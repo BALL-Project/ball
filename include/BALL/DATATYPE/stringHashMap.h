@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stringHashMap.h,v 1.16 2002/02/27 12:18:35 sturm Exp $
+// $Id: stringHashMap.h,v 1.17 2003/02/21 16:02:41 anhi Exp $
 
 #ifndef BALL_DATATYPE_STRINGHASHMAP_H
 #define BALL_DATATYPE_STRINGHASHMAP_H
@@ -165,9 +165,9 @@ namespace BALL
 		}
 
 			
-		/**	Remove the entry {\tt key} from the map.
+		/**	Remove the entry <tt>key</tt> from the map.
 				@param	key the key of the entry to be removed
-				@return	bool {\bf true} if the key was removed
+				@return	bool <b>true</b> if the key was removed
 		*/
 		bool remove(const String& key)	
 			throw()
@@ -233,7 +233,7 @@ namespace BALL
 		}
 
 		/** Return true if the hash map is empty.
-				This method return {\bf true} if the hash map does not contain any entries.
+				This method return <b>true</b> if the hash map does not contain any entries.
 		*/
 		bool isEmpty() const
 			throw()

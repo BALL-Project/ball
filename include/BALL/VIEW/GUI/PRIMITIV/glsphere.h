@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glsphere.h,v 1.12 2002/12/16 12:22:51 sturm Exp $
+// $Id: glsphere.h,v 1.13 2003/02/21 16:07:39 anhi Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLSPHERE_H
 #define BALL_VIEW_GUI_PRIMITIV_GLSPHERE_H
@@ -26,13 +26,13 @@ namespace BALL
 		/** GLSphere class.
 				An instance of GLSphere represents an instance of the geometric
 				visualization "sphere".
-				The class GLSphere is derived from the classes \Ref{Sphere} and
-				\Ref{GLObject}. Therefore the class glSphere is the graphical extension
+				The class GLSphere is derived from the classes  \link Sphere Sphere \endlink  and
+				 \link GLObject GLObject \endlink . Therefore the class glSphere is the graphical extension
 				of the geometrical definition of the class sphere.
-				The drawing method from \Ref{GLObject} is overridden to visualize the
+				The drawing method from  \link GLObject GLObject \endlink  is overridden to visualize the
 				sphere. OpenGL code is used for the visualization.
-				See these classes for further information.\\
-				{\bf Definition:} \URL{BALL/VIEW/GUI/PRIMITIV/glsphere.h}	
+				See these classes for further information. \par
+				<b>Definition:</b> BALL/VIEW/GUI/PRIMITIV/glsphere.h
 		*/
 		class GLSphere
 			: public Sphere,
@@ -57,7 +57,7 @@ namespace BALL
 					Construct new glSphere by copying the glSphere {\em glSphere}.
 					The copy is either deep (default) or shallow.
 					@param       glSphere the glSphere to be copied (cloned)
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false})
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>)
 					@return      GLSphere new constructed glSphere copied from {\em glSphere}
 					@see         Sphere
 					@see         GLObject
@@ -83,15 +83,15 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} glSphere.
-					Calls \Ref{destroy}.
+					Calls  \link destroy destroy \endlink .
 					@see         destroy
 			*/
 			virtual ~GLSphere()
 				throw();
 
 			/** Explicit default initialization.
-					Calls \Ref{Sphere::clear}
-					Calls \Ref{GLObject::clear}
+					Calls  \link Sphere::clear Sphere::clear \endlink 
+					Calls  \link GLObject::clear GLObject::clear \endlink 
 					@see  Sphere::clear
 					@see  GLObject::clear
 			*/
@@ -99,8 +99,8 @@ namespace BALL
 				throw();
 
 			/** Explicit destructor.
-					Calls \Ref{Sphere::destroy}
-					Calls \Ref{GLObject::destroy}
+					Calls  \link Sphere::destroy Sphere::destroy \endlink 
+					Calls  \link GLObject::destroy GLObject::destroy \endlink 
 					@see  Sphere::destroy
 					@see  GLObject::destroy
 			*/
@@ -116,9 +116,9 @@ namespace BALL
 					Assign the glSphere {\em sphere} to {\em *this} glSphere.
 					The copy is either deep (default) or shallow.
 					The value of {\em *this} glSphere is initialized to the value of 
-					the glSphere {\em sphere}.\\
+					the glSphere {\em sphere}. \par
 					@param       sphere the glSphere to be copied
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em sphere}
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of {\em sphere}
 					@see         Sphere
 					@see         GLObject
 			*/
@@ -128,9 +128,9 @@ namespace BALL
 			/** Assignment operator.
 					Assign the glSphere {\em sphere} to {\em *this} glSphere.
 					The copy is deep.
-					Calls \Ref{set}.
+					Calls  \link set set \endlink .
 					The value of {\em *this} glSphere is initialized to the value 
-					of the glSphere {\em sphere}.\\
+					of the glSphere {\em sphere}. \par
 					@param       sphere the glSphere to be copied
 					@return      GLSphere& constant reference {\em *this} glSphere
 					@see         set
@@ -141,11 +141,11 @@ namespace BALL
 			/** Copying with cloning facility.
 					Copy {\em *this} glSphere to the glSphere {\em sphere}.
 					The copy is either deep (default) or shallow.
-					Calls \Ref{set}.
+					Calls  \link set set \endlink .
 					The value of the glSphere {\em sphere} is initialized to the
-					value of {\em *this} glSphere.\\
+					value of {\em *this} glSphere. \par
 					@param       sphere the glSphere to be assigned to
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em sphere}
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of {\em sphere}
 					@see         set
 			*/
 			void get(GLSphere& sphere, bool deep = true) const
@@ -167,16 +167,16 @@ namespace BALL
 			//@{
 			
 			/** Creation of the graphical representation.
-					Overridden method from \Ref{GLObject}. Uses the geometrical properties
-					defined in class \Ref{Sphere} to create the graphical representation
+					Overridden method from  \link GLObject GLObject \endlink . Uses the geometrical properties
+					defined in class  \link Sphere Sphere \endlink  to create the graphical representation
 					of the sphere. This method is used internally from the render engine
-					of the \Ref{Scene}. Predefined shapes of spheres from the class
-					\Ref{GLPrimitiveManager} are used for the variable drawing resolutions.
+					of the  \link Scene Scene \endlink . Predefined shapes of spheres from the class
+					 \link GLPrimitiveManager GLPrimitiveManager \endlink  are used for the variable drawing resolutions.
 					The parameter {\em with_names} indicates whether the openGL command 
 					{\em glLoadName} must be used for naming the graphical object 
 					(necessary for picking mode in the scene).
 					@param     with_names flag if the graphical objects must have a name
-					@return    bool {\tt true} if successful,	{\tt false} otherwise
+					@return    bool <tt>true</tt> if successful,	<tt>false</tt> otherwise
 					@see       GLObject::draw
 					@see       GLPrimitiveManager
 			*/
@@ -185,9 +185,9 @@ namespace BALL
 
 			/** Export method.
 					This method handles the export of {\em *this} glSphere into another
-					format (eg. POVRAY, VRML) \\
-				  {\bf Note:} Not yet implemented.
-					@return    bool {\tt true} if successful,	{\tt false} otherwise
+					format (eg. POVRAY, VRML)  \par
+				  <b>Note:</b> Not yet implemented.
+					@return    bool <tt>true</tt> if successful,	<tt>false</tt> otherwise
 			*/
 			virtual bool extract()
 				throw();

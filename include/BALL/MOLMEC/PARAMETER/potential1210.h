@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: potential1210.h,v 1.11 2002/02/27 12:19:07 sturm Exp $
+// $Id: potential1210.h,v 1.12 2003/02/21 16:04:42 anhi Exp $
  
 #ifndef BALL_MOLMEC_PARAMETER_POTENTIAL1210_H
 #define BALL_MOLMEC_PARAMETER_POTENTIAL1210_H
@@ -18,7 +18,7 @@ namespace BALL
 {
 		
 	/**	Potential1210. 
-			{\bf Definition:} \URL{BALL/MOLMEC/PARAMETER/potential1210.h}	\\
+			<b>Definition:</b> BALL/MOLMEC/PARAMETER/potential1210.h
 			Molecular Mechanics Parameter: class describing the parameters required
 			for a 12-10 (hydrogen bond) potential.
 	*/

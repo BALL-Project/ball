@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: EFShiftProcessor.h,v 1.14 2002/02/27 12:19:29 sturm Exp $
+// $Id: EFShiftProcessor.h,v 1.15 2003/02/21 16:05:34 anhi Exp $
 
 #ifndef BALL_NMR_EFSHIFTPROCESSOR_H
 #define BALL_NMR_EFSHIFTPROCESSOR_H
@@ -20,7 +20,7 @@ namespace BALL
 	class Atom;
 		
 	/**	Shift assignment processor implementing the electric field effect. 
-			{\bf Definition}\URL{BALL/NMR/EFShiftProcessor.h}
+			<b>Definition</b>BALL/NMR/EFShiftProcessor.h
 	*/
 	class EFShiftProcessor
 		:	public ShiftModule
@@ -64,17 +64,17 @@ namespace BALL
 		//@{
 
 		/**	Initialization method.
-				This method reads the parameter section {\bf ElectricFieldEffect} and
+				This method reads the parameter section <b>ElectricFieldEffect</b> and
 				parses its contents.
 				This section contains the definition of two expressions that define
 				a bond (the first expression matches the atom whose shift is to be
 				calculated, the second describes its bond partner).
 				For each of these bonds, two parameters are given, 
-				$\varepsilon_1$ and	$\varepsilon_2$. \\
-				Then, this method extracts the contents of the {\bf Charges}
+				$\varepsilon_1$ and	$\varepsilon_2$.  \par
+				Then, this method extracts the contents of the <b>Charges</b>
 				section and thus constructs a hash map containing residue and atom names 
 				the corresponding charges.
-				This processor is applied to all atoms in \Ref{operator ()}, 
+				This processor is applied to all atoms in  \link operator () operator () \endlink , 
 				so expect the atom charges to change!
 				@see operator ()
 		*/
@@ -89,7 +89,7 @@ namespace BALL
 		/**	Processor start method.
 				This method clears the bond and effector list.
 				It fails if no parameters were assigned.
-				@return bool, {\bf false} if {\tt parameters_ == 0}
+				@return bool, <b>false</b> if <tt>parameters_ == 0</tt>
 		*/
 		virtual bool start()
 			throw();
@@ -97,9 +97,9 @@ namespace BALL
 
 		/**	operator ().
 				This method sets the charge for all atoms it encounters
-				(using \Ref{assign_charge_processor_}). 
-				Charged atoms	are stored in the atom list \Ref{effector_list_}.
-				All bonds are stored in \Ref{bond_list_}.
+				(using  \link assign_charge_processor_ assign_charge_processor_ \endlink ). 
+				Charged atoms	are stored in the atom list  \link effector_list_ effector_list_ \endlink .
+				All bonds are stored in  \link bond_list_ bond_list_ \endlink .
 				@return Processor::CONTINUE
 				@param composite an arbitrary composite. All non-atom objects are ignored.
 		*/
@@ -108,20 +108,20 @@ namespace BALL
 
 		/**	Finish method.
 				This method performs the chemical shift calculation.
-				It iterates over all bonds stored in \Ref{bond_list_}.
+				It iterates over all bonds stored in  \link bond_list_ bond_list_ \endlink .
 				If the two bond atoms match a pair of expressions from
-				\Ref{first_atom_expressions_} and \Ref{second_atom_expressions_},
+				 \link first_atom_expressions_ first_atom_expressions_ \endlink  and  \link second_atom_expressions_ second_atom_expressions_ \endlink ,
 				the electric field vector is calculated at the bond position using
 				Coulomb's law and the charges and positions of the atoms in the 
-				\Ref{effector_list_}.
+				 \link effector_list_ effector_list_ \endlink .
 				The chemical shift induced by the electric field effect is calculated as
 					$\delta_{EF} = \varepsilon_1 * E_z + \varepsilon_2 * E^2 $
 				where constants $\varepsilon_1$ and $\varepsilon_2$ are read
-				from the parameter file (section {\bf ElectricFieldEffect}).
+				from the parameter file (section <b>ElectricFieldEffect</b>).
 				The chemical shift is stored in the \emph{first} atom
-				using the named property \Ref{ShiftModule::PROPERTY__SHIFT} 
-				and in the named property \Ref{PROPERTY__EF_SHIFT}.
-				@return bool, {\bf false} if {\tt parameters_ == 0}
+				using the named property  \link ShiftModule::PROPERTY__SHIFT ShiftModule::PROPERTY__SHIFT \endlink  
+				and in the named property  \link PROPERTY__EF_SHIFT PROPERTY__EF_SHIFT \endlink .
+				@return bool, <b>false</b> if <tt>parameters_ == 0</tt>
 		*/
 		virtual bool finish()
 			throw();

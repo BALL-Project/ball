@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData3D.h,v 1.12 2002/12/18 11:20:12 anker Exp $ 
+// $Id: regularData3D.h,v 1.13 2003/02/21 16:02:03 anhi Exp $ 
 
 #ifndef BALL_DATATYPE_REGULARDATA3D_H
 #define BALL_DATATYPE_REGULARDATA3D_H
@@ -18,9 +18,9 @@ namespace BALL
 	/**	Simple 3D grid class.
 			Unlike BoxGrid this class represents a three-dimensional
 			array. An instance of GridDataType will be created
-			for each point of the grid upon instantiation of TRegularData3D.\\
-			{\bf Definition:}\\
-			\URL{BALL/DATATYPE/regularData3D.h}	\\
+			for each point of the grid upon instantiation of TRegularData3D. \par
+			<b>Definition:</b> \par
+			BALL/DATATYPE/regularData3D.h
 			@see	HashGrid3
 	*/
 	template <typename GridDataType>
@@ -65,7 +65,7 @@ namespace BALL
 				In fact, it doesn't really matter which coordinates are
 				which, as this method always takes the lowest coordinates (x,y,z)
 				for the lower corner and the highest coordinates for
-				the upper corner.\\
+				the upper corner. \par
 				{\em grid_points_[x,y,z]} gives the number of grid points in 
 				either direction. 
 				@param	lower_x	float, the x coordinate of the lower corner of the grid
@@ -128,7 +128,7 @@ namespace BALL
 		//@{
 
 		/**	Assignment operator.
-				Implemented using \Ref{set}.
+				Implemented using  \link set set \endlink .
 				@see set
 		*/
 		const TRegularData3D& operator = (const TRegularData3D& grid) throw(Exception::OutOfMemory);
@@ -271,7 +271,7 @@ namespace BALL
 			throw(Exception::OutOfGrid);
 
 		/**	Subscript operator.
-				Returns the data of the grid point specified by its {\tt position}.
+				Returns the data of the grid point specified by its <tt>position</tt>.
 				@return		GridDataType
 				@exception OutOfGrid if the point is outside the grid
 				@param		position Position, the grid position
@@ -282,7 +282,7 @@ namespace BALL
 
 		/**	Subscript operator.
 				Returns the data of the grid point nearest to the given
-				{\tt vector}
+				<tt>vector</tt>
 				@return		GridDataType
 				@exception OutOfGrid if the point is outside the grid
 				@param		vector Vector3, a position in the grid
@@ -325,7 +325,7 @@ namespace BALL
 				This method calculates the grid box that contains the given vector
 				and returns the indices of the grid points forming this box.
 				The given point lies either in the box or is the lower left front edge of the box.
-				@return bool {\bf true} if the vector is inside the grid
+				@return bool <b>true</b> if the vector is inside the grid
 				@exception OutOfGrid if the point is outside the grid
 				@param vector a point inside the grid
 				@param llf  left lower front corner of the box
@@ -348,7 +348,7 @@ namespace BALL
 				and returns the values at the grid points forming this box.
 				The given point lies either in the box or is the lower left front edge of the box.
 				@see getBoxIndices
-				@return bool {\bf true} if the vector is inside the grid
+				@return bool <b>true</b> if the vector is inside the grid
 				@exception OutOfGrid if the point is outside the grid
 				@param vector a point inside the grid
 				@param llf  value at the left lower front corner of the box
@@ -419,14 +419,14 @@ namespace BALL
 				the values at the eight surrounding grid points $v_i$:
 				\TEX{
 					\begin{eqnarray*}
-						{\mathrm value} & = & v_1 dx dy dz\\
-														& + & v_2 (1 - dx) dy dz\\
-														& + & v_3 dx (1 - dy) dz\\
-														& + & v_4 (1 - dx) (1 - dy) dz\\
-														& + & v_5 dx dy (1 - dz)\\
-														& + & v_6 (1 - dx) dy (1 - dz)\\
-														& + & v_7 dx (1 - dy) (1 - dz)\\
-														& + & v_8 (1 - dx) (1 - dy) (1 - dz)\\
+						{\mathrm value} & = & v_1 dx dy dz \par
+														& + & v_2 (1 - dx) dy dz \par
+														& + & v_3 dx (1 - dy) dz \par
+														& + & v_4 (1 - dx) (1 - dy) dz \par
+														& + & v_5 dx dy (1 - dz) \par
+														& + & v_6 (1 - dx) dy (1 - dz) \par
+														& + & v_7 dx (1 - dy) (1 - dz) \par
+														& + & v_8 (1 - dx) (1 - dy) (1 - dz) \par
 					\end{eqnarray*}
 				}
 				@exception OutOfGrid if the point is outside the grid

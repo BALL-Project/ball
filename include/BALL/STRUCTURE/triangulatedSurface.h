@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: triangulatedSurface.h,v 1.31 2002/12/17 14:13:14 anker Exp $
+// $Id: triangulatedSurface.h,v 1.32 2003/02/21 16:07:05 anhi Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATEDSURFACE_H
 #define BALL_STRUCTURE_TRIANGULATEDSURFACE_H
@@ -37,9 +37,9 @@ namespace BALL
 {
 
 	/** Generic TriangulatedSurface Class.
-			\\
-			{\bf Definition:}\URL{BALL/STRUCTURE/triangulatedSurface.h}
-			\\
+			 \par
+			<b>Definition:</b>BALL/STRUCTURE/triangulatedSurface.h
+			 \par
 	*/
 	class TriangulatedSurface
 	{
@@ -360,9 +360,9 @@ namespace BALL
 
 
 	/** Generic TriangulatedSphere Class.
-			\\
-			{\bf Definition:}\URL{BALL/STRUCTURE/triangulatedSurface.h}
-			\\
+			 \par
+			<b>Definition:</b>BALL/STRUCTURE/triangulatedSurface.h
+			 \par
 	*/
 	class TriangulatedSphere	:	public TriangulatedSurface
 	{

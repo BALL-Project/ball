@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: periodicBoundary.h,v 1.14 2002/02/27 12:19:02 sturm Exp $
+// $Id: periodicBoundary.h,v 1.15 2003/02/21 16:04:21 anhi Exp $
 
 #ifndef BALL_MOLMEC_COMMON_PERIODICBOUNDARY_H
 #define BALL_MOLMEC_COMMON_PERIODICBOUNDARY_H
@@ -27,8 +27,8 @@ namespace BALL
 
 	/**	Periodic boundary class for force field simulations. 
 			Molecular Mechanics: class representing periodic boundary conditions.
-			\\
-			{\bf Definition:} \URL{BALL/MOLMEC/COMMON/periodicBoundary.h}
+			 \par
+			<b>Definition:</b> BALL/MOLMEC/COMMON/periodicBoundary.h
 	*/
 	class PeriodicBoundary
 	{
@@ -181,7 +181,7 @@ namespace BALL
 
 		/**	Set the box dimensions.
 				The box dimensions are additionally stored in options
-				using keys \Ref{lower} and \Ref{upper}.
+				using keys  \link lower lower \endlink  and  \link upper upper \endlink .
 		*/
 		void setBox(const Box3& box);
 
@@ -189,18 +189,18 @@ namespace BALL
 				This method fills the defined box with solvent molecules.
 				If no box is defined, no solvent is added. The neccessary
 				solvent box template is either taken from the options (solvent_file)
-				or a default is assumed.\\
+				or a default is assumed. \par
 				This method replicates the solvent box starting at the box origin in
 				all three dimensions and removes all solvent molecules that are within 
-				\Ref{solvent_distance} of a solute molecule or outside the periodic box.\\
+				 \link solvent_distance solvent_distance \endlink  of a solute molecule or outside the periodic box. \par
 				The method returns the number of inserted solvent molecules. All solvent 
-				molecules are marked as such by setting their property \Ref{Molecule::PROPERTY__PERIODIC_BOX_SOLVENT}.\\
+				molecules are marked as such by setting their property  \link Molecule::PROPERTY__PERIODIC_BOX_SOLVENT Molecule::PROPERTY__PERIODIC_BOX_SOLVENT \endlink . \par
 				@see	removeSolvent
 		*/
 		Size addSolvent(const String& filename) const;
 		
 		/**	Removes all solvent molecules
-				This method removes all molecules that have the property \Ref{Molecule::PROPERTY__PERIODIC_BOX_SOLVENT}
+				This method removes all molecules that have the property  \link Molecule::PROPERTY__PERIODIC_BOX_SOLVENT Molecule::PROPERTY__PERIODIC_BOX_SOLVENT \endlink 
 				set from the force field's system.
 				The number of removed solvent molecules is returned.
 				@see	addSolvent
@@ -212,7 +212,7 @@ namespace BALL
 		*/
 		//@{
 			
-		/**	Returns {\bf true} if the periodic boundary is enabled
+		/**	Returns <b>true</b> if the periodic boundary is enabled
 				@see	enable
 				@see	disable
 		*/

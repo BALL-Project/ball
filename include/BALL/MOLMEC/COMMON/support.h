@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: support.h,v 1.17 2002/12/12 09:48:47 oliver Exp $
+// $Id: support.h,v 1.18 2003/02/21 16:04:27 anhi Exp $
 
 #ifndef BALL_MOLMEC_COMMON_SUPPORT_H
 #define BALL_MOLMEC_COMMON_SUPPORT_H
@@ -63,16 +63,16 @@ namespace BALL
 			
 		/**	Create a pair vector for non-bonded interactions.
 				Calculates a vector of atom pairs whose distance is smaller than
-				{\tt distance}.  The {\tt type} determines if a brute force algorithm
-				({\tt type == BRUTE_FORCE}) or a more sophisticated grid method
-				({\tt type == HASH_GRID}) is used.
+				<tt>distance</tt>.  The <tt>type</tt> determines if a brute force algorithm
+				(<tt>type == BRUTE_FORCE</tt>) or a more sophisticated grid method
+				(<tt>type == HASH_GRID</tt>) is used.
 				@param	pair_vector the vector containing pairs of interacting atoms
 				@param	atom_vector the atoms to be considered for pairs
 				@param	box	the periodic boundary used (if {\tt	periodic_boundary_enabled == true})
 				@param	distance the maximum distance (cut-off distance) for two atoms
 				@param	periodic_boundary_enabled flag indicating the use of periodic boundary conditions
 				@param	type	the type of algorithm used to calculate the pair vector
-				@return	the number of pairs generated ({\tt pair_vector.size()})
+				@return	the number of pairs generated (<tt>pair_vector.size()</tt>)
 		*/
 		BALL::Size calculateNonBondedAtomPairs
 			(ForceField::PairVector& pair_vector, 
@@ -90,17 +90,17 @@ namespace BALL
 		Size sortNonBondedAtomPairsAfterSelection(ForceField::PairVector& pair_vector);
 
 		/**	Merge the non-overlapping molecules of a system into another system.
-				Fills {\tt system} with copies of the solvent molecules stored in	{\tt solvent}. 
-				Solvent molecules are added to {\tt system} if the molecules lie in the 
-				{\tt box} and if they do not overlap with	the molecules in {\tt solute_grid}. 
+				Fills <tt>system</tt> with copies of the solvent molecules stored in	<tt>solvent</tt>. 
+				Solvent molecules are added to <tt>system</tt> if the molecules lie in the 
+				<tt>box</tt> and if they do not overlap with	the molecules in <tt>solute_grid</tt>. 
 				A molecule has an overlap with another molecule if any atom of the first 
 				molecule is within {\tt	distance} of any atom of the other molecule.
 				@param	system the system to be filled
 				@param	solute_grid a hash grid containing the solute molecules
 				@param	solvent the system containing the solvent
-				@param	box the periodic boundary of {\tt system}
+				@param	box the periodic boundary of <tt>system</tt>
 				@param	distance used to determine overlaps between two atoms
-				@return	the number of molecules added to {\tt system}
+				@return	the number of molecules added to <tt>system</tt>
 		*/
 		BALL::Size addNonOverlappingMolecules
 			(System& system, const HashGrid3<const Atom*>& solute_grid,
@@ -113,7 +113,7 @@ namespace BALL
 				because of a different defintion of the periodic boundary. This
 				function adapts such boxes to our definition by simply translating
 				such molecules to the opposite boundary wall such that their center
-				of gravity lies in the box afterwards.\\
+				of gravity lies in the box afterwards. \par
 				This might be obsoleted by PeriodicBoundarry::updateMolecules()
 				@param system the system containing the water box which is to be adapted
 				@param box the box definition for the periodic boundary
@@ -127,10 +127,10 @@ namespace BALL
 			(Vector3& distance, const Vector3& period);
 
 		/**	Compute all torsions in a given set of molecules.
-				@return the number of torsions added to {\tt torsions}
+				@return the number of torsions added to <tt>torsions</tt>
 				@param start an iterator pointing to the start of the atoms
 				@param end a past-the-end iterator for the atoms 
-				@param use_selection if set to {\bf true}, a torsion will be added only if all four atoms are selected
+				@param use_selection if set to <b>true</b>, a torsion will be added only if all four atoms are selected
 		*/
     template <typename TorsionType, typename AtomIteratorType>
     Size computeTorsions

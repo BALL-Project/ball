@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: server.h,v 1.13 2002/12/16 12:22:50 sturm Exp $
+// $Id: server.h,v 1.14 2003/02/21 16:07:32 anhi Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_SERVER_H
 #define BALL_VIEW_GUI_KERNEL_SERVER_H
@@ -54,16 +54,16 @@ namespace BALL
 	{
 
 		/** Server class.
-				The class Server handles all incoming \Ref{PersistentObject} objects,
-				converts them into \Ref{Composite} objects (if possible) and sents
-				them through the \Ref{ConnectionObject} tree with the message
-				\Ref{NewCompositeMessage}. Also it stores all received \Ref{Composite} objects
-				and replaces them if the same \Ref{Composite} object is received again.
-				If a \Ref{Composite} object is replaced the message 
-				\Ref{RemovedCompositeMessage} will be sent through the \Ref{ConnectionObject}
-				tree and after that the the message \Ref{NewCompositeMessage} with the new
+				The class Server handles all incoming  \link PersistentObject PersistentObject \endlink  objects,
+				converts them into  \link Composite Composite \endlink  objects (if possible) and sents
+				them through the  \link ConnectionObject ConnectionObject \endlink  tree with the message
+				 \link NewCompositeMessage NewCompositeMessage \endlink . Also it stores all received  \link Composite Composite \endlink  objects
+				and replaces them if the same  \link Composite Composite \endlink  object is received again.
+				If a  \link Composite Composite \endlink  object is replaced the message 
+				 \link RemovedCompositeMessage RemovedCompositeMessage \endlink  will be sent through the  \link ConnectionObject ConnectionObject \endlink 
+				tree and after that the the message  \link NewCompositeMessage NewCompositeMessage \endlink  with the new
 				received composite will be sent.
-				{\bf Definition:} \URL{BALL/VIEW/GUI/KERNEL/server.h} 
+				<b>Definition:</b> BALL/VIEW/GUI/KERNEL/server.h
 		*/
 		class Server
 			: public QTTimer,
@@ -82,7 +82,7 @@ namespace BALL
 					The state of {\em *this} server is:
 					\begin{itemize}
 					  \item no object creator registered
-						\item server listening on {\tt VIEW_DEFAULT_PORT} if activated
+						\item server listening on <tt>VIEW_DEFAULT_PORT</tt> if activated
 					\end{itemize}
 					@return      Server new constructed server
 					@see         QTTimer
@@ -98,7 +98,7 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} server.
-					Calls \Ref{destroy}.
+					Calls  \link destroy destroy \endlink .
 					@see         destroy
 			*/
 			virtual ~Server()
@@ -106,8 +106,8 @@ namespace BALL
 
 			/** Explicit default initialization.
 					Set the state of {\em *this} server to the default values.
-					Calls \Ref{QTTimer::clear}.
-					Calls \Ref{ConnectionObject::clear}.
+					Calls  \link QTTimer::clear QTTimer::clear \endlink .
+					Calls  \link ConnectionObject::clear ConnectionObject::clear \endlink .
 					@see QTTimer::clear
 					@see ConnectionObject::clear
 			*/
@@ -116,8 +116,8 @@ namespace BALL
 
 			/** Explicit destructor.
 					Destroy {\em *this} server.
-					Calls \Ref{QTTimer::destroy}.
-					Calls \Ref{ConnectionObject::destroy}.
+					Calls  \link QTTimer::destroy QTTimer::destroy \endlink .
+					Calls  \link ConnectionObject::destroy ConnectionObject::destroy \endlink .
 					@see         QTTimer::destroy
 					@see         ConnectionObject::destroy
 			*/
@@ -130,8 +130,8 @@ namespace BALL
 			//@{
 			
 			/** NotCompositeObject Exception class.
-					This exeption will be thrown if a \Ref{PersistentObject} was received
-					that was not a \Ref{Composite} object.
+					This exeption will be thrown if a  \link PersistentObject PersistentObject \endlink  was received
+					that was not a  \link Composite Composite \endlink  object.
 					@see         GeneralException			
 			*/
 			class NotCompositeObject:	public Exception::GeneralException
@@ -153,7 +153,7 @@ namespace BALL
 					every second whether an object will be available at the stream.
 					After this method the {\em timer} method will be called every second.
 					Must be called before other methods!
-					Calls \Ref{QTTimer::startTimer}
+					Calls  \link QTTimer::startTimer QTTimer::startTimer \endlink 
 					@see QTTimer::startTimer
 					@see timer
 			*/
@@ -163,14 +163,14 @@ namespace BALL
 			/** Deactivates the server.
 					If {\em *this} server is already running this method stops the server
 					and closes the socket stream.
-					Calls \Ref{QTTimer::stopTimer}
+					Calls  \link QTTimer::stopTimer QTTimer::stopTimer \endlink 
 					@see QTTimer::stopTimer
 			*/
 			void deactivate()
 				throw();
 
 			/**	Set the server port.
-					Set port of {\em *this} server. Must be called before \Ref{activate}
+					Set port of {\em *this} server. Must be called before  \link activate activate \endlink 
 					to have any effect.
 					@param  port the new port
 			*/
@@ -185,16 +185,16 @@ namespace BALL
 				throw();
 
 			/** Register a ObjectCreator.
-					Register a \Ref{ObjectCreator} that is used for converting 
-					\Ref{PersistentObject} objects into \Ref{Composite} objects.
+					Register a  \link ObjectCreator ObjectCreator \endlink  that is used for converting 
+					 \link PersistentObject PersistentObject \endlink  objects into  \link Composite Composite \endlink  objects.
 					@see ObjectCreator
 			*/
 			void registerObjectCreator(const ObjectCreator& s)
 				throw();
 
 			/** Reset the ObjectCreator.
-					After calling this method \Ref{PersistentObject} objects will be converted
-					using the default \Ref{ObjectCreator}.
+					After calling this method  \link PersistentObject PersistentObject \endlink  objects will be converted
+					using the default  \link ObjectCreator ObjectCreator \endlink .
 					@see ObjectCreator
 			*/
 			void unregisterObjectCreator()
@@ -202,8 +202,8 @@ namespace BALL
 
 			/**	Initialize the server widget.
 					This method initializes the icon of {\em *this} server and adds it
-					to \Ref{MainControl}. This method will be called by \Ref{show} of 
-					the class \Ref{MainControl}.
+					to  \link MainControl MainControl \endlink . This method will be called by  \link show show \endlink  of 
+					the class  \link MainControl MainControl \endlink .
 				  @see  ModularWidget
 					@see  show
 			*/
@@ -212,9 +212,9 @@ namespace BALL
 			
 			/**	Remove the server widget.
 					This method deletes the icon of {\em *this} server and removes it
-					from \Ref{MainControl}.
-					This method will be called by \Ref{aboutToExit} of 
-					the class \Ref{MainControl}.
+					from  \link MainControl MainControl \endlink .
+					This method will be called by  \link aboutToExit aboutToExit \endlink  of 
+					the class  \link MainControl MainControl \endlink .
 				  @see  ModularWidget
 					@see  aboutToExit
 			*/
@@ -223,11 +223,11 @@ namespace BALL
 			
 			/** Menu checking method.
 					This method checks, enables or disables all inserted menu entries of 
-					{\em *this} server. It will be called by \Ref{checkMenus} of 
-					the class \Ref{MainControl}.	
-					See \Ref{ModularWidget} for further information concerning menu structure
-					creation of \Ref{ModularWidget} objects.\\
-					{\bf Note:} Because {\em *this} server has no menu entries this method
+					{\em *this} server. It will be called by  \link checkMenus checkMenus \endlink  of 
+					the class  \link MainControl MainControl \endlink .	
+					See  \link ModularWidget ModularWidget \endlink  for further information concerning menu structure
+					creation of  \link ModularWidget ModularWidget \endlink  objects. \par
+					<b>Note:</b> Because {\em *this} server has no menu entries this method
 					is empty.
 				  @see        ModularWidget
 					@see        checkMenus
@@ -236,13 +236,13 @@ namespace BALL
 				throw();
 			
 			/** Initialize a preferences tab for the server.
-					This method creates the preferences tab \Ref{ServerPreferences} for
-					{\em *this} server and inserts it into the \Ref{Preferences} dialog
-					of the \Ref{MainControl}.
-					This method is called automatically by the method \Ref{show} of 
-					the class \Ref{MainControl} at the start of the application.
-					See \Ref{ModularWidget}	for more information concerning preferences tabs.\\
-					@param  preferences the \Ref{Preferences} dialog of the \Ref{MainControl}
+					This method creates the preferences tab  \link ServerPreferences ServerPreferences \endlink  for
+					{\em *this} server and inserts it into the  \link Preferences Preferences \endlink  dialog
+					of the  \link MainControl MainControl \endlink .
+					This method is called automatically by the method  \link show show \endlink  of 
+					the class  \link MainControl MainControl \endlink  at the start of the application.
+					See  \link ModularWidget ModularWidget \endlink 	for more information concerning preferences tabs. \par
+					@param  preferences the  \link Preferences Preferences \endlink  dialog of the  \link MainControl MainControl \endlink 
 					@see    show
 					@see    ServerPreferences
 					@see    Preferences
@@ -251,13 +251,13 @@ namespace BALL
 				throw();
 			
 			/**	Remove the preferences tab.
-					This method removes the \Ref{ServerPreferences} tab of {\em *this} server
-					from the \Ref{Preferences} dialog of the \Ref{MainControl}.
-					This method is called automatically by the method \Ref{aboutToExit}
-					method  of the class \Ref{MainControl} at the end of the application.
-					See \Ref{ModularWidget}
-					for more information concerning preferences tabs.\\
-					@param  preferences the \Ref{Preferences} dialog of the \Ref{MainControl}
+					This method removes the  \link ServerPreferences ServerPreferences \endlink  tab of {\em *this} server
+					from the  \link Preferences Preferences \endlink  dialog of the  \link MainControl MainControl \endlink .
+					This method is called automatically by the method  \link aboutToExit aboutToExit \endlink 
+					method  of the class  \link MainControl MainControl \endlink  at the end of the application.
+					See  \link ModularWidget ModularWidget \endlink 
+					for more information concerning preferences tabs. \par
+					@param  preferences the  \link Preferences Preferences \endlink  dialog of the  \link MainControl MainControl \endlink 
 					@see    aboutToExit
 					@see    ServerPreferences
 					@see    Preferences
@@ -266,12 +266,12 @@ namespace BALL
 				throw();
 			
 			/** Apply the preferences of the specific tab.
-					This method applies the preferences of the own tab \Ref{ServerPreferences}
+					This method applies the preferences of the own tab  \link ServerPreferences ServerPreferences \endlink 
 					to {\em *this} server.
-					This method is called automatically by the method \Ref{applyPreferencesTab} of 
-					the class \Ref{MainControl}.
-					See \Ref{ModularWidget}	for more information concerning preferences tabs.\\
-					@param  preferences the \Ref{Preferences} dialog of the \Ref{MainControl}
+					This method is called automatically by the method  \link applyPreferencesTab applyPreferencesTab \endlink  of 
+					the class  \link MainControl MainControl \endlink .
+					See  \link ModularWidget ModularWidget \endlink 	for more information concerning preferences tabs. \par
+					@param  preferences the  \link Preferences Preferences \endlink  dialog of the  \link MainControl MainControl \endlink 
 					@see    applyPreferencesTab
 					@see    ServerPreferences
 					@see    Preferences
@@ -281,11 +281,11 @@ namespace BALL
 			
 			/** Fetch the widgets preferences from the inifile.
 					This method fetches the preferences of {\em *this} server 
-					from the {\em inifile}.\\
-					This method is called automatically by the method \Ref{show} from the \Ref{MainControl}
+					from the {\em inifile}. \par
+					This method is called automatically by the method  \link show show \endlink  from the  \link MainControl MainControl \endlink 
 					object.
-					See \Ref{ModularWidget}	for more information concerning preferences tabs.\\
-					@param  inifile the \Ref{INIFile} that contains the needed values
+					See  \link ModularWidget ModularWidget \endlink 	for more information concerning preferences tabs. \par
+					@param  inifile the  \link INIFile INIFile \endlink  that contains the needed values
 					@see    MainControl
 					@see    show
 					@see    INIFile
@@ -296,11 +296,11 @@ namespace BALL
 			
 			/** Writes the widgets preferences to the inifile.
 					This method writes the preferences of {\em *this} server to the
-					{\em inifile}.\\
-					This method is called automatically by the method \Ref{aboutToExit} from the
-					\Ref{MainControl}
+					{\em inifile}. \par
+					This method is called automatically by the method  \link aboutToExit aboutToExit \endlink  from the
+					 \link MainControl MainControl \endlink 
 					object.
-					@param  inifile the \Ref{INIFile} that contains the needed values
+					@param  inifile the  \link INIFile INIFile \endlink  that contains the needed values
 					@see    MainControl
 					@see    aboutToExit
 					@see    INIFile
@@ -318,9 +318,9 @@ namespace BALL
 					Initiate self-validation of the internal state and data structure consistencies
 					of {\em *this} server.
 					If the internal state of {\em *this} server is correct (self-validated) and 
-					consistent {\tt true} is returned, {\tt false} otherwise. 
+					consistent <tt>true</tt> is returned, <tt>false</tt> otherwise. 
 					Calls {ConnectionObject::isValid}.
-					@return			bool {\tt true} if the internal state of {\em *this} server is correct
+					@return			bool <tt>true</tt> if the internal state of {\em *this} server is correct
 					@see        ConnectionObject::isValid
 			*/
 			virtual bool isValid() const
@@ -349,11 +349,11 @@ namespace BALL
 					This method handles the socket stream. Every second it checks whether
 					a new object is available at the stream. If this is the case the stream
 					will be accepted and the incoming object will be reveiced.
-					At the moment only \Ref{Composite} objects will be accepted. If
-					another object is received the exception \Ref{NotCompositeObject}
+					At the moment only  \link Composite Composite \endlink  objects will be accepted. If
+					another object is received the exception  \link NotCompositeObject NotCompositeObject \endlink 
 					will be thrown.				
 					@see    QTTimer::timer
-					@exception NotCompositeObject thrown if another object than \Ref{Composite} object is received
+					@exception NotCompositeObject thrown if another object than  \link Composite Composite \endlink  object is received
 			*/
 			virtual void timer();
 						

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricProperties.h,v 1.14 2002/02/27 12:19:44 sturm Exp $
+// $Id: geometricProperties.h,v 1.15 2003/02/21 16:06:42 anhi Exp $
 
 #ifndef BALL_STRUCTURE_GEOMETRICPROPERTIES_H
 #define BALL_STRUCTURE_GEOMETRICPROPERTIES_H
@@ -45,35 +45,35 @@ namespace BALL
 			The applicators, processors, and collectors described in 
 			this chapter are used to extract geometric properties out
 			of a given molecular object or to extract parts of these
-			objects according to their geometric properties.\\
-			Using the \Ref{BoundingBoxProcessor}, the bounding box 
+			objects according to their geometric properties. \par
+			Using the  \link BoundingBoxProcessor BoundingBoxProcessor \endlink , the bounding box 
 			of a given molecular object can be calculated. The bounding box is
 			represented by the lowest and highest coordinates occuring in the 
 			molecular object, i.e. the bounding box is the smallest rectangular
 			box (with sides parallel to the coordinate axes) that encloses all
-			atoms in the molecular object.\\
-			The \Ref{GeometricCenterProcessor} calculates the geometric 
-			center of all atoms contained in the molecular object it is applied to.\\
-			With the aid of the \Ref{FragmentDistanceCollector} it is possible
+			atoms in the molecular object. \par
+			The  \link GeometricCenterProcessor GeometricCenterProcessor \endlink  calculates the geometric 
+			center of all atoms contained in the molecular object it is applied to. \par
+			With the aid of the  \link FragmentDistanceCollector FragmentDistanceCollector \endlink  it is possible
 			to collect all molecular fragments that are within a given distance
 			from a certain fragment. This is useful to extract the relevant molecular
-			environment (e.g. to examin a binding site).\\
+			environment (e.g. to examin a binding site). \par
 	*/
 	//@{
 
 	/**	Bounding box creating processor.
 			This class iterates over all atoms of a given molecular object and
 			determines the lowest and the highest coordinates occuring. It returns
-			two coordinates (\Ref{getLower}, \Ref{getUpper}) describing the smallest
+			two coordinates ( \link getLower getLower \endlink ,  \link getUpper getUpper \endlink ) describing the smallest
 			cuboid (whose sides are parallel to the planes defined by the corrdinate
-			axes) enclosing all atoms of the molecular object.\\
+			axes) enclosing all atoms of the molecular object. \par
 			This processor is useful to determine the extent of a molecular object
-			if you want to define a \Ref{THashGrid} or alike objects.\\
-			The coordinates returned by \Ref{getLower} and \Ref{getUpper} are only
+			if you want to define a  \link THashGrid THashGrid \endlink  or alike objects. \par
+			The coordinates returned by  \link getLower getLower \endlink  and  \link getUpper getUpper \endlink  are only
 			valid, if the processor has been applied to a molecular object containing
-			atoms.\\
-			{\bf Definition:} \URL{BALL/STRUCTURE/geometricProperties.h}
-			\\
+			atoms. \par
+			<b>Definition:</b> BALL/STRUCTURE/geometricProperties.h
+			 \par
 	*/
 	class BoundingBoxProcessor
 		:	public UnaryProcessor<Atom>
@@ -129,13 +129,13 @@ namespace BALL
 
 	/**	Calculates the geometric center of a given Composite object.
 			This processor calculates the geometric center of the atom coordinates
-			of a given molecular object.\\
-			The geometric center is calculated as follows:\\
+			of a given molecular object. \par
+			The geometric center is calculated as follows: \par
 			\[
 				\vec{C} = \frac{1}{N} \sum_{i}{N} \vec{r_i}
 			\]
-			Where $\vec{r_i}$ represents the coordinates of the ith atom.\\
-			{\bf Definition:} \URL{BALL/STRUCTURE/geometricProperties.h}
+			Where $\vec{r_i}$ represents the coordinates of the ith atom. \par
+			<b>Definition:</b> BALL/STRUCTURE/geometricProperties.h
 	*/
 	class GeometricCenterProcessor
 		:	public UnaryProcessor<Atom> 
@@ -185,16 +185,16 @@ namespace BALL
 			This processor examines the distances between every atom of a given fragment
 			(further referred to as the reference fragment) and all other atoms in a molecular 
 			object he is applied to. If any atom of a fragment is closer to any atom of the
-			reference fragment, the whole fragment is collected in an array.\\
+			reference fragment, the whole fragment is collected in an array. \par
 			The reference fragment itself is also contained in this array, if it is part
-			of the molecular object the collector is applied to.\\
+			of the molecular object the collector is applied to. \par
 			The array only contains pointers to the fragments, the fragments are neither 
-			changed, nor removed from the molecular object.\\
+			changed, nor removed from the molecular object. \par
 			The reference fragment may either be given by a specialized constructor (also
-			together with the distance) or using \Ref{setFragment}.\\
-			The fragment array is emptied prior to each collection run.\\
-			{\bf Definition:} \URL{BALL/STRUCTURE/geometricProperties.h}
-			\\
+			together with the distance) or using  \link setFragment setFragment \endlink . \par
+			The fragment array is emptied prior to each collection run. \par
+			<b>Definition:</b> BALL/STRUCTURE/geometricProperties.h
+			 \par
 	*/
 	class FragmentDistanceCollector
 		: public UnaryProcessor<Composite> 

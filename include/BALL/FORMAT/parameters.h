@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: parameters.h,v 1.9 2002/12/22 11:45:19 sturm Exp $
+// $Id: parameters.h,v 1.10 2003/02/21 16:03:05 anhi Exp $
 // Molecular Mechanics: general force field parameter class
 
 #ifndef BALL_FORMAT_PARAMETERS_H
@@ -21,8 +21,8 @@ namespace BALL
 	/**	General Parameter class.
 			This class is intended to simplify parameter management 
 			for force fields or other stronlgy parameterized methods.
-			It is based on \Ref{INIFile}.	\\
-			{\bf Definition:}\URL{BALL/FORMAT/parameters.h} \\
+			It is based on  \link INIFile INIFile \endlink .	 \par
+			<b>Definition:</b>BALL/FORMAT/parameters.h
 	*/
 	class Parameters
 	{
@@ -91,9 +91,9 @@ namespace BALL
 		//@{
 			
 		/**	Validity predicate.
-				Return {\bf true} if the parameters were correctly
+				Return <b>true</b> if the parameters were correctly
 				initialized, the internal INI file is valid.		
-				@return bool - {\tt valid_ && parameter_file_.isValid()}
+				@return bool - <tt>valid_ && parameter_file_.isValid()</tt>
 		*/
 		virtual bool isValid() const;
 

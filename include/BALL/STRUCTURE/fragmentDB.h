@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentDB.h,v 1.17 2002/12/22 14:51:56 anker Exp $
+// $Id: fragmentDB.h,v 1.18 2003/02/21 16:06:41 anhi Exp $
 
 #ifndef BALL_STRUCTURE_FRAGMENTDB_H
 #define BALL_STRUCTURE_FRAGMENTDB_H
@@ -57,8 +57,8 @@ namespace BALL
 			used subunits as amino acids, sugars and the like.
 			They are entered in a special format described below.
 			The main resource file resides under 
-			\URL[data/fragments/Fragments.db]{../../../data/fragments/Fragments.db}. \\
-			{\bf Definition:} \URL{BALL/STRUCTURE/fragmentDB.h}
+			<a href="../../../data/fragments/Fragments.db">data/fragments/Fragments.db</a>.  \par
+			<b>Definition:</b> BALL/STRUCTURE/fragmentDB.h
 	*/
 	class FragmentDB 
 	{
@@ -98,8 +98,8 @@ namespace BALL
 		//@{
 		
 		/**	No fragment node found.
-				This exception is thrown by \Ref{init} if the resource database
-				does not contain a {\tt Fragments} entry.
+				This exception is thrown by  \link init init \endlink  if the resource database
+				does not contain a <tt>Fragments</tt> entry.
 		*/
 		class NoFragmentNode
 			:	public Exception::GeneralException
@@ -119,12 +119,12 @@ namespace BALL
 	
 		/**	Default constructor.
 				Creates a FragmentDB object and tries to read the fragment data
-				from the file {\tt fragments/Fragments.db} in the \Ref{BALL_DATA_PATH}.
-				@exception Exception::FileNotFound if {\tt fragments/Fragments.db} is not found in the BALL_DATA_PATH
+				from the file <tt>fragments/Fragments.db</tt> in the  \link BALL_DATA_PATH BALL_DATA_PATH \endlink .
+				@exception Exception::FileNotFound if <tt>fragments/Fragments.db</tt> is not found in the BALL_DATA_PATH
 		*/
 		FragmentDB();
 
-		/**	Creates a FragmentDB object and reads the contents of {\tt filename}.
+		/**	Creates a FragmentDB object and reads the contents of <tt>filename</tt>.
 		*/
 		FragmentDB(const String& filename);
 
@@ -182,7 +182,7 @@ namespace BALL
 				This method returns a standard template of a given fragment or a NULL pointer
 				if the fragment is not known. The first criterion is the fragment name.
 				If there exist multiple variants of the fragment, the correct variant is chosen 
-				according to the properties set in {\tt fragment}.
+				according to the properties set in <tt>fragment</tt>.
 		*/
 		const Fragment* getReferenceFragment(const Fragment& fragment) const;
 
@@ -191,7 +191,7 @@ namespace BALL
 		const Residue* getResidue(const String& fragment_name) const;
 
 		/**	Return a copy of a fragment.
-				If a fragment with name {\tt fragment_name} exists in the
+				If a fragment with name <tt>fragment_name</tt> exists in the
 				fragment database, a copy is created and returned. 
 				Otherwise, a null pointer is returned. 
 				Take care to destruct the copy again to avoid memory leaks.
@@ -201,7 +201,7 @@ namespace BALL
 		Fragment* getFragmentCopy(const String& fragment_name) const;
 
 		/**	Return a copy of a fragment as a molecule.
-				If a fragment with name {\tt fragment_name} exists in the
+				If a fragment with name <tt>fragment_name</tt> exists in the
 				fragment database, a copy is created, inserted into a new molecule, and returned. 
 				Otherwise, a null pointer is returned. 
 				Take care to destruct the copy again to avoid memory leaks.
@@ -211,7 +211,7 @@ namespace BALL
 		Molecule* getMoleculeCopy(const String& fragment_name) const;
 
 		/**	Return a copy of a residue.
-				If a fragment with name {\tt fragment_name} exists in the
+				If a fragment with name <tt>fragment_name</tt> exists in the
 				fragment database, a copy is created and returned as a residue. 
 				Otherwise, a null pointer is returned. Take care to destruct the copy again
 				to avoid memory leaks.
@@ -389,7 +389,7 @@ namespace BALL
 
 			/**	Build all possible bonds between two fragments.
 					This method builds all bonds that are allowed by
-					the {\bf Connections} entries in a resource database.
+					the <b>Connections</b> entries in a resource database.
 					@return the number of bonds built
 			*/
 			Size buildInterFragmentBonds(Fragment& first, Fragment& second) const;

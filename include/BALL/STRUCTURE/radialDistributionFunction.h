@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: radialDistributionFunction.h,v 1.13 2002/12/22 11:45:27 sturm Exp $
+// $Id: radialDistributionFunction.h,v 1.14 2003/02/21 16:06:50 anhi Exp $
 
 #ifndef BALL_STRUCTURE_RADIALDISTRIBUTIONFUNCTION_H
 #define BALL_STRUCTURE_RADIALDISTRIBUTIONFUNCTION_H
@@ -18,8 +18,8 @@ namespace BALL
 			functions. These functions describe the deviation of the number density
 			in a real fluid from the ideal (isotropic) case. The representation of
 			such a function is a piecewise polynomial obtained by smoothing spline
-			fit from molecular dynamics simulation.	\\
-			{\bf Definition:} \URL{BALL/STRUCTURE/radialDistributionFunction.h}
+			fit from molecular dynamics simulation.	 \par
+			<b>Definition:</b> BALL/STRUCTURE/radialDistributionFunction.h
 	*/
 	class RadialDistributionFunction 
 	{

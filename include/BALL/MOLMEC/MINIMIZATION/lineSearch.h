@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineSearch.h,v 1.11 2003/02/03 21:38:17 oliver Exp $
+// $Id: lineSearch.h,v 1.12 2003/02/21 16:04:35 anhi Exp $
 // Line Search Minimizer: A special class for the line search minimization algorithm
 
 #ifndef BALL_MOLMEC_MINIMIZATION_LINESEARCH_H
@@ -19,8 +19,8 @@ namespace BALL
 	/**	Basic line search class.
 			Without being a true energy minimizer, this method minimizes
 			the energy of a system along a given direction using	
-			cubic interpolation. \\
-			{\bf Definition:} \URL{BALL/MOLMEC/MINIMIZATION/lineSearch.h}
+			cubic interpolation.  \par
+			<b>Definition:</b> BALL/MOLMEC/MINIMIZATION/lineSearch.h
 	*/
 	class LineSearch
 	{
@@ -105,16 +105,16 @@ namespace BALL
 				$E(i+1)$ is the current and $E(i)$ the initial energy ($\lambda = 0$)
 				$\alpha$ and $\beta$ are two parameters (usually 0.9 and 0.0001).
 				The line search was successful, if it could determine a value for $\lambda$
-				fulfilling this criterion. The function is used in the \Ref{minimize} method.
+				fulfilling this criterion. The function is used in the  \link minimize minimize \endlink  method.
 		*/
 		virtual bool isSufficient(double lambda, double current_energy, double current_dir_grad) 
 			const;
 
 		/**	Cubic interpolation routine.
 				Use a cubic interpolation to estimate the minimum of the function.
-				if the function is linear, either {\bf lambda_0} or {\bf lambda_1} is returned
+				if the function is linear, either <b>lambda_0</b> or <b>lambda_1</b> is returned
 				(the one with the lower energy associated).
-				The value returned may otherwise lie outside of the interval defined by {\bf lambda_0} and {\bf lambda_1}.
+				The value returned may otherwise lie outside of the interval defined by <b>lambda_0</b> and <b>lambda_1</b>.
 		*/
 		virtual double interpolate	
 			(double lambda_0, double lambda_1, 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularInformation.h,v 1.8 2002/12/12 09:48:48 oliver Exp $
+// $Id: molecularInformation.h,v 1.9 2003/02/21 16:04:59 anhi Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_MOLECULARINFORMATION_H
 #define BALL_MOLVIEW_FUNCTOR_MOLECULARINFORMATION_H
@@ -20,15 +20,15 @@ namespace BALL
 	{
 		
 		/** MolecularInformation class.
-				The class MolecularInformation is derived from the class \Ref{Information}.
-				It overrides the \Ref{visit} method to extract the name and the type of
-				\Ref{Composite} objects that are of a molecular kind. The new types that will be
-				recognized are defined in \Ref{Type}. If the \Ref{Composite} object is not of the
-				types specified in the \Ref{Type} enumeration than the request will be given to
-				the \Ref{Information} class.
-				This class is used by the class \Ref{MolecularControl} to retrieve names and types
-				of the displayed \Ref{Composite} objects. \\
-				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/molecularInformation.h} 
+				The class MolecularInformation is derived from the class  \link Information Information \endlink .
+				It overrides the  \link visit visit \endlink  method to extract the name and the type of
+				 \link Composite Composite \endlink  objects that are of a molecular kind. The new types that will be
+				recognized are defined in  \link Type Type \endlink . If the  \link Composite Composite \endlink  object is not of the
+				types specified in the  \link Type Type \endlink  enumeration than the request will be given to
+				the  \link Information Information \endlink  class.
+				This class is used by the class  \link MolecularControl MolecularControl \endlink  to retrieve names and types
+				of the displayed  \link Composite Composite \endlink  objects.  \par
+				<b>Definition:</b> BALL/MOLVIEW/FUNCTOR/molecularInformation.h
 				@see     Information
 		*/
 		class MolecularInformation
@@ -44,31 +44,31 @@ namespace BALL
 			*/
 			enum Type
 			{
-				/// Unkown type. This value will be set in \Ref{clear}
+				/// Unkown type. This value will be set in  \link clear clear \endlink 
 				TYPE__UNKNOWN              = -1,
 
-				/// System type. This value will be set if the given \Ref{Composite} object is of kind \Ref{System}
+				/// System type. This value will be set if the given  \link Composite Composite \endlink  object is of kind  \link System System \endlink 
 				TYPE__SYSTEM               = 0,
 
-				/// Protein type. This value will be set if the given \Ref{Composite} object is of kind \Ref{Protein}
+				/// Protein type. This value will be set if the given  \link Composite Composite \endlink  object is of kind  \link Protein Protein \endlink 
 				TYPE__PROTEIN              = 1,
 
-				/// Molecule type. This value will be set if the given \Ref{Composite} object is of kind \Ref{Molecule}
+				/// Molecule type. This value will be set if the given  \link Composite Composite \endlink  object is of kind  \link Molecule Molecule \endlink 
 				TYPE__MOLECULE             = 2,
 
-				/// Chain type. This value will be set if the given \Ref{Composite} object is of kind \Ref{Chain}
+				/// Chain type. This value will be set if the given  \link Composite Composite \endlink  object is of kind  \link Chain Chain \endlink 
 				TYPE__CHAIN                = 3,
 
-				/// Fragment type. This value will be set if the given \Ref{Composite} object is of kind \Ref{Fragment}
+				/// Fragment type. This value will be set if the given  \link Composite Composite \endlink  object is of kind  \link Fragment Fragment \endlink 
 				TYPE__FRAGMENT             = 4,
 
-				/// Residue type. This value will be set if the given \Ref{Composite} object is of kind \Ref{Residue}
+				/// Residue type. This value will be set if the given  \link Composite Composite \endlink  object is of kind  \link Residue Residue \endlink 
 				TYPE__RESIDUE              = 5,
 
-				/// Secondary structure type. This value will be set if the given \Ref{Composite} object is of kind \Ref{SecondaryStructure}
+				/// Secondary structure type. This value will be set if the given  \link Composite Composite \endlink  object is of kind  \link SecondaryStructure SecondaryStructure \endlink 
 				TYPE__SECONDARY_STRUCTURE  = 6,
 
-				/// Atom type. This value will be set if the given \Ref{Composite} object is of kind \Ref{Atom}
+				/// Atom type. This value will be set if the given  \link Composite Composite \endlink  object is of kind  \link Atom Atom \endlink 
 				TYPE__ATOM                 = 7
 			};
 			//@}
@@ -79,7 +79,7 @@ namespace BALL
 
 			/** Default Constructor.
 					Construct new moleculareInformation.
-					Calls \Ref{clear}.
+					Calls  \link clear clear \endlink .
 					@return      MolecularInformation new constructed moleculareInformation
 					@see         Information
 			*/
@@ -94,7 +94,7 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} moleculareInformation.
-					Calls \Ref{destroy}.
+					Calls  \link destroy destroy \endlink .
 					@see         destroy
 			*/
 			virtual ~MolecularInformation()
@@ -102,9 +102,9 @@ namespace BALL
 
 			/** Explicit default initialization.
 					Reset the state of {\em *this} moleculareInformation to:
-					Calls \Ref{Information::clear}.
+					Calls  \link Information::clear Information::clear \endlink .
 					\begin{itemize}
-					  \item  type is set to {\tt TYPE__UNKNOWN}
+					  \item  type is set to <tt>TYPE__UNKNOWN</tt>
 					\end{itemize}
 					@see   Filter::clear
 			*/
@@ -123,9 +123,9 @@ namespace BALL
 			//@{
 
 			/** Return the type of the given composite.
-					If the given \Ref{Composite} is of any kind that is defined by the 
-					enumeration \Ref{Type} this type will be returned.
-					@return  Type the type of the \Ref{Composite}
+					If the given  \link Composite Composite \endlink  is of any kind that is defined by the 
+					enumeration  \link Type Type \endlink  this type will be returned.
+					@return  Type the type of the  \link Composite Composite \endlink 
 					@see     Type
 					@see     visit
 			*/
@@ -133,13 +133,13 @@ namespace BALL
 			  throw();
 
 			/** Visit method.
-					This method tries to determine the name and the type of the \Ref{Composite}
-					object. If the type of {\em composite} returned from the method \Ref{getType}
-					is one of the defined type of \Ref{Type}
-					than that name and type is set to the variables \Ref{name_} and \Ref{type_name_}.
-					If the type is {\em TYPE__UNKOWN} than the method \Ref{Information::getType} is
+					This method tries to determine the name and the type of the  \link Composite Composite \endlink 
+					object. If the type of {\em composite} returned from the method  \link getType getType \endlink 
+					is one of the defined type of  \link Type Type \endlink 
+					than that name and type is set to the variables  \link name_ name_ \endlink  and  \link type_name_ type_name_ \endlink .
+					If the type is {\em TYPE__UNKOWN} than the method  \link Information::getType Information::getType \endlink  is
 					called to determine the type.
-					@param  composite the \Ref{Composite} object whose information should be extracted
+					@param  composite the  \link Composite Composite \endlink  object whose information should be extracted
 					@see     Information
 					@see     getType
 			*/

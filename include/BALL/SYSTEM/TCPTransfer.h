@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer.h,v 1.11 2002/12/12 09:27:23 oliver Exp $
+// $Id: TCPTransfer.h,v 1.12 2003/02/21 16:06:06 anhi Exp $
 
 #ifndef BALL_SYSTEM_TCPTRANSFER
 #define BALL_SYSTEM_TCPTRANSFER
@@ -94,7 +94,7 @@ namespace BALL
 			 *	The file from the given address is downloaded and
 			 *	stored in the ofstream instance.
 			 *	You can specify protocol, port and a login/pass by using
-			 *	the syntax: \\
+			 *	the syntax:  \par
 			 *	http[ftp]://login:pass@server.com:port/fileaddress
 			 */
 			TCPTransfer(::std::ofstream& file, const String& address)

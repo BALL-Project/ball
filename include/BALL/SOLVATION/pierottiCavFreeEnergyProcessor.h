@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pierottiCavFreeEnergyProcessor.h,v 1.10 2002/02/27 12:19:39 sturm Exp $
+// $Id: pierottiCavFreeEnergyProcessor.h,v 1.11 2003/02/21 16:06:21 anhi Exp $
 
 #ifndef BALL_SOLVATION_PIEROTTICAVFREEENERGYPROCESSOR_H
 #define BALL_SOLVATION_PIEROTTICAVFREEENERGYPROCESSOR_H
@@ -24,9 +24,9 @@ namespace BALL
 			This processor is using the SPT theory approach by Pierotti,
 			Chem. Rev. 76(6):717--726, 1976 with the modification for
 			non-spherical solutes by Huron/Claverie, J. Phys. Chem.
-			76(15):2123-2133, 1972.	\\
-			Energy returned in units of kJ/mol.	\\
-			{\bf Definition:} \URL{BALL/SOLVATION/pierottiCavFreeEnergyProcessor.h}
+			76(15):2123-2133, 1972.	 \par
+			Energy returned in units of kJ/mol.	 \par
+			<b>Definition:</b> BALL/SOLVATION/pierottiCavFreeEnergyProcessor.h
 	 */
 	class PierottiCavFreeEnergyProcessor
 		:	public EnergyProcessor

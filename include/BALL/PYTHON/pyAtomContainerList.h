@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyAtomContainerList.h,v 1.3 2002/02/27 12:19:34 sturm Exp $
+// $Id: pyAtomContainerList.h,v 1.4 2003/02/21 16:05:50 anhi Exp $
 
 #ifndef BALL_PYTHON_PYATOMCONTAINERLIST_H
 #define BALL_PYTHON_PYATOMCONTAINERLIST_H
@@ -66,7 +66,7 @@ namespace BALL
 			
 		/**	Construct from a AtomContainer
 				This constructor creates an PyAtomContainerList object from
-				all base fragments of a \Ref{AtomContainer} object.
+				all base fragments of a  \link AtomContainer AtomContainer \endlink  object.
 		*/
 		PyAtomContainerList(const AtomContainer& fragment, bool selected_only = false);
 

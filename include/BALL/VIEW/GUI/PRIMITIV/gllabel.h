@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: gllabel.h,v 1.8 2002/02/27 12:20:04 sturm Exp $
+// $Id: gllabel.h,v 1.9 2003/02/21 16:07:33 anhi Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLLABEL_H
 #define BALL_VIEW_GUI_PRIMITIV_GLLABEL_H
@@ -32,13 +32,13 @@ namespace BALL
 		/** GLLabel class.
 				An instance of GLLabel represents an instance of the geometric
 				visualization "label".
-				The class GLLabel is derived from the classes \Ref{Label} and
-				\Ref{GLObject}. Therefore the class glLabel is the graphical extension
+				The class GLLabel is derived from the classes  \link Label Label \endlink  and
+				 \link GLObject GLObject \endlink . Therefore the class glLabel is the graphical extension
 				of the geometrical definition of the class label.
-				The drawing method from \Ref{GLObject} is overridden to visualize the
+				The drawing method from  \link GLObject GLObject \endlink  is overridden to visualize the
 				label. OpenGL code is used for the visualization.
 				See these classes for further information.
-				{\bf Definition:} \URL{BALL/VIEW/GUI/PRIMITIV/gllabel.h}
+				<b>Definition:</b> BALL/VIEW/GUI/PRIMITIV/gllabel.h
 		*/
 		class GLLabel
 			: public Label,
@@ -63,7 +63,7 @@ namespace BALL
 					Construct new glLabel by copying the glLabel {\em label}.
 					The copy is either deep (default) or shallow.
 					@param       label the glLabel to be copied (cloned)
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false})
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>)
 					@return      GLLabel new constructed glLabel copied from {\em label}
 					@see         Label
 					@see         GLObject
@@ -91,7 +91,7 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} glLabel.
-					Calls \Ref{destroy}.
+					Calls  \link destroy destroy \endlink .
 					@see         destroy
 			*/
 			virtual ~GLLabel()
@@ -99,8 +99,8 @@ namespace BALL
 
 			/** Explicit default initialization.
 					Set the font of {\em *this} label to "helvetica".
-					Calls \Ref{Label::clear}
-					Calls \Ref{GLObject::clear}
+					Calls  \link Label::clear Label::clear \endlink 
+					Calls  \link GLObject::clear GLObject::clear \endlink 
 					@see  Label::clear
 					@see  GLObject::clear
 			*/
@@ -108,8 +108,8 @@ namespace BALL
 				throw();
 
 			/** Explicit destructor.
-					Calls \Ref{Label::destroy}
-					Calls \Ref{GLObject::destroy}
+					Calls  \link Label::destroy Label::destroy \endlink 
+					Calls  \link GLObject::destroy GLObject::destroy \endlink 
 					@see  Label::destroy
 					@see  GLObject::destroy
 			*/
@@ -125,9 +125,9 @@ namespace BALL
 					Assign the glLabel {\em label} to {\em *this} glLabel.
 					The copy is either deep (default) or shallow.
 					The value of {\em *this} glLabel is initialized to the value of 
-					the glLabel {\em label}.\\
+					the glLabel {\em label}. \par
 					@param       label the glLabel to be copied
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em label}
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of {\em label}
 					@see         Label
 					@see         GLObject
 			*/
@@ -137,9 +137,9 @@ namespace BALL
 			/** Assignment operator.
 					Assign the glLabel {\em label} to {\em *this} glLabel.
 					The copy is deep.
-					Calls \Ref{set}.
+					Calls  \link set set \endlink .
 					The value of {\em *this} glLabel is initialized to the value 
-					of the glLabel {\em label}.\\
+					of the glLabel {\em label}. \par
 					@param       label the glLabel to be copied
 					@return      GLLabel& constant reference {\em *this} glLabel
 					@see         set
@@ -150,11 +150,11 @@ namespace BALL
 			/** Copying with cloning facility.
 					Copy {\em *this} glLabel to the glLabel {\em label}.
 					The copy is either deep (default) or shallow.
-					Calls \Ref{set}.
+					Calls  \link set set \endlink .
 					The value of the glLabel {\em label} is initialized to the
-					value of {\em *this} glLabel.\\
+					value of {\em *this} glLabel. \par
 					@param       label the glLabel to be assigned to
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em label}
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of {\em label}
 					@see         set
 			*/
 			void get(GLLabel& label, bool deep = true) const
@@ -175,7 +175,7 @@ namespace BALL
 			/** Change the name of the glLabel.
 					Change the name of {\em *this} glLabel represented by the parameter {\em text}.
 					Store the old text for internal purpose.
-					Calls \Ref{Label::setText}.
+					Calls  \link Label::setText Label::setText \endlink .
 					@param       text the new text of {\em *this} glLabel
 					@see         Label::setText
 			*/
@@ -212,10 +212,10 @@ namespace BALL
 			//@{
 			
 			/** Creation of the graphical representation.
-					Overridden method from \Ref{GLObject}. Uses the geometrical properties
-					defined in class \Ref{Label} to create the graphical representation
+					Overridden method from  \link GLObject GLObject \endlink . Uses the geometrical properties
+					defined in class  \link Label Label \endlink  to create the graphical representation
 					of the label. This method is used internally from the render engine
-					of the \Ref{Scene}.
+					of the  \link Scene Scene \endlink .
 					If the render engine calls this method for the first time a bitmap
 					representing the text of the glLabel will be created with the
 					chosen font. If the font or the text of {\em *this} glLabel changes
@@ -224,7 +224,7 @@ namespace BALL
 					{\em glLoadName} must be used for naming the graphical object 
 					(necessary for picking mode in the scene).
 					@param     with_names flag if the graphical objects must have a name
-					@return    bool {\tt true} if successful,	{\tt false} otherwise
+					@return    bool <tt>true</tt> if successful,	<tt>false</tt> otherwise
 					@see       GLObject::draw
 			*/
 			virtual bool draw(bool with_names = false)
@@ -232,9 +232,9 @@ namespace BALL
 
 			/** Export method.
 					This method handles the export of {\em *this} glLabel into another
-					format (eg. POVRAY, VRML)\\
-				  {\bf Note:} Not yet implemented.
-					@return    bool {\tt true} if successful,	{\tt false} otherwise
+					format (eg. POVRAY, VRML) \par
+				  <b>Note:</b> Not yet implemented.
+					@return    bool <tt>true</tt> if successful,	<tt>false</tt> otherwise
 			*/
 			virtual bool extract()
 				throw();

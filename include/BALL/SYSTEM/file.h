@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.h,v 1.42 2002/12/16 17:15:33 oliver Exp $
+// $Id: file.h,v 1.43 2003/02/21 16:06:08 anhi Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -65,18 +65,18 @@ namespace BALL
 {
 
 	/**	This class handles automatic file transformation methods.
-		  \Ref{File} provides the ability to transform files on the fly using predefined 
+		   \link File File \endlink  provides the ability to transform files on the fly using predefined 
 			transformation commands  (e.g. unix-style filters). For example, compressed 
-      files can be automatically decompressed by calling the unic {\tt compress} command.
+      files can be automatically decompressed by calling the unic <tt>compress</tt> command.
 			The respective commands are selectedvia a suitable regular expression, usually
       matching the file suffix. A frequent application for this transformation is the
-			compressed storage of PDB files in the unix compressed format ({\tt *.Z}).
+			compressed storage of PDB files in the unix compressed format (<tt>*.Z</tt>).
 			Transformation manager basically contains a map consisting of two strings.
-			Using \Ref{findTransformationCommand}, \Ref{File} can determine whether there
+			Using  \link findTransformationCommand findTransformationCommand \endlink ,  \link File File \endlink  can determine whether there
 			is a suitable transformation command available for a given file name.
 			User-defined transformation may be defined at any time using the 
-			\Ref{registerTransformation} method of the static instance of \Ref{TransformationManager}
-			accessible through \Ref{File::getTransformationManager}.
+			 \link registerTransformation registerTransformation \endlink  method of the static instance of  \link TransformationManager TransformationManager \endlink 
+			accessible through  \link File::getTransformationManager File::getTransformationManager \endlink .
 	*/
 	class TransformationManager
 	{	
@@ -108,20 +108,20 @@ namespace BALL
 		String findTransformation(const String& name) const;
 
 		/** Apply a suitable transformation to the string.
-				This first calls \Ref{findTransformation} to determine the
-				command string that should be applied. The {\tt name} argument
+				This first calls  \link findTransformation findTransformation \endlink  to determine the
+				command string that should be applied. The <tt>name</tt> argument
 				is then replaced with the contents of the matching command in the 
 				TransformationManager's map. The following rules apply (in that order):
 				\begin{itemize}
-					\item {\tt %s} is replaced by the full content of {\tt name}
-					\item {\tt %f} is replaced by the full content of {\tt name}, without any file type suffix (i.e. anything after
+					\item <tt>%s</tt> is replaced by the full content of <tt>name</tt>
+					\item <tt>%f</tt> is replaced by the full content of <tt>name</tt>, without any file type suffix (i.e. anything after
 								the last dot in the filename is removed)
-					\item {\tt %f[suffix]} is replaced by the previous content of {\tt name} without the {\tt suffix}
-					\item {\tt %b} and {\tt %b[suffix]} like {\tt %f} and {\tt %f[suffix]}, except that the
+					\item <tt>%f[suffix]</tt> is replaced by the previous content of <tt>name</tt> without the {\tt suffix}
+					\item <tt>%b</tt> and <tt>%b[suffix]</tt> like {\tt %f} and {\tt %f[suffix]}, except that the
 								path is removed as well, so it is only the {\em base name} of the file
-					\item {\tt %p} the path to the file
-					\item {\tt %t} a temporary file name (all occurences of {\tt %t} are replace with the same file name for
-												the same invocation of \Ref{transform}, but different file names on subsequent invocations)
+					\item <tt>%p</tt> the path to the file
+					\item <tt>%t</tt> a temporary file name (all occurences of <tt>%t</tt> are replace with the same file name for
+												the same invocation of  \link transform transform \endlink , but different file names on subsequent invocations)
 				\end{itemize}
 		*/
 		String transform(const String& name);
@@ -134,7 +134,7 @@ namespace BALL
 	};
 		
 	/**	File Class.	
-			{\bf Definition:} \URL{BALL/SYSTEM/file.h} \\
+			<b>Definition:</b> BALL/SYSTEM/file.h
 	*/
 	class File
 		: public std::fstream
@@ -475,13 +475,13 @@ namespace BALL
 		//@{
 
 		/**	Mutable access the TransformationManager.
-				\Ref{File} defines a static instance of \Ref{TransformationManager} to
+				 \link File File \endlink  defines a static instance of  \link TransformationManager TransformationManager \endlink  to
 				handle on-the-fly conversions of files (e.g. compression, charset conversion, etc.).
 		*/
 		TransformationManager& getTransformationManager();
 
 		/**	Constant access to the TransformationManager.
-				\Ref{File} defines a static instance of \Ref{TransformationManager} to
+				 \link File File \endlink  defines a static instance of  \link TransformationManager TransformationManager \endlink  to
 				handle on-the-fly conversions of files (e.g. compression, charset conversion, etc.).
 		*/
 		const TransformationManager& getTransformationManager() const;
@@ -630,13 +630,13 @@ namespace BALL
 
 	/** Helper class for data conversion.	
 			BinaryFileAdaptors are used to read and write binary data from and to
-			streams. This is done by reading the member {\tt data} as a byte stream
+			streams. This is done by reading the member <tt>data</tt> as a byte stream
 			through an explicit cast and utilizing the stream read() and write() 
-			functions.\\
-			{\bf Caveat:} This concept relies on the C++ memory layout and thus 
+			functions. \par
+			<b>Caveat:</b> This concept relies on the C++ memory layout and thus 
 			is highly non-portable!
-			\\
-			{\bf Definition:} \URL{BALL/SYSTEM/file.h} 
+			 \par
+			<b>Definition:</b> BALL/SYSTEM/file.h
 	*/
 	template <typename T>
 	class BinaryFileAdaptor
@@ -659,20 +659,20 @@ namespace BALL
 		///@name Accessors
 		//@{
 
-		/** Sets the member {\tt data} to the desired value.
+		/** Sets the member <tt>data</tt> to the desired value.
 				@param data data of type T
 		*/
 		void setData(const T& data)
 			throw();
 
 		/** Returns a const reference to the data stored in the adaptor
-				@return a const reference to {\tt data}
+				@return a const reference to <tt>data</tt>
 		*/
 		const T& getData() const
 			throw();
 
 		/** Returns a mutable reference to the data stored in the adaptor
-				@return a mutable reference to {\tt data}
+				@return a mutable reference to <tt>data</tt>
 				*/
 		T& getData()
 			throw();

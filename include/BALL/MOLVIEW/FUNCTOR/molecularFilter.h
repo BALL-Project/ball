@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFilter.h,v 1.8 2002/12/12 09:48:48 oliver Exp $
+// $Id: molecularFilter.h,v 1.9 2003/02/21 16:04:58 anhi Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_MOLECULARFILTER_H
 #define BALL_MOLVIEW_FUNCTOR_MOLECULARFILTER_H
@@ -17,12 +17,12 @@ namespace BALL
 		
 		/** MolecularFilter class.
 				The class MolecularFilter is a class that filters
-				\Ref{Composite} objects. The \Ref{visit} method implements the filter
-				criteria. In this case this method filters \Ref{Composite} objects
-				that are of kind \Ref{Atom} or of kind \Ref{AtomContainer}.
-				This class is used by the class \Ref{MolecularControl} to filter
-				\Ref{Composite} objects that are of the kind specified above. \\
-				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/molecularFilter.h} 
+				 \link Composite Composite \endlink  objects. The  \link visit visit \endlink  method implements the filter
+				criteria. In this case this method filters  \link Composite Composite \endlink  objects
+				that are of kind  \link Atom Atom \endlink  or of kind  \link AtomContainer AtomContainer \endlink .
+				This class is used by the class  \link MolecularControl MolecularControl \endlink  to filter
+				 \link Composite Composite \endlink  objects that are of the kind specified above.  \par
+				<b>Definition:</b> BALL/MOLVIEW/FUNCTOR/molecularFilter.h
 		*/
 		class MolecularFilter: public VIEW::Filter
 		{
@@ -34,7 +34,7 @@ namespace BALL
 
 			/** Default Constructor.
 					Construct new filter.
-					The state of {\em *this} filter is: result is {\tt false}.
+					The state of {\em *this} filter is: result is <tt>false</tt>.
 					@return      Filter new constructed filter
 					@see         Filter
 			*/
@@ -49,21 +49,21 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} molecularFilter.
-					Calls \Ref{destroy}.
+					Calls  \link destroy destroy \endlink .
 					@see         destroy
 			*/
 			virtual ~MolecularFilter()
 				throw();
 
 			/** Explicit default initialization.
-					Calls \Ref{Filter::clear}.
+					Calls  \link Filter::clear Filter::clear \endlink .
 					@see  Filter::clear
 			*/
 			virtual void clear()
 				throw();
 
 			/** Explicit destructor.
-					Calls \Ref{Filter::destroy}.
+					Calls  \link Filter::destroy Filter::destroy \endlink .
 					@see  Filter::destroy
 			*/
 			virtual void destroy()
@@ -74,10 +74,10 @@ namespace BALL
 			*/
 			//@{
 			/** Visit method.
-					This method sets the result to {\tt true} if the \Ref{Composite} object
-					is of kind \Ref{Atom} or of kind \Ref{AtomContainer}, {\tt false}
+					This method sets the result to <tt>true</tt> if the  \link Composite Composite \endlink  object
+					is of kind  \link Atom Atom \endlink  or of kind  \link AtomContainer AtomContainer \endlink , <tt>false</tt>
 					otherwise
-					@param  composite the \Ref{Composite} object to be filtered by {\em *this} molecularFilter.
+					@param  composite the  \link Composite Composite \endlink  object to be filtered by {\em *this} molecularFilter.
 					@see    Filter
 					@see    setResult_
 			*/

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: global.h,v 1.13 2002/12/22 13:19:12 oliver Exp $
+// $Id: global.h,v 1.14 2003/02/21 16:01:16 anhi Exp $
 
 #ifndef BALL_COMMON_GLOBAL_H
 #define BALL_COMMON_GLOBAL_H
@@ -42,102 +42,102 @@ namespace BALL
 	/**	@name Type aliases defined by BALL.
 			These predefined types are used in BALL for portability and
 			comprehensibility.
-			{\bf Definition:} \URL{BALL/COMMON/global.h}
+			<b>Definition:</b> BALL/COMMON/global.h
 	*/
 	//@{
 
 	/**	Distance type.
 			Use this type to represent distances in indices. Signed.
-			\\
-			{\bf Size:} 32 bit\\
-			{\bf persistent}
+			 \par
+			<b>Size:</b> 32 bit \par
+			<b>persistent</b>
 	*/
 	typedef BALL_INDEX_TYPE	Distance; 
 
 	/**	Handle type.
-			Use this type to represent {\bf handles}. Handles are used
+			Use this type to represent <b>handles</b>. Handles are used
 			for the non-ambiguous identification of objects (e.g. object derived
-      from \Ref{Object}). Handles are unsigned.
-			\\
-			{\bf Size:} 32 bit\\
-			{\bf persistent}
+      from  \link Object Object \endlink ). Handles are unsigned.
+			 \par
+			<b>Size:</b> 32 bit \par
+			<b>persistent</b>
   */
 	typedef BALL_SIZE_TYPE 	Handle;
 
 	/**	Index type.
 			Use this type to represent indices (e.g. in strings or other sequences).
-			Theses indices may be signed, contrary to the \Ref{Size} type.
-			\\
-			{\bf Size:} 32 bit\\
-			{\bf persistent}
+			Theses indices may be signed, contrary to the  \link Size Size \endlink  type.
+			 \par
+			<b>Size:</b> 32 bit \par
+			<b>persistent</b>
 	*/
 	typedef BALL_INDEX_TYPE	Index;
 
 	/**	Size type.
 			Use this type to represent sizes of containers, sequences or alike.
 			Variables of type Size are unsigned.
-			\\
-			{\bf Size:} 32 bit\\
-			{\bf persistent}
+			 \par
+			<b>Size:</b> 32 bit \par
+			<b>persistent</b>
 	*/
 	typedef BALL_SIZE_TYPE 	Size;
 
 	/**	Time type.
 			Use this type to represent a point in time
 			(as a replaecement for time_t).
-			\\
-			{\bf Size:} platform dependent\\
-			{\bf not persistent}
+			 \par
+			<b>Size:</b> platform dependent \par
+			<b>not persistent</b>
 	*/
 	typedef time_t 	Time;
 
 	/**	HashIndex type.
 			Use this type to access the result of a hash functions. All hash functions
-			defined in namespace \Ref{Hashing} return a HashIndex. HashIndex is unsigned.
-			\\
-			{\bf Size:} 32 bit\\
-			{\bf persistent}
+			defined in namespace  \link Hashing Hashing \endlink  return a HashIndex. HashIndex is unsigned.
+			 \par
+			<b>Size:</b> 32 bit \par
+			<b>persistent</b>
 	*/
 	typedef	BALL_SIZE_TYPE	HashIndex;
 
 	/**	Position type.
 			Use this type to represent positions (e.g. in a container) that
-			cannot be negative (contrary to \Ref{Index}).
-			\\
-			{\bf Size:} 32 bit\\
-			{\bf persistent}
+			cannot be negative (contrary to  \link Index Index \endlink ).
+			 \par
+			<b>Size:</b> 32 bit \par
+			<b>persistent</b>
 	*/
 	typedef	BALL_SIZE_TYPE	Position;
 
 	/**	Real type.
 			Use this type to represent standard floating point numbers.
-			\\
-			{\bf Size:} 32 bit\\
-			{\bf persistent}
+			 \par
+			<b>Size:</b> 32 bit \par
+			<b>persistent</b>
 	*/
 	typedef float Real;
 
 	/**	Double-precision real type.
 			Use this type to represent double precision floating point numbers.
-			\\
-			{\bf Size:} 64 bit\\
-			{\bf persistent}
+			 \par
+			<b>Size:</b> 64 bit \par
+			<b>persistent</b>
 	*/
 	typedef double DoubleReal;
 
 	/**	Unnamed property type.
 			Use this type to represent (unnamed) properties.
-			\\
-			{\bf Size:} 32 bit\\
-			{\bf persistent}
+			 \par
+			<b>Size:</b> 32 bit \par
+			<b>persistent</b>
 			@see PropertyManager
 	*/
 	typedef BALL_SIZE_TYPE Property;
 
 	/**	Error code property type.
-			Use this type to represent (signed) error codes. \\
-			{\bf Size:} 32 bit\\
-			{\bf persistent}
+			Use this type to represent (signed) error codes.  \par
+			<b>Size:</b> 32 bit \par
+			<b>persistent</b>
 			@see PropertyManager
 	*/
 	typedef BALL_INDEX_TYPE ErrorCode;
@@ -146,27 +146,27 @@ namespace BALL
 	/**	Byte type.
 			Use this type to represent byte data (8 bit length).
 			A Byte is always unsigned.
-			\\
-			{\bf Size:} 8 bit\\
-			{\bf persistent}
+			 \par
+			<b>Size:</b> 8 bit \par
+			<b>persistent</b>
 	*/
 	typedef	unsigned char Byte;
 
 	/**	Pointer-sized unsigned int type.
 			This type holds unsigned 64 bit integer numbers and is used to store pointers
 			in a portable fashion (for both 32-bit and 64-bit systems).
-			\\
-			{\bf Size:} 64 bit\\
-			{\bf persistent}
+			 \par
+			<b>Size:</b> 64 bit \par
+			<b>persistent</b>
 	*/
 	typedef BALL_ULONG64_TYPE PointerSizeUInt;
 
 	/**	Pointer-sized signed int type.
 			This type holds unsigned 64 bit numbers and is used to store pointers
 			in a portable fashion (for both 32-bit and 64-bit systems).
-			\\
-			{\bf Size:} 64 bit\\
-			{\bf persistent}
+			 \par
+			<b>Size:</b> 64 bit \par
+			<b>persistent</b>
 	*/
 	typedef BALL_LONG64_TYPE PointerSizeInt;
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: exception.h,v 1.33 2002/12/12 09:48:39 oliver Exp $
+// $Id: exception.h,v 1.34 2003/02/21 16:01:15 anhi Exp $
    
 #ifndef BALL_COMMON_EXCEPTION_H
 #define BALL_COMMON_EXCEPTION_H
@@ -36,25 +36,25 @@ namespace BALL
 				Each exception class should define a constructor taking a string
 				and an int as parameters. These two values are interpreted as the
 				current filename and line number and is usually printed in case of
-				an uncaught exception.  To support this feature, each {\bf throw}
-				directive should look as follows: \\
-				{\tt {\bf throw Exception::GeneralException}(\_\_FILE\_\_, \_\_LINE\_\_);}\\
-				{\tt \_\_FILE\_\_} and {\tt \_\_LINE\_\_} are built-in preprocessor
+				an uncaught exception.  To support this feature, each <b>throw</b>
+				directive should look as follows:  \par
+				<tt><b>throw Exception::GeneralException</b>(\_\_FILE\_\_, \_\_LINE\_\_);</tt> \par
+				<tt>\_\_FILE\_\_</tt> and <tt>\_\_LINE\_\_</tt> are built-in preprocessor
 				macros that hold the desired information.
-				\\
-				BALL provides its own \Ref{terminate} handler. This handler
+				 \par
+				BALL provides its own  \link terminate terminate \endlink  handler. This handler
 				extracts as much information as possible from the exception, prints
-				it to {\tt cerr} and \Ref{Log}, and finally calls exits the program
+				it to <tt>cerr</tt> and  \link Log Log \endlink , and finally calls exits the program
 				cleanly (with exit code 1).  This can be rather inconvenient for
 				debugging, since you are told where the exception was thrown, but
 				in general you do not know anything about the context.  Therefore
-				{\tt terminate} can also create a core dump. Using a debugger (e.g.
+				<tt>terminate</tt> can also create a core dump. Using a debugger (e.g.
 				dbx or gdb) you can then create a stack traceback.  To create a
 				core dump, you should set the environment variable {\tt
 				BALL_DUMP_CORE} to any (non empty) value.
-				\\
-				{\bf Definition:}\URL{BALL/COMMON/exception.h}
-				\\
+				 \par
+				<b>Definition:</b>BALL/COMMON/exception.h
+				 \par
 		*/
 		
 		class GeneralException 
@@ -420,18 +420,18 @@ namespace BALL
 
 			/**	Default constructor.
 					This constructor installs the BALL specific handlers for
-					{\tt terminate}, {\tt unexpected}, and {\tt new_handler}.
-					{\tt terminate} or {\tt unexpected} are called to abort 
+					<tt>terminate</tt>, <tt>unexpected</tt>, and {\tt new_handler}.
+					<tt>terminate</tt> or <tt>unexpected</tt> are called to abort 
 					a program if an exception was not caught or a function 
 					exits via an exception that is not allowed by its exception
 					specification. Both functions are replaced by a function of 
 					GlobalExceptionHandler that tries to determine the 
 					last exception thrown. This mechanism only works, if all 
-					exceptions are defrived from \Ref{GeneralException}.\\
+					exceptions are defrived from  \link GeneralException GeneralException \endlink . \par
 
-					The default {\tt new_handler} is replaced by \Ref{newHandler}
-					and throws an exception of type \Ref{OutOfMemory} instead of 
-					{\tt bad_alloc} (the default behaviour defined in the ANSI C++ 
+					The default <tt>new_handler</tt> is replaced by  \link newHandler newHandler \endlink 
+					and throws an exception of type  \link OutOfMemory OutOfMemory \endlink  instead of 
+					<tt>bad_alloc</tt> (the default behaviour defined in the ANSI C++ 
 					standard).
 			*/
 			GlobalExceptionHandler()

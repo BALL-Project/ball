@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: steepestDescent.h,v 1.11 2003/02/04 14:26:57 oliver Exp $
+// $Id: steepestDescent.h,v 1.12 2003/02/21 16:04:36 anhi Exp $
 // Line Search Minimizer: A special class for the line search minimization algorithm
 
 #ifndef BALL_MOLMEC_MINIMIZATION_STEEPESTDESCENT_H
@@ -148,7 +148,7 @@ namespace BALL
 
 		/**	The current step size.
 				This is used in findStep as an argument to the line search.
-				The step size is chosen and adjusted in the \Ref{minimize}.
+				The step size is chosen and adjusted in the  \link minimize minimize \endlink .
 		*/
 		double step_;
 	};

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: poissonBoltzmann.h,v 1.20 2002/12/22 11:45:26 sturm Exp $ 
+// $Id: poissonBoltzmann.h,v 1.21 2003/02/21 16:06:22 anhi Exp $ 
 // Finite Difference Poisson Boltzmann Solver
 
 #ifndef BALL_SOLVATION_POISSONBOLTZMANN_H
@@ -30,7 +30,7 @@ namespace BALL
 {
 
 	/** Finite Difference Poisson Boltzmann Solver.
-			{\bf Definition:} \URL{BALL/SOLVATION/poissonBoltzmann.h}
+			<b>Definition:</b> BALL/SOLVATION/poissonBoltzmann.h
 	*/			
 	class FDPB 
 	{
@@ -73,10 +73,10 @@ namespace BALL
 			ERROR__CANNOT_CREATE_SAS_GRID,
 
 			/**	Unable to create dielectric grid/out of memory.
-					FDPB uses a {\tt TRegularData3D<float>} (\Ref{FDPB::eps_grid}) to describe the
+					FDPB uses a <tt>TRegularData3D<float></tt> ( \link FDPB::eps_grid FDPB::eps_grid \endlink ) to describe the
 					dielectric constant $\varepsilon$ as a function of space.
 					This grid is created by calling FDPB::setupEpsGrid().
-					It contains the relative dielectric constant between neighbouring grid points.\\
+					It contains the relative dielectric constant between neighbouring grid points. \par
 					If virtual memory is exhausted and the grid could not be created 
 					this error is set.
 			*/
@@ -85,7 +85,7 @@ namespace BALL
 			/**	Unable to create grid for the modified Debye Hueckel parameter/out of memory.
 					The modified Debye Hueckel parameter $\bar{\kappa}$ is also a function of 
 					space and therefore represented by a TRegularData3D<float> (FDPB::kappa_grid).
-					The grid is created by FDPB::setupKappaGrid().\\
+					The grid is created by FDPB::setupKappaGrid(). \par
 					If the creation of this grid fails due to a alack of virtual memory
 					this error code is set.
 			*/
@@ -93,7 +93,7 @@ namespace BALL
 
 			/**	Unable to create charge grid/out of memory.
 					FDPB::setupQGrid() distributes the charge of the atoms
-					in a grid. This grid is named FDPB::q_grid.\\
+					in a grid. This grid is named FDPB::q_grid. \par
 					If the creation of this grid fails due to a lack of virtual memory,
 					this error code is set.
 			*/
@@ -110,7 +110,7 @@ namespace BALL
 			/**	Create solvent accessible surface grid first.
 					This error code is set by FDPB::setupKappGrid() if it is called
 					but the ion excluded surface has not been set (usually by calling
-					FDPB::setupSASGrid).\\
+					FDPB::setupSASGrid). \par
 					Solution: call  FDPB::setupKappaGrid after calling FDPB::setupSASGrid.
 			*/
 			ERROR__SAS_GRID_REQUIRED,
@@ -118,8 +118,8 @@ namespace BALL
 			/**	Create dielectric constant grid first.
 					This error code is set by FDPB::setupQGrid(), FDPB::setupKappaGrid(), 
 					or FDPB::setupPhiGrid() if it was called, 
-					but \Ref{FDPB::eps_grid} was not defined yet (this is usually done
-					by calling \Ref{FDPB::setupEpsGrid}).\\
+					but  \link FDPB::eps_grid FDPB::eps_grid \endlink  was not defined yet (this is usually done
+					by calling  \link FDPB::setupEpsGrid FDPB::setupEpsGrid \endlink ). \par
 					Solution:	call FDPB::setupEpsGrid first
 			*/
 			ERROR__EPSILON_GRID_REQUIRED,
@@ -127,7 +127,7 @@ namespace BALL
 			/**	Create atom array first.
 					This error code is set by FDPB::setupQGrid() or
 					FDPB::setupBoundary() if it was called but FDPB::atom_array
-					was not yet defined (this is usually done by calling FDPB::setupAtomArray()).\\
+					was not yet defined (this is usually done by calling FDPB::setupAtomArray()). \par
 					Solution: call FDPB::setupAtomArray() first
 			*/
 			ERROR__ATOM_ARRAY_REQUIRED,
@@ -151,7 +151,7 @@ namespace BALL
 			/**	The specified method to smooth the dielectric constant grid 
 					is not allowed.
 					FDPB::setupEpsGrid sets this error code, if it cannot
-					identify the method given in FDPB::Option::dielectric_smoothing.\\
+					identify the method given in FDPB::Option::dielectric_smoothing. \par
 					Solution: specify a valid smoothing method in FDPB::options
 					@see	FDPB::Option::dielectric_smoothing
 					@see	FDPB::DielectricSmoothing
@@ -160,7 +160,7 @@ namespace BALL
 		
 			/**	The specified charge distribution is not allowed.
 					FDPB::setupQGrid() sets this error code, if it cannot
-					identify the method given in FDPB::Option::charge_distribution.\\
+					identify the method given in FDPB::Option::charge_distribution. \par
 					Solution: specify a valid charge distribution method in FDPB::options
 					@see	FDPB::Option::charge_distribution
 					@see	FDPB::ChargeDistribution
@@ -169,7 +169,7 @@ namespace BALL
 
 			/**	The specified boundary condition type is not allowed.
 					FDPB::setupBoundary() sets this error code, if it cannot
-					identify the boundary condition given in FDPB::Option::boundary.\\
+					identify the boundary condition given in FDPB::Option::boundary. \par
 					Solution: specify a valid boundary condition in FDPB::options
 					@see	FDPB::Option::boundary
 					@see	FDPB::Boundary
@@ -179,7 +179,7 @@ namespace BALL
 			/**	Upper or lower grid coordinates were specified in an incorrect format.
 					This error code is set by FDPB::setupEpsGrid if the string
 					given in FDPB::options (key FDPB::Option::LOWER or FDPB::Option::UPPER)
-					were not in vector format.\\
+					were not in vector format. \par
 					Solution: specify upper/lower coordinates in the correct format
 					@see	Options::isVector
 			*/
@@ -190,14 +190,14 @@ namespace BALL
 					(key FDPB::Option::LOWER and FDPB::Option::UPPER)
 					must fulfill just one condition: every coordinate of lower
 					hast to be less (not equal!) to the corresponding coordinate of
-					upper.\\
+					upper. \par
 					Solution: specify a reasonable non-degenerate grid
 			*/
 			ERROR__ILLEGAL_VALUE_FOR_LOWER_UPPER,
 
 			/**	Call setup first.
 					This error code is set by FDPB::solve() if FDPB::q_grid
-					or FDPB::phi_grid or FDPB::eps_grid are undefined.\\
+					or FDPB::phi_grid or FDPB::eps_grid are undefined. \par
 					Solution: define each of the above mentioned grids or call FDPB::setup()
 			*/
 			ERROR__SETUP_REQUIRED,
@@ -209,14 +209,14 @@ namespace BALL
 
 		/**	Symbolic names for option keys.
 				This struct contains a symbolic name
-				for each recognized key in FDPB::options.\\
+				for each recognized key in FDPB::options. \par
 				For each symbol the required type is given under parameters.
 		*/
 		struct Option 
 		{
 			/**	The verbosity level.
 					Use integer values with this option.
-					0 = terse\\
+					0 = terse \par
 					99 = tell me everything
 					@see		Default::VERBOSITY
 					@param	verbosity  integer
@@ -227,7 +227,7 @@ namespace BALL
 					
 					This prints the timing (if Option::verbosity > 1)
 					of each setup routine and the time needed to solve the
-					equations.\\
+					equations. \par
 					Results are also included in FDPB::results.
 					@see		Default::PRINT_TIMING
 					@param	print_timing	bool
@@ -420,7 +420,7 @@ namespace BALL
 			/** Boundary condition Debye: potential at boundary points is
 					estimated using Debye Hueckel theory.
 					The Potential at each point of the grid boundary is estimated
-					as the Debye Hueckel potential according to the following formula:\\
+					as the Debye Hueckel potential according to the following formula: \par
 					\[
 							\phi_{x,y,z} = \sum_i \frac{1}{4 \pi \varepsilon \varepsilon_0}
 													\frac{q_i}{r} e^{-\frac{r}{d}}
@@ -476,19 +476,19 @@ namespace BALL
 
 			/**	Uniform smoothing.
 					This method assigns the arithmetic average of the point's value and
-					its 26 next grid neighbours to the grid point:\\
+					its 26 next grid neighbours to the grid point: \par
 					\[
 							\varepsilon_0 = \frac{1}{27} \left( \sum_{i=1}^{26} \varepsilon_i + \varepsilon_0 \right)
-					\]\\
+					\] \par
 			*/
 			static const char* UNIFORM;
 
 			/**	Harmonic smoothing.
 					This method assigns the harmonic average of the point's value and 
-					its 26 next grid neighbours to the grid point:\\
+					its 26 next grid neighbours to the grid point: \par
 					\[
 							\varepsilon_0 = \frac{1}{\sum_{i=1}^{26} \frac{1}{\varepsilon_i} + \frac{1}{\varepsilon_0}}
-					\]\\
+					\] \par
 			*/
 			static const char* HARMONIC;
 		};
@@ -683,9 +683,9 @@ namespace BALL
 
 		/**	Destroys all allocated grids and the atom array.
 				This method reverts the FDPB object to the state it had prior to
-				a call to setup. Especially it frees all memory intensive datastructures.\\
+				a call to setup. Especially it frees all memory intensive datastructures. \par
 				{\em destroyGrids} deletes eps_grid, kappa_grid, q_grid, phi_grid, and SAS_grid.
-				Contrary to destroy, it doesnt't clear options and results.\\
+				Contrary to destroy, it doesnt't clear options and results. \par
 				@see	destroy
 				@see	setup
 		*/
@@ -694,7 +694,7 @@ namespace BALL
 		//@}
 		/**	@name Setup methods
 				Using these methods, a FDPB object can be prepared
-				for a calculation.\\
+				for a calculation. \par
 		*/
 		//@{
 
@@ -710,7 +710,7 @@ namespace BALL
 					\item setupBoundary
 				\end{itemize}
 				If any of theses method invocations fail, it terminates at this point and
-				returns false.\\
+				returns false. \par
 				On successful execution it returns true and the FDPB object is
 				ready to solve the Poisson Boltzmann equation by calling solve().
 				@see	setup(System& system, Options& options)
@@ -734,17 +734,17 @@ namespace BALL
 				on the assumption that one can determine which points on a 
 				given grid are inside a given solute (with low dielectric constant)
 				and which points are outside (i.e., they are in the high dielectric
-				constant solvent).\\
-				\Ref{setupEpsGrid} creates a grid containing the dielectric constant
+				constant solvent). \par
+				 \link setupEpsGrid setupEpsGrid \endlink  creates a grid containing the dielectric constant
 				between any two neighbouring grid points (i.e., it contains 3 N values).
 				Points inside the molecule (i.i, inside the radius of any atom) are set to
 				the solute dielectric constant, all other points are set to the solvent
-				dielectric constant.\\
+				dielectric constant. \par
 				This method also sets the coordinates and dimensions of the grid (extracted
-				from either options or system) and the grid spacing.\\
+				from either options or system) and the grid spacing. \par
 				Normally this method is not called by the user, but automatically
 				by setup. If you consider to call it by yourself, be sure to call 
-				the single setup methods in the correct order (as described for setup).\\
+				the single setup methods in the correct order (as described for setup). \par
 				This method may set one of the following error codes and return false afterwards:
 				\begin{itemize}
 					\item ERROR__NOT_A_VECTOR_IN_UPPER_LOWER
@@ -763,7 +763,7 @@ namespace BALL
 		bool setupSASGrid(System& system);
 
 		/**	Setup an compact datastructure containing all charged atoms.
-				This method creates a dynamic array containing all charged atoms.\\
+				This method creates a dynamic array containing all charged atoms. \par
 				The method may set the error code to ERROR__CANNOT_CREATE_ATOM_ARRAY 
 				and terminate with false if insufficient virtual memory is available to create
 				the array.
@@ -881,7 +881,7 @@ namespace BALL
 
 		/**	The grid containing the atom charges (distributed).
 				Each atom's charge is distributed on the grid by setupQGrid, according
-				to the charge distribution method specified in options.\\
+				to the charge distribution method specified in options. \par
 				q_grid contains these partial charges. Units are elementary charges, if
 				the atom charges were given in multiples of the elementary charge (Atom::setCharge).
 				@see	BALL_ELEMENTARY_CHARGE
@@ -892,7 +892,7 @@ namespace BALL
 		/**	The grid containing the electrostatic potential. 
 				Before a calculation this is grid is initialized with
 				the boundary condition. After the calculation (i.e. after
-				a call to {\tt solve()}) it contains the electrostatic potential
+				a call to <tt>solve()</tt>) it contains the electrostatic potential
 				in units of J/C resulting from the Poisson-Boltzmann equation).
 				@see		setupPhiGrid()
 				@see		setupBoundary()

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: client.h,v 1.13 2002/12/16 12:22:52 sturm Exp $
+// $Id: client.h,v 1.14 2003/02/21 16:07:50 anhi Exp $
 
 #ifndef BALL_VIEW_KERNEL_CLIENT_H
 #define BALL_VIEW_KERNEL_CLIENT_H
@@ -36,18 +36,18 @@ namespace BALL
 	{
 
 		/** Client class.	
-				The class Client introduces a rudimentary interface for sending \Ref{Composite}
+				The class Client introduces a rudimentary interface for sending  \link Composite Composite \endlink 
 				objects to the visualization.
 				In this version only the one way direction from {\em *this} client to the
 				visualization is possible. In the future there is also a bidirectional
-				data exchange intended. If a \Ref{Composite} is sent two times than the 
+				data exchange intended. If a  \link Composite Composite \endlink  is sent two times than the 
 				graphical representation of the first one will be replaced through the
 				new graphical representation of the second one. For example if the structure
-				of the \Ref{Composite} is continually changed by a program so the visualization
-				of this \Ref{Composite} changes as well.
-				The Client class connects to the \Ref{Server} class that is also a part of
-				the VIEW library. See \Ref{Server} for further information.
-				{\bf Definition:} \URL{BALL/VIEW/KERNEL/client.h}	
+				of the  \link Composite Composite \endlink  is continually changed by a program so the visualization
+				of this  \link Composite Composite \endlink  changes as well.
+				The Client class connects to the  \link Server Server \endlink  class that is also a part of
+				the VIEW library. See  \link Server Server \endlink  for further information.
+				<b>Definition:</b> BALL/VIEW/KERNEL/client.h
 				@see     Server
 		*/
 		class Client
@@ -73,8 +73,8 @@ namespace BALL
 
 			/** NoPersistentObject exception class.
 					This exception will be thrown whenever an object that is not a 
-					\Ref{PersistentObject} will be tried to sent through the client.
-					Only \Ref{PersistentObject}'s can be sent through {\em *this} client.
+					 \link PersistentObject PersistentObject \endlink  will be tried to sent through the client.
+					Only  \link PersistentObject PersistentObject \endlink 's can be sent through {\em *this} client.
 					@see         Exception::GeneralException			
 			*/
 			class NoPersistentObject:	public Exception::GeneralException
@@ -120,7 +120,7 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} client.
-					Calls \Ref{destroy}.
+					Calls  \link destroy destroy \endlink .
 					@see         destroy
 			*/
 			virtual ~Client()
@@ -153,18 +153,18 @@ namespace BALL
 				throw();
 
 			/** Adds a new composite.
-					Inserts a new \Ref{Composite} to {\em *this} client. 
-					With this method \Ref{Composite}'s can be added to the visualization.
-					If the same \Ref{Composite} was already added before it will be replaced 
+					Inserts a new  \link Composite Composite \endlink  to {\em *this} client. 
+					With this method  \link Composite Composite \endlink 's can be added to the visualization.
+					If the same  \link Composite Composite \endlink  was already added before it will be replaced 
 					by the new representation of {\em composite}.
-					The \Ref{Composite} will be put into the \Ref{TextPersistenceManager} that
+					The  \link Composite Composite \endlink  will be put into the  \link TextPersistenceManager TextPersistenceManager \endlink  that
 					has a connection to a socket stream connected to the given host and port.
-					The \Ref{TextPersistenceManager} will then use that socket stream to write
-					the \Ref{Composite} into.
-					@param   composite the \Ref{Composite} to be added to the client (visualization)
+					The  \link TextPersistenceManager TextPersistenceManager \endlink  will then use that socket stream to write
+					the  \link Composite Composite \endlink  into.
+					@param   composite the  \link Composite Composite \endlink  to be added to the client (visualization)
 					@see     TextPersistenceManager::TextPersistenceManager
 					@exception  InvalidClient if the client has no connection to a server
-					@exception  NoPersistentObject if the composite is not a \Ref{PersistentObject}
+					@exception  NoPersistentObject if the composite is not a  \link PersistentObject PersistentObject \endlink 
 			*/
 			void insert(Composite &composite)
 				throw(InvalidClient, NoPersistentObject);
@@ -175,11 +175,11 @@ namespace BALL
 
 			/** Internal state and consistency self-validation.
 					Initiates self-validation of the internal state of {\em *this} client. 
-					If the {\em *this} client has a connection to a server than {\tt true}
-					is returned, {\tt false} otherwise. 
+					If the {\em *this} client has a connection to a server than <tt>true</tt>
+					is returned, <tt>false</tt> otherwise. 
 					@return			bool -
-											{\tt true} if {\em *this} client has a connection to a server,
-					 						{\tt false} otherwise
+											<tt>true</tt> if {\em *this} client has a connection to a server,
+					 						<tt>false</tt> otherwise
 			*/
 			virtual bool isValid() const
 				throw();

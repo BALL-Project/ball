@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: baseModelConnector.h,v 1.7 2002/12/12 09:48:48 oliver Exp $
+// $Id: baseModelConnector.h,v 1.8 2003/02/21 16:04:54 anhi Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BASEMODELCONNECTOR_H
 #define BALL_MOLVIEW_FUNCTOR_BASEMODELCONNECTOR_H
@@ -29,21 +29,21 @@ namespace BALL
 	{
 		
 		/** BaseModelConnector class.
-				The class BaseModelConnector is derived from \Ref{Visitor} and
-				\Ref{PropertyManager}. It contains therefore the visitor interface
+				The class BaseModelConnector is derived from  \link Visitor Visitor \endlink  and
+				 \link PropertyManager PropertyManager \endlink . It contains therefore the visitor interface
 				and the property concept.
-				This class is a base class for all model connector classes (e.g. \Ref{AtomBondModelConnector}).
+				This class is a base class for all model connector classes (e.g.  \link AtomBondModelConnector AtomBondModelConnector \endlink ).
 				A model connector class is used by the model classes to create a connection
 				between different types of models.
-				If one \Ref{Atom} object has the model {\em Ball And Stick} and its neighbor \Ref{Atom}
+				If one  \link Atom Atom \endlink  object has the model {\em Ball And Stick} and its neighbor  \link Atom Atom \endlink 
 				object has the model {\em Van Der Waals} than the model connector class determines
-				the model of the \Ref{Bond} object between these two atoms (in this case a 
+				the model of the  \link Bond Bond \endlink  object between these two atoms (in this case a 
 				{\em Ball And Stick} representation would be chosen). If a new model is introduced
 				the model connector class must be extended to deal with this new model and
 				its connections to the other models.
-				This class has access to the class \Ref{FindGeometricObjects} and the class 
-				\Ref{ColorCalculator}. \\
-				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/baseModelConnector.h}
+				This class has access to the class  \link FindGeometricObjects FindGeometricObjects \endlink  and the class 
+				 \link ColorCalculator ColorCalculator \endlink .  \par
+				<b>Definition:</b> BALL/MOLVIEW/FUNCTOR/baseModelConnector.h
 		*/
 		class BaseModelConnector
 			: public Visitor<Composite>,
@@ -57,9 +57,9 @@ namespace BALL
 
 			/** Default Constructor.
 					Construct new baseModelConnector.
-					Initialize the \Ref{ColorCalculator} of {\em *this} baseModelConnector to the
-					default colorCalculator and clears the \Ref{PropertyManager} and the
-					\Ref{FindGeometricObjects} search processor.
+					Initialize the  \link ColorCalculator ColorCalculator \endlink  of {\em *this} baseModelConnector to the
+					default colorCalculator and clears the  \link PropertyManager PropertyManager \endlink  and the
+					 \link FindGeometricObjects FindGeometricObjects \endlink  search processor.
 					@return      BaseModelConnector new constructed baseModelConnector
 					@see         Visitor
 					@see         PropertyManager
@@ -69,10 +69,10 @@ namespace BALL
 
 			/** Copy constructor.
 					Construct new baseModelConnector by copying the baseModelConnector {\em connector}.
-					Copies the properties and the \Ref{ColorCalculator} of {\em connector} to 
+					Copies the properties and the  \link ColorCalculator ColorCalculator \endlink  of {\em connector} to 
 					{\em this} baseModelConnector.
 					@param       connector the baseModelConnector to be copied
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em connector}
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of {\em connector}
 					@return      BaseModelConnector new constructed baseModelConnector copied from {\em connector}
 					@see         PropertyManager
 			*/
@@ -88,7 +88,7 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} baseModelConnector.
-					Calls \Ref{destroy}.
+					Calls  \link destroy destroy \endlink .
 					@see         destroy
 			*/
 			virtual ~BaseModelConnector()
@@ -98,11 +98,11 @@ namespace BALL
 					Reset the state of {\em *this} baseModelConnector to:
 					\begin{itemize}
 					  \item  clear the properties
-					  \item  clear the \Ref{FindGeometricObjects}
-					  \item  set the \Ref{ColorCalculator} to the default colorCalculator
+					  \item  clear the  \link FindGeometricObjects FindGeometricObjects \endlink 
+					  \item  set the  \link ColorCalculator ColorCalculator \endlink  to the default colorCalculator
 					\end{itemize}
-					Calls \Ref{PropertyManager::clear}.
-					Calls \Ref{FindGeometricObjects::clear}.
+					Calls  \link PropertyManager::clear PropertyManager::clear \endlink .
+					Calls  \link FindGeometricObjects::clear FindGeometricObjects::clear \endlink .
 					@see  FindGeometricObjects
 					@see  ColorCalculator
 					@see  PropertyManager
@@ -123,11 +123,11 @@ namespace BALL
 
 			/** Assignment.
 					Assign the baseModelConnector {\em connector} to {\em *this} baseModelConnector.
-					The properties and the \Ref{ColorCalculator} of {\em *this} are initialized to 
+					The properties and the  \link ColorCalculator ColorCalculator \endlink  of {\em *this} are initialized to 
 					the properties and the colorCalculator of the baseModelConnector {\em connector}.
-					Calls \Ref{PropertyManager::set}.
+					Calls  \link PropertyManager::set PropertyManager::set \endlink .
 					@param       connector the baseModelConnector to be copied 
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em connector}
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of {\em connector}
 					@see         PropertyManager
 					@see         ColorCalculator
 			*/
@@ -137,8 +137,8 @@ namespace BALL
 
 			/** Assignment operator.
 					Assign the baseModelConnector {\em connector} to {\em *this} baseModelConnector.
-					Calls \Ref{set}.
-					The properties and the \Ref{ColorCalculator} of {\em *this} are initialized to 
+					Calls  \link set set \endlink .
+					The properties and the  \link ColorCalculator ColorCalculator \endlink  of {\em *this} are initialized to 
 					the properties and the colorCalculator of the baseModelConnector {\em connector}.
 					The assignment will be deep.
 					@param       connector the baseModelConnector to be copied
@@ -151,11 +151,11 @@ namespace BALL
 
 			/** Copying.
 					Copy {\em *this} baseModelConnector to the baseModelConnector {\em connector}.
-					Calls \Ref{set}.
-					The properties and the \Ref{ColorCalculator} of {\em *this} are initialized to 
+					Calls  \link set set \endlink .
+					The properties and the  \link ColorCalculator ColorCalculator \endlink  of {\em *this} are initialized to 
 					the properties and the colorCalculator of the baseModelConnector {\em connector}.
 					@param       connector the baseModelConnector to be assigned to
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em connector}
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of {\em connector}
 					@see         set
 			*/
 			void get
@@ -163,10 +163,10 @@ namespace BALL
 				throw();
 
 			/** Swapping of baseModelConnector.
-					Swap the properties and the \Ref{ColorCalculator} of {\em *this} baseModelConnector
+					Swap the properties and the  \link ColorCalculator ColorCalculator \endlink  of {\em *this} baseModelConnector
 					with those of the baseModelConnector {\em connector}.
-					Calls \Ref{PropertyManager::swap}
-					Calls \Ref{ColorCalculator::swap}
+					Calls  \link PropertyManager::swap PropertyManager::swap \endlink 
+					Calls  \link ColorCalculator::swap ColorCalculator::swap \endlink 
 					@param       connector the baseModelConnector being swapped with {\em *this} baseModelConnector 
 					@see         PropertyManager
 					@see         ColorCalculator
@@ -182,8 +182,8 @@ namespace BALL
 			//@{
 
 			/** Register a colorCalculator.
-					Change the \Ref{ColorCalculator} of {\em *this} baseModelConnector.
-					@param   color_calculator the new \Ref{ColorCalculator} for {\em *this} baseModelConnector
+					Change the  \link ColorCalculator ColorCalculator \endlink  of {\em *this} baseModelConnector.
+					@param   color_calculator the new  \link ColorCalculator ColorCalculator \endlink  for {\em *this} baseModelConnector
 					@see     unregisterColorCalculator
 					@see     ColorCalculator
 			*/
@@ -192,7 +192,7 @@ namespace BALL
 				throw();
 
 			/** Unregister the colorCalculator.
-					Change the \Ref{ColorCalculator} of {\em *this} baseModelConnector to the
+					Change the  \link ColorCalculator ColorCalculator \endlink  of {\em *this} baseModelConnector to the
 					default colorCalculator.
 					@see     registerColorCalculator
 					@see     ColorCalculator
@@ -201,7 +201,7 @@ namespace BALL
 				throw();
 
 			/** Mutable inspection of the colorCalculator.
-					Access the mutable pointer to the \Ref{ColorCalculator} of {\em *this} baseModelConnector.
+					Access the mutable pointer to the  \link ColorCalculator ColorCalculator \endlink  of {\em *this} baseModelConnector.
 					@return  ColorCalculator* a pointer to the colorCalculator of {\em *this} baseModelConnector
 					@see     registerColorCalculator
 					@see     unregisterColorCalculator
@@ -213,20 +213,20 @@ namespace BALL
 			/** Change the properties.
 					Change the properties of {\em *this} baseModelConnector by copying the properties
 					of {\em manager} to {\em *this} baseModelConnector.
-					Calls \Ref{PropertyManager::set}.
+					Calls  \link PropertyManager::set PropertyManager::set \endlink .
 					This method is provided for convenience.
-					@param  manager the \Ref{PropertyManager} to be copied to {\em *this} baseModelConnector
+					@param  manager the  \link PropertyManager PropertyManager \endlink  to be copied to {\em *this} baseModelConnector
 					@see    PropertyManager
 			*/
 			void setProperties(PropertyManager &manager)
 				throw();
 
 			/** Mutable inspection of the search processor.
-					Access the mutable reference to \Ref{FindGeometricObjects} of {\em *this}
+					Access the mutable reference to  \link FindGeometricObjects FindGeometricObjects \endlink  of {\em *this}
 					baseModelConnector.
-					This object is used to search for specific \Ref{GeometricObject} objects that
+					This object is used to search for specific  \link GeometricObject GeometricObject \endlink  objects that
 					have certain properties.
-					@return  FindGeometricObjects& a mutable reference to the \Ref{FindGeometricObjects} of {\em *this} baseModelConnector
+					@return  FindGeometricObjects& a mutable reference to the  \link FindGeometricObjects FindGeometricObjects \endlink  of {\em *this} baseModelConnector
 					@see     FindGeometricObjects
 			*/
 			FindGeometricObjects& getGeometricObjectSearcher()
@@ -247,7 +247,7 @@ namespace BALL
 			/** Internal value dump.
 					Dump the current state of {\em *this} baseModelConnector to 
 					the output ostream {\em s} with dumping depth {\em depth}.
-					Calls \Ref{ColorCalculator::dump}.
+					Calls  \link ColorCalculator::dump ColorCalculator::dump \endlink .
 					@param   s output stream where to output the state of {\em *this} baseModelConnector
 					@param   depth the dumping depth
 			*/

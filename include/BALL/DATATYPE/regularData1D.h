@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1D.h,v 1.25 2002/12/12 09:48:43 oliver Exp $
+// $Id: regularData1D.h,v 1.26 2003/02/21 16:02:01 anhi Exp $
 
 #ifndef BALL_DATATYPE_REGULARDATA1D_H
 #define BALL_DATATYPE_REGULARDATA1D_H
@@ -17,12 +17,12 @@ namespace BALL
 
 	/**	A class to store regularaly spaced data.
 			This class can is intended to hold regularly spaced, one-dimensional data sets.
-			It might be useful to hold data sets like spectra, or precomputed function values.\\
-			The two bounds (set with \Ref{setBoundaries}) designate an X-range with \Ref{getSize}
+			It might be useful to hold data sets like spectra, or precomputed function values. \par
+			The two bounds (set with  \link setBoundaries setBoundaries \endlink ) designate an X-range with  \link getSize getSize \endlink 
 			equally spaced values. The data can be accessed in the same way as data of an STL vector
 			(i.e., using operator [] and iterators).
-			\\
-			{\bf Definition:} \URL{BALL/DATATYPE/regularData1D.h}
+			 \par
+			<b>Definition:</b> BALL/DATATYPE/regularData1D.h
 	*/
 	template <typename T>
 	class TRegularData1D
@@ -92,7 +92,7 @@ namespace BALL
 		const TRegularData1D& operator = (const TRegularData1D& data)
 			throw();
 
-		/**	Assignment from a {\tt vector} of {\tt T}.
+		/**	Assignment from a <tt>vector</tt> of <tt>T</tt>.
 				Copy the contents of the data without changing the boundaries.
 		*/
 		const TRegularData1D& operator = (const VectorType& data)
@@ -119,13 +119,13 @@ namespace BALL
 			throw(Exception::OutOfGrid);
 		
 		/**	Constant random access operator.
-				@exception IndexOverflow if {\tt index} is out of range
+				@exception IndexOverflow if <tt>index</tt> is out of range
 		*/	
 		const T& operator [] (Position index) const
 			throw(Exception::IndexOverflow);
 			
 		/**	Mutable random access operator.
-				@exception IndexOverflow if {\tt index} is out of range
+				@exception IndexOverflow if <tt>index</tt> is out of range
 		*/	
 		T& operator [] (Position index)
 			throw(Exception::IndexOverflow);
@@ -162,10 +162,10 @@ namespace BALL
 			throw();
 
 		/**	Resize the data.
-				If {\tt new_size} is larger than the current size, the data 
-				{\tt vector} is extended to the new size and filled with default
-				constructed items of type {\tt T}. Resizing to a value lesser than
-				the current size truncates the vector. \\
+				If <tt>new_size</tt> is larger than the current size, the data 
+				<tt>vector</tt> is extended to the new size and filled with default
+				constructed items of type <tt>T</tt>. Resizing to a value lesser than
+				the current size truncates the vector.  \par
 				The boundaries are adapted and the positions of the retained items
 				fixed, i.e.  the upper bound is increased or decreased
 				proportionally while the lower bound remains unchanged.
@@ -176,7 +176,7 @@ namespace BALL
 
 		/**	Rescale the data.
 				Keep the current boundaries of the data and reinterpolate
-				the data to reflect the new size. To create a data set of {\tt new_size}
+				the data to reflect the new size. To create a data set of <tt>new_size</tt>
 				data points, the data is interpolated linearly at the new data points.
 				
 				@param new_size the new data set size
@@ -185,9 +185,9 @@ namespace BALL
 			throw();
 
 		/**	Rescale and change the boundaries.
-				{\tt lower} and {\tt upper} define the new boundaries, while {\tt new_size}
+				<tt>lower</tt> and <tt>upper</tt> define the new boundaries, while {\tt new_size}
 				gives the number of new data points. The existing data is cut/extended to the
-				new boundaries and the resulting new data points ({\tt new_size} data
+				new boundaries and the resulting new data points (<tt>new_size</tt> data
 				points in total) are obtained by linear interpolation of the current data.
 				if the boundaries are extended, the resulting excess data points are initialized
 				with zero.

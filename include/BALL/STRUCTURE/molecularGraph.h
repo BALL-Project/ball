@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularGraph.h,v 1.3 2002/12/18 16:00:30 sturm Exp $
+// $Id: molecularGraph.h,v 1.4 2003/02/21 16:06:47 anhi Exp $
 
 #ifndef BALL_STRUCTURE_MOLECULARGRAPH_H
 #define BALL_STRUCTURE_MOLECULARGRAPH_H
@@ -191,7 +191,7 @@ namespace BALL
 	};
 
 	/**	Default molecular graph type.
-			Each edge and node has a label of type \Ref{Index}.
+			Each edge and node has a label of type  \link Index Index \endlink .
 	*/
 	typedef TMolecularGraph<Index, Index> MolecularGraph;
 

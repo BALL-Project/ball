@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: system.h,v 1.25 2003/01/08 21:13:26 oliver Exp $
+// $Id: system.h,v 1.26 2003/02/21 16:03:39 anhi Exp $
 
 #ifndef BALL_KERNEL_SYSTEM_H
 #define BALL_KERNEL_SYSTEM_H
@@ -51,8 +51,8 @@ namespace BALL
 
 	/** System class.
 			This class is used to represent a system, i.e., a collection
-			of molecules.\\
-			{\bf Definition:}\URL{BALL/KERNEL/system.h}
+			of molecules. \par
+			<b>Definition:</b>BALL/KERNEL/system.h
 	*/
 	class System
 		: public AtomContainer
@@ -106,7 +106,7 @@ namespace BALL
 		/** Assignment with cloning facility.
 				The assignment is either deep or shallow (default).
 				@param  system the System to be copied (cloned)
-				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy
+				@param  deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy
 		*/
 		void set(const System& system, bool deep = true)
 			throw();
@@ -252,22 +252,22 @@ namespace BALL
 		bool remove(Molecule& molecule)
 			throw();
 
-		/**	Move the children of {\tt system} into this instance.
-				Cut all children of {\tt system} and prepend them before the children of this instance.
+		/**	Move the children of <tt>system</tt> into this instance.
+				Cut all children of <tt>system</tt> and prepend them before the children of this instance.
 				@param system the system to access
 		*/
 		void spliceBefore(System& system)
 			throw();
 
-		/**	Move the children of {\tt system} into this instance.
-				Cut all children of {\tt system} and append them after the children of this instance.
+		/**	Move the children of <tt>system</tt> into this instance.
+				Cut all children of <tt>system</tt> and append them after the children of this instance.
 				@param system the system to access
 		*/
 		void spliceAfter(System& system)
 			throw();
 
-		/**	Move the children of {\tt system} into this instance.
-				The children are inserted using \Ref{spliceBefore}.
+		/**	Move the children of <tt>system</tt> into this instance.
+				The children are inserted using  \link spliceBefore spliceBefore \endlink .
 		*/
 		void splice(System& system)
 			throw();

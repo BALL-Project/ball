@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glTwoColoredTube.h,v 1.8 2002/12/12 09:48:52 oliver Exp $
+// $Id: glTwoColoredTube.h,v 1.9 2003/02/21 16:05:25 anhi Exp $
 
 #ifndef BALL_MOLVIEW_GUI_PRIMITIV_GLTWOCOLOREDTUBE_H
 #define BALL_MOLVIEW_GUI_PRIMITIV_GLTWOCOLOREDTUBE_H
@@ -23,13 +23,13 @@ namespace BALL
 		/** GLTwoColoredTube class.
 				An instance of GLTwoColoredTube represents an instance of the geometric
 				visualization of a two colored "tube".
-				The class GLTwoColoredTube is derived from the classes \Ref{TwoColoredTube} and
-				\Ref{GLObject}. Therefore the class GLTwoColoredTube is the graphical extension
+				The class GLTwoColoredTube is derived from the classes  \link TwoColoredTube TwoColoredTube \endlink  and
+				 \link GLObject GLObject \endlink . Therefore the class GLTwoColoredTube is the graphical extension
 				of the geometrical definition of the class twoColoredTube.
-				The drawing method from \Ref{GLObject} is overridden to visualize the
+				The drawing method from  \link GLObject GLObject \endlink  is overridden to visualize the
 				twoColoredTube. OpenGL code is used for the visualization.
-				See these classes for further information. \\
-				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/PRIMITIV/glTwoColoredTube.h}
+				See these classes for further information.  \par
+				<b>Definition:</b> BALL/MOLVIEW/GUI/PRIMITIV/glTwoColoredTube.h
 		*/
 		class GLTwoColoredTube
 			: public TwoColoredTube,
@@ -55,7 +55,7 @@ namespace BALL
 					{\em GL_two_colored_tube}.
 					The copy is either deep (default) or shallow.
 					@param       tube the tube to be copied (cloned)
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false})
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>)
 					@return      GLTwoColoredTube new constructed glTwoColoredTube copied from {\em GL_two_colored_tube}
 					@see         TwoColoredTube
 					@see         GLObject
@@ -65,8 +65,8 @@ namespace BALL
 
 			/** Copy constructor from geometricObject.
 					Constructs new glTwoColoredTube by copying the internal values from
-					\Ref{GeometricObject} {\em geometric_object}.
-					@param       geometric_object the \Ref{GeometricObject} which internal value should be copied
+					 \link GeometricObject GeometricObject \endlink  {\em geometric_object}.
+					@param       geometric_object the  \link GeometricObject GeometricObject \endlink  which internal value should be copied
 					@return      GLTwoColoredTube new constructed glTwoColoredTube initialized from {\em geometric_object}
 					@see         TwoColoredTube
 					@see         GLObject
@@ -82,15 +82,15 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} glTwoColoredTube.
-					Calls \Ref{destroy}.
+					Calls  \link destroy destroy \endlink .
 					@see         destroy
 			*/
 			virtual ~GLTwoColoredTube()
 				throw();
 
 			/** Explicit default initialization.
-					Calls \Ref{TwoColoredTube::clear}
-					Calls \Ref{GLObject::clear}
+					Calls  \link TwoColoredTube::clear TwoColoredTube::clear \endlink 
+					Calls  \link GLObject::clear GLObject::clear \endlink 
 					@see  TwoColoredTube::clear
 					@see  GLObject::clear
 			*/
@@ -98,8 +98,8 @@ namespace BALL
 				throw();
 
 			/** Explicit destructor.
-					Calls \Ref{TwoColoredTube::destroy}
-					Calls \Ref{GLObject::destroy}
+					Calls  \link TwoColoredTube::destroy TwoColoredTube::destroy \endlink 
+					Calls  \link GLObject::destroy GLObject::destroy \endlink 
 					@see  TwoColoredTube::destroy
 					@see  GLObject::destroy
 			*/
@@ -120,11 +120,11 @@ namespace BALL
 					the glTwoColoredTube {\em gl_two_colored_tube}.
 					This method does not copy the structure of {\em gl_two_colored_tube} into {\em *this}
 					glTwoColoredTube. Only the geometric properties and the the access to the
-					\Ref{GLPrimitiveManager} are copied. 
-					See \Ref{GeometricObject} and	\Ref{GLObject} for information.
-					Calls \Ref{GeometricObject::set}.
+					 \link GLPrimitiveManager GLPrimitiveManager \endlink  are copied. 
+					See  \link GeometricObject GeometricObject \endlink  and	 \link GLObject GLObject \endlink  for information.
+					Calls  \link GeometricObject::set GeometricObject::set \endlink .
 					@param       gl_two_colored_tube the glTwoColoredTube to be copied
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em gl_two_colored_tube}
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of {\em gl_two_colored_tube}
 					@see         GeometricObject::set
 					@see         GLObject::set
 			*/
@@ -137,11 +137,11 @@ namespace BALL
 					This method does not copy the structure of {\em gl_two_colored_tube} into {\em *this}
 					glTwoColoredTube. 
 					Only the geometric properties and the the access to the
-					\Ref{GLPrimitiveManager} are copied.
-					See \Ref{GeometricObject} and	\Ref{GLObject} for information.
-					Calls \Ref{set}.
+					 \link GLPrimitiveManager GLPrimitiveManager \endlink  are copied.
+					See  \link GeometricObject GeometricObject \endlink  and	 \link GLObject GLObject \endlink  for information.
+					Calls  \link set set \endlink .
 					The value of {\em *this} glTwoColoredTube is initialized to the value 
-					of the glTwoColoredTube {\em gl_two_colored_tube}.\\
+					of the glTwoColoredTube {\em gl_two_colored_tube}. \par
 					@param       gl_two_colored_tube the glTwoColoredTube to be copied
 					@return      GLTwoColoredTube& constant reference of {\em *this} glTwoColoredTube
 					@see         set
@@ -155,13 +155,13 @@ namespace BALL
 					This method does not copy the structure of {\em *this} glTwoColoredTube into
 					{\em gl_two_colored_tube}. 
 					Only the geometric properties and the the access to the
-					\Ref{GLPrimitiveManager} are copied.
-					See \Ref{GeometricObject} and	\Ref{GLObject} for information.
-					Calls \Ref{set}.
+					 \link GLPrimitiveManager GLPrimitiveManager \endlink  are copied.
+					See  \link GeometricObject GeometricObject \endlink  and	 \link GLObject GLObject \endlink  for information.
+					Calls  \link set set \endlink .
 					The value of the glTwoColoredTube {\em gl_two_colored_tube} is initialized to the
-					value of {\em *this} glTwoColoredTube.\\
+					value of {\em *this} glTwoColoredTube. \par
 					@param       gl_two_colored_tube the glTwoColoredTube to be assigned to
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em gl_two_colored_tube}
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of {\em gl_two_colored_tube}
 					@see         set
 			*/
 			void get(GLTwoColoredTube& gl_two_colored_tube, bool deep = true) const
@@ -173,8 +173,8 @@ namespace BALL
 					This method does not swap the structure of {\em gl_two_colored_tube} with {\em *this}
 					glTwoColoredTube. 
 					Only the geometric properties and the the access to the
-					\Ref{GLPrimitiveManager} are swapped.
-					See \Ref{GeometricObject} and	\Ref{GLObject} for information.
+					 \link GLPrimitiveManager GLPrimitiveManager \endlink  are swapped.
+					See  \link GeometricObject GeometricObject \endlink  and	 \link GLObject GLObject \endlink  for information.
 					@param       gl_two_colored_tube the glTwoColoredTube being swapped with {\em *this} glTwoColoredTube
 			*/
 			void swap(GLTwoColoredTube& gl_two_colored_tube)
@@ -189,16 +189,16 @@ namespace BALL
 			//@{
 			
 			/** Creation of the graphical representation.
-					Overridden method from \Ref{GLObject}. Uses the geometrical properties
-					defined in class \Ref{TwoColoredTube} to create the graphical representation
+					Overridden method from  \link GLObject GLObject \endlink . Uses the geometrical properties
+					defined in class  \link TwoColoredTube TwoColoredTube \endlink  to create the graphical representation
 					of the twoColoredTube. This method is used internally by the render engine
-					of the \Ref{Scene}. Predefined shapes of tube objects from the class
-					\Ref{GLPrimitiveManager} are used for the variable drawing resolutions.
+					of the  \link Scene Scene \endlink . Predefined shapes of tube objects from the class
+					 \link GLPrimitiveManager GLPrimitiveManager \endlink  are used for the variable drawing resolutions.
 					The parameter {\em with_names} indicates whether the openGL command 
 					{\em glLoadName} must be used for naming the graphical object 
 					(necessary for picking mode in the scene).
 					@param     with_names flag if the graphical objects must have a name
-					@return    bool {\tt true} if successful,	{\tt false} otherwise
+					@return    bool <tt>true</tt> if successful,	<tt>false</tt> otherwise
 					@see       GLObject::draw
 					@see       GLPrimitiveManager
 			*/
@@ -207,9 +207,9 @@ namespace BALL
 
 			/** Export method.
 					This method handles the export of {\em *this} glTwoColoredTube into another
-					format (eg. POVRAY, VRML)\\
-					Calls \Ref{TwoColoredTube::extract}.
-					@return    bool {\tt true} if successful,	{\tt false} otherwise
+					format (eg. POVRAY, VRML) \par
+					Calls  \link TwoColoredTube::extract TwoColoredTube::extract \endlink .
+					@return    bool <tt>true</tt> if successful,	<tt>false</tt> otherwise
 			*/
 			virtual bool extract()
 				throw();

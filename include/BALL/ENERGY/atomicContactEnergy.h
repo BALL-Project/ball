@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomicContactEnergy.h,v 1.6 2002/02/27 12:18:36 sturm Exp $
+// $Id: atomicContactEnergy.h,v 1.7 2003/02/21 16:02:44 anhi Exp $
 
 #ifndef BALL_ENERGY_ATOMICCONTACTENERGY_H
 #define BALL_ENERGY_ATOMICCONTACTENERGY_H
@@ -19,11 +19,11 @@ namespace BALL
 			Zhang et al. (J. Mol. Biol., 267, 707-726 (1997))
 			The energy is returned in units of kJ/mol
 			Unparametrized Atoms are simply ignored, this leads to
-			unreasonable values. \\
-			{\bf Files:} \\
-			Types are taken from {\tt data/energy/ACE\_types.dat} \\
-			Values for contact energies are in {\tt data/energy/AtomicContactEnergy.dat} \\
-			{\bf Definition:} \URL{BALL/ENERGY/atomicContactEnergy.h}	\\
+			unreasonable values.  \par
+			<b>Files:</b>  \par
+			Types are taken from <tt>data/energy/ACE\_types.dat</tt>  \par
+			Values for contact energies are in <tt>data/energy/AtomicContactEnergy.dat</tt>  \par
+			<b>Definition:</b> BALL/ENERGY/atomicContactEnergy.h
 	*/ 
 	double calculateACE(AtomContainer& atoms);
 

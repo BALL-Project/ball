@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glVanDerWaalsModel.h,v 1.8 2002/12/12 09:48:51 oliver Exp $
+// $Id: glVanDerWaalsModel.h,v 1.9 2003/02/21 16:05:18 anhi Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLVANDERWAALSMODEL_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_GLVANDERWAALSMODEL_H
@@ -20,12 +20,12 @@ namespace BALL
 	{
 		/** AddGLVanDerWaalsModel class.
 				The class AddGLVanDerWaalsModel is derived from the class 
-				\Ref{AddVanDerWaalsModel} and extents this class by overriding the creation
+				 \link AddVanDerWaalsModel AddVanDerWaalsModel \endlink  and extents this class by overriding the creation
 				methods used for creating the primitives. These new primitives contain
 				OpenGL implementation to generate the graphical visualization of geometric
 				shapes they present.
-				This class has the same functionality as its base class \Ref{AddVanDerWaalsModel}. \\
-				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/FUNCTOR/glVanDerWaalsModel.h}
+				This class has the same functionality as its base class  \link AddVanDerWaalsModel AddVanDerWaalsModel \endlink .  \par
+				<b>Definition:</b> BALL/MOLVIEW/GUI/FUNCTOR/glVanDerWaalsModel.h
 		*/
 		class AddGLVanDerWaalsModel: public AddVanDerWaalsModel
 		{
@@ -48,7 +48,7 @@ namespace BALL
 					{\em add_GL_van_der_waals_model}. Initializes the state of {\em this} 
 					addGLVanDerWaalsModel to the state of {\em add_GL_van_der_waals_model}.
 					@param       add_GL_van_der_waals_model the addGLVanDerWaalsModel to be copied
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em add_GL_van_der_waals_model}
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of {\em add_GL_van_der_waals_model}
 					@return      AddGLVanDerWaalsModel new addGLVanDerWaalsModel copied from {\em add_GL_van_der_waals_model}
 					@see         AddVanDerWaalsModel
 			*/
@@ -64,7 +64,7 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} addGLVanDerWaalsModel.
-					Calls \Ref{AddVanDerWaalsModel::destroy}.
+					Calls  \link AddVanDerWaalsModel::destroy AddVanDerWaalsModel::destroy \endlink .
 					@see  AddVanDerWaalsModel
 			*/
 			virtual ~AddGLVanDerWaalsModel()
@@ -79,17 +79,17 @@ namespace BALL
 					for generating the graphical representation of the shapes they
 					represent.
 					This method is the overridden method of the base class 
-					\Ref{AddVanDerWaalsModel}.
+					 \link AddVanDerWaalsModel AddVanDerWaalsModel \endlink .
 					@see  AddVanDerWaalsModel
 			*/
 			//@{
 
 			/** Creates a sphere.
-					Creates a \Ref{GLSphere} object and returns it as \Ref{Sphere}.
-					This overridden method of the class \Ref{AddVanDerWaalsModel} creates
+					Creates a  \link GLSphere GLSphere \endlink  object and returns it as  \link Sphere Sphere \endlink .
+					This overridden method of the class  \link AddVanDerWaalsModel AddVanDerWaalsModel \endlink  creates
 					a primitive with openGL implementation.
-					The method \Ref{operator()} uses this method to create a sphere
-					for each \Ref{Atom} object.
+					The method  \link operator() operator() \endlink  uses this method to create a sphere
+					for each  \link Atom Atom \endlink  object.
 					@see  GLSphere
 					@see  Sphere
 					@see  AddVanDerWaalsModel

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: snapShotManager.h,v 1.7 2002/02/27 12:19:03 sturm Exp $
+// $Id: snapShotManager.h,v 1.8 2003/02/21 16:04:26 anhi Exp $
 
 #ifndef BALL_MOLMEC_COMMON_SNAPSHOTMANAGER_H
 #define BALL_MOLMEC_COMMON_SNAPSHOTMANAGER_H
@@ -41,8 +41,8 @@ namespace BALL
 
   /**	Snapshot management for MD simulations.
 			This class manages a list of single snapshot objects.
-			Snapshots are numbered starting with 1.	\\
-			{\bf Definition:}\URL{BALL/MOLMEC/COMMON/snapShotManager.h}
+			Snapshots are numbered starting with 1.	 \par
+			<b>Definition:</b>BALL/MOLMEC/COMMON/snapShotManager.h
 	*/
   class SnapShotManager
   {
@@ -80,7 +80,7 @@ namespace BALL
 			throw();
 
     /** This constructor expects a valid system, a valid force field
-				and the name of a snapshot file. If the {\tt overwrite} is true
+				and the name of a snapshot file. If the <tt>overwrite</tt> is true
 				then any existing file of the given name will be overwritten,
 				otherwise the new data will be appended, provided that the systems
 				match. 
@@ -95,7 +95,7 @@ namespace BALL
 			throw();
 
     /** This constructor expects a valid system, a valid force field
-				and the name of a snapshot file. If the {\tt overwrite} is true
+				and the name of a snapshot file. If the <tt>overwrite</tt> is true
 				then any existing file of the given name will be overwritten,
 				otherwise the new data will be appended, provided that the systems
 				match. 
@@ -103,8 +103,8 @@ namespace BALL
 				@param my_force_field the force field that is bound to the system
 				@param my_options
 				@param filename the name of the snapshot file
-				@param overwrite {\bf true}: overwrite existing snapshot file, 
-												 {\bf false}: append to the file.
+				@param overwrite <b>true</b>: overwrite existing snapshot file, 
+												 <b>false</b>: append to the file.
     */
     SnapShotManager	
 			(System* my_system, const ForceField* my_force_field,
@@ -217,17 +217,17 @@ namespace BALL
 			throw();
 
 		/** Read a certain SnapShot from a TrajectoryFile. This method tries to
-				read SnapShot number {\bf number} from the file
+				read SnapShot number <b>number</b> from the file
 				@param number the number of the snapshot we want to read
 				@param snapshot a buffer for returning the snapshot
-				@return true if the snapshot could be read, {\bf false} ow.
+				@return true if the snapshot could be read, <b>false</b> ow.
 		*/
 		virtual bool applySnapShot(Size number)
 			throw();
 
 		/** Read a the first SnapShot from the associated TrajectoryFile.
 				@param snapshot a buffer for returning the snapshot
-				@return true if the snapshot could be read, {\bf false} ow.
+				@return true if the snapshot could be read, <b>false</b> ow.
 		*/
 		virtual bool applyFirstSnapShot()
 			throw();
@@ -235,7 +235,7 @@ namespace BALL
 		/** Read a the next SnapShot from the associated TrajectoryFile and
 				apply it to the system
 				@param snapshot a buffer for returning the snapshot
-				@return true if the snapshot could be read, {\bf false} ow.
+				@return true if the snapshot could be read, <b>false</b> ow.
 		*/
 		virtual bool applyNextSnapShot()
 			throw();

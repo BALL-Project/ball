@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberNonBonded.h,v 1.20 2002/12/16 18:12:44 oliver Exp $
+// $Id: amberNonBonded.h,v 1.21 2003/02/21 16:04:06 anhi Exp $
 
 // Molecular Mechanics: Amber force field, non-bonded component
 
@@ -32,7 +32,7 @@ namespace BALL
 {
 
 	/**	Amber NonBonded (VdW + Electrostatic) component
-			{\bf Definition:} \URL{BALL/MOLMEC/AMBER/amberNonBonded.h}
+			<b>Definition:</b> BALL/MOLMEC/AMBER/amberNonBonded.h
 	*/
 	class AmberNonBonded 
 		: public ForceFieldComponent
@@ -117,7 +117,7 @@ namespace BALL
 
 		/**	Update the pair list.
 				This method is called by the force field whenever
-				\Ref{ForceField::update} is called. It is used
+				 \link ForceField::update ForceField::update \endlink  is called. It is used
 				to recalculate the nonbonded pair list.
 		*/
 		virtual void update()

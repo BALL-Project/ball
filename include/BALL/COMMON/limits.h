@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: limits.h,v 1.11 2002/12/12 09:48:39 oliver Exp $
+// $Id: limits.h,v 1.12 2003/02/21 16:01:18 anhi Exp $
 
 #ifndef BALL_COMMON_LIMITS_H
 #define BALL_COMMON_LIMITS_H
@@ -31,12 +31,12 @@ namespace BALL
 	/**	Numeric limits class.
 			This template class describes the minimum and maximum values for
 			the differnet data types.
-			It a substitute for the {\tt numeric_limits} class described in the
+			It a substitute for the <tt>numeric_limits</tt> class described in the
 			ISO/ANSI standard (chapter 18.2.1.1), as most compiler still do not support
 			this feature (or more precisely: the header file <limits> is not implemented).
-			If <limits> exists, Limits is just a wrapper around the {\tt numeric_limits} class,
-			otherwise it returns the value from the standard C header <limits.h>.\\
-			{\bf Definition:} \URL{BALL/COMMON/limits.h}
+			If <limits> exists, Limits is just a wrapper around the <tt>numeric_limits</tt> class,
+			otherwise it returns the value from the standard C header <limits.h>. \par
+			<b>Definition:</b> BALL/COMMON/limits.h
 	*/
 	template <typename T>
 	class Limits

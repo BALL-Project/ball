@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TRRFile.h,v 1.5 2002/12/22 11:45:18 sturm Exp $
+// $Id: TRRFile.h,v 1.6 2003/02/21 16:02:57 anhi Exp $
 
 #ifndef BALL_FORMAT_TRRFILE_H
 #define BALL_FORMAT_TRRFILE_H
@@ -15,10 +15,10 @@ namespace BALL
 
 	/** TRR Trajectory file format. This class enables BALL to read and write
 			TRR	files. The format stems from the gromacs molecular dynamics
-			program. This format is portable.	\\
+			program. This format is portable.	 \par
 			In a TRR-file, each timestep is preceded by a header. The header
-			is handled by the nested TRRHeader class. \\
-			{\bf Definition:} \URL{BALL/FORMAT/TRRFile.h}	\\
+			is handled by the nested TRRHeader class.  \par
+			<b>Definition:</b> BALL/FORMAT/TRRFile.h
 	*/
 	class TRRFile
 	  :	public TrajectoryFile
@@ -31,10 +31,10 @@ namespace BALL
 		//@{
 
 		/** The header for each coordinate set stored in the TRR file.
-				The format can be found at \\
-				http://www.ks.uiuc.edu/~danorris/projects/formats/trr.shtml \\
-				The header consists of several records that are stored sequentially. \\
-				{\bf Definition:} \URL{BALL/FORMAT/TRRFile.h}	\\
+				The format can be found at  \par
+				http://www.ks.uiuc.edu/~danorris/projects/formats/trr.shtml  \par
+				The header consists of several records that are stored sequentially.  \par
+				<b>Definition:</b> BALL/FORMAT/TRRFile.h
 		*/
 		class TRRHeader
 		{
@@ -69,7 +69,7 @@ namespace BALL
 
 			/** The size of the bounding box data: 9 means that we have an arbitrary
 					box, i.e. the base vectors may have arbitray length and relative angles.
-					The size is then stored as x1 y1 z1 x2 y2 z2 x3 y3 z3 \\
+					The size is then stored as x1 y1 z1 x2 y2 z2 x3 y3 z3  \par
 					3 means a shortened notation for rectangular boxes. The size is then
 					stored as x1 y2 z3. All other components are assumed to be zero.
 			*/

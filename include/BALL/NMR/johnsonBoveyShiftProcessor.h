@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: johnsonBoveyShiftProcessor.h,v 1.9 2002/02/27 12:19:31 sturm Exp $
+// $Id: johnsonBoveyShiftProcessor.h,v 1.10 2003/02/21 16:05:42 anhi Exp $
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -33,7 +33,7 @@ namespace BALL
 {
 		
 	/**	Shift assignment processor implementing Johnson Bovey theory. 
-			{\bf Definition}\URL{BALL/NMR/johnsonBoveyShiftProcessor.h}
+			<b>Definition</b>BALL/NMR/johnsonBoveyShiftProcessor.h
 	*/
 	class JohnsonBoveyShiftProcessor
 		:	public ShiftModule

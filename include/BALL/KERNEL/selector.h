@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: selector.h,v 1.18 2002/02/27 12:18:52 sturm Exp $
+// $Id: selector.h,v 1.19 2003/02/21 16:03:36 anhi Exp $
 
 #ifndef BALL_KERNEL_SELECTOR_H
 #define BALL_KERNEL_SELECTOR_H
@@ -27,8 +27,8 @@ namespace BALL
 {
 
 	/**	@name	Kernel Object Selection.
-			These classes allow the convenient selection of kernel objects.\\
-			{\bf Definition:}\URL{BALL/KERNEL/selector.h}
+			These classes allow the convenient selection of kernel objects. \par
+			<b>Definition:</b>BALL/KERNEL/selector.h
 	*/
 	//@{
 	class Selector
@@ -54,7 +54,7 @@ namespace BALL
 			throw();
 
 		/** Construct a Selector with a string.
-				The selector's expression is set to {\tt expression_string}.
+				The selector's expression is set to <tt>expression_string</tt>.
 		*/
 		Selector(const String& expression_string)
 			throw();
@@ -95,9 +95,9 @@ namespace BALL
 		//@{
 
 		/** Access operator.
-				If the given Composite is an \Ref{Atom} and the current
-				\Ref{expression_} is fulfilled for that atom, select it by
-				calling \Ref{Composite::select}.
+				If the given Composite is an  \link Atom Atom \endlink  and the current
+				 \link expression_ expression_ \endlink  is fulfilled for that atom, select it by
+				calling  \link Composite::select Composite::select \endlink .
 		*/
 		virtual Processor::Result operator () (Composite& composite)
 			throw();

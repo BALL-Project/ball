@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorExtension4.h,v 1.9 2002/12/16 12:22:53 sturm Exp $
+// $Id: colorExtension4.h,v 1.10 2003/02/21 16:07:55 anhi Exp $
 
 #ifndef BALL_VIEW_KERNEL_COLOREXTENSION4_H
 #define BALL_VIEW_KERNEL_COLOREXTENSION4_H
@@ -26,9 +26,9 @@ namespace BALL
 
 		/** ColorExtension4 class.
 				The class ColorExtension4 is used as a base class for all geometric 
-				objects that needs four colors \Ref{ColorRGBA}. It provides the derived
+				objects that needs four colors  \link ColorRGBA ColorRGBA \endlink . It provides the derived
 				class with methods for accessing these colors.
-				{\bf Definition:} \URL{BALL/VIEW/KERNEL/colorExtension4.h}
+				<b>Definition:</b> BALL/VIEW/KERNEL/colorExtension4.h
 		*/
 		class ColorExtension4: public ColorExtension3
 		{
@@ -41,7 +41,7 @@ namespace BALL
 			/** Default Constructor.
 					Construct new colorExtension4.
 					The colors of {\em *this} colorExtension4 are set to (0.0, 0.0, 0.0, 1.0).
-					Calls \Ref{ColorExtension3}.
+					Calls  \link ColorExtension3 ColorExtension3 \endlink .
 					@return      ColorExtension4 new constructed colorExtension4
 					@see         ColorRGBA
 					@see         ColorExtension3
@@ -53,7 +53,7 @@ namespace BALL
 					Construct new colorExtension4 by copying the colorExtension4 
 					{\em color_extension}. The colors of {\em *this} colorExtension4 are
 					initialized to the colors of {\em color_extension}.
-					Calls \Ref{ColorExtension3}.
+					Calls  \link ColorExtension3 ColorExtension3 \endlink .
 					@param       color_extension the colorExtension4 to be copied
 					@return      ColorExtension4 new constructed colorExtension4 copied from {\em color_extension}
 					@see         ColorRGBA
@@ -69,7 +69,7 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} colorExtension4.
-					Calls \Ref{destroy}.
+					Calls  \link destroy destroy \endlink .
 					@see         destroy
 			*/
 			virtual ~ColorExtension4()
@@ -78,8 +78,8 @@ namespace BALL
 			/** Explicit default initialization.
 					Set the colors of {\em *this} colorExtension4 to the color 
 					(0.0, 0.0, 0.0, 1.0).
-					Calls \Ref{ColorExtension3::clear}.
-					Calls \Ref{ColorRGBA::clear}.
+					Calls  \link ColorExtension3::clear ColorExtension3::clear \endlink .
+					Calls  \link ColorRGBA::clear ColorRGBA::clear \endlink .
 					@see  ColorExtension3::clear
 					@see  ColorRGBA::clear
 			*/
@@ -102,8 +102,8 @@ namespace BALL
 					colorExtension4.
 					The colors of {\em *this} colorExtension4 are initialized to the colors of 
 					the colorExtension4 {\em color_extension}.
-					Calls \Ref{ColorExtension3::set}.
-					Calls \Ref{ColorRGBA::set}.
+					Calls  \link ColorExtension3::set ColorExtension3::set \endlink .
+					Calls  \link ColorRGBA::set ColorRGBA::set \endlink .
 					@param       color_extension the colorExtension4 to be copied
 					@see         ColorExtension3::set
 					@see         ColorRGBA
@@ -115,9 +115,9 @@ namespace BALL
 			/** Assignment operator.
 					Assign the colorExtension4 {\em color_extension} to {\em *this}
 					colorExtension4.
-					Calls \Ref{set}.
+					Calls  \link set set \endlink .
 					The colors of {\em *this} colorExtension4 are initialized to the colors 
-					of the colorExtension4 {\em color_extension}.\\
+					of the colorExtension4 {\em color_extension}. \par
 					@param       color_extension the colorExtension4 to be copied
 					@return      ColorExtension4& constant reference of {\em *this} colorExtension4
 					@see         set
@@ -128,9 +128,9 @@ namespace BALL
 			/** Copying.
 					Copy {\em *this} colorExtension4 to the colorExtension4
 					{\em color_extension}.
-					Calls \Ref{set}.
+					Calls  \link set set \endlink .
 					The colors of the colorExtension4 {\em color_extension} 
-					are initialized to the colors of {\em *this} colorExtension4.\\
+					are initialized to the colors of {\em *this} colorExtension4. \par
 					@param       color_extension the colorExtension4 to be assigned to
 					@see         set
 			*/
@@ -140,8 +140,8 @@ namespace BALL
 			/** Swapping of colorExtensions.
 					Swap the colors of {\em *this} colorExtension4 with the colorExtension4
 					{\em color_extension}.
-					Calls \Ref{ColorExtension3::swap}.
-					Calls \Ref{ColorRGBA::swap}.
+					Calls  \link ColorExtension3::swap ColorExtension3::swap \endlink .
+					Calls  \link ColorRGBA::swap ColorRGBA::swap \endlink .
 					@param       color_extension the colorExtension4 being swapped with {\em *this} colorExtension 
 					@see         ColorExtension4
 					@see         ColorExtension3::swap
@@ -192,14 +192,14 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the fourth color of {\em *this} colorExtension4.
-				  For further information see \Ref{getColor4}.
+				  For further information see  \link getColor4 getColor4 \endlink .
 			*/
 			const ColorRGBA& getColor4() const
 				throw();
 
 			/** Inspection of the fourth color of {\em *this} colorExtension4.
 					Access the fourth color of {\em *this} colorExtension4 by using
-					\Ref{ColorRGBA}.
+					 \link ColorRGBA ColorRGBA \endlink .
 					@param       color the color receiving the fourth color of {\em *this} colorExtension4
 					@see         setColor4
 					@see         ColorRGBA
@@ -209,7 +209,7 @@ namespace BALL
 
 			/** Inspection of all the components of the fourth color of {\em *this} colorExtension4.
 					Access all the components of the fourth color of {\em *this} colorExtension4
-					by using \Ref{ColorUnit}.
+					by using  \link ColorUnit ColorUnit \endlink .
 					@param       red the red component of the fourth color of {\em *this} colorExtension4
 					@param       green the green component of the fourth color of {\em *this} colorExtension4
 					@param       blue the blue component of the fourth color of {\em *this} colorExtension4
@@ -225,7 +225,7 @@ namespace BALL
 			/** Inspection of the components of the fourth color of {\em *this}
 					colorExtension4.
 					Access only the red, green and blue components of the fourth color 
-					of {\em *this} colorExtension4	by using \Ref{ColorUnit}.
+					of {\em *this} colorExtension4	by using  \link ColorUnit ColorUnit \endlink .
 					@param       red the red component of the fourth color of {\em *this} colorExtension4
 					@param       green the green component of the fourth color of {\em *this} colorExtension4
 					@param       blue the blue component of the fourth color of {\em *this} colorExtension4
@@ -240,7 +240,7 @@ namespace BALL
 					Change the first, second, third and fourth color of {\em *this} colorExtension4
 					to the colors	represented by the parameters {\em a}, {\em b}, {\em c} and
 					{\em d}.
-					Calls \Ref{ColorExtension3::setColors}.
+					Calls  \link ColorExtension3::setColors ColorExtension3::setColors \endlink .
 					@param       a the new first color of {\em *this} colorExtension4
 					@param       b the new second color of {\em *this} colorExtension4
 					@param       c the new third color of {\em *this} colorExtension4
@@ -257,8 +257,8 @@ namespace BALL
 			/** Inspection of the first, second, third and fourth color of {\em *this}
 					colorExtension4.
 					Access the first, second, third and fourth color of {\em *this} colorExtension4
-					by using \Ref{ColorRGBA}.
-					Calls \Ref{ColorExtension3::getColors}.
+					by using  \link ColorRGBA ColorRGBA \endlink .
+					Calls  \link ColorExtension3::getColors ColorExtension3::getColors \endlink .
 					@param       a the color receiving the first color of {\em *this} colorExtension4
 					@param       b the color receiving the second color of {\em *this} colorExtension4
 					@param       c the color receiving the third color of {\em *this} colorExtension4

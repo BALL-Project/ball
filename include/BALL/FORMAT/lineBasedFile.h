@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineBasedFile.h,v 1.21 2002/12/12 09:48:45 oliver Exp $
+// $Id: lineBasedFile.h,v 1.22 2003/02/21 16:03:03 anhi Exp $
 
 #ifndef BALL_FORMAT_LINEBASEDFILE_H
 #define BALL_FORMAT_LINEBASEDFILE_H
@@ -21,7 +21,7 @@ namespace BALL
 {
 
 	/** A class for the convenient parsing of line-based file formats.
-			{\bf Definition:} \URL{BALL/FORMAT/lineBasedFile.h} \\
+			<b>Definition:</b> BALL/FORMAT/lineBasedFile.h
 	*/
 	class LineBasedFile
 		:	public File
@@ -120,7 +120,7 @@ namespace BALL
 		/** Search for a line starting with a given string.
 				Search starts at the current line and ends at the end of the file 
 				(no wrap around).
-				@param return_to_start if set to {\bf true}, the current line is reset to its value prior to the invocation
+				@param return_to_start if set to <b>true</b>, the current line is reset to its value prior to the invocation
 				@return true if line could be found
 		*/
 		bool search(const String& text, bool return_to_start = false)
@@ -153,7 +153,7 @@ namespace BALL
 				@param line should be used for __LINE__
 				@param condition to be tested
 				@param msg this string is used as message in the exception
-				@exception ParseError if {\tt condition} is not fulfilled
+				@exception ParseError if <tt>condition</tt> is not fulfilled
 		*/
 		void test(const char* file, int line, bool condition, const String& msg) 
 			const throw(Exception::ParseError);
@@ -179,8 +179,8 @@ namespace BALL
 			const throw();
 
 		/**	Parse column based formats.
-				Copy the subsection of the current line defined by {\tt index} and {\tt length} into a buffer
-				try to parse it using {\tt sscanf}. The result is stored in {\tt arg} (use with caution: no type checking!).
+				Copy the subsection of the current line defined by <tt>index</tt> and <tt>length</tt> into a buffer
+				try to parse it using <tt>sscanf</tt>. The result is stored in <tt>arg</tt> (use with caution: no type checking!).
 		*/
 		bool parseColumnFormat(const char* format, Position index, Size length, void* arg);
 

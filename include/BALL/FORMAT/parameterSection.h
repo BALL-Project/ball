@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: parameterSection.h,v 1.17 2002/12/22 11:45:19 sturm Exp $
+// $Id: parameterSection.h,v 1.18 2003/02/21 16:03:04 anhi Exp $
 // Format: general  parameter section class
 
 #ifndef BALL_FORMAT_PARAMETERSECTION_H
@@ -21,21 +21,22 @@ namespace BALL
 	class Parameters;
 
 	/**	General Parameter Section Class.
-			It is similar to \Ref{INIFile}, but a little bit more sophisticated.
+			It is similar to  \link INIFile INIFile \endlink , but a little bit more sophisticated.
 			Just as in a INIFile there can be comment lines starting with either 
-			"{\bf ;}", "{\bf !}" or "{\bf \#}" and it is divided in sections.
-			A section-line looks like "{\bf [ElectricFieldEffect]}".
+			"<b>;</b>", "<b>!</b>" or "{\bf \#}" and it is divided in sections.
+			A section-line looks like "<b>[ElectricFieldEffect]</b>".
 			The first non-comment line in a section is the format-line.
-			It defines the sort of values stored in the section and their order: \\
-			"{\bf key:residue key:atom value:charge }" \\
-			Option lines start with a "{\bf @ }": \\
-			"{\bf @exclude_residue_field=true }" \\
+			It defines the sort of values stored in the section and their order:  \par
+			"<b>key:residue key:atom value:charge </b>"  \par
+			Option lines start with a "<b>@ </b>":  \par
+			"<b>@exclude_residue_field=true </b>"  \par
 			The values are stored in fields seperated by whitespaces in the order given
-			by their format-line: \\
-			"{\bf     Ca       Ca        9.6 }" \\		
+			by their format-line:  \par
+			"<b>    Ca       Ca        9.6 </b>"  \par
+		
 			Each value line may contain version information, indicated by a variable 
 			definition named "ver"; thus only the latest version will be version will be accessed.
-			{\bf Definition:} \URL{BALL/FORMAT/parameterSection.h} \\
+			<b>Definition:</b> BALL/FORMAT/parameterSection.h
 	*/
 	class ParameterSection 
 	{
@@ -88,13 +89,13 @@ namespace BALL
 				the format, and builds some datastructures for fast and easy acces to the data.
 				@param	parameters the parameters defining the inifile to be read from
 				@param	section_name the name of the section to be read (without the squared brackets)
-				@return bool - {\bf true} if the section could be read, {\bf false} otherwise
+				@return bool - <b>true</b> if the section could be read, <b>false</b> otherwise
 		*/
 		bool extractSection(Parameters& parameters, const String& section_name)
 			throw();
 
 		/**	Return the name of the section read.
-				The section name is empty before \Ref{extractSection} was called.
+				The section name is empty before  \link extractSection extractSection \endlink  was called.
 				@return the	name of the section extracted
 		*/
 		const String& getSectionName() const
@@ -142,14 +143,14 @@ namespace BALL
 		Size getNumberOfKeys() const throw();
 
 		/**	Fast access to the value array.
-				If the value is undefined, \Ref{UNDEFINED} is returned.
+				If the value is undefined,  \link UNDEFINED UNDEFINED \endlink  is returned.
 		*/
 		const String& getValue(Position key_index, Position variable_index)
 			const throw();
 
 		/**	Fast access to the key array.
 				The first key has the index 0.
-				If the key is undefined, \Ref{UNDEFINED} is returned.
+				If the key is undefined,  \link UNDEFINED UNDEFINED \endlink  is returned.
 		*/
 		const String& getKey(Position key_index) const throw();
 

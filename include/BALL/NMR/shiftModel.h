@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: shiftModel.h,v 1.8 2002/02/27 12:19:32 sturm Exp $
+// $Id: shiftModel.h,v 1.9 2003/02/21 16:05:46 anhi Exp $
 
 #ifndef BALL_NMR_SHIFTMODEL_H
 #define BALL_NMR_SHIFTMODEL_H
@@ -24,10 +24,10 @@ namespace BALL
 	/**	A class representing a complete parameterized NMR shift model.
 			The model consists of a set of single contributions (e.g. ring curent,
 			magnetic anisotropy, etc.). Each of these contributions is calculated
-			by a separate \Ref{ShiftModule} object. ShiftModel contains a list of 
+			by a separate  \link ShiftModule ShiftModule \endlink  object. ShiftModel contains a list of 
 			these processors and is also derived from ShiftModul. Hence, it can
-			be applied to arbitrary kernel objects in the same fashion as \Ref{ShiftModule}s.	\\
-			{\bf Definition:} \URL{BALL/NMR/shiftModel.h}
+			be applied to arbitrary kernel objects in the same fashion as  \link ShiftModule ShiftModule \endlink s.	 \par
+			<b>Definition:</b> BALL/NMR/shiftModel.h
 	*/
 	class ShiftModel 
 		: public ShiftModule		

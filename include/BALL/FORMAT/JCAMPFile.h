@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: JCAMPFile.h,v 1.9 2002/12/12 09:48:44 oliver Exp $
+// $Id: JCAMPFile.h,v 1.10 2003/02/21 16:02:51 anhi Exp $
 
 #ifndef BALL_FORMAT_JCAMPFILE_H
 #define BALL_FORMAT_JCAMPFILE_H
@@ -22,8 +22,8 @@ namespace BALL
 {
 
 	/**	JCAMP file.
-			This class....	\\
-			{\bf Definition:}\URL{BALL/FORMAT/JCAMPFile.h}	\\
+			This class....	 \par
+			<b>Definition:</b>BALL/FORMAT/JCAMPFile.h
 	*/
 	class JCAMPFile 
 		: public File
@@ -63,7 +63,7 @@ namespace BALL
 		*/
 		double parameter(const String& name) const;
 
-		/**	Exists the parameter {\tt name}?
+		/**	Exists the parameter <tt>name</tt>?
 		*/
 		bool has(const String& name) const;
 

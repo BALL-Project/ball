@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glQuadricObject.h,v 1.10 2002/12/16 12:22:49 sturm Exp $
+// $Id: glQuadricObject.h,v 1.11 2003/02/21 16:07:29 anhi Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLQUADRICOBJECT_H
 #define BALL_VIEW_GUI_KERNEL_GLQUADRICOBJECT_H
@@ -24,8 +24,8 @@ namespace BALL
 				of OpenGL quadric objects and defines an easy interface for creating those
 				quadric objects.
 				See the documentation of the OpenGL graphical library for information
-				concerning quadric objects.\\
-				{\bf Definition:} \URL{BALL/VIEW/GUI/KERNEL/glQuadricObject.h}
+				concerning quadric objects. \par
+				<b>Definition:</b> BALL/VIEW/GUI/KERNEL/glQuadricObject.h
 		*/
 		class GLQuadricObject
 		{
@@ -100,10 +100,10 @@ namespace BALL
 					Construct new glQuadricObject.
 					The state of {\em *this} glQuadricObject is set to:
 					\begin{itemize}
-					  \item drawing style is set to {\tt GLU_FILL} (Default)
-					  \item normal style is set to {\tt GLU_FLAT_FILL} (Default)
-					  \item orientation style is set to {\tt GLU_OUTSIDE} (Default)
-					  \item generate texture coordinates is set to {\tt false} (Default)
+					  \item drawing style is set to <tt>GLU_FILL</tt> (Default)
+					  \item normal style is set to <tt>GLU_FLAT_FILL</tt> (Default)
+					  \item orientation style is set to <tt>GLU_OUTSIDE</tt> (Default)
+					  \item generate texture coordinates is set to <tt>false</tt> (Default)
 					\end{itemize}
 					See the documentation of the OpenGL	graphical library for the various
 					styles of quadric objects.
@@ -118,7 +118,7 @@ namespace BALL
 					Construct new glQuadricObject by copying the glQuadricObject 
 					{\em GL_quadric_object}.
 					{\em *this} glQuadricObject is initialized to the glQuadricObject
-					{\em GL_quadric_object}.\\
+					{\em GL_quadric_object}. \par
 					@param       GL_quadric_object the glQuadricObject to be copied 
 					@return      GLQuadricObject new constructed glQuadricObject copied from {\em GL_quadric_object}
 			*/
@@ -132,7 +132,7 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} glQuadricObject.
-					Calls \Ref{destroy}.
+					Calls  \link destroy destroy \endlink .
 					@see         destroy
 			*/
 			virtual ~GLQuadricObject()
@@ -146,7 +146,7 @@ namespace BALL
 
 			/** Explicit destructor.
 					Deletes the internally allocated OpenGL quadric object if already allocated.
-					Calls \Ref{clear}
+					Calls  \link clear clear \endlink 
 					@see  clear
 			*/
 			virtual void destroy()
@@ -171,7 +171,7 @@ namespace BALL
 					Assign the glQuadricObject {\em GL_quadric_object} to {\em *this} glQuadricObject.
 					The state of {\em *this} glQuadricObject is initialized to the state
 					of the glQuadricObject {\em GL_quadric_object}
-					Calls \Ref{set}.
+					Calls  \link set set \endlink .
 					@param       GL_quadric_object the glObject to be copied
 					@return      GLQuadricObject& constant reference of {\em *this} glQuadricObject
 					@see         set
@@ -183,7 +183,7 @@ namespace BALL
 					Copy {\em *this} glQuadricObject to the glQuadricObject {\em GL_quadric_object}.
 					The state of {\em *this} glQuadricObject is initialized to the state
 					of the glQuadricObject {\em GL_quadric_object}
-					Calls \Ref{set}.
+					Calls  \link set set \endlink .
 					@param       GL_quadric_object the glQuadricObject to be assigned to
 					@see         set
 			*/
@@ -250,8 +250,8 @@ namespace BALL
 					off according to the value represented by the parameter {\em generate}.
 					See the documentation of the OpenGL	graphical library for information
 					concerning texture coordinate generation of quadric objects.
-					@param       generate if set to {\tt true} the texture coordinate generation of {\em *this} glQuadricObject will be turned on; 
-											 turned off if set to {\tt false}
+					@param       generate if set to <tt>true</tt> the texture coordinate generation of {\em *this} glQuadricObject will be turned on; 
+											 turned off if set to <tt>false</tt>
 					@see         getTextureCoordinateGeneration
 			*/
 			void setTextureCoordinateGeneration(bool generate)
@@ -259,8 +259,8 @@ namespace BALL
 
 			/** Inspection of the texture coordinate generation switch.
 					Is the texture coordinate generation of {\em *this} glQuadricObject
-					turned on {\tt true}, or turned off {\tt false}.
-					@return    bool {\tt true} if the texture coordinate generation of {\em *this} glQuadricObject will be turned on, {\tt false} otherwise
+					turned on <tt>true</tt>, or turned off <tt>false</tt>.
+					@return    bool <tt>true</tt> if the texture coordinate generation of {\em *this} glQuadricObject will be turned on, <tt>false</tt> otherwise
 					@see       setTextureCoordinateGeneration
 			*/
 			bool getTextureCoordinateGeneration() const
@@ -371,12 +371,12 @@ namespace BALL
 					Initiate self-validation of the internal state and data structure 
 					consistencies	of {\em *this} glQuadricObject.
 					If the internal state of {\em *this} glQuadricObject is correct
-					(self-validated) and consistent {\tt true} is returned,
-					{\tt false} otherwise. 
+					(self-validated) and consistent <tt>true</tt> is returned,
+					<tt>false</tt> otherwise. 
 					{\em *this} glQuadricObject is valid if a quadric object is already defined
 					(a graphical object is created).
-					@return			bool {\tt true} if the internal state of {\em *this} glQuadricObject is correct (self-validated) and consistent,
-					 						{\tt false} otherwise
+					@return			bool <tt>true</tt> if the internal state of {\em *this} glQuadricObject is correct (self-validated) and consistent,
+					 						<tt>false</tt> otherwise
 			*/
 			virtual bool isValid() const
 				throw();

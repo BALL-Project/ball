@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: property.h,v 1.28 2002/12/12 09:46:22 oliver Exp $
+// $Id: property.h,v 1.29 2003/02/21 16:01:42 anhi Exp $
 
 #ifndef BALL_CONCEPT_PROPERTY_H
 #define BALL_CONCEPT_PROPERTY_H
@@ -28,7 +28,7 @@ namespace BALL
 	//@{
 	
 	/** Named Property Class.
-			{\bf Definition:} \URL{BALL/CONCEPT/property.h}
+			<b>Definition:</b> BALL/CONCEPT/property.h
 	*/
 	class NamedProperty
 		:	public PersistentObject
@@ -45,25 +45,25 @@ namespace BALL
 		*/
 		enum Type
 		{
-			/**	@doc Bool-type properties can have the value {\bf true} or 
-					{\bf false}.
+			/**	@doc Bool-type properties can have the value <b>true</b> or 
+					<b>false</b>.
 			*/
 			BOOL,
 
-			/** @doc Int-type properties contain a variable of type {\bf int}
+			/** @doc Int-type properties contain a variable of type <b>int</b>
 			*/
 			INT,
 
 			/** @doc Unsigned-int-type properties contain a variable of type 
-					{\bf unsigned int}
+					<b>unsigned int</b>
 			*/
 			UNSIGNED_INT,
 
-			/**	@doc Float-type properties contain a variable of type {\bf double}
+			/**	@doc Float-type properties contain a variable of type <b>double</b>
 			*/
 			FLOAT,
 
-			/**	@doc Double-type properties contain a variable of type {\bf double}
+			/**	@doc Double-type properties contain a variable of type <b>double</b>
 			*/
 			DOUBLE,
 
@@ -99,7 +99,7 @@ namespace BALL
 		/**	Standard constructor.
 				Creates an object of type NONE. Use this constructor to create
 				it properties with user defined names.
-				The {\tt Type} is set to \Ref{OBJECT}.
+				The <tt>Type</tt> is set to  \link OBJECT OBJECT \endlink .
 				@param	name the propertie's name
 		*/
 		NamedProperty(const string& name)
@@ -107,7 +107,7 @@ namespace BALL
 
 		/**	Constructor for bool-type properties.
 				Creates a NamedProperty object containing a boolean value.
-				The {\tt Type} is set to \Ref{BOOL}.
+				The <tt>Type</tt> is set to  \link BOOL BOOL \endlink .
 				@param	name the property's name
 				@param	value the boolean value stored in the property
 		*/	
@@ -116,7 +116,7 @@ namespace BALL
 
 		/**	Constructor for int-type properties.
 				Creates a NamedProperty object containing a signed int value.
-				The {\tt Type} is set to \Ref{INT}.
+				The <tt>Type</tt> is set to  \link INT INT \endlink .
 				@param	name the property's name
 				@param	value the int value stored in the property
 		*/
@@ -125,7 +125,7 @@ namespace BALL
 
 		/** Constructor for unsigned int-type properties.
 				Creates a NamedProperty object containing an unsigned int value.
-				The {\tt Type} is set to \Ref{UNSIGNED_INT}.
+				The <tt>Type</tt> is set to  \link UNSIGNED_INT UNSIGNED_INT \endlink .
 				@param	name the property's name
 				@param	value the int value stored in the property
 		*/
@@ -134,7 +134,7 @@ namespace BALL
 
 		/** Constructor for float-type properties.
 				Creates a NamedProperty object containing a float value.
-				The {\tt Type} is set to \Ref{FLOAT}.
+				The <tt>Type</tt> is set to  \link FLOAT FLOAT \endlink .
 				@param	name the property's name
 				@param	value the float value stored in the property
 		*/
@@ -143,7 +143,7 @@ namespace BALL
 
 		/** Constructor for double-type properties.
 				Creates a NamedProperty object containing a double value.
-				The {\tt Type} is set to \Ref{DOUBLE}.
+				The <tt>Type</tt> is set to  \link DOUBLE DOUBLE \endlink .
 				@param	name the property's name
 				@param	value the double value stored in the property
 		*/
@@ -152,8 +152,8 @@ namespace BALL
 
 		/** Constructor for string-type properties.
 				Objects of type STRING contain a pointer to a string
-				object. This object is constructed as a copy of {\tt str}
-				The {\tt Type} is set to \Ref{STRING}.
+				object. This object is constructed as a copy of <tt>str</tt>
+				The <tt>Type</tt> is set to  \link STRING STRING \endlink .
 				@param	name the property's name
 				@param	str the string stored in the property
 		*/
@@ -163,7 +163,7 @@ namespace BALL
 		/**	Constructor for object-type properties.
 				Creates a NamedProperty object containing a 
 				pointer to a persistent object.
-				The {\tt Type} is set to \Ref{OBJECT}.
+				The <tt>Type</tt> is set to  \link OBJECT OBJECT \endlink .
 				@param	name the property's name
 				@param	po a reference to the persistent object stored in the property
 		*/
@@ -216,49 +216,49 @@ namespace BALL
 			throw();
 
 		/** Return the data of the property object as bool.
-				If the property object is not of BOOL type, {\bf false}
+				If the property object is not of BOOL type, <b>false</b>
 				is returned.
 		*/
 		bool getBool() const
 			throw();
 
 		/** Return the data of the property object as int.
-				If the property object is not of INT type, {\bf 0}
+				If the property object is not of INT type, <b>0</b>
 				is returned.
 		*/
 		int getInt() const
 			throw();
 			
 		/** Return the data of the property object as float.
-				If the property object is not of FLOAT type, {\bf 0.0}
+				If the property object is not of FLOAT type, <b>0.0</b>
 				is returned.
 		*/
 		float getFloat() const
 			throw();
 			
 		/** Return the data of the property object as double.
-				If the property object is not of DOUBLE type, {\bf 0.0}
+				If the property object is not of DOUBLE type, <b>0.0</b>
 				is returned.
 		*/
 		double getDouble() const
 			throw();
 			
 		/** Return the data of the property object as unsigned int.
-				If the property object is not of UNSIGNED_INT type, {\bf 0}
+				If the property object is not of UNSIGNED_INT type, <b>0</b>
 				is returned.
 		*/
 		unsigned int getUnsignedInt() const
 			throw();
 
 		/** Return the data of the property object as a pointer to a PersistentObject.
-				If the property object is not of OBJECT type, {\bf 0}
+				If the property object is not of OBJECT type, <b>0</b>
 				is returned.
 		*/
 		PersistentObject* getObject() const
 			throw();
 
 		/** Return the data of the property object as a string.
-				If the property object is not of STRING type, {\bf ""}
+				If the property object is not of STRING type, <b>""</b>
 				is returned.
 		*/
 		string getString() const
@@ -321,16 +321,16 @@ namespace BALL
 			order to avoid this, all kernel classes derived from PropertyManager
 			contain a public enum that defines a value NUMBER_OF_PROPERTIES. All
 			user defined properties should	refer to this constant (e.g. by
-			defining {\tt MY_PROPERTY = Molecule::NUMBER_OF_PROPERTIES + 1}).
-			\\
+			defining <tt>MY_PROPERTY = Molecule::NUMBER_OF_PROPERTIES + 1</tt>).
+			 \par
 			The second way of storing properties is much more flexible, but less
 			efficient.  It uses the class NamedProperty that also allows to store
 			additional information along with the property. In this case, each
 			property is accessed via a unique name.
-			\\
-			{\bf Interface:} Storable
-			\\
-			{\bf Definition:} \URL{BALL/CONCEPT/property.h}
+			 \par
+			<b>Interface:</b> Storable
+			 \par
+			<b>Definition:</b> BALL/CONCEPT/property.h
 	*/
 	class PropertyManager
 	{
@@ -375,17 +375,17 @@ namespace BALL
 			throw();
 
 		/** Assignment operator.
-				This operator calls {\tt set(property_manager)} to assign
+				This operator calls <tt>set(property_manager)</tt> to assign
 				a new object.
 				@param property_manager the PropertyManager object to copy from
-				@return PropertyManager {\tt *this}
+				@return PropertyManager <tt>*this</tt>
 		*/
 		const PropertyManager& operator = (const PropertyManager& property_manager)
 			throw();
 
 		/** Assign properties to another property manager.
 				This method copies the contents of the PropertyManager object
-				to the given {\tt property_manager}.
+				to the given <tt>property_manager</tt>.
 				@param	property_manager the target object
 		*/
 		void get(PropertyManager& property_manager) const
@@ -441,7 +441,7 @@ namespace BALL
 
 		/** Set a property.
 				This method sets an unnamed property of a PropertyManager object by
-				calling {\tt BitVector::setBit(property)} for the private bit vector.
+				calling <tt>BitVector::setBit(property)</tt> for the private bit vector.
 				@param property the number of the property to be set
 		*/
 		void setProperty(Property property)
@@ -449,7 +449,7 @@ namespace BALL
 
 		/** Clear a property.
 				This method clears an unnamed property of a PropertyManager object by
-				calling {\tt BitVector::clearBit(property)} for the private bit vector.
+				calling <tt>BitVector::clearBit(property)</tt> for the private bit vector.
 				@param property the number of the property to be cleared
 		*/
 		void clearProperty(Property property)
@@ -457,7 +457,7 @@ namespace BALL
 
 		/** Toggle (invert) a property.
 				This method clears an unnamed property of a PropertyManager object by
-				calling {\tt BitVector::toggleBit(property)} for the private bit vector.
+				calling <tt>BitVector::toggleBit(property)</tt> for the private bit vector.
 				@param property the number of the property to be toggled
 		*/
 		void toggleProperty(Property property)
@@ -474,7 +474,7 @@ namespace BALL
 		//@}
 
 		/**	@name	Handling named properties 
-				PropertyManager contains an vector of \Ref{NamedProperty} objects.
+				PropertyManager contains an vector of  \link NamedProperty NamedProperty \endlink  objects.
 				Each of the NamedProeprty objects has to have a {\em unique} name.
 				The setProperty methods ensure the uniqueness of this name.
 				If a setProperty method is called for an existing name, the
@@ -495,8 +495,8 @@ namespace BALL
 		/**	Set a named property.
 				This method adds a new named property to the property manager's 
 				array of named properties or substitutes an already existing
-				named property by {\tt property}. If a property with the same name as 
-				{\tt property} already exists, it is destructed.
+				named property by <tt>property</tt>. If a property with the same name as 
+				<tt>property</tt> already exists, it is destructed.
 				@param	property the new property to be set
 		*/
 		void setProperty(const NamedProperty& property)
@@ -504,8 +504,8 @@ namespace BALL
 
 		/**	Set a named property without any data.
 				This method creates a new named property not containing any data
-				({\tt NamedProperty::Type == NONE}).
-				Already existing data using the same {\tt name} is overwritten.
+				(<tt>NamedProperty::Type == NONE</tt>).
+				Already existing data using the same <tt>name</tt> is overwritten.
 				@param	name the name to be used for the new property
 		*/
 		void setProperty(const string& name)
@@ -513,8 +513,8 @@ namespace BALL
 
 		/**	Set a named property containing boolean data.
 				This method creates a new named property containing boolean
-				data ({\tt NamedProperty::Type == BOOL}).
-				Already existing data using the same {\tt name} is overwritten.
+				data (<tt>NamedProperty::Type == BOOL</tt>).
+				Already existing data using the same <tt>name</tt> is overwritten.
 				@param	name the name to be used for the new property
 				@param	value the boolean value 
 		*/
@@ -523,8 +523,8 @@ namespace BALL
 
 		/**	Set a named property containing a signed integer number.
 				This method creates a new named property containing an 
-				int ({\tt NamedProperty::Type == INT}).
-				Already existing data using the same {\tt name} is overwritten.
+				int (<tt>NamedProperty::Type == INT</tt>).
+				Already existing data using the same <tt>name</tt> is overwritten.
 				@param	name the name to be used for the new property
 				@param	value the data 
 		*/
@@ -533,8 +533,8 @@ namespace BALL
 
 		/**	Set a named property containing an unsigned integer number.
 				This method creates a new named property containing an 
-				unsigned int ({\tt NamedProperty::Type == UNSIGNED_INT}).
-				Already existing data using the same {\tt name} is overwritten.
+				unsigned int (<tt>NamedProperty::Type == UNSIGNED_INT</tt>).
+				Already existing data using the same <tt>name</tt> is overwritten.
 				@param	name the name to be used for the new property
 				@param	value the data 
 		*/
@@ -543,8 +543,8 @@ namespace BALL
 
 		/**	Set a named property containing a floating point number.
 				This method creates a new named property containing a
-				floating point number ({\tt NamedProperty::Type == FLOAT}).
-				Already existing data using the same {\tt name} is overwritten.
+				floating point number (<tt>NamedProperty::Type == FLOAT</tt>).
+				Already existing data using the same <tt>name</tt> is overwritten.
 				@param	name the name to be used for the new property
 				@param	value the data 
 		*/
@@ -553,8 +553,8 @@ namespace BALL
 
 		/**	Set a named property containing a double-precision floating point number.
 				This method creates a new named property containing a
-				floating point number ({\tt NamedProperty::Type == DOUBLE}).
-				Already existing data using the same {\tt name} is overwritten.
+				floating point number (<tt>NamedProperty::Type == DOUBLE</tt>).
+				Already existing data using the same <tt>name</tt> is overwritten.
 				@param	name the name to be used for the new property
 				@param	value the data 
 		*/
@@ -563,8 +563,8 @@ namespace BALL
 
 		/**	Set a named property containing a string.
 				This method creates a new named property containing a
-				string ({\tt NamedProperty::Type == STRING}).
-				Already existing data using the same {\tt name} is overwritten.
+				string (<tt>NamedProperty::Type == STRING</tt>).
+				Already existing data using the same <tt>name</tt> is overwritten.
 				@param	name the name to be used for the new property
 				@param	value the data 
 		*/
@@ -573,8 +573,8 @@ namespace BALL
 
 		/**	Set a named property containing a PersistentObject.
 				This method creates a new named property containing a
-				string ({\tt NamedProperty::Type == OBJECT}).
-				Already existing data using the same {\tt name} is overwritten.
+				string (<tt>NamedProperty::Type == OBJECT</tt>).
+				Already existing data using the same <tt>name</tt> is overwritten.
 				@param	name the name to be used for the new property
 				@param	value the data 
 		*/
@@ -582,7 +582,7 @@ namespace BALL
 			throw();
 
 		/**	Retrieve a named property.
-				If the property manager contains a property named {\tt name}
+				If the property manager contains a property named <tt>name</tt>
 				this property is returned. An empty property is returned
 				otherwise.
 				@param	name the name of the proeprty to be retrieved
@@ -591,7 +591,7 @@ namespace BALL
 			throw();
 
 		/**	Remove a named property.
-				If the named property {\tt name} does exist, it is remove from
+				If the named property <tt>name</tt> does exist, it is remove from
 				the array of properties.
 				@param name the name of the property to be removed
 		*/
@@ -652,7 +652,7 @@ namespace BALL
 
 		/**	Test if instance is valid.
 				Returns true if the bitvector is valid.
-				@return bool {\bf true}
+				@return bool <b>true</b>
 		*/
 		bool isValid() const
 			throw();

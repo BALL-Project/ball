@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: analyticalGeometry.h,v 1.54 2003/01/07 14:14:51 amoll Exp $
+// $Id: analyticalGeometry.h,v 1.55 2003/02/21 16:03:43 anhi Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -47,7 +47,7 @@ namespace BALL
 
 	/**	Subroutine to get the determinant of any matrix.
 			Direct usage of this function should be avoided.
-			Instead use {\tt T getDeterminant(const T* m, Size dim) }
+			Instead use <tt>T getDeterminant(const T* m, Size dim) </tt>
 			@param	m pointer to matrix
 			@param	dim dimension of the matrix
 	*/
@@ -174,30 +174,30 @@ namespace BALL
 	}
 
 	/**	Solve a system of linear equations.
-		  Given a system of linear equations\\
-			\\
+		  Given a system of linear equations \par
+			 \par
 			$
 				\begin{array}{ccccccccc}
-				 a_{1,1} x_1 & + & a_{1,2} x_2 & + & \ldots & + & a_{1,n} x_n & = & a_{1,(n+1)}\\
-				 a_{2,1} x_1 & + & a_{2,2} x_2 & + & \ldots & + & a_{2,n} x_n & = & a_{2,(n+1)}\\
-				   \vdots    &   &   \vdots    &   & \ddots &   &   \vdots    &   &   \vdots\\
-				 a_{n,1} x_1 & + & a_{n,2} x_2 & + & \ldots & + & a_{n,n} x_n & = & a_{n,(n+1)}\\
+				 a_{1,1} x_1 & + & a_{1,2} x_2 & + & \ldots & + & a_{1,n} x_n & = & a_{1,(n+1)} \par
+				 a_{2,1} x_1 & + & a_{2,2} x_2 & + & \ldots & + & a_{2,n} x_n & = & a_{2,(n+1)} \par
+				   \vdots    &   &   \vdots    &   & \ddots &   &   \vdots    &   &   \vdots \par
+				 a_{n,1} x_1 & + & a_{n,2} x_2 & + & \ldots & + & a_{n,n} x_n & = & a_{n,(n+1)} \par
 				\end{array}
 			$
-			\\
-			in matrix form, identify the solution $x = (x_1, x_2,\ldots x_N)$.\\
-			{\tt m} should point to a C-style array containing the $n\times(n+1)$ matrix {\bf A}.\\
-			The elements of {\bf A} are row-ordered, i.e., they are ordered like this:\\
+			 \par
+			in matrix form, identify the solution $x = (x_1, x_2,\ldots x_N)$. \par
+			<tt>m</tt> should point to a C-style array containing the $n\times(n+1)$ matrix <b>A</b>. \par
+			The elements of <b>A</b> are row-ordered, i.e., they are ordered like this: \par
 			$
 				a_{1,1}, a_{1,2}, \cdot, a_{1,(n+1)}, a_{2,1}, \ldots a_{n,(n+1)}
-			$\\
-			{\tt x} points to a C-style array that will contain the solution vector {\bf x}
-			upon successful termination of the function.\\
-			If there is no solution or the system is under-determined, return {\bf false}.
+			$ \par
+			<tt>x</tt> points to a C-style array that will contain the solution vector <b>x</b>
+			upon successful termination of the function. \par
+			If there is no solution or the system is under-determined, return <b>false</b>.
 			@param	m pointer to the factors in the equations
 			@param	x pointer in which the results are stored
 			@param  dim the dimension of the equation system (number of variables)
-			@return bool {\tt true} if a solution is found
+			@return bool <tt>true</tt> if a solution is found
 	*/
 	template <typename T>
 	bool SolveSystem(const T* m, T* x, const Size dim)
@@ -291,7 +291,7 @@ namespace BALL
 			@param	a1- c2 constants of the system
 			@param x1 the first solution
 			@param x2 the second solution
-			@return bool {\tt true} if a solution is found
+			@return bool <tt>true</tt> if a solution is found
 	*/
 	template <typename T>
 	BALL_INLINE 
@@ -933,12 +933,12 @@ namespace BALL
 	}
 	 
 	/**	Get the intersection circle between two spheres.
-			This methods returns {\bf false}, if the two spheres
+			This methods returns <b>false</b>, if the two spheres
 			are identical, since then no intersection circle exists.
 			@param	a the first sphere
 			@param	b the second sphere
 			@param	intersection_circle the intersection circle
-			@return bool, {\bf true} if an intersection can be calculated, otherwise {\bf false}
+			@return bool, <b>true</b> if an intersection can be calculated, otherwise <b>false</b>
 	*/
 	template <typename T>
 	bool GetIntersection(const TSphere3<T>& a, const TSphere3<T>& b, TCircle3<T>& intersection_circle)
@@ -983,7 +983,7 @@ namespace BALL
 			@param	s3 the third sphere
 			@param	p1 the first intersection point
 			@param	p2 the second intersection point
-			@return bool, {\bf true} if an intersection can be calculated, otherwise {\bf false}
+			@return bool, <b>true</b> if an intersection can be calculated, otherwise <b>false</b>
 	*/
 	template <class T>
 	bool GetIntersection(const TSphere3<T>& s1,

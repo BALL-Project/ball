@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: line.h,v 1.12 2002/12/16 12:22:56 sturm Exp $
+// $Id: line.h,v 1.13 2003/02/21 16:08:04 anhi Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_LINE_H
 #define BALL_VIEW_PRIMITIV_LINE_H
@@ -37,10 +37,10 @@ namespace BALL
 					\item vertex1 - the first vertex of the line
 					\item vertex2 - the second vertex of the line
 				\end{itemize}
-				The class Line is derived from the classes \Ref{GeometricObject}, \Ref{ColorExtension}
-				and \Ref{Vertex2}. See these classes for further information concerning
-				interface and additional methods. \\
-				{\bf Definition:} \URL{BALL/VIEW/PRIMITIV/line.h}
+				The class Line is derived from the classes  \link GeometricObject GeometricObject \endlink ,  \link ColorExtension ColorExtension \endlink 
+				and  \link Vertex2 Vertex2 \endlink . See these classes for further information concerning
+				interface and additional methods.  \par
+				<b>Definition:</b> BALL/VIEW/PRIMITIV/line.h
 		*/
 		class Line
 			: public GeometricObject,
@@ -73,7 +73,7 @@ namespace BALL
 					Construct new line by copying the line {\em line}.
 					The copy is either deep (default) or shallow.
 					@param       line the line to be copied (cloned)
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false})
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>)
 					@return      Line new constructed line copied from {\em line}
 					@see         GeometricObject
 					@see         ColorExtension
@@ -101,16 +101,16 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} line.
-					Calls \Ref{destroy}.
+					Calls  \link destroy destroy \endlink .
 					@see         destroy
 			*/
 			virtual ~Line()
 				throw();
 
 			/** Explicit default initialization.
-					Calls \Ref{GeometricObject::clear}.
-					Calls \Ref{ColorExtension::clear}.
-					Calls \Ref{Vertex2::clear}.
+					Calls  \link GeometricObject::clear GeometricObject::clear \endlink .
+					Calls  \link ColorExtension::clear ColorExtension::clear \endlink .
+					Calls  \link Vertex2::clear Vertex2::clear \endlink .
 					@see  GeometricObject::clear
 					@see  ColorExtension::clear
 					@see  Vertex2::clear
@@ -119,9 +119,9 @@ namespace BALL
 				throw();
 
 			/** Explicit destructor.
-					Calls \Ref{GeometricObject::destroy}.
-					Calls \Ref{ColorExtension::destroy}.
-					Calls \Ref{Vertex2::destroy}.
+					Calls  \link GeometricObject::destroy GeometricObject::destroy \endlink .
+					Calls  \link ColorExtension::destroy ColorExtension::destroy \endlink .
+					Calls  \link Vertex2::destroy Vertex2::destroy \endlink .
 					@see  GeometricObject::destroy
 					@see  ColorExtension::destroy
 					@see  Vertex2::destroy
@@ -139,9 +139,9 @@ namespace BALL
 					Assign the line {\em line} to {\em *this} line.
 					The copy is either deep (default) or shallow.
 					The value of {\em *this} line is initialized to the value of 
-					the line {\em line}.\\
+					the line {\em line}. \par
 					@param       line the line to be copied
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em line}
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of {\em line}
 			*/
 			void set(const Line& line, bool deep = true)
 				throw();
@@ -149,9 +149,9 @@ namespace BALL
 			/** Assignment operator.
 					Assign the line {\em line} to {\em *this} line.
 					The copy is deep.
-					Calls \Ref{set}.
+					Calls  \link set set \endlink .
 					The value of {\em *this} line is initialized to the value 
-					of the line {\em line}.\\
+					of the line {\em line}. \par
 					@param       line the line to be copied
 					@return      Line& {\em *this} line
 					@see         set
@@ -162,11 +162,11 @@ namespace BALL
 			/** Copying with cloning facility.
 					Copy {\em *this} line to the line {\em line}.
 					The copy is either deep (default) or shallow.
-					Calls \Ref{set}.
+					Calls  \link set set \endlink .
 					The value of the line {\em line} is initialized to the
-					value of {\em *this} line.\\
+					value of {\em *this} line. \par
 					@param       line the line to be assigned to
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em line}
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of {\em line}
 					@see         set
 			*/
 			void get(Line& line, bool deep = true) const
@@ -190,10 +190,10 @@ namespace BALL
 					Initiate self-validation of the internal state and data structure consistencies
 					of {\em *this} line.
 					If the internal state of {\em *this} line is correct (self-validated) and 
-					consistent {\tt true} is returned, {\tt false} otherwise. 
-					Calls \Ref{GeometricObject::isValid}.
-					Calls \Ref{Vertex2::isValid}.
-					@return			bool {\tt true} if the internal state of {\em *this} line is correct (self-validated) and consistent, {\tt false} otherwise
+					consistent <tt>true</tt> is returned, <tt>false</tt> otherwise. 
+					Calls  \link GeometricObject::isValid GeometricObject::isValid \endlink .
+					Calls  \link Vertex2::isValid Vertex2::isValid \endlink .
+					@return			bool <tt>true</tt> if the internal state of {\em *this} line is correct (self-validated) and consistent, <tt>false</tt> otherwise
 					@see        GeometricObject::isValid
 					@see        Vertex2::isValid
 			*/
@@ -203,9 +203,9 @@ namespace BALL
 			/** Internal value dump.
 					Dump the current value of {\em *this} line to 
 					the output ostream {\em s} with dumping depth {\em depth}.
-					Calls \Ref{GeometricObject::dump}.
-					Calls \Ref{ColorExtension::dump}.
-					Calls \Ref{Vertex2::dump}.
+					Calls  \link GeometricObject::dump GeometricObject::dump \endlink .
+					Calls  \link ColorExtension::dump ColorExtension::dump \endlink .
+					Calls  \link Vertex2::dump Vertex2::dump \endlink .
 					@param   s output stream where to output the value of {\em *this} line
 					@param   depth the dumping depth
 					@see        GeometricObject::dump
@@ -221,9 +221,9 @@ namespace BALL
 
 			/** Export method.
 					This method handles the export of {\em *this} line into another
-					format (eg. POVRAY, VRML)\\
-				  {\bf Note:} Not yet implemented.
-					@return    bool {\tt true} if successful,	{\tt false} otherwise
+					format (eg. POVRAY, VRML) \par
+				  <b>Note:</b> Not yet implemented.
+					@return    bool <tt>true</tt> if successful,	<tt>false</tt> otherwise
 			*/
 			virtual bool extract()
 				throw();

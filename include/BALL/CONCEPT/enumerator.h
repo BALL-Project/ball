@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: enumerator.h,v 1.22 2002/12/16 15:52:10 oliver Exp $
+// $Id: enumerator.h,v 1.23 2003/02/21 16:01:33 anhi Exp $
 
 #ifndef BALL_CONCEPT_ENUMERATOR_H
 #define BALL_CONCEPT_ENUMERATOR_H
@@ -39,8 +39,8 @@ namespace BALL
 			digits that have different bases. The bases are the numbers of
 			possibilities for each variant in the list. Most significant component
 			is operator [] (0), so incrementing starts at operator [] (size() - 1)
-			\\
-			{\bf Definition:} \URL{BALL/CONCEPT/enumerator.h}
+			 \par
+			<b>Definition:</b> BALL/CONCEPT/enumerator.h
 	*/
 	class EnumeratorIndex
 		: private std::vector<Position>
@@ -51,8 +51,8 @@ namespace BALL
 		 */
 		//@{
 		/** Exception for reporting incompatible EnumeratorIndex instances, 
-				i.e. instances with different moduli. {\bf Definition:}
-				\URL{BALL/CONCEPT/enumerator.h}
+				i.e. instances with different moduli. <b>Definition:</b>
+				BALL/CONCEPT/enumerator.h
 		*/	 
 		class IncompatibleIndex
 			: public Exception::GeneralException
@@ -152,8 +152,8 @@ namespace BALL
 		/**	Add a new digit.	
 				Push the modulus to the ack of the modulus array and
 				initialize the corresponding digit with zero.
-				\\
-				{\bf Example:} To construct a hex counter with three
+				 \par
+				<b>Example:</b> To construct a hex counter with three
 				digits, you can use something like:
 				\begin{verbatim}
 					EnumerationIndex counter;
@@ -172,21 +172,21 @@ namespace BALL
 
 		/** Equality operator.
 		 * @param rhs
-		 * @return true, if {\tt rhs} is equal to {\tt this} instance
+		 * @return true, if <tt>rhs</tt> is equal to <tt>this</tt> instance
 		 */
 		bool operator == (const EnumeratorIndex& rhs) const
 			throw();
 
 		/** Inequality operator.
 		 * @param rhs
-		 * @return true, if {\tt rhs} is not equal to {\tt this} instance
+		 * @return true, if <tt>rhs</tt> is not equal to <tt>this</tt> instance
 		 */
 		bool operator != (const EnumeratorIndex& rhs) const
 			throw();
 
 		/** Greater than operator.
 		 * @param rhs
-		 * @return true, if {\tt rhs} is greater than {\tt this} instance
+		 * @return true, if <tt>rhs</tt> is greater than <tt>this</tt> instance
 			 @exception EnumeratorIndex::Incompatible index if the modulus vector differs, i.e. the two indices aren't comparable
 		 */
 		bool operator > (const EnumeratorIndex& rhs) const
@@ -194,7 +194,7 @@ namespace BALL
 
 		/** Lesser than operator.
 		 * @param rhs
-		 * @return true, if {\tt rhs} is lesser than {\tt this} instance
+		 * @return true, if <tt>rhs</tt> is lesser than <tt>this</tt> instance
 		 *  @exception EnumeratorIndex::Incompatible index if the modulus vector differs, i.e. the two indices aren't comparable
 		 */
 		bool operator < (const EnumeratorIndex& rhs) const
@@ -202,7 +202,7 @@ namespace BALL
 				
 		/** Greater or equal operator.
 		 * @param rhs
-		 * @return true, if {\tt rhs} is greater than or equal to {\tt this} instance
+		 * @return true, if <tt>rhs</tt> is greater than or equal to <tt>this</tt> instance
 		 *  @exception EnumeratorIndex::Incompatible index if the modulus vector differs, i.e. the two indices aren't comparable
 		 */
 		bool operator >= (const EnumeratorIndex& rhs) const
@@ -210,7 +210,7 @@ namespace BALL
 
 		/** Lesser or equal operator.
 		 * @param rhs
-		 * @return true, if {\tt rhs} is lesser than or equal to {\tt this} instance
+		 * @return true, if <tt>rhs</tt> is lesser than or equal to <tt>this</tt> instance
 		 *  @exception EnumeratorIndex::Incompatible index if the modulus vector differs, i.e. the two indices aren't comparable
 		 */
 		bool operator <= (const EnumeratorIndex& rhs) const
@@ -267,28 +267,28 @@ namespace BALL
 			combinations of things. Applications are e.g. the enumeration of
 			all possible sequences defined through a multisequence or
 			enumerating all possible rotamers of a peptide or a bindings site.
-			\\
-			Enumerator uses \Ref{EnumeratorIndex} as an inhomogeneous counter
+			 \par
+			Enumerator uses  \link EnumeratorIndex EnumeratorIndex \endlink  as an inhomogeneous counter
 			class. It is also highly templatized in order to be adaptable to
 			most problem instances. In general, the enumeration problem can 
 			be seen as counting with a mixed-base number. For an example of 
 			the Enumerator's usage, please refer to the tutorial.
-			\\
+			 \par
 			The Enumerator's template arguments are 
 			\begin{itemize}
-				\item the {\tt Container}
-					it operates on (e.g. the \Ref{String} representing the sequence
+				\item the <tt>Container</tt>
+					it operates on (e.g. the  \link String String \endlink  representing the sequence
 					or the protein containing the amino acids)
-				\item the {\tt SiteIterator} (i.e. an iterator pointing to a 
+				\item the <tt>SiteIterator</tt> (i.e. an iterator pointing to a 
 					defined position within the container)
-				\item the {\tt Variant} type (i.e. the type of the object to be enumerated).
-					It has to be the same type as the dereferenced {\tt SiteIterator}.
+				\item the <tt>Variant</tt> type (i.e. the type of the object to be enumerated).
+					It has to be the same type as the dereferenced <tt>SiteIterator</tt>.
 			\end{itemize}
-			In the case of a string sequence that has to be mutated, the {\tt Container}
-			is of class \Ref{String}, the {\tt SiteIterator} is of type
-			{\tt String::Iterator}, and {\tt Variant} is obviously of type {\tt char}.
-			\\
-			{\bf Definition:} \URL{BALL/CONCEPT/enumerator.h}
+			In the case of a string sequence that has to be mutated, the <tt>Container</tt>
+			is of class  \link String String \endlink , the <tt>SiteIterator</tt> is of type
+			<tt>String::Iterator</tt>, and <tt>Variant</tt> is obviously of type {\tt char}.
+			 \par
+			<b>Definition:</b> BALL/CONCEPT/enumerator.h
 	*/
 	template <class Container, class SiteIterator, class Variant>
 	class Enumerator
@@ -349,7 +349,7 @@ namespace BALL
 
 		/** Detailed Constructor.
 				The mutator function is set to a default mutator,
-				using the assignment operator for {\tt Variant}.
+				using the assignment operator for <tt>Variant</tt>.
 				@param container a Container class to be mutated
 		 */
 		Enumerator(Container& container)

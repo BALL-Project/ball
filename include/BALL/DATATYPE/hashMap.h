@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hashMap.h,v 1.29 2002/12/12 09:48:43 oliver Exp $ 
+// $Id: hashMap.h,v 1.30 2003/02/21 16:01:55 anhi Exp $ 
 
 #ifndef BALL_DATATYPE_HASHMAP_H
 #define BALL_DATATYPE_HASHMAP_H
@@ -44,7 +44,7 @@ namespace BALL
 {
 
 	/**	Generic Hash Map Class.
-			{\bf Definition:} \URL{BALL/DATATYPE/hashMap.h}
+			<b>Definition:</b> BALL/DATATYPE/hashMap.h
 	*/
 	template <class Key, class T>
 	class HashMap
@@ -416,21 +416,21 @@ namespace BALL
 		*/
 		Size size() const throw();
 
-		/** Find the element whose key is {\tt key}.
+		/** Find the element whose key is <tt>key</tt>.
 		*/
 		Iterator find(const Key& key) throw();
 	
-		/** Find the element whose key is {\tt key}.
+		/** Find the element whose key is <tt>key</tt>.
 		*/
 		ConstIterator find(const Key& key) const throw();
 
-		/**	Return a mutable reference to the element whose key is {\tt key}.
-				If an element with the key {\tt key} does not exist, it is inserted.
+		/**	Return a mutable reference to the element whose key is <tt>key</tt>.
+				If an element with the key <tt>key</tt> does not exist, it is inserted.
 				@param	key the key
 		*/
 		T& operator [] (const Key& key) throw();
 
-		/**	Return a constant reference to the element whose key is {\tt key}.
+		/**	Return a constant reference to the element whose key is <tt>key</tt>.
 				@exception IllegalKey if the given key does not exist
 				@param	key the key
 		*/
@@ -442,11 +442,11 @@ namespace BALL
 		std::pair<Iterator, bool> insert(const ValueType& entry) throw();
 
 		/**	Insert a new entry into the hash map.
-				For STL compatibility. The value of {\tt pos} is ignored.
+				For STL compatibility. The value of <tt>pos</tt> is ignored.
 		*/
 		Iterator insert(Iterator pos, const ValueType& entry) throw();
 
-		/**	Erase element with key {\tt key}.
+		/**	Erase element with key <tt>key</tt>.
 				@return Size the number of elements erased (0 or 1)
 		*/
 		Size erase(const Key& key) throw();
@@ -457,7 +457,7 @@ namespace BALL
 		void erase(Iterator pos) throw(Exception::IncompatibleIterators, Exception::InvalidIterator);
 
 		/**	Erase a range of elements.
-				Erase all elements in the range {\tt first - last}.
+				Erase all elements in the range <tt>first - last</tt>.
 		*/
 		void erase(Iterator first, Iterator last) throw(Exception::IncompatibleIterators);
 

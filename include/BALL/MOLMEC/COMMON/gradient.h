@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: gradient.h,v 1.12 2002/12/12 09:48:47 oliver Exp $ 
+// $Id: gradient.h,v 1.13 2003/02/21 16:04:20 anhi Exp $ 
 
 // A conjugate gradient minimizer for geometry optimisation
 
@@ -30,11 +30,11 @@ namespace BALL
 			forces of the atoms are correctly set (e.g. using ForceField::updateForces()).
 			The gradient contains the negative forces from each atom. Forces are converted from Newton (N)
 			to units of $kJ/(mol \AA)$.
-			A gradient may be invalidated by calling \Ref{invalidate}. This method only
+			A gradient may be invalidated by calling  \link invalidate invalidate \endlink . This method only
 			flags the gradient as invalid, the data is untouched. This may be used to 
 			initiate automatic recalculations of the gradient.
-			This class is used by all minimizer classes. \\
-			{\bf Definition:}\URL{BALL/MOLMEC/COMMON/gradient.h}
+			This class is used by all minimizer classes.  \par
+			<b>Definition:</b>BALL/MOLMEC/COMMON/gradient.h
 	*/
 	class Gradient
 		:	private std::vector<Vector3>

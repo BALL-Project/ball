@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyPDBAtomList.h,v 1.6 2002/02/27 12:19:36 sturm Exp $
+// $Id: pyPDBAtomList.h,v 1.7 2003/02/21 16:06:01 anhi Exp $
 
 #ifndef BALL_PYTHON_PYPDBATOMLIST_H
 #define BALL_PYTHON_PYPDBATOMLIST_H
@@ -71,13 +71,13 @@ namespace BALL
 			
 		/**	Construct from a AtomContainer.
 				This constructor creates an PyPDBAtomList object from
-				all atoms of a \Ref{AtomContainer} object.
+				all atoms of a  \link AtomContainer AtomContainer \endlink  object.
 		*/
 		PyPDBAtomList(const AtomContainer& fragment);
 
 		/**	Construct from a AtomContainer with expression.
 				This constructor creates an PyPDBAtomList object from
-				the atoms of a \Ref{AtomContainer} object that match {\tt expression}.
+				the atoms of a  \link AtomContainer AtomContainer \endlink  object that match <tt>expression</tt>.
 		*/
 		PyPDBAtomList(const AtomContainer& fragment, const String& expression);
 

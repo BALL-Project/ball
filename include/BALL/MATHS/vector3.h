@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector3.h,v 1.59 2002/12/12 09:48:46 oliver Exp $
+// $Id: vector3.h,v 1.60 2003/02/21 16:04:02 anhi Exp $
 
 #ifndef BALL_MATHS_VECTOR3_H
 #define BALL_MATHS_VECTOR3_H
@@ -32,7 +32,7 @@
 namespace BALL 
 {
 	/**	@name	Three-dimensional vector.
-			@memo representation of points and vectors in three-dimensional space: class \Ref{TVector3} and class \Ref{Vector3}
+			@memo representation of points and vectors in three-dimensional space: class  \link TVector3 TVector3 \endlink  and class  \link Vector3 Vector3 \endlink 
 	*/
 	//@{
 
@@ -52,7 +52,7 @@ namespace BALL
 		throw();
 
 	/**	Input operator.
-			Reads the values of {\tt three} vector components of type {\em T}
+			Reads the values of <tt>three</tt> vector components of type {\em T}
 			from an istream. The components are read in the order of x, y, z.
 	*/
 	template <typename T>
@@ -60,7 +60,7 @@ namespace BALL
 		throw();
 
 	/**	Output operator.
-			Writes the values of {\tt three} vector components of type {\em T}
+			Writes the values of <tt>three</tt> vector components of type {\em T}
 			to an ostream. The components are writen in the order of x, y, z.
 	*/
 	template <typename T>
@@ -70,7 +70,7 @@ namespace BALL
 	//@}
 
 	/** Generic Three-Dimensional Vector.
-      {\bf Definition:} \URL{BALL/MATHS/vector3.h}
+      <b>Definition:</b> BALL/MATHS/vector3.h
 	*/
 	template <typename T>
 	class TVector3
@@ -83,33 +83,33 @@ namespace BALL
 
 		/**	Default constructor.
 				This method creates a new TVector3 object. The three components
-				are initialized to {\tt (T)0}.
+				are initialized to <tt>(T)0</tt>.
 		*/
 		TVector3()
 			throw();
 
 		/**	Array constructor.
 				This constructor creates a TVector3 object from the first
-				three elements pointed to by {\tt ptr}.
+				three elements pointed to by <tt>ptr</tt>.
 				@param ptr the array to construct from
-				@exception NullPointer if {\tt ptr == 0}
+				@exception NullPointer if <tt>ptr == 0</tt>
 		*/
 		TVector3(const T* ptr)
 			throw(Exception::NullPointer);
 
 		/**	Scalar constructor.
 				Create a new vector with all components set
-				to the same {\tt value}.
+				to the same <tt>value</tt>.
 				@param	value the value of all components
 		*/
 		explicit TVector3(const T& value)
 			throw();
 
 		/**	Detailed constructor.
-				Create a new TVector3 object from three variables of type {\tt T}.
-				@param	vx assigned to {\tt x}
-				@param	vy assigned to {\tt y}
-				@param	vz assigned to {\tt z}
+				Create a new TVector3 object from three variables of type <tt>T</tt>.
+				@param	vx assigned to <tt>x</tt>
+				@param	vy assigned to <tt>y</tt>
+				@param	vz assigned to <tt>z</tt>
 		*/
 		TVector3(const T& vx, const T& vy, const T& vz)
 			throw();
@@ -124,7 +124,7 @@ namespace BALL
 		/**	Spherical polar coordinate constructor.
 				Create a TVector3 object and set its coordinates to 
 				the point described by the three spherical polar coordinates
-				{\tt r} (radius), {\tt phi} (azimuth), and {\tt theta} (co-latitude).
+				<tt>r</tt> (radius), <tt>phi</tt> (azimuth), and {\tt theta} (co-latitude).
 				@see set(const T& r, const TAngle<T>& phi, const TAngle<T> &theta)
 				@param r the radius
 				@param phi the azimuth 
@@ -153,16 +153,16 @@ namespace BALL
 		//@{
 
 		/**	Assign from an array.
-				Assign the three components {\tt x}, {\tt y}, and {\tt z} from
-				the first three elements of the array pointed to by {\tt ptr}.
+				Assign the three components <tt>x</tt>, <tt>y</tt>, and {\tt z} from
+				the first three elements of the array pointed to by <tt>ptr</tt>.
 				@param ptr an array
-				@exception Nullpointer if {\tt ptr == 0}
+				@exception Nullpointer if <tt>ptr == 0</tt>
 		*/
 		void set(const T* ptr)
 			throw(Exception::NullPointer);
 
 		/**	Assign from a scalar.
-				Assign {\tt value} to the three vector components.
+				Assign <tt>value</tt> to the three vector components.
 				@param	value the new value of the components
 		*/
 		void set(const T& value)
@@ -183,14 +183,14 @@ namespace BALL
 			throw();
 
 		/**	Assign from spherical polar coordinates.
-				The radius describes the distance of the point from the origin.\\
-				{\tt phi}	ranges from 0 to $2 \pi$, {\tt theta} ranges from 0 (north pole, positive z-axis)
-				to $\pi$ (south pole, negative z-axis).\\
-				Coordinates are calculated according to the following formulae:\\
+				The radius describes the distance of the point from the origin. \par
+				<tt>phi</tt>	ranges from 0 to $2 \pi$, <tt>theta</tt> ranges from 0 (north pole, positive z-axis)
+				to $\pi$ (south pole, negative z-axis). \par
+				Coordinates are calculated according to the following formulae: \par
 				\[
 					\begin{aligned}
-					x & = & r \sin \theta \cos \phi\\
-					y & = & r \sin \theta \sin \phi\\
+					x & = & r \sin \theta \cos \phi \par
+					y & = & r \sin \theta \sin \phi \par
 					z & = & r \cos \theta
 					\end{aligned}
 				\]
@@ -218,21 +218,21 @@ namespace BALL
 		/**	Array assignment operator.
 				Assigns the first three elements of an array to the vector components.
 				@param	ptr the array
-				@exception	NullPointer if {\tt ptr == 0}
+				@exception	NullPointer if <tt>ptr == 0</tt>
 		*/
 		const TVector3& operator = (const T* ptr)
 			throw(Exception::NullPointer);
 
 		/**	Assign to an array.
-				Sets the first three array elements pointed to by {\tt ptr} 
+				Sets the first three array elements pointed to by <tt>ptr</tt> 
 				to the values of the three vector components.
 				@param ptr the array
-				@exception	NullPointer if {\tt ptr == 0}
+				@exception	NullPointer if <tt>ptr == 0</tt>
 		*/
 		void get(T* ptr) const
 			throw(Exception::NullPointer);
 
-		/**	Assign to three variables of type {\tt T}.
+		/**	Assign to three variables of type <tt>T</tt>.
 				@param	x the x component
 				@param	y the y component
 				@param	z the z component
@@ -248,7 +248,7 @@ namespace BALL
 			throw();
 
 		/**	Assign to polar coordinates.
-				Sets {\tt r}, {\tt phi}, and {\tt theta} to the
+				Sets <tt>r</tt>, <tt>phi</tt>, and {\tt theta} to the
 				coordinates of the vector in spherical polar coordinates.
 				@param	r the radius (returned)
 				@param  phi the azimuth (returned)
@@ -307,13 +307,13 @@ namespace BALL
 			throw();
 
 		/**	Mutable array-like access to the components.
-				@exception Exception::IndexOverflow if {\tt index > 2}
+				@exception Exception::IndexOverflow if <tt>index > 2</tt>
 		*/
 		T& operator [] (Position position)
 			throw(Exception::IndexOverflow);
 
 		/**	Constant array-like access to the components.
-				@exception Exception::IndexOverflow if {\tt index > 2}
+				@exception Exception::IndexOverflow if <tt>index > 2</tt>
 		*/
 		const T& operator [] (Position position) const
 			throw(Exception::IndexOverflow);
@@ -344,7 +344,7 @@ namespace BALL
 			throw();
 
 		/**	Add a vector to this vector.
-				Add the components of {\tt vector} to this vector.
+				Add the components of <tt>vector</tt> to this vector.
 				@param vector the vector to add
 				@return TVector3&, {\em *this}
 		*/
@@ -359,15 +359,15 @@ namespace BALL
 			throw();
 
 		/**	Scalar product.
-				Return {\tt TVector3(x * scalar, y * scalar, z * scalar)}.
+				Return <tt>TVector3(x * scalar, y * scalar, z * scalar)</tt>.
 				@param scalar, the scalar to multiply by
-				@return TVector3, the scalar product of this vector and {\tt scalar}
+				@return TVector3, the scalar product of this vector and <tt>scalar</tt>
 		*/
 		TVector3 operator * (const T& scalar) const
 			throw();
 
 		/**	Multiply by a scalar.
-				Multiply all components of the vector by a {\tt scalar} value.
+				Multiply all components of the vector by a <tt>scalar</tt> value.
 				@param scalar the to multiply by
 				@return TVector3&, {\em *this}
 		*/
@@ -375,10 +375,10 @@ namespace BALL
 			throw();
 
 		/**	Fraction of a vector.
-				Return {\tt TVector3(x / lambda, y / lambda, z / lambda)}.
+				Return <tt>TVector3(x / lambda, y / lambda, z / lambda)</tt>.
 				@param lambda the scalar value to divide by
 				@return TVector3& 
-				@exception Exception::DivisionByZero if {\tt lambda == (T)0}
+				@exception Exception::DivisionByZero if <tt>lambda == (T)0</tt>
 		*/
 		TVector3 operator / (const T& lambda) const
 			throw(Exception::DivisionByZero);
@@ -386,19 +386,19 @@ namespace BALL
 		/**	Divide a vector by a scalar.
 				@param lambda the scalar value to divide by
 				@return TVector3&, {\em *this}
-				@exception Exception::DivisionByZero if {\tt lambda == (T)0}
+				@exception Exception::DivisionByZero if <tt>lambda == (T)0</tt>
 		*/
 		TVector3& operator /= (const T& lambda)
 			throw(Exception::DivisionByZero);
 
 		/** Dot product.
-				Return the dot product of this vector and {\tt vector}.
+				Return the dot product of this vector and <tt>vector</tt>.
 		*/
 		T operator * (const TVector3& vector) const
 			throw();
 
 		/** Cross product.
-				Return the cross product of this vector and {\tt vector}.
+				Return the cross product of this vector and <tt>vector</tt>.
 		*/
 		TVector3 operator % (const TVector3& vector) const
 			throw();
@@ -427,7 +427,7 @@ namespace BALL
 
 		/**	Return the enclosed angle of two vectors.
 				@exception Exception::DivisionByZero if the product of the squared
-								lengths of the two vectors equals {\tt (T)0}
+								lengths of the two vectors equals <tt>(T)0</tt>
 		*/
 		TAngle<T> getAngle(const TVector3& vector) const
 			throw(Exception::DivisionByZero);
@@ -466,23 +466,23 @@ namespace BALL
 
 		/**	Equality operator.
 				The function Maths::isEqual is used to compare the values. 
-				\Ref{Maths::isEqual}
-				@return bool, {\bf true} if all three vector components are equal, {\bf false} otherwise
+				 \link Maths::isEqual Maths::isEqual \endlink 
+				@return bool, <b>true</b> if all three vector components are equal, <b>false</b> otherwise
 		*/
 		bool operator == (const TVector3& vector) const
 			throw();
 	
 		/**	Inequality operator.
 				The function Maths::isEqual is used to compare the values. 
-				\Ref{Maths::isEqual}
-				@return bool, {\bf true} if the two vectors differ in at least one component, {\bf false} otherwise
+				 \link Maths::isEqual Maths::isEqual \endlink 
+				@return bool, <b>true</b> if the two vectors differ in at least one component, <b>false</b> otherwise
 		*/
 		bool operator != (const TVector3& vector) const
 			throw();
 
 		/**	Zero predicate.
 				The function Maths::isZero is used to compare the values with zero. 
-				\Ref{Maths::isZero}
+				 \link Maths::isZero Maths::isZero \endlink 
 		*/
 		bool isZero() const
 			throw();
@@ -526,7 +526,7 @@ namespace BALL
 
 		/**	Test if instance is valid.
 				Always returns true.
-				@return bool {\bf true}
+				@return bool <b>true</b>
 		*/
 		bool isValid() const
 			throw();

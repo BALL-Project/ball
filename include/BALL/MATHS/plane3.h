@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: plane3.h,v 1.26 2003/01/07 14:14:52 amoll Exp $
+// $Id: plane3.h,v 1.27 2003/02/21 16:03:56 anhi Exp $
 
 #ifndef BALL_MATHS_PLANE3_H
 #define BALL_MATHS_PLANE3_H
@@ -48,7 +48,7 @@ namespace BALL
 		throw();
 
 	/** Threedimensional plane.
-      {\bf Definition:} \URL{BALL/MATHS/plane3.h}
+      <b>Definition:</b> BALL/MATHS/plane3.h
 			A plane is defined by a point and its normal.
 	*/
 	template <typename T>
@@ -64,7 +64,7 @@ namespace BALL
 
 		/**	Default constructor.
 				This method creates a new TPlane3 object. The two components
-				are initialized to {\tt (T)0}.
+				are initialized to <tt>(T)0</tt>.
 		*/
 		TPlane3()
 			throw()
@@ -86,8 +86,8 @@ namespace BALL
 
 		/**	Detailed constructor.
 				Create a new instances of TPlane3 from a point and the normal.
-				@param	point assigned to {\tt p}
-				@param	normal assigned to {\tt n}
+				@param	point assigned to <tt>p</tt>
+				@param	normal assigned to <tt>n</tt>
 		*/
 		TPlane3(const TVector3<T>& point, const TVector3<T>& normal)
 			throw()
@@ -98,8 +98,8 @@ namespace BALL
 
 		/**	Detailed constructor.
 				Create a new instance of TPlane3 from three points.
-				@param	a assigned to {\tt p}
-				@param	a, b, c are used to calculate the normal {\tt n}
+				@param	a assigned to <tt>p</tt>
+				@param	a, b, c are used to calculate the normal <tt>n</tt>
 		*/
 		TPlane3(const TVector3<T>& a, const TVector3<T>& b, const TVector3<T>& c)
 			throw()
@@ -109,9 +109,9 @@ namespace BALL
 		}
 
 		/**	Constructor.
-				Create a new TPlane3 object from four {\tt T} values.
+				Create a new TPlane3 object from four <tt>T</tt> values.
 				Form: COORDINATE (ax + by + cz + d = 0)
-				@param	a, b, c are used to calculate the normal {\tt n} and the point {\tt p}
+				@param	a, b, c are used to calculate the normal <tt>n</tt> and the point <tt>p</tt>
 		*/
 		TPlane3(const T& a, const T& b, const T& c, const T& d)
 			throw(Exception::DivisionByZero)
@@ -288,7 +288,7 @@ namespace BALL
 		//@{
 
 		/**	Equality operator.
-				@return bool, {\bf true} if all components are equal, {\bf false} otherwise
+				@return bool, <b>true</b> if all components are equal, <b>false</b> otherwise
 		*/
 		bool operator == (const TPlane3& plane) const
 			throw()
@@ -297,7 +297,7 @@ namespace BALL
 		}
 
 		/**	Inequality operator.
-				@return bool, {\bf false} if all components are equal, {\bf true} otherwise
+				@return bool, <b>false</b> if all components are equal, <b>true</b> otherwise
 		*/
 		bool operator != (const TPlane3& plane) const
 			throw()
@@ -307,7 +307,7 @@ namespace BALL
 
 		/**	Test whether a given point is a member of the plane.
 				@param point the point to be tested
-				@return bool, {\bf true} or {\bf false}
+				@return bool, <b>true</b> or <b>false</b>
 		*/
 		bool has(const TVector3<T>& point) const
 			throw()
@@ -317,7 +317,7 @@ namespace BALL
 
 		/**	Test whether a given line is a member of the plane.
 				@param line the line to be tested
-				@return bool, {\bf true} or {\bf false}
+				@return bool, <b>true</b> or <b>false</b>
 		*/
 		bool has(const TLine3<T>& line) const
 			throw()
@@ -332,7 +332,7 @@ namespace BALL
 
 		/**	Test whether instance is valid.
 				always retruns true
-				@return bool {\bf true}
+				@return bool <b>true</b>
 		*/
 		bool isValid() const
 			throw()
@@ -383,7 +383,7 @@ namespace BALL
 	//@{
 
 	/**	Input operator
-			reads in two instances of TVector3: {\bf p, n}
+			reads in two instances of TVector3: <b>p, n</b>
 	*/
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TPlane3<T>& plane)
@@ -395,7 +395,7 @@ namespace BALL
 	}
 
 	/**	Output operator
-			Prints two instances of TVector3: {\bf p, n}
+			Prints two instances of TVector3: <b>p, n</b>
 	*/
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TPlane3<T>& plane)
@@ -406,7 +406,7 @@ namespace BALL
 	
 	//@}
 
-	/**	Default plane class of type {\bf float}
+	/**	Default plane class of type <b>float</b>
 	*/
 	typedef TPlane3<float> Plane3;
 	

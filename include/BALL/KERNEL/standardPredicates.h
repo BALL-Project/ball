@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.h,v 1.26 2002/12/20 16:32:45 anker Exp $
+// $Id: standardPredicates.h,v 1.27 2003/02/21 16:03:37 anhi Exp $
 
 #ifndef BALL_KERNEL_STANDARDPREDICATES_H
 #define BALL_KERNEL_STANDARDPREDICATES_H
@@ -35,15 +35,15 @@ namespace BALL
 {
 
 	/**	@name	Predefined Predicates. 
-			{\bf Note:} These predicates do not provide the OCI.
+			<b>Note:</b> These predicates do not provide the OCI.
 			@see ExpressionPredicate
-			{\bf Definition:}\URL{BALL/KERNEL/standardPredicates.h}
+			<b>Definition:</b>BALL/KERNEL/standardPredicates.h
 	*/
 	//@{
 
 	/** Default predicate.
 			This predicate may be used to implement
-			default rules. It is always {\bf true}.
+			default rules. It is always <b>true</b>.
 	 */
 	class TruePredicate
 		:	public ExpressionPredicate
@@ -51,7 +51,7 @@ namespace BALL
 		public:
 			BALL_CREATE(TruePredicate)
 
-			/** Evaluate the predicate for the atom {\tt atom}
+			/** Evaluate the predicate for the atom <tt>atom</tt>
 					@param atom the atom to test
 					@return true - always
 			*/
@@ -61,7 +61,7 @@ namespace BALL
 
 	/** False predicate.
 			This predicate may be used to implement
-			default rules. It is always {\bf false}.
+			default rules. It is always <b>false</b>.
 	 */
 	class FalsePredicate
 		:	public ExpressionPredicate
@@ -69,7 +69,7 @@ namespace BALL
 		public:
 		BALL_CREATE(FalsePredicate)
 
-		/** Evaluate the predicate for the atom {\tt atom}
+		/** Evaluate the predicate for the atom <tt>atom</tt>
 				@param atom the atom to test
 				@return false - always
 		*/
@@ -78,7 +78,7 @@ namespace BALL
 	};
 
 	/** Selection predicate.
-			This predicate is {\bf true}, if the atom is selected, {\bf false}
+			This predicate is <b>true</b>, if the atom is selected, <b>false</b>
 			otherwise.
 	 */
 	class SelectedPredicate
@@ -87,7 +87,7 @@ namespace BALL
 		public:
 			BALL_CREATE(SelectedPredicate)
 
-			/** Evaluate the predicate for the atom {\tt atom}.
+			/** Evaluate the predicate for the atom <tt>atom</tt>.
 					@param atom the atom to test
 					@return true - always
 			*/
@@ -95,7 +95,7 @@ namespace BALL
 				throw();
 	};
 
-	/** Predicate for matching atom names. Returns {\tt true}, if the name of
+	/** Predicate for matching atom names. Returns <tt>true</tt>, if the name of
 			the atom matches the argument of this predicate. This is an exact
 			match.
 	 */
@@ -105,7 +105,7 @@ namespace BALL
 		public:
 			BALL_CREATE(AtomNamePredicate)
 
-			/** Evaluate the predicate for the atom {\tt atom}.
+			/** Evaluate the predicate for the atom <tt>atom</tt>.
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 			*/
@@ -113,7 +113,7 @@ namespace BALL
 				throw();
 	};
 
-	/** Predicate for matching atom types. Returns {\tt true}, if the type name
+	/** Predicate for matching atom types. Returns <tt>true</tt>, if the type name
 			of the atom matches exactly the argument of this predicate. 
 	 */
 	class AtomTypePredicate
@@ -122,7 +122,7 @@ namespace BALL
 		public:
 			BALL_CREATE(AtomTypePredicate)
 
-			/** Evaluate the predicate for the atom {\tt atom}.
+			/** Evaluate the predicate for the atom <tt>atom</tt>.
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 			*/
@@ -130,7 +130,7 @@ namespace BALL
 				throw();
 	};
 
-	/** Predicate for matching elements. Returns {\tt true}, if the element
+	/** Predicate for matching elements. Returns <tt>true</tt>, if the element
 			symbol of the atom matches exactly the argument  of this predicate.
 	 */
 	class ElementPredicate
@@ -139,7 +139,7 @@ namespace BALL
 		public:
 			BALL_CREATE(ElementPredicate)
 
-			/** Evaluate the predicate for the atom {\tt atom}.
+			/** Evaluate the predicate for the atom <tt>atom</tt>.
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 			*/
@@ -147,7 +147,7 @@ namespace BALL
 				throw();
 	};
 
-	/** Predicate for matching residues. Returns {\tt true}, if the name of the 
+	/** Predicate for matching residues. Returns <tt>true</tt>, if the name of the 
 			residue that the atom belongs to matches exactly the argument of this
 			predicate.
 	 */
@@ -157,7 +157,7 @@ namespace BALL
 		public:
 			BALL_CREATE(ResiduePredicate)
 
-			/** Evaluate the predicate for the atom {\tt atom}.
+			/** Evaluate the predicate for the atom <tt>atom</tt>.
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 			*/
@@ -165,7 +165,7 @@ namespace BALL
 				throw();
 	};
 
-	/** Predicate for matching residues IDs. Returns {\tt true}, if the ID of
+	/** Predicate for matching residues IDs. Returns <tt>true</tt>, if the ID of
 			the residue that the atom belongs to matches exactly the argument of
 			this predicate.
 	 */
@@ -175,7 +175,7 @@ namespace BALL
 		public:
 			BALL_CREATE(ResidueIDPredicate)
 
-			/** Evaluate the predicate for the atom {\tt atom}.
+			/** Evaluate the predicate for the atom <tt>atom</tt>.
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 			*/
@@ -183,7 +183,7 @@ namespace BALL
 				throw();
 	};
 
-	/** Predicate for matching proteins. Returns {\tt true}, if the name of the
+	/** Predicate for matching proteins. Returns <tt>true</tt>, if the name of the
 			protein that the atom belongs to matches exactly the argument of this
 			predicate.
 	 */
@@ -193,7 +193,7 @@ namespace BALL
 		public:
 			BALL_CREATE(ProteinPredicate)
 
-			/** Evaluate the predicate for the atom {\tt atom}.
+			/** Evaluate the predicate for the atom <tt>atom</tt>.
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 			*/
@@ -201,7 +201,7 @@ namespace BALL
 				throw();
 	};
 
-	/** Predicate for matching chains. Returns {\tt true}, if the name of the
+	/** Predicate for matching chains. Returns <tt>true</tt>, if the name of the
 			chain that the atom belongs to matches exactly the argument of this
 			expression.
 	 */
@@ -211,7 +211,7 @@ namespace BALL
 		public:
 			BALL_CREATE(ChainPredicate)
 
-			/** Evaluate the predicate for the atom {\tt atom}.
+			/** Evaluate the predicate for the atom <tt>atom</tt>.
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 			*/
@@ -219,7 +219,7 @@ namespace BALL
 				throw();
 	};
 
-	/** Predicate for matching secondary structures. Returns {\tt true}, if the
+	/** Predicate for matching secondary structures. Returns <tt>true</tt>, if the
 			name of the secondary structure that the atom belongs to matches
 			exactly the argument of this predicate.
 	 */
@@ -229,7 +229,7 @@ namespace BALL
 		public:
 			BALL_CREATE(SecondaryStructurePredicate)
 
-			/** Evaluate the predicate for the atom {\tt atom}.
+			/** Evaluate the predicate for the atom <tt>atom</tt>.
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 			*/
@@ -238,9 +238,9 @@ namespace BALL
 	};
 
 	/** Predicate indicating solvent atoms. 
-			Returns {\tt true}, if the atom
-			belongs to a solvent molecule. This predicate is {\bf true} if the 
-			atom is contained in a molecule with the property \Ref{Molecule::IS_SOLVENT}
+			Returns <tt>true</tt>, if the atom
+			belongs to a solvent molecule. This predicate is <b>true</b> if the 
+			atom is contained in a molecule with the property  \link Molecule::IS_SOLVENT Molecule::IS_SOLVENT \endlink 
 			set. This is usually the case for solvents added automatically by a
 			force field.
 			@see PeriodicBoundary::addSolvent
@@ -251,7 +251,7 @@ namespace BALL
 		public:
 		BALL_CREATE(SolventPredicate)
 
-		/** Evaluate the predicate for the atom {\tt atom}.
+		/** Evaluate the predicate for the atom <tt>atom</tt>.
 				@param atom the atom to test
 				@return true, if the predicate is true, false otherwise
 		*/
@@ -259,7 +259,7 @@ namespace BALL
 			throw();
 	};
 
-	/** Predicate for matching molecules. Returns {\tt true}, if the atom
+	/** Predicate for matching molecules. Returns <tt>true</tt>, if the atom
 			belongs to the molecule defined by the expression of this predicate.
 	 */
 	class MoleculePredicate
@@ -268,7 +268,7 @@ namespace BALL
 		public:
 			BALL_CREATE(MoleculePredicate)
 
-			/** Evaluate the predicate for the atom {\tt atom}.
+			/** Evaluate the predicate for the atom <tt>atom</tt>.
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 			*/
@@ -276,7 +276,7 @@ namespace BALL
 				throw();
 	};
 
-	/** Predicate indicating backbone atoms. Returns {\tt true}, if the atom
+	/** Predicate indicating backbone atoms. Returns <tt>true</tt>, if the atom
 			belongs to the backbone of a protein, i. e. is one of the members of
 			the peptide bond.
 	 */
@@ -286,7 +286,7 @@ namespace BALL
 		public:
 			BALL_CREATE(BackBonePredicate)
 
-			/** Evaluate the predicate for the atom {\tt atom}.
+			/** Evaluate the predicate for the atom <tt>atom</tt>.
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 			*/
@@ -302,7 +302,7 @@ namespace BALL
 		public:
 			BALL_CREATE(NucleicAcidPredicate)
 
-			/** Evaluate the predicate for the atom {\tt atom}.
+			/** Evaluate the predicate for the atom <tt>atom</tt>.
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 			*/
@@ -310,7 +310,7 @@ namespace BALL
 				throw();
 	};
 
-	/** Predicate indicating nucleotide atoms. Returns {\tt true}, if the
+	/** Predicate indicating nucleotide atoms. Returns <tt>true</tt>, if the
 			atom belongs to a nucleotide.
 	 */
 	class NucleotidePredicate
@@ -319,7 +319,7 @@ namespace BALL
 		public:
 			BALL_CREATE(NucleotidePredicate)
 
-			/** Evaluate the predicate for the atom {\tt atom}.
+			/** Evaluate the predicate for the atom <tt>atom</tt>.
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 			*/
@@ -336,7 +336,7 @@ namespace BALL
 
 			BALL_CREATE(InRingPredicate)
 
-			/** Evaluate the predicate for the atom {\tt atom}.
+			/** Evaluate the predicate for the atom <tt>atom</tt>.
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 			*/
@@ -361,7 +361,7 @@ namespace BALL
 		public:
 			BALL_CREATE(DoubleBondsPredicate)
 
-			/** Evaluate the predicate for the atom {\tt atom}.
+			/** Evaluate the predicate for the atom <tt>atom</tt>.
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 			*/
@@ -384,7 +384,7 @@ namespace BALL
 		public:
 			BALL_CREATE(SingleBondsPredicate)
 
-			/** Evaluate the predicate for the atom {\tt atom}.
+			/** Evaluate the predicate for the atom <tt>atom</tt>.
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 			*/
@@ -403,7 +403,7 @@ namespace BALL
 		public:
 			BALL_CREATE(TripleBondsPredicate)
 
-			/** Evaluate the predicate for the atom {\tt atom}.
+			/** Evaluate the predicate for the atom <tt>atom</tt>.
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 				*/
@@ -422,7 +422,7 @@ namespace BALL
 		public:
 			BALL_CREATE(AromaticBondsPredicate)
 
-			/** Evaluate the predicate for the atom {\tt atom}.
+			/** Evaluate the predicate for the atom <tt>atom</tt>.
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 			*/
@@ -441,7 +441,7 @@ namespace BALL
 		public:
 			BALL_CREATE(NumberOfBondsPredicate)
 
-			/** Evaluate the predicate for the atom {\tt atom}.
+			/** Evaluate the predicate for the atom <tt>atom</tt>.
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 			*/
@@ -453,17 +453,25 @@ namespace BALL
 	/** Predicate class for atoms being connected to a constellation defined
 			by an expression. Syntax:
       \begin{tabular}{cl}
-        Bonds \\
-        {\tt -}            & single \\   
-        {\tt =}            & double \\   
-        {\tt \#}           & triple \\     
-        {\tt \symbol{126}} & aromatic \\     
-        {\tt .}            & any \\   
-        Elements           & \\
-        {\tt symbol}       & the desired element \\   
-        {\tt *}            & any element \\   
-        Groups             & \\
-        {\tt ( )}          & symbols enlosed by brackets denote groups \\   
+        Bonds  \par
+        <tt>-</tt>            & single  \par
+   
+        <tt>=</tt>            & double  \par
+   
+        <tt>\#</tt>           & triple  \par
+     
+        <tt>\symbol{126</tt>} & aromatic  \par
+     
+        <tt>.</tt>            & any  \par
+   
+        Elements           &  \par
+        <tt>symbol</tt>       & the desired element  \par
+   
+        <tt>*</tt>            & any element  \par
+   
+        Groups             &  \par
+        <tt>( )</tt>          & symbols enlosed by brackets denote groups  \par
+   
       \end{tabular}
 	*/
 	class ConnectedToPredicate
@@ -697,7 +705,7 @@ namespace BALL
 			virtual ~ConnectedToPredicate()
 				throw();
 
-			/** Evaluate the predicate for the atom {\tt atom}.
+			/** Evaluate the predicate for the atom <tt>atom</tt>.
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 			*/
@@ -758,7 +766,7 @@ namespace BALL
 		public:
 			BALL_CREATE(SpHybridizedPredicate)
 
-			/** Evaluate the predicate for the atom {\tt atom}.
+			/** Evaluate the predicate for the atom <tt>atom</tt>.
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 			*/
@@ -774,7 +782,7 @@ namespace BALL
 		public:
 			BALL_CREATE(Sp2HybridizedPredicate)
 
-			/** Evaluate the predicate for the atom {\tt atom}.
+			/** Evaluate the predicate for the atom <tt>atom</tt>.
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 			*/
@@ -791,7 +799,7 @@ namespace BALL
 		public:
 			BALL_CREATE(Sp3HybridizedPredicate)
 
-			/** Evaluate the predicate for the atom {\tt atom}.
+			/** Evaluate the predicate for the atom <tt>atom</tt>.
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 			*/
@@ -811,8 +819,8 @@ namespace BALL
 				The argument of this predicate is either a number,
 				in which case the charge of the atom has to be equal to 
 				that number (down to the specified accuracy for floating 
-				point comparisons, \Ref{EPSILON}), or an operator followed	
-				by a number. Possible operators are: {\tt <}, {\tt >}, {\tt >=}, {\tt <=}, {\tt =}.
+				point comparisons,  \link EPSILON EPSILON \endlink ), or an operator followed	
+				by a number. Possible operators are: <tt><</tt>, <tt>></tt>, {\tt >=}, {\tt <=}, {\tt =}.
 				@param atom the atom to test
 				@return true, if the predicate is true, false otherwise
 		*/

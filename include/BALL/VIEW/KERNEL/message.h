@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.14 2002/12/18 16:00:32 sturm Exp $
+// $Id: message.h,v 1.15 2003/02/21 16:08:00 anhi Exp $
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
 #define BALL_VIEW_KERNEL_MESSAGE_H
@@ -38,22 +38,22 @@ namespace BALL
 		/** General Message class.
 				The class Message is the base class of all message classes. It provides all
 				derived classes with the base interface each message class must have.
-				Message classes will be sent through the \Ref{ConnectionObject} tree for
+				Message classes will be sent through the  \link ConnectionObject ConnectionObject \endlink  tree for
 				the purpose of communication between several connectionObject classes.
-				Each \Ref{ConnectionObject} handels in its {\em onNotify} method messages
-				that are relevant for that class by means of \Ref{RTTI}. 
+				Each  \link ConnectionObject ConnectionObject \endlink  handels in its {\em onNotify} method messages
+				that are relevant for that class by means of  \link RTTI RTTI \endlink . 
 				This class can be given a sender object that is a pointer to the 
-				\Ref{ConnectionObject} that has initially sent the message. This methods
+				 \link ConnectionObject ConnectionObject \endlink  that has initially sent the message. This methods
 				concerning the sender object are internally used and no user interaction
 				is necessary. A message can be deletable or not. If a message is deletable
-				it will be deleted after all \Ref{ConnectionObject} objects has been informed
+				it will be deleted after all  \link ConnectionObject ConnectionObject \endlink  objects has been informed
 				of this message. Therefore a deletable message must be created with the {\em new}
 				command.
 				All messages should be created with the {\em new} command and set to deletable
 				for avoiding segmentation faults.
-				See \Ref{ConnectionObject} for further information concerning message handling
-				and message posting. \\
-				{\bf Definition:} \URL{BALL/VIEW/KERNEL/message.h}
+				See  \link ConnectionObject ConnectionObject \endlink  for further information concerning message handling
+				and message posting.  \par
+				<b>Definition:</b> BALL/VIEW/KERNEL/message.h
 		*/
 		class Message
 		{
@@ -68,7 +68,7 @@ namespace BALL
 					The state of {\em *this} message is:
 					\begin{itemize}
 					  \item  sender    - set to 0
-						\item  deletable - set to {\tt false} 
+						\item  deletable - set to <tt>false</tt> 
 					\end{itemize}
 					@return      Message new constructed message
 			*/
@@ -102,8 +102,8 @@ namespace BALL
 			/** Change the sender.
 					Change the sender of {\em *this} message to the value
 					represented by the void parameter {\em object}. This parameter always represents
-					a void pointer to a \Ref{ConnectionObject}. This method will be used internally
-					by the \Ref{ConnectionObject} class it its {\em notify_} method.
+					a void pointer to a  \link ConnectionObject ConnectionObject \endlink . This method will be used internally
+					by the  \link ConnectionObject ConnectionObject \endlink  class it its {\em notify_} method.
 					@param       object the new sender of {\em *this} message
 					@see         getSender
 					@see         ConnectionObject
@@ -115,8 +115,8 @@ namespace BALL
 			/** Non-mutable inspection of the sender.
 					Access the constant pointer of the sender of {\em *this} message.
 					This return type always represents
-					a void pointer to a \Ref{ConnectionObject}. This method will be used internally
-					by the \Ref{ConnectionObject} class it its {\em onNotify} method.
+					a void pointer to a  \link ConnectionObject ConnectionObject \endlink . This method will be used internally
+					by the  \link ConnectionObject ConnectionObject \endlink  class it its {\em onNotify} method.
 					@return      const void* constant pointer to the sender of {\em *this} message
 					@see         setSender
 					@see         ConnectionObject
@@ -127,13 +127,13 @@ namespace BALL
 
 			/** Change the deletable flag.
 					Change the deletable flag of {\em *this} message to the value
-					represented by the parameter {\em flag}. \\
-					If the parameter {\em flag} is set to {\tt true} the message is set to deletable
-					and will be automatically deleted after all \Ref{ConnectionObject} objects
+					represented by the parameter {\em flag}.  \par
+					If the parameter {\em flag} is set to <tt>true</tt> the message is set to deletable
+					and will be automatically deleted after all  \link ConnectionObject ConnectionObject \endlink  objects
 					are notified of {\em *this} message. It is important that {\em *this} message
-					is created by the {\em new} command to avoid segmentation faults.\\
-					If the parameter {\em flag} is set to {\tt false} the message will not be 
-					automatically deleted.\\
+					is created by the {\em new} command to avoid segmentation faults. \par
+					If the parameter {\em flag} is set to <tt>false</tt> the message will not be 
+					automatically deleted. \par
 					Avoid creating non-deletable messages because it can result in
 					segmentation faults.
 					@param       flag the new deletable state of {\em *this} message
@@ -143,7 +143,7 @@ namespace BALL
 				throw();
 
 			/** Test if {\em *this} message is deletable.
-					@return  bool -	{\tt true} if {\em *this} message is deletable, {\tt false} otherwise
+					@return  bool -	<tt>true</tt> if {\em *this} message is deletable, <tt>false</tt> otherwise
 					@see     setDeletable
 			*/
 		  bool isDeletable() const
@@ -164,8 +164,9 @@ namespace BALL
 				It provides all	derived classes with the base interface each composite message
 				class must have.
 				The CompositeMessage class is a base class for messages that are relevant for
-				\Ref{ConnectionObject} objects that must react to \Ref{Composite} changes.
-				\\ {\bf Definition:} \URL{BALL/VIEW/KERNEL/message.h}\\
+				 \link ConnectionObject ConnectionObject \endlink  objects that must react to  \link Composite Composite \endlink  changes.
+				 \par
+ <b>Definition:</b> BALL/VIEW/KERNEL/message.h
 		*/
 		class CompositeMessage: public Message
 		{
@@ -268,12 +269,13 @@ namespace BALL
 
 		/** NewCompositeMessage class.
 				The class NewCompositeMessage is the message class that is responsible for
-				making known a new \Ref{Composite} object inside the \Ref{ConnectionObject} tree.
-				It will be sent by existing \Ref{ConnectionObject} objects that create new
-				\Ref{Composites} objects. One can use the \Ref{RTTI} mechanism to identify
-				such messages in the {\em onNotify} method of user constructed \Ref{ConnectionObject}
+				making known a new  \link Composite Composite \endlink  object inside the  \link ConnectionObject ConnectionObject \endlink  tree.
+				It will be sent by existing  \link ConnectionObject ConnectionObject \endlink  objects that create new
+				 \link Composites Composites \endlink  objects. One can use the  \link RTTI RTTI \endlink  mechanism to identify
+				such messages in the {\em onNotify} method of user constructed  \link ConnectionObject ConnectionObject \endlink 
 				objects.
-				 \\ {\bf Definition:} \URL{BALL/VIEW/KERNEL/message.h}
+				  \par
+ <b>Definition:</b> BALL/VIEW/KERNEL/message.h
 		*/
 		class NewCompositeMessage: public CompositeMessage
 		{
@@ -320,12 +322,13 @@ namespace BALL
 
 		/** RemovedCompositeMessage class.
 				The class RemovedCompositeMessage is the message class that is responsible for
-				marking a \Ref{Composite} object as removed inside the \Ref{ConnectionObject} tree.
-				It will be sent by existing \Ref{ConnectionObject} objects that remove (or would like to
-				remove) \Ref{Composites} objects. One can use the \Ref{RTTI} mechanism to identify
-				such messages in the {\em onNotify} method of user constructed \Ref{ConnectionObject}
+				marking a  \link Composite Composite \endlink  object as removed inside the  \link ConnectionObject ConnectionObject \endlink  tree.
+				It will be sent by existing  \link ConnectionObject ConnectionObject \endlink  objects that remove (or would like to
+				remove)  \link Composites Composites \endlink  objects. One can use the  \link RTTI RTTI \endlink  mechanism to identify
+				such messages in the {\em onNotify} method of user constructed  \link ConnectionObject ConnectionObject \endlink 
 				objects.
-				\\ {\bf Definition:} \URL{BALL/VIEW/KERNEL/message.h}
+				 \par
+ <b>Definition:</b> BALL/VIEW/KERNEL/message.h
 		*/
 		class RemovedCompositeMessage: public CompositeMessage
 		{
@@ -372,12 +375,13 @@ namespace BALL
 
 		/** ChangedCompositeMessage class.
 				The class ChangedCompositeMessage is the message class that is responsible for
-				marking a \Ref{Composite} object as changed inside the \Ref{ConnectionObject} tree.
-				It will be sent by existing \Ref{ConnectionObject} objects that change (or would like to
-				change) \Ref{Composites} objects. One can use the \Ref{RTTI} mechanism to identify
-				such messages in the {\em onNotify} method of user constructed \Ref{ConnectionObject}
+				marking a  \link Composite Composite \endlink  object as changed inside the  \link ConnectionObject ConnectionObject \endlink  tree.
+				It will be sent by existing  \link ConnectionObject ConnectionObject \endlink  objects that change (or would like to
+				change)  \link Composites Composites \endlink  objects. One can use the  \link RTTI RTTI \endlink  mechanism to identify
+				such messages in the {\em onNotify} method of user constructed  \link ConnectionObject ConnectionObject \endlink 
 				objects.
-				\\ {\bf Definition:} \URL{BALL/VIEW/KERNEL/message.h}
+				 \par
+ <b>Definition:</b> BALL/VIEW/KERNEL/message.h
 		*/
 		class ChangedCompositeMessage: public CompositeMessage
 		{
@@ -424,14 +428,15 @@ namespace BALL
 
 		/** SceneMessage class.
 				The class SceneMessage is the message class that is responsible for
-				changing the visual properties of the \Ref{Scene}.
-				\Ref{ConnectionObject} objects that would like to have the \Ref{Scene} focus on another
-				\Ref{Composite} or would like to update the contents of the \Ref{Scene}
+				changing the visual properties of the  \link Scene Scene \endlink .
+				 \link ConnectionObject ConnectionObject \endlink  objects that would like to have the  \link Scene Scene \endlink  focus on another
+				 \link Composite Composite \endlink  or would like to update the contents of the  \link Scene Scene \endlink 
 				(because of some changes in the composite structure) will sent this message.
-				This message will only be catched by the {\em onNotify} method of the \Ref{Scene}.
-				There are methods available that will tell the \Ref{Scene} to update its contents
+				This message will only be catched by the {\em onNotify} method of the  \link Scene Scene \endlink .
+				There are methods available that will tell the  \link Scene Scene \endlink  to update its contents
 				or change the camera positions.
-				\\ {\bf Definition:} \URL{BALL/VIEW/KERNEL/message.h}
+				 \par
+ <b>Definition:</b> BALL/VIEW/KERNEL/message.h
 		*/
 		class SceneMessage: public Message
 		{
@@ -445,9 +450,9 @@ namespace BALL
 					Construct new sceneMessage.
 					The state of {\em *this} sceneMessage is set to:
 					\begin{itemize}
-					  \item  update flag     - set to {\tt false}
-						\item  camera look at  - set to {\tt (0,0,0)} 
-						\item  camera position - set to {\tt (0,0,0)} 
+					  \item  update flag     - set to <tt>false</tt>
+						\item  camera look at  - set to <tt>(0,0,0)</tt> 
+						\item  camera position - set to <tt>(0,0,0)</tt> 
 					\end{itemize}
 					@return      SceneMessage new constructed sceneMessage
 					@see         Message
@@ -483,20 +488,20 @@ namespace BALL
 			//@{
 			/** Change the update flag of {\em *this} sceneMessage.
 					Change the update flag of {\em *this} sceneMessage to the value
-					represented by the parameter {\em value}. \\
-					If the parameter {\em value} is set to {\tt true} the sceneMessage will evoke an update
-					of the \Ref{Scene} contents (the visualization will be drawn anew).
-					Changes of the camera position will be ignored.\\
-					If the parameter {\em value} is set to {\tt false} the sceneMessage will not evoke an update
-					of the \Ref{Scene} contents. Changes of the camera position will be used.
+					represented by the parameter {\em value}.  \par
+					If the parameter {\em value} is set to <tt>true</tt> the sceneMessage will evoke an update
+					of the  \link Scene Scene \endlink  contents (the visualization will be drawn anew).
+					Changes of the camera position will be ignored. \par
+					If the parameter {\em value} is set to <tt>false</tt> the sceneMessage will not evoke an update
+					of the  \link Scene Scene \endlink  contents. Changes of the camera position will be used.
 					@param       value the new update state of {\em *this} sceneMessage
 					@see         isUpdateOnly
 			*/
 			void updateOnly(bool value = true)
 				throw();
 
-			/** Test if {\em *this} sceneMessage evokes only a \Ref{Scene} update.
-					@return  bool -	{\tt true} if {\em *this} sceneMessage evokes only a \Ref{Scene} update, {\tt false} otherwise (camera position changeable)
+			/** Test if {\em *this} sceneMessage evokes only a  \link Scene Scene \endlink  update.
+					@return  bool -	<tt>true</tt> if {\em *this} sceneMessage evokes only a  \link Scene Scene \endlink  update, <tt>false</tt> otherwise (camera position changeable)
 					@see     updateOnly
 			*/
 			bool isUpdateOnly()
@@ -523,7 +528,7 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the {\em look at} component of the camera position.
-				  For further information see \Ref{getCameraLookAt}
+				  For further information see  \link getCameraLookAt getCameraLookAt \endlink 
 			*/
 			const Vector3& getCameraLookAt() const
 				throw();
@@ -549,7 +554,7 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the {\em view point} component of the camera position.
-					For further information see \Ref{getCameraViewPoint}.					
+					For further information see  \link getCameraViewPoint getCameraViewPoint \endlink .					
 			*/
 			const Vector3& getCameraViewPoint() const
 				throw();
@@ -567,10 +572,11 @@ namespace BALL
 		/** WindowMessage class.
 				The class WindowMessage is the message class that is responsible for
 				changing the status bar of the main Application. The main Application
-				can in its {\em onNotify} method, by means of the \Ref{RTTI} mechanism, filter
+				can in its {\em onNotify} method, by means of the  \link RTTI RTTI \endlink  mechanism, filter
 				this message and extract the new contents of status bar that any other
-				\Ref{ConnectionObject} object has sent through the \Ref{ConnectionObject} tree.
-				\\ {\bf Definition:} \URL{BALL/VIEW/KERNEL/message.h}
+				 \link ConnectionObject ConnectionObject \endlink  object has sent through the  \link ConnectionObject ConnectionObject \endlink  tree.
+				 \par
+ <b>Definition:</b> BALL/VIEW/KERNEL/message.h
 		*/
 		class WindowMessage: public Message
 		{
@@ -644,13 +650,14 @@ namespace BALL
 
 		/** SelectionMessage class.
 				The class SelectionMessage is the message class that is a container for
-				\Ref{Composite} objects that are somehow selected.
-				It will be sent by existing \Ref{ConnectionObject} objects that collect
-				\Ref{Composites} objects for a certain purpose.
-				One can use the \Ref{RTTI} mechanism to identify
-				such messages in the {\em onNotify} method of user constructed \Ref{ConnectionObject}
+				 \link Composite Composite \endlink  objects that are somehow selected.
+				It will be sent by existing  \link ConnectionObject ConnectionObject \endlink  objects that collect
+				 \link Composites Composites \endlink  objects for a certain purpose.
+				One can use the  \link RTTI RTTI \endlink  mechanism to identify
+				such messages in the {\em onNotify} method of user constructed  \link ConnectionObject ConnectionObject \endlink 
 				objects.
-				\\ {\bf Definition:} \URL{BALL/VIEW/KERNEL/message.h}
+				 \par
+ <b>Definition:</b> BALL/VIEW/KERNEL/message.h
 		*/
 		class SelectionMessage: public Message
 		{
@@ -698,20 +705,20 @@ namespace BALL
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
-			/** Change the selection of \Ref{Composite} objects.
-					Change the selection of \Ref{Composite} objects of {\em *this} selectionMessage
+			/** Change the selection of  \link Composite Composite \endlink  objects.
+					Change the selection of  \link Composite Composite \endlink  objects of {\em *this} selectionMessage
 					to the value represented by the parameter {\em selection}. The selection list will
 					be copied from the given list.
-					@param       selection the new selection of \Ref{Composite} objects of {\em *this} selectionMessage
+					@param       selection the new selection of  \link Composite Composite \endlink  objects of {\em *this} selectionMessage
 					@see         getSelection
 			*/
 			void setSelection(const List<Composite*> &selection)
 				throw();
 
-			/** Non-mutable inspection of the selection of \Ref{Composite} objects.
-					Access the constant reference of the selection of \Ref{Composite} objects
+			/** Non-mutable inspection of the selection of  \link Composite Composite \endlink  objects.
+					Access the constant reference of the selection of  \link Composite Composite \endlink  objects
 					of {\em *this} selectionMessage.
-					@return      const List<Composite*>& constant reference to the selection of \Ref{Composite} objects	of {\em *this} selectionMessage
+					@return      const List<Composite*>& constant reference to the selection of  \link Composite Composite \endlink  objects	of {\em *this} selectionMessage
 					@see         setSelection
 					@see         List
 					@see         Composite
@@ -760,13 +767,14 @@ namespace BALL
 
 		/** GeometricObjectSelectionMessage class.
 				The class GeometricObjectSelectionMessage is the message class that is a container for
-				\Ref{GeometricObject} objects that are somehow selected.
-				It will be sent by existing \Ref{ConnectionObject} objects that collect
-				\Ref{GeometricObject} objects for a certain purpose.
-				One can use the \Ref{RTTI} mechanism to identify
-				such messages in the {\em onNotify} method of user constructed \Ref{ConnectionObject}
+				 \link GeometricObject GeometricObject \endlink  objects that are somehow selected.
+				It will be sent by existing  \link ConnectionObject ConnectionObject \endlink  objects that collect
+				 \link GeometricObject GeometricObject \endlink  objects for a certain purpose.
+				One can use the  \link RTTI RTTI \endlink  mechanism to identify
+				such messages in the {\em onNotify} method of user constructed  \link ConnectionObject ConnectionObject \endlink 
 				objects.
-				\\ {\bf Definition:} \URL{BALL/VIEW/KERNEL/message.h}
+				 \par
+ <b>Definition:</b> BALL/VIEW/KERNEL/message.h
 		*/
 		class GeometricObjectSelectionMessage: public SelectionMessage
 		{

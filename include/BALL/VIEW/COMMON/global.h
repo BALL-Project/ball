@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: global.h,v 1.9 2002/12/12 09:28:35 oliver Exp $
+// $Id: global.h,v 1.10 2003/02/21 16:07:06 anhi Exp $
 
 #ifndef BALL_VIEW_COMMON_GLOBAL_H
 #define BALL_VIEW_COMMON_GLOBAL_H
@@ -17,12 +17,12 @@ namespace BALL
 		/**     @name Type aliases defined by VIEW
 						These predefined types are used in VIEW for portability and
 						comprehensibility.
-						{\bf Definition:} \URL{BALL/VIEW/COMMON/global.h}
+						<b>Definition:</b> BALL/VIEW/COMMON/global.h
 		*/
 		//@{
 		
 		/**     SceneHandle type.
-						Use this type to represent {\bf scene handles}. Scene handles are used
+						Use this type to represent <b>scene handles</b>. Scene handles are used
 						for the non-ambiguous identification of scenes.
 		*/
 		typedef unsigned long    SceneHandle;      
@@ -67,7 +67,7 @@ namespace BALL
 
 		/** MainControlMissing exception class.
 				This exception is thrown if {\em *this} scene is not inserted into a
-				\Ref{MainControl} object.
+				 \link MainControl MainControl \endlink  object.
 				@see GeneralException
 		*/
  		class MainControlMissing: public Exception::GeneralException

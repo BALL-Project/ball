@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vanDerWaalsModel.h,v 1.13 2002/12/12 09:48:49 oliver Exp $
+// $Id: vanDerWaalsModel.h,v 1.14 2003/02/21 16:05:04 anhi Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_VANDERWAALSMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_VANDERWAALSMODEL_H
@@ -24,9 +24,9 @@ namespace BALL
 				The class AddVanDerWaalsModel is a model processor that is responsible
 				for creating a {\em Van der Waals} model.
 				This processor creates only the primitive objects without openGL implementation.
-				The derived class \Ref{AddGLVanDerWaalsModel} uses the primitives with openGL implementation.
-				For information about the processor concept see \Ref{Processor} in tbe BALL documentation.\\
-				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/vanDerWaalsModel.h}
+				The derived class  \link AddGLVanDerWaalsModel AddGLVanDerWaalsModel \endlink  uses the primitives with openGL implementation.
+				For information about the processor concept see  \link Processor Processor \endlink  in tbe BALL documentation. \par
+				<b>Definition:</b> BALL/MOLVIEW/FUNCTOR/vanDerWaalsModel.h
 		*/
 		class AddVanDerWaalsModel: public AtomBondModelBaseProcessor
 		{
@@ -48,7 +48,7 @@ namespace BALL
 					Construct new addVanDerWaalsModel by copying the addVanDerWaalsModel
 					{\em add_van_der_waals_model}.
 					@param       add_van_der_waals_model the addVanDerWaalsModel to be copied
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em add_van_der_waals_model}
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of {\em add_van_der_waals_model}
 					@return      AddVanDerWaalsModel new constructed addVanDerWaalsModel copied from {\em add_van_der_waals_model}
 					@see         AtomBondModelBaseProcessor
 			*/
@@ -63,14 +63,14 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} addVanDerWaalsModel.
-					Calls \Ref{destroy}.
+					Calls  \link destroy destroy \endlink .
 					@see         destroy
 			*/
 			virtual ~AddVanDerWaalsModel()
 				throw();
 
 			/** Explicit default initialization.
-					Calls \Ref{AtomBondModelBaseProcessor::clear}.
+					Calls  \link AtomBondModelBaseProcessor::clear AtomBondModelBaseProcessor::clear \endlink .
 					@see  AtomBondModelBaseProcessor
 			*/
 			virtual void clear()
@@ -88,10 +88,10 @@ namespace BALL
 			//@{
 
 			/** Start method.
-					Initialize the properties of the \Ref{BaseModelConnector} to {\em *this}
+					Initialize the properties of the  \link BaseModelConnector BaseModelConnector \endlink  to {\em *this}
 					addVanDerWaalsModel.
-					Calls \Ref{AtomBondModelBaseProcessor::start}.
-					@return bool {\tt true} if the start of {\em *this} addVanDerWaalsModel was successful, {\tt false} otherwise
+					Calls  \link AtomBondModelBaseProcessor::start AtomBondModelBaseProcessor::start \endlink .
+					@return bool <tt>true</tt> if the start of {\em *this} addVanDerWaalsModel was successful, <tt>false</tt> otherwise
 					@see    operator()
 					@see    AtomBondModelBaseProcessor
 					@see    getModelConnector
@@ -101,11 +101,11 @@ namespace BALL
 			
 			/** Finish method.
 					This method will be internally called from the processor mechanism if the processor
-					has finished processing the \Ref{Composite} tree.
-					All previously inserted \Ref{Atom} objects (inserted with the method \Ref{insertAtom_})
-					will be processed with the method \Ref{buildBondModels_} to create the graphical 
-					representation of the \Ref{Bond} objects.
-					@return bool {\tt true} if the finish of {\em *this} addVanDerWaalsModel was successful, {\tt false} otherwise
+					has finished processing the  \link Composite Composite \endlink  tree.
+					All previously inserted  \link Atom Atom \endlink  objects (inserted with the method  \link insertAtom_ insertAtom_ \endlink )
+					will be processed with the method  \link buildBondModels_ buildBondModels_ \endlink  to create the graphical 
+					representation of the  \link Bond Bond \endlink  objects.
+					@return bool <tt>true</tt> if the finish of {\em *this} addVanDerWaalsModel was successful, <tt>false</tt> otherwise
 					@see    insertAtom_
 					@see    buildBondModels_
 					@see    operator()
@@ -116,21 +116,21 @@ namespace BALL
 			virtual bool finish();
 
 			/**	Operator method.
-					This method iterates over each \Ref{Composite} object reachable in the 
-					\Ref{Composite} tree. If {\em composite} is of kind \Ref{Atom} than a \Ref{Sphere}
-					with radius \Ref{getVanDerWaalsRadius}
+					This method iterates over each  \link Composite Composite \endlink  object reachable in the 
+					 \link Composite Composite \endlink  tree. If {\em composite} is of kind  \link Atom Atom \endlink  than a \Ref{Sphere}
+					with radius  \link getVanDerWaalsRadius getVanDerWaalsRadius \endlink 
 					is created for that atom, appended to {\em composite} and inserted with the
-					method \Ref{insertAtom_}.
+					method  \link insertAtom_ insertAtom_ \endlink .
 					All previously appended primitives to {\em composite}	are removed using the method
-					\Ref{removeGeometricObjects_}.
-					The color for that \Ref{Sphere} object is calculated with the \Ref{ColorCalculator}
-					object retrieved with the method \Ref{getColorCalculator}.
-					All atoms inserted with the method \Ref{insertAtom_} will later used for creating
-					the model of the reachable \Ref{Bond} objects. Those models will be created
-					with the method \Ref{buildBondModels_}.
-					@param  composite the \Ref{Composite} object that will be processed
+					 \link removeGeometricObjects_ removeGeometricObjects_ \endlink .
+					The color for that  \link Sphere Sphere \endlink  object is calculated with the  \link ColorCalculator ColorCalculator \endlink 
+					object retrieved with the method  \link getColorCalculator getColorCalculator \endlink .
+					All atoms inserted with the method  \link insertAtom_ insertAtom_ \endlink  will later used for creating
+					the model of the reachable  \link Bond Bond \endlink  objects. Those models will be created
+					with the method  \link buildBondModels_ buildBondModels_ \endlink .
+					@param  composite the  \link Composite Composite \endlink  object that will be processed
 					@return Processor::Result the result of {\em *this} addVanDerWaalsModel
-					@exeception OutOfMemory thrown if the memory allocation for a \Ref{Sphere} object failed
+					@exeception OutOfMemory thrown if the memory allocation for a  \link Sphere Sphere \endlink  object failed
 					@see    Sphere
 					@see    ColorCalculator
 					@see    getColorCalculator
@@ -154,7 +154,7 @@ namespace BALL
 			/** Internal value dump.
 					Dump the current state of {\em *this} addVanDerWaalsModel to 
 					the output ostream {\em s} with dumping depth {\em depth}.
-					Calls \Ref{AtomBondModelBaseProcessor::dump}.
+					Calls  \link AtomBondModelBaseProcessor::dump AtomBondModelBaseProcessor::dump \endlink .
 					@param   s output stream where to output the state of {\em *this} addVanDerWaalsModel
 					@param   depth the dumping depth
 					@see     AtomBondModelBaseProcessor
@@ -169,7 +169,7 @@ namespace BALL
 			//@}
 			/** @name Creation methods
 					This methods create primitives without OpenGL implementation.
-					This methods are overridden by the class \Ref{AddGLVanDerWaalsModel}
+					This methods are overridden by the class  \link AddGLVanDerWaalsModel AddGLVanDerWaalsModel \endlink 
 					to create primitives with OpenGL implementation to generate the graphical
 					representation of the shapes they represent.
 					@see  AddGLVanDerWaalsModel
@@ -177,11 +177,11 @@ namespace BALL
 			//@{
 
 			/** Create a sphere.
-					Create a \Ref{Sphere} object.
-					This method is overridden by the class \Ref{AddGLVanDerWaalsModel} to
+					Create a  \link Sphere Sphere \endlink  object.
+					This method is overridden by the class  \link AddGLVanDerWaalsModel AddGLVanDerWaalsModel \endlink  to
 					create a primitive with openGL implementation.
-					The method \Ref{operator()} uses this method to create a sphere
-					for \Ref{Atom} objects.
+					The method  \link operator() operator() \endlink  uses this method to create a sphere
+					for  \link Atom Atom \endlink  objects.
 					@see  Sphere
 					@see  AddGLVanDerWaalsModel
 					@see  Atom

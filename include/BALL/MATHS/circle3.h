@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: circle3.h,v 1.31 2003/01/07 14:14:51 amoll Exp $
+// $Id: circle3.h,v 1.32 2003/02/21 16:03:46 anhi Exp $
 
 #ifndef BALL_MATHS_CIRCLE3_H
 #define BALL_MATHS_CIRCLE3_H
@@ -40,7 +40,7 @@ namespace BALL
 		throw();
 
 	/**	Generic Circle in Three-Dimensional Space.
-			{\bf Definition:} \URL{BALL/MATHS/circle3.h}
+			<b>Definition:</b> BALL/MATHS/circle3.h
 	*/
 	template <typename T>
 	class TCircle3
@@ -55,7 +55,7 @@ namespace BALL
 
 		/**	Default constructor.
 				This method creates a new TCircle3 object. The three components
-				are initialized to {\tt 0}.
+				are initialized to <tt>0</tt>.
 		*/
 		TCircle3()
 			throw()
@@ -185,7 +185,7 @@ namespace BALL
 			circle.radius = radius;
 		}
 
-		/**	Assign to two variables of type TVector3 and one {\tt T} value.
+		/**	Assign to two variables of type TVector3 and one <tt>T</tt> value.
 				@param	point the center point
 				@param	normal the circle normal
 				@param	rhs the radius
@@ -204,7 +204,7 @@ namespace BALL
 		//@{
 
 		/**	Equality operator.
-				@return bool, {\bf true} if all components are equal, {\bf false} otherwise
+				@return bool, <b>true</b> if all components are equal, <b>false</b> otherwise
 		*/
 		bool operator == (const TCircle3& circle) const
 			throw()
@@ -213,7 +213,7 @@ namespace BALL
 		}
 
 		/**	Inequality operator.
-				@return bool, {\bf false} if all components are equal, {\bf true} otherwise
+				@return bool, <b>false</b> if all components are equal, <b>true</b> otherwise
 		*/
 		bool operator != (const TCircle3& circle) const
 			throw()
@@ -225,7 +225,7 @@ namespace BALL
 				Optional it can be testet, if the point lies on the surface.
 				@param point the point to be tested
 				@param on_surface true to test the surface (default = false)
-				@return bool, {\bf true} or {\bf false}
+				@return bool, <b>true</b> or <b>false</b>
 		*/
 		bool has(const TVector3<T>& point, bool on_surface = false) const
 			throw()
@@ -249,7 +249,7 @@ namespace BALL
 
 		/**	Test if instance is valid.
 				Always returns true
-				@return bool {\bf true}
+				@return bool <b>true</b>
 		*/
 		bool isValid() const
 			throw()
@@ -305,7 +305,7 @@ namespace BALL
 		//@}
 	};
 
-	/**	Default three-dimensional circle class of type {\bf float}
+	/**	Default three-dimensional circle class of type <b>float</b>
 	*/
 	typedef TCircle3<float> Circle3;
 
@@ -314,7 +314,7 @@ namespace BALL
 	//@{
 
 	/**	Input operator.
-			Reads in two TVector3 and a {\bf T} value: p, n, radius
+			Reads in two TVector3 and a <b>T</b> value: p, n, radius
 	*/
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TCircle3<T>& circle)
@@ -328,10 +328,10 @@ namespace BALL
 	}
 
 	/**	Output  Operator.
-			Writes the values of {\tt p}, {\tt n}, and {\tt radius} to an 
-			output stream. The three values are separated by spaces and enclosed in brackets.\\
-			{\bf Example:}\\
-			{\tt ((0 0 0) (1 2 1) 3.5)}
+			Writes the values of <tt>p</tt>, <tt>n</tt>, and {\tt radius} to an 
+			output stream. The three values are separated by spaces and enclosed in brackets. \par
+			<b>Example:</b> \par
+			<tt>((0 0 0) (1 2 1) 3.5)</tt>
 			@see TVector3::operator<<
 	*/
 	template <typename T>

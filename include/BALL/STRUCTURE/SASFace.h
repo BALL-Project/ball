@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SASFace.h,v 1.3 2002/12/17 14:13:10 anker Exp $
+// $Id: SASFace.h,v 1.4 2003/02/21 16:06:34 anhi Exp $
 
 #ifndef BALL_STRUCTURE_SASFACE_H
 #define BALL_STRUCTURE_SASFACE_H
@@ -26,7 +26,7 @@ namespace BALL
 	class SASTriangulator;
 
 	/** Generic SASFace Class.
-			{\bf Definition:} \URL{BALL/STRUCTURE/SASFace.h}
+			<b>Definition:</b> BALL/STRUCTURE/SASFace.h
 	*/
 	class SASFace	:	public GraphFace< SASVertex,SASEdge,SASFace >
 	{
@@ -128,19 +128,19 @@ namespace BALL
 		//@{
 
 		/**	Equality operator.
-				@return bool	{\bf true}
+				@return bool	<b>true</b>
 		*/
 		virtual bool operator == (const SASFace&) const
 			throw();
 
 		/**	Inequality operator.
-				@return	bool	{\bf false}
+				@return	bool	<b>false</b>
 		*/
 		virtual bool operator != (const SASFace&) const
 			throw();
 
 		/**	Similarity operator.
-				@return	bool	{\bf true}
+				@return	bool	<b>true</b>
 		*/
 		virtual bool operator *= (const SASFace&) const
 			throw();

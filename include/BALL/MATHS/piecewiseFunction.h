@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: piecewiseFunction.h,v 1.13 2002/02/27 12:18:55 sturm Exp $
+// $Id: piecewiseFunction.h,v 1.14 2003/02/21 16:03:53 anhi Exp $
 
 #ifndef BALL_MATHS_PIECEWISEFUNCTION_H
 #define BALL_MATHS_PIECEWISEFUNCTION_H
@@ -36,11 +36,11 @@ namespace BALL
 	/** Piecewise function object.
 			This class provides the interface for piecewise functions needed as
 			representation of radial distribution functions (@see RadialDistributionFunction). 
-			It implements the {\tt Function} interface.\\
+			It implements the <tt>Function</tt> interface. \par
 			Note that intervals {\em must} be disjunct and interval limits have to
 			meet. We require the intervals to be sorted such that the lowest interval
-			limit is the first interval of the vector.\\
-			{\bf Definition:} \URL{BALL/MATHS/piecewiseFunction.h}
+			limit is the first interval of the vector. \par
+			<b>Definition:</b> BALL/MATHS/piecewiseFunction.h
 	 */
 	class PiecewiseFunction
 	{
@@ -88,7 +88,7 @@ namespace BALL
 		//@{
 
 		/** Set the intervals for the piecewise definition.
-				Note that this method does {\bf not} check the definition of the
+				Note that this method does <b>not</b> check the definition of the
 				intervals for sanity.
 		 */
 		void setIntervals(const std::vector<Interval>& intervals) throw();
@@ -117,7 +117,7 @@ namespace BALL
 		const Interval& getRange() const throw();
 
 		/** Set the coefficients.
-				Note that this method does {\bf not} check the vector of coefficients
+				Note that this method does <b>not</b> check the vector of coefficients
 				for sanity.
 		 */
 		void setCoefficients(const vector<Coefficients>& coefficients) throw();

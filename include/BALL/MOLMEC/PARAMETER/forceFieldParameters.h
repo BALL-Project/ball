@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceFieldParameters.h,v 1.13 2002/02/27 12:19:06 sturm Exp $
+// $Id: forceFieldParameters.h,v 1.14 2003/02/21 16:04:40 anhi Exp $
 // Molecular Mechanics: general force field parameter class
 
 #ifndef BALL_MOLMEC_FORCEFIELDPARAMETERS_H
@@ -24,7 +24,7 @@ namespace BALL
 	class AtomTypes;
 	
 	/**	Force field parameter class.
-			{\bf Definition:} \URL{BALL/MOLMEC/PARAMETER/forceFieldParameters.h}
+			<b>Definition:</b> BALL/MOLMEC/PARAMETER/forceFieldParameters.h
 	*/
 	class ForceFieldParameters
 		:	public Parameters
@@ -89,10 +89,10 @@ namespace BALL
 		//@{
 			
 		/**	Valididty predicate.
-				Return {\bf true} if the force field parameters were correctly
+				Return <b>true</b> if the force field parameters were correctly
 				initialized, the internal INI file is valid and the internal atom types		
 				object is valid.
-				@return bool - {\tt valid_ && parameter_file_.isValid() && atom_types_.isValid()}
+				@return bool - <tt>valid_ && parameter_file_.isValid() && atom_types_.isValid()</tt>
 		*/
 		virtual bool isValid() const;
 

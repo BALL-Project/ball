@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyBondList.h,v 1.4 2002/02/27 12:19:34 sturm Exp $
+// $Id: pyBondList.h,v 1.5 2003/02/21 16:05:52 anhi Exp $
 
 #ifndef BALL_PYTHON_PYBONDLIST_H
 #define BALL_PYTHON_PYBONDLIST_H
@@ -68,14 +68,14 @@ namespace BALL
 			
 		/**	Construct from a AtomContainer.
 				This constructor creates an PyBondList object from
-				all bonds of the atoms of a \Ref{AtomContainer} object.
-				If {\tt selected_only} is set to {\bf true}, only those
+				all bonds of the atoms of a  \link AtomContainer AtomContainer \endlink  object.
+				If <tt>selected_only</tt> is set to <b>true</b>, only those
 				atoms are inserted into the list where both atoms are selected.
 				It is not required that both atoms of a bond are contained
-				in {\tt fragment}.
+				in <tt>fragment</tt>.
 				@param fragment the AtomContainer containing the atoms
-				@param selected_only if set to {\bf true}, only those bonds are inserted
-					where at least one atom is selected and contained in {\tt fragment}
+				@param selected_only if set to <b>true</b>, only those bonds are inserted
+					where at least one atom is selected and contained in <tt>fragment</tt>
 		*/
 		PyBondList(const AtomContainer& fragment, bool selected_only = false);
 

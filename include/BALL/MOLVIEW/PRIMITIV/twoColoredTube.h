@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: twoColoredTube.h,v 1.11 2002/12/16 12:22:44 sturm Exp $
+// $Id: twoColoredTube.h,v 1.12 2003/02/21 16:05:33 anhi Exp $
 
 #ifndef BALL_MOLVIEW_PRIMITIV_TWOCOLOREDTUBE_H
 #define BALL_MOLVIEW_PRIMITIV_TWOCOLOREDTUBE_H
@@ -44,11 +44,11 @@ namespace BALL
 				in color 2. The tube is exactly divided in the middle. One half (starting
 				from vertex1 til middle vertex) is colored by the color1 and the other half 
 				(starting from middle vertex to vertex2) is colored by color2.
-				The class TwoColoredTube is derived from the classes \Ref{GeometricObject},
-				\Ref{ColorExtension2}, \Ref{Radius}	and \Ref{Vertex2}.
+				The class TwoColoredTube is derived from the classes  \link GeometricObject GeometricObject \endlink ,
+				 \link ColorExtension2 ColorExtension2 \endlink ,  \link Radius Radius \endlink 	and \Ref{Vertex2}.
 				See these classes for further information concerning
-				interface and additional methods. \\
-				{\bf Definition:} \URL{BALL/MOLVIEW/PRIMITIV/twoColoredTube.h}
+				interface and additional methods.  \par
+				<b>Definition:</b> BALL/MOLVIEW/PRIMITIV/twoColoredTube.h
 		*/
 		class TwoColoredTube
 			: public GeometricObject,
@@ -83,7 +83,7 @@ namespace BALL
 					Construct new twoColoredTube by copying the twoColoredTube {\em two_colored_tube}.
 					The copy is either deep (default) or shallow.
 					@param       two_colored_tube the twoColoredTube to be copied (cloned)
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false})
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>)
 					@return      TwoColoredTube new constructed twoColoredTube copied from {\em two_colored_tube}
 					@see         GeometricObject
 					@see         ColorExtension2
@@ -94,8 +94,8 @@ namespace BALL
 
 			/** Copy constructor from geometricObject.
 					Construct new twoColoredTube by copying the internal values from 
-					\Ref{GeometricObject} {\em geometric_object}.
-					@param       geometric_object the \Ref{GeometricObject} which internal values should be copied
+					 \link GeometricObject GeometricObject \endlink  {\em geometric_object}.
+					@param       geometric_object the  \link GeometricObject GeometricObject \endlink  which internal values should be copied
 					@return      TwoColoredTube new constructed twoColoredTube initialized from {\em geometric_object}
 					@see         GeometricObject
 					@see         ColorExtension2
@@ -111,17 +111,17 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} twoColoredTube.
-					Calls \Ref{destroy}.
+					Calls  \link destroy destroy \endlink .
 					@see         destroy
 			*/
 			virtual ~TwoColoredTube()
 				throw();
 
 			/** Explicit default initialization.
-					Calls \Ref{GeometricObject::clear}.
-					Calls \Ref{ColorExtension2::clear}.
-					Calls \Ref{Radius::clear}.
-					Calls \Ref{Vertex2::clear}.
+					Calls  \link GeometricObject::clear GeometricObject::clear \endlink .
+					Calls  \link ColorExtension2::clear ColorExtension2::clear \endlink .
+					Calls  \link Radius::clear Radius::clear \endlink .
+					Calls  \link Vertex2::clear Vertex2::clear \endlink .
 					@see  GeometricObject::clear
 					@see  ColorExtension2::clear
 					@see  Radius::clear
@@ -131,10 +131,10 @@ namespace BALL
 				throw();
 
 			/** Explicit destructor.
-					Calls \Ref{GeometricObject::destroy}.
-					Calls \Ref{ColorExtension2::destroy}.
-					Calls \Ref{Radius::destroy}.
-					Calls \Ref{Vertex2::destroy}.
+					Calls  \link GeometricObject::destroy GeometricObject::destroy \endlink .
+					Calls  \link ColorExtension2::destroy ColorExtension2::destroy \endlink .
+					Calls  \link Radius::destroy Radius::destroy \endlink .
+					Calls  \link Vertex2::destroy Vertex2::destroy \endlink .
 					@see  GeometricObject::destroy
 					@see  ColorExtension2::destroy
 					@see  Radius::destroy
@@ -154,12 +154,12 @@ namespace BALL
 					The copy is either deep (default) or shallow.
 					The value of {\em *this} twoColoredTube is initialized to the value of 
 					the twoColoredTube {\em two_colored_tube}.
-					Calls \Ref{GeometricObject::set}.
-					Calls \Ref{ColorExtension2::set}.
-					Calls \Ref{Radius::set}.
-					Calls \Ref{Vertex2::set}.
+					Calls  \link GeometricObject::set GeometricObject::set \endlink .
+					Calls  \link ColorExtension2::set ColorExtension2::set \endlink .
+					Calls  \link Radius::set Radius::set \endlink .
+					Calls  \link Vertex2::set Vertex2::set \endlink .
 					@param       two_colored_tube the twoColoredTube to be copied
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em two_colored_tube}
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of {\em two_colored_tube}
 					@see         GeometricObject::set
 					@see         ColorExtension2::set
 					@see         Radius::set
@@ -171,9 +171,9 @@ namespace BALL
 			/** Assignment operator.
 					Assign the twoColoredTube {\em two_colored_tube} to {\em *this}
 					twoColoredTube.	The copy is deep.
-					Calls \Ref{set}.
+					Calls  \link set set \endlink .
 					The value of {\em *this} twoColoredTube is initialized to the value 
-					of the twoColoredTube {\em two_colored_tube}.\\
+					of the twoColoredTube {\em two_colored_tube}. \par
 					@param       two_colored_tube the twoColoredTube to be copied
 					@return      TwoColoredTube& constant reference of {\em *this} twoColoredTube
 					@see         set
@@ -184,11 +184,11 @@ namespace BALL
 			/** Copying with cloning facility.
 					Copy {\em *this} twoColoredTube to the twoColoredTube {\em two_colored_tube}.
 					The copy is either deep (default) or shallow.
-					Calls \Ref{set}.
+					Calls  \link set set \endlink .
 					The value of the twoColoredTube {\em two_colored_tube} is initialized to the
-					value of {\em *this} twoColoredTube.\\
+					value of {\em *this} twoColoredTube. \par
 					@param       two_colored_tube the twoColoredTube to be assigned to
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em two_colored_tube}
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of {\em two_colored_tube}
 					@see         set
 			*/
 			void get(TwoColoredTube& two_colored_tube, bool deep = true) const
@@ -233,10 +233,10 @@ namespace BALL
 					consistencies	of {\em *this} twoColoredTube.
 					If the internal state of {\em *this} twoColoredTube is correct 
 					(self-validated) and 
-					consistent {\tt true} is returned, {\tt false} otherwise. 
+					consistent <tt>true</tt> is returned, <tt>false</tt> otherwise. 
 					Calls {GeometricObject::isValid}.
-					@return			bool {\tt true} if the internal state of {\em *this} twoColoredTube 
-											is correct (self-validated) and consistent, {\tt false} otherwise
+					@return			bool <tt>true</tt> if the internal state of {\em *this} twoColoredTube 
+											is correct (self-validated) and consistent, <tt>false</tt> otherwise
 					@see        GeometricObject::isValid
 			*/
 			virtual bool isValid() const
@@ -245,10 +245,10 @@ namespace BALL
 			/** Internal value dump.
 					Dump the current value of {\em *this} twoColoredTube to 
 					the output ostream {\em s} with dumping depth {\em depth}.
-					Calls \Ref{GeometricObject::dump}.
-					Calls \Ref{ColorExtension2::dump}.
-					Calls \Ref{Radius::dump}.
-					Calls \Ref{Vertex2::dump}.
+					Calls  \link GeometricObject::dump GeometricObject::dump \endlink .
+					Calls  \link ColorExtension2::dump ColorExtension2::dump \endlink .
+					Calls  \link Radius::dump Radius::dump \endlink .
+					Calls  \link Vertex2::dump Vertex2::dump \endlink .
 					@param   s output stream where to output the value of {\em *this} twoColoredTube
 					@param   depth the dumping depth
 					@see        GeometricObject::dump
@@ -280,9 +280,9 @@ namespace BALL
 
 			/** Export method.
 					This method handles the export of {\em *this} twoColoredTube into another
-					format (eg. POVRAY, VRML)\\
-				  {\bf Note:} Not yet implemented.
-					@return    bool {\tt true} if successful,	{\tt false} otherwise
+					format (eg. POVRAY, VRML) \par
+				  <b>Note:</b> Not yet implemented.
+					@return    bool <tt>true</tt> if successful,	<tt>false</tt> otherwise
 			*/
 			virtual bool extract()
 				throw();

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: shiftModule.h,v 1.11 2002/02/27 12:19:33 sturm Exp $
+// $Id: shiftModule.h,v 1.12 2003/02/21 16:05:47 anhi Exp $
 
 #ifndef BALL_NMR_SHIFTMODULE_H
 #define BALL_NMR_SHIFTMODULE_H
@@ -32,14 +32,14 @@ namespace BALL
 			NMR shift models typically consist of a number of different 
 			contributions (e.g. ring current, ansisotopy, etc.). Each of these
 			contributions is implemented in a ShiftModule. Several of these ShiftModules 
-			can then be combined to a complete \Ref{ShiftModel}.
-			Since ShiftModules are derived from \Ref{UnaryProcessor}, they can be applied
-			to arbitrary kernel data structures. 	\\
-			{\bf Caveat:} The shifts are usually stored in a property of the corresponding atom.
+			can then be combined to a complete  \link ShiftModel ShiftModel \endlink .
+			Since ShiftModules are derived from  \link UnaryProcessor UnaryProcessor \endlink , they can be applied
+			to arbitrary kernel data structures. 	 \par
+			<b>Caveat:</b> The shifts are usually stored in a property of the corresponding atom.
 			Applying the same processor multiply will give incorrect results, as the ShiftModules
 			\emph{add} their shift contribution. Before applying a ShiftModule, these
-			properties can be reset to zero by applying a \Ref{ClearShiftProcessor}. \\
-			{\bf Definition}\URL{BALL/NMR/shiftModule.h}
+			properties can be reset to zero by applying a  \link ClearShiftProcessor ClearShiftProcessor \endlink .  \par
+			<b>Definition</b>BALL/NMR/shiftModule.h
 	*/
 	class ShiftModule 
 		: public UnaryProcessor<Composite>
@@ -54,9 +54,9 @@ namespace BALL
 
 		/**	Named property to store the shift values.
 				Use this string constant to access the shift values stored in the single
-				atoms.\\
-				{\bf Example:}
-				{\tt atom.setProperty(ShiftModule::PROPERTY__SHIFT, 0.0);}
+				atoms. \par
+				<b>Example:</b>
+				<tt>atom.setProperty(ShiftModule::PROPERTY__SHIFT, 0.0);</tt>
 		*/
 		static const char* PROPERTY__SHIFT;
 		//@}
@@ -118,7 +118,7 @@ namespace BALL
 
 		/**	Set the parameters.
 				After the assignment, the state of the module is \emph{invalid},
-				so it is required to run \Ref{init}.
+				so it is required to run  \link init init \endlink .
 				@param parameters the new parameters
 				@see	isValid
 		*/
@@ -133,10 +133,10 @@ namespace BALL
 		/**	Parameter initalization.
 				Use this method to implement the extraction and initialization of
 				the module's parameters.
-				\Ref{init} is called by \Ref{ShiftModel} as soon as the \Ref{ShiftModule}
-				is constructed and parameters and name are assigned.\\
-				All implementations in derived classes should set the \Ref{valid_} flag
-				to {\bf true} if the initialization was successful and to {\bf false} otherwise.
+				 \link init init \endlink  is called by  \link ShiftModel ShiftModel \endlink  as soon as the \Ref{ShiftModule}
+				is constructed and parameters and name are assigned. \par
+				All implementations in derived classes should set the  \link valid_ valid_ \endlink  flag
+				to <b>true</b> if the initialization was successful and to <b>false</b> otherwise.
 		*/
 		virtual void init() 
 			throw();
@@ -166,7 +166,7 @@ namespace BALL
 		//@{
 
 		/**	Return the module state.
-				The module is valid if \Ref{init} was executed successfully.
+				The module is valid if  \link init init \endlink  was executed successfully.
 				@return the module state
 		*/
 		bool isValid() const

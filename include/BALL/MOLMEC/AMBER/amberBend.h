@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberBend.h,v 1.10 2002/12/12 09:48:46 oliver Exp $
+// $Id: amberBend.h,v 1.11 2003/02/21 16:04:05 anhi Exp $
 
 // Molecular Mechanics: Amber force field, bond stretch component
 
@@ -28,7 +28,7 @@ namespace BALL
 {
 
 	/**	Amber bond stretch component
-			{\bf Definition:}\URL{BALL/MOLMEC/AMBER/amberBend.h}
+			<b>Definition:</b>BALL/MOLMEC/AMBER/amberBend.h
 	*/
 	class AmberBend 
 		: public ForceFieldComponent

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: secondaryStructure.h,v 1.26 2003/01/08 21:13:26 oliver Exp $
+// $Id: secondaryStructure.h,v 1.27 2003/02/21 16:03:35 anhi Exp $
 
 #ifndef BALL_KERNEL_SECONDARYSTRUCTURE_H
 #define BALL_KERNEL_SECONDARYSTRUCTURE_H
@@ -30,8 +30,8 @@ namespace BALL
 	/**	Secondary structure class.
 			This class is used to represent secondary structure elements
 			of protein chains.
-			\\
-			{\bf Definition:}\URL{BALL/KERNEL/secondaryStructure.h}
+			 \par
+			<b>Definition:</b>BALL/KERNEL/secondaryStructure.h
 	*/
 	class SecondaryStructure
 		: public AtomContainer
@@ -125,7 +125,7 @@ namespace BALL
 		/** Assignment with cloning facility.
 				The assignment is either deep or shallow (default).
 				@param  secondary_structure the SecondaryStructure to be copied (cloned)
-				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy
+				@param  deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy
 		*/
 		void set(const SecondaryStructure& secondary_structure, bool deep = true)
 			throw();
@@ -299,22 +299,22 @@ namespace BALL
 		bool remove(Residue& residue)
 			throw();
 
-		/**	Move the children of {\tt secondary_structure} into this instance.
-				Cut all children of {\tt secondary_structure} and prepend them before the children of this instance.
+		/**	Move the children of <tt>secondary_structure</tt> into this instance.
+				Cut all children of <tt>secondary_structure</tt> and prepend them before the children of this instance.
 				@param secondary_structure the SecondaryStructure to access
 		*/
 		void spliceBefore(SecondaryStructure& secondary_structure)
 			throw();
 
-		/**	Move the children of {\tt secondary_structure} into this instance.
-				Cut all children of {\tt secondary_structure} and append them after the children of this instance.
+		/**	Move the children of <tt>secondary_structure</tt> into this instance.
+				Cut all children of <tt>secondary_structure</tt> and append them after the children of this instance.
 				@param secondary_structure the SecondaryStructure to access
 		*/
 		void spliceAfter(SecondaryStructure& secondary_structure)
 			throw();
 
-		/**	Move the children of {\tt secondary_structure} into this instance.
-				The children are inserted using \Ref{spliceBefore}.
+		/**	Move the children of <tt>secondary_structure</tt> into this instance.
+				The children are inserted using  \link spliceBefore spliceBefore \endlink .
 		*/
 		void splice(SecondaryStructure& secondary_structure)
 			throw();
@@ -325,8 +325,8 @@ namespace BALL
 		//@{
 	
 		/** Internal state and consistency self-validation.
-				@return	 bool - {\tt true} if the internal state is correct (self-validated) and consistent, 
-												{\tt false} otherwise
+				@return	 bool - <tt>true</tt> if the internal state is correct (self-validated) and consistent, 
+												<tt>false</tt> otherwise
 		*/
 		virtual bool isValid() const
 			throw();

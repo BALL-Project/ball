@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularDynamics.h,v 1.21 2003/02/05 13:00:17 oliver Exp $
+// $Id: molecularDynamics.h,v 1.22 2003/02/21 16:04:32 anhi Exp $
 // MolecularDynamics: A base class for doing molecular dynamics simulations    
 // Useful MD classes must be derived from this class 
 
@@ -63,7 +63,7 @@ namespace BALL
 	/**	Molecular Dynamics base class.
 			This class is the base class for classical molecular dynamics
 			simulations. Actual MD classes must be derived from this class.
-			{\bf Definition:}\URL{BALL/MOLMEC/MDSIMULATION/molecularDynamics.h}
+			<b>Definition:</b>BALL/MOLMEC/MDSIMULATION/molecularDynamics.h
 	*/
 	class MolecularDynamics
 	{
@@ -310,7 +310,7 @@ namespace BALL
 		ForceField *getForceField() const;
 
 		/** Start the molecular dynamics simulation.
-				This method calls \Ref{simulateIterations} with the maximum 
+				This method calls  \link simulateIterations simulateIterations \endlink  with the maximum 
 				number of iterations.
 				@see setMaximumNumberOfIterations
 		*/
@@ -319,7 +319,7 @@ namespace BALL
 		/**  Simulate a given time interval.
 				 This method determines the number of steps necessary
 				 to simulate a given time interval and executes a
-				 simulation for that interval by calling \Ref{simulateIterations}.
+				 simulation for that interval by calling  \link simulateIterations simulateIterations \endlink .
 		*/
 		void simulateTime(double simulation_time, bool restart = false);
 
@@ -327,7 +327,7 @@ namespace BALL
 		     the given number of iterations. 
 				 This is the proper simulation method, which is implemented in 
 				 the derived classes only. The implementation provided
-				 by \Ref{MolecularDynamics} is simply empty.
+				 by  \link MolecularDynamics MolecularDynamics \endlink  is simply empty.
 		*/
 		virtual void simulateIterations(Size number, bool restart = false);
 		//@}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backbone.h,v 1.10 2003/01/06 17:42:37 amoll Exp $
+// $Id: backbone.h,v 1.11 2003/02/21 16:05:31 anhi Exp $
 
 #ifndef BALL_MOLVIEW_PRIMITIV_BACKBONE_H
 #define BALL_MOLVIEW_PRIMITIV_BACKBONE_H
@@ -47,16 +47,16 @@ namespace BALL
 
 		/** Backbone class.
 				An instance of Backbone represents a graphical representation of a spline
-				path through a list of given \Ref{Atom} objects. The spline path
-				will be created from \Ref{Tube} and \Ref{Sphere} objects. Before creating
-				a Backbone there must be given a list of \Ref{Atom} object and a list
-				of \Ref{ColorRGBA} objects. See the methods \Ref{setAtomList} and
-				\Ref{setAtomColorList} for information.
-				To create the Backbone use the method \Ref{createBackbone}.
-				The class Backbone is derived from the class \Ref{GeometricObject}.
+				path through a list of given  \link Atom Atom \endlink  objects. The spline path
+				will be created from  \link Tube Tube \endlink  and  \link Sphere Sphere \endlink  objects. Before creating
+				a Backbone there must be given a list of  \link Atom Atom \endlink  object and a list
+				of  \link ColorRGBA ColorRGBA \endlink  objects. See the methods  \link setAtomList setAtomList \endlink  and
+				 \link setAtomColorList setAtomColorList \endlink  for information.
+				To create the Backbone use the method  \link createBackbone createBackbone \endlink .
+				The class Backbone is derived from the class  \link GeometricObject GeometricObject \endlink .
 				See this class for further information concerning
-				interface and additional methods. \\
-				{\bf Definition:} \URL{BALL/MOLVIEW/PRIMITIV/backbone.h}
+				interface and additional methods.  \par
+				<b>Definition:</b> BALL/MOLVIEW/PRIMITIV/backbone.h
 		*/
 		class Backbone
 			: public GeometricObject
@@ -79,7 +79,7 @@ namespace BALL
 					Construct new backbone by copying the backbone {\em backbone}.
 					The copy is either deep (default) or shallow.
 					@param       backbone the backbone to be copied (cloned)
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false})
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>)
 					@return      Backbone new constructed backbone copied from {\em backbone}
 					@see         GeometricObject
 			*/
@@ -88,8 +88,8 @@ namespace BALL
 
 			/** Copy constructor from geometricObject.
 					Construct new backbone by copying the internal values from 
-					\Ref{GeometricObject} {\em geometric_object}.
-					@param       geometric_object the \Ref{GeometricObject} which internal values should be copied
+					 \link GeometricObject GeometricObject \endlink  {\em geometric_object}.
+					@param       geometric_object the  \link GeometricObject GeometricObject \endlink  which internal values should be copied
 					@return      Backbone new constructed backbone initialized from {\em geometric_object}
 					@see         GeometricObject
 			*/
@@ -103,21 +103,21 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} backbone.
-					Calls \Ref{destroy}.
+					Calls  \link destroy destroy \endlink .
 					@see         destroy
 			*/
 			virtual ~Backbone()
 				throw();
 
 			/** Explicit default initialization.
-					Calls \Ref{GeometricObject::clear}.
+					Calls  \link GeometricObject::clear GeometricObject::clear \endlink .
 					@see  GeometricObject::clear
 			*/
 			virtual void clear()
 				throw();
 
 			/** Explicit destructor.
-					Calls \Ref{GeometricObject::destroy}.
+					Calls  \link GeometricObject::destroy GeometricObject::destroy \endlink .
 					@see  GeometricObject::destroy
 			*/
 			virtual void destroy()
@@ -135,11 +135,11 @@ namespace BALL
 					The value of {\em *this} backbone is initialized to the value of 
 					the backbone {\em backbone}.
 					This method does not copy the structure of {\em backbone} into {\em *this}
-					backbone. Only the geometric properties are copied. See \Ref{GeometricObject}
+					backbone. Only the geometric properties are copied. See  \link GeometricObject GeometricObject \endlink 
 					for information.
-					Calls \Ref{GeometricObject::set}.
+					Calls  \link GeometricObject::set GeometricObject::set \endlink .
 					@param       backbone the backbone to be copied
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em backbone}
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of {\em backbone}
 					@see         GeometricObject::set
 			*/
 			void set(const Backbone& backbone, bool deep = true)
@@ -149,11 +149,11 @@ namespace BALL
 					Assign the backbone {\em backbone} to {\em *this}
 					backbone.	The copy is deep.
 					This method does not copy the structure of {\em backbone} into {\em *this}
-					backbone. Only the geometric properties are copied. See \Ref{GeometricObject}
+					backbone. Only the geometric properties are copied. See  \link GeometricObject GeometricObject \endlink 
 					for information.
-					Calls \Ref{set}.
+					Calls  \link set set \endlink .
 					The value of {\em *this} backbone is initialized to the value 
-					of the backbone {\em backbone}.\\
+					of the backbone {\em backbone}. \par
 					@param       backbone the backbone to be copied
 					@return      Backbone& constant reference of {\em *this} backbone
 					@see         set
@@ -166,12 +166,12 @@ namespace BALL
 					The copy is either deep (default) or shallow.
 					This method does not copy the structure of {\em *this} backbone into
 					{\em backbone}. Only the geometric properties are copied.
-					See \Ref{GeometricObject}	for information.
-					Calls \Ref{set}.
+					See  \link GeometricObject GeometricObject \endlink 	for information.
+					Calls  \link set set \endlink .
 					The value of the backbone {\em backbone} is initialized to the
-					value of {\em *this} backbone.\\
+					value of {\em *this} backbone. \par
 					@param       backbone the backbone to be assigned to
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em backbone}
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of {\em backbone}
 					@see         set
 			*/
 			void get(Backbone& backbone, bool deep = true) const
@@ -181,7 +181,7 @@ namespace BALL
 					Swap the value of {\em *this} backbone with the backbone
 					{\em backbone}.
 					This method does not swap the structure of {\em backbone} with {\em *this}
-					backbone. Only the geometric properties are swapped. See \Ref{GeometricObject}
+					backbone. Only the geometric properties are swapped. See  \link GeometricObject GeometricObject \endlink 
 					for information.
 					@param       backbone the backbone being swapped with {\em *this}  backbone
 			*/
@@ -197,11 +197,11 @@ namespace BALL
 					Set a list of atoms that should be used to create a backbone representation.
 					{\em *this} backbone will create a spline path through these atoms
 					(from the first atom to the last atom stored in this list).
-					\Ref{Tube} and \Ref{Sphere} objects will be used to build the spline.
-					The color that should be used for each \Ref{Atom} in this list must be
-					stored in the atom color list (See \Ref{setAtomColorList}) in the same
+					 \link Tube Tube \endlink  and  \link Sphere Sphere \endlink  objects will be used to build the spline.
+					The color that should be used for each  \link Atom Atom \endlink  in this list must be
+					stored in the atom color list (See  \link setAtomColorList setAtomColorList \endlink ) in the same
 					order.
-					@param  atoms the list containing the \Ref{Atom} object through which a backbone representation should be created
+					@param  atoms the list containing the  \link Atom Atom \endlink  object through which a backbone representation should be created
 					@see    setAtomColorList
 					@see    Tube
 					@see    Sphere
@@ -211,16 +211,16 @@ namespace BALL
 				throw();
 
 			/** Set the color for the atoms.
-					Set a list of \Ref{ColorRGBA} objects that will be used for creating
+					Set a list of  \link ColorRGBA ColorRGBA \endlink  objects that will be used for creating
 					the backbone representation.
-					Each color in this list correlates to an \Ref{Atom} object in the atom list
-					(See \Ref{setAtomList}). If this list is empty or contains less 
-					\Ref{ColorRGBA} object than are \Ref{Atom} objects in the other list
-					than the color {\tt white} will be used for all \Ref{Atom} objects that will
+					Each color in this list correlates to an  \link Atom Atom \endlink  object in the atom list
+					(See  \link setAtomList setAtomList \endlink ). If this list is empty or contains less 
+					 \link ColorRGBA ColorRGBA \endlink  object than are  \link Atom Atom \endlink  objects in the other list
+					than the color <tt>white</tt> will be used for all  \link Atom Atom \endlink  objects that will
 					be left. If there are more color objects in this list than atom objects
 					are in the other list only the color objects are used with position in this 
 					list less or equal to the size of the atom list.
-					@param  atom_colors the list of \Ref{ColorRGBA} objects
+					@param  atom_colors the list of  \link ColorRGBA ColorRGBA \endlink  objects
 					@see    setAtomList
 					@see    ColorRGBA
 					@see    ColorRGBA
@@ -230,8 +230,8 @@ namespace BALL
 
 			/** Create the backbone.
 					Create the graphical representation of {\em *this} backbone.
-					To create the representation of {\em *this} backbone a list of \Ref{Atom}
-					objects and their correlating list of \Ref{ColorRGBA} objects must be
+					To create the representation of {\em *this} backbone a list of  \link Atom Atom \endlink 
+					objects and their correlating list of  \link ColorRGBA ColorRGBA \endlink  objects must be
 					previously set.
 					@see   setAtomList
 					@see   setAtomColorList
@@ -244,7 +244,7 @@ namespace BALL
 			/** Return the type name of {\em *this} backbone.
 					Virtually overridden method for specifying the type name of {\em *this}
 					backbone.
-					This method is used by the \Ref{Control} class to identify the
+					This method is used by the  \link Control Control \endlink  class to identify the
 					backbone object.
 					@return  String the type name of {\em *this} backbone
 					@see     Control
@@ -262,10 +262,10 @@ namespace BALL
 					consistencies	of {\em *this} backbone.
 					If the internal state of {\em *this} backbone is correct 
 					(self-validated) and 
-					consistent {\tt true} is returned, {\tt false} otherwise. 
+					consistent <tt>true</tt> is returned, <tt>false</tt> otherwise. 
 					Calls {GeometricObject::isValid}.
-					@return			bool {\tt true} if the internal state of {\em *this} backbone 
-											is correct (self-validated) and consistent, {\tt false} otherwise
+					@return			bool <tt>true</tt> if the internal state of {\em *this} backbone 
+											is correct (self-validated) and consistent, <tt>false</tt> otherwise
 					@see        GeometricObject::isValid
 			*/
  			virtual bool isValid() const
@@ -274,7 +274,7 @@ namespace BALL
 			/** Internal value dump.
 					Dump the current value of {\em *this} backbone to 
 					the output ostream {\em s} with dumping depth {\em depth}.
-					Calls \Ref{GeometricObject::dump}.
+					Calls  \link GeometricObject::dump GeometricObject::dump \endlink .
 					@param   s output stream where to output the value of {\em *this} backbone
 					@param   depth the dumping depth
 					@see        GeometricObject::dump
@@ -289,9 +289,9 @@ namespace BALL
 			
 			/** Export method.
 					This method handles the export of {\em *this} backbone into another
-					format (eg. POVRAY, VRML)\\
-				  {\bf Note:} Not yet implemented.
-					@return    bool {\tt true} if successful,	{\tt false} otherwise
+					format (eg. POVRAY, VRML) \par
+				  <b>Note:</b> Not yet implemented.
+					@return    bool <tt>true</tt> if successful,	<tt>false</tt> otherwise
 			*/
 			virtual bool extract()
 				throw();

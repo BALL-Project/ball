@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomVector.h,v 1.15 2002/02/27 12:19:01 sturm Exp $
+// $Id: atomVector.h,v 1.16 2003/02/21 16:04:16 anhi Exp $
 
 #ifndef BALL_MOLMEC_COMMON_ATOMVECTOR_H 
 #define BALL_MOLMEC_COMMON_ATOMVECTOR_H 
@@ -22,8 +22,8 @@ namespace BALL
 	class Composite;
 	
 	/**	Atom vector class.
-			This class is used to store atom pointers. \\
-			{\bf Definition:}\URL{BALL/MOLMEC/COMMON/atomVector.h}
+			This class is used to store atom pointers.  \par
+			<b>Definition:</b>BALL/MOLMEC/COMMON/atomVector.h
 	*/
 	class AtomVector
 		:	private ::std::vector<Atom*>
@@ -57,7 +57,7 @@ namespace BALL
 				This method constructs an AtomVector from a given composite
 				using selection or not.
 				@param	composite the composite containing the atoms
-				@param	selected_only store the selected atoms only (if {\bf true})
+				@param	selected_only store the selected atoms only (if <b>true</b>)
     */
     AtomVector(const Composite& composite, bool selected_only = false);
 
@@ -88,17 +88,17 @@ namespace BALL
 		void set(const AtomVector& atoms);
 
     /**	Assignment operator for Composites.
-				Calls \Ref{set} and extracts all atoms, if none of the atoms in 
-				{\tt composite} are selected or the selected atoms	only 
-				(if any atom is selected in {\tt composite}.
-				The implementation calls {\tt \Ref{set}({\tt rhs}, {\tt rhs}.\Ref{containsSelection}())}.
+				Calls  \link set set \endlink  and extracts all atoms, if none of the atoms in 
+				<tt>composite</tt> are selected or the selected atoms	only 
+				(if any atom is selected in <tt>composite</tt>.
+				The implementation calls <tt> \link set</tt>(<tt>rhs set</tt>({\tt rhs \endlink , {\tt rhs</tt>. \link containsSelection containsSelection \endlink ())}.
 				@see	Selectable
     */
     const AtomVector& operator = (const Composite& rhs);
 
 		/**	Assign from a composite.
 				This method iterates over the composite tree and extracts all atoms. 
-				@param	selected_only extract only selected atoms if set to {\bf true}
+				@param	selected_only extract only selected atoms if set to <b>true</b>
 		*/
 		void set(const Composite& composite, bool selected_only = false);
 
@@ -118,12 +118,12 @@ namespace BALL
 		
 		/**	Store the current atom positions.
 				AtomVector also contains an array with positions for each atom.
-				\Ref{moveTo} considers these coordinates as start coordinates.
+				 \link moveTo moveTo \endlink  considers these coordinates as start coordinates.
 		*/
 		void savePositions();
 
 		/**	Resets the atom positions to the saved positions.
-				If coordinates weres stored using \Ref{savePositions}, the atoms
+				If coordinates weres stored using  \link savePositions savePositions \endlink , the atoms
 				coordinates are reset to the saved positions.
 				If no savedPositions exist the coordinates remain unchanged.
 		*/
@@ -131,8 +131,8 @@ namespace BALL
 
 		/**	Move all atoms along a direction vector.
 				The method translates all atoms a long a given direction.
-				The direction vector is multiplied with a step length {\tt step}.
-				If a saved position exists (\Ref{savePositions}), it is used as a start
+				The direction vector is multiplied with a step length <tt>step</tt>.
+				If a saved position exists ( \link savePositions savePositions \endlink ), it is used as a start
 				position (i.e. the final positions are $\vec{\mathrm{start}} + \mathrm{step} \vec{\mathrm{direction}}$).
 				Otherwise, the current atom positions are used.
 				If the gradient's size differs from the number of atoms, nothing is done.

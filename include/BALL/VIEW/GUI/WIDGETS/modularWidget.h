@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.h,v 1.12 2002/12/12 09:37:46 oliver Exp $
+// $Id: modularWidget.h,v 1.13 2003/02/21 16:07:44 anhi Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
 #define BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
@@ -37,20 +37,20 @@ namespace BALL
 		/**	The ModularWidget class.
 				The base class for all modular widgets.
 				BALLVIEW provides a simple mechanism for Rapid Application Prototyping based 
-				on {\em modular widgets}.	Using the modular widgets and the \Ref{MainControl} class
+				on {\em modular widgets}.	Using the modular widgets and the  \link MainControl MainControl \endlink  class
 				(or more precisely, classes derived from MainControl) applications can be developed
 				in a plug&play style.	The most important of a visualization application are	
 				implemented as classes derived from ModularWidget.
 				Inserting an instance of one of these widgets automatically creates the required
 				menus in the menubar of the main window, sets up the required connections,
 				and registers the class instance for use from the embedded Python interpreter 
-				(if desired).\\
+				(if desired). \par
 				When implementing classes derived from ModularWidget and you want to give access 
-				to the class (from Python), please remember	to include the \Ref{BALL_EMBEDDABLE} 
+				to the class (from Python), please remember	to include the  \link BALL_EMBEDDABLE BALL_EMBEDDABLE \endlink  
 				macro in the public section	of your class declaration. Also make sure that the QT 
 				class you	derive from (e.g. QWidget) is the {\em first} base class and 
-				ModularWidget	second. \\
-				{\bf Definition:} \URL{BALL/VIEW/GUI/WIDGETS/modularWidget.h}
+				ModularWidget	second.  \par
+				<b>Definition:</b> BALL/VIEW/GUI/WIDGETS/modularWidget.h
 				@see MainControl
 				@see Embeddable
 				@see PyInterpreter
@@ -83,7 +83,7 @@ namespace BALL
 			/**	Copy constructor.
 					Construct new modularWidget by copying the modularWidget {\em widget}.
 					The state of {\em *this} modularWidget is initialized to the state of the
-					modularWidget {\em widget}.\\
+					modularWidget {\em widget}. \par
 					@param       widget the modularWidget to be copied
 					@return      ModularWidget new constructed modularWidget copied from {\em widget}
 					@see         Embeddable
@@ -99,7 +99,7 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} modularWidget.
-					Calls \Ref{destroy}.
+					Calls  \link destroy destroy \endlink .
 					@see         destroy
 			*/
 			virtual ~ModularWidget()
@@ -123,11 +123,11 @@ namespace BALL
 			//@{
 			
 			/**	Register the widget.
-					Register the widget {\em mwidget} to the \Ref{MainControl}. Modular widgets
-					objects must always be created with \Ref{MainControl} as parent and must have
+					Register the widget {\em mwidget} to the  \link MainControl MainControl \endlink . Modular widgets
+					objects must always be created with  \link MainControl MainControl \endlink  as parent and must have
 					this method in their constructors. This method connects {\em mwidget} to the
-					\Ref{MainControl} object.
-					@param  mwidget the modularWidget to be registered to the \Ref{MainControl}
+					 \link MainControl MainControl \endlink  object.
+					@param  mwidget the modularWidget to be registered to the  \link MainControl MainControl \endlink 
 			*/
 			static void registerWidget(ModularWidget* mwidget)
 				throw();
@@ -135,8 +135,8 @@ namespace BALL
 			/**	Initialize the widget.
 					This method is called automatically	immediately before the main application 
 					is started. It should add the widget's menu entries and connections (if required).
-					This method will be called by \Ref{show} from the \Ref{MainControl} object.
-					@param main_control the \Ref{MainControl} object to be initialized with {\em *this} modularWidget
+					This method will be called by  \link show show \endlink  from the  \link MainControl MainControl \endlink  object.
+					@param main_control the  \link MainControl MainControl \endlink  object to be initialized with {\em *this} modularWidget
 					@see   finalizeWidget
 					@see   show
 			*/
@@ -144,10 +144,10 @@ namespace BALL
 			//	throw();
 			
 			/**	Remove the widget.
-					This method should reverse all actions performed in \Ref{initializeWidget}
+					This method should reverse all actions performed in  \link initializeWidget initializeWidget \endlink 
 					(remove menu entries and connections of {\em *this} modularWidget).
-					This method will be called by \Ref{aboutToExit} from the \Ref{MainControl} object.
-					@param main_control the \Ref{MainControl} object to be finalized with {\em *this} modularWidget
+					This method will be called by  \link aboutToExit aboutToExit \endlink  from the  \link MainControl MainControl \endlink  object.
+					@param main_control the  \link MainControl MainControl \endlink  object to be finalized with {\em *this} modularWidget
 					@see   initializeWidget
 					@see   aboutToExit
 			*/
@@ -155,10 +155,10 @@ namespace BALL
 			//	throw();
 			
 			/**	Menu checking method.
-					This method is called by the method \Ref{checkMenus} from the
-					\Ref{MainControl} object before a popup menu is shown.
+					This method is called by the method  \link checkMenus checkMenus \endlink  from the
+					 \link MainControl MainControl \endlink  object before a popup menu is shown.
 					It should be used to update the state of menu entries (e.g. disable or enable entries).
-					@param main_control the \Ref{MainControl} object whose menus should be checked
+					@param main_control the  \link MainControl MainControl \endlink  object whose menus should be checked
 					@see   initializeWidget
 					@see   finalizeWidget
 					@see   show
@@ -170,10 +170,10 @@ namespace BALL
 			/** Initialize a preferences tab.
 					Initialize a preferences tab for the widget (if needed).
 					This method can be used to create preferences widgets that can be inserted
-					into the \Ref{Preferences} dialog with the method \Ref{insertTab}.
-					This method is called automatically by the method \Ref{show} from the 
-					\Ref{MainControl} object at the start of the application.
-					@param preferences the \Ref{Preferences} dialog of the \Ref{MainControl}
+					into the  \link Preferences Preferences \endlink  dialog with the method  \link insertTab insertTab \endlink .
+					This method is called automatically by the method  \link show show \endlink  from the 
+					 \link MainControl MainControl \endlink  object at the start of the application.
+					@param preferences the  \link Preferences Preferences \endlink  dialog of the  \link MainControl MainControl \endlink 
 					@see   finalizePreferencesTab
 					@see   show
 					@see   Preferences
@@ -183,10 +183,10 @@ namespace BALL
 			
 			/**	Remove the preferences tab.
 					This method can remove a preferences widget (if created in 
-					\Ref{initializePreferencesTab})	from the \Ref{Preferences} dialog of the \Ref{MainControl}.
-					This method is called automatically by the method \Ref{aboutToExit} from the
-					\Ref{MainControl} object at the end of the application.
-					@param  preferences the \Ref{Preferences} dialog of the \Ref{MainControl}
+					 \link initializePreferencesTab initializePreferencesTab \endlink )	from the  \link Preferences Preferences \endlink  dialog of the \Ref{MainControl}.
+					This method is called automatically by the method  \link aboutToExit aboutToExit \endlink  from the
+					 \link MainControl MainControl \endlink  object at the end of the application.
+					@param  preferences the  \link Preferences Preferences \endlink  dialog of the  \link MainControl MainControl \endlink 
 					@see    initializePreferencesTab
 					@see    aboutToExit
 					@see    Preferences
@@ -197,10 +197,10 @@ namespace BALL
 			/** Apply the preferences of the specific tab.
 					In this method the widget can extract any changed values from
 					its preferences tab (if required).
-					This method is called automatically by the \Ref{applyPreferencesTab} from the
-					\Ref{MainControl} object if the apply button in the \Ref{Preferences} dialog
+					This method is called automatically by the  \link applyPreferencesTab applyPreferencesTab \endlink  from the
+					 \link MainControl MainControl \endlink  object if the apply button in the  \link Preferences Preferences \endlink  dialog
 					is pressed.
-					@param  preferences the \Ref{Preferences} dialog of the \Ref{MainControl}
+					@param  preferences the  \link Preferences Preferences \endlink  dialog of the  \link MainControl MainControl \endlink 
 					@see    initializePreferencesTab
 					@see    finalizePreferencesTab
 					@see    MainControl
@@ -211,11 +211,11 @@ namespace BALL
 				throw();
 			
 			/** Fetch the widgets preferences from the inifile.
-					This method extracts the default values from the given \Ref{INIFile}
-					{\em inifile} (as written to the inifile in the \Ref{fetchPreferences} method).
-					This method is called automatically by the method \Ref{show} from the 
-					\Ref{MainControl} object at the start of the application.
-					@param  inifile the \Ref{INIFile} that contains the needed values
+					This method extracts the default values from the given  \link INIFile INIFile \endlink 
+					{\em inifile} (as written to the inifile in the  \link fetchPreferences fetchPreferences \endlink  method).
+					This method is called automatically by the method  \link show show \endlink  from the 
+					 \link MainControl MainControl \endlink  object at the start of the application.
+					@param  inifile the  \link INIFile INIFile \endlink  that contains the needed values
 					@see    writePreferences
 					@see    initializePreferencesTab
 					@see    finalizePreferencesTab
@@ -228,10 +228,10 @@ namespace BALL
 			
 			/** Writes the widgets preferences to the inifile.
 					This method should write all needed values to the given inifile (as read from
-					the inifile in the \Ref{fetchPreferences} method).
-					This method is called automatically by the method \Ref{aboutToExit} from the 
-					\Ref{MainControl} object at the end of the application.
-					@param  inifile the \Ref{INIFile} that contains the needed values
+					the inifile in the  \link fetchPreferences fetchPreferences \endlink  method).
+					This method is called automatically by the method  \link aboutToExit aboutToExit \endlink  from the 
+					 \link MainControl MainControl \endlink  object at the end of the application.
+					@param  inifile the  \link INIFile INIFile \endlink  that contains the needed values
 					@see    fetchPreferences
 					@see    initializePreferencesTab
 					@see    finalizePreferencesTab

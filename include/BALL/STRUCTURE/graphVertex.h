@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: graphVertex.h,v 1.8 2002/12/17 17:22:08 oliver Exp $
+// $Id: graphVertex.h,v 1.9 2003/02/21 16:06:46 anhi Exp $
 
 #ifndef BALL_STRUCTURE_GRAPHVERTEX_H
 #define BALL_STRUCTURE_GRAPHVERTEX_H
@@ -27,7 +27,7 @@ namespace BALL
 	class GraphTriangle;
 
 	/** Generic GraphVertex Class.
-			{\bf Definition:} \URL{BALL/STRUCTURE/graphVertex.h}
+			<b>Definition:</b> BALL/STRUCTURE/graphVertex.h
 	*/
 	template <typename Vertex, typename Edge, typename Face>
 	class GraphVertex
@@ -163,8 +163,8 @@ namespace BALL
 		/** Join two GraphVertices if they are similar.
 				All edges and faces of the given Vertex are inserted.
 				@param	vertex	the Vertex to join with
-				@return	bool		{\bf true} if the vertices can be joined,
-												{\bf false} otherwise
+				@return	bool		<b>true</b> if the vertices can be joined,
+												<b>false</b> otherwise
 		*/
 		bool join(const Vertex& vertex)
 			throw();
@@ -172,8 +172,8 @@ namespace BALL
 		/** Subsitute the GraphVertex by a similar one.
 				The GraphVertex is substituted in all his Edges and Faces.
 				@param	vertex	a pointer to the vertex to substitute
-				@return	bool		{\bf true} if the vertex can be substituted,
-												{\bf false} otherwise
+				@return	bool		<b>true</b> if the vertex can be substituted,
+												<b>false</b> otherwise
 		*/
 		bool substitute(Vertex* vertex)
 			throw();
@@ -185,33 +185,33 @@ namespace BALL
 		//@{
 
 		/**	Equality operator.
-				@return	bool	{\bf true}
+				@return	bool	<b>true</b>
 		*/
 		virtual bool operator == (const Vertex&) const
 			throw();
 
 		/**	Inequality operator.
-				@return	bool	{\bf false}
+				@return	bool	<b>false</b>
 		*/
 		virtual bool operator != (const Vertex&) const
 			throw();
 
 		/**	Similarity operator.
-				@return	bool	{\bf true}
+				@return	bool	<b>true</b>
 		*/
 		virtual bool operator *= (const Vertex&) const
 			throw();
 
 		/**	Test whether the vertex is meber of a given face.
 				@param	face	a pointer to the the face to be tested
-				@return	Face*	a pointer to the face if it exists, otherwise {\bf NULL}
+				@return	Face*	a pointer to the face if it exists, otherwise <b>NULL</b>
 		*/
 		Face* has(Face* face) const
 			throw();
 
 		/**	Test whether the vertex is meber of a given edge.
 				@param	edge	a pointer to the edge to be tested
-				@return	Edge*	a pointer to the edge if it exists, otherwise {\bf NULL}
+				@return	Edge*	a pointer to the edge if it exists, otherwise <b>NULL</b>
 		*/
 		Edge* has(Edge* edge) const
 			throw();

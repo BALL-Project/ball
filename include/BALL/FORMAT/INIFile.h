@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: INIFile.h,v 1.27 2002/12/12 09:48:44 oliver Exp $
+// $Id: INIFile.h,v 1.28 2003/02/21 16:02:50 anhi Exp $
 
 #ifndef BALL_FORMAT_INIFILE_H
 #define BALL_FORMAT_INIFILE_H
@@ -29,8 +29,8 @@ namespace BALL
 
 	/**	INIFile.
 			This class provides support to read and evaluate
-			the contents of Windows-style INI files.\\
-			{\bf Definition:}	\URL{BALL/FORMAT/INIFile.h}
+			the contents of Windows-style INI files. \par
+			<b>Definition:</b>	BALL/FORMAT/INIFile.h
 	*/
 	class INIFile
 	{
@@ -342,14 +342,14 @@ namespace BALL
 		virtual ~INIFile();
 
 		/**	Destroy the contents of the object.
-				{\tt Destroy} calls {\tt clear} and also resets
+				<tt>Destroy</tt> calls <tt>clear</tt> and also resets
 				the filename to the empty string and invalidates the object.
 		*/
 		void destroy();
 
 		/**	Clear the internal datastructures.
-				{\tt Clear} frees all allocated memory but retains the
-				filename set for the {\tt INIFile} object.
+				<tt>Clear</tt> frees all allocated memory but retains the
+				filename set for the <tt>INIFile</tt> object.
 		*/
 		void clear();
 
@@ -363,18 +363,18 @@ namespace BALL
 				This method destroys all existing data in memory and
 				then tries to open the file specified by setFilename.
 				If the file could not be opened, the method returns immediately false,
-				leaving the INIFile instance in invalid state (as returned by \Ref{isValid}). \\
+				leaving the INIFile instance in invalid state (as returned by  \link isValid isValid \endlink ).  \par
 				If the file could be opened, the whole file is read into an 
 				internal buffer and the different sections are interpreted.
 				Then, internal datastructures for fast acces to the stored data
-				are built (hash table containing the sections).\\
+				are built (hash table containing the sections). \par
 				Line starting with '!', ';', or '\#' are treated as comment
 				lines and are stored, but not interpreted.
 				Key-names and values are trimmed.
 				If a line starts with "[", but no closing bracket occurs, false is returned.
 				@return	bool \begin{itemize}
-												\item {\bf true} if the file could be opened and read
-												\item {\bf false} otherwise
+												\item <b>true</b> if the file could be opened and read
+												\item <b>false</b> otherwise
 											\end{itemize}
 		*/	
 		bool read();
@@ -382,8 +382,8 @@ namespace BALL
 		/**	Writes the buffer contents to a file.
 				If the file could not be writen, valid_ is set to false, ow true.
 				@return	bool - \begin{itemize}
-												\item {\bf true} if the file could be succesfully written
-												\item {\bf false} otherwise
+												\item <b>true</b> if the file could be succesfully written
+												\item <b>false</b> otherwise
 											\end{itemize}
 		*/	
 		bool write();
@@ -412,15 +412,15 @@ namespace BALL
 		//@}
 		/** @name	Methods for line-wise access.	
 				The INI file can be accessed line-wise (ignoring the section structure). 
-				Each line can be accessed via its index (starting with 0)	by \Ref{getLine} 
-				and modified by \Ref{setLine}. 
-				The index has to be less than	the value returned by \Ref{getNumberOfLines}.
+				Each line can be accessed via its index (starting with 0)	by  \link getLine getLine \endlink  
+				and modified by  \link setLine setLine \endlink . 
+				The index has to be less than	the value returned by  \link getNumberOfLines getNumberOfLines \endlink .
 		*/
 		//@{	
 
 		/**	Return the contents of the specified line.
-				If the {\bf line_number} given is not valid (less than
-				0 or greater or equal to the number returned by \Ref{getNumberOfLines})
+				If the <b>line_number</b> given is not valid (less than
+				0 or greater or equal to the number returned by  \link getNumberOfLines getNumberOfLines \endlink )
 				a non-valid iterator is returned.
 				Use of this method is not recommended, because in the worst case, it could
 				be O(n).
@@ -436,7 +436,7 @@ namespace BALL
 		//@{		
 		
 		/**	Change the contents of a line.
-				Replaces the line given by {\bf line_it} by the text in {\bf line}.
+				Replaces the line given by <b>line_it</b> by the text in <b>line</b>.
 				Section lines cannot be changed with this method.
 				If the line contains a key, the old one is deleted and the new one
 				(if any) is set.
@@ -444,8 +444,8 @@ namespace BALL
 				@param	line_it iterator to the line to change
 				@param	line new content of the line
 				@return	bool \begin{itemize}
-											\item {\bf true} if line_it is valid
-											\item {\bf false} otherwise
+											\item <b>true</b> if line_it is valid
+											\item <b>false</b> otherwise
 										\end{itemize}
 		*/	
 		bool setLine(LineIterator line_it, const String& line);
@@ -475,7 +475,7 @@ namespace BALL
 		//@{		
 
 		/** Append a line to a section.
-				To add a line to the HEADER use {\bf INIFile::HEADER} as section_name.
+				To add a line to the HEADER use <b>INIFile::HEADER</b> as section_name.
 				If the given section does not exists, false is returned.
 				Lines starting with "[" cannot be added (to prevent problems with
 				section headers).
@@ -497,8 +497,8 @@ namespace BALL
 		/**	Queries for a certain section.
 				@param	section_name	the name of the section (without square brackets)
 				@return bool \begin{itemize}
-											\item {\bf true} if the section exists (is hashed!)
-											\item {\bf false}	if the section could not be found
+											\item <b>true</b> if the section exists (is hashed!)
+											\item <b>false</b>	if the section could not be found
 										\end{itemize}
 		*/	
 		bool hasSection(const String& section_name) const;
@@ -571,8 +571,8 @@ namespace BALL
 
 		/**	Check whether the given section contains a certain key.
 				@return	bool \begin{itemize}
-											\item {\bf true} if the key could be found in the section, 
-											\item {\bf false} if either key or section didn't exist
+											\item <b>true</b> if the key could be found in the section, 
+											\item <b>false</b> if either key or section didn't exist
 										 \end{itemize}
 				@param	section	the section to look in for the key
 				@param	key the key to look for
@@ -583,10 +583,10 @@ namespace BALL
 				If no value exists for the given key, or either the section or 
 				the key are not defined, an empty string is returned.
 				@param	section	the section name to look in for the key
-				@param	key a key in the {\bf section}
+				@param	key a key in the <b>section</b>
 				@return	String \begin{itemize} 
-												\item the value corresponding to the {\bf key} in {\bf section}
-												\item or \Ref{UNDEFINED}
+												\item the value corresponding to the <b>key</b> in <b>section</b>
+												\item or  \link UNDEFINED UNDEFINED \endlink 
 											 \end{itemize}
 		*/	
 		String getValue(const String& section, const String& key) const;
@@ -598,8 +598,8 @@ namespace BALL
 				@param	key	the key to look for
 				@param	value the new value
 				@return	bool - \begin{itemize}
-									\item {\bf true} if the value was changed
-									\item {\bf false} if key or section do not exist
+									\item <b>true</b> if the value was changed
+									\item <b>false</b> if key or section do not exist
 								\end{itemize}
 		*/	
 		bool setValue(const String& section, const String& key, const String& value);
@@ -610,8 +610,8 @@ namespace BALL
 				@param	key	the key to insert
 				@param	value the new value
 				@return	bool - \begin{itemize}
-									\item {\bf true} if the value was inserted
-									\item {\bf false} if key or section do not exist
+									\item <b>true</b> if the value was inserted
+									\item <b>false</b> if key or section do not exist
 								\end{itemize}
 		*/
 		bool insertValue(const String& section, const String& key, const String& value);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glBallAndStickModel.h,v 1.7 2002/12/12 09:48:51 oliver Exp $
+// $Id: glBallAndStickModel.h,v 1.8 2003/02/21 16:05:15 anhi Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLBALLANDSTICKMODEL_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_GLBALLANDSTICKMODEL_H
@@ -30,12 +30,12 @@ namespace BALL
 
 		/** AddGLBallAndStickModel class.
 				The class AddGLBallAndStickModel is derived from the class 
-				\Ref{AddBallAndStickModel} and extents this class by overriding the creation
+				 \link AddBallAndStickModel AddBallAndStickModel \endlink  and extents this class by overriding the creation
 				methods used for creating the primitives. These new primitives contain
 				OpenGL implementation to generate the graphical visualization of geometric
 				shapes they present.
-				This class has the same functionality as its base class \Ref{AddBallAndStickModel}.
-				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/FUNCTOR/glBallAndStickModel.h}
+				This class has the same functionality as its base class  \link AddBallAndStickModel AddBallAndStickModel \endlink .
+				<b>Definition:</b> BALL/MOLVIEW/GUI/FUNCTOR/glBallAndStickModel.h
 		*/
 		class AddGLBallAndStickModel: public AddBallAndStickModel
 		{
@@ -58,7 +58,7 @@ namespace BALL
 					{\em add_GL_ball_and_stick_model}. Initializes the state of {\em this} 
 					addGLBallAndStickModel to the state of {\em add_GL_ball_and_stick_model}.
 					@param       add_GL_ball_and_stick_model the addGLBallAndStickModel to be copied
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em add_GL_ball_and_stick_model}
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of {\em add_GL_ball_and_stick_model}
 					@return      AddGLBallAndStickModel new addGLBallAndStickModel copied from {\em add_GL_ball_and_stick_model}
 					@see         AddBallAndStickModel
 			*/
@@ -74,7 +74,7 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} addGLBallAndStickModel.
-					Calls \Ref{AddBallAndStickModel::destroy}.
+					Calls  \link AddBallAndStickModel::destroy AddBallAndStickModel::destroy \endlink .
 					@see  AddBallAndStickModel
 			*/
 			virtual ~AddGLBallAndStickModel()
@@ -88,16 +88,16 @@ namespace BALL
 					for generating the graphical representation of the shapes they
 					represent.
 					This methods are overridden methods of the base class 
-					\Ref{AddBallAndStickModel}.
+					 \link AddBallAndStickModel AddBallAndStickModel \endlink .
 					@see  AddBallAndStickModel
 			*/
 			//@{
 			/** Creates a sphere.
-					Creates a \Ref{GLSphere} object and returns it as \Ref{Sphere}.
-					This overridden method of the class \Ref{AddBallAndStickModel} creates
+					Creates a  \link GLSphere GLSphere \endlink  object and returns it as  \link Sphere Sphere \endlink .
+					This overridden method of the class  \link AddBallAndStickModel AddBallAndStickModel \endlink  creates
 					a primitive with openGL implementation.
-					The method \Ref{operator()} uses this method to create a sphere
-					for each \Ref{Atom} object.
+					The method  \link operator() operator() \endlink  uses this method to create a sphere
+					for each  \link Atom Atom \endlink  object.
 					@see  GLSphere
 					@see  Sphere
 					@see  AddBallAndStickModel
@@ -106,11 +106,11 @@ namespace BALL
 			virtual Sphere* createSphere_();
 		 
 			/** Creates a one colored tube.
-					Creates a \Ref{GLTube} object and returns it as \Ref{Tube}.
-					This overridden method of the class \Ref{AddBallAndStickModel} creates
+					Creates a  \link GLTube GLTube \endlink  object and returns it as  \link Tube Tube \endlink .
+					This overridden method of the class  \link AddBallAndStickModel AddBallAndStickModel \endlink  creates
 					a primitive with openGL implementation.
-					The method \Ref{operator()} uses this method to create one colored
-					tubes for \Ref{Bond} objects whose \Ref{Atom} objects have the same
+					The method  \link operator() operator() \endlink  uses this method to create one colored
+					tubes for  \link Bond Bond \endlink  objects whose  \link Atom Atom \endlink  objects have the same
 					element types and thus the same color.
 					@see  GLTube
 					@see  Tube
@@ -121,11 +121,11 @@ namespace BALL
 			virtual Tube* createTube_();
 		 
 			/** Creates a two colored tube.
-					Creates a \Ref{GLTwoColoredTube} object and returns it as \Ref{TwoColoredTube}.
-					This overridden method of the class \Ref{AddBallAndStickModel} creates
+					Creates a  \link GLTwoColoredTube GLTwoColoredTube \endlink  object and returns it as  \link TwoColoredTube TwoColoredTube \endlink .
+					This overridden method of the class  \link AddBallAndStickModel AddBallAndStickModel \endlink  creates
 					a primitive with openGL implementation.
-					The method \Ref{operator()} uses this method to create two colored
-					tubes for \Ref{Bond} objects whose \Ref{Atom} objects have different
+					The method  \link operator() operator() \endlink  uses this method to create two colored
+					tubes for  \link Bond Bond \endlink  objects whose  \link Atom Atom \endlink  objects have different
 					element types and thus different colors.
 					@see  GLTwoColoredTube
 					@see  TwoColoredTube

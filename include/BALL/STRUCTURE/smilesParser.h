@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smilesParser.h,v 1.5 2002/12/12 09:48:55 oliver Exp $
+// $Id: smilesParser.h,v 1.6 2003/02/21 16:06:55 anhi Exp $
 
 #ifndef BALL_STRUCTURE_SMILES_PARSER_H
 #define BALL_STRUCTURE_SMILES_PARSER_H
@@ -30,10 +30,10 @@ namespace BALL
 			however are all zero! The system contains only connectivity data (topology) of
 			the molecule. At this time, there's no support in BALL to convert this 2D data
 			automatically to 3D data.
-			\\
-			{\bf Definition:} \URL{BALL/STRUCTURE/smilesParser.h}
-			\\
-			{\bf Status:} {\bf experimental}\\
+			 \par
+			<b>Definition:</b> BALL/STRUCTURE/smilesParser.h
+			 \par
+			<b>Status:</b> <b>experimental</b> \par
 			
 	*/
 	class SmilesParser

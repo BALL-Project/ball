@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: predicate.h,v 1.10 2003/01/08 21:13:25 oliver Exp $
+// $Id: predicate.h,v 1.11 2003/02/21 16:03:32 anhi Exp $
 
 #ifndef BALL_KERNEL_PREDICATE_H
 #define BALL_KERNEL_PREDICATE_H
@@ -22,23 +22,23 @@ namespace BALL
 {
 
 	/**	@name	Kernel predicates
-			This chapter describes a set of unary predicates acting on \Ref{Composites}, that
-			can be used to identify the class type of a composite at runtime.\\
-			This predicates are functionally similar to the \Ref{RTTI:isKindOf} function.
+			This chapter describes a set of unary predicates acting on  \link Composites Composites \endlink , that
+			can be used to identify the class type of a composite at runtime. \par
+			This predicates are functionally similar to the  \link RTTI:isKindOf RTTI:isKindOf \endlink  function.
 			They decide whether a given composite is an instance of a certain class (or of
-			a class derived thereof). For instance, the application of a \Ref{MoleculePredicate}
-			to a composite will yield {\bf true}, if the given composite was an instance of \Ref{Molecule}
-			(or \Ref{Protein}, as Protein is derived from Molecule). Otherwise false is returned.\\
+			a class derived thereof). For instance, the application of a  \link MoleculePredicate MoleculePredicate \endlink 
+			to a composite will yield <b>true</b>, if the given composite was an instance of  \link Molecule Molecule \endlink 
+			(or  \link Protein Protein \endlink , as Protein is derived from Molecule). Otherwise false is returned. \par
 			Each KernelPredicate possesses three methods:
 			\begin{itemize}
-				\item{\bf operator (const Composite&)}
-				\item{\bf operator (const Composite&) const}
+				\item<b>operator (const Composite&)</b>
+				\item<b>operator (const Composite&) const</b>
 			\end{itemize}
 			The two operators are functionally identical (two methods are needed, because the class
 			is derived from TUnaryPredicate and we want to make sure both methods are overwritten).
-			{\bf operator()} returns true, if the given composite is a kind of the class corresponding 
-			to the respective predicate, false otherwise.\\
-			{\bf Definition:} \URL{BALL/KERNEL/predicate.h}
+			<b>operator()</b> returns true, if the given composite is a kind of the class corresponding 
+			to the respective predicate, false otherwise. \par
+			<b>Definition:</b> BALL/KERNEL/predicate.h
 			@see	UnaryPredicate
 			@see	RTTI	
 	*/

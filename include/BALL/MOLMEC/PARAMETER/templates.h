@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: templates.h,v 1.7 2002/02/27 12:19:08 sturm Exp $
+// $Id: templates.h,v 1.8 2003/02/21 16:04:47 anhi Exp $
 // Molecular Mechanics Parameter: class describing the atom type section of a parameter file
 
 #ifndef BALL_MOLMEC_PARAMETER_TEMPLATES_H
@@ -19,7 +19,7 @@ namespace BALL
 {
 
 	/**	Force Field Residue Template Class.	
-			{\bf Definition:} \URL{BALL/MOLMEC/PARAMETER/templates.h}
+			<b>Definition:</b> BALL/MOLMEC/PARAMETER/templates.h
 	*/
 	class Templates 
 		:	public ParameterSection
@@ -55,7 +55,7 @@ namespace BALL
 				This method reads the section given in section_name from ini_file,
 				interprets (if given) a format line, reads the data from this section according to 
 				the format, and builds some datastructures for fast and easy acces this data.
-				The section is typically entitled {\bf ChargesAndTypeNames}.
+				The section is typically entitled <b>ChargesAndTypeNames</b>.
 		*/
 		virtual bool extractSection(Parameters& parameters, const String& section_name);
 
@@ -90,7 +90,7 @@ namespace BALL
 		//@{
 
 		/**	Assignment operator.
-				Copy the contents of {\tt templates} into {\tt this} residue template object.
+				Copy the contents of <tt>templates</tt> into <tt>this</tt> residue template object.
 				@param	templates the residue template object to be copied
 		*/
 		Templates& operator = (const Templates& templates);

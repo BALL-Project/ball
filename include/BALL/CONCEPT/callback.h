@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: callback.h,v 1.4 2002/02/27 12:18:23 sturm Exp $
+// $Id: callback.h,v 1.5 2003/02/21 16:01:28 anhi Exp $
 
 #ifndef BALL_CONCEPT_CALLBACK_H
 #define BALL_CONCEPT_CALLBACK_H
@@ -14,7 +14,7 @@ namespace BALL
 {
 
 	/**	Callback class.
-			{\bf Definition:} \URL{BALL/CONCEPT/callback.h}
+			<b>Definition:</b> BALL/CONCEPT/callback.h
 	*/
 	class Callback
 	{

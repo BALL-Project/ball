@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glObjectCollector.h,v 1.9 2002/12/20 16:27:47 anhi Exp $
+// $Id: glObjectCollector.h,v 1.10 2003/02/21 16:07:23 anhi Exp $
 
 #ifndef BALL_VIEW_GUI_FUNCTOR_GLOBJECTCOLLECTOR_H
 #define BALL_VIEW_GUI_FUNCTOR_GLOBJECTCOLLECTOR_H
@@ -19,14 +19,14 @@ namespace BALL
 	namespace VIEW
 	{
 		/** GLObjectCollector class.
-				The class GLObjectCollector is responsible for collecting the \Ref{GLObject}
-				objects that are found in a \Ref{Composite} tree for the later processing
-				in the render engine \Ref{CompositeDescriptor}. The \Ref{GLObject} objects
+				The class GLObjectCollector is responsible for collecting the  \link GLObject GLObject \endlink 
+				objects that are found in a  \link Composite Composite \endlink  tree for the later processing
+				in the render engine  \link CompositeDescriptor CompositeDescriptor \endlink . The  \link GLObject GLObject \endlink  objects
 				are separated into different visualization groups (=lists) that are necessary
 				for proper rendering.
-				This class will be used internally from the \Ref{CompositeDescriptor} class
-				to collect {\em *this} objects. \\
-				{\bf Defintion:} \URL{BALL/VIEW/GUI/FUNCTOR/glObjectCollector.h}\\
+				This class will be used internally from the  \link CompositeDescriptor CompositeDescriptor \endlink  class
+				to collect {\em *this} objects.  \par
+				<b>Defintion:</b> BALL/VIEW/GUI/FUNCTOR/glObjectCollector.h
 		*/
 		class GLObjectCollector
 			: public UnaryProcessor<Composite>
@@ -39,8 +39,8 @@ namespace BALL
 
 			/** Default Constructor.
 					Construct new glObjectCollector.
-					The state of {\em *this} glObjectCollector is: all \Ref{GLObject} lists
-					are empty and the root composite is set to {\tt 0}.
+					The state of {\em *this} glObjectCollector is: all  \link GLObject GLObject \endlink  lists
+					are empty and the root composite is set to <tt>0</tt>.
 					@return GLObjectCollector new constructed glObjectCollector
 					@see    setRootComposite
 					@see    GLObject
@@ -55,14 +55,14 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} glObjectCollector.
-					Calls \Ref{destroy}.
+					Calls  \link destroy destroy \endlink .
 					@see         destroy
 			 */
 			virtual ~GLObjectCollector()
 				throw();
 
 			/** Explicit default initialization.
-					Clears all \Ref{GLObject} lists of {\em *this} glObjectCollector.
+					Clears all  \link GLObject GLObject \endlink  lists of {\em *this} glObjectCollector.
 					@see     GLObject
 			*/
 			virtual void clear()
@@ -80,10 +80,10 @@ namespace BALL
 			//@{
 
 			/** Append new glObject to the static list.
-					Append new \Ref{GLObject} to the static list of {\em *this} glObjectCollector.
-					See \Ref{GeometricObject} for information concerning the different
+					Append new  \link GLObject GLObject \endlink  to the static list of {\em *this} glObjectCollector.
+					See  \link GeometricObject GeometricObject \endlink  for information concerning the different
 					properties an object can have.
-					@param  GL_object the \Ref{GLObject} to be appended to the static list of {\em *this} glObjectCollector.
+					@param  GL_object the  \link GLObject GLObject \endlink  to be appended to the static list of {\em *this} glObjectCollector.
 					@see    getStaticList
 					@see    GLObject
 					@see    GeometricObject
@@ -93,7 +93,7 @@ namespace BALL
 
 			/** Mutable inspection of the static list.
 					Access a mutable reference of the static list of {\em *this} glObjectCollector.
-					See \Ref{GeometricObject} for information concerning the different
+					See  \link GeometricObject GeometricObject \endlink  for information concerning the different
 					properties an object can have.
 					@return  list<GLObject*>& mutable reference of the static list of {\em *this} glObjectCollector
 					@see    appendToStaticList
@@ -104,17 +104,17 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the static list.
-					For further information see \Ref{getStaticList}.
+					For further information see  \link getStaticList getStaticList \endlink .
 			*/
 			const list<GLObject *>& getStaticList() const
 				throw();
 
 			/** Append new glObject to the static always front list.
-					Append new \Ref{GLObject} to the static always front list of {\em *this} 
+					Append new  \link GLObject GLObject \endlink  to the static always front list of {\em *this} 
 					glObjectCollector.
-					See \Ref{GeometricObject} for information concerning the different
+					See  \link GeometricObject GeometricObject \endlink  for information concerning the different
 					properties an object can have.
-					@param  GL_object the \Ref{GLObject} to be appended to the static always front list of 
+					@param  GL_object the  \link GLObject GLObject \endlink  to be appended to the static always front list of 
 										{\em *this} glObjectCollector.
 					@see    getStaticAlwaysFrontList
 					@see    GLObject
@@ -126,7 +126,7 @@ namespace BALL
 			/** Mutable inspection of the static always front list.
 					Access a mutable reference of the static always front list of {\em *this}
 					glObjectCollector.
-					See \Ref{GeometricObject} for information concerning the different
+					See  \link GeometricObject GeometricObject \endlink  for information concerning the different
 					properties an object can have.
 					@return  list<GLObject*>& mutable reference of the static always front list of {\em *this} glObjectCollector
 					@see    appendToStaticAlwaysFrontList
@@ -137,17 +137,17 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the static always front list.
-					For further information see \Ref{getStaticAlwaysFrontList}.
+					For further information see  \link getStaticAlwaysFrontList getStaticAlwaysFrontList \endlink .
 			*/
 			const list<GLObject *>& getStaticAlwaysFrontList() const
 				throw();
 
 			/** Append new glObject to the static wireframe list.
-					Append new \Ref{GLObject} to the static wireframe list of {\em *this} 
+					Append new  \link GLObject GLObject \endlink  to the static wireframe list of {\em *this} 
 					glObjectCollector.
-					See \Ref{GeometricObject} for information concerning the different
+					See  \link GeometricObject GeometricObject \endlink  for information concerning the different
 					properties an object can have.
-					@param  GL_object the \Ref{GLObject} to be appended to the static wireframe list of {\em *this} glObjectCollector.
+					@param  GL_object the  \link GLObject GLObject \endlink  to be appended to the static wireframe list of {\em *this} glObjectCollector.
 					@see    getStaticWireframeList
 					@see    GLObject
 					@see    GeometricObject
@@ -158,7 +158,7 @@ namespace BALL
 			/** Mutable inspection of the static wireframe list.
 					Access a mutable reference of the static wireframe list of {\em *this}
 					glObjectCollector.
-					See \Ref{GeometricObject} for information concerning the different
+					See  \link GeometricObject GeometricObject \endlink  for information concerning the different
 					properties an object can have.
 					@return  list<GLObject*>& mutable reference of the static wireframe list of {\em *this} glObjectCollector
 					@see    appendToStaticWireframeList
@@ -169,17 +169,17 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the static wireframe list.
-					For further information see \Ref{getStaticWireframeList}.
+					For further information see  \link getStaticWireframeList getStaticWireframeList \endlink .
 			*/
 			const list<GLObject *>& getStaticWireframeList() const
 				throw();
 
 			/** Append new glObject to the static wireframe always front list.
-					Append new \Ref{GLObject} to the static wireframe always front list of
+					Append new  \link GLObject GLObject \endlink  to the static wireframe always front list of
 					{\em *this} glObjectCollector.
-					See \Ref{GeometricObject} for information concerning the different
+					See  \link GeometricObject GeometricObject \endlink  for information concerning the different
 					properties an object can have.
-					@param  GL_object the \Ref{GLObject} to be appended to the static wireframe always front list of 
+					@param  GL_object the  \link GLObject GLObject \endlink  to be appended to the static wireframe always front list of 
 										{\em *this} glObjectCollector.
 					@see    getStaticWireframeAlwaysFrontList
 					@see    GLObject
@@ -191,7 +191,7 @@ namespace BALL
 			/** Mutable inspection of the static wireframe always front list.
 					Access a mutable reference of the static wireframe always front list of
 					{\em *this} glObjectCollector.
-					See \Ref{GeometricObject} for information concerning the different
+					See  \link GeometricObject GeometricObject \endlink  for information concerning the different
 					properties an object can have.
 					@return  list<GLObject*>& mutable reference of the static wireframe always front list of 
 										{\em *this} glObjectCollector
@@ -203,17 +203,17 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the static wireframe always front list.
-					For further information see \Ref{getStaticWireframeAlwaysFrontList}.
+					For further information see  \link getStaticWireframeAlwaysFrontList getStaticWireframeAlwaysFrontList \endlink .
 			*/
 			const list<GLObject *>& getStaticWireframeAlwaysFrontList() const
 				throw();
 
 			/** Append new glObject to the dynamic list.
-					Append new \Ref{GLObject} to the dynamic list of
+					Append new  \link GLObject GLObject \endlink  to the dynamic list of
 					{\em *this} glObjectCollector.
-					See \Ref{GeometricObject} for information concerning the different
+					See  \link GeometricObject GeometricObject \endlink  for information concerning the different
 					properties an object can have.
-					@param  GL_object the \Ref{GLObject} to be appended to the dynamic list of {\em *this} glObjectCollector.
+					@param  GL_object the  \link GLObject GLObject \endlink  to be appended to the dynamic list of {\em *this} glObjectCollector.
 					@see    getDynamicList
 					@see    GLObject
 					@see    GeometricObject
@@ -222,7 +222,7 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the dynamic list.
-					For further information see \Ref{getDynamicList}.
+					For further information see  \link getDynamicList getDynamicList \endlink .
 			*/
 			const list<GLObject *>& getDynamicList() const
 				throw();
@@ -230,7 +230,7 @@ namespace BALL
 			/** Mutable inspection of the dynamic list.
 					Access a mutable reference of the dynamic list of
 					{\em *this} glObjectCollector.
-					See \Ref{GeometricObject} for information concerning the different
+					See  \link GeometricObject GeometricObject \endlink  for information concerning the different
 					properties an object can have.
 					@return  list<GLObject*>& mutable reference of the dynamic list of {\em *this} glObjectCollector
 					@see    appendToDynamicList
@@ -241,11 +241,11 @@ namespace BALL
 				throw();
 
 			/** Append new glObject to the dynamic wireframe list.
-					Append new \Ref{GLObject} to the dynamic wireframe list of
+					Append new  \link GLObject GLObject \endlink  to the dynamic wireframe list of
 					{\em *this} glObjectCollector.
-					See \Ref{GeometricObject} for information concerning the different
+					See  \link GeometricObject GeometricObject \endlink  for information concerning the different
 					properties an object can have.
-					@param  GL_object the \Ref{GLObject} to be appended to the dynamic wireframe list of {\em *this} glObjectCollector.
+					@param  GL_object the  \link GLObject GLObject \endlink  to be appended to the dynamic wireframe list of {\em *this} glObjectCollector.
 					@see    getDynamicWireframeList
 					@see    GLObject
 					@see    GeometricObject
@@ -256,7 +256,7 @@ namespace BALL
 			/** Mutable inspection of the dynamic wireframe list.
 					Access a mutable reference of the dynamic wireframe list of
 					{\em *this} glObjectCollector.
-					See \Ref{GeometricObject} for information concerning the different
+					See  \link GeometricObject GeometricObject \endlink  for information concerning the different
 					properties an object can have.
 					@return  list<GLObject*>& mutable reference of the dynamic wireframe list of {\em *this} glObjectCollector
 					@see    appendToDynamicWireframeList
@@ -267,17 +267,17 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the dynamic wireframe list.
-					For further information see \Ref{getDynamicWireframeList}.
+					For further information see  \link getDynamicWireframeList getDynamicWireframeList \endlink .
 			*/
 			const list<GLObject *>& getDynamicWireframeList() const
 				throw();
 
 			/** Append new glObject to the dynamic wireframe always front list.
-					Append new \Ref{GLObject} to the dynamic wireframe always front list of
+					Append new  \link GLObject GLObject \endlink  to the dynamic wireframe always front list of
 					{\em *this} glObjectCollector.
-					See \Ref{GeometricObject} for information concerning the different
+					See  \link GeometricObject GeometricObject \endlink  for information concerning the different
 					properties an object can have.
-					@param  GL_object the \Ref{GLObject} to be appended to the dynamic wireframe always front list of 
+					@param  GL_object the  \link GLObject GLObject \endlink  to be appended to the dynamic wireframe always front list of 
 										{\em *this} glObjectCollector.
 					@see    getDynamicWireframeAlwaysFrontList
 					@see    GLObject
@@ -289,7 +289,7 @@ namespace BALL
 			/** Mutable inspection of the dynamic wireframe always front list.
 					Access a mutable reference of the dynamic wireframe always front list of
 					{\em *this} glObjectCollector.
-					See \Ref{GeometricObject} for information concerning the different
+					See  \link GeometricObject GeometricObject \endlink  for information concerning the different
 					properties an object can have.
 					@return  list<GLObject*>& mutable reference of the dynamic wireframe always front list of {\em *this} glObjectCollector
 					@see    appendToDynamicWireframeAlwaysFrontList
@@ -300,17 +300,17 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the dynamic wireframe always front list.
-					For further information see \Ref{getDynamicAlwaysFrontList}.
+					For further information see  \link getDynamicAlwaysFrontList getDynamicAlwaysFrontList \endlink .
 			*/
 			const list<GLObject *>& getDynamicWireframeAlwaysFrontList() const
 				throw();
 
 			/** Append new glObject to the dynamic always front list.
-					Append new \Ref{GLObject} to the dynamic always front list of
+					Append new  \link GLObject GLObject \endlink  to the dynamic always front list of
 					{\em *this} glObjectCollector.
-					See \Ref{GeometricObject} for information concerning the different
+					See  \link GeometricObject GeometricObject \endlink  for information concerning the different
 					properties an object can have.
-					@param  GL_object the \Ref{GLObject} to be appended to the dynamic always front list of 
+					@param  GL_object the  \link GLObject GLObject \endlink  to be appended to the dynamic always front list of 
 										{\em *this} glObjectCollector.
 					@see    getDynamicAlwaysFrontList
 					@see    GLObject
@@ -322,7 +322,7 @@ namespace BALL
 			/** Mutable inspection of the dynamic always front list.
 					Access a mutable reference of the dynamic always front list of
 					{\em *this} glObjectCollector.
-					See \Ref{GeometricObject} for information concerning the different
+					See  \link GeometricObject GeometricObject \endlink  for information concerning the different
 					properties an object can have.
 					@return  list<GLObject*>& mutable reference of the dynamic always front list of {\em *this} glObjectCollector
 					@see    appendToDynamicAlwaysFrontList
@@ -333,17 +333,17 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the dynamic always front list.
-					For further information see \Ref{getDynamicAlwaysFrontList}.
+					For further information see  \link getDynamicAlwaysFrontList getDynamicAlwaysFrontList \endlink .
 			*/
 			const list<GLObject *>& getDynamicAlwaysFrontList() const
 				throw();
 
 			/** Append new glObject to the transparent list.
-					Append new \Ref{GLObject} to the transparent list of
+					Append new  \link GLObject GLObject \endlink  to the transparent list of
 					{\em *this} glObjectCollector.
-					See \Ref{GeometricObject} for information concerning the different
+					See  \link GeometricObject GeometricObject \endlink  for information concerning the different
 					properties an object can have.
-					@param  GL_object the \Ref{GLObject} to be appended to the transparent list of {\em *this} glObjectCollector.
+					@param  GL_object the  \link GLObject GLObject \endlink  to be appended to the transparent list of {\em *this} glObjectCollector.
 					@see    getTransparentList
 					@see    GLObject
 					@see    GeometricObject
@@ -354,7 +354,7 @@ namespace BALL
 			/** Mutable inspection of the transparent list.
 					Access a mutable reference of the transparent list of
 					{\em *this} glObjectCollector.
-					See \Ref{GeometricObject} for information concerning the different
+					See  \link GeometricObject GeometricObject \endlink  for information concerning the different
 					properties an object can have.
 					@return  list<GLObject*>& mutable reference of the transparent list of {\em *this} glObjectCollector
 					@see    appendToTransparentList
@@ -365,17 +365,17 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the transparent list.
-					For further information see \Ref{getTransparentList}.
+					For further information see  \link getTransparentList getTransparentList \endlink .
 			*/
 			const list<GLObject *>& getTransparentList() const
 				throw();
 
 			/** Append new glObject to the transparent always front list.
-					Append new \Ref{GLObject} to the transparent always front list of
+					Append new  \link GLObject GLObject \endlink  to the transparent always front list of
 					{\em *this} glObjectCollector.
-					See \Ref{GeometricObject} for information concerning the different
+					See  \link GeometricObject GeometricObject \endlink  for information concerning the different
 					properties an object can have.
-					@param  GL_object the \Ref{GLObject} to be appended to the transparent always front list of 
+					@param  GL_object the  \link GLObject GLObject \endlink  to be appended to the transparent always front list of 
 										{\em *this} glObjectCollector.
 					@see    getTransparentAlwaysFrontList
 					@see    GLObject
@@ -387,7 +387,7 @@ namespace BALL
 			/** Mutable inspection of the transparent always front list.
 					Access a mutable reference of the transparent always front list of
 					{\em *this} glObjectCollector.
-					See \Ref{GeometricObject} for information concerning the different
+					See  \link GeometricObject GeometricObject \endlink  for information concerning the different
 					properties an object can have.
 					@return  list<GLObject*>& mutable reference of the transparent always front list of {\em *this} glObjectCollector
 					@see    appendToTransparentAlwaysFrontList
@@ -398,17 +398,17 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the transparent always front list.
-					For further information see \Ref{getTransparentAlwaysFrontList}.
+					For further information see  \link getTransparentAlwaysFrontList getTransparentAlwaysFrontList \endlink .
 			*/
 			const list<GLObject *>& getTransparentAlwaysFrontList() const
 				throw();
 
 			/** Change the root composite.
-					Change the root \Ref{Composite} object of {\em *this} glObjectCollector.
-					This method is used internally from the \Ref{CompositeDescriptor} object. In the
-					\Ref{CompositeDescriptor} the \Ref{Composite} object that {\em *this}
+					Change the root  \link Composite Composite \endlink  object of {\em *this} glObjectCollector.
+					This method is used internally from the  \link CompositeDescriptor CompositeDescriptor \endlink  object. In the
+					 \link CompositeDescriptor CompositeDescriptor \endlink  the  \link Composite Composite \endlink  object that {\em *this}
 					glObjectCollector is applied on is stored with this method for later use.
-					@param  composite pointer to the new root \Ref{Composite} object of {\em *this} glObjectCollector
+					@param  composite pointer to the new root  \link Composite Composite \endlink  object of {\em *this} glObjectCollector
 					@see    getRootComposite
 					@see    Composite
 			*/
@@ -416,8 +416,8 @@ namespace BALL
 				throw();
 
 			/** Inspection of the root composite.
-					Access the root \Ref{Composite} object of {\em *this} glObjectCollector.
-					@return  Composite* the constant pointer to the root \Ref{Composite} object of {\em *this} glObjectCollector
+					Access the root  \link Composite Composite \endlink  object of {\em *this} glObjectCollector.
+					@return  Composite* the constant pointer to the root  \link Composite Composite \endlink  object of {\em *this} glObjectCollector
 					@see     setRootComposite
 					@see     Composite
 			*/
@@ -429,8 +429,8 @@ namespace BALL
 			*/
 			//@{
 			/** Start method.
-					Calls \Ref{clear}.
-					@return bool {\tt true} if the start of {\em *this} glObjectCollector was successful, {\tt false} otherwise
+					Calls  \link clear clear \endlink .
+					@return bool <tt>true</tt> if the start of {\em *this} glObjectCollector was successful, <tt>false</tt> otherwise
 			*/
 			virtual bool start()
 				throw();
@@ -438,16 +438,16 @@ namespace BALL
 			/** Finish method.
 					Empty for further purpose. Override this method for finalizing
 					the glObjectCollector.
-					@return bool {\tt true} if the finish of {\em *this} glObjectCollector was successful, {\tt false} otherwise
+					@return bool <tt>true</tt> if the finish of {\em *this} glObjectCollector was successful, <tt>false</tt> otherwise
 			*/
 			virtual bool finish()
 				throw();
 			
 			/**	Operator ().
-					Traverse the \Ref{Composite} tree with the start \Ref{Composite} {\em composite}
-					and search for \Ref{GeometricObject} objects that are also of kind \Ref{GLObject}.
+					Traverse the  \link Composite Composite \endlink  tree with the start  \link Composite Composite \endlink  {\em composite}
+					and search for  \link GeometricObject GeometricObject \endlink  objects that are also of kind  \link GLObject GLObject \endlink .
 					According to their property they will be collected into the appropriate lists.
-					@param  composite the \Ref{Composite} to be searched for \Ref{GLObject} objects
+					@param  composite the  \link Composite Composite \endlink  to be searched for  \link GLObject GLObject \endlink  objects
 					@return Processor::Result the result of {\em *this} glObjectCollector
 					@see    appendToStaticList
 					@see    appendToStaticAlwaysFrontList

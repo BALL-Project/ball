@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.h,v 1.14 2003/02/04 14:26:57 oliver Exp $ 
+// $Id: conjugateGradient.h,v 1.15 2003/02/21 16:04:33 anhi Exp $ 
 
 #ifndef BALL_MOLMEC_MINIMIZATION_CONJUGATEGRADIENT_H 
 #define BALL_MOLMEC_MINIMIZATION_CONJUGATEGRADIENT_H 
@@ -55,7 +55,7 @@ namespace BALL
 { 
 
 	/**	Conjugate gradient (CG) minimizer. 
-			{\bf Definition:} \URL{BALL/MOLMEC/MINIMIZATION/conjugateGradient.h} \\
+			<b>Definition:</b> BALL/MOLMEC/MINIMIZATION/conjugateGradient.h
 			A conjugate gradient minimizer for geometry optimisation.
 	*/
   class ConjugateGradientMinimizer 
@@ -188,8 +188,8 @@ namespace BALL
 				If this fails again, the step width is reduced by an order of
 				magnitude and a last line search is performed along ths negative
 				gradient.
-				The best solution found is stored in {\tt lambda_}.
-				@return	bool {\bf true} if the line search found an acceptable solution
+				The best solution found is stored in <tt>lambda_</tt>.
+				@return	bool <b>true</b> if the line search found an acceptable solution
 				@see	EnergyMinimizer::findStep
 		*/
 		virtual double findStep();
@@ -201,11 +201,11 @@ namespace BALL
 		virtual void updateDirection();
 
     /**	Minimize the energy of the system.
-				This method executes at most {\tt iterations} minimization steps.
+				This method executes at most <tt>iterations</tt> minimization steps.
 				If the number of iterations is not given, the number specified in the
 				options is taken.
 				@param	iterations the maximum number of iterations
-				@param	restart {\bf true} if the minimization is restarted
+				@param	restart <b>true</b> if the minimization is restarted
 				@see		EnergyMinimizer::minimize
     */
     virtual bool minimize(Size iterations = 0, bool restart = false); 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: function.h,v 1.17 2003/01/07 14:14:52 amoll Exp $
+// $Id: function.h,v 1.18 2003/02/21 16:03:49 anhi Exp $
 
 #ifndef BALL_MATHS_FUNCTION_H
 #define BALL_MATHS_FUNCTION_H
@@ -14,7 +14,7 @@ namespace BALL
 {
 	/** Constant function class. This function represents a constant that is
 			already known at compile time. 
-			{\bf Definition:} \URL{BALL/MATHS/function.h}
+			<b>Definition:</b> BALL/MATHS/function.h
 	*/
 	// ????? float templates sind nicht ANSI.
 	template <int constant_template>
@@ -47,8 +47,8 @@ namespace BALL
 
 	/** Constant function class. 
 			This class represents constants that are not known at 
-			compile time but must be set at running time. \\
-			{\bf Definition:} \URL{BALL/MATHS/function.h}
+			compile time but must be set at running time.  \par
+			<b>Definition:</b> BALL/MATHS/function.h
 	*/
 	template <typename DataType = float>
 	class MutableConstant
@@ -151,7 +151,7 @@ namespace BALL
 
 
 	/** Addition class.
-			{\bf Definition:} \URL{BALL/MATHS/function.h}
+			<b>Definition:</b> BALL/MATHS/function.h
 	*/
 	template <typename First, typename Second, typename DataType = float>
 	class Addition
@@ -286,7 +286,7 @@ namespace BALL
 
 
 	/** Subtraction class.
-			{\bf Definition:} \URL{BALL/MATHS/function.h}
+			<b>Definition:</b> BALL/MATHS/function.h
 	*/
 	template <typename First, typename Second, typename DataType = float>
 	class Subtraction
@@ -405,7 +405,7 @@ namespace BALL
 
 
 	/** Multiplication class.
-			{\bf Definition:} \URL{BALL/MATHS/function.h}
+			<b>Definition:</b> BALL/MATHS/function.h
 	*/
 	template <typename First, typename Second, typename DataType = float>
 	class Product
@@ -534,7 +534,7 @@ namespace BALL
 
 
 	/** Division class.
-			{\bf Definition:} \URL{BALL/MATHS/function.h}
+			<b>Definition:</b> BALL/MATHS/function.h
 	*/
 	template <typename First, typename Second, typename DataType = float>
 	class Division
@@ -661,7 +661,7 @@ namespace BALL
 
 
 	/** Reciprocal class.
-			{\bf Definition:} \URL{BALL/MATHS/function.h}
+			<b>Definition:</b> BALL/MATHS/function.h
 	*/
 	template <typename Function, typename DataType = float>
 	class Reciprocal
@@ -767,7 +767,7 @@ namespace BALL
 
 
 	/** SquareFunction class.
-			{\bf Definition:} \URL{BALL/MATHS/function.h}
+			<b>Definition:</b> BALL/MATHS/function.h
 	*/
 	template <typename Function, typename DataType = float>
 	class SquareFunction
@@ -867,7 +867,7 @@ namespace BALL
 
 
 	/** CubicFunction class.
-			{\bf Definition:} \URL{BALL/MATHS/function.h}
+			<b>Definition:</b> BALL/MATHS/function.h
 	*/
 	template <typename Function, typename DataType = float>
 	class CubicFunction
@@ -966,7 +966,7 @@ namespace BALL
 
 
 	/** MutablePower class.	
-			{\bf Definition:} \URL{BALL/MATHS/function.h}
+			<b>Definition:</b> BALL/MATHS/function.h
 	*/
 	template <typename Function, typename DataType = float>
 	class MutablePower

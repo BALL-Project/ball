@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: baseModel.h,v 1.14 2002/12/18 03:13:01 amoll Exp $
+// $Id: baseModel.h,v 1.15 2003/02/21 16:04:53 anhi Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BASEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_BASEMODEL_H
@@ -31,17 +31,17 @@ namespace BALL
 	namespace MOLVIEW
 	{
 		/** BaseModelProcessor class.
-				The class BaseModelProcessor is derived from \Ref{UnaryProcessor} and
-				\Ref{ExtendedPropertyManager}. It contains therefore the processor interface
+				The class BaseModelProcessor is derived from  \link UnaryProcessor UnaryProcessor \endlink  and
+				 \link ExtendedPropertyManager ExtendedPropertyManager \endlink . It contains therefore the processor interface
 				and the property concept.
 				The class BaseModelProcessor is base class for all model processors. 
 				A model can be created for static mode or dynamic mode therefore there are methods
 				to switch and check the actual mode of {\em *this} baseModelProcessor.
-				See \Ref{GeometricObject} for information about static and dynamic object creation.
-				Every model must have a \Ref{ColorCalculator} and a \Ref{BaseModelConnector} object
+				See  \link GeometricObject GeometricObject \endlink  for information about static and dynamic object creation.
+				Every model must have a  \link ColorCalculator ColorCalculator \endlink  and a  \link BaseModelConnector BaseModelConnector \endlink  object
 				so interface methods are available too.
-				Some protected helper methods are included that are used by some model processors. \\
-				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/baseModel.h}
+				Some protected helper methods are included that are used by some model processors.  \par
+				<b>Definition:</b> BALL/MOLVIEW/FUNCTOR/baseModel.h
 		*/
 		class BaseModelProcessor
 			: public UnaryProcessor<Composite>,
@@ -55,9 +55,9 @@ namespace BALL
 
 			/** Default Constructor.
 					Construct new baseModelProcessor.
-					Initialize the \Ref{ColorCalculator} and the \Ref{BaseModelConnector} of
+					Initialize the  \link ColorCalculator ColorCalculator \endlink  and the  \link BaseModelConnector BaseModelConnector \endlink  of
 					{\em *this} baseModelConnector to the default colorCalculator and default baseModelConnector
-					and clears the \Ref{ExtendedPropertyManager} and the \Ref{FindGeometricObjects}
+					and clears the  \link ExtendedPropertyManager ExtendedPropertyManager \endlink  and the  \link FindGeometricObjects FindGeometricObjects \endlink 
 					search processor.
 					@return      BaseModelProcessor new constructed baseModelProcessor
 					@see         ExtendedPropertyManager
@@ -71,10 +71,10 @@ namespace BALL
 			/** Copy constructor.
 					Construct new baseModelProcessor by copying the baseModelProcessor
 					{\em base_model_processor}.
-					Copies the properties, the \Ref{ColorCalculator} and the \Ref{BaseModelConnector}
+					Copies the properties, the  \link ColorCalculator ColorCalculator \endlink  and the  \link BaseModelConnector BaseModelConnector \endlink 
 					of {\em base_model_processor} to {\em this} baseModelProcessor.
 					@param       base_model_processor the baseModelProcessor to be copied
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em base_model_processor}
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of {\em base_model_processor}
 					@return      BaseModelProcessor new constructed baseModelProcessor copied from {\em base_model_processor}
 					@see         ExtendedPropertyManager
 					@see         ColorCalculator
@@ -91,7 +91,7 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} baseModelProcessor.
-					Calls \Ref{destroy}.
+					Calls  \link destroy destroy \endlink .
 					@see         destroy
 			*/
 			virtual ~BaseModelProcessor()
@@ -101,13 +101,13 @@ namespace BALL
 					Reset the state of {\em *this} baseModelProcessor to:
 					\begin{itemize}
 					  \item  clear the properties
-					  \item  clear the \Ref{FindGeometricObjects}
-					  \item  set the \Ref{ColorCalculator} to the default colorCalculator
-					  \item  set the \Ref{BaseModelConnector} to the default baseModelConnector
+					  \item  clear the  \link FindGeometricObjects FindGeometricObjects \endlink 
+					  \item  set the  \link ColorCalculator ColorCalculator \endlink  to the default colorCalculator
+					  \item  set the  \link BaseModelConnector BaseModelConnector \endlink  to the default baseModelConnector
 					\end{itemize}
-					Calls \Ref{ExtendedPropertyManager::clear}.
-					Calls \Ref{FindGeometricObjects::clear}.
-					Calls \Ref{clear_}
+					Calls  \link ExtendedPropertyManager::clear ExtendedPropertyManager::clear \endlink .
+					Calls  \link FindGeometricObjects::clear FindGeometricObjects::clear \endlink .
+					Calls  \link clear_ clear_ \endlink 
 					@see  BaseModelConnector
 					@see  FindGeometricObjects
 					@see  ColorCalculator
@@ -129,14 +129,14 @@ namespace BALL
 
 			/** Assignment.
 					Assign the baseModelProcessor {\em base_model_processor} to {\em *this} baseModelProcessor.
-					Initializes the \Ref{ExtendedPropertyManager}, \Ref{BaseModelConnector}, 
-					\Ref{FindGeometricObject} and the \Ref{ColorCalculator} of {\em *this} baseModelProcessor
+					Initializes the  \link ExtendedPropertyManager ExtendedPropertyManager \endlink ,  \link BaseModelConnector BaseModelConnector \endlink , 
+					 \link FindGeometricObject FindGeometricObject \endlink  and the  \link ColorCalculator ColorCalculator \endlink  of {\em *this} baseModelProcessor
 					to those of {\em base_model_processor}.
-					Calls \Ref{clear_}.
-					Calls \Ref{ExtendedPropertyManager::set}.
-					Calls \Ref{FindGeometricObject::set}.
+					Calls  \link clear_ clear_ \endlink .
+					Calls  \link ExtendedPropertyManager::set ExtendedPropertyManager::set \endlink .
+					Calls  \link FindGeometricObject::set FindGeometricObject::set \endlink .
 					@param       base_model_processor the baseModelProcessor to be copied 
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em base_model_processor}
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of {\em base_model_processor}
 					@see         BaseModelConnector
 					@see         ExtendedPropertyManager
 					@see         FindGeometricObject
@@ -148,10 +148,10 @@ namespace BALL
 
 			/** Assignment operator.
 					Assign the baseModelProcessor {\em base_model_processor} to {\em *this} baseModelProcessor.
-					Initializes the \Ref{ExtendedPropertyManager}, \Ref{BaseModelConnector}, 
-					\Ref{FindGeometricObject} and the \Ref{ColorCalculator} of {\em *this} baseModelProcessor
+					Initializes the  \link ExtendedPropertyManager ExtendedPropertyManager \endlink ,  \link BaseModelConnector BaseModelConnector \endlink , 
+					 \link FindGeometricObject FindGeometricObject \endlink  and the  \link ColorCalculator ColorCalculator \endlink  of {\em *this} baseModelProcessor
 					to those of {\em base_model_processor}.
-					Calls \Ref{set}.
+					Calls  \link set set \endlink .
 					The assignment will be deep.
 					@param       base_model_processor the baseModelProcessor to be copied
 					@return      BaseModelProcessor& constant reference of {\em *this} baseModelProcessor
@@ -162,23 +162,23 @@ namespace BALL
 
 			/** Copying.
 					Copy {\em *this} baseModelProcessor to the baseModelProcessor {\em connector}.
-					Initializes the \Ref{ExtendedPropertyManager}, \Ref{BaseModelConnector}, 
-					\Ref{FindGeometricObject} and the \Ref{ColorCalculator} of {\em *this} baseModelProcessor
+					Initializes the  \link ExtendedPropertyManager ExtendedPropertyManager \endlink ,  \link BaseModelConnector BaseModelConnector \endlink , 
+					 \link FindGeometricObject FindGeometricObject \endlink  and the  \link ColorCalculator ColorCalculator \endlink  of {\em *this} baseModelProcessor
 					to those of {\em base_model_processor}.
-					Calls \Ref{set}.
+					Calls  \link set set \endlink .
 					@param       base_model_processor the baseModelProcessor to be assigned to
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em base_model_processor}
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of {\em base_model_processor}
 					@see         set
 			*/
 			void get(BaseModelProcessor& base_model_processor, bool deep = true) const
 				throw();
 
 			/** Swapping of baseModelProcessor's.
-					Swap the \Ref{ExtendedPropertyManager}, \Ref{BaseModelConnector}, 
-					\Ref{FindGeometricObject} and the \Ref{ColorCalculator} of {\em *this} baseModelProcessor
+					Swap the  \link ExtendedPropertyManager ExtendedPropertyManager \endlink ,  \link BaseModelConnector BaseModelConnector \endlink , 
+					 \link FindGeometricObject FindGeometricObject \endlink  and the  \link ColorCalculator ColorCalculator \endlink  of {\em *this} baseModelProcessor
 					with those of {\em base_model_processor}.
-					Calls \Ref{ExtendedPropertyManager::swap}
-					Calls \Ref{FindGeometricObject::swap}
+					Calls  \link ExtendedPropertyManager::swap ExtendedPropertyManager::swap \endlink 
+					Calls  \link FindGeometricObject::swap FindGeometricObject::swap \endlink 
 					@param       connector the baseModelConnector being swapped with {\em *this} baseModelProcessor 
 					@see         BaseModelConnector
 					@see         ExtendedPropertyManager
@@ -195,9 +195,9 @@ namespace BALL
 			
 			/** Enable creation of static models.
 					If this method is called {\em *this} baseModelProcessor will create models with
-					the property {\tt PROPERTY__OBJECT_STATIC}.
-					See \Ref{GeometricObject} for information about static models.
-					The method \Ref{disableDynamicModel} will be do exactly the same as this method.
+					the property <tt>PROPERTY__OBJECT_STATIC</tt>.
+					See  \link GeometricObject GeometricObject \endlink  for information about static models.
+					The method  \link disableDynamicModel disableDynamicModel \endlink  will be do exactly the same as this method.
 					@see  disableStaticModel
 					@see  disableDynamicModel
 					@see  isStaticModelEnabled
@@ -208,9 +208,9 @@ namespace BALL
 
 			/** Disable creation of static models.
 					If this method is called {\em *this} baseModelProcessor will create models with
-					the property {\tt PROPERTY__OBJECT_DYNAMIC}.
-					See \Ref{GeometricObject} for information about dynamic models.
-					The method \Ref{enableDynamicModel} will be do exactly the same as this method.
+					the property <tt>PROPERTY__OBJECT_DYNAMIC</tt>.
+					See  \link GeometricObject GeometricObject \endlink  for information about dynamic models.
+					The method  \link enableDynamicModel enableDynamicModel \endlink  will be do exactly the same as this method.
 					@see  enableStaticModel
 					@see  enableDynamicModel
 					@see  isStaticModelDisabled
@@ -221,9 +221,9 @@ namespace BALL
 
 			/** Enable creation of dynamic models.
 					If this method is called {\em *this} baseModelProcessor will create models with
-					the property {\tt PROPERTY__OBJECT_DYNAMIC}.
-					See \Ref{GeometricObject} for information about dynamic models.
-					The method \Ref{disableStaticModel} will be do exactly the same as this method.
+					the property <tt>PROPERTY__OBJECT_DYNAMIC</tt>.
+					See  \link GeometricObject GeometricObject \endlink  for information about dynamic models.
+					The method  \link disableStaticModel disableStaticModel \endlink  will be do exactly the same as this method.
 					@see  disableDynamicModel
 					@see  disableStaticModel
 					@see  isDynamicModelEnabled
@@ -234,9 +234,9 @@ namespace BALL
 
 			/** Disable creation of dynamic models.
 					If this method is called {\em *this} baseModelProcessor will create models with
-					the property {\tt PROPERTY__OBJECT_STATIC}.
-					See \Ref{GeometricObject} for information about static models.
-					The method \Ref{enableStaticModel} will be do exactly the same as this method.
+					the property <tt>PROPERTY__OBJECT_STATIC</tt>.
+					See  \link GeometricObject GeometricObject \endlink  for information about static models.
+					The method  \link enableStaticModel enableStaticModel \endlink  will be do exactly the same as this method.
 					@see  enableDynamicModel
 					@see  enableStaticModel
 					@see  isDynamicModelDisabled
@@ -246,8 +246,8 @@ namespace BALL
 				throw();
 
 			/** Register a colorCalculator.
-					Change the \Ref{ColorCalculator} of {\em *this} baseModelProcessor.
-					@param   color_calculator the new \Ref{ColorCalculator} for {\em *this} baseModelProcessor
+					Change the  \link ColorCalculator ColorCalculator \endlink  of {\em *this} baseModelProcessor.
+					@param   color_calculator the new  \link ColorCalculator ColorCalculator \endlink  for {\em *this} baseModelProcessor
 					@see     unregisterColorCalculator
 					@see     ColorCalculator
 			*/
@@ -255,7 +255,7 @@ namespace BALL
 				throw();
 
 			/** Unregister the colorCalculator.
-					Change the \Ref{ColorCalculator} of {\em *this} baseModelProcessor to the
+					Change the  \link ColorCalculator ColorCalculator \endlink  of {\em *this} baseModelProcessor to the
 					default colorCalculator.
 					@see     registerColorCalculator
 					@see     ColorCalculator
@@ -264,7 +264,7 @@ namespace BALL
 				throw();
 
 			/** Mutable inspection of the colorCalculator.
-					Access the mutable pointer to the \Ref{ColorCalculator} of {\em *this} baseModelProcessor.
+					Access the mutable pointer to the  \link ColorCalculator ColorCalculator \endlink  of {\em *this} baseModelProcessor.
 					@return  ColorCalculator* a pointer to the colorCalculator of {\em *this} baseModelProcessor
 					@see     registerColorCalculator
 					@see     unregisterColorCalculator
@@ -274,8 +274,8 @@ namespace BALL
 				throw();
 
 			/** Register a baseModelConnector.
-					Change the \Ref{BaseModelConnector} of {\em *this} baseModelProcessor.
-					@param    model_connector the new \Ref{BaseModelConnector} for {\em *this} baseModelProcessor
+					Change the  \link BaseModelConnector BaseModelConnector \endlink  of {\em *this} baseModelProcessor.
+					@param    model_connector the new  \link BaseModelConnector BaseModelConnector \endlink  for {\em *this} baseModelProcessor
 					@see     unregisterBaseModelConnector
 					@see     BaseModelConnector
 			*/
@@ -283,7 +283,7 @@ namespace BALL
 				throw();
 
 			/** Unregister the baseModelConnector.
-					Change the \Ref{BaseModelConnector} of {\em *this} baseModelProcessor to the
+					Change the  \link BaseModelConnector BaseModelConnector \endlink  of {\em *this} baseModelProcessor to the
 					default baseModelConnector.
 					@see     registerBaseModelConnector
 					@see     BaseModelConnector
@@ -292,7 +292,7 @@ namespace BALL
 				throw();
 
 			/** Mutable inspection of the baseModelConnector.
-					Access the mutable pointer to the \Ref{BaseModelConnector} of {\em *this} baseModelProcessor.
+					Access the mutable pointer to the  \link BaseModelConnector BaseModelConnector \endlink  of {\em *this} baseModelProcessor.
 					@return  BaseModelConnector* a pointer to the colorCalculator of {\em *this} baseModelProcessor
 					@see     registerBaseModelConnector
 					@see     unregisterBaseModelConnector
@@ -307,11 +307,11 @@ namespace BALL
 			//@{
 			
 			/** Start method.
-					Set the properties of \Ref{FindGeometricObjects} search processor and the properties
-					of \Ref{BaseModelConnector} to the properties of {\em *this} baseModelProcessor
-					and registers the \Ref{ColorCalculator} of {\em *this} baseModelProcessor to
-					\Ref{BaseModelConnector}.
-					@return bool {\tt true} if the start of {\em *this} baseModelProcessor was successful, {\tt false} otherwise
+					Set the properties of  \link FindGeometricObjects FindGeometricObjects \endlink  search processor and the properties
+					of  \link BaseModelConnector BaseModelConnector \endlink  to the properties of {\em *this} baseModelProcessor
+					and registers the  \link ColorCalculator ColorCalculator \endlink  of {\em *this} baseModelProcessor to
+					 \link BaseModelConnector BaseModelConnector \endlink .
+					@return bool <tt>true</tt> if the start of {\em *this} baseModelProcessor was successful, <tt>false</tt> otherwise
 					@see    operator()
 					@see    BaseModelConnector
 					@see    FindGeometricObjects
@@ -321,14 +321,14 @@ namespace BALL
 			/** Finish method.
 					Empty for further purpose. Override this method for finalizing
 					the models.
-					@return bool {\tt true} if the finish of {\em *this} baseModelProcessor was successful, {\tt false} otherwise
+					@return bool <tt>true</tt> if the finish of {\em *this} baseModelProcessor was successful, <tt>false</tt> otherwise
 					@see    operator()
 			*/
 			virtual bool finish();
 
 			/**	Operator method.
 					This method will be overridden to implement the creation of the different models.
-					@param  composite the \Ref{Composite} object that will be processed
+					@param  composite the  \link Composite Composite \endlink  object that will be processed
 					@return Processor::Result the result of {\em *this} baseModel
 					@see    start
 					@see    finish
@@ -342,9 +342,9 @@ namespace BALL
 			//@{
 
 			/** Test if creation of static models is enabled.
-					Test if the property {\tt PROPERTY__OBJECT_STATIC} is set for {\em *this} baseModelProcessor.
-					See \Ref{GeometricObject} for information about this property.
-					@return  bool {\tt true} if static models of {\em *this} baseModelProcessor should be created, {\tt false} otherwise
+					Test if the property <tt>PROPERTY__OBJECT_STATIC</tt> is set for {\em *this} baseModelProcessor.
+					See  \link GeometricObject GeometricObject \endlink  for information about this property.
+					@return  bool <tt>true</tt> if static models of {\em *this} baseModelProcessor should be created, <tt>false</tt> otherwise
 					@see     enableStaticModel
 					@see     disableStaticModel
 					@see     GeometricObject
@@ -354,9 +354,9 @@ namespace BALL
 				throw();
 
 			/** Test if creation of static models is disabled.
-					Test if the property {\tt PROPERTY__OBJECT_STATIC} is not set for {\em *this} baseModelProcessor.
-					See \Ref{GeometricObject} for information about this property.
-					@return  bool {\tt true} if static models of {\em *this} baseModelProcessor should not be created, {\tt false} otherwise
+					Test if the property <tt>PROPERTY__OBJECT_STATIC</tt> is not set for {\em *this} baseModelProcessor.
+					See  \link GeometricObject GeometricObject \endlink  for information about this property.
+					@return  bool <tt>true</tt> if static models of {\em *this} baseModelProcessor should not be created, <tt>false</tt> otherwise
 					@see     enableStaticModel
 					@see     disableStaticModel
 					@see     GeometricObject
@@ -366,9 +366,9 @@ namespace BALL
 				throw();
 
 			/** Test if creation of dynamic models is enabled.
-					Test if the property {\tt PROPERTY__OBJECT_DYNAMIC} is set for {\em *this} baseModelProcessor.
-					See \Ref{GeometricObject} for information about this property.
-					@return  bool {\tt true} if dynamic models of {\em *this} baseModelProcessor should be created
+					Test if the property <tt>PROPERTY__OBJECT_DYNAMIC</tt> is set for {\em *this} baseModelProcessor.
+					See  \link GeometricObject GeometricObject \endlink  for information about this property.
+					@return  bool <tt>true</tt> if dynamic models of {\em *this} baseModelProcessor should be created
 					@see     enableDynamicModel
 					@see     disableDynamicModel
 					@see     GeometricObject
@@ -378,9 +378,9 @@ namespace BALL
 				throw();
 
 			/** Test if creation of dynamic models is disabled.
-					Test if the property {\tt PROPERTY__OBJECT_DYNAMIC} is not set for {\em *this} baseModelProcessor.
-					See \Ref{GeometricObject} for information about this property.
-					@return  bool {\tt true} if dynamic models of {\em *this} baseModelProcessor should not be created
+					Test if the property <tt>PROPERTY__OBJECT_DYNAMIC</tt> is not set for {\em *this} baseModelProcessor.
+					See  \link GeometricObject GeometricObject \endlink  for information about this property.
+					@return  bool <tt>true</tt> if dynamic models of {\em *this} baseModelProcessor should not be created
 					@see     enableDynamicModel
 					@see     disableDynamicModel
 					@see     GeometricObject
@@ -390,9 +390,9 @@ namespace BALL
 				throw();
 
 			/** Test if the default colorCalculator is registered.
-					Test if the default \Ref{ColorCalculator} is registered for {\em *this} 
+					Test if the default  \link ColorCalculator ColorCalculator \endlink  is registered for {\em *this} 
 					atomBondModelConnector.
-					@return  bool {\tt true} if the default \Ref{ColorCalculator} is registered, {\tt false} otherwise
+					@return  bool <tt>true</tt> if the default  \link ColorCalculator ColorCalculator \endlink  is registered, <tt>false</tt> otherwise
 					@see     registerColorCalculator
 					@see     unregisterColorCalculator
 					@see     getColorCalculator
@@ -410,14 +410,14 @@ namespace BALL
 					Initiate self-validation of the internal state and data structure consistencies
 					of {\em *this} atomBondModelConnector.
 					If the internal state of {\em *this} atomBondModelConnector is correct 
-					(self-validated) and consistent {\tt true} is returned, {\tt false} otherwise. 
+					(self-validated) and consistent <tt>true</tt> is returned, <tt>false</tt> otherwise. 
 					{\em *this} atomBondModelConnector is valid if:
-					\Ref{ExentedPropertyManager}, \Ref{BaseModelConnector} and \Ref{FindGeometricObjects}
+					 \link ExentedPropertyManager ExentedPropertyManager \endlink ,  \link BaseModelConnector BaseModelConnector \endlink  and \Ref{FindGeometricObjects}
 					is valid.
-					Calls \Ref{ExentedPropertyManager::isValid}.
-					Calls \Ref{BaseModelConnector::isValid}.
-					Calls \Ref{FindGeometricObjects::isValid}.
-					@return			bool {\tt true} if the internal state of {\em *this}atomBondModelConnector is correct
+					Calls  \link ExentedPropertyManager::isValid ExentedPropertyManager::isValid \endlink .
+					Calls  \link BaseModelConnector::isValid BaseModelConnector::isValid \endlink .
+					Calls  \link FindGeometricObjects::isValid FindGeometricObjects::isValid \endlink .
+					@return			bool <tt>true</tt> if the internal state of {\em *this}atomBondModelConnector is correct
 					@see       ExentedPropertyManager
 					@see       BaseModelConnector
 					@see       FindGeometricObjects
@@ -442,20 +442,20 @@ namespace BALL
 			//@{
 			
 			/** Mutable inspection of the search processor.
-					Access the mutable reference to \Ref{FindGeometricObjects} of {\em *this}
+					Access the mutable reference to  \link FindGeometricObjects FindGeometricObjects \endlink  of {\em *this}
 					atomBondModelConnector.
-					This object is used to search for specific \Ref{GeometricObject} objects that
+					This object is used to search for specific  \link GeometricObject GeometricObject \endlink  objects that
 					have certain properties.
-					@return  FindGeometricObjects& a mutable reference to the \Ref{FindGeometricObjects} 
+					@return  FindGeometricObjects& a mutable reference to the  \link FindGeometricObjects FindGeometricObjects \endlink  
 					@see     FindGeometricObjects
 			*/
 			FindGeometricObjects& getSearcher_()
 				throw();
 
 			/** Test if a geometricObject is a model.
-					Test if \Ref{GeometricObject} {\em geometric_object} has a model property.
-					Return {\tt true} if a model property is set in {\em geometric_object}.
-					This method is called from the method \Ref{removeGeometricObjects_}.
+					Test if  \link GeometricObject GeometricObject \endlink  {\em geometric_object} has a model property.
+					Return <tt>true</tt> if a model property is set in {\em geometric_object}.
+					This method is called from the method  \link removeGeometricObjects_ removeGeometricObjects_ \endlink .
 					The following models are recognized:
 					\begin{itemize}
 					  \item {\em PROPERTY__MODEL_BALL_AND_STICK}
@@ -463,8 +463,8 @@ namespace BALL
 					  \item {\em PROPERTY__MODEL_LINES}
 					  \item {\em PROPERTY__MODEL_VDW}
 					\end{itemize}
-					@param  geometric_object the \Ref{GeometricObject} to be tested if a model property is present
-					@return bool {\tt true} if a model property is set, {\tt false} otherwise
+					@param  geometric_object the  \link GeometricObject GeometricObject \endlink  to be tested if a model property is present
+					@return bool <tt>true</tt> if a model property is set, <tt>false</tt> otherwise
 					@see    removeGeometricObjects_
 					@see    GeometricObject
 			*/
@@ -472,12 +472,12 @@ namespace BALL
 				throw();
 
 			/** Remove geometric objects.
-					Remove \Ref{GeometricObject} objects appended to \Ref{Composite} {\em composite}.
-					If {\em only_models} is set to {\tt true} (Default) only \Ref{GeometricObject}
-					objects are removed that have a model property (determined with the method \Ref{isModel_}).
-					All found \Ref{GeometricObject} objects are deleted.
-					@param  composite the \Ref{Composite} object that should be search for \Ref{GeometricObject} objects
-					@param  only_models if set to {\tt true} \Ref{GeometricObject} objects are searched that have a model property
+					Remove  \link GeometricObject GeometricObject \endlink  objects appended to  \link Composite Composite \endlink  {\em composite}.
+					If {\em only_models} is set to <tt>true</tt> (Default) only  \link GeometricObject GeometricObject \endlink 
+					objects are removed that have a model property (determined with the method  \link isModel_ isModel_ \endlink ).
+					All found  \link GeometricObject GeometricObject \endlink  objects are deleted.
+					@param  composite the  \link Composite Composite \endlink  object that should be search for  \link GeometricObject GeometricObject \endlink  objects
+					@param  only_models if set to <tt>true</tt>  \link GeometricObject GeometricObject \endlink  objects are searched that have a model property
 					@see    isModel_
 					@see    GeometricObject
 					@see    Composite
@@ -489,14 +489,14 @@ namespace BALL
 					Resets the properties of {\em *this} baseModelProcessor.
 					Set the properties to:
 					\begin{itemize}
-					  \item {\tt PROPERTY__OBJECT_STATIC}
-					  \item {\tt PROPERTY__OBJECT_OPAQUE}
-					  \item {\tt PROPERTY__OBJECT_VISIBLE}
-					  \item {\tt PROPERTY__OBJECT_CLOSED}
-					  \item {\tt PROPERTY__DRAWING_MODE_SOLID}
-					  \item {\tt PROPERTY__DRAWING_PRECISION_HIGH}
+					  \item <tt>PROPERTY__OBJECT_STATIC</tt>
+					  \item <tt>PROPERTY__OBJECT_OPAQUE</tt>
+					  \item <tt>PROPERTY__OBJECT_VISIBLE</tt>
+					  \item <tt>PROPERTY__OBJECT_CLOSED</tt>
+					  \item <tt>PROPERTY__DRAWING_MODE_SOLID</tt>
+					  \item <tt>PROPERTY__DRAWING_PRECISION_HIGH</tt>
 					\end{itemize}
-					Those properties are defined in the class \Ref{GeometricObject}.
+					Those properties are defined in the class  \link GeometricObject GeometricObject \endlink .
 					@see   GeometricObject
 			*/
 			void clear_()

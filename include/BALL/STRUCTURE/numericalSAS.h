@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: numericalSAS.h,v 1.19 2002/02/27 12:19:45 sturm Exp $
+// $Id: numericalSAS.h,v 1.20 2003/02/21 16:06:48 anhi Exp $
 
 #ifndef BALL_STRUCTURE_NUMERICALSAS_H
 #define BALL_STRUCTURE_NUMERICALSAS_H
@@ -73,7 +73,7 @@ namespace BALL
 	/**	Calculate a point set on the Solvent Accessible Surface.
 			This method returns the points on the Solvent Accessible
 			Surface (SAS) used to calculate the surface area.
-			The \Ref{Surface} object holds just the vertices, it
+			The  \link Surface Surface \endlink  object holds just the vertices, it
 			does not contain any triangles. The normals for each point
 			normals to the SAS in that point, their length equals the 
 			fraction of the surface area represented by this point in $ A^2$:

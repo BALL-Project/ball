@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.h,v 1.47 2003/02/08 16:11:41 oliver Exp $
+// $Id: atom.h,v 1.48 2003/02/21 16:03:11 anhi Exp $
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -56,23 +56,23 @@ namespace BALL
 	/** Atom class.
 			A class representing atoms.
 			During each runtime instance of a program an atom is unique and
-			identified by a \Ref{Object::Handle}. Atom equality is defined as
+			identified by a  \link Object::Handle Object::Handle \endlink . Atom equality is defined as
 			atom identity, so there cannot be any two identical atoms. A linear
 			ordering of atoms is defined as the linear order of the
-			\Ref{Object::Handle}s.
-			\\
-			Two atoms can be connected via a \Ref{Bond}. There can be only one
+			 \link Object::Handle Object::Handle \endlink s.
+			 \par
+			Two atoms can be connected via a  \link Bond Bond \endlink . There can be only one
 			bond between any two atoms (double bonds etc. are expressed via the
 			bond order attribute of the bond) and the total number of bonds of an
 			atom is limited to eight (can be changed at compile time, see
-			\Ref{MAX_NUMBER_OF_BONDS}).
-			\\
-			Since \Ref{Atom} is derived from \Ref{ProperyManager}, it may contain
+			 \link MAX_NUMBER_OF_BONDS MAX_NUMBER_OF_BONDS \endlink ).
+			 \par
+			Since  \link Atom Atom \endlink  is derived from  \link ProperyManager ProperyManager \endlink , it may contain
 			arbitrary, user-defined properties.
-			An atom may be inserted in a \Ref{Fragment} instance ("parent fragment").
+			An atom may be inserted in a  \link Fragment Fragment \endlink  instance ("parent fragment").
 			The "state" of an atom is defined by its attributes:
 			\begin{itemize}
-				\item "element" - an instance of \Ref{Element}
+				\item "element" - an instance of  \link Element Element \endlink 
 				\item "charge" - the charge in multiples of the the proton charge
 				\item "name" - a string identifier
 				\item "type name" - a string identifier, meaningful in the the
@@ -85,10 +85,10 @@ namespace BALL
 				\item "velocity" - velocity the velocity of the atom (Angstrom/ps)
 				\item "force" - the force experienced by the atom (for forcefield
 							calculations, in units of Newton)
-				\item "bonds" - up to \Ref{MAX_NUMBER_OF_BONDS} bonds to other atoms
+				\item "bonds" - up to  \link MAX_NUMBER_OF_BONDS MAX_NUMBER_OF_BONDS \endlink  bonds to other atoms
 			\end{itemize}
-			{\bf Definition:} \URL{BALL/KERNEL/atom.h}
-			\\
+			<b>Definition:</b> BALL/KERNEL/atom.h
+			 \par
 			@see Bond
 			@see Molecule
 			@see AtomContainer
@@ -167,11 +167,11 @@ namespace BALL
 						\item charge is 0
 						\item name is empty string
 						\item type name is "?"
-						\item position is \Ref{Vector3}(0,0,0)
+						\item position is  \link Vector3 Vector3 \endlink (0,0,0)
 						\item radius is 0
-						\item type \Ref{INVALID_TYPE}
-						\item velocity is \Ref{Vector3}(0,0,0)
-						\item force is \Ref{Vector3}(0,0,0)
+						\item type  \link INVALID_TYPE INVALID_TYPE \endlink 
+						\item velocity is  \link Vector3 Vector3 \endlink (0,0,0)
+						\item force is  \link Vector3 Vector3 \endlink (0,0,0)
 						\item bond table is empty (atom has no bonds)
 					\end{itemize}
 					@return  Atom - new atom
@@ -183,10 +183,10 @@ namespace BALL
 		
 			/** Copy constructor.
 					The copy is either deep or shallow (default).
-					\\
-					{\bf Note:} Deep copying of atoms does not include bond cloning.
+					 \par
+					<b>Note:</b> Deep copying of atoms does not include bond cloning.
 					@param   atom the atom to be copied (cloned)
-					@param   deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em atom}
+					@param   deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of {\em atom}
 					@return  Atom - new constructed atom cloned from {\em atom}
 					@see     Composite::Composite
 					@see     PropertyManager::PropertyManager
@@ -227,17 +227,17 @@ namespace BALL
 
 			/** Destructor.
 					If the atom has bonds in common with an other atom that atom is
-					disconnected and the associated \Ref{Bond} instance is destroyed.
-					Calls \Ref{Atom::destroy}.
+					disconnected and the associated  \link Bond Bond \endlink  instance is destroyed.
+					Calls  \link Atom::destroy Atom::destroy \endlink .
 					@see  Atom::destroy
 			*/
 			virtual ~Atom()
 				throw();
 
 			/** Explicit default initialization.
-					Calls \Ref{Composite::clear} and resets the 
+					Calls  \link Composite::clear Composite::clear \endlink  and resets the 
 					attributes to the default values. In contrast
-					to \Ref{destroy}, the atom is not removed from 
+					to  \link destroy destroy \endlink , the atom is not removed from 
 					any composite structure, i.e. its parent fragment
 					pointer remains unchanged.
 					@see	Composite::clear
@@ -281,17 +281,17 @@ namespace BALL
       /** Deep/shallow assignment.
           The assignment is either deep or shallow (default is deep).
 					In the case of a deep assignment, all composites contained in
-					{\tt atom} are copied as well. 
-					\\
-          {\bf Caveat:} Bonds are not copied!
+					<tt>atom</tt> are copied as well. 
+					 \par
+          <b>Caveat:</b> Bonds are not copied!
           @param   atom the atom to be copied
-          @param   deep make a deep (={\bf true}) or shallow (={\bf false}) copy of {\tt atom}
+          @param   deep make a deep (=<b>true</b>) or shallow (=<b>false</b>) copy of <tt>atom</tt>
       */
       void set(const Atom& atom, bool deep = true)
         throw();
 
       /** Deep/shallow assignment.
-					The inverse operation to \Ref{set}, behaves identically.
+					The inverse operation to  \link set set \endlink , behaves identically.
           @param  atom the atom to be assigned to
           @see    Atom::set
       */
@@ -299,9 +299,9 @@ namespace BALL
         throw();
 
 			/** Assignment operator.
-					The assignment is always deep.	Calls \Ref{Atom::set}.
-					\\
-					{\bf Note:} Bonds are not copied
+					The assignment is always deep.	Calls  \link Atom::set Atom::set \endlink .
+					 \par
+					<b>Note:</b> Bonds are not copied
 					@param   atom the atom to be copied
 					@return  Atom& - this instance
 					@see     Atom::set
@@ -369,9 +369,9 @@ namespace BALL
 
 			/** Mutable inspection of the atom's parent molecule.
 					A NULL pointer is returned if this atom is not part of a molecule.
-					\\
-					Use \Ref{Molecule::insert} to insert an atom into a molecule and
-					\Ref{Molecule::remove} to remove it.
+					 \par
+					Use  \link Molecule::insert Molecule::insert \endlink  to insert an atom into a molecule and
+					 \link Molecule::remove Molecule::remove \endlink  to remove it.
 					@return  Molecule* - mutable pointer to the parent molecule
 			*/
 			Molecule *getMolecule()
@@ -379,9 +379,9 @@ namespace BALL
 
 			/** Constant inspection of the atom's parent molecule.
 					A NULL pointer is returned if this atom is not part of a molecule.
-					\\
-					Use \Ref{Molecule::insert} to insert an atom into a molecule and
-					\Ref{Molecule::remove} to remove it.
+					 \par
+					Use  \link Molecule::insert Molecule::insert \endlink  to insert an atom into a molecule and
+					 \link Molecule::remove Molecule::remove \endlink  to remove it.
 					@return  Molecule* - constant pointer to the parent molecule
 			*/
 			const Molecule* getMolecule() const
@@ -389,9 +389,9 @@ namespace BALL
 
 			/** Mutable inspection of the atom's parent fragment.
 					A NULL pointer is returned if this atom is not part of a fragment.
-					\\
-					Use \Ref{Fragment::insert} to insert an atom into a fragment and
-					\Ref{Fragment::remove} to remove it.
+					 \par
+					Use  \link Fragment::insert Fragment::insert \endlink  to insert an atom into a fragment and
+					 \link Fragment::remove Fragment::remove \endlink  to remove it.
 					@return   Fragment* - mutable pointer to the parent fragment
 			*/
 			Fragment* getFragment()
@@ -399,9 +399,9 @@ namespace BALL
 
 			/** Constant inspection of the atom's parent fragment.
 					A NULL pointer is returned if this atom is not part of a fragment.
-					\\
-					Use \Ref{Fragment::insert} to insert an atom into a fragment and
-					\Ref{Fragment::remove} to remove it.					
+					 \par
+					Use  \link Fragment::insert Fragment::insert \endlink  to insert an atom into a fragment and
+					 \link Fragment::remove Fragment::remove \endlink  to remove it.					
 					@return   Fragment* -	constant pointer to the parent fragment
 			*/
 			const Fragment* getFragment() const
@@ -409,9 +409,9 @@ namespace BALL
 
 			/** Constant inspection of the atom's parent residue.
 					A NULL pointer is returned if this atom is not part of a residue.
-					\\
-					Use \Ref{Residue::insert} to insert an atom into a residue and
-					\Ref{Residue::remove} to remove it.					
+					 \par
+					Use  \link Residue::insert Residue::insert \endlink  to insert an atom into a residue and
+					 \link Residue::remove Residue::remove \endlink  to remove it.					
 					@return   Residue* -	constant pointer to the parent residue
 			*/
 			const Residue* getResidue() const
@@ -433,16 +433,16 @@ namespace BALL
 					This method returns at fully specified atom name as used for charge and 
 					type assignments.	The name consists of the name of the residue the atom is 
 					contained in, a colon, and the atom name.	Blanks are removed from both names. 
-					For example, for the alpha carbon atom of isoleucine {\tt getFullName} 
-					will return the name {\tt ILE:CA}. 
-					For N terminal residues, {\tt -N} is appended to the residue name, for C 
-					terminal residues {\tt -C}.	If the residue is a CYS involved in a disulphide
-					bridge, an additional {\tt -S} or {\tt S} (for terminal residue)
-					is appended. For single amino acids (C and N terminal) {\tt -M} is added.\\
+					For example, for the alpha carbon atom of isoleucine <tt>getFullName</tt> 
+					will return the name <tt>ILE:CA</tt>. 
+					For N terminal residues, <tt>-N</tt> is appended to the residue name, for C 
+					terminal residues <tt>-C</tt>.	If the residue is a CYS involved in a disulphide
+					bridge, an additional <tt>-S</tt> or <tt>S</tt> (for terminal residue)
+					is appended. For single amino acids (C and N terminal) <tt>-M</tt> is added. \par
 					If the atom is not contained in a residue, the name of the parent fragment 
 					is taken instead of	the residue name. If there is no parent fragment, the name 
 					of the parent molecule is taken.
-					If the atom is not contained in any superstructure, getFullname returns getName.\\
+					If the atom is not contained in any superstructure, getFullname returns getName. \par
 					Overview of the returned strings:
 					\begin{itemize}
 						\item <residue>:<atom>  -- if contained in a residue
@@ -454,8 +454,8 @@ namespace BALL
 						\item <fragment>:atom -- for atoms contained in a fragment, but not in a residue
 						\item <molecule>:atom -- for atoms contained in a molecule, but not in a fragment
 					\end{itemize}				
-					@param	type if type is set to {\tt Atom::NO_VARIANT_EXTENSIONS}, 
-									the variant extension ({\tt -XX}) is omitted
+					@param	type if type is set to <tt>Atom::NO_VARIANT_EXTENSIONS</tt>, 
+									the variant extension (<tt>-XX</tt>) is omitted
 					@return	String the full name
 			*/
 			String getFullName(FullNameType type = ADD_VARIANT_EXTENSIONS) const
@@ -559,31 +559,31 @@ namespace BALL
 				throw();
 
 			/** Mutable inspection of an atom's indexed bond.
-					The reference is 0 if this instance does not have a bond with index {\em index}.\\
-					{\bf Note:} No corresponding mutator Atom::setBond exists to
+					The reference is 0 if this instance does not have a bond with index {\em index}. \par
+					<b>Note:</b> No corresponding mutator Atom::setBond exists to
 					consider design of contract - an atom may not insert a bond in its bond table at a given index.
 					The atom's bond table is an implementation detail that is not relevant to and should not be relied
-					on by the client programmer. A bond must always be created via \Ref{Bond::Bond} or
-					\Ref{Atom::createBond}.
+					on by the client programmer. A bond must always be created via  \link Bond::Bond Bond::Bond \endlink  or
+					 \link Atom::createBond Atom::createBond \endlink .
 					@param   index the index of the bond to be accessed to
 					@return  Bond* - mutable pointer to the bond that is indexed in this instance's bond table,
 									 0 if this instance does not have a bond with index {\em index}
-					@exception   IndexOverflow if {\tt index > MAX_NUMBER_OF_BONDS}
+					@exception   IndexOverflow if <tt>index > MAX_NUMBER_OF_BONDS</tt>
 			*/
 			Bond* getBond(Position index)
 				throw(Exception::IndexOverflow);
 
 			/** Constant inspection of an atom's indexed bond.
-					The reference is 0 if this instance does not have a bond with index {\em index}.\\
-					{\bf Note:} No corresponding mutator Atom::setBond exists to
+					The reference is 0 if this instance does not have a bond with index {\em index}. \par
+					<b>Note:</b> No corresponding mutator Atom::setBond exists to
 					consider design of contract - an atom may not insert a bond in its bond table at a given index.
 					The atom's bond table is an implementation detail that is not relevant to and should not be relied
-					on by the client programmer. A bond must always be created via \Ref{Bond::Bond} or
-					\Ref{Atom::createBond}.
+					on by the client programmer. A bond must always be created via  \link Bond::Bond Bond::Bond \endlink  or
+					 \link Atom::createBond Atom::createBond \endlink .
 					@param   index the index of the bond to be accessed to
 					@return  Bond* - constant pointer to the bond that is indexed in this instance's bond table,
 									 0 if this instance does not have a bond with index {\em index}
-					@exception   IndexOverflow if {\tt index > MAX_NUMBER_OF_BONDS}
+					@exception   IndexOverflow if <tt>index > MAX_NUMBER_OF_BONDS</tt>
 			*/
 			const Bond* getBond(Position index) const
 				throw(Exception::IndexOverflow);
@@ -591,7 +591,7 @@ namespace BALL
 			/** Mutable inspection of an atom's bond with another atom.
 					The reference is 0 if this instance does not have a bond with {\em atom}.
 					@param   atom the atom that is considered to have a bond with this instance
-					@return  Bond* - mutable pointer to the bond that connects {\tt atom}  with this instance,
+					@return  Bond* - mutable pointer to the bond that connects <tt>atom</tt>  with this instance,
 									 0 if this instance does not have a bond with {\em atom}
 					@see     Atom::createBond	     
 			*/
@@ -614,8 +614,8 @@ namespace BALL
 			//@{ 
 
 			/** Bond creation.
-					Create a new instance of \Ref{Bond} connecting this instance to {\em atom}.
-					Calls \Ref{Bond::createBond}.
+					Create a new instance of  \link Bond Bond \endlink  connecting this instance to {\em atom}.
+					Calls  \link Bond::createBond Bond::createBond \endlink .
 					The state of the bond is initialized to the default values.
 					@return  Bond* - default initialized Bond instance that connects this instance to {\em atom}
 					@see     Bond::createBond
@@ -625,9 +625,9 @@ namespace BALL
 
 			/** Extended bond creation.
 					Initialize the bond {\em bond} to connect this instance to {\em atom}.
-					Calls \Ref{Bond::createBond}.
-					The state of the bond is initialzed to the default values.\\
-					{\bf Note:} This method is recommended for use if a subclass of the \Ref{Bond}
+					Calls  \link Bond::createBond Bond::createBond \endlink .
+					The state of the bond is initialzed to the default values. \par
+					<b>Note:</b> This method is recommended for use if a subclass of the  \link Bond Bond \endlink 
 									 is to be used as the new bond. This permits extensibility of bonds to the framework client.
 					@return  Bond* - default initialized bond {\em bond} that connects this instance to {\em atom}
 					@see     Bond::createBond
@@ -643,9 +643,9 @@ namespace BALL
 			/** Explicit bond destruction.
 					Destroy the bond connecting {\em *this atom} and {\em atom} explicitly.
 					If the bond is auto-deletable the default destructor is called 
-					otherwise \Ref{Bond::destroy}.\\
-					{\bf Note:} This method is recommended to destroy a bond of an atom explicitly
-					instead of using the keyword {\tt delete}.
+					otherwise  \link Bond::destroy Bond::destroy \endlink . \par
+					<b>Note:</b> This method is recommended to destroy a bond of an atom explicitly
+					instead of using the keyword <tt>delete</tt>.
 					This is due to erroneous explicit destruction of statically allocated bonds.
 					@param   atom the atom that should be disconnected from this instance
 					@see     AutoDeletable
@@ -657,9 +657,9 @@ namespace BALL
 			/** Explicit bond table destruction.
 					Destroy all the bonds connecting {\em *this atom} with another atom explicitly.
 					If the bonds are auto-deletable the default destructors are called 
-					otherwise \Ref{Bond::destroy}.\\
-					{\bf Note:} This method is recommended to destroy all bonds of an atom explicitly
-					instead of using the keyword {\tt delete}.
+					otherwise  \link Bond::destroy Bond::destroy \endlink . \par
+					<b>Note:</b> This method is recommended to destroy all bonds of an atom explicitly
+					instead of using the keyword <tt>delete</tt>.
 					This is due to erroneous explicit destruction of statically allocated bonds.
 					@param     atom the atom that should be disconnected from this instance
 					@see       AutoDeletable
@@ -675,26 +675,26 @@ namespace BALL
 
 			/** Determine whether the atom takes part in a certain bond.
 					@param   bond the bond in question
-					@return  bool {\tt true} if the bond {\em bond} connects this instance with another atom,
-										    {\tt false} otherwise
+					@return  bool <tt>true</tt> if the bond {\em bond} connects this instance with another atom,
+										    <tt>false</tt> otherwise
 					@see     Atom::hasBond
 			*/
 			bool hasBond(const Bond& bond) const
 				throw();
 
 			/** Determine whether the atom is bound to another.
-					Calls \Ref{Atom::getBond}.
+					Calls  \link Atom::getBond Atom::getBond \endlink .
 					@param   atom the atom in question
-					@return  bool - {\tt true} if bond connects {\em atom} with {\em *this atom},
-													{\tt false} otherwise
+					@return  bool - <tt>true</tt> if bond connects {\em atom} with {\em *this atom},
+													<tt>false</tt> otherwise
 					@see     Atom::getBond
 			*/
 			bool isBoundTo(const Atom& atom) const
 				throw();
 
 			/** Determine whether the atom has any bond.
-					@return  bool - {\tt true} if an atom is bound to this instance,
-													{\tt false} otherwise
+					@return  bool - <tt>true</tt> if an atom is bound to this instance,
+													<tt>false</tt> otherwise
 					@see     Atom::hasBond
 			*/
 			bool isBound() const
@@ -704,7 +704,7 @@ namespace BALL
 					Two atoms are geminal if they do not share a common bond but both have a
 					bond to a third atom. For example the two hydrogen atoms in water are geminal. 
 					@param	atom the second atom
-					@return bool - {\bf true} if {\tt atom} is geminal to this instance
+					@return bool - <b>true</b> if <tt>atom</tt> is geminal to this instance
 			*/
 			bool isGeminal(const Atom& atom) const
 				throw();
@@ -712,7 +712,7 @@ namespace BALL
 			/**	True if the two atoms are vicinal.
 					Two atoms are vicinal if they are separated by three bonds (1-4 position).
 					@param	atom the second atom
-					@return bool - {\bf true} if {\tt atom} is vicinal to this instance
+					@return bool - <b>true</b> if <tt>atom</tt> is vicinal to this instance
 			*/
 			bool isVicinal(const Atom& atom) const
 				throw();
@@ -723,8 +723,8 @@ namespace BALL
 			//@{ 
 
 			/** Internal state and consistency self-validation.
-					@return	bool - {\tt true} if the internal state of this 
-									instance is correct (self-validated) and consistent, {\tt false} otherwise
+					@return	bool - <tt>true</tt> if the internal state of this 
+									instance is correct (self-validated) and consistent, <tt>false</tt> otherwise
 			*/
 			virtual bool isValid() const
 				throw();
@@ -745,9 +745,9 @@ namespace BALL
 			//@{
 
 			/** Application of an unary processor on every contained bond.
-					@param  processor a typed unary processor for \Ref{Bond} instances
-					@return  bool - {\tt true} if application has been terminated successfully,
-													{\tt false} otherwise
+					@param  processor a typed unary processor for  \link Bond Bond \endlink  instances
+					@return  bool - <tt>true</tt> if application has been terminated successfully,
+													<tt>false</tt> otherwise
 			*/
 			bool applyBonds(UnaryProcessor<Bond>& processor)
 				throw();
@@ -1082,8 +1082,8 @@ namespace BALL
 			void clear();
 
 			/** Swap the contents of the two attributes.
-					Adjusts the {\tt ptr} and {\tt index_} members of
-					\Ref{StaticAtomAttributes} and \Ref{Atom}.
+					Adjusts the <tt>ptr</tt> and <tt>index_</tt> members of
+					 \link StaticAtomAttributes StaticAtomAttributes \endlink  and  \link Atom Atom \endlink .
 			*/
 			void swap(StaticAtomAttributes& attr);
 

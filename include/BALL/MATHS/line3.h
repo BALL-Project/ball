@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: line3.h,v 1.35 2003/01/08 21:13:26 oliver Exp $
+// $Id: line3.h,v 1.36 2003/02/21 16:03:50 anhi Exp $
 
 #ifndef BALL_MATHS_LINE3_H
 #define BALL_MATHS_LINE3_H
@@ -39,9 +39,9 @@ namespace BALL
 		throw();
 	
 	/**	Generic Line in Three-Dimensional Space.
-			\\
-      {\bf Definition:} \URL{BALL/MATHS/line3.h}
-			\\
+			 \par
+      <b>Definition:</b> BALL/MATHS/line3.h
+			 \par
 	*/
 	template <typename T>
 	class TLine3
@@ -55,8 +55,8 @@ namespace BALL
 		//@{
 
 		/** form of parameter to describe the line:
-				{\tt 0} one Point and one Vector.
-				{\tt 1} two Points
+				<tt>0</tt> one Point and one Vector.
+				<tt>1</tt> two Points
 		*/
 		enum Form
 		{
@@ -94,11 +94,11 @@ namespace BALL
 		/**	Detailed constructor.
 				Depending on form, create a new TLine3 object from a point and a vector
 				or from two points.
-				@param	point assigned to {\tt p}
-				@param	vector assigned to {\tt d}
+				@param	point assigned to <tt>p</tt>
+				@param	vector assigned to <tt>d</tt>
 				@param	form assigns form of parameter
-								{\tt 0} one Point and one Vector\\
-								{\tt 1} two Points
+								<tt>0</tt> one Point and one Vector \par
+								<tt>1</tt> two Points
 		*/
 		TLine3(const TVector3<T>& point, const TVector3<T>& vector, Form form = FORM__PARAMETER)
 			throw()
@@ -161,8 +161,8 @@ namespace BALL
 
 		/**	Assign from one point and a vector
 				or from two points, depending on form.
-				@param	point assigned to {\tt p}
-				@param	vector assigned to {\tt d}
+				@param	point assigned to <tt>p</tt>
+				@param	vector assigned to <tt>d</tt>
 				@param	form assigns form of parameter
 		*/
 		void set(const TVector3<T>& point, const TVector3<T>& vector, Form form = FORM__PARAMETER)
@@ -203,13 +203,13 @@ namespace BALL
 			line.d = d;
 		}
 
-		/**	Assign to two instances of {\tt TVector3}.
+		/**	Assign to two instances of <tt>TVector3</tt>.
 				Type of components depends on form.
 				@param	point the first point
 				@param	vector the second point or the vector component
-				@param	form assigns form of parameter \\
-								{\tt 0} one Point and one Vector \\
-								{\tt 1} two Points
+				@param	form assigns form of parameter  \par
+								<tt>0</tt> one Point and one Vector  \par
+								<tt>1</tt> two Points
 		*/
 		void get(TVector3<T>& point,TVector3<T>& vector, Form form = FORM__PARAMETER) const
 			throw()
@@ -247,7 +247,7 @@ namespace BALL
 		//@{
 
 		/**	Equality operator.
-				@return bool, {\bf true} if both components are equal, {\bf false} otherwise
+				@return bool, <b>true</b> if both components are equal, <b>false</b> otherwise
 		*/
 		bool operator ==(const TLine3& line) const
 			throw()
@@ -256,7 +256,7 @@ namespace BALL
 		}
 
 		/**	Inequality operator.
-				@return bool, {\bf true} if the two lines differ in at least one component, {\bf false} otherwise
+				@return bool, <b>true</b> if the two lines differ in at least one component, <b>false</b> otherwise
 		*/
 		bool operator != (const TLine3& line) const
 			throw()
@@ -265,7 +265,7 @@ namespace BALL
 		}
 
 		/**	Test whether a given point is a member of the line.
-				@return bool, {\bf true} or {\bf false}
+				@return bool, <b>true</b> or <b>false</b>
 		*/
 		bool has(const TVector3<T>& point) const
 			throw()
@@ -307,7 +307,7 @@ namespace BALL
 
 		/**	Test whether instance is valid.
 				Always returns true.
-				@return bool {\bf true}
+				@return bool <b>true</b>
 		*/
 		bool isValid() const
 			throw()
@@ -353,7 +353,7 @@ namespace BALL
 		//@}
 	};
 
-	/**	Default line of type {\bf float}.
+	/**	Default line of type <b>float</b>.
 	*/
 	typedef TLine3<float> Line3;
 
@@ -361,8 +361,8 @@ namespace BALL
 	*/
 	//@{
 	/**	Input operator.
-			Reads two objcts of type {\bf TVector3} from an {\tt istream} and
-			assigns them to {\tt d} and {\tt p}.
+			Reads two objcts of type <b>TVector3</b> from an <tt>istream</tt> and
+			assigns them to <tt>d</tt> and <tt>p</tt>.
 	*/
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TLine3<T>& line)
@@ -374,10 +374,10 @@ namespace BALL
 	}
 
 	/**	Output operator.
-			Writes the two public attributes {\tt d} and {\tt p} to an output stream.
-			The values of the two vectors are enclosed in brackets.\\
-			{\bf Example:}\\
-			{\tt ((0 0 0) (1 2 1))}
+			Writes the two public attributes <tt>d</tt> and <tt>p</tt> to an output stream.
+			The values of the two vectors are enclosed in brackets. \par
+			<b>Example:</b> \par
+			<tt>((0 0 0) (1 2 1))</tt>
 			@see TVector3::operator<<
 	*/
 	template <typename T>

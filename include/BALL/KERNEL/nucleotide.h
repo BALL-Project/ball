@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nucleotide.h,v 1.21 2003/01/08 21:13:25 oliver Exp $
+// $Id: nucleotide.h,v 1.22 2003/02/21 16:03:31 anhi Exp $
 
 #ifndef BALL_KERNEL_NUCLEOTIDE_H
 #define BALL_KERNEL_NUCLEOTIDE_H
@@ -30,9 +30,9 @@ namespace BALL
 
 	/**	Nucleotide class.
 			This class is used to represent nucleotides within
-			an \Ref{NucleicAcid} object.
-			\\
-			{\bf Definition:} \URL{BALL/KERNEL/nucleotide.h}
+			an  \link NucleicAcid NucleicAcid \endlink  object.
+			 \par
+			<b>Definition:</b> BALL/KERNEL/nucleotide.h
 	*/
 	class Nucleotide
 		: public Fragment
@@ -114,7 +114,7 @@ namespace BALL
 		/** Assignment with cloning facility.
 				The assignment is either deep or shallow (default).
 				@param  nucleotide the nucleotide to be copied (cloned)
-				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy
+				@param  deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy
 		*/
 		void set(const Nucleotide& nucleotide, bool deep = true)
 			throw();
@@ -236,20 +236,20 @@ namespace BALL
 		bool remove(Atom& atom)
 			throw();
 
-		/**	Cut all children of {\tt nucleotide} and prepend them before the children of this instance.
+		/**	Cut all children of <tt>nucleotide</tt> and prepend them before the children of this instance.
 				@param nucleotide the nucleotide to access
 		*/
 		void spliceBefore(Nucleotide& nucleotide)
 			throw();
 
-		/**	Cut all children of {\tt nucleotide} and append them after the children of this instance.
+		/**	Cut all children of <tt>nucleotide</tt> and append them after the children of this instance.
 				@param nucleotide the nucleotide to access
 		*/
 		void spliceAfter(Nucleotide& nucleotide)
 			throw();
 
-		/**	Move the children of {\tt nucleotide} into this instance.
-				The children are inserted using \Ref{spliceBefore}.
+		/**	Move the children of <tt>nucleotide</tt> into this instance.
+				The children are inserted using  \link spliceBefore spliceBefore \endlink .
 		*/
 		void splice(Nucleotide& nucleotide)
 			throw();
@@ -287,8 +287,8 @@ namespace BALL
 		//@{
 
 		/** Internal state and consistency self-validation.
-				@return	 bool -	{\tt true} if the internal state of this instance nucleotide is correct
-												(self-validated) and consistent, {\tt false} otherwise
+				@return	 bool -	<tt>true</tt> if the internal state of this instance nucleotide is correct
+												(self-validated) and consistent, <tt>false</tt> otherwise
 		*/
 		virtual bool isValid() const
 			throw();

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RSEdge.h,v 1.24 2002/12/17 14:13:09 anker Exp $
+// $Id: RSEdge.h,v 1.25 2003/02/21 16:06:30 anhi Exp $
 
 #ifndef BALL_STRUCTURE_RSEDGE_H
 #define BALL_STRUCTURE_RSEDGE_H
@@ -45,7 +45,7 @@ namespace BALL
 	class SASTriangulator;
 
 	/** Generic RSEdge Class.
-      {\bf Definition:} \URL{BALL/STRUCTURE/RSEdge.h}
+      <b>Definition:</b> BALL/STRUCTURE/RSEdge.h
 	*/
 	class RSEdge	:	public GraphEdge< RSVertex,RSEdge,RSFace >
 	{
@@ -315,35 +315,35 @@ namespace BALL
 		//@{
 
 		/**	Equality operator.
-				@return bool, {\bf true} if all vertices and all faces are equal	
-											modulo order, {\bf false} otherwise
+				@return bool, <b>true</b> if all vertices and all faces are equal	
+											modulo order, <b>false</b> otherwise
 		*/
 		virtual bool operator == (const RSEdge& rsedge) const
 			throw();
 
 		/**	Inequality operator.
-				@return	bool	{\bf false} if all vertices and all faces are equal	
-											modulo order, {\bf true} otherwise
+				@return	bool	<b>false</b> if all vertices and all faces are equal	
+											modulo order, <b>true</b> otherwise
 		*/
 		virtual bool operator != (const RSEdge& rsedge) const
 			throw();
 
 		/**	Similarity operator.
-				@return	bool	{\bf true} if all vertices are similar modulo order,
-											{\bf false} otherwise
+				@return	bool	<b>true</b> if all vertices are similar modulo order,
+											<b>false</b> otherwise
 		*/
 		virtual bool operator *=(const RSEdge& rsedge) const
 			throw();
 
 		/** isSingular
-				@return	bool	{\bf true} if the RSEdge is singular,
-											{\bf false} otherwise
+				@return	bool	<b>true</b> if the RSEdge is singular,
+											<b>false</b> otherwise
 		*/
 		bool isSingular() const
 			throw();
 
 		/** isFree
-				@return	bool	{\bf true} if the RSEdge is free, {\bf false} otherwise
+				@return	bool	<b>true</b> if the RSEdge is free, <b>false</b> otherwise
 		*/
 		bool isFree() const
 			throw();

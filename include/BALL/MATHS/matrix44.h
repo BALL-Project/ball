@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: matrix44.h,v 1.39 2002/02/27 12:18:54 sturm Exp $
+// $Id: matrix44.h,v 1.40 2003/02/21 16:03:51 anhi Exp $
 
 #ifndef BALL_MATHS_MATRIX44_H
 #define BALL_MATHS_MATRIX44_H
@@ -30,14 +30,14 @@ namespace BALL
 {
 
 	/**	@name	4x4 Matrix
-			@memo matrix representing transformations: class \Ref{TMatrix4x4} and class \Ref{Matrix4x4}
+			@memo matrix representing transformations: class  \link TMatrix4x4 TMatrix4x4 \endlink  and class  \link Matrix4x4 Matrix4x4 \endlink 
 	*/
 	//@{
 	template <typename T>
 	class TMatrix4x4;
 
 	/**	Input Operator.
-			Read sixteen values of type {\tt T} from an input stream.
+			Read sixteen values of type <tt>T</tt> from an input stream.
 			@param s	the input stream
 			@param m the matrix to read 
 	*/
@@ -46,7 +46,7 @@ namespace BALL
 		throw();
 
 	/**	Output Operator
-			Writes sixteen values of type {\tt T} to an output stream.
+			Writes sixteen values of type <tt>T</tt> to an output stream.
 			@param s	the output stream
 			@param m  the matrix to write 
 	*/
@@ -55,7 +55,7 @@ namespace BALL
 		throw();
 	
 	/**	Generic 4x4 Matrix Class.
-      {\bf Definition:} \URL{BALL/MATHS/matrix44.h} \\
+      <b>Definition:</b> BALL/MATHS/matrix44.h
  	*/
 	template <typename T>
 	class TMatrix4x4
@@ -70,25 +70,25 @@ namespace BALL
 
 		/**	Default constructor.
 				This method creates a new TMatrix4x4 object. The components
-				are initialized to {\tt 0}.
+				are initialized to <tt>0</tt>.
 		*/
 		TMatrix4x4()
 			throw();
 
 		/**	Array constructor.
 				This constructor creates a TMatrix4x4 object from the first
-				sixteen elements pointed to by {\tt ptr}.
+				sixteen elements pointed to by <tt>ptr</tt>.
 				@param ptr the array to construct from
-				@exception NullPointer if {\tt ptr == 0}
+				@exception NullPointer if <tt>ptr == 0</tt>
 		*/
 		TMatrix4x4(const T* ptr)
 			throw(Exception::NullPointer);
 
 		/**	Array constructor.
 				This constructor creates a TMatrix4x4 object from the
-				sixteen elements in the array assigned by {\tt ptr}.
+				sixteen elements in the array assigned by <tt>ptr</tt>.
 				@param ptr the array to construct from
-				@exception NullPointer if {\tt ptr == 0}
+				@exception NullPointer if <tt>ptr == 0</tt>
 		*/
 		TMatrix4x4(const T ptr[4][4])
 			throw(Exception::NullPointer);
@@ -115,7 +115,7 @@ namespace BALL
 			throw();
 
 		/**	Detailed constructor.
-				Create a new TMatrix4x4 object from sixteen {\tt T} values.
+				Create a new TMatrix4x4 object from sixteen <tt>T</tt> values.
 				@param m11 - m44 assigned to the components
 		*/
 		TMatrix4x4
@@ -146,17 +146,17 @@ namespace BALL
 		//@{
 
 		/**	Assign from array-ptr.
-				Assign from the first	sixteen elements pointed to by {\tt ptr}.
+				Assign from the first	sixteen elements pointed to by <tt>ptr</tt>.
 				@param ptr the array to construct from
-				@exception NullPointer if {\tt ptr == 0}
+				@exception NullPointer if <tt>ptr == 0</tt>
 		*/
 		void set( const T* ptr)
 			throw(Exception::NullPointer);
 
 		/**	Assign from the first sixteen elements.
-				pointed to by the array assigned by {\tt ptr}.
+				pointed to by the array assigned by <tt>ptr</tt>.
 				@param ptr the array to construct from
-				@exception NullPointer if {\tt ptr == 0}
+				@exception NullPointer if <tt>ptr == 0</tt>
 		*/
 		void set(const T ptr[4][4])
 			throw(Exception::NullPointer);
@@ -189,14 +189,14 @@ namespace BALL
 			throw();
 
 		/**	Assignment operator.
-				Assign the components from the first 16 values assigned by {\tt ptr}.
+				Assign the components from the first 16 values assigned by <tt>ptr</tt>.
 				@param ptr the array to construct from
 		**/
 		const TMatrix4x4& operator = ( const T* ptr)
 			throw(Exception::NullPointer);
 
 		/**	Assignment operator.
-				Assign the components from the first 16 values assigned by {\tt ptr}.
+				Assign the components from the first 16 values assigned by <tt>ptr</tt>.
 				@param ptr the array to construct from
 		**/
 		const TMatrix4x4& operator = (const T ptr[4][4])
@@ -210,16 +210,16 @@ namespace BALL
 			throw();
 
 		/**	Assign to an array.
-				Assigns the components to a pointer of an array of sixteen values of type {\tt T}.
-				@exception NullPointer if {\tt ptr == 0}
+				Assigns the components to a pointer of an array of sixteen values of type <tt>T</tt>.
+				@exception NullPointer if <tt>ptr == 0</tt>
 				@param ptr the pointer to assign to
 		*/
 		void get(T* ptr) const
 			throw(Exception::NullPointer);
 
 		/**	Assign to an array.
-				Assigns the components to an array of sixteen values of type {\tt T}.
-				@exception NullPointer if {\tt ptr == 0}
+				Assigns the components to an array of sixteen values of type <tt>T</tt>.
+				@exception NullPointer if <tt>ptr == 0</tt>
 				@param ptr the array to assign to
 		*/
 		void get(T ptr[4][4]) const
@@ -243,7 +243,7 @@ namespace BALL
 			 TVector4<T>& col3, TVector4<T>& col4) const
 			throw();
 
-		/**	Assign to sixteen variables of type {\tt T}.
+		/**	Assign to sixteen variables of type <tt>T</tt>.
 				@param m11 - m44 the variables to assign to
 		*/
 		void get
@@ -307,7 +307,7 @@ namespace BALL
 
 		/** Get a row of the matrix.
 				@param row the number of the row (0-3)
-				@exception IndexOverflow if {\tt row > 3}
+				@exception IndexOverflow if <tt>row > 3</tt>
 				@return TVector4 the row
 		*/
 		TVector4<T> getRow(Position row) const
@@ -315,7 +315,7 @@ namespace BALL
 
 		/** Get a column of the matrix.
 				@param col the number of the column (0-3)
-				@exception IndexOverflow if {\tt col > 3}
+				@exception IndexOverflow if <tt>col > 3</tt>
 				@return TVector4 the column
 		*/
 		TVector4<T> getColumn(Position col) const
@@ -324,7 +324,7 @@ namespace BALL
 		/** Set a row of the matrix.
 				@param row the number of the row (0-3)
 				@param row_value the new value of the row
-				@exception IndexOverflow if {\tt row > 3}
+				@exception IndexOverflow if <tt>row > 3</tt>
 		*/
 		void setRow(Position row, const TVector4<T> row_value)
 			throw(Exception::IndexOverflow);
@@ -332,16 +332,16 @@ namespace BALL
 		/** Set a column of the matrix.
 				@param col the number of the column (0-3)
 				@param col_value the new value of the col
-				@exception IndexOverflow if {\tt col > 3}
+				@exception IndexOverflow if <tt>col > 3</tt>
 		*/
 		void setColumn(Position col, const TVector4<T> col_value)
 			throw(Exception::IndexOverflow);
 
 		/** Test whether two matrices are equal.
-				Two matrices are considered equal, if \Ref{Maths::isEqual} returns {\bf true} 
+				Two matrices are considered equal, if  \link Maths::isEqual Maths::isEqual \endlink  returns <b>true</b> 
 				for each pair of corresponding elements.
 				@param m the matrix to compare with
-				@return bool, {\bf true} if all components are equal, {\bf false} otherwise
+				@return bool, <b>true</b> if all components are equal, <b>false</b> otherwise
 		*/
 		bool isEqual(const TMatrix4x4& m) const
 			throw();
@@ -355,7 +355,7 @@ namespace BALL
 		/** Access operator of a cell.
 				@param row the number of the row (0-3)
 				@param col the number of the column (0-3)
-				@exception IndexOverflow if {\tt col >3 || row > 3}
+				@exception IndexOverflow if <tt>col >3 || row > 3</tt>
 				@return T& a reference to the cell
 		*/
 		T& operator () (Position row, Position col)
@@ -364,16 +364,16 @@ namespace BALL
 		/** Constant access operator of a cell.
 				@param row the number of the row (0-3)
 				@param col the number of the column (0-3)
-				@exception IndexOverflow if {\tt col ||row > 3}
+				@exception IndexOverflow if <tt>col ||row > 3</tt>
 				@return T& a const reference to the cell
 		*/
 		const T& operator () (Position row, Position col) const
 			throw(Exception::IndexOverflow);
 
 		/**	Constant random access operator.
-				Access single elements of the matrix. {\tt index} may assume
+				Access single elements of the matrix. <tt>index</tt> may assume
 				values in the range of 0 - 15. The elements of the matrix
-				are returned rows first, i.e., in the following order: {\tt m11}, {\tt m12}, {\tt m13}...
+				are returned rows first, i.e., in the following order: <tt>m11</tt>, <tt>m12</tt>, {\tt m13}...
 				
 		*/
 		const T& operator [] (Position index) const
@@ -443,7 +443,7 @@ namespace BALL
 
 		/**	Divide by a scalar.
 				Operator for dividing every cell value by a scalar value.
-				@exception DivisionByZero if {\tt scalar == 0}
+				@exception DivisionByZero if <tt>scalar == 0</tt>
 				@return TMatrix4x4 the result
 		*/
 		TMatrix4x4 operator / (const T& scalar) const
@@ -451,7 +451,7 @@ namespace BALL
 
 		/**	Divide by a scalar.
 				Operator for dividing every cell value by a scalar value.
-				@exception DivisionByZero if {\tt scalar == 0}
+				@exception DivisionByZero if <tt>scalar == 0</tt>
 				@return TMatrix4x4&, {\em *this}
 		*/
 		TMatrix4x4& operator /= (const T& scalar)
@@ -655,60 +655,60 @@ namespace BALL
 
 		/**	Equality operator.
 				Instead of this operator isEqual should be used.
-				\Ref{isEqual}
-				@return bool, {\bf true} if all components are equal, {\bf false} otherwise
+				 \link isEqual isEqual \endlink 
+				@return bool, <b>true</b> if all components are equal, <b>false</b> otherwise
 		*/
 		bool operator == (const TMatrix4x4& m) const
 			throw(); 
 
 		/**	Inequality operator.
 				Instead of this operator isEqual should be used.
-				\Ref{isEqual}
-				@return bool, {\bf true} if the two TMatrix4x4 differ in at least one component, {\bf false} otherwise
+				 \link isEqual isEqual \endlink 
+				@return bool, <b>true</b> if the two TMatrix4x4 differ in at least one component, <b>false</b> otherwise
 		*/
 		bool operator != (const TMatrix4x4& m) const
 			throw();
 
 		/** Test whether this matrix is an identity matrix.
 				(I.e. m11, m22, m33, m44 = 1 and the other cells have the value 0)
-				@return bool, {\bf true} if identity matrix, {\bf false} otherwise
+				@return bool, <b>true</b> if identity matrix, <b>false</b> otherwise
 		*/
 		bool isIdentity() const
 			throw();
 
 		/** Test whether this matrix is regular.
-				@return bool, {\bf true} if (Determinant != 0), {\bf false} otherwise
+				@return bool, <b>true</b> if (Determinant != 0), <b>false</b> otherwise
 		*/
 		bool isRegular() const
 			throw();
 
 		/** Test whether this matrix is singular.
-				@return bool, {\bf true} if (Determinant == 0), {\bf false} otherwise
+				@return bool, <b>true</b> if (Determinant == 0), <b>false</b> otherwise
 		*/
 		bool isSingular() const
 			throw();
 
 		/** Test whether this matrix is symmetric.
 				(m12 = m21, m31 = m13, ...)
-				@return bool, {\bf true} if symmatric, {\bf false} otherwise
+				@return bool, <b>true</b> if symmatric, <b>false</b> otherwise
 		*/
 		bool isSymmetric() const
 			throw();
 
 		/** Test whether the lower triangular is zero.
-				@return bool, {\bf true} if (m12 = m13 = m14 = m23 = m24 = m34 = 0), {\bf false} otherwise
+				@return bool, <b>true</b> if (m12 = m13 = m14 = m23 = m24 = m34 = 0), <b>false</b> otherwise
 		*/
 		bool isLowerTriangular() const
 			throw();
 
 		/** Test whether the upper triangular is zero.
-				@return bool, {\bf true} if (m21 = m31 = m32 = m41 = m42 = m43 = 0), {\bf false} otherwise
+				@return bool, <b>true</b> if (m21 = m31 = m32 = m41 = m42 = m43 = 0), <b>false</b> otherwise
 		*/
 		bool isUpperTriangular() const
 			throw();
 
 		/** Test whether all cells but the diagonal are zero.
-				@return bool, {\bf true} or {\bf false}
+				@return bool, <b>true</b> or <b>false</b>
 		*/
 		bool isDiagonal() const
 			throw();
@@ -720,7 +720,7 @@ namespace BALL
 
 		/**	Test whether instance is valid.
 				Always returns true.
-				@return bool {\bf true}
+				@return bool <b>true</b>
 		*/
 		bool isValid() const
 			throw();

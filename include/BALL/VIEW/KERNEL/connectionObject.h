@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: connectionObject.h,v 1.11 2002/12/16 12:22:54 sturm Exp $
+// $Id: connectionObject.h,v 1.12 2003/02/21 16:07:57 anhi Exp $
 
 #ifndef BALL_VIEW_KERNEL_CONNECTIONOBJECT_H
 #define BALL_VIEW_KERNEL_CONNECTIONOBJECT_H
@@ -44,7 +44,7 @@ namespace BALL
 				should be connected as well as notifying methods that are responsible for posting
 				messages. The registering process will be handled by the interface of every
 				dialog and widget. In this process a tree will be created that connects all 
-				connectionObject objects.	See \Ref{ModularWidget} for further information concerning
+				connectionObject objects.	See  \link ModularWidget ModularWidget \endlink  for further information concerning
 				widget and dialog interface definition.
 				The widgets communicate with the help of the method notify\_. With this method
 				a message can be sent through the connectionObject tree. One connectionObject
@@ -58,7 +58,7 @@ namespace BALL
 				always be created with the new command and the flag deletable must be set to {\em true}.
 				If a message if statically created in the {\em onNotify} method there is the possibility
 				that the message is already destroyed when it should be processed.
-				{\bf Definition:} \URL{BALL/VIEW/KERNEL/connectionObject.h}\\
+				<b>Definition:</b> BALL/VIEW/KERNEL/connectionObject.h
 		*/
 		class ConnectionObject
 		{
@@ -83,7 +83,7 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} connectionObject.
-					Calls \Ref{destroy}.
+					Calls  \link destroy destroy \endlink .
 					@see   destroy
 			*/
 			virtual ~ConnectionObject()
@@ -97,7 +97,7 @@ namespace BALL
 				throw();
 
 			/** Explicit destructor.
-					Calls \Ref{clear}
+					Calls  \link clear clear \endlink 
 					@see   clear
 			*/
 			virtual void destroy()
@@ -134,7 +134,7 @@ namespace BALL
 					Test if {\em object} connectionObject is a child of {\em *this} connectionObject.
 
 					@param   object the connectionObject to be tested
-					@return  bool {\tt true} if {\em object} is a child of {\em *this} connectionObject, {\tt false} otherwise
+					@return  bool <tt>true</tt> if {\em object} is a child of {\em *this} connectionObject, <tt>false</tt> otherwise
 					@see     registerConnectionObject
 					@see     unregisterConnectionObject
 			*/
@@ -143,15 +143,15 @@ namespace BALL
 
 			/** Inspection of parent connectionObject.
 					Access the parent connectionObject of {\em *this} connectionObject.
-					If {\em *this} connectionObject is root {\tt 0} will be returned.
-					@return  ConnectionObject* the pointer to the parent connectionObject, {\tt 0} if {\em *this} is root.
+					If {\em *this} connectionObject is root <tt>0</tt> will be returned.
+					@return  ConnectionObject* the pointer to the parent connectionObject, <tt>0</tt> if {\em *this} is root.
 			*/
 			ConnectionObject *getParent() const
 				throw();
 
 			/** Inspection of the root connectionObject.
 					Access the root of {\em *this} connectionObject. Return the connectionObject that
-					parent is {\tt 0}.
+					parent is <tt>0</tt>.
 					@return   ConnectionObject* the connectionObject that is the root
 			*/
 			ConnectionObject *getRoot()
@@ -162,7 +162,7 @@ namespace BALL
 					If a certain message should be processed for {\em *this} connectionObject
 					this method must be overridden. With the help of the RTTI methods one can easily
 					determine if an incoming message is relevant for {\em *this} connectionObject.
-					See \Ref{Message} for further information concerning messages.
+					See  \link Message Message \endlink  for further information concerning messages.
 					@param   message a pointer to a message. Do not delete the message in this method.
 			*/
 			virtual void onNotify(Message *message)
@@ -177,13 +177,13 @@ namespace BALL
 					Initiate self-validation of the data structure consistencies
 					of {\em *this} connectionObject.
 					If the internal data structure of {\em *this} connectionObject is correct
-					(self-validated) and consistent {\tt true} is returned, {\tt false} otherwise. 
+					(self-validated) and consistent <tt>true</tt> is returned, <tt>false</tt> otherwise. 
 					Checks the tree structure if all connections (in both ways: up and down) are 
 					without error.
 
-					@return			bool {\tt true} if the internal data structure of {\em *this}
+					@return			bool <tt>true</tt> if the internal data structure of {\em *this}
                       connectionObject is correct (self-validated) and consistent,
-					 						{\tt false} otherwise
+					 						<tt>false</tt> otherwise
 			*/
 			virtual bool isValid() const
 				throw();
@@ -219,9 +219,9 @@ namespace BALL
 					the statically created message for later processing but if the message is processed
 					later the {\em onNotify} method that has created that message is already finished.
 					Therefore the message is no longer available what leads to a segmentation fault.
-					To prevent that error always create messages with the {\tt new} command and uses
+					To prevent that error always create messages with the <tt>new</tt> command and uses
 					this method for the notification.
-					See \Ref{Message} For further information concerning messages.
+					See  \link Message Message \endlink  For further information concerning messages.
 					@param   message a pointer to a message that will be sent through the connectionObject tree.
 					@see     Message
 			*/

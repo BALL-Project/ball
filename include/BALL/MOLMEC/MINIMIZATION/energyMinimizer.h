@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: energyMinimizer.h,v 1.31 2003/02/04 14:26:57 oliver Exp $
+// $Id: energyMinimizer.h,v 1.32 2003/02/21 16:04:34 anhi Exp $
 
 // Energy Minimizer: A class for minimizing the energy of molecular systems
 
@@ -210,14 +210,14 @@ namespace BALL
 
     /** Implements the convergence criterion.
 				If the convergence criterion is fulfilled, this method
-				returns {\bf true}. The convergence criterion is implemented as one
+				returns <b>true</b>. The convergence criterion is implemented as one
 				of three conditions:
 				\begin{itemize}
 					\item {RMS gradient} is below max_rms_gradient_
-					\item \Ref{same_energy_counter_} is above \Ref{max_same_energy_}
-					\item {the energy difference} between two successive steps is below \Ref{energy_difference_bound_}
+					\item  \link same_energy_counter_ same_energy_counter_ \endlink  is above  \link max_same_energy_ max_same_energy_ \endlink 
+					\item {the energy difference} between two successive steps is below  \link energy_difference_bound_ energy_difference_bound_ \endlink 
 				\end{itemize}
-				If any of these conditions hold \Ref{isConverged} returns {\bf true}.
+				If any of these conditions hold  \link isConverged isConverged \endlink  returns <b>true</b>.
 				This method should be reimplemented in derived classes for a different
 				convergence criterion.
     */
@@ -241,14 +241,14 @@ namespace BALL
     virtual void updateDirection();
 
     /** Update energy.
-				This method calls {\tt force_field_->updateEnergy()} and stores
-				the result in {\tt current_energy_}.
+				This method calls <tt>force_field_->updateEnergy()</tt> and stores
+				the result in <tt>current_energy_</tt>.
     */
     virtual double updateEnergy();
 
     /** Update forces and store them in current_grad_.
-				This method calls {\tt force_field_->updateForces()} and stores them in 
-				\Ref{current_grad_}.
+				This method calls <tt>force_field_->updateForces()</tt> and stores them in 
+				 \link current_grad_ current_grad_ \endlink .
     */
     virtual void updateForces();
 
@@ -260,18 +260,18 @@ namespace BALL
 		void storeGradientEnergy();
 
     /** Print the energy.
-        This method is called by \Ref{finishIteration} after every
-        \Ref{energy_output_frequency_} steps.
-        It prints the current RMS gradient and the current energy to \Ref{Log}{\tt .info()}.
+        This method is called by  \link finishIteration finishIteration \endlink  after every
+         \link energy_output_frequency_ energy_output_frequency_ \endlink  steps.
+        It prints the current RMS gradient and the current energy to  \link Log Log \endlink <tt>.info()</tt>.
 				@see setEnergyOutputFrequency
 				@see getEnergyOutputFrequency
     */
     virtual void printEnergy() const;
 
 		/**	Take a snapshot of the system.
-				This method is called by \Ref{finishIteration} after every
-				\Ref{snapshot_frequency_} steps.
-				It saves a {\tt SnapShot} of the current atom coordinates to a \Ref{SnapShotManager}
+				This method is called by  \link finishIteration finishIteration \endlink  after every
+				 \link snapshot_frequency_ snapshot_frequency_ \endlink  steps.
+				It saves a <tt>SnapShot</tt> of the current atom coordinates to a  \link SnapShotManager SnapShotManager \endlink 
 				(if enabled).
 				@see setSnapShotFrequency
 				@see getSnapShotFrequency
@@ -280,16 +280,16 @@ namespace BALL
 
 		/**	Finishing step for this iteration.
 				This method should be called at the end of the main iteration 
-				loop implemented in \Ref{minimize}. It takes over some administrative stuff:
+				loop implemented in  \link minimize minimize \endlink . It takes over some administrative stuff:
 				\begin{itemize}
-					\item increment the iteration counter \Ref{number_of_iterations_}
-					\item call \Ref{takeSnapShot} if necessary
-					\item call \Ref{printEnergy} if necessary
-					\item call \Ref{ForceField::update} if necessary (to rebuild the pair lists!)
+					\item increment the iteration counter  \link number_of_iterations_ number_of_iterations_ \endlink 
+					\item call  \link takeSnapShot takeSnapShot \endlink  if necessary
+					\item call  \link printEnergy printEnergy \endlink  if necessary
+					\item call  \link ForceField::update ForceField::update \endlink  if necessary (to rebuild the pair lists!)
 				\end{itemize}
 
 				This method should be overwritten only in rare cases. Even then, the programmer
-				should make sure to call {\tt EnergyMinimizer::finishIteration} or 
+				should make sure to call <tt>EnergyMinimizer::finishIteration</tt> or 
 				has to take care of the above items himself.
 
 				All derived classes should call this method at the end of the minimize main loop.
@@ -369,12 +369,12 @@ namespace BALL
 		float	getEnergyDifferenceBound() const;
 
     /** Set the maximum RMS gradient (first convergence criterion).
-      The gradient unit of the gradient is {\bf kJ/(mol \AA)}.
+      The gradient unit of the gradient is <b>kJ/(mol \AA)</b>.
     */
     void setMaxGradient(float max_gradient);
 
     /** Get the maximum RMS gradient (first convergence criterion).
-        The gradient unit of the gradient is {\bf kJ/(mol \AA)}.
+        The gradient unit of the gradient is <b>kJ/(mol \AA)</b>.
     */
     float getMaxGradient() const;
 
@@ -412,13 +412,13 @@ namespace BALL
 		/**	Minimize the energy of the system bound to the force field.	
 				If a number of steps is given, the minimization is aborted after
 				that number of steps, regardless of the number of steps given in 
-				the options ({\tt MAX_STEPS}). Together with the {\tt restart} option
+				the options (<tt>MAX_STEPS</tt>). Together with the <tt>restart</tt> option
 				this feature is used to extract properties or visualize the results
-				in the course of the minimization. If restart is set to {\bf true},
+				in the course of the minimization. If restart is set to <b>true</b>,
 				the minimization continues with the former step width.	
 				@param		steps maximum number of steps to be taken
-				@param		restart {\bf true} if the minimization is to be continued
-				@return		bool - {\bf true} if the minimization is terminated
+				@param		restart <b>true</b> if the minimization is to be continued
+				@return		bool - <b>true</b> if the minimization is terminated
 		*/
 		virtual bool	minimize(Size steps = 0, bool restart = false);
 

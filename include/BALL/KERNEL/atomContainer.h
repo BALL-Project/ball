@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomContainer.h,v 1.15 2002/02/27 12:18:44 sturm Exp $
+// $Id: atomContainer.h,v 1.16 2003/02/21 16:03:12 anhi Exp $
 
 #ifndef BALL_KERNEL_ATOMCONTAINER_H
 #define BALL_KERNEL_ATOMCONTAINER_H
@@ -44,10 +44,10 @@ namespace BALL
 	class Molecule;
 
 	/**	Atom Container Base Class.
-			The {\tt AtomContainer} class is the base class
+			The <tt>AtomContainer</tt> class is the base class
 			of all kernel classes containing atoms.
-			\\
-			{\bf Definition:}\URL{BALL/KERNEL/atomContainer.h}
+			 \par
+			<b>Definition:</b>BALL/KERNEL/atomContainer.h
 	*/
 	class AtomContainer
 		: public Composite,
@@ -100,14 +100,14 @@ namespace BALL
 
 		/** Clear the contents of this instance of AtomContainer.
 				This methods clears the base fragment's name, destroys all its children
-				(as in \Ref{Composite::clear}), but does not remove it from its parent composite structures.
+				(as in  \link Composite::clear Composite::clear \endlink ), but does not remove it from its parent composite structures.
 		*/
 		virtual void clear()
 			throw();
 	
 		/** Clear the contents of this instance of AtomContainer and removes it from parent composite structures.
 				This methods clears the base fragment's name, destroys all its children
-				(as in \Ref{Composite::destroy}), and removes it from its parent composite structures.
+				(as in  \link Composite::destroy Composite::destroy \endlink ), and removes it from its parent composite structures.
 		*/
 		virtual void destroy()
 			throw();
@@ -138,7 +138,7 @@ namespace BALL
 		/** Assign the contents of an AtomContainer
 				The assignment is either deep or shallow (default is deep).
 				@param  atom_container the atom_container to be copied (cloned)
-				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy
+				@param  deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy
 				@see Composite::set
 		*/
 		void set(const AtomContainer& atom_container, bool deep = true)
@@ -370,14 +370,14 @@ namespace BALL
 		void insertAfter(AtomContainer& atom_container, Composite& after)
 			throw();
 
-		/**	Cut all children of {\tt atom_container} and prepend them before
+		/**	Cut all children of <tt>atom_container</tt> and prepend them before
 				the children of this instance.
 				@param atom_container the AtomContainer to access
 		*/
 		void spliceBefore(AtomContainer& atom_container)
 			throw();
 
-		/**	Cut all children of {\tt atom_container} and append them after the 
+		/**	Cut all children of <tt>atom_container</tt> and append them after the 
 				children of this instance.
 				@param atom_container the AtomContainer to access
 		*/
@@ -385,9 +385,9 @@ namespace BALL
 			throw();
 
 		/**	Move the children of {\em atom_container} into this instance.
-				The children of {\tt atom_container} are inserted at its position
-				if it is is a child of {\tt this}.
-				Otherwise the children are inserted using \Ref{spliceBefore}.
+				The children of <tt>atom_container</tt> are inserted at its position
+				if it is is a child of <tt>this</tt>.
+				Otherwise the children are inserted using  \link spliceBefore spliceBefore \endlink .
 		*/
 		void splice(AtomContainer& atom_container)
 			throw();
@@ -433,7 +433,7 @@ namespace BALL
 
 		/** Internal state and consistency self-validation.
 				If the internal state of this instance is correct (self-validated) and 
-				consistent {\tt true} is returned, {\tt false} otherwise. 
+				consistent <tt>true</tt> is returned, <tt>false</tt> otherwise. 
 				@return	 bool
 		*/
 		virtual bool isValid() const

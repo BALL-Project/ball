@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glLineModel.h,v 1.7 2002/12/12 09:48:51 oliver Exp $
+// $Id: glLineModel.h,v 1.8 2003/02/21 16:05:16 anhi Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLLINEMODEL_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_GLLINEMODEL_H
@@ -29,12 +29,12 @@ namespace BALL
 		
 		/** AddGLLineModel class.
 				The class AddGLLineModel is derived from the class 
-				\Ref{AddLineModel} and extents this class by overriding the creation
+				 \link AddLineModel AddLineModel \endlink  and extents this class by overriding the creation
 				methods used for creating the primitives. These new primitives contain
 				OpenGL implementation to generate the graphical visualization of geometric
 				shapes they present.
-				This class has the same functionality as its base class \Ref{AddLineModel}. \\
-				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/FUNCTOR/glLineModel.h}
+				This class has the same functionality as its base class  \link AddLineModel AddLineModel \endlink .  \par
+				<b>Definition:</b> BALL/MOLVIEW/GUI/FUNCTOR/glLineModel.h
 		*/
 		class AddGLLineModel: public AddLineModel
 		{
@@ -57,7 +57,7 @@ namespace BALL
 					{\em add_GL_line_model}. Initializes the state of {\em this} 
 					addGLLineModel to the state of {\em add_GL_line_model}.
 					@param       add_GL_line_model the addGLLineModel to be copied
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em add_GL_line_model}
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of {\em add_GL_line_model}
 					@return      AddGLLineModel new constructed addGLLineModel copied from {\em add_GL_line_model}
 					@see         AddLineModel
 			*/
@@ -71,7 +71,7 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} addGLLineModel.
-					Calls \Ref{AddLineModel::destroy}.
+					Calls  \link AddLineModel::destroy AddLineModel::destroy \endlink .
 					@see  AddLineModel
 			*/
 			virtual ~AddGLLineModel()
@@ -86,17 +86,17 @@ namespace BALL
 					for generating the graphical representation of the shapes they
 					represent.
 					This methods are overridden methods of the base class 
-					\Ref{AddLineModel}.
+					 \link AddLineModel AddLineModel \endlink .
 					@see  AddLineModel
 			*/
 			//@{
 			
 			/** Creates a point.
-					Creates a \Ref{GLPoint} object and returns it as \Ref{Point}.
-					This overridden method of the class \Ref{AddLineModel} creates
+					Creates a  \link GLPoint GLPoint \endlink  object and returns it as  \link Point Point \endlink .
+					This overridden method of the class  \link AddLineModel AddLineModel \endlink  creates
 					a primitive with openGL implementation.
-					The method \Ref{operator()} uses this method to create a point
-					for each \Ref{Atom} object whose.
+					The method  \link operator() operator() \endlink  uses this method to create a point
+					for each  \link Atom Atom \endlink  object whose.
 					@see  GLPoint
 					@see  Point
 					@see  AddLineModel
@@ -105,11 +105,11 @@ namespace BALL
 			virtual Point* createPoint_();
 		 
 			/** Creates a one colored line.
-					Creates a \Ref{GLLine} object and returns it as \Ref{Line}.
-					This overridden method of the class \Ref{AddLineModel} creates
+					Creates a  \link GLLine GLLine \endlink  object and returns it as  \link Line Line \endlink .
+					This overridden method of the class  \link AddLineModel AddLineModel \endlink  creates
 					a primitive with openGL implementation.
-					The method \Ref{operator()} uses this method to create one colored
-					lines for \Ref{Bond} objects whose \Ref{Atom} objects have the same
+					The method  \link operator() operator() \endlink  uses this method to create one colored
+					lines for  \link Bond Bond \endlink  objects whose  \link Atom Atom \endlink  objects have the same
 					element types and thus the same color.
 					@see  GLLine
 					@see  Line
@@ -120,11 +120,11 @@ namespace BALL
 			virtual Line* createLine_();
 
 			/** Creates a two colored line.
-					Creates a \Ref{GLTwoColoredLine} object and returns it as \Ref{TwoColoredLine}.
-					This overridden method of the class \Ref{AddLineModel} creates
+					Creates a  \link GLTwoColoredLine GLTwoColoredLine \endlink  object and returns it as  \link TwoColoredLine TwoColoredLine \endlink .
+					This overridden method of the class  \link AddLineModel AddLineModel \endlink  creates
 					a primitive with openGL implementation.
-					The method \Ref{operator()} uses this method to create two colored
-					lines for \Ref{Bond} objects whose \Ref{Atom} objects have different
+					The method  \link operator() operator() \endlink  uses this method to create two colored
+					lines for  \link Bond Bond \endlink  objects whose  \link Atom Atom \endlink  objects have different
 					element types and thus different colors.
 					@see  GLTwoColoredLine
 					@see  TwoColoredLine

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: experiment.h,v 1.4 2002/12/12 09:48:54 oliver Exp $
+// $Id: experiment.h,v 1.5 2003/02/21 16:05:40 anhi Exp $
 
 #ifndef BALL_NMR_EXPERIMENT_H
 #define BALL_NMR_EXPERIMENT_H
@@ -25,9 +25,9 @@ namespace BALL
 			This class (and its subclasses) are used to describe
 			how a list of peaks is derived from the shifts calculated
 			for a system.
-			\\
-			{\bf Definition}\URL{BALL/NMR/experiment.h}
-			\\
+			 \par
+			<b>Definition</b>BALL/NMR/experiment.h
+			 \par
 	*/
 	template <typename PeakListType>
 	class Experiment
@@ -146,10 +146,10 @@ namespace BALL
 	/**	Simple 1D NMR experiment class.
 			This experiment extracts all atoms with an assigned
 			shift value, which match a given kernel expression.
-			The default expression is {\bf "true()"}, so by default
+			The default expression is <b>"true()"</b>, so by default
 			all atoms with an assigned shift value are added to 
 			the peak list. The default peak intensity and width
-			are user-defined (\Ref{setDefaultPeak}).
+			are user-defined ( \link setDefaultPeak setDefaultPeak \endlink ).
 	*/
 	class SimpleExperiment1D
 		:	public Experiment1D
@@ -175,17 +175,17 @@ namespace BALL
 		//@{
 		/**	Initialize the experiment.
 				This method simply clears the internal peak list.
-				@return always {\bf true}
+				@return always <b>true</b>
 		*/
 		virtual bool start()
 			throw();
 		/**	Processor application operator.
 				This operator creates a new peak in the peak list for
 				every atom it encounters that possesses shift data
-				and matches the expression set with \Ref{setExpression}.
+				and matches the expression set with  \link setExpression setExpression \endlink .
 				The default is an empty expression, which matches all atoms.
 				Each peak in the peak list is assigned the intensity and width	
-				defined using \Ref{setDefaultPeak} (defaults to zero).
+				defined using  \link setDefaultPeak setDefaultPeak \endlink  (defaults to zero).
 		*/
 		virtual Processor::Result operator () (Composite& composite)
 			throw();

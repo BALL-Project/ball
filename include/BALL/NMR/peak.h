@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: peak.h,v 1.11 2002/12/12 09:48:54 oliver Exp $
+// $Id: peak.h,v 1.12 2003/02/21 16:05:43 anhi Exp $
 
 #ifndef BALL_NMR_PEAK_H
 #define BALL_NMR_PEAK_H
@@ -28,8 +28,8 @@ namespace BALL
 	/**	Generic Peak Class.
 			Each peak contains a pointer to an associated atom 
 			(in the case of NMR: the atom that causes this peak).	
-			\\
-			{\bf Definition}\URL{BALL/NMR/peak.h}
+			 \par
+			<b>Definition</b>BALL/NMR/peak.h
 	*/
 	template <typename PositionType>
 	class Peak

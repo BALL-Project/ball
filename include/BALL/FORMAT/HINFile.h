@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HINFile.h,v 1.20 2002/12/17 16:40:42 oliver Exp $
+// $Id: HINFile.h,v 1.21 2003/02/21 16:02:49 anhi Exp $
 
 #ifndef BALL_FORMAT_HINFILE_H
 #define BALL_FORMAT_HINFILE_H
@@ -17,8 +17,8 @@
 namespace BALL 
 {
 	/**	HyperChem file class.
-			This class enables BALL to read and write HyperChem HIN files. \\
-			{\bf Definition:} \URL{BALL/FORMAT/HINFile.h} \\
+			This class enables BALL to read and write HyperChem HIN files.  \par
+			<b>Definition:</b> BALL/FORMAT/HINFile.h
 	*/
 	class HINFile
 		: public GenericMolFile
@@ -103,7 +103,7 @@ namespace BALL
 		Box3 getPeriodicBoundary() const;
 
 		/**	Return the temperature stored in the file.
-				HIN files may contain a {\tt sys} entry containing
+				HIN files may contain a <tt>sys</tt> entry containing
 				the temperature of the last simulation step. If it is set,
 				it is returned. Otherwise 0 is returned.
 				@return	the final simulation temperature

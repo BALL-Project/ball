@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyConstant.h,v 1.2 2002/02/27 12:19:34 sturm Exp $
+// $Id: pyConstant.h,v 1.3 2003/02/21 16:05:55 anhi Exp $
 
 #ifndef BALL_PYTHON_PYCONSTANT_H
 #define BALL_PYTHON_PYCONSTANT_H
@@ -10,8 +10,8 @@ namespace BALL
 {
 	/**	Python constants namespace wrapper.
 			This class is a wrapper for the constants namespace.	
-			\\
-			{\bf Definition:}\URL{BALL/PYTHON/pyConstant.h}
+			 \par
+			<b>Definition:</b>BALL/PYTHON/pyConstant.h
 	*/
 	class Constant
 	{

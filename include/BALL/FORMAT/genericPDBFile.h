@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericPDBFile.h,v 1.18 2002/12/13 13:30:58 anker Exp $
+// $Id: genericPDBFile.h,v 1.19 2003/02/21 16:03:02 anhi Exp $
 
 #ifndef BALL_FORMAT_GENERICPDBFILE_H
 #define BALL_FORMAT_GENERICPDBFILE_H
@@ -915,8 +915,8 @@ namespace BALL
 	}
 
 	/**	Generic PDB file class.
-			\\
-			{\bf Definition:} \URL{BALL/FORMAT/genericPDBFile.h}\\
+			 \par
+			<b>Definition:</b> BALL/FORMAT/genericPDBFile.h
 	*/
 	class GenericPDBFile
 		: public File,
@@ -926,14 +926,14 @@ namespace BALL
 
 		/**	Symbolic names for option keys.
 				This struct contains a symbolic name
-				for each recognized key in PDBFile::options.\\
+				for each recognized key in PDBFile::options. \par
 				For each symbol the required type is given under parameters.
 		*/
 		struct Option 
 		{
 			/**	The verbosity level.
 					Use integer values with this option.
-					0 = terse\\
+					0 = terse \par
 					99 = tell me everything
 					@see		Default::VERBOSITY
 					@param	verbosity  integer

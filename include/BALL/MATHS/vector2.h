@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector2.h,v 1.9 2002/12/22 11:45:21 sturm Exp $
+// $Id: vector2.h,v 1.10 2003/02/21 16:04:01 anhi Exp $
 
 #ifndef BALL_MATHS_VECTOR2_H
 #define BALL_MATHS_VECTOR2_H
@@ -25,7 +25,7 @@ namespace BALL
 {
 	/**	@name	Two-dimensional vectors.
 			@memo Representation of points and vectors in two-dimensional space:
-						class \Ref{TVector2} and class \Ref{Vector2}.
+						class  \link TVector2 TVector2 \endlink  and class  \link Vector2 Vector2 \endlink .
 	*/
 	//@{
 
@@ -59,8 +59,8 @@ namespace BALL
 	//@}
 
 	/** Generic Two-Dimensional Vector.
-      {\bf Definition:} \URL{BALL/MATHS/vector2.h}
-      \\
+      <b>Definition:</b> BALL/MATHS/vector2.h
+       \par
 	*/
 	template <typename T>
 	class TVector2
@@ -76,23 +76,23 @@ namespace BALL
 
 		/**	Default constructor.
 				This method creates a new TVector2 object. The two components
-				are initialized to {\tt (T)0}.
+				are initialized to <tt>(T)0</tt>.
 		*/
 		TVector2()
 			throw();
 
 		/**	Scalar constructor.
 				Create a new vector with all components set
-				to the same {\tt value}.
+				to the same <tt>value</tt>.
 				@param	value the value of all components
 		*/
 		explicit TVector2(const T& value)
 			throw();
 
 		/**	Detailed constructor.
-				Create a new TVector2 object from two variables of type {\tt T}.
-				@param	vx assigned to {\tt x}
-				@param	vy assigned to {\tt y}
+				Create a new TVector2 object from two variables of type <tt>T</tt>.
+				@param	vx assigned to <tt>x</tt>
+				@param	vy assigned to <tt>y</tt>
 		*/
 		TVector2(const T& vx, const T& vy)
 			throw();
@@ -145,7 +145,7 @@ namespace BALL
 		//@{
 
 		/**	Assign from a scalar.
-				Assign {\tt value} to the two vector components.
+				Assign <tt>value</tt> to the two vector components.
 				@param	value the new value of the components
 		*/
 		void set(const T& value)
@@ -181,7 +181,7 @@ namespace BALL
 		/**	Array assignment operator.
 				Assigns the first two elements of an array to the vector components.
 				@param	ptr the array
-				@exception	NullPointer if {\tt ptr == 0}
+				@exception	NullPointer if <tt>ptr == 0</tt>
 		*/
 		const TVector2& operator = (const T* ptr)
 			throw(Exception::NullPointer);
@@ -230,13 +230,13 @@ namespace BALL
 			throw();
 
 		/**	Mutable array-like access to the components.
-				@exception Exception::IndexOverflow if {\tt index > 1}
+				@exception Exception::IndexOverflow if <tt>index > 1</tt>
 		*/
 		T& operator [] (Position position)
 			throw(Exception::IndexOverflow);
 
 		/**	Constant array-like access to the components.
-				@exception Exception::IndexOverflow if {\tt index > 1}
+				@exception Exception::IndexOverflow if <tt>index > 1</tt>
 		*/
 		const T& operator [] (Position position) const
 			throw(Exception::IndexOverflow);
@@ -267,7 +267,7 @@ namespace BALL
 			throw();
 
 		/**	Add a vector to this vector.
-				Add the components of {\tt vector} to this vector.
+				Add the components of <tt>vector</tt> to this vector.
 				@param vector the vector to add
 				@return TVector2&, {\em *this}
 		*/
@@ -282,16 +282,16 @@ namespace BALL
 			throw();
 
 		/**	Scalar product.
-				Return {\tt TVector2(x * scalar, y * scalar)}.
+				Return <tt>TVector2(x * scalar, y * scalar)</tt>.
 				The symmetric case is a global function.
 				@param scalar, the scalar to multiply by
-				@return TVector2, the scalar product of this vector and {\tt scalar}
+				@return TVector2, the scalar product of this vector and <tt>scalar</tt>
 		*/
 		TVector2 operator * (const T& scalar) const
 			throw();
 
 		/**	Multiply by a scalar.
-				Multiply all components of the vector by a {\tt scalar} value.
+				Multiply all components of the vector by a <tt>scalar</tt> value.
 				@param scalar the to multiply by
 				@return TVector2&, {\em *this}
 		*/
@@ -299,10 +299,10 @@ namespace BALL
 			throw();
 
 		/**	Fraction of a vector.
-				Return {\tt TVector2(x / lambda, y / lambda)}.
+				Return <tt>TVector2(x / lambda, y / lambda)</tt>.
 				@param lambda the scalar value to divide by
 				@return TVector2& 
-				@exception Exception::DivisionByZero if {\tt lambda == (T)0}
+				@exception Exception::DivisionByZero if <tt>lambda == (T)0</tt>
 		*/
 		TVector2 operator / (const T& lambda) const
 			throw(Exception::DivisionByZero);
@@ -310,13 +310,13 @@ namespace BALL
 		/**	Divide a vector by a scalar.
 				@param lambda the scalar value to divide by
 				@return TVector2&, {\em *this}
-				@exception Exception::DivisionByZero if {\tt lambda == (T)0}
+				@exception Exception::DivisionByZero if <tt>lambda == (T)0</tt>
 		*/
 		TVector2& operator /= (const T& lambda)
 			throw(Exception::DivisionByZero);
 
 		/** Dot product.
-				Return the dot product of this vector and {\tt vector}.
+				Return the dot product of this vector and <tt>vector</tt>.
 		*/
 		T operator * (const TVector2& vector) const
 			throw();
@@ -345,23 +345,23 @@ namespace BALL
 
 		/**	Equality operator.
 				The function Maths::isEqual is used to compare the values. 
-				\Ref{Maths::isEqual}
-				@return bool, {\bf true} if all two vector components are equal, {\bf false} otherwise
+				 \link Maths::isEqual Maths::isEqual \endlink 
+				@return bool, <b>true</b> if all two vector components are equal, <b>false</b> otherwise
 		*/
 		bool operator == (const TVector2& vector) const
 			throw();
 	
 		/**	Inequality operator.
 				The function Maths::isEqual is used to compare the values. 
-				\Ref{Maths::isEqual}
-				@return bool, {\bf true} if the two vectors differ in at least one component, {\bf false} otherwise
+				 \link Maths::isEqual Maths::isEqual \endlink 
+				@return bool, <b>true</b> if the two vectors differ in at least one component, <b>false</b> otherwise
 		*/
 		bool operator != (const TVector2& vector) const
 			throw();
 
 		/**	Zero predicate.
 				The function Maths::isZero is used to compare the values with zero. 
-				\Ref{Maths::isZero}
+				 \link Maths::isZero Maths::isZero \endlink 
 		*/
 		bool isZero() const
 			throw();
@@ -389,7 +389,7 @@ namespace BALL
 
 		/**	Test if instance is valid.
 				Always returns true.
-				@return bool {\bf true}
+				@return bool <b>true</b>
 		*/
 		bool isValid() const
 			throw();

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: snapShot.h,v 1.19 2002/02/27 12:19:03 sturm Exp $
+// $Id: snapShot.h,v 1.20 2003/02/21 16:04:25 anhi Exp $
 
 // This file contains the definitions of the classes 
 // SnapshotManager and Snapshot. 
@@ -31,8 +31,8 @@ namespace BALL
 	/** SnapShot class, containing the actual data of one single snapshot.
 			It consists of the posistions, velocities and forces for each atom
 			along with kinetic and potential energy of selected atoms. It is used
-			by the \Ref{SnapShotManager}. \\
-			{\bf Definition:} \URL{BALL/MOLMEC/COMMON/snapShot.h}
+			by the  \link SnapShotManager SnapShotManager \endlink .  \par
+			<b>Definition:</b> BALL/MOLMEC/COMMON/snapShot.h
 	*/
   class SnapShot
   {
@@ -148,14 +148,14 @@ namespace BALL
 		//@{
 
 		/** Take a SnapShot from a system. Copy all positions, velocities and
-				forces from the System {\tt system} to this instance of SnapShot.
+				forces from the System <tt>system</tt> to this instance of SnapShot.
 				@param system the System from which to take the data
 		*/
 		void takeSnapShot(const System& system)
 			throw(Exception::OutOfMemory);
 
 		/** Apply the data contained in a SnapShot to a System. Copy all
-				available data to the system. {\bf Note} that some trajectory file
+				available data to the system. <b>Note</b> that some trajectory file
 				formats do not contain all this information and vectors might be
 				zero or even worse undefined when read SnapShots are read from such
 				a file.

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: claverieParameter.h,v 1.8 2002/02/27 12:19:38 sturm Exp $
+// $Id: claverieParameter.h,v 1.9 2003/02/21 16:06:14 anhi Exp $
 
 #ifndef BALL_SOLVATION_CLAVERIEPARAMETER_H
 #define BALL_SOLVATION_CLAVERIEPARAMETER_H
@@ -25,8 +25,8 @@ namespace BALL
 			This class provides the parameters needed for the computation of
 			van-der-Waals interaction energies according to the scheme by Huron and
 			Claverie. [missing: units, reference].
-			{\bf Note:} Dispersion and repulsion terms are {\bf not} distinguished. \\
-			{\bf Definition:} \URL{BALL/SOLVATION/claverieParameter.h}
+			<b>Note:</b> Dispersion and repulsion terms are <b>not</b> distinguished.  \par
+			<b>Definition:</b> BALL/SOLVATION/claverieParameter.h
 	 */
 	class ClaverieParameter
 		:	public ParameterSection

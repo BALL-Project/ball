@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reissCavFreeEnergyProcessor.h,v 1.11 2002/12/22 11:45:26 sturm Exp $
+// $Id: reissCavFreeEnergyProcessor.h,v 1.12 2003/02/21 16:06:23 anhi Exp $
 
 #ifndef BALL_SOLVATION_REISSCAVFREEENERGYPROCESSOR_H
 #define BALL_SOLVATION_REISSCAVFREEENERGYPROCESSOR_H
@@ -24,9 +24,10 @@ namespace BALL
 			This processor is using the SPT theory approach by Reiss et al.,
 			J. Chem. Phys. 37(1):119-124, 1960 with the modification for
 			non-spherical solutes by Huron/Claverie, J. Phys. Chem.
-			76(15):2123-2133, 1972. \\ 
-			Energies are returned in units of kJ/mol.	\\
-			{\bf Definition:} \URL{BALL/SOLVATION/reissCavFreeEnergyProcessor.h}
+			76(15):2123-2133, 1972.  \par
+ 
+			Energies are returned in units of kJ/mol.	 \par
+			<b>Definition:</b> BALL/SOLVATION/reissCavFreeEnergyProcessor.h
 	 */
 	class ReissCavFreeEnergyProcessor
 		:	public EnergyProcessor

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: trajectoryFile.h,v 1.12 2002/12/12 09:48:45 oliver Exp $
+// $Id: trajectoryFile.h,v 1.13 2003/02/21 16:03:07 anhi Exp $
 
 #ifndef BALL_FORMAT_TRAJECTORYFILE_H
 #define BALL_FORMAT_TRAJECTORYFILE_H
@@ -27,8 +27,8 @@ namespace BALL
 	/** Trajectory file format for MD simulation.
 			This is more an interface definition than an actual class, because it
 			would not make too much sense to create yet-another-trajectory-format.
-			This class will be specialized by actual formats, like DCD.	\\
-			{\bf Definition:} \URL{BALL/FORMAT/trajectoryFile.h} \\
+			This class will be specialized by actual formats, like DCD.	 \par
+			<b>Definition:</b> BALL/FORMAT/trajectoryFile.h
 	*/
 	class TrajectoryFile
 		:	public File
@@ -113,8 +113,8 @@ namespace BALL
 		virtual bool writeHeader()
 			throw();
 
-		/** Append a SnapShot to an existing file. {\bf Note} that this method
-				does {\bf note} update the header.
+		/** Append a SnapShot to an existing file. <b>Note</b> that this method
+				does <b>note</b> update the header.
 				@param snapshot the SnapShot we want to save
 				@return true, if writing was successful
 		*/
@@ -123,7 +123,7 @@ namespace BALL
 
 		/** Read the next SnapShot from the file.
 				@param snapshot a buffer for result delivery
-				@return true if a snapshot could be read, {\tt false} ow.
+				@return true if a snapshot could be read, <tt>false</tt> ow.
 		*/
 		virtual bool read(SnapShot& snapshot)
 			throw();

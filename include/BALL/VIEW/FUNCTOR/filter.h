@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: filter.h,v 1.6 2002/02/27 12:19:56 sturm Exp $
+// $Id: filter.h,v 1.7 2003/02/21 16:07:13 anhi Exp $
 
 #ifndef BALL_VIEW_FUNCTOR_FILTER_H
 #define BALL_VIEW_FUNCTOR_FILTER_H
@@ -31,16 +31,16 @@ namespace BALL
 		
 		/** Filter class.
 				The class Filter is a base class for filter objects. This class filters
-				\Ref{Composite} objects. Override the method \Ref{visit} to
-				specify the needed filter criteria und use the method \Ref{setResult_} 
+				 \link Composite Composite \endlink  objects. Override the method  \link visit visit \endlink  to
+				specify the needed filter criteria und use the method  \link setResult_ setResult_ \endlink  
 				to set the result of the applied filter criteria.
-				In this class the default implementation filters for \Ref{GeometricObjects}.
-				So if a \Ref{Composite} object that if of kind \Ref{GeometricObject} is visited 
-				from this class the method \Ref{getResult} returns {\tt true}, otherwise
-				{\tt false}.
-				This class is used by the class \Ref{Control} to filter for \Ref{GeometricObject}
-				objects. \\
-				{\bf Definition:} \URL{BALL/VIEW/FUNCTOR/filter.h}
+				In this class the default implementation filters for  \link GeometricObjects GeometricObjects \endlink .
+				So if a  \link Composite Composite \endlink  object that if of kind  \link GeometricObject GeometricObject \endlink  is visited 
+				from this class the method  \link getResult getResult \endlink  returns <tt>true</tt>, otherwise
+				<tt>false</tt>.
+				This class is used by the class  \link Control Control \endlink  to filter for  \link GeometricObject GeometricObject \endlink 
+				objects.  \par
+				<b>Definition:</b> BALL/VIEW/FUNCTOR/filter.h
 				@see     Control
 		*/
 		class Filter: public Visitor<Composite>
@@ -53,7 +53,7 @@ namespace BALL
 
 			/** Default Constructor.
 					Construct new filter.
-					The state of {\em *this} filter is: result is {\tt false}.
+					The state of {\em *this} filter is: result is <tt>false</tt>.
 					@return      Filter new constructed filter
 			*/
 			Filter()
@@ -66,14 +66,14 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} filter.
-					Calls \Ref{destroy}.
+					Calls  \link destroy destroy \endlink .
 					@see         destroy
 			*/
 			virtual ~Filter()
 				throw();
 
 			/** Explicit default initialization.
-					Set the result of {\em *this} filter to {\tt false}.
+					Set the result of {\em *this} filter to <tt>false</tt>.
 			*/
 			virtual void clear()
 				throw();
@@ -91,7 +91,7 @@ namespace BALL
 			//@{
 			/** Inspection of the result.
 					Access the result of {\em *this} filter.
-					@return bool {\tt true} if the \Ref{Composite} object passed through {\em *this} filter, {\tt false} otherwise
+					@return bool <tt>true</tt> if the  \link Composite Composite \endlink  object passed through {\em *this} filter, <tt>false</tt> otherwise
 					@see    setResult_
 			*/
 			bool getResult() const
@@ -99,11 +99,11 @@ namespace BALL
 
 			/** Visit method.
 					Override this method for defining the filter criteria. 
-					Set the result if the \Ref{Composite} object passed with the 
-					\Ref{setResult_} method.
-					This method sets the result to {\tt true} if the \Ref{Composite} object
-					is of kind \Ref{GeometricObject} (Default implementation). 
-					@param  composite the \Ref{Composite} object to be filtered by {\em *this} filter.
+					Set the result if the  \link Composite Composite \endlink  object passed with the 
+					 \link setResult_ setResult_ \endlink  method.
+					This method sets the result to <tt>true</tt> if the  \link Composite Composite \endlink  object
+					is of kind  \link GeometricObject GeometricObject \endlink  (Default implementation). 
+					@param  composite the  \link Composite Composite \endlink  object to be filtered by {\em *this} filter.
 					@see    setResult_
 			*/
 			virtual void visit(Composite& composite);
@@ -114,7 +114,7 @@ namespace BALL
 			//@{
 			/** Conversion to bool.
 					Cast {\em *this} filter to a boolean value.
-					@return  bool {\tt true} if the \Ref{Composite} object passed through {\em *this} filter, {\tt false} otherwise
+					@return  bool <tt>true</tt> if the  \link Composite Composite \endlink  object passed through {\em *this} filter, <tt>false</tt> otherwise
 					@see     getResult
 					@see     setResult_
 			*/
@@ -123,7 +123,7 @@ namespace BALL
 
 			/** Conversion to int.
 					Cast {\em *this} filter to a integer value.
-					@return  int {\tt 1} if the \Ref{Composite} object passed through {\em *this} filter, {\tt 0} otherwise
+					@return  int <tt>1</tt> if the  \link Composite Composite \endlink  object passed through {\em *this} filter, <tt>0</tt> otherwise
 					@see     getResult
 					@see     setResult_
 			*/
@@ -132,7 +132,7 @@ namespace BALL
 
 			/** Conversion to long.
 					Cast {\em *this} filter to a long value.
-					@return  int {\tt 1} if the \Ref{Composite} object passed through {\em *this} filter, {\tt 0} otherwise
+					@return  int <tt>1</tt> if the  \link Composite Composite \endlink  object passed through {\em *this} filter, <tt>0</tt> otherwise
 					@see     getResult
 					@see     setResult_
 			*/
@@ -141,7 +141,7 @@ namespace BALL
 
 			/** Conversion to void*.
 					Cast {\em *this} filter to a void* value.
-					@return  int {\tt (void*)1} if the \Ref{Composite} object passed through {\em *this} filter, {\tt (void*)0} otherwise
+					@return  int <tt>(void*)1</tt> if the  \link Composite Composite \endlink  object passed through {\em *this} filter, <tt>(void*)0</tt> otherwise
 					@see     getResult
 					@see     setResult_
 			*/
@@ -160,7 +160,7 @@ namespace BALL
 					value of {\em *this} filter so all the implemented access methods
 					are still functioning.
 					Use this method to set the result value in a derived class in the overriden
-					method \Ref{visit}.
+					method  \link visit visit \endlink .
 					@param  result the new result value of {\em *this} filter.
 					@see    visit
 					@see    getResult

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: autoDeletable.h,v 1.15 2002/12/12 09:46:21 oliver Exp $
+// $Id: autoDeletable.h,v 1.16 2003/02/21 16:01:23 anhi Exp $
 
 #ifndef BALL_CONCEPT_AUTODELETABLE_H
 #define BALL_CONCEPT_AUTODELETABLE_H
@@ -24,31 +24,31 @@ namespace BALL
 	/**	Auto-deletable concept.
 			This class allows the distinction between objects that may be deleted
 			automatically (because they are created dynamically on the heap) and
-			instances that are static and should not be deleted automatically.\\
-			Standard application is the class \Ref{Composite}. Composites may
+			instances that are static and should not be deleted automatically. \par
+			Standard application is the class  \link Composite Composite \endlink . Composites may
 			contain other composites (tree-like structure). If a composite is
 			deleted, it has to decide whether all composites contained therein
 			are to be deleted, too.  If these composites are static objects,
 			calling their destructor often is fatal!  The same is true for
 			objects contained in an array.  Therefore, composite is derived from
-			\Ref{AutoDeletable}.\\
+			 \link AutoDeletable AutoDeletable \endlink . \par
 			The AutoDeletable class determines whether it was instantiated via
-			{\bf new} and then sets an internal flag to false. The mechanism to
-			determine this is as follows:\\
+			<b>new</b> and then sets an internal flag to false. The mechanism to
+			determine this is as follows: \par
 			AutoDeletable has on overloaded new operator. When invoked, this
 			operator allocates storage for an instance of AutoDeletable using the
 			global new operator and remembers the address of in a private
-			variable {\bf last\_ptr\_}.  Each constructor of AutoDeletable checks
-			whether its {\bf this} pointer is equal to the address stored in {\bf
+			variable <b>last\_ptr\_</b>.  Each constructor of AutoDeletable checks
+			whether its <b>this</b> pointer is equal to the address stored in {\bf
 			last\_ptr\_}. If both pointers are equal, the object has been created
 			using the new operator and so it is safe to delete it automatically.
 			If the adresses do not match, the object is either part of an array
-			or static and should not be deleted automatically.\\
+			or static and should not be deleted automatically. \par
 			The state of each object may be changed after it is constructed by a
-			call to \Ref{setAutoDeletable}. This might be useful to protect
+			call to  \link setAutoDeletable setAutoDeletable \endlink . This might be useful to protect
 			certain instances of objects, however usually this should not be
-			neccessary.\\
-			{\bf Definition:} \URL{BALL/CONCEPT/autoDeletable.h}
+			neccessary. \par
+			<b>Definition:</b> BALL/CONCEPT/autoDeletable.h
 	*/
 	class AutoDeletable
 	{
@@ -64,9 +64,9 @@ namespace BALL
 		virtual ~AutoDeletable()
 			throw();
 
-		/**	{\bf new} operator.
+		/**	<b>new</b> operator.
 				This operator allocates storage for the object and remembers its
-				pointer. This pointer is {\bf static} and is evaluated by the
+				pointer. This pointer is <b>static</b> and is evaluated by the
 				constructors. As this operator is only invoked for the creation of
 				single dynamic objects, arrays and static objects can be
 				identified.
@@ -74,7 +74,7 @@ namespace BALL
 		void* operator new(size_t size) 
 			throw();
 	
-		/**	{\bf delete} operator.
+		/**	<b>delete</b> operator.
 				This operator frees the space allocated for an Autodeletable
 				object. It is implemented solely to achieve a consistent interface
 				and to avoid warnings issued by some compilers if operator
@@ -83,9 +83,9 @@ namespace BALL
 		void operator delete(void* ptr) 
 			throw();
 	
-		/**	Placement {\bf new} operator.
+		/**	Placement <b>new</b> operator.
 				This operator allocates storage for the object and remembers its
-				pointer.  This pointer is {\bf static} and is evaluated by the
+				pointer.  This pointer is <b>static</b> and is evaluated by the
 				constructors.  As this operator is only invoked for the creation of
 				single dynamic objects, arrays and static objects can be
 				identified.
@@ -93,7 +93,7 @@ namespace BALL
 		void* operator new(size_t size, void* ptr)
 			throw();
 	
-		/**	Placement {\bf delete} operator.
+		/**	Placement <b>delete</b> operator.
 				This operator frees the space allocated for an Autodeletable
 				object. It is implemented solely to achieve a consistent interface
 				and to avoid warnings issued by some compilers if operator
@@ -112,7 +112,7 @@ namespace BALL
 				Objects can be marked as deletable or not deletable by this method.
 				Use this method to protect objects from automatic deletion.
 				You should never set static objects to autodeletable, as 
-				invoking {\bf delete} on a static object may result in a crash.
+				invoking <b>delete</b> on a static object may result in a crash.
 		*/
 		void setAutoDeletable(bool enable)
 			throw();
@@ -124,10 +124,10 @@ namespace BALL
 		//@{
 
 		/**	Query the objects status.
-				Returns {\bf true} if the object should be automatically
+				Returns <b>true</b> if the object should be automatically
 				deleted if the objects it is contained in are deleted.
 				Recursive destruction methods should honor this flag and 
-				should not call the destructor for objects that return {\bf true}.
+				should not call the destructor for objects that return <b>true</b>.
 		*/
 		bool isAutoDeletable() const
 			throw();

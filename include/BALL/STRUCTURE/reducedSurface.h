@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reducedSurface.h,v 1.37 2002/12/17 14:13:12 anker Exp $
+// $Id: reducedSurface.h,v 1.38 2003/02/21 16:06:52 anhi Exp $
 
 #ifndef BALL_STRUCTURE_REDUCEDSURFACE_H
 #define BALL_STRUCTURE_REDUCEDSURFACE_H
@@ -63,7 +63,7 @@ namespace BALL
 	class SESTriangulator;
 
 	/** Generic ReducedSurface Class.
-			{\bf Definition:} \URL{BALL/STRUCTURE/reducedSurface.h}
+			<b>Definition:</b> BALL/STRUCTURE/reducedSurface.h
 	*/
 	class ReducedSurface
 	{
@@ -97,7 +97,7 @@ namespace BALL
 		//@{
 
 		/**	Default constructor.
-				All components are initialized to {\tt (T)0} or {\tt NULL},
+				All components are initialized to <tt>(T)0</tt> or <tt>NULL</tt>,
 				respectivly.
 		*/
 		ReducedSurface()
@@ -378,7 +378,7 @@ namespace BALL
 
 
 	/** Generic RSComputer Class.
-			{\bf Definition:} \URL{BALL/STRUCTURE/reducedSurface.h}
+			<b>Definition:</b> BALL/STRUCTURE/reducedSurface.h
 	*/
 	class RSComputer
 	{
@@ -391,9 +391,9 @@ namespace BALL
 		//@{
 
 		/** status of the probe positions of three atoms:
-				{\tt 0} ok
-				{\tt 1} not ok
-				{\tt 2} not tested
+				<tt>0</tt> ok
+				<tt>1</tt> not ok
+				<tt>2</tt> not tested
 		*/
 		enum ProbeStatus
 		{
@@ -403,9 +403,9 @@ namespace BALL
 		};
 
 		/** status of an atom
-				{\tt 0} on surface
-				{\tt 1} inside
-				{\tt 2} outside
+				<tt>0</tt> on surface
+				<tt>1</tt> inside
+				<tt>2</tt> outside
 		*/
 		enum AtomStatus
 		{
@@ -426,7 +426,7 @@ namespace BALL
 		//@{
 
 		/**	Default constructor.
-				All components are initialized to {\tt (T)0} or {\tt NULL},
+				All components are initialized to <tt>(T)0</tt> or <tt>NULL</tt>,
 				respectivly.
 		*/
 		RSComputer()

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residueChecker.h,v 1.10 2002/12/12 09:48:55 oliver Exp $
+// $Id: residueChecker.h,v 1.11 2003/02/21 16:06:53 anhi Exp $
 
 #ifndef BALL_STRUCTURE_RESIDUECHECKER_H
 #define BALL_STRUCTURE_RESIDUECHECKER_H
@@ -23,8 +23,8 @@ namespace BALL
 			and non-integral or extremely large charges on the residue.
 			Atom positions are checked as well: a warning is printed, if any of the 
 			atom's coordinates is not a number (NaN).
-			Warnings are emitted to \Ref{Log}. \\
-			{\bf Definition:} \URL{BALL/STRUCTURE/residueChecker.h}
+			Warnings are emitted to  \link Log Log \endlink .  \par
+			<b>Definition:</b> BALL/STRUCTURE/residueChecker.h
 	*/
 	class ResidueChecker
 		:	public	UnaryProcessor<Residue>
@@ -61,7 +61,7 @@ namespace BALL
 		/**	Return true if the last application did not produce any warning.
 				The getStatus method may be called after applying the ResidueChecker 
 				to a kernel object. 
-				@return bool {\bf true} if no warnings occured, {\bf false} otherwise
+				@return bool <b>true</b> if no warnings occured, <b>false</b> otherwise
 		*/
 		bool getStatus() const;
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.22 2003/02/19 13:17:24 amoll Exp $
+// $Id: displayProperties.h,v 1.23 2003/02/21 16:05:06 anhi Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
 #define BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
@@ -82,32 +82,33 @@ namespace BALL
 				With the help of various combo boxes it is possible to customize the look of
 				the graphical visualization (the model, the drawing precision, the drawing mode,
 				the coloring method and the custom color).
-				The follwing properties are available:\\ \\
+				The follwing properties are available: \par
+  \par
 				The models:
 				\begin{itemize}
-				  \item  \Ref{AddGLBallAndStickModel} the ball and stick model
-				  \item  \Ref{AddGLBackboneModel} the backbone model
-				  \item  \Ref{AddGLLineModel} the line model
-				  \item  \Ref{AddGLSurfaceModel} the surface model
-				  \item  \Ref{AddGLVanDerWaalsModel} the van der waals model
+				  \item   \link AddGLBallAndStickModel AddGLBallAndStickModel \endlink  the ball and stick model
+				  \item   \link AddGLBackboneModel AddGLBackboneModel \endlink  the backbone model
+				  \item   \link AddGLLineModel AddGLLineModel \endlink  the line model
+				  \item   \link AddGLSurfaceModel AddGLSurfaceModel \endlink  the surface model
+				  \item   \link AddGLVanDerWaalsModel AddGLVanDerWaalsModel \endlink  the van der waals model
 				\end{itemize} 
 				The coloring methods:
 				\begin{itemize}
-				  \item  \Ref{ElementColorCalculator} colors the molecular objects according to their atom elements
-				  \item  \Ref{ResidueNameColorCalculator} colors the molecular objects according to their residue names
-				  \item  \Ref{AtomChargeColorCalculator} colors the molecular objects according to their atom charge
-				  \item  \Ref{AtomDistanceColorCalculator} colors the molecular objects according to their atom distance
-				  \item  \Ref{CustomColorCalculator} colors the molecular objects according to selected color
+				  \item   \link ElementColorCalculator ElementColorCalculator \endlink  colors the molecular objects according to their atom elements
+				  \item   \link ResidueNameColorCalculator ResidueNameColorCalculator \endlink  colors the molecular objects according to their residue names
+				  \item   \link AtomChargeColorCalculator AtomChargeColorCalculator \endlink  colors the molecular objects according to their atom charge
+				  \item   \link AtomDistanceColorCalculator AtomDistanceColorCalculator \endlink  colors the molecular objects according to their atom distance
+				  \item   \link CustomColorCalculator CustomColorCalculator \endlink  colors the molecular objects according to selected color
 				\end{itemize} 
-				For information about the drawing precision see \Ref{GeometricObject}.\\
+				For information about the drawing precision see  \link GeometricObject GeometricObject \endlink . \par
 				This dialog is also responsible for selecting and deselecting,
 				building bonds and adding hydrogens to molecular objects. Further it is possible
-				to center the camera of the \Ref{Scene} to the geometric center of the selection of molecular objects.
-				The class \Ref{MolecularControl} is responsible for creating such a selection.
-				If this dialog is used, it should be created with \Ref{MainControl} as parent.
+				to center the camera of the  \link Scene Scene \endlink  to the geometric center of the selection of molecular objects.
+				The class  \link MolecularControl MolecularControl \endlink  is responsible for creating such a selection.
+				If this dialog is used, it should be created with  \link MainControl MainControl \endlink  as parent.
 				The class DisplayPropertiesData contains the definition of the layout of
-				this dialog and is therefore not necessary for understanding. \\
-				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/DIALOGS/displayProperties.h}
+				this dialog and is therefore not necessary for understanding.  \par
+				<b>Definition:</b> BALL/MOLVIEW/GUI/DIALOGS/displayProperties.h
 		*/
 		class DisplayProperties 
 			: public DisplayPropertiesData,
@@ -124,10 +125,10 @@ namespace BALL
 
 			/** Default Constructor.
 					Constructs new displayProperties.
-					Sets the combo box of the coloring method to the \Ref{ElementColorCalculator}.
+					Sets the combo box of the coloring method to the  \link ElementColorCalculator ElementColorCalculator \endlink .
 					This combo box as well as the others can be set differently according to saved
-					preferences. See \Ref{fetchPreferences}.
-					Calls \Ref{registerWidget}.
+					preferences. See  \link fetchPreferences fetchPreferences \endlink .
+					Calls  \link registerWidget registerWidget \endlink .
 					@param      parent the parent widget of {\em *this} displayProperties 
 					@param      name the name of {\em *this} displayProperties 
 					@return     DisplayProperties new constructed displayProperties
@@ -156,16 +157,16 @@ namespace BALL
 			//@{
 
 			/** Message handling method.
-					Handles messages sent by other registered \Ref{ConnectionObject} objects.
-					Catches \Ref{NewMolecularMessage} and \Ref{MolecularSelectionMessage}.
-					If \Ref{NewMolecularMessage} is catched the chosen graphical visualization
-					will be applied to the \Ref{Composite} object and the follwing \Ref{Message}
-					objects will be sent through the \Ref{ConnectionObject} tree:
+					Handles messages sent by other registered  \link ConnectionObject ConnectionObject \endlink  objects.
+					Catches  \link NewMolecularMessage NewMolecularMessage \endlink  and  \link MolecularSelectionMessage MolecularSelectionMessage \endlink .
+					If  \link NewMolecularMessage NewMolecularMessage \endlink  is catched the chosen graphical visualization
+					will be applied to the  \link Composite Composite \endlink  object and the follwing  \link Message Message \endlink 
+					objects will be sent through the  \link ConnectionObject ConnectionObject \endlink  tree:
 					\begin{itemize}
-						\item  \Ref{ChangedMolecularMessage} to indicate that the \Ref{Composite} object has changed.
-						\item  \Ref{SceneMessage} to force an update of the \Ref{Scene} (and set the camera to new object)
+						\item   \link ChangedMolecularMessage ChangedMolecularMessage \endlink  to indicate that the  \link Composite Composite \endlink  object has changed.
+						\item   \link SceneMessage SceneMessage \endlink  to force an update of the  \link Scene Scene \endlink  (and set the camera to new object)
 					\end{itemize}
-					If \Ref{MolecularSelectionMessage} is catched the selection of this object will 
+					If  \link MolecularSelectionMessage MolecularSelectionMessage \endlink  is catched the selection of this object will 
 					be used for changing the visualization.
 					If such a message is catched the apply button will be enabled and the graphical
 					representation of the selection can be changed.
@@ -189,10 +190,10 @@ namespace BALL
 			/** Fetches the preferences.
 					Fetches the preferences (the position, the custom color, the model, the drawing 
 					precision, the drawing mode and the coloring method of {\em *this}
-					displayProperties) from the	\Ref{INIFile} {\em inifile}.
-					This method will be called inside the method \Ref{show} from the class
-					\Ref{MainControl}.
-					@param  inifile the \Ref{INIFile} that contains the needed information for {\em *this} displayProperties
+					displayProperties) from the	 \link INIFile INIFile \endlink  {\em inifile}.
+					This method will be called inside the method  \link show show \endlink  from the class
+					 \link MainControl MainControl \endlink .
+					@param  inifile the  \link INIFile INIFile \endlink  that contains the needed information for {\em *this} displayProperties
 					@see    writePreferences
 					@see    MainControl
 			*/
@@ -202,10 +203,10 @@ namespace BALL
 			/** Writes the preferences.
 					Writes the preferences (the position, the custom color, the model, the drawing 
 					precision, the drawing mode and the coloring method of {\em *this}
-					displayProperties) to the	\Ref{INIFile} {\em inifile}.
-					This method will be called inside the method \Ref{aboutToExit} from the class
-					\Ref{MainControl}.
-					@param  inifile the \Ref{INIFile} to be written into
+					displayProperties) to the	 \link INIFile INIFile \endlink  {\em inifile}.
+					This method will be called inside the method  \link aboutToExit aboutToExit \endlink  from the class
+					 \link MainControl MainControl \endlink .
+					@param  inifile the  \link INIFile INIFile \endlink  to be written into
 					@see    fetchPreferences
 					@see    MainControl
 			*/
@@ -216,17 +217,17 @@ namespace BALL
 					Initializes the popup menu {\em Display} with its checkable submenus
 					\begin{itemize}
 						\item  {\em Display Properties} - opens the dialog (indicates if open)
-						\item  {\em Select} - marks the selected molecular objects in the selected color (See \Ref{GeometricObject})
+						\item  {\em Select} - marks the selected molecular objects in the selected color (See  \link GeometricObject GeometricObject \endlink )
 						\item  {\em Deselect} - uses the previously set color of the selected molecular objects
-						\item  {\em Focus Camera} - centers the camera of \Ref{Scene} to the geometric center 
+						\item  {\em Focus Camera} - centers the camera of  \link Scene Scene \endlink  to the geometric center 
 										of the molecular objects in the selection
-						\item  {\em Build Bonds} - generates the \Ref{Bond} object to the molecular objects in the selection
+						\item  {\em Build Bonds} - generates the  \link Bond Bond \endlink  object to the molecular objects in the selection
 						\item  {\em Add Hydrogens} - adds hydrogens to the molecular objects in the selection
 					\end{itemize}
 					and adds them to the appropriate slots.
 					This method is called automatically	immediately before the main application is started. 
-					This method will be called by \Ref{show} from the \Ref{MainControl} object.
-					@param main_control the \Ref{MainControl} object to be initialized with {\em *this} displayProperties
+					This method will be called by  \link show show \endlink  from the  \link MainControl MainControl \endlink  object.
+					@param main_control the  \link MainControl MainControl \endlink  object to be initialized with {\em *this} displayProperties
 					@see   openDialog
 					@see   select
 					@see   deselect
@@ -246,8 +247,8 @@ namespace BALL
 			/**	Removes the widget.
 					Removes the checkable submenus from the popup menu
 					{\em Display}	and cut the all previously registered connections.
-					This method will be called by \Ref{aboutToExit} from the \Ref{MainControl} object.
-					@param main_control the \Ref{MainControl} object to be finalized with {\em *this} displayProperties
+					This method will be called by  \link aboutToExit aboutToExit \endlink  from the  \link MainControl MainControl \endlink  object.
+					@param main_control the  \link MainControl MainControl \endlink  object to be finalized with {\em *this} displayProperties
 					@see   initializeWidget
 					@see   checkMenu
 					@see   removeMenuEntry
@@ -258,15 +259,15 @@ namespace BALL
 					throw();
 				
 			/**	Menu checking method.
-					This method is called by the method \Ref{checkMenus} from the
-					\Ref{MainControl} object before a popup menu is shown.
+					This method is called by the method  \link checkMenus checkMenus \endlink  from the
+					 \link MainControl MainControl \endlink  object before a popup menu is shown.
 					The menu {\em Display Properties} will be checked
 					if {\em *this} displayProperties is visible. 
 					The menus {\em Select}, {\em Deselect}, {\em Add Hydrogens} and {\em Build Bonds}
 					will be enabled if the selection of molecular objects is not empty.
 					The menu {\em Focus camera} will be enabled only if only one molecular object
 					is in the selection list.
-					@param main_control the \Ref{MainControl} object whose menus should be checked
+					@param main_control the  \link MainControl MainControl \endlink  object whose menus should be checked
 					@see   onNotify
 					@see   initializeWidget
 					@see   finalizeWidget
@@ -286,7 +287,7 @@ namespace BALL
 
 			/** Starts the displayProperties dialog.
 					Opens {\em *this} displayProperties dialog.
-					Calls \Ref{show} and \Ref{raise} from \Ref{QDialog} class.
+					Calls  \link show show \endlink  and  \link raise raise \endlink  from \Ref{QDialog} class.
 					See documentation of QT-library for information concerning QDialog widgets.
 			*/
 			void openDialog();
@@ -339,12 +340,12 @@ namespace BALL
 			virtual void selectColoringMethod(const QString& string);
 			
 			/** Indicates the apply button was pressed.
-					Applies the selected model with its selected properties to each \Ref{Composite} object
+					Applies the selected model with its selected properties to each  \link Composite Composite \endlink  object
 					available in the molecular selection list.
-					The message \Ref{ChangedCompositeMessage} will be sent for each \Ref{Composite}
+					The message  \link ChangedCompositeMessage ChangedCompositeMessage \endlink  will be sent for each  \link Composite Composite \endlink 
 					object in the	selection list.
-					The messages \Ref{WindowMessage} and \Ref{SceneMessage} will
-					be sent to inform the \Ref{MainControl} and the \Ref{Scene} about the change.
+					The messages  \link WindowMessage WindowMessage \endlink  and  \link SceneMessage SceneMessage \endlink  will
+					be sent to inform the  \link MainControl MainControl \endlink  and the  \link Scene Scene \endlink  about the change.
 					@see  selectPrecision
 					@see  selectColoringMethod
 					@see  selectModel
@@ -359,7 +360,7 @@ namespace BALL
 			/** Opens the edit color dialog.
 					Opens the dialog for editing the color in which the model
 					should be drawn (if coloring method: custom was chosen).
-					Opens a \Ref{QColorDialog} from the QT-library.
+					Opens a  \link QColorDialog QColorDialog \endlink  from the QT-library.
 					See documentation of QT-library for information concerning QColorDialog widgets.
 					@see   selectColoringMethod
 			 */ 

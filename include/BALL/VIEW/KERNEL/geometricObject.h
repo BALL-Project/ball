@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricObject.h,v 1.23 2002/12/16 15:35:41 amoll Exp $
+// $Id: geometricObject.h,v 1.24 2003/02/21 16:07:58 anhi Exp $
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
 #define BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
@@ -28,17 +28,17 @@ namespace BALL
 		/** GeometricObject class.
 				The class GeometricObject is the most important base class for a
 				geometric primitive.  All geometric primitives must be derived from
-				this class.  GeometricObject is derived from \Ref{Composite}.
+				this class.  GeometricObject is derived from  \link Composite Composite \endlink .
 				Therefore all geometric primitive can be appended to other
 				composites. With the help of this class the graphical
 				representation can be easily added to the information (stored as
 				composites) which should be visualized. This class contains only
 				the general information like selection color and properties a
 				geometric object can have. All other methods concerning drawing are
-				in the base class \Ref{GLObject}.  The class geometricObject
+				in the base class  \link GLObject GLObject \endlink .  The class geometricObject
 				handles the different properties (see predefined properties), the
 				selected color, the name and the typename of a geometric object.
-				{\bf Definition:} \URL{BALL/VIEW/KERNEL/geometricObject.h}
+				<b>Definition:</b> BALL/VIEW/KERNEL/geometricObject.h
 		*/
 		class GeometricObject
 			: public Composite,
@@ -171,7 +171,7 @@ namespace BALL
 					The copy is either deep (default) or shallow.
 					The state of {\em *this} geometricObject is initialized to the state of the geometricObject {\em object}.
 					@param       object the geometricObject to be copied (cloned)
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em object}
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of {\em object}
 					@return      GeometricObject new constructed geometricObject cloned from {\em object}
 					@see         ColorRGBA
 					@see         Composite
@@ -186,7 +186,7 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} geometricObject.
-					Calls \Ref{destroy}.
+					Calls  \link destroy destroy \endlink .
 					@see         destroy
 			*/
 			virtual ~GeometricObject()
@@ -208,16 +208,16 @@ namespace BALL
 						  \item PROPERTY__DRAWING_PRECISION_HIGH
 						\end{itemize}
 					\end{itemize}
-					Calls \Ref{Composite::clear}.
-					Calls \Ref{PropertyManager::clear}.
+					Calls  \link Composite::clear Composite::clear \endlink .
+					Calls  \link PropertyManager::clear PropertyManager::clear \endlink .
 			*/
 			virtual void clear()
 				throw();
 
 			/** Explicit destructor.
 					Destroy {\em *this} geometricObject.
-					Calls \Ref{Composite::destroy}.
-					Calls \Ref{PropertyManager::destroy}.
+					Calls  \link Composite::destroy Composite::destroy \endlink .
+					Calls  \link PropertyManager::destroy PropertyManager::destroy \endlink .
 					@see         Composite::destroy
 					@see         PropertyManager::destroy
 			*/
@@ -233,9 +233,9 @@ namespace BALL
 					Assign the geometricObject {\em object} to {\em *this} geometricObject.
 					The assignment is either deep (default) or shallow.
 					The state of {\em *this} geometricObject is initialized to the state of 
-					the geometricObject {\em object}.\\
+					the geometricObject {\em object}. \par
 					@param       object the geometricObject to be copied (cloned)
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em object}
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of {\em object}
 					@see         GeometricObject
 			*/
 			void set(const GeometricObject& object, bool deep = true)
@@ -244,9 +244,9 @@ namespace BALL
 			/** Assignment operator.
 					Assign the geometricObject {\em object} to {\em *this} geometricObject.
 					The assignment is deep.
-					Calls \Ref{set}.
+					Calls  \link set set \endlink .
 					The state of {\em *this} geometricObject is initialized to the state 
-					of the geometricObject {\em object}.\\
+					of the geometricObject {\em object}. \par
 					@param       object the geometricObject to be copied (cloned)
 					@return      GeometricObject& {\em *this} geometricObject
 					@see         set
@@ -257,9 +257,9 @@ namespace BALL
 			/** Copying with cloning facility.
 					Copy {\em *this} geometricObject to the geometricObject {\em object}.
 					The assignment is either deep (default) or shallow.
-					Calls \Ref{set}.
+					Calls  \link set set \endlink .
 					The state of the geometricObject {\em object} is initialized to the
-					state of {\em *this} geometricObject.\\
+					state of {\em *this} geometricObject. \par
 					@param       object the geometricObject to be assigned to
 					@see         set
 			*/
@@ -284,7 +284,7 @@ namespace BALL
 					represented by the parameter {\em property}. 
 					See predefined properties for allowed	properties.
 					This method overrides the method {\em setProperty} from the class
-					\Ref{PropertyManager}. There are certain properties that cannot be
+					 \link PropertyManager PropertyManager \endlink . There are certain properties that cannot be
 					set together (e.g. the model properties, the precision properties, etc.).
 					If such a property is set all previously set properties of the same
 					group are cleared (e.g. if the property DRAWING_PRECISION_LOW was set
@@ -315,14 +315,14 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the name of {\em *this} geometricObject.
-					For further information see \Ref{getName}.
+					For further information see  \link getName getName \endlink .
 			*/
 			const String& getName() const
 				throw();
 
 			/** Test if {\em *this} geometricObject has a name.
 					Test if the name of {\em *this} is not empty.
-					@return  bool -	{\tt true} if the name of {\em *this} is not empty, {\tt false} otherwise
+					@return  bool -	<tt>true</tt> if the name of {\em *this} is not empty, <tt>false</tt> otherwise
 					@see     setName
 					@see     getName
 			*/
@@ -331,7 +331,7 @@ namespace BALL
 
 			/** Return the type name of {\em *this} geometricObject.
 					Virtually overrideable method for specifying the type name of {\em *this} geometricObject.
-					This method is used by the \Ref{Control} class to identify the geometricObjects.
+					This method is used by the  \link Control Control \endlink  class to identify the geometricObjects.
 					If the derived primitive geometric object should have a type name displayed by the
 					control class, this method should be overridden.
 					@return  String the type name of {\em *this} geometricObject
@@ -349,10 +349,10 @@ namespace BALL
 					Initiate self-validation of the internal state and data structure consistencies
 					of {\em *this} geometricObject.
 					If the internal state of {\em *this} geometricObject is correct (self-validated) and 
-					consistent {\tt true} is returned, {\tt false} otherwise. 
+					consistent <tt>true</tt> is returned, <tt>false</tt> otherwise. 
 					Calls {Composite::isValid}.
 					Calls {PropertyManager::isValid}.
-					@return			bool {\tt true} if the internal state of {\em *this} geometricObject is correct
+					@return			bool <tt>true</tt> if the internal state of {\em *this} geometricObject is correct
 					@see        Composite::isValid
 					@see        PropertyManager::isValid
 			*/

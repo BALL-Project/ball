@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mesh.h,v 1.13 2002/12/16 12:22:56 sturm Exp $
+// $Id: mesh.h,v 1.14 2003/02/21 16:08:05 anhi Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_MESH_H
 #define BALL_VIEW_PRIMITIV_MESH_H
@@ -38,11 +38,11 @@ namespace BALL
 				\begin{itemize}
 				  \item color - the color of the mesh
 				\end{itemize}
-				The class Mesh is derived from the classes \Ref{GeometricObject}, \Ref{ColorExtension}
-				and \Ref{Surface}. The data structures defining the mesh are implemented in
-				the class \Ref{Surface}. Therefore one can use {\em *this} mesh in the
-				same fashion as \Ref{Surface}. \\
-				{\bf Definition:} \URL{BALL/VIEW/PRIMITIV/mesh.h}	
+				The class Mesh is derived from the classes  \link GeometricObject GeometricObject \endlink ,  \link ColorExtension ColorExtension \endlink 
+				and  \link Surface Surface \endlink . The data structures defining the mesh are implemented in
+				the class  \link Surface Surface \endlink . Therefore one can use {\em *this} mesh in the
+				same fashion as  \link Surface Surface \endlink .  \par
+				<b>Definition:</b> BALL/VIEW/PRIMITIV/mesh.h
 		*/
 		class Mesh
 			: public GeometricObject,
@@ -73,7 +73,7 @@ namespace BALL
 					Construct new mesh by copying the mesh {\em mesh}.
 					The copy is either deep (default) or shallow.
 					@param       mesh the mesh to be copied (cloned)
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false})
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>)
 					@return      Mesh new constructed mesh copied from {\em mesh}
 					@see         GeometricObject
 					@see         ColorExtension
@@ -100,15 +100,15 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} mesh.
-					Calls \Ref{destroy}.
+					Calls  \link destroy destroy \endlink .
 					@see         destroy
 			*/
 			virtual ~Mesh()
 				throw();
 
 			/** Explicit default initialization.
-					Calls \Ref{GeometricObject::clear}
-					Calls \Ref{ColorExtension::clear}
+					Calls  \link GeometricObject::clear GeometricObject::clear \endlink 
+					Calls  \link ColorExtension::clear ColorExtension::clear \endlink 
 					@see  GeometricObject::clear
 					@see  ColorExtension::clear
 			*/
@@ -116,8 +116,8 @@ namespace BALL
 				throw();
 
 			/** Explicit destructor.
-					Calls \Ref{GeometricObject::destroy}
-					Calls \Ref{ColorExtension::destroy}
+					Calls  \link GeometricObject::destroy GeometricObject::destroy \endlink 
+					Calls  \link ColorExtension::destroy ColorExtension::destroy \endlink 
 					@see  GeometricObject::destroy
 					@see  ColorExtension::destroy
 			*/
@@ -133,9 +133,9 @@ namespace BALL
 					Assign the mesh {\em mesh} to {\em *this} mesh.
 					The copy is either deep (default) or shallow.
 					The value of {\em *this} mesh is initialized to the value of 
-					the mesh {\em mesh}.\\
+					the mesh {\em mesh}. \par
 					@param       mesh the mesh to be copied
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em mesh}
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of {\em mesh}
 					@see         Mesh
 			*/
 			void set(const Mesh& mesh, bool deep = true)
@@ -144,9 +144,9 @@ namespace BALL
 			/** Assignment operator.
 					Assign the mesh {\em mesh} to {\em *this} mesh.
 					The copy is deep.
-					Calls \Ref{set}.
+					Calls  \link set set \endlink .
 					The value of {\em *this} mesh is initialized to the value 
-					of the mesh {\em mesh}.\\
+					of the mesh {\em mesh}. \par
 					@param       mesh the mesh to be copied
 					@return      Mesh& {\em *this} mesh
 					@see         set
@@ -157,11 +157,11 @@ namespace BALL
 			/** Copying with cloning facility.
 					Copy {\em *this} mesh to the mesh {\em mesh}.
 					The copy is either deep (default) or shallow.
-					Calls \Ref{set}.
+					Calls  \link set set \endlink .
 					The value of the mesh {\em mesh} is initialized to the
-					value of {\em *this} mesh.\\
+					value of {\em *this} mesh. \par
 					@param       mesh the mesh to be assigned to
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em mesh}
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of {\em mesh}
 					@see         set
 			*/
 			void get(Mesh& mesh, bool deep = true) const
@@ -183,9 +183,9 @@ namespace BALL
 					Initiate self-validation of the internal state and data structure consistencies
 					of {\em *this} mesh.
 					If the internal state of {\em *this} mesh is correct (self-validated) and 
-					consistent {\tt true} is returned, {\tt false} otherwise. 
-					Calls \Ref{GeometricObject::isValid}.
-					@return			bool {\tt true} if the internal state of {\em *this} mesh is correct (self-validated) and consistent, {\tt false} otherwise
+					consistent <tt>true</tt> is returned, <tt>false</tt> otherwise. 
+					Calls  \link GeometricObject::isValid GeometricObject::isValid \endlink .
+					@return			bool <tt>true</tt> if the internal state of {\em *this} mesh is correct (self-validated) and consistent, <tt>false</tt> otherwise
 					@see        GeometricObject::isValid
 			*/
 			virtual bool isValid() const
@@ -194,8 +194,8 @@ namespace BALL
 			/** Internal value dump.
 					Dump the current value of {\em *this} mesh to 
 					the output ostream {\em s} with dumping depth {\em depth}.
-					Calls \Ref{GeometricObject::dump}.
-					Calls \Ref{ColorExtension::dump}.
+					Calls  \link GeometricObject::dump GeometricObject::dump \endlink .
+					Calls  \link ColorExtension::dump ColorExtension::dump \endlink .
 					@param   s output stream where to output the value of {\em *this} mesh
 					@param   depth the dumping depth
 					@see     GeometricObject::dump
@@ -220,9 +220,9 @@ namespace BALL
 
 			/** Export method.
 					This method handles the export of {\em *this} mesh into another
-					format (eg. POVRAY, VRML)	\\
-				  {\bf Note:} Not yet implemented.
-					@return    bool {\tt true} if successful,	{\tt false} otherwise
+					format (eg. POVRAY, VRML)	 \par
+				  <b>Note:</b> Not yet implemented.
+					@return    bool <tt>true</tt> if successful,	<tt>false</tt> otherwise
 			*/
 			virtual bool extract()
 				throw();

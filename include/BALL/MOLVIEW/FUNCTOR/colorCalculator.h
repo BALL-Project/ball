@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorCalculator.h,v 1.11 2002/12/12 09:48:48 oliver Exp $
+// $Id: colorCalculator.h,v 1.12 2003/02/21 16:04:55 anhi Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_COLORCALCULATOR_H
 #define BALL_MOLVIEW_FUNCTOR_COLORCALCULATOR_H
@@ -31,16 +31,16 @@ namespace BALL
 		using VIEW::ColorRGBA;
 		
 		/** ColorCalculator class.
-				The class ColorCalculator is derived from both \Ref{Visitor} of \Ref{Atom}
-				and \Ref{Composite}. So there are \Ref{visit} methods for both \Ref{Atom} and
-				\Ref{Composite} objects. The class ColorCalculator is used for calculating
-				a \Ref{ColorRGBA} for each given \Ref{Atom} object. A \Ref{ColorMap} is used
+				The class ColorCalculator is derived from both  \link Visitor Visitor \endlink  of  \link Atom Atom \endlink 
+				and  \link Composite Composite \endlink . So there are  \link visit visit \endlink  methods for both \Ref{Atom} and
+				 \link Composite Composite \endlink  objects. The class ColorCalculator is used for calculating
+				a  \link ColorRGBA ColorRGBA \endlink  for each given  \link Atom Atom \endlink  object. A \Ref{ColorMap} is used
 				to store the colors with a given name. That name will be calculated by the method
-				\Ref{calculateKey} from the given object. If a name is not inserted into the 
+				 \link calculateKey calculateKey \endlink  from the given object. If a name is not inserted into the 
 				color map a default color	will be returned. 
 				This class and their derived classes will be used by the model processors to
-				calculate a color for each \Ref{Atom} object they process. \\
-				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/colorCalculator.h} 
+				calculate a color for each  \link Atom Atom \endlink  object they process.  \par
+				<b>Definition:</b> BALL/MOLVIEW/FUNCTOR/colorCalculator.h
 		*/
 		class ColorCalculator
 			: public Visitor<Atom>,
@@ -54,7 +54,7 @@ namespace BALL
 				
 			/**	ColorMap type.
 					Define the type of a colorMap. A colorMap is a string hash map from strings
-					to \Ref{ColorRGBA} objects.
+					to  \link ColorRGBA ColorRGBA \endlink  objects.
 					@see   StringHashMap
 					@see   ColorRGBA
 			*/
@@ -93,7 +93,7 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} colorCalculator.
-					Calls \Ref{destroy}.
+					Calls  \link destroy destroy \endlink .
 					@see         destroy
 			*/
 			virtual ~ColorCalculator()
@@ -102,8 +102,8 @@ namespace BALL
 			/** Explicit default initialization.
 					Reset the state of {\em *this} colorCalculator to:
 					\begin{itemize}
-					  \item  {\em color_} set to red ({\tt "FF0000FF"})
-					  \item  {\em default_color_} set to red ({\tt "FF0000FF"})
+					  \item  {\em color_} set to red (<tt>"FF0000FF"</tt>)
+					  \item  {\em default_color_} set to red (<tt>"FF0000FF"</tt>)
 					  \item  {\em color_map_} is cleared
 					\end{itemize}
 					@see  color_
@@ -140,7 +140,7 @@ namespace BALL
 			/** Assignment operator.
 					Assign the colorCalculator {\em color_calculator} to {\em *this}
 					colorCalculator.
-					Calls \Ref{set}.
+					Calls  \link set set \endlink .
 					The colors and the colorMap of {\em *this} are initialized to the colors and 
 					the colorMap of the colorCalculator {\em color_calculator}. 
 					@param       color_calculator the colorCalculator to be copied
@@ -153,7 +153,7 @@ namespace BALL
 			/** Copying.
 					Copy {\em *this} colorCalculator to the colorCalculator 
 					{\em color_calculator}.
-					Calls \Ref{set}.
+					Calls  \link set set \endlink .
 					The colors and the colorMap of {\em *this} are initialized to the colors and 
 					the colorMap of the colorCalculator {\em color_calculator}. 
 					@param       color_calculator the colorCalculator to be assigned to
@@ -165,8 +165,8 @@ namespace BALL
 			/** Swapping of colorCalculator's.
 					Swap the colors and the colorMap of {\em *this} colorCalculator with
 					the colorCalculator	{\em color_calculator}.
-					Calls \Ref{ColorRGBA::swap}.
-					Calls \Ref{StringHashMap::swap}.
+					Calls  \link ColorRGBA::swap ColorRGBA::swap \endlink .
+					Calls  \link StringHashMap::swap StringHashMap::swap \endlink .
 					@param       color_calculator the colorCalculator being swapped with {\em *this} colorCalculator 
 					@see         color_
 					@see         default_color_
@@ -183,9 +183,9 @@ namespace BALL
 
 			/** Change the default color.
 					Change the default color of {\em *this} colorCalculator.
-					If the object given to the \Ref{visit} method has a name that is not inserted
-					into the \Ref{color_map_} the default color will be written into the variable
-					\Ref{color_}. So the method \Ref{getColor} always returns a valid color.
+					If the object given to the  \link visit visit \endlink  method has a name that is not inserted
+					into the  \link color_map_ color_map_ \endlink  the default color will be written into the variable
+					 \link color_ color_ \endlink . So the method  \link getColor getColor \endlink  always returns a valid color.
 					@param color the new default color.
 					@see   getDefaultColor
 					@see   getColor
@@ -197,7 +197,7 @@ namespace BALL
 
 			/** Non-mutable inspection of the default color.
 					Access the constant reference of the default color of {\em *this} colorCalculator.
-					@return  ColorRGBA& a constant reference to the default \Ref{ColorRGBA} of {\em *this} colorCalculator
+					@return  ColorRGBA& a constant reference to the default  \link ColorRGBA ColorRGBA \endlink  of {\em *this} colorCalculator
 					@see     setDefaultColor
 					@see     default_color_
 			*/
@@ -206,7 +206,7 @@ namespace BALL
 
 			/** Non-mutable inspection of the chosen color.
 					Access the constant reference of the chosen color of {\em *this} colorCalculator.
-					@return  ColorRGBA& a constant reference to the chosen \Ref{ColorRGBA} of {\em *this} colorCalculator
+					@return  ColorRGBA& a constant reference to the chosen  \link ColorRGBA ColorRGBA \endlink  of {\em *this} colorCalculator
 					@see     visit
 					@see     color_
 			*/
@@ -214,10 +214,10 @@ namespace BALL
 				throw();
 
 			/** Change the color map.
-					Change the color map of {\em *this} colorCalculator. The given \Ref{ColorMap}
-					{\em color_map} will be used in the \Ref{visit} method to retrieve a 
-					\Ref{ColorRGBA} for a given object.
-					@param  color_map the new \Ref{ColorMap} of {\em *this} colorCalculator
+					Change the color map of {\em *this} colorCalculator. The given  \link ColorMap ColorMap \endlink 
+					{\em color_map} will be used in the  \link visit visit \endlink  method to retrieve a 
+					 \link ColorRGBA ColorRGBA \endlink  for a given object.
+					@param  color_map the new  \link ColorMap ColorMap \endlink  of {\em *this} colorCalculator
 					@see    getColorMap
 					@see    visit
 					@see    ColorMap
@@ -228,7 +228,7 @@ namespace BALL
 
 			/** Non-mutable inspection of the color map.
 					Access the constant reference of the color map of {\em *this}	colorCalculator.
-					@return  ColorMap& a constant reference to the \Ref{color_map_} of {\em *this} colorCalculator
+					@return  ColorMap& a constant reference to the  \link color_map_ color_map_ \endlink  of {\em *this} colorCalculator
 					@see     setColorMap
 					@see     color_map_
 					@see     ColorMap
@@ -237,12 +237,12 @@ namespace BALL
 				throw();				
 
 			/** Visit method.
-					Calculate a key with the method \Ref{calculateKey} of the given \Ref{Atom} {\em atom}
-					and searches the key in the \Ref{color_map_}. If such a key exists the 
-					corresponding \Ref{ColorRGBA} object will be written into the variable \Ref{color_}.
-					If no such key exists the \Ref{default_color_} will be written into the variable
-					\Ref{color_}.
-					@param  atom the \Ref{Atom} object whose color should be retrieved
+					Calculate a key with the method  \link calculateKey calculateKey \endlink  of the given  \link Atom Atom \endlink  {\em atom}
+					and searches the key in the  \link color_map_ color_map_ \endlink . If such a key exists the 
+					corresponding  \link ColorRGBA ColorRGBA \endlink  object will be written into the variable  \link color_ color_ \endlink .
+					If no such key exists the  \link default_color_ default_color_ \endlink  will be written into the variable
+					 \link color_ color_ \endlink .
+					@param  atom the  \link Atom Atom \endlink  object whose color should be retrieved
 					@see    Atom
 					@see    calculateKey
 					@see    getColor
@@ -257,9 +257,9 @@ namespace BALL
 			virtual void visit(Atom& atom);
 
 			/** Visit method.
-					If the \Ref{Composite} {\em composite} is of kind \Ref{Atom} than the method
-					\Ref{visit} will be called else the \Ref{default_color_} will be written into
-					the variable \Ref{color_}.
+					If the  \link Composite Composite \endlink  {\em composite} is of kind  \link Atom Atom \endlink  than the method
+					 \link visit visit \endlink  will be called else the  \link default_color_ default_color_ \endlink  will be written into
+					the variable  \link color_ color_ \endlink .
 					@see    visit
 					@see    Composite
 					@see    Atom
@@ -276,13 +276,13 @@ namespace BALL
 			virtual void visit(Composite& composite);
 
 			/** Calculate a key to an atom.
-					Calculate a key to the given \Ref{Atom} {\em atom}.
-					This method can be overridden to calculate a string key of the \Ref{Atom} object.
+					Calculate a key to the given  \link Atom Atom \endlink  {\em atom}.
+					This method can be overridden to calculate a string key of the  \link Atom Atom \endlink  object.
 					In this implementation the key of {\em atom} is the symbol of the element of the
-					\Ref{Atom} object.
-					This calculated key will be used to access the \Ref{ColorMap} to store a
-					\Ref{ColorRGBA} for the given \Ref{Atom} object.
-					@param  atom the \Ref{Atom} object for which a string key should be calculated
+					 \link Atom Atom \endlink  object.
+					This calculated key will be used to access the  \link ColorMap ColorMap \endlink  to store a
+					 \link ColorRGBA ColorRGBA \endlink  for the given  \link Atom Atom \endlink  object.
+					@param  atom the  \link Atom Atom \endlink  object for which a string key should be calculated
 					@return String& a constant reference to a string key
 					@see    visit
 			*/
@@ -312,7 +312,7 @@ namespace BALL
 			*/
 			//@{
 			/** Access to the colorMap.
-					This variable contains all \Ref{ColorRGBA} object that are inserted with a
+					This variable contains all  \link ColorRGBA ColorRGBA \endlink  object that are inserted with a
 					certain name.
 					@see   ColorMap
 			*/

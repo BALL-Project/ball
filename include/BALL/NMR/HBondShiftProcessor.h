@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HBondShiftProcessor.h,v 1.6 2002/02/27 12:19:29 sturm Exp $
+// $Id: HBondShiftProcessor.h,v 1.7 2003/02/21 16:05:35 anhi Exp $
 
 #ifndef BALL_NMR_HBONDSHIFTPROCESSOR_H
 #define BALL_NMR_HBONDSHIFTPROCESSOR_H
@@ -30,7 +30,7 @@ namespace BALL
 {
 
   /** Shift assignment processor implementing the effect of hydrogen bonds. 
-			{\bf Definition}\URL{BALL/NMR/HBondShiftProcessor.h}
+			<b>Definition</b>BALL/NMR/HBondShiftProcessor.h
   */
   class HBondShiftProcessor
 		: public ShiftModule
@@ -74,7 +74,7 @@ namespace BALL
 	      This method reads the parameter section "HBondEffect" and parses its contents.
 		    This section contains the parameters used to calculate the contribution of a hydrogen bond
 		    to the chemical shift. Right now, it is assumed that the effect is linear in the bond length
-		    and the slope {\tt a} and the shift {\tt b} are universal, that is the same for all 
+		    and the slope <tt>a</tt> and the shift <tt>b</tt> are universal, that is the same for all 
 				kinds of hydrogen bonds.
     */
     virtual void init()
@@ -91,8 +91,8 @@ namespace BALL
       throw();
 
     /** operator ().
-	      This method adds all acceptors to the {\tt acceptor_list_} and all donators to the
-		    {\tt donator_list_}.
+	      This method adds all acceptors to the <tt>acceptor_list_</tt> and all donators to the
+		    <tt>donator_list_</tt>.
     */
     virtual Processor::Result operator () (Composite& composite)
       throw();
@@ -100,15 +100,15 @@ namespace BALL
     
     /** Finish method.
 	      This method performs the chemical shift calculation.
-				For each donator in \Ref{donator_list_}, it looks for acceptors in the \Ref{acceptor_list_} that
-				lie inside a spherical shell of inner radius \Ref{minimum_bond_length_} and outer radius 
-				\Ref{maximum_bond_length_}
+				For each donator in  \link donator_list_ donator_list_ \endlink , it looks for acceptors in the  \link acceptor_list_ acceptor_list_ \endlink  that
+				lie inside a spherical shell of inner radius  \link minimum_bond_length_ minimum_bond_length_ \endlink  and outer radius 
+				 \link maximum_bond_length_ maximum_bond_length_ \endlink 
 				with the donator in its center. Then, it calculates the bond length $x$ and
 				calculates the chemical shift as $ delta_{HBond} = a*x + b $
 				The chemical shift is stored in the \emph{acceptor} atom using the named property 
-				\Ref{ShiftModule::PROPERTY__SHIFT}
-				and in the named property \Ref{PROPERTY__HBOND_SHIFT}.
-				@return bool, {\bf false} if {\tt parameters_ == 0}
+				 \link ShiftModule::PROPERTY__SHIFT ShiftModule::PROPERTY__SHIFT \endlink 
+				and in the named property  \link PROPERTY__HBOND_SHIFT PROPERTY__HBOND_SHIFT \endlink .
+				@return bool, <b>false</b> if <tt>parameters_ == 0</tt>
     */
     virtual bool finish()
       throw();
@@ -117,11 +117,11 @@ namespace BALL
 
     protected:
 
-    /** list of HBond donators collected by {\tt operator ()}
+    /** list of HBond donators collected by <tt>operator ()</tt>
      */
     std::list<Atom*> donator_list_;
 
-    /** list of HBond acceptors collected by {\tt operator ()}
+    /** list of HBond acceptors collected by <tt>operator ()</tt>
      */
     std::list<Atom*> acceptor_list_;
 

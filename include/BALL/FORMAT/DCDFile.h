@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile.h,v 1.19 2003/01/29 11:34:48 anker Exp $
+// $Id: DCDFile.h,v 1.20 2003/02/21 16:02:48 anhi Exp $
 
 #ifndef BALL_FORMAT_DCDFILE_H
 #define BALL_FORMAT_DCDFILE_H
@@ -15,21 +15,21 @@ namespace BALL
 
 	/** DCD Trajectory file format. This class enables BALL to write DCD
 			files that can be read by VMD. The format stems from the xplor
-			package. This format is {\bf NOT} portable.	\\
-			The header is described in the documentation for the nested DCDHeader	class. \\
+			package. This format is <b>NOT</b> portable.	 \par
+			The header is described in the documentation for the nested DCDHeader	class.  \par
 			Header of a DCD file: Got this description from
 			http://www.arl.hpc.mil/PET/cta/ccm/software/fmd/Docs/html/fmd_ug.html.
 			Quote: "The exact format of these files is quite ugly, as it
 			reproduces the binary record format of unformatted FORTRAN files.
 			Each such "record" begins with 4 bytes containing the integer value
 			of the number of bytes in the following record.  It ends with a
-			record containing the same 4 bytes." \\
+			record containing the same 4 bytes."  \par
 			The header consists of several blocks. Each block starts and ends
 			with the number of bytes enclosed between those numbers, i. e. a
 			block consisting of 8 bytes starts with the number 8 followed by 8
-			bytes of data and ends with the number 8.	\\
-			BASUTELLE: complete header description \\
-			{\bf Definition:} \URL{BALL/FORMAT/DCDFile.h}	\\
+			bytes of data and ends with the number 8.	 \par
+			BASUTELLE: complete header description  \par
+			<b>Definition:</b> BALL/FORMAT/DCDFile.h
 	*/
 	class DCDFile
 		:	public TrajectoryFile
@@ -124,8 +124,8 @@ namespace BALL
 
 		// ?????:
 		// should append() also write the header? what is more intuitive?
-		/** Append a SnapShot to an existing file. {\bf Note} that this method
-				does {\bf not} update the header. 
+		/** Append a SnapShot to an existing file. <b>Note</b> that this method
+				does <b>not</b> update the header. 
 				@param snapshot the snapshot we want to save
 				@return true, if writing was successful
 		*/

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: QTTimer.h,v 1.12 2002/12/16 12:22:51 sturm Exp $
+// $Id: QTTimer.h,v 1.13 2003/02/21 16:07:49 anhi Exp $
 
 #ifndef BALL_VIEW_KERNEL_QTTIMER_H
 #define BALL_VIEW_KERNEL_QTTIMER_H
@@ -30,9 +30,9 @@ namespace BALL
 				The {\em timer} method will not save any values when it exits. Therefore
 				the necessary initialization and value savings must be done by the user in the
 				{\em timer} method.
-				The class is derived from the \Ref{QObject} class from the QT library. 
+				The class is derived from the  \link QObject QObject \endlink  class from the QT library. 
 				Therefore it will only function within a qt application.
-				{\bf Definition:} \URL{BALL/VIEW/KERNEL/QTTimer.h}
+				<b>Definition:</b> BALL/VIEW/KERNEL/QTTimer.h
 		*/
 		class QTTimer: public QObject
 		{
@@ -75,7 +75,7 @@ namespace BALL
 
 			/** Copy constructor.
 					Constructs new QTTimer by copying the qtTimer {\em qt_timer}.
-					The state of {\em *this} qtTimer is initialized to the state of the qtTimer {\em qt_timer}.\\
+					The state of {\em *this} qtTimer is initialized to the state of the qtTimer {\em qt_timer}. \par
 					@param       qt_timer the qtTimer to be copied
 					@return      QTTimer new constructed qtTimer copied from {\em qt_timer}
 			*/
@@ -89,7 +89,7 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} qtTimer.
-					Calls \Ref{destroy}.
+					Calls  \link destroy destroy \endlink .
 					@see         destroy
 			*/
 			virtual ~QTTimer()
@@ -122,7 +122,7 @@ namespace BALL
 					Assigns the qtTimer {\em qt_timer} to {\em *this} qtTimer.
 					The state of {\em *this} qtTimer is initialized to the state of 
 					the qtTimer {\em qt_timer}.
-					The timer is halted.\\
+					The timer is halted. \par
 					@param       qt_timer the qtTimer to be copied
 			*/
 			void set(const QTTimer& qt_timer)
@@ -130,9 +130,9 @@ namespace BALL
 
 			/** Assignment operator.
 					Assigns the qtTimer {\em qt_timer} to {\em *this} qtTimer.
-					Calls \Ref{set}.
+					Calls  \link set set \endlink .
 					The state of {\em *this} qtTimer is initialized to the state 
-					of the qtTimer {\em qt_timer}.\\
+					of the qtTimer {\em qt_timer}. \par
 					@param       qt_timer the qtTimer to be copied
 					@return      QTTimer& {\em *this} qtTimer
 					@see         set
@@ -142,9 +142,9 @@ namespace BALL
 
 			/** Copying.
 					Copies {\em *this} qtTimer to the qtTimer {\em qt_timer}.
-					Calls \Ref{set}.
+					Calls  \link set set \endlink .
 					The state of the qtTimer {\em qt_timer} is initialized to the
-					state of {\em *this} qtTimer.\\
+					state of {\em *this} qtTimer. \par
 					@param       qt_timer the qtTimer to be assigned to
 					@see         set
 			*/
@@ -169,7 +169,7 @@ namespace BALL
 					represented by the parameter {\em interval}. {\em *this} qtTimer will
 					call the method {\em timer} every {\em interval} msec.
 					@param       interval the new interval of {\em *this} qtTimer
-					@exception   NoValidInterval thrown if the value of {\em interval} is lower or equal {\tt 0}
+					@exception   NoValidInterval thrown if the value of {\em interval} is lower or equal <tt>0</tt>
 					@see         startTimer
 					@see         stopTimer
 					@see         timer
@@ -211,7 +211,7 @@ namespace BALL
 			//@{
 
 			/** Tests if {\em *this} qtTimer is running.
-					@return  bool -	{\tt true} if {\em *this} qtTimer is running, {\tt false} otherwise
+					@return  bool -	<tt>true</tt> if {\em *this} qtTimer is running, <tt>false</tt> otherwise
 					@see     startTimer
 					@see     stopTimer
 			*/
@@ -219,7 +219,7 @@ namespace BALL
 				throw();
 
 			/** Tests if {\em *this} qtTimer is stopped.
-					@return  bool -	{\tt true} if {\em *this} qtTimer is stopped, {\tt false} otherwise
+					@return  bool -	<tt>true</tt> if {\em *this} qtTimer is stopped, <tt>false</tt> otherwise
 					@see     startTimer
 					@see     stopTimer
 			*/

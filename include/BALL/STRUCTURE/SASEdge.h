@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SASEdge.h,v 1.3 2002/12/17 14:13:10 anker Exp $
+// $Id: SASEdge.h,v 1.4 2003/02/21 16:06:33 anhi Exp $
 
 #ifndef BALL_STRUCTURE_SASEDGE_H
 #define BALL_STRUCTURE_SASEDGE_H
@@ -29,7 +29,7 @@ namespace BALL
 	class SASTriangulator;
 
 	/** Generic SASEdge Class.
-			{\bf Definition:} \URL{BALL/STRUCTURE/SASEdge.h}
+			<b>Definition:</b> BALL/STRUCTURE/SASEdge.h
 	*/
 	class SASEdge	:	public GraphEdge< SASVertex,SASEdge,SASFace >
 	{
@@ -172,26 +172,26 @@ namespace BALL
 		//@{
 
 		/**	Equality operator.
-				@return	bool	{\bf true}
+				@return	bool	<b>true</b>
 		*/
 		virtual bool operator == (const SASEdge&) const
 			throw();
 
 		/**	Inequality operator.
-				@return	bool	{\bf false}
+				@return	bool	<b>false</b>
 		*/
 		virtual bool operator != (const SASEdge&) const
 			throw();
 
 		/**	Similarity operator.
-				@return	bool	{\bf true}
+				@return	bool	<b>true</b>
 		*/
 		virtual bool operator *= (const SASEdge&) const
 			throw();
 
 		/** isFree.
-				@return	bool	{\bf true} if the RSEdge of the SASEdge is free,	
-											{\bf false} otherwise
+				@return	bool	<b>true</b> if the RSEdge of the SASEdge is free,	
+											<b>false</b> otherwise
 		*/
 		bool isFree() const
 			throw();

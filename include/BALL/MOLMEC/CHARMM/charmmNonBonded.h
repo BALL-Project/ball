@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmNonBonded.h,v 1.11 2002/12/16 18:12:45 oliver Exp $
+// $Id: charmmNonBonded.h,v 1.12 2003/02/21 16:04:12 anhi Exp $
 // Molecular Mechanics: Charmm force field, bond stretch component
 
 #ifndef BALL_MOLMEC_CHARMM_NONBONDED_H
@@ -35,7 +35,7 @@ namespace BALL
 {
 
 	/**	Charmm NonBonded (VdW + Electrostatic) component
-			{\bf Definition:} \URL{BALL/MOLMEC/CHARMM/charmmNonBonded.h}
+			<b>Definition:</b> BALL/MOLMEC/CHARMM/charmmNonBonded.h
 	*/
 	class CharmmNonBonded 
 		: public ForceFieldComponent

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bitVector.h,v 1.31 2002/02/27 12:18:30 sturm Exp $
+// $Id: bitVector.h,v 1.32 2003/02/21 16:01:50 anhi Exp $
 
 #ifndef BALL_DATATYPE_BITVECTOR_H
 #define BALL_DATATYPE_BITVECTOR_H
@@ -37,7 +37,7 @@ namespace BALL
 	class BitVector;
 
 	/**	Bit Class. This class represents a bit within a BitVector.
-			{\bf Definition:} \URL{BALL/DATATYPE/bitVector.h} \\
+			<b>Definition:</b> BALL/DATATYPE/bitVector.h
 			@see BitVector. 
 	*/
 	class Bit

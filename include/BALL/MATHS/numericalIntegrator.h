@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: numericalIntegrator.h,v 1.8 2002/02/27 12:18:55 sturm Exp $
+// $Id: numericalIntegrator.h,v 1.9 2003/02/21 16:03:52 anhi Exp $
 
 #ifndef BALL_MATHS_NUMERICALINTEGRATOR_H
 #define BALL_MATHS_NUMERICALINTEGRATOR_H
@@ -14,8 +14,8 @@ namespace BALL
 {
 
 	/** Numerical integrator class.
-			\\
-			{\bf Definition:} \URL{BALL/MATHS/numericalIntegrator.h}
+			 \par
+			<b>Definition:</b> BALL/MATHS/numericalIntegrator.h
 	*/
 	template <typename Function, typename DataType = float>
 	class NumericalIntegrator
@@ -85,8 +85,8 @@ namespace BALL
 			throw();
 
 		/** Get the value of the function at position {\em x}
-				@param x the position at which {\tt function\_} is to be evaluated
-				@return the value of {\tt function\_} at {\em x}
+				@param x the position at which <tt>function\_</tt> is to be evaluated
+				@return the value of <tt>function\_</tt> at {\em x}
 		*/
 		DataType getValue(const DataType& x) const
 			throw();

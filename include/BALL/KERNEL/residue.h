@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residue.h,v 1.29 2003/01/08 21:13:26 oliver Exp $
+// $Id: residue.h,v 1.30 2003/02/21 16:03:34 anhi Exp $
 
 #ifndef BALL_KERNEL_RESIDUE_H
 #define BALL_KERNEL_RESIDUE_H
@@ -38,8 +38,8 @@ namespace BALL
 
 	/** Residue class.
 			This class is used to represent residues in proteins.
-			\\
-			{\bf Definition:}\URL{BALL/KERNEL/residue.h}
+			 \par
+			<b>Definition:</b>BALL/KERNEL/residue.h
 	*/
 	class Residue
 		: public Fragment
@@ -79,7 +79,7 @@ namespace BALL
 		};
 
 		/**	Enum used to describe the kind of
-				name constructed by \Ref{getFullName}.
+				name constructed by  \link getFullName getFullName \endlink .
 		*/
 		enum FullNameType
 		{
@@ -147,7 +147,7 @@ namespace BALL
 		/** Assignment with cloning facility.
 				The assignment is either deep or shallow (default).
 				@param  residue the Residue to be copied (cloned)
-				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy
+				@param  deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy
 		*/
 		void set(const Residue& residue, bool deep = true)
 			throw();
@@ -190,13 +190,13 @@ namespace BALL
 		/**	Return the fully qualified name.
 				Residue names are modified as follows:
 				\begin{itemize}
-					\item {\tt -N} is added for N terminal residues
-					\item {\tt -C} is added for C terminal residue
-					\item {\tt [-]S} is added for CYS involved in a disulphide bridge
-					\item {\tt -M} is added for individual amino acids (C and N terminal)
+					\item <tt>-N</tt> is added for N terminal residues
+					\item <tt>-C</tt> is added for C terminal residue
+					\item <tt>[-]S</tt> is added for CYS involved in a disulphide bridge
+					\item <tt>-M</tt> is added for individual amino acids (C and N terminal)
 				\end{itemize}
-				@param	type if type is set to {\tt NO_VARIANT_EXTENSIONS},
-								the variant extension ({\tt -XX}) is omitted.
+				@param	type if type is set to <tt>NO_VARIANT_EXTENSIONS</tt>,
+								the variant extension (<tt>-XX</tt>) is omitted.
 				@return String the full fragment name
 		*/
 		String getFullName(FullNameType type = ADD_VARIANT_EXTENSIONS) const
@@ -338,20 +338,20 @@ namespace BALL
 		bool remove(PDBAtom& atom)
 			throw();
 
-		/**	Cut all children of {\tt residue} and prepend them before the children of this instance.
+		/**	Cut all children of <tt>residue</tt> and prepend them before the children of this instance.
 				@param residue the residue to access
 		*/
 		void spliceBefore(Residue& residue)
 			throw();
 
-		/**	Cut all children of {\tt residue} and append them after the children of this instance.
+		/**	Cut all children of <tt>residue</tt> and append them after the children of this instance.
 				@param residue the residue to access
 		*/
 		void spliceAfter(Residue& residue)
 			throw();
 
-		/**	Move the children of {\tt residue} into this instance.
-				The children are inserted using \Ref{spliceBefore}.
+		/**	Move the children of <tt>residue</tt> into this instance.
+				The children are inserted using  \link spliceBefore spliceBefore \endlink .
 		*/
 		void splice(Residue& residue)
 			throw();
@@ -398,8 +398,8 @@ namespace BALL
 		//@{
 
 		/** Internal state and consistency self-validation.
-				@return	 bool - {\tt true} if the internal state 
-								 is correct (self-validated) and consistent, {\tt false} otherwise
+				@return	 bool - <tt>true</tt> if the internal state 
+								 is correct (self-validated) and consistent, <tt>false</tt> otherwise
 		*/
 		virtual bool isValid() const
 			throw();

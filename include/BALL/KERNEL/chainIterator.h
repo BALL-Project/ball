@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: chainIterator.h,v 1.10 2002/02/27 12:18:46 sturm Exp $
+// $Id: chainIterator.h,v 1.11 2003/02/21 16:03:18 anhi Exp $
 
 #ifndef BALL_KERNEL_CHAINITERATOR_H
 #define BALL_KERNEL_CHAINITERATOR_H
@@ -26,7 +26,7 @@ namespace BALL
 {
 
 	/** Traits class for the various ChainIterators.
-			{\bf Definition:} \URL{BALL/KERNEL/chainIterator.h}
+			<b>Definition:</b> BALL/KERNEL/chainIterator.h
 	*/
 	class ChainIteratorTraits_
 		: public CompositeIteratorTraits_

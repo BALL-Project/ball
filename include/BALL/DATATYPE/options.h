@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: options.h,v 1.14 2002/02/27 12:18:33 sturm Exp $
+// $Id: options.h,v 1.15 2003/02/21 16:01:58 anhi Exp $
 
 #ifndef BALL_DATATYPE_OPTIONS_H
 #define BALL_DATATYPE_OPTIONS_H
@@ -28,13 +28,13 @@ namespace BALL
 	/**		Options class.
 				This object is intended to store options for complex
 				method calls. These options are stored as key/value pairs
-				of \Ref{String}.\\
-				Using this datastructure, options for force fields (\Ref{ForceField}),
-				finit difference Poisson Boltzmann calculations (\Ref{FDPB}), or the 
+				of  \link String String \endlink . \par
+				Using this datastructure, options for force fields ( \link ForceField ForceField \endlink ),
+				finit difference Poisson Boltzmann calculations ( \link FDPB FDPB \endlink ), or the 
 				results of calculations can be given, retrieved, stored into a file
 				and retrieved from a file.  This simplifies the handling of such
-				complex parameter sets.\\
-				{\bf Definition:} \URL{BALL/DATATYPE/options.h} \\
+				complex parameter sets. \par
+				<b>Definition:</b> BALL/DATATYPE/options.h
 	*/
 	class Options
 		: public StringHashMap<String> 
@@ -101,8 +101,8 @@ namespace BALL
 
 		/**		Returns true, if the value associated with the 
 					given key is a boolean.
-					A boolean entry has either the value {\tt true}
-					or {\tt false}. 
+					A boolean entry has either the value <tt>true</tt>
+					or <tt>false</tt>. 
 					@param	key String
 					@return	true, if {\em key} is a boolean value
 		*/
@@ -153,11 +153,11 @@ namespace BALL
 
 		/**		Returns the value associated with the key as bool.
 					This method tries to convert the value associated
-					with {\bf key} to a bool value.\\
+					with <b>key</b> to a bool value. \par
 					If the value is neither "true", nor "false" or the key does
 					not exist false is returned!
 					You might want to check the value's validity as a bool first
-					by calling \Ref{isBool}.
+					by calling  \link isBool isBool \endlink .
 					@param	key the key
 					@return	bool, boolean value
 		*/
@@ -165,9 +165,9 @@ namespace BALL
 
 		/**		Returns the value associated with the key as a floting point number.
 					If the value could not be converted to a floating point number or the key
-					does not exist a value of #0.0# is returned.\\
+					does not exist a value of #0.0# is returned. \par
 					You might want to check the value's validity as a floating point 
-					number first by calling \Ref{isReal}.
+					number first by calling  \link isReal isReal \endlink .
 					@param	key the key
 					@return float, floating point value
 		*/
@@ -175,40 +175,40 @@ namespace BALL
 
 		/**		Returns the value associated with the key as a Vector3 object.
 					This method is useful to read threedimensional coordinates, points, etc.
-					The value corresponding to {\bf key} has to be of the form
+					The value corresponding to <b>key</b> has to be of the form
 					#(<float> <float> <float>)# (i.e. three floating point numbers separated
-					by white blanks and surrounded by round brackets).\\
+					by white blanks and surrounded by round brackets). \par
 					If the content of the value is of a differnet format or the key does not
 					exists, the content	of the returned vector is undefined.
 					You might therefore check the value's validity first
-					by calling \Ref{isVector}.
+					by calling  \link isVector isVector \endlink .
 					@param	key the key
 					@return	Vector3	vector containing the three coordinates
 		*/
 		Vector3	getVector(const String& key) const throw();
 
 		/**		Returns the value associated with the key as an integer.
-					If the value corresponding to {\bf key} could not be converted to an
+					If the value corresponding to <b>key</b> could not be converted to an
 					integer number or the key does not exists, zero is returned.
 					It is possible to check for the validity 
-					of this conversion by calling \Ref{isInteger}.
+					of this conversion by calling  \link isInteger isInteger \endlink .
 					@return 	long the integer value
 					@param	key the key
 		*/
 		long getInteger(const String& key) const throw();
 
 		/** 	Assigns value to key. 
-					The string given as {\bf value} is assigned to the {\bf key}.
-					If {\bf key} didn't exist in the internal hash table, it 
+					The string given as <b>value</b> is assigned to the <b>key</b>.
+					If <b>key</b> didn't exist in the internal hash table, it 
 					is inserted.
 					@param key the key
 		*/
 		void set(const String& key, const String& value) throw();
 
 		/** 	Assigns the real number given by value to key.
-					{\bf value} is first converted to a string, which is 
-					then stored in the option object.\\
-					If {\bf key} didn't already exist, it is created.
+					<b>value</b> is first converted to a string, which is 
+					then stored in the option object. \par
+					If <b>key</b> didn't already exist, it is created.
 					@param	value the new value
 					@param key the key
 		*/
@@ -216,35 +216,35 @@ namespace BALL
 
 		/**		Assigns a Vector3 object to the value corresponding to a key.
 					The given Vector3 is converted to a string by the following
-					call to sprintf:\\
-					#sprintf(buffer, "(%f %f %f)", value.x, value.y, value.z)#\\
-					The so-built string is then stored in the hash table under key.\\
-					If {\bf key} didn't already exist, it is created.
+					call to sprintf: \par
+					#sprintf(buffer, "(%f %f %f)", value.x, value.y, value.z)# \par
+					The so-built string is then stored in the hash table under key. \par
+					If <b>key</b> didn't already exist, it is created.
 					@param	key the key
 					@param	value a vector
 		*/
 		void setVector(const String& key, const Vector3& value) throw();
 
 		/** Assigns the integer given by value to key.
-				{\bf value} is first converted to a string, which is 
-				then stored in the hash table under key.\\
-				If {\bf key} didn't already exist, it is created.\\
+				<b>value</b> is first converted to a string, which is 
+				then stored in the hash table under key. \par
+				If <b>key</b> didn't already exist, it is created. \par
 				@param	key the key
 				@param	value the integer value
 		*/
 		void setInteger(const String& key, const long value) throw();
 
 		/**	Assigns the boolean value given by value to the table entry key.
-				The value associated with {\bf key} is either set to
-				the string "true" or the string "false".\\
-				If {\bf key} didn't already exist, it is created.\\
+				The value associated with <b>key</b> is either set to
+				the string "true" or the string "false". \par
+				If <b>key</b> didn't already exist, it is created. \par
 				@param	key the key
 				@param	value the boolean value
 		*/
 		void setBool(const String& key, const bool value) throw();
 
 		/**	Assigns the value only, if the key is not yet defined. 
-				If an entry for {\bf key} exists, it is not modified.
+				If an entry for <b>key</b> exists, it is not modified.
 				It is set to value otherwise.
 				@see	set
 				@param	key the key
@@ -253,37 +253,37 @@ namespace BALL
 		String setDefault(const String& key, const String& value) throw();
 
 		/**	Assigns the value only, if the key is not yet defined. 
-				If an entry for {\bf key} exists, it is not modified.
+				If an entry for <b>key</b> exists, it is not modified.
 				It is set to value otherwise.
 				@see	setInteger
 				@param	key the key
 				@param 	value	a new value
-				@return	the value of {\tt key}
+				@return	the value of <tt>key</tt>
 		*/
 		long setDefaultInteger(const String& key, const long value) throw();
 
 		/**	Assigns the value only, if the key is not yet defined. 
-				If an entry for {\bf key} exists, it is not modified.
+				If an entry for <b>key</b> exists, it is not modified.
 				It is set to value otherwise.
 				@see	setReal
 				@param	key the key
 				@param 	value	a new value
-				@return	the value of {\tt key}
+				@return	the value of <tt>key</tt>
 		*/
 		double setDefaultReal(const String& key, const double value) throw();
 
 		/**	Assigns the value only if the key is not yet defined.
-				If an entry for {\bf key} exists, it is not modified.
+				If an entry for <b>key</b> exists, it is not modified.
 				It is set to value otherwise.
 				@see	setBool
 				@param	key the key
 				@param 	value	a new value
-				@return	the value of {\tt key}
+				@return	the value of <tt>key</tt>
 		*/
 		bool setDefaultBool(const String& key, const bool value) throw();
 
 		/**		Reads options from a file. 
-					This method opens the file specified by {\bf filename}.
+					This method opens the file specified by <b>filename</b>.
 					If the file could not be opened, the method returns false.
 					Otherwise, the file is read line by line and each line is interpreted
 					as a key (starting with the first non-blank character and	terminated
@@ -291,25 +291,25 @@ namespace BALL
 					with the first non-blank charakter after the key and terminated
 					by the end of the line).
 					For each line either an existing key is updated with the value read,
-					or a new key-value pair is created.\\
+					or a new key-value pair is created. \par
 					Lines starting with '\#', '!', or ';' are ignored and may be used
-					as comments.\\
+					as comments. \par
 					@param	filename the name of the file to be read
 					@return	bool	\begin{itemize}
-													\item {\bf true} if the file could be read
-													\item {\bf false} otherwise
+													\item <b>true</b> if the file could be read
+													\item <b>false</b> otherwise
 												\end{itemize}
 		*/
 		bool readOptionFile(const String& filename) throw();
 
 		/**		Writes options to a file.
-					This method opens or creates the file specified by {\bf filename}.
+					This method opens or creates the file specified by <b>filename</b>.
 					If the file could not be opened, the method returns false.
 					The option table's name is writen in a line starting with '!'.
 					@param	filename the name of the file to write
 					@return	bool	\begin{itemize}
-													\item {\bf true} if the file could be writen
-													\item {\bf false} otherwise
+													\item <b>true</b> if the file could be writen
+													\item <b>false</b> otherwise
 												\end{itemize}
 					@see readOptionFile
 		*/		

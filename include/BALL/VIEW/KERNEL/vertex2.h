@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertex2.h,v 1.9 2002/12/16 12:22:55 sturm Exp $
+// $Id: vertex2.h,v 1.10 2003/02/21 16:08:02 anhi Exp $
 
 #ifndef BALL_VIEW_KERNEL_VERTEX2_H
 #define BALL_VIEW_KERNEL_VERTEX2_H
@@ -25,11 +25,11 @@ namespace BALL
 				The class Vertex2 is used as a base class for all geometric objects that
 				have two vertices. It provides the derived class with methods for accessing
 				that vertices. Further there is the possibility to give an address to a 
-				vector \Ref{Vector3} as vertices. So if the values of these given vectors
+				vector  \link Vector3 Vector3 \endlink  as vertices. So if the values of these given vectors
 				changes the values of the vectors of {\em *this} vertex2 changes 
 				as well. To avoid segmentation faults these vector addresses must be 
-				valid as long as {\em *this} vertex2 exists. \\
-				{\bf Definition:} \URL{BALL/VIEW/KERNEL/vertex2.h}
+				valid as long as {\em *this} vertex2 exists.  \par
+				<b>Definition:</b> BALL/VIEW/KERNEL/vertex2.h
 		*/
 		class Vertex2
 		{
@@ -69,7 +69,7 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} vertex2.
-					Calls \Ref{destroy}.
+					Calls  \link destroy destroy \endlink .
 					@see         destroy
 			*/
 			virtual ~Vertex2()
@@ -97,7 +97,7 @@ namespace BALL
 			/** Assignment.
 					Assign the vertex2 {\em vertex} to {\em *this} vertex2.
 					The vectors and the vertex addresses of {\em *this} vertex2 are initialized 
-					to the vectors and vertex addresses of the vertex2 {\em vertex}.\\
+					to the vectors and vertex addresses of the vertex2 {\em vertex}. \par
 					@param       vertex the vertex2 to be copied
 					@see         setVertex1
 					@see         setVertex1Address
@@ -110,9 +110,9 @@ namespace BALL
 
 			/** Assignment operator.
 					Assign the vertex2 {\em vertex} to {\em *this} vertex2.
-					Calls \Ref{set}.
+					Calls  \link set set \endlink .
 					The vectors and the vertex addresses of {\em *this} vertex2 are initialized
-					to the vectors and the vertex addresses of the vertex2 {\em vertex}.\\
+					to the vectors and the vertex addresses of the vertex2 {\em vertex}. \par
 					@param       vertex the vertex2 to be copied
 					@return      Vertex2& constant reference of {\em *this} vertex2
 					@see         set
@@ -122,9 +122,9 @@ namespace BALL
 
 			/** Copying.
 					Copy {\em *this} vertex2 to the vertex2 {\em vertex}.
-					Calls \Ref{set}.
+					Calls  \link set set \endlink .
 					The vectors and the vertex addresses of {\em *this} vertex2 are initialized
-					to the vectors and the vertex addresses of the vertex {\em vertex}.\\
+					to the vectors and the vertex addresses of the vertex {\em vertex}. \par
 					@param       vertex the vertex2 to be assigned to
 					@see         set
 			*/
@@ -179,13 +179,13 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the first vector of {\em *this} vertex2.
-					For further information see \Ref{getVertex1}.
+					For further information see  \link getVertex1 getVertex1 \endlink .
 			*/
 			const Vector3& getVertex1() const
 				throw();
 
 			/** Inspection of the first vector of {\em *this} vertex2.
-					Access the first vector of {\em *this} vertex by using \Ref{Vector3}.
+					Access the first vector of {\em *this} vertex by using  \link Vector3 Vector3 \endlink .
 					@param       v the vector receiving the first vector of {\em *this} vertex2
 					@see         setVertex1
 					@see         Vector3
@@ -194,7 +194,7 @@ namespace BALL
 				throw();
 
 			/** Inspection of the components of the first vector of {\em *this} vertex2.
-					Access the components of the first vector of {\em *this} vertex2 by using \Ref{Real}.
+					Access the components of the first vector of {\em *this} vertex2 by using  \link Real Real \endlink .
 					@param       x the x component of the first vector of {\em *this} vertex2
 					@param       y the y component of the first vector of {\em *this} vertex2
 					@param       z the z component of the first vector of {\em *this} vertex2
@@ -279,13 +279,13 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the second vector of {\em *this} vertex2.
-					For further information see \Ref{getVertex2}.
+					For further information see  \link getVertex2 getVertex2 \endlink .
 			*/
 			const Vector3& getVertex2() const
 				throw();
 
 			/** Inspection of the second vector of {\em *this} vertex2.
-					Access the second vector of {\em *this} vertex by using \Ref{Vector3}.
+					Access the second vector of {\em *this} vertex by using  \link Vector3 Vector3 \endlink .
 					@param       v the vector receiving the second vector of {\em *this} vertex2
 					@see         setVertex2
 					@see         Vector3
@@ -295,7 +295,7 @@ namespace BALL
 
 			/** Inspection of the components of the second vector of {\em *this} vertex2.
 					Access the components of the second vector of {\em *this} vertex2 
-					by using \Ref{Real}.
+					by using  \link Real Real \endlink .
 					@param       x the x component of the second vector of {\em *this} vertex2
 					@param       y the y component of the second vector of {\em *this} vertex2
 					@param       z the z component of the second vector of {\em *this} vertex2
@@ -400,7 +400,7 @@ namespace BALL
 
 			/** Inspection of the first and second vector of {\em *this} vertex2.
 					Access the first and second vector of {\em *this} vertex 
-					by using \Ref{Vector3}.
+					by using  \link Vector3 Vector3 \endlink .
 					@param       vertex1 the vector receiving the first vector of {\em *this} vertex2
 					@param       vertex2 the vector receiving the second vector of {\em *this} vertex2
 					@see         setVertices
@@ -412,7 +412,7 @@ namespace BALL
 			/** Inspection of the components of the first and second vector of 
 					{\em *this} vertex2.
 					Access the components of the first and second vector of {\em *this}
-					vertex2 by using \Ref{Real}.
+					vertex2 by using  \link Real Real \endlink .
 					@param       vertex1_x the x component of the first vector of {\em *this} vertex2
 					@param       vertex1_y the y component of the first vector of {\em *this} vertex2
 					@param       vertex1_z the z component of the first vector of {\em *this} vertex2
@@ -448,8 +448,8 @@ namespace BALL
 			/** first vertex address test.
 					Tests if the first vertex address of {\em *this} vertex2 points to the 
 					first vector of {\em *this} vertex2.
-					@return			bool {\tt true} if the first vertex address of {\em *this} vertex2 points to the first vector of {\em *this} vertex2.
-					 						{\tt false} otherwise
+					@return			bool <tt>true</tt> if the first vertex address of {\em *this} vertex2 points to the first vector of {\em *this} vertex2.
+					 						<tt>false</tt> otherwise
 					@see        setVertex1Address					
 					@see        getVertex1Address					
 					@see        setDefaultVertex1Address					
@@ -460,8 +460,8 @@ namespace BALL
 			/** second vertex address test.
 					Test if the second vertex address of {\em *this} vertex2 points to the 
 					second vector of {\em *this} vertex2.
-					@return			bool {\tt true} if the second vertex address of {\em *this} vertex2 points to the second vector of {\em *this} vertex2.
-					 						{\tt false} otherwise
+					@return			bool <tt>true</tt> if the second vertex address of {\em *this} vertex2 points to the second vector of {\em *this} vertex2.
+					 						<tt>false</tt> otherwise
 					@see        setVertex2Address					
 					@see        getVertex2Address					
 					@see        setDefaultVertex2Address					
@@ -472,8 +472,8 @@ namespace BALL
 			/** both vertex addresses test.
 					Test if both vertex addresses of {\em *this} vertex2 each points to its
 					own vector of {\em *this} vertex2.
-					@return			bool {\tt true} if both vertex addresses of {\em *this} vertex2 each points to its own vector of {\em *this} vertex2.
-					 						{\tt false} otherwise
+					@return			bool <tt>true</tt> if both vertex addresses of {\em *this} vertex2 each points to its own vector of {\em *this} vertex2.
+					 						<tt>false</tt> otherwise
 					@see        setVertex1Address					
 					@see        getVertex1Address					
 					@see        setVertex2Address					
@@ -493,11 +493,11 @@ namespace BALL
 					Initiate self-validation of the internal state and data structure 
 					consistencies	of {\em *this} vertex2.
 					If the internal state of {\em *this} vertex2 is correct 
-					(self-validated) and consistent {\tt true} is returned,
-					{\tt false} otherwise. 
+					(self-validated) and consistent <tt>true</tt> is returned,
+					<tt>false</tt> otherwise. 
 					Calls {Vector3::isValid}.
-					@return			bool {\tt true} if the internal state of {\em *this} vertex is correct (self-validated) and consistent,
-					 						{\tt false} otherwise
+					@return			bool <tt>true</tt> if the internal state of {\em *this} vertex is correct (self-validated) and consistent,
+					 						<tt>false</tt> otherwise
 					@see        Vector3::isValid
 			*/
 			virtual bool isValid() const

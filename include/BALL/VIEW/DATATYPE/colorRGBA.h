@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorRGBA.h,v 1.8 2002/12/16 12:22:45 sturm Exp $
+// $Id: colorRGBA.h,v 1.9 2003/02/21 16:07:09 anhi Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
 #define BALL_VIEW_DATATYPE_COLORRGBA_H
@@ -31,10 +31,10 @@ namespace BALL
 
 		/** ColorRGBA class.
 				An instance of ColorRGBA represents a color consisting of the components
-				red, green, blue and alpha. The components are \Ref{ColorUnit}'s. This class
+				red, green, blue and alpha. The components are  \link ColorUnit ColorUnit \endlink 's. This class
 				allows many types of input parameters. See description of this class for further
-				informations. \\
-				{\bf Definition:} \URL{BALL/VIEW/DATATYPE/colorRGBA.h}
+				informations.  \par
+				<b>Definition:</b> BALL/VIEW/DATATYPE/colorRGBA.h
 		*/
 		class ColorRGBA
 		{
@@ -69,7 +69,7 @@ namespace BALL
 
 			/** Constructor with ColorHSV.
 					Constructs new colorRGBA by converting the colorHSV {\em color}.
-					@param       color the colorHSV to be converted. See \Ref{ColorHSV}
+					@param       color the colorHSV to be converted. See  \link ColorHSV ColorHSV \endlink 
 					@return      ColorRGBA new constructed colorRGBA converted from {\em color}
 					@see         ColorHSV
 			*/
@@ -83,7 +83,7 @@ namespace BALL
 					be considered. If the string is only 6 characters long the alpha component will
 					be set to 1.0.					
 					@param       value the pointer to a string representing a color
-					@exception   InvalidRange if {\tt string length != 6 && string length != 8}
+					@exception   InvalidRange if <tt>string length != 6 && string length != 8</tt>
 					@exception   NotInHexFormat if the string is not a valid hex format string
 					@return      ColorRGBA new constructed colorRGBA
 			*/
@@ -93,7 +93,7 @@ namespace BALL
 			/** Constructor with Parameter string.
 					Same as constructor with parameter char*.
 					@param       value a string representing a color
-					@exception   InvalidRange if {\tt string length != 6 && string length != 8}
+					@exception   InvalidRange if <tt>string length != 6 && string length != 8</tt>
 					@exception   NotInHexFormat if the string is not a valid hex format string
 					@return      ColorRGBA new constructed colorRGBA
 			*/
@@ -102,10 +102,10 @@ namespace BALL
 
 			/** Detailed component initializing constructor.
 					Constructs new colorRGBA using the given component parameters.
-					@param       red_value the red component. See \Ref{ColorUnit}
-					@param       green_value the green component. See \Ref{ColorUnit}
-					@param       blue_value the blue component. See \Ref{ColorUnit}
-					@param       alpha_value the alpha component. See \Ref{ColorUnit}. Default value 1.0
+					@param       red_value the red component. See  \link ColorUnit ColorUnit \endlink 
+					@param       green_value the green component. See  \link ColorUnit ColorUnit \endlink 
+					@param       blue_value the blue component. See  \link ColorUnit ColorUnit \endlink 
+					@param       alpha_value the alpha component. See  \link ColorUnit ColorUnit \endlink . Default value 1.0
 					@return      ColorRGBA new constructed colorRGBA
 					@see         ColorUnit
 			*/
@@ -121,7 +121,7 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} colorRGBA.
-					Calls \Ref{destroy}.
+					Calls  \link destroy destroy \endlink .
 					@see         destroy
 			*/
 			~ColorRGBA()
@@ -153,7 +153,7 @@ namespace BALL
 
 			/** Conversion to string.
 					This operator casts an instance of colorRGBA to the string type.
-					@return      a string with hex format {\tt "00000000"-"FFFFFFFF"}. The string has the same format as the one given to the constructor.
+					@return      a string with hex format <tt>"00000000"-"FFFFFFFF"</tt>. The string has the same format as the one given to the constructor.
 					@see         ColorRGBA::ColorRGBA
 			*/
 			operator String() const
@@ -166,7 +166,7 @@ namespace BALL
 
 			/** Assignment.
 					Assigns the colorRGBA {\em color} to {\em *this} colorRGBA.
-					The color of {\em *this} is initialized to the color of the colorRGBA {\em color}.\\
+					The color of {\em *this} is initialized to the color of the colorRGBA {\em color}. \par
 					@param       color the colorRGBA to be copied 
 			*/
 			void set(const ColorRGBA& color)
@@ -174,8 +174,8 @@ namespace BALL
 
 			/** Assignment operator.
 					Assigns the colorRGBA {\em color} to {\em *this} colorRGBA.
-					Calls \Ref{set}.
-					The color of {\em *this} is initialized to the color of the colorRGBA {\em color}.\\
+					Calls  \link set set \endlink .
+					The color of {\em *this} is initialized to the color of the colorRGBA {\em color}. \par
 					@param       color the colorRGBA to be copied
 					@return      ColorRGBA& constant reference of {\em *this} colorRGBA
 					@see         set
@@ -185,8 +185,8 @@ namespace BALL
 
 			/** Copying.
 					Copies {\em *this} colorRGBA to the colorRGBA {\em color}.
-					Calls \Ref{set}.
-					The color of the colorRGBA {\em color} is initialized to the color of {\em *this} colorRGBA.\\
+					Calls  \link set set \endlink .
+					The color of the colorRGBA {\em color} is initialized to the color of {\em *this} colorRGBA. \par
 					@param       color the colorRGBA to be assigned to
 					@see         set
 			*/
@@ -195,7 +195,7 @@ namespace BALL
 
 			/** Assignment with ColorHSV.
 					Assigns the colorHSV {\em color} to {\em *this} colorRGBA.
-					The color of {\em *this} is initialized to the color of the colorHSV {\em color}.\\
+					The color of {\em *this} is initialized to the color of the colorHSV {\em color}. \par
 					@param       color the colorHSV to be copied 
 			*/
 			void set(const ColorHSV& color)
@@ -203,8 +203,8 @@ namespace BALL
 
 			/** Assignment operator with ColorHSV.
 					Assigns the colorHSV {\em color} to {\em *this} colorRGBA.
-					Calls \Ref{set}.
-					The color of {\em *this} is initialized to the color of the colorHSV {\em color}.\\
+					Calls  \link set set \endlink .
+					The color of {\em *this} is initialized to the color of the colorHSV {\em color}. \par
 					@param       color the colorHSV to be copied
 					@return      ColorRGBA& constant reference of {\em *this} colorRGBA
 					@see         set
@@ -215,8 +215,8 @@ namespace BALL
 
 			/** Copying to ColorHSV.
 					Copies {\em *this} colorRGBA to the colorHSV {\em color}.
-					Calls \Ref{set}.
-					The color of the colorHSV {\em color} is initialized to the color of {\em *this} colorRGBA.\\
+					Calls  \link set set \endlink .
+					The color of the colorHSV {\em color} is initialized to the color of {\em *this} colorRGBA. \par
 					@param       color the colorHSV to be assigned to
 					@see         set
 					@see         ColorHSV
@@ -229,7 +229,7 @@ namespace BALL
 					The color of {\em *this} is initialized to the color represented by the string {\em value}.
 					See constructor for format description.
 					@param       value the color represented by a string 
-					@exception   InvalidRange if {\tt string length != 6 && string length != 8}
+					@exception   InvalidRange if <tt>string length != 6 && string length != 8</tt>
 					@exception   NotInHexFormat if the string is not a valid hex format string
 			*/
 			void set(const char* value)
@@ -237,11 +237,11 @@ namespace BALL
 
 			/** Assignment operator with char*.
 					Assigns the color represented by the string {\em value} to {\em *this} colorRGBA.
-					Calls \Ref{set}.
+					Calls  \link set set \endlink .
 					The color of {\em *this} is initialized to the color represented by the string {\em value}.
 					See constructor for format description.
 					@param       value the color represented by a string
-					@exception   InvalidRange if {\tt string length != 6 && string length != 8}
+					@exception   InvalidRange if <tt>string length != 6 && string length != 8</tt>
 					@exception   NotInHexFormat if the string is not a valid hex format string
 					@return      ColorRGBA& {\em *this} colorRGBA
 					@see         set
@@ -251,7 +251,7 @@ namespace BALL
 
 			/** Copying to char*.
 					Copies the color of {\em *this} colorRGBA to the string represented by the pointer {\em value}.
-					Calls \Ref{set}.
+					Calls  \link set set \endlink .
 					The string {\em value} is initialized to the color of {\em *this} colorRGBA.
 					At least 9 bytes must be allocated for the string. The format of the string is
 					the same as the one given to the constructor.
@@ -266,7 +266,7 @@ namespace BALL
 					The color of {\em *this} is initialized to the color represented by the string {\em value}.
 					See constructor for format description.
 					@param       value the color represented by a string 
-					@exception   InvalidRange if {\tt string length != 6 && string length != 8}
+					@exception   InvalidRange if <tt>string length != 6 && string length != 8</tt>
 					@exception   NotInHexFormat if the string is not a valid hex format string
 			*/
 			void set(const String& value)
@@ -274,11 +274,11 @@ namespace BALL
 
 			/** Assignment operator with string.
 					Assigns the color represented by the string {\em value} to {\em *this} colorRGBA.
-					Calls \Ref{set}.
+					Calls  \link set set \endlink .
 					The color of {\em *this} is initialized to the color represented by the string {\em value}.
 					See constructor for format description.
 					@param       value the color represented by a string
-					@exception   InvalidRange if {\tt string length != 6 && string length != 8}
+					@exception   InvalidRange if <tt>string length != 6 && string length != 8</tt>
 					@exception   NotInHexFormat if the string is not a valid hex format string
 					@return      ColorRGBA& {\em *this} colorRGBA
 					@see         set
@@ -288,7 +288,7 @@ namespace BALL
 
 			/** Copying to string.
 					Copies the color of {\em *this} colorRGBA to the string {\em value}.
-					Calls \Ref{set}.
+					Calls  \link set set \endlink .
 					The string {\em value} is initialized to the color of {\em *this} colorRGBA.
 					The format of the string is	the same as the one given to the constructor.
 					See constructor for format description.
@@ -312,7 +312,7 @@ namespace BALL
 
 			/** Changes the value of the red component.
 					Changes the value of of the red component of {\em *this} colorRGBA to the value
-					represented by the parameter {\em red_value}. See \Ref{ColorUnit} for further information.
+					represented by the parameter {\em red_value}. See  \link ColorUnit ColorUnit \endlink  for further information.
 					@param       red_value the new red component of {\em *this} colorRGBA
 					@see         getRed
 					@see         ColorUnit
@@ -322,7 +322,7 @@ namespace BALL
 
 			/** Mutable inspection of the red component.
 					Accesses the mutual reference of the red component of {\em *this} colorRGBA.
-					See \Ref{ColorUnit} for further information concerning type conversion.
+					See  \link ColorUnit ColorUnit \endlink  for further information concerning type conversion.
 					@return      ColorUnit& mutable reference to the red component of {\em *this} colorRGBA
 					@see         setRed
 					@see         ColorUnit
@@ -338,7 +338,7 @@ namespace BALL
 
 			/** Changes the value of the green component.
 					Changes the value of of the green component of {\em *this} colorRGBA to the value
-					represented by the parameter {\em green_value}. See \Ref{ColorUnit} for further information.
+					represented by the parameter {\em green_value}. See  \link ColorUnit ColorUnit \endlink  for further information.
 					@param       green_value the new green component of {\em *this} colorRGBA
 					@see         getGreen
 					@see         ColorUnit
@@ -348,7 +348,7 @@ namespace BALL
 
 			/** Mutable inspection of the green component.
 					Accesses the mutual reference of the green component of {\em *this} colorRGBA.
-					See \Ref{ColorUnit} for further information concerning type conversion.
+					See  \link ColorUnit ColorUnit \endlink  for further information concerning type conversion.
 					@return      ColorUnit& mutable reference to the green component of {\em *this} colorRGBA
 					@see         setGreen
 					@see         ColorUnit
@@ -364,7 +364,7 @@ namespace BALL
 
 			/** Changes the value of the blue component.
 					Changes the value of of the blue component of {\em *this} colorRGBA to the value
-					represented by the parameter {\em blue_value}. See \Ref{ColorUnit} for further information.
+					represented by the parameter {\em blue_value}. See  \link ColorUnit ColorUnit \endlink  for further information.
 					@param       blue_value the new blue component of {\em *this} colorRGBA
 					@see         getBlue
 					@see         ColorUnit
@@ -374,7 +374,7 @@ namespace BALL
 
 			/** Mutable inspection of the blue component.
 					Accesses the mutual reference of the blue component of {\em *this} colorRGBA.
-					See \Ref{ColorUnit} for further information concerning type conversion.
+					See  \link ColorUnit ColorUnit \endlink  for further information concerning type conversion.
 					@return      ColorUnit& mutable reference to the blue component of {\em *this} colorRGBA
 					@see         setBlue
 					@see         ColorUnit
@@ -390,7 +390,7 @@ namespace BALL
 
 			/** Changes the value of the alpha component.
 					Changes the value of of the alpha component of {\em *this} colorRGBA to the value
-					represented by the parameter {\em alpha_value}. See \Ref{ColorUnit} for further information.
+					represented by the parameter {\em alpha_value}. See  \link ColorUnit ColorUnit \endlink  for further information.
 					@param       alpha_value the new alpha component of {\em *this} colorRGBA
 					@see         getAlpha
 					@see         ColorUnit
@@ -400,7 +400,7 @@ namespace BALL
 
 			/** Mutable inspection of the alpha component.
 					Accesses the mutual reference of the alpha component of {\em *this} colorRGBA.
-					See \Ref{ColorUnit} for further information concerning type conversion.
+					See  \link ColorUnit ColorUnit \endlink  for further information concerning type conversion.
 					@return      ColorUnit& mutable reference to the alpha component of {\em *this} colorRGBA
 					@see         setAlpha
 					@see         ColorUnit
@@ -416,7 +416,7 @@ namespace BALL
 
 			/** Changes the values of the red, green, blue and alpha component.
 					Changes the values of of the red, green, blue and alpha component of {\em *this}
-					colorRGBA to the values represented by the parameters. See \Ref{ColorUnit} for
+					colorRGBA to the values represented by the parameters. See  \link ColorUnit ColorUnit \endlink  for
 					further information concerning type conversions.
 					@param       red_value the new red component of {\em *this} colorRGBA
 					@param       green_value the new green component of {\em *this} colorRGBA
@@ -431,7 +431,7 @@ namespace BALL
 				throw();
 
 			/** Inspection of the colorRGBA's components.
-					Accesses all the components of {\em *this} colorRGBA by using \Ref{ColorUnit}'s.
+					Accesses all the components of {\em *this} colorRGBA by using  \link ColorUnit ColorUnit \endlink 's.
 					@param      red_value the colorUnit receiving the red component of {\em *this} colorRGBA
 					@param      green_value the colorUnit receiving the green component of {\em *this} colorRGBA
 					@param      blue_value the colorUnit receiving the blue component of {\em *this} colorRGBA
@@ -445,7 +445,7 @@ namespace BALL
 				throw();
 
 			/** Inspection of the colorRGBA's components.
-					Accesses only the red, green and blue components of {\em *this} colorRGBA by using \Ref{ColorUnit}'s.
+					Accesses only the red, green and blue components of {\em *this} colorRGBA by using  \link ColorUnit ColorUnit \endlink 's.
 					@param      red_value the colorUnit receiving the red component of {\em *this} colorRGBA
 					@param      green_value the colorUnit receiving the green component of {\em *this} colorRGBA
 					@param      blue_value the colorUnit receiving the blue component of {\em *this} colorRGBA
@@ -466,10 +466,10 @@ namespace BALL
 
 			/** Equality test.
 					Tests if {\em color} is equal to {\em *this} colorRGBA.
-					Equality means that all components are equal. See \Ref{ColorUnit} for further
+					Equality means that all components are equal. See  \link ColorUnit ColorUnit \endlink  for further
 					information concerning equality tests.
 					@param   color the colorRGBA to be compared with
-					@return  bool {\tt true} if the color of {\em *this} is equal to {\em color}, {\tt false} otherwise
+					@return  bool <tt>true</tt> if the color of {\em *this} is equal to {\em color}, <tt>false</tt> otherwise
 					@see     ColorUnit
 			*/
 			bool operator == (const ColorRGBA& color) const
@@ -477,10 +477,10 @@ namespace BALL
 
 			/** Unequality test.
 					Tests if {\em color} is not equal to {\em *this} colorRGBA.
-					Unequality means that all components are unequal. See \Ref{ColorUnit} for further
+					Unequality means that all components are unequal. See  \link ColorUnit ColorUnit \endlink  for further
 					information concerning unequality tests.
 					@param   color the colorRGBA to be compared with
-					@return  bool {\tt true} if the color of {\em *this} is not equal to {\em color}, {\tt false} otherwise
+					@return  bool <tt>true</tt> if the color of {\em *this} is not equal to {\em color}, <tt>false</tt> otherwise
 					@see     ColorUnit
 			*/
 			bool operator !=  (const ColorRGBA& color) const
@@ -489,10 +489,10 @@ namespace BALL
 			/** Smaller test.
 					Tests if {\em *this} is smaller than {\em color} colorRGBA.
 					Smaller means that all components of {\em *this} are smaller than all the
-					components of {\em color} colorRGBA. See \Ref{ColorUnit} for further
+					components of {\em color} colorRGBA. See  \link ColorUnit ColorUnit \endlink  for further
 					information concerning smaller tests.
 					@param   color the colorRGBA to be compared with
-					@return  bool {\tt true} if the color of {\em *this} is smaller than {\em color}, {\tt false} otherwise
+					@return  bool <tt>true</tt> if the color of {\em *this} is smaller than {\em color}, <tt>false</tt> otherwise
 					@see     ColorUnit
 			*/
 			bool operator < (const ColorRGBA& color) const
@@ -501,10 +501,10 @@ namespace BALL
 			/** Smaller or equal test.
 					Tests if {\em *this} is smaller or equal than {\em color} colorRGBA.
 					Smaller or equal means that all components of {\em *this} are smaller or equal than all the
-					components of {\em color} colorRGBA. See \Ref{ColorUnit} for further
+					components of {\em color} colorRGBA. See  \link ColorUnit ColorUnit \endlink  for further
 					information concerning smaller or equal tests.
 					@param   color the colorRGBA to be compared with
-					@return  bool {\tt true} if the color of {\em *this} is smaller or equal than {\em color}, {\tt false} otherwise
+					@return  bool <tt>true</tt> if the color of {\em *this} is smaller or equal than {\em color}, <tt>false</tt> otherwise
 					@see     ColorUnit
 			*/
 			bool operator <= (const ColorRGBA& color) const
@@ -513,10 +513,10 @@ namespace BALL
 			/** Greater test.
 					Tests if {\em *this} is greater than {\em color} colorRGBA.
 					Greater means that all components of {\em *this} are greater than all the
-					components of {\em color} colorRGBA. See \Ref{ColorUnit} for further
+					components of {\em color} colorRGBA. See  \link ColorUnit ColorUnit \endlink  for further
 					information concerning greater tests.
 					@param   color the colorRGBA to be compared with
-					@return  bool {\tt true} if the color of {\em *this} is greater than {\em color}, {\tt false} otherwise
+					@return  bool <tt>true</tt> if the color of {\em *this} is greater than {\em color}, <tt>false</tt> otherwise
 					@see     ColorUnit
 			*/
 			bool operator > (const ColorRGBA& color) const
@@ -525,10 +525,10 @@ namespace BALL
 			/** Greater or equal test.
 					Tests if {\em *this} is greater or equal than {\em color} colorRGBA.
 					Greater or equal means that all components of {\em *this} are greater or equal than all the
-					components of {\em color} colorRGBA. See \Ref{ColorUnit} for further
+					components of {\em color} colorRGBA. See  \link ColorUnit ColorUnit \endlink  for further
 					information concerning greater or equal tests.
 					@param   color the colorRGBA to be compared with
-					@return  bool {\tt true} if the color of {\em *this} is greater or equal than {\em color}, {\tt false} otherwise
+					@return  bool <tt>true</tt> if the color of {\em *this} is greater or equal than {\em color}, <tt>false</tt> otherwise
 					@see     ColorUnit
 			*/
 			bool operator >= (const ColorRGBA& color) const

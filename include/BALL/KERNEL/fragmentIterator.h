@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentIterator.h,v 1.7 2002/02/27 12:18:48 sturm Exp $
+// $Id: fragmentIterator.h,v 1.8 2003/02/21 16:03:25 anhi Exp $
 
 #ifndef BALL_KERNEL_FRAGMENTITERATOR_H
 #define BALL_KERNEL_FRAGMENTITERATOR_H
@@ -27,8 +27,8 @@ namespace BALL
 
 	/** Traits class for the FragmentIterator.
 			Intended for internal use only!
-			\\
-			{\bf Definition:} \URL{BALL/KERNEL/PDBAtomIterator.h}
+			 \par
+			<b>Definition:</b> BALL/KERNEL/PDBAtomIterator.h
 	*/
 	class FragmentIteratorTraits_
 		: public CompositeIteratorTraits_

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bruker1DFile.h,v 1.15 2002/12/12 09:48:44 oliver Exp $
+// $Id: bruker1DFile.h,v 1.16 2003/02/21 16:02:59 anhi Exp $
 
 #ifndef BALL_FORMAT_BRUKER1DFILE_H
 #define BALL_FORMAT_BRUKER1DFILE_H
@@ -33,8 +33,8 @@ namespace BALL
 	//????
 	/**	Bruker 1D spectrum format.
 			A class for handling Bruker one-dimensional NMR spectra.
-			\\
-			{\bf Definition:}\URL{BALL/FORMAT/bruker1DFile.h}
+			 \par
+			<b>Definition:</b>BALL/FORMAT/bruker1DFile.h
 	*/
 	class Bruker1D 
 		: public File
@@ -70,7 +70,7 @@ namespace BALL
 		*/
 		//@{
 
-		/**	Read a spectrum from {\tt name}. 
+		/**	Read a spectrum from <tt>name</tt>. 
 				It will be stored in spectrum_
 		*/
 		void read(const String &name);

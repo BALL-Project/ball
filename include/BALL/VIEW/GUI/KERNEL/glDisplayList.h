@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glDisplayList.h,v 1.9 2002/12/16 12:22:47 sturm Exp $
+// $Id: glDisplayList.h,v 1.10 2003/02/21 16:07:25 anhi Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLDISPLAYLIST_H
 #define BALL_VIEW_GUI_KERNEL_GLDISPLAYLIST_H
@@ -25,8 +25,8 @@ namespace BALL
 				This class is a wrapper class for the OpenGL display list mechanims.
 				It defines some useful methods for easy creation of a display list and
 				handles errors that can occur when using display lists. See the OpenGL
-				defintion of display lists for further information concerning display lists.\\
-				{\bf Definition:} \URL{BALL/VIEW/GUI/KERNEL/glDisplayList.h}
+				defintion of display lists for further information concerning display lists. \par
+				<b>Definition:</b> BALL/VIEW/GUI/KERNEL/glDisplayList.h
 		*/
 		class GLDisplayList
 		{
@@ -123,7 +123,7 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} glDisplayList.
-					Calls \Ref{destroy}.
+					Calls  \link destroy destroy \endlink .
 					@see         destroy
 			*/
 			virtual ~GLDisplayList()
@@ -156,7 +156,7 @@ namespace BALL
 					@exception   NestedDisplayList thrown whenever a nested display list definition is tried.
 					@exception   NoDisplayListAvailable thrown whenever no memory for the display list is available.
 					@exception   DisplayListRedeclaration thrown whenever {\em *this} glDisplayList is tried to be redefined before 
-										   \Ref{destroy} is called.
+										    \link destroy destroy \endlink  is called.
 					@see         endDefinition
 			*/
 			void startDefinition()
@@ -172,8 +172,8 @@ namespace BALL
 			/** Draw the display list.
 					If this method is called the graphical representation of {\em *this}
 					will be drawn. Precondition: {\em *this} glDisplayList has a graphical
-					representation defined before by \Ref{startDefinition}
-					and \Ref{endDefinition}.
+					representation defined before by  \link startDefinition startDefinition \endlink 
+					and  \link endDefinition endDefinition \endlink .
 					@see         startDefinition
 					@see         endDefinition
 			*/
@@ -182,7 +182,7 @@ namespace BALL
 
 			/** Compile mode switch.
 					Before the definition of the graphical objects between
-					\Ref{startDefinition} and \Ref{endDefinition}
+					 \link startDefinition startDefinition \endlink  and  \link endDefinition endDefinition \endlink 
 					the compile mode can be set.
 					If this method is used {\em *this} glDisplayList will only compile
 					the graphical representation of the used objects into a display list.
@@ -195,7 +195,7 @@ namespace BALL
 
 			/** Compile and Execute mode switch.
 					Before the definition of the graphical objects between
-					\Ref{startDefinition} and \Ref{endDefinition}
+					 \link startDefinition startDefinition \endlink  and  \link endDefinition endDefinition \endlink 
 					the compile and execute mode can be set.
 					If this method is used {\em *this} glDisplayList will compile the used
 					objects into a display list and simultaneously execute their graphical
@@ -214,7 +214,7 @@ namespace BALL
 
 			/** Compile mode test.
 					Tests if {\em *this} glDisplayList is set to compile only.
-					@return  bool {\tt true} if {\em *this} glDisplayList is set to compile only, {\tt false} otherwise
+					@return  bool <tt>true</tt> if {\em *this} glDisplayList is set to compile only, <tt>false</tt> otherwise
 					@see         useCompileMode				
 			*/
 			bool isCompileMode() const
@@ -222,7 +222,7 @@ namespace BALL
 
 			/** Compile and Execute mode test.
 					Tests if {\em *this} glDisplayList is set to compile and execute.
-					@return  bool {\tt true} if {\em *this} glDisplayList is set to compile and execute, {\tt false} otherwise
+					@return  bool <tt>true</tt> if {\em *this} glDisplayList is set to compile and execute, <tt>false</tt> otherwise
 					@see         useCompileAndExecuteMode				
 			*/
 			bool isCompileAndExecuteMode() const
@@ -236,11 +236,11 @@ namespace BALL
 					Initiate self-validation of the internal state and data structure 
 					consistencies	of {\em *this} glDisplayList.
 					If the internal state of {\em *this} glDisplayList is correct
-					(self-validated) and consistent {\tt true} is returned,
-					{\tt false} otherwise. 
+					(self-validated) and consistent <tt>true</tt> is returned,
+					<tt>false</tt> otherwise. 
 					{\em *this} glDisplayList is valid if a display list is already defined.
-					@return			bool {\tt true} if the internal state of {\em *this} glDisplayList is correct (self-validated) and consistent,
-					 						{\tt false} otherwise
+					@return			bool <tt>true</tt> if the internal state of {\em *this} glDisplayList is correct (self-validated) and consistent,
+					 						<tt>false</tt> otherwise
 			*/
 			virtual bool isValid() const
 				throw();

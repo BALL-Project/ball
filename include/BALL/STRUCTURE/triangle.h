@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: triangle.h,v 1.4 2002/12/17 14:13:13 anker Exp $
+// $Id: triangle.h,v 1.5 2003/02/21 16:07:00 anhi Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGLE_H
 #define BALL_STRUCTURE_TRIANGLE_H
@@ -33,9 +33,9 @@ namespace BALL
 
 
 	/** Generic TriangleEdge Class.
-			\\
-			{\bf Definition:}\URL{BALL/STRUCTURE/triangle.h}
-			\\
+			 \par
+			<b>Definition:</b>BALL/STRUCTURE/triangle.h
+			 \par
 	*/
 	class Triangle
 			:	public GraphTriangle< TrianglePoint,TriangleEdge,Triangle >
@@ -150,19 +150,19 @@ namespace BALL
 		//@{
 
 		/**	Equality operator.
-				@return	{\bf true}
+				@return	<b>true</b>
 		*/
 		virtual bool operator == (const Triangle&) const
 			throw();
 
 		/**	Inequality operator.
-				@return	{\bf false}
+				@return	<b>false</b>
 		*/
 		virtual bool operator != (const Triangle&) const
 			throw();
 
 		/**	Similarity operator.
-				@return	{\bf true}
+				@return	<b>true</b>
 		*/
 		virtual bool operator *= (const Triangle&) const
 			throw();

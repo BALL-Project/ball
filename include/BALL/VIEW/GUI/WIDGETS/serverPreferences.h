@@ -21,13 +21,13 @@ namespace BALL
 
 		/** ServerPreferences class.
 				The class ServerPreferences is a widget that will be inserted into the
-				tab dialog \Ref{Preferences}. It contains the preferences 
-				of the \Ref{Server}. The \Ref{Server} will access those preferences
-				if the apply-button on the \Ref{Preferences} is pressed.
-				{\em *this} serverPreferences will be created by the \Ref{Server}
-				object in the \Ref{Server::initializePreferencesTab} and will be inserted
-				into the \Ref{Preferences} dialog by the \Ref{MainControl}.
-				{\bf Definition:} \URL{BALL/VIEW/GUI/WIDGETS/mainControlPreferences.h}\\ \\
+				tab dialog  \link Preferences Preferences \endlink . It contains the preferences 
+				of the  \link Server Server \endlink . The  \link Server Server \endlink  will access those preferences
+				if the apply-button on the  \link Preferences Preferences \endlink  is pressed.
+				{\em *this} serverPreferences will be created by the  \link Server Server \endlink 
+				object in the  \link Server::initializePreferencesTab Server::initializePreferencesTab \endlink  and will be inserted
+				into the  \link Preferences Preferences \endlink  dialog by the  \link MainControl MainControl \endlink .
+				<b>Definition:</b> BALL/VIEW/GUI/WIDGETS/mainControlPreferences.h
 		*/
 		class ServerPreferences : public QWidget
 		{
@@ -42,13 +42,13 @@ namespace BALL
 			/** Default Constructor.
 					Construct new serverPreferences.
 					{\em *this} serverPreferences contains the preferences of the 
-					\Ref{Server}.
+					 \link Server Server \endlink .
 					The attributs of {\em *this} serverPreferences are:
 					\begin{itemize}
-					  \item  server port set to {\tt VIEW_DEFAULT_PORT}
+					  \item  server port set to <tt>VIEW_DEFAULT_PORT</tt>
 						\item  server status set to accept clients
 					\end{itemize}
-					@param       parent the parent \Ref{QWidget} of {\em *this} serverPreferences (See QFileDialog in the QT documentation)
+					@param       parent the parent  \link QWidget QWidget \endlink  of {\em *this} serverPreferences (See QFileDialog in the QT documentation)
 					@param       name the name of {\em *this} serverPreferences (See QFileDialog in the QT documentation)
 					@return      ServerPreferences new constructed serverPreferences widget
 					@see         getPort
@@ -65,7 +65,7 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} serverPreferences.
-					Calls \Ref{destroy}.
+					Calls  \link destroy destroy \endlink .
 					@see         destroy
 			*/
 			virtual ~ServerPreferences()
@@ -89,9 +89,9 @@ namespace BALL
 			//@{
 			/** Fetch the preferences.
 					Fetch the preferences (the port and the status of {\em *this}
-					serverPreferences) from	the	\Ref{INIFile} {\em inifile}.
-					This method will be called from the method \Ref{Server::fetchPreferences}.
-					@param  inifile the \Ref{INIFile} that contains the needed information for {\em *this} serverPreferences
+					serverPreferences) from	the	 \link INIFile INIFile \endlink  {\em inifile}.
+					This method will be called from the method  \link Server::fetchPreferences Server::fetchPreferences \endlink .
+					@param  inifile the  \link INIFile INIFile \endlink  that contains the needed information for {\em *this} serverPreferences
 					@see    writePreferences
 			*/
 			void fetchPreferences(INIFile& inifile)
@@ -99,10 +99,10 @@ namespace BALL
 
 			/** Write the preferences.
 					Write the preferences (the port and the status  of {\em *this} 
-					serverPreferences) to the	\Ref{INIFile} {\em inifile}.
+					serverPreferences) to the	 \link INIFile INIFile \endlink  {\em inifile}.
 					This method will be called from the method 
-					\Ref{Server::writePreferences}.
-					@param  inifile the \Ref{INIFile} to be written into
+					 \link Server::writePreferences Server::writePreferences \endlink .
+					@param  inifile the  \link INIFile INIFile \endlink  to be written into
 					@see    fetchPreferences
 			*/
 			void writePreferences(INIFile& inifile)
@@ -110,7 +110,7 @@ namespace BALL
 			
 			/** Inspection of the port.
 					Access the port of {\em *this} serverPreferences. This number is the port
-					the \Ref{Server} tries to connect to.
+					the  \link Server Server \endlink  tries to connect to.
 					@return int the port number of {\em *this} serverPreferences
 					@see    resetPort
 			*/
@@ -118,10 +118,10 @@ namespace BALL
 				throw();
 
 			/** Check the server status.
-					Access the server status. If the server status is set to {\tt true} than
-					the \Ref{Server} will try to accepts clients.
-					If set to {\tt false} the \Ref{Server} will not accept clients.
-					@return bool {\tt true} the \Ref{Server} will try to accept clients, {\tt false} the \Ref{Server} will not accept clients.
+					Access the server status. If the server status is set to <tt>true</tt> than
+					the  \link Server Server \endlink  will try to accepts clients.
+					If set to <tt>false</tt> the  \link Server Server \endlink  will not accept clients.
+					@return bool <tt>true</tt> the  \link Server Server \endlink  will try to accept clients, <tt>false</tt> the  \link Server Server \endlink  will not accept clients.
 			*/
 			bool getServerStatus()
 				throw();
@@ -136,8 +136,8 @@ namespace BALL
 
 			/** Reset the port.
 					Reset the port of {\em *this} serverPreferences to the value 
-					{\tt VIEW_DEFAULT_PORT}.
-					This method is connected to the button {\tt Reset} of {\em *this}
+					<tt>VIEW_DEFAULT_PORT</tt>.
+					This method is connected to the button <tt>Reset</tt> of {\em *this}
 					serverPreferences.
 			*/
 			void resetPort();

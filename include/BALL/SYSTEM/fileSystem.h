@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fileSystem.h,v 1.7 2002/12/12 09:27:23 oliver Exp $
+// $Id: fileSystem.h,v 1.8 2003/02/21 16:06:09 anhi Exp $
 
 #ifndef BALL_SYSTEM_FILESYSTEM_H
 #define BALL_SYSTEM_FILESYSTEM_H
@@ -34,8 +34,8 @@ namespace BALL
 	/**	File System Class
 			This class is a wrapper around some very basic properties
 			of the machine's file system properties.
-			The method (\Ref{canonizePath}) is mainly used
-			by \Ref{File} to obtain a unique and unambiguous representation
+			The method ( \link canonizePath canonizePath \endlink ) is mainly used
+			by  \link File File \endlink  to obtain a unique and unambiguous representation
 			of a path.
 	*/
 	class FileSystem
@@ -47,17 +47,17 @@ namespace BALL
 		//@{
 
 		/**	The character separating directories in a path.
-				This is usually {\tt '/'}.
+				This is usually <tt>'/'</tt>.
 		*/
 		static const char PATH_SEPARATOR;
 
 		/**	The string used to indicate the current directory.
-				This is usually {\tt '.'}
+				This is usually <tt>'.'</tt>
 		*/
 		static const char* const CURRENT_DIRECTORY;
 
 		/**	The string indicating the parent directory.
-				This is usually {\tt '..'}
+				This is usually <tt>'..'</tt>
 		*/
 		static const char* const PARENT_DIRECTORY;
 		//@}
@@ -81,7 +81,7 @@ namespace BALL
 		/** Convert a given filename to a canonical name.
 				This method creates a unique and unambiguous representation
 				of any absolute or relative path.
-				It expands the user's homedirectory ({\tt '\~'}) and
+				It expands the user's homedirectory (<tt>'\~'</tt>) and
 				duplicate or redundant separators, e.g.
         '//' is reduced to /'/' and '/./' is removed.
 		*/
@@ -90,13 +90,13 @@ namespace BALL
 
 		/** Return the base name of a file.
 				This strips the path from the filename, i.e. everything
-				before and including the last occurence of \Ref{PATH_SEPARATOR}.
+				before and including the last occurence of  \link PATH_SEPARATOR PATH_SEPARATOR \endlink .
 		*/
 		static String baseName(const String& filename);
 
 		/** Return the path to a file.
 				This method returns the path to a file, i.e. everything up to
-				and including the last occurence of \Ref{PATH_SEPARATOR}.
+				and including the last occurence of  \link PATH_SEPARATOR PATH_SEPARATOR \endlink .
 		*/
 		static String path(const String& filename);
 		//@}

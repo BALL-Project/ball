@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: quaternion.h,v 1.30 2003/01/07 14:14:52 amoll Exp $
+// $Id: quaternion.h,v 1.31 2003/02/21 16:03:57 anhi Exp $
 
 #ifndef BALL_MATHS_QUATERNION_H
 #define BALL_MATHS_QUATERNION_H
@@ -27,7 +27,7 @@ namespace BALL
 	//@{
 
 	/**	Generic Quaternion Class. 
-      {\bf Definition:} \URL{BALL/MATHS/quaternion.h} \\
+      <b>Definition:</b> BALL/MATHS/quaternion.h
 			Representing a rotation in three dimensional space.
 	*/
 	template <typename T>
@@ -43,7 +43,7 @@ namespace BALL
 
 		/**	Default constructor.
 				This method creates a new TQuaternion object. The axis-components
-				are initialized to {\tt 0}, the angle is set to {\tt 1}.
+				are initialized to <tt>0</tt>, the angle is set to <tt>1</tt>.
 		*/
 		TQuaternion()
 			throw();
@@ -64,7 +64,7 @@ namespace BALL
 			throw();
 
 		/**	Detailed constructor.
-				Create a new TQuaternion object from three values of type {\bf T} and an angle.
+				Create a new TQuaternion object from three values of type <b>T</b> and an angle.
 				@param x assigned to the x-component of the axis
 				@param y assigned to the y-component of the axis
 				@param z assigned to the z-component of the axis
@@ -125,7 +125,7 @@ namespace BALL
 			throw();
 
 		/**	Assign the components to the standard values.
-				The axis-components are set to {\tt 0}, the angle is set to {\tt 1}.
+				The axis-components are set to <tt>0</tt>, the angle is set to <tt>1</tt>.
 		*/
 		void setIdentity()
 			throw();
@@ -198,13 +198,13 @@ namespace BALL
 		//@{
 
 		/**	Equality operator.
-				@return bool, {\bf true} if all components are equal, {\bf false} otherwise
+				@return bool, <b>true</b> if all components are equal, <b>false</b> otherwise
 		*/
 		bool operator == (const TQuaternion& q) const
 			throw();
 
 		/**	Inequality operator.
-				@return bool, {\bf true} if the two TQuaternion differ in at least one component, {\bf false} otherwise
+				@return bool, <b>true</b> if the two TQuaternion differ in at least one component, <b>false</b> otherwise
 		*/
 		bool operator != (const TQuaternion& q) const
 			throw();
@@ -575,10 +575,10 @@ namespace BALL
 
 	/**	Output Operator.
 			Write the values of the quaternion to an output stream.
-			The values of {\tt i}, {\tt j}, {\tt k}, and {\tt angle} are written to
-			an output stream. They are enclosed in brackets.\\
-			{\bf Example:}\\
-			{\tt (0.32 0.45 0.12 1.0)}
+			The values of <tt>i</tt>, <tt>j</tt>, {\tt k}, and {\tt angle} are written to
+			an output stream. They are enclosed in brackets. \par
+			<b>Example:</b> \par
+			<tt>(0.32 0.45 0.12 1.0)</tt>
 			@param s	the output stream
 			@param q  the quaternion to write 
 	*/	
@@ -616,8 +616,8 @@ namespace BALL
 	}
 
 	/**	The Default TQuaternion Type.
-			If double precision is not needed, {\tt TQuaternion<float>} should
-			be used. It is predefined as {\tt Quaternion} for convenience.
+			If double precision is not needed, <tt>TQuaternion<float></tt> should
+			be used. It is predefined as <tt>Quaternion</tt> for convenience.
 	*/
 	typedef TQuaternion<float> Quaternion;
 

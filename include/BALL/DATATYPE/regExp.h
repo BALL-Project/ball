@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regExp.h,v 1.16 2002/12/12 09:48:43 oliver Exp $
+// $Id: regExp.h,v 1.17 2003/02/21 16:02:00 anhi Exp $
 
 #ifndef BALL_DATATYPE_REGEXP_H
 #define BALL_DATATYPE_REGEXP_H
@@ -187,7 +187,7 @@ namespace BALL
 				@param pattern to compare with
 				@param compile_flags ?????
 				@param execute_flags ?????
-				@exception NullPointer if {\tt text} or {\tt pattern} are NULL
+				@exception NullPointer if <tt>text</tt> or <tt>pattern</tt> are NULL
 		*/
 		static bool match(const char* text, const char* pattern,
 											int compile_flags = 0 | REG_EXTENDED | REG_NOSUB, int execute_flags = 0)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expressionParser.h,v 1.4 2002/12/12 09:48:45 oliver Exp $
+// $Id: expressionParser.h,v 1.5 2003/02/21 16:03:20 anhi Exp $
 
 #ifndef BALL_KERNEL_EXPRESSIONPARSER_H
 #define BALL_KERNEL_EXPRESSIONPARSER_H
@@ -32,8 +32,8 @@ namespace BALL
 	/** @name	Expression Parser.
 			A simple parser for BALL kernel expressions. It reads a string and constructs
 			a syntax tree from the boolean expressions contained therein.
-			\\
-			{\bf Definition:} \URL{BALL/STRUCTURE/expressionParser.h}
+			 \par
+			<b>Definition:</b> BALL/STRUCTURE/expressionParser.h
 	*/
 	class ExpressionParser
 	{
@@ -41,9 +41,9 @@ namespace BALL
 
 		/** SyntaxTree.
 				This internal class should be used in the implementation
-				of \Ref{ExpressionParser} only.
-				\\
-				{\bf Definition} \URL{BALL/KERNEL/syntaxTree.h}
+				of  \link ExpressionParser ExpressionParser \endlink  only.
+				 \par
+				<b>Definition</b> BALL/KERNEL/syntaxTree.h
 		*/
 		class SyntaxTree
 		{
@@ -91,7 +91,7 @@ namespace BALL
 			//@{
 
 			/** Clear method. This method brings this instance to the state after
-					default construction. {\bf Note} that the list of children will be
+					default construction. <b>Note</b> that the list of children will be
 					cleared but the childrem themselves will \emph{not} be deleted.
 			*/
 			virtual void clear()

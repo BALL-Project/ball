@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SDFile.h,v 1.6 2002/12/12 09:48:44 oliver Exp $
+// $Id: SDFile.h,v 1.7 2003/02/21 16:02:56 anhi Exp $
 
 #ifndef BALL_FORMAT_SDFILE_H
 #define BALL_FORMAT_SDFILE_H
@@ -17,11 +17,11 @@ namespace BALL
 	class Molecule;
 
 	/**	MDL SD file class.
-			This class enables BALL to read and write MDL SD files.\\
-			A description of this file format (and the related \Ref{MOLFile} 
-			format) can be obtained from the MDL webpage \URL{http://www.mdli.com}.
-			\\
-			{\bf Definition:} \URL{BALL/FORMAT/SDFile.h} \\
+			This class enables BALL to read and write MDL SD files. \par
+			A description of this file format (and the related  \link MOLFile MOLFile \endlink  
+			format) can be obtained from the MDL webpage http://www.mdli.com
+			 \par
+			<b>Definition:</b> BALL/FORMAT/SDFile.h
 	*/
 	class SDFile
 		: public MOLFile
@@ -85,9 +85,9 @@ namespace BALL
 				the properties of the molecules only. Since SD files can contain
 				all kinds of information besides the molecular structure
 				and reading the structure can be rather time and space consuming,
-				you can disable it with this option. The \Ref{read} and \Ref{write}
+				you can disable it with this option. The  \link read read \endlink  and  \link write write \endlink 
 				methods will still create molecules, but they will be empty. 
-				However, the \Ref{NamedProperties} of the molecules contain
+				However, the  \link NamedProperties NamedProperties \endlink  of the molecules contain
 				the optional information contained in the SD file.
 		*/
 		void disableAtoms()

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceFieldComponent.h,v 1.11 2002/02/27 12:19:02 sturm Exp $
+// $Id: forceFieldComponent.h,v 1.12 2003/02/21 16:04:19 anhi Exp $
 // Molecular Mechanics: general force field component class
 
 #ifndef BALL_MOLMEC_FORCEFIELDCOMPONENT_H
@@ -26,7 +26,7 @@ namespace BALL
 	class ForceField;
 
 	/**	Generic force field component class.
-			{\bf Definition:} \URL{BALL/MOLMEC/COMMON/forceFieldComponent.h}
+			<b>Definition:</b> BALL/MOLMEC/COMMON/forceFieldComponent.h
 	*/
 	class ForceFieldComponent 
 	{
@@ -104,7 +104,7 @@ namespace BALL
 
 		/**	Returns the energy of the force field component.
 				The current energy for this force field component is being
-				calculated and returned in units of kJ/mol.\\
+				calculated and returned in units of kJ/mol. \par
 				If the component isn't assigned to a ForceField object,
 				zero is returned.
 		*/
@@ -122,7 +122,7 @@ namespace BALL
 				Each component that contains updatable data structures
 				(like nonbonded pair lists) should implement
 				this method. It is called for each component of a force field
-				each time \Ref{ForceField::update} is called.
+				each time  \link ForceField::update ForceField::update \endlink  is called.
 				The default implementation does exactly nothing.
 		*/
 		virtual void update();

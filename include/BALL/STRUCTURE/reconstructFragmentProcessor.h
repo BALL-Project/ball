@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reconstructFragmentProcessor.h,v 1.2 2002/05/12 14:03:22 oliver Exp $
+// $Id: reconstructFragmentProcessor.h,v 1.3 2003/02/21 16:06:51 anhi Exp $
 
 #ifndef BALL_STRUCTURE_RECONSTRUCFRAGMENTPROCESSOR_H
 #define BALL_STRUCTURE_RECONSTRUCFRAGMENTPROCESSOR_H
@@ -42,14 +42,14 @@ namespace BALL
 
 		/**	Default constructor.
 				Create a new ReconstructFragmentProcessor, which is not yet 
-				bound to a \Ref{FragmentDB}, i.e. which cannot yet reconstruct
+				bound to a  \link FragmentDB FragmentDB \endlink , i.e. which cannot yet reconstruct
 				fragments.
 		*/
 		ReconstructFragmentProcessor();
 
 		/** Detailed constructor.
 				Create a new ReconstructFragmentProcessor, which is 
-				bound to the \Ref{FragmentDB} {\tt db}.
+				bound to the  \link FragmentDB FragmentDB \endlink  <tt>db</tt>.
 		*/
 		ReconstructFragmentProcessor(const FragmentDB& db);
 
@@ -76,7 +76,7 @@ namespace BALL
 		
 		/** Processor applicaiton method.
 				Tries to reconstruct the current fragment from a matching
-				fragment from the current \Ref{FragmentDB}.
+				fragment from the current  \link FragmentDB FragmentDB \endlink .
 		*/
 		virtual Processor::Result operator() (Fragment&);
 
@@ -105,13 +105,13 @@ namespace BALL
 		//@{
 		/**	Map three vectors onto each other.
 				This method computes the transformation which 
-				move the three points given in {\tt v1}, {\tt v2}, and {\tt v3} 
-				onto the the three reference points {\tt w1}, {\tt w2}, and {\tt w3}.
-				{\tt v1} is always mapped exactly onto {\tt w1}, and the plane spanned by
-				{\tt v1}, {\tt v2}, and {\tt v3} is always mapped onto  the plane spanned
-        by the three reference points. Furthermore, {\tt v2} is mapped such that
-				the vector connecting {\tt v1} and {\tt v2} is parallel to the vector 
-				connecting {\tt w1} and {\tt w2} after the transformation.
+				move the three points given in <tt>v1</tt>, <tt>v2</tt>, and {\tt v3} 
+				onto the the three reference points <tt>w1</tt>, <tt>w2</tt>, and {\tt w3}.
+				<tt>v1</tt> is always mapped exactly onto <tt>w1</tt>, and the plane spanned by
+				<tt>v1</tt>, <tt>v2</tt>, and {\tt v3} is always mapped onto  the plane spanned
+        by the three reference points. Furthermore, <tt>v2</tt> is mapped such that
+				the vector connecting <tt>v1</tt> and <tt>v2</tt> is parallel to the vector 
+				connecting <tt>w1</tt> and <tt>w2</tt> after the transformation.
 				Well-deinfed, but less meaningful transformations are obtained if
 				any of the two point sets is co-linear.
 		*/
@@ -121,8 +121,8 @@ namespace BALL
 
 		/**	Search for the next atoms suitable as reference points.
 				This method performs a BFS-like search for atoms in the same
-				residue the {\tt ref_center_atom} is in. It will consider
-				only atoms contained in the hash set {\tt allowed}.
+				residue the <tt>ref_center_atom</tt> is in. It will consider
+				only atoms contained in the hash set <tt>allowed</tt>.
 
 		*/
 		static Triple<bool, const Atom*, const Atom*>

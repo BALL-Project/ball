@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: chain.h,v 1.26 2003/01/08 21:13:25 oliver Exp $
+// $Id: chain.h,v 1.27 2003/02/21 16:03:16 anhi Exp $
 
 #ifndef BALL_KERNEL_CHAIN_H
 #define BALL_KERNEL_CHAIN_H
@@ -31,10 +31,10 @@ namespace BALL
 	class Protein;
 
 	/** Protein chain class.
-			This class represents a polypeptide chain within a \Ref{Protein}.
-			Chains can contain \Ref{SecondaryStructure}s or \Ref{Residue}s.
-			\\
-			{\bf Definition:}\URL{BALL/KERNEL/chain.h}
+			This class represents a polypeptide chain within a  \link Protein Protein \endlink .
+			Chains can contain  \link SecondaryStructure SecondaryStructure \endlink s or  \link Residue Residue \endlink s.
+			 \par
+			<b>Definition:</b>BALL/KERNEL/chain.h
 	*/
 	class Chain
 		: public AtomContainer
@@ -100,7 +100,7 @@ namespace BALL
 		/** Assignment with cloning facility.
 				The assignment is either deep or shallow (default).
 				@param  chain the chain to be copied (cloned)
-				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy
+				@param  deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy
 		*/
 		void set(const Chain& chain, bool deep = true)
 			throw();
@@ -338,20 +338,20 @@ namespace BALL
 		bool remove(Residue& residue)
 			throw();
 
-		/**	Cut all children of {\tt chain} and prepend them before the children of this chain.
+		/**	Cut all children of <tt>chain</tt> and prepend them before the children of this chain.
 				@param chain the chain to access
 		*/
 		void spliceBefore(Chain& chain)
 			throw();
 
-		/**	Cut all children of {\tt chain} and append them after the children of this chain.
+		/**	Cut all children of <tt>chain</tt> and append them after the children of this chain.
 				@param chain the chain to access
 		*/
 		void spliceAfter(Chain &chain)
 			throw();
 
-		/**	Move the children of {\tt chain} into this chain.
-				The children of {\tt chain} are inserted using \Ref{spliceBefore}.
+		/**	Move the children of <tt>chain</tt> into this chain.
+				The children of <tt>chain</tt> are inserted using  \link spliceBefore spliceBefore \endlink .
 		*/
 		void splice(Chain &chain)
 			throw();

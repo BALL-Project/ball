@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: solventExcludedSurface.h,v 1.32 2002/12/17 14:13:12 anker Exp $
+// $Id: solventExcludedSurface.h,v 1.33 2003/02/21 16:06:57 anhi Exp $
 
 #ifndef BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
 #define BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
@@ -63,7 +63,7 @@ namespace BALL
 	class SESTriangulator;
 
 	/** Generic SolventExcludedSurface Class.
-			{\bf Definition:} \URL{BALL/STRUCTURE/solventExcludedSurface.h}	\\
+			<b>Definition:</b> BALL/STRUCTURE/solventExcludedSurface.h
 	*/
 	class SolventExcludedSurface
 	{
@@ -317,7 +317,7 @@ namespace BALL
 
 
 	/** Generic SESComputer Class.
-			{\bf Definition:} \URL{BALL/STRUCTURE/solventExcludedSurface.h}	\\
+			<b>Definition:</b> BALL/STRUCTURE/solventExcludedSurface.h
 	*/
 	class SESComputer
 	{
@@ -459,7 +459,7 @@ namespace BALL
 
 
 	/** Generic SESComputer Class.
-			{\bf Definition:} \URL{BALL/STRUCTURE/solventExcludedSurface.h}	\\
+			<b>Definition:</b> BALL/STRUCTURE/solventExcludedSurface.h
 	*/
 	class SESSingularityCleaner
 	{

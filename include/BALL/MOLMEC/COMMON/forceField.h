@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceField.h,v 1.20 2003/02/02 21:53:53 oliver Exp $
+// $Id: forceField.h,v 1.21 2003/02/21 16:04:18 anhi Exp $
 
 #ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
 #define BALL_MOLMEC_COMMON_FORCEFIELD_H
@@ -49,37 +49,37 @@ namespace BALL
 			This class is used to represent a general force field.
 			Each force field by itself is composed by several
 			different force field components which are represented
-			by \Ref{ForceFieldComponent} objects.\\
+			by  \link ForceFieldComponent ForceFieldComponent \endlink  objects. \par
 			Each ForceField object provides a list of components
 			which may be manipulated by the user to generate the
-			force field he needs.\\
+			force field he needs. \par
 			ForceField only represents a baseclass to the specific force field
-			implementations (e.g. \Ref{AMBER}) and implements the common interface 
-			and the neccessary mechanisms to administer the force field	components.\\
+			implementations (e.g.  \link AMBER AMBER \endlink ) and implements the common interface 
+			and the neccessary mechanisms to administer the force field	components. \par
 			A typical force field contains a small number of components (e.g. bond stretch,
 			bend, torsion and non-bonding interactions). 
 			A specialized forcefield has to implement each of these components (by deriving them
-			from \Ref{ForceFieldComponent} and must be derived from ForceField.
+			from  \link ForceFieldComponent ForceFieldComponent \endlink  and must be derived from ForceField.
 			Basically only the default constructor for the new forcefield has to
 			be modified to create an instance of each of the components and 
-			register them by calling \Ref{insertComponent}. But in order to implement
+			register them by calling  \link insertComponent insertComponent \endlink . But in order to implement
 			the setup methods of the force field components efficiently, 
 			jobs like assigning atom types, reading parameter files and the such should be
 			provided for all force field components by the corrseponding ForceField
-			object. This should be implemented in the force field-specific \Ref{specificSetup} 
-			method.\\
+			object. This should be implemented in the force field-specific  \link specificSetup specificSetup \endlink  
+			method. \par
 			For an efficient and easy to use implementation of a forcefield
-			parameter file, please refer to \Ref{ForceFieldParameters} and its
-			related objects.\\
+			parameter file, please refer to  \link ForceFieldParameters ForceFieldParameters \endlink  and its
+			related objects. \par
 			Each force field provides as well energy and its derivatives, the force
 			on each atom. A calculation of the energy is done by calling
-			\Ref{updateEnergy}. This method iterates over the list of force field
+			 \link updateEnergy updateEnergy \endlink . This method iterates over the list of force field
 			components and invokes the updateEnergy method of each of these components.
-			The total energy may then be retrieved by calling \Ref{getEnergy}.\\
-			Analogously, a force calculation is performed by invoking \Ref{updateForces}.
-			\Ref{getForces} returns a pointer to an array containing the forces
-			for each atom.\\
-			{\bf Definition:} \URL{BALL/MOLMEC/COMMON/forceField.h}
+			The total energy may then be retrieved by calling  \link getEnergy getEnergy \endlink . \par
+			Analogously, a force calculation is performed by invoking  \link updateForces updateForces \endlink .
+			 \link getForces getForces \endlink  returns a pointer to an array containing the forces
+			for each atom. \par
+			<b>Definition:</b> BALL/MOLMEC/COMMON/forceField.h
 	*/
 	class ForceField
 	{
@@ -93,7 +93,7 @@ namespace BALL
 
 		/**	Atom pair vector.
 				This type is used to represent "pair lists". In fact, it is
-				a {\tt vector} of {\tt pair}s of atom pointers.
+				a <tt>vector</tt> of <tt>pair</tt>s of atom pointers.
 		*/
 		typedef vector<pair<Atom*, Atom*> >	PairVector;
 
@@ -112,13 +112,13 @@ namespace BALL
 
 		/**	Constructor.
 				The successful setup of the force field can be verified
-				by the \Ref{isValid} method.
+				by the  \link isValid isValid \endlink  method.
 		*/
 		ForceField(System& system);
 
 		/**	Constructor.
 				The successful setup of the force field can be verified
-				by the \Ref{isValid} method.
+				by the  \link isValid isValid \endlink  method.
 		*/
 		ForceField(System& system, const Options& options);
 
@@ -152,7 +152,7 @@ namespace BALL
 
 		/**	Check the force field's validity.
 				A force field is valid if it is bound to a system
-				and \Ref{setup} was successful.
+				and  \link setup setup \endlink  was successful.
 		*/
 		bool isValid() const
 			throw();
@@ -194,9 +194,9 @@ namespace BALL
 		Size getNumberOfAtoms() const;
 
 		/**	Returns the number of non-fixed atoms stored in the force field.
-				If the option {\tt SELECTION_FIXED} is set to {\bf true} or
-				{\tt SELECTION_MOVABLE} is set to {\bf true} the atom array
-				is split. The first section (indices 0 to \Ref{getNumberOfMovableAtoms})
+				If the option <tt>SELECTION_FIXED</tt> is set to <b>true</b> or
+				<tt>SELECTION_MOVABLE</tt> is set to <b>true</b> the atom array
+				is split. The first section (indices 0 to  \link getNumberOfMovableAtoms getNumberOfMovableAtoms \endlink )
 				contains the atoms that are to be moved, the rest of the array contains
 				the fixed atoms.
 		*/
@@ -234,8 +234,8 @@ namespace BALL
 				ForceField contains a time stamp which is used to determine
 				whether the selection or even the topology of the system
 				has changed. Every time update is called, the 
-				\Ref{update_time_stamp_} is updated. Similarly, all setup methods
-				update the \Ref{setup_time_stamp_}
+				 \link update_time_stamp_ update_time_stamp_ \endlink  is updated. Similarly, all setup methods
+				update the  \link setup_time_stamp_ setup_time_stamp_ \endlink 
 		*/
 		const TimeStamp& getUpdateTime() const
 			throw();
@@ -244,8 +244,8 @@ namespace BALL
 				ForceField contains a time stamp which is used to determine
 				whether the selection or even the topology of the system
 				has changed. Every time update is called, the 
-				\Ref{update_time_stamp_} is updated. Similarly, all setup methods
-				update the \Ref{setup_time_stamp_}
+				 \link update_time_stamp_ update_time_stamp_ \endlink  is updated. Similarly, all setup methods
+				update the  \link setup_time_stamp_ setup_time_stamp_ \endlink 
 		*/
 		const TimeStamp& getSetupTime() const
 			throw();
@@ -295,16 +295,16 @@ namespace BALL
 
 		/**	Return the update frequency for pair lists etc.
 				This method is used by minimizers or the MD simulation to determine the number
-				of iterations between two calls to \Ref{update}.
+				of iterations between two calls to  \link update update \endlink .
 		*/
 		virtual Size getUpdateFrequency() const;
 
 		/**	Update internal data structures.
 				The force field may use this method to update internal data structures
 				(e.g. pair lists) periodically. The MD simulation class as well as the minimizer classes
-				use \Ref{getUpdateFrequency} to determine the number of iterations
-				between two calls to update.\\
-				The default implementation calls \Ref{ForceFieldComponent::update} for
+				use  \link getUpdateFrequency getUpdateFrequency \endlink  to determine the number of iterations
+				between two calls to update. \par
+				The default implementation calls  \link ForceFieldComponent::update ForceFieldComponent::update \endlink  for
 				each component in the force field.
 		*/
 		virtual void update();

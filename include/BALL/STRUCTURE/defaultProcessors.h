@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: defaultProcessors.h,v 1.9 2002/02/27 12:19:44 sturm Exp $
+// $Id: defaultProcessors.h,v 1.10 2003/02/21 16:06:39 anhi Exp $
 
 #ifndef BALL_STRUCTURE_DEFAULTPROCESSORS_H
 #define BALL_STRUCTURE_DEFAULTPROCESSORS_H
@@ -95,12 +95,12 @@ namespace BALL
 		 *  If for an atom from the container no matching atom from the file can be found,
 		 *  a warning is displayed and the number of errors increases.
 		 *  If in the file, the is a nonmatching atom, nothing happens.
-		 *  \\
+		 *   \par
 		 *  The matching of the atoms from the file with the atom of the container works like
-		 *  this:\\
-		 *  1.) The original atomnames are tested. \\
-		 *  2.) The full name of the atoms are compared. \\
-		 *  3.) Wild card matching: {\tt  "*:" + atom_name} \\
+		 *  this: \par
+		 *  1.) The original atomnames are tested.  \par
+		 *  2.) The full name of the atoms are compared.  \par
+		 *  3.) Wild card matching: <tt> "*:" + atom_name</tt>  \par
 		 *  @see Residue
 		 */
 		virtual Processor::Result operator()(Atom& atom);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fileDialog.h,v 1.10 2002/12/16 15:52:10 oliver Exp $
+// $Id: fileDialog.h,v 1.11 2003/02/21 16:07:17 anhi Exp $
 
 #ifndef BALL_VIEW_GUI_DIALOGS_FILEDIALOG_H
 #define BALL_VIEW_GUI_DIALOGS_FILEDIALOG_H
@@ -19,12 +19,12 @@ namespace BALL
 
 		/** FileDialog class.
 				The class FileDialog is a base class for file dialogs. Its base classes are
-				\Ref{QFileDialog} (See QT documentation) and \Ref{ModularWidget}.
-				The virtual method \Ref{openFile_} can be overridden for specifying
-				what should be done with the selected file. With the method \Ref{exec}
+				 \link QFileDialog QFileDialog \endlink  (See QT documentation) and  \link ModularWidget ModularWidget \endlink .
+				The virtual method  \link openFile_ openFile_ \endlink  can be overridden for specifying
+				what should be done with the selected file. With the method  \link exec exec \endlink 
 				{\em *this} fileDialog can be opened. If a file was selected the path and the file
-				name can be accessed with the methods \Ref{getPathName} and \Ref{getFileName}. \\
-				{\bf Definition:} \URL{BALL/VIEW/GUI/DIALOGS/fileDialog.h}\
+				name can be accessed with the methods  \link getPathName getPathName \endlink  and  \link getFileName getFileName \endlink .  \par
+				<b>Definition:</b> BALL/VIEW/GUI/DIALOGS/fileDialog.h
 		*/
 		class FileDialog
 			: public QFileDialog,	public ModularWidget
@@ -43,10 +43,10 @@ namespace BALL
 					Construct new fileDialog.
 					Set the title and the mode of {\em *this} fileDialog to {\em header}.
 					See QT documentation for information concerning modes for file dialogs.
-					Calls \Ref{ModularWidget::registerWidget}
+					Calls  \link ModularWidget::registerWidget ModularWidget::registerWidget \endlink 
 					@param       header the title of {\em *this} fileDialog
 					@param       mode the mode of {\em *this} fileDialog (See QFileDialog in the QT documentation)
-					@param       parent the parent \Ref{QWidget} of {\em *this} fileDialog (See QFileDialog in the QT documentation)
+					@param       parent the parent  \link QWidget QWidget \endlink  of {\em *this} fileDialog (See QFileDialog in the QT documentation)
 					@param       name the name of {\em *this} fileDialog (See QFileDialog in the QT documentation)
 					@return      FileDialog new constructed fileDialog
 					@see         ModularWidget
@@ -61,7 +61,7 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} fileDialog.
-					Calls \Ref{clear}.
+					Calls  \link clear clear \endlink .
 			*/
 			virtual ~FileDialog()
 				throw();
@@ -103,8 +103,8 @@ namespace BALL
 
 			/** Start the file dialog.
 					Open {\em *this} fileDialog.
-					If a file was successfully selected \Ref{openFile_} will be called.
-					@return int the result code as returned by the \Ref{QFileDialog} (See QT documentation)
+					If a file was successfully selected  \link openFile_ openFile_ \endlink  will be called.
+					@return int the result code as returned by the  \link QFileDialog QFileDialog \endlink  (See QT documentation)
 					@see    openFile_
 			*/
 			int exec();

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residueTorsions.h,v 1.11 2002/02/27 12:19:07 sturm Exp $
+// $Id: residueTorsions.h,v 1.12 2003/02/21 16:04:46 anhi Exp $
 // Molecular Mechanics Parameter: class describing the ResidueTorsions section of a parameter file
  
 #ifndef BALL_MOLMEC_PARAMETER_RESIDUETORSIONS_H
@@ -26,8 +26,8 @@ namespace BALL
 			the parameter section [ResidueTorsions] and then decide whether they have
 			to generate the torsions by itself (creating all torsions and
 			complaining about missing parameters) or whether they have to read them
-			from this section.\\
-			{\bf Definition:} \URL{BALL/MOLMEC/PARAMETER/residueTorsions.h}
+			from this section. \par
+			<b>Definition:</b> BALL/MOLMEC/PARAMETER/residueTorsions.h
 	*/
 	class ResidueTorsions 
 		:	public ParameterSection
@@ -105,9 +105,9 @@ namespace BALL
 
 		/**	Assign the {\it i}th torsion for a residue.
 				@param	name the residue name (including modifiers like -S or -N);
-				@param  i the index. 0 $<$ {\tt i} $<$ \Ref{getNumberOfResidueTorsions}
+				@param  i the index. 0 $<$ <tt>i</tt> $<$  \link getNumberOfResidueTorsions getNumberOfResidueTorsions \endlink 
 				@param	ResidueTorsion the torsion to be assigned to
-				@return bool - {\bf true} if the torsion was found, {\bf false} otherwise
+				@return bool - <b>true</b> if the torsion was found, <b>false</b> otherwise
 		*/
 		bool assignTorsion(const String& name, Position i, Data& torsion) const;
 

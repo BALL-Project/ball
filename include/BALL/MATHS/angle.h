@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: angle.h,v 1.33 2003/02/10 17:03:25 oliver Exp $
+// $Id: angle.h,v 1.34 2003/02/21 16:03:44 anhi Exp $
 
 #ifndef BALL_MATHS_ANGLE_H
 #define BALL_MATHS_ANGLE_H
@@ -20,7 +20,7 @@ namespace BALL
 	class TAngle;
 
 	/**	@name Angle
-			representation of angles: class \Ref{TAngle} and class \Ref{Angle}
+			representation of angles: class  \link TAngle TAngle \endlink  and class  \link Angle Angle \endlink 
 	*/
 	//@{
 	
@@ -43,8 +43,8 @@ namespace BALL
 	/**	Generic Angle Class.
 			Use this class to describe angles. The TAngle class permits the conversion
 			from degree to radians and is the return type of all functions used to calculate
-			angles.\\
-			{\bf Definition:} \URL{BALL/MATHS/angle.h} \\
+			angles. \par
+			<b>Definition:</b> BALL/MATHS/angle.h
 	*/
 	template <typename T>
 	class TAngle
@@ -58,9 +58,9 @@ namespace BALL
 		//@{
 
 		/** form of the angle range:
-				{\tt RANGE__UNLIMITED = 0} no limitations
-				{\tt RANGE__UNSIGNED  = 1} 0 <= angle <= 360, 0 <= angle <= PI * 2
-				{\tt RANGE__SIGNED    = 2} -180 <= angle <= 180, -PI <= angle <= PI
+				<tt>RANGE__UNLIMITED = 0</tt> no limitations
+				<tt>RANGE__UNSIGNED  = 1</tt> 0 <= angle <= 360, 0 <= angle <= PI * 2
+				<tt>RANGE__SIGNED    = 2</tt> -180 <= angle <= 180, -PI <= angle <= PI
 		*/
 		enum Range
 		{
@@ -92,10 +92,10 @@ namespace BALL
 
 		/**	Detailed constructor.
 				Create a new angle object and set its value to 
-				{\tt new_value}. {\tt radian} determines whether {\tt new_value}
+				<tt>new_value</tt>. <tt>radian</tt> determines whether {\tt new_value}
 				is in radians or in degrees.
 				@param	new_value the value of the angle object
-				@param	radian {\bf true} if {\tt new_value} is in radians, {\tt false} otherwise 
+				@param	radian <b>true</b> if <tt>new_value</tt> is in radians, <tt>false</tt> otherwise 
 		*/
 		explicit TAngle(const T& new_value, bool radian = true)
 			throw();
@@ -127,10 +127,10 @@ namespace BALL
 			throw();
 
 		/**	Assign a new value to the angle.
-				{\tt radian} determines whether {\tt new_value}
+				<tt>radian</tt> determines whether <tt>new_value</tt>
 				is in radians or in degrees.
 				@param	new_value the value of the angle object
-				@param	radian {\bf true} if {\tt new_value} is in radians, {\tt false} otherwise 
+				@param	radian <b>true</b> if <tt>new_value</tt> is in radians, <tt>false</tt> otherwise 
 		*/
 		void set(const T& new_value, bool radian = true)
 			throw();
@@ -160,9 +160,9 @@ namespace BALL
 		void get(TAngle& angle) const
 			throw();
 
-		/**	Assign the value to a variable of type {\tt T}.
+		/**	Assign the value to a variable of type <tt>T</tt>.
 				@param	val the variable to assign the value to
-				@param	radian, if set to {\tt true} assigns the value in radians (default).
+				@param	radian, if set to <tt>true</tt> assigns the value in radians (default).
 		*/
 		void get(T& val, bool radian = true) const
 			throw();
@@ -205,9 +205,9 @@ namespace BALL
 			throw();
 
 		/**	Normalize the angle over a given range.
-				{\tt RANGE__UNLIMITED = 0} no limitations.
-				{\tt RANGE__UNSIGNED  = 1} $0 \le \mathtt{angle} \le 360, 0 \le angle \le 2 \pi$.
-				{\tt RANGE__SIGNED    = 2} $-180 \le \mathtt{angle} \le 180, -\pi \le \mathtt{angle} \le \pi$.
+				<tt>RANGE__UNLIMITED = 0</tt> no limitations.
+				<tt>RANGE__UNSIGNED  = 1</tt> $0 \le \mathtt{angle} \le 360, 0 \le angle \le 2 \pi$.
+				<tt>RANGE__SIGNED    = 2</tt> $-180 \le \mathtt{angle} \le 180, -\pi \le \mathtt{angle} \le \pi$.
 				@param range the range of the angle
 		*/		
 		void normalize(Range range)
@@ -314,7 +314,7 @@ namespace BALL
 				This test uses Maths::isEqual instead of comparing the
 				values directly.
 				@param angle the angle to compare with
-				@return bool, {\bf true} if the two angles are equal
+				@return bool, <b>true</b> if the two angles are equal
 		*/
 		bool operator == (const TAngle& angle) const
 			throw();
@@ -323,7 +323,7 @@ namespace BALL
 				This test uses Maths::isNotEqual instead of comparing the
 				values directly.
 				@param angle the angle to compare with
-				@return bool, {\bf true} if the two angles are not equal
+				@return bool, <b>true</b> if the two angles are not equal
 		*/
 		bool operator != (const TAngle& angle) const
 			throw();
@@ -332,7 +332,7 @@ namespace BALL
 				This test uses Maths::isLess instead of comparing the
 				values directly.
 				@param angle the angle to compare with
-				@return bool, {\bf true} if {\em *this} angle is smaller than {\tt value}
+				@return bool, <b>true</b> if {\em *this} angle is smaller than <tt>value</tt>
 		*/
 		bool operator <	(const TAngle& angle) const
 			throw();
@@ -341,7 +341,7 @@ namespace BALL
 				This test uses Maths::isLess instead of comparing the
 				values directly.
 				@param val the value to compare with
-				@return bool, {\bf true} if {\em *this} angle is smaller than {\tt value}
+				@return bool, <b>true</b> if {\em *this} angle is smaller than <tt>value</tt>
 		*/
 		bool operator <	(const T& val) const
 			throw();
@@ -350,7 +350,7 @@ namespace BALL
 				This test uses Maths::isLessOrEqual instead of comparing the
 				values directly.
 				@param angle the angle to compare with
-				@return bool, {\bf true} if {\em *this} angle is smaller or equal than {\tt value}
+				@return bool, <b>true</b> if {\em *this} angle is smaller or equal than <tt>value</tt>
 		*/
 		bool operator <= (const TAngle& angle) const
 			throw();
@@ -359,7 +359,7 @@ namespace BALL
 				This test uses Maths::isGreaterOrEqual instead of comparing the
 				values directly.
 				@param angle the angle to compare with
-				@return bool, {\bf true} if {\em *this} angle is greater or equal than {\tt value}
+				@return bool, <b>true</b> if {\em *this} angle is greater or equal than <tt>value</tt>
 		*/
 		bool operator >=	(const TAngle& angle) const
 			throw();
@@ -368,7 +368,7 @@ namespace BALL
 				This test uses Maths::isGreater instead of comparing the
 				values directly.
 				@param angle the angle to compare with
-				@return bool, {\bf true} if {\em *this} angle is greater than {\tt value}
+				@return bool, <b>true</b> if {\em *this} angle is greater than <tt>value</tt>
 		*/
 		bool operator > (const TAngle& angle) const
 			throw();
@@ -377,7 +377,7 @@ namespace BALL
 				Both angles are normalized and afterwards compared with Maths::isEqual
 				instead of comparing the values directly.
 				@param angle the angle to compare with
-				@return bool, {\bf true} if {\em *this} angle is equal to {\tt value}
+				@return bool, <b>true</b> if {\em *this} angle is equal to <tt>value</tt>
 		*/
 		bool isEquivalent(TAngle angle) const
 			throw();
@@ -389,7 +389,7 @@ namespace BALL
 
 		/**	Test whether instance is valid.
 				Always returns true
-				@return bool {\bf true}
+				@return bool <b>true</b>
 		*/
 		bool isValid () const
 			throw();
@@ -771,8 +771,8 @@ namespace BALL
 	}
 
 	/**	The Default Angle Type.
-			If double precision is not needed, {\tt TAngle<float>} should
-			be used. It is predefined as {\tt Angle} for convenience.
+			If double precision is not needed, <tt>TAngle<float></tt> should
+			be used. It is predefined as <tt>Angle</tt> for convenience.
 	*/
 	typedef TAngle<float> Angle;
 
@@ -827,8 +827,8 @@ namespace BALL
 
 	/**	Output Operator.
 			Writes the value of the angle to an output stream.
-			The stream operator {\tt operator <<} has to be defined
-			for the template parameter {\tt T}.
+			The stream operator <tt>operator <<</tt> has to be defined
+			for the template parameter <tt>T</tt>.
 	*/
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TAngle<T>& angle)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: externalRenderer.h,v 1.4 2002/12/18 17:36:51 sturm Exp $
+// $Id: externalRenderer.h,v 1.5 2003/02/21 16:07:22 anhi Exp $
 
 #ifndef BALL_VIEW_GUI_FUNCTOR_EXTERNALRENDERER_H
 #define BALL_VIEW_GUI_FUNCTOR_EXTERNALRENDERER_H
@@ -22,7 +22,7 @@ namespace BALL
 		/** ExternalRenderer class.
 		    This class provides an interface for exporting the glObjects contained
 				in a Scene to the file format of an external renderer.
-				{\bf Definition:} \URL{BALL/VIEW/GUI/FUNCTOR/externalRenderer.h}\\
+				<b>Definition:</b> BALL/VIEW/GUI/FUNCTOR/externalRenderer.h
 			*/
 		class ExternalRenderer : public UnaryProcessor<Composite>
 		{
@@ -73,9 +73,9 @@ namespace BALL
 				throw();
 
 			/** Operator ().
-			 		Traverses the \Ref{Composite} tree with the start \Ref{Composite} {\em composite}
-					and searches for \Ref{GeometricObject} objects that are also of kind \Ref{GLObject}.
-					@param composite the \Ref{Composite} to be searched for \Ref{GLObject} objects
+			 		Traverses the  \link Composite Composite \endlink  tree with the start  \link Composite Composite \endlink  {\em composite}
+					and searches for  \link GeometricObject GeometricObject \endlink  objects that are also of kind  \link GLObject GLObject \endlink .
+					@param composite the  \link Composite Composite \endlink  to be searched for  \link GLObject GLObject \endlink  objects
 					@return Processor::Result the result of {\em *this} ExternalRenderer
 				*/
 			virtual Processor::Result operator() (Composite& composite)

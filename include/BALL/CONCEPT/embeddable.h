@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: embeddable.h,v 1.7 2002/02/27 12:18:25 sturm Exp $
+// $Id: embeddable.h,v 1.8 2003/02/21 16:01:32 anhi Exp $
 
 #ifndef BALL_CONCEPT_EMBEDDABLE_H
 #define BALL_CONCEPT_EMBEDDABLE_H
@@ -37,9 +37,9 @@ namespace BALL
 	/**	Python Embedding Base Class.
 			This class defines a common interface for all classes that
 			have to be accessible from an embedded Python interpreter.
-			\\
-			{\bf Definition:} \URL{BALL/CONCEPT/embeddable.h}		
-			\\
+			 \par
+			<b>Definition:</b> BALL/CONCEPT/embeddable.h
+			 \par
 			@see PyInterpreter
 			@see MainControl
 			@see ModularWidget
@@ -95,7 +95,7 @@ namespace BALL
 
 		/**	Register the instance.
 				DO NOT IMPLEMENT THIS METHOD! It is automatically implemented
-				correctly when putting the \Ref{BALL_EMBEDDABLE} macro in a class
+				correctly when putting the  \link BALL_EMBEDDABLE BALL_EMBEDDABLE \endlink  macro in a class
 				definition.
 				@see getInstanceList
 		*/

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: compositeDescriptor.h,v 1.12 2002/12/16 12:22:47 sturm Exp $
+// $Id: compositeDescriptor.h,v 1.13 2003/02/21 16:07:24 anhi Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_COMPOSITEDESCRIPTOR_H
 #define BALL_VIEW_GUI_KERNEL_COMPOSITEDESCRIPTOR_H
@@ -49,26 +49,26 @@ namespace BALL
 
 		/** CompositeDescriptor class.
 				The class CompositeDescriptor is responsible for maintaining
-				the graphical representation stored in \Ref{GLEntityDescriptor} objects of 
-				a given \Ref{Composite}.
+				the graphical representation stored in  \link GLEntityDescriptor GLEntityDescriptor \endlink  objects of 
+				a given  \link Composite Composite \endlink .
 				This class is part of the render engine for creating the graphical representation.
 				Certain methods create, compile, update and maintain the visualization.
-				This class will be used internally by the \Ref{MainControl} class for
-				handling \Ref{Composite} objects.
-				All necessary information concerning visualization of a \Ref{Composite} like
+				This class will be used internally by the  \link MainControl MainControl \endlink  class for
+				handling  \link Composite Composite \endlink  objects.
+				All necessary information concerning visualization of a  \link Composite Composite \endlink  like
 				name, center vector and rotation axis are available in this class.
-				Further this class creates, updates and maintains \Ref{GLEntityDescriptor}
-				objects for every \Ref{Scene}.
-				These \Ref{GLEntityDescriptor} contain precompiled display lists of the
-				\Ref{Composite} of {\em *this} compositeDescriptor for faster visualization.
+				Further this class creates, updates and maintains  \link GLEntityDescriptor GLEntityDescriptor \endlink 
+				objects for every  \link Scene Scene \endlink .
+				These  \link GLEntityDescriptor GLEntityDescriptor \endlink  contain precompiled display lists of the
+				 \link Composite Composite \endlink  of {\em *this} compositeDescriptor for faster visualization.
 				It is possible to create a shallow copy of {\em *this} compositeDescriptor.
 				Such a shallow copy has only a link to its parent compositeDescriptor. It shares
-				all attributes including the \Ref{Composite} and the graphical representation 
+				all attributes including the  \link Composite Composite \endlink  and the graphical representation 
 				with its parent.
 				If the parent of such a shallow copy will be deleted the shallow copy will be
 				deleted as well because all attributs are no longer available. This mechanism
-				will work automatically. \\
-				{\bf Defintion:} \URL{BALL/VIEW/GUI/KERNEL/compositeDescriptor.h}
+				will work automatically.  \par
+				<b>Defintion:</b> BALL/VIEW/GUI/KERNEL/compositeDescriptor.h
 		*/
 		class CompositeDescriptor
 		{
@@ -114,17 +114,17 @@ namespace BALL
 					{\em composite_descriptor}.
 					The copy is either deep (default) or shallow. In this case deep means
 					that the composite of the given compositeDescriptor {\em composite_descriptor}
-					is also copied deep. If the flag {\em deep} is set to {\tt false} then
+					is also copied deep. If the flag {\em deep} is set to <tt>false</tt> then
 					only a link to the given compositeDescriptor
 					{\em composite_descriptor} is stored in this new compositeDescriptor.
 					In the case of a shallow copy all the other attributes of {\em *this}
 					compositeDescriptor are linked to {\em composite_descriptor} compositeDescriptor.
 					If the parent compositeDescriptor of a shallow compositeDescriptor is deleted
 					so the shallow compositeDescriptor will also be deleted because all the 
-					necessary attributes and the \Ref{Composite} are originally stored in the parent
+					necessary attributes and the  \link Composite Composite \endlink  are originally stored in the parent
 					compositeDescriptor.
 					@param  composite_descriptor the compositeDescriptor to be copied (cloned)
-					@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em composite_descriptor}
+					@param  deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of {\em composite_descriptor}
 					@return CompositeDescriptor new constructed compositeDescriptor cloned from {\em composite_descriptor}.
 					@see    CompositeDescriptor
 			 */
@@ -138,16 +138,16 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} compositeDescriptor.
-					Calls \Ref{destroy}.
+					Calls  \link destroy destroy \endlink .
 					@see         destroy
 			 */
 			virtual ~CompositeDescriptor()
 				throw();
 
 			/** Explicit default initialization.
-					Clears all \Ref{GLEntityDescriptor} objects of {\em *this} compositeDescriptor 
+					Clears all  \link GLEntityDescriptor GLEntityDescriptor \endlink  objects of {\em *this} compositeDescriptor 
 					and resets the internal linkage.
-					Calls \Ref{GLEntityDescriptor::clear}.
+					Calls  \link GLEntityDescriptor::clear GLEntityDescriptor::clear \endlink .
 					@see     GLEntityDescriptor::clear
 			*/
 			virtual void clear()
@@ -155,14 +155,14 @@ namespace BALL
 
 			/** Explicit destructor.
 					Destroy {\em *this} compositeDescriptor.
-					Deletes all graphical representation stored in \Ref{GLEntityDescriptor} objects
-					for the \Ref{Composite} of {\em *this} compositeDescriptor. Deletes all shallow
+					Deletes all graphical representation stored in  \link GLEntityDescriptor GLEntityDescriptor \endlink  objects
+					for the  \link Composite Composite \endlink  of {\em *this} compositeDescriptor. Deletes all shallow
 					copies of {\em *this} compositeDescriptor.
 					If {\em *this} compositeDescriptor was a shallow copy of another 
 					compositeDescriptor it will be removed from it. If {\em *this} compositeDescriptor
-					was a deep copy of another compositeDescriptor the \Ref{Composite}
+					was a deep copy of another compositeDescriptor the  \link Composite Composite \endlink 
 					of {\em *this} compositeDescriptor will be deleted.
-					Calls \Ref{clear}
+					Calls  \link clear clear \endlink 
 					@see         clear
 			*/
 			virtual void destroy()
@@ -178,9 +178,9 @@ namespace BALL
 					compositeDescriptor.
 					The assignment is either deep (default) or shallow.
 					If this method is called {\em *this} compositeDescriptor is internally destroyed.
-					Calls \Ref{destroy}
+					Calls  \link destroy destroy \endlink 
 					@param  composite_descriptor the compositeDescriptor to be copied (cloned)
-					@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em composite_descriptor}
+					@param  deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of {\em composite_descriptor}
 					@see    CompositeDescriptor
 					@see    destroy
 			*/
@@ -191,7 +191,7 @@ namespace BALL
 					Assign the compositeDescriptor {\em composite_descriptor} to {\em *this}
 					compositeDescriptor.
 					The assignment is deep.
-					Calls \Ref{set}.
+					Calls  \link set set \endlink .
 					@param   composite_descriptor the compositeDescriptor to be copied (cloned)
 					@return  CompositeDescriptor& constant reference of {\em *this} compositeDescriptor
 					@see     set
@@ -203,7 +203,7 @@ namespace BALL
 					Copy {\em *this} compositeDescriptor to the compositeDescriptor 
 					{\em composite_descriptor}.
 					The assignment is either deep (default) or shallow.
-					Calls \Ref{set}.
+					Calls  \link set set \endlink .
 					@param  composite_descriptor the compositeDescriptor to be assigned to
 					@see    set
 			*/
@@ -217,7 +217,7 @@ namespace BALL
 
 			/** Change of the CompositeDescriptor's name.
 					Change the name of {\em *this} compositeDescriptor to the parameter {\em name}.
-					Every graphical representation of the \Ref{Composite} of {\em *this}
+					Every graphical representation of the  \link Composite Composite \endlink  of {\em *this}
 					compositeDescriptor needs a name to identify later.
 					@param  name the new name of {\em *this} compositeDescriptor
 					@see    getName
@@ -234,16 +234,16 @@ namespace BALL
 				throw();
 
 			/** Constant inspection of the name.
-					For further information see \Ref{getName}.
+					For further information see  \link getName getName \endlink .
 			*/
 			const String& getName() const
 				throw();
 
 			/** Change of the CompositeDescriptor's center vector.
-					Change the center vector of {\em *this} compositeDescriptor to \Ref{Vector3}
+					Change the center vector of {\em *this} compositeDescriptor to  \link Vector3 Vector3 \endlink 
 					{\em center}.
 					The center vector is the vector that is the origin of the graphical
-					representation of the \Ref{Composite} of {\em *this}	compositeDescriptor.
+					representation of the  \link Composite Composite \endlink  of {\em *this}	compositeDescriptor.
 					@param  center the new center vector of {\em *this} compositeDescriptor
 					@see    getCenter
 					@see     Vector3
@@ -261,16 +261,16 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the center vector.
-					For further information see \Ref{getCenter}.
+					For further information see  \link getCenter getCenter \endlink .
 			*/
 			const Vector3& getCenter() const
 				throw();
 
 			/** Change of the CompositeDescriptor's quaternion.
-					Change the \Ref{Quaternion} of {\em *this} compositeDescriptor to the
-					\Ref{Quaternion} {\em quaternion}.
-					The \Ref{Quaternion} describes the rotation of the graphical representation 
-					of the \Ref{Composite} of {\em *this}	compositeDescriptor.
+					Change the  \link Quaternion Quaternion \endlink  of {\em *this} compositeDescriptor to the
+					 \link Quaternion Quaternion \endlink  {\em quaternion}.
+					The  \link Quaternion Quaternion \endlink  describes the rotation of the graphical representation 
+					of the  \link Composite Composite \endlink  of {\em *this}	compositeDescriptor.
 					@param  quaternion the new quaternion
 					@see    getQuaternion
 					@see    Quaternion
@@ -279,10 +279,10 @@ namespace BALL
 				throw();
 
 			/** Change of the CompositeDescriptor's quaternion.
-					Change the \Ref{Quaternion} of {\em *this} compositeDescriptor to the
-					\Ref{Quaternion} constructed from {\em axis} and {\em angle}.
-					The \Ref{Quaternion} describes the rotation of the graphical representation 
-					of the \Ref{Composite} of {\em *this}	compositeDescriptor.
+					Change the  \link Quaternion Quaternion \endlink  of {\em *this} compositeDescriptor to the
+					 \link Quaternion Quaternion \endlink  constructed from {\em axis} and {\em angle}.
+					The  \link Quaternion Quaternion \endlink  describes the rotation of the graphical representation 
+					of the  \link Composite Composite \endlink  of {\em *this}	compositeDescriptor.
 					@param  axis the new quaternion axis
 					@param  angle the new quaternion angle
 					@see    getQuaternion
@@ -293,12 +293,12 @@ namespace BALL
 				throw();
 
 			/** Change of the CompositeDescriptor's quaternion.
-					Change the \Ref{Quaternion} of {\em *this} compositeDescriptor to the 
-					\Ref{Quaternion} constructed from the parameter {\em axis} and {\em angle}.
-					The \Ref{Quaternion} describes the rotation of the graphical representation 
-					of the \Ref{Composite} of {\em *this}	compositeDescriptor.
-					@param  axis the new \Ref{Quaternion} axis
-					@param  angle the new \Ref{Quaternion} angle
+					Change the  \link Quaternion Quaternion \endlink  of {\em *this} compositeDescriptor to the 
+					 \link Quaternion Quaternion \endlink  constructed from the parameter {\em axis} and {\em angle}.
+					The  \link Quaternion Quaternion \endlink  describes the rotation of the graphical representation 
+					of the  \link Composite Composite \endlink  of {\em *this}	compositeDescriptor.
+					@param  axis the new  \link Quaternion Quaternion \endlink  axis
+					@param  angle the new  \link Quaternion Quaternion \endlink  angle
 					@see    getQuaternion
 					@see    Quaternion
 					@see    Vector3
@@ -307,8 +307,8 @@ namespace BALL
 				throw();
 
 			/** Mutable inspection of the quaternion.
-					Access a mutable reference of the \Ref{Quaternion} of {\em *this} compositeDescriptor.
-					@return  Quaternion& mutable reference of the \Ref{Quaternion} of {\em *this} compositeDescriptor
+					Access a mutable reference of the  \link Quaternion Quaternion \endlink  of {\em *this} compositeDescriptor.
+					@return  Quaternion& mutable reference of the  \link Quaternion Quaternion \endlink  of {\em *this} compositeDescriptor
 					@see     setQuaternion
 					@see     Quaternion
 			*/
@@ -316,14 +316,14 @@ namespace BALL
 				throw();
 
 			/** Constant inspection of the quaternion.
-					For further information see \Ref{getQuaternion}.
+					For further information see  \link getQuaternion getQuaternion \endlink .
 			*/
 			const Quaternion& getQuaternion() const
 				throw();
 
 			/** Change of the CompositeDescriptor's composite.
-					Change the \Ref{Composite} of {\em *this} compositeDescriptor to {\em composite}.
-					@param  composite the new \Ref{Composite} of {\em *this} compositeDescriptor
+					Change the  \link Composite Composite \endlink  of {\em *this} compositeDescriptor to {\em composite}.
+					@param  composite the new  \link Composite Composite \endlink  of {\em *this} compositeDescriptor
 					@param  allow_deletion states if the given composite may be deleted by destruction of {\em *this} compositeDescriptor
 					@see    getComposite
 					@see    Composite
@@ -332,8 +332,8 @@ namespace BALL
 				throw();
 
 			/** Mutable inspection of the composite.
-					Access a mutable pointern to the \Ref{Composite} of {\em *this} compositeDescriptor.
-					@return  Composite* mutable pointer to the \Ref{Composite} of {\em *this} compositeDescriptor
+					Access a mutable pointern to the  \link Composite Composite \endlink  of {\em *this} compositeDescriptor.
+					@return  Composite* mutable pointer to the  \link Composite Composite \endlink  of {\em *this} compositeDescriptor
 					@see     setComposite
 					@see     Composite
 			*/
@@ -341,18 +341,18 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the composite.
-					For further information see \Ref{getComposite}.
+					For further information see  \link getComposite getComposite \endlink .
 			*/
 			const Composite* getComposite() const
 				throw();
 				
 			/** Mark all graphical representation for update.
-					This method marks the \Ref{Composite} of {\em *this} and all shallow copies
+					This method marks the  \link Composite Composite \endlink  of {\em *this} and all shallow copies
 					of {\em *this} for update. That means that if the next time the render engine
 					wants to draw the graphical representation of {\em *this} compositeDescriptor
 					or one of the shallow copies the precompiled lists stored in the current
-					\Ref{GLEntityDescriptor} will be rebuild. 
-					Call this method if the structure of the \Ref{Composite} or its graphical
+					 \link GLEntityDescriptor GLEntityDescriptor \endlink  will be rebuild. 
+					Call this method if the structure of the  \link Composite Composite \endlink  or its graphical
 					representation has changed.
 					@see    compileEntity
 					@see    GLEntityDescriptor
@@ -365,26 +365,26 @@ namespace BALL
 			*/
 			//@{
 
-			/** Registers a \Ref{GLPrimitiveManager}.
-					The \Ref{GLPrimitiveManager} stores some optimized primitives
-					for faster rendering. The \Ref{GLPrimitiveManager} is used by 
-					\Ref{GLEntityDescriptor} for creating the graphical representation. 
-					For each \Ref{GLPrimitiveManager} there will be a new \Ref{GLEntityDescriptor}
+			/** Registers a  \link GLPrimitiveManager GLPrimitiveManager \endlink .
+					The  \link GLPrimitiveManager GLPrimitiveManager \endlink  stores some optimized primitives
+					for faster rendering. The  \link GLPrimitiveManager GLPrimitiveManager \endlink  is used by 
+					 \link GLEntityDescriptor GLEntityDescriptor \endlink  for creating the graphical representation. 
+					For each  \link GLPrimitiveManager GLPrimitiveManager \endlink  there will be a new  \link GLEntityDescriptor GLEntityDescriptor \endlink 
 					created.
 					This method will be called internally from the render engine.
-					@param manager the new \Ref{GLPrimitiveManager}
+					@param manager the new  \link GLPrimitiveManager GLPrimitiveManager \endlink 
 					@see   GLPrimitiveManager
 					@see   GLEntityDescriptor
 			*/
 			void registerPrimitiveManager(const GLPrimitiveManager& manager)
 				throw();
 
-			/** Registers a \Ref{GLObjectCollector}.
-					The \Ref{GLObjectCollector} is used by the \Ref{GLEntityDescriptor}
-					for collecting all openGL objects from the \Ref{Composite} of {\em *this}
+			/** Registers a  \link GLObjectCollector GLObjectCollector \endlink .
+					The  \link GLObjectCollector GLObjectCollector \endlink  is used by the  \link GLEntityDescriptor GLEntityDescriptor \endlink 
+					for collecting all openGL objects from the  \link Composite Composite \endlink  of {\em *this}
 					compositeDescriptor.
 					This method will be called internally from the render engine.
-					@param collector the new \Ref{GLObjectCollector}
+					@param collector the new  \link GLObjectCollector GLObjectCollector \endlink 
 					@see   GLObjectCollector
 					@see   GLEntityDescriptor
 			*/
@@ -392,16 +392,16 @@ namespace BALL
 				throw();
 
 			/** Create display lists of the graphical representation.
-					If the graphical representation of the \Ref{Composite} of {\em *this}
+					If the graphical representation of the  \link Composite Composite \endlink  of {\em *this}
 					compositeDescriptor does not change often it is better to compile this
 					graphical representation into a faster processable structure. The
-					\Ref{GLEntityDescriptor} {\em entity} contains the new compiled lists
-					of the graphical representation of the \Ref{Composite} of {\em *this}
+					 \link GLEntityDescriptor GLEntityDescriptor \endlink  {\em entity} contains the new compiled lists
+					of the graphical representation of the  \link Composite Composite \endlink  of {\em *this}
 					compositeDescriptor.
 					This method will be called internally by the 
-					\Ref{drawEntity} method.
-					@param entity the new \Ref{GLEntityDescriptor} that will hold the lists of 
-					              the graphical representation of the \Ref{Composite} of {\em *this}
+					 \link drawEntity drawEntity \endlink  method.
+					@param entity the new  \link GLEntityDescriptor GLEntityDescriptor \endlink  that will hold the lists of 
+					              the graphical representation of the  \link Composite Composite \endlink  of {\em *this}
 												compositeDescriptor
 					@see   drawEntity
 			*/
@@ -409,16 +409,16 @@ namespace BALL
 				throw();
 
 			/** Draws the graphical representation fast. 
-					This method uses precompiled lists created with \Ref{compileEntity} for 
-					drawing the graphical representation of the \Ref{Composite} of {\em *this}
+					This method uses precompiled lists created with  \link compileEntity compileEntity \endlink  for 
+					drawing the graphical representation of the  \link Composite Composite \endlink  of {\em *this}
 					compositeDescriptor faster.
 					The representation can either be drawn in hires
 					quality (default) or in lowres quality used for quicker moving the graphic.
 					This method will be called internally from the render engine.
-					Calls \Ref{compileEntity}
-					@param dynamic the new drawing mode ({\tt true} - lowres drawing mode, 
-					               {\tt false} (Default) - hires drawing mode.
-												 See \Ref{GeometricObject} for description of the different
+					Calls  \link compileEntity compileEntity \endlink 
+					@param dynamic the new drawing mode (<tt>true</tt> - lowres drawing mode, 
+					               <tt>false</tt> (Default) - hires drawing mode.
+												 See  \link GeometricObject GeometricObject \endlink  for description of the different
 												 drawing modes)
 					@see   compileEntity
 					@see   registerPrimitiveManager
@@ -431,7 +431,7 @@ namespace BALL
 					The representation can either be drawn in hires
 					quality (default) or in lowres quality used for quicker displaying.
 					This version of the drawEntity method does not use the optimized functions
-					given by the \Ref{GLPrimitiveManager} but instead draws the primitives directly.
+					given by the  \link GLPrimitiveManager GLPrimitiveManager \endlink  but instead draws the primitives directly.
 					Normaly before the drawing there will be the compilation phase that optimizes
 					the graphical represenation for faster drawing. This will use a little time but
 					the rendering will be faster afterwards. However if the representation changes
@@ -439,9 +439,9 @@ namespace BALL
 					considerably. Another feature of this method is the possibily that each
 					graphical object can be named. That is essential for the selection mode.
 					This method will be called internally from the render engine.
-					@param dynamic the new drawing mode ({\tt true} - lowres drawing mode, 
-					               {\tt false} (Default) - hires drawing mode.
-												 See \Ref{GeometricObject} for description of the different
+					@param dynamic the new drawing mode (<tt>true</tt> - lowres drawing mode, 
+					               <tt>false</tt> (Default) - hires drawing mode.
+												 See  \link GeometricObject GeometricObject \endlink  for description of the different
 												 drawing modes)
 					@param with_names the flag if names should be used or not (default)
 					@see   registerPrimitiveManager
@@ -456,14 +456,14 @@ namespace BALL
 			//@{
 			
 			/** Determines if the compositeDescriptor is a shallow copy.
-					@return  bool {\tt true} if {\em *this} compositeDescriptor is a shallow copy, {\tt false} otherwise
+					@return  bool <tt>true</tt> if {\em *this} compositeDescriptor is a shallow copy, <tt>false</tt> otherwise
 					@see     isDeepCopy
 			*/
 			bool isShallowCopy() const
 				throw();
 
 			/** Test if compositeDescriptor is a deep copy.
-					@return  bool {\tt true} if {\em *this} compositeDescriptor is a deep copy, {\tt false} otherwise
+					@return  bool <tt>true</tt> if {\em *this} compositeDescriptor is a deep copy, <tt>false</tt> otherwise
 					@see     isShallowCopy
 			*/
 			bool isDeepCopy() const
@@ -478,10 +478,10 @@ namespace BALL
 					Initiate self-validation of the internal state and data structure consistencies
 					of {\em *this} compositeDescriptor.
 					If the internal state of {\em *this} compositeDescriptor is correct 
-					(self-validated) and consistent {\tt true} is returned, {\tt false} otherwise. 
+					(self-validated) and consistent <tt>true</tt> is returned, <tt>false</tt> otherwise. 
 					This method checks whether all shallow copies of {\em *this} 
 					compositeDescriptor are connected to {\em *this} compositeDescriptor.
-					@return			bool {\tt true} if the internal state of {\em *this} compositeDescriptor is correct (self-validated) and consistent, {\tt false} otherwise
+					@return			bool <tt>true</tt> if the internal state of {\em *this} compositeDescriptor is correct (self-validated) and consistent, <tt>false</tt> otherwise
 			*/
 			virtual bool isValid() const
 				throw();

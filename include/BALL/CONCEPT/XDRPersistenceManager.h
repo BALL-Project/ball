@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XDRPersistenceManager.h,v 1.16 2002/12/22 15:56:23 oliver Exp $
+// $Id: XDRPersistenceManager.h,v 1.17 2003/02/21 16:01:22 anhi Exp $
 
 #ifndef BALL_CONCEPT_XDRPERSISTENCEMANAGER_H
 #define BALL_CONCEPT_XDRPERSISTENCEMANAGER_H
@@ -76,29 +76,29 @@ namespace BALL
 		//@{
 
 		/**	Write an object header.
-				This method stores \Ref{OBJECT_HEADER} as an int value to mark the
-				start of an object (using {\tt xdr_int}).
+				This method stores  \link OBJECT_HEADER OBJECT_HEADER \endlink  as an int value to mark the
+				start of an object (using <tt>xdr_int</tt>).
 		*/
 		virtual void writeHeader(const char* type_name, const char* name, PointerSizeUInt ptr)
       throw();
 
 		/**	Check for an object header.
-				This method reads an int form the input stream (using {\tt xdr_int}) and
-				returns {\bf true} if the value read equals \Ref{OBJECT_HEADER}.
+				This method reads an int form the input stream (using <tt>xdr_int</tt>) and
+				returns <b>true</b> if the value read equals  \link OBJECT_HEADER OBJECT_HEADER \endlink .
 		*/
 		virtual bool checkHeader(const char* type_name, const char* name, PointerSizeUInt& ptr)
       throw();
 
 		/** Write an object trailer.
-				This method stores \Ref{OBJECT_TRAILER} as an int value to mark the
-				start of an object (using {\tt xdr_int}).
+				This method stores  \link OBJECT_TRAILER OBJECT_TRAILER \endlink  as an int value to mark the
+				start of an object (using <tt>xdr_int</tt>).
 		*/
 		virtual void writeTrailer(const char* name = 0)
       throw();
 
 		/**	Check for an object trailer.
-				This method reads an int form the input stream (using {\tt xdr_int}) and
-				returns {\bf true} if the value read equals \Ref{OBJECT_TRAILER}.
+				This method reads an int form the input stream (using <tt>xdr_int</tt>) and
+				returns <b>true</b> if the value read equals  \link OBJECT_TRAILER OBJECT_TRAILER \endlink .
 		*/
 		virtual bool checkTrailer(const char* name = 0)
       throw();

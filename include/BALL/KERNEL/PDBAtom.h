@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBAtom.h,v 1.23 2002/02/27 12:18:43 sturm Exp $
+// $Id: PDBAtom.h,v 1.24 2003/02/21 16:03:08 anhi Exp $
 
 #ifndef BALL_KERNEL_PDBATOM_H
 #define BALL_KERNEL_PDBATOM_H
@@ -34,9 +34,9 @@ namespace BALL
 			It contains additional attributes to hold the crystallographic properties
 			of atoms from a PDB file (e.g., temperature factor, occupancy).
 			For details on the PDB format and the detailed meaning of those fields,
-			please refer to the PDB documentation at \URL{http://www.rcsb.org}.
-			\\
-			{\bf Definition:}\URL{BALL/KERNEL/PDBAtom.h}
+			please refer to the PDB documentation at http://www.rcsb.org
+			 \par
+			<b>Definition:</b>BALL/KERNEL/PDBAtom.h
 			@see PDBFile
 	*/
 	class PDBAtom
@@ -169,7 +169,7 @@ namespace BALL
     /** Assignment with cloning facility.
         The assignment is either deep or shallow (default).
         @param  pdb_atom the PDBAtom to be copied (cloned)
-        @param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy
+        @param  deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy
     */
     void set(const PDBAtom& pdb_atom, bool deep = true)
       throw(); 

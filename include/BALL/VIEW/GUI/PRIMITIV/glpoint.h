@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glpoint.h,v 1.11 2002/12/12 09:36:47 oliver Exp $
+// $Id: glpoint.h,v 1.12 2003/02/21 16:07:36 anhi Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLPOINT_H
 #define BALL_VIEW_GUI_PRIMITIV_GLPOINT_H
@@ -28,13 +28,13 @@ namespace BALL
 		/** GLPoint class.				
 				An instance of GLPoint represents an instance of the geometric
 				visualization "point".
-				The class GLPoint is derived from the classes \Ref{Point} and
-				\Ref{GLObject}. Therefore the class glPoint is the graphical extension
+				The class GLPoint is derived from the classes  \link Point Point \endlink  and
+				 \link GLObject GLObject \endlink . Therefore the class glPoint is the graphical extension
 				of the geometrical definition of the class point.
-				The drawing method from \Ref{GLObject} is overridden to visualize the
+				The drawing method from  \link GLObject GLObject \endlink  is overridden to visualize the
 				point. OpenGL code is used for the visualization.
 				See these classes for further information.
-				{\bf Definition:} \URL{BALL/VIEW/GUI/PRIMITIV/glpoint.h}
+				<b>Definition:</b> BALL/VIEW/GUI/PRIMITIV/glpoint.h
 		*/
 		class GLPoint
 			: public Point,
@@ -59,7 +59,7 @@ namespace BALL
 					Construct new glPoint by copying the glPoint {\em point}.
 					The copy is either deep (default) or shallow.
 					@param       point the glPoint to be copied (cloned)
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false})
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>)
 					@return      GLPoint new constructed glPoint copied from {\em point}
 					@see         Point
 					@see         GLObject
@@ -85,15 +85,15 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} glPoint.
-					Calls \Ref{destroy}.
+					Calls  \link destroy destroy \endlink .
 					@see         destroy
 			*/
 			virtual ~GLPoint()
 				throw();
 
 			/** Explicit default initialization.
-					Calls \Ref{Point::clear}
-					Calls \Ref{GLObject::clear}
+					Calls  \link Point::clear Point::clear \endlink 
+					Calls  \link GLObject::clear GLObject::clear \endlink 
 					@see  Point::clear
 					@see  GLObject::clear
 			*/
@@ -101,8 +101,8 @@ namespace BALL
 				throw();
 
 			/** Explicit destructor.
-					Calls \Ref{Point::destroy}
-					Calls \Ref{GLObject::destroy}
+					Calls  \link Point::destroy Point::destroy \endlink 
+					Calls  \link GLObject::destroy GLObject::destroy \endlink 
 					@see  Point::destroy
 					@see  GLObject::destroy
 			*/
@@ -119,9 +119,9 @@ namespace BALL
 					Assign the glPoint {\em point} to {\em *this} glPoint.
 					The copy is either deep (default) or shallow.
 					The value of {\em *this} glPoint is initialized to the value of 
-					the glPoint {\em point}.\\
+					the glPoint {\em point}. \par
 					@param       point the glPoint to be copied
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em point}
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of {\em point}
 					@see         Point
 					@see         GLObject
 			*/
@@ -131,9 +131,9 @@ namespace BALL
 			/** Assignment operator.
 					Assign the glPoint {\em point} to {\em *this} glPoint.
 					The copy is deep.
-					Calls \Ref{set}.
+					Calls  \link set set \endlink .
 					The value of {\em *this} glPoint is initialized to the value 
-					of the glPoint {\em point}.\\
+					of the glPoint {\em point}. \par
 					@param       point the glPoint to be copied
 					@return      GLPoint& constant reference {\em *this} glPoint
 					@see         set
@@ -144,11 +144,11 @@ namespace BALL
 			/** Copying with cloning facility.
 					Copy {\em *this} glPoint to the glPoint {\em point}.
 					The copy is either deep (default) or shallow.
-					Calls \Ref{set}.
+					Calls  \link set set \endlink .
 					The value of the glPoint {\em point} is initialized to the
-					value of {\em *this} glPoint.\\
+					value of {\em *this} glPoint. \par
 					@param       point the glPoint to be assigned to
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em point}
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of {\em point}
 					@see         set
 			*/
 			void get(GLPoint& point, bool deep = true) const
@@ -170,15 +170,15 @@ namespace BALL
 			//@{
 			
 			/** Creation of the graphical representation.
-					Overridden method from \Ref{GLObject}. Uses the geometrical properties
-					defined in class \Ref{Point} to create the graphical representation
+					Overridden method from  \link GLObject GLObject \endlink . Uses the geometrical properties
+					defined in class  \link Point Point \endlink  to create the graphical representation
 					of the point. This method is used internally from the render engine
-					of the \Ref{Scene}.
+					of the  \link Scene Scene \endlink .
 					The parameter {\em with_names} indicates whether the openGL command 
 					{\em glLoadName} must be used for naming the graphical object 
 					(necessary for picking mode in the scene).		
 					@param     with_names flag if the graphical objects must have a name
-					@return    bool {\tt true} if successful,	{\tt false} otherwise
+					@return    bool <tt>true</tt> if successful,	<tt>false</tt> otherwise
 					@see       GLObject::draw
 			*/
 			virtual bool draw(bool with_names = false)
@@ -186,9 +186,9 @@ namespace BALL
 
 			/** Export method.
 					This method handles the export of {\em *this} glPoint into another
-					format (eg. POVRAY, VRML) \\
-				  {\bf Note:} Not yet implemented.
-					@return    bool {\tt true} if successful,	{\tt false} otherwise
+					format (eg. POVRAY, VRML)  \par
+				  <b>Note:</b> Not yet implemented.
+					@return    bool <tt>true</tt> if successful,	<tt>false</tt> otherwise
 			*/
 			virtual bool extract()
 				throw();

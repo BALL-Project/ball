@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: resourceFile.h,v 1.16 2002/12/18 16:09:22 anker Exp $
+// $Id: resourceFile.h,v 1.17 2003/02/21 16:03:06 anhi Exp $
 
 #ifndef BALL_FORMAT_RESOURCEFILE_H
 #define BALL_FORMAT_RESOURCEFILE_H
@@ -65,15 +65,15 @@ namespace BALL
 		/**	Copy constructor.
 				Creates a new resource entry from another.
 				@param entry the ResourceEntry object to be copied
-				@param deep create a deep ({\bf true}) or shallow ({\bf false}) copy
+				@param deep create a deep (<b>true</b>) or shallow (<b>false</b>) copy
 		*/
 		ResourceEntry(const ResourceEntry& entry, bool deep = true);
 
 		/**	Create a new resource entry.
-				An entry with {\tt key} and {\tt value} is created. If {\tt parent} is given,
+				An entry with <tt>key</tt> and <tt>value</tt> is created. If {\tt parent} is given,
 				the new entries parent pointer is set to this value. Take care: the parents
 				child array is {\em not} updated - so use this option only if you really know 
-				what you are doing. To keep this data consistent, use \Ref{insertChild}.
+				what you are doing. To keep this data consistent, use  \link insertChild insertChild \endlink .
 				@param	key the key of the new entry
 				@param	value the value of the new entry
 				@param	parent the content of the new entry's parent pointer
@@ -101,7 +101,7 @@ namespace BALL
 
 		/**	Assign a resource entry from another.
 				@param entry the ResourceEntry object to be copied
-				@param deep create a deep ({\bf true}) or shallow ({\bf false}) copy
+				@param deep create a deep (<b>true</b>) or shallow (<b>false</b>) copy
 		*/
 		void set(const ResourceEntry& entry, bool deep = true);
 
@@ -112,7 +112,7 @@ namespace BALL
 	
 		/**	Assign the contents of a resource enytry to another one.
 				@param entry the ResourceEntry object to be copied
-				@param deep create a deep ({\bf true}) or shallow ({\bf false}) copy
+				@param deep create a deep (<b>true</b>) or shallow (<b>false</b>) copy
 		*/
 		void get(ResourceEntry& entry, bool deep = true) const;
 		//@}
@@ -147,12 +147,12 @@ namespace BALL
 		const ResourceEntry* getParent() const;
 
 		/**	Return a pointer to a child node.	
-				@return 0 if the child {\tt index} does not exist
+				@return 0 if the child <tt>index</tt> does not exist
 		*/
 		ResourceEntry* getChild(Position index);
 
 		/**	Return a const pointer to a child node.	
-				@return 0 if the child {\tt index} does not exist
+				@return 0 if the child <tt>index</tt> does not exist
 		*/
 		const ResourceEntry* getChild(Position index) const;
 

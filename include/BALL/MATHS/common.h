@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.19 2003/01/07 14:14:51 amoll Exp $
+// $Id: common.h,v 1.20 2003/02/21 16:03:47 anhi Exp $
 
 #ifndef BALL_MATHS_COMPARISON_H
 #define BALL_MATHS_COMPARISON_H
@@ -39,8 +39,8 @@ namespace BALL
 	{
 
 		/**	@name	Common Mathematical Functions
-				{\bf Namespace:} {\tt BALL::Maths}\\
-				{\bf Definition:} \URL{BALL/MATHS/common.h}	\\
+				<b>Namespace:</b> <tt>BALL::Maths</tt> \par
+				<b>Definition:</b> BALL/MATHS/common.h
 		*/
 		//@{ 
 
@@ -141,7 +141,7 @@ namespace BALL
 
 		/**	Return the sign of a number.
 				@param	t the number
-				@return Index {\tt -1} t < 0;  {\tt 0} t = 0; {\tt 1} t > 0
+				@return Index <tt>-1</tt> t < 0;  <tt>0</tt> t = 0; {\tt 1} t > 0
 		*/
 		template <typename T>
 		inline 
@@ -153,7 +153,7 @@ namespace BALL
 
 		/**	Test whether a number is finite.
 				@param	t the number
-				@return bool, {\bf true} if {\tt t} is finite
+				@return bool, <b>true</b> if <tt>t</tt> is finite
 		*/
 		template <typename T>
 		inline 
@@ -169,7 +169,7 @@ namespace BALL
 
 		/**	Test whether a number is infinite.
 				@param	t the number
-				@return bool, {\bf true} if {\tt t} equals {\tt inf} or {\tt -inf}
+				@return bool, <b>true</b> if <tt>t</tt> equals <tt>inf</tt> or {\tt -inf}
 		*/
 		template <typename T>
 		inline 
@@ -181,7 +181,7 @@ namespace BALL
 
 		/**	Test whether a value is not a number.
 				@param	t the number
-				@return bool, {\bf true} if t equals {\tt nan}
+				@return bool, <b>true</b> if t equals <tt>nan</tt>
 		*/
 		template <typename T>
 		inline 
@@ -197,7 +197,7 @@ namespace BALL
 
 		/**	Test whether a number is zero.
 				@param	t the number
-				@return bool, {\bf true} if the absolute value of {\tt t} is below \Ref{Constants::EPSILON}
+				@return bool, <b>true</b> if the absolute value of <tt>t</tt> is below  \link Constants::EPSILON Constants::EPSILON \endlink 
 		*/
 		template <typename T>
 		inline 
@@ -209,7 +209,7 @@ namespace BALL
 
 		/**	Test whether a number is not zero.
 				@param	t the number
-				@return bool, {\bf true}, if the absolute value of {\tt t} is at least \Ref{Constants::EPSILON}
+				@return bool, <b>true</b>, if the absolute value of <tt>t</tt> is at least  \link Constants::EPSILON Constants::EPSILON \endlink 
 		*/
 		template <typename T>
 		inline 
@@ -222,7 +222,7 @@ namespace BALL
 		/**	Test whether a number is equal to another.
 				@param	a the first number
 				@param	b the second number
-				@return bool, {\bf true} if the absolute distance of {\tt a} and {\tt b} is below \Ref{Constants::EPSILON}
+				@return bool, <b>true</b> if the absolute distance of <tt>a</tt> and <tt>b</tt> is below  \link Constants::EPSILON Constants::EPSILON \endlink 
 		*/
 		template <typename T1, typename T2>
 		inline 
@@ -235,7 +235,7 @@ namespace BALL
 		/**	Test whether a number is not equal to another.
 				@param	a the first number
 				@param	b the second number
-				@return bool, {\bf true} if the absolute distance of {\tt a} and {\tt b} is at least \Ref{Constants::EPSILON}
+				@return bool, <b>true</b> if the absolute distance of <tt>a</tt> and <tt>b</tt> is at least  \link Constants::EPSILON Constants::EPSILON \endlink 
 		*/
 		template <typename T1, typename T2>
 		inline 
@@ -248,7 +248,7 @@ namespace BALL
 		/**	Test whether a number is less compared to another.
 				@param	a the first number
 				@param	b the second number
-				@return bool, {\bf true} if {\tt a} is smaller than {\tt b}
+				@return bool, <b>true</b> if <tt>a</tt> is smaller than <tt>b</tt>
 		*/
 		template <typename T1, typename T2>
 		inline 
@@ -261,7 +261,7 @@ namespace BALL
 		/**	Test whether a number is less or equal compared to another.
 				@param	a the first number
 				@param	b the second number
-				@return bool, {\bf true} if {\tt a} is less or equal {\tt b}
+				@return bool, <b>true</b> if <tt>a</tt> is less or equal <tt>b</tt>
 		*/
 		template <typename T1, typename T2>
 		inline 
@@ -274,7 +274,7 @@ namespace BALL
 		/**	Test whether a number is greater or equal compared to another.
 				@param	a the first number
 				@param	b the second number
-				@return bool, {\bf true} if {\tt a} is greater or equal than {\tt b}
+				@return bool, <b>true</b> if <tt>a</tt> is greater or equal than <tt>b</tt>
 		*/
 		template <typename T1, typename T2>
 		inline 
@@ -287,7 +287,7 @@ namespace BALL
 		/**	Test whether a number is greater compared to another.
 				@param	a the first number
 				@param	b the second number
-				@return bool, {\bf true} if {\tt a} is greater than {\tt b}
+				@return bool, <b>true</b> if <tt>a</tt> is greater than <tt>b</tt>
 		*/
 		template <typename T1, typename T2>
 		inline 
@@ -324,7 +324,7 @@ namespace BALL
 		/**	Compare two numbers to each other.
 				@param	a the first number
 				@param	b the second number
-				@return Index {\tt -1} a < b; {\tt 0} a = b; {\tt 1} a > b
+				@return Index <tt>-1</tt> a < b; <tt>0</tt> a = b; {\tt 1} a > b
 		*/
 		template <typename T1, typename T2>
 		inline 
@@ -338,7 +338,7 @@ namespace BALL
 				@param	a the first number
 				@param	b the second number
 				@param	max_diff the maximum allowed difference between the two numbers
-				@return bool, {\bf true} if the absolute distance between {\tt a} and {\tt b} is below {\tt max_diff}
+				@return bool, <b>true</b> if the absolute distance between <tt>a</tt> and <tt>b</tt> is below {\tt max_diff}
 		*/
 		template <typename T>
 		inline 

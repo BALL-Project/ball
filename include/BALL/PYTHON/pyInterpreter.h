@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyInterpreter.h,v 1.3 2002/02/27 12:19:35 sturm Exp $ 
+// $Id: pyInterpreter.h,v 1.4 2003/02/21 16:05:57 anhi Exp $ 
 
 #ifndef BALL_PYTHON_PYINTERPRETER_H
 #define BALL_PYTHON_PYINTERPRETER_H
@@ -20,24 +20,24 @@ namespace BALL
 			There's just one global instance of the interpreter,
 			so all methods are static. The use of subinterpreters
 			is not yet supported.
-			\\
-			{\bf Definition:}\URL{BALL/PYTHON/pyInterpreter.h}
-			\\
+			 \par
+			<b>Definition:</b>BALL/PYTHON/pyInterpreter.h
+			 \par
 	*/
 	class PyInterpreter
 	{
 		public:
 
 		/**	Initialize the interpreter.
-				Initialize the interpreter (by calling {\tt PY_Initialize}) and 
-				load the modules {\tt sys}, {\tt site}, and {\tt BALL}.
-				A second call to {\tt initialize} may be used to restart the intepreter.
+				Initialize the interpreter (by calling <tt>PY_Initialize</tt>) and 
+				load the modules <tt>sys</tt>, <tt>site</tt>, and {\tt BALL}.
+				A second call to <tt>initialize</tt> may be used to restart the intepreter.
 		*/
 		static void initialize();
 
 		/**	Stop the interpreter.
 				Deallocate all memory occupied by the interpreter
-				(by calling {\tt PY_Finalize}.
+				(by calling <tt>PY_Finalize</tt>.
 		*/
 		static void finalize();
 
@@ -58,8 +58,8 @@ namespace BALL
 		static String runFile(const String& filename);
 			
 		/**	Import a module.	
-				The module with name {\tt module_name} is imported
-				using {\tt PyImport_ImportModule} and initialized.
+				The module with name <tt>module_name</tt> is imported
+				using <tt>PyImport_ImportModule</tt> and initialized.
 				When called 
 				@return true if the modules was found an initialized correctly
 		*/

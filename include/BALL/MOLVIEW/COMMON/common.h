@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.15 2002/12/16 15:36:04 amoll Exp $
+// $Id: common.h,v 1.16 2003/02/21 16:04:48 anhi Exp $
 
 #ifndef BALL_MOLVIEW_COMMON_COMMON_H
 #define BALL_MOLVIEW_COMMON_COMMON_H
@@ -28,7 +28,7 @@ namespace BALL
 			/** Predefined properties.
 					Enumeration of all properties that are used by the MOLVIEW kernel.
 					This properties define the models available in MOLVIEW.
-					This enumeration is an extension of the property in the \Ref{GeometricObject}
+					This enumeration is an extension of the property in the  \link GeometricObject GeometricObject \endlink 
 					class.
 			*/
 			enum Property

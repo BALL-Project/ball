@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyNucleicAcidList.h,v 1.4 2002/02/27 12:19:35 sturm Exp $
+// $Id: pyNucleicAcidList.h,v 1.5 2003/02/21 16:05:59 anhi Exp $
 
 #ifndef BALL_PYTHON_PYNUCLEICACIDLIST_H
 #define BALL_PYTHON_PYNUCLEICACIDLIST_H
@@ -67,7 +67,7 @@ namespace BALL
 			
 		/**	Construct from a AtomContainer
 				This constructor creates an PyNucleicAcidList object from
-				all nucleic acids of a \Ref{AtomContainer} object.
+				all nucleic acids of a  \link AtomContainer AtomContainer \endlink  object.
 		*/
 		PyNucleicAcidList(const AtomContainer& fragment, bool selected_only = false);
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: box3.h,v 1.33 2003/01/07 14:14:51 amoll Exp $
+// $Id: box3.h,v 1.34 2003/02/21 16:03:45 anhi Exp $
 
 #ifndef BALL_MATHS_BOX3_H
 #define BALL_MATHS_BOX3_H
@@ -23,8 +23,8 @@ namespace BALL
 	/**	Generic three-dimensional Box.
 			This class describes a three-dimensional box with edges parallel to
 			the coordinate system. Hence, a box is given by the coordinates of
-			the lower left front corner and ther upper right back corner.\\
-			{\bf Definition:} \URL{BALL/MATHS/box3.h}\\
+			the lower left front corner and ther upper right back corner. \par
+			<b>Definition:</b> BALL/MATHS/box3.h
 	*/
 	template <typename T>
 	class TBox3
@@ -39,7 +39,7 @@ namespace BALL
 
 		/**	Default constructor.
 				This method creates a new TBox3 object. The three components
-				of the two TVector3 are initialized to {\tt (T)0}.
+				of the two TVector3 are initialized to <tt>(T)0</tt>.
 		*/
 		TBox3()
 			throw();
@@ -53,20 +53,20 @@ namespace BALL
 
 		/**	Detailed constructor.
 				Create a new TBox3 object from two instances of TVector3.
-				@param	a assigned to {\tt a}
-				@param	b assigned to {\tt b}
+				@param	a assigned to <tt>a</tt>
+				@param	b assigned to <tt>b</tt>
 		*/
 		TBox3(const TVector3<T>& a, const TVector3<T>& b)
 			throw();
 
 		/**	Detailed constructor.
-				Create a new TBox3 object from six variables of type {\tt T}.
-				@param	ax assigned to {\tt a.x}
-				@param	ay assigned to {\tt a.y}
-				@param	az assigned to {\tt a.z}
-				@param	bx assigned to {\tt b.x}
-  			@param	by assigned to {\tt b.y}
-				@param	bz assigned to {\tt b.z}
+				Create a new TBox3 object from six variables of type <tt>T</tt>.
+				@param	ax assigned to <tt>a.x</tt>
+				@param	ay assigned to <tt>a.y</tt>
+				@param	az assigned to <tt>a.z</tt>
+				@param	bx assigned to <tt>b.x</tt>
+  			@param	by assigned to <tt>b.y</tt>
+				@param	bz assigned to <tt>b.z</tt>
 		*/
 		TBox3(const T& ax, const T& ay, const T& az,
 					const T& bx, const T& by, const T& bz)
@@ -105,13 +105,13 @@ namespace BALL
 		void set(const TVector3<T>& lower, const TVector3<T>& upper)
 			throw();
 
-		/**	Assign from six values of type {\tt T}.
-				@param	ax assigned to {\tt a.x}
-				@param	ay assigned to {\tt a.y}
-				@param	az assigned to {\tt a.z}
-				@param	bx assigned to {\tt b.x}
-  			@param	by assigned to {\tt b.y}
-				@param	bz assigned to {\tt b.z}
+		/**	Assign from six values of type <tt>T</tt>.
+				@param	ax assigned to <tt>a.x</tt>
+				@param	ay assigned to <tt>a.y</tt>
+				@param	az assigned to <tt>a.z</tt>
+				@param	bx assigned to <tt>b.x</tt>
+  			@param	by assigned to <tt>b.y</tt>
+				@param	bz assigned to <tt>b.z</tt>
 		*/
 		void set(const T& ax, const T& ay, const T& az,
 						 const T& bx, const T& by, const T& bz)
@@ -131,20 +131,20 @@ namespace BALL
 		void get(TBox3& box) const
 			throw();
 
-		/**	Assign to two variables of type {\tt TVector3}.
+		/**	Assign to two variables of type <tt>TVector3</tt>.
 				@param lower the lower corner of the box
 				@param upper the upper corner of the box
 		*/
 		void get(TVector3<T>& lower, TVector3<T>& upper) const
 			throw();
 
-		/**	Assign to six variables of type {\tt T}.
-				@param	ax is assigned {\tt a.x}
-				@param	ay is assigned {\tt a.y}
-				@param	az is assigned {\tt a.z}
-				@param	bx is assigned {\tt b.x}
-				@param	by is assigned {\tt b.y}
-				@param	bz is assigned {\tt b.z}
+		/**	Assign to six variables of type <tt>T</tt>.
+				@param	ax is assigned <tt>a.x</tt>
+				@param	ay is assigned <tt>a.y</tt>
+				@param	az is assigned <tt>a.z</tt>
+				@param	bx is assigned <tt>b.x</tt>
+				@param	by is assigned <tt>b.y</tt>
+				@param	bz is assigned <tt>b.z</tt>
 		*/
 		void get(T& ax, T& ay, T& az, T& bx, T& by, T& bz) const
 			throw();
@@ -205,13 +205,13 @@ namespace BALL
 		//@{
 
 		/**	Equality operator.
-				@return bool, {\bf true} if all box components are equal, {\bf false} otherwise
+				@return bool, <b>true</b> if all box components are equal, <b>false</b> otherwise
 		*/
 		bool operator == (const TBox3& box) const
 			throw();
 
 		/**	Inequality operator.
-				@return bool, {\bf true} if the two boxes differ in at least one component, {\bf false} otherwise
+				@return bool, <b>true</b> if the two boxes differ in at least one component, <b>false</b> otherwise
 		*/
 		bool operator != (const TBox3& box) const
 			throw();
@@ -220,14 +220,14 @@ namespace BALL
 				Optional it can be testet, if the point lies on the surface.
 				@param point the point to be tested
 				@param on_surface true to test the surface (default = false)
-				@return bool, {\bf true} or {\bf false}
+				@return bool, <b>true</b> or <b>false</b>
 		*/
 		bool has(const TVector3<T>& point, bool on_surface = false) const
 			throw();
 
 		/**	Test if two boxes intersect.
 				@param box the box to be tested
-				@return bool, {\bf true} if the two boxes are intersecting, {\bf false} otherwise
+				@return bool, <b>true</b> if the two boxes are intersecting, <b>false</b> otherwise
 		*/
 		bool isIntersecting(const TBox3& box) const
 			throw();
@@ -239,7 +239,7 @@ namespace BALL
 
 		/**	Test whether instance is valid.
 				Always returns true.
-				@return bool {\bf true}
+				@return bool <b>true</b>
 		*/
 		bool isValid() const
 			throw();
@@ -621,9 +621,9 @@ namespace BALL
 
 	/**	Output Operator.
 			Writes the two coordinates of the box to an output stream.
-			The vectors are enclosed by brackets.\\
-			{\bf Example:}\\
-			{\tt ((0 1 2) (7.5 3.4 10))}\\
+			The vectors are enclosed by brackets. \par
+			<b>Example:</b> \par
+			<tt>((0 1 2) (7.5 3.4 10))</tt> \par
 			@see TVector3::operator<<
 	*/
 	template <typename T>
@@ -634,7 +634,7 @@ namespace BALL
 	}
 	//@}
 
-	/**	Default three-dimensional box class of type {\bf float}
+	/**	Default three-dimensional box class of type <b>float</b>
 	*/
 	typedef TBox3<float> Box3;
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: spectrum.h,v 1.8 2002/12/12 09:48:54 oliver Exp $
+// $Id: spectrum.h,v 1.9 2003/02/21 16:05:48 anhi Exp $
 
 #ifndef BALL_NMR_SPECTRUM_H
 #define BALL_NMR_SPECTRUM_H
@@ -27,9 +27,9 @@ namespace BALL
 {
 
 	/**	A generic NMR spectrum class.
-			\\
-			{\bf Definition}\URL{BALL/NMR/spectrum.h}
-			\\
+			 \par
+			<b>Definition</b>BALL/NMR/spectrum.h
+			 \par
 	*/
 	template <typename DataT, typename PeakT, typename PositionT = typename PeakT::Position>
 	class Spectrum

@@ -36,15 +36,15 @@ namespace BALL
 	{
 
 		/** LogView class.
-				The class LogView records all messages sent to the \Ref{Log} object and
+				The class LogView records all messages sent to the  \link Log Log \endlink  object and
 				displays them as a text history. The class is derived from 
 				{\em NotificationTarget<LogStreamNotifier>} that provides the connection
-				to the \Ref{Log} object. The class \Ref{QMultiLineEdit} from the 
+				to the  \link Log Log \endlink  object. The class  \link QMultiLineEdit QMultiLineEdit \endlink  from the 
 				qt - library is responsible for the visualization of the text history.
 				Use the class LogView as a widget. There are no initializations necessary.
 				Just create this widget as a child widgets of your application and it will
-				record and show all messages sent to the \Ref{Log} object.
-				{\bf Definition:} \URL{BALL/VIEW/KERNEL/logView.h}
+				record and show all messages sent to the  \link Log Log \endlink  object.
+				<b>Definition:</b> BALL/VIEW/KERNEL/logView.h
 		*/
 		class LogView
 			: public NotificationTarget<LogStreamNotifier>,
@@ -59,8 +59,8 @@ namespace BALL
 			/** Default Constructor.
 					Construct new logView.
 					The text of {\em *this} logView is empty. The contructor connects the own
-					{\em stringstream} with the \Ref{Log} object. If a string is written into
-					\Ref{Log} {\em *this} will be notified and the string will be displayed
+					{\em stringstream} with the  \link Log Log \endlink  object. If a string is written into
+					 \link Log Log \endlink  {\em *this} will be notified and the string will be displayed
 					by {\em *this} logView. 
 					@return      LogView new constructed logView
 					@see         Log
@@ -85,8 +85,8 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} logView.
-					Remove the connection between the \Ref{Log} object and {\em *this} logView.
-					Calls \Ref{clear}.
+					Remove the connection between the  \link Log Log \endlink  object and {\em *this} logView.
+					Calls  \link clear clear \endlink .
 			*/
 			virtual ~LogView()
 				throw();
@@ -105,11 +105,11 @@ namespace BALL
 			protected:
 
 			/** Overridden notify call.
-					Will be called by \Ref{Log} whenever a string is written to it.
+					Will be called by  \link Log Log \endlink  whenever a string is written to it.
 					That string will be added to the history string of {\em *this} logView
 					and then displayed.
 					@param   source the notification source
-					@return  bool returns always {\tt true}
+					@return  bool returns always <tt>true</tt>
 			*/
 			virtual bool onNotify(LogStreamNotifier &source)
 				throw();

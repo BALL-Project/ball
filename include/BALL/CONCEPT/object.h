@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: object.h,v 1.16 2002/02/27 12:18:26 sturm Exp $ 
+// $Id: object.h,v 1.17 2003/02/21 16:01:37 anhi Exp $ 
 
 #ifndef BALL_CONCEPT_OBJECT_H
 #define BALL_CONCEPT_OBJECT_H
@@ -28,8 +28,8 @@ namespace BALL
 	/** Generic object class. This class provides unique handles for every
 			object that is an instance of a derived class of object. Together
 			with the BALL object manager this class also provides a double linked
-			list of all objects. \\
-			{\bf Definition:} \URL{BALL/CONCEPT/object.h}
+			list of all objects.  \par
+			<b>Definition:</b> BALL/CONCEPT/object.h
 	*/
 	class Object
 		: public AutoDeletable
@@ -117,47 +117,47 @@ namespace BALL
 			throw();
 
 		/** Less than operator. This method checks whether the handle of
-				{\bf this} object is less than the handle of {\tt object}
+				<b>this</b> object is less than the handle of <tt>object</tt>
 				@param	object an Object
-				@return	true, if the handle of {\bf this} is less than the handle
-								of {\tt object}
+				@return	true, if the handle of <b>this</b> is less than the handle
+								of <tt>object</tt>
 		*/
 		bool operator < (const Object& object) const
 			throw();
 
 		/** Less than or equal operator. This method checks whether the handle of
-				{\bf this} object is less than or equal to the handle of {\tt object}
+				<b>this</b> object is less than or equal to the handle of <tt>object</tt>
 				@param	object an Object
-				@return	true, if the handle of {\bf this} is less than or equal 
-								to the handle of {\tt object}
+				@return	true, if the handle of <b>this</b> is less than or equal 
+								to the handle of <tt>object</tt>
 		*/
 		bool operator <= (const Object& object) const
 			throw();
 
 		/** Greater than or equal operator. This method checks whether the
-				handle of {\bf this} object is greater than or equal to the handle
-				of {\tt object}
+				handle of <b>this</b> object is greater than or equal to the handle
+				of <tt>object</tt>
 				@param	object an Object
-				@return	true, if the handle of {\bf this} is greater than or 
-								equal to the handle of {\tt object}
+				@return	true, if the handle of <b>this</b> is greater than or 
+								equal to the handle of <tt>object</tt>
 		*/
 		bool operator >= (const Object& object) const
 			throw();
 
 		/** Greater than operator. This method checks whether the handle of
-				{\bf this} object is greater than the handle of {\tt object}
+				<b>this</b> object is greater than the handle of <tt>object</tt>
 				@param	object an Object
-				@return	true, if the handle of {\bf this} is greater than the 
-								handle of {\tt object}
+				@return	true, if the handle of <b>this</b> is greater than the 
+								handle of <tt>object</tt>
 		*/
 		bool operator > (const Object& object) const
 			throw();
 
-		/** Compare the handle of {\bf this} object with the handle of
+		/** Compare the handle of <b>this</b> object with the handle of
 				another.
 				@param	object an Object
-				@return 0, if both objects are equal, -1 if {\tt object}'s handle
-								is greater and 1 if {\bf this}'s handle is greater.
+				@return 0, if both objects are equal, -1 if <tt>object</tt>'s handle
+								is greater and 1 if <b>this</b>'s handle is greater.
 		*/
 		int compare(const Object& object) const
 			throw();

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SESFace.h,v 1.20 2002/12/17 14:13:10 anker Exp $
+// $Id: SESFace.h,v 1.21 2003/02/21 16:06:37 anhi Exp $
 
 #ifndef BALL_STRUCTURE_SESFACE_H
 #define BALL_STRUCTURE_SESFACE_H
@@ -34,7 +34,7 @@ namespace BALL
 	class SESTriangulator;
 
 	/** Generic SESFace Class.
-			{\bf Definition:} \URL{BALL/STRUCTURE/SESFace.h}
+			<b>Definition:</b> BALL/STRUCTURE/SESFace.h
 	*/
 	class SESFace	:	public GraphFace< SESVertex,SESEdge,SESFace >
 	{
@@ -66,10 +66,10 @@ namespace BALL
 		//@{
 
 		/** type of SESFace:
-				{\tt 0} spheric reentrant face
-				{\tt 1} toric reentrant face
-				{\tt 2} contact face
-				{\tt 3} singular toric reentrant face
+				<tt>0</tt> spheric reentrant face
+				<tt>1</tt> toric reentrant face
+				<tt>2</tt> contact face
+				<tt>3</tt> singular toric reentrant face
 		*/
 		enum Type
 		{
@@ -206,19 +206,19 @@ namespace BALL
 		//@{
 
 		/**	Equality operator.
-				@return bool	{\bf true}
+				@return bool	<b>true</b>
 		*/
 		virtual bool operator == (const SESFace&) const
 			throw();
 
 		/**	Inequality operator.
-				@return	bool	{\bf false}
+				@return	bool	<b>false</b>
 		*/
 		virtual bool operator != (const SESFace&) const
 			throw();
 
 		/**	Similarity operator.
-				@return	bool	{\bf true}
+				@return	bool	<b>true</b>
 		*/
 		virtual bool operator *= (const SESFace&) const
 			throw();
@@ -226,22 +226,22 @@ namespace BALL
 		/** Test whether two faces are neighboured.
 				Two faces are neighboured if they have a common edge.
 				@param	face	the face to be tested
-				@return	bool	{\bf true} if the faces are neighboured,	
-											{\bf false} otherwise
+				@return	bool	<b>true</b> if the faces are neighboured,	
+											<b>false</b> otherwise
 		*/
 		bool isNeighbouredTo(SESFace* face) const
 			throw();
 
 		/**	Test whether a toric face is free ore not.
-				@return	bool	{\bf true} if the face is toric and free,	
-											{\bf false} otherwise
+				@return	bool	<b>true</b> if the face is toric and free,	
+											<b>false</b> otherwise
 		*/
 		bool isFree() const
 			throw();
 
 		/**	Test whether a face has singular edges.
-				@return	bool	{\bf true} if the face has singular edges,	
-											{\bf false} otherwise
+				@return	bool	<b>true</b> if the face has singular edges,	
+											<b>false</b> otherwise
 		*/
 		bool hasSingularEdges() const
 			throw();

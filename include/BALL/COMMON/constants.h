@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: constants.h,v 1.8 2002/02/27 12:18:19 sturm Exp $
+// $Id: constants.h,v 1.9 2003/02/21 16:01:13 anhi Exp $
 
 #ifndef BALL_COMMON_CONSTANTS_H
 #define BALL_COMMON_CONSTANTS_H
@@ -14,15 +14,16 @@ namespace BALL
 
 		/**	@name The constants namespace.
 				This namespace contains definitions for some basic mathematical and physical constants.
-				All constants are double precision.\\
+				All constants are double precision. \par
 				There are basically two ways of accessing these constants:
 				\begin{itemize}
-					\item specify all namespaces:\\
-							{\tt float my_pi = BALL::Constants::PI}
-					\item shortcut via the {\tt using directive}:\\
-							{\tt using namespace BALL::Constants; \\float my_pi = PI;}
+					\item specify all namespaces: \par
+							<tt>float my_pi = BALL::Constants::PI</tt>
+					\item shortcut via the <tt>using directive</tt>: \par
+							<tt>using namespace BALL::Constants;  \par
+float my_pi = PI;</tt>
 				\end{itemize}
-				{\bf Definition:} \URL{BALL/COMMON/constants.h}
+				<b>Definition:</b> BALL/COMMON/constants.h
 		*/
 		//@{
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: uhligCavFreeEnergyProcessor.h,v 1.11 2002/12/22 11:45:27 sturm Exp $
+// $Id: uhligCavFreeEnergyProcessor.h,v 1.12 2003/02/21 16:06:26 anhi Exp $
 
 #ifndef BALL_SOLVATION_UHLIGCAVFREEENERGYPROCESSOR_H
 #define BALL_SOLVATION_UHLIGCAVFREEENERGYPROCESSOR_H
@@ -23,8 +23,8 @@ namespace BALL
 	/** Processor for the computation of the cavitation free energy. 
 			This processor is using the method proposed by Simonson/Bruenger, J.
 			Phys. Chem. 98:4683--4694, 1994 which is based on Uhlig, J. Phys. Chem.
-			41(9):1215--1225, 1937. \\
-			{\bf Definition:} \URL{BALL/SOLVATION/uhligCavFreeEnergyProcessor.h}
+			41(9):1215--1225, 1937.  \par
+			<b>Definition:</b> BALL/SOLVATION/uhligCavFreeEnergyProcessor.h
 	 */
 	class UhligCavFreeEnergyProcessor
 		:	public EnergyProcessor
@@ -106,7 +106,7 @@ namespace BALL
 
 			/** Default additive constant.
 					This additive constant was also found by fitting aginst experimental
-					data \Ref{Default::SURFACE_TENSION}. 
+					data  \link Default::SURFACE_TENSION Default::SURFACE_TENSION \endlink . 
 					In contrast to Simonson/Br{\"u}nger it is not zero but $0.921
 					\mathrm{kcal}\cdot\mathrm{mol}^{-1} = 3.855
 					\mathrm{kJ}\cdot\mathrm{mol}^{-1}$.

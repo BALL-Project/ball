@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyChainList.h,v 1.4 2002/02/27 12:19:34 sturm Exp $
+// $Id: pyChainList.h,v 1.5 2003/02/21 16:05:54 anhi Exp $
 
 #ifndef BALL_PYTHON_PYCHAINLIST_H
 #define BALL_PYTHON_PYCHAINLIST_H
@@ -67,7 +67,7 @@ namespace BALL
 			
 		/**	Construct from a AtomContainer
 				This constructor creates an PyChainList object from
-				all atoms of a \Ref{AtomContainer} object.
+				all atoms of a  \link AtomContainer AtomContainer \endlink  object.
 		*/
 		PyChainList(const AtomContainer& fragment, bool selected_only = false);
 

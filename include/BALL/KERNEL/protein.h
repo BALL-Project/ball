@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: protein.h,v 1.20 2003/01/08 21:13:25 oliver Exp $ 
+// $Id: protein.h,v 1.21 2003/02/21 16:03:33 anhi Exp $ 
 
 #ifndef BALL_KERNEL_PROTEIN_H
 #define BALL_KERNEL_PROTEIN_H
@@ -42,10 +42,10 @@ namespace BALL
 
 	/**	Protein Class.
 			This class is used to represent proteins.
-			A protein may contain several \Ref{Chain}, \Ref{SecondaryStructure},
-			and \Ref{Residue}.
-			\\
-			{\bf Definition:} \URL{BALL/KERNEL/protein.h}
+			A protein may contain several  \link Chain Chain \endlink ,  \link SecondaryStructure SecondaryStructure \endlink ,
+			and  \link Residue Residue \endlink .
+			 \par
+			<b>Definition:</b> BALL/KERNEL/protein.h
 	*/
 	class Protein
 		: public Molecule
@@ -120,7 +120,7 @@ namespace BALL
 		/** Assignment with cloning facility.
 				The assignment is either deep or shallow (default).
 				@param  protein the Protein to be copied (cloned)
-				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy
+				@param  deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy
 		*/
 		void set(const Protein& protein, bool deep = true)
 			throw();
@@ -325,8 +325,8 @@ namespace BALL
 		//@{
 
 		/** Internal state and consistency self-validation.
-				@return	 bool -{\tt true} if the internal state of this instance is 
-								 correct (self-validated) and consistent, {\tt false} otherwise
+				@return	 bool -<tt>true</tt> if the internal state of this instance is 
+								 correct (self-validated) and consistent, <tt>false</tt> otherwise
 		*/
 		virtual bool isValid() const
 			throw();

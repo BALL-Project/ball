@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: moleculeObjectCreator.h,v 1.6 2002/12/12 09:48:52 oliver Exp $
+// $Id: moleculeObjectCreator.h,v 1.7 2003/02/21 16:05:20 anhi Exp $
 
 #ifndef BALL_MOLVIEW_GUI_KERNEL_MOLECULEOBJECTCREATOR_H
 #define BALL_MOLVIEW_GUI_KERNEL_MOLECULEOBJECTCREATOR_H
@@ -47,15 +47,15 @@ namespace BALL
 		using VIEW::ObjectCreator;
 
 		/** MoleculeObjectCreator class.
-				The class MoleculeObjectCreator is a class for converting \Ref{PersistentObject}
-				objects that represent molecular structures into \Ref{Composite} objects.
+				The class MoleculeObjectCreator is a class for converting  \link PersistentObject PersistentObject \endlink 
+				objects that represent molecular structures into  \link Composite Composite \endlink  objects.
 				Objects that do not represent molecular structures will not be converted.
 				All necessary initialization and registration of molecular structure patterns
-				will be done in the method \Ref{initPersistenceManager}.
-				The conversion will be executed in the method \Ref{convertObject}.
-				This class is used by the class \Ref{Server} to convert incoming
-				\Ref{PersistentObject} objects to \Ref{Composite} objects. \\
-				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/KERNEL/moleculeObjectCreator.h}
+				will be done in the method  \link initPersistenceManager initPersistenceManager \endlink .
+				The conversion will be executed in the method  \link convertObject convertObject \endlink .
+				This class is used by the class  \link Server Server \endlink  to convert incoming
+				 \link PersistentObject PersistentObject \endlink  objects to  \link Composite Composite \endlink  objects.  \par
+				<b>Definition:</b> BALL/MOLVIEW/GUI/KERNEL/moleculeObjectCreator.h
 		*/
 		class MoleculeObjectCreator: public ObjectCreator
 		{
@@ -81,21 +81,21 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} moleculeObjectCreator.
-					Calls \Ref{destroy}.
+					Calls  \link destroy destroy \endlink .
 					@see         destroy
 			*/
 			virtual ~MoleculeObjectCreator()
 				throw();
 
 			/** Explicit default initialization.
-					Calls \Ref{ObjectCreator::clear}.
+					Calls  \link ObjectCreator::clear ObjectCreator::clear \endlink .
 					@see  ObjectCreator::clear
 			*/
 			virtual void clear()
 				throw();
 
 			/** Explicit destructor.
-					Calls \Ref{ObjectCreator::destroy}.
+					Calls  \link ObjectCreator::destroy ObjectCreator::destroy \endlink .
 					@see  ObjectCreator::destroy
 			*/
 			virtual void destroy()
@@ -107,11 +107,11 @@ namespace BALL
 			*/
 			//@{		
 			/** Initializes the persistence manager.
-					Initializes the \Ref{TextPersistenceManager} of {\em *this} moleculeObjectCreator.
+					Initializes the  \link TextPersistenceManager TextPersistenceManager \endlink  of {\em *this} moleculeObjectCreator.
 					Registers all necessary molecular structures available in BALL.
-					See \Ref{TextPersistenceManager} for information on how and why
-					to register \Ref{PersistentObject} classes.
-					@param  pm the \Ref{TextPersistenceManager} to be initialized
+					See  \link TextPersistenceManager TextPersistenceManager \endlink  for information on how and why
+					to register  \link PersistentObject PersistentObject \endlink  classes.
+					@param  pm the  \link TextPersistenceManager TextPersistenceManager \endlink  to be initialized
 					@see    TextPersistenceManager
 					@see    convertObject
 			*/
@@ -119,13 +119,13 @@ namespace BALL
 				throw();
 
 			/** Converts persistent objects.
-					If {\em po} is an object that represents a molecular structure (an \Ref{Atom},
-					\Ref{Protein} or \Ref{System}) it will be converted into a \Ref{Composite}
-					object and returned. If it is none of the above {\tt 0} will be returned.
-					See \Ref{TextPersistenceManager} for information
-					on how to convert \Ref{PersistentObject} objects into other objects.				
-					@param  po a reference to a \Ref{PersistentObject} to be converted
-					@return Composite* a converted \Ref{Composite} object if {\em po} could successfully be converted into a \Ref{Composite} object
+					If {\em po} is an object that represents a molecular structure (an  \link Atom Atom \endlink ,
+					 \link Protein Protein \endlink  or  \link System System \endlink ) it will be converted into a \Ref{Composite}
+					object and returned. If it is none of the above <tt>0</tt> will be returned.
+					See  \link TextPersistenceManager TextPersistenceManager \endlink  for information
+					on how to convert  \link PersistentObject PersistentObject \endlink  objects into other objects.				
+					@param  po a reference to a  \link PersistentObject PersistentObject \endlink  to be converted
+					@return Composite* a converted  \link Composite Composite \endlink  object if {\em po} could successfully be converted into a  \link Composite Composite \endlink  object
 					@see    initPersistenceManager
 			*/
 			virtual Composite *convertObject(PersistentObject &po)

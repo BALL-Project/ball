@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyMoleculeList.h,v 1.5 2002/02/27 12:19:35 sturm Exp $
+// $Id: pyMoleculeList.h,v 1.6 2003/02/21 16:05:58 anhi Exp $
 
 #ifndef BALL_PYTHON_PYMOLECULELIST_H
 #define BALL_PYTHON_PYMOLECULELIST_H
@@ -67,7 +67,7 @@ namespace BALL
 			
 		/**	Construct from a AtomContainer
 				This constructor creates an PyMoleculeList object from
-				all atoms of a \Ref{AtomContainer} object.
+				all atoms of a  \link AtomContainer AtomContainer \endlink  object.
 		*/
 		PyMoleculeList(const AtomContainer& fragment, bool selected_only = false);
 

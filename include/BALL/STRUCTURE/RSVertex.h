@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RSVertex.h,v 1.26 2002/12/17 14:13:09 anker Exp $
+// $Id: RSVertex.h,v 1.27 2003/02/21 16:06:32 anhi Exp $
 
 #ifndef BALL_STRUCTURE_RSVERTEX_H
 #define BALL_STRUCTURE_RSVERTEX_H
@@ -34,7 +34,7 @@ namespace BALL
 	class SASTriangulator;
 
 	/** Generic RSVertex Class.
-			{\bf Definition:} \URL{BALL/STRUCTURE/RSVertex.h}
+			<b>Definition:</b> BALL/STRUCTURE/RSVertex.h
 	*/
 	class RSVertex	:	public GraphVertex< RSVertex,RSEdge,RSFace >
 	{
@@ -162,21 +162,21 @@ namespace BALL
 		//@{
 
 		/**	Equality operator.
-				@return	bool	{\bf true} if the vertices are equal in all components,
-											{\bf false} otherwise
+				@return	bool	<b>true</b> if the vertices are equal in all components,
+											<b>false</b> otherwise
 		*/
 		virtual bool operator == (const RSVertex& rsvertex) const
 			throw();
 
 		/**	Inequality operator.
-				@return	bool	{\bf false} if the vertices are equal in all components,
-											{\bf true} otherwise
+				@return	bool	<b>false</b> if the vertices are equal in all components,
+											<b>true</b> otherwise
 		*/
 		virtual bool operator != (const RSVertex& rsvertex) const
 			throw();
 
 		/**	Similarity operator.
-				@return	bool	{\bf true} if the atoms are equal, {\bf false} otherwise
+				@return	bool	<b>true</b> if the atoms are equal, <b>false</b> otherwise
 		*/
 		virtual bool operator *= (const RSVertex& rsvertex) const
 			throw();

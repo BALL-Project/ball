@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertex1.h,v 1.9 2002/12/16 14:37:29 amoll Exp $
+// $Id: vertex1.h,v 1.10 2003/02/21 16:08:01 anhi Exp $
 
 #ifndef BALL_VIEW_KERNEL_VERTEX1_H
 #define BALL_VIEW_KERNEL_VERTEX1_H
@@ -24,11 +24,11 @@ namespace BALL
 				The class Vertex is used as a base class for all geometric objects that
 				have a single vertex. It provides the derived class with methods for accessing
 				that vertex. Further there is the possibility to give an address to a 
-				vector \Ref{Vector3} as vertex. So if the value of that given vector
+				vector  \link Vector3 Vector3 \endlink  as vertex. So if the value of that given vector
 				changes the value of {\em *this} vertex changes as well. To avoid 
 				segmentation faults this vector address must be valid as long as 
-				{\em *this} vertex exists. \\
-				{\bf Definition:} \URL{BALL/VIEW/KERNEL/vertex1.h}
+				{\em *this} vertex exists.  \par
+				<b>Definition:</b> BALL/VIEW/KERNEL/vertex1.h
 		*/
 		class Vertex
 		{
@@ -67,7 +67,7 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} vertex.
-					Calls \Ref{destroy}.
+					Calls  \link destroy destroy \endlink .
 					@see         destroy
 			*/
 			virtual ~Vertex()
@@ -95,7 +95,7 @@ namespace BALL
 			/** Assignment.
 					Assign the vertex {\em v} to {\em *this} vertex.
 					The vector and the vertex address of {\em *this} vertex is initialized 
-					to the vector and vertex address of the vertex {\em v}.\\
+					to the vector and vertex address of the vertex {\em v}. \par
 					@param       v the vertex to be copied
 					@see         setVertex
 					@see         setVertexAddress
@@ -106,9 +106,9 @@ namespace BALL
 
 			/** Assignment operator.
 					Assign the vertex {\em v} to {\em *this} vertex.
-					Calls \Ref{set}.
+					Calls  \link set set \endlink .
 					The vector and the vertex address of {\em *this} vertex is initialized
-					to the vector and the vertex address of the vertex {\em v}.\\
+					to the vector and the vertex address of the vertex {\em v}. \par
 					@param       v the vertex to be copied
 					@return      Vertex& constant reference of {\em *this} vertex
 					@see         set
@@ -118,9 +118,9 @@ namespace BALL
 
 			/** Copying.
 					Copy {\em *this} vertex to the vertex {\em v}.
-					Calls \Ref{set}.
+					Calls  \link set set \endlink .
 					The vector and the vertex address of {\em *this} vertex is initialized
-					to the vector and the vertex address of the vertex {\em v}.\\
+					to the vector and the vertex address of the vertex {\em v}. \par
 					@param       v the vertex to be assigned to
 					@see         set
 			*/
@@ -174,13 +174,13 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the vector of {\em *this} vertex.
-					For further information see \Ref{getVertex}.
+					For further information see  \link getVertex getVertex \endlink .
 			*/
 			const Vector3& getVertex() const
 				throw();
 
 			/** Inspection of the vector of {\em *this} vertex.
-					Access the vector of {\em *this} vertex by using \Ref{Vector3}.
+					Access the vector of {\em *this} vertex by using  \link Vector3 Vector3 \endlink .
 					@param       v the vector receiving the vector of {\em *this} vertex
 					@see         setVertex
 					@see         Vector3
@@ -189,7 +189,7 @@ namespace BALL
 				throw();
 
 			/** Inspection of the components of the vector of {\em *this} vertex.
-					Access the components of the vector of {\em *this} vertex by using \Ref{Real}.
+					Access the components of the vector of {\em *this} vertex by using  \link Real Real \endlink .
 					@param       x the x component of the vector of {\em *this} vertex
 					@param       y the y component of the vector of {\em *this} vertex
 					@param       z the z component of the vector of {\em *this} vertex
@@ -247,8 +247,8 @@ namespace BALL
 			/** Vertex address test.
 					Tests if the vertex address of {\em *this} vertex points to the vector
 					of {\em *this} vertex.
-					@return			bool {\tt true} if the vertex address of {\em *this} vertex points to the vector of {\em *this} vertex.
-					 						{\tt false} otherwise
+					@return			bool <tt>true</tt> if the vertex address of {\em *this} vertex points to the vector of {\em *this} vertex.
+					 						<tt>false</tt> otherwise
 					@see        setVertexAddress					
 					@see        getVertexAddress					
 					@see        setDefaultVertexAddress					
@@ -265,11 +265,11 @@ namespace BALL
 					Initiate self-validation of the internal state and data structure consistencies
 					of {\em *this} vertex.
 					If the internal state of {\em *this} vertex is correct (self-validated) and 
-					consistent {\tt true} is returned, {\tt false} otherwise. 
+					consistent <tt>true</tt> is returned, <tt>false</tt> otherwise. 
 					Calls {Vector3::isValid}.
 					@return			bool -
-											{\tt true} if the internal state of {\em *this} vertex is correct (self-validated) and consistent,
-					 						{\tt false} otherwise
+											<tt>true</tt> if the internal state of {\em *this} vertex is correct (self-validated) and consistent,
+					 						<tt>false</tt> otherwise
 					@see        Vector3::isValid
 			*/
 			virtual bool isValid() const

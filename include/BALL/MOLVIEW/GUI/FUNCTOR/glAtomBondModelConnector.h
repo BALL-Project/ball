@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glAtomBondModelConnector.h,v 1.8 2003/01/06 17:42:36 amoll Exp $
+// $Id: glAtomBondModelConnector.h,v 1.9 2003/02/21 16:05:12 anhi Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_GLATOMBONDMODELCONNECTOR_H
 #define BALL_MOLVIEW_FUNCTOR_GLATOMBONDMODELCONNECTOR_H
@@ -36,12 +36,12 @@ namespace BALL
 		
 		/** GLAtomBondModelConnector class.
 				The class GLAtomBondModelConnector is derived from the class 
-				\Ref{AtomBondModelConnector} and extents this class by overriding the creation
+				 \link AtomBondModelConnector AtomBondModelConnector \endlink  and extents this class by overriding the creation
 				methods used for creating the primitives. These new primitives contain
 				OpenGL implementation to generate the graphical visualization of geometric
 				shapes they present.
-				This class has the same functionality as its base class \Ref{AtomBondModelConnector}. \\
-				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/FUNCTOR/glAtomBondModelConnector.h}
+				This class has the same functionality as its base class  \link AtomBondModelConnector AtomBondModelConnector \endlink .  \par
+				<b>Definition:</b> BALL/MOLVIEW/GUI/FUNCTOR/glAtomBondModelConnector.h
 		*/
 		class GLAtomBondModelConnector: public AtomBondModelConnector
 		{
@@ -65,7 +65,7 @@ namespace BALL
 					{\em connector}. Initializes the state of {\em this} glAtomBondModelConnector 
 					to the state of {\em connector}.
 					@param       connector the glAtomBondModelConnector to be copied
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em connector}
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of {\em connector}
 					@return      GLAtomBondModelConnector new constructed glAtomBondModelConnector copied from {\em connector}
 					@see         AtomBondModelConnector
 			*/
@@ -79,7 +79,7 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} glAtomBondModelConnector.
-					Calls \Ref{AtomBondModelConnector::destroy}.
+					Calls  \link AtomBondModelConnector::destroy AtomBondModelConnector::destroy \endlink .
 					@see  AtomBondModelConnector
 			*/
 			virtual ~GLAtomBondModelConnector()
@@ -94,16 +94,16 @@ namespace BALL
 					for generating the graphical representation of the shapes they
 					represent.
 					This methods are overridden methods of the base class 
-					\Ref{AtomBondModelConnector}.
+					 \link AtomBondModelConnector AtomBondModelConnector \endlink .
 					@see  AtomBondModelConnector
 			*/
 			//@{
 			/** Create a one colored line.
-					Create a \Ref{GLLine} object and returns it as \Ref{Line}.
-					This overridden method of the class \Ref{AtomBondModelConnector} creates
+					Create a  \link GLLine GLLine \endlink  object and returns it as  \link Line Line \endlink .
+					This overridden method of the class  \link AtomBondModelConnector AtomBondModelConnector \endlink  creates
 					a primitive with openGL implementation.
-					The method \Ref{operator()} uses this method to create one colored
-					lines for \Ref{Bond} objects whose \Ref{Atom} objects have the same
+					The method  \link operator() operator() \endlink  uses this method to create one colored
+					lines for  \link Bond Bond \endlink  objects whose  \link Atom Atom \endlink  objects have the same
 					element types and thus the same color.
 					@see  GLLine
 					@see  Line
@@ -114,11 +114,11 @@ namespace BALL
 			virtual Line* createLine_();
 
 			/** Create a two colored line.
-					Create a \Ref{GLTwoColoredLine} object and returns it as \Ref{TwoColoredLine}.
-					This overridden method of the class \Ref{AtomBondModelConnector} creates
+					Create a  \link GLTwoColoredLine GLTwoColoredLine \endlink  object and returns it as  \link TwoColoredLine TwoColoredLine \endlink .
+					This overridden method of the class  \link AtomBondModelConnector AtomBondModelConnector \endlink  creates
 					a primitive with openGL implementation.
-					The method \Ref{operator()} uses this method to create two colored
-					lines for \Ref{Bond} objects whose \Ref{Atom} objects have different
+					The method  \link operator() operator() \endlink  uses this method to create two colored
+					lines for  \link Bond Bond \endlink  objects whose  \link Atom Atom \endlink  objects have different
 					element types and thus different colors.
 					@see  GLTwoColoredLine
 					@see  TwoColoredLine
@@ -129,11 +129,11 @@ namespace BALL
 			virtual TwoColoredLine* createTwoColoredLine_();
 
 			/** Create a one colored tube.
-					Create a \Ref{GLTube} object and returns it as \Ref{Tube}.
-					This overridden method of the class \Ref{AtomBondModelConnector} creates
+					Create a  \link GLTube GLTube \endlink  object and returns it as  \link Tube Tube \endlink .
+					This overridden method of the class  \link AtomBondModelConnector AtomBondModelConnector \endlink  creates
 					a primitive with openGL implementation.
-					The method \Ref{operator()} uses this method to create one colored
-					tubes for \Ref{Bond} objects whose \Ref{Atom} objects have the same
+					The method  \link operator() operator() \endlink  uses this method to create one colored
+					tubes for  \link Bond Bond \endlink  objects whose  \link Atom Atom \endlink  objects have the same
 					element types and thus the same color.
 					@see  GLTube
 					@see  Tube
@@ -144,11 +144,11 @@ namespace BALL
 			virtual Tube* createTube_();
 
 			/** Create a two colored tube.
-					Create a \Ref{GLTwoColoredTube} object and returns it as \Ref{TwoColoredTube}.
-					This overridden method of the class \Ref{AtomBondModelConnector} creates
+					Create a  \link GLTwoColoredTube GLTwoColoredTube \endlink  object and returns it as  \link TwoColoredTube TwoColoredTube \endlink .
+					This overridden method of the class  \link AtomBondModelConnector AtomBondModelConnector \endlink  creates
 					a primitive with openGL implementation.
-					The method \Ref{operator()} uses this method to create two colored
-					tubes for \Ref{Bond} objects whose \Ref{Atom} objects have different
+					The method  \link operator() operator() \endlink  uses this method to create two colored
+					tubes for  \link Bond Bond \endlink  objects whose  \link Atom Atom \endlink  objects have different
 					element types and thus different colors.
 					@see  GLTwoColoredTube
 					@see  TwoColoredTube

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.h,v 1.20 2002/12/21 11:10:24 oliver Exp $
+// $Id: PDBFile.h,v 1.21 2003/02/21 16:02:55 anhi Exp $
 
 #ifndef BALL_FORMAT_PDBFILE_H
 #define BALL_FORMAT_PDBFILE_H
@@ -54,8 +54,8 @@ namespace BALL
 
 	
 	/**	PDB file class.
-			\\
-			{\bf Definition:} \URL{BALL/FORMAT/PDBFile.h}\\
+			 \par
+			<b>Definition:</b> BALL/FORMAT/PDBFile.h
 	*/
 	class PDBFile
 		: public GenericPDBFile
@@ -78,8 +78,8 @@ namespace BALL
 			throw(Exception::FileNotFound);
 
 		/** Detailed constructor.
-				The file named {\tt filename} is opened. By default, the file is
-				opened for reading. To open it for writing, use {\tt open_mode = File::OUT}.
+				The file named <tt>filename</tt> is opened. By default, the file is
+				opened for reading. To open it for writing, use <tt>open_mode = File::OUT</tt>.
 				@param	filename the name of the file to open
 				@param	open_mode the file mode
 		*/

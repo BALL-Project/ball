@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricCollector.h,v 1.8 2002/12/12 09:30:36 oliver Exp $
+// $Id: geometricCollector.h,v 1.9 2003/02/21 16:07:14 anhi Exp $
 
 #ifndef BALL_VIEW_FUNCTOR_GEOMETRICCOLLECTOR_H
 #define BALL_VIEW_FUNCTOR_GEOMETRICCOLLECTOR_H
@@ -23,13 +23,13 @@ namespace BALL
 	namespace VIEW
 	{
 		/** GeometricCollector class.
-				The class GeometricCollector is a \Ref{Processor} that collects
-				\Ref{GeometricObject} objects that can either be selected or
+				The class GeometricCollector is a  \link Processor Processor \endlink  that collects
+				 \link GeometricObject GeometricObject \endlink  objects that can either be selected or
 				not. It is also a base class for collector objects that can collect
-				\Ref{Composite} objects. Overrides the	methods \Ref{operator},
-				\Ref{start} and \Ref{finish} to	change the collection filter criteria. 
-				This class is used by the class \Ref{Scene} to collect picked objects. \\
-				{\bf Definition:} \URL{BALL/VIEW/FUNCTOR/geometricCollector.h}
+				 \link Composite Composite \endlink  objects. Overrides the	methods  \link operator operator \endlink ,
+				 \link start start \endlink  and  \link finish finish \endlink  to	change the collection filter criteria. 
+				This class is used by the class  \link Scene Scene \endlink  to collect picked objects.  \par
+				<b>Definition:</b> BALL/VIEW/FUNCTOR/geometricCollector.h
 				@see     GeometricObject
 				@see     Scene
 		*/
@@ -43,7 +43,7 @@ namespace BALL
 
 			/** Default Constructor.
 					Constructs new geometricCollector.
-					Calls \Ref{clear}.
+					Calls  \link clear clear \endlink .
 					@return      GeometricCollector new constructed geometricCollector
 					@see         clear
 			*/
@@ -57,7 +57,7 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} geometricCollector.
-					Calls \Ref{destroy}.
+					Calls  \link destroy destroy \endlink .
 					@see         destroy
 			*/
 			virtual ~GeometricCollector()
@@ -66,7 +66,7 @@ namespace BALL
 			/** Explicit default initialization.
 					Resets the state of {\em *this} geometricCollector to:
 					\begin{itemize}
-					  \item  collect all \Ref{GeometricObject} objects (independent of the selection property)
+					  \item  collect all  \link GeometricObject GeometricObject \endlink  objects (independent of the selection property)
 					  \item  the collection list is empty
 					\end{itemize}
 			*/
@@ -86,11 +86,11 @@ namespace BALL
 			//@{
 
 			/** Mutable inspection of the collection list.
-					Accesses the mutable reference of the collected \Ref{GeometricObject}
-					objects as a list of \Ref{Composite} objects from {\em *this}
+					Accesses the mutable reference of the collected  \link GeometricObject GeometricObject \endlink 
+					objects as a list of  \link Composite Composite \endlink  objects from {\em *this}
 					geometricCollector.
-					@return  List<Composite*> a mutable reference to the collected \Ref{GeometricObject} objects 
-									 returned as a list of \Ref{Composite} objects
+					@return  List<Composite*> a mutable reference to the collected  \link GeometricObject GeometricObject \endlink  objects 
+									 returned as a list of  \link Composite Composite \endlink  objects
 					@see     collectSelectedGeometricObjects
 					@see     collectingSelectedGeometricObjects
 					@see     Composite
@@ -107,8 +107,8 @@ namespace BALL
 
 			/** Changes the collection mode.
 					Changes the collection mode of {\em *this} geometricCollection.
-					@param  selected {\tt true} if {\em only selected} \Ref{GeometricObject} objects should be collected, 
-									{\tt false} if {\em all} \Ref{GeometricObject} object should be selected
+					@param  selected <tt>true</tt> if {\em only selected}  \link GeometricObject GeometricObject \endlink  objects should be collected, 
+									<tt>false</tt> if {\em all}  \link GeometricObject GeometricObject \endlink  object should be selected
 					@see    getCollection
 					@see    GeometricObject
 			*/
@@ -117,10 +117,10 @@ namespace BALL
 
 			/** Inspection of the collection mode.
 					Checks the collection mode of {\em *this} geometricCollector.
-					If {\tt true} is returned than {\em only selected} \Ref{GeometricObject}
-					objects are collected. If {\tt false} is returned than {\em all} 
-					\Ref{GeometricObject} objects are collected.
-					@return      bool {\tt true} if {\em only selected} \Ref{GeometricObject} objects are collected
+					If <tt>true</tt> is returned than {\em only selected}  \link GeometricObject GeometricObject \endlink 
+					objects are collected. If <tt>false</tt> is returned than {\em all} 
+					 \link GeometricObject GeometricObject \endlink  objects are collected.
+					@return      bool <tt>true</tt> if {\em only selected}  \link GeometricObject GeometricObject \endlink  objects are collected
 					@see         getCollection
 					@see         GeometricObject
 			*/
@@ -134,24 +134,24 @@ namespace BALL
 
 			/** Start method.
 					Empty for further purpose. Override this method for initializing the geometricCollector.
-					@return bool {\tt true} if the start of {\em *this} geometricCollection was successful, {\tt false} otherwise
+					@return bool <tt>true</tt> if the start of {\em *this} geometricCollection was successful, <tt>false</tt> otherwise
 			*/
 			virtual bool start()
 				throw();
 			
 			/** Finish method.
 					Empty for further purpose. Override this method for finalizing the geometricCollector.
-					@return bool {\tt true} if the finish of {\em *this} geometricCollection was successful, {\tt false} otherwise
+					@return bool <tt>true</tt> if the finish of {\em *this} geometricCollection was successful, <tt>false</tt> otherwise
 			*/
 			virtual bool finish()
 				throw();
 			
 			/**	Operator ().
-					Collects all \Ref{GeometricObject} objects that are
-					available in the given \Ref{Composite} object {\em composite}. The collected
-					\Ref{GeometricObject} objects can either be selected or not.
-					Uses the method \Ref{collectSelectedGeometricObjects} to switch the filter criteria.
-					@param  composite the \Ref{Composite} to be filtered for \Ref{GeometricObject} objects
+					Collects all  \link GeometricObject GeometricObject \endlink  objects that are
+					available in the given  \link Composite Composite \endlink  object {\em composite}. The collected
+					 \link GeometricObject GeometricObject \endlink  objects can either be selected or not.
+					Uses the method  \link collectSelectedGeometricObjects collectSelectedGeometricObjects \endlink  to switch the filter criteria.
+					@param  composite the  \link Composite Composite \endlink  to be filtered for  \link GeometricObject GeometricObject \endlink  objects
 					@return Processor::Result the result of {\em *this} geometricCollection
 					@see    collectSelectedGeometricObjects
 					@see    GeometricObject

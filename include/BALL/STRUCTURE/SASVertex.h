@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SASVertex.h,v 1.3 2002/12/17 14:13:10 anker Exp $
+// $Id: SASVertex.h,v 1.4 2003/02/21 16:06:35 anhi Exp $
 
 #ifndef BALL_STRUCTURE_SASVERTEX_H
 #define BALL_STRUCTURE_SASVERTEX_H
@@ -24,7 +24,7 @@ namespace BALL
 	class SASTriangulator;
 
 	/** Generic SASVertex Class.	
-      {\bf Definition:} \URL{BALL/STRUCTURE/SASVertex.h}
+      <b>Definition:</b> BALL/STRUCTURE/SASVertex.h
 	*/
 	class SASVertex	:	public GraphVertex< SASVertex,SASEdge,SASFace >
 	{
@@ -131,20 +131,20 @@ namespace BALL
 		//@{
 
 		/**	Equality operator.
-				@return	bool	{\bf true}
+				@return	bool	<b>true</b>
 		*/
 		virtual bool operator == (const SASVertex&) const
 			throw();
 
 		/**	Inequality operator.
-				@return	bool	{\bf false}
+				@return	bool	<b>false</b>
 		*/
 		virtual bool operator != (const SASVertex&) const
 			throw();
 
 		/**	Similarity operator.
-				@return	bool	{\bf true} if the points the SASVertices lie on are	
-											equal, {\bf false} otherwise
+				@return	bool	<b>true</b> if the points the SASVertices lie on are	
+											equal, <b>false</b> otherwise
 		*/
 		virtual bool operator *= (const SASVertex&) const
 			throw();

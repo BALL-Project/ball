@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RDFIntegrator.h,v 1.11 2002/02/27 12:19:41 sturm Exp $
+// $Id: RDFIntegrator.h,v 1.12 2003/02/21 16:06:27 anhi Exp $
 
 #ifndef BALL_STRUCTURE_RDFINTEGRATOR_H
 #define BALL_STRUCTURE_RDFINTEGRATOR_H
@@ -15,8 +15,8 @@ namespace BALL
 
 	/** Integrator class for radial distribution functions.
 			This class provides the integration functionality needed for the
-			computation of interaction energies.	\\
-			{\bf Definition:} \URL{BALL/STRUCTURE/RDFIntegrator.h}
+			computation of interaction energies.	 \par
+			<b>Definition:</b> BALL/STRUCTURE/RDFIntegrator.h
   */
 	class RDFIntegrator
 	{

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glObject.h,v 1.11 2002/12/16 12:22:48 sturm Exp $
+// $Id: glObject.h,v 1.12 2003/02/21 16:07:27 anhi Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLOBJECT_H
 #define BALL_VIEW_GUI_KERNEL_GLOBJECT_H
@@ -17,13 +17,13 @@ namespace BALL
 		class CompositeDescriptor;
 		
 		/** GLObject class.
-				{\bf Definition:} \URL{BALL/VIEW/GUI/KERNEL/glObject.h}\\ \\
+				<b>Definition:</b> BALL/VIEW/GUI/KERNEL/glObject.h
 				The class GLObject is the base class for all geometric primitives that have a 
 				graphical representation. GLObject declares an interface for the drawing mechanism
 				that is used for creating the visualisation.
 				All geometric primitives with graphical representation must be derived from this class.
 				The class glObject has access to the class glPrimitiveManager that holds a number
-				of primitives in variable resolutions. See \Ref{GLPrimitiveManager} for further
+				of primitives in variable resolutions. See  \link GLPrimitiveManager GLPrimitiveManager \endlink  for further
 				information concerning available primitives.
 		*/
 		class GLObject
@@ -53,7 +53,7 @@ namespace BALL
 			
 			/** Copy constructor.
 					Construct new glObject by copying the glObject {\em GL_object}.
-					The glPrimitiveManager of {\em *this} glObject is initialized to the glPrimitiveManager of the glObject {\em GL_object}.\\
+					The glPrimitiveManager of {\em *this} glObject is initialized to the glPrimitiveManager of the glObject {\em GL_object}. \par
 					@param       GL_object the glObject to be copied 
 					@return      GLObject new constructed glObject cloned from {\em GL_object}
 					@see         GLPrimitiveManager
@@ -69,7 +69,7 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} glObject.
-					Calls \Ref{destroy}.
+					Calls  \link destroy destroy \endlink .
 					@see         destroy
 			*/
 			virtual ~GLObject()
@@ -94,7 +94,7 @@ namespace BALL
 
 			/** Assignment.
 					Assign the glObject {\em GL_object} to {\em *this} glObject.
-					The glPrimitiveManager of {\em *this} glObject is initialized to the glPrimitiveManager of the glObject {\em GL_object}.\\
+					The glPrimitiveManager of {\em *this} glObject is initialized to the glPrimitiveManager of the glObject {\em GL_object}. \par
 					@param       GL_object the glObject to be copied
 					@see         GLObject
 			*/
@@ -103,8 +103,8 @@ namespace BALL
 
 			/** Assignment operator.
 					Assign the glObject {\em GL_object} to {\em *this} glObject.
-					Calls \Ref{set}.
-					The glPrimitiveManager of {\em *this} glObject is initialized to the glPrimitiveManager of the glObject {\em GL_object}.\\
+					Calls  \link set set \endlink .
+					The glPrimitiveManager of {\em *this} glObject is initialized to the glPrimitiveManager of the glObject {\em GL_object}. \par
 					@param       GL_object the glObject to be copied
 					@return      GLObject& constant reference of {\em *this} glObject
 					@see         set
@@ -114,8 +114,8 @@ namespace BALL
 
 			/** Copying.
 					Copy {\em *this} glObject to the glObject {\em GL_object}.
-					Calls \Ref{set}.
-					The glPrimitiveManager of {\em *this} glObject is initialized to the glPrimitiveManager of the glObject {\em GL_object}.\\
+					Calls  \link set set \endlink .
+					The glPrimitiveManager of {\em *this} glObject is initialized to the glPrimitiveManager of the glObject {\em GL_object}. \par
 					@param       GL_object the glObject to be assigned to
 					@see         set
 			*/
@@ -139,9 +139,9 @@ namespace BALL
 					Initiate self-validation of the internal state and data structure consistencies
 					of {\em *this} glObject.
 					If the internal state of {\em *this} glObject is correct (self-validated) and 
-					consistent {\tt true} is returned, {\tt false} otherwise. 
+					consistent <tt>true</tt> is returned, <tt>false</tt> otherwise. 
 					Calls {GLPrimitiveManager::isValid}.
-					@return			bool {\tt true} if the internal state of {\em *this} glObject is correct (self-validated) and consistent, {\tt false} otherwise
+					@return			bool <tt>true</tt> if the internal state of {\em *this} glObject is correct (self-validated) and consistent, <tt>false</tt> otherwise
 					@see        GLPrimitiveManager::isValid
 			*/
 			virtual bool isValid() const
@@ -171,7 +171,7 @@ namespace BALL
 					must be used for naming the graphical object (necessary for picking mode in the
 					scene).
 					@param     with_names flag if the graphical objects must have a name
-					@return    bool {\tt true} if successful,	{\tt false} otherwise
+					@return    bool <tt>true</tt> if successful,	<tt>false</tt> otherwise
 					@see       getGLPrimitiveManager
 			*/
 			virtual bool draw(bool with_names = false)
@@ -179,9 +179,9 @@ namespace BALL
 
 			/** Export method.
 					This method handles the export of {\em *this} glObject into another
-					format (eg. POVRAY, VRML)\\
-				  {\bf Note:} Not yet implemented.
-					@return    bool {\tt true} if successful,	{\tt false} otherwise
+					format (eg. POVRAY, VRML) \par
+				  <b>Note:</b> Not yet implemented.
+					@return    bool <tt>true</tt> if successful,	<tt>false</tt> otherwise
 			*/
 			virtual bool extract()
 				throw();
@@ -199,9 +199,9 @@ namespace BALL
 			//@{
 
 			/** Internal primitive manager register method.
-					This methods registers a \Ref{GLPrimitiveManager} which contains a number
+					This methods registers a  \link GLPrimitiveManager GLPrimitiveManager \endlink  which contains a number
 					of predefined primitives in variable resolutions. This method will
-					be called for each \Ref{Scene} by the render engine before calling the method
+					be called for each  \link Scene Scene \endlink  by the render engine before calling the method
 					draw. 
 					@param    GL_primitive_manager the primitive manager for the current scene
 					@see      draw
@@ -212,7 +212,7 @@ namespace BALL
 				throw();
 			
 			/** Internal primitive manager access method.
-					If the primitive uses predefined shapes that are available in \Ref{GLPrimitiveManager}
+					If the primitive uses predefined shapes that are available in  \link GLPrimitiveManager GLPrimitiveManager \endlink 
 					then this method should be used in the draw method to access these shapes.
 					There is the possibility that before each call to the draw method the primitive
 					manager changes. Therefore it is necessary that this method should be used

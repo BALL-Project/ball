@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector4.h,v 1.40 2002/12/12 09:48:46 oliver Exp $
+// $Id: vector4.h,v 1.41 2003/02/21 16:04:03 anhi Exp $
 
 #ifndef BALL_MATHS_VECTOR4_H
 #define BALL_MATHS_VECTOR4_H
@@ -59,8 +59,8 @@ namespace BALL
 		throw();
 
 	/**	Generic Four-Dimensional Vector.
-			{\bf Definition:} \URL{BALL/MATHS/vector4.h}
-			\\
+			<b>Definition:</b> BALL/MATHS/vector4.h
+			 \par
 	*/
 	template <typename T>
 	class TVector4
@@ -75,34 +75,34 @@ namespace BALL
 
 		/**	Default constructor.
 				This method creates a new TVector4 object. The four components
-				are initialized to {\tt (T)0}.
+				are initialized to <tt>(T)0</tt>.
 		*/
 		TVector4()
 			throw();
 
 		/**	Array constructor.
 				This constructor creates a TVector4 object from the first
-				four elements pointed by {\tt ptr}.
+				four elements pointed by <tt>ptr</tt>.
 				@param ptr the array to construct from
-				@exception NullPointer if {\tt ptr == 0}
+				@exception NullPointer if <tt>ptr == 0</tt>
 		*/
 		TVector4(const T* ptr)
 			throw(Exception::NullPointer);
 
    /** Scalar constructor.
         Create a new vector with all components set
-        to the same {\tt value}.
+        to the same <tt>value</tt>.
         @param  value the value of all components
     */
     explicit TVector4(const T& value)
       throw();                                                                                                                                                                     
 
 		/**	Detailed constructor.
-				Create a new TVector4 object from three or four values of type {\tt T}.
-				@param	x assigned to {\tt x}
-				@param	y assigned to {\tt y}
-				@param	z assigned to {\tt z}
-				@param	h assigned to {\tt h}, default: 1 ; 
+				Create a new TVector4 object from three or four values of type <tt>T</tt>.
+				@param	x assigned to <tt>x</tt>
+				@param	y assigned to <tt>y</tt>
+				@param	z assigned to <tt>z</tt>
+				@param	h assigned to <tt>h</tt>, default: 1 ; 
 		*/
 		TVector4(const T& x, const T& y, const T& z, const T& h = (T)1)
 			throw();
@@ -136,10 +136,10 @@ namespace BALL
 		//@{
 	
 		/**	Assign from an array.
-				Assign the four components {\tt x}, {\tt y}, {\tt z} and {\tt h} from
-				the first four elements of the array pointed to by {\tt ptr}.
+				Assign the four components <tt>x</tt>, <tt>y</tt>, {\tt z} and {\tt h} from
+				the first four elements of the array pointed to by <tt>ptr</tt>.
 				@param ptr an array
-				@exception Nullpointer if {\tt ptr == 0}
+				@exception Nullpointer if <tt>ptr == 0</tt>
 		*/
 		void set(const T* ptr)
       throw(Exception::NullPointer);
@@ -162,7 +162,7 @@ namespace BALL
 		/**	Array assignment operator.
 				Assigns the first four elements of an array to the vector components x, y, z and h.
 				@param	ptr the array
-				@exception	NullPointer if {\tt ptr == 0}
+				@exception	NullPointer if <tt>ptr == 0</tt>
 		*/
 		const TVector4& operator = (const T* ptr)
       throw(Exception::NullPointer);
@@ -182,15 +182,15 @@ namespace BALL
 			throw();
 
 		/**	Assign to an array.
-				Sets the first four array elements pointed of array {\tt ptr} 
+				Sets the first four array elements pointed of array <tt>ptr</tt> 
 				to the values of the four vector components.
 				@param ptr the array
-				@exception	NullPointer if {\tt ptr == 0}
+				@exception	NullPointer if <tt>ptr == 0</tt>
 		*/
 		void get(T* ptr) const
       throw(Exception::NullPointer);
 
-		/**	Assign to four variables of type {\tt T}.
+		/**	Assign to four variables of type <tt>T</tt>.
 				@param	rx the x component
 				@param	ry the y component
 				@param	rz the z component
@@ -259,13 +259,13 @@ namespace BALL
       throw();
 
 		/**	Mutable array-like access to the components.
-				@exception Exception::IndexOverflow if {\tt index > 3}
+				@exception Exception::IndexOverflow if <tt>index > 3</tt>
 		*/
 		T& operator [] (Position position)
       throw(Exception::IndexOverflow);
 
 		/**	Constant array-like access to the components.
-				@exception Exception::IndexOverflow if {\tt index > 3}
+				@exception Exception::IndexOverflow if <tt>index > 3</tt>
 		*/
 		const T& operator [] (Position position) const
       throw(Exception::IndexOverflow);
@@ -300,15 +300,15 @@ namespace BALL
       throw();
 
 		/**	Scalar product.
-				Return {\tt TVector4(x * scalar, y * scalar, z * scalar, h * scalar)}.
+				Return <tt>TVector4(x * scalar, y * scalar, z * scalar, h * scalar)</tt>.
 				@param scalar, the scalar to multiply by
-				@return TVector4 the scalar product of this vector and {\tt scalar}
+				@return TVector4 the scalar product of this vector and <tt>scalar</tt>
 		*/
 		TVector4 operator * (const T& scalar)
       throw();
 
 		/**	Multiply by a scalar.
-				Multiply all components of the vector with a {\tt scalar}.
+				Multiply all components of the vector with a <tt>scalar</tt>.
 				@param scalar the scalar to multiply by
 				@return TVector4& {\em *this}
 		*/
@@ -316,10 +316,10 @@ namespace BALL
       throw();
 
 		/**	Fraction of a vector.
-				Return {\tt TVector4(x / scalar, y / scalar, z / scalar, h / scalar)}.
+				Return <tt>TVector4(x / scalar, y / scalar, z / scalar, h / scalar)</tt>.
 				@param scalar the scalar to divide by
 				@return TVector4 
-				@exception Exception::DivisionByZero if {\tt scalar == (T)0}
+				@exception Exception::DivisionByZero if <tt>scalar == (T)0</tt>
 		*/
 		TVector4 operator / (const T& scalar)
       throw(Exception::DivisionByZero);
@@ -327,14 +327,14 @@ namespace BALL
 		/**	Divide a vector by a scalar.
 				@param scalar the scalar to divide by
 				@return TVector4&, {\em *this}
-				@exception Exception::DivisionByZero if {\tt scalar == (T)0}
+				@exception Exception::DivisionByZero if <tt>scalar == (T)0</tt>
 		*/
 		TVector4& operator /= (const T& scalar)
       throw(Exception::DivisionByZero);
 
 		/** Dot product.
 				@param vector the vector to multiply by
-				@return T the dot product of this vector with {\tt vector}.
+				@return T the dot product of this vector with <tt>vector</tt>.
 		*/
 		T operator * (const TVector4& vector) const
       throw();
@@ -362,16 +362,16 @@ namespace BALL
 			
 		/**	Equality operator.
 				The function Maths::isEqual is used to compare the values. 
-				\Ref{Maths::isEqual}
-				@return bool, {\bf true} if all four vector components are equal, {\bf false} otherwise
+				 \link Maths::isEqual Maths::isEqual \endlink 
+				@return bool, <b>true</b> if all four vector components are equal, <b>false</b> otherwise
 		*/
 		bool operator == (const TVector4& vector) const
       throw();
 
 		/**	Inequality operator.
 				The function Maths::isEqual is used to compare the values. 
-				\Ref{Maths::isEqual}
-				@return bool, {\bf true} if the two vectors differ in at least one component, {\bf false} otherwise
+				 \link Maths::isEqual Maths::isEqual \endlink 
+				@return bool, <b>true</b> if the two vectors differ in at least one component, <b>false</b> otherwise
 		*/
 		bool operator != (const TVector4& vector) const
       throw();
@@ -388,7 +388,7 @@ namespace BALL
 
 		/**	Test whether instance is valid.
 				Always returns true
-				@return bool {\bf true}
+				@return bool <b>true</b>
 		*/
 		bool isValid() const
       throw();
@@ -957,7 +957,7 @@ namespace BALL
 
 
 	/**	Input operator
-			Reads four values of type {\bf T} from an input stream and assigns them to 
+			Reads four values of type <b>T</b> from an input stream and assigns them to 
 			the components x, y, z and h of the vector.
 	*/
 	template <typename T>
@@ -971,9 +971,9 @@ namespace BALL
 
 	/**	Output Operator.
 			Write the four components of the vector to an output stream.
-			The values are enclosed by brackets.\\
-			{\bf Example:}\\
-			{\tt (0.1 2.0 0 1)}
+			The values are enclosed by brackets. \par
+			<b>Example:</b> \par
+			<tt>(0.1 2.0 0 1)</tt>
 	*/
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TVector4<T>& v)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecule.h,v 1.22 2003/01/08 21:13:25 oliver Exp $
+// $Id: molecule.h,v 1.23 2003/02/21 16:03:28 anhi Exp $
 
 #ifndef BALL_KERNEL_MOLECULE_H
 #define BALL_KERNEL_MOLECULE_H
@@ -24,8 +24,8 @@ namespace BALL
 	class System;
 
 	/**	Molecule class.
-			Used to represent general molecules without specific properties.\\
-			{\bf Definition:}\URL{BALL/KERNEL/molecule.h}
+			Used to represent general molecules without specific properties. \par
+			<b>Definition:</b>BALL/KERNEL/molecule.h
 	*/
 	class Molecule
 		: public AtomContainer
@@ -95,7 +95,7 @@ namespace BALL
 
 		/**	Assign from another Molecule.
 				@param molecule	the Molecule object to assign from
-				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy
+				@param  deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy
 		*/
 		void set(const Molecule& molecule, bool deep = true)
 			throw();
@@ -108,7 +108,7 @@ namespace BALL
 
 		/**	Assign to another Molecule.
 				@param molecule	the Molecule to be assigned to
-				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy
+				@param  deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy
 		*/
 		void get(Molecule& molecule, bool deep = true) const
 			throw();
@@ -206,22 +206,22 @@ namespace BALL
 		void insertAfter(AtomContainer& atom_container, Composite& after)
 			throw();
 
-		/**	Cut all children of {\tt atom_container} and prepend them before the children of this molecule.
+		/**	Cut all children of <tt>atom_container</tt> and prepend them before the children of this molecule.
 				@param atom_container the AtomContainer to access
 		*/
 		void spliceBefore(AtomContainer& atom_container)
 			throw();
 
-		/**	Cut all children of {\tt atom_container} and append them after the children of this molecule.
+		/**	Cut all children of <tt>atom_container</tt> and append them after the children of this molecule.
 				@param atom_container the AtomContainer to access
 		*/
 		void spliceAfter(AtomContainer& atom_container)
 			throw();
 
 		/**	Move the children of atom_container into this molecule.
-				The children of {\tt atom_container} are inserted at the position of 
-				{\tt atom_container} if it is a child of {\tt this}.
-				Otherwise the children are inserted using \Ref{spliceBefore}.
+				The children of <tt>atom_container</tt> are inserted at the position of 
+				<tt>atom_container</tt> if it is a child of <tt>this</tt>.
+				Otherwise the children are inserted using  \link spliceBefore spliceBefore \endlink .
 		*/
 		void splice(AtomContainer& atom_container)
 			throw();

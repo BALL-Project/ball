@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyProteinList.h,v 1.4 2002/02/27 12:19:36 sturm Exp $
+// $Id: pyProteinList.h,v 1.5 2003/02/21 16:06:02 anhi Exp $
 
 #ifndef BALL_PYTHON_PYPROTEINLIST_H
 #define BALL_PYTHON_PYPROTEINLIST_H
@@ -67,7 +67,7 @@ namespace BALL
 			
 		/**	Construct from a AtomContainer
 				This constructor creates an PyProteinList object from
-				all atoms of a \Ref{AtomContainer} object.
+				all atoms of a  \link AtomContainer AtomContainer \endlink  object.
 		*/
 		PyProteinList(const AtomContainer& fragment, bool selected_only = false);
 

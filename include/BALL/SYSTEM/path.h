@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: path.h,v 1.4 2002/12/22 11:45:29 sturm Exp $
+// $Id: path.h,v 1.5 2003/02/21 16:06:10 anhi Exp $
 
 #ifndef BALL_COMMON_PATH_H
 #define BALL_COMMON_PATH_H
@@ -21,8 +21,8 @@ namespace BALL
 
 	/**	Data path management class.
 			This class is intended to provide a unique interface to 
-			directories where the data files needed by BALL reside.	\\
-			{\bf Definition:}\URL{BALL/SYSTEM/path.h}	\\
+			directories where the data files needed by BALL reside.	 \par
+			<b>Definition:</b>BALL/SYSTEM/path.h
 	*/
 	class Path 
 	{
@@ -40,13 +40,13 @@ namespace BALL
 				This directory is set to a default value at compile time
 				of the library (see configure to change this setting).
 				It may be overridden at runtime by setting the environment
-				variable "BALL\_DATA" to the desired value.\\
+				variable "BALL\_DATA" to the desired value. \par
 				The environment variable always overrides the compiled
-				settings.\\
-				The default path may be accessed using \Ref{getDefaultDataPath}.
-				The path may also be modified at runtime by calling \Ref{setDataPath}.
+				settings. \par
+				The default path may be accessed using  \link getDefaultDataPath getDefaultDataPath \endlink .
+				The path may also be modified at runtime by calling  \link setDataPath setDataPath \endlink .
 				The path contains a colon separated list of paths that are searched 
-				in the order of occurence.\\
+				in the order of occurence. \par
 		*/		
 		string getDataPath();
 
@@ -70,14 +70,14 @@ namespace BALL
 		/**	Returns the full path to a file residing in one of the data directories.
 				If a file that matches the name is not found, an empty string is returned.
 				Directories are searched in the order of occurence in the data path.
-				If {\bf name} contains relative path information but no file matching 
+				If <b>name</b> contains relative path information but no file matching 
 				this path could be found, another search is performed as a second step
-				taking in account only the basename of the file.\\
-				E.g.:\\
-				Specifying {\bf data/test.dat} will search for data/test.dat in each
+				taking in account only the basename of the file. \par
+				E.g.: \par
+				Specifying <b>data/test.dat</b> will search for data/test.dat in each
 				data directory first. If this search doesn't yield a match, find will search 
-				for a file named {\bf test.dat} in each of the directories.\\
-				If this behaviour is not desired, try \Ref{findStrict} instead.\\
+				for a file named <b>test.dat</b> in each of the directories. \par
+				If this behaviour is not desired, try  \link findStrict findStrict \endlink  instead. \par
 		*/
 		string find(const string& name);
 

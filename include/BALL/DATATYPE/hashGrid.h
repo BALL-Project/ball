@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hashGrid.h,v 1.27 2002/12/12 09:48:43 oliver Exp $
+// $Id: hashGrid.h,v 1.28 2003/02/21 16:01:54 anhi Exp $
 
 #ifndef BALL_DATATYPE_HASHGRID_H
 #define BALL_DATATYPE_HASHGRID_H
@@ -41,8 +41,8 @@ namespace BALL
 			These boxes represent the buckets of a threedimensional hash grid.
 			Every such box contains a linear list of the objects that are
 			contained in this box. This list is accessible through a
-			DataIterator.\\
-			{\bf Definition:} \URL{BALL/DATATYPE/hashGrid.h}
+			DataIterator. \par
+			<b>Definition:</b> BALL/DATATYPE/hashGrid.h
 	*/
 	template <typename Item>
 	class HashGridBox3
@@ -125,7 +125,7 @@ namespace BALL
 
 		/** Remove the first occurrence of a certain item from the data item list.
 				@param item the item to be removed
-				@return bool - {\tt true}, if the item could be removed, {\tt false} 
+				@return bool - <tt>true</tt>, if the item could be removed, <tt>false</tt> 
 								otherwise.
 		*/
 		bool remove(const Item& item)
@@ -133,7 +133,7 @@ namespace BALL
 
 		/** Remove all occurences of a certain item from the data item list.
 				@param item the item to be removed
-				@return bool - {\tt true}, if the item could be removed, {\tt false} 
+				@return bool - <tt>true</tt>, if the item could be removed, <tt>false</tt> 
 								otherwise.
 		*/
 		bool removeAll(const Item& item)
@@ -163,14 +163,14 @@ namespace BALL
 
 		/** Test whether an item is in the data item list
 				@param item
-				@return bool - {\tt true} if instance has {\tt item}, {\tt false} otherwise.
+				@return bool - <tt>true</tt> if instance has <tt>item</tt>, {\tt false} otherwise.
 		*/
 		bool has(const Item& item) const
 			throw();
 
 		/** Test, whether this box is empty, i. e. the data item list contains
 				nothing
-				@return bool - {\tt true}, if {\tt this} is empty. {\tt false} otherwise. 
+				@return bool - <tt>true</tt>, if <tt>this</tt> is empty. {\tt false} otherwise. 
 		*/
 		bool isEmpty() const
 			throw();
@@ -415,7 +415,7 @@ namespace BALL
 		}
 
 
-		/// This is the const version of \Ref{BoxIterator}
+		/// This is the const version of  \link BoxIterator BoxIterator \endlink 
 		typedef ConstForwardIterator
 			<HashGridBox3<Item>, HashGridBox3<Item>,
 			BoxIteratorPosition, BoxIteratorTraits_>
@@ -579,7 +579,7 @@ namespace BALL
 		friend class DataIteratorTraits_;
 
 		/** Data iterator for grid boxes.
-				This iterator traverses the list of data items store in a \Ref{HashGridBox3}.
+				This iterator traverses the list of data items store in a  \link HashGridBox3 HashGridBox3 \endlink .
 		*/
 		typedef ForwardIterator
 			<HashGridBox3<Item>, Item,
@@ -602,7 +602,7 @@ namespace BALL
 
 
 		/** Const data iterator for grid boxes.
-				This is the const version of \Ref{DataIterator}
+				This is the const version of  \link DataIterator DataIterator \endlink 
 		*/
 		typedef ConstForwardIterator
 			<HashGridBox3<Item>, Item,
@@ -1051,8 +1051,8 @@ namespace BALL
 
 
 	/**	Three-dimensional Hash Grid Class.
-			?????\\
-			{\bf Definition:} \URL{BALL/DATATYPE/hashGrid.h}
+			????? \par
+			<b>Definition:</b> BALL/DATATYPE/hashGrid.h
 	*/
 	template <typename Item>
 	class HashGrid3
@@ -1070,7 +1070,7 @@ namespace BALL
 			throw();
 			
 		/** Constructor using origin, dimensions, and spacings of the grid.
-				It creates a hashgrid at {\tt origin} with axis-dependant spacings. 
+				It creates a hashgrid at <tt>origin</tt> with axis-dependant spacings. 
 				@param origin
 				@param dimension_x
 				@param dimension_y
@@ -1091,8 +1091,8 @@ namespace BALL
 			throw();
 
 		/** Constructor using two vectors and a single spacing.
-				This constructor creates a hash grid at {\tt origin} with spacing
-				{\tt spacing}. The vector {\tt size} has to be relative to {\tt origin}
+				This constructor creates a hash grid at <tt>origin</tt> with spacing
+				<tt>spacing</tt>. The vector <tt>size</tt> has to be relative to {\tt origin}
 				and defines the opposite corner of the grid, thereby setting the size 
 				of the grid.
 				@param origin a vector defining the origin of our cubic hash grid
@@ -1118,7 +1118,7 @@ namespace BALL
 		void clear(Position x, Position y, Position z)
 			throw();
 
-		/// Clears the HashGridBox3 at position {\tt vector}
+		/// Clears the HashGridBox3 at position <tt>vector</tt>
 		void clear(const Vector3 &vector)
 			throw();
 
@@ -1230,7 +1230,7 @@ namespace BALL
 		void insert(Position x, Position y, Position z, const Item& item)
 			throw();
 		
-		/// Insert an item at position {\tt vector}
+		/// Insert an item at position <tt>vector</tt>
 		void insert(const Vector3& vector, const Item& item)
 			throw();
 
@@ -1238,7 +1238,7 @@ namespace BALL
 		bool remove(Position x, Position y, Position z, const Item& item)
 			throw();
 
-		/// Remove an item from position {\tt vector}
+		/// Remove an item from position <tt>vector</tt>
 		bool remove(const Vector3& vector, const Item& item)
 			throw();
 
@@ -1264,7 +1264,7 @@ namespace BALL
 		bool operator != (const HashGrid3& grid) const
 			throw();
 
-		/// Tests, whether {\tt this} is empty
+		/// Tests, whether <tt>this</tt> is empty
 		bool isEmpty() const
 			throw();
 

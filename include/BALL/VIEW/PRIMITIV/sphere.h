@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sphere.h,v 1.14 2002/12/16 12:22:57 sturm Exp $
+// $Id: sphere.h,v 1.15 2003/02/21 16:08:08 anhi Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_SPHERE_H
 #define BALL_VIEW_PRIMITIV_SPHERE_H
@@ -40,10 +40,10 @@ namespace BALL
 					\item radius - the radius of the sphere
 					\item vertex - the position of the sphere
 				\end{itemize}
-				The class Sphere is derived from the classes \Ref{GeometricObject}, \Ref{ColorExtension},
-				\Ref{Vertex} and \Ref{Radius}. See these classes for further information concerning
-				interface and additional methods. \\
-				{\bf Definition:} \URL{BALL/VIEW/PRIMITIV/sphere.h}	
+				The class Sphere is derived from the classes  \link GeometricObject GeometricObject \endlink ,  \link ColorExtension ColorExtension \endlink ,
+				 \link Vertex Vertex \endlink  and  \link Radius Radius \endlink . See these classes for further information concerning
+				interface and additional methods.  \par
+				<b>Definition:</b> BALL/VIEW/PRIMITIV/sphere.h
 		*/
 		class Sphere
 			: public GeometricObject,
@@ -77,7 +77,7 @@ namespace BALL
 					Construct new sphere by copying the sphere {\em sphere}.
 					The copy is either deep (default) or shallow.
 					@param       sphere the sphere to be copied (cloned)
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false})
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>)
 					@return      Sphere new constructed sphere copied from {\em sphere}
 					@see         GeometricObject
 					@see         ColorExtension
@@ -106,17 +106,17 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} sphere.
-					Calls \Ref{destroy}.
+					Calls  \link destroy destroy \endlink .
 					@see         destroy
 			*/
 			virtual ~Sphere()
 				throw();
 
 			/** Explicit default initialization.
-					Calls \Ref{GeometricObject::clear}
-					Calls \Ref{ColorExtension::clear}
-					Calls \Ref{Vertex::clear}
-					Calls \Ref{Radius::clear}
+					Calls  \link GeometricObject::clear GeometricObject::clear \endlink 
+					Calls  \link ColorExtension::clear ColorExtension::clear \endlink 
+					Calls  \link Vertex::clear Vertex::clear \endlink 
+					Calls  \link Radius::clear Radius::clear \endlink 
 					@see  GeometricObject::clear
 					@see  ColorExtension::clear
 					@see  Vertex::clear
@@ -126,10 +126,10 @@ namespace BALL
 				throw();
 
 			/** Explicit destructor.
-					Calls \Ref{GeometricObject::destroy}
-					Calls \Ref{ColorExtension::destroy}
-					Calls \Ref{Vertex::destroy}
-					Calls \Ref{Radius::destroy}
+					Calls  \link GeometricObject::destroy GeometricObject::destroy \endlink 
+					Calls  \link ColorExtension::destroy ColorExtension::destroy \endlink 
+					Calls  \link Vertex::destroy Vertex::destroy \endlink 
+					Calls  \link Radius::destroy Radius::destroy \endlink 
 					@see  GeometricObject::destroy
 					@see  ColorExtension::destroy
 					@see  Vertex::destroy
@@ -147,9 +147,9 @@ namespace BALL
 					Assign the sphere {\em sphere} to {\em *this} sphere.
 					The copy is either deep (default) or shallow.
 					The value of {\em *this} sphere is initialized to the value of 
-					the sphere {\em sphere}.\\
+					the sphere {\em sphere}. \par
 					@param       sphere the sphere to be copied
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em sphere}
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of {\em sphere}
 					@see         Sphere
 			*/
 			void set(const Sphere& sphere, bool deep = true)
@@ -158,9 +158,9 @@ namespace BALL
 			/** Assignment operator.
 					Assign the sphere {\em sphere} to {\em *this} sphere.
 					The copy is deep.
-					Calls \Ref{set}.
+					Calls  \link set set \endlink .
 					The value of {\em *this} sphere is initialized to the value 
-					of the sphere {\em sphere}.\\
+					of the sphere {\em sphere}. \par
 					@param       sphere the sphere to be copied
 					@return      Sphere& {\em *this} sphere
 					@see         set
@@ -171,11 +171,11 @@ namespace BALL
 			/** Copying with cloning facility.
 					Copy {\em *this} sphere to the sphere {\em sphere}.
 					The copy is either deep (default) or shallow.
-					Calls \Ref{set}.
+					Calls  \link set set \endlink .
 					The value of the sphere {\em sphere} is initialized to the
-					value of {\em *this} sphere.\\
+					value of {\em *this} sphere. \par
 					@param       sphere the sphere to be assigned to
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em sphere}
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of {\em sphere}
 					@see         set
 			*/
 			void get(Sphere& sphere, bool deep = true) const
@@ -197,10 +197,10 @@ namespace BALL
 					Initiate self-validation of the internal state and data structure consistencies
 					of {\em *this} sphere.
 					If the internal state of {\em *this} sphere is correct (self-validated) and 
-					consistent {\tt true} is returned, {\tt false} otherwise. 
-					Calls \Ref{GeometricObject::isValid}.
-					Calls \Ref{Vertex::isValid}.
-					@return			bool {\tt true} if the internal state of {\em *this} sphere is correct (self-validated) and consistent, {\tt false} otherwise
+					consistent <tt>true</tt> is returned, <tt>false</tt> otherwise. 
+					Calls  \link GeometricObject::isValid GeometricObject::isValid \endlink .
+					Calls  \link Vertex::isValid Vertex::isValid \endlink .
+					@return			bool <tt>true</tt> if the internal state of {\em *this} sphere is correct (self-validated) and consistent, <tt>false</tt> otherwise
 					@see        GeometricObject::isValid
 					@see        Vertex::isValid
 			*/
@@ -210,10 +210,10 @@ namespace BALL
 			/** Internal value dump.
 					Dump the current value of {\em *this} sphere to 
 					the output ostream {\em s} with dumping depth {\em depth}.
-					Calls \Ref{GeometricObject::dump}.
-					Calls \Ref{ColorExtension::dump}.
-					Calls \Ref{Vertex::dump}.
-					Calls \Ref{Radius::dump}.
+					Calls  \link GeometricObject::dump GeometricObject::dump \endlink .
+					Calls  \link ColorExtension::dump ColorExtension::dump \endlink .
+					Calls  \link Vertex::dump Vertex::dump \endlink .
+					Calls  \link Radius::dump Radius::dump \endlink .
 					@param   s output stream where to output the value of {\em *this} sphere
 					@param   depth the dumping depth
 					@see     GeometricObject::dump
@@ -245,9 +245,9 @@ namespace BALL
 
 			/** Export method.
 					This method handles the export of {\em *this} sphere into another
-					format (eg. POVRAY, VRML)\\
-				  {\bf Note:} Not yet implemented.
-					@return    bool {\tt true} if successful,	{\tt false} otherwise
+					format (eg. POVRAY, VRML) \par
+				  <b>Note:</b> Not yet implemented.
+					@return    bool <tt>true</tt> if successful,	<tt>false</tt> otherwise
 			*/
 			virtual bool extract()
 				throw();

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOL2File.h,v 1.15 2002/12/12 09:48:44 oliver Exp $
+// $Id: MOL2File.h,v 1.16 2003/02/21 16:02:52 anhi Exp $
 
 #ifndef BALL_FORMAT_MOL2FILE_H
 #define BALL_FORMAT_MOL2FILE_H
@@ -21,8 +21,8 @@ namespace BALL
 	class System;
 
 	/**	SYBYL MOL2 file class.
-			This class is used to read and write SYBYL MOL2 files (Tripos).	\\
-			{\bf Definition:} \URL{BALL/FORMAT/MOL2File.h} \\
+			This class is used to read and write SYBYL MOL2 files (Tripos).	 \par
+			<b>Definition:</b> BALL/FORMAT/MOL2File.h
 	*/
 	class MOL2File
 		: public GenericMolFile

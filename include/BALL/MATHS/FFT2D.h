@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FFT2D.h,v 1.3 2002/12/23 09:05:46 sturm Exp $
+// $Id: FFT2D.h,v 1.4 2003/02/21 16:03:41 anhi Exp $
 
 #ifndef BALL_MATHS_FFT2D_H
 #define BALL_MATHS_FFT2D_H
@@ -29,13 +29,13 @@ namespace BALL
 {
 
 	/** A class to perform Fast Fourier Transforms and inverse Fast Fourier Transforms
-			on regularly spaced two dimensional data. \\
-			This class makes use of the freely available library {\bf FFTW}, which can be
-			found at \URL{http://www.fftw.org}. Normalization, translation and scaling of the
+			on regularly spaced two dimensional data.  \par
+			This class makes use of the freely available library <b>FFTW</b>, which can be
+			found at http://www.fftw.org
 			coordinate system can be handled automatically. The normaliztion is chosen
 			symmetrically.
-			\\
-			{\bf Definition:} \URL{BALL/MATHS/FFT2D.h}
+			 \par
+			<b>Definition:</b> BALL/MATHS/FFT2D.h
 	 */
 
 	class FFT2D : public TRegularData2D<FFTW_COMPLEX>
@@ -56,7 +56,7 @@ namespace BALL
 			FFT2D(const FFT2D &data)
 				throw();
 
-			/** Detailed constructor. \\
+			/** Detailed constructor.  \par
 			 		@param ldnX The binary logarithm of the number of grid points in X direction (we use the logarithm to
 										 ensure that the number of points is a power of two, which is important for
 										 the FFT)
@@ -201,7 +201,7 @@ namespace BALL
 			Complex getData(const Vector2& pos) const
 				throw(Exception::OutOfGrid);
 
-			/** Returns the data at point {\bf pos}. If {\bf pos} is not a 
+			/** Returns the data at point <b>pos</b>. If <b>pos</b> is not a 
 			 		point on the grid, the data is linearly interpolated.
 					This method automatically includes the correct phase factor
 					and (symmetric) normalization.

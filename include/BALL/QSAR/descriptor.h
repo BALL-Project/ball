@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: descriptor.h,v 1.4 2002/02/27 12:19:37 sturm Exp $
+// $Id: descriptor.h,v 1.5 2003/02/21 16:06:05 anhi Exp $
 
 #ifndef BALL_QSAR_DESCRIPTOR_H
 #define BALL_QSAR_DESCRIPTOR_H
@@ -18,8 +18,8 @@ namespace BALL
 {
 
 	/**	Generic QSAR molecular descriptor class.
-			{\bf Definition:}\URL{BALL/include/BALL/QSAR/descriptor.h}
-			\\
+			<b>Definition:</b>BALL/include/BALL/QSAR/descriptor.h
+			 \par
 	*/
 	class Descriptor
 		:	public UnaryProcessor<Molecule>

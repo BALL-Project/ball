@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: tube.h,v 1.14 2002/12/16 12:22:57 sturm Exp $
+// $Id: tube.h,v 1.15 2003/02/21 16:08:09 anhi Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_TUBE_H
 #define BALL_VIEW_PRIMITIV_TUBE_H
@@ -36,11 +36,11 @@ namespace BALL
 					\item vertex1 - the first vertex of the tube
 					\item vertex2 - the second vertex of the tube
 				\end{itemize}
-				The class Tube is derived from the classes \Ref{GeometricObject}, \Ref{ColorExtension},
-				\Ref{Radius} and \Ref{Vertex2}. 
+				The class Tube is derived from the classes  \link GeometricObject GeometricObject \endlink ,  \link ColorExtension ColorExtension \endlink ,
+				 \link Radius Radius \endlink  and  \link Vertex2 Vertex2 \endlink . 
 				See these classes for further information concerning
-				interface and additional methods. \\
-				{\bf Definition:} \URL{BALL/VIEW/PRIMITIV/tube.h}
+				interface and additional methods.  \par
+				<b>Definition:</b> BALL/VIEW/PRIMITIV/tube.h
 		*/
 		class Tube
 			: public GeometricObject,
@@ -75,7 +75,7 @@ namespace BALL
 					Construct new tube by copying the tube {\em tube}.
 					The copy is either deep (default) or shallow.
 					@param       tube the tube to be copied (cloned)
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy
 					@return      Tube new constructed tube copied from {\em tube}
 					@see         GeometricObject
 					@see         ColorExtension
@@ -104,17 +104,17 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} tube.
-					Calls \Ref{destroy}.
+					Calls  \link destroy destroy \endlink .
 					@see         destroy
 			*/
 			virtual ~Tube()
 				throw();
 
 			/** Explicit default initialization.
-					Calls \Ref{GeometricObject::clear}
-					Calls \Ref{ColorExtension::clear}
-					Calls \Ref{Radius::clear}
-					Calls \Ref{Vertex2::clear}
+					Calls  \link GeometricObject::clear GeometricObject::clear \endlink 
+					Calls  \link ColorExtension::clear ColorExtension::clear \endlink 
+					Calls  \link Radius::clear Radius::clear \endlink 
+					Calls  \link Vertex2::clear Vertex2::clear \endlink 
 					@see  GeometricObject::clear
 					@see  ColorExtension::clear
 					@see  Radius::clear
@@ -124,10 +124,10 @@ namespace BALL
 				throw();
 
 			/** Explicit destructor.
-					Calls \Ref{GeometricObject::destroy}
-					Calls \Ref{ColorExtension::destroy}
-					Calls \Ref{Radius::destroy}
-					Calls \Ref{Vertex2::destroy}
+					Calls  \link GeometricObject::destroy GeometricObject::destroy \endlink 
+					Calls  \link ColorExtension::destroy ColorExtension::destroy \endlink 
+					Calls  \link Radius::destroy Radius::destroy \endlink 
+					Calls  \link Vertex2::destroy Vertex2::destroy \endlink 
 					@see  GeometricObject::destroy
 					@see  ColorExtension::destroy
 					@see  Radius::destroy
@@ -145,9 +145,9 @@ namespace BALL
 					Assign the tube {\em tube} to {\em *this} tube.
 					The copy is either deep (default) or shallow.
 					The value of {\em *this} tube is initialized to the value of 
-					the tube {\em tube}.\\
+					the tube {\em tube}. \par
 					@param       tube the tube to be copied
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em tube}
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of {\em tube}
 					@see         Tube
 			*/
 			void set(const Tube& tube, bool deep = true)
@@ -156,9 +156,9 @@ namespace BALL
 			/** Assignment operator.
 					Assign the tube {\em tube} to {\em *this} tube.
 					The copy is deep.
-					Calls \Ref{set}.
+					Calls  \link set set \endlink .
 					The value of {\em *this} tube is initialized to the value 
-					of the tube {\em tube}.\\
+					of the tube {\em tube}. \par
 					@param       tube the tube to be copied
 					@return      Tube& {\em *this} tube
 					@see         set
@@ -169,11 +169,11 @@ namespace BALL
 			/** Copying with cloning facility.
 					Copy {\em *this} tube to the tube {\em tube}.
 					The copy is either deep (default) or shallow.
-					Calls \Ref{set}.
+					Calls  \link set set \endlink .
 					The value of the tube {\em tube} is initialized to the
-					value of {\em *this} tube.\\
+					value of {\em *this} tube. \par
 					@param       tube the tube to be assigned to
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em tube}
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of {\em tube}
 					@see         set
 			*/
 			void get(Tube& tube, bool deep = true) const
@@ -214,10 +214,10 @@ namespace BALL
 					Initiate self-validation of the internal state and data structure consistencies
 					of {\em *this} tube.
 					If the internal state of {\em *this} tube is correct (self-validated) and 
-					consistent {\tt true} is returned, {\tt false} otherwise. 
-					Calls \Ref{GeometricObject::isValid}.
-					Calls \Ref{Vertex2::isValid}.
-					@return			bool {\tt true} if the internal state of {\em *this} tube is correct (self-validated) and consistent, {\tt false} otherwise
+					consistent <tt>true</tt> is returned, <tt>false</tt> otherwise. 
+					Calls  \link GeometricObject::isValid GeometricObject::isValid \endlink .
+					Calls  \link Vertex2::isValid Vertex2::isValid \endlink .
+					@return			bool <tt>true</tt> if the internal state of {\em *this} tube is correct (self-validated) and consistent, <tt>false</tt> otherwise
 					@see        GeometricObject::isValid
 					@see        Vertex2::isValid
 			*/
@@ -227,10 +227,10 @@ namespace BALL
 			/** Internal value dump.
 					Dump the current value of {\em *this} tube to 
 					the output ostream {\em s} with dumping depth {\em depth}.
-					Calls \Ref{GeometricObject::dump}.
-					Calls \Ref{ColorExtension::dump}.
-					Calls \Ref{Radius::dump}.
-					Calls \Ref{Vertex2::dump}.
+					Calls  \link GeometricObject::dump GeometricObject::dump \endlink .
+					Calls  \link ColorExtension::dump ColorExtension::dump \endlink .
+					Calls  \link Radius::dump Radius::dump \endlink .
+					Calls  \link Vertex2::dump Vertex2::dump \endlink .
 					@param   s output stream where to output the value of {\em *this} tube
 					@param   depth the dumping depth
 					@see        GeometricObject::dump
@@ -262,9 +262,9 @@ namespace BALL
 
 			/** Export method.
 					This method handles the export of {\em *this} tube into another
-					format (eg. POVRAY, VRML). \\
-				  {\bf Note:} Not yet implemented.
-					@return    bool {\tt true} if successful,	{\tt false} otherwise
+					format (eg. POVRAY, VRML).  \par
+				  <b>Note:</b> Not yet implemented.
+					@return    bool <tt>true</tt> if successful,	<tt>false</tt> otherwise
 			*/
 			virtual bool extract()
 				throw();

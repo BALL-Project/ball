@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: piecewisePolynomial.h,v 1.9 2002/02/27 12:18:55 sturm Exp $
+// $Id: piecewisePolynomial.h,v 1.10 2003/02/21 16:03:55 anhi Exp $
 
 #ifndef BALL_MATHS_PPOLYNOMIAL_H
 #define BALL_MATHS_PPOLYNOMIAL_H
@@ -25,7 +25,7 @@ namespace BALL
 			the interval and $d$ is the overall degree of the PPCurve. Note that
 			there is no warranty that the defined curve is continuously
 			differentiable or even continuous.
-			{\bf Definition:} \URL{BALL/MATHS/piecewisePolynomial.h}
+			<b>Definition:</b> BALL/MATHS/piecewisePolynomial.h
 	 */
 
 	class PiecewisePolynomial
@@ -48,7 +48,7 @@ namespace BALL
 		PiecewisePolynomial(const PiecewisePolynomial& polynomial) throw();
 
 		/** Detailed Constructor.
-				This constructor does {\bf not} check sanity of the arguments 
+				This constructor does <b>not</b> check sanity of the arguments 
 		 */
 		PiecewisePolynomial(Size degree, const std::vector<Interval>& intervals,
 				const std::vector<Coefficients>& coefficients) throw();

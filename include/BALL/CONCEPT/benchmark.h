@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: benchmark.h,v 1.6 2002/12/17 16:32:39 oliver Exp $
+// $Id: benchmark.h,v 1.7 2003/02/21 16:01:26 anhi Exp $
 
 #ifndef BALL_COMMON_H
 # include <BALL/common.h>
@@ -14,9 +14,9 @@
 #include <string>
 
 /**	@name	Benchmarking of classes.
-		\URL[source/BENCHMARKS/Skeleton_bench.C]{../../source/BALL/BENCHMARKS/Skeleton_bench.C}
-		\\
-		{\bf Definitions:} \URL{BALL/CONCEPT/benchmark.h}
+		<a href="../../source/BALL/BENCHMARKS/Skeleton_bench.C">source/BENCHMARKS/Skeleton_bench.C</a>
+		 \par
+		<b>Definitions:</b> BALL/CONCEPT/benchmark.h
 */
 //@{
 
@@ -56,8 +56,8 @@
 /**	Start the timer.
 		This macro is used to determine the running time of a set of commands.
 		It may be used in benchmarks and requires a prior invocation of the
-		\Ref{START_BENCHMARK} macro.
-		All commands that are between the START_TIMER and the \Ref{STOP_TIMER}
+		 \link START_BENCHMARK START_BENCHMARK \endlink  macro.
+		All commands that are between the START_TIMER and the  \link STOP_TIMER STOP_TIMER \endlink 
 		command contribute to the overall running time of the benchmark.
 */
 #define START_TIMER \
@@ -67,15 +67,15 @@
 /**	Stop the timer.
 		This macro is used to determine the running time of a set of commands.
 		It may be used in benchmarks and requires a prior invocation of the
-		\Ref{START_BENCHMARK} and \Ref{START_TIMER} macros.
-		All commands that are between the START_TIMER and the \Ref{STOP_TIMER}
+		 \link START_BENCHMARK START_BENCHMARK \endlink  and  \link START_TIMER START_TIMER \endlink  macros.
+		All commands that are between the START_TIMER and the  \link STOP_TIMER STOP_TIMER \endlink 
 		command contribute to the overall running time of the benchmark.
 */
 #define STOP_TIMER \
 	BENCHMARK::timer.stop();
 
 /**	Program body for the benchmark.
-		The parameter {\tt weight} determines the overall weight of
+		The parameter <tt>weight</tt> determines the overall weight of
 		this test in the accumulated benchmark (BALLStones).
 */
 #define START_BENCHMARK(class_name, overall_weight, version)\

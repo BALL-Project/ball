@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: trianglePoint.h,v 1.6 2002/12/17 14:13:13 anker Exp $
+// $Id: trianglePoint.h,v 1.7 2003/02/21 16:07:02 anhi Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGLEPOINT_H
 #define BALL_STRUCTURE_TRIANGLEPOINT_H
@@ -37,9 +37,9 @@ namespace BALL
 
 
 	/** Generic TriangleEdge Class.
-			\\
-			{\bf Definition:}\URL{BALL/STRUCTURE/triangle.h}
-			\\
+			 \par
+			<b>Definition:</b>BALL/STRUCTURE/triangle.h
+			 \par
 	*/
 	class TrianglePoint
 			:	public GraphVertex< TrianglePoint,TriangleEdge,Triangle >
@@ -151,22 +151,22 @@ namespace BALL
 		//@{
 
 		/** Equality operator
-				@return	bool	{\bf true} if the TrianglePoints lie on the same point,	
-											{\bf false} otherwise.
+				@return	bool	<b>true</b> if the TrianglePoints lie on the same point,	
+											<b>false</b> otherwise.
 		*/
 		virtual bool operator == (const TrianglePoint& point) const
 			throw();
 
 		/** Inequality operator
-				@return	bool	{\bf false} if the TrianglePoints lie on the same point,	
-											{\bf true} otherwise.
+				@return	bool	<b>false</b> if the TrianglePoints lie on the same point,	
+											<b>true</b> otherwise.
 		*/
 		virtual bool operator != (const TrianglePoint& point) const
 			throw();
 
 		/** Similarity operator
-				@return	bool	{\bf true} if the TrianglePoints lie on the same point,	
-											{\bf false} otherwise.
+				@return	bool	<b>true</b> if the TrianglePoints lie on the same point,	
+											<b>false</b> otherwise.
 		*/
 		virtual bool operator *= (const TrianglePoint& point) const
 			throw();

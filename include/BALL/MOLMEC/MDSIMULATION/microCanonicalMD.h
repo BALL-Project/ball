@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: microCanonicalMD.h,v 1.15 2002/02/27 12:19:04 sturm Exp $
+// $Id: microCanonicalMD.h,v 1.16 2003/02/21 16:04:31 anhi Exp $
 
 #ifndef BALL_MOLMEC_MDSIMULATION_MICROCANONICALMD_H   
 #define BALL_MOLMEC_MDSIMULATION_MICROCANONICALMD_H   
@@ -55,8 +55,8 @@ namespace BALL
 			according to the principle of a microcanonical ensemble (NVE), i.e.,
 			the total energy of the system is kept constant. Numerical
 			integration for new atom positions is done via the Velocity Verlet
-			method. \\
-			{\bf Definition:} \URL{BALL/MOLMEC/MDSIMULATION/microCanonicalMD.h}
+			method.  \par
+			<b>Definition:</b> BALL/MOLMEC/MDSIMULATION/microCanonicalMD.h
 	*/
   class MicroCanonicalMD : public MolecularDynamics
 	{

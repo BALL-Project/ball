@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: timer.h,v 1.9 2002/12/18 22:05:41 oliver Exp $
+// $Id: timer.h,v 1.10 2003/02/21 16:06:12 anhi Exp $
 
 #ifndef BALL_SYSTEM_TIMER_H
 #define BALL_SYSTEM_TIMER_H
@@ -61,16 +61,16 @@ namespace BALL
 		void clear();			
 	
 		/** Start the timer.
-				The timer is started. If the timer is already running, {\bf false}
+				The timer is started. If the timer is already running, <b>false</b>
 				is returned.
-				@return bool {\bf false} if the timer was already running, {\bf true} otherwise
+				@return bool <b>false</b> if the timer was already running, <b>true</b> otherwise
 		*/
 		bool start();			
 
 		/** Stop the timer.
-				The timer is stopped. If the timer was not running, {\bf false}
+				The timer is stopped. If the timer was not running, <b>false</b>
 				is returned.
-				@return bool {\bf false} if the was not running, {\bf true} otherwise
+				@return bool <b>false</b> if the was not running, <b>true</b> otherwise
 		*/
 		bool stop();
 
@@ -116,7 +116,7 @@ namespace BALL
 		/**	Assignment operator.
 				Assigns a timer from another. The two timer will then run 
 				synchronously.
-				@return Timer {\tt *this}
+				@return Timer <tt>*this</tt>
 		*/
 		Timer& operator = (const Timer& timer);
 
@@ -127,25 +127,25 @@ namespace BALL
 		//@{
 
 		/**	Return true if the timer is running.
-				@return bool {\bf true} if the timer is running, {\bf false} otherwise
+				@return bool <b>true</b> if the timer is running, <b>false</b> otherwise
 		*/
 		bool isRunning() const;
 
 		/**	Equality operator.
-				Return {\bf true} if two timers are equal, i.e. they contain exactly 
+				Return <b>true</b> if two timers are equal, i.e. they contain exactly 
 				the same time intervals for clock, user and system time and have the
 				same running status.
 				@param timer the timer to compare with
-				@return bool {\bf true} on equality, {\bf false} otherwise
+				@return bool <b>true</b> on equality, <b>false</b> otherwise
 		*/
 		bool operator == (const Timer& timer) const;
 
 		/**	Inequality operator.
-				Return {\bf false} if two timers differ in any way, i.e. they differ
+				Return <b>false</b> if two timers differ in any way, i.e. they differ
 				in either the clock, user, or system time or have a different 
 				running status.
 				@param timer the timer to compare with
-				@return bool {\bf true} on inequality, {\bf false} otherwise
+				@return bool <b>true</b> on inequality, <b>false</b> otherwise
 		*/
 		bool operator != (const Timer& timer) const;
 
@@ -153,7 +153,7 @@ namespace BALL
 				Return true, if the timer is in all timings lesser than the
 				timer to be compared with (clock, user and system time).
 				@param timer the timer to compare with
-				@return bool {\bf true} if all times are lesser
+				@return bool <b>true</b> if all times are lesser
 		*/
 		bool operator < (const Timer& timer) const;
 
@@ -161,7 +161,7 @@ namespace BALL
 				Return true, if the timer is in all timings lesser or equal than the
 				timer to be compared with (clock, user and system time).
 				@param timer the timer to compare with
-				@return bool {\bf true} if all times are lesser or equal
+				@return bool <b>true</b> if all times are lesser or equal
 		*/
 		bool operator <= (const Timer& timer) const;
 
@@ -169,7 +169,7 @@ namespace BALL
 				Return true, if the timer is in all timings greater or equal than the
 				timer to be compared with (clock, user and system time).
 				@param timer the timer to compare with
-				@return bool {\bf true} if all times are greater or equal
+				@return bool <b>true</b> if all times are greater or equal
 		*/
 		bool operator >= (const Timer& timer) const;
 
@@ -177,7 +177,7 @@ namespace BALL
 				Return true, if the timer is in all timings greater than the
 				timer to be compared with (clock, user and system time).
 				@param timer the timer to compare with
-				@return bool {\bf true} if all times are greater 
+				@return bool <b>true</b> if all times are greater 
 		*/
 		bool operator > (const Timer& timer) const;
 

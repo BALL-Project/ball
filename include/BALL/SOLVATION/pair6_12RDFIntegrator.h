@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pair6_12RDFIntegrator.h,v 1.13 2002/12/22 11:45:25 sturm Exp $
+// $Id: pair6_12RDFIntegrator.h,v 1.14 2003/02/21 16:06:18 anhi Exp $
 
 #ifndef BALL_SOLVATION_PAIR6_12RDFINTEGRATOR_H
 #define BALL_SOLVATION_PAIR6_12RDFINTEGRATOR_H
@@ -31,8 +31,8 @@ namespace BALL
 			van-der-Waals interaction energies. The difference to the values
 			calculated with the standard interaction energy processor is the
 			inclusion of a radial distribution function 
-			(@see	RadialDistributionFunction) into the computaion.\\
-			{\bf Definition:} \URL{BALL/SOLVATION/pair6_12RDFIntegrator.h}
+			(@see	RadialDistributionFunction) into the computaion. \par
+			<b>Definition:</b> BALL/SOLVATION/pair6_12RDFIntegrator.h
 	*/
 	class Pair6_12RDFIntegrator
 		:	public RDFIntegrator
@@ -167,14 +167,14 @@ namespace BALL
 		void getConstants(double& A, double& B, double& k1, double& k2)	
 			throw();
 
-		/** Integrate to Infinity from {\tt from} using previously set constants 
+		/** Integrate to Infinity from <tt>from</tt> using previously set constants 
 				@param from the lower limit of integration
 				@return the value of the integration
 		*/
 		double integrateToInf(double from) const 
 			throw();
 
-		/** Integrate from {\tt from} to infinity using the specified constants 
+		/** Integrate from <tt>from</tt> to infinity using the specified constants 
 				@param A repulsion constant of the 6-12 potential in units of ...
 				@param B dispersion constant of the 6-12 potential in units of ...
 				@param k1 geometric correction constant
@@ -186,7 +186,7 @@ namespace BALL
 				double k2) 
 			throw();
 
-		/** Integrate from {\tt from} to {\tt to} using previously assigned
+		/** Integrate from <tt>from</tt> to <tt>to</tt> using previously assigned
 				constants 
 				@param from the lower limit
 				@param to the upper limit 
@@ -195,7 +195,7 @@ namespace BALL
 		double integrate(double from, double to) const 
 			throw();
 		
-		/** Integrate from {\tt from} to {\tt to} using the specified constants 
+		/** Integrate from <tt>from</tt> to <tt>to</tt> using the specified constants 
 				@param from the lower limit of integration
 				@param to the upper limit 
 				@param A repulsion constant of the 6-12 potential in units of ...
@@ -208,7 +208,7 @@ namespace BALL
 				double k2) 
 			throw();
 
-		/** Default operation, integrate from {\tt x} to infinity using
+		/** Default operation, integrate from <tt>x</tt> to infinity using
 				previously assigned constants.
 				@param x the lower limit of the integration to infinity
 				@return the value of the integration

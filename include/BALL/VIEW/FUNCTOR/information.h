@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: information.h,v 1.8 2002/02/27 12:19:57 sturm Exp $
+// $Id: information.h,v 1.9 2003/02/21 16:07:15 anhi Exp $
 
 #ifndef BALL_VIEW_FUNCTOR_INFORMATION_H
 #define BALL_VIEW_FUNCTOR_INFORMATION_H
@@ -57,15 +57,15 @@ namespace BALL
 		/** Information class.
 				The class Information is a base class for information objects.
 				This class retrieves information concerning
-				\Ref{Composite} objects. Override the \Ref{visit} method to
-				extract the needed information from the given \Ref{Composite} object and
-				write the result in the member variables \Ref{name_} and
-				\Ref{type_name_}.
-				In this implementation the types and type names of \Ref{Type} will be already
+				 \link Composite Composite \endlink  objects. Override the  \link visit visit \endlink  method to
+				extract the needed information from the given  \link Composite Composite \endlink  object and
+				write the result in the member variables  \link name_ name_ \endlink  and
+				 \link type_name_ type_name_ \endlink .
+				In this implementation the types and type names of  \link Type Type \endlink  will be already
 				recognized.
-				This class is used by the class \Ref{Control} to retrieve informations
-				about the shown \Ref{Composite} objects. \\
-				{\bf Definition:} \URL{BALL/VIEW/FUNCTOR/information.h}
+				This class is used by the class  \link Control Control \endlink  to retrieve informations
+				about the shown  \link Composite Composite \endlink  objects.  \par
+				<b>Definition:</b> BALL/VIEW/FUNCTOR/information.h
 				@see     Control
 		*/
 		class Information: public Visitor<Composite>
@@ -80,31 +80,31 @@ namespace BALL
 			*/
 			enum Type
 			{
-				/// Unknown type. This value will be set in \Ref{clear}
+				/// Unknown type. This value will be set in  \link clear clear \endlink 
 				TYPE__UNKNOWN              = -1,
 
-				/// Line type. This value will be set if the given \Ref{Composite} object is of kind \Ref{Line}
+				/// Line type. This value will be set if the given  \link Composite Composite \endlink  object is of kind  \link Line Line \endlink 
 				TYPE__LINE                 = 0,
 
-				/// Sphere type. This value will be set if the given \Ref{Composite} object is of kind \Ref{Sphere}
+				/// Sphere type. This value will be set if the given  \link Composite Composite \endlink  object is of kind  \link Sphere Sphere \endlink 
 				TYPE__SPHERE               = 1,
 
-				/// Tube type. This value will be set if the given \Ref{Composite} object is of kind \Ref{Tube}
+				/// Tube type. This value will be set if the given  \link Composite Composite \endlink  object is of kind  \link Tube Tube \endlink 
 				TYPE__TUBE                 = 2,
 
-				/// Point type. This value will be set if the given \Ref{Composite} object is of kind \Ref{Point}
+				/// Point type. This value will be set if the given  \link Composite Composite \endlink  object is of kind  \link Point Point \endlink 
 				TYPE__POINT                = 3,
 
-				/// Mesh type. This value will be set if the given \Ref{Composite} object is of kind \Ref{Mesh}
+				/// Mesh type. This value will be set if the given  \link Composite Composite \endlink  object is of kind  \link Mesh Mesh \endlink 
 				TYPE__MESH                 = 4,
 
-				/// Simple box type. This value will be set if the given \Ref{Composite} object is of kind \Ref{SimpleBox}
+				/// Simple box type. This value will be set if the given  \link Composite Composite \endlink  object is of kind  \link SimpleBox SimpleBox \endlink 
 				TYPE__SIMPLE_BOX           = 5,
 
-				/// Geometric object type. This value will be set if the given \Ref{Composite} object is of kind \Ref{GeometricObject}
+				/// Geometric object type. This value will be set if the given  \link Composite Composite \endlink  object is of kind  \link GeometricObject GeometricObject \endlink 
 				TYPE__GEOMETRIC_OBJECT     = 20,
 
-				/// Composite type. This value will be set if the given \Ref{Composite} object is non of the above
+				/// Composite type. This value will be set if the given  \link Composite Composite \endlink  object is non of the above
 				TYPE__COMPOSITE            = 21
 			};
 			//@}
@@ -115,7 +115,7 @@ namespace BALL
 
 			/** Default Constructor.
 					Constructs new information.
-					Calls \Ref{clear}.
+					Calls  \link clear clear \endlink .
 					@return      Information new constructed information
 					@see         clear
 			*/
@@ -130,7 +130,7 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} information.
-					Calls \Ref{destroy}.
+					Calls  \link destroy destroy \endlink .
 					@see         destroy
 			*/
 			virtual ~Information()
@@ -139,9 +139,9 @@ namespace BALL
 			/** Explicit default initialization.
 					Resets the state of {\em *this} information to:
 					\begin{itemize}
-					  \item  name_ is set to {\tt "unknown"}
-					  \item  type_name_ is set to {\tt "unknown type"}
-					  \item  type is set to {\tt TYPE__UNKNOWN}
+					  \item  name_ is set to <tt>"unknown"</tt>
+					  \item  type_name_ is set to <tt>"unknown type"</tt>
+					  \item  type is set to <tt>TYPE__UNKNOWN</tt>
 					\end{itemize}
 			*/
 			virtual void clear()
@@ -160,9 +160,9 @@ namespace BALL
 			//@{
 
 			/** Returns the type of the given composite.
-					If the given \Ref{Composite} is of any kind that is defined by the 
-					enumeration \Ref{Type} this type will be returned.
-					@return  Type the type of the \Ref{Composite}
+					If the given  \link Composite Composite \endlink  is of any kind that is defined by the 
+					enumeration  \link Type Type \endlink  this type will be returned.
+					@return  Type the type of the  \link Composite Composite \endlink 
 					@see     Type
 					@see     visit
 			*/
@@ -170,25 +170,25 @@ namespace BALL
 				throw();
 
 			/** Returns the type name of the given composite.
-					Accesses the type name of the given \Ref{Composite} object.
+					Accesses the type name of the given  \link Composite Composite \endlink  object.
 					If the composite object is of any kind that is defined by the 
-					enumeration \Ref{Type} this type will be returned as
-					a string. If a \Ref{Composite} is of kind \Ref{GeometricObject}
-					than the string defined by the \Ref{GeometricObject::getTypeName}
+					enumeration  \link Type Type \endlink  this type will be returned as
+					a string. If a  \link Composite Composite \endlink  is of kind  \link GeometricObject GeometricObject \endlink 
+					than the string defined by the  \link GeometricObject::getTypeName GeometricObject::getTypeName \endlink 
 					method is returned.
-					@return  String the type name of the given \Ref{Composite} object
+					@return  String the type name of the given  \link Composite Composite \endlink  object
 					@see     visit
 			*/
 			String getTypeName() const
 				throw();
 			
 			/** Returns the name of the given composite.
-					Accesses the name of the given \Ref{Composite} object.
-					If a \Ref{Composite} is of kind \Ref{GeometricObject}
-					than the string defined by the \Ref{GeometricObject::getName}
-					method is returned. If a \Ref{Composite} is not of kind 
-					\Ref{GeometricObject} than the string {\tt "<Composite>"} is returned.
-					@return  String the name of the given \Ref{Composite} object
+					Accesses the name of the given  \link Composite Composite \endlink  object.
+					If a  \link Composite Composite \endlink  is of kind  \link GeometricObject GeometricObject \endlink 
+					than the string defined by the  \link GeometricObject::getName GeometricObject::getName \endlink 
+					method is returned. If a  \link Composite Composite \endlink  is not of kind 
+					 \link GeometricObject GeometricObject \endlink  than the string <tt>"<Composite>"</tt> is returned.
+					@return  String the name of the given  \link Composite Composite \endlink  object
 					@see     visit
 			*/
 			String getName() const
@@ -197,15 +197,15 @@ namespace BALL
 			/** Visit method.
 					Override this method for extracting the informations.
 					Set the name and the type name in the protected member variables
-					\Ref{name_} and \Ref{type_name_}.
+					 \link name_ name_ \endlink  and  \link type_name_ type_name_ \endlink .
 					This method extracts already the name and the type name of a
-					given \Ref{Composite} object as defined in the enumeration
-					\Ref{Type}.\\
-					{\bf Note:} If this method is overridden always call this method
+					given  \link Composite Composite \endlink  object as defined in the enumeration
+					 \link Type Type \endlink . \par
+					<b>Note:</b> If this method is overridden always call this method
 					if the new
 					implementation does not yield any information on the given 
-					\Ref{Composite} object.
-					@param  composite the \Ref{Composite} object whose information should be extracted
+					 \link Composite Composite \endlink  object.
+					@param  composite the  \link Composite Composite \endlink  object whose information should be extracted
 					@see     getType
 					@see     getTypeName
 					@see     getName

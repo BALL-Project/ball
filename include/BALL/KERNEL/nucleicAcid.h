@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nucleicAcid.h,v 1.23 2003/01/08 21:13:25 oliver Exp $ 
+// $Id: nucleicAcid.h,v 1.24 2003/02/21 16:03:29 anhi Exp $ 
 
 #ifndef BALL_KERNEL_NUCLEICACID_H
 #define BALL_KERNEL_NUCLEICACID_H
@@ -26,9 +26,9 @@ namespace BALL
 	class Nucleotide;
 
 	/**	Nucleic acid class.
-			\\
-			{\bf Definition:} \URL{BALL/KERNEL/nucleicAcid.h}
-			\\
+			 \par
+			<b>Definition:</b> BALL/KERNEL/nucleicAcid.h
+			 \par
 	*/
 	class NucleicAcid
 		: public Molecule
@@ -110,7 +110,7 @@ namespace BALL
 		/** Assignment with cloning facility.
 				The assignment is either deep or shallow (default).
 				@param  nucleic_acid the NucleicAcid to be copied (cloned)
-				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy
+				@param  deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy
 		*/
 		void set(const NucleicAcid& nucleic_acid, bool deep = true)
 			throw();
@@ -243,8 +243,8 @@ namespace BALL
 		//@{
 
 		/** Internal state and consistency self-validation.
-				@return	 bool - {\tt true} if the internal state of this instance atom 
-								 is correct (self-validated) and consistent, {\tt false}
+				@return	 bool - <tt>true</tt> if the internal state of this instance atom 
+								 is correct (self-validated) and consistent, <tt>false</tt>
 								 otherwise
 		*/
 		virtual bool isValid() const

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: graphEdge.h,v 1.6 2002/12/17 14:13:11 anker Exp $
+// $Id: graphEdge.h,v 1.7 2003/02/21 16:06:44 anhi Exp $
 
 #ifndef BALL_STRUCTURE_GRAPHEDGE_H
 #define BALL_STRUCTURE_GRAPHEDGE_H
@@ -25,7 +25,7 @@ namespace BALL
 	class GraphTriangle;
 
 	/** Generic GraphEdge Class.
-      {\bf Definition:} \URL{BALL/STRUCTURE/GraphEdge.h}
+      <b>Definition:</b> BALL/STRUCTURE/GraphEdge.h
 	*/
 	template <typename Vertex, typename Edge, typename Face>
 	class GraphEdge
@@ -193,8 +193,8 @@ namespace BALL
 		/** Substitute a vertex by an other one.
 				@param	old_vertex	the vertex that has to be substituted
 				@param	new_vertex	the new vertex
-				@return	bool				{\bf true}, if the vertex can be substituted,
-														{\bf false} otherwise
+				@return	bool				<b>true</b>, if the vertex can be substituted,
+														<b>false</b> otherwise
 		*/
 		bool substitute(const Vertex* old_vertex, Vertex* new_vertex)
 			throw();
@@ -202,8 +202,8 @@ namespace BALL
 		/** Substitute a face by an other one.
 				@param	old_face	the face that has to be substituted
 				@param	new_face	the new face
-				@return	bool			{\bf true}, if the face can be substituted,
-													{\bf false} otherwise
+				@return	bool			<b>true</b>, if the face can be substituted,
+													<b>false</b> otherwise
 		*/
 		bool substitute(const Face* old_vertex, Face* new_vertex)
 			throw();
@@ -231,19 +231,19 @@ namespace BALL
 		//@{
 
 		/**	Equality operator.
-				@return bool, {\bf true}
+				@return bool, <b>true</b>
 		*/
 		virtual bool operator == (const Edge&) const
 			throw();
 
 		/**	Inequality operator.
-				@return	bool	{\bf false}
+				@return	bool	<b>false</b>
 		*/
 		virtual bool operator != (const Edge&) const
 			throw();
 
 		/**	Similarity operator.
-				@return	bool	{\bf true}
+				@return	bool	<b>true</b>
 		*/
 		virtual bool operator *= (const Edge&) const
 			throw();

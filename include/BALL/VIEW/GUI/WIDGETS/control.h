@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: control.h,v 1.12 2002/12/12 09:37:45 oliver Exp $
+// $Id: control.h,v 1.13 2003/02/21 16:07:41 anhi Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_CONTROL_H
 #define BALL_VIEW_GUI_WIDGETS_CONTROL_H
@@ -57,16 +57,16 @@ namespace BALL
 	{
 
 		/**	The Control class.
-				The Control class is a widget to display the structure of \Ref{Composite}
+				The Control class is a widget to display the structure of  \link Composite Composite \endlink 
 				objects. There are methods available to change the structure as well as
 				copy or paste objects into {\em *this} control.
 				Various virtual methods can be overridden to customize the behavior of these
-				structure changing methods. The method \Ref{buildContextMenu} is a means to 
+				structure changing methods. The method  \link buildContextMenu buildContextMenu \endlink  is a means to 
 				create a customizable context menu entries.
-				To use this widget in the application just create it with \Ref{MainControl} as
-				parent and all inserted \Ref{Composite} objects sent with \Ref{NewCompositeMessage}
+				To use this widget in the application just create it with  \link MainControl MainControl \endlink  as
+				parent and all inserted  \link Composite Composite \endlink  objects sent with  \link NewCompositeMessage NewCompositeMessage \endlink 
 				will be shown in the structure view of {\em *this} control.
-				{\bf Definition:} \URL{BALL/VIEW/GUI/WIDGETS/control.h}
+				<b>Definition:</b> BALL/VIEW/GUI/WIDGETS/control.h
 		*/
 		class Control
 			: public QListView, 
@@ -126,10 +126,10 @@ namespace BALL
 					There are two columns for {\em *this} control. The {\em Name} column and the
 					{\em Type} column. In the Name column the item tree will be shown and in 
 					the Type column the type of each item will be shown.
-					There is a connection from the signal \Ref{rightButtonClicked} from the
-					QT-library to the method \Ref{onContextMenu}. See documentation of QT-library 
+					There is a connection from the signal  \link rightButtonClicked rightButtonClicked \endlink  from the
+					QT-library to the method  \link onContextMenu onContextMenu \endlink . See documentation of QT-library 
 					for information concerning signal/slot mechanism.
-					Calls \Ref{registerWidget}.
+					Calls  \link registerWidget registerWidget \endlink .
 					@param      parent the parent widget of {\em *this} control (See documentation of QT-library for information concerning widgets)
 					@param      name the name of {\em *this} control (See documentation of QT-library for information concerning widgets)
 					@return     Control new constructed control
@@ -147,7 +147,7 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} control.
-					Calls \Ref{destroy}.
+					Calls  \link destroy destroy \endlink .
 					@see         destroy
 			*/
 			virtual ~Control()
@@ -171,13 +171,13 @@ namespace BALL
 			//@{
 
 			/** Insert a composite.
-					Insert a \Ref{Composite} object {\em composite} into {\em *this} control.
-					If {\tt name == 0} than the \Ref{Information} visitor is used for determining
+					Insert a  \link Composite Composite \endlink  object {\em composite} into {\em *this} control.
+					If <tt>name == 0</tt> than the  \link Information Information \endlink  visitor is used for determining
 					a name for {\em composite}.
-					Calls \Ref{generateListViewItem_} for {\em composite}.
-					@param   composite a pointer to the \Ref{Composite} object that will be inserted into {\em *this} control
+					Calls  \link generateListViewItem_ generateListViewItem_ \endlink  for {\em composite}.
+					@param   composite a pointer to the  \link Composite Composite \endlink  object that will be inserted into {\em *this} control
 					@param   name a name {\em composite} should receive
-					@return  bool {\tt true} if {\tt composite != 0}, {\tt false} otherwise
+					@return  bool <tt>true</tt> if <tt>composite != 0</tt>, {\tt false} otherwise
 					@see     getInformationVisitor_
 					@see     generateListViewItem_
 					@see     updateContents
@@ -186,12 +186,12 @@ namespace BALL
 				throw();
 
 			/** Remove a composite.
-					Remove a \Ref{Composite} object {\em composite} from {\em *this} control.
-					Calls \Ref{findListViewItem_} for {\em composite}. If an item exists than
+					Remove a  \link Composite Composite \endlink  object {\em composite} from {\em *this} control.
+					Calls  \link findListViewItem_ findListViewItem_ \endlink  for {\em composite}. If an item exists than
 					the item will be removed.
-					Calls \Ref{updateContents}.
-					@param   composite a pointer to the \Ref{Composite} object that will be removed from {\em *this} control
-					@return  bool {\tt true} if {\em composite} could be removed, {\tt false} otherwise
+					Calls  \link updateContents updateContents \endlink .
+					@param   composite a pointer to the  \link Composite Composite \endlink  object that will be removed from {\em *this} control
+					@return  bool <tt>true</tt> if {\em composite} could be removed, <tt>false</tt> otherwise
 					@see     findListViewItem_
 					@see     updateContents
 			*/
@@ -205,10 +205,10 @@ namespace BALL
 				throw();
 
 			/** Update a composite.
-					Update a \Ref{Composite} object {\em composite} to {\em *this} control.
-					Calls \Ref{updateListViewItem_} for {\em composite}.
-					@param   composite a pointer to the \Ref{Composite} object that will be updated
-					@return  bool {\tt true} if {\em *this} control must be updated, {\tt false} otherwise
+					Update a  \link Composite Composite \endlink  object {\em composite} to {\em *this} control.
+					Calls  \link updateListViewItem_ updateListViewItem_ \endlink  for {\em composite}.
+					@param   composite a pointer to the  \link Composite Composite \endlink  object that will be updated
+					@return  bool <tt>true</tt> if {\em *this} control must be updated, <tt>false</tt> otherwise
 					@see     updateListViewItem_
 					@see     updateContents
 			*/
@@ -224,16 +224,16 @@ namespace BALL
 				throw();
 			
 			/** Non-mutable inspection of the selection.
-					For further information see \Ref{getSelection}.
+					For further information see  \link getSelection getSelection \endlink .
 			*/
 			const List<Composite*>& getSelection() const
 				throw();
 			
 			/** Message handling.
-					Overridden method from \Ref{ConnectionObject} to handle incoming messages.
-					Calls \Ref{reactToMessages_}.
-					Calls \Ref{sentSelection}
-					@param  message a pointer to a \Ref{Message} object
+					Overridden method from  \link ConnectionObject ConnectionObject \endlink  to handle incoming messages.
+					Calls  \link reactToMessages_ reactToMessages_ \endlink .
+					Calls  \link sentSelection sentSelection \endlink 
+					@param  message a pointer to a  \link Message Message \endlink  object
 					@see    sentSelection
 					@see    reactToMessages_
 					@see    ConnectionObject
@@ -243,15 +243,15 @@ namespace BALL
 				throw();
 
 			/** Build a context menu.
-					Build a context menu for the \Ref{Composite} object {\em composite} and
-					the \Ref{QListViewItem} object {\em item}.
+					Build a context menu for the  \link Composite Composite \endlink  object {\em composite} and
+					the  \link QListViewItem QListViewItem \endlink  object {\em item}.
 					If {\em composite} have certain properties (in this case {\em composite} is
-					a \Ref{GeometricObject}) a context menu is created.
+					a  \link GeometricObject GeometricObject \endlink ) a context menu is created.
 					Override this method for creating other context menu entries.
-					Calls \Ref{insertContextMenuEntry} for each context menu entry that will be
+					Calls  \link insertContextMenuEntry insertContextMenuEntry \endlink  for each context menu entry that will be
 					created.
-					@param   composite the \Ref{Composite} object for that a context menu should be created
-					@param   item the \Ref{QListViewItem} object for that a context menu should be created
+					@param   composite the  \link Composite Composite \endlink  object for that a context menu should be created
+					@param   item the  \link QListViewItem QListViewItem \endlink  object for that a context menu should be created
 					@see     insertContextMenuEntry
 					@see     onContextMenu
 			*/
@@ -284,8 +284,8 @@ namespace BALL
 					\end{itemize}
 					This method is called automatically	immediately before the main application 
 					is started. 
-					This method will be called by \Ref{show} from the \Ref{MainControl} object.
-					@param main_control the \Ref{MainControl} object to be initialized with {\em *this} modularWidget
+					This method will be called by  \link show show \endlink  from the  \link MainControl MainControl \endlink  object.
+					@param main_control the  \link MainControl MainControl \endlink  object to be initialized with {\em *this} modularWidget
 					@see   cut_id_
 					@see   copy_id_
 					@see   paste_id_
@@ -299,11 +299,11 @@ namespace BALL
 				throw();
 
 			/**	Remove the widget.
-					Reverse all actions performed in \Ref{initializeWidget}
+					Reverse all actions performed in  \link initializeWidget initializeWidget \endlink 
 					(remove menu entries of {\em *this} control).
-					This method will be called by \Ref{aboutToExit} from the \Ref{MainControl}
+					This method will be called by  \link aboutToExit aboutToExit \endlink  from the  \link MainControl MainControl \endlink 
 					object.
-					@param main_control the \Ref{MainControl} object to be finalized with {\em *this} control
+					@param main_control the  \link MainControl MainControl \endlink  object to be finalized with {\em *this} control
 					@see   cut_id_
 					@see   copy_id_
 					@see   paste_id_
@@ -317,10 +317,10 @@ namespace BALL
 				throw();
 
 			/**	Menu checking method.
-					This method is called by the method \Ref{checkMenus} from the
-					\Ref{MainControl} object before a popup menu is shown.
+					This method is called by the method  \link checkMenus checkMenus \endlink  from the
+					 \link MainControl MainControl \endlink  object before a popup menu is shown.
 					Empty for further purpose.
-					@param main_control the \Ref{MainControl} object whose menus should be checked
+					@param main_control the  \link MainControl MainControl \endlink  object whose menus should be checked
 					@see   cut_id_
 					@see   copy_id_
 					@see   paste_id_
@@ -344,22 +344,22 @@ namespace BALL
 			/** Invalidate the selection.
 					Invalidate the selection of {\em *this} control.
 					All selected items in the tree will be deselected.
-					Calls \Ref{updateSelection}.
+					Calls  \link updateSelection updateSelection \endlink .
 					@see  updateSelection
 			*/
 			void invalidateSelection();
 
 			/** Update the selection.
-					Calls \Ref{filterSelection_} with the \Ref{Filter} object and calls
-					\Ref{sentSelection} after the selection is filtered.
+					Calls  \link filterSelection_ filterSelection_ \endlink  with the  \link Filter Filter \endlink  object and calls
+					 \link sentSelection sentSelection \endlink  after the selection is filtered.
 					@see   filterSelection_
 					@see   sentSelection
 			*/
 			void updateSelection();
 			
 			/** Sent the selection.
-					Sent the selection obtained with the method \Ref{getSelection} with the
-					message \Ref{GeometricObjectSelectionMessage}.
+					Sent the selection obtained with the method  \link getSelection getSelection \endlink  with the
+					message  \link GeometricObjectSelectionMessage GeometricObjectSelectionMessage \endlink .
 					Override this method if other messages should be sent.
 					@see  getSelection
 					@see  GeometricObjectSelectionMessage
@@ -368,13 +368,13 @@ namespace BALL
 			virtual void sentSelection();
 
 			/** Cut the selected items.
-					Cut the selected items {\Ref{Composite} objects} and copy them into an internal
-					copy list. If there are already \Ref{Composite} objects in the internal
-					copy list they will be deleted. All \Ref{Composite} objects that are cutted
+					Cut the selected items { \link Composite Composite \endlink  objects} and copy them into an internal
+					copy list. If there are already  \link Composite Composite \endlink  objects in the internal
+					copy list they will be deleted. All  \link Composite Composite \endlink  objects that are cutted
 					are removed from {\em *this} control.
-					A \Ref{RemovedCompositeMessage} will be sent for each cutted object.
-					If all selected objects are removed a \Ref{SceneMessage} will be sent to
-					update the \Ref{Scene}. A \Ref{WindowMessage} will be sent to the main
+					A  \link RemovedCompositeMessage RemovedCompositeMessage \endlink  will be sent for each cutted object.
+					If all selected objects are removed a  \link SceneMessage SceneMessage \endlink  will be sent to
+					update the  \link Scene Scene \endlink . A  \link WindowMessage WindowMessage \endlink  will be sent to the main
 					application for status messages.
 					@see    copy
 					@see    paste
@@ -388,11 +388,11 @@ namespace BALL
 			void cut();
 
 			/** Copy the selected items.
-					Copy the selected items {\Ref{Composite} objects} into an internal
-					copy list. If there are already \Ref{Composite} objects in the internal
+					Copy the selected items { \link Composite Composite \endlink  objects} into an internal
+					copy list. If there are already  \link Composite Composite \endlink  objects in the internal
 					copy list they will be deleted. The selected object will not be deleted
 					from {\em *this} control.
-					A \Ref{WindowMessage} will be sent to the main application for status
+					A  \link WindowMessage WindowMessage \endlink  will be sent to the main application for status
 					messages.
 					@see    cut
 					@see    paste
@@ -403,10 +403,10 @@ namespace BALL
 			void copy();
 
 			/** Paste the copied items.
-					Paste the copied items {\Ref{Composite} objects} from the internal
-					copy list into {\em *this} control. For each \Ref{Compsoite} object in the
-					copy list a \Ref{NewCompositeMessage} will be sent.
-					A \Ref{WindowMessage} will be sent to the main application for status
+					Paste the copied items { \link Composite Composite \endlink  objects} from the internal
+					copy list into {\em *this} control. For each  \link Compsoite Compsoite \endlink  object in the
+					copy list a  \link NewCompositeMessage NewCompositeMessage \endlink  will be sent.
+					A  \link WindowMessage WindowMessage \endlink  will be sent to the main application for status
 					messages.
 					@see    cut
 					@see    copy
@@ -417,9 +417,9 @@ namespace BALL
 			void paste();
 
 			/** Clear the clipboard.
-					Clear the copied items {\Ref{Composite} objects} from the internal
+					Clear the copied items { \link Composite Composite \endlink  objects} from the internal
 					copy list.
-					A \Ref{WindowMessage} will be sent to the main application for status
+					A  \link WindowMessage WindowMessage \endlink  will be sent to the main application for status
 					messages.
 					@see    cut
 					@see    copy
@@ -430,9 +430,9 @@ namespace BALL
 
 			/** Controlling method for context menus.
 					Clear the previously created context menu.
-					Calls \Ref{buildContextMenu} for the \Ref{Composite} object belonging
+					Calls  \link buildContextMenu buildContextMenu \endlink  for the  \link Composite Composite \endlink  object belonging
 					to the {\em item} and executes the context menu if menu entries are available.
-					@param  item the \Ref{QListViewItem} for which a context menu should be created
+					@param  item the  \link QListViewItem QListViewItem \endlink  for which a context menu should be created
 					@param  point the position to which the context menu should be drawn
 					@param  column not used at the moment
 					@see    buildContextMenu
@@ -440,14 +440,14 @@ namespace BALL
 			void onContextMenu(QListViewItem* item, const QPoint& point, int column);
 
 			/** Erase a geometricObject.
-					Erase a \Ref{GeometricObject} object previously selected with the context menu.
-					If the \Ref{GeometricObject} object has a parent it will be removed from it
-					and the message \Ref{ChangedCompositeMessage} will be sent. If the 
-					\Ref{GeometricObject} object has no parent it will be removed entirely from
-					{\em *this} control and the message \Ref{RemovedCompositeMessage} will be sent.
-					The message \Ref{SceneMessage} will be sent after the former process to 
-					update the \Ref{Scene}.
-					Calls \Ref{updateContents} to update {\em *this} control.
+					Erase a  \link GeometricObject GeometricObject \endlink  object previously selected with the context menu.
+					If the  \link GeometricObject GeometricObject \endlink  object has a parent it will be removed from it
+					and the message  \link ChangedCompositeMessage ChangedCompositeMessage \endlink  will be sent. If the 
+					 \link GeometricObject GeometricObject \endlink  object has no parent it will be removed entirely from
+					{\em *this} control and the message  \link RemovedCompositeMessage RemovedCompositeMessage \endlink  will be sent.
+					The message  \link SceneMessage SceneMessage \endlink  will be sent after the former process to 
+					update the  \link Scene Scene \endlink .
+					Calls  \link updateContents updateContents \endlink  to update {\em *this} control.
 					@see    buildContextMenu
 					@see    updateContents
 					@see    ChangedCompositeMessage
@@ -478,11 +478,11 @@ namespace BALL
 				throw(MainControlMissing);
 
 			/** Access the information visitor.
-					Access the \Ref{Information} visitor of {\em *this} control.
+					Access the  \link Information Information \endlink  visitor of {\em *this} control.
 					Override this method if another information visitor is needed.
-					This method is used in the method \Ref{generateListViewItem_} to
-					retrieve certain information of the given \Ref{Composite} object.
-					@return  Information a reference to a \Ref{Information} visitor.
+					This method is used in the method  \link generateListViewItem_ generateListViewItem_ \endlink  to
+					retrieve certain information of the given  \link Composite Composite \endlink  object.
+					@return  Information a reference to a  \link Information Information \endlink  visitor.
 					@see     Information
 					@see     generateListViewItem_
 			*/
@@ -490,40 +490,40 @@ namespace BALL
 				throw();
 			
 			/** Recursive iteration method.
-					Iterate over the children of the \Ref{Composite} {\em composite} and
-					call for each the method \Ref{generateListViewItem_}.
-					@param   item a pointer to a \Ref{QListViewItem} to which all children of {\em composite} will be inserted
-					@param   composite a pointer to a \Ref{Composite} object whose children will be inserted into {\em item}
+					Iterate over the children of the  \link Composite Composite \endlink  {\em composite} and
+					call for each the method  \link generateListViewItem_ generateListViewItem_ \endlink .
+					@param   item a pointer to a  \link QListViewItem QListViewItem \endlink  to which all children of {\em composite} will be inserted
+					@param   composite a pointer to a  \link Composite Composite \endlink  object whose children will be inserted into {\em item}
 					@see     generateListViewItem_
 			*/
 			virtual void recurseGeneration_(QListViewItem* item, Composite* composite)
 				throw();
 			
 			/** Recursive update method.
-					Iterate over the children of the \Ref{Composite} {\em composite} and
-					call for each the method \Ref{updateListViewItem_}.
-					@param   item a pointer to a \Ref{QListViewItem} containing the subtree structure 
-					@param   composite a pointer to a \Ref{Composite} object containing the (possibly) new substructure
-					@return  bool {\tt true} if the subtree structure of {\em composite} and the subtree 
-									 structure of {\em item} are unequal, {\tt false} otherwise 
+					Iterate over the children of the  \link Composite Composite \endlink  {\em composite} and
+					call for each the method  \link updateListViewItem_ updateListViewItem_ \endlink .
+					@param   item a pointer to a  \link QListViewItem QListViewItem \endlink  containing the subtree structure 
+					@param   composite a pointer to a  \link Composite Composite \endlink  object containing the (possibly) new substructure
+					@return  bool <tt>true</tt> if the subtree structure of {\em composite} and the subtree 
+									 structure of {\em item} are unequal, <tt>false</tt> otherwise 
 					@see     updateListViewItem_
 			*/
 			virtual bool recurseUpdate_(QListViewItem* item, Composite* composite)
 				throw();
 			
 			/** Message handling.
-					Catch the \Ref{Message} objects and react accordingly to the different messages.
-					Override this method if new messages should be catched.\\
-					{\bf Note:} If this method is overriden, call this method at the end of the
-					new implementation to make sure the old messages are still catched properly.\\
+					Catch the  \link Message Message \endlink  objects and react accordingly to the different messages.
+					Override this method if new messages should be catched. \par
+					<b>Note:</b> If this method is overriden, call this method at the end of the
+					new implementation to make sure the old messages are still catched properly. \par
 					Messages to be catched and the resulting reaction:
 					\begin{itemize}
-					  \item  \Ref{NewCompositeMessage} - update always necessary
-					  \item  \Ref{RemovedCompositeMessage} - update necessary if already inserted
-					  \item  \Ref{ChangedCompositeMessage} - update necessary if \Ref{Composite} object has changed
+					  \item   \link NewCompositeMessage NewCompositeMessage \endlink  - update always necessary
+					  \item   \link RemovedCompositeMessage RemovedCompositeMessage \endlink  - update necessary if already inserted
+					  \item   \link ChangedCompositeMessage ChangedCompositeMessage \endlink  - update necessary if  \link Composite Composite \endlink  object has changed
 					\end{itemize}
-					@param   message a pointer to the \Ref{Message} object
-					@return  bool {\tt true} if an update of {\em *this} control is necessary, {\tt false} otherwise
+					@param   message a pointer to the  \link Message Message \endlink  object
+					@return  bool <tt>true</tt> if an update of {\em *this} control is necessary, <tt>false</tt> otherwise
 					@see     onNotify
 			*/
 			virtual bool reactToMessages_(Message* message)
@@ -531,10 +531,10 @@ namespace BALL
 			
 			/** Filter the selected tree items.
 					Filter the selected tree items of {\em *this} control and collect the
-					\Ref{Composite} objects that are both selected in the \Ref{QListViewItem} tree
-					and pass through the \Ref{Filter} object {\em filter}.
-					All collected \Ref{Composite} object are collected in the selection list.
-					@param  filter the \Ref{Filter} object to be used for filtering the \Ref{Composite} objects
+					 \link Composite Composite \endlink  objects that are both selected in the  \link QListViewItem QListViewItem \endlink  tree
+					and pass through the  \link Filter Filter \endlink  object {\em filter}.
+					All collected  \link Composite Composite \endlink  object are collected in the selection list.
+					@param  filter the  \link Filter Filter \endlink  object to be used for filtering the  \link Composite Composite \endlink  objects
 					@see    getSelection
 					@see    updateSelection
 			*/
@@ -543,9 +543,9 @@ namespace BALL
 
 			/** Mutable inspection of the copy list.
 					Access the mutable reference of the copy list of {\em *this} control.
-					In this list all copied or cutted \Ref{Composite} objects are stored until
-					the method \Ref{clearClipboard} is called.
-					@return  List<Composite*>& a mutable reference of the list of the copied \Ref{Composite} objects
+					In this list all copied or cutted  \link Composite Composite \endlink  objects are stored until
+					the method  \link clearClipboard clearClipboard \endlink  is called.
+					@return  List<Composite*>& a mutable reference of the list of the copied  \link Composite Composite \endlink  objects
 					@see     cut
 					@see     copy
 					@see     paste
@@ -555,26 +555,26 @@ namespace BALL
 				throw();
 			
 			/** Non-mutable inspection of the copy list.
-					For further information see \Ref{getCopyList_}.
+					For further information see  \link getCopyList_ getCopyList_ \endlink .
 			*/
 			const List<Composite*>& getCopyList_() const
 				throw();
 
 			/** Generate the item tree recursivly.
-					Generate a new \Ref{QListViewItem} for the given \Ref{Composite} object
-					{\em composite} with name {\em default_name} if {\tt default_name != 0}.
-					If {\tt default_name == 0} than a new name is created using the 
-					\Ref{Information} visitor accessed with the method 
-					\Ref{getInformationVisitor_}.
-					If {\tt item == 0} than a new \Ref{QListViewItem} for {\em composite} is 
+					Generate a new  \link QListViewItem QListViewItem \endlink  for the given  \link Composite Composite \endlink  object
+					{\em composite} with name {\em default_name} if <tt>default_name != 0</tt>.
+					If <tt>default_name == 0</tt> than a new name is created using the 
+					 \link Information Information \endlink  visitor accessed with the method 
+					 \link getInformationVisitor_ getInformationVisitor_ \endlink .
+					If <tt>item == 0</tt> than a new  \link QListViewItem QListViewItem \endlink  for {\em composite} is 
 					created that becomes a root item in {\em *this} control.
-					Otherwise a new \Ref{QListViewItem} for {\em composite} is created that will
+					Otherwise a new  \link QListViewItem QListViewItem \endlink  for {\em composite} is created that will
 					be inserted into given {\em item}.
 					All children of {\em composite} will be inserted recursivly into the newly
-					created item by the method \Ref{recurseGeneration_}.
-					@param  item a \Ref{QListViewItem} into which a subtree of items will be inserted, 
-											 or {\tt 0} if a new root item should be created
-					@param  composite the \Ref{Composite} object whose subtree will be inserted into {\em item}
+					created item by the method  \link recurseGeneration_ recurseGeneration_ \endlink .
+					@param  item a  \link QListViewItem QListViewItem \endlink  into which a subtree of items will be inserted, 
+											 or <tt>0</tt> if a new root item should be created
+					@param  composite the  \link Composite Composite \endlink  object whose subtree will be inserted into {\em item}
 					@param  default_name the name of the {\em item}
 					@see    Information
 					@see    getInformationVisitor_
@@ -586,15 +586,15 @@ namespace BALL
 			/** Update the item tree recursivly.
 					Check if the tree structure of {\em item} matches the tree structure of
 					{\em composite}.
-					Calls the method \Ref{findListViewItem_}: If an item
+					Calls the method  \link findListViewItem_ findListViewItem_ \endlink : If an item
 					does not exist a subtree for {\em composite} will be created with the
-					method \Ref{generateListViewItem_} and inserted into {\em item}.
-					Otherwise the method \Ref{recurseUpdate_} will iterate over the childrens
+					method  \link generateListViewItem_ generateListViewItem_ \endlink  and inserted into {\em item}.
+					Otherwise the method  \link recurseUpdate_ recurseUpdate_ \endlink  will iterate over the childrens
 					of {\em composite}.			
-					@param  item a \Ref{QListViewItem} whose subtree of items will be checked against {\em composite}
-					@param  composite the \Ref{Composite} object whose subtree will be checked against {\em item}
+					@param  item a  \link QListViewItem QListViewItem \endlink  whose subtree of items will be checked against {\em composite}
+					@param  composite the  \link Composite Composite \endlink  object whose subtree will be checked against {\em item}
 					@param  default_name the name of the {\em item}
-					@return bool {\tt true} if an update of {\em *this} control is necessary, {\tt false} otherwise
+					@return bool <tt>true</tt> if an update of {\em *this} control is necessary, <tt>false</tt> otherwise
 					@see    findListViewItem_
 					@see    generateListViewItem_
 					@see    recurseUpdate_
@@ -603,11 +603,11 @@ namespace BALL
 				throw();
 			
 			/** Search the item tree for a composite.
-					Search the \Ref{QListViewItem} tree of {\em *this} control for the given
-					\Ref{Composite} object {\em composite}.
-					@param  composite a pointer to the \Ref{Composite} object to be search for
-					@return QListViewItem* a pointer to the \Ref{QListViewItem} containing the \Ref{Composite} 
-									object {\em composite}, {\tt 0} if no such \Ref{Composite} object exists
+					Search the  \link QListViewItem QListViewItem \endlink  tree of {\em *this} control for the given
+					 \link Composite Composite \endlink  object {\em composite}.
+					@param  composite a pointer to the  \link Composite Composite \endlink  object to be search for
+					@return QListViewItem* a pointer to the  \link QListViewItem QListViewItem \endlink  containing the  \link Composite Composite \endlink  
+									object {\em composite}, <tt>0</tt> if no such  \link Composite Composite \endlink  object exists
 					@see    updateListViewItem_
 			*/
 			QListViewItem* findListViewItem_(Composite* composite)
@@ -621,7 +621,7 @@ namespace BALL
 			/** Cut id.
 					In this variable the menu id for the cut menu is stored.
 					This variable is provided for access to the cut menu. With the help of this
-					variable the cut menu can be enabled or disabled in the \Ref{checkMenu} method.
+					variable the cut menu can be enabled or disabled in the  \link checkMenu checkMenu \endlink  method.
 					@see   initializeWidget
 					@see   finalizeWidget
 					@see   checkMenu
@@ -631,7 +631,7 @@ namespace BALL
 			/** Copy id.
 					In this variable the menu id for the copy menu is stored.
 					This variable is provided for access to the copy menu. With the help of this
-					variable the copy menu can be enabled or disabled in the \Ref{checkMenu}
+					variable the copy menu can be enabled or disabled in the  \link checkMenu checkMenu \endlink 
 					method.
 					@see   initializeWidget
 					@see   finalizeWidget
@@ -642,7 +642,7 @@ namespace BALL
 			/** Paste id.
 					In this variable the menu id for the paste menu is stored.
 					This variable is provided for access to the paste menu. With the help of this
-					variable the paste menu can be enabled or disabled in the \Ref{checkMenu}
+					variable the paste menu can be enabled or disabled in the  \link checkMenu checkMenu \endlink 
 					method.
 					@see   initializeWidget
 					@see   finalizeWidget
@@ -653,7 +653,7 @@ namespace BALL
 			/** Clipboard id.
 					This variable is provided for access to the clipboard menu. With the help of
 					this variable the clipboard menu can be enabled or disabled in the 
-					\Ref{checkMenu}	method.
+					 \link checkMenu checkMenu \endlink 	method.
 					In this variable the menu id for the clipboard menu is stored.
 					@see   initializeWidget
 					@see   finalizeWidget

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glsimpleBox.h,v 1.10 2002/12/16 12:22:50 sturm Exp $
+// $Id: glsimpleBox.h,v 1.11 2003/02/21 16:07:38 anhi Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLSIMPLEBOX_H
 #define BALL_VIEW_GUI_PRIMITIV_GLSIMPLEBOX_H
@@ -28,13 +28,13 @@ namespace BALL
 		/** GLSimpleBox class.
 				An instance of GLSimpleBox represents an instance of the geometric
 				visualization "simpleBox".
-				The class GLSimpleBox is derived from the classes \Ref{SimpleBox} and
-				\Ref{GLObject}. Therefore the class glSimpleBox is the graphical extension
+				The class GLSimpleBox is derived from the classes  \link SimpleBox SimpleBox \endlink  and
+				 \link GLObject GLObject \endlink . Therefore the class glSimpleBox is the graphical extension
 				of the geometrical definition of the class simpleBox.
-				The drawing method from \Ref{GLObject} is overridden to visualize the
+				The drawing method from  \link GLObject GLObject \endlink  is overridden to visualize the
 				simpleBox. OpenGL code is used for the visualization.
 				See these classes for further information.
-				{\bf Definition:} \URL{BALL/VIEW/GUI/PRIMITIV/glsimpleBox.h}\\ \\
+				<b>Definition:</b> BALL/VIEW/GUI/PRIMITIV/glsimpleBox.h
 		*/
 		class GLSimpleBox
 			: public SimpleBox,
@@ -59,7 +59,7 @@ namespace BALL
 					Construct new glSimpleBox by copying the glSimpleBox {\em simpleBox}.
 					The copy is either deep (default) or shallow.
 					@param       simpleBox the glSimpleBox to be copied (cloned)
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false})
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>)
 					@return      GLSimpleBox new constructed glSimpleBox copied from {\em simpleBox}
 					@see         SimpleBox
 					@see         GLObject
@@ -86,15 +86,15 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} glSimpleBox.
-					Calls \Ref{destroy}.
+					Calls  \link destroy destroy \endlink .
 					@see         destroy
 			*/
 			virtual ~GLSimpleBox()
 				throw();
 
 			/** Explicit default initialization.
-					Calls \Ref{SimpleBox::clear}
-					Calls \Ref{GLObject::clear}
+					Calls  \link SimpleBox::clear SimpleBox::clear \endlink 
+					Calls  \link GLObject::clear GLObject::clear \endlink 
 					@see  SimpleBox::clear
 					@see  GLObject::clear
 			*/
@@ -102,8 +102,8 @@ namespace BALL
 				throw();
 
 			/** Explicit destructor.
-					Calls \Ref{SimpleBox::destroy}
-					Calls \Ref{GLObject::destroy}
+					Calls  \link SimpleBox::destroy SimpleBox::destroy \endlink 
+					Calls  \link GLObject::destroy GLObject::destroy \endlink 
 					@see  SimpleBox::destroy
 					@see  GLObject::destroy
 			*/
@@ -119,9 +119,9 @@ namespace BALL
 					Assign the glSimpleBox {\em simpleBox} to {\em *this} glSimpleBox.
 					The copy is either deep (default) or shallow.
 					The value of {\em *this} glSimpleBox is initialized to the value of 
-					the glSimpleBox {\em simpleBox}.\\
+					the glSimpleBox {\em simpleBox}. \par
 					@param       simpleBox the glSimpleBox to be copied
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em simpleBox}
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of {\em simpleBox}
 					@see         SimpleBox
 					@see         GLObject
 			*/
@@ -131,9 +131,9 @@ namespace BALL
 			/** Assignment operator.
 					Assign the glSimpleBox {\em simpleBox} to {\em *this} glSimpleBox.
 					The copy is deep.
-					Calls \Ref{set}.
+					Calls  \link set set \endlink .
 					The value of {\em *this} glSimpleBox is initialized to the value 
-					of the glSimpleBox {\em simpleBox}.\\
+					of the glSimpleBox {\em simpleBox}. \par
 					@param       simpleBox the glSimpleBox to be copied
 					@return      GLSimpleBox& constant reference {\em *this} glSimpleBox
 					@see         set
@@ -144,11 +144,11 @@ namespace BALL
 			/** Copying with cloning facility.
 					Copy {\em *this} glSimpleBox to the glSimpleBox {\em simpleBox}.
 					The copy is either deep (default) or shallow.
-					Calls \Ref{set}.
+					Calls  \link set set \endlink .
 					The value of the glSimpleBox {\em simpleBox} is initialized to the
-					value of {\em *this} glSimpleBox.\\
+					value of {\em *this} glSimpleBox. \par
 					@param       simpleBox the glSimpleBox to be assigned to
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em simpleBox}
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of {\em simpleBox}
 					@see         set
 			*/
 			void get(GLSimpleBox& simpleBox, bool deep = true) const
@@ -170,16 +170,16 @@ namespace BALL
 			//@{
 			
 			/** Creation of the graphical representation.
-					Overridden method from \Ref{GLObject}. Uses the geometrical properties
-					defined in class \Ref{SimpleBox} to create the graphical representation
+					Overridden method from  \link GLObject GLObject \endlink . Uses the geometrical properties
+					defined in class  \link SimpleBox SimpleBox \endlink  to create the graphical representation
 					of the simpleBox. This method is used internally from the render engine
-					of the \Ref{Scene}. Predefined shapes of simpleBoxes from the class
-					\Ref{GLPrimitiveManager} are used for the variable drawing resolutions.
+					of the  \link Scene Scene \endlink . Predefined shapes of simpleBoxes from the class
+					 \link GLPrimitiveManager GLPrimitiveManager \endlink  are used for the variable drawing resolutions.
 					The parameter {\em with_names} indicates whether the openGL command 
 					{\em glLoadName} must be used for naming the graphical object 
 					(necessary for picking mode in the scene).
 					@param     with_names flag if the graphical objects must have a name
-					@return    bool {\tt true} if successful,	{\tt false} otherwise
+					@return    bool <tt>true</tt> if successful,	<tt>false</tt> otherwise
 					@see       GLObject::draw
 					@see       GLPrimitiveManager
 			*/
@@ -188,9 +188,9 @@ namespace BALL
 
 			/** Export method.
 					This method handles the export of {\em *this} glSimpleBox into another
-					format (eg. POVRAY, VRML)\\
-				  {\bf Note:} Not yet implemented.
-					@return    bool {\tt true} if successful,	{\tt false} otherwise
+					format (eg. POVRAY, VRML) \par
+				  <b>Note:</b> Not yet implemented.
+					@return    bool <tt>true</tt> if successful,	<tt>false</tt> otherwise
 			*/
 			virtual bool extract()
 				throw();

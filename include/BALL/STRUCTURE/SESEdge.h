@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SESEdge.h,v 1.17 2002/12/17 14:13:10 anker Exp $
+// $Id: SESEdge.h,v 1.18 2003/02/21 16:06:36 anhi Exp $
 
 #ifndef BALL_STRUCTURE_SESEDGE_H
 #define BALL_STRUCTURE_SESEDGE_H
@@ -30,7 +30,7 @@ namespace BALL
 	class SESTriangulator;
 
 	/** Generic SESEdge Class.
-			{\bf Definition:} \URL{BALL/STRUCTURE/SESEdge.h}
+			<b>Definition:</b> BALL/STRUCTURE/SESEdge.h
 	*/
 	class SESEdge	:	public GraphEdge< SESVertex,SESEdge,SESFace >
 	{
@@ -62,9 +62,9 @@ namespace BALL
 		//@{
 
 		/** type of SESEdge:
-				{\tt 0} concave
-				{\tt 1} convex
-				{\tt 2} singular
+				<tt>0</tt> concave
+				<tt>1</tt> convex
+				<tt>2</tt> singular
 		*/
 		enum Type
 		{
@@ -212,28 +212,28 @@ namespace BALL
 		//@{
 
 		/**	Equality operator.
-				@return	bool	{\bf true} if all vertices are equal modulo order,
-											{\bf false} otherwise
+				@return	bool	<b>true</b> if all vertices are equal modulo order,
+											<b>false</b> otherwise
 		*/
 		virtual bool operator == (const SESEdge& sesedge) const
 			throw();
 
 		/**	Inequality operator.
-				@return	bool	{\bf false} if all vertices are equal modulo order,
-											{\bf true} otherwise
+				@return	bool	<b>false</b> if all vertices are equal modulo order,
+											<b>true</b> otherwise
 		*/
 		virtual bool operator != (const SESEdge& sesedge) const
 			throw();
 
 		/**	similarity operator.
-				@return	bool	{\bf true}
+				@return	bool	<b>true</b>
 		*/
 		virtual bool operator *= (const SESEdge&) const
 			throw();
 
 		/** isFree.
-				@return	bool	{\bf true} if the RSEdge of the SESEdge is free,
-											{\bf false} otherwise
+				@return	bool	<b>true</b> if the RSEdge of the SESEdge is free,
+											<b>false</b> otherwise
 		*/
 		bool isFree() const
 			throw();

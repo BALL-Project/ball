@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logStream.h,v 1.17 2003/01/17 11:11:26 oliver Exp $
+// $Id: logStream.h,v 1.18 2003/02/21 16:01:19 anhi Exp $
 
 #ifndef BALL_COMMON_LOGSTREAM_H
 #define BALL_COMMON_LOGSTREAM_H
@@ -41,21 +41,21 @@ namespace BALL
 	/**	@name Log streams
 			Logging, filtering, and storing messages.
 			Many programs emit warning messages, error messages, or simply
-			informations and remarks to their users. The \Ref{LogStream}
+			informations and remarks to their users. The  \link LogStream LogStream \endlink 
 			class provides a convenient and straight-forward interface 
 			to classify these messages according to their importance 
 			(via the loglevel), filter and store them in files or
-			write them to streams.\\
+			write them to streams. \par
 			As the LogStream class is derived from ostream, it behaves 
 			as any ostream object. Additionally you may associate
 			streams with each LogStream object that catch only 
 			messages of certain loglevels. So the user might decide to
 			redirect all error messages to cerr, all warning messages
-			to cout and all informations to a file.\\
+			to cout and all informations to a file. \par
 			Along with each message its time of creation and its loglevel
 			is stored. So the user might also decide to store all 
-			errors he got in the last two hours or alike.\\
-			The \Ref{LogStream} class heavily relies on the \Ref{LogStreamBuf}
+			errors he got in the last two hours or alike. \par
+			The  \link LogStream LogStream \endlink  class heavily relies on the  \link LogStreamBuf LogStreamBuf \endlink 
 			class, which does the actual buffering and storing, but is only
 			of interest if you want to implement a derived class, as the 
 			actual user interface is implemented in the LogStream class.
@@ -85,20 +85,20 @@ namespace BALL
 
 	/** Stream buffer used by LogStream.
 			This class implements the low level behaviour of
-			\Ref{LogStream}. It takes care of the buffers and stores
-			the lines written into the \Ref{LogStream} object.
+			 \link LogStream LogStream \endlink . It takes care of the buffers and stores
+			the lines written into the  \link LogStream LogStream \endlink  object.
 			It also contains a list of streams that are associated with
 			the LogStream object. This list contains pointers to the
 			streams and their minimum and maximum log level.
-			Each line entered in the \Ref{LogStream} is marked with its
-			time (in fact, the time \Ref{sync} was called) and its
+			Each line entered in the  \link LogStream LogStream \endlink  is marked with its
+			time (in fact, the time  \link sync sync \endlink  was called) and its
 			loglevel. The loglevel is determined by either the current
-			loglevel (as set by \Ref{LogStream::setLevel} or a temporary
-			level (as set by \Ref{LogStream::level} for a single line only).
+			loglevel (as set by  \link LogStream::setLevel LogStream::setLevel \endlink  or a temporary
+			level (as set by  \link LogStream::level LogStream::level \endlink  for a single line only).
 			For each line stored, the list of associated streams is checked
 			whether the loglevel falls into the range declared by the 
 			stream's minimum and maximum level. If this condition is met,
-			the logline (with its prefix, see \Ref{LogStream::setPrefix})
+			the logline (with its prefix, see  \link LogStream::setPrefix LogStream::setPrefix \endlink )
 			is also copied to the associated stream and this stream is 
 			flushed, too.
 	*/
@@ -164,7 +164,7 @@ namespace BALL
 		virtual int sync();
 
 		/**	Overflow method.
-				This method calls sync and {\tt streambuf::overflow(c)} to 
+				This method calls sync and <tt>streambuf::overflow(c)</tt> to 
 				prevent a buffer overflow.
 		*/
 		virtual int overflow(int c = -1);
@@ -226,9 +226,9 @@ namespace BALL
 
 
 	/**	Log Stream Class.
-			\\
-			{\bf Definition:} \URL{BALL/COMMON/logStream.h}
-			\\
+			 \par
+			<b>Definition:</b> BALL/COMMON/logStream.h
+			 \par
 	*/
 	class LogStream
 		: public std::ostream
@@ -250,9 +250,9 @@ namespace BALL
 			
 		/** Log levels.
 				Constants for the different predefined log levels.
-				Use \Ref{ERROR} to indicate a severe error, \Ref{WARNING} to 
+				Use  \link ERROR ERROR \endlink  to indicate a severe error,  \link WARNING WARNING \endlink  to 
 				indicate a problem that could be fixed or is of minor importance, 
-				and \Ref{INFORMATION} for messages that do not indicate any problem 
+				and  \link INFORMATION INFORMATION \endlink  for messages that do not indicate any problem 
 				(e.g. progress messages).
 		*/
 		enum 
@@ -276,10 +276,10 @@ namespace BALL
 
 		/** Default constructor.
 				Creates a new LogStream object that is not associated with any stream.
-				If the argument {\tt associate\_stdio} is set to {\bf true},
-				{\tt cout} is associated with all messages of levels \Ref{INFORMATION} 
-				and \Ref{WARNING}, and {\tt cerr} is associated with all messages
-				of level \Ref{ERROR}.
+				If the argument <tt>associate\_stdio</tt> is set to <b>true</b>,
+				<tt>cout</tt> is associated with all messages of levels  \link INFORMATION INFORMATION \endlink  
+				and  \link WARNING WARNING \endlink , and <tt>cerr</tt> is associated with all messages
+				of level  \link ERROR ERROR \endlink .
 				@param	associate_stdio bool, default is false
 		*/
 		LogStream(bool associate_stdio = false);
@@ -300,7 +300,7 @@ namespace BALL
 		*/
 		//@{
 
-		/**	{\tt rdbuf} method of ostream.
+		/**	<tt>rdbuf</tt> method of ostream.
 				This method is needed to access the LogStreamBuf object.
 		*/
 		LogStreamBuf* rdbuf();
@@ -318,24 +318,24 @@ namespace BALL
 				This method assigns a new loglevel which will be used
 				for all messages sent to the LogStream after that call
 				(except for messages which use the temporary loglevel
-				set by \Ref{level}).
+				set by  \link level level \endlink ).
 		*/
 		void setLevel(int level);
 
 		/**	Return the current log level.
-				The LogStreamBuf object has an internal current log level ({\tt level\_}).
+				The LogStreamBuf object has an internal current log level (<tt>level\_</tt>).
 				It is set to 0 by the LogStreamBuf default constructor.
-				This method returns {\tt rdbuf()->level\_} if rdbuf() does not
+				This method returns <tt>rdbuf()->level\_</tt> if rdbuf() does not
 				return a null pointer, 0 otherwise.
 				@return		int the current log level
 		*/
 		int getLevel();
 
 		/**	Set a temporary log level.
-				Using {\bf level}, a temporary loglevel may be defined.
-				It is valid unly until the next {\bf flush} or {\bf endl} is issued.\\
-				Use this command to log a single line with a certain log level.\\
-				{\bf Example:}
+				Using <b>level</b>, a temporary loglevel may be defined.
+				It is valid unly until the next <b>flush</b> or <b>endl</b> is issued. \par
+				Use this command to log a single line with a certain log level. \par
+				<b>Example:</b>
 				\begin{verbatim}
 					log << "log message 1" << endl;
 					log.level(4) << "log message 2" << endl;
@@ -349,19 +349,19 @@ namespace BALL
 		LogStream& level(int level);
 
 		/**	Log an information message.
-				This method is equivalent to \Ref{level}(LogStream::INFORMATION + n). 
+				This method is equivalent to  \link level level \endlink (LogStream::INFORMATION + n). 
 				@param	n the channel 
 		*/
 		LogStream& info(int n = 0);
 
 		/**	Log an error message.
-				This method is equivalent to \Ref{level}(LogStream::ERROR + n). 
+				This method is equivalent to  \link level level \endlink (LogStream::ERROR + n). 
 				@param	n the channel 
 		*/
 		LogStream& error(int n = 0);
 
 		/**	Log an information message.
-				This method is equivalent to \Ref{level}(LogStream::WARNING + n). 
+				This method is equivalent to  \link level level \endlink (LogStream::WARNING + n). 
 				@param	n the channel 
 		*/
 		LogStream& warn(int n = 0);
@@ -377,10 +377,10 @@ namespace BALL
 				associated streams and sets the corresponding minimum
 				and maximum log levels.
 				Any message that is subsequently logged, will be copied
-				to this stream if its log level is between {\tt min\_level}
-				and {\tt max\_level}. If {\tt min\_level} and {\tt max\_level}
+				to this stream if its log level is between <tt>min\_level</tt>
+				and <tt>max\_level</tt>. If <tt>min\_level</tt> and {\tt max\_level}
 				are omitted, all messages are copied to this stream.
-				If {\tt min\_level}	and {\tt max\_level} are equal, this function can be used
+				If <tt>min\_level</tt>	and <tt>max\_level</tt> are equal, this function can be used
 				to listen to a specified channel.
 				@param	s a reference to the stream to be associated
 				@param	min_level the minimum level of messages copied to this stream
@@ -392,7 +392,7 @@ namespace BALL
 
 		/**	Remove an association with a stream.
 				Remove a stream from the stream list and avoid the copying of new messages to
-				this stream.\\
+				this stream. \par
 				If the stream was not in the list of associated streams nothing will
 				happen.
 				@param	s the stream to be removed
@@ -429,18 +429,18 @@ namespace BALL
 				Each line written to the stream will be prefixed by
 				this string. The string may also contain trivial 
 				format specifiers to include loglevel and time/date 
-				of the logged message.\\
+				of the logged message. \par
 				The following format tags are recognized:
 				\begin{itemize}
-					\item {\bf %l}	loglevel
-					\item {\bf %y}	message type ("Error", "Warning", "Information", "-")
-					\item {\bf %T}  time (HH:MM:SS)
-					\item {\bf %t}  time in short format (HH:MM)
-					\item {\bf %D}	date (DD.MM.YYYY)
-					\item {\bf %d}  date in short format (DD.MM.)
-					\item {\bf %S}  time and date (DD.MM.YYYY, HH:MM:SS)
-					\item {\bf %s}  time and date in short format (DD.MM., HH:MM)
-					\item {\bf %%}	percent sign (escape sequence)
+					\item <b>%l</b>	loglevel
+					\item <b>%y</b>	message type ("Error", "Warning", "Information", "-")
+					\item <b>%T</b>  time (HH:MM:SS)
+					\item <b>%t</b>  time in short format (HH:MM)
+					\item <b>%D</b>	date (DD.MM.YYYY)
+					\item <b>%d</b>  date in short format (DD.MM.)
+					\item <b>%S</b>  time and date (DD.MM.YYYY, HH:MM:SS)
+					\item <b>%s</b>  time and date in short format (DD.MM., HH:MM)
+					\item <b>%%</b>	percent sign (escape sequence)
 				\end{itemize}
 		*/
 		void setPrefix(const std::ostream& s, const string& prefix);
@@ -457,7 +457,7 @@ namespace BALL
 	
 		/**	Return the number of lines.
 				This method retruns the number of lines in the buffer 
-				for a given range of levels.\\
+				for a given range of levels. \par
 				If the range is omitted, the total number of messages is
 				returned.
 				@return Size the number of lines matching the log level range
@@ -514,7 +514,7 @@ namespace BALL
 
 
 	/** Global static instance of a logstream.
-			This instance of LogStream is by default bound to {\bf cout} {\bf cerr} by calling
+			This instance of LogStream is by default bound to <b>cout</b> <b>cerr</b> by calling
 			the default constructor.
 	*/
 	extern LogStream	Log;

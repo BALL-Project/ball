@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOLFile.h,v 1.5 2002/12/12 09:48:44 oliver Exp $
+// $Id: MOLFile.h,v 1.6 2003/02/21 16:02:53 anhi Exp $
 
 #ifndef BALL_FORMAT_MOLFILE_H
 #define BALL_FORMAT_MOLFILE_H
@@ -21,8 +21,8 @@ namespace BALL
 	class Molecule;
 
 	/**	MDL MOL file class.
-			This class enables BALL to read and write MDL MOL files. \\
-			{\bf Definition:} \URL{BALL/FORMAT/MOLFile.h} \\
+			This class enables BALL to read and write MDL MOL files.  \par
+			<b>Definition:</b> BALL/FORMAT/MOLFile.h
 	*/
 	class MOLFile
 		: public GenericMolFile
@@ -37,8 +37,8 @@ namespace BALL
 
 		/** String constants used for named properties.
 				Some of the data read from MOL files cannot be stored immediately in
-				the kernel datastructures, so they are stored as \Ref{NamedProperty} objects
-				in \Ref{Atom} and \Ref{Bond}. These string constants are used to access
+				the kernel datastructures, so they are stored as  \link NamedProperty NamedProperty \endlink  objects
+				in  \link Atom Atom \endlink  and  \link Bond Bond \endlink . These string constants are used to access
 				the corresponding fields of the atom and bond block of the MOL file.
 				@see PropertyManager::setProperty
 				@see PropertyManager::getProperty

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FFT3D.h,v 1.2 2002/10/30 10:56:53 anhi Exp $
+// $Id: FFT3D.h,v 1.3 2003/02/21 16:03:42 anhi Exp $
 
 #ifndef BALL_MATHS_FFT3D_H
 #define BALL_MATHS_FFT3D_H
@@ -29,13 +29,13 @@ namespace BALL
 {
 
 	/** A class to perform Fast Fourier Transforms and inverse Fast Fourier Transforms
-			on regularly spaced three dimensional data. \\
-			This class makes use of the freely available library {\bf FFTW}, which can be
-			found at \URL{www.fftw.org}. Normalization, translation and scaling of the
+			on regularly spaced three dimensional data.  \par
+			This class makes use of the freely available library <b>FFTW</b>, which can be
+			found at www.fftw.org
 			coordinate system can be handled automatically. The normalization is chosen
 			symmetrically.
-			\\
-			{\bf Definition:} \URL{BALL/MATHS/FFT3D.h}
+			 \par
+			<b>Definition:</b> BALL/MATHS/FFT3D.h
 	 */
 
 	class FFT3D : public TRegularData3D<FFTW_COMPLEX>
@@ -56,7 +56,7 @@ namespace BALL
 			FFT3D(const FFT3D &data)
 				throw();
 
-			/** Detailed constructor. \\
+			/** Detailed constructor.  \par
 			 		@param ldnX The binary logarithm of the number of grid points in X direction (we use the logarithm to
 										 ensure that the number of points is a power of two, which is important for
 										 the FFT)
@@ -270,7 +270,7 @@ namespace BALL
 			Complex getData(const Vector3& pos) const
 				throw(Exception::OutOfGrid);
 
-			/** Returns the data at point {\bf pos}. If {\bf pos} is not a 
+			/** Returns the data at point <b>pos</b>. If <b>pos</b> is not a 
 			 		point on the grid, the data is linearly interpolated.
 					This method automatically includes the correct phase factor
 					and (symmetric) normalization.
@@ -320,8 +320,8 @@ namespace BALL
 			 */
 			//@{
 
-			/** Returns {\bf true} if the data is considered to be in Fourier space,
-			 		{\bf false} otherwise.
+			/** Returns <b>true</b> if the data is considered to be in Fourier space,
+			 		<b>false</b> otherwise.
 			 */
 			bool isInFourierSpace() const
 				throw();
@@ -347,7 +347,7 @@ namespace BALL
 		throw();
 	
 	/** Global assignment operator from FFT3D to TRegularData3D<float>.
-	 		This operator assigns the {\bf real} part of the complex FFT3D-data to the
+	 		This operator assigns the <b>real</b> part of the complex FFT3D-data to the
 			TRegularData3D<float> to.
 	 */
 	const RegularData3D& operator << (RegularData3D& to, const FFT3D& from)

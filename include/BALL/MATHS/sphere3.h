@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sphere3.h,v 1.27 2003/01/07 14:14:52 amoll Exp $
+// $Id: sphere3.h,v 1.28 2003/02/21 16:03:59 anhi Exp $
 
 #ifndef BALL_MATHS_SPHERE3_H
 #define BALL_MATHS_SPHERE3_H
@@ -33,7 +33,7 @@ namespace BALL
 	//@{
 
 	/** Generic Sphere Class.
-      {\bf Definition:} \URL{BALL/MATHS/sphere3.h}  \\
+      <b>Definition:</b> BALL/MATHS/sphere3.h
 	*/
 	template <typename T>
 	class TSphere3
@@ -48,7 +48,7 @@ namespace BALL
 
 		/**	Default constructor.
 				This method creates a new TSphere3 object. The three components
-				are initialized to {\tt (T)0}.
+				are initialized to <tt>(T)0</tt>.
 		*/
 		TSphere3()
 			throw()
@@ -154,7 +154,7 @@ namespace BALL
 			sphere3.radius = radius;
 		}
 
-		/**	Assign to an instance of Vector3 and a variable of type {\tt T}.
+		/**	Assign to an instance of Vector3 and a variable of type <tt>T</tt>.
 				@param	point the point component
 				@param	rhs the radius component
 		*/
@@ -171,7 +171,7 @@ namespace BALL
 		//@{
 
 		/**	Equality operator.
-				@return bool, {\bf true} if all components are equal, {\bf false} otherwise
+				@return bool, <b>true</b> if all components are equal, <b>false</b> otherwise
 		*/
 		bool operator == (const TSphere3& sphere3) const
 			throw()
@@ -180,7 +180,7 @@ namespace BALL
 		}
 
 		/**	Inequality operator.
-				@return bool, {\bf true} if the two Sphere3 differ in at least one component, {\bf false} otherwise
+				@return bool, <b>true</b> if the two Sphere3 differ in at least one component, <b>false</b> otherwise
 		*/
 		bool operator != (const TSphere3& sphere3) const
 			throw()
@@ -192,7 +192,7 @@ namespace BALL
 				Optional it can be testet, if the point lies on the surface.
 				@param point the point to be tested
 				@param on_surface true to test the surface (default = false)
-				@return bool, {\bf true} or {\bf false}
+				@return bool, <b>true</b> or <b>false</b>
 		*/
 		bool has(const TVector3<T>& point, bool on_surface = false) const
 			throw()
@@ -208,7 +208,7 @@ namespace BALL
 		}
 
 		/**	Test whether the Sphere is empty (radius = 0).
-				@return bool, {\bf true} or {\bf false}
+				@return bool, <b>true</b> or <b>false</b>
 		*/
 		bool isEmpty() const
 			throw()
@@ -223,7 +223,7 @@ namespace BALL
 
 		/**	Test whether instance is valid.
 				Always returns true
-				@return bool {\bf true}
+				@return bool <b>true</b>
 		*/
 		bool isValid() const
 			throw()
@@ -274,7 +274,7 @@ namespace BALL
 	//@{
 
 	/**	Input operator.
-			Reads in an instance of TVector3 and a {\bf T} value : p, radius.
+			Reads in an instance of TVector3 and a <b>T</b> value : p, radius.
 	*/
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TSphere3<T>& sphere3)
@@ -286,10 +286,10 @@ namespace BALL
 	}
 
 	/**	Output Operator.
-			Write the contents of {\tt p} and {\tt radius} to an output stream.
-			The values are enclose in brackets.\\
-			{\bf Example:}\\
-			{\tt ((0 1 1.5) 0.4)}
+			Write the contents of <tt>p</tt> and <tt>radius</tt> to an output stream.
+			The values are enclose in brackets. \par
+			<b>Example:</b> \par
+			<tt>((0 1 1.5) 0.4)</tt>
 	*/
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TSphere3<T>& sphere3)
@@ -302,8 +302,8 @@ namespace BALL
 	//@}
 
 	/**	The Default TSphere3 Type.
-			If double precision is not needed, {\tt TSphere3<float>} should
-			be used. It is predefined as {\tt Sphere3} for convenience.
+			If double precision is not needed, <tt>TSphere3<float></tt> should
+			be used. It is predefined as <tt>Sphere3</tt> for convenience.
 	*/
 	typedef TSphere3<float> Sphere3;
 	

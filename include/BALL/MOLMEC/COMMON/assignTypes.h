@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: assignTypes.h,v 1.8 2002/02/27 12:19:00 sturm Exp $
+// $Id: assignTypes.h,v 1.9 2003/02/21 16:04:15 anhi Exp $
 // Molecular Mechanics: atom type assignment
 
 #ifndef BALL_MOLMEC_COMMON_ASSIGNTYPES_H
@@ -21,7 +21,7 @@ namespace BALL
 {
 	
 	/**	Type assignment processor.
-			{\bf Definition:} \URL{BALL/MOLMEC/COMMON/assignTypes.h}
+			<b>Definition:</b> BALL/MOLMEC/COMMON/assignTypes.h
 	*/
 	class	AssignTypeProcessor
 		:	public UnaryProcessor<Atom>

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ruleEvaluator.h,v 1.9 2002/02/27 12:19:02 sturm Exp $
+// $Id: ruleEvaluator.h,v 1.10 2003/02/21 16:04:23 anhi Exp $
 // Molecular Mechanics: rule-based assignment of properties (typenames, charges, radii, etc.)
 
 #ifndef BALL_MOLMEC_COMMON_RULEEVALUATOR_H
@@ -27,8 +27,8 @@ namespace BALL
 			This class provides means for evaluating rules on Atoms. 
 			It is a helper class of RuleProcessors. 
 			Rules define values depending on atom constellations. 
-			They are defined in an INIFile. \\
-			{\bf Definition:} \URL{BALL/MOLMEC/COMMON/ruleEvaluator.h}
+			They are defined in an INIFile.  \par
+			<b>Definition:</b> BALL/MOLMEC/COMMON/ruleEvaluator.h
 			@see RuleProcessor
 	*/
 	class RuleEvaluator

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.h,v 1.7 2002/12/12 09:48:48 oliver Exp $
+// $Id: backboneModel.h,v 1.8 2003/02/21 16:04:51 anhi Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BACKBONEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_BACKBONEMODEL_H
@@ -32,15 +32,15 @@ namespace BALL
 	{
 		/** AddBackboneModel class.
 				The class AddBackboneModel is a model processor that creates a backbone model
-				through the {\em CA}-atoms of the processed \Ref{Composite} object.
-				The created \Ref{Backbone} object will be inserted to the root of the 
-				start \Ref{Composite} object if the root is of kind \Ref{System}.
-				This processor creates only the \Ref{Backbone} object  without openGL implementation.
-				The derived class \Ref{AddGLBackboneModel} uses the \Ref{GLBackBone} with
+				through the {\em CA}-atoms of the processed  \link Composite Composite \endlink  object.
+				The created  \link Backbone Backbone \endlink  object will be inserted to the root of the 
+				start  \link Composite Composite \endlink  object if the root is of kind  \link System System \endlink .
+				This processor creates only the  \link Backbone Backbone \endlink  object  without openGL implementation.
+				The derived class  \link AddGLBackboneModel AddGLBackboneModel \endlink  uses the  \link GLBackBone GLBackBone \endlink  with
 				openGL implementation.
-				For information about the processor concept see \Ref{Processor} in tbe BALL
-				documentation. \\
-				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/backboneModel.h}
+				For information about the processor concept see  \link Processor Processor \endlink  in tbe BALL
+				documentation.  \par
+				<b>Definition:</b> BALL/MOLVIEW/FUNCTOR/backboneModel.h
 		*/
 		class AddBackboneModel: public BaseModelProcessor
 		{
@@ -63,7 +63,7 @@ namespace BALL
 					Construct new addBackboneModel by copying the addBackboneModel
 					{\em add_Backbone_model}.
 					@param       add_Backbone_model the addBackboneModel to be copied
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em add_Backbone_model}
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of {\em add_Backbone_model}
 					@return      AddBackboneModel new constructed addBackboneModel copied from {\em add_Backbone_model}
 					@see         BaseModelProcessor
 			*/
@@ -79,7 +79,7 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} addBackboneModel.
-					Calls \Ref{destroy}.
+					Calls  \link destroy destroy \endlink .
 					@see         destroy
 			*/
 			virtual ~AddBackboneModel()
@@ -87,7 +87,7 @@ namespace BALL
 
 			/** Explicit default initialization.
 					Clears all internal structures.
-					Calls \Ref{BaseModelProcessor::clear}.
+					Calls  \link BaseModelProcessor::clear BaseModelProcessor::clear \endlink .
 					@see  BaseModelProcessor
 			*/
 			virtual void clear()
@@ -107,8 +107,8 @@ namespace BALL
 			//@{
 			/** Start method.
 					Clear all internal structures.
-					Calls \Ref{BaseModelProcessor::start}.
-					@return bool {\tt true} if the start of {\em *this} addBackboneModel was successful, {\tt false} otherwise
+					Calls  \link BaseModelProcessor::start BaseModelProcessor::start \endlink .
+					@return bool <tt>true</tt> if the start of {\em *this} addBackboneModel was successful, <tt>false</tt> otherwise
 					@see    operator()
 					@see    BaseModelProcessor
 			*/
@@ -116,14 +116,14 @@ namespace BALL
 			
 			/** Finish method.
 					This method will be internally called from the processor mechanism if the processor
-					has finished processing the \Ref{Composite} tree.
-					All previously inserted \Ref{Atom} objects and their calculated colores
-					(inserted in the method \Ref{operator()}) will be used to create a \Ref{Backbone}
+					has finished processing the  \link Composite Composite \endlink  tree.
+					All previously inserted  \link Atom Atom \endlink  objects and their calculated colores
+					(inserted in the method  \link operator() operator() \endlink ) will be used to create a  \link Backbone Backbone \endlink 
 					object.
-					The created backbone will be appended to the root of the start \Ref{Composite}
-					if the root is of kind \Ref{System}.
-					@return bool {\tt true} if the finish of {\em *this} addBackboneModel was successful, {\tt false} otherwise
-					@exeception OutOfMemory thrown if the memory allocation for the \Ref{Backbone} object failed
+					The created backbone will be appended to the root of the start  \link Composite Composite \endlink 
+					if the root is of kind  \link System System \endlink .
+					@return bool <tt>true</tt> if the finish of {\em *this} addBackboneModel was successful, <tt>false</tt> otherwise
+					@exeception OutOfMemory thrown if the memory allocation for the  \link Backbone Backbone \endlink  object failed
 					@see    Backbone
 					@see    operator()
 					@see    Atom
@@ -133,16 +133,16 @@ namespace BALL
 			virtual bool finish();
 			
 			/**	Operator method.
-					This method iterates over each \Ref{Composite} object reachable in the 
-					\Ref{Composite} tree. If {\em composite} is of kind \Ref{Atom} and has the
-					substring {\tt CA} in its name (this method collects only {\em CA}-atoms) than
-					that atom	is stored for later processing in the \Ref{finish} method.
-					The color for that \Ref{Atom} object is calculated with the \Ref{ColorCalculator}
-					object retrieved with the method \Ref{getColorCalculator} and stored for later
+					This method iterates over each  \link Composite Composite \endlink  object reachable in the 
+					 \link Composite Composite \endlink  tree. If {\em composite} is of kind  \link Atom Atom \endlink  and has the
+					substring <tt>CA</tt> in its name (this method collects only {\em CA}-atoms) than
+					that atom	is stored for later processing in the  \link finish finish \endlink  method.
+					The color for that  \link Atom Atom \endlink  object is calculated with the  \link ColorCalculator ColorCalculator \endlink 
+					object retrieved with the method  \link getColorCalculator getColorCalculator \endlink  and stored for later
 					generation of the backbone model.
-					The created backbone will be appended to the root of the \Ref{Composite} object 
+					The created backbone will be appended to the root of the  \link Composite Composite \endlink  object 
 					that has started {\em *this} addBackboneModel.
-					@param  composite the \Ref{Composite} object that will be processed
+					@param  composite the  \link Composite Composite \endlink  object that will be processed
 					@return Processor::Result the result of {\em *this} addBackboneModel
 					@see    ColorCalculator
 					@see    getColorCalculator
@@ -163,7 +163,7 @@ namespace BALL
 			/** Internal value dump.
 					Dump the current state of {\em *this} addBackboneModel to 
 					the output ostream {\em s} with dumping depth {\em depth}.
-					Calls \Ref{BaseModelProcessor::dump}.
+					Calls  \link BaseModelProcessor::dump BaseModelProcessor::dump \endlink .
 					@param   s output stream where to output the state of {\em *this} addBackboneModel
 					@param   depth the dumping depth
 					@see     BaseModelProcessor
@@ -179,18 +179,18 @@ namespace BALL
 
 			/** @name Creation method
 					This method creates a primitive without OpenGL implementation.
-					This method is overridden by the class \Ref{AddGLBackboneModel}
+					This method is overridden by the class  \link AddGLBackboneModel AddGLBackboneModel \endlink 
 					to create primitives with OpenGL implementation to generate the graphical
 					representation of the shapes they represent.
 					@see  AddGLBackboneModel
 			*/
 			//@{
 			/** Create a backbone.
-					Create a \Ref{Backbone} object.
-					This method is overridden by the class \Ref{AddGLBackboneModel} to
+					Create a  \link Backbone Backbone \endlink  object.
+					This method is overridden by the class  \link AddGLBackboneModel AddGLBackboneModel \endlink  to
 					create a primitive with openGL implementation.
-					The method \Ref{operator()} uses this method to create a backbone
-					through the {\em CA} \Ref{Atom} objects.
+					The method  \link operator() operator() \endlink  uses this method to create a backbone
+					through the {\em CA}  \link Atom Atom \endlink  objects.
 					@see  Backbone
 					@see  AddGLBackboneModel
 					@see  Atom

@@ -20,11 +20,11 @@ namespace BALL
 
 		/** MainControlPreferences class.
 				The class MainControlPreferences is a widget that will be inserted into the
-				tab dialog \Ref{Preferences}. It contains the style preferences 
-				of the \Ref{MainControl}.
-				{\em *this} mainControlPreferences will be created in the \Ref{MainControl}
-				object and will be inserted into the \Ref{Preferences} dialog.
-				{\bf Definition:} \URL{BALL/VIEW/GUI/WIDGETS/mainControlPreferences.h}
+				tab dialog  \link Preferences Preferences \endlink . It contains the style preferences 
+				of the  \link MainControl MainControl \endlink .
+				{\em *this} mainControlPreferences will be created in the  \link MainControl MainControl \endlink 
+				object and will be inserted into the  \link Preferences Preferences \endlink  dialog.
+				<b>Definition:</b> BALL/VIEW/GUI/WIDGETS/mainControlPreferences.h
 		*/
 		class MainControlPreferences : public QWidget
 		{
@@ -39,8 +39,8 @@ namespace BALL
 			/** Default Constructor.
 					Construct new mainControlPreferences.
 					{\em *this} mainControlPreferences contains the various styles the 
-					\Ref{MainControl} can have.
-					@param       parent the parent \Ref{QWidget} of {\em *this} mainControlPreferences (See QFileDialog in the QT documentation)
+					 \link MainControl MainControl \endlink  can have.
+					@param       parent the parent  \link QWidget QWidget \endlink  of {\em *this} mainControlPreferences (See QFileDialog in the QT documentation)
 					@param       name the name of {\em *this} mainControlPreferences (See QFileDialog in the QT documentation)
 					@return      MainControlPreferences new constructed mainControlPreferences widget
 			*/
@@ -55,7 +55,7 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} mainControlPreferences.
-					Calls \Ref{clear}.
+					Calls  \link clear clear \endlink .
 			*/
 			virtual ~MainControlPreferences()
 				throw();
@@ -73,7 +73,7 @@ namespace BALL
 			//@{
 			/** Inspection of the selected style.
 					Access the selected style of {\em *this} mainControlPreferences.
-					This method will be called from the method \Ref{MainControl::applyPreferences}.
+					This method will be called from the method  \link MainControl::applyPreferences MainControl::applyPreferences \endlink .
 					@return  QStyle* a pointer to the selected style of {\em *this} mainControlPreferences (See documentation of QT-library for information concerning styles)
 			 */
 			QStyle* getStyle()
@@ -81,9 +81,9 @@ namespace BALL
 			
 			/** Fetch the preferences.
 					Fetch the preferences (the style of {\em *this} mainControlPreferences) from
-					the	\Ref{INIFile} {\em inifile}.
-					This method will be called from the method \Ref{MainControl::fetchPreferences}.
-					@param  inifile the \Ref{INIFile} that contains the needed information for {\em *this} mainControlPreferences
+					the	 \link INIFile INIFile \endlink  {\em inifile}.
+					This method will be called from the method  \link MainControl::fetchPreferences MainControl::fetchPreferences \endlink .
+					@param  inifile the  \link INIFile INIFile \endlink  that contains the needed information for {\em *this} mainControlPreferences
 					@see    writePreferences
 			*/
 			void fetchPreferences(INIFile &inifile)
@@ -91,10 +91,10 @@ namespace BALL
 
 			/** Write the preferences.
 					Write the preferences (the style of {\em *this} mainControlPreferences) to the
-					\Ref{INIFile} {\em inifile}.
+					 \link INIFile INIFile \endlink  {\em inifile}.
 					This method will be called from the method 
-					\Ref{MainControl::writePreferences}.
-					@param  inifile the \Ref{INIFile} to be written into
+					 \link MainControl::writePreferences MainControl::writePreferences \endlink .
+					@param  inifile the  \link INIFile INIFile \endlink  to be written into
 					@see    fetchPreferences
 			*/
 			void writePreferences(INIFile &inifile)

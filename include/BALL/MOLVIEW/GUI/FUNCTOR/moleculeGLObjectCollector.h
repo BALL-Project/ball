@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: moleculeGLObjectCollector.h,v 1.7 2002/12/12 09:48:51 oliver Exp $
+// $Id: moleculeGLObjectCollector.h,v 1.8 2003/02/21 16:05:19 anhi Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_MOLECULEGLOBJECTCOLLECTOR_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_MOLECULEGLOBJECTCOLLECTOR_H
@@ -18,15 +18,15 @@ namespace BALL
 
 		/** MoleculeGLObjectCollector class.
 				The class MoleculeGLObjectCollector is responsible for additionally collecting 
-				the \Ref{GLObject} objects that are found in \Ref{Bond} objects that are available
-				in the processed \Ref{Molecule} object. This is done by overriding the \Ref{finish}
-				method from the class \Ref{GLObjectCollector}. All bond primitives are collected
+				the  \link GLObject GLObject \endlink  objects that are found in  \link Bond Bond \endlink  objects that are available
+				in the processed  \link Molecule Molecule \endlink  object. This is done by overriding the  \link finish finish \endlink 
+				method from the class  \link GLObjectCollector GLObjectCollector \endlink . All bond primitives are collected
 				after the atom primitives are collected by the base class.
-				The \Ref{GLObject} objects
+				The  \link GLObject GLObject \endlink  objects
 				are separated into different visualization groups (=lists) that are necessary
 				for proper rendering.
-				See \Ref{GLObjectCollector} for further information about collecting \Ref{GLObject} objects.\\
-				{\bf Defintion:} \URL{BALL/MOLVIEW/GUI/FUNCTOR/moleculeGLObjectCollector.h}
+				See  \link GLObjectCollector GLObjectCollector \endlink  for further information about collecting  \link GLObject GLObject \endlink  objects. \par
+				<b>Defintion:</b> BALL/MOLVIEW/GUI/FUNCTOR/moleculeGLObjectCollector.h
 		*/
 		class MoleculeGLObjectCollector: public GLObjectCollector
 		{
@@ -51,7 +51,7 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} moleculeGLObjectCollector.
-					Calls \Ref{GLObjectCollector::destroy}
+					Calls  \link GLObjectCollector::destroy GLObjectCollector::destroy \endlink 
 			 */
 			virtual ~MoleculeGLObjectCollector()
 				throw();
@@ -62,12 +62,12 @@ namespace BALL
 			//@{
 
 			/** Finish method.
-					Collects all \Ref{GLObject} objects that are accessable on each \Ref{Bond}
-					of the processed \Ref{Molecule} object (if \Ref{getRootComposite} is of type
-					\Ref{Molecule}).
-					Calls \Ref{GLObjectCollector::operator()} for each \Ref{Bond} of \Ref{Molecule}.
-					@return bool {\tt true} if the finish of {\em *this} moleculeGLObjectCollector was successful, 
-					             {\tt false} otherwise
+					Collects all  \link GLObject GLObject \endlink  objects that are accessable on each  \link Bond Bond \endlink 
+					of the processed  \link Molecule Molecule \endlink  object (if  \link getRootComposite getRootComposite \endlink  is of type
+					 \link Molecule Molecule \endlink ).
+					Calls  \link GLObjectCollector::operator() GLObjectCollector::operator() \endlink  for each  \link Bond Bond \endlink  of \Ref{Molecule}.
+					@return bool <tt>true</tt> if the finish of {\em *this} moleculeGLObjectCollector was successful, 
+					             <tt>false</tt> otherwise
 			*/
 			virtual bool finish()
 				throw();

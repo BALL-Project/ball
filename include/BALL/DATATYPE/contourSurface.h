@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: contourSurface.h,v 1.5 2002/12/12 09:48:43 oliver Exp $
+// $Id: contourSurface.h,v 1.6 2003/02/21 16:01:52 anhi Exp $
 
 #ifndef BALL_DATATYPE_CONTOURSURFACE_H
 #define BALL_DATATYPE_CONTOURSURFACE_H
@@ -181,7 +181,7 @@ static int corner_rotation[NUM_CUBE_ROTATIONS][NUM_CUBE_VERTICES] = {
 	
 
   /** This class is intended to store a single contour surface generated from a RegularData3D - class.
-      {\bf Definition:} \URL{BALL/DATATYPE/contourLine.h}
+      <b>Definition:</b> BALL/DATATYPE/contourLine.h
   */
   template <typename T>  
   class TContourSurface 

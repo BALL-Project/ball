@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: complex.h,v 1.13 2003/01/10 08:21:20 oliver Exp $
+// $Id: complex.h,v 1.14 2003/02/21 16:03:48 anhi Exp $
 
 #ifndef BALL_MATHS_COMPLEX_H
 #define BALL_MATHS_COMPLEX_H
@@ -32,7 +32,7 @@ namespace BALL
 	//@{
 
 	/** Multiply a real number with a complex number. 
-			The symmetric case is a member of the \Ref{TComplex} class.
+			The symmetric case is a member of the  \link TComplex TComplex \endlink  class.
 	*/
 	template <typename T1, typename T2>
 	BALL_INLINE 
@@ -54,8 +54,8 @@ namespace BALL
 	//@}
 
 	/** Generic Complex Number.
-      {\bf Definition:} \URL{BALL/MATHS/complex.h}
-      \\
+      <b>Definition:</b> BALL/MATHS/complex.h
+       \par
 	*/
 	template <typename T>
 	class TComplex
@@ -68,7 +68,7 @@ namespace BALL
 
 		/**	Default constructor.
 				This method creates a new complex object. The two real and imaginary part
-				are initialized to {\tt (T)0}.
+				are initialized to <tt>(T)0</tt>.
 		*/
 		TComplex()
 			throw();
@@ -81,8 +81,8 @@ namespace BALL
 		/**	Detailed constructor.
 				Create a new complex number from a real and imaginary value.
 				The imaginary part may be omitted, in which case it is set to zero.
-				@param	new_re assigned to {\tt re}
-				@param  new_im assigned to {\tt im}
+				@param	new_re assigned to <tt>re</tt>
+				@param  new_im assigned to <tt>im</tt>
 		*/
 		TComplex(const T& new_re, const T& new_im = (T)0)
 			throw();
@@ -115,7 +115,7 @@ namespace BALL
 
 		/** Scalar assignment operator.
 				Assign the real part and set the imaginary part to zero.
-				@param value the constant to assign to {\tt re}
+				@param value the constant to assign to <tt>re</tt>
 		**/
 		const TComplex& operator = (const T& value)
 			throw();
@@ -123,7 +123,7 @@ namespace BALL
 		/**	Array assignment operator.
 				Assigns the first two elements of an array to the real and imaginary part.
 				@param	ptr the array
-				@exception	NullPointer if {\tt ptr == 0}
+				@exception	NullPointer if <tt>ptr == 0</tt>
 		*/
 		const TComplex& operator = (const T* ptr)
 			throw(Exception::NullPointer);
@@ -210,25 +210,25 @@ namespace BALL
 			throw();
 
 		/**	Divide by a real number.
-				@exception Exception::DivisionByZero if {\tt r == (T)0}
+				@exception Exception::DivisionByZero if <tt>r == (T)0</tt>
 		*/
 		TComplex operator / (const T& r) const
 			throw(Exception::DivisionByZero);
 
 		/**	Divide by a real number.
-				@exception Exception::DivisionByZero if {\tt r == (T)0}
+				@exception Exception::DivisionByZero if <tt>r == (T)0</tt>
 		*/
 		const TComplex& operator /= (const T& r)
 			throw(Exception::DivisionByZero);
 
 		/**	Divide by a complex number.
-				@exception Exception::DivisionByZero if {\tt cpx == (T)0}
+				@exception Exception::DivisionByZero if <tt>cpx == (T)0</tt>
 		*/
 		TComplex operator / (const TComplex<T>& cpx) const
 			throw(Exception::DivisionByZero);
 
 		/**	Divide by a complex number.
-				@exception Exception::DivisionByZero if {\tt cpx == (T)0}
+				@exception Exception::DivisionByZero if <tt>cpx == (T)0</tt>
 		*/
 		const TComplex& operator /= (const TComplex<T>& cpx)
 			throw(Exception::DivisionByZero);
@@ -244,38 +244,38 @@ namespace BALL
 		//@{
 
 		/**	Equality operator.
-				@return bool, {\bf true} if real and imaginary parts are equal, {\bf false} otherwise
+				@return bool, <b>true</b> if real and imaginary parts are equal, <b>false</b> otherwise
 		*/
 		bool operator == (const TComplex& cpx) const
 			throw();
 	
 		/**	Inequality operator.
-				@return bool, {\bf true} if the two numbers differ in either the imaginary or the real part, {\bf false} otherwise
+				@return bool, <b>true</b> if the two numbers differ in either the imaginary or the real part, <b>false</b> otherwise
 		*/
 		bool operator != (const TComplex& vector) const
 			throw();
 
 		/**	Equality operator.
-				@return bool, {\bf true} if real part equals {\tt r} and the imaginary part is zero, {\bf false} otherwise
+				@return bool, <b>true</b> if real part equals <tt>r</tt> and the imaginary part is zero, <b>false</b> otherwise
 		*/
 		bool operator == (const T& r) const
 			throw();
 	
 		/**	Inequality operator.
-				@return bool, {\bf true} if real part differs from {\tt r} or the imaginary part is non-zero, {\bf false} otherwise
+				@return bool, <b>true</b> if real part differs from <tt>r</tt> or the imaginary part is non-zero, <b>false</b> otherwise
 		*/
 		bool operator != (const T& r) const
 			throw();
 
 		/**	Zero predicate.
-				@return {\bf true}, if real and imaginary part are zero.
+				@return <b>true</b>, if real and imaginary part are zero.
 				@see Maths::isZero
 		*/
 		bool isZero() const
 			throw();
 
 		/**	Real predicate.
-				@return {\bf true}, if the imaginary part is zero.
+				@return <b>true</b>, if the imaginary part is zero.
 				@see Maths::isZero
 		*/
 		bool isReal() const

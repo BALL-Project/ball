@@ -34,11 +34,11 @@ namespace BALL
 		/**	The LabelProperties class.
 				The class LabelProperties is a dialog for appending to a selection of 
 				molecular objects a label which text and color can be changed.
-				The class \Ref{MolecularControl} is responsible for creating such a selection.
-				If this dialog is used, it should be created with \Ref{MainControl} as parent.
+				The class  \link MolecularControl MolecularControl \endlink  is responsible for creating such a selection.
+				If this dialog is used, it should be created with  \link MainControl MainControl \endlink  as parent.
 				The class LabelPropertiesData contains the definition of the layout of
-				this dialog and is therefore not necessary for understanding. \\
-				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/DIALOGS/labelProperties.h}
+				this dialog and is therefore not necessary for understanding.  \par
+				<b>Definition:</b> BALL/MOLVIEW/GUI/DIALOGS/labelProperties.h
 		*/
 		class LabelProperties : 
 			public LabelPropertiesData,
@@ -55,7 +55,7 @@ namespace BALL
 
 			/** Default Constructor.
 					Construct new labelProperties.
-					Calls \Ref{registerWidget}.
+					Calls  \link registerWidget registerWidget \endlink .
 					@param      parent the parent widget of {\em *this} labelProperties 
 					@param      name the name of {\em *this} labelProperties
 					@return     LabelProperties new constructed labelProperties
@@ -82,8 +82,8 @@ namespace BALL
 			//@{
 
 			/** Message handling method.
-					Handles messages sent by other registered \Ref{ConnectionObject} objects.
-					Catches only \Ref{MolecularSelectionMessage} objects.
+					Handles messages sent by other registered  \link ConnectionObject ConnectionObject \endlink  objects.
+					Catches only  \link MolecularSelectionMessage MolecularSelectionMessage \endlink  objects.
 					If such a message is catched the apply button will be enabled and labels
 					can be appended onto the selection.
 					@param message the pointer to the message that should be processed
@@ -102,10 +102,10 @@ namespace BALL
 			
 			/** Fetches the preferences.
 					Fetches the preferences (the position and the selected color of {\em *this}
-					labelProperties) from the	\Ref{INIFile} {\em inifile}.
-					This method will be called inside the method \Ref{show} from the class
-					\Ref{MainControl}.
-					@param  inifile the \Ref{INIFile} that contains the needed information for {\em *this} labelProperties
+					labelProperties) from the	 \link INIFile INIFile \endlink  {\em inifile}.
+					This method will be called inside the method  \link show show \endlink  from the class
+					 \link MainControl MainControl \endlink .
+					@param  inifile the  \link INIFile INIFile \endlink  that contains the needed information for {\em *this} labelProperties
 					@see    writePreferences
 			*/
 			virtual void fetchPreferences(INIFile &inifile)
@@ -113,10 +113,10 @@ namespace BALL
 			
 			/** Writes the preferences.
 					Writes the preferences (the position and the selected color of {\em *this}
-					labelProperties) to the	\Ref{INIFile} {\em inifile}.
-					This method will be called inside the method \Ref{aboutToExit} from the class
-					\Ref{MainControl}.
-					@param  inifile the \Ref{INIFile} to be written into
+					labelProperties) to the	 \link INIFile INIFile \endlink  {\em inifile}.
+					This method will be called inside the method  \link aboutToExit aboutToExit \endlink  from the class
+					 \link MainControl MainControl \endlink .
+					@param  inifile the  \link INIFile INIFile \endlink  to be written into
 					@see    fetchPreferences
 			*/
 			virtual void writePreferences(INIFile &inifile)
@@ -124,11 +124,11 @@ namespace BALL
 				
 			/**	Initializes the widget.
 					Initializes the popup menu {\em Display} with its checkable submenu 
-					{\em Label Properties} and connects it to the method \Ref{openDialog}.
+					{\em Label Properties} and connects it to the method  \link openDialog openDialog \endlink .
 					This method is called automatically	immediately before the main application 
 					is started. 
-					This method will be called by \Ref{show} from the \Ref{MainControl} object.
-					@param main_control the \Ref{MainControl} object to be initialized with {\em *this} labelProperties
+					This method will be called by  \link show show \endlink  from the  \link MainControl MainControl \endlink  object.
+					@param main_control the  \link MainControl MainControl \endlink  object to be initialized with {\em *this} labelProperties
 					@see   openDialog
 					@see   finalizeWidget
 					@see   insertMenuEntry
@@ -140,10 +140,10 @@ namespace BALL
 			
 			/**	Removes the widget.
 					Removes the checkable submenu {\em Label Properties} from the popup menu
-					{\em Display}	and cuts the connection to the method \Ref{openDialog}.
-					This method will be called by \Ref{aboutToExit} from the \Ref{MainControl}
+					{\em Display}	and cuts the connection to the method  \link openDialog openDialog \endlink .
+					This method will be called by  \link aboutToExit aboutToExit \endlink  from the  \link MainControl MainControl \endlink 
 					object.
-					@param main_control the \Ref{MainControl} object to be finalized with {\em *this} labelProperties
+					@param main_control the  \link MainControl MainControl \endlink  object to be finalized with {\em *this} labelProperties
 					@see   initializeWidget
 					@see   checkMenu
 					@see   removeMenuEntry
@@ -153,12 +153,12 @@ namespace BALL
 				throw();
 			
 			/**	Menu checking method.
-					This method is called by the method \Ref{checkMenus} from the
-					\Ref{MainControl} object before a popup menu is shown.
+					This method is called by the method  \link checkMenus checkMenus \endlink  from the
+					 \link MainControl MainControl \endlink  object before a popup menu is shown.
 					The menus {\em Label Properties} will be checked
 					if {\em *this} labelProperties is visible. It will be enabled if a selection of
 					objects to be labeled is available, disabled otherwise.
-					@param main_control the \Ref{MainControl} object whose menus should be checked
+					@param main_control the  \link MainControl MainControl \endlink  object whose menus should be checked
 					@see   initializeWidget
 					@see   finalizeWidget
 					@see   checkMenus
@@ -177,7 +177,7 @@ namespace BALL
 				
 			/** Starts the labelProperties dialog.
 					Opens {\em *this} labelProperties dialog.
-					Calls \Ref{show} and \Ref{raise} from \Ref{QDialog} class.
+					Calls  \link show show \endlink  and  \link raise raise \endlink  from \Ref{QDialog} class.
 					See documentation of QT-library for information concerning QDialog widgets.
 			*/
 			void openDialog();
@@ -190,11 +190,11 @@ namespace BALL
 			protected slots:
 							
 			/** Indicates the apply button was pressed.
-					Appends a \Ref{GLLabel} with the specified text and color
+					Appends a  \link GLLabel GLLabel \endlink  with the specified text and color
 					to the geometric center of the objects in the selection. 
-					Sents the message \Ref{ChangedCompositeMessage}, \Ref{SceneMessage}
-					and \Ref{WindowMessage} to inform other \Ref{ConnectionObject} about the change
-					in the \Ref{Composite} objects in the selection.
+					Sents the message  \link ChangedCompositeMessage ChangedCompositeMessage \endlink ,  \link SceneMessage SceneMessage \endlink 
+					and  \link WindowMessage WindowMessage \endlink  to inform other  \link ConnectionObject ConnectionObject \endlink  about the change
+					in the  \link Composite Composite \endlink  objects in the selection.
 					@see  onNotify
 					@see  Composite
 					@see  GeometricCenterProcessor
@@ -208,7 +208,7 @@ namespace BALL
 			/** Opens the edit color dialog.
 					Opens the dialog for editing the color in which the text of the label
 					should be drawn.
-					Opens a \Ref{QColorDialog} from the QT-library.
+					Opens a  \link QColorDialog QColorDialog \endlink  from the QT-library.
 					See documentation of QT-library for information concerning QColorDialog widgets.
 			 */ 
 			virtual void editColor();

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expression.h,v 1.21 2002/02/27 12:18:46 sturm Exp $
+// $Id: expression.h,v 1.22 2003/02/21 16:03:19 anhi Exp $
 
 #ifndef BALL_KERNEL_EXPRESSION_H
 #define BALL_KERNEL_EXPRESSION_H
@@ -30,16 +30,16 @@ namespace BALL
 {
 
 	/** Expression class. 
-			This class provides a frontend to ExpressionTree.	\\
-			Expressions may be built from the following modules: \\
-			AND & a conjunction \\
-			OR & a disjunction \\
+			This class provides a frontend to ExpressionTree.	 \par
+			Expressions may be built from the following modules:  \par
+			AND & a conjunction  \par
+			OR & a disjunction  \par
 			predicate(argument) & a predicate class that is derived from
-			\Ref{ExpressionPredicate) and provides {\tt operator () (const Atom& atom) const}. \\
-			\\
+			\Ref{ExpressionPredicate) and provides <tt>operator () (const Atom& atom) const</tt>.  \par
+			 \par
 			Additionally brackets can be used for grouping. At least one bracket
 			pair must exist which encloses the argument of a predicate. Empty arguments are allowed.
-			{\bf Definition:} \URL{BALL/KERNEL/expression.h}
+			<b>Definition:</b> BALL/KERNEL/expression.h
 			@see ExpressionTree
 	*/
 	class Expression
@@ -100,7 +100,7 @@ namespace BALL
 		*/
 		//@{
 
-		/** Evaluate the expression of {\tt atom}
+		/** Evaluate the expression of <tt>atom</tt>
 				@param atom
 		*/
 		virtual bool operator () (const Atom& atom) const 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: peakList.h,v 1.9 2002/12/12 09:48:54 oliver Exp $
+// $Id: peakList.h,v 1.10 2003/02/21 16:05:44 anhi Exp $
 
 #ifndef BALL_NMR_PEAKLIST_H
 #define BALL_NMR_PEAKLIST_H
@@ -22,8 +22,8 @@ namespace BALL
 {
 
 	/**	A generic peak list for spectra of arbitrary dimension.
-			\\
-			{\bf Definition}\URL{BALL/NMR/peakList.h}
+			 \par
+			<b>Definition</b>BALL/NMR/peakList.h
 	*/
 	template <typename PT>
 	class PeakList

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorExtension2.h,v 1.10 2002/12/16 12:22:53 sturm Exp $
+// $Id: colorExtension2.h,v 1.11 2003/02/21 16:07:53 anhi Exp $
 
 #ifndef BALL_VIEW_KERNEL_COLOREXTENSION2_H
 #define BALL_VIEW_KERNEL_COLOREXTENSION2_H
@@ -21,9 +21,9 @@ namespace BALL
 
 		/** ColorExtension2 class.
 				The class ColorExtension2 is used as a base class for all geometric 
-				objects that needs two colors \Ref{ColorRGBA}. It provides the derived
+				objects that needs two colors  \link ColorRGBA ColorRGBA \endlink . It provides the derived
 				class with methods for accessing these colors.
-				{\bf Definition:} \URL{BALL/VIEW/KERNEL/colorExtension2.h}
+				<b>Definition:</b> BALL/VIEW/KERNEL/colorExtension2.h
 		*/
 		class ColorExtension2
 		{
@@ -61,7 +61,7 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} colorExtension2.
-					Calls \Ref{destroy}.
+					Calls  \link destroy destroy \endlink .
 					@see         destroy
 			*/
 			virtual ~ColorExtension2()
@@ -70,7 +70,7 @@ namespace BALL
 			/** Explicit default initialization.
 					Set the colors of {\em *this} colorExtension2 to the color 
 					(0.0, 0.0, 0.0, 1.0).
-					Calls \Ref{ColorRGBA::clear}.
+					Calls  \link ColorRGBA::clear ColorRGBA::clear \endlink .
 					@see ColorRGBA::clear
 			*/
 			virtual void clear()
@@ -92,7 +92,7 @@ namespace BALL
 					colorExtension2.
 					The colors of {\em *this} colorExtension2 are initialized to the colors of 
 					the colorExtension2 {\em color_extension}.
-					Calls \Ref{ColorRGBA::set}.
+					Calls  \link ColorRGBA::set ColorRGBA::set \endlink .
 					@param       color_extension the colorExtension2 to be copied
 					@see         ColorRGBA
 					@see         ColorRGBA::set
@@ -103,9 +103,9 @@ namespace BALL
 			/** Assignment operator.
 					Assign the colorExtension2 {\em color_extension} to {\em *this}
 					colorExtension2.
-					Calls \Ref{set}.
+					Calls  \link set set \endlink .
 					The colors of {\em *this} colorExtension2 are initialized to the colors 
-					of the colorExtension2 {\em color_extension}.\\
+					of the colorExtension2 {\em color_extension}. \par
 					@param       color_extension the colorExtension2 to be copied
 					@return      ColorExtension2& const reference of {\em *this} colorExtension2
 					@see         set
@@ -116,9 +116,9 @@ namespace BALL
 			/** Copying.
 					Copy {\em *this} colorExtension2 to the colorExtension2
 					{\em color_extension}.
-					Calls \Ref{set}.
+					Calls  \link set set \endlink .
 					The colors of the colorExtension2 {\em color_extension} 
-					are initialized to the colors of {\em *this} colorExtension2.\\
+					are initialized to the colors of {\em *this} colorExtension2. \par
 					@param       color_extension the colorExtension2 to be assigned to
 					@see         set
 			*/
@@ -128,7 +128,7 @@ namespace BALL
 			/** Swapping of colorExtensions.
 					Swap the colors of {\em *this} colorExtension2 with the colorExtension2
 					{\em color_extension}.
-					Calls \Ref{ColorRGBA::swap}.
+					Calls  \link ColorRGBA::swap ColorRGBA::swap \endlink .
 					@param       color_extension the colorExtension2 being swapped with {\em *this} colorExtension 
 					@see         ColorExtension2
 					@see         ColorRGBA::swap
@@ -178,14 +178,14 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the first color of {\em *this} colorExtension2.
-					For further information see \Ref{getColor1}.
+					For further information see  \link getColor1 getColor1 \endlink .
 			*/
 			const ColorRGBA& getColor1() const
 				throw();
 
 			/** Inspection of all the components of the first color of {\em *this} colorExtension2.
 					Access all the components of the first color of {\em *this} colorExtension2
-					by using \Ref{ColorUnit}.
+					by using  \link ColorUnit ColorUnit \endlink .
 					@param       red the red component of the first color of {\em *this} colorExtension2
 					@param       green the green component of the first color of {\em *this} colorExtension2
 					@param       blue the blue component of the first color of {\em *this} colorExtension2
@@ -201,7 +201,7 @@ namespace BALL
 			/** Inspection of the components of the first color of {\em *this}
 					colorExtension2.
 					Access only the red, green and blue components of the first color 
-					of {\em *this} colorExtension2	by using \Ref{ColorUnit}.
+					of {\em *this} colorExtension2	by using  \link ColorUnit ColorUnit \endlink .
 					@param       red the red component of the first color of {\em *this} colorExtension2
 					@param       green the green component of the first color of {\em *this} colorExtension2
 					@param       blue the blue component of the first color of {\em *this} colorExtension2
@@ -215,7 +215,7 @@ namespace BALL
 			
 			/** Inspection of the first color of {\em *this} colorExtension2.
 					Access the first color of {\em *this} colorExtension2 by using
-					\Ref{ColorRGBA}.
+					 \link ColorRGBA ColorRGBA \endlink .
 					@param       color the color receiving the first color of {\em *this} colorExtension2
 					@see         setColor1
 					@see         ColorRGBA
@@ -252,7 +252,7 @@ namespace BALL
 			/** Inspection of all the components of the second color of {\em *this}
 					colorExtension2.
 					Access all the components of the second color of {\em *this} colorExtension2
-					by using \Ref{ColorUnit}.
+					by using  \link ColorUnit ColorUnit \endlink .
 					@param       red the red component of the second color of {\em *this} colorExtension2
 					@param       green the green component of the second color of {\em *this} colorExtension2
 					@param       blue the blue component of the second color of {\em *this} colorExtension2
@@ -268,7 +268,7 @@ namespace BALL
 			/** Inspection of the components of the second color of {\em *this}
 					colorExtension2.
 					Access only the red, green and blue components of the second color 
-					of {\em *this} colorExtension2	by using \Ref{ColorUnit}.
+					of {\em *this} colorExtension2	by using  \link ColorUnit ColorUnit \endlink .
 					@param       red the red component of the second color of {\em *this} colorExtension2
 					@param       green the green component of the second color of {\em *this} colorExtension2
 					@param       blue the blue component of the second color of {\em *this} colorExtension2
@@ -291,14 +291,14 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the second color of {\em *this} colorExtension2.
-					For further information see \Ref{getColor2}.
+					For further information see  \link getColor2 getColor2 \endlink .
 			*/
 			const ColorRGBA& getColor2() const
 				throw();
 
 			/** Inspection of the second color of {\em *this} colorExtension2.
 					Access the second color of {\em *this} colorExtension2 by using
-					\Ref{ColorRGBA}.
+					 \link ColorRGBA ColorRGBA \endlink .
 					@param       color the color receiving the second color of {\em *this} colorExtension2
 					@see         setColor2
 					@see         ColorRGBA
@@ -319,7 +319,7 @@ namespace BALL
 				
 			/** Inspection of the first and second color of {\em *this} colorExtension2.
 					Access the first and second color of {\em *this} colorExtension2 by using
-					\Ref{ColorRGBA}.
+					 \link ColorRGBA ColorRGBA \endlink .
 					@param       a the color receiving the first color of {\em *this} colorExtension2
 					@param       b the color receiving the second color of {\em *this} colorExtension2
 					@see         setColors

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: iterator.h,v 1.14 2003/01/07 14:19:05 amoll Exp $
+// $Id: iterator.h,v 1.15 2003/02/21 16:03:27 anhi Exp $
 
 #ifndef BALL_KERNEL_ITERATOR_H
 #define BALL_KERNEL_ITERATOR_H
@@ -73,8 +73,8 @@ namespace BALL
 	/**	Composite Iterator Traits
 			This class is used in the implementation of the kernel iterators.
 			It is intended for internal use only.
-			\\
-			{\bf Definition:} \URL{BALL/KERNEL/iterator.h}
+			 \par
+			<b>Definition:</b> BALL/KERNEL/iterator.h
 			
 	*/
 	class CompositeIteratorTraits_
@@ -143,7 +143,7 @@ namespace BALL
 		//@{
 		/** Return the current status of the iterator.
 				If the iterator is bound and its subcomposite iterator is valid,
-				this predicate returns {\tt true}.
+				this predicate returns <tt>true</tt>.
 		*/
 		bool isValid() const
 			throw();
@@ -190,8 +190,8 @@ namespace BALL
 			throw();
 	
 		/**	Invalidate the iterator.
-				The iterator is separated from its container (\Ref{isSingular} is {\bf true} afterwards)
-				and its \Ref{SubCompositeIterator} is invalidated as well.
+				The iterator is separated from its container ( \link isSingular isSingular \endlink  is <b>true</b> afterwards)
+				and its  \link SubCompositeIterator SubCompositeIterator \endlink  is invalidated as well.
 		*/
 		void invalidate()
 			throw();

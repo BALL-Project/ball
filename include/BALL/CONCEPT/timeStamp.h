@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: timeStamp.h,v 1.16 2002/12/17 21:32:05 oliver Exp $
+// $Id: timeStamp.h,v 1.17 2003/02/21 16:01:48 anhi Exp $
 
 #ifndef BALL_CONCEPT_TIMESTAMP_H
 #define BALL_CONCEPT_TIMESTAMP_H
@@ -35,10 +35,10 @@ namespace BALL
 
 	/**	Time class.
 			Used to store a point of time.
-			This class  provides a higher precision than \Ref{Time}
-			(below seconds). \\
-			{\bf Interface:} {\tt Storable}	\\
-			{\bf Definition:} \URL{BALL/CONCEPT/timeStamp.h} \\
+			This class  provides a higher precision than  \link Time Time \endlink 
+			(below seconds).  \par
+			<b>Interface:</b> <tt>Storable</tt>	 \par
+			<b>Definition:</b> BALL/CONCEPT/timeStamp.h
 	*/
 	class PreciseTime
 	{
@@ -154,8 +154,8 @@ namespace BALL
     //@{
 
     /** Persistent stream writing.
-        This method writes the contents of the \Ref{PreciseTime} objects to the
-        persistent stream using the {\tt writePrimitive} method
+        This method writes the contents of the  \link PreciseTime PreciseTime \endlink  objects to the
+        persistent stream using the <tt>writePrimitive</tt> method
         of the PersistenceManager.
         @param pm the persistence manager
     */
@@ -163,8 +163,8 @@ namespace BALL
 			throw();
 
     /** Persistent stream reading.
-        This method reads the contents of a \Ref{PreciseTime} object from the
-        persistent stream using the {\tt readPrimitive} method
+        This method reads the contents of a  \link PreciseTime PreciseTime \endlink  object from the
+        persistent stream using the <tt>readPrimitive</tt> method
         of the PersistenceManager.
         @param pm the persistence manager
     */
@@ -186,8 +186,8 @@ namespace BALL
 	/**	Time stamp concept.
 			This class implements a so-called time stamp. It is used to 
 			store modification or creation times of objects.
-			{\bf Interface:} {\tt Storable}	\\
-			{\bf Definition:} \URL{BALL/CONCEPT/timeStamp.h} \\
+			<b>Interface:</b> <tt>Storable</tt>	 \par
+			<b>Definition:</b> BALL/CONCEPT/timeStamp.h
 	*/
 	class TimeStamp
 	{
@@ -245,10 +245,10 @@ namespace BALL
 		//@{
 
 		/**	Update the time stamp.
-				Store the value of {\tt time} in the internal time stamp.
-				If {\tt time} is 0, use the current time (as given by
-				\Ref{PreciseTime::now}).
-				@param time the new time stamp (default = \Ref{PreciseTime::now})														
+				Store the value of <tt>time</tt> in the internal time stamp.
+				If <tt>time</tt> is 0, use the current time (as given by
+				 \link PreciseTime::now PreciseTime::now \endlink ).
+				@param time the new time stamp (default =  \link PreciseTime::now PreciseTime::now \endlink )														
 		*/
 		virtual void stamp(const PreciseTime& time = PreciseTime::ZERO) 
 			throw();
@@ -280,8 +280,8 @@ namespace BALL
     //@{
 
     /** Persistent stream writing.
-        This method writes the contents of the \Ref{TimeStamp} objects to the
-        persistent stream using the {\tt writePrimitive} method
+        This method writes the contents of the  \link TimeStamp TimeStamp \endlink  objects to the
+        persistent stream using the <tt>writePrimitive</tt> method
         of the PersistenceManager.
         @param pm the persistence manager
     */
@@ -289,8 +289,8 @@ namespace BALL
 			throw();
 
     /** Persistent stream reading.
-        This method reads the contents of a \Ref{TimeStamp} object from the
-        persistent stream using the {\tt readPrimitive} method
+        This method reads the contents of a  \link TimeStamp TimeStamp \endlink  object from the
+        persistent stream using the <tt>readPrimitive</tt> method
         of the PersistenceManager.
         @param pm the persistence manager
     */

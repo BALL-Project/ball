@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: list.h,v 1.15 2003/02/19 12:29:53 amoll Exp $
+// $Id: list.h,v 1.16 2003/02/21 16:01:57 anhi Exp $
 
 #ifndef BALL_DATATYPE_LIST_H
 #define BALL_DATATYPE_LIST_H
@@ -25,7 +25,7 @@ namespace BALL
 	
 	/** Extended list object.
 		This object is an improved version of the STL list class
-		{\bf Definition:} \URL{BALL/DATATYPE/list.h}
+		<b>Definition:</b> BALL/DATATYPE/list.h
 	*/
  	template <typename Value>
 	class List
@@ -140,9 +140,9 @@ namespace BALL
 			return (Size)size();
 		}
 
-		/** Remove an item from the list. The first item that matches {\tt item} will be removed.
+		/** Remove an item from the list. The first item that matches <tt>item</tt> will be removed.
 				@param 	item the item to be removed
-				@return bool {\bf true} if the item was removed
+				@return bool <b>true</b> if the item was removed
 		 */
 		bool remove(const Value& item) throw()
 		{
@@ -163,7 +163,7 @@ namespace BALL
 		//@{
 
 		/** Return true if the list is empty.
-				This method return {\bf true} if the list does not contain any entries.
+				This method return <b>true</b> if the list does not contain any entries.
 		*/
 		bool isEmpty() const throw()
 		{

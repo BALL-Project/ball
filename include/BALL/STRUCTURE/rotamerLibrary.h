@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rotamerLibrary.h,v 1.18 2002/12/12 09:48:55 oliver Exp $
+// $Id: rotamerLibrary.h,v 1.19 2003/02/21 16:06:54 anhi Exp $
 
 #ifndef BALL_STRUCTURE_ROTAMERLIBRARY_H
 #define BALL_STRUCTURE_ROTAMERLIBRARY_H
@@ -26,7 +26,7 @@ namespace BALL
 {
 
 	/** Rotamer class.
-			{\bf Definition:} \URL{BALL/STRUCTURE/rotamerLibrary.h}
+			<b>Definition:</b> BALL/STRUCTURE/rotamerLibrary.h
 	*/
 	class Rotamer
 	{
@@ -78,7 +78,7 @@ namespace BALL
 
 
 	/** ResidueRotamerSet.
-			{\bf Definition:} \URL{BALL/STRUCTURE/rotamerLibrary.h}
+			<b>Definition:</b> BALL/STRUCTURE/rotamerLibrary.h
 	*/
 	class ResidueRotamerSet
 	{
@@ -183,7 +183,7 @@ namespace BALL
 		Rotamer getRotamer(const Residue& residue) const;
 
 		/**	Return a reference to a given rotamer by number.
-				The index should be in the range [0, \Ref{getNumberOfRotamers}()[,
+				The index should be in the range [0,  \link getNumberOfRotamers getNumberOfRotamers \endlink ()[,
 				however the index is computed modulo the maximum number, so it
 				really doesn't matter.
 		*/

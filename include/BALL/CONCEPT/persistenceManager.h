@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: persistenceManager.h,v 1.36 2002/12/22 15:56:23 oliver Exp $
+// $Id: persistenceManager.h,v 1.37 2003/02/21 16:01:38 anhi Exp $
 
 #ifndef BALL_CONCEPT_PERSISTENCEMANAGER_H
 #define BALL_CONCEPT_PERSISTENCEMANAGER_H
@@ -37,18 +37,18 @@ namespace BALL
 	/**	Persistence manager class.
 			This class serializes and deserializes persistent objects and
 			provides support for the implementation of the object-specific 
-			serialization methods \Ref{persistentRead} and \Ref{persistentWrite}.
+			serialization methods  \link persistentRead persistentRead \endlink  and  \link persistentWrite persistentWrite \endlink .
 			It defines three different layers:
 			\begin{itemize}
-				\item {\bf Layer 0} contains the basic I/O routines for primitive
+				\item <b>Layer 0</b> contains the basic I/O routines for primitive
 					data types. All methods of layer 0 are virtual to exchange the 
 					implementation of the format-independent storage and retrieval of
 					this data (e.g. XDR or text format)
-				\item {\bf Layer 1} implements the methods needed to store objects
+				\item <b>Layer 1</b> implements the methods needed to store objects
 					or more complex data structures using Layer 0. To implement
 					object persistence for a user defined object, methods from layer
 					0 and layer 1 are needed
-				\item {\bf Layer 2} implements the persistence manager's {\em user interface}.
+				\item <b>Layer 2</b> implements the persistence manager's {\em user interface}.
 					These are the methods needed to register classes,
 					set the associated streams, and to store or retrieve objects.
 			\end{itemize}
@@ -56,8 +56,8 @@ namespace BALL
 			the referenced object is automatically initiated after the objects
 			holding the pointer has been written. Hence, pointers between persistent 
 			objects remain valid after deserializing the objects again.
-			\\
-			{\bf Note:} This class is mainly an interface definition and contains
+			 \par
+			<b>Note:</b> This class is mainly an interface definition and contains
 			abstract methods. Do not try to instantiate a PersistenceManager,
 			your compiler will be complaining.
 			@see	PersistentObject
@@ -74,10 +74,10 @@ namespace BALL
 			
 		/**	Create method type.
 				This type describes a method to dynamically create a specific
-				object.  It should return a {\tt void} pointer for interface
+				object.  It should return a <tt>void</tt> pointer for interface
 				compatibility and doesn't take an argument.  It creates a new
-				object and returns the object's {\tt this} pointer (cast to {\tt
-				void*}).  The \Ref{getNew} function (in the RTTI namespace) is an
+				object and returns the object's <tt>this</tt> pointer (cast to {\tt
+				void*}).  The  \link getNew getNew \endlink  function (in the RTTI namespace) is an
 				example for such a method.
 				@see registerClass
 				@see RTTI
@@ -122,7 +122,7 @@ namespace BALL
 		/**	Destructor.
 				Destruct the persistence manager and and clear up all data
 				structures. The associated streams or sockets
-				(\Ref{setIStream}/\Ref{setOStream}) are not closed.
+				( \link setIStream setIStream \endlink / \link setOStream setOStream \endlink ) are not closed.
 		*/
 		virtual ~PersistenceManager()
       throw();
@@ -137,7 +137,7 @@ namespace BALL
 				Each object read by the persistence manager has to be constructed
 				somehow. The persistence manager first reads a class' signature
 				(i.e. a unique identifier in the context of this stream). This is
-				usually the stream name of the class (see \Ref{getStreamName}), but
+				usually the stream name of the class (see  \link getStreamName getStreamName \endlink ), but
 				can be an arbitrary string (without blanks). When reading an
 				object header with a given class signature, the persistence manager
 				tries to find a method to create an instance of this object. For
@@ -145,7 +145,7 @@ namespace BALL
 				classes to be read has to be contained in this hash map together
 				with a method to create an instance of this object. This is done
 				by calling registerClass. The create method is usually the
-				\Ref{getNew} method for a class:
+				 \link getNew getNew \endlink  method for a class:
 \begin{verbatim}
 	PersistenceManager pm;
 	pm.registerClass(RTTI::getStreamName<Atom>(), RTTI::getNew<Atom>);
@@ -153,7 +153,7 @@ namespace BALL
 \end{verbatim}
 				Remember to include the {\em baseclasses} of each class, too! To
 				register all kernel classes, use the
-				\Ref{BALL_REGISTER_PERSISTENT_KERNEL_CLASSES} macro.
+				 \link BALL_REGISTER_PERSISTENT_KERNEL_CLASSES BALL_REGISTER_PERSISTENT_KERNEL_CLASSES \endlink  macro.
 				@param signature the class signatur
 				@param m a dynamic class create method
 		*/
@@ -196,9 +196,9 @@ namespace BALL
 				This method write a start marker to the output stream and prepares
 				the stream and the persistence manager's internal data structures
 				for the output of an object. The start marker is written via the
-				method \Ref{writeStreamHeader}.
-				\\
-				It need not be called usually, as it is called by {\tt operator >>}.
+				method  \link writeStreamHeader writeStreamHeader \endlink .
+				 \par
+				It need not be called usually, as it is called by <tt>operator >></tt>.
 		*/
 		void startOutput()
       throw();
@@ -211,8 +211,8 @@ namespace BALL
 				their persistent write methods.  It then writes an end marker to
 				the file (via writeStreamTrailer) and clears the pending output
 				list.
-				\\
-				It need not be called usually, as it is called by {\tt operator >>}.
+				 \par
+				It need not be called usually, as it is called by <tt>operator >></tt>.
 		*/
 		void endOutput()
       throw();
@@ -221,10 +221,10 @@ namespace BALL
 				This method tries to read a persistent object from the stream,
 				creates the object and all dependend objects, finally demangles all
 				pointers and references.
-				\\
+				 \par
 				If no object could be read or the format was not correct, a null
 				pointer is returned.
-				@return	0 if no object could be read, the object's {\tt this}
+				@return	0 if no object could be read, the object's <tt>this</tt>
 								pointer otherwise
 		*/	
 		PersistentObject*	readObject()
@@ -237,7 +237,7 @@ namespace BALL
       throw();
 
 		/**	Read a persistent object from a stream.
-				This method calls \Ref{readObject}.
+				This method calls  \link readObject readObject \endlink .
 		*/
 		PersistenceManager& operator >> (PersistentObject*& object_ptr)
       throw();
@@ -365,7 +365,7 @@ namespace BALL
 			throw();
 
 		/**	Write an array of persistent objects.
-				This method writes {\tt size} persistent objects to the persistent
+				This method writes <tt>size</tt> persistent objects to the persistent
 				stream. It also writes the necessary header and trailer.
 				@param	array the array of persistent objects
 				@param	name the name (usually the name of the member variable)
@@ -376,7 +376,7 @@ namespace BALL
 			throw();
 
 		/**	Read an array of persistent objects.
-				This method reads {\tt size} persistent objects from the persistent
+				This method reads <tt>size</tt> persistent objects from the persistent
 				stream. It also checks header and trailer of the array.
 				@param	array the array of persistent objects
 				@param	name the name (usually the name of the member variable)
@@ -387,7 +387,7 @@ namespace BALL
 			throw();
 
 		/** Write an array of pointers to persistent objects.
-				Thhis method writes {\tt size} persistent objects to the persistent
+				Thhis method writes <tt>size</tt> persistent objects to the persistent
 				stream. It also writes the necessary header and trailer.
 				@param  array the array of persistent object pointers
 				@param  name the name (usually the name of the member variable)
@@ -398,7 +398,7 @@ namespace BALL
 			throw();
 	
 		/**	Read an array of persistent object pointers.
-				This method reads {\tt size} persistent object pointers from the
+				This method reads <tt>size</tt> persistent object pointers from the
 				persistent stream. It also checks header and trailer of the array.
 				@param	array the array of persistent object pointers
 				@param	name the name (usually the name of the member variable)
@@ -416,14 +416,14 @@ namespace BALL
 			
 		/**	Write the header for an object.
 				This method writes the header information containing the class
-				signature, the name and its {\tt this pointer}.  The name
+				signature, the name and its <tt>this pointer</tt>.  The name
 				information is required to differentiate between base classes of an
 				object and member objects or the object itself. If writeHeader is
-				called for a base class, name should be set to 0. {\tt type_name}
+				called for a base class, name should be set to 0. <tt>type_name</tt>
 				should refer to the stream name of an object (see
-				\Ref{getStreamName}). \\
+				 \link getStreamName getStreamName \endlink ).  \par
 				When defining an object (i.e. when writing the first header to a
-				persistent stream), {\tt name} should be set to {\tt ""}. For base
+				persistent stream), <tt>name</tt> should be set to <tt>""</tt>. For base
 				classes, name has to be set to 0. The exact behaviour of this
 				method is implementation dependend - it is abstract for
 				PersistenceManager.
@@ -434,9 +434,9 @@ namespace BALL
 		/**	Check an object header.
 				@param	type_name the stream name of the class to be read
 				@param	name the expected name of the object 
-				@param	ptr a reference to a {\tt PointerSizeUInt} to store the {\tt this} 
+				@param	ptr a reference to a <tt>PointerSizeUInt</tt> to store the <tt>this</tt> 
 								pointer of the object read from the stream
-				@return	bool true, if the header was correct, {\bf false}
+				@return	bool true, if the header was correct, <b>false</b>
 								otherwise
 				@return	ptr the pointer is set to the value read from the file
 		*/
@@ -643,17 +643,17 @@ namespace BALL
 		/**	@name	Put methods for primitive data types.
 				Persistence in BALL supports the following predefined data types:
 				\begin{tabular}{lcc}
-					Name & signed/unsigned & Size (in bit)\\
+					Name & signed/unsigned & Size (in bit) \par
 					\hline
-					char & signed & 8\\
-					bool & - & 1\\
-					Byte & unsigned & 8\\
-					Index & signed & 32\\
-					Size/Position & unsigned & 32\\
-					PointerSizeUInt & unsigned & 64\\
-					float & signed & 32\\
-					double & signed & 64\\
-					long double & signed & 128\\
+					char & signed & 8 \par
+					bool & - & 1 \par
+					Byte & unsigned & 8 \par
+					Index & signed & 32 \par
+					Size/Position & unsigned & 32 \par
+					PointerSizeUInt & unsigned & 64 \par
+					float & signed & 32 \par
+					double & signed & 64 \par
+					long double & signed & 128 \par
 					String & - & -
 				\end{tabular}
 		*/

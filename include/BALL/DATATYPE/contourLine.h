@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: contourLine.h,v 1.8 2002/02/27 12:18:31 sturm Exp $
+// $Id: contourLine.h,v 1.9 2003/02/21 16:01:51 anhi Exp $
 
 #ifndef BALL_DATATYPE_CONTOURLINE_H
 #define BALL_DATATYPE_CONTOURLINE_H
@@ -63,7 +63,7 @@ namespace BALL
 
 
   /** This class is intended to store a single contour line generated from a RegularData2D - class.
-      {\bf Definition:} \URL{BALL/DATATYPE/contourLine.h}
+      <b>Definition:</b> BALL/DATATYPE/contourLine.h
   */
   template <typename T>  
   class TContourLine

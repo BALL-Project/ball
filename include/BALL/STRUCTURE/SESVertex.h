@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SESVertex.h,v 1.14 2002/12/17 14:13:11 anker Exp $
+// $Id: SESVertex.h,v 1.15 2003/02/21 16:06:38 anhi Exp $
 
 #ifndef BALL_STRUCTURE_SESVERTEX_H
 #define BALL_STRUCTURE_SESVERTEX_H
@@ -26,7 +26,7 @@ namespace BALL
 	class SESTriangulator;
 
 	/** Generic SESVertex Class.
-      {\bf Definition:} \URL{BALL/STRUCTURE/SESVertex.h}
+      <b>Definition:</b> BALL/STRUCTURE/SESVertex.h
 	*/
 	class SESVertex : public GraphVertex< SESVertex,SESEdge,SESFace >
 	{
@@ -171,19 +171,19 @@ namespace BALL
 		//@{
 
 		/**	Equality operator.
-				@return	bool	{\bf true}
+				@return	bool	<b>true</b>
 		*/
 		virtual bool operator == (const SESVertex&) const
 			throw();
 
 		/**	Inequality operator.
-				@return	bool	{\bf false}
+				@return	bool	<b>false</b>
 		*/
 		virtual bool operator != (const SESVertex&) const
 			throw();
 
 		/**	Similarity operator.
-				@return	bool	{\bf true}
+				@return	bool	<b>true</b>
 		*/
 		virtual bool operator *= (const SESVertex&) const
 			throw();

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineModel.h,v 1.11 2002/12/12 09:48:48 oliver Exp $
+// $Id: lineModel.h,v 1.12 2003/02/21 16:04:57 anhi Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_LINEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_LINEMODEL_H
@@ -34,9 +34,9 @@ namespace BALL
 				The class AddLineModel is a model processor that is responsible
 				for creating a line model.
 				This processor creates only the primitive objects without openGL implementation.
-				The derived class \Ref{AddGLLineModel} uses the primitives with openGL implementation.
-				For information about the processor concept see \Ref{Processor} in tbe BALL documentation.\\
-				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/lineModel.h}
+				The derived class  \link AddGLLineModel AddGLLineModel \endlink  uses the primitives with openGL implementation.
+				For information about the processor concept see  \link Processor Processor \endlink  in tbe BALL documentation. \par
+				<b>Definition:</b> BALL/MOLVIEW/FUNCTOR/lineModel.h
 		*/
 		class AddLineModel: public AtomBondModelBaseProcessor
 		{
@@ -58,7 +58,7 @@ namespace BALL
 					Construct new addLineModel by copying the addLineModel
 					{\em add_line_model}.
 					@param       add_line_model the addLineModel to be copied
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em add_line_model}
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of {\em add_line_model}
 					@return      AddLineModel new constructed addLineModel copied from {\em add_line_model}
 					@see         AtomBondModelBaseProcessor
 			*/
@@ -72,14 +72,14 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} addLineModel.
-					Calls \Ref{destroy}.
+					Calls  \link destroy destroy \endlink .
 					@see         destroy
 			*/
 			virtual ~AddLineModel()
 				throw();
 
 			/** Explicit default initialization.
-					Calls \Ref{AtomBondModelBaseProcessor::clear}.
+					Calls  \link AtomBondModelBaseProcessor::clear AtomBondModelBaseProcessor::clear \endlink .
 					@see  AtomBondModelBaseProcessor
 			*/
 			virtual void clear()
@@ -97,12 +97,12 @@ namespace BALL
 			//@{
 
 			/** Start method.
-					Initialize the properties of the \Ref{BaseModelConnector} to {\em *this}
+					Initialize the properties of the  \link BaseModelConnector BaseModelConnector \endlink  to {\em *this}
 					addLineModel and changes the property of {\em *this} addLineModel from
-					{\tt PROPERTY__DRAWING_MODE_SOLID} to {\tt PROPERTY__DRAWING_MODE_WIREFRAME}.
-					See \Ref{GeometricObject} for information about properties.
-					Calls \Ref{AtomBondModelBaseProcessor::start}.
-					@return bool {\tt true} if the start of {\em *this} addLineModel was successful, {\tt false} otherwise
+					<tt>PROPERTY__DRAWING_MODE_SOLID</tt> to <tt>PROPERTY__DRAWING_MODE_WIREFRAME</tt>.
+					See  \link GeometricObject GeometricObject \endlink  for information about properties.
+					Calls  \link AtomBondModelBaseProcessor::start AtomBondModelBaseProcessor::start \endlink .
+					@return bool <tt>true</tt> if the start of {\em *this} addLineModel was successful, <tt>false</tt> otherwise
 					@see    operator()
 					@see    AtomBondModelBaseProcessor
 					@see    getModelConnector
@@ -113,11 +113,11 @@ namespace BALL
 			
 			/** Finish method.
 					This method will be internally called from the processor mechanism if the processor
-					has finished processing the \Ref{Composite} tree.
-					All previously inserted \Ref{Atom} objects (inserted with the method \Ref{insertAtom_})
-					will be processed with the method \Ref{buildBondModels_} to create the graphical 
-					representation of the \Ref{Bond} objects.
-					@return bool {\tt true} if the finish of {\em *this} addLineModel was successful, {\tt false} otherwise
+					has finished processing the  \link Composite Composite \endlink  tree.
+					All previously inserted  \link Atom Atom \endlink  objects (inserted with the method  \link insertAtom_ insertAtom_ \endlink )
+					will be processed with the method  \link buildBondModels_ buildBondModels_ \endlink  to create the graphical 
+					representation of the  \link Bond Bond \endlink  objects.
+					@return bool <tt>true</tt> if the finish of {\em *this} addLineModel was successful, <tt>false</tt> otherwise
 					@see    insertAtom_
 					@see    buildBondModels_
 					@see    operator()
@@ -128,20 +128,20 @@ namespace BALL
 			virtual bool finish();
 			
 			/**	Operator method.
-					This method iterates over each \Ref{Composite} object reachable in the 
-					\Ref{Composite} tree. If {\em composite} is of kind \Ref{Atom} than a \Ref{Point}
+					This method iterates over each  \link Composite Composite \endlink  object reachable in the 
+					 \link Composite Composite \endlink  tree. If {\em composite} is of kind  \link Atom Atom \endlink  than a \Ref{Point}
 					is created for that atom, appended to {\em composite} and inserted with the
-					method \Ref{insertAtom_}.
+					method  \link insertAtom_ insertAtom_ \endlink .
 					All previously appended primitives to {\em composite}	are removed using the method
-					\Ref{removeGeometricObjects_}.
-					The color for that \Ref{Point} object is calculated with the \Ref{ColorCalculator}
-					object retrieved with the method \Ref{getColorCalculator}.
-					All atoms inserted with the method \Ref{insertAtom_} will later used for creating
-					the model of the reachable \Ref{Bond} objects. Those models will be created
-					with the method \Ref{buildBondModels_}.
-					@param  composite the \Ref{Composite} object that will be processed
+					 \link removeGeometricObjects_ removeGeometricObjects_ \endlink .
+					The color for that  \link Point Point \endlink  object is calculated with the  \link ColorCalculator ColorCalculator \endlink 
+					object retrieved with the method  \link getColorCalculator getColorCalculator \endlink .
+					All atoms inserted with the method  \link insertAtom_ insertAtom_ \endlink  will later used for creating
+					the model of the reachable  \link Bond Bond \endlink  objects. Those models will be created
+					with the method  \link buildBondModels_ buildBondModels_ \endlink .
+					@param  composite the  \link Composite Composite \endlink  object that will be processed
 					@return Processor::Result the result of {\em *this} addLineModel
-					@exeception OutOfMemory thrown if the memory allocation for a \Ref{Point} object failed
+					@exeception OutOfMemory thrown if the memory allocation for a  \link Point Point \endlink  object failed
 					@see    Point
 					@see    ColorCalculator
 					@see    getColorCalculator
@@ -164,7 +164,7 @@ namespace BALL
 			/** Internal value dump.
 					Dump the current state of {\em *this} addLineModel to 
 					the output ostream {\em s} with dumping depth {\em depth}.
-					Calls \Ref{AtomBondModelBaseProcessor::dump}.
+					Calls  \link AtomBondModelBaseProcessor::dump AtomBondModelBaseProcessor::dump \endlink .
 					@param   s output stream where to output the state of {\em *this} addLineModel
 					@param   depth the dumping depth
 					@see     AtomBondModelBaseProcessor
@@ -179,7 +179,7 @@ namespace BALL
 			
 			/** @name Creation methods
 					This methods create primitives without OpenGL implementation.
-					This methods are overridden by the class \Ref{AddGLLineModel}
+					This methods are overridden by the class  \link AddGLLineModel AddGLLineModel \endlink 
 					to create primitives with OpenGL implementation to generate the graphical
 					representation of the shapes they represent.
 					@see  AddGLLineModel
@@ -187,11 +187,11 @@ namespace BALL
 			//@{
 			
 			/** Create a point.
-					Create a \Ref{Point} object.
-					This method is overridden by the class \Ref{AddGLLineModel} to
+					Create a  \link Point Point \endlink  object.
+					This method is overridden by the class  \link AddGLLineModel AddGLLineModel \endlink  to
 					create a primitive with openGL implementation.
-					The method \Ref{operator()} uses this method to create a point
-					for \Ref{Atom} objects.
+					The method  \link operator() operator() \endlink  uses this method to create a point
+					for  \link Atom Atom \endlink  objects.
 					@see  Point
 					@see  AddGLLineModel
 					@see  Atom
@@ -199,11 +199,11 @@ namespace BALL
 			virtual Point* createPoint_();
 
 			/** Create a one colored line.
-					Create a \Ref{Line} object.
-					This method is overridden by the class \Ref{AddGLLineModel} to
+					Create a  \link Line Line \endlink  object.
+					This method is overridden by the class  \link AddGLLineModel AddGLLineModel \endlink  to
 					create a primitive with openGL implementation.
-					The method \Ref{operator()} uses this method to create one colored
-					lines for \Ref{Bond} objects whose \Ref{Atom} objects have the same
+					The method  \link operator() operator() \endlink  uses this method to create one colored
+					lines for  \link Bond Bond \endlink  objects whose  \link Atom Atom \endlink  objects have the same
 					element types and thus the same color.
 					@see  Line
 					@see  AddGLLineModel
@@ -213,11 +213,11 @@ namespace BALL
 			virtual Line* createLine_();
 
 			/** Create a two colored line.
-					Create a \Ref{TwoColoredLine} object.
-					This method is overridden by the class \Ref{AddGLLineModel} to
+					Create a  \link TwoColoredLine TwoColoredLine \endlink  object.
+					This method is overridden by the class  \link AddGLLineModel AddGLLineModel \endlink  to
 					create a primitive with openGL implementation.
-					The method \Ref{operator()} uses this method to create two colored
-					lines for \Ref{Bond} objects whose \Ref{Atom} objects have different
+					The method  \link operator() operator() \endlink  uses this method to create two colored
+					lines for  \link Bond Bond \endlink  objects whose  \link Atom Atom \endlink  objects have different
 					element types and thus different colors.
 					@see  TwoColoredLine
 					@see  AddGLLineModel

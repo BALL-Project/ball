@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricTransformations.h,v 1.8 2002/02/27 12:19:44 sturm Exp $
+// $Id: geometricTransformations.h,v 1.9 2003/02/21 16:06:43 anhi Exp $
 
 #ifndef BALL_STRUCTURE_GEOMETRICTRANSFORMATIONS_H
 #define BALL_STRUCTURE_GEOMETRICTRANSFORMATIONS_H
@@ -37,8 +37,8 @@ namespace BALL
 			This processor executes a translation on each atom of a given Composite object.
 			The translation may be given in the constructor, or by calling setTranslation.
 			Applying the processor to a given Composite object will add the given
-			translation vector to the coordinates of each Atom object (and derived classes).\\
-			{\bf Definition:} \URL{BALL/STRUCTURE/geometricTransformations.h}
+			translation vector to the coordinates of each Atom object (and derived classes). \par
+			<b>Definition:</b> BALL/STRUCTURE/geometricTransformations.h
 	*/
 	class TranslationProcessor
 		:	public UnaryProcessor<Atom> 
@@ -83,8 +83,8 @@ namespace BALL
 			The transformation may be given in the constructor, or by calling setTransformation.
 			Applying the applicator to a given Composite object will multiply the coordinates
 			of each Atom object (or objects derived from Atom) with the given transformation
-			matrix.\\
-			{\bf Definition:} \URL{BALL/STRUCTURE/geometricTransformations.h}
+			matrix. \par
+			<b>Definition:</b> BALL/STRUCTURE/geometricTransformations.h
 	*/
 	class TransformationProcessor
 		:public UnaryProcessor<Atom> 
@@ -96,10 +96,10 @@ namespace BALL
 				is set to identity:
 				\[
 					\left(	\begin{array}{cccc}
-										1 & 0 & 0 & 0 \\
-										0 & 1 & 0 & 0 \\
-										0 & 0 & 1 & 0 \\
-										0 & 0 & 0 & 1 \\
+										1 & 0 & 0 & 0  \par
+										0 & 1 & 0 & 0  \par
+										0 & 0 & 1 & 0  \par
+										0 & 0 & 0 & 1  \par
 									\end{array}
 					\right)
 				\]

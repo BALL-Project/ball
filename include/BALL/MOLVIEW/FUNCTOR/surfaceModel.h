@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceModel.h,v 1.10 2003/02/19 16:14:32 amoll Exp $
+// $Id: surfaceModel.h,v 1.11 2003/02/21 16:05:03 anhi Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_SURFACEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_SURFACEMODEL_H
@@ -27,12 +27,12 @@ namespace BALL
 
 		/** AddSurfaceModel class.
 				The class AddSurfaceModel is a model processor that creates a surface model
-				of the given start \Ref{Composite} object. 
-				A \Ref{Mesh} object is created and filled with the method \Ref{getSurface}
-				from the class \Ref{SurfaceProcessor}.
-				The derived class \Ref{AddGLSurfaceModel} uses the \Ref{GLMesh} with openGL implementation.
-				For information about the processor concept see \Ref{Processor} in tbe BALL documentation. \\
-				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/surfaceModel.h}
+				of the given start  \link Composite Composite \endlink  object. 
+				A  \link Mesh Mesh \endlink  object is created and filled with the method  \link getSurface getSurface \endlink 
+				from the class  \link SurfaceProcessor SurfaceProcessor \endlink .
+				The derived class  \link AddGLSurfaceModel AddGLSurfaceModel \endlink  uses the  \link GLMesh GLMesh \endlink  with openGL implementation.
+				For information about the processor concept see  \link Processor Processor \endlink  in tbe BALL documentation.  \par
+				<b>Definition:</b> BALL/MOLVIEW/FUNCTOR/surfaceModel.h
 				@see     Mesh
 				@see     SurfaceProcessor
 		*/
@@ -58,7 +58,7 @@ namespace BALL
 					Construct new addSurfaceModel by copying the addSurfaceModel
 					{\em add_surface_model}.
 					@param       add_surface_model the addSurfaceModel to be copied
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em add_surface_model}
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of {\em add_surface_model}
 					@return      AddSurfaceModel new constructed addSurfaceModel copied from {\em add_surface_model}
 					@see         BaseModelProcessor
 			*/
@@ -72,7 +72,7 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} addSurfaceModel.
-					Calls \Ref{destroy}.
+					Calls  \link destroy destroy \endlink .
 					@see         destroy
 			*/
 			virtual ~AddSurfaceModel()
@@ -80,7 +80,7 @@ namespace BALL
 
 			/** Explicit default initialization.
 					Clears all internal structures.
-					Calls \Ref{BaseModelProcessor::clear}.
+					Calls  \link BaseModelProcessor::clear BaseModelProcessor::clear \endlink .
 					@see  BaseModelProcessor
 			*/
 			virtual void clear()
@@ -99,8 +99,8 @@ namespace BALL
 			
 			/** Start method.
 					Clears all internal structures.
-					Calls \Ref{BaseModelProcessor::start}.
-					@return bool {\tt true} if the start of {\em *this} addSurfaceModel was successful, {\tt false} otherwise
+					Calls  \link BaseModelProcessor::start BaseModelProcessor::start \endlink .
+					@return bool <tt>true</tt> if the start of {\em *this} addSurfaceModel was successful, <tt>false</tt> otherwise
 					@see    operator()
 					@see    BaseModelProcessor
 			*/
@@ -108,11 +108,11 @@ namespace BALL
 			
 			/** Finish method.
 					This method will be internally called from the processor mechanism if the processor
-					has finished processing the \Ref{Composite} tree.
-					The created \Ref{Mesh} object will be filled with the method \Ref{getSurface}
-					from the \Ref{SurfaceProcessor}.
-					@return bool {\tt true} if the finish of {\em *this} addSurfaceModel was successful, {\tt false} otherwise
-					@exeception OutOfMemory thrown if the memory allocation for the \Ref{Mesh} object failed
+					has finished processing the  \link Composite Composite \endlink  tree.
+					The created  \link Mesh Mesh \endlink  object will be filled with the method  \link getSurface getSurface \endlink 
+					from the  \link SurfaceProcessor SurfaceProcessor \endlink .
+					@return bool <tt>true</tt> if the finish of {\em *this} addSurfaceModel was successful, <tt>false</tt> otherwise
+					@exeception OutOfMemory thrown if the memory allocation for the  \link Mesh Mesh \endlink  object failed
 					@see    Mesh
 					@see    operator()
 					@see    Composite
@@ -121,9 +121,9 @@ namespace BALL
 			virtual bool finish();
 			
 			/**	Operator method.
-					This method stores only the start \Ref{Composite} object. In the \Ref{finish}
-					method for this stored start composite a \Ref{Mesh} object will be created.
-					@param  composite the \Ref{Composite} object that will be processed
+					This method stores only the start  \link Composite Composite \endlink  object. In the  \link finish finish \endlink 
+					method for this stored start composite a  \link Mesh Mesh \endlink  object will be created.
+					@param  composite the  \link Composite Composite \endlink  object that will be processed
 					@return Processor::Result the result of {\em *this} addSurfaceModel
 					@see    start
 					@see    finish
@@ -144,7 +144,7 @@ namespace BALL
 			/** Internal value dump.
 					Dump the current state of {\em *this} addSurfaceModel to 
 					the output ostream {\em s} with dumping depth {\em depth}.
-					Calls \Ref{BaseModelProcessor::dump}.
+					Calls  \link BaseModelProcessor::dump BaseModelProcessor::dump \endlink .
 					@param   s output stream where to output the state of {\em *this} addSurfaceModel
 					@param   depth the dumping depth
 					@see     BaseModelProcessor
@@ -157,7 +157,7 @@ namespace BALL
 			//@}
 			/** @name Creation method
 					This method creates a primitives without OpenGL implementation.
-					This method is overridden by the class \Ref{AddGLSurfaceModel}
+					This method is overridden by the class  \link AddGLSurfaceModel AddGLSurfaceModel \endlink 
 					to create primitives with OpenGL implementation to generate the graphical
 					representation of the shapes they represent.
 					@see  AddGLSurfaceModel
@@ -165,11 +165,11 @@ namespace BALL
 			//@{
 			
 			/** Create a mesh.
-					Create a \Ref{Mesh} object.
-					This method is overridden by the class \Ref{AddGLSurfaceModel} to
+					Create a  \link Mesh Mesh \endlink  object.
+					This method is overridden by the class  \link AddGLSurfaceModel AddGLSurfaceModel \endlink  to
 					create a primitive with openGL implementation.
-					The method \Ref{operator()} uses this method to create a mesh
-					for the start \Ref{Composite} object.
+					The method  \link operator() operator() \endlink  uses this method to create a mesh
+					for the start  \link Composite Composite \endlink  object.
 					@see  Mesh
 					@see  AddGLSurfaceModel
 					@see  Composite

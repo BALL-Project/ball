@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hashSet.h,v 1.33 2002/12/18 11:42:24 anker Exp $ 
+// $Id: hashSet.h,v 1.34 2003/02/21 16:01:56 anhi Exp $ 
 
 #ifndef BALL_DATATYPE_HASHSET_H
 #define BALL_DATATYPE_HASHSET_H
@@ -41,7 +41,7 @@ namespace BALL
 {
 
   /** Generic Hash Set Class.
-      {\bf Definition:} \URL{BALL/DATATYPE/hashSet.h}
+      <b>Definition:</b> BALL/DATATYPE/hashSet.h
   */
  	template <class Key>
 	class HashSet
@@ -261,7 +261,7 @@ namespace BALL
 
 		/**	Illegal key exception.
 				Thrown if access to a non-existent key is required by the constant
-				version of \Ref{operator []}.
+				version of  \link operator [] operator [] \endlink .
 		*/
 		class IllegalKey
 			:	public Exception::GeneralException
@@ -388,11 +388,11 @@ namespace BALL
 		*/
 		Size size() const	throw();
 
-    /** Find the element whose key is {\tt key}.
+    /** Find the element whose key is <tt>key</tt>.
     */
  		Iterator find(const Key& key)	throw();
 	
-    /** Find the element whose key is {\tt key}.
+    /** Find the element whose key is <tt>key</tt>.
     */
 		ConstIterator find(const Key& key) const	throw();
 
@@ -401,11 +401,11 @@ namespace BALL
 		std::pair<Iterator, bool> insert(const ValueType& item)	throw();
 
 		/**	Insert a new entry into the hash set.
-				For STL compatibility. The value of {\tt pos} is ignored.
+				For STL compatibility. The value of <tt>pos</tt> is ignored.
 		*/
 		Iterator insert(Iterator pos, const ValueType& item) throw();
 
-		/**	Erase element with key {\tt key}.
+		/**	Erase element with key <tt>key</tt>.
 				@return Size the number of elements erased (0 or 1)
 		*/
 		Size erase(const KeyType& key)	throw();
@@ -416,7 +416,7 @@ namespace BALL
 		void erase(Iterator pos) throw(Exception::IncompatibleIterators, Exception::InvalidIterator);
 
 		/**	Erase a range of elements.
-				Erase all elements in the range {\tt f - l}.
+				Erase all elements in the range <tt>f - l</tt>.
 		*/
 		void erase(Iterator f, Iterator l) throw(Exception::IncompatibleIterators);
 
@@ -427,13 +427,13 @@ namespace BALL
 		//@{
 		/**	Intersection operator.
 				Replace the contents of the current hash set by
-				its intersection with {\tt rhs}.
+				its intersection with <tt>rhs</tt>.
 		*/
 		const HashSet& operator &= (const HashSet& rhs) throw();
 		
 		/**	Union operator.
 				Replace the contents of the current hash set by
-				its union with {\tt rhs}.
+				its union with <tt>rhs</tt>.
 		*/
 		const HashSet& operator |= (const HashSet& rhs) throw();
 		
@@ -456,8 +456,8 @@ namespace BALL
 
 		/**	Difference operator.
 				Computes the difference of the two sets, i.e. constructs a
-				set containing the the elements of {\tt this} set that are not
-				contained in {\tt rhs}.
+				set containing the the elements of <tt>this</tt> set that are not
+				contained in <tt>rhs</tt>.
 		*/
 		HashSet operator - (const HashSet& rhs) const throw();
 
@@ -467,7 +467,7 @@ namespace BALL
 		const HashSet& operator += (const HashSet& rhs) throw();
 
 		/**	Difference operator.
-				Remove all elements contained in {\tt rhs} from the set.
+				Remove all elements contained in <tt>rhs</tt> from the set.
 		*/
 		const HashSet& operator -= (const HashSet& rhs) throw();
 		//@}
@@ -486,7 +486,7 @@ namespace BALL
 		*/
 		//@{
 
-		/**	Test whether the set contains the key {\tt key}.
+		/**	Test whether the set contains the key <tt>key</tt>.
 		*/
 		bool has(const Key& key) const	throw();
 

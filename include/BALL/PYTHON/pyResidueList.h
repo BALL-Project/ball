@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyResidueList.h,v 1.5 2002/02/27 12:19:36 sturm Exp $
+// $Id: pyResidueList.h,v 1.6 2003/02/21 16:06:03 anhi Exp $
 
 #ifndef BALL_PYTHON_PYRESIDUELIST_H
 #define BALL_PYTHON_PYRESIDUELIST_H
@@ -67,7 +67,7 @@ namespace BALL
 			
 		/**	Construct from a AtomContainer
 				This constructor creates an PyResidueList object from
-				all residues of a \Ref{AtomContainer} object.
+				all residues of a  \link AtomContainer AtomContainer \endlink  object.
 		*/
 		PyResidueList(const AtomContainer& fragment, bool selected_only = false);
 

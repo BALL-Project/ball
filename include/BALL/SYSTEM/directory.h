@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: directory.h,v 1.17 2002/12/22 11:45:28 sturm Exp $
+// $Id: directory.h,v 1.18 2003/02/21 16:06:07 anhi Exp $
 
 #ifndef BALL_SYSTEM_DIRECTORY_H
 #define BALL_SYSTEM_DIRECTORY_H
@@ -43,7 +43,7 @@ namespace BALL
 {
 
 	/**	Directory class. 
-			{\bf Definition:} \URL{BALL/SYSTEM/directory.h}
+			<b>Definition:</b> BALL/SYSTEM/directory.h
 	*/
 	class Directory
 	{
@@ -259,12 +259,12 @@ namespace BALL
 		bool isEmpty();
 
 		/**	Equality operator.
-				@return bool, {\bf true} if the name of both directories are equal
+				@return bool, <b>true</b> if the name of both directories are equal
 		*/
 		bool operator == (const Directory& directory) const;
 
 		/**	Inequality operator.
-				@return bool, {\bf true} if the name of both directories are inequal
+				@return bool, <b>true</b> if the name of both directories are inequal
 		*/
 		bool operator != (const Directory& directory) const;
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularMessage.h,v 1.9 2002/12/22 17:23:51 sturm Exp $
+// $Id: molecularMessage.h,v 1.10 2003/02/21 16:05:29 anhi Exp $
 
 #ifndef BALL_MOLVIEW_KERNEL_MOLECULARMESSAGE_H
 #define BALL_MOLVIEW_KERNEL_MOLECULARMESSAGE_H
@@ -21,17 +21,17 @@ namespace BALL
 	{
 		/** NewMolecularMessage class.
 				The class NewMolecularMessage is responsible for making known a new molecular
-				structure in the \Ref{ConnectionObject} tree. This message will be converted
-				from the message \Ref{NewCompositeMessage} if the \Ref{Composite} object contains
+				structure in the  \link ConnectionObject ConnectionObject \endlink  tree. This message will be converted
+				from the message  \link NewCompositeMessage NewCompositeMessage \endlink  if the  \link Composite Composite \endlink  object contains
 				a molecular structure. The conversion will be done by the widget class
-				\Ref{MolecularProperties}.
+				 \link MolecularProperties MolecularProperties \endlink .
 				There are widgets that will be react only to the class newMolecularMessage but
-				not to the message class \Ref{NewCompositeMessage} such as \Ref{DisplayProperties}.
+				not to the message class  \link NewCompositeMessage NewCompositeMessage \endlink  such as  \link DisplayProperties DisplayProperties \endlink .
 				Because the RTTI mechanism of BALL is used to identify the different messages
-				this class is not derived from \Ref{NewCompositeMessage}. Otherwise every method
-				accepting \Ref{NewCompositeMessage} object would also accept 
-				\Ref{NewMolecularMessage} objects and that is not allowed. \\
-				{\bf Definition:} \URL{BALL/MOLVIEW/KERNEL/molecularMessage.h}
+				this class is not derived from  \link NewCompositeMessage NewCompositeMessage \endlink . Otherwise every method
+				accepting  \link NewCompositeMessage NewCompositeMessage \endlink  object would also accept 
+				 \link NewMolecularMessage NewMolecularMessage \endlink  objects and that is not allowed.  \par
+				<b>Definition:</b> BALL/MOLVIEW/KERNEL/molecularMessage.h
 		*/
 		class NewMolecularMessage: public CompositeMessage
 		{
@@ -79,14 +79,14 @@ namespace BALL
 
 		/** RemovedMolecularMessage class.
 				The class RemovedCompositeMessage is the message class that is responsible for
-				marking a \Ref{Composite} object as removed inside the \Ref{ConnectionObject} tree.
-				It will be sent by existing \Ref{ConnectionObject} objects that remove (or would like to
-				remove) \Ref{Composites} objects. One can use the \Ref{RTTI} mechanism to identify
-				such messages in the {\em onNotify} method of user constructed \Ref{ConnectionObject}
+				marking a  \link Composite Composite \endlink  object as removed inside the  \link ConnectionObject ConnectionObject \endlink  tree.
+				It will be sent by existing  \link ConnectionObject ConnectionObject \endlink  objects that remove (or would like to
+				remove)  \link Composites Composites \endlink  objects. One can use the  \link RTTI RTTI \endlink  mechanism to identify
+				such messages in the {\em onNotify} method of user constructed  \link ConnectionObject ConnectionObject \endlink 
 				objects.
 				This class is only provided for convinience. So in MOLVIEW applications one can
-				use this class in the same way as the class \Ref{RemovedCompositeMessage}. \\
-				{\bf Definition:} \URL{BALL/VIEW/KERNEL/message.h}
+				use this class in the same way as the class  \link RemovedCompositeMessage RemovedCompositeMessage \endlink .  \par
+				<b>Definition:</b> BALL/VIEW/KERNEL/message.h
 		*/
 		class RemovedMolecularMessage: public RemovedCompositeMessage
 		{
@@ -136,14 +136,14 @@ namespace BALL
 
 		/** ChangedMolecularMessage class.
 				The class ChangedCompositeMessage is the message class that is responsible for
-				marking a \Ref{Composite} object as changed inside the \Ref{ConnectionObject} tree.
-				It will be sent by existing \Ref{ConnectionObject} objects that change (or would like to
-				change) \Ref{Composites} objects. One can use the \Ref{RTTI} mechanism to identify
-				such messages in the {\em onNotify} method of user constructed \Ref{ConnectionObject}
+				marking a  \link Composite Composite \endlink  object as changed inside the  \link ConnectionObject ConnectionObject \endlink  tree.
+				It will be sent by existing  \link ConnectionObject ConnectionObject \endlink  objects that change (or would like to
+				change)  \link Composites Composites \endlink  objects. One can use the  \link RTTI RTTI \endlink  mechanism to identify
+				such messages in the {\em onNotify} method of user constructed  \link ConnectionObject ConnectionObject \endlink 
 				objects.
 				This class is only provided for convinience. So in MOLVIEW applications one can
-				use this class in the same way as the class \Ref{ChangedCompositeMessage}. \\
-				{\bf Definition:} \URL{BALL/VIEW/KERNEL/message.h}\
+				use this class in the same way as the class  \link ChangedCompositeMessage ChangedCompositeMessage \endlink .  \par
+				<b>Definition:</b> BALL/VIEW/KERNEL/message.h
 		*/
 		class ChangedMolecularMessage: public ChangedCompositeMessage
 		{
@@ -192,15 +192,15 @@ namespace BALL
 
 		/** MolecularSelectionMessage class.
 				The class MolecularSelectionMessage is the message class that is a container for
-				\Ref{Composite} objects that are somehow selected.
-				It will be sent by existing \Ref{ConnectionObject} objects that collect
-				\Ref{Composites} objects for a certain purpose.
-				One can use the \Ref{RTTI} mechanism to identify
-				such messages in the {\em onNotify} method of user constructed \Ref{ConnectionObject}
+				 \link Composite Composite \endlink  objects that are somehow selected.
+				It will be sent by existing  \link ConnectionObject ConnectionObject \endlink  objects that collect
+				 \link Composites Composites \endlink  objects for a certain purpose.
+				One can use the  \link RTTI RTTI \endlink  mechanism to identify
+				such messages in the {\em onNotify} method of user constructed  \link ConnectionObject ConnectionObject \endlink 
 				objects.
 				This class is only provided for convinience. So in MOLVIEW applications one can
-				use this class in the same way as the class \Ref{SelectionMessage}. \\
-				{\bf Definition:} \URL{BALL/VIEW/KERNEL/message.h}
+				use this class in the same way as the class  \link SelectionMessage SelectionMessage \endlink .  \par
+				<b>Definition:</b> BALL/VIEW/KERNEL/message.h
 		*/
 		class MolecularSelectionMessage: public SelectionMessage
 		{

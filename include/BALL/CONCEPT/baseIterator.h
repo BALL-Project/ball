@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: baseIterator.h,v 1.19 2002/12/12 09:46:21 oliver Exp $
+// $Id: baseIterator.h,v 1.20 2003/02/21 16:01:25 anhi Exp $
 
 #ifndef BALL_CONCEPT_BASEITERATOR_H
 #define BALL_CONCEPT_BASEITERATOR_H
@@ -32,19 +32,20 @@ namespace BALL
 			features.
 	 		An important difference exists for the iterators of the kernel
 			objects.  For most kernel onjects, multiple iterators exist.
-			Therefore, we could not simply use {\tt begin()} and {\tt end()} like
+			Therefore, we could not simply use <tt>begin()</tt> and <tt>end()</tt> like
 			in STL, but we introduced specialized methods like
-			\Ref{AtomContainer::beginAtom} and \Ref{AtomContainer::endAtom}. For
+			 \link AtomContainer::beginAtom AtomContainer::beginAtom \endlink  and  \link AtomContainer::endAtom AtomContainer::endAtom \endlink . For
 			similar reasons, the iterators for kernel classes are not implemented
 			as nested classes of the respective kernel classes, but as
 			independent classes to avoid code replication. An exception is
-			\Ref{Atom::BondIterator}, which is relevant to \Ref{Atom} alone.
+			 \link Atom::BondIterator Atom::BondIterator \endlink , which is relevant to  \link Atom Atom \endlink  alone.
 
 			Each BALL iterator can be bound to a container, so once the iteration
 			has started, it "knows" about the end() of the container.
 			Therefore, BALL iterators additionally implement the unary plus operator
 			to check for the validity of the iterator.
-			this allows the convenient implementation of for loops, e.g. as follows:\\ 
+			this allows the convenient implementation of for loops, e.g. as follows: \par
+ 
 			\begin{verbatim}
 				AtomIterator atom_it = system.beginAtom();
 				for (; +atom_it; ++atom_it)
@@ -52,7 +53,7 @@ namespace BALL
 					....
 				}
 			\end{verbatim}
-			{\bf Definition:} \URL{BALL/CONCEPT/baseIterator.h}
+			<b>Definition:</b> BALL/CONCEPT/baseIterator.h
 	*/
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	class ConstBaseIterator
@@ -216,7 +217,7 @@ namespace BALL
 			throw(Exception::IncompatibleIterators);
 
 		/** Singularity predicate.
-				This method returns {\bf true} if the iterator is singular, i.e., 
+				This method returns <b>true</b> if the iterator is singular, i.e., 
 				not associated with a container.
 		*/
 		bool isSingular() const
@@ -524,7 +525,7 @@ namespace BALL
 
 
 	/**	Constant Basic Iterator.
-			{\bf Definition:} \URL{BALL/CONCEPT/baseIterator.h}
+			<b>Definition:</b> BALL/CONCEPT/baseIterator.h
 	*/
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	class BaseIterator

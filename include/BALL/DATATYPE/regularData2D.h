@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2D.h,v 1.20 2003/01/06 17:42:36 amoll Exp $
+// $Id: regularData2D.h,v 1.21 2003/02/21 16:02:02 anhi Exp $
 
 #ifndef BALL_DATATYPE_TRegularData2D_H
 #define BALL_DATATYPE_TRegularData2D_H
@@ -19,8 +19,8 @@ namespace BALL
 	/**	Simple 2D grid class.
 			This class represents a two-dimensional array. 
 			An instance of GridDataType will be created
-			for each point of the grid upon instantiation of TRegularData2D.\\
-			{\bf Definition:} \URL{BALL/DATATYPE/regularData2D.h}	\\
+			for each point of the grid upon instantiation of TRegularData2D. \par
+			<b>Definition:</b> BALL/DATATYPE/regularData2D.h
 	*/
 	template <typename GridDataType>
 	class TRegularData2D 
@@ -64,7 +64,7 @@ namespace BALL
 				In fact, it doesn't really matter which coordinates are
 				which, as this method always takes the lowest coordinates (x,y)
 				for the lower corner and the highest coordinates for
-				the upper corner.\\
+				the upper corner. \par
 				{\em grid_points_[x,y]} gives the number of grid points in 
 				either direction. 
 				@param	lower_x	float, the x coordinate of the lower corner of the grid
@@ -236,7 +236,7 @@ namespace BALL
 		GridDataType* getData(const Position position) throw(Exception::OutOfGrid);
 
 		/**	Subscript operator.
-				Returns the data of the grid point specified by its {\tt position}.
+				Returns the data of the grid point specified by its <tt>position</tt>.
 				@return			GridDataType
 				@exception 	OutOfGrid if the point is outside the grid
 				@param			position Position, the grid position
@@ -245,7 +245,7 @@ namespace BALL
 		GridDataType& operator[](const Position position) throw(Exception::OutOfGrid);
 
 		/**	Subscript operator.
-				Returns the data of the grid point nearest to the given {\tt vector}
+				Returns the data of the grid point nearest to the given <tt>vector</tt>
 				@return			GridDataType
 				@exception 	OutOfGrid if the point is outside the grid
 				@param			vector Vector2, a position in the grid
@@ -272,7 +272,7 @@ namespace BALL
 				This method calculates the grid rectangle that contains the given vector
 				and returns the indices of the grid points forming this rectangle.
 				The given point lies either in the rectangle or is the lower left front edge of the rectangle.
-				@return bool {\bf true} if the vector is inside the grid
+				@return bool <b>true</b> if the vector is inside the grid
 				@exception OutOfGrid if the point is outside the grid
 				@param vector a point inside the grid
 				@param ll  left lower corner of the rectangle
@@ -289,7 +289,7 @@ namespace BALL
 				and returns the values at the grid points forming this rectangle.
 				The given point lies either in the rectangle or is the lower left front edge of the rectangle.
 				@see getRectangleIndices
-				@return bool {\bf true} if the vector is inside the grid
+				@return bool <b>true</b> if the vector is inside the grid
 				@exception OutOfGrid if the point is outside the grid
 				@param vector a point inside the grid
 				@param ll  value at the left lower corner of the rectangle
@@ -354,10 +354,10 @@ namespace BALL
 				the values at the eight surrounding grid points $v_i$:
 				\TEX{
 					\begin{eqnarray*}
-						{\mathrm value} & = & v_1 dx dy dz\\
-														& + & v_2 (1 - dx) dy dz\\
-														& + & v_3 dx (1 - dy) dz\\
-														& + & v_4 (1 - dx) (1 - dy) dz\\
+						{\mathrm value} & = & v_1 dx dy dz \par
+														& + & v_2 (1 - dx) dy dz \par
+														& + & v_3 dx (1 - dy) dz \par
+														& + & v_4 (1 - dx) (1 - dy) dz \par
 					\end{eqnarray*}
 				}
 				@exception OutOfGrid if the point is outside the grid or the grid has fewer then two points in any dimension

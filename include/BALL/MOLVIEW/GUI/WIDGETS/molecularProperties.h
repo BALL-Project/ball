@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularProperties.h,v 1.14 2003/01/06 17:42:37 amoll Exp $
+// $Id: molecularProperties.h,v 1.15 2003/02/21 16:05:27 anhi Exp $
 
 #ifndef BALL_MOLVIEW_GUI_WIDGETS_MOLECULARPROPERTIES_H
 #define BALL_MOLVIEW_GUI_WIDGETS_MOLECULARPROPERTIES_H
@@ -25,15 +25,15 @@ namespace BALL
 	{
 
 		/**	The MolecularProperties class.
-				The class MolecularProperties is a widget that converts certain \Ref{Message}
-				objects to other \Ref{Message} objects.
-				This class is necessary to convert new \Ref{Composite} objects opened with either
-				\Ref{openPDBFile} or \Ref{openHINFile} to \Ref{Composite} objects
+				The class MolecularProperties is a widget that converts certain  \link Message Message \endlink 
+				objects to other  \link Message Message \endlink  objects.
+				This class is necessary to convert new  \link Composite Composite \endlink  objects opened with either
+				 \link openPDBFile openPDBFile \endlink  or  \link openHINFile openHINFile \endlink  to \Ref{Composite} objects
 				that have certain molecular properties. Further it converts the geometric selection
-				sent by \Ref{Scene} to a molecular selection whose objects can be given a new
-				graphical representation by the \Ref{DisplayProperties} dialog.
-				See \Ref{onNotify} for information concerning the conversion mechanism. \\
-				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/WIDGETS/molecularProperties.h}
+				sent by  \link Scene Scene \endlink  to a molecular selection whose objects can be given a new
+				graphical representation by the  \link DisplayProperties DisplayProperties \endlink  dialog.
+				See  \link onNotify onNotify \endlink  for information concerning the conversion mechanism.  \par
+				<b>Definition:</b> BALL/MOLVIEW/GUI/WIDGETS/molecularProperties.h
 		*/
 		class MolecularProperties
 			: public QWidget, 
@@ -50,7 +50,7 @@ namespace BALL
 
 			/** Default Constructor.
 					Constructs new molecularProperties.
-					Calls \Ref{registerWidget}.
+					Calls  \link registerWidget registerWidget \endlink .
 					@param      parent the parent widget of {\em *this} molecularProperties 
 					@param      name the name of {\em *this} molecularProperties 
 					@return     MolecularProperties new constructed molecularProperties
@@ -77,15 +77,15 @@ namespace BALL
 			//@{
 
 			/** Message handling method.
-					Handles messages sent by other registered \Ref{ConnectionObject} objects.
-					Converts \Ref{NewCompositeMessage} to \Ref{NewMolecularMessage} if the
-					retrieved \Ref{Composite} object is kind of \Ref{AtomContainer} and
-					applies molecular properties to it (like \Ref{normalize_names} and
-					\Ref{build_bonds}).\\
-					Converts \Ref{GeometricObjectSelectionMessage} to \Ref{NewMolecularMessage}
-					if every \Ref{Composite} object in the selection has an ancestor that is
-					an \Ref{AtomContainer}. These found ancestors are put into a new selection
-					that is sent with the \Ref{NewMolecularMessage}.
+					Handles messages sent by other registered  \link ConnectionObject ConnectionObject \endlink  objects.
+					Converts  \link NewCompositeMessage NewCompositeMessage \endlink  to  \link NewMolecularMessage NewMolecularMessage \endlink  if the
+					retrieved  \link Composite Composite \endlink  object is kind of  \link AtomContainer AtomContainer \endlink  and
+					applies molecular properties to it (like  \link normalize_names normalize_names \endlink  and
+					 \link build_bonds build_bonds \endlink ). \par
+					Converts  \link GeometricObjectSelectionMessage GeometricObjectSelectionMessage \endlink  to  \link NewMolecularMessage NewMolecularMessage \endlink 
+					if every  \link Composite Composite \endlink  object in the selection has an ancestor that is
+					an  \link AtomContainer AtomContainer \endlink . These found ancestors are put into a new selection
+					that is sent with the  \link NewMolecularMessage NewMolecularMessage \endlink .
 					@param message the pointer to the message that should be processed
 					@see   Message
 					@see   NewCompositeMessage
@@ -105,52 +105,52 @@ namespace BALL
 			public slots:
 
 			/** Centers the camera.
-					Centers the camera of \Ref{Scene} to the geometric center of the molecular objects
+					Centers the camera of  \link Scene Scene \endlink  to the geometric center of the molecular objects
 					in the selection list.
-					The messages \Ref{WindowMessage} and \Ref{SceneMessage} will
-					be sent to inform the \Ref{MainControl} and the \Ref{Scene} about the change.
+					The messages  \link WindowMessage WindowMessage \endlink  and  \link SceneMessage SceneMessage \endlink  will
+					be sent to inform the  \link MainControl MainControl \endlink  and the  \link Scene Scene \endlink  about the change.
 			*/
 			void centerCamera(Composite* composite = 0);
 
 			/** Creates bonds.
-					If selected molecular objects are available \Ref{Bond} objects will be created
+					If selected molecular objects are available  \link Bond Bond \endlink  objects will be created
 					for each object in the selection list
-					using the \Ref{build_bonds} processor of the \Ref{FragmentDB}
-					The message \Ref{ChangedCompositeMessage} will be sent for each object in the
-					selection list. The messages \Ref{WindowMessage} and \Ref{SceneMessage} will
-					be sent to inform the \Ref{MainControl} and the \Ref{Scene} about the change.
-					The number of bonds created will be written into the \Ref{Log} object.
+					using the  \link build_bonds build_bonds \endlink  processor of the  \link FragmentDB FragmentDB \endlink 
+					The message  \link ChangedCompositeMessage ChangedCompositeMessage \endlink  will be sent for each object in the
+					selection list. The messages  \link WindowMessage WindowMessage \endlink  and  \link SceneMessage SceneMessage \endlink  will
+					be sent to inform the  \link MainControl MainControl \endlink  and the  \link Scene Scene \endlink  about the change.
+					The number of bonds created will be written into the  \link Log Log \endlink  object.
 			*/
 			void buildBonds();
 			
 			/** Adds hydrogens.
 					If selected molecular objects are available hydrogens will be created
 					for each object in the selection list
-					using the \Ref{add_hydrogens} processor of the \Ref{FragmentDB}
-					The message \Ref{ChangedCompositeMessage} will be sent for each object in the
-					selection list. The messages \Ref{WindowMessage} and \Ref{SceneMessage} will
-					be sent to inform the \Ref{MainControl} and the \Ref{Scene} about the change.
-					The number of hydrogens created will be written into the \Ref{Log} object.
+					using the  \link add_hydrogens add_hydrogens \endlink  processor of the  \link FragmentDB FragmentDB \endlink 
+					The message  \link ChangedCompositeMessage ChangedCompositeMessage \endlink  will be sent for each object in the
+					selection list. The messages  \link WindowMessage WindowMessage \endlink  and  \link SceneMessage SceneMessage \endlink  will
+					be sent to inform the  \link MainControl MainControl \endlink  and the  \link Scene Scene \endlink  about the change.
+					The number of hydrogens created will be written into the  \link Log Log \endlink  object.
 			*/
 			void addHydrogens();
 			
 
 			/** Colors selected objects uniquely.
 					If selected molecular objects are available they will be colored according to
-					the selected color as specified in \Ref{GeometricObject}.
-					The message \Ref{ChangedCompositeMessage} will be sent for each object in the
-					selection list. The messages \Ref{WindowMessage} and \Ref{SceneMessage} will
-					be sent to inform the \Ref{MainControl} and the \Ref{Scene} about the change.
+					the selected color as specified in  \link GeometricObject GeometricObject \endlink .
+					The message  \link ChangedCompositeMessage ChangedCompositeMessage \endlink  will be sent for each object in the
+					selection list. The messages  \link WindowMessage WindowMessage \endlink  and  \link SceneMessage SceneMessage \endlink  will
+					be sent to inform the  \link MainControl MainControl \endlink  and the  \link Scene Scene \endlink  about the change.
 			*/
 			void select();
 
 			/** Colors deselected objects in their own color.
 					If selected molecular objects are available they will be colored according to
 					their own color as specified in the objects. This method reverses the process
-					done in the \Ref{select} method.
-					The message \Ref{ChangedCompositeMessage} will be sent for each object in the
-					selection list. The messages \Ref{WindowMessage} and \Ref{SceneMessage} will
-					be sent to inform the \Ref{MainControl} and the \Ref{Scene} about the change.
+					done in the  \link select select \endlink  method.
+					The message  \link ChangedCompositeMessage ChangedCompositeMessage \endlink  will be sent for each object in the
+					selection list. The messages  \link WindowMessage WindowMessage \endlink  and  \link SceneMessage SceneMessage \endlink  will
+					be sent to inform the  \link MainControl MainControl \endlink  and the  \link Scene Scene \endlink  about the change.
 			*/
 			void deselect();
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RSFace.h,v 1.24 2002/12/17 14:13:09 anker Exp $
+// $Id: RSFace.h,v 1.25 2003/02/21 16:06:31 anhi Exp $
 
 #ifndef BALL_STRUCTURE_RSFACE_H
 #define BALL_STRUCTURE_RSFACE_H
@@ -37,7 +37,7 @@ namespace BALL
 	class SESTriangulator;
 
 	/** Generic RSFace Class.	
-			{\bf Definition:} \URL{BALL/STRUCTURE/RSFace.h} 
+			<b>Definition:</b> BALL/STRUCTURE/RSFace.h
 	*/
 	class RSFace	:	public GraphTriangle< RSVertex,RSEdge,RSFace >
 	{
@@ -187,29 +187,29 @@ namespace BALL
 		//@{
 
 		/**	Equality operator.
-				@return bool	{\bf true} if all vertices are similar modulo order	
-											and the centers are equal, {\bf false} otherwise
+				@return bool	<b>true</b> if all vertices are similar modulo order	
+											and the centers are equal, <b>false</b> otherwise
 		*/
 		virtual bool operator == (const RSFace& rsface) const
 			throw();
 
 		/**	Inequality operator.
-				@return	bool	{\bf false} if all vertices are similar modulo order	
-											and the centers are equal, {\bf true} otherwise
+				@return	bool	<b>false</b> if all vertices are similar modulo order	
+											and the centers are equal, <b>true</b> otherwise
 		*/
 		virtual bool operator != (const RSFace& rsface) const
 			throw();
 
 		/**	Similarity operator.
-				@return	bool	{\bf true} if all vertices are similar modulo order,	
-											{\bf false} otherwise
+				@return	bool	<b>true</b> if all vertices are similar modulo order,	
+											<b>false</b> otherwise
 		*/
 		virtual bool operator *=(const RSFace& rsface) const
 			throw();
 		
 		/** isSingular
-				@return	bool	{\bf true} if the RSFace is singular,	
-											{\bf false} otherwise
+				@return	bool	<b>true</b> if the RSFace is singular,	
+											<b>false</b> otherwise
 		*/
 		bool isSingular() const
 			throw();

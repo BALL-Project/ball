@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.7 2003/01/06 17:42:37 amoll Exp $
+// $Id: pyWidget.h,v 1.8 2003/02/21 16:07:45 anhi Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_PYWIDGET_H
 #define BALL_VIEW_GUI_WIDGETS_PYWIDGET_H
@@ -26,7 +26,7 @@ namespace BALL
 	{
 
 /** Python Widget class.
-		{\bf Definition:} \URL{BALL/VIEW/GUI/WIDGETS/pyWidget.h}
+		<b>Definition:</b> BALL/VIEW/GUI/WIDGETS/pyWidget.h
 */
 class PyWidget
 	: public QMultiLineEdit,
@@ -43,7 +43,7 @@ class PyWidget
 	//@{
 	/** Standard constructor.
 			Creates a new widget. If the widget is part of a BALL \ref{MainControl} widget, 
-			it inserts a menu entry {\tt Tools|Restart Python} into the menu bar.
+			it inserts a menu entry <tt>Tools|Restart Python</tt> into the menu bar.
 			@param parent the parent widget
 			@param name the widget name
 	*/
@@ -68,14 +68,14 @@ class PyWidget
 			This method initializes the interpreter if it
 			is not yet running. An already running interpreter 
 			is reinitialized.
-			This method calls {\tt PyInitialize()} to 
+			This method calls <tt>PyInitialize()</tt> to 
 			create an interpreter.
-			This is a QT {\bf SLOT}.
+			This is a QT <b>SLOT</b>.
 	*/
 	virtual void startInterpreter();
 	/**	Stop the interpreter.
-			The interpreter is stoped by calling {\tt Py_Finish()}.
-			This is a QT {\bf SLOT}.
+			The interpreter is stoped by calling <tt>Py_Finish()</tt>.
+			This is a QT <b>SLOT</b>.
 	*/
 	virtual void stopInterpreter();
 	//@}
@@ -98,7 +98,7 @@ class PyWidget
 
 	/** @name	Widget related methods
 			These methods implement the basic behaviour of the edit window by 
-			overwriting the corresponding methods of {\tt QMultiLineEdit}.
+			overwriting the corresponding methods of <tt>QMultiLineEdit</tt>.
 			You should not call them immediately, but you might want to
 			overwrite them in derived classes.
 	*/
@@ -130,7 +130,7 @@ class PyWidget
 	/**	Print prompt.
 			Determine the correct type of prompt and append it 
 			to the current text. The cursor is placed after
-			the prompt and {\tt textChanged} is emitted.
+			the prompt and <tt>textChanged</tt> is emitted.
 	*/
 	void newPrompt_();
 
@@ -139,7 +139,7 @@ class PyWidget
 	/**	Replace the line the cursor is in with a line from the history.
 			Used to display text from the history (cursor down/up).
 			The previous content of the line is stored in
-			{\tt current_line_} if this is the first time the history
+			<tt>current_line_</tt> if this is the first time the history
 			function is used for this specific line.
 	*/	
 	void retrieveHistoryLine_(Position index);

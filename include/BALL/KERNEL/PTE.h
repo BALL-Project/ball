@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PTE.h,v 1.17 2002/02/27 12:18:43 sturm Exp $
+// $Id: PTE.h,v 1.18 2003/02/21 16:03:10 anhi Exp $
 
 #ifndef BALL_KERNEL_PTE_H
 #define BALL_KERNEL_PTE_H
@@ -42,18 +42,18 @@ namespace BALL
 
 	/**	@name	Periodic Table of Elements
 			These classes represent elements and the periodic table of elements.
-			The \Ref{Element} class is used to describe common properties of atoms
+			The  \link Element Element \endlink  class is used to describe common properties of atoms
 			(e.g., mass, nuclear charge, element symbol). Elements can be retrieved
-			from the \Ref{PTE} object ({\bf P}eriodic {\bf T}able of {\bf E}lements)
-			which is a global instance of \Ref{PTE_}.\\
-			{\bf Definition:}\URL{BALL/KERNEL/PTE.h}
+			from the  \link PTE PTE \endlink  object (<b>P</b>eriodic <b>T</b>able of {\bf E}lements)
+			which is a global instance of  \link PTE_ PTE_ \endlink . \par
+			<b>Definition:</b>BALL/KERNEL/PTE.h
 			@see Atom::setElement
 			@see Atom::getElement
 	*/
 	//@{
 
 	/**	Element class.
-			{\bf Definition:}\URL{BALL/KERNEL/PTE.h}
+			<b>Definition:</b>BALL/KERNEL/PTE.h
 	*/
 	class Element
 		: public PropertyManager
@@ -330,7 +330,7 @@ namespace BALL
 			
 			/**	Default constructor
 					The instance is set to the default values
-					(= \Ref{UNKNOWN} element).
+					(=  \link UNKNOWN UNKNOWN \endlink  element).
 			*/
 			Element()
 				throw();
@@ -362,7 +362,7 @@ namespace BALL
 
 			/** Clear method.
 					The instance is set to the default values
-					(= \Ref{UNKNOWN} element).
+					(=  \link UNKNOWN UNKNOWN \endlink  element).
 			*/
 			virtual void clear()
 				throw();
@@ -674,7 +674,7 @@ namespace BALL
 
 
 	/**	Element output operator.
-			Prints the contents of an instance of \Ref{Element} to an {\tt ostream}.
+			Prints the contents of an instance of  \link Element Element \endlink  to an <tt>ostream</tt>.
 	*/
 	std::ostream& operator << (std::ostream& s, const Element& element)
 		throw();
@@ -716,7 +716,7 @@ namespace BALL
 				throw();
 
 			/** Clear method.
-					This method just calls \Ref{PropertyManager::clear}.
+					This method just calls  \link PropertyManager::clear PropertyManager::clear \endlink .
 			*/
 			virtual void clear()
 				throw();
@@ -818,8 +818,8 @@ namespace BALL
 		
 			/** Application of an unary processor on every contained element.
 					@param  processor a typed unary processor for Element instances
-					@return  bool - {\tt true} if application has been terminated successfully,
-													{\tt false} otherwise
+					@return  bool - <tt>true</tt> if application has been terminated successfully,
+													<tt>false</tt> otherwise
 			*/
 			static bool apply(UnaryProcessor<Element>& applicator)
 				throw();

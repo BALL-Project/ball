@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PCMCavFreeEnergyProcessor.h,v 1.11 2002/12/22 11:45:24 sturm Exp $
+// $Id: PCMCavFreeEnergyProcessor.h,v 1.12 2003/02/21 16:06:13 anhi Exp $
 
 #ifndef BALL_SOLVATION_PCMCAVFREEENERGYPROCESSOR_H
 #define BALL_SOLVATION_PCMCAVFREEENERGYPROCESSOR_H
@@ -24,9 +24,9 @@ namespace BALL
 			This processor is using the SPT theory approach implemented in the PCM
 			model. It is based on Pierotti, Chem. Rev. 76(6):717--726, 1976 and the
 			modification for non-spherical solutes by Huron/Claverie, J. Phys.
-			Chem. 76(15):2123-2133, 1972.	\\
-			The energy value is returned in units of kJ/mol. \\
-			{\bf Definition:} \URL{BALL/SOLVATION/PCMCavFreeEnergyProcessor.h}
+			Chem. 76(15):2123-2133, 1972.	 \par
+			The energy value is returned in units of kJ/mol.  \par
+			<b>Definition:</b> BALL/SOLVATION/PCMCavFreeEnergyProcessor.h
 	 */
 	class PCMCavFreeEnergyProcessor
 		:	public EnergyProcessor

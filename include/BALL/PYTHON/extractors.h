@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: extractors.h,v 1.9 2002/02/27 12:19:33 sturm Exp $
+// $Id: extractors.h,v 1.10 2003/02/21 16:05:49 anhi Exp $
 
 #ifndef BALL_PYTHON_EXTRACTORS_H
 #define BALL_PYTHON_EXTRACTORS_H
@@ -30,8 +30,8 @@ namespace BALL
 	/**	Extraction functions for external iteration.
 			The following set of functions can by used from python to
 			compile lists of objects from BALL kernel data structures.
-			using the python {\tt for} loop, it is then possible to
-			iterate over the objects of the list.	\\
+			using the python <tt>for</tt> loop, it is then possible to
+			iterate over the objects of the list.	 \par
 			For example, the BALL code
 			\begin{verbatim}
 				System S = ..;
@@ -47,13 +47,13 @@ namespace BALL
 				for atom in atoms(S):
 					print atom.getFullName()
 			\end{verbatim}
-			{\bf Definition:} \URL{BALL/PYTHON/extractors.h}
+			<b>Definition:</b> BALL/PYTHON/extractors.h
 	*/
 	//@{
 
 	/**	Extract atoms matching an expression.
 			This method extracts all atoms of a kernel data structure into
-			a list that match the \Ref{Expression} {\tt expression}.
+			a list that match the  \link Expression Expression \endlink  <tt>expression</tt>.
 			@param fragment the AtomContainer containing the atoms
 			@param expression the expression that selects the atoms
 	*/
@@ -67,7 +67,7 @@ namespace BALL
 
 	/**	Extract PDB atoms matching an expression.
 			This method extracts all PDB atoms of a kernel data structure into
-			a list that match the \Ref{Expression} {\tt expression}.
+			a list that match the  \link Expression Expression \endlink  <tt>expression</tt>.
 			@param fragment the AtomContainer containing the atoms
 			@param expression the expression that selects the atoms
 	*/
@@ -82,7 +82,7 @@ namespace BALL
 
 	/**	Extract all bonds from a kernel data structure.
 			This function extracts all bonds from the atoms contained in the base fragment.
-			If {\tt selected_only} is set to {\bf true}, only bonds are extracted where
+			If <tt>selected_only</tt> is set to <b>true</b>, only bonds are extracted where
 			both atoms are selected.
 	*/
 	PyBondList* bonds(const AtomContainer& fragment, bool selected_only = false);

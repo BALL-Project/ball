@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: events.h,v 1.9 2002/12/12 09:37:45 oliver Exp $
+// $Id: events.h,v 1.10 2003/02/21 16:07:42 anhi Exp $
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -932,15 +932,15 @@ namespace BALL
 		/**	The Events class.
 				The class Events declares some event classes, the appropriate receiver classes
 				and event combination operators to handle, process and combine events.
-				Macros are used to declare these classes.  The \Ref{Notification} concept of
-				BALL is used for the receivers classes. The class \Ref{Scene} binds its own
-				methods to the receivers classes of {\em *this} events. Further the \Ref{Scene}
+				Macros are used to declare these classes.  The  \link Notification Notification \endlink  concept of
+				BALL is used for the receivers classes. The class  \link Scene Scene \endlink  binds its own
+				methods to the receivers classes of {\em *this} events. Further the  \link Scene Scene \endlink 
 				object uses the combination operators to combine different events together and
 				sent them to other receiving event classes prio registered with the 
-				\Ref{Notification} mechanism of BALL.
+				 \link Notification Notification \endlink  mechanism of BALL.
 				The names of the methods may seems a bit too long and unreadable but they are only
-				event names and will used and created automatically for the \Ref{Scene} object.
-				{\bf Definition:} \URL{BALL/VIEW/GUI/WIDGETS/events.h}
+				event names and will used and created automatically for the  \link Scene Scene \endlink  object.
+				<b>Definition:</b> BALL/VIEW/GUI/WIDGETS/events.h
 		*/
 		class Events
 		{
@@ -950,7 +950,7 @@ namespace BALL
 			*/
 			//@{
 			/** EventCombinationNotAllowed exception class.
-					This exception is thrown if events of different \Ref{Scene} objects are
+					This exception is thrown if events of different  \link Scene Scene \endlink  objects are
 					combined.
 					@see GeneralException
 					@see Scene
@@ -973,7 +973,7 @@ namespace BALL
 			/** Default Constructor.
 					Construct new events.
 					Initialize all own event classes.
-					@param      scene the pointer to a \Ref{Scene} object to bind onto {\em *this} events
+					@param      scene the pointer to a  \link Scene Scene \endlink  object to bind onto {\em *this} events
 					@return     Events new constructed events
 					@see        Scene
 			*/
@@ -988,7 +988,7 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} events.
-					Calls \Ref{destroy}.
+					Calls  \link destroy destroy \endlink .
 					@see         destroy
 			*/
 			virtual ~Events()
@@ -1013,8 +1013,8 @@ namespace BALL
 			//@{
 
 			/** Inspection of the scene.
-					Access a pointer to the \Ref{Scene} object of {\em *this} events.
-					@return Scene* a pointer to the \Ref{Scene} object
+					Access a pointer to the  \link Scene Scene \endlink  object of {\em *this} events.
+					@return Scene* a pointer to the  \link Scene Scene \endlink  object
  			*/
 			Scene *getScene();
 			//@}
@@ -1025,14 +1025,14 @@ namespace BALL
 			//@{
 			/** Declare event class ShiftKeyPressed.
 					Declare the event class {\em ShiftKeyPressed}. This event will be sent by
-					the \Ref{Scene} object whenever the shift key on the keyboard is pressed.
+					the  \link Scene Scene \endlink  object whenever the shift key on the keyboard is pressed.
 			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
 				(ShiftKeyPressed); 
 
 			/** Declare event class ShiftKeyPressedMouseMoved.
 					This event will be
-					sent by the \Ref{Scene} object whenever the shift key on the keyboard is pressed
+					sent by the  \link Scene Scene \endlink  object whenever the shift key on the keyboard is pressed
 					and at the same moment the mouse is moved.
 			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
@@ -1040,14 +1040,14 @@ namespace BALL
 			
 			/** Declare event class ControlKeyPressed.
 					This event will be sent by
-					the \Ref{Scene} object whenever the control key on the keyboard is pressed.
+					the  \link Scene Scene \endlink  object whenever the control key on the keyboard is pressed.
 			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
 				(ControlKeyPressed);
 			
 			/** Declare event class ControlKeyPressedMouseMoved.
 					This event will be
-					sent by the \Ref{Scene} object whenever the control key on the keyboard is pressed
+					sent by the  \link Scene Scene \endlink  object whenever the control key on the keyboard is pressed
 					and at the same moment the mouse is moved.
 			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
@@ -1055,14 +1055,14 @@ namespace BALL
 			
 			/** Declare event class ShiftKeyPressedControlKeyPressed.
 					This event will be
-					sent by the \Ref{Scene} object whenever the shift key on the keyboard is pressed
+					sent by the  \link Scene Scene \endlink  object whenever the shift key on the keyboard is pressed
 					and at the same moment the control key is pressed.
 			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
 				(ShiftKeyPressedControlKeyPressed);
 			
 			/** Declare event class ShiftKeyPressedControlKeyPressedMouseMoved.
-					This event will be sent by the \Ref{Scene} object whenever the shift key and
+					This event will be sent by the  \link Scene Scene \endlink  object whenever the shift key and
 					the control key on the keyboard are pressed and at the same moment the 
 					mouse is  moved.
 			*/
@@ -1071,13 +1071,13 @@ namespace BALL
 			
 			/** Declare event class MouseLeftButtonPressed.
 					This event will be sent by
-					the \Ref{Scene} object whenever the left button of the mouse is pressed.
+					the  \link Scene Scene \endlink  object whenever the left button of the mouse is pressed.
 			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
 				(MouseLeftButtonPressed);
 			
 			/** Declare event class MouseLeftButtonPressedShiftKeyPressed.
-					This event will be sent by the \Ref{Scene} object whenever 
+					This event will be sent by the  \link Scene Scene \endlink  object whenever 
 					the left button of the mouse is pressed
 					and at the same moment the 
 					shift key on the keyboard is pressed.
@@ -1086,7 +1086,7 @@ namespace BALL
 				(MouseLeftButtonPressedShiftKeyPressed);
 			
 			/** Declare event class MouseLeftButtonPressedControlKeyPressed.
-					This event will be sent by the \Ref{Scene} object whenever 
+					This event will be sent by the  \link Scene Scene \endlink  object whenever 
 					the left button of the mouse is pressed
 					and at the same moment the 
 					control key on the keyboard is pressed.
@@ -1095,7 +1095,7 @@ namespace BALL
 				(MouseLeftButtonPressedControlKeyPressed);
 			
 			/** Declare event class MouseLeftButtonPressedShiftKeyPressedControlKeyPressed.
-					This event will be sent by the \Ref{Scene} object whenever 
+					This event will be sent by the  \link Scene Scene \endlink  object whenever 
 					the left button of the mouse is pressed
 					and at the same moment the 
 					shift key and the control key on the keyboard are pressed.
@@ -1104,7 +1104,7 @@ namespace BALL
 				(MouseLeftButtonPressedShiftKeyPressedControlKeyPressed);
 			
 			/** Declare event class MouseLeftButtonPressedMouseMoved.
-					This event will be sent by the \Ref{Scene} object whenever 
+					This event will be sent by the  \link Scene Scene \endlink  object whenever 
 					the left button of the mouse is pressed
 					and at the same moment the 
 					the mouse is moved.
@@ -1113,7 +1113,7 @@ namespace BALL
 				(MouseLeftButtonPressedMouseMoved);
 			
 			/** Declare event class MouseLeftButtonPressedShiftKeyPressedMouseMoved.
-					This event will be sent by the \Ref{Scene} object whenever 
+					This event will be sent by the  \link Scene Scene \endlink  object whenever 
 					the left button of the mouse is pressed
 					and at the same moment the 
 					the shift key on the keyboard is pressed and the mouse is moved.
@@ -1122,7 +1122,7 @@ namespace BALL
 				(MouseLeftButtonPressedShiftKeyPressedMouseMoved);
 			
 			/** Declare event class MouseLeftButtonPressedControlKeyPressedMouseMoved.
-					This event will be sent by the \Ref{Scene} object whenever 
+					This event will be sent by the  \link Scene Scene \endlink  object whenever 
 					the left button of the mouse is pressed
 					and at the same moment the 
 					the control key on the keyboard is pressed and the mouse is moved.
@@ -1131,7 +1131,7 @@ namespace BALL
 				(MouseLeftButtonPressedControlKeyPressedMouseMoved);
 			
 			/** Declare event class MouseLeftButtonPressedControlKeyPressedMouseMoved.
-					This event will be sent by the \Ref{Scene} object whenever 
+					This event will be sent by the  \link Scene Scene \endlink  object whenever 
 					the left button of the mouse is pressed
 					and at the same moment the 
 					the shift key and the control key on the keyboard are pressed and the mouse is moved.
@@ -1141,14 +1141,14 @@ namespace BALL
 			
 			/** Declare event class MouseLeftButtonReleased.
 					This event will be sent by
-					the \Ref{Scene} object whenever 
+					the  \link Scene Scene \endlink  object whenever 
 					the left button of the mouse is released.
 			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
 				(MouseLeftButtonReleased);
 			
 			/** Declare event class MouseLeftButtonReleasedShiftKeyPressed.
-					This event will be sent by the \Ref{Scene} object whenever 
+					This event will be sent by the  \link Scene Scene \endlink  object whenever 
 					the left button of the mouse is released
 					and at the same moment the 
 					shift key on the keyboard is pressed.
@@ -1157,7 +1157,7 @@ namespace BALL
 				(MouseLeftButtonReleasedShiftKeyPressed);
 			
 			/** Declare event class MouseLeftButtonReleasedControlKeyPressed.
-					This event will be sent by the \Ref{Scene} object whenever 
+					This event will be sent by the  \link Scene Scene \endlink  object whenever 
 					the left button of the mouse is released
 					and at the same moment the 
 					control key on the keyboard is pressed.
@@ -1166,7 +1166,7 @@ namespace BALL
 				(MouseLeftButtonReleasedControlKeyPressed);
 			
 			/** Declare event class MouseLeftButtonReleasedShiftKeyPressedControlKeyPressed.
-					This event will be sent by the \Ref{Scene} object whenever 
+					This event will be sent by the  \link Scene Scene \endlink  object whenever 
 					the left button of the mouse is released
 					and at the same moment the 
 					shift key and the control key on the keyboard are pressed.
@@ -1175,14 +1175,14 @@ namespace BALL
 				(MouseLeftButtonReleasedShiftKeyPressedControlKeyPressed);
 			
 			/** Declare event class MouseMiddleButtonPressed.
-					This event will be sent by the \Ref{Scene} object whenever 
+					This event will be sent by the  \link Scene Scene \endlink  object whenever 
 					the middle button of the mouse is pressed.
 			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
 				(MouseMiddleButtonPressed);
 			
 			/** Declare event class MouseMiddleButtonPressedShiftKeyPressed.
-					This event will be sent by the \Ref{Scene} object whenever 
+					This event will be sent by the  \link Scene Scene \endlink  object whenever 
 					the middle button of the mouse is pressed
 					and at the same moment the 
 					shift key on the keyboard is pressed.
@@ -1191,7 +1191,7 @@ namespace BALL
 				(MouseMiddleButtonPressedShiftKeyPressed);
 			
 			/** Declare event class MouseMiddleButtonPressedControlKeyPressed.
-					This event will be sent by the \Ref{Scene} object whenever 
+					This event will be sent by the  \link Scene Scene \endlink  object whenever 
 					the middle button of the mouse is pressed
 					and at the same moment the 
 					control key on the keyboard is pressed.
@@ -1200,7 +1200,7 @@ namespace BALL
 				(MouseMiddleButtonPressedControlKeyPressed);
 			
 			/** Declare event class MouseMiddleButtonPressedShiftKeyPressedControlKeyPressed.
-					This event will be sent by the \Ref{Scene} object whenever 
+					This event will be sent by the  \link Scene Scene \endlink  object whenever 
 					the middle button of the mouse is pressed
 					and at the same moment the 
 					shift key and the control key on the keyboard are pressed.
@@ -1209,7 +1209,7 @@ namespace BALL
 				(MouseMiddleButtonPressedShiftKeyPressedControlKeyPressed);
 			
 			/** Declare event class MouseMiddleButtonPressedMouseMoved.
-					This event will be sent by the \Ref{Scene} object whenever 
+					This event will be sent by the  \link Scene Scene \endlink  object whenever 
 					the middle button of the mouse is pressed
 					and at the same moment the 
 					mouse is moved.
@@ -1218,7 +1218,7 @@ namespace BALL
 				(MouseMiddleButtonPressedMouseMoved);
 			
 			/** Declare event class MouseMiddleButtonPressedShiftKeyPressedMouseMoved.
-					This event will be sent by the \Ref{Scene} object whenever 
+					This event will be sent by the  \link Scene Scene \endlink  object whenever 
 					the middle button of the mouse is pressed
 					and at the same moment the 
 					shift key on the keyboard is pressed and the
@@ -1228,7 +1228,7 @@ namespace BALL
 				(MouseMiddleButtonPressedShiftKeyPressedMouseMoved);
 			
 			/** Declare event class MouseMiddleButtonPressedControlKeyPressedMouseMoved.
-					This event will be sent by the \Ref{Scene} object whenever 
+					This event will be sent by the  \link Scene Scene \endlink  object whenever 
 					the middle button of the mouse is pressed
 					and at the same moment the 
 					control key on the keyboard is pressed and the
@@ -1238,7 +1238,7 @@ namespace BALL
 				(MouseMiddleButtonPressedControlKeyPressedMouseMoved);
 			
 			/** Declare event class MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedMouseMoved.
-					This event will be sent by the \Ref{Scene} object whenever 
+					This event will be sent by the  \link Scene Scene \endlink  object whenever 
 					the middle button of the mouse is pressed
 					and at the same moment the 
 					shift key and the control key on the keyboard are pressed and the
@@ -1248,14 +1248,14 @@ namespace BALL
 				(MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedMouseMoved);
 			
 			/** Declare event class MouseMiddleButtonReleased.
-					This event will be sent by the \Ref{Scene} object whenever 
+					This event will be sent by the  \link Scene Scene \endlink  object whenever 
 					the middle button of the mouse is released.
 			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
 				(MouseMiddleButtonReleased);
 			
 			/** Declare event class MouseMiddleButtonReleasedShiftKeyPressed.
-					This event will be sent by the \Ref{Scene} object whenever 
+					This event will be sent by the  \link Scene Scene \endlink  object whenever 
 					the middle button of the mouse is released
 					and at the same moment the 
 					shift key on the keyboard is pressed.
@@ -1264,7 +1264,7 @@ namespace BALL
 				(MouseMiddleButtonReleasedShiftKeyPressed);
 			
 			/** Declare event class MouseMiddleButtonReleasedControlKeyPressed.
-					This event will be sent by the \Ref{Scene} object whenever 
+					This event will be sent by the  \link Scene Scene \endlink  object whenever 
 					the middle button of the mouse is released
 					and at the same moment the 
 					control key on the keyboard is pressed.
@@ -1273,7 +1273,7 @@ namespace BALL
 				(MouseMiddleButtonReleasedControlKeyPressed);
 			
 			/** Declare event class MouseMiddleButtonReleasedShiftKeyPressedControlKeyPressed.
-					This event will be sent by the \Ref{Scene} object whenever 
+					This event will be sent by the  \link Scene Scene \endlink  object whenever 
 					the middle button of the mouse is released
 					and at the same moment the 
 					shift key and the control key on the keyboard are pressed.
@@ -1282,14 +1282,14 @@ namespace BALL
 				(MouseMiddleButtonReleasedShiftKeyPressedControlKeyPressed);
 			
 			/** Declare event class MouseRightButtonPressed.
-					This event will be sent by the \Ref{Scene} object whenever 
+					This event will be sent by the  \link Scene Scene \endlink  object whenever 
 					the right button of the mouse is pressed.
 			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
 				(MouseRightButtonPressed);
 			
 			/** Declare event class MouseRightButtonPressedShiftKeyPressed.
-					This event will be sent by the \Ref{Scene} object whenever 
+					This event will be sent by the  \link Scene Scene \endlink  object whenever 
 					the right button of the mouse is pressed
 					and at the same moment the 
 					shift key on the keyboard is pressed.
@@ -1298,7 +1298,7 @@ namespace BALL
 				(MouseRightButtonPressedShiftKeyPressed);
 			
 			/** Declare event class MouseRightButtonPressedControlKeyPressed.
-					This event will be sent by the \Ref{Scene} object whenever 
+					This event will be sent by the  \link Scene Scene \endlink  object whenever 
 					the right button of the mouse is pressed
 					and at the same moment the 
 					control key on the keyboard is pressed.
@@ -1307,7 +1307,7 @@ namespace BALL
 				(MouseRightButtonPressedControlKeyPressed);
 			
 			/** Declare event class MouseRightButtonPressedShiftKeyPressedControlKeyPressed.
-					This event will be sent by the \Ref{Scene} object whenever 
+					This event will be sent by the  \link Scene Scene \endlink  object whenever 
 					the right button of the mouse is pressed
 					and at the same moment the 
 					shift key and the control key on the keyboard are pressed.
@@ -1316,7 +1316,7 @@ namespace BALL
 				(MouseRightButtonPressedShiftKeyPressedControlKeyPressed);
 			
 			/** Declare event class MouseRightButtonPressedMouseMoved.
-					This event will be sent by the \Ref{Scene} object whenever 
+					This event will be sent by the  \link Scene Scene \endlink  object whenever 
 					the right button of the mouse is pressed
 					and at the same moment the 
 					mouse is moved.
@@ -1325,7 +1325,7 @@ namespace BALL
 				(MouseRightButtonPressedMouseMoved);
 			
 			/** Declare event class MouseRightButtonPressedShiftKeyPressedMouseMoved.
-					This event will be sent by the \Ref{Scene} object whenever 
+					This event will be sent by the  \link Scene Scene \endlink  object whenever 
 					the right button of the mouse is pressed
 					and at the same moment the 
 					shift key on the keyboard is pressed and the
@@ -1335,7 +1335,7 @@ namespace BALL
 				(MouseRightButtonPressedShiftKeyPressedMouseMoved);
 			
 			/** Declare event class MouseRightButtonPressedControlKeyPressedMouseMoved.
-					This event will be sent by the \Ref{Scene} object whenever 
+					This event will be sent by the  \link Scene Scene \endlink  object whenever 
 					the right button of the mouse is pressed
 					and at the same moment the 
 					control key on the keyboard is pressed and the
@@ -1345,7 +1345,7 @@ namespace BALL
 				(MouseRightButtonPressedControlKeyPressedMouseMoved);
 			
 			/** Declare event class MouseRightButtonPressedShiftKeyPressedControlKeyPressedMouseMoved.
-					This event will be sent by the \Ref{Scene} object whenever 
+					This event will be sent by the  \link Scene Scene \endlink  object whenever 
 					the right button of the mouse is pressed
 					and at the same moment the 
 					shift key and the control key on the keyboard are pressed and the
@@ -1355,14 +1355,14 @@ namespace BALL
 				(MouseRightButtonPressedShiftKeyPressedControlKeyPressedMouseMoved);
 			
 			/** Declare event class MouseRightButtonReleased.
-					This event will be sent by the \Ref{Scene} object whenever 
+					This event will be sent by the  \link Scene Scene \endlink  object whenever 
 					the right button of the mouse is released.
 			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
 				(MouseRightButtonReleased);
 			
 			/** Declare event class MouseRightButtonReleasedShiftKeyPressed.
-					This event will be sent by the \Ref{Scene} object whenever 
+					This event will be sent by the  \link Scene Scene \endlink  object whenever 
 					the right button of the mouse is released
 					and at the same moment the 
 					shift key on the keyboard is pressed.
@@ -1371,7 +1371,7 @@ namespace BALL
 				(MouseRightButtonReleasedShiftKeyPressed);
 			
 			/** Declare event class MouseRightButtonReleasedControlKeyPressed.
-					This event will be sent by the \Ref{Scene} object whenever 
+					This event will be sent by the  \link Scene Scene \endlink  object whenever 
 					the right button of the mouse is released
 					and at the same moment the 
 					control key on the keyboard is pressed.
@@ -1380,7 +1380,7 @@ namespace BALL
 				(MouseRightButtonReleasedControlKeyPressed);
 			
 			/** Declare event class MouseRightButtonReleasedShiftKeyPressedControlKeyPressed.
-					This event will be sent by the \Ref{Scene} object whenever 
+					This event will be sent by the  \link Scene Scene \endlink  object whenever 
 					the right button of the mouse is released
 					and at the same moment the 
 					shift key and the control key on the keyboard are pressed.
@@ -1389,7 +1389,7 @@ namespace BALL
 				(MouseRightButtonReleasedShiftKeyPressedControlKeyPressed);
 			
 			/** Declare event class MouseMoved.
-					This event will be sent by the \Ref{Scene} object whenever 
+					This event will be sent by the  \link Scene Scene \endlink  object whenever 
 					the mouse is moved.
 			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
@@ -1403,10 +1403,10 @@ namespace BALL
 					This event receiver class catches all pressed and moved events and relates
 					them to the method registered with {\em registerRotateSystem} available in this
 					class. The method registered with {\em registerRotateSystem} must have as
-					parameter a pointer to the \Ref{Scene} object. So you have access in this
-					method to the	\Ref{Scene} object that has sent the event.
+					parameter a pointer to the  \link Scene Scene \endlink  object. So you have access in this
+					method to the	 \link Scene Scene \endlink  object that has sent the event.
 					The method {\em registerRotateSystem} takes as parameter as pointer to
-					a method available in the \Ref{Scene} object.
+					a method available in the  \link Scene Scene \endlink  object.
 			*/
 			BALL_VIEW_DECLARE_PRESSED_MOVED_EVENT_CLASS(RotateSystem);
 
@@ -1414,10 +1414,10 @@ namespace BALL
 					This event receiver class catches all pressed and moved events and relates
 					them to the method registered with {\em registerZoomSystem} available in this
 					class. The method registered with {\em registerZoomSystem} must have as
-					parameter a pointer to the \Ref{Scene} object. So you have access in this
-					method to the	\Ref{Scene} object that has sent the event.
+					parameter a pointer to the  \link Scene Scene \endlink  object. So you have access in this
+					method to the	 \link Scene Scene \endlink  object that has sent the event.
 					The method {\em registerZoomSystem} takes as parameter as pointer to
-					a method available in the \Ref{Scene} object.
+					a method available in the  \link Scene Scene \endlink  object.
 			*/
 			BALL_VIEW_DECLARE_PRESSED_MOVED_EVENT_CLASS(ZoomSystem);
 
@@ -1425,10 +1425,10 @@ namespace BALL
 					This event receiver class catches all pressed and moved events and relates
 					them to the method registered with {\em registerTranslateSystem} available in this
 					class. The method registered with {\em registerTranslateSystem} must have as
-					parameter a pointer to the \Ref{Scene} object. So you have access in this
-					method to the	\Ref{Scene} object that has sent the event.
+					parameter a pointer to the  \link Scene Scene \endlink  object. So you have access in this
+					method to the	 \link Scene Scene \endlink  object that has sent the event.
 					The method {\em registerTranslateSystem} takes as parameter as pointer to
-					a method available in the \Ref{Scene} object.
+					a method available in the  \link Scene Scene \endlink  object.
 			*/
 			BALL_VIEW_DECLARE_PRESSED_MOVED_EVENT_CLASS(TranslateSystem);
 
@@ -1436,10 +1436,10 @@ namespace BALL
 					This event receiver class catches all pressed and moved events and relates
 					them to the method registered with {\em registerSelectionPressedMoved} available in this
 					class. The method registered with {\em registerSelectionPressedMoved} must have as
-					parameter a pointer to the \Ref{Scene} object. So you have access in this
-					method to the	\Ref{Scene} object that has sent the event.
+					parameter a pointer to the  \link Scene Scene \endlink  object. So you have access in this
+					method to the	 \link Scene Scene \endlink  object that has sent the event.
 					The method {\em registerSelectionPressedMoved} takes as parameter as pointer to
-					a method available in the \Ref{Scene} object.
+					a method available in the  \link Scene Scene \endlink  object.
 			*/
 			BALL_VIEW_DECLARE_PRESSED_MOVED_EVENT_CLASS(SelectionPressedMoved);
 
@@ -1447,10 +1447,10 @@ namespace BALL
 					This event receiver class catches all pressed events and relates
 					them to the method registered with {\em registerSelectionPressed} available in this
 					class. The method registered with {\em registerSelectionPressed} must have as
-					parameter a pointer to the \Ref{Scene} object. So you have access in this
-					method to the	\Ref{Scene} object that has sent the event.
+					parameter a pointer to the  \link Scene Scene \endlink  object. So you have access in this
+					method to the	 \link Scene Scene \endlink  object that has sent the event.
 					The method {\em registerSelectionPressed} takes as parameter as pointer to
-					a method available in the \Ref{Scene} object.
+					a method available in the  \link Scene Scene \endlink  object.
 			*/
 			BALL_VIEW_DECLARE_PRESSED_EVENT_CLASS(SelectionPressed);
 
@@ -1458,10 +1458,10 @@ namespace BALL
 					This event receiver class catches all released events and relates
 					them to the method registered with {\em registerSelectionReleased} available in this
 					class. The method registered with {\em registerSelectionReleased} must have as
-					parameter a pointer to the \Ref{Scene} object. So you have access in this
-					method to the	\Ref{Scene} object that has sent the event.
+					parameter a pointer to the  \link Scene Scene \endlink  object. So you have access in this
+					method to the	 \link Scene Scene \endlink  object that has sent the event.
 					The method {\em registerSelectionReleased} takes as parameter as pointer to
-					a method available in the \Ref{Scene} object.
+					a method available in the  \link Scene Scene \endlink  object.
 			*/
 			BALL_VIEW_DECLARE_RELEASED_EVENT_CLASS(SelectionReleased);
 
@@ -1469,10 +1469,10 @@ namespace BALL
 					This event receiver class catches all pressed and moved events and relates
 					them to the method registered with {\em registerDeselectionPressedMoved} available in this
 					class. The method registered with {\em registerDeselectionPressedMoved} must have as
-					parameter a pointer to the \Ref{Scene} object. So you have access in this
-					method to the	\Ref{Scene} object that has sent the event.
+					parameter a pointer to the  \link Scene Scene \endlink  object. So you have access in this
+					method to the	 \link Scene Scene \endlink  object that has sent the event.
 					The method {\em registerDeselectionPressedMoved} takes as parameter as pointer to
-					a method available in the \Ref{Scene} object.
+					a method available in the  \link Scene Scene \endlink  object.
 			*/
 			BALL_VIEW_DECLARE_PRESSED_MOVED_EVENT_CLASS(DeselectionPressedMoved);
 
@@ -1480,10 +1480,10 @@ namespace BALL
 					This event receiver class catches all pressed events and relates
 					them to the method registered with {\em registerDeselectionPressed} available in this
 					class. The method registered with {\em registerDeselectionPressed} must have as
-					parameter a pointer to the \Ref{Scene} object. So you have access in this
-					method to the	\Ref{Scene} object that has sent the event.
+					parameter a pointer to the  \link Scene Scene \endlink  object. So you have access in this
+					method to the	 \link Scene Scene \endlink  object that has sent the event.
 					The method {\em registerDeselectionPressed} takes as parameter as pointer to
-					a method available in the \Ref{Scene} object.
+					a method available in the  \link Scene Scene \endlink  object.
 			*/
 			BALL_VIEW_DECLARE_PRESSED_EVENT_CLASS(DeselectionPressed);
 
@@ -1491,10 +1491,10 @@ namespace BALL
 					This event receiver class catches all released events and relates
 					them to the method registered with {\em registerDeselectionReleased} available in this
 					class. The method registered with {\em registerDeselectionReleased} must have as
-					parameter a pointer to the \Ref{Scene} object. So you have access in this
-					method to the	\Ref{Scene} object that has sent the event.
+					parameter a pointer to the  \link Scene Scene \endlink  object. So you have access in this
+					method to the	 \link Scene Scene \endlink  object that has sent the event.
 					The method {\em registerDeselectionReleased} takes as parameter as pointer to
-					a method available in the \Ref{Scene} object.
+					a method available in the  \link Scene Scene \endlink  object.
 			*/
 			BALL_VIEW_DECLARE_RELEASED_EVENT_CLASS(DeselectionReleased);
 			//@}

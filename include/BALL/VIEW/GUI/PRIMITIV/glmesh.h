@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glmesh.h,v 1.10 2002/12/16 12:22:50 sturm Exp $
+// $Id: glmesh.h,v 1.11 2003/02/21 16:07:35 anhi Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLMESH_H
 #define BALL_VIEW_GUI_PRIMITIV_GLMESH_H
@@ -24,13 +24,13 @@ namespace BALL
 	{
 		/** GLMesh class.
 				An instance of GLMesh represents an instance of the geometric visualization "mesh".
-				The class GLMesh is derived from the classes \Ref{Mesh} and
-				\Ref{GLObject}. Therefore the class glMesh is the graphical extension
+				The class GLMesh is derived from the classes  \link Mesh Mesh \endlink  and
+				 \link GLObject GLObject \endlink . Therefore the class glMesh is the graphical extension
 				of the geometrical definition of the class mesh.
-				The drawing method from \Ref{GLObject} is overridden to visualize the
+				The drawing method from  \link GLObject GLObject \endlink  is overridden to visualize the
 				mesh. OpenGL code is used for the visualization.
 				See these classes for further information.
-				{\bf Definition:} \URL{BALL/VIEW/GUI/PRIMITIV/glmesh.h}
+				<b>Definition:</b> BALL/VIEW/GUI/PRIMITIV/glmesh.h
 		*/
 		class GLMesh
 			: public Mesh,
@@ -55,7 +55,7 @@ namespace BALL
 					Construct new glMesh by copying the glMesh {\em mesh}.
 					The copy is either deep (default) or shallow.
 					@param       mesh the glMesh to be copied (cloned)
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false})
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>)
 					@return      GLMesh new constructed glMesh copied from {\em mesh}
 					@see         Mesh
 					@see         GLObject
@@ -80,15 +80,15 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} glMesh.
-					Calls \Ref{destroy}.
+					Calls  \link destroy destroy \endlink .
 					@see         destroy
 			*/
 			virtual ~GLMesh()
 				throw();
 
 			/** Explicit default initialization.
-					Calls \Ref{Mesh::clear}
-					Calls \Ref{GLObject::clear}
+					Calls  \link Mesh::clear Mesh::clear \endlink 
+					Calls  \link GLObject::clear GLObject::clear \endlink 
 					@see  Mesh::clear
 					@see  GLObject::clear
 			*/
@@ -96,8 +96,8 @@ namespace BALL
 				throw();
 
 			/** Explicit destructor.
-					Calls \Ref{Mesh::destroy}
-					Calls \Ref{GLObject::destroy}
+					Calls  \link Mesh::destroy Mesh::destroy \endlink 
+					Calls  \link GLObject::destroy GLObject::destroy \endlink 
 					@see  Mesh::destroy
 					@see  GLObject::destroy
 			*/
@@ -113,9 +113,9 @@ namespace BALL
 					Assign the glMesh {\em mesh} to {\em *this} glMesh.
 					The copy is either deep (default) or shallow.
 					The value of {\em *this} glMesh is initialized to the value of 
-					the glMesh {\em mesh}.\\
+					the glMesh {\em mesh}. \par
 					@param       mesh the glMesh to be copied
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em mesh}
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of {\em mesh}
 					@see         Mesh
 					@see         GLObject
 			*/
@@ -125,9 +125,9 @@ namespace BALL
 			/** Assignment operator.
 					Assign the glMesh {\em mesh} to {\em *this} glMesh.
 					The copy is deep.
-					Calls \Ref{set}.
+					Calls  \link set set \endlink .
 					The value of {\em *this} glMesh is initialized to the value 
-					of the glMesh {\em mesh}.\\
+					of the glMesh {\em mesh}. \par
 					@param       mesh the glMesh to be copied
 					@return      GLMesh& constant reference {\em *this} glMesh
 					@see         set
@@ -138,11 +138,11 @@ namespace BALL
 			/** Copying with cloning facility.
 					Copy {\em *this} glMesh to the glMesh {\em mesh}.
 					The copy is either deep (default) or shallow.
-					Calls \Ref{set}.
+					Calls  \link set set \endlink .
 					The value of the glMesh {\em mesh} is initialized to the
-					value of {\em *this} glMesh.\\
+					value of {\em *this} glMesh. \par
 					@param       mesh the glMesh to be assigned to
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em mesh}
+					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of {\em mesh}
 					@see         set
 			*/
 			void get(GLMesh& mesh, bool deep = true) const
@@ -164,17 +164,17 @@ namespace BALL
 			//@{
 			
 			/** Creation of the graphical representation.
-					Overridden method from \Ref{GLObject}. Uses the geometrical properties
-					defined in class \Ref{Mesh} to create the graphical representation
+					Overridden method from  \link GLObject GLObject \endlink . Uses the geometrical properties
+					defined in class  \link Mesh Mesh \endlink  to create the graphical representation
 					of the mesh. This method is used internally from the render engine
-					of the \Ref{Scene}.
-					This method draws the mesh of the surface defined by \Ref{Surface} as
+					of the  \link Scene Scene \endlink .
+					This method draws the mesh of the surface defined by  \link Surface Surface \endlink  as
 					triangles. OpenGL triangle strips are used for the implementation.
 					The parameter {\em with_names} indicates whether the openGL command 
 					{\em glLoadName} must be used for naming the graphical object 
 					(necessary for picking mode in the scene).
 					@param     with_names flag if the graphical objects must have a name
-					@return    bool {\tt true} if successful,	{\tt false} otherwise
+					@return    bool <tt>true</tt> if successful,	<tt>false</tt> otherwise
 					@see       GLObject::draw
 			*/
 			virtual bool draw(bool with_names = false)
@@ -182,9 +182,9 @@ namespace BALL
 
 			/** Export method.
 					This method handles the export of {\em *this} glMesh into another
-					format (eg. POVRAY, VRML)\\
-				  {\bf Note:} Not yet implemented.
-					@return    bool {\tt true} if successful,	{\tt false} otherwise
+					format (eg. POVRAY, VRML) \par
+				  <b>Note:</b> Not yet implemented.
+					@return    bool <tt>true</tt> if successful,	<tt>false</tt> otherwise
 			*/
 			virtual bool extract()
 				throw();

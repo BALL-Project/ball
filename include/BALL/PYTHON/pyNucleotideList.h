@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyNucleotideList.h,v 1.4 2002/02/27 12:19:35 sturm Exp $
+// $Id: pyNucleotideList.h,v 1.5 2003/02/21 16:06:00 anhi Exp $
 
 #ifndef BALL_PYTHON_PYNUCLEOTIDELIST_H
 #define BALL_PYTHON_PYNUCLEOTIDELIST_H
@@ -67,7 +67,7 @@ namespace BALL
 			
 		/**	Construct from a AtomContainer
 				This constructor creates an PyNucleotideList object from
-				all nucleotides of a \Ref{AtomContainer} object.
+				all nucleotides of a  \link AtomContainer AtomContainer \endlink  object.
 		*/
 		PyNucleotideList(const AtomContainer& fragment, bool selected_only = false);
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: createSpectrumProcessor.h,v 1.17 2002/12/22 14:48:56 anker Exp $
+// $Id: createSpectrumProcessor.h,v 1.18 2003/02/21 16:05:39 anhi Exp $
 
 #ifndef BALL_NMR_CREATESPECTRUMPROCESSOR_H
 #define BALL_NMR_CREATESPECTRUMPROCESSOR_H
@@ -40,8 +40,8 @@ namespace BALL
 
 	/**	Processor creates peaklist_. 
 			Each atom´s chemical shift will create a new peak.
-			Thist peak´s {\tt atomlist_} will contain the corresponding atom. \\
-			{\bf Definition} \URL{BALL/NMR/createSpectrumProcessor.h}
+			Thist peak´s <tt>atomlist_</tt> will contain the corresponding atom.  \par
+			<b>Definition</b> BALL/NMR/createSpectrumProcessor.h
 	*/
 	class CreateSpectrumProcessor
 		:	public ShiftModule
@@ -65,8 +65,8 @@ namespace BALL
 
 		/**	Default Constructor.
 				Create a default instance of CreateSpectrumProcessor.
-				Calls \Ref{init} to read default values from a configuration
-				file, see \Ref{init} for details.
+				Calls  \link init init \endlink  to read default values from a configuration
+				file, see  \link init init \endlink  for details.
 				@exception FileNotFound if the INI file does not exist
 				@exception ParseError if the contents of the file could not be parsed
 		*/	
@@ -86,7 +86,7 @@ namespace BALL
 		/**	Init method.
 				Read the contents of a specified INI file containing
 				information on ignored and averaged atoms.
-				The default filename is {\tt NMR/StandardSpectrum.ini} 
+				The default filename is <tt>NMR/StandardSpectrum.ini</tt> 
 				in the BALL data path.
 				@exception FileNotFound if the INI file does not exist
 				@exception ParseError if the contents of the file could not be parsed
@@ -104,7 +104,7 @@ namespace BALL
 		virtual Processor::Result operator () (Composite& atom)
 			throw();
 		
-		/**	Returns a reference to {\tt peaklist_}.
+		/**	Returns a reference to <tt>peaklist_</tt>.
 		*/
 		const PeakList1D& getPeakList() const;
 		
@@ -163,7 +163,7 @@ namespace BALL
 			representation of the spectrum. The spectrum synthesis is
 			based upon the assumption of a Lorentzian line shape. Peak width,
 			position, and height are taken from each individual peak of the 
-			peak list. Each point in the \Ref{RegularData1D} array is assigned
+			peak list. Each point in the  \link RegularData1D RegularData1D \endlink  array is assigned
 			the sum of all Lorentzians centered at the peak positions:
 			\begin{equation}
 					S(\delta) = \sum_{i} \frac{h_i}{w_i (\delta_i-\delta)^2},

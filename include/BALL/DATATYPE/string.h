@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: string.h,v 1.43 2002/12/12 09:48:44 oliver Exp $
+// $Id: string.h,v 1.44 2003/02/21 16:02:04 anhi Exp $
 
 #ifndef BALL_DATATYPE_STRING_H
 #define BALL_DATATYPE_STRING_H
@@ -44,7 +44,7 @@ namespace BALL
 
 	/**	@name	String
 			An improved version of STL string.
-			{\bf Definition:} \URL{BALL/DATATYPE/string.h}
+			<b>Definition:</b> BALL/DATATYPE/string.h
 	*/
 	//@{
 				
@@ -71,10 +71,10 @@ namespace BALL
 
 		/**	Constants to set the compare mode.
 				Use one of these constants to set the mode you need.
-				These modes affect all \Ref{compare} methods. As these
+				These modes affect all  \link compare compare \endlink  methods. As these
 				methods are also used in the implementation of comparison operators,
-				all comparison operations will get affected from a change.\\
-				You may change the comparison mode by invoking setCompareMode.\\
+				all comparison operations will get affected from a change. \par
+				You may change the comparison mode by invoking setCompareMode. \par
 		*/
 		enum CompareMode
 		{ 
@@ -86,7 +86,7 @@ namespace BALL
 		};
 
 		/**	Constant indicating the end of the string.
-				Use this constant instead of {\tt string::npos} to indicate an invalid 
+				Use this constant instead of <tt>string::npos</tt> to indicate an invalid 
 				position inside the string or the end of the string in those methods
 				requiring indices.
 		*/
@@ -119,7 +119,7 @@ namespace BALL
 		static const char* CHARACTER_CLASS__ASCII_FLOAT;
 
 		/**	Character class containing all whitespace characters.
-				Whitespace characters are:\\
+				Whitespace characters are: \par
 				\begin{itemize}
 					\item blank " "
 					\item horizontal tab $ "\backslash t" $
@@ -154,37 +154,37 @@ namespace BALL
 
 		/** Creates a new string from a given range of another string.
 				@see 		String:Indices
-				@exception Exception::IndexUnderflow if {\tt from < 0}
-				@exception Exception::IndexOverflow if {\tt from >= size()}
+				@exception Exception::IndexUnderflow if <tt>from < 0</tt>
+				@exception Exception::IndexOverflow if <tt>from >= size()</tt>
 		*/
 		String(const String& s, Index from, Size len = EndPos)
 			throw(Exception::IndexUnderflow, Exception::IndexOverflow);
 	
 		/**	Creates a new string from a C type string.
-				The new string contains the contents of {\bf s} until 
-				it has reached a length of {\bf len} or contains a zero character
-				(whichever comes first). Default value for {\bf len} is {\bf EndPos},
+				The new string contains the contents of <b>s</b> until 
+				it has reached a length of <b>len</b> or contains a zero character
+				(whichever comes first). Default value for <b>len</b> is <b>EndPos</b>,
 				meaning as long as possible.
 		*/
 		String(const char* char_ptr, Index from = 0, Size len = EndPos)
 			throw(Exception::NullPointer, Exception::IndexUnderflow, Exception::IndexOverflow);
 
-		/**	Creates a string using {\bf sprintf}.
+		/**	Creates a string using <b>sprintf</b>.
 				This constructor creates a new string and sets its content
-				to the result of a call to {\bf sprintf} using {\bf format} as a
-				format string and all additional parameters as arguments.\\
+				to the result of a call to <b>sprintf</b> using <b>format</b> as a
+				format string and all additional parameters as arguments. \par
 				The result of the sprintf call is intermediately written to a buffer
-				of a maximum size of {\bf buffer_size} characters, so choose an 
-				appropriate size for this variables.\\
+				of a maximum size of <b>buffer_size</b> characters, so choose an 
+				appropriate size for this variables. \par
 				@exception IndexUnderflow, if the buffer size specified is not larger than 0
-				@exception NullPointer, if {\tt format == 0}
+				@exception NullPointer, if <tt>format == 0</tt>
 		*/
 		String(Size buffer_size, const char* format, ... )
 			throw(Exception::IndexUnderflow, Exception::NullPointer);
 
-		/**	Create a new string from the contents of a {\bf stringstream}.
-				The contents of the {\tt stringstream} are not modified, i.e.
-				successive construction of multiple strings from the same {\tt stringstream}
+		/**	Create a new string from the contents of a <b>stringstream</b>.
+				The contents of the <tt>stringstream</tt> are not modified, i.e.
+				successive construction of multiple strings from the same <tt>stringstream</tt>
 				object leads to identical copies.
 		*/
 		String(std::stringstream& s)
@@ -249,33 +249,33 @@ namespace BALL
 		//@{
 
 		/**	Assign a String from a range of another string
-				@exception Exception::IndexOverflow if {\tt from < 0}
-				@exception Exception::IndexUnderflow if {\tt from >= size()}
+				@exception Exception::IndexOverflow if <tt>from < 0</tt>
+				@exception Exception::IndexUnderflow if <tt>from >= size()</tt>
 		*/
 		void set(const String& string, Index from = 0, Size len = EndPos)
 			throw(Exception::IndexUnderflow, Exception::IndexOverflow);
 
 		/** Assign a String from a C type string 
-				@exception Exception::IndexUnderflow if {\tt from < 0}
-				@exception Exception::IndexOverflow if {\tt from >= size()}
+				@exception Exception::IndexUnderflow if <tt>from < 0</tt>
+				@exception Exception::IndexOverflow if <tt>from >= size()</tt>
 		*/
 		void set(const char* char_ptr, Index from = 0, Size len = EndPos)
 			throw(Exception::NullPointer, Exception::IndexUnderflow, Exception::IndexOverflow);
 	
-		/** Assign a string to the result of a {\bf sprintf} call
+		/** Assign a string to the result of a <b>sprintf</b> call
 				@exception Exception::IndexUnderflow, if the buffer size is zero
-				@exception Exception::NullPointer, {\tt format} is a NULL pointer
+				@exception Exception::NullPointer, <tt>format</tt> is a NULL pointer
 		*/
 		void set(Size buffer_size, const char *format, ...)
 			throw(Exception::IndexUnderflow, Exception::NullPointer);
 
-		/** Assign a String from a {\bf stringstream}.
-				The contents of the {\tt stringstream} object are not modified.
+		/** Assign a String from a <b>stringstream</b>.
+				The contents of the <tt>stringstream</tt> object are not modified.
 		*/
 		void set(std::stringstream& s)
 			throw();
 
-		/// Assign a String from the result of repeating {\bf c} {\bf len} times
+		/// Assign a String from the result of repeating <b>c</b> <b>len</b> times
 		void set(char c, Size len = 1)
 			throw();
 
@@ -327,8 +327,8 @@ namespace BALL
 		const String& operator = (const char* pc)
 			throw(Exception::NullPointer);
 
-		/** Assign a string from a {\bf stringstream}.
-				The contents of the {\tt stringstream} object are not modified.
+		/** Assign a string from a <b>stringstream</b>.
+				The contents of the <tt>stringstream</tt> object are not modified.
 		*/
 		const String& operator = (std::stringstream& s)
 			throw();
@@ -396,8 +396,8 @@ namespace BALL
 		//@{
 
 		/**	Converts the string to a bool value.
-				This method returns {\bf false}, if the string contains the string {\tt false}
-				(may be surrounded by whitespaces), or {\bf true} otherwise.
+				This method returns <b>false</b>, if the string contains the string <tt>false</tt>
+				(may be surrounded by whitespaces), or <b>true</b> otherwise.
 		*/
 		bool toBool() const
 			throw();
@@ -468,22 +468,22 @@ namespace BALL
 		Substring operator () (Index from, Size len = EndPos) const
 			throw(Exception::IndexUnderflow, Exception::IndexOverflow);
 
-		/** Returns a substring containing the string before the first occurence of {\bf s}
+		/** Returns a substring containing the string before the first occurence of <b>s</b>
 		*/
 		Substring before(const String& s, Index from = 0) const
 			throw();
  
-		/** Returns a substring containing the beginning of the string including the first occurence of {\bf s}
+		/** Returns a substring containing the beginning of the string including the first occurence of <b>s</b>
 		*/
 		Substring through(const String& s, Index from = 0) const
 			throw();
  
-		/** Returns a substring containing the string from the first occurence of {\bf s} on
+		/** Returns a substring containing the string from the first occurence of <b>s</b> on
 		*/
 		Substring from(const String& s, Index from = 0) const
 			throw();
 
-		/** Returns a substring containing the string after the first occurence of {\bf s}.
+		/** Returns a substring containing the string after the first occurence of <b>s</b>.
 		*/
 		Substring after(const String& s, Index from = 0) const
 			throw();
@@ -518,18 +518,18 @@ namespace BALL
 
 		/** Split the string into fields and assign these field to a vector of strings.
 				The vector of strings is cleared in any case. Its final size is returned.
-				@exception IndexOverflow if {\tt from < 0}
-				@exception NullPointer if {\tt delimiters == 0}
+				@exception IndexOverflow if <tt>from < 0</tt>
+				@exception NullPointer if <tt>delimiters == 0</tt>
 		*/
 		Size split(std::vector<String>& strings, const char* delimiters = CHARACTER_CLASS__WHITESPACE, Index from = 0) const
 			throw(Exception::IndexUnderflow, Exception::NullPointer);
 
 		/** Split the string into fields and respect quote characters.
-				Similar to \Ref{split}, but delimiters that are inside quote characters (default is \Ref{CHARACTER_CLASS__QUOTES})
+				Similar to  \link split split \endlink , but delimiters that are inside quote characters (default is  \link CHARACTER_CLASS__QUOTES CHARACTER_CLASS__QUOTES \endlink )
 				are not considered to split the string.
 				The vector of strings is cleared in any case. Its final size is returned.
-				@exception IndexOverflow if {\tt from < 0}
-				@exception NullPointer if {\tt delimiters == 0}
+				@exception IndexOverflow if <tt>from < 0</tt>
+				@exception NullPointer if <tt>delimiters == 0</tt>
 		*/
 		Size splitQuoted(std::vector<String>& strings, const char* delimiters = CHARACTER_CLASS__WHITESPACE, 
 							 const char* quotes = CHARACTER_CLASS__QUOTES, Index from = 0) const
@@ -540,50 +540,50 @@ namespace BALL
 		*/
 		//@{
 
-		/** Strips all characters in {\bf trimmed} from the left of the string.
-				trimLeft stops at the first character encountered that is not in {\bf trimmed}.
+		/** Strips all characters in <b>trimmed</b> from the left of the string.
+				trimLeft stops at the first character encountered that is not in <b>trimmed</b>.
 				Using its default parameter CHARACTER_CLASS__WHITESPACE, it is usually handy to 
 				remove blanks from the beginning of a string.
-				Strings consisting of character from {\tt trimmed} only yield an empty string.
+				Strings consisting of character from <tt>trimmed</tt> only yield an empty string.
 		*/
 		String& trimLeft(const char* trimmed = CHARACTER_CLASS__WHITESPACE)
 			throw();
 
-		/** Strips all characters in {\bf trimmed} from the right of the string.
-				trimRight stops at the first character encountered that is not in {\bf trimmed}.
+		/** Strips all characters in <b>trimmed</b> from the right of the string.
+				trimRight stops at the first character encountered that is not in <b>trimmed</b>.
 				Using its default parameter CHARACTER_CLASS__WHITESPACE, it is usually handy to 
 				remove blanks from the end of a string.
-				Strings consisting of character from {\tt trimmed} only yield an empty string.
+				Strings consisting of character from <tt>trimmed</tt> only yield an empty string.
 		*/
 		String& trimRight(const char* trimmed = CHARACTER_CLASS__WHITESPACE)
 			throw();
 
-		/**	Strips all characters in {\bf trimmed} from both sides of the string.
-				trim calls {\tt trimRight(trimmed).trimLeft(trimmed)}.
+		/**	Strips all characters in <b>trimmed</b> from both sides of the string.
+				trim calls <tt>trimRight(trimmed).trimLeft(trimmed)</tt>.
 		*/
 		String& trim(const char* trimmed = CHARACTER_CLASS__WHITESPACE)
 			throw();
 
 		// ?????
-		/**	Strips all characters in {\bf trimmed} from both sides of the string.
-				trim calls {\tt trimRight(trimmed).trimLeft(trimmed)}.
+		/**	Strips all characters in <b>trimmed</b> from both sides of the string.
+				trim calls <tt>trimRight(trimmed).trimLeft(trimmed)</tt>.
 		*/
 		String trim(const char* trimmed = CHARACTER_CLASS__WHITESPACE) const
 			throw();
 
-		/// Truncate the string to length {\bf size}
+		/// Truncate the string to length <b>size</b>
 		String& truncate(Size size)
 			throw();
 
-		/// Returns a substring containing the {\bf len} leftmost characters of the string
+		/// Returns a substring containing the <b>len</b> leftmost characters of the string
 		Substring left(Size len) const
 			throw();
 
-		/// Returns a substring containing the {\bf len} rightmost characters of the string
+		/// Returns a substring containing the <b>len</b> rightmost characters of the string
 		Substring right(Size len) const
 			throw();
 
-		/** Returns a substring containing the first occurence of {\bf pattern} in the string.
+		/** Returns a substring containing the first occurence of <b>pattern</b> in the string.
 				If the pattern is not contained in the string, an empty Substring is returned.
 				The search for the pattern may also start from an index different from zero, allowing
 				incremental search.
@@ -633,8 +633,8 @@ namespace BALL
 		String& reverse(Index from = 0, Size len = EndPos)
 			throw(Exception::IndexUnderflow, Exception::IndexOverflow);
 
-		/** Substitute the first occurence of {\bf to_replace} by the content of {\bf replacing}.
-				@return the first position of the substitution or \Ref{EndPos} if {\bf to_replace} is not found
+		/** Substitute the first occurence of <b>to_replace</b> by the content of <b>replacing</b>.
+				@return the first position of the substitution or  \link EndPos EndPos \endlink  if <b>to_replace</b> is not found
 		*/
 		Size substitute(const String& to_replace, const String& replacing)
 			throw();
@@ -645,19 +645,19 @@ namespace BALL
 		*/
 		//@{
 
-		/// True, if the string contains character {\bf c}
+		/// True, if the string contains character <b>c</b>
 		bool has(char c) const
 			throw();
 
-		/// True, if the string contains the substring {\bf s} after index {\bf from}
+		/// True, if the string contains the substring <b>s</b> after index <b>from</b>
 		bool hasSubstring(const String& s, Index from = 0) const
 			throw();
 
-		/// True, if the string starts with {\bf s}
+		/// True, if the string starts with <b>s</b>
 		bool hasPrefix(const String& s) const
 			throw();
 
-		/// True, if the string ends with {\bf s}
+		/// True, if the string ends with <b>s</b>
 		bool hasSuffix(const String& s) const
 			throw();
 
@@ -666,39 +666,39 @@ namespace BALL
 			throw();
 
 		/** True, if the string only contains letters (any case).	
-				It returns also {\bf true}, if called for an empty string.
+				It returns also <b>true</b>, if called for an empty string.
 		*/
 		bool isAlpha() const
 			throw();
 
 		/** True, if the string only contains letters and digits.
-				It returns also {\bf true}, if called for an empty string.
+				It returns also <b>true</b>, if called for an empty string.
 		*/
 		bool isAlnum() const
 			throw();
 
 		/** True, if the string only contains digits.
-				It returns also {\bf true}, if called for an empty string.
+				It returns also <b>true</b>, if called for an empty string.
 		*/
 		bool isDigit() const
 			throw();
 
 		/** True, if the string is a floating number.
 				(It contains only numbers and maybe a dot).
-				It returns also {\bf true}, if called for an empty string.
+				It returns also <b>true</b>, if called for an empty string.
 		*/
 		bool isFloat() const
 			throw();
 
 		/** True, if the string only contains spaces.
-				It returns also {\bf true}, if called for an empty string.
+				It returns also <b>true</b>, if called for an empty string.
 		*/
 		bool isSpace() const
 			throw();
 
 		/** True, if the string only contains whitespace characters.
 				Whitespaces are defined in CHARACTER_CLASS__WHITESPACE.
-				It returns also {\bf true}, if called for an empty string.
+				It returns also <b>true</b>, if called for an empty string.
 		*/
 		bool isWhitespace() const
 			throw();
@@ -951,10 +951,10 @@ namespace BALL
 
 	/**	A substring class.
 			The Substring class represents an efficient way to deal with substrings
-			of \Ref{String}. Each Substring is bound to an instance of String and 
+			of  \link String String \endlink . Each Substring is bound to an instance of String and 
 			is defined by a start and end index. It can be used like a String (with several
-			restrictions) but only affects the given range of the string it is bount to.\\
-			{\bf Definition:} \URL{BALL/DATATYPE/string.h} \\
+			restrictions) but only affects the given range of the string it is bount to. \par
+			<b>Definition:</b> BALL/DATATYPE/string.h
 	*/
 	class Substring
 	{
@@ -1013,7 +1013,7 @@ namespace BALL
 		/** Create a substring from a string and two indices.
 				@param	string the string the substring is bound to.
 				@param	from the start index of the substring
-				@param	len the length of the substring (default {\tt EndPos}: to the end of the string)
+				@param	len the length of the substring (default <tt>EndPos</tt>: to the end of the string)
 		*/
 		Substring(const String& string, Index from = 0, Size len = String::EndPos)
 			throw(Exception::IndexUnderflow, Exception::IndexOverflow);

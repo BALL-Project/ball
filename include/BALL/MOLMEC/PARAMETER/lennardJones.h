@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lennardJones.h,v 1.18 2002/12/12 09:48:47 oliver Exp $
+// $Id: lennardJones.h,v 1.19 2003/02/21 16:04:41 anhi Exp $
 
 // Molecular Mechanics Parameter: class describing the atom type section of a parameter file
  
@@ -24,9 +24,9 @@ namespace BALL
 			6-12 Potential). Parameters may be given in three different formats
 			(no mixing of formats is allowed).
 			\begin{itemize}
-				\item {\em A} and {\em B} are given directly (\Ref{A_B_FORMAT})
-				\item well depth and minimum radii (\Ref{EPSILON_R_FORMAT})
-				\item Slater-Kirkwood parameters (\Ref{SLATER_KIRKWOOD_FORMAT})
+				\item {\em A} and {\em B} are given directly ( \link A_B_FORMAT A_B_FORMAT \endlink )
+				\item well depth and minimum radii ( \link EPSILON_R_FORMAT EPSILON_R_FORMAT \endlink )
+				\item Slater-Kirkwood parameters ( \link SLATER_KIRKWOOD_FORMAT SLATER_KIRKWOOD_FORMAT \endlink )
 			\end{itemize}
 			If the Slater-Kirkwood format is used, the values for $A_{ij}$ and $B_{ij}$ are calculated
 			as follows (see e.g. Brooks et al., J. Comput. Chem, 4(2):187-217 (1983))
@@ -37,8 +37,8 @@ namespace BALL
 			\[
 				A_{ij} & = & \frac{1}2{} B_{ij} (R_i + R_j)^6
 			\]
-			\\
-			{\bf Definition:}\URL{BALL/MOLMEC/PARAMETER/lennardJones.h}	
+			 \par
+			<b>Definition:</b>BALL/MOLMEC/PARAMETER/lennardJones.h
 	*/
 	class LennardJones 
 		:	public ParameterSection

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.11 2002/12/15 12:31:34 amoll Exp $
+// $Id: scene.h,v 1.12 2003/02/21 16:07:47 anhi Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_SCENE_H
 #define BALL_VIEW_GUI_WIDGETS_SCENE_H
@@ -63,19 +63,19 @@ namespace BALL
 
 		/**	The Scene class.
 				The class Scene is the main visualization widget that shows that graphical
-				representation of the inserted \Ref{Composite} objects that are stored
-				in the \Ref{MainControl} object.
-				To do this the class Scene must be a child of the \Ref{MainControl} object.
-				Because the \Ref{MainControl} object is also the main application object
-				a scene widget must be created with the pointer to the \Ref{MainControl} object
+				representation of the inserted  \link Composite Composite \endlink  objects that are stored
+				in the  \link MainControl MainControl \endlink  object.
+				To do this the class Scene must be a child of the  \link MainControl MainControl \endlink  object.
+				Because the  \link MainControl MainControl \endlink  object is also the main application object
+				a scene widget must be created with the pointer to the  \link MainControl MainControl \endlink  object
 				as parent widget.
-				It is also possible to connect scenes together with the \Ref{Notification}
+				It is also possible to connect scenes together with the  \link Notification Notification \endlink 
 				mechanism of BALL. Connecting two or more scenes together means that that
 				mouse action performed in one scene are also transfered to all other connected
 				scenes. These other scenes can have different camera angles or other properties.
-				The class \Ref{Events} is a container class of appropriate events that can
+				The class  \link Events Events \endlink  is a container class of appropriate events that can
 				be assigned to a scene.
-				{\bf Definition:} \URL{BALL/VIEW/GUI/WIDGETS/scene.h}
+				<b>Definition:</b> BALL/VIEW/GUI/WIDGETS/scene.h
 		*/
 		class Scene
 			: public QGLWidget, public ModularWidget
@@ -117,21 +117,21 @@ namespace BALL
 
 			/** Default Constructor.
 					Construct new scene.
-					Initialize the width and height of {\em *this} scene to {\tt 600} and sets
+					Initialize the width and height of {\em *this} scene to <tt>600</tt> and sets
 					the camera position to:
 					\begin{itemize}
-					  \item camera position set to {\tt Vector(1,0,0)}
-					  \item camera look at position set to {\tt Vector(0,0,0)}
+					  \item camera position set to <tt>Vector(1,0,0)</tt>
+					  \item camera look at position set to <tt>Vector(0,0,0)</tt>
 					\end{itemize}
 					The following events are used initially:
 					\begin{itemize}
-					  \item \Ref{MouseLeftButtonPressed} & \Ref{MouseMoved} are connected to \Ref{RotateSystem}
-					  \item \Ref{MouseMiddleButtonPressed} & \Ref{MouseMoved} are connected to \Ref{ZoomSystem}
-					  \item \Ref{MouseRightButtonPressed} & \Ref{MouseMoved} are connected to \Ref{TranslateSystem}
+					  \item  \link MouseLeftButtonPressed MouseLeftButtonPressed \endlink  &  \link MouseMoved MouseMoved \endlink  are connected to \Ref{RotateSystem}
+					  \item  \link MouseMiddleButtonPressed MouseMiddleButtonPressed \endlink  &  \link MouseMoved MouseMoved \endlink  are connected to \Ref{ZoomSystem}
+					  \item  \link MouseRightButtonPressed MouseRightButtonPressed \endlink  &  \link MouseMoved MouseMoved \endlink  are connected to \Ref{TranslateSystem}
 					\end{itemize}					
-					Register a default \Ref{GLObjectCollector}.
-					A \Ref{GLPrimitiveManager} is initialized for {\em *this} scene.
-					Calls \Ref{registerWidget}.
+					Register a default  \link GLObjectCollector GLObjectCollector \endlink .
+					A  \link GLPrimitiveManager GLPrimitiveManager \endlink  is initialized for {\em *this} scene.
+					Calls  \link registerWidget registerWidget \endlink .
 					@param      parent_widget the parent widget of {\em *this} scene 
 					@param      name the name of {\em *this} scene 
 					@param      flags the flags the scene widget should have 
@@ -145,17 +145,17 @@ namespace BALL
 
 			/** Copy constructor.
 					Construct new scene by copying the scene {\em scene}.
-					Initialize the width, height, camera position and the \Ref{GLObjectCollector}
+					Initialize the width, height, camera position and the  \link GLObjectCollector GLObjectCollector \endlink 
 					of {\em *this} scene to the width, height, camera position and the 
-					\Ref{GLObjectCollector}	of {\em scene}
+					 \link GLObjectCollector GLObjectCollector \endlink 	of {\em scene}
 					The following events are used initially:
 					\begin{itemize}
-					  \item \Ref{MouseLeftButtonPressed} & \Ref{MouseMoved} are connected to \Ref{RotateSystem}
-					  \item \Ref{MouseMiddleButtonPressed} & \Ref{MouseMoved} are connected to \Ref{ZoomSystem}
-					  \item \Ref{MouseRightButtonPressed} & \Ref{MouseMoved} are connected to \Ref{TranslateSystem}
+					  \item  \link MouseLeftButtonPressed MouseLeftButtonPressed \endlink  &  \link MouseMoved MouseMoved \endlink  are connected to \Ref{RotateSystem}
+					  \item  \link MouseMiddleButtonPressed MouseMiddleButtonPressed \endlink  &  \link MouseMoved MouseMoved \endlink  are connected to \Ref{ZoomSystem}
+					  \item  \link MouseRightButtonPressed MouseRightButtonPressed \endlink  &  \link MouseMoved MouseMoved \endlink  are connected to \Ref{TranslateSystem}
 					\end{itemize}					
-					A \Ref{GLPrimitiveManager} is initialized for {\em *this} scene.
-					Calls \Ref{registerWidget}.
+					A  \link GLPrimitiveManager GLPrimitiveManager \endlink  is initialized for {\em *this} scene.
+					Calls  \link registerWidget registerWidget \endlink .
 					@param  scene the scene to be copied
 					@param  parent_widget the parent widget of {\em *this} scene 
 					@param  name the name of {\em *this} scene (See documentation of QT-library for information concerning widgets)
@@ -174,7 +174,7 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} scene.
-					Calls \Ref{destroy}.
+					Calls  \link destroy destroy \endlink .
 					@see         destroy
 			*/
 			virtual ~Scene()
@@ -183,12 +183,12 @@ namespace BALL
 			/** Explicit default initialization.
 					Reset the default values of {\em *this} scene to:
 					\begin{itemize}
-					  \item  width is set to {\tt 600}
-					  \item  height is set to {\tt 600}
-					  \item camera position set to {\tt Vector(1,0,0)}
-					  \item camera look at position set to {\tt Vector(0,0,0)}
+					  \item  width is set to <tt>600</tt>
+					  \item  height is set to <tt>600</tt>
+					  \item camera position set to <tt>Vector(1,0,0)</tt>
+					  \item camera look at position set to <tt>Vector(0,0,0)</tt>
 					\end{itemize}
-					Set the \Ref{GLObjectCollector} to the default object collector.
+					Set the  \link GLObjectCollector GLObjectCollector \endlink  to the default object collector.
 			*/
 			virtual void clear()
 				throw();
@@ -206,9 +206,9 @@ namespace BALL
 
 			/** Assignment.
 					Assign the scene {\em scene} to {\em *this}	scene.
-					Initialize the width, height, camera position and the \Ref{GLObjectCollector}
+					Initialize the width, height, camera position and the  \link GLObjectCollector GLObjectCollector \endlink 
 					of {\em *this} scene to the width, height, camera position and the 
-					\Ref{GLObjectCollector}	of {\em scene}.				
+					 \link GLObjectCollector GLObjectCollector \endlink 	of {\em scene}.				
 					@param  scene the scene to be copied
 					@see    get
 			*/
@@ -217,7 +217,7 @@ namespace BALL
 
 			/** Assignment operator.
 					Assign the scene {\em scene} to {\em *this}	scene.
-					Calls \Ref{set}.
+					Calls  \link set set \endlink .
 					@param   scene the scene to be copied
 					@return  Scene& {\em *this} scene copied from {\em scene}
 					@see     set
@@ -227,7 +227,7 @@ namespace BALL
 
 			/** Copying.
 					Copy {\em *this} scene to the scene	{\em scene}.
-					Calls \Ref{set}.
+					Calls  \link set set \endlink .
 					@param  scene the scene to be assigned to
 					@see    set
 			*/
@@ -243,7 +243,7 @@ namespace BALL
 					Change the camera position of {\em *this} scene.
 					@param look_at the look at position of the camera
 					@param view_point the view point of the camera
-					@param set_origin if set to {\tt true} than the {\em look_at} vector will be used as the system origin. 
+					@param set_origin if set to <tt>true</tt> than the {\em look_at} vector will be used as the system origin. 
 								 otherwise the system origin will not be changed
 					@see   setViewPointPosition
 					@see   Vector3
@@ -290,7 +290,7 @@ namespace BALL
 			
 			/** Inspection of the view point position of the camera.
 					Access the view point position of the camera of {\em *this} scene by using 
-					\Ref{Vector3}.
+					 \link Vector3 Vector3 \endlink .
 					@param  v the vector receiving the view point position of the camera of {\em *this} scene
 					@see    setViewPointPosition 
 					@see    setCamera
@@ -301,7 +301,7 @@ namespace BALL
 			
 			/** Inspection of the view point position of the camera (coordinate version).
 					Access the view point position of the camera of {\em *this} scene by using 
-					\Ref{Real}.
+					 \link Real Real \endlink .
 					@param  x reference to the x coordinate receiving the x coordinate of the view point 
 									position of the camera of {\em *this} scene
 					@param  y reference to the y coordinate receiving the x coordinate of the view point 
@@ -319,8 +319,8 @@ namespace BALL
 					Change the look at position of the camera of {\em *this} scene. The system origin
 					can either be set to the new look at position {\em v} (Default) or not.
 					@param v the new look at position
-					@param set_origin if set to {\tt true} than {\em v} is also the new system origin of {\em *this} scene, 
-								 if set to {\tt false} the system origin is not changed
+					@param set_origin if set to <tt>true</tt> than {\em v} is also the new system origin of {\em *this} scene, 
+								 if set to <tt>false</tt> the system origin is not changed
 					@see   setViewPointPosition
 					@see   getLookAtPosition
 					@see   setCamera
@@ -368,8 +368,8 @@ namespace BALL
 					@param x the x coordinate of the new look at position
 					@param y the y coordinate of the new look at position
 					@param z the z coordinate of the new look at position
-					@param set_origin if set to {\tt true} than the vector consisting of {\em x}, {\em y}, and {\em z} is also the 
-								 new system origin of {\em *this} scene, if set to {\tt false} the system origin is not changed
+					@param set_origin if set to <tt>true</tt> than the vector consisting of {\em x}, {\em y}, and {\em z} is also the 
+								 new system origin of {\em *this} scene, if set to <tt>false</tt> the system origin is not changed
 					@see   getLookAtPosition
 					@see   setCamera
 					@see   Real
@@ -379,7 +379,7 @@ namespace BALL
 			
 			/** Inspection of the look at position of the camera.
 					Access the look at position of the camera of {\em *this} scene by using 
-					\Ref{Vector3}.
+					 \link Vector3 Vector3 \endlink .
 					@param  v the vector receiving the look at position of the camera of {\em *this} scene
 					@see    setLookAtPosition 
 					@see    setCamera
@@ -390,7 +390,7 @@ namespace BALL
 
 			/** Inspection of the look at position of the camera (coordinate version).
 					Access the look at position of the camera of {\em *this} scene by using 
-					\Ref{Real}.
+					 \link Real Real \endlink .
 					@param  x reference to the x coordinate receiving the x coordinate of the look at 
 									position of the camera of {\em *this} scene
 					@param  y reference to the y coordinate receiving the x coordinate of the look at 
@@ -404,12 +404,12 @@ namespace BALL
 			void getLookAtPosition(Real& x, Real& y, Real& z) const
 				throw();
 
-			/** Register a \Ref{GLObjectCollector} for {\em *this} scene.
-					Initially a default \Ref{GLObjectCollector} is already registered.
-					A \Ref{GLObjectCollector} is responsible for collecting all \Ref{GLObject} objects
-					from the \Ref{Composite} object that is inserted into the \Ref{MainControl}.
+			/** Register a  \link GLObjectCollector GLObjectCollector \endlink  for {\em *this} scene.
+					Initially a default  \link GLObjectCollector GLObjectCollector \endlink  is already registered.
+					A  \link GLObjectCollector GLObjectCollector \endlink  is responsible for collecting all  \link GLObject GLObject \endlink  objects
+					from the  \link Composite Composite \endlink  object that is inserted into the  \link MainControl MainControl \endlink .
 					See this classes for further information.
-					@param globject_collector the new \Ref{GLObjectCollector} to be registered for {\em *this} scene
+					@param globject_collector the new  \link GLObjectCollector GLObjectCollector \endlink  to be registered for {\em *this} scene
 					@see   unregisterGLObjectCollector
 					@see   getGLObjectCollector
 					@see   GLObjectCollector
@@ -420,8 +420,8 @@ namespace BALL
 			void registerGLObjectCollector(const GLObjectCollector& globject_collector)
 				throw();
 
-			/** Unregister a \Ref{GLObjectCollector} for {\em *this} scene.
-					If this method is called a default \Ref{GLObjectCollector} will be registered.
+			/** Unregister a  \link GLObjectCollector GLObjectCollector \endlink  for {\em *this} scene.
+					If this method is called a default  \link GLObjectCollector GLObjectCollector \endlink  will be registered.
 					@see   registerGLObjectCollector
 					@see   getGLObjectCollector
 					@see   GLObjectCollector
@@ -429,8 +429,8 @@ namespace BALL
 			void unregisterGLObjectCollector()
 				throw();
 
-			/** Access a constant pointer to the \Ref{GLObjectCollector} of {\em *this} scene.
-					@return GLObjectCollector* a constant pointer to the registered \Ref{GLObjectCollector} of {\em *this} scene
+			/** Access a constant pointer to the  \link GLObjectCollector GLObjectCollector \endlink  of {\em *this} scene.
+					@return GLObjectCollector* a constant pointer to the registered  \link GLObjectCollector GLObjectCollector \endlink  of {\em *this} scene
 					@see   registerGLObjectCollector
 					@see   unregisterGLObjectCollector
 					@see   GLObjectCollector
@@ -439,8 +439,8 @@ namespace BALL
 				throw();
 
 			/** Update the visualization of {\em *this} scene.
-					@param  rebuild_displaylists is set to {\tt true} than all the \Ref{GLDisplayList} objects are updated. 
-									If set to {\tt false} only the display is redrawed.
+					@param  rebuild_displaylists is set to <tt>true</tt> than all the  \link GLDisplayList GLDisplayList \endlink  objects are updated. 
+									If set to <tt>false</tt> only the display is redrawed.
 					@see    GLDisplayList
 					@see    GLEntityDescriptor
 					@see    CompositeDescriptor
@@ -449,9 +449,9 @@ namespace BALL
 			void update(bool rebuild_displaylists = false)
 				throw(MainControlMissing);
 
-			/** Handles messages sent by other registered \Ref{ConnectionObject} objects.
-					Filters for \Ref{SceneMessage} and sets the camera appropriate or updates the visualization. 
-					Calls \Ref{update} with {\tt false} as parameter.
+			/** Handles messages sent by other registered  \link ConnectionObject ConnectionObject \endlink  objects.
+					Filters for  \link SceneMessage SceneMessage \endlink  and sets the camera appropriate or updates the visualization. 
+					Calls  \link update update \endlink  with <tt>false</tt> as parameter.
 					@param message the pointer to the message that should be processed
 					@see   ConnectionObject
 					@see   Message
@@ -470,7 +470,7 @@ namespace BALL
 			//@{
 			
 			/** This object contains all possible events {\em *this} scene can sent via the 
-					\Ref{Notification} mechanism of BALL
+					 \link Notification Notification \endlink  mechanism of BALL
 					@see  Events
 			*/
 			Events events;
@@ -487,8 +487,8 @@ namespace BALL
 					\end{itemize}
 					This method is called automatically	immediately before the main application 
 					is started. 
-					This method will be called by \Ref{show} from the \Ref{MainControl} object.
-					@param main_control the \Ref{MainControl} object to be initialized with {\em *this} scene
+					This method will be called by  \link show show \endlink  from the  \link MainControl MainControl \endlink  object.
+					@param main_control the  \link MainControl MainControl \endlink  object to be initialized with {\em *this} scene
 					@see   finalizeWidget
 					@see   insertMenuEntry
 					@see   checkMenu
@@ -498,9 +498,9 @@ namespace BALL
 				throw();
 		
 			/**	Remove the widget.
-					Reverse all actions performed in \Ref{initializeWidget} (remove menu entries of {\em *this} scene).
-					This method will be called by \Ref{aboutToExit} from the \Ref{MainControl} object.
-					@param main_control the \Ref{MainControl} object to be finalized with {\em *this} scene
+					Reverse all actions performed in  \link initializeWidget initializeWidget \endlink  (remove menu entries of {\em *this} scene).
+					This method will be called by  \link aboutToExit aboutToExit \endlink  from the  \link MainControl MainControl \endlink  object.
+					@param main_control the  \link MainControl MainControl \endlink  object to be finalized with {\em *this} scene
 					@see   initializeWidget
 					@see   checkMenu
 					@see   removeMenuEntry
@@ -510,11 +510,11 @@ namespace BALL
 				throw();
 		
 			/**	Menu checking method.
-					This method is called by the method \Ref{checkMenus} from the
-					\Ref{MainControl} object before a popup menu is shown.
+					This method is called by the method  \link checkMenus checkMenus \endlink  from the
+					 \link MainControl MainControl \endlink  object before a popup menu is shown.
 					The menus {\em rotate mode} and {\em picking mode} each will be checked
 					if {\em *this} scene is in the beloning mode.
-					@param main_control the \Ref{MainControl} object whose menus should be checked
+					@param main_control the  \link MainControl MainControl \endlink  object whose menus should be checked
 					@see   initializeWidget
 					@see   finalizeWidget
 					@see   checkMenus
@@ -529,7 +529,7 @@ namespace BALL
 			//@{
 
 			/** Test if default glObjectCollector is registered.
-					@return bool {\tt true} if a default \Ref{GLObjectCollector} is registered for {\em *this} scene
+					@return bool <tt>true</tt> if a default  \link GLObjectCollector GLObjectCollector \endlink  is registered for {\em *this} scene
 			*/
 			bool hasDefaultGLObjectCollector() const
 				throw();
@@ -541,15 +541,15 @@ namespace BALL
 
 			/** Internal state and consistency self-validation.
 					If the internal state of {\em *this} scene is correct 
-					(self-validated) and consistent {\tt true} is returned, {\tt false} otherwise. 
+					(self-validated) and consistent <tt>true</tt> is returned, <tt>false</tt> otherwise. 
 					{\em *this} scene is valid if:
 					\begin{itemize}
-					  \item the \Ref{GLPrimitiveManager} is valid
+					  \item the  \link GLPrimitiveManager GLPrimitiveManager \endlink  is valid
 						\item {\em *this} scene has a parent
 					\end{itemize}
-					Calls \Ref{GLPrimitiveManager::isValid}.
-					@return			bool {\tt true} if the internal state of {\em *this} scene is correct (self-validated) and consistent,
-					 						{\tt false} otherwise
+					Calls  \link GLPrimitiveManager::isValid GLPrimitiveManager::isValid \endlink .
+					@return			bool <tt>true</tt> if the internal state of {\em *this} scene is correct (self-validated) and consistent,
+					 						<tt>false</tt> otherwise
 			*/
 			virtual bool isValid() const
 				throw();
@@ -610,7 +610,7 @@ namespace BALL
 
 			/** Non-mutable inspection of the look up vector.
 					The look up vector is a vector that helps define the y- and the x-coordinate axis
-					of {\em *this} scene (see \Ref{getUpVector} and \Ref{getRightVector}).
+					of {\em *this} scene (see  \link getUpVector getUpVector \endlink  and  \link getRightVector getRightVector \endlink ).
 					This vector is internally needed for calculating rotation, translation and zoom of {\em *this} scene.
 					This vector will be calculated anew if the position of the camera changes.
 					@return  Vector3& constant reference to the look up vector of {\em *this} scene
@@ -630,7 +630,7 @@ namespace BALL
 
 			/** Initialize the OpenGL context.
 					Overriden qt method for initializing the OpenGL context of {\em *this} scene.
-					This method will be called automatically before any call to \Ref{paintGL} or \Ref{resizeGL}.
+					This method will be called automatically before any call to  \link paintGL paintGL \endlink  or  \link resizeGL resizeGL \endlink .
 					See QT-library for information concerning the qglwidget events.
 					@see  paintGL
 					@see  resizeGL
@@ -660,8 +660,8 @@ namespace BALL
 			/** Catch key press events.
 					Catch the following key press events:
 					\begin{itemize}
-					  \item {\tt Key_Shift} the SHIFT key was pressed
-					  \item {\tt Key_Control} the SHIFT key was pressed
+					  \item <tt>Key_Shift</tt> the SHIFT key was pressed
+					  \item <tt>Key_Control</tt> the SHIFT key was pressed
 					\end{itemize}
 					This events will be stored for later processing.
 					See QT-library for information concerning key press events.
@@ -676,8 +676,8 @@ namespace BALL
 			/** Catch key release events.
 					Catch the following key release events:
 					\begin{itemize}
-					  \item {\tt Key_Shift} the SHIFT key was released
-					  \item {\tt Key_Control} the SHIFT key was released
+					  \item <tt>Key_Shift</tt> the SHIFT key was released
+					  \item <tt>Key_Control</tt> the SHIFT key was released
 					\end{itemize}
 					This events will be stored for later processing.
 					See QT-library for information concerning key released events.
@@ -692,7 +692,7 @@ namespace BALL
 			/** Catch mouse move events.
 					Catch mouse move events, store the actual mouse position in {\em *this} scene
 					widget and sent events accordingly.
-					Calls \Ref{Notify}
+					Calls  \link Notify Notify \endlink 
 					@param  qmouse_event the QT-mouse event (See QT-library for mouse events)
 					@see    Events
 			*/
@@ -701,7 +701,7 @@ namespace BALL
 			/** Catch mouse press events.
 					Catch mouse press events, store the actual mouse position in {\em *this} scene
 					widget and sent events accordingly.
-					Calls \Ref{Notify}
+					Calls  \link Notify Notify \endlink 
 					@param  qmouse_event the QT-mouse event (See QT-library for mouse events)
 					@see    Events
 			*/
@@ -710,7 +710,7 @@ namespace BALL
 			/** Catch mouse release events.
 					Catch mouse release events, store the actual mouse position in {\em *this} scene
 					widget and sent events accordingly.
-					Calls \Ref{Notify}
+					Calls  \link Notify Notify \endlink 
 					@param  qmouse_event the QT-mouse event (See QT-library for mouse events)
 					@see    Events
 			*/
