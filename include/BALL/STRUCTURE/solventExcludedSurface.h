@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: solventExcludedSurface.h,v 1.23 2002/04/18 18:23:57 strobel Exp $
+// $Id: solventExcludedSurface.h,v 1.24 2002/05/02 11:56:46 strobel Exp $
 
 #ifndef BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
 #define BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
@@ -2666,7 +2666,7 @@ std::cout << "is_max:    " << (is_max ? "true" : "false") << "\n";*/
 			}
 			try
 			{
-std::cout << "löse Singularität auf ... ";
+//std::cout << "löse Singularität auf ... ";
 				endEdges(edge,a1,a2,a3,a4,big_a1,big_a2,big_a3,big_a4,
 								 probe1,probe2,min_probe,max_probe,
 								 edge->face_[0]->index_,edge->face_[1]->index_,min,max,
@@ -2674,7 +2674,7 @@ std::cout << "löse Singularität auf ... ";
 			}
 			catch (Exception::GeneralException)
 			{
-std::cout << "FAILED\n";
+//std::cout << "FAILED\n";
 				delete a1;
 				delete a2;
 				delete a3;
@@ -2697,7 +2697,7 @@ std::cout << "FAILED\n";
 				#endif
 				return;
 			}
-std::cout << "ok\n";
+//std::cout << "ok\n";
 		}
 		if (a != NULL)
 		{
@@ -2765,7 +2765,7 @@ std::cout << "ok\n";
 			else
 			{
 				singular_edges_.push_front(a1);
-cout << "#########\n";
+//cout << "#########\n";
 			}
 			number_of_singular_edges_++;
 			a1->face_[0]->edge_.push_back(a1);
@@ -2800,7 +2800,7 @@ cout << "#########\n";
 			else
 			{
 				singular_edges_.push_front(a2);
-cout << "#########\n";
+//cout << "#########\n";
 			}
 			number_of_singular_edges_++;
 			a2->face_[0]->edge_.push_back(a2);
@@ -2835,7 +2835,7 @@ cout << "#########\n";
 			else
 			{
 				singular_edges_.push_front(a3);
-cout << "#########\n";
+//cout << "#########\n";
 			}
 			number_of_singular_edges_++;
 			a3->face_[0]->edge_.push_back(a3);
@@ -2870,7 +2870,7 @@ cout << "#########\n";
 			else
 			{
 				singular_edges_.push_front(a4);
-cout << "#########\n";
+//cout << "#########\n";
 			}
 			number_of_singular_edges_++;
 			a4->face_[0]->edge_.push_back(a4);
