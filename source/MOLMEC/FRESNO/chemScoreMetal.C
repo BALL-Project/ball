@@ -1,4 +1,4 @@
-// $Id: chemScoreMetal.C,v 1.1.2.5 2003/08/25 17:06:11 anker Exp $
+// $Id: chemScoreMetal.C,v 1.1.2.6 2004/04/28 15:40:50 anker Exp $
 // 
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -198,7 +198,7 @@ namespace BALL
 			{
 				// we could possibly speed up the next step by using the fact that the
 				// difference between R1 and R2 is constant
-				val = FresnoFF::calculateBaseFunction(distance, R1, R2);
+				val = ((FresnoFF*)getForceField())->base_function->calculate(distance, R1, R2);
 
 				if (verbosity >= 90)
 				{
