@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertexBuffer.C,v 1.1.2.14 2005/01/21 17:23:02 amoll Exp $
+// $Id: vertexBuffer.C,v 1.1.2.15 2005/01/22 17:52:09 amoll Exp $
 
 // prevent typedef clash under Linux
 #define QT_CLEAN_NAMESPACE
@@ -95,23 +95,17 @@ MeshBuffer::MeshBuffer()
 MeshBuffer::MeshBuffer(const MeshBuffer& mesh_buffer)
 : mesh_(mesh_buffer.mesh_),
 	buffers_(),
-	filled_(mesh_buffer.filled_)
+	filled_(false)
 {
-	buffers_[0] = mesh_buffer.buffers_[0];
-	buffers_[1] = mesh_buffer.buffers_[1];
-	buffers_[2] = mesh_buffer.buffers_[2];
-	buffers_[3] = mesh_buffer.buffers_[3];
+	buffers_[0] = buffers_[1] = buffers_[2] = buffers_[3] = 0;
 }
 
 const MeshBuffer& MeshBuffer::operator = (const MeshBuffer& mesh_buffer)
 	throw()
 {
   mesh_ = mesh_buffer.mesh_;
-	filled_ = mesh_buffer.filled_;
-	buffers_[0] = mesh_buffer.buffers_[0];
-	buffers_[1] = mesh_buffer.buffers_[1];
-	buffers_[2] = mesh_buffer.buffers_[2];
-	buffers_[3] = mesh_buffer.buffers_[3];
+	filled_ = false;
+	buffers_[0] = buffers_[1] = buffers_[2] = buffers_[3] = 0;
 	return *this;
 }
 
@@ -131,6 +125,7 @@ bool MeshBuffer::initialize()
 	glEnableClientState(GL_NORMAL_ARRAY);
 
 	float* data = new float[nr_vertices * 4];
+	if (data == 0) return false;
 	for (Size index = 0; index < nr_vertices; ++index)
 	{
 		const Size start = index * 3;
@@ -173,6 +168,7 @@ bool MeshBuffer::initialize()
 	delete[] data;
 
 	unsigned int* indices = new unsigned int[nr_triangles * 3];
+	if (indices == 0) return false;
 	for (Size index = 0; index < nr_triangles; ++index)
 	{
 		const Size start = index * 3;
@@ -198,7 +194,6 @@ void MeshBuffer::clear()
 {
 	mesh_ = 0;
 	clearBuffer();
-
 }
 
 void MeshBuffer::clearBuffer()
@@ -210,6 +205,7 @@ void MeshBuffer::clearBuffer()
 
 bool MeshBuffer::draw()
 {
+Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 	if (!filled_ || gl_renderer_ == 0) return false;
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
@@ -265,6 +261,7 @@ bool MeshBuffer::draw()
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_COLOR_ARRAY);
+Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 	return true;
 }
 

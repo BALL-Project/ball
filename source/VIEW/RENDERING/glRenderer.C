@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.57.2.24 2005/01/21 01:34:33 amoll Exp $
+// $Id: glRenderer.C,v 1.57.2.25 2005/01/22 17:53:57 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -46,7 +46,7 @@ namespace BALL
 				GL_boxes_list_(0),
 				name_to_object_(),
 				object_to_name_(),
-				all_names_(0),
+				all_names_(1),
 				last_color_(&dummy_color_),
 				stereo_(NO_STEREO),
 				render_mode_(RENDER_MODE_UNDEFINED),
@@ -67,7 +67,7 @@ namespace BALL
 		{
 			name_to_object_.clear();
 			object_to_name_.clear();
-			all_names_ = 0;
+			all_names_ = 1;
 
 			if (GL_spheres_list_ != 0) delete[] GL_spheres_list_;
 			if (GL_boxes_list_   != 0) delete[] GL_boxes_list_;
@@ -403,8 +403,16 @@ namespace BALL
 						}
 						else
 						{
-							renderMesh_(*mesh);
-							mesh_to_buffer_[mesh]->draw();
+							MeshBufferHashMap::Iterator it = mesh_to_buffer_.find(mesh);
+							if (it == mesh_to_buffer_.end())
+							{
+								renderMesh_(*mesh);
+								mesh_to_buffer_[mesh]->draw();
+							}
+							else
+							{
+								it->second->draw();
+							}
 						}
 					}
 					finishDrawingMeshes_();
@@ -1584,7 +1592,7 @@ namespace BALL
 			picking_mode_ = false;
 			object_to_name_.clear();
 			name_to_object_.clear();
-			all_names_ = 0;
+			all_names_ = 1;
 		}
 
 
