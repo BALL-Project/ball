@@ -1,4 +1,4 @@
-// $Id: message.C,v 1.4.4.1 2002/11/04 18:14:49 amoll Exp $
+// $Id: message.C,v 1.4.4.2 2002/11/29 00:45:02 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/COMMON/rtti.h>
@@ -13,17 +13,15 @@ namespace BALL
 
 		Message::Message()
 			throw()
-			:
-			connection_object_(0),
-		  deletable_(false)
+			: connection_object_(0),
+				deletable_(false)
 		{
 		}
 
 		Message::Message(const Message& message)
 			throw()
-			:
-			connection_object_(message.connection_object_),
-		  deletable_(message.deletable_)
+			: connection_object_(message.connection_object_),
+				deletable_(message.deletable_)
 		{
 		}
 
@@ -31,26 +29,24 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<Message>() << endl;
+				Log.error() << "Destructing object " << (void *)this 
+										<< " of class " << RTTI::getName<Message>() << endl;
 			#endif 
 		}
 
 		CompositeMessage::CompositeMessage()
 			throw()
-			:
-			Message(),
-			composite_(0),
-			composite_name_()
+			: Message(),
+				composite_(0),
+				composite_name_()
 		{
 		}
 
 		CompositeMessage::CompositeMessage(const CompositeMessage& message)
 			throw()
-			:
-			Message(message),
-			composite_(message.composite_),
-			composite_name_(message.composite_name_)
+			: Message(message),
+				composite_(message.composite_),
+				composite_name_(message.composite_name_)
 		{
 		}
 
@@ -58,22 +54,20 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<CompositeMessage>() << endl;
+				Log.error() << "Destructing object " << (void *)this 
+										<< " of class " << RTTI::getName<CompositeMessage>() << endl;
 			#endif 
 		}
 
 		NewCompositeMessage::NewCompositeMessage()
 			throw()
-			:
-			CompositeMessage()
+			: CompositeMessage()
 		{
 		}
 
 		NewCompositeMessage::NewCompositeMessage(const CompositeMessage& message)
 			throw()
-			:
-			CompositeMessage(message)
+			: CompositeMessage(message)
 		{
 		}
 
@@ -81,22 +75,20 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<NewCompositeMessage>() << endl;
+				Log.error() << "Destructing object " << (void *)this 
+										<< " of class " << RTTI::getName<NewCompositeMessage>() << endl;
 			#endif 
 		}
 
 		RemovedCompositeMessage::RemovedCompositeMessage()
 			throw()
-			:
-			CompositeMessage()
+			: CompositeMessage()
 		{
 		}
 
 		RemovedCompositeMessage::RemovedCompositeMessage(const CompositeMessage& message)
 			throw()
-			:
-			CompositeMessage(message)
+			: CompositeMessage(message)
 		{
 		}
 
@@ -111,15 +103,13 @@ namespace BALL
 
 		ChangedCompositeMessage::ChangedCompositeMessage()
 			throw()
-			:
-			CompositeMessage()
+			: CompositeMessage()
 		{
 		}
 
 	  ChangedCompositeMessage::ChangedCompositeMessage(const CompositeMessage& message)
 			throw()
-			:
-			CompositeMessage(message)
+			: CompositeMessage(message)
 		{
 		}
 
@@ -127,51 +117,26 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<ChangedCompositeMessage>() << endl;
+				Log.error() << "Destructing object " << (void *)this 
+										<< " of class " << RTTI::getName<ChangedCompositeMessage>() << endl;
 			#endif 
 		}
-		/*
-		DisplayMessage::DisplayMessage()
-			throw()
-			:
-			CompositeMessage()
-		{
-		}
 
-		DisplayMessage::DisplayMessage(const DisplayMessage& message)
-			throw()
-			:
-			CompositeMessage(message)
-		{
-		}
-
-		DisplayMessage::~DisplayMessage()
-			throw()
-		{
-			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<DisplayMessage>() << endl;
-			#endif 
-		}
-		*/
 		SceneMessage::SceneMessage()
 			throw()
-			:
-			Message(),
-			update_only_(false),
-			camera_look_at_(),
-			camera_view_point_()
+			: Message(),
+				update_only_(false),
+				camera_look_at_(),
+				camera_view_point_()
 		{
 		}
 
 		SceneMessage::SceneMessage(const SceneMessage& message)
 			throw()
-			:
-			Message(message),
-			update_only_(message.update_only_),
-			camera_look_at_(message.camera_look_at_),
-			camera_view_point_(message.camera_view_point_)
+			: Message(message),
+				update_only_(message.update_only_),
+				camera_look_at_(message.camera_look_at_),
+				camera_view_point_(message.camera_view_point_)
 		{
 		}
 
@@ -179,24 +144,22 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<SceneMessage>() << endl;
+				Log.error() << "Destructing object " << (void *)this 
+										<< " of class " << RTTI::getName<SceneMessage>() << endl;
 			#endif 
 		}
 
 		WindowMessage::WindowMessage()
 			throw()
-			:
-			Message(),
-			status_bar_()
+			: Message(),
+				status_bar_()
 		{
 		}
 
 		WindowMessage::WindowMessage(const WindowMessage& message)
 			throw()
-			:
-			Message(message),
-			status_bar_(message.status_bar_)
+			: Message(message),
+				status_bar_(message.status_bar_)
 		{
 		}
 
@@ -204,24 +167,22 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<WindowMessage>() << endl;
+				Log.error() << "Destructing object " << (void *)this 
+										<< " of class " << RTTI::getName<WindowMessage>() << endl;
 			#endif 
 		}
 
 		SelectionMessage::SelectionMessage()
 			throw()
-			:
-			Message(),
-			selection_()
+			: Message(),
+				selection_()
 		{
 		}
 
 		SelectionMessage::SelectionMessage(const SelectionMessage& message)
 			throw()
-			:
-			Message(message),
-			selection_(message.selection_)
+			: Message(message),
+				selection_(message.selection_)
 		{
 		}
 
@@ -229,23 +190,21 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<SelectionMessage>() << endl;
+				Log.error() << "Destructing object " << (void *)this 
+										<< " of class " << RTTI::getName<SelectionMessage>() << endl;
 			#endif 
 		}
 
 
 		GeometricObjectSelectionMessage::GeometricObjectSelectionMessage()
 			throw()
-			:
-			SelectionMessage()
+			: SelectionMessage()
 		{
 		}
 
 		GeometricObjectSelectionMessage::GeometricObjectSelectionMessage(const SelectionMessage& message)
 			throw()
-			:
-			SelectionMessage(message)
+			: SelectionMessage(message)
 		{
 		}
 
@@ -253,8 +212,8 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<GeometricObjectSelectionMessage>() << endl;
+				Log.error() << "Destructing object " << (void *)this 
+										<< " of class " << RTTI::getName<GeometricObjectSelectionMessage>() << endl;
 			#endif 
 		}
 
