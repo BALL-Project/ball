@@ -1,20 +1,4 @@
-// $Id: timeStamp.iC,v 1.6 2000/12/11 21:13:06 oliver Exp $
-
-BALL_INLINE
-PreciseTime::PreciseTime()
-	throw()
-	: secs_(0),
-		usecs_(0)
-{
-}
-
-BALL_INLINE
-PreciseTime::PreciseTime(const PreciseTime& time)
-	throw()
-	:	secs_(time.secs_),
-		usecs_(time.usecs_)
-{
-}
+// $Id: timeStamp.iC,v 1.7 2000/12/16 21:26:54 amoll Exp $
 
 BALL_INLINE
 PreciseTime::PreciseTime(long secs, long usecs)
@@ -95,13 +79,6 @@ long PreciseTime::getMicroSeconds() const
 	throw()
 {
 	return usecs_;
-}
-
-BALL_INLINE
-TimeStamp::TimeStamp()
-	throw()
-	:	time_()
-{
 }
 
 BALL_INLINE

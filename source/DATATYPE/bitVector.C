@@ -1,4 +1,4 @@
-// $Id: bitVector.C,v 1.24 2000/12/08 09:21:46 oliver Exp $
+// $Id: bitVector.C,v 1.25 2000/12/16 21:27:18 amoll Exp $
 
 #include <BALL/DATATYPE/bitVector.h>
 #include <BALL/MATHS/common.h>
@@ -17,6 +17,23 @@ namespace BALL
 	{
 		message_ = "Trying to modifiy a const bitvector by a bit";
 		Exception::globalHandler.setMessage(message_);
+	}
+
+
+	Bit::Bit() 
+		throw()
+		: bitvector_(0),
+			index_(0),
+			bitvector_muteable_(false)
+	{
+	}
+
+	Bit::Bit(const Bit& bit) 
+		throw()
+		: bitvector_(bit.bitvector_),
+			index_(bit.index_),
+			bitvector_muteable_(bit.bitvector_muteable_)
+	{
 	}
 
 	BitVector::BitVector()

@@ -1,4 +1,4 @@
-// $Id: timeStamp.C,v 1.14 2000/12/15 13:11:13 amoll Exp $
+// $Id: timeStamp.C,v 1.15 2000/12/16 21:26:59 amoll Exp $
 
 #include <BALL/CONCEPT/timeStamp.h>
 
@@ -8,6 +8,27 @@ using namespace std;
 
 namespace BALL 
 {
+
+	PreciseTime::PreciseTime()
+		throw()
+		: secs_(0),
+			usecs_(0)
+	{
+	}
+
+	PreciseTime::PreciseTime(const PreciseTime& time)
+		throw()
+		:	secs_(time.secs_),
+			usecs_(time.usecs_)
+	{
+	}
+
+	TimeStamp::TimeStamp()
+		throw()
+		:	time_()
+	{
+	}
+
 
 	void PreciseTime::write(PersistenceManager& pm) const
 		throw()

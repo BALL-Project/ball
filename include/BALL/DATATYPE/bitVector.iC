@@ -1,22 +1,4 @@
-// $Id: bitVector.iC,v 1.17 2000/12/11 21:14:22 oliver Exp $
-
-BALL_INLINE
-Bit::Bit() 
-	throw()
-	: bitvector_(0),
-		index_(0),
-		bitvector_muteable_(false)
-{
-}
-
-BALL_INLINE
-Bit::Bit(const Bit& bit) 
-	throw()
-	: bitvector_(bit.bitvector_),
-		index_(bit.index_),
-		bitvector_muteable_(bit.bitvector_muteable_)
-{
-}
+// $Id: bitVector.iC,v 1.18 2000/12/16 21:27:13 amoll Exp $
 
 BALL_INLINE 
 BALL::Size BitVector::getSize() const
