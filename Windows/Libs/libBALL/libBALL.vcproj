@@ -2028,9 +2028,6 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\..\source\STRUCTURE\md5.C">
-				</File>
-				<File
 					RelativePath="..\..\..\source\STRUCTURE\molecularGraph.C">
 				</File>
 				<File
@@ -2319,10 +2316,10 @@
 							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
 					</FileConfiguration>
 					<FileConfiguration
-						Name="Release|Win32"
-						ExcludedFromBuild="TRUE">
+						Name="Release|Win32">
 						<Tool
-							Name="VCCLCompilerTool"/>
+							Name="VCCLCompilerTool"
+							AdditionalIncludeDirectories="C:\Programme\Python23\include"/>
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Python|Win32">
