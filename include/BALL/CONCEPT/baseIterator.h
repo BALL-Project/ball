@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: baseIterator.h,v 1.24 2003/03/26 13:56:11 anhi Exp $
+// $Id: baseIterator.h,v 1.25 2003/05/08 08:46:51 sneumann Exp $
 
 #ifndef BALL_CONCEPT_BASEITERATOR_H
 #define BALL_CONCEPT_BASEITERATOR_H
@@ -610,38 +610,38 @@ namespace BALL
 	Traits& BaseIterator<Container, DataType, Position, Traits>::getTraits() const
 		throw()
 	{
-		return *traits_ptr_;
+		return *BaseIterator<Container, DataType, Position, Traits>::traits_ptr_;
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	Container* BaseIterator<Container, DataType, Position, Traits>::getContainer() const
 		throw()
 	{
-		return traits_ptr_->getContainer();
+		return BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->getContainer();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	DataType& BaseIterator<Container, DataType, Position, Traits>::operator * () const
 		throw(Exception::InvalidIterator)
 	{
-		if (!traits_ptr_->isValid())
+		if (!BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
 
-		return (DataType &)traits_ptr_->getData();
+		return (DataType &)BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->getData();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	DataType* BaseIterator<Container, DataType, Position, Traits>::operator -> () const
 		throw(Exception::InvalidIterator)
 	{
-		if (!traits_ptr_->isValid())
+		if (!BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
 
-		return (DataType *)&(traits_ptr_->getData());
+		return (DataType *)&(BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->getData());
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
