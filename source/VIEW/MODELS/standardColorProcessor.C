@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.46 2004/09/27 23:21:58 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.47 2004/10/22 21:39:53 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -314,7 +314,7 @@ namespace BALL
 				return default_color_;
 			}
 
-			ColorRGBA color = table_.map(pos);
+			ColorRGBA color = table_.map((float)pos);
 			color.setAlpha(255 - transparency_);
 			return color;
 		}
@@ -376,7 +376,7 @@ namespace BALL
 			}
 
 			max_++;
-			table_.setRange(min_, max_);
+			table_.setRange((float)min_, (float)max_);
 			table_.createTable();
 			return true;
 		}
@@ -646,7 +646,7 @@ namespace BALL
 			default_color_ = ColorRGBA(1.0,1.0,1.0);
 			min_color_.set(0,0,1.0),
 			max_color_.set(1.0,1.0,0),
-			min_value_ = 0.00001;
+			min_value_ = (float) 0.00001;
 			max_value_ = 50;
 		}
 
@@ -710,7 +710,7 @@ namespace BALL
 
 			Vector3 force = (dynamic_cast<const Atom*>(composite))->getForce();
 			if (force.getSquareLength() == 0) return min_color_;
-			force *= pow(10.0, 12.0);
+			force *= pow((float)10.0, (float)12.0);
 
 			float forcev = log(force.getLength());
 
