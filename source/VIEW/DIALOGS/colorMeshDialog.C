@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.C,v 1.28 2004/05/14 12:26:18 amoll Exp $
+// $Id: colorMeshDialog.C,v 1.29 2004/05/14 12:31:05 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
@@ -327,6 +327,7 @@ void ColorMeshDialog::colorByGrid_()
 	catch(...)
 	{
 		setStatusbarText("Invalid value for min, mid or max value!");
+		return;
 	}
 
 	setColor_(min_min_color, min_min_button, min_min_alpha);
