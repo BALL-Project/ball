@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.14 1999/12/18 12:52:18 oliver Exp $
+dnl    $Id: configure.in,v 1.15 1999/12/21 11:54:20 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -1440,7 +1440,7 @@ dnl 	held in config/binary_formats. Avoid double entries
 dnl
 if test "${MULTI_BUILD}" = "true" ; then
 	touch ${BINFORMAT_FILE}
-	if test "`${GREP} ${BINFMT} ${BINFORMAT_FILE}`" = "" ; then
+	if test "`${GREP} ^${BINFMT}\\$ ${BINFORMAT_FILE}`" = "" ; then
 		echo ${BINFMT} >> ${BINFORMAT_FILE}
 	fi
 fi
