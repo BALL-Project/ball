@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: List_test.C,v 1.6 2002/02/27 12:24:37 sturm Exp $
+// $Id: List_test.C,v 1.7 2003/06/17 13:20:01 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -26,23 +26,23 @@ class myVisitor
 	}
 };
 
-START_TEST(List<T>, "$Id: List_test.C,v 1.6 2002/02/27 12:24:37 sturm Exp $")
+START_TEST(List<T>, "$Id: List_test.C,v 1.7 2003/06/17 13:20:01 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 
 List<int>*	lst_ptr;
-CHECK(List<int>::List())											
+CHECK(List() throw())
 	lst_ptr = new List<int>;
 	TEST_NOT_EQUAL(lst_ptr, 0)
 RESULT
 
-CHECK(List<int>::~List())
+CHECK(~List() throw())
 	delete lst_ptr;
 RESULT
 
-CHECK(List<int>::getSize())
+CHECK(Size getSize() const throw())
 	List<int> int_list;
 	TEST_EQUAL(int_list.getSize(), 0)
 	int_list.push_back(1);
@@ -51,7 +51,7 @@ CHECK(List<int>::getSize())
 	TEST_EQUAL(int_list.getSize(), 2)
 RESULT
 
-CHECK(List<int>::List(const List&))
+CHECK(List(const List& new_list, bool /* deep = true */) throw())
 	List<int> int_list;
 	int_list.push_back(1);
 	int_list.push_back(2);
@@ -68,7 +68,7 @@ RESULT
 
 List<int> int_list;
 
-CHECK(set)
+CHECK(void set(const List& list, bool /* deep */ = true) throw())
 	List<int> int_list2;
 	int_list.push_back(1);
 	int_list.push_back(2);
@@ -79,32 +79,33 @@ CHECK(set)
 RESULT
 
 
-CHECK(operator = )
+CHECK(const List& operator = (const List& list) throw())
 	List<int> int_list2;
 	int_list2 = int_list;
 	TEST_EQUAL(int_list2.size(), 4)
 RESULT
 
-CHECK(get)
+
+CHECK(void get(List& list, bool deep = true) const throw())
 	List<int> int_list2;
 	int_list.get(int_list2);
 	TEST_EQUAL(int_list2.size(), 4)
 RESULT
 
-CHECK(swap)
+CHECK(void swap(List& list) throw())
 	List<int> int_list2;
 	int_list2.swap(int_list);
 	TEST_EQUAL(int_list.size(), 0)
 	TEST_EQUAL(int_list2.size(), 4)
 RESULT
 
-CHECK(isEmpty)
+CHECK(bool isEmpty() const throw())
 	TEST_EQUAL(int_list.isEmpty(), true)
 	int_list.push_back(1);
 	TEST_EQUAL(int_list.isEmpty(), false)	
 RESULT
 
-CHECK(remove)
+CHECK(bool remove(const Value& item) throw())
 	List<int> int_list2;
 	int_list2.push_back(1);
 	int_list2.push_back(2);
@@ -120,7 +121,7 @@ RESULT
 
 List<int> int_list1;
 
-CHECK(operator ==/!=)
+CHECK(bool operator == (const List<Value>& list) const throw())
 	int_list1.push_back(1);
 	int_list1.push_back(2);
 	int_list1.push_back(3);
@@ -140,8 +141,29 @@ CHECK(operator ==/!=)
 	TEST_EQUAL(int_list1 == int_list2, true);
 RESULT
 
+CHECK(bool operator != (const List<Value>& list) const throw())
+	int_list1.clear();
+	int_list1.push_back(1);
+	int_list1.push_back(2);
+	int_list1.push_back(3);
+	List<int> int_list2(int_list1);
 
-CHECK(host(Visitor<List<Value> >& visitor))
+	TEST_EQUAL(int_list1 != int_list2, false);
+
+	int_list2.remove(2);
+	TEST_EQUAL(int_list1.size(), int_list2.size() +1)
+	TEST_EQUAL(int_list1 != int_list2, true);
+
+	int_list2.push_back(2);
+	TEST_EQUAL(int_list1 != int_list2, true);
+
+	int_list2.remove(3);
+	int_list2.push_back(3);
+	TEST_EQUAL(int_list1 != int_list2, false);
+RESULT
+
+
+CHECK(void host(Visitor<List<Value> >& visitor) throw())
 	myVisitor mv;
 	TEST_EQUAL(int_list1.front(), 1);
 	int_list1.host(mv);
@@ -149,7 +171,8 @@ CHECK(host(Visitor<List<Value> >& visitor))
 	TEST_EQUAL(mv.value, 1)
 RESULT
 
-CHECK(apply(UnaryProcessor<List<Value> >& processor))
+
+CHECK(bool apply(UnaryProcessor<Value>& processor) throw())
 	ItemCollector<int> myproc;
 	int_list1.apply(myproc);
 
@@ -162,7 +185,24 @@ CHECK(apply(UnaryProcessor<List<Value> >& processor))
 	TEST_EQUAL(myproc.getPointer(), 0)
 RESULT
 
+CHECK(void destroy() throw())
+	List<int> int_list2;
+	int_list.push_back(1);
+	int_list.push_back(2);
+	int_list.destroy();
+	TEST_EQUAL(int_list.size(), 0)
+RESULT
 
+CHECK(BALL_CREATE_DEEP(List))
+	List<int> int_list2;
+	int_list.push_back(1);
+	List<int>* l_ptr = (List<int>*)int_list.create(false, true);
+	TEST_EQUAL(l_ptr->getSize(), 0)
+	delete l_ptr;
+	l_ptr = (List<int>*)int_list.create();
+	TEST_EQUAL(l_ptr->getSize(), 1)
+	delete l_ptr;
+RESULT
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST
