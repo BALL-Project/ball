@@ -1,4 +1,4 @@
-// $Id: colorRGBA.h,v 1.5.4.1 2002/11/15 14:40:10 amoll Exp $
+// $Id: colorRGBA.h,v 1.5.4.2 2002/11/15 16:33:15 amoll Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
 #define BALL_VIEW_DATATYPE_COLORRGBA_H
@@ -600,6 +600,8 @@ namespace BALL
 				throw(Exception::InvalidRange, ColorUnit::NotInHexFormat);
 		};
 
+		/** Static instance for the color of selected geometric objects */
+		extern ColorRGBA BALL_SELECTED_COLOR;
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/DATATYPE/colorRGBA.iC>
