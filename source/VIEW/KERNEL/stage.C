@@ -1,4 +1,6 @@
 #include <BALL/VIEW/KERNEL/stage.h>
+#include <BALL/MATHS/plane3.h>
+#include <BALL/MATHS/analyticalGeometry.h>
 
 namespace BALL
 {
@@ -341,46 +343,82 @@ void Stage::translate(const Vector3& v3)
 	}
 }
 
-void Stage::moveCameraTo(const Camera& camera)
+void Stage::moveCameraTo(const Camera& new_camera)
 	throw()
 {
-	camera_ = camera;
-	clearLightSources();
+	// we will calculate the distances of all lightsources position and destination points,
+	// relative in units of view_vector, right_vector and look_up_vector
+	// by calculating the normals to three planes
+	
+	// make sure the three planes are far enough, to be always on one side of them
+	const float d = 1000000.0;
+	Vector3 dv(camera_.getViewVector());
+	dv.normalize();
+	dv *= d;
 
-	LightSource light;
-	light.setType(LightSource::POSITIONAL);
-	light.setPosition((getCamera().getViewPoint() - 
-										getCamera().getViewVector() * 4) +
-										getCamera().getLookUpVector() * 20);
-	light.setDirection(getCamera().getLookAtPosition());
-	addLightSource(light);
-	/* ????????
-	vector<Vector3> p_diff, l_diff;
+	Vector3 du(camera_.getLookUpVector());
+	du.normalize();
+	du *= d;
+
+	Vector3 dr(camera_.getRightVector());
+	dr.normalize();
+	dr *= d;
+
+	// calculate the planes
+	const Vector3 vp = camera_.getLookAtPosition();
+	const Plane3 plane_vv(vp + dv, camera_.getViewVector());
+	const Plane3 plane_rv(vp + dr, camera_.getRightVector());
+	const Plane3 plane_uv(vp + du, camera_.getLookUpVector());
+
+	// normalize the vectors
+	Vector3 new_vv = new_camera.getViewVector();
+	new_vv.normalize();
+	Vector3 new_rv = new_camera.getRightVector();
+	new_rv.normalize();
+	Vector3 new_uv = new_camera.getLookUpVector();
+	new_uv.normalize();
+
+	// iterate over all light sources
 	List<LightSource>::Iterator it = light_sources_.begin();
 	for (; it != light_sources_.end(); it++)
 	{
-		p_diff.push_back(it->getPosition() - camera_.getViewPoint());
-		l_diff.push_back(it->getDirection() - camera_.getLookAtPosition());
+		if (!it->isRelativeToCamera()) continue;
+
+		LightSource& light = *it;
+
+ 		const Vector3 dest(light.getPosition() + light.getDirection());
+		const Vector3& pos = light.getPosition();
+
+		// distance of the destion of the light source from the three planes
+		const float dvd = GetDistance(plane_vv, dest) - d;
+		const float drd = GetDistance(plane_rv, dest) - d;
+		const float dud = GetDistance(plane_uv, dest) - d;
+
+		// distance of the position of the light source from the three planes
+		const float pvd = GetDistance(plane_vv, pos) - d;
+		const float prd = GetDistance(plane_rv, pos) - d;
+		const float pud = GetDistance(plane_uv, pos) - d;
+
+		// new position of the lightsource
+		Vector3 new_pos = new_vv * pvd + 
+											new_rv * prd +
+											new_uv * pud;
+		new_pos *= -1.0;
+		new_pos += new_camera.getLookAtPosition();
+
+		// new destination of the lightsource
+		Vector3 new_dest = new_vv * dvd + 
+											 new_rv * drd +
+											 new_uv * dud;
+		new_dest *= -1.0;
+		new_dest += new_camera.getLookAtPosition();
+
+		// apply new values
+		light.setPosition(new_pos);
+		light.setDirection(new_dest - new_pos);
 	}
 
-	camera_ = camera;
-
-	vector<Vector3>::iterator pit = p_diff.begin();
-	vector<Vector3>::iterator lit = l_diff.begin();
-
-	it = light_sources_.begin();
-	for (; it != light_sources_.end(); it++)
-	{
-		if (it->isRelativeToCamera())
-		{
-			it->setPosition(camera_.getViewPoint() + *pit);
-			it->setDirection(camera_.getLookAtPosition() + *lit);
-		}
-
-		pit++;
-		lit++;
-	}
-	*/
+	camera_ = new_camera;
 }
 
 
