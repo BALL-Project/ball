@@ -187,7 +187,8 @@ EXECUTABLES_SOLVATION = \
 	Pair6_12RDFIntegrator_test\
 	Pair6_12InteractionEnergyProcessor_test\
 	PairExpInteractionEnergyProcessor_test\
-	PairExpRDFIntegrator_test
+	PairExpRDFIntegrator_test\
+	PARSE_test
 
 EXECUTABLES_QSAR = \
 	Descriptor_test\
