@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.12 2003/10/20 21:52:25 amoll Exp $
+// $Id: colorProcessor.C,v 1.13 2003/10/21 13:03:31 amoll Exp $
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
 #include <BALL/VIEW/DATATYPE/colorExtension2.h>
@@ -222,15 +222,18 @@ InterpolateColorProcessor::InterpolateColorProcessor()
 	: ColorProcessor(),
 		min_color_(ColorRGBA(0,0,1.0)),
 		max_color_(ColorRGBA(1.0,1.0,0)),
-		max_value_(50)
+		min_min_color_(ColorRGBA(1.0,1.0,1.0)),
+		max_max_color_(ColorRGBA(1.0,0.0,0)),
+		max_value_(1),
+		min_value_(0)
 {
 	default_color_ = ColorRGBA(1.0,1.0,1.0);
 }
 
 ColorRGBA InterpolateColorProcessor::interpolateColor(float value)
 {
-	if (value < min_value_) return min_color_;
-	if (value > max_value_) return max_color_;
+	if (value < min_value_) return min_min_color_;
+	if (value > max_value_) return max_max_color_;
 
 	float red1   = min_color_.getRed();
 	float green1 = min_color_.getGreen();
@@ -282,6 +285,30 @@ void InterpolateColorProcessor::setMaxValue(float value)
 	throw()
 {
 	max_value_ = value;
+}
+
+void InterpolateColorProcessor::setMinMinColor(const ColorRGBA& color)
+	throw()
+{
+	min_min_color_ = color;
+}
+
+void InterpolateColorProcessor::setMaxMaxColor(const ColorRGBA& color)
+	throw()
+{
+	max_max_color_ = color;
+}
+
+const ColorRGBA& InterpolateColorProcessor::getMinMinColor() const
+	throw()
+{
+	return min_min_color_;
+}
+
+const ColorRGBA& InterpolateColorProcessor::getMaxMaxColor() const
+	throw()
+{
+	return max_max_color_;
 }
 
 } } // namespaces

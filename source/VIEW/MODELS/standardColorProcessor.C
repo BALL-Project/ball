@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.11 2003/10/20 21:52:26 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.12 2003/10/21 13:03:31 amoll Exp $
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
@@ -519,6 +519,7 @@ TemperatureFactorColorProcessor::TemperatureFactorColorProcessor()
 	default_color_ = ColorRGBA(1.0,1.0,1.0);
 	min_color_.set(0,0,1.0),
 	max_color_.set(1.0,1.0,0),
+	min_value_ = 0.00001;
 	max_value_ = 50;
 }
 
@@ -539,6 +540,7 @@ OccupancyColorProcessor::OccupancyColorProcessor()
 	default_color_ = ColorRGBA(1.0,1.0,1.0);
 	min_color_.set(0,0,1.0),
 	max_color_.set(1.0,1.0,0),
+	min_value_ = 0;
 	max_value_ = 1;
 }
 

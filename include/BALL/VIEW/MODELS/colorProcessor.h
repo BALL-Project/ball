@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.h,v 1.11 2003/10/20 21:52:44 amoll Exp $
+// $Id: colorProcessor.h,v 1.12 2003/10/21 13:03:40 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_COLORPROCESSOR_H
@@ -205,6 +205,23 @@ namespace BALL
 			///
 			const ColorRGBA& getMaxColor() const
 				throw();
+			
+			///
+			void setMinMinColor(const ColorRGBA& color)
+				throw();
+
+			///
+			void setMaxMaxColor(const ColorRGBA& color)
+				throw();
+
+			///
+			const ColorRGBA& getMinMinColor() const
+				throw();
+			
+			///
+			const ColorRGBA& getMaxMaxColor() const
+				throw();
+
 
 			///
 			void setMaxValue(float value)
@@ -219,8 +236,10 @@ namespace BALL
 
 			protected:
 
-			ColorRGBA min_color_;
-			ColorRGBA max_color_;
+			ColorRGBA min_color_,
+								max_color_,
+								min_min_color_,
+								max_max_color_;
 			float 		max_value_;
 			float 		min_value_;
 		};
