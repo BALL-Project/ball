@@ -1,4 +1,4 @@
-// $Id: contour.h,v 1.8 2001/06/06 14:16:09 anhi Exp $
+// $Id: contour.h,v 1.9 2001/06/21 21:46:07 amoll Exp $
 
 #ifndef BALL_DATATYPE_CONTOUR_H
 #define BALL_DATATYPE_CONTOUR_H
@@ -38,8 +38,8 @@ namespace BALL
 
 		/// Destructor
 		virtual ~TContour();
+		
 		//@}
-
 		/** @name    Accessors
 		*/
 		//@{
@@ -48,7 +48,6 @@ namespace BALL
 		bool getNextContourLine(TContourLine<T>& contour);
 
 		//@}
-
 		/** @name    Assignment
 		*/
 		//@{
@@ -56,8 +55,7 @@ namespace BALL
 		/// Assignment operator
 		const TContour& operator = (const TContour& assigTContour);
 
-		/**
-				
+		/**		
 		*/
 		void apply(TRegularData2D<T>& data);
 
@@ -68,7 +66,6 @@ namespace BALL
 		void resetCounter();
 
 		//@}
-
 		/** @name    Predicates
 		*/
 		//@{
@@ -88,7 +85,7 @@ namespace BALL
 		Position index_;
 	};
 
-	/**     Default type
+	/** Default type
 	 */
 	typedef TContour<float> Contour;
 
