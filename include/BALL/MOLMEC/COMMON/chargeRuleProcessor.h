@@ -1,4 +1,4 @@
-// $Id: chargeRuleProcessor.h,v 1.1 2000/05/19 11:12:24 oliver Exp $
+// $Id: chargeRuleProcessor.h,v 1.2 2000/06/02 07:11:04 oliver Exp $
 // Molecular Mechanics: rule-based assignment of charges 
 
 #ifndef BALL_MOLMEC_COMMON_CHARGERULEPROCESSOR_H
@@ -29,7 +29,7 @@ namespace BALL
 			
 		/**	Detailed constructor
 		*/
-		ChargeRuleProcessor(INIFile& file, const String& prefix);
+		ChargeRuleProcessor(INIFile& file, const String& prefix = "ChargeRules");
 			
 		/**	Copy constructor
 		*/
