@@ -1,6 +1,6 @@
 /** @name Constructing a dialog for the example application.
 
-		In the section \REF{Building a bounding box processor.} we have constructed a processor that creates bounding boxes
+		In the section \Ref{Building a bounding box processor.} we have constructed a processor that creates bounding boxes
 		for molecular structures. In this section we create a dialog that allows us to
 		create bounding boxes in different colors for molecular structures. We use the dialog
 		created in the \Ref{VIEW.} tutorial (section \Ref{Construction of a dialog.}) and extend and reimplement certain methods to
