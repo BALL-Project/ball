@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.66 2004/11/13 13:18:32 amoll Exp $
+// $Id: mainControl.h,v 1.67 2004/11/13 16:22:31 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -721,6 +721,11 @@ namespace BALL
 			void moveItems(const Matrix4x4& m)
 				throw();
 
+			#ifdef BALL_QT_HAS_THREADS
+			/// QWaitCondition to wake up threads, after Composites are unlocked
+			QWaitCondition& getCompositesLockedWaitCondition() { return composites_locked_wait_condition_;}
+			#endif
+
 			//@}
 			/**	@name	Debugging and Diagnostics
 			*/
@@ -744,10 +749,18 @@ namespace BALL
 			
 			protected slots:
 
+			void clearStatusBarText_();
+
 			// Connected to the delete entry
 			virtual void deleteClicked();
 
 			protected:
+
+			///
+			void stopedSimulation_();
+
+			///
+			void lockComposites_();
 
 			/*_ Remove a composite.
 					Every Representation, which was created for the Composite is deleted, by sending a 
@@ -785,10 +798,6 @@ namespace BALL
 			*/
 			void setBusyMode_(bool state);
 
-			///
-			bool lockCompositesForMainControl_()
-				throw();
-		
 			//_
 			FragmentDB fragment_db_;
 
@@ -806,7 +815,6 @@ namespace BALL
 			*/
 			QLabel* 										message_label_;
 
-
 			PrimitiveManager 						primitive_manager_;
 			CompositeManager 						composite_manager_;
 
@@ -817,7 +825,7 @@ namespace BALL
 			INIFile		 									preferences_;
 			
 			static int 									current_id_;
-			bool 												composites_locked_by_main_control_;
+			bool 												composites_locked_;
 			ModularWidget*							locking_widget_;
 			bool 											  stop_simulation_;
 
@@ -828,12 +836,6 @@ namespace BALL
 					removeModularWidget.
 			*/
 			List<ModularWidget*>				modular_widgets_;
-
-			protected slots:
-
-			void clearStatusBarText_();
-
-			protected:
 
 			HashMap<Index, String>      menu_entries_hints_;
 
@@ -850,6 +852,10 @@ namespace BALL
 			bool 								about_to_quit_;
 			bool 								important_text_;
 			QTimer 							timer_;
+			#ifdef 	BALL_QT_HAS_THREADS
+			QMutex 							composites_locked_mutex_;
+			QWaitCondition 			composites_locked_wait_condition_;
+			#endif
 };
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS

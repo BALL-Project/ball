@@ -86,7 +86,6 @@ namespace BALL
 		void SimulationThread::updateScene_()
 		{
 			// notify MainControl to update all Representations for the Composite
-			main_control_->getPrimitiveManager().willUpdateSoon();
 			UpdateCompositeEvent* se = new UpdateCompositeEvent;
 			se->setComposite(composite_);
 			qApp->postEvent(main_control_, se);
@@ -94,10 +93,7 @@ namespace BALL
 
 		void SimulationThread::exportSceneToPNG_()
 		{
-			if (main_control_->stopedSimulation()) 
-			{
-				return;
-			}
+			if (main_control_->stopedSimulation()) return;
 
 			Scene* scene = Scene::getInstance(0);
 			if (scene == 0) return;
@@ -120,17 +116,15 @@ namespace BALL
 		{
 			SimulationThreadFinished* su = new SimulationThreadFinished;
 			qApp->postEvent(main_control_, su);  // Qt will delete it when done
+
+			main_control_->getCompositesLockedWaitCondition().wakeAll();
 		}
 
 		void SimulationThread::waitForUpdateOfRepresentations_()
 		{
 			if (!representations_to_be_updated_) return;
 
-			while (main_control_->getPrimitiveManager().updatePending())
-			{
-				msleep(10);
-			}
-			main_control_->getPrimitiveManager().getUpdateThread().wait();
+			main_control_->getPrimitiveManager().getUpdateWaitCondition().wait();
 		}
 
 		// =====================================================================

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.24 2004/11/13 13:11:45 amoll Exp $
+// $Id: primitiveManager.C,v 1.25 2004/11/13 16:22:26 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -25,7 +25,6 @@ PrimitiveManager::PrimitiveManager(MainControl* mc)
 	throw()
 	: Object(),
 		main_control_(mc),
-		update_still_to_be_started_(false),
 		update_running_(false)
 {
 }
@@ -107,11 +106,7 @@ bool PrimitiveManager::remove(Representation& representation, bool send_message)
 		main_control_->notify_(*rm);
 	}
 
-	if (willBeUpdated(representation))
-	{
-		representations_to_be_deleted_.insert(&representation);
-	}
-	else
+	if (!willBeUpdated(representation))
 	{
 		delete &representation;
 	}
@@ -263,24 +258,16 @@ void PrimitiveManager::startUpdateThread_()
 
 	if (!mutex_.tryLock()) return;
 
-	if (updateRunning())
-	{
-		Log.error() << "Problem while updateing Representations in " 
-								<< __FILE__ << " " << __LINE__ << std::endl;
-		return;
-	}
-
-
+	// maybe the Representation to be updated is already deleted?
 	Representation* rep = *representations_to_be_updated_.begin();
 	if (!has(*rep)) 
 	{
  		delete rep;
 		representations_to_be_updated_.pop_front();
+		mutex_.unlock();
 		startUpdateThread_();
 		return;
 	}
-
-	update_still_to_be_started_ = false;
 
 	// start the UpdateRepresentationThread
 	thread_.setRepresentation(*rep);
@@ -339,15 +326,14 @@ void PrimitiveManager::finishedUpdate_()
 		delete rep;
 	}
 
-	// shouldnt happen
-	if (updateRunning())
-	{
-		Log.error() << "Problem in "  << __FILE__ << "  " << __LINE__<< std::endl;
-		return;
-	}
-
 	update_running_ = false;
 	mutex_.unlock();
+
+	if (representations_to_be_updated_.size() == 0)
+	{
+		update_finished_.wakeAll();
+		return;
+	}
 
 	startUpdateThread_();
 #endif
@@ -370,18 +356,6 @@ bool PrimitiveManager::willBeUpdated(const Representation& rep) const
 	}
 
 	return false;
-}
-
-bool PrimitiveManager::updatePending() const
-	throw()
-{
-	return update_still_to_be_started_;
-}
-
-void PrimitiveManager::willUpdateSoon()
-	throw()
-{
-	update_still_to_be_started_ = true;
 }
 
 

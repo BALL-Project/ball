@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.h,v 1.15 2004/11/13 13:11:55 amoll Exp $
+// $Id: primitiveManager.h,v 1.16 2004/11/13 16:22:32 amoll Exp $
 
 #ifndef  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
 #define  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
@@ -12,6 +12,7 @@
 
 #ifdef BALL_QT_HAS_THREADS
 # include <qmutex.h>
+# include <qwaitcondition.h>
 #endif
 
 namespace BALL
@@ -171,16 +172,9 @@ namespace BALL
 			#ifdef BALL_QT_HAS_THREADS
 			///
 			static UpdateRepresentationThread& getUpdateThread() { return thread_;}
+			QWaitCondition& getUpdateWaitCondition() { return update_finished_;}
 			#endif
 
-			/// used by SimulationThread to know when UpdateThread will be finished
-			void willUpdateSoon()
-				throw();
-
-			///
-			bool updatePending() const
-				throw();
-			
 			protected:
 
 			void startUpdateThread_()
@@ -198,16 +192,13 @@ namespace BALL
 			//_ List with all representations, which will be updated
 			RepresentationList representations_to_be_updated_;
 			
-			//_ List with all representations, which are to be deleted
-			HashSet<Representation*> representations_to_be_deleted_;
-
 			#ifdef BALL_QT_HAS_THREADS
 			static UpdateRepresentationThread thread_;
 			static QMutex 										mutex_;
+			QWaitCondition 										update_finished_;
 			#endif
 
 			MainControl* 	main_control_;
-			bool 					update_still_to_be_started_;
 			bool 					update_running_;
 		};
 

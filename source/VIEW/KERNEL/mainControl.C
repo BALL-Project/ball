@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.135 2004/11/13 16:22:26 amoll Exp $
+// $Id: mainControl.C,v 1.136 2004/11/13 16:23:24 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1446,6 +1446,7 @@ namespace BALL
 					notify_(message);
 				}
 				
+				simulation_thread_->wait();
 				delete simulation_thread_;
 				simulation_thread_ = 0;
 			}
