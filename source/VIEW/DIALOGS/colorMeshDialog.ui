@@ -1633,106 +1633,6 @@
                     </widget>
                 </hbox>
             </widget>
-            <widget class="QButtonGroup">
-                <property name="name">
-                    <cstring>transparency_group_grid</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>83</x>
-                        <y>202</y>
-                        <width>291</width>
-                        <height>45</height>
-                    </rect>
-                </property>
-                <property name="title">
-                    <string>Transparency</string>
-                </property>
-                <property name="exclusive">
-                    <bool>true</bool>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string></string>
-                </property>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>none_button_grid</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>17</x>
-                            <y>18</y>
-                            <width>58</width>
-                            <height>20</height>
-                        </rect>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>0</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="text">
-                        <string>none</string>
-                    </property>
-                    <property name="checked">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>alpha_button_grid</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>100</x>
-                            <y>18</y>
-                            <width>119</width>
-                            <height>20</height>
-                        </rect>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>0</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="text">
-                        <string>alpha-blending</string>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>If you use alpha-blending, dont forget to reduce the alpha channel</string>
-                    </property>
-                </widget>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>full_button_grid</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>238</x>
-                            <y>18</y>
-                            <width>46</width>
-                            <height>20</height>
-                        </rect>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>0</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="text">
-                        <string>full</string>
-                    </property>
-                </widget>
-            </widget>
             <widget class="QLayoutWidget">
                 <property name="name">
                     <cstring>Layout18</cstring>
@@ -1946,6 +1846,82 @@
                         <height>22</height>
                     </rect>
                 </property>
+            </widget>
+            <widget class="QButtonGroup">
+                <property name="name">
+                    <cstring>transparency_group_grid</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>83</x>
+                        <y>202</y>
+                        <width>225</width>
+                        <height>45</height>
+                    </rect>
+                </property>
+                <property name="title">
+                    <string>Transparency</string>
+                </property>
+                <property name="exclusive">
+                    <bool>true</bool>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string></string>
+                </property>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>none_button_grid</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>17</x>
+                            <y>18</y>
+                            <width>58</width>
+                            <height>20</height>
+                        </rect>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>none</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>alpha_button_grid</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>100</x>
+                            <y>18</y>
+                            <width>119</width>
+                            <height>20</height>
+                        </rect>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>alpha-blending</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>If you use alpha-blending, dont forget to reduce the alpha channel</string>
+                    </property>
+                </widget>
             </widget>
         </widget>
         <widget class="QWidget">
@@ -2224,106 +2200,6 @@
                     <string>You can choose a color here</string>
                 </property>
             </widget>
-            <widget class="QButtonGroup">
-                <property name="name">
-                    <cstring>transparency_group_custom</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>82</x>
-                        <y>200</y>
-                        <width>284</width>
-                        <height>45</height>
-                    </rect>
-                </property>
-                <property name="title">
-                    <string>Transparency</string>
-                </property>
-                <property name="exclusive">
-                    <bool>true</bool>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string></string>
-                </property>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>alpha_button_custom</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>96</x>
-                            <y>17</y>
-                            <width>115</width>
-                            <height>20</height>
-                        </rect>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>0</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="text">
-                        <string>alpha-blending</string>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>If you use alpha-blending, dont forget to reduce the alpha channel</string>
-                    </property>
-                </widget>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>full_button_custom</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>234</x>
-                            <y>17</y>
-                            <width>45</width>
-                            <height>20</height>
-                        </rect>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>0</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="text">
-                        <string>full</string>
-                    </property>
-                </widget>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>none_button_custom</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>13</x>
-                            <y>17</y>
-                            <width>64</width>
-                            <height>20</height>
-                        </rect>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>0</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="text">
-                        <string>none</string>
-                    </property>
-                    <property name="checked">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-            </widget>
             <widget class="QLayoutWidget">
                 <property name="name">
                     <cstring>layout17</cstring>
@@ -2511,6 +2387,82 @@
                 <property name="text">
                     <string>Choose:</string>
                 </property>
+            </widget>
+            <widget class="QButtonGroup">
+                <property name="name">
+                    <cstring>transparency_group_custom</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>82</x>
+                        <y>200</y>
+                        <width>218</width>
+                        <height>45</height>
+                    </rect>
+                </property>
+                <property name="title">
+                    <string>Transparency</string>
+                </property>
+                <property name="exclusive">
+                    <bool>true</bool>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string></string>
+                </property>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>alpha_button_custom</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>96</x>
+                            <y>17</y>
+                            <width>115</width>
+                            <height>20</height>
+                        </rect>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>alpha-blending</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>If you use alpha-blending, dont forget to reduce the alpha channel</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>none_button_custom</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>13</x>
+                            <y>17</y>
+                            <width>64</width>
+                            <height>20</height>
+                        </rect>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>none</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
             </widget>
         </widget>
     </widget>
