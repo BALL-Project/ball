@@ -71,6 +71,11 @@
                             <widget class="QComboBox" row="0" column="0">
                                 <item>
                                     <property name="text">
+                                        <string>&lt;select&gt;</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
                                         <string>Geometric Fit</string>
                                     </property>
                                 </item>

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.8 2005/01/25 16:36:36 leonhardt Exp $
+// $Id: dockDialog.C,v 1.1.2.9 2005/01/26 08:50:40 leonhardt Exp $
 //
 
 #include "dockDialog.h"
@@ -216,25 +216,34 @@ namespace BALL
 		void DockDialog::reset()
 			throw()
 		{
-			// comboboxes
-			systems1->setCurrentText("<select>");
-			systems2->setCurrentText("<select>");
-			generators->setCurrentText("<select>");
-			eval_functions->setCurrentText("<select>");
-			rank_functions->setCurrentText("<select>");
-		
-			// radii / charges config files
-			radii_data_lineedit->setText("radii/PARSE.siz");
-			radii_rules_lineedit->setText("solvation/PARSE.rul");
-			charges_data_lineedit->setText("charges/PARSE.crg");
-			charges_rules_lineedit->setText("solvation/PARSE.rul");
+			if (tab_pages->currentPageIndex() == 0)
+			{
+				// comboboxes
+				systems1->setCurrentText("<select>");
+				systems2->setCurrentText("<select>");
+				generators->setCurrentText("<select>");
+				eval_functions->setCurrentText("<select>");
+				rank_functions->setCurrentText("<select>");
+				
+				//options
+				best_num->setText("100");
+			}
 			
-			// processors
-			normalize_names->setChecked(false);
-			assign_charges->setChecked(true);
-			assign_radii->setChecked(true);
-			build_bonds->setChecked(false);
-			add_hydrogens->setChecked(false);
+			if (tab_pages->currentPageIndex() == 1)
+			{
+				// radii / charges config files
+				radii_data_lineedit->setText("radii/PARSE.siz");
+				radii_rules_lineedit->setText("solvation/PARSE.rul");
+				charges_data_lineedit->setText("charges/PARSE.crg");
+				charges_rules_lineedit->setText("solvation/PARSE.rul");
+			
+				// processors
+				normalize_names->setChecked(false);
+				assign_charges->setChecked(true);
+				assign_radii->setChecked(true);
+				build_bonds->setChecked(false);
+				add_hydrogens->setChecked(false);
+			}
 		}
 		
 		/// show chosen file in the dialog
@@ -380,7 +389,7 @@ namespace BALL
 			//check which generator is currentText of the combobox
 			if (generators->currentText() == "Geometric Fit")
 			{
-				GeometricFitDialog dialog();
+				GeometricFitDialog dialog(this);
 				dialog.exec();
 				
 				
@@ -441,7 +450,7 @@ namespace BALL
 		///
 		void DockDialog::okPressed()
 		{
-			//if less than 2/ 2 equal systems are selected => Error message!
+			//if less than 2/ more than 2 equal systems are selected => Error message!
 			if ((systems1->currentText() == "<select>") || (systems2->currentText() == "<select>") 
 					|| (systems1->currentText() == systems2->currentText()))
 			{
