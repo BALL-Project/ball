@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.57 2004/04/21 13:59:42 amoll Exp $
+// $Id: scene.C,v 1.57.2.1 2004/05/22 10:42:21 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -40,7 +40,7 @@ namespace BALL
 		#define  ROTATE_FACTOR    11
 		#define  TRANSLATE_FACTOR 6 
 
- 		QGLFormat Scene::gl_format_(QGL::DepthBuffer | QGL::StereoBuffers);
+ 		QGLFormat Scene::gl_format_(QGL::DepthBuffer);// | QGL::StereoBuffers);
 
 		Scene::Scene()
 			throw()
@@ -1013,10 +1013,10 @@ namespace BALL
 
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
 
-			stereo_id_ = main_control.insertMenuEntry (
- 					MainControl::DISPLAY, "&Stereo Mode", this, SLOT(switchStereo()), ALT+Key_Y);
- 			menuBar()->setItemChecked(stereo_id_, false) ;
-
+//			 stereo_id_ = main_control.insertMenuEntry (
+//  					MainControl::DISPLAY, "&Stereo Mode", this, SLOT(switchStereo()), ALT+Key_Y);
+//  			menuBar()->setItemChecked(stereo_id_, false) ;
+// 
 			hint = "Print the coordinates of the current viewpoint";
 			main_control.insertMenuEntry(
 					MainControl::DISPLAY_VIEWPOINT, "Show Vie&wpoint", this, SLOT(showViewPoint_()), CTRL+Key_W, -1, hint);
@@ -1051,7 +1051,7 @@ namespace BALL
 					SLOT(setViewPoint_()), CTRL+Key_N);		
 			main_control.removeMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Rese&t Camera", this, 
 					SLOT(resetCamera_()), CTRL+Key_T);		
-			main_control.removeMenuEntry(MainControl::DISPLAY, "& Stereo Mode", this, SLOT( switchStereo()), ALT+Key_Y);		
+//			main_control.removeMenuEntry(MainControl::DISPLAY, "&  Stereo Mode", this, SLOT( switchStereo()), ALT+Key_Y);		
 			main_control.removeMenuEntry(MainControl::FILE_EXPORT, "PNG", this, SLOT(exportPNG()), ALT+Key_P);		
 			main_control.removeMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
 		}
