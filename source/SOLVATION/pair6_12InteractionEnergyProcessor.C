@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pair6_12InteractionEnergyProcessor.C,v 1.20 2003/02/22 12:56:04 anker Exp $
+// $Id: pair6_12InteractionEnergyProcessor.C,v 1.21 2003/03/13 15:44:20 anker Exp $
 
 #include <BALL/SYSTEM/path.h>
 #include <BALL/KERNEL/PTE.h>
@@ -37,11 +37,11 @@ namespace BALL
 	const Size Pair6_12InteractionEnergyProcessor::Default::VERBOSITY = 1;
 	const bool Pair6_12InteractionEnergyProcessor::Default::USE_RDF = false;
 	const char* Pair6_12InteractionEnergyProcessor::Default::RDF_FILENAME
-		= "data/solvation/RDF-AMBER.ini";
+		= "solvation/RDF-AMBER.ini";
 	const char* Pair6_12InteractionEnergyProcessor::Default::LJ_FILENAME
-		= "data/Amber/amber94.ini";
+		= "Amber/amber94.ini";
 	const char* Pair6_12InteractionEnergyProcessor::Default::SOLVENT_FILENAME
-		= "data/solvents/PCM-water.ini";
+		= "solvents/PCM-water.ini";
 	const Size Pair6_12InteractionEnergyProcessor::Default::SURFACE_TYPE
 		= SURFACE__SAS;
 	const char* Pair6_12InteractionEnergyProcessor::Default::SURFACE_FILENAME
@@ -202,6 +202,10 @@ namespace BALL
 		if (solvent_filename == "")
 		{
 			solvent_filename = options.get(Option::SOLVENT_FILENAME);
+		}
+		if (verbosity > 0)
+		{
+			Log.info() << "Using " << solvent_filename << " as solvent description" << endl;
 		}
 		Size surface_type = (Size)options.getInteger(Option::SURFACE_TYPE);
 		String surface_filename = options.get(Option::SURFACE_FILENAME);
