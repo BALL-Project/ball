@@ -323,7 +323,7 @@ void ColoringSettingsDialog::setDefaults(bool all)
 	if (all || widget_stack->id(widget_stack->visibleWidget()) == 8)
 	{
 		force_min_color_.set(0,0,255);
-		force_max_color_.set(0,0,255);
+		force_max_color_.set(255,0,0);
 		force_max_value_slider->setValue(10 * 10);
 	}
 
