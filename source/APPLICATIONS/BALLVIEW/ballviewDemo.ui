@@ -1,0 +1,142 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>BALLViewDemoData</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>BALLViewDemoData</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>598</width>
+            <height>480</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>BALLView Demo</string>
+    </property>
+    <widget class="QLayoutWidget">
+        <property name="name">
+            <cstring>layout4</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>3</x>
+                <y>2</y>
+                <width>590</width>
+                <height>475</height>
+            </rect>
+        </property>
+        <vbox>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <property name="spacing">
+                <number>5</number>
+            </property>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>label</cstring>
+                </property>
+                <property name="text">
+                    <string>&lt;blockquote&gt;
+Welcome to the BALLView demo. It will show you some of 
+BALLViews main features. The demo is divided in 
+serveral steps, wich have to be finished one after the other. The 
+progress bar at the bottom informs you about your advancements.
+The button "next" will be enabled after finishing each individual step.
+&lt;br&gt;
+We start by building a polypeptide from an aminoacid sequence.
+To do so, open the PeptideBuilder dialog by clicking the menu entry
+&lt;br&gt;
+&lt;b&gt;Build-&gt;BuildPeptide.&lt;/b&gt;
+&lt;br&gt;
+&lt;br&gt;
+Then enter the sequence ARND in the label field at the top. This
+will create a polypeptide with the aminosequence
+Alanin-&gt;Arginin-&gt;Asparagine-&gt;Aspartic acid.
+&lt;blockquote&gt;</string>
+                </property>
+                <property name="alignment">
+                    <set>WordBreak|AlignTop</set>
+                </property>
+            </widget>
+            <widget class="QLayoutWidget">
+                <property name="name">
+                    <cstring>layout3</cstring>
+                </property>
+                <hbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="spacing">
+                        <number>5</number>
+                    </property>
+                    <widget class="QProgressBar">
+                        <property name="name">
+                            <cstring>progress_bar</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>7</hsizetype>
+                                <vsizetype>0</vsizetype>
+                                <horstretch>12</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                    </widget>
+                    <widget class="QPushButton">
+                        <property name="name">
+                            <cstring>next_button</cstring>
+                        </property>
+                        <property name="enabled">
+                            <bool>false</bool>
+                        </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>90</width>
+                                <height>25</height>
+                            </size>
+                        </property>
+                        <property name="text">
+                            <string>Next</string>
+                        </property>
+                    </widget>
+                    <widget class="QPushButton">
+                        <property name="name">
+                            <cstring>close_button</cstring>
+                        </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>90</width>
+                                <height>0</height>
+                            </size>
+                        </property>
+                        <property name="text">
+                            <string>Close</string>
+                        </property>
+                    </widget>
+                </hbox>
+            </widget>
+        </vbox>
+    </widget>
+</widget>
+<connections>
+    <connection>
+        <sender>next_button</sender>
+        <signal>clicked()</signal>
+        <receiver>BALLViewDemoData</receiver>
+        <slot>nextClicked()</slot>
+    </connection>
+    <connection>
+        <sender>close_button</sender>
+        <signal>clicked()</signal>
+        <receiver>BALLViewDemoData</receiver>
+        <slot>close()</slot>
+    </connection>
+</connections>
+<slots>
+    <slot>nextClicked()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

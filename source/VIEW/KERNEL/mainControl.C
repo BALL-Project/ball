@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.166 2005/02/27 17:55:45 amoll Exp $
+// $Id: mainControl.C,v 1.167 2005/02/27 18:33:42 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1906,7 +1906,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		}
 		catch(...)
 		{
-			setStatusbarText("Could not open project file, it doesnt seem to exist.", true);
+			setStatusbarText("Could not open the project file \"" + filename + "\", it doesnt seem to exist.", true);
 			return;
 		}
 

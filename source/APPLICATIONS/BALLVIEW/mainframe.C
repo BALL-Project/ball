@@ -1,12 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.49 2005/01/31 14:34:39 amoll Exp $
+// $Id: mainframe.C,v 1.50 2005/02/27 18:38:27 amoll Exp $
 //
 
 #include "mainframe.h"
 #include "aboutDialog.h"
 #include "icons.h"
+#include "ballviewDemo.h"
 
 #include <BALL/VIEW/KERNEL/moleculeObjectCreator.h>
 #include <BALL/VIEW/KERNEL/server.h>
@@ -111,6 +112,9 @@ namespace BALL
 		CHECK_PTR(logview);
 		logview->setMinimumSize(10, 10);
 
+		BALLViewDemo* demo = new BALLViewDemo(this, "BALLViewDemo");
+		CHECK_PTR(demo);
+
 		#ifdef BALL_PYTHON_SUPPORT
 			PyWidget* pywidget = new PyWidget(this, "Python Interpreter");
 			CHECK_PTR(pywidget);
@@ -137,6 +141,7 @@ namespace BALL
 
 		// Help-Menu -------------------------------------------------------------------
 		insertMenuEntry(MainControl::HELP, "About", this, SLOT(about()));
+		insertMenuEntry(MainControl::HELP, "Demo", demo, SLOT(show()));
 
 		// Menu ------------------------------------------------------------------------
 		menuBar()->setSeparator(QMenuBar::InWindowsStyle);
