@@ -1,4 +1,4 @@
-// $Id: RDFSection.C,v 1.5 2000/10/18 12:53:17 oliver Exp $
+// $Id: RDFSection.C,v 1.6 2000/10/18 13:54:36 anker Exp $
 
 #include <BALL/STRUCTURE/RDFSection.h>
 #include <BALL/FORMAT/parameters.h>
@@ -8,60 +8,61 @@ using namespace std;
 namespace BALL
 {
 
-	RDFSection::RDFSection()
+	RDFSection::RDFSection() throw()
 		:	ParameterSection(),
 		 	rdf_()
 	{
 	}
 
 
-	RDFSection::RDFSection(const RDFSection& rdf_section)
+	RDFSection::RDFSection(const RDFSection& rdf_section) throw()
 		:	ParameterSection(),
 			rdf_(rdf_section.rdf_)
 	{
 	}
 
 
-	RDFSection::~RDFSection()
-		throw()
-	{
-	}
-
-
-	void RDFSection::destroy()
+	RDFSection::~RDFSection() throw()
 	{
 		clear();
+
+		valid_ = false;
 	}
 
 
-	void RDFSection::clear()
-		throw()
+	void RDFSection::clear() throw()
 	{
 		rdf_.clear();
-	}
 
-
-	void RDFSection::set(const RDFSection& rdf_section)
-	{
-		rdf_.set(rdf_section.rdf_);
+		ParameterSection::clear();
 	}
 
 
 	const RDFSection& RDFSection::operator = (const RDFSection& rdf_section)
+		throw()
 	{
-		rdf_.set(rdf_section.rdf_);
+		ParameterSection::operator = (rdf_section);
+		rdf_ = rdf_section.rdf_;
+
 		return *this;
 	}
 
 
-	RadialDistributionFunction RDFSection::getRDF() const
+	const RadialDistributionFunction& RDFSection::getRDF() const throw()
 	{
 		return rdf_;
 	}
 
+	
+	bool RDFSection::operator == (const RDFSection& section) const throw()
+	{
+		return (ParameterSection::operator == (section)
+			&& (rdf_ == section.rdf_));
+	}
+
 
 	bool RDFSection::extractSection(Parameters& parameters,
-			const String& section_name)
+			const String& section_name) throw()
 	{
 		if (!parameters.isValid())
 		{
