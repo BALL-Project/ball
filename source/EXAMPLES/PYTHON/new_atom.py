@@ -1,0 +1,7 @@
+mc = MainControl.getInstance(0)
+s = System()
+m = Molecule()
+o = Atom()
+m.insert(o)
+s.insert(m)
+mc.insert(s)
