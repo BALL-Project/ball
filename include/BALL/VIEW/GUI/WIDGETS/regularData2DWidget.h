@@ -1,4 +1,4 @@
-// $Id: regularData2DWidget.h,v 1.17 2001/12/28 02:33:39 oliver Exp $
+// $Id: regularData2DWidget.h,v 1.17.4.1 2002/10/21 09:26:40 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGET_REGULARDATA2DWIDGET_H
 #define BALL_VIEW_GUI_WIDGET_REGULARDATA2DWIDGET_H
@@ -52,8 +52,9 @@
 #endif
 
 #ifndef BALL_VIEW_GUI_DIALOGS_DLGMOVEOVERLAY_H
-# include <BALL/MOLVIEW/GUI/DIALOGS/DlgMoveOverlay.h>
+# include <BALL/VIEW/GUI/DIALOGS/dlgMoveOverlay.h>
 #endif
+
 using namespace BALL;
 using namespace BALL::VIEW;
 
