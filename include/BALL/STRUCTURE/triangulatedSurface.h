@@ -1,4 +1,4 @@
-// $Id: triangulatedSurface.h,v 1.16 2001/02/23 18:24:59 anker Exp $
+// $Id: triangulatedSurface.h,v 1.17 2001/03/01 14:56:23 balltest Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATEDSURFACE_H
 #define BALL_STRUCTURE_TRIANGULATEDSURFACE_H
@@ -512,7 +512,7 @@ namespace BALL
 
 
 	template <class T>
-	void TTriangulatedSurface<T>::refineSphere(Position iterations, bool out = true)
+	void TTriangulatedSurface<T>::refineSphere(Position iterations, bool out)
 	{
 		for (Position i = 0; i < iterations; i++)
 		{
