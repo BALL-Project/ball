@@ -95,22 +95,18 @@ starts with a special prefix, ends with a suffix, consists only of letters or
 is simply a floating point number. The following code snippet will give you
 some idea of the power of the predicates.
 \begin{lstlisting}{}
-String test_string("This STRING does not start with PREFIX");
-cout << "String is empty? " 
-	<< test_string.isEmpty() << endl;
-cout << "Has prefix \"PREFIX\"? " 
-	<< test_string.hasPrefix("PREFIX") << endl;
-cout << "Contains substring \"PREFIX\"? " 
-	<< test_string.hasSubstring("PREFIX") << endl;
-cout << "Contains only letters? "
-	<< test_string.isAlpha() << endl;
+String T("This STRING does not start with PREFIX");
+cout << "String is empty? " << T.isEmpty() << endl;
+cout << "Has prefix \"PREFIX\"? " << T.hasPrefix("PREFIX") << endl;
+cout << "Contains \"PREFIX\"? " << T.hasSubstring("PREFIX") << endl;
+cout << "Contains only letters? " << T.isAlpha() << endl;
 \end{lstlisting}
 We will get the following output:
 \begin{lstlisting}{}
-String is empty? false
-Has prefix "PREFIX"? false
-Contains substring "PREFIX"? true
-Contains only letters? true
+String is empty? 0
+Has prefix "PREFIX"? 0
+Contains substring "PREFIX"? 1
+Contains only letters? 1
 \end{lstlisting}
 
 \subsection{Comparing Strings}
