@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Bend.C,v 1.1.2.6 2005/03/27 14:12:35 amoll Exp $
+// $Id: MMFF94Bend.C,v 1.1.2.7 2005/03/27 15:05:33 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Bend.h>
@@ -117,23 +117,17 @@ namespace BALL
 
 					// check for parameters
 					if (!parameters_.getParameters(this_bend.ATIJK, 
-																				 atom_type_a1, 
-																				 atom_type_a2, 
-																				 atom_type_a3, 
-																				 this_bend.ka, 
-																				 this_bend.theta0))
+																				 atom_type_a1, atom_type_a2, atom_type_a3, 
+																				 this_bend.ka, this_bend.theta0))
 					{
 						// try wildcard matching
 						if (!parameters_.getParameters(this_bend.ATIJK, 
-																					 0, 
-																					 atom_type_a2, 
-																					 0, 
-																					 this_bend.ka, 
-																					 this_bend.theta0))
+																					 0, atom_type_a2, 0, 
+																					 this_bend.ka, this_bend.theta0))
 						{
 							// complain if nothing was found
 							getForceField()->error() << "MMFF94Bend::setup: cannot find bend parameters for atom types:"
-								<< atom_type_a1 << "-" << atom_type_a2 << "-" << atom_type_a3 
+								<< atom_type_a1 << "-" << atom_type_a2 << "-" << atom_type_a3 << "bend " << this_bend.ATIJK
 								<< " (atoms are: " << this_bend.atom1->ptr->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) << "/" 
 								<< this_bend.atom2->ptr->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) << "/" 
 								<< this_bend.atom3->ptr->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) << ")" << endl;
@@ -274,8 +268,8 @@ Log.info() << "Bend " << bend_it->atom1->ptr->getName() << " "
 			Size size = all_rings[ring_nr].size();
 			if (size < 3 || size > 4) continue;
 
-			if (!all_rings[ring_nr].has(&atom1) &&
-			    !all_rings[ring_nr].has(&atom2) &&
+			if (!all_rings[ring_nr].has(&atom1) ||
+			    !all_rings[ring_nr].has(&atom2) ||
 			    !all_rings[ring_nr].has(&atom3))
 			{
 				continue;
@@ -293,14 +287,14 @@ Log.info() << "Bend " << bend_it->atom1->ptr->getName() << " "
 		if (in_ring_of_four)
 		{
 			Position result = 4;
-			if (sum_bond_types != 0) result = 7 + sum_bond_types;
+			if (sum_bond_types != 0) result = 6 + sum_bond_types;
 			return result;
 		}
 
 		if (in_ring_of_three)
 		{
 			Position result = 3;
-			if (sum_bond_types != 0) result = 5 + sum_bond_types;
+			if (sum_bond_types != 0) result = 4 + sum_bond_types;
 			return result;
 		}
 
