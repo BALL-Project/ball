@@ -1,11 +1,11 @@
-// $Id: Vector4_test.C,v 1.10 2000/05/26 19:25:05 amoll Exp $
+// $Id: Vector4_test.C,v 1.11 2000/06/07 09:34:44 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/MATHS/vector4.h>
 ///////////////////////////
 
-START_TEST(TVector4, "$Id: Vector4_test.C,v 1.10 2000/05/26 19:25:05 amoll Exp $")
+START_TEST(TVector4, "$Id: Vector4_test.C,v 1.11 2000/06/07 09:34:44 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -31,7 +31,7 @@ RESULT
 Vector4 v;
 Vector4 v1;
 Vector4 v2;
-float x;
+float x = 0.0;
 
 CHECK(TVector4::T& operator [] (Index index) const)
 	v = Vector4(1.0, 2.0, 3.0, 4.0);
@@ -39,8 +39,8 @@ CHECK(TVector4::T& operator [] (Index index) const)
 	TEST_EQUAL(v[1], 2.0)
 	TEST_EQUAL(v[2], 3.0)
 	TEST_EQUAL(v[3], 4.0)
-	TEST_EXCEPTION(Exception::IndexUnderflow, x = v[-1])
-	TEST_EXCEPTION(Exception::IndexOverflow,  x = v[4])
+	TEST_EXCEPTION(Exception::IndexUnderflow, (x == v[-1]))
+	TEST_EXCEPTION(Exception::IndexOverflow,  (x == v[4]))
 RESULT
 
 CHECK(TVector4(const T* ptr);)
