@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.78.2.4 2005/01/24 17:29:49 amoll Exp $
+// $Id: molecularStructure.C,v 1.78.2.5 2005/01/25 01:07:44 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -1106,12 +1106,13 @@ namespace BALL
 				bool ok = true;
 				while (ok && minimizer->getNumberOfIterations() < minimizer->getMaxNumberOfIterations())
 				{
-					ok = minimizer->minimize(minimization_dialog_.getRefresh(), true);
+					minimizer->minimize(minimization_dialog_.getRefresh(), true);
 					getMainControl()->update(*system);
 
 					setStatusbarText(String("Iteration ") + String(minimizer->getNumberOfIterations())
 													 + ": E = " + String(ff.getEnergy()) + " kJ/mol, RMS grad = "
 													 + String(ff.getRMSGradient()) + " kJ/(mol A)", true);
+					ok = !minimizer->wasAborted();
 				}
 
 				if (!ok)
@@ -1473,7 +1474,6 @@ namespace BALL
 			HashSet<const Atom*>::ConstIterator ait = getForceField().getUnassignedAtoms().begin();
 			for (; +ait; ait++)
 			{
-Log.error() << "#~~#   6 "     << (*ait)->getFullName()        << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 				(const_cast<Atom*>(*ait))->select();
 	
 				CompositeMessage* msg = new CompositeMessage(**ait, CompositeMessage::SELECTED_COMPOSITE);
@@ -1481,7 +1481,6 @@ Log.error() << "#~~#   6 "     << (*ait)->getFullName()        << " "  << __FILE
 				msg->setShowSelectionInfos(false);
 				notify_(msg);
 			}
-Log.error() << "#~~#   4 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 
 			CompositeMessage* msg = new CompositeMessage(*getForceField().getSystem(), CompositeMessage::CHANGED_COMPOSITE);
 			notify_(msg);
