@@ -1,4 +1,4 @@
-// $Id: Plane3_test.C,v 1.6 2000/05/26 19:25:04 amoll Exp $
+// $Id: Plane3_test.C,v 1.7 2000/06/27 23:22:14 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 #include <BALL/MATHS/line3.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Plane3_test.C,v 1.6 2000/05/26 19:25:04 amoll Exp $")
+START_TEST(class_name, "$Id: Plane3_test.C,v 1.7 2000/06/27 23:22:14 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -96,7 +96,6 @@ CHECK(TPlane3::void set(TPlane3 &plane, bool /* deep */ = true) const)
 	TEST_EQUAL(p, p2)
 RESULT
 
-
 CHECK(TPlane3::void set(const TPlane3<T>& point, const TPlane3<T>& normal))
 	v3 = Vector3(1.0, 2.0, 3.0);
 	v4 = Vector3(4.0, 5.0, 5.0);
@@ -105,7 +104,6 @@ CHECK(TPlane3::void set(const TPlane3<T>& point, const TPlane3<T>& normal))
 	p2 = Plane3(v3, v4);
 	TEST_EQUAL(p, p2)
 RESULT
-
 
 CHECK(TPlane3::TPlane3& operator = (const TPlane3 &plane))
 	v1 = Vector3(1.0, 2.0, 3.0);

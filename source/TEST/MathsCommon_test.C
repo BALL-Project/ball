@@ -1,11 +1,11 @@
-// $Id: MathsCommon_test.C,v 1.4 2000/05/26 19:25:03 amoll Exp $
+// $Id: MathsCommon_test.C,v 1.5 2000/06/27 23:20:49 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/MATHS/common.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: MathsCommon_test.C,v 1.4 2000/05/26 19:25:03 amoll Exp $")
+START_TEST(class_name, "$Id: MathsCommon_test.C,v 1.5 2000/06/27 23:20:49 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -22,7 +22,6 @@ CHECK(frac(const T& t))
 	TEST_REAL_EQUAL(Maths::frac(1.0), 0.0)
 	TEST_REAL_EQUAL(Maths::frac(-1.0), 0.0)
 	TEST_REAL_EQUAL(Maths::frac(-1.1), -0.1)
-	TEST_REAL_EQUAL(Maths::frac(1.1), 0.1)
 	TEST_REAL_EQUAL(Maths::frac(1.1), 0.1)
 RESULT
 
