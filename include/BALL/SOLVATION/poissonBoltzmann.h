@@ -1,4 +1,4 @@
-// $Id: poissonBoltzmann.h,v 1.12 2001/07/15 18:56:44 amoll Exp $ 
+// $Id: poissonBoltzmann.h,v 1.13 2001/07/31 00:43:31 oliver Exp $ 
 // Finite Difference Poisson Boltzmann Solver
 
 #ifndef BALL_SOLVATION_POISSONBOLTZMANN_H
@@ -26,7 +26,7 @@ using std::vector;
 namespace BALL 
 {
 
-	/** Finite Difference Poisson Boltzmann Solver. //
+	/** Finite Difference Poisson Boltzmann Solver.
 			{\bf Definition:} \URL{BALL/MOLMEC/COMMON/poissonBoltzmann.h}
 	*/			
 	class FDPB 
