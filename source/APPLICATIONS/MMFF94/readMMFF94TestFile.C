@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.17 2005/04/04 17:00:32 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.18 2005/04/05 15:43:48 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -206,6 +206,8 @@ bool testStretchBend(MMFF94& mmff, const String& filename, bool compare)
 		constants_ours.push_back(s.kba_kji);
 		constants_ours.push_back(s.kba_ijk);
 
+		Position sbtijk = 0;
+
 		float energy1 = 0.0;
 		for (Position poss2 = 0; poss2 < atoms1.size(); poss2++)
 		{
@@ -219,27 +221,25 @@ bool testStretchBend(MMFF94& mmff, const String& filename, bool compare)
 			{
 				energy1 += energy[poss2];
 				constants.push_back(f_ij[poss2]);
+				sbtijk = type[poss2];
 				found ++;
 			}
 
 
 			if (found != 2) continue;
 
-//   			float deltae = std::fabs(energy1 - s.energy);
-
 			sort(constants.begin(), constants.end());
 			sort(constants_ours.begin(), constants_ours.end());
 
-			if (constants[0] != constants_ours[0] ||
+			if (//s.sbtijk != sbtijk ||
+					constants[0] != constants_ours[0] ||
 					constants[1] != constants_ours[1] )
-			/*		(deltae > std::fabs(energy1 / 20.0) && 
-					std::fabs(deltae) > 0.001)) */
 			{
 				Log.error() << std::endl
 										<< "Problem StretchBend:   " << filename << "   " 
 										<< s.atom1->ptr->getName() << " " << s.atom2->ptr->getName() << " " << s.atom3->ptr->getName()  << std::endl
-										<< "got " << constants_ours[0] << " " << constants_ours[1] << "   " << s.energy << std::endl
-										<< "was " << constants[0] << " " << constants[1]  << "   " << energy1 << std::endl;
+										<< "got " << s.sbtijk << "  " << constants_ours[0] << " " << constants_ours[1] << "   " << s.energy << std::endl
+										<< "was " << sbtijk << "  " << constants[0] << " " << constants[1]  << "   " << energy1 << std::endl;
 			}
 
 			break;
@@ -260,7 +260,7 @@ bool testStretchBend(MMFF94& mmff, const String& filename, bool compare)
 	float s_plus_b = results[2] + results[1] + results[4];
 	float diff = std::fabs(mmff.getEnergy() - s_plus_b);
 
-	if (std::fabs(diff / s_plus_b) > 1.0 / 100.0 && diff > 0.001)
+	if (std::fabs(diff / s_plus_b) > 5.0 / 100.0 && diff > 0.001)
 	{
 		Log.error() << filename << "   " << s_plus_b << "  " 
 																		 << mmff.getEnergy() << std::endl;
@@ -408,7 +408,12 @@ int runtests(const vector<String>& filenames)
 			wrong_rings = true;
 		}
 
-		bool result = true;
+		bool result = mmff.getUnassignedAtoms().size() == 0;
+		if (!result)
+		{
+			Log.info() << "We have unassigned atoms: " << mmff.getUnassignedAtoms().size() << std::endl;
+		}
+
 //          		if (testStretch(mmff, filenames[pos], true)) ok++;
 //       result = testBend(mmff, filenames[pos], true);
 //      		testBend(mmff, filenames[pos], false);
@@ -457,6 +462,23 @@ vector<String> getTestFiles()
 	results.pop_back();
 
 	return results;
+}
+
+int bla()
+{
+	MMFF94StretchBendParameters sb_param;
+	Path    path;
+	String  filename1(path.find("MMFF94/MMFFSTBN.PAR"));
+	String  filename2(path.find("MMFF94/MMFFDFSB.PAR"));
+	sb_param.readParameters(filename1, filename2);
+
+	Atom a1, a2, a3;
+	a1.setType(7);
+	a2.setType(3);
+	a3.setType(37);
+	float k1, k2;
+	Log.info() << sb_param.getParameters(2, a1, a2, a3, k1, k2) << " " << k1 << " " << k2 << std::endl;
+	return 1;
 }
 
 
