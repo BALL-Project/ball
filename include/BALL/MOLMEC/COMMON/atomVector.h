@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomVector.h,v 1.22 2003/08/27 16:41:50 oliver Exp $
+// $Id: atomVector.h,v 1.23 2004/05/17 14:36:47 amoll Exp $
 //
 
 #ifndef BALL_MOLMEC_COMMON_ATOMVECTOR_H 
@@ -89,10 +89,9 @@ namespace BALL
 		void set(const AtomVector& atoms);
 
     /**	Assignment operator for Composites.
-				Calls  \link set set \endlink  and extracts all atoms, if none of the atoms in 
+				Calls  set() and extracts all atoms, if none of the atoms in 
 				<tt>composite</tt> are selected or the selected atoms	only 
 				(if any atom is selected in <tt>composite</tt>.
-				The implementation calls <tt> \link set</tt>(<tt>rhs set</tt>(<tt>rhs \endlink , {\tt rhs</tt>. \link containsSelection containsSelection \endlink ())</tt>.
 				@see	Selectable
     */
     const AtomVector& operator = (const Composite& rhs);
@@ -119,12 +118,12 @@ namespace BALL
 		
 		/**	Store the current atom positions.
 				AtomVector also contains an array with positions for each atom.
-				 \link moveTo moveTo \endlink  considers these coordinates as start coordinates.
+				moveTo() considers these coordinates as start coordinates.
 		*/
 		void savePositions();
 
 		/**	Resets the atom positions to the saved positions.
-				If coordinates weres stored using  \link savePositions savePositions \endlink , the atoms
+				If coordinates weres stored using  savePositions() , the atoms
 				coordinates are reset to the saved positions.
 				If no savedPositions exist the coordinates remain unchanged.
 		*/
@@ -133,7 +132,7 @@ namespace BALL
 		/**	Move all atoms along a direction vector.
 				The method translates all atoms a long a given direction.
 				The direction vector is multiplied with a step length <tt>step</tt>.
-				If a saved position exists ( \link savePositions savePositions \endlink ), it is used as a start
+				If a saved position exists ( savePositions() ), it is used as a start
 				position (i.e. the final positions are $\vec{\mathrm{start}} + \mathrm{step} \vec{\mathrm{direction}}$).
 				Otherwise, the current atom positions are used.
 				If the gradient's size differs from the number of atoms, nothing is done.
