@@ -1,4 +1,4 @@
-// $Id: rtti.h,v 1.1 1999/08/26 07:53:14 oliver Exp $
+// $Id: rtti.h,v 1.2 1999/12/28 18:30:28 oliver Exp $
 
 #ifndef BALL_COMMON_RTTI_H
 #define BALL_COMMON_RTTI_H
@@ -12,7 +12,8 @@
 #include <typeinfo>
 using std::string;
 
-namespace BALL {
+namespace BALL 
+{
 
 
 #	ifdef	__GNUC__
@@ -118,14 +119,14 @@ namespace BALL {
 		template <class U>
 		static bool isKindOf(const U&  u)
 		{
-			return ( 0 != dynamic_cast<T*>(const_cast<U*>(&u)) );
+			return (0 != dynamic_cast<const T*>(&u));
 		}
 
 		///
 		template <class U>
 		static T* castTo(const U& u)
 		{
-			return dynamic_cast<T*>(const_cast<U*>(&u));
+			return const_cast<T*>(dynamic_cast<const T*>(&u));
 		}
 
 		///
