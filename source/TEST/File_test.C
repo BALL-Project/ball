@@ -1,4 +1,4 @@
-// $Id: File_test.C,v 1.9 2000/10/19 20:00:45 amoll Exp $
+// $Id: File_test.C,v 1.10 2000/10/20 15:00:11 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 #include <sys/stat.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: File_test.C,v 1.9 2000/10/19 20:00:45 amoll Exp $")
+START_TEST(class_name, "$Id: File_test.C,v 1.10 2000/10/20 15:00:11 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -43,7 +43,8 @@ CHECK(File(const String& name, OpenMode open_mode = File::IN))
 	TEST_EXCEPTION(Exception::FileNotFound, File f2("sdffsdf"))
 RESULT
 
-File f("data/File_test.txt");
+			File  file("data/File_test.txt");
+const File& f  = file;
 
 CHECK(File(const File& file))
 	File f1(f);
@@ -54,36 +55,36 @@ CHECK(File(const File& file))
 RESULT
 
 CHECK(close())
-	TEST_EQUAL(f.getSize(), 100)
-	f.close();
+	TEST_EQUAL(file.getSize(), 100)
+	file.close();
 	TEST_EQUAL(f.isClosed(), true)
-	TEST_EQUAL(f.getSize(), 100)
+	TEST_EQUAL(file.getSize(), 100)
 RESULT
 
 CHECK(open(const String& name, OpenMode open_mode = File::IN))
-	f.open("data/File_test.txt");
+	file.open("data/File_test.txt");
 	TEST_EQUAL(f.isOpen(), true)
-	TEST_EQUAL(f.getSize(), 100)
+	TEST_EQUAL(file.getSize(), 100)
 
 	File f1(f);
 	TEST_EXCEPTION(Exception::FileNotFound, f1.open(""))
 RESULT
 
 CHECK(reopen())
-	f.close();
-	f.reopen();
-	f.reopen();
+	file.close();
+	file.reopen();
+	file.reopen();
 	TEST_EQUAL(f.isOpen(), true)
-	TEST_EQUAL(f.getSize(), 100)
+	TEST_EQUAL(file.getSize(), 100)
 RESULT
 
 CHECK(getName())
 	TEST_EQUAL(f.getName(), "data/File_test.txt")
-	TEST_EQUAL(f.getSize(), 100)
+	TEST_EQUAL(file.getSize(), 100)
 RESULT
 
 CHECK(getSize())
-	TEST_EQUAL(f.getSize(), 100)
+	TEST_EQUAL(file.getSize(), 100)
 RESULT
 
 CHECK(static getSize(String filename))
@@ -93,58 +94,51 @@ RESULT
 
 CHECK(int getOpenMode() const)
 	TEST_EQUAL(f.getOpenMode(), File::IN)
-	TEST_EQUAL(f.getSize(), 100)
+	TEST_EQUAL(file.getSize(), 100)
 RESULT
 
 CHECK(static Type getType(String name, bool trace_link))
 	TEST_EQUAL(f.getType("data/File_test.txt", false), 4)
-	TEST_EQUAL(f.getSize(), 100)
+	TEST_EQUAL(file.getSize(), 100)
 RESULT
 
 CHECK(Type getType(bool trace_link) const;)
 	TEST_EQUAL(f.getType(false), 4)
 	TEST_EQUAL(f.getType(true), 4)
-	TEST_EQUAL(f.getSize(), 100)
-RESULT
-
-CHECK(std::fstream& getFileStream();)
-//	fstream fs;
-//	FILE file;
-//	file = f.getFileStream(); //!!!
-	TEST_EQUAL(f.getSize(), 100)
+	TEST_EQUAL(file.getSize(), 100)
 RESULT
 
 CHECK(copy(String source_name, String destination_name, Size buffer_size = 4096))
-	TEST_EQUAL(f.copy("data/File_test.txt", "data/File_test.txt"), false)
-	TEST_EQUAL(f.copy("", "data/File_test.txt"), false)
-	TEST_EQUAL(f.copy("data/File_test.txt", ""), false)
-	TEST_EQUAL(f.copy("", ""), false)
-	TEST_EQUAL(f.copy("ZZZZZZZZZZ", "XXX"), false)
-	TEST_EQUAL(f.copy("data/File_test.txt", "XXX"), true)
-	TEST_EQUAL(f.copy("data/File_test.txt", "XXX"), true)
-	TEST_EQUAL(f.getSize(), 100)
+	TEST_EQUAL(file.copy("data/File_test.txt", "data/File_test.txt"), false)
+	TEST_EQUAL(file.copy("", "data/File_test.txt"), false)
+	TEST_EQUAL(file.copy("data/File_test.txt", ""), false)
+	TEST_EQUAL(file.copy("", ""), false)
+	TEST_EXCEPTION(Exception::FileNotFound, file.copy("ZZZZZZZZZZ", "XXX"))
+	TEST_EQUAL(file.copy("data/File_test.txt", "XXX"), true)
+	TEST_EQUAL(file.copy("data/File_test.txt", "XXX"), true)
+	TEST_EQUAL(file.getSize(), 100)
 	TEST_EQUAL(f.getSize("XXX"), 100)
 	f.remove("XXX");
 
-	TEST_EQUAL(f.copy("", "X"), false)
-	TEST_EQUAL(f.copy("data/File_test.txt", ""), false)
+	TEST_EQUAL(file.copy("", "X"), false)
+	TEST_EQUAL(file.copy("data/File_test.txt", ""), false)
 RESULT
 
 CHECK(copyTo(const String& destination_name, Size buffer_size = 4096))
-	TEST_EQUAL(f.copyTo("data/File_test.txt"), false)
-	TEST_EQUAL(f.copyTo(""), false)
-	TEST_EQUAL(f.copyTo("XXX"), true)
-	TEST_EQUAL(f.copyTo("XXX"), true)
-	TEST_EQUAL(f.getSize(), 100)
+	TEST_EQUAL(file.copyTo("data/File_test.txt"), false)
+	TEST_EQUAL(file.copyTo(""), false)
+	TEST_EQUAL(file.copyTo("XXX"), true)
+	TEST_EQUAL(file.copyTo("XXX"), true)
+	TEST_EQUAL(file.getSize(), 100)
 	TEST_EQUAL(f.getSize("XXX"), 100)
 	f.remove("XXX");
 
-	TEST_EQUAL(f.copyTo(""), false)
+	TEST_EQUAL(file.copyTo(""), false)
 RESULT
 
 CHECK(move(const String& source_name, const String& destination_name))
-	TEST_EQUAL(f.copyTo("XXX"), true)
-	TEST_EQUAL(f.copyTo("YYY"), true)
+	TEST_EQUAL(file.copyTo("XXX"), true)
+	TEST_EQUAL(file.copyTo("YYY"), true)
 	TEST_EQUAL(f.move("XXX", "XXX"), false)
 	TEST_EQUAL(f.move("", "XXX"), false)
 	TEST_EQUAL(f.move("XXX", ""), false)
@@ -153,19 +147,21 @@ CHECK(move(const String& source_name, const String& destination_name))
 	TEST_EQUAL(f.isAccessible("XXX"), false)
 	TEST_EQUAL(f.getSize("YYY"), 100)
 
-	f.copyTo("XXX");
+	file.copyTo("XXX");
 	TEST_EQUAL(f.move("XXX", "YYY"), true)
-	TEST_EQUAL(f.getSize(), 100)
+	TEST_EQUAL(file.getSize(), 100)
 
 	TEST_EQUAL(f.move("YYY", ""), false)
 	TEST_EQUAL(f.move("", "XXX"), false)
 
 	f.remove("XXX");
 	f.remove("YYY");
+
+	TEST_EXCEPTION(Exception::FileNotFound, f.move("ZZZZZZZZZZ", "XXX"))
 RESULT
 
 CHECK(moveTo(const String& destination_name))
-	f.copyTo("XXX");
+	file.copyTo("XXX");
 	File f1("XXX");
 	TEST_EQUAL(f1.moveTo("XXX"), false)
 	TEST_EQUAL(f1.moveTo(""), false)
@@ -176,30 +172,34 @@ CHECK(moveTo(const String& destination_name))
 	TEST_EQUAL(f.getSize("YYY"), 100)
 
 	TEST_EQUAL(f1.moveTo(""), false)
+	TEST_EQUAL(f.remove("YYY"), true)
+	TEST_EXCEPTION(Exception::FileNotFound, f1.moveTo("XXX"))
 RESULT
 
 CHECK(remove(String name))
-	f.copyTo("XXX");
+	file.copyTo("XXX");
 	TEST_EQUAL(f.remove("XXX"), true)
-	TEST_EQUAL(f.getSize(), 100)
+	TEST_EQUAL(file.getSize(), 100)
+	TEST_EQUAL(f.remove("XXX"), false)
 RESULT
 
 CHECK(remove())
-	f.copyTo("XXX");
+	file.copyTo("XXX");
 	File f1 = File("XXX");
-	f1.remove();
+	TEST_EQUAL(f1.remove(), true)
+	TEST_EQUAL(f1.remove(), false)
 	TEST_EQUAL(f1.isAccessible(), false)
 RESULT
 
 CHECK(rename(String old_path, String new_path))
-	f.copyTo("XXX");
+	file.copyTo("XXX");
 	File f1("XXX");
 	TEST_EQUAL(f1.rename("XXX", "XXX"), true)
 	TEST_EQUAL(f1.rename("XXX", "YYY"), true)
 	TEST_EQUAL(f1.isAccessible("XXX"), false)
 	TEST_EQUAL(f1.isAccessible("YYY"), true)
 	f1.remove();
-	TEST_EQUAL(f.getSize(), 100)
+	TEST_EQUAL(file.getSize(), 100)
 	f.remove("YYY");
 
 	TEST_EXCEPTION(Exception::FileNotFound, f1.rename("", "XXX"))
@@ -207,7 +207,7 @@ CHECK(rename(String old_path, String new_path))
 RESULT
 
 CHECK(renameTo(const String& new_path))
-	f.copyTo("XXX");
+	file.copyTo("XXX");
 	File f1("XXX");
 	TEST_EQUAL(f1.renameTo("XXX"), true)
 	TEST_EQUAL(f1.isAccessible("XXX"), true)
@@ -218,7 +218,7 @@ CHECK(renameTo(const String& new_path))
 RESULT
 
 CHECK(truncate(String path, Size size = 0))
-	f.copyTo("XXX");
+	file.copyTo("XXX");
 	File f1("XXX");
 	TEST_EQUAL(f1.truncate("XXX", 50), true)
 	TEST_EQUAL(f1.getSize(), 50)
@@ -230,7 +230,7 @@ CHECK(truncate(String path, Size size = 0))
 RESULT
 
 CHECK(truncate(Size size = 0))
-	f.copyTo("XXX");
+	file.copyTo("XXX");
 	File f1("XXX");
 	TEST_EQUAL(f1.truncate(50), true)
 	TEST_EQUAL(f1.getSize(), 50)
@@ -248,23 +248,23 @@ RESULT
 CHECK(operator == (const File& file))
 	File f1(f);
 	TEST_EQUAL(f1 == f, true)	
-	f.copyTo("XXX");
+	file.copyTo("XXX");
 	File f2("XXX");
 	TEST_EQUAL(f2 == f, false)	
-	TEST_EQUAL(f.getSize(), 100)
+	TEST_EQUAL(file.getSize(), 100)
 RESULT
 
 CHECK(operator != (const File& file))
 	File f1(f);
 	TEST_EQUAL(f1 != f, false)	
-	f.copyTo("XXX");
+	file.copyTo("XXX");
 	File f2("XXX");
 	TEST_EQUAL(f2 != f, true)	
-	TEST_EQUAL(f.getSize(), 100)
+	TEST_EQUAL(file.getSize(), 100)
 RESULT
 
 CHECK(isOpen())
-	f.copyTo("XXX");
+	file.copyTo("XXX");
 	File f1("XXX");
 	TEST_EQUAL(f1.isOpen(), true)	
 	f1.close();
@@ -272,7 +272,7 @@ CHECK(isOpen())
 RESULT
 
 CHECK(isClosed())
-	f.copyTo("XXX");
+	file.copyTo("XXX");
 	File f1("XXX");
 	TEST_EQUAL(f1.isClosed(), false)	
 	f1.close();
@@ -287,7 +287,7 @@ RESULT
 
 CHECK(isAccessible())
 	TEST_EQUAL(f.isAccessible(), true)
-	f.copyTo("XXX");
+	file.copyTo("XXX");
 	File f1("XXX");
 	f1.remove();
 	TEST_EQUAL(f1.isAccessible(), false)
