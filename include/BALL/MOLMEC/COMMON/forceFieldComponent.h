@@ -1,4 +1,4 @@
-// $Id: forceFieldComponent.h,v 1.3 2000/02/06 19:46:45 oliver Exp $
+// $Id: forceFieldComponent.h,v 1.4 2000/03/26 12:44:20 oliver Exp $
 // Molecular Mechanics: general force field component class
 
 #ifndef BALL_MOLMEC_FORCEFIELDCOMPONENT_H
@@ -102,7 +102,7 @@ namespace BALL
 
 		/**	Returns the energy of the force field component
 		*/
-		virtual float getEnergy() const;
+		virtual double getEnergy() const;
 
 		/**	Returns the energy of the force field component.
 				The current energy for this force field component is being
@@ -110,7 +110,7 @@ namespace BALL
 				If the component isn't assigned to a ForceField object,
 				zero is returned.
 		*/
-		virtual float	updateEnergy();
+		virtual double	updateEnergy();
 		
 
 		/**	Updates the atomic forces in the force field.
@@ -136,7 +136,7 @@ namespace BALL
 
 		/*_	The energy of the component
 		*/
-		float	energy_;
+		double	energy_;
 
 		//_@}
 

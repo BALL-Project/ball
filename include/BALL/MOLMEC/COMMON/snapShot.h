@@ -1,4 +1,4 @@
-// $Id: snapShot.h,v 1.4 1999/12/28 18:50:38 oliver Exp $
+// $Id: snapShot.h,v 1.5 2000/03/26 12:42:14 oliver Exp $
 // This file contains the definitions of the classes 
 // SnapshotManager and Snapshot. 
 // They can be used to obtain snapshots from an MD simulation or an energy 
@@ -151,12 +151,12 @@ namespace BALL
     /** The potential energy in the system when the snapshot is taken.
         Only contributions from selected atoms are considered. 
     */
-    float potential_energy; 
+    double potential_energy; 
 
     /** The  kinetic energy due to electrostatic interactions. 
         Only contributions from selected atoms are considered. 
     */
-    float kinetic_energy; 
+    double kinetic_energy; 
 
     /** An STL vector with the positions of all atoms 
     */
@@ -394,7 +394,7 @@ namespace BALL
 
     /*_ Calculate the kinetic energy 
     */
-    float calculateKineticEnergy();
+    double calculateKineticEnergy();
 
     //@}
 

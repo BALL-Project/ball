@@ -1,4 +1,4 @@
-// $Id: charmmTorsion.h,v 1.2 2000/02/14 22:43:59 oliver Exp $
+// $Id: charmmTorsion.h,v 1.3 2000/03/26 12:47:34 oliver Exp $
 // Molecular Mechanics: CHARMM force field, proper torsion component
 
 #ifndef BALL_MOLMEC_CHARMM_CHARMMTORSION_H
@@ -109,7 +109,7 @@ namespace BALL
 
 		/**	Calculates and returns the component's energy.
 		*/
-		virtual float updateEnergy();
+		virtual double updateEnergy();
 
 		/**	Calculates and returns the component's forces.
 		*/

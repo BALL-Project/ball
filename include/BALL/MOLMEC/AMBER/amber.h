@@ -1,4 +1,4 @@
-// $Id: amber.h,v 1.6 2000/02/06 19:45:00 oliver Exp $ 
+// $Id: amber.h,v 1.7 2000/03/26 12:45:08 oliver Exp $ 
 // Molecular Mechanics: Amber force field class
 
 #ifndef BALL_MOLMEC_AMBER_AMBER_H
@@ -20,7 +20,9 @@
 namespace BALL 
 {
 
-	/**	Force field class.
+	/**	AMBER force field class.
+			{\bf Definition:}\URL{BALL/MOLMEC/AMBER/amber.h}
+			\\
 	*/
 	class AmberFF 
 		: public ForceField
@@ -43,12 +45,21 @@ namespace BALL
 			static const char* NONBONDED_CUTOFF;
 
 			/**	Van der Waals cutoff
+					
 			*/
 			static const char* VDW_CUTOFF;
+
+			/**	Van der Waals cuton
+			*/
+			static const char* VDW_CUTON;
 
 			/**	Electrostatic cutoff
 			*/
 			static const char* ELECTROSTATIC_CUTOFF;
+
+			/**	Electrostatic cuton
+			*/
+			static const char* ELECTROSTATIC_CUTON;
 
 			/**	1-4 vdw interaction scaling factor.
 			*/
@@ -88,24 +99,37 @@ namespace BALL
 			/**	Default filename for the parameter file
 			*/
 			static const char* FILENAME;
+
 			/**	Non bonded cutoff
 			*/
 			static const float NONBONDED_CUTOFF;
+
 			/**	Van der Waals cutoff
 			*/
 			static const float VDW_CUTOFF;
+
+			/**	Van der Waals cuton
+			*/
+			static const float VDW_CUTON;
+
 			/**	Electrostatic cutoff
 			*/
 			static const float ELECTROSTATIC_CUTOFF;
+
+			/**	Electrostatic cuton
+			*/
+			static const float ELECTROSTATIC_CUTON;
+
 			/**	Electrosstatic scaling factor for 1-4 interaction
 			*/
 			static const float SCALING_ELECTROSTATIC_1_4; 
+
 			/**	Vdw scaling factor for 1-4 interaction
 			*/
 			static const float SCALING_VDW_1_4; 
 
-			/**	use of distance dependent dielectric constant
-                                default = false 
+			/**	Use of distance dependent dielectric constant.
+          default: false 
 			*/
 			static const bool DISTANCE_DEPENDENT_DIELECTRIC; 
 
@@ -178,29 +202,29 @@ namespace BALL
 		//@{
 		/**	Return the bond stretch contribution to the total energy
 		*/
-		float getStretchEnergy() const;
+		double getStretchEnergy() const;
 
 		/**	Return the angle bend contribution to the total energy
 		*/
-		float getBendEnergy() const;
+		double getBendEnergy() const;
 
 		/**	Return the torsion contribution to the total energy.
 				This energy comprises proper and improper torsions.
 		*/
-		float getTorsionEnergy() const;
+		double getTorsionEnergy() const;
 
 		/**	Return the nonbonded contribution to the total energy.
 				This energy comprises Van der Waals energy, hydrogen bond energy, and elesctrostatic energy.
 		*/
-		float getNonbondedEnergy() const;
+		double getNonbondedEnergy() const;
 
 		/**	Return the electrostatic contribution to the total energy.
 		*/
-		float getESEnergy() const;
+		double getESEnergy() const;
 
 		/**	Return the Van der Waals and hydrogen bond contribution to the total energy.
 		*/
-		float getVdWEnergy() const;
+		double getVdWEnergy() const;
 
 		/**	Return true, if the parameters have already been initialized
 		*/

@@ -1,4 +1,4 @@
-// $Id: amber.C,v 1.13 2000/02/15 18:13:59 oliver Exp $
+// $Id: amber.C,v 1.14 2000/03/26 12:51:47 oliver Exp $
 // Molecular Mechanics: Amber force field class
 
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -16,7 +16,9 @@ namespace BALL
 	const char* AmberFF::Option::FILENAME = "filename";
 	const char* AmberFF::Option::NONBONDED_CUTOFF = "nonbonded_cutoff";
 	const char* AmberFF::Option::VDW_CUTOFF = "vdw_cutoff";
+	const char* AmberFF::Option::VDW_CUTON = "vdw_cuton";
 	const char* AmberFF::Option::ELECTROSTATIC_CUTOFF = "electrostatic_cutoff";
+	const char* AmberFF::Option::ELECTROSTATIC_CUTON = "electrostatic_cuton";
 	const char* AmberFF::Option::SCALING_VDW_1_4 = "SCAB";
 	const char* AmberFF::Option::SCALING_ELECTROSTATIC_1_4 = "SCEE";
 	const char* AmberFF::Option::DISTANCE_DEPENDENT_DIELECTRIC = "DDDC"; 
@@ -29,7 +31,9 @@ namespace BALL
 	const char* AmberFF::Default::FILENAME = "Amber/amber96.ini";
 	const float AmberFF::Default::NONBONDED_CUTOFF = 20.0;
 	const float AmberFF::Default::VDW_CUTOFF = 15.0;
+	const float AmberFF::Default::VDW_CUTON = 13.0;
 	const float AmberFF::Default::ELECTROSTATIC_CUTOFF = 15.0;
+	const float AmberFF::Default::ELECTROSTATIC_CUTON = 13.0;
 	const float AmberFF::Default::SCALING_ELECTROSTATIC_1_4 = 2.0;
 	const float AmberFF::Default::SCALING_VDW_1_4 = 2.0;
   const bool  AmberFF::Default::DISTANCE_DEPENDENT_DIELECTRIC = false;   
@@ -132,7 +136,9 @@ namespace BALL
 		{
 			filename_ = options[Option::FILENAME];
 			setName("Amber [" + filename_ + "]");
-		} else {
+		} 
+		else 
+		{
 			options[Option::FILENAME] = filename_;
 		}
 
@@ -207,11 +213,15 @@ namespace BALL
 			if (assign_charges && assign_type_names)
 			{
 				templates.assign(*getSystem(), overwrite_type_names, overwrite_charges);
-			} else {
+			} 
+			else 
+			{
 				if (assign_type_names)
 				{
 					templates.assignTypeNames(*getSystem(), overwrite_type_names);
-				} else {
+				} 
+				else 
+				{
 					templates.assignCharges(*getSystem(), overwrite_charges);
 				}
 			}
@@ -226,40 +236,46 @@ namespace BALL
 		return true;
 	}
 
-	float AmberFF::getStretchEnergy() const
+	double AmberFF::getStretchEnergy() const
 	{
 		ForceFieldComponent* component = getComponent("Amber Stretch");
 		if (component != 0)
 		{
 			return component->getEnergy();
-		} else {
+		} 
+		else 
+		{
 			return 0;
 		}
 	}
 
-	float AmberFF::getBendEnergy() const
+	double AmberFF::getBendEnergy() const
 	{
 		ForceFieldComponent* component = getComponent("Amber Bend");
 		if (component != 0)
 		{
 			return component->getEnergy();
-		} else {
+		} 
+		else 
+		{
 			return 0;
 		}
 	}
 
-	float AmberFF::getTorsionEnergy() const
+	double AmberFF::getTorsionEnergy() const
 	{
 		ForceFieldComponent* component = getComponent("Amber Torsion");
 		if (component != 0)
 		{
 			return component->getEnergy();
-		} else {
+		} 
+		else 
+		{
 			return 0;
 		}
 	}
 
-	float AmberFF::getVdWEnergy() const
+	double AmberFF::getVdWEnergy() const
 	{
 		const ForceFieldComponent* component = getComponent("Amber NonBonded");
 		if (component != 0)
@@ -274,7 +290,7 @@ namespace BALL
 		return 0;
 	}
 
-	float AmberFF::getESEnergy() const
+	double AmberFF::getESEnergy() const
 	{
 		const ForceFieldComponent* component = getComponent("Amber NonBonded");
 		if (component != 0)
@@ -289,7 +305,7 @@ namespace BALL
 		return 0;
 	}
 
-	float AmberFF::getNonbondedEnergy() const
+	double AmberFF::getNonbondedEnergy() const
 	{
 		const ForceFieldComponent* component = getComponent("Amber NonBonded");
 		if (component != 0)

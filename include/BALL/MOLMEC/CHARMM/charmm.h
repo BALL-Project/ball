@@ -1,4 +1,4 @@
-// $Id: charmm.h,v 1.1 2000/02/10 15:29:57 oliver Exp $
+// $Id: charmm.h,v 1.2 2000/03/26 12:47:33 oliver Exp $
 // Molecular Mechanics: CHARMM force field class
 
 #ifndef BALL_MOLMEC_CHARMM_CHARMM_H
@@ -53,6 +53,18 @@ namespace BALL
 			/**	Electrostatic cutoff
 			*/
 			static const char* ELECTROSTATIC_CUTOFF;
+
+			/**	Electrostatic cuton
+			*/
+			static const char* ELECTROSTATIC_CUTON;
+
+			/**	Solvation cutoff
+			*/
+			static const char* SOLVATION_CUTOFF;
+
+			/**	Solvation cuton
+			*/
+			static const char* SOLVATION_CUTON;
 
 			/**	1-4 vdw interaction scaling factor.
 			*/
@@ -111,14 +123,27 @@ namespace BALL
 			/**	Electrostatic cutoff
 			*/
 			static const float ELECTROSTATIC_CUTOFF;
+
+			/**	Electrostatic cuton
+			*/
+			static const float ELECTROSTATIC_CUTON;
+
+			/**	Solvation cutoff
+			*/
+			static const float SOLVATION_CUTOFF;
+
+			/**	Solvation cuton
+			*/
+			static const float SOLVATION_CUTON;
+
 			/**	Electrosstatic scaling factor for 1-4 interaction
 			*/
+			static const float SCALING_ELECTROSTATIC_1_4; 
 
 			/**	Use EEF1 solvation method.
 			*/
 			static const bool USE_EEF1;
 
-			static const float SCALING_ELECTROSTATIC_1_4; 
 			/**	Vdw scaling factor for 1-4 interaction
 			*/
 			static const float SCALING_VDW_1_4; 
@@ -197,41 +222,41 @@ namespace BALL
 		//@{
 		/**	Return the bond stretch contribution to the total energy
 		*/
-		float getStretchEnergy() const;
+		double getStretchEnergy() const;
 
 		/**	Return the angle bend contribution to the total energy
 		*/
-		float getBendEnergy() const;
+		double getBendEnergy() const;
 
 		/**	Return the torsion contribution to the total energy.
 				This energy comprises proper and improper torsions.
 		*/
-		float getTorsionEnergy() const;
+		double getTorsionEnergy() const;
 
 		/**	Return the improper torsion contribution to the total energy.
 		*/
-		float getImproperTorsionEnergy() const;
+		double getImproperTorsionEnergy() const;
 
 		/**	Return the proper torsion contribution to the total energy.
 		*/
-		float getProperTorsionEnergy() const;
+		double getProperTorsionEnergy() const;
 
 		/**	Return the nonbonded contribution to the total energy.
 				This energy comprises Van der Waals energy, hydrogen bond energy, and elesctrostatic energy.
 		*/
-		float getNonbondedEnergy() const;
+		double getNonbondedEnergy() const;
 
 		/**	Return the electrostatic contribution to the total energy.
 		*/
-		float getESEnergy() const;
+		double getESEnergy() const;
 
 		/**	Return the Van der Waals and hydrogen bond contribution to the total energy.
 		*/
-		float getVdWEnergy() const;
+		double getVdWEnergy() const;
 
 		/**	Return the solvation contribution to the total energy.
 		*/
-		float getSolvationEnergy() const;
+		double getSolvationEnergy() const;
 
 		/**	Return true, if the parameters have already been initialized
 		*/

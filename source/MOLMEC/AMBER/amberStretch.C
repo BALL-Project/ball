@@ -1,4 +1,4 @@
-// $Id: amberStretch.C,v 1.7 2000/02/14 22:44:05 oliver Exp $
+// $Id: amberStretch.C,v 1.8 2000/03/26 12:52:25 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberStretch.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -169,7 +169,7 @@ namespace BALL
 	}
 
 	// calculates the current energy of this component
-	float AmberStretch::updateEnergy()
+	double AmberStretch::updateEnergy()
 	{
 
 		// initial energy is zero
@@ -182,7 +182,7 @@ namespace BALL
 			   (getForceField()->getUseSelection() == true && 
 			   (stretch_[i].atom1->isSelected() || stretch_[i].atom2->isSelected())))
 			{
-				float distance = (stretch_[i].atom1->getPosition()).getDistance(stretch_[i].atom2->getPosition());
+				double distance = (stretch_[i].atom1->getPosition()).getDistance(stretch_[i].atom2->getPosition());
 				energy_ += stretch_[i].values.k * (distance - stretch_[i].values.r0) * (distance - stretch_[i].values.r0);
 
 			}
@@ -204,7 +204,7 @@ namespace BALL
 			{
 
 				Vector3 direction(stretch_[i].atom1->getPosition() - stretch_[i].atom2->getPosition());
-				float distance = direction.getLength(); 
+				double distance = direction.getLength(); 
 
 				if (distance != 0) 
 				{

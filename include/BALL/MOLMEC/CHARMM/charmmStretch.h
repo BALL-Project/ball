@@ -1,4 +1,4 @@
-// $Id: charmmStretch.h,v 1.2 2000/02/14 22:43:58 oliver Exp $ 
+// $Id: charmmStretch.h,v 1.3 2000/03/26 12:47:34 oliver Exp $ 
 // Molecular Mechanics: Charmm force field, bond stretch component
 
 #ifndef BALL_MOLMEC_CHARMM_CHARMMSTRETCH_H
@@ -68,7 +68,7 @@ namespace BALL
 
 		/**	Calculates and returns the component's energy.
 		*/
-		virtual float updateEnergy();
+		virtual double updateEnergy();
 
 		/**	Calculates and returns the component's forces.
 		*/
