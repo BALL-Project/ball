@@ -2,7 +2,7 @@ import string, sys, os
 
 # global variables
 config = {}
-logfiles = ["./BALL/source/TEST/test.log", "./BALL/source/BENCHMARKS/bench.log", "./BALL/source/config.log", "./BALL/source/config.status"]
+logfiles = ["./BALL/source/TEST/*.log", "./BALL/source/BENCHMARKS/bench.log", "./BALL/source/config.log", "./BALL/source/config.status"]
 
 # this function is responsible for transferring file "file"
 # as user "user" to the host "host", path "path"
