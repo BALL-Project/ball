@@ -1,4 +1,4 @@
-// $Id: splayTree.h,v 1.4 2000/08/22 17:03:31 amoll Exp $
+// $Id: splayTree.h,v 1.5 2000/08/28 16:00:10 oliver Exp $
 
 #ifndef BALL_DATATYPE_SPLAYTREE_H
 #define BALL_DATATYPE_SPLAYTREE_H
@@ -199,7 +199,7 @@ namespace BALL
 		for (const TBSTreeItem<DataType>* item = tree_it.forward();
 				 item != 0; item = tree_it.forward())
 		{
-			insert(item->data_, true);
+			insert(item->getData(), true);
 		}
 	}
 
