@@ -1,4 +1,4 @@
-// $Id: directory.iC,v 1.8 2000/12/17 09:38:44 amoll Exp $
+// $Id: directory.iC,v 1.9 2000/12/17 09:52:51 amoll Exp $
 BALL_INLINE
 void Directory::synchronize_()
 {
@@ -32,13 +32,6 @@ void Directory::destroy()
 	clear();
 }
 
-BALL_INLINE 
-Directory& Directory::operator = (const Directory& directory)
-{
-  set(directory);
-  return *this;
-}
-
 BALL_INLINE
 void Directory::set(const Directory& directory)
 {
@@ -46,6 +39,13 @@ void Directory::set(const Directory& directory)
   dirent_ = 0;
   directory_path_ = directory.directory_path_;
   backup_path_ = "";
+}
+
+BALL_INLINE 
+Directory& Directory::operator = (const Directory& directory)
+{
+  set(directory);
+  return *this;
 }
 
 BALL_INLINE 
