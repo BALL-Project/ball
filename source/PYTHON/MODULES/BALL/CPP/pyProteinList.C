@@ -1,8 +1,8 @@
-// $Id: pyProteinList.C,v 1.1 2000/07/18 21:18:51 oliver Exp $
+// $Id: pyProteinList.C,v 1.2 2000/08/30 19:58:39 oliver Exp $
 
 #include <BALL/PYTHON/pyProteinList.h>
 #include <BALL/KERNEL/protein.h>
-#include <BALL/KERNEL/baseFragment.h>
+#include <BALL/KERNEL/atomContainer.h>
 
 namespace BALL
 {
@@ -21,18 +21,18 @@ namespace BALL
 	{
 	}
 
-	PyProteinList::PyProteinList(const BaseFragment& fragment, bool selected_only )
+	PyProteinList::PyProteinList(const AtomContainer& fragment, bool selected_only )
 	{
 		set(fragment, selected_only);
 	}
 
-	void PyProteinList::set(const BaseFragment& fragment, bool selected_only)
+	void PyProteinList::set(const AtomContainer& fragment, bool selected_only)
 	{
 		// clear the old contents of the list
 		clear();
 
 		// iterate over all proteins
-		BaseFragmentConstIterator it = fragment.beginBaseFragment();
+		AtomContainerConstIterator it = fragment.beginAtomContainer();
 
     for (; +it; ++it)
     {

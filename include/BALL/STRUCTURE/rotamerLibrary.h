@@ -1,4 +1,4 @@
-// $Id: rotamerLibrary.h,v 1.9 1999/09/17 13:47:01 oliver Exp $
+// $Id: rotamerLibrary.h,v 1.10 2000/08/30 19:58:26 oliver Exp $
 
 #ifndef BALL_STRUCTURE_ROTAMERLIBRARY_H
 #define BALL_STRUCTURE_ROTAMERLIBRARY_H
@@ -85,7 +85,7 @@ namespace BALL
 		/**	@name Constructors and Destructors
 		*/
 		//@{
-		BALL_CREATE(ResidueRotamerSet)
+		BALL_CREATE_DEEP(ResidueRotamerSet)
 
 		/**	Default constructor
 		*/
@@ -252,7 +252,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE(RotamerLibrary)
+		BALL_CREATE_DEEP(RotamerLibrary)
 
 		/**	@name	Constructors and Destructors
 		*/

@@ -1,4 +1,4 @@
-// $Id: molecularInformation.C,v 1.2 2000/07/18 08:29:58 oliver Exp $
+// $Id: molecularInformation.C,v 1.3 2000/08/30 19:58:34 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/molecularInformation.h>
 
@@ -224,8 +224,8 @@ namespace BALL
 			  case TYPE__FRAGMENT:
 			  case TYPE__SECONDARY_STRUCTURE:
 				{
-					BaseFragment* base_fragment = RTTI::castTo<BaseFragment>(composite);
-					temp = base_fragment->getName();
+					AtomContainer* atom_container = RTTI::castTo<AtomContainer>(composite);
+					temp = atom_container->getName();
 				}
 				break;
 

@@ -1,4 +1,4 @@
-// $Id: molecularFilter.C,v 1.1 2000/05/16 20:53:58 hekl Exp $
+// $Id: molecularFilter.C,v 1.2 2000/08/30 19:58:33 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/molecularFilter.h>
 
@@ -29,7 +29,7 @@ namespace BALL
 		{
 			bool result = false;
 
-			if (RTTI::isKindOf<BaseFragment>(composite))
+			if (RTTI::isKindOf<AtomContainer>(composite))
 			{
 				result = true;
 			}

@@ -1,4 +1,4 @@
-// $Id: charmmImproperTorsion.h,v 1.4 2000/06/30 05:53:20 oliver Exp $
+// $Id: charmmImproperTorsion.h,v 1.5 2000/08/30 19:58:16 oliver Exp $
 // Molecular Mechanics: Charmm force field, bond stretch component
 
 #ifndef BALL_MOLMEC_CHARMM_CHARMMIMPROPERTORSION_H
@@ -48,7 +48,7 @@ namespace BALL
 		/**	@name	Constructors and Destructors	*/
 		//@{
 
-		BALL_CREATE(CharmmImproperTorsion)
+		BALL_CREATE_DEEP(CharmmImproperTorsion)
 
 		/**	Default constructor.
 		*/

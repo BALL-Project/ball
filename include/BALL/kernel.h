@@ -1,4 +1,4 @@
-// $Id: kernel.h,v 1.2 2000/03/28 15:26:18 oliver Exp $
+// $Id: kernel.h,v 1.3 2000/08/30 19:57:56 oliver Exp $
 // BALL collective kernel header file
 // includes all kernel headers
 #ifndef BALL_KERNEL_H
@@ -8,8 +8,8 @@
 #	include <BALL/KERNEL/atom.h>
 #endif
 
-#ifndef BALL_KERNEL_BASEFRAGMENT_H
-#	include <BALL/KERNEL/baseFragment.h>
+#ifndef BALL_KERNEL_ATOMCONTAINER_H
+#	include <BALL/KERNEL/atomContainer.h>
 #endif
 
 #ifndef BALL_KERNEL_BOND_H

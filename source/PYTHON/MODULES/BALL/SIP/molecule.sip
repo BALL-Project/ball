@@ -1,7 +1,7 @@
-// $Id: molecule.sip,v 1.1 2000/07/18 21:27:47 oliver Exp $
+// $Id: molecule.sip,v 1.2 2000/08/30 19:59:10 oliver Exp $
 
 class Molecule
-  : BaseFragment
+  : AtomContainer
 {
 %HeaderCode
 	#include <BALL/KERNEL/molecule.h>
@@ -28,15 +28,15 @@ class Molecule
   void insertBefore(Atom&, Composite&);
   void insertAfter(Atom&, Composite&);
   bool remove(Atom&);
-  void prepend(BaseFragment&);
-  void append(BaseFragment&);
-  void insert(BaseFragment&);
-  void insertBefore(BaseFragment&, Composite&);
-  void insertAfter(BaseFragment&, Composite&);
-  void spliceBefore(BaseFragment&);
-  void spliceAfter(BaseFragment&);
-  void splice(BaseFragment&);
-  bool remove(BaseFragment&);
+  void prepend(AtomContainer&);
+  void append(AtomContainer&);
+  void insert(AtomContainer&);
+  void insertBefore(AtomContainer&, Composite&);
+  void insertAfter(AtomContainer&, Composite&);
+  void spliceBefore(AtomContainer&);
+  void spliceAfter(AtomContainer&);
+  void splice(AtomContainer&);
+  bool remove(AtomContainer&);
   virtual bool isValid() const;
 	//  virtual void dump(ostream& s = cout, unsigned long depth = 0) const;
 	//  virtual void read(istream& s);

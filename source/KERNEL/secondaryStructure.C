@@ -1,4 +1,4 @@
-// $Id: secondaryStructure.C,v 1.5 2000/04/27 15:09:35 amoll Exp $
+// $Id: secondaryStructure.C,v 1.6 2000/08/30 19:58:33 oliver Exp $
 
 #include <BALL/KERNEL/secondaryStructure.h>
 
@@ -12,17 +12,17 @@ namespace BALL
 {
 
 	SecondaryStructure::SecondaryStructure()
-		:	BaseFragment()
+		:	AtomContainer()
 	{
 	}
 		
 	SecondaryStructure::SecondaryStructure(const SecondaryStructure& secondary_structure, bool deep)
-		:	BaseFragment(secondary_structure, deep)
+		:	AtomContainer(secondary_structure, deep)
 	{
 	}
 		
 	SecondaryStructure::SecondaryStructure(const String& name)
-		:	BaseFragment(name)
+		:	AtomContainer(name)
 	{
 	}
 
@@ -33,31 +33,31 @@ namespace BALL
 
 	void SecondaryStructure::clear()
 	{
-		BaseFragment::clear();
+		AtomContainer::clear();
 	}
 		
 	void SecondaryStructure::destroy()
 	{
-		BaseFragment::destroy();
+		AtomContainer::destroy();
 	}
 		
   void SecondaryStructure::persistentWrite(PersistenceManager& pm, const char* name) const
   {
     pm.writeObjectHeader(this, name);
-      BaseFragment::persistentWrite(pm);
+      AtomContainer::persistentWrite(pm);
     pm.writeObjectTrailer(name);
 	}
 
   void SecondaryStructure::persistentRead(PersistenceManager& pm)
   {
-    pm.checkObjectHeader(RTTI::getStreamName<BaseFragment>());
-			BaseFragment::persistentRead(pm);
+    pm.checkObjectHeader(RTTI::getStreamName<AtomContainer>());
+			AtomContainer::persistentRead(pm);
     pm.checkObjectTrailer(0);
 	}
  
 	void SecondaryStructure::set(const SecondaryStructure& secondary_structure, bool deep)
 	{
-		BaseFragment::set(secondary_structure, deep);
+		AtomContainer::set(secondary_structure, deep);
 	}
 			
 	SecondaryStructure& SecondaryStructure::operator =(const SecondaryStructure& secondary_structure)
@@ -74,7 +74,7 @@ namespace BALL
 			
 	void SecondaryStructure::swap(SecondaryStructure& secondary_structure)
 	{
-		BaseFragment::swap(secondary_structure);
+		AtomContainer::swap(secondary_structure);
 	}
 
 	Protein* SecondaryStructure::getProtein()
@@ -197,59 +197,59 @@ namespace BALL
 
 	void SecondaryStructure::prepend(Residue &residue)
 	{
-		BaseFragment::prepend(residue);
+		AtomContainer::prepend(residue);
 	}
 
 	void SecondaryStructure::append(Residue &residue)
 	{
-		BaseFragment::append(residue);
+		AtomContainer::append(residue);
 	}
 
 	void SecondaryStructure::insert(Residue &residue)
 	{
-		BaseFragment::insert(residue);
+		AtomContainer::insert(residue);
 	}
 
 	void SecondaryStructure::insertBefore(Residue& residue, Composite& before)
 	{
-		BaseFragment::insertBefore(residue, before);
+		AtomContainer::insertBefore(residue, before);
 	}
 
 	void SecondaryStructure::insertAfter(Residue& residue, Composite& after)
 	{
-		BaseFragment::insertAfter(residue, after);
+		AtomContainer::insertAfter(residue, after);
 	}
 
 	bool SecondaryStructure::remove(Residue& residue)
 	{
-		return BaseFragment::remove(residue);
+		return AtomContainer::remove(residue);
 	}
 
 	void SecondaryStructure::spliceBefore(SecondaryStructure& secondary_structure)
 	{
-		BaseFragment::spliceBefore(secondary_structure);
+		AtomContainer::spliceBefore(secondary_structure);
 	}
 
 	void SecondaryStructure::spliceAfter(SecondaryStructure& secondary_structure)
 	{
-		BaseFragment::spliceAfter(secondary_structure);
+		AtomContainer::spliceAfter(secondary_structure);
 	}
 
 	void SecondaryStructure::splice(SecondaryStructure& secondary_structure)
 	{
-		BaseFragment::splice(secondary_structure);
+		AtomContainer::splice(secondary_structure);
 	}
 
 	bool SecondaryStructure::isValid() const
 	{ 
-		return BaseFragment::isValid();
+		return AtomContainer::isValid();
 	}
 
 	void SecondaryStructure::dump(ostream& s, Size depth) const
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 		
-		BaseFragment::dump(s, depth);
+		AtomContainer::dump(s, depth);
 		// just to avoid these damned compiler warnings
 		// (dump_indent_depth_ was declared but never referenced)
 		if (dump_indent_depth_ == 0) ;

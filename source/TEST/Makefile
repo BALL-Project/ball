@@ -6,13 +6,13 @@ EXECUTABLES = \
 	AnalyticalSES_test\
 	Angle_test\
 	Atom_test\
+	AtomContainer_test\
 	AtomicContactEnergy_test\
 	AtomVector_test\
 	AutoDeleteable_test\
 	BinarySearchTree_test\
 	BitVector_test\
 	Bond_test\
-	BaseFragment_test\
 	Box3_test\
 	Chain_test\
 	CharmmFF_test\

@@ -1,8 +1,8 @@
-// $Id: pySecondaryStructureList.C,v 1.1 2000/07/18 21:18:54 oliver Exp $
+// $Id: pySecondaryStructureList.C,v 1.2 2000/08/30 19:58:39 oliver Exp $
 
 #include <BALL/PYTHON/pySecondaryStructureList.h>
 #include <BALL/KERNEL/secondaryStructure.h>
-#include <BALL/KERNEL/baseFragment.h>
+#include <BALL/KERNEL/atomContainer.h>
 
 namespace BALL
 {
@@ -21,18 +21,18 @@ namespace BALL
 	{
 	}
 
-	PySecondaryStructureList::PySecondaryStructureList(const BaseFragment& fragment, bool selected_only )
+	PySecondaryStructureList::PySecondaryStructureList(const AtomContainer& fragment, bool selected_only )
 	{
 		set(fragment, selected_only);
 	}
 
-	void PySecondaryStructureList::set(const BaseFragment& fragment, bool selected_only)
+	void PySecondaryStructureList::set(const AtomContainer& fragment, bool selected_only)
 	{
 		// clear the old contents of the list
 		clear();
 
 		// iterate over all secondary structures
-		BaseFragmentConstIterator it = fragment.beginBaseFragment();
+		AtomContainerConstIterator it = fragment.beginAtomContainer();
 
     for (; +it; ++it)
     {

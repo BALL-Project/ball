@@ -1,4 +1,4 @@
-// $Id: sphere3.h,v 1.19 2000/05/05 17:39:06 amoll Exp $
+// $Id: sphere3.h,v 1.20 2000/08/30 19:58:14 oliver Exp $
 
 #ifndef BALL_MATHS_SPHERE3_H
 #define BALL_MATHS_SPHERE3_H
@@ -34,7 +34,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE_NODEEP(TSphere3)
+		BALL_CREATE(TSphere3)
 
 		/**	@name	Constructors and Destructors
 		*/

@@ -1,4 +1,4 @@
-// $Id: geometricConvertor.C,v 1.1 2000/06/04 17:51:15 hekl Exp $
+// $Id: geometricConvertor.C,v 1.2 2000/08/30 19:58:34 oliver Exp $
 
 #include <BALL/MOLVIEW/KERNEL/geometricConvertor.h>
 
@@ -34,8 +34,8 @@ namespace BALL
 					
 					for (; it != geometric_selection->getSelection().end(); ++it)
 					{
-						Atom* atom = (**it).getAncestor(Atom());
-						BaseFragment* fragment = (**it).getAncestor(BaseFragment());
+						Atom* atom = (**it).getAncestor(RTTI::getDefault<Atom>());
+						AtomContainer* fragment = (**it).getAncestor(RTTI::getDefault<AtomContainer>());
 
 						if (atom != 0)
 						{

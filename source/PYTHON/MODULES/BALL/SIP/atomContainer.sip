@@ -1,11 +1,11 @@
-// $Id: baseFragment.sip,v 1.3 2000/08/28 15:48:08 oliver Exp $
+// $Id: atomContainer.sip,v 1.1 2000/08/30 19:59:07 oliver Exp $
 
-class BaseFragment
+class AtomContainer
   : Composite, 
 		PropertyManager
 {
 %HeaderCode
-	#include <BALL/KERNEL/baseFragment.h>
+	#include <BALL/KERNEL/atomContainer.h>
 	using namespace BALL;
 %End
 
@@ -14,32 +14,32 @@ class BaseFragment
   {
     NUMBER_OF_PROPERTIES = 0
   };
-  BaseFragment();
-  BaseFragment(const BaseFragment&, bool = true);
-  BaseFragment(const String&);
-	~BaseFragment();
+  AtomContainer();
+  AtomContainer(const AtomContainer&, bool = true);
+  AtomContainer(const String&);
+	~AtomContainer();
   virtual void clear();
   virtual void destroy();
 	//  virtual void persistentWrite(PersistenceManager& pm, const char* = 0) const;
 	//  virtual void persistentRead(PersistenceManager& pm);
-  void set(const BaseFragment&, bool = true);
-	//  BaseFragment& operator = (const BaseFragment&);
-  void get(BaseFragment&, bool = true) const;
-  void swap(BaseFragment&);
+  void set(const AtomContainer&, bool = true);
+	//  AtomContainer& operator = (const AtomContainer&);
+  void get(AtomContainer&, bool = true) const;
+  void swap(AtomContainer&);
   void setName(const String&);
   String& getName();
   const String& getName() const;
   Molecule* getMolecule();
   const Molecule* getMolecule() const;
-  BaseFragment* getSuperBaseFragment();
-  const BaseFragment* getSuperBaseFragment() const;
-  BaseFragment* getBaseFragment(Position);
-  const BaseFragment* getBaseFragment(Position) const;
+  AtomContainer* getSuperAtomContainer();
+  const AtomContainer* getSuperAtomContainer() const;
+  AtomContainer* getAtomContainer(Position);
+  const AtomContainer* getAtomContainer(Position) const;
   Atom* getAtom(Position);
   const Atom* getAtom(Position) const;
   Atom* getAtom(const String&);
   const Atom* getAtom(const String&) const;
-  Size countBaseFragments() const;
+  Size countAtomContainers() const;
   Size countAtoms() const;
   Size countBonds() const;
   Size countInterBonds() const;
@@ -50,18 +50,18 @@ class BaseFragment
   void insertBefore(Atom&, Composite&);
   void insertAfter(Atom&, Composite&);
   bool remove(Atom&);
-  void prepend(BaseFragment&);
-  void append(BaseFragment&);
-  void insert(BaseFragment&);
-  void insertBefore(BaseFragment&, Composite&);
-  void insertAfter(BaseFragment&, Composite&);
-  void spliceBefore(BaseFragment&);
-  void spliceAfter(BaseFragment&);
-  void splice(BaseFragment&);
-  bool remove(BaseFragment&);
+  void prepend(AtomContainer&);
+  void append(AtomContainer&);
+  void insert(AtomContainer&);
+  void insertBefore(AtomContainer&, Composite&);
+  void insertAfter(AtomContainer&, Composite&);
+  void spliceBefore(AtomContainer&);
+  void spliceAfter(AtomContainer&);
+  void splice(AtomContainer&);
+  bool remove(AtomContainer&);
   void destroyBonds();
-  bool isSubBaseFragmentOf(const BaseFragment&) const;
-  bool isSuperBaseFragmentOf(const BaseFragment&) const;
+  bool isSubAtomContainerOf(const AtomContainer&) const;
+  bool isSuperAtomContainerOf(const AtomContainer&) const;
   virtual bool isValid() const;
 	//  virtual void dump(ostream& s = cout,unsigned long depth = 0) const;
 	//  virtual void read(istream& s);
@@ -76,11 +76,11 @@ class BaseFragment
 	
 	operator const char* ();
 %MemberCode
-  BaseFragment* ptr;
-  if ((ptr = (BaseFragment*)sipGetCppPtr(sipThis,sipClass_BaseFragment)) == NULL)
+  AtomContainer* ptr;
+  if ((ptr = (AtomContainer*)sipGetCppPtr(sipThis,sipClass_AtomContainer)) == NULL)
     return NULL;
 
-  return PyString_FromString(String(String("BaseFragment ") + ptr->getName() 
+  return PyString_FromString(String(String("AtomContainer ") + ptr->getName() 
 						+ " { " + String(ptr->countAtoms()) + " atoms }").c_str());
 %End
 };

@@ -1,4 +1,4 @@
-// $Id: nucleicAcidIterator.h,v 1.1 2000/05/16 15:19:44 amoll Exp $
+// $Id: nucleicAcidIterator.h,v 1.2 2000/08/30 19:58:09 oliver Exp $
 
 #ifndef BALL_KERNEL_NUCLEICACIDITERATOR_H
 #define BALL_KERNEL_NUCLEICACIDITERATOR_H
@@ -29,7 +29,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE(NucleicAcidIteratorTraits_)
+		BALL_CREATE_DEEP(NucleicAcidIteratorTraits_)
 
 		NucleicAcidIteratorTraits_()
 			:	CompositeIteratorTraits_()

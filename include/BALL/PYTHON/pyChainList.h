@@ -1,4 +1,4 @@
-// $Id: pyChainList.h,v 1.1 2000/06/27 07:44:09 oliver Exp $
+// $Id: pyChainList.h,v 1.2 2000/08/30 19:58:23 oliver Exp $
 
 #ifndef BALL_PYTHON_PYCHAINLIST_H
 #define BALL_PYTHON_PYCHAINLIST_H
@@ -14,7 +14,7 @@
 namespace BALL 
 {
 	class Chain;
-	class BaseFragment;
+	class AtomContainer;
 	
 	/**
 	*/
@@ -23,7 +23,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE_NODEEP(PyChainList)
+		BALL_CREATE(PyChainList)
 
 		/**	@name	Type Definitions
 		*/
@@ -62,11 +62,11 @@ namespace BALL
 		*/
 		PyChainList(const PyChainList& new_list);
 			
-		/**	Construct from a BaseFragment
+		/**	Construct from a AtomContainer
 				This constructor creates an PyChainList object from
-				all atoms of a \Ref{BaseFragment} object.
+				all atoms of a \Ref{AtomContainer} object.
 		*/
-		PyChainList(const BaseFragment& fragment, bool selected_only = false);
+		PyChainList(const AtomContainer& fragment, bool selected_only = false);
 
 		/**	Destructor
 		*/
@@ -78,7 +78,7 @@ namespace BALL
 		//@{
 		/**
 		*/
-		void set(const BaseFragment& fragment, bool selected_only = false);
+		void set(const AtomContainer& fragment, bool selected_only = false);
 		//@}
 	};
 

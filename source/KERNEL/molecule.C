@@ -1,4 +1,4 @@
-// $Id: molecule.C,v 1.5 2000/04/17 13:59:02 amoll Exp $
+// $Id: molecule.C,v 1.6 2000/08/30 19:58:33 oliver Exp $
 
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/system.h>
@@ -9,17 +9,17 @@ namespace BALL
 {
 
 	Molecule::Molecule()
-		:	BaseFragment()
+		:	AtomContainer()
 	{
 	}
 
 	Molecule::Molecule(const Molecule& molecule,bool deep)
-		: BaseFragment(molecule, deep)
+		: AtomContainer(molecule, deep)
 	{
 	}
 		
 	Molecule::Molecule(const String& name)
-		: BaseFragment(name)
+		: AtomContainer(name)
 	{
 	}
 
@@ -31,20 +31,20 @@ namespace BALL
 	void Molecule::persistentWrite(PersistenceManager& pm, const char* name) const
 	{
 		pm.writeObjectHeader(this, name);
-			BaseFragment::persistentWrite(pm);
+			AtomContainer::persistentWrite(pm);
 		pm.writeObjectTrailer(name);
 	}
 
 	void Molecule::persistentRead(PersistenceManager& pm)
 	{
-		pm.checkObjectHeader(RTTI::getStreamName<BaseFragment>());
-			BaseFragment::persistentRead(pm);
+		pm.checkObjectHeader(RTTI::getStreamName<AtomContainer>());
+			AtomContainer::persistentRead(pm);
 		pm.checkObjectTrailer(0);
 	}
 
 	void Molecule::set(const Molecule& molecule, bool deep)
 	{
-		BaseFragment::set(molecule, deep);
+		AtomContainer::set(molecule, deep);
 	}
 			
 	Molecule& Molecule::operator =(const Molecule& molecule)
@@ -61,7 +61,7 @@ namespace BALL
 			
 	void Molecule::swap(Molecule& molecule)
 	{
-		BaseFragment::swap(molecule);
+		AtomContainer::swap(molecule);
 	}
 		
 	System* Molecule::getSystem()
@@ -85,85 +85,85 @@ namespace BALL
 
 	void Molecule::prepend(Atom& atom)
 	{
-		BaseFragment::prepend(atom);
+		AtomContainer::prepend(atom);
 	}
 
 	void Molecule::append(Atom& atom)
 	{
-		BaseFragment::append(atom);
+		AtomContainer::append(atom);
 	}
 
 	void Molecule::insert(Atom& atom)
 	{
-		BaseFragment::insert(atom);
+		AtomContainer::insert(atom);
 	}
 
 	void Molecule::insertBefore(Atom& atom, Composite& before)
 	{
-		BaseFragment::insertBefore(atom, before);
+		AtomContainer::insertBefore(atom, before);
 	}
 
 	void Molecule::insertAfter(Atom& atom,
 		 Composite& after)
 	{
-		BaseFragment::insertAfter(atom, after);
+		AtomContainer::insertAfter(atom, after);
 	}
 
 	bool Molecule::remove(Atom& atom)
 	{
-		return BaseFragment::remove(atom);
+		return AtomContainer::remove(atom);
 	}
 
-	void Molecule::prepend(BaseFragment& base_fragment)
+	void Molecule::prepend(AtomContainer& atom_container)
 	{
-		BaseFragment::prepend(base_fragment);
+		AtomContainer::prepend(atom_container);
 	}
 
-	void Molecule::append(BaseFragment& base_fragment)
+	void Molecule::append(AtomContainer& atom_container)
 	{
-		BaseFragment::append(base_fragment);
+		AtomContainer::append(atom_container);
 	}
 
-	void Molecule::insert(BaseFragment& base_fragment)
+	void Molecule::insert(AtomContainer& atom_container)
 	{
-		BaseFragment::insert(base_fragment);
+		AtomContainer::insert(atom_container);
 	}
 
-	void Molecule::insertBefore(BaseFragment& base_fragment, Composite& before)
+	void Molecule::insertBefore(AtomContainer& atom_container, Composite& before)
 	{
-		BaseFragment::insertBefore(base_fragment, before);
+		AtomContainer::insertBefore(atom_container, before);
 	}
 
-	void Molecule::insertAfter(BaseFragment& base_fragment, Composite& after)
+	void Molecule::insertAfter(AtomContainer& atom_container, Composite& after)
 	{
-		BaseFragment::insertAfter(base_fragment, after);
+		AtomContainer::insertAfter(atom_container, after);
 	}
 
-	void Molecule::spliceBefore(BaseFragment& base_fragment)
+	void Molecule::spliceBefore(AtomContainer& atom_container)
 	{
-		BaseFragment::spliceBefore(base_fragment);
+		AtomContainer::spliceBefore(atom_container);
 	}
 
-	void Molecule::spliceAfter(BaseFragment& base_fragment)
+	void Molecule::spliceAfter(AtomContainer& atom_container)
 	{
-		BaseFragment::spliceAfter(base_fragment);
+		AtomContainer::spliceAfter(atom_container);
 	}
 
-	void Molecule::splice(BaseFragment& base_fragment)
+	void Molecule::splice(AtomContainer& atom_container)
 	{
-		BaseFragment::splice(base_fragment);
+		AtomContainer::splice(atom_container);
 	}
 
-	bool Molecule::remove(BaseFragment& base_fragment)
+	bool Molecule::remove(AtomContainer& atom_container)
 	{
-		return BaseFragment::remove(base_fragment);
+		return AtomContainer::remove(atom_container);
 	}
 
 	void Molecule::dump(ostream& s, Size depth) const
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 		
-		BaseFragment::dump(s, depth);
+		AtomContainer::dump(s, depth);
 		// just to avoid these damned compiler warnings
 		// (dump_indent_depth_ was declared but never referenced)
 		if (dump_indent_depth_ == 0) ;

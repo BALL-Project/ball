@@ -1,4 +1,4 @@
-// $Id: extractors.h,v 1.5 2000/07/10 14:08:59 oliver Exp $
+// $Id: extractors.h,v 1.6 2000/08/30 19:58:22 oliver Exp $
 
 #ifndef BALL_PYTHON_EXTRACTORS_H
 #define BALL_PYTHON_EXTRACTORS_H
@@ -11,7 +11,7 @@ namespace BALL
 {
 	class PyAtomList;
 	class PyBondList;
-	class PyBaseFragmentList;
+	class PyAtomContainerList;
 	class PyPDBAtomList;
 	class PyResidueList;
 	class PyFragmentList;
@@ -21,7 +21,8 @@ namespace BALL
 	class PyChainList;
 	class PyNucleotideList;
 	class PyNucleicAcidList;
-	class BaseFragment;
+	class AtomContainer;
+	class Atom;
 
 	/**	Extraction functions for external iteration.
 			The following set of functions can by used from python to
@@ -53,39 +54,39 @@ namespace BALL
 	/**	Extract atoms matching an expression.
 			This method extracts all atoms of a kernel data structure into
 			a list that match the \Ref{Expression} {\tt expression}.
-			@param fragment the BaseFragment containing the atoms
+			@param fragment the AtomContainer containing the atoms
 			@param expression the expression that selects the atoms
 	*/
-	PyAtomList* atoms(const BaseFragment& fragment, const String& expression);
+	PyAtomList* atoms(const AtomContainer& fragment, const String& expression);
 			
 	/**	Extract all atoms.
 			This method extracts all atoms of a kernel data structure into
 			a list. 
-			@param fragment the BaseFragment containing the atoms
+			@param fragment the AtomContainer containing the atoms
 	*/
-	PyAtomList* atoms(const BaseFragment& fragment);
+	PyAtomList* atoms(const AtomContainer& fragment);
 
 	/**	Extract PDB atoms matching an expression.
 			This method extracts all PDB atoms of a kernel data structure into
 			a list that match the \Ref{Expression} {\tt expression}.
-			@param fragment the BaseFragment containing the atoms
+			@param fragment the AtomContainer containing the atoms
 			@param expression the expression that selects the atoms
 	*/
-	PyPDBAtomList* PDBAtoms(const BaseFragment& fragment, const String& expression);
+	PyPDBAtomList* PDBAtoms(const AtomContainer& fragment, const String& expression);
 			
 	/**	Extract all PDB atoms.
 			This method extracts all PDB atoms of a kernel data structure into
 			a list. 
-			@param fragment the BaseFragment containing the atoms
+			@param fragment the AtomContainer containing the atoms
 	*/
-	PyPDBAtomList* PDBAtoms(const BaseFragment& fragment);
+	PyPDBAtomList* PDBAtoms(const AtomContainer& fragment);
 
 	/**	Extract all bonds from a kernel data structure.
 			This function extracts all bonds from the atoms contained in the base fragment.
 			If {\tt selected_only} is set to {\bf true}, only bonds are extracted where
 			both atoms are selected.
 	*/
-	PyBondList* bonds(const BaseFragment& fragment, bool selected_only = false);
+	PyBondList* bonds(const AtomContainer& fragment, bool selected_only = false);
 
 	/**	Extract all bonds from an atom.
 			This function returns all bonds of an atom.
@@ -95,39 +96,39 @@ namespace BALL
 
 	/**	Extract all base fragments from a kernel data structure.
 	*/
-	PyBaseFragmentList* baseFragments(const BaseFragment& fragment, bool selected_only = false);
+	PyAtomContainerList* atomContainers(const AtomContainer& fragment, bool selected_only = false);
 
 	/**	Extract all residues from a kernel data structure.
 	*/
-	PyResidueList* residues(const BaseFragment& fragment, bool selected_only = false);
+	PyResidueList* residues(const AtomContainer& fragment, bool selected_only = false);
 
 	/**	Extract all fragments from a kernel data structure.
 	*/
-	PyFragmentList* fragments(const BaseFragment& fragment, bool selected_only = false);
+	PyFragmentList* fragments(const AtomContainer& fragment, bool selected_only = false);
 
 	/**	Extract all molecules from a kernel data structure.
 	*/
-	PyMoleculeList* molecules(const BaseFragment& fragment, bool selected_only = false);
+	PyMoleculeList* molecules(const AtomContainer& fragment, bool selected_only = false);
 
 	/**	Extract all proteins from a kernel data structure.
 	*/
-	PyProteinList* proteins(const BaseFragment& fragment, bool selected_only = false);
+	PyProteinList* proteins(const AtomContainer& fragment, bool selected_only = false);
 
 	/**	Extract all secondary structures from a kernel data structure.
 	*/
-	PySecondaryStructureList* secondaryStructures(const BaseFragment& fragment, bool selected_only = false);
+	PySecondaryStructureList* secondaryStructures(const AtomContainer& fragment, bool selected_only = false);
 
 	/**	Extract all chains from a kernel data structure.
 	*/
-	PyChainList* chains(const BaseFragment& fragment, bool selected_only = false);
+	PyChainList* chains(const AtomContainer& fragment, bool selected_only = false);
 
 	/**	Extract all nucleic acids from a kernel data structure.
 	*/
-	PyNucleicAcidList* nucleicAcids(const BaseFragment& fragment, bool selected_only = false);
+	PyNucleicAcidList* nucleicAcids(const AtomContainer& fragment, bool selected_only = false);
 
 	/**	Extract all nucleotides from a kernel data structure.
 	*/
-	PyNucleotideList* nucleotides(const BaseFragment& fragment, bool selected_only = false);
+	PyNucleotideList* nucleotides(const AtomContainer& fragment, bool selected_only = false);
 
 	//@}
 } // namespace BALL

@@ -1,4 +1,4 @@
-// $Id: NumericalSAS_test.C,v 1.5 2000/06/15 17:24:22 oliver Exp $
+// $Id: NumericalSAS_test.C,v 1.6 2000/08/30 19:59:16 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,14 +8,14 @@
 #include <BALL/DATATYPE/hashMap.h>
 ///////////////////////////
 
-START_TEST(NumericalSAS, "$Id: NumericalSAS_test.C,v 1.5 2000/06/15 17:24:22 oliver Exp $")
+START_TEST(NumericalSAS, "$Id: NumericalSAS_test.C,v 1.6 2000/08/30 19:59:16 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
 
-CHECK(calculateSASArea(const BaseFragment&, float probe_radius, Size number_of_points))
+CHECK(calculateSASArea(const AtomContainer&, float probe_radius, Size number_of_points))
 	Fragment	f;
 	Atom a1, a2;
 	a1.setRadius(1.0);
@@ -31,7 +31,7 @@ CHECK(calculateSASArea(const BaseFragment&, float probe_radius, Size number_of_p
 	TEST_REAL_EQUAL(area, 157.07963)
 RESULT
 
-CHECK(calculateSASVolume(const BaseFragment&, float probe_radius, Size number_of_points))
+CHECK(calculateSASVolume(const AtomContainer&, float probe_radius, Size number_of_points))
 	Fragment	f;
 	Atom a1, a2;
 	a1.setRadius(1.0);

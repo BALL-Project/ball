@@ -1,4 +1,4 @@
-// $Id: MOL2File.C,v 1.7 2000/06/20 21:31:42 oliver Exp $
+// $Id: MOL2File.C,v 1.8 2000/08/30 19:58:30 oliver Exp $
 
 #include <BALL/FORMAT/MOL2File.h>
 #include <BALL/DATATYPE/string.h>
@@ -60,10 +60,10 @@ namespace BALL
 		// and hash the fragment pointers to a substructure ID (Position)
 		// the vector substr_names holds the assembled names of the 
 		// substructures
-		HashMap<const BaseFragment*, Position> substructure_map;
+		HashMap<const AtomContainer*, Position> substructure_map;
 		vector<String>	substructure_name;
-		vector<const BaseFragment*> substructure_pointers;
-		BaseFragmentConstIterator frag_it = system.beginBaseFragment();
+		vector<const AtomContainer*> substructure_pointers;
+		AtomContainerConstIterator frag_it = system.beginAtomContainer();
 
 		// increment the iterator once to skip the system (which is no substructure)
 		++frag_it;
@@ -86,7 +86,7 @@ namespace BALL
 			}
 
 			// store the name and the pointer 
-			substructure_map.insert(pair<const BaseFragment*, Position>(&*frag_it, substructure_name.size()));
+			substructure_map.insert(pair<const AtomContainer*, Position>(&*frag_it, substructure_name.size()));
 			substructure_pointers.push_back(&*frag_it);
 			substructure_name.push_back(name);
 		}
@@ -163,7 +163,7 @@ namespace BALL
 			f	<< name << " ";
 			
 			// if the atom has a substructure, retrieve its name and ID
-			const BaseFragment* frag = dynamic_cast<const BaseFragment*>(atom_it->getParent());
+			const AtomContainer* frag = dynamic_cast<const AtomContainer*>(atom_it->getParent());
 			if ((frag != 0) && substructure_map.has(frag))
 			{
 				f << substructure_map[frag] << " " << substructure_name[substructure_map[frag]] << " ";
@@ -549,15 +549,15 @@ namespace BALL
 		}
 
 		// construct the substructures
-		vector<BaseFragment*>	sub_ptr(substructures_.size());
+		vector<AtomContainer*>	sub_ptr(substructures_.size());
 		Position i;
 		for (i = 0; i < substructures_.size(); i++)
 		{
-			BaseFragment* frag = 0;
+			AtomContainer* frag = 0;
 			if (substructures_[i].substructure_type == "RESIDUE")
 			{
 				Residue* residue= new Residue;
-				frag = static_cast<BaseFragment*>(residue);
+				frag = static_cast<AtomContainer*>(residue);
 
 				// Sybyl stores the residue (PDB) ID in the 
 				// residue name (e.g. ALA175)
@@ -575,7 +575,7 @@ namespace BALL
 			else
 			{
 				// create a fragment
-				frag = static_cast<BaseFragment*>(new Fragment);
+				frag = static_cast<AtomContainer*>(new Fragment);
 			}
 
 			// set the fragment name

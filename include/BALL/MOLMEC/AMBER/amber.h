@@ -1,4 +1,4 @@
-// $Id: amber.h,v 1.7 2000/03/26 12:45:08 oliver Exp $ 
+// $Id: amber.h,v 1.8 2000/08/30 19:58:15 oliver Exp $ 
 // Molecular Mechanics: Amber force field class
 
 #ifndef BALL_MOLMEC_AMBER_AMBER_H
@@ -162,7 +162,7 @@ namespace BALL
 		//@{
 
 
-		BALL_CREATE(AmberFF)
+		BALL_CREATE_DEEP(AmberFF)
 
 
 		/**	Default constructor.

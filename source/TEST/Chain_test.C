@@ -1,4 +1,4 @@
-// $Id: Chain_test.C,v 1.6 2000/07/12 19:36:45 oliver Exp $
+// $Id: Chain_test.C,v 1.7 2000/08/30 19:59:15 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -8,11 +8,11 @@
 #include <BALL/KERNEL/protein.h>
 #include <BALL/KERNEL/secondaryStructure.h>
 #include <BALL/KERNEL/PDBAtom.h>
-#include <BALL/KERNEL/baseFragment.h>
+#include <BALL/KERNEL/atomContainer.h>
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(BaseFragment, "$Id: Chain_test.C,v 1.6 2000/07/12 19:36:45 oliver Exp $")
+START_TEST(AtomContainer, "$Id: Chain_test.C,v 1.7 2000/08/30 19:59:15 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

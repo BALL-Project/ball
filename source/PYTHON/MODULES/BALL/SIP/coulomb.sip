@@ -1,9 +1,9 @@
-// $Id: coulomb.sip,v 1.1 2000/07/18 21:27:26 oliver Exp $
+// $Id: coulomb.sip,v 1.2 2000/08/30 19:59:09 oliver Exp $
 
 %HeaderCode
 	#include <BALL/ENERGY/coulomb.h>
 	using namespace BALL;
 %End
 
-double calculateCoulomb(const BaseFragment& /fragment/);
+double calculateCoulomb(const AtomContainer& /fragment/);
  

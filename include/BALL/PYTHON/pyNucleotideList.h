@@ -1,4 +1,4 @@
-// $Id: pyNucleotideList.h,v 1.1 2000/06/27 13:07:24 oliver Exp $
+// $Id: pyNucleotideList.h,v 1.2 2000/08/30 19:58:24 oliver Exp $
 
 #ifndef BALL_PYTHON_PYNUCLEOTIDELIST_H
 #define BALL_PYTHON_PYNUCLEOTIDELIST_H
@@ -14,7 +14,7 @@
 namespace BALL 
 {
 	class Nucleotide;
-	class BaseFragment;
+	class AtomContainer;
 	
 	/**
 	*/
@@ -23,7 +23,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE_NODEEP(PyNucleotideList)
+		BALL_CREATE(PyNucleotideList)
 
 		/**	@name	Type Definitions
 		*/
@@ -62,11 +62,11 @@ namespace BALL
 		*/
 		PyNucleotideList(const PyNucleotideList& new_list);
 			
-		/**	Construct from a BaseFragment
+		/**	Construct from a AtomContainer
 				This constructor creates an PyNucleotideList object from
-				all nucleotides of a \Ref{BaseFragment} object.
+				all nucleotides of a \Ref{AtomContainer} object.
 		*/
-		PyNucleotideList(const BaseFragment& fragment, bool selected_only = false);
+		PyNucleotideList(const AtomContainer& fragment, bool selected_only = false);
 
 		/**	Destructor
 		*/
@@ -78,7 +78,7 @@ namespace BALL
 		//@{
 		/**
 		*/
-		void set(const BaseFragment& fragment, bool selected_only = false);
+		void set(const AtomContainer& fragment, bool selected_only = false);
 		//@}
 	};
 

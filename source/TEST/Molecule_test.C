@@ -1,4 +1,4 @@
-// $Id: Molecule_test.C,v 1.6 2000/07/12 19:36:47 oliver Exp $
+// $Id: Molecule_test.C,v 1.7 2000/08/30 19:59:16 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Molecule_test.C,v 1.6 2000/07/12 19:36:47 oliver Exp $")
+START_TEST(class_name, "$Id: Molecule_test.C,v 1.7 2000/08/30 19:59:16 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -192,124 +192,124 @@ CHECK(Molecule::remove(Atom& atom))
 	TEST_EQUAL(m.getAtom(0), &a2)
 RESULT
 
-CHECK(Molecule::prepend(BaseFragment& base_fragment))
+CHECK(Molecule::prepend(AtomContainer& atom_container))
 	Molecule m;
-	BaseFragment bf2;
-	BaseFragment bf3;
+	AtomContainer bf2;
+	AtomContainer bf3;
 	m.prepend(bf2);
 	m.prepend(bf3);
-	TEST_EQUAL(m.getBaseFragment(1), &bf2)
-	TEST_EQUAL(m.getBaseFragment(0), &bf3)
+	TEST_EQUAL(m.getAtomContainer(1), &bf2)
+	TEST_EQUAL(m.getAtomContainer(0), &bf3)
 RESULT
 
-CHECK(Molecule::append(BaseFragment& base_fragment))
+CHECK(Molecule::append(AtomContainer& atom_container))
 	Molecule m;
-	BaseFragment bf2;
-	BaseFragment bf3;
+	AtomContainer bf2;
+	AtomContainer bf3;
 	m.append(bf2);
 	m.append(bf3);
-	TEST_EQUAL(m.getBaseFragment(0), &bf2)
-	TEST_EQUAL(m.getBaseFragment(1), &bf3)
+	TEST_EQUAL(m.getAtomContainer(0), &bf2)
+	TEST_EQUAL(m.getAtomContainer(1), &bf3)
 RESULT
 
-CHECK(Molecule::insert(BaseFragment& base_fragment))
+CHECK(Molecule::insert(AtomContainer& atom_container))
 	Molecule m;
-	BaseFragment bf2;
-	BaseFragment bf3;
+	AtomContainer bf2;
+	AtomContainer bf3;
 	m.insert(bf2);
 	m.insert(bf3);
-	TEST_EQUAL(m.getBaseFragment(0), &bf2)
-	TEST_EQUAL(m.getBaseFragment(1), &bf3)
+	TEST_EQUAL(m.getAtomContainer(0), &bf2)
+	TEST_EQUAL(m.getAtomContainer(1), &bf3)
 RESULT
 
-CHECK(Molecule::insertBefore(BaseFragment& base_fragment, Composite& before))
+CHECK(Molecule::insertBefore(AtomContainer& atom_container, Composite& before))
 	Molecule m;
-	BaseFragment bf2;
-	BaseFragment bf3;
-	BaseFragment bf4;
+	AtomContainer bf2;
+	AtomContainer bf3;
+	AtomContainer bf4;
 	m.append(bf2);
 	m.append(bf3);
 	m.insertBefore(bf4, bf3);
-	TEST_EQUAL(m.getBaseFragment(0), &bf2)
-	TEST_EQUAL(m.getBaseFragment(1), &bf4)
-	TEST_EQUAL(m.getBaseFragment(2), &bf3)
+	TEST_EQUAL(m.getAtomContainer(0), &bf2)
+	TEST_EQUAL(m.getAtomContainer(1), &bf4)
+	TEST_EQUAL(m.getAtomContainer(2), &bf3)
 RESULT
 
-CHECK(Molecule::insertAfter(BaseFragment& base_fragment, Composite& after))
+CHECK(Molecule::insertAfter(AtomContainer& atom_container, Composite& after))
 	Molecule m;
-	BaseFragment bf2;
-	BaseFragment bf3;
-	BaseFragment bf4;
+	AtomContainer bf2;
+	AtomContainer bf3;
+	AtomContainer bf4;
 	m.append(bf2);
 	m.append(bf3);
 	m.insertAfter(bf4, bf2);
-	TEST_EQUAL(m.getBaseFragment(0), &bf2)
-	TEST_EQUAL(m.getBaseFragment(1), &bf4)
-	TEST_EQUAL(m.getBaseFragment(2), &bf3)
+	TEST_EQUAL(m.getAtomContainer(0), &bf2)
+	TEST_EQUAL(m.getAtomContainer(1), &bf4)
+	TEST_EQUAL(m.getAtomContainer(2), &bf3)
 RESULT
 
-CHECK(Molecule::spliceBefore(BaseFragment& base_fragment))
+CHECK(Molecule::spliceBefore(AtomContainer& atom_container))
 	Molecule m;
-	BaseFragment bf2;
-	BaseFragment bf3;
-	BaseFragment bf4;
+	AtomContainer bf2;
+	AtomContainer bf3;
+	AtomContainer bf4;
 	m.append(bf2);
 	bf4.append(bf3);
 	bf4.spliceBefore(m);
-	TEST_EQUAL(m.getBaseFragment(0), 0)
-	TEST_EQUAL(bf4.getBaseFragment(0), &bf2)
-	TEST_EQUAL(bf4.getBaseFragment(1), &bf3)
+	TEST_EQUAL(m.getAtomContainer(0), 0)
+	TEST_EQUAL(bf4.getAtomContainer(0), &bf2)
+	TEST_EQUAL(bf4.getAtomContainer(1), &bf3)
 	bf4.spliceBefore(bf4);
-	TEST_EQUAL(bf4.getBaseFragment(0), &bf2)
-	TEST_EQUAL(bf4.getBaseFragment(1), &bf3)
+	TEST_EQUAL(bf4.getAtomContainer(0), &bf2)
+	TEST_EQUAL(bf4.getAtomContainer(1), &bf3)
 RESULT
 
-CHECK(Molecule::spliceAfter(BaseFragment& base_fragment))
+CHECK(Molecule::spliceAfter(AtomContainer& atom_container))
 	Molecule m;
-	BaseFragment bf2;
-	BaseFragment bf3;
-	BaseFragment bf4;
+	AtomContainer bf2;
+	AtomContainer bf3;
+	AtomContainer bf4;
 	m.append(bf2);
 	bf4.append(bf3);
 	bf4.spliceAfter(m);
-	TEST_EQUAL(m.getBaseFragment(0), 0)
-	TEST_EQUAL(bf4.getBaseFragment(1), &bf2)
-	TEST_EQUAL(bf4.getBaseFragment(0), &bf3)
+	TEST_EQUAL(m.getAtomContainer(0), 0)
+	TEST_EQUAL(bf4.getAtomContainer(1), &bf2)
+	TEST_EQUAL(bf4.getAtomContainer(0), &bf3)
 	bf4.spliceBefore(bf4);
-	TEST_EQUAL(bf4.getBaseFragment(1), &bf2)
-	TEST_EQUAL(bf4.getBaseFragment(0), &bf3)
+	TEST_EQUAL(bf4.getAtomContainer(1), &bf2)
+	TEST_EQUAL(bf4.getAtomContainer(0), &bf3)
 RESULT
 
-CHECK(Molecule::splice(BaseFragment& base_fragment))
+CHECK(Molecule::splice(AtomContainer& atom_container))
 	Molecule m;
-	BaseFragment bf2;
-	BaseFragment bf3;
-	BaseFragment bf4;
-	BaseFragment bf5;
-	BaseFragment bfx;
-	BaseFragment bfy;
+	AtomContainer bf2;
+	AtomContainer bf3;
+	AtomContainer bf4;
+	AtomContainer bf5;
+	AtomContainer bfx;
+	AtomContainer bfy;
 	m.append(bf2);
 	m.append(bfx);
 	m.append(bf3);
 	bfx.append(bfy);
 	bf4.append(bf5);
 	m.splice(bfx);
-	TEST_EQUAL(m.getBaseFragment(0), &bf2)
-	TEST_EQUAL(m.getBaseFragment(1), &bfy)
-	TEST_EQUAL(m.getBaseFragment(2), &bf3)
+	TEST_EQUAL(m.getAtomContainer(0), &bf2)
+	TEST_EQUAL(m.getAtomContainer(1), &bfy)
+	TEST_EQUAL(m.getAtomContainer(2), &bf3)
 	m.splice(bf4);
-	TEST_EQUAL(m.getBaseFragment(0), &bf5)
-	TEST_EQUAL(m.getBaseFragment(1), &bf2)
+	TEST_EQUAL(m.getAtomContainer(0), &bf5)
+	TEST_EQUAL(m.getAtomContainer(1), &bf2)
 RESULT
 
-CHECK(Molecule::remove(BaseFragment& base_fragment))
+CHECK(Molecule::remove(AtomContainer& atom_container))
 	Molecule m;
-	BaseFragment bf2;
-	BaseFragment bf3;
+	AtomContainer bf2;
+	AtomContainer bf3;
 	m.append(bf2);
 	m.append(bf3);
 	m.remove(bf2);
-	TEST_EQUAL(m.getBaseFragment(0), &bf3)
+	TEST_EQUAL(m.getAtomContainer(0), &bf3)
 RESULT
 
 CHECK(Molecule::isValid() const )

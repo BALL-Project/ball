@@ -1,4 +1,4 @@
-// $Id: pyFragmentList.h,v 1.1 2000/06/27 07:44:10 oliver Exp $
+// $Id: pyFragmentList.h,v 1.2 2000/08/30 19:58:24 oliver Exp $
 
 #ifndef BALL_PYTHON_PYFRAGMENTLIST_H
 #define BALL_PYTHON_PYFRAGMENTLIST_H
@@ -14,7 +14,7 @@
 namespace BALL 
 {
 	class Fragment;
-	class BaseFragment;
+	class AtomContainer;
 	
 	/**
 	*/
@@ -23,7 +23,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE_NODEEP(PyFragmentList)
+		BALL_CREATE(PyFragmentList)
 
 		/**	@name	Type Definitions
 		*/
@@ -62,11 +62,11 @@ namespace BALL
 		*/
 		PyFragmentList(const PyFragmentList& new_list);
 			
-		/**	Construct from a BaseFragment
+		/**	Construct from a AtomContainer
 				This constructor creates an PyFragmentList object from
-				all atoms of a \Ref{BaseFragment} object.
+				all atoms of a \Ref{AtomContainer} object.
 		*/
-		PyFragmentList(const BaseFragment& fragment, bool selected_only = false);
+		PyFragmentList(const AtomContainer& fragment, bool selected_only = false);
 
 		/**	Destructor
 		*/
@@ -78,7 +78,7 @@ namespace BALL
 		//@{
 		/**
 		*/
-		void set(const BaseFragment& fragment, bool selected_only = false);
+		void set(const AtomContainer& fragment, bool selected_only = false);
 		//@}
 	};
 

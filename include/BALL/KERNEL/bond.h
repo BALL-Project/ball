@@ -1,4 +1,4 @@
-// $Id: bond.h,v 1.14 2000/07/25 21:12:36 oliver Exp $
+// $Id: bond.h,v 1.15 2000/08/30 19:58:07 oliver Exp $
 
 #ifndef BALL_KERNEL_BOND_H
 #define BALL_KERNEL_BOND_H
@@ -31,7 +31,7 @@ namespace BALL
 {
 
 	class Atom;
-	class BaseFragment;
+	class AtomContainer;
 	class Fragment;
 	class System;
 
@@ -62,8 +62,8 @@ namespace BALL
 			
 			@memo    Bond class (BALL kernel framework)
 			@author  $Author: oliver $
-			@version $Revision: 1.14 $
-			@date    $Date: 2000/07/25 21:12:36 $
+			@version $Revision: 1.15 $
+			@date    $Date: 2000/08/30 19:58:07 $
 	*/
 	class Bond
 		: public Composite,
@@ -75,7 +75,7 @@ namespace BALL
 		friend class Atom;
 
 
-		BALL_CREATE(Bond)
+		BALL_CREATE_DEEP(Bond)
 
 
 		/**	@name	Exceptions
@@ -536,17 +536,17 @@ namespace BALL
 			*/
 			bool isInterBond() const;
 
-			/** Request for the intermolecular bonding of {\em *this} bond within {\em base_fragment}.
-					Query, if {\em *this} bond connects its two atoms within the common parent {\em base_fragment} instance.
+			/** Request for the intermolecular bonding of {\em *this} bond within {\em atom_container}.
+					Query, if {\em *this} bond connects its two atoms within the common parent {\em atom_container} instance.
 					If {\em *this} bond is intermolecular {\tt true} is returned, {\tt false} otherwise.
 					Calls \Ref{Composite::isDescendantOf}.
-					@param  	base_fragment the queried parent fragment.
+					@param  	atom_container the queried parent fragment.
 					@return  	bool -
 									 	{\tt true} if {\em *this} bond is intermolecular
 									 	{\tt false} otherwise
 					@see      Composite::isDescendantOf
 			*/
-			bool isInterBondOf(const BaseFragment& base_fragment) const;
+			bool isInterBondOf(const AtomContainer& atom_container) const;
 
 			/** Request for the intermolecular bonding of {\em *this} bond within {\em system}.
 					Query, if {\em *this} bond connects its two atoms within the common parent {\em system} instance.
@@ -573,18 +573,18 @@ namespace BALL
 			*/
 			bool isIntraBond() const;
 
-			/** Request for the intramolecular bonding of {\em *this} bond within {\em base_fragment}.
-					Query, if {\em *this} bond connects its two atoms within the common parent {\em base_fragment} instance.
+			/** Request for the intramolecular bonding of {\em *this} bond within {\em atom_container}.
+					Query, if {\em *this} bond connects its two atoms within the common parent {\em atom_container} instance.
 					If {\em *this} bond is intramolecular {\tt true} is returned, {\tt false} otherwise.
 					Calls \Ref{Composite::isDescendantOf}.
 		
-					@param       base_fragment the queried parent fragment.
+					@param       atom_container the queried parent fragment.
 					@return      bool -
 											 {\tt true} if {\em *this} bond is intramolecular
 											 {\tt false} otherwise
 					@see         Composite::isDescendantOf
 			*/
-			bool isIntraBondOf(const BaseFragment& base_fragment) const;
+			bool isIntraBondOf(const AtomContainer& atom_container) const;
 
 			/** Request for the intramolecular bonding of {\em *this} bond within {\em system}.
 					Query, if {\em *this} bond connects its two atoms within the common parent {\em system} instance.

@@ -1,4 +1,4 @@
-// $Id: ruleEvaluator.h,v 1.3 2000/05/24 16:17:53 oliver Exp $
+// $Id: ruleEvaluator.h,v 1.4 2000/08/30 19:58:18 oliver Exp $
 // Molecular Mechanics: rule-based assignment of properties (typenames, charges, radii, etc.)
 
 #ifndef BALL_MOLMEC_COMMON_RULEEVALUATOR_H
@@ -27,7 +27,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE_NODEEP(RuleEvaluator)
+		BALL_CREATE(RuleEvaluator)
 
 		/**	Type Definitions
 		*/

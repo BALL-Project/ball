@@ -1,4 +1,4 @@
-// $Id: string.h,v 1.22 2000/07/23 10:37:34 oliver Exp $
+// $Id: string.h,v 1.23 2000/08/30 19:58:02 oliver Exp $
 
 #ifndef BALL_DATATYPE_STRING_H
 #define BALL_DATATYPE_STRING_H
@@ -57,7 +57,7 @@ namespace BALL
 
 		public:
 
-		BALL_CREATE(Substring)
+		BALL_CREATE_DEEP(Substring)
 
 		/**	@name	Exceptions
 		*/

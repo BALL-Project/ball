@@ -1,4 +1,4 @@
-// $Id: atomIterator.h,v 1.3 1999/12/30 20:30:40 oliver Exp $
+// $Id: atomIterator.h,v 1.4 2000/08/30 19:58:06 oliver Exp $
 
 #ifndef BALL_KERNEL_ATOMITERATOR_H
 #define BALL_KERNEL_ATOMITERATOR_H
@@ -27,7 +27,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE(AtomIteratorTraits_)
+		BALL_CREATE_DEEP(AtomIteratorTraits_)
 
 		AtomIteratorTraits_()
 			:	CompositeIteratorTraits_()

@@ -1,4 +1,4 @@
-// $Id: hashMap.h,v 1.9 2000/08/29 16:37:48 oliver Exp $ 
+// $Id: hashMap.h,v 1.10 2000/08/30 19:58:02 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_HASHMAP_H
 #define BALL_DATATYPE_HASHMAP_H
@@ -99,7 +99,7 @@ namespace BALL
 		*/
 		//@{
 
-		BALL_CREATE_NODEEP(HashMap)
+		BALL_CREATE(HashMap)
 		/**	Default constructor.
 				Create a new and empty hash map.
 				@param initial_capacity the capcaity of the hash map

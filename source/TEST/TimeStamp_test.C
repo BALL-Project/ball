@@ -1,4 +1,4 @@
-// $Id: TimeStamp_test.C,v 1.2 2000/08/28 20:27:59 oliver Exp $
+// $Id: TimeStamp_test.C,v 1.3 2000/08/30 19:59:16 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(TimeStamp, "$Id: TimeStamp_test.C,v 1.2 2000/08/28 20:27:59 oliver Exp $")
+START_TEST(TimeStamp, "$Id: TimeStamp_test.C,v 1.3 2000/08/30 19:59:16 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -28,7 +28,9 @@ RESULT
 
 CHECK(Time::TimeStamp::getTime() const  throw())
   TimeStamp t1;
+	STATUS(t1)
   TimeStamp t2;
+	STATUS(t2)
 	TEST_NOT_EQUAL(t1.getTime(), t2.getTime())
 	TEST_EQUAL((t1.getTime() < t2.getTime()), true)
 	TEST_EQUAL((t1.getTime() > t2.getTime()), false)
@@ -83,8 +85,10 @@ RESULT
 
 
 CHECK(Time::TimeStamp::stamp(const Time& time = Time::ZERO) throw())
-	TimeStamp ts1;
-	TimeStamp ts2;
+  TimeStamp ts1;
+	STATUS(ts1)
+  TimeStamp ts2;
+	STATUS(ts2)
 	TEST_EQUAL(ts1.isNewerThan(ts1), false)
 	TEST_EQUAL(ts1.isNewerThan(ts2), false)
 	TEST_EQUAL(ts2.isNewerThan(ts1), true)
@@ -105,8 +109,6 @@ RESULT
 CHECK(Time::TimeStamp::read(PersistenceManager& pm))
   //BAUSTELLE
 RESULT
-
-
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

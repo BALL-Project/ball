@@ -1,4 +1,4 @@
-// $Id: fragmentIterator.h,v 1.2 1999/12/30 20:30:40 oliver Exp $
+// $Id: fragmentIterator.h,v 1.3 2000/08/30 19:58:08 oliver Exp $
 
 #ifndef BALL_KERNEL_FRAGMENTITERATOR_H
 #define BALL_KERNEL_FRAGMENTITERATOR_H
@@ -27,7 +27,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE(FragmentIteratorTraits_)
+		BALL_CREATE_DEEP(FragmentIteratorTraits_)
 
 		FragmentIteratorTraits_()
 			:	CompositeIteratorTraits_()

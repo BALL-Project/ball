@@ -1,4 +1,4 @@
-// $Id: chainIterator.h,v 1.3 1999/12/30 20:30:40 oliver Exp $
+// $Id: chainIterator.h,v 1.4 2000/08/30 19:58:07 oliver Exp $
 
 #ifndef BALL_KERNEL_CHAINITERATOR_H
 #define BALL_KERNEL_CHAINITERATOR_H
@@ -27,7 +27,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE(ChainIteratorTraits_)
+		BALL_CREATE_DEEP(ChainIteratorTraits_)
 
 		ChainIteratorTraits_()
 			:	CompositeIteratorTraits_()

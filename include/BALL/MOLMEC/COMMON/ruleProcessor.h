@@ -1,4 +1,4 @@
-// $Id: ruleProcessor.h,v 1.4 2000/05/24 18:34:15 oliver Exp $
+// $Id: ruleProcessor.h,v 1.5 2000/08/30 19:58:18 oliver Exp $
 // Molecular Mechanics: rule-based assignment of properties (typenames, charges, radii, etc.)
 
 #ifndef BALL_MOLMEC_COMMON_RULEPROCESSOR_H
@@ -22,7 +22,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE_NODEEP(RuleProcessor)
+		BALL_CREATE(RuleProcessor)
 
 		/**	Constructors and Destructors
 		*/

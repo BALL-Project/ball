@@ -1,4 +1,4 @@
-// $Id: protein.h,v 1.10 2000/06/03 00:09:24 amoll Exp $ 
+// $Id: protein.h,v 1.11 2000/08/30 19:58:10 oliver Exp $ 
 
 #ifndef BALL_KERNEL_PROTEIN_H
 #define BALL_KERNEL_PROTEIN_H
@@ -48,7 +48,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE(Protein)
+		BALL_CREATE_DEEP(Protein)
 
 		/**	@name	Enums
 		*/

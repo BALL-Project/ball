@@ -1,4 +1,4 @@
-// $Id: amberTorsion.h,v 1.8 2000/06/30 05:53:17 oliver Exp $
+// $Id: amberTorsion.h,v 1.9 2000/08/30 19:58:16 oliver Exp $
 // Molecular Mechanics: Amber force field, bond stretch component
 
 #ifndef BALL_MOLMEC_AMBER_AMBERTORSION_H
@@ -70,7 +70,7 @@ namespace BALL
 		/**	@name	Constructors and Destructors	*/
 		//@{
 
-		BALL_CREATE(AmberTorsion)
+		BALL_CREATE_DEEP(AmberTorsion)
 
 		/**	Default constructor.
 		*/

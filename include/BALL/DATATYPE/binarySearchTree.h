@@ -1,4 +1,4 @@
-// $Id: binarySearchTree.h,v 1.16 2000/08/28 20:00:17 oliver Exp $
+// $Id: binarySearchTree.h,v 1.17 2000/08/30 19:58:01 oliver Exp $
 
 #ifndef BALL_DATATYPE_BINARYSEARCHTREE_H
 #define BALL_DATATYPE_BINARYSEARCHTREE_H
@@ -354,7 +354,7 @@ namespace BALL
 	{
 		public:
 			
-		BALL_CREATE_NODEEP(TBSTreeItem)
+		BALL_CREATE(TBSTreeItem)
 
 
 		/**	@name Constructors and Destructors
@@ -558,7 +558,7 @@ namespace BALL
 	{
 		public:
 		
-		BALL_CREATE(TBSTree)
+		BALL_CREATE_DEEP(TBSTree)
 	
 		/**	@name	Constructors and Destructors
 		*/
@@ -792,7 +792,7 @@ namespace BALL
 		{
 			public:
 
-			BALL_CREATE(PreorderIteratorTraits_)
+			BALL_CREATE_DEEP(PreorderIteratorTraits_)
 
 			PreorderIteratorTraits_()
 				:	bound_(0),

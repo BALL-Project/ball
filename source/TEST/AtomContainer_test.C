@@ -1,14 +1,14 @@
-// $Id: BaseFragment_test.C,v 1.20 2000/07/27 18:48:53 amoll Exp $
+// $Id: AtomContainer_test.C,v 1.1 2000/08/30 19:59:14 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
-#include <BALL/KERNEL/baseFragment.h>
+#include <BALL/KERNEL/atomContainer.h>
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(BaseFragment, "$Id: BaseFragment_test.C,v 1.20 2000/07/27 18:48:53 amoll Exp $")
+START_TEST(AtomContainer, "$Id: AtomContainer_test.C,v 1.1 2000/08/30 19:59:14 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -20,18 +20,18 @@ String filename;
 NEW_TMP_FILE(filename)
 
 
-BaseFragment*	bf;
-CHECK(BaseFragment())
-	bf = new BaseFragment;
+AtomContainer*	bf;
+CHECK(AtomContainer())
+	bf = new AtomContainer;
 	TEST_NOT_EQUAL(bf, 0)
 RESULT
 
-CHECK(~BaseFragment())
+CHECK(~AtomContainer())
 	delete bf;
 RESULT
 
 CHECK(setName(String&))
-	bf = new BaseFragment;
+	bf = new AtomContainer;
 	bf->setName("testname");
 RESULT
 
@@ -40,13 +40,13 @@ CHECK(getName())
 	delete bf;
 RESULT
 
-CHECK(BaseFragment(BaseFragment&, bool))
-	BaseFragment* bf1 = new BaseFragment;
+CHECK(AtomContainer(AtomContainer&, bool))
+	AtomContainer* bf1 = new AtomContainer;
 	bf1->setName("testname");
 	Atom a;
 	a.setName("a");
 	bf1->insert(a);
-	BaseFragment* bf2 = new BaseFragment(*bf1, true);
+	AtomContainer* bf2 = new AtomContainer(*bf1, true);
 	TEST_NOT_EQUAL(bf2, 0)
 	if (bf2 != 0)
 	{
@@ -54,7 +54,7 @@ CHECK(BaseFragment(BaseFragment&, bool))
 		TEST_EQUAL(bf2->getAtom(0)->getName(), "a")
 		delete bf2;
 	}
-	bf2 = new BaseFragment(*bf1, false);
+	bf2 = new AtomContainer(*bf1, false);
 	TEST_NOT_EQUAL(bf2, 0)
 	if (bf2 != 0)
 	{
@@ -64,8 +64,8 @@ CHECK(BaseFragment(BaseFragment&, bool))
 	delete bf1;
 RESULT
 
-CHECK(BaseFragment(String&))
-	BaseFragment* bf1 = new BaseFragment("hello");
+CHECK(AtomContainer(String&))
+	AtomContainer* bf1 = new AtomContainer("hello");
 	TEST_NOT_EQUAL(bf1, 0)
 	if (bf1 != 0)
 	{
@@ -74,106 +74,106 @@ CHECK(BaseFragment(String&))
 	}
 RESULT
 
-CHECK(insert(BaseFragment&))
-	BaseFragment bf1;
-	BaseFragment bf2;
+CHECK(insert(AtomContainer&))
+	AtomContainer bf1;
+	AtomContainer bf2;
 	bf1.insert(bf2);
 RESULT
 
-CHECK(remove(BaseFragment&))
-	BaseFragment bf1;
-	BaseFragment bf2;
+CHECK(remove(AtomContainer&))
+	AtomContainer bf1;
+	AtomContainer bf2;
 	bf1.insert(bf2);
 	bf1.remove(bf2);
 RESULT
 
-CHECK(countBaseFragments())
-	BaseFragment bf1;
-	BaseFragment bf2;
-	TEST_EQUAL(bf1.countBaseFragments(), 0)
+CHECK(countAtomContainers())
+	AtomContainer bf1;
+	AtomContainer bf2;
+	TEST_EQUAL(bf1.countAtomContainers(), 0)
 	bf1.insert(bf2);
-	TEST_EQUAL(bf1.countBaseFragments(), 1)
+	TEST_EQUAL(bf1.countAtomContainers(), 1)
 	bf1.remove(bf2);
-	TEST_EQUAL(bf1.countBaseFragments(), 0)
+	TEST_EQUAL(bf1.countAtomContainers(), 0)
 	bf1.insert(bf1);
-	TEST_EQUAL(bf1.countBaseFragments(), 0)
+	TEST_EQUAL(bf1.countAtomContainers(), 0)
 	bf1.insert(bf2);
-	TEST_EQUAL(bf1.countBaseFragments(), 1)
+	TEST_EQUAL(bf1.countAtomContainers(), 1)
 	bf2.insert(bf1);
-	TEST_EQUAL(bf1.countBaseFragments(), 1)
-	TEST_EQUAL(bf2.countBaseFragments(), 0)
+	TEST_EQUAL(bf1.countAtomContainers(), 1)
+	TEST_EQUAL(bf2.countAtomContainers(), 0)
 	bf1.remove(bf2);
-	TEST_EQUAL(bf1.countBaseFragments(), 0)
-	TEST_EQUAL(bf2.countBaseFragments(), 0)
+	TEST_EQUAL(bf1.countAtomContainers(), 0)
+	TEST_EQUAL(bf2.countAtomContainers(), 0)
 	bf2.remove(bf1);
-	TEST_EQUAL(bf1.countBaseFragments(), 0)
-	TEST_EQUAL(bf2.countBaseFragments(), 0)
+	TEST_EQUAL(bf1.countAtomContainers(), 0)
+	TEST_EQUAL(bf2.countAtomContainers(), 0)
 RESULT
 
-CHECK(getBaseFragment(Position))
-	BaseFragment bf1("bf1");
-	BaseFragment bf2("bf2");
-	BaseFragment* bf3;
-	bf3 = bf1.getBaseFragment(0);
+CHECK(getAtomContainer(Position))
+	AtomContainer bf1("bf1");
+	AtomContainer bf2("bf2");
+	AtomContainer* bf3;
+	bf3 = bf1.getAtomContainer(0);
 	TEST_EQUAL(bf3, 0)
 	bf1.insert(bf2);
-	bf3 = bf1.getBaseFragment(0);
+	bf3 = bf1.getAtomContainer(0);
 	TEST_NOT_EQUAL(bf3, 0)
 	if (bf3 != 0)
 	{
 		TEST_EQUAL(bf3->getName(), "bf2")
 	}
-	bf3 = bf1.getBaseFragment(1);
+	bf3 = bf1.getAtomContainer(1);
 	TEST_EQUAL(bf3, 0)
 RESULT
 
-CHECK(getBaseFragment(Position) const)
-	BaseFragment bf1("bf1");
-	BaseFragment bf2("bf2");
-	const BaseFragment* bf3;
-	bf3 = bf1.getBaseFragment(0);
+CHECK(getAtomContainer(Position) const)
+	AtomContainer bf1("bf1");
+	AtomContainer bf2("bf2");
+	const AtomContainer* bf3;
+	bf3 = bf1.getAtomContainer(0);
 	TEST_EQUAL(bf3, 0)
 	bf1.insert(bf2);
-	bf3 = bf1.getBaseFragment(0);
+	bf3 = bf1.getAtomContainer(0);
 	TEST_NOT_EQUAL(bf3, 0)
 	if (bf3 != 0)
 	{
 		TEST_EQUAL(bf3->getName(), "bf2")
 	}
-	bf3 = bf1.getBaseFragment(1);
+	bf3 = bf1.getAtomContainer(1);
 	TEST_EQUAL(bf3, 0)
 RESULT
 
 CHECK(clear())
-	BaseFragment bf1("bf1");
-	BaseFragment bf2("bf2");
-	BaseFragment bf3("bf2");
+	AtomContainer bf1("bf1");
+	AtomContainer bf2("bf2");
+	AtomContainer bf3("bf2");
 	bf1.insert(bf2);
 	bf2.insert(bf3);
 	bf2.clear();
 	TEST_EQUAL(bf1.getName(), "bf1")
 	TEST_EQUAL(bf2.getName(), "")
 	TEST_EQUAL(bf3.getName(), "")
-	TEST_EQUAL(bf1.countBaseFragments(), 1)
-	TEST_EQUAL(bf2.countBaseFragments(), 0)
+	TEST_EQUAL(bf1.countAtomContainers(), 1)
+	TEST_EQUAL(bf2.countAtomContainers(), 0)
 RESULT
 
 CHECK(destroy())
-	BaseFragment bf1("bf1");
-	BaseFragment bf2("bf2");
-	BaseFragment bf3("bf2");
+	AtomContainer bf1("bf1");
+	AtomContainer bf2("bf2");
+	AtomContainer bf3("bf2");
 	bf1.insert(bf2);
 	bf2.insert(bf3);
 	bf2.destroy();
 	TEST_EQUAL(bf1.getName(), "bf1")
 	TEST_EQUAL(bf2.getName(), "")
 	TEST_EQUAL(bf3.getName(), "")
-	TEST_EQUAL(bf1.countBaseFragments(), 0)
-	TEST_EQUAL(bf2.countBaseFragments(), 0)
+	TEST_EQUAL(bf1.countAtomContainers(), 0)
+	TEST_EQUAL(bf2.countAtomContainers(), 0)
 RESULT
 
 CHECK(clone(bool))
-	BaseFragment* bf1 = new BaseFragment;
+	AtomContainer* bf1 = new AtomContainer;
 	Composite*	composite = (Composite*)bf1;
 	bf1->setName("hello");
 
@@ -190,7 +190,7 @@ CHECK(clone(bool))
 	TEST_EQUAL(bf1->countBonds(), 3)
 	TEST_EQUAL(bf1->countAtoms(), 4)
 
-	BaseFragment* bf2 = (BaseFragment*)composite->create(true);
+	AtomContainer* bf2 = (AtomContainer*)composite->create(true);
 	TEST_NOT_EQUAL(bf2, 0)
 	if (bf2 != 0)
 	{
@@ -199,7 +199,7 @@ CHECK(clone(bool))
 		TEST_EQUAL(bf2->countAtoms(), 4)
 		delete bf2;
 	}
-	bf2 = (BaseFragment*)composite->create(false);
+	bf2 = (AtomContainer*)composite->create(false);
 	TEST_NOT_EQUAL(bf2, 0)
 	if (bf2 != 0)
 	{
@@ -213,13 +213,13 @@ RESULT
 
 TextPersistenceManager pm;
 using namespace RTTI;
-pm.registerClass(getStreamName<BaseFragment>(), BaseFragment::createDefault);
+pm.registerClass(getStreamName<AtomContainer>(), AtomContainer::createDefault);
 NEW_TMP_FILE(filename)
 CHECK(persistentWrite(PersistenceManager&, String, bool))
 	std::ofstream	ofile(filename.c_str(), File::OUT);
-	BaseFragment* f1 = new BaseFragment("name1");
-	BaseFragment* f2 = new BaseFragment("name2");
-	BaseFragment* f3 = new BaseFragment("name3");
+	AtomContainer* f1 = new AtomContainer("name1");
+	AtomContainer* f2 = new AtomContainer("name2");
+	AtomContainer* f3 = new AtomContainer("name3");
 	f1->insert(*f2);
 	f1->insert(*f3);
 	pm.setOstream(ofile);
@@ -235,12 +235,12 @@ CHECK(persistentRead(PersistenceManager&))
 	TEST_NOT_EQUAL(ptr, 0)
 	if (ptr != 0)
 	{
-		TEST_EQUAL(isKindOf<BaseFragment>(*ptr), true)
-		BaseFragment*	f1 = castTo<BaseFragment>(*ptr);
+		TEST_EQUAL(isKindOf<AtomContainer>(*ptr), true)
+		AtomContainer*	f1 = castTo<AtomContainer>(*ptr);
 		TEST_EQUAL(f1->getName(), "name1")
-		TEST_EQUAL(f1->countBaseFragments(), 2)
-		TEST_EQUAL(f1->getBaseFragment(0)->getName(), "name2")
-		TEST_EQUAL(f1->getBaseFragment(1)->getName(), "name3")
+		TEST_EQUAL(f1->countAtomContainers(), 2)
+		TEST_EQUAL(f1->getAtomContainer(0)->getName(), "name2")
+		TEST_EQUAL(f1->getAtomContainer(1)->getName(), "name3")
 		delete f1;
 	} 
 	else 
@@ -249,69 +249,69 @@ CHECK(persistentRead(PersistenceManager&))
 	}
 RESULT
 
-CHECK(set(BaseFragment&, bool))
-	BaseFragment bf1("name1");
-	BaseFragment bf2;
+CHECK(set(AtomContainer&, bool))
+	AtomContainer bf1("name1");
+	AtomContainer bf2;
 	bf1.insert(bf2);
-	BaseFragment bf3;
+	AtomContainer bf3;
 	bf3.set(bf1, false);
 	TEST_EQUAL(bf3.getName(), "name1");
-	TEST_EQUAL(bf3.countBaseFragments(), 0);
+	TEST_EQUAL(bf3.countAtomContainers(), 0);
 	bf1.setName("name2");
 	bf3.set(bf1, true);
 	TEST_EQUAL(bf3.getName(), "name2");
-	TEST_EQUAL(bf3.countBaseFragments(), 1);
+	TEST_EQUAL(bf3.countAtomContainers(), 1);
 RESULT
 
-CHECK(operator = (BaseFragment&))
-	BaseFragment bf1("name1");
+CHECK(operator = (AtomContainer&))
+	AtomContainer bf1("name1");
 	Atom a;
 	bf1.insert(a);
-	BaseFragment bf2;
+	AtomContainer bf2;
 	bf2 = bf1;
 	TEST_EQUAL(bf2.getName(), "name1");
 	TEST_EQUAL(bf2.countAtoms(), 1);
 RESULT
 
-CHECK(get(BaseFragment&, bool))
-	BaseFragment bf1("name1");
-	BaseFragment bf2;
+CHECK(get(AtomContainer&, bool))
+	AtomContainer bf1("name1");
+	AtomContainer bf2;
 	bf1.insert(bf2);
-	BaseFragment bf3;
+	AtomContainer bf3;
 	bf1.get(bf3, false);
 	TEST_EQUAL(bf3.getName(), "name1");
-	TEST_EQUAL(bf3.countBaseFragments(), 0);
+	TEST_EQUAL(bf3.countAtomContainers(), 0);
 	bf1.setName("name2");
 	bf1.get(bf3, true);
 	TEST_EQUAL(bf3.getName(), "name2");
-	TEST_EQUAL(bf3.countBaseFragments(), 1);
+	TEST_EQUAL(bf3.countAtomContainers(), 1);
 RESULT
 
-CHECK(swap(BaseFragment&))
-	BaseFragment bf1("bf1");
-	BaseFragment bf2("bf2");
-	BaseFragment bf3("bf3");
-	BaseFragment bf4("bf4");
+CHECK(swap(AtomContainer&))
+	AtomContainer bf1("bf1");
+	AtomContainer bf2("bf2");
+	AtomContainer bf3("bf3");
+	AtomContainer bf4("bf4");
 	bf1.insert(bf2);
 	bf3.insert(bf4);
 	TEST_EQUAL(bf1.getName(), "bf1")
-	TEST_EQUAL(bf1.getBaseFragment(0), &bf2)
+	TEST_EQUAL(bf1.getAtomContainer(0), &bf2)
 	TEST_EQUAL(bf3.getName(), "bf3")
-	TEST_EQUAL(bf3.getBaseFragment(0), &bf4)
+	TEST_EQUAL(bf3.getAtomContainer(0), &bf4)
 	bf1.swap(bf3);
 	TEST_EQUAL(bf1.getName(), "bf3")
-	TEST_EQUAL(bf1.getBaseFragment(0), &bf4)
+	TEST_EQUAL(bf1.getAtomContainer(0), &bf4)
 	TEST_EQUAL(bf3.getName(), "bf1")
-	TEST_EQUAL(bf3.getBaseFragment(0), &bf2)
+	TEST_EQUAL(bf3.getAtomContainer(0), &bf2)
 	bf1.swap(bf3);
 	TEST_EQUAL(bf1.getName(), "bf1")
-	TEST_EQUAL(bf1.getBaseFragment(0), &bf2)
+	TEST_EQUAL(bf1.getAtomContainer(0), &bf2)
 	TEST_EQUAL(bf3.getName(), "bf3")
-	TEST_EQUAL(bf3.getBaseFragment(0), &bf4)
+	TEST_EQUAL(bf3.getAtomContainer(0), &bf4)
 RESULT
 
 CHECK(getMolecule())
-	BaseFragment bf1("bf1");
+	AtomContainer bf1("bf1");
 	Molecule* ptr;
 	ptr = bf1.getMolecule();
 	TEST_EQUAL(ptr, 0)
@@ -320,7 +320,7 @@ CHECK(getMolecule())
 	ptr = bf1.getMolecule();
 	TEST_EQUAL(ptr, &m)
 	m.remove(bf1);
-	BaseFragment bf2;
+	AtomContainer bf2;
 	bf2.insert(bf1);
 	m.insert(bf2);
 	ptr = bf1.getMolecule();
@@ -330,62 +330,62 @@ CHECK(getMolecule())
 RESULT
 
 CHECK(getMolecule() const)
-	BaseFragment bf1("bf1");
+	AtomContainer bf1("bf1");
 	TEST_EQUAL(bf1.getMolecule(), 0)
 	Molecule m;
 	m.insert(bf1);
 	TEST_EQUAL(bf1.getMolecule(), &m)
 	m.remove(bf1);
-	BaseFragment bf2;
+	AtomContainer bf2;
 	bf2.insert(bf1);
 	m.insert(bf2);
 	TEST_EQUAL(bf2.getMolecule(), &m)
 	TEST_EQUAL(bf1.getMolecule(), &m)
 RESULT
 
-CHECK(getSuperBaseFragment())
-	BaseFragment bf1("bf1");
-	BaseFragment* ptr = bf1.getSuperBaseFragment();
+CHECK(getSuperAtomContainer())
+	AtomContainer bf1("bf1");
+	AtomContainer* ptr = bf1.getSuperAtomContainer();
 	TEST_EQUAL(ptr, 0)
-	BaseFragment bf2;
-	BaseFragment bf3;
+	AtomContainer bf2;
+	AtomContainer bf3;
 	bf2.insert(bf3);
 	bf1.insert(bf2);
-	ptr = bf3.getSuperBaseFragment();
+	ptr = bf3.getSuperAtomContainer();
 	TEST_EQUAL(ptr, &bf2)
-	ptr = bf2.getSuperBaseFragment();
+	ptr = bf2.getSuperAtomContainer();
 	TEST_EQUAL(ptr, &bf1)
 RESULT
 
-CHECK(getSuperBaseFragment() const)
-	BaseFragment bf1("bf1");
-	const BaseFragment* ptr = bf1.getSuperBaseFragment();
+CHECK(getSuperAtomContainer() const)
+	AtomContainer bf1("bf1");
+	const AtomContainer* ptr = bf1.getSuperAtomContainer();
 	TEST_EQUAL(ptr, 0)
-	BaseFragment bf2;
-	BaseFragment bf3;
+	AtomContainer bf2;
+	AtomContainer bf3;
 	bf2.insert(bf3);
 	bf1.insert(bf2);
-	ptr = bf3.getSuperBaseFragment();
+	ptr = bf3.getSuperAtomContainer();
 	TEST_EQUAL(ptr, &bf2)
-	ptr = bf2.getSuperBaseFragment();
+	ptr = bf2.getSuperAtomContainer();
 	TEST_EQUAL(ptr, &bf1)
 RESULT
 
 CHECK(insert(Atom&))
-	BaseFragment bf1;
+	AtomContainer bf1;
 	Atom a;
 	bf1.insert(a);
 RESULT
 
 CHECK(remove(Atom&))
-	BaseFragment bf1;
+	AtomContainer bf1;
 	Atom a;
 	bf1.insert(a);
 	bf1.remove(a);
 RESULT
 
 CHECK(getAtom(Position))
-	BaseFragment bf1;
+	AtomContainer bf1;
 	Atom a;
 	Atom* ptr = bf1.getAtom(0);
 	TEST_EQUAL(ptr, 0)
@@ -400,7 +400,7 @@ CHECK(getAtom(Position))
 RESULT
 
 CHECK(getAtom(Position) const)
-	BaseFragment bf1;
+	AtomContainer bf1;
 	Atom a;
 	TEST_EQUAL(bf1.getAtom(0), 0)
 	bf1.insert(a);
@@ -411,8 +411,8 @@ CHECK(getAtom(Position) const)
 RESULT
 
 CHECK(countAtoms())
-	BaseFragment bf1;
-	BaseFragment bf2;
+	AtomContainer bf1;
+	AtomContainer bf2;
 	bf1.insert(bf2);
 	Atom a1;
 	Atom a2;
@@ -434,8 +434,8 @@ CHECK(countAtoms())
 RESULT
 
 CHECK(countBonds())
-	BaseFragment bf1;
-	BaseFragment bf2;
+	AtomContainer bf1;
+	AtomContainer bf2;
 	Atom a1;
 	Atom a2;
 	Atom a3;
@@ -455,8 +455,8 @@ CHECK(countBonds())
 RESULT
 
 CHECK(countInterBonds())
-	BaseFragment bf1;
-	BaseFragment bf2;
+	AtomContainer bf1;
+	AtomContainer bf2;
 	Atom a1;
 	Atom a2;
 	Atom a3;
@@ -475,8 +475,8 @@ CHECK(countInterBonds())
 RESULT
 
 CHECK(countIntraBonds())
-	BaseFragment bf1;
-	BaseFragment bf2;
+	AtomContainer bf1;
+	AtomContainer bf2;
 	Atom a1;
 	Atom a2;
 	Atom a3;
@@ -495,7 +495,7 @@ CHECK(countIntraBonds())
 RESULT
 
 CHECK(prepend(Atom&))
-	BaseFragment bf1;
+	AtomContainer bf1;
 	Atom a1;
 	Atom a2;
 	bf1.insert(a1);
@@ -506,7 +506,7 @@ CHECK(prepend(Atom&))
 RESULT
 
 CHECK(insert(Atom&))
-	BaseFragment bf1;
+	AtomContainer bf1;
 	Atom a1;
 	Atom a2;
 	bf1.insert(a1);
@@ -517,7 +517,7 @@ CHECK(insert(Atom&))
 RESULT
 
 CHECK(append(Atom&))
-	BaseFragment bf1;
+	AtomContainer bf1;
 	Atom a1;
 	Atom a2;
 	bf1.insert(a1);
@@ -527,7 +527,7 @@ CHECK(append(Atom&))
 RESULT
 
 CHECK(insertBefore(Atom&, Composite&))
-	BaseFragment bf1;
+	AtomContainer bf1;
 	Atom a1;
 	Atom a2;
 	Atom a3;
@@ -540,7 +540,7 @@ CHECK(insertBefore(Atom&, Composite&))
 RESULT
 
 CHECK(insertAfter(Atom&, Composite&))
-	BaseFragment bf1;
+	AtomContainer bf1;
 	Atom a1;
 	Atom a2;
 	Atom a3;
@@ -552,108 +552,108 @@ CHECK(insertAfter(Atom&, Composite&))
 	TEST_EQUAL(bf1.getAtom(2), &a2)
 RESULT
 
-CHECK(prepend(BaseFragment&))
-	BaseFragment bf1;
-	BaseFragment bf2;
-	BaseFragment bf3;
+CHECK(prepend(AtomContainer&))
+	AtomContainer bf1;
+	AtomContainer bf2;
+	AtomContainer bf3;
 	bf1.prepend(bf2);
 	bf1.prepend(bf3);
-	TEST_EQUAL(bf1.getBaseFragment(1), &bf2)
-	TEST_EQUAL(bf1.getBaseFragment(0), &bf3)
+	TEST_EQUAL(bf1.getAtomContainer(1), &bf2)
+	TEST_EQUAL(bf1.getAtomContainer(0), &bf3)
 RESULT
 
-CHECK(append(BaseFragment&))
-	BaseFragment bf1;
-	BaseFragment bf2;
-	BaseFragment bf3;
+CHECK(append(AtomContainer&))
+	AtomContainer bf1;
+	AtomContainer bf2;
+	AtomContainer bf3;
 	bf1.append(bf2);
 	bf1.append(bf3);
-	TEST_EQUAL(bf1.getBaseFragment(0), &bf2)
-	TEST_EQUAL(bf1.getBaseFragment(1), &bf3)
+	TEST_EQUAL(bf1.getAtomContainer(0), &bf2)
+	TEST_EQUAL(bf1.getAtomContainer(1), &bf3)
 RESULT
 
-CHECK(insertBefore(BaseFragment&, Composite&))
-	BaseFragment bf1;
-	BaseFragment bf2;
-	BaseFragment bf3;
-	BaseFragment bf4;
+CHECK(insertBefore(AtomContainer&, Composite&))
+	AtomContainer bf1;
+	AtomContainer bf2;
+	AtomContainer bf3;
+	AtomContainer bf4;
 	bf1.append(bf2);
 	bf1.append(bf3);
 	bf1.insertBefore(bf4, bf3);
-	TEST_EQUAL(bf1.getBaseFragment(0), &bf2)
-	TEST_EQUAL(bf1.getBaseFragment(1), &bf4)
-	TEST_EQUAL(bf1.getBaseFragment(2), &bf3)
+	TEST_EQUAL(bf1.getAtomContainer(0), &bf2)
+	TEST_EQUAL(bf1.getAtomContainer(1), &bf4)
+	TEST_EQUAL(bf1.getAtomContainer(2), &bf3)
 RESULT
 
-CHECK(insertAfter(BaseFragment&, Composite&))
-	BaseFragment bf1;
-	BaseFragment bf2;
-	BaseFragment bf3;
-	BaseFragment bf4;
+CHECK(insertAfter(AtomContainer&, Composite&))
+	AtomContainer bf1;
+	AtomContainer bf2;
+	AtomContainer bf3;
+	AtomContainer bf4;
 	bf1.append(bf2);
 	bf1.append(bf3);
 	bf1.insertAfter(bf4, bf2);
-	TEST_EQUAL(bf1.getBaseFragment(0), &bf2)
-	TEST_EQUAL(bf1.getBaseFragment(1), &bf4)
-	TEST_EQUAL(bf1.getBaseFragment(2), &bf3)
+	TEST_EQUAL(bf1.getAtomContainer(0), &bf2)
+	TEST_EQUAL(bf1.getAtomContainer(1), &bf4)
+	TEST_EQUAL(bf1.getAtomContainer(2), &bf3)
 RESULT
 
-CHECK(spliceBefore(BaseFragment&))
-	BaseFragment bf1;
-	BaseFragment bf2;
-	BaseFragment bf3;
-	BaseFragment bf4;
+CHECK(spliceBefore(AtomContainer&))
+	AtomContainer bf1;
+	AtomContainer bf2;
+	AtomContainer bf3;
+	AtomContainer bf4;
 	bf1.append(bf2);
 	bf4.append(bf3);
 	bf4.spliceBefore(bf1);
-	TEST_EQUAL(bf1.getBaseFragment(0), 0)
-	TEST_EQUAL(bf4.getBaseFragment(0), &bf2)
-	TEST_EQUAL(bf4.getBaseFragment(1), &bf3)
+	TEST_EQUAL(bf1.getAtomContainer(0), 0)
+	TEST_EQUAL(bf4.getAtomContainer(0), &bf2)
+	TEST_EQUAL(bf4.getAtomContainer(1), &bf3)
 	bf4.spliceBefore(bf4);
-	TEST_EQUAL(bf4.getBaseFragment(0), &bf2)
-	TEST_EQUAL(bf4.getBaseFragment(1), &bf3)
+	TEST_EQUAL(bf4.getAtomContainer(0), &bf2)
+	TEST_EQUAL(bf4.getAtomContainer(1), &bf3)
 RESULT
 
-CHECK(spliceAfter(BaseFragment&))
-	BaseFragment bf1;
-	BaseFragment bf2;
-	BaseFragment bf3;
-	BaseFragment bf4;
+CHECK(spliceAfter(AtomContainer&))
+	AtomContainer bf1;
+	AtomContainer bf2;
+	AtomContainer bf3;
+	AtomContainer bf4;
 	bf1.append(bf2);
 	bf4.append(bf3);
 	bf4.spliceAfter(bf1);
-	TEST_EQUAL(bf1.getBaseFragment(0), 0)
-	TEST_EQUAL(bf4.getBaseFragment(1), &bf2)
-	TEST_EQUAL(bf4.getBaseFragment(0), &bf3)
+	TEST_EQUAL(bf1.getAtomContainer(0), 0)
+	TEST_EQUAL(bf4.getAtomContainer(1), &bf2)
+	TEST_EQUAL(bf4.getAtomContainer(0), &bf3)
 	bf4.spliceBefore(bf4);
-	TEST_EQUAL(bf4.getBaseFragment(1), &bf2)
-	TEST_EQUAL(bf4.getBaseFragment(0), &bf3)
+	TEST_EQUAL(bf4.getAtomContainer(1), &bf2)
+	TEST_EQUAL(bf4.getAtomContainer(0), &bf3)
 RESULT
 
-CHECK(splice(BaseFragment&))
-	BaseFragment bf1;
-	BaseFragment bf2;
-	BaseFragment bf3;
-	BaseFragment bf4;
-	BaseFragment bf5;
-	BaseFragment bfx;
-	BaseFragment bfy;
+CHECK(splice(AtomContainer&))
+	AtomContainer bf1;
+	AtomContainer bf2;
+	AtomContainer bf3;
+	AtomContainer bf4;
+	AtomContainer bf5;
+	AtomContainer bfx;
+	AtomContainer bfy;
 	bf1.append(bf2);
 	bf1.append(bfx);
 	bf1.append(bf3);
 	bfx.append(bfy);
 	bf4.append(bf5);
 	bf1.splice(bfx);
-	TEST_EQUAL(bf1.getBaseFragment(0), &bf2)
-	TEST_EQUAL(bf1.getBaseFragment(1), &bfy)
-	TEST_EQUAL(bf1.getBaseFragment(2), &bf3)
+	TEST_EQUAL(bf1.getAtomContainer(0), &bf2)
+	TEST_EQUAL(bf1.getAtomContainer(1), &bfy)
+	TEST_EQUAL(bf1.getAtomContainer(2), &bf3)
 	bf1.splice(bf4);
-	TEST_EQUAL(bf1.getBaseFragment(0), &bf5)
-	TEST_EQUAL(bf1.getBaseFragment(1), &bf2)
+	TEST_EQUAL(bf1.getAtomContainer(0), &bf5)
+	TEST_EQUAL(bf1.getAtomContainer(1), &bf2)
 RESULT
 
 CHECK(destroyBonds())
-	BaseFragment bf1;
+	AtomContainer bf1;
 	Atom a1, a2, a3, a4;
 	a1.createBond(a2);
 	a1.createBond(a3);
@@ -667,35 +667,35 @@ CHECK(destroyBonds())
 	TEST_EQUAL(a3.countBonds(), 1)	
 RESULT
 
-CHECK(isSubBaseFragmentOf(BaseFragment&))
-	BaseFragment bf1;
-	BaseFragment bf2;
-	BaseFragment bf3;
+CHECK(isSubAtomContainerOf(AtomContainer&))
+	AtomContainer bf1;
+	AtomContainer bf2;
+	AtomContainer bf3;
 	bf1.append(bf2);
 	bf2.append(bf3);
-	TEST_EQUAL(bf1.isSubBaseFragmentOf(bf2), false)	
-	TEST_EQUAL(bf2.isSubBaseFragmentOf(bf2), false)	
-	TEST_EQUAL(bf2.isSubBaseFragmentOf(bf1), true)	
-	TEST_EQUAL(bf3.isSubBaseFragmentOf(bf1), true)	
+	TEST_EQUAL(bf1.isSubAtomContainerOf(bf2), false)	
+	TEST_EQUAL(bf2.isSubAtomContainerOf(bf2), false)	
+	TEST_EQUAL(bf2.isSubAtomContainerOf(bf1), true)	
+	TEST_EQUAL(bf3.isSubAtomContainerOf(bf1), true)	
 RESULT
 
-CHECK(isSuperBaseFragmentOf(BaseFragment&))
-	BaseFragment bf1;
-	BaseFragment bf2;
-	BaseFragment bf3;
+CHECK(isSuperAtomContainerOf(AtomContainer&))
+	AtomContainer bf1;
+	AtomContainer bf2;
+	AtomContainer bf3;
 	bf1.append(bf2);
 	bf2.append(bf3);
-	TEST_EQUAL(bf1.isSuperBaseFragmentOf(bf2), true)	
-	TEST_EQUAL(bf1.isSuperBaseFragmentOf(bf3), true)	
-	TEST_EQUAL(bf2.isSuperBaseFragmentOf(bf2), false)	
-	TEST_EQUAL(bf2.isSuperBaseFragmentOf(bf1), false)	
-	TEST_EQUAL(bf3.isSuperBaseFragmentOf(bf1), false)	
+	TEST_EQUAL(bf1.isSuperAtomContainerOf(bf2), true)	
+	TEST_EQUAL(bf1.isSuperAtomContainerOf(bf3), true)	
+	TEST_EQUAL(bf2.isSuperAtomContainerOf(bf2), false)	
+	TEST_EQUAL(bf2.isSuperAtomContainerOf(bf1), false)	
+	TEST_EQUAL(bf3.isSuperAtomContainerOf(bf1), false)	
 RESULT
 
 CHECK(isValid())
-	BaseFragment bf1;
-	BaseFragment bf2;
-	BaseFragment bf3;
+	AtomContainer bf1;
+	AtomContainer bf2;
+	AtomContainer bf3;
 	bf1.append(bf2);
 	bf2.append(bf3);
 	Atom a1, a2, a3, a4;
@@ -712,8 +712,8 @@ CHECK(isValid())
 RESULT
 
 CHECK(dump(ostream&, Size))
-	BaseFragment bf1;
-	BaseFragment bf2;
+	AtomContainer bf1;
+	AtomContainer bf2;
 	bf1.setName("BF1");
 	bf2.setName("BF2");
 	bf1.append(bf2);
@@ -723,7 +723,7 @@ CHECK(dump(ostream&, Size))
 	std::ofstream outfile(filename.c_str(), File::OUT);
 	bf1.dump(outfile);
 	outfile.close();
-	TEST_FILE(filename.c_str(), "data/Base_Fragment.txt", true)
+	TEST_FILE(filename.c_str(), "data/AtomContainer_test.txt", true)
 RESULT
 
 CHECK(read(istream&)) 

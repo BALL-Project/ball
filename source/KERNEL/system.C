@@ -1,4 +1,4 @@
-// $Id: system.C,v 1.14 2000/07/18 08:29:54 oliver Exp $
+// $Id: system.C,v 1.15 2000/08/30 19:58:33 oliver Exp $
 
 #include <BALL/KERNEL/system.h>
 
@@ -13,32 +13,32 @@ namespace BALL
 {
 
 	System::System()
-		:	BaseFragment()
+		:	AtomContainer()
 	{
 	}
 		
 	System::System(const System& system, bool deep)
-		: BaseFragment()
+		: AtomContainer()
 	{
 		set(system, deep);
 	}
 		
 	System::System(const String& name)
-		:	BaseFragment(name)
+		:	AtomContainer(name)
 	{
 	}
 
   void System::persistentWrite(PersistenceManager& pm, const char* name) const
   {
     pm.writeObjectHeader(this, name);
-      BaseFragment::persistentWrite(pm);
+      AtomContainer::persistentWrite(pm);
     pm.writeObjectTrailer(name);
 	}
 
   void System::persistentRead(PersistenceManager& pm)
   {
-    pm.checkObjectHeader(RTTI::getStreamName<BaseFragment>());
-			BaseFragment::persistentRead(pm);
+    pm.checkObjectHeader(RTTI::getStreamName<AtomContainer>());
+			AtomContainer::persistentRead(pm);
     pm.checkObjectTrailer(0);
 	}
 
@@ -49,12 +49,12 @@ namespace BALL
 		
 	void System::set(const System& system, bool deep)
 	{
-		BaseFragment::set(system, deep);
+		AtomContainer::set(system, deep);
 	}
 			
 	System& System::operator = (const System& system)
 	{
-		BaseFragment::set(system);
+		AtomContainer::set(system);
 
 		return *this;
 	}

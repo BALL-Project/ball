@@ -993,7 +993,7 @@ const void *sipCast_SecondaryStructure(const void *ptr,PyObject *targetClass)
 	if (targetClass == sipClass_SecondaryStructure)
 		return ptr;
 
-	if ((res = sipCast_BaseFragment((BaseFragment *)(SecondaryStructure *)ptr,targetClass)) != NULL)
+	if ((res = sipCast_AtomContainer((AtomContainer *)(SecondaryStructure *)ptr,targetClass)) != NULL)
 		return res;
 
 	return NULL;

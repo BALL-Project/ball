@@ -1,4 +1,4 @@
-// $Id: atom.h,v 1.24 2000/07/25 21:12:35 oliver Exp $
+// $Id: atom.h,v 1.25 2000/08/30 19:58:05 oliver Exp $
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -83,8 +83,8 @@ namespace BALL
 			
 			@memo    Atom class (BALL kernel framework)
 			@author  $Author: oliver $
-			@version $Revision: 1.24 $
-			@date    $Date: 2000/07/25 21:12:35 $
+			@version $Revision: 1.25 $
+			@date    $Date: 2000/08/30 19:58:05 $
 	*/
 	class Atom
 		: public Composite,
@@ -100,7 +100,7 @@ namespace BALL
 
 			friend class Bond;
 
-			BALL_CREATE(Atom)
+			BALL_CREATE_DEEP(Atom)
 
 
 			/** Atom type.
@@ -828,7 +828,7 @@ namespace BALL
 			{
 				public:
 
-				BALL_CREATE(BondIteratorTraits_)
+				BALL_CREATE_DEEP(BondIteratorTraits_)
 
 				BondIteratorTraits_()
 					:	bound_(0),

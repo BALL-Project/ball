@@ -1,4 +1,4 @@
-// $Id: residueIterator.h,v 1.2 1999/12/30 20:30:41 oliver Exp $
+// $Id: residueIterator.h,v 1.3 2000/08/30 19:58:11 oliver Exp $
 
 #ifndef BALL_KERNEL_RESIDUEITERATOR_H
 #define BALL_KERNEL_RESIDUEITERATOR_H
@@ -27,7 +27,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE(ResidueIteratorTraits_)
+		BALL_CREATE_DEEP(ResidueIteratorTraits_)
 
 		ResidueIteratorTraits_()
 			:	CompositeIteratorTraits_()

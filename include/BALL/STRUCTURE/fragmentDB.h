@@ -1,4 +1,4 @@
-// $Id: fragmentDB.h,v 1.7 2000/08/07 12:53:11 oliver Exp $
+// $Id: fragmentDB.h,v 1.8 2000/08/30 19:58:26 oliver Exp $
 
 #ifndef BALL_STRUCTURE_FRAGMENTDB_H
 #define BALL_STRUCTURE_FRAGMENTDB_H
@@ -73,7 +73,7 @@ namespace BALL
 		typedef short Type;
 		//@}
 
-		BALL_CREATE(FragmentDB)
+		BALL_CREATE_DEEP(FragmentDB)
 	
 		/**	@name	Exceptions
 		*/

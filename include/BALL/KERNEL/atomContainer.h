@@ -1,7 +1,7 @@
-// $Id: baseFragment.h,v 1.20 2000/06/03 00:12:02 amoll Exp $
+// $Id: atomContainer.h,v 1.1 2000/08/30 19:58:05 oliver Exp $
 
-#ifndef BALL_KERNEL_BASEFRAGMENT_H
-#define BALL_KERNEL_BASEFRAGMENT_H
+#ifndef BALL_KERNEL_ATOMCONTAINER_H
+#define BALL_KERNEL_ATOMCONTAINER_H
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -27,12 +27,12 @@
 #	include <BALL/KERNEL/atomIterator.h>
 #endif
 
-#ifndef BALL_KERNEL_BASEFRAGMENTITERATOR_H
-#	include <BALL/KERNEL/baseFragmentIterator.h>
+#ifndef BALL_KERNEL_ATOMCONTAINERITERATOR_H
+#	include <BALL/KERNEL/atomContainerIterator.h>
 #endif
 
 
-#define BALL_BASEFRAGMENT_DEFAULT_NAME   ""
+#define BALL_ATOMCONTAINER_DEFAULT_NAME   ""
 
 namespace BALL 
 {
@@ -41,17 +41,17 @@ namespace BALL
 	class Molecule;
 
 	/**	Atom Container Base Class.
-			The {\tt BaseFragment} class is the base class
+			The {\tt AtomContainer} class is the base class
 			of all kernel classes containing atoms.\\
-			{\bf Definition:}\URL{BALL/KERNEL/baseFragment.h}
+			{\bf Definition:}\URL{BALL/KERNEL/atomContainer.h}
 	*/
-	class BaseFragment
+	class AtomContainer
 		: public Composite,
 			public PropertyManager
 	{
 		public:
 
-		BALL_CREATE(BaseFragment)
+		BALL_CREATE_DEEP(AtomContainer)
 
 		/**	@name	Enums 
 		*/
@@ -69,24 +69,24 @@ namespace BALL
 		//@{
 
 		/** Default constructor */
-		BaseFragment();
+		AtomContainer();
 	
 		/** Copy constructor */
-		BaseFragment(const BaseFragment& base_fragment, bool deep = true);
+		AtomContainer(const AtomContainer& atom_container, bool deep = true);
 	
 		/** Constructor */
-		BaseFragment(const String& name);
+		AtomContainer(const String& name);
 
 		/** Destructor */
-		virtual ~BaseFragment();
+		virtual ~AtomContainer();
 
-		/** Clears the contents of this instance of BaseFragment.
+		/** Clears the contents of this instance of AtomContainer.
 				This methods clears the base fragment's name, destroys all its children
 				(as in \Ref{Composite::clear}), but does not remove it from its parent composite structures.
 		*/
 		virtual void clear();
 	
-		/** Clears the contents of this instance of BaseFragment and removes it from parent composite structures.
+		/** Clears the contents of this instance of AtomContainer and removes it from parent composite structures.
 				This methods clears the base fragment's name, destroys all its children
 				(as in \Ref{Composite::destroy}), and removes it from its parent composite structures.
 		*/
@@ -98,13 +98,13 @@ namespace BALL
 		//@{
 
 		/**	Persistent writing.
-				Writes a BaseFragment object to a persistent stream.
+				Writes a AtomContainer object to a persistent stream.
 				@param pm the persistence manager
 		*/
 		virtual void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
 
 		/**	Persistent reading.
-				Reads a BaseFragment object from a persistent stream.
+				Reads a AtomContainer object from a persistent stream.
 				@param pm the persistence manager
 		*/
 		virtual void persistentRead(PersistenceManager& pm);
@@ -115,59 +115,59 @@ namespace BALL
 		//@{
 
 		/** Assignment with cloning facility.
-				Assign {\em base_fragment} to {\em *this} instance.
+				Assign {\em atom_container} to {\em *this} instance.
 				The assignment is either deep or shallow (default).
-				@param  base_fragment the base_fragment to be copied (cloned)
-				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em base_fragment}
+				@param  atom_container the atom_container to be copied (cloned)
+				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em atom_container}
 		*/
-		void set(const BaseFragment& base_fragment, bool deep = true);
+		void set(const AtomContainer& atom_container, bool deep = true);
 
 		/** Assignment operator.
-				Assign {\em base_fragment} to {\em *this} instance.
+				Assign {\em atom_container} to {\em *this} instance.
 				The assignment is either deep or shallow (default).
-				@param   base_fragment the BaseFragment to be copied (cloned)
-				@return  BaseFragment& - {\em *this} BaseFragment
-				@see     BaseFragment::set
+				@param   atom_container the AtomContainer to be copied (cloned)
+				@return  AtomContainer& - {\em *this} AtomContainer
+				@see     AtomContainer::set
 		*/
-		BaseFragment& operator = (const BaseFragment& base_fragment);
+		AtomContainer& operator = (const AtomContainer& atom_container);
 
 		/** Copying with cloning facility.
-				Copy {\em *this} to {\em base_fragment}.
+				Copy {\em *this} to {\em atom_container}.
 				The assignment is either deep or shallow (default).
-				@param  base_fragment the BaseFragment to be assigned to
-				@see    BaseFragment::set
+				@param  atom_container the AtomContainer to be assigned to
+				@see    AtomContainer::set
 		*/
-		void get(BaseFragment& base_fragment, bool deep = true) const;
+		void get(AtomContainer& atom_container, bool deep = true) const;
 
-		/** Swapping of BaseFragments.
-				Swap the states of {\em *this} with {\em base_fragment}.
-				@param  base_fragment the BaseFragment {\em *this} is being swapped with
+		/** Swapping of AtomContainers.
+				Swap the states of {\em *this} with {\em atom_container}.
+				@param  atom_container the AtomContainer {\em *this} is being swapped with
 		*/
-		void swap(BaseFragment& base_fragment);
+		void swap(AtomContainer& atom_container);
 
 		//@}
 	
 		/**	@name	Accessors */
 		//@{
 
-		/** Change of the BaseFragment's name.
+		/** Change of the AtomContainer's name.
 				Change the name of {\em *this} to {\em name}.
 				@param  name the new name
-				@see    BaseFragment::getName
+				@see    AtomContainer::getName
 		*/
 		void setName(const String& name);
 
     /** Mutable inspection of the name.
     Access a mutable reference to the name of {\em *this}.
 	  @return  String& - mutable reference to the name
-    @see     BaseFragment::setName
+    @see     AtomContainer::setName
 		*/
 		String& getName();
 
 		/** Constant inspection of the name.
 				Access a constant reference to the name of {\em *this}.
 				@return  String& - constant reference to the name of {\em *this}
-				@see     BaseFragment::setName
+				@see     AtomContainer::setName
 		*/
 		const String& getName() const;
 
@@ -175,21 +175,21 @@ namespace BALL
 				Access a mutable reference to the parent molecule of {\em *this}.
 				The reference is 0 if {\em *this} does not have a parent molecule.\\
 				\\
-				{\bf Note:} No corresponding mutator BaseFragment::setMolecule exists to
-				consider design of contract - a BaseFragment may not insert into a molecule,
+				{\bf Note:} No corresponding mutator AtomContainer::setMolecule exists to
+				consider design of contract - a AtomContainer may not insert into a molecule,
 				it must be inserted via the molecule.
 				@return  Molecule* -
 								 mutable reference to the parent molecule of {\em *this},
-								 0 if {\em *this} BaseFragment does not have a parent molecule
+								 0 if {\em *this} AtomContainer does not have a parent molecule
 		*/
 		Molecule* getMolecule();
 
 		/** Mutable inspection of the parent molecule.
 				Access a constant reference to the parent molecule of {\em *this}.
-				The reference is 0 if {\em *this} BaseFragment does not have a parent molecule.\\
+				The reference is 0 if {\em *this} AtomContainer does not have a parent molecule.\\
 				\\
-				{\bf Note:} No corresponding mutator BaseFragment::setMolecule exists to
-				consider design of contract - a BaseFragment may not insert into a molecule,
+				{\bf Note:} No corresponding mutator AtomContainer::setMolecule exists to
+				consider design of contract - a AtomContainer may not insert into a molecule,
 				it must be inserted via the molecule.
 				@return  Molecule* -
 								 constant reference to the parent molecule of {\em *this},
@@ -197,35 +197,35 @@ namespace BALL
 		*/
 		const Molecule* getMolecule() const;
 
-		/** Get a pointer to the parent BaseFragment.
-				The reference is 0 if {\em *this} instance does not have a parent BaseFragment.
-				@return  BaseFragment* -
-								 mutable reference to the parent BaseFragment of {\em *this},
+		/** Get a pointer to the parent AtomContainer.
+				The reference is 0 if {\em *this} instance does not have a parent AtomContainer.
+				@return  AtomContainer* -
+								 mutable reference to the parent AtomContainer of {\em *this},
 		*/
-		BaseFragment* getSuperBaseFragment();
+		AtomContainer* getSuperAtomContainer();
 
-		/** Get a constant pointer to the parent BaseFragment.
-				The reference is 0 if {\em *this} instance does not have a parent BaseFragment.
-				@return  BaseFragment* -
-								 constant reference to the parent BaseFragment of {\em *this},
+		/** Get a constant pointer to the parent AtomContainer.
+				The reference is 0 if {\em *this} instance does not have a parent AtomContainer.
+				@return  AtomContainer* -
+								 constant reference to the parent AtomContainer of {\em *this},
 		*/
-		const BaseFragment* getSuperBaseFragment() const;
+		const AtomContainer* getSuperAtomContainer() const;
 
-		/** Get a pointer to a child BaseFragment at a given position.
-				The reference is 0 if {\em *this} instance does not have a BaseFragment at the given position.
-				@param   position of the child BaseFragment
-				@return  BaseFragment* -
-								 mutable reference to the child BaseFragment at {\em positon} of {\em *this},
+		/** Get a pointer to a child AtomContainer at a given position.
+				The reference is 0 if {\em *this} instance does not have a AtomContainer at the given position.
+				@param   position of the child AtomContainer
+				@return  AtomContainer* -
+								 mutable reference to the child AtomContainer at {\em positon} of {\em *this},
 		*/
-		BaseFragment* getBaseFragment(Position position);
+		AtomContainer* getAtomContainer(Position position);
 	
-		/** Get a constant pointer to a child BaseFragment at a given position.
-				The reference is 0 if {\em *this} instance does not have a BaseFragment at the given position.
-				@param   position of the child BaseFragment
-				@return  BaseFragment* -
-								 constant reference to the child BaseFragment at {\em positon} of {\em *this},
+		/** Get a constant pointer to a child AtomContainer at a given position.
+				The reference is 0 if {\em *this} instance does not have a AtomContainer at the given position.
+				@param   position of the child AtomContainer
+				@return  AtomContainer* -
+								 constant reference to the child AtomContainer at {\em positon} of {\em *this},
 		*/
-		const BaseFragment* getBaseFragment(Position position) const;
+		const AtomContainer* getAtomContainer(Position position) const;
 	
 		/** Get a pointer to a child atom at a given position.
 				The reference is 0 if {\em *this} instance does not have an atom at the given position.
@@ -252,17 +252,17 @@ namespace BALL
 		Atom* getAtom(const String& name);
 	
 		/** Get a pointer to a child atom with the name {\em name}.
-				The reference is 0 if {\em *this} BaseFragment does not have an atom with this name.
+				The reference is 0 if {\em *this} AtomContainer does not have an atom with this name.
 				@param   name the name of the child atom
 				@return  Atom* -
 								 constant reference to the child atom with the name {\em name} of {\em *this},
 		*/
 		const Atom* getAtom(const String& name) const;
 	
-		/** Count the child BaseFragments.
-				@return Size the number of BaseFragments
+		/** Count the child AtomContainers.
+				@return Size the number of AtomContainers
 		*/
-		Size countBaseFragments() const;
+		Size countAtomContainers() const;
 
 		/** Count the child atoms.
 				@return Size the number of atoms
@@ -316,62 +316,62 @@ namespace BALL
 		*/
 		bool remove(Atom& atom);
 
-		/** Prepend a BaseFragment at position 0.
-				@param base_fragment, the BaseFragment to prepend
+		/** Prepend a AtomContainer at position 0.
+				@param atom_container, the AtomContainer to prepend
 		*/
-		void prepend(BaseFragment& base_fragment);
+		void prepend(AtomContainer& atom_container);
 
-		/** Append a BaseFragment at the last position.
-				@param base_fragment, the BaseFragment to prepend
+		/** Append a AtomContainer at the last position.
+				@param atom_container, the AtomContainer to prepend
 		*/
-		void append(BaseFragment& base_fragment);
+		void append(AtomContainer& atom_container);
 
-		/** Insert a BaseFragment at the last position.
-				@param base_fragment, the BaseFragment to insert
+		/** Insert a AtomContainer at the last position.
+				@param atom_container, the AtomContainer to insert
 		*/
-		void insert(BaseFragment& base_fragment);
+		void insert(AtomContainer& atom_container);
 
-		/** Insert a BaseFragment before a given {\em Comosite} object.
-				@param base_fragment, the BaseFragment to insert
+		/** Insert a AtomContainer before a given {\em Comosite} object.
+				@param atom_container, the AtomContainer to insert
 				@param before, the {\em Comosite} object to insert before
 		*/
-		void insertBefore(BaseFragment& base_fragment, Composite& before);
+		void insertBefore(AtomContainer& atom_container, Composite& before);
 
-		/** Insert a BaseFragment after a given {\em Comosite} object.
-				@param base_fragment, the BaseFragment to insert
+		/** Insert a AtomContainer after a given {\em Comosite} object.
+				@param atom_container, the AtomContainer to insert
 				@param after, the {\em Comosite} object to insert after
 		*/
-		void insertAfter(BaseFragment& base_fragment, Composite& after);
+		void insertAfter(AtomContainer& atom_container, Composite& after);
 
-		/**	Cut all children of {\tt base_fragment} and prepend them before the children of {\em *this}.
-				@param base_fragment the BaseFragment to access
+		/**	Cut all children of {\tt atom_container} and prepend them before the children of {\em *this}.
+				@param atom_container the AtomContainer to access
 		*/
-		void spliceBefore(BaseFragment& base_fragment);
+		void spliceBefore(AtomContainer& atom_container);
 
-		/**	Cut all children of {\tt base_fragment} and append them after the children of {\em *this}.
-				@param base_fragment the BaseFragment to access
+		/**	Cut all children of {\tt atom_container} and append them after the children of {\em *this}.
+				@param atom_container the AtomContainer to access
 		*/
-		void spliceAfter(BaseFragment& base_fragment);
+		void spliceAfter(AtomContainer& atom_container);
 
-		/**	Move the children of {\em base_fragment} into {\em *this} instance.
-				The children of {\tt base_fragment} are inserted at its position
+		/**	Move the children of {\em atom_container} into {\em *this} instance.
+				The children of {\tt atom_container} are inserted at its position
 				if it is is a child of {\tt this}.
 				Otherwise the children are inserted using \Ref{spliceBefore}.
 		*/
-		void splice(BaseFragment& base_fragment);
+		void splice(AtomContainer& atom_container);
 
-		/** Remove a BaseFragment
-				@param base_fragment the BaseFragment to remove
-				@return false if {\em base_fragment} could not be removed
+		/** Remove a AtomContainer
+				@param atom_container the AtomContainer to remove
+				@return false if {\em atom_container} could not be removed
 		*/
-		bool remove(BaseFragment& base_fragment);
+		bool remove(AtomContainer& atom_container);
 
 		//@}
 
 		/**	@name	Miscellaneous */
 		//@{
 
-		/** Destroy all bonds in {\tt this} BaseFragment
+		/** Destroy all bonds in {\tt this} AtomContainer
 		*/
 		void destroyBonds();
 
@@ -380,15 +380,15 @@ namespace BALL
 		/**	@name	Predicates */
 		//@{
 
-		/** Test if a BaseFragment is a child of {\tt this}.
-				@param base_fragment the BaseFragment to test
+		/** Test if a AtomContainer is a child of {\tt this}.
+				@param atom_container the AtomContainer to test
 		*/
-		bool isSubBaseFragmentOf(const BaseFragment& base_fragment) const;
+		bool isSubAtomContainerOf(const AtomContainer& atom_container) const;
 
-		/** Test if a BaseFragment is a parent of {\tt this}.
-				@param base_fragment the BaseFragment to test
+		/** Test if a AtomContainer is a parent of {\tt this}.
+				@param atom_container the AtomContainer to test
 		*/
-		bool isSuperBaseFragmentOf(const BaseFragment& base_fragment) const;
+		bool isSuperAtomContainerOf(const AtomContainer& atom_container) const;
 		//@}
 
 		/**	Debugging and Diagnostics */
@@ -439,17 +439,17 @@ namespace BALL
 		*/
 		//@{
 
-		///	Apply to all bonds inside this BaseFragment
+		///	Apply to all bonds inside this AtomContainer
 		bool applyIntraBond(UnaryProcessor<Bond>& processor);
 
-		/// Apply to all bonds to atoms outside this BaseFragment
+		/// Apply to all bonds to atoms outside this AtomContainer
 		bool applyInterBond(UnaryProcessor<Bond>& processor);
 		//@}
 
 		// --- EXTERNAL ITERATORS
 		
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(Atom)
-		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(BaseFragment)
+		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(AtomContainer)
 
 
 		private:
@@ -463,4 +463,4 @@ namespace BALL
 
 } // namespace BALL
 
-#endif // BALL_KERNEL_BASEFRAGMENT_H
+#endif // BALL_KERNEL_ATOMCONTAINER_H

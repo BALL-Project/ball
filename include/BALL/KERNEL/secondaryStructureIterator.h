@@ -1,4 +1,4 @@
-// $Id: secondaryStructureIterator.h,v 1.3 1999/12/30 20:30:41 oliver Exp $
+// $Id: secondaryStructureIterator.h,v 1.4 2000/08/30 19:58:11 oliver Exp $
 
 #ifndef BALL_KERNEL_SECONDARYSTRUCTUREITERATOR_H
 #define BALL_KERNEL_SECONDARYSTRUCTUREITERATOR_H
@@ -27,7 +27,7 @@ namespace BALL
 	{
 		public:
 		
-		BALL_CREATE(SecondaryStructureIteratorTraits_)
+		BALL_CREATE_DEEP(SecondaryStructureIteratorTraits_)
 
 		SecondaryStructureIteratorTraits_()
 			:	CompositeIteratorTraits_()

@@ -1,4 +1,4 @@
-// $Id: microCanonicalMD.h,v 1.4 2000/05/10 08:39:25 pmueller Exp $
+// $Id: microCanonicalMD.h,v 1.5 2000/08/30 19:58:20 oliver Exp $
 // Microcanonical MD: A class for doing molecular dynamics simulations      
 // according to the principle of a microcanonical ensemble (NVE), i.e., 
 // the total energy of the system is kept constant.
@@ -73,7 +73,7 @@ namespace BALL
     */
     //@{
 
-    BALL_CREATE(MicroCanonicalMD)
+    BALL_CREATE_DEEP(MicroCanonicalMD)
 
     /** The default constructor with no arguments
     */

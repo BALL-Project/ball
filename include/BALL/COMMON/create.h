@@ -1,4 +1,4 @@
-// $Id: create.h,v 1.2 2000/03/14 19:36:44 oliver Exp $
+// $Id: create.h,v 1.3 2000/08/30 19:57:59 oliver Exp $
 
 #ifndef BALL_COMMON_CREATE_H
 #define BALL_COMMON_CREATE_H
@@ -23,7 +23,7 @@
 		
 		@param	name the class name
 */
-#define BALL_CREATE(name)\
+#define BALL_CREATE_DEEP(name)\
 \
 	virtual void* create(bool deep = true, bool empty = false) const\
 	{\
@@ -59,7 +59,7 @@
 		a new instance of {\tt name}.
 		@param	name the class name
 */
-#define BALL_CREATE_NODEEP(name)\
+#define BALL_CREATE(name)\
 \
 	virtual void* create(bool /* deep */ = true, bool empty = false) const\
 	{\

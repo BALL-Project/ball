@@ -1,4 +1,4 @@
-// $Id: pyBondList.h,v 1.1 2000/07/04 08:05:34 oliver Exp $
+// $Id: pyBondList.h,v 1.2 2000/08/30 19:58:23 oliver Exp $
 
 #ifndef BALL_PYTHON_PYBONDLIST_H
 #define BALL_PYTHON_PYBONDLIST_H
@@ -15,7 +15,7 @@ namespace BALL
 {
 	class Bond;
 	class Atom;
-	class BaseFragment;
+	class AtomContainer;
 	
 	/**
 	*/
@@ -24,7 +24,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE_NODEEP(PyBondList)
+		BALL_CREATE(PyBondList)
 
 		/**	@name	Type Definitions
 		*/
@@ -63,18 +63,18 @@ namespace BALL
 		*/
 		PyBondList(const PyBondList& new_list);
 			
-		/**	Construct from a BaseFragment.
+		/**	Construct from a AtomContainer.
 				This constructor creates an PyBondList object from
-				all bonds of the atoms of a \Ref{BaseFragment} object.
+				all bonds of the atoms of a \Ref{AtomContainer} object.
 				If {\tt selected_only} is set to {\bf true}, only those
 				atoms are inserted into the list where both atoms are selected.
 				It is not required that both atoms of a bond are contained
 				in {\tt fragment}.
-				@param fragment the BaseFragment containing the atoms
+				@param fragment the AtomContainer containing the atoms
 				@param selected_only if set to {\bf true}, only those bonds are inserted
 					where at least one atom is selected and contained in {\tt fragment}
 		*/
-		PyBondList(const BaseFragment& fragment, bool selected_only = false);
+		PyBondList(const AtomContainer& fragment, bool selected_only = false);
 
 		/**	Construct a list of all bonds of an atom.
 				This constructor creates a PyBondList object from
@@ -93,7 +93,7 @@ namespace BALL
 		//@{
 		/**
 		*/
-		void set(const BaseFragment& fragment, bool selected_only = false);
+		void set(const AtomContainer& fragment, bool selected_only = false);
 			
 		/**
 		*/

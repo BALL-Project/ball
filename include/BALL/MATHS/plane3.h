@@ -1,4 +1,4 @@
-// $Id: plane3.h,v 1.17 2000/06/20 10:55:25 oliver Exp $
+// $Id: plane3.h,v 1.18 2000/08/30 19:58:13 oliver Exp $
 
 #ifndef BALL_MATHS_PLANE3_H
 #define BALL_MATHS_PLANE3_H
@@ -48,7 +48,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE_NODEEP(TPlane3<T>)
+		BALL_CREATE(TPlane3<T>)
 
 		/**	@name	Constructors and Destructors
 		*/

@@ -1,4 +1,4 @@
-// $Id: system.h,v 1.14 2000/06/03 00:12:04 amoll Exp $
+// $Id: system.h,v 1.15 2000/08/30 19:58:12 oliver Exp $
 
 #ifndef BALL_KERNEL_SYSTEM_H
 #define BALL_KERNEL_SYSTEM_H
@@ -52,11 +52,11 @@ namespace BALL
 			{\bf Definition:}\URL{BALL/KERNEL/system.h}
 	*/
 	class System
-		: public BaseFragment
+		: public AtomContainer
 	{
 		public:
 
-		BALL_CREATE(System)
+		BALL_CREATE_DEEP(System)
 
 		/**	@name	Constructors and Destructors*/
 		//@{
@@ -260,7 +260,7 @@ namespace BALL
 		// --- EXTERNAL ITERATORS ---
 
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(Atom)
-		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(BaseFragment)
+		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(AtomContainer)
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(Fragment)
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(Molecule)
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(Protein)

@@ -1,4 +1,4 @@
-// $Id: box3.h,v 1.20 2000/05/05 17:39:04 amoll Exp $
+// $Id: box3.h,v 1.21 2000/08/30 19:58:12 oliver Exp $
 
 #ifndef BALL_MATHS_BOX3_H
 #define BALL_MATHS_BOX3_H
@@ -26,7 +26,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE_NODEEP(TBox3<T>)
+		BALL_CREATE(TBox3<T>)
 
 		/**	@name	Constructors and Destructors
 		*/

@@ -1,4 +1,4 @@
-// $Id: stringHashMap.h,v 1.8 2000/02/17 00:30:39 oliver Exp $
+// $Id: stringHashMap.h,v 1.9 2000/08/30 19:58:03 oliver Exp $
 
 #ifndef BALL_DATATYPE_STRINGHASHMAP_H
 #define BALL_DATATYPE_STRINGHASHMAP_H
@@ -34,7 +34,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE(StringHashMap)
+		BALL_CREATE_DEEP(StringHashMap)
 
 		/**	@name Type Definitions
 		*/

@@ -1,4 +1,4 @@
-// $Id: matrix44.h,v 1.32 2000/05/06 00:48:04 amoll Exp $
+// $Id: matrix44.h,v 1.33 2000/08/30 19:58:13 oliver Exp $
 
 #ifndef BALL_MATHS_MATRIX44_H
 #define BALL_MATHS_MATRIX44_H
@@ -58,7 +58,7 @@ namespace BALL
 	{
 		public:
 	
-		BALL_CREATE_NODEEP(TMatrix4x4)
+		BALL_CREATE(TMatrix4x4)
 
 		/**	@name	Constructors and Destructors
 		*/

@@ -1,8 +1,8 @@
-// $Id: pyNucleicAcidList.C,v 1.1 2000/07/18 21:18:48 oliver Exp $
+// $Id: pyNucleicAcidList.C,v 1.2 2000/08/30 19:58:39 oliver Exp $
 
 #include <BALL/PYTHON/pyNucleicAcidList.h>
 #include <BALL/KERNEL/nucleicAcid.h>
-#include <BALL/KERNEL/baseFragment.h>
+#include <BALL/KERNEL/atomContainer.h>
 
 namespace BALL
 {
@@ -21,18 +21,18 @@ namespace BALL
 	{
 	}
 
-	PyNucleicAcidList::PyNucleicAcidList(const BaseFragment& fragment, bool selected_only )
+	PyNucleicAcidList::PyNucleicAcidList(const AtomContainer& fragment, bool selected_only )
 	{
 		set(fragment, selected_only);
 	}
 
-	void PyNucleicAcidList::set(const BaseFragment& fragment, bool selected_only)
+	void PyNucleicAcidList::set(const AtomContainer& fragment, bool selected_only)
 	{
 		// clear the old contents of the list
 		clear();
 
 		// iterate over all nucleic acids
-		BaseFragmentConstIterator it = fragment.beginBaseFragment();
+		AtomContainerConstIterator it = fragment.beginAtomContainer();
 
     for (; +it; ++it)
     {

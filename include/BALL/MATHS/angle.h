@@ -1,4 +1,4 @@
-// $Id: angle.h,v 1.26 2000/05/05 17:39:04 amoll Exp $
+// $Id: angle.h,v 1.27 2000/08/30 19:58:12 oliver Exp $
 
 #ifndef BALL_MATHS_ANGLE_H
 #define BALL_MATHS_ANGLE_H
@@ -47,7 +47,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE_NODEEP(TAngle<T>)
+		BALL_CREATE(TAngle<T>)
 
 		/**	@name	Enums
 		*/

@@ -1,4 +1,4 @@
-// $Id: proteinIterator.h,v 1.2 1999/12/30 20:30:41 oliver Exp $
+// $Id: proteinIterator.h,v 1.3 2000/08/30 19:58:10 oliver Exp $
 
 #ifndef BALL_KERNEL_PROTEINITERATOR_H
 #define BALL_KERNEL_PROTEINITERATOR_H
@@ -27,7 +27,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE(ProteinIteratorTraits_)
+		BALL_CREATE_DEEP(ProteinIteratorTraits_)
 
 		ProteinIteratorTraits_()
 			:	CompositeIteratorTraits_()

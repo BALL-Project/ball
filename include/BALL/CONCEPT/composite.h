@@ -1,4 +1,4 @@
-// $Id: composite.h,v 1.22 2000/08/29 20:00:14 amoll Exp $
+// $Id: composite.h,v 1.23 2000/08/30 19:57:59 oliver Exp $
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #define BALL_CONCEPT_COMPOSITE_H
@@ -106,7 +106,7 @@ namespace BALL
 		};
 		//@}
 				
-		BALL_CREATE(Composite)
+		BALL_CREATE_DEEP(Composite)
 
 		static UnaryProcessor<Composite> DEFAULT_PROCESSOR;
 		static KernelPredicateType DEFAULT_UNARY_PREDICATE;
@@ -780,7 +780,7 @@ namespace BALL
 		{
 			public:
 
-			BALL_CREATE(AncestorIteratorTraits_)
+			BALL_CREATE_DEEP(AncestorIteratorTraits_)
 
 			AncestorIteratorTraits_()
 				:	bound_(0),
@@ -930,7 +930,7 @@ namespace BALL
 		{
 			public:
 
-			BALL_CREATE(ChildCompositeIteratorTraits_)
+			BALL_CREATE_DEEP(ChildCompositeIteratorTraits_)
 
 			ChildCompositeIteratorTraits_()
 				:	bound_(0),
@@ -1212,7 +1212,7 @@ namespace BALL
 		{
 			public:
 
-			BALL_CREATE(CompositeIteratorTraits_)
+			BALL_CREATE_DEEP(CompositeIteratorTraits_)
 
 			CompositeIteratorTraits_()
 				:	bound_(0),
@@ -1427,7 +1427,7 @@ namespace BALL
 		{
 			public:
 
-			BALL_CREATE(SubcompositeIteratorTraits_)
+			BALL_CREATE_DEEP(SubcompositeIteratorTraits_)
 
 			SubcompositeIteratorTraits_()
 				: CompositeIteratorTraits_()

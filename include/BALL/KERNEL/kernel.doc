@@ -1,4 +1,4 @@
-// $Id: kernel.doc,v 1.5 2000/03/30 10:16:06 oliver Exp $
+// $Id: kernel.doc,v 1.6 2000/08/30 19:58:09 oliver Exp $
 
 /**@name	Kernel
 		This chapter contains all relevant information on 
@@ -15,10 +15,8 @@
 	//@Inlcude:	nucleotide.h
   //@Include: PDBAtom.h
   //@Include: protein.h
-  //@Include: PTE.h
   //@Include: residue.h
   //@Include: secondaryStructure.h
-	//@Include:	selector.h
   //@Include: system.h
   //@Include: universe.h
 	
@@ -26,11 +24,14 @@
 			Further classes and functions related to the kernel classes
 	*/
 	//@{
-	  //@Include: baseFragment.h
+	  //@Include: atomContainer.h
   	//@Include: predicate.h
 	  //@Include: global.h
   	//@Include: iterator.h
 	  //@Include: forEach.h
+	  //@Include: PTE.h
+		//@Include:	selector.h
+		//@Include:	standardPredicates.h
 	//@}
 
 //@}

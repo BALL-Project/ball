@@ -1,4 +1,4 @@
-// $Id: steepestDescent.h,v 1.6 2000/02/06 19:47:47 oliver Exp $
+// $Id: steepestDescent.h,v 1.7 2000/08/30 19:58:21 oliver Exp $
 // Line Search Minimizer: A special class for the line search minimization algorithm
 
 #ifndef BALL_MOLMEC_MINIMIZATION_STEEPESTDESCENT_H
@@ -89,7 +89,7 @@ namespace BALL
 		*/
 		//@{
 		
-		BALL_CREATE(SteepestDescentMinimizer)
+		BALL_CREATE_DEEP(SteepestDescentMinimizer)
 
 		/**	Default constructor.
 		*/

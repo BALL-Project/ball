@@ -71,7 +71,7 @@ void sipFragment::clear()
 	if (sipIsPyMethod(&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_clear,&relLock))
 		sipObject::sipVH_clear(&sipPyMethods[2],sipPyThis,relLock);
 	else
-		BaseFragment::clear();
+		AtomContainer::clear();
 }
 void sipFragment::destroy()
 {
@@ -80,7 +80,7 @@ void sipFragment::destroy()
 	if (sipIsPyMethod(&sipPyMethods[3],sipPyThis,NULL,sipName_BALL_destroy,&relLock))
 		sipObject::sipVH_destroy(&sipPyMethods[3],sipPyThis,relLock);
 	else
-		BaseFragment::destroy();
+		AtomContainer::destroy();
 }
 bool sipFragment::isValid() const
 {
@@ -88,7 +88,7 @@ bool sipFragment::isValid() const
 
 	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[4],sipPyThis,NULL,sipName_BALL_isValid,&relLock) ?
 		sipObject::sipVH_isValid(&sipPyMethods[4],sipPyThis,relLock) :
-		BaseFragment::isValid();
+		AtomContainer::isValid();
 }
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
@@ -100,7 +100,7 @@ const void *sipCast_Fragment(const void *ptr,PyObject *targetClass)
 	if (targetClass == sipClass_Fragment)
 		return ptr;
 
-	if ((res = sipCast_BaseFragment((BaseFragment *)(Fragment *)ptr,targetClass)) != NULL)
+	if ((res = sipCast_AtomContainer((AtomContainer *)(Fragment *)ptr,targetClass)) != NULL)
 		return res;
 
 	return NULL;

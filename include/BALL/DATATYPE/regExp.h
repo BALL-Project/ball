@@ -1,4 +1,4 @@
-// $Id: regExp.h,v 1.6 2000/07/29 18:02:57 amoll Exp $
+// $Id: regExp.h,v 1.7 2000/08/30 19:58:02 oliver Exp $
 
 #ifndef BALL_DATATYPE_REGEXP_H
 #define BALL_DATATYPE_REGEXP_H
@@ -33,7 +33,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE(RegularExpression)
+		BALL_CREATE_DEEP(RegularExpression)
 
 		/**	@name	String constants 
 		*/

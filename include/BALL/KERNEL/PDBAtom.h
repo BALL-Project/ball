@@ -1,4 +1,4 @@
-// $Id: PDBAtom.h,v 1.12 2000/06/03 00:12:02 amoll Exp $
+// $Id: PDBAtom.h,v 1.13 2000/08/30 19:58:04 oliver Exp $
 
 #ifndef BALL_KERNEL_PDBATOM_H
 #define BALL_KERNEL_PDBATOM_H
@@ -40,7 +40,7 @@ namespace BALL
 		
 		friend class Bond;
 
-		BALL_CREATE(PDBAtom)
+		BALL_CREATE_DEEP(PDBAtom)
 
 		/**	@name	Enums
 		*/

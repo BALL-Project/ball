@@ -1,7 +1,7 @@
-// $Id: fragment.sip,v 1.2 2000/08/28 15:48:08 oliver Exp $
+// $Id: fragment.sip,v 1.3 2000/08/30 19:59:10 oliver Exp $
 
 class Fragment
-  : BaseFragment
+  : AtomContainer
 {
 %HeaderCode
 	#include <BALL/KERNEL/fragment.h>
@@ -11,7 +11,7 @@ class Fragment
   // BALL_CREATE(Fragment)
   enum Property
   {
-   NUMBER_OF_PROPERTIES = BaseFragment::Property::NUMBER_OF_PROPERTIES
+   NUMBER_OF_PROPERTIES = AtomContainer::Property::NUMBER_OF_PROPERTIES
   };
   Fragment();
   Fragment(const Fragment& /fragment/, bool /deep/ = true);

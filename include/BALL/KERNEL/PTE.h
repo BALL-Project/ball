@@ -1,4 +1,4 @@
-// $Id: PTE.h,v 1.7 2000/06/16 10:41:50 anker Exp $
+// $Id: PTE.h,v 1.8 2000/08/30 19:58:05 oliver Exp $
 
 #ifndef BALL_KERNEL_PTE_H
 #define BALL_KERNEL_PTE_H
@@ -57,7 +57,7 @@ namespace BALL
 	{
 		public:
 
-			BALL_CREATE(Element)
+			BALL_CREATE_DEEP(Element)
 
 			/**		Group
 			*/
@@ -621,7 +621,7 @@ namespace BALL
 	{
 		public:
 
-			BALL_CREATE(PTE_)
+			BALL_CREATE_DEEP(PTE_)
 
 			/**	
 			*/

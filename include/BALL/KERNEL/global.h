@@ -1,4 +1,4 @@
-// $Id: global.h,v 1.5 2000/04/25 16:52:26 amoll Exp $
+// $Id: global.h,v 1.6 2000/08/30 19:58:08 oliver Exp $
 
 #ifndef BALL_KERNEL_GLOBAL_H
 #define BALL_KERNEL_GLOBAL_H
@@ -30,7 +30,7 @@ namespace BALL
 			However, cloning of any kernel objects should naturally clone bonds, too. The implementation of
 			this {\em cloning-with-bonds} is divided in two parts: first, a deep (recursive) cloning of
 			all composites is performed. Second, the root composite (which is always an AtomContainer,
-      as it is either a System or derived from BaseFragment) calls \Ref{cloneBonds} for the
+      as it is either a System or derived from AtomContainer) calls \Ref{cloneBonds} for the
 			cloned system to copy the bonds.\\
       The trouble with this implementation is that each clone method must have the possibility to
       call {\bf cloneBonds}, but only the first clone method in the recursive call tree is allowed

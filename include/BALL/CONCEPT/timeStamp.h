@@ -1,4 +1,4 @@
-// $Id: timeStamp.h,v 1.2 2000/08/28 14:13:15 amoll Exp $
+// $Id: timeStamp.h,v 1.3 2000/08/30 19:58:00 oliver Exp $
 
 #ifndef BALL_CONCEPT_TIMESTAMP_H
 #define BALL_CONCEPT_TIMESTAMP_H
@@ -30,7 +30,7 @@ namespace BALL
 	{
 		
 		public:
-		BALL_CREATE_NODEEP(Time)
+		BALL_CREATE(Time)
 
 		/**	@name Constructors and Destructors.
 		*/
@@ -144,7 +144,7 @@ namespace BALL
 	class TimeStamp
 	{
 		public:
-		BALL_CREATE_NODEEP(TimeStamp)
+		BALL_CREATE(TimeStamp)
 		/**	@name	Constructors and Destructors
 		*/
 		//@{

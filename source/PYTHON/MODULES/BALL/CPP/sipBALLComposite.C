@@ -298,28 +298,33 @@ static PyObject *sipDo_Composite_countDescendants(PyObject *sipThisObj,PyObject 
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_getPathLength(PyObject *,PyObject *sipArgs)
+static PyObject *sipDo_Composite_getPathLength(PyObject *sipThisObj,PyObject *sipArgs)
 {
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Composite)) == NULL)
+		return NULL;
 
 	{
 		const Composite *a0;
 		PyObject *a0obj;
-		const Composite *a1;
-		PyObject *a1obj;
 
-		if (sipParseArgs(sipArgs,"-II",sipCanConvertTo_Composite,&a0obj,sipCanConvertTo_Composite,&a1obj))
+		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
 		{
 			int res;
+			Composite *ptr;
+
+			if ((ptr = (Composite *)sipGetCppPtr(sipThis,sipClass_Composite)) == NULL)
+				return NULL;
 
 			int iserr = 0;
 
 			sipConvertTo_Composite(a0obj,(Composite **)&a0,1,&iserr);
-			sipConvertTo_Composite(a1obj,(Composite **)&a1,1,&iserr);
 
 			if (iserr)
 				return NULL;
 
-			res = Composite::getPathLength(* a0,* a1);
+			res = ptr -> Composite::getPathLength(* a0);
 
 			return PyInt_FromLong((long)res);
 		}

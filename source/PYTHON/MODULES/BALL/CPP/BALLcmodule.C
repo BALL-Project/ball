@@ -31,13 +31,13 @@
 #include "sipBALLXYZFile.h"
 #include "sipBALLResourceEntry.h"
 #include "sipBALLResourceFile.h"
+#include "sipBALLAtom.h"
+#include "sipBALLAtomType.h"
+#include "sipBALLAtomContainer.h"
 #include "sipBALLPDBAtom.h"
 #include "sipBALLElement.h"
 #include "sipBALLPTE_.h"
-#include "sipBALLAtom.h"
-#include "sipBALLAtomType.h"
 #include "sipBALLBond.h"
-#include "sipBALLBaseFragment.h"
 #include "sipBALLChain.h"
 #include "sipBALLExpressionPredicate.h"
 #include "sipBALLExpression.h"
@@ -91,7 +91,7 @@
 #include "sipBALLPyCompositeDescriptorList.h"
 #include "sipBALLCompositeProcessor.h"
 #include "sipBALLPyBondList.h"
-#include "sipBALLPyBaseFragmentList.h"
+#include "sipBALLPyAtomContainerList.h"
 #include "sipBALLPyFragmentList.h"
 #include "sipBALLPyMoleculeList.h"
 #include "sipBALLPyPDBAtomList.h"
@@ -236,7 +236,7 @@ char sipName_BALL_PyResidueList[] = "PyResidueList";
 char sipName_BALL_PyPDBAtomList[] = "PyPDBAtomList";
 char sipName_BALL_PyMoleculeList[] = "PyMoleculeList";
 char sipName_BALL_PyFragmentList[] = "PyFragmentList";
-char sipName_BALL_PyBaseFragmentList[] = "PyBaseFragmentList";
+char sipName_BALL_PyAtomContainerList[] = "PyAtomContainerList";
 char sipName_BALL_PyBondList[] = "PyBondList";
 char sipName_BALL_PyCompositeDescriptorList[] = "PyCompositeDescriptorList";
 char sipName_BALL_ResidueProcessor[] = "ResidueProcessor";
@@ -253,7 +253,7 @@ char sipName_BALL_secondaryStructures[] = "secondaryStructures";
 char sipName_BALL_residues[] = "residues";
 char sipName_BALL_molecules[] = "molecules";
 char sipName_BALL_fragments[] = "fragments";
-char sipName_BALL_baseFragments[] = "baseFragments";
+char sipName_BALL_atomContainers[] = "atomContainers";
 char sipName_BALL_bonds[] = "bonds";
 char sipName_BALL_PDBAtoms[] = "PDBAtoms";
 char sipName_BALL_atoms[] = "atoms";
@@ -538,20 +538,6 @@ char sipName_BALL_getCTerminal[] = "getCTerminal";
 char sipName_BALL_getNTerminal[] = "getNTerminal";
 char sipName_BALL_getSecondaryStructure[] = "getSecondaryStructure";
 char sipName_BALL_Chain[] = "Chain";
-char sipName_BALL_apply[] = "apply";
-char sipName_BALL_isSuperBaseFragmentOf[] = "isSuperBaseFragmentOf";
-char sipName_BALL_isSubBaseFragmentOf[] = "isSubBaseFragmentOf";
-char sipName_BALL_remove[] = "remove";
-char sipName_BALL_append[] = "append";
-char sipName_BALL_prepend[] = "prepend";
-char sipName_BALL_countIntraBonds[] = "countIntraBonds";
-char sipName_BALL_countInterBonds[] = "countInterBonds";
-char sipName_BALL_countAtoms[] = "countAtoms";
-char sipName_BALL_countBaseFragments[] = "countBaseFragments";
-char sipName_BALL_getAtom[] = "getAtom";
-char sipName_BALL_getBaseFragment[] = "getBaseFragment";
-char sipName_BALL_getSuperBaseFragment[] = "getSuperBaseFragment";
-char sipName_BALL_BaseFragment[] = "BaseFragment";
 char sipName_BALL_isIntraBondOf[] = "isIntraBondOf";
 char sipName_BALL_isIntraBond[] = "isIntraBond";
 char sipName_BALL_isInterBondOf[] = "isInterBondOf";
@@ -568,36 +554,6 @@ char sipName_BALL_getFirstAtom[] = "getFirstAtom";
 char sipName_BALL_setFirstAtom[] = "setFirstAtom";
 char sipName_BALL_finalize[] = "finalize";
 char sipName_BALL_Bond[] = "Bond";
-char sipName_BALL_AtomType[] = "AtomType";
-char sipName_BALL_isVicinal[] = "isVicinal";
-char sipName_BALL_isGeminal[] = "isGeminal";
-char sipName_BALL_isBoundTo[] = "isBoundTo";
-char sipName_BALL_hasBond[] = "hasBond";
-char sipName_BALL_destroyBonds[] = "destroyBonds";
-char sipName_BALL_destroyBond[] = "destroyBond";
-char sipName_BALL_cloneBond[] = "cloneBond";
-char sipName_BALL_createBond[] = "createBond";
-char sipName_BALL_getBond[] = "getBond";
-char sipName_BALL_countBonds[] = "countBonds";
-char sipName_BALL_getForce[] = "getForce";
-char sipName_BALL_setForce[] = "setForce";
-char sipName_BALL_getVelocity[] = "getVelocity";
-char sipName_BALL_setVelocity[] = "setVelocity";
-char sipName_BALL_setTypeName[] = "setTypeName";
-char sipName_BALL_getTypeName[] = "getTypeName";
-char sipName_BALL_setType[] = "setType";
-char sipName_BALL_getRadius[] = "getRadius";
-char sipName_BALL_setRadius[] = "setRadius";
-char sipName_BALL_getPosition[] = "getPosition";
-char sipName_BALL_setPosition[] = "setPosition";
-char sipName_BALL_getFullName[] = "getFullName";
-char sipName_BALL_getFragment[] = "getFragment";
-char sipName_BALL_getMolecule[] = "getMolecule";
-char sipName_BALL_getCharge[] = "getCharge";
-char sipName_BALL_setCharge[] = "setCharge";
-char sipName_BALL_setElement[] = "setElement";
-char sipName_BALL_UNK[] = "UNK";
-char sipName_BALL_getElement[] = "getElement";
 char sipName_BALL_PTE_[] = "PTE_";
 char sipName_BALL_isUnknown[] = "isUnknown";
 char sipName_BALL_getElectronegativity[] = "getElectronegativity";
@@ -632,8 +588,52 @@ char sipName_BALL_setBranchDesignator[] = "setBranchDesignator";
 char sipName_BALL_getResidue[] = "getResidue";
 char sipName_BALL_getChain[] = "getChain";
 char sipName_BALL_getProtein[] = "getProtein";
-char sipName_BALL_Atom[] = "Atom";
 char sipName_BALL_PDBAtom[] = "PDBAtom";
+char sipName_BALL_apply[] = "apply";
+char sipName_BALL_isSuperAtomContainerOf[] = "isSuperAtomContainerOf";
+char sipName_BALL_isSubAtomContainerOf[] = "isSubAtomContainerOf";
+char sipName_BALL_remove[] = "remove";
+char sipName_BALL_append[] = "append";
+char sipName_BALL_prepend[] = "prepend";
+char sipName_BALL_countIntraBonds[] = "countIntraBonds";
+char sipName_BALL_countInterBonds[] = "countInterBonds";
+char sipName_BALL_countAtoms[] = "countAtoms";
+char sipName_BALL_countAtomContainers[] = "countAtomContainers";
+char sipName_BALL_getAtom[] = "getAtom";
+char sipName_BALL_getAtomContainer[] = "getAtomContainer";
+char sipName_BALL_getSuperAtomContainer[] = "getSuperAtomContainer";
+char sipName_BALL_AtomContainer[] = "AtomContainer";
+char sipName_BALL_AtomType[] = "AtomType";
+char sipName_BALL_isVicinal[] = "isVicinal";
+char sipName_BALL_isGeminal[] = "isGeminal";
+char sipName_BALL_isBoundTo[] = "isBoundTo";
+char sipName_BALL_hasBond[] = "hasBond";
+char sipName_BALL_destroyBonds[] = "destroyBonds";
+char sipName_BALL_destroyBond[] = "destroyBond";
+char sipName_BALL_cloneBond[] = "cloneBond";
+char sipName_BALL_createBond[] = "createBond";
+char sipName_BALL_getBond[] = "getBond";
+char sipName_BALL_countBonds[] = "countBonds";
+char sipName_BALL_getForce[] = "getForce";
+char sipName_BALL_setForce[] = "setForce";
+char sipName_BALL_getVelocity[] = "getVelocity";
+char sipName_BALL_setVelocity[] = "setVelocity";
+char sipName_BALL_setTypeName[] = "setTypeName";
+char sipName_BALL_getTypeName[] = "getTypeName";
+char sipName_BALL_setType[] = "setType";
+char sipName_BALL_getRadius[] = "getRadius";
+char sipName_BALL_setRadius[] = "setRadius";
+char sipName_BALL_getPosition[] = "getPosition";
+char sipName_BALL_setPosition[] = "setPosition";
+char sipName_BALL_getFullName[] = "getFullName";
+char sipName_BALL_getFragment[] = "getFragment";
+char sipName_BALL_getMolecule[] = "getMolecule";
+char sipName_BALL_getCharge[] = "getCharge";
+char sipName_BALL_setCharge[] = "setCharge";
+char sipName_BALL_getElement[] = "getElement";
+char sipName_BALL_setElement[] = "setElement";
+char sipName_BALL_UNK[] = "UNK";
+char sipName_BALL_Atom[] = "Atom";
 char sipName_BALL_hasKey[] = "hasKey";
 char sipName_BALL_save[] = "save";
 char sipName_BALL_saveAs[] = "saveAs";
@@ -958,18 +958,18 @@ static PyObject *sipDo_calculateSASPoints(PyObject *,PyObject *sipArgs)
 
 	{
 #line 44 "numericalSAS.sip"
-	const BaseFragment *a0;
+	const AtomContainer *a0;
 	PyObject *a0obj;
 	float a1 = 1.5;
 	Size a2 = 0;
 
-	if (sipParseArgs(sipArgs,"-I|fI",sipCanConvertTo_BaseFragment,&a0obj,&a1,&a2))
+	if (sipParseArgs(sipArgs,"-I|fI",sipCanConvertTo_AtomContainer,&a0obj,&a1,&a2))
 	{
 		Surface *res;
 
 		int iserr = 0;
 
-		sipConvertTo_BaseFragment(a0obj,(BaseFragment **)&a0,1,&iserr);
+		sipConvertTo_AtomContainer(a0obj,(AtomContainer **)&a0,1,&iserr);
 		if (iserr)
 			return NULL;
 
@@ -993,18 +993,18 @@ static PyObject *sipDo_calculateSASAtomAreas(PyObject *,PyObject *sipArgs)
 
 	{
 #line 15 "numericalSAS.sip"
-	const BaseFragment *a0;
+	const AtomContainer *a0;
 	PyObject *a0obj;
 	float a1 = 1.5;
 	Size a2 = 0;
 
-	if (sipParseArgs(sipArgs,"-I|fI",sipCanConvertTo_BaseFragment,&a0obj,&a1,&a2))
+	if (sipParseArgs(sipArgs,"-I|fI",sipCanConvertTo_AtomContainer,&a0obj,&a1,&a2))
 	{
 		PyAtomDict *res;
 
 		int iserr = 0;
 
-		sipConvertTo_BaseFragment(a0obj,(BaseFragment **)&a0,1,&iserr);
+		sipConvertTo_AtomContainer(a0obj,(AtomContainer **)&a0,1,&iserr);
 
 		if (iserr)
 			return NULL;
@@ -1031,18 +1031,18 @@ static PyObject *sipDo_calculateSASVolume(PyObject *,PyObject *sipArgs)
 {
 
 	{
-		const BaseFragment *a0;
+		const AtomContainer *a0;
 		PyObject *a0obj;
 		float a1 = 1.5;
 		int a2 = 400;
 
-		if (sipParseArgs(sipArgs,"-I|fi",sipCanConvertTo_BaseFragment,&a0obj,&a1,&a2))
+		if (sipParseArgs(sipArgs,"-I|fi",sipCanConvertTo_AtomContainer,&a0obj,&a1,&a2))
 		{
 			float res;
 
 			int iserr = 0;
 
-			sipConvertTo_BaseFragment(a0obj,(BaseFragment **)&a0,1,&iserr);
+			sipConvertTo_AtomContainer(a0obj,(AtomContainer **)&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -1064,18 +1064,18 @@ static PyObject *sipDo_calculateSASArea(PyObject *,PyObject *sipArgs)
 {
 
 	{
-		const BaseFragment *a0;
+		const AtomContainer *a0;
 		PyObject *a0obj;
 		float a1 = 1.5;
 		int a2 = 400;
 
-		if (sipParseArgs(sipArgs,"-I|fi",sipCanConvertTo_BaseFragment,&a0obj,&a1,&a2))
+		if (sipParseArgs(sipArgs,"-I|fi",sipCanConvertTo_AtomContainer,&a0obj,&a1,&a2))
 		{
 			float res;
 
 			int iserr = 0;
 
-			sipConvertTo_BaseFragment(a0obj,(BaseFragment **)&a0,1,&iserr);
+			sipConvertTo_AtomContainer(a0obj,(AtomContainer **)&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -1174,17 +1174,17 @@ static PyObject *sipDo_nucleicAcids(PyObject *,PyObject *sipArgs)
 {
 
 	{
-		const BaseFragment *a0;
+		const AtomContainer *a0;
 		PyObject *a0obj;
 		long a1 = false;
 
-		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_BaseFragment,&a0obj,&a1))
+		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_AtomContainer,&a0obj,&a1))
 		{
 			PyNucleicAcidList *res;
 
 			int iserr = 0;
 
-			sipConvertTo_BaseFragment(a0obj,(BaseFragment **)&a0,1,&iserr);
+			sipConvertTo_AtomContainer(a0obj,(AtomContainer **)&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -1208,17 +1208,17 @@ static PyObject *sipDo_nucleotides(PyObject *,PyObject *sipArgs)
 {
 
 	{
-		const BaseFragment *a0;
+		const AtomContainer *a0;
 		PyObject *a0obj;
 		long a1 = false;
 
-		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_BaseFragment,&a0obj,&a1))
+		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_AtomContainer,&a0obj,&a1))
 		{
 			PyNucleotideList *res;
 
 			int iserr = 0;
 
-			sipConvertTo_BaseFragment(a0obj,(BaseFragment **)&a0,1,&iserr);
+			sipConvertTo_AtomContainer(a0obj,(AtomContainer **)&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -1242,17 +1242,17 @@ static PyObject *sipDo_proteins(PyObject *,PyObject *sipArgs)
 {
 
 	{
-		const BaseFragment *a0;
+		const AtomContainer *a0;
 		PyObject *a0obj;
 		long a1 = false;
 
-		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_BaseFragment,&a0obj,&a1))
+		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_AtomContainer,&a0obj,&a1))
 		{
 			PyProteinList *res;
 
 			int iserr = 0;
 
-			sipConvertTo_BaseFragment(a0obj,(BaseFragment **)&a0,1,&iserr);
+			sipConvertTo_AtomContainer(a0obj,(AtomContainer **)&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -1276,17 +1276,17 @@ static PyObject *sipDo_chains(PyObject *,PyObject *sipArgs)
 {
 
 	{
-		const BaseFragment *a0;
+		const AtomContainer *a0;
 		PyObject *a0obj;
 		long a1 = false;
 
-		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_BaseFragment,&a0obj,&a1))
+		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_AtomContainer,&a0obj,&a1))
 		{
 			PyChainList *res;
 
 			int iserr = 0;
 
-			sipConvertTo_BaseFragment(a0obj,(BaseFragment **)&a0,1,&iserr);
+			sipConvertTo_AtomContainer(a0obj,(AtomContainer **)&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -1310,17 +1310,17 @@ static PyObject *sipDo_secondaryStructures(PyObject *,PyObject *sipArgs)
 {
 
 	{
-		const BaseFragment *a0;
+		const AtomContainer *a0;
 		PyObject *a0obj;
 		long a1 = false;
 
-		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_BaseFragment,&a0obj,&a1))
+		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_AtomContainer,&a0obj,&a1))
 		{
 			PySecondaryStructureList *res;
 
 			int iserr = 0;
 
-			sipConvertTo_BaseFragment(a0obj,(BaseFragment **)&a0,1,&iserr);
+			sipConvertTo_AtomContainer(a0obj,(AtomContainer **)&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -1344,17 +1344,17 @@ static PyObject *sipDo_residues(PyObject *,PyObject *sipArgs)
 {
 
 	{
-		const BaseFragment *a0;
+		const AtomContainer *a0;
 		PyObject *a0obj;
 		long a1 = false;
 
-		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_BaseFragment,&a0obj,&a1))
+		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_AtomContainer,&a0obj,&a1))
 		{
 			PyResidueList *res;
 
 			int iserr = 0;
 
-			sipConvertTo_BaseFragment(a0obj,(BaseFragment **)&a0,1,&iserr);
+			sipConvertTo_AtomContainer(a0obj,(AtomContainer **)&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -1378,17 +1378,17 @@ static PyObject *sipDo_molecules(PyObject *,PyObject *sipArgs)
 {
 
 	{
-		const BaseFragment *a0;
+		const AtomContainer *a0;
 		PyObject *a0obj;
 		long a1 = false;
 
-		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_BaseFragment,&a0obj,&a1))
+		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_AtomContainer,&a0obj,&a1))
 		{
 			PyMoleculeList *res;
 
 			int iserr = 0;
 
-			sipConvertTo_BaseFragment(a0obj,(BaseFragment **)&a0,1,&iserr);
+			sipConvertTo_AtomContainer(a0obj,(AtomContainer **)&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -1412,17 +1412,17 @@ static PyObject *sipDo_fragments(PyObject *,PyObject *sipArgs)
 {
 
 	{
-		const BaseFragment *a0;
+		const AtomContainer *a0;
 		PyObject *a0obj;
 		long a1 = false;
 
-		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_BaseFragment,&a0obj,&a1))
+		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_AtomContainer,&a0obj,&a1))
 		{
 			PyFragmentList *res;
 
 			int iserr = 0;
 
-			sipConvertTo_BaseFragment(a0obj,(BaseFragment **)&a0,1,&iserr);
+			sipConvertTo_AtomContainer(a0obj,(AtomContainer **)&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -1442,28 +1442,28 @@ static PyObject *sipDo_fragments(PyObject *,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_baseFragments(PyObject *,PyObject *sipArgs)
+static PyObject *sipDo_atomContainers(PyObject *,PyObject *sipArgs)
 {
 
 	{
-		const BaseFragment *a0;
+		const AtomContainer *a0;
 		PyObject *a0obj;
 		long a1 = false;
 
-		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_BaseFragment,&a0obj,&a1))
+		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_AtomContainer,&a0obj,&a1))
 		{
-			PyBaseFragmentList *res;
+			PyAtomContainerList *res;
 
 			int iserr = 0;
 
-			sipConvertTo_BaseFragment(a0obj,(BaseFragment **)&a0,1,&iserr);
+			sipConvertTo_AtomContainer(a0obj,(AtomContainer **)&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;
 
-			res = baseFragments(* a0, (bool)a1);
+			res = atomContainers(* a0, (bool)a1);
 
-			PyObject *resobj = sipConvertFrom_PyBaseFragmentList(res);
+			PyObject *resobj = sipConvertFrom_PyAtomContainerList(res);
 
 			return resobj;
 		}
@@ -1471,7 +1471,7 @@ static PyObject *sipDo_baseFragments(PyObject *,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoFunction(sipName_BALL_baseFragments);
+	sipNoFunction(sipName_BALL_atomContainers);
 
 	return NULL;
 }
@@ -1480,17 +1480,17 @@ static PyObject *sipDo_bonds(PyObject *,PyObject *sipArgs)
 {
 
 	{
-		const BaseFragment *a0;
+		const AtomContainer *a0;
 		PyObject *a0obj;
 		long a1 = false;
 
-		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_BaseFragment,&a0obj,&a1))
+		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_AtomContainer,&a0obj,&a1))
 		{
 			PyBondList *res;
 
 			int iserr = 0;
 
-			sipConvertTo_BaseFragment(a0obj,(BaseFragment **)&a0,1,&iserr);
+			sipConvertTo_AtomContainer(a0obj,(AtomContainer **)&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -1537,18 +1537,18 @@ static PyObject *sipDo_PDBAtoms(PyObject *,PyObject *sipArgs)
 {
 
 	{
-		const BaseFragment *a0;
+		const AtomContainer *a0;
 		PyObject *a0obj;
 		const String *a1;
 		PyObject *a1obj;
 
-		if (sipParseArgs(sipArgs,"-II",sipCanConvertTo_BaseFragment,&a0obj,sipCanConvertTo_String,&a1obj))
+		if (sipParseArgs(sipArgs,"-II",sipCanConvertTo_AtomContainer,&a0obj,sipCanConvertTo_String,&a1obj))
 		{
 			PyPDBAtomList *res;
 
 			int iserr = 0;
 
-			sipConvertTo_BaseFragment(a0obj,(BaseFragment **)&a0,1,&iserr);
+			sipConvertTo_AtomContainer(a0obj,(AtomContainer **)&a0,1,&iserr);
 			int istemp1 = sipConvertTo_String(a1obj,(String **)&a1,1,&iserr);
 
 			if (iserr)
@@ -1566,16 +1566,16 @@ static PyObject *sipDo_PDBAtoms(PyObject *,PyObject *sipArgs)
 	}
 
 	{
-		const BaseFragment *a0;
+		const AtomContainer *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_BaseFragment,&a0obj))
+		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_AtomContainer,&a0obj))
 		{
 			PyPDBAtomList *res;
 
 			int iserr = 0;
 
-			sipConvertTo_BaseFragment(a0obj,(BaseFragment **)&a0,1,&iserr);
+			sipConvertTo_AtomContainer(a0obj,(AtomContainer **)&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -1599,18 +1599,18 @@ static PyObject *sipDo_atoms(PyObject *,PyObject *sipArgs)
 {
 
 	{
-		const BaseFragment *a0;
+		const AtomContainer *a0;
 		PyObject *a0obj;
 		const String *a1;
 		PyObject *a1obj;
 
-		if (sipParseArgs(sipArgs,"-II",sipCanConvertTo_BaseFragment,&a0obj,sipCanConvertTo_String,&a1obj))
+		if (sipParseArgs(sipArgs,"-II",sipCanConvertTo_AtomContainer,&a0obj,sipCanConvertTo_String,&a1obj))
 		{
 			PyAtomList *res;
 
 			int iserr = 0;
 
-			sipConvertTo_BaseFragment(a0obj,(BaseFragment **)&a0,1,&iserr);
+			sipConvertTo_AtomContainer(a0obj,(AtomContainer **)&a0,1,&iserr);
 			int istemp1 = sipConvertTo_String(a1obj,(String **)&a1,1,&iserr);
 
 			if (iserr)
@@ -1628,16 +1628,16 @@ static PyObject *sipDo_atoms(PyObject *,PyObject *sipArgs)
 	}
 
 	{
-		const BaseFragment *a0;
+		const AtomContainer *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_BaseFragment,&a0obj))
+		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_AtomContainer,&a0obj))
 		{
 			PyAtomList *res;
 
 			int iserr = 0;
 
-			sipConvertTo_BaseFragment(a0obj,(BaseFragment **)&a0,1,&iserr);
+			sipConvertTo_AtomContainer(a0obj,(AtomContainer **)&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -2942,16 +2942,16 @@ static PyObject *sipDo_calculateDistanceCoulomb(PyObject *,PyObject *sipArgs)
 {
 
 	{
-		const BaseFragment *a0;
+		const AtomContainer *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_BaseFragment,&a0obj))
+		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_AtomContainer,&a0obj))
 		{
 			double res;
 
 			int iserr = 0;
 
-			sipConvertTo_BaseFragment(a0obj,(BaseFragment **)&a0,1,&iserr);
+			sipConvertTo_AtomContainer(a0obj,(AtomContainer **)&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -2973,16 +2973,16 @@ static PyObject *sipDo_calculateCoulomb(PyObject *,PyObject *sipArgs)
 {
 
 	{
-		const BaseFragment *a0;
+		const AtomContainer *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_BaseFragment,&a0obj))
+		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_AtomContainer,&a0obj))
 		{
 			double res;
 
 			int iserr = 0;
 
-			sipConvertTo_BaseFragment(a0obj,(BaseFragment **)&a0,1,&iserr);
+			sipConvertTo_AtomContainer(a0obj,(AtomContainer **)&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -3004,16 +3004,16 @@ static PyObject *sipDo_calculateACE(PyObject *,PyObject *sipArgs)
 {
 
 	{
-		BaseFragment *a0;
+		AtomContainer *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_BaseFragment,&a0obj))
+		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_AtomContainer,&a0obj))
 		{
 			double res;
 
 			int iserr = 0;
 
-			sipConvertTo_BaseFragment(a0obj,&a0,1,&iserr);
+			sipConvertTo_AtomContainer(a0obj,&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -3114,13 +3114,13 @@ static sipClassDef classesTable[] = {
 	{sipName_BALL_Expression, sipNew_Expression, &sipClass_Expression, sipClassAttrTab_Expression, NULL},
 	{sipName_BALL_ExpressionPredicate, sipNew_ExpressionPredicate, &sipClass_ExpressionPredicate, sipClassAttrTab_ExpressionPredicate, NULL},
 	{sipName_BALL_Chain, sipNew_Chain, &sipClass_Chain, sipClassAttrTab_Chain, NULL},
-	{sipName_BALL_BaseFragment, sipNew_BaseFragment, &sipClass_BaseFragment, sipClassAttrTab_BaseFragment, NULL},
 	{sipName_BALL_Bond, sipNew_Bond, &sipClass_Bond, sipClassAttrTab_Bond, NULL},
-	{sipName_BALL_AtomType, sipNew_AtomType, &sipClass_AtomType, sipClassAttrTab_AtomType, NULL},
 	{sipName_BALL_PTE_, sipNew_PTE_, &sipClass_PTE_, sipClassAttrTab_PTE_, NULL},
 	{sipName_BALL_Element, sipNew_Element, &sipClass_Element, sipClassAttrTab_Element, NULL},
-	{sipName_BALL_Atom, sipNew_Atom, &sipClass_Atom, sipClassAttrTab_Atom, NULL},
 	{sipName_BALL_PDBAtom, sipNew_PDBAtom, &sipClass_PDBAtom, sipClassAttrTab_PDBAtom, NULL},
+	{sipName_BALL_AtomContainer, sipNew_AtomContainer, &sipClass_AtomContainer, sipClassAttrTab_AtomContainer, NULL},
+	{sipName_BALL_AtomType, sipNew_AtomType, &sipClass_AtomType, sipClassAttrTab_AtomType, NULL},
+	{sipName_BALL_Atom, sipNew_Atom, &sipClass_Atom, sipClassAttrTab_Atom, NULL},
 	{sipName_BALL_ResourceFile, sipNew_ResourceFile, &sipClass_ResourceFile, sipClassAttrTab_ResourceFile, NULL},
 	{sipName_BALL_ResourceEntry, sipNew_ResourceEntry, &sipClass_ResourceEntry, sipClassAttrTab_ResourceEntry, NULL},
 	{sipName_BALL_XYZFile, sipNew_XYZFile, &sipClass_XYZFile, sipClassAttrTab_XYZFile, NULL},
@@ -3206,7 +3206,7 @@ static PyObject *initModule(PyObject *,PyObject *)
 		{sipName_BALL_residues, sipDo_residues, METH_VARARGS, NULL},
 		{sipName_BALL_molecules, sipDo_molecules, METH_VARARGS, NULL},
 		{sipName_BALL_fragments, sipDo_fragments, METH_VARARGS, NULL},
-		{sipName_BALL_baseFragments, sipDo_baseFragments, METH_VARARGS, NULL},
+		{sipName_BALL_atomContainers, sipDo_atomContainers, METH_VARARGS, NULL},
 		{sipName_BALL_bonds, sipDo_bonds, METH_VARARGS, NULL},
 		{sipName_BALL_PDBAtoms, sipDo_PDBAtoms, METH_VARARGS, NULL},
 		{sipName_BALL_atoms, sipDo_atoms, METH_VARARGS, NULL},

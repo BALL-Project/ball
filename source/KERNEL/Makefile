@@ -4,7 +4,7 @@ THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
 	atom.C\
-	baseFragment.C\
+	atomContainer.C\
 	bond.C\
 	chain.C\
 	expression.C\

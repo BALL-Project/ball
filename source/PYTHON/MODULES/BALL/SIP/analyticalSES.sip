@@ -1,4 +1,4 @@
-// $Id: analyticalSES.sip,v 1.1 2000/07/18 21:27:06 oliver Exp $
+// $Id: analyticalSES.sip,v 1.2 2000/08/30 19:59:07 oliver Exp $
 
 %HeaderCode 
 	#include <BALL/STRUCTURE/analyticalSES.h>
@@ -6,8 +6,8 @@
 %End
 
 float calculateSESAtomAreas
-  (const BaseFragment& /fragment/, AtomDict& /atom_areas/, float /probe_radius/ = 1.5);
+  (const AtomContainer& /atom_container/, AtomDict& /atom_areas/, float /probe_radius/ = 1.5);
 float calculateSESArea
-  (const BaseFragment& /fragment/, float /probe_radius/ = 1.5);
+  (const AtomContainer& /atom_container/, float /probe_radius/ = 1.5);
 float calculateSESVolume
-  (const BaseFragment& /fragment/, float /probe_radius/ = 1.5);
+  (const AtomContainer& /atom_container/, float /probe_radius/ = 1.5);

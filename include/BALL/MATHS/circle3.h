@@ -1,4 +1,4 @@
-// $Id: circle3.h,v 1.17 2000/05/04 11:06:33 amoll Exp $
+// $Id: circle3.h,v 1.18 2000/08/30 19:58:13 oliver Exp $
 
 #ifndef BALL_MATHS_CIRCLE3_H
 #define BALL_MATHS_CIRCLE3_H
@@ -44,7 +44,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE_NODEEP(TCircle3<T>)
+		BALL_CREATE(TCircle3<T>)
 
 
 		/**	@name	Constructors and Destructors

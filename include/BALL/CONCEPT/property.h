@@ -1,4 +1,4 @@
-// $Id: property.h,v 1.13 2000/08/28 15:53:10 oliver Exp $
+// $Id: property.h,v 1.14 2000/08/30 19:58:00 oliver Exp $
 
 #ifndef BALL_CONCEPT_PROPERTY_H
 #define BALL_CONCEPT_PROPERTY_H
@@ -34,7 +34,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE_NODEEP(NamedProperty)
+		BALL_CREATE(NamedProperty)
 
 		/**	@name Enums
 		*/

@@ -1,9 +1,9 @@
-// $Id: pyAtomList.C,v 1.1 2000/07/18 21:18:37 oliver Exp $
+// $Id: pyAtomList.C,v 1.2 2000/08/30 19:58:37 oliver Exp $
 
 #include <BALL/PYTHON/pyAtomList.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/expression.h>
-#include <BALL/KERNEL/baseFragment.h>
+#include <BALL/KERNEL/atomContainer.h>
 
 namespace BALL
 {
@@ -22,17 +22,17 @@ namespace BALL
 	{
 	}
 
-	PyAtomList::PyAtomList(const BaseFragment& fragment, const String& expression)
+	PyAtomList::PyAtomList(const AtomContainer& fragment, const String& expression)
 	{
 		set(fragment, expression);
 	}
 
-	PyAtomList::PyAtomList(const BaseFragment& fragment)
+	PyAtomList::PyAtomList(const AtomContainer& fragment)
 	{
 		set(fragment, "");
 	}
 
-	void PyAtomList::set(const BaseFragment& fragment, const String& expression)
+	void PyAtomList::set(const AtomContainer& fragment, const String& expression)
 	{
 		// clear the old contents of the list
 		clear();

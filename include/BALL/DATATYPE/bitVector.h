@@ -1,4 +1,4 @@
-// $Id: bitVector.h,v 1.15 2000/08/24 12:05:13 amoll Exp $
+// $Id: bitVector.h,v 1.16 2000/08/30 19:58:01 oliver Exp $
 
 #ifndef BALL_DATATYPE_BITVECTOR_H
 #define BALL_DATATYPE_BITVECTOR_H
@@ -129,7 +129,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE(BitVector)
+		BALL_CREATE_DEEP(BitVector)
 
 
 		/**	@name	Type Definitions and Constants

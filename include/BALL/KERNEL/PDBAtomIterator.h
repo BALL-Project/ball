@@ -1,4 +1,4 @@
-// $Id: PDBAtomIterator.h,v 1.4 2000/01/10 15:51:00 oliver Exp $ 
+// $Id: PDBAtomIterator.h,v 1.5 2000/08/30 19:58:04 oliver Exp $ 
 
 #ifndef BALL_KERNEL_PDBATOMITERATOR_H
 #define BALL_KERNEL_PDBATOMITERATOR_H
@@ -27,7 +27,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE(PDBAtomIteratorTraits_)
+		BALL_CREATE_DEEP(PDBAtomIteratorTraits_)
 
 		PDBAtomIteratorTraits_()
 			:	CompositeIteratorTraits_()

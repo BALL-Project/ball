@@ -1,7 +1,7 @@
-// $Id: chain.sip,v 1.1 2000/07/18 21:27:15 oliver Exp $
+// $Id: chain.sip,v 1.2 2000/08/30 19:59:09 oliver Exp $
 
 class Chain
- : BaseFragment
+ : AtomContainer
 {
 %HeaderCode
 	#include <BALL/KERNEL/chain.h>

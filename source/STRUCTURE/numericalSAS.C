@@ -1,9 +1,9 @@
-// $Id: numericalSAS.C,v 1.15 2000/08/03 08:54:49 oliver Exp $
+// $Id: numericalSAS.C,v 1.16 2000/08/30 19:59:13 oliver Exp $
 
 #include <BALL/STRUCTURE/numericalSAS.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/DATATYPE/hashMap.h>
-#include <BALL/KERNEL/baseFragment.h>
+#include <BALL/KERNEL/atomContainer.h>
 #include <BALL/MATHS/surface.h>
 
 using namespace std;
@@ -19,7 +19,7 @@ namespace BALL
 	int nsc_(double*, double*, int, int, int, double*, double**, double*, double**, int*, int**);
 
 	float calculateSASAtomAreas
-		(const BaseFragment& fragment, HashMap<Atom*,float>& atom_areas,
+		(const AtomContainer& fragment, HashMap<Atom*,float>& atom_areas,
 		 float probe_radius, Size number_of_dots)
 	{
 		// extract all atoms: iterate over all composites and
@@ -103,7 +103,7 @@ namespace BALL
 
 
 	float calculateSASArea	
-		(const BaseFragment& fragment, float probe_radius, Size number_of_dots)
+		(const AtomContainer& fragment, float probe_radius, Size number_of_dots)
 	{
 		// extract all atoms: iterate over all composites and
 		// check whether they are Atoms
@@ -167,7 +167,7 @@ namespace BALL
 	}
 
 	float calculateSASVolume
-		(const BaseFragment& fragment, float probe_radius, Size number_of_dots)
+		(const AtomContainer& fragment, float probe_radius, Size number_of_dots)
 	{
 		// extract all atoms: iterate over all composites and
 		// check whether they are Atoms
@@ -231,7 +231,7 @@ namespace BALL
 	}
 
   float calculateSASPoints
-		(const BaseFragment& fragment, Surface& surface,
+		(const AtomContainer& fragment, Surface& surface,
 		 float probe_radius,  Size number_of_dots)
 	{
 		// extract all atoms: iterate over all composites and
@@ -337,7 +337,7 @@ namespace BALL
 	}
 	
   float calculateSASAtomPoints
-		(const BaseFragment& fragment, HashMap<Atom*,Surface>& atom_surfaces,
+		(const AtomContainer& fragment, HashMap<Atom*,Surface>& atom_surfaces,
 		 float probe_radius,  Size number_of_dots)
 	{
 		// extract all atoms: iterate over all composites and

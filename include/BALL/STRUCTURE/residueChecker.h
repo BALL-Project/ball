@@ -1,4 +1,4 @@
-// $Id: residueChecker.h,v 1.3 2000/01/10 15:51:07 oliver Exp $
+// $Id: residueChecker.h,v 1.4 2000/08/30 19:58:26 oliver Exp $
 
 
 #ifndef BALL_STRUCTURE_RESIDUECHECKER_H
@@ -30,7 +30,7 @@ namespace BALL
 		*/
 		//@{
 
-		BALL_CREATE(ResidueChecker)
+		BALL_CREATE_DEEP(ResidueChecker)
 
 		/**	Default constructor
 		*/

@@ -1,4 +1,4 @@
-// $Id: AnalyticalSES_test.C,v 1.6 2000/06/27 14:19:19 oliver Exp $
+// $Id: AnalyticalSES_test.C,v 1.7 2000/08/30 19:59:13 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -6,14 +6,14 @@
 #include <BALL/KERNEL/fragment.h>
 ///////////////////////////
 
-START_TEST(AnalyticalSES, "$Id: AnalyticalSES_test.C,v 1.6 2000/06/27 14:19:19 oliver Exp $")
+START_TEST(AnalyticalSES, "$Id: AnalyticalSES_test.C,v 1.7 2000/08/30 19:59:13 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
 
-CHECK(calculateSESArea(const BaseFragment& fragment, float probe_radius))
+CHECK(calculateSESArea(const AtomContainer& fragment, float probe_radius))
 	Fragment	f;
 	Atom a1, a2;
 	a1.setRadius(1.0);
@@ -34,7 +34,7 @@ CHECK(calculateSESArea(const BaseFragment& fragment, float probe_radius))
 	TEST_REAL_EQUAL(area, 18.722)
 RESULT
 
-CHECK(calculateSESAtomAreas(const BaseFragment& fragment, HashMap<Atom*, float>& atom_areas, float probe_radius))
+CHECK(calculateSESAtomAreas(const AtomContainer& fragment, HashMap<Atom*, float>& atom_areas, float probe_radius))
 	Fragment	f;
 	Atom a1, a2;
 	a1.setRadius(1.0);
@@ -102,7 +102,7 @@ CHECK(calculateSESAtomAreas(const BaseFragment& fragment, HashMap<Atom*, float>&
 RESULT
 
 
-CHECK(calculateSESVolume(const BaseFragment& fragment, float probe_radius))
+CHECK(calculateSESVolume(const AtomContainer& fragment, float probe_radius))
 	Fragment	f;
 	Atom a1, a2;
 	a1.setRadius(1.0);

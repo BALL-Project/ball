@@ -865,7 +865,7 @@ const void *sipCast_System(const void *ptr,PyObject *targetClass)
 	if (targetClass == sipClass_System)
 		return ptr;
 
-	if ((res = sipCast_BaseFragment((BaseFragment *)(System *)ptr,targetClass)) != NULL)
+	if ((res = sipCast_AtomContainer((AtomContainer *)(System *)ptr,targetClass)) != NULL)
 		return res;
 
 	if ((res = sipCast_PropertyManager((PropertyManager *)(System *)ptr,targetClass)) != NULL)

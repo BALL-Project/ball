@@ -1,22 +1,22 @@
-// $Id: extractors.sip,v 1.1 2000/07/18 21:27:32 oliver Exp $
+// $Id: extractors.sip,v 1.2 2000/08/30 19:59:09 oliver Exp $
 
 %HeaderCode
 	#include <BALL/PYTHON/extractors.h>
 	using namespace BALL;
 %End
-PyAtomList* 								atoms(const BaseFragment& /fragment/, const String& /expression/);
-PyAtomList*									atoms(const BaseFragment& /fragment/);
-PyPDBAtomList* 							PDBAtoms(const BaseFragment& /fragment/, const String& /expression/);
-PyPDBAtomList* 							PDBAtoms(const BaseFragment& /fragment/);
-PyBondList* 								bonds(const BaseFragment& /fragment/, bool /selected_only/ = false);
+PyAtomList* 								atoms(const AtomContainer& /fragment/, const String& /expression/);
+PyAtomList*									atoms(const AtomContainer& /fragment/);
+PyPDBAtomList* 							PDBAtoms(const AtomContainer& /fragment/, const String& /expression/);
+PyPDBAtomList* 							PDBAtoms(const AtomContainer& /fragment/);
+PyBondList* 								bonds(const AtomContainer& /fragment/, bool /selected_only/ = false);
 PyBondList* 								bonds(const Atom& /atom/);
-PyBaseFragmentList* 				baseFragments(const BaseFragment& /fragment/, bool /selected_only/ = false);
-PyFragmentList* 						fragments(const BaseFragment& /fragment/, bool /selected_only/ = false);
-PyMoleculeList* 						molecules(const BaseFragment& /fragment/, bool /selected_only/ = false);
-PyResidueList* 							residues(const BaseFragment& /fragment/, bool /selected_only/ = false);
-PySecondaryStructureList* 	secondaryStructures(const BaseFragment& /fragment/, bool /selected_only/ = false);
-PyChainList* 								chains(const BaseFragment& /fragment/, bool /selected_only/ = false);
-PyProteinList* 							proteins(const BaseFragment& /fragment/, bool /selected_only/ = false);
-PyNucleotideList* 					nucleotides(const BaseFragment& /fragment/, bool /selected_only/ = false);
-PyNucleicAcidList* 					nucleicAcids(const BaseFragment& /fragment/, bool /selected_only/ = false);
+PyAtomContainerList* 				atomContainers(const AtomContainer& /fragment/, bool /selected_only/ = false);
+PyFragmentList* 						fragments(const AtomContainer& /fragment/, bool /selected_only/ = false);
+PyMoleculeList* 						molecules(const AtomContainer& /fragment/, bool /selected_only/ = false);
+PyResidueList* 							residues(const AtomContainer& /fragment/, bool /selected_only/ = false);
+PySecondaryStructureList* 	secondaryStructures(const AtomContainer& /fragment/, bool /selected_only/ = false);
+PyChainList* 								chains(const AtomContainer& /fragment/, bool /selected_only/ = false);
+PyProteinList* 							proteins(const AtomContainer& /fragment/, bool /selected_only/ = false);
+PyNucleotideList* 					nucleotides(const AtomContainer& /fragment/, bool /selected_only/ = false);
+PyNucleicAcidList* 					nucleicAcids(const AtomContainer& /fragment/, bool /selected_only/ = false);
 

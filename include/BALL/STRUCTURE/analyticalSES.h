@@ -1,4 +1,4 @@
-// $Id: analyticalSES.h,v 1.5 2000/06/27 14:35:09 oliver Exp $
+// $Id: analyticalSES.h,v 1.6 2000/08/30 19:58:26 oliver Exp $
 
 #ifndef BALL_STRUCTURE_ANALYTICALSES_H
 #define BALL_STRUCTURE_ANALYTICALSES_H
@@ -10,8 +10,8 @@
 namespace BALL 
 {
 	// forward declarations
-	class BaseFragment;
 	class Atom;
+	class AtomContainer;
 	template <typename Key, typename Value>
 	class HashMap;
 	
@@ -25,7 +25,7 @@ namespace BALL
 			@return the SES area in $\AA^2$
 	*/
 	float calculateSESAtomAreas
-		(const BaseFragment& fragment, HashMap<Atom*,float>& atom_areas, float probe_radius = 1.5);
+		(const AtomContainer& fragment, HashMap<Atom*,float>& atom_areas, float probe_radius = 1.5);
 	
 	/**	Calculate the solvent excluded surface area analytically.
 			This method uses the algorithm by Michael L. Connolly.
@@ -37,7 +37,7 @@ namespace BALL
 			@return the SES area in $\AA^2$
 	*/
 	float calculateSESArea
-		(const BaseFragment& fragment, float probe_radius = 1.5);
+		(const AtomContainer& fragment, float probe_radius = 1.5);
 	
 	/**	Calculate the solvent excluded volume analytically.
 			This method uses the algorithm by Michael L. Connolly.
@@ -49,7 +49,7 @@ namespace BALL
 			@return the volume in $\AA^3$
 	*/
 	float calculateSESVolume
-		(const BaseFragment& fragment, float probe_radius = 1.5);
+		(const AtomContainer& fragment, float probe_radius = 1.5);
 	
 } // namespace BALL
 

@@ -1,4 +1,4 @@
-// $Id: charmm.h,v 1.2 2000/03/26 12:47:33 oliver Exp $
+// $Id: charmm.h,v 1.3 2000/08/30 19:58:16 oliver Exp $
 // Molecular Mechanics: CHARMM force field class
 
 #ifndef BALL_MOLMEC_CHARMM_CHARMM_H
@@ -182,7 +182,7 @@ namespace BALL
 		//@{
 
 
-		BALL_CREATE(CharmmFF)
+		BALL_CREATE_DEEP(CharmmFF)
 
 
 		/**	Default constructor.

@@ -1,4 +1,4 @@
-// $Id: snapShot.h,v 1.8 2000/07/24 15:04:55 oliver Exp $
+// $Id: snapShot.h,v 1.9 2000/08/30 19:58:19 oliver Exp $
 // This file contains the definitions of the classes 
 // SnapshotManager and Snapshot. 
 // They can be used to obtain snapshots from an MD simulation or an energy 
@@ -68,7 +68,7 @@ namespace BALL
     /** @name Constructors and Destructors
     */
     //@{
-    BALL_CREATE(SnapShot)
+    BALL_CREATE_DEEP(SnapShot)
 
     /** The default constructor. It creates an empty SnapShot object. 
     */
@@ -205,7 +205,7 @@ namespace BALL
     }; 
 
 
-    BALL_CREATE(SnapShotManager)
+    BALL_CREATE_DEEP(SnapShotManager)
 
     /** @name Constructors and Destructors
     */

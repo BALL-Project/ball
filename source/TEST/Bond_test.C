@@ -1,4 +1,4 @@
-// $Id: Bond_test.C,v 1.17 2000/07/25 21:24:57 oliver Exp $
+// $Id: Bond_test.C,v 1.18 2000/08/30 19:59:15 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +11,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(Bond, "$Id: Bond_test.C,v 1.17 2000/07/25 21:24:57 oliver Exp $")
+START_TEST(Bond, "$Id: Bond_test.C,v 1.18 2000/08/30 19:59:15 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -364,7 +364,7 @@ CHECK(isInterBond())
 	TEST_EQUAL(b4.isInterBond(), false)
 RESULT
 
-CHECK(isInterBondOf(BaseFragment&) const)
+CHECK(isInterBondOf(AtomContainer&) const)
 	Fragment f("F1");
 	Fragment f2("F2");
 	Atom a1, a2, a3, a4;
@@ -412,7 +412,7 @@ CHECK(isIntraBond())
 	TEST_EQUAL(b3.isIntraBond(), false)
 RESULT
 
-CHECK(isIntraBondOf(BaseFragment&))
+CHECK(isIntraBondOf(AtomContainer&))
 	Fragment f("F1");
 	Fragment f2("F2");
 	Atom a1, a2, a3, a4;
@@ -428,7 +428,7 @@ CHECK(isIntraBondOf(BaseFragment&))
 	TEST_EQUAL(b3.isIntraBondOf(f), false)
 RESULT
 
-CHECK(isIntraBondOf(BaseFragment&) const)
+CHECK(isIntraBondOf(AtomContainer&) const)
 	Fragment f("F1");
 	Fragment f2("F2");
 	Atom a1, a2, a3, a4;

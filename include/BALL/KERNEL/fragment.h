@@ -1,4 +1,4 @@
-// $Id: fragment.h,v 1.9 2000/06/03 00:12:03 amoll Exp $
+// $Id: fragment.h,v 1.10 2000/08/30 19:58:08 oliver Exp $
 
 #ifndef BALL_KERNEL_FRAGMENT_H
 #define BALL_KERNEL_FRAGMENT_H
@@ -7,8 +7,8 @@
 #	include <BALL/common.h>
 #endif
 
-#ifndef BALL_KERNEL_BASEFRAGMENT_H
-#	include <BALL/KERNEL/baseFragment.h>
+#ifndef BALL_KERNEL_ATOMCONTAINER_H
+#	include <BALL/KERNEL/atomContainer.h>
 #endif
 
 #ifndef BALL_KERNEL_FRAGMENTITERATOR_H
@@ -24,11 +24,11 @@ namespace BALL
 			{\bf Definition:}\URL{BALL/KERNEL/fragment.h}
 	*/
 	class Fragment
-		: public BaseFragment
+		: public AtomContainer
 	{
 		public:
 
-		BALL_CREATE(Fragment)
+		BALL_CREATE_DEEP(Fragment)
 
 		
 		/**	@name	Enums 
@@ -39,7 +39,7 @@ namespace BALL
 		enum Property
 		{
 			///
-			NUMBER_OF_PROPERTIES = BaseFragment::NUMBER_OF_PROPERTIES
+			NUMBER_OF_PROPERTIES = AtomContainer::NUMBER_OF_PROPERTIES
 		};
 		//@}
 			

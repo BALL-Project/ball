@@ -1,4 +1,4 @@
-// $Id: numericalSAS.h,v 1.8 2000/08/03 09:00:42 anker Exp $
+// $Id: numericalSAS.h,v 1.9 2000/08/30 19:58:26 oliver Exp $
 
 #ifndef BALL_STRUCTURE_NUMERICALSAS_H
 #define BALL_STRUCTURE_NUMERICALSAS_H
@@ -12,7 +12,7 @@ namespace BALL
 
 	class Atom;
 	class Surface;
-	class BaseFragment;
+	class AtomContainer;
 	template <typename Key, typename T>
   class HashMap;
 
@@ -35,7 +35,7 @@ namespace BALL
 			@return the total SAS area in $\AA^2$
 	*/
 	float calculateSASArea
-					(const BaseFragment& fragment, float probe_radius = 1.5,
+					(const AtomContainer& fragment, float probe_radius = 1.5,
 					 Size number_of_dots = 400); 
 
 	/** Calculate the solvent accessible volume numerically.
@@ -49,7 +49,7 @@ namespace BALL
 			@return the volume in $\AA^3$
 	*/
 	float calculateSASVolume
-					(const BaseFragment& fragment, float probe_radius = 1.5,
+					(const AtomContainer& fragment, float probe_radius = 1.5,
 					 Size number_of_dots = 400); 
 
 	/**	Calculate the Solvent Accessible Surface area for each atom.
@@ -63,7 +63,7 @@ namespace BALL
 			@return the total SAS area in $\AA^2$
 	*/
 	float calculateSASAtomAreas
-					(const BaseFragment& fragment, HashMap<Atom*,float>& atom_areas,
+					(const AtomContainer& fragment, HashMap<Atom*,float>& atom_areas,
 					 float probe_radius = 1.5, Size number_of_dots = 400);
 	
 	/**	Calculate a point set on the Solvent Accessible Surface.
@@ -84,7 +84,7 @@ namespace BALL
 			@return the total SAS area in $\AA^2$
 	*/
 	float calculateSASPoints
-					(const BaseFragment& fragment, Surface& surface_points,
+					(const AtomContainer& fragment, Surface& surface_points,
 					 float probe_radius = 1.5,  Size number_of_dots = 400);
 
 	/** Calculate a point set on the Solvent Accessible Surface for each
@@ -97,7 +97,7 @@ namespace BALL
 			@return the total SAS area in $\AA^2$
 	*/
 	float calculateSASAtomPoints
-					(const BaseFragment& fragment, 
+					(const AtomContainer& fragment, 
 					HashMap<Atom*, Surface>& atom_surfaces,
 					float probe_radius = 1.5,  Size number_of_dots = 400);
 

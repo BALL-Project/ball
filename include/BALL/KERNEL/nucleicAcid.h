@@ -1,4 +1,4 @@
-// $Id: nucleicAcid.h,v 1.12 2000/06/03 00:12:03 amoll Exp $ 
+// $Id: nucleicAcid.h,v 1.13 2000/08/30 19:58:09 oliver Exp $ 
 
 #ifndef BALL_KERNEL_NUCLEICACID_H
 #define BALL_KERNEL_NUCLEICACID_H
@@ -29,7 +29,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE(NucleicAcid)
+		BALL_CREATE_DEEP(NucleicAcid)
 
 		/**	@name	Enums
 		*/

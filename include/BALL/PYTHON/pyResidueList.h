@@ -1,4 +1,4 @@
-// $Id: pyResidueList.h,v 1.2 2000/06/27 13:07:25 oliver Exp $
+// $Id: pyResidueList.h,v 1.3 2000/08/30 19:58:25 oliver Exp $
 
 #ifndef BALL_PYTHON_PYRESIDUELIST_H
 #define BALL_PYTHON_PYRESIDUELIST_H
@@ -14,7 +14,7 @@
 namespace BALL 
 {
 	class Residue;
-	class BaseFragment;
+	class AtomContainer;
 	
 	/**
 	*/
@@ -23,7 +23,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE_NODEEP(PyResidueList)
+		BALL_CREATE(PyResidueList)
 
 		/**	@name	Type Definitions
 		*/
@@ -62,11 +62,11 @@ namespace BALL
 		*/
 		PyResidueList(const PyResidueList& new_list);
 			
-		/**	Construct from a BaseFragment
+		/**	Construct from a AtomContainer
 				This constructor creates an PyResidueList object from
-				all residues of a \Ref{BaseFragment} object.
+				all residues of a \Ref{AtomContainer} object.
 		*/
-		PyResidueList(const BaseFragment& fragment, bool selected_only = false);
+		PyResidueList(const AtomContainer& fragment, bool selected_only = false);
 
 		/**	Destructor
 		*/
@@ -78,7 +78,7 @@ namespace BALL
 		//@{
 		/**
 		*/
-		void set(const BaseFragment& fragment, bool selected_only = false);
+		void set(const AtomContainer& fragment, bool selected_only = false);
 		//@}
 	};
 

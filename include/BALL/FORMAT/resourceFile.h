@@ -1,4 +1,4 @@
-// $Id: resourceFile.h,v 1.5 2000/06/30 05:54:27 oliver Exp $
+// $Id: resourceFile.h,v 1.6 2000/08/30 19:58:04 oliver Exp $
 
 #ifndef BALL_FORMAT_RESOURCEFILE_H
 #define BALL_FORMAT_RESOURCEFILE_H
@@ -49,7 +49,7 @@ namespace BALL
 	{
 		public:
 		
-		BALL_CREATE(ResourceEntry)
+		BALL_CREATE_DEEP(ResourceEntry)
 
 		/**	@name	Constructors and Destructors 
 		*/
@@ -312,7 +312,7 @@ namespace BALL
 		{
 			public:
 
-			BALL_CREATE(IteratorTraits_)
+			BALL_CREATE_DEEP(IteratorTraits_)
 
 			IteratorTraits_()
 				:	bound_(0),

@@ -1,4 +1,4 @@
-// $Id: pyPDBAtomList.h,v 1.3 2000/07/10 14:09:00 oliver Exp $
+// $Id: pyPDBAtomList.h,v 1.4 2000/08/30 19:58:24 oliver Exp $
 
 #ifndef BALL_PYTHON_PYPDBATOMLIST_H
 #define BALL_PYTHON_PYPDBATOMLIST_H
@@ -18,7 +18,7 @@
 namespace BALL 
 {
 	class PDBAtom;
-	class BaseFragment;
+	class AtomContainer;
 	
 	/**
 	*/
@@ -27,7 +27,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE_NODEEP(PyPDBAtomList)
+		BALL_CREATE(PyPDBAtomList)
 
 		/**	@name	Type Definitions
 		*/
@@ -66,17 +66,17 @@ namespace BALL
 		*/
 		PyPDBAtomList(const PyPDBAtomList& new_list);
 			
-		/**	Construct from a BaseFragment.
+		/**	Construct from a AtomContainer.
 				This constructor creates an PyPDBAtomList object from
-				all atoms of a \Ref{BaseFragment} object.
+				all atoms of a \Ref{AtomContainer} object.
 		*/
-		PyPDBAtomList(const BaseFragment& fragment);
+		PyPDBAtomList(const AtomContainer& fragment);
 
-		/**	Construct from a BaseFragment with expression.
+		/**	Construct from a AtomContainer with expression.
 				This constructor creates an PyPDBAtomList object from
-				the atoms of a \Ref{BaseFragment} object that match {\tt expression}.
+				the atoms of a \Ref{AtomContainer} object that match {\tt expression}.
 		*/
-		PyPDBAtomList(const BaseFragment& fragment, const String& expression);
+		PyPDBAtomList(const AtomContainer& fragment, const String& expression);
 
 		/**	Destructor
 		*/
@@ -88,7 +88,7 @@ namespace BALL
 		//@{
 		/**
 		*/
-		void set(const BaseFragment& fragment, const String& expression = "" );
+		void set(const AtomContainer& fragment, const String& expression = "" );
 		//@}
 	};
 

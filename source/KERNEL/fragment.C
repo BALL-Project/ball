@@ -1,4 +1,4 @@
-// $Id: fragment.C,v 1.5 2000/04/17 13:51:33 amoll Exp $
+// $Id: fragment.C,v 1.6 2000/08/30 19:58:32 oliver Exp $
 
 #include <BALL/KERNEL/fragment.h>
 
@@ -8,17 +8,17 @@ namespace BALL
 {
 
 	Fragment::Fragment()
-		:	BaseFragment()
+		:	AtomContainer()
 	{
 	}
 		
 	Fragment::Fragment(const Fragment& fragment, bool deep)
-		: BaseFragment(fragment, deep)
+		: AtomContainer(fragment, deep)
 	{
 	}
 		
 	Fragment::Fragment(const String& name)
-		: BaseFragment(name)
+		: AtomContainer(name)
 	{
 	}
 
@@ -30,20 +30,20 @@ namespace BALL
 	void Fragment::persistentWrite(PersistenceManager& pm, const char* name) const
   {
     pm.writeObjectHeader(this, name);
-      BaseFragment::persistentWrite(pm);
+      AtomContainer::persistentWrite(pm);
 		pm.writeObjectTrailer(name);
 	}
 
   void Fragment::persistentRead(PersistenceManager& pm)
   {    
-		pm.checkObjectHeader(RTTI::getStreamName<BaseFragment>());
-			BaseFragment::persistentRead(pm);
+		pm.checkObjectHeader(RTTI::getStreamName<AtomContainer>());
+			AtomContainer::persistentRead(pm);
     pm.checkObjectTrailer(0);
 	}
 	
 	Fragment& Fragment::operator =(const Fragment& fragment)
 	{
-		BaseFragment::operator =(fragment);
+		AtomContainer::operator =(fragment);
 
 		return *this;
 	}
@@ -52,7 +52,7 @@ namespace BALL
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 		
-		BaseFragment::dump(s, depth);
+		AtomContainer::dump(s, depth);
 		// just to avoid these damned compiler warnings 
 		// (dump_indent_depth_ was declared but never referenced)
 		if (dump_indent_depth_ == 0) ;

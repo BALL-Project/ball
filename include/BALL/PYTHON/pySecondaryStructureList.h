@@ -1,4 +1,4 @@
-// $Id: pySecondaryStructureList.h,v 1.1 2000/06/27 07:44:13 oliver Exp $
+// $Id: pySecondaryStructureList.h,v 1.2 2000/08/30 19:58:25 oliver Exp $
 
 #ifndef BALL_PYTHON_PYSECONDARYSTRUCTURELIST_H
 #define BALL_PYTHON_PYSECONDARYSTRUCTURELIST_H
@@ -14,7 +14,7 @@
 namespace BALL 
 {
 	class SecondaryStructure;
-	class BaseFragment;
+	class AtomContainer;
 	
 	/**
 	*/
@@ -23,7 +23,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE_NODEEP(PySecondaryStructureList)
+		BALL_CREATE(PySecondaryStructureList)
 
 		/**	@name	Type Definitions
 		*/
@@ -62,11 +62,11 @@ namespace BALL
 		*/
 		PySecondaryStructureList(const PySecondaryStructureList& new_list);
 			
-		/**	Construct from a BaseFragment
+		/**	Construct from a AtomContainer
 				This constructor creates an PySecondaryStructureList object from
-				all atoms of a \Ref{BaseFragment} object.
+				all atoms of a \Ref{AtomContainer} object.
 		*/
-		PySecondaryStructureList(const BaseFragment& fragment, bool selected_only = false);
+		PySecondaryStructureList(const AtomContainer& fragment, bool selected_only = false);
 
 		/**	Destructor
 		*/
@@ -78,7 +78,7 @@ namespace BALL
 		//@{
 		/**
 		*/
-		void set(const BaseFragment& fragment, bool selected_only = false);
+		void set(const AtomContainer& fragment, bool selected_only = false);
 		//@}
 	};
 

@@ -1,4 +1,4 @@
-// $Id: PDBFile.C,v 1.14 2000/07/25 21:24:53 oliver Exp $
+// $Id: PDBFile.C,v 1.15 2000/08/30 19:58:30 oliver Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 
@@ -1021,9 +1021,9 @@ namespace BALL
 				
 				if (system == true)
 				{
-					BaseFragmentIterator frag_it;
+					AtomContainerIterator frag_it;
 		
-					BALL_FOREACH_BASEFRAGMENT(molecule, frag_it)
+					BALL_FOREACH_ATOMCONTAINER(molecule, frag_it)
 					{	
 						if (RTTI::isKindOf<Molecule>(*frag_it) == false
 								|| RTTI::isKindOf<Protein>(*frag_it) == true)

@@ -1,7 +1,7 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.4 2000/08/28 15:48:50 oliver Exp $
+# $Id: Makefile,v 1.5 2000/08/30 19:58:36 oliver Exp $
 #
 
 all: libBALLc.so
@@ -53,7 +53,7 @@ SIP_SOURCES_FORMAT=\
 SIP_SOURCES_KERNEL=\
 	sipBALLAtom.C\
 	sipBALLAtomType.C\
-	sipBALLBaseFragment.C\
+	sipBALLAtomContainer.C\
 	sipBALLBond.C\
 	sipBALLChain.C\
 	sipBALLElement.C\
@@ -127,7 +127,7 @@ SIP_SOURCES_PYTHON=\
 	sipBALLPyAtomDict.C\
 	sipBALLPyAtomList.C\
 	sipBALLPyBondList.C\
-	sipBALLPyBaseFragmentList.C\
+	sipBALLPyAtomContainerList.C\
 	sipBALLPyCompositeDescriptorList.C\
 	sipBALLPyFragmentList.C\
 	sipBALLPyMoleculeList.C\
@@ -190,7 +190,7 @@ PYBALL_SOURCES=\
 	extractors.C\
 	pyBALLSipHelper.C\
 	pyAtomList.C\
-	pyBaseFragmentList.C\
+	pyAtomContainerList.C\
 	pyBondList.C\
 	pyConstant.C\
 	pyFragmentList.C\

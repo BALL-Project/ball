@@ -1,4 +1,4 @@
-// $Id: forEach.h,v 1.4 2000/04/25 16:52:25 amoll Exp $
+// $Id: forEach.h,v 1.5 2000/08/30 19:58:08 oliver Exp $
 
 #ifndef BALL_KERNEL_FOREACH_H
 #define BALL_KERNEL_FOREACH_H
@@ -53,25 +53,25 @@ for (fragment_iterator = (fragment_container).beginFragment(); \
      !fragment_iterator.isEnd(); ++fragment_iterator)
 
 
-/** BaseFragment iterator macro.
-    Convenience macro for easy iteration over all base fragments of {\em basefragment_container}.\\
+/** AtomContainer iterator macro.
+    Convenience macro for easy iteration over all atom containers of {\em atom_container}.\\
 
 		{\bf Framework:} BALL/KERNEL\\
 		{\bf Definition:} \URL{BALL/KERNEL/forEach.h}
 		\\
-		{\bf Category:} \Ref{BaseFragment} iterator\\
+		{\bf Category:} \Ref{AtomContainer} iterator\\
     {\bf Concept:} iterator design pattern\\
-		{\bf Implementation notes:} Macro is implemented by one \Ref{BaseFragmentIterator} instance.\\
-    {\bf Complexity:} O(n), n:="number of \Ref{Composite} instances in {\em base_fragment_container}"\\
+		{\bf Implementation notes:} Macro is implemented by one \Ref{AtomContainerIterator} instance.\\
+    {\bf Complexity:} O(n), n:="number of \Ref{Composite} instances in {\em atom_containers}"\\
 
-    @param   base_fragment_container container of \Ref{BaseFragment} instances
-    @param   base_fragment_iterator \Ref{BaseFragmentIterator} instance
-    @see     BaseFragment
-    @see     BaseFragmentIterator
+    @param   atom_containers container of \Ref{AtomContainer} instances
+    @param   atom_container_iterator \Ref{AtomContainerIterator} instance
+    @see     AtomContainer
+    @see     AtomContainerIterator
 */
-#define BALL_FOREACH_BASEFRAGMENT(base_fragment_container, base_fragment_iterator) \
-for (base_fragment_iterator = (base_fragment_container).beginBaseFragment(); \
-     !base_fragment_iterator.isEnd(); ++base_fragment_iterator)
+#define BALL_FOREACH_ATOMCONTAINER(atom_containers, atom_container_iterator) \
+for (atom_container_iterator = (atom_containers).beginAtomContainer(); \
+     !atom_container_iterator.isEnd(); ++atom_container_iterator)
 
 
 /** Atom iterator macro.

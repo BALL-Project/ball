@@ -1,4 +1,4 @@
-// $Id: HashMap_test.C,v 1.2 2000/05/26 08:31:17 oliver Exp $
+// $Id: HashMap_test.C,v 1.3 2000/08/30 19:59:15 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(HashMap<T>, "$Id: HashMap_test.C,v 1.2 2000/05/26 08:31:17 oliver Exp $")
+START_TEST(HashMap<T>, "$Id: HashMap_test.C,v 1.3 2000/08/30 19:59:15 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -175,7 +175,21 @@ CHECK(HashMap::destroy())
 RESULT
 
 CHECK(HashMap::set(const HashMap&, bool))
-	// BAUSTELLE
+	HashMap<int, int> hm1;
+	hm1.insert(pair<int, int>(12, 34));
+	hm1.insert(pair<int, int>(44, 55));
+	HashMap<int, int> hm2;
+	TEST_EQUAL(hm1.getSize(), 2)
+	TEST_EQUAL(hm2.getSize(), 0)
+	TEST_EQUAL(hm1.has(12), true)
+	TEST_EQUAL(hm1.has(44), true)
+	hm2.set(hm1);
+	TEST_EQUAL(hm2.getSize(), 2)
+	TEST_EQUAL(hm2.has(12), true)
+	TEST_EQUAL(hm2.has(44), true)
+	TEST_EQUAL(hm1.getSize(), 2)
+	TEST_EQUAL(hm1.has(12), true)
+	TEST_EQUAL(hm1.has(44), true)
 RESULT
 
 CHECK(HashMap::get(HashMap&, bool) const)

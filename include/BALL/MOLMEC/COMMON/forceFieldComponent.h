@@ -1,4 +1,4 @@
-// $Id: forceFieldComponent.h,v 1.6 2000/07/25 21:14:20 oliver Exp $
+// $Id: forceFieldComponent.h,v 1.7 2000/08/30 19:58:18 oliver Exp $
 // Molecular Mechanics: general force field component class
 
 #ifndef BALL_MOLMEC_FORCEFIELDCOMPONENT_H
@@ -37,7 +37,7 @@ namespace BALL
 
 		public:
 
-		BALL_CREATE(ForceFieldComponent)
+		BALL_CREATE_DEEP(ForceFieldComponent)
 
 
 		/**	Default constructor.

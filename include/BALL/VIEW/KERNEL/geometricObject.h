@@ -1,4 +1,4 @@
-// $Id: geometricObject.h,v 1.7 2000/06/13 18:22:17 hekl Exp $
+// $Id: geometricObject.h,v 1.8 2000/08/30 19:58:27 oliver Exp $
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
 #define BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
@@ -56,7 +56,7 @@ namespace BALL
 
 			public:
 			
-			BALL_CREATE(GeometricObject)
+			BALL_CREATE_DEEP(GeometricObject)
 			
 			/**	@name	Enums
 			*/

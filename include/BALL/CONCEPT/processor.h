@@ -1,4 +1,4 @@
-// $Id: processor.h,v 1.6 2000/03/14 19:37:56 oliver Exp $
+// $Id: processor.h,v 1.7 2000/08/30 19:58:00 oliver Exp $
 
 #ifndef BALL_CONCEPT_PROCESSOR_H
 #define BALL_CONCEPT_PROCESSOR_H
@@ -56,7 +56,7 @@ namespace BALL
 		/**	@name	Constructors and Destructors
 		*/
 		//@{
-		BALL_CREATE_NODEEP(UnaryProcessor)
+		BALL_CREATE(UnaryProcessor)
 		/**	Default constructor
 		*/
 		UnaryProcessor()
@@ -114,7 +114,7 @@ namespace BALL
 		/**	@name	Constructors and Destructors
 		*/
 		//@{
-		BALL_CREATE_NODEEP(BinaryProcessor)
+		BALL_CREATE(BinaryProcessor)
 		/**	Default constructor
 		*/
 		BinaryProcessor()	

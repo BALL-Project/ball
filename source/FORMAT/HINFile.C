@@ -1,4 +1,4 @@
-// $Id: HINFile.C,v 1.22 2000/08/02 16:06:17 oliver Exp $
+// $Id: HINFile.C,v 1.23 2000/08/30 19:58:30 oliver Exp $
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/CONCEPT/composite.h>
@@ -677,7 +677,7 @@ namespace BALL
 					// create a fragment to insert the "loose" atoms into
 					if (fragment == 0)
 					{
-						chain->BaseFragment::insert(*(fragment = new Fragment));
+						chain->AtomContainer::insert(*(fragment = new Fragment));
 					}
 
 					// now check for a molecule, that might already exist
@@ -758,7 +758,7 @@ namespace BALL
 					{
 						if (fragment->countAtoms() == 0)
 						{
-							chain->BaseFragment::remove(*fragment);
+							chain->AtomContainer::remove(*fragment);
 						}
 					}
 

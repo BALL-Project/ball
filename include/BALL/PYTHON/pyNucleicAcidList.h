@@ -1,4 +1,4 @@
-// $Id: pyNucleicAcidList.h,v 1.1 2000/06/27 13:07:24 oliver Exp $
+// $Id: pyNucleicAcidList.h,v 1.2 2000/08/30 19:58:24 oliver Exp $
 
 #ifndef BALL_PYTHON_PYNUCLEICACIDLIST_H
 #define BALL_PYTHON_PYNUCLEICACIDLIST_H
@@ -14,7 +14,7 @@
 namespace BALL 
 {
 	class NucleicAcid;
-	class BaseFragment;
+	class AtomContainer;
 	
 	/**
 	*/
@@ -23,7 +23,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE_NODEEP(PyNucleicAcidList)
+		BALL_CREATE(PyNucleicAcidList)
 
 		/**	@name	Type Definitions
 		*/
@@ -62,11 +62,11 @@ namespace BALL
 		*/
 		PyNucleicAcidList(const PyNucleicAcidList& new_list);
 			
-		/**	Construct from a BaseFragment
+		/**	Construct from a AtomContainer
 				This constructor creates an PyNucleicAcidList object from
-				all nucleic acids of a \Ref{BaseFragment} object.
+				all nucleic acids of a \Ref{AtomContainer} object.
 		*/
-		PyNucleicAcidList(const BaseFragment& fragment, bool selected_only = false);
+		PyNucleicAcidList(const AtomContainer& fragment, bool selected_only = false);
 
 		/**	Destructor
 		*/
@@ -78,7 +78,7 @@ namespace BALL
 		//@{
 		/**
 		*/
-		void set(const BaseFragment& fragment, bool selected_only = false);
+		void set(const AtomContainer& fragment, bool selected_only = false);
 		//@}
 	};
 

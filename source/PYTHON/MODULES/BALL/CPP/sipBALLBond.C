@@ -962,10 +962,10 @@ static PyObject *sipDo_Bond_isInterBondOf(PyObject *sipThisObj,PyObject *sipArgs
 		return NULL;
 
 	{
-		const BaseFragment *a0;
+		const AtomContainer *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_BaseFragment,&a0obj))
+		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_AtomContainer,&a0obj))
 		{
 			bool res;
 			Bond *ptr;
@@ -975,7 +975,7 @@ static PyObject *sipDo_Bond_isInterBondOf(PyObject *sipThisObj,PyObject *sipArgs
 
 			int iserr = 0;
 
-			sipConvertTo_BaseFragment(a0obj,(BaseFragment **)&a0,1,&iserr);
+			sipConvertTo_AtomContainer(a0obj,(AtomContainer **)&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -1055,10 +1055,10 @@ static PyObject *sipDo_Bond_isIntraBondOf(PyObject *sipThisObj,PyObject *sipArgs
 		return NULL;
 
 	{
-		const BaseFragment *a0;
+		const AtomContainer *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_BaseFragment,&a0obj))
+		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_AtomContainer,&a0obj))
 		{
 			bool res;
 			Bond *ptr;
@@ -1068,7 +1068,7 @@ static PyObject *sipDo_Bond_isIntraBondOf(PyObject *sipThisObj,PyObject *sipArgs
 
 			int iserr = 0;
 
-			sipConvertTo_BaseFragment(a0obj,(BaseFragment **)&a0,1,&iserr);
+			sipConvertTo_AtomContainer(a0obj,(AtomContainer **)&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;

@@ -1,4 +1,4 @@
-// $Id: pointGrid.h,v 1.17 2000/07/18 08:29:51 oliver Exp $ 
+// $Id: pointGrid.h,v 1.18 2000/08/30 19:58:02 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_POINTGRID_H
 #define BALL_DATATYPE_POINTGRID_H
@@ -25,7 +25,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE(PointGrid<GridDataType>)
+		BALL_CREATE_DEEP(PointGrid<GridDataType>)
 
 		/**	@name	Type Definitions
 		*/

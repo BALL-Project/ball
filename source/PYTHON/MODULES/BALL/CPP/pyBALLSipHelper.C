@@ -1,4 +1,4 @@
-// $Id: pyBALLSipHelper.C,v 1.1 2000/07/18 21:18:39 oliver Exp $
+// $Id: pyBALLSipHelper.C,v 1.2 2000/08/30 19:58:37 oliver Exp $
 
 #include <typeinfo>
 
@@ -7,7 +7,7 @@
 #include "sipBALLAtom.h"
 #include "sipBALLBond.h"
 #include "sipBALLPDBAtom.h"
-#include "sipBALLBaseFragment.h"
+#include "sipBALLAtomContainer.h"
 #include "sipBALLFragment.h"
 #include "sipBALLResidue.h"
 #include "sipBALLNucleotide.h"
@@ -42,7 +42,7 @@ namespace BALL
 		BALL_TO_SIP_MAP(Molecule)
 		BALL_TO_SIP_MAP(Protein)
 		BALL_TO_SIP_MAP(SecondaryStructure)
-		BALL_TO_SIP_MAP(BaseFragment)
+		BALL_TO_SIP_MAP(AtomContainer)
 		BALL_TO_SIP_MAP(NucleicAcid)
 		BALL_TO_SIP_MAP(Nucleotide)
 		BALL_TO_SIP_MAP(System)
@@ -56,7 +56,7 @@ namespace BALL
 		BALL_TO_SIP_MAP_BASECLASS(Chain)
 		BALL_TO_SIP_MAP_BASECLASS(Protein)
 		BALL_TO_SIP_MAP_BASECLASS(SecondaryStructure)
-		BALL_TO_SIP_MAP_BASECLASS(BaseFragment)
+		BALL_TO_SIP_MAP_BASECLASS(AtomContainer)
 		BALL_TO_SIP_MAP_BASECLASS(NucleicAcid)
 		BALL_TO_SIP_MAP_BASECLASS(Nucleotide)
 		BALL_TO_SIP_MAP_BASECLASS(System)

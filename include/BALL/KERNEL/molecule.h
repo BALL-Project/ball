@@ -1,4 +1,4 @@
-// $Id: molecule.h,v 1.12 2000/05/15 12:07:56 amoll Exp $
+// $Id: molecule.h,v 1.13 2000/08/30 19:58:09 oliver Exp $
 
 #ifndef BALL_KERNEL_MOLECULE_H
 #define BALL_KERNEL_MOLECULE_H
@@ -7,8 +7,8 @@
 #	include <BALL/common.h>
 #endif
 
-#ifndef BALL_KERNEL_BASEFRAGMENT_H
-#	include <BALL/KERNEL/baseFragment.h>
+#ifndef BALL_KERNEL_ATOMCONTAINER_H
+#	include <BALL/KERNEL/atomContainer.h>
 #endif
 
 #ifndef BALL_KERNEL_FRAGMENT_H
@@ -25,11 +25,11 @@ namespace BALL
 			{\bf Definition:}\URL{BALL/KERNEL/molecule.h}
 	*/
 	class Molecule
-		: public BaseFragment
+		: public AtomContainer
 	{
 		public:
 
-		BALL_CREATE(Molecule)
+		BALL_CREATE_DEEP(Molecule)
 
 		/**	@name	Enums
 		*/
@@ -39,7 +39,7 @@ namespace BALL
 		*/
 		enum Property
 		{
-			IS_SOLVENT = BaseFragment::NUMBER_OF_PROPERTIES,
+			IS_SOLVENT = AtomContainer::NUMBER_OF_PROPERTIES,
 			NUMBER_OF_PROPERTIES
 		};
 		//@}
@@ -154,54 +154,54 @@ namespace BALL
 		*/
 		bool remove(Atom& atom);
 
-		/** Insert a BaseFragment as the first child of {\em *this} instance.
-				@param base_fragment the BaseFragment to add
+		/** Insert a AtomContainer as the first child of {\em *this} instance.
+				@param atom_container the AtomContainer to add
 		*/
-		void prepend(BaseFragment& base_fragment);
+		void prepend(AtomContainer& atom_container);
 
-		/** Append a BaseFragment as the last child of {\em *this} instance.
-				@param base_fragment the BaseFragment to add
+		/** Append a AtomContainer as the last child of {\em *this} instance.
+				@param atom_container the AtomContainer to add
 		*/
-		void append(BaseFragment& base_fragment);
+		void append(AtomContainer& atom_container);
 
-		/** Insert a BaseFragment as the last child of {\em *this} instance.
-				@param base_fragment the BaseFragment to add
+		/** Insert a AtomContainer as the last child of {\em *this} instance.
+				@param atom_container the AtomContainer to add
 		*/
-		void insert(BaseFragment& base_fragment);
+		void insert(AtomContainer& atom_container);
 
-		/** Insert a BaseFragment before a given {\em Comosite} object.
-				@param base_fragment, the BaseFragment to insert
+		/** Insert a AtomContainer before a given {\em Comosite} object.
+				@param atom_container, the AtomContainer to insert
 				@param before, the {\em Comosite} object to insert before
 		*/
-		void insertBefore(BaseFragment& base_fragment, Composite& before);
+		void insertBefore(AtomContainer& atom_container, Composite& before);
 
-		/** Insert a BaseFragment after a given {\em Comosite} object.
-				@param base_fragment, the BaseFragment to insert
+		/** Insert a AtomContainer after a given {\em Comosite} object.
+				@param atom_container, the AtomContainer to insert
 				@param after, the {\em Comosite} object to insert after
 		*/
-		void insertAfter(BaseFragment& base_fragment, Composite& after);
+		void insertAfter(AtomContainer& atom_container, Composite& after);
 
-		/**	Cut all children of {\tt base_fragment} and prepend them before the children of this molecule.
-				@param base_fragment the BaseFragment to access
+		/**	Cut all children of {\tt atom_container} and prepend them before the children of this molecule.
+				@param atom_container the AtomContainer to access
 		*/
-		void spliceBefore(BaseFragment& base_fragment);
+		void spliceBefore(AtomContainer& atom_container);
 
-		/**	Cut all children of {\tt base_fragment} and append them after the children of this molecule.
-				@param base_fragment the BaseFragment to access
+		/**	Cut all children of {\tt atom_container} and append them after the children of this molecule.
+				@param atom_container the AtomContainer to access
 		*/
-		void spliceAfter(BaseFragment& base_fragment);
+		void spliceAfter(AtomContainer& atom_container);
 
-		/**	Move the children of base_fragment into this molecule.
-				The children of {\tt base_fragment} are inserted at the position of 
-				{\tt base_fragment} if {\tt base_fragment} is a child of {\tt this}.
+		/**	Move the children of atom_container into this molecule.
+				The children of {\tt atom_container} are inserted at the position of 
+				{\tt atom_container} if {\tt atom_container} is a child of {\tt this}.
 				Otherwise the children are inserted using \Ref{spliceBefore}.
 		*/
-		void splice(BaseFragment& base_fragment);
+		void splice(AtomContainer& atom_container);
 
-		/** Remove a BaseFragment.
-				@param base_fragment the BaseFragment to remove
+		/** Remove a AtomContainer.
+				@param atom_container the AtomContainer to remove
 		*/
-		bool remove(BaseFragment& base_fragment);
+		bool remove(AtomContainer& atom_container);
 
 		//@}
 
@@ -249,9 +249,9 @@ namespace BALL
 
 		const Molecule* getMolecule() const;
 
-		BaseFragment* getSuperBaseFragment();
+		AtomContainer* getSuperAtomContainer();
 
-		const BaseFragment* getSuperBaseFragment() const;
+		const AtomContainer* getSuperAtomContainer() const;
 
 		void prepend(Molecule& molecule);
 
@@ -265,7 +265,7 @@ namespace BALL
 
 		bool remove(Molecule& molecule);
 
-		bool isSubBaseFragmentOf(const BaseFragment& base_fragment) const;
+		bool isSubAtomContainerOf(const AtomContainer& atom_container) const;
 	};
 
 } // namespace BALL 

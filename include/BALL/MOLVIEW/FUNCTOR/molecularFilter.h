@@ -1,4 +1,4 @@
-// $Id: molecularFilter.h,v 1.1 2000/05/16 20:53:59 hekl Exp $
+// $Id: molecularFilter.h,v 1.2 2000/08/30 19:58:21 oliver Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_MOLECULARFILTER_H
 #define BALL_MOLVIEW_FUNCTOR_MOLECULARFILTER_H
@@ -7,8 +7,8 @@
 #	include <BALL/common.h>
 #endif
 
-#ifndef BALL_KERNEL_BASEFRAGMENT_H
-#	include <BALL/KERNEL/baseFragment.h>
+#ifndef BALL_KERNEL_ATOMCONTAINER_H
+#	include <BALL/KERNEL/atomContainer.h>
 #endif
 
 #ifndef BALL_KERNEL_ATOM_H

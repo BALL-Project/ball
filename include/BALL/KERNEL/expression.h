@@ -1,4 +1,4 @@
-// $Id: expression.h,v 1.5 2000/05/25 10:56:46 oliver Exp $
+// $Id: expression.h,v 1.6 2000/08/30 19:58:08 oliver Exp $
 
 #ifndef BALL_KERNEL_EXPRESSION_H
 #define BALL_KERNEL_EXPRESSION_H
@@ -31,7 +31,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE_NODEEP(ExpressionPredicate)
+		BALL_CREATE(ExpressionPredicate)
 
 		/**	@name	Constructors and Destructors.
 		*/
@@ -80,7 +80,7 @@ namespace BALL
 		public:
 
 		// BAUSTELLE
-		// BALL_CREATE_NODEEP(ExpressionTree)
+		// BALL_CREATE(ExpressionTree)
 
 		/**	@name	Type Definitions
 		*/
@@ -175,7 +175,7 @@ namespace BALL
 		public:
 		
 		// BAUSTELLE
-		// BALL_CREATE_NODEEP(SyntaxTree)
+		// BALL_CREATE(SyntaxTree)
 
 		/**	@name	Type Definitions
 		*/
@@ -252,7 +252,7 @@ namespace BALL
 		public:
 		
 		// BAUSTELLE
-		// BALL_CREATE_NODEEP(Expression)
+		// BALL_CREATE(Expression)
 
 		/**	@name	Type Definitions
 		*/

@@ -1,4 +1,4 @@
-// $Id: ooiEnergy.C,v 1.9 2000/07/23 22:16:05 oliver Exp $
+// $Id: ooiEnergy.C,v 1.10 2000/08/30 19:59:12 oliver Exp $
 
 #include <BALL/SOLVATION/ooiEnergy.h>
 
@@ -178,7 +178,7 @@ namespace BALL
 		}
 	}
 
-	double calculateOoiEnergy(BaseFragment& fragment) 
+	double calculateOoiEnergy(AtomContainer& atoms) 
 	{
 		using namespace OoiEnergy;
 
@@ -194,7 +194,7 @@ namespace BALL
 		}
 		
 		// assign radii and atom types for all atoms
-		AtomIterator atom_it = fragment.beginAtom();
+		AtomIterator atom_it = atoms.beginAtom();
 		for (; +atom_it; ++atom_it) 
 		{
 			// construct correct name, <RESNAME>:<ATOMNAME>
@@ -254,11 +254,11 @@ namespace BALL
 		// atom_SAS_areas hashes the atom pointer to the
 		// surface area (in Angstrom^2)
 		HashMap<Atom*,float> atom_SAS_areas;
-		calculateSASAtomAreas(fragment, atom_SAS_areas, 1.4, 1888);
+		calculateSASAtomAreas(atoms, atom_SAS_areas, 1.4, 1888);
 
 		// iterate over all atoms and add up the energies
 		float energy = 0.0;
-		for (atom_it = fragment.beginAtom(); +atom_it; ++atom_it) 
+		for (atom_it = atoms.beginAtom(); +atom_it; ++atom_it) 
 		{
 			
 			if (atom_SAS_areas.has(&*atom_it))

@@ -1,4 +1,4 @@
-// $Id: hashGrid.h,v 1.8 2000/01/10 15:50:57 oliver Exp $
+// $Id: hashGrid.h,v 1.9 2000/08/30 19:58:01 oliver Exp $
 
 #ifndef BALL_DATATYPE_HASHGRID_H
 #define BALL_DATATYPE_HASHGRID_H
@@ -203,7 +203,7 @@ namespace BALL
 		{
 			public:
 
-			BALL_CREATE(BoxIteratorTraits_)
+			BALL_CREATE_DEEP(BoxIteratorTraits_)
 
 			BoxIteratorTraits_()
 				:	bound_(0),
@@ -359,7 +359,7 @@ namespace BALL
 			{
 				public:
 
-				BALL_CREATE(DataIteratorTraits_)
+				BALL_CREATE_DEEP(DataIteratorTraits_)
 
 				DataIteratorTraits_()
 					:	bound_(0),
@@ -1095,7 +1095,7 @@ namespace BALL
 		{
 			public:
 
-			BALL_CREATE(BoxIteratorTraits_)
+			BALL_CREATE_DEEP(BoxIteratorTraits_)
 
 			BoxIteratorTraits_()
 				:	bound_(0),

@@ -1,4 +1,4 @@
-// $Id: moleculeIterator.h,v 1.3 1999/12/30 20:30:40 oliver Exp $
+// $Id: moleculeIterator.h,v 1.4 2000/08/30 19:58:09 oliver Exp $
 
 #ifndef BALL_KERNEL_MOLECULEITERATOR_H
 #define BALL_KERNEL_MOLECULEITERATOR_H
@@ -27,7 +27,7 @@ namespace BALL
 	{
 		public:
 		
-		BALL_CREATE(MoleculeIteratorTraits_)
+		BALL_CREATE_DEEP(MoleculeIteratorTraits_)
 
 		MoleculeIteratorTraits_()
 			:	CompositeIteratorTraits_()

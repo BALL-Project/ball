@@ -1,4 +1,4 @@
-// $Id: vector4.h,v 1.30 2000/06/06 13:18:58 oliver Exp $
+// $Id: vector4.h,v 1.31 2000/08/30 19:58:15 oliver Exp $
 
 #ifndef BALL_MATHS_VECTOR4_H
 #define BALL_MATHS_VECTOR4_H
@@ -60,7 +60,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE_NODEEP(TVector4<T>)
+		BALL_CREATE(TVector4<T>)
 
 		/**	@name	Constructors and Destructors
 		*/

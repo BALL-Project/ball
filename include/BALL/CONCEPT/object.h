@@ -1,4 +1,4 @@
-// $Id: object.h,v 1.6 2000/06/06 13:18:56 oliver Exp $ 
+// $Id: object.h,v 1.7 2000/08/30 19:58:00 oliver Exp $ 
 
 #ifndef BALL_CONCEPT_OBJECT_H
 #define BALL_CONCEPT_OBJECT_H
@@ -35,7 +35,7 @@ namespace BALL
 		
 		public:
 
-		BALL_CREATE(Object)
+		BALL_CREATE_DEEP(Object)
 
 
 		/**	@name	Construction and Destruction */	
@@ -216,7 +216,7 @@ namespace BALL
 			{
 				public:
 
-				BALL_CREATE(IteratorTraits_)
+				BALL_CREATE_DEEP(IteratorTraits_)
 
 				IteratorTraits_()
 					:	bound_(0),

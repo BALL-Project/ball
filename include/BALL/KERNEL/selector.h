@@ -1,4 +1,4 @@
-// $Id: selector.h,v 1.11 2000/05/19 12:23:12 anker Exp $
+// $Id: selector.h,v 1.12 2000/08/30 19:58:11 oliver Exp $
 
 #ifndef BALL_KERNEL_SELECTOR_H
 #define BALL_KERNEL_SELECTOR_H
@@ -39,7 +39,7 @@ namespace BALL
 		/**	@name	Constructors and Destructors
 		*/
 		//@{
-		BALL_CREATE_NODEEP(Selector)
+		BALL_CREATE(Selector)
 		/**	Default constructor.
 		*/
 		Selector();

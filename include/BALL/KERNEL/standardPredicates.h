@@ -1,4 +1,4 @@
-// $Id: standardPredicates.h,v 1.9 2000/07/06 13:59:58 oliver Exp $
+// $Id: standardPredicates.h,v 1.10 2000/08/30 19:58:12 oliver Exp $
 
 #ifndef BALL_KERNEL_STANDARDPREDICATES_H
 #define BALL_KERNEL_STANDARDPREDICATES_H
@@ -43,7 +43,7 @@ namespace BALL
 		:	public ExpressionPredicate
 	{
 		public:
-			BALL_CREATE_NODEEP(TruePredicate)
+			BALL_CREATE(TruePredicate)
 			/** Evaluate the predicate for the atom {\tt atom}
 				@param atom the atom to test
 				@return true - always
@@ -59,7 +59,7 @@ namespace BALL
 		:	public ExpressionPredicate
 	{
 		public:
-			BALL_CREATE_NODEEP(SelectedPredicate)
+			BALL_CREATE(SelectedPredicate)
 			/** Evaluate the predicate for the atom {\tt atom}
 					@param atom the atom to test
 					@return true - always
@@ -74,7 +74,7 @@ namespace BALL
 		:	public	ExpressionPredicate
 		{
 			public:
-				BALL_CREATE_NODEEP(AtomNamePredicate)
+				BALL_CREATE(AtomNamePredicate)
 				/** Evaluate the predicate for the atom {\tt atom}
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
@@ -88,7 +88,7 @@ namespace BALL
 		:	public	ExpressionPredicate
 		{
 			public:
-				BALL_CREATE_NODEEP(AtomTypePredicate)
+				BALL_CREATE(AtomTypePredicate)
 				/** Evaluate the predicate for the atom {\tt atom}
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
@@ -102,7 +102,7 @@ namespace BALL
 		:	public	ExpressionPredicate
 		{
 			public:
-				BALL_CREATE_NODEEP(ElementPredicate)
+				BALL_CREATE(ElementPredicate)
 				/** Evaluate the predicate for the atom {\tt atom}
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
@@ -116,7 +116,7 @@ namespace BALL
 		:	public	ExpressionPredicate
 		{
 			public:
-				BALL_CREATE_NODEEP(ResiduePredicate)
+				BALL_CREATE(ResiduePredicate)
 				/** Evaluate the predicate for the atom {\tt atom}
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
@@ -130,7 +130,7 @@ namespace BALL
 		:	public	ExpressionPredicate
 		{
 			public:
-				BALL_CREATE_NODEEP(ResidueIDPredicate)
+				BALL_CREATE(ResidueIDPredicate)
 				/** Evaluate the predicate for the atom {\tt atom}
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
@@ -144,7 +144,7 @@ namespace BALL
 		:	public	ExpressionPredicate
 		{
 			public:
-				BALL_CREATE_NODEEP(ProteinPredicate)
+				BALL_CREATE(ProteinPredicate)
 				/** Evaluate the predicate for the atom {\tt atom}
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
@@ -158,7 +158,7 @@ namespace BALL
 		:	public	ExpressionPredicate
 		{
 			public:
-				BALL_CREATE_NODEEP(ChainPredicate)
+				BALL_CREATE(ChainPredicate)
 				/** Evaluate the predicate for the atom {\tt atom}
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
@@ -172,7 +172,7 @@ namespace BALL
 		:	public	ExpressionPredicate
 		{
 			public:
-				BALL_CREATE_NODEEP(SecondaryStructurePredicate)
+				BALL_CREATE(SecondaryStructurePredicate)
 				/** Evaluate the predicate for the atom {\tt atom}
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
@@ -186,7 +186,7 @@ namespace BALL
 		:	public	ExpressionPredicate
 		{
 			public:
-				BALL_CREATE_NODEEP(SolventPredicate)
+				BALL_CREATE(SolventPredicate)
 				/** Evaluate the predicate for the atom {\tt atom}
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
@@ -200,7 +200,7 @@ namespace BALL
 		:	public	ExpressionPredicate
 		{
 			public:
-				BALL_CREATE_NODEEP(MoleculePredicate)
+				BALL_CREATE(MoleculePredicate)
 				/** Evaluate the predicate for the atom {\tt atom}
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
@@ -214,7 +214,7 @@ namespace BALL
 		:	public	ExpressionPredicate
 		{
 			public:
-				BALL_CREATE_NODEEP(BackBonePredicate)
+				BALL_CREATE(BackBonePredicate)
 				/** Evaluate the predicate for the atom {\tt atom}
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
@@ -229,7 +229,7 @@ namespace BALL
 		:	public	ExpressionPredicate
 		{
 			public:
-				BALL_CREATE_NODEEP(NucleicAcidPredicate)
+				BALL_CREATE(NucleicAcidPredicate)
 				/** Evaluate the predicate for the atom {\tt atom}
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
@@ -243,7 +243,7 @@ namespace BALL
 		:	public	ExpressionPredicate
 		{
 			public:
-				BALL_CREATE_NODEEP(NucleotidePredicate)
+				BALL_CREATE(NucleotidePredicate)
 				/** Evaluate the predicate for the atom {\tt atom}
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
@@ -258,7 +258,7 @@ namespace BALL
 		{
 			public:
 
-				BALL_CREATE_NODEEP(InRingPredicate)
+				BALL_CREATE(InRingPredicate)
 
 				InRingPredicate();
 				
@@ -281,7 +281,7 @@ namespace BALL
 		:	public	ExpressionPredicate
 		{
 			public:
-				BALL_CREATE_NODEEP(DoubleBondsPredicate)
+				BALL_CREATE(DoubleBondsPredicate)
 				/** Evaluate the predicate for the atom {\tt atom}
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
@@ -298,7 +298,7 @@ namespace BALL
 		:	public DoubleBondsPredicate
 		{
 			public:
-				BALL_CREATE_NODEEP(SingleBondsPredicate)
+				BALL_CREATE(SingleBondsPredicate)
 				/** Evaluate the predicate for the atom {\tt atom}
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
@@ -316,7 +316,7 @@ namespace BALL
 		:	public DoubleBondsPredicate
 		{
 			public:
-				BALL_CREATE_NODEEP(TripleBondsPredicate)
+				BALL_CREATE(TripleBondsPredicate)
 				/** Evaluate the predicate for the atom {\tt atom}
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
@@ -334,7 +334,7 @@ namespace BALL
 		:	public DoubleBondsPredicate
 		{
 			public:
-				BALL_CREATE_NODEEP(AromaticBondsPredicate)
+				BALL_CREATE(AromaticBondsPredicate)
 				/** Evaluate the predicate for the atom {\tt atom}
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
@@ -348,7 +348,7 @@ namespace BALL
 		:	public	ExpressionPredicate
 		{
 			public:
-				BALL_CREATE_NODEEP(NumberOfBondsPredicate)
+				BALL_CREATE(NumberOfBondsPredicate)
 				/** Evaluate the predicate for the atom {\tt atom}
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
@@ -380,7 +380,7 @@ namespace BALL
 		:	public	ExpressionPredicate
 		{
 			public:
-				BALL_CREATE_NODEEP(ConnectedToPredicate)
+				BALL_CREATE(ConnectedToPredicate)
 				/** Evaluate the predicate for the atom {\tt atom}
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
@@ -404,7 +404,7 @@ namespace BALL
 		:	public	ExpressionPredicate
 		{
 			public:
-				BALL_CREATE_NODEEP(SpHybridizedPredicate)
+				BALL_CREATE(SpHybridizedPredicate)
 				/** Evaluate the predicate for the atom {\tt atom}
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
@@ -418,7 +418,7 @@ namespace BALL
 		:	public	ExpressionPredicate
 		{
 			public:
-				BALL_CREATE_NODEEP(Sp2HybridizedPredicate)
+				BALL_CREATE(Sp2HybridizedPredicate)
 				/** Evaluate the predicate for the atom {\tt atom}
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
@@ -432,7 +432,7 @@ namespace BALL
 		:	public	ExpressionPredicate
 		{
 			public:
-				BALL_CREATE_NODEEP(Sp3HybridizedPredicate)
+				BALL_CREATE(Sp3HybridizedPredicate)
 				/** Evaluate the predicate for the atom {\tt atom}
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise

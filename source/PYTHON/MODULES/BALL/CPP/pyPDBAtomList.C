@@ -1,9 +1,9 @@
-// $Id: pyPDBAtomList.C,v 1.1 2000/07/18 21:18:50 oliver Exp $
+// $Id: pyPDBAtomList.C,v 1.2 2000/08/30 19:58:39 oliver Exp $
 
 #include <BALL/PYTHON/pyPDBAtomList.h>
 #include <BALL/KERNEL/PDBAtom.h>
 #include <BALL/KERNEL/expression.h>
-#include <BALL/KERNEL/baseFragment.h>
+#include <BALL/KERNEL/atomContainer.h>
 
 namespace BALL
 {
@@ -22,17 +22,17 @@ namespace BALL
 	{
 	}
 
-	PyPDBAtomList::PyPDBAtomList(const BaseFragment& fragment, const String& expression)
+	PyPDBAtomList::PyPDBAtomList(const AtomContainer& fragment, const String& expression)
 	{
 		set(fragment, expression);
 	}
 
-	PyPDBAtomList::PyPDBAtomList(const BaseFragment& fragment)
+	PyPDBAtomList::PyPDBAtomList(const AtomContainer& fragment)
 	{
 		set(fragment, "");
 	}
 
-	void PyPDBAtomList::set(const BaseFragment& fragment, const String& expression)
+	void PyPDBAtomList::set(const AtomContainer& fragment, const String& expression)
 	{
 		// clear the old contents of the list
 		clear();

@@ -1,4 +1,4 @@
-// $Id: energyMinimizer.h,v 1.15 2000/03/28 15:32:10 oliver Exp $
+// $Id: energyMinimizer.h,v 1.16 2000/08/30 19:58:20 oliver Exp $
 // Energy Minimizer: A class for minimizing the energy of molecular systems
 
 #ifndef BALL_MOLMEC_MINIMIZATION_ENERGYMINIMIZER_H
@@ -137,7 +137,7 @@ namespace BALL
 		*/
 		//@{
 		
-		BALL_CREATE(EnergyMinimizer)
+		BALL_CREATE_DEEP(EnergyMinimizer)
 
 		/**	Default constructor.
 		*/

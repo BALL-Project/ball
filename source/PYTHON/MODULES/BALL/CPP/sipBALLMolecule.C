@@ -345,10 +345,10 @@ static PyObject *sipDo_Molecule_prepend(PyObject *sipThisObj,PyObject *sipArgs)
 	}
 
 	{
-		BaseFragment *a0;
+		AtomContainer *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_BaseFragment,&a0obj))
+		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_AtomContainer,&a0obj))
 		{
 			Molecule *ptr;
 
@@ -357,7 +357,7 @@ static PyObject *sipDo_Molecule_prepend(PyObject *sipThisObj,PyObject *sipArgs)
 
 			int iserr = 0;
 
-			sipConvertTo_BaseFragment(a0obj,&a0,1,&iserr);
+			sipConvertTo_AtomContainer(a0obj,&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -409,10 +409,10 @@ static PyObject *sipDo_Molecule_append(PyObject *sipThisObj,PyObject *sipArgs)
 	}
 
 	{
-		BaseFragment *a0;
+		AtomContainer *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_BaseFragment,&a0obj))
+		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_AtomContainer,&a0obj))
 		{
 			Molecule *ptr;
 
@@ -421,7 +421,7 @@ static PyObject *sipDo_Molecule_append(PyObject *sipThisObj,PyObject *sipArgs)
 
 			int iserr = 0;
 
-			sipConvertTo_BaseFragment(a0obj,&a0,1,&iserr);
+			sipConvertTo_AtomContainer(a0obj,&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -473,10 +473,10 @@ static PyObject *sipDo_Molecule_insert(PyObject *sipThisObj,PyObject *sipArgs)
 	}
 
 	{
-		BaseFragment *a0;
+		AtomContainer *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_BaseFragment,&a0obj))
+		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_AtomContainer,&a0obj))
 		{
 			Molecule *ptr;
 
@@ -485,7 +485,7 @@ static PyObject *sipDo_Molecule_insert(PyObject *sipThisObj,PyObject *sipArgs)
 
 			int iserr = 0;
 
-			sipConvertTo_BaseFragment(a0obj,&a0,1,&iserr);
+			sipConvertTo_AtomContainer(a0obj,&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -540,12 +540,12 @@ static PyObject *sipDo_Molecule_insertBefore(PyObject *sipThisObj,PyObject *sipA
 	}
 
 	{
-		BaseFragment *a0;
+		AtomContainer *a0;
 		PyObject *a0obj;
 		Composite *a1;
 		PyObject *a1obj;
 
-		if (sipParseArgs(sipArgs,"II",sipCanConvertTo_BaseFragment,&a0obj,sipCanConvertTo_Composite,&a1obj))
+		if (sipParseArgs(sipArgs,"II",sipCanConvertTo_AtomContainer,&a0obj,sipCanConvertTo_Composite,&a1obj))
 		{
 			Molecule *ptr;
 
@@ -554,7 +554,7 @@ static PyObject *sipDo_Molecule_insertBefore(PyObject *sipThisObj,PyObject *sipA
 
 			int iserr = 0;
 
-			sipConvertTo_BaseFragment(a0obj,&a0,1,&iserr);
+			sipConvertTo_AtomContainer(a0obj,&a0,1,&iserr);
 			sipConvertTo_Composite(a1obj,&a1,1,&iserr);
 
 			if (iserr)
@@ -610,12 +610,12 @@ static PyObject *sipDo_Molecule_insertAfter(PyObject *sipThisObj,PyObject *sipAr
 	}
 
 	{
-		BaseFragment *a0;
+		AtomContainer *a0;
 		PyObject *a0obj;
 		Composite *a1;
 		PyObject *a1obj;
 
-		if (sipParseArgs(sipArgs,"II",sipCanConvertTo_BaseFragment,&a0obj,sipCanConvertTo_Composite,&a1obj))
+		if (sipParseArgs(sipArgs,"II",sipCanConvertTo_AtomContainer,&a0obj,sipCanConvertTo_Composite,&a1obj))
 		{
 			Molecule *ptr;
 
@@ -624,7 +624,7 @@ static PyObject *sipDo_Molecule_insertAfter(PyObject *sipThisObj,PyObject *sipAr
 
 			int iserr = 0;
 
-			sipConvertTo_BaseFragment(a0obj,&a0,1,&iserr);
+			sipConvertTo_AtomContainer(a0obj,&a0,1,&iserr);
 			sipConvertTo_Composite(a1obj,&a1,1,&iserr);
 
 			if (iserr)
@@ -677,10 +677,10 @@ static PyObject *sipDo_Molecule_remove(PyObject *sipThisObj,PyObject *sipArgs)
 	}
 
 	{
-		BaseFragment *a0;
+		AtomContainer *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_BaseFragment,&a0obj))
+		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_AtomContainer,&a0obj))
 		{
 			bool res;
 			Molecule *ptr;
@@ -690,7 +690,7 @@ static PyObject *sipDo_Molecule_remove(PyObject *sipThisObj,PyObject *sipArgs)
 
 			int iserr = 0;
 
-			sipConvertTo_BaseFragment(a0obj,&a0,1,&iserr);
+			sipConvertTo_AtomContainer(a0obj,&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -716,10 +716,10 @@ static PyObject *sipDo_Molecule_spliceBefore(PyObject *sipThisObj,PyObject *sipA
 		return NULL;
 
 	{
-		BaseFragment *a0;
+		AtomContainer *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_BaseFragment,&a0obj))
+		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_AtomContainer,&a0obj))
 		{
 			Molecule *ptr;
 
@@ -728,7 +728,7 @@ static PyObject *sipDo_Molecule_spliceBefore(PyObject *sipThisObj,PyObject *sipA
 
 			int iserr = 0;
 
-			sipConvertTo_BaseFragment(a0obj,&a0,1,&iserr);
+			sipConvertTo_AtomContainer(a0obj,&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -755,10 +755,10 @@ static PyObject *sipDo_Molecule_spliceAfter(PyObject *sipThisObj,PyObject *sipAr
 		return NULL;
 
 	{
-		BaseFragment *a0;
+		AtomContainer *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_BaseFragment,&a0obj))
+		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_AtomContainer,&a0obj))
 		{
 			Molecule *ptr;
 
@@ -767,7 +767,7 @@ static PyObject *sipDo_Molecule_spliceAfter(PyObject *sipThisObj,PyObject *sipAr
 
 			int iserr = 0;
 
-			sipConvertTo_BaseFragment(a0obj,&a0,1,&iserr);
+			sipConvertTo_AtomContainer(a0obj,&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -794,10 +794,10 @@ static PyObject *sipDo_Molecule_splice(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		BaseFragment *a0;
+		AtomContainer *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_BaseFragment,&a0obj))
+		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_AtomContainer,&a0obj))
 		{
 			Molecule *ptr;
 
@@ -806,7 +806,7 @@ static PyObject *sipDo_Molecule_splice(PyObject *sipThisObj,PyObject *sipArgs)
 
 			int iserr = 0;
 
-			sipConvertTo_BaseFragment(a0obj,&a0,1,&iserr);
+			sipConvertTo_AtomContainer(a0obj,&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -863,7 +863,7 @@ const void *sipCast_Molecule(const void *ptr,PyObject *targetClass)
 	if (targetClass == sipClass_Molecule)
 		return ptr;
 
-	if ((res = sipCast_BaseFragment((BaseFragment *)(Molecule *)ptr,targetClass)) != NULL)
+	if ((res = sipCast_AtomContainer((AtomContainer *)(Molecule *)ptr,targetClass)) != NULL)
 		return res;
 
 	return NULL;

@@ -1,4 +1,4 @@
-// $Id: geometricObjectSelector.h,v 1.4 2000/06/25 19:15:11 hekl Exp $
+// $Id: geometricObjectSelector.h,v 1.5 2000/08/30 19:58:21 oliver Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_GEOMETRICOBJECTSELECTOR_H
 #define BALL_MOLVIEW_FUNCTOR_GEOMETRICOBJECTSELECTOR_H
@@ -52,7 +52,7 @@ namespace BALL
 		{
 			public:
 
-			BALL_CREATE(GeometricObjectSelector)
+			BALL_CREATE_DEEP(GeometricObjectSelector)
 
 			/**	@name	Constructors and Destructors
 			*/

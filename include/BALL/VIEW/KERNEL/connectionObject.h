@@ -46,7 +46,7 @@ namespace BALL
 		{
 			public:
 			
-			BALL_CREATE(ConnectionObject)
+			BALL_CREATE_DEEP(ConnectionObject)
 			
 			/**	@name	Enums
 			*/

@@ -1,4 +1,4 @@
-// $Id: secondaryStructure.h,v 1.14 2000/06/03 00:12:04 amoll Exp $
+// $Id: secondaryStructure.h,v 1.15 2000/08/30 19:58:11 oliver Exp $
 
 #ifndef BALL_KERNEL_SECONDARYSTRUCTURE_H
 #define BALL_KERNEL_SECONDARYSTRUCTURE_H
@@ -30,11 +30,11 @@ namespace BALL
 			{\bf Definition:}\URL{BALL/KERNEL/secondaryStructure.h}
 	*/
 	class SecondaryStructure
-		: public BaseFragment
+		: public AtomContainer
 	{
 		public:
 
-		BALL_CREATE(SecondaryStructure)
+		BALL_CREATE_DEEP(SecondaryStructure)
 
 
 		/**	@name	Enums
@@ -349,25 +349,25 @@ namespace BALL
 
 		bool remove(Atom &atom);
 
-		void prepend(BaseFragment &base_fragment);
+		void prepend(AtomContainer &atom_container);
 
-		void append(BaseFragment &base_fragment);
+		void append(AtomContainer &atom_container);
 
-		void insert(BaseFragment &base_fragment);
+		void insert(AtomContainer &atom_container);
 			
-		void insertBefore(BaseFragment &base_fragment, Composite &before);
+		void insertBefore(AtomContainer &atom_container, Composite &before);
 
-		void insertAfter(BaseFragment &base_fragment, Composite &after);
+		void insertAfter(AtomContainer &atom_container, Composite &after);
 
-		void spliceBefore(BaseFragment &base_fragment);
+		void spliceBefore(AtomContainer &atom_container);
 
-		void spliceAfter(BaseFragment &base_fragment);
+		void spliceAfter(AtomContainer &atom_container);
 
-		void splice(BaseFragment &base_fragment);
+		void splice(AtomContainer &atom_container);
 
-		bool remove(BaseFragment &base_fragment);
+		bool remove(AtomContainer &atom_container);
 
-		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(BaseFragment)
+		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(AtomContainer)
 
 		void clear_();
 	};

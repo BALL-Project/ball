@@ -1,4 +1,4 @@
-// $Id: RTTI_test.C,v 1.7 2000/06/06 09:46:23 oliver Exp $
+// $Id: RTTI_test.C,v 1.8 2000/08/30 19:59:16 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 #include <BALL/KERNEL/secondaryStructure.h>
 ///////////////////////////
 
-START_TEST(RTTI, "$Id: RTTI_test.C,v 1.7 2000/06/06 09:46:23 oliver Exp $")
+START_TEST(RTTI, "$Id: RTTI_test.C,v 1.8 2000/08/30 19:59:16 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -21,16 +21,16 @@ CHECK(RTTI::isKindOf<>())
 	Protein p;
 	Protein*			p_ptr(&p);
 	Molecule*			m_ptr(&p);
-	BaseFragment*	b_ptr(&p);
+	AtomContainer*	b_ptr(&p);
 	TEST_EQUAL(isKindOf<Molecule>(*p_ptr), true)
 	TEST_EQUAL(isKindOf<Molecule>(*m_ptr), true)
 	TEST_EQUAL(isKindOf<Molecule>(*b_ptr), true)
 	TEST_EQUAL(isKindOf<Protein>(*p_ptr), true)
 	TEST_EQUAL(isKindOf<Protein>(*m_ptr), true)
 	TEST_EQUAL(isKindOf<Protein>(*b_ptr), true)
-	TEST_EQUAL(isKindOf<BaseFragment>(*p_ptr), true)
-	TEST_EQUAL(isKindOf<BaseFragment>(*m_ptr), true)
-	TEST_EQUAL(isKindOf<BaseFragment>(*b_ptr), true)
+	TEST_EQUAL(isKindOf<AtomContainer>(*p_ptr), true)
+	TEST_EQUAL(isKindOf<AtomContainer>(*m_ptr), true)
+	TEST_EQUAL(isKindOf<AtomContainer>(*b_ptr), true)
 	TEST_EQUAL(isKindOf<Residue>(*p_ptr), false)
 	TEST_EQUAL(isKindOf<Residue>(*m_ptr), false)
 	TEST_EQUAL(isKindOf<Residue>(*b_ptr), false)
@@ -41,15 +41,15 @@ CHECK(RTTI::isKindOf<>())
 	TEST_EQUAL(isKindOf<Molecule>(*b_ptr), true)
 	TEST_EQUAL(isKindOf<Protein>(*m_ptr), false)
 	TEST_EQUAL(isKindOf<Protein>(*b_ptr), false)
-	TEST_EQUAL(isKindOf<BaseFragment>(*m_ptr), true)
-	TEST_EQUAL(isKindOf<BaseFragment>(*b_ptr), true)
+	TEST_EQUAL(isKindOf<AtomContainer>(*m_ptr), true)
+	TEST_EQUAL(isKindOf<AtomContainer>(*b_ptr), true)
 	TEST_EQUAL(isKindOf<Residue>(*m_ptr), false)
 	TEST_EQUAL(isKindOf<Residue>(*b_ptr), false)
-	BaseFragment b;
+	AtomContainer b;
 	b_ptr = &b;
 	TEST_EQUAL(isKindOf<Molecule>(*b_ptr), false)
 	TEST_EQUAL(isKindOf<Protein>(*b_ptr), false)
-	TEST_EQUAL(isKindOf<BaseFragment>(*b_ptr), true)
+	TEST_EQUAL(isKindOf<AtomContainer>(*b_ptr), true)
 	TEST_EQUAL(isKindOf<Residue>(*b_ptr), false)
 
 	System*				s_ptr = new System;
@@ -62,16 +62,16 @@ CHECK(RTTI::isInstanceOf<>())
 	Protein p;
 	Protein*			p_ptr(&p);
 	Molecule*			m_ptr(&p);
-	BaseFragment*	b_ptr(&p);
+	AtomContainer*	b_ptr(&p);
 	TEST_EQUAL(isInstanceOf<Molecule>(*p_ptr), false)
 	TEST_EQUAL(isInstanceOf<Molecule>(*m_ptr), false)
 	TEST_EQUAL(isInstanceOf<Molecule>(*b_ptr), false)
 	TEST_EQUAL(isInstanceOf<Protein>(*p_ptr), true)
 	TEST_EQUAL(isInstanceOf<Protein>(*m_ptr), true)
 	TEST_EQUAL(isInstanceOf<Protein>(*b_ptr), true)
-	TEST_EQUAL(isInstanceOf<BaseFragment>(*p_ptr), false)
-	TEST_EQUAL(isInstanceOf<BaseFragment>(*m_ptr), false)
-	TEST_EQUAL(isInstanceOf<BaseFragment>(*b_ptr), false)
+	TEST_EQUAL(isInstanceOf<AtomContainer>(*p_ptr), false)
+	TEST_EQUAL(isInstanceOf<AtomContainer>(*m_ptr), false)
+	TEST_EQUAL(isInstanceOf<AtomContainer>(*b_ptr), false)
 	TEST_EQUAL(isInstanceOf<Residue>(*p_ptr), false)
 	TEST_EQUAL(isInstanceOf<Residue>(*m_ptr), false)
 	TEST_EQUAL(isInstanceOf<Residue>(*b_ptr), false)
@@ -82,15 +82,15 @@ CHECK(RTTI::isInstanceOf<>())
 	TEST_EQUAL(isInstanceOf<Molecule>(*b_ptr), true)
 	TEST_EQUAL(isInstanceOf<Protein>(*m_ptr), false)
 	TEST_EQUAL(isInstanceOf<Protein>(*b_ptr), false)
-	TEST_EQUAL(isInstanceOf<BaseFragment>(*m_ptr), false)
-	TEST_EQUAL(isInstanceOf<BaseFragment>(*b_ptr), false)
+	TEST_EQUAL(isInstanceOf<AtomContainer>(*m_ptr), false)
+	TEST_EQUAL(isInstanceOf<AtomContainer>(*b_ptr), false)
 	TEST_EQUAL(isInstanceOf<Residue>(*m_ptr), false)
 	TEST_EQUAL(isInstanceOf<Residue>(*b_ptr), false)
-	BaseFragment b;
+	AtomContainer b;
 	b_ptr = &b;
 	TEST_EQUAL(isInstanceOf<Molecule>(*b_ptr), false)
 	TEST_EQUAL(isInstanceOf<Protein>(*b_ptr), false)
-	TEST_EQUAL(isInstanceOf<BaseFragment>(*b_ptr), true)
+	TEST_EQUAL(isInstanceOf<AtomContainer>(*b_ptr), true)
 	TEST_EQUAL(isInstanceOf<Residue>(*b_ptr), false)
 
 	Atom*					a_ptr = new Atom();
@@ -134,8 +134,8 @@ CHECK(getDefault<>())
 	c = getDefault<Chain>();
 	Molecule m;
 	m = getDefault<Molecule>();
-	BaseFragment bf;
-	bf = getDefault<BaseFragment>();
+	AtomContainer bf;
+	bf = getDefault<AtomContainer>();
 	Fragment f;
 	f = getDefault<Fragment>();
 RESULT
@@ -163,7 +163,7 @@ CHECK(getNew<>())
 	TEST_NOT_EQUAL(c, 0)
 	Molecule* m = (Molecule*)getNew<Molecule>();
 	TEST_NOT_EQUAL(m, 0)
-	BaseFragment* bf = (BaseFragment*)getNew<BaseFragment>();
+	AtomContainer* bf = (AtomContainer*)getNew<AtomContainer>();
 	TEST_NOT_EQUAL(bf, 0)
 	Fragment* f = (Fragment*)getNew<Fragment>();
 	TEST_NOT_EQUAL(f, 0)
@@ -183,7 +183,7 @@ CHECK(getName<>())
 	TEST_EQUAL(String(getName<Residue>()).hasSubstring("Residue"), true)
 	TEST_EQUAL(String(getName<Chain>()).hasSubstring("Chain"), true)
 	TEST_EQUAL(String(getName<Molecule>()).hasSubstring("Molecule"), true)
-	TEST_EQUAL(String(getName<BaseFragment>()).hasSubstring("BaseFragment"), true)
+	TEST_EQUAL(String(getName<AtomContainer>()).hasSubstring("AtomContainer"), true)
 	TEST_EQUAL(String(getName<Fragment>()).hasSubstring("Fragment"), true)
 RESULT
 
@@ -201,13 +201,13 @@ CHECK(getStreamName<>())
 	TEST_EQUAL(getStreamName<Residue>(), String("BALL::Residue"))
 	TEST_EQUAL(getStreamName<Chain>(), String("BALL::Chain"))
 	TEST_EQUAL(getStreamName<Molecule>(), String("BALL::Molecule"))
-	TEST_EQUAL(getStreamName<BaseFragment>(), String("BALL::BaseFragment"))
+	TEST_EQUAL(getStreamName<AtomContainer>(), String("BALL::AtomContainer"))
 	TEST_EQUAL(getStreamName<Fragment>(), String("BALL::Fragment"))
 RESULT
 
 CHECK(castTo<>())
 	Fragment f1;
-	BaseFragment* bf1 = &f1;
+	AtomContainer* bf1 = &f1;
 	Fragment* f = castTo<Fragment>(*bf1);
 	TEST_NOT_EQUAL(f, 0)
 RESULT

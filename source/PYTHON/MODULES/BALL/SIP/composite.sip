@@ -1,4 +1,4 @@
-// $Id: composite.sip,v 1.2 2000/08/28 15:48:08 oliver Exp $
+// $Id: composite.sip,v 1.3 2000/08/30 19:59:09 oliver Exp $
 
 class Composite
   :  PersistentObject,
@@ -31,8 +31,7 @@ class Composite
   Size getDegree() const;
   // Size count(const KernelPredicateType& /predicate/) const;
   Size countDescendants() const;
-  static Size getPathLength(const Composite& /a/, const Composite& /b/);
-  // static Size getDepth(const Composite& /composite/);
+  Size getPathLength(const Composite& /a/);
   Size getDepth() const;
   Size getHeight() const;
   Composite& getRoot();

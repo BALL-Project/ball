@@ -1,9 +1,9 @@
-// $Id: bond.C,v 1.8 2000/07/25 21:12:41 oliver Exp $
+// $Id: bond.C,v 1.9 2000/08/30 19:58:32 oliver Exp $
 
 #include <BALL/KERNEL/bond.h>
 
 #include <BALL/KERNEL/system.h>
-#include <BALL/KERNEL/baseFragment.h>
+#include <BALL/KERNEL/atomContainer.h>
 
 using namespace std;
 
@@ -335,12 +335,12 @@ namespace BALL
 			&& (first_->Composite::getRoot() != second_->Composite::getRoot()));
 	}
 
-	bool Bond::isInterBondOf(const BaseFragment& base_fragment) const
+	bool Bond::isInterBondOf(const AtomContainer& atom_container) const
 	{
 		if (isBound() == true)
 		{
-  		bool first_atom_is_descendant = first_->Composite::isDescendantOf(base_fragment);
-			bool second_atom_is_descendant = second_->Composite::isDescendantOf(base_fragment);
+  		bool first_atom_is_descendant = first_->Composite::isDescendantOf(atom_container);
+			bool second_atom_is_descendant = second_->Composite::isDescendantOf(atom_container);
 
 			return (bool)((first_atom_is_descendant == true && second_atom_is_descendant == false)
 				|| (first_atom_is_descendant == false && second_atom_is_descendant == true));
@@ -371,11 +371,11 @@ namespace BALL
 									&& (first_->Composite::getRoot() == second_->Composite::getRoot()));
 	}
 
-	bool Bond::isIntraBondOf(const BaseFragment &base_fragment) const
+	bool Bond::isIntraBondOf(const AtomContainer &atom_container) const
 	{
 		return (bool)(isBound() == true
-									&& first_->Composite::isDescendantOf(base_fragment) == true
-									&& second_->Composite::isDescendantOf(base_fragment) == true);
+									&& first_->Composite::isDescendantOf(atom_container) == true
+									&& second_->Composite::isDescendantOf(atom_container) == true);
 	}
 
 	bool Bond::isIntraBondOf(const System &system) const

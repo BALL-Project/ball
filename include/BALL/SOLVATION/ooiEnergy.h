@@ -1,4 +1,4 @@
-// $Id: ooiEnergy.h,v 1.2 2000/05/30 10:42:46 oliver Exp $
+// $Id: ooiEnergy.h,v 1.3 2000/08/30 19:58:25 oliver Exp $
 
 #ifndef BALL_SOLVATION_OOIENERGY_H
 #define BALL_SOLVATION_OOIENERGY_H
@@ -14,7 +14,7 @@
 namespace BALL 
 {
 
-	class BaseFragment;
+	class AtomContainer;
 
 	/** Calculate the solvation energy.
 			Calculates the solvation energy after
@@ -28,7 +28,7 @@ namespace BALL
 			{\bf Definition:} \URL{BALL/SOLVATION/ooiEnergy.h}
 			\\
 	*/ 
-	double calculateOoiEnergy(BaseFragment& fragment);
+	double calculateOoiEnergy(AtomContainer& atoms);
 
 		
 } // namespace BALL

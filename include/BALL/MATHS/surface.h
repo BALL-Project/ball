@@ -1,4 +1,4 @@
-// $Id: surface.h,v 1.4 2000/06/02 07:09:28 oliver Exp $
+// $Id: surface.h,v 1.5 2000/08/30 19:58:14 oliver Exp $
 
 #ifndef BALL_MATHS_SURFACE_H
 #define BALL_MATHS_SURFACE_H
@@ -23,7 +23,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE_NODEEP(Surface)
+		BALL_CREATE(Surface)
 
 		/**	@name	Type Definitions
 		*/

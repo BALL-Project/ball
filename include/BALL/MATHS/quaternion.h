@@ -1,4 +1,4 @@
-// $Id: quaternion.h,v 1.21 2000/05/05 17:39:06 amoll Exp $
+// $Id: quaternion.h,v 1.22 2000/08/30 19:58:14 oliver Exp $
 
 #ifndef BALL_MATHS_QUATERNION_H
 #define BALL_MATHS_QUATERNION_H
@@ -35,7 +35,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE_NODEEP(TQuaternion<T>)
+		BALL_CREATE(TQuaternion<T>)
 		
 
 		/**	@name	Constructors and Destructors

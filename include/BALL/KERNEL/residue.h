@@ -1,4 +1,4 @@
-// $Id: residue.h,v 1.19 2000/08/28 15:54:51 oliver Exp $
+// $Id: residue.h,v 1.20 2000/08/30 19:58:10 oliver Exp $
 
 #ifndef BALL_KERNEL_RESIDUE_H
 #define BALL_KERNEL_RESIDUE_H
@@ -42,7 +42,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE(Residue)
+		BALL_CREATE_DEEP(Residue)
 	
 		/**	@name	Enums
 		*/
@@ -384,33 +384,33 @@ namespace BALL
 
 		private:
 
-		BaseFragment* getBaseFragment(Position position);
+		AtomContainer* getAtomContainer(Position position);
 	
-		const BaseFragment* getBaseFragment(Position position) const;
+		const AtomContainer* getAtomContainer(Position position) const;
 	
-		Size countBaseFragments() const;
+		Size countAtomContainers() const;
 
-		void prepend(BaseFragment& base_fragment);
+		void prepend(AtomContainer& atom_container);
 
-		void append(BaseFragment& base_fragment);
+		void append(AtomContainer& atom_container);
 
-		void insert(BaseFragment& base_fragment);
+		void insert(AtomContainer& atom_container);
 
-		void insertBefore(BaseFragment& base_fragment, Composite& composite);
+		void insertBefore(AtomContainer& atom_container, Composite& composite);
 
-		void insertAfter(BaseFragment& base_fragment, Composite& composite);
+		void insertAfter(AtomContainer& atom_container, Composite& composite);
 
-		void spliceBefore(BaseFragment& base_fragment);
+		void spliceBefore(AtomContainer& atom_container);
 
-		void spliceAfter(BaseFragment& base_ragment);
+		void spliceAfter(AtomContainer& base_ragment);
 
-		void splice(BaseFragment& BaseFragment);
+		void splice(AtomContainer& AtomContainer);
 
-		bool remove(BaseFragment& BaseFragment);
+		bool remove(AtomContainer& AtomContainer);
 
-		bool isSuperBaseFragmentOf(const BaseFragment& base_fragment) const;
+		bool isSuperAtomContainerOf(const AtomContainer& atom_container) const;
 
-		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(BaseFragment)
+		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(AtomContainer)
 
 		void clear_();
 

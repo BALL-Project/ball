@@ -1,4 +1,4 @@
-// $Id: line3.h,v 1.25 2000/05/05 17:39:05 amoll Exp $
+// $Id: line3.h,v 1.26 2000/08/30 19:58:13 oliver Exp $
 
 #ifndef BALL_MATHS_LINE3_H
 #define BALL_MATHS_LINE3_H
@@ -41,7 +41,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE_NODEEP(TLine3<T>)
+		BALL_CREATE(TLine3<T>)
 
 		/**	@name	Enums
 		*/

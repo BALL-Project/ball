@@ -1,4 +1,4 @@
-// $Id: pyProteinList.h,v 1.1 2000/06/27 07:44:12 oliver Exp $
+// $Id: pyProteinList.h,v 1.2 2000/08/30 19:58:25 oliver Exp $
 
 #ifndef BALL_PYTHON_PYPROTEINLIST_H
 #define BALL_PYTHON_PYPROTEINLIST_H
@@ -14,7 +14,7 @@
 namespace BALL 
 {
 	class Protein;
-	class BaseFragment;
+	class AtomContainer;
 	
 	/**
 	*/
@@ -23,7 +23,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE_NODEEP(PyProteinList)
+		BALL_CREATE(PyProteinList)
 
 		/**	@name	Type Definitions
 		*/
@@ -62,11 +62,11 @@ namespace BALL
 		*/
 		PyProteinList(const PyProteinList& new_list);
 			
-		/**	Construct from a BaseFragment
+		/**	Construct from a AtomContainer
 				This constructor creates an PyProteinList object from
-				all atoms of a \Ref{BaseFragment} object.
+				all atoms of a \Ref{AtomContainer} object.
 		*/
-		PyProteinList(const BaseFragment& fragment, bool selected_only = false);
+		PyProteinList(const AtomContainer& fragment, bool selected_only = false);
 
 		/**	Destructor
 		*/
@@ -78,7 +78,7 @@ namespace BALL
 		//@{
 		/**
 		*/
-		void set(const BaseFragment& fragment, bool selected_only = false);
+		void set(const AtomContainer& fragment, bool selected_only = false);
 		//@}
 	};
 

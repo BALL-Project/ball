@@ -1,4 +1,4 @@
-// $Id: conjugateGradient.h,v 1.5 2000/03/28 15:30:48 oliver Exp $ 
+// $Id: conjugateGradient.h,v 1.6 2000/08/30 19:58:20 oliver Exp $ 
 // A conjugate gradient minimizer for geometry optimisation
 
 #ifndef BALL_MOLMEC_MINIMIZATION_CONJUGATEGRADIENT_H 
@@ -107,7 +107,7 @@ namespace BALL
 
     //@}
 
-    BALL_CREATE(ConjugateGradientMinimizer)
+    BALL_CREATE_DEEP(ConjugateGradientMinimizer)
 
     /**	@name	Constructors and Destructors	
     */

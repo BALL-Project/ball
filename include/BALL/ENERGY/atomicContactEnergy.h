@@ -1,4 +1,4 @@
-// $Id: atomicContactEnergy.h,v 1.3 2000/06/28 20:24:24 oliver Exp $
+// $Id: atomicContactEnergy.h,v 1.4 2000/08/30 19:58:03 oliver Exp $
 
 #ifndef BALL_ENERGY_ATOMICCONTACTENERGY_H
 #define BALL_ENERGY_ATOMICCONTACTENERGY_H
@@ -9,7 +9,7 @@
 
 namespace BALL 
 {
-	class BaseFragment;
+	class AtomContainer;
 
 	/** Calculate the atomic contact energy.
 			Calculates the atomic contact energy (ACE) after
@@ -25,7 +25,7 @@ namespace BALL
 			{\bf Definition:} \URL{BALL/ENERGY/atomicContactEnergy.h}
 			\\
 	*/ 
-	double calculateACE(BaseFragment& fragment);
+	double calculateACE(AtomContainer& atoms);
 
 		
 } // namespace BALL

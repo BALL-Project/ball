@@ -1,8 +1,8 @@
-// $Id: pyNucleotideList.C,v 1.1 2000/07/18 21:18:49 oliver Exp $
+// $Id: pyNucleotideList.C,v 1.2 2000/08/30 19:58:39 oliver Exp $
 
 #include <BALL/PYTHON/pyNucleotideList.h>
 #include <BALL/KERNEL/nucleotide.h>
-#include <BALL/KERNEL/baseFragment.h>
+#include <BALL/KERNEL/atomContainer.h>
 
 namespace BALL
 {
@@ -21,18 +21,18 @@ namespace BALL
 	{
 	}
 
-	PyNucleotideList::PyNucleotideList(const BaseFragment& fragment, bool selected_only )
+	PyNucleotideList::PyNucleotideList(const AtomContainer& fragment, bool selected_only )
 	{
 		set(fragment, selected_only);
 	}
 
-	void PyNucleotideList::set(const BaseFragment& fragment, bool selected_only)
+	void PyNucleotideList::set(const AtomContainer& fragment, bool selected_only)
 	{
 		// clear the old contents of the list
 		clear();
 
 		// iterate over all nucleotides
-		BaseFragmentConstIterator it = fragment.beginBaseFragment();
+		AtomContainerConstIterator it = fragment.beginAtomContainer();
 
     for (; +it; ++it)
     {

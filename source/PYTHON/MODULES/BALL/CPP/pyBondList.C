@@ -1,9 +1,9 @@
-// $Id: pyBondList.C,v 1.1 2000/07/18 21:18:41 oliver Exp $
+// $Id: pyBondList.C,v 1.2 2000/08/30 19:58:38 oliver Exp $
 
 #include <BALL/PYTHON/pyBondList.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/bond.h>
-#include <BALL/KERNEL/baseFragment.h>
+#include <BALL/KERNEL/atomContainer.h>
 #include <BALL/DATATYPE/hashSet.h>
 
 namespace BALL
@@ -23,7 +23,7 @@ namespace BALL
 	{
 	}
 
-	PyBondList::PyBondList(const BaseFragment& fragment, bool selected_only )
+	PyBondList::PyBondList(const AtomContainer& fragment, bool selected_only )
 	{
 		set(fragment, selected_only);
 	}
@@ -33,7 +33,7 @@ namespace BALL
 		set(atom);
 	}
 
-	void PyBondList::set(const BaseFragment& fragment, bool selected_only)
+	void PyBondList::set(const AtomContainer& fragment, bool selected_only)
 	{
 		// clear the old contents of the list
 		clear();

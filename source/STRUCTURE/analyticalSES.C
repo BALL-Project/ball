@@ -1,9 +1,9 @@
-// $Id: analyticalSES.C,v 1.9 2000/06/27 11:08:44 oliver Exp $
-// $Id: analyticalSES.C,v 1.9 2000/06/27 11:08:44 oliver Exp $
+// $Id: analyticalSES.C,v 1.10 2000/08/30 19:59:13 oliver Exp $
+// $Id: analyticalSES.C,v 1.10 2000/08/30 19:59:13 oliver Exp $
 
 #include <BALL/STRUCTURE/analyticalSES.h>
 #include <BALL/KERNEL/atom.h>
-#include <BALL/KERNEL/baseFragment.h>
+#include <BALL/KERNEL/atomContainer.h>
 
 namespace BALL
 {
@@ -12,7 +12,7 @@ namespace BALL
 												double *volume, double *area, double probe, double exclude, double* atom_areas);
 
 	float calculateSESArea	
-		(const BaseFragment& fragment, float probe_radius)
+		(const AtomContainer& fragment, float probe_radius)
 	{
 		// extract all atoms: iterate over all composites and
 		// check whether they are Atoms
@@ -66,7 +66,7 @@ namespace BALL
 	}
 
   float calculateSESAtomAreas
-		(const BaseFragment& fragment, HashMap<Atom*,float>& atom_areas, float probe_radius)
+		(const AtomContainer& fragment, HashMap<Atom*,float>& atom_areas, float probe_radius)
 	{
 		// extract all atoms: iterate over all composites and
 		// check whether they are Atoms
@@ -126,7 +126,7 @@ namespace BALL
 	}
 
 	float calculateSESVolume	
-		(const BaseFragment& fragment, float probe_radius)
+		(const AtomContainer& fragment, float probe_radius)
 	{
 		// extract all atoms: iterate over all composites and
 		// check whether they are Atoms

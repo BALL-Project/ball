@@ -1,4 +1,4 @@
-// $Id: radiusRuleProcessor.h,v 1.2 2000/06/02 07:11:05 oliver Exp $
+// $Id: radiusRuleProcessor.h,v 1.3 2000/08/30 19:58:18 oliver Exp $
 // Molecular Mechanics: rule-based assignment of radii
 
 #ifndef BALL_MOLMEC_COMMON_RADIUSRULEPROCESSOR_H
@@ -18,7 +18,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE_NODEEP(RadiusRuleProcessor)
+		BALL_CREATE(RadiusRuleProcessor)
 
 		/**	Constructors and Destructors
 		*/

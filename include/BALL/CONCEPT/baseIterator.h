@@ -1,4 +1,4 @@
-// $Id: baseIterator.h,v 1.4 2000/03/05 11:02:53 oliver Exp $
+// $Id: baseIterator.h,v 1.5 2000/08/30 19:57:59 oliver Exp $
 
 #ifndef BALL_CONCEPT_BASEITERATOR_H
 #define BALL_CONCEPT_BASEITERATOR_H
@@ -32,7 +32,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE(BaseIterator)
+		BALL_CREATE_DEEP(BaseIterator)
 
 		/**	@name	Constructors and Destructors 
 		*/

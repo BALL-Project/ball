@@ -1,4 +1,4 @@
-// $Id: gradient.h,v 1.2 2000/03/28 15:28:30 oliver Exp $ 
+// $Id: gradient.h,v 1.3 2000/08/30 19:58:18 oliver Exp $ 
 // A conjugate gradient minimizer for geometry optimisation
 
 #ifndef BALL_MOLMEC_COMMON_GRADIENT_H 
@@ -43,7 +43,7 @@ namespace BALL
 	{
     public:
 
-    BALL_CREATE(Gradient)
+    BALL_CREATE_DEEP(Gradient)
 
 		/**	Type definitions
 		*/

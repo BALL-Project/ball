@@ -1,4 +1,4 @@
-// $Id: canonicalMD.h,v 1.6 2000/07/24 20:12:21 oliver Exp $
+// $Id: canonicalMD.h,v 1.7 2000/08/30 19:58:19 oliver Exp $
 
 #ifndef BALL_MOLMEC_MDSIMULATION_CANONICALMD_H   
 #define BALL_MOLMEC_MDSIMULATION_CANONICALMD_H   
@@ -82,7 +82,7 @@ namespace BALL
     */
     //@{
 
-    // BALL_CREATE(CanonicalMD)
+    // BALL_CREATE_DEEP(CanonicalMD)
 
     /** The default constructor with no arguments
     */

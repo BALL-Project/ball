@@ -1,8 +1,8 @@
-// $Id: pyFragmentList.C,v 1.1 2000/07/18 21:18:45 oliver Exp $
+// $Id: pyFragmentList.C,v 1.2 2000/08/30 19:58:38 oliver Exp $
 
 #include <BALL/PYTHON/pyFragmentList.h>
 #include <BALL/KERNEL/fragment.h>
-#include <BALL/KERNEL/baseFragment.h>
+#include <BALL/KERNEL/atomContainer.h>
 
 namespace BALL
 {
@@ -21,18 +21,18 @@ namespace BALL
 	{
 	}
 
-	PyFragmentList::PyFragmentList(const BaseFragment& fragment, bool selected_only )
+	PyFragmentList::PyFragmentList(const AtomContainer& fragment, bool selected_only )
 	{
 		set(fragment, selected_only);
 	}
 
-	void PyFragmentList::set(const BaseFragment& fragment, bool selected_only)
+	void PyFragmentList::set(const AtomContainer& fragment, bool selected_only)
 	{
 		// clear the old contents of the list
 		clear();
 
 		// iterate over all fragments
-		BaseFragmentConstIterator it = fragment.beginBaseFragment();
+		AtomContainerConstIterator it = fragment.beginAtomContainer();
 
 		for (; +it; ++it)
 		{

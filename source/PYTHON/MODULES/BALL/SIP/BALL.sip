@@ -1,4 +1,4 @@
-// $Id: BALL.sip,v 1.4 2000/08/28 15:46:28 oliver Exp $
+// $Id: BALL.sip,v 1.5 2000/08/30 19:59:07 oliver Exp $
 /////////////////////////
 // BALL PYTHON SUPPORT
 /////////////////////////
@@ -86,14 +86,14 @@
 
 
 // KERNEL
+%Include atom.sip
+%Include atomContainer.sip
+// atomIterator.h // not needed
 %Include PDBAtom.sip
 // PDBAtomIterator.h // not needed
 %Include PTE.sip
-%Include atom.sip
-// atomIterator.h // not needed
 %Include bond.sip 
 // bondIterator.h // not needed
-%Include baseFragment.sip
 %Include chain.sip
 // chainIterator.h // not needed
 %Include expression.sip 
@@ -210,7 +210,7 @@
 %Include pyCompositeDescriptorList.sip
 %Include pyCompositeProcessor.sip
 %Include pyBondList.sip
-%Include pyBaseFragmentList.sip
+%Include pyAtomContainerList.sip
 %Include pyFragmentList.sip
 %Include pyMoleculeList.sip
 %Include pyPDBAtomList.sip

@@ -1,4 +1,4 @@
-// $Id: atomVector.h,v 1.1 2000/03/26 12:40:53 oliver Exp $
+// $Id: atomVector.h,v 1.2 2000/08/30 19:58:17 oliver Exp $
 // A class containing a vector of atom pointers
 
 #ifndef BALL_MOLMEC_COMMON_ATOMVECTOR_H 
@@ -32,7 +32,7 @@ namespace BALL
 	{
     public:
 
-    BALL_CREATE(AtomVector)
+    BALL_CREATE_DEEP(AtomVector)
 
 		/**	@name Type definitions
 		*/

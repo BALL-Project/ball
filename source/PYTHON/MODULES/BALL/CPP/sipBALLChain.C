@@ -1182,7 +1182,7 @@ const void *sipCast_Chain(const void *ptr,PyObject *targetClass)
 	if (targetClass == sipClass_Chain)
 		return ptr;
 
-	if ((res = sipCast_BaseFragment((BaseFragment *)(Chain *)ptr,targetClass)) != NULL)
+	if ((res = sipCast_AtomContainer((AtomContainer *)(Chain *)ptr,targetClass)) != NULL)
 		return res;
 
 	return NULL;

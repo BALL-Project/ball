@@ -1,4 +1,4 @@
-// $Id: bond.sip,v 1.2 2000/07/25 21:20:35 oliver Exp $
+// $Id: bond.sip,v 1.3 2000/08/30 19:59:08 oliver Exp $
 
 class Bond
 	: Composite,
@@ -79,10 +79,10 @@ class Bond
   bool isBondOf(const Atom& /atom/) const;
   bool isBound() const;
   bool isInterBond() const;
-  bool isInterBondOf(const BaseFragment& /base_fragment/) const;
+  bool isInterBondOf(const AtomContainer& /atom_container/) const;
   bool isInterBondOf(const System& /system/) const;
   bool isIntraBond() const;
-  bool isIntraBondOf(const BaseFragment& /base_fragment/) const;
+  bool isIntraBondOf(const AtomContainer& /atom_container/) const;
   bool isIntraBondOf(const System& /system/) const;
   virtual bool isValid() const;
   // virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;

@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.105 2000/07/18 23:12:49 oliver Exp $
+dnl    $Id: configure.in,v 1.106 2000/08/30 19:59:18 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -2141,9 +2141,9 @@ if test "${USE_BALLVIEW}" = true ; then
 	if test "${QT_LINKING_OK+set}" != set ; then
 		AC_MSG_RESULT(no)
 		AC_MSG_RESULT()
-		AC_MSG_RESULT(Cannot link against libqgl/qt - disabling support for visualization!)
-		AC_MSG_RESULT(If qt is installed, please specify the path to the library)
-		AC_MSG_RESULT(using the option --with-qt-libs=DIR)
+		AC_MSG_RESULT([Cannot link against libqgl/qt - disabling support for visualization!])
+		AC_MSG_RESULT([If QT is installed, please specify the path to the library])
+		AC_MSG_RESULT([using the option --with-qt-libs=DIR])
 		AC_MSG_RESULT()
 		USE_BALLVIEW=false
 	else

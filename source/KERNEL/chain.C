@@ -1,4 +1,4 @@
-// $Id: chain.C,v 1.6 2000/04/27 15:09:34 amoll Exp $
+// $Id: chain.C,v 1.7 2000/08/30 19:58:32 oliver Exp $
 
 #include <BALL/KERNEL/chain.h>
 #include <BALL/KERNEL/global.h>
@@ -10,17 +10,17 @@ namespace BALL
 {
 
 	Chain::Chain()
-		:	BaseFragment()
+		:	AtomContainer()
 	{
 	}
 		
 	Chain::Chain(const Chain& chain, bool deep)
-		:	BaseFragment(chain, deep)
+		:	AtomContainer(chain, deep)
 	{
 	}
 		
 	Chain::Chain(const String& name)
-		:	BaseFragment(name)
+		:	AtomContainer(name)
 	{
 	}
 
@@ -32,20 +32,20 @@ namespace BALL
   void Chain::persistentWrite(PersistenceManager& pm, const char* name) const
   {
     pm.writeObjectHeader(this, name);
-      BaseFragment::persistentWrite(pm);
+      AtomContainer::persistentWrite(pm);
     pm.writeObjectTrailer(name);
 	}
 
   void Chain::persistentRead(PersistenceManager& pm)
   {
-    pm.checkObjectHeader(RTTI::getStreamName<BaseFragment>());
-			BaseFragment::persistentRead(pm);
+    pm.checkObjectHeader(RTTI::getStreamName<AtomContainer>());
+			AtomContainer::persistentRead(pm);
     pm.checkObjectTrailer(0);
 	}
  
 	void Chain::set(const Chain& chain, bool deep)
 	{
-		BaseFragment::set(chain, deep);
+		AtomContainer::set(chain, deep);
 	}
 			
 	Chain& Chain::operator = (const Chain &chain)
@@ -62,7 +62,7 @@ namespace BALL
 			
 	void Chain::swap(Chain &chain)
 	{
-		BaseFragment::swap(chain);
+		AtomContainer::swap(chain);
 	}
 
 	Protein *Chain::getProtein()
@@ -186,86 +186,86 @@ namespace BALL
 
 	void Chain::prepend(SecondaryStructure &secondary_structure)
 	{
-		BaseFragment::prepend(secondary_structure);
+		AtomContainer::prepend(secondary_structure);
 	}
 
 	void Chain::append(SecondaryStructure &secondary_structure)
 	{
-		BaseFragment::append(secondary_structure);
+		AtomContainer::append(secondary_structure);
 	}
 
 	void Chain::insert(SecondaryStructure &secondary_structure)
 	{
-		BaseFragment::insert(secondary_structure);
+		AtomContainer::insert(secondary_structure);
 	}
 
 	void Chain::insertBefore
 		(SecondaryStructure &secondary_structure,
 		 Composite &before)
 	{
-		BaseFragment::insertBefore(secondary_structure, before);
+		AtomContainer::insertBefore(secondary_structure, before);
 	}
 
 	void Chain::insertAfter(SecondaryStructure &secondary_structure, Composite &after)
 	{
-		BaseFragment::insertAfter(secondary_structure, after);
+		AtomContainer::insertAfter(secondary_structure, after);
 	}
 
 	bool Chain::remove(SecondaryStructure &secondary_structure)
 	{
-		return BaseFragment::remove(secondary_structure);
+		return AtomContainer::remove(secondary_structure);
 	}
 
 	void Chain::prepend(Residue &residue)
 	{
-		BaseFragment::prepend(residue);
+		AtomContainer::prepend(residue);
 	}
 
 	void Chain::append(Residue &residue)
 	{
-		BaseFragment::append(residue);
+		AtomContainer::append(residue);
 	}
 
 	void Chain::insert(Residue &residue)
 	{
-		BaseFragment::insert(residue);
+		AtomContainer::insert(residue);
 	}
 
 	void Chain::insertBefore(Residue &residue, Composite &before)
 	{
-		BaseFragment::insertBefore(residue, before);
+		AtomContainer::insertBefore(residue, before);
 	}
 
 	void Chain::insertAfter(Residue &residue, Composite &after)
 	{
-		BaseFragment::insertAfter(residue, after);
+		AtomContainer::insertAfter(residue, after);
 	}
 
 	bool Chain::remove(Residue &residue)
 	{
-		return BaseFragment::remove(residue);
+		return AtomContainer::remove(residue);
 	}
 
 	void Chain::spliceBefore(Chain &chain)
 	{
-		BaseFragment::spliceBefore(chain);
+		AtomContainer::spliceBefore(chain);
 	}
 
 	void Chain::spliceAfter(Chain &chain)
 	{
-		BaseFragment::spliceAfter(chain);
+		AtomContainer::spliceAfter(chain);
 	}
 
 	void Chain::splice(Chain &chain)
 	{
-		BaseFragment::splice(chain);
+		AtomContainer::splice(chain);
 	}
 
 	void Chain::dump(ostream& s, Size depth) const
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 		
-		BaseFragment::dump(s, depth);
+		AtomContainer::dump(s, depth);
 		// just to avoid these damned compiler warnings
 		// (dump_indent_depth_ was declared but never referenced)
 		if (dump_indent_depth_ == 0) ;

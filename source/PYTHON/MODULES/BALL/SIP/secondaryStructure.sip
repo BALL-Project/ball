@@ -1,7 +1,7 @@
-// $Id: secondaryStructure.sip,v 1.1 2000/07/18 21:28:25 oliver Exp $
+// $Id: secondaryStructure.sip,v 1.2 2000/08/30 19:59:11 oliver Exp $
 
 class SecondaryStructure
-  : BaseFragment
+  : AtomContainer
 {
 %HeaderCode
 	#include <BALL/KERNEL/secondaryStructure.h>
