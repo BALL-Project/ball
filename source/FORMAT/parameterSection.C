@@ -1,4 +1,4 @@
-// $Id: parameterSection.C,v 1.1 2000/02/14 22:47:09 oliver Exp $
+// $Id: parameterSection.C,v 1.2 2000/02/15 18:15:52 oliver Exp $
 //
 
 #include <BALL/FORMAT/parameterSection.h>
@@ -161,8 +161,9 @@ namespace BALL
 		// allocate space for all entries
 		entries_ = new String[number_of_lines * number_of_variables];
 		
-		// cleaer all former contest of the keys_ array
+		// clear all former contest of the keys_ array
 		keys_.clear();
+		section_entries_.clear();
 		
 		// now extract all non-comment lines
 		bool ignore_entry;
@@ -229,7 +230,7 @@ namespace BALL
 							// if this key is new, remember it!
 							if (!section_entries_.has(key))
 							{
-								// add the key to the array of kes
+								// add the key to the array of keys
 								keys_.push_back(key);
 
 								// insert the key into the hash map
@@ -301,7 +302,8 @@ namespace BALL
 		if ((key_index < keys_.size()) 
 				&& (variable_index < number_of_variables_))
 		{
-			return entries_[key_index * number_of_variables_ + variable_index];
+			// return the section entry corresponding to the key
+			return entries_[(section_entries_[keys_[key_index]]) * number_of_variables_ + variable_index];
 		} else {
 			return undefined;
 		}
