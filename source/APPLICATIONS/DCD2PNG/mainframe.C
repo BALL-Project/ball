@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.5 2004/07/26 14:21:00 amoll Exp $
+// $Id: mainframe.C,v 1.6 2004/08/31 11:20:30 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -97,7 +97,7 @@ namespace BALL
 
 		// check menu entries, fetch and apply preferences
 		List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
-		for (it = modular_widgets_.begin(); it != modular_widgets_.end(); ++it)
+		for (; it != modular_widgets_.end(); ++it)
 		{
 			(*it)->fetchPreferences(in);
 			(*it)->applyPreferences();

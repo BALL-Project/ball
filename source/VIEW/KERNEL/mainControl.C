@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.101 2004/08/16 12:36:52 amoll Exp $
+// $Id: mainControl.C,v 1.102 2004/08/31 11:20:10 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -409,7 +409,7 @@ namespace BALL
 
 			// checks all modular widgets 
 			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
-			for (it = modular_widgets_.begin(); it != modular_widgets_.end(); ++it)
+			for (; it != modular_widgets_.end(); ++it)
 			{
 				(*it)->checkMenu(*this);
 			}
@@ -427,7 +427,7 @@ namespace BALL
 
 			// checks all modular widgets 
 			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
-			for (it = modular_widgets_.begin(); it != modular_widgets_.end(); ++it)
+			for (; it != modular_widgets_.end(); ++it)
 			{
 				(*it)->applyPreferences();
 			}
@@ -439,7 +439,7 @@ namespace BALL
 		{
 			// checks all modular widgets 
 			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
-			for (it = modular_widgets_.begin(); it != modular_widgets_.end(); ++it)
+			for (; it != modular_widgets_.end(); ++it)
 			{
 				(*it)->cancelPreferences();
 			}
@@ -450,7 +450,7 @@ namespace BALL
 		{
 			// checks all modular widgets if one of their preferences is the current page
 			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
-			for (it = modular_widgets_.begin(); it != modular_widgets_.end(); ++it)
+			for (; it != modular_widgets_.end(); ++it)
 			{
 				(*it)->defaultPreferences();
 			}
@@ -472,7 +472,7 @@ namespace BALL
 
 			// finalizes all modular widgets
 			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
-			for (it = modular_widgets_.begin(); it != modular_widgets_.end(); ++it)
+			for (; it != modular_widgets_.end(); ++it)
 			{
 				(*it)->writePreferences(preferences_);
 				(*it)->finalizePreferencesTab(*preferences_dialog_);
@@ -1351,7 +1351,7 @@ namespace BALL
 		void MainControl::deleteClicked()
 		{
 			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
-			for (it = modular_widgets_.begin(); it != modular_widgets_.end(); ++it)
+			for (; it != modular_widgets_.end(); ++it)
 			{
 				if (RTTI::isKindOf<GenericControl>(**it))
 				{
