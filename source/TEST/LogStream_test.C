@@ -1,4 +1,4 @@
-// $Id: LogStream_test.C,v 1.3 2000/05/24 09:48:48 oliver Exp $
+// $Id: LogStream_test.C,v 1.4 2000/05/24 11:13:54 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: LogStream_test.C,v 1.3 2000/05/24 09:48:48 oliver Exp $")
+START_TEST(class_name, "$Id: LogStream_test.C,v 1.4 2000/05/24 11:13:54 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -103,7 +103,7 @@ CHECK(warn(int n = 0))
 RESULT
 
 CHECK(insert(std::ostream& s, int min_level = INT_MIN, int max_level = INT_MAX))
-	ostream s;
+	ofstream s;
 	LogStream l1;
 	l1.insert(s);
 // BAUSTELLE
