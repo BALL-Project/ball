@@ -1,4 +1,4 @@
-// $Id: ruleEvaluator.C,v 1.7 2000/07/18 08:29:55 oliver Exp $
+// $Id: ruleEvaluator.C,v 1.8 2000/10/28 15:40:28 anker Exp $
 
 #include <BALL/MOLMEC/COMMON/ruleEvaluator.h>
 #include <BALL/FORMAT/INIFile.h>
@@ -11,14 +11,15 @@ using namespace std;
 namespace BALL 
 {
 
-	RuleEvaluator::RuleEvaluator()
+	RuleEvaluator::RuleEvaluator() throw()
 		:	prefix_(),
 			rule_map_(),
 			valid_(false)
 	{
 	}
 
-	RuleEvaluator::RuleEvaluator(INIFile& file, const String& prefix)
+
+	RuleEvaluator::RuleEvaluator(INIFile& file, const String& prefix) throw()
 		:	prefix_(),
 			rule_map_(),
 			valid_(false)
@@ -26,7 +27,8 @@ namespace BALL
 		valid_ = initialize(file, prefix);
 	}
 
-	RuleEvaluator::RuleEvaluator(const RuleEvaluator& evaluator)
+
+	RuleEvaluator::RuleEvaluator(const RuleEvaluator& evaluator) throw()
 		:	prefix_(evaluator.prefix_),
 			rule_map_(evaluator.rule_map_),
 			valid_(evaluator.valid_)
@@ -34,36 +36,35 @@ namespace BALL
 	}
 
 
-	RuleEvaluator::~RuleEvaluator()
-	{
-		destroy();
-	}
-	
-	void RuleEvaluator::destroy()
+	RuleEvaluator::~RuleEvaluator() throw()
 	{
 		clear();
 	}
+
 	
-	void RuleEvaluator::clear()
+	void RuleEvaluator::clear() throw()
 	{
-		valid_ = false;
 		prefix_ = "";
 		rule_map_.clear();
+
+		valid_ = false;
 	}
 	
 
-	const String& RuleEvaluator::getPrefix() const
+	const String& RuleEvaluator::getPrefix() const throw()
 	{
 		return prefix_;
 	}
 
-	void RuleEvaluator::setPrefix(const String& prefix)
+
+	void RuleEvaluator::setPrefix(const String& prefix) throw()
 	{
 		prefix_ = prefix;
 	}
 
+
 	bool RuleEvaluator::initialize
-		(INIFile& file, const String& prefix)
+		(INIFile& file, const String& prefix) throw()
 	{
 		// destroy the old rules
 		rule_map_.clear();
@@ -99,7 +100,9 @@ namespace BALL
 		return true;
 	}
 
+
 	void RuleEvaluator::extractSection_(INIFile& file, const String& symbol)
+		throw()
 	{
 		// assemble the section name
 		String section_name(prefix_ + ":" + symbol);
@@ -145,7 +148,8 @@ namespace BALL
 		}
 	}
 
-	String RuleEvaluator::operator () (const Atom& atom) const
+
+	String RuleEvaluator::operator () (const Atom& atom) const throw()
 	{
 		// check whether we got a rule for this element
 		String symbol = atom.getElement().getSymbol();
@@ -195,25 +199,35 @@ namespace BALL
 		return result;
 	}
 
-	const RuleEvaluator& RuleEvaluator::operator = (const RuleEvaluator& evaluator)
+
+	bool RuleEvaluator::operator == (const RuleEvaluator& evaluator) const
+		throw()
 	{
-		set(evaluator);
-		return *this;
+		return ((prefix_ == evaluator.prefix_)
+			&& (rule_map_ == evaluator.rule_map_)
+			&& (valid_ == evaluator.valid_));
 	}
 
-	void RuleEvaluator::set(const RuleEvaluator& evaluator)
+
+	const RuleEvaluator& RuleEvaluator::operator = 
+		(const RuleEvaluator& evaluator) throw()
 	{
 		valid_ = evaluator.valid_;
 		prefix_ = evaluator.prefix_;
 		rule_map_ = evaluator.rule_map_;
+
+		return *this;
 	}
 
-	bool RuleEvaluator::isValid() const
+
+	bool RuleEvaluator::isValid() const throw()
 	{
 		return valid_;
 	}
 
-	void RuleEvaluator::dump(std::ostream& /* s */, Size /* indent_depth */) const
+
+	void RuleEvaluator::dump(std::ostream& /* s */, Size /* indent_depth */)
+		const throw()
 	{
 		// BAUSTELLE
 	}
