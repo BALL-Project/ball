@@ -1,4 +1,4 @@
-// $Id: surface.h,v 1.3 2000/03/26 21:54:12 oliver Exp $
+// $Id: surface.h,v 1.4 2000/06/02 07:09:28 oliver Exp $
 
 #ifndef BALL_MATHS_SURFACE_H
 #define BALL_MATHS_SURFACE_H
@@ -51,6 +51,12 @@ namespace BALL
 			
 		///
 		virtual ~Surface();
+
+		///
+		void clear();
+
+		///
+		void destroy();
 		//@}
 
 		/**	@name	Assignment
@@ -61,17 +67,14 @@ namespace BALL
 		void set(const Surface& box);
 
 		///
-		Surface& operator = (const Surface& box);
+		const Surface& operator = (const Surface& box);
 
 		///
 		void get(Surface& box) const;
 
-		///
-		void swap(Surface& box);
-
 		/**	Read from MSMS file.
 				Read the contents of the vertex and faces file created by Michael
-				Sanners MSMS.
+				Sanners software MSMS.
 		*/
 		void readMSMSFile(const String& vert_filename, const String& face_filename);
 		//@}
@@ -81,28 +84,7 @@ namespace BALL
 		//@{
 
 		///
-		float getVolume() const;
-
-		///
 		float getArea() const;
-	
-		///	
-		Size getNumberOfTriangles() const;
-	
-		///	
-		Size getNumberOfVertices() const;
-
-		//	
-		Triangle triangle(Size index) const;
-
-		//	
-		Vector3 vertex(Size index) const;
-
-		//	
-		Vector3 normal(Size index) const;
-
-		///
-		void smoothNormals();
 		//@}
 
 		/**	@name	Predicates
@@ -123,14 +105,23 @@ namespace BALL
 		bool isValid() const;
 		//@}
 
+		/**	@name	Attributes
+		*/
+		//@{
+
+		/// the vertices
+		vector<Vector3>		vertex;
+
+		/// the normals for each vertex
+		vector<Vector3>		normal;
+
+		/// the triangles
+		vector<Triangle>	triangle;
+		//@}
 
 		protected:
 
 		bool valid_;
-
-		vector<Vector3>		vertices_;
-		vector<Vector3>		normals_;
-		vector<Triangle>	triangles_;
 	};
 
 } // namespace BALL
