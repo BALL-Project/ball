@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: String_test4.C,v 1.4 2003/05/22 21:57:21 oliver Exp $
+// $Id: String_test4.C,v 1.5 2003/05/25 21:45:58 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -11,7 +11,7 @@
 #include <string>
 ///////////////////////////
 
-START_TEST(String,"$Id: String_test4.C,v 1.4 2003/05/22 21:57:21 oliver Exp $")
+START_TEST(String,"$Id: String_test4.C,v 1.5 2003/05/25 21:45:58 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -579,6 +579,19 @@ CHECK(String::operator Substring())
 	Substring sub((Substring)s4);
 	TEST_EQUAL(sub.toString(), s4)
 RESULT
+
+CHECK(encodeBase64/decodeBase64)
+	String test("abcdefghi");
+	String erg = test.encodeBase64();
+	TEST_EQUAL(erg, "YWJjZGVmZ2hp")
+	erg = erg.decodeBase64();
+	TEST_EQUAL(erg, test)
+
+	test="";
+	erg = test.decodeBase64();
+	TEST_EQUAL(erg, "")
+RESULT
+
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
