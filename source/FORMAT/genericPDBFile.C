@@ -1,4 +1,4 @@
-// $Id: genericPDBFile.C,v 1.16 2001/09/28 08:40:56 anker Exp $
+// $Id: genericPDBFile.C,v 1.17 2001/12/11 12:04:08 oliver Exp $
 
 #include <BALL/FORMAT/genericPDBFile.h>
 
@@ -834,16 +834,7 @@ namespace BALL
 
 				temp2 = temp = format_column;
 
-				// BAUSTELLE:
-				// does isdigit() return false if it encounters a \0? otherwise
-				// this loop could run over the end of the string and into
-				// nirvana...
-
-				Log.info() << "before loop: " << format_column << endl;
-				for (; isdigit(*format_column); ++format_column)
-				{
-					Log.info() << "loop: " << *format_column << endl;
-				}
+				for (; isdigit(*format_column); ++format_column);
 
 				if (*format_column == '.')
 				{
