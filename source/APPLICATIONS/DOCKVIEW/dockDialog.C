@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.9 2005/01/26 08:50:40 leonhardt Exp $
+// $Id: dockDialog.C,v 1.1.2.10 2005/01/26 10:58:42 haid Exp $
 //
 
 #include "dockDialog.h"
@@ -149,7 +149,7 @@ namespace BALL
 					current_system_list.append(system->getName());
 					
 					//test if the user has selected one or two systems
-					//three selected systems -> error
+					//more than 2 selected systems -> error
 					if (system->isSelected())
 					{
 						if(docking_partner1_ == NULL)

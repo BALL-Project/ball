@@ -14,7 +14,7 @@ namespace BALL
 				PreferencesEntry()
 			{
 			#ifdef BALL_VIEW_DEBUG
-				Log.error() << "new DockDialog " << this << std::endl;
+				Log.error() << "new GeometricFitDialog " << this << std::endl;
 			#endif
 			
 				// register the widget with the MainControl
@@ -39,7 +39,7 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				Log.info() << "Destructing object " << this << " of class DockDialog" << std::endl;
+				Log.info() << "Destructing object " << this << " of class GeometricFitDialog" << std::endl;
 			#endif 
 		}
 		

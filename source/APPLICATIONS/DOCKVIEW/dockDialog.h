@@ -179,7 +179,6 @@ namespace BALL
 					//options for the docking algorithm
 					Options 	options_;
 					Docking::DockingAlgorithm docking_;
-					//Docking docking_;
 					
 					//menu entry id
 					int id_;

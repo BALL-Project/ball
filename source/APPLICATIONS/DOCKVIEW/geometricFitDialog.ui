@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>328</width>
-            <height>277</height>
+            <width>350</width>
+            <height>284</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -23,7 +23,7 @@
     <property name="maximumSize">
         <size>
             <width>350</width>
-            <height>300</height>
+            <height>290</height>
         </size>
     </property>
     <property name="caption">
@@ -133,6 +133,12 @@
                     <property name="name">
                         <cstring>surface_thickness</cstring>
                     </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>40</width>
+                            <height>23</height>
+                        </size>
+                    </property>
                     <property name="maximumSize">
                         <size>
                             <width>80</width>
@@ -165,6 +171,12 @@
                 <widget class="QLineEdit" row="1" column="1">
                     <property name="name">
                         <cstring>grid_spacing</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>40</width>
+                            <height>23</height>
+                        </size>
                     </property>
                     <property name="maximumSize">
                         <size>
@@ -199,6 +211,12 @@
                     <property name="name">
                         <cstring>inside_value1</cstring>
                     </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>40</width>
+                            <height>23</height>
+                        </size>
+                    </property>
                     <property name="maximumSize">
                         <size>
                             <width>80</width>
@@ -231,6 +249,12 @@
                 <widget class="QLineEdit" row="3" column="1">
                     <property name="name">
                         <cstring>inside_value2</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>40</width>
+                            <height>23</height>
+                        </size>
                     </property>
                     <property name="maximumSize">
                         <size>
@@ -265,6 +289,12 @@
                     <property name="name">
                         <cstring>deg_interval</cstring>
                     </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>40</width>
+                            <height>23</height>
+                        </size>
+                    </property>
                     <property name="maximumSize">
                         <size>
                             <width>80</width>
@@ -298,6 +328,12 @@
                     <property name="name">
                         <cstring>near_radius</cstring>
                     </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>40</width>
+                            <height>23</height>
+                        </size>
+                    </property>
                     <property name="maximumSize">
                         <size>
                             <width>80</width>
@@ -330,6 +366,12 @@
                 <widget class="QLineEdit" row="6" column="1">
                     <property name="name">
                         <cstring>peak_num</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>40</width>
+                            <height>23</height>
+                        </size>
                     </property>
                     <property name="maximumSize">
                         <size>
