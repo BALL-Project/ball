@@ -1,4 +1,4 @@
-// $Id: singularities.h,v 1.16 2001/09/19 17:40:13 strobel Exp $
+// $Id: singularities.h,v 1.17 2001/12/20 01:08:06 oliver Exp $
 
 #ifndef BALL_STRUCTURE_SINGULARITIES_H
 #define BALL_STRUCTURE_SINGULARITIES_H
@@ -58,14 +58,17 @@
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/PTE.h>
-#include <BALL/FORMAT/HINFile.h>
+
+#ifdef debug_singularities
+#	include <BALL/FORMAT/HINFile.h>
+#endif
 
 namespace BALL
 {
 
-			#ifdef debug_singularities
-			int STOP_SINGULARITIES;
-			#endif
+#ifdef debug_singularities
+	int STOP_SINGULARITIES;
+#endif
 
 	template <class T>
 	void TreatSingularities(TSolventExcludedSurface<T>*& ses,
