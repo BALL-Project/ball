@@ -1,20 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: selectable.iC,v 1.6 2002/02/27 12:18:29 sturm Exp $
+// $Id: selectable.iC,v 1.7 2003/06/27 09:28:53 anker Exp $
 
 BALL_INLINE 
 void Selectable::clear()
 	throw()
 {
   selected_ = false;
-}
-
-BALL_INLINE 
-void Selectable::destroy()
-	throw()
-{
-  clear();
 }
 
 BALL_INLINE 

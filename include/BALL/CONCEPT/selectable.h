@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: selectable.h,v 1.17 2003/03/26 15:59:18 anhi Exp $
+// $Id: selectable.h,v 1.18 2003/06/27 09:28:53 anker Exp $
 
 #ifndef BALL_CONCEPT_SELECTABLE_H
 #define BALL_CONCEPT_SELECTABLE_H
@@ -66,12 +66,6 @@ namespace BALL
 		virtual void clear()
 			throw();
 		
-		/**	Clear the selection flag.
-				This method does the same as the clear method.
-		*/
-		virtual void destroy()
-			throw();
-
 		//@}
 
 		/**	@name	Assignment 
