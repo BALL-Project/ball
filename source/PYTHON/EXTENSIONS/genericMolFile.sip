@@ -1,4 +1,4 @@
-// $Id: genericMolFile.sip,v 1.1 2001/12/20 01:13:03 oliver Exp $
+// $Id: genericMolFile.sip,v 1.2 2001/12/20 01:20:41 oliver Exp $
 
 class GenericMolFile
 	: LineBasedFile
@@ -6,7 +6,7 @@ class GenericMolFile
 %HeaderCode
 	#include <BALL/FORMAT/genericMolFile.h>
 	using namespace BALL;
-	typedef Exception::ParseError ParseError;
+	using namespace BALL::Exception;
 %End
 
 	public:

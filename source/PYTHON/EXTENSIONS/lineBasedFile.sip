@@ -1,4 +1,4 @@
-// $Id: lineBasedFile.sip,v 1.1 2001/12/20 01:13:03 oliver Exp $
+// $Id: lineBasedFile.sip,v 1.2 2001/12/20 01:20:41 oliver Exp $
 
 
 class LineBasedFile
@@ -7,9 +7,7 @@ class LineBasedFile
 %HeaderCode
 	#include <BALL/FORMAT/lineBasedFile.h>	
 	using namespace BALL;
-	typedef Exception::FileNotFound 	FileNotFound;
-	typedef Exception::IndexUndeflow 	IndexUnderflow;
-	typedef Exception::ParseError 		ParseError;
+	using namespace BALL::Exception;
 %End
 				public:
 
