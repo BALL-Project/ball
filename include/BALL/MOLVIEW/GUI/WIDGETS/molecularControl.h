@@ -1,7 +1,4 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-// $Id: molecularControl.h,v 1.9 2002/12/12 09:48:52 oliver Exp $
+// $Id: molecularControl.h,v 1.10 2002/12/12 17:09:36 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_WIDGETS_MOLECULARCONTROL_H
 #define BALL_MOLVIEW_GUI_WIDGETS_MOLECULARCONTROL_H
@@ -77,7 +74,6 @@ namespace BALL
 				throw();
 			
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -87,8 +83,8 @@ namespace BALL
 			*/
 			virtual ~MolecularControl()
 				throw();
-			//@}
 			
+			//@}
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
@@ -118,10 +114,10 @@ namespace BALL
 			*/
 			virtual void buildContextMenu(Composite* composite, QListViewItem* item)
 				throw();
-			//@}
 
 		public slots:
 				
+			//@}
 			/** @name Public slots
 			*/
 			//@{
@@ -139,6 +135,26 @@ namespace BALL
 
 			/** Atom properties dialog requested */
 			void atomProperties();
+
+			/** Check residues
+			 */
+			void checkResidue();
+
+			/** Select 
+			 */
+			void select();
+			
+			/** Deselect
+			 */
+			void deselect();
+			
+			/** Build bonds
+			 */
+			void buildBonds();
+			
+			/** Center the camera on a composite.
+			 */
+			void centerCamera();
 
 		protected:
 
