@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.C,v 1.14 2003/11/17 17:37:31 amoll Exp $
+// $Id: colorMeshDialog.C,v 1.15 2003/12/01 18:02:32 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
@@ -177,6 +177,7 @@ bool ColorMeshDialog::insertGrid_(RegularData3D& grid, const String& name)
 	grids->insertItem(name.c_str());
 	if (!grid_) grid_ = &grid;
 	if (!mesh_ || !mesh_->vertex.size()) return false;
+
 	gridSelected();
 	return true;
 }
@@ -520,6 +521,12 @@ void ColorMeshDialog::setMesh(Mesh* mesh, Representation* rep)
 		return;
 	}
 
+	if (grids->currentItem() == -1 && 
+			grids->count() != 0)
+	{
+		grids->setCurrentItem(grids->count()-1);
+	}
+	gridSelected();
 	apply_button->setEnabled(grid_);
 }
 
