@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.7 2005/03/01 18:48:40 oliver Exp $
+# $Id: Makefile,v 1.8 2005/03/01 20:24:11 oliver Exp $
 #
 
 EXECUTABLE=BALLView
@@ -110,11 +110,13 @@ macos_pkg: $(EXECUTABLE)
 	@-mkkdir $(BALL_PATH)/MacOSX/BALLPackage 2>/dev/null | true
 	@-mkdir $(BALL_PATH)/MacOSX/BALLPackage/Library 2>/dev/null | true
 	@-mkdir $(BALL_PATH)/MacOSX/BALLPackage/Library/BALL 2>/dev/null | true
+	@-mkdir $(BALL_PATH)/MacOSX/BALLPackage/Library/BALL/Library 2>/dev/null | true
 	@echo "Copying BALL/data..."
 	@$(CP) -r $(BALL_PATH)/data $(BALL_PATH)/MacOSX/BALLPackage/Library/BALL
 	@echo "Copying BALLView"
 	@$(MV) BALLView $(BALL_PATH)/MacOSX/BALLPackage/Applications/BALLView.app/Contents/MacOS/
-	@echo "Please don't forget to copy the QT library to"
-	@echo "  $(BALL_PATH)/MacOSX/BALLPackage/Library/BALL/Library"
+	@echo "Copying QT libraries..."
+	@$(CP) $(QT_LIBPATH)/libqt$(QT_MT_SUFFIX).$(SHARED_LIB_SUFFIX) $(BALL_PATH)/MacOSX/BALLPackage/Library/BALL/Library/
+	
 	
 	
