@@ -214,17 +214,17 @@ namespace BALL
 
 				updateScene_();
 
-				if (!ok)
-				{
-					output_("Aborted EnergyMinimizer because of strange energy values.", true);
-					return;
-				}
-
 				output_(ff.getResults());
 				output_("final RMS gadient    : " + String(ff.getRMSGradient()) + " kJ/(mol A)   after " 
 								+ String(minimizer_->getNumberOfIterations()) + " iterations\n",
 								true);
 				finish_();
+
+				if (!ok)
+				{
+					output_("Aborted EnergyMinimizer because of strange energy values.", true);
+					return;
+				}
 			}
 			catch(Exception::GeneralException e)
 			{
@@ -300,16 +300,16 @@ namespace BALL
 
 				if (dcd_file_) manager.flushToDisk();
 
-				if (!ok)
-				{
-					output_("Aborted MDSimulation because of strange energy values.", true);
-					return;
-				}
-
  				output_(ff.getResults());
 				output_("final RMS gadient    : " + String(ff.getRMSGradient()) + " kJ/(mol A)   after " 
 								+ String(md_->getNumberOfIterations()) + " iterations\n", 
 								true);
+
+				if (!ok)
+				{
+					output_("Aborted MDSimulation because of strange energy values.", true);
+				}
+
 				finish_();
 			}
 			catch(Exception::GeneralException e)
