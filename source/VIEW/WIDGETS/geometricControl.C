@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.37 2004/04/18 17:13:50 amoll Exp $
+// $Id: geometricControl.C,v 1.38 2004/04/19 16:51:11 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -78,6 +78,7 @@ GeometricControl::GeometricControl(QWidget* parent, const char* name)
 
 	QToolTip::add(listview, txt.c_str());
 	connect(listview, SIGNAL(selectionChanged()), this, SLOT(updateSelection()));
+	registerWidget(this);
 }
 
 GeometricControl::~GeometricControl()

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.24 2004/04/19 12:53:38 amoll Exp $
+// $Id: pyWidget.C,v 1.25 2004/04/19 16:51:12 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -23,13 +23,15 @@ namespace BALL
 	{
 
 		PyWidgetData::PyWidgetData(QWidget* parent, const char* name)
-			: QTextEdit(parent, name)
+			: QTextEdit(parent, name),
+				stop_script_(false)
 		{
 			setWrapPolicy(QTextEdit::Anywhere);
 		}
 
 		PyWidgetData::PyWidgetData(const PyWidgetData& /*widget*/)
-			:	QTextEdit()
+			:	QTextEdit(),
+				stop_script_(false)
 		{
 		}
 
@@ -147,6 +149,12 @@ namespace BALL
 				return false;
 			}
 
+			if (stop_script_) 
+			{
+				stop_script_ = false;
+				return true;
+			}
+
 			// check for comments
 			String temp(line);
 			temp.trim();
@@ -246,6 +254,7 @@ namespace BALL
 		bool PyWidgetData::parseLine_()
 		{
 			String line = current_line_.getSubstring(4);
+			stop_script_ = false;
 			return parseLine_(line);
 		}
 
@@ -457,13 +466,19 @@ namespace BALL
 		#endif
 			default_visible_ = false;
 			setGuest(*text_edit_);
+			registerWidget(this);
 		}
+
+		PyWidget::~PyWidget()
+			throw()
+		{}
 
 		void PyWidget::initializeWidget(MainControl& main_control)
 			throw()
 		{
 			main_control.insertMenuEntry(MainControl::TOOLS_PYTHON, "Restart Python", text_edit_, SLOT(startInterpreter()));
 			main_control.insertMenuEntry(MainControl::TOOLS_PYTHON, "Run Python Script", text_edit_, SLOT(scriptDialog()));
+			main_control.insertMenuEntry(MainControl::TOOLS_PYTHON, "Abort Python Script", text_edit_, SLOT(abortScript()));
 			main_control.insertMenuEntry(MainControl::TOOLS_PYTHON, "Export History", text_edit_, SLOT(exportHistory()));
 
 			DockWidget::initializeWidget(main_control);
@@ -550,6 +565,17 @@ namespace BALL
 		{
 			text_edit_->stopInterpreter();
 		}
+
+		void PyWidgetData::abortScript()
+		{
+			((PyWidget*)(parent()))->setStatusbarText("Aborting Python script");
+			stop_script_ = true;
+		}
+
+		PyWidget::PyWidget(const PyWidget& p)
+			throw()
+		 : DockWidget(p)
+		{}
 
 	} // namespace VIEW
 } // namespace BALL

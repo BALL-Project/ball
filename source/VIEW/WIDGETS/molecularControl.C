@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.54 2004/04/17 22:16:55 amoll Exp $
+// $Id: molecularControl.C,v 1.55 2004/04/19 16:51:12 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -145,6 +145,7 @@ MolecularControl::MolecularControl(QWidget* parent, const char* name)
 	}
 
 	connect(&model_menu_, SIGNAL(highlighted(int)), this, SLOT(activatedItem_(int)));
+	registerWidget(this);
 }
 
 MolecularControl::~MolecularControl()

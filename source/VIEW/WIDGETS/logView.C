@@ -25,6 +25,7 @@ LogView::LogView(QWidget *parent, const char *name)
 {
 	default_visible_ = false;
 	setGuest(*text_edit_);
+  registerWidget(this);
 }
 
 LogView::LogView(const LogView& view)

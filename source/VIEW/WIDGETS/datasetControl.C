@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.22 2004/02/26 09:28:41 anhi Exp $
+// $Id: datasetControl.C,v 1.23 2004/04/19 16:51:11 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -38,6 +38,7 @@ DatasetControl::DatasetControl(QWidget* parent, const char* name)
 	listview->setColumnWidth(2, 60);
 	default_visible_ = false;
 	connect(listview, SIGNAL(selectionChanged()), this, SLOT(updateSelection()));
+	registerWidget(this);
 }
 
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockWidget.C,v 1.18 2004/04/07 13:00:26 anker Exp $
+// $Id: dockWidget.C,v 1.19 2004/04/19 16:51:11 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/dockWidget.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -59,8 +59,6 @@ namespace BALL
 			{
 				setName("DockWidget");
 			}
-
-			registerWidget(this);
 		}
 
 		void DockWidget::setGuest(QWidget& guest)
