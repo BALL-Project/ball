@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.136 2004/11/13 16:23:24 amoll Exp $
+// $Id: mainControl.C,v 1.137 2004/11/14 22:41:44 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -102,7 +102,7 @@ namespace BALL
 				logging_file_name_("VIEW.log"),
 				logging_to_file_(false),
 				about_to_quit_(false),
-				important_text_(false)
+				important_text_in_statusbar_(false)
 		{
 		#ifdef BALL_VIEW_DEBUG
 			Log.error() << "new MainControl " << this << std::endl;
@@ -343,7 +343,8 @@ namespace BALL
 						ALT+Key_C, MENU_STOPSIMULATION, hint);
 			#endif
 
-			insertMenuEntry(MainControl::EDIT, "Toggle Selection", this, SLOT(complementSelection()));
+			insertMenuEntry(MainControl::EDIT, "Toggle Selection", this, 
+										SLOT(complementSelection()), 0, MainControl::MENU_COMPLEMENT_SELECTION);
 
 			// establish connection 
 			connect(preferences_dialog_->ok_button, SIGNAL(clicked()), 
@@ -424,6 +425,7 @@ namespace BALL
 			}
 
 			menuBar()->setItemEnabled(MENU_STOPSIMULATION, simulation_thread_ != 0);
+			menuBar()->setItemEnabled(MENU_COMPLEMENT_SELECTION, !composites_locked_);
 		}
 
 		void MainControl::applyPreferencesTab()
@@ -1186,12 +1188,12 @@ namespace BALL
 				QApplication::beep();
 			}
 
-			if (!important && important_text_)
+			if (!important && important_text_in_statusbar_)
 			{
 				return;
 			}
 
-			important_text_ = important;
+			important_text_in_statusbar_ = important;
 
 			message_label_->setText(text.c_str());
 			if (important)
@@ -1208,10 +1210,10 @@ namespace BALL
 
 		void MainControl::clearStatusBarText_()
 		{
-			if (important_text_)
+			if (important_text_in_statusbar_)
 			{
 				message_label_->setPaletteForegroundColor( QColor(0,0,0) );
-				important_text_ = false;
+				important_text_in_statusbar_ = false;
 				timer_.start(4000);
 			}
 
@@ -1389,7 +1391,11 @@ namespace BALL
 
 			if (state)
 			{
-				QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
+				if (composites_locked_) 
+				{
+					return;
+				}
+				QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 				simulation_icon_->show();
 			}
 			else
@@ -1398,6 +1404,7 @@ namespace BALL
 				simulation_icon_->hide();
 			}
 		}
+
 		void MainControl::stopSimulation() 
 		{
 		#ifdef BALL_QT_HAS_THREADS
@@ -1451,7 +1458,10 @@ namespace BALL
 				simulation_thread_ = 0;
 			}
 
-			setStatusbarText("Calculation terminated.", true);
+			if (stop_simulation_)
+			{
+				setStatusbarText("Calculation terminated.", true);
+			}
 			stop_simulation_ = false;
 			unlockCompositesFor(locking_widget_);
 			#endif
@@ -1489,6 +1499,13 @@ namespace BALL
 				{
 					Log.warn() << "Could not update visualisation in " << __FILE__ << __LINE__ << std::endl;
 					return;
+				}
+
+				if (simulation_thread_ != 0)
+				{
+//   Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+//   					simulation_thread_ready_condition_.wait();
+//   Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 				}
 
 				updateRepresentationsOf(*(Composite*)so->getComposite(), true);

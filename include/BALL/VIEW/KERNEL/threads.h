@@ -129,13 +129,20 @@ namespace VIEW
 
 			protected:
 
-			///
+			/** Wait until all Representation's are rebuild, by using
+					PrimitiveManager::updatePending() and \\
+					PrimitiveManager::getUpdateWaitCondition().wait() .
+			*/
 			void waitForUpdateOfRepresentations_();
-			
-			///
+		
+			/// Notify the MainControl to export an PNG
 			void exportSceneToPNG_();
 
-			/// Provokes an update of the Scene with rebuild of the display-lists
+			/** Provokes an update of the Representation's and the Scene 
+			 		with rebuild of the display-lists.
+					This method calls PrimitiveManager::notifyOfPendingingUpdate()
+					and sends an UpdateCompositeEvent with a pointer to the Composite.
+			*/
 			void updateScene_();
 
 			/// Sends the string as outout to Log.info
@@ -149,7 +156,6 @@ namespace VIEW
 			MainControl* 	main_control_;
 			DCDFile*   		dcd_file_;
 			Composite* 		composite_;
-			bool 					representations_to_be_updated_;
 		};
 
 

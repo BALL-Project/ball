@@ -1,7 +1,7 @@
-// -*- Mode: C++; tab-width: 2; -*-
+//   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.25 2004/11/13 16:22:26 amoll Exp $
+// $Id: primitiveManager.C,v 1.26 2004/11/14 22:41:44 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -25,7 +25,8 @@ PrimitiveManager::PrimitiveManager(MainControl* mc)
 	throw()
 	: Object(),
 		main_control_(mc),
-		update_running_(false)
+		update_running_(false),
+		update_pending_(false)
 {
 }
 
@@ -258,6 +259,7 @@ void PrimitiveManager::startUpdateThread_()
 
 	if (!mutex_.tryLock()) return;
 
+	update_running_ = true;
 	// maybe the Representation to be updated is already deleted?
 	Representation* rep = *representations_to_be_updated_.begin();
 	if (!has(*rep)) 
@@ -326,11 +328,12 @@ void PrimitiveManager::finishedUpdate_()
 		delete rep;
 	}
 
-	update_running_ = false;
 	mutex_.unlock();
 
 	if (representations_to_be_updated_.size() == 0)
 	{
+		update_running_ = false;
+		update_pending_ = false;
 		update_finished_.wakeAll();
 		return;
 	}

@@ -1,13 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.65 2004/11/13 12:06:29 amoll Exp $
+// $Id: geometricControl.C,v 1.66 2004/11/14 22:41:44 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/representation.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/atomContainer.h>
@@ -50,9 +51,23 @@ namespace BALL
 			setText(2, representation->getProperties().c_str());
 		}
 
-		void GeometricControl::SelectableListViewItem::stateChange(bool)
+		void GeometricControl::SelectableListViewItem::stateChange(bool state)
 			throw()
 		{
+			if (ignore_change_)
+			{
+				ignore_change_ = false;
+				return;
+			}
+
+			if (control_reference_.getMainControl()->compositesAreLocked())
+			{
+				ignore_change_ = true;
+				setOn(!state);
+				VIEW::getMainControl()
+					->setStatusbarText("Cannot switch on/off Representation now!", true);
+				return;
+			}
 			control_reference_.selectedRepresentation(*representation_, isOn());
 		}
 

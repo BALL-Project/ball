@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.67 2004/11/13 16:22:31 amoll Exp $
+// $Id: mainControl.h,v 1.68 2004/11/14 22:42:01 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -86,6 +86,7 @@ namespace BALL
 				public Embeddable
 		{
 			friend class PrimitiveManager;
+			friend class SimulationThread;
 
 			Q_OBJECT
 
@@ -161,7 +162,8 @@ namespace BALL
 			///
 			enum MenuEntry
 			{
-				MENU_STOPSIMULATION = 10450
+				MENU_STOPSIMULATION 			= 10450,
+				MENU_COMPLEMENT_SELECTION = 10460
 			};
 
 			//@}
@@ -749,6 +751,7 @@ namespace BALL
 			
 			protected slots:
 
+			//_ Called by timer to clear the text in the statusbar
 			void clearStatusBarText_();
 
 			// Connected to the delete entry
@@ -756,7 +759,7 @@ namespace BALL
 
 			protected:
 
-			///
+			//_  Called after receiving an SimulationThreadFinished event
 			void stopedSimulation_();
 
 			///
@@ -850,7 +853,7 @@ namespace BALL
 			File 								logging_file_;
 
 			bool 								about_to_quit_;
-			bool 								important_text_;
+			bool 								important_text_in_statusbar_;
 			QTimer 							timer_;
 			#ifdef 	BALL_QT_HAS_THREADS
 			QMutex 							composites_locked_mutex_;

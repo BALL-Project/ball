@@ -73,8 +73,7 @@ namespace BALL
 			: QThread(),
 				main_control_(0),
 				dcd_file_(0),
-				composite_(0),
-				representations_to_be_updated_(false)
+				composite_(0)
 		{
 		}
 
@@ -85,6 +84,7 @@ namespace BALL
 
 		void SimulationThread::updateScene_()
 		{
+			main_control_->getPrimitiveManager().notifyOfPendingingUpdate();
 			// notify MainControl to update all Representations for the Composite
 			UpdateCompositeEvent* se = new UpdateCompositeEvent;
 			se->setComposite(composite_);
@@ -122,9 +122,10 @@ namespace BALL
 
 		void SimulationThread::waitForUpdateOfRepresentations_()
 		{
-			if (!representations_to_be_updated_) return;
-
-			main_control_->getPrimitiveManager().getUpdateWaitCondition().wait();
+			if (main_control_->getPrimitiveManager().updatePending())
+			{
+				main_control_->getPrimitiveManager().getUpdateWaitCondition().wait();
+			}
 		}
 
 		// =====================================================================
@@ -142,10 +143,6 @@ namespace BALL
 
 				ForceField& ff = *minimizer_->getForceField();
 
-				representations_to_be_updated_ = 
-					main_control_->getPrimitiveManager().
-						getRepresentationsOf(*minimizer_->getForceField()->getSystem()).size() > 0;
-
 				// iterate until done and refresh the screen every "steps" iterations
 				while (!main_control_->stopedSimulation() &&
 								minimizer_->getNumberOfIterations() < minimizer_->getMaxNumberOfIterations() &&
@@ -153,13 +150,14 @@ namespace BALL
 				{
 					updateScene_();
 
+					waitForUpdateOfRepresentations_();
+
 					QString message;
 					message.sprintf("Iteration %d: energy = %f kJ/mol, RMS gradient = %f kJ/mol A", 
 													minimizer_->getNumberOfIterations(), 
 													ff.getEnergy(), ff.getRMSGradient());
 					output_(message.ascii());
 
-					waitForUpdateOfRepresentations_();
 				}
 
 				updateScene_();
@@ -220,16 +218,14 @@ namespace BALL
 				SnapShotManager manager(ff.getSystem(), &ff, dcd_file_);
 				manager.setFlushToDiskFrequency(10);
 
-				representations_to_be_updated_ = 
-					main_control_->getPrimitiveManager().
-						getRepresentationsOf(*md_->getForceField()->getSystem()).size() > 0;
-
 				// iterate until done and refresh the screen every "steps" iterations
 				while (md_->getNumberOfIterations() < steps_ &&
 							 !main_control_->stopedSimulation())
 				{
 					md_->simulateIterations(steps_between_updates_, true);
 					updateScene_();
+
+					waitForUpdateOfRepresentations_();
 					
 					QString message;
 					message.sprintf("Iteration %d: energy = %f kJ/mol, RMS gradient = %f kJ/mol A", 
@@ -237,7 +233,6 @@ namespace BALL
 													ff.getRMSGradient());
 					output_(message.ascii());
 					
-					waitForUpdateOfRepresentations_();
 
 					if (save_images_) exportSceneToPNG_();
 					if (dcd_file_) 		manager.takeSnapShot();

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.h,v 1.22 2004/10/15 11:59:26 amoll Exp $
+// $Id: geometricControl.h,v 1.23 2004/11/14 22:42:02 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
 #define BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
@@ -69,9 +69,9 @@ namespace BALL
 				virtual void stateChange(bool)
 					throw();
 
-				Representation* representation_;
-
+				Representation* 	representation_;
 				GeometricControl& control_reference_;
+				bool 							ignore_change_;
 
 				private: 
 				
