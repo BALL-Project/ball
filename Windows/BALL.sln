@@ -11,6 +11,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tests", "Tests\Tests.vcproj
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Benchmarks", "Benchmarks\Benchmarks.vcproj", "{253B8927-6644-43B8-A48F-847A4D338C59}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestTest", "TestTest\testtest.vcproj", "{BCFF90FA-28B4-43EB-88BA-6BB7339AA1DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		ConfigName.0 = Debug
@@ -22,6 +24,7 @@ Global
 		{BCFF90FA-28B4-43EB-88BA-6BB7339AA1DC}.2 = {98714B1B-8ADD-418B-BF10-404EAA830356}
 		{253B8927-6644-43B8-A48F-847A4D338C59}.0 = {98714B1B-8ADD-418B-BF10-404EAA830356}
 		{253B8927-6644-43B8-A48F-847A4D338C59}.0 = {98714B1B-8ADD-418B-BF10-404EAA830356}
+		{BCFF90FA-28B4-43EB-88BA-6BB7339AA1DC}.0 = {98714B1B-8ADD-418B-BF10-404EAA830356}
 	EndGlobalSection
 	GlobalSection(ProjectConfiguration) = postSolution
 		{98714B1B-8ADD-418B-BF10-404EAA830356}.Debug.ActiveCfg = Debug|Win32
@@ -48,6 +51,10 @@ Global
 		{253B8927-6644-43B8-A48F-847A4D338C59}.Debug.Build.0 = Debug|Win32
 		{253B8927-6644-43B8-A48F-847A4D338C59}.Release.ActiveCfg = Debug|Win32
 		{253B8927-6644-43B8-A48F-847A4D338C59}.Release.Build.0 = Release|Win32
+		{BCFF90FA-28B4-43EB-88BA-6BB7339AA1DC}.Debug.ActiveCfg = Debug|Win32
+		{BCFF90FA-28B4-43EB-88BA-6BB7339AA1DC}.Debug.Build.0 = Debug|Win32
+		{BCFF90FA-28B4-43EB-88BA-6BB7339AA1DC}.Release.ActiveCfg = Release|Win32
+		{BCFF90FA-28B4-43EB-88BA-6BB7339AA1DC}.Release.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

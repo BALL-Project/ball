@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmm.C,v 1.13 2002/02/27 12:21:31 sturm Exp $
+// $Id: charmm.C,v 1.14 2002/12/19 21:01:35 oliver Exp $
 // Molecular Mechanics: Charmm force field class
 
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -49,7 +49,7 @@ namespace BALL
 	const float CharmmFF::Default::ELECTROSTATIC_CUTON = 7.0;
 	const float CharmmFF::Default::SCALING_ELECTROSTATIC_1_4 = 2.0;
 	const float CharmmFF::Default::SCALING_VDW_1_4 = 1.0;
-  const bool  CharmmFF::Default::DISTANCE_DEPENDENT_DIELECTRIC = true;
+	  const bool  CharmmFF::Default::DISTANCE_DEPENDENT_DIELECTRIC = true;
 	const bool	CharmmFF::Default::ASSIGN_CHARGES = true;
 	const bool	CharmmFF::Default::ASSIGN_TYPENAMES = true;
 	const bool	CharmmFF::Default::ASSIGN_TYPES = true;
@@ -73,9 +73,9 @@ namespace BALL
 		insertComponent(new CharmmNonBonded(*this));
 	}
 
-  // Constructor initialized with a system
-  CharmmFF::CharmmFF(System& system)
-    : ForceField(),
+	// Constructor initialized with a system
+	CharmmFF::CharmmFF(System& system)
+		: ForceField(),
 			filename_(Default::FILENAME)
   {
 		// create the component list

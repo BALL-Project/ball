@@ -109,11 +109,12 @@ EXECUTABLES_KERNEL = \
 EXECUTABLES_MOLMEC = \
 	Gradient_test\
 	AtomVector_test\
-	AmberFF_test\
 	MolmecSupport_test\
 	EnergyMinimizer_test\
 	SnapShot_test\
-	SnapShotManager_test
+	SnapShotManager_test\
+	AmberFF_test\
+	CharmmFF_test
 
 EXECUTABLES_NMR = \
 	AssignShiftProcessor_test\

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.C,v 1.34 2002/12/19 17:40:45 anker Exp $
+// $Id: standardPredicates.C,v 1.35 2002/12/19 21:01:35 oliver Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -1178,6 +1178,7 @@ namespace BALL
 		CTPNode::ConstIterator child_it = current->begin();
 		for (; child_it != current->end(); ++child_it)
 		{
+
 			bool this_result = false;
 
 			for (Size j = 0; j < atom.countBonds(); ++j)
@@ -1189,7 +1190,7 @@ namespace BALL
 					{
 						partner = bond->getPartner(atom);
 						if (((*child_it)->getSymbol() == "*")
-							|| (partner->getElement().getSymbol() == (*child_it)->getSymbol()))
+								|| (partner->getElement().getSymbol() == (*child_it)->getSymbol()))
 						{
 							visited.insert(bond);
 							this_result = find_(*partner, *child_it, visited);

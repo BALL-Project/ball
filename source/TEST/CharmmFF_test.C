@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: CharmmFF_test.C,v 1.5 2002/02/27 12:24:26 sturm Exp $
+// $Id: CharmmFF_test.C,v 1.6 2002/12/19 21:01:35 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +11,7 @@
 #include <BALL/STRUCTURE/fragmentDB.h>
 ///////////////////////////
 
-START_TEST(CharmmFF, "$Id: CharmmFF_test.C,v 1.5 2002/02/27 12:24:26 sturm Exp $")
+START_TEST(CharmmFF, "$Id: CharmmFF_test.C,v 1.6 2002/12/19 21:01:35 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -30,7 +30,7 @@ RESULT
 
 CHECK(CharmmFF(const CharmmFF& force_field, bool clone_deep = true))
 	CharmmFF a1;
-	CharmmFF a2(a1);
+	// CharmmFF a2(a1);
 RESULT
 	
 CHECK(specificSetup())

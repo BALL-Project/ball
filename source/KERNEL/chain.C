@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: chain.C,v 1.16 2002/12/18 06:10:07 oliver Exp $
+// $Id: chain.C,v 1.17 2002/12/19 21:01:34 oliver Exp $
 
 #include <BALL/KERNEL/chain.h>
 #include <BALL/KERNEL/global.h>
@@ -313,8 +313,9 @@ namespace BALL
 
 	void Chain::dump(ostream& s, Size depth) const
 		throw()
-	{
+	{ 
 		BALL_DUMP_STREAM_PREFIX(s)
+
 		
 		AtomContainer::dump(s, depth);
 		// just to avoid these damned compiler warnings
