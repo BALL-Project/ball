@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>529</width>
-            <height>344</height>
+            <height>361</height>
         </rect>
     </property>
     <property name="minimumSize">
@@ -357,7 +357,15 @@ rather than its surface.
                                 </property>
                                 <property name="text">
                                     <string>&lt;blockquote&gt;
-Backbone
+Since proteins are composed of an often large number of amino acids,
+the number of atoms is typically quite high. Therefore, models that show
+each individual atom or each bond in the molecule tend to become too
+complex, hiding the structural information in often unnecessary details.
+&lt;br&gt;
+Fortunately, it is often sufficient to visualize the chain of amino acids
+as a thread in space, the &lt;it&gt;backbone&lt;/it&gt; of the protein.
+
+
 
 &lt;/blockquote&gt;</string>
                                 </property>
@@ -392,8 +400,10 @@ Backbone
                                 </property>
                                 <property name="text">
                                     <string>&lt;blockquote&gt;
-Cartoon
-
+Parts of a protein's backbone often assume one of two typical
+patterns, the so-called secondary structure elements: a helical
+shape, or a zig-zag motive. These structural elements can be
+computed and visualized in a &lt;it&gt;Cartoon&lt;/it&gt; like fashion.
 &lt;/blockquote&gt;</string>
                                 </property>
                                 <property name="alignment">
@@ -427,8 +437,10 @@ Cartoon
                                 </property>
                                 <property name="text">
                                     <string>&lt;blockquote&gt;
-Stick Model + HBonds
-
+In order to understand a protein's structure, or the structure of a biomolecular
+complex, it is often illustrative to look at the hydrogen bonds occurring in
+the system. These can be computed as well, and visualized as "dashed"
+bonds.
 &lt;/blockquote&gt;</string>
                                 </property>
                                 <property name="alignment">
@@ -465,12 +477,16 @@ Stick Model + HBonds
 Every model can be combined with the 12 different coloring methods.
 &lt;br&gt;
 &lt;br&gt;
-Here we see a VDW model with coloring by temperature factor.
-This means the atoms are colored, by how flexible they become with increasing 
-temperature. 
-The colors are interpolated between blue (rigid) to yellow (very flexible).
-White means, that no value could be assigned. This data is derived from 
-crystallographic measurements.
+For this example we chose a Van-der-Waals model with coloring 
+by temperature factor, where the color of an individual atom
+is determined by its flexibility.&lt;br&gt;&lt;br&gt;
+
+In the default settings, the colors are interpolated between blue 
+(rigid) to yellow (very flexible). If no value can be assigned, the
+atom is colored white. The temperature factor data is 
+typically derived from crystallographic measurements.&lt;br&gt;&lt;br&gt;
+The default coloring for this and all other coloring methods
+can be changed in the preferences dialog.
 
 &lt;/blockquote&gt;</string>
                                 </property>
@@ -505,9 +521,9 @@ crystallographic measurements.
                                 </property>
                                 <property name="text">
                                     <string>&lt;blockquote&gt;
-This is again a Cartoon Model, but now it is also colored by the secondary structure.
-(Blue = Helices, Red = Strands, Green = Coils)
-
+In this example we see a Cartoon Model, colored according to
+the secondary structure elements. In the default settings, helices
+are colored in blue, strands in red, and everything else in green.
 &lt;/blockquote&gt;</string>
                                 </property>
                                 <property name="alignment">
@@ -541,8 +557,10 @@ This is again a Cartoon Model, but now it is also colored by the secondary struc
                                 </property>
                                 <property name="text">
                                     <string>&lt;blockquote&gt;
-A Cartoon Model, now colored by the residue index. Since Proteins are linear 
-molecules, we have a nice color interpolation from red at the beginning of the molecule to blue at its end.
+This Cartoon Model has been colored according to the index of 
+each amino acid in the polypeptide chain. Since Proteins are linear 
+molecules, this yields a nice color interpolation from red at the beginning
+of the molecule to blue at its end in the default coloring settings.
 &lt;/blockquote&gt;</string>
                                 </property>
                                 <property name="alignment">
@@ -576,13 +594,19 @@ molecules, we have a nice color interpolation from red at the beginning of the m
                                 </property>
                                 <property name="text">
                                     <string>&lt;blockquote&gt;
-A Stick model colored by the different aminoacids.
-BALLView has many more coloring methods, but lets do something else now.
+As a final example for the different coloring schemes, 
+we choose a Stick model, colored according to its amino acids, i.e.
+all alanines are assigned the same color, and so on.&lt;br&gt;&lt;br&gt;
+BALLView offers even more coloring methods which you can
+explore easily. But at this point, we want to move on to something
+more interesting...
 &lt;br&gt;&lt;br&gt;
 When you press OK, a molecular dynamics simulation will start. You can watch 
-the movements of the molecule, just like it would move in the real world.
-The MD Simulation takes a moment to start. We will perform 50 steps, the current
-step number is shown in the statusbar at the bottom of the main window.
+the structural changes the molecule would undergo in time.
+We will perform 50 steps and the current
+step number will be shown in the statusbar at the bottom of the main window.
+&lt;br&gt;&lt;br&gt;
+Don't worry if the MD Simulation takes a moment to start.
 &lt;/blockquote&gt;</string>
                                 </property>
                                 <property name="alignment">
@@ -616,8 +640,13 @@ step number is shown in the statusbar at the bottom of the main window.
                                 </property>
                                 <property name="text">
                                     <string>&lt;blockquote&gt;
-Now we will calculate the molecules electrostatics.&lt;br&gt;
-This will take a second.
+To understand a protein's function, it is often necessary to study
+its electrostatic field. This can be easily done using BALLView, where
+you can compute the electrostatic potentials in space in an FDPB
+setting with just a few mouse clicks.&lt;br&gt;&lt;br&gt;
+When you press Ok, such an FDPB electrostatic computation will
+be performed. Depending on the performance of your machine
+this might take a moment.
 &lt;/blockquote&gt;</string>
                                 </property>
                                 <property name="alignment">
@@ -651,8 +680,11 @@ This will take a second.
                                 </property>
                                 <property name="text">
                                     <string>&lt;blockquote&gt;
-Well this didn't change much, but now we can create a Isocontour Surface with 
-the data grid.
+While the computation of the potential did not directly create
+any representations, we can now choose from a number of 
+different visualization
+options. For example, we can colour the protein's SES
+according to the electrostatic potential.
 &lt;/blockquote&gt;</string>
                                 </property>
                                 <property name="alignment">
@@ -686,7 +718,13 @@ the data grid.
                                 </property>
                                 <property name="text">
                                     <string>&lt;blockquote&gt;
-bla
+This completes our interactive tour of BALLView.&lt;br&gt;&lt;br&gt;
+But apart from what was shown in this demo, there are numerous
+additional features to explore, like e.g. the integrated peptide
+builder, the POVRay export, or the powerful Python scripting
+support.&lt;br&gt;&lt;br&gt;
+Additional information and the BALLView manual can be found
+at &lt;a href="http://www.ballview.org"&gt;http://www.ballview.org&lt;/a&gt;
 &lt;/blockquote&gt;</string>
                                 </property>
                                 <property name="alignment">
