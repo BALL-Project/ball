@@ -1,4 +1,4 @@
-// $Id: molecularControl.C,v 1.6.4.17 2002/12/10 17:07:49 amoll Exp $
+// $Id: molecularControl.C,v 1.6.4.18 2002/12/12 11:08:10 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/WIDGETS/molecularControl.h>
 #include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
@@ -154,7 +154,7 @@ void MolecularControl::buildContextMenu(Composite* composite, QListViewItem* ite
 
 		context_menu_.insertSeparator();
 		insertContextMenuEntry("build Bonds", this, SLOT(buildBonds()), BONDS__BUILD);
-		insertContextMenuEntry("remove Bonds", this, SLOT(removeBonds()), BONDS__REMOVE);
+		//insertContextMenuEntry("remove Bonds", this, SLOT(removeBonds()), BONDS__REMOVE);
 		context_menu_.insertSeparator();
 	}
 	if (RTTI::isKindOf<Atom>(*composite) ||
@@ -184,6 +184,37 @@ void MolecularControl::atomProperties()
 	notify_(message);
 }
 	
+void MolecularControl::buildBonds()
+{
+	BuildBondsMessage* message = new BuildBondsMessage;
+	notify_(message);
+}
+	
+void MolecularControl::centerCamera()
+{
+	CenterCameraMessage* message = new CenterCameraMessage;
+	notify_(message);
+}
+
+void MolecularControl::select()
+{
+	SelectMessage* message = new SelectMessage;
+	message->select_ = true;
+	notify_(message);
+}
+
+void MolecularControl::deselect()
+{
+	SelectMessage* message = new SelectMessage;
+	message->select_ = false;
+	notify_(message);
+}
+
+void MolecularControl::checkResidue()
+{
+	CheckResidueMessage* message = new CheckResidueMessage;
+	notify_(message);
+}
 
 	} // namespace MOLVIEW
 
