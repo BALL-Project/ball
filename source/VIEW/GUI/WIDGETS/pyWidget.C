@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.13 2003/03/28 19:36:07 amoll Exp $
+// $Id: pyWidget.C,v 1.14 2003/03/28 19:38:50 amoll Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/pyWidget.h>
 #include <BALL/VIEW/GUI/KERNEL/mainControl.h>
@@ -87,7 +87,6 @@ void PyWidget::retrieveHistoryLine_(Position index)
 		history_position_ = history_.size();
 		removeParagraph(row);
 		insertParagraph(getPrompt_(), row);
-//		insertParagraph(String(getPrompt_()) + current_line_, row);
 		setCursorPosition(row, col); 
 		QScrollBar* sb = verticalScrollBar();
 		if (sb != 0)
@@ -276,16 +275,6 @@ void PyWidget::keyPressEvent(QKeyEvent* e)
 	{
 		qt_continue = returnPressed();
 	}
-	else if (e->key() == Key_Print)
-	{
-		Log.error() << "print " << std::endl; 
-		dump();
-	}
-	else if (e->key() == Key_Escape)
-	{
-		Log.error() << "||: " << getCurrentLine_() << "|"<< std::endl;
-	}
-
 
 	if (qt_continue)
 	{
