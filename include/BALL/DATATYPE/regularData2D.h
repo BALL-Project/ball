@@ -1,4 +1,4 @@
-// $Id: regularData2D.h,v 1.16.4.3 2002/12/11 14:06:44 anker Exp $
+// $Id: regularData2D.h,v 1.16.4.4 2002/12/11 14:37:11 anker Exp $
 
 #ifndef BALL_DATATYPE_TRegularData2D_H
 #define BALL_DATATYPE_TRegularData2D_H
@@ -130,18 +130,7 @@ namespace BALL
 		*/
 		//@{
 
-		/**	Copy the contents of another grid.
-				Replaces the contents and dimensions of the current
-				grid with those of {\tt grid}. The previous content
-				is deleted and memory is freed.
-				If copying the grid fails (e.g., due to insufficient memory),
-				\Ref{isValid} returns {\bf false} after this operation.
-		*/
-		void set(const TRegularData2D& grid) throw(Exception::OutOfMemory);
-
 		/**	Assignment operator.
-				Implemented using \Ref{set}.
-				@see set
 		*/
 		const TRegularData2D& operator = (const TRegularData2D& grid) throw(Exception::OutOfMemory);
 
@@ -480,7 +469,20 @@ namespace BALL
 			upper_(0,0),
 			valid_(false)
 	{
-		set(grid);
+		// resize the grid
+		resize(grid.origin_, grid.upper_,
+				grid.number_of_points_x_,
+				grid.number_of_points_y_);
+
+		// copy data
+		if (valid_)
+		{
+			for (Position i = 0; i < number_of_grid_points_; i++)
+			{
+				data[i] = grid.data[i];
+			}
+		}
+
 	}
 
 	// copy constructor
@@ -498,7 +500,18 @@ namespace BALL
 		(const TRegularData2D<GridDataType>& grid)
 		throw(Exception::OutOfMemory)
 	{
-		set(grid);
+
+		resize(grid.origin_, grid.upper_, 
+				grid.number_of_points_x_, grid.number_of_points_y_);
+
+		if (valid_)
+		{
+			for (Position i = 0; i < number_of_grid_points_; i++)
+			{
+				data[i] = grid.data[i];
+			}
+		}
+
 		return *this;
 	}
 
