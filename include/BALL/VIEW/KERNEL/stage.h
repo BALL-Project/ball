@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stage.h,v 1.7 2004/02/26 08:41:40 anhi Exp $
+// $Id: stage.h,v 1.7.2.1 2004/06/01 12:04:18 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_STAGE_H
 #define BALL_VIEW_KERNEL_STAGE_H
@@ -333,7 +333,8 @@ namespace BALL
 	
 	
 		/** A Stage has a Camera, LightSources and a background color.
-		 		Also a flag can be set, so that a coordinate system will be shown.
+		 		It stores also the eye distance for the stereo view.
+		 		Finally a flag can be set, so that a coordinate system will be shown.
 				\ingroup ViewKernelStage
 		*/
 		class BALL_EXPORT Stage
@@ -423,6 +424,14 @@ namespace BALL
 			virtual void moveCameraTo(const Camera& camera)
 				throw();
 
+			/// Set the eye distance for the stereo view
+			void setEyeDistance(float value) 
+				throw() { eye_distance_ = value;}
+
+			/// Get the eye distance for the stereo view
+			float getEyeDistance() const
+				throw() { return eye_distance_;}
+			
 			//@}
 			/**	@name Predicates
 			*/
@@ -456,6 +465,9 @@ namespace BALL
 
 			//_
 			bool 								show_coordinate_system_;
+
+			//_
+			float 							eye_distance_;
 		};
 
 
