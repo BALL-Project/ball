@@ -1,4 +1,4 @@
-// $Id: Quaternion_test.C,v 1.1 2000/03/05 15:37:14 amoll Exp $
+// $Id: Quaternion_test.C,v 1.2 2000/03/05 23:00:45 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 #include <BALL/MATHS/quaternion.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Quaternion_test.C,v 1.1 2000/03/05 15:37:14 amoll Exp $")
+START_TEST(class_name, "$Id: Quaternion_test.C,v 1.2 2000/03/05 23:00:45 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -87,11 +87,11 @@ angle)) )
 RESULT
 
 
-//line137: method TQuaternion::getAxis(TVector3<T> &v)
-CHECK(TQuaternion::getAxis(TVector3<T> &v))
-	Vector3 v2 = v, v3;
+//line137: method TQuaternion::getAxis()
+CHECK(TQuaternion::getAxis())
+	Vector3 v2 = Vector3(i, j, k), v3;
 	v2.normalize();
-	q.getAxis();
+	v3 = q.getAxis();
 	TEST_EQUAL(v3, v2)
 	v3 = Vector3();
 	q1 = Quaternion(v3, 4);
@@ -106,20 +106,32 @@ CHECK(TQuaternion::getRotationMatrix(TMatrix4x4<T>& m) const )
 			 (2.0 * (i * j - k * angle)), 
 			 (2.0 * (k * i + j * angle)), 
 			 0, 
-			 
 			 (2.0 * (i * j + k * angle)), 
 			 (1.0 - 2.0 * (k * k + i * i)), 
 			 (2.0 * (j * k - i * angle)), 
-			 0, 
-			 
+			 0, 			 
 			 (2.0 * (k * i - j * angle)),
 			 (2.0 * (j * k + i * angle)),
 			 (1.0 - 2.0 * (j * j + i * i)), 
 			 0,
-
 			 0, 0, 0, 1);
 	q.getRotationMatrix(m2);
-	TEST_EQUAL(m2, m)
+	TEST_REAL_EQUAL(m2.m11, m.m11);
+	TEST_REAL_EQUAL(m2.m12, m.m12);
+	TEST_REAL_EQUAL(m2.m13, m.m13);
+	TEST_REAL_EQUAL(m2.m14, m.m14);
+	TEST_REAL_EQUAL(m2.m21, m.m21);
+	TEST_REAL_EQUAL(m2.m22, m.m22);
+	TEST_REAL_EQUAL(m2.m23, m.m23);
+	TEST_REAL_EQUAL(m2.m24, m.m24);
+	TEST_REAL_EQUAL(m2.m31, m.m31);
+	TEST_REAL_EQUAL(m2.m32, m.m32);
+	TEST_REAL_EQUAL(m2.m33, m.m33);
+	TEST_REAL_EQUAL(m2.m34, m.m34);
+	TEST_REAL_EQUAL(m2.m41, m.m41);
+	TEST_REAL_EQUAL(m2.m42, m.m42);
+	TEST_REAL_EQUAL(m2.m43, m.m43);
+	TEST_REAL_EQUAL(m2.m44, m.m44);
 RESULT
 
 
