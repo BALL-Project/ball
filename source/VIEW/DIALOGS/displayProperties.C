@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.94 2004/11/13 13:11:44 amoll Exp $
+// $Id: displayProperties.C,v 1.95 2004/12/15 16:34:48 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -362,19 +362,9 @@ void DisplayProperties::editSelectionColor()
 Representation* DisplayProperties::createRepresentation_(const List<Composite*>& composites)
 	throw(Exception::InvalidOption)
 {
-	ModelProcessor* model_processor = 
-		model_settings_->createModelProcessor((ModelType) model_type_combobox->currentItem());
-
-	ColorProcessor* color_processor = 
-		coloring_settings_->createColorProcessor((ColoringMethod) coloring_method_combobox->currentItem());
-
-	QColor qcolor = custom_color_label->backgroundColor();
-	custom_color_.set(qcolor);
-	custom_color_.setAlpha(255 - (Position)(transparency_slider->value() * 2.55));
-	color_processor->setDefaultColor(custom_color_);
-
 	bool rebuild_representation = false;
 	Representation* rep = 0;
+	// if rep_ == 0 we are currently in create mode, otherwise in modify mode
 	bool new_representation = (rep_ == 0);
 
 	if (new_representation)
@@ -411,8 +401,22 @@ Representation* DisplayProperties::createRepresentation_(const List<Composite*>&
 		rep = rep_;
 	}
 
+	if (new_representation || rebuild_representation)
+	{
+		ModelProcessor* model_processor = 
+			model_settings_->createModelProcessor((ModelType) model_type_combobox->currentItem());
+		rep->setModelProcessor(model_processor);
+	}
+
+	ColorProcessor* color_processor = 
+		coloring_settings_->createColorProcessor((ColoringMethod) coloring_method_combobox->currentItem());
+
+	QColor qcolor = custom_color_label->backgroundColor();
+	custom_color_.set(qcolor);
+	custom_color_.setAlpha(255 - (Position)(transparency_slider->value() * 2.55));
+	color_processor->setDefaultColor(custom_color_);
 	rep->setColorProcessor(color_processor);
-	rep->setModelProcessor(model_processor);
+
 	rep->setTransparency((Size)(transparency_slider->value() * 2.55));
 	rep->setColoringMethod((ColoringMethod)coloring_method_combobox->currentItem());
 	rep->setDrawingMode((DrawingMode)mode_combobox->currentItem());
