@@ -1,4 +1,4 @@
-// $Id: persistenceManager.h,v 1.11 2000/03/14 22:46:18 oliver Exp $
+// $Id: persistenceManager.h,v 1.12 2000/03/16 12:06:07 oliver Exp $
 
 #ifndef BALL_CONCEPT_PERSISTENCE_H
 #define BALL_CONCEPT_PERSISTENCE_H
@@ -35,7 +35,7 @@ namespace BALL
 			\begin{itemize}
 				\item {\bf Layer 0} contains the basic I/O routines for primitive
 					data types. All methods of layer 0 are virtual to exchange the 
-					implementation of the platform-independent sorage and retrieval of
+					implementation of the format-independent storage and retrieval of
 					this data (e.g. XDR or text format)
 				\item {\bf Layer 1} implements the methods needed to store objects or
 					more complex data structures using Layer 0. To implement object persistence
@@ -126,6 +126,11 @@ namespace BALL
 				@param m a dynamic class creation method
 		*/
 		virtual void registerClass(String signature, const CreateMethod	m);
+
+		/**	Register a class with its default name and virtual constructor.
+		*/
+		template <typename T>
+		void registerClassDefault();
 		
 		/**	Create an object of a registered class.
 				If the persistence manager has registered a creation method for the given
@@ -740,7 +745,7 @@ namespace BALL
 				This method is automatically called in the constructor.
 		*/
 		void registerKernelClasses_();
-		
+
 		void addPointerPair_(LongPointerType old_ptr, void* new_ptr);
 				
 		void addNeededObjects_();
@@ -776,6 +781,12 @@ namespace BALL
 		std::ostream*	ostr_;
 		std::istream*	istr_;
 	};
+
+	template <typename T>
+	void PersistenceManager::registerClassDefault()
+	{
+		registerClass(RTTI::getStreamName<T>(), T::createDefault);
+	}
 
 } // namespace BALL
 
