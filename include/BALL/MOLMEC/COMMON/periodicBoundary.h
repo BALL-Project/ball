@@ -1,4 +1,4 @@
-// $Id: periodicBoundary.h,v 1.1 1999/08/26 07:53:21 oliver Exp $
+// $Id: periodicBoundary.h,v 1.2 1999/09/25 14:26:38 oliver Exp $
 // Molecular Mechanics: class representing periodic boundary conditions
 
 #ifndef BALL_MOLMEC_COMMON_PERIODICBOUNDARY_H
@@ -144,7 +144,7 @@ namespace BALL {
 		/** Fill the defined box with a solvent.
 				This method fills the defined box with solvent molecules.
 				If no box is defined, no solvent is added. The neccessary
-				solvent box template is either taken from the options (solvent_file)
+				solvent box template is either taken from the options (solvent\_file)
 				or a default is assumed.\\
 				This method replicates the solvent box starting at the box origin in
 				all three dimensions and removes all solvent molecules that are within 

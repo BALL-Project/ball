@@ -1,4 +1,4 @@
-// $Id: composite.h,v 1.4 1999/09/07 19:35:33 oliver Exp $
+// $Id: composite.h,v 1.5 1999/09/25 14:26:24 oliver Exp $
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #define BALL_CONCEPT_COMPOSITE_H
@@ -261,7 +261,9 @@ namespace BALL
 					 composite_ptr != 0; composite_ptr = composite_ptr->parent_)
 			{
 				if (RTTI<T>::isKindOf(*composite_ptr))
+				{
 					return composite_ptr;
+				}
 			}
 			
 			return 0;
@@ -403,6 +405,7 @@ namespace BALL
 					\item {\tt child != this}
 					\item {\tt child} has a parent
 					\item {\tt this} is not a descendant of {\tt child}
+				\end{itemize}
 				@return false if composite could not be removed
 		*/
 		bool removeChild(Composite& child);
@@ -438,7 +441,7 @@ namespace BALL
 		bool isEmpty() const;
 
 		/**	Return true if the node has no parent.
-				@return {\bf true} if {\tt parent_ == 0}
+				@return {\bf true} if {\tt parent\_ == 0}
 		*/
 		bool isRoot() const;
 	
@@ -531,10 +534,10 @@ namespace BALL
 		bool isHomomorph(const Composite& composite) const;
 
 		/**	Return true if any descendant is selected.
-				Complexity: O(1)\\
 				This method does not check all nodes recursively. Instead, on each 
 				modification in the tree internal flags are updated and propagated 
-				upwards in the tree.
+				upwards in the tree.\\
+				Complexity: O(1)\\
 				@return {\bf true} if any node in the subtree is selected
 		*/
 		bool containsSelection() const;

@@ -1,4 +1,4 @@
-// $Id: pointGrid.h,v 1.3 1999/09/06 22:20:59 oliver Exp $ 
+// $Id: pointGrid.h,v 1.4 1999/09/25 14:26:32 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_POINTGRID_H
 #define BALL_DATATYPE_POINTGRID_H
@@ -191,7 +191,7 @@ namespace BALL
 		/**	Return the largest grid index for the x direction.
 				This method returns the maximum index allowed in the grid.
 				As the point in the origin has the indices (0, 0, 0), this
-				method returns the number of points in each direction.
+				method returns the number of points in X direction minus one.
 				@memo
 		*/
 		Size getMaxXIndex(void) const;
@@ -199,7 +199,7 @@ namespace BALL
 		/**	Return the largest grid index for the y direction.
 				This method returns the maximum index allowed in the grid.
 				As the point in the origin has the indices (0, 0, 0), this
-				method returns the number of points in each direction.
+				method returns the number of points in Y direction minus one.
 				@memo
 		*/
 		Size getMaxYIndex(void) const;
@@ -207,7 +207,7 @@ namespace BALL
 		/**	Return the largest grid index for the z direction.
 				This method returns the maximum index allowed in the grid.
 				As the point in the origin has the indices (0, 0, 0), this
-				method returns the number of points in each direction.
+				method returns the number of points in Z direction minus one.
 				@memo
 		*/
 		Size getMaxZIndex(void) const;

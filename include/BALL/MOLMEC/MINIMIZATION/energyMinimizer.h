@@ -1,4 +1,4 @@
-// $Id: energyMinimizer.h,v 1.2 1999/09/14 17:45:03 oliver Exp $
+// $Id: energyMinimizer.h,v 1.3 1999/09/25 14:26:39 oliver Exp $
 // Energy Minimizer: A class for minimizing the energy of molecular systems
 
 #ifndef BALL_MOLMEC_MINIMIZATION_ENERGYMINIMIZER_H
@@ -268,7 +268,7 @@ namespace BALL {
 		/**	Minimize the energy of the system bound to the force field.	
 				If a number of steps is given, the minimization is aborted after
 				that number of steps, regardless of the number of steps given in 
-				the options ({\tt MAX_STEPS}). Together with the {\tt restart} option
+				the options ({\tt MAX\_STEPS}). Together with the {\tt restart} option
 				this feature is used to extract properties or visualize the results
 				in the course of the minimization. If restart is set to {\bf true},
 				the minimization continues with the former step width.	
