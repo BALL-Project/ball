@@ -1,4 +1,4 @@
-// $Id: shiftModule.C,v 1.4 2000/09/18 11:03:17 oliver Exp $
+// $Id: shiftModule.C,v 1.5 2000/09/18 15:42:56 oliver Exp $
 
 #include<BALL/NMR/shiftModule.h>
 
@@ -9,6 +9,8 @@ namespace BALL
 
 	ShiftModule::ShiftModule()
 		throw()
+		:	module_name_(""),
+			parameters_(0)
 	{
 	}
 
