@@ -60,7 +60,7 @@ expression:
 		}
 	|	TK_NOT expression {
 			$$ = $2;
-			$2->negate = true;
+			$2->negate = !$2->negate;
 		}
 	| TK_OPEN_BRACKET expression TK_CLOSE_BRACKET { 
 			$$ = $2; 
