@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: string.C,v 1.44 2003/04/22 21:46:15 oliver Exp $
+// $Id: string.C,v 1.45 2003/05/21 14:37:23 oliver Exp $
+//
 
 #include <BALL/DATATYPE/string.h>
 #include <BALL/COMMON/limits.h>
@@ -49,6 +50,8 @@ namespace BALL
 	const char* String::CHARACTER_CLASS__QUOTES = "\"";
 
 	const Size String::EndPos = Limits<Size>::max();
+	
+	const String String::EMPTY("");
 
 	String::CompareMode String::compare_mode_ = String::CASE_SENSITIVE;
 
