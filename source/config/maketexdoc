@@ -1,12 +1,12 @@
 #!/usr/local/bin/bash
-# $Id: maketexdoc,v 1.5 2000/01/11 20:19:14 oliver Exp $
+# $Id: maketexdoc,v 1.6 2000/02/17 00:31:41 oliver Exp $
 
 mkdir ../doc 2>/dev/null
 mkdir ../doc/tex 2>/dev/null
 cp config/docxx.sty ../doc/tex
 
 cd ../include/BALL
-/KM/comp-bio/BALL-contrib/docxx/bin/SunOS/doc++ $OPTS -t -o ../../doc/tex/BALL.tex BALL.doc
+/KM/comp-bio/BALL-contrib/doc++-3.4.1/bin/doc++ $OPTS -N -u -t -o ../../doc/tex/BALL.tex BALL.doc
 cd ../../doc/tex
 latex BALL
 latex BALL
