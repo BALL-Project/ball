@@ -4,6 +4,7 @@ THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
 	glAtomBondModelConnector.C\
+	glBackboneModel.C\
 	glBallAndStickModel.C\
 	glLineModel.C\
 	glSurfaceModel.C\
