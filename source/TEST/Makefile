@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.186 2003/05/21 15:49:04 oliver Exp $
+# $Id: Makefile,v 1.187 2003/05/23 15:39:22 oliver Exp $
 #
 DIRECTORY=TEST
 
@@ -181,8 +181,8 @@ EXECUTABLES_STRUCTURE = \
 	RotamerLibrary_test\
 	SmilesParser_test\
 	StructureMapper_test\
-	TransformationApplicator_test\
-	TranslationApplicator_test\
+	TransformationProcessor_test\
+	TranslationProcessor_test\
 	SurfaceProcessor_test
 
 EXECUTABLES_SOLVATION = \

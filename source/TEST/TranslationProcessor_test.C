@@ -1,27 +1,27 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TranslationApplicator_test.C,v 1.4 2003/05/23 10:26:05 oliver Exp $
+// $Id: TranslationProcessor_test.C,v 1.1 2003/05/23 15:39:23 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
 #include <BALL/STRUCTURE/geometricTransformations.h>
 #include <BALL/KERNEL/fragment.h>
 
-START_TEST(TranslationApplictor, "$Id: TranslationApplicator_test.C,v 1.4 2003/05/23 10:26:05 oliver Exp $")
+START_TEST(TranslationApplictor, "$Id: TranslationProcessor_test.C,v 1.1 2003/05/23 15:39:23 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
-using BALL::TranslationProcessor;
+using namespace BALL;
+
 TranslationProcessor* app;
 CHECK(default constructor)
 	app = new TranslationProcessor;
 	TEST_NOT_EQUAL(app, 0)
 RESULT
 
-using BALL::Vector3;
-Vector3	t(0,0,0);
+Vector3	t(0.0, 0.0, 0.0);
 CHECK(getTranslation/setTranslation)
 	TEST_EQUAL(app->getTranslation(), t)
 	t.set(1,2,3);
@@ -34,7 +34,6 @@ CHECK(destructor/constructor)
 	app = new TranslationProcessor(t);
 	TEST_NOT_EQUAL(app, 0)
 	TEST_EQUAL(app->getTranslation(), t)
-	delete app;
 RESULT
 
 CHECK(operator ())
@@ -55,6 +54,7 @@ CHECK(operator ())
 	t *= 2;
 	TEST_EQUAL(atom1->getPosition(), t)
 RESULT
+delete app;
 
 
 /////////////////////////////////////////////////////////////

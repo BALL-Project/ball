@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TransformationApplicator_test.C,v 1.3 2002/12/12 11:34:46 oliver Exp $
+// $Id: TransformationProcessor_test.C,v 1.1 2003/05/23 15:39:23 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 #include <BALL/STRUCTURE/geometricTransformations.h>
 #include <BALL/KERNEL/fragment.h>
 
-START_TEST(TransformationApplictor, "$Id: TransformationApplicator_test.C,v 1.3 2002/12/12 11:34:46 oliver Exp $")
+START_TEST(TransformationApplictor, "$Id: TransformationProcessor_test.C,v 1.1 2003/05/23 15:39:23 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
