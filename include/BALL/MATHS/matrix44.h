@@ -1,4 +1,4 @@
-// $Id: matrix44.h,v 1.14 2000/03/13 22:40:22 amoll Exp $
+// $Id: matrix44.h,v 1.15 2000/03/14 00:47:28 amoll Exp $
 
 #ifndef BALL_MATHS_MATRIX44_H
 #define BALL_MATHS_MATRIX44_H
@@ -301,7 +301,7 @@ namespace BALL
 				@param max_diff the allowed maximum between two values
 				@return bool, {\bf true} if all components are equal, {\bf false} otherwise
 		*/
-		bool TMatrix4x4<T>::isEqual(const TMatrix4x4<T> m, const T maxDiff) const;
+		bool TMatrix4x4<T>::isEqual(const TMatrix4x4<T>& m, const T& maxDiff) const;
 
 
 		/** Get the diagonal of the matrix
@@ -1169,7 +1169,7 @@ namespace BALL
 	}
 
 	template <class T>
-	bool TMatrix4x4<T>::isEqual(TMatrix4x4<T> m, T maxDiff) const
+	bool TMatrix4x4<T>::isEqual(const TMatrix4x4<T>& m, const T& maxDiff) const
 	{
 		for (int i=0; i<4; i++ )
 		{
