@@ -1,4 +1,4 @@
-// $Id: hashMap.h,v 1.6 2000/01/07 21:50:19 oliver Exp $ 
+// $Id: hashMap.h,v 1.7 2000/03/14 19:37:25 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_HASHMAP_H
 #define BALL_DATATYPE_HASHMAP_H
@@ -99,6 +99,7 @@ namespace BALL
 		*/
 		//@{
 
+		BALL_CREATE_NODEEP(HashMap)
 		/**	Default constructor.
 				Create a new and empty hash map.
 				@param initial_capacity the capcaity of the hash map
@@ -110,7 +111,7 @@ namespace BALL
 				@param	hash_map the hash map to be copied
 				@param	deep not used
 		*/
-		HashMap(const HashMap& hash_map, bool deep = true);
+		HashMap(const HashMap& hash_map);
 
 		/**	Destructor.
 		*/
@@ -142,9 +143,8 @@ namespace BALL
 
 		/**	Assignment from another hash map.
 				@param hash_map the hash map to assign from
-				@param deep not used
 		*/
-		void set(const HashMap& hash_map, bool deep = true);
+		void set(const HashMap& hash_map);
 
 		/**	Assignment operator.
 				Assign the contents of a hash map to another.
@@ -154,7 +154,7 @@ namespace BALL
 
 		/**	Assign the contents of this hash map to another map.
 		*/
-		void get(HashMap& hash_map, bool deep = true) const;
+		void get(HashMap& hash_map) const;
 
 		/**	Swap the contents of two hash maps.
 		*/
@@ -525,7 +525,7 @@ namespace BALL
 
 	template <class Key, class T>
 	HashMap<Key, T>::HashMap
-		(const HashMap& hash_map, bool /* deep */)
+		(const HashMap& hash_map)
 		:	size_(hash_map.size_),
 			capacity_(hash_map.capacity_),
 			bucket_(hash_map.bucket_.size())
@@ -573,7 +573,7 @@ namespace BALL
 	template <class Key, class T>
 	BALL_INLINE 
 	void HashMap<Key, T>::set
-		(const HashMap& hash_map, bool /* deep */)
+		(const HashMap& hash_map)
 	{
 		if (&hash_map == this)
 		{
@@ -612,9 +612,9 @@ namespace BALL
 
 	template <class Key, class T>
 	BALL_INLINE 
-	void HashMap<Key, T>::get(HashMap& hash_map, bool deep) const
+	void HashMap<Key, T>::get(HashMap& hash_map) const
 	{
-		hash_map.set(*this, clone_deep);
+		hash_map.set(*this);
 	}
 
 	template <class Key, class T>
