@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logStream.C,v 1.34 2004/04/07 12:29:26 anker Exp $
+// $Id: logStream.C,v 1.35 2004/04/22 23:32:53 amoll Exp $
 //
 
 #include <limits>
@@ -272,7 +272,8 @@ namespace BALL
 	LogStream::LogStream(LogStreamBuf* buf, bool delete_buf, bool associate_stdio)
 		: BALL_IOS(buf),
 			BALL_OSTREAM(buf),
-			delete_buffer_(delete_buf)
+			delete_buffer_(delete_buf),
+			disable_output_(false)
 	{
 		if (associate_stdio == true) 
 		{
@@ -576,6 +577,33 @@ namespace BALL
 			pos++;
 		}
 		return list_indices;
+	}
+
+	void LogStream::disableOutput()
+		throw()
+	{
+		disable_output_ = true;
+	}
+
+	void LogStream::enableOutput()
+		throw()
+	{
+		disable_output_ = false;
+		std::ostream::flush();
+	}
+
+	bool LogStream::outputEnabled() const
+		throw()
+	{
+		return disable_output_;
+	}
+
+	void LogStream::flush()
+		throw()
+	{
+		if (disable_output_) return;
+
+		std::ostream::flush();
 	}
 
 	// global default logstream

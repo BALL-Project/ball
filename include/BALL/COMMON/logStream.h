@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logStream.h,v 1.29 2004/04/15 12:09:51 amoll Exp $
+// $Id: logStream.h,v 1.30 2004/04/22 23:31:54 amoll Exp $
 //
 
 #ifndef BALL_COMMON_LOGSTREAM_H
@@ -450,6 +450,20 @@ namespace BALL
 				
 		*/
 		void setPrefix(const std::ostream& s, const string& prefix);
+
+		/// Disable all output
+		void disableOutput() throw();
+
+		/// Enable all output
+		void enableOutput() throw();
+
+		/// Is Output enabled?
+		bool outputEnabled() const
+			throw();
+
+		///
+		void flush()
+			throw();
 		//@}		
 		
 		/**	@name	Message Buffer Management */
@@ -516,6 +530,7 @@ namespace BALL
 		// the LogStreamBuf, delete_buffer_ is set to true and the ctor
 		// also deletes the buffer.
 		bool	delete_buffer_;
+		bool  disable_output_;
 	};
 
 
