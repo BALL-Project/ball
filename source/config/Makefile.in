@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.in,v 1.28 2003/05/26 16:09:59 oliver Exp $
+# $Id: Makefile.in,v 1.29 2003/05/26 17:05:27 amoll Exp $
 #
 
 include config.mak
@@ -154,15 +154,7 @@ bench:	dummy
 
 # creates the documentation
 doc:
-	@../doc/tools/makedoc complete
-
-# creates the documentation in LaTeX format
-texdoc:	
-	@../doc/tools/makedoc tex
-
-# creates the documentation in HTML format
-htmldoc:
-	@../doc/tools/makedoc html
+	@cd ../doc/ && doxygen doxygen.cfg; cd ../source
 
 # creates a distributable .tgz file
 dist:
