@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.40 2004/07/26 13:45:10 amoll Exp $
+// $Id: glRenderer.C,v 1.41 2004/08/17 11:59:56 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -203,8 +203,8 @@ namespace BALL
 			if (reset_all)
 			{
 				GLenum LIGHTS_MAX = GL_MAX_LIGHTS;
-				if (LIGHTS_MAX > GL_LIGHT0 + 10) LIGHTS_MAX = GL_LIGHT0 + 10;
-				for (; light_nr < LIGHTS_MAX; light_nr++)
+	 			if (LIGHTS_MAX > 10) LIGHTS_MAX = 10;
+				for (; light_nr < GL_LIGHT0 + LIGHTS_MAX; light_nr++)
 				{
 					glDisable(light_nr);
 				}
