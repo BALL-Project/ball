@@ -1,4 +1,4 @@
-// $Id: autoDeletable.h,v 1.13 2002/01/12 01:59:48 oliver Exp $
+// $Id: autoDeletable.h,v 1.13.4.1 2002/03/10 01:09:15 oliver Exp $
 
 #ifndef BALL_CONCEPT_AUTODELETABLE_H
 #define BALL_CONCEPT_AUTODELETABLE_H
@@ -98,7 +98,6 @@ namespace BALL
 		*/
 		void operator delete(void* ptr, void*)
 			throw();
-
 	
 		//@}
 	
@@ -134,12 +133,14 @@ namespace BALL
 
 		protected:
 
-		/*_ ?????
+		/*_	Default constructor.
+				Should be called by subclasses only. There's no need to construct
+				AutoDeletable objects by themselves.
 		*/
 		AutoDeletable()
 			throw();
 
-		/*_ ?????
+		/*_ Copy constructor.
 		*/
 		AutoDeletable(const AutoDeletable& auto_deletable, bool deep = false)
 			throw();
@@ -147,11 +148,13 @@ namespace BALL
 
 		private:
 
-		/*_ ?????
+		/*_	Flag describing whether the object may be deleted automatically.
 		*/
-		bool 		enabled_;
+		bool enabled_;
 
-		/*_ ?????
+		/*_ The last new pointer.
+				This pointe ris used internally to determine whether a given 
+				instance of AutoDeletable was constructed statically or dynamically.
 		*/
 		static 	void* last_ptr_;
 	};

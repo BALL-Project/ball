@@ -1,4 +1,4 @@
-// $Id: lennardJones.h,v 1.16.4.1 2002/02/27 00:32:49 oliver Exp $
+// $Id: lennardJones.h,v 1.16.4.2 2002/03/10 01:09:16 oliver Exp $
 // Molecular Mechanics Parameter: class describing the atom type section of a parameter file
  
 #ifndef BALL_MOLMEC_PARAMETER_LENNARDJONES_H
@@ -161,7 +161,6 @@ namespace BALL
 		FormatType						format_;
 			
 		std::vector<String>		names_;
-
 	};
 
 } // namespace BALL

@@ -1,4 +1,4 @@
-// $Id: lennardJones.C,v 1.13 2001/12/30 13:28:51 sturm Exp $
+// $Id: lennardJones.C,v 1.13.4.1 2002/03/10 01:09:16 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/lennardJones.h>
@@ -94,6 +94,8 @@ namespace BALL
 		
 		// extract the basis information
 		ParameterSection::extractSection(parameters, section_name);
+		bool use_geometric_mean = false;
+
 
 		// check whether all variables we need are defined, terminate otherwise
 		if ((!hasVariable("A") || !hasVariable("B"))
@@ -113,6 +115,22 @@ namespace BALL
 			if (hasVariable("epsilon") && hasVariable("R"))
 			{
 				format_ = EPSILON_R_FORMAT;
+				if (options.has("radius_averaging"))
+				{
+					if (options["radius_averaging"] == "arithmetic")
+					{
+						use_geometric_mean = false;
+					}
+					else if (options["radius_averaging"] == "geometric")
+					{
+						use_geometric_mean = true;
+					}
+					else
+					{
+						Log.warn() << "AmberNonBonded: unknown method for averaging LJ radii: '" 
+								<< options["radius_averaging"] << "'. Using arithmetic mean." << std::endl;
+					}
+				}
 			} 
 			else if (hasVariable("A") && hasVariable("B"))
 			{
@@ -265,7 +283,15 @@ namespace BALL
 					// calculate the values for A and B if in eps/R format
 					if (format_ == EPSILON_R_FORMAT)
 					{
-						double R = B_[i] + B_[j];
+						double R;
+						if (!use_geometric_mean)
+						{
+							R = B_[i] + B_[j];
+						}
+						else
+						{
+							R = 2.0 * sqrt(B_[i] * B_[j]);
+						}
 						double R3 = R * R * R;
 						double R6 = R3 * R3;
 						double epsilon = sqrt(A_[i] * A_[j]);

@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.C,v 1.20.4.5 2002/03/01 02:55:36 oliver Exp $
+// $Id: amberNonBonded.C,v 1.20.4.6 2002/03/10 01:09:16 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -7,7 +7,7 @@
 
 using namespace std;
 
-#define NEW_STYLE
+//#define NEW_STYLE
 
 // define a macro for the square function
 #define SQR(x) ((x) * (x))
@@ -582,6 +582,7 @@ namespace BALL
 		 bool use_periodic_boundary, 
 		 bool use_dist_depend)
   {
+		if (is_hydrogen_bond) std::cout << "ISHBOND!" << std::endl;
 		// useful aliases
 		Atom::StaticAtomAttributes& atom1(*LJ_data.atom1);
 		Atom::StaticAtomAttributes& atom2(*LJ_data.atom2);
