@@ -1,4 +1,4 @@
-// $Id: molecule.h,v 1.7 2000/04/14 13:09:54 amoll Exp $
+// $Id: molecule.h,v 1.8 2000/04/17 13:59:15 amoll Exp $
 
 #ifndef BALL_KERNEL_MOLECULE_H
 #define BALL_KERNEL_MOLECULE_H
@@ -58,16 +58,6 @@ namespace BALL
 
 		/** Destructor */
 		virtual ~Molecule();
-
-		/** Clears the contents of the molecule and removes its comopsite children.
-				The molecule is not removed from its parent composite (if any).
-		*/
-		virtual void clear();
-	
-		/** Clears the contents of the molecule and removes its comopsite children.
-				The molecule is also removed from its parent composite (if any).
-		*/
-		virtual void destroy();
 		
 		//@}
 
@@ -218,16 +208,6 @@ namespace BALL
 	
 		/**	@name Debugging and Diagnostics */
 		//@{
-
-		/** Internal state and consistency self-validation.
-				Initiate self-validation of the internal state and data structure consistencies of {\em *this} molecule.
-				If the internal state of {\em *this} molecule is correct (self-validated) and consistent {\tt true} is returned,
-				{\tt false} otherwise. 
-				@return			bool -
-										{\tt true} if the internal state of {\em *this} molecule is correct (self-validated) and consistent,
-										{\tt false} otherwise
-		*/
-		virtual bool isValid() const;
 
 		/** Internal state dump.
 				Dump the current internal state of {\em *this} molecule to the output ostream {\em s} with dumping depth {\em depth}.

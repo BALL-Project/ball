@@ -1,4 +1,4 @@
-// $Id: molecule.C,v 1.4 1999/12/30 18:05:33 oliver Exp $
+// $Id: molecule.C,v 1.5 2000/04/17 13:59:02 amoll Exp $
 
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/system.h>
@@ -26,16 +26,6 @@ namespace BALL
 	Molecule::~Molecule()
 	{
 		destroy();
-	}
-
-	void Molecule::clear()
-	{
-		BaseFragment::clear();
-	}
-		
-	void Molecule::destroy()
-	{
-		BaseFragment::destroy();
 	}
 		
 	void Molecule::persistentWrite(PersistenceManager& pm, const char* name) const
@@ -167,11 +157,6 @@ namespace BALL
 	bool Molecule::remove(BaseFragment& base_fragment)
 	{
 		return BaseFragment::remove(base_fragment);
-	}
-
-	bool Molecule::isValid() const
-	{ 
-		return BaseFragment::isValid();
 	}
 
 	void Molecule::dump(ostream& s, Size depth) const
