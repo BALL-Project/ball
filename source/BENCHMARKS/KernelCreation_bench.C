@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: KernelCreation_bench.C,v 1.2 2002/12/18 16:00:33 sturm Exp $
+// $Id: KernelCreation_bench.C,v 1.3 2002/12/21 16:46:18 oliver Exp $
 #include <BALL/CONCEPT/benchmark.h>
 
 ///////////////////////////
@@ -14,17 +14,17 @@
 
 using namespace BALL;
 
-START_BENCHMARK(KernelIteration, 1.0, "$Id: KernelCreation_bench.C,v 1.2 2002/12/18 16:00:33 sturm Exp $")
+START_BENCHMARK(KernelIteration, 1.0, "$Id: KernelCreation_bench.C,v 1.3 2002/12/21 16:46:18 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 
-Size N = 20000;
+Size N = 40000;
 
 vector<Atom*> atoms;
 atoms.reserve(N);
-START_SECTION(Atom creation, 0.1)
+START_SECTION(Atom creation, 1.0)
 
 	for (Size i = 0; i < N; i++)
 	{
@@ -36,7 +36,7 @@ START_SECTION(Atom creation, 0.1)
 	
 END_SECTION
 
-START_SECTION(Atom destruction, 0.1)
+START_SECTION(Atom destruction, 1.0)
 
 	for (Size i = 0; i < N; i++)
 	{
@@ -52,7 +52,7 @@ END_SECTION
 
 vector<Fragment*> fragments;
 fragments.reserve(N);
-START_SECTION(Fragment creation, 0.1)
+START_SECTION(Fragment creation, 1.0)
 
 	for (Size i = 0; i < N; i++)
 	{
@@ -64,7 +64,7 @@ START_SECTION(Fragment creation, 0.1)
 	
 END_SECTION
 
-START_SECTION(Fragment destruction, 0.1)
+START_SECTION(Fragment destruction, 1.0)
 
 	for (Size i = 0; i < N; i++)
 	{
@@ -80,7 +80,7 @@ END_SECTION
 
 vector<Residue*> residues;
 residues.reserve(N);
-START_SECTION(Residue creation, 0.1)
+START_SECTION(Residue creation, 1.0)
 
 	for (Size i = 0; i < N; i++)
 	{
@@ -92,7 +92,7 @@ START_SECTION(Residue creation, 0.1)
 	
 END_SECTION
 
-START_SECTION(Residue destruction, 0.1)
+START_SECTION(Residue destruction, 1.0)
 
 	for (Size i = 0; i < N; i++)
 	{
@@ -108,7 +108,7 @@ END_SECTION
 
 vector<Molecule*> molecules;
 molecules.reserve(N);
-START_SECTION(Molecule creation, 0.1)
+START_SECTION(Molecule creation, 1.0)
 
 	for (Size i = 0; i < N; i++)
 	{
@@ -120,7 +120,7 @@ START_SECTION(Molecule creation, 0.1)
 	
 END_SECTION
 
-START_SECTION(Molecule destruction, 0.1)
+START_SECTION(Molecule destruction, 1.0)
 
 	for (Size i = 0; i < N; i++)
 	{
@@ -136,7 +136,7 @@ END_SECTION
 
 vector<System*> systems;
 systems.reserve(N);
-START_SECTION(System creation, 0.1)
+START_SECTION(System creation, 1.0)
 
 	for (Size i = 0; i < N; i++)
 	{
@@ -148,7 +148,7 @@ START_SECTION(System creation, 0.1)
 	
 END_SECTION
 
-START_SECTION(System destruction, 0.1)
+START_SECTION(System destruction, 1.0)
 
 	for (Size i = 0; i < N; i++)
 	{

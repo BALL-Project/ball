@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: KernelClone_bench.C,v 1.3 2002/12/18 16:00:33 sturm Exp $
+// $Id: KernelClone_bench.C,v 1.4 2002/12/21 16:46:18 oliver Exp $
 #include <BALL/CONCEPT/benchmark.h>
 
 ///////////////////////////
@@ -14,7 +14,7 @@
 
 using namespace BALL;
 
-START_BENCHMARK(KernelIteration, 1.0, "$Id: KernelClone_bench.C,v 1.3 2002/12/18 16:00:33 sturm Exp $")
+START_BENCHMARK(KernelIteration, 1.0, "$Id: KernelClone_bench.C,v 1.4 2002/12/21 16:46:18 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -27,16 +27,16 @@ infile.close();
 System S;
 Molecule* M = new Molecule;
 S.insert(*M);
-for (Position i = 0; i < 2000; i++)
+for (Position i = 0; i < 700; i++)
 {
 	M->insert(*new Atom);
 }
 
 
 
-START_SECTION(Cloning w/o bonds, 0.5)
+START_SECTION(Cloning w/o bonds, 1.0)
 
-	for (int count = 0; count < 500; count++)
+	for (int count = 0; count < 200; count++)
 	{
 		System S2;
 		START_TIMER
@@ -56,9 +56,9 @@ for (++it; +it; ++it)
 	last = &*it;
 }
 
-START_SECTION(Cloning, 0.5)
+START_SECTION(Cloning, 1.0)
 
-	for (int count = 0; count < 500; count++)
+	for (int count = 0; count < 200; count++)
 	{
 		System S2;
 		START_TIMER
@@ -69,11 +69,11 @@ START_SECTION(Cloning, 0.5)
 
 END_SECTION
 
-START_SECTION(Creation, 0.5)
+START_SECTION(Creation, 1.0)
 
-	for (int count = 0; count < 500; count++)
+	for (int count = 0; count < 300; count++)
 	{
-		for (int i = 0; i < 2000; i++)
+		for (int i = 0; i < 700; i++)
 		{
 			START_TIMER
 			Atom* a = new Atom;
@@ -83,12 +83,12 @@ START_SECTION(Creation, 0.5)
 	}
 END_SECTION
 
-START_SECTION(Assignment, 0.5)
+START_SECTION(Assignment, 1.0)
 
-	for (int count = 0; count < 500; count++)
+	for (int count = 0; count < 200; count++)
 	{
 		Atom atom;
-		for (int i = 0; i < 2000; i++)
+		for (int i = 0; i < 700; i++)
 		{
 			Atom* a = new Atom;
 			START_TIMER
@@ -99,12 +99,12 @@ START_SECTION(Assignment, 0.5)
 	}
 END_SECTION
 
-START_SECTION(Cloning (create), 0.5)
+START_SECTION(Cloning (create), 1.0)
 
-	for (int count = 0; count < 500; count++)
+	for (int count = 0; count < 300; count++)
 	{
 		Atom atom;
-		for (int i = 0; i < 2000; i++)
+		for (int i = 0; i < 700; i++)
 		{
 			Atom* a;
 			START_TIMER
@@ -115,11 +115,11 @@ START_SECTION(Cloning (create), 0.5)
 	}
 END_SECTION
 
-START_SECTION(Insertion, 0.5)
+START_SECTION(Insertion, 1.0)
 
-	for (int count = 0; count < 500; count++)
+	for (int count = 0; count < 300; count++)
 	{
-		for (int i = 0; i < 2000; i++)
+		for (int i = 0; i < 700; i++)
 		{
 			Molecule M;
 			Atom* a = new Atom;
@@ -137,9 +137,9 @@ for (; +ai; ++ai)
 	ai->destroyBonds();
 }
 
-START_SECTION(Deleting, 0.5)
+START_SECTION(Deleting, 1.0)
 
-	for (int count = 0; count < 500; count++)
+	for (int count = 0; count < 200; count++)
 	{
 		System S2;
 		S2 = *static_cast<System*>(S.create(true));

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MolmecSupport_bench.C,v 1.4 2002/12/18 16:00:33 sturm Exp $
+// $Id: MolmecSupport_bench.C,v 1.5 2002/12/21 16:46:18 oliver Exp $
 #include <BALL/CONCEPT/benchmark.h>
 
 ///////////////////////////
@@ -14,7 +14,7 @@
 using namespace BALL;
 
 // args: benchmark name (without '"'), reference time in seconds, CVS ID string
-START_BENCHMARK(MolmecSupport, 4.0, "$Id: MolmecSupport_bench.C,v 1.4 2002/12/18 16:00:33 sturm Exp $")
+START_BENCHMARK(MolmecSupport, 4.0, "$Id: MolmecSupport_bench.C,v 1.5 2002/12/21 16:46:18 oliver Exp $")
 
 
 /////////////////////////////////////////////////////////////
@@ -23,8 +23,8 @@ START_BENCHMARK(MolmecSupport, 4.0, "$Id: MolmecSupport_bench.C,v 1.4 2002/12/18
 // Create a system filled with solvent (water) only
 System S;
 ForceField ff;
-ff.options.setVector(PeriodicBoundary::Option::PERIODIC_BOX_LOWER, Vector3(-25.0));
-ff.options.setVector(PeriodicBoundary::Option::PERIODIC_BOX_UPPER, Vector3(25.0));
+ff.options.setVector(PeriodicBoundary::Option::PERIODIC_BOX_LOWER, Vector3(-17.0));
+ff.options.setVector(PeriodicBoundary::Option::PERIODIC_BOX_UPPER, Vector3(17.0));
 ff.periodic_boundary.enable();
 ff.setup(S);
 

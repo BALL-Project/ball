@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: CompositeCreation_bench.C,v 1.3 2002/12/18 16:00:33 sturm Exp $
+// $Id: CompositeCreation_bench.C,v 1.4 2002/12/21 16:46:18 oliver Exp $
 #include <BALL/CONCEPT/benchmark.h>
 
 ///////////////////////////
@@ -13,17 +13,17 @@
 
 using namespace BALL;
 
-START_BENCHMARK(CompositeCreation, 1.0, "$Id: CompositeCreation_bench.C,v 1.3 2002/12/18 16:00:33 sturm Exp $")
+START_BENCHMARK(CompositeCreation, 1.0, "$Id: CompositeCreation_bench.C,v 1.4 2002/12/21 16:46:18 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
-Size N = 100000;
+Size N = 2000000;
 
 std::vector<Composite*> composites;
 composites.reserve(100000);
 
-START_SECTION(Creation, 0.5)
+START_SECTION(Creation, 1.0)
 
 	Composite* composite;
 	for (Size i = 0; i < N; i++)
@@ -36,7 +36,7 @@ START_SECTION(Creation, 0.5)
 
 END_SECTION
 
-START_SECTION(Destruction, 0.5)
+START_SECTION(Destruction, 1.0)
 
 	for (Size i = 0; i < N; i++)
 	{
