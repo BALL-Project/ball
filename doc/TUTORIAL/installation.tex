@@ -29,7 +29,7 @@ other versions of {\tt make}. It is available from \URL{ftp://ftp.gnu.org/gnu/}
 and easy to install.
 
 The compilation of the visualization component VIEW also requires
-the QT library (any version above 3.2), which is available from
+the QT library (at least version 3.2), which is available from
 \URL{www.trolltech.com/products/qt}/.
 
 If QT was not installed in one of the standard library paths or the
@@ -38,9 +38,6 @@ include directories, use \mbox{"\option{--with-qt-libs}{\tt{}=DIR}"} and
 \mbox{"\option{--with-qt-incl}{\tt{}=DIR}"} as options to configure (see
 Section \ref{section:building-ball}) to specify the paths QT was installed
 to.\index{QT} {\tt configure} will also honor the {\tt QTDIR} environment variable.
-Please remember to compile also \file{libqgl.so}, which is one of the QT
-extensions (to build \file{libqgl.a}, cd to 
-{\tt\nobreak{\$QTDIR/extensions/opengl/src}} and type {\tt make}).
 
 QT also requires OpenGL. On platforms that do not provide OpenGL, MESA can
 be used (e.g. Linux). Mesa is a 3-D graphics library with an API which is 
