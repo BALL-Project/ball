@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmNonBonded.C,v 1.29 2004/12/27 17:06:12 amoll Exp $
+// $Id: charmmNonBonded.C,v 1.30 2005/01/24 17:22:08 amoll Exp $
 //
 
 #include <BALL/MOLMEC/CHARMM/charmmNonBonded.h>
@@ -435,11 +435,19 @@ namespace BALL
 
 		// Calculate all non bonded atom pairs
 		ForceField::PairVector atom_pair_vector;
-		Size number_of_non_bonded_interactions = MolmecSupport::calculateNonBondedAtomPairs
+		Size number_of_non_bonded_interactions = 0;
+		try
+		{
+			number_of_non_bonded_interactions = MolmecSupport::calculateNonBondedAtomPairs
 																								(atom_pair_vector, getForceField()->getAtoms(), 
 																								 getForceField()->periodic_boundary.getBox(),
 																								 cut_off_, force_field_->periodic_boundary.isEnabled(), 
 																								 algorithm_type_); 
+		}
+		catch(...)
+		{
+			throw Exception::TooManyErrors(__FILE__, __LINE__);
+		}
 
 		// Reserve space for non-bonded vector.
 		non_bonded_.reserve(number_of_non_bonded_interactions + (Size)(number_of_non_bonded_interactions / 5));

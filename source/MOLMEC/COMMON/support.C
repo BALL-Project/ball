@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: support.C,v 1.41 2003/08/26 09:17:53 oliver Exp $
+// $Id: support.C,v 1.42 2005/01/24 17:22:09 amoll Exp $
 //
 
 #include <BALL/MOLMEC/COMMON/support.h>
@@ -40,6 +40,7 @@ namespace BALL
 			 double distance,
 			 bool periodic_boundary_enabled, 
 			 PairListAlgorithmType type)
+			throw(Exception::OutOfMemory)
 		{
 
 			// determine lower and upper corner of the hash grid that contains
@@ -146,6 +147,12 @@ namespace BALL
 			double squared_distance = distance * distance;
 
 			// initialize the hash grid
+			// abort if grid becomes too big, here 10^4
+			if ((lower - upper).getSquareLength() > 10^16) 
+			{
+				throw(Exception::OutOfMemory(__FILE__, __LINE__));
+			}
+
 			// we enlarge the box by some constant to be sure not to run into
 			// numerical problems
 			HashGrid3<Atom*> grid(lower - Vector3(0.1F),

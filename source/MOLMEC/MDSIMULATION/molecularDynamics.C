@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularDynamics.C,v 1.18 2005/01/24 16:03:00 amoll Exp $
+// $Id: molecularDynamics.C,v 1.19 2005/01/24 17:22:09 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MDSIMULATION/molecularDynamics.h>
@@ -42,7 +42,7 @@ namespace BALL
 			force_field_ptr_(0),
 			system_ptr_(0),
 			abort_by_energy_enabled_(true),
-			abort_energy_(10000000000.0)
+			abort_energy_(1000000000.0)
 	{
 		// As no force field has been named, there is not much to do. 
 		// Just indicate that the MD simulation is not ready yet. 
@@ -50,7 +50,7 @@ namespace BALL
 
 	// Constructor expecting a force field 
 	MolecularDynamics::MolecularDynamics(ForceField& force_field)
-		:	abort_energy_(10000000000.0)
+		:	abort_energy_(1000000000.0)
 	{
 		valid_ = true;
 		force_field_ptr_ = &force_field;
@@ -421,17 +421,18 @@ namespace BALL
 	}
 
 	// This method will be overwritten by a subclass
-	void MolecularDynamics::simulateIterations(Size /* number */, bool /* restart */)
+	bool MolecularDynamics::simulateIterations(Size /* number */, bool /* restart */)
 	{
+		return true;
 	}
 
 	// This method does the actual simulation stuff
   // It runs for getMaximalNumberOfIterations() iterations. 
   // restart=true means that the counting of iterations is started with the end
   // value of the previous run
-	void MolecularDynamics::simulate(bool restart)
+	bool MolecularDynamics::simulate(bool restart)
 	{
-		simulateIterations(maximal_number_of_iterations_, restart);
+		return simulateIterations(maximal_number_of_iterations_, restart);
 	}
 
 
@@ -439,7 +440,7 @@ namespace BALL
 	// It runs for the indicated simulation time in picoseconds. 
   // restart=true means that the counting of iterations is started with the end
   // value of the previous run
-	void MolecularDynamics::simulateTime (double simulation_time, bool restart)
+	bool MolecularDynamics::simulateTime (double simulation_time, bool restart)
 	{
 		Size number;
 
@@ -447,9 +448,12 @@ namespace BALL
 		if (valid_)
 		{
 			number = static_cast < Size > (simulation_time / time_step_);
-			simulateIterations (number, restart);
+			if (!simulateIterations (number, restart)) return false;
 		}
+
+		return true;
 	}
+
 	// This method will be overwritten by a subclass
 	bool MolecularDynamics::specificSetup()
 	{

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: microCanonicalMD.C,v 1.12 2005/01/24 16:02:59 amoll Exp $
+// $Id: microCanonicalMD.C,v 1.13 2005/01/24 17:22:09 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MDSIMULATION/microCanonicalMD.h>
@@ -153,15 +153,15 @@ namespace BALL
 	// It runs for the indicated number of iterations           
   // restart=true means that the counting of iterations is started with the end
   // value of the previous run
-	void MicroCanonicalMD::simulateIterations(Size iterations, bool restart)
+	bool MicroCanonicalMD::simulateIterations(Size iterations, bool restart)
 	{
 		// local variables
-		double current_energy;
-		Size max_number;
+		double current_energy = 0;
+		Size max_number = 0;
 
-		Atom *atom_ptr;
-		Size force_update_freq;
-		Size iteration;
+		Atom *atom_ptr = 0;
+		Size force_update_freq = 0;
+		Size iteration = 0;
 
     if (restart == false)
     {
@@ -193,7 +193,7 @@ namespace BALL
 		if (!valid_ || force_field_ptr_ == 0 || !force_field_ptr_->isValid())
 		{
 			Log.error() << "MD simulation not possible! " << "MD class is  not valid." << std::endl;
-			return;
+			return false;
 		}
 
 
@@ -284,11 +284,15 @@ namespace BALL
 				snapshot_manager_ptr_->takeSnapShot();
 			}
 
-			if (Maths::isNan(force_field_ptr_->getEnergy())) return;
+			if (Maths::isNan(force_field_ptr_->getEnergy())) return false;
 
 			if (abort_by_energy_enabled_)
 			{
-				if (force_field_ptr_->getEnergy() > abort_energy_) return;
+				if (force_field_ptr_->getEnergy() > abort_energy_ ||
+						force_field_ptr_->getEnergy() < -abort_energy_) 
+				{
+					return false;
+				}
 			}
 
 		}	// next iteration 
@@ -302,7 +306,7 @@ namespace BALL
 		// update the current temperature in the system
 		force_field_ptr_->updateEnergy();
 		updateInstantaneousTemperature();
-
+		return true;
 	}	// end of simulateIterations() 
 
 }	// end of namespace BALL

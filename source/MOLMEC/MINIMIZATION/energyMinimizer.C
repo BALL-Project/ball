@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: energyMinimizer.C,v 1.27 2004/05/27 19:49:59 oliver Exp $
+// $Id: energyMinimizer.C,v 1.28 2005/01/24 17:22:10 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
@@ -62,7 +62,9 @@ namespace BALL
 			same_energy_counter_(0),
 			maximum_displacement_(0.0F),
 			force_update_counter_(0),
-			energy_update_counter_(0)
+			energy_update_counter_(0),
+			abort_by_energy_enabled_(true),
+			abort_energy_(1000000000.0)
 	{
 	}
 
@@ -90,7 +92,9 @@ namespace BALL
 			same_energy_counter_(energy_minimizer.same_energy_counter_),
 			maximum_displacement_(energy_minimizer.maximum_displacement_),
 			force_update_counter_(energy_minimizer.force_update_counter_),
-			energy_update_counter_(energy_minimizer.energy_update_counter_)
+			energy_update_counter_(energy_minimizer.energy_update_counter_),
+			abort_by_energy_enabled_(energy_minimizer.abort_by_energy_enabled_),
+			abort_energy_(energy_minimizer.abort_energy_)
 	{
 	}
 
@@ -116,6 +120,8 @@ namespace BALL
 			maximum_displacement_         = energy_minimizer.maximum_displacement_;
       force_update_counter_         = energy_minimizer.force_update_counter_;
       energy_update_counter_        = energy_minimizer.energy_update_counter_;
+			abort_by_energy_enabled_      = energy_minimizer.abort_by_energy_enabled_;
+			abort_energy_ 								= energy_minimizer.abort_energy_;
 	
 		}
 
@@ -581,4 +587,24 @@ namespace BALL
 			&& (energy_update_counter_ == energy_minimizer.energy_update_counter_));
 	}
 
+	void EnergyMinimizer::enableEnergyAbortCondition(bool state)
+	{
+		abort_by_energy_enabled_ = state;
+	}
+
+	bool EnergyMinimizer::energyAbortConditionEnabled() const
+	{
+		return abort_by_energy_enabled_;
+	}
+
+	void EnergyMinimizer::setEnergyToAbort(float value)
+	{
+		abort_energy_ = value;
+	}
+		
+	float EnergyMinimizer::getEnergyToAbort() const
+	{
+		return abort_energy_;
+	}
+		
 } // namespace Ball

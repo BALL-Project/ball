@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.C,v 1.34 2004/11/07 08:25:36 oliver Exp $
+// $Id: conjugateGradient.C,v 1.35 2005/01/24 17:22:09 amoll Exp $
 //
 // Minimize the potential energy of a system using a nonlinear conjugate 
 // gradient method with  line search
@@ -701,6 +701,21 @@ namespace BALL
 			// increment iteration counter, take snapshots, print energy,
 			// update pair lists, and check the same-energy counter
 			finishIteration();
+
+			if (Maths::isNan(force_field_->getEnergy())) return false;
+
+			if (Maths::isNan(getGradient().rbegin()->x) ||
+			    Maths::isNan(getGradient().rbegin()->y) ||
+			    Maths::isNan(getGradient().rbegin()->z)) 
+			{
+				return false;
+			}
+
+			if (abort_by_energy_enabled_)
+			{
+				if (force_field_->getEnergy() > abort_energy_) return false;
+			}
+
 		}	
 
 		return converged;

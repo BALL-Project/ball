@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: canonicalMD.C,v 1.20 2005/01/24 16:02:59 amoll Exp $
+// $Id: canonicalMD.C,v 1.21 2005/01/24 17:22:09 amoll Exp $
 
 #include <BALL/MOLMEC/MDSIMULATION/canonicalMD.h>
 #include <BALL/MOLMEC/COMMON/atomVector.h>
@@ -185,7 +185,7 @@ namespace BALL
 	// It runs for the indicated number of iterations           
   // restart=true means that the counting of iterations is started with the end
   // value of the previous run
-	void CanonicalMD::simulateIterations(Size iterations, bool restart)
+	bool CanonicalMD::simulateIterations(Size iterations, bool restart)
 		throw()
 	{
 		// local variables
@@ -224,7 +224,7 @@ namespace BALL
 		{
 			Log.error() << "CanonicalMD::simulateIterations(): "
 									<< "MD simulation not possible, class is not valid." << std::endl;
-			return;
+			return false;
 		}
 
 		// pre-calculate some needed factors
@@ -339,11 +339,15 @@ namespace BALL
 				snapshot_manager_ptr_->takeSnapShot ();
 			}
 
-			if (Maths::isNan(force_field_ptr_->getEnergy())) return;
+			if (Maths::isNan(force_field_ptr_->getEnergy())) return false;
 
 			if (abort_by_energy_enabled_)
 			{
-				if (force_field_ptr_->getEnergy() > abort_energy_) return;
+				if (force_field_ptr_->getEnergy() > abort_energy_ ||
+						force_field_ptr_->getEnergy() < abort_energy_) 
+				{
+					return false;
+				}
 			}
 
 		}	// next iteration 
@@ -355,6 +359,7 @@ namespace BALL
 
 		force_field_ptr_->updateEnergy();
 		updateInstantaneousTemperature();
+		return true;
 	}	// end of simulateIterations() 
 
 }	// end of namespace Ball

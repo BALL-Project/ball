@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: steepestDescent.C,v 1.25 2004/04/20 11:40:45 amoll Exp $
+// $Id: steepestDescent.C,v 1.26 2005/01/24 17:22:10 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MINIMIZATION/steepestDescent.h>
@@ -193,6 +193,21 @@ namespace BALL
 			
 			// End of this iteration: increment iteration counter, update pairlists etc.
 			finishIteration();
+
+			if (Maths::isNan(force_field_->getEnergy())) return false;
+
+			if (Maths::isNan(getGradient().rbegin()->x) ||
+			    Maths::isNan(getGradient().rbegin()->y) ||
+			    Maths::isNan(getGradient().rbegin()->z)) 
+			{
+				return false;
+			}
+
+			if (abort_by_energy_enabled_)
+			{
+				if (force_field_->getEnergy() > abort_energy_) return false;
+			}
+
 		}
 		
 		return converged;
