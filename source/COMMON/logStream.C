@@ -1,4 +1,4 @@
-// $Id: logStream.C,v 1.13 2000/01/10 15:51:09 oliver Exp $
+// $Id: logStream.C,v 1.14 2000/05/24 00:05:34 amoll Exp $
 
 #include <BALL/COMMON/logStream.h>
 #include <BALL/CONCEPT/notification.h>
@@ -490,6 +490,58 @@ namespace BALL
 		}
 
 		return count;
+	}
+
+	string LogStream::getLineText(Index index) const
+	{
+		if ((signed)getNumberOfLines() < index)
+		{
+			return "";
+		}
+
+		LogStream*	non_const_this = const_cast<LogStream*>(this);
+
+		if (non_const_this->rdbuf() == 0)
+		{
+			return "";
+		}
+
+		return non_const_this->rdbuf()->loglines_[index].text;	
+	}
+
+	int LogStream::getLineLevel(Index index) const
+	{
+		if ((signed)getNumberOfLines() < index)
+		{
+			return 0;
+		}
+
+		LogStream*	non_const_this = const_cast<LogStream*>(this);
+
+		if (non_const_this->rdbuf() == 0)
+		{
+			return 0;
+		}
+
+		return non_const_this->rdbuf()->loglines_[index].level;	
+	}
+
+
+	time_t LogStream::getLineTime(Index index) const
+	{
+		if ((signed)getNumberOfLines() < index)
+		{
+			return 0;
+		}
+
+		LogStream*	non_const_this = const_cast<LogStream*>(this);
+
+		if (non_const_this->rdbuf() == 0)
+		{
+			return 0;
+		}
+
+		return non_const_this->rdbuf()->loglines_[index].time;	
 	}
 
 	// global default logstream
