@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControlPreferences.C,v 1.11 2004/09/02 15:09:24 amoll Exp $
+// $Id: mainControlPreferences.C,v 1.12 2004/09/28 21:41:05 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/mainControlPreferences.h>
@@ -18,10 +18,13 @@ namespace BALL
 
 MainControlPreferences::MainControlPreferences(QWidget* parent, const char* name, WFlags fl)
 	throw()
-	: MainControlPreferencesData(parent, name, fl)
+	: MainControlPreferencesData(parent, name, fl),
+		PreferencesEntry()
 {
-	style_box_->setEditable(false);
 	style_box_->insertStringList(QStyleFactory::keys());
+	registerObject_(style_box_);
+	registerObject_(show_labels);
+	registerObject_(logging_to_file);
 }
 
 MainControlPreferences::~MainControlPreferences()
@@ -38,34 +41,6 @@ QStyle* MainControlPreferences::getStyle()
 {
 	QStyle* new_style = QStyleFactory::create(style_box_->currentText());			
 	return new_style;
-}
-
-void MainControlPreferences::fetchPreferences(INIFile& inifile)
-	throw()
-{
-	String style = "platinum";
-	if (inifile.hasEntry("WINDOWS", "style"))
-	{
-		style = inifile.getValue("WINDOWS", "style");
-	}
-	if (QStyleFactory::keys().grep(style.c_str()).size() > 0)
-	{
-		style_box_->setCurrentText(*QStyleFactory::keys().grep(style.c_str()).begin());
-	}
-	if (inifile.hasEntry("WINDOWS", "DockWindows::show_labels"))
-	{
-		BALL_VIEW_DOCKWINDOWS_SHOW_LABELS = inifile.getValue("WINDOWS", "DockWindows::show_labels").toUnsignedInt();
-	}
-	show_labels->setChecked(BALL_VIEW_DOCKWINDOWS_SHOW_LABELS);
-}
-
-void MainControlPreferences::writePreferences(INIFile& inifile)
-	throw()
-{
-	// save the style settings
-	String style = style_box_->currentText().ascii();
-	inifile.insertValue("WINDOWS", "style", style);
-	inifile.insertValue("WINDOWS", "DockWindows::show_labels", String(BALL_VIEW_DOCKWINDOWS_SHOW_LABELS));
 }
 
 bool MainControlPreferences::showLabelsEnabled() const

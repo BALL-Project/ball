@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.h,v 1.20 2004/09/28 17:35:52 amoll Exp $
+// $Id: modelSettingsDialog.h,v 1.21 2004/09/28 21:40:10 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MODELSETTINGSDIALOG_H
@@ -241,12 +241,6 @@ namespace BALL
 				throw();
 
 			void setLabelText_(QLabel* label, const QSlider* const from)
-				throw();
-
-			void fetchPreference_(const INIFile& inifile, const String& entry, QSlider& slider)
-				throw();
-
-			void writePreference_(INIFile& inifile, const String& entry, const QSlider& slider) const
 				throw();
 		};
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.C,v 1.28 2004/09/28 17:36:32 amoll Exp $
+// $Id: modelSettingsDialog.C,v 1.29 2004/09/28 21:41:05 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modelSettingsDialog.h>
@@ -57,7 +57,7 @@ namespace BALL
 			registerObject_(cartoon_dna_helix_radius_slider);
 			registerObject_(cartoon_dna_ladder_radius_slider);
 			registerObject_(cartoon_dna_base_radius_slider);
-			registerObject_(cartoon_dna_wac);
+			registerObject_(dna_cartoon_model_type);
 			
 			registerObject_(force_scaling_slider);
 			registerObject_(force_max_length_slider);

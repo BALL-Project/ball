@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControlPreferences.h,v 1.12 2004/05/27 19:49:48 oliver Exp $
+// $Id: mainControlPreferences.h,v 1.13 2004/09/28 21:40:09 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MAINCONTROLPREFERENCES_H
@@ -12,6 +12,10 @@
 #endif
 
 #include <BALL/VIEW/UIC/mainControlPreferencesData.h>
+
+#ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY
+# include <BALL/VIEW/KERNEL/preferencesEntry.h>
+#endif
 
 namespace BALL
 {
@@ -26,7 +30,8 @@ namespace BALL
 		\ingroup ViewDialogs
 */
 class BALL_EXPORT MainControlPreferences 
-	: public MainControlPreferencesData
+	: public MainControlPreferencesData,
+		public PreferencesEntry
 {
 	Q_OBJECT
 
@@ -75,22 +80,6 @@ class BALL_EXPORT MainControlPreferences
 
 	///
 	bool loggingToFileEnabled() const
-		throw();
-	
-	/** Fetch the preferences (the style) from the INIFile <tt>inifile</tt>.
-			This method will be called from MainControl::fetchPreferences.
-			\param  inifile the INIFile that contains the needed information
-			\see    writePreferences
-	*/
-	void fetchPreferences(INIFile &inifile)
-		throw();
-
-		/** Write the preferences (the style) to the INIFile <tt>inifile</tt>.
-				This method will be called from MainControl::writePreferences.
-				\param  inifile the INIFile to be written into
-				\see    fetchPreferences
-	*/
-	void writePreferences(INIFile &inifile)
 		throw();
 	//@}
 };

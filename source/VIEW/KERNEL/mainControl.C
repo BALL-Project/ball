@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.106 2004/09/16 13:15:25 amoll Exp $
+// $Id: mainControl.C,v 1.107 2004/09/28 21:41:05 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -853,7 +853,7 @@ namespace BALL
 			// the default preferences tab (if existent)
 			if (main_control_preferences_ != 0)
 			{
-				main_control_preferences_->fetchPreferences(inifile);
+				main_control_preferences_->readPreferenceEntries(inifile);
 			}
 
 			restoreWindows(inifile);
@@ -891,7 +891,7 @@ namespace BALL
 			// the default preferences tab (if existent)
 			if (main_control_preferences_ != 0)
 			{
-				main_control_preferences_->writePreferences(inifile);
+				main_control_preferences_->writePreferenceEntries(inifile);
 			}
 			
 			inifile.write();

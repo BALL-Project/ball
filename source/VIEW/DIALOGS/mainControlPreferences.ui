@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>MainControlPreferencesData</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>437</width>
-            <height>273</height>
+            <width>651</width>
+            <height>406</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -35,23 +35,23 @@
     <property name="caption">
         <string>MainControlPreferences</string>
     </property>
-    <widget class="QCheckBox">
+    <widget class="QLabel">
         <property name="name">
-            <cstring>show_labels</cstring>
+            <cstring>textLabel2</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>23</x>
-                <y>74</y>
-                <width>229</width>
-                <height>21</height>
+                <x>24</x>
+                <y>10</y>
+                <width>250</width>
+                <height>17</height>
             </rect>
         </property>
         <property name="text">
-            <string>show labels in docked widgets</string>
+            <string>GUI Style</string>
         </property>
-        <property name="checked">
-            <bool>true</bool>
+        <property name="alignment">
+            <set>AlignCenter</set>
         </property>
     </widget>
     <widget class="QComboBox">
@@ -75,23 +75,23 @@
             </sizepolicy>
         </property>
     </widget>
-    <widget class="QLabel">
+    <widget class="QCheckBox">
         <property name="name">
-            <cstring>textLabel2</cstring>
+            <cstring>show_labels</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>24</x>
-                <y>10</y>
-                <width>250</width>
-                <height>17</height>
+                <x>23</x>
+                <y>74</y>
+                <width>351</width>
+                <height>21</height>
             </rect>
         </property>
         <property name="text">
-            <string>GUI Style</string>
+            <string>show labels in docked widgets</string>
         </property>
-        <property name="alignment">
-            <set>AlignCenter</set>
+        <property name="checked">
+            <bool>true</bool>
         </property>
     </widget>
     <widget class="QCheckBox">
@@ -102,7 +102,7 @@
             <rect>
                 <x>25</x>
                 <y>131</y>
-                <width>240</width>
+                <width>356</width>
                 <height>21</height>
             </rect>
         </property>
