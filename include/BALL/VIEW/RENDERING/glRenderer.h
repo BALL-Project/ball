@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.27.2.7 2005/01/17 00:08:30 amoll Exp $
+// $Id: glRenderer.h,v 1.27.2.8 2005/01/17 17:20:59 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -262,6 +262,15 @@ namespace BALL
 			///
 			bool vertexBuffersEnabled() const;
 
+			///
+			bool pixelBuffersEnabled() const;
+
+			///
+			bool storeScreenToBuffer();
+
+			///
+			bool restoreScreenFromBuffer();
+
 			//@}
 			// protected:
 
@@ -421,10 +430,12 @@ namespace BALL
 			Vector3 								normal_vector_;
 			ColorRGBA 							dummy_color_;
 			const ColorRGBA* 				last_color_;
+			unsigned int 						screen_buffer_;
 
 			StereoMode stereo_;
 			RenderMode render_mode_;
 			bool use_vertex_buffer_;
+			bool use_pixel_buffer_;
 		};
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS

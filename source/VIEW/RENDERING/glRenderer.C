@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.57.2.15 2005/01/17 17:16:35 amoll Exp $
+// $Id: glRenderer.C,v 1.57.2.16 2005/01/17 17:20:57 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -60,6 +60,7 @@ namespace BALL
 #endif
 
 #ifdef GL_EXT_pixel_buffer_object
+logString(String("#~~#   2 ") + String( )                        + "             " + __FILE__ + "  " + String(__LINE__));
 			use_pixel_buffer_ = true;
 #endif
 		}
@@ -1523,17 +1524,23 @@ Log.error() << "drawlislistt" << std::endl;
 			return false;
 		#else
 			if (use_pixel_buffer_ == false) return false;
-
+Log.error() << __LINE__ << std::endl;
 			if (screen_buffer_ != 0)
 			{
 				glDeleteBuffersARB(1, &screen_buffer_);
 			}
+Log.error() << __LINE__ << std::endl;
 			glGenBuffersARB(1, &screen_buffer_);
+Log.error() << __LINE__ << std::endl;
 			Size size = (Size)(width_ * height_ * 4);
 			glReadBuffer(GL_FRONT);
+Log.error() << __LINE__ << std::endl;
 			glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_EXT, screen_buffer_);
+Log.error() << __LINE__ << std::endl;
 			glReadPixels(0, 0, (Size)width_, (Size)height_, GL_BGRA, GL_UNSIGNED_BYTE, 0);
+Log.error() << __LINE__ << std::endl;
 			glBufferDataARB(GL_PIXEL_UNPACK_BUFFER_EXT, size, NULL, GL_STATIC_READ);
+Log.error() << __LINE__ << std::endl;
 		#endif
 
 		return true;
@@ -1548,9 +1555,13 @@ Log.error() << "drawlislistt" << std::endl;
 
 			if (screen_buffer_ == 0) return false;
 
+Log.error() << __LINE__ << std::endl;
 			glDrawBuffer(GL_FRONT);
+Log.error() << __LINE__ << std::endl;
 			glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_EXT, screen_buffer_);
+Log.error() << __LINE__ << std::endl;
 			glDrawPixels((Size)width_, (Size)height_, GL_BGRA, GL_UNSIGNED_BYTE, 0);
+Log.error() << __LINE__ << std::endl;
 		#endif
 
 		return true;
