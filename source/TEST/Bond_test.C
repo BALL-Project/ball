@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Bond_test.C,v 1.30 2003/03/14 12:29:51 oliver Exp $
+// $Id: Bond_test.C,v 1.31 2003/06/26 12:45:00 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -15,7 +15,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(Bond, "$Id: Bond_test.C,v 1.30 2003/03/14 12:29:51 oliver Exp $")
+START_TEST(Bond, "$Id: Bond_test.C,v 1.31 2003/06/26 12:45:00 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -28,16 +28,16 @@ using namespace RTTI;
 	
 Bond*	b;
 
-CHECK(Bond())
+CHECK(Bond() throw())
 	b = new Bond;
 	TEST_NOT_EQUAL(b, 0)
 RESULT											
 
-CHECK(~Bond())
+CHECK(~Bond() throw())
 	delete b;
 RESULT
 
-CHECK(Bond(const Bond& bond, bool deep = true))
+CHECK(Bond(const Bond& bond, bool deep = true) throw())
 	Atom a1;
 	Atom a2;
 	Bond b1, b2;
@@ -47,20 +47,18 @@ CHECK(Bond(const Bond& bond, bool deep = true))
 	TEST_EQUAL(b1.getFirstAtom(), &a2);
 RESULT		
 
-CHECK(Bond(String&, Atom&, Atom&, Order, Type))
+CHECK(Bond(const String& name, Atom& first, Atom& second, Order order = BALL_BOND_DEFAULT_ORDER, Type type = BALL_BOND_DEFAULT_TYPE) throw(TooManyBonds))
 	Atom a1;
 	Atom a2;
-	Bond& b1 = *new Bond("name", a1, a2, 1, 2);
-	TEST_NOT_EQUAL(&b1, 0)
+	Bond b1("name", a1, a2, 1, 2);
 	TEST_EQUAL(b1.getName(), "name")
 	TEST_EQUAL(b1.getFirstAtom(), &a1)
 	TEST_EQUAL(b1.getSecondAtom(), &a2)
 	TEST_EQUAL(b1.getOrder(), 1)
 	TEST_EQUAL(b1.getType(), 2)
-	delete &b1;
 RESULT
 
-CHECK(createBond(Bond&, Atom&, Atom&))
+CHECK(static Bond* createBond(Bond& bond, Atom& first, Atom& second) throw(TooManyBonds))
 	Atom a1;
 	Atom a2;
 	Atom a3;
@@ -107,7 +105,7 @@ CHECK(createBond(Bond&, Atom&, Atom&))
 	atoms[0].destroyBonds();
 RESULT
 
-CHECK(clear())
+CHECK(void clear() throw())
 	Atom a1;
 	Atom a2;
 	Bond b1("bond", a1, a2);
@@ -121,7 +119,7 @@ CHECK(clear())
 	TEST_EQUAL(b1.getType(), Bond::TYPE__UNKNOWN)
 RESULT
 
-CHECK(destroy())
+CHECK(void destroy() throw())
 	Atom a1;
 	Atom a2;
 	Bond b1("bond", a1, a2);
@@ -130,7 +128,7 @@ CHECK(destroy())
 	TEST_EQUAL(a2.countBonds(), 0)
 RESULT
 
-CHECK(operator = (Bond&))
+CHECK(Bond& operator = (const Bond& bond) throw())
 	Atom a1;
 	Atom a2;
 	Bond b1("bond", a1, a2), b2;
@@ -152,7 +150,7 @@ CHECK(operator = (Bond&))
 	b2.setSecondAtom(0);
 RESULT
 
-CHECK(swap())
+CHECK(void swap(Bond& bond) throw())
 	Atom a1, a2;
 	Atom a3, a4;
 	Bond b1("bond1", a1, a2), b2;
@@ -193,13 +191,13 @@ CHECK(swap())
 	b4.setSecondAtom(0);
 RESULT
 
-CHECK(setFirstAtom(Atom*))
+CHECK(void setFirstAtom(Atom* atom) throw())
 	Atom a1;
 	Bond b1;
 	b1.setFirstAtom(&a1);
 RESULT
 
-CHECK(getFirstAtom())
+CHECK(const Atom* getFirstAtom() const throw())
 	Atom a1;
 	Atom a2;
 	Bond b1;
@@ -209,20 +207,13 @@ CHECK(getFirstAtom())
 	TEST_EQUAL(b1.getFirstAtom(), &a2);
 RESULT
 
-CHECK(getFirstAtom() const)
-	Atom a1;
-	Atom a2;
-	const Bond b1("bond", a1, a2);
-	TEST_EQUAL(b1.getFirstAtom(), &a1);
-RESULT
-
-CHECK(setSecond(Atom*))
+CHECK(void setSecondAtom(Atom* atom) throw())
 	Atom a1;
 	Bond b1;
 	b1.setSecondAtom(&a1);
 RESULT
 
-CHECK(getSecondAtom())
+CHECK(const Atom* getSecondAtom() const throw())
 	Atom a1;
 	Atom a2;
 	Bond b1;
@@ -232,20 +223,13 @@ CHECK(getSecondAtom())
 	TEST_EQUAL(b1.getSecondAtom(), &a2);
 RESULT
 
-CHECK(getSecondAtom() const)
-	Atom a1;
-	Atom a2;
-	const Bond* b1 = new Bond("bond", a1, a2);
-	TEST_EQUAL(b1->getSecondAtom(), &a2);
-RESULT
-
-CHECK(setName(String&))
+CHECK(void setName(const String& name) throw())
 	Bond b1;
 	b1.setName("abc");
 	b1.setName("");
 RESULT
 
-CHECK(getName())
+CHECK(const String& getName() const throw())
 	Bond b1;
 	b1.setName("abc");
 	TEST_EQUAL(b1.getName(), "abc")
@@ -253,13 +237,13 @@ CHECK(getName())
 	TEST_EQUAL(b1.getName(), "")
 RESULT
 
-CHECK(setOrder(Order))
+CHECK(void setOrder(Order bond_order) throw())
 	Bond b1;
 	b1.setOrder(0);
 	b1.setOrder(1);
 RESULT
 
-CHECK(getOrder())
+CHECK(Order getOrder() const throw())
 	Bond b1;
 	b1.setOrder(1);
 	TEST_EQUAL(b1.getOrder(), 1)
@@ -267,13 +251,13 @@ CHECK(getOrder())
 	TEST_EQUAL(b1.getOrder(), 0)
 RESULT
 
-CHECK(setType(Type))
+CHECK(void setType(Type bond_type) throw())
 	Bond b1;
 	b1.setType(0);
 	b1.setType(1);
 RESULT
 
-CHECK(getType())
+CHECK(Type getType() const throw())
 	Bond b1;
 	b1.setType(1);
 	TEST_EQUAL(b1.getType(), 1)
@@ -281,7 +265,7 @@ CHECK(getType())
 	TEST_EQUAL(b1.getType(), 0)
 RESULT
 
-CHECK(getLength())
+CHECK(float getLength() const throw(NotBound))
 	Atom a1;
 	Atom a2;
 	a1.setPosition(Vector3(1.0, 1.0, 1.0));
@@ -296,7 +280,7 @@ CHECK(getLength())
 	TEST_REAL_EQUAL(b2.getLength(), ::sqrt(3.0))
 RESULT
 
-CHECK(getBoundAtom(Atom&) const )
+CHECK(const Atom* getBoundAtom(const Atom& atom) const throw())
 	Atom a1, a2;
 	a2.setCharge(0.1);
 	Bond b1("bond", a1, a2);
@@ -304,7 +288,7 @@ CHECK(getBoundAtom(Atom&) const )
 	TEST_REAL_EQUAL(a3->getCharge(), 0.1)
 RESULT
 
-CHECK(isBondOf(Atom&))
+CHECK(bool isBondOf(const Atom& atom) const throw())
 	Atom a1, a2, a3;
 	Bond b1("bond", a1, a2);
 	TEST_EQUAL(b1.isBondOf(a1), true)
@@ -312,14 +296,14 @@ CHECK(isBondOf(Atom&))
 	TEST_EQUAL(b1.isBondOf(a3), false)
 RESULT
 
-CHECK(isBound())
+CHECK(bool isBound() const throw())
 	Atom a1, a2, a3;
 	Bond b1("bond", a1, a2);
 	TEST_EQUAL(b1.isBound(), true)
 	TEST_EQUAL(b1.isBondOf(a3), false)
 RESULT
 
-CHECK(isInterBond())
+CHECK(bool isInterBond() const throw())
 	Fragment f("F1");
 	Atom a1, a2, a3, a4;
 	f.append(a1);
@@ -343,7 +327,7 @@ CHECK(isInterBond())
 	TEST_EQUAL(b4.isInterBond(), false)
 RESULT
 
-CHECK(isInterBondOf(AtomContainer&) const)
+CHECK(bool isInterBondOf(const AtomContainer& atom_container) const throw())
 	Fragment f("F1");
 	Fragment f2("F2");
 	Atom a1, a2, a3, a4;
@@ -359,26 +343,7 @@ CHECK(isInterBondOf(AtomContainer&) const)
 	TEST_EQUAL(b3.isInterBondOf(f), true)
 RESULT
 
-CHECK(isInterBondOf(System& system) const)
-	Molecule m("m1");
-	System s("S1");
-	Molecule m2("m2");
-	System s2("S2");
-	Atom a1, a2, a3, a4;
-	m.append(a1);
-	m.append(a2);
-	m2.append(a3);
-	m2.append(a4);
-	Bond b1("bond1", a1, a2);
-	s.append(m);
-	TEST_EQUAL(b1.isInterBondOf(s), false)
-	Bond b2("bond2", a3, a4);
-	TEST_EQUAL(b2.isInterBondOf(s), false)
-	Bond b3("bond3", a1, a3);
-	TEST_EQUAL(b3.isInterBondOf(s), true)
-RESULT
-
-CHECK(isIntraBond())
+CHECK(bool isIntraBond() const throw())
 	Fragment f("F1");
 	Atom a1, a2, a3, a4;
 	f.append(a1);
@@ -393,7 +358,7 @@ CHECK(isIntraBond())
 	TEST_EQUAL(b3.isIntraBond(), false)
 RESULT
 
-CHECK(isIntraBondOf(AtomContainer&))
+CHECK(bool isIntraBondOf(const AtomContainer& atom_container) const throw())
 	Fragment f("F1");
 	Fragment f2("F2");
 	Atom a1, a2, a3, a4;
@@ -409,29 +374,13 @@ CHECK(isIntraBondOf(AtomContainer&))
 	TEST_EQUAL(b3.isIntraBondOf(f), false)
 RESULT
 
-CHECK(isIntraBondOf(AtomContainer&) const)
-	Fragment f("F1");
-	Fragment f2("F2");
-	Atom a1, a2, a3, a4;
-	f.append(a1);
-	f.append(a2);
-	f2.append(a3);
-	f2.append(a4);
-	Bond b1("bond1", a1, a2);
-	TEST_EQUAL(b1.isIntraBondOf(f), true)
-	Bond b2("bond2", a3, a4);
-	TEST_EQUAL(b2.isIntraBondOf(f), false)
-	Bond b3("bond3", a1, a3);
-	TEST_EQUAL(b3.isIntraBondOf(f), false)
-RESULT
-
-CHECK(isValid())
+CHECK(bool isValid() const throw())
 	Atom a1, a2;
 	Bond b1("bond", a1, a2);
 	TEST_EQUAL(b1.isValid(), true)
 RESULT
 
-CHECK(dump(ostream&, Size))
+CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw())
 	Atom a1;
 	Atom a2;
 	a1.setName("a1");
@@ -447,7 +396,7 @@ CHECK(dump(ostream&, Size))
 	TEST_FILE_REGEXP(filename.c_str(), "data/Bond_test.txt")
 RESULT
 
-CHECK(finalize())
+CHECK(void finalize() throw(Exception::GeneralException))
 	Atom a1;
 	Atom a2;
 	Atom a3;
@@ -473,20 +422,19 @@ using namespace RTTI;
 pm.registerClass(getStreamName<Bond>(), Bond::createDefault);
 pm.registerClass(getStreamName<Atom>(), Atom::createDefault);
 NEW_TMP_FILE(filename)
-CHECK(persistentWrite(PersistenceManager&, String, bool))
+CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const throw(Exception::GeneralException))
 	std::ofstream	ofile(filename.c_str(), std::ios::out);
 	Atom a1;
 	a1.setName("a1");
 	Atom a2;
 	a2.setName("a2");
-	Bond* f1 = new Bond("name1", a1, a2);
+	Bond f1("name1", a1, a2);
 	pm.setOstream(ofile);
-	*f1 >> pm;
+	f1 >> pm;
 	ofile.close();
-	delete f1;
 RESULT
 
-CHECK(persistentRead(PersistenceManager&))
+CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralException))
 	std::ifstream	ifile(filename.c_str());
 	pm.setIstream(ifile);
 	PersistentObject*	ptr = pm.readObject();
@@ -514,7 +462,7 @@ CHECK(persistentRead(PersistenceManager&))
 	}
 RESULT
 
-CHECK(operator ==)
+CHECK(bool operator == (const Bond& bond) const throw())
 	Atom a1, a2, a3;
 	Bond b1("test", a1, a2);
 	Bond b2("test", a1, a2);
@@ -522,12 +470,47 @@ CHECK(operator ==)
 	TEST_EQUAL(b1 == b1, true)
 RESULT
 
-CHECK(operator !=)
+CHECK(bool operator != (const Bond& bond) const throw())
 	Atom a1, a2, a3;
 	Bond b1("test", a1, a2);
 	Bond b2("test", a1, a2);
 	TEST_EQUAL(b1 != b2, true)
 	TEST_EQUAL(b1 != b1, false)
+RESULT
+
+CHECK(Atom* getPartner(const Atom& atom) const throw())
+	Atom a1, a2, a3;
+	Bond b1("test", a1, a2);
+	TEST_EQUAL(b1.getPartner(a1), &a2)
+	TEST_EQUAL(b1.getPartner(a2), &a1)
+	TEST_EQUAL(b1.getPartner(a3), 0)
+RESULT
+
+CHECK(BALL_CREATE_DEEP(Bond))
+	Atom a1, a2, a3;
+	Bond b1("test", a1, a2);
+	Bond b2 = *(Bond*)b1.create(false, true);
+	Bond empty;
+	TEST_EQUAL(b2.getName(), "")
+	TEST_EQUAL(b2.getFirstAtom(), 0)
+	TEST_EQUAL(b2.getSecondAtom(), 0)
+	b2 = *(Bond*) b1.create();
+	TEST_EQUAL(b2.getName(), "test")
+	TEST_EQUAL(b2.getFirstAtom(), &a1)
+	TEST_EQUAL(b2.getSecondAtom(), &a2)
+RESULT
+
+CHECK(NotBound(const char* file, int line) throw())
+	TEST_EXCEPTION(Bond::NotBound, throw(Bond::NotBound(__FILE__, __LINE__)))
+RESULT
+
+CHECK(TooManyBonds(const char* file, int line) throw())
+	TEST_EXCEPTION(Bond::TooManyBonds, throw(Bond::TooManyBonds(__FILE__, __LINE__)));
+RESULT
+
+CHECK(TooManyBonds(const char* file, int line, const Atom& atom1, const Atom& atom2) throw())
+	Atom a,b;
+	TEST_EXCEPTION(Bond::TooManyBonds, throw(Bond::TooManyBonds(__FILE__, __LINE__, a,b)))
 RESULT
 
 /////////////////////////////////////////////////////////////
