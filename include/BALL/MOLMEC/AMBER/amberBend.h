@@ -1,4 +1,4 @@
-// $Id: amberBend.h,v 1.5 2000/02/14 22:43:54 oliver Exp $
+// $Id: amberBend.h,v 1.6 2000/03/26 12:45:41 oliver Exp $
 // Molecular Mechanics: Amber force field, bond stretch component
 
 #ifndef BALL_MOLMEC_AMBER_AMBERBEND_H
@@ -67,7 +67,7 @@ namespace BALL
 
 		/**	Calculates and returns the component's energy.
 		*/
-		virtual float updateEnergy();
+		virtual double updateEnergy();
 
 		/**	Calculates and returns the component's forces.
 		*/
