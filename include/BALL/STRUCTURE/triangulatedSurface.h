@@ -1,4 +1,4 @@
-// $Id: triangulatedSurface.h,v 1.12 2001/01/10 14:50:10 strobel Exp $
+// $Id: triangulatedSurface.h,v 1.13 2001/01/22 13:22:52 oliver Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATEDSURFACE_H
 #define BALL_STRUCTURE_TRIANGULATEDSURFACE_H
@@ -129,26 +129,26 @@ namespace BALL
 				@param triangulatedSurface the TriangulatedSurface object to be copied
 				@param bool ignored - just for interface consistency
 		*/
-		TTriangulatedSurface(const TTriangulatedSurface<T>& /*surface*/, bool /* deep */ = true)
+		TTriangulatedSurface(const TTriangulatedSurface<T>& surface, bool /* deep */ = true)
 		{
-/*			std::list<Point*>::iterator p;
+			std::list<Point*>::const_iterator p;
 			for (p = surface.points.begin(); p != surface.points.end(); p++)
 			{
 				Point* point = new Point(*(*p));
 				points.push_back(point);
 			}
-			std::list<Edge*>::iterator e;
+			std::list<Edge*>::const_iterator e;
 			for (e = surface.edges.begin(); e != surface.edges.end(); e++)
 			{
 				Edge* edge = new Edge(*(*e));
 				edges.push_back(edge);
 			}
-			std::list<Triangle*>::iterator t;
+			std::list<Triangle*>::const_iterator t;
 			for (t = surface.triangles.begin(); t != surface.triangles.end(); t++)
 			{
 				Triangle* triangle = new Triangle(*(*t));
 				triangles.push_back(triangle);
-			}*/
+			}
 		}
 
 		/**	Destructor.
