@@ -1,4 +1,4 @@
-// $Id: DCDFile.h,v 1.8 2001/03/21 18:09:13 anker Exp $
+// $Id: DCDFile.h,v 1.9 2001/04/04 09:38:32 anker Exp $
 
 #ifndef BALL_FORMAT_DCDFILE_H
 #define BALL_FORMAT_DCDFILE_H
@@ -60,9 +60,14 @@ namespace BALL
 			/// The number of time steps between saves
 			Size				steps_between_saves;
 
-			/** An array of 6 unuses integers (specialized versions use them, e.g. CHARMM)
+			/** BALL additional flag.
+					1 indicates that this file additionally contains atom velocities 
 			*/
-			Size 				unused_1[6];
+			Size				BALL_flag;
+
+			/** An array of 5 unuses integers (specialized versions use them, e.g. CHARMM)
+			*/
+			Size 				unused_1[5];
 
 			/// The length of one time step (in units of ???)
 			DoubleReal	time_step_length;
@@ -107,6 +112,7 @@ namespace BALL
 					number_of_coordinate_sets(0),
 					step_number_of_starting_time(1),
 					steps_between_saves(0),
+					BALL_flag(0),
 					// unused_1(),
 					time_step_length(0.0),
 					// unused_2()
@@ -142,21 +148,6 @@ namespace BALL
 				// sprintf(title, "BALL DCD export file");
 				// sprintf(title+80, "Here should be the date");
 			}
-
-			/**	@name I/O operators
-			*/
-			//@{
-
-			/*
-			// BAUSTELLE
-			friend ::std::ostream& operator << (::std::ostream& os,	const DCDHeader& header)
-				throw();
-
-			// BAUSTELLE
-			friend ::std::istream& operator >> (::std::istream& os,	DCDHeader& header)
-				throw();
-			//@}
-			*/
 
 		};
 
@@ -205,7 +196,15 @@ namespace BALL
 		//@{
 
 		/// Equality operator
-		bool operator == (const DCDFile& file)
+		bool operator == (const DCDFile& file) const
+			throw();
+
+		///
+		bool isSwappingBytes() const
+			throw();
+
+		///
+		bool hasVelocities() const
 			throw();
 
 		//@}
@@ -258,6 +257,26 @@ namespace BALL
 		virtual bool flushToDisk(const ::std::vector<SnapShot> buffer)
 			throw();
 		//@}
+		/// @name Accessors 
+		//@{
+
+		///
+		const DCDHeader& getHeader() const
+			throw();
+
+		///
+		void setHeader(const DCDHeader& header)
+			throw();
+
+		/// 
+		void enableVelocityStorage()
+			throw();
+
+		/// 
+		void disableVelocityStorage()
+			throw();
+
+		//@}
 
 		protected:
 
@@ -266,6 +285,9 @@ namespace BALL
 
 		// a flag indicating that we have to swap bytes when reading data
 		bool swap_bytes_;
+
+		// a floag indicating that this DCD file contains atom velocities
+		bool has_velocities_;
 
 	};
 } // namespace BALL
