@@ -1,15 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: parameters.h,v 1.14 2003/03/26 13:56:26 anhi Exp $
+// $Id: parameters.h,v 1.15 2003/07/03 11:36:39 amoll Exp $
 // Molecular Mechanics: general force field parameter class
 
 #ifndef BALL_FORMAT_PARAMETERS_H
 #define BALL_FORMAT_PARAMETERS_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_FORMAT_INIFILE_H
 # include <BALL/FORMAT/INIFile.h>

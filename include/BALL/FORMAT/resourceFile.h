@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: resourceFile.h,v 1.21 2003/06/11 08:08:53 oliver Exp $
+// $Id: resourceFile.h,v 1.22 2003/07/03 11:36:40 amoll Exp $
 
 #ifndef BALL_FORMAT_RESOURCEFILE_H
 #define BALL_FORMAT_RESOURCEFILE_H
@@ -20,14 +20,6 @@
 
 #ifndef BALL_CONCEPT_AUTODELETABLE_H
 #	include <BALL/CONCEPT/autoDeletable.h>
-#endif
-
-#ifndef BALL_DATATYPE_STRING_H
-#	include <BALL/DATATYPE/string.h>
-#endif
-
-#ifndef BALL_CONCEPT_PREDICATE_H
-#	include <BALL/CONCEPT/predicate.h>
 #endif
 
 #ifndef BALL_CONCEPT_PROCESSOR_H

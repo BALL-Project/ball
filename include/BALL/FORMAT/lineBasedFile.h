@@ -1,21 +1,16 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineBasedFile.h,v 1.26 2003/03/26 13:56:25 anhi Exp $
+// $Id: lineBasedFile.h,v 1.27 2003/07/03 11:36:39 amoll Exp $
 
 #ifndef BALL_FORMAT_LINEBASEDFILE_H
 #define BALL_FORMAT_LINEBASEDFILE_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_SYSTEM_FILE_H
 # include <BALL/SYSTEM/file.h>
 #endif
 
 #include <vector>
-#include <fstream>
 
 namespace BALL 
 {

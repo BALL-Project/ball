@@ -1,14 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.h,v 1.25 2003/03/26 13:56:23 anhi Exp $
+// $Id: PDBFile.h,v 1.26 2003/07/03 11:36:39 amoll Exp $
 
 #ifndef BALL_FORMAT_PDBFILE_H
 #define BALL_FORMAT_PDBFILE_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #include <list>
 
@@ -18,10 +14,6 @@
 
 #ifndef BALL_DATATYPE_QUADRUPLE_H
 #	include <BALL/DATATYPE/quadruple.h>
-#endif
-
-#ifndef BALL_DATATYPE_STRING_H
-#	include <BALL/DATATYPE/string.h>
 #endif
 
 #ifndef BALL_FORMAT_GENERICPDBFILE_H

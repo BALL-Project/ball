@@ -1,25 +1,19 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XYZFile.h,v 1.13 2003/03/26 13:56:24 anhi Exp $
+// $Id: XYZFile.h,v 1.14 2003/07/03 11:36:39 amoll Exp $
 
 #ifndef BALL_FORMAT_XYZFILE_H
 #define BALL_FORMAT_XYZFILE_H
-
-#ifndef BALL_COMMON_H
-# include <BALL/common.h>
-#endif
 
 #ifndef BALL_SYSTEM_FILE_H
 #	include <BALL/SYSTEM/file.h>
 #endif
 
-#ifndef BALL_KERNEL_SYSTEM_H
-# include <BALL/KERNEL/system.h>
-#endif
-
 namespace BALL 
 {
+	class System;
+
 	/**	XYZ file class.
 			This class enables BALL to read and write XMol XYZ files.
 			The XYZ format is a very simple molecular file format. It contains

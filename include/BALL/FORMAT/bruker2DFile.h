@@ -1,26 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bruker2DFile.h,v 1.22 2003/06/01 17:07:10 oliver Exp $
+// $Id: bruker2DFile.h,v 1.23 2003/07/03 11:36:39 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_BRUKER2DFILE_H
 #define BALL_FORMAT_BRUKER2DFILE_H
 
-#ifndef BALL_SYSTEM_FILE_H
-# include <BALL/SYSTEM/file.h>
-#endif
-
-#ifndef BALL_DATATYPE_STRING_H
-# include <BALL/DATATYPE/string.h>
-#endif
-
 #ifndef BALL_FORMAT_JCAMPFILE_H
 # include <BALL/FORMAT/JCAMPFile.h>
-#endif
-
-#ifndef BALL_DATATYPE_STRING_H
-# include <BALL/DATATYPE/string.h>
 #endif
 
 #ifndef BALL_FORMAT_JCAMPFILE_H
@@ -30,10 +18,6 @@
 #ifndef BALL_DATATYPE_REGULARDATA2D_H
 # include <BALL/DATATYPE/regularData2D.h>
 #endif
-
-#include <vector>
-#include <list>
-
 
 namespace BALL
 {

@@ -1,14 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: trajectoryFile.h,v 1.17 2003/03/26 13:56:26 anhi Exp $
+// $Id: trajectoryFile.h,v 1.18 2003/07/03 11:36:40 amoll Exp $
 
 #ifndef BALL_FORMAT_TRAJECTORYFILE_H
 #define BALL_FORMAT_TRAJECTORYFILE_H
-
-#ifndef BALL_COMMON_H
-# include <BALL/common.h>
-#endif
 
 #ifndef BALL_SYSTEM_FILE_H
 #	include <BALL/SYSTEM/file.h>

@@ -1,14 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: INIFile.h,v 1.32 2003/03/26 13:56:22 anhi Exp $
+// $Id: INIFile.h,v 1.33 2003/07/03 11:36:38 amoll Exp $
 
 #ifndef BALL_FORMAT_INIFILE_H
 #define BALL_FORMAT_INIFILE_H
-
-#ifndef BALL_COMMON_H
-# include <BALL/common.h>
-#endif
 
 #ifndef BALL_DATATYPE_STRINGHASHMAP_H
 # include <BALL/DATATYPE/stringHashMap.h>

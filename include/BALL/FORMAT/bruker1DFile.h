@@ -1,31 +1,17 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bruker1DFile.h,v 1.22 2003/06/02 14:34:22 oliver Exp $
+// $Id: bruker1DFile.h,v 1.23 2003/07/03 11:36:39 amoll Exp $
 
 #ifndef BALL_FORMAT_BRUKER1DFILE_H
 #define BALL_FORMAT_BRUKER1DFILE_H
 
-#include <vector>
-
-#ifndef BALL_SYSTEM_FILESYSTEM_H
-#       include <BALL/SYSTEM/fileSystem.h>
-#endif
-
-#ifndef BALL_SYSTEM_FILE_H
-#	include <BALL/SYSTEM/file.h>
-#endif
-
-#ifndef BALL_DATATYPE_STRING_H
-#	include <BALL/DATATYPE/string.h>
-#endif
-
 #ifndef BALL_FORMAT_JCAMPFILE_H
-#       include <BALL/FORMAT/JCAMPFile.h>
+# include <BALL/FORMAT/JCAMPFile.h>
 #endif
 
 #ifndef BALL_DATATYPE_REGULARDATA1D_H
-#       include <BALL/DATATYPE/regularData1D.h>
+# include <BALL/DATATYPE/regularData1D.h>
 #endif
 
 namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: JCAMPFile.h,v 1.15 2003/06/01 09:13:40 oliver Exp $
+// $Id: JCAMPFile.h,v 1.16 2003/07/03 11:36:38 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_JCAMPFILE_H
@@ -9,10 +9,6 @@
 
 #ifndef BALL_FORMAT_LINEBASEDFILE__H
 #	include <BALL/FORMAT/lineBasedFile.h>
-#endif
-
-#ifndef BALL_DATATYPE_STRING_H
-#	include <BALL/DATATYPE/string.h>
 #endif
 
 #ifndef BALL_DATATYPE_STRINGHASHMAP_H
