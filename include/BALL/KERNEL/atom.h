@@ -1,4 +1,4 @@
-// $Id: atom.h,v 1.39 2001/06/27 18:03:29 amoll Exp $
+// $Id: atom.h,v 1.40 2001/06/28 20:42:37 amoll Exp $
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -63,7 +63,6 @@ namespace BALL
 			eight (can be changed at compile time, see \Ref{MAX_NUMBER_OF_BONDS}).\\
 			Since \Ref{Atom} is derived from \Ref{ProperyManager}, it may contain
 			arbitrary, user-defined properties.
-
 			An atom may be inserted in a \Ref{Fragment} instance ("parent fragment").
 			The "state" of an atom is defined by its attributes:
 			\begin{itemize}
@@ -78,8 +77,7 @@ namespace BALL
 				\item "force" - the force experienced by the atom (for forcefield calculations, in units of Newton)
 				\item "bonds" - up to \Ref{MAX_NUMBER_OF_BONDS} bonds to other atoms
 			\end{itemize}
-			\\
-			{\bf Definition:} \URL{BALL/KERNEL/atom.h}\\
+			{\bf Definition:} \URL{BALL/KERNEL/atom.h} \\
 			@see Bond
 			@see Molecule
 			@see AtomContainer
