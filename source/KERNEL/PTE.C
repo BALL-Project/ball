@@ -1,4 +1,4 @@
-// $Id: PTE.C,v 1.9 2000/12/16 21:29:22 amoll Exp $
+// $Id: PTE.C,v 1.10 2001/01/21 21:03:56 amoll Exp $
 
 #include <BALL/KERNEL/PTE.h>
 
@@ -27,7 +27,7 @@ namespace BALL
 
 	Element PTE_::element_[] =
 	{
-		//Element      NAME              SYMBOL       GROUP  PERIOD NUMBER   WEIGHT      ATOMIC COV.  VDW   EN    
+	//Element    NAME                   SYMBOL       GROUP  PERIOD NUMBER   WEIGHT       ATOMIC  COV.  VDW   EN    
 		Element("Actinium",                "Ac",				 3,    7,      89,     227.0278,    1.88,  0.0,  0.0,  1.3),
 		Element("Aluminum",                "Al",        13,    3,      13,      26.981539,  1.43,  1.25, 2.05, 1.61),
 		Element("Americium",               "Am",				 0,    7,      95,     243.0614,    1.73,  0.0,  0.0,  1.3), 
@@ -452,6 +452,22 @@ namespace BALL
 		return s;
 	}
 
+	const Element& Element::operator =(const Element& element)
+		throw()
+	{
+		name_ = element.name_;
+		symbol_ = element.symbol_;
+		group_ = element.group_;
+		period_ = element.period_;
+		atomic_number_ = element.atomic_number_;
+		atomic_weight_ = element.atomic_weight_;
+		atomic_radius_ = element.atomic_radius_;
+		covalent_radius_ = element.covalent_radius_;
+		van_der_waals_radius_ = element.van_der_waals_radius_;
+		electronegativity_ = element.electronegativity_;
+
+		return *this;
+	}
 
 
 	PTE_::PTE_()
