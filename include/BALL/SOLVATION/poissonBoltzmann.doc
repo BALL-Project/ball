@@ -1,8 +1,0 @@
-// $Id: poissonBoltzmann.doc,v 1.1 2000/05/04 18:33:41 oliver Exp $
-/** Finite Difference Poisson Boltzmann Solver.
-	This class implements ....\\
-	{\bf Definition:} \URL{BALL/SOLVATION/poissonBoltzmann.h}
-	\\
-	{\bf Implementation:} \URL[source/SOLVATION/poissonBoltzmann.C]{../../source/SOLVATION/poissonBoltzmann.C}
-	\\
-*/                                                                                                                         
