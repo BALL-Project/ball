@@ -1,4 +1,4 @@
-// $Id: PiecewisePolynomial_test.C,v 1.4 2000/10/18 19:23:54 oliver Exp $
+// $Id: PiecewisePolynomial_test.C,v 1.5 2000/10/26 10:51:38 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: PiecewisePolynomial_test.C,v 1.4 2000/10/18 19:23:54 oliver Exp $")
+START_TEST(class_name, "$Id: PiecewisePolynomial_test.C,v 1.5 2000/10/26 10:51:38 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -202,10 +202,10 @@ RESULT
 CHECK(PiecewisePolynomial::getCoefficients(double x) const )
 	PiecewisePolynomial poly2;
 	poly2.setCoefficients(coefs);
-	bool test = (poly2.getCoefficients(0.5) == INVALID_COEFFICIENTS);
-	TEST_EQUAL(test, true)
+	TEST_EXCEPTION(Exception::OutOfRange, poly2.getCoefficients(0.5))
 	poly2.setIntervals(intervals);
-	test = (poly2.getCoefficients(0.5) == coefs[0]);
+	bool test = (poly2.getCoefficients(0.5) == coefs[0]);
+	TEST_EQUAL(test, true);
 	// BAUSTELLE: false
 RESULT
 
