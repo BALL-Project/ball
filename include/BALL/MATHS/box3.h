@@ -1,4 +1,4 @@
-// $Id: box3.h,v 1.16 2000/04/29 15:28:35 amoll Exp $
+// $Id: box3.h,v 1.17 2000/04/30 16:42:49 oliver Exp $
 
 #ifndef BALL_MATHS_BOX3_H
 #define BALL_MATHS_BOX3_H
@@ -77,16 +77,16 @@ namespace BALL
 		*/
 		//@{
 
-		/**	Assign from an other TBox3.
+		/**	Assign from another TBox3.
 				@param vector	the TBox3 object to assign from
 		*/
 		void set(const TBox3& box);
 
-		/**	Assign from two TVector3.
-				@param a	the TVector3 a
-				@param b	the TVector3 b
+		/**	Assign from two vectors.
+				@param lower the lower corner of the box
+				@param upper the upper corner of the box
 		*/
-		void set(const TVector3<T>& a, const TVector3<T>& b);
+		void set(const TVector3<T>& lower, const TVector3<T>& upper);
 
 		/**	Assign from six {\tt T} values.
 				@param	ax assigned to {\tt a.x}
@@ -101,13 +101,13 @@ namespace BALL
 			 const T& bx, const T& by, const T& bz);
 
 		/**	Assignment operator.
-				Assign the box components from an other TBox3.
+				Assign the box components from another TBox3.
 				@param box the TBox3 to assign from
 		**/
 		TBox3& operator = (const TBox3& box);
 
-		/**	Assign to an other TBox3.
-				Assigns the box components to an other box.
+		/**	Assign to another TBox3.
+				Assigns the box components to another box.
 				@param box	the box to be asigned to
 		*/
 		void get(TBox3& box) const;
@@ -116,7 +116,7 @@ namespace BALL
 				@param	a the first vector
 				@param	b the second vector
 		*/
-		void get(TVector3<T>& a, TVector3<T>& b) const;
+		void get(TVector3<T>& lower, TVector3<T>& upper) const;
 
 		/**	Assign to six variables of type {\tt T}.
 				@param	ax is assigned {\tt a.x}
@@ -163,7 +163,7 @@ namespace BALL
 		*/
 		T getDepth() const;
 	
-		/**	Join the box with an other.
+		/**	Join the box with another.
 				Instance is set to to the box containing
 				both, the box and a given box 
 				@param	box the box to contain
@@ -230,9 +230,9 @@ namespace BALL
 	}
 
 	template <class T>
-	TBox3<T>::TBox3(const TVector3<T>& a, const TVector3<T>& b)
-		:	a(a),
-			b(b)
+	TBox3<T>::TBox3(const TVector3<T>& lower, const TVector3<T>& upper)
+		:	a(lower),
+			b(upper)
 	{
 	}
 
@@ -255,10 +255,10 @@ namespace BALL
 
 	template <class T>
 	BALL_INLINE 
-	void TBox3<T>::set(const TVector3<T>& new_a, const TVector3<T>& new_b)
+	void TBox3<T>::set(const TVector3<T>& lower, const TVector3<T>& upper)
 	{
-		a.set(new_a);
-		b.set(new_b);
+		a.set(lower);
+		b.set(upper);
 	}
 
 	template <class T>
@@ -289,10 +289,10 @@ namespace BALL
 
 	template <class T>
 	BALL_INLINE 
-	void TBox3<T>::get(TVector3<T>& a, TVector3<T>& b) const
+	void TBox3<T>::get(TVector3<T>& lower, TVector3<T>& upper) const
 	{
-		a.set(a);
-		b.set(b);
+		lower.set(a);
+		upper.set(b);
 	}
 
 	template <class T>
