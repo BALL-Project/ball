@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.30 2004/07/13 12:45:03 amoll Exp $
+// $Id: glRenderer.C,v 1.31 2004/07/13 13:23:22 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -400,7 +400,7 @@ namespace BALL
 		void GLRenderer::renderSphere_(const Sphere& sphere)
 			throw() 
 		{
-			glPushMatrix();
+	 		glPushMatrix();
 			setColor4ub_(sphere);
 			translateVector3_(sphere.getPosition());
 			scale_(sphere.getRadius());
@@ -408,7 +408,7 @@ namespace BALL
 			GL_spheres_list_[drawing_mode_ * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 
 											 drawing_precision_].draw();
 
-			glPopMatrix();
+ 			glPopMatrix();
 		}
 
 		void GLRenderer::renderDisc_(const Disc& disc)
@@ -436,6 +436,7 @@ namespace BALL
 		void GLRenderer::renderLine_(const Line& line)
 			throw()
 		{
+			glDisable(GL_LIGHTING);
 			setColor4ub_(line);
 
 			// BAUSTELLE
@@ -445,6 +446,8 @@ namespace BALL
 				vertexVector3_(line.getVertex1());
 				vertexVector3_(line.getVertex2());
 			glEnd();
+
+			glEnable(GL_LIGHTING);
 		}
 
 

@@ -49,6 +49,4 @@ runTest("SES", 			MODEL_SE_SURFACE)
 print "Result: "+str(result)+" seconds"
 result /= nr_runs
 result = 1 / result
-#scale result
-result /= 2
 print "Result: "+str(result)+" BALLView stones"
