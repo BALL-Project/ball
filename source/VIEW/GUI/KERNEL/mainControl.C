@@ -1,4 +1,4 @@
-// $Id: mainControl.C,v 1.5 2000/10/24 20:33:56 oliver Exp $
+// $Id: mainControl.C,v 1.6 2000/11/05 14:31:38 hekl Exp $
 
 // this is required for QMenuItem
 #define INCLUDE_MENUITEM_DEF
@@ -88,22 +88,22 @@ namespace BALL
 						break;
    				case FILE_IMPORT:
 						initPopupMenu(MainControl::FILE)
-							->insertItem("&Import File", menu, FILE_IMPORT, (1 <= max_id) ? 1 : -1);
+							->insertItem("&Import File", menu, FILE_IMPORT);
 						break;
 					case EDIT:
-						menuBar()->insertItem("&Edit", menu, EDIT, (2 <= max_id) ? 2 : -1);
+						menuBar()->insertItem("&Edit", menu, EDIT, (1 <= max_id) ? 1 : -1);
 						break;
 					case BUILD:
-						menuBar()->insertItem("&Build", menu, BUILD, (3 <= max_id) ? 3 : -1);
+						menuBar()->insertItem("&Build", menu, BUILD, (2 <= max_id) ? 2 : -1);
 						break;
 					case DISPLAY:
-						menuBar()->insertItem("&Display", menu, DISPLAY, (4 <= max_id) ? 4 : -1);
+						menuBar()->insertItem("&Display", menu, DISPLAY, (3 <= max_id) ? 3 : -1);
 						break;
 					case TOOLS:
-						menuBar()->insertItem("&Tools", menu, TOOLS, (5 <= max_id) ? 5 : -1);
+						menuBar()->insertItem("&Tools", menu, TOOLS, (4 <= max_id) ? 4 : -1);
 						break;
 					case USER:
-						menuBar()->insertItem("&User", menu, USER, (6 <= max_id) ? 6 : -1);
+						menuBar()->insertItem("&User", menu, USER, (5 <= max_id) ? 5 : -1);
 						break;
 
 					case HELP:
@@ -163,6 +163,10 @@ namespace BALL
 				(*it)->checkMenu(*this);
 			}
 			
+			// own menu entries
+			insertPopupMenuSeparator(MainControl::FILE);
+			insertMenuEntry(MainControl::FILE, "E&xit", qApp, SLOT(quit()), CTRL+Key_X);	
+
 			QMainWindow::show();
 		}
 
@@ -590,6 +594,27 @@ namespace BALL
 			return -1;
 		}
 		
+		void MainControl::insertPopupMenuSeparator
+		  (int ID)
+		{
+			QMenuBar* menu_bar = menuBar();
+			if (menu_bar != 0)
+			{
+				// enable the corresponding popup menu
+				menu_bar->setItemEnabled(ID, true);
+				//
+				QPopupMenu* popup = initPopupMenu(ID);
+				if (popup == 0)
+				{
+					Log.error() << "MainControl::insertMenuEntry: cannot find popup menu for ID " << ID << endl;
+				}
+				else
+				{
+					popup->insertSeparator();
+				}
+			}
+		}
+
 		void MainControl::removeMenuEntry
 			(int /* ID */, const String& /* name */, 
 			 const QObject* /* receiver */, const char* /* slot */, 
