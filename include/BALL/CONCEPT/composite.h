@@ -1,4 +1,4 @@
-// $Id: composite.h,v 1.15 2000/03/23 20:03:33 oliver Exp $
+// $Id: composite.h,v 1.17 2000/08/24 11:58:50 amoll Exp $
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #define BALL_CONCEPT_COMPOSITE_H
@@ -80,7 +80,7 @@ namespace BALL
 		BALL_CREATE(Composite)
 
 		static UnaryProcessor<Composite> DEFAULT_PROCESSOR;
-		static UnaryPredicate<Composite> DEFAULT_UNARY_PREDICATE;
+		static KernelPredicateType DEFAULT_UNARY_PREDICATE;
 		
 		/**	@name	Construction and Destruction 
 		*/
@@ -139,7 +139,7 @@ namespace BALL
 				@param	predicate the predicate
 				@param  a pointer to the root composite ({\tt &root})
 		*/
-		void* clone(Composite& root, UnaryPredicate<Composite>& predicate) const;
+		void* clone(Composite& root, KernelPredicateType& predicate) const;
 
 		//@}		
 
@@ -165,9 +165,7 @@ namespace BALL
 
 		/**	Predicative assign a tree.
 		*/
-		void set
-			(const Composite& composite,
-			 UnaryPredicate<Composite>& predicate);
+		void set(const Composite& composite, KernelPredicateType& predicate);
 
 		/**	Regular tree assignment.
 		*/
@@ -184,9 +182,7 @@ namespace BALL
 				@param	composite the composite to be assigned to
 				@param	predicate the predicate used to decide which composites are copied
 		*/
-		void get
-			(Composite& composite,
-			 UnaryPredicate<Composite>& predicate) const;
+		void get(Composite& composite, KernelPredicateType& predicate) const;
 
 		/**	Regular assignment of a tree to another.
 				Create a deep ({\tt deep} = {\bf true}) or shallow copy of a composite
@@ -253,22 +249,7 @@ namespace BALL
 								matching composite was found up to the root of the tree
 		*/
 		template <typename T>
-		T* getAncestor(const T& /* dummy */)
-		{
-			T* T_ptr = 0;
-			
-			for (Composite* composite_ptr = parent_;
-					 composite_ptr != 0; composite_ptr = composite_ptr->parent_)
-			{
-				T_ptr = dynamic_cast<T*>(composite_ptr);
-				if (T_ptr != 0)
-				{
-					break;
-				}	
-			}
-			
-			return T_ptr;
-		}
+		T* getAncestor(const T& /* dummy */);
 
 		/**	Find the first ancestor of type T (const method).
 				This method operates also on constant trees.
@@ -276,20 +257,7 @@ namespace BALL
 								matching composite was found to the root of the tree
 		*/
 		template <class T>
-		const T* getAncestor(const T& /* dummy */) const
-		{
-			T* t_ptr = 0;
-			for (Composite* composite_ptr = parent_;
-					 composite_ptr != 0; composite_ptr = composite_ptr->parent_)
-			{
-				if ((t_ptr = dynamic_cast<T*>(composite_ptr)) != 0)
-				{
-					break;
-				}	
-			}
-			
-			return const_cast<const T*>(t_ptr);
-		}
+		const T* getAncestor(const T& /* dummy */) const;
 
 		/**	Find the nearest previous composite of type T.
 				This method walks backward in the tree from composite to composite and
@@ -298,34 +266,7 @@ namespace BALL
 								matching composite was found up to the root of the tree
 		*/
 		template <typename T>
-		T* getPrevious(const T& /* dummy */)
-		{
-			// create an iterator bound to the root of the subtree
-			SubcompositeReverseIterator it(getRoot().rbeginSubcomposite());
-
-			// set its position to the current composite
-      Composite::setCurrentPreorderIteratorPosition_
-        (Composite::getFirstPreorderIteratorPosition_(*this), it.getTraits().getPosition(), false);
- 
-
-			// walk back until we find something	
-			// or we cannot walk any further
-			do 
-			{
-				it++;
-			} 
-			while (it.isValid() && !RTTI::isKindOf<T>(*it));
-
-
-			// return a NULL pointer if nothing was found
-			Composite* ptr = 0;
-			if (+it)
-			{
-				ptr = &*it;
-			}
-			
-			return dynamic_cast<T*>(ptr);
-		}
+		T* getPrevious(const T& /* dummy */);
 
 		/**	Find the nearest previous composite of type T (const method).
 				This method walks backward in the tree from composite to composite and
@@ -334,13 +275,7 @@ namespace BALL
 								matching composite was found up to the root of the tree
 		*/
 		template <class T>
-		const T* getPrevious(const T& dummy) const
-		{
-			// cast away the constness of this and call the non-const method
-			Composite* nonconst_this = const_cast<Composite*>(this);
-
-			return const_cast<const T*>(nonconst_this->getPrevious(dummy));
-		}
+		const T* getPrevious(const T& dummy) const;
 
 		/**	Find the next composite of type T.
 				This method walks backward in the tree from composite to composite and
@@ -349,34 +284,7 @@ namespace BALL
 								matching composite was found up to the root of the tree
 		*/
 		template <typename T>
-		T* getNext(const T& /* dummy */)
-		{
-			// create an iterator bound to the root of the subtree
-			SubcompositeIterator it(getRoot().beginSubcomposite());
-
-			// set its position to the current composite
-      Composite::setCurrentPreorderIteratorPosition_
-        (Composite::getFirstPreorderIteratorPosition_(*this), it.getTraits().getPosition(), false);
- 
-
-			// walk forward until we find something	
-			// or we cannot walk any further
-			do 
-			{
-				it++;
-			} 
-			while (it.isValid() && !RTTI::isKindOf<T>(*it));
-
-
-			// return a NULL pointer if nothing was found
-			Composite* ptr = 0;
-			if (+it)
-			{
-				ptr = &*it;
-			}
-			
-			return dynamic_cast<T*>(ptr);
-		}
+		T* getNext(const T& /* dummy */);
 
 		/**	Find the next composite of type T (const method).
 				This method walks backward in the tree from composite to composite and
@@ -385,13 +293,7 @@ namespace BALL
 								matching composite was found up to the root of the tree
 		*/
 		template <class T>
-		const T* getNext(const T& dummy) const
-		{
-			// cast away the constness of this and call the non-const method
-			Composite* nonconst_this = const_cast<Composite*>(this);
-
-			return const_cast<const T*>(nonconst_this->getNext(dummy));
-		}
+		const T* getNext(const T& dummy) const;
 
 		/**	Return the composite's parent.
 				@return a pointer to the parent composite or 0 if no parent exists
@@ -421,6 +323,7 @@ namespace BALL
 				A pointer to the sibling {\tt index} positions to the right (for
 				positive values of {\tt index}) or {\tt -index} positions to the left 
 				(for negative values of {\tt index}) is returned.
+				For Index = 0 the this-pointer is returned.
 		*/
 		Composite* getSibling(Index index);
 
@@ -428,6 +331,7 @@ namespace BALL
 				A pointer to the sibling {\tt index} positions to the right (for
 				positive values of {\tt index}) or {\tt -index} positions to the left 
 				(for negative values of {\tt index}) is returned.
+				For Index = 0 the this-pointer is returned.
 		*/
 		const Composite* getSibling(Index index) const;
 
@@ -452,10 +356,15 @@ namespace BALL
 		const Composite* getLastChild() const;
 
 		/**	Expand a collapsed composite.
+				Only expanded composite subtrees are iterated.
+				@see collapse
 		*/
 		void expand();
 
 		/**	Collapse a composite.
+				Collapsed composite subtrees are ignored by iterators.
+				This is usefull for accelerating an iteration process.
+				@see expand
 		*/
 		void collapse();
 
@@ -541,10 +450,15 @@ namespace BALL
 	
 		/**	@name	Predicates */
 		//@{
-		///
+
+		/** Test if instance is expanded.
+				@see expand
+		*/
 		bool isExpanded() const;
 		
-		///
+		/** Test if instance is collapsed.
+				@see collapse
+		*/
 		bool isCollapsed() const;
 	
 		/**	Return true if the node does not contain children.
@@ -625,19 +539,13 @@ namespace BALL
 
 		///
 		template <typename T>
-		bool hasAncestor(const T& dummy ) const 
-		{
-			return (getAncestor(dummy) != 0);	
-		}
+		bool hasAncestor(const T& dummy ) const; 
 
 		///
 		bool isAncestor() const;
 
 		///
-		bool isAncestorOf(const Composite& composite) const
-		{
-			return composite.isDescendantOf(*this);
-		}
+		bool isAncestorOf(const Composite& composite) const;
 
 		///
 		bool isRelatedWith(const Composite& composite) const;
@@ -1475,7 +1383,7 @@ namespace BALL
 	
 		Size countDescendants_() const;
 
-		void clone_(Composite& parent, Composite& stack, UnaryPredicate<Composite>& predicate) const;
+		void clone_(Composite& parent, Composite& stack, KernelPredicateType& predicate) const;
 
 		// traverse forward, valid for composites and subcomposites
 		static Composite* setCurrentPreorderIteratorPosition_
@@ -1705,7 +1613,7 @@ namespace BALL
     else if (level > 0)
     {
       for (Composite* composite = first_child_;
-           composite != 0; composite_ptr = composite->next_)
+           composite != 0; composite = composite->next_)
       {
         if (composite->first_child_ != 0 && composite->applyLevelNostart_(processor, level) == false)
         {
@@ -1762,7 +1670,7 @@ namespace BALL
 			T* t_ptr = dynamic_cast<T*>(this);
 			if (!return_value && (t_ptr != 0))
 			{
-				return_value = (processor(*t_ptr) < BREAK) && processor.finish();
+				return_value = (processor(*t_ptr) < Processor::BREAK) && processor.finish();
 			} 
 		}
 		
@@ -1774,6 +1682,133 @@ namespace BALL
 	{
 		return processor.start() && applyPreorderNostart_(processor) && processor.finish();
 	}
+
+
+	template <typename T>
+	BALL_INLINE 
+	T* Composite::getAncestor(const T& /* dummy */)
+	{
+		T* T_ptr = 0;
+		
+		for (Composite* composite_ptr = parent_;
+				 composite_ptr != 0; composite_ptr = composite_ptr->parent_)
+		{
+			T_ptr = dynamic_cast<T*>(composite_ptr);
+			if (T_ptr != 0)
+			{
+				break;
+			}	
+		}
+		
+		return T_ptr;
+	}
+
+	template <class T>
+	BALL_INLINE 
+	const T* Composite::getAncestor(const T& /* dummy */) const
+	{
+		T* t_ptr = 0;
+		for (Composite* composite_ptr = parent_;
+				 composite_ptr != 0; composite_ptr = composite_ptr->parent_)
+		{
+			if ((t_ptr = dynamic_cast<T*>(composite_ptr)) != 0)
+			{
+				break;
+			}	
+		}
+		
+		return const_cast<const T*>(t_ptr);
+	}
+
+	template <typename T>
+	BALL_INLINE 
+	T* Composite::getPrevious(const T& /* dummy */)
+	{
+		// create an iterator bound to the root of the subtree
+		SubcompositeReverseIterator it(getRoot().rbeginSubcomposite());
+
+		// set its position to the current composite
+		Composite::setCurrentPreorderIteratorPosition_
+			(Composite::getFirstPreorderIteratorPosition_(*this), it.getTraits().getPosition(), false);
+
+
+		// walk back until we find something	
+		// or we cannot walk any further
+		do 
+		{
+			it++;
+		} 
+		while (it.isValid() && !RTTI::isKindOf<T>(*it));
+
+
+		// return a NULL pointer if nothing was found
+		Composite* ptr = 0;
+		if (+it)
+		{
+			ptr = &*it;
+		}
+		
+		return dynamic_cast<T*>(ptr);
+	}
+
+	template <class T>
+	BALL_INLINE 
+	const T* Composite::getPrevious(const T& dummy) const
+	{
+		// cast away the constness of this and call the non-const method
+		Composite* nonconst_this = const_cast<Composite*>(this);
+
+		return const_cast<const T*>(nonconst_this->getPrevious(dummy));
+	}
+
+	template <typename T>
+	BALL_INLINE 
+	T* Composite::getNext(const T& /* dummy */)
+	{
+		// create an iterator bound to the root of the subtree
+		SubcompositeIterator it(getRoot().beginSubcomposite());
+
+		// set its position to the current composite
+		Composite::setCurrentPreorderIteratorPosition_
+			(Composite::getFirstPreorderIteratorPosition_(*this), it.getTraits().getPosition(), false);
+
+
+		// walk forward until we find something	
+		// or we cannot walk any further
+		do 
+		{
+			it++;
+		} 
+		while (it.isValid() && !RTTI::isKindOf<T>(*it));
+
+
+		// return a NULL pointer if nothing was found
+		Composite* ptr = 0;
+		if (+it)
+		{
+			ptr = &*it;
+		}
+		
+		return dynamic_cast<T*>(ptr);
+	}
+
+	template <class T>
+	BALL_INLINE 
+	const T* Composite::getNext(const T& dummy) const
+	{
+		// cast away the constness of this and call the non-const method
+		Composite* nonconst_this = const_cast<Composite*>(this);
+
+		return const_cast<const T*>(nonconst_this->getNext(dummy));
+	}
+
+	template <typename T>
+	BALL_INLINE 
+	bool Composite::hasAncestor(const T& dummy ) const 
+	{
+		return (getAncestor(dummy) != 0);	
+	}
+
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/CONCEPT/composite.iC>

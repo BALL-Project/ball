@@ -1,4 +1,4 @@
-// $Id: property.C,v 1.10 2000/08/19 20:26:00 amoll Exp $
+// $Id: property.C,v 1.11 2000/08/22 17:03:35 amoll Exp $
 
 #include <BALL/CONCEPT/property.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -87,7 +87,7 @@ namespace BALL
 		vector<const NamedProperty>::iterator it = property_manager.named_properties_.begin();
 		for (; it != property_manager.named_properties_.end(); ++it)
 		{
-			s << it;
+			s << it << endl;
 		}
 
 		return s;

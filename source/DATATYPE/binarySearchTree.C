@@ -1,4 +1,4 @@
-// $Id: binarySearchTree.C,v 1.5 2000/08/06 18:02:10 amoll Exp $
+// $Id: binarySearchTree.C,v 1.6 2000/08/22 17:03:42 amoll Exp $
 
 #include <BALL/DATATYPE/binarySearchTree.h>
 
@@ -1099,6 +1099,8 @@ namespace BALL
 		}
 		return current_;
 	}
+
+
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/DATATYPE/binarySearchTree.iC>

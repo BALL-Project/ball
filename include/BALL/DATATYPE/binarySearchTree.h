@@ -1,4 +1,4 @@
-// $Id: binarySearchTree.h,v 1.14 2000/08/09 10:09:25 amoll Exp $
+// $Id: binarySearchTree.h,v 1.15 2000/08/22 17:03:31 amoll Exp $
 
 #ifndef BALL_DATATYPE_BINARYSEARCHTREE_H
 #define BALL_DATATYPE_BINARYSEARCHTREE_H
@@ -364,10 +364,7 @@ namespace BALL
 		/**	Default constructor.
 				Create a new and empty TBSTreeItem
 		*/
-		TBSTreeItem()
-			:	BSTreeItem()
-		{
-		}
+		TBSTreeItem();
 
 		/**	Detailed constructor.
 				Create a new TBSTreeItem from its {\tt data}, {\tt color},
@@ -379,18 +376,12 @@ namespace BALL
 		*/
 		TBSTreeItem
 			(const DataType& data, TBSTreeItem* left_item, 
-			 TBSTreeItem* right_item, char color = BSTreeItem::BLACK)
-			: BSTreeItem(left_item, right_item, color),
-				data_(data)
-		{
-		}
+			 TBSTreeItem* right_item, char color = BSTreeItem::BLACK);
 
 		/**	Destructor.
 				Destruct the item.
 		*/
-		virtual ~TBSTreeItem()
-		{
-		}
+		virtual ~TBSTreeItem();
 		//@}
 		
 		/**	@name	Accessors
@@ -399,64 +390,26 @@ namespace BALL
 
 		/**	Set the nodes data.
 		*/
-		void setData(const DataType& data)
-		{
-			data_ = data;
-		}
+		void setData(const DataType& data);
 
 		/**	Return the nodes data.
 				@return the item's data
 		*/
-		const DataType& getData() const
-		{
-			return data_;
-		}
+		const DataType& getData() const;
 
 		/**	Return the left child.
 				@return the item's left child item
 		*/
-		TBSTreeItem*& getLeftChild() const
-		{
-			return (TBSTreeItem*&)left_;
-		}
+		TBSTreeItem*& getLeftChild() const;
 		
 		/**	Return the right child.
 				@return the item's right child item
 		*/
-		TBSTreeItem*& getRightChild() const
-		{
-			return (TBSTreeItem*&)right_;
-		}
+		TBSTreeItem*& getRightChild() const;
 
 		/**
 		*/
-		Size count(const DataType& data, const Comparator<DataType>* comparator) const
-		{
-			if (comparator == 0)
-			{
-				throw Exception::NullPointer(__FILE__, __LINE__);
-			}
-
-			const TBSTreeItem* item = this;
-			Size size = 0;
-
-			while(item) 
-			{
-				if (comparator->isEqual(item->data_, data) == true)
-				{
-					++size;
-				}
-
-				if (item->left_)
-				{
-					size += ((TBSTreeItem*)item->left_)->count(data, comparator);
-				}
-	
-				item = (TBSTreeItem*)item->right_;
-			}
-
-			return size;
-		}
+		Size count(const DataType& data, const Comparator<DataType>* comparator) const;
 		//@}
 
 		/**	@name	Processor application methods
@@ -465,73 +418,35 @@ namespace BALL
 
 		/**
 		*/
-		bool applyPreorder(UnaryProcessor<DataType>& processor)
-		{
-			TreeItemProcessor_ tree_item_proc(&processor);
-			
-			return BSTreeItem::applyPreorder(tree_item_proc);
-		}
+		bool applyPreorder(UnaryProcessor<DataType>& processor);
 		
 		/**
 		*/
-		bool applyInorder(UnaryProcessor<DataType>& processor)
-		{
-			TreeItemProcessor_ tree_item_proc(&processor);
-			
-			return BSTreeItem::applyInorder(tree_item_proc);
-		}
+		bool applyInorder(UnaryProcessor<DataType>& processor);
 
 		/**
 		*/
-		bool applyPostorder(UnaryProcessor<DataType>& processor)
-		{
-			TreeItemProcessor_ tree_item_proc(&processor);
-			
-			return BSTreeItem::applyPostorder(tree_item_proc);
-		}
+		bool applyPostorder(UnaryProcessor<DataType>& processor);
 
 		/**
 		*/
-		bool applyLevelorder(UnaryProcessor<DataType>& processor)
-		{
-			TreeItemProcessor_ tree_item_proc(&processor);
-			
-			return BSTreeItem::applyLevelorder(tree_item_proc);
-		}
+		bool applyLevelorder(UnaryProcessor<DataType>& processor);
 
 		/**
 		*/
-		bool applyPreorderFlat(UnaryProcessor<DataType>& processor)
-		{
-			TreeItemProcessor_ tree_item_proc(&processor);
-			
-			return BSTreeItem::applyPreorderFlat(tree_item_proc);
-		}
+		bool applyPreorderFlat(UnaryProcessor<DataType>& processor);
 
 		/**
 		*/
-		bool applyInorderFlat(UnaryProcessor<DataType>& processor)
-		{
-			TreeItemProcessor_ tree_item_proc(&processor);
-			
-			return BSTreeItem::applyInorderFlat(tree_item_proc);
-		}
+		bool applyInorderFlat(UnaryProcessor<DataType>& processor);
 
 		/**
 		*/
-		bool applyPostorderFlat(UnaryProcessor<DataType>& processor)
-		{
-			TreeItemProcessor_ tree_item_proc(&processor);
-			
-			return BSTreeItem::applyPostorderFlat(tree_item_proc);
-		}
+		bool applyPostorderFlat(UnaryProcessor<DataType>& processor);
 
 		/**
 		*/
-		bool apply(UnaryProcessor<DataType>processor)
-		{
-			return applyPreorder(processor);
-		}
+		bool apply(UnaryProcessor<DataType>processor);
 		//@}
 
 		protected:
@@ -554,6 +469,7 @@ namespace BALL
 			{
 				return processor_->operator()(((TBSTreeItem<DataType> &)item).data_);
 			}
+
 
 			UnaryProcessor<DataType>* processor_;
 		};
@@ -622,36 +538,17 @@ namespace BALL
 	{
 		public:
 		
-			TBSTreeIterator(const BSTreeItemType* itemType = 0)
-				: BSTreeIterator(itemType)
-			{
-			}
+			TBSTreeIterator(const BSTreeItemType* itemType = 0);
 
-			TBSTreeIterator(const BSTreeItemType* itemType, BSTreeIterator::WalkOrder walk_order)
-				:	BSTreeIterator(itemType, walk_order)
-			{
-			}
+			TBSTreeIterator(const BSTreeItemType* itemType, BSTreeIterator::WalkOrder walk_order);
 
-			TBSTreeIterator(const TBSTreeIterator& iterator)
-				:	BSTreeIterator(iterator)
-			{
-			}
+			TBSTreeIterator(const TBSTreeIterator& iterator);
 
-			~TBSTreeIterator()
-			{
-			}
+			~TBSTreeIterator();
 
-			TBSTreeIterator& operator = (const TBSTreeIterator& iterator)
-			{
-				BSTreeIterator::set(iterator);
-
-				return *this;
-			}   
+			TBSTreeIterator& operator = (const TBSTreeIterator& iterator);
 		
-			const BSTreeItemType* forward()
-			{
-				return (BSTreeItemType *)((this->*forward_)());
-			}
+			const BSTreeItemType* forward();
 	};
 
 
@@ -1303,8 +1200,6 @@ namespace BALL
 
 		//@}
 
-
-
 		protected:
 	
 		virtual BSTreeItem* newItem
@@ -1319,310 +1214,112 @@ namespace BALL
 
 		bool isValid_(const TBSTreeItem<DataType>* parent, const TBSTreeItem<DataType>* child) const;
 
-		void dump_(std::ostream& s, Size depth, const TBSTreeItem<DataType>* item) const;
+		void dump_(std::ostream& s = std::cout, Size depth = 0, const TBSTreeItem<DataType>* item = 0) const;
 
 		TBSTreeItem<DataType>*				root_;
 		const Comparator<DataType>*		comparator_;
 	};
 
-	template<typename DataType>
-	TBSTree<DataType>::TBSTree()
-		:	root_(0),
-			comparator_(&(RTTI::getDefault<Comparator<DataType> >()))
+
+
+template<typename DataType>
+TBSTree<DataType>::TBSTree()
+	:	root_(0),
+		comparator_(&(RTTI::getDefault<Comparator<DataType> >()))
+{
+}
+
+template<typename DataType>
+TBSTree<DataType>::TBSTree(const TBSTree<DataType>& tree, bool deep)
+	:	root_(0),
+		comparator_(0)
+{
+	if (deep == false)
 	{
+		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
+	
+	set(tree);
+}
 
-	template<typename DataType>
-	TBSTree<DataType>::TBSTree(const TBSTree<DataType>& tree, bool deep)
-		:	root_(0),
-			comparator_(0)
+template<typename DataType>
+TBSTree<DataType>::~TBSTree()
+{
+	clear();
+}
+
+template<typename DataType>
+void TBSTree<DataType>::set(const TBSTree<DataType>& tree, BSTreeIterator::WalkOrder walk_order)
+{
+	clear();
+	comparator_ = tree.comparator_;
+
+	TBSTreeIterator< TBSTreeItem<DataType> > iterator(tree.root_, walk_order);
+	
+	for (const TBSTreeItem<DataType> *item = iterator.forward();
+			 item != 0; item = iterator.forward())
 	{
-		if (deep == false)
-		{
-			throw Exception::NotImplemented(__FILE__, __LINE__);
-		}
-		
-		set(tree);
+		insert(item->getData(), true);
 	}
+}
 
-	template<typename DataType>
-	TBSTree<DataType>::~TBSTree()
+template<typename DataType>
+const DataType* TBSTree<DataType>::find(const DataType &data) const
+{
+	if (root_ != 0)
 	{
-		clear();
-	}
-
-	template<typename DataType>
-	BALL_INLINE 
-	void TBSTree<DataType>::clear()
-	{
-		destroy_(root_);
-		root_ = 0;
-	}
-
-	template<typename DataType>
-	BALL_INLINE 
-	void TBSTree<DataType>::destroy()
-	{
-		clear();
-	}
-
-	template<typename DataType>
-	BALL_INLINE 
-	void TBSTree<DataType>::set
-		(const TBSTree<DataType>& tree, bool deep)
-	{
-		if (deep == false)
-		{
-			throw Exception::NotImplemented(__FILE__, __LINE__);
-		}
-		
-		clear();
-		comparator_ = tree.comparator_;
-		root_ = (TBSTreeItem<DataType> *)clone_(tree.root_);
-	}
-
-	template<typename DataType>
-	void TBSTree<DataType>::set(const TBSTree<DataType>& tree, BSTreeIterator::WalkOrder walk_order)
-	{
-		clear();
-		comparator_ = tree.comparator_;
-
-		TBSTreeIterator< TBSTreeItem<DataType> > iterator(tree.root_, walk_order);
-		
-		for (const TBSTreeItem<DataType> *item = iterator.forward();
-				 item != 0; item = iterator.forward())
-		{
-			insert(item->getData(), true);
-		}
-	}
-
-	template<typename DataType>
-	BALL_INLINE 
-	TBSTree<DataType>& TBSTree<DataType>::operator = (const TBSTree<DataType>& tree)
-	{
-		if (this != &tree)
-		{
-			set(tree);
-		}
-		return *this;
-	}
-
-	template<typename DataType>
-	BALL_INLINE
-	void TBSTree<DataType>::get(TBSTree<DataType>& tree, bool deep) const
-	{
-		tree.set(*this, deep);
-	}
-
-	template<typename DataType>
-	BALL_INLINE 
-	void TBSTree<DataType>::get(TBSTree<DataType>& tree, BSTreeIterator::WalkOrder walk_order) const
-	{
-		tree.set(*this, walk_order);
-	}
-
-	template<typename DataType>
-	BALL_INLINE 
-	void TBSTree<DataType>::swap(TBSTree<DataType>& tree)
-	{
-		TBSTreeItem<DataType>* root_item = root_;
-		root_ = tree.root_;
-		tree.root_ = root_item;
-
-		const Comparator<DataType>* temp = comparator_;
-		comparator_ = tree.comparator_;
-		tree.comparator_ = temp;
-	}
-
-	template <class DataType>
-	BALL_INLINE 
-	void TBSTree<DataType>::setComparator(const Comparator<DataType>& comparator)
-	{
-		comparator_ = &comparator;
-	}
-
-	template <class DataType>
-	BALL_INLINE 
-	void TBSTree<DataType>::resetComparator()
-	{
-		comparator_ = &(RTTI::getDefault<Comparator<DataType> >());
-	}
-
-	template <class DataType>
-	BALL_INLINE 
-	const Comparator<DataType>* TBSTree<DataType>::getComparator() const
-	{
-		return comparator_;
-	}
-
-	template<typename DataType>
-	BALL_INLINE 
-	const TBSTreeItem<DataType>* TBSTree<DataType>::getRoot() const
-	{
-		return root_;
-	}
-			
-	template<typename DataType>
-	BALL_INLINE 
-	Size TBSTree<DataType>::getHeight() const
-	{
-		if (root_ == 0)
-		{
-			return 0;
-		}
-		return root_->getHeight();
-	}
-			
-	template<typename DataType>
-	BALL_INLINE 
-	Size TBSTree<DataType>::getSize() const
-	{
-		if (root_ == 0)
-		{
-			return 0;
-		}
-		return root_->getSize();
-	}
-			
-	template<typename DataType>
-	BALL_INLINE 
-	const DataType* TBSTree<DataType>::getMinimum() const
-	{
-		if (root_ == 0) 
-		{
-			return 0;
-		}
-		return &(((TBSTreeItem<DataType> *)root_->getMinimum())->getData());
-	}
-
-	template<typename DataType>
-	BALL_INLINE 
-	const DataType* TBSTree<DataType>::getMaximum() const
-	{
-		if (root_ == 0) 
-		{
-			return 0;
-		}
-		return &(((TBSTreeItem<DataType> *)root_->getMaximum())->getData());
-	}
-
-	template<typename DataType>
-	const DataType* TBSTree<DataType>::find(const DataType &data) const
-	{
-		if (root_ != 0)
-		{
-			TBSTreeItem<DataType> *item = root_;
-				 
-			for (; item != 0 && (comparator_->isNotEqual(data, item->getData()) == true);
-					 item = (comparator_->isLess(data, item->getData()) == true) 
-						? item->getLeftChild() 
-						: item->getRightChild())
-			{
-			}
-
-			if (item != 0)
-			{
-				return &(item->getData());
-			}
-		}
-
-		return 0;
-	}
-
-	template<typename DataType>
-	BALL_INLINE 
-	Size TBSTree<DataType>::count(const DataType &data) const
-	{
-		if (root_ == 0)
-		{
-			return 0;
-		}
-		return root_->count(data, comparator_);
-	}
-
-	template<typename DataType>
-	TBSTreeItem<DataType>* TBSTree<DataType>::insert(const DataType& data, bool multiple)
-	{
-		TBSTreeItem<DataType> *parent = 0;
 		TBSTreeItem<DataType> *item = root_;
-		bool right_child = false;
-
-		if (multiple == true)
+			 
+		for (; item != 0 && (comparator_->isNotEqual(data, item->getData()) == true);
+				 item = (comparator_->isLess(data, item->getData()) == true) 
+					? item->getLeftChild() 
+					: item->getRightChild())
 		{
-			while (item) 
-			{
-				parent = item;
-				if (comparator_->isLessOrEqual(data, item->getData()) == true)
-				{
-					right_child = false;
-					item = item->getLeftChild();
-				}
-				else 
-				{ 
-					right_child = true;
-					item = item->getRightChild();
-				}
-			}
-		}
-		else 
-		{
-			while (item) 
-			{
-				if (comparator_->isEqual(data, item->getData()) == true)
-				{
-					return item;
-				}
-
-				parent = item;
-				if (comparator_->isLess(data, item->getData()) == true)
-				{
-					right_child = false;
-					item = item->getLeftChild();
-				}
-				else 
-				{
-					right_child = true;
-					item = item->getRightChild();
-				}
-			}
 		}
 
-		item = (TBSTreeItem<DataType> *)newItem(data, 0, item);
-		if (parent) 
+		if (item != 0)
 		{
-			if (right_child)
+			return &(item->getData());
+		}
+	}
+
+	return 0;
+}
+
+template<typename DataType>
+TBSTreeItem<DataType>* TBSTree<DataType>::insert(const DataType& data, bool multiple)
+{
+	TBSTreeItem<DataType> *parent = 0;
+	TBSTreeItem<DataType> *item = root_;
+	bool right_child = false;
+
+	if (multiple == true)
+	{
+		while (item) 
+		{
+			parent = item;
+			if (comparator_->isLessOrEqual(data, item->getData()) == true)
 			{
-				parent->setRightChild(item);
+				right_child = false;
+				item = item->getLeftChild();
 			}
 			else 
-			{
-				parent->setLeftChild(item);
+			{ 
+				right_child = true;
+				item = item->getRightChild();
 			}
 		}
-		else 
-		{
-			root_ = item;
-		}
-
-		return item;
 	}
-
-	template<typename DataType>
-	TBSTreeItem<DataType>* TBSTree<DataType>::detach(const DataType& data)
+	else 
 	{
-		bool right_child = false;
-		TBSTreeItem<DataType> *parent = 0;
-		TBSTreeItem<DataType> *item = root_;
-
 		while (item) 
 		{
 			if (comparator_->isEqual(data, item->getData()) == true)
 			{
-				break;
+				return item;
 			}
-			
+
 			parent = item;
-			
 			if (comparator_->isLess(data, item->getData()) == true)
 			{
 				right_child = false;
@@ -1634,380 +1331,779 @@ namespace BALL
 				item = item->getRightChild();
 			}
 		}
-
-		return (TBSTreeItem<DataType> *)BSTreeItem::detachNode
-			((BSTreeItem *&)root_, item, parent, right_child);
 	}
 
-	template<typename DataType>
-	BALL_INLINE 
-	TBSTreeItem<DataType>* TBSTree<DataType>::detachMinimum()
+	item = (TBSTreeItem<DataType> *)newItem(data, 0, item);
+	if (parent) 
 	{
-		BSTreeItem* parent = root_->getParentOfMinimum();
-		
-		if (parent && parent->getLeftChild())
+		if (right_child)
 		{
-			return (TBSTreeItem<DataType> *)BSTreeItem::detachNode
-				((BSTreeItem *&)root_, parent->getLeftChild(), parent, false);
+			parent->setRightChild(item);
 		}
-
-		return (TBSTreeItem<DataType> *)BSTreeItem::detachNode
-			((BSTreeItem *&)root_, root_, 0, false);
-	}
-
-	template<typename DataType>
-	BALL_INLINE 
-	TBSTreeItem<DataType>* TBSTree<DataType>::detachMaximum()
-	{
-		BSTreeItem* parent = root_->getParentOfMaximum();
-		
-		if (parent && parent->getRightChild())
+		else 
 		{
-			return (TBSTreeItem<DataType> *)BSTreeItem::detachNode
-				((BSTreeItem *&)root_, parent->getRightChild(), parent, true);
+			parent->setLeftChild(item);
 		}
-
-		return (TBSTreeItem<DataType> *)BSTreeItem::detachNode
-			((BSTreeItem *&)root_, root_, 0, false);
+	}
+	else 
+	{
+		root_ = item;
 	}
 
-	template<typename DataType>
-	BALL_INLINE 
-	bool TBSTree<DataType>::remove(const DataType &data)
+	return item;
+}
+
+template<typename DataType>
+TBSTreeItem<DataType>* TBSTree<DataType>::detach(const DataType& data)
+{
+	bool right_child = false;
+	TBSTreeItem<DataType> *parent = 0;
+	TBSTreeItem<DataType> *item = root_;
+
+	while (item) 
 	{
-		if (root_ == 0)
+		if (comparator_->isEqual(data, item->getData()) == true)
+		{
+			break;
+		}
+		
+		parent = item;
+		
+		if (comparator_->isLess(data, item->getData()) == true)
+		{
+			right_child = false;
+			item = item->getLeftChild();
+		}
+		else 
+		{
+			right_child = true;
+			item = item->getRightChild();
+		}
+	}
+
+	return (TBSTreeItem<DataType> *)BSTreeItem::detachNode
+		((BSTreeItem *&)root_, item, parent, right_child);
+}
+
+template<typename DataType>
+bool TBSTree<DataType>::removeAll(const DataType &data)
+{
+	if (root_ == 0)
+	{
+		return false;
+	}
+
+	TBSTreeItem<DataType> *item = detach(data);
+
+	if (item != 0)
+	{
+		for(; item != 0; item = detach(data))
+		{
+			deleteItem(item);
+		}
+		return true;
+	}
+	return false;
+}
+
+template<typename DataType>
+bool TBSTree<DataType>::operator == (const TBSTree<DataType>& tree) const
+{
+	TBSTreeIterator< TBSTreeItem<DataType> > this_iterator(root_);
+	
+	TBSTreeIterator< TBSTreeItem<DataType> > iterator(tree.root_);
+	
+	const TBSTreeItem<DataType>* this_item = this_iterator.forward();
+	const TBSTreeItem<DataType>* item = iterator.forward();
+
+	for (; this_item != 0 && item != 0; this_item = this_iterator.forward(), item = iterator.forward())
+	{
+		if (comparator_->isNotEqual(this_item->getData(), item->getData()) == true)
 		{
 			return false;
 		}
-
-		TBSTreeItem<DataType>* item = detach(data);
-		if (item != 0)
-		{
-			deleteItem(item);
-			return true;
-		}
-		return false;
 	}
 
-	template<typename DataType>
-	bool TBSTree<DataType>::removeAll(const DataType &data)
+	return (bool)(this_item == item);
+}
+
+template<typename DataType>
+void TBSTree<DataType>::dump(std::ostream& s, Size depth) const
+{
+	BALL_DUMP_STREAM_PREFIX(s);
+
+	BALL_DUMP_DEPTH(s, depth);
+	BALL_DUMP_HEADER(s, this, this);
+
+	BALL_DUMP_DEPTH(s, depth);
+	s << "  comparator: " << (void *)comparator_ << endl;
+
+	BALL_DUMP_DEPTH(s, depth);
+	s << "  height: " << getHeight() << endl;
+
+	BALL_DUMP_DEPTH(s, depth);
+	s << "  size: " << getSize() << endl;
+
+	BALL_DUMP_DEPTH(s, depth);
+	s << "  items: " << endl;
+
+	BALL_DUMP_DEPTH(s, depth);
+	s << "    root: ";
+	dump_(s, depth + 1, root_);
+	
+	BALL_DUMP_STREAM_SUFFIX(s);
+}
+
+template<typename DataType>
+BSTreeItem* TBSTree<DataType>::newItem
+	(const DataType& data, BSTreeItem* left_item, 
+	 BSTreeItem* right_item, char color) const
+{
+	return new TBSTreeItem<DataType>
+		(data, (TBSTreeItem<DataType>*)left_item, 
+		 (TBSTreeItem<DataType>*)right_item, color);
+}
+
+template<typename DataType>
+void TBSTree<DataType>::deleteItem(BSTreeItem *item) const
+{
+	delete item;
+}
+
+template<typename DataType>
+BSTreeItem* TBSTree<DataType>::clone_(const BSTreeItem *item) const
+{
+	if (item == 0)
 	{
-		if (root_ == 0)
-		{
-			return false;
-		}
+		return 0;
+	}
 
-		TBSTreeItem<DataType> *item = detach(data);
+	return newItem
+		(((TBSTreeItem<DataType> *)item)->getData(), 
+		 clone_(item->getLeftChild()), clone_(item->getRightChild()), item->getColor());
+}
 
-		if (item != 0)
+template<typename DataType>
+void TBSTree<DataType>::destroy_(TBSTreeItem<DataType>* item)
+{
+	if (item != 0)
+	{
+		destroy_(item->getLeftChild());
+		destroy_(item->getRightChild());
+		deleteItem(item);
+	}
+}
+
+template<typename DataType>
+bool TBSTree<DataType>::isValid_
+	(const TBSTreeItem<DataType>* parent,
+	 const TBSTreeItem<DataType>* childitem) const
+{
+	if (childitem != 0)
+	{
+		if (parent != 0)
 		{
-			for(; item != 0; item = detach(data))
+			if (parent->getLeftChild() == (BSTreeItem *)childitem)
 			{
-				deleteItem(item);
-			}
-			return true;
-		}
-		return false;
-	}
-
-	template<typename DataType>
-	BALL_INLINE 
-	bool TBSTree<DataType>::removeMinimum()
-	{
-		TBSTreeItem<DataType>* item = detachMinimum();
-		if (item != 0)
-		{
-			deleteItem(item);
-			return true;
-		}
-		return false;
-	}
-
-	template<typename DataType>
-	BALL_INLINE 
-	bool TBSTree<DataType>::removeMaximum()
-	{
-		TBSTreeItem<DataType>* item = detachMaximum();
-		if (item != 0)
-		{
-			deleteItem(item);
-			return true;
-		}
-		return false;
-	}
-
-	template <class DataType>
-	BALL_INLINE 
-	void TBSTree<DataType>::host(Visitor< TBSTree<DataType> >& visitor)
-	{
-		visitor.visit(*this);
-	}
-
-	template<typename DataType>
-	bool TBSTree<DataType>::operator == (const TBSTree<DataType>& tree) const
-	{
-		TBSTreeIterator< TBSTreeItem<DataType> > this_iterator(root_);
-		
-		TBSTreeIterator< TBSTreeItem<DataType> > iterator(tree.root_);
-		
-		const TBSTreeItem<DataType>* this_item = this_iterator.forward();
-		const TBSTreeItem<DataType>* item = iterator.forward();
-
-		for (; this_item != 0 && item != 0; this_item = this_iterator.forward(), item = iterator.forward())
-		{
-			if (comparator_->isNotEqual(this_item->getData(), item->getData()) == true)
-			{
-				return false;
-			}
-		}
-
-		return (bool)(this_item == item);
-	}
-
-	template<typename DataType>
-	BALL_INLINE 
-	bool TBSTree<DataType>::operator != (const TBSTree<DataType>& tree) const
-	{
-		return (bool)!(*this == tree);
-	}
-
-	template<typename DataType>
-	BALL_INLINE 
-	bool TBSTree<DataType>::has(const DataType& data) const
-	{
-		return (bool)(find(data) != 0);
-	}
-
-	template<typename DataType>
-	BALL_INLINE 
-	bool TBSTree<DataType>::isEmpty() const
-	{
-		return (bool)(root_ == 0);
-	}
-
-	template<typename DataType>
-	BALL_INLINE 
-	bool TBSTree<DataType>::isValid() const
-	{
-		return (bool)(isValid_(0, root_) == true && comparator_ != 0);
-	}
-
-	template<typename DataType>
-	void TBSTree<DataType>::dump(std::ostream& s, Size depth) const
-	{
-		BALL_DUMP_STREAM_PREFIX(s);
-
-		BALL_DUMP_DEPTH(s, depth);
-		BALL_DUMP_HEADER(s, this, this);
-
-		BALL_DUMP_DEPTH(s, depth);
-		s << "  comparator: " << (void *)comparator_ << endl;
-
-		BALL_DUMP_DEPTH(s, depth);
-		s << "  height: " << getHeight() << endl;
-
-		BALL_DUMP_DEPTH(s, depth);
-		s << "  size: " << getSize() << endl;
-
-		BALL_DUMP_DEPTH(s, depth);
-		s << "  items: " << endl;
-
-		BALL_DUMP_DEPTH(s, depth);
-		s << "    root: ";
-		dump_(s, depth + 1, root_);
-		
-		BALL_DUMP_STREAM_SUFFIX(s);
-	}
-
-	template<typename DataType>
-	BALL_INLINE 
-	bool TBSTree<DataType>::applyPreorder(UnaryProcessor<DataType>& processor)
-	{
-		if (root_ != 0)
-		{
-			return root_->applyPreorder(processor);
-		}
-		return true;
-	}
-			
-	template<typename DataType>
-	BALL_INLINE 
-	bool TBSTree<DataType>::applyInorder(UnaryProcessor<DataType>& processor)
-	{
-		if (root_ != 0)
-		{
-			return root_->applyInorder(processor);
-		}
-		return true;
-	}
-
-	template<typename DataType>
-	BALL_INLINE 
-	bool TBSTree<DataType>::applyPostorder(UnaryProcessor<DataType>& processor)
-	{ 
-		if (root_ != 0)
-		{
-			return root_->applyPostorder(processor);
-		}
-		return true;
-	}
-
-	template<typename DataType>
-	BALL_INLINE 
-	bool TBSTree<DataType>::applyLevelorder(UnaryProcessor<DataType>& processor)
-	{
-		if (root_ != 0)
-		{
-			return root_->applyLevelorder(processor);
-		}
-		return true;
-	}
-
-	template<typename DataType>
-	BALL_INLINE 
-	bool TBSTree<DataType>::applyPreorderFlat(UnaryProcessor<DataType>& processor)
-	{
-		if (root_ != 0)
-		{
-			return root_->applyPreorderFlat(processor);
-		}
-		return true;
-	}
-
-	template<typename DataType>
-	BALL_INLINE 
-	bool TBSTree<DataType>::applyInorderFlat(UnaryProcessor<DataType>& processor)
-	{
-		if (root_ != 0)
-		{
-			return root_->applyInorderFlat(processor);
-		}
-		return true;
-	}
-
-	template<typename DataType>
-	BALL_INLINE 
-	bool TBSTree<DataType>::applyPostorderFlat(UnaryProcessor<DataType>& processor)
-	{
-		if (root_ != 0)
-		{
-			return root_->applyPostorderFlat(processor);
-		}
-		return true;
-	}
-
-	template<typename DataType>
-	BALL_INLINE 
-	bool TBSTree<DataType>::apply(UnaryProcessor<DataType>& processor)
-	{
-		return applyPreorder(processor);
-	}
-
-	template<typename DataType>
-	BSTreeItem* TBSTree<DataType>::newItem
-		(const DataType& data, BSTreeItem* left_item, 
-		 BSTreeItem* right_item, char color) const
-	{
-		return new TBSTreeItem<DataType>
-			(data, (TBSTreeItem<DataType>*)left_item, 
-			 (TBSTreeItem<DataType>*)right_item, color);
-	}
-
-	template<typename DataType>
-	void TBSTree<DataType>::deleteItem(BSTreeItem *item) const
-	{
-		delete item;
-	}
-
-	template<typename DataType>
-	BSTreeItem* TBSTree<DataType>::clone_(const BSTreeItem *item) const
-	{
-		if (item == 0)
-		{
-			return 0;
-		}
-
-		return newItem
-			(((TBSTreeItem<DataType> *)item)->getData(), 
-			 clone_(item->getLeftChild()), clone_(item->getRightChild()), item->getColor());
-	}
-
-	template<typename DataType>
-	void TBSTree<DataType>::destroy_(TBSTreeItem<DataType>* item)
-	{
-		if (item != 0)
-		{
-			destroy_(item->getLeftChild());
-			destroy_(item->getRightChild());
-			deleteItem(item);
-		}
-	}
-
-	template<typename DataType>
-	bool TBSTree<DataType>::isValid_
-		(const TBSTreeItem<DataType>* parent,
-		 const TBSTreeItem<DataType>* childitem) const
-	{
-		if (childitem != 0)
-		{
-			if (parent != 0)
-			{
-				if (parent->getLeftChild() == (BSTreeItem *)childitem)
+				if (comparator_->isLess(parent->getData(), childitem->getData()) == true)
 				{
-					if (comparator_->isLess(parent->getData(), childitem->getData()) == true)
+					return false;
+				}
+			}
+			else 
+			{
+				if (parent->getRightChild() == (BSTreeItem *)childitem)
+				{
+					if (comparator_->isLess(childitem->getData(), parent->getData()) == true)
 					{
 						return false;
 					}
 				}
-				else 
-				{
-					if (parent->getRightChild() == (BSTreeItem *)childitem)
-					{
-						if (comparator_->isLess(childitem->getData(), parent->getData()) == true)
-						{
-							return false;
-						}
-					}
-				}
-			}
-			
-			if (!isValid_(childitem, (const TBSTreeItem<DataType> *)childitem->getLeftChild()) ||
-					!isValid_(childitem, (const TBSTreeItem<DataType> *)childitem->getRightChild()))
-			{
-				return false;
 			}
 		}
+		
+		if (!isValid_(childitem, (const TBSTreeItem<DataType> *)childitem->getLeftChild()) ||
+				!isValid_(childitem, (const TBSTreeItem<DataType> *)childitem->getRightChild()))
+		{
+			return false;
+		}
+	}
 
+	return true;
+}
+
+template <class DataType>
+void TBSTree<DataType>::dump_
+	(std::ostream& s, Size depth, const TBSTreeItem<DataType>* item) const
+{
+	BALL_DUMP_STREAM_PREFIX(s);
+
+	if (item != 0)
+	{
+		s << item->getData() << " (" << (int)item->getColor() << ')' << endl;
+
+		if (item->getRightChild() != 0)
+		{
+			BALL_DUMP_DEPTH(s, depth);
+			s << "  r: ";
+			dump_(s, depth + 1, (const TBSTreeItem<DataType> *)item->getRightChild());
+		}
+
+		if (item->getLeftChild() != 0)
+		{
+			BALL_DUMP_DEPTH(s, depth);
+			s << "  l: ";
+			dump_(s, depth + 1, (const TBSTreeItem<DataType> *)item->getLeftChild());
+		}
+	}
+
+	BALL_DUMP_STREAM_SUFFIX(s);
+}
+
+template<typename DataType>
+BALL_INLINE 
+void TBSTree<DataType>::clear()
+{
+	destroy_(root_);
+	root_ = 0;
+}
+
+template<typename DataType>
+BALL_INLINE 
+void TBSTree<DataType>::destroy()
+{
+	clear();
+}
+
+template<typename DataType>
+BALL_INLINE 
+void TBSTree<DataType>::set(const TBSTree<DataType>& tree, bool deep)
+{
+	if (deep == false)
+	{
+		throw Exception::NotImplemented(__FILE__, __LINE__);
+	}
+	
+	clear();
+	comparator_ = tree.comparator_;
+	root_ = (TBSTreeItem<DataType> *)clone_(tree.root_);
+}
+
+
+template<typename DataType>
+BALL_INLINE 
+TBSTreeItem<DataType>::TBSTreeItem()
+	:	BSTreeItem()
+{
+}
+
+template<typename DataType>
+BALL_INLINE 
+TBSTreeItem<DataType>::TBSTreeItem
+	(const DataType& data, TBSTreeItem* left_item, 
+	 TBSTreeItem* right_item, char color)
+	: BSTreeItem(left_item, right_item, color),
+		data_(data)
+{
+}
+
+template<typename DataType>
+BALL_INLINE 
+TBSTreeItem<DataType>::~TBSTreeItem()
+{
+}
+
+template<typename DataType>
+BALL_INLINE 
+void TBSTreeItem<DataType>::setData(const DataType& data)
+{
+	data_ = data;
+}
+
+template<typename DataType>
+BALL_INLINE 
+const DataType& TBSTreeItem<DataType>::getData() const
+{
+	return data_;
+}
+
+template<typename DataType>
+BALL_INLINE 
+TBSTreeItem<DataType>*& TBSTreeItem<DataType>::getLeftChild() const
+{
+	return (TBSTreeItem*&)left_;
+}
+
+template<typename DataType>
+BALL_INLINE 
+TBSTreeItem<DataType>*& TBSTreeItem<DataType>::getRightChild() const
+{
+	return (TBSTreeItem*&)right_;
+}
+
+template<typename DataType>
+BALL_INLINE 
+Size TBSTreeItem<DataType>::count(const DataType& data, const Comparator<DataType>* comparator) const
+{
+	if (comparator == 0)
+	{
+		throw Exception::NullPointer(__FILE__, __LINE__);
+	}
+
+	const TBSTreeItem* item = this;
+	Size size = 0;
+
+	while(item) 
+	{
+		if (comparator->isEqual(item->data_, data) == true)
+		{
+			++size;
+		}
+
+		if (item->left_)
+		{
+			size += ((TBSTreeItem*)item->left_)->count(data, comparator);
+		}
+
+		item = (TBSTreeItem*)item->right_;
+	}
+
+	return size;
+}
+
+template<typename DataType>
+BALL_INLINE 
+bool TBSTreeItem<DataType>::applyPreorder(UnaryProcessor<DataType>& processor)
+{
+	TreeItemProcessor_ tree_item_proc(&processor);
+	
+	return BSTreeItem::applyPreorder(tree_item_proc);
+}
+
+template<typename DataType>
+BALL_INLINE 
+bool TBSTreeItem<DataType>::applyInorder(UnaryProcessor<DataType>& processor)
+{
+	TreeItemProcessor_ tree_item_proc(&processor);
+	
+	return BSTreeItem::applyInorder(tree_item_proc);
+}
+
+template<typename DataType>
+BALL_INLINE 
+bool TBSTreeItem<DataType>::applyPostorder(UnaryProcessor<DataType>& processor)
+{
+	TreeItemProcessor_ tree_item_proc(&processor);
+	
+	return BSTreeItem::applyPostorder(tree_item_proc);
+}
+
+template<typename DataType>
+BALL_INLINE 
+bool TBSTreeItem<DataType>::applyLevelorder(UnaryProcessor<DataType>& processor)
+{
+	TreeItemProcessor_ tree_item_proc(&processor);
+	
+	return BSTreeItem::applyLevelorder(tree_item_proc);
+}
+
+template<typename DataType>
+BALL_INLINE 
+bool TBSTreeItem<DataType>::applyPreorderFlat(UnaryProcessor<DataType>& processor)
+{
+	TreeItemProcessor_ tree_item_proc(&processor);
+	
+	return BSTreeItem::applyPreorderFlat(tree_item_proc);
+}
+
+template<typename DataType>
+BALL_INLINE 
+bool TBSTreeItem<DataType>::applyInorderFlat(UnaryProcessor<DataType>& processor)
+{
+	TreeItemProcessor_ tree_item_proc(&processor);
+	
+	return BSTreeItem::applyInorderFlat(tree_item_proc);
+}
+
+template<typename DataType>
+BALL_INLINE 
+bool TBSTreeItem<DataType>::applyPostorderFlat(UnaryProcessor<DataType>& processor)
+{
+	TreeItemProcessor_ tree_item_proc(&processor);
+	
+	return BSTreeItem::applyPostorderFlat(tree_item_proc);
+}
+
+template<typename DataType>
+BALL_INLINE 
+bool TBSTreeItem<DataType>::apply(UnaryProcessor<DataType>processor)
+{
+	return applyPreorder(processor);
+}
+
+
+
+template<typename BSTreeItemType>
+BALL_INLINE 
+TBSTreeIterator<BSTreeItemType>::TBSTreeIterator(const BSTreeItemType* itemType)
+	: BSTreeIterator(itemType)
+{
+}
+
+template<typename BSTreeItemType>
+BALL_INLINE 
+TBSTreeIterator<BSTreeItemType>::TBSTreeIterator(const BSTreeItemType* itemType, BSTreeIterator::WalkOrder walk_order)
+	:	BSTreeIterator(itemType, walk_order)
+{
+}
+
+template<typename BSTreeItemType>
+BALL_INLINE 
+TBSTreeIterator<BSTreeItemType>::TBSTreeIterator(const TBSTreeIterator& iterator)
+	:	BSTreeIterator(iterator)
+{
+}
+
+template<typename BSTreeItemType>
+BALL_INLINE 
+TBSTreeIterator<BSTreeItemType>::~TBSTreeIterator()
+{
+}
+
+template<typename BSTreeItemType>
+BALL_INLINE 
+TBSTreeIterator<BSTreeItemType>& TBSTreeIterator<BSTreeItemType>::operator = (const TBSTreeIterator& iterator)
+{
+	BSTreeIterator::set(iterator);
+
+	return *this;
+}   
+
+template<typename BSTreeItemType>
+BALL_INLINE 
+const BSTreeItemType* TBSTreeIterator<BSTreeItemType>::forward()
+{
+	return (BSTreeItemType *)((this->*forward_)());
+}
+
+
+
+template<typename DataType>
+BALL_INLINE 
+TBSTree<DataType>& TBSTree<DataType>::operator = (const TBSTree<DataType>& tree)
+{
+	if (this != &tree)
+	{
+		set(tree);
+	}
+	return *this;
+}
+
+template<typename DataType>
+BALL_INLINE
+void TBSTree<DataType>::get(TBSTree<DataType>& tree, bool deep) const
+{
+	tree.set(*this, deep);
+}
+
+template<typename DataType>
+BALL_INLINE 
+void TBSTree<DataType>::get(TBSTree<DataType>& tree, BSTreeIterator::WalkOrder walk_order) const
+{
+	tree.set(*this, walk_order);
+}
+
+template<typename DataType>
+BALL_INLINE 
+void TBSTree<DataType>::swap(TBSTree<DataType>& tree)
+{
+	TBSTreeItem<DataType>* root_item = root_;
+	root_ = tree.root_;
+	tree.root_ = root_item;
+
+	const Comparator<DataType>* temp = comparator_;
+	comparator_ = tree.comparator_;
+	tree.comparator_ = temp;
+}
+
+template <class DataType>
+BALL_INLINE 
+void TBSTree<DataType>::setComparator(const Comparator<DataType>& comparator)
+{
+	comparator_ = &comparator;
+}
+
+template <class DataType>
+BALL_INLINE 
+void TBSTree<DataType>::resetComparator()
+{
+	comparator_ = &(RTTI::getDefault<Comparator<DataType> >());
+}
+
+template <class DataType>
+BALL_INLINE 
+const Comparator<DataType>* TBSTree<DataType>::getComparator() const
+{
+	return comparator_;
+}
+
+template<typename DataType>
+BALL_INLINE 
+const TBSTreeItem<DataType>* TBSTree<DataType>::getRoot() const
+{
+	return root_;
+}
+		
+template<typename DataType>
+BALL_INLINE 
+Size TBSTree<DataType>::getHeight() const
+{
+	if (root_ == 0)
+	{
+		return 0;
+	}
+	return root_->getHeight();
+}
+		
+template<typename DataType>
+BALL_INLINE 
+Size TBSTree<DataType>::getSize() const
+{
+	if (root_ == 0)
+	{
+		return 0;
+	}
+	return root_->getSize();
+}
+		
+template<typename DataType>
+BALL_INLINE 
+const DataType* TBSTree<DataType>::getMinimum() const
+{
+	if (root_ == 0) 
+	{
+		return 0;
+	}
+	return &(((TBSTreeItem<DataType> *)root_->getMinimum())->getData());
+}
+
+template<typename DataType>
+BALL_INLINE 
+const DataType* TBSTree<DataType>::getMaximum() const
+{
+	if (root_ == 0) 
+	{
+		return 0;
+	}
+	return &(((TBSTreeItem<DataType> *)root_->getMaximum())->getData());
+}
+
+template<typename DataType>
+BALL_INLINE 
+Size TBSTree<DataType>::count(const DataType &data) const
+{
+	if (root_ == 0)
+	{
+		return 0;
+	}
+	return root_->count(data, comparator_);
+}
+
+template<typename DataType>
+BALL_INLINE 
+TBSTreeItem<DataType>* TBSTree<DataType>::detachMinimum()
+{
+	BSTreeItem* parent = root_->getParentOfMinimum();
+	
+	if (parent && parent->getLeftChild())
+	{
+		return (TBSTreeItem<DataType> *)BSTreeItem::detachNode
+			((BSTreeItem *&)root_, parent->getLeftChild(), parent, false);
+	}
+
+	return (TBSTreeItem<DataType> *)BSTreeItem::detachNode
+		((BSTreeItem *&)root_, root_, 0, false);
+}
+
+template<typename DataType>
+BALL_INLINE 
+TBSTreeItem<DataType>* TBSTree<DataType>::detachMaximum()
+{
+	BSTreeItem* parent = root_->getParentOfMaximum();
+	
+	if (parent && parent->getRightChild())
+	{
+		return (TBSTreeItem<DataType> *)BSTreeItem::detachNode
+			((BSTreeItem *&)root_, parent->getRightChild(), parent, true);
+	}
+
+	return (TBSTreeItem<DataType> *)BSTreeItem::detachNode
+		((BSTreeItem *&)root_, root_, 0, false);
+}
+
+template<typename DataType>
+BALL_INLINE 
+bool TBSTree<DataType>::remove(const DataType &data)
+{
+	if (root_ == 0)
+	{
+		return false;
+	}
+
+	TBSTreeItem<DataType>* item = detach(data);
+	if (item != 0)
+	{
+		deleteItem(item);
 		return true;
 	}
+	return false;
+}
 
-	template <class DataType>
-	void TBSTree<DataType>::dump_
-		(std::ostream& s, Size depth, const TBSTreeItem<DataType>* item) const
+template<typename DataType>
+BALL_INLINE 
+bool TBSTree<DataType>::removeMinimum()
+{
+	TBSTreeItem<DataType>* item = detachMinimum();
+	if (item != 0)
 	{
-		BALL_DUMP_STREAM_PREFIX(s);
-
-		if (item != 0)
-		{
-			s << item->getData() << " (" << (int)item->getColor() << ')' << endl;
-
-			if (item->getRightChild() != 0)
-			{
-				BALL_DUMP_DEPTH(s, depth);
-				s << "  r: ";
-				dump_(s, depth + 1, (const TBSTreeItem<DataType> *)item->getRightChild());
-			}
-
-			if (item->getLeftChild() != 0)
-			{
-				BALL_DUMP_DEPTH(s, depth);
-				s << "  l: ";
-				dump_(s, depth + 1, (const TBSTreeItem<DataType> *)item->getLeftChild());
-			}
-		}
-
-		BALL_DUMP_STREAM_SUFFIX(s);
+		deleteItem(item);
+		return true;
 	}
+	return false;
+}
+
+template<typename DataType>
+BALL_INLINE 
+bool TBSTree<DataType>::removeMaximum()
+{
+	TBSTreeItem<DataType>* item = detachMaximum();
+	if (item != 0)
+	{
+		deleteItem(item);
+		return true;
+	}
+	return false;
+}
+
+template <class DataType>
+BALL_INLINE 
+void TBSTree<DataType>::host(Visitor< TBSTree<DataType> >& visitor)
+{
+	visitor.visit(*this);
+}
+
+template<typename DataType>
+BALL_INLINE 
+bool TBSTree<DataType>::operator != (const TBSTree<DataType>& tree) const
+{
+	return (bool)!(*this == tree);
+}
+
+template<typename DataType>
+BALL_INLINE 
+bool TBSTree<DataType>::has(const DataType& data) const
+{
+	return (bool)(find(data) != 0);
+}
+
+template<typename DataType>
+BALL_INLINE 
+bool TBSTree<DataType>::isEmpty() const
+{
+	return (bool)(root_ == 0);
+}
+
+template<typename DataType>
+BALL_INLINE 
+bool TBSTree<DataType>::isValid() const
+{
+	return (bool)(isValid_(0, root_) == true && comparator_ != 0);
+}
+
+template<typename DataType>
+BALL_INLINE 
+bool TBSTree<DataType>::applyPreorder(UnaryProcessor<DataType>& processor)
+{
+	if (root_ != 0)
+	{
+		return root_->applyPreorder(processor);
+	}
+	return true;
+}
+		
+template<typename DataType>
+BALL_INLINE 
+bool TBSTree<DataType>::applyInorder(UnaryProcessor<DataType>& processor)
+{
+	if (root_ != 0)
+	{
+		return root_->applyInorder(processor);
+	}
+	return true;
+}
+
+template<typename DataType>
+BALL_INLINE 
+bool TBSTree<DataType>::applyPostorder(UnaryProcessor<DataType>& processor)
+{ 
+	if (root_ != 0)
+	{
+		return root_->applyPostorder(processor);
+	}
+	return true;
+}
+
+template<typename DataType>
+BALL_INLINE 
+bool TBSTree<DataType>::applyLevelorder(UnaryProcessor<DataType>& processor)
+{
+	if (root_ != 0)
+	{
+		return root_->applyLevelorder(processor);
+	}
+	return true;
+}
+
+template<typename DataType>
+BALL_INLINE 
+bool TBSTree<DataType>::applyPreorderFlat(UnaryProcessor<DataType>& processor)
+{
+	if (root_ != 0)
+	{
+		return root_->applyPreorderFlat(processor);
+	}
+	return true;
+}
+
+template<typename DataType>
+BALL_INLINE 
+bool TBSTree<DataType>::applyInorderFlat(UnaryProcessor<DataType>& processor)
+{
+	if (root_ != 0)
+	{
+		return root_->applyInorderFlat(processor);
+	}
+	return true;
+}
+
+template<typename DataType>
+BALL_INLINE 
+bool TBSTree<DataType>::applyPostorderFlat(UnaryProcessor<DataType>& processor)
+{
+	if (root_ != 0)
+	{
+		return root_->applyPostorderFlat(processor);
+	}
+	return true;
+}
+
+template<typename DataType>
+BALL_INLINE 
+bool TBSTree<DataType>::apply(UnaryProcessor<DataType>& processor)
+{
+	return applyPreorder(processor);
+}
+
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/DATATYPE/binarySearchTree.iC>

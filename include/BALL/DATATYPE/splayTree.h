@@ -1,4 +1,4 @@
-// $Id: splayTree.h,v 1.3 2000/08/09 10:00:18 amoll Exp $
+// $Id: splayTree.h,v 1.4 2000/08/22 17:03:31 amoll Exp $
 
 #ifndef BALL_DATATYPE_SPLAYTREE_H
 #define BALL_DATATYPE_SPLAYTREE_H
@@ -69,19 +69,19 @@ namespace BALL
 			//@{
 
 			///
-			void set(const TSplayTree& splay_tree, bool deep = true);
+			//void set(const TSplayTree& splay_tree, bool deep = true);
 
 			///
-			void set(const TSplayTree &splay_tree,  BSTreeIterator::WalkOrder walk_order);
+			//void set(const TSplayTree &splay_tree,  BSTreeIterator::WalkOrder walk_order);
 
 			///
-			TSplayTree& operator = (const TSplayTree& splay_tree);
+			//TSplayTree& operator = (const TSplayTree& splay_tree);
 
 			///
-			void get(TSplayTree& splay_tree, bool deep = true) const;
+			//void get(TSplayTree& splay_tree, bool deep = true) const;
 
 			///
-			void get(TSplayTree& splay_tree, BSTreeIterator::WalkOrder walk_order) const;
+			//void get(TSplayTree& splay_tree, BSTreeIterator::WalkOrder walk_order) const;
 			
 			//@}
 
@@ -92,13 +92,13 @@ namespace BALL
 			const DataType* getMinimum();
 
 			///
-			const DataType* getMinimum() const;
+			//const DataType* getMinimum() const;
 
 			///
 			const DataType* getMaximum();
 
 			///
-			const DataType* getMaximum() const;
+			//const DataType* getMaximum() const;
 
 			///
 			const DataType* find(const DataType& data);
@@ -138,7 +138,7 @@ namespace BALL
 			//@{
 
 			///
-			void host(Visitor<TSplayTree>& visitor);
+			//void host(Visitor<TSplayTree>& visitor);
 			//@}
 
 			/**	@name	Predicates */
@@ -179,7 +179,7 @@ namespace BALL
 	{
 		clear();
 	}
-
+/*
 	template<class DataType>
 	BALL_INLINE 
 	void TSplayTree<DataType>::set(const TSplayTree &splay_tree, bool deep)
@@ -225,7 +225,7 @@ namespace BALL
 	{
 		splay_tree.set(*this, walk_order);
 	}
-
+*/
 	template<class DataType>
 	BALL_INLINE 
 	const DataType* TSplayTree<DataType>::getMinimum()
@@ -236,19 +236,19 @@ namespace BALL
 		}
 		else
 		{
-			root_ = (TBSTreeItem<DataType> *)SplayTree::splayMinimum(root_);
+			root_ = (TBSTreeItem<DataType> *)splayMinimum(root_);
 
 			return &(((TBSTreeItem<DataType> *)root_)->data_);
 		}
 	}
-
+/*
 	template<class DataType>
 	BALL_INLINE 
 	const DataType* TSplayTree<DataType>::getMinimum() const
 	{
 		return TBSTree<DataType>::getMinimum();
 	}
-
+*/
 	template<class DataType>
 	BALL_INLINE 
 	const DataType* TSplayTree<DataType>::getMaximum()
@@ -264,14 +264,14 @@ namespace BALL
 			return &(((TBSTreeItem<DataType> *)root_)->data_);
 		}
 	}
-
+/*
 	template<class DataType>
 	BALL_INLINE 
 	const DataType* TSplayTree<DataType>::getMaximum() const
 	{
 		return TBSTree<DataType>::getMaximum();
 	}
-
+*/
 	template<class DataType>
 	BALL_INLINE 
 	const DataType* TSplayTree<DataType>::find(const DataType& data)
@@ -463,13 +463,13 @@ namespace BALL
 			return false;
 		}
 	}
-
+/*
 	template <class DataType>
 	BALL_INLINE 
 	void TSplayTree<DataType>::host(Visitor< TSplayTree<DataType> >& visitor)
 	{
 		visitor.visit(*this);
-	}
+	}*/
 
 	template<class DataType>
 	BALL_INLINE 
