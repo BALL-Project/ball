@@ -11,7 +11,9 @@ CPP_SOURCES=\
 	parameterSection.C\
 	PDBFile.C\
 	resourceFile.C\
-	XYZFile.C
+	XYZFile.C\
+	readFile.C\
+	NMRStarFile.C
 
 include ../common.mak
 include .Dependencies
