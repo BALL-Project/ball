@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.31 2000/01/06 21:20:43 oliver Exp $
+dnl    $Id: configure.in,v 1.32 2000/01/07 22:04:13 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -21,26 +21,22 @@ dnl
 dnl    define command line arguments for QT, Mesa, and OpenGL
 dnl    includes and libraries
 dnl
-AC_ARG_WITH(compiler,          [  --with-compiler=CXX     use CXX as C++ compiler])
-AC_ARG_WITH(cxxflags,          [  --with-cxxflags=FLAGS   add FLAGS as compiler flags])
 AC_ARG_ENABLE(optimization,    [  --enable-optimization   optimize the library for speed. Omit debug info.!])
 AC_ARG_ENABLE(debuginfo,       [  --disable-debuginfo     remove -g from the compiler flags (omit debug information)])
 AC_ARG_ENABLE(BALLVIEW,        [  --disable-BALLVIEW      disable the compilation of BALL, the visualization component])
+AC_ARG_ENABLE(64,              [  --enable-64             create 64 bit binaries (if allowed by the compiler)])
+AC_ARG_WITH(compiler,          [  --with-compiler=CXX     use CXX as C++ compiler])
+AC_ARG_WITH(cxxflags,          [  --with-cxxflags=FLAGS   add FLAGS as compiler flags])
 AC_ARG_WITH(qt-incl,           [  --with-qt-incl=DIR      QT header files are in DIR])
 AC_ARG_WITH(qt-libs,           [  --with-qt-libs=DIR      QT libraries are in DIR])
 AC_ARG_WITH(opengl-incl,       [  --with-opengl-incl=DIR  OpenGL/Mesa header files are in DIR/GL])
 AC_ARG_WITH(opengl-libs,       [  --with-opengl-libs=DIR  OpenGL/Mesa libraries are in DIR/GL])
 AC_ARG_WITH(opengl,            [  --without-OpenGL        use MESA instead of OpenGL])
+AC_ARG_WITH(libxnet,           [  --without-libxnet       use -lsocket -lnsl rather than -lxnet (under Solaris)])
 
+dnl
 dnl    interpret switches...
-if test "$with_compiler" != "" ; then
-	CXX=$with_compiler
-fi
-
-if test "$with_cxxflags" != "" ; then
-	CPPFLAGS=$with_cxxflags
-fi
-
+dnl
 if test "$enable_optimization" = "yes" ; then
 	DEBUG=false
 else
@@ -53,24 +49,44 @@ else
 	DEBUG_INFO=true
 fi
 
+if test "$enable_64" = "yes" ; then
+	BINFMT_64_BIT=true
+else
+	BINFMT_64_BIT=false
+fi
+
+if test "$with_compiler" != "" ; then
+	CXX=$with_compiler
+fi
+
+if test "$with_cxxflags" != "" ; then
+	CPPFLAGS=$with_cxxflags
+fi
+
 if test "$with_qt_incl" != "" ; then
-	QT_INCLUDES=$with_qt_incl
+	QT_INCPATH=$with_qt_incl
 fi
 if test "$with_qt_libs" != "" ; then
-	QT_LIBS=$with_qt_libs
+	QT_LIBPATH=$with_qt_libs
 fi
 
 if test "$with_opengl_incl" != "" ; then
-	OPENGL_INCLUDES=$with_opengl_incl
+	OPENGL_INCPATH=$with_opengl_incl
 fi
 if test "$with_qt_libs" != "" ; then
-	OPENGL_LIBS=$with_opengl_libs
+	OPENGL_LIBPATH=$with_opengl_libs
 fi
 
 if test "$with_opengl" != "no" ; then	
 	BALLVIEW_PLATFORM=OpenGL
 else
  	BALLVIEW_PLATFORM=Mesa
+fi
+
+if test "$with_libxnet" != "no" ; then	
+	USE_LIBXNET=true
+else
+	USE_LIBXNET=false
 fi
 
 if test "$with_BALLVIEW" = "no" ; then
@@ -698,17 +714,11 @@ else
 		fi
 		AC_MSG_RESULT(${CXX_VERSION_OUTPUT})
 
-		if test "${CXX_VERSION_1}" -lt 6 " ; then
+		if test "${CXX_VERSION_1}" -lt 6 ; then
 			AC_MSG_RESULT()
 			AC_MSG_RESULT(Wrong version of CC! CC before release 6 is not ANSI C++ compliant)
 			AC_MSG_RESULT(Please upgrade to a more recent version of CC.)
 			AC_MSG_ERROR(aborted)
-		fi
-		
-
-		dnl check for correct architecture
-		if test ${ARCHITECTURE}" = sparc ; then
-			CPP_FLAGS="${CPP_FLAGS} -xarch=v9"
 		fi
 	fi
 fi
@@ -835,97 +845,71 @@ else
 
 			dnl	 set the default binary format (if none selected)
 			dnl
-			if test "${IRIX_BINFMT}" = "" ; then
+			if test "${BINFMT_64_BIT}" = true ; then
+				IRIX_BINFMT=64
+				CXX_NAME="${CXX_NAME}_64"
+			else
 				IRIX_BINFMT=N32
+				CXX_NAME="${CXX_NAME}_N32"
 			fi
 			
-			dnl	handle wrong (hand-made!) entries in configure
-			dnl  
-			if test "${IRIX_BINFMT}" != "64" && test "${IRIX_BINFMT}" != "N32" && test "${IRIX_BINFMT}" != "32" ; then
-				AC_MSG_RESULT(A${IRIX_BINFMT}A)
-				AC_MSG_RESULT(Wrong IRIX_BINFMT! Please choose one from 32, N32, or 64.)
-				AC_MSG_RESULT(You may also decide to leave the entry open. This defaults to 64 on 64 bit machines)
-				AC_MSG_RESULT(and 32 otherwise.)
-				AC_ERROR(aborted)
+			BALL_TYPENAME=typename
+
+			dnl 
+			dnl			a version above 7.2 is required
+			dnl
+			if test "${CXX_VERSION_1}" -lt 7  -o "${CXX_VERSION_1}" -eq 7 \
+							-a "${CXX_VERSION_2}" = 10; then
+				AC_MSG_RESULT()
+				AC_MSG_RESULT(MipsPro CC version 7.2 and above is required. Please update your compiler.)
+				AC_ERROR(Aborted)
 			fi
 
-			dnl  SGI has two _different_ compiler hidden behind CC
-			dnl  
-			if test "${IRIX_BINFMT}" = 32 ; then
-				DEF_BOOL=true
-				BALL_TYPENAME=""
-				PRELINK="/usr/lib/DCC/edg_prelink"
-				CPPFLAGS="$CPPFLAGS -32 +w"
-				CPPFLAGS_D="${CPPFLAGS_D} -fullwarn"
+
+			AR=${CXX}
+			AROPTS="-ar -o"
+			DYNAR=${CXX}
+			DYNAROPTS="-LANG:std -shared -quickstart_info -no_unresolved -o"
+
+			dnl  issue a warning about an old compiler with a broken ostream implementation: reopening a fstream
+			dnl  and writing to it will omit the first 16k written to the stream. Nasty, but confirmed with SGI
+			dnl  and fixed in 7.3.1.1m
+			if test "${CXX_VERSION_1}" = 7 -a "${CXX_VERSION_2}" = 3 \
+							-a "${CXX_VERSION_3}" = 1m -a "${CXX_VERSION_4}" = ""; then
+				
+				COMMENTS="${COMMENTS}\nPlease take care - this version of SGI CC (7.3.1m) contains serious bugs\n"
+				COMMENTS="${COMMENTS}in its implementaion of fstream/iostream. This may lead to strange behaviour\n"
+				COMMENTS="${COMMENTS}and causes PDBFile_test to fail. Please update your compiler.\n\n"
+				AC_MSG_RESULT(${COMMENTS})
+				ADDITIONAL_COMMENTS="${ADDITIONAL_COMMENTS}${COMMENTS}"
+				COMMENTS=""
+			fi
+
+			CXX_MAKEDEPEND="${CXX}"
+			MAKEDEP_CXX_OPTS="-M 2>/dev/null"
+			MAKEDEP_CXX_SUFFIX=" >.Dependencies"
+
+			if test "${IRIX_BINFMT}" = 64 ; then
+				DEF_BOOL=false
+				CPPFLAGS="$CPPFLAGS -64 -LANG:std"
+				DYNAROPTS="-64 ${DYNAROPTS}"
+				CPPFLAGS_O="${CPPFLAGS_O} -O2 -OPT:Olimit_opt=on -multigot -G 6"
+				CPPFLAGS_D="${CPPFLAGS_D} -fullwarn -multigot -G 6 -DEBUG:woff=1375,3201,1424,1110,1209"
 				CPPFLAGS_DI="${CPPFLAGS_DI} -g"
-				CPPFLAGS_O="${CPPFLAGS_O} -O2 -Olimit=40000"
-				LDFLAGS="$LDFLAGS -32"
+				LDFLAGS="$LDFLAGS -64 -LANG:std"
+				AC_DEFINE(IRIX64,)
+				ADDITIONAL_COMMENTS="${ADDITIONAL_COMMENTS}Please remember to use LD_LIBRARY64_PATH instead of\n LD_LIBRARY_PATH - you are using 64 bit objects!"
+			fi
+			if test "${IRIX_BINFMT}" = N32 ; then
+				DEF_BOOL=false
+				CPPFLAGS="$CPPFLAGS -n32 -LANG:std"
+				DYNAROPTS="-n32 ${DYNAROPTS}"
+				CPPFLAGS_O="${CPPFLAGS_O} -O2 -OPT:Olimit_opt=on -multigot -G 6"
+				CPPFLAGS_D="${CPPFLAGS_D} -fullwarn -multigot -G 6 -DEBUG:woff=1375,3201,1424,1110,1209"
+				CPPFLAGS_DI="${CPPFLAGS_DI} -g"
+				LDFLAGS="$LDFLAGS -n32 -LANG:std"
 				AC_DEFINE(IRIX32,)
-			else	
-				BALL_TYPENAME=typename
-				dnl			CC 7.20 doesn't have the external prelinker
-				dnl			anymore (at least for 64 bit) so we use
-				dnl			no prelinker and CC -ar instead of ar
-				dnl			Otherwise: use edg_prelink
-				dnl
-
-				AR=${CXX}
-				AROPTS="-ar -o"
-				DYNAR=${CXX}
-				DYNAROPTS="-LANG:std -shared -quickstart_info -no_unresolved -o"
-
-				if test "${CXX_VERSION_1}" -gt 7  -o "${CXX_VERSION_1}" -eq 7 \
-								-a "${CXX_VERSION_2}" != 10 -a "${CXX_VERSION_2}" != 1; then
-					CC_DOES_PRELINK=true
-				else
-					CC_DOES_PRELINK=false
-					if test "${IRIX_BINFMT}" = 64 ; then
-						PRELINK="/usr/lib32/cmplrs/edg_prelink"
-					else
-						PRELINK="/usr/lib32/cmplrs/edg_prelink"
-					fi
-				fi
-
-				dnl  issue a warning about an old compiler with a broken ostream implementation: reopening a fstream
-				dnl  and writing to it will omit the first 16k written to the stream. Nasty, but confirmed with SGI
-				dnl  and fixed in 7.3.1.1m
-				if test "${CXX_VERSION_1}" = 7 -a "${CXX_VERSION_2}" = 3 \
-								-a "${CXX_VERSION_3}" = 1m -a "${CXX_VERSION_4}" = ""; then
-					
-					COMMENTS="${COMMENTS}\nPlease take care - this version of SGI CC (7.3.1m) contains serious bugs\n"
-					COMMENTS="${COMMENTS}in its implementaion of fstream/iostream. This may lead to strange behaviour\n"
-					COMMENTS="${COMMENTS}and causes PDBFile_test to fail. Please update your compiler.\n\n"
-					AC_MSG_RESULT(${COMMENTS})
-					ADDITIONAL_COMMENTS="${ADDITIONAL_COMMENTS}${COMMENTS}"
-					COMMENTS=""
-				fi
-
-				CXX_MAKEDEPEND="${CXX}"
-				MAKEDEP_CXX_OPTS="-M"
-				MAKEDEP_CXX_SUFFIX=" >.Dependencies 2>/dev/null"
-
-				if test "${IRIX_BINFMT}" = 64 ; then
-					DEF_BOOL=false
-					CPPFLAGS="$CPPFLAGS -64 -LANG:std"
-					DYNAROPTS="-64 ${DYNAROPTS}"
-					CPPFLAGS_O="${CPPFLAGS_O} -O2 -OPT:Olimit_opt=on -multigot -G 6"
-					CPPFLAGS_D="${CPPFLAGS_D} -fullwarn -multigot -G 6 -DEBUG:woff=1375,3201,1424,1110,1209"
-					CPPFLAGS_DI="${CPPFLAGS_DI} -g"
-					LDFLAGS="$LDFLAGS -64 -LANG:std"
-					AC_DEFINE(IRIX64,)
-					ADDITIONAL_COMMENTS="${ADDITIONAL_COMMENTS}Please remember to use LD_LIBRARY64_PATH instead of\n LD_LIBRARY_PATH - you are using 64 bit objects!"
-				fi
-				if test "${IRIX_BINFMT}" = N32 ; then
-					DEF_BOOL=false
-					CPPFLAGS="$CPPFLAGS -n32 -LANG:std"
-					DYNAROPTS="-n32 ${DYNAROPTS}"
-					CPPFLAGS_O="${CPPFLAGS_O} -O2 -OPT:Olimit_opt=on -multigot -G 6"
-					CPPFLAGS_D="${CPPFLAGS_D} -fullwarn -multigot -G 6 -DEBUG:woff=1375,3201,1424,1110,1209"
-					CPPFLAGS_DI="${CPPFLAGS_DI} -g"
-					LDFLAGS="$LDFLAGS -n32 -LANG:std"
-					AC_DEFINE(IRIX32,)
-					ADDITIONAL_COMMENTS="${ADDITIONAL_COMMENTS}Please remember to use LD_LIBRARYN32_PATH instead of\n LD_LIBRARY_PATH - you are using new style 32 bit objects."
-				fi
+				ADDITIONAL_COMMENTS="${ADDITIONAL_COMMENTS}Please remember to use LD_LIBRARYN32_PATH instead of\n LD_LIBRARY_PATH - you are using new style 32 bit objects."
 			fi
 
 			AC_DEFINE(MIPS,)	
@@ -968,18 +952,13 @@ else
 			AR="${CXX}"
 			DYNAR="${CXX}"
 			AROPTS="-xar -o"
-			DYNAROPTS="-G -PIC -o"
+			DYNAROPTS="-G -KPIC -o"
 			CXX_MAKEDEPEND="${CXX}"
 			MAKEDEP_CXX_OPTS="-xM1"
 			MAKEDEP_CXX_SUFFIX=" >.Dependencies"
 
-			dnl 
-			dnl suppress all warnings for this f*** compiler
-			dnl and disable all inlining (it will crash in 
-			dnl optimizing mode otherwise)
-			dnl
 			AC_DEFINE(BALL_NO_INLINE_FUNCTIONS,)
-			CPPFLAGS="${CPPFLAGS} -pto -w -PIC"
+			CPPFLAGS="${CPPFLAGS} -pto -KPIC"
 			CPPFLAGS_O="${CPPFLAGS_O} -xO3 -xtarget=native"
 			CPPFLAGS_D="${CPPFLAGS_D}"
 			CPPFLAGS_DI="${CPPFLAGS_DI} -g"
@@ -999,8 +978,8 @@ if test "$DEBUG" != "" ; then
 	if test "$DEBUG" = true ; then	
 		dnl  if debug information is also required, add the corresponding flag
 		dnl
-		if test "$DEBUG_INFO" = true -a "$CPP_FLAGS_DI" != "" ; then
-			CPP_FLAGS_D="${CPP_FLAGS_D} ${CPP_FLAGS_DI}"
+		if test "${DEBUG_INFO}" = true -a "$CPPFLAGS_DI" != "" ; then
+			CPPFLAGS_D="${CPPFLAGS_D} ${CPPFLAGS_DI}"
 		fi
 		AC_DEFINE(BALL_DEBUG,)
 		AC_DEFINE(BALL_NO_INLINE_FUNCTIONS,)
@@ -1021,11 +1000,9 @@ fi
 dnl
 dnl		check for multi-platform build
 dnl
-AC_MSG_CHECKING(multi-platform build)
 if test "${MULTI_BUILD}" = "true" ; then
+	AC_MSG_CHECKING(multi-platform build)
 	AC_MSG_RESULT(enabled)
-else 
-	AC_MSG_RESULT(disabled)
 fi
 
 dnl
@@ -1171,7 +1148,7 @@ if test ${BALL_CFG_USING_METHOD_DIRECTIVE} = none ; then
 fi
 AC_MSG_RESULT(${BALL_CFG_USING_METHOD_DIRECTIVE})
 if test ${BALL_CFG_USING_METHOD_DIRECTIVE} = ANSI ; then
-	AC_DEFINE(BALL_CFG_USING_METHID_DIRECTIVE)
+	AC_DEFINE(BALL_CFG_USING_METHOD_DIRECTIVE)
 fi
 if test ${BALL_CFG_USING_METHOD_DIRECTIVE} = none ; then
 	AC_MSG_RESULT(Compiler does not understand ARM or ANSI style method access modification.)
@@ -1192,33 +1169,25 @@ dnl		we define the type PointerInt (in COMMON/global.h) according to the macro
 dnl		BALL_POINTERSIZE_INT (which is set here)
 dnl	  missing: usage of the result of AC_TYPE_SIZE_T
 dnl
-AC_MSG_CHECKING(for size of types)
-cat > /tmp/$$.conftest.c << EOF
-#include <iostream.h>
-#include <sys/types.h>
-int main()
-{
-	cout << 8 * sizeof(int) << ":" << 8 * sizeof(long) << ":" 
-       << 8 * sizeof(size_t) << ":" << 8 * sizeof(void*) << endl;
-}
-EOF
-${CXX} ${CPPFLAGS} /tmp/$$.conftest.c -o /tmp/$$.conftest.exe 2>/dev/null >/dev/null
-INT_SIZE=`/tmp/$$.conftest.exe|cut -d: -f1`
-LONG_SIZE=`/tmp/$$.conftest.exe|cut -d: -f2`
-SIZE_T_SIZE=`/tmp/$$.conftest.exe|cut -d: -f3`
-POINTER_SIZE=`/tmp/$$.conftest.exe|cut -d: -f4`
-rm /tmp/$$.conftest.c /tmp/$$.conftest.exe
+AC_CHECK_SIZEOF(int, 4)
+AC_CHECK_SIZEOF(long, 4)
+AC_CHECK_SIZEOF(size_t, 4)
+AC_CHECK_SIZEOF(void*, 4)
 
-AC_MSG_RESULT("int=${INT_SIZE}bit long=${LONG_SIZE}bit size_t=${SIZE_T_SIZE}bit pointer=${POINTER_SIZE}bit")
-AC_DEFINE_UNQUOTED(BALL_INT_SIZE,"${INT_SIZE}")
-AC_DEFINE_UNQUOTED(BALL_LONG_SIZE,"${LONG_SIZE}")
-AC_DEFINE_UNQUOTED(BALL_SIZE_T_SIZE,"${SIZE_T_SIZE}")
-AC_DEFINE_UNQUOTED(BALL_POINTER_SIZE,"${POINTER_SIZE}")
+SIZEOF_INT=$ac_cv_sizeof_int
+SIZEOF_LONG=$ac_cv_sizeof_long
+SIZEOF_SIZE_T=$ac_cv_sizeof_size_t
+SIZEOF_VOID_P=$ac_cv_sizeof_voidp
 
-if test "${POINTER_SIZE}" = "${INT_SIZE}" ; then
+AC_DEFINE_UNQUOTED(BALL_INT_SIZE,"${SIZEOF_INT}")
+AC_DEFINE_UNQUOTED(BALL_LONG_SIZE,"${SIZEOF_LONG}")
+AC_DEFINE_UNQUOTED(BALL_SIZE_T_SIZE,"${SIZEOF_SIZE_T}")
+AC_DEFINE_UNQUOTED(BALL_POINTER_SIZE,"${SIZEOF_VOID_P}")
+
+if test "${SIZEOF_VOID_P}" = "${SIZEOF_INT}" ; then
 	BALL_POINTERSIZE_INT=int
 else 
-	if test "${POINTER_SIZE}" = "${LONG_SIZE}" ; then
+	if test "${SIZEOF_VOID_P}" = "${SIZEOF_LONG}" ; then
 		BALL_POINTERSIZE_INT=long
 	else
 		AC_MSG_RESULT()
@@ -1227,11 +1196,11 @@ else
 	fi
 fi
 AC_DEFINE_UNQUOTED(BALL_POINTERSIZE_INT, ${BALL_POINTERSIZE_INT})
-if test "${SIZE_T_SIZE}" = "${INT_SIZE}" ; then
+if test "${SIZEOF_SIZE_T}" = "${SIZEOF_INT}" ; then
 	BALL_INDEX_TYPE="int"
 	BALL_SIZE_TYPE="unsigned int"
 else 
-	if test "${SIZE_T_SIZE}" = "${LONG_SIZE}" ; then
+	if test "${SIZEOF_SIZE_T}" = "${SIZEOF_LONG}" ; then
 		BALL_INDEX_TYPE="long"
 		BALL_SIZE_TYPE="unsigned long"
 	else
@@ -1260,7 +1229,7 @@ if test "${HAVE_INET_ADDR+set}" = set ; then
 fi 
 
 dnl   if gethostbyname was not defined in libc, try libxnet (Solaris only?)
-if test "${HAVE_GETHOSTBYNAME+set}" != set ; then
+if test "${HAVE_GETHOSTBYNAME+set}" != set -a "${USE_LIBXNET}" != false; then
 	AC_CHECK_LIB(xnet, gethostbyname)
 	unset ac_cv_func_gethostbyname
 	AC_CHECK_FUNCS(gethostbyname,HAVE_GETHOSTBYNAME=1)
@@ -1268,7 +1237,7 @@ fi
 if test "${HAVE_INET_ADDR+set}" != set ; then
 	unset ac_cv_func_inet_addr
 	AC_CHECK_FUNCS(inet_addr,HAVE_INET_ADDR=1)
-	if test "${HAVE_INET_ADDR+set}" != set ; then
+	if test "${HAVE_INET_ADDR+set}" != set -a "${USE_LIBXNET}" != false; then
 		AC_CHECK_LIB(xnet, inet_addr)
 		unset ac_cv_func_inet_addr
 		AC_CHECK_FUNCS(inet_addr,HAVE_INET_ADDR=1)
@@ -1405,6 +1374,8 @@ dnl    search for X-libs and includes and BALLView (OpenGL/MESA) stuff
 dnl 
 if test "${USE_BALLVIEW}" = true ; then
 	AC_PATH_X
+	X11_INCPATH=${x_includes}
+	X11_LIBPATH=${x_libraries}
 
 	if test "${no_x}" = "yes" ; then
 		USE_BALLVIEW=false
@@ -1416,7 +1387,7 @@ if test "${USE_BALLVIEW}" = true ; then
 
 		if test "${BALLVIEW_PLATFORM}" = Mesa ; then
 			AC_MSG_CHECKING(for Mesa includes)
-			AC_FIND_HEADER(MESA_INCLUDES,GL/gl.h, ${OPENGL_INCLUDES} ${X11_PATH})
+			AC_FIND_HEADER(MESA_INCLUDES,GL/gl.h, ${OPENGL_INCPATH} ${X11_INCPATH})
 			if test "${MESA_INCLUDES}" = "" ; then
 				AC_MSG_RESULT((not found!))
 				AC_MSG_RESULT()
@@ -1431,7 +1402,7 @@ if test "${USE_BALLVIEW}" = true ; then
 
 			if test "${USE_BALLVIEW}" = true ; then
 				AC_MSG_CHECKING(for Mesa library)
-				AC_FIND_LIB(MESA_LIBS,libMesaGL, ${OPENGL_LIBS} ${x_libraries})
+				AC_FIND_LIB(MESA_LIBS,libMesaGL, ${OPENGL_LIBPATH} ${X11_LIBPATH})
 				if test "${MESA_LIBS}" = "" ; then
 					AC_MSG_RESULT((not found!))
 					AC_MSG_RESULT()
@@ -1453,74 +1424,78 @@ if test "${USE_BALLVIEW}" = true ; then
 
 		if test ${BALLVIEW_PLATFORM} = OpenGL ; then
 			AC_MSG_CHECKING(for OpenGL includes)
-			AC_FIND_HEADER(OPENGL_INCLUDES,GL/gl.h)
-			if test "${OPENGL_INCLUDES}" = "" ; then
+			AC_FIND_HEADER(OPENGL_INCPATH,GL/gl.h)
+			if test "${OPENGL_INCPATH}" = "" ; then
 				AC_MSG_RESULT((not found!))
 				AC_MSG_RESULT()
 				AC_MSG_RESULT(no OpenGL headers found! Please modify the top section)
 				AC_MSG_RESULT(of configure and specify the correct path to these headers.)
 				AC_MSG_ERROR(aborted)
 			else
-				AC_MSG_RESULT((${OPENGL_INCLUDES}))
+				AC_MSG_RESULT((${OPENGL_INCPATH}))
 			fi
 
 			AC_MSG_CHECKING(for OpenGL library)
-			AC_FIND_LIB(OPENGL_LIBS,libGL)
-			if test "${OPENGL_LIBS}" = "" ; then
+			AC_FIND_LIB(OPENGL_LIBPATH,libGL)
+			if test "${OPENGL_LIBPATH}" = "" ; then
 				AC_MSG_RESULT((not found!))
 				AC_MSG_RESULT()
 				AC_MSG_RESULT(no OpenGL lib found! Please modify the top section)
 				AC_MSG_RESULT(of configure and specify the correct path to these libraries.)
 				AC_MSG_ERROR(aborted)
 			else
-				AC_MSG_RESULT((${OPENGL_LIBS}))
+				AC_MSG_RESULT((${OPENGL_LIBPATH}))
 			fi
 			
-			if test "${OPENGL_INCLUDES}" != /usr/include && test "${OPENGL_INCLUDES}" != "" ; then
-				BALLVIEW_INCLUDES="${BALLVIEW_INCLUDES} -I${OPENGL_INCLUDES}"
+			if test "${OPENGL_INCPATH}" != /usr/include && test "${OPENGL_INCPATH}" != "" ; then
+				BALLVIEW_INCLUDES="${BALLVIEW_INCLUDES} -I${OPENGL_INCPATH}"
 			fi
 		fi
 
 		AC_MSG_CHECKING(for QT headers)
 		if test "${QTDIR}" != "" ; then
-			AC_FIND_HEADER(QT_INCLUDES,qgl.h,${QTDIR}/include ${BALL_PATH}/contrib/qt/include)
+			AC_FIND_HEADER(QT_INCPATH,qgl.h,${QTDIR}/include ${BALL_PATH}/contrib/qt/include)
 		else
-			AC_FIND_HEADER(QT_INCLUDES,qgl.h,${BALL_PATH}/contrib/qt/include)
+			AC_FIND_HEADER(QT_INCPATH,qgl.h,${BALL_PATH}/contrib/qt/include)
 		fi
 
-		if test "${QT_INCLUDES}" = "" ; then
+		if test "${QT_INCPATH}" = "" ; then
 			AC_MSG_RESULT((not found!))
 			AC_MSG_RESULT()
-			AC_MSG_RESULT(no QT header files found! Please modify the top section)
-			AC_MSG_RESULT(of configure and specify the correct path to these headers)
-			AC_MSG_RESULT(or install QT. The QT package can be found in BALL/contrib/qt.)
-			AC_MSG_RESULT(You may also set yout environment variable QTDIR to the correct)
+			AC_MSG_RESULT(No QT header files found! Please specify the path to the QT headers)
+			AC_MSG_RESULT(by passing the option --with-qt-incl=DIR to configure.)
+			AC_MSG_RESULT(You may also set the environment variable QTDIR to the correct)
 			AC_MSG_RESULT(path - configure will recognize this, too.)
-			AC_MSG_ERROR(aborted)
+			AC_MSG_RESULT(The QT package can be found under the following URL:)
+			AC_MSG_RESULT(  http://www.troll.no/qt)
+			AC_MSG_ERROR(Building of the visualization component BALLVIEW was disabled!)
 		else
-			AC_MSG_RESULT((${QT_INCLUDES}))	
+			AC_MSG_RESULT((${QT_INCPATH}))	
 		fi
 
 		AC_MSG_CHECKING(for QT library)
 		if test "${QTDIR}" != "" ; then
-			AC_FIND_LIB(QT_LIBS,libqt,${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include)
+			AC_FIND_LIB(QT_LIBPATH,libqt,${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include)
 		else
-			AC_FIND_LIB(QT_LIBS,libqt,${BALL_PATH}/contrib/qt/lib ${BALL_PATH}/contrib/qt/lib/${BINFMT})
+			AC_FIND_LIB(QT_LIBPATH,libqt,${BALL_PATH}/contrib/qt/lib ${BALL_PATH}/contrib/qt/lib/${BINFMT})
 		fi
 
-		if test "${QT_LIBS}" = "" ; then
+		if test "${QT_LIBPATH}" = "" ; then
 			AC_MSG_RESULT((not found!))
 			AC_MSG_RESULT()
-			AC_MSG_RESULT(no QT library file found! Please modify the top section)
-			AC_MSG_RESULT(of configure and specify the correct path to these headers)
-			AC_MSG_RESULT(or compile QT and rerun this script again)
-			AC_MSG_ERROR(aborted)
+			AC_MSG_RESULT(The QT library could not be found. Please specify the path to libqt)
+			AC_MSG_RESULT(by passing the option --with-qt-libs=DIR to configure.)
+			AC_MSG_RESULT(You may also set the environment variable QTDIR to the correct)
+			AC_MSG_RESULT(path - configure will recognize this, too.)
+			AC_MSG_RESULT(The QT package can be found under the following URL:)
+			AC_MSG_RESULT(  http://www.troll.no/qt)
+			AC_MSG_ERROR(Building of the visualization component BALLVIEW was disabled!)
 		else
-			AC_MSG_RESULT((${QT_LIBS}))	
+			AC_MSG_RESULT((${QT_LIBPATH}))	
 		fi
 
-		if test "${QT_INCLUDES}" != /usr/include && test "${QT_INCLUDES}" != "" ; then
-			BALLVIEW_INCLUDES="${BALLVIEW_INCLUDES} -I${QT_INCLUDES}"
+		if test "${QT_INCPATH}" != /usr/include && test "${QT_INCPATH}" != "" ; then
+			BALLVIEW_INCLUDES="${BALLVIEW_INCLUDES} -I${QT_INCPATH}"
 		fi
 	
 		BALLVIEW="VIEW MOLVIEW"
@@ -1536,39 +1511,76 @@ dnl   (X, QT, Mesa/OpenGL)
 dnl
 
 if test "${USE_BALLVIEW}" = true ; then
-	if test "${x_libraries}" != "/usr/lib" -a "${x_libraries}" != ""; then
-		X11_PATH="-L${x_libraries}"
-	else
-		X11_PATH=""
+	if test "${X11_LIBPATH}" = "/usr/lib" ; then
+		X11_LIBPATH=""
 	fi
 fi
 
 if test "${USE_BALLVIEW}" = true ; then		
+	dnl  
 	dnl
-	dnl  Linux seems to require two libraries more: SM and ICE
+	dnl  identify the X11 libraries needed to link agains
 	dnl
+	dnl
+	
 	AC_MSG_CHECKING(linking against X11 libraries)
-	if test "${OS}" = Linux ; then
-		ADD_X_LIBS="-lSM -lICE"
-	fi
-
 	dnl 
-	dnl   this is our defualt guess for reasonable X11 libraries
+	dnl   if the user specified X libraries, try these first
 	dnl
-	if test "${X_LIBS}" = "" ; then
-		X_LIBS="-lXmu -lXext -lXt -lX11"
+	if test "${X11_LIBS}" != "" ; then
+		SAVE_LIBS=${LIBS}
+		LIBS="-L${X11_LIBPATH} ${X11_LIBS} ${LIBS}"
+		AC_TRY_LINK([],[],X_LINKING_OK=1)
+		LIBS=${SAVE_LIBS}
 	fi
 
+	dnl 		
+	dnl  now try the default guess: Xmu, Xt, and X11 
 	dnl
-	dnl   now, try to link a dummy programm with these libraries
-	dnl		crashes, if unresolved symbols occur
-	dnl   libraries may then be specified externally via the
-	dnl   env variable X_LIBS...
+	if test "${X_LINKING_OK+set}" != set ; then
+		X11_LIBS="-lXmu -lXt -lX11"
+		SAVE_LIBS=${LIBS}
+		LIBS="-L${X11_LIBPATH} ${X11_LIBS} ${LIBS}"
+		AC_TRY_LINK([],[],X_LINKING_OK=1)
+		LIBS=${SAVE_LIBS}
+	fi
+	
+	dnl 		
+	dnl  second guess: add SM and ICE
 	dnl
-	SAVE_LDFLAGS=${LDFLAGS}
-	LDFLAGS="${LDFLAGS} ${X11_PATH} ${X_LIBS} ${ADD_X_LIBS}"
-	AC_TRY_LINK([],[],X_LINKING_OK=1)
-	LDFLAGS=${SAVE_LDFLAGS}
+	if test "${X_LINKING_OK+set}" != set ; then
+		X11_LIBS="-lXmu -lXt -lX11 -lSM -lICE"
+		SAVE_LIBS=${LIBS}
+		LIBS="-L${X11_LIBPATH} ${X11_LIBS} ${LIBS}"
+		AC_TRY_LINK([],[],X_LINKING_OK=1)
+		LIBS=${SAVE_LIBS}
+	fi
+	
+	dnl 		
+	dnl  third guess: Xmu, Xext, Xt, and X11 
+	dnl
+	if test "${X_LINKING_OK+set}" != set ; then
+		X11_LIBS="-lXmu -lXext -lXt -lX11"
+		SAVE_LIBS=${LIBS}
+		LIBS="-L${X11_LIBPATH} ${X11_LIBS} ${LIBS}"
+		AC_TRY_LINK([],[],X_LINKING_OK=1)
+		LIBS=${SAVE_LIBS}
+	fi
+	
+	dnl 		
+	dnl fourth guess: add SM and ICE
+	dnl
+	if test "${X_LINKING_OK+set}" != set ; then
+		X11_LIBS="-lXmu -lXext -lXt -lX11 -lSM -lICE"
+		SAVE_LIBS=${LIBS}
+		LIBS="-L${X11_LIBPATH} ${X11_LIBS} ${LIBS}"
+		AC_TRY_LINK([],[],X_LINKING_OK=1)
+		LIBS=${SAVE_LIBS}
+	fi
+	
+	dnl 
+	dnl  if we could not link - complain about it!
+	dnl
 	if test "${X_LINKING_OK+set}" = set ; then
 		AC_MSG_RESULT(yes)	
 	else
@@ -1576,18 +1588,22 @@ if test "${USE_BALLVIEW}" = true ; then
 		AC_MSG_RESULT()
 		AC_MSG_RESULT(Don't know how to link with X11 libraries.)
 		AC_MSG_RESULT(Please specify the correct libraries (e.g. -lXmu -lXt -lX11) in the)
-		AC_MSG_RESULT(environment variable X_LIBS)
+		AC_MSG_RESULT(environment variable X11_LIBS)
+		AC_MSG_RESULT(If you are running Solaris 2.x you might also try the option --without-libxnet)
+		AC_MSG_RESULT(if your X libraries were linked against libsocket and libnsl instead of libxnet.)
 		AC_MSG_RESULT(Built of visualization component BALLVIEW disabled.)
 		AC_MSG_RESULT()
+		USE_BALLVIEW=false
 	fi
 
 	dnl		
-	dnl  join the additional X libraries (SM/ICE)
+	dnl  define some variables: X11_LIBOPTS and BALLVIEW_LIBS
 	dnl
-	if test "${ADD_X_LIBS}" != "" ; then
-		X_LIBS="${X_LIBS} ${ADD_X_LIBS}"
+	if test "${X11_LIBPATH}" != "" ; then
+		X11_LIBOPTS="-L${X11_LIBPATH} ${X11_LIBS}"
+	else
+		X11_LIBOPTS="${X11_LIBS}"
 	fi
-	BALLVIEW_LIBS="${BALLVIEW_LIBS} ${X11_PATH} ${X_LIBS}"
 fi
 
 if test "${USE_BALLVIEW}" = true ; then
@@ -1596,23 +1612,21 @@ if test "${USE_BALLVIEW}" = true ; then
 		dnl  strip default path
 		dnl
 		if test "${MESA_LIBS}" != "/usr/lib" -a "${MESA_LIBS}" != "" ; then
-			BALLVIEW_LIBS="${BALLVIEW_LIBS} -L${MESA_LIBS} -lMesaGLU -lMesaGL"
-			OPENGL_PATH="-L${MESA_LIBS}"
-			OPENGL_LIBS="-L${MESA_LIBS} -lMesaGLU -lMesaGL"			
+			OPENGL_LIBPATH="${MESA_LIBS}"
+			OPENGL_LIBOPTS="-L${MESA_LIBS} -lMesaGLU -lMesaGL"			
 		else
-			BALLVIEW_LIBS="${BALLVIEW_LIBS} -lMesaGLU -lMesaGL"
-			OPENGL_PATH=""
-			OPENGL_LIBS="-lMesaGLU -lMesaGL"
+			OPENGL_LIBPATH=""
+			OPENGL_LIBOPTS="-lMesaGLU -lMesaGL"
 		fi
 		
 		dnl
 		dnl  try to link against mesa libraries
 		dnl
 		AC_MSG_CHECKING(linking against Mesa libs)
-		SAVE_LDFLAGS=${LDFLAGS}
-		LDFLAGS="${LDFLAGS} ${OPENGL_LIBS} ${X11_PATH} ${X_LIBS}"
+		SAVE_LIBS=${LIBS}
+		LIBS="${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} "
 		AC_TRY_LINK([],[], HAVE_MESALIBS=1)
-		LDFLAGS=${SAVE_LDFLAGS}
+		LIBS=${SAVE_LIBS}
 		if test "${HAVE_MESALIBS+set}" != set ; then
 			AC_MSG_RESULT(no)
 			AC_MSG_RESULT()
@@ -1627,20 +1641,17 @@ if test "${USE_BALLVIEW}" = true ; then
 fi
 if test "${USE_BALLVIEW}" = true ; then
 	if test "${BALLVIEW_PLATFORM}" = OpenGL ; then
-		if test "${OPENGL_LIBS}" != "/usr/lib" ; then
-			BALLVIEW_LIBS="${BALLVIEW_LIBS} -L${OPENGL_LIBS} -lGLU -lGL"
-			OPENGL_PATH="-L${OPENGL_LIBS}"
-			OPENGL_LIBS="-L${OPENGL_LIBS} -lGLU -lGL"
+		if test "${OPENGL_LIBPATH}" != "/usr/lib" -a "${OPENGL_LIBPATH}" != "" ; then
+			OPENGL_LIBOPTS="-L${OPENGL_LIBPATH} -lGLU -lGL"
 		else
-			BALLVIEW_LIBS="${BALLVIEW_LIBS} -lGLU -lGL"
-			OPENGL_PATH=""
-			OPENGL_LIBS="-lGLU -lGL"
+			OPENGL_LIBPATH=""
+			OPENGL_LIBOPTS="-lGLU -lGL"
 		fi
 		AC_MSG_CHECKING(linking against OpenGL libraries)
-		SAVE_LDFLAGS=${LDFLAGS}
-		LDFLAGS="${LDFLAGS} ${OPENGL_LIBS}"
+		SAVE_LIBS=${LIBS}
+		LIBS="${OPENGL_LIBOPTS} ${LIBS}"
 		AC_TRY_LINK([],[],OPENGL_LINKING_OK=1)
-		LDFLAGS=${SAVE_LDFLAGS}
+		LIBS=${SAVE_LIBS}
 		if test "${OPENGL_LINKING_OK+set}" != set ; then
 			AC_MSG_RESULT(no)
 			AC_MSG_RESULT()
@@ -1655,20 +1666,17 @@ if test "${USE_BALLVIEW}" = true ; then
 fi
 	
 if test "${USE_BALLVIEW}" = true ; then
-	if test "${QT_LIBS}" != "/usr/lib" ; then
-		BALLVIEW_LIBS="${BALLVIEW_LIBS} -L${QT_LIBS} -lqgl -lqt"
-		QT_PATH="-L${QT_LIBS}"
-		QT_LIBS="-L${QT_LIBS} -lqgl -lqt}"
+	if test "${QT_LIBPATH}" != "/usr/lib" ; then
+		QT_LIBOPTS="-L${QT_LIBPATH} -lqgl -lqt"
 	else 
-		BALLVIEW_LIBS="${BALLVIEW_LIBS} -lqgl -lqt"
-		QT_PATH=""
-		QT_LIBS="-lqgl -lqt"
+		QT_LIBPATH=""
+		QT_LIBOPTS="-lqgl -lqt"
 	fi
 fi
 if test "${USE_BALLVIEW}" = true ; then
 	AC_MSG_CHECKING(linking against QT libraries)
 	SAVE_LIBS=${LIBS}
-	LIBS="${LIBS} ${QT_PATH} -lqgl -lqt ${OPENGL_PATH} ${OPENGL_LIBS} ${X11_PATH} ${X_LIBS}"
+	LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
 	AC_TRY_LINK([const char* qGLVersion();], [qGLVersion();], QT_LINKING_OK=1)
 	LIBS=${SAVE_LIBS}
 	if test "${QT_LINKING_OK+set}" != set; then
@@ -1737,7 +1745,7 @@ else
 fi
 
 LIBS="${LIBS} -lm"
-BALLVIEW_LIBS="${BALLVIEW_LIBS} -lm"
+BALLVIEW_LIBS="${BALLVIEW_LIBS} ${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} -lm"
 
 BALL_LIBS="${BALL_LIBS} -L${BALL_PATH}/lib/${BINFMT} -lBALL"
 if test "${USE_BALLVIEW}" = true ; then
@@ -1752,57 +1760,23 @@ LIBS="$BALL_LIBS $LIBS"
 dnl
 dnl   joining all flags
 dnl
-
 CPPFLAGS="$CPPFLAGS $DEFINES"
 
-
-	
 dnl
-dnl    try to find C++ standard include paths
-dnl    this is needed for make depend. If it doesn't work
-dnl    (quite probable the case) - it doesn't matter
-dnl    Don't try to find out how this bad hack works...
+dnl  we try to remove dependencies from non-BALL files
+dnl  to speed up compilation
+dnl  This works only for compilers that create one-line dependencies
+dnl  (most compilers except for g++). We simply "grep" away all foreign stuff.
+dnl  We can only insert ou egrep filter, if the compiler needs
+dnl  a redirection of the output (MAKEDEP_CXX_SUFFIX != "")
 dnl
-
-AC_PATH_PROG(DIRNAME,dirname,no)
-AC_MSG_CHECKING(for standard include path...)
-echo "#include <iostream.h>" >/tmp/$$.test.C
-LINES=`${CXX} -E /tmp/$$.test.C | egrep /iostream.h\"`
-${RM} /tmp/$$.test.C
-TEST=""
-for i in $LINES ; do
-	T=`echo $i | egrep /iostream.h\"`
-	if test "$T" != "" && test "$TEST" = "" ; then
-		TEST=$i
-	fi
-done
-
-TEST=`echo $TEST|${CUT} -d\" -f2`
-STD_CPP_INCLUDES=
-if test "${DIRNAME}" = no ; then
-	while test _`egrep / $TEST`_ != __ ; do
-		STD_CPP_INCLUDES=${STD_CPP_INCLUDES}/`echo $TEST|${CUT} -d/ -f2`
-		TEST=/`echo $TEST|${CUT} -d/ -f3-`
-	done
-else
-	STD_CPP_INCLUDES=`dirname $TEST`
+dnl  btw: escaping is FUN! the expression below uses \ to escape the damned shell,
+dnl  [] to escape m4, and finally $$ to escape make - the correct expression
+dnl  is something like "(${BALL_PATH}|^[^/]*$)". Send me an email if got that immediately...
+dnl
+if test "${HAS_GPLUSPLUS}" = false -a "${MAKEDEP_CXX_SUFFIX}" != "" ; then
+	MAKEDEP_CXX_SUFFIX="|egrep \"(${BALL_PATH}|^[[^/]]*\$\$)\" ${MAKEDEP_CXX_SUFFIX}"
 fi
-AC_MSG_RESULT(done)
-STD_CPP_INCLUDES="-I${STD_CPP_INCLUDES} -I/usr/include"
-
-
-
-
-
-AC_MSG_CHECKING(for prelinker)
-if test "${PRELINK}" = "" ; then
-	AC_MSG_RESULT(not needed)
-	__PRELINK__="@echo no external prelinker needed..."
-else
-	AC_MSG_RESULT(using ${PRELINK})
-	__PRELINK__="@\$(PRELINK) \$(PREOPTS) \`cat *.objects\`"
-fi
-
 
 
 
@@ -1827,7 +1801,7 @@ fi
 AC_SUBST(CXX_MAKEDEPEND)		dnl path to C++ makedepend
 AC_SUBST(MAKEDEP_CXX_OPTS)	dnl options to C++ makedepend
 AC_SUBST(MAKEDEP_CXX_SUFFIX)dnl optional suffix (for redirection) for C++ makedepend
-
+AC_SUBST(DEPENDENCY_GREPS)  dnl command line to remove non-BALL headers from the dependencies
 
 
 dnl         COMPILER
@@ -1848,10 +1822,13 @@ AC_SUBST(BINFMT_INDEX)      dnl BFMT: binformat index of the current BINFMT - pa
 dnl         LINKER
 
 AC_SUBST(BALLVIEW_LIBS)     dnl BALLVIEW libs
-AC_SUBST(OPENGL_LIBS)       dnl OpenGL libs
-AC_SUBST(OPENGL_PATH)       dnl path to OpenGL libs (including -L)
-AC_SUBST(QT_PATH)           dnl path to QT libs (including -L)
-AC_SUBST(X11_PATH)          dnl path to X11 libs (including -L)
+AC_SUBST(OPENGL_LIBOPTS)    dnl compiler options for OpenGL libs (-Lxxx -lGLU -lGL)
+AC_SUBST(OPENGL_LIBPATH)    dnl path to OpenGL libs (without -L)
+AC_SUBST(QT_LIBOPTS)        dnl copiler options for QT libs (-Lxxx -lqgl -lqt)
+AC_SUBST(QT_LIBPATH)        dnl path to QT libs (without -L)
+AC_SUBST(X11_LIBOPTS)       dnl compiler options for X11 libs (-Lxx -lXmu -lXt -lX11 [-lSM -lICE])
+AC_SUBST(X11_LIBPATH)       dnl path to X11 libs (without -L)
+AC_SUBST(X11_LIBS)          dnl the X11 libraries only (-lXmu -lXt...)
 AC_SUBST(BALL_LIBS)         dnl libraries
 AC_SUBST(LDFLAGS)           dnl linker flags
 AC_SUBST(LIBS)              dnl linker libraries
@@ -1861,9 +1838,6 @@ AC_SUBST(CPPFLAGS_O)        dnl optimization flags for compiler
 AC_SUBST(CPP_MODE_FLAGS)    dnl set to CPPFLAGS_D|CPPFLAGS_O, depending on BALL_DEBUG
 AC_SUBST(CPP_MODE_FLAGS_NO_OPTIMIZATION)    
 														dnl set to CPPFLAGS_D|"", depending on BALL_DEBUG
-AC_SUBST(PRELINK)           dnl name of prelinker
-AC_SUBST(__PRELINK__)       dnl prelinker call in common.mak
-AC_SUBST(PREOPTS)           dnl prelinker options
 
 
 
@@ -1938,7 +1912,7 @@ AC_SUBST(SUBDIRS)
 
 if test "${MULTI_BUILD}" = "true" ; then
 	AC_MSG_RESULT(creating shadow directories...)
-	config/shadowsource.sh `pwd`"/${BINFMT}" `pwd` "${SUBDIRS} TEST"
+	config/shadowsource.sh `pwd`"/${BINFMT}" `pwd` "${SUBDIRS} TEST EXAMPLES TUTORIAL APPLICATIONS"
 	${RM} -fr `pwd`/${BINFMT}/TEST/data 2>/dev/null
 	${LN} -s `pwd`/TEST/data `pwd`/${BINFMT}/TEST 2>/dev/null
 	${LN} -s `pwd`/TEST/runtests `pwd`/${BINFMT}/TEST 2>/dev/null
