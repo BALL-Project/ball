@@ -1,0 +1,7 @@
+// $Id: enumerator.iC,v 1.1 2000/06/14 14:45:35 anker Exp $
+
+BALL_INLINE
+const vector<Size>& EnumeratorIndex::getModulus() const
+{
+	return modulus_;
+}
