@@ -1,4 +1,4 @@
-// $Id: SESEdge.h,v 1.12 2002/01/07 17:49:20 strobel Exp $
+// $Id: SESEdge.h,v 1.13 2002/01/14 20:58:57 strobel Exp $
 
 #ifndef BALL_STRUCTURE_SESEDGE_H
 #define BALL_STRUCTURE_SESEDGE_H
@@ -252,7 +252,7 @@ namespace BALL
 							<< ((sesedge.getRSEdge() == NULL) ?
 											-2 : sesedge.getRSEdge()->getIndex())
 							<< ((sesedge.getType() == TSESEdge<T>::TYPE_CONCAVE) ?
-											" cocave)" :
+											" concave)" :
 											((sesedge.getType() == TSESEdge<T>::TYPE_CONVEX) ?
 														" convex)" : " singular)"))
 						);
