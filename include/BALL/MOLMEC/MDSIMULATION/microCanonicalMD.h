@@ -1,4 +1,4 @@
-// $Id: microCanonicalMD.h,v 1.2 1999/12/30 18:14:23 pmueller Exp $
+// $Id: microCanonicalMD.h,v 1.3 2000/03/26 12:49:30 oliver Exp $
 // Microcanonical MD: A class for doing molecular dynamics simulations      
 // according to the principle of a microcanonical ensemble (NVE), i.e., 
 // the total energy of the system is kept constant.
@@ -70,7 +70,7 @@ namespace BALL
     */
     struct Aux_Factors
       {
-      float factor1,factor2; 
+      double factor1,factor2; 
       }; 
     
     /** @name Constructors and Destructors
@@ -155,7 +155,7 @@ namespace BALL
     /**  This method does the actual simulation stuff
          It runs for the indicated time in picoseconds  
     */
-    virtual void simulateTime(float simulation_time,bool restart = false); 
+    virtual void simulateTime(double simulation_time,bool restart = false); 
 
     //@}
 

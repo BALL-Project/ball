@@ -1,415 +1,404 @@
-// $Id: molecularDynamics.h,v 1.4 2000/02/06 19:47:15 oliver Exp $
+// $Id: molecularDynamics.h,v 1.5 2000/03/26 12:49:30 oliver Exp $
 // MolecularDynamics: A base class for doing molecular dynamics simulations    
 // Useful MD classes must be derived from this class 
 
-#ifndef BALL_MOLMEC_MDSIMULATION_MOLECULARDYNAMICS_H 
-#define BALL_MOLMEC_MDSIMULATION_MOLECULARDYNAMICS_H 
+#ifndef BALL_MOLMEC_MDSIMULATION_MOLECULARDYNAMICS_H
+#define BALL_MOLMEC_MDSIMULATION_MOLECULARDYNAMICS_H
 
 
 // Include all necessary BALL headers 
 #ifndef _BALL_COMMON_H
-#	include <BALL/common.h>
+# include <BALL/common.h>
 #endif
 
 #ifndef BALL_KERNEL_PSE_H
-#       include <BALL/KERNEL/PSE.h>
-#endif 
+# include <BALL/KERNEL/PSE.h>
+#endif
 
 #ifndef BALL_KERNEL_SYSTEM_H
-#	include <BALL/KERNEL/system.h>
+# include <BALL/KERNEL/system.h>
 #endif
 
-#ifndef BALL_KERNEL_ATOM_H         
-#	include <BALL/KERNEL/atom.h>
+#ifndef BALL_KERNEL_ATOM_H
+# include <BALL/KERNEL/atom.h>
 #endif
 
-#ifndef BALL_MATHS_VECTOR3_H         
-#	include <BALL/MATHS/vector3.h>
+#ifndef BALL_MATHS_VECTOR3_H
+# include <BALL/MATHS/vector3.h>
 #endif
 
 
 #ifndef BALL_DATATYPE_OPTIONS_H
-#	include <BALL/DATATYPE/options.h>
+# include <BALL/DATATYPE/options.h>
 #endif
 
 #ifndef BALL_MOLMEC_PARAMETER_FORCEFIELDPARAMETER_H
-#	include <BALL/MOLMEC/PARAMETER/forceFieldParameters.h>
+# include <BALL/MOLMEC/PARAMETER/forceFieldParameters.h>
 #endif
 
 #ifndef BALL_MOLMEC_PARAMETER_ATOMTYPES_H
-#	include <BALL/MOLMEC/PARAMETER/atomTypes.h>
+# include <BALL/MOLMEC/PARAMETER/atomTypes.h>
 #endif
 
 #ifndef BALL_MOLMEC_COMMON_PERIODIC_BOUNDARY_H
-#	include <BALL/MOLMEC/COMMON/periodicBoundary.h>
+# include <BALL/MOLMEC/COMMON/periodicBoundary.h>
 #endif
 
 #ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
-#	include <BALL/MOLMEC/COMMON/forceField.h>
+# include <BALL/MOLMEC/COMMON/forceField.h>
 #endif
 
 #ifndef BALL_MOLMEC_COMMON_SNAPSHOT_H
-#	include <BALL/MOLMEC/COMMON/snapShot.h>
+# include <BALL/MOLMEC/COMMON/snapShot.h>
 #endif
 
 
 // STL include commands 
 #include <vector>
 
-namespace BALL 
+namespace BALL
 {
-        // This class is the base class for classical molecular dynamics
-        // simulations. Actual MD classes must be derived from this class  
-	class MolecularDynamics 
-	  {
- 	  public:
-
-          /**     Local classes for option names and default option values 
-                  for all MD (sub)classes 
-          */
-          struct Option
-            {
-            /**     The maximal number of iterations to be carried out 
-             */
-            static const char *MAXIMAL_NUMBER_OF_ITERATIONS;        
-
-            /**     The current number of iteration 
-             */
-            static const char *NUMBER_OF_ITERATION;        
-
-            /**     After how many iterations shall energy information be saved 
-            */
-            static const char *ENERGY_OUTPUT_FREQUENCY;
-
-            /**    After how many iterations shall a snapshot of the system be taken         
-            */
-            static const char *SNAPSHOT_FREQUENCY;
-
-            /**    The time step in picoseconds 
-            */
-            static const char *TIME_STEP; 
-
-            /**    The reference temperature in Kelvin
-            */
-            static const char *REFERENCE_TEMPERATURE; 
-
-            /**    The parameter for heat bath coupling in picoseconds. 
-                   It should be greater than 0.1 ps. 
-            */
-            static const char *BATH_RELAXATION_TIME; 
-
-            /**    The current time of the simulation in picoseconds
-            */
-            static const char  *CURRENT_TIME; 
-            };
-
-          struct Default
-             {
-             /**     The maximal number of iterations to be simulated. 
-                     Default 10,000
-             */
-             static const int MAXIMAL_NUMBER_OF_ITERATIONS; 
-
-             /**     The current number of iteration 
-             */
-             static const int NUMBER_OF_ITERATION; 
-
-             /**     After how many iterations shall the current energy/temperature 
-                     be calculated/saved.
-                     Default 50  
-             */
-             static const int ENERGY_OUTPUT_FREQUENCY;
-
-             /**    After how many iterations shall the current positions/velocities be saved.
-             Default 1000
-             */
-             static const int SNAPSHOT_FREQUENCY;        
-
-             /**    The size of the time step in picoseconds. Default 0.0005 ps
-             */
-             static const float TIME_STEP;             
-
-             /**     The reference temperature for the simulated system.
-                     Default 300 K.
-             */
-             static const float REFERENCE_TEMPERATURE; 
-
-
-             /**    The parameter for heat bath coupling in picoseconds. Default = 0.2 ps
-             */
-             static const float BATH_RELAXATION_TIME; 
-
-             /**    The current time of the simulation in picoseconds
-                    Useful when doing several successive MD runs on the system 
-             */
-             static const float CURRENT_TIME;                   
-             };
-
-	     /**	@name	Constructors and Destructors	
-	     */
-	     //@{
+	/**	Molecular Dynamics base class.
+			This class is the base class for classical molecular dynamics
+			simulations. Actual MD classes must be derived from this class  
+	*/
+	class MolecularDynamics
+	{
+		public:
 		
-	     BALL_CREATE(MolecularDynamics)
+		/**     Local classes for option names and default option values 
+		 * for all MD(sub)classes 
+		 */
+		struct Option
+		{
+
+			/**     The maximal number of iterations to be carried out 
+			 */
+			static const char *MAXIMAL_NUMBER_OF_ITERATIONS;
+
+			/**     The current number of iteration 
+			 */
+			static const char *NUMBER_OF_ITERATION;
+
+			/**     After how many iterations shall energy information be saved 
+			 */
+			static const char *ENERGY_OUTPUT_FREQUENCY;
+
+			/**    After how many iterations shall a snapshot of the system be taken         
+			 */
+			static const char *SNAPSHOT_FREQUENCY;
 
-	     /**	Default constructor.
-	     */
-	     MolecularDynamics();
+			/**    The time step in picoseconds 
+			 */
+			static const char *TIME_STEP;
 
-	     /**	Constructor. It expects the forcefield
-	     */
-	     MolecularDynamics(ForceField & myforcefield);
+			/**    The reference temperature in Kelvin
+			 */
+			static const char *REFERENCE_TEMPERATURE;
 
+			/**    The parameter for heat bath coupling in picoseconds. 
+			 * It should be greater than 0.1 ps. 
+			 */
+			static const char *BATH_RELAXATION_TIME;
 
-	     /**	Copy constructor
-	     */
-	     MolecularDynamics(const MolecularDynamics &rhs, bool deep = true);
+			/**    The current time of the simulation in picoseconds
+			 */
+			static const char *CURRENT_TIME;
+		};
 
-	     /**	Destructor.
-	     */
-	     virtual ~MolecularDynamics();
+		struct Default
+		{
 
-	     //@}
+			/**     The maximal number of iterations to be simulated. 
+			 * Default 10,000
+			 */
+			static const int MAXIMAL_NUMBER_OF_ITERATIONS;
 
+			/**     The current number of iteration 
+			 */
+			static const int NUMBER_OF_ITERATION;
 
-	     /**	@name	Assignments 
-	     */
-	     //@{
+			/**     After how many iterations shall the current energy/temperature 
+			 * be calculated/saved.
+			 * Default 50  
+			 */
+			static const int ENERGY_OUTPUT_FREQUENCY;
 
-	     /**	Assignment operator
-	     */
-	     MolecularDynamics &operator=(const MolecularDynamics &rhs);              
+			/**    After how many iterations shall the current positions/velocities be saved.
+			 * Default 1000
+			 */
+			static const int SNAPSHOT_FREQUENCY;
 
-	     //@}
+			/**    The size of the time step in picoseconds. Default 0.0005 ps
+			 */
+			static const double TIME_STEP;
 
-	     /**	@name	Debugging and Diagnostics 
-	     */
+			/**     The reference temperature for the simulated system.
+			 * Default 300 K.
+			 */
+			static const double REFERENCE_TEMPERATURE;
 
-	     //@{
-	     /**	Has the molecular dynamics class been successfully set up?
-	     */
-	     bool	isValid() const;
 
-	     //@}
+			/**    The parameter for heat bath coupling in picoseconds. Default = 0.2 ps
+			 */
+			static const double BATH_RELAXATION_TIME;
 
-	     /**	@name	Setup methods 
-	     */
-	     //@{
+			/**    The current time of the simulation in picoseconds
+			 * Useful when doing several successive MD runs on the system 
+			 */
+			static const double CURRENT_TIME;
+		};
 
+		/**  @name Constructors and Destructors  
+		 */
+		//@{
 
-	     /**	Set up the molecular dynamics 
-	     */
-	     virtual bool setup(ForceField &myforcefield,SnapShotManager *snapshot_man);
+		BALL_CREATE (MolecularDynamics)
+		/**  Default constructor.
+		*/
+		MolecularDynamics ();
 
-	     /**	Set up the molecular dynamics    
-	     */
-	     virtual bool setup(ForceField &myforcefield,SnapShotManager *snapshot_man,
-                                                                 const Options &myoptions);
+		/**  Constructor. It expects the forcefield
+		*/
+		MolecularDynamics (ForceField & myforcefield);
 
-	     /**	Specific setup; derived class can use this method for
-	                additional preparations if necessary 
-	     */
-	     virtual bool specificSetup();
 
-	     //@}
+		/**  Copy constructor
+		*/
+		MolecularDynamics (const MolecularDynamics & rhs, bool deep = true);
 
+		/**  Destructor.
+		*/
+		virtual ~ MolecularDynamics ();
 
-	     /**	@name	Accessors 
-	     */
-	     //@{
+		//@}
 
-	     /**	Set the number of the current iteration 
-	     */
-	     void	setNumberOfIteration(Size number);
 
-	     /**	Set the maximal number of iterations
-	     */
-	     void	setMaximalNumberOfIterations(Size number);
+		/**  @name Assignments 
+		*/
+		//@{
 
-	     /**	Set the reference temperature for the system 
-	     */
-	     void	setReferenceTemperature(float temperature);     
+		/**  Assignment operator
+		*/
+		MolecularDynamics& operator = (const MolecularDynamics & rhs);
 
-             /**        Set the current time of the MD run in picoseconds
-             */
-             void       setCurrentTime(float time); 
+		//@}
 
-	     /**	Set the energy output frequency
-	     */
-	     void	setEnergyOutputFrequency(Size number);
+		/**  @name Debugging and Diagnostics 
+		*/
 
-	     /**	Set the snapshot frequency
-	     */
-	     void	setSnapShotFrequency(Size number);
+		//@{
 
-	     /**	Get the energy output frequency
-	     */
-	     Size	getEnergyOutputFrequency() const;
+		/**  Has the molecular dynamics class been successfully set up?
+		*/
+		bool isValid () const;
 
-             /**        Get the current iteration of the MD simulation 
-             */
-             Size getNumberOfIteration() const; 
+		//@}
 
-             /**        Get the maximal number of iterations of the MD simulation 
-             */
-             Size getMaximalNumberOfIterations() const; 
+		/**  @name Setup methods 
+		*/
+		//@{
 
-	     /**	Get the snapshot frequency
-	     */
-	     Size	getSnapShotFrequency() const;
 
-	     /**	Get the current temperature of the system         
-	     */
-	     float	getTemperature() const;
+		/**  Set up the molecular dynamics 
+		*/
+		virtual bool setup (ForceField & myforcefield, SnapShotManager * snapshot_man);
 
-             /**        Get the current time of the MD simulation
-             */
-             float      getTime() const; 
+		/**  Set up the molecular dynamics    
+		*/
+		virtual bool setup (ForceField & myforcefield, SnapShotManager * snapshot_man, const Options & myoptions);
 
-             /**        Get the current total energy of the system
-             */
-             float      getTotalEnergy() const;
+		/**  Specific setup; derived class can use this method for
+				additional preparations if necessary 
+		*/
+		virtual bool specificSetup ();
 
-             /**        Get the current potential energy of the system
-             */
-             float      getPotentialEnergy() const;
+		//@}
 
-             /**        Get the current kinetic energy of the system
-             */
-             float      getKineticEnergy() const;
 
-	     /**	Get the force field the MD simulation is bound to 
-	     */
-	     ForceField *getForceField() const;
+		/**  @name Accessors 
+		 */
+		//@{
 
+		/**  Set the number of the current iteration 
+		*/
+		void setNumberOfIteration (Size number);
 
-	     /**	Start the molecular dynamics simulation                      
-                        The base class does not provide any
-                        implementation for these methods below. 
-	     */
-	     virtual void simulate(bool restart = false);
+		/**  Set the maximal number of iterations
+		*/
+		void setMaximalNumberOfIterations (Size number);
 
-	     /**	Start the molecular dynamics simulation and carry out
-	                the given number of iterations. 
-	     */
-	     virtual void simulateIterations(Size number,bool restart = false);
+		/**  Set the reference temperature for the system 
+		*/
+		void setReferenceTemperature (double temperature);
 
-	     /**	Start the molecular dynamics simulation and carry out
-	                the given time in picoseconds    
-	     */
-	     virtual void simulateTime(float simulation_time, bool restart = false);
+		/**        Set the current time of the MD run in picoseconds
+		*/
+		void setCurrentTime (double time);
 
-	     //@}
+		/**  Set the energy output frequency
+		*/
+		void setEnergyOutputFrequency (Size number);
 
+		/**  Set the snapshot frequency
+		*/
+		void setSnapShotFrequency (Size number);
 
-	     /**	@name	Public Attributes
-	      */
-	     //@{
-		
-             /*         The options for this class
-             */
-	     Options	options;
+		/**  Get the energy output frequency
+		*/
+		Size getEnergyOutputFrequency () const;
 
-	     //@}
+		/**        Get the current iteration of the MD simulation 
+		*/
+		Size getNumberOfIteration () const;
 
-	     protected:
-	     /*_	@name	Protected Methods 
-	     */
+		/**        Get the maximal number of iterations of the MD simulation 
+		*/
+		Size getMaximalNumberOfIterations () const;
 
-	     //_@{
-             /*_        A method for calculating the
-                        current temperature in the system
-             */
-             void updateInstantaneousTemperature();
-	     //_@}
+		/**  Get the snapshot frequency
+		*/
+		Size getSnapShotFrequency () const;
 
-	     /*_	@name	Protected Attributes
-	     */
-	     //_@{
+		/**  Get the current temperature of the system         
+		*/
+		double getTemperature () const;
 
-	     /*_	The boolean variable indicates if the setup of the 
-	                molecular dynamics has been successful 
-	     */
-	     bool 	valid_;
+		/**        Get the current time of the MD simulation
+		*/
+		double getTime () const;
 
+		/**        Get the current total energy of the system
+		*/
+		double getTotalEnergy () const;
 
-	     /*_	The force field the MD class is bound to          
-	      */
-	     ForceField *force_field_ptr_;
+		/**        Get the current potential energy of the system
+		*/
+		double getPotentialEnergy () const;
 
-             /*_        The system the MD class is bound to
-             */
-             System     *system_ptr_; 
+		/**        Get the current kinetic energy of the system
+		*/
+		double getKineticEnergy () const;
 
+		/**  Get the force field the MD simulation is bound to 
+		*/
+		ForceField *getForceField () const;
 
-             /*_        The list of atoms. The simulation 
-                        will be carried out for these atoms 
-             */
-             vector<Atom *> atom_vector_; 
 
+		/**  Start the molecular dynamics simulation                      
+				The base class does not provide any
+		  implementation for these methods below. 
+		*/
+		virtual void simulate (bool restart = false);
 
-	     /*_	The current iteration number  
-	     */
-	     Size	number_of_iteration_;
+		/**  Start the molecular dynamics simulation and carry out
+		  the given number of iterations. 
+		*/
+		virtual void simulateIterations (Size number, bool restart = false);
 
-	     /*_	The maximal number of iterations to be simulated when
-                        calling the simulate() method. 
-	     */
-	     Size	maximal_number_of_iterations_;
+		/**  Start the molecular dynamics simulation and carry out
+		  the given time in picoseconds    
+		*/
+		virtual void simulateTime (double simulation_time, bool restart = false);
 
- 	     /*_	the time step in picoseconds                  
-	     */
-	     float	time_step_;                     
+		//@}
 
-	     /*_	The reference temperature  in Kelvin 
-	     */
-	     float 	reference_temperature_;                     
 
-	     /*_	The current (kinetic) temperatue in Kelvin 
-             */
-	     float 	current_temperature_;                     
+		/**  @name Public Attributes
+		*/
+		//@{
 
-             /*_        The current kinetic energy  in kJ/mol
-             */
-             float      kinetic_energy_;
+		/*         The options for this class
+		*/
+		Options options;
 
-             /*_        The current total energy in kJ/mol
-             */
-             float      total_energy_;
+		//@}
 
+		protected:
 
-             /*_        The current time of the MD run                 
-             */
-             float      current_time_; 
+		/**  @name Protected Methods 
+		*/
+		//@{
 
-	     /*_	Frequency of energy output (i.e. after how many iterations) 
-	     */
-	     Size	energy_output_frequency_;
+		/**        A method for calculating the
+		  current temperature in the system
+		*/
+		void updateInstantaneousTemperature ();
+		//@}
 
-	     /*_	Frequency of taking snapshots (i.e. after how many iterations) 
-	     */
-	     Size	snapshot_frequency_;
+		/**  @name Protected Attributes
+		*/
+		//@{
 
-             /*_        The Snapshot Manager that is used for taking snapshots
-             */
-             SnapShotManager *snapshot_manager_ptr_; 
+		/**  The boolean variable indicates if the setup of the 
+		  molecular dynamics has been successful 
+		*/
+		bool valid_;
 
-	     //_@}
 
-	     private:
+		/**  The force field the MD class is bound to          
+		*/
+		ForceField* force_field_ptr_;
 
-	     /*_	@name	Private Attributes  */
-	     //_@{
-	     /*_	Global error messages
-				@see BallAtom::ErrorCode
-	      */
-              // BAUSTELLE Was soll das hier?? 
-	      static const char *error_message_[];
-	      //_@}
+		/**        The system the MD class is bound to
+		*/
+		System* system_ptr_;
 
-	};  // end of class MolecularDynamics 
 
-} // end of namespace Ball
+		/**        The list of atoms. The simulation 
+			will be carried out for these atoms 
+		*/
+		AtomVector atom_vector_;
 
 
+		/**  The current iteration number  
+		*/
+		Size number_of_iteration_;
 
-#endif // _BALL_MOLMEC_MOLECULARDYNAMICS_H 
+		/**  The maximal number of iterations to be simulated when
+			calling the simulate() method. 
+		*/
+		Size maximal_number_of_iterations_;
+
+		/**  the time step in picoseconds                  
+		*/
+		double time_step_;
+
+		/**  The reference temperature  in Kelvin 
+		*/
+		double reference_temperature_;
+
+		/**  The current(kinetic) temperatue in Kelvin 
+		*/
+		double current_temperature_;
+
+		/**        The current kinetic energy  in kJ/mol
+		*/
+		double kinetic_energy_;
+
+		/**        The current total energy in kJ/mol
+		*/
+		double total_energy_;
+
+
+		/**        The current time of the MD run                 
+		*/
+		double current_time_;
+
+		/**  Frequency of energy output (i.e. after how many iterations) 
+		*/
+		Size energy_output_frequency_;
+
+		/**  Frequency of taking snapshots (i.e. after how many iterations) 
+		*/
+		Size snapshot_frequency_;
+
+		/**        The Snapshot Manager that is used for taking snapshots
+		*/
+		SnapShotManager *snapshot_manager_ptr_;
+		//@}
+	};	// end of class MolecularDynamics 
+
+}	 // end of namespace Ball
+
+#endif // BALL_MOLMEC_MOLECULARDYNAMICS_H
