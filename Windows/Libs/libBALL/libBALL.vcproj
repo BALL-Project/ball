@@ -1071,9 +1071,6 @@
 					RelativePath="..\..\..\source\FORMAT\genericMolFile.C">
 				</File>
 				<File
-					RelativePath="..\..\..\source\FORMAT\genericPDBFile.C">
-				</File>
-				<File
 					RelativePath="..\..\..\source\FORMAT\HINFile.C">
 				</File>
 				<File
@@ -1107,7 +1104,19 @@
 					RelativePath="..\..\..\source\FORMAT\parameterSection.C">
 				</File>
 				<File
-					RelativePath="..\..\..\source\FORMAT\PDBFile.C">
+					RelativePath="..\..\..\source\Format\PDBdefs.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\Format\PDBFileDetails.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\Format\PDBFileGeneral.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\Format\PDBInfo.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\Format\PDBRecords.C">
 				</File>
 				<File
 					RelativePath="..\..\..\source\FORMAT\resourceFile.C">
