@@ -1,8 +1,8 @@
-// $Id: rtti.C,v 1.4 2000/10/24 21:38:48 amoll Exp $
+// $Id: rtti.C,v 1.5 2001/06/21 02:40:47 oliver Exp $
 
 #include <BALL/COMMON/rtti.h>
 #include <typeinfo>
-
+#include <ctype.h>
 
 namespace BALL 
 {
