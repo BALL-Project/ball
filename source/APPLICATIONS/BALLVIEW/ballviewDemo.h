@@ -85,6 +85,10 @@ namespace BALL
 						
 			//@}
 			
+			protected:
+
+			void nextStep_();
+
 			private:
 
 			List<Composite*> composites_;

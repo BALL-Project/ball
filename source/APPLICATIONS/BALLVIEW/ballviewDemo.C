@@ -46,19 +46,11 @@ void BALLViewDemo::show()
 	dp->enableCreationForNewMolecules(false);
 	System* system = new System();
 
-	// remove old Representations
-	CompositeManager& cm = getMainControl()->getCompositeManager();
-	HashSet<Composite*> comps = cm.getComposites();
-	HashSet<Composite*>::Iterator it = comps.begin();
-	for (; +it; ++it)
-	{
-		getMainControl()->remove(**it, true);
-	}
-
 	PDBFile file;
 	try
 	{
-		file.open("bpti.pdb");
+//   		file.open("bpti.pdb");
+		file.open("AlaAla.pdb");
 		file >> *system;
 		getMainControl()->insert(*system, "demo");
 	}
@@ -87,23 +79,36 @@ void BALLViewDemo::onNotify(Message *message)
 
 	Index id = widget_stack->id(widget_stack->visibleWidget());
 
-	if (id <= 0) return;
-
-	if (id < MODEL_HBONDS)
+	if (id <= MODEL_HBONDS &&
+		  rmsg != 0 && 
+			rmsg->getType() == RepresentationMessage::UPDATE)
 	{
-		if (rmsg != 0 && rmsg->getType() == RepresentationMessage::UPDATE)
-		{
-			buttonOk->setEnabled(true);
-		}
+		nextStep_();
 	}
+}
+
+void BALLViewDemo::nextStep_()
+{
+	buttonOk->setEnabled(true);
+	widget_stack->raiseWidget(widget_stack->id(widget_stack->visibleWidget()) + 1);
 }
 
 void BALLViewDemo::accept()
 {
 	Index id = widget_stack->id(widget_stack->visibleWidget());
 
-	if (id < MODEL_HBONDS)
+	if (id <= MODEL_HBONDS)
 	{
+		// remove representations
+		PrimitiveManager& pm = getMainControl()->getPrimitiveManager();
+		Size nr = pm.getNumberOfRepresentations();
+		list<Representation*> reps = pm.getRepresentations();
+		for (Position p = 0; p < nr; p++)
+		{
+			getMainControl()->remove(**reps.begin());
+			reps.pop_front();
+		}
+
 		CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, (ModelType) id, COLORING_ELEMENT);
 		notify_(crmsg);
 	}

@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.4 2005/02/28 15:55:05 amoll Exp $
+# $Id: Makefile,v 1.5 2005/02/28 16:26:28 amoll Exp $
 #
 
 EXECUTABLE=BALLView
@@ -39,8 +39,7 @@ UIC_FILES=\
 	aboutDialog.h\
 	ballviewTutorialData.C\
 	ballviewTutorialData.h\
-	ballviewDemoData.C\
-	ballviewDemo.h\
+	ballviewDemoData.C
 
 BALLView:	$(OBJECTS)	$(SPECIAL_OBJECTS)
 	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(VIEW_LIBS) $(BALL_INCLUDES) $(PYTHON_LIBS)
