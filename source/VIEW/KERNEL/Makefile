@@ -1,7 +1,7 @@
 DIRECTORY=VIEW/KERNEL
 
 THISLIB=$(LIBNAME)
-	
+
 CPP_SOURCES=\
 	client.C\
 	colorExtension1.C\
