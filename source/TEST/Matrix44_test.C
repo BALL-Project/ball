@@ -1,4 +1,4 @@
-// $Id: Matrix44_test.C,v 1.8 2000/03/19 23:45:53 amoll Exp $
+// $Id: Matrix44_test.C,v 1.9 2000/05/04 18:32:17 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,10 +7,11 @@
 #include <BALL/MATHS/matrix44.h>
 #include <BALL/MATHS/angle.h>
 #include <BALL/common.h>
+#include <BALL/COMMON/limits.h>
 #include <math.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Matrix44_test.C,v 1.8 2000/03/19 23:45:53 amoll Exp $")
+START_TEST(class_name, "$Id: Matrix44_test.C,v 1.9 2000/05/04 18:32:17 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -22,6 +23,7 @@ using std::ofstream;
 using std::ios;
 #undef PRECISION
 #define PRECISION 1E-5
+Constants::EPSILON = PRECISION;
 
 //line 60: method TMatrix4x4::BALL_CREATE(TMatrix4x4)
 CHECK(TMatrix4x4::BALL_CREATE(TMatrix4x4))
@@ -143,7 +145,7 @@ CHECK(TMatrix4x4(const T ptr[4][4]))
 			}
 	}
 	m1 = Matrix4x4(v);
-	TEST_EQUAL(m1.isEqual(m, 0.00001), true);
+	TEST_EQUAL(m1.isEqual(m), true);
 	TEST_EXCEPTION(Exception::NullPointer, m1 = Matrix4x4((float*)0))
 RESULT
 
@@ -161,7 +163,7 @@ CHECK(set( const T* ptr))
 		arr[i] = (float)i + 1;
 	}
 	m1.set(arr);
-	TEST_EQUAL(m1.isEqual(m, 0.00001), true)
+	TEST_EQUAL(m1.isEqual(m), true)
 	TEST_EXCEPTION(Exception::NullPointer, m1.set((float*)0))
 RESULT
 
@@ -178,14 +180,14 @@ CHECK(set( const T ptr[4][4]))
 			}
 	}
 	m1.set(v);
-	TEST_EQUAL(m1.isEqual(m, 0.00001), true);
+	TEST_EQUAL(m1.isEqual(m), true);
 	TEST_EXCEPTION(Exception::NullPointer, m1.set((float*)0))
 RESULT
 
 CHECK(set(const TMatrix4x4& m, bool deep = true))
 	m1 = Matrix4x4();
 	m1.set(m);
-	TEST_EQUAL(m1.isEqual(m, 0.00001), true)
+	TEST_EQUAL(m1.isEqual(m), true)
 RESULT
 
 CHECK(set
@@ -193,7 +195,7 @@ CHECK(set
 			 const TVector4<T>& col3, const TVector4<T>& col4))
 	m1 = Matrix4x4();
 	m1.set(v, v1, v2, v3);
-	TEST_EQUAL(m1.isEqual(m, 0.00001), true)
+	TEST_EQUAL(m1.isEqual(m), true)
 RESULT
 
 
@@ -204,7 +206,7 @@ CHECK(set
 			 const T& m41, const T& m42, const T& m43, const T& m44))
 	m1 = Matrix4x4();
 	m1.set(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0);
-	TEST_EQUAL(m1.isEqual(m, 0.00001), true)
+	TEST_EQUAL(m1.isEqual(m), true)
 RESULT
 
 CHECK(operator = ( const T* ptr))
@@ -215,7 +217,7 @@ CHECK(operator = ( const T* ptr))
 		arr[i] = (float)i + 1.0;
 	}
 	m1 = arr;
-	TEST_EQUAL(m1.isEqual(m, 0.00001), true)
+	TEST_EQUAL(m1.isEqual(m), true)
 RESULT
 
 CHECK(operator = ( const T ptr[4][4]))
@@ -231,13 +233,13 @@ CHECK(operator = ( const T ptr[4][4]))
 			}
 	}
 	m1 = v;
-	TEST_EQUAL(m1.isEqual(m, 0.00001), true);
+	TEST_EQUAL(m1.isEqual(m), true);
 	TEST_EXCEPTION(Exception::NullPointer, m1 =((float*)0))
 RESULT
 
 CHECK(operator = (const TMatrix4x4& m))
 	m1 = m;
-	TEST_EQUAL(m1.isEqual(m, 0.00001), true)
+	TEST_EQUAL(m1.isEqual(m), true)
 RESULT
 
 CHECK(get(T* ptr) const)
@@ -245,7 +247,7 @@ CHECK(get(T* ptr) const)
 	float arr[16];
 	m.get(arr);
 	m1.set(arr);
-	TEST_EQUAL(m1.isEqual(m, 0.00001), true)
+	TEST_EQUAL(m1.isEqual(m), true)
 	TEST_EXCEPTION(Exception::NullPointer, m1.get((float*)0))
 RESULT
 
@@ -254,14 +256,14 @@ CHECK(get(T* ptr[4][4]) const)
 	float arr[4][4];
 	m.get(arr);
 	m1.set(arr);
-	TEST_EQUAL(m1.isEqual(m, 0.00001), true);
+	TEST_EQUAL(m1.isEqual(m), true);
 	TEST_EXCEPTION(Exception::NullPointer, m1.get((float*)0))
 RESULT
 
 CHECK(get(TMatrix4x4& m, bool deep = true) const)
 	m1 = Matrix4x4();
 	m.get(m1);
-	TEST_EQUAL(m1.isEqual(m, 0.00001), true)
+	TEST_EQUAL(m1.isEqual(m), true)
 RESULT
 
 CHECK(get
@@ -284,7 +286,7 @@ CHECK(get
 	m.get(a[0], a[1], a[2], a[3], a[4], a[5], a[6], a[7], a[8],
 				a[9], a[10], a[11], a[12], a[13], a[14], a[15]);
 	m1.set(a);
-	TEST_EQUAL(m1.isEqual(m, 0.00001), true)
+	TEST_EQUAL(m1.isEqual(m), true)
 RESULT
 
 CHECK(swap(TMatrix4x4& m))
@@ -292,8 +294,8 @@ CHECK(swap(TMatrix4x4& m))
 	m2 = Matrix4x4(1.0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
 	m3 = m2;
 	m1.swap(m2);
-	TEST_EQUAL(m2.isEqual(m, 0.00001), true)
-	TEST_EQUAL(m3.isEqual(m1, 0.00001), true)
+	TEST_EQUAL(m2.isEqual(m), true)
+	TEST_EQUAL(m3.isEqual(m1), true)
 RESULT
 
 //line 239: method TMatrix4x4::getTrace() const 
@@ -305,19 +307,19 @@ CHECK(static const TMatrix4x4& getZero())
 	const Matrix4x4 c = m1.getZero();
 	m1 = Matrix4x4();
 	m1.m11 = m1.m22 = m1.m33 = m1.m44 = 0;
-	TEST_EQUAL(m1.isEqual(c, 0.00001), true)
+	TEST_EQUAL(m1.isEqual(c), true)
 RESULT
 
 CHECK(const TMatrix4x4<T>& TMatrix4x4::setIdentity())
 	const Matrix4x4 c = m1.getIdentity();
 	m2 = Matrix4x4(1.0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
-	TEST_EQUAL(c.isEqual(m2, 0.00001), true)
+	TEST_EQUAL(c.isEqual(m2), true)
 RESULT
 
 CHECK(TMatrix4x4::setIdentity())
 	m1.setIdentity();
 	m2 = Matrix4x4(1.0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
-	TEST_EQUAL(m1.isEqual(m2, 0.00001), true)
+	TEST_EQUAL(m1.isEqual(m2), true)
 RESULT
 
 
@@ -325,7 +327,7 @@ RESULT
 CHECK(TMatrix4x4::fill(const T& t = (T)1))
 	m1.fill(2.0);
 	m2 = Matrix4x4(2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0);
-	TEST_EQUAL(m1.isEqual(m2, 0.00001), true)
+	TEST_EQUAL(m1.isEqual(m2), true)
 RESULT
 
 
@@ -334,49 +336,45 @@ CHECK(TMatrix4x4::transpose())
 	m1 = Matrix4x4(m);
 	m1.transpose();
 	m2 = Matrix4x4(1.0, 5.0, 9.0, 13.0, 2.0, 6.0, 10.0, 14.0, 3.0, 7.0, 11.0, 15.0, 4.0, 8.0, 12.0, 16.0);
-	TEST_EQUAL(m1.isEqual(m2, 0.00001), true)
+	TEST_EQUAL(m1.isEqual(m2), true)
 RESULT
 
 
-//line 270: method TMatrix4x4::getRow(Index row)
-CHECK(TMatrix4x4::getRow(Index row))
+//line 270: method TMatrix4x4::getRow(Position row)
+CHECK(TMatrix4x4::getRow(Position row))
 	m1 = Matrix4x4(m);
 	vx = m1.getRow(0);
 	TEST_EQUAL(vx , v)
-	TEST_EXCEPTION(Exception::IndexUnderflow, m1.getRow(-1))
 	TEST_EXCEPTION(Exception::IndexOverflow, m1.getRow(4))
 RESULT
 
 
-//line 278: method TMatrix4x4::getColumn(Index col)
-CHECK(TMatrix4x4::getColumn(Index col))
+//line 278: method TMatrix4x4::getColumn(Position col)
+CHECK(TMatrix4x4::getColumn(Position col))
 	m1 = Matrix4x4(m);
 	vx = m1.getColumn(0);
 	vy = Vector4(1.0, 5.0, 9.0, 13.0);
 	TEST_EQUAL(vx , vy)
-	TEST_EXCEPTION(Exception::IndexUnderflow, m1.getColumn(-1))
 	TEST_EXCEPTION(Exception::IndexOverflow, m1.getColumn(4))
 RESULT
 
 
-CHECK(TMatrix4x4::setColumn(Index row, TVector4<T> row_value))
+CHECK(TMatrix4x4::setColumn(Position row, TVector4<T> row_value))
 	Vector4 x(0.1, 0.2, 0.3, 0.4);
 	m1 = Matrix4x4(m);
 	m1.setRow(0, x);
 	vx = m1.getRow(0);
 	TEST_EQUAL(x , vx)
-	TEST_EXCEPTION(Exception::IndexUnderflow, m1.setRow(-1, vx))
 	TEST_EXCEPTION(Exception::IndexOverflow, m1.setRow(4, vx))
 RESULT
 
 
-CHECK(TMatrix4x4::setColumn(Index col, TVector4<T> col_value))
+CHECK(TMatrix4x4::setColumn(Position col, TVector4<T> col_value))
 	Vector4 x(0.1, 0.2, 0.3, 0.4);
 	m1 = Matrix4x4(m);
 	m1.setColumn(0, x);
 	vx = m1.getColumn(0);
 	TEST_EQUAL(x , vx)
-	TEST_EXCEPTION(Exception::IndexUnderflow, m1.setColumn(-1, vx))
 	TEST_EXCEPTION(Exception::IndexOverflow, m1.setColumn(4, vx))
 RESULT
 
@@ -389,50 +387,125 @@ CHECK(TMatrix4x4::getDiagonal() const )
 RESULT
 
 
-//line 292: method TMatrix4x4::T& operator ()(Index row, Index col)
-CHECK(TMatrix4x4::T& operator ()(Index row, Index col))
-	m1(1,1) = 1.1;
-	TEST_REAL_EQUAL(m1.m22, 1.1);
-	m1(3,3) = 11.1;
-	TEST_REAL_EQUAL(m1.m44, 11.1);
-	TEST_EXCEPTION(Exception::IndexUnderflow, m1(-1, 1) = 1.0)
-	TEST_EXCEPTION(Exception::IndexOverflow, m1(4, 1) = 1.0)
-	TEST_EXCEPTION(Exception::IndexUnderflow, m1(1, -1) = 1.0)
-	TEST_EXCEPTION(Exception::IndexOverflow, m1(1, 4) = 1.0)
+//line 292: method TMatrix4x4::T& operator () (Position row, Position col)
+CHECK(TMatrix4x4::T& operator () (Position row, Position col))
+	const Matrix4x4& c_m1 = const_cast<const Matrix4x4&>(m1);
+	TEST_REAL_EQUAL(c_m1(0, 0), m1.m11)
+	TEST_REAL_EQUAL(c_m1(0, 1), m1.m12)
+	TEST_REAL_EQUAL(c_m1(0, 2), m1.m13)
+	TEST_REAL_EQUAL(c_m1(0, 3), m1.m14)
+	TEST_REAL_EQUAL(c_m1(1, 0), m1.m21)
+	TEST_REAL_EQUAL(c_m1(1, 1), m1.m22)
+	TEST_REAL_EQUAL(c_m1(1, 2), m1.m23)
+	TEST_REAL_EQUAL(c_m1(1, 3), m1.m24)
+	TEST_REAL_EQUAL(c_m1(2, 0), m1.m31)
+	TEST_REAL_EQUAL(c_m1(2, 1), m1.m32)
+	TEST_REAL_EQUAL(c_m1(2, 2), m1.m33)
+	TEST_REAL_EQUAL(c_m1(2, 3), m1.m34)
+	TEST_REAL_EQUAL(c_m1(3, 0), m1.m41)
+	TEST_REAL_EQUAL(c_m1(3, 1), m1.m42)
+	TEST_REAL_EQUAL(c_m1(3, 2), m1.m43)
+	TEST_REAL_EQUAL(c_m1(3, 3), m1.m44)
+
+	TEST_EXCEPTION(Exception::IndexOverflow, m1.m22 = c_m1(4, 1))
+	TEST_EXCEPTION(Exception::IndexOverflow, m1.m22 = c_m1(1, 4))
+	TEST_EXCEPTION(Exception::IndexOverflow, m1.m22 = c_m1(Limits<Position>::max(), 1))
+	TEST_EXCEPTION(Exception::IndexOverflow, m1.m22 = c_m1(1, Limits<Position>::max()))
 RESULT
 
 
-//line 301: method TMatrix4x4::T& operator ()(Index row, Index col) const 
-CHECK(TMatrix4x4::T& operator ()(Index row, Index col) const )
-	m1(3,3) = 13.3;
-	TEST_REAL_EQUAL(m1(3,3) , 13.3)
-	m1(1,1) = 3.3;
-	TEST_REAL_EQUAL(m1(1,1) , 3.3)
-	TEST_EXCEPTION(Exception::IndexUnderflow, m1(-1, 1))
+//line 301: method TMatrix4x4::T& operator ()(Position row, Position col) const 
+CHECK(TMatrix4x4::T& operator () (Position row, Position col) const )
+	TEST_REAL_EQUAL(m1(0, 0), m1.m11)
+	TEST_REAL_EQUAL(m1(0, 1), m1.m12)
+	TEST_REAL_EQUAL(m1(0, 2), m1.m13)
+	TEST_REAL_EQUAL(m1(0, 3), m1.m14)
+	TEST_REAL_EQUAL(m1(1, 0), m1.m21)
+	TEST_REAL_EQUAL(m1(1, 1), m1.m22)
+	TEST_REAL_EQUAL(m1(1, 2), m1.m23)
+	TEST_REAL_EQUAL(m1(1, 3), m1.m24)
+	TEST_REAL_EQUAL(m1(2, 0), m1.m31)
+	TEST_REAL_EQUAL(m1(2, 1), m1.m32)
+	TEST_REAL_EQUAL(m1(2, 2), m1.m33)
+	TEST_REAL_EQUAL(m1(2, 3), m1.m34)
+	TEST_REAL_EQUAL(m1(3, 0), m1.m41)
+	TEST_REAL_EQUAL(m1(3, 1), m1.m42)
+	TEST_REAL_EQUAL(m1(3, 2), m1.m43)
+	TEST_REAL_EQUAL(m1(3, 3), m1.m44)
+
 	TEST_EXCEPTION(Exception::IndexOverflow, m1(4, 1))
-	TEST_EXCEPTION(Exception::IndexUnderflow, m1(1, -1))
 	TEST_EXCEPTION(Exception::IndexOverflow, m1(1, 4))
+	TEST_EXCEPTION(Exception::IndexOverflow, m1(Limits<Position>::max(), 1))
+	TEST_EXCEPTION(Exception::IndexOverflow, m1(1, Limits<Position>::max()))
+RESULT
+
+// method const TMatrix4x4::T& operator [] (Position index) const 
+CHECK(const T& TMatrxi44<T>::operator [] (Position index) const)
+	const Matrix4x4& c_m1 = const_cast<const Matrix4x4&>(m1);
+	TEST_REAL_EQUAL(c_m1[0] , m1.m11)
+	TEST_REAL_EQUAL(c_m1[1] , m1.m12)
+	TEST_REAL_EQUAL(c_m1[2] , m1.m13)
+	TEST_REAL_EQUAL(c_m1[3] , m1.m14)
+	TEST_REAL_EQUAL(c_m1[4] , m1.m21)
+	TEST_REAL_EQUAL(c_m1[5] , m1.m22)
+	TEST_REAL_EQUAL(c_m1[6] , m1.m23)
+	TEST_REAL_EQUAL(c_m1[7] , m1.m24)
+	TEST_REAL_EQUAL(c_m1[8] , m1.m31)
+	TEST_REAL_EQUAL(c_m1[9] , m1.m32)
+	TEST_REAL_EQUAL(c_m1[10] , m1.m33)
+	TEST_REAL_EQUAL(c_m1[11] , m1.m34)
+	TEST_REAL_EQUAL(c_m1[12] , m1.m41)
+	TEST_REAL_EQUAL(c_m1[13] , m1.m42)
+	TEST_REAL_EQUAL(c_m1[14] , m1.m43)
+	TEST_REAL_EQUAL(c_m1[15] , m1.m44)
+
+	TEST_EXCEPTION(Exception::IndexOverflow, m1.m44 = c_m1[16])
+	TEST_EXCEPTION(Exception::IndexOverflow, m1.m44 = c_m1[Limits<Position>::max()])
+RESULT
+
+
+// method TMatrix4x4::T& operator [] (Position index) 
+CHECK( T& TMatrxi44<T>::operator [] (Position index))
+	TEST_REAL_EQUAL(m1[0] , m1.m11)
+	TEST_REAL_EQUAL(m1[1] , m1.m12)
+	TEST_REAL_EQUAL(m1[2] , m1.m13)
+	TEST_REAL_EQUAL(m1[3] , m1.m14)
+	TEST_REAL_EQUAL(m1[4] , m1.m21)
+	TEST_REAL_EQUAL(m1[5] , m1.m22)
+	TEST_REAL_EQUAL(m1[6] , m1.m23)
+	TEST_REAL_EQUAL(m1[7] , m1.m24)
+	TEST_REAL_EQUAL(m1[8] , m1.m31)
+	TEST_REAL_EQUAL(m1[9] , m1.m32)
+	TEST_REAL_EQUAL(m1[10] , m1.m33)
+	TEST_REAL_EQUAL(m1[11] , m1.m34)
+	TEST_REAL_EQUAL(m1[12] , m1.m41)
+	TEST_REAL_EQUAL(m1[13] , m1.m42)
+	TEST_REAL_EQUAL(m1[14] , m1.m43)
+	TEST_REAL_EQUAL(m1[15] , m1.m44)
+
+	TEST_EXCEPTION(Exception::IndexOverflow, m1.m44 = m1[16])
+	TEST_EXCEPTION(Exception::IndexOverflow, m1.m44 = m1[Limits<Position>::max()])
 RESULT
 
 
 //line 305: method TMatrix4x4::TMatrix4x4 operator + () const 
 CHECK(TMatrix4x4::TMatrix4x4 operator + () const )
 	m1 = Matrix4x4(m);
-	TEST_EQUAL(m1.isEqual( + m, 0.00001), true)
+	TEST_EQUAL(m1.isEqual( + m), true)
 RESULT
 
 
 //line 309: method TMatrix4x4::TMatrix4x4 operator - () const 
 CHECK(TMatrix4x4::TMatrix4x4 operator - () const )
 	m1 = Matrix4x4(-1.0, -2.0, -3.0, -4.0, -5.0, -6.0, -7.0, -8.0, -9.0, -10.0, -11.0, -12.0, -13.0, -14.0, -15.0, -16.0);
-	TEST_EQUAL(m1.isEqual(- m, 0.00001), true)
+	TEST_EQUAL(m1.isEqual(- m), true)
 RESULT
 
 
 //line 316: method TMatrix4x4::TMatrix4x4 operator + (const TMatrix4x4& m) const 
 CHECK(TMatrix4x4::TMatrix4x4 operator + (const TMatrix4x4& m) const )
 	m1 = Matrix4x4() + m;
-	TEST_EQUAL(m1.isEqual(m, 0.00001), true)
+	TEST_EQUAL(m1.isEqual(m), true)
 RESULT
 
 
@@ -440,14 +513,14 @@ RESULT
 CHECK(TMatrix4x4::TMatrix4x4& operator += (const TMatrix4x4& m))
 	m1 = Matrix4x4();
 	m1 += m;
-	TEST_EQUAL(m1.isEqual(m, 0.00001), true)
+	TEST_EQUAL(m1.isEqual(m), true)
 RESULT
 
 
 //line 330: method TMatrix4x4::TMatrix4x4 operator - (const TMatrix4x4& m) const 
 CHECK(TMatrix4x4::TMatrix4x4 operator - (const TMatrix4x4& m) const )
 	m1 = Matrix4x4() - m;
-	TEST_EQUAL(m1.isEqual(-m, 0.00001), true)
+	TEST_EQUAL(m1.isEqual(-m), true)
 RESULT
 
 
@@ -455,14 +528,14 @@ RESULT
 CHECK(TMatrix4x4::TMatrix4x4& operator -= (const TMatrix4x4& m))
 	m1 = Matrix4x4();
 	m1 -= m;
-	TEST_EQUAL(m1.isEqual(-m, 0.00001), true)
+	TEST_EQUAL(m1.isEqual(-m), true)
 RESULT
 
 
 //line 342: method TMatrix4x4::TMatrix4x4 operator * (const T& scalar) const 
 CHECK(TMatrix4x4::TMatrix4x4 operator * (const T& scalar) const )
 	m1 = Matrix4x4(m) * (-1.0);
-	TEST_EQUAL(m1.isEqual(-m, 0.00001), true)
+	TEST_EQUAL(m1.isEqual(-m), true)
 RESULT
 
 
@@ -470,14 +543,14 @@ RESULT
 CHECK(TMatrix4x4::TMatrix4x4& operator *= (const T& scalar))
 	m1 = Matrix4x4(m);
 	m1 *= (-1.0);
-	TEST_EQUAL(m1.isEqual(-m, 0.00001), true)
+	TEST_EQUAL(m1.isEqual(-m), true)
 RESULT
 
 
 //line 353: method TMatrix4x4::TMatrix4x4 operator / (const T& scalar) const 
 CHECK(TMatrix4x4::TMatrix4x4 operator / (const T& scalar) const )
 	m1 = Matrix4x4(m) / (-1.0);
-	TEST_EQUAL(m1.isEqual(-m, 0.00001), true)
+	TEST_EQUAL(m1.isEqual(-m), true)
 	TEST_EXCEPTION(Exception::DivisionByZero, m1 / 0)
 RESULT
 
@@ -486,7 +559,7 @@ RESULT
 CHECK(TMatrix4x4::TMatrix4x4& operator /= (const T& scalar))
 	m1 = Matrix4x4(m);
 	m1 /= (-1.0);
-	TEST_EQUAL(m1.isEqual(-m, 0.00001), true)
+	TEST_EQUAL(m1.isEqual(-m), true)
 	TEST_EXCEPTION(Exception::DivisionByZero, m1 /= 0)
 RESULT
 
@@ -516,7 +589,7 @@ CHECK(TMatrix4x4::TMatrix4x4 operator * (const TMatrix4x4& m) const )
 				 m1.m41 * m.m13 + m1.m42 * m.m23 + m1.m43 * m.m33 + m1.m44 * m.m43,
 				 m1.m41 * m.m14 + m1.m42 * m.m24 + m1.m43 * m.m34 + m1.m44 * m.m44);
 	m3 = m1 * m;
-	TEST_EQUAL(m3.isEqual(m2, 0.00001), true)
+	TEST_EQUAL(m3.isEqual(m2), true)
 RESULT
 
 
@@ -526,7 +599,7 @@ CHECK(TMatrix4x4::TMatrix4x4& operator *= (const TMatrix4x4& m))
 								 141.0, 31.0, 71.0, 111.0, 151.0, 41.0, 81.0, 121.0, 161.0);
 	m3 = m1 * m;
 	m1 *= m;
-	TEST_EQUAL(m3.isEqual(m1, 0.00001), true)
+	TEST_EQUAL(m3.isEqual(m1), true)
 RESULT
 
 
@@ -553,7 +626,7 @@ CHECK(TMatrix4x4::invert(TMatrix4x4& inverse) const )
 	bool1 = m1.invert(m2);
 	TEST_EQUAL(bool1 , true)
 	m3 = m1 * m2;
-	TEST_EQUAL(m3.isEqual(e, 0.00001), true)
+	TEST_EQUAL(m3.isEqual(e), true)
 RESULT
 
 
@@ -567,7 +640,7 @@ CHECK(TMatrix4x4::invert())
 	m2 = Matrix4x4(m1);
 	bool1 = m1.invert();
 	m3 = m1 * m2;
-	TEST_EQUAL(m3.isEqual(e, 0.00001), true)
+	TEST_EQUAL(m3.isEqual(e), true)
 	TEST_EQUAL(bool1 , true)
 RESULT
 
@@ -634,10 +707,10 @@ CHECK(TMatrix4x4::translate(const T &x, const T &y, const T &z))
 	m1.m44 += m1.m41 * x + m1.m42 * y + m1.m43 * z;
 	m2 = Matrix4x4(m);
 	m2.translate(x, y, z);
-	TEST_EQUAL(m1.isEqual(m2, 0.00001), true)
+	TEST_EQUAL(m1.isEqual(m2), true)
 	x = -2; y = -3; z =-4;
 	m2.translate(x, y, z);
-	TEST_EQUAL(m.isEqual(m2, 0.00001), true)
+	TEST_EQUAL(m.isEqual(m2), true)
 RESULT
 
 
@@ -651,10 +724,10 @@ CHECK(TMatrix4x4::translate(const TVector3<T>& v))
 	m1.m44 += m1.m41 * v.x + m1.m42 * v.y + m1.m43 * v.z;
 	m2 = Matrix4x4(m);
 	m2.translate(v);
-	TEST_EQUAL(m1.isEqual(m2, 0.00001), true)
+	TEST_EQUAL(m1.isEqual(m2), true)
 	v = -v;
 	m2.translate(v);
-	TEST_EQUAL(m.isEqual(m2, 0.00001), true)
+	TEST_EQUAL(m.isEqual(m2), true)
 RESULT
 
 
@@ -681,7 +754,7 @@ CHECK(TMatrix4x4::setTranslation(const TVector3<T>& v))
 	Vector3 v(2.0, 3.0, 4.0);
 	m1.setTranslation(v);
 	m2.setTranslation(2.0, 3.0, 4.0);
-	TEST_EQUAL(m1.isEqual(m2, 0.00001), true)
+	TEST_EQUAL(m1.isEqual(m2), true)
 RESULT
 
 
@@ -690,7 +763,7 @@ CHECK(TMatrix4x4::scale(const T& x_scale, const T& y_scale, const T& z_scale))
 	m1 = Matrix4x4(m);
 	m1.scale(2.0, 4.0, 5.0);
 	m1.scale(0.5, 0.25, 0.2);
-	TEST_EQUAL(m1.isEqual(m, 0.00001), true)
+	TEST_EQUAL(m1.isEqual(m), true)
 RESULT
 
 
@@ -699,7 +772,7 @@ CHECK(TMatrix4x4::scale(const T& scale))
 	m1 = Matrix4x4(m);
 	m1.scale(2.0);
 	m1.scale(0.5);
-	TEST_EQUAL(m1.isEqual(m, 0.00001), true)
+	TEST_EQUAL(m1.isEqual(m), true)
 RESULT
 
 
@@ -710,7 +783,7 @@ CHECK(TMatrix4x4::scale(const TVector3<T>& v))
 	m1.scale(v);
 	v = Vector3(0.5, 0.25, 0.2);
 	m1.scale(v);
-	TEST_EQUAL(m1.isEqual(m, 0.00001), true)
+	TEST_EQUAL(m1.isEqual(m), true)
 RESULT
 
 
@@ -777,7 +850,7 @@ CHECK(TMatrix4x4::rotateX(const Angle& phi))
 	m3.setRotationX(a);
 	m2 *= m3;
 	m1.rotateX(a);
-	TEST_EQUAL(m1.isEqual(m2, 0.00001), true)
+	TEST_EQUAL(m1.isEqual(m2), true)
 RESULT
 
 
@@ -801,7 +874,7 @@ CHECK(TMatrix4x4::rotateY(const Angle &phi))
 	m3.setRotationY(a);
 	m2 *= m3;
 	m1.rotateY(a);
-	TEST_EQUAL(m1.isEqual(m2, 0.00001), true)
+	TEST_EQUAL(m1.isEqual(m2), true)
 RESULT
 
 
@@ -825,7 +898,7 @@ CHECK(TMatrix4x4::rotateZ(const Angle& phi))
 	m3.setRotationZ(a);
 	m2 *= m3;
 	m1.rotateZ(a);
-	TEST_EQUAL(m1.isEqual(m2, 0.00001), true)
+	TEST_EQUAL(m1.isEqual(m2), true)
 RESULT
 
 
@@ -836,7 +909,7 @@ CHECK(TMatrix4x4::rotate(const Angle& phi, const T& axis_x, const T& axis_y, con
 	Angle a = Angle(0);
 	m1.rotate(b, 1.0, 2.0, 3.0);
 	m2.rotate(a, 1.0, 2.0, 3.0);
-	TEST_EQUAL(m1.isEqual(m2, 0.00001), true)
+	TEST_EQUAL(m1.isEqual(m2), true)
 RESULT
 
 
@@ -847,7 +920,7 @@ CHECK(TMatrix4x4::rotate(const Angle& phi, const TVector3<T>& axis))
 	m2 = Matrix4x4(m);
 	m1.rotate(a, v.x, v.y, v.z);
 	m2.rotate(a, v);
-	TEST_EQUAL(m1.isEqual(m2, 0.00001), true)
+	TEST_EQUAL(m1.isEqual(m2), true)
 RESULT
 
 
@@ -858,7 +931,7 @@ CHECK(TMatrix4x4::rotate(const Angle& phi, const TVector4<T>& axis))
 	m2 = Matrix4x4(m);
 	m1.rotate(a, v.x, v.y, v.z);
 	m2.rotate(a, v);
-	TEST_EQUAL(m1.isEqual(m2, 0.00001), true)
+	TEST_EQUAL(m1.isEqual(m2), true)
 RESULT
 
 
@@ -869,7 +942,7 @@ CHECK(TMatrix4x4::setRotation(const Angle& phi, const T& axis_x, const T& axis_y
 	m1.m11 = m1.m22 = m1.m33 = m1.m44 = 1.0;
 	m1.rotate(a, 2.0, 3.0, 4.0);
 	m2.setRotation(a, 2.0, 3.0, 4.0);
-	TEST_EQUAL(m1.isEqual(m2, 0.00001), true)
+	TEST_EQUAL(m1.isEqual(m2), true)
 RESULT
 
 
@@ -881,7 +954,7 @@ CHECK(TMatrix4x4::setRotation(const Angle& phi, const TVector3<T>& axis))
 	m1.m11 = m1.m22 = m1.m33 = m1.m44 = 1.0;
 	m1.rotate(a, 2.0, 3.0, 4.0);
 	m2.setRotation(a, v);
-	TEST_EQUAL(m1.isEqual(m2, 0.00001), true)
+	TEST_EQUAL(m1.isEqual(m2), true)
 RESULT
 
 
@@ -891,7 +964,7 @@ CHECK(TMatrix4x4::setRotation(const Angle& phi, const TVector4<T>& axis))
 	m2.setRotation(a, v4);
 	Vector3 v3(2.0, 3.0, 4.0);
 	m1.setRotation(a, v3);
-	TEST_EQUAL(m1.isEqual(m2, 0.00001), true)
+	TEST_EQUAL(m1.isEqual(m2), true)
 RESULT
 
 
@@ -971,9 +1044,9 @@ RESULT
 
 CHECK(TMatrix4x4::isEqual(TMatrix4x4<T>& m, T maxDiff) const )
 	m1 = Matrix4x4(m);
-	TEST_EQUAL(m1.isEqual(m, 0.00001), true)
+	TEST_EQUAL(m1.isEqual(m), true)
 		m1.m41 = 12.12;
-	TEST_EQUAL(m1.isEqual(m, 0.00001), false)
+	TEST_EQUAL(m1.isEqual(m), false)
 RESULT
 
 //line 566: method TMatrix4x4::isValid() const 
@@ -998,7 +1071,7 @@ CHECK(std::istream& operator >> (std::istream& s, TMatrix4x4<T>& m))
 	std::ifstream instr("data/Matrix4x4_test2.txt");
 	instr >> m1;
 	instr.close();
-	TEST_EQUAL(m1.isEqual(m, 0.00001), true)
+	TEST_EQUAL(m1.isEqual(m), true)
 RESULT
 
 NEW_TMP_FILE(filename)
