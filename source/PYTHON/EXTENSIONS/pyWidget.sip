@@ -1,4 +1,4 @@
-// $Id: pyWidget.sip,v 1.1 2001/09/03 16:53:15 oliver Exp $
+// $Id: pyWidget.sip,v 1.2 2003/03/28 16:42:50 oliver Exp $
 
 class PyWidget
   // : public QMultiLineEdit,
@@ -29,11 +29,9 @@ class PyWidget
 	virtual void finalizeWidget(MainControl& /main_control/);
 
 	public:
-  virtual void cursorUp(bool /mark/ = false);
-  virtual void cursorDown(bool /mark/ = false);
- 	virtual void newLine();
-	virtual void cursorLeft(bool /mark/ = false, bool /wrap/ = true);
-	virtual void backspace();
-	virtual void cursorRight(bool /mark/ = false, bool /wrap/ = true);
-	// virtual void mousePressEvent(QMouseEvent* m);
+  virtual bool cursorUp();
+  virtual bool cursorDown();
+ 	virtual bool returnPressed();
+
+	// virtual void mousePressEvent(QMouseEvent* /m/);
 }; 
