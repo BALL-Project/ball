@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.C,v 1.21 2004/12/07 14:31:09 amoll Exp $
+// $Id: ballAndStickModel.C,v 1.22 2005/02/23 12:43:46 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/ballAndStickModel.h>
@@ -12,6 +12,7 @@
 #include <BALL/VIEW/PRIMITIVES/sphere.h>
 #include <BALL/VIEW/PRIMITIVES/disc.h>
 #include <BALL/VIEW/PRIMITIVES/twoColoredTube.h>
+#include <BALL/VIEW/KERNEL/common.h>
 
 using namespace std;
 
@@ -44,8 +45,7 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				Log.info() << "Destructing object " << (void *)this 
-									 << " of class " << RTTI::getName<AddBallAndStickModel>() << std::endl;
+				Log.info() << "Destructing object " << this << " of class AddBallAndStickModel" << std::endl;
 			#endif 
 		}
 
@@ -71,30 +71,11 @@ namespace BALL
 			dashed_bonds_ = add_ball_and_stick.dashed_bonds_;
 		}
 
-		const AddBallAndStickModel &AddBallAndStickModel::operator = 
-			(const AddBallAndStickModel &add_ball_and_stick)
+		const AddBallAndStickModel &AddBallAndStickModel::operator = (const AddBallAndStickModel &processor)
 			throw()
 		{
-			set(add_ball_and_stick);
+			set(processor);
 			return *this;
-		}
-
-		void AddBallAndStickModel::swap(AddBallAndStickModel &add_ball_and_stick)
-			throw()
-		{
-			AtomBondModelBaseProcessor::swap(add_ball_and_stick);
-
-			float temp_float = ball_radius_;
-			ball_radius_ = add_ball_and_stick.ball_radius_;
-			add_ball_and_stick.ball_radius_ = temp_float;
-
-			temp_float = stick_radius_;
-			stick_radius_ = add_ball_and_stick.stick_radius_;
-			add_ball_and_stick.stick_radius_ = temp_float;
-
-			bool temp_bool = ball_and_stick_;
-			ball_and_stick_ = add_ball_and_stick.ball_and_stick_;
-			add_ball_and_stick.ball_and_stick_ = temp_bool;
 		}
 
 		void AddBallAndStickModel::setBallRadius(const float radius)
@@ -128,12 +109,9 @@ namespace BALL
 				AtomBondModelBaseProcessor::operator() (composite);
 			}
 
-			if (!RTTI::isKindOf<Atom>(composite))
-			{
-				return Processor::CONTINUE;
-			}
-
 			Atom *atom = RTTI::castTo<Atom>(composite);
+
+			if (atom == 0) return Processor::CONTINUE;
 
 			Sphere* sphere_ptr = new Sphere;
 
@@ -192,10 +170,9 @@ namespace BALL
 			// no visualisation for hydrogen bonds
 			if (bond.getType() == Bond::TYPE__HYDROGEN) return;
 
-			if (!dashed_bonds_ ||
-					(bond.getOrder() != Bond::ORDER__DOUBLE &&
-					 bond.getOrder() != Bond::ORDER__TRIPLE &&
-					 bond.getOrder() != Bond::ORDER__AROMATIC))
+			if (!dashed_bonds_ 													||
+					bond.getOrder() < Bond::ORDER__DOUBLE 	||
+					bond.getOrder() > Bond::ORDER__AROMATIC )
 			{
 				// generate two colored tube
 				TwoColoredTube *tube = new TwoColoredTube;
@@ -207,92 +184,66 @@ namespace BALL
 				return;
 			}
 
-			if (bond.getOrder() == Bond::ORDER__TRIPLE)
+			try
 			{
 				Vector3 dir = bond.getSecondAtom()->getPosition() - bond.getFirstAtom()->getPosition();
-				Vector3 normal;
-				normal = dir % Vector3(1,0,0);
-				if (normal.getSquareLength() == .0)
-				{
-					normal = dir % Vector3(0,1,0);
-				}
-				normal.normalize();
-				normal *= stick_radius_ / (float) 1.5;
+				Vector3 normal = VIEW::getNormal(dir);
 
-				Vector3 normal2;
-				normal2 = dir % normal;
-				normal2.normalize();
-				normal2 *= stick_radius_ / (float) 1.5;
-				
+				if (bond.getOrder() == Bond::ORDER__AROMATIC)
+				{
+					// Bonds in aromatic rings will be drawn later
+					if (ring_atoms_.has(bond.getFirstAtom()) &&
+							ring_atoms_.has(bond.getSecondAtom()))
+					{
+						return;
+					}
+
+					renderDashedBond_(*bond.getFirstAtom(), *bond.getSecondAtom(), normal, normal);
+					return;
+				}
+	
+				normal *= stick_radius_ / (float) 1.5;
+				float radius = stick_radius_ / (float) 2.4;
+
 				TwoColoredTube* tube = new TwoColoredTube;
-				tube->setRadius(stick_radius_ / (float) 2.4);
-				tube->setVertex1(bond.getFirstAtom()->getPosition() - normal - normal2);
-				tube->setVertex2(bond.getSecondAtom()->getPosition() - normal - normal2);
+				tube->setRadius(radius);
 				tube->setComposite(&bond);
 				geometric_objects_.push_back(tube);
-				
-				TwoColoredTube* tube2 = new TwoColoredTube;
-				tube2->setRadius(stick_radius_ / (float) 2.4);
-				tube2->setVertex1(bond.getFirstAtom()->getPosition() + normal - normal2);
-				tube2->setVertex2(bond.getSecondAtom()->getPosition() + normal - normal2);
-				tube2->setComposite(&bond);
+					
+				TwoColoredTube* tube2 = new TwoColoredTube(*tube);
 				geometric_objects_.push_back(tube2);
 
-				TwoColoredTube* tube3 = new TwoColoredTube;
-				tube3->setRadius(stick_radius_ / (float) 2.4);
-				tube3->setVertex1(bond.getFirstAtom()->getPosition() + normal2);
-				tube3->setVertex2(bond.getSecondAtom()->getPosition() + normal2);
-				tube3->setComposite(&bond);
-				geometric_objects_.push_back(tube3);
-			}	
-
-			if (ring_atoms_.has(bond.getFirstAtom()) &&
-					ring_atoms_.has(bond.getSecondAtom()))
-			{
-				// Bonds in aromatic rings will be drawn later
-				return;
-			}
-
-			Vector3 dir = bond.getSecondAtom()->getPosition() - bond.getFirstAtom()->getPosition();
-			Vector3 normal;
-			normal = dir % Vector3(1,0,0);
-			if (normal.getSquareLength() == .0)
-			{
-				normal = dir % Vector3(0,1,0);
-			}
-			normal.normalize();
-
-			if (bond.getOrder() == Bond::ORDER__AROMATIC)
-			{
-				renderDashedBond_(*bond.getFirstAtom(), *bond.getSecondAtom(), normal, normal);
-				return;
-			}
-			
-			if (bond.getOrder() == Bond::ORDER__DOUBLE)
-			{
-				Vector3 dir = bond.getSecondAtom()->getPosition() - bond.getFirstAtom()->getPosition();
-				Vector3 normal;
-				normal = dir % Vector3(1,0,0);
-				if (normal.getSquareLength() == .0)
+				if (bond.getOrder() == Bond::ORDER__DOUBLE)
 				{
-					normal = dir % Vector3(0,1,0);
+					tube->setVertex1(bond.getFirstAtom()->getPosition() - normal);
+					tube->setVertex2(bond.getSecondAtom()->getPosition() - normal);
+
+					tube2->setVertex1(bond.getFirstAtom()->getPosition() + normal);
+					tube2->setVertex2(bond.getSecondAtom()->getPosition() + normal);
 				}
-				normal.normalize();
-				normal *= stick_radius_ / (float) 1.5;
-				
-				TwoColoredTube *tube = new TwoColoredTube;
-				tube->setRadius(stick_radius_ / (float) 2.4);
-				tube->setVertex1(bond.getFirstAtom()->getPosition() - normal);
-				tube->setVertex2(bond.getSecondAtom()->getPosition() - normal);
-				tube->setComposite(&bond);
-				geometric_objects_.push_back(tube);
-				
-				TwoColoredTube *tube2 = new TwoColoredTube;
-				tube2->setRadius(stick_radius_ / (float) 2.4);
-				tube2->setVertex1(bond.getFirstAtom()->getPosition() + normal);
-				tube2->setVertex2(bond.getSecondAtom()->getPosition() + normal);
-				tube2->setComposite(&bond);
-				geometric_objects_.push_back(tube2);
+				else
+				{
+					normal *= radius;
+
+					Vector3 normal2 = dir % normal;
+					normal2.normalize();
+					normal2 *= radius;
+					
+					tube->setVertex1(bond.getFirstAtom()->getPosition() - normal - normal2);
+					tube->setVertex2(bond.getSecondAtom()->getPosition() - normal - normal2);
+					
+					tube2->setVertex1(bond.getFirstAtom()->getPosition() + normal - normal2);
+					tube2->setVertex2(bond.getSecondAtom()->getPosition() + normal - normal2);
+
+					TwoColoredTube* tube3 = new TwoColoredTube(*tube);
+					tube3->setVertex1(bond.getFirstAtom()->getPosition() + normal2);
+					tube3->setVertex2(bond.getSecondAtom()->getPosition() + normal2);
+					geometric_objects_.push_back(tube3);
+				}
+			}
+			catch(...)
+			{
+				Log.error() << "We have a bond with a length of 0. Can't draw this!" << std::endl;
 			}
 		}
 
@@ -333,9 +284,8 @@ namespace BALL
 			}
 		}
 
-		void AddBallAndStickModel::renderDashedBond_(const Atom& a1, const Atom& a2, 
-																								 Vector3 n1, Vector3 n2)
-			throw()
+		void AddBallAndStickModel::renderDashedBond_(const Atom& a1, const Atom& a2, Vector3 n1, Vector3 n2)
+			throw(Exception::DivisionByZero)
 		{
 			n1.normalize();
 			n2.normalize();
@@ -380,30 +330,6 @@ namespace BALL
 					continue;
 				}
 
-				/*
-				Tube *tube = new Tube;
-				tube->setRadius(stick_radius_ / (float) 2.4);
-				tube->setVertex1(last);
-				tube->setVertex2(last + (v / 8));
-				geometric_objects_.push_back(tube);
-
-				if (p == 0)
-				{
-					tube->setComposite(&a1);
-				}
-				else
-				{
-					tube->setComposite(&a2);
-				}
-
-				Disc* disc = new Disc(Circle3(last, v, stick_radius_ / (float) 2.4));
-				disc->setComposite(&a1);
-				geometric_objects_.push_back(disc);
-
-				disc = new Disc(Circle3(last + (v / 8), v, stick_radius_ / (float) 2.4));
-				disc->setComposite(&a2);
-				geometric_objects_.push_back(disc);
-*/
 				last += (v /4);
 			}
 		}
