@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>ModelSettingsDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -186,7 +186,7 @@
         </widget>
         <widget class="QWidget">
             <property name="name">
-                <cstring>Ball_And_Stick</cstring>
+                <cstring>Ball_and_Stick</cstring>
             </property>
             <attribute name="id">
                 <number>1</number>
@@ -774,7 +774,7 @@
         </widget>
         <widget class="QWidget">
             <property name="name">
-                <cstring>Tube</cstring>
+                <cstring>Backbone</cstring>
             </property>
             <attribute name="id">
                 <number>4</number>

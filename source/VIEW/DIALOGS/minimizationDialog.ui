@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>MinimizationDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -525,81 +525,6 @@
             </property>
         </widget>
     </widget>
-    <widget class="QGroupBox">
-        <property name="name">
-            <cstring>groupBox2</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>4</x>
-                <y>196</y>
-                <width>438</width>
-                <height>84</height>
-            </rect>
-        </property>
-        <property name="title">
-            <string>Force Field Options</string>
-        </property>
-        <property name="alignment">
-            <set>AlignHCenter</set>
-        </property>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>layout2</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>8</x>
-                    <y>16</y>
-                    <width>422</width>
-                    <height>25</height>
-                </rect>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>useAmberRadioButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Use AmberFF</string>
-                    </property>
-                    <property name="checked">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>useCharmmRadioButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Use CharmmFF</string>
-                    </property>
-                </widget>
-            </hbox>
-        </widget>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>advanced_button</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>119</x>
-                    <y>47</y>
-                    <width>170</width>
-                    <height>30</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>&amp;ForceField Options</string>
-            </property>
-            <property name="accel">
-                <string>Alt+F</string>
-            </property>
-        </widget>
-    </widget>
     <widget class="QPushButton">
         <property name="name">
             <cstring>cancel_button</cstring>
@@ -670,6 +595,87 @@
         <property name="default">
             <bool>true</bool>
         </property>
+    </widget>
+    <widget class="QGroupBox">
+        <property name="name">
+            <cstring>groupBox2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>4</x>
+                <y>196</y>
+                <width>438</width>
+                <height>84</height>
+            </rect>
+        </property>
+        <property name="title">
+            <string>Force field</string>
+        </property>
+        <property name="alignment">
+            <set>AlignHCenter</set>
+        </property>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout2</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>8</x>
+                    <y>16</y>
+                    <width>422</width>
+                    <height>31</height>
+                </rect>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>useAmberRadioButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Use AmberFF</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>useCharmmRadioButton</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>0</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>Use CharmmFF</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>advanced_button</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>118</x>
+                    <y>50</y>
+                    <width>170</width>
+                    <height>30</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>&amp;Force field options</string>
+            </property>
+            <property name="accel">
+                <string>Alt+F</string>
+            </property>
+        </widget>
     </widget>
 </widget>
 <connections>

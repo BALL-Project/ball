@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.55 2004/09/16 11:23:58 amoll Exp $
+// $Id: mainControl.h,v 1.56 2004/10/07 15:11:18 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -460,6 +460,9 @@ namespace BALL
 			
 			/// Interface to QT events, e.g. to communicate with other threads
 			virtual void customEvent( QCustomEvent * e );
+
+			/// Make the program exit
+			virtual void quit();
 			
 			public:
 			
