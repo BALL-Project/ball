@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BALL.doc,v 1.22 2003/09/04 22:19:06 amoll Exp $
+// $Id: BALL.doc,v 1.23 2004/02/18 15:51:59 oliver Exp $
 //
 
 
@@ -27,6 +27,7 @@
 		\version 1.0
 		\author 
 				- Tim Aubertin
+				- Christian Bender
 				- Nicolas Pascal Boghossian
 		 		- Andreas Burchardt
 				-	Andreas Crauser
