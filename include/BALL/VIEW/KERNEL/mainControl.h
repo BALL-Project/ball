@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.9 2003/09/19 18:41:57 amoll Exp $
+// $Id: mainControl.h,v 1.10 2003/10/04 15:19:15 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -100,11 +100,17 @@ class MainControl
 		/// File menu
 		FILE        = 10001,
 
+		/// File menu sub menu open
+		FILE_OPEN,
+
 		/// File menu sub menu import
-		FILE_IMPORT = 10002,
+		FILE_IMPORT,
+
+		/// File menu sub menu export
+		FILE_EXPORT,
 
 		/// Edit menu
-		EDIT,
+		EDIT = 10100,
 
 		/// Build menu 
 		BUILD,

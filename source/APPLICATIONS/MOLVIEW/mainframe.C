@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.83 2003/09/20 15:46:01 amoll Exp $
+// $Id: mainframe.C,v 1.84 2003/10/04 15:19:40 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -79,6 +79,8 @@ namespace BALL
 		setCaption("MolVIEW");
 		setIcon(*new QPixmap(bucky_64x64_xpm));
 		resize(640,400);
+		// make sure the open submenu is the first in file
+		initPopupMenu(FILE_OPEN);
 
 		// ---------------------
 		// Logstream setup -----
@@ -142,7 +144,7 @@ namespace BALL
 		String hint;
 
 		// File Menu
-		insertMenuEntry(MainControl::FILE, "Export POVRa&y file", this, SLOT(exportPOVRay()), 
+		insertMenuEntry(MainControl::FILE_EXPORT, "Export POVRa&y file", this, SLOT(exportPOVRay()), 
 										CTRL+Key_Y, MENU_EXPORT_POVRAYFILE);
 
 		// Display Menu

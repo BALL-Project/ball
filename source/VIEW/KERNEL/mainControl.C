@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.12 2003/09/20 15:51:06 amoll Exp $
+// $Id: mainControl.C,v 1.13 2003/10/04 15:18:56 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -115,8 +115,14 @@ QPopupMenu* MainControl::initPopupMenu(int ID)
 			case FILE:
 				menuBar()->insertItem("&File", menu, FILE, 0);
 				break;
+			case FILE_OPEN:
+				initPopupMenu(MainControl::FILE)->insertItem("&Open", menu, FILE_OPEN);
+				break;
 			case FILE_IMPORT:
-				initPopupMenu(MainControl::FILE)->insertItem("&Import File", menu, FILE_IMPORT);
+				initPopupMenu(MainControl::FILE)->insertItem("&Import", menu, FILE_IMPORT);
+				break;
+			case FILE_EXPORT:
+				initPopupMenu(MainControl::FILE)->insertItem("&Export", menu, FILE_EXPORT);
 				break;
 			case EDIT:
 				menuBar()->insertItem("&Edit", menu, EDIT, (1 <= max_id) ? 1 : -1);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.7 2003/10/04 12:23:52 amoll Exp $
+// $Id: datasetControl.C,v 1.8 2003/10/04 15:18:56 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -54,10 +54,10 @@ void DatasetControl::initializeWidget(MainControl& main_control)
 	throw()
 {
 	open_trajectory_id_ = 
-		main_control.insertMenuEntry(MainControl::FILE, "Open Trajectory", this, SLOT(addTrajectory()), 0, -1,
+		main_control.insertMenuEntry(MainControl::FILE_OPEN, "Trajectory", this, SLOT(addTrajectory()), 0, -1,
 		String("To open a trajectory file, one System has to be selected."));
 	open_grid_id_ = 
-		main_control.insertMenuEntry(MainControl::FILE, "Open 3D Grid", this, SLOT(add3DGrid()), 0, -1,
+		main_control.insertMenuEntry(MainControl::FILE_OPEN, "3D Grid", this, SLOT(add3DGrid()), 0, -1,
 		String("To open a 3D grid, one System has to be selected."));
 	GenericControl::initializeWidget(main_control);
 }
@@ -66,8 +66,8 @@ void DatasetControl::initializeWidget(MainControl& main_control)
 void DatasetControl::finalizeWidget(MainControl& main_control)
 	throw()
 {
-	main_control.removeMenuEntry(MainControl::FILE, "Open Trajectory", this, SLOT(addTrajectory()));
-	main_control.removeMenuEntry(MainControl::FILE, "Open 3D Grid", this, SLOT(add3DGrid()));
+	main_control.removeMenuEntry(MainControl::FILE_OPEN, "Trajectory", this, SLOT(addTrajectory()));
+	main_control.removeMenuEntry(MainControl::FILE_OPEN, "3D Grid", this, SLOT(add3DGrid()));
 	GenericControl::finalizeWidget(main_control);
 }
 
