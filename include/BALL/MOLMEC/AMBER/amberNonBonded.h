@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.h,v 1.17.4.2 2002/05/22 22:54:14 oliver Exp $
+// $Id: amberNonBonded.h,v 1.17.4.3 2002/05/31 22:50:43 oliver Exp $
 // Molecular Mechanics: Amber force field, non-bonded component
 
 #ifndef BALL_MOLMEC_AMBER_NONBONDED_H
@@ -60,8 +60,8 @@ namespace BALL
 		*/
 		virtual ~AmberNonBonded()
 			throw();
-
 		//@}
+
 		/** Assignment
 		*/
 		//@{

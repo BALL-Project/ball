@@ -1,4 +1,4 @@
-// $Id: charmmNonBonded.C,v 1.15.4.3 2002/02/28 01:24:50 oliver Exp $
+// $Id: charmmNonBonded.C,v 1.15.4.4 2002/05/31 22:53:57 oliver Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmNonBonded.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -527,8 +527,8 @@ namespace BALL
 		LennardJones::Data tmp;
 		Atom*	atom1;
 		Atom* atom2;
-		Atom::Type	type_atom1;
-		Atom::Type  type_atom2;
+		Atom::Type type_atom1;
+		Atom::Type type_atom2;
 
 		// Iterate and search torsions, fill the atom pairs that have a torsion in non_bonded_
 
@@ -540,8 +540,8 @@ namespace BALL
 				atom2 = pair_it->second;
 				type_atom1 = atom1->getType();
 				type_atom2 = atom2->getType();
-				tmp.atom1 = &(Atom::getAttributes()[atom1->getIndex()]);
-				tmp.atom2 = &(Atom::getAttributes()[atom2->getIndex()]);
+				tmp.atom1 = atom1->getAttributePtr();
+				tmp.atom2 = atom2->getAttributePtr();
 
 				if (!van_der_waals_parameters_14_.assignParameters(tmp.values, type_atom1, type_atom2))
 				{
@@ -555,8 +555,8 @@ namespace BALL
 					}
 				}
 				
-				// nasty: check for diagonal 1-4 interactions in sex membered rings
-				// (PHE/TYR) - here the interaction is omitted
+				// Nasty: check for diagonal 1-4 interactions in six-membered rings
+				// (PHE/TYR) - those interactions are omitted.
 				Residue* res1 = atom1->getAncestor(RTTI::getDefault<Residue>());
 				Residue* res2 = atom2->getAncestor(RTTI::getDefault<Residue>());
 				if (res1 == res2 && res1 != 0 && res2 != 0
@@ -594,8 +594,8 @@ namespace BALL
 
 				type_atom1 = atom1->getType();
 				type_atom2 = atom2->getType();
-				tmp.atom1 = &(Atom::getAttributes()[atom1->getIndex()]);
-				tmp.atom2 = &(Atom::getAttributes()[atom2->getIndex()]);
+				tmp.atom1 = atom1->getAttributePtr();
+				tmp.atom2 = atom2->getAttributePtr();
 
 				if (!van_der_waals_parameters_.assignParameters(tmp.values, type_atom1, type_atom2)) 
 				{

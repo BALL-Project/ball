@@ -1,4 +1,4 @@
-// $Id: amberBend.C,v 1.15 2002/02/26 11:51:33 oliver Exp $
+// $Id: amberBend.C,v 1.15.2.1 2002/05/31 22:53:56 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberBend.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -78,18 +78,20 @@ namespace BALL
 			{
 				for (it1 = it2, ++it1; +it1 ; ++it1) 
 				{
-					this_bend.atom1 = it2->getPartner(**atom_it);
-					this_bend.atom2 = *atom_it;
-					this_bend.atom3 = it1->getPartner(**atom_it);
+					this_bend.atom1 = &Atom::getAttributes()[it2->getPartner(**atom_it)->getIndex()];
+					this_bend.atom2 = &Atom::getAttributes()[(*atom_it)->getIndex()];
+					this_bend.atom3 = &Atom::getAttributes()[it1->getPartner(**atom_it)->getIndex()];
 
 					if (getForceField()->getUseSelection() == false ||
 					   (getForceField()->getUseSelection() == true && 
-					   (this_bend.atom1->isSelected() || this_bend.atom2->isSelected() || this_bend.atom3->isSelected())))
+					   (this_bend.atom1->ptr->isSelected() 
+							|| this_bend.atom2->ptr->isSelected() 
+							|| this_bend.atom3->ptr->isSelected())))
 					{ 
 
-						Atom::Type atom_type_a1 = this_bend.atom1->getType();
-						Atom::Type atom_type_a2 = this_bend.atom2->getType();
-						Atom::Type atom_type_a3 = this_bend.atom3->getType();
+						Atom::Type atom_type_a1 = this_bend.atom1->type;
+						Atom::Type atom_type_a2 = this_bend.atom2->type;
+						Atom::Type atom_type_a3 = this_bend.atom3->type;
 
 						// check for parameters
 						if (!bend_parameters.assignParameters(this_bend.values, atom_type_a1, atom_type_a2, atom_type_a3))
@@ -102,9 +104,9 @@ namespace BALL
 									<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a1) << "-"
 									<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a2) << "-"
 									<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a3) 
-									<< " (atoms are: " << this_bend.atom1->getFullName() << "/" 
-									<< this_bend.atom2->getFullName() << "/" 
-									<< this_bend.atom3->getFullName() << ")" << endl;
+									<< " (atoms are: " << this_bend.atom1->ptr->getFullName() << "/" 
+									<< this_bend.atom2->ptr->getFullName() << "/" 
+									<< this_bend.atom3->ptr->getFullName() << ")" << endl;
 							}
 							else
 							{
@@ -136,31 +138,21 @@ namespace BALL
 		{
 			if (getForceField()->getUseSelection() == false ||
 					(getForceField()->getUseSelection() == true  &&
-					(bend_[i].atom1->isSelected() || bend_[i].atom2->isSelected() || bend_[i].atom3->isSelected())))
+					(bend_[i].atom1->ptr->isSelected() 
+					 || bend_[i].atom2->ptr->isSelected() 
+					 || bend_[i].atom3->ptr->isSelected())))
 			{
 
-				Vector3 v1 = bend_[i].atom1->getPosition() - bend_[i].atom2->getPosition();
-				length = v1.getLength();
+				Vector3 v1 = bend_[i].atom1->position - bend_[i].atom2->position;
+				Vector3 v2 = bend_[i].atom3->position - bend_[i].atom2->position;
+				length = v1.getLength() * v2.getLength();
 
-				if (length == 0) 
+				if (length == 0.0) 
 				{
 					continue;
 				}
 
-				double inverse_length = 1 / length;
-				v1 *= inverse_length;
-				Vector3 v2 = bend_[i].atom3->getPosition() - bend_[i].atom2->getPosition();
-				length = v2.getLength();
-
-				if (length == 0) 
-				{
-					continue;
-				}
-
-				inverse_length = 1/length;
-				v2 *= inverse_length;
-
-				double costheta = v1 * v2;
+				double costheta = v1 * v2 / length;
 				double theta;
 				if (costheta > 1.0) 
 				{	
@@ -177,7 +169,6 @@ namespace BALL
 			
 				energy_ += bend_[i].values.k * (theta - bend_[i].values.theta0) * (theta - bend_[i].values.theta0);
 			}
-
 		}
 		
 		return energy_;
@@ -186,21 +177,24 @@ namespace BALL
 	// calculates and adds its forces to the current forces of the force field
 	void AmberBend::updateForces()
 	{
-
 		double length;
 
 		for (Size i = 0; i < bend_.size(); i++) 
 		{
 			if (getForceField()->getUseSelection() == false ||
-					(getForceField()->getUseSelection()  == true  &&
-					(bend_[i].atom1->isSelected() || bend_[i].atom2->isSelected() || bend_[i].atom3->isSelected())))
+					(getForceField()->getUseSelection() == true  &&
+					(bend_[i].atom1->ptr->isSelected() 
+					 || bend_[i].atom2->ptr->isSelected() 
+					 || bend_[i].atom3->ptr->isSelected())))
 			{
 
 				// Calculate the vector between atom1 and atom2,
 				// test if the vector has length larger than 0 and normalize it
 
-				Vector3 v1 = bend_[i].atom1->getPosition() - bend_[i].atom2->getPosition();
+				Vector3 v1 = bend_[i].atom1->position - bend_[i].atom2->position;
+				Vector3 v2 = bend_[i].atom3->position - bend_[i].atom2->position;
 				length = v1.getLength();
+
 				if (length == 0) continue;
 				double inverse_length_v1 = 1/length;
 				v1 *= inverse_length_v1 ;
@@ -208,7 +202,6 @@ namespace BALL
 				// Calculate the vector between atom3 and atom2,
 				// test if the vector has length larger than 0 and normalize it
 
-				Vector3 v2 = bend_[i].atom3->getPosition() - bend_[i].atom2->getPosition();
 				length = v2.getLength();
 				if (length == 0) continue;
 				double inverse_length_v2 = 1/length;
@@ -247,26 +240,26 @@ namespace BALL
 
 				if (getForceField()->getUseSelection() == false)
 				{
-					bend_[i].atom1->getForce() -= n1;
-					bend_[i].atom2->getForce() += n1;
-					bend_[i].atom2->getForce() -= n2;
-					bend_[i].atom3->getForce() += n2;
+					bend_[i].atom1->force -= n1;
+					bend_[i].atom2->force += n1;
+					bend_[i].atom2->force -= n2;
+					bend_[i].atom3->force += n2;
 				} 
 				else 
 				{
-					if (bend_[i].atom1->isSelected()) 
+					if (bend_[i].atom1->ptr->isSelected()) 
 					{
-						bend_[i].atom1->getForce() -= n1;
+						bend_[i].atom1->force -= n1;
 					}
 	
-					if (bend_[i].atom2->isSelected())
+					if (bend_[i].atom2->ptr->isSelected())
 					{
-						bend_[i].atom2->getForce() += n1;
-						bend_[i].atom2->getForce() -= n2;
+						bend_[i].atom2->force += n1;
+						bend_[i].atom2->force -= n2;
 					}
-					if (bend_[i].atom3->isSelected())
+					if (bend_[i].atom3->ptr->isSelected())
 					{
-						bend_[i].atom3->getForce() += n2;
+						bend_[i].atom3->force += n2;
 					}
 				}
 			}

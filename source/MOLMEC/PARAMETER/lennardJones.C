@@ -1,4 +1,4 @@
-// $Id: lennardJones.C,v 1.13.4.1 2002/03/10 01:09:16 oliver Exp $
+// $Id: lennardJones.C,v 1.13.4.2 2002/05/31 22:53:57 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/lennardJones.h>
@@ -263,7 +263,6 @@ namespace BALL
 			} 
 			else	
 			{
-
 				Log.warn() << "LennardJones::extractSection: unknown atom type in Lennard Jones parameters: " << key << "   i = " << i << endl;
 			}
 		}
@@ -368,10 +367,8 @@ namespace BALL
 	bool LennardJones::operator == (const LennardJones& lj) const throw()
 	{
 		return (ParameterSection::operator == (lj)
-			&& (A_ == lj.A_)
-			&& (B_ == lj.B_)
-			&& (Aij_ == lj.Aij_)
-			&& (Bij_ == lj.Bij_));
+						&& (A_ == lj.A_) && (B_ == lj.B_)
+						&& (Aij_ == lj.Aij_) && (Bij_ == lj.Bij_));
 	}
 	 
 } // namespace BALL

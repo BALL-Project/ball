@@ -1,5 +1,5 @@
-// $Id: amberBend.h,v 1.8 2001/02/28 01:17:25 amoll Exp $
-// Molecular Mechanics: Amber force field, bond stretch component
+// $Id: amberBend.h,v 1.8.4.1 2002/05/31 22:50:43 oliver Exp $
+// Molecular Mechanics: Amber force field, angle bend component
 
 #ifndef BALL_MOLMEC_AMBER_AMBERBEND_H
 #define BALL_MOLMEC_AMBER_AMBERBEND_H
@@ -52,6 +52,7 @@ namespace BALL
 		virtual ~AmberBend();
 
 		//@}
+
 		/**	@name	Setup Methods	
 		*/
 		//@{
@@ -61,6 +62,8 @@ namespace BALL
 		virtual bool setup();
 
 		//@}
+
+
 		/**	@name	Accessors	
 		*/
 		//@{

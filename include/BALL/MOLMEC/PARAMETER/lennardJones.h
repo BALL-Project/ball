@@ -1,4 +1,4 @@
-// $Id: lennardJones.h,v 1.16.4.2 2002/03/10 01:09:16 oliver Exp $
+// $Id: lennardJones.h,v 1.16.4.3 2002/05/31 22:50:44 oliver Exp $
 // Molecular Mechanics Parameter: class describing the atom type section of a parameter file
  
 #ifndef BALL_MOLMEC_PARAMETER_LENNARDJONES_H
@@ -73,6 +73,8 @@ namespace BALL
 		};
 
 		//@}
+
+
 		/**	@name	Constructors and Destructors
 		*/
 		//@{

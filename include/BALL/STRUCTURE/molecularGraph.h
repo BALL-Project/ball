@@ -1,4 +1,4 @@
-// $Id: molecularGraph.h,v 1.1.2.2 2002/05/28 02:18:54 oliver Exp $
+// $Id: molecularGraph.h,v 1.1.2.3 2002/05/31 22:50:44 oliver Exp $
 
 #ifndef BALL_STRUCTURE_MOLECULARGRAPH_H
 #define BALL_STRUCTURE_MOLECULARGRAPH_H
@@ -25,7 +25,7 @@ namespace BALL
 	class EdgeItem;
 
 	template <typename Node, typename Edge> 
-	class MolecularGraph;
+	class TMolecularGraph;
 
 	/**	The node type in a molecular graph
 	*/
@@ -48,7 +48,7 @@ namespace BALL
 		typedef typename std::list<EdgeItem<Node, Edge>*>::const_iterator ConstIterator;
 		//@}
 
-		friend class MolecularGraph<Node, Edge>;
+		friend class TMolecularGraph<Node, Edge>;
 
 		NodeItem() throw();
 		NodeItem(const Atom& atom) throw();
@@ -131,7 +131,7 @@ namespace BALL
 	}
 
 	template <typename Node, typename Edge>
-	class MolecularGraph
+	class TMolecularGraph
 	{
 		public:
 		typedef NodeItem<Node, Edge> NodeItemType;
@@ -140,11 +140,12 @@ namespace BALL
 		typedef typename std::list<NodeItemType>::const_iterator NodeConstIterator;
 		typedef typename std::list<EdgeItemType>::iterator EdgeIterator;
 		typedef typename std::list<EdgeItemType>::const_iterator EdgeConstIterator;
-			
-		MolecularGraph(const Molecule& molecule);
 
-		bool newNode(const Atom& atom);
-		bool newEdge(const Bond& bond);
+		TMolecularGraph() throw();
+		TMolecularGraph(const Molecule& molecule) throw();
+
+		bool newNode(const Atom& atom) throw();
+		bool newEdge(const Bond& bond) throw();
 
 		bool deleteNode(NodeItemType& node);
 		bool deleteEdge(EdgeItemType& edge);
@@ -166,16 +167,39 @@ namespace BALL
 		EdgeItemType& getEdge(Position index) { return edges_[index]; };
 		const EdgeItemType& getEdge(Position index) const { return edges_[index]; };
 
+		/** Return the number of nodes in the graph
+		*/
+		Size getNumberOfNodes() const throw();
+
+		/** Return the number of nodes in the graph
+		*/
+		Size getNumberOfEdges() const throw();
+
 		protected:
 		std::list<NodeItemType>	nodes_;
 		std::list<EdgeItemType> edges_;
 		HashMap<Atom*, NodeItemType*> atom_to_node_;
-		HashMap<Bond*, EdgeItemType&> bond_to_edge_;
+		HashMap<Bond*, EdgeItemType*> bond_to_edge_;
 	};
 
+	/**	Default molecular graph type.
+			Each edge and node has a label of type \Ref{Index}.
+	*/
+	typedef TMolecularGraph<Index, Index> MolecularGraph;
 
 	template <typename Node, typename Edge>
-	MolecularGraph<Node, Edge>::MolecularGraph(const Molecule& molecule)
+	TMolecularGraph<Node, Edge>::TMolecularGraph()
+			throw()
+		:	nodes_(),
+			edges_(),
+			atom_to_node_(),
+			bond_to_edge_()
+	{
+	}
+
+	template <typename Node, typename Edge>
+	TMolecularGraph<Node, Edge>::TMolecularGraph(const Molecule& molecule)
+			throw()
 		:	nodes_(),
 			edges_(),
 			atom_to_node_(),
@@ -200,7 +224,8 @@ namespace BALL
 	}
 
 	template <typename Node, typename Edge>
-	bool MolecularGraph<Node, Edge>::newNode(const Atom& atom)
+	bool TMolecularGraph<Node, Edge>::newNode(const Atom& atom)
+		throw()
 	{
 		Atom* atom_ptr = const_cast<Atom*>(&atom);
 
@@ -216,7 +241,8 @@ namespace BALL
 	}
 
 	template <typename Node, typename Edge>
-	bool MolecularGraph<Node, Edge>::newEdge(const Bond& bond)
+	bool TMolecularGraph<Node, Edge>::newEdge(const Bond& bond)
+		throw()
 	{
 		Atom* first = const_cast<Atom*>(bond.getFirstAtom());
 		Atom* second = const_cast<Atom*>(bond.getSecondAtom());	
@@ -225,8 +251,8 @@ namespace BALL
 			return false;
 		}
 
-		NodeItemType* first_item = &nodes_[atom_to_node_[first]];
-		NodeItemType* second_item = &nodes_[atom_to_node_[second]];
+		NodeItemType* first_item = atom_to_node_[first];
+		NodeItemType* second_item = atom_to_node_[second];
 		edges_.push_back(EdgeItemType(bond, first_item, second_item));
 		bond_to_edge_.insert(std::pair<Bond*, EdgeItemType*>(const_cast<Bond*>(&bond), &edges_.back()));
 		first_item->adjacent_edges_.push_back(&edges_.back());
@@ -236,11 +262,11 @@ namespace BALL
 	}
 
 	template <typename Node, typename Edge>
-	std::ostream& operator << (std::ostream& os, const MolecularGraph<Node, Edge>& G)
+	std::ostream& operator << (std::ostream& os, const TMolecularGraph<Node, Edge>& G)
 	{		
 		os << "Nodes:" << std::endl;
 
-		typename MolecularGraph<Node, Edge>::NodeConstIterator node = G.beginNode();
+		typename TMolecularGraph<Node, Edge>::NodeConstIterator node = G.beginNode();
 		Size count = 0;
 		for (; node != G.endNode(); ++node)
 		{
@@ -249,7 +275,7 @@ namespace BALL
 
 		os << "Edges:" << std::endl;	
 
-		typename MolecularGraph<Node, Edge>::EdgeConstIterator edge = G.beginEdge();
+		typename TMolecularGraph<Node, Edge>::EdgeConstIterator edge = G.beginEdge();
 		count = 0;
 		for (; edge != G.endEdge(); ++edge)
 		{
@@ -260,7 +286,7 @@ namespace BALL
 	}
 
 	template <typename Node, typename Edge>
-	bool MolecularGraph<Node, Edge>::deleteNode(MolecularGraph<Node, Edge>::NodeItemType& node)
+	bool TMolecularGraph<Node, Edge>::deleteNode(TMolecularGraph<Node, Edge>::NodeItemType& node)
 	{
 		cout << "entering deleteNode(atom = " << node.getAtom() <<  ")" << endl;
 		NodeIterator node_it = std::find(nodes_.begin(), nodes_.end(), node);
@@ -289,7 +315,7 @@ namespace BALL
 	}
 
 	template <typename Node, typename Edge>
-	bool MolecularGraph<Node, Edge>::deleteEdge(MolecularGraph<Node, Edge>::EdgeItemType& edge)
+	bool TMolecularGraph<Node, Edge>::deleteEdge(TMolecularGraph<Node, Edge>::EdgeItemType& edge)
 	{
 		cout << "entering deleteEdge(edge = " << edge.getBond() <<  ")" << endl;
 		typename std::list<EdgeItemType>::iterator edge_it = std::find(edges_.begin(), edges_.end(), edge);
@@ -341,7 +367,7 @@ namespace BALL
 		throw()
 	{ 
 		data_ = data; 
-	};
+	}
 
 	
 	template <typename Node, typename Edge>
@@ -415,6 +441,22 @@ namespace BALL
 		{
 			cout << "cannot erase edge " << item->getBond() << endl;
 		}
+	}
+
+	template <typename Node, typename Edge>
+	BALL_INLINE
+	Size TMolecularGraph<Node, Edge>::getNumberOfNodes() const
+		throw()
+	{
+		return atom_to_node_.size();
+	}
+
+	template <typename Node, typename Edge>
+	BALL_INLINE
+	Size TMolecularGraph<Node, Edge>::getNumberOfEdges() const
+		throw()
+	{
+		return bond_to_edge_.size();
 	}
 
 
