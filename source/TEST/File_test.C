@@ -1,13 +1,14 @@
-// $Id: File_test.C,v 1.3 2000/06/29 14:13:04 amoll Exp $
+// $Id: File_test.C,v 1.4 2000/06/29 18:26:11 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/SYSTEM/file.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+//#include <fstream>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: File_test.C,v 1.3 2000/06/29 14:13:04 amoll Exp $")
+START_TEST(class_name, "$Id: File_test.C,v 1.4 2000/06/29 18:26:11 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -35,12 +36,6 @@ File f("data/File_test.txt");
 CHECK(File(const File& file))
 	File f1(f);
 	TEST_EQUAL(f1 == f, true)
-RESULT
-
-CHECK(enableProtocol(Protocol protocol))
-RESULT
-
-CHECK(disableProtocol(Protocol protocol))
 RESULT
 
 CHECK(close())
@@ -96,8 +91,9 @@ CHECK(Type getType(bool trace_link) const;)
 RESULT
 
 CHECK(std::fstream& getFileStream();)
-	//std::fstream fs();
-	//fs = f.getFileStream(); //!!!
+//	fstream fs;
+//	FILE file;
+//	file = f.getFileStream(); //!!!
 	TEST_EQUAL(f.getSize(), 100)
 RESULT
 
