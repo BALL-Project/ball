@@ -1,4 +1,4 @@
-// $Id: forceField.h,v 1.9 2000/08/30 19:58:17 oliver Exp $
+// $Id: forceField.h,v 1.10 2000/10/16 19:18:34 oliver Exp $
 // Molecular Mechanics: general force field class
 
 #ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
@@ -14,6 +14,10 @@
 
 #ifndef BALL_DATATYPE_OPTIONS_H
 #	include <BALL/DATATYPE/options.h>
+#endif
+
+#ifndef BALL_CONCEPT_TIMESTAMP_H
+#	include <BALL/CONCEPT/timeStamp.h>
 #endif
 
 #ifndef BALL_MOLMEC_PARAMETER_FORCEFIELDPARAMETERS_H
@@ -95,7 +99,7 @@ namespace BALL
 		*/
 		//@{
 		
-		BALL_CREATE_DEEP(ForceField)
+		BALL_CREATE(ForceField)
 
 		/**	Default constructor.
 		*/
@@ -111,7 +115,7 @@ namespace BALL
 
 		/**	Copy constructor
 		*/
-		ForceField(const ForceField& force_field, bool deep = true);
+		ForceField(const ForceField& force_field);
 
 		/**	Destructor.
 		*/
@@ -128,6 +132,11 @@ namespace BALL
 		*/
 		ForceField&	operator = (const ForceField& force_field);
 
+
+		/**	Clear method.
+		*/
+		virtual void clear()
+			throw();
 		//@}
 
 		/**	@name	Debugging and Diagnostics 
@@ -135,7 +144,8 @@ namespace BALL
 		//@{
 		/**	Is the force field valid?
 		*/
-		bool	isValid();
+		bool isValid()
+			throw();
 
 		//@}
 
@@ -146,18 +156,16 @@ namespace BALL
 
 		/**	Sets up the force field and its components.
 		*/
-		bool	setup(System& system);
+		bool setup(System& system);
 
 		/**	Sets up the force field and its components.
 		*/
-		bool	setup(System& system, const Options& options);
-
+		bool setup(System& system, const Options& options);
 
 		/**	Force field specific setup.
 				This method is called by setup.
 		*/
 		virtual bool specificSetup();
-
 		//@}
 
 
@@ -167,15 +175,15 @@ namespace BALL
 
 		/**	Sets the force field name.
 		*/
-		void	setName(const String& name);
+		void setName(const String& name);
 		
 		/**	Returns the force field name
 		*/
-		String	getName() const;
+		String getName() const;
 		
 		/**	Returns the number of atoms stored in the force field
 		*/
-		Size	getNumberOfAtoms() const;
+		Size getNumberOfAtoms() const;
 
 		/**	Returns the number of non-fixed atoms stored in the force field.
 				If the option {\tt SELECTION_FIXED} is set to {\bf true} or
@@ -188,54 +196,71 @@ namespace BALL
 
 		/**	Returns a reference to the atom vector
 		*/
-		const	AtomVector&  getAtoms() const;
+		const	AtomVector& getAtoms() const;
 
 		/**	Returns a pointer to the system
 		*/
-		System*  getSystem();
+		System* getSystem();
 
 		/**	Return the status of the selection mechanism
 		*/
-		bool	getUseSelection();
+		bool getUseSelection();
 
 		/**	Set the status of the selection mechanism
 		*/
-		void	setUseSelection(bool use_selection);
+		void setUseSelection(bool use_selection);
 
 		/**	Returns a pointer to the parameter file
 		*/
-		ForceFieldParameters&  getParameters();
+		ForceFieldParameters& getParameters();
 
 		/**	Returns the number of components registered by the force field.
 		*/
-		Size	countComponents() const;
+		Size countComponents() const;
+
+		/**	Return the point of time of the last call to update.
+				ForceField contains a time stamp which is used to determine
+				whether the selection or even the topology of the system
+				has changed. Every time update is called, the 
+				\Ref{update_time_stamp_} is updated. Similarly, all setup methods
+				update the \Ref{setup_time_stamp_}
+		*/
+		const TimeStamp& getUpdateTime() const
+			throw();
+		
+		/**	Return the point of time of the last call to setup.
+				ForceField contains a time stamp which is used to determine
+				whether the selection or even the topology of the system
+				has changed. Every time update is called, the 
+				\Ref{update_time_stamp_} is updated. Similarly, all setup methods
+				update the \Ref{setup_time_stamp_}
+		*/
+		const TimeStamp& getSetupTime() const
+			throw();
 		
 		/**	Insert a new component into the force field's component list.
 		*/
-		void	insertComponent(ForceFieldComponent* force_field_component);
+		void insertComponent(ForceFieldComponent* force_field_component);
 
 		/**	Remove a component from the force field's component list.
 		*/
-		void	removeComponent(const ForceFieldComponent* force_field_component);
+		void removeComponent(const ForceFieldComponent* force_field_component);
 
 		/**	Remove a component from the force field's component list.
 		*/
-		void	removeComponent(const String& name);
-
-
+		void removeComponent(const String& name);
 
 		/**	Return a pointer to the specified force field component.
 				If the specified index does not exist, 0 is returned.
 				The given index should be smaller than the value returned by
 				countComponents. The first component in the list has the index zero.
 		*/
-		ForceFieldComponent*	getComponent(const Size	index) const;
+		ForceFieldComponent* getComponent(const Size	index) const;
 
 		/**	Return a pointer to the specified force field component.
 				If a component with the specified name does not exist, 0 is returned.
 		*/
 		ForceFieldComponent*	getComponent(const String& name) const;
-
 
 		/**	Return the sum of energies of all registered force field components. 
 				No calculation will be performed. This method simply returns the 
@@ -246,16 +271,15 @@ namespace BALL
 
 		/**	Calculate the sum of energies of all force field components and returns its value.
 		*/
-		double	updateEnergy();
-
+		double updateEnergy();
 
 		/**	Calculate the forces caused by each component and updates the current forces.
 		*/
-		void 	updateForces();
+		void updateForces();
 
 		/**	Calculates the RMS of the current gradient
 		*/
-		double	getRMSGradient() const;
+		double getRMSGradient() const;
 
 		/**	Return the update frequency for pair lists etc.
 				This method is used by minimzers or the MD simulation to determine the number
@@ -272,7 +296,6 @@ namespace BALL
 				each component in the force field.
 		*/
 		virtual void update();
-
 		//@}
 
 
@@ -335,6 +358,14 @@ namespace BALL
 		/*_	Are atoms in the system selected?
 		*/
 		bool	use_selection_;
+
+		/*_	The time of the last call to update.
+		*/
+		TimeStamp	update_time_stamp_;
+
+		/*_	The time of the last call to setup.
+		*/
+		TimeStamp	setup_time_stamp_;
 		//_@}
 	};
 
