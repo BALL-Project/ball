@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: triangulatedSES.C,v 1.4 2002/12/17 14:13:21 anker Exp $
+// $Id: triangulatedSES.C,v 1.5 2003/04/15 19:23:21 strobel Exp $
 
 #include <BALL/STRUCTURE/solventExcludedSurface.h>
 #include <BALL/STRUCTURE/triangle.h>
@@ -843,6 +843,7 @@ namespace BALL
 			TriangulatedSphere part;
 			part.icosaeder();
 			part.refine(numberOfRefinements(tses_->density_,sphere.radius));
+			part.blowUp(sphere.radius);
 			part.shift(sphere.p);
 			tses_->join(part);
 		}
