@@ -128,13 +128,14 @@ namespace BALL
 	{
 		using namespace RTTI;
 		create_methods_.insert("true", TruePredicate::createDefault);
+		create_methods_.insert("selected", SelectedPredicate::createDefault);
 		create_methods_.insert("name", AtomNamePredicate::createDefault);
 		create_methods_.insert("type", AtomTypePredicate::createDefault);
 		create_methods_.insert("element", ElementPredicate::createDefault);
 		create_methods_.insert("residue", ResiduePredicate::createDefault);
 		create_methods_.insert("residueID", ResidueIDPredicate::createDefault);
 		create_methods_.insert("protein", ProteinPredicate::createDefault);
-		create_methods_.insert("secondarystruct", SecondaryStructurePredicate::createDefault);
+		create_methods_.insert("secondaryStruct", SecondaryStructurePredicate::createDefault);
 		create_methods_.insert("solvent", SolventPredicate::createDefault);
 		create_methods_.insert("backbone", BackBonePredicate::createDefault);
 		create_methods_.insert("chain", ChainPredicate::createDefault);
