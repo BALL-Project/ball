@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.95 2005/02/14 14:50:34 amoll Exp $
+// $Id: molecularControl.C,v 1.96 2005/02/14 23:48:32 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -332,6 +332,13 @@ bool MolecularControl::reactToMessages_(Message* message)
 	{
 		NewSelectionMessage* nsm = (NewSelectionMessage*) message;
 		setSelection_(true, nsm->openItems());
+		return true;
+	}
+
+	if (RTTI::isKindOf<ControlSelectionMessage>(*message))
+	{
+		ControlSelectionMessage* nsm = (ControlSelectionMessage*) message;
+		setHighlighting_(nsm->getSelection());
 		return true;
 	}
 
@@ -699,6 +706,18 @@ void MolecularControl::invalidateSelection()
 	listview->triggerUpdate();
 }
 
+// set the highlighting according to the selection in the MainControl
+void MolecularControl::setHighlighting_(List<Composite*> selection)
+	throw()
+{	
+	listview->clearSelection();
+
+	List<Composite*>::Iterator cit = selection.begin();
+	for (; cit != selection.end(); cit++)
+	{
+		composite_to_item_[*cit]->setSelected(true);
+	}
+}
 
 // set the checkboxes according to the selection in the MainControl
 void MolecularControl::setSelection_(bool open, bool force)

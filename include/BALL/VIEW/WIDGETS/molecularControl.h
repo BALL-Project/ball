@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.45 2004/12/19 13:34:14 amoll Exp $
+// $Id: molecularControl.h,v 1.46 2005/02/14 23:48:32 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -448,6 +448,17 @@ class BALL_EXPORT MolecularControl
 	bool pasteAllowedFor_(Composite& composite)
 		throw();
 
+	void setHighlighting_(List<Composite*> selection)
+		throw();
+
+	//
+	void removeRecursive_(SelectableListViewItem* item)
+		throw();
+
+	// only for Python Interface
+	MolecularControl(const MolecularControl& mc)
+		throw();
+	
 	//@} 
 	/** @name Menu entries ids
 	*/ 
@@ -469,16 +480,6 @@ class BALL_EXPORT MolecularControl
 	int deselect_id_;
 
 	//@}
-	
-	protected:
-
-	//
-	void removeRecursive_(SelectableListViewItem* item)
-		throw();
-
-	// only for Python Interface
-	MolecularControl(const MolecularControl& mc)
-		throw();
 	
 	List<Composite*> 				selected_;
 	List<Composite*> 				copy_list_;
@@ -507,7 +508,6 @@ class BALL_EXPORT MolecularControl
 	Size 						nr_items_removed_;
 };
 	
-
 }} // namespaces
 
 #endif // BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
