@@ -1,5 +1,5 @@
 # 
-# $Id: Makefile,v 1.5 2003/08/28 18:29:00 oliver Exp $
+# $Id: Makefile,v 1.6 2004/04/16 11:25:02 amoll Exp $
 #
 #
 # APPLICATIONS/Makefile
@@ -14,7 +14,7 @@ THISLIB=$(LIBNAME)
 
 OPTIONAL_DIRS=\
 	NMRVIEW\
-	MOLVIEW
+	BALLVIEW
 
 VIEW_DIRS=$(BALL_HAS_VIEW:true=$(OPTIONAL_DIRS))
 

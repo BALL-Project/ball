@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.42 2004/04/14 14:01:59 amoll Exp $
+// $Id: mainControl.h,v 1.43 2004/04/16 11:30:41 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -102,7 +102,7 @@ namespace BALL
 				It handles also the general preferences tab Preferences of the main application and notifies all
 				registered ModularWidget objects if the preferences have changed. \par
 				The preferences of the application are stored in an INIFile.
-				The default name of this file is ".molview".
+				The default name of this file is ".BALLView".
 				<b>Caveat:</b> Due to a peculiarity of the QT Meta Object Compiler (MOC)
 				you have to specify the full namespace qualified name of this class when deriving from it. \par
 				So don't use\par 

@@ -1,4 +1,4 @@
-// $Id: classes.txt,v 1.28 2002/12/12 10:11:49 oliver Exp $
+// $Id: classes.txt,v 1.29 2004/04/16 11:38:27 amoll Exp $
 
 D documentation deficiencies
 E exception qualifier
@@ -292,18 +292,14 @@ QuadraticBondStretch                E           Z
 QuadraticImproperTorsion            /           Z
 LennardJones                        X           Z       ::extractSection
 Potential1210                       (/)         Z
-------------------------MOLVIEW---------------------------------------------
+------------------------VIEW---------------------------------------------
                         -----COMMON-------
 Common                              /           Z
                         -----FUNCTOR------
 AddVanDerWaalsModel                 I           Z
 AtomBondModelBaseProcessor          I           Z
-AtomBondModelConnector              I           Z  
-            MissingProperty
-            MemoryAllocationFailed 
 AddBallAndStickModel                I           Z
 AddLineModel                        I           Z
-BaseModelConnector                  IX          Z
 BaseModelProcessor                  I           Z
 BackboneModel                       E           Z
 ColorCalculator                     I           Z
@@ -313,37 +309,18 @@ StandardColorCalculator             I           Z
   AtomChargeColorCalculator
   AtomDistanceColorCalculator 
 FindGeometricObjects                I           Z
-MolecularFilter                     I           Z
 MolecularInformation                I           Z
-RemoveModel                         I           Z
                         -------GUI-------
 LabelProperties                     /           Z
-LabelPropertiesData                 EI          Z
 DisplayProperties                   /           Z
-DisplayPropertiesData               EI          Z
-OpenHINFile                         I           Z
-OpenPDBFile                         I           Z
-OpenBruker1DFile                    /?          Z
-OpenBruker2DFile                    /?          Z
-OpenMOL2File                        /?          Z
-AddGLSurfaceModel                   /           Z
-AddGLBallAndStickModel              /           Z
-AddGLLineModel                      /           Z
-AddGLVanDerWaalsModel               /           Z
-GLAtomBondModelConnector            /           Z
-MoleculeGLObjectCollector           X           Z       ::finish()   
-GLTwoColoredLine                    EI          Z
-GLTwoColoredTube                    EI          Z
+AddSurfaceModel                   	/           Z
+AddBallAndStickModel              	/           Z
+AddLineModel                      	/           Z
+AddVanDerWaalsModel               	/           Z
 Control                             EI          Z
 MolecularControl                    I           Z
-MolecularProperties                 /           Z
-GLBackbone                          X           Z
+MolecularStructure                  /           Z
                         -----KERNEL------
-ExtendedPropertyManager             E           Z
-NewMolecularMessage                 E           Z
-  RemovedMolecularMessage
-  ChangedMolecularMessage
-  MolecularSelectionMessage
                         -----PRIMITV-----
 Backbone                            EI?         Z
 TwoColoredLine                      /           Z

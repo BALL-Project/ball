@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.53 2004/04/16 10:27:16 amoll Exp $
+// $Id: scene.C,v 1.54 2004/04/16 11:33:07 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1278,7 +1278,7 @@ namespace BALL
 			makeCurrent();
 			QImage image = grabFrameBuffer();
 
-			String filename = String("molview_screenshot" + String(screenshot_nr_) +".png");
+			String filename = String("BALLView_screenshot" + String(screenshot_nr_) +".png");
 			bool result = image.save(filename.c_str(), "PNG");
 			screenshot_nr_ ++;
 
@@ -1290,7 +1290,7 @@ namespace BALL
 
 		void Scene::exportPOVRay()
 		{
-			String filename = String("molview_pov_" + String(pov_nr_) +".pov");
+			String filename = String("BALLView_pov_" + String(pov_nr_) +".pov");
 
 			POVRenderer pr(filename);
 			bool result = exportScene(pr);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.52 2004/03/13 12:49:14 amoll Exp $
+// $Id: molecularControl.C,v 1.53 2004/04/16 11:33:07 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -355,6 +355,11 @@ void MolecularControl::compositeProperties()
 
 void MolecularControl::bondProperties()
 {
+	if (((Atom*) context_composite_)->countBonds() == 0) 
+	{
+		setStatusbarText("Atom has no bonds!");
+		return;
+	}
 	BondProperties bs((Atom*) context_composite_, this);
 	bs.exec();
 }
@@ -1128,7 +1133,7 @@ void MolecularControl::applySelector()
 
 void MolecularControl::showSelectorHelp()
 {
-	QMessageBox::information( this, "molview",
+	QMessageBox::information( this, "BALLView",
 			String(
 			String("In this text field, you can enter regular expressions to select molecular entities.\n")+
 			"To apply your selection, just press Return key after you are finished. If you want to\n"+

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.75 2004/04/14 14:01:57 amoll Exp $
+// $Id: mainControl.C,v 1.76 2004/04/16 11:33:17 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -77,7 +77,7 @@ namespace BALL
 				selection_(),
 				message_label_(new QLabel("" , statusBar())),
 				main_control_preferences_(0),
-				preferences_dialog_(new Preferences(this, "Molview Preferences")),
+				preferences_dialog_(new Preferences(this, "BALLView Preferences")),
 				preferences_id_(-1),
 				delete_id_(0),
 				composites_muteable_(true),
@@ -133,7 +133,7 @@ namespace BALL
 				Embeddable(main_control),
 				selection_(),
 				main_control_preferences_(0),
-				preferences_dialog_(new Preferences(this, "Molview Preferences")),
+				preferences_dialog_(new Preferences(this, "BALLView Preferences")),
 				preferences_id_(-1),
 				delete_id_(0),
 				composites_muteable_(main_control.composites_muteable_)

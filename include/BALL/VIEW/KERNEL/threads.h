@@ -71,7 +71,7 @@ namespace VIEW
 				 a memory leak.
 			5. After updating the visualisations, call SimulationThread::setUpdateRunning(false)
 				 from the MainControl.
-			If you dont pay attention to these rules, dont wonder if molview freezes
+			If you dont pay attention to these rules, dont wonder if BALLView freezes
 			or crashes!
 	*/
 	class BALL_EXPORT SimulationThread
