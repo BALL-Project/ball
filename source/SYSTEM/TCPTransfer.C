@@ -1,4 +1,4 @@
-// $Id: TCPTransfer.C,v 1.2 2001/09/10 12:50:12 amoll Exp $
+// $Id: TCPTransfer.C,v 1.3 2001/09/11 17:09:03 amoll Exp $
 
 #include <BALL/SYSTEM/TCPTransfer.h>
 #include <BALL/SYSTEM/timer.h>
@@ -8,17 +8,24 @@
 #include <netinet/in.h> 
 #include <unistd.h>
 
-#include <sys/ioctl.h>
+//#include <sys/ioctl.h>
 #include <fstream>
 #include <stdio.h>
 
+#if defined(__hpux__) || defined(__linux__)
+# include <sys/ioctl.h>
+#else
+# include <sys/filio.h>
+#endif
+
+//#include <sys/filio.h>
 //using namespace std;
 
 namespace BALL
 {
 
 // no support for passworts yet
-TCPTransfer::TCPTransfer(ofstream& file, const String& address)
+TCPTransfer::TCPTransfer(::std::ofstream& file, const String& address)
 	throw() 
 {
 	buffer_ = new char[BUFFER_SIZE];
@@ -47,7 +54,7 @@ TCPTransfer::Status TCPTransfer::transfer()
 	return UNKNOWN_PROTOCOL_ERROR;
 }
 
-bool TCPTransfer::set(ofstream& file, const String& address)
+bool TCPTransfer::set(::std::ofstream& file, const String& address)
 	throw()
 {
 	clear();
@@ -222,6 +229,7 @@ TCPTransfer::Status TCPTransfer::setBlock_(Socket socket, bool block)
 {
 	int temp = !block;
 	if (ioctl(socket, FIONBIO, &temp) == -1)
+	//if (ioctl(socket, 0x00005421, &temp) == -1)
 	{
 		return CONNECT_ERROR;
 	}
@@ -302,7 +310,7 @@ void TCPTransfer::output_()
 {
 	for (Position pos = 0; pos < (Position) received_bytes_; pos++)
 	{
-		cout << buffer_[pos];
+		::std::cout << buffer_[pos];
 	}
 }
 
