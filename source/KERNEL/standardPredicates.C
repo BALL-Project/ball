@@ -1,4 +1,4 @@
-// $Id: standardPredicates.C,v 1.25 2001/06/05 15:51:13 anker Exp $
+// $Id: standardPredicates.C,v 1.26 2001/07/16 12:38:07 anker Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -490,7 +490,8 @@ namespace BALL
 						} 
 						else
 						{
-							Log.error() << "Invalid String" << endl;
+							Log.error() << "ConnectedToPredicate::parse_(): "
+								<< "Invalid String" << endl;
 							return false;
 						}
 						tmp = "";
