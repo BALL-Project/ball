@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.115 2004/07/26 13:45:11 amoll Exp $
+// $Id: scene.C,v 1.116 2004/07/26 14:16:56 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -757,7 +757,7 @@ namespace BALL
 			SetCamera set_camera(this);
 			set_camera.exec();
 			gl_renderer_.updateCamera();
-			paintGL();
+			updateGL();
 		}
 
 
@@ -1113,6 +1113,7 @@ namespace BALL
 			}
 
 			renderView_(REBUILD_DISPLAY_LISTS);
+			updateGL();
 		}
 
 
@@ -1541,7 +1542,7 @@ namespace BALL
 
 				stage_settings_->updateFromStage();
 
-				paintGL();
+				updateGL();
 			}
 		}
 
@@ -1694,17 +1695,6 @@ namespace BALL
 		void Scene::enterActiveStereo()
 			throw()
 		{
-			/*
-			gl_renderer_.setStereoMode(GLRenderer::ACTIVE_STEREO);
-			GLboolean enabled = false;
-			glGetBooleanv(GL_STEREO, &enabled);
-			if (!enabled)
-			{
-				Log.error() << "No Stereo mode capability in driver" << std::endl;
-				setStatusbarText("No Stereo mode capability in driver");
-			}
-			*/
-			
 			gl_renderer_.setStereoMode(GLRenderer::ACTIVE_STEREO);
 			last_pos_ = pos();
 			hide();

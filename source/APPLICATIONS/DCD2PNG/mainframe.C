@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.4 2004/07/26 13:59:15 amoll Exp $
+// $Id: mainframe.C,v 1.5 2004/07/26 14:21:00 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -28,9 +28,10 @@ namespace BALL
 			display_properties_(0),
 			molecular_structure_(0)
 	{
-	#ifdef BALL_VIEW_DEBUG
-	Log.error() << "new Mainframe " << this << std::endl;
-	#endif
+		#ifdef BALL_VIEW_DEBUG
+			Log.error() << "new Mainframe " << this << std::endl;
+		#endif
+
 		Log.remove(std::cout);
   	Log.remove(std::cerr);
 
@@ -102,13 +103,15 @@ namespace BALL
 			(*it)->applyPreferences();
 		}
 
-		System* new_system = 0;
-		new_system = getSelectedSystem();
 		/*
-		String molecular_file;
-		if (in.hasEntry("BALLVIEW_PROJECT", "MolecularFile"))
+		for (Position pos = 1; pos < 1000; pos++)
 		{
-			molecular_file = in.getValue("BALLVIEW_PROJECT", "MolecularFile");
+			if (!in.hasEntry("BALLVIEW_PROJECT", "MolecularFile" + String(pos)))
+			{
+				break;
+			}
+
+			String molecular_file = in.getValue("BALLVIEW_PROJECT", "MolecularFile" + String(pos));
 			display_properties_->enableCreationForNewMolecules(false);
 
 			ifstream infile(molecular_file.c_str(), std::ios::in);
@@ -116,33 +119,39 @@ namespace BALL
 			PersistentObject* po = pm.readObject();
 			if (!RTTI::isKindOf<System>(*po))
 			{
+				setStatusbarText("Error while reading project file! Aborting...");
+				Log.error() << "Error while reading project file! Aborting..." << std::endl;
+				return;
 			}
-			new_system = (System*) po;
 			infile.close();
-			insert(*new_system);
+			insert(*(System*) po);
 		}
 		*/
+
 		try
 		{
 			for (Position p = 0; p < 9999999; p++)
 			{
-				if (!in.hasEntry("BALLVIEW_PROJECT", "Representation" + String(p)))
-				{
-					break;
-				}
+				if (!in.hasEntry("BALLVIEW_PROJECT", "Representation" + String(p))) break;
 
 				String data_string = in.getValue("BALLVIEW_PROJECT", "Representation" + String(p));
 
-
 				vector<String> string_vector;
-				Size split_size = data_string.split(string_vector, "[]");
-				if (split_size == 1) 
+				Size split_size;
+
+				// Representation0=1;3 2 2 6.500000 0 0 [2]|Color|H
+				// 								 ^ 																	System Number
+				// 								         ^            							Model Settings
+				// 								         							 ^            Composites numbers
+				// 								         							     ^        Custom Color
+				// 								         							     			^   Hidden Flag
+
+				if (data_string.hasPrefix("CP:")) 
 				{
-					Size split_size = data_string.split(string_vector);
-					if (split_size != 4)
-					{
-						continue;
-					}
+					data_string = data_string.after("CP:");
+					// we have a clipping plane
+					split_size = data_string.split(string_vector);
+					if (split_size != 4) continue;
 
 					Representation* rep = new Representation();
 					rep->setModelType(MODEL_CLIPPING_PLANE);
@@ -154,31 +163,82 @@ namespace BALL
 					insert(*rep);
 					continue;
 				}
+
+				// split off information of system number
+				split_size = data_string.split(string_vector, ";");
+				Position system_pos = string_vector[0].toUnsignedInt();
+
+				// split off between representation settings and composite numbers
+				data_string = string_vector[1];
+				vector<String> string_vector2;
+				data_string.split(string_vector2, "[]");
+				data_string = string_vector2[0];
 				display_properties_->getSettingsFromString(data_string);
 
-				if (new_system == 0) continue;
-				
-				data_string = string_vector[1];
-				data_string.split(string_vector, ",");
+				// Composite positions
+				data_string = string_vector2[1];
+				data_string.split(string_vector2, ",");
 				HashSet<Position> hash_set;
-				for (Position p = 0; p < string_vector.size(); p++)
+				for (Position p = 0; p < string_vector2.size(); p++)
 				{
-					hash_set.insert(string_vector[p].toUnsignedInt());
+					hash_set.insert(string_vector2[p].toUnsignedInt());
 				}
-	
+
+				Position pos = getCompositeManager().getNumberOfComposites() - 1;
+				CompositeManager::CompositeIterator cit2 = getCompositeManager().begin();
+				for (; cit2 != getCompositeManager().end() && system_pos != pos; cit2++)
+				{
+					pos--;
+				}
+
+				if (cit2 == getCompositeManager().end())  
+				{
+					setStatusbarText("Error while reading project file! Aborting...");
+					Log.error() << "Error while reading project file! Aborting..." << std::endl;
+					continue;
+				}
+
+				data_string = string_vector[1];
+				if (data_string.has('|'))
+				{
+					data_string.split(string_vector2, "|");
+					ColorRGBA color;
+					color = string_vector2[1];
+					display_properties_->setCustomColor(color);
+				}
+
 				getSelection().clear();
 				Position current = 0;
-				setSelection_(new_system, hash_set, current);
+				setSelection_(*cit2, hash_set, current);
 				NewSelectionMessage* msg = new NewSelectionMessage();
 				notify_(msg);
 			
 				display_properties_->apply();
+
+				if (string_vector2.size() == 3 && string_vector2[2].has('H'))
+				{
+					Representation* rep = 0;
+					PrimitiveManager::RepresentationsIterator pit = getPrimitiveManager().begin();
+					for (; pit != getPrimitiveManager().end(); pit++)
+					{
+						rep = *pit;
+					}
+
+					rep->setHidden(true);
+					rep->update(false);
+
+#ifndef BALL_QT_HAS_THREADS
+			 		RepresentationMessage* msg = new RepresentationMessage(*rep, RepresentationMessage::UPDATE);
+ 					notify_(msg);
+#endif
+				}
 			}
 		}
-		catch(...)
+		catch(Exception::InvalidFormat e)
 		{
 			setStatusbarText("Error while reading project file! Aborting...");
 			Log.error() << "Error while reading project file! Aborting..." << std::endl;
+			Log.error() << e << std::endl;
 			return;
 		}
 	
