@@ -1,0 +1,69 @@
+\section{The BALL File Class}
+
+All classes handling file I/O in BALL are derived from a common
+base class, \class{File}. This base class provides a lot of
+functionality that applies to all derived classes as well.
+On eof the most usefult features is on-the-fly file transformation.
+For example, we can open a file (e.g. a PDB file using the \class{PDBFile} 
+class) that is not stored locally on a disc, but in the internet:
+
+\begin{lstlisting}{}
+	PDBFile
+	infile("ftp://ftp.rcsb.org/pub/pdb/data/structures/all/pdb/pdb4pti.ent");
+	System S;
+	infile >> S;
+	infile.close();
+\end{lstlisting}
+
+\noindent
+This command retrieves the file {\tt pdb4pti.ent} from its location at the RCSB
+site using the FTP protocol and reads the contents of that file into a
+\class{System}. The retrieval and the expansion of the URL into something
+meaningful is performed by the classes \class{TransformationManager} and
+\class{TCPTransfer}. Any filename is first handed to the static instance of
+\class{TransformationManager} \class{File} possesses, which then applies all
+matching rules to that file name. The resulting expanded file names are then 
+checked for special prefixes by \class{File}:
+\begin{itemize}
+	\item a file name starting with {\tt exec:} will execute the command after the
+					colon, redirect the output of the command to a temporary file, which 	
+					is the opened and returned
+	\item a file name starting with {\tt http:} or {\tt ftp:} will initiate
+					an HTTP or FTP tranfer from the given URL to a temporary file, which
+					is opened and returned
+\end{itemize}
+
+\noindent 
+THe {\tt exec:} prefix can be used to filter existing files through a command, 
+e.g. the compressed (GZIPped file) {\tt test.txt.gz} can be achieved through
+the filename {\tt exec:gunzip -c test.txt.gz}, assuming that the gunzip
+executable is in your path. You can also automate this process using the
+TransformationManger. Simply by defining a rule for all files ending in {\tt
+.gz}, gunzip will be called automatically:
+
+\begin{lstlisting}{}
+	File::registerTransformation(".*\.gz", "exec:/usr/local/bin/gunzip -c %s");
+\end{lstlisting}
+
+\noindent
+Similarly, if you store a local copy of the PDB in {\tt /local/PDB}, you might
+want to define a short-hand for the path to the PDB through the following
+rule:
+
+\begin{lstlisting}{}
+	File::registerTransformation("PDB:.*", "/local/PDB/structures/all/pdb/pdb%b.ent");
+\end{lstlisting}
+
+\noindent
+This rule would then expand the name {\tt PDB://4pti} to the local copy
+in {\tt /local/PDB/structures/all/pdb/pdb4pti.ent}. In the above rule, 
+{\tt %b} corresponds  to the basename of the file, \ie the name without path 
+and without the file type extension (everything after the last dot).
+For details on the formulation of rules, please refer to the section
+covering \class{TransformationManager} in the BALL Reference Manual.
+
+Some restrictions apply when using transformed file names. First, they may
+be used for {\em reading} files only -- there is no destinct rule set for
+writing files. Second, te transformation manager will alway sapply the first 
+rule he finds. Therefore chaining of rules is not possible and the user
+is responsible for avoiding ambiguities between multiple defined rules.
