@@ -127,7 +127,7 @@ namespace BALL
 		create_methods_.insert("backbone", BackBonePredicate::createDefault);
 		create_methods_.insert("chain", ChainPredicate::createDefault);
 		create_methods_.insert("nucleotide", NucleotidePredicate::createDefault);
-		create_methods_.insert("inRing", inRingPredicate::createDefault);
+		create_methods_.insert("inRing", InRingPredicate::createDefault);
 		create_methods_.insert("doubleBonds", doubleBondsPredicate::createDefault);
 		create_methods_.insert("tripleBonds", tripleBondsPredicate::createDefault);
 		create_methods_.insert("aromaticBonds", aromaticBondsPredicate::createDefault);
