@@ -1,4 +1,4 @@
-// $Id: periodicBoundary.C,v 1.21 2001/12/30 13:28:48 sturm Exp $
+// $Id: periodicBoundary.C,v 1.22 2002/01/11 01:57:57 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/periodicBoundary.h>
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -339,7 +339,7 @@ namespace BALL
 		}
 
 		// check whether we should add water
-		if (options->has(Option::PERIODIC_BOX_ADD_SOLVENT) && options->isBool(Option::PERIODIC_BOX_ADD_SOLVENT))
+		if (options->has(Option::PERIODIC_BOX_ADD_SOLVENT) && options->getBool(Option::PERIODIC_BOX_ADD_SOLVENT))
 		{
 			String filename(Option::PERIODIC_WATER_FILE);
 			

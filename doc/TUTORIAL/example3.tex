@@ -1,11 +1,13 @@
 \section{A simple AMBER calculation}
 
+\index{Energy minimization}
+\index{optimizing hydrogens}
+
 Having introduced the basic of handling proteins in the last
 chapter, we now turn towards real-life examples: getting a protein
-from the PDB and performing an AMBER calculation with it.
+from the PDB and performing a molecular dynamics simulation with it.
 Again, we will be using BPTI, reading to from a PDB file as in the
 previous example:
-class) that is not stored locally on a disc, but in the internet:
 
 \begin{lstlisting}{}
 	PDBFile	infile("pdb4pti.ent");
@@ -16,7 +18,7 @@ class) that is not stored locally on a disc, but in the internet:
 
 \noindent
 The file we chose to read here is the original file as obtained from
-the PDB, therefor it does not contain neither hydrogen atoms, nor bonds.
+the PDB, therefore it contains neither hydrogen atoms, nor bonds.
 The BALL class \class{FragmentDB} provides a convenient way to solve
 both problems. \class{FragmentDB} is an extensible database of residue
 structures. By comparing the residues in the PDB file with the reference
@@ -36,7 +38,7 @@ can \member{apply} it to any given kernel data structure:
 \noindent
 Instantiating \class{FragmentDB} usually takes a few seconds to parse the 
 fragment database and the naming conversion tables. The corresponding data is
-using the \member{add\_hydrogens} processor and rebuild the mising bonds
+using the \member{add\_hydrogens} processor and rebuild the missing bonds
 stored in \directory{BALL/data/Fragments}. Now we will add the missing hydrogens 
 using the \member{build\_bonds} processor:
 
@@ -44,6 +46,8 @@ using the \member{build\_bonds} processor:
 	S.apply(db.add_hydrogens);
 	S.apply(db.build_bonds);
 \end{lstlisting}
+\index{adding hydrogens}
+\index{building bonds}
 
 \noindent
 Now we have constructed a complete protein structure of BPTI. We can verify
@@ -57,12 +61,13 @@ checks on a given kernel data structure:
 	\item check bond lengths (should be within 15% of the template bond lengths)
 \end{itemize}
 The information on missing atoms and bond lengths is taken from an instance
-of \class{FragmentDB}:
+of \class{FragmentDB}:\index{fragment database}
 
 \begin{lstlisting}{}
 	ResidueChecker rc(db);
 	S.apply(rc);
 \end{lstlisting}
+\index{checking residues}
 	
 \noindent
 If the \class{ResidueChecker} notices a problem with the structure, it will 
@@ -77,8 +82,7 @@ hydrogen positions using a molecular mechanics calculation.
 We will use the AMBER force field\cite{AMBER95} and optimize the hydrogen 
 positions while keeping the heavy atoms rigid. The AMBER force field is
 implemented in the \class{AmberFF} class. Instantiating a force field and
-setting up a calculation is very simple:
-system is very simple:
+setting up a calculation is very simple:\index{AMBER force field}
 
 \begin{lstlisting}{}
 	AmberFF amber(S);
@@ -110,6 +114,7 @@ is the \class{Selector} class. Given a BALL {\em kernel expression} (see the
 documentation for \class{Expression} for details), it will select all atoms
 for which the expression evaluates to true. In our case, the expression 
 {\tt "element(H)"} describes the set of atoms we are interested in:
+\index{selecting atoms}
 
 \begin{lstlisting}{}
 	Selector hydrogen_selector("element(H)");
@@ -125,4 +130,89 @@ energy minimizer instances are bound to the force field. Again, we can use a
 constructor to do most of the work:
 
 \begin{lstlisting}{}
+	ConjugateGradientMinimizer cgm(FF);
+	cgm.setEnergyOutputFrequency(1);
+	cgm.setMaxGradient(5.0);
+	std::cout << "Minimizer options:" << std::endl 
+						<< cgm.options << std::endl;
+	cg.minimize(100);
 \end{lstlisting}
+
+\noindent
+The minimizer object {\tt cgm} has a variety of options controlling its
+behavior (please consult the reference manual for all possible options).
+After instantiating it, we first adjust its {\em energy output frequency},
+\ie the number of iterations performed before a status message is printed.
+This status message contains information on the current energy and the
+gradient. \method{setMaxGradient} adjusts the convergence criterion for the
+minimizer: as soon as the RMS gradient of the system falls below 5~kJ/(mol
+\AA), the minimization is aborted. Please note that all energies in BALL
+are in kJ/mol, all positions and distances in \AA and therefore the gradient
+in kJ/(mol \AA). The current settings of the minimizer are all stored in 
+the member \member{EnergyMinimizer}{options} (a public instance of 
+\class{Options}), so the internal state of the minimizer is readily obtained by
+dumping \member{EnergyMinimizer}{options} to {\tt cout}.
+
+Finally, a call to \method{minimize} will cause the minimizer to run for
+(at most) 100 iterations. The result is a structure of BPTI containing all
+the atoms at optimized positions, so now we can perform an MD simulation of
+the whole protein. Obviously, we now have to deselect the hydrogen atoms.
+Selection is recursive, so deselecting or selecting a residue will
+select/deselect all its atoms, selecting a system will select all its
+molecules, and so on. For a more detailed description, please read Section
+\ref{section:kernel-data-structures}. The easiest way to deselect all atoms is
+therefore to deselect the whole system:
+
+\begin{lstlisting}{}
+	S.deselect();
+\end{lstlisting}
+
+\noindent
+Similar to energy minimization, molecular dynamics (MD) simulation is also
+implemented as its own class, \class{MolecularDynamics}. There are two derived
+classes: \class{CanonicalMD} and \class{MicroCanonicalMD}, implementing an MD
+simulation in the canonical ensemble (isothermal) and the microcanonical
+ensemble (adiabatic). 
+
+For a protein immersed in water, the canonical ensemble is the obvious choice.
+We will furthermore run the simulation in a cubic box with periodic boundary 
+conditions. So the first step is to set up that box and fill it with water.
+Luckily, water is the default solvent in BALL, so all you have to do is
+let the force field know that you want to set up a box with water around the
+current system:
+
+\begin{lstlisting}{}
+	FF.options[PeriodicBoundary::Option::PERIODIC_BOX_ENABLED] = "true";
+	FF.options[PeriodicBoundary::Option::PERIODIC_BOX_ADD_SOLVENT] = "true";
+	FF.setup()
+\end{lstlisting}
+
+\noindent
+Setting the options {\tt PERIODIC\_BOX\_ENABLED} and {\tt
+PERIODIC\_BOX\_ADD\_SOLVENT} will cause the force field to enable periodic
+boundary conditions and add the default solvent to the box at the next call
+to \method{setup}. By default, the box is defined as the bounding box of the
+system augmented by 5~\AA in each direction. You can also specify arbitrary
+bounding boxes or different solvents. Please refer to the documentation of
+\class{PeriodicBoundary} for a more detailed description.
+
+We can now instantiate the molecular dynamics object, set up a run at 300~K and
+perform a few  MD simulation steps:
+
+\begin{lstlisting}{}
+	CanonicalMD md(FF);
+	md.setTemperature(300);
+	md.simulate(10);
+	std::cout << "Simulation settings:" << md.options << std::endl;
+\end{lstlisting}
+
+\noindent
+As in the force field and the energy minimizer, the MD simulation object
+stores all its settings in an options object. The
+\method{MolecularDynamics}{simulate} method simulates a given number of MD
+steps. 
+
+The source code for the complete example can be found as {\tt example3.C}
+in \directory{BALL/source/EXAMPLES}. Further documentation is available for all
+classes in the BALL Reference Manual. The header files required for molecular
+mechanics reside in \directory{BALL/include/BALL/MOLMEC} and its subdirectories.
