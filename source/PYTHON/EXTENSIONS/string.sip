@@ -1,4 +1,4 @@
-// $Id: string.sip,v 1.9 2003/04/20 12:46:13 oliver Exp $
+// $Id: string.sip,v 1.10 2003/04/20 16:40:17 oliver Exp $
 
 class Substring
 {
@@ -40,8 +40,6 @@ class Substring
   // Substring& operator = (const String& string);
   // Substring& operator = (const Substring& substring);
   // Substring& operator = (const char* char_ptr);
-  char* c_str();
-  const char* c_str() const;
   Index getFirstIndex() const;
   Index getLastIndex() const;
   Size size() const;
@@ -174,6 +172,7 @@ class String
   Substring right(Size /len/) const;
   Substring instr(const String& /pattern/, Index /from/ = 0) const;
   // String operator + (const string& /string/) const;
+	String operator + (const String& /string/) const;
   String operator + (const char* /char_ptr/) const;
   String operator + (char /c/) const;
   // friend String operator + (const char* char_ptr, const String& s);
@@ -235,7 +234,12 @@ class String
   // void dump(::std::ostream& s = ::std::cout, Size depth = 0) const;
   // ::std::istream& getline(::std::istream& s = ::std::cin, char delimiter = '\n');
   // friend ::std::istream& getline(::std::istream& s,  String& string,  char delimiter = '\n');
+	
+	// std::string compatibility methods
 	int size() const;
+  char* c_str();
+  const char* c_str() const;
+
 
   char *__str__() /NonLazy/;
 %MemberCode
