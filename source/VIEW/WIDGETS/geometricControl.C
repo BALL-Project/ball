@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.38 2004/04/19 16:51:11 amoll Exp $
+// $Id: geometricControl.C,v 1.38.2.1 2004/05/17 11:31:05 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -423,38 +423,36 @@ void GeometricControl::updateSelection()
 	RepresentationMessage* message = new RepresentationMessage(*rep, RepresentationMessage::SELECTED);
 	notify_(message);
 
-	if (rep->getComposites().size() == 0) 
+	if (rep->getComposites().size() > 0) 
 	{
-		return;
-	}
+		String name;
+		const Composite* c_ptr = *rep->getComposites().begin();
 
-	String name;
-	const Composite* c_ptr = *rep->getComposites().begin();
-
-	while (!c_ptr->isRoot())
-	{
-		if (RTTI::isKindOf<AtomContainer> (*c_ptr))
+		while (!c_ptr->isRoot())
 		{
-			name = ((const AtomContainer*) c_ptr)->getName() + "->" + name;
+			if (RTTI::isKindOf<AtomContainer> (*c_ptr))
+			{
+				name = ((const AtomContainer*) c_ptr)->getName() + "->" + name;
+			}
+			else if (RTTI::isKindOf<Atom> (*c_ptr))
+			{
+				name = ((const Atom*) c_ptr)->getName() + "->" + name;
+			}
+
+			c_ptr = c_ptr->getParent();
 		}
-		else if (RTTI::isKindOf<Atom> (*c_ptr))
+
+		if (RTTI::isKindOf<AtomContainer>(*c_ptr))
 		{
-			name = ((const Atom*) c_ptr)->getName() + "->" + name;
+			name = ((const AtomContainer*)c_ptr)->getProperty("FROM_FILE").getString() + "->" + name;
 		}
+		
+		name.trimRight("->");
 
-		c_ptr = c_ptr->getParent();
+		if (rep->getComposites().size() > 1) name += "...";
+
+		setStatusbarText("Representation from " + name);
 	}
-
-	if (RTTI::isKindOf<AtomContainer>(*c_ptr))
-	{
-		name = ((const AtomContainer*)c_ptr)->getProperty("FROM_FILE").getString() + "->" + name;
-	}
-	
-	name.trimRight("->");
-
-	if (rep->getComposites().size() > 1) name += "...";
-
-	setStatusbarText("Representation from " + name);
 
 	// update ColorMeshDialog if representation is a surface
 	if (isSurfaceModel(rep->getModelType()) &&
