@@ -1,4 +1,4 @@
-// $Id: exception.h,v 1.29 2001/07/29 22:18:15 oliver Exp $
+// $Id: exception.h,v 1.30 2002/01/09 15:47:04 amoll Exp $
    
 #ifndef BALL_COMMON_EXCEPTION_H
 #define BALL_COMMON_EXCEPTION_H
@@ -364,7 +364,7 @@ namespace BALL
 			std::string filename_;
 		};
 
-		/**	File not found.
+		/**	Invalid Position.
 				A given position in three dimensional is invalid.
 		*/
 		class IllegalPosition 
