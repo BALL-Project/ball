@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.3 2003/09/04 23:14:14 amoll Exp $
+// $Id: glRenderer.h,v 1.4 2003/09/16 15:18:32 amoll Exp $
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
 #define BALL_VIEW_RENDERING_GLRENDERER_H
@@ -167,6 +167,14 @@ namespace BALL
 				throw();
 			
 			///
+			void setStereoMode(bool on)
+				throw();
+
+			///
+			bool isInStereoMode() const
+				throw() { return stereo_;}
+
+			///
 			virtual bool render_(const Representation& representation)
 				throw();
 
@@ -323,6 +331,8 @@ namespace BALL
 			DisplayListHashMap 			display_lists_;
 			Name 										all_names_;
 			unsigned int 						object_buffer_[BALL_GLRENDERER_PICKING_NUMBER_OF_MAX_OBJECTS];
+
+			bool stereo_;
 		};
 
 	} // namespace VIEW

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.6 2003/09/11 22:36:29 amoll Exp $
+// $Id: scene.h,v 1.7 2003/09/16 15:18:32 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -443,6 +443,10 @@ namespace BALL
 			virtual void switchShowWidget()
 				throw();
 
+			///
+			void switchStereo()
+				throw();
+
 			protected slots:
 
 			//@}
@@ -560,12 +564,9 @@ namespace BALL
 				throw();
 			
 			// Menu entry IDs
-			int rotate_id_;
-			int picking_id_;
-			int sensitivity_id_;
-			int viewpoint_id_;
-			int setviewpoint_id_;
-			int reset_camera_id_;
+			Index rotate_id_;
+			Index picking_id_;
+			Index stereo_id_;
 			
 			bool rotate_mode_;
 
