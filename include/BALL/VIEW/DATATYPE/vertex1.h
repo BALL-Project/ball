@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertex1.h,v 1.4 2003/11/18 14:42:47 amoll Exp $
+// $Id: vertex1.h,v 1.5 2003/12/12 14:59:41 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_VERTEX1_H
@@ -17,11 +17,9 @@
 
 namespace BALL
 {
-	
 	namespace VIEW
 	{
-		/** Vertex class.
-				The class Vertex is used as a base class for all geometric objects that
+		/** Vertex is a base class for all GeometricObject 's that
 				have a single vertex. It provides the derived class with methods for accessing
 				that vertex. Further there is the possibility to give an address to a 
 				vector Vector3 as vertex. So if the value of that given vector
@@ -38,34 +36,26 @@ namespace BALL
 			//@{
 
 			/** Default Constructor.
-					Construct new vertex.
 					The vector of this vertex is set to (0.0, 0.0, 0.0). The vertex
 					address is set to the address of the own vector of this vertex.
-					\return      Vertex new constructed vertex
-					\see         Vector3
 			*/
 			Vertex()
 				throw();
 
 			/** Copy constructor.
-					Construct new vertex by copying the vertex <b> vertex</b>. The vector of
-					<b> vertex</b> is copied to the vector of this vertex.
+					The vector of <b> vertex</b> is copied to the vector of this vertex.
 					The vertex address of this vertex is set to the value of 
 					the vertex address of <b> vertex</b> vertex.
-					\param       vertex the vertex to be copied
-					\return      Vertex new constructed vertex copied from <b> vertex</b>
 			*/
 			Vertex(const Vertex& vertex)
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
 
 			/** Destructor.
-					Default destruction of this vertex.
 			*/
 			virtual ~Vertex()
 				throw();
@@ -84,13 +74,8 @@ namespace BALL
 			//@{
 
 			/** Assignment.
-					Assign the vertex <b> v</b> to this vertex.
 					The vector and the vertex address of this vertex is initialized 
 					to the vector and vertex address of the vertex <b> v</b>.\par
-					\param       v the vertex to be copied
-					\see         setVertex
-					\see         setVertexAddress
-					\see         Vector3
 			*/
 			void set(const Vertex& v)
 				throw();
@@ -99,9 +84,6 @@ namespace BALL
 					Calls set.
 					The vector and the vertex address of this vertex is initialized
 					to the vector and the vertex address of the vertex <b> v</b>.\par
-					\param       v the vertex to be copied
-					\return      Vertex& constant reference of this vertex
-					\see         set
 			*/
 			const Vertex& operator = (const Vertex& v)
 				throw();
@@ -109,45 +91,29 @@ namespace BALL
 			/** Swapping of vertices.
 					Swap the vector and vertex address of this vertex with 
 					the vector and vertex address of the vertex	<b> v</b>.
-					\param       v the vertex being swapped with this vertex 
-					\see         Vertex
 			*/
 			void swap(Vertex& v)
 				throw();
-			//@}
 
+			//@}
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
 
 			/** Change the vector of this vertex.
-					Change the vector of this vertex to the vector
-					represented by the parameter <b> v</b>.
-					\param       v the new vector of this vertex
 					\see         getVertex
-					\see         Vector3
 			*/
 			void setVertex(const Vector3& v)
 				throw();
 
 			/** Change the vector of this vertex.
-					Change the vector of this vertex to the vector represented by the
-					parameters <b> x</b>, <b> y</b> and <b> z</b>.
-					\param       x the x component of the new vector of this vertex
-					\param       y the y component of the new vector of this vertex
-					\param       z the z component of the new vector of this vertex
 					\see         getVertex
-					\see         Vector3
-					\see         float
 			*/
 			void setVertex(const float x, const float y, const float z)
 				throw();
 
 			/** Mutable inspection of the vector of this vertex.
-					Access the mutual reference of the vector of this vertex.
-					\return      Vector3& mutable reference to the vector of this vertex
 					\see         setVertex
-					\see         Vector3
 			*/
 			Vector3& getVertex()
 				throw();
@@ -159,27 +125,18 @@ namespace BALL
 				throw();
 
 			/** Inspection of the vector of this vertex.
-					Access the vector of this vertex by using Vector3.
-					\param       v the vector receiving the vector of this vertex
 					\see         setVertex
-					\see         Vector3
 			*/
 			void getVertex(Vector3& v) const
 				throw();
 
-			/** Inspection of the components of the vector of this vertex.
-					Access the components of the vector of this vertex by using float.
-					\param       x the x component of the vector of this vertex
-					\param       y the y component of the vector of this vertex
-					\param       z the z component of the vector of this vertex
+			/** Access the components of the vector of this vertex by using float.
 					\see         setVertex
-					\see         float
 			*/
 			void getVertex(float& x, float& y, float& z) const
 				throw();
 
-			/** Change the vector address of this vertex.
-					Change the vector address of this vertex to the vector address
+			/** Change the vector address of this vertex to the vector address
 					represented by the parameter <b> v</b>.
 					If a vector address is given the value of the vector of this vertex
 					is ignored. Instead if the method getVertex (or any other access method)
@@ -191,7 +148,6 @@ namespace BALL
 					changes its position.
 					\param       v the new vector address of this vertex
 					\see         getVertexAddress
-					\see         Vector3
 			*/
 			void setVertexAddress(const Vector3& v)
 				throw();
@@ -207,18 +163,14 @@ namespace BALL
 			void setDefaultVertexAddress()
 				throw();
 
-			/** Mutable inspection of the vertex address of this vertex.
-					Access the pointer of the vector that contains the value of
+			/** Access the pointer of the vector that contains the value of
 					this	vertex.
-					\return      Vector3* pointer to the vector that contains the value of this vertex
 					\see         setVertexAddress
-					\see         Vector3
 			*/
 			Vector3* getVertexAddress() const
 				throw();
 
 			//@}
-			
 			/**	@name	Predicates
 			*/
 			//@{
@@ -226,30 +178,20 @@ namespace BALL
 			/** Vertex address test.
 					Tests if the vertex address of this vertex points to the vector
 					of this vertex.
-					\return			bool <tt> true</tt> if the vertex address of this vertex points to the vector of this vertex.
-					 						<tt> false</tt> otherwise
 					\see        setVertexAddress					
 					\see        getVertexAddress					
 					\see        setDefaultVertexAddress					
 			*/
 			bool isDefaultVertexAddress() const
 				throw();
-			//@}
 
+			//@}
 			/**	@name	debuggers and diagnostics
 			*/	
 			//@{
 
 			/** Internal state and consistency self-validation.
-					Initiate self-validation of the internal state and data structure consistencies
-					of this vertex.
-					If the internal state of this vertex is correct (self-validated) and 
-					consistent <tt> true</tt> is returned, <tt> false</tt> otherwise. 
-					Calls {Vector3::isValid}.
-					\return			bool -
-											<tt> true</tt> if the internal state of this vertex is correct (self-validated) and consistent,
-					 						<tt> false</tt> otherwise
-					\see        Vector3::isValid
+					Calls Vector3::isValid
 			*/
 			virtual bool isValid() const
 				throw();
@@ -263,6 +205,7 @@ namespace BALL
 			*/
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
+
 			//@}
 
 			private:
@@ -280,7 +223,6 @@ namespace BALL
 #		endif
   
 	} // namespace VIEW
-	
 } // namespace BALL
 
 #endif // BALL_VIEW_KERNEL_VERTEX1_H

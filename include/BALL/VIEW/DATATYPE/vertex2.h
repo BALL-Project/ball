@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertex2.h,v 1.6 2003/11/18 14:42:47 amoll Exp $
+// $Id: vertex2.h,v 1.7 2003/12/12 14:56:10 amoll Exp $
 
 #ifndef BALL_VIEW_DATATYPE_VERTEX2_H
 #define BALL_VIEW_DATATYPE_VERTEX2_H
@@ -14,20 +14,18 @@
 #	include <BALL/MATHS/vector3.h>
 #endif
 
-
 namespace BALL
 {
 	namespace VIEW
 	{
 
-		/** Vertex2 class.
-				The class Vertex2 is used as a base class for all geometric objects that
+		/** Vertex2 is a base class for all GeometricObject 's that
 				have two vertices. It provides the derived class with methods for accessing
 				that vertices. Further there is the possibility to give an address to a 
-				vector Vector3 as vertices. So if the values of these given vectors
-				changes the values of the vectors of this vertex2 changes 
+				Vector3 as vertice. So if the values of these given vectors
+				changes, the values of the vectors  changes 
 				as well. To avoid segmentation faults these vector addresses must be 
-				valid as long as this vertex2 exists. \par
+				valid as long as the Vertex2 exists. \par
 		*/
 		class Vertex2
 		{
@@ -38,43 +36,31 @@ namespace BALL
 			//@{
 
 			/** Default Constructor.
-					Construct new vertex2.
-					The vectors of this vertex2 are set to (0.0, 0.0, 0.0). The vertex
-					addresses are set to the addresses of the own vectors of this 
-					vertex2.
-					\return      Vertex2 new constructed vertex2
-					\see         Vector3
+					The vectors  are set to (0.0, 0.0, 0.0). The vertex
+					addresses are set to the addresses of the own vectors.
 			*/
 			Vertex2()
 				throw();
 
 			/** Copy constructor.
-					Construct new vertex2 by copying the vertex2 <b> vertex</b>. The vectors of
-					<b> vertex</b> are copied to the vectors of this vertex2.
-					The vertex addresses of this vertex are set to the values of 
-					the vertex addresses of <b> vertex</b> vertex2.
-					\param       vertex the vertex2 to be copied
-					\return      Vertex2 new constructed vertex2 copied from <b> vertex</b>
 			*/
 			Vertex2(const Vertex2& vertex)
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 		  */
 			//@{
 
 			/** Destructor.
-					Default destruction of this vertex2.
 			*/
 			virtual ~Vertex2()
 				throw();
 
 			/** Explicit default initialization.
-					Set the vectors of this vertex2 to the vector (0.0, 0.0, 0.0).
-					The vertex addresses of this vertex2 are set to the addresses of 
-					the own vectors of this vertex2.
+					Set the vectors  to the vector (0.0, 0.0, 0.0).
+					The vertex addresses  are set to the addresses of 
+					the own vectors .
 			*/
 			virtual void clear()
 				throw();
@@ -85,104 +71,70 @@ namespace BALL
 			//@{
 
 			/** Assignment.
-					Assign the vertex2 <b> vertex</b> to this vertex2.
-					The vectors and the vertex addresses of this vertex2 are initialized 
+					The vectors and the vertex addresses  are initialized 
 					to the vectors and vertex addresses of the vertex2 <b> vertex</b>.\par
-					\param       vertex the vertex2 to be copied
-					\see         setVertex1
-					\see         setVertex1Address
-					\see         setVertex2
-					\see         setVertex2Address
-					\see         Vector3
 			*/
 			void set(const Vertex2& vertex)
 				throw();
 
 			/** Assignment operator.
-					Assign the vertex2 <b> vertex</b> to this vertex2.
 					Calls set.
-					The vectors and the vertex addresses of this vertex2 are initialized
+					The vectors and the vertex addresses  are initialized
 					to the vectors and the vertex addresses of the vertex2 <b> vertex</b>.\par
-					\param       vertex the vertex2 to be copied
-					\return      Vertex2& constant reference of this vertex2
-					\see         set
 			*/
 			const Vertex2& operator = (const Vertex2& vertex)
 				throw();
 
 			/** Swapping of vertices.
-					Swap the vectors of this vertex2 with the vertex2 <b> vertex</b>
-					and swaps the vertex addresses of this vertex2 with the vertex2
-					<b> vertex</b>.
-					\param       vertex the vertex2 being swapped with this vertex2 
 			*/
 			void swap(Vertex2& vertex)
 				throw();
-			//@}
 
+			//@}
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
 
-			/** Change the first vector of this vertex2.
-					\param       v the new first vector of this vertex2
+			/** Change the first vector .
+					\param       v the new first vector 
 					\see         getVertex1
-					\see         Vector3
 			*/
 			void setVertex1(const Vector3& v)
 				throw();
 
-			/** Change the first vector of this vertex2.
-					Change the first vector of this vertex2 to the vector 
-					represented by the parameters <b> x</b>, <b> y</b> and <b> z</b>.
-					\param       x the x component of the new first vector of this vertex2
-					\param       y the y component of the new first vector of this vertex2
-					\param       z the z component of the new first vector of this vertex2
+			/** Change the first vector .
 					\see         getVertex1
-					\see         Vector3
-					\see         float
 			*/
 			void setVertex1(const float x, const float y, const float z)
 				throw();
 
-			/** Mutable inspection of the first vector of this vertex2.
-					Access the mutual reference of the first vector of this vertex2.
-					\return      Vector3& mutable reference to the first vector of this vertex2
+			/** Mutable inspection of the first vector
+					\return      Vector3& mutable reference to the first vector
 					\see         setVertex1
-					\see         Vector3
 			*/
 			Vector3& getVertex1()
 				throw();
 
-			/** Non-mutable inspection of the first vector of this vertex2.
-					For further information see getVertex1.
+			/** Non-mutable inspection of the first vector 
 			*/
 			const Vector3& getVertex1() const
 				throw();
 
-			/** Inspection of the first vector of this vertex2.
+			/** Inspection of the first vector .
 					Access the first vector of this vertex by using Vector3.
-					\param       v the vector receiving the first vector of this vertex2
+					\param       v the vector receiving the first vector
 					\see         setVertex1
-					\see         Vector3
 			*/
 			void getVertex1(Vector3& v) const
 				throw();
 
-			/** Inspection of the components of the first vector of this vertex2.
-					Access the components of the first vector of this vertex2 by using float.
-					\param       x the x component of the first vector of this vertex2
-					\param       y the y component of the first vector of this vertex2
-					\param       z the z component of the first vector of this vertex2
+			/** Access the components of the first vector by using float.
 					\see         setVertex1
-					\see         float
 			*/
 			void getVertex1(float& x, float& y, float& z) const
 				throw();
 
-			/** Change the vector address of the first vector of this vertex2.
-					Change the vector address of the first vector of this vertex2
-					to the vector address	represented by the parameter <b> v</b>.
+			/** Change the vector address of the first vector.
 					If a vector address is given the value of the first vector of this
 					vertex2	is ignored. Instead if the method getVertex1 (or any other access
 					method concerning the first vector) are called the value of the vector
@@ -193,18 +145,15 @@ namespace BALL
 					(speaking in terms of position). If the	object changes its first
 					position so the object derived from this vertex2	changes
 					its first position.
-					\param       v the new first vector address of this vertex2
+					\param       v the new first vector address
 					\see         getVertex1Address
-					\see         Vector3
 			*/
 			void setVertex1Address(const Vector3& v)
 				throw();
 
-			/** Change the first vector address of this vertex2 to the default address.
-					This method resets the first vertex address to the first vector of
-					this vertex2. So the value of the first vector of this
-					vertex2 will no longer be ignored and all access methods will return 
-					it again.
+			/** Change the first vector address to the default address.
+					So the value of the first vector will no longer be ignored 
+					and all access methods will return it again.
 					This method unhooks the object from any other objects prio connected
 					with setVertex1Address.
 					\see         Vertex::setVertex1Address
@@ -212,78 +161,55 @@ namespace BALL
 			void setDefaultVertex1Address()
 				throw();
 
-			/** Mutable inspection of the first vertex address of this vertex2.
-					Access the pointer of the first vector that contains the value of
-					this	vertex2.
-					\return      Vector3* pointer to the first vector that contains the value of this vertex2
+			/** Mutable inspection of the first vertex address.
+					\return      Vector3* pointer to the first vector that contains the value
 					\see         setVertex1Address
-					\see         Vector3
 			*/
 			Vector3* getVertex1Address() const
 				throw();
 
-			/** Change the second vector of this vertex2.
-					Change the second vector of this vertex2 to the vector
-					represented by the parameter <b> v</b>.
-					\param       v the new second vector of this vertex2
+			/** Change the second vector .
+					\param       v the new second vector 
 					\see         getVertex2
-					\see         Vector3
 			*/
 			void setVertex2(const Vector3& v)
 				throw();
 
-			/** Change the second vector of this vertex2.
-					Change the second vector of this vertex2 to the vector 
-					represented by the parameters <b> x</b>, <b> y</b> and <b> z</b>.
-					\param       x the x component of the new second vector of this vertex2
-					\param       y the y component of the new second vector of this vertex2
-					\param       z the z component of the new second vector of this vertex2
+			/** Change the second vector .
 					\see         getVertex2
-					\see         Vector3
-					\see         float
 			*/
 			void setVertex2(const float x, const float y, const float z)
 				throw();
 
-			/** Mutable inspection of the second vector of this vertex2.
-					Access the mutual reference of the second vector of this vertex2.
-					\return      Vector3& mutable reference to the second vector of this vertex2
+			/** Mutable inspection of the second vector.
+					\return      Vector3& mutable reference to the second vector
 					\see         setVertex2
-					\see         Vector3
 			*/
 			Vector3& getVertex2()
 				throw();
 
-			/** Non-mutable inspection of the second vector of this vertex2.
+			/** Non-mutable inspection of the second vector .
 					For further information see getVertex2.
 			*/
 			const Vector3& getVertex2() const
 				throw();
 
-			/** Inspection of the second vector of this vertex2.
+			/** Inspection of the second vector .
 					Access the second vector of this vertex by using Vector3.
-					\param       v the vector receiving the second vector of this vertex2
+					\param       v the vector receiving the second vector 
 					\see         setVertex2
 					\see         Vector3
 			*/
 			void getVertex2(Vector3& v) const
 				throw();
 
-			/** Inspection of the components of the second vector of this vertex2.
-					Access the components of the second vector of this vertex2 
-					by using float.
-					\param       x the x component of the second vector of this vertex2
-					\param       y the y component of the second vector of this vertex2
-					\param       z the z component of the second vector of this vertex2
+			/** Inspection of the components of the second vector .
 					\see         setVertex2
-					\see         float
 			*/
 			void getVertex2(float& x, float& y, float& z) const
 				throw();
 
-			/** Change the vector address of the second vector of this vertex2.
-					Change the vector address of the second vector of this vertex2
-					to the vector address	represented by the parameter <b> v</b>.
+			/** Change the vector address of the second vector .
 					If a vector address is given the value of the first vector of this
 					vertex2	is ignored. Instead if the method getVertex2 (or any other access
 					method concerning the second vector) are called the value of the vector
@@ -294,15 +220,13 @@ namespace BALL
 					(speaking in terms of position). If the	object changes its second
 					position so the object derived from this vertex2	changes
 					its second position.
-					\param       v the new second vector address of this vertex2
+					\param       v the new second vector address 
 					\see         getVertex2Address
-					\see         Vector3
 			*/
 			void setVertex2Address(const Vector3& v)
 				throw();
 
-			/** Change the second vector address of this vertex2 to the
-					default address.
+			/** Change the second vector address  to the default address.
 					This method resets the second vertex address to the second vector of
 					this vertex2. So the value of the second vector of this
 					vertex2 will no longer be ignored and all access methods will return 
@@ -314,40 +238,23 @@ namespace BALL
 			void setDefaultVertex2Address()
 				throw();
 
-			/** Mutable inspection of the second vertex address of this vertex2.
-					Access the pointer of the second vector that contains the value of
-					this	vertex2.
-					\return      Vector3* pointer to the second vector that contains the value of this vertex2
+			/** Mutable inspection of the second vertex address .
+					\return      Vector3* pointer to the second vector that contains the value 
 					\see         setVertex2Address
-					\see         Vector3
 			*/
 			Vector3* getVertex2Address() const
 				throw();
 
-			/** Change the first and second vector of this vertex2.
-					Change the first and second vector of this vertex2 to the vectors
-					represented by the parameters <b> vertex1</b> and <b> vertex2</b>.
-					\param       vertex1 the new first vector of this vertex2
-					\param       vertex2 the new second vector of this vertex2
+			/** Change the first and second vector .
+					\param       vertex1 the new first vector 
+					\param       vertex2 the new second vector 
 					\see         getVertices
-					\see         Vector3
 			*/
 			void setVertices(const Vector3& vertex1, const Vector3& vertex2)
 				throw();
 
-			/** Change the first and second vector of this vertex2.
-					Change the first and second vector of this vertex2 to the vectors 
-					represented by the parameters <b> vertex1_x</b>, <b> vertex1_y</b>,
-					<b> vertex1_z</b> and <b> vertex2_x</b>, <b> vertex2_y</b>, <b> vertex2_z</b>. 
-					\param       vertex1_x the x component of the new first vector of this vertex2
-					\param       vertex1_y the y component of the new first vector of this vertex2
-					\param       vertex1_z the z component of the new first vector of this vertex2
-					\param       vertex2_x the x component of the new second vector of this vertex2
-					\param       vertex2_y the y component of the new second vector of this vertex2
-					\param       vertex2_z the z component of the new second vector of this vertex2
+			/** Change the first and second vector .
 					\see         getVertices
-					\see         Vector3
-					\see         float
 			*/
 			void setVertices
 				(const float vertex1_x,
@@ -358,56 +265,39 @@ namespace BALL
 				 const float vertex2_z)
 				throw();
 
-			/** Change the vector addresses of the first and second vector of this
-					vertex2.
-					Change the vector addresses of the first and second vector of this
-					vertex2	to the vector addresses	represented by the parameters
-					<b> vertex1</b> and <b> vertex2</b>.
+			/** Change the vector addresses of the first and second vector.
 					See setVertex1Address or setVertex2Address for further information
 					concerning vector addresses.
-					\param       vertex1 the new first vector address of this vertex2
-					\param       vertex2 the new second vector address of this vertex2
+					\param       vertex1 the new first vector address 
+					\param       vertex2 the new second vector address 
 					\see         setVertex1Address
 					\see         setVertex2Address
-					\see         Vector3
 			*/
 			void setVertexAddresses(const Vector3& vertex1, const Vector3& vertex2)
 				throw();
 
-			/** Inspection of the first and second vector of this vertex2.
-					Access the first and second vector of this vertex 
-					by using Vector3.
-					\param       vertex1 the vector receiving the first vector of this vertex2
-					\param       vertex2 the vector receiving the second vector of this vertex2
+			/** Inspection of the first and second vector .
+					\param       vertex1 the vector receiving the first vector 
+					\param       vertex2 the vector receiving the second vector 
 					\see         setVertices
-					\see         Vector3
 			*/
 			void getVertices(Vector3& vertex1, Vector3& vertex2)
 				throw();
 
-			/** Inspection of the components of the first and second vector of 
-					this vertex2.
-					Access the components of the first and second vector of this
+			/** Access the components of the first and second vector of this
 					vertex2 by using float.
-					\param       vertex1_x the x component of the first vector of this vertex2
-					\param       vertex1_y the y component of the first vector of this vertex2
-					\param       vertex1_z the z component of the first vector of this vertex2
-					\param       vertex2_x the x component of the second vector of this vertex2
-					\param       vertex2_y the y component of the second vector of this vertex2
-					\param       vertex2_z the z component of the second vector of this vertex2
 					\see         setVertices
-					\see         float
 			*/
 			void getVertices
 				(float& vertex1_x, float& vertex1_y, float& vertex1_z,
 				 float& vertex2_x, float& vertex2_y, float& vertex2_z)
 				throw();
 
-			/** Change the first and second vector address of this vertex2
+			/** Change the first and second vector address 
 					to the default addresses.
 					This method resets the first and second vertex address to the first 
-					and second vector of this vertex2. So the value of the first 
-					and second vector of this vertex2 will no longer be ignored and
+					and second vector . So the value of the first 
+					and second vector  will no longer be ignored and
 					all access methods will return them again.
 					This method unhooks the object from any other objects prio connected
 					with setVertexAddresses.
@@ -415,16 +305,16 @@ namespace BALL
 			*/
 			void setDefaultVertexAddresses()
 				throw();
-			//@}
 
+			//@}
 			/**	@name	Predicates
 			*/
 			//@{
 
 			/** first vertex address test.
-					Tests if the first vertex address of this vertex2 points to the 
-					first vector of this vertex2.
-					\return			bool <tt> true</tt> if the first vertex address of this vertex2 points to the first vector of this vertex2.
+					Tests if the first vertex address  points to the 
+					first vector .
+					\return			bool <tt> true</tt> if the first vertex address  points to the first vector .
 					 						<tt> false</tt> otherwise
 					\see        setVertex1Address					
 					\see        getVertex1Address					
@@ -434,9 +324,9 @@ namespace BALL
 				throw();
 
 			/** second vertex address test.
-					Test if the second vertex address of this vertex2 points to the 
-					second vector of this vertex2.
-					\return			bool <tt> true</tt> if the second vertex address of this vertex2 points to the second vector of this vertex2.
+					Test if the second vertex address  points to the 
+					second vector .
+					\return			bool <tt> true</tt> if the second vertex address  points to the second vector .
 					 						<tt> false</tt> otherwise
 					\see        setVertex2Address					
 					\see        getVertex2Address					
@@ -446,9 +336,7 @@ namespace BALL
 				throw();
 
 			/** both vertex addresses test.
-					Test if both vertex addresses of this vertex2 each points to its
-					own vector of this vertex2.
-					\return			bool <tt> true</tt> if both vertex addresses of this vertex2 each points to its own vector of this vertex2.
+					\return			bool <tt> true</tt> if both vertex addresses  each points to its own vector .
 					 						<tt> false</tt> otherwise
 					\see        setVertex1Address					
 					\see        getVertex1Address					
@@ -459,37 +347,29 @@ namespace BALL
 		  */
 			bool isDefaultVertexAddresses() const
 				throw();
-			//@}
 
+			//@}
 			/**	@name	debuggers and diagnostics
 			*/	
 			//@{
 
 			/** Internal state and consistency self-validation.
-					Initiate self-validation of the internal state and data structure 
-					consistencies	of this vertex2.
-					If the internal state of this vertex2 is correct 
-					(self-validated) and consistent <tt> true</tt> is returned,
-					<tt> false</tt> otherwise. 
-					Calls {Vector3::isValid}.
-					\return			bool <tt> true</tt> if the internal state of this vertex is correct (self-validated) and consistent,
-					 						<tt> false</tt> otherwise
-					\see        Vector3::isValid
+					Calls Vector3::isValid.
 			*/
 			virtual bool isValid() const
 				throw();
 
 			/** Internal value dump.
-					Dump the current state of this vertex2 to 
+					Dump the current state  to 
 					the output ostream <b> s</b> with dumping depth <b> depth</b>.
-					\param   s output stream where to output the state of this vertex2
+					\param   s output stream where to output the state 
 					\param   depth the dumping depth
 					\see     Vector3::operator <<
 			*/
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
-			//@}
 
+			//@}
 
 			private:
 		
