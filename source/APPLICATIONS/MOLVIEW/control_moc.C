@@ -1,8 +1,8 @@
 /****************************************************************************
 ** Control meta object code from reading C++ file 'control.h'
 **
-** Created: Sun Jan 9 17:50:08 2000
-**      by: The Qt Meta Object Compiler ($Revision: 1.3 $)
+** Created: Mon Jan 10 18:17:59 2000
+**      by: The Qt Meta Object Compiler ($Revision: 1.4 $)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/

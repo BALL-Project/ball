@@ -1,4 +1,4 @@
-// $Id: control.C,v 1.5 2000/01/10 10:55:38 oliver Exp $
+// $Id: control.C,v 1.6 2000/01/10 18:24:47 oliver Exp $
 
 #include "control.h"
 
@@ -15,10 +15,11 @@ Control::Control
 			selected_type__mQString_("unkown"),
 			selected_root_type__mQString_("unkown"),
 			copied__mpComposite_(0),
-			__mDisplayProperties_(0)
+			__mDisplayProperties_(0),
+			display_properties_dialog_(0)
 {
 	setRootIsDecorated(TRUE);
-	//	setMultiSelection(TRUE);
+	setMultiSelection(TRUE);
 	setSorting(-1);
 
 	connect(this, 
@@ -1004,6 +1005,7 @@ void
 Control::openDisplay()
 {
 	__mDisplayProperties_.show();
+	display_properties_dialog_.show();
 }
 
 void 

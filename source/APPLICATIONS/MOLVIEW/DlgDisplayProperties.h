@@ -3,7 +3,7 @@
 	--- Qt Architect generated file ---
 
 	File: DlgDisplayProperties.h
-	Last generated: Mon Jan 10 15:21:18 2000
+	Last generated: Mon Jan 10 18:55:27 2000
 
  *********************************************************************/
 
@@ -23,5 +23,9 @@ public:
         const char *name = NULL );
 
     virtual ~DlgDisplayProperties();
+
+    protected slots:
+
+    virtual void editColor();
 };
 #endif // DlgDisplayProperties_included

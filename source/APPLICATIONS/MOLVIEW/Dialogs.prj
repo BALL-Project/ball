@@ -3,5 +3,5 @@ Project {
 Name {testest}
 Dialog {/KM/comp-bio/data/oliver/BALL/source/APPLICATIONS/MOLVIEW/DlgAbout.dlg}
 Dialog {/KM/comp-bio/data/oliver/BALL/source/APPLICATIONS/MOLVIEW/DlgDisplayProperties.dlg}
-Dialog {/KM/comp-bio/data/oliver/BALL/source/APPLICATIONS/MOLVIEW/DlgSelector}
+Dialog {/KM/comp-bio/data/oliver/BALL/source/APPLICATIONS/MOLVIEW/DlgSelector.dlg}
 }

@@ -2,6 +2,7 @@ EXECUTABLE=molview
 
 all:	$(EXECUTABLE)
 
+include .Dependencies
 include ../../common.mak
 
 BALL_INCLUDES=$(BALLVIEW_INCLUDES)
@@ -29,6 +30,15 @@ OBJECTS=\
 
 molview:	$(OBJECTS) ../../VIEW/KERNEL/timerTextView.o
 	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) ../../VIEW/KERNEL/timerTextView.o $(BALLVIEW_LIBS)
+
+mainframe_moc.C:	mainframe.h
+	moc mainframe.h -o $@
+
+control_moc.C:	control.h
+	moc control.h -o $@
+
+displayProperties_moc.C:	displayProperties.h
+	moc displayProperties.h -o $@
 
 DlgAbout_moc.C:	DlgAbout.h
 	moc DlgAbout.h -o $@

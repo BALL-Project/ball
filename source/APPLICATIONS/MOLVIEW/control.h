@@ -1,4 +1,4 @@
-// $Id: control.h,v 1.3 2000/01/09 17:43:40 hekl Exp $
+// $Id: control.h,v 1.4 2000/01/10 18:24:47 oliver Exp $
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_CONTROL_H
 #define BALL_APPLICATIONS_MOLVIEW_CONTROL_H
@@ -60,7 +60,7 @@
 #endif
 
 #include "displayProperties.h"
-
+#include "DlgDisplayProperties.h"
 
 using namespace BALL;
 using namespace BALL::VIEW;
@@ -235,6 +235,7 @@ class Control
 		Composite *copied__mpComposite_;
 
 		DisplayProperties __mDisplayProperties_;
+		DlgDisplayProperties display_properties_dialog_;
 };
 
 

@@ -1,5 +1,7 @@
 #include "mainframe.h"
 #include "DlgAbout.h"
+#include "DlgSelector.h"
+#include "DlgDisplayProperties.h"
 #include <qcolordialog.h>
 
 using namespace std;
@@ -52,14 +54,17 @@ Mainframe::Mainframe
 	CHECK_PTR(files__pQPopupMenu);
 	popup_menus__mList_.push_back(files__pQPopupMenu);
 
-	files__pQPopupMenu->insertItem("&PDB File", this, SLOT(importPDB()), CTRL+Key_P);
-	files__pQPopupMenu->insertItem("&HIN File", this, SLOT(importHIN()), CTRL+Key_H);
+	files__pQPopupMenu->insertItem("&PDB File", this, SLOT(importPDB()), CTRL+Key_P, 1);
+	files__pQPopupMenu->insertItem("&HIN File", this, SLOT(importHIN()), CTRL+Key_H, 2);
+	files__pQPopupMenu->insertItem("&MOL2 File", 3);
+	files__pQPopupMenu->setItemEnabled(3, false);
 
 	QPopupMenu *export__pQPopupMenu = new QPopupMenu(this);
 	CHECK_PTR(export__pQPopupMenu);
 	popup_menus__mList_.push_back(export__pQPopupMenu);
 	
-	export__pQPopupMenu->insertItem("&Povray", this, SLOT(exportPovray()), CTRL+Key_P);
+	export__pQPopupMenu->insertItem("&Povray", this, SLOT(exportPovray()), CTRL+Key_P, 4);
+	export__pQPopupMenu->setItemEnabled(4, false);
 
 	QPopupMenu *file__pQPopupMenu = new QPopupMenu(this);
 	CHECK_PTR(file__pQPopupMenu);
@@ -195,7 +200,7 @@ Mainframe::Mainframe
 }
 
 Mainframe::~Mainframe
-  (void)
+  ()
 {
 	List<QPopupMenu *>::Iterator iterator__List;
 
@@ -210,7 +215,7 @@ Mainframe::~Mainframe
 }
 
 void Mainframe::importPDB
-  (void)
+  ()
 {
 	QStringList __QStringList;
 	__QStringList = "PDB files (*.pdb)";
@@ -267,7 +272,7 @@ void Mainframe::importPDB
 }
 
 void Mainframe::importHIN
-  (void)
+  ()
 {
 	QStringList __QStringList;
 	__QStringList = "HIN files (*.hin)";
@@ -327,29 +332,10 @@ void Mainframe::exportPovray()
 	QMessageBox::about(this, "export Povray", "available in Version 2.0");
 }
 
-void Mainframe::about(void)
+void Mainframe::about()
 {
-	/*
-	list<int> __list = __mLogStream_.getLineIndices(150,150);
-	list<int>::iterator iterator__list = __list.begin();
-
-	string __string;
-
-	for (; iterator__list != __list.end(); ++iterator__list)
-	{
-		__string += __mLogStream_.getLineText(*iterator__list);
-	}
-
-	cout << __string << endl;
-	*/
-	//	__mpQTextView_->setText(QString(__string));
-	
-	
 	DlgAbout about_box;
-	about_box.exec();
-	QColor color = QColorDialog::getColor(about_box.backgroundColor());
-	about_box.setBackgroundColor(color);
-	about_box.exec();
+	about_box.show();
 }
 
 void Mainframe::updateEditMenuFromSelection(bool selected__bool, bool residue__bool)

@@ -1,8 +1,8 @@
 /****************************************************************************
 ** DlgDisplayPropertiesData meta object code from reading C++ file 'DlgDisplayPropertiesData.h'
 **
-** Created: Mon Jan 10 15:26:35 2000
-**      by: The Qt Meta Object Compiler ($Revision: 1.1 $)
+** Created: Mon Jan 10 18:40:06 2000
+**      by: The Qt Meta Object Compiler ($Revision: 1.2 $)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -64,8 +64,13 @@ void DlgDisplayPropertiesData::staticMetaObject()
     QDialog::initMetaObject();
 #endif
 
+    typedef void(DlgDisplayPropertiesData::*m1_t0)();
+    m1_t0 v1_0 = Q_AMPERSAND DlgDisplayPropertiesData::done;
+    QMetaData *slot_tbl = QMetaObject::new_metadata(1);
+    slot_tbl[0].name = "done()";
+    slot_tbl[0].ptr = *((QMember*)&v1_0);
     metaObj = QMetaObject::new_metaobject(
 	"DlgDisplayPropertiesData", "QDialog",
-	0, 0,
+	slot_tbl, 1,
 	0, 0 );
 }
