@@ -112,6 +112,12 @@ void SnapshotVisualisationDialog::animateClicked()
 			notify_(message);
 		}
 
+		if (export_POV->isChecked())
+		{
+			SceneMessage* message = new SceneMessage(SceneMessage::EXPORT_POVRAY);
+			notify_(message);
+		}
+
 		tmp_.setNum(i, 10);
 		// speed things up after first snapshot is read
 		if (i == getStartSnapshot())
@@ -131,11 +137,18 @@ void SnapshotVisualisationDialog::animateClicked()
 				setCaption((String("CurrentSnapshot: ") + String(i)).c_str());
 				snapShotSlider->setValue(i);
 				update_();
+				
 				if (export_PNG->isChecked())
 				{
 					SceneMessage* message = new SceneMessage(SceneMessage::EXPORT_PNG);
 					notify_(message);
 				}
+				if (export_POV->isChecked())
+				{
+					SceneMessage* message = new SceneMessage(SceneMessage::EXPORT_POVRAY);
+					notify_(message);
+				}
+				
 				if (forwardLoopButton->isChecked())
 				{
 					i = 1;

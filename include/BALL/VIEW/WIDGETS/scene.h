@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.19 2004/02/18 23:57:08 amoll Exp $
+// $Id: scene.h,v 1.20 2004/02/20 11:05:07 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -208,7 +208,7 @@ namespace BALL
 
 			/** This method exports the content of the Scene to an external Renderer.
 			*/
-			virtual void exportScene(Renderer &er) const
+			virtual bool exportScene(Renderer &er) const
 				throw();
 
 			//@}			
@@ -445,6 +445,9 @@ namespace BALL
 
 			///
 			void exportPNG();
+			
+			///
+			void exportPOVRay();
 
 			/** Show or hide widget (Called by menu entry in "WINDOWS")
 					If the ModularWidget is not also a QWidget, this method does nothing
@@ -607,7 +610,8 @@ namespace BALL
 
 			StageSettings* stage_settings_;
 
-			Position screenshot_nr_;
+			Position screenshot_nr_,
+							 pov_nr_;
 		};
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS

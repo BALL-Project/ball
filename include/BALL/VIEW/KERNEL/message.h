@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.43 2004/02/18 23:53:35 amoll Exp $
+// $Id: message.h,v 1.44 2004/02/20 11:05:07 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -267,7 +267,10 @@ class SceneMessage: public Message
 		REMOVE_COORDINATE_SYSTEM,
 
 		/// Export a PNG
-		EXPORT_PNG
+		EXPORT_PNG,
+
+		/// Export a POVRay
+		EXPORT_POVRAY
 	};
 
 	//@}

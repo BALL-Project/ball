@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.41 2004/02/18 16:08:00 amoll Exp $
+// $Id: scene.C,v 1.42 2004/02/20 11:04:06 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -14,6 +14,7 @@
 #include <BALL/VIEW/DIALOGS/stageSettings.h>
 #include <BALL/VIEW/PRIMITIVES/simpleBox.h>
 #include <BALL/VIEW/PRIMITIVES/label.h>
+#include <BALL/VIEW/RENDERING/POVRenderer.h>
 
 #include <qpainter.h>
 #include <qmenubar.h>
@@ -56,7 +57,8 @@ Scene::Scene()
 		stage_(new Stage),
 		light_settings_(0),
 		stage_settings_(0),
-		screenshot_nr_(10000)
+		screenshot_nr_(10000),
+		pov_nr_(10000)
 {
 	gl_renderer_.setSize(600, 600);
 #ifdef BALL_VIEW_DEBUG
@@ -80,7 +82,8 @@ Scene::Scene(QWidget* parent_widget, const char* name, WFlags w_flags)
 		stage_(new Stage),
 		light_settings_(0),
 		stage_settings_(0),
-		screenshot_nr_(1)
+		screenshot_nr_(10000),
+		pov_nr_(10000)
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "new Scene (2) " << this << std::endl;
@@ -122,7 +125,8 @@ Scene::Scene(const Scene& scene, QWidget* parent_widget, const char* name, WFlag
 		stage_(new Stage(*scene.stage_)),
 		light_settings_(new LightSettings(this)),
 		stage_settings_(new StageSettings(this)),
-		screenshot_nr_(1)
+		screenshot_nr_(10000),
+		pov_nr_(10000)
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "new Scene (3) " << this << std::endl;
@@ -293,6 +297,10 @@ void Scene::onNotify(Message *message)
 
 		case SceneMessage::EXPORT_PNG:
 			exportPNG();
+			return;
+
+		case SceneMessage::EXPORT_POVRAY:
+			exportPOVRay();
 			return;
 
 		case SceneMessage::UNDEFINED:
@@ -739,7 +747,7 @@ void Scene::createCoordinateSystem_()
 }
 
 
-void Scene::exportScene(Renderer &er) const
+bool Scene::exportScene(Renderer &er) const
 	throw()
 {
 	if (er.init(*stage_, (float) width(), (float) height()))
@@ -763,11 +771,12 @@ void Scene::exportScene(Renderer &er) const
 		{
 			// cant call Scene::setStatusbarText(..), no idea why!!!
 			getMainControl()->setStatusbarText("Successfully exported Scene...");
-			return;
+			return true;
 		}
 	}
 
 	getMainControl()->setStatusbarText("Error while exporting Scene...");
+	return false;
 }
 
 //##########################PREFERENCES#################################
@@ -1495,22 +1504,30 @@ void Scene::selectionPressedMoved_(Scene* /* scene */)
 	
 	painter.end();
 }
+
 void Scene::exportPNG()
 {
-// old way to do this: to be removed after testing (now 7.2.2004) ????
-//  	QPixmap pix = QPixmap::grabWindow(this->winId());
-//  	pix.loadFromData(pixels, width()*height());
-
 	makeCurrent();
 	QImage image = grabFrameBuffer();
 
 	String filename = String("molview_screenshot" + String(screenshot_nr_) +".png");
-// 	bool result = pix.save(filename.c_str(), "PNG");
 	bool result = image.save(filename.c_str(), "PNG");
 	screenshot_nr_ ++;
 
 	if (result) setStatusbarText("Saved screenshot to " + filename);
 	else 				setStatusbarText("Could not save screenshot to " + filename);
+}
+
+void Scene::exportPOVRay()
+{
+	String filename = String("molview_pov_" + String(pov_nr_) +".pov");
+
+	POVRenderer pr(filename);
+	bool result = exportScene(pr);
+	pov_nr_ ++;
+
+	if (result) setStatusbarText("Saved POVRay to " + filename);
+	else 				setStatusbarText("Could not save POVRay to " + filename);
 }
 
 void Scene::customEvent( QCustomEvent * e )
