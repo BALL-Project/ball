@@ -1,10 +1,12 @@
-// $Id: reading.C,v 1.2 2000/05/05 18:16:05 oliver Exp $
+// $Id: reading.C,v 1.3 2000/05/25 11:02:42 oliver Exp $
 
+#include <BALL/FORMAT/PDBFile.h>
+#include <BALL/FORMAT/HINFile.h>
+#include <BALL/FORMAT/INIFile.h>
 #include "global.h"
 #include "reading.h"
 #include "assignment.h"
-#include <BALL/FORMAT/PDBFile.h>
-#include <BALL/FORMAT/HINFile.h>
+#include <fstream>
 
 using namespace std;
 
@@ -104,14 +106,69 @@ void readChargeFile(const String& filename)
 		Log.info() << "reading charges from " << filename << endl;
 	}
 	charges.setFilename(filename);
+	
+	// ignore the rule-based processors
+	use_charge_rules = false;
 }
 
 void readRadiusFile(const String& filename)
 {
 	if (verbose)
 	{
-		Log.info() << "reading charges from " << filename << endl;
+		Log.info() << "reading radii from " << filename << endl;
 	}
 	radii.setFilename(filename);
+	
+	// ignore the rule-based processors
+	use_radius_rules = false;
 }
 
+void readRuleFile(const String& filename)
+{
+	if (verbose)
+	{
+		Log.info() << "reading charges and radius rules from " << filename << endl;
+	}
+
+	// open the rules file
+	INIFile ini(filename);
+	
+	// read the rules
+	ini.read();
+	charge_rules.initialize(ini, "ChargeRules");
+	radius_rules.initialize(ini, "RadiusRules");
+
+	// ignore the other assignment processors
+	use_charge_rules = true;
+	use_radius_rules = true;
+
+}
+
+void dumpFile()
+{
+	if (verbose)
+	{
+		Log.info() << "dumping atom positions, charges, and radii to " << dump_file << endl;
+	}
+
+	ofstream outfile(dump_file.c_str(), ios::out);
+	
+	outfile << "#   PB dump file" << endl;
+	outfile << "# atom      x[A]   y[A]   z[A]   charge[e0]  radius[A]" << endl;
+	outfile << "#------------------------------------------------------" << endl;
+	
+	AtomIterator it = S.beginAtom();
+	double total_charge = 0.0;
+	for (; +it; ++it)
+	{
+		total_charge += it->getCharge();
+		outfile << it->getFullName() 
+						<< " " << it->getPosition().x
+						<< " " << it->getPosition().y
+						<< " " << it->getPosition().z
+						<< " " << it->getCharge()
+						<< " " << it->getRadius() << endl;
+	}
+	outfile << "# total charge: " << total_charge << " e0" << endl;
+	outfile.close();
+}

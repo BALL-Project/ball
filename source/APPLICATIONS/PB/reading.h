@@ -1,4 +1,4 @@
-// $Id: reading.h,v 1.1 2000/05/05 12:33:39 oliver Exp $
+// $Id: reading.h,v 1.2 2000/05/25 11:02:42 oliver Exp $
 
 // read the contents of a PDB file and assign
 // charges and radii 
@@ -20,3 +20,8 @@ void readRadiusFile(const String& filename);
 // read a charge file
 void readChargeFile(const String& filename);
 
+// read a charge and radius rule file
+void readRuleFile(const String& filename);
+
+// dump the positions, charges, and radii to a file
+void dumpFile();

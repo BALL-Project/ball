@@ -1,4 +1,4 @@
-// $Id: assignment.C,v 1.2 2000/05/05 18:16:05 oliver Exp $
+// $Id: assignment.C,v 1.3 2000/05/25 11:02:40 oliver Exp $
 
 #include "global.h"
 #include "assignment.h"
@@ -17,14 +17,29 @@ void assignCharges(System& system)
 	else 
 	{
 		// assign the current charge set
-		system.apply(charges);
+		if (use_charge_rules)
+		{
+			system.apply(charge_rules);
+		}
+		else 
+		{
+			system.apply(charges);
+		}
 	}
 }
 
 
 void assignRadii(System& system)
 {
-	system.apply(radii);
+	// assign the current charge set
+	if (use_radius_rules)
+	{
+		system.apply(radius_rules);
+	}
+	else 
+	{
+		system.apply(radii);
+	}
 }
 
 void normalizeNames(System& system)

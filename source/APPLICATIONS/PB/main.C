@@ -1,4 +1,4 @@
-// $Id: main.C,v 1.1 2000/05/05 12:33:38 oliver Exp $
+// $Id: main.C,v 1.2 2000/05/25 11:02:41 oliver Exp $
 
 #include "global.h"
 #include "reading.h"
@@ -19,8 +19,10 @@ void usage()
 	Log.error() << "     -o <FILE>            read FDPB options from <FILE>" << endl;
 	Log.error() << "     -c <FILE>            read charges from <FILE>" << endl;
 	Log.error() << "     -r <FILE>            read radii from <FILE>" << endl;
+	Log.error() << "     -u <FILE>            read charge and type rules form <FILE>" << endl;
 	Log.error() << "     -0                   clear all charges in subsequently read structures" << endl;
 	Log.error() << "     -n                   normalize all atom names in subsequently read structures" << endl;
+	Log.error() << "     -d <FILE>            dump the atom charges and radii to <FILE> (for debugging)" << endl;
 	Log.error() << "     -v                   verbose output (implies ``verbosity 99'' in the" << endl;
 	Log.error() << "                            option file, print additional results and options)" << endl;
 	Log.error() << endl;
@@ -56,8 +58,8 @@ int main(int argc, char** argv)
 		}
 
 		// check for another argument for those 
-		// options requiring a filename (-p -h -c -r -o)
-		if (String("phcro").has(option[1]) && (i == (argc - 1)))
+		// options requiring a filename (-p -h -c -r -o -u -d)
+		if (String("phcroud").has(option[1]) && (i == (argc - 1)))
 		{
 			// pring usage hints, an error message, exit
 			usage();
@@ -92,6 +94,14 @@ int main(int argc, char** argv)
 				readRadiusFile(argv[++i]);
 				break;
 
+			case 'u':		// read a rule file
+				readRuleFile(argv[++i]);
+				break;
+
+			case 'd':		// dump the final results
+				dump_file = argv[++i];
+				break;
+
 			case 'v':		// change verbosity
 				options[FDPB::Option::VERBOSITY] = 99;
 				verbose = true;
@@ -123,10 +133,15 @@ int main(int argc, char** argv)
 		return 6;
 	}
 
+	// if the option -d was give, dump the positions, charges, and radii to a file
+	if (dump_file != "")
+	{
+		dumpFile();
+	}
+
 	// setup logging to print the current time in front of each line
 	Log.setPrefix(cout, "[%T] ");
 	Log.setPrefix(cerr, "[%T ERROR] ");
-
 
 	// setup the calculation
 	Timer T;
