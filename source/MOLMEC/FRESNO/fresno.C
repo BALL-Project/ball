@@ -1,4 +1,4 @@
-// $Id: fresno.C,v 1.1.2.24 2005/01/30 14:00:21 anker Exp $
+// $Id: fresno.C,v 1.1.2.25 2005/02/10 10:45:50 anker Exp $
 // Molecular Mechanics: Fresno force field class
 
 #include <BALL/SYSTEM/path.h>
@@ -99,21 +99,54 @@ namespace BALL
 			return(0.0);
 		}
 
-		if (x <= lower_)
+		if (lower_ == upper_)
 		{
-			return_value = 1.0;
+			Log.error() << "FresnoFF::BaseFunctionLinear::calculate(): "
+				<< "lower == upper, division by zero, returning 0" << std::endl;
+			return(0.0f);
 		}
-		else
+
+		// if lower_ < upper return the function that returns 1 for x < lower
+		// and 0 for x > upper. Otherwise invert the function.
+		if (lower_ < upper_)
 		{
-			if (x <= upper_)
+			if (x <= lower_)
 			{
-				return_value = 1.0 - ((x - lower_)/(upper_ - lower_));
+				return_value = 1.0f;
 			}
 			else
 			{
-				return_value = 0.0;
+				if (x <= upper_)
+				{
+					return_value = 1.0f - ((x - lower_)/(upper_ - lower_));
+				}
+				else
+				{
+					return_value = 0.0f;
+				}
 			}
 		}
+		else
+		{
+			// Careful! The meaning of upper_ and lower_ is interchanged in this
+			// context
+			if (x <= upper_)
+			{
+				return_value = 0.0f;
+			}
+			else
+			{
+				if (x <= lower_)
+				{
+					return_value = (x - upper_)/(lower_ - upper_);
+				}
+				else
+				{
+					return_value = 1.0f;
+				}
+			}
+		}
+
 		return return_value;
 	}
 
@@ -213,7 +246,7 @@ namespace BALL
 	const char* FresnoFF::Option::DESOLV_FOCUS_GRID_AROUND_LIGAND 
 		= "desolv_focus_grid_around_ligand";
 	const char* FresnoFF::Option::PROBE_RADIUS = "probe_radius";
-	const char* FresnoFF::Option::SURFACE_TENSION = "surface_tesnion";
+	const char* FresnoFF::Option::SURFACE_TENSION = "surface_tension";
 	const char* FresnoFF::Option::UHLIG_CONSTANT = "uhlig_constant";
 	const char* FresnoFF::Option::SOLVENT_NUMBER_DENSITY 
 		= "solvent_number_density";
