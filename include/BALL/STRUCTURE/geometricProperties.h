@@ -1,4 +1,4 @@
-// $Id: geometricProperties.h,v 1.10 2000/12/19 12:50:59 amoll Exp $
+// $Id: geometricProperties.h,v 1.11 2000/12/21 16:20:02 amoll Exp $
 
 #ifndef BALL_STRUCTURE_GEOMETRICPROPERTIES_H
 #define BALL_STRUCTURE_GEOMETRICPROPERTIES_H
@@ -304,12 +304,12 @@ namespace BALL
 	/**	Calculate the torsion angle between four atoms
 	*/
 	Angle calculateTorsionAngle(const Atom& a1, const Atom& a2, const Atom& a3, const Atom& a4)
-		throw(Exception::DivisionByZero);
+		throw(Exception::IllegalPosition);
 
 	/**	Calculate the bond angle between three atoms
 	*/
 	Angle calculateBondAngle(const Atom& a1, const Atom& a2, const Atom& a3)
-		throw(Exception::DivisionByZero);
+		throw(Exception::IllegalPosition);
 	//@}
 
 } // namespace BALL

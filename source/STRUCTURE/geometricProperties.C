@@ -1,4 +1,4 @@
-// $Id: geometricProperties.C,v 1.10 2000/12/19 12:51:12 amoll Exp $
+// $Id: geometricProperties.C,v 1.11 2000/12/21 16:20:15 amoll Exp $
 
 #include <BALL/STRUCTURE/geometricProperties.h>
 
@@ -286,7 +286,7 @@ namespace BALL
 
   // Calculate the torsion angle between four atoms
   Angle calculateTorsionAngle(const Atom& a1, const Atom& a2, const Atom& a3, const Atom& a4)
-		throw(Exception::DivisionByZero)
+		throw(Exception::IllegalPosition)
 	{
 		Vector3 a12(a2.getPosition() - a1.getPosition());
 		Vector3 a23(a3.getPosition() - a2.getPosition());
@@ -298,7 +298,7 @@ namespace BALL
 		if (n12 == Vector3::getZero() ||
 				n34 == Vector3::getZero())
 		{
-			throw(Exception::DivisionByZero(__FILE__, __LINE__));
+			throw(Exception::IllegalPosition(__FILE__, __LINE__, 0, 0, 0));
 		}
 
 		n12.normalize();
@@ -328,13 +328,14 @@ namespace BALL
 
   // Calculate the bond angle between three atoms
   Angle calculateBondAngle(const Atom& a1, const Atom& a2, const Atom& a3)
-		throw(Exception::DivisionByZero)
+		throw(Exception::IllegalPosition)
 	{
 		// two atoms can't have the same position
 		if (a1.getPosition() == a2.getPosition() ||
 				a3.getPosition() == a2.getPosition())
 		{
-			throw(Exception::DivisionByZero(__FILE__, __LINE__));
+			throw(Exception::IllegalPosition(__FILE__, __LINE__, a2.getPosition().x,
+a2.getPosition().y, a2.getPosition().z));
 		}
 
 		Vector3 a12(a2.getPosition() - a1.getPosition());
