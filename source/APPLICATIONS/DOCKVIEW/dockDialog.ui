@@ -41,14 +41,17 @@
         </property>
         <widget class="QTabWidget">
             <property name="name">
-                <cstring>tabWidget8</cstring>
+                <cstring>tab_sides</cstring>
+            </property>
+            <property name="margin">
+                <number>0</number>
             </property>
             <widget class="QWidget">
                 <property name="name">
-                    <cstring>tab</cstring>
+                    <cstring>general_tab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Tab 1</string>
+                    <string>General</string>
                 </attribute>
                 <grid>
                     <property name="name">
@@ -186,7 +189,7 @@
             </widget>
             <widget class="QWidget">
                 <property name="name">
-                    <cstring>tab</cstring>
+                    <cstring>processor_tab</cstring>
                 </property>
                 <attribute name="title">
                     <string>Processors</string>
