@@ -1,4 +1,4 @@
-// $Id: support.h,v 1.9 2001/02/21 18:20:10 anker Exp $
+// $Id: support.h,v 1.10 2001/02/23 14:38:43 anker Exp $
 
 #ifndef BALL_MOLMEC_COMMON_SUPPORT_H
 #define BALL_MOLMEC_COMMON_SUPPORT_H
@@ -113,7 +113,8 @@ namespace BALL
 
 		/** Compute the minimum image
 		*/
-		Vector3& calculateMinimumImage(const Vector3& distance, 
+		// BAUSTELLE
+		void calculateMinimumImage(Vector3& distance, 
 				const Vector3& period);
 
 		//@}
