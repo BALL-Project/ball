@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stageSettings.h,v 1.3 2003/09/04 22:17:48 amoll Exp $
+// $Id: stageSettings.h,v 1.4 2003/11/21 01:22:22 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_STAGESETTINGS_H
@@ -42,6 +42,10 @@ namespace BALL
 
 			/// Apply the new values to the stage
 			void apply()
+				throw();
+
+			/// 
+			void setDefaultValues()
 				throw();
 
 			public slots:

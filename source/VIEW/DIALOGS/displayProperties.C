@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.44 2003/11/20 22:19:25 amoll Exp $
+// $Id: displayProperties.C,v 1.45 2003/11/21 01:22:51 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -877,6 +877,13 @@ void DisplayProperties::applyPreferences(Preferences& /*preferences*/)
 	throw()
 {
 	advanced_options_modified_ = true;
+}
+
+void DisplayProperties::defaultPreferences(Preferences& /*preferences*/)
+	throw()
+{
+	if (model_settings_ != 0) model_settings_->setDefaultValues();
+	if (coloring_settings_ != 0) coloring_settings_->setDefaultValues();
 }
 
 

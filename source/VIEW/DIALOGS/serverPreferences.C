@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: serverPreferences.C,v 1.3 2003/08/27 13:58:30 amoll Exp $
+// $Id: serverPreferences.C,v 1.4 2003/11/21 01:22:52 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/serverPreferences.h>
@@ -41,26 +41,10 @@ namespace BALL
 			port_->setMaximumSize(32767, 32767);
 			port_->setFocusPolicy(QWidget::StrongFocus);
 			port_->setBackgroundMode(QWidget::PaletteBase);
-			port_->setText( tr( "20000" ) );
 			port_->setMaxLength( 5 );
 			port_->setFrame( QLineEdit::Normal );
 			port_->setFrame( TRUE );
 			port_->setAlignment( AlignRight );
-			
-			QPushButton *qtarch_PushButton_6 = new QPushButton(this, "PushButton_6");
-			qtarch_PushButton_6->setGeometry(250, 20, 100, 30);
-			qtarch_PushButton_6->setMinimumSize(0, 0);
-			qtarch_PushButton_6->setMaximumSize(32767, 32767);
-			qtarch_PushButton_6->setFocusPolicy(QWidget::TabFocus);
-			qtarch_PushButton_6->setBackgroundMode(QWidget::PaletteButton);
-			qtarch_PushButton_6->setText( tr( "Reset" ) );
-			qtarch_PushButton_6->setAutoRepeat( FALSE );
-			qtarch_PushButton_6->setAutoResize( FALSE );
-			qtarch_PushButton_6->setToggleButton( FALSE );
-			qtarch_PushButton_6->setDefault( FALSE );
-			qtarch_PushButton_6->setAutoDefault( TRUE );
-			qtarch_PushButton_6->setIsMenuButton( FALSE );
-			connect(qtarch_PushButton_6, SIGNAL(clicked()), SLOT(resetPort()));
 			
 			server_status_ = new QCheckBox(this, "CheckBox_1");
 			server_status_->setGeometry(40, 80, 118, 21);
@@ -71,11 +55,11 @@ namespace BALL
 			server_status_->setText( tr( "accept clients" ) );
 			server_status_->setAutoRepeat( FALSE );
 			server_status_->setAutoResize( TRUE );
-			server_status_->setChecked( TRUE );
 			
 			resize(380,210);
 			setMinimumSize(0, 0);
 			setMaximumSize(32767, 32767);
+			setDefaultValues();
 		}
 
 		ServerPreferences::~ServerPreferences()
@@ -125,11 +109,6 @@ namespace BALL
 			port_->setText(String(port).c_str());
 		}
 		
-		void ServerPreferences::resetPort()
-		{
-			port_->setText(String(VIEW_DEFAULT_PORT).c_str());
-		}
-		
 		int ServerPreferences::getPort()
 			throw()
 		{
@@ -140,6 +119,13 @@ namespace BALL
 			throw()
 		{
 			return server_status_->isChecked();
+		}
+
+		void ServerPreferences::setDefaultValues()
+			throw()
+		{
+			port_->setText(String(VIEW_DEFAULT_PORT).c_str());
+			server_status_->setChecked(false);
 		}
 
 	} // namespace VIEW

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferences.C,v 1.5 2003/11/15 12:53:58 oliver Exp $
+// $Id: preferences.C,v 1.6 2003/11/21 01:22:52 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/preferences.h>
@@ -26,6 +26,7 @@ namespace BALL
 		{
 			setApplyButton();
 			setCancelButton();
+			setDefaultButton();
 			
 			resize(width,height);
 			setMinimumSize(width, height);
@@ -100,6 +101,5 @@ namespace BALL
 		}
 		
 	} // namespace VIEW
-
 } // namespace BALL
 

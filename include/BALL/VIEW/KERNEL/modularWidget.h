@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.h,v 1.5 2003/10/15 14:23:17 amoll Exp $
+// $Id: modularWidget.h,v 1.6 2003/11/21 01:22:22 amoll Exp $
 //
 
 #ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
@@ -171,6 +171,10 @@ namespace BALL
 
 			/// Method is called when the Cancel button of the Preferences is pressed.
 			virtual void cancelPreferences(Preferences& /*preferences*/)
+				throw() {};
+
+			/// Set default values for the current page in Preferences
+			virtual void defaultPreferences(Preferences& /*preferences*/)
 				throw() {};
 			
 			/** Fetch the widgets preferences from the inifile.

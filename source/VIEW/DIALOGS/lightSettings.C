@@ -351,5 +351,13 @@ void LightSettings::intensityChanged()
 }
 
 
+void LightSettings::setDefaultValues()
+	throw()
+{
+	defaultsPressed();
+	color_sample->setBackgroundColor(white);
+	lights_list->setCurrentItem(0);
+}
+
 // NAMESPACE
 } }

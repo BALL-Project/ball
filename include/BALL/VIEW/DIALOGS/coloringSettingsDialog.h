@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: coloringSettingsDialog.h,v 1.7 2003/11/20 01:02:41 amoll Exp $
+// $Id: coloringSettingsDialog.h,v 1.8 2003/11/21 01:22:21 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_COLORINGSETTINGSDIALOG_H
@@ -75,6 +75,7 @@ namespace BALL
 			private:
 				vector<ColorRGBA> colors_;
 				vector<String>    names_;
+				bool setting_content_;
 		};
 
 
@@ -102,8 +103,12 @@ namespace BALL
 			void fetchPreferences(const INIFile& file)
 				throw();
 
-			///
-			void setDefaults()
+			/// 
+			virtual void setDefaults(bool all = true)
+				throw();
+			
+			/// Called when defaults is pressed in Preferences, calls setDefaults
+			virtual void setDefaultValues()
 				throw();
 
 			///

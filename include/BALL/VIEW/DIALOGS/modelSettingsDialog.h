@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.h,v 1.8 2003/11/20 18:51:37 amoll Exp $
+// $Id: modelSettingsDialog.h,v 1.9 2003/11/21 01:22:22 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MODELSETTINGSDIALOG_H
@@ -44,7 +44,11 @@ namespace BALL
 				throw();
 
 			///
-			void setDefaults()
+			void setDefaults(bool all = true)
+				throw();
+			
+			/// Called when defaults is pressed in Preferences, calls setDefaults
+			virtual void setDefaultValues()
 				throw();
 
 			///

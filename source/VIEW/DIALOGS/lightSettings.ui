@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>LightSettingsData</class>
 <widget class="QWidget">
     <property name="name">
@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>439</width>
-            <height>273</height>
+            <height>276</height>
         </rect>
     </property>
     <property name="maximumSize">
@@ -199,7 +199,7 @@
                 <enum>Horizontal</enum>
             </property>
             <property name="tickmarks">
-                <enum>Right</enum>
+                <enum>NoMarks</enum>
             </property>
             <property name="tickInterval">
                 <number>10</number>
@@ -457,47 +457,6 @@
     </widget>
     <widget class="QPushButton">
         <property name="name">
-            <cstring>remove_lights_button</cstring>
-        </property>
-        <property name="enabled">
-            <bool>false</bool>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>240</x>
-                <y>240</y>
-                <width>70</width>
-                <height>24</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Remove</string>
-        </property>
-        <property name="toolTip" stdset="0">
-            <string>remove a light</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>defaults_button</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>340</x>
-                <y>240</y>
-                <width>70</width>
-                <height>24</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Reset</string>
-        </property>
-        <property name="toolTip" stdset="0">
-            <string>get the default values</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
             <cstring>add_lights_button</cstring>
         </property>
         <property name="enabled">
@@ -507,7 +466,7 @@
             <rect>
                 <x>140</x>
                 <y>240</y>
-                <width>70</width>
+                <width>110</width>
                 <height>24</height>
             </rect>
         </property>
@@ -516,6 +475,28 @@
         </property>
         <property name="toolTip" stdset="0">
             <string>create a new light</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>remove_lights_button</cstring>
+        </property>
+        <property name="enabled">
+            <bool>false</bool>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>300</x>
+                <y>240</y>
+                <width>110</width>
+                <height>24</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Remove</string>
+        </property>
+        <property name="toolTip" stdset="0">
+            <string>remove a light</string>
         </property>
     </widget>
 </widget>
@@ -549,12 +530,6 @@
         <signal>valueChanged(int)</signal>
         <receiver>LightSettingsData</receiver>
         <slot>intensityChanged()</slot>
-    </connection>
-    <connection>
-        <sender>defaults_button</sender>
-        <signal>clicked()</signal>
-        <receiver>LightSettingsData</receiver>
-        <slot>defaultsPressed()</slot>
     </connection>
     <connection>
         <sender>color_button</sender>

@@ -56,5 +56,13 @@ void StageSettings::apply()
 	stage_->showCoordinateSystem(coordinate_button->isChecked());
 }
 
+
+void StageSettings::setDefaultValues()
+	throw()
+{
+	color_sample->setBackgroundColor(black);
+	coordinate_button->setChecked(false);
+}
+
 // NAMESPACE
 } }

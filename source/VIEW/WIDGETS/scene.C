@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.21 2003/11/03 16:52:35 amoll Exp $
+// $Id: scene.C,v 1.22 2003/11/21 01:22:53 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -850,19 +850,26 @@ void Scene::finalizePreferencesTab(Preferences &preferences)
 	}
 }
 
+void Scene::defaultPreferences(Preferences&)
+	throw()
+{
+	if (light_settings_ == 0) return;
+	stage_settings_->setDefaultValues();
+	light_settings_->setDefaultValues();
+}
+
 
 void Scene::applyPreferences(Preferences & /* preferences */)
 	throw()
 {
 	if (light_settings_ == 0) return;
 	
-	PrimitiveManager& pm = getMainControl()->getPrimitiveManager();
-
 	light_settings_->apply();
 	gl_renderer_.setLights();
 
 	bool showed_coordinate = stage_->coordinateSystemEnabled();
 	stage_settings_->apply();
+	PrimitiveManager& pm = getMainControl()->getPrimitiveManager();
 
 	if (showed_coordinate && !stage_->coordinateSystemEnabled())
 	{

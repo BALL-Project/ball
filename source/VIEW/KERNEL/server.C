@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: server.C,v 1.7 2003/10/16 10:53:20 amoll Exp $
+// $Id: server.C,v 1.8 2003/11/21 01:22:53 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/server.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -364,6 +364,11 @@ namespace BALL
 			notify_(new_message);
     }
 
+		void Server::defaultPreferences(Preferences&)
+			throw()
+		{
+			server_preferences_->setDefaultValues();
+		}
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/KERNEL/server.iC>

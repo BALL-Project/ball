@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.21 2003/11/18 16:58:45 amoll Exp $
+// $Id: mainControl.C,v 1.22 2003/11/21 01:22:53 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -208,6 +208,7 @@ void MainControl::show()
 	// establish connection 
 	connect(preferences_dialog_, SIGNAL(applyButtonPressed()), this, SLOT(applyPreferencesTab()));
 	connect(preferences_dialog_, SIGNAL(cancelButtonPressed()), this, SLOT(cancelPreferencesTab()));
+	connect(preferences_dialog_, SIGNAL(defaultButtonPressed()), this, SLOT(defaultPreferencesTab()));
 
 	// initialize own preferences tab
 	initializePreferencesTab(*preferences_dialog_);
@@ -299,6 +300,16 @@ void MainControl::cancelPreferencesTab()
 	}
 }
 
+void MainControl::defaultPreferencesTab()
+	throw()
+{
+	// checks all modular widgets if one of their preferences is the current page
+	List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
+	for (it = modular_widgets_.begin(); it != modular_widgets_.end(); ++it)
+	{
+		(*it)->defaultPreferences(*preferences_dialog_);
+	}
+}
 
 void MainControl::aboutToExit()
 {

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lightSettings.h,v 1.3 2003/09/04 22:17:45 amoll Exp $
+// $Id: lightSettings.h,v 1.4 2003/11/21 01:22:21 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_LIGHTSETTINGS_H
@@ -57,6 +57,10 @@ namespace BALL
 
 			/// Store the default values of lighting for later usage
 			void getDefaultLights()
+				throw();
+
+			/// Called when defaults is pressed in Preferences, calls setDefaults
+			virtual void setDefaultValues()
 				throw();
 
 			public slots:

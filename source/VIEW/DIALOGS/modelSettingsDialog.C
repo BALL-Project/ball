@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.C,v 1.11 2003/11/20 21:45:12 amoll Exp $
+// $Id: modelSettingsDialog.C,v 1.12 2003/11/21 01:22:52 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modelSettingsDialog.h>
@@ -10,6 +10,7 @@
 
 #include <qslider.h>
 #include <qlabel.h>
+#include <qtabwidget.h>
 
 namespace BALL
 {
@@ -23,20 +24,47 @@ namespace BALL
 			show();
 		}
 
-		void ModelSettingsDialog::setDefaults()
+		void ModelSettingsDialog::setDefaults(bool all)
 			throw()
 		{
-			stick_radius_slider->setValue(2);
-			ball_stick_cylinder_radius_slider->setValue(2);
-			ball_stick_sphere_radius_slider->setValue(4);
-			vdw_radius_factor_slider->setValue(10);
-			surface_probe_radius_slider->setValue(15);
-			tube_radius_slider->setValue(4);
-			cartoon_tube_radius_slider->setValue(4);
-			cartoon_helix_radius_slider->setValue(20);
-			cartoon_arrow_width_slider->setValue(4);
-			cartoon_arrow_height_slider->setValue(8);
-			hbonds_radius_slider->setValue(3);
+			if (all || tabwidget->currentPageIndex() == 0)
+			{
+				stick_radius_slider->setValue(2);
+			}
+			
+			if (all || tabwidget->currentPageIndex() == 1)
+			{
+				ball_stick_cylinder_radius_slider->setValue(2);
+				ball_stick_sphere_radius_slider->setValue(4);
+			}
+			
+			if (all || tabwidget->currentPageIndex() == 2)
+			{
+				vdw_radius_factor_slider->setValue(10);
+			}
+			
+			if (all || tabwidget->currentPageIndex() == 3)
+			{
+				surface_probe_radius_slider->setValue(15);
+			}
+			
+			if (all || tabwidget->currentPageIndex() == 4)
+			{
+				tube_radius_slider->setValue(4);
+			}
+			
+			if (all || tabwidget->currentPageIndex() == 5)
+			{
+				cartoon_tube_radius_slider->setValue(4);
+				cartoon_helix_radius_slider->setValue(20);
+				cartoon_arrow_width_slider->setValue(4);
+				cartoon_arrow_height_slider->setValue(8);
+			}
+			
+			if (all || tabwidget->currentPageIndex() == 6)
+			{
+				hbonds_radius_slider->setValue(3);
+			}
 		}
 
 		float ModelSettingsDialog::getFloatValue_(const QSlider* const& slider) const
@@ -107,6 +135,13 @@ namespace BALL
 			fetchPreference_(file, "cartoon_arrow_width", *cartoon_arrow_width_slider);
 			fetchPreference_(file, "hbonds_radius", *hbonds_radius_slider);
 		}
-	
+
+	void ModelSettingsDialog::setDefaultValues()
+		throw()
+	{
+		setDefaults(false);
+	}
+
+
 	} // namespace VIEW
 } // namespace BALL

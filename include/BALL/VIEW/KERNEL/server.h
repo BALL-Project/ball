@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: server.h,v 1.3 2003/09/04 23:14:12 amoll Exp $
+// $Id: server.h,v 1.4 2003/11/21 01:22:23 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_SERVER_H
@@ -248,32 +248,21 @@ namespace BALL
 			*/
 			virtual void applyPreferences(Preferences &preferences)
 				throw();
+
+			///
+			virtual void defaultPreferences(Preferences&)
+				throw();
 			
 			/** Fetch the widgets preferences from the inifile.
-					This method fetches the preferences of this server 
-					from the <b> inifile</b>.\par
-					This method is called automatically by the method show from the MainControl
-					object.
+					This method is called automatically by the method MainControl::show.
 					See ModularWidget	for more information concerning preferences tabs.\par
-					\param  inifile the INIFile that contains the needed values
-					\see    MainControl
-					\see    show
-					\see    INIFile
 					\see    ServerPreferences
 			*/
 			virtual void fetchPreferences(INIFile &inifile)
 				throw();
 			
 			/** Writes the widgets preferences to the inifile.
-					This method writes the preferences of this server to the
-					<b> inifile</b>.\par
-					This method is called automatically by the method aboutToExit from the
-					MainControl
-					object.
-					\param  inifile the INIFile that contains the needed values
-					\see    MainControl
-					\see    aboutToExit
-					\see    INIFile
+					This method is called automatically by the MainControl::aboutToExit.
 					\see    ServerPreferences
 			*/
 			virtual void writePreferences(INIFile &inifile)
@@ -285,10 +274,6 @@ namespace BALL
 			//@{
 
 			/** Internal state and consistency self-validation.
-					Initiate self-validation of the internal state and data structure consistencies
-					of this server.
-					If the internal state of this server is correct (self-validated) and 
-					consistent <tt> true</tt> is returned, <tt> false</tt> otherwise. 
 					Calls {ConnectionObject::isValid}.
 					\return			bool <tt> true</tt> if the internal state of this server is correct
 					\see        ConnectionObject::isValid
@@ -296,9 +281,8 @@ namespace BALL
 			virtual bool isValid() const
 				throw();
 
-			/** Internal value dump.
-					Dump the current state of this server to 
-					the output ostream <b> s</b> with dumping depth <b> depth</b>.
+			/** Dump the current state of this server to 
+					the output ostream with a dumping depth.
 					\param   s output stream where to output the state of this server
 					\param   depth the dumping depth
 					\see     ConnectionObject::dump

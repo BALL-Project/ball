@@ -11,6 +11,7 @@
 #include <qslider.h>
 #include <qlabel.h>
 
+#include <qpoint.h>
 namespace BALL
 {
 	namespace VIEW
@@ -32,11 +33,13 @@ void QColorTableItem::paint(QPainter *p, const QColorGroup &cg, const QRect &cr,
 // ==============================================================================================
 QColorTable::QColorTable(QWidget* parent) 
 	throw()
-	: QTable(parent) 
+	: QTable(parent),
+		setting_content_(false)
 {
   setNumCols(2);
   horizontalHeader()->setLabel(1, "Color");
 	setGeometry(5,5, 260, 250);
+	setSelectionMode(NoSelection);
 }
 
 void QColorTable::setNamesTitle(const String& name)
@@ -48,6 +51,7 @@ void QColorTable::setNamesTitle(const String& name)
 void QColorTable::setContent(const vector<String>& names, const vector<ColorRGBA>& colors)
 	throw()
 {
+	setting_content_ = true;
 	colors_ = colors;
 	names_ = names;
 
@@ -58,6 +62,7 @@ void QColorTable::setContent(const vector<String>& names, const vector<ColorRGBA
     setText(p, 0, names_[p].c_str());
     setItem(p, 1, c2 );
 	}
+	setting_content_ = false;
 }
 
 void QColorTable::setColors(const vector<ColorRGBA>& colors)
@@ -75,7 +80,7 @@ void QColorTable::setColors(const vector<ColorRGBA>& colors)
 
 QWidget* QColorTable::beginEdit(int row, int col, bool)
 {
-	if (col == 0) return 0;
+	if (col == 0 || setting_content_) return 0;
 	ColorRGBA old_rgba(((QColorTableItem*)item(row,col))->getColor());
 	QColor old(old_rgba.getRed(), old_rgba.getGreen(), old_rgba.getBlue());
 	QColor color = QColorDialog::getColor(old);
@@ -203,74 +208,105 @@ void ColoringSettingsDialog::fetchPreferences(const INIFile& file)
 	setLabelColorsFromValues_();
 }
 
-void ColoringSettingsDialog::setDefaults()
+void ColoringSettingsDialog::setDefaults(bool all)
 	throw()
 {
 	vector<String> 		names;
 	vector<ColorRGBA> colors;
 
-	// setting residue colors
-	// create a dummy processor to get the default values
-	ElementColorProcessor elp;
-	const HashMap<Position, ColorRGBA>& color_hash_map = elp.getColorMap();
-	HashMap<Position, ColorRGBA>::ConstIterator it = color_hash_map.begin();
-
-	for(; it != color_hash_map.end(); it++)
+	// =============================================================
+	// setting element colors
+	if (all || tabwidget->currentPageIndex() == 0)
 	{
-		if (it->first == 0) continue;
-		names.push_back(PTE[it->first].getSymbol());
-		colors.push_back(it->second);
-	}
+		// create a dummy processor to get the default values
+		ElementColorProcessor elp;
+		const HashMap<Position, ColorRGBA>& color_hash_map = elp.getColorMap();
+		HashMap<Position, ColorRGBA>::ConstIterator it = color_hash_map.begin();
 
-	names.push_back(PTE[0].getSymbol());
-	colors.push_back(color_hash_map[0]);
-	element_table_->setNamesTitle("Element");
-	element_table_->setContent(names, colors);
-	names.clear();
-	colors.clear();
+		for(; it != color_hash_map.end(); it++)
+		{
+			if (it->first == 0) continue;
+			names.push_back(PTE[it->first].getSymbol());
+			colors.push_back(it->second);
+		}
+
+		names.push_back(PTE[0].getSymbol());
+		colors.push_back(color_hash_map[0]);
+		element_table_->setNamesTitle("Element");
+		element_table_->setContent(names, colors);
+		names.clear();
+		colors.clear();
+	}
 
 	// =============================================================
 	// setting residue name colors
 	// create a dummy processor to get the default values
-	ResidueNameColorProcessor rcp;
-	const StringHashMap<ColorRGBA>& color_map = rcp.getColorMap();
-	StringHashMap<ColorRGBA>::ConstIterator it2 = color_map.begin();
-
-	for(; it2 != color_map.end(); it2++)
+	if (all || tabwidget->currentPageIndex() == 2)
 	{
-		names.push_back(it2->first);
-		colors.push_back(it2->second);
-	}
+		ResidueNameColorProcessor rcp;
+		const StringHashMap<ColorRGBA>& color_map = rcp.getColorMap();
+		StringHashMap<ColorRGBA>::ConstIterator it2 = color_map.begin();
 
-	residue_table_->setNamesTitle("Residue");
-	residue_table_->setContent(names, colors);
-	
+		for(; it2 != color_map.end(); it2++)
+		{
+			names.push_back(it2->first);
+			colors.push_back(it2->second);
+		}
+
+		residue_table_->setNamesTitle("Residue");
+		residue_table_->setContent(names, colors);
+	}
+		
 	// =============================================================
-	first_residue_color_.set(255,255,0);
-	middle_residue_color_.set(0,255,0);
-	last_residue_color_.set(0,0,255);
+	// setting residue number colors
+	if (all || tabwidget->currentPageIndex() == 1)
+	{
+		first_residue_color_.set(255,255,0);
+		middle_residue_color_.set(0,255,0);
+		last_residue_color_.set(0,0,255);
+	}
 	// =============================================================
-	negative_charge_color_.set(255,0,0);
-	neutral_charge_color_.set(255,255,255);
-	positive_charge_color_.set(0,0,255);
+	// setting charge colors
+	if (all || tabwidget->currentPageIndex() == 3)
+	{
+		negative_charge_color_.set(255,0,0);
+		neutral_charge_color_.set(255,255,255);
+		positive_charge_color_.set(0,0,255);
+	}
 	// =============================================================
-	null_distance_color_.set(255,0,0);
-	max_distance_color_.set(0,0,255);
-	max_distance_slider->setValue(10 * 10);
+	// setting distance colors
+	if (all || tabwidget->currentPageIndex() == 4)
+	{
+		null_distance_color_.set(255,0,0);
+		max_distance_color_.set(0,0,255);
+		max_distance_slider->setValue(10 * 10);
+	}
 	// =============================================================
-	minimum_tf_color_.set(0,0,255);
-	maximum_tf_color_.set(255,255,0);
-	unassigned_tf_color_.set(255,255,255);
-	max_tf_slider->setValue(50 * 10);
+	// setting temperature factor colors
+	if (all || tabwidget->currentPageIndex() == 5)
+	{
+		minimum_tf_color_.set(0,0,255);
+		maximum_tf_color_.set(255,255,0);
+		unassigned_tf_color_.set(255,255,255);
+		max_tf_slider->setValue(50 * 10);
+	}
 	// =============================================================
-	minimum_occupancy_color_.set(0,0,255);
-	maximum_occupancy_color_.set(255,255,0);
-	unassigned_occupancy_color_.set(255,255,255);
+	// setting occupancy colors
+	if (all || tabwidget->currentPageIndex() == 6)
+	{
+		minimum_occupancy_color_.set(0,0,255);
+		maximum_occupancy_color_.set(255,255,0);
+		unassigned_occupancy_color_.set(255,255,255);
+	}
 	// =============================================================
-  helix_color_.set(0,0,255);
-	coil_color_.set(0,155,155);
-	strand_color_.set(255,0,0);
-	turn_color_.set(255,255,0);
+	// setting secondary structure colors
+	if (all || tabwidget->currentPageIndex() == 7)
+	{
+		helix_color_.set(0,0,255);
+		coil_color_.set(0,155,155);
+		strand_color_.set(255,0,0);
+		turn_color_.set(255,255,0);
+	}
 
 	// =============================================================
 	setLabelColorsFromValues_();
@@ -556,6 +592,10 @@ void ColoringSettingsDialog::writePreference_(INIFile& inifile, const String& en
 	inifile.insertValue("COLORING_OPTIONS", entry, color);
 }
 
-
+void ColoringSettingsDialog::setDefaultValues()
+	throw()
+{
+	setDefaults(false);
+}
 
 } } // NAMESPACE
