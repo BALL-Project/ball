@@ -28,7 +28,8 @@ fixed:
 - issue with restoring window's geometry on X11 (still buggy on some X-Servers)
 
 changed:
-- doubled OpenGL performance since BALL(View) 1.0 !
+- inside of surfaces gets now correctly drawn
+- increased OpenGL performance 
 - Scene Preferences
 - GeometricObjects no longe have names
 - removed Information Processor for GeometricObjects
