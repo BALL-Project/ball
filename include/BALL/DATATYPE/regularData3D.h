@@ -1,4 +1,4 @@
-// $Id: regularData3D.h,v 1.3 2001/05/10 13:44:43 oliver Exp $ 
+// $Id: regularData3D.h,v 1.4 2001/05/10 17:22:44 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_REGULARDATA3D_H
 #define BALL_DATATYPE_REGULARDATA3D_H
@@ -409,7 +409,7 @@ namespace BALL
 				@param x, y, z the coordinates
 				@return bool
 		*/
-		bool has(float& x, float& y,float& z) const throw();
+		bool has(float x, float y, float z) const throw();
 
 		/**	Returns the linear interpolation of the eight surrounding grid points.
 				This method calculates the corresponding box to a vector and linearly.
@@ -850,7 +850,7 @@ namespace BALL
 
 	template <class GridDataType> 
 	BALL_INLINE
-	bool RegularData3D<GridDataType>::has(float& x, float& y,float& z) const		
+	bool RegularData3D<GridDataType>::has(float x, float y, float z) const		
 		throw()
 	{
 		if (x > upper_.x  ||	y > upper_.y  ||	z > upper_.z  ||
