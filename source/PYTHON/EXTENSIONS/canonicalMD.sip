@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: canonicalMD.sip,v 1.3 2003/10/29 22:54:37 oliver Exp $
+// $Id: canonicalMD.sip,v 1.4 2004/04/17 16:54:27 oliver Exp $
 //
 
 class CanonicalMD 
@@ -16,7 +16,7 @@ class CanonicalMD
     CanonicalMD(ForceField& /myforcefield/); 
     CanonicalMD(ForceField& /myforcefield/,SnapShotManager* /ssm/); 
     CanonicalMD(ForceField& /myforcefield/,SnapShotManager* /ssm/, const Options& /options/);
-    CanonicalMD(const CanonicalMD& /rhs/, bool /deep/ = true); 
+    CanonicalMD(const CanonicalMD& /rhs/); 
     ~CanonicalMD() throw(); 
     // CanonicalMD &operator=(const CanonicalMD& /rhs/); 
     void setBathRelaxationTime(double /time/);

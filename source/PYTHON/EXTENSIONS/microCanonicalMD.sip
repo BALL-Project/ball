@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: microCanonicalMD.sip,v 1.3 2003/10/29 22:54:41 oliver Exp $
+// $Id: microCanonicalMD.sip,v 1.4 2004/04/17 16:54:27 oliver Exp $
 //
 
 class MicroCanonicalMD 
@@ -17,7 +17,7 @@ class MicroCanonicalMD
 	MicroCanonicalMD(ForceField&/my_force_field/); 
 	MicroCanonicalMD(ForceField&/my_force_field/, SnapShotManager* /ssm/); 
 	MicroCanonicalMD(ForceField&/my_force_field/, SnapShotManager* /ssm/, const Options& /myoptions/);
-	MicroCanonicalMD(const MicroCanonicalMD& /rhs/, bool /deep/ = true); 
+	MicroCanonicalMD(const MicroCanonicalMD& /rhs/); 
 	~MicroCanonicalMD(); 
 	// MicroCanonicalMD& operator = (const MicroCanonicalMD& /rhs/); 
 	virtual bool setup(ForceField&/my_force_field/, SnapShotManager* /ssm/); 

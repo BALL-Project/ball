@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularDynamics.sip,v 1.4 2003/10/29 22:54:41 oliver Exp $
+// $Id: molecularDynamics.sip,v 1.5 2004/04/17 16:54:27 oliver Exp $
 //
 
 class MolecularDynamics
@@ -38,7 +38,7 @@ class MolecularDynamics
   // BALL_CREATE (MolecularDynamics)
   MolecularDynamics ();
   MolecularDynamics (ForceField& /forcefield/);
-  MolecularDynamics (const MolecularDynamics& /rhs/, bool /deep/ = true);
+  MolecularDynamics (const MolecularDynamics& /rhs/);
   ~MolecularDynamics ();
   // const MolecularDynamics& operator = (const MolecularDynamics& /rhs/);
 	void set(const MolecularDynamics& /rhs/);
