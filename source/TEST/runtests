@@ -126,5 +126,5 @@ else
 	echo "It is also neccessary to include the files ../config.mak ../config.h"
 	echo " "
 
-	exit $(ABORT_ON_FAIL)
+	exit ${ABORT_ON_FAIL}
 fi
