@@ -1,4 +1,4 @@
-// $Id: RTTI_test.C,v 1.5 2000/06/05 01:14:19 amoll Exp $
+// $Id: RTTI_test.C,v 1.6 2000/06/05 22:18:30 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 #include <BALL/KERNEL/secondaryStructure.h>
 ///////////////////////////
 
-START_TEST(RTTI, "$Id: RTTI_test.C,v 1.5 2000/06/05 01:14:19 amoll Exp $")
+START_TEST(RTTI, "$Id: RTTI_test.C,v 1.6 2000/06/05 22:18:30 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -217,11 +217,11 @@ CHECK(getStreamName<>())
 	TEST_EQUAL(getStreamName<Fragment>(), String("BALL::Fragment"))
 RESULT
 
-CHECK(castTo<>())/*
-	Fragment* f1 = new Fragment();
-	BaseFragment bf = castTo<BaseFragment) (*f);
-	BaseFragment* bf = new BaseFragment();
-	Fragment f = castTo<Fragment) (*f1);*/
+CHECK(castTo<>())
+	Fragment f1();
+	BaseFragment bf1();
+	Fragment* f = castTo<Fragment> (*bf1);
+	TEST_NOT_EQUAL(f, 0)
 RESULT
 
 /////////////////////////////////////////////////////////////
