@@ -134,7 +134,7 @@ QColor ColorMeshDialog::setColor(QPushButton* button)
 void ColorMeshDialog::choose_clicked()
 {
 	QColor qcolor = setColor(choose_button);
-	selected_color.set(qcolor.red(), qcolor.blue(), qcolor.green());
+	selected_color.set(qcolor.red(), qcolor.green(), qcolor.blue());
 	red_box->setValue(qcolor.red());
 	blue_box->setValue(qcolor.blue());
 	green_box->setValue(qcolor.green());
@@ -143,10 +143,10 @@ void ColorMeshDialog::choose_clicked()
 void ColorMeshDialog::color_boxes_changed()
 {
 	selected_color.set(red_box->value(),
-										 blue_box->value(),
 										 green_box->value(),
+										 blue_box->value(),
 										 alpha_box->value());
-	QColor qcolor(red_box->value(), blue_box->value(), green_box->value());
+	QColor qcolor(red_box->value(), green_box->value(), blue_box->value());
 	QPalette p = choose_button->palette();
 	p.setColor(QColorGroup::Button, qcolor);
 	p.setColor(QColorGroup::Base, qcolor);
@@ -166,31 +166,33 @@ void ColorMeshDialog::location_changed()
 void ColorMeshDialog::max_clicked()
 {
 	QColor qcolor = setColor(max_button);
-	max_color.set(qcolor.red(), qcolor.blue(), qcolor.green());;
+	max_color.set(qcolor.red(), qcolor.green(), qcolor.blue());;
 }
 
 void ColorMeshDialog::mid_clicked()
 {
 	QColor qcolor = setColor(mid_button);
-	mid_color.set(qcolor.red(), qcolor.blue(), qcolor.green());;
+	mid_color.set(qcolor.red(), qcolor.green(), qcolor.blue());;
 }
 
 void ColorMeshDialog::min_clicked()
 {
 	QColor qcolor = setColor(min_button);
-	min_color.set(qcolor.red(), qcolor.blue(), qcolor.green());;
+	min_color.set(qcolor.red(), qcolor.green(), qcolor.blue());;
+
+			
 }
 
 void ColorMeshDialog::min_min_clicked()
 {
 	QColor qcolor = setColor(min_min_button);
-	min_min_color.set(qcolor.red(), qcolor.blue(), qcolor.green());;
+	min_min_color.set(qcolor.red(), qcolor.green(), qcolor.blue());;
 }
 
 void ColorMeshDialog::max_max_clicked()
 {
 	QColor qcolor = setColor(max_max_button);
-	max_max_color.set(qcolor.red(), qcolor.blue(), qcolor.green());;
+	max_max_color.set(qcolor.red(), qcolor.green(), qcolor.blue());;
 }
 
 void ColorMeshDialog::tab_changed()
