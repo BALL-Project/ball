@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glmesh.C,v 1.9 2002/12/20 20:14:36 anhi Exp $
+// $Id: glmesh.C,v 1.10 2002/12/22 13:08:03 oliver Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/glmesh.h>
 
@@ -117,8 +117,6 @@ namespace BALL
 			getDrawingModeAndPrecision(mode, precision);
 			mode += GeometricObject::PROPERTY__DRAWING_MODE_DOTS;
 
-			cout << mode << endl;
-			
 			// If we have only one color for the whole mesh, this can
 			// be assigned efficiently
 			if (colorList.size() < vertex.size())
