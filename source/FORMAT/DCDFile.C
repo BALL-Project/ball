@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile.C,v 1.29 2004/03/19 00:50:54 amoll Exp $
+// $Id: DCDFile.C,v 1.30 2004/03/20 15:22:32 amoll Exp $
 //
 
 #include <BALL/FORMAT/DCDFile.h>
@@ -62,6 +62,10 @@ namespace BALL
 			time_step_length_(0.0),
 			number_of_comments_(0)
 	{
+		if (!(open_mode & std::ios::binary))
+		{
+			reopen(open_mode | std::ios::binary);
+		}
 		init();
 
 		// If we want to open the file for writing, write a default header,
@@ -125,6 +129,11 @@ namespace BALL
 	bool DCDFile::open(const String& name, File::OpenMode open_mode)
 		throw(Exception::FileNotFound)
 	{
+		if (!(open_mode |= std::ios::binary))
+		{
+			open_mode = open_mode | std::ios::binary;
+		}
+
 		if (!TrajectoryFile::open(name, open_mode))
 		{
 			return(false);
@@ -516,6 +525,8 @@ namespace BALL
 			Log.info() << "file position at beginning of read(): " << tellg() << endl;
 		#endif
 
+		if (!good() || eof()) return false;
+
 		// the number of atoms has to be read from the file header before ever
 		// thinking of reading correct information
 		Size expected_noa = getNumberOfAtoms();
@@ -663,7 +674,7 @@ namespace BALL
 	bool DCDFile::flushToDisk(const ::std::vector<SnapShot>& buffer)
 		throw(File::CannotWrite)
 	{
-		if (!isOpen() || getOpenMode() != File::OUT)
+		if (!isOpen() || !(getOpenMode() & File::OUT))
 		{
 			throw (File::CannotWrite(__FILE__, __LINE__, name_));
 		}

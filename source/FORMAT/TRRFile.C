@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TRRFile.C,v 1.7 2003/08/26 09:17:47 oliver Exp $
+// $Id: TRRFile.C,v 1.8 2004/03/20 15:22:32 amoll Exp $
 //
 
 #include <BALL/FORMAT/TRRFile.h>
@@ -58,6 +58,10 @@ namespace BALL
 			box2_(),
 			box3_()
 	{
+		if (!(open_mode & std::ios::binary))
+		{
+			reopen(open_mode | std::ios::binary);
+		}
 		init();
 	}
 
@@ -144,11 +148,10 @@ namespace BALL
 		if ((newprecision == 4) || (newprecision == 8))
 		{
 			precision_ = newprecision;
-
 			return true;
 		}
-		else
-			return false;
+
+		return false;
 	}
 
 	float TRRFile::getTimestep() const
@@ -482,8 +485,7 @@ namespace BALL
 		BinaryFileAdaptor<float>  adapt_float;
 		BinaryFileAdaptor<double> adapt_double;
 
- 		if (!readNextHeader(header_))
-			return false;
+ 		if (!readNextHeader(header_)) return false;
 
 		Size noa = header_.number_of_atoms;
 
