@@ -1,4 +1,4 @@
-// $Id: molecularMessage.C,v 1.1 2000/05/14 15:29:36 hekl Exp $
+// $Id: molecularMessage.C,v 1.2 2000/05/16 15:43:35 hekl Exp $
 
 #include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
 
@@ -70,6 +70,26 @@ namespace BALL
 			#endif 
 		}
 
+
+		MolecularSelectionMessage::MolecularSelectionMessage()
+			:
+			SelectionMessage()
+		{
+		}
+
+		MolecularSelectionMessage::MolecularSelectionMessage(const SelectionMessage& message, bool /* deep */)
+			:
+			SelectionMessage(message)
+		{
+		}
+
+		MolecularSelectionMessage::~MolecularSelectionMessage()
+		{
+			#ifdef BALL_VIEW_DEBUG
+				cout << "Destructing object " << (void *)this 
+					<< " of class " << RTTI::getName<MolecularSelectionMessage>() << endl;
+			#endif 
+		}
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/MOLVIEW/KERNEL/molecularMessage.iC>
