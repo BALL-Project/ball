@@ -1,4 +1,4 @@
-// $Id: QTTimer.C,v 1.10 2001/05/13 14:28:37 hekl Exp $
+// $Id: QTTimer.C,v 1.11 2001/05/13 16:30:10 hekl Exp $
 
 
 #include <BALL/VIEW/KERNEL/QTTimer.h>
@@ -114,7 +114,6 @@ namespace BALL
 		}
 
 		void QTTimer::timer()
-				throw()
 		{
 			return;
 		}

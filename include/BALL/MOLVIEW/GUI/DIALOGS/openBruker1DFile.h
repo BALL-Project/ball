@@ -1,4 +1,4 @@
-// $Id: openBruker1DFile.h,v 1.1 2001/01/29 17:17:14 anhi Exp $
+// $Id: openBruker1DFile.h,v 1.2 2001/05/13 16:32:29 hekl Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_OPENBRUKER1DFILE_H
 #define BALL_MOLVIEW_GUI_DIALOGS_OPENBRUKER1DFILE_H
@@ -52,21 +52,24 @@ namespace BALL
     /** Initialization. This method is called automatically before the main application is started. 
 				It adds the	dialog's menu entries and connections.
     */
-    virtual void initializeWidget(MainControl& main_control);
+    virtual void initializeWidget(MainControl& main_control)
+		throw();
 
     /** Remove the dialog.
 				This method is called by the dialog's destructor.
 				It reverses all actions performed in 
 				initializeWidget (remove menu entries and connections).
     */
-    virtual void finalizeWidget(MainControl& main_control);
+    virtual void finalizeWidget(MainControl& main_control)
+		throw();
 
 
 		protected:
 
     /** Open the bruker1DFile.
      */
-    virtual void openFile_();
+    virtual void openFile_()
+		throw();
 
 	};
 

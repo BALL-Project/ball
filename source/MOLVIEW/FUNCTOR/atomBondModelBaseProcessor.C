@@ -1,4 +1,4 @@
-// $Id: atomBondModelBaseProcessor.C,v 1.4 2001/05/13 15:02:38 hekl Exp $
+// $Id: atomBondModelBaseProcessor.C,v 1.5 2001/05/13 16:27:25 hekl Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/atomBondModelBaseProcessor.h>
 
@@ -83,7 +83,6 @@ namespace BALL
 		}
 
 		bool AtomBondModelBaseProcessor::start()
-			throw()
 		{
 			clearUsedAtoms_();
 			
@@ -91,7 +90,6 @@ namespace BALL
 		}
 				
 		bool AtomBondModelBaseProcessor::finish()
-			throw()
 		{
 			buildBondModels_();
 
@@ -99,7 +97,6 @@ namespace BALL
 		}
 				
 		Processor::Result AtomBondModelBaseProcessor::operator()(Composite & /* composite */)
-			throw()
 		{
 			return Processor::CONTINUE;
 		}

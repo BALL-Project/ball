@@ -1,4 +1,4 @@
-// $Id: QTTimer.h,v 1.7 2001/05/13 13:47:44 hekl Exp $
+// $Id: QTTimer.h,v 1.8 2001/05/13 16:31:38 hekl Exp $
 
 #ifndef BALL_VIEW_KERNEL_QTTIMER_H
 #define BALL_VIEW_KERNEL_QTTIMER_H
@@ -33,8 +33,8 @@ namespace BALL
 				Therefore it will only function within a qt application.
 				@memo    QTTimer class (BALL VIEW kernel framework)
 				@author  $Author: hekl $
-				@version $Revision: 1.7 $
-				@date    $Date: 2001/05/13 13:47:44 $
+				@version $Revision: 1.8 $
+				@date    $Date: 2001/05/13 16:31:38 $
 		*/
 		class QTTimer: public QObject
 		{
@@ -286,8 +286,7 @@ namespace BALL
 					@see    startTimer
 					@see    stopTimer
 			*/
-			virtual void timer()
-				throw();
+			virtual void timer();
 			//@}
 
 			private:

@@ -1,4 +1,4 @@
-// $Id: regularData1DWidget.h,v 1.1 2001/01/29 17:17:59 anhi Exp $
+// $Id: regularData1DWidget.h,v 1.2 2001/05/13 16:31:20 hekl Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGET_REGULARDATA1DWIDGET_H
 #define BALL_VIEW_GUI_WIDGET_REGULARDATA1DWIDGET_H
@@ -128,7 +128,8 @@ class RegularData1DWidget
 
  public slots:
 
-  void onNotify(Message *message);
+  void onNotify(Message *message)
+	throw();
   bool reactToMessages_(Message *message);
   
   /**    @name    ModularWidget related methods
@@ -138,11 +139,13 @@ class RegularData1DWidget
 	 RegularData1DWidget creates an entry in Tools|RegularData1DWidget and connects
 	 the entry to createPlot()
   */
-  virtual void initializeWidget(MainControl& main_control);
+  virtual void initializeWidget(MainControl& main_control)
+	throw();
 
   /**    Remove menu entries.
    */
-  virtual void finalizeWidget(MainControl& main_control);
+  virtual void finalizeWidget(MainControl& main_control)
+	throw();
   //@}
 
   void createPlot();

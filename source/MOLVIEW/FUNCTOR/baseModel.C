@@ -1,4 +1,4 @@
-// $Id: baseModel.C,v 1.11 2001/05/13 15:02:39 hekl Exp $
+// $Id: baseModel.C,v 1.12 2001/05/13 16:27:25 hekl Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/baseModel.h>
 
@@ -105,7 +105,6 @@ namespace BALL
 		}
 
 		bool BaseModelProcessor::start()
-			throw()
 		{
 			if (hasProperty(GeometricObject::PROPERTY__OBJECT_DYNAMIC) == true)
 			{
@@ -128,13 +127,11 @@ namespace BALL
 		}
 				
 		bool BaseModelProcessor::finish()
-			throw()
 		{
 			return true;
 		}
 				
 		Processor::Result BaseModelProcessor::operator()(Composite & /* composite */)
-			throw()
 		{
 			return Processor::CONTINUE;
 		}

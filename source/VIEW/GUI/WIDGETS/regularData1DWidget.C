@@ -1,6 +1,9 @@
-// $Id: regularData1DWidget.C,v 1.3 2001/03/11 23:42:45 amoll Exp $
+// $Id: regularData1DWidget.C,v 1.4 2001/05/13 16:29:53 hekl Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/regularData1DWidget.h>
+
+using std::endl;
+using std::cout;
 
 NewRegularData1DMessage::NewRegularData1DMessage()
   :    CompositeMessage()
@@ -52,16 +55,19 @@ RegularData1DWidget::~RegularData1DWidget()
 }
 
 void RegularData1DWidget::initializeWidget(MainControl& main_control)
+  throw()
 {
   main_control.insertMenuEntry(MainControl::TOOLS, "&1D-NMR", this, SLOT(createPlot()));
 }
 
 void RegularData1DWidget::finalizeWidget(MainControl& main_control)
+  throw()
 {
   main_control.removeMenuEntry(MainControl::TOOLS, "&1D-NMR", this, SLOT(createPlot()));
 }
 
 void RegularData1DWidget::onNotify(Message* message)
+  throw()
 {
   reactToMessages_(message);
 }

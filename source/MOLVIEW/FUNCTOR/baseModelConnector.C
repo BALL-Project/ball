@@ -1,4 +1,4 @@
-// $Id: baseModelConnector.C,v 1.4 2001/05/13 15:02:39 hekl Exp $
+// $Id: baseModelConnector.C,v 1.5 2001/05/13 16:27:25 hekl Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/baseModelConnector.h>
 
@@ -90,7 +90,6 @@ namespace BALL
 		}
 
 		void BaseModelConnector::visit(Composite& /* composite */)
-			throw()
 		{
 		}
 

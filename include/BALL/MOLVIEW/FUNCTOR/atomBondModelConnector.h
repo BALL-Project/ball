@@ -1,4 +1,4 @@
-// $Id: atomBondModelConnector.h,v 1.3 2001/05/13 14:55:21 hekl Exp $
+// $Id: atomBondModelConnector.h,v 1.4 2001/05/13 16:32:06 hekl Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELCONNECTOR_H
 #define BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELCONNECTOR_H
@@ -78,8 +78,8 @@ namespace BALL
 				between different models.
 				@memo    AtomBondModelConnector class (BALL MOLVIEW functor framework)
 				@author  $Author: hekl $
-				@version $Revision: 1.3 $
-				@date    $Date: 2001/05/13 14:55:21 $
+				@version $Revision: 1.4 $
+				@date    $Date: 2001/05/13 16:32:06 $
 		*/
 		class AtomBondModelConnector
 			: public BaseModelConnector
@@ -149,8 +149,7 @@ namespace BALL
 					@exception  OutOfMemory thrown if the memory allocation for creating the connector model failed
 					@see        getModel_
 			*/
-			virtual void visit(Composite& composite)
-				throw(Exception::OutOfMemory);
+			virtual void visit(Composite& composite);
 			//@}
 			
 

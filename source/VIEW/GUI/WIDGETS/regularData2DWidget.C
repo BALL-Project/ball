@@ -1,6 +1,9 @@
-// $Id: regularData2DWidget.C,v 1.19 2001/03/14 17:22:41 anhi Exp $
+// $Id: regularData2DWidget.C,v 1.20 2001/05/13 16:29:53 hekl Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/regularData2DWidget.h>
+
+using std::cout;
+using std::endl;
 
 /* Converts to RGB-Space */
 QColor con2rgb(double arg, double min, double max)
@@ -134,17 +137,20 @@ RegularData2DWidget::~RegularData2DWidget()
 }
 
 void RegularData2DWidget::initializeWidget(MainControl& main_control)
+	throw()
 {
   main_control.insertMenuEntry(MainControl::TOOLS, "&2D-NMR", this, SLOT(createPlot()));
   stat_ = MainControl::getMainControl(this)->statusBar();
 }
 
 void RegularData2DWidget::finalizeWidget(MainControl& main_control)
+	throw()
 {
   main_control.removeMenuEntry(MainControl::TOOLS, "&2D-NMR", this, SLOT(createPlot()));
 }
 
 void RegularData2DWidget::onNotify(Message *message)
+	throw()
 {
   reactToMessages_(message);
 }

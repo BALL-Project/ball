@@ -1,4 +1,4 @@
-// $Id: mainframe.h,v 1.27 2001/05/13 15:07:00 hekl Exp $
+// $Id: mainframe.h,v 1.28 2001/05/13 16:36:31 hekl Exp $
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
 #define BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -132,10 +132,13 @@ class Mainframe
 		throw();
 
 
-	virtual void fetchPreferences(INIFile& inifile);
-	virtual void writePreferences(INIFile& inifile);
+	virtual void fetchPreferences(INIFile& inifile)
+	throw();
+	virtual void writePreferences(INIFile& inifile)
+	throw();
 
-	virtual void onNotify(Message *message);
+	virtual void onNotify(Message *message)
+	throw();
 
 	
 

@@ -203,6 +203,7 @@ Mainframe::~Mainframe()
 }
 
 void Mainframe::onNotify(Message *message)
+	throw()
 {
 	if (message == 0)
 	{
@@ -452,6 +453,7 @@ void Mainframe::about()
 }
 
 void Mainframe::fetchPreferences(INIFile& inifile)
+	throw()
 {
 	// 
 	// the splitter positions
@@ -482,6 +484,7 @@ void Mainframe::fetchPreferences(INIFile& inifile)
 }
 
 void Mainframe::writePreferences(INIFile& inifile)
+	throw()
 {
 	// the splitter positions
 	// 

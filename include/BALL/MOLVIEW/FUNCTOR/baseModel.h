@@ -1,4 +1,4 @@
-// $Id: baseModel.h,v 1.9 2001/05/13 14:55:21 hekl Exp $
+// $Id: baseModel.h,v 1.10 2001/05/13 16:32:06 hekl Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BASEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_BASEMODEL_H
@@ -61,8 +61,8 @@ namespace BALL
 				Some protected helper methods are included that are used by some model processors.
 				@memo    BaseModelProcessor class (BALL MOLVIEW functor framework)
 				@author  $Author: hekl $
-				@version $Revision: 1.9 $
-				@date    $Date: 2001/05/13 14:55:21 $
+				@version $Revision: 1.10 $
+				@date    $Date: 2001/05/13 16:32:06 $
 		*/
 		class BaseModelProcessor
 			: public UnaryProcessor<Composite>,
@@ -345,8 +345,7 @@ namespace BALL
 					@see    BaseModelConnector
 					@see    FindGeometricObjects
 			*/
-			virtual bool start()
-				throw();
+			virtual bool start();
 			
 			/** Finish method.
 					Empty for further purpose. Override this method for finalizing
@@ -354,8 +353,7 @@ namespace BALL
 					@return bool {\tt true} if the finish of {\em *this} baseModelProcessor was successful, {\tt false} otherwise
 					@see    operator()
 			*/
-			virtual bool finish()
-				throw();
+			virtual bool finish();
 
 			/**	Operator method.
 					This method will be overridden to implement the creation of the different models.
@@ -365,8 +363,7 @@ namespace BALL
 					@see    finish
 					@see    Composite
 			*/
-			virtual Processor::Result operator() (Composite& composite)
-				throw();
+			virtual Processor::Result operator() (Composite& composite);
 
 			//@}
 				

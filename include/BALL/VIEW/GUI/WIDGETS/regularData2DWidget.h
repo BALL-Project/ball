@@ -1,4 +1,4 @@
-// $Id: regularData2DWidget.h,v 1.12 2001/03/14 17:20:30 anhi Exp $
+// $Id: regularData2DWidget.h,v 1.13 2001/05/13 16:31:20 hekl Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGET_REGULARDATA2DWIDGET_H
 #define BALL_VIEW_GUI_WIDGET_REGULARDATA2DWIDGET_H
@@ -127,8 +127,11 @@ class RegularData2DWidget
   */
   bool isVisibleAs(double x, double y, pair<Position, Position>& res);
 
- public slots:
-  void onNotify(Message *message);
+
+  void onNotify(Message *message)
+	throw();
+
+public slots:
   bool reactToMessages_(Message* message);
 
   void paintEvent( QPaintEvent * );
@@ -150,11 +153,13 @@ class RegularData2DWidget
 	RegularData2DWidget creates an entry in Tools|RegularData2DWidget and connects
 	the entry to createPlot()
   */
-  virtual void initializeWidget(MainControl& main_control);
+  virtual void initializeWidget(MainControl& main_control)
+	throw();
 
   /**	Remove menu entries.
    */
-  virtual void finalizeWidget(MainControl& main_control);
+  virtual void finalizeWidget(MainControl& main_control)
+	throw();
   //@}
 
   void createPlot();

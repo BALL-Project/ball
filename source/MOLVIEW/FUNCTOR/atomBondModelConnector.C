@@ -1,4 +1,4 @@
-// $Id: atomBondModelConnector.C,v 1.3 2001/05/13 15:02:38 hekl Exp $
+// $Id: atomBondModelConnector.C,v 1.4 2001/05/13 16:27:25 hekl Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/atomBondModelConnector.h>
 
@@ -43,7 +43,6 @@ namespace BALL
 		}
 
   	void AtomBondModelConnector::visit(Composite& composite)
-			throw(Exception::OutOfMemory)
 		{
 			if (!RTTI::isKindOf<Bond>(composite))
 			{
