@@ -16,13 +16,13 @@
 # include <BALL/VIEW/PRIMITIV/mesh.h>
 #endif
 
+#ifndef BALL_VIEW_GUI_KERNEL_REPRESENTATION_H
+# include <BALL/VIEW/GUI/KERNEL/representation.h>
+#endif
+
 #ifndef BALL_DATATYPE_REGULARDATA3D
 # include <BALL/DATATYPE/regularData3D.h>
 #endif 
-
-#ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
- #include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
-#endif
 
 namespace BALL
 {
@@ -30,8 +30,7 @@ namespace BALL
 	{
 
 		class ColorMeshDialog 
-			: public ColorMeshDialogData,
-				public ModularWidget
+			: public ColorMeshDialogData
 		{ 
 				Q_OBJECT
 
@@ -56,20 +55,20 @@ namespace BALL
 					GRID_FROM_FDPD
 				};
 
-				ColorMeshDialog( QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 )
+				ColorMeshDialog( QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+				~ColorMeshDialog();
+						
+				void setRepresentation(Representation& rep)
 					throw();
 
-				~ColorMeshDialog()
-					throw();
-						
+				Representation* getRepresentation()
+					throw() { return rep_;}
+
 				void setMesh(Mesh& mesh)
-					throw();
+					throw() {mesh_ = &mesh;}
 
 				Mesh* getMesh()
 					throw() { return mesh_;}
-
-				void setComposite(Composite& composite)
-					throw() { composite_ = &composite;}
 				
 		public slots:
 				void applyPressed();
@@ -111,9 +110,9 @@ namespace BALL
 
 				ColorRGBA	 	selected_color, min_min_color, min_color, mid_color, max_color, max_max_color;	
 
-				HashMap<Mesh*, ColoringConfig> configs_;
+				HashMap<Representation*, ColoringConfig> configs_;
 				Mesh* mesh_;		
-				Composite* composite_;
+				Representation* rep_;
 		};
 
 } } // Namespaces
