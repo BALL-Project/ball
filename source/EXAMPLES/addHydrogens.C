@@ -61,7 +61,8 @@ int main(int argc, char** argv)
 	// created in this way are only good estimates
 	Log << "adding hydrogens..." << endl;
 	bool res = S.apply(fragment_db.add_hydrogens);	
-	Log << "result = " << res << endl;
+	Log << "added " << fragment_db.add_hydrogens.getNumberOfInsertedHydrogens() 
+			<< " hydrogen atoms" << endl;
 
 	// now we check whether the model we built is consistent
 	// The ResidueChecker checks for charges, bond lengths,
@@ -73,31 +74,20 @@ int main(int argc, char** argv)
 	// now we create an AMBER force field 
 	Log << "setting up force field..." << endl;
 	AmberFF FF;
-	FF.setup(S);
 
 	// we then select all hydrogens (element(H))
 	// using a specialized processor (Selector)
+	S.deselect();
 	Selector selector("element(H)");
 	S.apply(selector);
+	FF.setup(S);
 	
-	// just for curiosity: we iterate over all 
-	// atoms and count the number of selected atoms
-	AtomIterator atom_it = S.beginAtom();
-	Size counter = 0;
-	for (; +atom_it; ++atom_it)
-	{
-		// if the atom is selected: increment "counter"
-		if (atom_it->isSelected())
-		{
-			counter++;
-		}
-	}
-	Log << "optimizing " << counter << " hydrogen atoms." << endl;
-
+	// just for curiosity: check how many atoms we are going
+	// to optimize
+	Log << "optimizing " << FF.getNumberOfMovableAtoms() << " out of " << S.countAtoms() << " atoms" << endl;
 	
-	// now we create a minimizer object that uses
-	// a conjugate gradient algorithm to optimize the positions of
-	// atoms
+	// now we create a minimizer object that uses a conjugate 
+	// gradient algorithm to optimize the atom positions
 	ConjugateGradientMinimizer minimizer;
 
 	// we only want to optimize the positions of the selected
@@ -108,10 +98,10 @@ int main(int argc, char** argv)
 	float initial_energy = FF.updateEnergy();
 
 	// initialize the minimizer and perform (up to)
-	// 10000 optimization steps
+	// 1000 optimization steps
 	minimizer.setup(FF);
 	minimizer.setEnergyOutputFrequency(1);
-	minimizer.minimize(10000);
+	minimizer.minimize(1000);
 
 	// calculate the terminal energy and print it
 	float terminal_energy = FF.getEnergy();
