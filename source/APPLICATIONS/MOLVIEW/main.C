@@ -1,16 +1,25 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.19 2003/11/29 14:47:12 oliver Exp $
+// $Id: main.C,v 1.20 2004/03/21 11:48:35 amoll Exp $
 //
 
-// order of includes is important:
+// order of includes is important: first qapplication, than BALL includes
 #include <qapplication.h>
 #include "mainframe.h"
 
+#ifndef BALL_PLATFORM_WINDOWS
 int main(int argc, char **argv)
+#else
+int WINAPI WinMain( HINSTANCE, HINSTANCE, PSTR cmd_line, int )
+#endif
 {
-  QApplication application(argc, argv);
+
+#ifdef BALL_PLATFORM_WINDOWS
+	int argc = __argc;
+	char** argv = __argv;
+#endif
+	QApplication application(argc, argv);
 
 	// Create the mainframe.
 	BALL::Mainframe mainframe;
@@ -30,6 +39,6 @@ int main(int argc, char **argv)
 		mainframe.openFile(argv[i]);
 	}
 
-	// Hand over control to the application.
-  return application.exec();
+    // Hand over control to the application.
+    return application.exec();
 }
