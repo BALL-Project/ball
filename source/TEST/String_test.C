@@ -1,4 +1,4 @@
-// $Id: String_test.C,v 1.27 2000/09/19 15:42:55 oliver Exp $
+// $Id: String_test.C,v 1.28 2000/09/19 19:17:13 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -8,7 +8,7 @@
 #include <string>
 ///////////////////////////
 
-START_TEST(String,"$Id: String_test.C,v 1.27 2000/09/19 15:42:55 oliver Exp $")
+START_TEST(String,"$Id: String_test.C,v 1.28 2000/09/19 19:17:13 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -893,7 +893,7 @@ CHECK(String::getFieldQuoted(Index field, const char* delimiters, const char* qu
 	TEST_EQUAL(s4.getFieldQuoted(3), "")
 
 	// simple quotes
-	s4 = "aa 'bb cc'";
+	s4 = "aa \"bb cc\"";
 	TEST_EQUAL(s4.getFieldQuoted(0), "aa")
 	TEST_EQUAL(s4.getFieldQuoted(1), "bb cc")
 	TEST_EQUAL(s4.getFieldQuoted(2), "")
