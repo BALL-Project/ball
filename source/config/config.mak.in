@@ -2,7 +2,7 @@
 # Please do ONLY change config.mak.in, as config.mak is automagically 
 # created by configure from config.mak.in
 #
-# RCS ID: $Id: config.mak.in,v 1.7 2000/01/16 21:31:10 oliver Exp $
+# RCS ID: $Id: config.mak.in,v 1.8 2000/01/31 16:24:49 oliver Exp $
 #
 # author:    $author$
 # date:      $date$
@@ -63,25 +63,25 @@ X11_LIBPATH         = @X11_LIBPATH@
 X11_LIBOPTS         = @X11_LIBOPTS@
 X11_LIBS            = @X11_LIBS@
 
-# These are standard flags. CPPFLAGS to compile, LDFLAGS to link programs
-# DEFINES and DEBUG are both part of CPPFLAGS
-# ADD_CPPFLAGS are also passed on to the C++ compiler
+# These are standard flags. CXXFLAGS to compile, LDFLAGS to link programs
+# DEFINES and DEBUG are both part of CXXFLAGS
+# ADD_CXXFLAGS are also passed on to the C++ compiler
 # but are NOT passed on to makedepend
 # This is the place for compiler options that are not understood
 # by makedepend (e.g. -Olimit using IRIX DCC)
 #
-CPPFLAGS		    = @CPPFLAGS@ @BINFMT_INDEX@
+CXXFLAGS		    = @CXXFLAGS@ @BINFMT_INDEX@
 LDFLAGS			    = @LDFLAGS@
-ADD_CPPFLAGS		= @ADD_CPPFLAGS@
+ADD_CXXFLAGS		= @ADD_CXXFLAGS@
 
 # all the libraries in linker usable format (-l..)
 LIBS			= @LIBS@
 #
 DEFINES   = @DEFINES@
 #
-CPPFLAGS_D		= @CPPFLAGS_D@
-CPPFLAGS_O		= @CPPFLAGS_O@
-BALL_CPPFLAGS = @BALL_CPPFLAGS@
+CXXFLAGS_D		= @CXXFLAGS_D@
+CXXFLAGS_O		= @CXXFLAGS_O@
+BALL_CXXFLAGS = @BALL_CXXFLAGS@
 
 # MODE_FLAGS is set to DEBUG_FLAGS or OPTIMIZE_FLAGS, this
 # can be controlled by specifying the configure switch 
@@ -112,4 +112,4 @@ DIRS	= @SUBDIRS@
 # Rule to create .o files from .C files
 #
 .C.o:
-	$(CXX) $(CPPFLAGS) $(ADD_CPPFLAGS) $(CPP_MODE_FLAGS) $(BALL_CPPFLAGS) $(BALL_INCLUDES) -c $*.C -o $@
+	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(BALL_CXXFLAGS) $(BALL_INCLUDES) -c $*.C -o $@
