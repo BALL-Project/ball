@@ -1,4 +1,4 @@
-// $Id: vector3.h,v 1.55 2001/07/10 16:31:38 anker Exp $
+// $Id: vector3.h,v 1.56 2001/07/16 02:13:47 oliver Exp $
 
 #ifndef BALL_MATHS_VECTOR3_H
 #define BALL_MATHS_VECTOR3_H
@@ -36,7 +36,7 @@ namespace BALL
 	template <typename T>
 	class TVector3;
 
-	/**	@name	Global binary operator functions for three-dimensional vectors.
+	/**	@name	Global binary operators for three-dimensional vectors.
 	*/
 	//@{
 
@@ -45,7 +45,7 @@ namespace BALL
 	*/
 	template <typename T>
 	BALL_INLINE 
-	TVector3<T> operator * (const TVector3<T>& a, const TVector3<T>& b)
+	TVector3<T> operator * (const T& a, const TVector3<T>& b)
 		throw();
 
 	/**	Input operator.
@@ -102,7 +102,7 @@ namespace BALL
 				to the same {\tt value}.
 				@param	value the value of all components
 		*/
-		TVector3(const T& value)
+		explicit TVector3(const T& value)
 			throw();
 
 		/**	Detailed constructor.
