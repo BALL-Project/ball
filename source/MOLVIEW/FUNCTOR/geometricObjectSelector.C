@@ -1,4 +1,4 @@
-// $Id: geometricObjectSelector.C,v 1.3 2000/06/18 16:34:05 hekl Exp $
+// $Id: geometricObjectSelector.C,v 1.4 2000/06/25 19:07:18 hekl Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/geometricObjectSelector.h>
 
@@ -13,11 +13,9 @@ namespace BALL
 		GeometricObjectSelector::GeometricObjectSelector
 			()
 				: 
-				BaseModelProcessor(),
+				AtomBondModelBaseProcessor(),
 				selection_(true),
-				selection_color_(255,255,0,255),
-				hashed_atoms_(),
-				used_atoms_()
+				selection_color_(255,255,0,255)
 		{
 		}
 
@@ -25,11 +23,9 @@ namespace BALL
 			(const GeometricObjectSelector &selector,
 			 bool deep)
 				:
-				BaseModelProcessor(selector, deep),
+				AtomBondModelBaseProcessor(selector, deep),
 				selection_(selector.selection_),
-				selection_color_(selector.selection_color_),
-				hashed_atoms_(),
-				used_atoms_()
+				selection_color_(selector.selection_color_)
 		{
 		}
 
@@ -48,21 +44,17 @@ namespace BALL
 		GeometricObjectSelector::clear
 			()
 		{
-			BaseModelProcessor::clear();
-			
-			used_atoms_.clear();
+			AtomBondModelBaseProcessor::clear();
 		}
 
 		void 
 		GeometricObjectSelector::destroy
 			()
 		{
-			BaseModelProcessor::destroy();
+			AtomBondModelBaseProcessor::destroy();
 
 			selection_ = true;
 			selection_color_.set(255,255,0,255);
-			hashed_atoms_.destroy();
-			used_atoms_.destroy();
 		}
 
 		void 
@@ -70,12 +62,10 @@ namespace BALL
 			(const GeometricObjectSelector &selector,
 			 bool deep)
 		{
-			BaseModelProcessor::set(selector, deep);
+			AtomBondModelBaseProcessor::set(selector, deep);
 
 			selection_ = selector.selection_;
 			selection_color_ = selector.selection_color_;
-			hashed_atoms_.destroy();
-			used_atoms_.destroy();
 		}
 
 		GeometricObjectSelector &
@@ -99,7 +89,7 @@ namespace BALL
 		GeometricObjectSelector::swap
 			(GeometricObjectSelector &selector)
 		{
-			BaseModelProcessor::swap(selector);
+			AtomBondModelBaseProcessor::swap(selector);
 
 			bool __bool = selection_;
 			selection_ = selector.selection_;
@@ -112,11 +102,9 @@ namespace BALL
 		GeometricObjectSelector::start
 			()
 		{
-			hashed_atoms_.clear();
-			used_atoms_.clear();
 			getSearcher_().clear();
 
-			return BaseModelProcessor::start();
+			return AtomBondModelBaseProcessor::start();
 		}
 				
 		bool 
@@ -131,8 +119,8 @@ namespace BALL
 			List<Atom*>::Iterator list_iterator;
 
 			// for all used atoms
-			for (list_iterator = used_atoms_.begin();
-					 list_iterator != used_atoms_.end(); ++list_iterator)
+			for (list_iterator = getAtomList_().begin();
+					 list_iterator != getAtomList_().end(); ++list_iterator)
 			{
 				first__pAtom = *list_iterator;
 
@@ -146,57 +134,27 @@ namespace BALL
 					if (*first__pAtom < *second__pAtom)
 					{
 						// select bond only if second atom is selected too
-						if (hashed_atoms_.has(second__pAtom))
+						if (getAtomSet_().has(second__pAtom))
 						{
-							// get bond model
-							__pBond->applyChild(getSearcher_());
-
-							// if found, select bond model 
-							if (getSearcher_().geometricObjectsFound() == true)
+							if (selection_ == true)
 							{
-								// get bond models
-								List<VIEW::GeometricObject*>::Iterator it = getSearcher_().getGeometricObjects().begin();
-
-								for(; it != getSearcher_().getGeometricObjects().end(); ++it)
-								{
-									VIEW::GeometricObject *bond_geometricObject = *it;
-
-									bond_geometricObject->setSelectedColor(selection_color_);
-
-									if (selection_ == true)
-									{
-										bond_geometricObject->select();
-									}
-									else
-									{
-										bond_geometricObject->deselect();
-									}
-								}
+								__pBond->select();
+							}
+							else
+							{
+								__pBond->deselect();
 							}
 						}
 					}
 				}
 
-				// get the geometric object
-				first__pAtom->applyChild(getSearcher_());
-
-				// get atom models
-				List<VIEW::GeometricObject*>::Iterator it = getSearcher_().getGeometricObjects().begin();
-				
-				for(; it != getSearcher_().getGeometricObjects().end(); ++it)
+				if (selection_ == true)
 				{
-					VIEW::GeometricObject *atom_geometricObject = *it;
-
-					atom_geometricObject->setSelectedColor(selection_color_);
-					
-					if (selection_ == true)
-					{
-						atom_geometricObject->select();
-					}
-					else
-					{
-						atom_geometricObject->deselect();
-					}
+					first__pAtom->select();
+				}
+				else
+				{
+					first__pAtom->deselect();
 				}
 			}
 			
@@ -215,9 +173,6 @@ namespace BALL
 
 			Atom *atom = RTTI::castTo<Atom>(composite);
 
-			// check if there are already models appended
-			atom->applyChild(getSearcher_());
-
 			if (selection_ == true)
 			{
 				atom->select();
@@ -227,15 +182,8 @@ namespace BALL
 				atom->deselect();
 			}
 
-			// geometric object is not existent => do nothing
-			if (getSearcher_().geometricObjectsFound() == false)
-			{
-				return Processor::CONTINUE;
-			}
-
 			// collect atom with geometric object for selection
-			hashed_atoms_.insert(atom);
-			used_atoms_.push_back(atom);
+			insertAtom_(atom);
 
 			return Processor::CONTINUE;
 		}
@@ -259,7 +207,7 @@ namespace BALL
 			BALL_DUMP_DEPTH(s, depth);
 			cout << "Selection Color:     " << selection_color_ << endl;
 
-			BaseModelProcessor::dump(s, depth + 1);
+			AtomBondModelBaseProcessor::dump(s, depth + 1);
 
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
