@@ -1,4 +1,4 @@
-// $Id: regularData2D.h,v 1.7 2000/12/11 21:14:22 oliver Exp $
+// $Id: regularData2D.h,v 1.8 2001/02/06 18:07:12 anhi Exp $
 
 #ifndef BALL_DATATYPE_REGULARDATA2D_H
 #define BALL_DATATYPE_REGULARDATA2D_H
@@ -693,7 +693,7 @@ namespace BALL
 	  
 	  sigmaGroundState_ /= (numsamples - 1);
 	  sigmaGroundState_ = sqrt(sigmaGroundState_);
-	};
+	}
 
 } // namespace BALL
 
