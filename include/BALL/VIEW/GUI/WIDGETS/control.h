@@ -1,4 +1,4 @@
-// $Id: control.h,v 1.10.4.2 2002/09/24 17:40:23 anhi Exp $
+// $Id: control.h,v 1.10.4.3 2002/10/18 14:40:51 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_CONTROL_H
 #define BALL_VIEW_GUI_WIDGETS_CONTROL_H
@@ -302,7 +302,7 @@ namespace BALL
 
 			/** Invalidate the selection.
 					Invalidate the selection of {\em *this} control.
-					Alle selected items in the tree will be deselected.
+					All selected items in the tree will be deselected.
 					Calls \Ref{updateSelection}.
 					@see  updateSelection
 			*/
@@ -390,8 +390,7 @@ namespace BALL
 			/** Controlling method for context menus.
 					Clear the previously created context menu.
 					Calls \Ref{buildContextMenu} for the \Ref{Composite} object belonging
-					to the {\em item} and executes the context menu if menu entries are
-					available.
+					to the {\em item} and executes the context menu if menu entries are available.
 					@param  item the \Ref{QListViewItem} for which a context menu should be created
 					@param  point the position to which the context menu should be drawn
 					@param  column not used at the moment
@@ -400,13 +399,11 @@ namespace BALL
 			void onContextMenu(QListViewItem* item,  const QPoint& point, int column);
 
 			/** Erase a geometricObject.
-					Erase a \Ref{GeometricObject} object previously selected with the context
-					menu.
+					Erase a \Ref{GeometricObject} object previously selected with the context menu.
 					If the \Ref{GeometricObject} object has a parent it will be removed from it
 					and the message \Ref{ChangedCompositeMessage} will be sent. If the 
 					\Ref{GeometricObject} object has no parent it will be removed entirely from
-					{\em *this} control and the message \Ref{RemovedCompositeMessage} will be
-					sent.
+					{\em *this} control and the message \Ref{RemovedCompositeMessage} will be sent.
 					The message \Ref{SceneMessage} will be sent after the former process to 
 					update the \Ref{Scene}.
 					Calls \Ref{updateContents} to update {\em *this} control.
@@ -456,15 +453,15 @@ namespace BALL
 					call for each the method \Ref{updateListViewItem_}.
 					@param   item a pointer to a \Ref{QListViewItem} containing the subtree structure 
 					@param   composite a pointer to a \Ref{Composite} object containing the (possibly) new substructure
-					@return  bool {\tt true} if the subtree structure of {\em composite} and the subtree structure of {\em item} are unequal, {\tt false} otherwise 
+					@return  bool {\tt true} if the subtree structure of {\em composite} and the subtree 
+									 structure of {\em item} are unequal, {\tt false} otherwise 
 					@see     updateListViewItem_
 			*/
 			virtual bool recurseUpdate_(QListViewItem* item, Composite* composite)
 				throw();
 			
 			/** Message handling.
-					Catch the \Ref{Message} objects and react accordingly to the different
-					messages.
+					Catch the \Ref{Message} objects and react accordingly to the different messages.
 					Override this method if new messages should be catched.\\
 					{\bf Note:} If this method is overriden, call this method at the end of the
 					new implementation to make sure the old messages are still catched properly.\\
@@ -524,7 +521,8 @@ namespace BALL
 					be inserted into given {\em item}.
 					All children of {\em composite} will be inserted recursivly into the newly
 					created item by the method \Ref{recurseGeneration_}.
-					@param  item a \Ref{QListViewItem} into which a subtree of items will be inserted, or {\tt 0} if a new root item should be created
+					@param  item a \Ref{QListViewItem} into which a subtree of items will be inserted, 
+											 or {\tt 0} if a new root item should be created
 					@param  composite the \Ref{Composite} object whose subtree will be inserted into {\em item}
 					@param  default_name the name of the {\em item}
 					@see    Information
@@ -559,7 +557,8 @@ namespace BALL
 					Search the \Ref{QListViewItem} tree of {\em *this} control for the given
 					\Ref{Composite} object {\em composite}.
 					@param  composite a pointer to the \Ref{Composite} object to be search for
-					@return QListViewItem* a pointer to the \Ref{QListViewItem} containing the \Ref{Composite} object {\em composite}, {\tt 0} if no such \Ref{Composite} object exists
+					@return QListViewItem* a pointer to the \Ref{QListViewItem} containing the \Ref{Composite} 
+									object {\em composite}, {\tt 0} if no such \Ref{Composite} object exists
 					@see    updateListViewItem_
 			*/
 			QListViewItem* findListViewItem_(Composite* composite)
