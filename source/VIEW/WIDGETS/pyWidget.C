@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.14 2003/11/13 15:01:57 amoll Exp $
+// $Id: pyWidget.C,v 1.15 2003/11/13 15:11:56 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -205,7 +205,19 @@ namespace BALL
 
 			bool state;
 			String result = PyInterpreter::run(line, state);
-			if (result != "") append(result.c_str());
+			if (result != "") 
+			{
+				if (result.hasSubstring("ERROR"))
+				{
+					setColor(red);
+				}
+				else
+				{
+					setColor(green);
+				}
+				append(result.c_str());
+				setColor(black);
+			}
 
 				
 			if (!multi_line_mode_)
