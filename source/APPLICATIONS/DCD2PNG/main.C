@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.15 2004/11/03 14:19:45 amoll Exp $
+// $Id: main.C,v 1.16 2004/12/13 13:38:41 amoll Exp $
 //
 
 // order of includes is important: first qapplication, than BALL includes
@@ -24,8 +24,8 @@ using namespace BALL::VIEW;
 void showUsage()
 {
  	Log.insert(std::cerr);
-	Log.error() << "DCD2PNG <PDBFILE.pdb | HINFILE.hin> <DCDFILE.dcd> <BALLViewProject.bvp>" << std::endl;
-	Log.error() << "Read a molecular file, and create PNG images from them by using POVRay." << std::endl;
+	Log.error() << "DCD2PNG <DCDFILE.dcd> <BALLViewProject.bvp | molecular_file.[pdb|hin]> <DCD2PNG.ini>" << std::endl;
+	Log.error() << "Read a BALLView project or a molecular file format and create PNG images from it by using POVRay." << std::endl;
  	Log.remove(std::cerr);
 }
 
@@ -39,8 +39,7 @@ int main(int argc, char **argv)
 	}
 
 	// =============== testing if we can write in current directoy =====================
-	bool dir_error = false;
-	char* home_dir = 0;
+	String home_dir;
 	try
 	{
 		BALL::String temp_file_name;
@@ -52,34 +51,21 @@ int main(int argc, char **argv)
 	catch(...)
 	{
 		// oh, we have a problem, look for the users home dir
-		dir_error = true;
+		home_dir = BALL::Directory::getUserHomeDir();
 
-		// default for UNIX/LINUX
-		home_dir = getenv("HOME");
-		if (home_dir == 0) 
-		{
-			// windows
-			home_dir = getenv("HOMEPATH");
-		}
-
-		// changedir to the homedir
-		if (home_dir != 0)
-		{
-			BALL::Directory dir(home_dir);
-			dir_error = !dir.setCurrent();
-		}
-
-		if (dir_error)
+		if (home_dir == "")
 		{
 			Log.error() << 
 					"You dont have write access to the current working directory\n"<<
 					"and I can not find your home directory. This can cause\n" <<
 					"unexpected behaviour. Please start DCD2PNG from your homedir with\n" << 
 					"absolute path.\n";
+			return -1;
 		}
 	}
 
 	// =============== initialize Mainframe ============================================
+	BALL::Directory dir;
 	QApplication application(argc, argv);
 	BALL::Mainframe* mainframe = new Mainframe();
  	application.setMainWidget(mainframe);
@@ -89,7 +75,7 @@ int main(int argc, char **argv)
  	mainframe->hide();
 
 	// if we need to use the users homedir as working dir, do so
-	if (home_dir != 0 && !dir_error)
+	if (home_dir != "")
 	{
 		mainframe->setWorkingDir(home_dir);
 	}
@@ -99,20 +85,24 @@ int main(int argc, char **argv)
 	String molecular_file_name;
 	String working_dir = ".";
 	String project_file = "";
+	String inifile_name = dir.getPath() + BALL::FileSystem::PATH_SEPARATOR + "DCD2PNG.ini";
 	bool error = false;
 	System* system = 0;
 	Position nr = 100000000;
-
-	DisplayProperties::getInstance(0)->enableCreationForNewMolecules(false);
 
 	for (BALL::Index i = 1; i < argc && !error; ++i)
 	{
 		BALL::String argument(argv[i]);
 		if (argument.hasSuffix(".bvp"))
 		{
-			DisplayProperties::getInstance(0)->enableCreationForNewMolecules(true);
 		 	mainframe->loadBALLViewProjectFile(argument);
 			project_file = argument;
+			continue;
+		}
+
+		if (argument.hasSuffix(".ini"))
+		{
+			inifile_name = argument;
 			continue;
 		}
 
@@ -155,7 +145,7 @@ int main(int argc, char **argv)
 		error = true;
 	}
 
-	if (molecular_file_name == "" ||
+	if ((molecular_file_name == "" && project_file == "") ||
 			dcd_file_name == "" ||
 			error)
 	{
@@ -164,62 +154,79 @@ int main(int argc, char **argv)
 		return 0;
 	}
 
-	if (project_file == "")
+	if (system == 0)
 	{
-		DisplayProperties::getInstance(0)->enableCreationForNewMolecules(true);
- 		DisplayProperties::getInstance(0)->apply();
+		if (mainframe->getCompositeManager().getNumberOfComposites() == 0)
+		{
+			std::cerr << "No molecular entities stored in project file and no molecular file given..." << std::endl;
+			showUsage();
+			return -1;
+		}
+
+		system = (System*) *mainframe->getCompositeManager().begin();
 	}
 
 	Size width = 720;
 	Size height = 480;
 	String povray_options = "-V +FN +QR +A0.3 -UV -D +I- ";
 	String povray_exec;
-	INIFile inifile("DCD2PNG.ini");
-	if (inifile.read())
+	INIFile inifile(inifile_name);
+	if (!inifile.read())
 	{
-		if (inifile.hasEntry("DCD2PNG", "WORKINGDIR"))
+		std::cerr << "Could not find DCD2PNG.ini file, please specify the absolute path." << std::endl;
+		return -1;
+	}
+
+	if (inifile.hasEntry("DCD2PNG", "WORKINGDIR"))
+	{
+		String argument = inifile.getValue("DCD2PNG", "WORKINGDIR");
+		Directory d(dir.getPath() + BALL::FileSystem::PATH_SEPARATOR + argument);
+		if (d.isValid())
 		{
-			String argument = inifile.getValue("DCD2PNG", "WORKINGDIR");
-			Directory d(argument);
+			working_dir = dir.getPath() + BALL::FileSystem::PATH_SEPARATOR + argument;
+		}
+		else
+		{
+			d.set(argument);
 			if (d.isValid())
 			{
 				working_dir = argument;
 			}
 			else
 			{
-				std::cerr << "Could not read directory for images from INIFile!" << std::endl;
+				std::cerr << "Could not read directory for images from DCD2PNG.ini!" << std::endl;
+				return -1;
 			}
-		}
-
-		try
-		{
-			if (inifile.hasEntry("DCD2PNG", "WIDTH"))
-			{
-				String argument = inifile.getValue("DCD2PNG", "WIDTH");
-				width = argument.toUnsignedInt();
-			}
-			if (inifile.hasEntry("DCD2PNG", "HEIGHT"))
-			{
-				String argument = inifile.getValue("DCD2PNG", "HEIGHT");
-				height = argument.toUnsignedInt();
-			}
-		}
-		catch(...)
-		{
-			std::cerr << "Could not read values for width and height from INIFile!" << std::endl;
-		}
-
-		if (inifile.hasEntry("DCD2PNG", "POVRAY_OPTIONS"))
-		{
-			povray_options = inifile.getValue("DCD2PNG", "POVRAY_OPTIONS") + " +I- ";
-		}
-
-		if (inifile.hasEntry("DCD2PNG", "POVRAY"))
-		{
-			povray_exec = inifile.getValue("DCD2PNG", "POVRAY");
 		}
 	}
 
+	try
+	{
+		if (inifile.hasEntry("DCD2PNG", "WIDTH"))
+		{
+			String argument = inifile.getValue("DCD2PNG", "WIDTH");
+			width = argument.toUnsignedInt();
+		}
+		if (inifile.hasEntry("DCD2PNG", "HEIGHT"))
+		{
+			String argument = inifile.getValue("DCD2PNG", "HEIGHT");
+			height = argument.toUnsignedInt();
+		}
+	}
+	catch(...)
+	{
+		std::cerr << "Could not read values for width and height from INIFile!" << std::endl;
+	}
+
+	if (inifile.hasEntry("DCD2PNG", "POVRAY_OPTIONS"))
+	{
+		povray_options = inifile.getValue("DCD2PNG", "POVRAY_OPTIONS") + " +I- ";
+	}
+
+	if (inifile.hasEntry("DCD2PNG", "POVRAY"))
+	{
+		povray_exec = inifile.getValue("DCD2PNG", "POVRAY");
+	}
 
 	Scene::getInstance(0)->resize(width, height);
 
@@ -235,6 +242,12 @@ int main(int argc, char **argv)
 
 	vector<String> strings;
 	Size s = povray_exec.split(strings, String(FileSystem::PATH_SEPARATOR).c_str());
+	if (s < 2)
+	{
+		std::cerr << "Error: Specify in DCD2PNG.ini the absolute path to povray." << std::endl;
+		std::cerr << "e.g. POVRAY=/usr/bin/povray" << std::endl;
+		return -1 ;
+	}
 	String pov_exec2 = strings[s - 1];
 
 	while(sm.applyNextSnapShot())
