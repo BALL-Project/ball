@@ -1,4 +1,4 @@
-// $Id: ballAndStickModel.C,v 1.13.4.1 2002/12/06 01:12:27 amoll Exp $
+// $Id: ballAndStickModel.C,v 1.13.4.2 2002/12/06 16:58:27 amoll Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/ballAndStickModel.h>
 
@@ -215,22 +215,6 @@ namespace BALL
 
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
-
-		Sphere* AddBallAndStickModel::createSphere_()
-		{
-			return (Sphere *)(new Sphere());
-		}
-
-		Tube* AddBallAndStickModel::createTube_()
-		{
-			return (Tube *)(new Tube());
-		}
-
-		TwoColoredTube*AddBallAndStickModel::createTwoColoredTube_()
-		{
-			return (TwoColoredTube *)(new TwoColoredTube());
-		}
-
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/MOLVIEW/FUNCTOR/ballAndStickModel.iC>
