@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.1 2004/04/16 11:24:47 amoll Exp $
+// $Id: mainframe.C,v 1.2 2004/04/19 21:16:29 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -236,9 +236,6 @@ namespace BALL
 
 	void Mainframe::about()
 	{
-		cout << "testc" << std::endl;
-		Log.error() << "test2" << std::endl;
-		Log.info() << "test3" << std::endl;
 		// Display about dialog
 		AboutDialog about;
 		about.exec(); 
