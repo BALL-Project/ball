@@ -12,10 +12,12 @@ class test:
 	line=''
 	lastline=''
 	linenr= -1
+	carriage=0
 	f = open(sys.argv[1])
 
 	# expressions for use in all files.
 	exp = [\
+		re.compile(''),																		#DOS carriage
 		re.compile('BAUSTELLE'),														#good old BAUSTELLE
 		re.compile('cout'),																	#no cout in BALL!
 		re.compile('cerr'),																	#no cerr in BALL!
@@ -44,54 +46,44 @@ class test:
 	# expressions for use with header-files
 	exp_header = [
 		re.compile('///[\s]*\Z'),														#empty comment
-		re.compile('/\*\*[\s]*\Z'),														#empty comment
+		re.compile('/\*\*[\s]*\Z'),													#empty comment
 		re.compile('@exception[\s]*NotImplemented'),				#no usefull information
 		re.compile('@param[\s]*{'),													#standard problem => tex error
 		re.compile('@return[\s]*{') 												#standard problem => tex error
 	]
 
+
 	def write(self, error_code):
-		self.errors = self.errors + 1
-		self.linenr = self.linenr + 1
-		self.lastline = self.line
-		self.line = self.f.readline()
 		print
 		print '------------ ' + `self.linenr` + ' --------------- ' + `error_code`
-		self.lastline = string.strip(self.lastline)
-		self.line = string.strip(self.line)
-		if string.find(self.line, '*/') != -1:
-			print self.lastline + '    ' + self.line
-			self.lastline = self.line
-			self.getLine()
-			self.line = string.strip(self.line[0:])
-			print self.line
-			return 1
-		else:
-			print self.lastline
-			print self.line
+		print string.strip(self.line[0:-1])
+
 
 	def ende(self):
 		self.f.close()
 		print
 		sys.exit(self.errors)
 
+
 	def test_line(self, x):
-		for i in range(len(self.exp)):
+		#test for DOS-carriage, print it just once
+		if self.exp[0].search(x, 0) and self.carriage==0:
+			self.carriage=1
+			self.write(0)
+		for i in range(1, len(self.exp)):
 			if self.exp[i].search(x, 0):
 				self.errors = self.errors + 1	
-				return i
-		return 0
-
+				self.write(i)
+	
+	
 	def getLine(self):
 		self.linenr = self.linenr + 1
 		self.lastline = self.line
 		self.line = self.f.readline()
 		if not self.line: return 0
-		self.line = string.strip(self.line[0:-1])
-		erg = self.test_line(self.line)
-		if erg != 0:
-			self.write(erg)
+		self.test_line(self.line)
 		return 1
+
 
 	def BALL_TEST_TEST(self):
 		while self.getLine() == 1:
@@ -103,6 +95,7 @@ class test:
 						self.write('test ' + `i`)		
 		self.ende()
 
+
 	def BALL_HEADER_TEST(self):
 		WOERTER=[]
 		while self.getLine() == 1:
@@ -112,10 +105,12 @@ class test:
 					self.write('docu')
 		self.ende()
 
+
 	def BALL_ALL_TEST(self):
 		while self.getLine() == 1:
 			pass
 		self.ende()
+
 
 	def debug(self):
 		while self.getLine() == 1:
@@ -131,12 +126,16 @@ class test:
 					self.errors = self.errors + 1
 					print '  T ', i
 
+
 	def __init__(self):
 		# file for debuging this script
 		if string.find(sys.argv[1], 'test.file') != -1:
 			self.debug()
 			sys.exit(self.errors)
 			
+		# general testing
+		self.BALL_ALL_TEST()
+		
 		# file is a TEST-FILE
 		if string.find(sys.argv[1], '_test.C') != -1:
 			self.BALL_TEST_TEST()
@@ -147,8 +146,6 @@ class test:
 			self.BALL_HEADER_TEST()
 			sys.exit(self.errors)
 
-		# general testing
-		self.BALL_ALL_TEST()
 		sys.exit(self.errors)
 
 
