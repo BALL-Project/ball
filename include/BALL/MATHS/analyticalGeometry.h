@@ -1,4 +1,4 @@
-// $Id: analyticalGeometry.h,v 1.12 2000/03/22 21:49:44 amoll Exp $
+// $Id: analyticalGeometry.h,v 1.13 2000/03/24 13:53:55 amoll Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -697,8 +697,15 @@ namespace BALL
 		T ba, bb, bc, bd;
 		T x1, x2;
 
-		a.get(aa, ab, ac, ad);
-		b.get(ba, bb, bc, bd);
+		aa = a.n.x;
+		ab = a.n.y;
+		ac = a.n.z;
+		ad = -(a.n * a.p);
+
+		ba = b.n.x;
+		bb = b.n.y;
+		bc = b.n.z;
+		bd = -(b.n * b.p);
 
 		if (SolveSystem2(aa, ab, -ad, ba, bb, -bd,x1, x2) == false)
 		{
@@ -738,9 +745,15 @@ namespace BALL
 		T ba, bb, bc, bd;
 		T ca, cb, cc, cd;
 
-		a.get(aa, ab, ac, ad);
-		b.get(ba, bb, bc, bd);
-		c.get(ca, cb, cc, cd);
+		aa = a.n.x;
+		ab = a.n.y;
+		ac = a.n.z;
+		ad = -(a.n * a.p);
+
+		ba = b.n.x;
+		bb = b.n.y;
+		bc = b.n.z;
+		bd = -(b.n * b.p);
 
 		T quot = GetDeterminant3(aa, ab, ac, ba, bb, bc, ca, cb, cc);
 		
@@ -774,7 +787,7 @@ namespace BALL
 		short number_of_solutions 
 			= SolveSquaredEquality
 					(line.d * line.d,
-					 2 * (line.p - sphere.p) * line.d,
+					 (line.p - sphere.p) * line.d * 2,
 					 (line.p - sphere.p) * (line.p - sphere.p) - sphere.radius * sphere.radius,
 					 x1, x2);
 
@@ -885,8 +898,8 @@ namespace BALL
 
 		plane.hessify();
 
-		T d = - (plane.n * plane.p);
-		plane.get(tmp_a, tmp_b, c, d);
+
+		T d = -(plane.n * plane.n);
 
 		intersection_circle.set(- d * plane.n, plane.n, sqrt(a.radius * a.radius - d * d));
 
