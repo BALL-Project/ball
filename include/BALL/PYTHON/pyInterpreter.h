@@ -1,4 +1,4 @@
-// $Id: pyInterpreter.h,v 1.1 2000/07/16 19:28:46 oliver Exp $ 
+// $Id: pyInterpreter.h,v 1.2 2000/10/25 12:41:31 anker Exp $ 
 
 #ifndef BALL_PYTHON_PYINTERPRETER_H
 #define BALL_PYTHON_PYINTERPRETER_H
@@ -44,7 +44,7 @@ namespace BALL
 		static bool isInitialized();
 
 		/**	Execute a string.
-				@param the string to run (may contain multiple lines with correct indentation)
+				@param s the string to run (may contain multiple lines with correct indentation)
 				@return the output of the interpreter (may also contain error messages)
 		*/
 		static String run(const String& s);
