@@ -1,4 +1,4 @@
-// $Id: charmm.C,v 1.11 2000/10/16 19:57:34 oliver Exp $
+// $Id: charmm.C,v 1.12 2001/09/25 12:17:04 anker Exp $
 // Molecular Mechanics: Charmm force field class
 
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -233,9 +233,9 @@ namespace BALL
 							bool extended = getParameters().getAtomTypes().getValue(type_name, "extended").toBool();
 							if (extended) 
 							{
-								// check for hydrogen atoms and insert them into the hash set
-								// We use a hash set just in case - usually a hydrogen shouldn`t be 
-								// bound to two atoms!
+								// check for hydrogen atoms and insert them into the hash
+								// set. We use a hash set just in case - usually a hydrogen
+								// shouldn`t be bound to two atoms!
 								Atom::BondIterator bond_it = it->beginBond();
 								for (; +bond_it; ++bond_it)
 								{
@@ -253,15 +253,16 @@ namespace BALL
 
 				if (atoms_to_delete.size() > 0)
 				{
-					Log.info() << "CharmmFF::setup: deleted " << atoms_to_delete.size() << " hydrogen atoms (using CHARMM united atoms instead)." << endl;
 					HashSet<Atom*>::Iterator hydrogen_it = atoms_to_delete.begin();
 					for (; hydrogen_it != atoms_to_delete.end(); ++hydrogen_it)
 					{
 						delete *hydrogen_it;
 					}
+					Log.info() << "CharmmFF::setup: deleted " << atoms_to_delete.size() 
+						<< " hydrogen atoms (using CHARMM united atoms instead)." << endl;
 						
-					// tell the ForceField class to recalculate the atoms_ vector 
-					// - we deleted things!
+					// tell the ForceField class to recalculate the atoms_ vector
+					// because we deleted things!
 					atoms_.clear();
 				}
 			}
