@@ -15,6 +15,7 @@
   number of children containing selection:0
   children:
   element: Helium He 18 1 2 4.0026 1.28 0 1.22 0 
+  formal charge: 0
   charge: 10.1
   name: Atom1
   type name: my_type_name

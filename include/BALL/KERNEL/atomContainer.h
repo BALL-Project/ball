@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomContainer.h,v 1.28 2004/04/25 12:02:55 oliver Exp $
+// $Id: atomContainer.h,v 1.29 2004/05/04 18:45:48 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_ATOMCONTAINER_H
@@ -49,13 +49,14 @@ namespace BALL
 		};
 
 		//@}
-
 		/**	@name Constructors and Destructors 
 		*/
 		//@{
 
-		/// Default constructor 
-		AtomContainer()	throw();
+		/** Default constructor 
+		*/
+		AtomContainer()
+			throw();
 	
 		/** Copy constructor 
 				@param atom_container the AtomContainer to construct from
@@ -70,23 +71,26 @@ namespace BALL
 		AtomContainer(const String& name)
 			throw();
 
-		/// Destructor 
-		virtual ~AtomContainer() throw();
+		/** Destructor 
+		*/
+		virtual ~AtomContainer()
+			throw();
 
 		/** Clear the contents of this instance of AtomContainer.
 				This methods clears the base fragment's name, destroys all its children
 				(as in  \link Composite::clear Composite::clear \endlink ), but does not remove it from its parent composite structures.
 		*/
-		virtual void clear() throw();
+		virtual void clear()
+			throw();
 	
 		/** Clear the contents of this instance of AtomContainer and removes it from parent composite structures.
 				This methods clears the base fragment's name, destroys all its children
 				(as in  \link Composite::destroy Composite::destroy \endlink ), and removes it from its parent composite structures.
 		*/
-		virtual void destroy() throw();
+		virtual void destroy()
+			throw();
 
 		//@}
-
 		/**	@name	Persistence 
 		*/
 		//@{
@@ -104,7 +108,6 @@ namespace BALL
 			throw(Exception::GeneralException);
 			
 		//@}			
-
 		/**	@name	Assignment 
 		*/
 		//@{

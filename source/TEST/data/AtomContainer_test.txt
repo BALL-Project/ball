@@ -49,6 +49,7 @@
           number of children containing selection:0
           children:
           element: Unknown ? 0 0 0 0 0 0 0 0 
+          formal charge: 0
           charge: 0
           name: A1
           type name: ?

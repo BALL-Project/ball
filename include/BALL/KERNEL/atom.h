@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.h,v 1.63 2004/02/23 20:38:17 anker Exp $
+// $Id: atom.h,v 1.64 2004/05/04 18:45:47 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_ATOM_H
@@ -26,6 +26,7 @@
 // Defines for default values for an atom
 #define BALL_ATOM_DEFAULT_ELEMENT &Element::UNKNOWN
 #define BALL_ATOM_DEFAULT_CHARGE     0
+#define BALL_ATOM_DEFAULT_FORMAL_CHARGE     0
 #define BALL_ATOM_DEFAULT_NAME       ""
 #define BALL_ATOM_DEFAULT_TYPE_NAME  "?"
 #define BALL_ATOM_DEFAULT_POSITION   0,0,0
@@ -62,6 +63,7 @@ namespace BALL
 			The "state" of an atom is defined by its attributes:
 
 				- "element" - an instance of  \link Element Element \endlink 
+				- "formal charge" - the formal charge of the atom
 				- "charge" - the charge in multiples of the the proton charge
 				- "name" - a string identifier
 				- "type name" - a string identifier, meaningful in the the
@@ -153,6 +155,7 @@ namespace BALL
 			/** Default constructor.
 					The state of this instance is:
 						- element type is unknown (Element::UNKNOWN)
+						- formal charge is 0
 						- charge is 0
 						- name is empty string
 						- type name is "?"
@@ -192,6 +195,7 @@ namespace BALL
 					@param   velocity velocity of the constructed atom
 					@param   force force acting upon the constructed atom
 					@param   charge charge of the constructed atom
+					@param   formal_charge formal charge of the constructed atom
 					@param   radius radius of the constructed atom
 					@return  Atom - new constructed atom
 					@see     Composite::Composite
@@ -204,7 +208,8 @@ namespace BALL
 					 const Vector3& velocity = Vector3(BALL_ATOM_DEFAULT_VELOCITY),
 					 const Vector3& force = Vector3(BALL_ATOM_DEFAULT_FORCE),
 					 float charge = BALL_ATOM_DEFAULT_CHARGE,
-					 float radius = BALL_ATOM_DEFAULT_RADIUS)	
+					 float radius = BALL_ATOM_DEFAULT_RADIUS,
+					 Index formal_charge = BALL_ATOM_DEFAULT_FORMAL_CHARGE)	
 				throw();
 
 			//@}
@@ -351,6 +356,16 @@ namespace BALL
 			*/
 			float getCharge() const
 				throw();
+
+			/** Set the formal charge of the atom.
+			*/
+			void setFormalCharge(Index formal_charge) 
+				throw();
+
+			/** Return the formal charge of the atom
+			*/
+			float getFormalCharge() const throw();
+
 
 			/** Mutable inspection of the atom's parent molecule.
 					A NULL pointer is returned if this atom is not part of a molecule.
@@ -995,6 +1010,8 @@ namespace BALL
 		class StaticAtomAttributes
 		{
 			public:
+			///
+			Index						formal_charge;
 			///
 			float 					charge;
 			///

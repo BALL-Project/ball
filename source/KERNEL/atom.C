@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.C,v 1.50 2004/02/25 10:47:12 oliver Exp $
+// $Id: atom.C,v 1.51 2004/05/04 18:45:48 oliver Exp $
 //
 
 #include <BALL/KERNEL/atom.h>
@@ -28,6 +28,7 @@ namespace BALL
 	
 	void Atom::StaticAtomAttributes::clear()
 	{
+		formal_charge = BALL_ATOM_DEFAULT_FORMAL_CHARGE;
 		charge = BALL_ATOM_DEFAULT_CHARGE;
 		type = BALL_ATOM_DEFAULT_TYPE;
 		position.set(BALL_ATOM_DEFAULT_POSITION);
@@ -37,6 +38,7 @@ namespace BALL
 
 	void Atom::StaticAtomAttributes::swap(Atom::StaticAtomAttributes& attr)
 	{
+		std::swap(formal_charge, attr.formal_charge);
 		std::swap(charge, attr.charge);
 		std::swap(type, attr.type);
 		std::swap(ptr, attr.ptr);
@@ -47,6 +49,7 @@ namespace BALL
 
 	void Atom::StaticAtomAttributes::set(Atom::StaticAtomAttributes& attr)
 	{
+		formal_charge = attr.formal_charge;
 		charge = attr.charge;
 		type = attr.type;
 		// Do not assign the back pointer!
@@ -60,6 +63,7 @@ namespace BALL
 	Atom::StaticAtomAttributes& Atom::StaticAtomAttributes::operator = 
 		(const Atom::StaticAtomAttributes& attr)
 	{
+		formal_charge = attr.formal_charge;
 		charge = attr.charge;
 		type = attr.type;
 		// Do not assign the back pointer!
@@ -107,7 +111,7 @@ namespace BALL
 			(Element& element, const String& name,
 			 const String& type_name, Atom::Type type,
 			 const Vector3& position, const Vector3& velocity,
-			 const Vector3& force, float charge, float radius)
+			 const Vector3& force, float charge, float radius, Index formal_charge)
 		throw()
 		:	Composite(),
 			PropertyManager(),
@@ -118,6 +122,7 @@ namespace BALL
 			radius_(radius),
 			number_of_bonds_(0)
 	{
+		static_attributes_[index_].formal_charge = formal_charge;
 		static_attributes_[index_].charge = charge;
 		static_attributes_[index_].type = type;
 		static_attributes_[index_].force = force;
@@ -191,6 +196,7 @@ namespace BALL
 			pm.writeStorableObject(*(PropertyManager*)this, "PropertyManager");
 
 			pm.writePrimitive((String)element_->getSymbol(), "element_");
+			pm.writePrimitive(static_attributes_[index_].formal_charge, "formal_charge_");
 			pm.writePrimitive(static_attributes_[index_].charge, "charge_");
 			pm.writePrimitive(radius_, "radius_");
 			pm.writePrimitive(name_, "name_");
@@ -218,6 +224,7 @@ namespace BALL
 		String s;
 		pm.readPrimitive(s, "element_");	
 		element_ = &PTE[s];
+		pm.readPrimitive(static_attributes_[index_].formal_charge, "formal_charge_");
 		pm.readPrimitive(static_attributes_[index_].charge, "charge_");
 		pm.readPrimitive(radius_, "radius_");
 		pm.readPrimitive(name_, "name_");
@@ -647,6 +654,9 @@ namespace BALL
 		BALL_DUMP_DEPTH(s, depth);
 		s << "  element: " << *element_ << endl;
 
+		BALL_DUMP_DEPTH(s, depth);
+		s << "  formal charge: " << static_attributes_[index_].formal_charge << endl;
+		
 		BALL_DUMP_DEPTH(s, depth);
 		s << "  charge: " << static_attributes_[index_].charge << endl;
 		
