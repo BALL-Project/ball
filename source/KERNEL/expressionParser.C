@@ -1,4 +1,4 @@
-// $Id: expressionParser.C,v 1.1 2002/01/26 22:08:08 oliver Exp $
+// $Id: expressionParser.C,v 1.2 2002/01/27 21:37:06 oliver Exp $
 
 #include <BALL/KERNEL/expressionParser.h>
 #include <BALL/KERNEL/PTE.h>
@@ -42,7 +42,7 @@ namespace BALL
 			throw()
 		:	expression(""),
 			predicate(predicate_name),
-			argument(args),
+			argument((args == 0) ? "" : args),
 			evaluated(false),
 			negate(false),
 			type(),
@@ -101,6 +101,7 @@ namespace BALL
 		BALL_DUMP_HEADER(os, this, this);
 		BALL_DUMP_DEPTH(os, depth);
 		os << "[expression = " << expression 
+			<< "  predicate = " << predicate 
 			<< "  arg = " << argument
 			<< "  evaluated = " << evaluated 
 			<< "  negate = " << negate 
@@ -115,6 +116,7 @@ namespace BALL
 	}
 
 	ExpressionParser::ExpressionParser()
+		:	syntax_tree_(0)
 	{
 	}
 
@@ -124,22 +126,35 @@ namespace BALL
 
 	const ExpressionParser::SyntaxTree& ExpressionParser::getSyntaxTree() const
 	{
-		return syntax_tree_;
+		return *syntax_tree_;
 	}
 
 	void ExpressionParser::parse(const String& s)
 		throw(Exception::ParseError)
 	{
+		// clear former contents
+		if (syntax_tree_ != 0)
+		{
+			delete syntax_tree_;
+			syntax_tree_ = 0;
+		}
+		
+
 		// make the internals of this parser available for all
 		state.current_parser = this;
 		state.buffer = s.c_str();	
 		state.char_count = 0;
+		state.tree = 0;
     
 		try
 		{
 			ExpressionParser_initBuffer(state.buffer);
 			ExpressionParserparse();
-			ExpressionParser_delBuffer();	
+			ExpressionParser_delBuffer();		
+
+			// the tree's mine now...
+			syntax_tree_ = state.tree;
+			state.tree = 0;
 		}
 		catch (Exception::ParseError& e)
 		{

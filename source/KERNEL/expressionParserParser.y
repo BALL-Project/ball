@@ -24,8 +24,11 @@ extern void ExpressionParsererror(char* s);
 %left 	<text>		TK_OR
 %left 	<text>		TK_AND
 %left							TK_NOT
+%left							TK_WHITESPACE;
 %token	<text>		TK_ARGS
 %token	<text>		TK_PREDICATE_NAME
+%token	<text>		TK_OPEN_BRACKET
+%token	<text>		TK_CLOSE_BRACKET
 
 %type		<node>		kernel_expression
 %type		<node>		expression
@@ -38,6 +41,7 @@ extern void ExpressionParsererror(char* s);
 
 kernel_expression:	expression 
 		{ 
+			ExpressionParser::state.tree = $1;
 		}
 	;
 
@@ -45,11 +49,17 @@ expression:
 		predicate { 
 			$$ = $1;
 		}
+	| TK_WHITESPACE expression {
+			$$ = $2;
+		}
+	| expression TK_WHITESPACE {
+			$$ = $1;
+		}
 	|	TK_NOT expression {
 			$$ = $2;
 			$2->negate = true;
 		}
-	| '(' expression ')' { 
+	| TK_OPEN_BRACKET expression TK_CLOSE_BRACKET { 
 			$$ = $2; 
 		}
 	| expression TK_AND expression { 
@@ -61,10 +71,13 @@ expression:
 	;
 
 predicate:
-		TK_PREDICATE_NAME '(' TK_ARGS ')' { 
-			$$ = new ExpressionParser::SyntaxTree($1, $3);
+		TK_PREDICATE_NAME TK_OPEN_BRACKET TK_ARGS TK_CLOSE_BRACKET { 
+			*$2 = '\0';
+			*($4 - 1) = '\0';
+			$$ = new ExpressionParser::SyntaxTree($1, $3 + 1);
 		}
-	|	TK_PREDICATE_NAME '(' ')' { 
+	|	TK_PREDICATE_NAME TK_OPEN_BRACKET TK_CLOSE_BRACKET { 
+			*$2 = '\0';
 			$$ = new ExpressionParser::SyntaxTree($1, 0);
 		}
 	;
