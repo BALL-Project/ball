@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Stretch.C,v 1.1.2.3 2005/03/21 16:51:58 amoll Exp $
+// $Id: MMFF94Stretch.C,v 1.1.2.4 2005/03/22 01:17:58 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Stretch.h>
@@ -9,6 +9,8 @@
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/SYSTEM/path.h>
+
+#define BALL_DEBUG_MMFF
 
 using namespace std;
 
@@ -111,6 +113,12 @@ namespace BALL
 					dummy_stretch.atom1 = (Atom*) bond.getFirstAtom();
 					dummy_stretch.atom2 = (Atom*) bond.getSecondAtom();
 
+#ifdef BALL_DEBUG_MMFF
+					Log.info() << bond.getFirstAtom()->getFullName() << " -> " 
+						         << bond.getSecondAtom()->getFullName() << " : "
+										 << atom_type_A << " " << atom_type_B << std::endl;
+#endif
+
 					stretch_.push_back(dummy_stretch);
 				}
 			}
@@ -144,8 +152,12 @@ namespace BALL
 			float eb_ij = 143.9325 * stretch_[i].kb / 2.0 * delta_2 *
 				            (1.0 + CUBIC_STRENGTH_CONSTANT * delta + 7.0 / 12.0 * CUBIC_STRENGTH_CONSTANT * CUBIC_STRENGTH_CONSTANT * delta_2);
 
+#ifdef BALL_DEBUG_MMFF
 			Log.info() << stretch_[i].atom1->getFullName() << " -> " 
-								 << stretch_[i].atom2->getFullName() << " : bond stretch energy " << eb_ij << std::endl;
+								 << stretch_[i].atom2->getFullName() 
+								 << "r0: " << stretch_[i].r0
+								 << "D: " << delta << " | E: " << eb_ij << std::endl;
+#endif
 
 			energy_ += eb_ij;
 		}

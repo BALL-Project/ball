@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: splitMMFFTestSuiteMolFiles.C,v 1.1.2.1 2005/03/21 12:48:36 amoll Exp $
+// $Id: splitMMFFTestSuiteMolFiles.C,v 1.1.2.2 2005/03/22 01:18:34 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -76,6 +76,8 @@ int main(int argc, char** argv)
 		outfile << *vit << std::endl;
 		vit++;
 	}
+
+	Log.info() << "Extracted " << file_names.size() << " files" << std::endl;
 
 	outfile.close();
 
