@@ -1,4 +1,4 @@
-// $Id: ramachandran.C,v 1.3 2000/01/17 13:12:18 oliver Exp $
+// $Id: ramachandran.C,v 1.4 2000/02/02 15:12:03 oliver Exp $
 
 //============================================================================
 // BALL - Ramachandran plot example
@@ -67,20 +67,23 @@ int main(int argc, char** argv)
 			ResidueIterator last_res = res_it;
 			last_res--;
 			Atom* last_C = 0;
-			for (atom_it = last_res->beginAtom(); +atom_it; atom_it++)
+			if (+last_res)
 			{
-				if (atom_it->getName() == "C")
+				for (atom_it = last_res->beginAtom(); +atom_it; atom_it++)
 				{
-					last_C = &*atom_it;
-					break;
+					if (atom_it->getName() == "C")
+					{
+						last_C = &*atom_it;
+						break;
+					}
 				}
-			}
-			
-			// if we found C(i-1), N(i), CA(i), and C(i), we can calculate phi
-			if ((last_C != 0) && (N != 0) && (CA != 0) && (C != 0))
-			{
-				Angle phi = calculateTorsionAngle(*last_C, *N, *CA, *C);
-				cout << "phi(" << res_it->getName() << res_it->getID() << ") = " << phi.toDegree() << endl;
+				
+				// if we found C(i-1), N(i), CA(i), and C(i), we can calculate phi
+				if ((last_C != 0) && (N != 0) && (CA != 0) && (C != 0))
+				{
+					Angle phi = calculateTorsionAngle(*last_C, *N, *CA, *C);
+					cout << "phi(" << res_it->getName() << res_it->getID() << ") = " << phi.toDegree() << endl;
+				}
 			}
 		}
 
@@ -91,20 +94,23 @@ int main(int argc, char** argv)
 			ResidueIterator next_res = res_it;
 			next_res++;
 			Atom* next_N = 0;
-			for (atom_it = next_res->beginAtom(); +atom_it; atom_it++)
+			if (+next_res)
 			{
-				if (atom_it->getName() == "N")
+				for (atom_it = next_res->beginAtom(); +atom_it; atom_it++)
 				{
-					next_N = &*atom_it;
-					break;
+					if (atom_it->getName() == "N")
+					{
+						next_N = &*atom_it;
+						break;
+					}
 				}
-			}
-			
-			// if we found N(i), CA(i), C(i), and N(i+1), we can calculate psi
-			if ((next_N != 0) && (N != 0) && (CA != 0) && (C != 0))
-			{
-				Angle psi = calculateTorsionAngle(*N, *CA, *C, *next_N);
-				cout << "psi(" << res_it->getName() << res_it->getID() << ") = " << psi.toDegree() << endl;
+				
+				// if we found N(i), CA(i), C(i), and N(i+1), we can calculate psi
+				if ((next_N != 0) && (N != 0) && (CA != 0) && (C != 0))
+				{
+					Angle psi = calculateTorsionAngle(*N, *CA, *C, *next_N);
+					cout << "psi(" << res_it->getName() << res_it->getID() << ") = " << psi.toDegree() << endl;
+				}
 			}
 		}
 	}
