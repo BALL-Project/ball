@@ -1,4 +1,4 @@
-// $Id: canonicalMD.C,v 1.5 2000/05/10 08:40:39 pmueller Exp $
+// $Id: canonicalMD.C,v 1.6 2000/07/06 14:48:50 oliver Exp $
 
 // BALL includes 
 #include <BALL/MOLMEC/MDSIMULATION/canonicalMD.h>
@@ -24,7 +24,7 @@ namespace BALL
 	}
 
 	// This constructor uses the given force field and a snapshot manager 
-CanonicalMD::CanonicalMD (ForceField & myforcefield, SnapShotManager * ssm):MolecularDynamics (myforcefield)
+	CanonicalMD::CanonicalMD (ForceField & myforcefield, SnapShotManager * ssm):MolecularDynamics (myforcefield)
 	{
 		valid_ = setup (myforcefield, ssm);
 	}
@@ -218,18 +218,18 @@ CanonicalMD::CanonicalMD (ForceField & myforcefield, SnapShotManager * ssm):Mole
 	  vector < Aux_Factors >::iterator factor_it;
 
     if(restart == false)
-      {
+    {
       // reset the current number of iteration and the simulation time  to the values given
       // in the options
       number_of_iteration_  = options.getInteger(MolecularDynamics::Option::NUMBER_OF_ITERATION);
       current_time_ = options.getReal(MolecularDynamics::Option::CURRENT_TIME);
-      }
+    }
     else
-     {
+		{
      // the values from the last simulation run are used; increase by one to start in the
      // next iteration
      number_of_iteration_++;
-     }
+    }
 
 
 		// determine the largest value for the iteration counter
@@ -279,8 +279,9 @@ CanonicalMD::CanonicalMD (ForceField & myforcefield, SnapShotManager * ssm):Mole
 			// If the simulation runs with periodic boundary conditions, update the
 			// list and position of molecules
 			if (force_field_ptr_->periodic_boundary.isEnabled () == true)
+			{
 				force_field_ptr_->periodic_boundary.updateMolecules ();
-
+			}
 
 			// In regular intervals, calculate and  output the current energy
 			if (iteration % energy_output_frequency_ == 0)
@@ -303,25 +304,21 @@ CanonicalMD::CanonicalMD (ForceField & myforcefield, SnapShotManager * ssm):Mole
 			// iteration for computing the factor. 
 			updateInstantaneousTemperature ();
 
-			if (bath_relaxation_time_ == 0 || current_temperature_ == 0)
+			// check whether the rescaling will be successful
+			// We trap a special case: at the start of a simulation, the current temperature
+			// will be zero, so we do not rescale 
+			if ((bath_relaxation_time_ != 0.0) && (current_temperature_ != 0.0))
 			{
-				Log.level (LogStream::ERROR) << " Attempted division by zero in line "
-					<< __LINE__ << ", file " << __FILE__ << endl;
-				Log.level (LogStream::ERROR) << " Program is aborted. " << endl << endl;
-				Log.level (LogStream::ERROR) << " bath_relaxation_time_ = " << bath_relaxation_time_ << endl;
-				Log.level (LogStream::ERROR) << " current_temperature_ = " << current_temperature_ << endl;
 
-				if (current_temperature_ == 0)
-				{
-					Log.level (LogStream::ERROR) << " Make sure that every atom has an initial velocity." << endl;
-				}
-
-				exit (0);
+				// calculate the scaling factor (Berendsen's velocity scaling)
+				scaling_factor = sqrt (1.0 + time_step_ / bath_relaxation_time_
+															 * (reference_temperature_ / current_temperature_ - 1.0));
 			}
-
-
-			scaling_factor = sqrt (1 + time_step_ / bath_relaxation_time_
-														 * (reference_temperature_ / current_temperature_ - 1.0));
+			else 
+			{
+				// we do not rescale for a temperature of zero
+				scaling_factor = 1.0;
+			}
 
 			// Calculate new atomic positions and new tentative velocities 
 			for (atom_it = atom_vector_.begin (),
