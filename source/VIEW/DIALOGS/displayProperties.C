@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.40 2003/11/18 16:59:12 amoll Exp $
+// $Id: displayProperties.C,v 1.41 2003/11/19 12:44:22 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -230,12 +230,14 @@ void DisplayProperties::createRepresentationMode()
 {
 	rep_ = 0;
 	setCaption("create Representation");
+	apply_button->setText("Create");
 	apply_button->setEnabled(getMainControl()->getControlSelection().size());
 }
 
 void DisplayProperties::modifyRepresentationMode()
 {
 	setCaption("modify Representation");
+	apply_button->setText("Modify");
 	if (rep_->getColoringType() != COLORING_UNKNOWN)
 	{
 		coloring_method_combobox->setCurrentItem(rep_->getColoringType());
