@@ -1,4 +1,4 @@
-// $Id: point.C,v 1.1 1999/08/26 08:02:47 oliver Exp $
+// $Id: point.C,v 1.2 1999/12/19 17:15:54 oliver Exp $
 
 #include <BALL/VIEW/PRIMITIV/point.h>
 
@@ -112,7 +112,7 @@ namespace BALL
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
-		bool Point::export()
+		bool Point::extract()
 		{
 			return true;  
 		}

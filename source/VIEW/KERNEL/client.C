@@ -1,4 +1,4 @@
-// $Id: client.C,v 1.1 1999/08/26 08:02:46 oliver Exp $
+// $Id: client.C,v 1.2 1999/12/19 17:15:40 oliver Exp $
 
 #include <BALL/VIEW/KERNEL/client.h>
 
@@ -56,12 +56,12 @@ namespace BALL
 			cout << endl;
 		}
 
-		ClientScene Client::getNewScene()
+		ClientScene Client::getScene()
 		{
 			IOStreamSocket iostream_socket;	
 			iostream_socket->connect(host_, port_);
 
-			iostream_socket << COMMAND__OPEN_SCENE << endl;
+			iostream_socket << (int)COMMAND__OPEN_SCENE << endl;
 
 			SceneHandle scene_handle;
 			iostream_socket >> scene_handle;

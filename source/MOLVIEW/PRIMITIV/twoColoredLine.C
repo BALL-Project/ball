@@ -1,4 +1,4 @@
-// $Id: twoColoredLine.C,v 1.1 1999/08/26 08:02:48 oliver Exp $
+// $Id: twoColoredLine.C,v 1.2 1999/12/19 17:14:38 oliver Exp $
 
 #include <BALL/MOLVIEW/PRIMITIV/twoColoredLine.h>
 
@@ -117,7 +117,7 @@ namespace BALL
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
-		bool TwoColoredLine::export()
+		bool TwoColoredLine::extract()
 		{
 			return true;  
 		}

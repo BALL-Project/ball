@@ -1,4 +1,4 @@
-// $Id: twoColoredTube.C,v 1.1 1999/08/26 08:02:48 oliver Exp $
+// $Id: twoColoredTube.C,v 1.2 1999/12/19 17:14:39 oliver Exp $
 
 
 #include <BALL/MOLVIEW/PRIMITIV/twoColoredTube.h>
@@ -109,7 +109,7 @@ namespace BALL
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
-		bool TwoColoredTube::export()
+		bool TwoColoredTube::extract()
 		{
 			return true;  
 		}

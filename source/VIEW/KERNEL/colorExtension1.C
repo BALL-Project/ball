@@ -1,6 +1,8 @@
-// $Id: colorExtension1.C,v 1.1 1999/08/26 08:02:46 oliver Exp $
+// $Id: colorExtension1.C,v 1.2 1999/12/19 17:15:41 oliver Exp $
 
 #include <BALL/VIEW/KERNEL/colorExtension1.h>
+
+using namespace std;
 
 namespace BALL
 {

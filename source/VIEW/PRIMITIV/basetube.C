@@ -1,4 +1,4 @@
-// $Id: basetube.C,v 1.1 1999/08/26 08:02:47 oliver Exp $
+// $Id: basetube.C,v 1.2 1999/12/19 17:15:54 oliver Exp $
 
 #include <BALL/VIEW/PRIMITIV/basetube.h>
 
@@ -10,22 +10,22 @@ namespace BALL
 
 		BaseTube::BaseTube()
 			:	GeometricObject(),
-				Vertex2(),
-				Radius()
+				Radius(),
+				Vertex2()
 		{
 		}
 
 		BaseTube::BaseTube(const BaseTube& base_tube, bool deep)
 			:	GeometricObject(base_tube, deep),
-				Vertex2(base_tube, deep),
-				Radius(base_tube, deep)
+				Radius(base_tube, deep),
+				Vertex2(base_tube, deep)
 		{
 		}
 
 		BaseTube::BaseTube(const GeometricObject& geometric_object)
 			:	GeometricObject(geometric_object),
-				Vertex2(),
-				Radius()
+				Radius(),
+				Vertex2()
 		{
 		}
 
@@ -111,7 +111,7 @@ namespace BALL
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
-		bool BaseTube::export()
+		bool BaseTube::extract()
 		{
 			return true;  
 		}

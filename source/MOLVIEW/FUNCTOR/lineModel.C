@@ -1,4 +1,4 @@
-// $Id: lineModel.C,v 1.1 1999/08/26 08:02:48 oliver Exp $
+// $Id: lineModel.C,v 1.2 1999/12/19 17:14:26 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/lineModel.h>
 
@@ -197,7 +197,7 @@ namespace BALL
 			(Atom &__rAtom)
 		{
 			// test if there are already Line models appended
-			if (__rAtom.countChildren() > (Size)0)
+			if (__rAtom.countDescendants() > (Size)0)
 			{
 				__rAtom.applyChild(getSearcher());
 

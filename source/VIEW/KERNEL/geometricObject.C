@@ -1,4 +1,4 @@
-// $Id: geometricObject.C,v 1.1 1999/08/26 08:02:46 oliver Exp $
+// $Id: geometricObject.C,v 1.2 1999/12/19 17:15:42 oliver Exp $
 
 #include <BALL/VIEW/KERNEL/geometricObject.h>
 
@@ -11,7 +11,6 @@ namespace BALL
 		GeometricObject::GeometricObject()
 			:	Composite(),
 				PropertyManager(),
-				Selectable(),
 				selected_color_(255, 255, 0, 255),
 				name_("unkown")
 		{
@@ -22,7 +21,6 @@ namespace BALL
 			(const GeometricObject& geometric_object, bool deep)
 			:	Composite(geometric_object, deep),
 				PropertyManager(geometric_object, deep),
-				Selectable(geometric_object, deep),
 				selected_color_(geometric_object.selected_color_),
 				name_(geometric_object.name_)
 		{
@@ -42,7 +40,6 @@ namespace BALL
 		{
 			Composite::clear();
 			PropertyManager::clear();
-			Selectable::clear();
 
 			clear_();
 		}
@@ -51,7 +48,6 @@ namespace BALL
 		{
 			Composite::destroy();
 			PropertyManager::destroy();
-			Selectable::destroy();
 
 			clear_();
 		}
@@ -61,7 +57,6 @@ namespace BALL
 		{
 			Composite::set(geometric_object, deep);
 			PropertyManager::set(geometric_object, deep);
-			Selectable::set(geometric_object, deep);
 			
 			selected_color_ = geometric_object.selected_color_;
 			name_ = geometric_object.name_;
@@ -85,7 +80,6 @@ namespace BALL
 		{
 			Composite::swap(geometric_object);
 			PropertyManager::swap(geometric_object);
-			Selectable::swap(geometric_object);
 
 			selected_color_.swap(geometric_object.selected_color_);
 			name_.swap(geometric_object.name_);
@@ -250,7 +244,7 @@ namespace BALL
 			return true;
 		}
 		*/
-		bool GeometricObject::export()
+		bool GeometricObject::extract()
 		{
 			return true;
 		}

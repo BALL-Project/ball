@@ -1,7 +1,10 @@
-// $Id: colorUnitHue.C,v 1.1 1999/08/26 08:02:46 oliver Exp $
+// $Id: colorUnitHue.C,v 1.2 1999/12/19 17:15:34 oliver Exp $
 
 #include <BALL/VIEW/DATATYPE/colorUnitHue.h>
 #include <BALL/VIEW/DATATYPE/colorUnit.h>
+#include <stdio.h>
+
+using namespace std;
 
 namespace BALL
 {

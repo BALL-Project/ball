@@ -1,4 +1,4 @@
-// $Id: findGeometricObject.C,v 1.1 1999/08/26 08:02:47 oliver Exp $
+// $Id: findGeometricObject.C,v 1.2 1999/12/19 17:14:25 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/findGeometricObject.h>
 
@@ -115,8 +115,16 @@ namespace BALL
 			VIEW::GeometricObject *__pGeometricObject 
 				= RTTI<VIEW::GeometricObject>::castTo(composite);
 
-			if (getBitVector().operator&(__pGeometricObject->getBitVector())
-					== getBitVector())
+			BitVector and_bitvector = getBitVector().operator&(__pGeometricObject->getBitVector());
+			BitVector help_bitvector(and_bitvector.getSize());
+
+			help_bitvector.or(getBitVector());
+			/*
+			cout << "own: " << help_bitvector << " object:  " << __pGeometricObject->getBitVector()
+					 << "  &: " << and_bitvector << " size own: " << help_bitvector.getSize()
+					 << "  temp size: " << and_bitvector.getSize() << endl;
+			*/
+			if (and_bitvector == help_bitvector)
 			{
 				geometric_object_ = __pGeometricObject;
 

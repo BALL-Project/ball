@@ -8,6 +8,7 @@ CPP_SOURCES=\
 	colorCalculator.C\
 	findGeometricObject.C\
 	lineModel.C\
+	removeModel.C\
 	vanDerWaalsModel.C
 
 include ../../common.mak
