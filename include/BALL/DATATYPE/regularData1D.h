@@ -1,4 +1,4 @@
-// $Id: regularData1D.h,v 1.11 2001/03/08 11:26:44 amoll Exp $
+// $Id: regularData1D.h,v 1.12 2001/03/12 10:48:27 oliver Exp $
 
 #ifndef BALL_DATATYPE_REGULARDATA1D_H
 #define BALL_DATATYPE_REGULARDATA1D_H
@@ -145,6 +145,30 @@ namespace BALL
 		void resize(Size new_size)
 			throw();
 
+		/**	Rescale the data.
+				Keep the current boundaries of the data and reinterpolate
+				the data to reflect the new size. To create a data set of {\tt new_size}
+				data points, the data is interpolated linearly at the new data points.
+				
+				@param new_size the new data set size
+		*/
+		void rescale(Size new_size)
+			throw();
+
+		/**	Rescale and change the boundaries.
+				{\tt lower} and {\tt upper} define the new boundaries, while {\tt new_size}
+				gives the number of new data points. The existing data is cut/extended to the
+				new boundaries and the resulting new data points ({\tt new_size} data
+				points in total) are obtained by linear interpolation of the current data.
+				if the boundaries are extended, the resulting excess data points are initialized
+				with zero.
+
+				@param new_size the new size of the data set
+				@param lower the lower boundary
+				@param upper the upper boundary
+		*/
+		void rescale(double lower, double upper, Size new_size)
+			throw();
 		//@}
 	
 		protected:
@@ -314,6 +338,106 @@ namespace BALL
 		data_.resize(new_size);
 	}
 		
+
+	template <typename T>
+	void TRegularData1D<T>::rescale(Size new_size)
+		throw()
+	{
+		// if the new and the old size coincide: done.
+		if (new_size == data_.size())
+		{
+			return;
+		}
+
+		// if the data set is empty...
+		if (data_.size() == 0)
+		{
+			// ...there's nothing to do: a resize was requested
+			data_.resize(new_size);
+			return;
+		}
+		
+		// if the data set contains only a single value,
+		// we fill everything with this value
+		if ((data_.size() == 1) && (new_size > 1))
+		{
+			T old_value = data_[0];
+			data_.resize(new_size);
+			for (Position i = 1; i < new_size; i++)
+			{
+				data_[i] = old_value;
+			}
+
+			return;
+		}
+
+		// that's the default case: use linear interpolation
+		// to determine the values at the new positions
+		VectorType new_data(new_size);
+		double factor1 = (double)data_.size() / (double)new_size;
+		double factor2 = (double)(data_.size() - 1) / (new_size - 1);
+		for (Size i = 0; i < new_size; i++)
+		{
+			// determine the interval of the old data set we are currently in
+			// ([old_idx, old_idx + 1])
+			Position old_idx = (Position)(i * factor1);
+			double factor3 = (double)i * factor2 - (double)old_idx;
+			new_data[i] = data_[old_idx] * (1 - factor3) + factor3 * data_[old_idx + 1];
+		}
+
+		// assign the new data
+		data_ = new_data;
+	}
+
+	template <typename T>
+	void TRegularData1D<T>::rescale(double lower, double upper, Size new_size)
+		throw()
+	{
+		// if the data set is empty...
+		if (data_.size() == 0)
+		{
+			// ...there's nothing to do: a resize was requested
+			data_.resize(new_size);
+			return;
+		}
+		
+		// if the new boundaries and the old boundaries do not overlap,
+		// we create a new (empty) data set
+		if ((lower_ > upper) || (upper_ < lower))
+		{
+			data_.resize(new_size);
+			T default_value;
+			for (Position i = 0; i < new_size; i++)
+			{
+				data_[0] = default_value;
+			}
+			return;
+		}
+
+		// that's the default case: use linear interpolation
+		// to determine the values at the new positions
+
+		// first, we create a new vector of appropriate size
+		VectorType new_data(new_size);
+		double s = (upper_ - lower_) / ((double)data_.size() - 1);
+		for (Size i = 0; i < new_size; i++)
+		{
+			double new_x = lower + (double)i / (new_size - 1) * (upper - lower);
+			if ((new_x >= lower_) && (new_x <= upper_))
+			{
+				Position old_idx = (Position)((new_x - lower_) / s);
+				double factor3 = ((new_x - lower_) -  (double)old_idx * s) / s;
+				new_data[i] = data_[old_idx] * (1 - factor3) + factor3 * data_[old_idx + 1];
+			}
+		}
+
+		// assign the new data and the boundaries
+		data_ = new_data;
+		lower_ = lower;
+		upper_ = upper;
+	}
+
+
 } // namespace BALL
 
 #endif // BALL_DATATYPE_REGULARDATA1D_H
