@@ -16,7 +16,7 @@ CPP_SOURCES=\
 MOC_SOURCES=\
 	mainControl_moc.C
 
-MOC=/KM/comp-bio/BALL-contrib/qt/bin/IRIX6-CC_7.2.1/moc
+MOC=/KM/comp-bio/BALL-contrib/qt/bin/IRIX6/moc
 
 include ../../../common.mak
 include .Dependencies
