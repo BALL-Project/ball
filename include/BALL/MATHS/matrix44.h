@@ -1,4 +1,4 @@
-// $Id: matrix44.h,v 1.11 2000/03/11 13:00:21 oliver Exp $
+// $Id: matrix44.h,v 1.12 2000/03/11 16:55:55 amoll Exp $
 
 #ifndef BALL_MATHS_MATRIX44_H
 #define BALL_MATHS_MATRIX44_H
@@ -238,11 +238,9 @@ namespace BALL
 		*/
 		T getTrace() const;
 
-		/// BAUSTELLE unnoetig?
-		///static const TMatrix4x4& getZero();
+		static const TMatrix4x4& getZero();
 
-		/// BAUSTELLE unnoetig?
-		//static const TMatrix4x4& getIdentity();
+		static const TMatrix4x4& getIdentity();
 
 		/** Set the TMatrix4x4 to a identity matrix
 				m11, m22, m33, m44 = 1;
@@ -267,7 +265,7 @@ namespace BALL
 				@exception IndexOverflow if {\tt row > 3}
 				@return TVector4 the row
 		*/
-		TVector4<T> getRow(Index row);
+		TVector4<T> getRow(Index row) const;
 
 		/** Get a column of the matrix
 				@param col the number of the column (0-3)
@@ -275,7 +273,24 @@ namespace BALL
 				@exception IndexOverflow if {\tt col > 3}
 				@return TVector4 the column
 		*/
-		TVector4<T> getColumn(Index col);
+		TVector4<T> getColumn(Index col) const;
+
+
+		/** Set a row of the matrix
+				@param row the number of the row (0-3)
+				@param row_value the new value of the row
+				@exception IndexUnderflow if {\tt row < 0}
+				@exception IndexOverflow if {\tt row > 3}
+		*/
+		void setRow(Index row, TVector4<T> row_value);
+
+		/** Set a column of the matrix
+				@param col the number of the column (0-3)
+				@param col_value the new value of the col
+				@exception IndexUnderflow if {\tt col < 0}
+				@exception IndexOverflow if {\tt col > 3}
+		*/
+		void setColumn(Index col, TVector4<T> col_value);
 
 		/** Get the diagonal of the matrix
 				@return TVector4 the diagonal
@@ -405,12 +420,6 @@ namespace BALL
 		void setTranslation(const TVector3<T>& v);
 
 		///
-		static TMatrix4x4& getTranslation(const T& x, const T& y, const T& z, TMatrix4x4& m);
-
-		///
-		static TMatrix4x4& getTranslation(const TVector3<T>& v,TMatrix4x4& m);
-
-		///
 		void scale(const T& x_scale, const T& y_scale, const T& z_scale);
 
 		///
@@ -429,25 +438,10 @@ namespace BALL
 		void setScale(const TVector3<T> &);
 
 		///
-		static TMatrix4x4& getScale(const T& x_scale, const T& y_scale, const T& z_scale, TMatrix4x4& m);
-
-		///
-		static TMatrix4x4& getScale(const T& scale, TMatrix4x4& m);
-
-		///
-		static TMatrix4x4& getScale(const TVector3<T>& v, TMatrix4x4& m);
-
-		///
-		static TMatrix4x4& getScale(const TVector4<T>& v, TMatrix4x4& m);
-
-		///
 		void rotateX(const Angle& phi);
 
 		///
 		void setRotationX(const Angle& phi);
-
-		///
-		static TMatrix4x4& getRotationX(const Angle& phi, TMatrix4x4& m);
 
 		///
 		void rotateY(const Angle& phi);
@@ -456,16 +450,10 @@ namespace BALL
 		void setRotationY(const Angle& phi);
 
 		///
-		static TMatrix4x4& getRotationY(const Angle& phi, TMatrix4x4& m);
-
-		///
 		void rotateZ(const Angle &phi);
 
 		///
 		void setRotationZ(const Angle &phi);
-
-		///
-		static TMatrix4x4& getRotationZ(const Angle& phi, TMatrix4x4& m);
 
 		///
 		void rotate(const Angle& phi, const T& axis_x, const T& axis_y, const T& axis_z);
@@ -485,19 +473,6 @@ namespace BALL
 		///
 		void setRotation(const Angle& phi, const TVector4<T>& axis);
 
-		///
-		static TMatrix4x4& getRotation
-			(const Angle& phi, const T& axis_x,
-			 const T& axis_y, const T& axis_z,
-			 TMatrix4x4& m);
-
-		///
-		static TMatrix4x4& getRotation
-			(const Angle& phi, const TVector3<T>& axis, TMatrix4x4& m);
-
-		///
-		static TMatrix4x4 &getRotation
-			(const Angle& phi, const TVector4<T>& axis, TMatrix4x4& m);
 		//@}
 
 		/**	@name	Predicates
@@ -537,13 +512,11 @@ namespace BALL
 		*/
 		bool isSymmetric() const;
 
-		//BAUSTELLE code richtig?
 		/** Test if the lower triangular is zero.
 				@return bool, {\bf true} if (m12 = m13 = m14 = m23 = m24 = m34 = 0), {\bf false} otherwise
 		*/
 		bool isLowerTriangular() const;
 
-		//BAUSTELLE code richtig?
 		/** Test if the upper triangular is zero.
 				@return bool, {\bf true} if (m21 = m31 = m32 = m41 = m42 = m43 = 0), {\bf false} otherwise
 		*/
@@ -1029,7 +1002,7 @@ namespace BALL
 	{
 		return (m11 + m22 + m33 + m44);
 	}
-/*
+
 	template <class T>
 	BALL_INLINE 
 	const TMatrix4x4<T>& TMatrix4x4<T>::getZero()
@@ -1042,7 +1015,7 @@ namespace BALL
 		
 		return null_matrix;
 	}
-*/
+
 
 	template <class T>
 	BALL_INLINE
@@ -1051,7 +1024,6 @@ namespace BALL
 		m12 = m13 = m14 = m21 = m23 = m24 = m31 = m32 = m34 = m41 = m42 = m43 = 0;
 		m11 = m22 = m33 = m44 = (T)1;
 	}
-/*
 	template <class T>
 	BALL_INLINE 
 	const TMatrix4x4<T>& TMatrix4x4<T>::getIdentity()
@@ -1064,7 +1036,7 @@ namespace BALL
 
 		return identity;
 	}
-*/
+
 	template <class T>
 	void TMatrix4x4<T>::fill(const T& t)
 	{
@@ -1125,7 +1097,7 @@ namespace BALL
 	}
 
 	template <class T>
-	TVector4<T> TMatrix4x4<T>::getRow(Index row)
+	TVector4<T> TMatrix4x4<T>::getRow(Index row) const
 	{
 		if (row < 0)
 			throw Exception::IndexUnderflow(__FILE__, __LINE__, row, 0);
@@ -1139,7 +1111,7 @@ namespace BALL
 	}
 
 	template <class T>
-	TVector4<T> TMatrix4x4<T>::getColumn(Index col)
+	TVector4<T> TMatrix4x4<T>::getColumn(Index col) const
 	{
 		if (col < 0)
 			throw Exception::IndexUnderflow(__FILE__, __LINE__, col, 0);
@@ -1149,6 +1121,40 @@ namespace BALL
 
 		return TVector4<T> (*comp_ptr_[0][col], *comp_ptr_[1][col], *comp_ptr_[2][col], *comp_ptr_[3][col]);
 	}
+
+
+	template <class T>
+	void TMatrix4x4<T>::setRow(Index row, TVector4<T> row_value)
+	{
+		if (row < 0)
+			throw Exception::IndexUnderflow(__FILE__, __LINE__, row, 0);
+
+		if (row > 3)
+			throw Exception::IndexOverflow(__FILE__, __LINE__, row, 3);
+
+		T **ptr = (T **)comp_ptr_[row];
+
+		*ptr[0] = row_value.x;
+		*ptr[1] = row_value.y;
+		*ptr[2] = row_value.z;
+		*ptr[3] = row_value.h;
+	}
+
+	template <class T>
+	void TMatrix4x4<T>::setColumn(Index col, TVector4<T> col_value)
+	{
+		if (col < 0)
+			throw Exception::IndexUnderflow(__FILE__, __LINE__, col, 0);
+
+		if (col > 3)
+			throw Exception::IndexOverflow(__FILE__, __LINE__, col, 3);
+
+		*comp_ptr_[0][col] = col_value.x;
+		*comp_ptr_[1][col] = col_value.y;
+		*comp_ptr_[2][col] = col_value.z;
+		*comp_ptr_[3][col] = col_value.h;
+	}
+
 
 	template <class T>
 	TVector4<T>TMatrix4x4<T>::getDiagonal() const
@@ -1601,26 +1607,6 @@ namespace BALL
 	}
 
 	template <class T>
-	BALL_INLINE 
-	TMatrix4x4<T>& TMatrix4x4<T>::getTranslation
-		(const T& x, const T& y, const T& z, TMatrix4x4<T>& m)
-	{
-		m.setTranslation(x, y, z);
-
-		return m;
-	}
-
-	template <class T>
-	BALL_INLINE 
-	TMatrix4x4<T>& TMatrix4x4<T>::getTranslation
-		(const TVector3<T>& v, TMatrix4x4<T>& m)
-	{
-		m.setTranslation(v);
-
-		return m;
-	}
-
-	template <class T>
 	void TMatrix4x4<T>::scale
 		(const T& x_scale, const T& y_scale, const T& z_scale)
 	{
@@ -1722,45 +1708,9 @@ namespace BALL
 
 	template <class T>
 	BALL_INLINE 
-	TMatrix4x4<T>& TMatrix4x4<T>::getScale(const T& x_scale, const T& y_scale, const T& z_scale, TMatrix4x4& m)
-	{
-		m.setScale(x_scale, y_scale, z_scale);
-
-		return m;
-	}
-
-	template <class T>
-	BALL_INLINE 
-	TMatrix4x4<T>& TMatrix4x4<T>::getScale(const T& scale, TMatrix4x4& m)
-	{
-		m.setScale(scale);
-
-		return m;
-	}
-
-	template <class T>
-	BALL_INLINE 
-	TMatrix4x4<T>& TMatrix4x4<T>::getScale(const TVector3<T>& v, TMatrix4x4& m)
-	{
-		m.setScale(v);
-
-		return m;
-	}
-
-	template <class T>
-	BALL_INLINE 
-	TMatrix4x4<T>& TMatrix4x4<T>::getScale(const TVector4<T>& v,TMatrix4x4& m)
-	{
-		m.setScale(v);
-
-		return m;
-	}
-
-	template <class T>
-	BALL_INLINE 
 	void TMatrix4x4<T>::rotateX(const Angle& phi)
 	{
-		TMatrix4x4<T> rotation(true);
+		TMatrix4x4<T> rotation;
 
 		rotation.setRotationX(phi);
 		*this *= rotation;
@@ -1784,18 +1734,9 @@ namespace BALL
 
 	template <class T>
 	BALL_INLINE 
-	TMatrix4x4<T>& TMatrix4x4<T>::getRotationX(const Angle& phi, TMatrix4x4<T>& m)
-	{
-		m.setRotationX(phi);
-
-		return m;
-	}
-
-	template <class T>
-	BALL_INLINE 
 	void TMatrix4x4<T>::rotateY(const Angle& phi)
 	{
-		TMatrix4x4<T> rotation(true);
+		TMatrix4x4<T> rotation;
 
 		rotation.setRotationY(phi);
 		*this *= rotation;
@@ -1818,18 +1759,9 @@ namespace BALL
 
 	template <class T>
 	BALL_INLINE 
-	TMatrix4x4<T>& TMatrix4x4<T>::getRotationY(const Angle& phi, TMatrix4x4<T>& m)
-	{
-		m.setRotationY(phi);
-
-		return m;
-	}
-
-	template <class T>
-	BALL_INLINE 
 	void TMatrix4x4<T>::rotateZ(const Angle& phi)
 	{
-		TMatrix4x4<T> rotation(true);
+		TMatrix4x4<T> rotation;
 
 		rotation.setRotationZ(phi);
 		*this *= rotation;
@@ -1848,15 +1780,6 @@ namespace BALL
 
 		m11 = m22 = cos(phi);
 		m12 = -(m21 = sin(phi));
-	}
-
-	template <class T>
-	BALL_INLINE 
-	TMatrix4x4<T>& TMatrix4x4<T>::getRotationZ(const Angle& phi, TMatrix4x4<T>& m)
-	{
-		m.setRotationZ(phi);
-
-		return m;
 	}
 
 	template <class T>
@@ -1995,41 +1918,11 @@ namespace BALL
 
 	template <class T>
 	BALL_INLINE 
-	void TMatrix4x4<T>::setRotation (const Angle& phi, const TVector3<T>& v)
+	void TMatrix4x4<T>::setRotation(const Angle& phi, const TVector3<T>& v)
 	{
 		m12 = m13 = m14 = m21 = m23 = m24 = m31 = m32 = m34 = m41 = m42 = m43 = 0;
 		m11 = m22 = m33 = m44 = (T)1;
 		rotate(phi, v.x, v.y, v.z);
-	}
-
-	template <class T>
-	BALL_INLINE 
-	TMatrix4x4<T>& TMatrix4x4<T>::getRotation
-		(const Angle& phi, const T& x, const T& y, const T& z, TMatrix4x4<T>& m)
-	{
-		m.setRotation(phi, x, y, z);
-
-		return m;
-	}
-
-	template <class T>
-	BALL_INLINE 
-	TMatrix4x4<T>& TMatrix4x4<T>::getRotation
-		(const Angle& phi,const TVector3<T>& v, TMatrix4x4<T>& m)
-	{
-		m.setRotation(phi, v.x, v.y,v.z);
-
-		return m;
-	}
-
-	template <class T>
-	BALL_INLINE 
-	TMatrix4x4<T>& TMatrix4x4<T>::getRotation
-		(const Angle& phi, const TVector4<T>& v, TMatrix4x4<T>& m)
-	{
-		m.setRotation(phi, v.x, v.y, v.z);
-
-		return m;
 	}
 
 	template <class T>
@@ -2185,18 +2078,20 @@ namespace BALL
 
 	template <class T>
 	std::istream& operator >> (std::istream& s, TMatrix4x4<T>& m)
-	{
-		s >> m.m11 >> m.m12 >> m.m13 >> m.m14
-		  >> m.m21 >> m.m22 >> m.m23 >> m.m24
-		  >> m.m31 >> m.m32 >> m.m33 >> m.m34
-			>> m.m41 >> m.m42 >> m.m43 >> m.m44;
+	{		
+		char c;
+		s >> c
+		  >> m.m11 >> m.m12 >> m.m13 >> m.m14 >> c >> c
+		  >> m.m21 >> m.m22 >> m.m23 >> m.m24 >> c >> c
+		  >> m.m31 >> m.m32 >> m.m33 >> m.m34 >> c >> c
+			>> m.m41 >> m.m42 >> m.m43 >> m.m44 >> c;
 		
 		return s;
 	}
 
 	template <class T>
 	std::ostream& operator << (std::ostream& s, const TMatrix4x4<T>& m)
-	{
+	{ 
 		s << '/'  <<  std::setw(14) << m.m11 << ' ' << std::setw(14) << m.m12 << ' ' << std::setw(14) << m.m13 << ' ' << std::setw(14) << m.m14 << " \\" << std::endl
 			<< '|'  <<  std::setw(14) << m.m21 << ' ' << std::setw(14) << m.m22 << ' ' << std::setw(14) << m.m23 << ' ' << std::setw(14) << m.m24 << " |"  << std::endl
 			<< '|'  <<  std::setw(14) << m.m31 << ' ' << std::setw(14) << m.m32 << ' ' << std::setw(14) << m.m33 << ' ' << std::setw(14) << m.m34 << " |"  << std::endl
