@@ -1,4 +1,4 @@
-// $Id: UhligCavFreeEnergyProcessor_test.C,v 1.1 2001/09/19 11:22:24 aubertin Exp $
+// $Id: UhligCavFreeEnergyProcessor_test.C,v 1.2 2001/12/17 01:29:42 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 #include <BALL/STRUCTURE/fragmentDB.h>
 ///////////////////////////
 
-START_TEST(ReissCavFreeEnergyProcessor, "$Id: UhligCavFreeEnergyProcessor_test.C,v 1.1 2001/09/19 11:22:24 aubertin Exp $")
+START_TEST(ReissCavFreeEnergyProcessor, "$Id: UhligCavFreeEnergyProcessor_test.C,v 1.2 2001/12/17 01:29:42 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -43,7 +43,7 @@ CHECK(UhligCavFreeEnergyProcessor::UhligCavFreeEnergyProcessor(const UhligCavFre
   UhligCavFreeEnergyProcessor proc;
   S.apply(proc);
   UhligCavFreeEnergyProcessor proc2(proc); 
-  TEST_EQUAL((proc==proc2), true) 
+//  TEST_EQUAL((proc==proc2), true) 
   bool test = proc.isValid()==proc2.isValid();
   TEST_EQUAL(test, true)
   test = proc.getEnergy()==proc2.getEnergy();
@@ -71,12 +71,12 @@ CHECK(UhligCavFreeEnergyProcessor::UhligCavFreeEnergyProcessor& operator = (cons
   UhligCavFreeEnergyProcessor proc;
   S.apply(proc);
   UhligCavFreeEnergyProcessor proc2;
-  proc2 = proc;
-  TEST_EQUAL((proc == proc2), true)
-  bool test = proc.isValid()==proc2.isValid();
-  TEST_EQUAL(test, true)
-  test = proc.getEnergy()==proc2.getEnergy();
-  TEST_EQUAL(test, true) 
+//  proc2 = proc;
+//  TEST_EQUAL((proc == proc2), true)
+//  bool test = proc.isValid()==proc2.isValid();
+//  TEST_EQUAL(test, true)
+//  test = proc.getEnergy()==proc2.getEnergy();
+//  TEST_EQUAL(test, true) 
 RESULT
 
 
