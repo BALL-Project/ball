@@ -1,4 +1,4 @@
-// $Id: global.h,v 1.2 2000/01/16 17:25:39 oliver Exp $
+// $Id: global.h,v 1.3 2000/01/28 16:38:28 oliver Exp $
 
 #ifndef BALL_COMMON_GLOBAL_H
 #define BALL_COMMON_GLOBAL_H
@@ -8,10 +8,6 @@
 #endif
 
 #include <limits.h>
-
-//#ifndef BALL_COMMON_DEBUG_H
-//#	include <BALL/COMMON/debug.h>
-//#endif
 
 #ifndef BALL_COMMON_VERSION_H
 #	include <BALL/COMMON/version.h>
