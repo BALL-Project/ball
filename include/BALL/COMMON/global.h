@@ -1,4 +1,4 @@
-// $Id: global.h,v 1.9.4.1 2002/05/27 23:57:13 oliver Exp $
+// $Id: global.h,v 1.9.4.2 2002/05/31 22:40:34 oliver Exp $
 
 #ifndef BALL_COMMON_GLOBAL_H
 #define BALL_COMMON_GLOBAL_H
@@ -170,7 +170,7 @@ namespace BALL
 
 	/**	Complex numbers
 	*/
-	typedef complex<float> Complex;
+	typedef std::complex<float> Complex;
 	//@}
 
 	enum ASCII
