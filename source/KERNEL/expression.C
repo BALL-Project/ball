@@ -16,14 +16,16 @@ namespace BALL
 	// Expression class, frontend to ExpressionTree
 
 	Expression::Expression() 
-		: expression_tree_(0)
+		: expression_tree_(0),
+			expression_string_("<not initialized>")
 	{
 		registerStandardPredicates_();
 	}
 
 	Expression::Expression(const Expression& expression)
 		:	create_methods_(expression.create_methods_),
-		  expression_tree_(new ExpressionTree(*expression.expression_tree_))
+		  expression_tree_(new ExpressionTree(*expression.expression_tree_)),
+			expression_string_(expression.expression_string_)
 	{
 	}
 
@@ -78,11 +80,17 @@ namespace BALL
 	{
 		delete expression_tree_;
 		expression_tree_ = 0;
+		expression_string_ = expression;
 
 		SyntaxTree tree(expression);
 		tree.parse();
 
 		expression_tree_ = constructExpressionTree_(tree);
+	}
+
+	const String& Expression::getExpression() const
+	{
+		return expression_string_;
 	}
 
   ExpressionTree* Expression::constructExpressionTree_(const SyntaxTree& t)

@@ -1,4 +1,4 @@
-// $Id: expression.h,v 1.4 2000/05/24 15:12:21 anker Exp $
+// $Id: expression.h,v 1.5 2000/05/25 10:56:46 oliver Exp $
 
 #ifndef BALL_KERNEL_EXPRESSION_H
 #define BALL_KERNEL_EXPRESSION_H
@@ -314,6 +314,10 @@ namespace BALL
 		*/
 		void setExpression(const String& expression);
 
+		/**
+		*/
+		const String& getExpression() const;
+
 		//@}
 
 		protected:
@@ -323,7 +327,7 @@ namespace BALL
 
 		StringHashMap<CreationMethod> create_methods_;
 		ExpressionTree*								expression_tree_;
-
+		String												expression_string_;
 	};
 	//@}
 }	
