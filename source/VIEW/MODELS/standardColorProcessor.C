@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.30 2004/08/07 19:51:26 oliver Exp $
+// $Id: standardColorProcessor.C,v 1.31 2004/08/25 10:24:52 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -455,6 +455,7 @@ namespace BALL
 		{
 			AtomDistanceHashMap::Iterator it1 = atom_2_distance_.begin();
 			AtomDistanceHashMap::Iterator it1_old;
+			Molecule dummy;
 
 			// brute force
 			for(; it1 != atom_2_distance_.end();)
@@ -464,12 +465,18 @@ namespace BALL
 				it1_old = it1;
 
 				AtomDistanceHashMap::Iterator it2 = ++it1;
-
+				
 				for(; it2 != atom_2_distance_.end(); ++it2)
 				{
 					Atom* atom2 = (Atom*)(it2->first);
+					/*
+					Composite* ancestor = atom1->getLowestCommonAncestor(*atom2);
 
-					if (&atom1->getRoot() != &atom2->getRoot())
+					if (ancestor == 0 ||
+							RTTI::isKindOf<System>(*ancestor) ||
+							RTTI::isKindOf<Molecule>(*ancestor))
+					{*/
+					if (atom1->isSelected() != atom2->isSelected())
 					{
 						float distance = (atom2->getPosition() - atom1->getPosition()).getLength();
 						
@@ -495,7 +502,6 @@ namespace BALL
 		ColorRGBA AtomDistanceColorProcessor::getColor(const Composite* composite)
 		{
 			if (composite == 0) return default_color_;
-			if (composite->isSelected()) return ColorProcessor::getColor(composite);
 
 			if (!RTTI::isKindOf<Atom>(*composite))
 			{
