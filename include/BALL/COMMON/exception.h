@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: exception.h,v 1.46 2004/05/27 19:49:36 oliver Exp $
+// $Id: exception.h,v 1.47 2004/09/01 12:22:34 amoll Exp $
 //
    
 #ifndef BALL_COMMON_EXCEPTION_H
@@ -433,6 +433,16 @@ namespace BALL
 			public:
 			///
 			Postcondition(const char* file, int line, const char* condition) throw();
+		};
+
+		/// Exception to be thrown if an invalid option is given
+		class InvalidOption: public Exception::GeneralException
+		{
+			public:
+
+				///
+				InvalidOption(const char* file, int line, int option)
+					throw();
 		};
 
 		/**

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: exception.C,v 1.34 2003/06/11 16:09:25 oliver Exp $
+// $Id: exception.C,v 1.35 2004/09/01 12:22:45 amoll Exp $
 //
 
 #include <BALL/COMMON/exception.h>
@@ -288,6 +288,12 @@ namespace BALL
 			{
 			}
 		
+			InvalidOption::InvalidOption(const char* file, int line, int option)
+				throw()
+				: GeneralException(file, line, "Invalid option: ", option)
+			{
+			}
+
 			DEF_EXCEPTION(DivisionByZero, "a division by zero was requested")
 
 			DEF_EXCEPTION(InvalidRange, "the range of the operation was invalid")
