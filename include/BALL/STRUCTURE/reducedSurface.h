@@ -1,4 +1,4 @@
-// $Id: reducedSurface.h,v 1.8 2000/12/13 19:00:52 oliver Exp $
+// $Id: reducedSurface.h,v 1.9 2001/01/10 14:47:28 strobel Exp $
 
 //#define debug_rs
 //#define print cout
@@ -356,7 +356,7 @@ namespace BALL
 					{
 						clear();
 						indices = all_indices;
-						std::cout << "\nProbeSphere berührt vier Atome, starte neu ...\n\n";
+						cout << "\nProbeSphere berührt vier Atome, starte neu ...\n\n";
 						compute();
 						return;
 					}
