@@ -1,0 +1,45 @@
+<node>ACE
+	<node>Names
+		<node>?????</node>
+	</node>
+	<node>Atoms
+		<node>C<value>C -0.710977 -1.12008 0.000774821</value></node>
+		<node>CH3<value>C 0.0997794 -2.40762 0.00202052</value></node>
+		<node>O<value>O -1.92224 -1.17518 0.00112378</value></node>
+		<node>1HH3<value>H -0.167239 -2.98461 0.880642</value></node>
+		<node>2HH3<value>H 1.1711 -2.24422 -0.00400307</value></node>
+		<node>3HH3<value>H -0.176322 -2.99236 -0.868617</value></node>
+	</node>
+	<node>Bonds
+		<node>1<value>C CH3 s</value></node>
+		<node>2<value>C O d</value></node>
+		<node>3<value>CH3 1HH3 s</value></node>
+		<node>4<value>CH3 2HH3 s</value></node>
+		<node>5<value>CH3 3HH3 s</value></node>
+	</node>
+	<node>Connections
+		<node>C-term<value>C N-term s 1.33 0.5</value></node>
+	</node>
+	<node>Properties
+		<node>AMINO_ACID</node>
+	</node>
+	<node>Variants
+		<node>ACE-N
+			<node>Delete
+				<node>OXT</node>
+			</node>
+			<node>Rename	
+				<node>1H<value>H</value></node>
+			</node>
+			<node>Properties
+				<node>N_TERMINAL</node>
+			</node>
+		</node>
+		<node>NME-M
+			<node>Properties
+				<node>C_TERMINAL</node>
+				<node>N_TERMINAL</node>
+			</node>
+		</node>
+	</node>
+</node>
