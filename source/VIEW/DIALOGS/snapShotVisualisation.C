@@ -280,7 +280,7 @@ void SnapshotVisualisationDialog::setSnapShotManager(SnapShotManager* snapshot_m
 	numberOfSnapshots->setText(tmp_);
 	endSnapshot->setText(tmp_);
 	snapShotSlider->setRange(1,snap_shot_manager_->getTrajectoryFile()->getNumberOfSnapShots());
-	animationSpeedLineEdit->setText(String(1).c_str() + String("x"));
+	animationSpeedLineEdit->setText("1x");
 	tmp_.setNum(1);
   currentSnapshot->setText(tmp_);
 	startSnapshot->setText(tmp_);
