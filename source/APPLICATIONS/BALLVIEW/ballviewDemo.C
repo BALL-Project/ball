@@ -53,8 +53,10 @@ BALLViewDemo::~BALLViewDemo()
 void BALLViewDemo::show()
 {
 	widget_stack->raiseWidget(0);
+	buttonOk->setEnabled(true);
 	DisplayProperties* dp = DisplayProperties::getInstance(0);
 	dp->setDrawingPrecision(DRAWING_PRECISION_HIGH);
+	dp->setSurfaceDrawingPrecision(6.5);
 	dp->enableCreationForNewMolecules(false);
 	system_ = new System();
 
@@ -97,7 +99,7 @@ void BALLViewDemo::onNotify(Message *message)
 
 	Index id = widget_stack->id(widget_stack->visibleWidget());
 
-	if (id == MODEL_HBONDS + 5)
+	if (id == 12)
 	{
 		if (RTTI::isKindOf<FinishedSimulationMessage>(*message))
 		{
@@ -107,7 +109,7 @@ void BALLViewDemo::onNotify(Message *message)
 	}
 
 
-	if (id == MODEL_HBONDS + 6)
+	if (id == 13)
 	{
 		RegularData3DMessage* msg = RTTI::castTo<RegularData3DMessage>(*message);
 		if (msg != 0 &&
@@ -141,7 +143,7 @@ void BALLViewDemo::accept()
 	MolecularStructure* ms = MolecularStructure::getInstance(0);
 	bool disable_button = true;
 
-	if (id < MODEL_HBONDS + 7)
+//   	if (id < MODEL_HBONDS + 7)
 	{
 		// remove representations
 		PrimitiveManager& pm = getMainControl()->getPrimitiveManager();
@@ -154,41 +156,42 @@ void BALLViewDemo::accept()
 		}
 	}
 
-	if (id < MODEL_HBONDS - 1)
+	if (id < 7)
 	{
-		if (((ModelType)id) >= MODEL_SA_SURFACE) id ++;
- 		CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, (ModelType) id, COLORING_ELEMENT);
-//   CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_ELEMENT);
+		ModelType type = (ModelType) id;
+		if (type >= MODEL_SA_SURFACE) ((Index)type) ++;
+if (type == MODEL_SE_SURFACE) type = MODEL_LINES;
+ 		CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, type, COLORING_ELEMENT);
 		notify_(crmsg);
 	}
-	else if (id == MODEL_HBONDS - 1)
+	else if (id == 7)
 	{
-		CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_ELEMENT);
-		notify_(crmsg);
-		crmsg = new CreateRepresentationMessage(composites_, MODEL_HBONDS, COLORING_ELEMENT);
-		notify_(crmsg);
+   	CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_ELEMENT);
+   	notify_(crmsg);
+ 		crmsg = new CreateRepresentationMessage(composites_, MODEL_HBONDS, COLORING_ELEMENT);
+ 		notify_(crmsg);
 	}
-	else if (id == MODEL_HBONDS)
+	else if (id == 8)
 	{
 		CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_VDW, COLORING_TEMPERATURE_FACTOR);
 		notify_(crmsg);
 	}
-	else if (id == MODEL_HBONDS + 1)
+	else if (id == 9)
 	{
 		CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_CARTOON, COLORING_SECONDARY_STRUCTURE);
 		notify_(crmsg);
 	}
-	else if (id == MODEL_HBONDS + 2)
+	else if (id == 10)
 	{
 		CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_CARTOON, COLORING_RESIDUE_INDEX);
 		notify_(crmsg);
 	}
-	else if (id == MODEL_HBONDS + 3)
+	else if (id == 11)
 	{
 		CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_RESIDUE_NAME);
 		notify_(crmsg);
 	}
-	else if (id == MODEL_HBONDS + 4)
+	else if (id == 12)
 	{
 		CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_ELEMENT);
 		notify_(crmsg);
@@ -198,13 +201,13 @@ void BALLViewDemo::accept()
  		ms->getMDSimulationDialog().setNumberOfSteps(30);
 		ms->MDSimulation(false);
 	}
-	else if (id == MODEL_HBONDS + 5) //FDPB
+	else if (id == 13) //FDPB
 	{
 		ms->calculateFDPB();
 		ms->getFDPBDialog()->okPressed();
 		disable_button = false;
 	}
-	else if (id == MODEL_HBONDS + 6) // SES colored 
+	else if (id == 14) // SES colored 
 	{
 		getMainControl()->getPrimitiveManager().setMultithreadingMode(false);
 		CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_SE_SURFACE, COLORING_ELEMENT);
@@ -278,7 +281,7 @@ void BALLViewDemo::accept()
  		disable_button = false;
 		
 	}
-	else if (id == MODEL_HBONDS + 7) // last
+	else if (id == 15) // last
 	{
 		CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_ELEMENT);
 		notify_(crmsg);
