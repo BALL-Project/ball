@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockWidget.C,v 1.4 2003/09/09 23:23:22 amoll Exp $
+// $Id: dockWidget.C,v 1.5 2003/09/10 01:27:49 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/dockWidget.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -17,7 +17,8 @@ namespace BALL
 		
 DockWidget::DockWidget(QWidget* parent, const char* name)
 : QDockWindow(QDockWindow::InDock, parent),
-	ModularWidget(name)
+	ModularWidget(name),
+	default_visible_(true)
 {
 	layout_ = new QVBoxLayout(this);
   caption_label_ = new QLabel(this, "caption_label");
@@ -99,23 +100,38 @@ void DockWidget::writePreferences(INIFile& inifile)
 {
 	inifile.insertValue("WINDOWS", getIdentifier() + "::on", 
 		String(getMainControl()->menuBar()->isItemChecked(window_menu_entry_id_)));
+
+	inifile.insertValue("WINDOWS", getIdentifier() + "::x", String(x()));
+	inifile.insertValue("WINDOWS", getIdentifier() + "::y", String(y()));
+	inifile.insertValue("WINDOWS", getIdentifier() + "::width", String(width()));
+	inifile.insertValue("WINDOWS", getIdentifier() + "::height", String(height()));
+
+	inifile.insertValue("WINDOWS", getIdentifier() + "::docked", String(place()));
 }
 
 void DockWidget::fetchPreferences(INIFile & inifile)
 	throw()
 {
-	if (!inifile.hasEntry("WINDOWS", getIdentifier() + "::on")) return;
-	if (inifile.getValue( "WINDOWS", getIdentifier() + "::on").toUnsignedInt() == 0) 
+	if (	 (inifile.hasEntry("WINDOWS", getIdentifier() + "::on") &&
+				  inifile.getValue("WINDOWS", getIdentifier() + "::on").toUnsignedInt() == 0)
+		  || (!default_visible_))
 	{
 		switchShowWidget();
 	}
-}
 
+	if (inifile.hasEntry("WINDOWS", getIdentifier() + "::x"))
+	{
+		setGeometry(inifile.getValue("WINDOWS", getIdentifier() + "::x").toUnsignedInt(),
+		            inifile.getValue("WINDOWS", getIdentifier() + "::y").toUnsignedInt(),
+		            inifile.getValue("WINDOWS", getIdentifier() + "::width").toUnsignedInt(),
+		            inifile.getValue("WINDOWS", getIdentifier() + "::height").toUnsignedInt());
+	}
 
-void DockWidget::close()
-{
-Log.error() << "#~~#   1" << std::endl;
-	QDockWindow::close();
+	if (inifile.hasEntry("WINDOWS", getIdentifier() + "::docked") &&
+			inifile.getValue("WINDOWS", getIdentifier() + "::docked").toUnsignedInt() != 0)
+	{
+		undock();
+	}
 }
 
 } } // namespaces
