@@ -1,4 +1,4 @@
-dnl		$Id: aclocal.m4,v 1.15 2003/03/03 13:09:04 anhi Exp $
+dnl		$Id: aclocal.m4,v 1.16 2003/04/01 21:15:01 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -3123,6 +3123,16 @@ AC_DEFUN(CF_PYTHON, [
 			AC_MSG_ERROR(Aborted)
 		fi
 
+		AC_MSG_CHECKING(for Python interpreter)
+		if test -x "${PYTHON_EXECUTABLE}" ; then
+			AC_MSG_RESULT(${PYTHON_EXECUTABLE})
+		else
+			AC_MSG_RESULT()
+			AC_MSG_RESULT([Could not find Python interpreter ]${PYTHON_EXCUTABLE})
+			AC_MSG_RESULT([Please use --with-python=EXE to specify its location.])
+			AC_MSG_ERROR(Aborted)
+		fi
+			
 		dnl
 		dnl	 Run python to retrieve some useful configuration information
 		dnl	
@@ -3132,6 +3142,7 @@ AC_DEFUN(CF_PYTHON, [
 		PYTHON_VERSION_NUMBER_1=`echo ${PYTHON_VERSION} | ${CUT} -d. -f1`
 		PYTHON_VERSION_NUMBER_2=`echo ${PYTHON_VERSION} | ${CUT} -d. -f2`
 		PYTHON_VERSION_NUMBER_3=`echo ${PYTHON_VERSION} | ${CUT} -d. -f3`
+
 		dnl
 		dnl	shorten the release number to Major.minor (only those are used to construct
 		dnl include and lib paths)

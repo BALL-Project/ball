@@ -17207,6 +17207,23 @@ echo "$as_me: error: Aborted" >&2;}
    { (exit 1); exit 1; }; }
 		fi
 
+		echo "$as_me:$LINENO: checking for Python interpreter" >&5
+echo $ECHO_N "checking for Python interpreter... $ECHO_C" >&6
+		if test -x "${PYTHON_EXECUTABLE}" ; then
+			echo "$as_me:$LINENO: result: ${PYTHON_EXECUTABLE}" >&5
+echo "${ECHO_T}${PYTHON_EXECUTABLE}" >&6
+		else
+			echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6
+			echo "$as_me:$LINENO: result: Could not find Python interpreter ${PYTHON_EXCUTABLE}" >&5
+echo "${ECHO_T}Could not find Python interpreter ${PYTHON_EXCUTABLE}" >&6
+			echo "$as_me:$LINENO: result: Please use --with-python=EXE to specify its location." >&5
+echo "${ECHO_T}Please use --with-python=EXE to specify its location." >&6
+			{ { echo "$as_me:$LINENO: error: Aborted" >&5
+echo "$as_me: error: Aborted" >&2;}
+   { (exit 1); exit 1; }; }
+		fi
+
 								echo "$as_me:$LINENO: checking for Python version" >&5
 echo $ECHO_N "checking for Python version... $ECHO_C" >&6
 		PYTHON_VERSION=`${PYTHON_EXECUTABLE} -c 'import sys;print sys.version' | ${SED} -n 1p | ${CUT} -d\  -f1`
@@ -17215,6 +17232,7 @@ echo "${ECHO_T}${PYTHON_VERSION}" >&6
 		PYTHON_VERSION_NUMBER_1=`echo ${PYTHON_VERSION} | ${CUT} -d. -f1`
 		PYTHON_VERSION_NUMBER_2=`echo ${PYTHON_VERSION} | ${CUT} -d. -f2`
 		PYTHON_VERSION_NUMBER_3=`echo ${PYTHON_VERSION} | ${CUT} -d. -f3`
+
 										PYTHON_VERSION="${PYTHON_VERSION_NUMBER_1}.${PYTHON_VERSION_NUMBER_2}"
 
 								if test "${PYTHON_VERSION_NUMBER_1}" -le 1 ; then
