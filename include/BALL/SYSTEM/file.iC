@@ -1,4 +1,4 @@
-// $Id: file.iC,v 1.5 2000/06/09 12:30:56 amoll Exp $
+// $Id: file.iC,v 1.6 2000/06/12 16:01:32 amoll Exp $
 
 BALL_INLINE 
 void File::enableProtocol(File::Protocol protocol)
