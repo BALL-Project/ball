@@ -1,4 +1,4 @@
-// $Id: molecularFileDialog.C,v 1.4 2002/12/12 18:16:23 amoll Exp $
+// $Id: molecularFileDialog.C,v 1.5 2002/12/12 18:24:41 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/molecularFileDialog.h>
 
@@ -131,6 +131,7 @@ namespace BALL
 				Log.error() << "Not a single system selected! Aborting writing..." << std::endl;
 				return false;
 			}
+			
 
 			setStatusbarText("writing PDB file...");
 
@@ -146,6 +147,17 @@ namespace BALL
 			fd->exec();
 
 			String filename(fd->selectedFile());
+			
+			bool ok = false;
+			try
+			{
+				if (File::isWritable(filename)) ok = true;
+			}
+			catch(...)
+			{}
+
+			if (!ok || filename == "/" || filename == "\\") return false;
+
 
 			const System& system = *(const System*) (*selection.begin());
 
