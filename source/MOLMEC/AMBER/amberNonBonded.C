@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.C,v 1.20.4.17 2002/11/26 20:54:08 oliver Exp $
+// $Id: amberNonBonded.C,v 1.20.4.18 2002/11/26 21:40:04 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -13,9 +13,6 @@ using namespace std;
 // ???? Relics induced by SGI/CC
 // #define TPL_ARG_INLINE inline
 #define TPL_ARG_INLINE 
-
-// ???? Induced by incorrect handling of template functions by SUNPro 5.3 (WS 6U2)
-//#define BALL_MUST_CAST_TEMPLATE_FUNCTION_ARGS
 
 namespace BALL 
 {

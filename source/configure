@@ -13865,9 +13865,6 @@ fi
 if test "${ADDITIONAL_COMMENTS}" = "" ; then
 	ADDITIONAL_COMMENTS=""
 fi
-if test "${USE_BALLVIEW}" = true ; then
-	ADDITIONAL_COMMENTS="${ADDITIONAL_COMMENTS}\n\nTo build the molecule viewer MolVIEW, please type\n\n   make molview\n\nThe executable is built in the directory APPLICATIONS/MOLVIEW\n"
-fi
 
 
 

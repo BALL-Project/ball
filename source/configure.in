@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.19.4.12 2002/11/26 19:36:40 oliver Exp $
+dnl    $Id: configure.in,v 1.19.4.13 2002/11/26 21:40:04 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -1353,6 +1353,9 @@ if test "${COMPILER_DONE}" != true ; then
 		AC_DEFINE(SOLARIS,)
 
 		TEMPLATE_DIR="SunWS_cache"
+		dnl  a nasty bug in SUNPro CC 5.3 causes trouble
+		dnl  with the function templates in amberNonBonded.C
+		AC_DEFINE(BALL_MUST_CAST_TEMPLATE_FUNCTION_ARGS,)
 
 		dnl	 set the default binary format (if none selected)
 		dnl
@@ -1380,6 +1383,7 @@ if test "${COMPILER_DONE}" != true ; then
 		MAKEDEP_CXX_SUFFIX=" >.Dependencies"
 
 		AC_DEFINE(BALL_NO_INLINE_FUNCTIONS,)
+		
 		CXXFLAGS="${CXXFLAGS} -KPIC"
 		CXXFLAGS_O="${CXXFLAGS_O} -xO5"
 		CXXFLAGS_D="${CXXFLAGS_D}"
@@ -3458,9 +3462,6 @@ dnl   case for the IRIX LD_LBRARY_PATH/LD_LIBRARY64_PATH/LD_LIBRARYN32_PATH)
 dnl   If BALLVIEW is to be built, we add a hint for MolVIEW.
 if test "${ADDITIONAL_COMMENTS}" = "" ; then
 	ADDITIONAL_COMMENTS=""
-fi
-if test "${USE_BALLVIEW}" = true ; then
-	ADDITIONAL_COMMENTS="${ADDITIONAL_COMMENTS}\n\nTo build the molecule viewer MolVIEW, please type\n\n   make molview\n\nThe executable is built in the directory APPLICATIONS/MOLVIEW\n"
 fi
 AC_SUBST(ADDITIONAL_COMMENTS)
 

@@ -1,4 +1,4 @@
-// $Id: config.h.in,v 1.29.2.1 2002/08/26 06:33:26 oliver Exp $ 
+// $Id: config.h.in,v 1.29.2.2 2002/11/26 21:40:04 oliver Exp $ 
 
 #ifndef BALL_CONFIG_CONFIG_H
 #define BALL_CONFIG_CONFIG_H
@@ -161,6 +161,10 @@
 // Define the template argument for friends of template classes:
 // either "" or "<>"
 #define BALL_NULL_TEMPLATE_ARGS ""
+
+// Basically a work-around for the broken SUNPro CC (WS 6U2),
+// which handles function template incorrectly -- see amberNonBonded.C
+#undef BALL_MUST_CAST_TEMPLATE_FUNCTION_ARGS
 
 // Define whether the compiler provides an ANSI-compliant implementation
 // of <iostream>. This is required in COMMON/socket.h/C since we need
