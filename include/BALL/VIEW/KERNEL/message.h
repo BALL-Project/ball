@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.52 2004/06/24 23:03:42 amoll Exp $
+// $Id: message.h,v 1.53 2004/06/25 14:52:50 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -273,9 +273,6 @@ class BALL_EXPORT SceneMessage: public Message
 		
 		/// Remove the coordinate system in the Scene.
 		REMOVE_COORDINATE_SYSTEM,
-
-		/// Modified Clipping Planes
-		UPDATE_CLIPPING_PLANES,
 
 		/// Export a PNG
 		EXPORT_PNG,
