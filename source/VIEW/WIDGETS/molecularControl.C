@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.93 2005/02/14 14:10:49 amoll Exp $
+// $Id: molecularControl.C,v 1.94 2005/02/14 14:37:46 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -776,8 +776,11 @@ void MolecularControl::cut()
 			(**it).getParent()->removeChild(**it);
  			if (was_delete_) delete *it;
 		}
-
-		getMainControl()->remove(**it, was_delete_);
+		else
+		{
+			// only update roots this way, otherwise it may take too long for serveral items to be pasted
+			getMainControl()->remove(**it, was_delete_);
+		}
 
 		if (!was_delete_) copy_list_.push_back(*it);
 	}
