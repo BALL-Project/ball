@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.18.2.2 2004/12/30 15:25:10 amoll Exp $
+// $Id: POVRenderer.C,v 1.18.2.3 2004/12/30 19:49:14 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -266,7 +266,7 @@ namespace BALL
 			(*outfile_) << "specular " 	<< stage.getSpecularIntensity() / 2.0 + 0.5 << " ";
 			(*outfile_) << "diffuse " 	<< stage.getDiffuseIntensity() 	/ 2.0 + 0.5 << " ";
 			// povray uses an other ambient setting
-			(*outfile_) << "ambient 0.0 "	 	<< endl;
+			(*outfile_) << "ambient 0.0 }"	 	<< endl;
 			(*outfile_) << "#declare BALLFinishSphereSolid      = BALLFinish" << endl;
 			(*outfile_) << "#declare BALLFinishSphereTransp     = BALLFinish" << endl;
 			(*outfile_) << "#declare BALLFinishTubeSolid        = BALLFinish" << endl;
@@ -443,6 +443,113 @@ namespace BALL
 		}
 
 		void POVRenderer::renderMesh_(const Mesh& mesh)
+			throw()
+		{
+			if (mesh.vertex.size() == 0 ||
+			    mesh.normal.size() == 0 ||
+					mesh.triangle.size() == 0)
+			{
+				return;
+			}
+
+			std::ostream& out = *outfile_;
+
+			out << "\tmesh2 {" << endl;
+			// write vertices ---->
+			out << "\t\tvertex_vectors {" << endl;
+			out << "\t\t\t" << mesh.vertex.size() << ","  << endl;
+			out << "\t\t\t";
+			for (Position i = 0; i < mesh.vertex.size() - 1; i++)
+			{
+				out << POVVector3(mesh.vertex[i]) << ", ";
+			}
+			out << POVVector3(mesh.vertex[mesh.vertex.size() - 1]) << endl;
+			out << "\t\t}" << endl;
+
+			// write normals ---->
+			out << "\t\tnormal_vectors {" << endl;
+			out << "\t\t\t" << mesh.normal.size() << "," << endl;
+			out << "\t\t\t";
+			for (Position i = 0; i < mesh.normal.size() - 1; i++)
+			{
+				out << POVVector3(mesh.normal[i]) << ", ";
+			}
+			out << POVVector3(mesh.normal[mesh.normal.size() - 1]) << endl;
+			out << "\t\t}" << endl;
+
+			/////////////////////////////////////////////////
+			// calculate a hashset of all colors in the mesh
+			/////////////////////////////////////////////////
+			HashMap<String, Position> colors;
+			vector<ColorRGBA> color_vector;
+			Position pos = 0;
+			String color_string;
+			for (Position i = 0; i < mesh.colorList.size(); i++)
+			{
+				mesh.colorList[i].get(color_string);
+				if (!colors.has(color_string))
+				{
+					colors[color_string] = pos;
+					color_vector.push_back(mesh.colorList[i]);
+					pos++;
+				}
+			}
+
+			// write colors of vertices ---->
+			out << "\t\ttexture_list{" << endl;
+			out << "\t\t\t" << colors.size() + 1<< ","<< endl;
+
+			ColorRGBA temp_color;
+			for (Position p = 0; p < color_vector.size(); p++)
+			{
+				temp_color.set(color_vector[p]);
+				out << "texture { pigment { " << POVColorRGBA(temp_color) << " } }," << endl;
+			}
+			out << "texture { pigment { " << POVColorRGBA(temp_color) << " } }" << endl; // dummy
+			out << "\t\t}" << endl;
+			
+			// write vertex indices ---->
+			out << "\t\tface_indices {" << endl;
+			out << "\t\t\t" << mesh.triangle.size() << ","<<  endl;
+			if (colors.size() == 1)
+			{
+				out << "\t\t\t";
+				for (Position i = 0; i < mesh.triangle.size(); i++)
+				{
+					out << "<";
+					out << mesh.triangle[i].v1 << ", ";
+					out << mesh.triangle[i].v2 << ", ";
+					out << mesh.triangle[i].v3 << ", ";
+					// color index
+					out << "> " << 0 << endl;
+				}
+			}
+			else
+			{
+				String color_temp;
+				for (Position i = 0; i < mesh.triangle.size(); i++)
+				{
+					out << "<";
+					out << mesh.triangle[i].v1 << ", ";
+					out << mesh.triangle[i].v2 << ", ";
+					out << mesh.triangle[i].v3;
+					out << ">, " << endl;
+					// color index
+					mesh.colorList[mesh.triangle[i].v1].get(color_temp);
+					out << colors[color_temp] << ", ";
+					mesh.colorList[mesh.triangle[i].v1].get(color_temp);
+					out << colors[color_temp] << ", ";
+					mesh.colorList[mesh.triangle[i].v1].get(color_temp);
+					out << colors[color_temp] << endl;
+				}
+			}
+			out << "\t\t}" << endl;
+
+			out << "\t}" << endl;
+		}
+				
+
+		void POVRenderer::renderMesh2_(const Mesh& mesh)
 			throw()
 		{
 			// so we should let POVRay know...
