@@ -1,4 +1,4 @@
-// $Id: periodicBoundary.C,v 1.5 2000/02/02 14:10:06 len Exp $
+// $Id: periodicBoundary.C,v 1.6 2000/03/25 22:57:47 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/periodicBoundary.h>
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -114,7 +114,7 @@ namespace BALL
 		float mass;
 		float atomic_mass;
 		Vector3 center_of_gravity;
-		vector<Atom*>& atom = const_cast<vector<Atom*>&>(force_field_->getAtoms());
+		AtomVector& atom = const_cast<AtomVector&>(force_field_->getAtoms());
 		float shift_x = box_.b.x - box_.a.x;
 		float shift_y = box_.b.y - box_.a.y;
 		float shift_z = box_.b.z - box_.a.z;
