@@ -1,4 +1,4 @@
-// $Id: exception.C,v 1.6 2000/03/16 12:17:17 oliver Exp $
+// $Id: exception.C,v 1.7 2000/04/02 14:35:32 oliver Exp $
 
 #include <BALL/COMMON/exception.h>
 #include <BALL/COMMON/logStream.h>
@@ -8,6 +8,9 @@
 #include <exception>
 #include <stdio.h>
 #include <stdlib.h>	// for getenv in terminate()
+#include <sys/types.h>
+#include <signal.h> // for SIGSEGV and kill
+#include <unistd.h> // fot getpid
 
 #define BALL_CORE_DUMP_ENVNAME "BALL_DUMP_CORE"
 
@@ -208,8 +211,7 @@ namespace BALL
 					Log.error() << "dumping core file.... (to avoid this, unset " << BALL_CORE_DUMP_ENVNAME 
 											<< " in your environment)" << endl;
 					// provoke a core dump 
-					int* ptr = 0;
-					*ptr = 1;
+					kill(getpid(), SIGSEGV);
 				}
 
 				// otherwise exit cleanly
