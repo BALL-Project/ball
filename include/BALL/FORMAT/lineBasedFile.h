@@ -1,4 +1,4 @@
-// $Id: lineBasedFile.h,v 1.12 2001/01/24 11:58:21 amoll Exp $
+// $Id: lineBasedFile.h,v 1.13 2001/02/28 01:17:12 amoll Exp $
 #ifndef BALL_FORMAT_LINEBASEDFILE_H
 #define BALL_FORMAT_LINEBASEDFILE_H
 
@@ -21,6 +21,7 @@ namespace BALL
 {
 
 	/** This class is intended for use with Line Based File Formats.
+			{\bf Definition:} \URL{BALL/FORMAT/lineBasedFile.h} \\
 	*/
 	class LineBasedFile
 		:	public File
@@ -32,6 +33,7 @@ namespace BALL
 		/**	@name Exceptions
 		*/
 		//@{
+
 		/** Exception thrown if a file could not be processed right.
 		*/
 		class LineBasedFileError
@@ -40,8 +42,8 @@ namespace BALL
 			public:
 			LineBasedFileError(const char* file, int line, const LineBasedFile* f = 0, const string& message = "");
 		};
-		//@}
 
+		//@}
 		/**	@name Constructors and Destructors
 		*/
 		//@{
@@ -57,6 +59,7 @@ namespace BALL
 			throw(Exception::FileNotFound);
 
 		/** Copy constructor
+				The file is opened and the same position in it is seeked.
 		*/
 		LineBasedFile(const LineBasedFile& f)
 			throw();
@@ -67,7 +70,6 @@ namespace BALL
 			throw();
 
 		//@}
-
 		/**	@name Equality operators
 		*/
 		//@{
@@ -81,7 +83,6 @@ namespace BALL
 		bool operator != (const LineBasedFile& f)  throw();
 
 		//@}
-
 		/**	@name Assignment
 		*/
 		//@{
@@ -91,8 +92,8 @@ namespace BALL
 		*/
 		const LineBasedFile& operator = (const LineBasedFile& file)
 			throw();
-		//@}
 
+		//@}
 		/**	@name Accessors
 		*/
 		//@{
@@ -106,7 +107,6 @@ namespace BALL
 			const throw();
 
 		//@}
-
 		/**	@name	Help-Methods for File Acces
 		*/
 		//@{
@@ -123,15 +123,15 @@ namespace BALL
 		bool skipLines(Size number = 1)
 			throw(LineBasedFile::LineBasedFileError);
 
-		/** Function to search for a line starting like a given String.
+		/** Function to search for a line starting with a given String.
 				The search is started at the actual line.
-				@param return_to_point : true if line can not be found return to the starting position
+				@param return_to_point : true -> if line can not be found return to the starting position
 				@return true if line could be found
 		*/
 		bool search(const String& text, bool return_to_point = false)
 			throw(LineBasedFile::LineBasedFileError);
 
-		/** Like search above, but stop search when coming to a line staring with stop
+		/** Like search above, but stop search when coming to a line starting with stop
 		*/
 		bool search(const String& text, const String& stop, bool return_to_point)
 			throw(LineBasedFile::LineBasedFileError);
@@ -146,7 +146,18 @@ namespace BALL
 		void rewind()
 			throw(LineBasedFile::LineBasedFileError);
 
-		/// Tests a condition, if false prints an errormsg and terminates the programm
+		/** Tests a condition.
+				If false: Throw an exception and terminate the programm.
+				The method is implemented for use in derived classes.
+				Example: \\
+				test(__FILE__, __LINE__, shift_reference->elements.size() > 0,
+						 "no data for shift references found");
+				@param file should be used for __FILE__
+				@param line should be used for __LINE__
+				@param condition bool value to test
+				@param msg this string is used as message in the exception
+				@exception LineBasedFile if {\tt condition} is not fulfilled
+		*/
 		void test(const char* file, int line, bool condition, const String& msg) 
 			const throw(LineBasedFile::LineBasedFileError);
 
@@ -156,20 +167,21 @@ namespace BALL
 										const String& delimiters = String::CHARACTER_CLASS__WHITESPACE)
 			const	throw(Exception::IndexUnderflow);
 
-		/// Function to test if a String starts like an other String
+		/// Test if the actual line starts with text
 		bool startsWith(const String& text) 
 			const throw();
 
-		/// Return true if line_ has text
+		/// Return true if the actual line has text
 		bool has(const String& text) 
 			const throw();
 
-		/// Return the position of line_ in data or -1 if it does not exist in data
+		/** Switch method of the actual line.
+				Return the position of the actual in data or -1 if it does not exist.
+		*/
 		Index switchString(const std::vector<String>& data) 
 			const throw();
 
 		//@}
-
 		/*	@name	Protected Attributes
 		*/
 		//_@{

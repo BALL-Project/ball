@@ -1,4 +1,4 @@
-// $Id: charmmTorsion.h,v 1.6 2001/02/18 20:50:39 amoll Exp $
+// $Id: charmmTorsion.h,v 1.7 2001/02/28 01:17:38 amoll Exp $
 // Molecular Mechanics: CHARMM force field, proper torsion component
 
 #ifndef BALL_MOLMEC_CHARMM_CHARMMTORSION_H
@@ -24,6 +24,7 @@ namespace BALL
 {
 
 	/**	CHARMM torsion component
+			{\bf Definition:} \URL{BALL/MOLMEC/CHARMM/charmmTorsion.h}
 	*/
 	class CharmmTorsion 
 		: public ForceFieldComponent
@@ -82,7 +83,7 @@ namespace BALL
 		*/
 		CharmmTorsion();
 
-		/**	constructor.
+		/**	Constructor.
 		*/
 		CharmmTorsion(ForceField& force_field);
 

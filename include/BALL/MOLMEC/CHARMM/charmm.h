@@ -1,4 +1,4 @@
-// $Id: charmm.h,v 1.5 2001/02/18 20:50:38 amoll Exp $
+// $Id: charmm.h,v 1.6 2001/02/28 01:17:38 amoll Exp $
 // Molecular Mechanics: CHARMM force field class
 
 #ifndef BALL_MOLMEC_CHARMM_CHARMM_H
@@ -21,6 +21,7 @@ namespace BALL
 {
 
 	/**	CHARMM force field class.
+			{\bf Definition:} \URL{BALL/MOLMEC/CHARMM/charmm.h}
 	*/
 	class CharmmFF 
 		: public ForceField
@@ -38,6 +39,7 @@ namespace BALL
 			/**	The parameter file name
 			*/
 			static const char* FILENAME;
+
 			/**	Nonbonded cutoff
 			*/
 			static const char* NONBONDED_CUTOFF;
@@ -103,6 +105,8 @@ namespace BALL
 			static const char* OVERWRITE_TYPENAMES;
 		};
 
+		/** Default values
+		*/
 		struct Default
 		{
 			/**	Default filename for the parameter file
@@ -175,7 +179,7 @@ namespace BALL
 		};
 
 		//@}
-		/**@name	Constructors and Destructors
+		/** @name	Constructors and Destructors
 		*/
 		//@{
 
@@ -226,7 +230,7 @@ namespace BALL
 		virtual bool specificSetup();
 
 		//@}
-		/**	Accessors specific to the CHARMM force field
+		/**	@name	Accessors specific to the CHARMM force field
 		*/
 		//@{
 

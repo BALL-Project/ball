@@ -1,4 +1,4 @@
-// $Id: charmmBend.h,v 1.5 2001/02/18 20:50:38 amoll Exp $
+// $Id: charmmBend.h,v 1.6 2001/02/28 01:17:38 amoll Exp $
 // Molecular Mechanics: Charmm force field, bond stretch component
 
 #ifndef BALL_MOLMEC_CHARMM_CHARMMBEND_H
@@ -24,6 +24,7 @@ namespace BALL
 {
 
 	/**	Charmm bond stretch component
+			{\bf Definition:} \URL{BALL/MOLMEC/CHARMM/charmmBend.h}
 	*/
 	class CharmmBend 
 		: public ForceFieldComponent
@@ -38,7 +39,7 @@ namespace BALL
 		*/
 		CharmmBend();
 
-		/**	constructor.
+		/**	Constructor.
 		*/
 		CharmmBend(ForceField& force_field);
 

@@ -1,4 +1,4 @@
-// $Id: amberBend.h,v 1.7 2000/06/30 05:53:16 oliver Exp $
+// $Id: amberBend.h,v 1.8 2001/02/28 01:17:25 amoll Exp $
 // Molecular Mechanics: Amber force field, bond stretch component
 
 #ifndef BALL_MOLMEC_AMBER_AMBERBEND_H
@@ -24,20 +24,22 @@ namespace BALL
 {
 
 	/**	Amber bond stretch component
+			{\bf Definition:}\URL{BALL/MOLMEC/AMBER/amberBend.h}
 	*/
 	class AmberBend 
 		: public ForceFieldComponent
 	{
 		public:
 
-		/**@name	Constructors and Destructors	*/
+		/** @name	Constructors and Destructors	
+		*/
 		//@{ 
 
 		/**	Default constructor.
 		*/
 		AmberBend();
 
-		/**	constructor.
+		/**	Constructor.
 		*/
 		AmberBend(ForceField& force_field);
 
@@ -50,9 +52,8 @@ namespace BALL
 		virtual ~AmberBend();
 
 		//@}
-
-
-		/**	@name	Setup Methods	*/
+		/**	@name	Setup Methods	
+		*/
 		//@{
 
 		/**	Setup method.
@@ -60,9 +61,8 @@ namespace BALL
 		virtual bool setup();
 
 		//@}
-
-
-		/**	@name	Accessors	*/
+		/**	@name	Accessors	
+		*/
 		//@{
 
 		/**	Calculates and returns the component's energy.
@@ -75,10 +75,10 @@ namespace BALL
 
 		//@}
 
-
 		private:
 
-		/*_	@name	Private Attributes	*/
+		/*_	@name	Private Attributes	
+		*/
 		//_@{
 
 		/*_	pointer to the array of bends
@@ -86,6 +86,7 @@ namespace BALL
 		vector<QuadraticAngleBend::Data>	bend_;
 
 		QuadraticAngleBend								bend_parameters_;
+
 		//_@}
 	 
 	};

@@ -1,4 +1,4 @@
-// $Id: charmmNonBonded.h,v 1.6 2001/02/18 20:50:38 amoll Exp $
+// $Id: charmmNonBonded.h,v 1.7 2001/02/28 01:17:38 amoll Exp $
 // Molecular Mechanics: Charmm force field, bond stretch component
 
 #ifndef BALL_MOLMEC_CHARMM_NONBONDED_H
@@ -32,6 +32,7 @@ namespace BALL
 {
 
 	/**	Charmm NonBonded (VdW + Electrostatic) component
+			{\bf Definition:} \URL{BALL/MOLMEC/CHARMM/charmmNonBonded.h}
 	*/
 	class CharmmNonBonded 
 		: public ForceFieldComponent
@@ -96,7 +97,6 @@ namespace BALL
 
 
 		//@}
-
 		/**	@name Neighbourhood and Parameter calculations
 		*/
 		//@{
@@ -115,7 +115,8 @@ namespace BALL
 
 		protected:
 
-		/**	@name	Protected Attributes	*/
+		/**	@name	Protected Attributes	
+		*/
 		//@{
 
 		/**	Value of the electrostatic energy
@@ -131,70 +132,69 @@ namespace BALL
 		double solvation_energy_;
 
 		//@}
-
-		private:
-
 		/*_	@name	Private Attributes	
 		*/
 		//_@{
 
-		/**	Vector array with all atom pairs whose distance is smaller than cut_off
+		private:
+
+		/*_	Vector array with all atom pairs whose distance is smaller than cut_off
 		*/
 		vector<LennardJones::Data>	non_bonded_;
 
-		/**	Vector with parameters for the solvation component
+		/*_	Vector with parameters for the solvation component
 		*/
 		vector<CharmmEEF1::Values> solvation_values_;
  
-		/**	Number of 1-4 interactions in the vector non_bonded
+		/*_	Number of 1-4 interactions in the vector non_bonded
 		*/
 		Size	number_of_1_4_;	
 
-		/**	Cutoff distance for non-bonded interactions
+		/*_	Cutoff distance for non-bonded interactions
 		*/
 		float	cut_off_;
 
-		/**	Cutoff distance for vdw interactions
+		/*_	Cutoff distance for vdw interactions
 		*/
 		float	cut_off_vdw_;
 
-		/**	Start of the switch function for the vdw interactions
+		/*_	Start of the switch function for the vdw interactions
 		*/
 		float	cut_on_vdw_;
 
-		/**	Cutoff distance for electrostatic interactions
+		/*_	Cutoff distance for electrostatic interactions
 		*/
 		float	cut_off_electrostatic_;
 
-		/**	Start of the switch function for the vdw interactions
+		/*_	Start of the switch function for the vdw interactions
 		*/
 		float	cut_on_electrostatic_;
 
-		/**	Cutoff distance for solvation contribution (EEF1)
+		/*_	Cutoff distance for solvation contribution (EEF1)
 		*/
 		float	cut_off_solvation_;
 
-		/**	Inverse cube of the difference of cutoff and cuton for vdW
+		/*_	Inverse cube of the difference of cutoff and cuton for vdW
 		*/
 		float inverse_difference_off_on_vdw_3_;
 
-		/**	Inverse cube of the difference of cutoff and cuton for solvation
+		/*_	Inverse cube of the difference of cutoff and cuton for solvation
 		*/
 		float inverse_difference_off_on_solvation_3_;
 
-		/**	Inverse cube of the difference of cutoff and cuton for electrostatic
+		/*_	Inverse cube of the difference of cutoff and cuton for electrostatic
 		*/
 		float inverse_difference_off_on_electrostatic_3_;
 
-		/**	Start of the switch function for the solvation contribution (EEF1)
+		/*_	Start of the switch function for the solvation contribution (EEF1)
 		*/
 		float	cut_on_solvation_;
 
-		/**	Scaling factor for vdw_1_4_interactions
+		/*_	Scaling factor for vdw_1_4_interactions
 		*/
 		float	scaling_vdw_1_4_;
 
-		/**	Scaling factor for electrostatic_1_4_interactions
+		/*_	Scaling factor for electrostatic_1_4_interactions
 		*/
 		float	scaling_electrostatic_1_4_;
 
@@ -203,7 +203,7 @@ namespace BALL
 		*/
 		bool    use_dist_depend_dielectric_; 
 
-		/**	The most efficient algorithm to calculate the non-bonded atom pairs.
+		/*_	The most efficient algorithm to calculate the non-bonded atom pairs.
 				{\tt BRUTE\_FORCE}: brute force: all against all\\
 				{\tt HASH\_GRID}: box grid
 		*/

@@ -1,36 +1,50 @@
-// $Id: bruker2DFile.h,v 1.10 2000/12/11 21:14:27 oliver Exp $
+// $Id: bruker2DFile.h,v 1.11 2001/02/28 01:17:12 amoll Exp $
 
 #ifndef BALL_FORMAT_BRUKER2DFILE_H
 #define BALL_FORMAT_BRUKER2DFILE_H
 
-#include <vector>
-#include <list>
-
-#include <BALL/SYSTEM/file.h>
-#include <BALL/DATATYPE/string.h>
-#include <BALL/FORMAT/JCAMPFile.h>
+#ifndef BALL_SYSTEM_FILE_H
+# include <BALL/SYSTEM/file.h>
+#endif
 
 #ifndef BALL_DATATYPE_STRING_H
-#       include <BALL/DATATYPE/string.h>
+# include <BALL/DATATYPE/string.h>
 #endif
 
 #ifndef BALL_FORMAT_JCAMPFILE_H
-#       include <BALL/FORMAT/JCAMPFile.h>
+# include <BALL/FORMAT/JCAMPFile.h>
+#endif
+
+#ifndef BALL_DATATYPE_STRING_H
+# include <BALL/DATATYPE/string.h>
+#endif
+
+#ifndef BALL_FORMAT_JCAMPFILE_H
+# include <BALL/FORMAT/JCAMPFile.h>
 #endif
 
 #ifndef BALL_DATATYPE_REGULARDATA2D_H
-#       include <BALL/DATATYPE/regularData2D.h>
+# include <BALL/DATATYPE/regularData2D.h>
 #endif
+
+#include <vector>
+#include <list>
+
 
 namespace BALL
 {
 
+/**	Bruker 2D spectrum format.
+		This class....	\\
+		{\bf Definition:}\URL{BALL/FORMAT/bruker2DFile.h}
+*/
+// BAUSTELLE
 class Bruker2D 
-      : public File
+  : public File
 {
  public:
 
-  /**   Default constructor.
+  /** Default constructor.
    */
   Bruker2D();
 
@@ -47,42 +61,39 @@ class Bruker2D
   */
   ~Bruker2D();
 
-  /** Read a spectrum. It will be stored in spectrum_;
-   */
+  /** Read a spectrum. 
+			It will be stored in spectrum_;
+  */
   void read();
 
-  /** Read a spectrum from "name". It will be stored in spectrum_;
-   */
+  /** Read a spectrum from "name". 
+			It will be stored in spectrum_;
+  */
   void read(const String &name);
 
   /** Return a reference to the spectrum.
-   */
+  */
   RegularData2D* GetData();
 
-  /**
-   * Returns a list of peaks found in the spectrum.
-   */
+  /**	Returns a list of peaks found in the spectrum.
+  */
   std::list<std::pair<int, int> >& GetPeakList();
 
-  /**
-   * Returns the shift corresponding to a position in the bitmap.
-   */
+  /** Returns the shift corresponding to a position in the bitmap.
+  */
 	std::pair<double, double> GetShift(Position x, Position y);
 
-  /**
-   * Returns the coordinates of a point in the original data next to the given coordinates.
-   */
+  /** Returns the coordinates of a point in the original data next to the given coordinates.
+  */
   std::pair<Position, Position> GetPosition(double x, double y);
 
-  /**
-   * Set the parameters needed for conversion index<->shift.
-   */
-  void SetShiftRange(double offsetf1, double offsetf2, double swidthf1, double swidthf2, double bfreqf1, double bfreqf2, double spointnumf1, double spointnumf2);
+  /** Set the parameters needed for conversion index<->shift.
+  */
+  void SetShiftRange(double offsetf1, double offsetf2, double swidthf1, double swidthf2, 
+										 double bfreqf1, double bfreqf2, double spointnumf1, double spointnumf2);
 
-  /**
-   * These classes give access to the parameters used in aqcuiring the
-   * spectrum.
-   */
+  /** These classes give access to the parameters used in aqcuiring the spectrum.
+  */
   JCAMPFile *parsf1_, *parsf2_;
 
  protected:

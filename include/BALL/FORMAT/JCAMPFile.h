@@ -1,4 +1,4 @@
-// $Id: JCAMPFile.h,v 1.5 2000/11/28 17:25:04 anhi Exp $
+// $Id: JCAMPFile.h,v 1.6 2001/02/28 01:17:12 amoll Exp $
 
 #ifndef BALL_FORMAT_JCAMPFILE_H
 #define BALL_FORMAT_JCAMPFILE_H
@@ -18,6 +18,10 @@
 namespace BALL
 {
 
+	/**	JCAMP file.
+			This class....	\\
+			{\bf Definition:}\URL{BALL/FORMAT/JCAMPFile.h}	\\
+	*/
 	class JCAMPFile 
 		: public File
 	{
@@ -26,6 +30,7 @@ namespace BALL
 		/**	@name	Constructors and Destructors
 		*/
 		//@{
+
 		/** Detailed constructor.
 		*/
 		JCAMPFile(const String& name, OpenMode open_mode = IN);
@@ -37,27 +42,27 @@ namespace BALL
 		/**	Destructor.
 		*/
 		~JCAMPFile();
+
 		//@}
 
-		/**
-		 * Einlesen des Files.
+		/** Read the file.
 		*/
 		void read();
 
-		/**
-		 * Rückgabe des Titels.
-		 */
+		/** Return file.
+		*/
 		String title();
 
 		/**	Return parameter name
 		*/
 		double parameter(const String& name) const;
 
-		/**	Exists Parameter "name"?
+		/**	Exists the parameter {\tt name}?
 		*/
 		bool has(const String& name) const;
 
 		protected:
+
 		bool nextLine_();
 
 		String								line_;

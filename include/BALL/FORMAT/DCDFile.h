@@ -1,4 +1,4 @@
-// $Id: DCDFile.h,v 1.5 2001/01/08 16:56:08 anker Exp $
+// $Id: DCDFile.h,v 1.6 2001/02/28 01:17:12 amoll Exp $
 
 #ifndef BALL_FORMAT_DCDFILE_H
 #define BALL_FORMAT_DCDFILE_H
@@ -12,19 +12,16 @@ namespace BALL
 
 	/** DCD Trajectory file format. This class enables BALL to write DCD
 			files that can be read by VMD. The format stems from the xplor
-			package. This format is {\bf NOT} portable.
-			\\
-			The header is described in the documentation for the nested DCDHeader
-			class.
-			\\
-			{\bf Definition:} \URL{BALL/Format/DCDFile.h}
-			\\
+			package. This format is {\bf NOT} portable.	\\
+			The header is described in the documentation for the nested DCDHeader	class. \\
+			{\bf Definition:} \URL{BALL/Format/DCDFile.h}	\\
 	*/
 	class DCDFile
 		:	public TrajectoryFile
 	{
 
-		/// @name Type definitions
+		/** @name Type definitions
+		*/
 		//@{
 
 		/** A Header of a DCD file. Got this description from
@@ -33,15 +30,12 @@ namespace BALL
 				reproduces the binary record format of unformatted FORTRAN files.
 				Each such "record" begins with 4 bytes containing the integer value
 				of the number of bytes in the following record.  It ends with a
-				record containing the same 4 bytes."
-				\\
+				record containing the same 4 bytes." \\
 				The header consists of several blocks. Each block starts and ends
 				with the number of bytes enclosed between those numbers, i. e. a
 				block consisting of 8 bytes starts with the number 8 followed by 8
-				bytes of data and ends with the number 8.
-				\\
-				{\bf Definition:} \URL{BALL/Format/DCDFile.h}
-				\\
+				bytes of data and ends with the number 8.	\\
+				{\bf Definition:} \URL{BALL/Format/DCDFile.h}	\\
 		*/
 		class DCDHeader
 		{
@@ -51,8 +45,9 @@ namespace BALL
 			/// Start tag of the first block
 			Size				start_info_block;
 
-			/// Four characters used as a kind of magic number. They have to form
-			/// the string CORD.
+			/** Four characters used as a kind of magic number. They have to form
+				  the string CORD.
+			*/
 			char				CORD[4];
 
 			/// The number of coordinate sets in this file
@@ -64,8 +59,8 @@ namespace BALL
 			/// The number of time steps between saves
 			Size				steps_between_saves;
 
-			/// An array of 6 unuses integers (specialized versions use them, e.
-			/// g. CHARMM)
+			/** An array of 6 unuses integers (specialized versions use them, e.g. CHARMM)
+			*/
 			Size 				unused_1[6];
 
 			/// The length of one time step (in units of ???)
@@ -80,19 +75,22 @@ namespace BALL
 			/// Start tag of the title block.
 			Size				start_title_block;
 
-			/// The number of 80 byte comments in this record. In our case we
-			/// restrict this to be 2 for simplicity reasons.
+			/** The number of 80 byte comments in this record. In our case we
+			    restrict this to be 2 for simplicity reasons.
+			*/
 			Size				number_of_comments;
 
-			/// This 160 char array (actually consisting of two 80 char arrays)
-			/// may be used for arbitrary comments.
+			/** This 160 char array (actually consisting of two 80 char arrays)
+					may be used for arbitrary comments.
+			*/
 			char				title[160];
 			
 			/// End tag of the title block
 			Size				end_title_block;
 
-			/// Start tag of the little block containing only the number of atoms
-			/// in the system
+			/** Start tag of the little block containing only the number of atoms
+					in the system
+			*/
 			Size				start_atomnumber_block;
 
 			/// the number of atoms covered by every timestep
@@ -149,14 +147,12 @@ namespace BALL
 			//@{
 
 			/*
-			/// 
-			friend ::std::ostream& operator << (::std::ostream& os,
-					const DCDHeader& header)
+			// BAUSTELLE
+			friend ::std::ostream& operator << (::std::ostream& os,	const DCDHeader& header)
 				throw();
 
-			///
-			friend ::std::istream& operator >> (::std::istream& os,
-					DCDHeader& header)
+			// BAUSTELLE
+			friend ::std::istream& operator >> (::std::istream& os,	DCDHeader& header)
 				throw();
 			//@}
 			*/
@@ -169,7 +165,8 @@ namespace BALL
 
 		BALL_CREATE(DCDFile)
 
-		/// @name Constructors and Destructor
+		/** @name Constructors and Destructor
+		*/
 		//@{
 
 		/// Default constructor
@@ -189,9 +186,8 @@ namespace BALL
 			throw();
 
 		//@}
-
-
-		/// @name Assignment
+		/** @name Assignment
+		*/
 		//@{
 
 		/// Assignment operator
@@ -203,9 +199,8 @@ namespace BALL
 			throw();
 
 		//@}
-
-
-		/// @name Predicates
+		/** @name Predicates
+		*/
 		//@{
 
 		/// Equality operator
@@ -213,47 +208,44 @@ namespace BALL
 			throw();
 
 		//@}
-
-
-		/// @name Public methods for file handling
+		/** @name Public methods for file handling
+		*/
 		//@{
 
-		/** read the header of an existing file
-				return true if the header could be read successfully, false ow.
+		/** Read the header of an existing file.
+				Return true if the header could be read successfully, false ow.
 		*/
 		virtual bool readHeader()
 			throw();
 
-		/** update the internal header with information from the
-				SnapShotManager
+		/** Update the internal header with information from the SnapShotManager
 				@param manager the snapshot manager from which data will be written
 				@return true, if the update was successful, false ow.
 		*/
 		virtual bool updateHeader(const SnapShotManager& manager)
 			throw();
 
-		/** write a header
-				return true if the header could be written successfully, false ow.
+		/** Write a header
+				Return true if the header could be written successfully, false ow.
 		*/
 		virtual bool writeHeader()
 			throw();
 
-		/** read a whole SnapShotManager instance from a trjectory file
-				@param the SnapShotManager instance to be assigned from file
-				contents
+		/** Read a whole SnapShotManager instance from a trjectory file
+				@param the SnapShotManager instance to be assigned from file contents
 				@return true, if reading was succesful, false ow.
 		*/
 		virtual bool read(SnapShotManager& manager)
 			throw(Exception::NotImplemented);
 
-		/** write a whole SnapShotManager instance as trajectory file
+		/** Write a whole SnapShotManager instance as trajectory file
 				@param manager the snapshot manager to be written
 				@return true if the manager was written successfully
 		*/
 		virtual bool write(const SnapShotManager& manager)
 			throw(Exception::NotImplemented);
 
-		/** append a SnapShot to an existing file
+		/** Append a SnapShot to an existing file
 				@param buffer the list os SnapShots we want to save
 				@return true, if writing was successful
 		*/
@@ -261,7 +253,6 @@ namespace BALL
 			throw();
 
 		//@}
-
 
 		protected:
 

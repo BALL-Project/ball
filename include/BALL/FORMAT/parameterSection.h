@@ -1,4 +1,4 @@
-// $Id: parameterSection.h,v 1.10 2000/10/23 23:31:02 amoll Exp $
+// $Id: parameterSection.h,v 1.11 2001/02/28 01:17:12 amoll Exp $
 // Format: general  parameter section class
 
 #ifndef BALL_FORMAT_PARAMETERSECTION_H
@@ -18,8 +18,7 @@ namespace BALL
 	class Parameters;
 
 	/**	General Parameter Section Class.
-			{\bf Definition:} \URL{BALL/FORMAT/ParameterSection.h}
-			\\
+			{\bf Definition:} \URL{BALL/FORMAT/ParameterSection.h} \\
 	*/
 	class ParameterSection 
 	{
@@ -30,13 +29,14 @@ namespace BALL
 		/**	@name Enums
 		*/
 		//@{
+
 		///
 		enum 
 		{
 			MAX_FIELDS = 20
 		};
-		//@}
 
+		//@}
 		/**	@name	Constructors and Destructors
 		*/
 		//@{
@@ -45,15 +45,15 @@ namespace BALL
 		*/
 		ParameterSection() throw();
 
-		/** Copy constructor */
+		/** Copy constructor 
+		*/
 		ParameterSection(const ParameterSection& parameter_section) throw();
 
 		/**	Destructor.
 		*/
 		virtual ~ParameterSection() throw();
 
-		//@}
-		
+		//@}	
 		/**	@name	Extracting Data from the Section
 		*/
 		//@{
@@ -61,7 +61,7 @@ namespace BALL
 		/**	Reads a parameter section from an INI file.
 				This method reads the section given in section_name from ini_file,
 				interprets (if given) a format line, reads the data from this section according to 
-				the format, and builds some datastructures for fast and easy acces this data.
+				the format, and builds some datastructures for fast and easy acces to the data.
 				@param	ini_file the inifile to be read from
 				@param	section_name the name of the section to be read (without the squared brackets)
 				@return bool - {\bf true} if the section could be read, {\bf false} otherwise
@@ -126,20 +126,21 @@ namespace BALL
 		const String& getKey(Position key_index) const throw();
 
 		//@}
-
-		/** @name Assignment */
+		/** @name Assignment 
+		*/
 		//@{
 
-		/**	Clear method.  */
+		/**	Clear method.  
+		*/
 		virtual void clear() 
 			throw();
 
-		/** Assignment operator */
+		/** Assignment operator 
+		*/
 		const ParameterSection& operator = (const ParameterSection& section)
 			throw();
 
 		//@}
-
 		/**	@name	Predicates
 		*/
 		//@{
@@ -148,12 +149,12 @@ namespace BALL
 		*/
 		virtual bool isValid() const throw();
 
-		/** Equality operator */
+		/** Equality operator 
+		*/
 		bool operator == (const ParameterSection& parameter_section) const
 			throw();
 
 		//@}
-
 		/**	@name	Public Members
 		*/
 		//@{
@@ -165,7 +166,6 @@ namespace BALL
 		Options	options;
 
 		//@}
-
 
 		protected:
 

@@ -1,4 +1,4 @@
-// $Id: amber.h,v 1.9 2000/10/16 19:59:10 oliver Exp $ 
+// $Id: amber.h,v 1.10 2001/02/28 01:17:25 amoll Exp $ 
 // Molecular Mechanics: Amber force field class
 
 #ifndef BALL_MOLMEC_AMBER_AMBER_H
@@ -16,13 +16,11 @@
 #	include <BALL/KERNEL/system.h>
 #endif
 
-
 namespace BALL 
 {
 
 	/**	AMBER force field class.
 			{\bf Definition:}\URL{BALL/MOLMEC/AMBER/amber.h}
-			\\
 	*/
 	class AmberFF 
 		: public ForceField
@@ -40,6 +38,7 @@ namespace BALL
 			/**	The parameter file name
 			*/
 			static const char* FILENAME;
+
 			/**	Nonbonded cutoff
 			*/
 			static const char* NONBONDED_CUTOFF;
@@ -94,6 +93,8 @@ namespace BALL
 			static const char* OVERWRITE_TYPENAMES;
 		};
 
+		/** Default falues
+		*/
 		struct Default
 		{
 			/**	Default filename for the parameter file
@@ -155,15 +156,12 @@ namespace BALL
 		};
 
 		//@}
-
-
-		/**@name	Constructors and Destructors
+		/** @name	Constructors and Destructors
 		*/
 		//@{
 
 
 		BALL_CREATE(AmberFF)
-
 
 		/**	Default constructor.
 		*/
@@ -186,7 +184,6 @@ namespace BALL
 		virtual ~AmberFF();
 
 		//@}
-
 		/**	Assignment
 		*/
 		//@{
@@ -200,10 +197,8 @@ namespace BALL
 		*/
 		virtual void clear()
 			throw();
-
-			
+		
 		//@}
-
 		/**	@name	Setup Methods
 		*/
 		//@{
@@ -213,10 +208,10 @@ namespace BALL
 		virtual bool specificSetup();
 
 		//@}
-
 		/**	Accessors specific to the AMBER force field
 		*/
 		//@{
+
 		/**	Return the bond stretch contribution to the total energy
 		*/
 		double getStretchEnergy() const;
@@ -246,6 +241,7 @@ namespace BALL
 		/**	Return true, if the parameters have already been initialized
 		*/
 		bool hasInitializedParameters() const;
+
 		//@}
 
 		protected:

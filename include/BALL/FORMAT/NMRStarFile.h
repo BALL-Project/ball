@@ -1,4 +1,4 @@
-// $Id: NMRStarFile.h,v 1.12 2001/01/24 11:58:21 amoll Exp $
+// $Id: NMRStarFile.h,v 1.13 2001/02/28 01:17:12 amoll Exp $
 
 #ifndef BALL_NMR_READ_STAR_H
 #define BALL_NMR_READ_STAR_H
@@ -15,15 +15,17 @@
 
 namespace BALL 
 {
-	/** @name	NMRAtomData.
+	/** @name Data classes and structures.
+			These classes represent the data extracted from NMR-Star-Files.
+			{\bf Definition:} \URL{BALL/NMR/NMRStarFile.h}
+	*/
+	//@{
+
+	/**	NMRAtomData
 			This structure includes all information for one atom 
 			delivered by a NMR-Star-File.
 			All members are public for easy access.
-			\\
-			{\bf Definition:} \URL{BALL/NMR/NMRStarFile.h}
-			\\
 	*/
-	//@{
 	struct NMRAtomData
 	{
 		Position	atom_ID;
@@ -36,11 +38,10 @@ namespace BALL
 		Position	ambiguity_code;
 	};
 
-	/** @name	SampleConditions.
+	/** SampleConditions.
 			This structure includes all information for a set of samples
 			delivered by a NMR-Star-File.
 			All members are public for easy access.
-			{\bf Definition:} \URL{BALL/NMR/NMRStarFile.h}
 	*/
 	struct SampleCondition
 	{
@@ -52,11 +53,10 @@ namespace BALL
 		float		pressure;
 	};
 
-	/** @name	ShiftReferenceElement.
+	/** ShiftReferenceElement.
 			This structure includes all information for a shift reference element
 			for one atom type delivered by a NMR-Star-File.
 			All members are public for easy access.
-			{\bf Definition:} \URL{BALL/NMR/NMRStarFile.h}
 	*/
 	struct ShiftReferenceElement
 	{
@@ -73,11 +73,10 @@ namespace BALL
 		float			indirect_shift_ratio;
 	};
 
-	/** @name	ShiftReferenceSet.
+	/** ShiftReferenceSet.
 			This structure includes all information for all sets of shift references
 			for several atom types delivered by a NMR-Star-File.
 			All members are public for easy access.
-			{\bf Definition:} \URL{BALL/NMR/NMRStarFile.h}
 	*/
 	struct ShiftReferenceSet
 	{
@@ -103,10 +102,10 @@ namespace BALL
 	
 	//@}
 
-	/** @name	NMRStarFile.
+	/** NMRStarFile.
 			This class is designed to read a NMR-Star-File.
-			To read a file simpy use the NMRStarFile(char* filename)- Konstruktor.
-			All usefall data are extracted and stored.
+			To read a file simpy use the NMRStarFile(char* filename)- Constructor.
+			All useful data are extracted and stored.
 			To get access to the data use getData().
 			{\bf Definition:} \URL{BALL/NMR/NMRStarFile.h}
 	*/
@@ -118,12 +117,20 @@ namespace BALL
 
 			BALL_CREATE(NMRStarFile)
 
+			//@}
+			/**	@name	Constructors and Destructors
+			*/
+			//@{
+
 			/** Standard constructor
 			*/
 			NMRStarFile()
 				throw();
 			
-			/** Copy constructor
+			/** Copy constructor.
+					If the file was open, it is closed.
+					Then the file of f will be opend.
+					All data already extracted in f is copied to this instance.
 			*/
 			NMRStarFile(const NMRStarFile& f)
 				throw();
@@ -134,9 +141,19 @@ namespace BALL
 			NMRStarFile(const String& file_name)
 				throw(Exception::FileNotFound);
 
+			/** Assignment operator.
+					@see NMRStarFile(const NMRStarFile& f)
+			*/
+			const NMRStarFile& operator = (const NMRStarFile& f)  throw();
+
 			/** Clear the object.
 			*/
 			void clear() throw();
+
+			//@}
+			/**	@name	Access methods
+			*/
+			//@{
 
 			/** Get the maiximum number of atoms in all shift sets
 			*/
@@ -148,17 +165,25 @@ namespace BALL
 			const std::vector<NMRAtomDataSet*>& getData()
 				const throw();
 
-			/** Assignment operator
+			//@}
+			/**	@name	Equality
 			*/
-			const NMRStarFile& operator = (const NMRStarFile& f)  throw();
+			//@{
 
-			/** Equality operator
+			/** Equality operator.
+					Test if both instances point to the same file.
 			*/
 			bool operator == (const NMRStarFile& f)  throw();
 
 			/** Inequality operator
+					Test if both instances point to different files.
 			*/
 			bool operator != (const NMRStarFile& f)  throw();
+
+			//@}
+			/**	@name	Enums
+			*/
+			//@{
 
 			enum ReferenceMethod
 			{
@@ -175,6 +200,8 @@ namespace BALL
 				UNKNOWN_TYPE,
 				UNSET_TYPE
 			};
+
+			//@}
 
 		private:
 
@@ -209,8 +236,8 @@ namespace BALL
 			/// initialize the referenceOptions
 			static void initializeReferenceOptions_()
 				throw ();
-			//_@}
 
+			//_@}
 			/*_	@name	NMR-Star specific attributes
 			*/
 			//_@{
@@ -250,6 +277,7 @@ namespace BALL
 			//_@}
 
 	};
+
 	//@}
 
 } // Namespace BALL

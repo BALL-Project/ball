@@ -1,4 +1,4 @@
-// $Id: amberTorsion.h,v 1.9 2000/08/30 19:58:16 oliver Exp $
+// $Id: amberTorsion.h,v 1.10 2001/02/28 01:17:25 amoll Exp $
 // Molecular Mechanics: Amber force field, bond stretch component
 
 #ifndef BALL_MOLMEC_AMBER_AMBERTORSION_H
@@ -20,13 +20,15 @@ namespace BALL
 {
 
 	/**	Amber bond stretch component
+			{\bf Definition:} \URL{BALL/MOLMEC/AMBER/amberTorsion.h}
 	*/
 	class AmberTorsion 
 		: public ForceFieldComponent
 	{
 		public:
 
-		/**	@name	Type Definitions	*/
+		/**	@name	Type Definitions	
+		*/
 		//@{
 
 		struct SingleAmberTorsion 
@@ -65,9 +67,10 @@ namespace BALL
 
 			}
 		};
-		//@}
-			
-		/**	@name	Constructors and Destructors	*/
+
+		//@}	
+		/**	@name	Constructors and Destructors	
+		*/
 		//@{
 
 		BALL_CREATE_DEEP(AmberTorsion)
@@ -76,7 +79,7 @@ namespace BALL
 		*/
 		AmberTorsion();
 
-		/**	constructor.
+		/**	Constructor.
 		*/
 		AmberTorsion(ForceField& force_field);
 
@@ -87,9 +90,10 @@ namespace BALL
 		/**	Destructor.
 		*/
 		virtual ~AmberTorsion();
-		//@}
 
-		/**	@name	Setup Methods	*/
+		//@}
+		/**	@name	Setup Methods	
+		*/
 		//@{
 
 		/**	Setup method.
@@ -97,8 +101,8 @@ namespace BALL
 		virtual bool setup();
 
 		//@}
-
-		/**	@name	Accessors	*/
+		/**	@name	Accessors	
+		*/
 		//@{
 
 		/**	Calculates and returns the component's energy.
@@ -111,10 +115,10 @@ namespace BALL
 
 		//@}
 
-
 		private:
 
-		/*_	@name	Private Attributes	*/
+		/*_	@name	Private Attributes	
+		*/
 		//@{
 
 		/*_	array with the torsions
@@ -126,6 +130,7 @@ namespace BALL
 		CosineTorsion			improper_parameters_;
 
 		ParameterSection	impropers_;
+
 		//@}
 	 
 	};

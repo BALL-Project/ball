@@ -1,4 +1,4 @@
-// $Id: parameters.h,v 1.6 2000/10/16 19:56:02 oliver Exp $
+// $Id: parameters.h,v 1.7 2001/02/28 01:17:13 amoll Exp $
 // Molecular Mechanics: general force field parameter class
 
 #ifndef BALL_FORMAT_PARAMETERS_H
@@ -18,10 +18,8 @@ namespace BALL
 	/**	General Parameter class.
 			This class is intended to simplify parameter management 
 			for force fields or other stronlgy parameterized methods.
-			It is based on \Ref{INIFile}.
-			\\
-			{\bf Definition:}\URL{BALL/include/FORMAT/parameters.h}
-			\\
+			It is based on \Ref{INIFile}.	\\
+			{\bf Definition:}\URL{BALL/include/FORMAT/parameters.h} \\
 	*/
 	class Parameters
 	{
@@ -29,7 +27,8 @@ namespace BALL
 
 		BALL_CREATE(Parameters)
 
-		/**@name	Constructors and destructor	*/
+		/** @name	Constructors and destructor	
+		*/
 		//@{
 
 		/**	Default constructor.
@@ -54,18 +53,16 @@ namespace BALL
 			throw();
 
 		//@}
-
-
-		/**	@name	Assignment */
+		/**	@name	Assignment 
+		*/
 		//@{
 
-		/**	Assignment operator */
+		/**	Assignment operator 
+		*/
 		const Parameters& operator = (const Parameters& parameters);
 
 		//@}
-
-
-		/**@name	Accessors 	
+		/** @name	Accessors 	
 		*/
 		//@{
 
@@ -84,8 +81,8 @@ namespace BALL
 		/**	Read the contents of the INI file and interpret them.
 		*/
 		bool init();
-		//@}
 
+		//@}
 		/**	@name	Predicates
 		*/
 		//@{
@@ -97,13 +94,16 @@ namespace BALL
 		*/
 		virtual bool isValid() const;
 
-		/** Equality operator */
+		/** Equality operator 
+		*/
 		bool operator == (const Parameters& parameters) const;
+
 		//@}
 
 		protected:
 
-		/*_	@name	Protected Members */
+		/*_	@name	Protected Members 
+		*/
 		//_@{ 
 
 		/*_

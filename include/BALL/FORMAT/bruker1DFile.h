@@ -1,4 +1,4 @@
-// $Id: bruker1DFile.h,v 1.10 2001/01/29 18:17:03 anhi Exp $
+// $Id: bruker1DFile.h,v 1.11 2001/02/28 01:17:12 amoll Exp $
 
 #ifndef BALL_FORMAT_BRUKER1DFILE_H
 #define BALL_FORMAT_BRUKER1DFILE_H
@@ -28,20 +28,22 @@
 namespace BALL
 {
 	/**	Bruker 1D spectrum format.
-			This class....
-			\\
+			This class....	\\
 			{\bf Definition:}\URL{BALL/FORMAT/bruker1DFile.h}
-			\\
 	*/
+	// BAUSTELLE
 	class Bruker1D 
 		: public File
 	{
 		public:
+
 		/**	@name	Constructors and Destructors
 		*/
 		//@{
 
-       	        Bruker1D();
+		/**	Constructor
+		*/
+    Bruker1D();
 
 		/**	Constructor.
 				@param name important: name of the Bruker-*directory*
@@ -53,25 +55,27 @@ namespace BALL
 
 		/// Destructor
 		virtual ~Bruker1D();
-		//@}
 
+		//@}
 		/**	@name Accessors
 		*/
 		//@{
 
-		/**	Read a spectrum from "name". It will be stored in spectrum_
+		/**	Read a spectrum from {\tt name}. 
+				It will be stored in spectrum_
 		*/
 		void read(const String &name);
 
 		void read();
 
-	        /**     Return a reference to the spectrum.
+	  /** Return a pointer to the spectrum.
 		 */
 		RegularData1D* GetData();
 
 		/**
 		*/
 		JCAMPFile* getParameters();
+
 		//@}
 
 		protected:

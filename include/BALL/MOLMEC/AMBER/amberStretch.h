@@ -1,4 +1,4 @@
-// $Id: amberStretch.h,v 1.9 2000/08/30 19:58:15 oliver Exp $ 
+// $Id: amberStretch.h,v 1.10 2001/02/28 01:17:25 amoll Exp $ 
 // Molecular Mechanics: Amber force field, bond stretch component
 
 #ifndef BALL_MOLMEC_AMBER_AMBERSTRETCH_H
@@ -24,13 +24,15 @@ namespace BALL
 {
 
 	/**	Amber bond stretch component
+			{\bf Definition:} \URL{BALL/MOLMEC/AMBER/amberStretch.h}
 	*/
 	class AmberStretch 
 		: public ForceFieldComponent
 	{
 		public:
 
-		/**	@name	Constructors and Destructors	*/
+		/**	@name	Constructors and Destructors	
+		*/
 		//@{
 
 		BALL_CREATE_DEEP(AmberStretch)
@@ -39,7 +41,7 @@ namespace BALL
 		*/
 		AmberStretch();
 
-		/**	constructor.
+		/**	Constructor.
 		*/
 		AmberStretch(ForceField& force_field);
 
@@ -52,9 +54,8 @@ namespace BALL
 		virtual ~AmberStretch();
 
 		//@}
-
-
-		/**	@name Setup Methods	*/
+		/**	@name Setup Methods	
+		*/
 		//@{
 
 		/**	Setup method.
@@ -62,8 +63,8 @@ namespace BALL
 		virtual bool setup();
 
 		//@}
-
-		/**	@name Accessors		*/
+		/**	@name Accessors		
+		*/
 		//@{
 
 		/**	Calculates and returns the component's energy.
@@ -76,10 +77,10 @@ namespace BALL
 
 		//@} 
 
-
 		private:
 
-		/*_	@name	Private Attributes	*/
+		/*_	@name	Private Attributes	
+		*/
 		//_@{
 
 		/*_
@@ -93,6 +94,7 @@ namespace BALL
 		/*_	The stretch parameters section
 		*/
 		QuadraticBondStretch  stretch_parameters_;
+
 		//_@}
 		
 	};
