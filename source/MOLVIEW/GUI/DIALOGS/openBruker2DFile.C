@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: openBruker2DFile.C,v 1.11 2003/04/17 16:36:15 oliver Exp $
+// $Id: openBruker2DFile.C,v 1.12 2003/06/01 17:06:01 oliver Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/openBruker2DFile.h>
 #include <BALL/FORMAT/bruker2DFile.h>
@@ -50,18 +50,17 @@ namespace BALL
       notify_(window_message);
 
       // reading the file
-      Bruker2D *myfile = new Bruker2D();
+      Bruker2DFile myfile;
       
       String mydir = dirPath().latin1();
 
       try
       {
-				myfile->read(mydir);
+				myfile.read(mydir);
 			}
       catch (...)
 			{
 				Log.info() << "> read Bruker2D file failed." << std::endl;
-				delete myfile;
 				return;
 			}
 
@@ -70,7 +69,7 @@ namespace BALL
       
       // notify main window
       NewRegularData2DMessage new_message;
-      new_message.setComposite((Composite *)myfile->GetData());
+      new_message.setComposite((Composite*)new RegularData2D(myfile.getData()));
       new_message.setCompositeName(mydir);
 
       notify_(new_message);

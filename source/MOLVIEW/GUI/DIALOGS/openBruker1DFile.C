@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: openBruker1DFile.C,v 1.7 2003/01/06 17:43:04 amoll Exp $
+// $Id: openBruker1DFile.C,v 1.8 2003/06/01 17:06:01 oliver Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/openBruker1DFile.h>
 #include <BALL/FORMAT/bruker1DFile.h>
@@ -64,15 +64,7 @@ namespace BALL
 
       // writing to log
 			Log.info() << "> Bruker file " << mydir << " succesfully read." << std::endl;
-
-      // notify main window
-      NewRegularData1DMessage new_message;
-      new_message.setComposite((Composite *)myfile->getData());
-      new_message.setCompositeName(mydir);
-
-      notify_(new_message);
-
-      setStatusbarText("");
+      setStatusbarText(String("Read 1D NMR spectrum from ") + mydir);
     }
   }
 }
