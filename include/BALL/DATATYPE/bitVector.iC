@@ -1,4 +1,4 @@
-// $Id: bitVector.iC,v 1.6 1999/12/28 18:32:13 oliver Exp $
+// $Id: bitVector.iC,v 1.7 2000/07/20 23:43:25 amoll Exp $
 
 BALL_INLINE
 BitVector::BlockType BitVector::mask_(Index index) const
@@ -145,6 +145,7 @@ Bit BitVector::operator [] (Index index)
 BALL_INLINE
 bool BitVector::getBit(Index index)
 {
+	validateIndex_(index);
 	return (bool)((bitset_[block_(index)] & mask_(index)) != 0);
 }
 
@@ -163,7 +164,7 @@ bool BitVector::operator [] (Index index) const
 {
 	validateIndex_(index);
 
-	return ((BitVector *)this)->getBit(index);
+	return getBit(index);
 }
  
 BALL_INLINE
@@ -187,4 +188,76 @@ void BitVector::toggleBit(Index index)
 	bitset_[block_(index)] ^= mask_(index);
 }
 
- 
+BALL_INLINE
+bool Bit::operator == (bool bit) const
+{
+	if (bitvector_ == 0)
+	{
+		throw Exception::NullPointer(__FILE__, __LINE__);
+	}
+	return bitvector_->getBit(index_) == bit;
+}
+
+BALL_INLINE
+bool Bit::operator != (bool bit) const
+{
+	if (bitvector_ == 0)
+	{
+		throw Exception::NullPointer(__FILE__, __LINE__);
+	}
+	return bitvector_->getBit(index_) != bit;
+}
+
+BALL_INLINE
+bool Bit::operator == (const Bit& bit) const
+{
+	if (bitvector_ == 0)
+	{
+		throw Exception::NullPointer(__FILE__, __LINE__);
+	}
+	return bitvector_->getBit(index_) == bit.bitvector_->getBit(index_);
+}
+
+BALL_INLINE
+bool Bit::operator != (const Bit& bit) const
+{
+	if (bitvector_ == 0)
+	{
+		throw Exception::NullPointer(__FILE__, __LINE__);
+	}
+	return bitvector_->getBit(index_) != bit.bitvector_->getBit(index_);
+}
+
+
+BALL_INLINE
+Bit::operator bool() const
+{
+	if (bitvector_ == 0)
+	{
+		throw Exception::NullPointer(__FILE__, __LINE__);
+	}
+
+	return bitvector_->getBit(index_);
+}
+
+BALL_INLINE
+Bit& Bit::operator = (const Bit& bit)	{
+	if (bitvector_ == 0)
+	{
+		throw Exception::NullPointer(__FILE__, __LINE__);
+	}
+	bitvector_ = bit.bitvector_;
+	index_ = bit.index_;
+	return *this;
+}
+
+BALL_INLINE
+Bit& Bit::operator = (const bool bit)
+{
+	if (bitvector_ == 0)
+	{
+		throw Exception::NullPointer(__FILE__, __LINE__);
+	}
+	bitvector_->setBit(index_, bit);
+	return *this;
+}
