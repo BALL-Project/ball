@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.sip,v 1.2 2004/01/16 16:47:25 amoll Exp $
+// $Id: displayProperties.sip,v 1.3 2004/07/10 15:13:27 amoll Exp $
 //
 
 class DisplayProperties
@@ -42,6 +42,8 @@ static DisplayProperties* getInstance(Position /index/);
   void precisionSliderChanged();
   void selectColoringMethod(int);
   void selectMode(int);
+	void setDrawingPrecision(int);
+	void setSurfaceDrawingPrecision(float);
 //  void setRepresentation(Representation*) throw();
 //  void transparencySliderChanged();
 //  void writePreferences(INIFile &inifile) throw();

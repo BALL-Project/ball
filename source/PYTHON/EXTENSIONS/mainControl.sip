@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.sip,v 1.10 2004/01/15 16:26:08 anhi Exp $
+// $Id: mainControl.sip,v 1.11 2004/07/10 15:13:27 amoll Exp $
 //
 
 class MainControl
@@ -61,7 +61,7 @@ class MainControl
 	void addModularWidget(ModularWidget* /widget/) throw();
 
 
-	void applyPreferences(Preferences& /preferences/) throw();
+	void applyPreferences() throw();
 	void applyPreferencesTab();
 	void cancelPreferencesTab() throw();
 	void fetchPreferences(INIFile& /inifile/) throw();
@@ -81,7 +81,7 @@ class MainControl
 
 	// void onNotify(Message* /message/) throw();
 	void removeModularWidget(ModularWidget* /widget/) throw();
-	void restoreWindows() throw();
+	void restoreWindows(const INIFile&) throw();
 	// void setLabel(QLabel* /label/) throw();
 	void setMenuHint(Index /id/, const String& /hint/) throw();
 	void setStatusbarText(const String& /text/) throw();
