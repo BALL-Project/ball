@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.h,v 1.27.2.2 2005/01/12 20:50:25 amoll Exp $
+// $Id: standardColorProcessor.h,v 1.27.2.3 2005/01/13 01:18:29 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
@@ -383,6 +383,12 @@ namespace BALL
 			///
 			virtual void getColor(const Composite& composite, ColorRGBA& color_to_be_set);
 
+			///
+			bool showSelected() { return show_selection_;}
+
+			///
+			void setShowSelected(bool state) { show_selection_ = state;}
+			
 			/** Collect all atoms from the geometric objects
 			*/
 			virtual Processor::Result operator() (GeometricObject*& object)
@@ -391,12 +397,15 @@ namespace BALL
 
 			private:
 
+			void colorGeometricObject_(GeometricObject& object);
+
 			typedef HashMap<const Atom*, float> AtomDistanceHashMap;
 
 			AtomDistanceHashMap atom_2_distance_;
 			GeometricObjectList list_;
 
 			float 			distance_;
+			bool 				show_selection_;
 
 			ColorRGBA		null_distance_color_;
 			ColorRGBA		full_distance_color_;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.31.2.7 2005/01/12 23:54:48 amoll Exp $
+// $Id: colorProcessor.C,v 1.31.2.8 2005/01/13 01:18:21 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -283,11 +283,11 @@ namespace BALL
 
 				if (atom == 0)
 				{
-					mesh.colorList[p] = default_color_;
+ 					mesh.colorList[p] = default_color_;
 				}
 				else
 				{
-					getColor(*atom, mesh.colorList[p]);
+ 					getColor(*atom, mesh.colorList[p]);
 				}
 			}
 		}

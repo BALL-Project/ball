@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.50.2.4 2005/01/12 20:49:47 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.50.2.5 2005/01/13 01:18:21 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -452,6 +452,7 @@ namespace BALL
 			: ColorProcessor(),
 				atom_2_distance_(),
 				distance_((float)10),
+				show_selection_(false),
 				null_distance_color_("FFFF00FF"),
 				full_distance_color_("0000FFFF")
 		{
@@ -462,6 +463,7 @@ namespace BALL
 			:	ColorProcessor(color_processor),
 				atom_2_distance_(),
 				distance_(color_processor.distance_),
+				show_selection_(color_processor.show_selection_),
 				null_distance_color_(color_processor.null_distance_color_),
 				full_distance_color_(color_processor.full_distance_color_)
 		{
@@ -477,7 +479,7 @@ namespace BALL
 			// brute force
 			for(; it1 != atom_2_distance_.end();)
 			{
-				Atom* atom1 = (Atom*)(it1->first);
+				const Atom* const atom1 = dynamic_cast<const Atom*>(it1->first);
 
 				it1_old = it1;
 
@@ -485,11 +487,11 @@ namespace BALL
 				
 				for(; it2 != atom_2_distance_.end(); ++it2)
 				{
-					Atom* atom2 = (Atom*)(it2->first);
+					const Atom* const atom2 = dynamic_cast<const Atom*>(it2->first);
 
 					if (atom1->isSelected() != atom2->isSelected())
 					{
-						float distance = (atom2->getPosition() - atom1->getPosition()).getLength();
+						const float distance = (atom2->getPosition() - atom1->getPosition()).getSquareLength();
 						
 						if (it1_old->second > distance) it1_old->second = distance;
 						if (it2->second 		> distance) 	  it2->second = distance;
@@ -503,10 +505,10 @@ namespace BALL
 		{
 			AtomDistanceHashMap::Iterator it = atom_2_distance_.find(&atom);
 
-			// atom in hashmap ? => insert into hashmap with start distance = distance_
+			// atom not in hashmap ? => insert into hashmap with start distance = distance_
 			if (it == atom_2_distance_.end())
 			{
-				atom_2_distance_.insert(AtomDistanceHashMap::ValueType(&atom, distance_));
+				atom_2_distance_.insert(AtomDistanceHashMap::ValueType(&atom, distance_ * distance_));
 			}		
 		}
 
@@ -519,6 +521,13 @@ namespace BALL
 				return;
 			}
 
+			// here we have to consider selection color, unlike as for the other coloring processors
+			if (atom->isSelected() && show_selection_)
+			{
+				color_to_be_set.set(selection_color_);
+				return;
+			}
+
 			const AtomDistanceHashMap::Iterator it = atom_2_distance_.find(atom);
 			float distance = distance_;
 
@@ -526,12 +535,15 @@ namespace BALL
 			if (it != atom_2_distance_.end())
 			{
 				// get distance
-				distance = it->second;
+				distance = sqrt(it->second);
 			}
 
-			// clip the distance to  0 - distance_
+			// clip the distance to  0 -> distance_
 			if (distance > distance_) distance = distance_;
-			if (distance < 0.0) distance = 0.0;
+			if (distance < 0.0)
+			{
+				distance = 0.0;
+			}
 
 			const float red1   = null_distance_color_.getRed();
 			const float green1 = null_distance_color_.getGreen();
@@ -547,6 +559,97 @@ namespace BALL
 													 255 - transparency_);
 		}
 
+		void AtomDistanceColorProcessor::colorGeometricObject_(GeometricObject& object)
+		{
+			const Composite* composite = object.getComposite();
+
+			Mesh* const mesh = dynamic_cast<Mesh*>(&object);
+			if (mesh != 0)
+			{
+				mesh->colorList.clear();
+				if (composite == &composite_to_be_ignored_for_colorprocessors_ || composites_ == 0)
+				{
+					mesh->colorList.push_back(default_color_);
+					return;
+				}
+
+				if (composite == 0 || composite != last_composite_of_grid_)
+				{
+					createAtomGrid_(composite);
+				}
+
+				colorMeshFromGrid_(*mesh);
+				return;
+			}
+
+			ColorExtension2* const two_colored = dynamic_cast<ColorExtension2*>(&object);
+
+			if (composite == 0 ||
+					composite == &composite_to_be_ignored_for_colorprocessors_)
+			{
+				object.setColor(default_color_); 
+				if (two_colored != 0)
+				{
+					two_colored->setColor2(default_color_);
+				}
+				return;
+			}
+
+			if (two_colored == 0)
+			{
+				if (composite->isSelected())
+				{
+					object.setColor(selection_color_);
+				}
+				else
+				{
+					getColor(*composite, object.getColor()); 
+				}
+				return;
+			}
+
+			// ok, we have a two colored object
+			const Bond* const bond = dynamic_cast<const Bond*>(composite);
+			if (bond != 0)
+			{
+				const Atom* atom = bond->getFirstAtom();
+				if (!atom->isSelected() ||
+						!show_selection_)
+				{
+					getColor(*atom, object.getColor());
+				}
+				else
+				{
+					object.setColor(selection_color_);
+				}
+
+				const Atom* atom2 = bond->getSecondAtom();
+				if (!atom2->isSelected() ||
+						!show_selection_)
+				{
+					getColor(*atom2, two_colored->getColor2());
+				}
+				else
+				{
+					two_colored->setColor2(selection_color_);
+				}
+			}
+			else
+			{
+				if (composite->isSelected() && 
+						show_selection_)
+				{
+					object.setColor(selection_color_);
+					two_colored->setColor2(selection_color_);
+				}
+				else
+				{
+ 					getColor(*composite, object.getColor());
+ 					two_colored->setColor2(object.getColor());
+				}
+			}
+		}
+
 		bool AtomDistanceColorProcessor::finish()
 			throw()
 		{
@@ -554,7 +657,7 @@ namespace BALL
 			GeometricObjectList::Iterator it = list_.begin();
 			for(; it != list_.end(); it++)
 			{
-				ColorProcessor::operator () (*it);
+				colorGeometricObject_(**it);
 			}
 
 			atom_2_distance_.clear();
@@ -568,7 +671,7 @@ namespace BALL
 		{
 			if (RTTI::isKindOf<Mesh>(*object))
 			{
-				if (!atom_grid_created_)  
+				if (last_composite_of_grid_ == 0)
 				{ 
 					createAtomGrid_();
 				}
