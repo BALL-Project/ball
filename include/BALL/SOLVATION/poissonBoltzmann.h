@@ -1,4 +1,4 @@
-// $Id: poissonBoltzmann.h,v 1.11 2001/05/17 01:30:47 oliver Exp $ 
+// $Id: poissonBoltzmann.h,v 1.12 2001/07/15 18:56:44 amoll Exp $ 
 // Finite Difference Poisson Boltzmann Solver
 
 #ifndef BALL_SOLVATION_POISSONBOLTZMANN_H
@@ -8,7 +8,7 @@
 #	include <BALL/common.h>
 #endif
 
-#ifndef BALL_DATATYPE_POINTGRID_H
+#ifndef BALL_DATATYPE_REGULARDATA3D_H
 #	include <BALL/DATATYPE/regularData3D.h>
 #endif
 
