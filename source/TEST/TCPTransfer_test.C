@@ -1,4 +1,4 @@
-// $Id: TCPTransfer_test.C,v 1.6 2001/12/04 18:47:38 amoll Exp $
+// $Id: TCPTransfer_test.C,v 1.7 2001/12/06 21:49:01 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -81,7 +81,7 @@ bool testNetwork()
 }
 
 /////////////////////////
-START_TEST(TCPTransfer, "$Id: TCPTransfer_test.C,v 1.6 2001/12/04 18:47:38 amoll Exp $")
+START_TEST(TCPTransfer, "$Id: TCPTransfer_test.C,v 1.7 2001/12/06 21:49:01 amoll Exp $")
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
@@ -122,7 +122,7 @@ RESULT
 CHECK(http)
 	String filename;
 	File::createTemporaryFilename(filename);
-	ofstream out(filename.c_str(), ios::out);
+	ofstream out(filename.c_str(), ::std::ios::out);
 	
 	TCPTransfer tcp_t(out ,"http://www.zbi.uni-saarland.de/zbi/BALL/test/TCPTransferTest.txt" , false);
 	TEST_EQUAL(tcp_t.getHostAddress(), "www.zbi.uni-saarland.de")
@@ -139,7 +139,7 @@ CHECK(http)
 	f.close();
 
 	File::createTemporaryFilename(filename);
-	ofstream out2(filename.c_str(), ios::out);
+	ofstream out2(filename.c_str(), ::std::ios::out);
 	TCPTransfer tcp_t2(out2 ,"http://BALL:test@www.mpi-sb.mpg.de/BALL/INTERNAL/internal.html", true);
 	TEST_EQUAL(tcp_t2.getHostAddress(), "www.mpi-sb.mpg.de")
 	TEST_EQUAL(tcp_t2.getFileAddress(), "/BALL/INTERNAL/internal.html")
@@ -154,7 +154,7 @@ RESULT
 CHECK(ftp1)
   String filename;
 	File::createTemporaryFilename(filename);
-	ofstream out(filename.c_str(), ios::out);
+	ofstream out(filename.c_str(), ::std::ios::out);
 	TCPTransfer tcp_t(out, "ftp://anonymous:nobody@asd.de@ftp.mpi-sb.mpg.de:21/pub/welcome.msg", false);
 	TEST_EQUAL(tcp_t.getHostAddress(), "ftp.mpi-sb.mpg.de")
 	TEST_EQUAL(tcp_t.getFileAddress(), "/pub/welcome.msg")
@@ -174,7 +174,7 @@ RESULT
 CHECK(ftp2)
   String filename;
 	File::createTemporaryFilename(filename);
-	ofstream out(filename.c_str(), ios::out);
+	ofstream out(filename.c_str(), ::std::ios::out);
 	TCPTransfer tcp_t(out, "ftp://ftp.vim.org/pub/vim/pc/vim60w32.zip");
 	TEST_EQUAL(tcp_t.getHostAddress(), "ftp.vim.org")
 	TEST_EQUAL(tcp_t.getFileAddress(), "/pub/vim/pc/vim60w32.zip")
