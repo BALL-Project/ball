@@ -1,4 +1,4 @@
-// $Id: atomTypes.C,v 1.4 1999/12/28 17:52:37 oliver Exp $
+// $Id: atomTypes.C,v 1.5 2000/02/10 15:16:26 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/atomTypes.h>
@@ -102,7 +102,7 @@ namespace BALL
 	String FFPSAtomTypes::getTypeName(Atom::Type type) const 
 	{
 		static const String empty_string;
-		if ((type < Atom::ANY_TYPE) || (type > (Index)type_map_.size()))
+		if ((type < Atom::ANY_TYPE) || (type >= (Index)names_.size()))
 		{
 			return empty_string;
 		}
@@ -119,7 +119,7 @@ namespace BALL
 
 	Size FFPSAtomTypes::getNumberOfTypes() const 
 	{
-		return type_map_.size();
+		return names_.size();
 	}
 
 } // namespace BALL
