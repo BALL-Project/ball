@@ -1,4 +1,4 @@
-// $Id: StandardPredicates_test.C,v 1.7 2000/05/24 15:12:59 anker Exp $
+// $Id: StandardPredicates_test.C,v 1.8 2000/05/25 08:21:11 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.7 2000/05/24 15:12:59 anker Exp $")
+START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.8 2000/05/25 08:21:11 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -27,23 +27,34 @@ using namespace BALL;
 CHECK(AtomNamePredicate::()(const Atom& atom) const )
   Atom atom;
 	atom.setName("Grmpfl.");
-	AtomNamePredicate atomName;
-	atomName.setArgument("TEST");
-	TEST_EQUAL(atomName(atom), false)
+	AtomNamePredicate atom_name;
+	atom_name.setArgument("TEST");
+	TEST_EQUAL(atom_name(atom), false)
 	Atom atom2;
 	atom2.setName("TEST");
-	TEST_EQUAL(atomName(atom2), true)
-	atomName.setArgument("");
-	TEST_EQUAL(atomName(atom), false)
+	TEST_EQUAL(atom_name(atom2), true)
+	atom_name.setArgument("");
+	TEST_EQUAL(atom_name(atom), false)
 	atom2.setName("");
-	TEST_EQUAL(atomName(atom2), true)
+	TEST_EQUAL(atom_name(atom2), true)
 RESULT
 
 
 // tests for class AtomTypePredicate::
 
 CHECK(AtomTypePredicate::()(const Atom& atom) const )
-  //BAUSTELLE
+  Atom atom;
+	atom.setTypeName("CT");
+	AtomTypePredicate type_name;
+	type_name.setArgument("CT");
+	TEST_EQUAL(type_name(atom), true)
+	Atom atom2;
+	atom2.setTypeName("TEST");
+	TEST_EQUAL(type_name(atom2), false)
+	type_name.setArgument("");
+	TEST_EQUAL(type_name(atom), false)
+	atom2.setTypeName("");
+	TEST_EQUAL(type_name(atom2), true)
 RESULT
 
 

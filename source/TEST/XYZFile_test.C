@@ -1,4 +1,4 @@
-// $Id: XYZFile_test.C,v 1.1 2000/05/15 19:17:14 oliver Exp $
+// $Id: XYZFile_test.C,v 1.2 2000/05/25 08:16:24 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(XYZFile, "$Id: XYZFile_test.C,v 1.1 2000/05/15 19:17:14 oliver Exp $")
+START_TEST(XYZFile, "$Id: XYZFile_test.C,v 1.2 2000/05/25 08:16:24 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -55,9 +55,26 @@ CHECK(XYZFile::read(System& system))
 	TEST_REAL_EQUAL(it->getPosition().z, 5.0)
 RESULT
 
-
+String filename;
+NEW_TMP_FILE(filename)
 CHECK(XYZFile::write(const System& system))
-  //BAUSTELLE
+	System S;
+	Molecule* m = new Molecule;
+	Atom* a1 = new Atom;
+	Atom* a2 = new Atom;
+	a1->setElement(PTE[Element::C]);
+	a2->setElement(PTE[Element::O]);
+	a1->setPosition(Vector3(1.0, 2.0, 3.0));
+	a2->setPosition(Vector3(4.0, 5.0, 6.0));
+	m->insert(*a1);
+	m->insert(*a2);
+	S.insert(*m);
+	
+	XYZFile f(filename, std::ios::out);
+	f.write(S);
+	f.close();
+		
+	TEST_FILE(filename.c_str(), "data/XYZFile_test2.xyz", false)
 RESULT
 
 
@@ -82,7 +99,23 @@ CHECK(XYZFile::XYZFile& operator >> (System& system))
 RESULT
 
 CHECK(XYZFile::XYZFile& operator << (const System& system))
-  //BAUSTELLE
+	System S;
+	Molecule* m = new Molecule;
+	Atom* a1 = new Atom;
+	Atom* a2 = new Atom;
+	a1->setElement(PTE[Element::C]);
+	a2->setElement(PTE[Element::O]);
+	a1->setPosition(Vector3(1.0, 2.0, 3.0));
+	a2->setPosition(Vector3(4.0, 5.0, 6.0));
+	m->insert(*a1);
+	m->insert(*a2);
+	S.insert(*m);
+	
+	XYZFile f(filename, std::ios::out);
+	f << S;
+	f.close();
+		
+	TEST_FILE(filename.c_str(), "data/XYZFile_test2.xyz", false)
 RESULT
 
 /////////////////////////////////////////////////////////////
