@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.98 2000/07/13 15:44:23 oliver Exp $
+dnl    $Id: configure.in,v 1.99 2000/07/16 20:51:38 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -269,7 +269,6 @@ AC_DEFUN(AC_FIND_HEADER,[
 				_INCLUDES=`echo $j|${SED} "s/include\/.\*\$/include/"`
 			fi
 		done
-			_
 		
 		if test "${_INCLUDES}" = "" ; then
 			_TMP=`${FIND} /opt ${FIND_OPT} ${FIND_ARG} -print 2>/dev/null`
