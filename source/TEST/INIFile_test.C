@@ -1,11 +1,11 @@
-// $Id: INIFile_test.C,v 1.5 2001/03/14 00:48:08 amoll Exp $
+// $Id: INIFile_test.C,v 1.6 2001/03/14 14:17:16 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/FORMAT/INIFile.h>
 ///////////////////////////
 
-START_TEST(INIFile, "$Id: INIFile_test.C,v 1.5 2001/03/14 00:48:08 amoll Exp $")
+START_TEST(INIFile, "$Id: INIFile_test.C,v 1.6 2001/03/14 14:17:16 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -73,10 +73,13 @@ RESULT
 INIFile ini;
 
 
-// BAUSTELLE leeres file, mit prefix, nur prefix
+// BAUSTELLE mit prefix, nur prefix
 CHECK(INIFile::read())
 	ini.setFilename("data/INIFile_test.ini");
 	TEST_EQUAL(ini.read(), true)
+	
+	INIFile ini2("data/empty_file.txt");
+	TEST_EQUAL(ini2.read(), true)
 RESULT
 
 
@@ -105,7 +108,7 @@ RESULT
 
 CHECK(INIFile::hasSection(const String& section_name) const )
   TEST_EQUAL(ini.hasSection("replace test"), false)
-	TEST_EQUAL(ini.hasSection("[PREFIX]"), true)
+	TEST_EQUAL(ini.hasSection(ini.PREFIX), true)
   TEST_EQUAL(ini.hasSection("Section1"), true)  
   TEST_EQUAL(ini.hasSection("Section2"), true)  
   TEST_EQUAL(ini.hasSection("Section3"), true)  
@@ -119,7 +122,7 @@ RESULT
 
 
 CHECK(INIFile::getSectionName(Position pos) const )
-  TEST_EQUAL(*(ini.getSectionName(0)), "[PREFIX]")
+  TEST_EQUAL(*(ini.getSectionName(0)), ini.PREFIX)
   TEST_EQUAL(*(ini.getSectionName(1)), "Section1")
 	TEST_EQUAL(*(ini.getSectionName(2)), "Section2")
   TEST_EQUAL(*(ini.getSectionName(3)), "Section3")
@@ -129,7 +132,7 @@ RESULT
 
 
 CHECK(INIFile::getSectionFirstLine(const String& section_name) const )
-  TEST_EQUAL(ini.getSectionFirstLine("[PREFIX]"), INVALID_SIZE)
+  TEST_EQUAL(ini.getSectionFirstLine(ini.PREFIX), INVALID_SIZE)
   TEST_EQUAL(ini.getSectionFirstLine("Section1"), INVALID_SIZE)
   TEST_EQUAL(ini.getSectionFirstLine("Section2"), 2)
   TEST_EQUAL(ini.getSectionFirstLine("Section3"), 6)
@@ -139,7 +142,7 @@ RESULT
 
 
 CHECK(INIFile::getSectionLastLine(const String& section_name) const )
-  TEST_EQUAL(ini.getSectionLastLine("PREFIX"), INVALID_SIZE)
+  TEST_EQUAL(ini.getSectionLastLine(ini.PREFIX), INVALID_SIZE)
   TEST_EQUAL(ini.getSectionLastLine("Section1"), INVALID_SIZE)
   TEST_EQUAL(ini.getSectionLastLine("Section2"), 4)
   TEST_EQUAL(ini.getSectionLastLine("Section3"), 9)
@@ -149,7 +152,7 @@ RESULT
 
 
 CHECK(INIFile::getSectionLength(const String& section_name) const )
-  TEST_EQUAL(ini.getSectionLength("[PREFIX]"), 0)
+  TEST_EQUAL(ini.getSectionLength(ini.PREFIX), 0)
   TEST_EQUAL(ini.getSectionLength("Section1"), 0)
   TEST_EQUAL(ini.getSectionLength("Section2"), 3)
   TEST_EQUAL(ini.getSectionLength("Section3"), 4)
@@ -159,7 +162,7 @@ RESULT
 
 
 CHECK(INIFile::hasEntry(const String& section, const String& key) const )
-  TEST_EQUAL(ini.hasEntry("PREFIX", "test"), false)
+  TEST_EQUAL(ini.hasEntry(ini.PREFIX, "test"), false)
   TEST_EQUAL(ini.hasEntry("Section1", "test"), false)
   TEST_EQUAL(ini.hasEntry("Section2", "test"), false)
   TEST_EQUAL(ini.hasEntry("Section2", "! even more comment"), false)
@@ -171,7 +174,7 @@ RESULT
 
 
 CHECK(INIFile::getValue(const String& section, const String& key) const )
-  TEST_EQUAL(ini.getValue("[PREFIX]", "test"), ini.UNDEFINED)
+  TEST_EQUAL(ini.getValue(ini.PREFIX, "test"), ini.UNDEFINED)
   TEST_EQUAL(ini.getValue("Section1", "test"), ini.UNDEFINED)
   TEST_EQUAL(ini.getValue("Section2", "test"), ini.UNDEFINED)
   TEST_EQUAL(ini.getValue("Section2", "! even more comment"), ini.UNDEFINED)
@@ -183,7 +186,7 @@ RESULT
 
 
 CHECK(INIFile::setValue(const String& section, const String& key, const String& value))
-  TEST_EQUAL(ini.setValue("[PREFIX]", "test", "setValue_test"), false)
+  TEST_EQUAL(ini.setValue(ini.PREFIX, "test", "setValue_test"), false)
   TEST_EQUAL(ini.setValue("nonsense", "test", "setValue_test"), false)
   TEST_EQUAL(ini.setValue("Section1", "test", "setValue_test"), false)
   TEST_EQUAL(ini.getValue("Section1", "test"), ini.UNDEFINED)
