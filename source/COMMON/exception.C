@@ -1,4 +1,4 @@
-// $Id: exception.C,v 1.7 2000/04/02 14:35:32 oliver Exp $
+// $Id: exception.C,v 1.8 2000/05/30 10:33:42 oliver Exp $
 
 #include <BALL/COMMON/exception.h>
 #include <BALL/COMMON/logStream.h>
@@ -183,6 +183,12 @@ namespace BALL
 			{
 				std::set_terminate(terminate);
 				std::set_unexpected(terminate);
+				std::set_new_handler(newHandler);
+			}
+
+			void GlobalExceptionHandler::newHandler()
+			{
+				throw Exception::OutOfMemory(__FILE__, __LINE__);
 			}
 				
 			void GlobalExceptionHandler::terminate()
@@ -197,12 +203,14 @@ namespace BALL
 				Log.error() << "---------------------------------------------------" << endl;
 				Log.error() << "FATAL: terminate called!" << endl;
 				Log.error() << "---------------------------------------------------" << endl;
-				Log.error() << "last entry in the exception handler: " << endl;
-				Log.error() << "exception of type " << name_.c_str() << " occured in line " 
-										<< line_ << " of " << file_.c_str() << endl;
-				Log.error() << "error message: " << message_.c_str() << endl;
+				if ((line_ != -1) && (name_ != "unknown"))
+				{
+					Log.error() << "last entry in the exception handler: " << endl;
+					Log.error() << "exception of type " << name_.c_str() << " occured in line " 
+											<< line_ << " of " << file_.c_str() << endl;
+					Log.error() << "error message: " << message_.c_str() << endl;
+				}
 				Log.error() << "---------------------------------------------------" << endl;
-
 
 				// if the environment variable declared in BALL_CORE_DUMP_ENVNAME
 				// is set, provoke a core dump (this is helpful to get s stack traceback)
