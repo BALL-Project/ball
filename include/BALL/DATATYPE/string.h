@@ -1,4 +1,4 @@
-// $Id: string.h,v 1.16 2000/07/14 14:42:24 amoll Exp $
+// $Id: string.h,v 1.17 2000/07/16 19:26:20 oliver Exp $
 
 #ifndef BALL_DATATYPE_STRING_H
 #define BALL_DATATYPE_STRING_H
@@ -960,19 +960,35 @@ namespace BALL
 
 		protected:
 	
-		// the validate...  methods check perform a thorough
-		// index checking and an index translation
-		// Indices below zero are interpreted as indices
-		// relative to the end of the string
-		// All methods throw IndexUnder|Overflow exceptions
-		//
-		void validateIndex_(Index& index) const;
-	
-		void validateRange_(Index& from, Size& len) const; 
-
-		static void validateCharPtrRange_(Index& from, Size& len, const char* char_ptr);
+		/** @name Internal validation methods.
+				The {\tt validate...}  methods check perform a thorough
+				index checking and an index translation
+				Indices below zero are interpreted as indices
+				relative to the end of the string
+				All methods throw IndexUnder|Overflow exceptions
+		*/
+		//@{
 		
-		static void valudateCharPtrIndex_(Index& index);
+		/**
+		*/
+		void validateIndex_(Index& index) const 
+			throw (Exception::IndexOverflow, Exception::IndexUnderflow);
+	
+		/**
+		*/
+		void validateRange_(Index& from, Size& len) const 
+			throw (Exception::IndexOverflow, Exception::IndexUnderflow); 
+
+		/**
+		*/
+		static void validateCharPtrRange_(Index& from, Size& len, const char* char_ptr) 
+			throw (Exception::IndexUnderflow, Exception::IndexOverflow);
+		
+		/**
+		*/
+		static void valudateCharPtrIndex_(Index& index) 
+			throw (Exception::IndexUnderflow, Exception::IndexOverflow);
+		//@}
 		
 
 

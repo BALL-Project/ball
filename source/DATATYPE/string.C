@@ -1,4 +1,4 @@
-// $Id: string.C,v 1.21 2000/07/14 14:42:29 amoll Exp $
+// $Id: string.C,v 1.22 2000/07/16 19:26:41 oliver Exp $
 
 #include <BALL/DATATYPE/string.h>
 
@@ -202,7 +202,7 @@ namespace BALL
 	}
 
 	String::String(Size buffer_size, const char* format, ... )
-		: string()
+		: string() 
 	{
 		if (buffer_size <= 0)
 		{
@@ -266,7 +266,9 @@ namespace BALL
 		if (len == 0)
 		{
 			erase();
-		} else {
+		} 
+		else 
+		{
 			assign(s.c_str() + from, len);
 		}
 	}
@@ -278,7 +280,9 @@ namespace BALL
 		if (len == 0)
 		{
 			erase();
-		} else {
+		} 
+		else 
+		{
 			assign(s + from, len);
 		}
 	}
@@ -1021,6 +1025,7 @@ namespace BALL
  
 
 	void String::validateIndex_(Index& index) const
+		throw (Exception::IndexOverflow, Exception::IndexUnderflow)
 	{
 		// indices may be given as negative arguments: start from the end
 		// -1 therefore means the last bit.
@@ -1044,6 +1049,7 @@ namespace BALL
 	}
 
 	void String::validateRange_(Index& from, Size& len) const
+		throw (Exception::IndexOverflow, Exception::IndexUnderflow)
 	{
 		Size string_size = size();
 		
@@ -1112,6 +1118,7 @@ namespace BALL
  	}
 
 	void String::validateCharPtrRange_(Index& from, Size& len, const char* char_ptr)
+		throw (Exception::IndexUnderflow, Exception::IndexOverflow)
 	{
 		if (char_ptr == 0)
 		{
