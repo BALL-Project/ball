@@ -50,8 +50,8 @@ namespace BALL
 				const System& getSystem() const
 					throw();
 					
-				/*System& getSystem()
-					throw();*/
+				System& getSystem()
+					throw();
 
 				/** Use score as the new scoring information.
 				 */

@@ -46,14 +46,6 @@ namespace BALL
 				const Options& getOptions() const
 					throw();
 				
-				std::vector<ConformationSet::Conformation> operator () (const ConformationSet& conformations)
-					throw();
-
-			protected:
-
-				ForceField* ff_;
-				Options     options_;
-				bool 				delete_force_field_;
 		};
 }
 #endif
