@@ -1,4 +1,4 @@
-// $Id: pair6_12RDFIntegrator.h,v 1.6 2000/11/08 16:36:21 amoll Exp $
+// $Id: pair6_12RDFIntegrator.h,v 1.7 2000/12/01 11:49:35 anker Exp $
 
 #ifndef BALL_SOLVATION_PAIR6_12RDFINTEGRATOR_H
 #define BALL_SOLVATION_PAIR6_12RDFINTEGRATOR_H
@@ -100,18 +100,32 @@ namespace BALL
 		/** @name Constructors and destructors */
 		//@{
 
-		/** Default constructor */
-		Pair6_12RDFIntegrator() throw();
+		/** Default constructor 
+		*/
+		Pair6_12RDFIntegrator() 
+			throw();
 
-		/** Copy constructor */
-		Pair6_12RDFIntegrator(const Pair6_12RDFIntegrator& integrator) throw();
+		/** Copy constructor 
+				@param integrator the integrator we want to copy
+		*/
+		Pair6_12RDFIntegrator(const Pair6_12RDFIntegrator& integrator) 
+			throw();
 
-		/** Detailed constructor */
+		/** Detailed constructor
+				@param A repulsion constant of the 6-12 potential in units of ...
+				@param B dispersion constant of the 6-12 potential in units of ...
+				@param k1 geometric correction constant (@see ...)
+				@param k2 geometric correction constant (@see ...)
+				@param rdf a radial distribution function
+		*/
 		Pair6_12RDFIntegrator(double A, double B, double k1, double k2,
-				const RadialDistributionFunction& rdf) throw();
+				const RadialDistributionFunction& rdf) 
+			throw();
 
-		/** Destructor */
-		virtual ~Pair6_12RDFIntegrator() throw();
+		/** Destructor 
+		*/
+		virtual ~Pair6_12RDFIntegrator() 
+			throw();
 
 		//@}
 
@@ -119,54 +133,92 @@ namespace BALL
 		/** @name Assignment */
 		//@{
 
-		/** Set by specifing this instance */
-		void set(double A, double B, double k1, double k2,
-				const RadialDistributionFunction& rdf) throw();
-
-		/** Assignment operator */
+		/** Assignment operator 
+				@param integrator the integrator to assign from
+				@return a constant reference to {\rm this}
+		*/
 		const Pair6_12RDFIntegrator& operator =
-			(const Pair6_12RDFIntegrator& proc) throw();
+			(const Pair6_12RDFIntegrator& integrator) 
+			throw();
 
-		/** clear method */
-		virtual void clear() throw();
+		/** clear method 
+		*/
+		virtual void clear() 
+			throw();
 
 		//@}
 
 
-		/** @name Accessors */
+		/// @name Accessors 
 		//@{
 
 		/** set the constants for the integration, usually done by the calling
 				energy processor 
+				@param A repulsion constant of the 6-12 potential in units of ...
+				@param B dispersion constant of the 6-12 potential in units of ...
+				@param k1 geometric correction constant (@see ...)
+				@param k2 geometric correction constant (@see ...)
 		*/
-		void setConstants(double A, double B, double k1, double k2) throw();
+		void setConstants(double A, double B, double k1, double k2) 
+			throw();
 
 		/** get the constants from this processor 
+				@param A repulsion constant of the 6-12 potential in units of ...
+				@param B dispersion constant of the 6-12 potential in units of ...
+				@param k1 geometric correction constant (@see ...)
+				@param k2 geometric correction constant (@see ...)
 		*/
-		void getConstants(double& A, double& B, double& k1, double& k2)	throw();
+		void getConstants(double& A, double& B, double& k1, double& k2)	
+			throw();
 
 		/** integrate to Infinity from {\tt from} using previously set constants 
+				@param from the lower limit of integration
+				@return the value of the integration
 		*/
-		double integrateToInf(double from) const throw();
+		double integrateToInf(double from) const 
+			throw();
 
 		/** integrate from {\tt from} to infinity using the specified constants 
+				@param A repulsion constant of the 6-12 potential in units of ...
+				@param B dispersion constant of the 6-12 potential in units of ...
+				@param k1 geometric correction constant (@see ...)
+				@param k2 geometric correction constant (@see ...)
+				@param from the lower limit of integration
+				@return the value of the integration
 		*/
 		double integrateToInf(double from, double A, double B, double k1,
-				double k2) throw();
+				double k2) 
+			throw();
 
-		/** integrate from {\tt from} to {\tt to} using previously assigned constants 
+		/** integrate from {\tt from} to {\tt to} using previously assigned
+				constants 
+				@param from the lower limit
+				@param to the upper limit 
+				@return the value of the integration
 		*/
-		double integrate(double from, double to) const throw();
+		double integrate(double from, double to) const 
+			throw();
 		
 		/** integrate from {\tt from} to {\tt to} using the specified constants 
+				@param from the lower limit of integration
+				@param to the upper limit 
+				@param A repulsion constant of the 6-12 potential in units of ...
+				@param B dispersion constant of the 6-12 potential in units of ...
+				@param k1 geometric correction constant (@see ...)
+				@param k2 geometric correction constant (@see ...)
+				@return the value of the integration
 		*/
-		double integrate(double from, double to, double A, double B, double k1, double k2) 
+		double integrate(double from, double to, double A, double B, double k1,
+				double k2) 
 			throw();
 
 		/** Default operation, integrate from {\tt x} to infinity using
-		 *  previously assigned constants 
+				previously assigned constants 
+				@param x the lower limit of the integration to infinity
+				@return the value of the integration
 		 */
-		virtual double operator () (double x) const throw();
+		virtual double operator () (double x) const 
+			throw();
 
 		//@}
 
@@ -174,23 +226,32 @@ namespace BALL
 		/** @name Predicates */
 		//@{
 
-		/** Equality operator */
-		bool operator == (const Pair6_12RDFIntegrator& integrator) const throw();
+		/** Equality operator. Tests whether two instances of
+				Pair6_12RDFIntegrator have the same content.
+				@param integrator another instance of Pair6_12RDFIntegrator
+				@return true, if both instances are equal
+		*/
+		bool operator == (const Pair6_12RDFIntegrator& integrator) const 
+			throw();
+
 		//@}
 
 
-		/** The options of this Integrator 
+		/** The options of this Integrator (@see Options, ) 
 		*/
 		Options options;
+
 
 		/** @name Debugging and diagnostics 
 		*/
 		//@{
 
-		/** Dumps the whole content of the object 
+		/** Dumps the whole content of the object
+				@param s an ostream, defaults to std::cout
+				@param depth the indentation depth of the output
 		*/
 		virtual void dump (std::ostream& s = std::cout, Size depth = 0) const
-		throw();
+			throw();
 		
 		//@}
 
@@ -213,27 +274,36 @@ namespace BALL
 		*/
 		double k2_;
 
-		/*_ The valid flag. Should move to RDFIntegrator. 
-		*/
-		bool valid_;
-
 
 		private:
 
 		/*_ Integrate an interval analytically. This method does the actual work. 
+				@param interval the interval to be integrated
+				@param coeffs the coefficients for this interval
+				@param x0 the value to be subtracted from x
+				@return the value of the integral
 		*/
 		double analyticallyIntegrateInterval(const Interval& interval,
-				const Coefficients& coeffs, Position index) const throw();
+				const Coefficients& coeffs, float x0) const 
+			throw();
 
+		/*_ Integrate an interval numerically.
+				@param interval the interval to be integrated
+				@return the value of the integral
+		*/
 		double numericallyIntegrateInterval(const Interval& interval) const
 			throw();
 
 		/*_ Project a number from the integration beam to the projection beam
-		 *  of an atom center for the rdf thingy. 
-		 */
+				of an atom center for the rdf thingy. 
+				@param x the value to be projected
+				@return the projection of {\em x}
+		*/
 		double project(double x) const throw();
 
 		/*_ Do the reverse of project(). 
+				@param x the valut to be reversly projected
+				@return the projection of {\em x}
 		*/
 		double unproject(double x) const throw();
 	};
