@@ -1,4 +1,4 @@
-// $Id: Composite_test.C,v 1.4 1999/09/08 15:28:37 oliver Exp $
+// $Id: Composite_test.C,v 1.5 1999/09/08 18:07:56 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 using namespace BALL;
 ///////////////////////////
 
-START_TEST(Composite, "$Id: Composite_test.C,v 1.4 1999/09/08 15:28:37 oliver Exp $")
+START_TEST(Composite, "$Id: Composite_test.C,v 1.5 1999/09/08 18:07:56 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -636,9 +636,51 @@ TEST_EQUAL(e.isNextSiblingOf(d), false)
 TEST_EQUAL(f.isNextSiblingOf(d), false)
 RESULT
 
-// 		bool hasDescendant() const;
-// 		bool isDescendant() const;
-// 		bool isDescendantOf(const Composite& composite) const;
+CHECK(hasDescendant() const)
+TEST_EQUAL(a.hasDescendant(), true)
+TEST_EQUAL(b.hasDescendant(), true)
+TEST_EQUAL(c.hasDescendant(), true)
+TEST_EQUAL(d.hasDescendant(), false)
+TEST_EQUAL(e.hasDescendant(), false)
+TEST_EQUAL(f.hasDescendant(), false)
+RESULT
+
+CHECK(isDescendant() const)
+TEST_EQUAL(a.isDescendant(), false)
+TEST_EQUAL(b.isDescendant(), true)
+TEST_EQUAL(c.isDescendant(), true)
+TEST_EQUAL(d.isDescendant(), true)
+TEST_EQUAL(e.isDescendant(), true)
+TEST_EQUAL(f.isDescendant(), false)
+RESULT
+
+CHECK(isDescendantOf() const)
+TEST_EQUAL(a.isDescendantOf(a), false)
+TEST_EQUAL(b.isDescendantOf(a), true)
+TEST_EQUAL(c.isDescendantOf(a), true)
+TEST_EQUAL(d.isDescendantOf(a), true)
+TEST_EQUAL(e.isDescendantOf(a), true)
+TEST_EQUAL(f.isDescendantOf(a), false)
+TEST_EQUAL(a.isDescendantOf(b), false)
+TEST_EQUAL(b.isDescendantOf(b), false)
+TEST_EQUAL(c.isDescendantOf(b), true)
+TEST_EQUAL(d.isDescendantOf(b), true)
+TEST_EQUAL(e.isDescendantOf(b), true)
+TEST_EQUAL(f.isDescendantOf(b), false)
+TEST_EQUAL(a.isDescendantOf(c), false)
+TEST_EQUAL(b.isDescendantOf(c), false)
+TEST_EQUAL(c.isDescendantOf(c), false)
+TEST_EQUAL(d.isDescendantOf(c), false)
+TEST_EQUAL(e.isDescendantOf(c), true)
+TEST_EQUAL(f.isDescendantOf(c), false)
+TEST_EQUAL(a.isDescendantOf(d), false)
+TEST_EQUAL(b.isDescendantOf(d), false)
+TEST_EQUAL(c.isDescendantOf(d), false)
+TEST_EQUAL(d.isDescendantOf(d), false)
+TEST_EQUAL(e.isDescendantOf(d), false)
+TEST_EQUAL(f.isDescendantOf(d), false)
+RESULT
+
 // 		bool hasAnyAncestor() const;
 // 		template <class T> bool hasAncestor(const T& t) const 
 // 		bool isAncestor() const;
