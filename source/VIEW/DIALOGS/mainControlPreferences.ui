@@ -1,0 +1,139 @@
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<class>MainControlPreferencesData</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>MainControlPreferencesData</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>1</y>
+            <width>380</width>
+            <height>210</height>
+        </rect>
+    </property>
+    <property name="sizePolicy">
+        <sizepolicy>
+            <hsizetype>0</hsizetype>
+            <vsizetype>0</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+    </property>
+    <property name="minimumSize">
+        <size>
+            <width>380</width>
+            <height>210</height>
+        </size>
+    </property>
+    <property name="maximumSize">
+        <size>
+            <width>380</width>
+            <height>210</height>
+        </size>
+    </property>
+    <property name="caption">
+        <string>Form1</string>
+    </property>
+    <widget class="QButtonGroup">
+        <property name="name">
+            <cstring>buttonGroup1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>7</x>
+                <y>-1</y>
+                <width>112</width>
+                <height>185</height>
+            </rect>
+        </property>
+        <property name="title">
+            <string>GUI Style</string>
+        </property>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>is_platinum_style</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>7</x>
+                    <y>26</y>
+                    <width>94</width>
+                    <height>21</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Platinum</string>
+            </property>
+        </widget>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>is_windows_style</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>7</x>
+                    <y>57</y>
+                    <width>94</width>
+                    <height>21</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Windows</string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>is_motif_style</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>7</x>
+                    <y>88</y>
+                    <width>94</width>
+                    <height>21</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Motif</string>
+            </property>
+        </widget>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>is_cde_style</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>7</x>
+                    <y>119</y>
+                    <width>94</width>
+                    <height>21</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>CDE</string>
+            </property>
+        </widget>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>is_sgi_style</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>7</x>
+                    <y>150</y>
+                    <width>94</width>
+                    <height>21</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>SGI</string>
+            </property>
+        </widget>
+    </widget>
+</widget>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>
