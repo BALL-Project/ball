@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: triangulatedSAS.C,v 1.3 2003/11/04 22:34:22 amoll Exp $
+// $Id: triangulatedSAS.C,v 1.4 2003/12/17 11:52:57 strobel Exp $
 
 #	include <BALL/KERNEL/atom.h>
 #	include <BALL/KERNEL/molecule.h>
@@ -360,14 +360,14 @@ void Plane2HIN(const TPlane3<double>& plane, const String& file, Position size =
 		part.deleteIsolatedEdges();
 		part.deleteIsolatedPoints();
 		// create HashGrid of triangle points
-		HashGrid3<TrianglePoint*> point_grid(createHashGrid(part));
+//		HashGrid3<TrianglePoint*> point_grid(createHashGrid(part));
 		// create points on the cutting planes
-		createPoints(part,planes,point_grid);
+//		createPoints(part,planes,point_grid);
 		// create new triangles
-		createNewTriangles(part,point_grid);
+//		createNewTriangles(part,point_grid);
 		// remove isolated edges and points
-		part.deleteIsolatedEdges();
-		part.deleteIsolatedPoints();
+//		part.deleteIsolatedEdges();
+//		part.deleteIsolatedPoints();
 		// join the triangulation of this sas face with the sas
 		tsas_->join(part);
 	}
@@ -409,12 +409,17 @@ void Plane2HIN(const TPlane3<double>& plane, const String& file, Position size =
 		for (p = part.beginPoint(); p != part.endPoint(); p++)
 		{
 			(*p)->index_ = 0;
-			for (plane = planes.begin(); plane != planes.end(); plane++)
+			plane = planes.begin();
+			while (plane != planes.end())
 			{
 				if (Maths::isLessOrEqual(plane->first.n*(*p)->point_,plane->second))
 				{
 					(*p)->index_ = 1;
 					plane = planes.end();
+				}
+				else
+				{
+					plane++;
 				}
 			}
 		}
@@ -590,7 +595,7 @@ void Plane2HIN(const TPlane3<double>& plane, const String& file, Position size =
 			}
 			switch (type)
 			{
-				case 0 :  break; // triangel not intersected
+				case 0 :  break; // triangle not intersected
 				case 1 :  onePointOutside(0,*t,part,grid);    break;
 				case 2 :  onePointOutside(1,*t,part,grid);    break;
 				case 3 :  twoPointsOutside(0,1,*t,part,grid); break;
@@ -599,6 +604,7 @@ void Plane2HIN(const TPlane3<double>& plane, const String& file, Position size =
 				case 6 :  twoPointsOutside(1,2,*t,part,grid); break;
 				case 7 :  break; // should never happen
 			}
+			t++;
 		}
 	}
 
@@ -610,6 +616,7 @@ void Plane2HIN(const TPlane3<double>& plane, const String& file, Position size =
 			 HashGrid3<TrianglePoint*>& grid)
 		throw()
 	{
+std::cout << "onePointOutside ...\n";
 		// get the relative indices of the intersected edges
 		Position edge[3];
 		Position i = 0;
@@ -701,6 +708,7 @@ void Plane2HIN(const TPlane3<double>& plane, const String& file, Position size =
 			new_point->faces_.insert(third_triangle);
 			part.insert(third_triangle);
 		}
+std::cout << "... ok\n";
 	}
 
 
@@ -712,6 +720,7 @@ void Plane2HIN(const TPlane3<double>& plane, const String& file, Position size =
 			 HashGrid3<TrianglePoint*>& grid)
 		throw()
 	{
+std::cout << "twoPointsOutside ...\n";
 		// get the relative indices of the intersected edges
 		Position edge[3];
 		Position i = 0;
@@ -778,6 +787,7 @@ void Plane2HIN(const TPlane3<double>& plane, const String& file, Position size =
 			new_point->faces_.insert(new_triangle);
 			part.insert(new_triangle);
 		}
+std::cout << "... ok\n";
 	}
 
 
@@ -835,7 +845,6 @@ void Plane2HIN(const TPlane3<double>& plane, const String& file, Position size =
 		{
 			n = 4;
 		}
-//if (n == 4) { cout << "numberOfRefinements: " << n << "\n"; }
 		return n;
 	}
 
