@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: canonicalMD.sip,v 1.4 2004/04/17 16:54:27 oliver Exp $
+// $Id: canonicalMD.sip,v 1.5 2005/01/24 16:59:22 amoll Exp $
 //
 
 class CanonicalMD 
@@ -25,7 +25,7 @@ class CanonicalMD
     virtual bool setup(ForceField& /myforcefield/, SnapShotManager* /ssm/, const Options& /options/) throw(); 
     virtual bool specificSetup() throw();
     virtual void setTimeStep(double /time/) throw(); 
-    virtual void simulate(bool /restart/ = false) throw();
-    virtual void simulateIterations(Size /number/, bool /restart/ = false) throw();
-    virtual void simulateTime(double /simulation_time/, bool /restart/ = false) throw(); 
+    virtual bool simulate(bool /restart/ = false) throw();
+    virtual bool simulateIterations(Size /number/, bool /restart/ = false) throw();
+    virtual bool simulateTime(double /simulation_time/, bool /restart/ = false) throw(); 
 };

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularDynamics.sip,v 1.5 2004/04/17 16:54:27 oliver Exp $
+// $Id: molecularDynamics.sip,v 1.6 2005/01/24 16:59:23 amoll Exp $
 //
 
 class MolecularDynamics
@@ -66,9 +66,9 @@ class MolecularDynamics
   double getPotentialEnergy () const;
   double getKineticEnergy () const;
   ForceField *getForceField () const;
-  virtual void simulate (bool /restart/ = false);
-  virtual void simulateIterations (Size /number/, bool /restart/ = false);
-  virtual void simulateTime (double /simulation_time/, bool /restart/ = false);
+  virtual bool simulate (bool /restart/ = false);
+  virtual bool simulateIterations (Size /number/, bool /restart/ = false);
+  virtual bool simulateTime (double /simulation_time/, bool /restart/ = false);
   Options options;
 };  
   

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: microCanonicalMD.sip,v 1.4 2004/04/17 16:54:27 oliver Exp $
+// $Id: microCanonicalMD.sip,v 1.5 2005/01/24 16:59:23 amoll Exp $
 //
 
 class MicroCanonicalMD 
@@ -24,7 +24,7 @@ class MicroCanonicalMD
 	virtual bool setup(ForceField&/my_force_field/, SnapShotManager* /ssm/, const Options& /myoptions/); 
 	virtual bool specificSetup();
 	virtual void setTimeStep(double /step/); 
-	virtual void simulate(bool /restart/ = false);
-	virtual void simulateIterations(Size /number/, bool /restart/ = false);
-	virtual void simulateTime(double /simulation_time/, bool /restart/ = false); 
+	virtual bool simulate(bool /restart/ = false);
+	virtual bool simulateIterations(Size /number/, bool /restart/ = false);
+	virtual bool simulateTime(double /simulation_time/, bool /restart/ = false); 
 };
