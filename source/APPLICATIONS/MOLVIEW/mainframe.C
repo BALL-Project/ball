@@ -694,6 +694,7 @@ void Mainframe::writePreferences(INIFile& inifile)
 	inifile.insertValue("WINDOWS", "Main::vert_splitter", value_string);
 
 	MainControl::writePreferences(inifile);
+	display_properties_->writePreferences(inifile);
 }
 
 
