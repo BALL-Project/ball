@@ -1,4 +1,4 @@
-// $Id: string.iC,v 1.35 2001/05/17 17:45:47 oliver Exp $
+// $Id: string.iC,v 1.36 2001/06/05 15:42:49 anker Exp $
 
 BALL_INLINE 
 String::String()
@@ -495,6 +495,14 @@ String& String::trim(const char* trimmed)
 	throw()
 {
   return trimRight(trimmed).trimLeft(trimmed);
+}
+
+BALL_INLINE 
+String String::trim(const char* trimmed) const
+	throw()
+{
+	String tmp(*this);
+  return tmp.trimRight(trimmed).trimLeft(trimmed);
 }
 
 BALL_INLINE 
