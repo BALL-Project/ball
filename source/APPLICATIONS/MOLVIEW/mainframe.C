@@ -416,7 +416,7 @@ void Mainframe::amberMinimization()
 										amber.getEnergy(),
 										amber.getRMSGradient());
 
-		setStatusbarText(String(message));
+		setStatusbarText(String(message.latin1()));
  	}
 
 	Log.info() << endl << "minimization terminated." << endl << endl;
@@ -516,7 +516,7 @@ void Mainframe::amberMDSimulation()
 										mds->getNumberOfIterations(),
 										amber.getEnergy(),
 										amber.getRMSGradient());
-		setStatusbarText(String(message));
+		setStatusbarText(String(message.latin1()));
  	}
 	Log.info() << std::endl << "simulation terminated." << std::endl << endl;
 
