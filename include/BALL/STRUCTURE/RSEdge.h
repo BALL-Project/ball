@@ -1,4 +1,4 @@
-// $Id: RSEdge.h,v 1.1 2000/10/10 14:24:54 oliver Exp $
+// $Id: RSEdge.h,v 1.2 2000/10/19 14:24:51 strobel Exp $
 
 #ifndef BALL_STRUCTURE_RSEDGE_H
 #define BALL_STRUCTURE_RSEDGE_H
@@ -454,20 +454,25 @@ namespace BALL
 		}
 		
 		/** isSingular
-				@return bool, {\bf true} is the rsedge is singular, {\bf false} otherwise
+				@return bool, {\bf true} if the rsedge is singular, {\bf false} otherwise
 		*/
 		bool isSingular()
 		{
 			return singular_;
+		}
+		
+		/** isFree
+				@return bool, {\bf true} if the rsedge is free, {\bf false} otherwise
+		*/
+		bool isFree()
+		{
+			return (face0_ == NULL);
 		}
 
 		//@}
 
 
 		protected:
-		/**	@name	Attributes
-		*/
-		//@{
 
 		Index vertex0_;
 		Index vertex1_;
@@ -483,7 +488,6 @@ namespace BALL
 		bool singular_;
 		Index index_;
 
-		//@}
 	};
 
 	/**	@name	Storers

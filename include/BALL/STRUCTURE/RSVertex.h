@@ -1,4 +1,4 @@
-// $Id: RSVertex.h,v 1.1 2000/10/10 14:24:55 oliver Exp $
+// $Id: RSVertex.h,v 1.2 2000/10/19 14:24:51 strobel Exp $
 
 #ifndef BALL_STRUCTURE_RSVERTEX_H
 #define BALL_STRUCTURE_RSVERTEX_H
@@ -44,7 +44,7 @@ namespace BALL
 				initialized to {\tt (T)0} or {\tt NULL}, respectivly.
 		*/
 		TRSVertex()
-			: atom_(-1), edges_(), faces_()//, index_(-1)
+			: atom_(-1), edges_(), faces_()
 		{
 		}
 
@@ -65,7 +65,7 @@ namespace BALL
 				@param	sphere assigned to the atom
 		*/
 		TRSVertex(const Index a)
-			: atom_(a), edges_(), faces_()//, index_(-1)
+			: atom_(a), edges_(), faces_()
 		{
 		}
 
@@ -76,8 +76,8 @@ namespace BALL
 				@param	face_list assigned to list of rsfaces
 				@param	i assigned to the index of the rsvertex
 		*/
-		TRSVertex(const Index a, const list< TRSEdge<T>* >& edge_list,
-							const list< TRSFace<T>* >& face_list)
+		TRSVertex(const Index a, const std::list< TRSEdge<T>* >& edge_list,
+							const std::list< TRSFace<T>* >& face_list)
 			: atom_(a), edges_(edge_list), faces_(face_list)
 		{
 		}
@@ -104,7 +104,6 @@ namespace BALL
 			atom_ = rsvertex.getAtom();
 			edges_ = rsvertex.getEdges();
 			faces_ = rsvertex.getFaces();
-//			index_ = rsvertex.getIndex();
 		}
 
 		/**	Assign to a sphere and two lists.
@@ -112,10 +111,10 @@ namespace BALL
 				@param	edge_list assigned to list of edges
 				@param	face_list assigned to list of faces
 		*/
-		void set(const Index a, const list< TRSEdge<T>* >& edge_list,
-						 const list< TRSFace<T>* >& face_list)//, const Index i)
+		void set(const Index a, const std::list< TRSEdge<T>* >& edge_list,
+						 const std::list< TRSFace<T>* >& face_list)
 		{
-			atom_ = a; edges_ = edge_list; faces_ = face_list;// index_ = i;
+			atom_ = a; edges_ = edge_list; faces_ = face_list;
 		}
 		//@}
 
@@ -142,7 +141,7 @@ namespace BALL
 		/** Change the list of rsedges the rsvertex belongs to.
 				@param edges the new rsedge list
 		*/
-		void setEdges(list< TRSEdge<T>* > edges)
+		void setEdges(std::list< TRSEdge<T>* > edges)
 		{
 			edges_ = edges;
 		}
@@ -158,7 +157,7 @@ namespace BALL
 		/** Return the list of rsedges the rsvertex belongs to.
 				@return list< TRSEdge<T>* >, the list of rsedges the rsvertex belongs to
 		*/
-		list< TRSEdge<T>* > getEdges()
+		std::list< TRSEdge<T>* > getEdges()
 		{
 			return edges_;
 		}
@@ -166,7 +165,7 @@ namespace BALL
 		/** Change the list of rsfaces the rsvertex belongs to.
 				@param faces the new rsface list
 		*/
-		void setFaces(list< TRSFace<T>* > faces)
+		void setFaces(std::list< TRSFace<T>* > faces)
 		{
 			faces_ = faces;
 		}
@@ -182,26 +181,10 @@ namespace BALL
 		/** Return the list of rsfaces the rsvertex belongs to.
 				@return list< TRSFace<T>* >, the list of rsfaces the rsvertex belongs to
 		*/
-		list< TRSFace<T>* > getFaces()
+		std::list< TRSFace<T>* > getFaces()
 		{
 			return faces_;
 		}
-
-//		/** Change the index of the rsvertex.
-//				@param index the new index
-//		*/
-//		void setIndex(Index index)
-//		{
-//			index_ = index;
-//		}
-
-//		/** Return the index of the rsvertex.
-//				@return Index, the index of the rsvertex
-//		*/
-//		Index getIndex()
-//		{
-//			return index_;
-//		}
 
 		//@}
 
@@ -231,7 +214,7 @@ namespace BALL
 		*/
 		TRSFace<T>* has(TRSFace<T>* f)
 		{
-			list<TRSFace<T>*>::iterator i;
+			std::list<TRSFace<T>*>::iterator i;
 			for (i = faces_.begin(); i != faces_.end(); i++)
 			{
 				if (*(*i) == *f)
@@ -248,7 +231,7 @@ namespace BALL
 		*/
 		bool has(TRSEdge<T>* e)
 		{
-			list<TRSEdge<T>*>::iterator i;
+			std::list<TRSEdge<T>*>::iterator i;
 			for (i = edges_.begin(); i != edges_.end(); i++)
 				{
 					if (*(*i) == *e)
@@ -263,30 +246,11 @@ namespace BALL
 		//@}
 
 		protected:
-		/**	@name	Attributes
-		*/
-		//@{
 
-		/**	atom.
-				The index of the atom represented by the vertex.
-		*/
 		Index atom_;
+		std::list< TRSEdge<T>* > edges_;
+		std::list< TRSFace<T>* > faces_;
 
-		/**	edges.
-				A list of edges the vertex belongs to.
-		*/
-		list< TRSEdge<T>* > edges_;
-
-		/**	faces.
-				A list of faces the vertex belongs to.
-		*/
-		list< TRSFace<T>* > faces_;
-
-		/**	index.
-		*/
-//		Index index_;
-
-		//@}
 	};
 
 	/**	@name	Storers
@@ -309,15 +273,15 @@ namespace BALL
 		template <typename T>
 		std::ostream& operator << (std::ostream& s, TRSVertex<T>& rsvertex)
 		{
-			s << "RSVERTEX" << /*rsvertex.getIndex() <<*/ "(" << rsvertex.getAtom() << " [";
-			list< TRSEdge<T>* > edges = rsvertex.getEdges();
-			for (list<TRSEdge<T>*>::iterator i = edges.begin(); i != edges.end(); i++)
+			s << "RSVERTEX(" << rsvertex.getAtom() << " [";
+			std::list< TRSEdge<T>* > edges = rsvertex.getEdges();
+			for (std::list<TRSEdge<T>*>::iterator i = edges.begin(); i != edges.end(); i++)
 			{
 				s << (*i)->getIndex() << ' ';
 			}
 			s << "] [";
-			list< TRSFace<T>* > faces = rsvertex.getFaces();
-			for (list<TRSFace<T>*>::iterator i = faces.begin(); i != faces.end(); i++)
+			std::list< TRSFace<T>* > faces = rsvertex.getFaces();
+			for (std::list<TRSFace<T>*>::iterator i = faces.begin(); i != faces.end(); i++)
 			{
 				s << (*i)->getIndex() << ' ';
 			}

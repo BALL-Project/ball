@@ -1,4 +1,4 @@
-// $Id: reducedSurface.h,v 1.3 2000/10/14 13:01:07 oliver Exp $
+// $Id: reducedSurface.h,v 1.4 2000/10/19 14:24:51 strobel Exp $
 
 #ifndef BALL_STRUCTURE_REDUCEDSURFACE_H
 #define BALL_STRUCTURE_REDUCEDSURFACE_H
@@ -96,7 +96,7 @@ namespace BALL
 				Create a new ReducedSurface object from a list of spheres.
 				@param	atom assigned to the vector of atoms
 		*/
-		TReducedSurface(const vector< TSphere3<T> >& spheres, const T& probe_radius)
+		TReducedSurface(const std::vector< TSphere3<T> >& spheres, const T& probe_radius)
 		{
 #ifdef debug_rs
 			print.open("ReducedSurface.log");
@@ -105,11 +105,11 @@ namespace BALL
 			print << pre << "ReducedSurface(" << spheres.size() << ")\n";
 			pre += "  ";
 #endif
-			vector< TSphere3<T> > atom(spheres.size());
-			vector< TRSVertex<T>* > vertices(spheres.size());
-			vector< TRSEdge<T>* > edges;
-			vector< TRSFace<T>* > faces;
-			vector< TVector3<T> > point_list;
+			std::vector< TSphere3<T> > atom(spheres.size());
+			std::vector< TRSVertex<T>* > vertices(spheres.size());
+			std::vector< TRSEdge<T>* > edges;
+			std::vector< TRSFace<T>* > faces;
+			std::vector< TVector3<T> > point_list;
 			list<Index> index_list;
 			T r_max = 0;
 			for (Position i = 0; i < spheres.size(); i++)
@@ -127,7 +127,6 @@ namespace BALL
 			probe_radius_ = probe_radius;
 			vertices_ = vertices;
 			edges_ = edges;
-			free_edges_ = edges;
 			faces_ = faces;
 			tree_ = new TBSDTree<T>(point_list,index_list,"","");
 			tree_->build();
@@ -157,10 +156,6 @@ namespace BALL
 			for (Position i = 0; i < edges_.size(); i++)
 			{
 				delete edges_[i];
-			}
-			for (Position i = 0; i < free_edges_.size(); i++)
-			{
-				delete free_edges_[i];
 			}
 			for (Position i = 0; i < faces_.size(); i++)
 			{
@@ -201,14 +196,6 @@ namespace BALL
 		Size numberOfEdges()
 		{
 			return edges_.size();
-		}
-
-		/** Return the number of free rsedges.
-				@return Size the number of free rsedges
-		*/
-		Size numberOfFreeEdges()
-		{
-			return free_edges_.size();
 		}
 
 		/** Return the number of rsfaces.
@@ -254,7 +241,7 @@ namespace BALL
 		/** Return the vertices
 				@return vector< TRSVertex<T>* > all vertices
 		*/
-		vector< TRSVertex<T>* > getVertices()
+		std::vector< TRSVertex<T>* > getVertices()
 		{
 			return vertices_;
 		}
@@ -278,7 +265,7 @@ namespace BALL
 		/** Return the edges
 				@return vector< TRSEdge<T>* > all edges
 		*/
-		vector< TRSEdge<T>* > getEdges()
+		std::vector< TRSEdge<T>* > getEdges()
 		{
 			return edges_;
 		}
@@ -299,34 +286,10 @@ namespace BALL
 			}
 		}
 
-		/** Return the free edges
-				@return vector< TRSEdge<T>* > all free edges
-		*/
-		vector< TRSEdge<T>* > getFreeEdges()
-		{
-			return free_edges_;
-		}
-
-		/** Return the i'th free rsedge.
-				@param	i	the index of the free rsedge that should be given back
-				@return TSpherer3<T>, the i'th free rsedge
-		*/
-		TRSEdge<T>* getFreeEdge(Position i)
-		{
-			if (i < free_edges_.size())
-			{
-				return free_edges_[i];
-			}
-			else
-			{
-				throw Exception::IndexOverflow(__FILE__, __LINE__,i,free_edges_.size());
-			}
-		}
-
 		/** Return the faces
 				@return vector< TRSFace<T>* > all faces
 		*/
-		vector< TRSFace<T>* > getFaces()
+		std::vector< TRSFace<T>* > getFaces()
 		{
 			return faces_;
 		}
@@ -544,8 +507,8 @@ pre.replace(0,2,"");
 					TRSEdge<T>* edge = createFreeEdge(atom1,atom2);
 					if (edge != NULL)
 					{
-						edge->setIndex(free_edges_.size());
-						free_edges_.push_back(edge);
+						edge->setIndex(edges_.size());
+						edges_.push_back(edge);
 						vertices_[atom2] = new TRSVertex<T>(atom2);
 						indices.remove(atom2);
 						deleted_indices.push_back(atom2);
@@ -703,15 +666,13 @@ print << pre << "  norm:       " << norm << "\n";
 			Byte test = findStartPosition(indices,deleted_indices,0,0,vertex,edge,face);
 			switch (test)
 			{
-				case 1 :	
-									vertices_[vertex->getAtom()] = vertex;
+				case 1 :	vertices_[vertex->getAtom()] = vertex;
 									indices.remove(vertex->getAtom());
 									deleted_indices.push_back(vertex->getAtom());
 									new_vertices.push_back(vertex);
 									break;
-				case 2 :	
-									edge->setIndex(free_edges_.size());
-									free_edges_.push_back(edge);
+				case 2 :	edge->setIndex(edges_.size());
+									edges_.push_back(edge);
 									vertex1 = edge->getVertex(0);
 									vertex2 = edge->getVertex(1);
 									vertices_[vertex1]->pushEdge(edge);
@@ -723,8 +684,7 @@ print << pre << "  norm:       " << norm << "\n";
 									new_vertices.push_back(vertices_[vertex1]);
 									new_vertices.push_back(vertices_[vertex2]);
 									break;
-				case 3 :	
-									face->setIndex(faces_.size());
+				case 3 :	face->setIndex(faces_.size());
 									faces_.push_back(face);
 									vertex1 = face->getVertex(0);
 									vertex2 = face->getVertex(1);
@@ -1172,16 +1132,15 @@ print << pre << "  norm:       " << norm << "\n";
 
 		protected:
 
-    vector< TSphere3<T> > atom_;
+    std::vector< TSphere3<T> > atom_;
     T probe_radius_;
     TBSDTree<T>* tree_;
-    vector< TRSVertex<T>* > vertices_;
-    vector< TRSEdge<T>* > edges_;
-    vector< TRSEdge<T>* > free_edges_;
-    vector< TRSFace<T>* > faces_;
+    std::vector< TRSVertex<T>* > vertices_;
+    std::vector< TRSEdge<T>* > edges_;
+    std::vector< TRSFace<T>* > faces_;
     T r_max_;
 #ifdef debug_rs
-    ofstream print;
+    std::ofstream print;
     string pre;
 #endif
 	
@@ -1228,11 +1187,6 @@ print << pre << "  norm:       " << norm << "\n";
 			for (Position i = 0; i < rs.numberOfEdges(); i++)
 			{
 				s << "  " << *(rs.getEdge(i)) << "\n";
-		  }
-		  s << "free RSEdges:\n";
-			for (Position i = 0; i < rs.numberOfFreeEdges(); i++)
-			{
-				s << "  " << *(rs.getFreeEdge(i)) << "\n";
 		  }
 		  s << "RSFaces:\n";
 			for (Position i = 0; i < rs.numberOfFaces(); i++)

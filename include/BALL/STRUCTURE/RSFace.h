@@ -1,4 +1,4 @@
-// $Id: RSFace.h,v 1.1 2000/10/10 14:24:54 oliver Exp $
+// $Id: RSFace.h,v 1.2 2000/10/19 14:24:51 strobel Exp $
 
 #ifndef BALL_STRUCTURE_RSFACE_H
 #define BALL_STRUCTURE_RSFACE_H
@@ -451,9 +451,6 @@ namespace BALL
 		//@}
 
 		protected:
-		/**	@name	Attributes
-		*/
-		//@{
 
 		Index vertex0_;
 		Index vertex1_;
@@ -466,7 +463,6 @@ namespace BALL
 		bool singular_;
 		int index_;
 
-		//@}
 	};
 
 	/**	@name	Storers

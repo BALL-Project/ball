@@ -1,4 +1,4 @@
-// $Id: SESFace.h,v 1.1 2000/10/10 14:24:56 oliver Exp $
+// $Id: SESFace.h,v 1.2 2000/10/19 14:24:51 strobel Exp $
 
 #ifndef BALL_STRUCTURE_SESFACE_H
 #define BALL_STRUCTURE_SESFACE_H
@@ -49,9 +49,7 @@ namespace BALL
 			TYPE_SPHERIC  = 0,
 			TYPE_TORIC = 1,
 			TYPE_CONTACT = 2,
-			TYPE_SPHERIC_TRIANGULAR  = 3,
-			TYPE_SPHERIC_QUADRILATERAL  = 4,
-			TYPE_TORIC_SINGULAR = 5
+			TYPE_TORIC_SINGULAR = 3
 		};
 		//@}
 
@@ -256,20 +254,30 @@ namespace BALL
 		bool isNeighbouredTo(TSESFace<T>* face)
 		{
 			for (Position i = 0; i < edge.size(); i++)
+			{
+				if (edge[i] != NULL)
 				{
-					if (edge[i] != NULL)
-						{
-							if (edge[i]->face1 == face)
-								{
-									return true;
-								}
-							if (edge[i]->face2 == face)
-								{
-									return true;
-								}
-						}
+					if (edge[i]->face1 == face)
+					{
+						return true;
+					}
+					if (edge[i]->face2 == face)
+					{
+						return true;
+					}
 				}
+			}
 			return false;
+		}
+
+
+		bool isFree()
+		{
+			if (type != TYPE_TORIC)
+			{
+				return false;
+			}
+			return rsedge->isFree();
 		}
 		//@}
 

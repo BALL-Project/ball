@@ -1,4 +1,4 @@
-// $Id: triangulatedSurface.h,v 1.3 2000/10/14 13:01:45 oliver Exp $
+// $Id: triangulatedSurface.h,v 1.4 2000/10/19 14:24:52 strobel Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATEDSURFACE_H
 #define BALL_STRUCTURE_TRIANGULATEDSURFACE_H
@@ -48,6 +48,17 @@ namespace BALL
 			~Triangle()
 			{
 			}
+			Edge* other(Point* p)
+			{
+				for (Position i = 0; i < edge.size(); i++)
+				{
+					if ((edge[i]->point[0] != p) && (edge[i]->point[1] != p))
+					{
+						return edge[i];
+					}
+				}
+				return NULL;
+			}
 			vector<Point*> point;
 			vector<Edge*> edge;
 			vector<Triangle*> triangle;
@@ -94,8 +105,9 @@ namespace BALL
 			}
 			TVector3<T> p;
 			TVector3<T> n;
-			list<Edge*> edge;
-			list<Triangle*> triangle;
+			std::list<Edge*> edge;
+			std::list<Triangle*> triangle;
+			Index state;
 			long int index;
 		};
 		//@}
@@ -117,11 +129,26 @@ namespace BALL
 				@param triangulatedSurface the TriangulatedSurface object to be copied
 				@param bool ignored - just for interface consistency
 		*/
-		TTriangulatedSurface(const TTriangulatedSurface<T>& triangulatedSurface, bool /* deep */ = true)
-			: points(triangulatedSurface.points),
-				edges(triangulatedSurface.edges),
-				triangles(triangulatedSurface.triangles)
+		TTriangulatedSurface(const TTriangulatedSurface<T>& surface, bool /* deep */ = true)
 		{
+/*			std::list<Point*>::iterator p;
+			for (p = surface.points.begin(); p != surface.points.end(); p++)
+			{
+				Point* point = new Point(*(*p));
+				points.push_back(point);
+			}
+			std::list<Edge*>::iterator e;
+			for (e = surface.edges.begin(); e != surface.edges.end(); e++)
+			{
+				Edge* edge = new Edge(*(*e));
+				edges.push_back(edge);
+			}
+			std::list<Triangle*>::iterator t;
+			for (t = surface.triangles.begin(); t != surface.triangles.end(); t++)
+			{
+				Triangle* triangle = new Triangle(*(*t));
+				triangles.push_back(triangle);
+			}*/
 		}
 
 		/**	Destructor.
@@ -164,7 +191,7 @@ namespace BALL
 				@param	e assigned to list of edges
 				@param	f assigned to list of faces
 		*/
-		void set(const list< Point* >& p, const list< Edge* >& e, const list< Triangle* >& t)
+		void set(const std::list< Point* >& p, const std::list< Edge* >& e, const std::list< Triangle* >& t)
 		{
 			points = p; edges = e; triangles = t;
 		}
@@ -179,19 +206,19 @@ namespace BALL
 		*/
 		//@{
 
-		TSurface<T> exportSurface()
+/*		TSurface<T> exportSurface()
 		{
 			setIndices();
 			std::vector<TVector3<T> > surface_points;
 			std::vector<TSurface<T>::Triangle> surface_triangles;
 			std::vector<TVector3<T> > surface_normals;
-			list<Point*>::iterator p;
+			std::list<Point*>::iterator p;
 			for (p = points.begin(); p != points.end(); p++)
 			{
 				surface_points.push_back((*p)->p);
 				surface_normals.push_back((*p)->n);
 			}
-			list<Triangle*>::iterator t;
+			std::list<Triangle*>::iterator t;
 			for (t = triangles.begin(); t != triangles.end(); t++)
 			{
 				TSurface<T>::Triangle triangle;
@@ -207,20 +234,20 @@ namespace BALL
 			surface.normal = surface_normals;
 
 			return surface;
-		}
+		}*/
 
 
 		TTriangulatedSurface<T>& operator += (TTriangulatedSurface<T>& surface)
 		{
-			for (list<Point*>::iterator p = surface.points.begin(); p != surface.points.end(); p++)
+			for (std::list<Point*>::iterator p = surface.points.begin(); p != surface.points.end(); p++)
 				{
 					points.push_back(*p);
 				}
-			for (list<Edge*>::iterator e = surface.edges.begin(); e != surface.edges.end(); e++)
+			for (std::list<Edge*>::iterator e = surface.edges.begin(); e != surface.edges.end(); e++)
 				{
 					edges.push_back(*e);
 				}
-			for (list<Triangle*>::iterator t = surface.triangles.begin(); t != surface.triangles.end(); t++)
+			for (std::list<Triangle*>::iterator t = surface.triangles.begin(); t != surface.triangles.end(); t++)
 				{
 					triangles.push_back(*t);
 				}
@@ -228,7 +255,7 @@ namespace BALL
 		}
 
 
-		void isokaeder(const T& radius)
+		void icosaeder(const T& radius, const bool out = true)
 		{
 			TTriangulatedSurface<T>::Point* point1 = new TTriangulatedSurface<T>::Point();
 			TTriangulatedSurface<T>::Point* point2 = new TTriangulatedSurface<T>::Point();
@@ -248,22 +275,26 @@ namespace BALL
 			point1->p = TVector3<T>(-sqrt(6.0)/3.0*radius,-sqrt(2.0)/3.0*radius,-radius/3.0);
 			point1->edge.push_back(edge1); point1->edge.push_back(edge2); point1->edge.push_back(edge6);
 			point1->triangle.push_back(t1); point1->triangle.push_back(t3); point1->triangle.push_back(t4);
-			point1->n = point1->p;
+			point1->n = (out ? point1->p : -point1->p);
+			point1->n.normalize();
 			points.push_back(point1);
 			point2->p = TVector3<T>(sqrt(6.0)/3.0*radius,-sqrt(2.0)/3.0*radius,-radius/3.0);
 			point2->edge.push_back(edge2); point2->edge.push_back(edge3); point2->edge.push_back(edge5);
 			point2->triangle.push_back(t1); point2->triangle.push_back(t2); point2->triangle.push_back(t4);
-			point2->n = point2->p;
+			point2->n = (out ? point2->p : -point2->p);
+			point2->n.normalize();
 			points.push_back(point2);
 			point3->p = TVector3<T>(0,2*sqrt(2.0)/3.0*radius,-radius/3.0);
 			point3->edge.push_back(edge4); point3->edge.push_back(edge5); point3->edge.push_back(edge6);
 			point3->triangle.push_back(t2); point3->triangle.push_back(t3); point3->triangle.push_back(t4);
-			point3->n = point3->p;
+			point3->n = (out ? point3->p : -point3->p);
+			point3->n.normalize();
 			points.push_back(point3);
 			point4->p = TVector3<T>(0,0,radius);
 			point4->edge.push_back(edge1); point4->edge.push_back(edge3); point4->edge.push_back(edge4);
 			point4->triangle.push_back(t1); point4->triangle.push_back(t2); point4->triangle.push_back(t3);
-			point4->n = point4->p;
+			point4->n = (out ? point4->p : -point4->p);
+			point4->n.normalize();
 			points.push_back(point4);
 
 			edge1->point[0] = point1; edge1->point[1] = point4;
@@ -306,79 +337,78 @@ namespace BALL
 
 		void shift(const TVector3<T>& c)
 		{
-			for (list<Point*>::iterator i = points.begin(); i != points.end(); i++)
+			for (std::list<Point*>::iterator i = points.begin(); i != points.end(); i++)
 				{
 					(*i)->p += c;
 				}
 		}
 
 
-		void refineSphere(const T& radius, const int& iterations)
+		void refineSphere(const T& radius, Position iterations, bool out = true)
 		{
-			for (int i = 0; i < iterations; i++)
-				{
-					refineSphere(radius);
-				}
+			for (Position i = 0; i < iterations; i++)
+			{
+				refineSphere(radius,out);
+			}
 			setIncidences();
 		}
 
-		void refineSphere(const T& radius)
+		void refineSphere(const T& radius, const bool out)
 		{
-			list<Edge*> new_edges;
-			for (list<Edge*>::iterator i = edges.begin(); i != edges.end(); i++)
-			{
-				Point* point1 = (*i)->point[0];
-				Point* point2 = (*i)->point[1];
-				Point* new_point = new Point();
-				new_point->p = (point1->p+point2->p).normalize();
-				new_point->p *= radius;
-				new_point->n = new_point->p;
-				(*i)->triangle[0]->point.push_back(new_point);
-				(*i)->triangle[1]->point.push_back(new_point);
-				points.push_back(new_point);
-				Edge* new_edge1 = new Edge();
-				new_edge1->point[0] = point1;
-				new_edge1->point[1] = new_point;
-				(*i)->triangle[0]->edge.push_back(new_edge1);
-				(*i)->triangle[1]->edge.push_back(new_edge1);
-				new_edges.push_back(new_edge1);
-				Edge* new_edge2 = new Edge();
-				new_edge2->point[0] = point2;
-				new_edge2->point[1] = new_point;
-				(*i)->triangle[0]->edge.push_back(new_edge2);
-				(*i)->triangle[1]->edge.push_back(new_edge2);
-				new_edges.push_back(new_edge2);
-			}
-			list<Triangle*> new_triangles;
-			for (list<Triangle*>::iterator i = triangles.begin(); i != triangles.end(); i++)
-			{
-				Triangle current = *(*i);
-				vector<Triangle*> t(4);
-				for (int k = 0; k < 4; k++)				// create four new triangles
+			std::list<Edge*> new_edges;
+			for (std::list<Edge*>::iterator i = edges.begin(); i != edges.end(); i++)
 				{
-					t[k] = new Triangle();
+					Point* point1 = (*i)->point[0];
+					Point* point2 = (*i)->point[1];
+					Point* new_point = new Point();
+					new_point->p = (point1->p+point2->p).normalize();
+					new_point->p *= radius;
+					new_point->n = (out ? new_point->p : -new_point->p);
+					new_point->n.normalize();
+					(*i)->triangle[0]->point.push_back(new_point);
+					(*i)->triangle[1]->point.push_back(new_point);
+					points.push_back(new_point);
+					Edge* new_edge1 = new Edge;
+					new_edge1->point[0] = point1;
+					new_edge1->point[1] = new_point;
+					(*i)->triangle[0]->edge.push_back(new_edge1);
+					(*i)->triangle[1]->edge.push_back(new_edge1);
+					new_edges.push_back(new_edge1);
+					Edge* new_edge2 = new Edge;
+					new_edge2->point[0] = point2;
+					new_edge2->point[1] = new_point;
+					(*i)->triangle[0]->edge.push_back(new_edge2);
+					(*i)->triangle[1]->edge.push_back(new_edge2);
+					new_edges.push_back(new_edge2);
 				}
-				vector<Edge*> e(3);
-				for (int k = 0; k < 3; k++)				// create three new edges
+			std::list<Triangle*> new_triangles;
+			for (std::list<Triangle*>::iterator i = triangles.begin(); i != triangles.end(); i++)
 				{
-					e[k] = new Edge();
-				}
-				list<Edge*> edge_list;
-				for (int k = 3; k < 9; k++)				// list of edges created in the first for-loop
-				{																//  that belong to current
-					edge_list.push_back(current.edge[k]);
-				}
-				for (int k = 0; k < 3; k++)				// create a smaller triangle containing current->point[k]
-				{
-					Edge* first = NULL;
-					Edge* second = NULL;
-					Point* p1 = NULL;
-					Point* p2 = NULL;
-					Point* p3 = current.point[k];
-					list<Edge*>::iterator l = edge_list.begin();
-					while (first == NULL)
+					Triangle current = *(*i);
+					vector<Triangle* > t(4);
+					for (int k = 0; k < 4; k++)				// create four new triangles
 						{
-							if ((*l)->point[0]->p == p3->p)
+							t[k] = new Triangle;
+						}
+					vector< Edge* > e(3);
+					for (int k = 0; k < 3; k++)				// create three new edges
+						{
+							e[k] = new Edge;
+						}
+					std::list<Edge*> edge_list;
+					for (int k = 3; k < 9; k++)				// list of edges created in the first for-loop
+						{																//  that belong to current
+							edge_list.push_back(current.edge[k]);
+						}
+					for (int k = 0; k < 3; k++)				// create a smaller triangle containing current->point[k]
+						{
+							Edge* first = NULL;
+							Edge* second = NULL;
+							Point* p1 = NULL;
+							Point* p2 = NULL;
+							Point* p3 = current.point[k];
+							std::list<Edge*>::iterator l = edge_list.begin();
+							while (first == NULL)
 								{
 									first = *l;
 									p1 = (*l)->point[1];
@@ -463,12 +493,12 @@ namespace BALL
 
 		void setIncidences()
 		{
-			for (list<Point*>::iterator p = points.begin(); p != points.end(); p++)
+			for (std::list<Point*>::iterator p = points.begin(); p != points.end(); p++)
 				{
 					(*p)->edge.erase((*p)->edge.begin(),(*p)->edge.end());
 					(*p)->triangle.erase((*p)->triangle.begin(),(*p)->triangle.end());
 				}
-			for (list<Edge*>::iterator e = edges.begin(); e != edges.end(); e++)
+			for (std::list<Edge*>::iterator e = edges.begin(); e != edges.end(); e++)
 				{
 					(*e)->point[0]->edge.push_back(*e);
 					(*e)->point[0]->triangle.push_back((*e)->triangle[0]);
@@ -477,7 +507,7 @@ namespace BALL
 					(*e)->point[1]->triangle.push_back((*e)->triangle[0]);
 					(*e)->point[1]->triangle.push_back((*e)->triangle[1]);
 				}
-			for (list<Point*>::iterator p = points.begin(); p != points.end(); p++)
+			for (std::list<Point*>::iterator p = points.begin(); p != points.end(); p++)
 				{
 					(*p)->edge.sort();
 					(*p)->edge.unique();
@@ -490,19 +520,19 @@ namespace BALL
 		void setIndices()
 		{
 			long int i = 0;
-			for (list<Point*>::iterator p = points.begin(); p != points.end(); p++)
+			for (std::list<Point*>::iterator p = points.begin(); p != points.end(); p++)
 				{
 					(*p)->index = i;
 					i++;
 				}
 			i = 0;
-			for (list<Edge*>::iterator e = edges.begin(); e != edges.end(); e++)
+			for (std::list<Edge*>::iterator e = edges.begin(); e != edges.end(); e++)
 				{
 					(*e)->index = i;
 					i++;
 				}
 			i = 0;
-			for (list<Triangle*>::iterator t = triangles.begin(); t != triangles.end(); t++)
+			for (std::list<Triangle*>::iterator t = triangles.begin(); t != triangles.end(); t++)
 				{
 					(*t)->index = i;
 					i++;
@@ -518,17 +548,17 @@ namespace BALL
 		/** points.
 				The points of the surface.
 		*/
-		list<Point*> points;
+		std::list<Point*> points;
 
 		/** edges.
 				The edges of the surface.
 		*/
-		list<Edge*> edges;
+		std::list<Edge*> edges;
 
 		/** triangles.
 				The triangles of the surface.
 		*/
-		list<Triangle*> triangles;
+		std::list<Triangle*> triangles;
 
 		//@}
 	};
@@ -539,9 +569,9 @@ namespace BALL
 		std::ostream& operator << (std::ostream& s, TTriangulatedSurface<T>& surface)
 		{
 			surface.setIndices();
-			list<TTriangulatedSurface<T>::Point*>::iterator p;
-			list<TTriangulatedSurface<T>::Edge*>::iterator e;
-			list<TTriangulatedSurface<T>::Triangle*>::iterator t;
+			std::list<TTriangulatedSurface<T>::Point*>::iterator p;
+			std::list<TTriangulatedSurface<T>::Edge*>::iterator e;
+			std::list<TTriangulatedSurface<T>::Triangle*>::iterator t;
 			s << "Points: " << surface.points.size() << "\n";
 			for (p = surface.points.begin(); p != surface.points.end(); p++)
 				{
@@ -560,8 +590,9 @@ namespace BALL
 			s << "Edges: " << surface.edges.size() << "\n";
 			for (e = surface.edges.begin(); e != surface.edges.end(); e++)
 				{
-//					s << (*e)->index << ": (" << (*e)->point[0]->index << " " << (*e)->point[1]->index << ")\n";
-//						<< "[" << (*e)->triangle[0]->index << " " << (*e)->triangle[1]->index << "]\n";
+					s << (*e)->index << ": (" << (*e)->point[0]->index << " " << (*e)->point[1]->index << ")\t"
+						<< "[" << ((*e)->triangle[0] == NULL ? -2 : (*e)->triangle[0]->index)
+						<< " " << ((*e)->triangle[1] == NULL ? -2 : (*e)->triangle[1]->index) << "]\n";
 				}
 			s << "Triangles: " << surface.triangles.size() << "\n";
 			for (t = surface.triangles.begin(); t != surface.triangles.end(); t++)

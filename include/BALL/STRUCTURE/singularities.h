@@ -1,4 +1,4 @@
-// $Id: singularities.h,v 1.2 2000/10/17 19:33:53 oliver Exp $
+// $Id: singularities.h,v 1.3 2000/10/19 14:24:51 strobel Exp $
 
 #ifndef BALL_STRUCTURE_SINGULARITIES_H
 #define BALL_STRUCTURE_SINGULARITIES_H
@@ -51,8 +51,8 @@ namespace BALL
 	void TreatSingularities(TSolventExcludedSurface<T>* ses, const T& radius_of_probe)
 	{
 		list< TSESFace<T>* > singular_faces = GetSingularFaces(ses);
-		TreatFirstCathegory(ses,singular_faces,radius_of_probe);
-		TreatSecondCathegory(ses,radius_of_probe);
+//		TreatFirstCathegory(ses,singular_faces,radius_of_probe);
+//		TreatSecondCathegory(ses,radius_of_probe);
 	}
 	
 	
@@ -220,26 +220,26 @@ namespace BALL
 		vector< TSESEdge<T>* > triangular_edges1(3);
 		vector< TSESEdge<T>* > triangular_edges2(3);
 		for (Position i = 0; i < 3; i++)
-			{
-				triangular_edges1[i] = new TSESEdge<T>(NULL,NULL,face1,NULL,circle,NULL,-1);
-				triangular_edges2[i] = new TSESEdge<T>(NULL,NULL,face2,NULL,circle,NULL,-1);
-			}
+		{
+			triangular_edges1[i] = new TSESEdge<T>(NULL,NULL,face1,NULL,circle,NULL,-1);
+			triangular_edges2[i] = new TSESEdge<T>(NULL,NULL,face2,NULL,circle,NULL,-1);
+		}
 		BuildThreeEdges(face1,radius_of_probe,ses,triangular_edges1);
 		BuildThreeEdges(face2,radius_of_probe,ses,triangular_edges2);
 		for (Position i = 0; i < 3; i++)
+		{
+			triangular_edges1[i]->index = ses->edges.size();
+			ses->edges.push_back(triangular_edges1[i]);
+			for (Position j = 0; j < 3; j++)
 			{
-				triangular_edges1[i]->index = ses->edges.size();
-				ses->edges.push_back(triangular_edges1[i]);
-				for (Position j = 0; j < 3; j++)
-					{
-						if (triangular_edges1[i]->similar(*triangular_edges2[j]))
-							{
-								triangular_edges1[i]->face2 = face2;
-								face2->substituteEdge(triangular_edges2[j],triangular_edges1[i]);
-								delete triangular_edges2[j];
-							}
-					}
+				if (triangular_edges1[i]->similar(*triangular_edges2[j]))
+				{
+					triangular_edges1[i]->face2 = face2;
+					face2->substituteEdge(triangular_edges2[j],triangular_edges1[i]);
+					delete triangular_edges2[j];
+				}
 			}
+		}
 	}
 
 
@@ -295,34 +295,34 @@ namespace BALL
 	{
 		vector< list< TSESVertex<T>* > > ipnv(3);		// ipnv stands for intersection_point_near_vertex
 		for (Position i = 3; i < 9; i++)
+		{
+			for (Position j = 0; j < 3; j++)
 			{
-				for (Position j = 0; j < 3; j++)
-					{
-						if (face->vertex[i]->atom == face->vertex[j]->atom)
-							{
-								ipnv[j].push_back(face->vertex[i]);
-							}
-					}
+				if (face->vertex[i]->atom == face->vertex[j]->atom)
+				{
+					ipnv[j].push_back(face->vertex[i]);
+				}
 			}
+		}
 		for (Position i = 0; i < 3; i++)
-			{
-				triangular_edge[i]->vertex1 = ipnv[i].front();
-				triangular_edge[i]->vertex2 = ipnv[i].back();
-				face->edge.push_back(triangular_edge[i]);
-			}
+		{
+			triangular_edge[i]->vertex1 = ipnv[i].front();
+			triangular_edge[i]->vertex2 = ipnv[i].back();
+			face->edge.push_back(triangular_edge[i]);
+		}
 		if (Maths::isGreater(triangular_edge[0]->circle.n*face->rsface->getCenter(),
 												 triangular_edge[0]->circle.n*triangular_edge[0]->circle.p))
-			{
-				face->orientation.push_back(0);
-				face->orientation.push_back(0);
-				face->orientation.push_back(0);
-			}
-			else
-			{
-				face->orientation.push_back(1);
-				face->orientation.push_back(1);
-				face->orientation.push_back(1);
-			}
+		{
+			face->orientation.push_back(0);
+			face->orientation.push_back(0);
+			face->orientation.push_back(0);
+		}
+		else
+		{
+			face->orientation.push_back(1);
+			face->orientation.push_back(1);
+			face->orientation.push_back(1);
+		}
 	}
 
 
@@ -377,7 +377,7 @@ namespace BALL
 			}
 //cout << min << ":  " << min_probe << "  " << min_phi << "  " << min_point << "\n";
 //cout << max << ":  " << max_probe << "  " << max_phi << "  " << max_point << "\n";
-		if (min_phi < TAngle<T>(0,true))
+		if (min_phi > max_phi)
 			{
 				return;
 			}
