@@ -1,7 +1,4 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-// $Id: molecularProperties.h,v 1.10 2002/12/12 09:48:52 oliver Exp $
+// $Id: molecularProperties.h,v 1.11 2002/12/12 17:13:38 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_WIDGETS_MOLECULARPROPERTIES_H
 #define BALL_MOLVIEW_GUI_WIDGETS_MOLECULARPROPERTIES_H
@@ -18,7 +15,6 @@ using namespace BALL::VIEW;
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 
@@ -34,11 +30,13 @@ namespace BALL
 				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/WIDGETS/molecularProperties.h}
 		*/
 		class MolecularProperties
-			: public QWidget, public ModularWidget
+			: public QWidget, 
+				public ModularWidget
 		{
-			public:
-			
+			Q_OBJECT
 			BALL_EMBEDDABLE(MolecularProperties)
+
+			public:
 			
 			/**	@name	Constructors
 			*/	
@@ -57,7 +55,6 @@ namespace BALL
 				throw();
 			
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -67,11 +64,12 @@ namespace BALL
 			*/
 			virtual ~MolecularProperties()
 				throw();
+
 			//@}
-			
 			/**	@name	Accessors: inspectors and mutators 
 			 */
 			//@{
+
 			/** Message handling method.
 					Handles messages sent by other registered \Ref{ConnectionObject} objects.
 					Converts \Ref{NewCompositeMessage} to \Ref{NewMolecularMessage} if the
@@ -87,17 +85,93 @@ namespace BALL
 					@see   NewCompositeMessage
 					@see   NewMolecularMessage
 					@see   GeometricObjectSelectionMessage
-					@see   AtomContainer
 					@see   ConnectionObject
 		  */
 			void onNotify(Message *message)
 				throw();
+
+
+			/**	Check the menu entries.
+			 */
+			void checkMenu(MainControl& main_control)
+				throw();
+
+			public slots:
+
+			/** Centers the camera.
+					Centers the camera of \Ref{Scene} to the geometric center of the molecular objects
+					in the selection list.
+					The messages \Ref{WindowMessage} and \Ref{SceneMessage} will
+					be sent to inform the \Ref{MainControl} and the \Ref{Scene} about the change.
+			*/
+			void centerCamera();
+
+			/** Creates bonds.
+					If selected molecular objects are available \Ref{Bond} objects will be created
+					for each object in the selection list
+					using the \Ref{build_bonds} processor of the \Ref{FragmentDB}
+					The message \Ref{ChangedCompositeMessage} will be sent for each object in the
+					selection list. The messages \Ref{WindowMessage} and \Ref{SceneMessage} will
+					be sent to inform the \Ref{MainControl} and the \Ref{Scene} about the change.
+					The number of bonds created will be written into the \Ref{Log} object.
+			*/
+			void buildBonds();
+			
+			/** Adds hydrogens.
+					If selected molecular objects are available hydrogens will be created
+					for each object in the selection list
+					using the \Ref{add_hydrogens} processor of the \Ref{FragmentDB}
+					The message \Ref{ChangedCompositeMessage} will be sent for each object in the
+					selection list. The messages \Ref{WindowMessage} and \Ref{SceneMessage} will
+					be sent to inform the \Ref{MainControl} and the \Ref{Scene} about the change.
+					The number of hydrogens created will be written into the \Ref{Log} object.
+			*/
+			void addHydrogens();
+			
+
+			/** Colors selected objects uniquely.
+					If selected molecular objects are available they will be colored according to
+					the selected color as specified in \Ref{GeometricObject}.
+					The message \Ref{ChangedCompositeMessage} will be sent for each object in the
+					selection list. The messages \Ref{WindowMessage} and \Ref{SceneMessage} will
+					be sent to inform the \Ref{MainControl} and the \Ref{Scene} about the change.
+			*/
+			void select();
+
+			/** Colors deselected objects in their own color.
+					If selected molecular objects are available they will be colored according to
+					their own color as specified in the objects. This method reverses the process
+					done in the \Ref{select} method.
+					The message \Ref{ChangedCompositeMessage} will be sent for each object in the
+					selection list. The messages \Ref{WindowMessage} and \Ref{SceneMessage} will
+					be sent to inform the \Ref{MainControl} and the \Ref{Scene} about the change.
+			*/
+			void deselect();
+
+			/** Check the residues
+			 */
+			virtual bool checkResidue();
+
 			//@}
 
 			
 		private:
 			
+			virtual void calculateCenter_(Composite& composite);
+
 			FragmentDB fragment_db_;  			
+
+			int center_camera_id_;
+			int build_bonds_id_;
+			int add_hydrogens_id_;
+			int check_structure_id_;
+			int select_id_;
+			int deselect_id_;
+			
+			Vector3 										view_center_vector_;
+			int 												view_direction_;
+			Real 												view_distance_;
+
 		};
 
 	} // namespace MOLVIEW
