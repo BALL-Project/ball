@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Sysinfo_test.C,v 1.9 2005/01/25 17:20:52 amoll Exp $
+// $Id: Sysinfo_test.C,v 1.10 2005/01/25 17:26:48 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -9,7 +9,7 @@
 #include <BALL/SYSTEM/sysinfo.h>
 ///////////////////////////
 
-START_TEST(SysInfo, "$Id: Sysinfo_test.C,v 1.9 2005/01/25 17:20:52 amoll Exp $")
+START_TEST(SysInfo, "$Id: Sysinfo_test.C,v 1.10 2005/01/25 17:26:48 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -63,16 +63,13 @@ CHECK(getNumberOfProcessors())
 RESULT		
 
  // doesnt work under Linux, no idea why: ????????? AM
-/*
 CHECK(Extra1)
 	float i1 = getAvailableMemory();
-	i1 *= 0.9;
-	char* d = new char[(long) i1];
+	char* d = new char[(long)(i1 * 0.9)];
 	float i2 = getAvailableMemory();
 	TEST_EQUAL(i1 > i2, true);
 	delete[] d;
 RESULT		
-*/
 
 
 CHECK(Extra2)
