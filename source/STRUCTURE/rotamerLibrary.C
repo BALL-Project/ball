@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rotamerLibrary.C,v 1.21 2003/04/01 21:18:09 oliver Exp $
+// $Id: rotamerLibrary.C,v 1.22 2003/04/04 11:55:19 oliver Exp $
 
 #include <BALL/STRUCTURE/rotamerLibrary.h>
 
@@ -58,7 +58,7 @@ namespace BALL
 		readSQWRLLibraryFile(filename, fragment_db);
 	}
 
-	RotamerLibrary::RotamerLibrary(const RotamerLibrary& library, bool /* deep */)
+	RotamerLibrary::RotamerLibrary(const RotamerLibrary& library)
 		:	variants_(library.variants_),
 			valid_(library.valid_)
 	{
@@ -222,8 +222,9 @@ namespace BALL
 		// Test if there are some atoms
 		if ((residue.countAtoms()) == 0)
 		{
-			Log.error()  << " ResidueRotamerSet: Residue does not contain any atoms " <<
-			endl <<  " Maybe the residue is not contained in the fragment database " << endl;  
+			Log.error()  << " ResidueRotamerSet: Residue does not contain any atoms " << std::endl;
+			Log.error()  <<  "ResidueRotamerSet: Maybe the residue is not contained in the fragment database..." << std::endl;  
+
 			valid_ = false;
 			return;
 		}
@@ -240,23 +241,33 @@ namespace BALL
 			original_coordinates_.push_back(atom_it->getPosition());
 		}
 
-		// identify anchor_atoms
-		if (atom_name_map_.has("CA")  && atom_name_map_.has("C") && atom_name_map_.has("N")) 
+		// Create a hash set to store the atoms that mey not be included in the torsion.
+		// These are e.g. the backbone atoms or already assigned torsions (problem case: PRO!)
+		HashSet<String> assigned_atoms;
+
+		// identify anchor_atoms: those are the atoms used to "anchor" the first torsion to.
+		if (atom_name_map_.has("CA") && atom_name_map_.has("C") && atom_name_map_.has("N")) 
 		{
 			anchor_atoms_[0] = atom_name_map_["CA"];
 			anchor_atoms_[1] = atom_name_map_["C"];
 			anchor_atoms_[2] = atom_name_map_["N"];
-		} else {
+			assigned_atoms.insert("CA");
+			assigned_atoms.insert("C");
+			assigned_atoms.insert("N");
+		} 
+		else 
+		{
 			Log.error() << " ResidueRotamerSet: An anchor atom is missing. " << endl;
 			valid_ = false;
 			return;
 		}
 
-		// identify atoms for chi1-4
-		// and store them in movable_atoms_chi1-4 (first four entries)
+		// Identify atoms involved in the torsion for chi1 - chi4.
+		// and store them in movable_atoms_chi1-4 (first four entries each).
 
 		// Determine the atoms for chi1 and the set of movable atoms
-		if (atom_name_map_.has("N") && atom_name_map_.has("CA") && atom_name_map_.has("CB") && (number_of_torsions_ > 0))
+		if (atom_name_map_.has("N") && atom_name_map_.has("CA") && atom_name_map_.has("CB") 
+				&& (number_of_torsions_ > 0))
 		{
 			movable_atoms_chi1_.push_back("N");
 			movable_atoms_chi1_.push_back("CA");
@@ -273,10 +284,21 @@ namespace BALL
 
 			if (movable_atoms_chi1_.size() > 3)
 			{
-				addMovable_(movable_atoms_chi1_, *(atom_name_map_[movable_atoms_chi1_[2]])); 
-				addMovable_(movable_atoms_chi1_, *(atom_name_map_[movable_atoms_chi1_[3]])); 
+				copy(movable_atoms_chi1_.begin(), movable_atoms_chi1_.end(), inserter(assigned_atoms, assigned_atoms.begin()));
+				addMovable_(movable_atoms_chi1_, *(atom_name_map_[movable_atoms_chi1_[2]]), assigned_atoms); 
+				addMovable_(movable_atoms_chi1_, *(atom_name_map_[movable_atoms_chi1_[3]]), assigned_atoms);
+			}
+			else
+			{
+				// If we couldn't find the atoms, just remember this and forget about the torsion.
+				number_of_torsions_ = 0;
 			}
 		} 
+		else
+		{
+			number_of_torsions_ = 0;
+		}
+
 		// Determine the atoms for chi2 and the set of movable atoms
 		if (movable_atoms_chi1_.size() >= 4 && (number_of_torsions_ > 1))
 		{
@@ -295,8 +317,14 @@ namespace BALL
 
 			if (movable_atoms_chi2_.size() > 3)
 			{
-				addMovable_(movable_atoms_chi2_, *(atom_name_map_[movable_atoms_chi2_[2]])); 
-				addMovable_(movable_atoms_chi2_, *(atom_name_map_[movable_atoms_chi2_[3]])); 
+				copy(movable_atoms_chi1_.begin(), movable_atoms_chi1_.end(), inserter(assigned_atoms, assigned_atoms.begin()));
+				addMovable_(movable_atoms_chi2_, *(atom_name_map_[movable_atoms_chi2_[2]]), assigned_atoms); 
+				addMovable_(movable_atoms_chi2_, *(atom_name_map_[movable_atoms_chi2_[3]]), assigned_atoms); 
+			}
+			else
+			{
+				// If we couldn't find the atoms, just remember this and forget about the torsion.
+				number_of_torsions_ = 1;
 			}
 		}
 		// Determine the atoms for chi3 and the set of movable atoms
@@ -317,8 +345,14 @@ namespace BALL
 
 			if (movable_atoms_chi3_.size() > 3)
 			{
-				addMovable_(movable_atoms_chi3_, *(atom_name_map_[movable_atoms_chi3_[2]])); 
-				addMovable_(movable_atoms_chi3_, *(atom_name_map_[movable_atoms_chi3_[3]])); 
+				copy(movable_atoms_chi1_.begin(), movable_atoms_chi1_.end(), inserter(assigned_atoms, assigned_atoms.begin()));
+				addMovable_(movable_atoms_chi3_, *(atom_name_map_[movable_atoms_chi3_[2]]), assigned_atoms); 
+				addMovable_(movable_atoms_chi3_, *(atom_name_map_[movable_atoms_chi3_[3]]), assigned_atoms); 
+			}
+			else
+			{
+				// If we couldn't find the atoms, just remember this and forget about the torsion.
+				number_of_torsions_ = 2;
 			}
 		}
 		// Determine the atoms for chi4 and the set of movable atoms
@@ -335,17 +369,23 @@ namespace BALL
 
 			if (movable_atoms_chi4_.size() > 3)
 			{
-				addMovable_(movable_atoms_chi4_, *(atom_name_map_[movable_atoms_chi4_[2]])); 
-				addMovable_(movable_atoms_chi4_, *(atom_name_map_[movable_atoms_chi4_[3]])); 
+				copy(movable_atoms_chi1_.begin(), movable_atoms_chi1_.end(), inserter(assigned_atoms, assigned_atoms.begin()));
+				addMovable_(movable_atoms_chi4_, *(atom_name_map_[movable_atoms_chi4_[2]]), assigned_atoms); 
+				addMovable_(movable_atoms_chi4_, *(atom_name_map_[movable_atoms_chi4_[3]]), assigned_atoms); 
+			}
+			else
+			{
+				// If we couldn't find the atoms, just remember this and forget about the torsion.
+				number_of_torsions_ = 3;
 			}
 		}
-
+		
 		valid_ = true;
 	}
 
 
 	// Copy Constructor
-	ResidueRotamerSet::ResidueRotamerSet(const ResidueRotamerSet& residue_rotamer_set, bool /* deep */)
+	ResidueRotamerSet::ResidueRotamerSet(const ResidueRotamerSet& residue_rotamer_set)
 		: name_(residue_rotamer_set.name_),
 			side_chain_(residue_rotamer_set.side_chain_),
 			atom_name_map_(),
@@ -433,7 +473,12 @@ namespace BALL
 
 	// set the number of torsions
 	void ResidueRotamerSet::setNumberOfTorsions(Size number_of_torsions)
+		throw(Exception::IndexOverflow)
 	{
+		if (number_of_torsions > 4)
+		{
+			throw Exception::IndexOverflow(__FILE__, __LINE__, number_of_torsions, 4);
+		}
 		number_of_torsions_ = number_of_torsions;
 	}
 
@@ -485,7 +530,18 @@ namespace BALL
 	}
 
 	// Return the residue of the residue rotamer set
-	Residue&	ResidueRotamerSet::getResidue()
+	Residue& ResidueRotamerSet::getResidue()
+	{
+		return side_chain_;
+	}
+	
+	// Return the residue of the residue rotamer set
+	const Residue& ResidueRotamerSet::getResidue() const
+	{
+		return side_chain_;
+	}
+	
+	void ResidueRotamerSet::resetResidue() 
 	{
 		// restore the original atom coordinates
 		AtomIterator atom_it = side_chain_.beginAtom();
@@ -493,12 +549,10 @@ namespace BALL
 		{
 			atom_it->setPosition(original_coordinates_[index]);	
 		}
-		
-		return side_chain_;
 	}
-	
+
 	// Function for filling the vectors of movable atoms
-	void ResidueRotamerSet::addMovable_(vector<String>& movable, Atom& a)
+	void ResidueRotamerSet::addMovable_(vector<String>& movable, Atom& a, const HashSet<String>& assigned_atoms)
 	{
 		Atom::BondIterator bond_it = a.beginBond();
 		
@@ -507,10 +561,11 @@ namespace BALL
 			Atom* b = (*bond_it).getPartner(a);
 			String pattern = b->getName();
 
-			if (find(movable.begin(), movable.end(), pattern) == movable.end())
+			if (find(movable.begin(), movable.end(), pattern) == movable.end()
+					&& !assigned_atoms.has(pattern))
 			{
 				movable.push_back(pattern);
-				addMovable_(movable, *b);
+				addMovable_(movable, *b, assigned_atoms);
 			}
 		}
 	}
@@ -717,7 +772,7 @@ namespace BALL
 
 		AtomConstIterator atom_it;
 		Size count;
-		
+
 		if (number_of_torsions_ > 0)
 		{
 			count = 0;
