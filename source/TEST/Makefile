@@ -39,6 +39,7 @@ EXECUTABLES = \
 	List_test\
 	MathsCommon_test\
 	Matrix44_test\
+	Molecule_test\
 	NumericalSAS_test\
 	Options_test\
 	PDBFile_test\
@@ -147,6 +148,9 @@ MathsCommon_test:	MathsCommon_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 Matrix44_test:	Matrix44_test.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
+Molecule_test:	Molecule_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 NucleicAcid_test:	NucleicAcid_test.o
