@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.11 2004/07/04 17:04:22 amoll Exp $
+// $Id: mainframe.C,v 1.12 2004/07/05 08:51:07 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -295,6 +295,12 @@ namespace BALL
 	void Mainframe::saveBALLViewProjectFile()
 		throw()
 	{
+		if (getSelectedSystem() == 0)
+		{
+			setStatusbarText("Exactly one System has to be selected! Aborting...");
+			return;
+		}
+
 		QString result = QFileDialog::getSaveFileName(
 				getWorkingDir().c_str(), "*.bvp", 0, "Select a BALLView project file");
 		if (result.isEmpty())
@@ -313,20 +319,12 @@ namespace BALL
 		}
 		
 
-		List<Composite*>& selected_composites = getMolecularControlSelection();
-		System& system = *(System*)*selected_composites.begin();
-		if (selected_composites.size() != 0)
-		{
-			String molecular_file = String(result.ascii())+"_molecule.pdb";
-			out.appendSection("BALLVIEW_PROJECT");
-			out.insertValue("BALLVIEW_PROJECT", "MolecularFile", molecular_file);
+		System& system = *getSelectedSystem();
+		String molecular_file = String(result.ascii())+"_molecule.pdb";
+		out.appendSection("BALLVIEW_PROJECT");
+		out.insertValue("BALLVIEW_PROJECT", "MolecularFile", molecular_file);
 
-			file_dialog_->writePDBFile(molecular_file, system);
-		}
-		else
-		{
-			setStatusbarText("Warning: No molecular entities selected, so no writen...");
-		}
+		file_dialog_->writePDBFile(molecular_file, system);
 
 		out.insertValue("BALLVIEW_PROJECT", "Camera", scene_->getStage()->getCamera().toString());
 
@@ -393,7 +391,10 @@ namespace BALL
 			display_properties_->enableCreationForNewMolecules(false);
 			openFile(molecular_file);
 		}
-		
+						
+		System* new_system = getSelectedSystem();
+
+	
 		for (Position p = 0; p < 9999999; p++)
 		{
 			if (!in.hasEntry("BALLVIEW_PROJECT", "Representation" + String(p)))
@@ -401,8 +402,35 @@ namespace BALL
 				break;
 			}
 
-			display_properties_->getSettingsFromString(
-					in.getValue("BALLVIEW_PROJECT", "Representation" + String(p)));
+			String data_string = in.getValue("BALLVIEW_PROJECT", "Representation" + String(p));
+			display_properties_->getSettingsFromString(data_string);
+
+			vector<String> string_vector;
+			Size split_size = data_string.split(string_vector, "[]");
+			if (split_size < 2) return;
+			data_string = string_vector[1];
+			data_string.split(string_vector, "[]");
+			HashSet<Position> hash_set;
+			try
+			{
+				for (Position p = 0; p < string_vector.size(); p++)
+				{
+					hash_set.insert(string_vector[p].toUnsignedInt());
+				}
+			}
+			catch(...)
+			{
+				setStatusbarText("Error while reading project file! Aborting...");
+				Log.error() << "Error while reading project file! Aborting..." << std::endl;
+				return;
+			}
+	
+			getSelection().clear();
+			Position current = 0;
+			setSelection_(new_system, hash_set, current);
+			NewSelectionMessage* msg = new NewSelectionMessage();
+			notify_(msg);
+ 		
 			display_properties_->applyButtonClicked();
 		}
 
@@ -425,6 +453,23 @@ namespace BALL
 		}
 
 		display_properties_->enableCreationForNewMolecules(true);
+	}
+
+	void Mainframe::setSelection_(Composite* c, HashSet<Position>& hash_set, Position& current)
+		throw()
+	{
+		if (hash_set.has(current))
+		{
+			getSelection().insert(c);
+			hash_set.erase(current);
+		}
+
+		current++;
+
+		for (Position p = 0; p < c->getDegree() && hash_set.size() > 0; p++)
+		{
+			setSelection_(c->getChild(p), hash_set, current);
+		}
 	}
 
 }
