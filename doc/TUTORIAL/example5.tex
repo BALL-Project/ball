@@ -6,3 +6,83 @@ In general, you should avoid using {\tt const char*} or STL string when using
 BALL, although they are compatible to each other. You can easily convert BALL
 strings to char pointers (using the {\tt c\_str()} method and automatically
 convert char pointers to BALL strings.
+
+This part of the tutorial will give a short introduction to the wealthy
+functionality of BALL strings. For complete information refer to the BALL
+Referenced Manual.
+
+\subsection{String Operations}
+
+There are useful operations possible with BALL strings. Let us start with a
+very basic one, concatenation. The following code snippet will concatenate two
+BALL strings:
+\begin{lstlisting}{}
+String A("Concat");
+String B("enate");
+String C = A + B;
+\end{lstlisting}
+But concatenation is also defined with STL strings and even standard C
+strings, \ie {\tt char*}, as operands:
+\begin{lstlisting}{}
+string A("Concat");
+char* B = "enate";
+String C = A + B;
+\end{lstlisting}
+
+Another very useful operation is swapping two strings:
+\begin{lstlisting}{}
+String A("Swap");
+String B("swaP");
+A.swap(B);
+\end{lstlisting}
+
+Something we might also use very often is reversing a string:
+\begin{lstlisting}{}
+String A("Swap");
+A.reverse();
+\end{lstlisting}
+
+And finally, it is even possible to substitute parts of a string with another
+String by using the \method{substitute} method:
+\begin{lstlisting}{}
+String A("Please replace REPLACE with something else.");
+String B("REPLACE");
+String C("SOMETHING ELSE");
+A.substitute(B, C);
+\end{lstlisting}
+
+
+\subsection{Conversion}
+
+BALL strings are featured with many conversion mechanisms. They are either
+implemented through constructors or by one of the many explicit conversion
+methods available. We will first have a look at some constructors taking other
+types as argument. Let us first construct a String from some basic C types:
+{\tt char}:
+\begin{lstlisting}{}
+char c_char = 'B';
+int c_int = 1;
+float c_float = 2.99792458;
+
+String A(c_char);
+String B(c_int);
+String C(c_float);
+\end{lstlisting}
+There are many other simple types supported, like {\tt unsigned int}, {\tt
+double}, etc. Refer to the reference manual for further information.
+
+Let us turn to explicit conversions. 
+
+\subsection{Predicates}
+
+BALL Strings provide many predicates that can be used for determining special
+properties. One ca find out, whether a String contains a certain substring, 
+starts with a special prefix, ends with a suffix, consists only of letters or 
+is simply a floating point number. The following code snippet will give you
+some idea of the power of the predicates.
+
+\subsection{Comparing Strings}
+
+Commonly one often wants to compare strings, which was a pain with C type
+character fields. BALL strings provide you with a simple interface and rih
+functionality. 
