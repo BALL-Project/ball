@@ -2,62 +2,103 @@
 "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<title>BALLView Documentation: Hotkeys</title>
+<title>BALLView Documentation: Changelog</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 </head>
 <body>
 <center>
+<H2 align="center"><a href="tips.html">&lt;</a> <a href="index.html">Index</a></H2>
+
 <table width="700" border="0" cellpadding="0">
   <tr>
     <td align=left>
-	<H2>BALLView Hotkeys</H2>
+	<H2>BALLView Changelog</H2>
 	<table width="700" border="0" cellpadding="5">
 	  <tr><td>
 
-<table width="300" border="1" cellpadding="5">
-  <tr><td><b>Function</b></td><td><b>Hotkey</b></td></tr>
-  <tr><td>Open Structure</td><td>CTRL-O</td></tr>
-  <tr><td>Download Structure</td><td>Alt-A</td></tr>
-  <tr><td>Export POVRay</td><td>CTRL-Y</td>  </tr>
-  <tr><td>EXPORT PNG</td><td>ALT-P</td></tr>
-  <tr><td>Save Structure</td><td>CTRL-S</td></tr>
-  <tr><td>Quit</td><td>CTRL-Q</td></tr>
-  <tr><td>Select</td><td>ALT-S</td></tr>
-  <tr><td>Deselect</td><td>ALT-D</td></tr>
-  <tr><td>Cut</td><td>CTRL-X</td></tr>
-  <tr><td>Copy</td><td>CTRL-C</td></tr>
-  <tr><td>Paste</td><td>CTRL-V</td></tr>
-  <tr><td>Preferences</td><td>CTRL-Z</td></tr>
-  <tr><td>Build Peptide</td><td>ALT-U</td></tr>
-	<tr><td>Build Bonds</td><td>CTRL-B</td></tr>
-	<tr><td>Add Hydrogens</td><td>CTRL-H</td></tr>
-	<tr><td>Check Structure</td><td>CTRL-K</td></tr>
-	<tr><td>Focus Camera</td><td>CTRL-F</td></tr>
-</table>
+ <h2>Changes Since Version 1.0 (02.06.04):</h2>
+<h3>Added:</h3>
+- Documentation for BALLView in the folder BALL/doc/BALLView<br>
+- Stereo Modi: Side-by-Side and for shutter googles <br>
+- Clipping Planes<br>
+- new Move-Mode for molecular entities and Clipping Planes<br>
+- Writing and loading of BALLView project files<br>
+- Esc key now switches to last used mode in Scene<br>
+- Python:<br>
 
-</td><td>
+&nbsp;&nbsp;  - Hotkey support for starting any (BALL-)Python command from BALLView<br>
+&nbsp;&nbsp;  - support to quit program from Python interpreter<br>
+&nbsp;&nbsp;  - support for starting Python script from command line<br>
+&nbsp;&nbsp;  - added more classes to the Python SIP interface<br>
+&nbsp;&nbsp;  - Benchmark scripts for BALLView<br>
+  - new application: DCD2PNG to create series of PNG-images from a DCD trajectory file<br>
+  - new rotate mode for Scene<br>
+  - Backbone Model for DNA<br>
+  - 2 new Cartoon Models for DNA and RNA<br>
+  - support for drag and drop of molecular files<br>
+  - DataSetControl:<br>
+&nbsp;&nbsp; - management of 1D and 2D grids <br>
+&nbsp;&nbsp; - ability to start visualisation of 1D and 2D grids<br>
+&nbsp;&nbsp; - ability to load the SnapShot from file into RAM to accelerate their visualisation<br>
+  - 1D and 2D RegularDataWidgets update their contents automaticaly<br>
+  - Ramachandran Plot<br>
+  - Ability to create animations, either as on-screen presentations or for movies<br>
+  - Fog in Scene and its settings to Preferences<br>
+  - new model: visualisation of forces<br>
+  - Visualisation for double-, triple- and aromatic bonds in BallAndStick model<br>
+  - Coloring by residue name now also works for DNA<br>
+  - Preferences for material parameters in OpenGL</p>
+        <h3>Fixed:</h3>
+          - selection in MolecularControl with CRTG and SHIFT modifier<br>
+          - several problems in Cartoon model<br>
+          - creation of models for several selected items<br>
+          - overall cleanup of RegularDataWidgets<br>
+          - export of PNGs could result in strange problems e.g. with empty images<br>
+          - its now possible to create transparent wireframe and dot models<br>
+          - AtomDistanceColorProcessor<br>
+          - PeptideDialog: deletion of sequence<br>
+          - increased performance of SnapShot visualisation, especially for large numbers of SnapShots<br>
+          - A click on the &quot;default&quot; button in Preferences now only works on currently selected page<br>
+          - it was not possible to reset the Element-Coloring-Scheme to the default values <br>
+          - issue with restoring window's geometry on X11 (still buggy on some X-Servers)<br>
+          - restoring of working dir<br>
+          - MDS dialog: switching off storing to trajectory file<br>
+          - Scene: mouse sensitivity was adjusted<br>
+          - now show the correct number of added bonds<br>
+          - prevent flicking on startup from MainControlPreferences dialog<br>
+          - ResidueIndexColorProcessor now no longer counts water Residues <br>
+          - ResidueNameColorProcessor now supports RNA<br>
+          - core dumps:<br>
+  - when starting a simulation, while a Representation was still updateing<br>
+  - when removing a Representation, while a simulation was running<br>
+  - after deleting trajectory when SnapShotVisualisation Dialog was still open<br>
+  - from SnapShotVisualisation Dialog<br>
+  - from deleting molecular entities while simulation was running</p>
+  
+        <h3>Changed:</h3>
+          - improved focus camera on molecular structures<br>
+          - Layout of Preferences <br>
+          - inside of surfaces gets now correctly drawn<br>
+          - increased OpenGL performance <br>
+          - .BALLView config files are now always stored in the users homedir<br>
+          - changed Coloring or Model settings are now visible after pressing apply<br>
+          - Scene Preferences<br>
+          - disabled Server in BALLView by default</p>
+        <h3>Code Changes:</h3>
+          - fixed drawing of Boxes<br>
+          - GeometricObjects no longe have names<br>
+          - cleanup for storing of settings from dialogs<br>
+          - removed Information Processor for GeometricObjects<br>
+          - interface for the methods ModularWidget::applyPreferences, defaultPreferences, cancelPreferences<br>
+          - interface for the property &quot;hidden&quot; of Representation's<br>
+          - Destructor of ModularWidget now calls MainControl::removeModularWidget, so from ModularWidget derived classes no longer have to deregister themselves<br>
+  - improved the code for the BALLView termination process<br>
+  - fixed core dump in RingPerception Processesor<br>
+  - removed the old Move-Dialog<br>
+  - Contour Surfaces had sometimes strange normals<br>
 
-<table width="300" border="1" cellpadding="5">
-  <tr><td><b>Function</b></td><td><b>Hotkey</b></td></tr>
-	<tr><td>Focus Camera</td><td>CTRL-F</td></tr>
-	<tr><td>Show Viewpoint</td><td>CTRL-W</td></tr>
-	<tr><td>Set Viewpoint</td><td>CTRL-N</td></tr>
-	<tr><td>Reset Camera</td><td>CTRL-T</td></tr>
-	<tr><td>Toggle Fullscreen</td><td>ALT-X</td></tr>
-	<tr><td>Rotate Mode</td><td>CTRL-R</td></tr>
-	<tr><td>Picking Mode</td><td>CTRL-P</td></tr>
-	<tr><td>Display Properties</td><td>CTRL-I</td></tr>
-	<tr><td>Add Label</td><td>CTRL-L</td></tr>
-	<tr><td>Single Point Energy</td><td>CTRL-A</td></tr>
-	<tr><td>Energy Minimization</td><td>CTRL-E</td></tr>
-	<tr><td>Molecular Dynamics</td><td>CTRL-D</td></tr>
-	<tr><td>Abort Calculation</td><td>ALT-C</td></tr>
-	<tr><td>Calculate Secondary Structure</td><td>ALT-O</td></tr>
-	<tr><td>Calculate H-Bonds</td><td>ALT-N</td></tr>
-	<tr><td>Contour Surface</td><td>CTRL-U</td></tr>	
-	<tr><td>&nbsp;</td><td>&nbsp;</td></tr>	
 </td></tr></table>
+ <H2 align="center"><a href="tips.html">&lt;</a> <a href="index.html">Index</a></H2>
 
- </td></tr></table>
 </body>
 </html>
