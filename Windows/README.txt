@@ -23,8 +23,8 @@ installation, please copy it in the folder regex-0.12. (Be sure, not to create
 an other subdir regex-0.12 in this directory!)
 
 For the other packages, please start the individual installers and make sure
-they install their contents to respective subfolder in the Contrib directory 
-(the directory this file is in). The installers are:
+they install their contents to respective subfolder in the Contrib directory.
+The installers are:
   - bison-1.35-4-bin.exe (bison)
   - flex-2.5.4a-1-bin    (flex)
   - oncrpc.exe  				 (oncrpc)
