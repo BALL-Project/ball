@@ -1,23 +1,56 @@
-// $Id: PeakList_test.C,v 1.1 2001/06/24 16:36:23 oliver Exp $
+// $Id: PeakList_test.C,v 1.2 2001/07/09 17:10:21 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 
-#include <BALL/NMR/peakList.h>
+// insert includes here
 
 ///////////////////////////
 
-START_TEST(PeakList<T>, "$Id: PeakList_test.C,v 1.1 2001/06/24 16:36:23 oliver Exp $")
+START_TEST(class_name, "$Id: PeakList_test.C,v 1.2 2001/07/09 17:10:21 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
 
-CHECK(PeakList1D::PeakList1D())
+// tests for class PeakList::
+
+CHECK(PeakList::BALL_CREATE(PeakList<PT>))
+  //BAUSTELLE
 RESULT
 
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
 
+CHECK(PeakList::scale(float x))
+  //BAUSTELLE
+RESULT
+
+
+CHECK(PeakList::getMaxIntensity() const )
+  //BAUSTELLE
+RESULT
+
+
+CHECK(PeakList::getMinIntensity() const )
+  //BAUSTELLE
+RESULT
+
+
+CHECK(PeakList::getMinPosition() const )
+  //BAUSTELLE
+RESULT
+
+
+CHECK(PeakList::getMaxPosition() const )
+  //BAUSTELLE
+RESULT
+
+
+CHECK(PeakList::PeakList::PeakList())
+  //BAUSTELLE
+RESULT
+
+
+/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
 END_TEST
