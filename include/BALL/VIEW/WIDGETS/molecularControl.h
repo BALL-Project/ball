@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.40 2004/11/23 17:27:10 amoll Exp $
+// $Id: molecularControl.h,v 1.41 2004/11/25 01:10:42 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -158,9 +158,8 @@ namespace BALL
 				throw();
 
 			/** Recursive removal of a Composite from the Control.
-			 		\see removeComposite
 			*/
-			Size removeRecursiveComposite(Composite& composite)
+			Size removeComposite(Composite& composite)
 				throw();
 
 			/** Access the mutable reference to the selection list of this control.
@@ -486,6 +485,10 @@ namespace BALL
 
 		  protected:
 
+			//
+			void removeRecursiveComposite_(Composite& composite, bool first_call)
+				throw();
+
 			// only for Python Interface
 			MolecularControl(const MolecularControl& mc)
 				throw();
@@ -513,6 +516,7 @@ namespace BALL
 			ColoringMethod  selected_coloring_method_;
 			// let cut know to delete the entries, set by deleteCurrentItems()
 			bool 						was_delete_;
+			Size 						nr_items_removed_;
 		};
 
 }} // namespaces

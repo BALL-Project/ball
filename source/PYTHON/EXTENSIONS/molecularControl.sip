@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.sip,v 1.7 2004/10/23 19:16:53 amoll Exp $
+// $Id: molecularControl.sip,v 1.8 2004/11/25 01:10:57 amoll Exp $
 //
 
 class MolecularControl
@@ -21,7 +21,7 @@ class MolecularControl
 	
   //List<Composite*> & getSelection() throw();
   PyCompositeList getSelection() throw();
-  Size removeRecursiveComposite(Composite&) throw();
+  Size removeComposite(Composite&) throw();
   //constList<Composite*> & getSelection() const throw();
   //void onContextMenu_(QListViewItem*, const QPoint&, int);
   void createRepresentation();

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.79 2004/11/23 17:27:27 amoll Exp $
+// $Id: molecularControl.C,v 1.80 2004/11/25 01:10:21 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -184,7 +184,7 @@ void MolecularControl::checkMenu(MainControl& main_control)
 	// 																			copy_list_ not empty && 
 	// 																			no simulation running &&
 	// 																			it makes sense
-	bool allow_paste = getSelection().size() == 1 &&
+	bool allow_paste = getSelection().size() <= 1 &&
 										 getCopyList_().size() > 0 &&
 										 !main_control.compositesAreLocked();
 	if (allow_paste)
@@ -269,7 +269,7 @@ bool MolecularControl::reactToMessages_(Message* message)
 				return false;
 			
 			case CompositeMessage::REMOVED_COMPOSITE:
-				removeRecursiveComposite(*(Composite *)composite_message->getComposite());
+				removeComposite(*(Composite *)composite_message->getComposite());
 				return false;
 			
 			case CompositeMessage::CHANGED_COMPOSITE:
@@ -287,12 +287,14 @@ bool MolecularControl::reactToMessages_(Message* message)
 					}
 				}
 
-				removeRecursiveComposite(composite_message->getComposite()->getRoot());
+				removeComposite(composite_message->getComposite()->getRoot());
  				addComposite(composite_message->getComposite()->getRoot());
 
 				List<Composite*>::Iterator lit = open_items.begin();
 				for (; lit != open_items.end(); lit++)
 				{
+					if (!composite_to_item_.has(*lit)) continue;
+
 					composite_to_item_[*lit]->setOpen(true);
 				}
 
@@ -621,24 +623,33 @@ void MolecularControl::addComposite(Composite& composite, QString* own_name)
 }
 
 
-Size MolecularControl::removeRecursiveComposite(Composite& composite)
+Size MolecularControl::removeComposite(Composite& composite)
 	throw()
 {
-	if (!composite_to_item_.has(&composite)) return 0;
+	nr_items_removed_ = 0;
+	removeRecursiveComposite_(composite, true);
+	return nr_items_removed_;
+}
+
+void MolecularControl::removeRecursiveComposite_(Composite& composite, bool first_call)
+	throw()
+{
+	if (!composite_to_item_.has(&composite)) return;
 	SelectableListViewItem* item = composite_to_item_[&composite];
 
-	Size nr = 1;
-
-	for (Size i = 0; i < composite.getDegree(); i++)
+	SelectableListViewItem* child = dynamic_cast<SelectableListViewItem*>(item->firstChild());
+	Composite* c_ptr = 0;
+	while (child != 0)
 	{
-		Composite& child = *composite.getChild(i);
-		nr += removeRecursiveComposite(child);
+		c_ptr = child->getComposite();
+		composite_to_item_.erase(c_ptr);
+		removeRecursiveComposite_(*c_ptr, false);
+		delete child;
+		child = dynamic_cast<SelectableListViewItem*>(item->firstChild());
+		nr_items_removed_++;
 	}
 
-	removeItem_(item, false);
-	composite_to_item_.erase(&composite);		
-
-	return nr;
+	if (first_call) delete item;
 }
 
 
@@ -786,7 +797,7 @@ void MolecularControl::cut()
 	for (; delete_it!= to_delete.end(); delete_it++)
 	{
 		// remove composite representation from tree
-		nr_of_items += removeRecursiveComposite(**delete_it);
+		nr_of_items += removeComposite(**delete_it);
 		CompositeMessage* remove_message = new CompositeMessage(**delete_it, CompositeMessage::REMOVED_COMPOSITE, false);
 		notify_(remove_message);
 	}
@@ -1199,6 +1210,12 @@ void MolecularControl::deleteCurrentItems()
 bool MolecularControl::pasteAllowedFor_(Composite& child)
 	throw()
 {
+	if (getSelection().size() == 0 &&
+			RTTI::isKindOf<System>(child))
+	{
+		return true;
+	}
+
 	Composite& parent = **getSelection().begin();
 
 	if (RTTI::isKindOf<System>(child)) return false;
