@@ -1,4 +1,4 @@
-// $Id: RSEdge.h,v 1.14 2001/06/28 19:12:36 amoll Exp $
+// $Id: RSEdge.h,v 1.15 2001/07/10 16:36:47 anker Exp $
 
 #ifndef BALL_STRUCTURE_RSEDGE_H
 #define BALL_STRUCTURE_RSEDGE_H
@@ -279,7 +279,7 @@ namespace BALL
 		/** Return the index of the RSEdge.
 				@return	Index	the index of the RSEdge
 		*/
-		Index getIndex()
+		Index getIndex() const
 			throw();
 		
 		/** Return a pointer to the other face of the RSEdge.
@@ -765,7 +765,7 @@ namespace BALL
 
 
 	template <typename T>
-	Index TRSEdge<T>::getIndex()
+	Index TRSEdge<T>::getIndex() const
 		throw()
 	{
 		return index_;
