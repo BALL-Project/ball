@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.18 2003/04/01 16:27:53 amoll Exp $
+// $Id: pyWidget.h,v 1.19 2003/04/09 08:37:44 oliver Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_PYWIDGET_H
 #define BALL_VIEW_GUI_WIDGETS_PYWIDGET_H
@@ -137,6 +137,7 @@ class PyWidget
 	public:
 
 	//@}
+
 	/** @name	Widget related methods
 			These methods implement the basic behaviour of the edit window by 
 			overwriting the corresponding methods of <tt>QMultiLineEdit</tt>.
@@ -145,12 +146,15 @@ class PyWidget
 	*/
 	//@{
 	
-	///
+	/** Catch the enter key.
+			The behavior of the PyWidget is line-based.
+	*/
 	virtual bool returnPressed();
+	//@}
 
-	///
-	virtual void mousePressEvent(QMouseEvent* m);
-	
+	/**	@name Debugging
+	*/
+	//@{
 	/** Internal state dump.
 			Dump the current internal state of {\em *this} to 
 			the output ostream {\em s} with dumping depth {\em depth}.
@@ -188,7 +192,9 @@ class PyWidget
 	void retrieveHistoryLine_(Position index);
 
 
-	String getCurrentLine_();
+	String					getCurrentLine_();
+
+
 
 	bool						multi_line_mode_;
 	Size 						multi_lines_;
