@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: StructureMapper_test.C,v 1.7 2003/09/02 12:46:17 oliver Exp $
+// $Id: StructureMapper_test.C,v 1.8 2004/01/14 16:17:34 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -9,10 +9,12 @@
 #include <BALL/STRUCTURE/structureMapper.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/fragment.h>
+#include <BALL/KERNEL/system.h>
 #include <BALL/MATHS/quaternion.h>
+#include <BALL/FORMAT/PDBFile.h>
 #include <vector>
 
-START_TEST(StructureMapper, "$Id: StructureMapper_test.C,v 1.7 2003/09/02 12:46:17 oliver Exp $")
+START_TEST(StructureMapper, "$Id: StructureMapper_test.C,v 1.8 2004/01/14 16:17:34 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -394,6 +396,15 @@ RESULT
 
 CHECK((void set(AtomContainer& A, AtomContainer& B)))
   // ???
+RESULT
+
+CHECK(RSMD for two bptis)
+	System s1, s2;
+	PDBFile pf("../APPLICATIONS/MOLVIEW/bpti.pdb");
+	pf >> s1;
+	pf >> s2;
+	StructureMapper sm(s1,s2);
+	TEST_REAL_EQUAL(sm.calculateRMSD(), 0.0)
 RESULT
 
 /////////////////////////////////////////////////////////////

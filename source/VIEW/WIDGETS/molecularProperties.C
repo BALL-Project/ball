@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularProperties.C,v 1.16 2004/01/13 16:04:02 amoll Exp $
+// $Id: molecularProperties.C,v 1.17 2004/01/14 16:20:06 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularProperties.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -11,6 +11,7 @@
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/STRUCTURE/secondaryStructureProcessor.h>
 #include <BALL/KERNEL/system.h>
+#include <BALL/STRUCTURE/structureMapper.h>
 
 #include <qmenubar.h>
 
@@ -65,6 +66,10 @@ MolecularProperties::MolecularProperties(QWidget* parent, const char* name)
 	hint = "create a grid with the distance to the gemetric conter of a structure";
 	create_distance_grid_id_ = main_control.insertMenuEntry(MainControl::TOOLS_CREATE_GRID, 
 																			"&Distance Grid", this, SLOT(createGridFromDistance()));   
+
+	hint = "calculate RMSD from two selected AtomContainers";
+	calculate_RMSD_ = main_control.insertMenuEntry(MainControl::TOOLS,
+																			"&Calculate RMSD", this, SLOT(calculateRMSD()), 0, -1, hint);
 	}
 
 MolecularProperties::~MolecularProperties()
@@ -85,6 +90,9 @@ MolecularProperties::~MolecularProperties()
 																									SLOT(createGridFromDistance()));   
 	main_control.removeMenuEntry(MainControl::BUILD, "Calculate Secondary Structure", this,
 																									SLOT(calculateSecondaryStructure()));
+
+	main_control.removeMenuEntry(MainControl::BUILD, "Calculate RMSD", this,
+																									SLOT(calculateRMSD()));
 }
 
 void MolecularProperties::onNotify(Message *message)
@@ -295,8 +303,10 @@ void MolecularProperties::checkMenu(MainControl& main_control)
 	(main_control.menuBar())->setItemEnabled(calculate_ss_, getMainControl()->getSelectedSystem() && 
 																					 								getMainControl()->compositesAreMuteable());
 
-	// these menu points for single items only
+	// these menu point for single items only
 	(main_control.menuBar()) ->setItemEnabled(center_camera_id_, number_of_selected_objects == 1);
+
+	(main_control.menuBar()) ->setItemEnabled(calculate_RMSD_, number_of_selected_objects == 2);
 
 	if (!selected)
 	{
@@ -483,5 +493,48 @@ void MolecularProperties::calculateSecondaryStructure()
 	setStatusbarText("Calculated Secondary Structure");
 }
 
+
+void MolecularProperties::calculateRMSD()
+{
+	if (getMainControl()->getMolecularControlSelection().size() != 2)
+	{
+		return;
+	}
+
+	AtomContainer* a1 = 0;
+	AtomContainer* a2 = 0;
+
+	List<Composite*>::Iterator it = getMainControl()->getMolecularControlSelection().begin();
+	
+	if (!RTTI::isKindOf<AtomContainer>(**it)) 
+	{
+		setStatusbarText("Exact two AtomContainer have to be selected");
+		return;
+	}
+	
+	a1 = (AtomContainer*) *it;
+	it++;
+
+	if (!RTTI::isKindOf<AtomContainer>(**it)) 
+	{
+		setStatusbarText("Exact two AtomContainer have to be selected");
+		return;
+	}
+
+	a2 = (AtomContainer*) *it;
+
+	if (a1->isRelatedWith(*a2))
+	{
+		setStatusbarText("The two AtomContainer must not be descendet/ancestor of eachother.");
+		return;
+	}
+
+	StructureMapper sm(*a1, *a2);
+	
+	double rmsd = sm.calculateRMSD();
+	
+	Log.info() << "Calcuted RMSD: " << rmsd << std::endl;
+	setStatusbarText("Calcuted RMSD: " + String(rmsd));
+}
 	
 } } // namespaces
