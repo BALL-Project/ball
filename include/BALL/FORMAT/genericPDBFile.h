@@ -1,4 +1,4 @@
-// $Id: genericPDBFile.h,v 1.2 1999/12/04 18:34:15 oliver Exp $
+// $Id: genericPDBFile.h,v 1.3 2000/01/07 21:52:37 oliver Exp $
 
 #ifndef BALL_FORMAT_GENERICPDBFILE_H
 #define BALL_FORMAT_GENERICPDBFILE_H
@@ -15,13 +15,13 @@
 #	include <BALL/SYSTEM/file.h>
 #endif
 
-// #define BALL_STRICT_PDB_LINE_IMPORT
-
-namespace BALL {
+namespace BALL 
+{
 	
 	/**	PDB namespace
 	*/
-	namespace PDB {
+	namespace PDB 
+	{
 
 		enum
 		{
@@ -133,9 +133,9 @@ namespace BALL {
 		
 		struct RecordTypeFormat
 		{
-			RecordType	record_type;
-			char				string[7];
-			char*				format_string;
+			RecordType		record_type;
+			char					string[7];
+			char*					format_string;
 		};
 
 		struct RecordUNKNOWN
@@ -1211,8 +1211,7 @@ namespace BALL {
 			GenericPDBFile& operator = (const GenericPDBFile& generic_PDB_file);
 
 			static int RecordNameComparator_
-				(const PDB::RecordTypeFormat* a,
-				 const PDB::RecordTypeFormat* b);
+				(const PDB::RecordTypeFormat* a, const PDB::RecordTypeFormat* b);
 
 			Index current_model_;
 			Index selected_model_;
