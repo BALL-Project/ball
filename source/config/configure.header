@@ -1,5 +1,5 @@
 ###############
-###  $Id: configure.header,v 1.1 1999/08/26 08:02:33 oliver Exp $
+###  $Id: configure.header,v 1.2 1999/08/26 09:24:18 oliver Exp $
 ###############
 ###############
 ###
@@ -7,12 +7,17 @@
 ###   remember not to insert blanks before or after the '='!
 
 #    change this variable to use a certain C++ compiler
-CXX=
+#CXX=
 
 #    and this flag to add compiler specific flags
-CXXFLAGS=
+#CXXFLAGS=
 
+#   Use this flag to enable debug mode:
+DEBUG=true
 
+#   if you do not want to include BALLView,
+#   set USE_BALLVIEW to false
+USE_BALLVIEW=false
 
 #   all variables *_INCLUDES should be set to the path of
 #   include directory. E.g. your OpenGL include file GL/gl.h
@@ -38,11 +43,6 @@ MESA_LIBS=
 QT_INCLUDES=
 QT_LIBS=
 
-#   if you do not want to include BALLView,
-#   set USE_BALLVIEW to false
-USE_BALLVIEW=false
-
-
 #   if you do not want to be asked by configure
 #   which BALLView platform to use, put it here
 #   Possible values are Mesa or OpenGL
@@ -56,9 +56,19 @@ BALLVIEW_PLATFORM=
 #      64 : 64 bit format (default)
 IRIX_BINFMT=
 
-
-#   Use this flag to enable debug mode:
-DEBUG=true
+#		multi-platform build
+#   (for advanced users only!)
+#   Using this option, it is possible to keep objects for
+#   the library for all platforms in parallel.
+#   WIth the aid of the script config/shadowsource.sh
+#   shadow directories are build for the source tree 
+#   (directories containing only links to the sources in
+#   the main source tree). The top-level Makefile
+#   will be modified to redirect all commands to the
+#   shadow directory correpsonding to the current binary 
+#   format. The binary format may be queried using the
+#   command config/binfmt.sh
+#MULTI_BUILD=true
 
 ##################################################
 ##  PLEASE DO NOT CHANGE ANYTHING BELOW IF YOU  ##

@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.in,v 1.1 1999/08/26 08:02:33 oliver Exp $
+# $Id: Makefile.in,v 1.2 1999/08/26 09:24:17 oliver Exp $
 #
 
 include config.mak
@@ -128,6 +128,7 @@ depend:
 	@echo "creating dependencies..."
 	@echo "" >.Dependencies
 	@set -e; for i in $(DIRS); do ( cd $$i; $(MAKE) depend; cd .. ) ; done
+
 
 dirs:		dummy
 	@$(MAKE) subdirs SUBDIRS="$(DIRS)" TARGET=default

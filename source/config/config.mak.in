@@ -2,7 +2,7 @@
 # Please do ONLY change config.mak.in, as config.mak is automagically 
 # created by configure from config.mak.in
 #
-# RCS ID: $Id: config.mak.in,v 1.1 1999/08/26 08:02:33 oliver Exp $
+# RCS ID: $Id: config.mak.in,v 1.2 1999/08/26 09:24:18 oliver Exp $
 #
 # author:    $author$
 # date:      $date$
@@ -58,7 +58,7 @@ BALLVIEW_LIBS		= @BALLVIEW_LIBS@
 # This is the place for compiler options that are not understood
 # by makedepend (e.g. -Olimit using IRIX DCC)
 #
-CPPFLAGS		= @CPPFLAGS@ -DBFMT=@BINFMT_INDEX@
+CPPFLAGS		= @CPPFLAGS@ @BINFMT_INDEX@
 LDFLAGS			= @LDFLAGS@
 ADD_CPPFLAGS		= @ADD_CPPFLAGS@
 

@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.1 1999/08/26 08:02:33 oliver Exp $
+dnl    $Id: configure.in,v 1.2 1999/08/26 09:24:18 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -370,6 +370,7 @@ AC_PROG_LN_S
 AC_MSG_PATH_PROG(CP,cp,no)
 AC_MSG_PATH_PROG(RM,rm,no)
 AC_MSG_PATH_PROG(MV,mv,no)
+AC_MSG_PATH_PROG(LN,ln,no)
 AC_MSG_PATH_PROG(SED,sed,no)
 AC_MSG_PATH_PROG(FIND,find,no)
 AC_MSG_PATH_PROG(DIFF,diff,no)
@@ -864,6 +865,36 @@ else
 fi
 
 dnl
+dnl   checking for DEBUG-Flag
+dnl
+
+AC_MSG_CHECKING(for DEBUG flag)
+if test "$DEBUG" != "" ; then
+	dnl   define a debug flag and prevent the compilation of
+	dnl   inline functions by defining BALL_NO_INLINE_FUNCTIONS
+	dnl   (see COMMON/debug.h)
+	AC_DEFINE(BALL_DEBUG,)
+	AC_DEFINE(BALL_NO_INLINE_FUNCTIONS,)
+	AC_MSG_RESULT(enabled)
+	CPP_MODE_FLAGS="${CPPFLAGS_D}"
+	CPP_MODE_FLAGS_NO_OPTIMIZATION="${CPPFLAGS_D}"
+else
+	AC_MSG_RESULT(disabled)
+	CPP_MODE_FLAGS="${CPPFLAGS_O}"
+	CPP_MODE_FLAGS_NO_OPTIMIZATION=""
+fi
+
+dnl
+dnl		check for multi-platform build
+dnl
+AC_MSG_CHECKING(multi-platform build)
+if test "${MULTI_BUILD}" = "true" ; then
+	AC_MSG_RESULT(enabled)
+else 
+	AC_MSG_RESULT(disabled)
+fi
+
+dnl
 dnl		checks for header files
 dnl
 
@@ -879,6 +910,8 @@ fi
 dnl 	check for standard C headers
 dnl 	and how to run the preprocessor
 AC_HEADER_STDC
+
+
 
 
 
@@ -1326,38 +1359,50 @@ dnl		expand BINFMT to include the compiler name
 dnl
 BINFMT="${BINFMT}-${CXX_NAME}"
 
-dnl
+
+dnl		MULTI-BUILD MODE ONLY:
 dnl 	add the binary format to the list of supported binary formats
 dnl 	held in config/binary_formats. Avoid double entries
 dnl
-touch ${BINFORMAT_FILE}
-if test "`${GREP} ${BINFMT} ${BINFORMAT_FILE}`" = "" ; then
-	echo ${BINFMT} >> ${BINFORMAT_FILE}
+if test "${MULTI_BUILD}" = "true" ; then
+	touch ${BINFORMAT_FILE}
+	if test "`${GREP} ${BINFMT} ${BINFORMAT_FILE}`" = "" ; then
+		echo ${BINFMT} >> ${BINFORMAT_FILE}
+	fi
 fi
+
 dnl
 dnl   create the global config.h (the one including the platform specific
 dnl   config.h.${BINFMT})
 dnl
-${CAT} config/config.h.header | ${SED} 1,2d > config.h
-LINES=`cat config/binary_formats | wc -l`
-i=1
-while test $i -le $LINES ; do
-	BFMT=`cat ${BINFORMAT_FILE} | ${SED} -n ${i}p`
-	echo "#if ( BFMT == $i )" >> config.h
-	echo "#	include <BALL/CONFIG/config.h.${BFMT}>" >> config.h
-	echo "#endif" >> config.h
-	echo " " >> config.h
-	i=`expr $i + 1`
-done
-${CAT} config/config.h.footer | ${SED} 1,2d >> config.h
-if test "`${DIFF} ${BALL_PATH}/include/BALL/CONFIG/config.h config.h`" != "" ; then
-	${RM} ${BALL_PATH}/include/BALL/CONFIG/config.h
-	${MV} config.h  ${BALL_PATH}/include/BALL/CONFIG/config.h
-else
-	${RM} config.h
-fi
+if test "${MULTI_BUILD}" = "true" ; then
+	${CAT} config/config.h.header | ${SED} 1,2d > config.h
+	LINES=`cat config/binary_formats | wc -l`
+	i=1
+	while test $i -le $LINES ; do
+		BFMT=`cat ${BINFORMAT_FILE} | ${SED} -n ${i}p`
+		echo "#if ( BFMT == $i )" >> config.h
+		echo "#	include <BALL/CONFIG/config.h.${BFMT}>" >> config.h
+		echo "#endif" >> config.h
+		echo " " >> config.h
+		i=`expr $i + 1`
+	done
+	${CAT} config/config.h.footer | ${SED} 1,2d >> config.h
+	if test -f ${BALL_PATH}/include/BALL/CONFIG/config.h ; then
+		if test "`${DIFF} ${BALL_PATH}/include/BALL/CONFIG/config.h config.h`" != "" ; then
+			${RM} ${BALL_PATH}/include/BALL/CONFIG/config.h
+			${MV} config.h  ${BALL_PATH}/include/BALL/CONFIG/config.h
+		else 
+			${RM} config.h
+		fi
+	else
+		${MV} config.h  ${BALL_PATH}/include/BALL/CONFIG/config.h
+	fi
 
-BINFMT_INDEX=`${GREP} -n ${BINFMT} ${BINFORMAT_FILE} | ${CUT} -d: -f1 | ${TAIL} -1`
+	BINFMT_INDEX="-DBFMT="`${GREP} -n ${BINFMT} ${BINFORMAT_FILE} | ${CUT} -d: -f1 | ${TAIL} -1`
+else
+	BINFMT_INDEX=""
+fi
 
 LIBS="${LIBS} -lm"
 BALLVIEW_LIBS="${BALLVIEW_LIBS} -lm"
@@ -1374,25 +1419,6 @@ fi
 LDFLAGS="$LDFLAGS"
 LIBS="$BALL_LIBS $LIBS"
 
-dnl
-dnl   checking for DEBUG-Flag
-dnl
-
-AC_MSG_CHECKING(for DEBUG flag)
-if test "$DEBUG" != "" ; then
-	dnl   define a debug flag and prevent the compilation of
-	dnl   inline functions by defining BALL_NO_INLINE_FUNCTIONS
-	dnl   (see COMMON/debug.h)
-	AC_DEFINE(BALL_DEBUG,)
-	AC_DEFINE(BALL_NO_INLINE_FUNCTIONS,)
-	AC_MSG_RESULT(enabled)
-	CPP_MODE_FLAGS="${CPPFLAGS_D}"
-	CPP_MODE_FLAGS_NO_OPTIMIZATION="${CPPFLAGS_D}"
-else
-	AC_MSG_RESULT(disabled)
-	CPP_MODE_FLAGS="${CPPFLAGS_O}"
-	CPP_MODE_FLAGS_NO_OPTIMIZATION=""
-fi
 
 dnl
 dnl   joining all flags
@@ -1488,10 +1514,11 @@ AC_SUBST(BALL_TYPENAME)			dnl if the compiler requires the use of typename
                             dnl this variable is set to "typename". "" otherwise.
 AC_SUBST(BINFMT_INDEX)      dnl BFMT: binformat index of the current BINFMT - passed to the compiler
                             dnl   as -DBFMT=${BINFMT_INDEX} to decide which config.h to use
+                            dnl   used in multi-platform build only!
 
 dnl         LINKER
 
-AC_SUBST(BALLVIEW_LIBS)     dnl BallVIEW libs
+AC_SUBST(BALLVIEW_LIBS)     dnl BALLVIEW libs
 AC_SUBST(BALL_LIBS)         dnl libraries
 AC_SUBST(LDFLAGS)           dnl linker flags
 AC_SUBST(LIBS)              dnl linker libraries
@@ -1576,27 +1603,50 @@ dnl    create files
 dnl
 
 SUBDIRS="COMMON CONCEPT DATATYPE ENERGY FORMAT KERNEL MATHS MOLMEC NMR SOLVATION STRUCTURE SYSTEM ${BALLVIEW}"
-AC_MSG_RESULT(creating shadow directories...)
-config/shadowsource.sh `pwd`"/${BINFMT}" `pwd` "${SUBDIRS} TEST"
 AC_SUBST(SUBDIRS)
 
-AC_OUTPUT([
-	${BINFMT}/Makefile:config/Makefile.in
-	${BINFMT}/config.mak:config/config.mak.in 
-	${BINFMT}/common.mak:config/common.mak.in 
-])
+if test "${MULTI_BUILD}" = "true" ; then
+	AC_MSG_RESULT(creating shadow directories...)
+	config/shadowsource.sh `pwd`"/${BINFMT}" `pwd` "${SUBDIRS} TEST"
+	${RM} -fr `pwd`/${BINFMT}/TEST/data
+	${LN} -s `pwd`/TEST/data `pwd`/${BINFMT}/TEST
+	${LN} -s `pwd`/TEST/runtests `pwd`/${BINFMT}/TEST
+
+	AC_OUTPUT([
+		${BINFMT}/Makefile:config/Makefile.in
+		${BINFMT}/config.mak:config/config.mak.in 
+		${BINFMT}/common.mak:config/common.mak.in 
+	])
+
+	${CP} config/Makefile.multiplatform Makefile
+else 
+	AC_OUTPUT([
+		Makefile:config/Makefile.in
+		config.mak:config/config.mak.in 
+		common.mak:config/common.mak.in 
+	])
+fi
 
 dnl
 dnl    copy config.h to the includes directory
 dnl    remove obsolete dependency file
 dnl
 
-${MV} -f config.h $BALL_PATH/include/BALL/CONFIG/config.h.${BINFMT}
+if test "${MULTI_BUILD}" = "true" ; then
+	${MV} -f config.h $BALL_PATH/include/BALL/CONFIG/config.h.${BINFMT}
+else
+	${MV} -f config.h $BALL_PATH/include/BALL/CONFIG/config.h
+fi
+	
 
 dnl
 dnl		make sure the dependencies are (re)built
 dnl
-rm  ${BINFMT}/.Dependencies 2>/dev/null
+if test "${MULTI_BUILD}" = "true" ; then
+	${RM}  ${BINFMT}/.Dependencies 2>/dev/null
+else
+	${RM}  .Dependencies 2>/dev/null
+fi
 
 dnl
 dnl Just give another helpful message and exit
@@ -1610,4 +1660,3 @@ AC_MSG_RESULT(		make)
 AC_MSG_RESULT()
 AC_MSG_RESULT(to build BALL.)
 AC_MSG_RESULT()
-
