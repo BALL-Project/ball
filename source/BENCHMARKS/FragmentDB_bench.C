@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FragmentDB_bench.C,v 1.3 2004/02/13 15:52:28 oliver Exp $
+// $Id: FragmentDB_bench.C,v 1.4 2004/02/16 13:26:34 oliver Exp $
 
 #include <BALL/CONCEPT/benchmark.h>
 
@@ -15,16 +15,15 @@
 
 using namespace BALL;
 
-START_BENCHMARK(FragmentDB, 10.0, "$Id: FragmentDB_bench.C,v 1.3 2004/02/13 15:52:28 oliver Exp $")
+START_BENCHMARK(FragmentDB, 1.0, "$Id: FragmentDB_bench.C,v 1.4 2004/02/16 13:26:34 oliver Exp $")
 
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
-START_SECTION(Creation, 0.25)
-
+START_SECTION(Creation, 0.50)
 	FragmentDB* ptr;
-	for (Size i = 0; i < 10; i++)
+	for (Size i = 0; i < 20; i++)
 	{
 		START_TIMER
 			ptr = new FragmentDB;
@@ -42,8 +41,8 @@ System original;
 f >> original;
 f.close();
 
-START_SECTION(Name normalization, 0.25)
-	for (Size i = 0; i < 10; ++i)
+START_SECTION(Name normalization, 0.1)
+	for (Size i = 0; i < 50; ++i)
 	{
 		System S(original);
 		START_TIMER
@@ -53,8 +52,8 @@ START_SECTION(Name normalization, 0.25)
 	
 END_SECTION
 
-START_SECTION(Bond building, 0.25)
-	for (Size i = 0; i < 10; ++i)
+START_SECTION(Bond building, 0.1)
+	for (Size i = 0; i < 50; ++i)
 	{
 		System S(original);
 		START_TIMER
