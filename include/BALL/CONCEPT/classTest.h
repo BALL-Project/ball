@@ -1,4 +1,4 @@
-// $Id: classTest.h,v 1.5 1999/12/28 18:39:42 oliver Exp $
+// $Id: classTest.h,v 1.6 2000/01/14 20:39:21 oliver Exp $
 
 #include <BALL/common.h>
 #include <BALL/SYSTEM/file.h>
@@ -209,6 +209,23 @@ int main(int argc, char **argv)\
 		std::cout << "checking " << #test_name << "... " << std::flush;\
 	try\
 	{\
+
+/**	Print a status message.
+		If tests require longer preparations, {\tt STATUS} may be used to 
+		print some intermediated progress messages.
+		{\tt STATUS} uses {\tt cout} to print these messages (in verbose mode only).
+		The given stream expression {\tt message} is prefixed by the string {\tt status:}
+		and terminated with a newline. All valid operations on a stream may be performed
+		in {\tt message}.\\
+		{\bf Example:}\\
+		\begin{verbatim}
+		STATUS("just calculated x = " << setprecision(10) << x)
+		\end{verbatim}
+*/
+#define STATUS(message)  \
+	TEST::newline = true;\
+	if (TEST::verbose > 0)\
+		std::cout << "  status: " << message << std::endl;\
 
 /**	Check subtest result.
 		Each elementary test macro updates an internal variable ({\bf TEST}, defined by 
