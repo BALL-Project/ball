@@ -1,4 +1,4 @@
-// $Id: pyProteinList.h,v 1.2 2000/08/30 19:58:25 oliver Exp $
+// $Id: pyProteinList.h,v 1.3 2001/07/25 11:30:49 oliver Exp $
 
 #ifndef BALL_PYTHON_PYPROTEINLIST_H
 #define BALL_PYTHON_PYPROTEINLIST_H
@@ -70,7 +70,7 @@ namespace BALL
 
 		/**	Destructor
 		*/
-		virtual ~PyProteinList();
+		virtual ~PyProteinList() throw();
 		//@}
 
 		/**	@name Assignment

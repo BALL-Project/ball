@@ -1,4 +1,4 @@
-// $Id: pyPDBAtomList.h,v 1.4 2000/08/30 19:58:24 oliver Exp $
+// $Id: pyPDBAtomList.h,v 1.5 2001/07/25 11:30:49 oliver Exp $
 
 #ifndef BALL_PYTHON_PYPDBATOMLIST_H
 #define BALL_PYTHON_PYPDBATOMLIST_H
@@ -80,7 +80,7 @@ namespace BALL
 
 		/**	Destructor
 		*/
-		virtual ~PyPDBAtomList();
+		virtual ~PyPDBAtomList() throw();
 		//@}
 
 		/**	@name Assignment

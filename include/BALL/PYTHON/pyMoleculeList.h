@@ -1,4 +1,4 @@
-// $Id: pyMoleculeList.h,v 1.3 2000/08/30 19:58:24 oliver Exp $
+// $Id: pyMoleculeList.h,v 1.4 2001/07/25 11:30:48 oliver Exp $
 
 #ifndef BALL_PYTHON_PYMOLECULELIST_H
 #define BALL_PYTHON_PYMOLECULELIST_H
@@ -70,7 +70,7 @@ namespace BALL
 
 		/**	Destructor
 		*/
-		virtual ~PyMoleculeList();
+		virtual ~PyMoleculeList() throw();
 		//@}
 
 		/**	@name Assignment

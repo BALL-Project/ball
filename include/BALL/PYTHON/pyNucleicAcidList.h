@@ -1,4 +1,4 @@
-// $Id: pyNucleicAcidList.h,v 1.2 2000/08/30 19:58:24 oliver Exp $
+// $Id: pyNucleicAcidList.h,v 1.3 2001/07/25 11:30:49 oliver Exp $
 
 #ifndef BALL_PYTHON_PYNUCLEICACIDLIST_H
 #define BALL_PYTHON_PYNUCLEICACIDLIST_H
@@ -70,7 +70,7 @@ namespace BALL
 
 		/**	Destructor
 		*/
-		virtual ~PyNucleicAcidList();
+		virtual ~PyNucleicAcidList() throw();
 		//@}
 
 		/**	@name Assignment

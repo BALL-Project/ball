@@ -1,4 +1,4 @@
-// $Id: pyBondList.h,v 1.2 2000/08/30 19:58:23 oliver Exp $
+// $Id: pyBondList.h,v 1.3 2001/07/25 11:30:48 oliver Exp $
 
 #ifndef BALL_PYTHON_PYBONDLIST_H
 #define BALL_PYTHON_PYBONDLIST_H
@@ -85,7 +85,7 @@ namespace BALL
 
 		/**	Destructor
 		*/
-		virtual ~PyBondList();
+		virtual ~PyBondList() throw();
 		//@}
 
 		/**	@name Assignment

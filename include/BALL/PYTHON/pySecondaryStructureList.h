@@ -1,4 +1,4 @@
-// $Id: pySecondaryStructureList.h,v 1.2 2000/08/30 19:58:25 oliver Exp $
+// $Id: pySecondaryStructureList.h,v 1.3 2001/07/25 11:30:49 oliver Exp $
 
 #ifndef BALL_PYTHON_PYSECONDARYSTRUCTURELIST_H
 #define BALL_PYTHON_PYSECONDARYSTRUCTURELIST_H
@@ -70,7 +70,7 @@ namespace BALL
 
 		/**	Destructor
 		*/
-		virtual ~PySecondaryStructureList();
+		virtual ~PySecondaryStructureList() throw();
 		//@}
 
 		/**	@name Assignment

@@ -1,4 +1,4 @@
-// $Id: pyResidueList.h,v 1.3 2000/08/30 19:58:25 oliver Exp $
+// $Id: pyResidueList.h,v 1.4 2001/07/25 11:30:49 oliver Exp $
 
 #ifndef BALL_PYTHON_PYRESIDUELIST_H
 #define BALL_PYTHON_PYRESIDUELIST_H
@@ -70,7 +70,7 @@ namespace BALL
 
 		/**	Destructor
 		*/
-		virtual ~PyResidueList();
+		virtual ~PyResidueList() throw();
 		//@}
 
 		/**	@name Assignment

@@ -1,4 +1,4 @@
-// $Id: pyChainList.h,v 1.2 2000/08/30 19:58:23 oliver Exp $
+// $Id: pyChainList.h,v 1.3 2001/07/25 11:30:48 oliver Exp $
 
 #ifndef BALL_PYTHON_PYCHAINLIST_H
 #define BALL_PYTHON_PYCHAINLIST_H
@@ -70,7 +70,7 @@ namespace BALL
 
 		/**	Destructor
 		*/
-		virtual ~PyChainList();
+		virtual ~PyChainList() throw();
 		//@}
 
 		/**	@name Assignment

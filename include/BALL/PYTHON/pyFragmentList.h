@@ -1,4 +1,4 @@
-// $Id: pyFragmentList.h,v 1.2 2000/08/30 19:58:24 oliver Exp $
+// $Id: pyFragmentList.h,v 1.3 2001/07/25 11:30:48 oliver Exp $
 
 #ifndef BALL_PYTHON_PYFRAGMENTLIST_H
 #define BALL_PYTHON_PYFRAGMENTLIST_H
@@ -70,7 +70,7 @@ namespace BALL
 
 		/**	Destructor
 		*/
-		virtual ~PyFragmentList();
+		virtual ~PyFragmentList() throw();
 		//@}
 
 		/**	@name Assignment
