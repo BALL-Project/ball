@@ -43,8 +43,8 @@ void SelectorDialog::accept()
 
 	HashSet<Composite*> roots;
 
-	List<Composite*>::Iterator it = mc->getMolecularControlSelection().begin();
-	for(; it != mc->getMolecularControlSelection().end(); it++)
+	CompositeManager::CompositeIterator it = mc->getCompositeManager().begin();
+	for(; it != mc->getCompositeManager().end(); it++)
 	{
 		(*it)->apply(s);
 		List<Atom*>::Iterator ait = s.getSelectedAtoms().begin();
