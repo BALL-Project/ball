@@ -1,4 +1,4 @@
-// $Id: RDFSection.C,v 1.4 2000/09/22 16:30:17 anker Exp $
+// $Id: RDFSection.C,v 1.5 2000/10/18 12:53:17 oliver Exp $
 
 #include <BALL/STRUCTURE/RDFSection.h>
 #include <BALL/FORMAT/parameters.h>
@@ -23,6 +23,7 @@ namespace BALL
 
 
 	RDFSection::~RDFSection()
+		throw()
 	{
 	}
 
@@ -34,6 +35,7 @@ namespace BALL
 
 
 	void RDFSection::clear()
+		throw()
 	{
 		rdf_.clear();
 	}
