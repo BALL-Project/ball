@@ -1,4 +1,4 @@
-// $Id: periodicBoundary.C,v 1.15 2001/02/21 14:35:04 anker Exp $
+// $Id: periodicBoundary.C,v 1.16 2001/03/17 17:46:23 anker Exp $
 
 #include <BALL/MOLMEC/COMMON/periodicBoundary.h>
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -413,7 +413,7 @@ namespace BALL
 			Log.error() << "Force field does not contain  a system." << endl;
 			return 0;
 		}
-		
+
 		// get the minimum solvent-solute distance from the options
 		float solvent_solute_distance = 0.0;
 		if (options->has(Option::PERIODIC_BOX_SOLVENT_SOLUTE_DISTANCE))
@@ -456,9 +456,9 @@ namespace BALL
 		float width = solvent_box.getWidth();
 		float height = solvent_box.getHeight();
 		float depth = solvent_box.getDepth();
-		Size N_x = (Size)(box_.getWidth() / width + 1.0);
-		Size N_y = (Size)(box_.getHeight() / height + 1.0);
-		Size N_z = (Size)(box_.getDepth() / depth + 1.0);
+		Size N_x = (Size)(box_.getWidth() / width);
+		Size N_y = (Size)(box_.getHeight() / height);
+		Size N_z = (Size)(box_.getDepth() / depth);
 		
 		for (Size i = 0; i <= N_x; ++i)
 		{
@@ -489,7 +489,7 @@ namespace BALL
 		}
 
 		// DEBUG
-		Log.info() << "added " << added_molecules << " molecules" << endl;
+		Log.info() << "added " << added_molecules << " solvent molecules" << endl;
 		return added_molecules;
 	}
 
