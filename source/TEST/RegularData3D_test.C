@@ -1,9 +1,9 @@
-// $Id: RegularData3D_test.C,v 1.2 2001/05/10 16:46:09 oliver Exp $
+// $Id: RegularData3D_test.C,v 1.3 2001/08/01 01:49:51 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALL/DATATYPE/regularData3D.h>
 
-START_TEST(RegularData3D, "$Id: RegularData3D_test.C,v 1.2 2001/05/10 16:46:09 oliver Exp $")
+START_TEST(RegularData3D, "$Id: RegularData3D_test.C,v 1.3 2001/08/01 01:49:51 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -12,11 +12,10 @@ using namespace BALL;
 using namespace std;
 
 String filename;
-using BALL::RegularData3D;
-RegularData3D<float>*	grid;
+RegularData3D*	grid;
 
 CHECK(RegularData3D<T>())
-	grid = new RegularData3D<float>();
+	grid = new RegularData3D();
 	TEST_NOT_EQUAL(grid, 0)
 RESULT
 
@@ -25,7 +24,7 @@ CHECK(~RegularData3D<T>())
 RESULT
 
 CHECK(RegularData3D<T>(float, float, float, float, float, float, Size, Size, Size))
-	grid = new RegularData3D<float>(0.0, 0.0, 0.0,
+	grid = new RegularData3D(0.0, 0.0, 0.0,
 															10.0, 10.0, 10.0,
 															11, 11, 11);
 	TEST_NOT_EQUAL(grid, 0)
@@ -38,14 +37,14 @@ Vector3	lower(0.0, 0.0, 0.0);
 Vector3	upper(10.0, 10.0, 10.0);
 
 CHECK(RegularData3D<T>(const Vector3& lower, const Vector3& upper, float spacing))
-	grid = new RegularData3D<float>(lower, upper, 1.0);
+	grid = new RegularData3D(lower, upper, 1.0);
 	TEST_NOT_EQUAL(grid, 0)
 	TEST_EQUAL(grid->getSize(), 1331)
 	delete grid;
 RESULT
 
 CHECK(RegularData3D<T>(const Vector3& lower, const Vector3& upper, Size, Size, Size))
-	grid = new RegularData3D<float>(lower, upper, 11, 11, 11);
+	grid = new RegularData3D(lower, upper, 11, 11, 11);
 	TEST_NOT_EQUAL(grid, 0)
 RESULT
 
@@ -53,16 +52,16 @@ CHECK(getSize())
 	TEST_EQUAL(grid->getSize(), 1331)
 RESULT
 
-RegularData3D<float> g(0.0, 0.0, 0.0, 10.0, 10.0, 10.0,	11, 11, 11);
+RegularData3D g(0.0, 0.0, 0.0, 10.0, 10.0, 10.0,	11, 11, 11);
 
 CHECK(set(const RegularData3D<T>& grid))
-	RegularData3D<float> g1;
+	RegularData3D g1;
 	g1.set(g);
 	TEST_EQUAL(g1.getSize(), 1331)
 RESULT
 
 CHECK(operator = (const RegularData3D<T>& grid))
-	RegularData3D<float> g1;
+	RegularData3D g1;
 	g1 = g;
 	TEST_EQUAL(g1.getSize(), 1331)
 RESULT
@@ -133,7 +132,7 @@ CHECK(getZSpacing())
 	TEST_REAL_EQUAL(grid->getZSpacing(), 1.0)
 RESULT
 
-BALL::RegularData3D<float>::GridIndex	index;
+BALL::RegularData3D::GridIndex	index;
 
 CHECK(getIndex(const Vector3& vector))
 	lower.set(3.49, 3.51, 3.0);
@@ -287,7 +286,7 @@ CHECK(getInterpolatedValue)
 	TEST_EXCEPTION(Exception::OutOfGrid, g.getInterpolatedValue(lower))
 RESULT
 
-RegularData3D<float> grid2 = *grid;
+RegularData3D grid2 = *grid;
 
 CHECK(clear())
 	grid2.clear();
@@ -309,7 +308,7 @@ CHECK(operator !=)
 RESULT
 
 CHECK(has()1/1)
-	RegularData3D<float> g(0.0, 0.0, 0.0, 10.0, 10.0, 10.0,	11, 11, 11);
+	RegularData3D g(0.0, 0.0, 0.0, 10.0, 10.0, 10.0,	11, 11, 11);
 	TEST_EQUAL(g.has(0.0, 0.0, 0.0), true)
 	Vector3 v(0.0, 0.0, 0.0);
 	TEST_EQUAL(g.has(v), true)
@@ -326,7 +325,7 @@ CHECK(has()1/1)
 	v = Vector3(0.0, 0.0, -0.1);
 	TEST_EQUAL(g.has(v), false)
 
-	RegularData3D<float> h;
+	RegularData3D h;
 	TEST_EQUAL(h.isValid(), false)
 	TEST_EQUAL(h.has(0.0, 0.0, 0.0), false)
 	v = Vector3(0.0, 0.0, 0.0);
