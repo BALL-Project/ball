@@ -57,8 +57,11 @@ DownloadPDBFile::~DownloadPDBFile()
 #ifdef BALL_QT_HAS_THREADS
 	if (thread_ != 0) 
 	{
-		thread_->terminate();
-		thread_->wait();
+		if (thread_->running())
+		{
+			thread_->terminate();
+			thread_->wait();
+		}
 		delete thread_;
 	}
 #endif
