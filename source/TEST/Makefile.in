@@ -398,8 +398,7 @@ EXECUTABLES_NMR = \
 	ShiftModel_test\
 	ShiftModule_test\
 	Spectrum_test\
-	Peak_test\
-	PeakList_test
+	Peak_test
 
 
 AssignShiftProcessor_test_SOURCES = AssignShiftProcessor_test.C
@@ -414,7 +413,6 @@ ShiftModel_test_SOURCES = ShiftModel_test.C
 ShiftModule_test_SOURCES = ShiftModule_test.C
 Spectrum_test_SOURCES = Spectrum_test.C
 Peak_test_SOURCES = Peak_test.C
-PeakList_test_SOURCES = PeakList_test.C
 
 EXECUTABLES_FORMATS = \
 	LineBasedFile_test\
@@ -517,8 +515,8 @@ ReissCavFreeEnergyProcessor_test_SOURCES = ReissCavFreeEnergyProcessor_test.C
 UhligCavFreeEnergyProcessor_test_SOURCES = UhligCavFreeEnergyProcessor_test.C
 PCMCavFreeEnergyProcessor_test_SOURCES = PCMCavFreeEnergyProcessor_test.C
 PierottiCavFreeEnergyProcessor_test_SOURCES = PierottiCavFreeEnergyProcessor_test.C
-Pair6_12RDFIntegrator_test_SOURCES = Pair6_12RDFIntegrator.C
-Pair6_12InteractionEnergyProcessor_test_SOURCES = Pair6_12InteractionEnergyProcessor.C
+Pair6_12RDFIntegrator_test_SOURCES = Pair6_12RDFIntegrator_test.C
+Pair6_12InteractionEnergyProcessor_test_SOURCES = Pair6_12InteractionEnergyProcessor_test.C
 PairExpInteractionEnergyProcessor_test_SOURCES = PairExpInteractionEnergyProcessor_test.C
 PairExpRDFIntegrator_test_SOURCES = PairExpRDFIntegrator_test.C
 
@@ -616,7 +614,7 @@ bin_PROGRAMS = ClassTest_test$(EXEEXT) RegularExpression_test$(EXEEXT) \
 	JohnsonBoveyShiftProcessor_test$(EXEEXT) \
 	ShiftModel_test$(EXEEXT) ShiftModule_test$(EXEEXT) \
 	Spectrum_test$(EXEEXT) Peak_test$(EXEEXT) \
-	PeakList_test$(EXEEXT) AtomicContactEnergy_test$(EXEEXT) \
+	AtomicContactEnergy_test$(EXEEXT) \
 	ComposedEnergyProcessor_test$(EXEEXT) \
 	EnergyProcessor_test$(EXEEXT) OoiEnergy_test$(EXEEXT) \
 	AnalyticalSES_test$(EXEEXT) MolecularGraph_test$(EXEEXT) \
@@ -1058,13 +1056,14 @@ PTE_test_LDADD = $(LDADD)
 PTE_test_DEPENDENCIES =
 PTE_test_LDFLAGS =
 am_Pair6_12InteractionEnergyProcessor_test_OBJECTS = \
-	Pair6_12InteractionEnergyProcessor.$(OBJEXT)
+	Pair6_12InteractionEnergyProcessor_test.$(OBJEXT)
 Pair6_12InteractionEnergyProcessor_test_OBJECTS = \
 	$(am_Pair6_12InteractionEnergyProcessor_test_OBJECTS)
 Pair6_12InteractionEnergyProcessor_test_LDADD = $(LDADD)
 Pair6_12InteractionEnergyProcessor_test_DEPENDENCIES =
 Pair6_12InteractionEnergyProcessor_test_LDFLAGS =
-am_Pair6_12RDFIntegrator_test_OBJECTS = Pair6_12RDFIntegrator.$(OBJEXT)
+am_Pair6_12RDFIntegrator_test_OBJECTS = \
+	Pair6_12RDFIntegrator_test.$(OBJEXT)
 Pair6_12RDFIntegrator_test_OBJECTS = \
 	$(am_Pair6_12RDFIntegrator_test_OBJECTS)
 Pair6_12RDFIntegrator_test_LDADD = $(LDADD)
@@ -1099,11 +1098,6 @@ Path_test_OBJECTS = $(am_Path_test_OBJECTS)
 Path_test_LDADD = $(LDADD)
 Path_test_DEPENDENCIES =
 Path_test_LDFLAGS =
-am_PeakList_test_OBJECTS = PeakList_test.$(OBJEXT)
-PeakList_test_OBJECTS = $(am_PeakList_test_OBJECTS)
-PeakList_test_LDADD = $(LDADD)
-PeakList_test_DEPENDENCIES =
-PeakList_test_LDFLAGS =
 am_Peak_test_OBJECTS = Peak_test.$(OBJEXT)
 Peak_test_OBJECTS = $(am_Peak_test_OBJECTS)
 Peak_test_LDADD = $(LDADD)
@@ -1568,15 +1562,13 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/PCMCavFreeEnergyProcessor_test.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/PDBAtom_test.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/PDBFile_test.Po ./$(DEPDIR)/PTE_test.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/Pair6_12InteractionEnergyProcessor.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/Pair6_12RDFIntegrator.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/Pair6_12InteractionEnergyProcessor_test.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/Pair6_12RDFIntegrator_test.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/PairExpInteractionEnergyProcessor_test.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/PairExpRDFIntegrator_test.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/ParameterSection_test.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/Parameters_test.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/Path_test.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/PeakList_test.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/Peak_test.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/Path_test.Po ./$(DEPDIR)/Peak_test.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/Peptides_test.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/PersistenceManager_test.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/PersistentObject_test.Po \
@@ -1704,9 +1696,8 @@ DIST_SOURCES = $(AmberFF_test_SOURCES) \
 	$(PairExpInteractionEnergyProcessor_test_SOURCES) \
 	$(PairExpRDFIntegrator_test_SOURCES) \
 	$(ParameterSection_test_SOURCES) $(Parameters_test_SOURCES) \
-	$(Path_test_SOURCES) $(PeakList_test_SOURCES) \
-	$(Peak_test_SOURCES) $(Peptides_test_SOURCES) \
-	$(PersistenceManager_test_SOURCES) \
+	$(Path_test_SOURCES) $(Peak_test_SOURCES) \
+	$(Peptides_test_SOURCES) $(PersistenceManager_test_SOURCES) \
 	$(PersistentObject_test_SOURCES) \
 	$(PiecewiseFunction_test_SOURCES) \
 	$(PiecewisePolynomial_test_SOURCES) \
@@ -1755,7 +1746,7 @@ RECURSIVE_TARGETS = info-recursive dvi-recursive install-info-recursive \
 	uninstall-recursive check-recursive installcheck-recursive
 DIST_COMMON = Makefile.am Makefile.in
 DIST_SUBDIRS = $(SUBDIRS)
-SOURCES = $(AmberFF_test_SOURCES) $(AnalyticalGeometry_test_SOURCES) $(AnalyticalSES_test_SOURCES) $(Angle_test_SOURCES) $(AnisotropyShiftProcessor_test_SOURCES) $(AssignShiftProcessor_test_SOURCES) $(AtomContainer_test_SOURCES) $(AtomIterator_test_SOURCES) $(AtomVector_test_SOURCES) $(Atom_test_SOURCES) $(AtomicContactEnergy_test_SOURCES) $(AutoDeletable_test_SOURCES) $(BinaryFileAdaptor_test_SOURCES) $(BitVector_test_SOURCES) $(Bond_test_SOURCES) $(Box3_test_SOURCES) $(Chain_test_SOURCES) $(CharmmFF_test_SOURCES) $(Circle3_test_SOURCES) $(ClassTest_test_SOURCES) $(ClaverieParameter_test_SOURCES) $(ClearShiftProcessor_test_SOURCES) $(ComposedEnergyProcessor_test_SOURCES) $(Composite_test1_SOURCES) $(Composite_test2_SOURCES) $(CreateSpectrumProcessor_test_SOURCES) $(DCDFile_test_SOURCES) $(DefaultProcessors_test_SOURCES) $(Descriptor_test_SOURCES) $(Directory_test_SOURCES) $(EFShiftProcessor_test_SOURCES) $(Embeddable_test_SOURCES) $(EnergyMinimizer_test_SOURCES) $(EnergyProcessor_test_SOURCES) $(Enumerator_test_SOURCES) $(ExpressionParser_test_SOURCES) $(Expression_test_SOURCES) $(FileSystem_test_SOURCES) $(File_test_SOURCES) $(ForEach_test_SOURCES) $(FragmentDB_test_SOURCES) $(Fragment_test_SOURCES) $(Function_test_SOURCES) $(GenericMolFile_test_SOURCES) $(GlobalKernel_test_SOURCES) $(GlobalTypes_test_SOURCES) $(Gradient_test_SOURCES) $(HINFile_test_SOURCES) $(HaighMallionShiftProcessor_test_SOURCES) $(HashGrid3_test_SOURCES) $(HashMap_test_SOURCES) $(HashSet_test_SOURCES) $(Hash_test_SOURCES) $(INIFile_test_SOURCES) $(JohnsonBoveyShiftProcessor_test_SOURCES) $(KernelPredicate_test_SOURCES) $(Limits_test_SOURCES) $(Line3_test_SOURCES) $(LineBasedFile_test_SOURCES) $(List_test_SOURCES) $(LogStream_test_SOURCES) $(MOL2File_test_SOURCES) $(MOLFile_test_SOURCES) $(MathsCommon_test_SOURCES) $(Matrix44_test_SOURCES) $(MolecularGraph_test_SOURCES) $(Molecule_test_SOURCES) $(MolmecSupport_test_SOURCES) $(NMRStarFile_test_SOURCES) $(NucleicAcid_test_SOURCES) $(Nucleotide_test_SOURCES) $(NumericalIntegrator_test_SOURCES) $(NumericalSAS_test_SOURCES) $(Object_test_SOURCES) $(OoiEnergy_test_SOURCES) $(Options_test_SOURCES) $(PCMCavFreeEnergyProcessor_test_SOURCES) $(PDBAtom_test_SOURCES) $(PDBFile_test_SOURCES) $(PTE_test_SOURCES) $(Pair6_12InteractionEnergyProcessor_test_SOURCES) $(Pair6_12RDFIntegrator_test_SOURCES) $(PairExpInteractionEnergyProcessor_test_SOURCES) $(PairExpRDFIntegrator_test_SOURCES) $(ParameterSection_test_SOURCES) $(Parameters_test_SOURCES) $(Path_test_SOURCES) $(PeakList_test_SOURCES) $(Peak_test_SOURCES) $(Peptides_test_SOURCES) $(PersistenceManager_test_SOURCES) $(PersistentObject_test_SOURCES) $(PiecewiseFunction_test_SOURCES) $(PiecewisePolynomial_test_SOURCES) $(PierottiCavFreeEnergyProcessor_test_SOURCES) $(Plane3_test_SOURCES) $(PoissonBoltzmann_test_SOURCES) $(PreciseTime_test_SOURCES) $(PropertyManager_test_SOURCES) $(Protein_test_SOURCES) $(Quadruple_test_SOURCES) $(Quaternion_test_SOURCES) $(RDFIntegrator_test_SOURCES) $(RDFParameter_test_SOURCES) $(RDFSection_test_SOURCES) $(RTTI_test_SOURCES) $(RadialDistributionFunction_test_SOURCES) $(RandomAccessIterator_test_SOURCES) $(RandomCoilShiftProcessor_test_SOURCES) $(ReconstructFragmentProcessor_test_SOURCES) $(RegularData1D_test_SOURCES) $(RegularData2D_test_SOURCES) $(RegularData3D_test_SOURCES) $(RegularExpression_test_SOURCES) $(ReissCavFreeEnergyProcessor_test_SOURCES) $(Residue_test_SOURCES) $(ResourceFile_test_SOURCES) $(RuleEvaluator_test_SOURCES) $(SDFile_test_SOURCES) $(SecondaryStructure_test_SOURCES) $(Selectable_test_SOURCES) $(Selector_test_SOURCES) $(ShiftModel_test_SOURCES) $(ShiftModule_test_SOURCES) $(SimpleDescriptors_test_SOURCES) $(SmilesParser_test_SOURCES) $(SnapShotManager_test_SOURCES) $(SnapShot_test_SOURCES) $(Socket_test_SOURCES) $(SolventDescriptor_test_SOURCES) $(SolventParameter_test_SOURCES) $(Spectrum_test_SOURCES) $(Sphere3_test_SOURCES) $(StandardPredicates_test_SOURCES) $(StringHashMap_test_SOURCES) $(String_test1_SOURCES) $(String_test2_SOURCES) $(String_test3_SOURCES) $(String_test4_SOURCES) $(StructureMapper_test_SOURCES) $(Substring_test_SOURCES) $(Surface_test_SOURCES) $(System_test_SOURCES) $(TCPTransfer_test_SOURCES) $(TextPersistenceManager_test_SOURCES) $(TimeStamp_test_SOURCES) $(Timer_test_SOURCES) $(TrajectoryFile_test_SOURCES) $(TransformationApplicator_test_SOURCES) $(TransformationManager_test_SOURCES) $(TranslationApplicator_test_SOURCES) $(Triple_test_SOURCES) $(UhligCavFreeEnergyProcessor_test_SOURCES) $(Vector2_test_SOURCES) $(Vector3_test_SOURCES) $(Vector4_test_SOURCES) $(VersionInfo_test_SOURCES) $(XDRPersistenceManager_test_SOURCES) $(XYZFile_test_SOURCES)
+SOURCES = $(AmberFF_test_SOURCES) $(AnalyticalGeometry_test_SOURCES) $(AnalyticalSES_test_SOURCES) $(Angle_test_SOURCES) $(AnisotropyShiftProcessor_test_SOURCES) $(AssignShiftProcessor_test_SOURCES) $(AtomContainer_test_SOURCES) $(AtomIterator_test_SOURCES) $(AtomVector_test_SOURCES) $(Atom_test_SOURCES) $(AtomicContactEnergy_test_SOURCES) $(AutoDeletable_test_SOURCES) $(BinaryFileAdaptor_test_SOURCES) $(BitVector_test_SOURCES) $(Bond_test_SOURCES) $(Box3_test_SOURCES) $(Chain_test_SOURCES) $(CharmmFF_test_SOURCES) $(Circle3_test_SOURCES) $(ClassTest_test_SOURCES) $(ClaverieParameter_test_SOURCES) $(ClearShiftProcessor_test_SOURCES) $(ComposedEnergyProcessor_test_SOURCES) $(Composite_test1_SOURCES) $(Composite_test2_SOURCES) $(CreateSpectrumProcessor_test_SOURCES) $(DCDFile_test_SOURCES) $(DefaultProcessors_test_SOURCES) $(Descriptor_test_SOURCES) $(Directory_test_SOURCES) $(EFShiftProcessor_test_SOURCES) $(Embeddable_test_SOURCES) $(EnergyMinimizer_test_SOURCES) $(EnergyProcessor_test_SOURCES) $(Enumerator_test_SOURCES) $(ExpressionParser_test_SOURCES) $(Expression_test_SOURCES) $(FileSystem_test_SOURCES) $(File_test_SOURCES) $(ForEach_test_SOURCES) $(FragmentDB_test_SOURCES) $(Fragment_test_SOURCES) $(Function_test_SOURCES) $(GenericMolFile_test_SOURCES) $(GlobalKernel_test_SOURCES) $(GlobalTypes_test_SOURCES) $(Gradient_test_SOURCES) $(HINFile_test_SOURCES) $(HaighMallionShiftProcessor_test_SOURCES) $(HashGrid3_test_SOURCES) $(HashMap_test_SOURCES) $(HashSet_test_SOURCES) $(Hash_test_SOURCES) $(INIFile_test_SOURCES) $(JohnsonBoveyShiftProcessor_test_SOURCES) $(KernelPredicate_test_SOURCES) $(Limits_test_SOURCES) $(Line3_test_SOURCES) $(LineBasedFile_test_SOURCES) $(List_test_SOURCES) $(LogStream_test_SOURCES) $(MOL2File_test_SOURCES) $(MOLFile_test_SOURCES) $(MathsCommon_test_SOURCES) $(Matrix44_test_SOURCES) $(MolecularGraph_test_SOURCES) $(Molecule_test_SOURCES) $(MolmecSupport_test_SOURCES) $(NMRStarFile_test_SOURCES) $(NucleicAcid_test_SOURCES) $(Nucleotide_test_SOURCES) $(NumericalIntegrator_test_SOURCES) $(NumericalSAS_test_SOURCES) $(Object_test_SOURCES) $(OoiEnergy_test_SOURCES) $(Options_test_SOURCES) $(PCMCavFreeEnergyProcessor_test_SOURCES) $(PDBAtom_test_SOURCES) $(PDBFile_test_SOURCES) $(PTE_test_SOURCES) $(Pair6_12InteractionEnergyProcessor_test_SOURCES) $(Pair6_12RDFIntegrator_test_SOURCES) $(PairExpInteractionEnergyProcessor_test_SOURCES) $(PairExpRDFIntegrator_test_SOURCES) $(ParameterSection_test_SOURCES) $(Parameters_test_SOURCES) $(Path_test_SOURCES) $(Peak_test_SOURCES) $(Peptides_test_SOURCES) $(PersistenceManager_test_SOURCES) $(PersistentObject_test_SOURCES) $(PiecewiseFunction_test_SOURCES) $(PiecewisePolynomial_test_SOURCES) $(PierottiCavFreeEnergyProcessor_test_SOURCES) $(Plane3_test_SOURCES) $(PoissonBoltzmann_test_SOURCES) $(PreciseTime_test_SOURCES) $(PropertyManager_test_SOURCES) $(Protein_test_SOURCES) $(Quadruple_test_SOURCES) $(Quaternion_test_SOURCES) $(RDFIntegrator_test_SOURCES) $(RDFParameter_test_SOURCES) $(RDFSection_test_SOURCES) $(RTTI_test_SOURCES) $(RadialDistributionFunction_test_SOURCES) $(RandomAccessIterator_test_SOURCES) $(RandomCoilShiftProcessor_test_SOURCES) $(ReconstructFragmentProcessor_test_SOURCES) $(RegularData1D_test_SOURCES) $(RegularData2D_test_SOURCES) $(RegularData3D_test_SOURCES) $(RegularExpression_test_SOURCES) $(ReissCavFreeEnergyProcessor_test_SOURCES) $(Residue_test_SOURCES) $(ResourceFile_test_SOURCES) $(RuleEvaluator_test_SOURCES) $(SDFile_test_SOURCES) $(SecondaryStructure_test_SOURCES) $(Selectable_test_SOURCES) $(Selector_test_SOURCES) $(ShiftModel_test_SOURCES) $(ShiftModule_test_SOURCES) $(SimpleDescriptors_test_SOURCES) $(SmilesParser_test_SOURCES) $(SnapShotManager_test_SOURCES) $(SnapShot_test_SOURCES) $(Socket_test_SOURCES) $(SolventDescriptor_test_SOURCES) $(SolventParameter_test_SOURCES) $(Spectrum_test_SOURCES) $(Sphere3_test_SOURCES) $(StandardPredicates_test_SOURCES) $(StringHashMap_test_SOURCES) $(String_test1_SOURCES) $(String_test2_SOURCES) $(String_test3_SOURCES) $(String_test4_SOURCES) $(StructureMapper_test_SOURCES) $(Substring_test_SOURCES) $(Surface_test_SOURCES) $(System_test_SOURCES) $(TCPTransfer_test_SOURCES) $(TextPersistenceManager_test_SOURCES) $(TimeStamp_test_SOURCES) $(Timer_test_SOURCES) $(TrajectoryFile_test_SOURCES) $(TransformationApplicator_test_SOURCES) $(TransformationManager_test_SOURCES) $(TranslationApplicator_test_SOURCES) $(Triple_test_SOURCES) $(UhligCavFreeEnergyProcessor_test_SOURCES) $(Vector2_test_SOURCES) $(Vector3_test_SOURCES) $(Vector4_test_SOURCES) $(VersionInfo_test_SOURCES) $(XDRPersistenceManager_test_SOURCES) $(XYZFile_test_SOURCES)
 
 all: all-recursive
 
@@ -2051,9 +2042,6 @@ Parameters_test$(EXEEXT): $(Parameters_test_OBJECTS) $(Parameters_test_DEPENDENC
 Path_test$(EXEEXT): $(Path_test_OBJECTS) $(Path_test_DEPENDENCIES) 
 	@rm -f Path_test$(EXEEXT)
 	$(CXXLINK) $(Path_test_LDFLAGS) $(Path_test_OBJECTS) $(Path_test_LDADD) $(LIBS)
-PeakList_test$(EXEEXT): $(PeakList_test_OBJECTS) $(PeakList_test_DEPENDENCIES) 
-	@rm -f PeakList_test$(EXEEXT)
-	$(CXXLINK) $(PeakList_test_LDFLAGS) $(PeakList_test_OBJECTS) $(PeakList_test_LDADD) $(LIBS)
 Peak_test$(EXEEXT): $(Peak_test_OBJECTS) $(Peak_test_DEPENDENCIES) 
 	@rm -f Peak_test$(EXEEXT)
 	$(CXXLINK) $(Peak_test_LDFLAGS) $(Peak_test_OBJECTS) $(Peak_test_LDADD) $(LIBS)
@@ -2354,14 +2342,13 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PDBAtom_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PDBFile_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PTE_test.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Pair6_12InteractionEnergyProcessor.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Pair6_12RDFIntegrator.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Pair6_12InteractionEnergyProcessor_test.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Pair6_12RDFIntegrator_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PairExpInteractionEnergyProcessor_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PairExpRDFIntegrator_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ParameterSection_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Parameters_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Path_test.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PeakList_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Peak_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Peptides_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PersistenceManager_test.Po@am__quote@

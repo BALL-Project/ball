@@ -243,8 +243,7 @@ EXECUTABLES_NMR = \
 	ShiftModel_test\
 	ShiftModule_test\
 	Spectrum_test\
-	Peak_test\
-	PeakList_test
+	Peak_test
 
 AssignShiftProcessor_test_SOURCES=AssignShiftProcessor_test.C
 RandomCoilShiftProcessor_test_SOURCES=RandomCoilShiftProcessor_test.C
@@ -258,7 +257,6 @@ ShiftModel_test_SOURCES=ShiftModel_test.C
 ShiftModule_test_SOURCES=ShiftModule_test.C
 Spectrum_test_SOURCES=Spectrum_test.C
 Peak_test_SOURCES=Peak_test.C
-PeakList_test_SOURCES=PeakList_test.C
 
 EXECUTABLES_FORMATS =\
 	LineBasedFile_test\
@@ -357,8 +355,8 @@ ReissCavFreeEnergyProcessor_test_SOURCES=ReissCavFreeEnergyProcessor_test.C
 UhligCavFreeEnergyProcessor_test_SOURCES=UhligCavFreeEnergyProcessor_test.C
 PCMCavFreeEnergyProcessor_test_SOURCES=PCMCavFreeEnergyProcessor_test.C
 PierottiCavFreeEnergyProcessor_test_SOURCES=PierottiCavFreeEnergyProcessor_test.C
-Pair6_12RDFIntegrator_test_SOURCES=Pair6_12RDFIntegrator.C
-Pair6_12InteractionEnergyProcessor_test_SOURCES=Pair6_12InteractionEnergyProcessor.C
+Pair6_12RDFIntegrator_test_SOURCES=Pair6_12RDFIntegrator_test.C
+Pair6_12InteractionEnergyProcessor_test_SOURCES=Pair6_12InteractionEnergyProcessor_test.C
 PairExpInteractionEnergyProcessor_test_SOURCES=PairExpInteractionEnergyProcessor_test.C
 PairExpRDFIntegrator_test_SOURCES=PairExpRDFIntegrator_test.C
 
