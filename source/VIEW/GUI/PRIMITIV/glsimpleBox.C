@@ -1,12 +1,9 @@
-// $Id: glsimpleBox.C,v 1.5.4.1 2002/10/18 14:47:56 amoll Exp $
+// $Id: glsimpleBox.C,v 1.5.4.2 2002/11/05 15:37:06 amoll Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/glsimpleBox.h>
-#include <GL/gl.h>
-
 
 namespace BALL
 {
-
 	namespace VIEW
 	{
 

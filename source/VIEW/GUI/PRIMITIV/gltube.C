@@ -1,11 +1,9 @@
-// $Id: gltube.C,v 1.5.4.1 2002/10/18 14:47:57 amoll Exp $
+// $Id: gltube.C,v 1.5.4.2 2002/11/05 15:37:06 amoll Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/gltube.h>
-#include <GL/gl.h>
 
 namespace BALL
 {
-
 	namespace VIEW
 	{
 

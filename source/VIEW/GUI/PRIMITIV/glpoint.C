@@ -1,15 +1,12 @@
-// $Id: glpoint.C,v 1.6.4.2 2002/11/04 18:14:46 amoll Exp $
+// $Id: glpoint.C,v 1.6.4.3 2002/11/05 15:37:07 amoll Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/glpoint.h>
 #include <BALL/COMMON/rtti.h>
-#include <GL/gl.h>
 
 namespace BALL
 {
-
 	namespace VIEW
 	{
-
 
 		GLPoint::GLPoint()
 			throw()

@@ -1,12 +1,9 @@
-// $Id: glsphere.C,v 1.6.4.1 2002/10/18 14:47:57 amoll Exp $
+// $Id: glsphere.C,v 1.6.4.2 2002/11/05 15:37:06 amoll Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/glsphere.h>
-#include <GL/gl.h>
-
 
 namespace BALL
 {
-
 	namespace VIEW
 	{
 
@@ -35,8 +32,7 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<GLSphere>() << endl;
+				cout << "Destructing object " << (void *)this << " of class " << RTTI::getName<GLSphere>() << std::endl;
 			#endif 
 
 			destroy();
@@ -86,12 +82,12 @@ namespace BALL
 		bool GLSphere::draw(bool with_names)
 			throw()
 		{
-			if (hasProperty(GeometricObject::PROPERTY__OBJECT_HIDDEN) == true)
+			if (hasProperty(GeometricObject::PROPERTY__OBJECT_HIDDEN))
 			{
 				return true;
 			}
 
-			if (isSelected() == false)
+			if (!isSelected())
 			{
 				glColor4ub((unsigned char)getColor().getRed(),
 									 (unsigned char)getColor().getGreen(),

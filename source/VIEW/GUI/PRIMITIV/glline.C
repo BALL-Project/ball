@@ -1,11 +1,9 @@
-// $Id: glline.C,v 1.5.4.1 2002/10/18 14:47:55 amoll Exp $
+// $Id: glline.C,v 1.5.4.2 2002/11/05 15:35:26 amoll Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/glline.h>
-#include <GL/gl.h>
 
 namespace BALL
 {
-
 	namespace VIEW
 	{
 

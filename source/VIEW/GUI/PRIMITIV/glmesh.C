@@ -1,12 +1,9 @@
-// $Id: glmesh.C,v 1.5.4.3 2002/10/18 14:47:56 amoll Exp $
+// $Id: glmesh.C,v 1.5.4.4 2002/11/05 15:37:08 amoll Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/glmesh.h>
-#include <GL/gl.h>
-
 
 namespace BALL
 {
-
 	namespace VIEW
 	{
 
