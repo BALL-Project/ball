@@ -1,4 +1,4 @@
-// $Id: solventParameter.h,v 1.5 2001/07/16 23:58:52 amoll Exp $
+// $Id: solventParameter.h,v 1.6 2001/08/14 19:28:18 sturm Exp $
 
 #ifndef BALL_SOLVATION_SOLVENTPARAMETER_H
 #define BALL_SOLVATION_SOLVENTPARAMETER_H
@@ -42,9 +42,7 @@ namespace BALL
 		*/
 		SolventParameter() throw();
 
-		/** Detailed constructor 
-		*/
-		SolventParameter(Parameters& parameters) throw();
+		//SolventParameter(Parameters& parameters) throw();
 
 		/** Copy constructor 
 		*/
