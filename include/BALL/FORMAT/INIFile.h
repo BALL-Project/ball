@@ -1,4 +1,4 @@
-// $Id: INIFile.h,v 1.17 2001/04/17 14:08:41 amoll Exp $
+// $Id: INIFile.h,v 1.18 2001/04/21 20:30:35 amoll Exp $
 
 #ifndef BALL_FORMAT_INIFILE_H
 #define BALL_FORMAT_INIFILE_H
@@ -607,6 +607,11 @@ namespace BALL
 		/** Test if the given iterator is valid for this instance.
 		*/
 		bool isValid(const LineIterator& it) const;
+
+
+    /** Test if the given iterator is valid for this instance.
+    */
+    bool isValid(const Section_iterator& it) const;
 
 		//@}
 
