@@ -1,4 +1,4 @@
-// $Id: fragmentDB.h,v 1.8 2000/08/30 19:58:26 oliver Exp $
+// $Id: fragmentDB.h,v 1.9 2000/09/18 14:37:06 oliver Exp $
 
 #ifndef BALL_STRUCTURE_FRAGMENTDB_H
 #define BALL_STRUCTURE_FRAGMENTDB_H
@@ -209,7 +209,7 @@ namespace BALL
 		*/
 		const String&	getDefaultNamingStandard() const;
 
-		/**	Return an array containing all naming maps.
+		/**	Return a hash map containing all naming maps.
 		*/
 		StringHashMap<StringHashMap<String>*>&	getNamingStandards();
 
