@@ -1,4 +1,4 @@
-// $Id: objectSelector.h,v 1.3.4.2 2002/10/23 15:20:26 amoll Exp $
+// $Id: objectSelector.h,v 1.3.4.3 2002/11/09 20:57:51 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_OBJECTSELECTOR_H
 #define BALL_MOLVIEW_FUNCTOR_OBJECTSELECTOR_H
@@ -7,16 +7,12 @@
 #	include <BALL/MOLVIEW/FUNCTOR/atomBondModelBaseProcessor.h>
 #endif
 
-#ifndef BALL_MOLVIEW_COMMON_H
-# include <BALL/MOLVIEW/COMMON/common.h>
-#endif
-
 namespace BALL
 {
 	namespace MOLVIEW
 	{
 		/** ObjectSelector class.
-				The class ObjectSelector is responsible for selecting or deselecting
+				The class ObjectSelector is responsible for selecting
 				\Ref{Composite} objects. The method \Ref{Selectable::select} or 
 				\Ref{Selectable::deselect} will be called from each processed \Ref{Composite} object
 				according to the state of {\em *this} objectSelector.
@@ -55,8 +51,7 @@ namespace BALL
 					@return      ObjectSelector new constructed objectSelector copied from {\em selector}
 					@see         AtomBondModelBaseProcessor
 			*/
-			ObjectSelector
-				(const ObjectSelector& selector, bool deep = true)
+			ObjectSelector(const ObjectSelector& selector, bool deep = true)
 				throw();
 
 			//@}
@@ -145,35 +140,6 @@ namespace BALL
 				throw();
 			
 			//@}
-			/**	@name	Accessors: inspectors and mutators 
-					With these two methods {\em *this} objectSelector can be 
-					switched between selection and deselection of processed objects.
-					{\em *this} objectSelector is set to select objects initially.
-					@see   Selectable
-			*/
-			//@{
-
-			/** Select objects.
-					Change the state of {\em *this} objectSelector to select processed
-					objects. The method \Ref{Selectable::select} will be called for every
-					processed objects.
-					@see   deselect
-					@see   Selectable
-			*/
-			void select()
-				throw();
-
-			/** Deselect objects.
-					Change the state of {\em *this} objectSelector to deselect processed
-					objects. The method \Ref{Selectable::deselect} will be called for every
-					processed objects.
-					@see   select
-					@see   Selectable
-			*/
-			void deselect()
-				throw();
-
-			//@}
 			/**	@name Processor specific methods
 			*/
 			//@{
@@ -204,11 +170,10 @@ namespace BALL
 			*/
 			virtual bool finish();
 
-			
 			/**	Operator method.
 					This method iterates over each \Ref{Composite} object reachable in the 
 					\Ref{Composite} tree. If {\em composite} is of kind \Ref{Atom} this atom is
-					selected or deselected according to the state of {\em *this} objectSelector
+					selected according to the state of {\em *this} objectSelector
 					and is inserted with the method \Ref{insertAtom_}.
 					@param  composite the \Ref{Composite} object that will be processed
 					@return Processor::Result the result of {\em *this} geometricObjectSelectot
@@ -218,47 +183,14 @@ namespace BALL
 					@see    start
 					@see    finish
 					@see    insertAtom_
-					@see    Composite
-					@see    Atom
 			*/
 			virtual Processor::Result operator() (Composite& composite);
-			//@}
-
-			/**	@name	Predicates
-					These methods allow inspection of the state of {\em *this} objectSelector.
-			*/
-			//@{
-
-			/** Test if selection mode is enabled.
-					Check if the state of {\em *this} objectSelector is set to
-					select objects.
-					@return  bool {\tt true} if the state of {\em *this} objectSelector is set to select objects
-					@see     select
-					@see     deselect
-					@see     isDeselectionMode
-					@see     Selectable
-			*/
-			bool isSelectionMode()
-				throw();
-
-			/** Test if deselection mode is enabled.
-					Check if the state of {\em *this} objectSelector is set to
-					deselect objects.
-					@return  bool {\tt true} if the state of {\em *this} objectSelector is set to deselect objects
-					@see     select
-					@see     deselect
-					@see     isSelectionMode
-					@see     Selectable
-			*/
-			bool isDeselectionMode()
-				throw();
 
 			//@}
-
-
 			/**	@name	debuggers and diagnostics
 			*/
 			//@{
+
 			/** Internal value dump.
 					Dump the current state of {\em *this} objectSelector to 
 					the output ostream {\em s} with dumping depth {\em depth}.
@@ -267,23 +199,22 @@ namespace BALL
 					@param   depth the dumping depth
 					@see     AtomBondModelBaseProcessor
 			*/
-			virtual void dump
-				(std::ostream& s = std::cout, Size depth = 0) const
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
+
 			//@}
-
-			
-			private:
-
-			bool selection_;
 		};
 
-#			ifndef BALL_NO_INLINE_FUNCTIONS
-#				include <BALL/MOLVIEW/FUNCTOR/objectSelector.iC>
-#			endif
+		/** Deselector class
+		 		This class behaves in the same way as its parent class ObjectSelector, but
+				it deselects atoms and bonds.
+		*/
+		class ObjectDeselector : public ObjectSelector
+		{
+			virtual bool finish();
+		};
 
 	} // namespace MOLVIEW
-
 } // namespace BALL
 
 #endif // BALL_MOLVIEW_FUNCTOR_OBJECTSELECTOR_H

@@ -1,10 +1,8 @@
-// $Id: objectSelector.C,v 1.3.4.2 2002/10/23 15:20:31 amoll Exp $
+// $Id: objectSelector.C,v 1.3.4.3 2002/11/09 20:58:37 amoll Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/objectSelector.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/bond.h>
-
-using namespace std;
 
 namespace BALL
 {
@@ -13,16 +11,13 @@ namespace BALL
 
 		ObjectSelector::ObjectSelector()
 			throw()
-			: AtomBondModelBaseProcessor(),
-				selection_(true)
+			: AtomBondModelBaseProcessor()
 		{
 		}
 
-		ObjectSelector::ObjectSelector
-			(const ObjectSelector &selector, bool deep)
+		ObjectSelector::ObjectSelector(const ObjectSelector &selector, bool deep)
 			throw()
-			: AtomBondModelBaseProcessor(selector, deep),
-				selection_(selector.selection_)
+			: AtomBondModelBaseProcessor(selector, deep)
 		{
 		}
 
@@ -31,7 +26,7 @@ namespace BALL
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
-			 << " of class " << RTTI::getName<ObjectSelector>() << endl;
+						 << " of class " << RTTI::getName<ObjectSelector>() << std::endl;
 			#endif 
 
 			destroy();
@@ -41,8 +36,6 @@ namespace BALL
 			throw()
 		{
 			AtomBondModelBaseProcessor::clear();
-
-			selection_ = true;
 		}
 
 		void ObjectSelector::destroy()
@@ -54,15 +47,12 @@ namespace BALL
 			throw()
 		{
 			AtomBondModelBaseProcessor::set(selector, deep);
-
-			selection_ = selector.selection_;
 		}
 
 		const ObjectSelector& ObjectSelector::operator = (const ObjectSelector &selector)
 			throw()
 		{
 			set(selector);
-
 			return *this;
 		}
 
@@ -76,17 +66,11 @@ namespace BALL
 			throw()
 		{
 			AtomBondModelBaseProcessor::swap(selector);
-
-			bool tmp = selection_;
-			selection_ = selector.selection_;
-			selector.selection_ = tmp;
 		}
 
 		bool ObjectSelector::start()
 		{
-			getSearcher_().clear();
-
-			return AtomBondModelBaseProcessor::start();
+			return true; 
 		}
 				
 		bool ObjectSelector::finish()
@@ -111,31 +95,14 @@ namespace BALL
 					second_atom = const_cast<Atom*>(bond_ptr->getSecondAtom());
 
 					// use only atoms with greater handles than first atom
-					if (*first_atom < *second_atom)
+					// select bond only if second atom is selected too
+					if (*first_atom < *second_atom  && getAtomSet_().has(second_atom))
 					{
-						// select bond only if second atom is selected too
-						if (getAtomSet_().has(second_atom))
-						{
-							if (selection_ == true)
-							{
-								bond_ptr->select();
-							}
-							else
-							{
-								bond_ptr->deselect();
-							}
-						}
+						bond_ptr->select();
 					}
 				}
 
-				if (selection_ == true)
-				{
-					first_atom->select();
-				}
-				else
-				{
-					first_atom->deselect();
-				}
+				first_atom->select();
 			}
 			
 			return true;
@@ -143,22 +110,13 @@ namespace BALL
 				
 		Processor::Result ObjectSelector::operator() (Composite &composite)
 		{
-			// composite is an atom ?
+			// composite is notnot  an atom ?
 			if (!RTTI::isKindOf<Atom>(composite))
 			{
 				return Processor::CONTINUE;
 			}
 
 			Atom *atom = RTTI::castTo<Atom>(composite);
-
-			if (selection_ == true)
-			{
-				atom->select();
-			}
-			else
-			{
-				atom->deselect();
-			}
 
 			// collect atom with geometric object for selection
 			insertAtom_(atom);
@@ -174,22 +132,45 @@ namespace BALL
 			BALL_DUMP_DEPTH(s, depth);
 			BALL_DUMP_HEADER(s, this, this);
 
-			BALL_DUMP_DEPTH(s, depth);
-			cout << "use Selection Color: " << ((selection_ == true) ? "Yes" : "No") << endl;
-
-			BALL_DUMP_DEPTH(s, depth);
-			cout << "use Object Color:    " << ((selection_ == false) ? "Yes" : "No") << endl;
-
 			AtomBondModelBaseProcessor::dump(s, depth + 1);
 
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
 
+		bool ObjectDeselector::finish()
+		{
+			Atom *first_atom = 0;
+			Atom *second_atom = 0;
+			Bond *bond_ptr = 0;
+			AtomBondIterator bond_it;
 
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/FUNCTOR/objectSelector.iC>
-#		endif
+			List<Atom*>::Iterator list_iterator;
+
+			// for all used atoms
+			for (list_iterator = getAtomList_().begin();
+					 list_iterator != getAtomList_().end(); ++list_iterator)
+			{
+				first_atom = *list_iterator;
+
+				// for all bonds connected from first- to second atom
+				BALL_FOREACH_ATOM_BOND(*first_atom, bond_it)
+				{
+					bond_ptr = &(*bond_it);
+					second_atom = const_cast<Atom*>(bond_ptr->getSecondAtom());
+
+					// use only atoms with greater handles than first atom
+					// select bond only if second atom is selected too
+					if (*first_atom < *second_atom  && getAtomSet_().has(second_atom))
+					{
+						bond_ptr->deselect();
+					}
+				}
+
+				first_atom->deselect();
+			}
+			
+			return true;
+		}
 
 	} // namespace MOLVIEW
-
 } // namespace BALL
