@@ -1,4 +1,4 @@
-// $Id: Pair6_12InteractionEnergyProcessor_test.C,v 1.2 2000/10/06 11:51:56 anker Exp $
+// $Id: Pair6_12InteractionEnergyProcessor_test.C,v 1.3 2000/10/06 15:24:06 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Pair6_12InteractionEnergyProcessor_test.C,v 1.2 2000/10/06 11:51:56 anker Exp $")
+START_TEST(class_name, "$Id: Pair6_12InteractionEnergyProcessor_test.C,v 1.3 2000/10/06 15:24:06 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -69,7 +69,8 @@ CHECK(Pair6_12InteractionEnergyProcessor::finish())
 
 	S.apply(proc);
 	double val = proc.getEnergy();
-	TEST_REAL_EQUAL(val, 0.01)
+	Log.info() << "val = " << val << endl;
+	TEST_REAL_EQUAL(val, -6.027207050)
 RESULT
 
 CHECK(Pair6_12InteractionEnergyProcessor::isValid())
