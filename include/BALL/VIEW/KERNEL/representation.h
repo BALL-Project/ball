@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.10 2003/12/02 14:43:34 amoll Exp $
+// $Id: representation.h,v 1.11 2003/12/09 14:36:33 amoll Exp $
 
 #ifndef  BALL_VIEW_GUI_KERNEL_REPRESENTATION_H
 #define  BALL_VIEW_GUI_KERNEL_REPRESENTATION_H
@@ -37,10 +37,10 @@ namespace BALL
 		/** Representation
 		 		A Representation is a collection of geometric objects for a group of 
 				composites and a given model, for example a surface.
-				An instance of Representation manages the memory for the geometric objects,
-				the model processor. So when a Representation is destroyed, so are its geometric objects
+				An instance of Representation manages the memory for the geometric objects, the ColorProcessor and 
+				the ModelProcessor. So when a Representation is destroyed, so are its geometric objects
 				and processors. 
-				It stores the drawing precision.
+				It stores the drawing precision and mode.
 				\ingroup ViewKernelGeometricPrimitives
 		*/
 		class Representation
@@ -57,8 +57,13 @@ namespace BALL
 			/// Properties
 			enum Properties
 			{
+				///
 				PROPERTY__HIDDEN = 0,
+				
+				///
 				PROPERTY__ALWAYS_FRONT,
+				
+				///
 				PROPERTY__IS_COORDINATE_SYSTEM
 			};
 				

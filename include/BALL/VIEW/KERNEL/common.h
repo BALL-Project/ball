@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.15 2003/11/23 22:55:13 amoll Exp $
+// $Id: common.h,v 1.16 2003/12/09 14:34:25 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -87,7 +87,7 @@ enum DrawingPrecision
 	///
 	DRAWING_PRECISION_HIGH,
 
-	///
+	/// UNUSED AT THE MOMENT !
 	DRAWING_PRECISION_ULTRA
 };
 
@@ -134,6 +134,10 @@ enum ModelType
 
 	/// defines the property for the model: H-Bonds
 	MODEL_HBONDS,
+
+	// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	// add new model types before this comment!!!!
+	// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 	
 	/// defines the property for the model: Label
 	MODEL_LABEL,
@@ -172,6 +176,10 @@ enum ColoringMethod
 	///
 	COLORING_OCCUPANCY,
 
+	// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	// add new coloring types before this comment!!!!
+	// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	
 	///
 	COLORING_CUSTOM,
 
@@ -179,28 +187,33 @@ enum ColoringMethod
 	COLORING_UNKNOWN
 };
 
-///
+/// Get a name for a ModelType
 String getModelName(ModelType type) 
 	throw();
 
-///
+/// Get a name for a ColoringMethod
 String getColoringName(ColoringMethod type) 
 	throw();
 
 
-/// Enumeration of Events
+/** Enumeration of Events
+ 		These events are used to communicate between different threads.
+		Have a look at QWidget::customEvent(QCustomEvent) to learn about
+		QT and its events concept. This enum is used to give every type
+		of derived QCustomEvent its individual type id.
+*/
 enum EventsIDs
 {
-	///
+	/// see SceneUpdateEvent
 	SCENE_UPDATE_EVENT = 60000,
 
-	///
+	/// see Mainframe::SimulationThreadFinished
 	SIMULATION_THREAD_FINISHED_EVENT,
 
-	///
+	/// see SimulationOutput
 	SIMULATION_OUTPUT_EVENT,
 
-	///
+	/// see UpdateCompositeEvent
 	UPDATE_COMPOSITE_EVENT
 };
 	
