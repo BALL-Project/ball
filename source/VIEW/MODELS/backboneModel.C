@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.17.2.5 2004/12/21 14:44:42 amoll Exp $
+// $Id: backboneModel.C,v 1.17.2.6 2004/12/21 17:21:15 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -10,6 +10,10 @@
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/residue.h>
 #include <BALL/KERNEL/forEach.h>
+
+#include <BALL/VIEW/PRIMITIVES/line.h>
+#include <BALL/MATHS/analyticalGeometry.h>
+#include <BALL/MATHS/matrix44.h>
 
 #include <algorithm>
 
@@ -237,6 +241,8 @@ namespace BALL
 		void AddBackboneModel::buildGraphicalRepresentation_(Size start, Size end)
 			throw(Exception::OutOfMemory)
 		{
+have_start_point_ = false;
+
 			if (spline_points_.size() == 0) return;
 			if (spline_points_.size() != atoms_of_spline_points_.size())
 			{
@@ -252,6 +258,7 @@ namespace BALL
 			}
 			else
 			{
+				/*
 				// create sphere for the point
 				Sphere* sphere = new Sphere;
 				if (!sphere) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Sphere));
@@ -260,10 +267,110 @@ namespace BALL
 				sphere->setPosition(last_point_);
 				sphere->setComposite(atoms_of_spline_points_[start]);
 				geometric_objects_.push_back(sphere);
+				*/
 			}
 
-			for (Position p = start; p < end; p++)
+ 			float slides = 8.0 + drawing_precision_ * 8.0;
+			vector<Vector3> points;
+			Vector3 dir = spline_points_[start + 1] - last_point_;
+			Vector3 r = dir % Vector3(1,0,0);
+			if (Maths::isZero(r.getSquareLength())) 
+			{ 
+				r = dir % Vector3(0,1,0);
+				if (Maths::isZero(r.getSquareLength())) 
+				{
+					r = dir % Vector3(0,0,1);
+				}
+			}
+			r.normalize();
+			r *= tube_radius_;
+
+			Vector3 x(tube_radius_, 0, 0);
+			
+			Matrix4x4 m;
+			m.setRotation(Angle(360.0 / (slides), false), Vector3(0,1,0));
+			points.push_back(last_point_ + x);
+			// initialise a first set of points in a circle around the start position
+			for (float p = 0; p < slides; p++)
 			{
+				x = m * x;
+				points.push_back(last_point_ + x);
+			}
+			// add also a dummy for closing of ring
+			points.push_back(points[0]);
+
+			for (float p = 0; p < points.size() - 1; p++)
+			{
+				Line* line = new Line();
+				line->setVertex1(points[(Size)p]);
+				line->setVertex2(points[(Size)p+1]);
+				geometric_objects_.push_back(line);
+			}
+
+				
+			// iterate over all spline_points_
+			for (Position p = start + 1; p < end; p++)
+			{
+				Vector3 point 	= spline_points_[p];
+				Vector3 dir_new = spline_points_[p + 1] - point;
+				Vector3 r_new = dir_new % Vector3(1,0,0);
+				if (Maths::isZero(r.getSquareLength())) 
+				{ 
+					r_new = dir_new % Vector3(0,1,0);
+					if (Maths::isZero(r.getSquareLength())) 
+					{
+						r_new = dir_new % Vector3(0,0,1);
+					}
+				}
+				r_new.normalize();
+				r_new *= tube_radius_;
+
+				Angle angle;
+				GetAngle(r, r_new, angle);
+				Matrix4x4 m;
+				m.setRotation(angle, r);
+				r = m * r;
+
+
+				{
+					Line* line = new Line();
+					line->setVertex1(spline_points_[p+1]);
+					line->setVertex2(point);
+ 					geometric_objects_.push_back(line);
+				}
+
+				/*
+				if (!Maths::isZero(r_new.getSquareLength()))
+				{
+					r.normalize();
+					r *= tube_radius_ * 10;
+					r = r_new;
+					dir = dir_new;
+				}
+				*/
+
+				/*
+				for (float p = 0; p < slides; p++)
+				{
+					Vector3 rv(r.x * cos((360.0/slides)*p), 
+										 r.y * sin((360.0/slides)*p), 
+										 0);
+
+					Line* line = new Line();
+					line->setVertex1(points[(Size)p]);
+					points[(Size)p] = (point + rv);
+					line->setVertex2(points[(Size)p]);
+ 					geometric_objects_.push_back(line);
+				}
+				*/
+
+				Line* line = new Line();
+				line->setVertex1(point);
+				line->setVertex2(point + r * 10.0);
+ 				geometric_objects_.push_back(line);
+
+
+				/*
 				// build tube connection to the last point
 				Tube* tube = new Tube;
 				if (!tube) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Tube));
@@ -283,6 +390,7 @@ namespace BALL
 				sphere->setComposite(atoms_of_spline_points_[p]);
 				geometric_objects_.push_back(sphere);
 				last_point_ = spline_points_[p];
+				*/
 			}
 
 			have_start_point_ = true;
