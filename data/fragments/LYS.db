@@ -79,6 +79,7 @@
 		<node>LYS-M
 			<node>Properties
 				<node>C_TERMINAL</node>
+				<node>N_TERMINAL</node>
 			</node>
 		</node>
 		<node>LYS-C
