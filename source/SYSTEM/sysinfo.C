@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sysinfo.C,v 1.4 2005/01/25 15:14:29 amoll Exp $
+// $Id: sysinfo.C,v 1.5 2005/01/25 17:15:50 amoll Exp $
 //
 
 #include <BALL/SYSTEM/sysinfo.h>
@@ -19,59 +19,104 @@ namespace BALL
 	namespace SysInfo
 	{
 
-		long getAvailableMemory()
+		float getAvailableMemory()
 		{
-			long mem = getFreeMemory();
+			float mem = getFreeMemory();
 #ifndef BALL_PLATFORM_WINDOWS
 			mem += getBufferdMemory();
 #endif
 			return mem;
 		}
 
-		long getFreeMemory()
+		float getFreeMemory()
 		{
 #ifdef BALL_PLATFORM_WINDOWS
 			/*
 			MEMORYSTATUS ms;
 			GlobalMemoryStatus (&ms);
-			return (long) ms.dwAvailPhys;
+			return (float) ms.dwAvailPhys;
 			*/
 			MEMORYSTATUSEX statex;
 			GlobalMemoryStatusEx (&statex);
-			return (long) statex.ullAvailPhys
+			return (float) statex.ullAvailPhys
 #else
+			try
+			{
+				File cpuinfo("/proc/meminfo");
+				char buffer[1024];
+				String line;
+				while (!cpuinfo.eof())
+				{
+					cpuinfo.getline(buffer, 1024);
+					line.assign(buffer);
+					if (line.hasPrefix("MemFree:"))
+					{
+						line = line.after(":");
+						line.trimLeft();
+						line = line.before(" ");
+						return line.toFloat() * 1024;
+					}
+				}
+			}
+			catch(...)
+			{
+			}
+
+			// sysinfo seems to return somewhat unsane values, but better than nothing...
 			struct sysinfo info;
-			long result = sysinfo(&info);
+			float result = sysinfo(&info);
 			if (result == -1) return result;
 			return info.freeram;
 #endif
 		}
 
-		long getTotalMemory()
+		float getTotalMemory()
 		{
 #ifdef BALL_PLATFORM_WINDOWS
 			/*
 			MEMORYSTATUS ms;
 			GlobalMemoryStatus (&ms);
-			return (long) ms.dwTotalPhys;
+			return (float) ms.dwTotalPhys;
 			*/
  			MEMORYSTATUSEX statex;
 			GlobalMemoryStatusEx (&statex);
-			return (long) statex.ullFullPhys
+			return (float) statex.ullFullPhys
 #else
 			struct sysinfo info;
-			long result = sysinfo(&info);
+			float result = sysinfo(&info);
 			if (result == -1) return result;
 			return info.totalram;
 #endif
 		}
 
-		long getBufferdMemory()
+		float getBufferdMemory()
 		{
 #ifdef BALL_PLATFORM_WINDOWS
 #else
+			try
+			{
+				File cpuinfo("/proc/meminfo");
+				char buffer[1024];
+				String line;
+				while (!cpuinfo.eof())
+				{
+					cpuinfo.getline(buffer, 1024);
+					line.assign(buffer);
+					if (line.hasPrefix("Cached:"))
+					{
+						line = line.after(":");
+						line.trimLeft();
+						line = line.before(" ");
+						return line.toFloat() * 1024;
+					}
+				}
+			}
+			catch(...)
+			{
+			}
+
 			struct sysinfo info;
-			long result = sysinfo(&info);
+			float result = sysinfo(&info);
 			if (result == -1) return result;
 			return info.bufferram;
 #endif
@@ -83,7 +128,7 @@ namespace BALL
 			return -1;
 #else
 			struct sysinfo info;
-			long result = sysinfo(&info);
+			float result = sysinfo(&info);
 			if (result == -1) return result;
 			return info.uptime;
 #endif
@@ -125,15 +170,15 @@ namespace BALL
 		}
 
 
-		long getFreeSwapSpace()
+		float getFreeSwapSpace()
 		{
 #ifdef BALL_PLATFORM_WINDOWS
  			MEMORYSTATUSEX statex;
 			GlobalMemoryStatusEx (&statex);
-			return (long) statex.ullAvailPageFile;
+			return (float) statex.ullAvailPageFile;
 #else
 			struct sysinfo info;
-			long result = sysinfo(&info);
+			float result = sysinfo(&info);
 			if (result == -1) return result;
 			return info.freeswap;
 #endif

@@ -1,19 +1,16 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Sysinfo_test.C,v 1.6 2005/01/25 16:35:11 amoll Exp $
+// $Id: Sysinfo_test.C,v 1.7 2005/01/25 17:15:39 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
 ///////////////////////////
-
 #include <BALL/SYSTEM/sysinfo.h>
-
 #include <BALL/COMMON/limits.h>
-
 ///////////////////////////
 
-START_TEST(SysInfo, "$Id: Sysinfo_test.C,v 1.6 2005/01/25 16:35:11 amoll Exp $")
+START_TEST(SysInfo, "$Id: Sysinfo_test.C,v 1.7 2005/01/25 17:15:39 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -24,64 +21,75 @@ using namespace BALL::SysInfo;
 	
 CHECK(getFreeMemory())
 	TEST_EQUAL(getFreeMemory() > 0.0, true)
-//  	Log.error() <<getFreeMemory() << std::endl;
+// Log.error() <<getFreeMemory() << std::endl;
 RESULT		
+
 
 CHECK(getAvailableMemory())
 	TEST_EQUAL(getAvailableMemory() > 0.0, true)
-//   	Log.error() <<getAvailableMemory() << std::endl;
+// Log.error() <<getAvailableMemory() << std::endl;
 RESULT		
 
 
 CHECK(getTotalMemory())
 	TEST_EQUAL(getTotalMemory() > 0, true)
 	TEST_REAL_EQUAL(getTotalMemory(), getTotalMemory())
-// 	Log.error() <<getTotalMemory() << std::endl;
+//    	Log.error() <<getTotalMemory() << std::endl;
 RESULT		
 
+
 CHECK(getBufferdMemory())
-	long bufferd = getBufferdMemory();
+	float bufferd = getBufferdMemory();
 	TEST_EQUAL(bufferd > 0 || bufferd == -1, true)
-// 	Log.error() <<getBufferdMemory() << std::endl;
+//    	Log.error() <<getBufferdMemory() << std::endl;
 RESULT		
+
 
 CHECK(getFreeSwapSpace())
 	TEST_EQUAL(getFreeSwapSpace() >= 0, true)
-// 	Log.error() <<getFreeSwapSpace() << std::endl;
+//    	Log.error() <<getFreeSwapSpace() << std::endl;
 RESULT		
 
 
 CHECK(getUptime())
 	float uptime = getUptime();
 	TEST_EQUAL(uptime > 0 || uptime == -1, true)
-// 	Log.error() <<getUptime() << std::endl;
+//    	Log.error() <<getUptime() << std::endl;
 RESULT		
+
 
 CHECK(getNumberOfProcessors())
 	TEST_EQUAL(getNumberOfProcessors() >= 1, true)
-// 	Log.error() <<getNumberOfProcessors() << std::endl;
+ 	Log.error() <<getNumberOfProcessors() << std::endl;
 RESULT		
 
+ // doesnt work under Linux, no idea why: ????????? AM
 /*
 CHECK(Extra1)
-	TEST_EQUAL(getFreeMemory() > 0, true)
-	Index i1 = getFreeMemory() + getBufferdMemory();
-	Log.error() << std::endl;
-	Log.error() << i1 << std::endl;
-	double* d = new double[100000000];
-	sleep(1);
-	Index i2 = getFreeMemory() + getBufferdMemory();
-	Log.error() <<i2 << std::endl;
+	float i1 = getAvailableMemory();
+	i1 *= 0.9;
+	char* d = new char[(long) i1];
+	float i2 = getAvailableMemory();
 	TEST_EQUAL(i1 > i2, true);
 	delete[] d;
 RESULT		
 */
 
-CHECK(Extra1)
+
+CHECK(Extra2)
 	float i1 = getAvailableMemory();
-	i1 *= 0.9;
-	char* c = new char[i1];
+ 	i1 *= 0.9;
+	char* c = new char[(long)i1];
 	delete[] c;
+RESULT
+
+
+CHECK(Extra3)
+	float i1 = getAvailableMemory();
+ 	i1 *= 1.1;
+	char* c = 0;
+	TEST_EXCEPTION(Exception::OutOfMemory,c = new char[(long)i1]);
+	if (c != 0) delete[] c;
 RESULT
 
 /////////////////////////////////////////////////////////////
