@@ -1,4 +1,4 @@
-// $Id: glBallAndStickModel.C,v 1.3 2001/01/26 00:43:52 amoll Exp $
+// $Id: glBallAndStickModel.C,v 1.4 2001/05/13 15:02:40 hekl Exp $
 
 #include <BALL/MOLVIEW/GUI/FUNCTOR/glBallAndStickModel.h>
 
@@ -13,12 +13,14 @@ namespace BALL
 
 			
 		AddGLBallAndStickModel::AddGLBallAndStickModel()
+			throw()
 			: AddBallAndStickModel()
 		{
 		}
 
 		AddGLBallAndStickModel::AddGLBallAndStickModel
 			(const AddGLBallAndStickModel& rAddGLBallAndStickModel, bool deep)
+			throw()
 			: AddBallAndStickModel(rAddGLBallAndStickModel, deep)
 		{
 		}

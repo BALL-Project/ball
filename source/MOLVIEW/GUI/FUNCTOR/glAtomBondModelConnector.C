@@ -1,4 +1,4 @@
-// $Id: glAtomBondModelConnector.C,v 1.2 2000/12/12 16:19:34 oliver Exp $
+// $Id: glAtomBondModelConnector.C,v 1.3 2001/05/13 15:02:40 hekl Exp $
 
 #include <BALL/MOLVIEW/GUI/FUNCTOR/glAtomBondModelConnector.h>
 
@@ -10,12 +10,14 @@ namespace BALL
 	namespace MOLVIEW
 	{
 		GLAtomBondModelConnector::GLAtomBondModelConnector()
+			throw()
 			:	AtomBondModelConnector()
 		{
 		}
 
 		GLAtomBondModelConnector::GLAtomBondModelConnector
-			(const AtomBondModelConnector& connector, bool deep)
+			(const GLAtomBondModelConnector& connector, bool deep)
+			throw()
 				:	AtomBondModelConnector(connector, deep)
 		{
 		}

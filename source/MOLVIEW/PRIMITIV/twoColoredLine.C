@@ -1,4 +1,4 @@
-// $Id: twoColoredLine.C,v 1.8 2001/02/04 16:19:04 hekl Exp $
+// $Id: twoColoredLine.C,v 1.9 2001/05/13 15:02:41 hekl Exp $
 
 #include <BALL/MOLVIEW/PRIMITIV/twoColoredLine.h>
 
@@ -11,7 +11,8 @@ namespace BALL
 	{
 		
 		TwoColoredLine::TwoColoredLine()
-			:	VIEW::GeometricObject(),
+			throw()
+			:	GeometricObject(),
 				ColorExtension2(),
 				Vertex2()
 		{
@@ -19,15 +20,17 @@ namespace BALL
 
 		TwoColoredLine::TwoColoredLine
 			(const TwoColoredLine& two_colored_line, bool deep)
-			:	VIEW::GeometricObject(two_colored_line, deep),
+			throw()
+			:	GeometricObject(two_colored_line, deep),
 				ColorExtension2(two_colored_line),
 				Vertex2(two_colored_line)
 		{
 		}
 
 		TwoColoredLine::TwoColoredLine
-			(const VIEW::GeometricObject& geometric_object)
-			:	VIEW::GeometricObject(geometric_object),
+			(const GeometricObject& geometric_object)
+			throw()
+			:	GeometricObject(geometric_object),
 				ColorExtension2(),
 				Vertex2()
 		{
@@ -47,7 +50,7 @@ namespace BALL
 		void TwoColoredLine::clear()
 			throw()
 		{
-			VIEW::GeometricObject::clear();
+			GeometricObject::clear();
 			ColorExtension2::clear();
 			Vertex2::clear();
 		}
@@ -55,32 +58,36 @@ namespace BALL
 		void TwoColoredLine::destroy()
 			throw()
 		{
-			VIEW::GeometricObject::destroy();
+			GeometricObject::destroy();
 			ColorExtension2::destroy();
 			Vertex2::destroy();
 		}
 
 		void TwoColoredLine::set(const TwoColoredLine& two_colored_line, bool deep)
+			throw()
 		{
-			VIEW::GeometricObject::set(two_colored_line, deep);
+			GeometricObject::set(two_colored_line, deep);
 			ColorExtension2::set(two_colored_line);
 			Vertex2::set(two_colored_line);
 		}
 
 		const TwoColoredLine& TwoColoredLine::operator = (const TwoColoredLine &two_colored_line)
+			throw()
 		{
 			set(two_colored_line);
 			return *this;
 		}
 
 		void TwoColoredLine::get(TwoColoredLine& two_colored_line, bool deep) const
+			throw()
 		{
 			two_colored_line.set(*this, deep);
 		}
 
 		void TwoColoredLine::swap(TwoColoredLine& two_colored_line)
+			throw()
 		{
-			VIEW::GeometricObject::swap(two_colored_line);
+			GeometricObject::swap(two_colored_line);
 			ColorExtension2::swap(two_colored_line);
 			Vertex2::swap(two_colored_line);
 		}
@@ -88,7 +95,7 @@ namespace BALL
 		bool TwoColoredLine::isValid() const
 			throw()
 		{
-			return (VIEW::GeometricObject::isValid());
+			return (GeometricObject::isValid());
 		}
 
 		void TwoColoredLine::dump(ostream& s, Size depth) const
@@ -99,7 +106,7 @@ namespace BALL
 			BALL_DUMP_DEPTH(s, depth);
 			BALL_DUMP_HEADER(s, this, this);
 
-			VIEW::GeometricObject::dump(s, depth + 1);
+			GeometricObject::dump(s, depth + 1);
 			ColorExtension2::dump(s, depth + 1);
 			Vertex2::dump(s, depth + 1);
 

@@ -1,4 +1,4 @@
-// $Id: ballAndStickModel.C,v 1.11 2001/01/26 01:37:10 amoll Exp $
+// $Id: ballAndStickModel.C,v 1.12 2001/05/13 15:02:38 hekl Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/ballAndStickModel.h>
 
@@ -10,6 +10,7 @@ namespace BALL
 	{
 
 		AddBallAndStickModel::AddBallAndStickModel()
+			throw()
 			: AtomBondModelBaseProcessor(),
 				ball_radius_((Real)0.4),
 				stick_radius_((Real)0.2),
@@ -19,6 +20,7 @@ namespace BALL
 
 		AddBallAndStickModel::AddBallAndStickModel
 			(const AddBallAndStickModel &add_ball_and_stick, bool deep)
+			throw()
 			: AtomBondModelBaseProcessor(add_ball_and_stick, deep),
 				ball_radius_(add_ball_and_stick.ball_radius_),
 				stick_radius_(add_ball_and_stick.stick_radius_),
@@ -31,7 +33,7 @@ namespace BALL
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
-			 << " of class " << getBallClass().getName() << endl;
+			 << " of class " << RTTI::getName<AddBallAndStickModel>() << endl;
 			#endif 
 
 			destroy();
@@ -50,15 +52,11 @@ namespace BALL
 		void AddBallAndStickModel::destroy()
 			throw()
 		{
-			AtomBondModelBaseProcessor::destroy();
-
-			ball_radius_ = (Real)0.4;
-			stick_radius_ = (Real)0.2;
-			ball_and_stick_ = true;
 		}
 
 		void AddBallAndStickModel::set
 			(const AddBallAndStickModel &add_ball_and_stick, bool deep)
+			throw()
 		{
 			AtomBondModelBaseProcessor::set(add_ball_and_stick, deep);
 
@@ -67,8 +65,9 @@ namespace BALL
 			ball_and_stick_ = add_ball_and_stick.ball_and_stick_;
 		}
 
-		AddBallAndStickModel &AddBallAndStickModel::operator = 
+		const AddBallAndStickModel &AddBallAndStickModel::operator = 
 			(const AddBallAndStickModel &add_ball_and_stick)
+			throw()
 		{
 			set(add_ball_and_stick);
 
@@ -76,11 +75,13 @@ namespace BALL
 		}
 
 		void AddBallAndStickModel::get(AddBallAndStickModel &add_ball_and_stick, bool deep) const
+			throw()
 		{
 			add_ball_and_stick.set(*this, deep);
 		}
 
 		void AddBallAndStickModel::swap(AddBallAndStickModel &add_ball_and_stick)
+			throw()
 		{
 			AtomBondModelBaseProcessor::swap(add_ball_and_stick);
 
@@ -98,26 +99,31 @@ namespace BALL
 		}
 
 		void AddBallAndStickModel::setBallRadius(const Real radius)
+			throw(Exception::OutOfRange)
 		{
-			BALL_PRECONDITION
-				(radius > (Real)0,
-				 BALL_MOLVIEW_BALLANDSTICKMODEL_ERROR_HANDLER
-				 (AddBallAndStickModel::ERROR_BALL_RADIUS_LOWER_OR_EQUAL_ZERO));
+			// a radius never can be lower or equal 0
+			if (radius <= (Real)0)
+			{
+					throw Exception::OutOfRange(__FILE__, __LINE__);
+			}
 			
 			ball_radius_ = radius;
 		}
 
 		void AddBallAndStickModel::setStickRadius(const Real radius)
+			throw(Exception::OutOfRange)
 		{
-			BALL_PRECONDITION
-				(radius > (Real)0,
-				 BALL_MOLVIEW_BALLANDSTICKMODEL_ERROR_HANDLER
-				 (AddBallAndStickModel::ERROR_STICK_RADIUS_LOWER_OR_EQUAL_ZERO));
-			
+			// a radius never can be lower or equal 0
+			if (radius <= (Real)0)
+			{
+					throw Exception::OutOfRange(__FILE__, __LINE__);
+			}
+
 			stick_radius_ = radius;
 		}
 
 		bool AddBallAndStickModel::start()
+			throw()
 		{
 			// init model connector
 			getModelConnector()->setProperties(*this);
@@ -128,6 +134,7 @@ namespace BALL
 		}
 				
 		bool AddBallAndStickModel::finish()
+			throw()
 		{
 			buildBondModels_();
 			
@@ -135,6 +142,7 @@ namespace BALL
 		}
 				
 		Processor::Result AddBallAndStickModel::operator() (Composite &composite)
+			throw(Exception::OutOfMemory)
 		{
 			// composite is an atom ?
 			if (!RTTI::isKindOf<Atom>(composite))
@@ -150,16 +158,17 @@ namespace BALL
 			// generate BallPrimitive
 			Sphere* pSphere = createSphere_();
 
-			BALL_PRECONDITION
-				(pSphere != 0,
-				 BALL_MOLVIEW_BALLANDSTICKMODEL_ERROR_HANDLER
-				 (AddBallAndStickModel::ERROR_CANNOT_CREATE_SPHERE));
+			if (pSphere == 0)
+			{
+					throw Exception::OutOfMemory
+						(__FILE__, __LINE__, sizeof(Sphere));
+			}
 
 			// carry on selected flag
 			pSphere->Selectable::set(*atom);
 
 			pSphere->PropertyManager::set(*this);
-			pSphere->PropertyManager::setProperty(GeometricObject::PROPERTY__MODEL_BALL_AND_STICK);
+			pSphere->PropertyManager::setProperty(PROPERTY__MODEL_BALL_AND_STICK);
 
 			if (ball_and_stick_ == true)
 			{
@@ -208,16 +217,6 @@ namespace BALL
 			s << "s model: " << ball_and_stick_ << endl;
 
 			BALL_DUMP_STREAM_SUFFIX(s);
-		}
-
-		void AddBallAndStickModel::read(std::istream & /* s */)
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-		void AddBallAndStickModel::write(std::ostream & /* s */) const
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		Sphere* AddBallAndStickModel::createSphere_()

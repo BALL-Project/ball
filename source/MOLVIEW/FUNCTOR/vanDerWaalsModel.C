@@ -1,4 +1,4 @@
-// $Id: vanDerWaalsModel.C,v 1.8 2001/01/26 00:43:32 amoll Exp $
+// $Id: vanDerWaalsModel.C,v 1.9 2001/05/13 15:02:40 hekl Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/vanDerWaalsModel.h>
 
@@ -10,11 +10,13 @@ namespace BALL
 	{
 
 		AddVanDerWaalsModel::AddVanDerWaalsModel()
+			throw()
 			: AtomBondModelBaseProcessor()
 		{
  		}
 
 		AddVanDerWaalsModel::AddVanDerWaalsModel(const AddVanDerWaalsModel& _rAddVanDerWaalsModel, bool deep)
+			throw()
 			: AtomBondModelBaseProcessor(_rAddVanDerWaalsModel, deep)
 		{
 		}
@@ -23,7 +25,8 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this << " of class " << getBallClass().getName() << endl;
+				cout << "Destructing object " << (void *)this 
+						 << " of class " << RTTI::getName<AddVanDerWaalsModel>() << endl;
 			#endif 
 
 			destroy();
@@ -33,16 +36,16 @@ namespace BALL
 			throw()
 		{
 			AtomBondModelBaseProcessor::clear();
-			setProperty(GeometricObject::PROPERTY__MODEL_VDW);
+			setProperty(PROPERTY__MODEL_VDW);
 		}
 
 		void AddVanDerWaalsModel::destroy()
 			throw()
 		{
-			AtomBondModelBaseProcessor::destroy();
 		}
 
 		bool AddVanDerWaalsModel::start()
+			throw()
 		{
 			// init model connector
 			getModelConnector()->setProperties(*this);
@@ -51,6 +54,7 @@ namespace BALL
 		}
 				
 		bool AddVanDerWaalsModel::finish()
+			throw()
 		{
 			buildBondModels_();
 
@@ -58,6 +62,7 @@ namespace BALL
 		}
 				
 		Processor::Result AddVanDerWaalsModel::operator() (Composite &composite)
+			throw(Exception::OutOfMemory)
 		{
 			// composite is an atom ?
 			if (!RTTI::isKindOf<Atom>(composite))
@@ -72,16 +77,17 @@ namespace BALL
 
 			Sphere* pSphere = createSphere_();
 
-			BALL_PRECONDITION
-				(pSphere != 0,
-				 BALL_MOLVIEW_VANDERWAALSMODEL_ERROR_HANDLER
-				 (AddVanDerWaalsModel::ERROR__CANNOT_CREATE_SPHERE));
+			if (pSphere == 0)
+			{
+					throw Exception::OutOfMemory
+						(__FILE__, __LINE__, sizeof(Sphere));
+			}
 
 			// carry on selected flag
 			pSphere->Selectable::set(*atom);
 
 			pSphere->PropertyManager::set(*this);
-			pSphere->PropertyManager::setProperty(GeometricObject::PROPERTY__MODEL_VDW);
+			pSphere->PropertyManager::setProperty(PROPERTY__MODEL_VDW);
 			pSphere->setRadius((atom->getElement()).getVanDerWaalsRadius());
 			pSphere->setVertexAddress(atom->getPosition());
 
@@ -107,16 +113,6 @@ namespace BALL
 			AtomBondModelBaseProcessor::dump(s, depth + 1);
 
 			BALL_DUMP_STREAM_SUFFIX(s);
-		}
-
-		void AddVanDerWaalsModel::read(istream & /* s */)
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-		void AddVanDerWaalsModel::write(ostream & /* s */) const
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		Sphere* AddVanDerWaalsModel::createSphere_()

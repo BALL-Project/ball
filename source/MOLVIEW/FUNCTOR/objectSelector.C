@@ -1,6 +1,6 @@
-// $Id: geometricObjectSelector.C,v 1.6 2001/01/26 00:43:32 amoll Exp $
+// $Id: objectSelector.C,v 1.1 2001/05/13 15:02:39 hekl Exp $
 
-#include <BALL/MOLVIEW/FUNCTOR/geometricObjectSelector.h>
+#include <BALL/MOLVIEW/FUNCTOR/objectSelector.h>
 
 using namespace std;
 
@@ -10,86 +10,87 @@ namespace BALL
 	namespace MOLVIEW
 	{
 
-		GeometricObjectSelector::GeometricObjectSelector()
+		ObjectSelector::ObjectSelector()
+			throw()
 			: AtomBondModelBaseProcessor(),
-				selection_(true),
-				selection_color_(255,255,0,255)
+				selection_(true)
 		{
 		}
 
-		GeometricObjectSelector::GeometricObjectSelector
-			(const GeometricObjectSelector &selector, bool deep)
+		ObjectSelector::ObjectSelector
+			(const ObjectSelector &selector, bool deep)
+			throw()
 			: AtomBondModelBaseProcessor(selector, deep),
-				selection_(selector.selection_),
-				selection_color_(selector.selection_color_)
+				selection_(selector.selection_)
 		{
 		}
 
-		GeometricObjectSelector::~GeometricObjectSelector()
+		ObjectSelector::~ObjectSelector()
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
-			 << " of class " << getBallClass().getName() << endl;
+			 << " of class " << RTTI::getName<ObjectSelector>() << endl;
 			#endif 
 
 			destroy();
 		}
 
-		void GeometricObjectSelector::clear()
+		void ObjectSelector::clear()
 			throw()
 		{
 			AtomBondModelBaseProcessor::clear();
-		}
-
-		void GeometricObjectSelector::destroy()
-			throw()
-		{
-			AtomBondModelBaseProcessor::destroy();
 
 			selection_ = true;
-			selection_color_.set(255,255,0,255);
 		}
 
-		void GeometricObjectSelector::set(const GeometricObjectSelector &selector, bool deep)
+		void ObjectSelector::destroy()
+			throw()
+		{
+		}
+
+		void ObjectSelector::set(const ObjectSelector &selector, bool deep)
+			throw()
 		{
 			AtomBondModelBaseProcessor::set(selector, deep);
 
 			selection_ = selector.selection_;
-			selection_color_ = selector.selection_color_;
 		}
 
-		GeometricObjectSelector& GeometricObjectSelector::operator = (const GeometricObjectSelector &selector)
+		const ObjectSelector& ObjectSelector::operator = (const ObjectSelector &selector)
+			throw()
 		{
 			set(selector);
 
 			return *this;
 		}
 
-		void GeometricObjectSelector::get(GeometricObjectSelector &selector, bool deep) const
+		void ObjectSelector::get(ObjectSelector &selector, bool deep) const
+			throw()
 		{
 			selector.set(*this, deep);
 		}
 
-		void GeometricObjectSelector::swap (GeometricObjectSelector &selector)
+		void ObjectSelector::swap (ObjectSelector &selector)
+			throw()
 		{
 			AtomBondModelBaseProcessor::swap(selector);
 
 			bool _bool = selection_;
 			selection_ = selector.selection_;
 			selector.selection_ = _bool;
-
-			selection_color_.swap(selector.selection_color_);
 		}
 
-		bool GeometricObjectSelector::start()
+		bool ObjectSelector::start()
+			throw()
 		{
 			getSearcher_().clear();
 
 			return AtomBondModelBaseProcessor::start();
 		}
 				
-		bool GeometricObjectSelector::finish()
+		bool ObjectSelector::finish()
+			throw()
 		{
 			Atom *first_pAtom = 0;
 			Atom *second_pAtom = 0;
@@ -141,7 +142,8 @@ namespace BALL
 			return true;
 		}
 				
-		Processor::Result GeometricObjectSelector::operator() (Composite &composite)
+		Processor::Result ObjectSelector::operator() (Composite &composite)
+			throw()
 		{
 			// composite is an atom ?
 			if (!RTTI::isKindOf<Atom>(composite))
@@ -166,7 +168,7 @@ namespace BALL
 			return Processor::CONTINUE;
 		}
 
-		void GeometricObjectSelector::dump(ostream& s, Size depth) const
+		void ObjectSelector::dump(ostream& s, Size depth) const
 			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
@@ -180,27 +182,14 @@ namespace BALL
 			BALL_DUMP_DEPTH(s, depth);
 			cout << "use Object Color:    " << ((selection_ == false) ? "Yes" : "No") << endl;
 
-			BALL_DUMP_DEPTH(s, depth);
-			cout << "Selection Color:     " << selection_color_ << endl;
-
 			AtomBondModelBaseProcessor::dump(s, depth + 1);
 
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
 
-		void GeometricObjectSelector::read(istream & /* s */)
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-		void GeometricObjectSelector::write(ostream & /* s */) const
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/FUNCTOR/geometricObjectSelector.iC>
+#			include <BALL/MOLVIEW/FUNCTOR/objectSelector.iC>
 #		endif
 
 	} // namespace MOLVIEW

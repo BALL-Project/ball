@@ -1,4 +1,4 @@
-// $Id: glBackboneModel.C,v 1.2 2001/01/08 17:29:42 anker Exp $
+// $Id: glBackboneModel.C,v 1.3 2001/05/13 15:02:40 hekl Exp $
 
 #include <BALL/MOLVIEW/GUI/FUNCTOR/glBackboneModel.h>
 
@@ -8,8 +8,8 @@ namespace BALL
 	namespace MOLVIEW
 	{
 
-		AddGLBackboneModel::AddGLBackboneModel
-			()
+		AddGLBackboneModel::AddGLBackboneModel()
+			throw()
 				:
 				AddBackboneModel()
 		{
@@ -18,6 +18,7 @@ namespace BALL
 		AddGLBackboneModel::AddGLBackboneModel
 			(const AddGLBackboneModel &add_gl_backbone_model,
 			 bool deep)
+			throw()
 				:
 				AddBackboneModel(add_gl_backbone_model, deep)
 		{

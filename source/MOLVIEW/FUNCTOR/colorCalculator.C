@@ -1,4 +1,4 @@
-// $Id: colorCalculator.C,v 1.7 2000/12/12 16:19:24 oliver Exp $
+// $Id: colorCalculator.C,v 1.8 2001/05/13 15:02:39 hekl Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/colorCalculator.h>
 
@@ -11,13 +11,15 @@ namespace BALL
 	{
 
 		ColorCalculator::ColorCalculator()
+			throw()
 			:	Visitor<Atom>(),
 				Visitor<Composite>()
 		{
 		}
 
 		ColorCalculator::ColorCalculator
-			(const ColorCalculator& color_calculator, bool /* deep */)
+			(const ColorCalculator& color_calculator)
+			throw()
 			:	Visitor<Atom>(color_calculator),
 				Visitor<Composite>(color_calculator),
   			color_map_(color_calculator.color_map_),
@@ -48,20 +50,20 @@ namespace BALL
 		void ColorCalculator::destroy()
 			throw()
 		{
-			clear();
 		}
 
 		void ColorCalculator::set
-			(const ColorCalculator& color_calculator,
-			 bool /* deep */)
+			(const ColorCalculator& color_calculator)
+			throw()
 		{
 			color_map_ = color_calculator.color_map_;
 			default_color_ = color_calculator.default_color_;
 			color_ = color_calculator.color_;
 		}
 
-		ColorCalculator& 	ColorCalculator::operator =
+		const ColorCalculator& 	ColorCalculator::operator =
 			(const ColorCalculator& color_calculator)
+			throw()
 		{
 			set(color_calculator);
 
@@ -69,13 +71,15 @@ namespace BALL
 		}
 
 		void ColorCalculator::get
-			(ColorCalculator& color_calculator, bool deep) const
+			(ColorCalculator& color_calculator) const
+			throw()
 		{
-			color_calculator.set(*this, deep);
+			color_calculator.set(*this);
 		}
 
 		void ColorCalculator::swap
 			(ColorCalculator& color_calculator)
+			throw()
 		{
 			color_map_.swap(color_calculator.color_map_);
 			color_.swap(color_calculator.color_);
@@ -83,6 +87,7 @@ namespace BALL
 		}
 
 		void ColorCalculator::visit(Atom& atom)
+			throw()
 		{
 			String key = calculateKey(atom);
 			ColorMap::ConstIterator map_it = color_map_.find(key);
@@ -96,6 +101,7 @@ namespace BALL
 
 		void ColorCalculator::visit
 			(Composite& composite)
+			throw()
 		{
 			Atom* atom = dynamic_cast<Atom*>(&composite);
 
@@ -105,11 +111,6 @@ namespace BALL
 			} else {
 				color_ = default_color_;
 			}
-		}
-
-		bool ColorCalculator::isValid() const
-		{
-			return true;
 		}
 
 		void ColorCalculator::dump
@@ -135,6 +136,7 @@ namespace BALL
 		}
 
 		const String& ColorCalculator::calculateKey(const Atom& atom) const
+			throw()
 		{
 			return atom.getElement().getSymbol();
 		}

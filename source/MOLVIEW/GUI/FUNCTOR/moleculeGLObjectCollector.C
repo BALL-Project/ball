@@ -1,4 +1,4 @@
-// $Id: moleculeGLObjectCollector.C,v 1.2 2000/12/12 16:19:34 oliver Exp $
+// $Id: moleculeGLObjectCollector.C,v 1.3 2001/05/13 15:02:41 hekl Exp $
 
 #include <BALL/MOLVIEW/GUI/FUNCTOR/moleculeGLObjectCollector.h>
 
@@ -9,13 +9,8 @@ namespace BALL
 	{
 
 		MoleculeGLObjectCollector::MoleculeGLObjectCollector()
+			throw()
 			:	GLObjectCollector()
-		{
-		}
-
-		MoleculeGLObjectCollector::MoleculeGLObjectCollector
-			(const MoleculeGLObjectCollector& molecule_GL_object_collector, bool deep)
-			:	GLObjectCollector(molecule_GL_object_collector, deep)
 		{
 		}
 
@@ -32,6 +27,7 @@ namespace BALL
 
 
 		bool MoleculeGLObjectCollector::finish()
+			throw()
 		{
 			Molecule* molecule = (Molecule*)getRootComposite();
 			AtomIterator atom_it;

@@ -1,4 +1,4 @@
-// $Id: molecularFilter.C,v 1.3 2000/12/12 16:19:25 oliver Exp $
+// $Id: molecularFilter.C,v 1.4 2001/05/13 15:02:39 hekl Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/molecularFilter.h>
 
@@ -11,6 +11,7 @@ namespace BALL
 	{
 
 		MolecularFilter::MolecularFilter()
+			throw()
 			:	Filter()
 		{
 		}
@@ -26,7 +27,20 @@ namespace BALL
 			destroy();
 		}
 
+		void MolecularFilter::clear()
+			throw()
+		{
+			Filter::clear();
+		}
+
+		void MolecularFilter::destroy()
+			throw()
+		{
+			Filter::destroy();
+		}
+
 		void MolecularFilter::visit(Composite& composite)
+			throw()
 		{
 			bool result = false;
 

@@ -1,4 +1,4 @@
-// $Id: molecularInformation.C,v 1.5 2001/01/26 01:37:10 amoll Exp $
+// $Id: molecularInformation.C,v 1.6 2001/05/13 15:02:39 hekl Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/molecularInformation.h>
 
@@ -11,14 +11,8 @@ namespace BALL
 	{
 
 		MolecularInformation::MolecularInformation()
+			throw()
 			:	Information()
-		{
-		}
-
-		MolecularInformation::MolecularInformation
-			(const MolecularInformation& info, bool deep)
-			:	Information(info, deep),
-				type_(TYPE__UNKNOWN)
 		{
 		}
 
@@ -43,42 +37,10 @@ namespace BALL
 		void MolecularInformation::destroy()
 			throw()
 		{
-			clear();
-		}
-
-		void MolecularInformation::set
-			(const MolecularInformation& info,
-			 bool deep)
-		{
-			Information::set(info, deep);
-			type_ = info.type_;
-		}
-
-		MolecularInformation& 	MolecularInformation::operator =
-			(const MolecularInformation& info)
-		{
-			set(info);
-
-			return *this;
-		}
-
-		void MolecularInformation::get
-			(MolecularInformation& info, bool deep) const
-		{
-			info.set(*this, deep);
-		}
-
-		void MolecularInformation::swap
-			(MolecularInformation& info)
-		{
-			Information::swap(info);
-
-			Type temp = type_;
-			type_ = info.type_;
-			info.type_ = temp;
 		}
 
 		void MolecularInformation::visit(Composite& composite)
+			throw()
 		{
 			getType_(composite);
 
@@ -92,25 +54,6 @@ namespace BALL
 			{
 				Information::visit(composite);
 			}
-		}
-
-		bool MolecularInformation::isValid() const
-		{
-			return Information::isValid();
-		}
-
-		void MolecularInformation::dump(ostream& s, Size depth) const
-			throw()
-		{
-			BALL_DUMP_STREAM_PREFIX(s);
-			
-			BALL_DUMP_DEPTH(s, depth);
-			BALL_DUMP_HEADER(s, this, this);
-
-			BALL_DUMP_DEPTH(s, depth);
-			Information::dump(s, depth + 1);
-					
-			BALL_DUMP_STREAM_SUFFIX(s);
 		}
 
 	  void MolecularInformation::getType_(Composite& composite)

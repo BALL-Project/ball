@@ -1,4 +1,4 @@
-// $Id: findGeometricObject.C,v 1.10 2001/02/04 16:19:04 hekl Exp $
+// $Id: findGeometricObject.C,v 1.11 2001/05/13 15:02:39 hekl Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/findGeometricObject.h>
 
@@ -12,6 +12,7 @@ namespace BALL
 
 
 		FindGeometricObjects::FindGeometricObjects()
+			throw()
 			:	UnaryProcessor<Composite>(),
 				ExtendedPropertyManager(),
 				geometric_objects_()
@@ -20,6 +21,7 @@ namespace BALL
 
 		FindGeometricObjects::FindGeometricObjects
 			(const FindGeometricObjects &find_geometric_objects, bool deep)
+			throw()
 			:	UnaryProcessor<Composite>(find_geometric_objects),
 				ExtendedPropertyManager(find_geometric_objects, deep),
 				geometric_objects_(find_geometric_objects.geometric_objects_)
@@ -47,19 +49,20 @@ namespace BALL
 		void FindGeometricObjects::destroy()
 			throw()
 		{
-			clear();
 		}
 
 		void FindGeometricObjects::set
 			(const FindGeometricObjects &find_geometric_objects, bool deep)
+			throw()
 		{
 			clear();
 
 			ExtendedPropertyManager::set(find_geometric_objects, deep);
 		}
 
-		FindGeometricObjects& FindGeometricObjects::operator =
+		const FindGeometricObjects& FindGeometricObjects::operator =
 			(const FindGeometricObjects &find_geometric_objects)
+			throw()
 		{
 			set(find_geometric_objects);
 
@@ -68,16 +71,19 @@ namespace BALL
 
 		void FindGeometricObjects::get
 			(FindGeometricObjects& find_geometric_objects, bool deep) const
+			throw()
 		{
 			find_geometric_objects.set(*this, deep);
 		}
 
 		void FindGeometricObjects::swap(FindGeometricObjects& find_geometric_objects)
+			throw()
 		{
 			ExtendedPropertyManager::swap(find_geometric_objects);
 		}
 
 		bool FindGeometricObjects::start()
+			throw()
 		{
 			geometric_objects_.clear();
 
@@ -85,19 +91,21 @@ namespace BALL
 		}
 				
 		bool FindGeometricObjects::finish()
+			throw()
 		{
 			return true;
 		}
 				
 		Processor::Result FindGeometricObjects::operator () (Composite &composite)
+			throw()
 		{
 			// skip composites that are not instances of geometricObject
-			if (RTTI::isKindOf<VIEW::GeometricObject>(composite) == false)
+			if (RTTI::isKindOf<GeometricObject>(composite) == false)
 			{
 				return Processor::CONTINUE;
 			}
 
-			VIEW::GeometricObject* pGeometricObject = RTTI::castTo<VIEW::GeometricObject>(composite);
+			GeometricObject* pGeometricObject = RTTI::castTo<GeometricObject>(composite);
 
 			BitVector and_bitvector = getBitVector().operator&(pGeometricObject->getBitVector());
 			BitVector help_bitvector(and_bitvector.getSize());
@@ -113,8 +121,9 @@ namespace BALL
 		}
 
 		bool FindGeometricObjects::isValid() const
+			throw()
 		{
-			return true;
+			return ExtendedPropertyManager::isValid();
 		}
 
 		void FindGeometricObjects::dump(ostream& s, Size depth) const
@@ -131,79 +140,79 @@ namespace BALL
 			BALL_DUMP_DEPTH(s, depth);
 			s << "static object: " 
 					 << BALL_MOLVIEW_PRINT_PROPERTY
-											(VIEW::GeometricObject::PROPERTY__OBJECT_STATIC) 
+											(GeometricObject::PROPERTY__OBJECT_STATIC) 
 					 << endl;
 					
 			BALL_DUMP_DEPTH(s, depth);
 			s << "dynamic object: "
 					 << BALL_MOLVIEW_PRINT_PROPERTY
-											(VIEW::GeometricObject::PROPERTY__OBJECT_DYNAMIC) 
+											(GeometricObject::PROPERTY__OBJECT_DYNAMIC) 
 					 << endl;
 					
 			BALL_DUMP_DEPTH(s, depth);
 			s << "transparent object: " 
 					 << BALL_MOLVIEW_PRINT_PROPERTY
-											(VIEW::GeometricObject::PROPERTY__OBJECT_TRANSPARENT) 
+											(GeometricObject::PROPERTY__OBJECT_TRANSPARENT) 
 					 << endl;
 					
 			BALL_DUMP_DEPTH(s, depth);
 			s << "opaque object: " 
 					 << BALL_MOLVIEW_PRINT_PROPERTY
-											(VIEW::GeometricObject::PROPERTY__OBJECT_OPAQUE) 
+											(GeometricObject::PROPERTY__OBJECT_OPAQUE) 
 					 << endl;
 			
 			BALL_DUMP_DEPTH(s, depth);
 			s << "visible object: "
 					 << BALL_MOLVIEW_PRINT_PROPERTY
-											(VIEW::GeometricObject::PROPERTY__OBJECT_VISIBLE) 
+											(GeometricObject::PROPERTY__OBJECT_VISIBLE) 
 					 << endl;
 			
 			BALL_DUMP_DEPTH(s, depth);
 			s << "hidden object: "
 					 << BALL_MOLVIEW_PRINT_PROPERTY
-											(VIEW::GeometricObject::PROPERTY__OBJECT_HIDDEN) 
+											(GeometricObject::PROPERTY__OBJECT_HIDDEN) 
 					 << endl;
 			
 			BALL_DUMP_DEPTH(s, depth);
 			s << "drawing mode dots: " 
 					 << BALL_MOLVIEW_PRINT_PROPERTY
-											(VIEW::GeometricObject::PROPERTY__DRAWING_MODE_DOTS) 
+											(GeometricObject::PROPERTY__DRAWING_MODE_DOTS) 
 					 << endl;
 			
 			BALL_DUMP_DEPTH(s, depth);
 			s << "drawing mode wireframe: "
 					 << BALL_MOLVIEW_PRINT_PROPERTY
-											(VIEW::GeometricObject::PROPERTY__DRAWING_MODE_WIREFRAME) 
+											(GeometricObject::PROPERTY__DRAWING_MODE_WIREFRAME) 
 					 << endl;
 			
 			BALL_DUMP_DEPTH(s, depth);
 			s << "drawing mode solid: "
 					 << BALL_MOLVIEW_PRINT_PROPERTY
-											(VIEW::GeometricObject::PROPERTY__DRAWING_MODE_SOLID) 
+											(GeometricObject::PROPERTY__DRAWING_MODE_SOLID) 
 					 << endl;
 			
 			BALL_DUMP_DEPTH(s, depth);
 			s << "drawing precision low: "
 					 << BALL_MOLVIEW_PRINT_PROPERTY
-											(VIEW::GeometricObject::PROPERTY__DRAWING_PRECISION_LOW) 
+											(GeometricObject::PROPERTY__DRAWING_PRECISION_LOW) 
 					 << endl;
 			
 			BALL_DUMP_DEPTH(s, depth);
 			s << "drawing precision medium: "
 					 << BALL_MOLVIEW_PRINT_PROPERTY
-											(VIEW::GeometricObject::PROPERTY__DRAWING_PRECISION_MEDIUM) 
+											(GeometricObject::PROPERTY__DRAWING_PRECISION_MEDIUM) 
 					 << endl;
 			
 			BALL_DUMP_DEPTH(s, depth);
 			s << "drawing precision high: "
 					 << BALL_MOLVIEW_PRINT_PROPERTY
-											(VIEW::GeometricObject::PROPERTY__DRAWING_PRECISION_HIGH) 
+											(GeometricObject::PROPERTY__DRAWING_PRECISION_HIGH) 
 					 << endl;
 					
 			BALL_DUMP_DEPTH(s, depth);
 			s << "drawing precision ultra: "
 					 << BALL_MOLVIEW_PRINT_PROPERTY
-											(VIEW::GeometricObject::PROPERTY__DRAWING_PRECISION_ULTRA) 
+											(GeometricObject::PROPERTY__DRAWING_PRECISION_ULTRA) 
 					 << endl;
 					
 			BALL_DUMP_DEPTH(s, depth);

@@ -1,4 +1,4 @@
-// $Id: molecularControl.C,v 1.5 2001/01/26 01:37:12 amoll Exp $
+// $Id: molecularControl.C,v 1.6 2001/05/13 15:02:41 hekl Exp $
 
 #include <BALL/MOLVIEW/GUI/WIDGETS/molecularControl.h>
 #include <qpopupmenu.h>
@@ -14,6 +14,7 @@ namespace BALL
 
 MolecularControl::MolecularControl
   (QWidget* parent, const char* name)
+	throw()
 		:	Control(parent, name),
 			molecular_information_(),
 			molecular_filter_()
@@ -26,6 +27,7 @@ MolecularControl::~MolecularControl()
 }
 
 void MolecularControl::checkMenu(MainControl& main_control)
+	throw()
 {
 	bool copy_list_filled = (getCopyList_().size() > 0);
 
@@ -75,6 +77,7 @@ void MolecularControl::sentSelection()
 }
 
 void MolecularControl::buildContextMenu(Composite* composite, QListViewItem* item)
+	throw()
 {
 	Control::buildContextMenu(composite, item);
 
@@ -82,11 +85,13 @@ void MolecularControl::buildContextMenu(Composite* composite, QListViewItem* ite
 }
 
 Information& MolecularControl::getInformationVisitor_()
+	throw()
 {
 	return molecular_information_;
 }
 
 void MolecularControl::recurseGeneration_(QListViewItem* item, Composite* composite)
+	throw()
 {
 	// if the composite is anything but an atom,
 	// we iterate over all children and recurse
@@ -101,6 +106,7 @@ void MolecularControl::recurseGeneration_(QListViewItem* item, Composite* compos
 }
 
 bool MolecularControl::recurseUpdate_(QListViewItem* item, Composite* composite)
+	throw()
 {
 	bool tree_updated = false;
 
@@ -119,6 +125,7 @@ bool MolecularControl::recurseUpdate_(QListViewItem* item, Composite* composite)
 }
 
 bool MolecularControl::reactToMessages_(Message* message)
+	throw()
 {
 	bool update = false;
 

@@ -1,4 +1,4 @@
-// $Id: molecularMessage.C,v 1.2 2000/05/16 15:43:35 hekl Exp $
+// $Id: molecularMessage.C,v 1.3 2001/05/13 15:02:41 hekl Exp $
 
 #include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
 
@@ -11,18 +11,21 @@ namespace BALL
 	{
 
 		NewMolecularMessage::NewMolecularMessage()
+			throw()
 			:
 			CompositeMessage()
 		{
 		}
 
-		NewMolecularMessage::NewMolecularMessage(const CompositeMessage& message, bool /* deep */)
+		NewMolecularMessage::NewMolecularMessage(const CompositeMessage& message)
+			throw()
 			:
 			CompositeMessage(message)
 		{
 		}
 
 		NewMolecularMessage::~NewMolecularMessage()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -31,18 +34,21 @@ namespace BALL
 		}
 
 		RemovedMolecularMessage::RemovedMolecularMessage()
+			throw()
 			:
 			RemovedCompositeMessage()
 		{
 		}
 
-		RemovedMolecularMessage::RemovedMolecularMessage(const CompositeMessage& message, bool /* deep */)
+		RemovedMolecularMessage::RemovedMolecularMessage(const CompositeMessage& message)
+			throw()
 			:
 			RemovedCompositeMessage(message)
 		{
 		}
 
 		RemovedMolecularMessage::~RemovedMolecularMessage()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -51,18 +57,21 @@ namespace BALL
 		}
 
 		ChangedMolecularMessage::ChangedMolecularMessage()
+			throw()
 			:
 			ChangedCompositeMessage()
 		{
 		}
 
-	  ChangedMolecularMessage::ChangedMolecularMessage(const CompositeMessage& message, bool /* deep */)
+	  ChangedMolecularMessage::ChangedMolecularMessage(const CompositeMessage& message)
+			throw()
 			:
 			ChangedCompositeMessage(message)
 		{
 		}
 
 		ChangedMolecularMessage::~ChangedMolecularMessage()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -72,18 +81,21 @@ namespace BALL
 
 
 		MolecularSelectionMessage::MolecularSelectionMessage()
+			throw()
 			:
 			SelectionMessage()
 		{
 		}
 
-		MolecularSelectionMessage::MolecularSelectionMessage(const SelectionMessage& message, bool /* deep */)
+		MolecularSelectionMessage::MolecularSelectionMessage(const SelectionMessage& message)
+			throw()
 			:
 			SelectionMessage(message)
 		{
 		}
 
 		MolecularSelectionMessage::~MolecularSelectionMessage()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 

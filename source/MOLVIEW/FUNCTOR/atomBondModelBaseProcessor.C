@@ -1,4 +1,4 @@
-// $Id: atomBondModelBaseProcessor.C,v 1.3 2001/01/25 23:47:55 amoll Exp $
+// $Id: atomBondModelBaseProcessor.C,v 1.4 2001/05/13 15:02:38 hekl Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/atomBondModelBaseProcessor.h>
 
@@ -11,6 +11,7 @@ namespace BALL
 	{
 
 		AtomBondModelBaseProcessor::AtomBondModelBaseProcessor()
+			throw()
 			:	BaseModelProcessor(),
 			  used_atoms_(),
 				hashed_atoms_()
@@ -19,6 +20,7 @@ namespace BALL
 
 		AtomBondModelBaseProcessor::AtomBondModelBaseProcessor
 		  (const AtomBondModelBaseProcessor& processor, bool deep)
+			throw()
 			:	BaseModelProcessor(processor, deep),
 				used_atoms_(),
 				hashed_atoms_()
@@ -46,20 +48,20 @@ namespace BALL
 		void AtomBondModelBaseProcessor::destroy()
 			throw()
 		{
-			BaseModelProcessor::destroy();
-			clearUsedAtoms_();
 		}
 
 		void AtomBondModelBaseProcessor::set
 			(const AtomBondModelBaseProcessor& processor, bool deep)
+			throw()
 		{
 			clearUsedAtoms_();
 
 			BaseModelProcessor::set(processor, deep);
 		}
 
-		AtomBondModelBaseProcessor& AtomBondModelBaseProcessor::operator =
+		const AtomBondModelBaseProcessor& AtomBondModelBaseProcessor::operator =
 			(const AtomBondModelBaseProcessor& processor)
+			throw()
 		{
 			set(processor);
 
@@ -68,17 +70,20 @@ namespace BALL
 
 		void AtomBondModelBaseProcessor::get
 			(AtomBondModelBaseProcessor& processor, bool deep) const
+			throw()
 		{
 			processor.set(*this, deep);
 		}
 
 		void AtomBondModelBaseProcessor::swap
 			(AtomBondModelBaseProcessor& processor)
+			throw()
 		{
 			BaseModelProcessor::swap(processor);
 		}
 
 		bool AtomBondModelBaseProcessor::start()
+			throw()
 		{
 			clearUsedAtoms_();
 			
@@ -86,16 +91,21 @@ namespace BALL
 		}
 				
 		bool AtomBondModelBaseProcessor::finish()
+			throw()
 		{
-			return BaseModelProcessor::finish();
+			buildBondModels_();
+
+			return true;
 		}
 				
 		Processor::Result AtomBondModelBaseProcessor::operator()(Composite & /* composite */)
+			throw()
 		{
 			return Processor::CONTINUE;
 		}
 
 		bool AtomBondModelBaseProcessor::isValid() const
+			throw()
 		{
 			return BaseModelProcessor::isValid();
 		}
@@ -117,17 +127,8 @@ namespace BALL
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
 
-		void AtomBondModelBaseProcessor::read(istream & /* s */)
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-		void AtomBondModelBaseProcessor::write(ostream & /* s */) const
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
 		void AtomBondModelBaseProcessor::buildBondModels_()
+			throw()
     {
 			// generate bond primitive
 			Atom* first_pAtom = 0;

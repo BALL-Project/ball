@@ -15,6 +15,7 @@ namespace BALL
 
 LabelProperties::LabelProperties
 (QWidget* parent, const char* name)
+	throw()
 	:
 	Inherited( parent, name ),
 	ModularWidget(name),
@@ -33,6 +34,7 @@ LabelProperties::~LabelProperties()
 }
 
 void LabelProperties::fetchPreferences(INIFile& inifile)
+	throw()
 {
 	// 
 	// the geometry of the main window
@@ -59,15 +61,16 @@ void LabelProperties::fetchPreferences(INIFile& inifile)
 	{
 		custom_color_.set(inifile.getValue("WINDOWS", "Label::customcolor"));
 
-		QColor qcolor(custom_color_.red(), 
-									custom_color_.green(), 
-									custom_color_.blue());
+		QColor qcolor(custom_color_.getRed(), 
+									custom_color_.getGreen(), 
+									custom_color_.getBlue());
 
 		color_sample_->setBackgroundColor(qcolor);
 	}
 }
 
 void LabelProperties::writePreferences(INIFile& inifile)
+	throw()
 {
 	//	
 	// the label window position
@@ -85,6 +88,7 @@ void LabelProperties::writePreferences(INIFile& inifile)
 }
 
 void LabelProperties::onNotify(Message *message)
+	throw()
 {
 	// selection => store last selection for later processing
 	if (RTTI::isKindOf<MolecularSelectionMessage>(*message))
@@ -92,6 +96,11 @@ void LabelProperties::onNotify(Message *message)
 		MolecularSelectionMessage *selection = RTTI::castTo<MolecularSelectionMessage>(*message);
 
 		selection_ = selection->getSelection();
+	}
+	else
+	{
+		// no molecular selection => clear the selection
+		selection_.clear();
 	}
 
 	// disabled apply button, if selection is empty
@@ -106,6 +115,7 @@ void LabelProperties::onNotify(Message *message)
 }
 
 void LabelProperties::initializeWidget(MainControl& main_control)
+	throw()
 {
 	main_control.initPopupMenu(MainControl::DISPLAY)->setCheckable(true);
 
@@ -116,6 +126,7 @@ void LabelProperties::initializeWidget(MainControl& main_control)
 }
 
 void LabelProperties::finalizeWidget(MainControl& main_control)
+	throw()
 {
 	main_control.removeMenuEntry
 		(MainControl::DISPLAY, "&Label Properties", this,
@@ -124,6 +135,7 @@ void LabelProperties::finalizeWidget(MainControl& main_control)
 }
 
 void LabelProperties::checkMenu(MainControl& main_control)
+	throw()
 {
 	bool selected = (selection_.empty() ? false : true);
 

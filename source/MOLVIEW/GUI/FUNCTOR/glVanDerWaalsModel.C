@@ -1,4 +1,4 @@
-// $Id: glVanDerWaalsModel.C,v 1.3 2001/01/26 00:43:53 amoll Exp $
+// $Id: glVanDerWaalsModel.C,v 1.4 2001/05/13 15:02:41 hekl Exp $
 
 
 #include <BALL/MOLVIEW/GUI/FUNCTOR/glVanDerWaalsModel.h>
@@ -11,12 +11,14 @@ namespace BALL
 		using VIEW::GLSphere;
 
 		AddGLVanDerWaalsModel::AddGLVanDerWaalsModel()
+			throw()
 			: AddVanDerWaalsModel()
 		{
 		}
 
 		AddGLVanDerWaalsModel::AddGLVanDerWaalsModel
 			(const AddGLVanDerWaalsModel& rAddGLVanDerWaalsModel, bool deep)
+			throw()
 			: AddVanDerWaalsModel(rAddGLVanDerWaalsModel, deep)
 		{
 		}

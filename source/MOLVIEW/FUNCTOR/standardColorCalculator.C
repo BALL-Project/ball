@@ -1,4 +1,4 @@
-// $Id: standardColorCalculator.C,v 1.9 2000/12/13 16:43:22 oliver Exp $
+// $Id: standardColorCalculator.C,v 1.10 2001/05/13 15:02:40 hekl Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/standardColorCalculator.h>
 
@@ -9,6 +9,7 @@ namespace BALL
 
 		//    ElementColorCalculator
 		ElementColorCalculator::ElementColorCalculator()
+			throw()
 		{
 			const unsigned char color_values[111][3] =
 			{
@@ -146,6 +147,7 @@ namespace BALL
 
 		//    ResidueNameColorCalculator
 		ResidueNameColorCalculator::ResidueNameColorCalculator()
+			throw()
 		{
 			const unsigned char color_values[21][3] =
 			{
@@ -206,6 +208,7 @@ namespace BALL
 		}
 
 		const String& ResidueNameColorCalculator::calculateKey(const Atom& atom) const
+			throw()
 		{
 			static String empty_key;
 			// BAUSTELLE ---------
@@ -219,6 +222,7 @@ namespace BALL
 		}
 
 		AtomChargeColorCalculator::AtomChargeColorCalculator()
+			throw()
 			:	positive_color_("0000FFFF"),
 				neutral_color_("FFFFFFFF"),
 				negative_color_("FF0000FF")
@@ -226,6 +230,7 @@ namespace BALL
 		}
 		
 		AtomChargeColorCalculator::AtomChargeColorCalculator(const AtomChargeColorCalculator& color_calculator)
+			throw()
 			: ColorCalculator(color_calculator),
 				positive_color_(color_calculator.positive_color_),
 				neutral_color_(color_calculator.neutral_color_),
@@ -233,15 +238,66 @@ namespace BALL
 		{
 		}
 
-		void AtomChargeColorCalculator::visit(Composite& composite) 
+		AtomChargeColorCalculator::~AtomChargeColorCalculator()
+			throw()
 		{
-			if (RTTI::isKindOf<Atom>(composite))
-			{
-				visit(*RTTI::castTo<Atom>(composite));
-			}
+			#ifdef BALL_VIEW_DEBUG
+				cout << "Destructing object " << (void *)this 
+					<< " of class " << RTTI::getName<AtomChargeColorCalculator>() << endl;
+			#endif 
+
+			destroy();
+		}
+
+		void AtomChargeColorCalculator::clear()
+			throw()
+		{
+			positive_color_.set("0000FFFF");
+			neutral_color_.set("FFFFFFFF");
+			negative_color_.set("FF0000FF");
+		}
+
+		void AtomChargeColorCalculator::destroy()
+			throw()
+		{
+		}
+
+		void AtomChargeColorCalculator::set
+			(const AtomChargeColorCalculator& color_calculator)
+			throw()
+		{
+			positive_color_.set(color_calculator.positive_color_);
+			neutral_color_.set(color_calculator.neutral_color_);
+			negative_color_.set(color_calculator.negative_color_);
+		}
+
+		const AtomChargeColorCalculator& AtomChargeColorCalculator::operator =
+			(const AtomChargeColorCalculator& color_calculator)
+			throw()
+		{
+			set(color_calculator);
+
+			return *this;
+		}
+
+		void AtomChargeColorCalculator::get
+			(AtomChargeColorCalculator& color_calculator) const
+			throw()
+		{
+			color_calculator.set(*this);
+		}
+
+		void AtomChargeColorCalculator::swap
+			(AtomChargeColorCalculator& color_calculator)
+			throw()
+		{
+			positive_color_.swap(color_calculator.positive_color_);
+			neutral_color_.swap(color_calculator.neutral_color_);
+			negative_color_.swap(color_calculator.negative_color_);
 		}
 
 		void AtomChargeColorCalculator::visit(Atom& atom)
+			throw()
 		{
 			float charge = atom.getCharge();
 			float red1, green1, blue1;
@@ -254,15 +310,15 @@ namespace BALL
 			// interpolate the color
 			if (charge >= 0)
 			{
-				red1   = positive_color_.red();
-				green1 = positive_color_.green();
-				blue1  = positive_color_.blue();
+				red1   = positive_color_.getRed();
+				green1 = positive_color_.getGreen();
+				blue1  = positive_color_.getBlue();
 			} 
 			else 
 			{
-				red1   = negative_color_.red();
-				green1 = negative_color_.green();
-				blue1  = negative_color_.blue();
+				red1   = negative_color_.getRed();
+				green1 = negative_color_.getGreen();
+				blue1  = negative_color_.getBlue();
 			}
 
 			if (charge < 0.0)
@@ -270,9 +326,9 @@ namespace BALL
 				charge = -charge;
 			}
 
-			red2   = neutral_color_.red();
-			green2 = neutral_color_.green();
-			blue2  = neutral_color_.blue();
+			red2   = neutral_color_.getRed();
+			green2 = neutral_color_.getGreen();
+			blue2  = neutral_color_.getBlue();
 
 			color_.set
 				(red1 * charge + (1.0 - charge) * red2,
@@ -280,12 +336,9 @@ namespace BALL
 				 blue1 * charge + (1.0 - charge) * blue2);
 		}
 		
-		AtomChargeColorCalculator::~AtomChargeColorCalculator()
-			throw()
-		{
-		}
 
 		AtomDistanceColorCalculator::AtomDistanceColorCalculator()
+			throw()
 			: UnaryProcessor<Atom>(),
 				UnaryProcessor<Composite>(),
 				atom_2_distance_(),
@@ -296,6 +349,7 @@ namespace BALL
 		}
 		
 		AtomDistanceColorCalculator::AtomDistanceColorCalculator(const AtomDistanceColorCalculator& color_calculator)
+			throw()
 			:	UnaryProcessor<Atom>(color_calculator),
 				UnaryProcessor<Composite>(color_calculator),
 				ColorCalculator(color_calculator),
@@ -309,7 +363,12 @@ namespace BALL
 		AtomDistanceColorCalculator::~AtomDistanceColorCalculator()
 			throw()
 		{
-			clear();
+			#ifdef BALL_VIEW_DEBUG
+				cout << "Destructing object " << (void *)this 
+					<< " of class " << RTTI::getName<AtomDistanceColorCalculator>() << endl;
+			#endif 
+
+			destroy();
 		}
 
 		void AtomDistanceColorCalculator::clear()
@@ -324,10 +383,49 @@ namespace BALL
 		void AtomDistanceColorCalculator::destroy()
 			throw()
 		{
-			atom_2_distance_.destroy();
+		}
+
+		void AtomDistanceColorCalculator::set
+			(const AtomDistanceColorCalculator& color_calculator)
+			throw()
+		{
+			clear();
+
+			distance_ = color_calculator.distance_;
+			null_distance_color_ = color_calculator.null_distance_color_;
+			full_distance_color_ = color_calculator.full_distance_color_;
+		}
+
+		const AtomDistanceColorCalculator& AtomDistanceColorCalculator::operator =
+			(const AtomDistanceColorCalculator& color_calculator)
+			throw()
+		{
+			set(color_calculator);
+
+			return *this;
+		}
+
+		void AtomDistanceColorCalculator::get
+			(AtomDistanceColorCalculator& color_calculator) const
+			throw()
+		{
+			color_calculator.set(*this);
+		}
+
+		void AtomDistanceColorCalculator::swap
+			(AtomDistanceColorCalculator& color_calculator)
+			throw()
+		{
+			float temp = distance_;
+			distance_ = color_calculator.distance_;
+			color_calculator.distance_ = temp;
+
+			null_distance_color_.swap(color_calculator.null_distance_color_);
+			full_distance_color_.swap(color_calculator.full_distance_color_);
 		}
 
 		void AtomDistanceColorCalculator::calculateDistances()
+			throw()
 		{
 			AtomDistanceHashMap::Iterator it1 = atom_2_distance_.begin();
 			AtomDistanceHashMap::Iterator it1_old;
@@ -364,16 +462,19 @@ namespace BALL
 		}
 	 
 		bool AtomDistanceColorCalculator::start()
+			throw()
 		{
 			return true;
 		}
 				
 		bool AtomDistanceColorCalculator::finish()
+			throw()
 		{
 			return true;
 		}
 
 		Processor::Result AtomDistanceColorCalculator::operator() (Composite& composite)
+			throw()
 		{
 			if (RTTI::isKindOf<Atom>(composite))
 			{
@@ -384,6 +485,7 @@ namespace BALL
 		}
 		
 		Processor::Result AtomDistanceColorCalculator::operator() (Atom& atom)
+			throw()
 		{
 			AtomDistanceHashMap::Iterator it = atom_2_distance_.find((void*)&atom);
 
@@ -396,15 +498,8 @@ namespace BALL
 			return Processor::CONTINUE;
 		}
 
-		void AtomDistanceColorCalculator::visit(Composite& composite) 
-		{
-			if (RTTI::isKindOf<Atom>(composite))
-			{
-				visit(*RTTI::castTo<Atom>(composite));
-			}
-		}
-		
 		void AtomDistanceColorCalculator::visit(Atom& atom)
+			throw()
 		{
 			AtomDistanceHashMap::Iterator it = atom_2_distance_.find((void*)&atom);
 
@@ -424,13 +519,13 @@ namespace BALL
 			if (distance > distance_) distance = distance_;
 			if (distance < 0.0) distance = 0.0;
 
-			red1   = null_distance_color_.red();
-			green1 = null_distance_color_.green();
-			blue1  = null_distance_color_.blue();
+			red1   = null_distance_color_.getRed();
+			green1 = null_distance_color_.getGreen();
+			blue1  = null_distance_color_.getBlue();
 
-			red2   = full_distance_color_.red();
-			green2 = full_distance_color_.green();
-			blue2  = full_distance_color_.blue();
+			red2   = full_distance_color_.getRed();
+			green2 = full_distance_color_.getGreen();
+			blue2  = full_distance_color_.getBlue();
 
 			color_.set
 				(red1 + (distance * (red2 - red1)) / distance_,

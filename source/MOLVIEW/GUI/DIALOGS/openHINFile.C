@@ -1,4 +1,4 @@
-// $Id: openHINFile.C,v 1.3 2000/12/22 19:12:16 amoll Exp $
+// $Id: openHINFile.C,v 1.4 2001/05/13 15:02:40 hekl Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/openHINFile.h>
 
@@ -18,6 +18,7 @@ namespace BALL
 	namespace MOLVIEW
 	{
 	  OpenHINFile::OpenHINFile(QWidget* parent, const char* name)
+			throw()
 			:	FileDialog("Import HIN file", QFileDialog::ExistingFile, parent, name)
 		{
 			QStringList string_list;
@@ -37,6 +38,7 @@ namespace BALL
 		}
 
 		void OpenHINFile::initializeWidget(MainControl& main_control)
+			throw()
 		{
 			main_control.insertMenuEntry
 				(MainControl::FILE_IMPORT, "&HIN File", this,
@@ -45,6 +47,7 @@ namespace BALL
 		}
 		
 		void OpenHINFile::finalizeWidget(MainControl& main_control)
+			throw()
 		{
 			main_control.removeMenuEntry
 				(MainControl::FILE_IMPORT, "&HIN File", this,
@@ -53,6 +56,7 @@ namespace BALL
 		}
 
 		void OpenHINFile::openFile_()
+			throw()
     {
 			bool has_periodic_boundary = false;
 			Box3 bounding_box;
@@ -120,8 +124,13 @@ namespace BALL
 
 			QString filename = getFileName().c_str();
 
+			cerr << filename << endl;
+			cerr << getPathName() << endl;
+
 			// construct a name (the filename without the dir path)
 			filename.remove(0, getPathName().length() + 1);
+
+			cerr << filename << endl;
 
 			if (filename.find('.') != -1)
 			{

@@ -1,4 +1,4 @@
-// $Id: glTwoColoredTube.C,v 1.4 2001/02/04 16:19:04 hekl Exp $
+// $Id: glTwoColoredTube.C,v 1.5 2001/05/13 15:02:41 hekl Exp $
 
 #include <BALL/MOLVIEW/GUI/PRIMITIV/glTwoColoredTube.h>
 
@@ -13,6 +13,7 @@ namespace BALL
 		using VIEW::GeometricObject;
 
 		GLTwoColoredTube::GLTwoColoredTube()
+			throw()
 			:	TwoColoredTube(),
 				GLObject()
 		{
@@ -20,6 +21,7 @@ namespace BALL
 
 		GLTwoColoredTube::GLTwoColoredTube
 			(const GLTwoColoredTube& GL_two_colored_tube, bool deep)
+			throw()
 			:	TwoColoredTube(GL_two_colored_tube, deep),
 				GLObject(GL_two_colored_tube)
 		{
@@ -27,6 +29,7 @@ namespace BALL
 
 		GLTwoColoredTube::GLTwoColoredTube
 			(const GeometricObject& geometric_object)
+			throw()
 			:	TwoColoredTube(geometric_object),
 				GLObject()
 		{
@@ -57,7 +60,36 @@ namespace BALL
 			GLObject::destroy();
 		}
 
+		void GLTwoColoredTube::set(const GLTwoColoredTube& gl_two_colored_tube, bool deep)
+			throw()
+		{
+			TwoColoredTube::set(gl_two_colored_tube, deep);
+			GLObject::set(gl_two_colored_tube);
+		}
+
+		const GLTwoColoredTube& GLTwoColoredTube::operator = (const GLTwoColoredTube& gl_two_colored_tube)
+			throw()
+		{
+			set(gl_two_colored_tube);
+
+			return *this;
+		}
+
+		void GLTwoColoredTube::get(GLTwoColoredTube& gl_two_colored_tube, bool deep) const
+			throw()
+		{
+			gl_two_colored_tube.set(*this, deep);
+		}
+
+		void GLTwoColoredTube::swap(GLTwoColoredTube& gl_two_colored_tube)
+			throw()
+		{
+			TwoColoredTube::swap(gl_two_colored_tube);
+			GLObject::swap(gl_two_colored_tube);
+		}
+
 		bool GLTwoColoredTube::draw(bool with_names)
+			throw()
 		{
 			if (hasProperty(GeometricObject::PROPERTY__OBJECT_HIDDEN))
 			{
@@ -66,10 +98,10 @@ namespace BALL
 
 			if (isSelected())
 			{
-				glColor4ub((unsigned char)getSelectedColor().red(),
-									 (unsigned char)getSelectedColor().green(),
-									 (unsigned char)getSelectedColor().blue(),
-									 (unsigned char)getSelectedColor().alpha());
+				glColor4ub((unsigned char)getSelectedColor().getRed(),
+									 (unsigned char)getSelectedColor().getGreen(),
+									 (unsigned char)getSelectedColor().getBlue(),
+									 (unsigned char)getSelectedColor().getAlpha());
 			}
 
 			if (with_names)
@@ -90,20 +122,20 @@ namespace BALL
 
 			if (isSelected() == false)
 			{
-				glColor4ub((unsigned char)getColor1().red(),
-									 (unsigned char)getColor1().green(),
-									 (unsigned char)getColor1().blue(),
-									 (unsigned char)getColor1().alpha());
+				glColor4ub((unsigned char)getColor1().getRed(),
+									 (unsigned char)getColor1().getGreen(),
+									 (unsigned char)getColor1().getBlue(),
+									 (unsigned char)getColor1().getAlpha());
 			}
 
 			draw_(getVertex1(), getMiddleVertex(), rotation_axis, angle);
 
 			if (isSelected() == false)
 			{
-				glColor4ub((unsigned char)getColor2().red(),
-									 (unsigned char)getColor2().green(),
-									 (unsigned char)getColor2().blue(),
-									 (unsigned char)getColor2().alpha());
+				glColor4ub((unsigned char)getColor2().getRed(),
+									 (unsigned char)getColor2().getGreen(),
+									 (unsigned char)getColor2().getBlue(),
+									 (unsigned char)getColor2().getAlpha());
 			}
 
 			draw_(getMiddleVertex(), getVertex2(), rotation_axis, angle);
@@ -142,10 +174,6 @@ namespace BALL
 			glPopMatrix();
 		}
 
-		bool GLTwoColoredTube::drawUserDefined()
-		{
-			throw Exception::NotImplemented(__FILE__, __LINE__);
-		}
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/MOLVIEW/GUI/PRIMITIV/glTwoColoredTube.iC>

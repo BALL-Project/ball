@@ -1,4 +1,4 @@
-// $Id: molecularProperties.C,v 1.4 2000/12/22 19:12:16 amoll Exp $
+// $Id: molecularProperties.C,v 1.5 2001/05/13 15:02:41 hekl Exp $
 
 #include <BALL/MOLVIEW/GUI/WIDGETS/molecularProperties.h>
 
@@ -11,6 +11,7 @@ namespace BALL
 	{
 
   	MolecularProperties::MolecularProperties(QWidget* parent, const char* name)
+			throw()
 			:	QWidget(parent, name),
 				ModularWidget(name),
 				fragment_db_()
@@ -25,6 +26,7 @@ namespace BALL
     }
 
 	  void MolecularProperties::onNotify(Message *message)
+			throw()
     {
 			if (RTTI::isKindOf<NewCompositeMessage>(*message))
 			{
@@ -34,11 +36,14 @@ namespace BALL
 				// properties will be used only for atom containers
 				if (!RTTI::isKindOf<AtomContainer>(*(composite_message->getComposite())))
 				{
-					NewMolecularMessage* mol_message = new NewMolecularMessage;
-					mol_message->setComposite(composite_message->getComposite());
-					mol_message->setDeletable(true);
+					// ??????????????? warum wird eine MolecularMessage gesendet wenn
+					// composite kein AtomContainer ?????????????????????????????????
+					//
+					//					NewMolecularMessage* mol_message = new NewMolecularMessage;
+					//					mol_message->setComposite(composite_message->getComposite());
+					//					mol_message->setDeletable(true);
 					
-					notify_(mol_message);
+					//					notify_(mol_message);
 					
 					return;
 				}
@@ -126,18 +131,6 @@ namespace BALL
 			}
     }
 
-		void MolecularProperties::initializeWidget(MainControl& /* main_control */)
-		{
-		}
-		
-		void MolecularProperties::finalizeWidget(MainControl& /* main_control */)
-		{
-		}
-		
-		void MolecularProperties::checkMenu(MainControl& /* main_control */)
-		{
-		}
-		
 #		ifdef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/MOLVIEW/GUI/WIDGETS/molecularProperties.iC>
 #		endif

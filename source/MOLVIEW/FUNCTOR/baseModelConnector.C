@@ -1,4 +1,4 @@
-// $Id: baseModelConnector.C,v 1.3 2000/12/12 16:19:24 oliver Exp $
+// $Id: baseModelConnector.C,v 1.4 2001/05/13 15:02:39 hekl Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/baseModelConnector.h>
 
@@ -11,6 +11,7 @@ namespace BALL
 	{
 
 		BaseModelConnector::BaseModelConnector()
+			throw()
 			:	Visitor<Composite>(),
 				PropertyManager(),
 				searcher_(),
@@ -20,6 +21,7 @@ namespace BALL
 
 		BaseModelConnector::BaseModelConnector
 			(const BaseModelConnector& connector, bool deep)
+			throw()
 			:	Visitor<Composite>(connector),
 				PropertyManager(connector, deep),
 				searcher_(),
@@ -50,20 +52,21 @@ namespace BALL
 		void BaseModelConnector::destroy()
 			throw()
 		{
-			clear();
 		}
 
 		void BaseModelConnector::set
 			(const BaseModelConnector& connector,
 			 bool deep)
+			throw()
 		{
 			PropertyManager::set(connector, deep);
 			
 			color_calculator_ = connector.color_calculator_;
 		}
 
-		BaseModelConnector& 	BaseModelConnector::operator =
+		const BaseModelConnector&	BaseModelConnector::operator =
 			(const BaseModelConnector& connector)
+			throw()
 		{
 			set(connector);
 
@@ -72,12 +75,14 @@ namespace BALL
 
 		void BaseModelConnector::get
 			(BaseModelConnector& connector, bool deep) const
+			throw()
 		{
 			connector.set(*this, deep);
 		}
 
 		void BaseModelConnector::swap
 			(BaseModelConnector& connector)
+			throw()
 		{
 			PropertyManager::swap(connector);
 
@@ -85,13 +90,8 @@ namespace BALL
 		}
 
 		void BaseModelConnector::visit(Composite& /* composite */)
+			throw()
 		{
-			// BAUSTELLE
-		}
-
-		bool BaseModelConnector::isValid() const
-		{
-			return color_calculator_->isValid();
 		}
 
 		void BaseModelConnector::dump

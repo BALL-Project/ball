@@ -1,4 +1,4 @@
-// $Id: glBackbone.C,v 1.3 2001/02/04 16:19:04 hekl Exp $
+// $Id: glBackbone.C,v 1.4 2001/05/13 15:02:41 hekl Exp $
 
 #include <BALL/MOLVIEW/GUI/PRIMITIV/glBackbone.h>
 #include <GL/gl.h>
@@ -11,18 +11,21 @@ namespace BALL
 	{
 
 		GLBackbone::GLBackbone()
+			throw()
 			:	Backbone(),
 				GLObject()
 		{
 		}
 
 		GLBackbone::GLBackbone(const GLBackbone& GL_backbone, bool deep)
+			throw()
 			:	Backbone(GL_backbone, deep),
 				GLObject(GL_backbone)
 		{
 		}
 
 		GLBackbone::GLBackbone(const GeometricObject& geometric_object)
+			throw()
 			:	Backbone(geometric_object),
 				GLObject()
 		{
@@ -53,14 +56,38 @@ namespace BALL
 			GLObject::destroy();
 		}
 
-		bool GLBackbone::draw(bool /* with_names */)
+		void GLBackbone::set(const GLBackbone& glbackbone, bool deep)
+			throw()
 		{
-			return true;
+			Backbone::set(glbackbone, deep);
+			GLObject::set(glbackbone);
 		}
 
-		bool GLBackbone::drawUserDefined()
+		const GLBackbone& GLBackbone::operator = (const GLBackbone& glbackbone)
+			throw()
 		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
+			set(glbackbone);
+
+			return *this;
+		}
+
+		void GLBackbone::get(GLBackbone& glbackbone, bool deep) const
+			throw()
+		{
+			glbackbone.set(*this, deep);
+		}
+
+		void GLBackbone::swap(GLBackbone& glbackbone)
+			throw()
+		{
+			Backbone::swap(glbackbone);
+			GLObject::swap(glbackbone);
+		}
+
+		bool GLBackbone::draw(bool /* with_names */)
+			throw()
+		{
+			return true;
 		}
 
 		bool GLBackbone::extract()

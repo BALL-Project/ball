@@ -1,4 +1,4 @@
-// $Id: openPDBFile.C,v 1.3 2000/12/22 19:12:16 amoll Exp $
+// $Id: openPDBFile.C,v 1.4 2001/05/13 15:02:40 hekl Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/openPDBFile.h>
 
@@ -11,6 +11,7 @@ namespace BALL
 	namespace MOLVIEW
 	{
 	  OpenPDBFile::OpenPDBFile(QWidget* parent, const char* name)
+			throw()
 			:	FileDialog("Import PDB file", QFileDialog::ExistingFile, parent, name)
 		{
 			QStringList string_list;
@@ -32,6 +33,7 @@ namespace BALL
 		}
 
 		void OpenPDBFile::initializeWidget(MainControl& main_control)
+			throw()
 		{
 			main_control.insertMenuEntry
 				(MainControl::FILE_IMPORT, "&PDB File", this,
@@ -40,6 +42,7 @@ namespace BALL
 		}
 		
 		void OpenPDBFile::finalizeWidget(MainControl& main_control)
+			throw()
 		{
 			main_control.removeMenuEntry
 				(MainControl::FILE_IMPORT, "&PDB File", this,
@@ -48,6 +51,7 @@ namespace BALL
 		}
 
 		void OpenPDBFile::openFile_()
+			throw()
     {
 			// notify the main window
 			WindowMessage window_message;

@@ -1,4 +1,4 @@
-// $Id: moleculeObjectCreator.C,v 1.1 2000/09/23 15:39:15 hekl Exp $
+// $Id: moleculeObjectCreator.C,v 1.2 2001/05/13 15:02:41 hekl Exp $
 
 #include <BALL/MOLVIEW/GUI/KERNEL/moleculeObjectCreator.h>
 
@@ -11,17 +11,13 @@ namespace BALL
 	{
 
 		MoleculeObjectCreator::MoleculeObjectCreator()
+			throw()
 			:	ObjectCreator()
 		{
 		}
 
-		MoleculeObjectCreator::MoleculeObjectCreator
-			(const MoleculeObjectCreator& object_creator, bool deep)
-			:	ObjectCreator(object_creator, deep)
-		{
-		}
-
 		MoleculeObjectCreator::~MoleculeObjectCreator()
+			throw()
 		{
 			#ifdef BALL_MOLVIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -31,7 +27,20 @@ namespace BALL
 			destroy();
 		}
 
+		void MoleculeObjectCreator::clear()
+			throw()
+		{
+			ObjectCreator::clear();
+		}
+
+		void MoleculeObjectCreator::destroy()
+			throw()
+		{
+			ObjectCreator::destroy();
+		}
+
 	  void MoleculeObjectCreator::initPersistenceManager(TextPersistenceManager &pm)
+			throw()
     {
 			using namespace RTTI;
 
@@ -56,6 +65,7 @@ namespace BALL
 		}
 
 	  Composite *MoleculeObjectCreator::convertObject(PersistentObject &po)
+			throw()
     {
 			cout << "read object @ " << (void*)&po << endl;
 		

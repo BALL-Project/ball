@@ -1,4 +1,4 @@
-// $Id: glLineModel.C,v 1.3 2001/01/26 00:43:53 amoll Exp $
+// $Id: glLineModel.C,v 1.4 2001/05/13 15:02:41 hekl Exp $
 
 #include <BALL/MOLVIEW/GUI/FUNCTOR/glLineModel.h>
 
@@ -12,11 +12,13 @@ namespace BALL
 		using VIEW::GLLine;
 
 		AddGLLineModel::AddGLLineModel()
+			throw()
 			: AddLineModel()
 		{
 		}
 
 		AddGLLineModel::AddGLLineModel(const AddGLLineModel& rAddGLLineModel, bool deep)
+			throw()
 			: AddLineModel(rAddGLLineModel, deep)
 		{
 		}

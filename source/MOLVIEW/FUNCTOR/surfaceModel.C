@@ -1,4 +1,4 @@
-// $Id: surfaceModel.C,v 1.6 2000/12/12 16:19:25 oliver Exp $
+// $Id: surfaceModel.C,v 1.7 2001/05/13 15:02:40 hekl Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/surfaceModel.h>
 #include <BALL/STRUCTURE/surfaceProcessor.h>
@@ -12,6 +12,7 @@ namespace BALL
 	{
 
 		AddSurfaceModel::AddSurfaceModel()
+			throw()
 			: BaseModelProcessor(),
 				get_composite_(true),
 				start_composite_(0)
@@ -21,6 +22,7 @@ namespace BALL
 		AddSurfaceModel::AddSurfaceModel
 			(const AddSurfaceModel& add_surface,
 			 bool deep)
+			throw()
 			:	BaseModelProcessor(add_surface, deep),
 				get_composite_(true),
 				start_composite_(0)
@@ -32,7 +34,7 @@ namespace BALL
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
-			 << " of class " << getBallClass().getName() << endl;
+						 << " of class " << RTTI::getName<AddSurfaceModel>() << endl;
 			#endif 
 
 			destroy();
@@ -49,55 +51,29 @@ namespace BALL
 		void AddSurfaceModel::destroy()
 			throw()
 		{
-			BaseModelProcessor::destroy();
-			get_composite_ = true;
-			start_composite_ = 0;
-		}
-
-		void AddSurfaceModel::set
-			(const AddSurfaceModel& add_surface,
-			 bool deep)
-		{
-			BaseModelProcessor::set(add_surface, deep);
-			get_composite_ = true;
-			start_composite_ = 0;
-		}
-
-		AddSurfaceModel& AddSurfaceModel::operator =
-			(const AddSurfaceModel& add_surface)
-		{
-			set(add_surface);
-
-			return *this;
-		}
-
-		void AddSurfaceModel::get
-			(AddSurfaceModel& add_surface,
-			 bool deep) const
-		{
-			add_surface.set(*this, deep);
-		}
-
-		void AddSurfaceModel::swap
-			(AddSurfaceModel& add_surface)
-		{
-			BaseModelProcessor::swap(add_surface);
-			get_composite_ = true;
-			start_composite_ = 0;
 		}
 
 		bool AddSurfaceModel::start()
+			throw()
 		{
+			get_composite_ = true;
+			start_composite_ = 0;
 			return BaseModelProcessor::start();
 		}
 				
 		bool AddSurfaceModel::finish()
+			throw(Exception::OutOfMemory)
 		{
 			// insert surface only if a composite exist
 			if (start_composite_ != 0)
 			{
 				Mesh* mesh = createMesh_();
 
+				if (mesh == 0)
+				{
+					throw Exception::OutOfMemory
+						(__FILE__, __LINE__, sizeof(Mesh));
+				}
 				// create mesh
 				// ...
 
@@ -137,6 +113,7 @@ namespace BALL
 		Processor::Result 
 		AddSurfaceModel::operator()
 			(Composite &composite)
+			throw()
 		{
 			// take first composite, surface will be inserted to it later
 			if (get_composite_)
@@ -160,20 +137,6 @@ namespace BALL
 			BaseModelProcessor::dump(s, depth + 1);
 
 			BALL_DUMP_STREAM_SUFFIX(s);
-		}
-
-		void 
-		AddSurfaceModel::read
-			(std::istream & /* s */)
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-		void 
-		AddSurfaceModel::write
-			(std::ostream & /* s */) const
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		Mesh *

@@ -1,5 +1,11 @@
 // $Id:
 
+
+#include <BALL/KERNEL/molecule.h>
+#include <BALL/KERNEL/protein.h>
+#include <BALL/KERNEL/system.h>
+
+
 #include <qcolordialog.h>
 #include <qpopupmenu.h>
 #include <qmenubar.h>
@@ -20,6 +26,7 @@ DisplayProperties::DisplayProperties
 	QWidget* parent,
 	const char* name
 )
+  throw()
 	:
 	Inherited( parent, name ),
 	ModularWidget(name),
@@ -32,15 +39,29 @@ DisplayProperties::DisplayProperties
   model_string_("stick"),
   precision_string_("high"),
   coloring_method_string_("by element"),
-	object_processor_(),
-	distance_color_calculator_(),
 	distance_coloring_(false),
-	selection_()
+	selection_(),
+
+	view_center_vector_(0,0,0),
+	view_direction_(2),
+	view_distance_(25),
+	address_array_((int)50, (int)-1),
+
+	fragmentdb_(),
+	color_calculator_(0),
+	model_connector_(),
+	element_color_calculator_(),
+	residue_name_color_calculator_(),
+	atom_charge_color_calculator_(),
+	distance_color_calculator_(),
+	custom_color_calculator_()
 {
 	setCaption("Display Settings");
 
 	// register the widget with the MainControl
   ModularWidget::registerWidget(this);
+
+	color_calculator_ = &element_color_calculator_;
 }
 
 DisplayProperties::~DisplayProperties()
@@ -49,6 +70,7 @@ DisplayProperties::~DisplayProperties()
 }
 
 void DisplayProperties::fetchPreferences(INIFile& inifile)
+  throw()
 {
 	// 
 	// the geometry of the main window
@@ -75,9 +97,9 @@ void DisplayProperties::fetchPreferences(INIFile& inifile)
 	{
 		custom_color_.set(inifile.getValue("WINDOWS", "Display::customcolor"));
 
-		QColor qcolor(custom_color_.red(), 
-									custom_color_.green(), 
-									custom_color_.blue());
+		QColor qcolor(custom_color_.getRed(), 
+									custom_color_.getGreen(), 
+									custom_color_.getBlue());
 
 		color_sample->setBackgroundColor(qcolor);
 	}
@@ -111,6 +133,7 @@ void DisplayProperties::fetchPreferences(INIFile& inifile)
 }
 
 void DisplayProperties::writePreferences(INIFile& inifile)
+  throw()
 {
 	//	
 	// the display window position
@@ -134,6 +157,7 @@ void DisplayProperties::writePreferences(INIFile& inifile)
 }
 
 void DisplayProperties::onNotify(Message *message)
+  throw()
 {
 	// new composite => build graphical representation and notify scene
 	if (RTTI::isKindOf<NewMolecularMessage>(*message))
@@ -141,7 +165,7 @@ void DisplayProperties::onNotify(Message *message)
 		NewMolecularMessage *composite_message = RTTI::castTo<NewMolecularMessage>(*message);
 
 		// generate graphical representation
-		object_processor_.applyOn(*(composite_message->getComposite()));
+		applyOn_(*(composite_message->getComposite()));
 
 		// notify tree of the changes
 		ChangedMolecularMessage *changed_message = new ChangedMolecularMessage(*composite_message);
@@ -172,6 +196,10 @@ void DisplayProperties::onNotify(Message *message)
 
 		selection_ = selection->getSelection();
 	}
+	else
+	{
+		selection_.clear();
+	}
 
 	// disabled apply button, if selection is empty
 	if (selection_.empty())
@@ -185,6 +213,7 @@ void DisplayProperties::onNotify(Message *message)
 }
 
 void DisplayProperties::initializeWidget(MainControl& main_control)
+  throw()
 {
 	(main_control.initPopupMenu(MainControl::DISPLAY))->setCheckable(true);
 
@@ -226,6 +255,7 @@ void DisplayProperties::initializeWidget(MainControl& main_control)
 }
 
 void DisplayProperties::finalizeWidget(MainControl& main_control)
+  throw()
 {
 	main_control.removeMenuEntry
 		(MainControl::DISPLAY, "D&isplay Properties", this,
@@ -259,6 +289,7 @@ void DisplayProperties::finalizeWidget(MainControl& main_control)
 }
 
 void DisplayProperties::checkMenu(MainControl& main_control)
+  throw()
 {
 	(main_control.menuBar())->setItemChecked(id_, isVisible());
 
@@ -299,11 +330,11 @@ void DisplayProperties::select()
 	window_message->setDeletable(true);
 	notify_(window_message);
 
-	int value_static = object_processor_.getValue(ADDRESS__STATIC_MODEL);
-	int value_dynamic = object_processor_.getValue(ADDRESS__DYNAMIC_MODEL);
+	int value_static = getValue_(ADDRESS__STATIC_MODEL);
+	int value_dynamic = getValue_(ADDRESS__DYNAMIC_MODEL);
 
-	object_processor_.setValue(ADDRESS__STATIC_MODEL, VALUE__SELECT);
-	object_processor_.setValue(ADDRESS__DYNAMIC_MODEL, VALUE__SELECT);
+	setValue_(ADDRESS__STATIC_MODEL, VALUE__SELECT);
+	setValue_(ADDRESS__DYNAMIC_MODEL, VALUE__SELECT);
 
 	// copy list because the selection_ list can change after a changemessage event
 	List<Composite*> temp_selection_ = selection_;
@@ -311,7 +342,7 @@ void DisplayProperties::select()
 	List<Composite*>::ConstIterator list_it = temp_selection_.begin();	
 	for (; list_it != temp_selection_.end(); ++list_it)
 	{
-		object_processor_.applyOn(**list_it);
+		applyOn_(**list_it);
 		
 		// mark composite for update
 		ChangedCompositeMessage *change_message = new ChangedCompositeMessage;
@@ -321,8 +352,8 @@ void DisplayProperties::select()
 	}
 
 	// restore old values
-	object_processor_.setValue(ADDRESS__STATIC_MODEL, value_static);
-	object_processor_.setValue(ADDRESS__DYNAMIC_MODEL, value_dynamic);
+	setValue_(ADDRESS__STATIC_MODEL, value_static);
+	setValue_(ADDRESS__DYNAMIC_MODEL, value_dynamic);
 
 	// update scene
 	SceneMessage *scene_message = new SceneMessage;
@@ -352,11 +383,11 @@ void DisplayProperties::deselect()
 	window_message->setDeletable(true);
 	notify_(window_message);
 
-	int value_static = object_processor_.getValue(ADDRESS__STATIC_MODEL);
-	int value_dynamic = object_processor_.getValue(ADDRESS__DYNAMIC_MODEL);
+	int value_static = getValue_(ADDRESS__STATIC_MODEL);
+	int value_dynamic = getValue_(ADDRESS__DYNAMIC_MODEL);
 
-	object_processor_.setValue(ADDRESS__STATIC_MODEL, VALUE__DESELECT);
-	object_processor_.setValue(ADDRESS__DYNAMIC_MODEL, VALUE__DESELECT);
+	setValue_(ADDRESS__STATIC_MODEL, VALUE__DESELECT);
+	setValue_(ADDRESS__DYNAMIC_MODEL, VALUE__DESELECT);
         
 	// copy list because the selection_ list can change after a changemessage event
 	List<Composite*> temp_selection_ = selection_;
@@ -364,7 +395,7 @@ void DisplayProperties::deselect()
 	List<Composite*>::ConstIterator list_it = temp_selection_.begin();	
 	for (; list_it != temp_selection_.end(); ++list_it)
 	{
-		object_processor_.applyOn(**list_it);
+		applyOn_(**list_it);
 
 		// mark composite for update
 		ChangedCompositeMessage *change_message = new ChangedCompositeMessage;
@@ -374,8 +405,8 @@ void DisplayProperties::deselect()
 	}
 
 	// restore old values
-	object_processor_.setValue(ADDRESS__STATIC_MODEL, value_static);
-	object_processor_.setValue(ADDRESS__DYNAMIC_MODEL, value_dynamic);
+	setValue_(ADDRESS__STATIC_MODEL, value_static);
+	setValue_(ADDRESS__DYNAMIC_MODEL, value_dynamic);
 
 	// update scene
 	SceneMessage *scene_message = new SceneMessage;
@@ -398,15 +429,15 @@ void DisplayProperties::centerCamera()
 	}
 
   // use specified object processor for calculating the center
-  object_processor_.calculateCenter(*selection_.front());
+  calculateCenter_(*selection_.front());
 
-	Vector3 view_point = object_processor_.getViewCenter();
+	Vector3 view_point = getViewCenter_();
 
 	// update scene
 	SceneMessage *scene_message = new SceneMessage;
 	scene_message->setCameraLookAt(view_point);
 
-	view_point.z = view_point.z + object_processor_.getViewDistance();
+	view_point.z = view_point.z + getViewDistance_();
 	scene_message->setCameraViewPoint(view_point);
 	scene_message->setDeletable(true);
 	notify_(scene_message);
@@ -435,9 +466,9 @@ void DisplayProperties::buildBonds()
 	List<Composite*>::ConstIterator list_it = temp_selection_.begin();	
 	for (; list_it != temp_selection_.end(); ++list_it)
 	{	
-		(*list_it)->apply(object_processor_.fragmentdb.build_bonds);
-		number_of_bonds += object_processor_.fragmentdb.build_bonds.getNumberOfBondsBuilt();
-		object_processor_.applyOn(**list_it);
+		(*list_it)->apply(fragmentdb_.build_bonds);
+		number_of_bonds += fragmentdb_.build_bonds.getNumberOfBondsBuilt();
+		applyOn_(**list_it);
 
 		// mark composite for update
 		ChangedCompositeMessage *change_message = new ChangedCompositeMessage;
@@ -484,10 +515,10 @@ void DisplayProperties::addHydrogens()
 	List<Composite*>::ConstIterator list_it = temp_selection_.begin();	
 	for (; list_it != temp_selection_.end(); ++list_it)
 	{	
-		(*list_it)->apply(object_processor_.fragmentdb.add_hydrogens);
-		number_of_hydrogens += object_processor_.fragmentdb.add_hydrogens.getNumberOfInsertedHydrogens();
-		(*list_it)->apply(object_processor_.fragmentdb.build_bonds);
-		object_processor_.applyOn(**list_it);
+		(*list_it)->apply(fragmentdb_.add_hydrogens);
+		number_of_hydrogens += fragmentdb_.add_hydrogens.getNumberOfInsertedHydrogens();
+		(*list_it)->apply(fragmentdb_.build_bonds);
+		applyOn_(**list_it);
 
 		// mark composite for update
 		ChangedCompositeMessage *change_message = new ChangedCompositeMessage;
@@ -523,39 +554,23 @@ void DisplayProperties::selectPrecision(const QString& string)
 
 	if (string == "low")
 	{
-		object_processor_.
-			setValue(ADDRESS__STATIC_DRAWING_PRECISION, 
-								 VALUE__DRAWING_PRECISION_LOW);
-		object_processor_.
-			setValue(ADDRESS__DYNAMIC_DRAWING_PRECISION, 
-								 VALUE__DRAWING_PRECISION_LOW);
+		setValue_(ADDRESS__STATIC_DRAWING_PRECISION, VALUE__DRAWING_PRECISION_LOW);
+		setValue_(ADDRESS__DYNAMIC_DRAWING_PRECISION, VALUE__DRAWING_PRECISION_LOW);
 	}
 	else if (string == "medium")
 	{
-		object_processor_.
-			setValue(ADDRESS__STATIC_DRAWING_PRECISION, 
-								 VALUE__DRAWING_PRECISION_MEDIUM);
-		object_processor_.
-			setValue(ADDRESS__DYNAMIC_DRAWING_PRECISION, 
-								 VALUE__DRAWING_PRECISION_LOW);
+		setValue_(ADDRESS__STATIC_DRAWING_PRECISION, VALUE__DRAWING_PRECISION_MEDIUM);
+		setValue_(ADDRESS__DYNAMIC_DRAWING_PRECISION, VALUE__DRAWING_PRECISION_LOW);
 	}
 	else if (string == "high")
 	{
-		object_processor_.
-			setValue(ADDRESS__STATIC_DRAWING_PRECISION, 
-								 VALUE__DRAWING_PRECISION_HIGH);
-		object_processor_.
-			setValue(ADDRESS__DYNAMIC_DRAWING_PRECISION, 
-								 VALUE__DRAWING_PRECISION_LOW);
+		setValue_(ADDRESS__STATIC_DRAWING_PRECISION, VALUE__DRAWING_PRECISION_HIGH);
+		setValue_(ADDRESS__DYNAMIC_DRAWING_PRECISION, VALUE__DRAWING_PRECISION_LOW);
 	}
 	else if (string == "ultra")
 	{
-		object_processor_.
-			setValue(ADDRESS__STATIC_DRAWING_PRECISION, 
-								 VALUE__DRAWING_PRECISION_ULTRA);
-		object_processor_.
-			setValue(ADDRESS__DYNAMIC_DRAWING_PRECISION, 
-								 VALUE__DRAWING_PRECISION_LOW);
+		setValue_(ADDRESS__STATIC_DRAWING_PRECISION, VALUE__DRAWING_PRECISION_ULTRA);
+		setValue_(ADDRESS__DYNAMIC_DRAWING_PRECISION, VALUE__DRAWING_PRECISION_LOW);
 	}
 }
  
@@ -563,61 +578,43 @@ void DisplayProperties::selectModel(const QString& string)
 {
 	model_string_ = string;
 
-	object_processor_.
-		setValue(ADDRESS__DYNAMIC_DRAWING_MODE, 
-							 VALUE__DRAWING_MODE_SOLID);
+	setValue_(ADDRESS__DYNAMIC_DRAWING_MODE, VALUE__DRAWING_MODE_SOLID);
 
 	if (string == "none")
 	{
-		object_processor_.
-			setValue(ADDRESS__STATIC_MODEL, VALUE__MODEL_REMOVE);
-		object_processor_.
-			setValue(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_REMOVE);
+		setValue_(ADDRESS__STATIC_MODEL, VALUE__MODEL_REMOVE);
+		setValue_(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_REMOVE);
 	}
 	else if (string == "line")
 	{
-		object_processor_.
-			setValue(ADDRESS__STATIC_MODEL, VALUE__MODEL_LINES);
-		object_processor_.
-			setValue(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
+		setValue_(ADDRESS__STATIC_MODEL, VALUE__MODEL_LINES);
+		setValue_(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
 	}
 	else if (string == "stick")
 	{
- 		object_processor_.
-			setValue(ADDRESS__STATIC_MODEL, VALUE__MODEL_STICK);
-		object_processor_.
-			setValue(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
+		setValue_(ADDRESS__STATIC_MODEL, VALUE__MODEL_STICK);
+		setValue_(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
 	}
 	else if (string == "ball and stick")
 	{
-		object_processor_.
-			setValue(ADDRESS__STATIC_MODEL, VALUE__MODEL_BALL_AND_STICK);
-		object_processor_.
-			setValue(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
+		setValue_(ADDRESS__STATIC_MODEL, VALUE__MODEL_BALL_AND_STICK);
+		setValue_(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
 	}
 	else if (string == "backbone")
 	{
-		object_processor_.
-			setValue(ADDRESS__STATIC_MODEL, VALUE__MODEL_BACKBONE);
-		object_processor_.
-			setValue(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
+		setValue_(ADDRESS__STATIC_MODEL, VALUE__MODEL_BACKBONE);
+		setValue_(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
 	}
 	else if (string == "surface")
 	{
-		object_processor_.
-			setValue(ADDRESS__STATIC_MODEL, VALUE__MODEL_SURFACE);
-		object_processor_.
-			setValue(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_SURFACE);
-		object_processor_.
-			setValue(ADDRESS__DYNAMIC_DRAWING_MODE, 
-								 VALUE__DRAWING_MODE_DOTS);
+		setValue_(ADDRESS__STATIC_MODEL, VALUE__MODEL_SURFACE);
+		setValue_(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_SURFACE);
+		setValue_(ADDRESS__DYNAMIC_DRAWING_MODE, VALUE__DRAWING_MODE_DOTS);
 	}
 	else if (string == "van der Waals")
 	{
-		object_processor_.
-			setValue(ADDRESS__STATIC_MODEL, VALUE__MODEL_VAN_DER_WAALS);
-		object_processor_.
-			setValue(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
+		setValue_(ADDRESS__STATIC_MODEL, VALUE__MODEL_VAN_DER_WAALS);
+		setValue_(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
 	}
 }
 
@@ -629,23 +626,19 @@ void DisplayProperties::selectColoringMethod(const QString& string)
 
 	if (string == "by element")
 	{
-		object_processor_.
-			setColorCalculator(COLORCALCULATOR_VALUES__ELEMENT);
+		setColorCalculator_(COLORCALCULATOR_VALUES__ELEMENT);
 	}
 	else if (string == "by residue name")
 	{
-		object_processor_.
-			setColorCalculator(COLORCALCULATOR_VALUES__RESIDUE_NAME);
+		setColorCalculator_(COLORCALCULATOR_VALUES__RESIDUE_NAME);
 	}
 	else if (string == "by atom charge")
 	{
-		object_processor_.
-			setColorCalculator(COLORCALCULATOR_VALUES__ATOM_CHARGE);
+		setColorCalculator_(COLORCALCULATOR_VALUES__ATOM_CHARGE);
 	}
 	else if (string == "by atom distance")
 	{
-		object_processor_.
-			setColorCalculator(distance_color_calculator_);
+		setColorCalculator_(distance_color_calculator_);
 		
 		distance_coloring_ = true;
 	}
@@ -658,8 +651,7 @@ void DisplayProperties::selectColoringMethod(const QString& string)
 							(float)qcolor.green() / 255.0,
 							(float)qcolor.blue() / 255.0);
 
-		object_processor_.
-			setColorCalculator(COLORCALCULATOR_VALUES__CUSTOM, color);
+		setColorCalculator_(COLORCALCULATOR_VALUES__CUSTOM, color);
 	}
 }
 
@@ -692,7 +684,7 @@ void DisplayProperties::applyButtonClicked()
 	List<Composite*>::ConstIterator list_it = selection_.begin();
 	for (; list_it != selection_.end(); ++list_it)
 	{
-		object_processor_.applyOn(**list_it);
+		applyOn_(**list_it);
 
 		// move composite pointer to update list for later update
 		update_list.push_back(*list_it);
@@ -730,7 +722,7 @@ void DisplayProperties::editColor()
 
 	custom_color_ = color;
 
-	object_processor_.setColorCalculator(COLORCALCULATOR_VALUES__CUSTOM, color);
+	setColorCalculator_(COLORCALCULATOR_VALUES__CUSTOM, color);
 
 	coloring_method_string_ = "custom";
   setComboBoxIndex_(coloring_type_combobox_, coloring_method_string_);
@@ -759,9 +751,454 @@ void DisplayProperties::setComboBoxIndex_(QComboBox* combo_box, QString& item_st
 	}
 }
 
-//#		ifdef BALL_NO_INLINE_FUNCTIONS
-//#			include <BALL/MOLVIEW/GUI/DIALOGS/displayProperties.iC>
-//#		endif
+
+
+// ------------------------------------------------------------------------
+// Model Processor methods
+// ------------------------------------------------------------------------
+
+void DisplayProperties::applyOn_(Composite &composite)
+{
+
+// ------------------------------------------------------------------------------
+// models -----------------------------------------------------------------------
+// ------------------------------------------------------------------------------
+
+			AddGLBallAndStickModel ball_and_stick_model;
+			AddGLBackboneModel backbone_model;
+			AddGLLineModel line_model;
+			AddGLSurfaceModel surface_model;
+			AddGLVanDerWaalsModel van_der_waals_model;
+			RemoveModel remove_model;
+			ObjectSelector selector;			
+
+			ball_and_stick_model.registerModelConnector(model_connector_);
+			line_model.registerModelConnector(model_connector_);
+			van_der_waals_model.registerModelConnector(model_connector_);
+		
+// ------------------------------------------------------------------------------
+// RTTI -------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
+
+			BaseModelProcessor *static_base_model_pointer = NULL;
+			BaseModelProcessor *dynamic_base_model_pointer = NULL;
+
+// -----------------------------------------------------------------------------
+// selects and setups the static model processor -------------------------------
+// -----------------------------------------------------------------------------
+
+			switch (getValue_(ADDRESS__STATIC_MODEL))
+			{
+			  case VALUE__MODEL_LINES:
+					static_base_model_pointer = (BaseModelProcessor *)&line_model;
+					break;
+
+			  case VALUE__MODEL_STICK:
+					{
+						AddGLBallAndStickModel *model_pointer = &ball_and_stick_model;
+						static_base_model_pointer = (BaseModelProcessor *)model_pointer;
+						model_pointer->enableStickModel();
+					}
+					break;
+				
+			  case VALUE__MODEL_BALL_AND_STICK:
+					{
+						AddGLBallAndStickModel *model_pointer = &ball_and_stick_model;
+						static_base_model_pointer = (BaseModelProcessor *)model_pointer;
+						model_pointer->enableBallAndStickModel();
+					}
+					break;
+				
+			  case VALUE__MODEL_BACKBONE:
+					{
+						AddGLBackboneModel *model_pointer = &backbone_model;
+						static_base_model_pointer = (BaseModelProcessor *)model_pointer;
+					}
+					break;
+				
+  			case VALUE__MODEL_SURFACE:
+					static_base_model_pointer = (BaseModelProcessor *)&surface_model;
+					break;
+
+  			case VALUE__MODEL_VAN_DER_WAALS:
+					static_base_model_pointer = (BaseModelProcessor *)&van_der_waals_model;
+					break;
+
+  			case VALUE__MODEL_REMOVE:
+					static_base_model_pointer = (BaseModelProcessor *)&remove_model;
+					break;
+
+  			case VALUE__SELECT:
+					selector.select();
+					static_base_model_pointer = (BaseModelProcessor *)&selector;
+					break;
+
+  			case VALUE__DESELECT:
+					selector.deselect();
+					static_base_model_pointer = (BaseModelProcessor *)&selector;
+					break;
+
+			  default:
+					{
+						AddGLBallAndStickModel *model_pointer = &ball_and_stick_model;
+						static_base_model_pointer = (BaseModelProcessor *)model_pointer;
+						model_pointer->enableStickModel();
+					}
+					break;
+			}
+
+			// ------------------------------------------
+			// setup drawing precision ------------------
+			// ------------------------------------------
+			
+			switch (getValue_(ADDRESS__STATIC_DRAWING_PRECISION))
+			{
+			  case VALUE__DRAWING_PRECISION_LOW:
+					static_base_model_pointer
+						->setProperty(VIEW::GeometricObject::PROPERTY__DRAWING_PRECISION_LOW);
+					break;
+					
+			  case VALUE__DRAWING_PRECISION_MEDIUM:
+					static_base_model_pointer
+						->setProperty(VIEW::GeometricObject::PROPERTY__DRAWING_PRECISION_MEDIUM);
+					break;
+
+			  case VALUE__DRAWING_PRECISION_HIGH:
+					static_base_model_pointer
+						->setProperty(VIEW::GeometricObject::PROPERTY__DRAWING_PRECISION_HIGH);
+					break;
+					
+			  case VALUE__DRAWING_PRECISION_ULTRA:
+					static_base_model_pointer
+						->setProperty(VIEW::GeometricObject::PROPERTY__DRAWING_PRECISION_ULTRA);
+					break;
+					
+			  default:
+					static_base_model_pointer
+						->setProperty(VIEW::GeometricObject::PROPERTY__DRAWING_PRECISION_HIGH);
+					break;
+			}
+			
+			
+			// ------------------------------------------
+			// setup drawing mode -----------------------
+			// ------------------------------------------
+			
+			switch (getValue_(ADDRESS__STATIC_DRAWING_MODE))
+			{
+			  case VALUE__DRAWING_MODE_DOTS:
+					static_base_model_pointer
+						->setProperty(VIEW::GeometricObject::PROPERTY__DRAWING_MODE_DOTS);
+					break;
+					
+			  case VALUE__DRAWING_MODE_WIREFRAME:
+					static_base_model_pointer
+						->setProperty(VIEW::GeometricObject::PROPERTY__DRAWING_MODE_WIREFRAME);
+					break;
+					
+			  case VALUE__DRAWING_MODE_SOLID:
+					static_base_model_pointer
+						->setProperty(VIEW::GeometricObject::PROPERTY__DRAWING_MODE_SOLID);
+					break;
+					
+			  default:
+					static_base_model_pointer
+						->setProperty(VIEW::GeometricObject::PROPERTY__DRAWING_MODE_SOLID);
+					break;
+			}
+			
+			// switch to dynamic model
+			static_base_model_pointer
+				->setProperty(VIEW::GeometricObject::PROPERTY__OBJECT_STATIC);
+			static_base_model_pointer
+				->clearProperty(VIEW::GeometricObject::PROPERTY__OBJECT_DYNAMIC);
+
+// ------------------------------------------------------------------------------
+// register the color calculator ------------------------------------------------
+// ------------------------------------------------------------------------------
+			
+			static_base_model_pointer->registerColorCalculator(*color_calculator_);
+
+// ------------------------------------------------------------------------------
+// applies the processors to the composite --------------------------------------
+// ------------------------------------------------------------------------------
+
+			remove_model.setProperty(VIEW::GeometricObject::PROPERTY__OBJECT_STATIC);
+
+			if (getValue_(ADDRESS__STATIC_MODEL) == VALUE__MODEL_REMOVE)
+			{
+				applyOnComposite_(composite, &remove_model);
+			}
+			else
+			{
+				//				if (getValue_(ADDRESS__STATIC_MODEL) != VALUE__SELECT
+				//						&& getValue_(ADDRESS__STATIC_MODEL) != VALUE__DESELECT)
+				//				{
+				//					applyOnComposite_(composite, &remove_model);
+				//				}
+
+				applyOnComposite_(composite, static_base_model_pointer);
+			}
+
+			
+// -----------------------------------------------------------------------------
+// selects and setups the dynamic model processor ------------------------------
+// -----------------------------------------------------------------------------
+
+			switch (getValue_(ADDRESS__DYNAMIC_MODEL))
+			{
+			  case VALUE__MODEL_LINES:
+					dynamic_base_model_pointer = (BaseModelProcessor *)&line_model;
+					break;
+					
+			  case VALUE__MODEL_STICK:
+					{
+						AddGLBallAndStickModel *model_pointer = &ball_and_stick_model;
+						dynamic_base_model_pointer = (BaseModelProcessor *)model_pointer;
+						model_pointer->enableStickModel();
+					}
+					break;
+					
+			  case VALUE__MODEL_BALL_AND_STICK:
+					{
+						AddGLBallAndStickModel *model_pointer = &ball_and_stick_model;
+						dynamic_base_model_pointer = (BaseModelProcessor *)model_pointer;
+						model_pointer->enableBallAndStickModel();
+					}
+					break;
+					
+			  case VALUE__MODEL_SURFACE:
+					dynamic_base_model_pointer = (BaseModelProcessor *)&surface_model;
+					break;
+					
+			  case VALUE__MODEL_VAN_DER_WAALS:
+					dynamic_base_model_pointer = (BaseModelProcessor *)&van_der_waals_model;
+					break;
+					
+  			case VALUE__MODEL_REMOVE:
+					dynamic_base_model_pointer = (BaseModelProcessor *)&remove_model;
+					break;
+
+  			case VALUE__SELECT:
+					selector.select();
+					dynamic_base_model_pointer = (BaseModelProcessor *)&selector;
+					break;
+
+  			case VALUE__DESELECT:
+					selector.deselect();
+					dynamic_base_model_pointer = (BaseModelProcessor *)&selector;
+					break;
+
+			  default:
+					{
+						AddGLLineModel *model_pointer = &line_model;
+						dynamic_base_model_pointer = (BaseModelProcessor *)model_pointer;
+					}
+					break;
+			}
+
+
+			// switch to dynamic model
+			dynamic_base_model_pointer
+				->setProperty(VIEW::GeometricObject::PROPERTY__OBJECT_DYNAMIC);
+			dynamic_base_model_pointer
+				->clearProperty(VIEW::GeometricObject::PROPERTY__OBJECT_STATIC);
+			
+			
+			// ------------------------------------------
+			// setup drawing precision ------------------
+			// ------------------------------------------
+			
+			switch (getValue_(ADDRESS__DYNAMIC_DRAWING_PRECISION))
+			{
+			  case VALUE__DRAWING_PRECISION_LOW:
+					dynamic_base_model_pointer
+						->setProperty(VIEW::GeometricObject::PROPERTY__DRAWING_PRECISION_LOW);
+					break;
+					
+			  case VALUE__DRAWING_PRECISION_MEDIUM:
+					dynamic_base_model_pointer
+						->setProperty(VIEW::GeometricObject::PROPERTY__DRAWING_PRECISION_MEDIUM);
+					break;
+					
+			  case VALUE__DRAWING_PRECISION_HIGH:
+					dynamic_base_model_pointer
+						->setProperty(VIEW::GeometricObject::PROPERTY__DRAWING_PRECISION_HIGH);
+					break;
+					
+			  case VALUE__DRAWING_PRECISION_ULTRA:
+					dynamic_base_model_pointer
+						->setProperty(VIEW::GeometricObject::PROPERTY__DRAWING_PRECISION_ULTRA);
+					break;
+					
+			  default:
+					dynamic_base_model_pointer
+						->setProperty(VIEW::GeometricObject::PROPERTY__DRAWING_PRECISION_HIGH);
+					break;
+			}
+			
+			
+			// ------------------------------------------
+			// setup drawing mode -----------------------
+			// ------------------------------------------
+			
+			switch (getValue_(ADDRESS__DYNAMIC_DRAWING_MODE))
+			{
+			  case VALUE__DRAWING_MODE_DOTS:
+					dynamic_base_model_pointer
+						->setProperty(VIEW::GeometricObject::PROPERTY__DRAWING_MODE_DOTS);
+					break;
+					
+			  case VALUE__DRAWING_MODE_WIREFRAME:
+					dynamic_base_model_pointer
+						->setProperty(VIEW::GeometricObject::PROPERTY__DRAWING_MODE_WIREFRAME);
+					break;
+					 
+			  case VALUE__DRAWING_MODE_SOLID:
+					dynamic_base_model_pointer
+						->setProperty(VIEW::GeometricObject::PROPERTY__DRAWING_MODE_SOLID);
+					break;
+					
+			  default:
+					dynamic_base_model_pointer
+						->setProperty(VIEW::GeometricObject::PROPERTY__DRAWING_MODE_SOLID);
+					break;
+			}
+			
+// ------------------------------------------------------------------------------
+// register the color calculator ------------------------------------------------
+// ------------------------------------------------------------------------------
+			
+			dynamic_base_model_pointer->registerColorCalculator(*color_calculator_);
+
+// ------------------------------------------------------------------------------
+// applies the processors to the composite --------------------------------------
+// ------------------------------------------------------------------------------
+
+			if (getValue_(ADDRESS__STATIC_MODEL)
+					!= VALUE__MODEL_BACKBONE)
+			{
+				//				object_pointer->apply(*static_base_model_pointer);
+				//			object_pointer->apply(*dynamic_base_model_pointer);
+				remove_model.setProperty(VIEW::GeometricObject::PROPERTY__OBJECT_DYNAMIC);
+				
+				if (getValue_(ADDRESS__DYNAMIC_MODEL) == VALUE__MODEL_REMOVE)
+				{
+					applyOnComposite_(composite, &remove_model);
+				}
+				else
+				{
+					//				if (getValue_(ADDRESS__DYNAMIC_MODEL) != VALUE__SELECT
+					//						&& getValue_(ADDRESS__DYNAMIC_MODEL) != VALUE__DESELECT)
+					//				{
+					//					applyOnComposite_(composite, &remove_model);
+					//				}
+					
+					applyOnComposite_(composite, dynamic_base_model_pointer);
+				}
+			}
+}
+
+void DisplayProperties::calculateCenter_(Composite &composite)
+{
+			GeometricCenterProcessor center;
+
+			applyOnComposite_(composite, &center);
+				
+			setViewCenter_(center.getCenter());
+			setViewDirection_(2);
+
+			if (getValue_(ADDRESS__CAMERA_DISTANCE) != -1)
+			{
+				setViewDistance_(getValue_(ADDRESS__CAMERA_DISTANCE));
+			}
+			else
+			{
+				BoundingBoxProcessor bbox;
+
+				applyOnComposite_(composite, &bbox);
+
+				//				cout << (bbox.getUpper() - bbox.getLower()).getLength() - center.getCenter().z << endl;
+
+				setViewDistance_((bbox.getUpper() - bbox.getLower()).getLength() - center.getCenter().z + 3);
+			}
+}
+
+bool DisplayProperties::checkResidue_(Composite &composite)
+{
+			ResidueChecker residue_checker(fragmentdb_);
+
+			if (RTTI::isKindOf<AtomContainer>(composite))
+			{
+				(RTTI::castTo<AtomContainer>(composite))->apply(residue_checker);
+
+				return residue_checker.getStatus();
+			}
+			else if (RTTI::isKindOf<System>(composite))
+			{
+				(RTTI::castTo<System>(composite))->apply(residue_checker);
+
+				return residue_checker.getStatus();				
+			} else {
+				Log << "ResidueChecker: cannot apply to a " << typeid(composite).name() << " object" << endl;
+			}
+			
+			return false;
+}
+
+void DisplayProperties::setColorCalculator_
+  (ColorCalculatorValues values,
+	 const ColorRGBA &first_color,
+	 const ColorRGBA & /* second_color */,
+	 const ColorRGBA & /* third_color */)
+{
+			switch (values)
+			{
+   			default:
+  			case COLORCALCULATOR_VALUES__CUSTOM:
+					color_calculator_ = &custom_color_calculator_;
+					color_calculator_->setDefaultColor(first_color);
+					break;
+
+  			case COLORCALCULATOR_VALUES__ELEMENT:
+					color_calculator_ = &element_color_calculator_;
+					break;
+
+  			case COLORCALCULATOR_VALUES__RESIDUE_NAME:
+					color_calculator_ = &residue_name_color_calculator_;
+					break;
+
+  			case COLORCALCULATOR_VALUES__ATOM_CHARGE:
+					color_calculator_ = &atom_charge_color_calculator_;
+					break;
+      }
+}
+
+void DisplayProperties::setColorCalculator_(ColorCalculator& color_calculator)
+{
+			color_calculator_ = &color_calculator;
+}
+
+void DisplayProperties::applyOnComposite_ 
+  (Composite &composite, UnaryProcessor<Composite> *processor)
+{
+			composite.apply(*processor);
+}
+
+void DisplayProperties::applyOnComposite_
+  (Composite &composite, UnaryProcessor<Atom> *processor)
+{
+			composite.apply(*processor);
+}
+
+
+
+
+
+
+#		ifdef BALL_NO_INLINE_FUNCTIONS
+#			include <BALL/MOLVIEW/GUI/DIALOGS/displayProperties.iC>
+#		endif
 
 	} // namespace MOLVIEW
 

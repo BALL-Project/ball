@@ -9,8 +9,7 @@ CPP_SOURCES=\
 	glLineModel.C\
 	glSurfaceModel.C\
 	glVanDerWaalsModel.C\
-	moleculeGLObjectCollector.C\
-	moleculeObjectProcessor.C
+	moleculeGLObjectCollector.C
 
 include ../../../common.mak
 include .Dependencies

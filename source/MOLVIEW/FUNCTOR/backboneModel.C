@@ -1,4 +1,4 @@
-// $Id: backboneModel.C,v 1.2 2001/01/08 17:29:42 anker Exp $
+// $Id: backboneModel.C,v 1.3 2001/05/13 15:02:38 hekl Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BACKBONEMODEL_H
 #include <BALL/MOLVIEW/FUNCTOR/backboneModel.h>
@@ -13,6 +13,7 @@ namespace BALL
 	{
 
 		AddBackboneModel::AddBackboneModel()
+			throw()
 			: BaseModelProcessor(),
 				get_composite_(true),
 				start_composite_(0)
@@ -22,6 +23,7 @@ namespace BALL
 		AddBackboneModel::AddBackboneModel
 			(const AddBackboneModel& add_Backbone,
 			 bool deep)
+			throw()
 			:	BaseModelProcessor(add_Backbone, deep),
 				get_composite_(true),
 				start_composite_(0)
@@ -33,7 +35,7 @@ namespace BALL
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
-						 << " of class " << getBallClass().getName() << endl;
+						 << " of class " << RTTI::getName<AddBackboneModel>() << endl;
 			#endif 
 
 			destroy();
@@ -53,51 +55,10 @@ namespace BALL
 		void AddBackboneModel::destroy()
 			throw()
 		{
-			BaseModelProcessor::destroy();
-			get_composite_ = true;
-			start_composite_ = 0;
-
-			atoms_.clear();
-			atoms_color_.clear();
-		}
-
-		void AddBackboneModel::set
-			(const AddBackboneModel& add_Backbone,
-			 bool deep)
-		{
-			BaseModelProcessor::set(add_Backbone, deep);
-			get_composite_ = true;
-			start_composite_ = 0;
-			atoms_.clear();
-			atoms_color_.clear();
-		}
-
-		AddBackboneModel& AddBackboneModel::operator =
-			(const AddBackboneModel& add_Backbone)
-		{
-			set(add_Backbone);
-
-			return *this;
-		}
-
-		void AddBackboneModel::get
-			(AddBackboneModel& add_Backbone,
-			 bool deep) const
-		{
-			add_Backbone.set(*this, deep);
-		}
-
-		void AddBackboneModel::swap
-			(AddBackboneModel& add_Backbone)
-		{
-			BaseModelProcessor::swap(add_Backbone);
-			get_composite_ = true;
-			start_composite_ = 0;
-			atoms_.clear();
-			atoms_color_.clear();
 		}
 
 		bool AddBackboneModel::start()
+			throw()
 		{
 			get_composite_ = true;
 			start_composite_ = 0;
@@ -108,11 +69,18 @@ namespace BALL
 		}
 				
 		bool AddBackboneModel::finish()
+			throw(Exception::OutOfMemory)
 		{
 			// insert Backbone only if a composite exist
 			if (start_composite_ != 0)
 			{
 				Backbone* backbone = createBackbone_();
+
+				if (backbone == 0)
+				{
+					throw Exception::OutOfMemory
+						(__FILE__, __LINE__, sizeof(Backbone));
+				}
 
 				// get info from the start composite
 				MolecularInformation molecular_information;
@@ -143,6 +111,7 @@ namespace BALL
 		Processor::Result 
 		AddBackboneModel::operator()
 			(Composite &composite)
+			throw()
 		{
 			// take first composite, Backbone will be inserted to it later
 			if (get_composite_)
@@ -183,20 +152,6 @@ namespace BALL
 			BaseModelProcessor::dump(s, depth + 1);
 
 			BALL_DUMP_STREAM_SUFFIX(s);
-		}
-
-		void 
-		AddBackboneModel::read
-			(std::istream & /* s */)
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-		void 
-		AddBackboneModel::write
-			(std::ostream & /* s */) const
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		Backbone *

@@ -1,4 +1,4 @@
-// $Id: removeModel.C,v 1.8 2001/01/26 00:43:32 amoll Exp $
+// $Id: removeModel.C,v 1.9 2001/05/13 15:02:40 hekl Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/removeModel.h>
 
@@ -10,11 +10,13 @@ namespace BALL
 	{
 
 		RemoveModel::RemoveModel()
+			throw()
 			: AtomBondModelBaseProcessor()
 		{
 		}
 
 		RemoveModel::RemoveModel(const RemoveModel &model, bool deep)
+			throw()
 			: AtomBondModelBaseProcessor(model, deep)
 		{
 		}
@@ -23,7 +25,8 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this << " of class " << getBallClass().getName() << endl;
+				cout << "Destructing object " << (void *)this 
+						 << " of class " << RTTI::getName<RemoveModel>() << endl;
 			#endif 
 
 			destroy();
@@ -38,32 +41,10 @@ namespace BALL
 		void RemoveModel::destroy()
 			throw()
 		{
-			AtomBondModelBaseProcessor::destroy();
-		}
-
-		void RemoveModel::set(const RemoveModel &model, bool deep)
-		{
-			AtomBondModelBaseProcessor::set(model, deep);
-		}
-
-		RemoveModel& RemoveModel::operator = (const RemoveModel &model)
-		{
-			set(model);
-
-			return *this;
-		}
-
-		void RemoveModel::get(RemoveModel &model, bool deep) const
-		{
-			model.set(*this, deep);
-		}
-
-		void RemoveModel::swap(RemoveModel &model)
-		{
-			AtomBondModelBaseProcessor::swap(model);
 		}
 
 		bool RemoveModel::start()
+			throw()
 		{
 			getSearcher_().clear();
 
@@ -71,6 +52,7 @@ namespace BALL
 		}
 				
 		bool RemoveModel::finish()
+			throw()
 		{
 			// generate StickPrimitives
 			Atom* first_pAtom = 0;
@@ -108,6 +90,7 @@ namespace BALL
 		}
 				
 		Processor::Result RemoveModel::operator() (Composite &composite)
+			throw()
 		{
 			// composite is an atom ?
 			if (!RTTI::isKindOf<Atom>(composite))
@@ -143,16 +126,6 @@ namespace BALL
 			AtomBondModelBaseProcessor::dump(s, depth + 1);
 
 			BALL_DUMP_STREAM_SUFFIX(s);
-		}
-
-		void RemoveModel::read(istream & /* s */)
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-		void RemoveModel::write(ostream & /* s */) const
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 

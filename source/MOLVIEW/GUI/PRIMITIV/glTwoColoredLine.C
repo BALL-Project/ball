@@ -1,4 +1,4 @@
-// $Id: glTwoColoredLine.C,v 1.4 2001/02/04 16:19:04 hekl Exp $
+// $Id: glTwoColoredLine.C,v 1.5 2001/05/13 15:02:41 hekl Exp $
 
 #include <BALL/MOLVIEW/GUI/PRIMITIV/glTwoColoredLine.h>
 
@@ -11,6 +11,7 @@ namespace BALL
 	{
 
 		GLTwoColoredLine::GLTwoColoredLine()
+			throw()
 			:	TwoColoredLine(),
 				GLObject()
 		{
@@ -18,6 +19,7 @@ namespace BALL
 
 		GLTwoColoredLine::GLTwoColoredLine
 			(const GLTwoColoredLine& GL_two_colored_line, bool deep)
+			throw()
 			:	TwoColoredLine(GL_two_colored_line, deep),
 				GLObject(GL_two_colored_line)
 		{
@@ -25,6 +27,7 @@ namespace BALL
 
 		GLTwoColoredLine::GLTwoColoredLine
 			(const VIEW::GeometricObject& geometric_object)
+			throw()
 			:	TwoColoredLine(geometric_object),
 				GLObject()
 		{
@@ -55,7 +58,36 @@ namespace BALL
 			GLObject::destroy();
 		}
 
+		void GLTwoColoredLine::set(const GLTwoColoredLine& gl_two_colored_line, bool deep)
+			throw()
+		{
+			TwoColoredLine::set(gl_two_colored_line, deep);
+			GLObject::set(gl_two_colored_line);
+		}
+
+		const GLTwoColoredLine& GLTwoColoredLine::operator = (const GLTwoColoredLine& gl_two_colored_line)
+			throw()
+		{
+			set(gl_two_colored_line);
+
+			return *this;
+		}
+
+		void GLTwoColoredLine::get(GLTwoColoredLine& gl_two_colored_line, bool deep) const
+			throw()
+		{
+			gl_two_colored_line.set(*this, deep);
+		}
+
+		void GLTwoColoredLine::swap(GLTwoColoredLine& gl_two_colored_line)
+			throw()
+		{
+			TwoColoredLine::swap(gl_two_colored_line);
+			GLObject::swap(gl_two_colored_line);
+		}
+
 		bool GLTwoColoredLine::draw(bool with_names)
+			throw()
 		{
 			if (hasProperty(VIEW::GeometricObject::PROPERTY__OBJECT_HIDDEN))
 			{
@@ -64,10 +96,10 @@ namespace BALL
 
 			if (isSelected())
 			{
-				glColor4ub((unsigned char)getSelectedColor().red(),
-									 (unsigned char)getSelectedColor().green(),
-									 (unsigned char)getSelectedColor().blue(),
-									 (unsigned char)getSelectedColor().alpha());
+				glColor4ub((unsigned char)getSelectedColor().getRed(),
+									 (unsigned char)getSelectedColor().getGreen(),
+									 (unsigned char)getSelectedColor().getBlue(),
+									 (unsigned char)getSelectedColor().getAlpha());
 			}
 
 			if (with_names)
@@ -77,10 +109,10 @@ namespace BALL
 
 			if (isSelected() == false)
 			{
-				glColor4ub((unsigned char)getColor1().red(),
-									 (unsigned char)getColor1().green(),
-									 (unsigned char)getColor1().blue(),
-									 (unsigned char)getColor1().alpha());
+				glColor4ub((unsigned char)getColor1().getRed(),
+									 (unsigned char)getColor1().getGreen(),
+									 (unsigned char)getColor1().getBlue(),
+									 (unsigned char)getColor1().getAlpha());
 			}
 
 			glBegin(GL_LINE_STRIP);
@@ -93,10 +125,10 @@ namespace BALL
 
 			if (isSelected() == false)
 			{
-				glColor4ub((unsigned char)getColor2().red(),
-									 (unsigned char)getColor2().green(),
-									 (unsigned char)getColor2().blue(),
-									 (unsigned char)getColor2().alpha());
+				glColor4ub((unsigned char)getColor2().getRed(),
+									 (unsigned char)getColor2().getGreen(),
+									 (unsigned char)getColor2().getBlue(),
+									 (unsigned char)getColor2().getAlpha());
 			}
 
 			glVertex3f((GLfloat)(getMiddleVertex().x),

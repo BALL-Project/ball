@@ -1,4 +1,4 @@
-// $Id: lineModel.C,v 1.9 2001/01/26 00:43:32 amoll Exp $
+// $Id: lineModel.C,v 1.10 2001/05/13 15:02:39 hekl Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/lineModel.h>
 
@@ -10,11 +10,13 @@ namespace BALL
 	{
 
 		AddLineModel::AddLineModel()
+			throw()
 			: AtomBondModelBaseProcessor()
 		{
 		}
 
 		AddLineModel::AddLineModel(const AddLineModel& rAddLineModel, bool deep)
+			throw()
 			: AtomBondModelBaseProcessor(rAddLineModel, deep)
 		{
 		}
@@ -23,7 +25,8 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this << " of class " << getBallClass().getName() << endl;
+				cout << "Destructing object " << (void *)this 
+						 << " of class " << RTTI::getName<AddLineModel>() << endl;
 			#endif 
 
 			destroy();
@@ -38,32 +41,10 @@ namespace BALL
 		void AddLineModel::destroy()
 			throw()
 		{
-			AtomBondModelBaseProcessor::destroy();
-		}
-
-		void AddLineModel::set(const AddLineModel &rAddLineModel, bool deep)
-		{
-			AtomBondModelBaseProcessor::set(rAddLineModel, deep);
-		}
-
-		AddLineModel& AddLineModel::operator = (const AddLineModel &rAddLineModel)
-		{
-			set(rAddLineModel);
-
-			return *this;
-		}
-
-		void AddLineModel::get(AddLineModel &rAddLineModel, bool deep) const
-		{
-			rAddLineModel.set(*this, deep);
-		}
-
-		void AddLineModel::swap(AddLineModel &rAddLineModel)
-		{
-			AtomBondModelBaseProcessor::swap(rAddLineModel);
 		}
 
 		bool AddLineModel::start()
+			throw()
 		{
 			if (hasProperty(GeometricObject::PROPERTY__DRAWING_MODE_SOLID))
 			{
@@ -77,6 +58,7 @@ namespace BALL
 		}
 				
 		bool AddLineModel::finish()
+			throw()
 		{
 			buildBondModels_();
 
@@ -84,6 +66,7 @@ namespace BALL
 		}
 				
 		Processor::Result AddLineModel::operator() (Composite &composite)
+			throw(Exception::OutOfMemory)
 		{
 			// composite is an atom ?
 			if (!RTTI::isKindOf<Atom>(composite))
@@ -99,16 +82,17 @@ namespace BALL
 			// generate help BallPrimitive
 			Point *pPoint = createPoint_();
 
-			BALL_PRECONDITION
-				(pPoint != 0,
-				 BALL_MOLVIEW_LINEMODEL_ERROR_HANDLER
-				 (AddLineModel::ERROR__CANNOT_CREATE_POINT));
+			if (pPoint == 0)
+			{
+					throw Exception::OutOfMemory
+						(__FILE__, __LINE__, sizeof(Point));
+			}
 
 			// carry on selected flag
 			pPoint->Selectable::set(*atom);
 
 			pPoint->PropertyManager::set(*this);
-			pPoint->PropertyManager::setProperty(GeometricObject::PROPERTY__MODEL_LINES);
+			pPoint->PropertyManager::setProperty(PROPERTY__MODEL_LINES);
 			pPoint->setVertexAddress(atom->getPosition());
 			
 			atom->host(*getColorCalculator());
@@ -135,16 +119,6 @@ namespace BALL
 			AtomBondModelBaseProcessor::dump(s, depth + 1);
 
 			BALL_DUMP_STREAM_SUFFIX(s);
-		}
-
-		void AddLineModel::read(istream & /* s */)
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-		void AddLineModel::write(ostream & /* s */) const
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		Point* AddLineModel::createPoint_()

@@ -1,4 +1,4 @@
-// $Id: baseModel.C,v 1.10 2001/01/26 01:37:10 amoll Exp $
+// $Id: baseModel.C,v 1.11 2001/05/13 15:02:39 hekl Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/baseModel.h>
 
@@ -11,6 +11,7 @@ namespace BALL
 	{
 
 		BaseModelProcessor::BaseModelProcessor()
+			throw()
 			:	UnaryProcessor<Composite>(),
 				ExtendedPropertyManager(),
 				find_geometric_object_(),
@@ -22,6 +23,7 @@ namespace BALL
 
 		BaseModelProcessor::BaseModelProcessor
 			(const BaseModelProcessor& base_model_processor, bool deep)
+			throw()
 			:	UnaryProcessor<Composite>(),
 				ExtendedPropertyManager(base_model_processor, deep),
 				find_geometric_object_(base_model_processor.find_geometric_object_, deep),
@@ -55,11 +57,11 @@ namespace BALL
 		void BaseModelProcessor::destroy()
 			throw()
 		{
-			clear();
 		}
 
 		void BaseModelProcessor::set
 			(const BaseModelProcessor& base_model_processor, bool deep)
+			throw()
 		{
 			clear_();
 
@@ -69,8 +71,9 @@ namespace BALL
 			model_connector_ = base_model_processor.model_connector_;
 		}
 
-		BaseModelProcessor& BaseModelProcessor::operator =
+		const BaseModelProcessor& BaseModelProcessor::operator =
 			(const BaseModelProcessor& base_model_processor)
+			throw()
 		{
 			set(base_model_processor);
 
@@ -79,12 +82,14 @@ namespace BALL
 
 		void BaseModelProcessor::get
 			(BaseModelProcessor& base_model_processor, bool deep) const
+			throw()
 		{
 			base_model_processor.set(*this, deep);
 		}
 
 		void BaseModelProcessor::swap
 			(BaseModelProcessor& base_model_processor)
+			throw()
 		{
 			ExtendedPropertyManager::swap(base_model_processor);
 
@@ -100,6 +105,7 @@ namespace BALL
 		}
 
 		bool BaseModelProcessor::start()
+			throw()
 		{
 			if (hasProperty(GeometricObject::PROPERTY__OBJECT_DYNAMIC) == true)
 			{
@@ -122,19 +128,21 @@ namespace BALL
 		}
 				
 		bool BaseModelProcessor::finish()
+			throw()
 		{
 			return true;
 		}
 				
 		Processor::Result BaseModelProcessor::operator()(Composite & /* composite */)
+			throw()
 		{
 			return Processor::CONTINUE;
 		}
 
 		bool BaseModelProcessor::isValid() const
+			throw()
 		{
 			return (ExtendedPropertyManager::isValid()
-						  && color_calculator_->isValid()
 							&& model_connector_->isValid()
 							&& find_geometric_object_.isValid());
 		}
@@ -178,16 +186,6 @@ namespace BALL
 					 << endl;
 
 			BALL_DUMP_STREAM_SUFFIX(s);
-		}
-
-		void BaseModelProcessor::read(istream & /* s */)
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-		void BaseModelProcessor::write(ostream & /* s */) const
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		void BaseModelProcessor::dump_
@@ -255,35 +253,26 @@ namespace BALL
 											(GeometricObject::PROPERTY__DRAWING_PRECISION_ULTRA) 
 					 << endl;
 
-			BALL_DUMP_DEPTH(s, depth);
-			s << "   dprecision user: " 
-					 << BALL_MOLVIEW_PRINT_PROPERTY
-											(GeometricObject::PROPERTY__DRAWING_PRECISION_USER_DEFINED) 
-					 << endl;
-
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
 
 
-  	bool BaseModelProcessor::isModel_(VIEW::GeometricObject& geometric_object)
+  	bool BaseModelProcessor::isModel_(GeometricObject& geometric_object)
+			throw()
     {
-			if (geometric_object.hasProperty(GeometricObject::PROPERTY__MODEL_BALL_AND_STICK))
+			if (geometric_object.hasProperty(PROPERTY__MODEL_BALL_AND_STICK))
 			{
 				return true;
 			}
-			else if (geometric_object.hasProperty(GeometricObject::PROPERTY__MODEL_DOTS))
+			else if (geometric_object.hasProperty(PROPERTY__MODEL_DOTS))
 			{
 				return true;
 			}
-			else if (geometric_object.hasProperty(GeometricObject::PROPERTY__MODEL_LINES))
+			else if (geometric_object.hasProperty(PROPERTY__MODEL_LINES))
 			{
 				return true;
 			}
-			else if (geometric_object.hasProperty(GeometricObject::PROPERTY__MODEL_STARS))
-			{
-				return true;
-			}
-			else if (geometric_object.hasProperty(GeometricObject::PROPERTY__MODEL_VDW))
+			else if (geometric_object.hasProperty(PROPERTY__MODEL_VDW))
 			{
 				return true;
 			}
@@ -292,6 +281,7 @@ namespace BALL
     }
 
 	  void BaseModelProcessor::removeGeometricObjects_(Composite& composite, bool only_models)
+			throw()
     {
 			// get geometric objects
 			composite.applyChild(getSearcher_());
@@ -325,6 +315,7 @@ namespace BALL
    }
 
 		void BaseModelProcessor::clear_()
+			throw()
 		{
 			setProperty(GeometricObject::PROPERTY__OBJECT_STATIC);
 			setProperty(GeometricObject::PROPERTY__OBJECT_OPAQUE);

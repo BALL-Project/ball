@@ -1,4 +1,4 @@
-// $Id: atomBondModelConnector.C,v 1.2 2000/12/12 16:19:24 oliver Exp $
+// $Id: atomBondModelConnector.C,v 1.3 2001/05/13 15:02:38 hekl Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/atomBondModelConnector.h>
 
@@ -9,26 +9,24 @@ namespace BALL
 
 	namespace MOLVIEW
 	{
-
+		/*
     AtomBondModelConnector::MissingProperty::MissingProperty
 		  (const char* file, int line, const string& message)
+			throw()
 				: Exception::GeneralException(file, line, "MissingProperty", message)
 		{
     }
+		*/
 
-    AtomBondModelConnector::MemoryAllocationFailed::MemoryAllocationFailed
-		  (const char* file, int line, const string& message)
-				: Exception::GeneralException(file, line, "MemoryAllocationFailed", message)
-		{
-    }
- 
 		AtomBondModelConnector::AtomBondModelConnector()
+			throw()
 			:	BaseModelConnector()
 		{
 		}
 
 		AtomBondModelConnector::AtomBondModelConnector
 			(const AtomBondModelConnector& connector, bool deep)
+			throw()
 			:	BaseModelConnector(connector, deep)
 		{
 		}
@@ -45,6 +43,7 @@ namespace BALL
 		}
 
   	void AtomBondModelConnector::visit(Composite& composite)
+			throw(Exception::OutOfMemory)
 		{
 			if (!RTTI::isKindOf<Bond>(composite))
 			{
@@ -59,22 +58,22 @@ namespace BALL
 			Property second_model = getModel_(*second_atom);
 			
 			// if any model is unkown => do nothing
-			if (first_model == GeometricObject::PROPERTY__UNKNOWN
-					|| second_model == GeometricObject::PROPERTY__UNKNOWN)
+			if (first_model == PROPERTY__UNKNOWN
+					|| second_model == PROPERTY__UNKNOWN)
 			{
 				return;
 			}
 
 			// is any model a line model => bond will be shown as a line
-			if (first_model == GeometricObject::PROPERTY__MODEL_LINES
-					|| second_model == GeometricObject::PROPERTY__MODEL_LINES)
+			if (first_model == PROPERTY__MODEL_LINES
+					|| second_model == PROPERTY__MODEL_LINES)
 			{
 				createLineRepresentation_(*bond);
 			}
 			// now is it not a line model present
 			// if there is a ball and stick model present => create tube representation
-			else if (first_model == GeometricObject::PROPERTY__MODEL_BALL_AND_STICK
-							 || second_model == GeometricObject::PROPERTY__MODEL_BALL_AND_STICK)
+			else if (first_model == PROPERTY__MODEL_BALL_AND_STICK
+							 || second_model == PROPERTY__MODEL_BALL_AND_STICK)
 			{
 				createTubeRepresentation_(*bond);
 			}		
@@ -84,8 +83,9 @@ namespace BALL
 		}
 
 		Property AtomBondModelConnector::getModel_(Atom& atom)
+			throw()
     {
-			Property property = GeometricObject::PROPERTY__UNKNOWN;
+			Property property = PROPERTY__UNKNOWN;
 
 			// get geometric objects from first atom
 			atom.applyChild(getGeometricObjectSearcher());
@@ -95,19 +95,19 @@ namespace BALL
 
 			for(; it != getGeometricObjectSearcher().getGeometricObjects().end(); ++it)
 			{
-				if ((**it).hasProperty(GeometricObject::PROPERTY__MODEL_BALL_AND_STICK))
+				if ((**it).hasProperty(PROPERTY__MODEL_BALL_AND_STICK))
 				{
-					property = GeometricObject::PROPERTY__MODEL_BALL_AND_STICK;
+					property = PROPERTY__MODEL_BALL_AND_STICK;
 					break;
 				}
-				else if ((**it).hasProperty(GeometricObject::PROPERTY__MODEL_LINES))
+				else if ((**it).hasProperty(PROPERTY__MODEL_LINES))
 				{
-					property = GeometricObject::PROPERTY__MODEL_LINES;
+					property = PROPERTY__MODEL_LINES;
 					break;
 				}
-				else if ((**it).hasProperty(GeometricObject::PROPERTY__MODEL_VDW))
+				else if ((**it).hasProperty(PROPERTY__MODEL_VDW))
 				{
-					property = GeometricObject::PROPERTY__MODEL_VDW;
+					property = PROPERTY__MODEL_VDW;
 					break;
 				}
 			}
@@ -116,6 +116,7 @@ namespace BALL
     }
 
 		void AtomBondModelConnector::createLineRepresentation_(Bond& bond)
+			throw(Exception::OutOfMemory)
     {
 			Atom* first_atom = bond.getFirstAtom();
 			Atom* second_atom = bond.getSecondAtom();
@@ -135,15 +136,15 @@ namespace BALL
 
 				if (line == 0)
 				{
-					throw MemoryAllocationFailed
-						(__FILE__, __LINE__, "error creating line primitive.");
+					throw Exception::OutOfMemory
+						(__FILE__, __LINE__, sizeof(Line));
 				}
 								
 				// carry on selected flag
 				line->Selectable::set(bond);
 								
 				line->PropertyManager::set(*this);
-				line->PropertyManager::setProperty(GeometricObject::PROPERTY__MODEL_LINES);
+				line->PropertyManager::setProperty(PROPERTY__MODEL_LINES);
 				line->PropertyManager::clearProperty(GeometricObject::PROPERTY__DRAWING_MODE_SOLID);
 				line->PropertyManager::setProperty(GeometricObject::PROPERTY__DRAWING_MODE_WIREFRAME);
 				line->setVertex1Address(first_atom->getPosition());
@@ -159,15 +160,15 @@ namespace BALL
 
 				if (line == 0)
 				{
-					throw MemoryAllocationFailed
-						(__FILE__, __LINE__, "error creating two-colored line primitive.");
+					throw Exception::OutOfMemory
+						(__FILE__, __LINE__, sizeof(TwoColoredLine));
 				}
 								
 				// carry on selected flag
 				line->Selectable::set(bond);
 								
 				line->PropertyManager::set(*this);
-				line->PropertyManager::setProperty(GeometricObject::PROPERTY__MODEL_LINES);
+				line->PropertyManager::setProperty(PROPERTY__MODEL_LINES);
 				line->PropertyManager::clearProperty(GeometricObject::PROPERTY__DRAWING_MODE_SOLID);
 				line->PropertyManager::setProperty(GeometricObject::PROPERTY__DRAWING_MODE_WIREFRAME);
 				line->setVertex1Address(first_atom->getPosition());
@@ -180,6 +181,7 @@ namespace BALL
     }
 
 		void AtomBondModelConnector::createTubeRepresentation_(Bond& bond)
+			throw(Exception::OutOfMemory)
     {
 			float stick_radius = 0.4;
 
@@ -206,15 +208,15 @@ namespace BALL
 
 				if (tube == 0)
 				{
-					throw MemoryAllocationFailed
-						(__FILE__, __LINE__, "error creating tube primitive.");
+					throw Exception::OutOfMemory
+						(__FILE__, __LINE__, sizeof(Tube));
 				}
 								
 				// carry on selected flag
 				tube->Selectable::set(bond);
 								
 				tube->PropertyManager::set(*this);
-				tube->PropertyManager::setProperty(GeometricObject::PROPERTY__MODEL_BALL_AND_STICK);
+				tube->PropertyManager::setProperty(PROPERTY__MODEL_BALL_AND_STICK);
 				tube->setRadius(stick_radius);
 				tube->setVertex1Address(first_atom->getPosition());
 				tube->setVertex2Address(second_atom->getPosition());
@@ -229,15 +231,15 @@ namespace BALL
 								
 				if (tube == 0)
 				{
-					throw MemoryAllocationFailed
-						(__FILE__, __LINE__, "error creating two-colored tube primitive.");
+					throw Exception::OutOfMemory
+						(__FILE__, __LINE__, sizeof(TwoColoredTube));
 				}
 								
 				// carry on selected flag
 				tube->Selectable::set(bond);
 
 				tube->PropertyManager::set(*this);
-				tube->PropertyManager::setProperty(GeometricObject::PROPERTY__MODEL_BALL_AND_STICK);
+				tube->PropertyManager::setProperty(PROPERTY__MODEL_BALL_AND_STICK);
 				tube->setRadius(stick_radius);
 				tube->setVertex1Address(first_atom->getPosition());
 				tube->setVertex2Address(second_atom->getPosition());

@@ -1,4 +1,4 @@
-// $Id: backbone.C,v 1.5 2001/02/12 12:01:50 amoll Exp $
+// $Id: backbone.C,v 1.6 2001/05/13 15:02:41 hekl Exp $
 
 #include <BALL/MOLVIEW/PRIMITIV/backbone.h>
 
@@ -11,6 +11,7 @@ namespace BALL
 	{
 
 		Backbone::Backbone()
+			throw()
 			:	GeometricObject(),
 				spline_array_(0),
 				size_of_spline_array_(0)
@@ -18,6 +19,7 @@ namespace BALL
 		}
 
 		Backbone::Backbone(const Backbone& backbone, bool deep)
+			throw()
 			:	GeometricObject(backbone, deep),
 				spline_array_(0),
 				size_of_spline_array_(0)
@@ -25,6 +27,7 @@ namespace BALL
 		}
 
 		Backbone::Backbone(const GeometricObject& geometric_object)
+			throw()
 			:	GeometricObject(geometric_object),
 				spline_array_(0),
 				size_of_spline_array_(0)
@@ -55,11 +58,13 @@ namespace BALL
 		}
 
 		void Backbone::set(const Backbone& backbone, bool deep)
+			throw()
 		{
 			GeometricObject::set(backbone, deep);
 		}
 
-		Backbone& Backbone::operator = (const Backbone& backbone)
+		const Backbone& Backbone::operator = (const Backbone& backbone)
+			throw()
 		{
 			set(backbone);
 
@@ -67,11 +72,13 @@ namespace BALL
 		}
 
 		void Backbone::get(Backbone& backbone, bool deep) const
+			throw()
 		{
 			backbone.set(*this, deep);
 		}
 
 		void Backbone::swap(Backbone& backbone)
+			throw()
 		{
 			GeometricObject::swap(backbone);
 		}
@@ -79,6 +86,7 @@ namespace BALL
 		// creates the backbone representation from the given atom and 
 		// atom colors list
 		void Backbone::createBackbone()
+			throw()
 		{
 			// atom list empty => finished
 			if (atoms_.size() == 0)
@@ -145,6 +153,12 @@ namespace BALL
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
+		bool Backbone::extract()
+			throw()
+		{
+			return true;  
+		}
+
 		Sphere* Backbone::createSphere_()
 		{
 			return new Sphere();
@@ -175,6 +189,7 @@ namespace BALL
 			}
 			
 			List<ColorRGBA>::Iterator it_color;
+			int max_index = index;
 			index = 0;
 
 			ColorRGBA color(255,255,255);
@@ -184,7 +199,10 @@ namespace BALL
 					 it_color != atom_colors_.end(); ++it_color)
 			{
 				color = *it_color;
-				spline_array_[index++].setColor(color);
+				if (index < max_index)
+				{
+					spline_array_[index++].setColor(color);
+				}
 			}
 
 			for (;index < size_of_spline_array_; ++index)

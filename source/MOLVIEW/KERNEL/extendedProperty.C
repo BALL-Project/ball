@@ -1,4 +1,4 @@
-// $Id: extendedProperty.C,v 1.5 2000/12/12 16:19:35 oliver Exp $
+// $Id: extendedProperty.C,v 1.6 2001/05/13 15:02:41 hekl Exp $
 
 #include <BALL/MOLVIEW/KERNEL/extendedProperty.h>
 
@@ -9,10 +9,9 @@ namespace BALL
 	namespace MOLVIEW
 	{
 
-
-		// BAUSTELLE: Wofuer braucht man diese Klasse? [O.K.]
 		ExtendedPropertyManager::ExtendedPropertyManager
 			()
+			throw()
 				:
 				PropertyManager()
 		{
@@ -21,6 +20,7 @@ namespace BALL
 		ExtendedPropertyManager::ExtendedPropertyManager
 			(const ExtendedPropertyManager &__rExtendedPropertyManager,
 			 bool deep)
+			throw()
 				:
 				PropertyManager(__rExtendedPropertyManager, deep)
 		{
@@ -32,53 +32,52 @@ namespace BALL
 		}
 
 		void ExtendedPropertyManager::setProperty
-			(Property __Property)
+			(int property)
+			throw()
 		{
-			if (__Property == GeometricObject::PROPERTY__OBJECT_TRANSPARENT 
-					|| __Property == GeometricObject::PROPERTY__OBJECT_OPAQUE)
+			if (property == GeometricObject::PROPERTY__OBJECT_TRANSPARENT 
+					|| property == GeometricObject::PROPERTY__OBJECT_OPAQUE)
 			{
 				clearProperty(GeometricObject::PROPERTY__OBJECT_TRANSPARENT);
 				clearProperty(GeometricObject::PROPERTY__OBJECT_OPAQUE);
 			}
-			else if (__Property == GeometricObject::PROPERTY__OBJECT_VISIBLE 
-							 || __Property == GeometricObject::PROPERTY__OBJECT_HIDDEN)
+			else if (property == GeometricObject::PROPERTY__OBJECT_VISIBLE 
+							 || property == GeometricObject::PROPERTY__OBJECT_HIDDEN)
 			{
 				clearProperty(GeometricObject::PROPERTY__OBJECT_VISIBLE);
 				clearProperty(GeometricObject::PROPERTY__OBJECT_HIDDEN);
 			}
-			else if (__Property == GeometricObject::PROPERTY__OBJECT_OPENED 
-							 || __Property == GeometricObject::PROPERTY__OBJECT_CLOSED)
+			else if (property == GeometricObject::PROPERTY__OBJECT_OPENED 
+							 || property == GeometricObject::PROPERTY__OBJECT_CLOSED)
 			{
 				clearProperty(GeometricObject::PROPERTY__OBJECT_OPENED);
 				clearProperty(GeometricObject::PROPERTY__OBJECT_CLOSED);
 			}
-			else if (__Property >= GeometricObject::PROPERTY__DRAWING_PRECISION_LOW
-							 && __Property <= GeometricObject::PROPERTY__DRAWING_PRECISION_USER_DEFINED)
+			else if (property >= GeometricObject::PROPERTY__DRAWING_PRECISION_LOW
+							 && property <= GeometricObject::PROPERTY__DRAWING_PRECISION_ULTRA)
 			{
 				clearProperty(GeometricObject::PROPERTY__DRAWING_PRECISION_LOW);
 				clearProperty(GeometricObject::PROPERTY__DRAWING_PRECISION_MEDIUM);
 				clearProperty(GeometricObject::PROPERTY__DRAWING_PRECISION_HIGH);
 				clearProperty(GeometricObject::PROPERTY__DRAWING_PRECISION_ULTRA);
-				clearProperty(GeometricObject::PROPERTY__DRAWING_PRECISION_USER_DEFINED);
 			}
-			else if (__Property >= GeometricObject::PROPERTY__DRAWING_MODE_DOTS 
-							 && __Property <= GeometricObject::PROPERTY__DRAWING_MODE_SOLID)
+			else if (property >= GeometricObject::PROPERTY__DRAWING_MODE_DOTS 
+							 && property <= GeometricObject::PROPERTY__DRAWING_MODE_SOLID)
 			{
 				clearProperty(GeometricObject::PROPERTY__DRAWING_MODE_DOTS);
 				clearProperty(GeometricObject::PROPERTY__DRAWING_MODE_WIREFRAME);
 				clearProperty(GeometricObject::PROPERTY__DRAWING_MODE_SOLID);
 			}
-			else if (__Property >= GeometricObject::PROPERTY__MODEL_VDW
-							 && __Property <= GeometricObject::PROPERTY__MODEL_LINES)
+			else if (property >= PROPERTY__MODEL_VDW
+							 && property <= PROPERTY__MODEL_LINES)
 			{
-				clearProperty(GeometricObject::PROPERTY__MODEL_VDW);
-				clearProperty(GeometricObject::PROPERTY__MODEL_DOTS);
-				clearProperty(GeometricObject::PROPERTY__MODEL_STARS);
-				clearProperty(GeometricObject::PROPERTY__MODEL_BALL_AND_STICK);
-				clearProperty(GeometricObject::PROPERTY__MODEL_LINES);
+				clearProperty(PROPERTY__MODEL_VDW);
+				clearProperty(PROPERTY__MODEL_DOTS);
+				clearProperty(PROPERTY__MODEL_BALL_AND_STICK);
+				clearProperty(PROPERTY__MODEL_LINES);
 			}
 
-			PropertyManager::setProperty(__Property);
+			PropertyManager::setProperty(property);
 		}
 
 
