@@ -1,4 +1,4 @@
-// $Id: parameterSection.C,v 1.23 2001/08/22 11:14:51 sturm Exp $
+// $Id: parameterSection.C,v 1.24 2001/08/23 18:06:04 sturm Exp $
 
 #include <BALL/FORMAT/parameterSection.h>
 #include <BALL/FORMAT/parameters.h>
@@ -26,7 +26,8 @@ namespace BALL
 
 	ParameterSection::ParameterSection(const ParameterSection& parameter_section) 
 		throw()
-		:	section_name_(parameter_section.section_name_),
+		:	options(parameter_section.options),
+			section_name_(parameter_section.section_name_),
 			format_line_(parameter_section.format_line_),
 			section_entries_(parameter_section.section_entries_),
 			variable_names_(parameter_section.variable_names_),
@@ -45,6 +46,8 @@ namespace BALL
 
 	void ParameterSection::clear() throw()
 	{
+		// clear the options
+		options.clear();
 		// clear the section name
 		section_name_ = "";
 		format_line_ = "";
