@@ -1,6 +1,6 @@
 #! /bin/sh
 
-#  $Id: configure,v 1.73 2000/03/07 09:18:28 oliver Exp $
+#  $Id: configure,v 1.74 2000/03/09 11:34:39 oliver Exp $
 
 
 ##################################################
@@ -1872,7 +1872,7 @@ echo "configure:1767: checking for Digital/Compaq C++ compiler" >&5
 		CXX_NAME="Digital"
 	else
 		IS_DIGITALCXX=false
-		echo "$ac_t""no: ${DIGITAL_CXX}" 1>&6
+		echo "$ac_t""no" 1>&6
 	fi	
 fi
 

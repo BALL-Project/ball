@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.64 2000/03/07 09:18:25 oliver Exp $
+dnl    $Id: configure.in,v 1.65 2000/03/09 11:34:35 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -660,7 +660,7 @@ if test "${IS_GXX}" = false -a "${IS_KCC}" = false ; then
 		CXX_NAME="Digital"
 	else
 		IS_DIGITALCXX=false
-		AC_MSG_RESULT(no: ${DIGITAL_CXX})
+		AC_MSG_RESULT(no)
 	fi	
 fi
 
