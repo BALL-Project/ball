@@ -1,7 +1,7 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.24 2003/11/02 14:28:26 oliver Exp $
+# $Id: Makefile,v 1.25 2003/11/02 15:05:41 amoll Exp $
 #
 
 DIRECTORY=PYTHON/EXTENSIONS
@@ -75,7 +75,7 @@ CLEAN_FILES = \
  
 clean:
 	@echo "removing object files, libraries, and source/header files produced by SIP..."
-	@-$(RM) $(CLEAN_FILES) 2>/dev/null
+	@-$(RM) -f $(CLEAN_FILES) 2>/dev/null
 	@-$(RM) -fr SIP
 
 depend: sip  Makefile.inc .Dependencies
