@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.8 2003/11/23 22:51:55 amoll Exp $
+// $Id: molecularControl.h,v 1.9 2003/11/23 23:09:32 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -496,8 +496,8 @@ namespace BALL
 
 			HashMap<Composite*, SelectableListViewItem*> composite_to_item_;
 
-			Position selected_model_;
-			Position selected_coloring_method_;
+			ModelType 			selected_model_;
+			ColoringMethod  selected_coloring_method_;
 
 			//@}
 		};

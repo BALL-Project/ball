@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.17 2003/11/23 22:50:51 amoll Exp $
+// $Id: molecularControl.C,v 1.18 2003/11/23 23:08:58 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -178,7 +178,7 @@ void MolecularControl::activatedItem_(int pos)
 {
 	if (pos >= 1000 && pos < 2000)
 	{
-		selected_model_ = pos -1000;
+		selected_model_ = (ModelType)(pos -1000);
 	}
 }
 
