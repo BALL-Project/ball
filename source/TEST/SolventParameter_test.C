@@ -1,11 +1,11 @@
-// $Id: SolventParameter_test.C,v 1.9 2001/08/22 09:26:36 aubertin Exp $
+// $Id: SolventParameter_test.C,v 1.10 2001/08/22 10:54:53 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/SOLVATION/solventParameter.h>
 ///////////////////////////
 
-START_TEST(SolventParameter, "$Id: SolventParameter_test.C,v 1.9 2001/08/22 09:26:36 aubertin Exp $")
+START_TEST(SolventParameter, "$Id: SolventParameter_test.C,v 1.10 2001/08/22 10:54:53 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -13,7 +13,6 @@ START_TEST(SolventParameter, "$Id: SolventParameter_test.C,v 1.9 2001/08/22 09:2
 using namespace BALL;
 
 SolventParameter* s_ptr;
-SolventParameter* s_ptr2;
 
 CHECK(SolventParameter())
 	s_ptr = new SolventParameter;	
@@ -30,11 +29,6 @@ CHECK(SolventParameter())
 	TEST_EQUAL(test, true)
 RESULT
 
-CHECK(SolventParameter(const SolventParameter&))
-	s_ptr2 = new SolventParameter(*s_ptr);
-	TEST_NOT_EQUAL(s_ptr2,0)
-	TEST_EQUAL(s_ptr,s_ptr2)
-RESULT
 
 CHECK(~SolventParameter())
 	delete s_ptr;
@@ -135,7 +129,7 @@ CHECK(getSolventDescriptor() )
 	param.init();
 	s_ptr.extractSection(param,"SolventDescription");
 	SolventDescriptor sd = s_ptr.getSolventDescriptor();
-	TEST_EQUAL(sd.getName().getSubstring(0,3),"PCM")
+	TEST_EQUAL(sd.getName(),"PCM")
 RESULT
 
 
