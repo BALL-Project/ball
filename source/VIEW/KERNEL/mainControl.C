@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.88 2004/05/22 16:36:07 amoll Exp $
+// $Id: mainControl.C,v 1.89 2004/05/25 18:13:05 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -960,22 +960,26 @@ namespace BALL
 				{
 					// if one atom was picked, show its properties
 					Atom& atom = *atoms[0];
-					setStatusbarText("Properties of atom " + atom.getFullName() + "  Type: " + 
+					String text = String("Properties of atom ") + atom.getFullName() + "  Type: " + 
 													 String(atom.getType()) + "  Typename: " + 
 													 String(atom.getTypeName()) + ":  Position: (" + 
 													 String(atom.getPosition().x) + "|" +
 													 String(atom.getPosition().y) + "|" +
 													 String(atom.getPosition().z) + ")" + "  Charge: " + 
-													 String(atom.getCharge()));
+													 String(atom.getCharge());
+					setStatusbarText(text);
+					Log.info() << text << std::endl;
 					break;
 				}
 				case 2:
 				{
 					// if two atoms were picked, show their distance
-					setStatusbarText("Distance between atom " + 
+					String text = String("Distance between atom ") + 
 														atoms[0]->getFullName() + " and " + 
 														atoms[1]->getFullName() + ": " + 
-														String(GetDistance(atoms[0]->getPosition(), atoms[1]->getPosition())));
+														String(GetDistance(atoms[0]->getPosition(), atoms[1]->getPosition()));
+					setStatusbarText(text);
+					Log.info() << text << std::endl;
 					break;
 				}
 				case 3:
@@ -984,11 +988,13 @@ namespace BALL
 					Vector3 vector2(ordered_atoms[1]->getPosition() - ordered_atoms[0]->getPosition());
 					Angle result;
 					GetAngle(vector1, vector2, result);
-					setStatusbarText("Angle between atoms " + 
+					String text = String("Angle between atoms ") + 
 														atoms[0]->getFullName() + ", " + 
 														atoms[1]->getFullName() + ", " +
 														atoms[2]->getFullName() + ": " +
-														String(result.toDegree())); 
+														String(result.toDegree()); 
+					setStatusbarText(text);
+					Log.info() << text << std::endl;
 					break;
 				}
 				case 4:
@@ -1000,12 +1006,14 @@ namespace BALL
 							ordered_atoms[2]->getPosition().x, ordered_atoms[2]->getPosition().y, ordered_atoms[2]->getPosition().z,
 							ordered_atoms[3]->getPosition().x, ordered_atoms[3]->getPosition().y, ordered_atoms[3]->getPosition().z);
 
-					setStatusbarText("Torsion angle between atoms " + 
+					String text = String("Torsion angle between atoms ") + 
 														ordered_atoms[0]->getFullName() + ", " + 
 														ordered_atoms[1]->getFullName() + ", " +
 														ordered_atoms[2]->getFullName() + ", " +
 														ordered_atoms[3]->getFullName() + ": " +
-														String(result.toDegree()));
+														String(result.toDegree());
+					setStatusbarText(text);
+					Log.info() << text << std::endl;
 					break;
 				}
 			}
