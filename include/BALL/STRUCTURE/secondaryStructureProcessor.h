@@ -45,8 +45,11 @@ namespace BALL
 		private:
 			/** SecondaryStructureBool_ : matrix to save the existence of a SecondaryStructure
 			*/
+			//matrix to save the possible HBondPairs
 			vector< vector<int> > HBonds_;
-
+			bool hasPrefix(const String& pattern, Size i, const vector<char>& target);
+			void insert_turn(int turn, int position);
+			
 	}; //class SecondaryStructureProcessor
 
 }//namesspace BALL
