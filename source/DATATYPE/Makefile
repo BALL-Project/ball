@@ -8,6 +8,8 @@ CPP_SOURCES=\
 	hashGrid.C\
 	options.C\
 	regExp.C\
+	regularData1D.C\
+	regularData2D.C\
 	regularData3D.C
 
 include ../common.mak
