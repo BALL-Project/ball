@@ -1,4 +1,4 @@
-// $Id: DCDFile_test.C,v 1.2 2001/03/28 13:00:55 anker Exp $
+// $Id: DCDFile_test.C,v 1.3 2001/04/27 15:19:40 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: DCDFile_test.C,v 1.2 2001/03/28 13:00:55 anker Exp $")
+START_TEST(class_name, "$Id: DCDFile_test.C,v 1.3 2001/04/27 15:19:40 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -89,24 +89,44 @@ CHECK(DCDFile::bool operator == (const DCDFile& file) throw())
 	TEST_EQUAL(test, false)
 RESULT
 
-
-CHECK(DCDFile::init() throw())
-  //BAUSTELLE
-RESULT
-
+// init() is called every time an object is constructed, so we won't have a
+// dedicated test here. There is no reasonabel way to test it, anyway.
 
 CHECK(DCDFile::readHeader() throw())
-  //BAUSTELLE
+  DCDFile one(dcd_test_file, File::IN);
+	bool test = one.readHeader();
+	TEST_EQUAL(test, true)
+	one.close();
+	DCDFile two("data/INIFile_test.ini", File::IN);
+	test = two.readHeader();
+	TEST_EQUAL(test, false)
 RESULT
 
 
 CHECK(DCDFile::writeHeader() throw())
-  //BAUSTELLE
+	// BAUSTELLE:
+	// Oh, how did this temporary file thing work again?
+	// DCDFile one(temporary, File::OUT);
+	// one.writeHeader();
+	// one.close();
+	// DCDFile two(temporary, File::IN);
+	// bool test = two.readHeader();
+	// TEST_EQUAL(test, true);
 RESULT
 
 
 CHECK(DCDFile::append(const SnapShot& snapshot) throw())
-  //BAUSTELLE
+  // BAUSTELLE
+	// SnapShot snap;
+	// DCDFile one(temporary, File::out);
+	// one.append(snap);
+	// one.close();
+	// DCDFile two(temporary, File::IN);
+	// SnapShot snap2;
+	// two.readHeader();
+	// two.read(snap2);
+	// bool test = (snap == snap2);
+	// TEST_EQUAL(test, true);
 RESULT
 
 
