@@ -1,4 +1,4 @@
-// $Id: randomAccessIterator.h,v 1.9 2001/06/29 14:11:59 anker Exp $ 
+// $Id: randomAccessIterator.h,v 1.10 2001/06/30 15:07:27 amoll Exp $ 
 
 #ifndef BALL_CONCEPT_RANDOMACCESSITERATOR_H
 #define BALL_CONCEPT_RANDOMACCESSITERATOR_H
@@ -124,22 +124,22 @@ namespace BALL
 		bool isREnd() const
 			throw(Exception::InvalidIterator);
 
-		/** Advance the iterator.
+		/** Prefix Increment operator.
 		 */
 		RandomAccessIterator& operator ++ ()
 			throw(Exception::InvalidIterator);
 
-		/** 
+		/** Postfix Increment operator. 
 		 */
 		RandomAccessIterator operator ++ (int)
 			throw(Exception::InvalidIterator);
 
-		/** Move iterator one position backwards.
+		/** Prefix Destructor operator.
 		 */
 		RandomAccessIterator& operator -- ()
 			throw(Exception::InvalidIterator);
 
-		/**
+		/** Postfix Decrement operator.
 		 */
 		RandomAccessIterator operator -- (int)
 			throw(Exception::InvalidIterator);
