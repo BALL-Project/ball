@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.75 2004/06/13 19:18:17 amoll Exp $
+// $Id: scene.C,v 1.76 2004/06/13 19:44:01 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -415,13 +415,7 @@ namespace BALL
 		void Scene::renderRepresentations_(RenderMode mode)
 			throw()
 		{
-			GLint nr_planes;
-			glGetIntegerv(GL_MAX_CLIP_PLANES, &nr_planes);
-			for (GLint i = 0; i < GL_MAX_CLIP_PLANES; i++)
-			{
-				glDisable(GL_CLIP_PLANE0 + i);
-			}
-			current_clipping_plane_ = 0;
+			current_clipping_plane_ = GL_CLIP_PLANE0;
 
 			PrimitiveManager::RepresentationList::ConstIterator it;
 
@@ -460,6 +454,13 @@ namespace BALL
 				}
 			}
 			glEnable(GL_DEPTH_TEST);
+
+			GLint nr_planes;
+			glGetIntegerv(GL_MAX_CLIP_PLANES, &nr_planes);
+			for (GLint i = current_clipping_plane_; i < GL_MAX_CLIP_PLANES; i++)
+			{
+				glDisable(i);
+			}
 		}
 
 
@@ -485,8 +486,8 @@ namespace BALL
 				glRotated(rep.getProperty("AZ").getDouble(), 0, 0, 1);
 
 				GLdouble plane[] ={1, 0, 0, 0};
-				glClipPlane(GL_CLIP_PLANE0 + current_clipping_plane_, plane);
-				glEnable(GL_CLIP_PLANE0 + current_clipping_plane_);
+				glEnable(current_clipping_plane_);
+				glClipPlane(current_clipping_plane_, plane);
 				glPopMatrix();
 
 				current_clipping_plane_++;
