@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.5 2003/10/21 15:36:35 amoll Exp $
+// $Id: representation.h,v 1.6 2003/10/24 23:04:33 amoll Exp $
 
 #ifndef  BALL_VIEW_GUI_KERNEL_REPRESENTATION_H
 #define  BALL_VIEW_GUI_KERNEL_REPRESENTATION_H
@@ -54,7 +54,6 @@ namespace BALL
 			enum Properties
 			{
 				PROPERTY__HIDDEN = 0,
-				PROPERTY__TRANSPARENT_FULL,
 				PROPERTY__TRANSPARENT_BLENDING,
 				PROPERTY__ALWAYS_FRONT,
 				PROPERTY__IS_COORDINATE_SYSTEM
