@@ -1,4 +1,4 @@
-// $Id: SESVertex.h,v 1.1 2000/10/10 14:24:56 oliver Exp $
+// $Id: SESVertex.h,v 1.2 2000/10/25 19:24:44 oliver Exp $
 
 #ifndef BALL_STRUCTURE_SESVERTEX_H
 #define BALL_STRUCTURE_SESVERTEX_H
@@ -11,7 +11,7 @@
 #	include <BALL/MATHS/sphere3.h>
 #endif
 
-#include <list.h>
+#include <list>
 
 namespace BALL
 {
