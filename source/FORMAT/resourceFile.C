@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: resourceFile.C,v 1.29 2003/08/26 09:17:47 oliver Exp $
+// $Id: resourceFile.C,v 1.29.2.1 2004/05/11 18:55:14 oliver Exp $
 //
 
 #include <BALL/FORMAT/resourceFile.h>
@@ -666,7 +666,7 @@ namespace BALL
 	}
 
 
-	void ResourceFile::clear()
+	void ResourceFile::clear() throw()
 	{
 		root_.clear();
 	}

@@ -310,7 +310,7 @@ ac_includes_default="\
 #endif"
 
 ac_default_prefix=`cd ..; pwd`
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS PAGER LN_S UNAME CUT TR AR CP RM MV LN SED FIND DIFF TAIL GREP EGREP CAT ECHO_COMMAND ECHO OSMAJOR OS OSREV BINFMT BINFMT_PATH ARCHITECTURE SHARED_LIB_SUFFIX CXXPATH CXX CXXFLAGS LDFLAGS CPPFLAGS ac_ct_CXX EXEEXT OBJEXT CXXCPP BALL_HAS_XDR LEX LEXLIB LEX_OUTPUT_ROOT YACC BALL_HAS_FLEX_YACC BALL_HAS_FFTW BALL_HAS_FFTW_H MOC UIC SIP SIP_LIB SIP_INCLUDES PYTHON_INCLUDES PYTHON_SUPPORT PYTHON_LIBS PYTHON_EXECUTABLE VALGRIND VALGRIND_OPTS BALL_PATH BALL_INCLUDES CXX_MAKEDEPEND MAKEDEP_CXX_OPTS MAKEDEP_CXX_SUFFIX DEPENDENCY_GREPS CC ADD_CXXFLAGS LIB_CXXFLAGS NONLIB_CXXFLAGS HAS_GPLUSPLUS STD_CPP_INCLUDES MAKEDEP_OPTS BALL_TYPENAME BINFMT_INDEX VIEW_LIBS OPENGL_LIBOPTS OPENGL_LIBPATH QT_LIBOPTS QT_LIBPATH X11_LIBOPTS X11_LIBPATH X11_LIBS BALL_LIBS DEFINES CXXFLAGS_D CXXFLAGS_O CPP_MODE_FLAGS CPP_MODE_FLAGS_NO_OPTIMIZATION AROPTS DYNAR DYNAROPTS ADDITIONAL_COMMENTS USE_VIEW BALL_HAS_VIEW VIEW_PLATFORM VIEW_INCLUDES LIBVIEW TEMPLATE_DIR SUBDIRS LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS PAGER LN_S UNAME CUT TR AR CP RM MV LN SED FIND DIFF TAIL GREP EGREP CAT ECHO_COMMAND ECHO OSMAJOR OS OSREV BINFMT BINFMT_PATH ARCHITECTURE SHARED_LIB_SUFFIX CXXPATH CXX CXXFLAGS LDFLAGS CPPFLAGS ac_ct_CXX EXEEXT OBJEXT CXXCPP BALL_HAS_XDR LEX LEXLIB LEX_OUTPUT_ROOT YACC BALL_HAS_FLEX_YACC BALL_HAS_FFTW BALL_HAS_FFTW_H MOC UIC SIP SIP_LIB SIP_INCLUDES PYTHON_INCLUDES PYTHON_SUPPORT PYTHON_LIBS PYTHON_EXECUTABLE VALGRIND VALGRIND_OPTS BALL_PATH BALL_INCLUDES CXX_MAKEDEPEND MAKEDEP_CXX_OPTS MAKEDEP_CXX_SUFFIX DEPENDENCY_GREPS CC ADD_CXXFLAGS LIB_CXXFLAGS NONLIB_CXXFLAGS HAS_GPLUSPLUS STD_CPP_INCLUDES MAKEDEP_OPTS BALL_TYPENAME BINFMT_INDEX VIEW_LIBS OPENGL_LIBOPTS OPENGL_LIBPATH QT_LIBOPTS QT_LIBPATH X11_LIBOPTS X11_LIBPATH X11_LIBS BALL_LIBS DEFINES CXXFLAGS_D CXXFLAGS_O CPP_MODE_FLAGS CPP_MODE_FLAGS_NO_OPTIMIZATION AROPTS DYNAR DYNAROPTS ADD_DYNAROPTS_LIBBALL ADD_DYNAROPTS_LIBVIEW RANLIB ADDITIONAL_COMMENTS USE_VIEW BALL_HAS_VIEW VIEW_PLATFORM VIEW_INCLUDES LIBVIEW TEMPLATE_DIR SUBDIRS LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1567,116 +1567,116 @@ if test "${enable_double_cpx+set}" = set; then
 fi;
 
 if test "$enable_optimization" = "no" ; then
-	DEBUG=true
+DEBUG=true
 else
-	DEBUG=false
+DEBUG=false
 fi
 
 if test "$enable_debuginfo" = "yes" ; then
-	DEBUG_INFO=true
+DEBUG_INFO=true
 else
-	DEBUG_INFO=false
+DEBUG_INFO=false
 fi
 
 if test "$enable_64" = "yes" ; then
-	BINFMT_64_BIT=true
+BINFMT_64_BIT=true
 else
-	BINFMT_64_BIT=false
+BINFMT_64_BIT=false
 fi
 
 if test "$with_compiler" != "" ; then
-	CXX=$with_compiler
+CXX=$with_compiler
 fi
 
 if test "$with_cxxflags" != "" ; then
-	CXXFLAGS="${CXXFLAGS}`echo $with_cxxflags|tr , \  `"
+CXXFLAGS="${CXXFLAGS}`echo $with_cxxflags|tr , \  `"
 fi
 
 if test "$with_ldflags" != "" ; then
-	LDFLAGS="${LDFLAGS}`echo $with_ldflags|tr ,  \  `"
+LDFLAGS="${LDFLAGS}`echo $with_ldflags|tr ,  \  `"
 fi
 
 if test "$with_dynarflags" != "" ; then
-	DYNAROPTS="${DYNAROPTS}`echo $with_dynarflags|tr ,  \  `"
+DYNAROPTS="${DYNAROPTS}`echo $with_dynarflags|tr ,  \  `"
 fi
 
 if test "$with_arflags" != "" ; then
-	AROPTS="${AROPTS}`echo $with_arflags|tr ,  \  `"
+AROPTS="${AROPTS}`echo $with_arflags|tr ,  \  `"
 fi
 
 if test "$with_qt" != "" ; then
-	QTDIR=$with_qt
+QTDIR=$with_qt
 fi
 if test "$with_qt_incl" != "" ; then
-	QT_INCPATH=$with_qt_incl
+QT_INCPATH=$with_qt_incl
 fi
 if test "$with_qt_libs" != "" ; then
-	QT_LIBPATH=$with_qt_libs
+QT_LIBPATH=$with_qt_libs
 fi
 if test "$with_qt_mt" = "yes" ; then
-	USE_THREADSAFE_QT=true
-	QT_MT_SUFFIX="-mt"
+USE_THREADSAFE_QT=true
+QT_MT_SUFFIX="-mt"
 else
-	USE_THREADSAFE_QT=false
-	QT_MT_SUFFIX=""
+USE_THREADSAFE_QT=false
+QT_MT_SUFFIX=""
 fi
 if test "$with_opengl_incl" != "" ; then
-	OPENGL_INCPATH=$with_opengl_incl
+OPENGL_INCPATH=$with_opengl_incl
 fi
 if test "$with_opengl_libs" != "" ; then
-	OPENGL_LIBPATH=$with_opengl_libs
+OPENGL_LIBPATH=$with_opengl_libs
 fi
 
 if test "$with_mesa" != "yes" ; then
-	VIEW_PLATFORM=OpenGL
+VIEW_PLATFORM=OpenGL
 else
- 	VIEW_PLATFORM=Mesa
+VIEW_PLATFORM=Mesa
 fi
 
 if test "$with_moc" != "" ; then
-	MOC=$with_moc
+MOC=$with_moc
 else
- 	MOC=moc
+MOC=moc
 fi
 
 if test "$with_uic" != "" ; then
-	UIC=$with_uic
+UIC=$with_uic
 else
- 	UIC=uic
+UIC=uic
 fi
 
 if test "$with_libxnet" != "no" ; then
-	USE_LIBXNET=true
+USE_LIBXNET=true
 else
-	USE_LIBXNET=false
+USE_LIBXNET=false
 fi
 
 if test "$with_VIEW" = "no" -o "$enable_VIEW" = "no"; then
-	USE_VIEW=false
-	BALL_HAS_VIEW=""
+USE_VIEW=false
+BALL_HAS_VIEW=""
 else
-	USE_VIEW=true
-	BALL_HAS_VIEW=true
+USE_VIEW=true
+BALL_HAS_VIEW=true
 fi
 
 if test "$with_xdr" = "no" ; then
-	BALL_NO_XDR=true
+BALL_NO_XDR=true
 else
-	BALL_NO_XDR=false
+BALL_NO_XDR=false
 fi
 
 # use this switch to enable the python support
 # this also builds libBALLc.so and requires
 # Python.h and libsip.a
 if test "$with_python" != "" -a "$with_python" != "no" -o "$enable_python" = yes ; then
-	PYTHON_SUPPORT=true
-	if test "${with_python}" != "" -a "${with_python}" != "yes" ; then
-		PYTHON_EXE=${with_python}
-	else
-		PYTHON_EXE=python
-	fi
+PYTHON_SUPPORT=true
+if test "${with_python}" != "" -a "${with_python}" != "yes" ; then
+PYTHON_EXE=${with_python}
 else
-	PYTHON_SUPPORT=
+PYTHON_EXE=python
+fi
+else
+PYTHON_SUPPORT=
 fi
 
 # the path to the python includes (Python.h)
@@ -1695,22 +1695,22 @@ SIP=$with_sip
 
 # support for fftw (FFT lib)
 if test "$with_fftw" != "" -a "$with_fftw" != "no" -o "$enable_fftw" = yes ; then
-	FFTW_SUPPORT=true
-	if test "${with_fftw_lib}" != "" ; then
-		FFTW_LIBPATH=${with_fftw_lib}
-	else
-		FFTW_LIBPATH=""
-	fi
-	FFTW_INCL=${with_fftw_incl}
+FFTW_SUPPORT=true
+if test "${with_fftw_lib}" != "" ; then
+FFTW_LIBPATH=${with_fftw_lib}
 else
-	FFTW_SUPPORT=
+FFTW_LIBPATH=""
+fi
+FFTW_INCL=${with_fftw_incl}
+else
+FFTW_SUPPORT=
 fi
 
 # size of Complex type (if given)
 if test "$enable_double_cplx" = yes ; then
-	FFTW_PRECISION=double
+FFTW_PRECISION=double
 else
-	FFTW_PRECISION=float
+FFTW_PRECISION=float
 fi
 
 
@@ -4138,7 +4138,7 @@ CXX_MAKEDEPEND="makedepend"
 MAKEDEP_CXX_OPTS="-f.Dependencies -D__cplusplus --"
 
 case "${CXX_NAME}" in
-	g++ )
+g++ )
 
 	echo "$as_me:$LINENO: checking compiler version" >&5
 echo $ECHO_N "checking compiler version... $ECHO_C" >&6
@@ -4285,14 +4285,15 @@ echo "${ECHO_T}yes" >&6
 	fi
 
 
-			  CXX_MAKEDEPEND="${CXX}"
+			  CXXFLAGS="${CXXFLAGS} -pipe"
+	CXX_MAKEDEPEND="${CXX}"
   MAKEDEP_CXX_OPTS="-M"
   CXXFLAGS_D="${CXXFLAGS_D} -Wall -W -pedantic -Wno-long-long"
   CXXFLAGS_DI="${CXXFLAGS_DI} -g"
   CXXFLAGS_O="${CXXFLAGS_O} -O3 -Wall -W -pedantic -Wno-long-long"
   MAKEDEP_CXX_SUFFIX=" >.Dependencies"
 
-        if test "${OS}" != "CYGWIN" ; then
+        if test "${OS}" != "CYGWIN" -a "${OS}" != "Darwin" ; then
     CXXFLAGS="${CXXFLAGS} -fPIC"
   fi
 
@@ -4300,10 +4301,13 @@ echo "${ECHO_T}yes" >&6
   if test "${OS}" = "Solaris" ; then
     DYNAROPTS="${DYNAROPTS} -G -fPIC -o"
   else
-    if test "${OS}" = Darwin ; then
-	    DYNAROPTS="${DYNAROPTS} -dynamiclib -fPIC -o"
-		else
-  	  DYNAROPTS="${DYNAROPTS} -shared -fPIC -o"
+    if test "${OS}" = "Darwin" ; then
+      DYNAROPTS="${DYNAROPTS} -prebind -dynamiclib -o"
+			ADD_DYNAROPTS_LIBBALL="-seg1addr 0xb0000000"
+			ADD_DYNAROPTS_LIBVIEW="-seg1addr 0x80000000"
+      RANLIB="ranlib -s "
+    else
+      DYNAROPTS="${DYNAROPTS} -shared -fPIC -o"
 		fi
   fi
 
@@ -4315,7 +4319,7 @@ echo "${ECHO_T}yes" >&6
     fi
   fi
  ;;
-	KAI )
+KAI )
 	echo "$as_me:$LINENO: checking compiler version" >&5
 echo $ECHO_N "checking compiler version... $ECHO_C" >&6
 	echo "int main(){}" > conftest.C
@@ -4389,7 +4393,7 @@ _ACEOF
     fi
   fi
  ;;
-	Intel )
+Intel )
 	echo "$as_me:$LINENO: checking compiler version" >&5
 echo $ECHO_N "checking compiler version... $ECHO_C" >&6
 	echo "int main(){}" > conftest.C
@@ -4442,7 +4446,7 @@ _ACEOF
       CXXFLAGS_D="${CXXFLAGS_D} -O0 -w1"
   CXXFLAGS_DI="${CXXFLAGS_DI} -g"
  ;;
-	Compaq )
+Compaq )
 		echo "$as_me:$LINENO: checking compiler version" >&5
 echo $ECHO_N "checking compiler version... $ECHO_C" >&6
 		echo "int main(){}" > conftest.C
@@ -4550,7 +4554,7 @@ echo "$as_me: error: Aborted." >&2;}
     MAKEDEP_CXX_OPTS="${MAKEDEP_CXX_OPTS} -std strict_ansi"
   fi
  ;;
-	MIPSpro )
+MIPSpro )
 		echo "$as_me:$LINENO: checking compiler version" >&5
 echo $ECHO_N "checking compiler version... $ECHO_C" >&6
 		CXX_VERSION_STRING=`${CXX} -n32 -version 2>&1 | ${EGREP} ersion`
@@ -4713,7 +4717,7 @@ _ACEOF
 _ACEOF
 
  ;;
-	SunCC )
+SunCC )
 
 		echo "$as_me:$LINENO: checking compiler version for Sun C++" >&5
 echo $ECHO_N "checking compiler version for Sun C++... $ECHO_C" >&6
@@ -4910,8 +4914,8 @@ echo "${ECHO_T}disabled" >&6
 
 
 if test "$OS" = IRIX -o "$OS" = Solaris ; then
-	INCLUDE_IEEEFP=true
-	BALL_INCLUDE_IEEEFP=true
+INCLUDE_IEEEFP=true
+BALL_INCLUDE_IEEEFP=true
 fi
 
 ac_ext=cc
@@ -15555,27 +15559,27 @@ done
 test -n "$YACC" || YACC="yacc"
 
 if test "${LEX}" != "flex" -o "${YACC}" = "" ; then
-	BALL_HAS_FLEX_YACC=false
-	cat >>confdefs.h <<\_ACEOF
+BALL_HAS_FLEX_YACC=false
+cat >>confdefs.h <<\_ACEOF
 #define BALL_HAS_FLEX_YACC false
 _ACEOF
 
-	echo "$as_me:$LINENO: result: flex and yacc/bison required!" >&5
+echo "$as_me:$LINENO: result: flex and yacc/bison required!" >&5
 echo "${ECHO_T}flex and yacc/bison required!" >&6
-	echo "$as_me:$LINENO: result: Please install them from your closest GNU mirror." >&5
+echo "$as_me:$LINENO: result: Please install them from your closest GNU mirror." >&5
 echo "${ECHO_T}Please install them from your closest GNU mirror." >&6
-	echo "$as_me:$LINENO: result: " >&5
+echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-	{ { echo "$as_me:$LINENO: error: Aborted." >&5
+{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
 else
-	BALL_HAS_FLEX_YACC=true
-	cat >>confdefs.h <<\_ACEOF
+BALL_HAS_FLEX_YACC=true
+cat >>confdefs.h <<\_ACEOF
 #define BALL_HAS_FLEX_YACC true
 _ACEOF
 
-	LIBS="${LIBS}"
+LIBS="${LIBS}"
 fi
 
 
@@ -16426,6 +16430,12 @@ fi
 		fi
 
 		if test "${USE_VIEW}" = true ; then
+												if test "${OS}" = "Darwin" ; then
+				VIEW_PLATFORM="OpenGL-Darwin"
+				OPENGL_LIBOPTS="-framework OpenGL -framework AGL"
+				X11_LIBPATHOPT=""
+			fi
+
 			if test "${VIEW_PLATFORM}" = Mesa ; then
 				echo "$as_me:$LINENO: checking for Mesa includes" >&5
 echo $ECHO_N "checking for Mesa includes... $ECHO_C" >&6
@@ -17530,8 +17540,8 @@ echo "${ECHO_T}" >&6
 echo "${ECHO_T}  Could not determine version number of QT library -- please" >&6
 					echo "$as_me:$LINENO: result:   check config.log for details." >&5
 echo "${ECHO_T}  check config.log for details." >&6
-					echo "$as_me:$LINENO: result:   You might have a problem with your LD_LIBRARY_PATH." >&5
-echo "${ECHO_T}  You might have a problem with your LD_LIBRARY_PATH." >&6
+					echo "$as_me:$LINENO: result:   You might have a problem with your (DY)LD_LIBRARY_PATH." >&5
+echo "${ECHO_T}  You might have a problem with your (DY)LD_LIBRARY_PATH." >&6
 					echo "$as_me:$LINENO: result:   Please check the settings of QTDIR as well or specify" >&5
 echo "${ECHO_T}  Please check the settings of QTDIR as well or specify" >&6
 					echo "$as_me:$LINENO: result:   the path to the library/headers with" >&5
@@ -17694,6 +17704,12 @@ sed 's/^/| /' conftest.$ac_ext >&5
 fi
 rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
 			LIBS=${SAVE_LIBS}
+		fi
+
+										if test "${OS}" = "Darwin" ; then
+			X11_LIBS=""
+			X11_LIBPATHOPTS=""
+			X_LINKING_OK="true"
 		fi
 
 								if test "${X_LINKING_OK+set}" != set ; then
@@ -18216,9 +18232,9 @@ echo "${ECHO_T}yes" >&6
 		echo "$as_me:$LINENO: checking linking against QT libraries" >&5
 echo $ECHO_N "checking linking against QT libraries... $ECHO_C" >&6
 
-		SAVE_LIBS=${LIBS}
-		LIBS="${QTQGL_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
-		cat >conftest.$ac_ext <<_ACEOF
+			SAVE_LIBS=${LIBS}
+			LIBS="${QTQGL_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
+			cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
 /* confdefs.h.  */
 _ACEOF
@@ -18253,12 +18269,12 @@ sed 's/^/| /' conftest.$ac_ext >&5
 
 fi
 rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
-		LIBS=${SAVE_LIBS}
+			LIBS=${SAVE_LIBS}
 
-		if test "${QT_LINKING_OK+set}" != set ; then
-			SAVE_LIBS=${LIBS}
-			LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
-			cat >conftest.$ac_ext <<_ACEOF
+			if test "${QT_LINKING_OK+set}" != set ; then
+				SAVE_LIBS=${LIBS}
+				LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
+				cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
 /* confdefs.h.  */
 _ACEOF
@@ -18293,16 +18309,16 @@ sed 's/^/| /' conftest.$ac_ext >&5
 
 fi
 rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
-			LIBS=${SAVE_LIBS}
-		else
-						QT_LIBOPTS="${QTQGL_LIBOPTS}"
-		fi
+				LIBS=${SAVE_LIBS}
+			else
+								QT_LIBOPTS="${QTQGL_LIBOPTS}"
+			fi
 
-		if test "${QT_LINKING_OK+set}" != set ; then
-			SAVE_LIBS=${LIBS}
-			X11_LIBOPTS="-lXrender -lfreetype ${X11_LIBOPTS}"
-			LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
-			cat >conftest.$ac_ext <<_ACEOF
+			if test "${QT_LINKING_OK+set}" != set ; then
+				SAVE_LIBS=${LIBS}
+				X11_LIBOPTS="-lXrender -lfreetype ${X11_LIBOPTS}"
+				LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
+				cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
 /* confdefs.h.  */
 _ACEOF
@@ -18337,8 +18353,8 @@ sed 's/^/| /' conftest.$ac_ext >&5
 
 fi
 rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
-			LIBS=${SAVE_LIBS}
-		fi
+				LIBS=${SAVE_LIBS}
+			fi
 
 		if test "${QT_LINKING_OK+set}" != set ; then
 			echo "$as_me:$LINENO: result: no" >&5
@@ -18389,9 +18405,15 @@ echo "${ECHO_T}yes" >&6
 echo $ECHO_N "checking QT library version... $ECHO_C" >&6
 			SAVE_LIBS=${LIBS}
 			LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
-			LD_LIBRARY_PATH="${QT_LIBPATH}:${X11_LIBPATH}:${OPENGL_LIBPATH}:${LD_LIBRARY_PATH}"
-			export LD_LIBRARY_PATH
-			echo "LD_LIBRARY_PATH = ${LD_LIBRARY_PATH}" 1>&5
+			if test "${OS}" = "Darwin" ; then
+				DYLD_LIBRARY_PATH="${QT_LIBPATH}:${X11_LIBPATH}:${OPENGL_LIBPATH}:${DYLD_LIBRARY_PATH}"
+				export DYLD_LIBRARY_PATH
+				echo "DYLD_LIBRARY_PATH = ${DYLD_LIBRARY_PATH}" 1>&5
+			else
+				LD_LIBRARY_PATH="${QT_LIBPATH}:${X11_LIBPATH}:${OPENGL_LIBPATH}:${LD_LIBRARY_PATH}"
+				export LD_LIBRARY_PATH
+				echo "LD_LIBRARY_PATH = ${LD_LIBRARY_PATH}" 1>&5
+			fi
 			if test "$cross_compiling" = yes; then
   DUMMY=0
 
@@ -18593,8 +18615,8 @@ fi
 echo "${ECHO_T}" >&6
 			echo "$as_me:$LINENO: result: Could not find the QT Meta Object Compiler (moc)!" >&5
 echo "${ECHO_T}Could not find the QT Meta Object Compiler (moc)!" >&6
-			echo "$as_me:$LINENO: result: You might run into trouble if you want to compile BALLView." >&5
-echo "${ECHO_T}You might run into trouble if you want to compile BALLView." >&6
+			echo "$as_me:$LINENO: result: You might run into trouble if you want to compile MolVIEW." >&5
+echo "${ECHO_T}You might run into trouble if you want to compile MolVIEW." >&6
 			echo "$as_me:$LINENO: result: Please include the correct path to moc into your" >&5
 echo "${ECHO_T}Please include the correct path to moc into your" >&6
 			echo "$as_me:$LINENO: result: PATH environment variable or specify the path to moc" >&5
@@ -18785,8 +18807,8 @@ fi
 echo "${ECHO_T}" >&6
 			echo "$as_me:$LINENO: result: Could not find the QT User Interface Compiler (uic)!" >&5
 echo "${ECHO_T}Could not find the QT User Interface Compiler (uic)!" >&6
-			echo "$as_me:$LINENO: result: You might run into trouble if you want to compile BALLView." >&5
-echo "${ECHO_T}You might run into trouble if you want to compile BALLView." >&6
+			echo "$as_me:$LINENO: result: You might run into trouble if you want to compile MolVIEW." >&5
+echo "${ECHO_T}You might run into trouble if you want to compile MolVIEW." >&6
 			echo "$as_me:$LINENO: result: Please include the correct path to uic into your" >&5
 echo "${ECHO_T}Please include the correct path to uic into your" >&6
 			echo "$as_me:$LINENO: result: PATH environment variable or specify the path to uic" >&5
@@ -19876,8 +19898,8 @@ VIEW_LIBS="${VIEW_LIBS} ${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
 
 BALL_LIBS="${BALL_LIBS} -L${BALL_PATH}/lib/${BINFMT} -lBALL ${LIBS}"
 if test "${USE_VIEW}" = true ; then
-	VIEW_INCLUDES="${BALL_INCLUDES} ${VIEW_INCLUDES}"
-	VIEW_LIBS="-L${BALL_PATH}/lib/${BINFMT} -lVIEW -lBALL ${VIEW_LIBS}"
+VIEW_INCLUDES="${BALL_INCLUDES} ${VIEW_INCLUDES}"
+VIEW_LIBS="-L${BALL_PATH}/lib/${BINFMT} -lVIEW -lBALL ${VIEW_LIBS}"
 fi
 
 LDFLAGS="$LDFLAGS"
@@ -19887,7 +19909,7 @@ LIBS="$BALL_LIBS"
 CXXFLAGS="$CXXFLAGS $DEFINES"
 
 if test "${HAS_GPLUSPLUS}" = false -a "${MAKEDEP_CXX_SUFFIX}" != "" ; then
-	MAKEDEP_CXX_SUFFIX="|egrep \"(${BALL_PATH}|^[^/]*\$\$)\" ${MAKEDEP_CXX_SUFFIX}"
+MAKEDEP_CXX_SUFFIX="|egrep \"(${BALL_PATH}|^[^/]*\$\$)\" ${MAKEDEP_CXX_SUFFIX}"
 fi
 
 
@@ -19900,7 +19922,7 @@ fi
 
 MAKEDEP_CXX_OPTS="${MAKEDEP_CXX_OPTS} ${CXXFLAGS}"
 if test ${CXX_MAKEDEPEND} = "makedepend" ; then
-	MAKEDEP_CXX_OPTS="${MAKEDEP_CXX_OPTS} -- "
+MAKEDEP_CXX_OPTS="${MAKEDEP_CXX_OPTS} -- "
 fi
 
 
@@ -19919,11 +19941,14 @@ fi
 
 
 if test "${AR}" = "no" ; then
-	AR="ar"
+AR="ar"
 fi
 if test "${AROPTS}" = "" ; then
-	AROPTS="cru"
+AROPTS="cru"
 fi
+
+
+
 
 
 
@@ -20727,6 +20752,9 @@ s,@CPP_MODE_FLAGS_NO_OPTIMIZATION@,$CPP_MODE_FLAGS_NO_OPTIMIZATION,;t t
 s,@AROPTS@,$AROPTS,;t t
 s,@DYNAR@,$DYNAR,;t t
 s,@DYNAROPTS@,$DYNAROPTS,;t t
+s,@ADD_DYNAROPTS_LIBBALL@,$ADD_DYNAROPTS_LIBBALL,;t t
+s,@ADD_DYNAROPTS_LIBVIEW@,$ADD_DYNAROPTS_LIBVIEW,;t t
+s,@RANLIB@,$RANLIB,;t t
 s,@ADDITIONAL_COMMENTS@,$ADDITIONAL_COMMENTS,;t t
 s,@USE_VIEW@,$USE_VIEW,;t t
 s,@BALL_HAS_VIEW@,$BALL_HAS_VIEW,;t t
