@@ -1,4 +1,4 @@
-// $Id: Expression_test.C,v 1.14 2001/07/17 10:52:30 anker Exp $
+// $Id: Expression_test.C,v 1.15 2001/07/30 01:24:47 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -18,7 +18,7 @@ using namespace BALL;
 
 ///////////////////////////
 
-START_TEST(Expression, "$Id: Expression_test.C,v 1.14 2001/07/17 10:52:30 anker Exp $")
+START_TEST(Expression, "$Id: Expression_test.C,v 1.15 2001/07/30 01:24:47 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -762,13 +762,13 @@ CHECK(Expression::setExpression(const String& expression) throw())
 	String test_expression("connectedTo((-H))");
 	Expression e;
 	e.setExpression(test_expression);
-	TEST_EQUAL(e.getExpressionString(), test_expression)
+	TEST_EQUAL(e.getExpressionString(), "(connectedTo((-H)))")
 RESULT
 
 
 CHECK(Expression::getExpressionString() const  throw())
-	Expression e("connectedTo((-H))");
-	TEST_EQUAL("connectedTo((-H))", e.getExpressionString())
+	Expression e("(connectedTo((-H)))");
+	TEST_EQUAL("(connectedTo((-H)))", e.getExpressionString())
 RESULT
 
 
