@@ -1,4 +1,4 @@
-// $Id: PDBFile.C,v 1.3 1999/09/26 17:15:07 oliver Exp $
+// $Id: PDBFile.C,v 1.4 1999/11/05 12:20:54 oliver Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 
@@ -33,7 +33,7 @@ namespace BALL
 	{
 	}
 
-	PDBFile::PDBFile(const String& filename, int open_mode)
+	PDBFile::PDBFile(const String& filename, File::OpenMode open_mode)
 		:	PDB_atom_map_(),
 			residue_map_(),
 			ssbond_list_(),
