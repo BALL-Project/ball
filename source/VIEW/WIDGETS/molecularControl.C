@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.94 2005/02/14 14:37:46 amoll Exp $
+// $Id: molecularControl.C,v 1.95 2005/02/14 14:50:34 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1165,15 +1165,14 @@ void MolecularControl::deleteCurrentItems()
 bool MolecularControl::pasteAllowedFor_(Composite& child)
 	throw()
 {
-	if (getSelection().size() == 0 &&
-			RTTI::isKindOf<System>(child))
+	if (RTTI::isKindOf<System>(child)) 
 	{
-		return true;
+		return !getSelection().size();
 	}
 
-	Composite& parent = **getSelection().begin();
+	if (!getSelection().size()) return false;
 
-	if (RTTI::isKindOf<System>(child)) return false;
+	const Composite& parent = **getSelection().begin();
 
 	if (RTTI::isKindOf<Atom>(parent)) return false;
 
