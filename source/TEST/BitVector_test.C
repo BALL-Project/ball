@@ -1,4 +1,4 @@
-// $Id: BitVector_test.C,v 1.18 2000/10/21 11:10:11 oliver Exp $
+// $Id: BitVector_test.C,v 1.19 2000/11/24 02:12:03 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(BitVector, "$Id: BitVector_test.C,v 1.18 2000/10/21 11:10:11 oliver Exp $")
+START_TEST(BitVector, "$Id: BitVector_test.C,v 1.19 2000/11/24 02:12:03 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -28,7 +28,6 @@ RESULT
 
 CHECK(BitVector::getSize() const)
 	BitVector bv;
-//	TEST_EQUAL(bv.getSize(), BitVector::BlockSize)
 	TEST_EQUAL(bv.getSize(), 0)
 	TEST_EQUAL(bv.getBit(0), false)
 RESULT
@@ -546,6 +545,157 @@ CHECK(BitVector::setSize())
 	TEST_EQUAL(b.getSize(), 24)
 	b.setSize(0, false);
 	TEST_EQUAL(b.getSize(), 0)
+RESULT
+
+
+////////////////////////BIT//////////////////////////////////
+
+
+BitVector bv(8);
+const BitVector cbv(8);
+bv[1] = true;
+bv[3] = true;
+bv[5] = true;
+bv[7] = true;
+
+Bit* b_ptr;
+
+CHECK(Bit())
+	b_ptr = new Bit();
+	TEST_NOT_EQUAL(b_ptr, 0)
+RESULT
+
+CHECK(~Bit())
+	delete b_ptr;
+RESULT
+
+CHECK(Bit(const BitVector& bitvector, Index index = 0))
+	Bit b(bv, 0);
+	TEST_EQUAL(b, false)
+	Bit b1(bv, 1);
+	TEST_EQUAL(b1, true)
+	Bit b7(bv, 1);
+	TEST_EQUAL(b7, true)
+	Bit b8(bv, 1);
+	TEST_EQUAL(b8, true)
+
+	Bit cb99(cbv, 99);
+	TEST_EQUAL(cb99, false)
+RESULT
+
+CHECK(operator bool())
+	Bit b(bv, 0);
+	TEST_EQUAL((bool) b, false)
+	Bit b1(bv, 1);
+	TEST_EQUAL((bool) b1, true)
+RESULT
+
+Bit b0;
+
+CHECK(operator = (const Bit& bit))
+	Bit b1(bv, 1);
+	Bit b6(bv, 6);
+	TEST_EQUAL(b6, false)
+	TEST_EQUAL(b1, true)
+	b6 = b1;
+	//TEST_EQUAL(bv[6], true)
+	TEST_EQUAL(b6, true)
+
+	TEST_EXCEPTION(Exception::NullPointer, b0 = b1)
+RESULT
+
+CHECK(operator = (bool bit))
+	bv[6] = true;
+	Bit b6(bv, 6);
+	TEST_EQUAL(bv[6], true)
+	b6 = false;
+	TEST_EQUAL(bv[6], false)
+
+	b6 = true;
+	TEST_EQUAL(b6, true)
+	TEST_EQUAL(bv[6], true)
+
+	TEST_EXCEPTION(Exception::NullPointer, b0 = b6)
+RESULT
+
+CHECK(clear())
+	Bit b(bv, 1);
+	TEST_EQUAL(b, true)
+	b.clear();
+
+	TEST_EXCEPTION(Exception::NullPointer, b == false)
+RESULT
+
+CHECK(operator == (const Bit& bit))
+	Bit b(bv, 0);
+	Bit b1(bv, 2);
+	TEST_EQUAL(b == b1, true)
+	b = Bit(bv, 1);
+	b1 = Bit(bv, 3);
+	TEST_EQUAL(b == b1, true)
+
+	b = false;
+	b1 = true;
+	TEST_EQUAL(bv[1], false)
+	TEST_EQUAL(b, false)
+	TEST_EQUAL(bv[3], true)
+	TEST_EQUAL(b1, true)
+
+	TEST_EQUAL(b == b1, false)
+
+	b1 = false;
+	b = true;
+	TEST_EQUAL(b == b1, false)
+
+	TEST_EXCEPTION(Exception::NullPointer, b0 == b1)
+	TEST_EXCEPTION(Exception::NullPointer, b1 == b0)
+RESULT
+
+CHECK(operator == (const bool bit))
+	Bit b(bv, 0);
+	TEST_EQUAL(b == false, true)
+	b = Bit(bv, 1);
+	TEST_EQUAL(b == true, true)
+	b = false;
+	TEST_EQUAL(b == true, false)
+	b = true;
+	TEST_EQUAL(b == false, false)
+
+	TEST_EXCEPTION(Exception::NullPointer, b0 == true)
+RESULT
+
+CHECK(operator != (const Bit& bit))
+	Bit b(bv, 0);
+	TEST_EQUAL(bv[0] != bv[1], true)
+	Bit b1(bv, 1);
+	TEST_EQUAL(b != b1, true)
+	b = Bit(bv, 1);
+	b1 = Bit(bv, 2);
+	TEST_EQUAL(bv[1] != bv[2], true)
+	TEST_EQUAL(b != b1, true)
+	b = false;
+	b1 = false;
+	TEST_EQUAL(b != b1, false)
+
+	b1 = false;
+	b = true;
+	TEST_EQUAL(b != b1, true)
+
+	TEST_EXCEPTION(Exception::NullPointer, b0 != b)
+	TEST_EXCEPTION(Exception::NullPointer, b != b0)
+RESULT
+
+CHECK(operator != (const bool bit))
+	Bit b(bv, 0);
+	TEST_EQUAL(b != false, false)
+	b = Bit(bv, 1);
+	TEST_EQUAL(b != true, false)
+	b = false;
+	TEST_EQUAL(b != true, true)
+	b = true;
+	TEST_EQUAL(b != false, true)
+
+	TEST_EXCEPTION(Exception::NullPointer, b0 != true)
 RESULT
 
 ///////////////////////////////////////////////////
