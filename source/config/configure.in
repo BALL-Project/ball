@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.6 1999/08/31 22:01:19 oliver Exp $
+dnl    $Id: configure.in,v 1.7 1999/09/08 18:08:11 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -664,6 +664,9 @@ dnl
 if test "${HAS_GPLUSPLUS}" = "true" ; then
 	CXX_MAKEDEPEND="${CXX}"
 	MAKEDEP_CXX_OPTS="-M"
+	if test "${ARCHITECTURE}" = "alpha" ; then
+		CPPFLAGS="${CPPFLAGS} -Wa,-m21164a"
+	fi
 	CPPFLAGS_D="${CPPFLAGS_D} -g -Wall"
 	CPPFLAGS_O="${CPPFLAGS_O} -O2"
 	MAKEDEP_CXX_SUFFIX=" >.Dependencies"
