@@ -1,4 +1,4 @@
-// $Id: clip_protein_around_ligand.C,v 1.5 2003/08/20 12:19:33 anker Exp $
+// $Id: clip_protein_around_ligand.C,v 1.6 2004/02/18 19:12:48 oliver Exp $
 //
 // A program for extracting a parts of a protein around a ligand.
 // The output are XYZFiles because we use this program for creating AMSOL
@@ -499,7 +499,7 @@ int main(int argc, char** argv)
 	// consecutive order!
 	ChainIterator chain_it = protein.beginChain();
 	ChainIterator tmp_chain_it;
-	Index current_ID;
+	Index current_ID = 0;
 
 	ReconstructFragmentProcessor reconstruct(db);
 
