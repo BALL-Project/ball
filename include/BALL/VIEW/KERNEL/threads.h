@@ -15,6 +15,10 @@
 #include <BALL/FORMAT/DCDFile.h>
 #endif
 
+#ifndef BALL_SYSTEM_TCPTRANSFER
+# include <BALL/SYSTEM/TCPTransfer.h>
+#endif
+
 #include <qthread.h>
 #include <qevent.h>
 
@@ -88,7 +92,11 @@ namespace VIEW
 			Composite* 		composite_;
 		};
 
-	///
+	
+	/** Thread to fetch a file over TCP network traffic.
+	 		The result can either be stored in a file or in a stringstream.
+			This is the default, if no filename is given.
+	*/
 	class FetchHTMLThread
 		: public BALLThread
 	{
@@ -102,15 +110,25 @@ namespace VIEW
 				throw();
 
 			///
-			const String& getFilename() const
-				throw();
-
-			///
 			virtual void run();
 
+			///
+			void setFilename(const String& file_name) { file_name_ = file_name;}
+
+			///
+			const String& getFilename() const { return file_name_;}
+
+			///
+			TCPTransfer& getTCPTransfer() { return tcp_;}
+
+			///
+			std::stringstream& getStream() { return stream_;}
+
 			protected:
-			String filename_;
 			String url_;
+			String file_name_;
+			TCPTransfer tcp_;
+			std::stringstream stream_;
 	};
 	
 	///

@@ -80,7 +80,8 @@ namespace BALL
 
 		FetchHTMLThread::FetchHTMLThread()
 			throw()
-			: BALLThread()
+			: BALLThread(),
+				file_name_("")
 		{
 		}
 
@@ -90,26 +91,36 @@ namespace BALL
 			url_ = url;
 		}
 
-		const String& FetchHTMLThread::getFilename() const
-			throw()
-		{
-			return filename_;
-		}
-
 		void FetchHTMLThread::run()
 		{
-			if (url_ == "") return;
+			if (url_ == "")
+			{
+				output_("Invalid Address " + url_ + " in " + String(__FILE__) + __LINE__, true);
+				return;
+			}
 			try
 			{
-				// store current working directory
-				Directory d;
-				File f(url_);
-				d.changeToUserHomeDir();
+				if (file_name_ != "")
+				{
+					File f(file_name_, std::ios::out);
+					tcp_.set(f, url_);
+				}
+				else
+				{
+					char c;
+					stream_.get(c);
 
-				// create the temporary file in the users home dir
-				File::createTemporaryFilename(filename_);
-				f.copyTo(filename_);
-				d.setCurrent();
+					while (stream_.gcount() > 0)
+					{
+						stream_.get(c);
+					}
+
+					stream_.clear();
+
+					tcp_.set(stream_, url_);
+				}
+
+				tcp_.transfer();
 			}
 			catch(...)
 			{
