@@ -1,4 +1,4 @@
-// $Id: pPCurve.C,v 1.3 2000/07/13 13:03:44 anker Exp $
+// $Id: pPCurve.C,v 1.4 2000/07/13 16:27:02 anker Exp $
 
 #include <BALL/MATHS/pPCurve.h>
 
@@ -61,11 +61,6 @@ namespace BALL
 		return degree_;
 	}
 
-	void PPCurve::setIntervals(vector<float>& intervals)
-	{
-		intervals_ = intervals;
-	}
-
 	void PPCurve::setIntervals(const vector<float>& intervals)
 	{
 		intervals_ = intervals;
@@ -74,11 +69,6 @@ namespace BALL
 	vector<float> PPCurve::getIntervals() const
 	{
 		return intervals_;
-	}
-
-	void PPCurve::setCoefficients(vector< vector<float> >& coefficients)
-	{
-		coefficients_ = coefficients;
 	}
 
 	void PPCurve::setCoefficients(const vector< vector<float> >& coefficients)
