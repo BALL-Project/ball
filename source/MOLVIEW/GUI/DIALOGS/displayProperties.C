@@ -1,4 +1,4 @@
-// $Id:
+// $Id: displayProperties.C,v 1.13 2002/01/13 18:23:40 oliver Exp $
 
 
 #include <BALL/KERNEL/molecule.h>
@@ -12,6 +12,7 @@
 #include <BALL/MOLVIEW/GUI/DIALOGS/displayProperties.h>
 
 #define Inherited DisplayPropertiesData
+#undef DEBUG
 
 using namespace std;
 
@@ -1112,9 +1113,14 @@ namespace BALL
 						}
 					}
 			}
-			// ?????
-			catch (Exception::GeneralException e)
-			{	Log << e << std::endl;}
+			// in debug mode, print the exception and rethrow
+			catch (Exception::GeneralException& e)
+			{	
+				#ifdef DEBUG
+					Log << e << std::endl;
+				#endif
+				throw e;
+			}
 		}
 
 		void DisplayProperties::calculateCenter_(Composite &composite)
