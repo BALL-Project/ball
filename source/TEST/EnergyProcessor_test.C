@@ -1,73 +1,68 @@
-// $Id: EnergyProcessor_test.C,v 1.3 2001/07/15 21:06:32 oliver Exp $
+// $Id: EnergyProcessor_test.C,v 1.4 2001/07/15 22:15:20 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
-
-// insert includes here
+#include <BALL/FORMAT/HINFile.h>
+#include <BALL/KERNEL/system.h>
 #include <BALL/ENERGY/energyProcessor.h>
-
 ///////////////////////////
 
-START_TEST(EnergyProcessor, "$Id: EnergyProcessor_test.C,v 1.3 2001/07/15 21:06:32 oliver Exp $")
+START_TEST(EnergyProcessor, "$Id: EnergyProcessor_test.C,v 1.4 2001/07/15 22:15:20 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
 
-///  insert tests for each member function here         
-///
-	
+HINFile f("data/AnisotropyShiftProcessor_test.hin");
+System S;
+f >> S;
+
 
 CHECK(EnergyProcessor::EnergyProcessor())
-  //BAUSTELLE
+	EnergyProcessor* ep = new EnergyProcessor;
+	TEST_NOT_EQUAL(ep, 0)
+	TEST_EQUAL(ep->isValid(), false)
+	TEST_REAL_EQUAL(ep->getEnergy(), 0)
 RESULT
 
+EnergyProcessor ep;
 
 CHECK(EnergyProcessor::EnergyProcessor(const EnergyProcessor& proc))
-  //BAUSTELLE
+	EnergyProcessor ep2(ep);
 RESULT
 
 
 CHECK(EnergyProcessor::~EnergyProcessor())
-  //BAUSTELLE
-RESULT
-
-
-CHECK(EnergyProcessor::destroy())
-  //BAUSTELLE
+	EnergyProcessor* ep = new EnergyProcessor;
+	delete ep;
 RESULT
 
 
 CHECK(EnergyProcessor::clear())
-  //BAUSTELLE
-RESULT
-
-
-CHECK(EnergyProcessor::set(const EnergyProcessor& proc))
-  //BAUSTELLE
+  ep.clear();
 RESULT
 
 
 CHECK(EnergyProcessor::EnergyProcessor& operator = (const EnergyProcessor& proc))
-  //BAUSTELLE
+	EnergyProcessor ep2;
+	ep2 = ep;
 RESULT
 
 
 CHECK(EnergyProcessor::start())
-  //BAUSTELLE
+	TEST_EQUAL(ep.start(), true)
 RESULT
 
 
 CHECK(EnergyProcessor::Processor::Result operator () (BaseFragment& fragment))
-  //BAUSTELLE
+  TEST_EQUAL(S.apply(ep), true)
 RESULT
 
 
 CHECK(EnergyProcessor::getEnergy() const )
-  //BAUSTELLE
+  TEST_REAL_EQUAL(ep.getEnergy(), 0)
 RESULT
-
 
 
 /////////////////////////////////////////////////////////////
