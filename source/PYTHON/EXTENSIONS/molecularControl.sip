@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.sip,v 1.8 2004/11/25 01:10:57 amoll Exp $
+// $Id: molecularControl.sip,v 1.9 2004/11/30 14:15:48 amoll Exp $
 //
 
 class MolecularControl
@@ -47,7 +47,7 @@ class MolecularControl
   virtual void finalizeWidget(MainControl&) throw();
   virtual void initializeWidget(MainControl&) throw();
   void invalidateSelection();
-  void move();
+  void moveItems();
   //void onNotify(Message *message) throw();
   void paste();
   void select();
