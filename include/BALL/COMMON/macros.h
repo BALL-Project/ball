@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: macros.h,v 1.7 2003/02/08 16:07:30 oliver Exp $
+// $Id: macros.h,v 1.8 2003/02/10 17:03:22 oliver Exp $
 
 #ifndef BALL_COMMON_MACROS_H
 #define BALL_COMMON_MACROS_H
@@ -12,6 +12,10 @@
 
 #ifndef BALL_COMMON_CONSTANTS_H
 #	include <BALL/COMMON/constants.h>
+#endif
+
+#ifndef BALL_COMMON_RTTI_H
+#	include <BALL/COMMON/rtti.h>
 #endif
 
 #include <math.h>     // needed for fabs
