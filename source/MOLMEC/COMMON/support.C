@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: support.C,v 1.43 2005/01/24 22:36:56 amoll Exp $
+// $Id: support.C,v 1.44 2005/01/26 21:32:59 amoll Exp $
 //
 
 #include <BALL/MOLMEC/COMMON/support.h>
@@ -10,6 +10,7 @@
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/atomIterator.h>
 #include <BALL/COMMON/limits.h>
+#include <BALL/SYSTEM/sysinfo.h>
 
 #include <math.h>
 
@@ -146,23 +147,6 @@ namespace BALL
 			// Squared distance
 			double squared_distance = distance * distance;
 
-			// initialize the hash grid
-			// abort if grid becomes too big, here 10^4
-			if ((lower - upper).getSquareLength() > pow(10.0,16)) 
-			{
-				throw(Exception::OutOfMemory(__FILE__, __LINE__));
-			}
-
-			// we enlarge the box by some constant to be sure not to run into
-			// numerical problems
-			HashGrid3<Atom*> grid(lower - Vector3(0.1F),
-					upper - lower + Vector3(0.2F), distance);
-
-			// Iterators and hash box pointer for the grid search
-			HashGridBox3<Atom*>* hbox;
-			HashGridBox3<Atom*>::BoxIterator box_it;
-			HashGridBox3<Atom*>::DataIterator data_it;
-
 			if (periodic_boundary_enabled) 
 			{
 				// We always use the brute-force algorithm if PBC are enabled.
@@ -195,6 +179,14 @@ namespace BALL
 			// periodic boundary not enabled
 			else 
 			{
+				if (type != BRUTE_FORCE)
+				{
+					float memory = SysInfo::getAvailableMemory() * 0.7;
+					float min_spacing = HashGrid3<const Atom*>::calculateMinSpacing(memory, 
+																												upper - lower + Vector3(1));
+					if (min_spacing > distance) type = BRUTE_FORCE;
+				}
+
 				// Check what kind of algorithm should be used for calculating the
 				// neighbours
 				if (type == BRUTE_FORCE) 
@@ -220,6 +212,16 @@ namespace BALL
 					//
 					// Use a hash grid with box length "distance" to determine all
 					// neighboring atom pairs
+					//
+					// we enlarge the box by some constant to be sure not to run into
+					// numerical problems
+					HashGrid3<Atom*> grid(lower - Vector3(0.1F),
+							upper - lower + Vector3(0.2F), distance);
+
+					// Iterators and hash box pointer for the grid search
+					HashGridBox3<Atom*>* hbox;
+					HashGridBox3<Atom*>::BoxIterator box_it;
+					HashGridBox3<Atom*>::DataIterator data_it;
 
 					for (atom_it = atom_vector.begin(); atom_it != atom_vector.end();
 							++atom_it) 
