@@ -1,4 +1,4 @@
-// $Id: KernelPredicate_test.C,v 1.1 1999/12/01 13:23:53 oliver Exp $
+// $Id: KernelPredicate_test.C,v 1.2 2000/02/23 07:55:21 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 #include <BALL/KERNEL/baseFragment.h>
 ///////////////////////////
 
-START_TEST(KernelPredicate<T>, "$Id: KernelPredicate_test.C,v 1.1 1999/12/01 13:23:53 oliver Exp $")
+START_TEST(KernelPredicate<T>, "$Id: KernelPredicate_test.C,v 1.2 2000/02/23 07:55:21 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -41,7 +41,7 @@ TEST_EQUAL(atom_predicate(A), true)
 TEST_EQUAL(bond_predicate(S), false)
 TEST_EQUAL(bond_predicate(M), false)
 TEST_EQUAL(bond_predicate(A), false)
-TEST_EQUAL(base_fragment_predicate(S), false)
+TEST_EQUAL(base_fragment_predicate(S), true)
 TEST_EQUAL(base_fragment_predicate(M), true)
 TEST_EQUAL(base_fragment_predicate(A), false)
 RESULT
