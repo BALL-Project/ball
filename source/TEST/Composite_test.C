@@ -1,4 +1,4 @@
-// $Id: Composite_test.C,v 1.20 2000/12/01 16:37:48 amoll Exp $
+// $Id: Composite_test.C,v 1.21 2000/12/01 23:15:13 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -25,7 +25,7 @@ class myVisitor
 	}
 };
 
-START_TEST(Composite, "$Id: Composite_test.C,v 1.20 2000/12/01 16:37:48 amoll Exp $")
+START_TEST(Composite, "$Id: Composite_test.C,v 1.21 2000/12/01 23:15:13 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -1185,19 +1185,12 @@ CHECK(bool applyPostorder(UnaryProcessor<Composite>& processor))
 	a.applyPostorder(myproc);
 	TEST_EQUAL(myproc.getSize(), 5)
 
-	TEST_EQUAL(myproc.getPointer(), &d) myproc.forward();
 	TEST_EQUAL(myproc.getPointer(), &e) myproc.forward();
 	TEST_EQUAL(myproc.getPointer(), &c) myproc.forward();
+	TEST_EQUAL(myproc.getPointer(), &d) myproc.forward();
 	TEST_EQUAL(myproc.getPointer(), &b) myproc.forward();
 	TEST_EQUAL(myproc.getPointer(), &a) myproc.forward();
 	TEST_EQUAL(myproc.getPointer(), 0)
-	/*
-	TEST_EQUAL(myproc.getPointer(), &e) myproc.forward();
-	TEST_EQUAL(myproc.getPointer(), &c) myproc.forward();
-	TEST_EQUAL(myproc.getPointer(), &d) myproc.forward();
-	TEST_EQUAL(myproc.getPointer(), &b) myproc.forward();
-	TEST_EQUAL(myproc.getPointer(), &a) myproc.forward();
-	TEST_EQUAL(myproc.getPointer(), 0)*/
 RESULT
 
 CHECK(bool apply(UnaryProcessor<Composite>& processor))
