@@ -1,4 +1,4 @@
-// $Id: exception.h,v 1.11 2000/05/30 10:41:47 oliver Exp $
+// $Id: exception.h,v 1.12 2000/05/30 18:26:13 oliver Exp $
    
 #ifndef BALL_COMMON_EXCEPTION_H
 #define BALL_COMMON_EXCEPTION_H
@@ -245,6 +245,8 @@ namespace BALL
 		{
 			public:
 			OutOfMemory(const char* file, int line, Size size = 0);
+			
+			virtual ~OutOfMemory() throw();
 
 			protected:
 			Size size_;
