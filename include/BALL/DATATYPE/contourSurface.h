@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: contourSurface.h,v 1.3 2002/09/10 08:09:22 aubertin Exp $
+// $Id: contourSurface.h,v 1.4 2002/10/24 14:50:08 aubertin Exp $
 
 #ifndef BALL_DATATYPE_CONTOURSURFACE_H
 #define BALL_DATATYPE_CONTOURSURFACE_H
@@ -435,29 +435,29 @@ void TContourSurface<T>::generateFacetData() {
                     {
                       if (init_facet_data[j][l]>=0) 
                         { 
-                          //if(true)
-													//	{
+                          if(height_>0)
+														{
                           facet_data[i][11-l] = edge_rotation[k][init_facet_data[j][l]];
                           facet_data[0xFF-i][l] = edge_rotation[k][init_facet_data[j][l]];
-													/*	}
+														}
                           else
                             {
                           facet_data[i][l] = edge_rotation[k][init_facet_data[j][l]];
                           facet_data[0xFF-i][11-l] = edge_rotation[k][init_facet_data[j][l]];
-													}*/
+													}
                         }
                       else 
                         { 
-                          //if(true)
-													//	{
+                          if(height_>0)
+														{
                           facet_data[i][11-l] = (-1);
                           facet_data[0xFF-i][l] = (-1);
-													/*	}
+														}
                          else
                             {
                           facet_data[i][l] = (-1);
                           facet_data[0xFF-i][11-l] = (-1);
-													}*/
+													}
                         }
                     }
                 }
