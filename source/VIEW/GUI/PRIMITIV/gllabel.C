@@ -1,4 +1,4 @@
-// $Id: gllabel.C,v 1.5 2001/05/13 14:28:37 hekl Exp $
+// $Id: gllabel.C,v 1.6 2001/07/01 19:41:27 oliver Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/gllabel.h>
 #include <GL/gl.h>
@@ -227,12 +227,12 @@ namespace BALL
 				
 				if (text_array_ == 0)
 				{
-					text_array_ = new GLubyte[array_size]();
+					text_array_ = new GLubyte[array_size];
 				}
 				else
 				{
 					delete [] text_array_;
-					text_array_ = new GLubyte[array_size]();
+					text_array_ = new GLubyte[array_size];
 				}
 				
 				// clear char array
