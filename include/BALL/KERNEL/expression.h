@@ -1,4 +1,4 @@
-// $Id: expression.h,v 1.11 2001/07/03 20:49:08 anker Exp $
+// $Id: expression.h,v 1.12 2001/07/10 16:30:50 anker Exp $
 
 #ifndef BALL_KERNEL_EXPRESSION_H
 #define BALL_KERNEL_EXPRESSION_H
@@ -190,7 +190,7 @@ namespace BALL
 
 		/**
 		*/
-		ExpressionTree(Type type, list<ExpressionTree*> children, bool negate = false) 
+		ExpressionTree(Type type, list<const ExpressionTree*> children, bool negate = false) 
 			throw();
 
 		/**	Destructor
@@ -211,7 +211,7 @@ namespace BALL
 		/** Equality operator 
 		 */
 		bool operator == (const ExpressionTree& tree) const 
-			throw();
+			throw(Exception::NullPointer);
 
 		//@}
 		/**	@name	Accessors
@@ -250,7 +250,12 @@ namespace BALL
 
 		/**	Append a child to the tree.
 		*/
-		void appendChild(ExpressionTree* child) 
+		void appendChild(const ExpressionTree* child) 
+			throw();
+
+		/** Get the list of children.
+		*/
+		const list<const ExpressionTree*>& getChildren() const
 			throw();
 
 		//@}
@@ -274,19 +279,19 @@ namespace BALL
 		
 		/*_ The type of this node.
 		*/
-		Type									type_;
+		Type												type_;
 		
 		/*_ Negation flag. If set, the value of this node will be negated.
 		*/
-		bool									negate_;
+		bool												negate_;
 		
 		/*_ A pointer to the predicate that this node represents.
 		*/
-		ExpressionPredicate*	predicate_;
+		ExpressionPredicate*				predicate_;
 		
 		/*_ A list containing pointers to the children of this node. 
 		*/
-		list<ExpressionTree*>	children_;
+		list<const ExpressionTree*>	children_;
 
 	};
 
@@ -311,55 +316,79 @@ namespace BALL
 		typedef	list<SyntaxTree*>::const_iterator	ConstIterator;
 		
 		//@}
+
 		/**	@name	Constructors and Destructors	
 		*/
 		//@{
 
-		/** Default constructor
+		/** Default constructor.
 		*/
 		SyntaxTree()
 			throw();
 
-		/** Detailed constructor
+		/** Detailed constructor.
 		*/
 		SyntaxTree(const String& expression)
 			throw();
 
-		/**
+		/** Destructor.
 		*/
 		virtual ~SyntaxTree()
 			throw();
 		
 		//@}
+		/** @name Assignment
+		*/
+		//@{
+
+		/** Clear method. This method brings this instance to the state after
+				default construction. {\bf Note} that the list of children will be
+				cleared but the childrem themselves will \emph{not} be deleted.
+		*/
+		virtual void clear()
+			throw();
+
+		//@}
 		/**	@name	Accessors
 		*/
 		//@{
 
-		/// BAUSTELLE
+		/** Return a mutable iterator pointing to the first child.
+		*/
 		Iterator begin()
 			throw();
 
-		/// BAUSTELLE
+		/** Return a mutable iterator pointing to the last child.
+		*/
 		Iterator end()
 			throw();
 
-		/// BAUSTELLE
+		/** Return a constant iterator pointing to the first child.
+		*/
 		ConstIterator begin() const
 			throw();
 
-		/// BAUSTELLE
+		/** Return a constant iterator pointing to the last child.
+		*/
 		ConstIterator end() const
 			throw();	
 
-		/// BAUSTELLE
+		/** Merge this node with a tree (from the left side). A non-empty tree
+				will be deleted by this function.
+		*/
 		void mergeLeft(SyntaxTree* tree)
 			throw();
 
-		/// BAUSTELLE
+		/** Merge this node with a tree (from the right side). A non-empty tree
+				will be deleted by this function.
+		*/
 		void mergeRight(SyntaxTree* tree)
 			throw();
 
-		/// BAUSTELLE
+		/** Parse the tree. This method expands brackets and collapses all
+				conjunctions and disjunctions. The result is a tree that consists
+				of BAUSTELLE.
+		*/
 		void parse()
 			throw();
 		
@@ -399,7 +428,7 @@ namespace BALL
 		/*_ BAUSTELLE
 		*/
 		void expandBrackets_()
-			throw();
+			throw(Exception::ParseError);
 		
 		/*_ BAUSTELLE
 		*/
@@ -503,6 +532,11 @@ namespace BALL
 		/** get the expression string
 		*/
 		const String& getExpression() const 
+			throw();
+
+		/** Get the creation methods.
+		*/
+		const StringHashMap<CreationMethod>& getCreationMethods() const
 			throw();
 
 		//@}

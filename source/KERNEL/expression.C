@@ -17,7 +17,8 @@ namespace BALL
 
 	Expression::Expression() 
 		throw()
-		: expression_tree_(0),
+		: create_methods_(),
+			expression_tree_(0),
 			expression_string_("<not initialized>")
 	{
 		registerStandardPredicates_();
@@ -35,9 +36,13 @@ namespace BALL
 
 	Expression::Expression(const String& expression_string) 
 		throw()
-		:	expression_tree_(0)
+		:	create_methods_(),
+			expression_tree_(0),
+			expression_string_("")
 	{
 		registerStandardPredicates_();
+		// Use this method instead of ctor initialization because it builds a
+		// whole expression tree.
 		setExpression(expression_string);
 	}
 
@@ -53,6 +58,10 @@ namespace BALL
 		throw()
 	{
 		create_methods_.clear();
+		// clear() has to make a default constructed instance out of this, so
+		// the standard predicates have to be rebuilt.
+		registerStandardPredicates_();
+
 		delete expression_tree_;
 		expression_string_.clear();
 	}
@@ -61,7 +70,12 @@ namespace BALL
 	const Expression& Expression::operator = (const Expression& expression)
 		throw()
 	{
-		clear();
+
+		// don't use clear() here (for performance reasons, create_methods_ is
+		// rebuilt by clear() and we had to clear() it again.
+		create_methods_.clear();
+		delete expression_tree_;
+		expression_string_.clear();
 
 		create_methods_ = expression.create_methods_;
 		expression_tree_ = new ExpressionTree(*expression.expression_tree_);
@@ -125,13 +139,17 @@ namespace BALL
 	void Expression::setExpression(const String& expression)
 		throw()
 	{
+		// don't use clear() here, because it also would delete create_methods_
 		delete expression_tree_;
 		expression_tree_ = 0;
+
 		expression_string_ = expression;
 
+		// create a temporary tree from which the expression_tree_ can be built
 		SyntaxTree tree(expression);
 		tree.parse();
 
+		// construct the tree
 		expression_tree_ = constructExpressionTree_(tree);
 	}
 
@@ -140,6 +158,13 @@ namespace BALL
 		throw()
 	{
 		return expression_string_;
+	}
+
+
+	const StringHashMap<Expression::CreationMethod>& Expression::getCreationMethods() const
+		throw()
+	{
+		return create_methods_;
 	}
 
 
@@ -217,8 +242,8 @@ namespace BALL
 	}
 
 
-	ExpressionTree::ExpressionTree
-		(Type type, list<ExpressionTree*>	children, bool negate)
+	ExpressionTree::ExpressionTree(Type type,
+			list<const ExpressionTree*>	children, bool negate)
 		throw()
 		:	type_(type),
 			negate_(negate),
@@ -311,7 +336,7 @@ namespace BALL
 			}
 
 			// evaluated all children
-      list<ExpressionTree*>::const_iterator list_it = children_.begin();
+      list<const ExpressionTree*>::const_iterator list_it = children_.begin();
       bool abort = false;
       for (; !abort && list_it != children_.end(); ++list_it)
       {
@@ -341,8 +366,13 @@ namespace BALL
 
 
 	bool ExpressionTree::operator == (const ExpressionTree& tree) const
-		throw()
+		throw(Exception::NullPointer)
 	{
+		if ((predicate_ == 0) || (tree.predicate_ == 0))
+		{
+			throw Exception::NullPointer(__FILE__, __LINE__);
+		}
+
 		return ((type_ == tree.type_)
 			&& (negate_ == tree.negate_)
 			&& (*predicate_ == *tree.predicate_)
@@ -392,15 +422,28 @@ namespace BALL
 	}
 
 
-	void ExpressionTree::appendChild(ExpressionTree* child)
+	void ExpressionTree::appendChild(const ExpressionTree* child)
 		throw()
 	{
 		children_.push_back(child);
 	}
 
 
+	const list<const ExpressionTree*>& ExpressionTree::getChildren() const
+		throw()
+	{
+		return children_;
+	}
+
+
 	SyntaxTree::SyntaxTree()
 		throw()
+		:	expression(""),
+			argument(""),
+			evaluated(false),
+			negate(false),
+			type(ExpressionTree::INVALID),
+			children()
 	{
 	}
 
@@ -421,6 +464,17 @@ namespace BALL
 		{
 			delete *it;
 		}
+	}
+
+	void SyntaxTree::clear()
+		throw()
+	{
+		expression = "";
+		argument = "";
+		evaluated = false;
+		negate = false;
+		type = ExpressionTree::INVALID;
+		children.clear();
 	}
 
 	SyntaxTree::Iterator SyntaxTree::begin()
@@ -450,39 +504,51 @@ namespace BALL
 	void SyntaxTree::mergeLeft(SyntaxTree* tree)
 		throw()
 	{
+		// if the tree does not bear any children, save the pointer as the
+		// first of our own childs and return
     if (tree->children.empty())
     {
       children.push_front(tree);
       return;
 		}
 
+		// else go through the children of the tree (from right to left) and
+		// save them in our own list of children.
     for (list<SyntaxTree*>::reverse_iterator it = tree->children.rbegin(); 
 				 it != tree->children.rend(); ++it)
     {
       children.push_front(*it);
 		}
 
+		// now erase all the children of the tree...
     tree->children.erase(tree->begin(), tree->end());
 
+		// and the tree itself.
     delete tree;
 	}
 
 	void SyntaxTree::mergeRight(SyntaxTree* tree)
 		throw()
 	{
+		// if the tree does not bear any children, save the pointer as the
+		// first of our own childs and return
     if (tree->children.empty())
     {
       children.push_back(tree);
       return;
 		}
 
+		// else go through the children of the tree (from left to right) and
+		// save them in our own list of children.
     for (Iterator it = tree->begin(); it != tree->end(); ++it)
     {
       children.push_back(*it);
 		}
 
+		// now erase all the children of the tree...
     tree->children.erase(tree->begin(), tree->end());
 
+		// ... and the tree itself.
     delete tree;
 	}
 
@@ -498,7 +564,7 @@ namespace BALL
 	}
  
 	void SyntaxTree::expandBrackets_()
-		throw()
+		throw(Exception::ParseError)
 	{
     // we do not try to expand already processed nodes
     if (evaluated == true)
@@ -506,9 +572,15 @@ namespace BALL
       return;
 		}
 
+		// if this node represents a conjunction or a disjunction but doesn't
+		// bear any children, the expression is not parseable.
     if ((expression == "AND" || expression == "OR") && children.size() == 0)
     {
-      return;
+			// BAUSTELLE
+			// Let the exception print the WHOLE expression.
+
+			throw Exception::ParseError(__FILE__, __LINE__, expression.c_str());
+			return;
 		}
 
     String s = expression;
@@ -522,13 +594,22 @@ namespace BALL
     ex = s.find_first_of('(');
     if (ex == string::npos)
     {
-			Log.error() << "Expression::setExpression: need at least on opening bracket in expression {" << s << "}" << endl;
-      type = ExpressionTree::INVALID;
+			// we didn't find an opening bracket
+			// BAUSTELLE
+			// tell the user what went wrong.
+			// Log.error() << "Expression::setExpression: didn't find opening '(' in expression: {" << s << "}" << endl;
+			throw Exception::ParseError(__FILE__, __LINE__, expression.c_str());
       return;
 		}
+
+		// the subexpression y has to start one position after the bracket.
     sy = ex;
     sy++;
+
+		// we found an opening bracket, so increase the counter
     Index bracket_count = 1;
+
+		// go through the expression and count opening and closing brackets.
     Size i;
     for (i = (Size)sy; (i < (Size)s.size()) && (bracket_count > 0); ++i)
     {
@@ -541,19 +622,30 @@ namespace BALL
 
 		if (bracket_count > 0)
 		{
-			type = ExpressionTree::INVALID;
-			Log.error() << "Expression::setExpression: didn't find closing ')' in expression: {" << s << "}" << endl;
+			// we found too many opening brackets
+			// BAUSTELLE
+			// tell the user what happened.
+			// Log.error() << "Expression::setExpression: didn't find closing ')' in expression: {" << s << "}" << endl;
+			throw Exception::ParseError(__FILE__, __LINE__, expression.c_str());
 			return;
 		}
 
 		if (bracket_count < 0)
 		{
-			type = ExpressionTree::INVALID;
-			Log.error() << "Expression::setExpression: found too many closing ')' in expression: {" << s << "}" << endl;
+			// we found too many closing brackets.
+			// BAUSTELLE
+			// tell the user what happened.
+			// Log.error() << "Expression::setExpression: found too many closing ')' in expression: {" << s << "}" << endl;
+			throw Exception::ParseError(__FILE__, __LINE__, expression.c_str());
 			return;
 		}
 
+		// the subexpression y ends at position i which points to the last
+		// closing bracket (see for() {} above)
     ey = i;
+
+		// BAUSTELLE: I think ey >= s.size() cannot happen, because the for()
+		// statement above runs at most to s.size() - 1.
     if (ey >= s.size())
     {
       sz = s.size();
@@ -562,6 +654,7 @@ namespace BALL
 		{
       sz = ++i;
 		}
+
     // we identified the first expresion in brackets.
     // now decide, whether it is a predicate or a bracket expresion
     // or something strange
@@ -575,7 +668,8 @@ namespace BALL
       ex = sx;
 
       // expand the expression inside the brackets
-      SyntaxTree* new_t = new SyntaxTree(String(s, (Index)sy, (Index)(ey - sy - 1)));
+      SyntaxTree* new_t = new SyntaxTree(String(s, (Index)sy, 
+						(Index)(ey - sy - 1)));
       children.push_front(new_t);
       new_t->expandBrackets_();
 
@@ -587,7 +681,8 @@ namespace BALL
       String left_word = left.getField((Index)number_of_fields - 1);
       if (left_word == "AND" || left_word == "OR" || left_word == "!")
       {
-        SyntaxTree* new_t = new SyntaxTree(String(s, (Index)sy, (Index)(ey - sy - 1)));
+        SyntaxTree* new_t = new SyntaxTree(String(s, (Index)sy,
+							(Index)(ey - sy - 1)));
         new_t->expandBrackets_();
         children.push_front(new_t);
 
@@ -620,7 +715,8 @@ namespace BALL
 			else
 			{
 
-        SyntaxTree* new_t = new SyntaxTree(String(s, (Index)sy, (Index)(ey - sy - 1)));
+        SyntaxTree* new_t = new SyntaxTree(String(s, (Index)sy,
+							(Index)(ey - sy - 1)));
         new_t->type = ExpressionTree::LEAF;
         new_t->argument = new_t->expression;
         new_t->expression = left_word;
@@ -662,13 +758,15 @@ namespace BALL
 
     if (ex != sx)
     {
-      SyntaxTree* new_t = new SyntaxTree(String(s, (Index)sx, (Index)(ex - sx)));
+      SyntaxTree* new_t = new SyntaxTree(String(s, (Index)sx,
+						(Index)(ex - sx)));
       new_t->expandBrackets_();
       mergeLeft(new_t);
 		}
     if (ez != sz)
     {
-      SyntaxTree* new_t = new SyntaxTree(String(s, (Index)sz, (Index)(ez - sz)));
+      SyntaxTree* new_t = new SyntaxTree(String(s, (Index)sz,
+						(Index)(ez - sz)));
       new_t->expandBrackets_();
       mergeRight(new_t);
 		}
@@ -677,13 +775,22 @@ namespace BALL
 	void SyntaxTree::collapseANDs_()
 		throw()
 	{
+		// if we have less than 2 children, AND cannot be reasonable.
+		if (children.size() < 2)
+		{
+			throw Exception::ParseError(__FILE__, __LINE__, expression.c_str());
+			return;
+		}
+
+		// if we have less than 3 children, we cannot collapse anything.
+		// BAUSTELLE
+		// is that correct? what about a tautology?
     if (children.size() < 3)
     {
       return;
 		}
 
     Iterator  it = begin();
-
     while (it != end())
     {
       for (; it != end() && (*it)->expression != "AND"; ++it);
@@ -697,7 +804,8 @@ namespace BALL
       Iterator  start = it;
       start--;
 
-      for (; it != end() && ((*it)->expression == "AND" || (*it)->evaluated == true); ++it);
+      for (; it != end() 
+					&& ((*it)->expression == "AND" || (*it)->evaluated == true); ++it);
 
       // remember the last node for the AND expression
       Iterator  end = it;
@@ -746,7 +854,8 @@ namespace BALL
       Iterator  start = it;
       start--;
 
-      for (; it != end() && ((*it)->expression == "OR" || ((*it)->evaluated == true)); ++it);
+      for (; it != end() 
+					&& ((*it)->expression == "OR" || ((*it)->evaluated == true)); ++it);
 
       // remember the last node for the OR expression
       Iterator  end = it;
