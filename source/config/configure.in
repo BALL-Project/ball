@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.67 2000/03/14 20:49:27 oliver Exp $
+dnl    $Id: configure.in,v 1.68 2000/03/14 22:44:58 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -1464,6 +1464,7 @@ AC_DEFINE_UNQUOTED(BALL_INDEX_TYPE, ${BALL_INDEX_TYPE})
 dnl  define 64 bit unsigned type
 if test "${SIZEOF_ULONG}" = "8" ; then
 	BALL_ULONG64_TYPE="unsigned long"
+	AC_DEFINE(BALL_64BIT_ARCHITECTURE)
 else 
 	if test "${SIZEOF_ULONGLONG}" = "8" ; then
 		BALL_ULONG64_TYPE="unsigned long long"

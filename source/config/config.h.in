@@ -111,6 +111,10 @@
 // Define an unsigned integer type that has the same length as (void*)
 #define BALL_POINTERSIZE_INT int
 
+// Define on 64 bit architectures to avoid the use of long long
+// which is required on 32 bit machines for comatibility
+#undef BALL_64BIT_ARCHITECTURE
+
 // Define an unsigned numeric type of 64 bit length (used for
 // platform independent persistence: stores pointers)
 // this usually defaults to unsigned long on 64 bit architectures
