@@ -1,4 +1,4 @@
-// $Id: bitVector.h,v 1.3 1999/12/17 11:16:20 oliver Exp $
+// $Id: bitVector.h,v 1.4 1999/12/19 17:17:22 oliver Exp $
 
 #ifndef BALL_DATATYPE_BITVECTOR_H
 #define BALL_DATATYPE_BITVECTOR_H
@@ -121,12 +121,14 @@ namespace BALL
 		BALL_CREATE(BitVector)
 
 
-		/**	@name	Type Definitions
+		/**	@name	Type Definitions and Constants
 		*/
 		//@{
 
 		///
 		typedef unsigned char BlockType;
+			
+		static const Size BlockSize;
 		//@}
 
 	
@@ -134,7 +136,7 @@ namespace BALL
 		//@{
 
 		///
-		BitVector(Size size = BALL_BLOCK_BITS);
+		BitVector(Size size = BlockSize);
 
 		///
 		BitVector(const BitVector& bit_vector, bool deep = true);
