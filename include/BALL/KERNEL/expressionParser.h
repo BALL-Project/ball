@@ -1,4 +1,4 @@
-// $Id: expressionParser.h,v 1.1 2002/01/26 21:53:53 oliver Exp $
+// $Id: expressionParser.h,v 1.2 2002/01/27 21:36:38 oliver Exp $
 
 #ifndef BALL_KERNEL_EXPRESSION_PARSER_H
 #define BALL_KERNEL_EXPRESSION_PARSER_H
@@ -195,12 +195,13 @@ namespace BALL
 			Size							char_count;
 			ExpressionParser*	current_parser;
 			const char*				buffer;
+			SyntaxTree*				tree;
 		};
 		
 		static State state;
 
 		protected:
-		SyntaxTree								syntax_tree_;
+		SyntaxTree*								syntax_tree_;
 		static ExpressionParser*	current_parser_;
 	};
 
