@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.55 2004/12/16 14:10:33 amoll Exp $
+// $Id: glRenderer.C,v 1.56 2004/12/16 18:53:40 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -302,6 +302,12 @@ namespace BALL
 			if (!display_lists_.has(&rep)) return;
 			delete display_lists_[&rep];
 			display_lists_.erase(&rep);
+			List<GeometricObject*>::ConstIterator it = rep.getGeometricObjects().begin();
+			for (; it != rep.getGeometricObjects().end(); it++)
+			{
+				name_to_object_.erase(object_to_name_[*it]);
+				object_to_name_.erase(*it);
+			}
 		}
 
 		void GLRenderer::rebuildDisplayListFor(const Representation& rep)
