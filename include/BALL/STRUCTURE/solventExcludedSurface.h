@@ -1,4 +1,4 @@
-// $Id: solventExcludedSurface.h,v 1.1 2000/10/10 14:24:58 oliver Exp $
+// $Id: solventExcludedSurface.h,v 1.2 2000/10/11 09:39:36 oliver Exp $
 
 #ifndef BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
 #define BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
@@ -213,7 +213,7 @@ namespace BALL
 //cout << "%3\n";
 			for (Position i = 0; i < free_toric_faces.size(); i++)
 			{
-				createFreeToricFace(i,rs);
+				createFreeToricFace(i);
 			}
 //cout << "%4\n";
 		}
@@ -568,7 +568,7 @@ namespace BALL
 
 		}
 
-		void createFreeToricFace(Position i, TReducedSurface<T>* rs)
+		void createFreeToricFace(Position i)
 		{
 			TSESFace<T>* face(free_toric_faces[i]);
 			TCircle3<T> circle1(face->rsedge->getContactCircle(0));
