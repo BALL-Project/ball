@@ -1,4 +1,4 @@
-// $Id: function.h,v 1.11 2001/06/21 21:27:17 amoll Exp $
+// $Id: function.h,v 1.12 2001/07/13 17:30:38 anker Exp $
 
 #ifndef BALL_MATHS_FUNCTION_H
 #define BALL_MATHS_FUNCTION_H
@@ -31,7 +31,7 @@ namespace BALL
 				@return the function value
 		*/
 		BALL_INLINE
-		float operator () (float /* x */)
+		float operator () (float /* x */) const
 			throw()
 		{
 			return constant_template;
@@ -108,7 +108,7 @@ namespace BALL
 				@return the function value
 		*/
 		BALL_INLINE
-		DataType operator () (DataType /* x */)
+		DataType operator () (const DataType& /* x */) const
 			throw()
 		{
 			return constant_;
@@ -130,7 +130,7 @@ namespace BALL
 		/** Get the constant argument of the constant
 				@return a const reference to the constant argument
 		*/
-		const DataType& getConstant()
+		const DataType& getConstant() const
 			throw()
 		{
 			return constant_;
@@ -206,7 +206,7 @@ namespace BALL
 				@return the function value
 		*/
 		BALL_INLINE
-		DataType operator () (DataType x)
+		DataType operator () (const DataType& x) const 
 			throw()
 		{
 			return (first_(x) + second_(x));
@@ -234,6 +234,14 @@ namespace BALL
 			return first_;
 		}
 
+		/** Get the first argument of the addition (const version).
+		*/
+		const First& getFirst() const
+			throw()
+		{
+			return first_;
+		}
+
 		/** set the second argument of the addition
 		*/
 		void setSecond(const Second& second)
@@ -246,6 +254,14 @@ namespace BALL
 				@return a const reference to the second argument
 		*/
 		Second& getSecond()
+			throw()
+		{
+			return second_;
+		}
+	
+		/** Get the second argument of the addition (const version).
+		*/
+		const Second& getSecond() const
 			throw()
 		{
 			return second_;
@@ -325,7 +341,7 @@ namespace BALL
 				@return the function value
 		*/
 		BALL_INLINE
-		DataType operator () (DataType x)
+		DataType operator () (const DataType& x) const
 			throw()
 		{
 			return (first_(x) - second_(x));
@@ -444,7 +460,7 @@ namespace BALL
 				@return the function value
 		*/
 		BALL_INLINE
-		DataType operator () (DataType x)
+		DataType operator () (const DataType& x) const 
 			throw()
 		{
 			return (first_(x) * second_(x));
@@ -467,6 +483,15 @@ namespace BALL
 				@return a const reference to the first argument
 		*/
 		First& getFirst()
+			throw()
+		{
+			return first_;
+		}
+
+		/** Get the first argument of the product (const version).
+				@return a const reference to the first argument
+		*/
+		const First& getFirst() const
 			throw()
 		{
 			return first_;
@@ -564,7 +589,7 @@ namespace BALL
 				@return the function value
 		*/
 		BALL_INLINE
-		DataType operator () (DataType x)
+		DataType operator () (const DataType& x) const 
 			throw(Exception::DivisionByZero)
 		{
 			DataType val = second_(x);
@@ -691,7 +716,7 @@ namespace BALL
 				@return the function value
 		*/
 		BALL_INLINE
-		DataType operator () (DataType x)
+		DataType operator () (const DataType& x) const 
 			throw(Exception::DivisionByZero)
 		{
 			DataType val = function_(x);
@@ -797,7 +822,7 @@ namespace BALL
 				@return the function value
 		*/
 		BALL_INLINE
-		DataType operator () (DataType x)
+		DataType operator () (const DataType& x) const
 			throw()
 		{
 			DataType val = function_(x);
@@ -897,7 +922,7 @@ namespace BALL
 				@return the function value
 		*/
 		BALL_INLINE
-		DataType operator () (DataType x)
+		DataType operator () (const DataType& x) const 
 			throw()
 		{
 			DataType val = function_(x);
@@ -996,7 +1021,7 @@ namespace BALL
 				@return the function value
 		*/
 		BALL_INLINE
-		DataType operator () (DataType x)
+		DataType operator () (const DataType& x) const
 			throw()
 		{
 			return pow(function_(x), exponent_);
