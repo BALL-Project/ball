@@ -1,22 +1,45 @@
-DlgEdit:v1.2:Dialog:
-Dialog {
-	ClassHeader {DlgPreferences.h}
-	ClassSource {DlgPreferences.C}
-	ClassName {DlgPreferences}
-	DataHeader {DlgPreferencesData.h}
-	DataSource {DlgPreferencesData.C}
-	DataName {DlgPreferencesData}
-	WindowBaseClass {QTabDialog}
-	IsModal {FALSE}
-	WindowFlags {208}
-}
-WidgetLayout {
-InitialPos {-1 -1}
-Size {400 300}
-MinSize {400 300}
-MaxSize {400 300}
-Grid {10}
-TextTranslated {TRUE}
-
-
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<QtArch type="Dialog" version="2.1" nested="true" >
+  <Dialog supertype="true" nested="true" >
+    <DialogCommon  nested="true" >
+      <SourceDir >/root/BALL/source/APPLICATIONS/MOLVIEW/DIALOGS</SourceDir>
+      <ClassHeader >DlgPreferences.h</ClassHeader>
+      <ClassSource >DlgPreferences.C</ClassSource>
+      <ClassName >DlgPreferences</ClassName>
+      <DataHeader >DlgPreferencesData.h</DataHeader>
+      <DataSource >DlgPreferencesData.C</DataSource>
+      <DataName >DlgPreferencesData</DataName>
+      <WindowBaseClass >QTabDialog</WindowBaseClass>
+      <ClassHeader >DlgPreferences.h</ClassHeader>
+      <WindowFlags type="integer">208</WindowFlags>
+    </DialogCommon>
+    <WidgetLayout  nested="true" >
+      <WidgetLayoutCommon  nested="true" >
+        <InitialPos type="qpoint" complex="true"  nested="true" >
+          <X type="integer">-1</X>
+          <Y type="integer">-1</Y>
+        </InitialPos>
+        <Size type="qsize" complex="true"  nested="true" >
+          <Height type="integer">300</Height>
+          <Width type="integer">400</Width>
+        </Size>
+        <MinSize type="qsize" complex="true"  nested="true" >
+          <Height type="integer">300</Height>
+          <Width type="integer">400</Width>
+        </MinSize>
+        <MaxSize type="qsize" complex="true"  nested="true" >
+          <Height type="integer">300</Height>
+          <Width type="integer">400</Width>
+        </MaxSize>
+        <GridSize type="integer">10</GridSize>
+        <TextTranslated type="boolean">true</TextTranslated>
+      </WidgetLayoutCommon>
+      <Widgets  list="true"  nested="true" >
+      </Widgets>
+      <TabOrder  list="true"  nested="true" >
+      </TabOrder>
+      <Layout  list="true"  nested="true" >
+      </Layout>
+    </WidgetLayout>
+  </Dialog>
+</QtArch>

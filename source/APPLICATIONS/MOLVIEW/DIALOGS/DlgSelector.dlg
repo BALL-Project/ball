@@ -1,117 +1,159 @@
-DlgEdit:v1.2:Dialog:
-Dialog {
-	ClassHeader {DlgSelector.h}
-	ClassSource {DlgSelector.C}
-	ClassName {DlgSelector}
-	DataHeader {DlgSelectorData.h}
-	DataSource {DlgSelectorData.C}
-	DataName {DlgSelectorData}
-	WindowBaseClass {QDialog}
-	IsModal {FALSE}
-	WindowCaption {Selection}
-	WindowFlags {720}
-}
-WidgetLayout {
-InitialPos {-1 -1}
-Size {400 160}
-MinSize {0 0}
-MaxSize {32767 32767}
-Grid {10}
-TextTranslated {TRUE}
-
-MultiLineEdit {
-		Line {}
-		ReadOnly {FALSE}
-		OverwriteMode {FALSE}
-		AutoUpdate {TRUE}
-		Style {51}
-		LineWidth {2}
-		MidLineWidth {0}
-		FrameMargin {0}
-		Rect {10 10 380 100}
-		Name {selection_multilineedit}
-		Variable {selection_textbox}
-		MinimumSize {0 0}
-		MaximumSize {32767 32767}
-		BackgroundPixmap {}
-		UseBackgroundPixmap {FALSE}
-		AdjustSize {FALSE}
-		ReadPixmapFromData {FALSE}
-		DataVarName {}
-		DataLenName {}
-		FocusPolicy {TabFocus}
-		BackgroundMode {PaletteBase}
-		FontPropagation {SameFont}
-		PalettePropagation {SameFont}
-}
-PushButton {
-		ToggleButton {FALSE}
-		Default {FALSE}
-		AutoDefault {TRUE}
-		IsMenuButton {FALSE}
-		Text {&Done}
-		AutoRepeat {FALSE}
-		AutoResize {FALSE}
-		Rect {150 120 100 30}
-		Name {PushButton_8}
-		MinimumSize {0 0}
-		MaximumSize {32767 32767}
-		BackgroundPixmap {}
-		UseBackgroundPixmap {FALSE}
-		AdjustSize {FALSE}
-		ReadPixmapFromData {FALSE}
-		DataVarName {}
-		DataLenName {}
-		FocusPolicy {TabFocus}
-		BackgroundMode {PaletteButton}
-		FontPropagation {SameFont}
-		PalettePropagation {SameFont}
-}
-PushButton {
-		ToggleButton {FALSE}
-		Default {FALSE}
-		AutoDefault {TRUE}
-		IsMenuButton {FALSE}
-		Text {&Select}
-		AutoRepeat {FALSE}
-		AutoResize {FALSE}
-		Rect {10 120 100 30}
-		Name {PushButton_9}
-		MinimumSize {0 0}
-		MaximumSize {32767 32767}
-		BackgroundPixmap {}
-		UseBackgroundPixmap {FALSE}
-		AdjustSize {FALSE}
-		ReadPixmapFromData {FALSE}
-		DataVarName {}
-		DataLenName {}
-		FocusPolicy {TabFocus}
-		BackgroundMode {PaletteButton}
-		FontPropagation {SameFont}
-		PalettePropagation {SameFont}
-}
-PushButton {
-		ToggleButton {FALSE}
-		Default {FALSE}
-		AutoDefault {TRUE}
-		IsMenuButton {FALSE}
-		Text {&Help}
-		AutoRepeat {FALSE}
-		AutoResize {FALSE}
-		Rect {290 120 100 30}
-		Name {PushButton_10}
-		MinimumSize {0 0}
-		MaximumSize {32767 32767}
-		BackgroundPixmap {}
-		UseBackgroundPixmap {FALSE}
-		AdjustSize {FALSE}
-		ReadPixmapFromData {FALSE}
-		DataVarName {}
-		DataLenName {}
-		FocusPolicy {TabFocus}
-		BackgroundMode {PaletteButton}
-		FontPropagation {SameFont}
-		PalettePropagation {SameFont}
-}
-
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<QtArch type="Dialog" version="2.1" nested="true" >
+  <Dialog supertype="true" nested="true" >
+    <DialogCommon  nested="true" >
+      <SourceDir >/root/BALL/source/APPLICATIONS/MOLVIEW/DIALOGS</SourceDir>
+      <ClassHeader >DlgSelector.h</ClassHeader>
+      <ClassSource >DlgSelector.C</ClassSource>
+      <ClassName >DlgSelector</ClassName>
+      <DataHeader >DlgSelectorData.h</DataHeader>
+      <DataSource >DlgSelectorData.C</DataSource>
+      <DataName >DlgSelectorData</DataName>
+      <WindowBaseClass >QDialog</WindowBaseClass>
+      <ClassHeader >DlgSelector.h</ClassHeader>
+      <WindowCaption >Selection</WindowCaption>
+      <WindowFlags type="integer">720</WindowFlags>
+    </DialogCommon>
+    <WidgetLayout  nested="true" >
+      <WidgetLayoutCommon  nested="true" >
+        <InitialPos type="qpoint" complex="true"  nested="true" >
+          <X type="integer">-1</X>
+          <Y type="integer">-1</Y>
+        </InitialPos>
+        <Size type="qsize" complex="true"  nested="true" >
+          <Height type="integer">160</Height>
+          <Width type="integer">400</Width>
+        </Size>
+        <MaxSize type="qsize" complex="true"  nested="true" >
+          <Height type="integer">32767</Height>
+          <Width type="integer">32767</Width>
+        </MaxSize>
+        <GridSize type="integer">10</GridSize>
+        <TextTranslated type="boolean">true</TextTranslated>
+      </WidgetLayoutCommon>
+      <Widgets  list="true"  nested="true" >
+        <MultiLineEdit  nested="true" >
+          <Alignment type="qstring">AlignLeft</Alignment>
+          <EchoMode type="qstring">Normal</EchoMode>
+          <WordWrap type="qstring">NoWrap</WordWrap>
+          <WrapPolicy type="qstring">AtWhiteSpace</WrapPolicy>
+          <WrapColumnOrWidth type="integer">-1</WrapColumnOrWidth>
+          <UndoEnabled type="boolean">true</UndoEnabled>
+          <UndoDepth type="integer">256</UndoDepth>
+          <MaxLength type="integer">-1</MaxLength>
+          <MaxLineLength type="integer">-1</MaxLineLength>
+          <MaxLines type="integer">-1</MaxLines>
+          <HorizontalMargin type="integer">3</HorizontalMargin>
+          <AutoUpdate type="boolean">true</AutoUpdate>
+          <Frame  nested="true" >
+            <Style type="integer">51</Style>
+            <LineWidth type="integer">2</LineWidth>
+            <DlgWidget  nested="true" >
+              <Rect type="qrect" complex="true"  nested="true" >
+                <Height type="integer">100</Height>
+                <Width type="integer">380</Width>
+                <X type="integer">10</X>
+                <Y type="integer">10</Y>
+              </Rect>
+              <Name >selection_multilineedit</Name>
+              <Variable >selection_textbox</Variable>
+              <SignalConnection  list="true"  nested="true" >
+              </SignalConnection>
+              <MaximumSize type="qsize" complex="true"  nested="true" >
+                <Height type="integer">32767</Height>
+                <Width type="integer">32767</Width>
+              </MaximumSize>
+              <Enabled type="boolean">true</Enabled>
+              <FocusPolicy >TabFocus</FocusPolicy>
+              <BackgroundMode >PaletteBase</BackgroundMode>
+              <BackgroundOrigin >WidgetOrigin</BackgroundOrigin>
+            </DlgWidget>
+          </Frame>
+        </MultiLineEdit>
+        <PushButton  nested="true" >
+          <AutoDefault type="boolean">true</AutoDefault>
+          <Button  nested="true" >
+            <Text >&amp;Done</Text>
+            <DlgWidget  nested="true" >
+              <Rect type="qrect" complex="true"  nested="true" >
+                <Height type="integer">30</Height>
+                <Width type="integer">100</Width>
+                <X type="integer">150</X>
+                <Y type="integer">120</Y>
+              </Rect>
+              <Name >PushButton_8</Name>
+              <SignalConnection  list="true"  nested="true" >
+              </SignalConnection>
+              <MaximumSize type="qsize" complex="true"  nested="true" >
+                <Height type="integer">32767</Height>
+                <Width type="integer">32767</Width>
+              </MaximumSize>
+              <Enabled type="boolean">true</Enabled>
+              <FocusPolicy >TabFocus</FocusPolicy>
+              <BackgroundMode >PaletteButton</BackgroundMode>
+              <BackgroundOrigin >WidgetOrigin</BackgroundOrigin>
+            </DlgWidget>
+          </Button>
+        </PushButton>
+        <PushButton  nested="true" >
+          <AutoDefault type="boolean">true</AutoDefault>
+          <Button  nested="true" >
+            <Text >&amp;Select</Text>
+            <DlgWidget  nested="true" >
+              <Rect type="qrect" complex="true"  nested="true" >
+                <Height type="integer">30</Height>
+                <Width type="integer">100</Width>
+                <X type="integer">10</X>
+                <Y type="integer">120</Y>
+              </Rect>
+              <Name >PushButton_9</Name>
+              <SignalConnection  list="true"  nested="true" >
+              </SignalConnection>
+              <MaximumSize type="qsize" complex="true"  nested="true" >
+                <Height type="integer">32767</Height>
+                <Width type="integer">32767</Width>
+              </MaximumSize>
+              <Enabled type="boolean">true</Enabled>
+              <FocusPolicy >TabFocus</FocusPolicy>
+              <BackgroundMode >PaletteButton</BackgroundMode>
+              <BackgroundOrigin >WidgetOrigin</BackgroundOrigin>
+            </DlgWidget>
+          </Button>
+        </PushButton>
+        <PushButton  nested="true" >
+          <AutoDefault type="boolean">true</AutoDefault>
+          <Button  nested="true" >
+            <Text >&amp;Help</Text>
+            <DlgWidget  nested="true" >
+              <Rect type="qrect" complex="true"  nested="true" >
+                <Height type="integer">30</Height>
+                <Width type="integer">100</Width>
+                <X type="integer">290</X>
+                <Y type="integer">120</Y>
+              </Rect>
+              <Name >PushButton_10</Name>
+              <SignalConnection  list="true"  nested="true" >
+              </SignalConnection>
+              <MaximumSize type="qsize" complex="true"  nested="true" >
+                <Height type="integer">32767</Height>
+                <Width type="integer">32767</Width>
+              </MaximumSize>
+              <Enabled type="boolean">true</Enabled>
+              <FocusPolicy >TabFocus</FocusPolicy>
+              <BackgroundMode >PaletteButton</BackgroundMode>
+              <BackgroundOrigin >WidgetOrigin</BackgroundOrigin>
+            </DlgWidget>
+          </Button>
+        </PushButton>
+      </Widgets>
+      <TabOrder  list="true"  nested="true" >
+        <Widget type="qstring">selection_multilineedit</Widget>
+        <Widget type="qstring">PushButton_8</Widget>
+        <Widget type="qstring">PushButton_9</Widget>
+        <Widget type="qstring">PushButton_10</Widget>
+      </TabOrder>
+      <Layout  list="true"  nested="true" >
+      </Layout>
+    </WidgetLayout>
+  </Dialog>
+</QtArch>

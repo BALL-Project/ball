@@ -1,112 +1,174 @@
-DlgEdit:v1.2:Dialog:
-Dialog {
-	ClassHeader {DlgPreferencesNetwork.h}
-	ClassSource {DlgPreferencesNetwork.C}
-	ClassName {DlgPreferencesNetwork}
-	DataHeader {DlgPreferencesNetworkData.h}
-	DataSource {DlgPreferencesNetworkData.C}
-	DataName {DlgPreferencesNetworkData}
-	WindowBaseClass {QWidget}
-	WindowFlags {0}
-}
-WidgetLayout {
-InitialPos {-1 -1}
-Size {380 210}
-MinSize {0 0}
-MaxSize {32767 32767}
-Grid {10}
-TextTranslated {TRUE}
-
-Label {
-		Text {server port}
-		Alignment {AlignLeft|AlignVCenter|ExpandTabs}
-		AutoResize {TRUE}
-		Margin {0}
-		Style {0}
-		LineWidth {1}
-		MidLineWidth {0}
-		FrameMargin {0}
-		Rect {30 20 73 27}
-		Name {Label_1}
-		MinimumSize {0 0}
-		MaximumSize {32767 32767}
-		BackgroundPixmap {}
-		UseBackgroundPixmap {FALSE}
-		AdjustSize {FALSE}
-		ReadPixmapFromData {FALSE}
-		DataVarName {}
-		DataLenName {}
-		FocusPolicy {NoFocus}
-		BackgroundMode {PaletteBackground}
-		FontPropagation {SameFont}
-		PalettePropagation {SameFont}
-}
-LineEdit {
-		Text {20000}
-		EchoMode {Normal}
-		MaxLength {5}
-		FrameShown {TRUE}
-		Alignment {AlignRight}
-		Rect {120 20 50 30}
-		Name {LineEdit_1}
-		Variable {port_}
-		MinimumSize {0 0}
-		MaximumSize {32767 32767}
-		BackgroundPixmap {}
-		UseBackgroundPixmap {FALSE}
-		AdjustSize {FALSE}
-		ReadPixmapFromData {FALSE}
-		DataVarName {}
-		DataLenName {}
-		FocusPolicy {StrongFocus}
-		BackgroundMode {PaletteBase}
-		FontPropagation {SameFont}
-		PalettePropagation {SameFont}
-}
-PushButton {
-		ToggleButton {FALSE}
-		Default {FALSE}
-		AutoDefault {TRUE}
-		IsMenuButton {FALSE}
-		Text {Reset}
-		AutoRepeat {FALSE}
-		AutoResize {FALSE}
-		Rect {250 20 100 30}
-		Name {PushButton_6}
-		Signal {[Protected]  clicked --> resetPort  ()}
-		MinimumSize {0 0}
-		MaximumSize {32767 32767}
-		BackgroundPixmap {}
-		UseBackgroundPixmap {FALSE}
-		AdjustSize {FALSE}
-		ReadPixmapFromData {FALSE}
-		DataVarName {}
-		DataLenName {}
-		FocusPolicy {TabFocus}
-		BackgroundMode {PaletteButton}
-		FontPropagation {SameFont}
-		PalettePropagation {SameFont}
-}
-CheckBox {
-		Checked {TRUE}
-		Text {accept clients}
-		AutoRepeat {FALSE}
-		AutoResize {TRUE}
-		Rect {40 80 118 21}
-		Name {CheckBox_1}
-		Variable {server_status_}
-		MinimumSize {0 0}
-		MaximumSize {32767 32767}
-		BackgroundPixmap {}
-		UseBackgroundPixmap {FALSE}
-		AdjustSize {FALSE}
-		ReadPixmapFromData {FALSE}
-		DataVarName {}
-		DataLenName {}
-		FocusPolicy {TabFocus}
-		BackgroundMode {PaletteBackground}
-		FontPropagation {SameFont}
-		PalettePropagation {SameFont}
-}
-
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<QtArch type="Dialog" version="2.1" nested="true" >
+  <Dialog supertype="true" nested="true" >
+    <DialogCommon  nested="true" >
+      <SourceDir >/root/BALL/source/APPLICATIONS/MOLVIEW/DIALOGS</SourceDir>
+      <ClassHeader >DlgPreferencesNetwork.h</ClassHeader>
+      <ClassSource >DlgPreferencesNetwork.C</ClassSource>
+      <ClassName >DlgPreferencesNetwork</ClassName>
+      <DataHeader >DlgPreferencesNetworkData.h</DataHeader>
+      <DataSource >DlgPreferencesNetworkData.C</DataSource>
+      <DataName >DlgPreferencesNetworkData</DataName>
+      <WindowBaseClass >QWidget</WindowBaseClass>
+      <ClassHeader >DlgPreferencesNetwork.h</ClassHeader>
+    </DialogCommon>
+    <WidgetLayout  nested="true" >
+      <WidgetLayoutCommon  nested="true" >
+        <InitialPos type="qpoint" complex="true"  nested="true" >
+          <X type="integer">-1</X>
+          <Y type="integer">-1</Y>
+        </InitialPos>
+        <Size type="qsize" complex="true"  nested="true" >
+          <Height type="integer">210</Height>
+          <Width type="integer">380</Width>
+        </Size>
+        <MaxSize type="qsize" complex="true"  nested="true" >
+          <Height type="integer">32767</Height>
+          <Width type="integer">32767</Width>
+        </MaxSize>
+        <GridSize type="integer">10</GridSize>
+        <TextTranslated type="boolean">true</TextTranslated>
+      </WidgetLayoutCommon>
+      <Widgets  list="true"  nested="true" >
+        <Label  nested="true" >
+          <Text >server port</Text>
+          <Alignment >AlignLeft|AlignVCenter|ExpandTabs</Alignment>
+          <TextFormat type="qstring">AutoText</TextFormat>
+          <Frame  nested="true" >
+            <LineWidth type="integer">1</LineWidth>
+            <DlgWidget  nested="true" >
+              <Rect type="qrect" complex="true"  nested="true" >
+                <Height type="integer">27</Height>
+                <Width type="integer">73</Width>
+                <X type="integer">30</X>
+                <Y type="integer">20</Y>
+              </Rect>
+              <Name >Label_1</Name>
+              <SignalConnection  list="true"  nested="true" >
+              </SignalConnection>
+              <MaximumSize type="qsize" complex="true"  nested="true" >
+                <Height type="integer">32767</Height>
+                <Width type="integer">32767</Width>
+              </MaximumSize>
+              <Enabled type="boolean">true</Enabled>
+              <FocusPolicy >NoFocus</FocusPolicy>
+              <BackgroundMode >PaletteBackground</BackgroundMode>
+              <BackgroundOrigin >WidgetOrigin</BackgroundOrigin>
+            </DlgWidget>
+          </Frame>
+        </Label>
+        <LineEdit  nested="true" >
+          <Text >20000</Text>
+          <EchoMode >Normal</EchoMode>
+          <MaxLength type="integer">5</MaxLength>
+          <FrameShown type="boolean">true</FrameShown>
+          <Alignement >AlignLeft</Alignement>
+          <DlgWidget  nested="true" >
+            <Rect type="qrect" complex="true"  nested="true" >
+              <Height type="integer">30</Height>
+              <Width type="integer">50</Width>
+              <X type="integer">120</X>
+              <Y type="integer">20</Y>
+            </Rect>
+            <Name >LineEdit_1</Name>
+            <Variable >port_</Variable>
+            <SignalConnection  list="true"  nested="true" >
+            </SignalConnection>
+            <MaximumSize type="qsize" complex="true"  nested="true" >
+              <Height type="integer">32767</Height>
+              <Width type="integer">32767</Width>
+            </MaximumSize>
+            <Enabled type="boolean">true</Enabled>
+            <FocusPolicy >StrongFocus</FocusPolicy>
+            <BackgroundMode >PaletteBase</BackgroundMode>
+            <BackgroundOrigin >WidgetOrigin</BackgroundOrigin>
+          </DlgWidget>
+        </LineEdit>
+        <PushButton  nested="true" >
+          <AutoDefault type="boolean">true</AutoDefault>
+          <Button  nested="true" >
+            <Text >Reset</Text>
+            <DlgWidget  nested="true" >
+              <Rect type="qrect" complex="true"  nested="true" >
+                <Height type="integer">30</Height>
+                <Width type="integer">100</Width>
+                <X type="integer">250</X>
+                <Y type="integer">20</Y>
+              </Rect>
+              <Name >PushButton_6</Name>
+              <SignalConnection  list="true"  nested="true" >
+                <Signal >[Protected]  clicked --&gt; resetPort  ()</Signal>
+              </SignalConnection>
+              <MaximumSize type="qsize" complex="true"  nested="true" >
+                <Height type="integer">32767</Height>
+                <Width type="integer">32767</Width>
+              </MaximumSize>
+              <Enabled type="boolean">true</Enabled>
+              <FocusPolicy >TabFocus</FocusPolicy>
+              <BackgroundMode >PaletteButton</BackgroundMode>
+              <BackgroundOrigin >WidgetOrigin</BackgroundOrigin>
+            </DlgWidget>
+          </Button>
+        </PushButton>
+        <CheckBox  nested="true" >
+          <Checked type="boolean">true</Checked>
+          <Button  nested="true" >
+            <Text >accept clients </Text>
+            <DlgWidget  nested="true" >
+              <Rect type="qrect" complex="true"  nested="true" >
+                <Height type="integer">21</Height>
+                <Width type="integer">160</Width>
+                <X type="integer">40</X>
+                <Y type="integer">80</Y>
+              </Rect>
+              <Name >CheckBox_1</Name>
+              <Variable >server_status_</Variable>
+              <SignalConnection  list="true"  nested="true" >
+              </SignalConnection>
+              <MaximumSize type="qsize" complex="true"  nested="true" >
+                <Height type="integer">32767</Height>
+                <Width type="integer">32767</Width>
+              </MaximumSize>
+              <Enabled type="boolean">true</Enabled>
+              <FocusPolicy >TabFocus</FocusPolicy>
+              <BackgroundMode >PaletteBackground</BackgroundMode>
+              <BackgroundOrigin >WidgetOrigin</BackgroundOrigin>
+            </DlgWidget>
+          </Button>
+        </CheckBox>
+        <PushButton  nested="true" >
+          <Button  nested="true" >
+            <Text >hhhhhhhhh</Text>
+            <DlgWidget  nested="true" >
+              <Rect type="qrect" complex="true"  nested="true" >
+                <Height type="integer">30</Height>
+                <Width type="integer">100</Width>
+                <X type="integer">60</X>
+                <Y type="integer">140</Y>
+              </Rect>
+              <Name >PushButton_2</Name>
+              <SignalConnection  list="true"  nested="true" >
+              </SignalConnection>
+              <MaximumSize type="qsize" complex="true"  nested="true" >
+                <Height type="integer">32767</Height>
+                <Width type="integer">32767</Width>
+              </MaximumSize>
+              <Enabled type="boolean">true</Enabled>
+              <FocusPolicy >TabFocus</FocusPolicy>
+              <BackgroundMode >PaletteButton</BackgroundMode>
+              <BackgroundOrigin >WidgetOrigin</BackgroundOrigin>
+            </DlgWidget>
+          </Button>
+        </PushButton>
+      </Widgets>
+      <TabOrder  list="true"  nested="true" >
+        <Widget type="qstring">LineEdit_1</Widget>
+        <Widget type="qstring">PushButton_6</Widget>
+        <Widget type="qstring">CheckBox_1</Widget>
+        <Widget type="qstring">PushButton_2</Widget>
+      </TabOrder>
+      <Layout  list="true"  nested="true" >
+      </Layout>
+    </WidgetLayout>
+  </Dialog>
+</QtArch>
