@@ -20,6 +20,7 @@ added:
 - new model: visualisation of forces
 - Benchmark scripts for BALLView
 - Visualisation for double-, triple- and aromatic bonds in BallAndStick model
+- Coloring by residue name now also works for DNA
 - Preferences for material parameters in OpenGL
 - added more classes to the Python SIP interface
 
