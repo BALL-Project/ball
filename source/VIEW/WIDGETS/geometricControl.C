@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.13 2003/09/19 23:54:58 amoll Exp $
+// $Id: geometricControl.C,v 1.14 2003/09/20 15:36:35 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -106,6 +106,8 @@ void GeometricControl::updateRepresentation(Representation& rep)
 
 	listview->triggerUpdate();
 
+	RepresentationMessage* message = new RepresentationMessage(&rep, RepresentationMessage::SELECTED);
+	notify_(message);
 	return;
 }
 
@@ -244,7 +246,7 @@ void GeometricControl::deleteRepresentation_()
 		scene_message->setType(SceneMessage::REMOVE_COORDINATE_SYSTEM);
 	}
 		
-	RepresentationMessage* message = new RepresentationMessage(*context_representation_, RepresentationMessage::REMOVE);
+	RepresentationMessage* message = new RepresentationMessage(context_representation_, RepresentationMessage::REMOVE);
 	notify_(message);
 
 	getMainControl()->getPrimitiveManager().remove(*context_representation_);
@@ -333,7 +335,7 @@ void GeometricControl::updateSelection()
 
 	Representation* rep = getRepresentation(*item);
 
-	RepresentationMessage* message = new RepresentationMessage(*rep, RepresentationMessage::SELECTED);
+	RepresentationMessage* message = new RepresentationMessage(rep, RepresentationMessage::SELECTED);
 	notify_(message);
 
 	if (rep->getComposites().size() == 0) 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.11 2003/09/19 18:18:01 amoll Exp $
+// $Id: scene.C,v 1.12 2003/09/20 15:36:35 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -732,7 +732,7 @@ void Scene::createCoordinateSystem_()
 	// because the message wont arrive in Scene::onNotify
 	gl_renderer_.addRepresentation(*rp);
 	
-	RepresentationMessage* message = new RepresentationMessage(*rp, RepresentationMessage::ADD);
+	RepresentationMessage* message = new RepresentationMessage(rp, RepresentationMessage::ADD);
 	notify_(message);
 }
 
@@ -888,7 +888,7 @@ void Scene::applyPreferences(Preferences & /* preferences */)
 		for (; it != reps.end(); it++)
 		{
 			pm.remove(**it);
-			RepresentationMessage* message = new RepresentationMessage(**it, RepresentationMessage::REMOVE);
+			RepresentationMessage* message = new RepresentationMessage(*it, RepresentationMessage::REMOVE);
 			notify_(message);
 		}
 	}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.10 2003/09/19 18:17:59 amoll Exp $
+// $Id: mainControl.C,v 1.11 2003/09/20 15:37:16 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -326,7 +326,7 @@ bool MainControl::remove_(Composite& composite)
 	// notify GeometricControl of removed representations
 	for (; reps_it != removed_representations.end(); reps_it++)
 	{
-		RepresentationMessage* rr_message = new RepresentationMessage(**reps_it, RepresentationMessage::REMOVE);
+		RepresentationMessage* rr_message = new RepresentationMessage(*reps_it, RepresentationMessage::REMOVE);
 		notify_(rr_message);
 	}
 
@@ -346,7 +346,7 @@ bool MainControl::update(const Composite& composite)
 	// notify GeometricControl of changed representations
 	for (; reps_it != changed_representations.end(); reps_it++)
 	{
-		RepresentationMessage* ur_message = new RepresentationMessage(**reps_it, RepresentationMessage::UPDATE);
+		RepresentationMessage* ur_message = new RepresentationMessage(*reps_it, RepresentationMessage::UPDATE);
 		notify_(ur_message);
 	}
 
