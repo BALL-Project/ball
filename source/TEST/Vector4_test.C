@@ -1,4 +1,4 @@
-// $Id: Vector4_test.C,v 1.1 2000/02/19 12:15:08 oliver Exp $
+// $Id: Vector4_test.C,v 1.2 2000/02/19 19:55:29 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(TVector4, "$Id: Vector4_test.C,v 1.1 2000/02/19 12:15:08 oliver Exp $")
+START_TEST(TVector4, "$Id: Vector4_test.C,v 1.2 2000/02/19 19:55:29 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -118,15 +118,15 @@ RESULT
 
 //line 49: method std::istream& operator >> (std::istream& s, TVector4<T>& vector)
 CHECK(std::istream& operator >> (std::istream& s, TVector4<T>& vector))
-	std::ostream ostream;
-	v = Vector4(1, 2, 3, 4);
+	//std::ostream ostream;
+	//v = Vector4(1, 2, 3, 4);
 	//ostream = << v;
 	//TEST_EQUAL(ostream, << 1 << 2 << 3 << 4)  //BAUSTELLE
 RESULT
 
 //line 52: method std::ostream& operator << (std::ostream& s, const TVector4<T>& vector)
 CHECK(std::ostream& operator << (std::ostream& s, const TVector4<T>& vector))
-	std::istream instream;
+	// std::istream instream;
 	//instream >> 1 >> 2 >> 3 >> 4 ;
 	//v  = Vector4(instream);  //BAUSTELLE
 	TEST_EQUAL(v[0], 1)
