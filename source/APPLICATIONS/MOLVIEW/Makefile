@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.39 2003/08/27 12:23:17 amoll Exp $
+# $Id: Makefile,v 1.40 2003/08/27 13:20:30 amoll Exp $
 #
 
 EXECUTABLE=molview
@@ -20,27 +20,23 @@ LIB_CXXFLAGS=$(NONLIB_CXXFLAGS) -DQT_THREAD_SUPPORT
 
 BALL_INCLUDES=$(VIEW_INCLUDES) $(PYTHON_INCLUDES)
 
-#	DIALOGS/DlgAbout.C\
-#	DIALOGS/DlgAboutData.C
 CPP_SOURCES=\
 	icons.C\
 	main.C\
-	mainframe.C\
-	threads.C
+	mainframe.C
+
+#	threads.C
 
 MOC_SOURCES=\
-	DIALOGS/DlgAbout_moc.C\
-	DIALOGS/DlgAboutData_moc.C\
 	mainframe_moc.C
+	
+#	aboutDialog_moc.C\
 
 molview:	$(OBJECTS)	$(SPECIAL_OBJECTS)
-	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(BALL_INCLUDES) $(PYTHON_LIBS) -DQT_THREAD_SUPPORT
+	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(VIEW_LIBS) $(BALL_INCLUDES) $(PYTHON_LIBS) -DQT_THREAD_SUPPORT
 
-DIALOGS/DlgAbout_moc.C:     DIALOGS/DlgAbout.h
-				$(MOC) DIALOGS/DlgAbout.h -o $@
-
-DIALOGS/DlgAboutData_moc.C: DIALOGS/DlgAboutData.h
-				$(MOC) DIALOGS/DlgAboutData.h -o $@
+aboutDialog_moc.C: aboutDialog.h
+				$(MOC) aboutDialog.h -o $@
 
 mainframe_moc.C:	mainframe.h
 					$(MOC) mainframe.h -o $@
