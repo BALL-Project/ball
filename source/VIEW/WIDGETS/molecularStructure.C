@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.82 2005/02/18 13:39:01 amoll Exp $
+// $Id: molecularStructure.C,v 1.83 2005/02/18 13:48:02 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -1033,11 +1033,8 @@ namespace BALL
 			// so we have to make sure the rest of the world realizes something might have changed.
 			if (!use_amber_)
 			{
-				CompositeMessage* change_message = 
-					new CompositeMessage(*system, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
-				notify_(change_message);
+				getMainControl()->update(*system, true);
 			}
-
 
 			if (!ok)
 			{
@@ -1104,6 +1101,7 @@ namespace BALL
 			#else
 					thread->start();
 			#endif
+				return;
 				
    		#else
 				// ============================= WITHOUT MULTITHREADING =================================
@@ -1124,29 +1122,27 @@ namespace BALL
 				if (!ok)
 				{
 					setStatusbarText("Aborted EnergyMinimizer because of strange energy values.", true);
-					return;
 				}
-
-				// Print the final results.
-				Log.info() << endl << "minimization terminated." << endl << endl;
-				Log.info() << ff.getResults();
-				Log.info() << "final RMS gradient    : " << ff.getRMSGradient() << " kJ/(mol A)   after "
-									 << minimizer->getNumberOfIterations() << " iterations" << endl << endl;
-				setStatusbarText("Final energy: " + String(ff.getEnergy()) + " kJ/mol.", true);
-
-				// clean up
-				delete minimizer;
-				minimizer = 0;
+				else
+				{
+					// Print the final results.
+					Log.info() << endl << "minimization terminated." << endl << endl;
+					Log.info() << ff.getResults();
+					Log.info() << "final RMS gradient    : " << ff.getRMSGradient() << " kJ/(mol A)   after "
+										 << minimizer->getNumberOfIterations() << " iterations" << endl << endl;
+					setStatusbarText("Final energy: " + String(ff.getEnergy()) + " kJ/mol.", true);
+				}
 		#endif
 			}
 			catch(Exception::GeneralException& e)
 			{
-				delete minimizer;
 				String txt = "Calculation aborted because of unexpected exception: ";
 				setStatusbarText(txt + ". See Log for details.", true);
 				Log.error() << txt << ":" << std::endl;
 				Log.error() << e << std::endl;
 			}
+
+			delete minimizer;
 		}
 
 		void MolecularStructure::MDSimulation()
