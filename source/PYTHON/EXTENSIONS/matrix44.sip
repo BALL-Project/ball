@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: matrix44.sip,v 1.7 2003/11/01 09:27:38 oliver Exp $
+// $Id: matrix44.sip,v 1.8 2004/09/22 21:07:05 oliver Exp $
 //
 
 class Matrix4x4
@@ -70,7 +70,7 @@ class Matrix4x4
 
   // float operator () (Position /row/, Position /col/) const;
   // float operator [] (Position /index/) const;
-  float operator [] (Position /index/);
+ float operator [] (Position /index/) /Numeric/;
 %MethodCode
 	sipRes = sipCpp->operator [] (*a0);
 %End

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberNonBonded.sip,v 1.4 2003/10/29 22:54:36 oliver Exp $
+// $Id: amberNonBonded.sip,v 1.5 2004/09/22 21:07:05 oliver Exp $
 //
 
 class AmberNonBonded 
@@ -17,7 +17,7 @@ class AmberNonBonded
   AmberNonBonded(ForceField& /force_field/);
   AmberNonBonded(const AmberNonBonded& /amber_non_bonded/);
   ~AmberNonBonded() throw();
-  bool setup() throw();
+  virtual bool setup() throw();
   virtual double updateEnergy() throw();
   virtual void updateForces() throw();
   virtual double getElectrostaticEnergy() const throw();

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector2.sip,v 1.11 2004/02/25 12:04:41 oliver Exp $
+// $Id: vector2.sip,v 1.12 2004/09/22 21:07:06 oliver Exp $
 //
 
 //Vector2 operator * (float scalar, const Vector2& vector)
@@ -75,10 +75,8 @@ class Vector2
 	Vector2& operator /= (float /lambda/) throw(DivisionByZero);
 	float operator * (const Vector2& /vector/) const throw();
 
-	float getDistance(const Vector2& /vector/) const
-		throw();
-	float getSquareDistance(const Vector2& /vector/) const
-		throw();
+	float getDistance(const Vector2& /vector/) const throw();
+	float getSquareDistance(const Vector2& /vector/) const throw();
 
 	bool operator == (const Vector2& /vector/) const throw();
 	bool operator != (const Vector2& /vector/) const throw();
@@ -99,4 +97,5 @@ class Vector2
 	tmp += String(sipCpp->x) + " ";
 	tmp += String(sipCpp->y) + ")";
 	sipRes = PyString_FromString(tmp.c_str());
-%End};
+%End
+};

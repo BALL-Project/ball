@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData3D.sip,v 1.9 2003/11/01 09:27:39 oliver Exp $
+// $Id: regularData3D.sip,v 1.10 2004/09/22 21:07:05 oliver Exp $
 //
 
 class RegularData3D 
@@ -14,6 +14,7 @@ class RegularData3D
   // typedef typename std::vector<float>::iterator Iterator;
   // typedef typename std::vector<float>::const_iterator ConstIterator;
 %End
+	public:
 	class IndexType
 	{
 %TypeHeaderCode

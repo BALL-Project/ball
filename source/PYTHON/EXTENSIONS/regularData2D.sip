@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2D.sip,v 1.8 2003/11/01 09:27:39 oliver Exp $
+// $Id: regularData2D.sip,v 1.9 2004/09/22 21:07:05 oliver Exp $
 //
 
 typedef float GridDataType;
@@ -15,6 +15,7 @@ class RegularData2D
 	using namespace BALL::Exception;
 	// typedef TVector2<float> Vector2;
 %End
+	public:
 	class IndexType
 	{
 %TypeHeaderCode
