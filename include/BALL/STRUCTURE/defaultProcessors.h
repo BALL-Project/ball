@@ -1,4 +1,7 @@
-// $Id: defaultProcessors.h,v 1.8 2001/07/16 00:33:49 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: defaultProcessors.h,v 1.8.4.1 2002/08/22 17:17:55 oliver Exp $
 
 #ifndef BALL_STRUCTURE_DEFAULTPROCESSORS_H
 #define BALL_STRUCTURE_DEFAULTPROCESSORS_H

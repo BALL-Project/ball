@@ -1,4 +1,7 @@
-// $Id: SESEdge.h,v 1.13.4.1 2002/05/23 23:55:13 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: SESEdge.h,v 1.13.4.2 2002/08/22 17:17:55 oliver Exp $
 
 #ifndef BALL_STRUCTURE_SESEDGE_H
 #define BALL_STRUCTURE_SESEDGE_H
@@ -319,7 +322,7 @@ namespace BALL
 
 
 	template <typename T>
-	void TSESEdge<T>::setCircle(const TCircle3<T>& center)
+	void TSESEdge<T>::setCircle(const TCircle3<T>& circle)
 		throw()
 	{
 		circle_ = circle;
@@ -370,13 +373,13 @@ namespace BALL
 	bool TSESEdge<T>::similar(const TSESEdge<T>& sesedge) const
 		throw()
 	{
-		if ((vertex0_->p != sesedge.vertex0_->p) &&
-				(vertex0_->p != sesedge.vertex1_->p)		)
+		if ((vertex_[0]->point_ != sesedge.vertex_[0]->point_) &&
+				(vertex_[0]->point_ != sesedge.vertex_[1]->point_)		)
 		{
 			return false;
 		}
-		if ((vertex1_->p != sesedge.vertex0_->p) &&
-				(vertex1_->p != sesedge.vertex1_->p)		)
+		if ((vertex_[1]->point_ != sesedge.vertex_[0]->point_) &&
+				(vertex_[1]->point_ != sesedge.vertex_[1]->point_)		)
 		{
 			return false;
 		}

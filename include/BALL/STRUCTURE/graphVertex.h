@@ -1,3 +1,6 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
 // $Id:
 
 #ifndef BALL_STRUCTURE_GRAPHVERTEX_H
@@ -7,7 +10,9 @@
 #	include <BALL/common.h>
 #endif
 
-#include <list>
+#ifndef BALL_DATATYPE_HASHSET_H
+#	include <BALL/DATATYPE/hashSet.h>
+#endif
 
 namespace BALL
 {
@@ -42,14 +47,14 @@ namespace BALL
 			throw();
 
 		/**	Detailled constructor.
-				Create a new GraphVertex object from two lists and an Index.
-				@param	edges	assigned to list of edges
-				@param	faces	assigned to list of faces
+				Create a new GraphVertex object from two HashSets and an Index.
+				@param	edges	assigned to HashSet of edges
+				@param	faces	assigned to HashSet of faces
 				@param	i			assigned to the index of the GraphVertex
 		*/
 		GraphVertex
-				(const std::list<Edge*>& edges,
-				 const std::list<Face*>& faces,
+				(const HashSet<Edge*>& edges,
+				 const HashSet<Face*>& faces,
 				 Index i)
 			throw();
 
@@ -72,14 +77,14 @@ namespace BALL
 		void set(const GraphVertex<Edge,Face>& vertex, bool deep = false)
 			throw();
 
-		/**	Assign to two lists and an Index.
-				@param	edges	assigned to list of edges
-				@param	faces	assigned to list of faces
+		/**	Assign to two HashSets and an Index.
+				@param	edges	assigned to HashSet of edges
+				@param	faces	assigned to HashSet of faces
 				@param	i			asiigned to the index of the GraphVertex
 		*/
 		void set
-				(const std::list<Edge*>& edges,
-				 const std::list<Face*>& faces,
+				(const HashSet<Edge*>& edges,
+				 const HashSet<Face*>& faces,
 				 Index i)
 			throw();
 
@@ -88,28 +93,28 @@ namespace BALL
 		*/
 		//@{
 
-		/** Set the list of edges the GraphVertex belongs to.
-				@param	edges	the new list of edges
+		/** Set the HashSet of edges the GraphVertex belongs to.
+				@param	edges	the new HashSet of edges
 		*/
-		void setEdges(std::list<Edge*> edges)
+		void setEdges(HashSet<Edge*> edges)
 			throw();
 
-		/** Insert a new edge into the list of edges the GraphVertex belongs to.
+		/** Insert a new edge into the HashSet of edges the GraphVertex belongs to.
 				@param	edge	a pointer to the new edge
 		*/
 		void pushEdge(Edge* edge)
 			throw();
 
-		/** Delete a edge from the list of edges the GraphVertex belongs to.
+		/** Delete a edge from the HashSet of edges the GraphVertex belongs to.
 				@param	edge	a pointer to the edge to delete
 		*/
 		void deleteEdge(Edge* edge)
 			throw();
 
-		/** Return the list of edges the GraphVertex belongs to.
-				@return	std::list<Edge*>	the list of edges the GraphVertex belongs to
+		/** Return the HashSet of edges the GraphVertex belongs to.
+				@return	HashSet<Edge*>	the HashSet of edges the GraphVertex belongs to
 		*/
-		std::list<Edge*> getEdges() const
+		HashSet<Edge*> getEdges() const
 			throw();
 
 		/** Return the number of edges the GraphVertex belongs to.
@@ -118,28 +123,28 @@ namespace BALL
 		Position numberOfEdges() const
 			throw();
 
-		/** Set the list of faces the GraphVertex belongs to.
-				@param	faces	the new list of faces
+		/** Set the HashSet of faces the GraphVertex belongs to.
+				@param	faces	the new HashSet of faces
 		*/
-		void setFaces(std::list<Face*> faces)
+		void setFaces(HashSet<Face*> faces)
 			throw();
 
-		/** Insert a new face into the list of faces the GraphVertex belongs to.
+		/** Insert a new face into the HashSet of faces the GraphVertex belongs to.
 				@param	face	a pointer to the new face
 		*/
 		void pushFace(Face* face)
 			throw();
 
-		/** Delete a face from the list of faces the GraphVertex belongs to.
+		/** Delete a face from the HashSet of faces the GraphVertex belongs to.
 				@param	edge	a pointer to the face to delete
 		*/
 		void deleteFace(Face* face)
 			throw();
 
-		/** Return the list of faces the GraphVertex belongs to.
-				@return	std::list<Face*>	the list of faces the GraphVertex belongs to
+		/** Return the HashSet of faces the GraphVertex belongs to.
+				@return	HashSet<Face*>	the HashSet of faces the GraphVertex belongs to
 		*/
-		std::list<Face*> getFaces() const
+		HashSet<Face*> getFaces() const
 			throw();
 
 		/** Return the number of faces the GraphVertex belongs to.
@@ -160,6 +165,9 @@ namespace BALL
 		Index getIndex() const
 			throw();
 
+		//virtual bool join(const GraphVertex<Edge,Face>& vertex)
+		//	throw();
+
 
 		//@}
 		/**	@name	Predicates
@@ -179,6 +187,9 @@ namespace BALL
 		*/
 		bool operator != (const GraphVertex<Edge,Face>&) const
 			throw();// = 0;
+
+		virtual bool operator *= (const GraphVertex<Edge,Face>&) const
+			throw();
 
 		/**	Test if the vertex is meber of a given face.
 				@param	face	a pointer to the the face to be tested
@@ -206,10 +217,10 @@ namespace BALL
 
 		/*_ The RSEdges the RSVetex belongs to
 		*/
-		std::list<Edge*> edges_;
+		HashSet<Edge*> edges_;
 		/*_ The RSFaces the RSVetex belongs to
 		*/
-		std::list<Face*> faces_;
+		HashSet<Face*> faces_;
 		/*_ The index of the GraphVertex
 		*/
 		Index index_;
@@ -245,8 +256,8 @@ namespace BALL
 
 	template <typename Edge, typename Face>
 	GraphVertex<Edge,Face>::GraphVertex
-			(const std::list<Edge*>& edges,
-			 const std::list<Face*>& faces,
+			(const HashSet<Edge*>& edges,
+			 const HashSet<Face*>& faces,
 			 Index i)
 		throw()
 		: edges_(edges),
@@ -278,8 +289,8 @@ namespace BALL
 
 	template <typename Edge, typename Face>
 	void GraphVertex<Edge,Face>::set
-			(const std::list<Edge*>& edges,
-			 const std::list<Face*>& faces,
+			(const HashSet<Edge*>& edges,
+			 const HashSet<Face*>& faces,
 			 Index i)
 		throw()
 	{
@@ -290,7 +301,7 @@ namespace BALL
 
 
 	template <typename Edge, typename Face>
-	void GraphVertex<Edge,Face>::setEdges(std::list<Edge*> edges)
+	void GraphVertex<Edge,Face>::setEdges(HashSet<Edge*> edges)
 		throw()
 	{
 		edges_ = edges;
@@ -301,7 +312,7 @@ namespace BALL
 	void GraphVertex<Edge,Face>::pushEdge(Edge* edge)
 		throw()
 	{
-		edges_.push_back(edge);
+		edges_.insert(edge);
 	}
 
 
@@ -309,12 +320,12 @@ namespace BALL
 	void GraphVertex<Edge,Face>::deleteEdge(Edge* edge)
 		throw()
 	{
-		edges_.remove(edge);
+		edges_.erase(edge);
 	}
 
 
 	template <typename Edge, typename Face>
-	std::list<Edge*> GraphVertex<Edge,Face>::getEdges() const
+	HashSet<Edge*> GraphVertex<Edge,Face>::getEdges() const
 		throw()
 	{
 		return edges_;
@@ -330,7 +341,7 @@ namespace BALL
 
 
 	template <typename Edge, typename Face>
-	void GraphVertex<Edge,Face>::setFaces(std::list<Face*> faces)
+	void GraphVertex<Edge,Face>::setFaces(HashSet<Face*> faces)
 		throw()
 	{
 		faces_ = faces;
@@ -341,7 +352,7 @@ namespace BALL
 	void GraphVertex<Edge,Face>::pushFace(Face* face)
 		throw()
 	{
-		faces_.push_back(face);
+		faces_.insert(face);
 	}
 
 
@@ -349,12 +360,12 @@ namespace BALL
 	void GraphVertex<Edge,Face>::deleteFace(Face* face)
 		throw()
 	{
-		faces_.remove(face);
+		faces_.erase(face);
 	}
 
 
 	template <typename Edge, typename Face>
-	std::list<Face*> GraphVertex<Edge,Face>::getFaces() const
+	HashSet<Face*> GraphVertex<Edge,Face>::getFaces() const
 		throw()
 	{
 		return faces_;
@@ -385,11 +396,36 @@ namespace BALL
 	}
 
 
+	/*template <typename Edge, typename Face>
+	bool GraphVertex<Edge,Face>::join(const GraphVertex<Edge,Face>& vertex)
+		throw()
+	{
+		if (*this *= vertex)
+		{
+			typename HashSet<Edge*>::ConstIterator e;
+			for (e = vertex.edges_.begin(); e != vertex.edges_.end(); e++)
+			{
+				edges_.insert(*e);
+			}
+			typename HashSet<Face*>::ConstIterator f;
+			for (f = vertex.faces_.begin(); f != vertex.faces_.end(); f++)
+			{
+				faces_.insert(*f);
+			}
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}*/
+
+
 	template <typename Edge, typename Face>
 	Face* GraphVertex<Edge,Face>::has(Face* face) const
 		throw()
 	{
-		typename std::list<Face*>::const_iterator f;
+		typename HashSet<Face*>::ConstIterator f;
 		for (f = faces_.begin(); f != faces_.end(); f++)
 		{
 			if (*(*f) == *face)
@@ -405,7 +441,7 @@ namespace BALL
 	Edge* GraphVertex<Edge,Face>::has(Edge* edge) const
 		throw()
 	{
-		typename std::list<Edge*>::const_iterator e;
+		typename HashSet<Edge*>::ConstIterator e;
 		for (e = edges_.begin(); e != edges_.end(); e++)
 		{
 			if (*(*e) == *edge)
@@ -430,6 +466,14 @@ namespace BALL
 		throw()
 	{
 		return true;
+	}
+
+
+	template <typename Edge, typename Face>
+	bool GraphVertex<Edge,Face>::operator *= (const GraphVertex<Edge,Face>&) const
+		throw()
+	{
+		return false;
 	}
 
 

@@ -1,4 +1,7 @@
-// $Id: triangulatedSurface.h,v 1.25.4.1 2002/05/23 23:55:13 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: triangulatedSurface.h,v 1.25.4.2 2002/08/22 17:17:56 oliver Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATEDSURFACE_H
 #define BALL_STRUCTURE_TRIANGULATEDSURFACE_H
@@ -595,13 +598,18 @@ namespace BALL
 	{
 		if (deep)
 		{
-			std::list<TTriangle<T>*> delete_triangles = (*point)->faces_;
-			typename std::list<TTriangle<T>*>::iterator t;
+			//std::list<TTriangle<T>*> delete_triangles = (*point)->faces_;
+			//typename std::list<TTriangle<T>*>::iterator t;
+			HashSet<TTriangle<T>*> delete_triangles = (*point)->faces_;
+			typename HashSet<TTriangle<T>*>::Iterator t;
 			for (t = delete_triangles.begin(); t != delete_triangles.end(); t++)
 			{
-				(*t)->vertex_[0]->faces_.remove(*t);
-				(*t)->vertex_[1]->faces_.remove(*t);
-				(*t)->vertex_[2]->faces_.remove(*t);
+				//(*t)->vertex_[0]->faces_.remove(*t);
+				//(*t)->vertex_[1]->faces_.remove(*t);
+				//(*t)->vertex_[2]->faces_.remove(*t);
+				(*t)->vertex_[0]->faces_.erase(*t);
+				(*t)->vertex_[1]->faces_.erase(*t);
+				(*t)->vertex_[2]->faces_.erase(*t);
 				(*t)->edge_[0]->deleteFace(*t);
 				(*t)->edge_[1]->deleteFace(*t);
 				(*t)->edge_[2]->deleteFace(*t);
@@ -609,12 +617,16 @@ namespace BALL
 				number_of_triangles_--;
 				delete *t;
 			}
-			std::list<TTriangleEdge<T>*> delete_edges = (*point)->edges_;
-			typename std::list<TTriangleEdge<T>*>::iterator e;
+			//std::list<TTriangleEdge<T>*> delete_edges = (*point)->edges_;
+			//typename std::list<TTriangleEdge<T>*>::iterator e;
+			HashSet<TTriangleEdge<T>*> delete_edges = (*point)->edges_;
+			typename HashSet<TTriangleEdge<T>*>::Iterator e;
 			for (e = delete_edges.begin(); e != delete_edges.end(); e++)
 			{
-				(*e)->vertex_[0]->edges_.remove(*e);
-				(*e)->vertex_[1]->edges_.remove(*e);
+				//(*e)->vertex_[0]->edges_.remove(*e);
+				//(*e)->vertex_[1]->edges_.remove(*e);
+				(*e)->vertex_[0]->edges_.erase(*e);
+				(*e)->vertex_[1]->edges_.erase(*e);
 				edges_.remove(*e);
 				number_of_edges_--;
 				delete *e;
@@ -666,9 +678,12 @@ namespace BALL
 	{
 		if (deep)
 		{
-			triangle->vertex_[0]->faces_.remove(triangle);
-			triangle->vertex_[1]->faces_.remove(triangle);
-			triangle->vertex_[2]->faces_.remove(triangle);
+			//triangle->vertex_[0]->faces_.remove(triangle);
+			//triangle->vertex_[1]->faces_.remove(triangle);
+			//triangle->vertex_[2]->faces_.remove(triangle);
+			triangle->vertex_[0]->faces_.erase(triangle);
+			triangle->vertex_[1]->faces_.erase(triangle);
+			triangle->vertex_[2]->faces_.erase(triangle);
 			triangle->edge_[0]->deleteFace(triangle);
 			triangle->edge_[1]->deleteFace(triangle);
 			triangle->edge_[2]->deleteFace(triangle);
@@ -983,20 +998,26 @@ namespace BALL
 		typename std::list<TTriangleEdge<T>*>::iterator e;
 		for (e = edges_.begin(); e != edges_.end(); e++)
 		{
-			(*e)->vertex_[0]->edges_.push_back(*e);
+			/*(*e)->vertex_[0]->edges_.push_back(*e);
 			(*e)->vertex_[0]->faces_.push_back((*e)->face_[0]);
 			(*e)->vertex_[0]->faces_.push_back((*e)->face_[1]);
 			(*e)->vertex_[1]->edges_.push_back(*e);
 			(*e)->vertex_[1]->faces_.push_back((*e)->face_[0]);
-			(*e)->vertex_[1]->faces_.push_back((*e)->face_[1]);
+			(*e)->vertex_[1]->faces_.push_back((*e)->face_[1]);*/
+			(*e)->vertex_[0]->edges_.insert(*e);
+			(*e)->vertex_[0]->faces_.insert((*e)->face_[0]);
+			(*e)->vertex_[0]->faces_.insert((*e)->face_[1]);
+			(*e)->vertex_[1]->edges_.insert(*e);
+			(*e)->vertex_[1]->faces_.insert((*e)->face_[0]);
+			(*e)->vertex_[1]->faces_.insert((*e)->face_[1]);
 		}
-		for (p = points_.begin(); p != points_.end(); p++)
+		/*for (p = points_.begin(); p != points_.end(); p++)
 		{
 			(*p)->edges_.sort();
 			(*p)->edges_.unique();
 			(*p)->faces_.sort();
 			(*p)->faces_.unique();
-		}
+		}*/
 	}
 
 
@@ -1044,12 +1065,14 @@ namespace BALL
 				next_point++;
 				if (next_point == points_.end())
 				{
-					remove(p);
+					//remove(p);
+					points_.erase(p);
 					p = points_.end();
 				}
 				else
 				{
-					remove(p);
+					//remove(p);
+					points_.erase(p);
 					p = next_point;
 				}
 			}
@@ -1059,7 +1082,7 @@ namespace BALL
 			}
 		}
 		// delete all "isolated" edges (edges with no triangles)
-		typename std::list<TTriangleEdge<T>*>::iterator e = edges_.begin();
+		/*typename std::list<TTriangleEdge<T>*>::iterator e = edges_.begin();
 		typename std::list<TTriangleEdge<T>*>::iterator next_edge;
 		while (e != edges_.end())
 		{
@@ -1067,8 +1090,10 @@ namespace BALL
 			{
 				next_edge = e;
 				next_edge++;
-				(*e)->vertex_[0]->edges_.remove(*e);
-				(*e)->vertex_[1]->edges_.remove(*e);
+				//(*e)->vertex_[0]->edges_.remove(*e);
+				//(*e)->vertex_[1]->edges_.remove(*e);
+				(*e)->vertex_[0]->edges_.erase(*e);
+				(*e)->vertex_[1]->edges_.erase(*e);
 				delete *e;
 				if (next_edge == edges_.end())
 				{
@@ -1085,30 +1110,6 @@ namespace BALL
 			else
 			{
 				e++;
-			}
-		}
-		// delete all "isolated points" (points with no edge)
-		/*p = points_.begin();
-		while (p != points_.end())
-		{
-			if ((*p)->edges_.size() == 0)
-			{
-				next_point = p;
-				next_point++;
-				if (next_point == points_.end())
-				{
-					remove(p);
-					p = points_.end();
-				}
-				else
-				{
-					remove(p);
-					p = next_point;
-				}
-			}
-			else
-			{
-				p++;
 			}
 		}*/
 	}
@@ -1142,8 +1143,10 @@ namespace BALL
 			{
 				next_edge = e;
 				next_edge++;
-				(*e)->vertex_[0]->edges_.remove(*e);
-				(*e)->vertex_[1]->edges_.remove(*e);
+				//(*e)->vertex_[0]->edges_.remove(*e);
+				//(*e)->vertex_[1]->edges_.remove(*e);
+				(*e)->vertex_[0]->edges_.erase(*e);
+				(*e)->vertex_[1]->edges_.erase(*e);
 				delete *e;
 				if (next_edge == edges_.end())
 				{
@@ -1265,15 +1268,19 @@ namespace BALL
 			}
 		}
 		i = 0;
+		typename HashSet<TTriangleEdge<T>*>::ConstIterator he;
+		typename HashSet<TTriangle<T>*>::ConstIterator ht;
 		for (p = surface.points_.begin(); p != surface.points_.end(); p++)
 		{
-			for (e = (*p)->edges_.begin(); e != (*p)->edges_.end(); e++)
+			for (he = (*p)->edges_.begin(); he != (*p)->edges_.end(); he++)
 			{
-				point_vector[i]->edges_.push_back(edge_vector[(*e)->index_]);
+				//point_vector[i]->edges_.push_back(edge_vector[(*e)->index_]);
+				point_vector[i]->edges_.insert(edge_vector[(*he)->index_]);
 			}
-			for (t = (*p)->faces_.begin(); t != (*p)->faces_.end(); t++)
+			for (ht = (*p)->faces_.begin(); ht != (*p)->faces_.end(); ht++)
 			{
-				point_vector[i]->faces_.push_back(triangle_vector[(*t)->index_]);
+				//point_vector[i]->faces_.push_back(triangle_vector[(*t)->index_]);
+				point_vector[i]->faces_.insert(triangle_vector[(*ht)->index_]);
 			}
 			i++;
 		}
@@ -1417,7 +1424,7 @@ namespace BALL
 			point10->normal_ = -point10->point_;
 			point11->normal_ = -point11->point_;
 		}
-		point0->faces_.push_back(t0);   point0->faces_.push_back(t1);   point0->faces_.push_back(t2);
+		/*point0->faces_.push_back(t0);   point0->faces_.push_back(t1);   point0->faces_.push_back(t2);
 		point0->faces_.push_back(t3);   point0->faces_.push_back(t4);
 		point1->faces_.push_back(t0);   point1->faces_.push_back(t4);   point1->faces_.push_back(t5);
 		point1->faces_.push_back(t13);  point1->faces_.push_back(t14);
@@ -1464,7 +1471,55 @@ namespace BALL
 		point10->edges_.push_back(edge21); point10->edges_.push_back(edge22); point10->edges_.push_back(edge23);
 		point10->edges_.push_back(edge24); point10->edges_.push_back(edge29);
 		point11->edges_.push_back(edge25); point11->edges_.push_back(edge26); point11->edges_.push_back(edge27);
-		point11->edges_.push_back(edge28); point11->edges_.push_back(edge29);
+		point11->edges_.push_back(edge28); point11->edges_.push_back(edge29);*/
+		point0->faces_.insert(t0);   point0->faces_.insert(t1);   point0->faces_.insert(t2);
+		point0->faces_.insert(t3);   point0->faces_.insert(t4);
+		point1->faces_.insert(t0);   point1->faces_.insert(t4);   point1->faces_.insert(t5);
+		point1->faces_.insert(t13);  point1->faces_.insert(t14);
+		point2->faces_.insert(t0);   point2->faces_.insert(t1);   point2->faces_.insert(t6);
+		point2->faces_.insert(t7);   point2->faces_.insert(t5);
+		point3->faces_.insert(t1);   point3->faces_.insert(t2);   point3->faces_.insert(t7);
+		point3->faces_.insert(t8);   point3->faces_.insert(t9);
+		point4->faces_.insert(t2);   point4->faces_.insert(t3);   point4->faces_.insert(t9);
+		point4->faces_.insert(t10);  point4->faces_.insert(t11);
+		point5->faces_.insert(t4);   point5->faces_.insert(t11);  point5->faces_.insert(t12);
+		point5->faces_.insert(t3);   point5->faces_.insert(t14);
+		point6->faces_.insert(t5);   point6->faces_.insert(t6);   point6->faces_.insert(t13);
+		point6->faces_.insert(t15);  point6->faces_.insert(t19);
+		point7->faces_.insert(t6);   point7->faces_.insert(t7);   point7->faces_.insert(t8);
+		point7->faces_.insert(t15);  point7->faces_.insert(t16);
+		point8->faces_.insert(t8);   point8->faces_.insert(t9);   point8->faces_.insert(t10);
+		point8->faces_.insert(t16);  point8->faces_.insert(t17);
+		point9->faces_.insert(t10);  point9->faces_.insert(t11);  point9->faces_.insert(t12);
+		point9->faces_.insert(t17);  point9->faces_.insert(t18);
+		point10->faces_.insert(t12); point10->faces_.insert(t13); point10->faces_.insert(t14);
+		point10->faces_.insert(t18); point10->faces_.insert(t19);
+		point11->faces_.insert(t15); point11->faces_.insert(t16); point11->faces_.insert(t17);
+		point11->faces_.insert(t18); point11->faces_.insert(t19);
+		point0->edges_.insert(edge0);   point0->edges_.insert(edge1);   point0->edges_.insert(edge3);
+		point0->edges_.insert(edge5);   point0->edges_.insert(edge7);
+		point1->edges_.insert(edge1);   point1->edges_.insert(edge2);   point1->edges_.insert(edge9);
+		point1->edges_.insert(edge10);  point1->edges_.insert(edge23);
+		point2->edges_.insert(edge0);   point2->edges_.insert(edge2);   point2->edges_.insert(edge4);
+		point2->edges_.insert(edge11);  point2->edges_.insert(edge12);
+		point3->edges_.insert(edge3);   point3->edges_.insert(edge4);   point3->edges_.insert(edge6);
+		point3->edges_.insert(edge14);  point3->edges_.insert(edge15);
+		point4->edges_.insert(edge5);   point4->edges_.insert(edge6);   point4->edges_.insert(edge8);
+		point4->edges_.insert(edge17);  point4->edges_.insert(edge18);
+		point5->edges_.insert(edge7);   point5->edges_.insert(edge8);   point5->edges_.insert(edge9);
+		point5->edges_.insert(edge20);  point5->edges_.insert(edge21);
+		point6->edges_.insert(edge10);  point6->edges_.insert(edge11);  point6->edges_.insert(edge13);
+		point6->edges_.insert(edge24);  point6->edges_.insert(edge25);
+		point7->edges_.insert(edge12);  point7->edges_.insert(edge13);  point7->edges_.insert(edge14);
+		point7->edges_.insert(edge16);  point7->edges_.insert(edge26);
+		point8->edges_.insert(edge15);  point8->edges_.insert(edge16);  point8->edges_.insert(edge17);
+		point8->edges_.insert(edge19);  point8->edges_.insert(edge27);
+		point9->edges_.insert(edge18);  point9->edges_.insert(edge19);  point9->edges_.insert(edge20);
+		point9->edges_.insert(edge22);  point9->edges_.insert(edge28);
+		point10->edges_.insert(edge21); point10->edges_.insert(edge22); point10->edges_.insert(edge23);
+		point10->edges_.insert(edge24); point10->edges_.insert(edge29);
+		point11->edges_.insert(edge25); point11->edges_.insert(edge26); point11->edges_.insert(edge27);
+		point11->edges_.insert(edge28); point11->edges_.insert(edge29);
 		points_.push_back(point0);
 		points_.push_back(point1);
 		points_.push_back(point2);

@@ -1,4 +1,7 @@
-// $Id: connolly.C,v 1.9.4.1 2002/06/18 10:07:16 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: connolly.C,v 1.9.4.2 2002/08/22 17:20:31 oliver Exp $
 
 #include <math.h>
 #ifdef BALL_INCLUDE_VALUES

@@ -1,4 +1,7 @@
-// $Id: RDFIntegrator.C,v 1.7 2000/12/01 11:48:19 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: RDFIntegrator.C,v 1.7.4.1 2002/08/22 17:20:31 oliver Exp $
 
 #include <BALL/STRUCTURE/RDFIntegrator.h>
 

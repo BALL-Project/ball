@@ -1,4 +1,4 @@
-// $Id: solventAccessibleSurface.h,v 1.1 2002/06/19 12:52:49 strobel Exp $
+// $Id: solventAccessibleSurface.h,v 1.1.2.1 2002/08/22 17:17:55 oliver Exp $
 
 #ifndef BALL_STRUCTURE_SOLVENTACCESSIBLESURFACE_H
 #define BALL_STRUCTURE_SOLVENTACCESSIBLESURFACE_H

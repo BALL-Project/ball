@@ -1,4 +1,7 @@
-// $Id: numericalSAS.h,v 1.18 2001/06/05 15:47:57 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: numericalSAS.h,v 1.18.4.1 2002/08/22 17:17:55 oliver Exp $
 
 #ifndef BALL_STRUCTURE_NUMERICALSAS_H
 #define BALL_STRUCTURE_NUMERICALSAS_H

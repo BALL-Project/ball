@@ -1,4 +1,7 @@
-// $Id: RDFSection.C,v 1.7 2000/10/30 00:19:58 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: RDFSection.C,v 1.7.4.1 2002/08/22 17:20:31 oliver Exp $
 
 #include <BALL/STRUCTURE/RDFSection.h>
 #include <BALL/FORMAT/parameters.h>

@@ -1,4 +1,7 @@
-// $Id: numericalSAS.C,v 1.22 2002/02/10 08:41:34 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: numericalSAS.C,v 1.22.4.1 2002/08/22 17:20:31 oliver Exp $
 
 #include <BALL/STRUCTURE/numericalSAS.h>
 #include <BALL/KERNEL/atom.h>

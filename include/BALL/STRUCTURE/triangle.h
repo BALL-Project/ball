@@ -1,3 +1,6 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
 // $Id:
 
 #ifndef BALL_STRUCTURE_TRIANGLE_H
@@ -31,6 +34,9 @@ namespace BALL
 	template <class T>
 	class TTriangulatedSES;
 
+	template <class T>
+	class TTriangulatedSAS;
+
 
 	/** Generic TriangleEdge Class.
 			\\
@@ -38,7 +44,7 @@ namespace BALL
 			\\
 	*/
 	template <class T>
-	class TTriangle	:	public GraphFace< TTrianglePoint<T>,TTriangleEdge<T> >
+	class TTriangle	:	public GraphTriangle< TTrianglePoint<T>,TTriangleEdge<T> >
 	{
 		
 		public:
@@ -46,19 +52,21 @@ namespace BALL
 		/** @name Class friends
 				\begin{itemize}
 					\item class GraphEdge< TTrianglePoint<T>,TTriangle<T> >
-					\item class GraphFace< TTrianglePoint<T>,TTriangleEdge<T> >
+					\item class GraphTriangle< TTrianglePoint<T>,TTriangleEdge<T> >
 					\item class GraphVertex< TTriangleEdge<T>,TTriangle<T> >
 					\item class TTriangulatedSurface<T>
 					\item class TTriangulatedSES<T>
+					\item class TTriangulatedSAS<T>
 					\item class TTrianglePoint<T>;
 					\item class TTriangleEdge<T>;
 				\end{itemize}
 		*/
 		friend class GraphEdge< TTrianglePoint<T>,TTriangle<T> >;
-		friend class GraphFace< TTrianglePoint<T>,TTriangleEdge<T> >;
+		friend class GraphTriangle< TTrianglePoint<T>,TTriangleEdge<T> >;
 		friend class GraphVertex< TTriangleEdge<T>,TTriangle<T> >;
 		friend class TTriangulatedSurface<T>;
 		friend class TTriangulatedSES<T>;
+		friend class TTriangulatedSAS<T>;
 		friend class TTrianglePoint<T>;
 		friend class TTriangleEdge<T>;
 
@@ -132,6 +140,21 @@ namespace BALL
 			throw();
 
 		//@}
+		/**	@name	Predicates
+		*/
+		//@{
+
+		/**	Equality operator.
+		*/
+		bool operator == (const TTriangle<T>&) const
+			throw();
+
+		/**	Inequality operator.
+		*/
+		bool operator != (const TTriangle<T>&) const
+			throw();
+		
+		//@}
 
 	};
 
@@ -170,23 +193,15 @@ namespace BALL
 	template <class T>
 	TTriangle<T>::TTriangle()
 		throw()
-		:	GraphFace< TTrianglePoint<T>,TTriangleEdge<T> >()
+		:	GraphTriangle< TTrianglePoint<T>,TTriangleEdge<T> >()
 	{
-		vertex_.push_back(NULL);
-		vertex_.push_back(NULL);
-		vertex_.push_back(NULL);
-		number_of_vertices_ = 3;
-		edge_.push_back(NULL);
-		edge_.push_back(NULL);
-		edge_.push_back(NULL);
-		number_of_edges_ = 3;
 	}
 
 
 	template <class T>
 	TTriangle<T>::TTriangle(const TTriangle<T>& edge, bool deep)
 		throw()
-		:	GraphFace< TTrianglePoint<T>,TTriangleEdge<T> >(edge,deep)
+		:	GraphTriangle< TTrianglePoint<T>,TTriangleEdge<T> >(edge,deep)
 	{
 	}
 
@@ -274,6 +289,40 @@ namespace BALL
 			}
 		}
 		return NULL;
+	}
+
+
+	template <class T>
+	bool TTriangle<T>::operator == (const TTriangle<T>& triangle) const
+		throw()
+	{
+		if ((vertex_[0]->point_ != triangle.vertex_[0]->point_) &&
+				(vertex_[0]->point_ != triangle.vertex_[1]->point_) &&
+				(vertex_[0]->point_ != triangle.vertex_[2]->point_)    )
+		{
+			return false;
+		}
+		if ((vertex_[1]->point_ != triangle.vertex_[0]->point_) &&
+				(vertex_[1]->point_ != triangle.vertex_[1]->point_) &&
+				(vertex_[1]->point_ != triangle.vertex_[2]->point_)    )
+		{
+			return false;
+		}
+		if ((vertex_[2]->point_ != triangle.vertex_[0]->point_) &&
+				(vertex_[2]->point_ != triangle.vertex_[1]->point_) &&
+				(vertex_[2]->point_ != triangle.vertex_[2]->point_)    )
+		{
+			return false;
+		}
+		return true;
+	}
+
+
+	template <class T>
+	bool TTriangle<T>::operator != (const TTriangle<T>& triangle) const
+		throw()
+	{
+		return !(*this == triangle);
 	}
 
 

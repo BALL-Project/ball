@@ -1,3 +1,6 @@
-// $Id: singularities.C,v 1.2 2000/10/30 00:20:00 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: singularities.C,v 1.2.4.1 2002/08/22 17:20:31 oliver Exp $
 
 #include <BALL/STRUCTURE/singularities.h>

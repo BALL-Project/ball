@@ -1,3 +1,6 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
 // $Id:
 
 #ifndef BALL_STRUCTURE_TRIANGLEEDGE_H
@@ -31,6 +34,9 @@ namespace BALL
 	template <class T>
 	class TTriangulatedSES;
 
+	template <class T>
+	class TTriangulatedSAS;
+
 
 	/** Generic TriangleEdge Class.
 			\\
@@ -50,6 +56,7 @@ namespace BALL
 					\item class GraphVertex< TTriangleEdge<T>,TTriangle<T> >
 					\item class TTriangulatedSurface<T>
 					\item class TTriangulatedSES<T>
+					\item class TTriangulatedSAS<T>
 					\item class TTriangle<T>;
 					\item class TTriangleEdge<T>;
 				\end{itemize}
@@ -59,6 +66,7 @@ namespace BALL
 		friend class GraphVertex< TTriangleEdge<T>,TTriangle<T> >;
 		friend class TTriangulatedSurface<T>;
 		friend class TTriangulatedSES<T>;
+		friend class TTriangulatedSAS<T>;
 		friend class TTriangle<T>;
 		friend class TTrianglePoint<T>;
 

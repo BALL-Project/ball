@@ -1,4 +1,7 @@
-// $Id: geometricTransformations.C,v 1.4 2000/10/30 00:19:59 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: geometricTransformations.C,v 1.4.4.1 2002/08/22 17:20:31 oliver Exp $
 
 #include <BALL/STRUCTURE/geometricTransformations.h>
 

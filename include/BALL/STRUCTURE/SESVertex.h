@@ -1,4 +1,7 @@
-// $Id: SESVertex.h,v 1.11 2002/01/07 17:49:40 strobel Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: SESVertex.h,v 1.11.4.1 2002/08/22 17:17:55 oliver Exp $
 
 #ifndef BALL_STRUCTURE_SESVERTEX_H
 #define BALL_STRUCTURE_SESVERTEX_H
@@ -170,6 +173,12 @@ namespace BALL
 		Index getAtom() const
 			throw();
 
+		bool substitute(TSESVertex<T>* sesvertex)
+			throw();
+
+		bool join(const TSESVertex<T>& sesvertex)
+			throw();
+
 		//@}
 		/**	@name	Predicates
 		*/
@@ -204,10 +213,21 @@ namespace BALL
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TSESVertex<T>& sesvertex)
 	{
-		return (s << "SESVERTEX" << sesvertex.getIndex() << "("
-														 << sesvertex.getPoint() << ' '
-														 << sesvertex.getNormal() << ' '
-														 << sesvertex.getAtom() << ")");
+		s << "SESVERTEX" << sesvertex.getIndex() << "(" << sesvertex.getPoint() << " "
+			<< sesvertex.getNormal() << " [";
+		HashSet< TSESEdge<T>* > edges = sesvertex.getEdges();
+		for (typename HashSet<TSESEdge<T>*>::Iterator i = edges.begin(); i != edges.end(); i++)
+		{
+			s << (*i)->getIndex() << ' ';
+		}
+		s << "] [";
+		HashSet< TSESFace<T>* > faces = sesvertex.getFaces();
+		for (typename HashSet<TSESFace<T>*>::Iterator i = faces.begin(); i != faces.end(); i++)
+		{
+			s << (*i)->getIndex() << ' ';
+		}
+		s << "] " << sesvertex.getAtom() << ")";
+		return s;
 	}
 
 
@@ -358,6 +378,42 @@ namespace BALL
 		throw()
 	{
 		return atom_;
+	}
+
+
+	template <typename T>
+	bool TSESVertex<T>::substitute(TSESVertex<T>* sesvertex)
+		throw()
+	{
+		typename HashSet<TSESEdge<T>*>::Iterator e;
+		for (e = edges_.begin(); e != edges_.end(); e++)
+		{
+			(*e)->substituteVertex(this,sesvertex);
+		}
+		typename HashSet<TSESFace<T>*>::Iterator f;
+		for (f = faces_.begin(); f != faces_.end(); f++)
+		{
+			(*f)->substituteVertex(this,sesvertex);
+		}
+		return true;
+	}
+
+
+	template <typename T>
+	bool TSESVertex<T>::join(const TSESVertex<T>& sesvertex)
+		throw()
+	{
+		typename HashSet<TSESEdge<T>*>::ConstIterator e;
+		for (e = sesvertex.edges_.begin(); e != sesvertex.edges_.end(); e++)
+		{
+			edges_.insert(*e);
+		}
+		typename HashSet<TSESFace<T>*>::ConstIterator f;
+		for (f = sesvertex.faces_.begin(); f != sesvertex.faces_.end(); f++)
+		{
+			faces_.insert(*f);
+		}
+		return true;
 	}
 
 

@@ -1,3 +1,6 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
 // $Id:
 
 #ifndef BALL_STRUCTURE_GRAPHEDGE_H
@@ -162,20 +165,6 @@ namespace BALL
 		bool substituteFace(Face* old_vertex, Face* new_vertex)
 			throw();
 
-		/*void remove()
-		{	
-			vertex_[0]->deleteEdge(this);
-			vertex_[1]->deleteEdge(this);
-			//if (face0_ != NULL)
-			//{
-			//	face0_->deleteEdge(this);
-			//}
-			//if (face1_ != NULL)
-			//{
-			//	face1_->deleteEdge(this);
-			//}
-		}*/
-
 		/**	Delete a face of the GraphEdge.
 				If the second face of the GraphEdge should be deleted, it is set to NULL. If the first one should	
 				be deleted, the second one is copied to first position and then set to NULL.
@@ -183,6 +172,11 @@ namespace BALL
 				@return	Face*	a pointer to the other face
 		*/
 		Face* deleteFace(Face* face)
+			throw();
+
+		/*	Swap the two vertices of the GraphEdge
+		*/
+		void revert()
 			throw();
 
 		//@}
@@ -205,7 +199,7 @@ namespace BALL
 		//@}
 
 
-		//protected:
+		protected:
 
 		/*_ The vertices of the GraphEdge
 		*/
@@ -523,6 +517,16 @@ namespace BALL
 			}
 		}
 		return face_[0];
+	}
+
+
+	template <typename Vertex, typename Face>
+	void GraphEdge<Vertex,Face>::revert()
+		throw()
+	{
+		Vertex* tmp = vertex_[0];
+		vertex_[0] = vertex_[1];
+		vertex_[1] = tmp;
 	}
 
 
