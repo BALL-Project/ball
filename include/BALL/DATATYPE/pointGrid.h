@@ -1,4 +1,4 @@
-// $Id: pointGrid.h,v 1.1 1999/08/26 07:53:13 oliver Exp $ 
+// $Id: pointGrid.h,v 1.2 1999/09/01 09:41:45 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_POINTGRID_H
 #define BALL_DATATYPE_POINTGRID_H
@@ -613,14 +613,15 @@ namespace BALL
 		number_of_points_z_ = (Index)(size_.z / spacing) + 1;
 
 		// recalculate the box sizes
-		size_.x = (number_of_points_x_ - 1) * spacing;
-		size_.y = (number_of_points_y_ - 1) * spacing;
-		size_.z = (number_of_points_z_ - 1) * spacing;
+		size_.x = ((double)number_of_points_x_ - 1) * spacing;
+		size_.y = ((double)number_of_points_y_ - 1) * spacing;
+		size_.z = ((double)number_of_points_z_ - 1) * spacing;
 
 		// if the number of grid points in any direction is below 2
 		// (which means that the grid is not three-dimensional!)
 		// an error occured, so destroy everything again
-		if ((number_of_points_x_ < 2) || (number_of_points_y_ < 2) || (number_of_points_z_ < 2)){
+		if ((number_of_points_x_ < 2) || (number_of_points_y_ < 2) || (number_of_points_z_ < 2))
+		{
 			delete this;
 			return;
 		}
