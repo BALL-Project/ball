@@ -1,30 +1,31 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: UCK.C,v 1.5 2004/11/07 08:25:36 oliver Exp $
+// $Id: UCK.C,v 1.6 2005/02/23 13:46:58 oliver Exp $
 //
 
 #include <BALL/STRUCTURE/UCK.h>
-#include <BALL/STRUCTURE/md5.h>
+#include <BALL/COMMON/MD5Hash.h>
 #include <BALL/COMMON/limits.h>
-
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <map>
 #include <BALL/COMMON/limits.h>
 #include <BALL/FORMAT/SDFile.h>
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/fragment.h>
 #include <BALL/KERNEL/PTE.h>
 
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <map>
+
 using namespace std;
 
 namespace BALL
 {
-
-	typedef vector<pair<Size,Size> > pair_vec;
-	typedef vector<vector<Size> > vec_size;
+	
+	// ????
+	typedef vector<pair<Size,Size> > PairVector;
+	typedef vector<vector<Size> > SizeVector;
 
 	//default constructor
 	UCK::UCK()
@@ -54,25 +55,29 @@ namespace BALL
 	{
 	}
 	
-	void UCK::makePathMatrix(const pair_vec& e, vec_size& sp, const Size e_size)
+	void UCK::makePathMatrix(const PairVector& e, SizeVector& sp, const Size e_size)
 	{
-		vector<Size>* line;
+		std::vector<Size>* line;
 		// create bond-matrix, because Floyd's Algorithm requires a reachability matrix
-		vec_size* bond_matrix;
+		SizeVector* bond_matrix;
 		line = new vector<Size>;
-		bond_matrix = new vec_size;
+		bond_matrix = new SizeVector;
 		
 		// initialize bond-matrix with 0 at every position
-		for(Size i = 0; i != e_size; ++i)
+		for (Size i = 0; i != e_size; ++i)
 		{
 			line->clear();
 			for(Size j = 0; j != e_size; ++j)
+			{
 				line->push_back(0);
+			}
 			bond_matrix->push_back(*line);
 		}
 		// proceed all edges and set corresponding position in bond_matrix to 1
-		for(Size i = 0; i != e.size(); ++i)
+		for (Size i = 0; i != e.size(); ++i)
+		{
 			(*bond_matrix)[e[i].first][e[i].second] = 1;
+		}
 		
 		// initialize sp-matrix
 		for(Size i = 0; i != bond_matrix->size(); ++i)
@@ -116,7 +121,7 @@ namespace BALL
 		return;
 	}
 
-	void UCK::getGraph(vector<String>& v, pair_vec& e, const Molecule& mol)
+	void UCK::getGraph(vector<String>& v, PairVector& e, const Molecule& mol)
 	{
 		weight_ = 0.0;
 		Size count = 0;
@@ -173,7 +178,7 @@ namespace BALL
 		return x;
 	}
 	
-	String UCK::lambda(String lambda_d, const pair_vec& e, const vector<String>& v, Size i, Size d)
+	String UCK::lambda(String lambda_d, const PairVector& e, const vector<String>& v, Size i, Size d)
 	{
 		lambda_d = v[i]; // fix label
 		vector<String>* lam;
@@ -188,7 +193,7 @@ namespace BALL
 		else	// d!=0
 		{
 			// compute lambda_d-1_labels for all children
-			for(pair_vec::const_iterator it = e.begin(); it != e.end(); ++it)
+			for(PairVector::const_iterator it = e.begin(); it != e.end(); ++it)
 				if(it->first!=i)	// if source node in e is not equal to the current position i, then skip this edge
 					continue;
 				else	// an edge to another node is found, so compute lambda_d-1 of the child and store the resulting string
@@ -204,7 +209,7 @@ namespace BALL
 		return lambda_d;
 	}
 	
-	void UCK::makePairs(const vector<String>& lambda_map, vector<String>& pairs, const vec_size& sp)
+	void UCK::makePairs(const vector<String>& lambda_map, vector<String>& pairs, const SizeVector& sp)
 	{
 		for(Size i = 0; i != lambda_map.size(); ++i)
 			for(Size j = 0; j != lambda_map.size(); ++j)
@@ -224,9 +229,9 @@ namespace BALL
 		uck_str_ += "\n";
 
 		// RSA Data Security, Inc. MD5 Message-Digest Algorithm
-		char* md5_char_ptr = MD5String(const_cast<char*>(uck_str_.c_str()));
-		uck_str_ = md5_char_ptr; 
-		free(md5_char_ptr); // free the memory allocated by MD5String.
+		MD5Hash md5;
+		md5.encode(uck_str_);
+		uck_str_ = md5.asString();
 		return;
 	}
 	
@@ -264,8 +269,8 @@ namespace BALL
 	void UCK::makeUCK(const Molecule& m)
 	{
 		vector<String> v, pairs, lambda_map;
-		pair_vec e; // edge set
-		vec_size sp;
+		PairVector e; // edge set
+		SizeVector sp;
 		
 		getGraph(v, e, m);
 		

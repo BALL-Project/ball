@@ -53,8 +53,7 @@ CPP_SOURCES= \
 	triangulatedSES.C\
 	triangulatedSurface.C\
 	HBondProcessor.C\
-	UCK.C\
-	md5.C
+	UCK.C
 
 PARSER_PREFIX=SmilesParser
 
