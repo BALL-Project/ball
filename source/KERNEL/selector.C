@@ -1,4 +1,4 @@
-// $Id: selector.C,v 1.15 2000/05/19 12:20:13 anker Exp $
+// $Id: selector.C,v 1.16 2000/05/19 12:50:45 oliver Exp $
 
 #include <BALL/KERNEL/selector.h>
 
@@ -20,9 +20,9 @@ namespace BALL
 	}
 	
 	Selector::Selector(const String& expression_string)
-		:	number_of_selected_atoms_(0)
+		:	number_of_selected_atoms_(0),
+			expression_(expression_string)
 	{
-		Expression(expression_string);
 	}
 
 	Selector::Selector(const Selector& selector)
