@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.71 2005/02/06 20:57:04 oliver Exp $
+// $Id: mainControl.h,v 1.72 2005/02/14 23:42:30 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -787,9 +787,6 @@ namespace BALL
 			/*_	Create a unique item ID for a menuentry by adding 1 to current_id_
 			*/
 			int getNextID_()
-				throw();
-
-			void setSelection_(Composite* c, HashSet<Position>& hash_set, Position& current)
 				throw();
 
 			void selectRecursive_(Composite* composite)

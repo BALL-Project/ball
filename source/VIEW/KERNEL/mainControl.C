@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.161 2005/02/08 06:09:29 oliver Exp $
+// $Id: mainControl.C,v 1.162 2005/02/14 23:41:38 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1916,6 +1916,7 @@ namespace BALL
 			DisplayProperties::getInstance(0)->enableCreationForNewMolecules(false);
 		}
 
+		List<Composite*> selection;
 		Position current_composite = 0;
 		while (file.good() && !file.eof() && current_composite < nr_composites)
 		{
@@ -1926,7 +1927,8 @@ namespace BALL
 				setStatusbarText("Error while reading project file, could not read molecule", true);
 				return;
 			}
-			insert(*(System*) po);
+
+			insert(*dynamic_cast<System*>(po));
 			current_composite++;
 		}
 
@@ -2017,10 +2019,16 @@ namespace BALL
 					}
 				}
 
-				getSelection().clear();
+				ControlSelectionMessage* msg = new ControlSelectionMessage();
 				Position current = 0;
-				setSelection_(*cit2, hash_set, current);
-				NewSelectionMessage* msg = new NewSelectionMessage();
+
+				Composite::CompositeIterator ccit = (*cit2)->beginComposite();
+				for (; +ccit; ++ccit)
+				{
+					if (hash_set.has(current)) msg->getSelection().push_back((Composite*)&*ccit);
+					current++;
+				}
+
 				notify_(msg);
 			
 				if (DisplayProperties::getInstance(0) != 0)
@@ -2053,7 +2061,7 @@ namespace BALL
 			Log.error() << e << std::endl;
 			return;
 		}
-	
+
 		getSelection().clear();
 		NewSelectionMessage* msg = new NewSelectionMessage();
 		notify_(msg);
@@ -2083,23 +2091,6 @@ namespace BALL
 
 		Scene::getInstance(0)->fetchPreferences(in);
 		Scene::getInstance(0)->applyPreferences();
-	}
-
-	void MainControl::setSelection_(Composite* c, HashSet<Position>& hash_set, Position& current)
-		throw()
-	{
-		if (hash_set.has(current))
-		{
-			getSelection().insert(c);
-			hash_set.erase(current);
-		}
-
-		current++;
-
-		for (Position p = 0; p < c->getDegree() && hash_set.size() > 0; p++)
-		{
-			setSelection_(c->getChild(p), hash_set, current);
-		}
 	}
 
 	void MainControl::setPreferencesEnabled_(bool state)
