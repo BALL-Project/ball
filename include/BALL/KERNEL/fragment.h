@@ -1,4 +1,4 @@
-// $Id: fragment.h,v 1.3 2000/03/30 10:16:06 oliver Exp $
+// $Id: fragment.h,v 1.4 2000/04/17 13:51:24 amoll Exp $
 
 #ifndef BALL_KERNEL_FRAGMENT_H
 #define BALL_KERNEL_FRAGMENT_H
@@ -58,11 +58,6 @@ namespace BALL
 		///
 		virtual ~Fragment();
 
-		///
-		virtual void clear();
-	
-		///
-		virtual void destroy();
 		//@}
 	
 		/** @name Persistence */
@@ -87,9 +82,6 @@ namespace BALL
 
 		/**	@name	Debugging and Diagnostics */
 		//@{
-
-		///
-		virtual bool isValid() const;
 
 		///
 		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;

@@ -1,4 +1,4 @@
-// $Id: chain.C,v 1.4 1999/12/30 18:05:32 oliver Exp $
+// $Id: chain.C,v 1.5 2000/04/17 13:50:57 amoll Exp $
 
 #include <BALL/KERNEL/chain.h>
 #include <BALL/KERNEL/global.h>
@@ -27,16 +27,6 @@ namespace BALL
 	Chain::~Chain()
 	{
 		destroy();
-	}
-
-	void Chain::clear()
-	{
-		BaseFragment::clear();
-	}
-		
-	void Chain::destroy()
-	{
-		BaseFragment::destroy();
 	}
 
   void Chain::persistentWrite(PersistenceManager& pm, const char* name) const
@@ -278,11 +268,6 @@ namespace BALL
 	void Chain::splice(Chain &chain)
 	{
 		BaseFragment::splice(chain);
-	}
-
-	bool Chain::isValid() const
-	{ 
-		return BaseFragment::isValid();
 	}
 
 	void Chain::dump(ostream& s, Size depth) const

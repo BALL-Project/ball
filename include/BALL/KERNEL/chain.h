@@ -1,4 +1,4 @@
-// $Id: chain.h,v 1.8 2000/04/14 13:09:54 amoll Exp $
+// $Id: chain.h,v 1.9 2000/04/17 13:50:42 amoll Exp $
 
 #ifndef BALL_KERNEL_CHAIN_H
 #define BALL_KERNEL_CHAIN_H
@@ -63,12 +63,6 @@ namespace BALL
 
 		/// Destructor
 		virtual ~Chain();
-
-		/// Clears the chains contents
-		virtual void clear();
-	
-		/// Clears the chains contents and removes the cahin from all composite structures
-		virtual void destroy();
 			
 		//@}
 
@@ -322,16 +316,6 @@ namespace BALL
 
 		/**	@name	Debugging and Diagnostics */
 		//@{
-
-		/** Internal state and consistency self-validation.
-				Initiate self-validation of the internal state and data structure consistencies of {\em *this} chain.
-				If the internal state of {\em *this} chain is correct (self-validated) and consistent {\tt true} is returned,
-				{\tt false} otherwise. 
-				@return			bool -
-										{\tt true} if the internal state of {\em *this} chain is correct (self-validated) and consistent,
-										{\tt false} otherwise
-		*/
-		virtual bool isValid() const;
 		
 		/** Internal state dump.
 				Dump the current internal state of {\em *this} chain to the output ostream {\em s} with dumping depth {\em depth}.

@@ -1,4 +1,4 @@
-// $Id: fragment.C,v 1.4 1999/12/30 18:05:33 oliver Exp $
+// $Id: fragment.C,v 1.5 2000/04/17 13:51:33 amoll Exp $
 
 #include <BALL/KERNEL/fragment.h>
 
@@ -27,16 +27,6 @@ namespace BALL
 		destroy();
 	}
 
-	void Fragment::clear()
-	{
-		BaseFragment::clear();
-	}
-		
-	void Fragment::destroy()
-	{
-		BaseFragment::destroy();
-	}
-
 	void Fragment::persistentWrite(PersistenceManager& pm, const char* name) const
   {
     pm.writeObjectHeader(this, name);
@@ -58,11 +48,6 @@ namespace BALL
 		return *this;
 	}
 			
-	bool Fragment::isValid() const
-	{ 
-		return BaseFragment::isValid();
-	}
-
 	void Fragment::dump(ostream& s, Size depth) const
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
