@@ -1,4 +1,4 @@
-// $Id: hashGrid.h,v 1.17 2001/03/07 17:24:47 anker Exp $
+// $Id: hashGrid.h,v 1.18 2001/06/08 14:38:18 anker Exp $
 
 #ifndef BALL_DATATYPE_HASHGRID_H
 #define BALL_DATATYPE_HASHGRID_H
@@ -41,7 +41,7 @@ namespace BALL
 			DataIterator.\\
 			{\bf Definition:} \URL{BALL/DATATYPE/hashGrid.h}
 	*/
-	template <class Item>
+	template <typename Item>
 	class HashGridBox3
 	{
 		public:
@@ -649,7 +649,7 @@ namespace BALL
 		DataItem_* 					first_item_;
 	};
 
-	template<class Item>  
+	template<typename Item>  
 	HashGridBox3<Item>::HashGridBox3()
 		throw()
 		:	previous_(0),
@@ -659,7 +659,7 @@ namespace BALL
 	{
 	}
 
-	template<class Item>  
+	template<typename Item>  
 	HashGridBox3<Item>::HashGridBox3(const HashGridBox3<Item>& box, bool deep)
 		throw()
 		:	previous_(0),
@@ -670,14 +670,14 @@ namespace BALL
 		set(box, deep);
 	}
 
-	template<class Item>  
+	template<typename Item>  
 	HashGridBox3<Item>::~HashGridBox3()
 		throw()
 	{
 		clear();
 	}
 
-	template<class Item>  
+	template<typename Item>  
 	void HashGridBox3<Item>::clear()
 		throw()
 	{
@@ -694,7 +694,7 @@ namespace BALL
 		}
 	}
 
-	template<class Item>  
+	template<typename Item>  
 	BALL_INLINE 
 	void HashGridBox3<Item>::destroy()
 		throw()
@@ -702,14 +702,14 @@ namespace BALL
 		clear();
 	}
 
-	template<class Item>  
+	template<typename Item>  
 	void HashGridBox3<Item>::set(const HashGridBox3<Item>& box,  bool deep)
 		throw()
   { // BAUSTELLE - not implemented
     throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
  
-	template<class Item>  
+	template<typename Item>  
 	BALL_INLINE 
 	const HashGridBox3<Item>& HashGridBox3<Item>::operator = (const HashGridBox3<Item>& box)
 		throw()
@@ -719,7 +719,7 @@ namespace BALL
 		return *this;
 	}
 
-	template<class Item>  
+	template<typename Item>  
 	BALL_INLINE 
 	void HashGridBox3<Item>::get(HashGridBox3<Item>& box, bool deep) const
 		throw()
@@ -727,7 +727,7 @@ namespace BALL
 		box.set(*this, deep);
 	}
 
-	template<class Item>  
+	template<typename Item>  
 	Item* HashGridBox3<Item>::find(const Item& item)
 		throw()
 	{
@@ -742,7 +742,7 @@ namespace BALL
 		return 0;
 	}
 
-	template<class Item>  
+	template<typename Item>  
 	BALL_INLINE 
 	const Item* HashGridBox3<Item>::find(const Item& item) const
 		throw()
@@ -750,7 +750,7 @@ namespace BALL
 		return const_cast<HashGridBox3*>(this)->find(item);
 	}
 
-	template<class Item>  
+	template<typename Item>  
 	Size HashGridBox3<Item>::getSize() const
 		throw()
 	{
@@ -762,7 +762,7 @@ namespace BALL
 		return size;
 	}
 
-	template<class Item>  
+	template<typename Item>  
 	BALL_INLINE 
 	void HashGridBox3<Item>::insert(const Item& item)
 		throw()
@@ -770,7 +770,7 @@ namespace BALL
 		first_item_ = new DataItem_(item, first_item_);
 	}
 
-	template<class Item>  
+	template<typename Item>  
 	bool HashGridBox3<Item>::remove(const Item& item)
 		throw()
 	{
@@ -802,7 +802,7 @@ namespace BALL
 		return false;
 	}
 
-	template<class Item>  
+	template<typename Item>  
 	bool HashGridBox3<Item>::removeAll(const Item& item)
 		throw()
 	{
@@ -842,7 +842,7 @@ namespace BALL
 		return found;
 	}
 
-	template <class Item>
+	template <typename Item>
 	BALL_INLINE 
 	void HashGridBox3<Item>::host(Visitor< HashGridBox3<Item> >& visitor)
 		throw()
@@ -850,7 +850,7 @@ namespace BALL
 		visitor.visit(*this);
 	}
 
-	template<class Item>  
+	template<typename Item>  
 	bool HashGridBox3<Item>::operator == (const HashGridBox3<Item>& box) const
 		throw()
 	{
@@ -868,7 +868,7 @@ namespace BALL
 		return (a == b);
 	}
 
-	template<class Item>  
+	template<typename Item>  
 	BALL_INLINE 
 	bool HashGridBox3<Item>::operator != (const HashGridBox3<Item>& box) const
 		throw()
@@ -876,7 +876,7 @@ namespace BALL
 		return !(*this == box);
 	}
 
-	template<class Item>  
+	template<typename Item>  
 	BALL_INLINE 
 	bool HashGridBox3<Item>::has(const Item& item) const
 		throw()
@@ -884,7 +884,7 @@ namespace BALL
 		return (find(item) != 0);
 	}
 
-	template<class Item>  
+	template<typename Item>  
 	BALL_INLINE 
 	bool HashGridBox3<Item>::isEmpty() const
 		throw()
@@ -892,7 +892,7 @@ namespace BALL
 		return (first_item_ == 0);
 	}
 
-	template<class Item>  
+	template<typename Item>  
 	bool HashGridBox3<Item>::isValid() const
 		throw()
 	{
@@ -934,7 +934,7 @@ namespace BALL
 		return (size == 0);
 	}
 
-	template<class Item>  
+	template<typename Item>  
 	void HashGridBox3<Item>::dump(std::ostream& s, Size depth) const
 		throw()
 	{
@@ -964,7 +964,7 @@ namespace BALL
 		BALL_DUMP_STREAM_SUFFIX(s);
 	}
 
-	template <class Item>
+	template <typename Item>
 	bool HashGridBox3<Item>::apply(UnaryProcessor<Item>& processor)
 		throw()
 	{
@@ -988,7 +988,7 @@ namespace BALL
 		return preocessor->finish(); 
 	}
 
-	template <class Item>
+	template <typename Item>
 	bool HashGridBox3<Item>::apply(UnaryProcessor< HashGridBox3<Item> >& processor)
 		throw()
 	{
@@ -1013,7 +1013,7 @@ namespace BALL
 		return processor->finish(); 
 	}
 
-	template<class Item>  
+	template<typename Item>  
 	BALL_INLINE 
 	void HashGridBox3<Item>::insert_(HashGridBox3* box)
 		throw()
@@ -1021,7 +1021,7 @@ namespace BALL
 		first_neighbour_ = new NeighbourBoxItem_(box, first_neighbour_);
 	}
 
-	template<class Item>  
+	template<typename Item>  
 	bool HashGridBox3<Item>::remove_(HashGridBox3* box)
 		throw()
 	{
@@ -1059,7 +1059,7 @@ namespace BALL
 			BAUSTELLE\\
 			{\bf Definition:} \URL{BALL/DATATYPE/hashGrid.h}
 	*/
-	template <class Item>
+	template <typename Item>
 	class HashGrid3
 	{
 		public:
@@ -1523,7 +1523,7 @@ namespace BALL
 	//@}
 
 
-	template <class Item>
+	template <typename Item>
 	HashGrid3<Item>::HashGrid3()
 		throw()
 		:	box_(0),
@@ -1536,7 +1536,7 @@ namespace BALL
 	{
 	}
 
-	template <class Item>
+	template <typename Item>
 	HashGrid3<Item>::HashGrid3
 		(const Vector3 &originvector,
 		 Size dimension_x, Size dimension_y, Size dimension_z,
@@ -1553,7 +1553,7 @@ namespace BALL
 		box_ = new HashGridBox3<Item>[dimension_x * dimension_y * dimension_z];
 	}
 
-	template <class Item>
+	template <typename Item>
 	HashGrid3<Item>::HashGrid3
 		(const Vector3& origin,
 		 Size dimension_x, Size dimension_y, Size dimension_z, float spacing)
@@ -1570,7 +1570,7 @@ namespace BALL
 	}
 
 	// this constructor creates a linear array of HashGridBox3 objects.
-	template <class Item>
+	template <typename Item>
 	HashGrid3<Item>::HashGrid3(const Vector3& origin, const Vector3& size,
 			float spacing)
 		throw()
@@ -1585,7 +1585,7 @@ namespace BALL
 		box_ = new HashGridBox3<Item>[dimension_x_ * dimension_y_ * dimension_z_];
 	}
 
-	template <class Item>
+	template <typename Item>
 	HashGrid3<Item>::HashGrid3(const HashGrid3<Item>& grid, bool deep)
 		throw()
 		:	box_(0),
@@ -1596,7 +1596,7 @@ namespace BALL
 		set(grid, deep);
 	}
 
-	template <class Item>
+	template <typename Item>
 	HashGrid3<Item>::~HashGrid3()
 		throw()
 	{
@@ -1604,7 +1604,7 @@ namespace BALL
 		delete [] box_;
 	}
 
-	template <class Item>
+	template <typename Item>
 	void HashGrid3<Item>::clear()
 		throw()
 	{
@@ -1626,7 +1626,7 @@ namespace BALL
 		}
 	}
 
-	template <class Item>
+	template <typename Item>
 	BALL_INLINE 
 	void HashGrid3<Item>::clear(Position x, Position y, Position z)
 		throw()
@@ -1655,7 +1655,7 @@ namespace BALL
 		}
 	}
 
-	template <class Item>
+	template <typename Item>
 	BALL_INLINE 
 	void HashGrid3<Item>::clear(const Vector3& vector)
 		throw()
@@ -1684,7 +1684,7 @@ namespace BALL
 		}
 	}
 
-	template <class Item>
+	template <typename Item>
 	BALL_INLINE 
 	void HashGrid3<Item>::destroy()
 		throw()
@@ -1692,7 +1692,7 @@ namespace BALL
 		clear();
 	}
 
-	template <class Item>
+	template <typename Item>
 	BALL_INLINE 
 	void HashGrid3<Item>::destroy(Position x, Position y, Position z)
 		throw()
@@ -1700,7 +1700,7 @@ namespace BALL
 		clear(x, y, z);
 	}
 
-	template <class Item>
+	template <typename Item>
 	BALL_INLINE 
 	void HashGrid3<Item>::destroy(const Vector3 &vector)
 		throw()
@@ -1708,7 +1708,7 @@ namespace BALL
 		clear(vector);
 	}
 
-	template <class Item>
+	template <typename Item>
 	void HashGrid3<Item>::set
 		(const Vector3& origin, const Vector3& unit,
 		 Size dimension_x, Size dimension_y, Size dimension_z)
@@ -1727,7 +1727,7 @@ namespace BALL
 		box_ = new HashGridBox3<Item>[getSize()];
 	}
 
-	template <class Item>
+	template <typename Item>
 	void HashGrid3<Item>::set(const Vector3& origin, float unit, Size size)
 		throw()
 	{
@@ -1744,7 +1744,7 @@ namespace BALL
 		box_ = new HashGridBox3<Item>[getSize()];
 	}
 
-	template <class Item>
+	template <typename Item>
 	void HashGrid3<Item>::set(const HashGrid3<Item>& grid, bool /* deep */)
 		throw()
 	{
@@ -1768,7 +1768,7 @@ namespace BALL
 		}
 	}
 
-	template <class Item>
+	template <typename Item>
 	BALL_INLINE 
 	const HashGrid3<Item>& HashGrid3<Item>::operator = (const HashGrid3<Item> &grid)
 		throw()
@@ -1778,7 +1778,7 @@ namespace BALL
 		return *this;
 	}
 
-	template <class Item>
+	template <typename Item>
 	BALL_INLINE 
 	void HashGrid3<Item>::get(Vector3 &origin, Vector3 &unit,
 														Size& dimension_x, Size& dimension_y, Size& dimension_z) const
@@ -1791,7 +1791,7 @@ namespace BALL
 		dimension_z = dimension_z_;
 	}
 
-	template <class Item>
+	template <typename Item>
 	BALL_INLINE void 
 	HashGrid3<Item>::get(HashGrid3<Item> &grid, bool deep) const
 		throw()
@@ -1799,7 +1799,7 @@ namespace BALL
 		grid.set(*this, deep);
 	}
 
-	template <class Item>
+	template <typename Item>
 	Size 
 	HashGrid3<Item>::countNonEmptyBoxes() const
 		throw()
@@ -1814,7 +1814,7 @@ namespace BALL
 		return size;
 	}
 
-	template <class Item>
+	template <typename Item>
 	BALL_INLINE 
 	Size HashGrid3<Item>::getSize() const
 		throw()
@@ -1822,7 +1822,7 @@ namespace BALL
 		return (dimension_x_ * dimension_y_ * dimension_z_);
 	}
 
-	template <class Item>
+	template <typename Item>
 	BALL_INLINE 
 	Vector3& HashGrid3<Item>::getOrigin()
 		throw()
@@ -1830,7 +1830,7 @@ namespace BALL
 		return origin_;
 	}
 
-	template <class Item>
+	template <typename Item>
 	BALL_INLINE 
 	const Vector3& HashGrid3<Item>::getOrigin() const
 		throw()
@@ -1838,7 +1838,7 @@ namespace BALL
 		return origin_;
 	}
 
-	template <class Item>
+	template <typename Item>
 	BALL_INLINE 
 	Vector3& HashGrid3<Item>::getUnit()
 		throw()
@@ -1846,7 +1846,7 @@ namespace BALL
 		return unit_;
 	}
 
-	template <class Item>
+	template <typename Item>
 	BALL_INLINE 
 	const Vector3& HashGrid3<Item>::getUnit() const
 		throw()
@@ -1854,7 +1854,7 @@ namespace BALL
 		return unit_;
 	}
 
-	template <class Item>
+	template <typename Item>
 	BALL_INLINE 
 	Size HashGrid3<Item>::getSizeX() const
 		throw()
@@ -1862,7 +1862,7 @@ namespace BALL
 		return dimension_x_;
 	}
 
-	template <class Item>
+	template <typename Item>
 	BALL_INLINE 
 	Size HashGrid3<Item>::getSizeY() const
 		throw()
@@ -1870,7 +1870,7 @@ namespace BALL
 		return dimension_y_;
 	}
 
-	template <class Item>
+	template <typename Item>
 	BALL_INLINE 
 	Size HashGrid3<Item>::getSizeZ() const
 		throw()
@@ -1878,7 +1878,7 @@ namespace BALL
 		return dimension_z_;
 	}
 
-	template <class Item>
+	template <typename Item>
 	BALL_INLINE
 	HashGridBox3<Item>* HashGrid3<Item>::getBox(Position x, Position y, Position z)
 		throw()
@@ -1895,7 +1895,7 @@ namespace BALL
 		}
 	}
 
-	template <class Item>
+	template <typename Item>
 	BALL_INLINE 
 	const HashGridBox3<Item>* HashGrid3<Item>::getBox(Position x, Position y, Position z) const
 		throw()
@@ -1903,7 +1903,7 @@ namespace BALL
 		return ((HashGrid3*)this)->getBox(x, y, z);
 	}
 
-	template <class Item>
+	template <typename Item>
 	BALL_INLINE 
 	HashGridBox3<Item>* HashGrid3<Item>::getBox(const Vector3& vector)
 		throw()
@@ -1915,7 +1915,7 @@ namespace BALL
 		return getBox((Index)Maths::floor(x), (Index)Maths::floor(y), (Index)Maths::floor(z));
 	}
 
-	template <class Item>
+	template <typename Item>
 	BALL_INLINE 
 	const HashGridBox3<Item>* HashGrid3<Item>::getBox(const Vector3& vector) const
 		throw()
@@ -1923,7 +1923,7 @@ namespace BALL
 		return ((HashGrid3 *)this)->getBox(vector);
 	}
 
-	template <class Item>
+	template <typename Item>
 	bool HashGrid3<Item>::getIndices(const HashGridBox3<Item>& box,
 																	 Position& x, Position& y, Position& z) const
 		throw()
@@ -1945,7 +1945,7 @@ namespace BALL
 		return true;
 	}
 
-	template <class Item>
+	template <typename Item>
 	BALL_INLINE 
 	void HashGrid3<Item>::insert(Position x, Position y, Position z,
 			const Item& item)
@@ -1959,7 +1959,7 @@ namespace BALL
 		}
 	}
 
-	template <class Item>
+	template <typename Item>
 	BALL_INLINE 
 	void HashGrid3<Item>::insert(const Vector3& vector, const Item& item)
 		throw()
@@ -1972,7 +1972,7 @@ namespace BALL
 		}
 	}
 
-	template <class Item>
+	template <typename Item>
 	BALL_INLINE 
 	bool HashGrid3<Item>::remove(Position x, Position y, Position z, const Item& item)
 		throw()
@@ -1987,7 +1987,7 @@ namespace BALL
 		return false;
 	}
 
-	template <class Item>
+	template <typename Item>
 	BALL_INLINE 
 	bool HashGrid3<Item>::remove(const Vector3& vector, const Item& item)
 		throw()
@@ -2002,7 +2002,7 @@ namespace BALL
 		return false;
 	}
 
-	template <class Item>
+	template <typename Item>
 	BALL_INLINE 
 	void HashGrid3<Item>::host(Visitor< HashGrid3<Item> >& visitor)
 		throw()
@@ -2010,7 +2010,7 @@ namespace BALL
 		visitor.visit(*this);
 	}
 
-	template <class Item>
+	template <typename Item>
 	bool HashGrid3<Item>::operator ==	(const HashGrid3<Item>& grid) const
 		throw()
 	{
@@ -2041,7 +2041,7 @@ namespace BALL
 		return true;
 	}
 
-	template <class Item>
+	template <typename Item>
 	BALL_INLINE 
 	bool HashGrid3<Item>::operator !=	(const HashGrid3<Item>& grid) const
 		throw()
@@ -2049,7 +2049,7 @@ namespace BALL
 		return !(*this == grid);
 	}
 
-	template <class Item>
+	template <typename Item>
 	BALL_INLINE 
 	bool HashGrid3<Item>::isEmpty() const
 		throw()
@@ -2057,7 +2057,7 @@ namespace BALL
 		return (getSize() == 0);
 	}
 
-	template <class Item>
+	template <typename Item>
 	bool HashGrid3<Item>::isValid() const
 		throw()
 	{
@@ -2106,7 +2106,7 @@ namespace BALL
 		return (box == first_nonempty_);
 	}
 
-	template <class Item>
+	template <typename Item>
 	void HashGrid3<Item>::dump(std::ostream& s, Size depth) const
 		throw()
 	{
@@ -2154,7 +2154,7 @@ namespace BALL
 		BALL_DUMP_STREAM_SUFFIX(s);
 	}
 
-	template <class Item>
+	template <typename Item>
 	bool HashGrid3<Item>::apply(UnaryProcessor<Item>& processor)
 		throw()
 	{
@@ -2180,7 +2180,7 @@ namespace BALL
 		return processor->finish();
 	}
 
-	template <class Item>
+	template <typename Item>
 	bool HashGrid3<Item>::apply(UnaryProcessor< HashGridBox3<Item> >& processor)
 		throw()
 	{
@@ -2204,7 +2204,7 @@ namespace BALL
 		return processor->finish();
 	}
 
-	template <class Item>
+	template <typename Item>
 	Index HashGrid3<Item>::getIndex_(const HashGridBox3<Item>& box) const
 		throw()
 	{
@@ -2218,7 +2218,7 @@ namespace BALL
 		}
 	}
 
-	template <class Item>
+	template <typename Item>
 	void  HashGrid3<Item>::insert_(HashGridBox3<Item>* box, const Item& item)
 		throw()
 	{
@@ -2258,7 +2258,7 @@ namespace BALL
 		box->insert(item);
 	}
 
-	template <class Item>
+	template <typename Item>
 	bool HashGrid3<Item>::remove_(HashGridBox3<Item>* box, const Item& item)
 		throw()
 	{
