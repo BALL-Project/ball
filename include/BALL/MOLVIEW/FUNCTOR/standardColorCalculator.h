@@ -1,4 +1,4 @@
-// $Id: standardColorCalculator.h,v 1.3 2000/01/19 17:54:03 oliver Exp $
+// $Id: standardColorCalculator.h,v 1.4 2000/04/04 15:18:33 oliver Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_STANDARDCOLORCALCULATOR_H
 #define BALL_MOLVIEW_FUNCTOR_STANDARDCOLORCALCULATOR_H
@@ -76,7 +76,9 @@ namespace BALL
 			*/
 			//@{
 
-			AtomChargeColorCalculator();
+      AtomChargeColorCalculator();
+
+ 			AtomChargeColorCalculator(const AtomChargeColorCalculator& color_calculator);
 
 			//@}
 
