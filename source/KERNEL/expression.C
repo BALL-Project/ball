@@ -1,4 +1,4 @@
-// $Id: expression.C,v 1.23 2001/07/13 14:24:55 anker Exp $
+// $Id: expression.C,v 1.24 2001/07/13 17:38:33 anker Exp $
 
 #include <BALL/KERNEL/expression.h>
 #include <BALL/KERNEL/standardPredicates.h>
@@ -470,6 +470,7 @@ namespace BALL
 				return false;
 			}
 		}
+		return true;
 	}
 
 
