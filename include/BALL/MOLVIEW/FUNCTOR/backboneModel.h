@@ -1,221 +1,190 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.h,v 1.12 2003/03/26 13:56:46 anhi Exp $
+// $Id: backboneModel.h,v 1.13 2003/06/06 10:41:10 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BACKBONEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_BACKBONEMODEL_H
-
-#ifndef BALL_DATATYPE_LIST_H
-#	include <BALL/DATATYPE/list.h>
-#endif
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BASEMODEL_H
 #	include <BALL/MOLVIEW/FUNCTOR/baseModel.h>
 #endif
 
-#ifndef BALL_MOLVIEW_PRIMITIV_BACKBONE_H
-#	include <BALL/MOLVIEW/PRIMITIV/backbone.h>
+#ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
+#include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #endif
 
+#ifndef BALL_MATHS_VECTOR3_H
+# include <BALL/MATHS/vector3.h>
+#endif 
 
 namespace BALL
 {
 	class Atom;
-	
-	namespace VIEW
-	{
-		class ColorRGBA;
-	}
+	class Composite;
+
+	using VIEW::ColorRGBA;
 
 	namespace MOLVIEW
 	{
+		class Backbone;
+
 		/** AddBackboneModel class.
 				The class AddBackboneModel is a model processor that creates a backbone model
-				through the {\em CA}-atoms of the processed  \link Composite Composite \endlink  object.
-				The created  \link Backbone Backbone \endlink  object will be inserted to the root of the 
-				start  \link Composite Composite \endlink  object if the root is of kind  \link System System \endlink .
-				This processor creates only the  \link Backbone Backbone \endlink  object  without openGL implementation.
-				The derived class  \link AddGLBackboneModel AddGLBackboneModel \endlink  uses the  \link GLBackBone GLBackBone \endlink  with
-				openGL implementation.
-				For information about the processor concept see  \link Processor Processor \endlink  in tbe BALL
-				documentation.  \par
-				
-    		\ingroup  MolviewFunctorsModels
+				through the <b>CA</b>-atoms of the processed Composite object.
+				For information about the processor concept see Processor in the BALL
+				documentation.
+				\ingroup  MolviewFunctorsModels
 		*/
 		class AddBackboneModel: public BaseModelProcessor
 		{
+			//_
+			class SplinePoint
+			{
+			  public:
+
+				SplinePoint() {}
+				~SplinePoint() {}
+
+				void setVector(const Vector3& point) {point_ = point;}
+				const Vector3 &getVector() const {return point_;}
+
+				void setTangentialVector(const Vector3& tangent) {tangent_ = tangent;}
+				const Vector3 &getTangentialVector() const {return tangent_;}
+				
+				void setColor(const ColorRGBA& color) {color_ = color;}
+				const ColorRGBA &getColor() const {return color_;}
+
+			  private:
+
+				Vector3 point_;
+				Vector3 tangent_;
+				ColorRGBA color_;
+			};
 
 			public:
 
-			/**	@name	Constructors
+			/**	@name	Constructors and Destructors
 			*/	
 			//@{
 
 			/** Default Constructor.
-					Construct new addBackboneModel.
-					@return      AddBackboneModel new constructed addBackboneModel
-					@see         BaseModelProcessor
 			*/
 			AddBackboneModel()
 				throw();
 
 			/** Copy constructor.
-					Construct new addBackboneModel by copying the addBackboneModel
-					{\em add_Backbone_model}.
-					@param       add_Backbone_model the addBackboneModel to be copied
-					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of {\em add_Backbone_model}
-					@return      AddBackboneModel new constructed addBackboneModel copied from {\em add_Backbone_model}
-					@see         BaseModelProcessor
 			*/
-			AddBackboneModel
-				(const AddBackboneModel& add_Backbone_model, bool deep = true)
+			AddBackboneModel(const AddBackboneModel& add_Backbone_model)
 				throw();
 
-			//@}
-
-			/** @name Destructors 
-			*/
-			//@{
-
 			/** Destructor.
-					Default destruction of {\em *this} addBackboneModel.
-					Calls  \link destroy destroy \endlink .
-					@see         destroy
 			*/
 			virtual ~AddBackboneModel()
 				throw();
 
 			/** Explicit default initialization.
-					Clears all internal structures.
-					Calls  \link BaseModelProcessor::clear BaseModelProcessor::clear \endlink .
-					@see  BaseModelProcessor
+					Calls MolecularModelProcessor::clear.
 			*/
 			virtual void clear()
 				throw();
 
-			/** Explicit destructor.
-					Empty for further purpose.
-			*/
-			virtual void destroy()
-				throw();
-
-			//@}
-
-
-			/**	@name Processor specific methods
-			*/
+			//@} 
+			/**	@name Processor specific methods 
+			*/ 
 			//@{
+		
 			/** Start method.
 					Clear all internal structures.
-					Calls  \link BaseModelProcessor::start BaseModelProcessor::start \endlink .
-					@return bool <tt>true</tt> if the start of {\em *this} addBackboneModel was successful, <tt>false</tt> otherwise
-					@see    operator()
-					@see    BaseModelProcessor
+					Calls MolecularModelProcessor::start.
+					\return bool <tt>true<\tt> if the start was successful
+					\see    operator()
 			*/
 			virtual bool start();
 			
 			/** Finish method.
-					This method will be internally called from the processor mechanism if the processor
-					has finished processing the  \link Composite Composite \endlink  tree.
-					All previously inserted  \link Atom Atom \endlink  objects and their calculated colores
-					(inserted in the method  \link operator() operator() \endlink ) will be used to create a  \link Backbone Backbone \endlink 
-					object.
-					The created backbone will be appended to the root of the start  \link Composite Composite \endlink 
-					if the root is of kind  \link System System \endlink .
-					@return bool <tt>true</tt> if the finish of {\em *this} addBackboneModel was successful, <tt>false</tt> otherwise
-					@exeception OutOfMemory thrown if the memory allocation for the  \link Backbone Backbone \endlink  object failed
-					@see    Backbone
-					@see    operator()
-					@see    Atom
-					@see    Bond
-					@see    Composite
+					This method will be internally called from the processor mechanism when the processor
+					has finished processing the Composite tree.
+					All previously inserted Atom objects and their calculated colors
+					(inserted in the method operator()) will be used to create a backbone.
+					\return bool true if the finish was successful, false otherwise
+					@exeception OutOfMemory thrown if the memory allocation failed
 			*/
 			virtual bool finish();
 			
 			/**	Operator method.
-					This method iterates over each  \link Composite Composite \endlink  object reachable in the 
-					 \link Composite Composite \endlink  tree. If {\em composite} is of kind  \link Atom Atom \endlink  and has the
-					substring <tt>CA</tt> in its name (this method collects only {\em CA}-atoms) than
-					that atom	is stored for later processing in the  \link finish finish \endlink  method.
-					The color for that  \link Atom Atom \endlink  object is calculated with the  \link ColorCalculator ColorCalculator \endlink 
-					object retrieved with the method  \link getColorCalculator getColorCalculator \endlink  and stored for later
+					This method iterates over each Composite object reachable in the 
+					Composite tree. If a Composite is of kind Atom and has the
+					substring <b>CA</b> in its name (this method collects only <b>CA</b>-atoms) than
+					that atom	is stored for later processing in the finish method.
+					The color for that Atom object is calculated with the ColorCalculator
+					object retrieved with the method getColorCalculator() and stored for later
 					generation of the backbone model.
-					The created backbone will be appended to the root of the  \link Composite Composite \endlink  object 
-					that has started {\em *this} addBackboneModel.
-					@param  composite the  \link Composite Composite \endlink  object that will be processed
-					@return Processor::Result the result of {\em *this} addBackboneModel
-					@see    ColorCalculator
-					@see    getColorCalculator
-					@see    start
-					@see    finish
-					@see    Composite
-					@see    Atom
-					@see    Bond
+					\param  composite the Composite object that will be processed
+					\see    ColorCalculator
+					\see    getColorCalculator()
 			*/
 			virtual Processor::Result operator() (Composite& composite);
 
-			//@}
-
-
-			/**	@name	debuggers and diagnostics
-			*/
+			//@} 
+			/**	@name	debuggers and diagnostics 
+			*/ 
 			//@{
+
 			/** Internal value dump.
-					Dump the current state of {\em *this} addBackboneModel to 
-					the output ostream {\em s} with dumping depth {\em depth}.
-					Calls  \link BaseModelProcessor::dump BaseModelProcessor::dump \endlink .
-					@param   s output stream where to output the state of {\em *this} addBackboneModel
-					@param   depth the dumping depth
-					@see     BaseModelProcessor
+					Dump the current state to 
+					the output ostream <tt>s</tt> with dumping depth <tt>depth</tt>.
+					Calls MolecularModelProcessor::dump.
+					\param   s output stream where to output the state 
+					\param   depth the dumping depth
 			*/
-			virtual void dump
-				(std::ostream& s = std::cout, Size depth = 0) const
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
 
 			//@}
 
+			protected:
+			//_ init the spline array with both the positions from the atom list
+			//_ and the colors from the color list
+			void initSplineArray_();
 
-		  protected:
+			//_ calculates to every splinepoint the tangential vector
+			void calculateTangentialVectors_();
+			
+			//_ computes the actual spline path through the given support points
+			//_ in the splinepoint array
+			void createSplinePath_();
 
-			/** @name Creation method
-					This method creates a primitive without OpenGL implementation.
-					This method is overridden by the class  \link AddGLBackboneModel AddGLBackboneModel \endlink 
-					to create primitives with OpenGL implementation to generate the graphical
-					representation of the shapes they represent.
-					@see  AddGLBackboneModel
-			*/
-			//@{
-			/** Create a backbone.
-					Create a  \link Backbone Backbone \endlink  object.
-					This method is overridden by the class  \link AddGLBackboneModel AddGLBackboneModel \endlink  to
-					create a primitive with openGL implementation.
-					The method  \link operator() operator() \endlink  uses this method to create a backbone
-					through the {\em CA}  \link Atom Atom \endlink  objects.
-					@see  Backbone
-					@see  AddGLBackboneModel
-					@see  Atom
-			*/
-			virtual Backbone *createBackbone_();
-			//@}
+			//_ create a spline segment between two spline points a and b
+			void createSplineSegment_(const SplinePoint &a, const SplinePoint &b);
 
-			private:
+			//_ builds a graphical representation to this point with color
+			void buildGraphicalRepresentation_(const Vector3 &point, const ColorRGBA &color);
 
 			//_
-			bool get_composite_;
+			virtual Backbone* createBackbone_()
+				throw();
 
 			//_
-			Composite* start_composite_;
+			void buildBackbone_()
+				throw();
 
-			//_ list of used atoms for the creation of the backbone
-			List<Atom*> atoms_;
+			//_
+			vector<SplinePoint> spline_vector_;
 
-			//_ list of colors correlating to the atoms saved in atoms_.
-			List<ColorRGBA> atoms_color_;
+			//_
+			bool have_start_point_;
+
+			//_
+			Vector3 last_point_;
+
+			Composite* last_parent_;
+			Composite* root_;
+
+			Backbone* backbone_;
 		};
 
 	} // namespace MOLVIEW
-
 } // namespace BALL
 
 #endif // BALL_MOLVIEW_FUNCTOR_BACKBONEMODEL_H
