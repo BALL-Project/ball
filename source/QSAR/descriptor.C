@@ -1,4 +1,4 @@
-// $Id: descriptor.C,v 1.4 2001/12/17 03:17:36 oliver Exp $
+// $Id: descriptor.C,v 1.5 2001/12/18 01:12:51 oliver Exp $
 
 #include <BALL/QSAR/descriptor.h>
 
@@ -14,6 +14,15 @@ namespace BALL
 	Descriptor::Descriptor(const String& name)
 		:	UnaryProcessor<Molecule>(),
 			name_(name)
+	{
+	}
+
+	Descriptor::~Descriptor()
+	{
+	}
+
+	Descriptor::Descriptor(const Descriptor& descriptor)
+		:	name_(descriptor.name_)
 	{
 	}
 

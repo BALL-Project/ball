@@ -1,4 +1,4 @@
-// $Id: simpleDescriptors.C,v 1.2 2001/12/17 03:17:37 oliver Exp $
+// $Id: simpleDescriptors.C,v 1.3 2001/12/18 01:12:51 oliver Exp $
 
 #include <BALL/QSAR/simpleDescriptors.h>
 #include <BALL/KERNEL/PTE.h>
@@ -6,6 +6,16 @@
 
 namespace BALL
 {
+
+	NumberOfBonds::NumberOfBonds()
+		:	Descriptor("NumberOfBonds")
+	{
+	}
+
+	double NumberOfBonds::compute(const Molecule& molecule)
+	{
+		return (double)molecule.countBonds();
+	}
 
 	MolecularMass::MolecularMass()
 		:	Descriptor("MolecularMass")
