@@ -1,4 +1,4 @@
-// $Id: hashGrid.h,v 1.20 2001/07/11 00:05:23 oliver Exp $
+// $Id: hashGrid.h,v 1.21 2001/07/13 19:58:07 oliver Exp $
 
 #ifndef BALL_DATATYPE_HASHGRID_H
 #define BALL_DATATYPE_HASHGRID_H
@@ -943,22 +943,22 @@ namespace BALL
 		BALL_DUMP_DEPTH(s, depth);
 		
 		BALL_DUMP_DEPTH(s, depth);
-		s << "  size: " << getSize() << endl;
+		s << "  size: " << getSize() << std::endl;
 		
 		BALL_DUMP_DEPTH(s, depth);
-		s << "  data:" << endl;
+		s << "  data:" << std::endl;
 		for (DataItem_ *item = first_item_; item != 0; item = item->next_)
 		{
 			BALL_DUMP_DEPTH(s, depth);
-			s << "    " << item->item_ << endl;
+			s << "    " << item->item_ << std::endl;
 		}
 		
 		BALL_DUMP_DEPTH(s, depth);
-		s << "  neighbour boxes:" << endl;
+		s << "  neighbour boxes:" << std::endl;
 		for (NeighbourBoxItem_ *item_ptr_ = first_neighbour_; item_ptr_ != 0; item_ptr_ = item_ptr_->next_)
 		{
 			BALL_DUMP_DEPTH(s, depth);
-			s << "    " << item_ptr_->box_ << endl;
+			s << "    " << item_ptr_->box_ << std::endl;
 		}
 		
 		BALL_DUMP_STREAM_SUFFIX(s);
@@ -2116,41 +2116,41 @@ namespace BALL
 		BALL_DUMP_DEPTH(s, depth);
 		
 		BALL_DUMP_DEPTH(s, depth);
-		s << "  origin: " << origin_ << endl;
+		s << "  origin: " << origin_ << std::endl;
 		
 		BALL_DUMP_DEPTH(s, depth);
-		s << "  unit: " << unit_.z << endl;
+		s << "  unit: " << unit_.z << std::endl;
 		
 		BALL_DUMP_DEPTH(s, depth);
 		s << "  dimension: " << dimension_x_ << " " 
 			<< dimension_y_ << " " 
-			<< dimension_z_ << endl;
+			<< dimension_z_ << std::endl;
 		
 		Size size = getSize();
 		BALL_DUMP_DEPTH(s, depth);
-		s << "  size: " << size << endl;
+		s << "  size: " << size << std::endl;
 
 		BALL_DUMP_DEPTH(s, depth);
-		s << "  non empty boxes: " << countNonEmptyBoxes() << endl;
+		s << "  non empty boxes: " << countNonEmptyBoxes() << std::endl;
 		
 		BALL_DUMP_DEPTH(s, depth);
-		s << "  boxes:" << endl;
+		s << "  boxes:" << std::endl;
 		Position x, y, z;
 		for (Position index = 0; index < (Position)size; ++index)
 		{
 			BALL_DUMP_DEPTH(s, depth);
 			getIndices(box_[index], x, y, z);
 			s << "    " << index << ". box: (" 
-			  << x << ',' << y << ',' << z << ')' << endl;
+			  << x << ',' << y << ',' << z << ')' << std::endl;
 			box_[index].dump(s, 1);
 		}
 		
 		BALL_DUMP_DEPTH(s, depth);
-		s << "  non-empty boxes:" << endl;
+		s << "  non-empty boxes:" << std::endl;
 
 		for (const HashGridBox3<Item>* box = first_nonempty_; box != 0; box = box->next_)
 		{
-			s << "    " << getIndex_(*box) << endl;
+			s << "    " << getIndex_(*box) << std::endl;
 		}
 		BALL_DUMP_STREAM_SUFFIX(s);
 	}
