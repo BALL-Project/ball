@@ -1,0 +1,22 @@
+// $Id: primitives.doc,v 1.1 2003/09/04 19:57:36 amoll Exp $
+
+/**	\defgroup View Primitives
+		\ingroup Visualization
+			The representation of molecular structures consists of primitive geometric objects, e.g.:
+			- Boxes
+			- Discs
+			- Labels
+			- Lines
+			- Meshs of triangles
+			- Points
+			- Spheres
+			- Tubes
+			- ...
+
+			Every such object is implemented in a class derived from
+			GeometricObject. It contains all the information for the Renderer classes,
+			to show it on the screen or export it to specialised formats (e.g. POVRay).
+			<br>
+			If you want to visualise a new geometric object, create a new GeometricObject class
+			and adapt the Renderer.
+*/
