@@ -384,43 +384,6 @@
                     <set>AlignVCenter|AlignLeft</set>
                 </property>
             </widget>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>first_residue_button</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>245</x>
-                        <y>5</y>
-                        <width>70</width>
-                        <height>30</height>
-                    </rect>
-                </property>
-                <property name="minimumSize">
-                    <size>
-                        <width>70</width>
-                        <height>30</height>
-                    </size>
-                </property>
-                <property name="maximumSize">
-                    <size>
-                        <width>70</width>
-                        <height>30</height>
-                    </size>
-                </property>
-                <property name="backgroundMode">
-                    <enum>PaletteButton</enum>
-                </property>
-                <property name="focusPolicy">
-                    <enum>TabFocus</enum>
-                </property>
-                <property name="text">
-                    <string>Edit</string>
-                </property>
-                <property name="autoDefault">
-                    <bool>true</bool>
-                </property>
-            </widget>
             <widget class="QLabel">
                 <property name="name">
                     <cstring>textLabel1_4_3_5_2</cstring>
@@ -753,43 +716,6 @@
                 </property>
                 <property name="alignment">
                     <set>AlignVCenter|AlignLeft</set>
-                </property>
-            </widget>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>last_residue_button</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>245</x>
-                        <y>81</y>
-                        <width>70</width>
-                        <height>30</height>
-                    </rect>
-                </property>
-                <property name="minimumSize">
-                    <size>
-                        <width>70</width>
-                        <height>30</height>
-                    </size>
-                </property>
-                <property name="maximumSize">
-                    <size>
-                        <width>70</width>
-                        <height>30</height>
-                    </size>
-                </property>
-                <property name="backgroundMode">
-                    <enum>PaletteButton</enum>
-                </property>
-                <property name="focusPolicy">
-                    <enum>TabFocus</enum>
-                </property>
-                <property name="text">
-                    <string>Edit</string>
-                </property>
-                <property name="autoDefault">
-                    <bool>true</bool>
                 </property>
             </widget>
             <widget class="QLabel">
@@ -1132,6 +1058,86 @@
                 </property>
                 <property name="alignment">
                     <set>AlignVCenter|AlignLeft</set>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>first_residue_button</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>245</x>
+                        <y>5</y>
+                        <width>70</width>
+                        <height>30</height>
+                    </rect>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>70</width>
+                        <height>30</height>
+                    </size>
+                </property>
+                <property name="maximumSize">
+                    <size>
+                        <width>70</width>
+                        <height>30</height>
+                    </size>
+                </property>
+                <property name="backgroundMode">
+                    <enum>PaletteButton</enum>
+                </property>
+                <property name="focusPolicy">
+                    <enum>TabFocus</enum>
+                </property>
+                <property name="text">
+                    <string>Edit</string>
+                </property>
+                <property name="autoDefault">
+                    <bool>true</bool>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Edit color for first residue</string>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>last_residue_button</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>245</x>
+                        <y>81</y>
+                        <width>70</width>
+                        <height>30</height>
+                    </rect>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>70</width>
+                        <height>30</height>
+                    </size>
+                </property>
+                <property name="maximumSize">
+                    <size>
+                        <width>70</width>
+                        <height>30</height>
+                    </size>
+                </property>
+                <property name="backgroundMode">
+                    <enum>PaletteButton</enum>
+                </property>
+                <property name="focusPolicy">
+                    <enum>TabFocus</enum>
+                </property>
+                <property name="text">
+                    <string>Edit</string>
+                </property>
+                <property name="autoDefault">
+                    <bool>true</bool>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Edit color for last residue</string>
                 </property>
             </widget>
             <widget class="QPushButton">
@@ -1521,43 +1527,6 @@
                     <set>AlignVCenter|AlignLeft</set>
                 </property>
             </widget>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>negative_charge_color_button</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>282</x>
-                        <y>3</y>
-                        <width>70</width>
-                        <height>30</height>
-                    </rect>
-                </property>
-                <property name="minimumSize">
-                    <size>
-                        <width>70</width>
-                        <height>30</height>
-                    </size>
-                </property>
-                <property name="maximumSize">
-                    <size>
-                        <width>70</width>
-                        <height>30</height>
-                    </size>
-                </property>
-                <property name="backgroundMode">
-                    <enum>PaletteButton</enum>
-                </property>
-                <property name="focusPolicy">
-                    <enum>TabFocus</enum>
-                </property>
-                <property name="text">
-                    <string>Edit</string>
-                </property>
-                <property name="autoDefault">
-                    <bool>true</bool>
-                </property>
-            </widget>
             <widget class="QLabel">
                 <property name="name">
                     <cstring>textLabel1_4_3</cstring>
@@ -1892,43 +1861,6 @@
                     <set>AlignVCenter|AlignLeft</set>
                 </property>
             </widget>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>neutral_charge_color_button</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>282</x>
-                        <y>41</y>
-                        <width>70</width>
-                        <height>30</height>
-                    </rect>
-                </property>
-                <property name="minimumSize">
-                    <size>
-                        <width>70</width>
-                        <height>30</height>
-                    </size>
-                </property>
-                <property name="maximumSize">
-                    <size>
-                        <width>70</width>
-                        <height>30</height>
-                    </size>
-                </property>
-                <property name="backgroundMode">
-                    <enum>PaletteButton</enum>
-                </property>
-                <property name="focusPolicy">
-                    <enum>TabFocus</enum>
-                </property>
-                <property name="text">
-                    <string>Edit</string>
-                </property>
-                <property name="autoDefault">
-                    <bool>true</bool>
-                </property>
-            </widget>
             <widget class="QLabel">
                 <property name="name">
                     <cstring>textLabel1_4_3_5</cstring>
@@ -2261,6 +2193,80 @@
                 </property>
                 <property name="alignment">
                     <set>AlignVCenter|AlignLeft</set>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>negative_charge_color_button</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>282</x>
+                        <y>3</y>
+                        <width>70</width>
+                        <height>30</height>
+                    </rect>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>70</width>
+                        <height>30</height>
+                    </size>
+                </property>
+                <property name="maximumSize">
+                    <size>
+                        <width>70</width>
+                        <height>30</height>
+                    </size>
+                </property>
+                <property name="backgroundMode">
+                    <enum>PaletteButton</enum>
+                </property>
+                <property name="focusPolicy">
+                    <enum>TabFocus</enum>
+                </property>
+                <property name="text">
+                    <string>Edit</string>
+                </property>
+                <property name="autoDefault">
+                    <bool>true</bool>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>neutral_charge_color_button</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>282</x>
+                        <y>41</y>
+                        <width>70</width>
+                        <height>30</height>
+                    </rect>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>70</width>
+                        <height>30</height>
+                    </size>
+                </property>
+                <property name="maximumSize">
+                    <size>
+                        <width>70</width>
+                        <height>30</height>
+                    </size>
+                </property>
+                <property name="backgroundMode">
+                    <enum>PaletteButton</enum>
+                </property>
+                <property name="focusPolicy">
+                    <enum>TabFocus</enum>
+                </property>
+                <property name="text">
+                    <string>Edit</string>
+                </property>
+                <property name="autoDefault">
+                    <bool>true</bool>
                 </property>
             </widget>
             <widget class="QPushButton">
@@ -7183,99 +7189,6 @@
                     <set>WordBreak|AlignCenter</set>
                 </property>
             </widget>
-            <widget class="QSlider">
-                <property name="name">
-                    <cstring>force_min_value_slider</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>140</x>
-                        <y>83</y>
-                        <width>85</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-                <property name="minValue">
-                    <number>1</number>
-                </property>
-                <property name="maxValue">
-                    <number>30</number>
-                </property>
-                <property name="orientation">
-                    <enum>Horizontal</enum>
-                </property>
-                <property name="tickmarks">
-                    <enum>Above</enum>
-                </property>
-                <property name="tickInterval">
-                    <number>10</number>
-                </property>
-            </widget>
-            <widget class="QSlider">
-                <property name="name">
-                    <cstring>force_max_value_slider</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>141</x>
-                        <y>121</y>
-                        <width>85</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-                <property name="minValue">
-                    <number>1</number>
-                </property>
-                <property name="maxValue">
-                    <number>250</number>
-                </property>
-                <property name="orientation">
-                    <enum>Horizontal</enum>
-                </property>
-                <property name="tickmarks">
-                    <enum>Above</enum>
-                </property>
-                <property name="tickInterval">
-                    <number>100</number>
-                </property>
-            </widget>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>force_min_color_button</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>205</x>
-                        <y>3</y>
-                        <width>70</width>
-                        <height>30</height>
-                    </rect>
-                </property>
-                <property name="minimumSize">
-                    <size>
-                        <width>70</width>
-                        <height>30</height>
-                    </size>
-                </property>
-                <property name="maximumSize">
-                    <size>
-                        <width>70</width>
-                        <height>30</height>
-                    </size>
-                </property>
-                <property name="backgroundMode">
-                    <enum>PaletteButton</enum>
-                </property>
-                <property name="focusPolicy">
-                    <enum>TabFocus</enum>
-                </property>
-                <property name="text">
-                    <string>Edit</string>
-                </property>
-                <property name="autoDefault">
-                    <bool>true</bool>
-                </property>
-            </widget>
             <widget class="QLabel">
                 <property name="name">
                     <cstring>textLabel1_4_3_3_3_2</cstring>
@@ -7615,43 +7528,6 @@
                     <set>AlignVCenter|AlignLeft</set>
                 </property>
             </widget>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>force_max_color_button</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>205</x>
-                        <y>41</y>
-                        <width>70</width>
-                        <height>30</height>
-                    </rect>
-                </property>
-                <property name="minimumSize">
-                    <size>
-                        <width>70</width>
-                        <height>30</height>
-                    </size>
-                </property>
-                <property name="maximumSize">
-                    <size>
-                        <width>70</width>
-                        <height>30</height>
-                    </size>
-                </property>
-                <property name="backgroundMode">
-                    <enum>PaletteButton</enum>
-                </property>
-                <property name="focusPolicy">
-                    <enum>TabFocus</enum>
-                </property>
-                <property name="text">
-                    <string>Edit</string>
-                </property>
-                <property name="autoDefault">
-                    <bool>true</bool>
-                </property>
-            </widget>
             <widget class="QLabel">
                 <property name="name">
                     <cstring>force_max_color_label</cstring>
@@ -7989,6 +7865,142 @@
                 </property>
                 <property name="text">
                     <string>min color</string>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>force_max_color_button</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>205</x>
+                        <y>41</y>
+                        <width>70</width>
+                        <height>30</height>
+                    </rect>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>70</width>
+                        <height>30</height>
+                    </size>
+                </property>
+                <property name="maximumSize">
+                    <size>
+                        <width>70</width>
+                        <height>30</height>
+                    </size>
+                </property>
+                <property name="backgroundMode">
+                    <enum>PaletteButton</enum>
+                </property>
+                <property name="focusPolicy">
+                    <enum>TabFocus</enum>
+                </property>
+                <property name="text">
+                    <string>Edit</string>
+                </property>
+                <property name="autoDefault">
+                    <bool>true</bool>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Edit maximum color value</string>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>force_min_color_button</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>205</x>
+                        <y>3</y>
+                        <width>70</width>
+                        <height>30</height>
+                    </rect>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>70</width>
+                        <height>30</height>
+                    </size>
+                </property>
+                <property name="maximumSize">
+                    <size>
+                        <width>70</width>
+                        <height>30</height>
+                    </size>
+                </property>
+                <property name="backgroundMode">
+                    <enum>PaletteButton</enum>
+                </property>
+                <property name="focusPolicy">
+                    <enum>TabFocus</enum>
+                </property>
+                <property name="text">
+                    <string>Edit</string>
+                </property>
+                <property name="autoDefault">
+                    <bool>true</bool>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Edit mininum color value</string>
+                </property>
+            </widget>
+            <widget class="QSlider">
+                <property name="name">
+                    <cstring>force_min_value_slider</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>140</x>
+                        <y>83</y>
+                        <width>85</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="minValue">
+                    <number>1</number>
+                </property>
+                <property name="maxValue">
+                    <number>30</number>
+                </property>
+                <property name="orientation">
+                    <enum>Horizontal</enum>
+                </property>
+                <property name="tickmarks">
+                    <enum>Above</enum>
+                </property>
+                <property name="tickInterval">
+                    <number>10</number>
+                </property>
+            </widget>
+            <widget class="QSlider">
+                <property name="name">
+                    <cstring>force_max_value_slider</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>141</x>
+                        <y>121</y>
+                        <width>85</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="minValue">
+                    <number>1</number>
+                </property>
+                <property name="maxValue">
+                    <number>250</number>
+                </property>
+                <property name="orientation">
+                    <enum>Horizontal</enum>
+                </property>
+                <property name="tickmarks">
+                    <enum>Above</enum>
+                </property>
+                <property name="tickInterval">
+                    <number>100</number>
                 </property>
             </widget>
         </widget>

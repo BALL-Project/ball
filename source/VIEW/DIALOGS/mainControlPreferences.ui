@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>MainControlPreferencesData</class>
 <widget class="QWidget">
     <property name="name">
@@ -54,27 +54,6 @@
             <set>AlignCenter</set>
         </property>
     </widget>
-    <widget class="QComboBox">
-        <property name="name">
-            <cstring>style_box_</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>24</x>
-                <y>28</y>
-                <width>250</width>
-                <height>27</height>
-            </rect>
-        </property>
-        <property name="sizePolicy">
-            <sizepolicy>
-                <hsizetype>0</hsizetype>
-                <vsizetype>0</vsizetype>
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-            </sizepolicy>
-        </property>
-    </widget>
     <widget class="QCheckBox">
         <property name="name">
             <cstring>show_labels</cstring>
@@ -108,6 +87,30 @@
         </property>
         <property name="text">
             <string>enable logging to file</string>
+        </property>
+    </widget>
+    <widget class="QComboBox">
+        <property name="name">
+            <cstring>style_box_</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>24</x>
+                <y>28</y>
+                <width>250</width>
+                <height>27</height>
+            </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>0</hsizetype>
+                <vsizetype>0</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
+        </property>
+        <property name="toolTip" stdset="0">
+            <string>Select a GUI style to alter the appearance of BALLView</string>
         </property>
     </widget>
 </widget>

@@ -6,8 +6,8 @@
     </property>
     <property name="geometry">
         <rect>
-            <x>29</x>
-            <y>104</y>
+            <x>0</x>
+            <y>0</y>
             <width>650</width>
             <height>490</height>
         </rect>
@@ -362,6 +362,207 @@
                         <bool>true</bool>
                     </property>
                 </widget>
+            </widget>
+        </hbox>
+    </widget>
+    <widget class="QLayoutWidget">
+        <property name="name">
+            <cstring>layout1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>7</x>
+                <y>454</y>
+                <width>633</width>
+                <height>32</height>
+            </rect>
+        </property>
+        <hbox>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <property name="margin">
+                <number>0</number>
+            </property>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>close_button</cstring>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>0</width>
+                        <height>30</height>
+                    </size>
+                </property>
+                <property name="text">
+                    <string>&amp;Close</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+C</string>
+                </property>
+                <property name="default">
+                    <bool>true</bool>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Close and save options</string>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>cancel_button</cstring>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>0</width>
+                        <height>30</height>
+                    </size>
+                </property>
+                <property name="text">
+                    <string>Cancel</string>
+                </property>
+                <property name="accel">
+                    <string></string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Close window and discard changes</string>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>reset_button</cstring>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>0</width>
+                        <height>30</height>
+                    </size>
+                </property>
+                <property name="text">
+                    <string>Reset</string>
+                </property>
+                <property name="accel">
+                    <string></string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Reset all settings to default values</string>
+                </property>
+            </widget>
+        </hbox>
+    </widget>
+    <widget class="QLayoutWidget">
+        <property name="name">
+            <cstring>layout35</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>5</x>
+                <y>5</y>
+                <width>640</width>
+                <height>32</height>
+            </rect>
+        </property>
+        <hbox>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>Label_10</cstring>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>110</width>
+                        <height>29</height>
+                    </size>
+                </property>
+                <property name="backgroundMode">
+                    <enum>PaletteBackground</enum>
+                </property>
+                <property name="font">
+                    <font>
+                    </font>
+                </property>
+                <property name="focusPolicy">
+                    <enum>NoFocus</enum>
+                </property>
+                <property name="lineWidth">
+                    <number>1</number>
+                </property>
+                <property name="text">
+                    <string>Parameter file</string>
+                </property>
+                <property name="textFormat">
+                    <enum>AutoText</enum>
+                </property>
+                <property name="alignment">
+                    <set>AlignVCenter|AlignRight</set>
+                </property>
+            </widget>
+            <widget class="QLineEdit">
+                <property name="name">
+                    <cstring>parameter_file_edit</cstring>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>150</width>
+                        <height>23</height>
+                    </size>
+                </property>
+                <property name="backgroundMode">
+                    <enum>PaletteBase</enum>
+                </property>
+                <property name="font">
+                    <font>
+                    </font>
+                </property>
+                <property name="focusPolicy">
+                    <enum>StrongFocus</enum>
+                </property>
+                <property name="text">
+                    <string>Amber/amber96.ini</string>
+                </property>
+                <property name="maxLength">
+                    <number>32767</number>
+                </property>
+                <property name="frame">
+                    <bool>true</bool>
+                </property>
+                <property name="echoMode">
+                    <enum>Normal</enum>
+                </property>
+                <property name="alignment">
+                    <set>AlignRight</set>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>browse_button</cstring>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>90</width>
+                        <height>30</height>
+                    </size>
+                </property>
+                <property name="backgroundMode">
+                    <enum>PaletteButton</enum>
+                </property>
+                <property name="font">
+                    <font>
+                    </font>
+                </property>
+                <property name="focusPolicy">
+                    <enum>TabFocus</enum>
+                </property>
+                <property name="text">
+                    <string>Browse</string>
+                </property>
+                <property name="autoDefault">
+                    <bool>true</bool>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Browse your computer for amber file</string>
+                </property>
             </widget>
         </hbox>
     </widget>
@@ -849,195 +1050,6 @@
                 <string>VDW_CUTON</string>
             </property>
         </widget>
-    </widget>
-    <widget class="QLayoutWidget">
-        <property name="name">
-            <cstring>layout1</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>7</x>
-                <y>454</y>
-                <width>633</width>
-                <height>32</height>
-            </rect>
-        </property>
-        <hbox>
-            <property name="name">
-                <cstring>unnamed</cstring>
-            </property>
-            <property name="margin">
-                <number>0</number>
-            </property>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>close_button</cstring>
-                </property>
-                <property name="minimumSize">
-                    <size>
-                        <width>0</width>
-                        <height>30</height>
-                    </size>
-                </property>
-                <property name="text">
-                    <string>&amp;Close</string>
-                </property>
-                <property name="accel">
-                    <string>Alt+C</string>
-                </property>
-                <property name="default">
-                    <bool>true</bool>
-                </property>
-            </widget>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>cancel_button</cstring>
-                </property>
-                <property name="minimumSize">
-                    <size>
-                        <width>0</width>
-                        <height>30</height>
-                    </size>
-                </property>
-                <property name="text">
-                    <string>Cancel</string>
-                </property>
-                <property name="accel">
-                    <string></string>
-                </property>
-            </widget>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>reset_button</cstring>
-                </property>
-                <property name="minimumSize">
-                    <size>
-                        <width>0</width>
-                        <height>30</height>
-                    </size>
-                </property>
-                <property name="text">
-                    <string>Reset</string>
-                </property>
-                <property name="accel">
-                    <string></string>
-                </property>
-            </widget>
-        </hbox>
-    </widget>
-    <widget class="QLayoutWidget">
-        <property name="name">
-            <cstring>layout35</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>5</x>
-                <y>5</y>
-                <width>640</width>
-                <height>32</height>
-            </rect>
-        </property>
-        <hbox>
-            <property name="name">
-                <cstring>unnamed</cstring>
-            </property>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>Label_10</cstring>
-                </property>
-                <property name="minimumSize">
-                    <size>
-                        <width>110</width>
-                        <height>29</height>
-                    </size>
-                </property>
-                <property name="backgroundMode">
-                    <enum>PaletteBackground</enum>
-                </property>
-                <property name="font">
-                    <font>
-                    </font>
-                </property>
-                <property name="focusPolicy">
-                    <enum>NoFocus</enum>
-                </property>
-                <property name="lineWidth">
-                    <number>1</number>
-                </property>
-                <property name="text">
-                    <string>Parameter file</string>
-                </property>
-                <property name="textFormat">
-                    <enum>AutoText</enum>
-                </property>
-                <property name="alignment">
-                    <set>AlignVCenter|AlignRight</set>
-                </property>
-            </widget>
-            <widget class="QLineEdit">
-                <property name="name">
-                    <cstring>parameter_file_edit</cstring>
-                </property>
-                <property name="minimumSize">
-                    <size>
-                        <width>150</width>
-                        <height>23</height>
-                    </size>
-                </property>
-                <property name="backgroundMode">
-                    <enum>PaletteBase</enum>
-                </property>
-                <property name="font">
-                    <font>
-                    </font>
-                </property>
-                <property name="focusPolicy">
-                    <enum>StrongFocus</enum>
-                </property>
-                <property name="text">
-                    <string>Amber/amber96.ini</string>
-                </property>
-                <property name="maxLength">
-                    <number>32767</number>
-                </property>
-                <property name="frame">
-                    <bool>true</bool>
-                </property>
-                <property name="echoMode">
-                    <enum>Normal</enum>
-                </property>
-                <property name="alignment">
-                    <set>AlignRight</set>
-                </property>
-            </widget>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>browse_button</cstring>
-                </property>
-                <property name="minimumSize">
-                    <size>
-                        <width>90</width>
-                        <height>30</height>
-                    </size>
-                </property>
-                <property name="backgroundMode">
-                    <enum>PaletteButton</enum>
-                </property>
-                <property name="font">
-                    <font>
-                    </font>
-                </property>
-                <property name="focusPolicy">
-                    <enum>TabFocus</enum>
-                </property>
-                <property name="text">
-                    <string>Browse</string>
-                </property>
-                <property name="autoDefault">
-                    <bool>true</bool>
-                </property>
-            </widget>
-        </hbox>
     </widget>
 </widget>
 <connections>

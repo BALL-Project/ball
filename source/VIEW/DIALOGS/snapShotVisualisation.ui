@@ -206,34 +206,6 @@
                 </size>
             </property>
         </widget>
-        <widget class="QCheckBox">
-            <property name="name">
-                <cstring>export_POV</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>227</x>
-                    <y>121</y>
-                    <width>147</width>
-                    <height>21</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>110</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="text">
-                <string>export POVRay</string>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Export one PNG image for each Snapshot.</string>
-            </property>
-            <property name="whatsThis" stdset="0">
-                <string>Export one PNG image for each Snapshot.</string>
-            </property>
-        </widget>
         <widget class="QGroupBox">
             <property name="name">
                 <cstring>groupBox4</cstring>
@@ -566,6 +538,9 @@
                 <property name="tickInterval">
                     <number>1</number>
                 </property>
+                <property name="toolTip" stdset="0">
+                    <string>Select animation speed</string>
+                </property>
             </widget>
         </widget>
         <widget class="QCheckBox">
@@ -588,6 +563,34 @@
             </property>
             <property name="text">
                 <string>export PNGs</string>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Export one PNG image for each Snapshot.</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Export one PNG image for each Snapshot.</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>export_POV</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>227</x>
+                    <y>121</y>
+                    <width>147</width>
+                    <height>21</height>
+                </rect>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>110</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>export POVRay</string>
             </property>
             <property name="toolTip" stdset="0">
                 <string>Export one PNG image for each Snapshot.</string>
@@ -825,50 +828,6 @@
         </widget>
         <widget class="QPushButton">
             <property name="name">
-                <cstring>oneBackwardButton</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>148</x>
-                    <y>78</y>
-                    <width>30</width>
-                    <height>26</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>0</width>
-                    <height>26</height>
-                </size>
-            </property>
-            <property name="text">
-                <string>&lt;</string>
-            </property>
-        </widget>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>oneForwardButton</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>198</x>
-                    <y>78</y>
-                    <width>30</width>
-                    <height>26</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>0</width>
-                    <height>26</height>
-                </size>
-            </property>
-            <property name="text">
-                <string>&gt;</string>
-            </property>
-        </widget>
-        <widget class="QPushButton">
-            <property name="name">
                 <cstring>tenForwardButton</cstring>
             </property>
             <property name="geometry">
@@ -931,6 +890,56 @@
             </property>
             <property name="text">
                 <string>&gt;|</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>oneForwardButton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>198</x>
+                    <y>78</y>
+                    <width>30</width>
+                    <height>26</height>
+                </rect>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>0</width>
+                    <height>26</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>&gt;</string>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>forward</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>oneBackwardButton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>148</x>
+                    <y>78</y>
+                    <width>30</width>
+                    <height>26</height>
+                </rect>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>0</width>
+                    <height>26</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>&lt;</string>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>backward</string>
             </property>
         </widget>
     </widget>

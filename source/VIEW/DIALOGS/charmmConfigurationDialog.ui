@@ -422,41 +422,6 @@
             <set>AlignRight</set>
         </property>
     </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>browse_button</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>559</x>
-                <y>8</y>
-                <width>82</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>0</width>
-                <height>30</height>
-            </size>
-        </property>
-        <property name="backgroundMode">
-            <enum>PaletteButton</enum>
-        </property>
-        <property name="font">
-            <font>
-            </font>
-        </property>
-        <property name="focusPolicy">
-            <enum>TabFocus</enum>
-        </property>
-        <property name="text">
-            <string>Browse</string>
-        </property>
-        <property name="autoDefault">
-            <bool>true</bool>
-        </property>
-    </widget>
     <widget class="QLayoutWidget">
         <property name="name">
             <cstring>layout6</cstring>
@@ -495,6 +460,9 @@
                 <property name="default">
                     <bool>true</bool>
                 </property>
+                <property name="toolTip" stdset="0">
+                    <string>Close window and save changes</string>
+                </property>
             </widget>
             <widget class="QPushButton">
                 <property name="name">
@@ -512,6 +480,9 @@
                 <property name="accel">
                     <string></string>
                 </property>
+                <property name="toolTip" stdset="0">
+                    <string>Close window and discard changes</string>
+                </property>
             </widget>
             <widget class="QPushButton">
                 <property name="name">
@@ -528,6 +499,9 @@
                 </property>
                 <property name="accel">
                     <string></string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Reset settings to default values</string>
                 </property>
             </widget>
         </hbox>
@@ -1222,6 +1196,44 @@
                 </property>
             </widget>
         </hbox>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>browse_button</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>559</x>
+                <y>8</y>
+                <width>82</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>0</width>
+                <height>30</height>
+            </size>
+        </property>
+        <property name="backgroundMode">
+            <enum>PaletteButton</enum>
+        </property>
+        <property name="font">
+            <font>
+            </font>
+        </property>
+        <property name="focusPolicy">
+            <enum>TabFocus</enum>
+        </property>
+        <property name="text">
+            <string>Browse</string>
+        </property>
+        <property name="autoDefault">
+            <bool>true</bool>
+        </property>
+        <property name="toolTip" stdset="0">
+            <string>Browse your computer for CHARMM file</string>
+        </property>
     </widget>
 </widget>
 <connections>

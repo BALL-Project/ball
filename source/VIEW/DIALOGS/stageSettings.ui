@@ -133,6 +133,9 @@
                             <property name="text">
                                 <string>Edit</string>
                             </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Select background color</string>
+                            </property>
                         </widget>
                     </widget>
                     <widget class="QGroupBox">
@@ -269,6 +272,41 @@
                                 <string>Enable fog</string>
                             </property>
                         </widget>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>TextLabel1_3_4</cstring>
+                            </property>
+                            <property name="geometry">
+                                <rect>
+                                    <x>10</x>
+                                    <y>76</y>
+                                    <width>33</width>
+                                    <height>20</height>
+                                </rect>
+                            </property>
+                            <property name="text">
+                                <string>min</string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>TextLabel1_2_2_4</cstring>
+                            </property>
+                            <property name="geometry">
+                                <rect>
+                                    <x>210</x>
+                                    <y>75</y>
+                                    <width>47</width>
+                                    <height>21</height>
+                                </rect>
+                            </property>
+                            <property name="text">
+                                <string>max</string>
+                            </property>
+                            <property name="alignment">
+                                <set>AlignVCenter|AlignRight</set>
+                            </property>
+                        </widget>
                         <widget class="QSlider">
                             <property name="name">
                                 <cstring>fog_slider</cstring>
@@ -304,41 +342,6 @@
                             </property>
                             <property name="whatsThis" stdset="0">
                                 <string>Intensity of fog</string>
-                            </property>
-                        </widget>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>TextLabel1_3_4</cstring>
-                            </property>
-                            <property name="geometry">
-                                <rect>
-                                    <x>10</x>
-                                    <y>76</y>
-                                    <width>33</width>
-                                    <height>20</height>
-                                </rect>
-                            </property>
-                            <property name="text">
-                                <string>min</string>
-                            </property>
-                        </widget>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>TextLabel1_2_2_4</cstring>
-                            </property>
-                            <property name="geometry">
-                                <rect>
-                                    <x>210</x>
-                                    <y>75</y>
-                                    <width>47</width>
-                                    <height>21</height>
-                                </rect>
-                            </property>
-                            <property name="text">
-                                <string>max</string>
-                            </property>
-                            <property name="alignment">
-                                <set>AlignVCenter|AlignRight</set>
                             </property>
                         </widget>
                     </widget>

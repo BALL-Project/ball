@@ -233,76 +233,6 @@
     </widget>
     <widget class="QGroupBox">
         <property name="name">
-            <cstring>groupBox5</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>9</x>
-                <y>269</y>
-                <width>416</width>
-                <height>99</height>
-            </rect>
-        </property>
-        <property name="title">
-            <string>Force Field Options</string>
-        </property>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>advanced_button</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>100</x>
-                    <y>60</y>
-                    <width>166</width>
-                    <height>32</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>&amp;ForceField Options</string>
-            </property>
-            <property name="accel">
-                <string>Alt+F</string>
-            </property>
-        </widget>
-        <widget class="QRadioButton">
-            <property name="name">
-                <cstring>useCharmmRadioButton</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>183</x>
-                    <y>31</y>
-                    <width>166</width>
-                    <height>21</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>Use CharmmFF</string>
-            </property>
-        </widget>
-        <widget class="QRadioButton">
-            <property name="name">
-                <cstring>useAmberRadioButton</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>11</x>
-                    <y>31</y>
-                    <width>166</width>
-                    <height>21</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>Use AmberFF</string>
-            </property>
-            <property name="checked">
-                <bool>true</bool>
-            </property>
-        </widget>
-    </widget>
-    <widget class="QGroupBox">
-        <property name="name">
             <cstring>GroupBox_3</cstring>
         </property>
         <property name="geometry">
@@ -662,37 +592,6 @@
     </widget>
     <widget class="QPushButton">
         <property name="name">
-            <cstring>start_button</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>374</y>
-                <width>204</width>
-                <height>33</height>
-            </rect>
-        </property>
-        <property name="backgroundMode">
-            <enum>PaletteButton</enum>
-        </property>
-        <property name="focusPolicy">
-            <enum>TabFocus</enum>
-        </property>
-        <property name="text">
-            <string>&amp;Start</string>
-        </property>
-        <property name="accel">
-            <string>Alt+S</string>
-        </property>
-        <property name="autoDefault">
-            <bool>true</bool>
-        </property>
-        <property name="default">
-            <bool>true</bool>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
             <cstring>cancel_button</cstring>
         </property>
         <property name="geometry">
@@ -724,6 +623,113 @@
         <property name="autoDefault">
             <bool>true</bool>
         </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>start_button</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>374</y>
+                <width>204</width>
+                <height>33</height>
+            </rect>
+        </property>
+        <property name="backgroundMode">
+            <enum>PaletteButton</enum>
+        </property>
+        <property name="focusPolicy">
+            <enum>TabFocus</enum>
+        </property>
+        <property name="text">
+            <string>&amp;Start</string>
+        </property>
+        <property name="accel">
+            <string>Alt+S</string>
+        </property>
+        <property name="autoDefault">
+            <bool>true</bool>
+        </property>
+        <property name="default">
+            <bool>true</bool>
+        </property>
+        <property name="toolTip" stdset="0">
+            <string>Start simulation</string>
+        </property>
+    </widget>
+    <widget class="QGroupBox">
+        <property name="name">
+            <cstring>groupBox5</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>9</x>
+                <y>269</y>
+                <width>416</width>
+                <height>99</height>
+            </rect>
+        </property>
+        <property name="title">
+            <string>Force Field Options</string>
+        </property>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>useCharmmRadioButton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>183</x>
+                    <y>31</y>
+                    <width>166</width>
+                    <height>21</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Use CharmmFF</string>
+            </property>
+        </widget>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>useAmberRadioButton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>11</x>
+                    <y>31</y>
+                    <width>166</width>
+                    <height>21</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Use AmberFF</string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>advanced_button</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>100</x>
+                    <y>60</y>
+                    <width>166</width>
+                    <height>32</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>&amp;ForceField Options</string>
+            </property>
+            <property name="accel">
+                <string>Alt+F</string>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Alter force field options</string>
+            </property>
+        </widget>
     </widget>
 </widget>
 <connections>

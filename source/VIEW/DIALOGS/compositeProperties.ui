@@ -486,19 +486,6 @@
                 </rect>
             </property>
         </widget>
-        <widget class="QComboBox">
-            <property name="name">
-                <cstring>element_box</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>133</x>
-                    <y>81</y>
-                    <width>250</width>
-                    <height>24</height>
-                </rect>
-            </property>
-        </widget>
         <widget class="QLabel">
             <property name="name">
                 <cstring>TextLabel4</cstring>
@@ -642,6 +629,22 @@
             </property>
             <property name="alignment">
                 <set>AlignVCenter|AlignRight</set>
+            </property>
+        </widget>
+        <widget class="QComboBox">
+            <property name="name">
+                <cstring>element_box</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>133</x>
+                    <y>81</y>
+                    <width>250</width>
+                    <height>24</height>
+                </rect>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Select element</string>
             </property>
         </widget>
     </widget>

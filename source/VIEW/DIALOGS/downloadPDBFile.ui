@@ -30,22 +30,6 @@
     <property name="sizeGripEnabled">
         <bool>false</bool>
     </property>
-    <widget class="QLineEdit">
-        <property name="name">
-            <cstring>pdbId</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>215</x>
-                <y>274</y>
-                <width>149</width>
-                <height>28</height>
-            </rect>
-        </property>
-        <property name="toolTip" stdset="0">
-            <string>You can also enter a PDB id directly.</string>
-        </property>
-    </widget>
     <widget class="QLabel">
         <property name="name">
             <cstring>textLabel1</cstring>
@@ -64,194 +48,6 @@
         <property name="alignment">
             <set>AlignVCenter|AlignRight</set>
         </property>
-    </widget>
-    <widget class="QGroupBox">
-        <property name="name">
-            <cstring>search_box</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>2</x>
-                <y>2</y>
-                <width>556</width>
-                <height>261</height>
-            </rect>
-        </property>
-        <property name="title">
-            <string>Search </string>
-        </property>
-        <property name="alignment">
-            <set>AlignHCenter</set>
-        </property>
-        <widget class="QComboBox">
-            <property name="name">
-                <cstring>results</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>213</x>
-                    <y>222</y>
-                    <width>150</width>
-                    <height>28</height>
-                </rect>
-            </property>
-        </widget>
-        <widget class="QCheckBox">
-            <property name="name">
-                <cstring>removeSimilar</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>9</x>
-                    <y>174</y>
-                    <width>289</width>
-                    <height>31</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>Remove similar sequences</string>
-            </property>
-        </widget>
-        <widget class="QCheckBox">
-            <property name="name">
-                <cstring>exactMatch</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>9</x>
-                    <y>147</y>
-                    <width>247</width>
-                    <height>31</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>Match exact word</string>
-            </property>
-        </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>textLabel3</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>8</x>
-                    <y>16</y>
-                    <width>538</width>
-                    <height>44</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>Enter a query string. Queries may contain boolean modifiers &lt;font color="#ff0000"&gt;and&lt;/font&gt;, &lt;font color="#ff0000"&gt;or&lt;/font&gt; and &lt;font color="#ff0000"&gt;not&lt;/font&gt;, and the wildcard &lt;font color="#ff0000"&gt;*&lt;/font&gt;. Queries are case insensitive.</string>
-            </property>
-        </widget>
-        <widget class="QTextEdit">
-            <property name="name">
-                <cstring>searchField</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>8</x>
-                    <y>72</y>
-                    <width>383</width>
-                    <height>73</height>
-                </rect>
-            </property>
-        </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>textLabel2</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>11</x>
-                    <y>222</y>
-                    <width>197</width>
-                    <height>28</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>Structures matching:</string>
-            </property>
-            <property name="alignment">
-                <set>AlignVCenter|AlignRight</set>
-            </property>
-        </widget>
-        <widget class="QButtonGroup">
-            <property name="name">
-                <cstring>searchMethod</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>398</x>
-                    <y>66</y>
-                    <width>151</width>
-                    <height>75</height>
-                </rect>
-            </property>
-            <property name="title">
-                <string>Search method</string>
-            </property>
-            <property name="alignment">
-                <set>AlignHCenter</set>
-            </property>
-            <widget class="QRadioButton">
-                <property name="name">
-                    <cstring>authors</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>40</y>
-                        <width>101</width>
-                        <height>31</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Authors</string>
-                </property>
-            </widget>
-            <widget class="QRadioButton">
-                <property name="name">
-                    <cstring>fullText</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>20</y>
-                        <width>96</width>
-                        <height>22</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Full Text</string>
-                </property>
-                <property name="checked">
-                    <bool>true</bool>
-                </property>
-            </widget>
-        </widget>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>searchbutton</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>315</x>
-                    <y>162</y>
-                    <width>194</width>
-                    <height>30</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>0</width>
-                    <height>30</height>
-                </size>
-            </property>
-            <property name="text">
-                <string>Search www.rcsb.org</string>
-            </property>
-        </widget>
     </widget>
     <widget class="QLayoutWidget">
         <property name="name">
@@ -340,6 +136,22 @@
             </widget>
         </hbox>
     </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>pdbId</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>215</x>
+                <y>274</y>
+                <width>149</width>
+                <height>28</height>
+            </rect>
+        </property>
+        <property name="toolTip" stdset="0">
+            <string>You can also enter a PDB id directly.</string>
+        </property>
+    </widget>
     <widget class="QPushButton">
         <property name="name">
             <cstring>showDetails</cstring>
@@ -361,6 +173,200 @@
         <property name="text">
             <string>PDBFile Details</string>
         </property>
+    </widget>
+    <widget class="QGroupBox">
+        <property name="name">
+            <cstring>search_box</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>2</x>
+                <y>2</y>
+                <width>556</width>
+                <height>261</height>
+            </rect>
+        </property>
+        <property name="title">
+            <string>Search </string>
+        </property>
+        <property name="alignment">
+            <set>AlignHCenter</set>
+        </property>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>removeSimilar</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>9</x>
+                    <y>174</y>
+                    <width>289</width>
+                    <height>31</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Remove similar sequences</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>exactMatch</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>9</x>
+                    <y>147</y>
+                    <width>247</width>
+                    <height>31</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Match exact word</string>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel3</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>8</x>
+                    <y>16</y>
+                    <width>538</width>
+                    <height>44</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Enter a query string. Queries may contain boolean modifiers &lt;font color="#ff0000"&gt;and&lt;/font&gt;, &lt;font color="#ff0000"&gt;or&lt;/font&gt; and &lt;font color="#ff0000"&gt;not&lt;/font&gt;, and the wildcard &lt;font color="#ff0000"&gt;*&lt;/font&gt;. Queries are case insensitive.</string>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel2</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>11</x>
+                    <y>222</y>
+                    <width>197</width>
+                    <height>28</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Structures matching:</string>
+            </property>
+            <property name="alignment">
+                <set>AlignVCenter|AlignRight</set>
+            </property>
+        </widget>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>searchMethod</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>398</x>
+                    <y>66</y>
+                    <width>151</width>
+                    <height>75</height>
+                </rect>
+            </property>
+            <property name="title">
+                <string>Search method</string>
+            </property>
+            <property name="alignment">
+                <set>AlignHCenter</set>
+            </property>
+            <widget class="QRadioButton">
+                <property name="name">
+                    <cstring>authors</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>40</y>
+                        <width>101</width>
+                        <height>31</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Authors</string>
+                </property>
+            </widget>
+            <widget class="QRadioButton">
+                <property name="name">
+                    <cstring>fullText</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>20</y>
+                        <width>96</width>
+                        <height>22</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Full Text</string>
+                </property>
+                <property name="checked">
+                    <bool>true</bool>
+                </property>
+            </widget>
+        </widget>
+        <widget class="QTextEdit">
+            <property name="name">
+                <cstring>searchField</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>8</x>
+                    <y>72</y>
+                    <width>383</width>
+                    <height>73</height>
+                </rect>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Enter query string for www.rcsb.org</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>searchbutton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>315</x>
+                    <y>162</y>
+                    <width>194</width>
+                    <height>30</height>
+                </rect>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>0</width>
+                    <height>30</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>Search www.rcsb.org</string>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Mch at www.rcsb.orgake sear</string>
+            </property>
+        </widget>
+        <widget class="QComboBox">
+            <property name="name">
+                <cstring>results</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>213</x>
+                    <y>222</y>
+                    <width>150</width>
+                    <height>28</height>
+                </rect>
+            </property>
+        </widget>
     </widget>
 </widget>
 <connections>
