@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.C,v 1.22 2004/02/06 14:05:26 amoll Exp $
+// $Id: colorMeshDialog.C,v 1.23 2004/02/13 16:28:20 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
@@ -202,13 +202,13 @@ void ColorMeshDialog::removeGrid_(RegularData3D& grid)
 void ColorMeshDialog::gridSelected()
 {
 	if (mesh_ == 0) return;
-	Index pos = grids->currentItem();
-	if (pos == -1) 
+	if (grids->count() == 0 || grids->currentItem() == -1)
 	{
 		invalidateGrid_();
 		return;
 	}
 
+	Index pos = grids->currentItem();
 	list<RegularData3D*>::iterator it = grid_list_.begin();
 	for (Position p = 0; p < (Position)pos; p++)
 	{
