@@ -34,13 +34,13 @@ namespace BALL
 			*/
 			Processor::Result operator() (Composite &composite);
 
-			vector<char> sheet;
+			String sheet;
 		//	vector<char> bridge1;
 		//	vector<char> bridge2;
-			vector<char> Fiveturn;
-			vector<char> Fourturn;
-			vector<char> Threeturn;
-			vector<char> summary;
+			String Fiveturn;
+			String Fourturn;
+			String Threeturn;
+			String summary;
 
 		private:
 			/** SecondaryStructureBool_ : matrix to save the existence of a SecondaryStructure
@@ -49,9 +49,8 @@ namespace BALL
 			vector< vector<int> > HBonds_;
 			//vector to save the bridges
 			vector< vector <int> > posbridges_; 
-			bool hasPrefix(const String& pattern, Size i, const vector<char>& target);
 			void insert_turn(int turn, int position);
-      void change_all_X_to_Y(char X, char Y, vector<char>& target);			
+      void change_all_X_to_Y(char X, char Y, String& target);			
 			
 	}; //class SecondaryStructureProcessor
 
