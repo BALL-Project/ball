@@ -1,4 +1,4 @@
-// $Id: client.C,v 1.5 2000/01/13 22:32:43 oliver Exp $
+// $Id: client.C,v 1.6 2000/05/14 15:21:59 hekl Exp $
 
 #include <BALL/VIEW/KERNEL/client.h>
 
@@ -13,18 +13,21 @@ namespace BALL
 
 		Client::Client()
 			:	host_(),
-				port_(VIEW_DEFAULT_PORT)
+				port_(VIEW_DEFAULT_PORT),
+				pm_()
 		{
 		}
 
 		Client::Client
 			(const Client&  /* client */, bool /* deep */)
 			:	host_(),
-				port_(VIEW_DEFAULT_PORT)
+				port_(VIEW_DEFAULT_PORT),
+				pm_()
 		{
 		}
 
 		Client::Client(const String& host, int port)
+			:	pm_()
 		{
 			connect(host, port);
 		}
@@ -54,22 +57,108 @@ namespace BALL
 			port_ = port;
 		}
 
-		ClientScene Client::getScene()
-		{
+	  void Client::insert(Composite &composite)
+    {
+			#ifdef BALL_VIEW_DEBUG
+					
+			if (!isValid())
+			{
+				throw InvalidClient(__FILE__, __LINE__);
+			}	
+				
+			if (!RTTI::isKindOf<PersistentObject*>(&composite))
+			{
+				throw NoPersistentObject(__FILE__, __LINE__);
+			}
+
+			#endif
+
 			IOStreamSocket iostream_socket;	
 			iostream_socket->connect(host_.c_str(), port_);
 
-			iostream_socket << (int)COMMAND__OPEN_SCENE << endl;
+			iostream_socket << (int)COMMAND__SEND_OBJECT << " ";
+			iostream_socket << (unsigned long)(&composite) << endl;
 
-			SceneHandle scene_handle;
-			iostream_socket >> scene_handle;
+			pm_.setOstream(iostream_socket);
+			composite >> pm_;
+
+			iostream_socket->close();
+    }
+
+		void Client::setCreatorValue(int address, int value)
+    {
+			#ifdef BALL_VIEW_DEBUG
+					
+			if (!isValid())
+			{
+				throw InvalidClient(__FILE__, __LINE__);
+			}
+				
+			#endif
+
+			IOStreamSocket iostream_socket;	
+			iostream_socket->connect(host_.c_str(), port_);
+
+			iostream_socket << (int)COMMAND__SET_CREATOR_VALUE << " ";
+			iostream_socket << address << " ";
+			iostream_socket << value << endl;
+		
+			iostream_socket->close();
+		}
+
+		int Client::getCreatorValue(int address)
+    {
+			#ifdef BALL_VIEW_DEBUG
+					
+			if (!isValid())
+			{
+				throw InvalidClient(__FILE__, __LINE__);
+			}
+				
+			#endif
+
+			IOStreamSocket iostream_socket;	
+			iostream_socket->connect(host_.c_str(), port_);
+
+			iostream_socket << (int)COMMAND__GET_CREATOR_VALUE << " ";
+			iostream_socket << address << endl;
+
+			int value = -1;
+
+			iostream_socket >> value;
 
 			iostream_socket->close();
 
-			ClientScene scene(host_, port_, scene_handle);
-
-			return scene;
+			return value;
 		}
+
+		bool Client::hasCreatorValue(int address, int value)
+    {
+			#ifdef BALL_VIEW_DEBUG
+					
+			if (!isValid())
+			{
+				throw InvalidClient(__FILE__, __LINE__);
+			}
+				
+			#endif
+
+			IOStreamSocket iostream_socket;	
+			iostream_socket->connect(host_.c_str(), port_);
+
+			iostream_socket << (int)COMMAND__HAS_CREATOR_VALUE << " ";
+			iostream_socket << address << " ";
+			iostream_socket << value << endl;
+
+			bool has_value = false;
+
+			iostream_socket >> has_value;
+
+			iostream_socket->close();
+
+			return has_value;
+		}
+
 
 		bool Client::isValid() const
 		{

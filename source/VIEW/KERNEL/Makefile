@@ -4,7 +4,6 @@ THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
 	client.C\
-	clientScene.C\
 	colorExtension1.C\
 	colorExtension2.C\
 	colorExtension3.C\
