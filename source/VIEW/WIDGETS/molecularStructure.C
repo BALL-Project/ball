@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.21 2004/02/19 10:38:31 oliver Exp $
+// $Id: molecularStructure.C,v 1.22 2004/02/19 11:35:36 oliver Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -895,13 +895,11 @@ namespace BALL
 		setStatusbarText("setting up force field...");
 		
 		ForceField& ff = getForceField();
-		ff.options.dump(Log.info());
 		if (!ff.setup(*system))
 		{
 			setStatusbarText("Force field setup failed. See log for details.");
 			return;
 		}
-		ff.options.dump(Log.info());
 
 		// CHARMM setup may delete atoms (converted to united atoms!),
 		// so we have to make sure the rest of the world realizes something might have changed.
@@ -997,68 +995,61 @@ namespace BALL
 
 	void MolecularStructure::amberMDSimulation()
 	{
+		// Make sure we run just one instance at a time.
  		if (!getMainControl()->compositesAreMuteable())
 		{
 			Log.error() << "Simulation already running or still rendering!" << std::endl;
 			return;
 		}
+		
 		// retrieve the system from the selection
 		System* system = getMainControl()->getSelectedSystem();
 
-		// execute the MD simulation dialog
+		// Execute the MD simulation dialog
 		// and abort if cancel is clicked or nonsense arguments given
-		if (system == 0||
-				!md_dialog_.exec() ||
-				!md_dialog_.getSimulationTime() ||
-				!md_dialog_.getTemperature())
+		if ((system == 0) ||	!md_dialog_.exec() 
+				|| (md_dialog_.getSimulationTime() == 0.0)
+				|| (md_dialog_.getTemperature() == 0.0))
 		{
 			return;
 		}
 
+		// Get the force field.
 		use_amber_ = md_dialog_.getUseAmber();
-		AmberFF& amber = getAmberFF();
-		CharmmFF& charmm = getCharmmFF();
+		ForceField& ff = getForceField();
+
 		// set up the force field
 		setStatusbarText("setting up force field...");
 
-	#ifdef BALL_VIEW_DEBUG
-		if(use_amber_)
-			amber.options.dump();
-		else
-			charmm.options.dump();
-	#endif
 	
-		if (use_amber_)
+		// Setup the force field.
+		if (!ff.setup(*system))
 		{
-			if (!amber.setup(*system))
-			{
-				Log.error() << "Setup of amber force field failed." << endl;
-				return;
-			}
-			// calculate the energy
-			setStatusbarText("starting simulation...");
-			amber.updateEnergy();
+			Log.error() << "Force field setup failed." << endl;
+			return;
 		}
-		else
-		{
-			if (!charmm.setup(*system))
-			{
-				Log.error() << "Setup of charmm force field failed." << endl;
-				return;
-			}
+		ff.updateEnergy();
 
-			CompositeMessage *change_message = 
+		// CHARMM setup may delete atoms (converted to united atoms!),
+		// so we have to make sure the rest of the world realizes something might have changed.
+		if (!use_amber_)
+		{
+			CompositeMessage* change_message = 
 				new CompositeMessage(*system, CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL);
 			notify_(change_message);
-
-			// calculate the energy
-			setStatusbarText("starting simulation...");
-			charmm.updateEnergy();
 		}
+
 		
+		// Create an instance of the molecular dynamics simulation.
 		MolecularDynamics* mds = 0;
-		if (md_dialog_.useMicroCanonical()) mds = new CanonicalMD;
-		else 																mds = new MicroCanonicalMD;
+		if (md_dialog_.useMicroCanonical())
+		{
+			mds = new CanonicalMD;
+		}
+		else
+		{
+			mds = new MicroCanonicalMD;
+		}
 		
 		// set the options for the MDS	
 		Options options;
@@ -1068,21 +1059,17 @@ namespace BALL
 		try
 		{
 			// setup the simulation
-			if(use_amber_)
-				mds->setup(amber, 0, options);
-			else
-				mds->setup(charmm, 0, options);
-				
-			if (!mds->isValid())
+			if (!mds->setup(ff, 0, options))
 			{
 				Log.error() << "Setup for MD simulation failed!" << std::endl;
+				delete mds;
 				return;
 			}
 			
 			// perform an initial step (no restart step)
 			mds->simulateIterations(1, false);
 
-			// we update everything every so and so steps
+			// We update everything every so and so many steps.
 			Size steps = md_dialog_.getStepsBetweenRefreshs();
 
 			DCDFile* dcd = 0;
@@ -1113,17 +1100,7 @@ namespace BALL
 		#else
 			// ============================= WITHOUT MULTITHREADING ==============================
 			// iterate until done and refresh the screen every "steps" iterations
-			SnapShotManager manager;
-			if(use_amber_)
-			{
-				 SnapShotManager mngr(amber.getSystem(), &amber, dcd);
-				 manager = mngr;
-			}
-			else
-			{
-				static SnapShotManager mngr(charmm.getSystem(), &charmm, dcd);
-				manager = mngr;
-			}
+			SnapShotManager manager(system, &getForceField(), dcd);
 			manager.setFlushToDiskFrequency(10);
 			
 			while (mds->getNumberOfIterations() < md_dialog_.getNumberOfSteps())
@@ -1141,35 +1118,21 @@ namespace BALL
 					manager.takeSnapShot();
 				}
 
-				QString message;
-				if(use_amber_)
-					message.sprintf("Iteration %d: energy = %f kJ/mol, RMS gradient = %f kJ/mol A", 
-												mds->getNumberOfIterations(), amber.getEnergy(), amber.getRMSGradient());
-				else
-					message.sprintf("Iteration %d: energy = %f kJ/mol, RMS gradient = %f kJ/mol A", 
-												mds->getNumberOfIterations(), charmm.getEnergy(), charmm.getRMSGradient());
-				setStatusbarText(String(message.ascii()));
+
+				setStatusbarText(String("Iteration ") + String(minimizer->getNumberOfIterations())
+												 + ": E = " + String(ff.getEnergy()) + " kJ/mol, RMS grad = "
+												 + String(ff.getRMSGradient()) + " kJ/(mol A)");
 			}
 
 			if (dcd) manager.flushToDisk();
 
 			Log.info() << std::endl << "simulation terminated." << std::endl << endl;
-			if(use_amber_)
-			{
-				printAmberResults();
-				Log.info() << "final RMS gadient    : " << amber.getRMSGradient() << " kJ/(mol A)   after " 
-									 << mds->getNumberOfIterations() << " iterations" << endl << endl;
-				setStatusbarText("Total FF energy: " + String(amber.getEnergy()) + " kJ/mol.");
 
-			}
-			else
-			{
-				printCharmmResults();
-				Log.info() << "final RMS gadient    : " << charmm.getRMSGradient() << " kJ/(mol A)   after " 
-									 << mds->getNumberOfIterations() << " iterations" << endl << endl;
-				setStatusbarText("Total FF energy: " + String(charmm.getEnergy()) + " kJ/mol.");
-			}
-				
+			printResults();
+			Log.info() << "final RMS gadient    : " << ff.getRMSGradient() << " kJ/(mol A)   after " 
+								 << mds->getNumberOfIterations() << " iterations" << endl << endl;
+			setStatusbarText("Final energy: " + String(ff.getEnergy()) + " kJ/mol.");
+
 			// clean up
 			delete mds;
 
@@ -1180,10 +1143,7 @@ namespace BALL
 				dcd = new DCDFile(md_dialog_.getDCDFile(), File::IN);
 
 				NewTrajectoryMessage* message = new NewTrajectoryMessage;
-				if(use_amber_)
-					message->setComposite(*amber.getSystem());
-				else
-					message->setComposite(*charmm.getSystem());
+				message->setComposite(*system);
 				message->setTrajectoryFile(*dcd);
 				notify_(message);
 			}
@@ -1191,7 +1151,7 @@ namespace BALL
 		}
 		catch(Exception::GeneralException e)
 		{
-			String txt = "Calculation aborted because of throwed exception";
+			String txt = "Calculation aborted because of an unexpected exception";
 			setStatusbarText(txt + ". See Logs");
 			Log.error() << txt << ":" << std::endl;
 			Log.error() << e << std::endl;
