@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lennardJones.C,v 1.15 2002/12/12 10:44:36 oliver Exp $
+// $Id: lennardJones.C,v 1.16 2003/04/18 11:54:29 oliver Exp $
 
 #include <BALL/MOLMEC/PARAMETER/lennardJones.h>
 #include <BALL/MOLMEC/PARAMETER/forceFieldParameters.h>
@@ -327,12 +327,12 @@ namespace BALL
 	bool LennardJones::hasParameters(Atom::Type I, Atom::Type J) const
 		throw()
 	{
-		if ((I < 0) && ((Size)I >= number_of_atom_types_))
+		if ((I < 0) && (I >= (Index)number_of_atom_types_))
 		{
 			return false;
 		}
 
-		if ((J < 0) && ((Size)J >= number_of_atom_types_))
+		if ((J < 0) && (J >= (Index)number_of_atom_types_))
 		{
 			return false;
 		}
