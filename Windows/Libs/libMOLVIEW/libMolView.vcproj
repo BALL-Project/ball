@@ -193,6 +193,9 @@
 						RelativePath="..\..\..\source\MOLVIEW\GUI\DIALOGS\contourSurfaceDialog.C">
 					</File>
 					<File
+						RelativePath="..\..\..\source\MOLVIEW\GUI\DIALOGS\contourSurfaceDialogData.C">
+					</File>
+					<File
 						RelativePath="..\..\..\source\MOLVIEW\GUI\DIALOGS\displayProperties.C">
 					</File>
 					<File
@@ -441,6 +444,9 @@
 					</File>
 					<File
 						RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\contourSurfaceDialog.h">
+					</File>
+					<File
+						RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\contourSurfaceDialogData.h">
 					</File>
 					<File
 						RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\displayProperties.h">

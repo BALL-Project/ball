@@ -1,4 +1,4 @@
-// $Id: fileDialog.h,v 1.7.4.2 2002/12/03 10:08:49 oliver Exp $
+// $Id: fileDialog.h,v 1.7.4.3 2002/12/04 19:14:52 oliver Exp $
 
 #ifndef BALL_VIEW_GUI_DIALOGS_FILEDIALOG_H
 #define BALL_VIEW_GUI_DIALOGS_FILEDIALOG_H
@@ -8,9 +8,6 @@
 #ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
 # include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
 #endif
-
-
-
 
 namespace BALL
 {
