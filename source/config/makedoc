@@ -5,9 +5,22 @@ if [ $# = 1 ] && [ $1 = "-website" ]; then
 	CONFIGFILE=doxygen_website.cfg
 fi
 
-cd ../doc/ && \
-rm -f doxygen/html/*;  
-doxygen $CONFIGFILE && \
-cd doxygen/html && \
-for i in `find . -name "*html"`; do sed -i "s/BALL:://g" $i; done 
+cd ../doc/ || exit
+rm -f doxygen/html/* 
+doxygen $CONFIGFILE || exit
+cd doxygen/html || exit
 
+# Now walk over all html files and remove
+# the annoying BALL:: prefix for all class 
+# names to keep things short.
+TMPFILE=/tmp/$$.tmp.makedoc
+for i in `find . -name "*html"`; do 
+	cat $i|sed "s/BALL:://g" > $TMPFILE &&\
+		rm $i &&\
+		mv $TMPFILE $i
+done 
+
+# Remove leftovers if something went wrong above...
+if test -f "$TMPFILE" ; then 
+	rm $TMPFILE
+fi
