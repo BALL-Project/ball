@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expressionParser.C,v 1.4 2002/02/27 12:21:23 sturm Exp $
+// $Id: expressionParser.C,v 1.5 2003/06/30 13:54:29 amoll Exp $
 
 #include <BALL/KERNEL/expressionParser.h>
 #include <BALL/KERNEL/PTE.h>
@@ -123,6 +123,13 @@ namespace BALL
 	{
 	}
 
+	ExpressionParser::ExpressionParser(const ExpressionParser& parser)
+		:	syntax_tree_(0)
+	{	
+		if (parser.syntax_tree_ != 0) syntax_tree_ = new SyntaxTree(*parser.syntax_tree_);
+	}
+
+
 	ExpressionParser::~ExpressionParser()
 	{
 		if (syntax_tree_ != 0)
@@ -132,7 +139,9 @@ namespace BALL
 	}
 
 	const ExpressionParser::SyntaxTree& ExpressionParser::getSyntaxTree() const
+		throw(Exception::NullPointer)
 	{
+		if (syntax_tree_ == 0) throw(Exception::NullPointer(__FILE__, __LINE__));
 		return *syntax_tree_;
 	}
 
