@@ -1,4 +1,4 @@
-// $Id: shiftModel.h,v 1.2 2000/09/18 12:11:55 oliver Exp $
+// $Id: shiftModel.h,v 1.3 2000/09/19 20:33:40 oliver Exp $
 
 #ifndef BALL_NMR_SHIFTMODEL_H
 #define BALL_NMR_SHIFTMODEL_H
@@ -184,7 +184,7 @@ namespace BALL
 				from the contents of the parameter file.
 		*/
 		bool init_()
-			throw();
+			throw(Exception::FileNotFound);
 
 		/**	Create a ShiftModule from a symbolic name.
 				This method create a shift module from the symbolic
