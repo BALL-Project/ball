@@ -1,8 +1,8 @@
 <!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>AmberMinimizationDialogData</class>
+<class>MinimizationDialogData</class>
 <widget class="QDialog">
     <property name="name">
-        <cstring>minimizationDialogData</cstring>
+        <cstring>MinimizationDialogData</cstring>
     </property>
     <property name="geometry">
         <rect>
@@ -671,31 +671,31 @@
     <connection>
         <sender>start_button</sender>
         <signal>clicked()</signal>
-        <receiver>minimizationDialogData</receiver>
+        <receiver>MinimizationDialogData</receiver>
         <slot>accept()</slot>
     </connection>
     <connection>
         <sender>cancel_button</sender>
         <signal>clicked()</signal>
-        <receiver>minimizationDialogData</receiver>
+        <receiver>MinimizationDialogData</receiver>
         <slot>reject()</slot>
     </connection>
     <connection>
         <sender>advanced_button</sender>
         <signal>clicked()</signal>
-        <receiver>minimizationDialogData</receiver>
+        <receiver>MinimizationDialogData</receiver>
         <slot>advancedOptions()</slot>
     </connection>
     <connection>
         <sender>useAmberRadioButton</sender>
         <signal>clicked()</signal>
-        <receiver>minimizationDialogData</receiver>
+        <receiver>MinimizationDialogData</receiver>
         <slot>useAmberFF()</slot>
     </connection>
     <connection>
         <sender>useCharmmRadioButton</sender>
         <signal>clicked()</signal>
-        <receiver>minimizationDialogData</receiver>
+        <receiver>MinimizationDialogData</receiver>
         <slot>useCharmmFF()</slot>
     </connection>
 </connections>

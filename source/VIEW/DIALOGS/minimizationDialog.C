@@ -1,10 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: minimizationDialog.C,v 1.1 2004/02/18 17:21:56 amoll Exp $
+// $Id: minimizationDialog.C,v 1.2 2004/02/18 17:37:01 amoll Exp $
 //
 
-#include <BALL/VIEW/DIALOGS/amberMinimizationDialog.h>
+#include <BALL/VIEW/DIALOGS/minimizationDialog.h>
 #include <BALL/VIEW/DIALOGS/amberConfigurationDialog.h>
 #include <BALL/VIEW/DIALOGS/charmmConfigurationDialog.h>
 #include <qfiledialog.h>
@@ -16,18 +16,18 @@ namespace BALL
 	namespace VIEW
 	{
 
-		AmberMinimizationDialog::AmberMinimizationDialog(QWidget* parent, const char* name)
-			:	AmberMinimizationDialogData( parent, name ),
+		MinimizationDialog::MinimizationDialog(QWidget* parent, const char* name)
+			:	MinimizationDialogData( parent, name ),
 				amber_dialog_(0),
 				charmm_dialog_(0)
 		{
 		}
 
-		AmberMinimizationDialog::~AmberMinimizationDialog()
+		MinimizationDialog::~MinimizationDialog()
 		{
 		}
 
-		void AmberMinimizationDialog::writePreferences(INIFile& inifile) const
+		void MinimizationDialog::writePreferences(INIFile& inifile) const
 		{
 			// the minimizer options
 			if (!inifile.hasSection("MINIMIZATION")) inifile.appendSection("MINIMIZATION");
@@ -38,7 +38,7 @@ namespace BALL
 			inifile.insertValue("MINIMIZATION", "UseCGMinimizer", getUseConjugateGradient());
 		}
 
-		void AmberMinimizationDialog::readPreferences(const INIFile& inifile)
+		void MinimizationDialog::readPreferences(const INIFile& inifile)
 		{
 			// the minimizer options
 			if (inifile.hasEntry("MINIMIZATION", "Iterations::Max"))
@@ -63,7 +63,7 @@ namespace BALL
 			}
 		}
 
-		Size AmberMinimizationDialog::getMaxIterations() const	
+		Size MinimizationDialog::getMaxIterations() const	
 		{
 			try
 			{
@@ -76,12 +76,12 @@ namespace BALL
 			}
 		}
 
-		void AmberMinimizationDialog::setMaxIterations(Size n)
+		void MinimizationDialog::setMaxIterations(Size n)
 		{
 			max_iterations_lineedit->setText(QString(String(n).c_str()));
 		}
 
-		Size AmberMinimizationDialog::getRefresh() const
+		Size MinimizationDialog::getRefresh() const
 		{
 			try
 			{
@@ -94,12 +94,12 @@ namespace BALL
 			}
 		}
 
-		void AmberMinimizationDialog::setRefresh(Size n)
+		void MinimizationDialog::setRefresh(Size n)
 		{
 			refresh_iterations_lineedit->setText(QString(String(n).c_str()));
 		}
 
-		double AmberMinimizationDialog::getMaxGradient() const
+		double MinimizationDialog::getMaxGradient() const
 		{
 			try
 			{
@@ -112,12 +112,12 @@ namespace BALL
 			}
 		}
 
-		void AmberMinimizationDialog::setMaxGradient(double max_gradient)
+		void MinimizationDialog::setMaxGradient(double max_gradient)
 		{
 			max_grad_lineedit->setText(QString(String(max_gradient).c_str()));
 		}
 
-		double AmberMinimizationDialog::getEnergyDifference() const
+		double MinimizationDialog::getEnergyDifference() const
 		{
 			try
 			{
@@ -130,22 +130,22 @@ namespace BALL
 			}
 		}
 
-		void AmberMinimizationDialog::setEnergyDifference(double energy_difference)
+		void MinimizationDialog::setEnergyDifference(double energy_difference)
 		{
 			energy_difference_lineedit->setText(QString(String(energy_difference).c_str()));
 		}
 
-		bool AmberMinimizationDialog::getUseConjugateGradient() const
+		bool MinimizationDialog::getUseConjugateGradient() const
 		{
 			return conjugate_button->isChecked();
 		}
 
-		void AmberMinimizationDialog::setUseConjugateGradient(bool use_CG)
+		void MinimizationDialog::setUseConjugateGradient(bool use_CG)
 		{
 			conjugate_button->setChecked(use_CG);
 		}
 
-		void AmberMinimizationDialog::advancedOptions()
+		void MinimizationDialog::advancedOptions()
 		{
 			if(useAmberRadioButton->isChecked())
 			{
@@ -157,19 +157,19 @@ namespace BALL
 			}
 		}
 
-		void AmberMinimizationDialog::setAmberDialog(AmberConfigurationDialog* dialog)
+		void MinimizationDialog::setAmberDialog(AmberConfigurationDialog* dialog)
 		{
 			amber_dialog_ = dialog;
 		}
 
-		void AmberMinimizationDialog::setCharmmDialog(CharmmConfigurationDialog* dialog)
+		void MinimizationDialog::setCharmmDialog(CharmmConfigurationDialog* dialog)
 		{
 			charmm_dialog_ = dialog;
 		}
 
-		void AmberMinimizationDialog::setForceField(bool sel)
+		void MinimizationDialog::setForceField(bool amber)
 		{	
-			if(sel == true)
+			if (amber)
 			{
 				useAmberRadioButton->setChecked(true);
 				useCharmmRadioButton->setChecked(false);
@@ -181,19 +181,19 @@ namespace BALL
 			}
 		}
 
-		void AmberMinimizationDialog::useAmberFF()
+		void MinimizationDialog::useAmberFF()
 		{
 			useAmberRadioButton->setChecked(true);
 			useCharmmRadioButton->setChecked(false);
 		}
 
-		void AmberMinimizationDialog::useCharmmFF()
+		void MinimizationDialog::useCharmmFF()
 		{
 			useCharmmRadioButton->setChecked(true);
 			useAmberRadioButton->setChecked(false);
 		}
 
-		bool AmberMinimizationDialog::getUseAmber()
+		bool MinimizationDialog::getUseAmber()
 		{
 			return useAmberRadioButton->isChecked();
 		}
