@@ -1,4 +1,4 @@
-// $Id: Vector4_test.C,v 1.6 2000/02/20 17:58:10 oliver Exp $
+// $Id: Vector4_test.C,v 1.7 2000/02/21 15:32:20 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(TVector4, "$Id: Vector4_test.C,v 1.6 2000/02/20 17:58:10 oliver Exp $")
+START_TEST(TVector4, "$Id: Vector4_test.C,v 1.7 2000/02/21 15:32:20 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -143,7 +143,8 @@ RESULT
 //line 183: method TVector4::getLength() const 
 CHECK(TVector4::getLength() const )
 	v = Vector4(4, 9, 16, 25);
-	TEST_REAL_EQUAL(v.getLength(), sqrt(4 * 4 + 9 * 9 + 16 * 16 + 25 * 25))
+	float result = sqrt(4.0 * 4.0 + 9.0 * 9.0 + 16.0 * 16.0 + 25.0 * 25.0);
+	TEST_REAL_EQUAL(v.getLength(), result)
 RESULT
 
 //line 190: method TVector4::getSquareLength() const 
