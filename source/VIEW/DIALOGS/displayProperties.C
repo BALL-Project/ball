@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.16 2003/09/22 12:55:31 amoll Exp $
+// $Id: displayProperties.C,v 1.17 2003/10/15 13:53:32 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -17,6 +17,7 @@
 #include <BALL/VIEW/MODELS/surfaceModel.h>
 #include <BALL/VIEW/MODELS/vanDerWaalsModel.h>
 #include <BALL/VIEW/MODELS/HBondModel.h>
+#include <BALL/VIEW/MODELS/standardColorProcessor.h>
 
 #include <qcolordialog.h>
 #include <qmenubar.h>
@@ -134,8 +135,9 @@ void DisplayProperties::initializeWidget(MainControl& main_control)
 {
 	(main_control.initPopupMenu(MainControl::DISPLAY))->setCheckable(true);
 
+	String hint("Create a new representation or modify an existing");
 	id_ = main_control.insertMenuEntry(MainControl::DISPLAY, "D&isplay Properties", this, 
-																		 SLOT(showDialog()), CTRL+Key_I);   
+																		 SLOT(show()), CTRL+Key_I, -1, hint);   
 }
 
 
@@ -143,7 +145,7 @@ void DisplayProperties::finalizeWidget(MainControl& main_control)
 	throw()
 {
 	main_control.removeMenuEntry(MainControl::DISPLAY, "D&isplay Properties", this, 
-																									SLOT(showDialog()), CTRL+Key_I);   
+																									SLOT(show()), CTRL+Key_I);   
 }
 
 
@@ -154,9 +156,9 @@ void DisplayProperties::checkMenu(MainControl& main_control)
 }
 
 
-void DisplayProperties::showDialog()
+void DisplayProperties::show()
 {
-	show();
+	DisplayPropertiesData::show();
 	raise();
 }
 
@@ -212,7 +214,7 @@ void DisplayProperties::selectMode(int index)
 
 void DisplayProperties::selectColoringMethod(int index)
 {
-	if (index > 5)
+	if (index > COLORING_CUSTOM)
 	{
 		throw(InvalidOption(__FILE__, __LINE__, index));
 	}
@@ -277,7 +279,7 @@ void DisplayProperties::onNotify(Message *message)
 void DisplayProperties::applyButtonClicked()
 {
 	// no molecular or representation selection present 
-	if (!getMainControl()->getControlSelection().size() && !rep_)
+	if (getMainControl()->getControlSelection().size() == 0 && rep_ == 0)
 	{
 		return;
 	}
@@ -287,7 +289,6 @@ void DisplayProperties::applyButtonClicked()
 	// update scene
 	SceneMessage* scene_message = new SceneMessage(SceneMessage::REDRAW);
 	notify_(scene_message);
-	setStatusbarText("");
 }
 
 
@@ -388,9 +389,8 @@ void DisplayProperties::createRepresentation_(const Composite* composite)
 			color_processor = new ResidueNameColorProcessor;
 			break;
 
-		case COLORING_RESIDUE_TYPE:
-			color_processor = new ResidueNameColorProcessor;
-			Log.error() << "Not implemented ? " << __FILE__ << "   " << __LINE__ << std::endl;
+		case COLORING_RESIDUE_NUMBER:
+			color_processor = new ResidueNumberColorProcessor;
 			break;
 
 		case COLORING_ATOM_CHARGE:
@@ -429,6 +429,7 @@ void DisplayProperties::createRepresentation_(const Composite* composite)
 		rep = rep_;
 	}
 
+	rep->setColorProcessor(color_processor);
 	model_processor->setColorProcessor(color_processor);
 	rep->setModelProcessor(model_processor);
 	if (transparency->value() != 0)
@@ -436,7 +437,7 @@ void DisplayProperties::createRepresentation_(const Composite* composite)
 		rep->setProperty(Representation::PROPERTY__TRANSPARENT_BLENDING);
 	}
 	
-	if (!rep_) 
+	if (rep_ == 0) 
 	{	
 		pm.insert(*rep);
 		
@@ -464,16 +465,10 @@ void DisplayProperties::createRepresentation_(const Composite* composite)
 	rep->update();
 
 	// no refocus, if a representation already exists
-	if (getMainControl()->getPrimitiveManager().getRepresentations().size() == 1 && !rep_)
-	{
-		CompositeMessage* ccmessage = new CompositeMessage;
-		ccmessage->setComposite(composite);
-		ccmessage->setType(CompositeMessage::CENTER_CAMERA);
-		notify_(ccmessage);
-	}
+	bool focus = (getMainControl()->getPrimitiveManager().getRepresentations().size() == 1 && rep_ == 0);
 
 	RepresentationMessage* message = new RepresentationMessage;
-	if (!rep_)
+	if (rep_ == 0)
 	{
 		message->setType(RepresentationMessage::ADD);
 	}
@@ -483,6 +478,14 @@ void DisplayProperties::createRepresentation_(const Composite* composite)
 	}
 	message->setRepresentation(rep);
 	notify_(message);
+
+	if (focus)
+	{
+		CompositeMessage* ccmessage = new CompositeMessage;
+		ccmessage->setComposite(composite);
+		ccmessage->setType(CompositeMessage::CENTER_CAMERA);
+		notify_(ccmessage);
+	}
 }
 
 } } // namespaces
