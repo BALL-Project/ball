@@ -1,4 +1,4 @@
-// $Id: persistenceManager.h,v 1.17 2000/08/26 14:58:15 amoll Exp $
+// $Id: persistenceManager.h,v 1.18 2000/09/18 14:34:37 oliver Exp $
 
 #ifndef BALL_CONCEPT_PERSISTENCE_H
 #define BALL_CONCEPT_PERSISTENCE_H
@@ -108,7 +108,7 @@ namespace BALL
 		*/
 		//@{
 
-		/**	Register a creation method for a class.
+		/**	Register a create method for a class.
 				Each object read by the persistence manager has to be constructed somehow.
 				The persistence manager first reads a class' signature (i.e. a unique identifier
         in the context of this stream). This is usually the stream name of the class 
@@ -127,12 +127,12 @@ namespace BALL
 				Remember to include the {\em baseclasses} of each class, too! To register all 
 				kernel classes, use the \Ref{BALL_REGISTER_PERSISTENT_KERNEL_CLASSES} macro.
 				@param signature the class signatur
-				@param m a dynamic class creation method
+				@param m a dynamic class create method
 		*/
 		virtual void registerClass(String signature, const CreateMethod	m);
 
 		/**	Create an object of a registered class.
-				If the persistence manager has registered a creation method for the given
+				If the persistence manager has registered a create method for the given
 			  class signature, the corresponding create method is called and its result is
 				returned. If the class is not registered, 0 is returned.
 				@param signature the class signature of the object to be created
