@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.75 2000/03/27 17:49:55 oliver Exp $
+dnl    $Id: configure.in,v 1.76 2000/03/27 18:40:18 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -777,7 +777,7 @@ if test "${IS_DIGITALCXX}" = true ; then
 	AC_MSG_CHECKING(compiler version)
 	echo "int main(){}" > conftest.C
 	CXX_VERSION=`${CXX} -V  2>/dev/null| ${GREP} "C++" | ${CUT} -d" " -f3 | tr -d V`
-	CXX_NAME=`${CXX} -V | ${GREP} "C++" | ${CUT} -d" " -f1` 
+	CXX_NAME=`${CXX} -V | ${GREP} "C++" | ${CUT} -d" " -f1 | ${SED} "s/[A-Za-z]//g"` 
 	VERSION_OUTPUT="${CXX_NAME} C++ ${CXX_VERSION}"
 	CXX_COMPILER_NAME="Digital"
 	
@@ -1245,19 +1245,21 @@ dnl		check for limits header (class numeric limits, to be precise)
 dnl
 dnl
 AC_MSG_CHECKING(for numeric_limits class)
-cat > /tmp/$$.conftest.c << EOF
-#include <limits>
-int main()
-{
-	float f = std::numeric_limits<float>::min();
-	return 0;
-}
-EOF
-if ${CXX} /tmp/$$.conftest.c 2>/dev/null >/dev/null; then
+AC_TRY_COMPILE(
+	[
+		#include <limits>
+	],
+	[
+		float f = std::numeric_limits<float>::min();
+	],
+	BALL_HAVE_NUMERIC_LIMITS=true
+)
+if test "${BALL_HAVE_NUMERIC_LIMITS}" = true ; then
 	AC_MSG_RESULT(available)
 	AC_DEFINE(BALL_HAVE_NUMERIC_LIMITS)
 else
 	AC_MSG_RESULT(not available)
+	BALL_HAVE_NUMERIC_LIMITS=false
 
 	dnl
 	dnl	 we didn't find a numeric limits class, so we implement
