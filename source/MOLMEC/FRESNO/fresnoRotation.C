@@ -1,4 +1,4 @@
-// $Id: fresnoRotation.C,v 1.1.2.6 2002/04/06 20:04:28 anker Exp $
+// $Id: fresnoRotation.C,v 1.1.2.7 2002/04/07 17:45:40 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
 #include <BALL/KERNEL/standardPredicates.h>
@@ -179,9 +179,11 @@ namespace BALL
 		// ????
 		// This is not nice
 		pair<float, float> tmp;
-		tmp = pair<float, float>(1.54, 1.55);
+		// tmp = pair<float, float>(1.54, 1.55);
+		tmp = pair<float, float>(1.52, 1.55);
 		bondlengths["C"] = tmp;
-		tmp = pair<float, float>(1.47, 1.48);
+		// tmp = pair<float, float>(1.47, 1.48);
+		tmp = pair<float, float>(1.44, 1.48);
 		bondlengths["N"] = tmp;
 		tmp = pair<float, float>(1.43, 1.47);
 		bondlengths["O"] = tmp;
@@ -209,7 +211,7 @@ namespace BALL
 		cycleDFS_(atom1, visited,
 				tree, possible_cycle_bonds, cycle_bonds, cycle_count);
 
-		cout << tree.size() << endl;
+		cout << "Tree size: " << tree.size() << endl;
 
 		// initialize the data structures for another dfs and count the heavy
 		// atoms in the system 
@@ -218,19 +220,26 @@ namespace BALL
 
 		Sp2HybridizedPredicate isSp2;
 		Sp3HybridizedPredicate isSp3;
-		ConnectedToPredicate hasCH3Terminal;
-		hasCH3Terminal.setArgument("(C(H)(H)(H))");
-		ConnectedToPredicate hasCF3Terminal;
-		hasCF3Terminal.setArgument("(C(F)(F)(F))");
-		ConnectedToPredicate hasNH3Terminal;
-		hasNH3Terminal.setArgument("(N(H)(H)(H))");
-		ConnectedToPredicate hasNH2Terminal;
-		hasNH2Terminal.setArgument("(N(H)(H))");
+		ConnectedToPredicate hasH3Group;
+		hasH3Group.setArgument("(H)(H)(H)");
+		ConnectedToPredicate hasH2Group;
+		hasH2Group.setArgument("(H)(H)");
+		ConnectedToPredicate hasF3Group;
+		hasF3Group.setArgument("(F)(F)(F)");
+
+		ElementPredicate isCarbon;
+		isCarbon.setArgument("C");
+		ElementPredicate isNitrogen;
+		isNitrogen.setArgument("N");
+		ConnectedToPredicate hasAromaticBondedOxygen;
+		hasAromaticBondedOxygen.setArgument("(~O)");
 
 		bool A_sp2;
 		bool A_sp3;
 		bool B_sp2;
 		bool B_sp3;
+		bool A_CO;
+		bool B_CO;
 
 		bool found_rotatable_bond = false;
 
@@ -246,17 +255,30 @@ namespace BALL
 		{
 			atom1 = (*tree_it)->getFirstAtom();
 			atom2 = (*tree_it)->getSecondAtom();
+
 			if (!cycle_bonds.has(*tree_it))
 			{
 
-				if (!(hasCH3Terminal(*atom1)
-							| hasCF3Terminal(*atom1)
-							| hasNH3Terminal(*atom1)
-							| hasNH2Terminal(*atom1)
-							| hasCH3Terminal(*atom2)
-							| hasCF3Terminal(*atom2)
-							| hasNH3Terminal(*atom2)
-							| hasNH2Terminal(*atom2)))
+				// DEBUG
+				cout << atom1->getFullName() << "---" << atom2->getFullName()
+					<< endl;
+				cout << "hasH3Group(*atom1) " << hasH3Group(*atom1) << endl;
+				cout << "hasH2Group(*atom1) " << hasH2Group(*atom1) << endl;
+				cout << "hasF3Group(*atom1) " << hasF3Group(*atom1) << endl;
+				cout << "isCarbon(*atom1) " << isCarbon(*atom1) << endl;
+				cout << "isNitrogen(*atom1) " << isNitrogen(*atom1) << endl;
+				cout << "hasH3Group(*atom2) " << hasH3Group(*atom2) << endl;
+				cout << "hasH2Group(*atom2) " << hasH2Group(*atom2) << endl;
+				cout << "hasF3Group(*atom2) " << hasF3Group(*atom2) << endl;
+				cout << "isCarbon(*atom2) " << isCarbon(*atom2) << endl;
+				cout << "isNitrogen(*atom2) " << isNitrogen(*atom2) << endl;
+				// /DEBUG
+				if (!((hasH3Group(*atom1) & (isCarbon(*atom1) | isNitrogen(*atom1)))
+							| (hasH2Group(*atom1) & isNitrogen(*atom1))
+							| (hasF3Group(*atom1) & isCarbon(*atom1))
+							| (hasH3Group(*atom2) & (isCarbon(*atom2) | isNitrogen(*atom2)))
+							| (hasH2Group(*atom2) & isNitrogen(*atom2))
+							| (hasF3Group(*atom2) & isCarbon(*atom2))))
 				{
 
 					if (algorithm_type_ == ALGORITHM__GUESS)
@@ -327,8 +349,21 @@ namespace BALL
 							A_sp3 = isSp3(*atom1);
 							B_sp2 = isSp2(*atom2);
 							B_sp3 = isSp3(*atom2);
+							A_CO = (isCarbon(*atom1) & hasAromaticBondedOxygen(*atom1));
+							B_CO = (isCarbon(*atom2) & hasAromaticBondedOxygen(*atom2));
 
-							if (((A_sp2 & B_sp3) | (B_sp2 & A_sp3) | (A_sp3 & B_sp3)) == true)
+							// DEBUG
+							cout << "A SP2: " << A_sp2 << endl;
+							cout << "A SP3: " << A_sp3 << endl;
+							cout << "B SP2: " << B_sp2 << endl;
+							cout << "B SP3: " << B_sp3 << endl;
+							cout << "A CO: " << A_CO << endl;
+							cout << "B CO: " << B_CO << endl;
+							// /DEBUG
+
+							if (((A_sp2 & B_sp3) | (B_sp2 & A_sp3) | (A_sp3 & B_sp3))
+									| ((A_CO & B_sp3 & isCarbon(*atom2)) 
+										| (A_sp3 & B_CO & isCarbon(*atom1))) == true)
 							{
 								// DEBUG
 								cout << "found possible rotatable bond: " 
@@ -337,38 +372,38 @@ namespace BALL
 								// /DEBUG
 								found_rotatable_bond = true;
 							}
-							else
-							{
-								Log.error() << "Unknown algorithm type" << endl;
-								return false;
-							}
 						}
-					}
-					if (found_rotatable_bond == true)
-					{
-						found_rotatable_bond = false;
-						rotatable_bonds_.push_back(*tree_it);
-						visited.clear();
-						heavy_atom_count = 0;
-						// tmp.clear();
-						heavyAtomsDFS_(atom1, &**tree_it, visited,
-								heavy_atom_count); 
-						double first_fraction = (double) heavy_atom_count / (double) n_heavy_atoms;
-						double second_fraction = 1.0 - first_fraction;
-						heavy_atom_fractions_.push_back
-							(pair<double, double>(first_fraction, second_fraction));
-
-						cout << heavy_atom_count << " "
-							<< first_fraction << " "
-							<< atom1->getFullName() << ":" << atom2->getFullName() << " " 
-							<< n_heavy_atoms - heavy_atom_count 
-							<< " " << second_fraction << endl;
+						else
+						{
+							Log.error() << "Unknown algorithm type" << endl;
+							return false;
+						}
 					}
 				}
 			}
+			if (found_rotatable_bond == true)
+			{
+				found_rotatable_bond = false;
+				rotatable_bonds_.push_back(*tree_it);
+				visited.clear();
+				heavy_atom_count = 0;
+				// tmp.clear();
+				heavyAtomsDFS_(atom1, &**tree_it, visited,
+						heavy_atom_count); 
+				double first_fraction = (double) heavy_atom_count / (double) n_heavy_atoms;
+				double second_fraction = 1.0 - first_fraction;
+				heavy_atom_fractions_.push_back
+					(pair<double, double>(first_fraction, second_fraction));
+
+				cout << heavy_atom_count << " "
+					<< first_fraction << " "
+					<< atom1->getFullName() << ":" << atom2->getFullName() << " " 
+					<< n_heavy_atoms - heavy_atom_count 
+					<< " " << second_fraction << endl;
+			}
 		}
 
-		// N_rot_ = rotatable_bonds_.size();
+		N_rot_ = rotatable_bonds_.size();
 		is_frozen_.resize(rotatable_bonds_.size());
 
 		// DEBUG
@@ -386,7 +421,7 @@ namespace BALL
 		throw()
 	{
 
-		if (N_rot_ == 0.0)
+		if (N_rot_ == 0)
 		{
 			energy_ = 0.0;
 			return energy_;
