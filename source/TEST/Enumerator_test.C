@@ -1,4 +1,4 @@
-// $Id: Enumerator_test.C,v 1.7 2002/01/04 01:53:05 oliver Exp $
+// $Id: Enumerator_test.C,v 1.8 2002/01/04 03:09:14 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -13,7 +13,7 @@ void char_assign(char& c1, char& c2)
 	c1 = c2;
 }
 
-START_TEST(Enumerator, "$Id: Enumerator_test.C,v 1.7 2002/01/04 01:53:05 oliver Exp $")
+START_TEST(Enumerator, "$Id: Enumerator_test.C,v 1.8 2002/01/04 03:09:14 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -119,9 +119,10 @@ CHECK(~Enumerator())
   delete enumerator_ptr;
 RESULT
 
+String s;
 CHECK(countVariants())
 	Enumerator<String, String::iterator, char> enumerator(s, char_assign);	
-  TEST_EQUAL(enumerator.countVariants(), 0);
+  TEST_EQUAL(enumerator.countVariants(), 1);
 RESULT
 
 Enumerator<String, String::iterator, char> enumerator(s, char_assign);
