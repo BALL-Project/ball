@@ -1,4 +1,4 @@
-// $Id: shiftModel.C,v 1.3 2000/09/18 12:12:18 oliver Exp $
+// $Id: shiftModel.C,v 1.4 2000/09/18 14:39:41 oliver Exp $
 
 #include <BALL/NMR/shiftModel.h>
 #include <BALL/FORMAT/parameterSection.h>
@@ -9,6 +9,9 @@
 
 namespace BALL
 {
+
+	
+	const char* ShiftModel::MODULE_LIST_SECTION = "ShiftModules";
 
 	ShiftModel::ShiftModel()
 		throw()
@@ -24,6 +27,18 @@ namespace BALL
 		:	ShiftModule(),
 			parameters_(filename),
 			modules_(),
+			registered_modules_(),
+			valid_(false)
+	{
+		init_();
+	}
+
+	ShiftModel::ShiftModel(const ShiftModel& model)
+		throw()
+		:	ShiftModule(),
+			parameters_(model.parameters_),
+			modules_(),
+			registered_modules_(model.registered_modules_),
 			valid_(false)
 	{
 		init_();
@@ -99,6 +114,9 @@ namespace BALL
 		// copy the parameters and options
 		parameters_ = model.parameters_;
 		options = model.options;
+
+		// copy the registered modules
+		registered_modules_ = model.registered_modules_;
 		
 		// and try to set up the same model 
 		init_();
