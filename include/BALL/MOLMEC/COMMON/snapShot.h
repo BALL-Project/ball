@@ -1,4 +1,4 @@
-// $Id: snapShot.h,v 1.17 2001/03/11 19:31:58 anker Exp $
+// $Id: snapShot.h,v 1.18 2001/03/28 13:48:58 anker Exp $
 
 // This file contains the definitions of the classes 
 // SnapshotManager and Snapshot. 
@@ -125,7 +125,7 @@ namespace BALL
 			throw();
 
 		/// Specify all atom velocities
-		void setAtomVelocitites(const ::std::vector<Vector3>& atom_velocities)
+		void setAtomVelocities(const ::std::vector<Vector3>& atom_velocities)
 			throw();
 
 		/// Get the vector containing the atom velocitites
