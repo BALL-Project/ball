@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.h,v 1.6 2004/02/18 18:45:46 oliver Exp $
+// $Id: molecularStructure.h,v 1.7 2004/02/18 23:06:17 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARSTRUCTURE_H
@@ -50,9 +50,10 @@ namespace BALL
 	namespace VIEW
 	{
 
-		/**	MolecularStructure is a widget that reacts to Messages itself and converts some
-				to other Message objects.
-				The widget itself is invisible, but it has severeal menu entries:
+		/**	MolecularStructure provides means to modify molecular structures and do
+		 		several calculations. To do so, it contains the AMBER and CHARMM forcefields and
+				dialogs to do the setup.
+				The widget itself is invisible, but it has severeal menu entries, e.g.:
 				- checkResidue
 				- centerCamera
 				- buildBonds
@@ -61,8 +62,9 @@ namespace BALL
 				- deselect
 				- createGridFromDistance
 				- calculateSecondaryStructure
-				This class is also necessary to add certain properties to new Composite objects, which were opened with the 
-				MolecularFileDialog.
+				This class is also necessary to add certain properties to new Composite objects, 
+				which were opened with the MolecularFileDialog.
+		 		So it reacts to Messages itself and converts some to other Message objects.
 				Further it converts the geometric selection sent by Scene to a molecular selection 
 				whose objects can be given a new graphical representation by the DisplayProperties dialog.
 				See onNotify for information concerning the conversion mechanism. \par
@@ -139,11 +141,11 @@ namespace BALL
 			CharmmFF& getCHARMMFF() 
 				throw();
 
-			///
+			/// Get an instance of an dialog to setup the AMBER forcefield
 			AmberConfigurationDialog& getAmberConfigurationDialog()
 				throw();
 			
-			///
+			/// Get an instance of an dialog to setup the CHARMM forcefield
 			CharmmConfigurationDialog& getCharmmConfigurationDialog()
 				throw();
 
@@ -212,49 +214,49 @@ namespace BALL
 			 */
 			virtual bool checkResidue();
 
-			///
+			/// Create a RegularData3D instance with the distance from the geometric center
 			virtual void createGridFromDistance();
 
-			///
+			/// Calculate the secondary structure for a protein
 			virtual void calculateSecondaryStructure();
 
-			///
+			/// Map two Proteins and apply the resulting transformation matrix
 			virtual void mapProteins();
 
-			///
+			/// Calculate the RMSD between two Molecules
 			virtual void calculateRMSD();
 
-			///
+			/// Build a Peptide from a amino acid sequence
 			void buildPeptide();
 
-			///
+			/// Calculate the H-Bonds for a Protein
 			void calculateHBonds();
 
-			///
+			/// Calculate the charges for a Molecule
 			void assignCharges();
 
-			///
+			/// Calculate the energy for the currently selected force field
 			void calculateForceFieldEnergy();
 
-			///
+			/// Run a energy minization with the currently selected force field
 			void runMinimization();
 
-			///
+			/// Perfomr a molecular dynamics simulation with the currently selected force field
 			void amberMDSimulation();
 
-			///
+			/// Show the dialog to setup the AMBER force field
 			void showAmberForceFieldOptions();
 			
-			///
+			/// Show the dialog to setup the CHARMM force field
 			void showCharmmForceFieldOptions();
 			
-			///
+			/// Slot for a menu entry to select the AMBER force field
 			void chooseAmberFF();
 
-			///
+			/// Slot for a menu entry to select the CHARMM force field
 			void chooseCharmmFF();
 				
-			///
+			/// Show a dialog to setup the currently selected force field
 			void setupForceField();
 				
 			//@}
@@ -298,7 +300,6 @@ namespace BALL
 		};
 
 	} // namespace VIEW
-
 } // namespace BALL
 
 #endif // BALL_VIEW_WIDGETS_MOLECULARSTRUCTURE_H
