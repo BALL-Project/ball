@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Timer_test.C,v 1.21 2003/05/22 21:57:21 oliver Exp $
+// $Id: Timer_test.C,v 1.22 2003/07/03 12:00:13 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 #include <unistd.h>
@@ -15,7 +15,7 @@
 #endif
 ///////////////////////////
 
-START_TEST(Timer, "$Id: Timer_test.C,v 1.21 2003/05/22 21:57:21 oliver Exp $")
+START_TEST(Timer, "$Id: Timer_test.C,v 1.22 2003/07/03 12:00:13 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -27,17 +27,17 @@ using namespace BALL;
 	{ double x = 0.0; for (int i = 0; i < 5e6; i++, x += rand()); }
 
 Timer* timer_ptr = 0;
-CHECK(Timer::Timer())
+CHECK(Timer())
 	timer_ptr = new Timer;
 	TEST_NOT_EQUAL(timer_ptr, 0)
 	TEST_EQUAL(timer_ptr->isRunning(), false)
 RESULT
 
-CHECK(Timer::~Timer())
+CHECK(~Timer())
 	delete timer_ptr;
 RESULT
 
-CHECK(Timer::Timer(Timer& timer))
+CHECK(Timer(Timer& timer))
 	Timer t1;
 	t1.start();
 	BUSY_WAIT
@@ -70,7 +70,7 @@ CHECK(Timer::Timer(Timer& timer))
 	TEST_REAL_EQUAL(diff, 0.0)	
 RESULT
 
-CHECK(Timer::clear())
+CHECK(void clear())
 	Timer t1;
 	t1.start();
 	BUSY_WAIT
@@ -83,7 +83,7 @@ CHECK(Timer::clear())
 	TEST_EQUAL(t1.getCPUTime(), 0)	
 RESULT
 
-CHECK(Timer::start())
+CHECK(bool start())
 	Timer t1;
 	TEST_EQUAL(t1.start(), true)
 	TEST_EQUAL(t1.start(), false)
@@ -94,7 +94,7 @@ CHECK(Timer::start())
 	TEST_EQUAL(t1.getCPUTime() >= 0, true)	
 RESULT
 
-CHECK(Timer::stop())
+CHECK(bool stop())
 	Timer t1;
 	t1.start();
 	TEST_EQUAL(t1.isRunning(), true)
@@ -103,7 +103,7 @@ CHECK(Timer::stop())
 	TEST_EQUAL(t1.isRunning(), false)	
 RESULT
 
-CHECK(Timer::reset())
+CHECK(void reset())
 	Timer t1;
 	t1.start();
 	// some waiting
@@ -122,7 +122,7 @@ CHECK(Timer::reset())
 	TEST_EQUAL(t1.getCPUTime() < 0.1, true)	
 RESULT
 
-CHECK(Timer::getClockTime() const )
+CHECK(double getClockTime() const)
 	Timer t1;
 	TEST_EQUAL(t1.getClockTime(), 0.0)	
 	STATUS("t1.getClockTime() = " << t1.getClockTime())
@@ -139,7 +139,7 @@ CHECK(Timer::getClockTime() const )
 RESULT
 
 
-CHECK(Timer::getUserTime() const )
+CHECK(double getUserTime() const)
 	Timer t1;
 	TEST_EQUAL(t1.getUserTime(), 0)	
 	t1.start();
@@ -148,7 +148,7 @@ CHECK(Timer::getUserTime() const )
 	TEST_EQUAL(t1.getUserTime() >= 0, true)	
 RESULT
 
-CHECK(Timer::getSystemTime() const )
+CHECK(double getSystemTime() const)
 	Timer t1;
 	TEST_EQUAL(t1.getSystemTime(), 0)	
 	t1.start();
@@ -166,7 +166,7 @@ CHECK(Timer::getSystemTime() const )
 	TEST_EQUAL(t1.getSystemTime() >= 0, true)	
 RESULT
 
-CHECK(Timer::getCPUTime() const )
+CHECK(double getCPUTime() const)
 	Timer t0;
 	t0.start();
 	Timer t1;
@@ -190,7 +190,7 @@ CHECK(Timer::getCPUTime() const )
 	STATUS(t0.getCPUTime())
 RESULT
 
-CHECK(Timer::Timer& operator = (const Timer& timer))
+CHECK(Timer& operator = (const Timer& timer))
 	Timer t1;
 	t1.start();
 	BUSY_WAIT
@@ -227,7 +227,7 @@ CHECK(Timer::Timer& operator = (const Timer& timer))
 	TEST_REAL_EQUAL(diff, 0.0)	
 RESULT
 
-CHECK(Timer::isRunning() const )
+CHECK(bool isRunning() const)
 	Timer t1;
 	t1.start();
 	TEST_EQUAL(t1.isRunning(), true)
@@ -235,7 +235,7 @@ CHECK(Timer::isRunning() const )
 	TEST_EQUAL(t1.isRunning(), false)
 RESULT
 
-CHECK(Timer::bool operator == (const Timer& timer) const )
+CHECK(bool operator == (const Timer& timer) const)
 	Timer t1;
 	t1.start();
 	sleep(1);
@@ -246,7 +246,7 @@ CHECK(Timer::bool operator == (const Timer& timer) const )
 	TEST_EQUAL(t1 == t2, true);
 RESULT
 
-CHECK(Timer::bool operator != (const Timer& timer) const )
+CHECK(bool operator != (const Timer& timer) const)
 	Timer t1;
 	t1.start();
 	BUSY_WAIT
@@ -257,7 +257,7 @@ CHECK(Timer::bool operator != (const Timer& timer) const )
 	TEST_EQUAL(t1 != t2, false);
 RESULT
 
-CHECK(Timer::bool operator < (const Timer& timer) const )
+CHECK(bool operator < (const Timer& timer) const)
 	Timer t1;
 	t1.start();
 	BUSY_WAIT
@@ -269,7 +269,7 @@ CHECK(Timer::bool operator < (const Timer& timer) const )
 	TEST_EQUAL(t1 < t2, false);
 RESULT
 
-CHECK(Timer::bool operator <= (const Timer& timer) const )
+CHECK(bool operator <= (const Timer& timer) const)
 	Timer& t1 = *new Timer;
 	t1.start();
 	BUSY_WAIT
@@ -283,7 +283,7 @@ CHECK(Timer::bool operator <= (const Timer& timer) const )
 	delete &t2;
 RESULT
 
-CHECK(Timer::bool operator >= (const Timer& timer) const )
+CHECK(bool operator >= (const Timer& timer) const)
 	Timer& t1 = *new Timer;
 	t1.start();
 	BUSY_WAIT
@@ -297,7 +297,7 @@ CHECK(Timer::bool operator >= (const Timer& timer) const )
 	delete &t2;
 RESULT
 
-CHECK(Timer::bool operator > (const Timer& timer) const )
+CHECK(bool operator > (const Timer& timer) const)
 	Timer t1;
 	t1.start();
 	BUSY_WAIT
@@ -309,12 +309,12 @@ CHECK(Timer::bool operator > (const Timer& timer) const )
 	TEST_EQUAL(t1 > t2, false);
 RESULT
 
-CHECK(Timer::isValid() const )
+CHECK(bool isValid() const)
 	Timer t1;
 	TEST_EQUAL(t1.isValid(), true);
 RESULT
 
-CHECK(Timer::dump(::std::ostream& s = ::std::cout, Size depth = 0L) const )
+CHECK(void dump(::std::ostream& s = ::std::cout, Size depth = 0L) const)
 	Timer t1;
 	t1.start();
 	BUSY_WAIT
