@@ -1,3 +1,23 @@
+1.0pre1: 23.12.2002
+-------------------
+Additional platform:
+  - Windows (Microsoft Visual Studio .NET)
+
+Bugs fixed:
+  - several bugs in the kernel
+  - PDB reader
+  - visualization
+
+Added + improved:
+  - faster AMBER force field implementation
+  - faster kernel data structures
+  - molecular surface computation (really fast now)
+  - support for QT 3.0
+  - surface computations (including transparent surfaces) in MolView
+  - export of MolView scenes to PovRay
+  - coloring of surfaces w.r.t. grid data (e.g. elctrostatic potential)
+
+
 1.0b: 17.01.2002
 ----------------
 Bugs fixed:
