@@ -1,4 +1,4 @@
-// $Id: String_test.C,v 1.12 2000/06/22 10:24:10 oliver Exp $
+// $Id: String_test.C,v 1.13 2000/06/23 06:21:18 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -7,7 +7,7 @@
 #include <string.h>
 ///////////////////////////
 
-START_TEST(String,"$Id: String_test.C,v 1.12 2000/06/22 10:24:10 oliver Exp $")
+START_TEST(String,"$Id: String_test.C,v 1.13 2000/06/23 06:21:18 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -571,48 +571,48 @@ TEST_EQUAL(s4.toShort(), (short)12)
 RESULT
 
 CHECK(String::toUnsignedShort())
-s4.set("123");
-TEST_EQUAL(s4.toUnsignedShort(), (unsigned short)123)
-s4.set("abc");
-TEST_EQUAL(s4.toUnsignedShort(), (unsigned short)0)
-s4.set("");
-TEST_EQUAL(s4.toUnsignedShort(), (unsigned short)0)
-s4.set("12.34");
-TEST_EQUAL(s4.toUnsignedShort(), (unsigned short)12)
+	s4.set("123");
+	TEST_EQUAL(s4.toUnsignedShort(), (unsigned short)123)
+	s4.set("abc");
+	TEST_EQUAL(s4.toUnsignedShort(), (unsigned short)0)
+	s4.set("");
+	TEST_EQUAL(s4.toUnsignedShort(), (unsigned short)0)
+	s4.set("12.34");
+	TEST_EQUAL(s4.toUnsignedShort(), (unsigned short)12)
 RESULT
 
 CHECK(String::toInt())
-s4.set("123");
-TEST_EQUAL(s4.toInt(), (int)123)
-s4.set("abc");
-TEST_EQUAL(s4.toInt(), (int)0)
-s4.set("");
-TEST_EQUAL(s4.toInt(), (int)0)
-s4.set("12.34");
-TEST_EQUAL(s4.toInt(), (int)12)
+	s4.set("123");
+	TEST_EQUAL(s4.toInt(), (int)123)
+	s4.set("abc");
+	TEST_EQUAL(s4.toInt(), (int)0)
+	s4.set("");
+	TEST_EQUAL(s4.toInt(), (int)0)
+	s4.set("12.34");
+	TEST_EQUAL(s4.toInt(), (int)12)
 RESULT
 
 CHECK(String::toUnsignedInt())
-s4.set("123");
-TEST_EQUAL(s4.toUnsignedInt(), (unsigned int)123)
-s4.set("abc");
-TEST_EQUAL(s4.toUnsignedInt(), (unsigned int)0)
-s4.set("");
-TEST_EQUAL(s4.toUnsignedInt(), (unsigned int)0)
-s4.set("12.34");
-TEST_EQUAL(s4.toUnsignedInt(), (unsigned int)12)
+	s4.set("123");
+	TEST_EQUAL(s4.toUnsignedInt(), (unsigned int)123)
+	s4.set("abc");
+	TEST_EQUAL(s4.toUnsignedInt(), (unsigned int)0)
+	s4.set("");
+	TEST_EQUAL(s4.toUnsignedInt(), (unsigned int)0)
+	s4.set("12.34");
+	TEST_EQUAL(s4.toUnsignedInt(), (unsigned int)12)
 RESULT
 
 CHECK(String::operator cosnt char* ())
-s4 = "abcdef";
-const char* c_ptr((const char*)s4);
-CHECK_EQUAL(c_ptr, s4)
+	s4 = "abcdef";
+	const char* c_ptr((const char*)s4);
+	TEST_EQUAL(c_ptr, s4)
 RESULT
 
 CHECK(String::operator Substring())
-s4 = "abcdef";
-Substring sub((Substring)s4);
-TEST_EQUAL(sub.toString(), s4)
+	s4 = "abcdef";
+	Substring sub((Substring)s4);
+	TEST_EQUAL(sub.toString(), s4)
 RESULT
 
 CHECK(String::toLower())
