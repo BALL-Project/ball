@@ -3,7 +3,7 @@
 ############################################################
 # source directory shadow builder for multiplatform builds #
 ############################################################
-# $Id: binfmt.sh,v 1.2 1999/08/26 12:40:33 oliver Exp $
+# $Id: binfmt.sh,v 1.3 1999/08/26 15:33:24 oliver Exp $
 ############################################################
 
 UNAME=uname
@@ -101,10 +101,15 @@ if test "$ARCHITECTURE" = alpha ; then
 	ALPHA=ALPHA
 fi
 
+if test ! -f "${BINFORMAT_FILE}" ; then
+	echo "cannot open file ${BINFORMAT_FILE}" >&2	
+fi
+
 FORMATS=`${GREP} "^${BINFMT}-" ${BINFORMAT_FILE}`
 if test "${FORMATS}" = "" ; then
 	echo "no binary format defined for this platform - run configure first!" >&2
 	FORMAT="undefined"
+	set
 else
 	if test "${FORMATS}" != "`echo ${FORMATS} | cut -d\  -f1`" ; then
 		if test "${COMPILER_NAME}" != "" ; then
