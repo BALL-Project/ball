@@ -1,10 +1,10 @@
-// $Id: networkTest.h,v 1.1 2002/01/03 02:10:17 oliver Exp $
+// $Id: networkTest.h,v 1.2 2002/01/04 03:48:29 oliver Exp $
 
 #include <sys/socket.h>	  // socket
 #include <netdb.h>	  // gethostbyname
 #include <netinet/in.h>	  // sockaddr_in
 #include <unistd.h>	  // close
-#include <iostream.h>	  // cout, endl
+#include <iostream>	  // cout, endl
 
 #if defined(__hpux__) || defined(__linux__)
 # include <sys/ioctl.h>	  //ioctl, FIONBIO
