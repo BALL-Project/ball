@@ -1,4 +1,4 @@
-// $Id: displayProperties.C,v 1.13.4.18 2002/12/10 00:10:40 amoll Exp $
+// $Id: displayProperties.C,v 1.13.4.19 2002/12/11 14:40:21 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/displayProperties.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
@@ -734,7 +734,7 @@ namespace BALL
 			scene_message.updateOnly();
 			notify_(scene_message);
 			setStatusbarText("");
-			hide();
+			apply_button->setEnabled(false);
 		}
 
 
