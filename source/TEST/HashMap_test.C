@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HashMap_test.C,v 1.15 2003/06/17 12:51:02 amoll Exp $
+// $Id: HashMap_test.C,v 1.16 2003/06/26 10:41:05 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -38,18 +38,18 @@ class MyVisitor
 	}
 };
 
-START_TEST(HashMap, "$Id: HashMap_test.C,v 1.15 2003/06/17 12:51:02 amoll Exp $")
+START_TEST(HashMap, "$Id: HashMap_test.C,v 1.16 2003/06/26 10:41:05 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 HashMap<int, int>* map_ptr;
-CHECK(HashMap::HashMap())
+CHECK(HashMap(Size initial_capacity = INITIAL_CAPACITY, Size number_of_buckets = INITIAL_NUMBER_OF_BUCKETS) throw())
 	map_ptr = new HashMap<int, int>;
 	TEST_NOT_EQUAL(map_ptr, 0)
 RESULT
 
-CHECK(HashMap::~HashMap())
+CHECK(~HashMap() throw())
 	delete map_ptr;
 RESULT
 
@@ -450,6 +450,131 @@ CHECK(bool apply(UnaryProcessor<ValueType>& processor) throw())
 	TEST_EQUAL(myproc.getSize(), 2)
 	TEST_EQUAL(myproc.getPointer()->first, 0) myproc.forward();
 	TEST_EQUAL(myproc.getPointer()->first, 1) myproc.forward();
+RESULT
+
+
+CHECK(BALL_CREATE(HashMap))
+  // ???
+RESULT
+
+CHECK(ConstIterator begin() const throw())
+	HashMap<int, int> hm;
+	hm.insert(HashMap<int, int>::ValueType(0, 0));
+	HashMap<int, int>::ConstIterator it = hm.begin();
+	TEST_EQUAL(it->first == 0, true)
+	it++;
+	TEST_EQUAL(it == hm.end(), true)
+RESULT
+
+CHECK(ConstIterator end() const throw())
+	HashMap<int, int> hm;
+	TEST_EQUAL(hm.begin() ==  hm.end(), true)
+RESULT
+
+CHECK(HashMap* getContainer() throw())
+  // ???
+RESULT
+
+CHECK(IllegalKey(const char* file, int line))
+	HashMap<int, int>::IllegalKey ik(__FILE__, __LINE__);
+RESULT
+
+CHECK(Iterator end() throw())
+	HashMap<int, int> hm;
+	HashMap<int, int>::Iterator it1 = hm.begin();
+	HashMap<int, int>::Iterator it2 = hm.end();
+	TEST_EQUAL(it1 == it2, true)
+RESULT
+
+CHECK(Iterator insert(Iterator pos, const ValueType& entry) throw())
+  // ???
+RESULT
+
+HashMap<int, int> hm;
+hm.insert(HashMap<int, int>::ValueType(0, 0));
+hm.insert(HashMap<int, int>::ValueType(1, 1));
+HashMap<int, int>::Iterator it = hm.begin();
+
+
+// IteratorTraits_ tests
+CHECK(IteratorPosition& getPosition() throw())
+  // ???
+RESULT
+
+CHECK(IteratorTraits_() throw())
+  // ???
+RESULT
+
+CHECK(IteratorTraits_(const HashMap& hash_map) throw())
+  // ???
+RESULT
+
+CHECK(IteratorTraits_(const IteratorTraits_& traits) throw())
+  // ???
+RESULT
+
+CHECK(ValueType& getData() throw())
+  // ???
+RESULT
+
+CHECK(bool isBegin() const throw())
+  // ???
+RESULT
+
+CHECK(bool isEnd() const throw())
+  // ???
+RESULT
+
+CHECK(bool isSingular() const throw())
+  // ???
+RESULT
+
+CHECK(bool operator != (const IteratorTraits_& traits) const throw())
+  // ???
+RESULT
+
+CHECK(bool operator == (const IteratorTraits_& traits) const throw())
+  // ???
+RESULT
+
+CHECK(const HashMap* getContainer() const throw())
+  // ???
+RESULT
+
+CHECK(const IteratorPosition& getPosition() const throw())
+  // ???
+RESULT
+
+CHECK(const IteratorTraits_& operator = (const IteratorTraits_& traits) throw())
+  // ???
+RESULT
+
+CHECK(const ValueType& getData() const throw())
+  // ???
+RESULT
+
+CHECK(friend Iterator begin() throw())
+  // ???
+RESULT
+
+CHECK((std::pair<Iterator, bool> insert(const ValueType& entry) throw()))
+  // ???
+RESULT
+
+CHECK(void forward() throw())
+  // ???
+RESULT
+
+CHECK(void invalidate() throw())
+  // ???
+RESULT
+
+CHECK(void toBegin() throw())
+  // ???
+RESULT
+
+CHECK(void toEnd() throw())
+  // ???
 RESULT
 
 /////////////////////////////////////////////////////////////
