@@ -1,4 +1,4 @@
-// $Id: string.C,v 1.8 1999/12/17 14:27:40 oliver Exp $
+// $Id: string.C,v 1.9 1999/12/19 18:58:35 oliver Exp $
 
 #include <BALL/DATATYPE/string.h>
 
@@ -202,7 +202,6 @@ namespace BALL
 		s << ends;
 		char* str = s.str();
 		assign(str);
-		delete [] str;
 	}
 
 #	define BALL_STRING_DEFINE_CONSTRUCTOR_METHOD(type, format_string) \
