@@ -1,4 +1,4 @@
-// $Id: INIFile_test.C,v 1.10 2001/04/10 12:29:24 amoll Exp $
+// $Id: INIFile_test.C,v 1.11 2001/04/17 14:05:24 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -25,7 +25,7 @@ class MyItemCollector
 };
 
 
-START_TEST(INIFile, "$Id: INIFile_test.C,v 1.10 2001/04/10 12:29:24 amoll Exp $")
+START_TEST(INIFile, "$Id: INIFile_test.C,v 1.11 2001/04/17 14:05:24 amoll Exp $")
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
@@ -166,17 +166,24 @@ CHECK(INIFile::insertLine(LineIterator line_it, const String& line))
   TEST_EQUAL(ini.getValue("Section3", "insertTest"), "QQQ")
 
 	it = ini.getLine(10);
+	TEST_EQUAL(+it, true)
   TEST_EQUAL(ini.insertLine(it, "insertTest = ZZZ"), true)
   TEST_EQUAL(*ini.getLine(11), "insertTest = ZZZ")
   TEST_EQUAL(ini.getValue("Section4", "insertTest"), "ZZZ")
 
 	it = ini.getLine(0);
+	INIFile::LineIterator it2(it);
+	it2.toSectionLastLine();
+	TEST_EQUAL(*it2, "[Section1]")
+	TEST_EQUAL(it.isSectionLastLine(), true)
+  TEST_EQUAL(*it, "[Section1]")
   TEST_EQUAL(ini.insertLine(it, "insertTest2 = XXX"), true)
   TEST_EQUAL(*ini.getLine(1), "insertTest2 = XXX")
   TEST_EQUAL(ini.getValue("Section1", "insertTest2"), "XXX")
 
 	it = ini.getLine(0);
   TEST_EQUAL(ini.insertLine(it, "insertTest3"), true)
+  TEST_EQUAL(*ini.getLine(0), "[Section1]")
   TEST_EQUAL(*ini.getLine(1), "insertTest3")
   TEST_EQUAL(ini.getValue("Section1", "insertTest3"), ini.UNDEFINED)
 RESULT
@@ -201,7 +208,7 @@ RESULT
 
 CHECK(INIFile::getNumberOfLines() const )
 	INIFile ini2("data/amber91.ini");
-	ini2.read();
+	TEST_EQUAL(ini2.read(), true)
 	TEST_EQUAL(ini2.getNumberOfLines(), 1379)
   TEST_EQUAL(ini.getNumberOfLines(), 10)
 RESULT
