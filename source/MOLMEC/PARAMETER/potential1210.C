@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: potential1210.C,v 1.9 2002/02/27 12:21:44 sturm Exp $
+// $Id: potential1210.C,v 1.10 2005/01/18 21:33:52 amoll Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/potential1210.h>
@@ -143,7 +143,7 @@ namespace BALL
 			} 
 			else 
 			{
-				Log.level(LogStream::WARNING) << "unknown unit for parameter A: " << options["unit_A"] << endl;
+				Log.warn() << "unknown unit for parameter A: " << options["unit_A"] << endl;
 			}
 		}	
 		
@@ -155,7 +155,7 @@ namespace BALL
 			} 
 			else 
 			{
-				Log.level(LogStream::WARNING) << "unknown unit for parameter B: " << options["unit_B"] << endl;
+				Log.warn() << "unknown unit for parameter B: " << options["unit_B"] << endl;
 			}
 		}	
 		

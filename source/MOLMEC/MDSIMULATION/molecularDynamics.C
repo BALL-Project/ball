@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularDynamics.C,v 1.16 2004/04/17 14:14:56 oliver Exp $
+// $Id: molecularDynamics.C,v 1.17 2005/01/18 21:37:53 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MDSIMULATION/molecularDynamics.h>
@@ -321,8 +321,7 @@ namespace BALL
     }
 		else
 		{
-			Log.level(LogStream::WARNING) << "Assigning an energy_output_frequency of zero is not allowed. "
-				<< "Using old value." << std::endl;
+			Log.warn() << "Assigning an energy_output_frequency of zero is not allowed. Using old value." << std::endl;
 		}
 	}
 

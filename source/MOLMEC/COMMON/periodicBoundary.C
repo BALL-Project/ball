@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: periodicBoundary.C,v 1.26 2003/08/26 09:17:52 oliver Exp $
+// $Id: periodicBoundary.C,v 1.27 2005/01/18 21:36:37 amoll Exp $
 //
 
 #include <BALL/MOLMEC/COMMON/periodicBoundary.h>
@@ -262,7 +262,7 @@ namespace BALL
 		// we have no options from the force field: give up
 		if (options == 0)
 		{
-			Log.level(LogStream::WARNING) << "PeriodicBoundary not bound to a force field!" << endl;
+			Log.warn() << "PeriodicBoundary not bound to a force field!" << endl;
 			return false;
 		}
 
@@ -308,14 +308,14 @@ namespace BALL
 				// make sure we have a system
 				if (force_field_->getSystem() == 0)
 				{
-					Log.level(LogStream::ERROR) << "Force field has no system!" << endl;
+					Log.error() << "Force field has no system!" << endl;
 					return false;
 				}
 
 				// the minimum distance has to be non-negative
 				if (dist < 0)
 				{
-					Log.level(LogStream::ERROR) << "Minimum distance for periodic boundary is negative: " << dist << endl;
+					Log.error() << "Minimum distance for periodic boundary is negative: " << dist << endl;
 					return false;
 				}
 
@@ -334,7 +334,7 @@ namespace BALL
 		// ensure that the box is non-degenerate
 		if ((box_.a.x >= box_.b.x) || (box_.a.y >= box_.b.y) || (box_.a.z >= box_.b.z))
 		{
-			Log.level(LogStream::ERROR) << "Illegal coordinates for periodic boundary: " << box_.a << "/" << box_.b << endl;
+			Log.error() << "Illegal coordinates for periodic boundary: " << box_.a << "/" << box_.b << endl;
 			return false;
 		}
 

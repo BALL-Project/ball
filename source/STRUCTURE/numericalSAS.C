@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: numericalSAS.C,v 1.27 2004/11/19 19:18:59 oliver Exp $
+// $Id: numericalSAS.C,v 1.28 2005/01/18 21:29:57 amoll Exp $
 //
 
 #include <utility>
@@ -607,11 +607,11 @@ namespace BALL
 #define UNSP_ICO_ARC     10
 
 #define BALL_NSC_WARNING\
-	Log.level(LogStream::WARNING) << "NSC: error in " << __FILE__\
+	Log.level(LogStream::WARNING_LEVEL) << "NSC: error in " << __FILE__\
 		<< ":" << __LINE__ << ": " 
 
 #define BALL_NSC_ERROR\
-	Log.level(LogStream::ERROR) << "NSC: error in " << __FILE__\
+	Log.level(LogStream::ERROR_LEVEL) << "NSC: error in " << __FILE__\
 		<< ":" << __LINE__ << ": " 
 
 

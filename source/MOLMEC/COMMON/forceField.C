@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceField.C,v 1.39 2005/01/18 12:01:11 amoll Exp $
+// $Id: forceField.C,v 1.40 2005/01/18 21:36:37 amoll Exp $
 //
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -157,7 +157,7 @@ namespace BALL
 
 		if (!result) 
 		{
-			Log.level(LogStream::ERROR) << "Force Field setup failed! " << endl;
+			Log.error() << "Force Field setup failed! " << endl;
 			valid_ = false;
 		}
 	}
@@ -185,7 +185,7 @@ namespace BALL
 
 		if (!result) 
 		{
-			Log.level(LogStream::ERROR) << "Force Field setup failed! " << endl;
+			Log.error() << "Force Field setup failed! " << endl;
 			valid_ = false;
 		}
 	}

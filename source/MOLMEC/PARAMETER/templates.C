@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: templates.C,v 1.15 2004/12/17 15:29:38 amoll Exp $
+// $Id: templates.C,v 1.16 2005/01/18 21:31:24 amoll Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/templates.h>
@@ -66,21 +66,21 @@ namespace BALL
 		// extract the basis information
 		if (!ParameterSection::extractSection(parameters, section_name))
 		{
-			Log.level(LogStream::ERROR) << "Didn't find section for " << section_name << endl;
+			Log.error() << "Didn't find section for " << section_name << endl;
 			return false;
 		}
 
 		// check for the correct entries:
 		if (!hasVariable("q") || !hasVariable("type"))
 		{
-			Log.level(LogStream::ERROR) << "residue template section [" << section_name << "] requires variables q and type." << endl;
+			Log.error() << "residue template section [" << section_name << "] requires variables q and type." << endl;
 			return false;
 		}
 
 		// check for the correct unit
 		if (!options.has("unit_q") || (options["unit_q"] != "e0"))
 		{
-			Log.level(LogStream::ERROR) << "unknown unit in section [" << section_name 
+			Log.error() << "unknown unit in section [" << section_name 
 				<< "]. Please specify charges in multiples of the elementary charge (e0)" << endl;
 			return false;
 		}

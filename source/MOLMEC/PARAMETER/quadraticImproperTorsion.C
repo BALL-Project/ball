@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: quadraticImproperTorsion.C,v 1.8 2002/02/27 12:21:44 sturm Exp $
+// $Id: quadraticImproperTorsion.C,v 1.9 2005/01/18 21:32:27 amoll Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/quadraticImproperTorsion.h>
@@ -94,16 +94,14 @@ namespace BALL
 		// extract the section information
 		if (!ParameterSection::extractSection(parameters, section_name))
 		{
-			Log.level(LogStream::ERROR) << "Could not find section " 
-				<< section_name << " in parameter file!" << endl;
+			Log.error() << "Could not find section " << section_name << " in parameter file!" << endl;
 			return false;
 		}
 		
 		// check whether all variables we need are defined, terminate otherwise
 		if (!hasVariable("phase") || !hasVariable("k"))
 		{
-			Log.level(LogStream::ERROR) << "QuadraticImproperTorsion section (" << section_name 
-				<< ") needs columns phase and k!" << endl;
+			Log.error() << "QuadraticImproperTorsion section (" << section_name << ") needs columns phase and k!" << endl;
 			return false;
 		}
 
@@ -178,7 +176,7 @@ namespace BALL
 			} 
 			else 
 			{
-				Log.level(LogStream::ERROR) << "Could not interpret key " << key << endl;
+				Log.error() << "Could not interpret key " << key << endl;
 			}
 		}
 
