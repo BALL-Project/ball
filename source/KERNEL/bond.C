@@ -1,4 +1,4 @@
-// $Id: bond.C,v 1.21 2001/06/14 00:30:42 oliver Exp $
+// $Id: bond.C,v 1.22 2001/06/27 01:57:55 oliver Exp $
 
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/system.h>
@@ -15,7 +15,7 @@ namespace BALL
 	{
 	}
 
-	Bond::NotBounded::NotBounded(const char* file, int line)
+	Bond::NotBound::NotBound(const char* file, int line)
 		throw()
 		:	Exception::GeneralException(file, line)
 	{
@@ -45,8 +45,8 @@ namespace BALL
 	{
 	}
 		
-	Bond::Bond(const String &name, Atom &first, Atom &second, Bond::Order order,Type type)
-		throw()
+	Bond::Bond(const String& name, Atom& first, Atom &second, Bond::Order order,Type type)
+		throw(Bond::TooManyBonds)
 		: Composite(),
 			PropertyManager(),
 			first_(BALL_BOND_DEFAULT_FIRST_ATOM),
@@ -76,18 +76,14 @@ namespace BALL
 		}
 		
 		// throw an exception if there is no possibility to create another bond
-		// for one of the atoms
-		if ((Size)first.number_of_bonds_ >= (Size)Atom::MAX_NUMBER_OF_BONDS)
-		{
-			throw TooManyBonds(__FILE__, __LINE__);
-		}
-		
-		if ((Size)second.number_of_bonds_ >= (Size)Atom::MAX_NUMBER_OF_BONDS)
+		// for any of the two atoms
+		if (((Size)first.number_of_bonds_ >= (Size)Atom::MAX_NUMBER_OF_BONDS)
+				|| ((Size)second.number_of_bonds_ >= (Size)Atom::MAX_NUMBER_OF_BONDS))
 		{
 			throw TooManyBonds(__FILE__, __LINE__);
 		}
 
-		// if the bond is already bonded, delete it and create 
+		// if the bond is already bound, delete it and create 
 		// it anew
 		if (bond.isBound()) 
 		{
@@ -100,12 +96,6 @@ namespace BALL
 		
 		++(first.number_of_bonds_);
 		++(second.number_of_bonds_);
-		// DEBUG
-		if (first.number_of_bonds_ > Atom::MAX_NUMBER_OF_BONDS)
-		{
-			Log.error() << "number_of_bonds_ > " << Atom::MAX_NUMBER_OF_BONDS
-				<< endl;
-		}
 
 		// keep the order 
 		if (first < second)
@@ -195,7 +185,7 @@ namespace BALL
 	const Bond& Bond::operator = (const Bond& bond)
 		throw()
 	{
-		PropertyManager::operator =(bond);
+		PropertyManager::operator = (bond);
 
 		first_			=	bond.first_;
 		second_			=	bond.second_;
@@ -236,12 +226,6 @@ namespace BALL
 		first_ = atom;
 	}
 		 
-	Atom* Bond::getFirstAtom()
-		throw()
-	{
-		return first_;
-	}
-		 
 	const Atom* Bond::getFirstAtom() const
 		throw()
 	{
@@ -270,12 +254,6 @@ namespace BALL
 		throw()
 	{
 		second_ = atom;
-	}
-		 
-	Atom* Bond::getSecondAtom()
-		throw()
-	{
-		return second_;
 	}
 		 
 	const Atom* Bond::getSecondAtom() const
@@ -321,40 +299,15 @@ namespace BALL
 	}
 		
 	Real Bond::getLength() const
-		throw(Bond::NotBounded)
+		throw(Bond::NotBound)
 	{
 		if (first_ == 0 || second_ == 0)
 		{
-			throw NotBounded(__FILE__, __LINE__);
+			throw NotBound(__FILE__, __LINE__);
 		}
 		
 		return first_->position_.getDistance(second_->position_);
 	}
-
-	Bond* Bond::getBond(Atom &first,Atom &second)
-		throw()
-	{
-		return first.getBond(second);
-	}
-
-	Atom* Bond::getBoundAtom(const Atom& atom)
-		throw()
-	{
-		if (first_ == &atom)
-		{
-			return second_;
-		} 
-		else 
-		{
-			if (second_ == &atom) 
-			{
-				return first_;
-			} 
-		}
-
-		return 0;
-	}
-
 	const Atom* Bond::getBoundAtom(const Atom& atom) const
 		throw()
 	{
@@ -396,21 +349,6 @@ namespace BALL
 		return false;
 	}
 
-	bool Bond::isInterBondOf(const System &system) const
-		throw()
-	{
-		if (isBound() == true)
-		{
-			bool first_atom_is_descendant  =  first_->Composite::isDescendantOf(system);
-			bool second_atom_is_descendant = second_->Composite::isDescendantOf(system);
-
-			return (( first_atom_is_descendant && !second_atom_is_descendant) ||
-							(!first_atom_is_descendant &&  second_atom_is_descendant));
-		}
-
-		return false;
-	}
-
 	bool Bond::isIntraBond() const
 		throw()
 	{	
@@ -426,13 +364,6 @@ namespace BALL
 											&& second_->Composite::isDescendantOf(atom_container));
 	}
 
-	bool Bond::isIntraBondOf(const System &system) const
-		throw()
-	{
-		return (isBound() &&  first_->Composite::isDescendantOf(system)
-											&& second_->Composite::isDescendantOf(system));
-	}
-
 	bool Bond::isValid () const
 		throw()
 	{
@@ -440,7 +371,7 @@ namespace BALL
 									&& first_  != 0
 									&& second_ != 0
 									&& first_  != second_
-									&&  first_->hasBond(*this)
+									&& first_->hasBond(*this)
 									&& second_->hasBond(*this));
 	}
 
