@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: label.C,v 1.4 2003/08/29 15:37:59 amoll Exp $
+// $Id: label.C,v 1.4.2.1 2004/05/18 16:05:43 amoll Exp $
 
 #include <BALL/VIEW/PRIMITIVES/label.h>
 
@@ -62,12 +62,6 @@ namespace BALL
 			GeometricObject::swap(label);
 			Vertex::swap(label);
 		}
-
-	  String Label::getTypeName() const
-			throw()
-    {
-			return String("Label");
-    }
 
 		bool Label::isValid() const
 			throw()
