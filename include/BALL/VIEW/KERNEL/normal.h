@@ -1,4 +1,4 @@
-// $Id: normal.h,v 1.5 2001/05/13 13:47:48 hekl Exp $
+// $Id: normal.h,v 1.6 2001/07/09 17:55:13 sturm Exp $
 
 #ifndef BALL_VIEW_KERNEL_NORMAL_H
 #define BALL_VIEW_KERNEL_NORMAL_H
@@ -24,9 +24,9 @@ namespace BALL
 				needs a normal vector. It provides the derived class with methods for accessing
 				that normal vector.
 				@memo    NormalVector class (BALL VIEW kernel framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/05/13 13:47:48 $
+				@author  $Author: sturm $
+				@version $Revision: 1.6 $
+				@date    $Date: 2001/07/09 17:55:13 $
 		*/
 		class NormalVector
 		{
@@ -164,10 +164,7 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the vector of {\em *this} normalVector.
-					Access the constant reference of the vector of {\em *this} normalVector.
-					@return      Vector3& constant reference to the vector of {\em *this} normalVector
-					@see         setNormalVector
-					@see         Vector3
+			For further information see \Ref{getNormalVector}.
 			*/
 			const Vector3& getNormalVector() const
 				throw();
