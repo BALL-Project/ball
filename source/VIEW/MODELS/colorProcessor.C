@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.23 2003/11/11 12:11:19 amoll Exp $
+// $Id: colorProcessor.C,v 1.24 2003/12/17 16:13:48 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -176,8 +176,8 @@ namespace BALL
 			boxp.finish();
 
 			Vector3 diagonal = boxp.getUpper() - boxp.getLower();
-			atom_grid_ = AtomGrid(boxp.getLower() - Vector3(3.0, 3.0, 3.0), 
-														diagonal + Vector3(6.0, 6.0, 6.0),
+			atom_grid_ = AtomGrid(boxp.getLower() - Vector3(5, 5, 5), 
+														diagonal + Vector3(10, 10,10),
 														5.0); // spacing, increase this, it the grid consumes too much memory
 		 
 			for (lit = atoms.begin(); lit != atoms.end(); lit++)
