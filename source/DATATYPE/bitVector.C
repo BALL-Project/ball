@@ -1,4 +1,4 @@
-// $Id: bitVector.C,v 1.26 2001/10/11 00:31:35 oliver Exp $
+// $Id: bitVector.C,v 1.27 2001/12/11 12:01:24 oliver Exp $
 
 #include <BALL/DATATYPE/bitVector.h>
 #include <BALL/MATHS/common.h>
@@ -208,17 +208,17 @@ namespace BALL
 	BALL::Size BitVector::countValue(bool value) const
 		throw()
 	{
-		Size size = 0;
+		Size count = 0;
 
 		for (Position index = 0; index < size_; index++)
 		{
 			if (getBit((Index)index) == value)
 			{
-				size++;
+				count++;
 			}
 		}
 
-		return size;
+		return count;
 	}
 
 	void BitVector::set(const char* bit_string)
@@ -231,9 +231,9 @@ namespace BALL
 
 		const char* tmp = bit_string;
 		setSize((Size)strlen(bit_string));
-		for (Size i = 0; i < size_ ; i++)
+		for (Index i = size_ - 1; i >= 0; i--)
 		{
-			setBit((Index)i, (*tmp != '0'));
+			setBit(i, (*tmp != '0'));
 			tmp++;
 		}
 	}
@@ -389,8 +389,9 @@ namespace BALL
 	}
 
 	void BitVector::bitwiseXor(const BitVector& bit_vector)
-		throw (Exception::OutOfMemory)
+		throw (Exception::OutOfMemory) // in setSize below
 	{
+		// adjust the bitvector size to that of the longest vector!
 		if (size_ < bit_vector.size_)
 		{
 			setSize(bit_vector.size_, true);
@@ -403,9 +404,10 @@ namespace BALL
 	}
 
 	void BitVector::bitwiseOr(const BitVector& bit_vector)
-		throw (Exception::OutOfMemory)
+		throw (Exception::OutOfMemory) // in setSize below
 	{
-		if (bitset_.size() < bit_vector.bitset_.size())
+		// adjust the bitvector size to that of the longest vector!
+		if (size_ < bit_vector.size_)
 		{
 			setSize(bit_vector.size_, true);
 		}
@@ -417,9 +419,10 @@ namespace BALL
 	}
 
 	void BitVector::bitwiseAnd(const BitVector& bit_vector)
-		throw (Exception::OutOfMemory)
+		throw (Exception::OutOfMemory) // in setSize below
 	{
-		if (bitset_.size() < bit_vector.bitset_.size())
+		// adjust the bitvector size to that of the longest vector!
+		if (size_ < bit_vector.size_)
 		{
 			setSize(bit_vector.size_, true);
 		}
@@ -525,14 +528,7 @@ namespace BALL
 
 		for (Index i = (Index)size_ - 1; i >= 0; i--) 
 		{
-			if (getBit(i) == true)
-			{
-				s << '1';
-			}
-			else 
-			{
-				s << '0';
-			}
+			s << (getBit(i) ? '1' : '0');
 		}
 
 		s << ' ';
@@ -573,7 +569,7 @@ namespace BALL
 	}
 
 	Index BitVector::block_(Index index)
-	 throw(Exception::IndexUnderflow, Exception::OutOfMemory)
+		throw(Exception::IndexUnderflow, Exception::OutOfMemory)
 	{
 		if (index < 0)
 		{
@@ -595,6 +591,27 @@ namespace BALL
 			}
 		
 			size_ = index + 1; 
+		}
+
+		return (index >> BALL_BLOCK_SHIFT);
+	}
+
+	Index BitVector::block_(Index index) const
+		throw(Exception::IndexUnderflow, Exception::IndexOverflow)
+	{
+		if (index < 0)
+		{
+			index = (Index)size_ - index + 1;
+		}
+
+		if (index < 0)
+		{
+			throw Exception::IndexUnderflow(__FILE__, __LINE__);
+		}
+		
+		if ((Size)index >= size_)
+		{
+			throw Exception::IndexOverflow(__FILE__, __LINE__);
 		}
 
 		return (index >> BALL_BLOCK_SHIFT);

@@ -1,4 +1,4 @@
-// $Id: bitVector.iC,v 1.22 2001/10/11 00:32:54 oliver Exp $
+// $Id: bitVector.iC,v 1.23 2001/12/11 12:00:18 oliver Exp $
 
 BALL_INLINE 
 BALL::Size BitVector::getSize() const
@@ -10,13 +10,16 @@ BALL::Size BitVector::getSize() const
 BALL_INLINE
 Bit::Bit(const BitVector* const bit_vector, Index index) 
 	throw(Exception::NullPointer, Exception::IndexUnderflow, Exception::IndexOverflow)
+	:	bitvector_(const_cast<BitVector*> (bit_vector)),
+		index_(index),
+		bitvector_muteable_(false)
 {
 	if (bit_vector == 0)
 	{
 		throw Exception::NullPointer(__FILE__, __LINE__);
 	}
 
-	if (index < (Index) - bit_vector->getSize() )
+	if (index < (Index) - bit_vector->getSize())
 	{
 		throw Exception::IndexUnderflow(__FILE__, __LINE__);
 	}
@@ -25,25 +28,28 @@ Bit::Bit(const BitVector* const bit_vector, Index index)
 	{
 		throw Exception::IndexOverflow(__FILE__, __LINE__);
 	}
-
-	bitvector_					= const_cast<BitVector *> (bit_vector);
-	index_							= index;
-	bitvector_muteable_ = false;
 }
 
 BALL_INLINE
 Bit::Bit(BitVector* bit_vector, Index index) 
 	throw(Exception::NullPointer)
+	:	bitvector_(const_cast<BitVector*> (bit_vector)),
+		index_(index),
+		bitvector_muteable_(true)
 {
 	if (bit_vector == 0)
 	{
 		throw Exception::NullPointer(__FILE__, __LINE__);
 	}
+	if (index < (Index) - bit_vector->getSize())
+	{
+		throw Exception::IndexUnderflow(__FILE__, __LINE__);
+	}
 
-	bitvector_					= bit_vector;
-	index_							= index;
-	bitvector_muteable_ = true;
-
+	if (index >= (Index) bit_vector->getSize())
+	{
+		throw Exception::IndexOverflow(__FILE__, __LINE__);
+	}
 }
 
 BALL_INLINE
@@ -208,8 +214,7 @@ bool BitVector::getBit(Index index) const
   throw(Exception::IndexUnderflow, Exception::IndexOverflow)
 {
 	validateIndex_(index);
-	BitVector* const  const_this = const_cast<BitVector *>(this);
-	return const_this->getBit(index);
+	return ((bitset_[block_(index)] & mask_(index)) != 0);
 }
 
 BALL_INLINE

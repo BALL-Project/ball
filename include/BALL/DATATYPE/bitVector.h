@@ -1,4 +1,4 @@
-// $Id: bitVector.h,v 1.27 2001/10/11 00:32:54 oliver Exp $
+// $Id: bitVector.h,v 1.28 2001/12/11 12:00:18 oliver Exp $
 
 #ifndef BALL_DATATYPE_BITVECTOR_H
 #define BALL_DATATYPE_BITVECTOR_H
@@ -568,6 +568,9 @@ namespace BALL
 	
 		Index block_(Index index)
 			throw(Exception::IndexUnderflow, Exception::OutOfMemory);
+
+		Index block_(Index index) const
+			throw(Exception::IndexUnderflow, Exception::IndexOverflow);
 
 		BlockType mask_(Index index) const
 			throw();
