@@ -1,4 +1,4 @@
-// $Id: Vector3_test.C,v 1.33.4.1 2002/02/28 01:28:18 oliver Exp $
+// $Id: Vector3_test.C,v 1.33.4.2 2002/12/06 15:29:09 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 #include <BALL/MATHS/angle.h>
 ///////////////////////////
 
-START_TEST(TVector3, "$Id: Vector3_test.C,v 1.33.4.1 2002/02/28 01:28:18 oliver Exp $")
+START_TEST(TVector3, "$Id: Vector3_test.C,v 1.33.4.2 2002/12/06 15:29:09 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -103,7 +103,7 @@ TextPersistenceManager pm;
 CHECK(virtual void write(PersistenceManager& pm, const char* name = 0) const;)
 	Vector3 v(1.0, 2.0, 3.0);
 	NEW_TMP_FILE(filename)
-	ofstream  ofile(filename.c_str(), File::OUT);
+	ofstream  ofile(filename.c_str(), std::ios::out);
 	pm.setOstream(ofile);
 	pm.writeStorableObject(v, "testname");
 	ofile.close();	
@@ -449,7 +449,7 @@ CHECK(TVector3::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	Vector3 v(1.2, 2.3, 3.4);
   String filename;
 	NEW_TMP_FILE(filename)
-	std::ofstream outfile(filename.c_str(), File::OUT);
+	std::ofstream outfile(filename.c_str(), std::ios::out);
 	v.dump(outfile);
 	outfile.close();
 	TEST_FILE_REGEXP(filename.c_str(), "data/Vector3_test.txt")
@@ -514,7 +514,7 @@ RESULT
 NEW_TMP_FILE(filename)
 CHECK(std::ostream& operator << (std::ostream& s, const TVector3<T>& vector))
 	Vector3 v(1.2, 2.3, 3.4);
-	std::ofstream outstr(filename.c_str(), File::OUT);
+	std::ofstream outstr(filename.c_str(), std::ios::out);
 	outstr << v;
 	outstr.close();
 	TEST_FILE(filename.c_str(), "data/Vector3_test2.txt")

@@ -1,4 +1,4 @@
-// $Id: SDFile_test.C,v 1.5 2002/01/26 22:01:29 oliver Exp $
+// $Id: SDFile_test.C,v 1.5.4.1 2002/12/06 15:29:09 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -14,7 +14,7 @@
 
 ///////////////////////////
 
-START_TEST(SDFile, "$Id: SDFile_test.C,v 1.5 2002/01/26 22:01:29 oliver Exp $")
+START_TEST(SDFile, "$Id: SDFile_test.C,v 1.5.4.1 2002/12/06 15:29:09 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -73,7 +73,7 @@ RESULT
 
 
 CHECK(SDFile::SDFile(const String& filename, File::OpenMode open_mode))
-	SDFile f("data/SDFile_test1.sdf", File::IN);
+	SDFile f("data/SDFile_test1.sdf", std::ios::in);
 	System system;
 	f.read(system);
 	TEST_EQUAL(system.countAtoms(), 518)
@@ -111,7 +111,7 @@ CHECK(SDFile::write(const System& system))
 
 	String filename;
 	NEW_TMP_FILE(filename)
-	SDFile f(filename, File::OUT);
+	SDFile f(filename, std::ios::out);
 	f.write(S);
 	f.close();
 	
@@ -158,7 +158,7 @@ CHECK(SDFile::SDFile& operator << (const System& system))
 
 	String filename;
 	NEW_TMP_FILE(filename)
-	SDFile f(filename, File::OUT);
+	SDFile f(filename, std::ios::out);
 	f << S;	
 	f.close();
 	

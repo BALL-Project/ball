@@ -1,4 +1,4 @@
-// $Id: Object_test.C,v 1.10 2002/01/26 22:01:28 oliver Exp $
+// $Id: Object_test.C,v 1.10.4.1 2002/12/06 15:29:09 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(Object, "$Id: Object_test.C,v 1.10 2002/01/26 22:01:28 oliver Exp $")
+START_TEST(Object, "$Id: Object_test.C,v 1.10.4.1 2002/12/06 15:29:09 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -180,7 +180,7 @@ CHECK(Object::dump(std::ostream& s = std::cout, Size depth = 0) const  throw())
 	Object o;
 	String filename;
   NEW_TMP_FILE(filename)
-  std::ofstream outfile(filename.c_str(), File::OUT);
+  std::ofstream outfile(filename.c_str(), std::ios::out);
   o.dump(outfile);
   outfile.close();
   TEST_FILE_REGEXP(filename.c_str(), "data/Object_test.txt")

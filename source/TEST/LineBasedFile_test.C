@@ -1,11 +1,11 @@
-// $Id: LineBasedFile_test.C,v 1.13 2001/12/20 02:47:54 oliver Exp $
+// $Id: LineBasedFile_test.C,v 1.13.4.1 2002/12/06 15:29:08 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/FORMAT/lineBasedFile.h>
 ///////////////////////////
 
-START_TEST(LineBasedFile, "$Id: LineBasedFile_test.C,v 1.13 2001/12/20 02:47:54 oliver Exp $")
+START_TEST(LineBasedFile, "$Id: LineBasedFile_test.C,v 1.13.4.1 2002/12/06 15:29:08 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -30,7 +30,7 @@ CHECK(BALL_CREATE(LineBasedFile))
 	TEST_NOT_EQUAL(ptr, 0)
 RESULT
 
-CHECK(LineBasedFile(const String& filename, File::OpenMode open_mode = File::IN)
+CHECK(LineBasedFile(const String& filename, File::OpenMode open_mode = std::ios::in)
 			throw(Exception::FileNotFound))
 	LineBasedFile f1("data/LineBasedFile_test.txt");
 	TEST_EQUAL(f1.getLineNumber(), 0)

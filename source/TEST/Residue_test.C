@@ -1,4 +1,4 @@
-// $Id: Residue_test.C,v 1.20 2002/01/26 22:01:29 oliver Exp $
+// $Id: Residue_test.C,v 1.20.4.1 2002/12/06 15:29:09 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -13,7 +13,7 @@
 #include <BALL/MATHS/common.h>
 ///////////////////////////
 
-START_TEST(Residue, "$Id: Residue_test.C,v 1.20 2002/01/26 22:01:29 oliver Exp $")
+START_TEST(Residue, "$Id: Residue_test.C,v 1.20.4.1 2002/12/06 15:29:09 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -512,7 +512,7 @@ CHECK(Residue::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	Residue r1("r1", "test", 'X');
 	PDBAtom a1("a1");
 	r1.insert(a1);
-	std::ofstream outfile(filename.c_str(), File::OUT);
+	std::ofstream outfile(filename.c_str(), std::ios::out);
 	r1.dump(outfile);
 	outfile.close();
 	TEST_FILE_REGEXP(filename.c_str(), "data/Residue_test.txt")
@@ -524,7 +524,7 @@ pm.registerClass(getStreamName<Atom>(), Atom::createDefault);
 pm.registerClass(getStreamName<Molecule>(), Molecule::createDefault);
 NEW_TMP_FILE(filename)
 CHECK(persistentWrite(PersistenceManager&, String, bool))
-	std::ofstream	ofile(filename.c_str(), File::OUT);
+	std::ofstream	ofile(filename.c_str(), std::ios::out);
 	Atom* f2= new Atom();
 	f2->setName("name2");
 	Atom* f3= new Atom();

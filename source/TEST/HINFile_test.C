@@ -1,4 +1,4 @@
-// $Id: HINFile_test.C,v 1.18 2002/01/26 22:01:27 oliver Exp $
+// $Id: HINFile_test.C,v 1.18.4.1 2002/12/06 15:29:08 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 
 ///////////////////////////
 
-START_TEST(HINFile, "$Id: HINFile_test.C,v 1.18 2002/01/26 22:01:27 oliver Exp $")
+START_TEST(HINFile, "$Id: HINFile_test.C,v 1.18.4.1 2002/12/06 15:29:08 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -40,7 +40,7 @@ CHECK(HINFile::getPeriodicBoundary() const )
 RESULT
 
 
-CHECK(HINFile::HINFile(const String& filename, File::OpenMode open_mode = File::IN))
+CHECK(HINFile::HINFile(const String& filename, File::OpenMode open_mode = std::ios::in))
   hin = HINFile("data/HINFile_test.hin");
   TEST_EQUAL(hin.isValid(), true)
 RESULT
@@ -114,7 +114,7 @@ CHECK(HINFile::HINFile& operator << (const System& system))
 	// the name of an atom containing whitespaces to the first field
 	NEW_TMP_FILE(filename)
 	system.beginAtom()->setName("NAME TEST");
-	HINFile hin3(filename, File::OUT);
+	HINFile hin3(filename, std::ios::out);
 	CAPTURE_OUTPUT(LogStream::WARNING)
 		hin3 << system;
 	COMPARE_OUTPUT("HINFile::write: truncated atom name 'NAME TEST' to 'NAME'.\n")

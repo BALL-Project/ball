@@ -1,4 +1,4 @@
-// $Id: Selectable_test.C,v 1.5.4.1 2002/05/15 23:39:57 oliver Exp $
+// $Id: Selectable_test.C,v 1.5.4.2 2002/12/06 15:29:09 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 
 ///////////////////////////
 
-START_TEST(Selectable, "$Id: Selectable_test.C,v 1.5.4.1 2002/05/15 23:39:57 oliver Exp $")
+START_TEST(Selectable, "$Id: Selectable_test.C,v 1.5.4.2 2002/12/06 15:29:09 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -111,7 +111,7 @@ RESULT
 
 CHECK(Selectable::write(PersistenceManager& pm) const )
 	NEW_TMP_FILE(filename)
-	ofstream  ofile(filename.c_str(), File::OUT);
+	ofstream  ofile(filename.c_str(), std::ios::out);
 	pm.setOstream(ofile);
 	se.write(pm);
 	ofile.close();	
@@ -121,7 +121,7 @@ RESULT
 CHECK(Selectable::dump(::std::ostream& s = std::cout, Size depth = 0L) const )
   String filename;
 	NEW_TMP_FILE(filename)
-	std::ofstream outfile(filename.c_str(), File::OUT);
+	std::ofstream outfile(filename.c_str(), std::ios::out);
 	se.dump(outfile);
 	outfile.close();
 	TEST_FILE_REGEXP(filename.c_str(), "data/Selectable_test3.txt")

@@ -1,4 +1,4 @@
-// $Id: INIFile_test.C,v 1.17.4.1 2002/10/29 17:36:47 amoll Exp $
+// $Id: INIFile_test.C,v 1.17.4.2 2002/12/06 15:29:08 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -25,14 +25,14 @@ class MyItemCollector
 };
 
 
-START_TEST(INIFile, "$Id: INIFile_test.C,v 1.17.4.1 2002/10/29 17:36:47 amoll Exp $")
+START_TEST(INIFile, "$Id: INIFile_test.C,v 1.17.4.2 2002/12/06 15:29:08 oliver Exp $")
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
 
 INIFile* ini1 = 0;
-CHECK(INIFile::INIFile())
+CHECK(INIstd::ios::inIFile())
 	ini1 = new INIFile;
 	TEST_NOT_EQUAL(ini1, 0)
 RESULT
@@ -52,7 +52,7 @@ RESULT
 
 String filename;
 NEW_TMP_FILE(filename)
-CHECK(INIFile::INIFile(const String& filename))
+CHECK(INIstd::ios::inIFile(const String& filename))
 	INIFile ini(filename);
 	TEST_EQUAL(ini.getFilename(), filename)
 RESULT

@@ -377,17 +377,6 @@ bin_PROGRAMS= \
 	$(EXECUTABLES_QSAR)\
 	$(EXECUTABLES_SOLVATION)
 
-# default target
-#all:	$(EXECUTABLES)
-#all:	MolecularGraph_test
-
-# required for clean and depend
-#CURRENTDIR_SOURCES=$(EXECUTABLES:=.C)
-#OBJECTS=$(EXECUTABLES:=.o)
-
-#include ../Make.rules.in
-#include .Dependencies
-
 # remove the library specific flags
 # and replace them by the aplication specific
 # flags
@@ -447,8 +436,4 @@ qsar_test:	$(EXECUTABLES_QSAR)
 solvation_test:	$(EXECUTABLES_SOLVATION)
 	@./runtests -section "SOLVATION" $(TEST_OPTIONS) $(EXECUTABLES_SOLVATION)
 
-clean:	default_clean
-	@$(RM) -rf *.o *~ *.log ii_files Templates.DB	SunWS_cache _*.TMP core a.out $(EXECUTABLES)
-
 Enumerator_test_LDADD=../CONCEPT/enumerator.o
-#	$(CXX) $(LDFLAGS) -o Enumerator_test Enumerator_test.o ../CONCEPT/enumerator.o $(LIBS)

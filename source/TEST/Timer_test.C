@@ -1,4 +1,4 @@
-// $Id: Timer_test.C,v 1.12.4.1 2002/12/05 16:48:26 crauser Exp $
+// $Id: Timer_test.C,v 1.12.4.2 2002/12/06 15:29:09 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 #include <unistd.h>
 ///////////////////////////
@@ -10,7 +10,7 @@
 #endif
 ///////////////////////////
 
-START_TEST(Timer, "$Id: Timer_test.C,v 1.12.4.1 2002/12/05 16:48:26 crauser Exp $")
+START_TEST(Timer, "$Id: Timer_test.C,v 1.12.4.2 2002/12/06 15:29:09 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -264,7 +264,7 @@ CHECK(Timer::dump(::std::ostream& s = ::std::cout, Size depth = 0L) const )
   String filename;
 	NEW_TMP_FILE(filename)
 
-	std::ofstream outfile(filename.c_str(), File::OUT);
+	std::ofstream outfile(filename.c_str(), std::ios::out);
 
 	t1.dump(outfile);
 	outfile.close();

@@ -1,4 +1,4 @@
-// $Id: PDBFile_test.C,v 1.5.4.1 2002/11/08 18:52:16 oliver Exp $
+// $Id: PDBFile_test.C,v 1.5.4.2 2002/12/06 15:29:09 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.5.4.1 2002/11/08 18:52:16 oliver Exp $")
+START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.5.4.2 2002/12/06 15:29:09 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -38,13 +38,13 @@ CHECK(PDBFile::write(System&))
 	TEST_EQUAL(S.countAtoms(), 892);
 	f.close();
 
-	f.open(tmp_filename, File::OUT);
+	f.open(tmp_filename, std::ios::out);
 	f.write(S);
 	f.close();
 
 	TEST_FILE_REGEXP(tmp_filename.c_str(), "data/PDBFile_test2.txt")
 
-	f.open(tmp_filename, File::OUT);
+	f.open(tmp_filename, std::ios::out);
 	f.write(S);
 	f.close();
 
@@ -64,7 +64,7 @@ CHECK(writing of Systems containing Atoms instead of PDBAtoms)
 	String filename;
 	NEW_TMP_FILE(filename)
 	STATUS(system->countBonds())
-	PDBFile outfile(filename, File::OUT);
+	PDBFile outfile(filename, std::ios::out);
 	outfile << *system;
 	outfile.close();
 	delete system;

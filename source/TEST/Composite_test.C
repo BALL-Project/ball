@@ -1,4 +1,4 @@
-// $Id: Composite_test.C,v 1.29.4.1 2002/11/08 18:52:16 oliver Exp $
+// $Id: Composite_test.C,v 1.29.4.2 2002/12/06 15:29:08 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -25,7 +25,7 @@ class myVisitor
 	}
 };
 
-START_TEST(Composite, "$Id: Composite_test.C,v 1.29.4.1 2002/11/08 18:52:16 oliver Exp $")
+START_TEST(Composite, "$Id: Composite_test.C,v 1.29.4.2 2002/12/06 15:29:08 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -269,7 +269,7 @@ String filename;
 
 CHECK(persistentWrite(TextPersistenceManager&, String&, bool))
 	NEW_TMP_FILE(filename)
-	std::ofstream  ofile(filename.c_str(), File::OUT);
+	std::ofstream  ofile(filename.c_str(), std::ios::out);
 	pm.setOstream(ofile);
 	using namespace RTTI;
 	pm.registerClass(getStreamName<Composite>(), getNew<Composite>);
@@ -1085,7 +1085,7 @@ CHECK(dump())
 	TEST_EQUAL(a.count(Composite::DEFAULT_UNARY_PREDICATE), 5)
   String filename;
 	NEW_TMP_FILE(filename)
-	std::ofstream outfile(filename.c_str(), File::OUT);
+	std::ofstream outfile(filename.c_str(), std::ios::out);
 	a.dump(outfile);
 	outfile.close();
 	TEST_FILE_REGEXP(filename.c_str(), "data/Composite_test.txt")

@@ -112,17 +112,6 @@ LEX_OUTPUT_ROOT = @LEX_OUTPUT_ROOT@
 LIBBALLVIEW = @LIBBALLVIEW@
 LIBS = @LIBS@
 
-# default target
-#all:	$(EXECUTABLES)
-#all:	MolecularGraph_test
-
-# required for clean and depend
-#CURRENTDIR_SOURCES=$(EXECUTABLES:=.C)
-#OBJECTS=$(EXECUTABLES:=.o)
-
-#include ../Make.rules.in
-#include .Dependencies
-
 # remove the library specific flags
 # and replace them by the aplication specific
 # flags
@@ -2683,10 +2672,6 @@ qsar_test:	$(EXECUTABLES_QSAR)
 
 solvation_test:	$(EXECUTABLES_SOLVATION)
 	@./runtests -section "SOLVATION" $(TEST_OPTIONS) $(EXECUTABLES_SOLVATION)
-
-clean:	default_clean
-	@$(RM) -rf *.o *~ *.log ii_files Templates.DB	SunWS_cache _*.TMP core a.out $(EXECUTABLES)
-#	$(CXX) $(LDFLAGS) -o Enumerator_test Enumerator_test.o ../CONCEPT/enumerator.o $(LIBS)
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

@@ -1,4 +1,4 @@
-// $Id: LogStream_test.C,v 1.16.4.1 2002/12/05 16:48:26 crauser Exp $
+// $Id: LogStream_test.C,v 1.16.4.2 2002/12/06 15:29:08 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 #include <BALL/CONCEPT/notification.h>
 ///////////////////////////
 
-START_TEST(LogStream, "$Id: LogStream_test.C,v 1.16.4.1 2002/12/05 16:48:26 crauser Exp $")
+START_TEST(LogStream, "$Id: LogStream_test.C,v 1.16.4.2 2002/12/06 15:29:08 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -128,7 +128,7 @@ RESULT
 CHECK(insert(std::ostream& s, int min_level = LogStreamBuf::MIN_LEVEL, int max_level = LogStreamBuf::MAX_LEVEL))
 	NEW_TMP_FILE(filename)
 	LogStream l1;
-	ofstream s(filename.c_str(), File::OUT);
+	ofstream s(filename.c_str(), std::ios::out);
 	l1.insert(s, 99, 99);
 	l1.level(98) << "X" << endl;
 	l1.level(99) << "1" << endl;
@@ -179,7 +179,7 @@ RESULT
 CHECK(setMinLevel(const std::ostream& s, int min_level))
 	NEW_TMP_FILE(filename)
 	LogStream l1;
-	ofstream s(filename.c_str(), File::OUT);
+	ofstream s(filename.c_str(), std::ios::out);
 	l1.insert(s, 0);
 	l1.setMinLevel(s, 98);
 	l1.info(97) << "X" << endl;
@@ -192,7 +192,7 @@ RESULT
 CHECK(setMaxLevel(const std::ostream& s, int max_level))
 	NEW_TMP_FILE(filename)
 	LogStream l1;
-	ofstream s(filename.c_str(), File::OUT);
+	ofstream s(filename.c_str(), std::ios::out);
 	l1.insert(s, 0);
 	l1.setMaxLevel(s, 98);
 	l1.info(97) << "1" << endl;
@@ -205,7 +205,7 @@ RESULT
 CHECK(setPrefix(const std::ostream& s, const string& prefix))
 	NEW_TMP_FILE(filename)
 	LogStream l1;
-	ofstream s(filename.c_str(), File::OUT);;
+	ofstream s(filename.c_str(), std::ios::out);;
 	l1.insert(s, 0);
 	l1.setPrefix(s, "%l"); //loglevel
 	l1.info(1) << "  1." << endl;

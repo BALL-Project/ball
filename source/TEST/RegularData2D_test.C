@@ -1,9 +1,9 @@
-// $Id: RegularData2D_test.C,v 1.8 2002/01/26 22:01:28 oliver Exp $
+// $Id: RegularData2D_test.C,v 1.8.4.1 2002/12/06 15:29:09 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALL/DATATYPE/regularData2D.h>
 
-START_TEST(RegularData2D, "$Id: RegularData2D_test.C,v 1.8 2002/01/26 22:01:28 oliver Exp $")
+START_TEST(RegularData2D, "$Id: RegularData2D_test.C,v 1.8.4.1 2002/12/06 15:29:09 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -84,7 +84,7 @@ RESULT
 CHECK(dump())
   String filename;
 	NEW_TMP_FILE(filename)
-	std::ofstream outfile(filename.c_str(), File::OUT);
+	std::ofstream outfile(filename.c_str(), std::ios::out);
 	for (Position k = 0; k < g.getSize(); k++)
 	{
 		g[k] = k;

@@ -1,9 +1,9 @@
-// $Id: RegularData3D_test.C,v 1.4.4.3 2002/12/01 13:40:56 oliver Exp $
+// $Id: RegularData3D_test.C,v 1.4.4.4 2002/12/06 15:29:09 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALL/DATATYPE/regularData3D.h>
 
-START_TEST(RegularData3D, "$Id: RegularData3D_test.C,v 1.4.4.3 2002/12/01 13:40:56 oliver Exp $")
+START_TEST(RegularData3D, "$Id: RegularData3D_test.C,v 1.4.4.4 2002/12/06 15:29:09 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -69,7 +69,7 @@ RESULT
 CHECK(dump())
   String filename;
 	NEW_TMP_FILE(filename)
-	std::ofstream outfile(filename.c_str(), File::OUT);
+	std::ofstream outfile(filename.c_str(), std::ios::out);
 	// fill g with zero!
 	for (Position k = 0; k < g.getSize(); k++)
 	{

@@ -1,4 +1,4 @@
-// $Id: Protein_test.C,v 1.9 2002/01/26 22:01:28 oliver Exp $
+// $Id: Protein_test.C,v 1.9.4.1 2002/12/06 15:29:09 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(Protein, "$Id: Protein_test.C,v 1.9 2002/01/26 22:01:28 oliver Exp $")
+START_TEST(Protein, "$Id: Protein_test.C,v 1.9.4.1 2002/12/06 15:29:09 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -401,7 +401,7 @@ CHECK(Protein::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	p1.append(r1);
 	p1.append(r2);
 	NEW_TMP_FILE(filename)
-	std::ofstream outfile(filename.c_str(), File::OUT);
+	std::ofstream outfile(filename.c_str(), std::ios::out);
 	p1.dump(outfile);
 	outfile.close();
 	TEST_FILE_REGEXP(filename.c_str(), "data/Protein_test.txt")
@@ -413,7 +413,7 @@ pm.registerClass(getStreamName<Protein>(), Protein::createDefault);
 pm.registerClass(getStreamName<Chain>(), Chain::createDefault);
 NEW_TMP_FILE(filename)
 CHECK(persistentWrite(PersistenceManager&, String, bool))
-	std::ofstream	ofile(filename.c_str(), File::OUT);
+	std::ofstream	ofile(filename.c_str(), std::ios::out);
 	Protein* f1= new Protein("name1");
 	Chain* f2 = new Chain("name2");
 	f1->insert(*f2);
