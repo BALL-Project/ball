@@ -1,4 +1,4 @@
-// $Id: fragmentDB.C,v 1.37 2001/12/11 12:06:26 oliver Exp $
+// $Id: fragmentDB.C,v 1.38 2001/12/20 01:13:34 oliver Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 
@@ -22,7 +22,7 @@
 */
 
 #define FRAGMENT_DB_INCLUDE_TAG "#include:"
-#define DEBUG
+#undef DEBUG
 
 using namespace std;
 
