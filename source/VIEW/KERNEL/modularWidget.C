@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.C,v 1.3 2003/09/07 21:56:20 oliver Exp $
+// $Id: modularWidget.C,v 1.4 2003/09/11 16:51:06 amoll Exp $
 //
 
 #define BALL_VIEW_DEBUG // ????
@@ -11,6 +11,7 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/FORMAT/INIFile.h>
 #include <BALL/VIEW/DIALOGS/preferences.h>
+#include <qmenubar.h>
 
 using namespace std;
 
@@ -22,7 +23,10 @@ namespace BALL
 		ModularWidget::ModularWidget(const char* name)
 			throw()
 			: Embeddable(),
-				ConnectionObject()
+				ConnectionObject(),
+				window_menu_entry_id_(-1),
+				show_window_enty_(false),
+				default_visible_(true)
 		{
 			if (name != 0)
 			{
@@ -116,14 +120,49 @@ namespace BALL
 		{
 		}
 		
-		void ModularWidget::fetchPreferences(INIFile & /* inifile */)
+		void ModularWidget::fetchPreferences(INIFile& inifile)
 			throw()
 		{
+			QWidget* widget= dynamic_cast<QWidget*>(this);
+			if (!widget) return;
+
+			if (inifile.hasEntry("WINDOWS", getIdentifier() + "::on"))
+			{
+				if (inifile.getValue("WINDOWS", getIdentifier() + "::on").toUnsignedInt() == 0)
+				{
+					switchShowWidget();
+				}
+			}
+			else
+			{
+				if (default_visible_) switchShowWidget();
+			}
+
+			if (inifile.hasEntry("WINDOWS", getIdentifier() + "::x"))
+			{
+				widget->setGeometry(inifile.getValue("WINDOWS", getIdentifier() + "::x").toUnsignedInt(),
+													  inifile.getValue("WINDOWS", getIdentifier() + "::y").toUnsignedInt(),
+													  inifile.getValue("WINDOWS", getIdentifier() + "::width").toUnsignedInt(),
+													  inifile.getValue("WINDOWS", getIdentifier() + "::height").toUnsignedInt());
+			} 
 		}
 		
-		void ModularWidget::writePreferences(INIFile & /* inifile */)
+		void ModularWidget::writePreferences(INIFile& inifile)
 			throw()
 		{
+			QWidget* widget= dynamic_cast<QWidget*>(this);
+			if (!widget) return;
+
+			if (window_menu_entry_id_ != -1)
+			{
+				inifile.insertValue("WINDOWS", getIdentifier() + "::on", 
+					String(getMainControl()->menuBar()->isItemChecked(window_menu_entry_id_)));
+			}
+
+			inifile.insertValue("WINDOWS", getIdentifier() + "::x", String(widget->x()));
+			inifile.insertValue("WINDOWS", getIdentifier() + "::y", String(widget->y()));
+			inifile.insertValue("WINDOWS", getIdentifier() + "::width", String(widget->width()));
+			inifile.insertValue("WINDOWS", getIdentifier() + "::height", String(widget->height()));
 		}
 
 		void ModularWidget::setStatusbarText(String text)
@@ -144,5 +183,39 @@ namespace BALL
 			return *((FragmentDB*)&getMainControl()->getFragmentDB());
 		}
 
-	} // namespace VIEW
-} // namespace BALL
+		void ModularWidget::switchShowWidget()
+			throw()
+		{
+			QWidget* widget= dynamic_cast<QWidget*>(this);
+			if (!widget || 
+					window_menu_entry_id_ == -1) 
+			{
+				return;
+			}
+
+			if (!getMainControl()) 
+			{
+				Log.error() << "Problem in " << __FILE__ << __LINE__ << std::endl;
+				return;
+			}
+			QMenuBar* menu = getMainControl()->menuBar();
+			if (!menu) 
+			{
+				Log.error() << "Problem in " << __FILE__ << __LINE__ << std::endl;
+				return;
+			}
+			if (menu->isItemChecked(window_menu_entry_id_))
+			{
+				if (!widget->isVisible()) return;
+
+				widget->hide();
+				menu->setItemChecked(window_menu_entry_id_, false);
+			}
+			else
+			{
+				widget->show();
+				menu->setItemChecked(window_menu_entry_id_, true);
+			}
+		}
+
+} } // namespaces

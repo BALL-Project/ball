@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.h,v 1.2 2003/09/04 23:14:12 amoll Exp $
+// $Id: modularWidget.h,v 1.3 2003/09/11 16:51:14 amoll Exp $
 //
 
 #ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
@@ -210,12 +210,23 @@ namespace BALL
 			*/
 			FragmentDB& getFragmentDB() const
 				throw();
+	
+			/** Show or hide widget (Called by menu entry in "WINDOWS")
+			 		If the ModularWidget is not also a QWidget, this method does nothing
+			*/
+			virtual void switchShowWidget()
+				throw();
 
 			protected:
 			
-			// id in the menubar entry "WINDOWS" for every widget
+			//_ id in the menubar entry "WINDOWS" for every widget
 			Index window_menu_entry_id_;
 
+			//_ should there be an entry to switch the window on and off?
+			bool show_window_enty_;
+
+			//_ should the widget be visible, if no config file exists?
+			bool default_visible_;
 			//@}			
 		}; 
   
