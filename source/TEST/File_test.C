@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: File_test.C,v 1.42 2003/07/03 10:46:18 amoll Exp $
+// $Id: File_test.C,v 1.43 2003/07/03 10:38:51 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -20,7 +20,7 @@ using namespace std;
 #	define sleep(a) _sleep(1000 * a)
 #endif
 
-START_TEST(File, "$Id: File_test.C,v 1.42 2003/07/03 10:46:18 amoll Exp $")
+START_TEST(File, "$Id: File_test.C,v 1.43 2003/07/03 10:38:51 amoll Exp $")
 
 
 /////////////////////////////////////////////////////////////
@@ -648,7 +648,9 @@ RESULT
 // BinaryFileAdaptor
 
 CHECK(BinaryFileAdaptor() throw())
-	BinaryFileAdaptor<float> bfa;
+	BinaryFileAdaptor<float>* bfa = 0;
+	bfa = new BinaryFileAdaptor<float>;
+	TEST_NOT_EQUAL(bfa, 0)
 RESULT
 
 CHECK(BinaryFileAdaptor(const T& data) throw())
@@ -715,9 +717,15 @@ CHECK(String transform(const String& name))
 	TEST_EQUAL(f.transform("my3:filename.bla"), "my3:filename")
 	String PS = FileSystem::PATH_SEPARATOR;
 	f.registerTransformation("my4:", "%b");
-	TEST_EQUAL(f.transform("my4:"+PS+"some_path"+PS+"filename.ext"), "my3:filename")
+	TEST_EQUAL(f.transform("my4:"+PS+"some_path"+PS+"filename.ext"), "filename")
 	f.registerTransformation("my5:", "%p");
-	TEST_EQUAL(f.transform("my5:"+PS+"some_path"+PS+"filename.ext"), "my3:filename")
+	TEST_EQUAL(f.transform("my5:"+PS+"some_path"+PS+"filename.ext"), "my5:"+PS+"some_path"+PS)
+	f.registerTransformation("my6:", "%t");
+	String result = f.transform("my6:asddasd");
+	TEST_EQUAL(result !="", true )
+	TEST_EQUAL(result.size(), 12 )
+	TEST_EQUAL(result[0], '_')
+	TEST_EQUAL(File::isAccessible(result), false)
 RESULT
 
 CHECK(void unregisterTransformation(const String& pattern))
