@@ -37,6 +37,7 @@ CPP_SOURCES= \
 	SESEdge.C\
 	SESFace.C\
 	SESVertex.C\
+	secondaryStructureProcessor.C\
 	smilesParser.C\
 	smilesParserLexer.C\
 	smilesParserParser.C\
