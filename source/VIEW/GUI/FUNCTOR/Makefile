@@ -5,7 +5,7 @@ THISLIB=$(LIBNAME)
 CPP_SOURCES=\
 	glObjectCollector.C\
 	POVRenderer.C\
-	externalRenderer.C\
+	externalRenderer.C
 
 include ../../../common.mak
 include .Dependencies

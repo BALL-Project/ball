@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentDB.C,v 1.43 2002/05/12 14:01:08 oliver Exp $
+// $Id: fragmentDB.C,v 1.44 2002/12/20 16:33:48 oliver Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 
@@ -43,88 +43,78 @@ namespace BALL
 
 	void FragmentDB::expandTree_(ResourceEntry& root_entry, int depth)
 	{
-		while (expandFirst_(root_entry, depth));
+		bool expanded_one = true;
+		while (expanded_one)
+		{
+			expanded_one = false;
+			ResourceEntry::Iterator entry_iterator;
+			for (entry_iterator = ++root_entry.begin(); +entry_iterator && !expanded_one; ++entry_iterator)
+			{
+				if (entry_iterator->getKey().hasPrefix(FRAGMENT_DB_INCLUDE_TAG))
+				{
+					expandFirst_(*entry_iterator, depth - 1);
+					expanded_one = true;
+					break;
+				}
+			}	
+		}
 	}
 
 	bool FragmentDB::expandFirst_(ResourceEntry& root_entry, int depth)
 	{
-		if (!root_entry.getKey().hasPrefix(FRAGMENT_DB_INCLUDE_TAG))
+		String key = root_entry.getKey();
+		String value = root_entry.getValue();
+		String key_fields[2], value_fields[2];
+
+		if (key.countFields(":") != 2)
 		{
-			ResourceEntry::Iterator	entry_iterator;
+			// if the include directive is invalid,
+			// remove the entry
+			Log.error() << "FragmentDB: illegal #include directive: " << key << endl;
+			root_entry.getParent()->removeChild(key, 0);
 
-			bool expanded_one = false;
-
-			for (entry_iterator = ++root_entry.begin(); +entry_iterator && !expanded_one; ++entry_iterator)
-			{
-				if (depth > 0)
-				{
-					if (expandFirst_(*entry_iterator, depth - 1))
-					{
-						return true;
-					}
-				}
-			}
-					
 			return false;
 
 		} 
 		else 
 		{
+			key.split(key_fields, 2, ":");
+			value.split(value_fields, 2, ":");
+				
+			ResourceEntry*	parent = root_entry.getParent();
+			ResourceEntry* entry;
+			parent->removeChild(key, 0);
 
-			String	key = root_entry.getKey();
-			String	value = root_entry.getValue();
-			String	key_fields[2], value_fields[2];
+			ResourceFile*	file;
+			ResourceEntry* tree_entry;
 
-			if (key.countFields(":") != 2)
+			// search in the standard fragment DB file
+			Path path;
+			String filename = path.find(value_fields[0]);
+			if (filename == "")
 			{
-				// if the include directive is invalid,
-				// remove the entry
-				Log.error() << "FragmentDB: illegal #include directive: " << key << endl;
-				root_entry.getParent()->removeChild(key, 0);
+				throw Exception::FileNotFound(__FILE__, __LINE__, value_fields[0]);
+			}
 
+			file = new ResourceFile(filename);
+			if (!file->isValid())
+			{
+				Log.error() << "FragmentDB: cannot open include file " << value_fields[0] << endl;
+				delete file;
 				return false;
-
+			}
+				
+			tree_entry = file->getRoot().getEntry(value_fields[1]);
+			if (tree_entry == 0)
+			{
+				Log.error() << "FragmentDB: cannot find node " << value_fields[1] << " in file " << value_fields[0] << endl;
 			} 
 			else 
 			{
-				key.split(key_fields, 2, ":");
-				value.split(value_fields, 2, ":");
-					
-				ResourceEntry*	parent = root_entry.getParent();
-				ResourceEntry* entry;
-				parent->removeChild(key, 0);
-
-				ResourceFile*	file;
-				ResourceEntry* tree_entry;
-
-				// search in the standard fragment DB file
-				Path path;
-				String filename = path.find(value_fields[0]);
-				if (filename == "")
-				{
-					throw Exception::FileNotFound(__FILE__, __LINE__, value_fields[0]);
-				}
-
-				file = new ResourceFile(filename);
-				if (!file->isValid())
-				{
-					Log.error() << "FragmentDB: cannot open include file " << value_fields[0] << endl;
-					delete file;
-					return false;
-				}
-					
-				tree_entry = file->getRoot().getEntry(value_fields[1]);
-				if (tree_entry == 0)
-				{
-					Log.error() << "FragmentDB: cannot find node " << value_fields[1] << " in file " << value_fields[0] << endl;
-				} 
-				else 
-				{
-					entry = parent->insertChild(key_fields[1], tree_entry->getValue());
-					entry->mergeChildrenOf(*tree_entry);
-				}
-				delete file;
+				entry = parent->insertChild(key_fields[1], tree_entry->getValue());
+				entry->mergeChildrenOf(*tree_entry);
 			}
+			delete file;
 		}
 
 		return true;
