@@ -1,4 +1,4 @@
-// $Id: composite.C,v 1.15 2000/08/22 17:03:35 amoll Exp $
+// $Id: composite.C,v 1.16 2000/08/24 12:00:47 amoll Exp $
 
 #include <BALL/CONCEPT/composite.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -892,27 +892,21 @@ namespace BALL
 	bool Composite::removeChild(Composite& child)
 	{
 		// avoid self-removal and removal of ancestors
-		if (&child == this || isDescendantOf(child) == true)
+		if (&child == this || isDescendantOf(child) == true || child.parent_ != this)
 		{
 			return false;
 		}
 		
 		
-		Composite* parent_ptr = child.parent_;
-
-		// if child has no parent, we cannot remove it
-		if (parent_ptr == 0)
-		{
-			return false;
-		}
-			
-		// this seems starnge. Indeed, it is. It is just an archaic relic.
+//		Composite* parent_ptr = child.parent_;
+/*			
+		// this seems strange. Indeed, it is. It is just an archaic relic.
 		// Did not dare to change it. 
 		if (parent_ptr != this)	
 		{
 			return parent_ptr->removeChild(child);
 		}
-		
+*/	
 		// remove child from the list of children
 		if (first_child_ == &child)
 		{

@@ -1,4 +1,4 @@
-// $Id: property.C,v 1.11 2000/08/22 17:03:35 amoll Exp $
+// $Id: property.C,v 1.12 2000/08/24 12:00:47 amoll Exp $
 
 #include <BALL/CONCEPT/property.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -43,7 +43,6 @@ namespace BALL
 			}
 		pm.writeObjectTrailer(name);
 	}
-
 	
 	void NamedProperty::persistentRead(PersistenceManager& pm)
 	{
@@ -78,26 +77,81 @@ namespace BALL
 		}
 	}
 
+	ostream& operator << (std::ostream& s, const NamedProperty& property)
+  {	
+		s << property.type_;
+		s << endl;
+		s << property.name_;
+		s << endl;
+		switch (property.type_)
+		{
+			case NamedProperty::BOOL : 	s << property.data_.b; break;
+			case NamedProperty::INT : 	s << property.data_.i; break;
+			case NamedProperty::UNSIGNED_INT : 	s << property.data_.ui; break;
+			case NamedProperty::FLOAT : s << property.data_.f; break;
+			case NamedProperty::DOUBLE :s << property.data_.d; break;
+			case NamedProperty::STRING :s << *property.data_.s; break;
+			case NamedProperty::OBJECT :s << property.data_.object; break;
+			default:break;
+		}
+		return s;
+	}
+		/// Input operator
+	istream& operator >> (std::istream& s, NamedProperty& property)
+  {	
+		char c;
+		s >> (int)property.type_;
+		s >> c;
+		s >> property.name_;
+		s >> c;
+		switch (property.type_)
+		{
+			case NamedProperty::BOOL : 	s >> property.data_.b; break;
+			case NamedProperty::INT : 	s >> property.data_.i; break;
+			case NamedProperty::UNSIGNED_INT : 	s >> property.data_.ui; break;
+			case NamedProperty::FLOAT : s >> property.data_.f; break;
+			case NamedProperty::DOUBLE :s >> property.data_.d; break;
+			case NamedProperty::OBJECT :/*s >> (PersistentObject*)property.data_.object;*/ break;
+			case NamedProperty::NONE: break;
+			case NamedProperty::STRING :
+				string str;
+				s >> str;
+				property.data_.s = new string(str);
+				break;
+		}
+		return s;
+	}
+
+
   ostream& operator << (ostream& s, const PropertyManager& property_manager)
   {	
     s << property_manager.bitvector_;		
 		
-		// BAUSTELLE named properties still missing
-
+		s << endl;
+		s << property_manager.named_properties_.size();
+		s << endl;
 		vector<const NamedProperty>::iterator it = property_manager.named_properties_.begin();
 		for (; it != property_manager.named_properties_.end(); ++it)
 		{
 			s << it << endl;
 		}
-
 		return s;
 	}
 
   istream& operator >> (istream& s, PropertyManager& property_manager)
   {	
+		char c;
+		int size;
     s >> property_manager.bitvector_;
-
-		// BAUSTELLE named properties still missing
+		s >> c;
+		s >> size;
+		s >> c;
+		for (int i = 0; i < size; i++)
+		{
+			NamedProperty np;
+			s >> np;
+			property_manager.setProperty(np);
+		}
 
 		return s;
 	}
@@ -135,7 +189,6 @@ namespace BALL
 		return true;
 	}
   
-
 	void PropertyManager::set(const PropertyManager& property_manager, bool /* deep */)
 	{
 		bitvector_ = property_manager.bitvector_;
