@@ -1,4 +1,4 @@
-// $Id: shiftModule.C,v 1.6 2000/09/19 19:20:02 oliver Exp $
+// $Id: shiftModule.C,v 1.7 2000/09/20 11:16:09 oliver Exp $
 
 #include<BALL/NMR/shiftModule.h>
 
@@ -41,6 +41,13 @@ namespace BALL
 	{
 		module_name_ = "";
 		parameters_ = 0;
+	}
+
+
+	void ShiftModule::init()
+		throw()
+	{
+		// empty method
 	}
 
 	const ShiftModule& ShiftModule::operator = (const ShiftModule& module) 
