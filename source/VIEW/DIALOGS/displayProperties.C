@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.70 2004/07/07 17:19:31 amoll Exp $
+// $Id: displayProperties.C,v 1.71 2004/07/08 16:51:28 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -20,6 +20,7 @@
 #include <BALL/VIEW/MODELS/surfaceModel.h>
 #include <BALL/VIEW/MODELS/vanDerWaalsModel.h>
 #include <BALL/VIEW/MODELS/HBondModel.h>
+#include <BALL/VIEW/MODELS/forceModel.h>
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
 
 #include <qcolordialog.h>
@@ -495,6 +496,10 @@ void DisplayProperties::createRepresentation_(const List<Composite*>& composites
 		case MODEL_HBONDS:
 			model_processor = new HBondModelProcessor;
     	((HBondModelProcessor*) model_processor)->setRadius(model_settings_->getHBondsRadius());
+			break;
+
+		case MODEL_FORCES:
+			model_processor = new ForceModel;
 			break;
 			
 		default:

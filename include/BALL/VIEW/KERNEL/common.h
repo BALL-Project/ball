@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.23 2004/07/01 12:27:32 amoll Exp $
+// $Id: common.h,v 1.24 2004/07/08 16:49:42 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -163,6 +163,9 @@ namespace BALL
 
 			/// defines the property for the model: H-Bonds
 			MODEL_HBONDS,
+
+			/// 
+			MODEL_FORCES,
 
 			// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 			// add new model types before this comment!!!!

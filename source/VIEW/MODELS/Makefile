@@ -8,6 +8,7 @@ CPP_SOURCES=\
 	ballAndStickModel.C\
 	cartoonModel.C\
 	colorProcessor.C\
+	forceModel.C\
 	HBondModel.C\
 	lineModel.C\
 	modelProcessor.C\

@@ -32,6 +32,8 @@ String getModelName(ModelType type)
 			return "Cartoon";
 		case MODEL_HBONDS:
 			return "H-Bonds";
+		case MODEL_FORCES:
+			return "Forces";
 		case MODEL_LABEL:
 			return "Label";
 		case MODEL_CLIPPING_PLANE:
@@ -93,6 +95,7 @@ bool modelMustBeRebuild(ModelType type)
 	return (type == MODEL_SE_SURFACE ||
 					type == MODEL_SA_SURFACE ||
 					type == MODEL_BACKBONE 	||
+					type == MODEL_FORCES    ||
 					type == MODEL_CARTOON);
 }
 
