@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.57 2004/11/03 13:09:17 amoll Exp $
+// $Id: message.h,v 1.58 2004/11/03 13:10:57 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -161,7 +161,9 @@ class BALL_EXPORT CompositeMessage: public Message
 		/// a new molecule
 		NEW_MOLECULE,
 		/// highlight in MolecularControl
-		HIGHLIGHT
+		HIGHLIGHT,
+		/// remove highlighting in MolecularControl
+		UNHIGHLIGHT
 	};
 	/**	@name	Constructors and Destructors
 	*/	
