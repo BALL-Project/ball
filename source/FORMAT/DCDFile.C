@@ -1,4 +1,4 @@
-// $Id: DCDFile.C,v 1.3 2000/12/19 14:02:17 anker Exp $
+// $Id: DCDFile.C,v 1.4 2000/12/19 15:22:57 anker Exp $
 
 #include <BALL/FORMAT/DCDFile.h>
 #include <BALL/MOLMEC/COMMON/snapShot.h>
@@ -106,6 +106,10 @@ namespace BALL
 	bool DCDFile::readHeader()
 		throw()
 	{
+
+		return true;
+
+		/*
 		char			fourbytes[4];
 		char			eightyfourbytes[84];
 		int				tmp_int;
@@ -209,6 +213,7 @@ namespace BALL
 		}
 
 		return false;
+		*/
 	}
 
 
@@ -217,6 +222,7 @@ namespace BALL
 	{
 		// BAUSTELLE
 		header_.number_of_coordinate_sets = manager.getNumberOfSnapShots();
+		header_.number_of_atoms = manager.getNumberOfAtoms();
 		return true;
 	}
 
