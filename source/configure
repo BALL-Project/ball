@@ -1,6 +1,6 @@
 #! /bin/sh
 
-#  $Id: configure,v 1.86 2000/03/27 19:43:43 oliver Exp $
+#  $Id: configure,v 1.87 2000/03/28 17:59:57 oliver Exp $
 
 
 ##################################################
@@ -818,7 +818,7 @@ fi
 if test "$with_opengl_incl" != "" ; then
 	OPENGL_INCPATH=$with_opengl_incl
 fi
-if test "$with_qt_libs" != "" ; then
+if test "$with_opengl_libs" != "" ; then
 	OPENGL_LIBPATH=$with_opengl_libs
 fi
 
@@ -4980,8 +4980,8 @@ echo "configure:4803: checking for OpenGL includes" >&5
 			if test "${OPENGL_INCPATH}" = "" ; then
 				echo "$ac_t""(not found!)" 1>&6
 				echo "$ac_t""" 1>&6
-				echo "$ac_t""no OpenGL headers found! Please modify the top section" 1>&6
-				echo "$ac_t""of configure and specify the correct path to these headers." 1>&6
+				echo "$ac_t""no OpenGL headers found! Please use the option --with-opengl-incl=DIR" 1>&6
+				echo "$ac_t""of configure to specify the correct path to these headers." 1>&6
 				{ echo "configure: error: aborted" 1>&2; exit 1; }
 			else
 				echo "$ac_t""(${OPENGL_INCPATH})" 1>&6
@@ -5065,8 +5065,8 @@ echo "configure:4891: checking for OpenGL library" >&5
 			if test "${OPENGL_LIBPATH}" = "" ; then
 				echo "$ac_t""(not found!)" 1>&6
 				echo "$ac_t""" 1>&6
-				echo "$ac_t""no OpenGL lib found! Please modify the top section" 1>&6
-				echo "$ac_t""of configure and specify the correct path to these libraries." 1>&6
+				echo "$ac_t""no OpenGL lib found! Please use the option --with-opengl-libs=DIR" 1>&6
+				echo "$ac_t""of configure to specify the correct path to these libraries." 1>&6
 				{ echo "configure: error: aborted" 1>&2; exit 1; }
 			else
 				echo "$ac_t""(${OPENGL_LIBPATH})" 1>&6
@@ -5077,10 +5077,11 @@ echo "configure:4891: checking for OpenGL library" >&5
 			fi
 		fi
 
-		echo $ac_n "checking for QT headers""... $ac_c" 1>&6
-echo "configure:4981: checking for QT headers" >&5
-		if test "${QTDIR}" != "" ; then
-			
+		if test "${USE_BALLVIEW}" = true ; then
+			echo $ac_n "checking for QT headers""... $ac_c" 1>&6
+echo "configure:4982: checking for QT headers" >&5
+			if test "${QTDIR}" != "" ; then
+				
 	_INCLUDES=
 
 		if test "${QT_INCPATH}" != "" ; then
@@ -5156,8 +5157,8 @@ echo "configure:4981: checking for QT headers" >&5
 
 	QT_INCPATH="${_INCLUDES}"
 
-		else
-			
+			else
+				
 	_INCLUDES=
 
 		if test "${QT_INCPATH}" != "" ; then
@@ -5233,26 +5234,26 @@ echo "configure:4981: checking for QT headers" >&5
 
 	QT_INCPATH="${_INCLUDES}"
 
-		fi
+			fi
 
-		if test "${QT_INCPATH}" = "" ; then
-			echo "$ac_t""(not found!)" 1>&6
-			echo "$ac_t""" 1>&6
-			echo "$ac_t""No QT header files found! Please specify the path to the QT headers" 1>&6
-			echo "$ac_t""by passing the option --with-qt-incl=DIR to configure." 1>&6
-			echo "$ac_t""You may also set the environment variable QTDIR to the correct" 1>&6
-			echo "$ac_t""path - configure will recognize this" 1>&6
-			echo "$ac_t""The QT package can be found under the following URL:" 1>&6
-			echo "$ac_t""http://www.troll.no/qt" 1>&6
-			{ echo "configure: error: Building of the visualization component BALLVIEW was disabled!" 1>&2; exit 1; }
-		else
-			echo "$ac_t""(${QT_INCPATH})" 1>&6	
-		fi
+			if test "${QT_INCPATH}" = "" ; then
+				echo "$ac_t""(not found!)" 1>&6
+				echo "$ac_t""" 1>&6
+				echo "$ac_t""No QT header files found! Please specify the path to the QT headers" 1>&6
+				echo "$ac_t""by passing the option --with-qt-incl=DIR to configure." 1>&6
+				echo "$ac_t""You may also set the environment variable QTDIR to the correct" 1>&6
+				echo "$ac_t""path - configure will recognize this" 1>&6
+				echo "$ac_t""The QT package can be found under the following URL:" 1>&6
+				echo "$ac_t""http://www.troll.no/qt" 1>&6
+				{ echo "configure: error: Building of the visualization component BALLVIEW was disabled!" 1>&2; exit 1; }
+			else
+				echo "$ac_t""(${QT_INCPATH})" 1>&6	
+			fi
 
-		echo $ac_n "checking for libqt""... $ac_c" 1>&6
-echo "configure:5153: checking for libqt" >&5
-		if test "${QTDIR}" != "" ; then
-			
+			echo $ac_n "checking for libqt""... $ac_c" 1>&6
+echo "configure:5154: checking for libqt" >&5
+			if test "${QTDIR}" != "" ; then
+				
 	_LIBS=
 
 		if test "${QT_LIBPATH}" != "" ; then
@@ -5325,8 +5326,8 @@ echo "configure:5153: checking for libqt" >&5
 
 	QT_LIBPATH="${_LIBS}"
 
-		else
-			
+			else
+				
 	_LIBS=
 
 		if test "${QT_LIBPATH}" != "" ; then
@@ -5399,28 +5400,28 @@ echo "configure:5153: checking for libqt" >&5
 
 	QT_LIBPATH="${_LIBS}"
 
-		fi
+			fi
 
-		if test "${QT_LIBPATH}" = "" ; then
-			echo "$ac_t""(not found!)" 1>&6
-			echo "$ac_t""" 1>&6
-			echo "$ac_t""The QT library could not be found. Please specify the path to libqt" 1>&6
-			echo "$ac_t""by passing the option --with-qt-libs=DIR to configure." 1>&6
-			echo "$ac_t""You may also set the environment variable QTDIR to the correct" 1>&6
-			echo "$ac_t""path - configure will recognize this, too." 1>&6
-			echo "$ac_t""The QT package can be found under the following URL:" 1>&6
-			echo "$ac_t""http://www.troll.no/qt" 1>&6
-			echo "$ac_t""" 1>&6
-			echo "$ac_t""Building of the visualization component BALLVIEW was disabled!" 1>&6
-		else
-			echo "$ac_t""(${QT_LIBPATH})" 1>&6	
-		fi
+			if test "${QT_LIBPATH}" = "" ; then
+				echo "$ac_t""(not found!)" 1>&6
+				echo "$ac_t""" 1>&6
+				echo "$ac_t""The QT library could not be found. Please specify the path to libqt" 1>&6
+				echo "$ac_t""by passing the option --with-qt-libs=DIR to configure." 1>&6
+				echo "$ac_t""You may also set the environment variable QTDIR to the correct" 1>&6
+				echo "$ac_t""path - configure will recognize this, too." 1>&6
+				echo "$ac_t""The QT package can be found under the following URL:" 1>&6
+				echo "$ac_t""http://www.troll.no/qt" 1>&6
+				echo "$ac_t""" 1>&6
+				echo "$ac_t""Building of the visualization component BALLVIEW was disabled!" 1>&6
+			else
+				echo "$ac_t""(${QT_LIBPATH})" 1>&6	
+			fi
 
-		QGL_LIBPATH=${QT_LIBPATH}
-		echo $ac_n "checking for libqgl""... $ac_c" 1>&6
-echo "configure:5321: checking for libqgl" >&5
-		if test "${QTDIR}" != "" ; then
-			
+			QGL_LIBPATH=${QT_LIBPATH}
+			echo $ac_n "checking for libqgl""... $ac_c" 1>&6
+echo "configure:5322: checking for libqgl" >&5
+			if test "${QTDIR}" != "" ; then
+				
 	_LIBS=
 
 		if test "${QGL_LIBPATH}" != "" ; then
@@ -5493,8 +5494,8 @@ echo "configure:5321: checking for libqgl" >&5
 
 	QGL_LIBPATH="${_LIBS}"
 
-		else
-			
+			else
+				
 	_LIBS=
 
 		if test "${QGL_LIBPATH}" != "" ; then
@@ -5567,34 +5568,35 @@ echo "configure:5321: checking for libqgl" >&5
 
 	QGL_LIBPATH="${_LIBS}"
 
-		fi
+			fi
 
-		if test "${QGL_LIBPATH}" = "" ; then
-			echo "$ac_t""(not found!)" 1>&6
-			echo "$ac_t""" 1>&6
-			echo "$ac_t""The QT Opengl library libqgl.a could not be found. Please specify" 1>&6
-			echo "$ac_t""the path to libqt/libqgl by passing the option --with-qt-libs=DIR" 1>&6
-			echo "$ac_t""to configure." 1>&6
-			echo "$ac_t""You may also set the environment variable QTDIR to the correct" 1>&6
-			echo "$ac_t""path - configure will recognize this, too." 1>&6
-			echo "$ac_t""Perhaps you simple forgot to compile the OpenGl extsions, too?" 1>&6
-			echo "$ac_t""You find these extensions in ${QTDIR}/extensions/opengl" 1>&6
-			echo "$ac_t""" 1>&6
-			echo "$ac_t""The complete QT package can be found under the following URL:" 1>&6
-			echo "$ac_t""  http://www.troll.no/q" 1>&6
-			echo "$ac_t""" 1>&6
-			echo "$ac_t""Building of the visualization component BALLVIEW was disabled!" 1>&6
-		else
-			echo "$ac_t""(${QT_LIBPATH})" 1>&6	
-		fi
-		if test "${QGL_PATH}" != "${QT_PATH}" ; then
-			QT_PATH=${QGL_PATH}
-			echo "$ac_t""using ${QT_PATH} to look for liqt.so and libqgl.s" 1>&6
-		fi
+			if test "${QGL_LIBPATH}" = "" ; then
+				echo "$ac_t""(not found!)" 1>&6
+				echo "$ac_t""" 1>&6
+				echo "$ac_t""The QT Opengl library libqgl.a could not be found. Please specify" 1>&6
+				echo "$ac_t""the path to libqt/libqgl by passing the option --with-qt-libs=DIR" 1>&6
+				echo "$ac_t""to configure." 1>&6
+				echo "$ac_t""You may also set the environment variable QTDIR to the correct" 1>&6
+				echo "$ac_t""path - configure will recognize this, too." 1>&6
+				echo "$ac_t""Perhaps you simple forgot to compile the OpenGl extsions, too?" 1>&6
+				echo "$ac_t""You find these extensions in ${QTDIR}/extensions/opengl" 1>&6
+				echo "$ac_t""" 1>&6
+				echo "$ac_t""The complete QT package can be found under the following URL:" 1>&6
+				echo "$ac_t""  http://www.troll.no/q" 1>&6
+				echo "$ac_t""" 1>&6
+				echo "$ac_t""Building of the visualization component BALLVIEW was disabled!" 1>&6
+			else
+				echo "$ac_t""(${QT_LIBPATH})" 1>&6	
+			fi
+			if test "${QGL_PATH}" != "${QT_PATH}" ; then
+				QT_PATH=${QGL_PATH}
+				echo "$ac_t""using ${QT_PATH} to look for liqt.so and libqgl.s" 1>&6
+			fi
 
-		if test "${QT_INCPATH}" != /usr/include && test "${QT_INCPATH}" != "" ; then
-			BALLVIEW_INCLUDES="${BALLVIEW_INCLUDES} -I${QT_INCPATH}"
-		fi	
+			if test "${QT_INCPATH}" != /usr/include && test "${QT_INCPATH}" != "" ; then
+				BALLVIEW_INCLUDES="${BALLVIEW_INCLUDES} -I${QT_INCPATH}"
+			fi	
+		fi
 	fi
 fi
 
@@ -5603,19 +5605,19 @@ fi
 if test "${USE_BALLVIEW}" = true ; then		
 						
 	echo $ac_n "checking linking against X11 libraries""... $ac_c" 1>&6
-echo "configure:5506: checking linking against X11 libraries" >&5
+echo "configure:5508: checking linking against X11 libraries" >&5
 				if test "${X11_LIBS}" != "" ; then
 		SAVE_LIBS=${LIBS}
 		LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
 		cat > conftest.$ac_ext <<EOF
-#line 5511 "configure"
+#line 5513 "configure"
 #include "confdefs.h"
 
 int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:5518: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:5520: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   X_LINKING_OK=1
 else
@@ -5627,41 +5629,18 @@ rm -f conftest*
 	fi
 
 				if test "${X_LINKING_OK+set}" != set ; then
-		X11_LIBS="-lXmu -lXt -lX11"
+		X11_LIBS="-lXmu -lXext -lXt -lX11 -lm"
 		SAVE_LIBS=${LIBS}
 		LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
 		cat > conftest.$ac_ext <<EOF
-#line 5534 "configure"
+#line 5536 "configure"
 #include "confdefs.h"
 
 int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:5541: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
-  rm -rf conftest*
-  X_LINKING_OK=1
-else
-  echo "configure: failed program was:" >&5
-  cat conftest.$ac_ext >&5
-fi
-rm -f conftest*
-		LIBS=${SAVE_LIBS}
-	fi
-	
-				if test "${X_LINKING_OK+set}" != set ; then
-		X11_LIBS="-lXmu -lXt -lX11 -lSM -lICE"
-		SAVE_LIBS=${LIBS}
-		LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
-		cat > conftest.$ac_ext <<EOF
-#line 5557 "configure"
-#include "confdefs.h"
-
-int main() {
-
-; return 0; }
-EOF
-if { (eval echo configure:5564: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:5543: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   X_LINKING_OK=1
 else
@@ -5673,41 +5652,18 @@ rm -f conftest*
 	fi
 	
 				if test "${X_LINKING_OK+set}" != set ; then
-		X11_LIBS="-lXmu -lXext -lXt -lX11"
+		X11_LIBS="-lXmu -lXext -lXt -lX11 -lSM -lICE -lm"
 		SAVE_LIBS=${LIBS}
 		LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
 		cat > conftest.$ac_ext <<EOF
-#line 5580 "configure"
+#line 5559 "configure"
 #include "confdefs.h"
 
 int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:5587: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
-  rm -rf conftest*
-  X_LINKING_OK=1
-else
-  echo "configure: failed program was:" >&5
-  cat conftest.$ac_ext >&5
-fi
-rm -f conftest*
-		LIBS=${SAVE_LIBS}
-	fi
-	
-				if test "${X_LINKING_OK+set}" != set ; then
-		X11_LIBS="-lXmu -lXext -lXt -lX11 -lSM -lICE"
-		SAVE_LIBS=${LIBS}
-		LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
-		cat > conftest.$ac_ext <<EOF
-#line 5603 "configure"
-#include "confdefs.h"
-
-int main() {
-
-; return 0; }
-EOF
-if { (eval echo configure:5610: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:5566: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   X_LINKING_OK=1
 else
@@ -5752,7 +5708,7 @@ if test "${USE_BALLVIEW}" = true ; then
 			LDFLAGS="${LDFLAGS} -L${OPENGL_LIBPATH}"
 		fi
 		echo $ac_n "checking for XMesaGarbageCollect in -lGL""... $ac_c" 1>&6
-echo "configure:5655: checking for XMesaGarbageCollect in -lGL" >&5
+echo "configure:5611: checking for XMesaGarbageCollect in -lGL" >&5
 ac_lib_var=`echo GL'_'XMesaGarbageCollect | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -5760,7 +5716,7 @@ else
   ac_save_LIBS="$LIBS"
 LIBS="-lGL  $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 5663 "configure"
+#line 5619 "configure"
 #include "confdefs.h"
 /* Override any gcc2 internal prototype to avoid an error.  */
 #ifdef __cplusplus
@@ -5774,7 +5730,7 @@ int main() {
 XMesaGarbageCollect()
 ; return 0; }
 EOF
-if { (eval echo configure:5677: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:5633: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
@@ -5798,18 +5754,18 @@ fi
 		LDFLAGS=${SAVE_LDFLAGS}
 		if test "${BALLVIEW_PLATFORM}" != Mesa ; then
 			echo $ac_n "checking linking against OpenGL libraries""... $ac_c" 1>&6
-echo "configure:5701: checking linking against OpenGL libraries" >&5
+echo "configure:5657: checking linking against OpenGL libraries" >&5
 			SAVE_LIBS=${LIBS}
 			LIBS="${OPENGL_LIBOPTS} ${LIBS}"
 			cat > conftest.$ac_ext <<EOF
-#line 5705 "configure"
+#line 5661 "configure"
 #include "confdefs.h"
 
 int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:5712: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:5668: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   OPENGL_LINKING_OK=1
 else
@@ -5849,18 +5805,18 @@ if test "${USE_BALLVIEW}" = true ; then
 								OPENGL_LIBS="-lMesaGLU -lMesaGL"
 
 								echo $ac_n "checking linking against Mesa libs""... $ac_c" 1>&6
-echo "configure:5752: checking linking against Mesa libs" >&5
+echo "configure:5708: checking linking against Mesa libs" >&5
 		SAVE_LIBS=${LIBS}
 		LIBS="${OPENGL_LIBPATHOPT} ${OPENGL_LIBS} ${X11_LIBOPTS} ${LIBS} "
 		cat > conftest.$ac_ext <<EOF
-#line 5756 "configure"
+#line 5712 "configure"
 #include "confdefs.h"
 
 int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:5763: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:5719: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   HAVE_MESALIBS=1
 else
@@ -5875,14 +5831,14 @@ rm -f conftest*
 			SAVE_LIBS=${LIBS}
 			LIBS="${OPENGL_LIBPATHOPT} ${OPENGL_LIBS} ${X11_LIBOPTS} ${LIBS} "
 			cat > conftest.$ac_ext <<EOF
-#line 5778 "configure"
+#line 5734 "configure"
 #include "confdefs.h"
 
 int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:5785: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:5741: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   HAVE_MESALIBS=1
 else
@@ -5916,18 +5872,18 @@ if test "${USE_BALLVIEW}" = true ; then
 fi
 if test "${USE_BALLVIEW}" = true ; then
 	echo $ac_n "checking linking against QT libraries""... $ac_c" 1>&6
-echo "configure:5819: checking linking against QT libraries" >&5
+echo "configure:5775: checking linking against QT libraries" >&5
 	SAVE_LIBS=${LIBS}
 	LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
 	cat > conftest.$ac_ext <<EOF
-#line 5823 "configure"
+#line 5779 "configure"
 #include "confdefs.h"
 const char* qGLVersion();
 int main() {
 qGLVersion();
 ; return 0; }
 EOF
-if { (eval echo configure:5830: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:5786: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   QT_LINKING_OK=1
 else
@@ -5939,7 +5895,7 @@ rm -f conftest*
 	if test "${QT_LINKING_OK+set}" != set ; then
 		echo "$ac_t""no" 1>&6
 		echo "$ac_t""" 1>&6
-		echo "$ac_t""Cannot link agains libqgl/qt - disabling support for visualization!" 1>&6
+		echo "$ac_t""Cannot link against libqgl/qt - disabling support for visualization!" 1>&6
 		echo "$ac_t""If qt is installed" 1>&6
 		echo "$ac_t""using the option --with-qt-libs=DIR" 1>&6
 		echo "$ac_t""" 1>&6
@@ -5948,7 +5904,7 @@ rm -f conftest*
 		echo "$ac_t""yes" 1>&6
 		
 								echo $ac_n "checking QT library version""... $ac_c" 1>&6
-echo "configure:5851: checking QT library version" >&5
+echo "configure:5807: checking QT library version" >&5
 		SAVE_LIBS=${LIBS}
 		LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
 		LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${X11_LIBPATH}:${OPENGL_LIBPATH}:${QT_LIBPATH}
@@ -5959,7 +5915,7 @@ echo "configure:5851: checking QT library version" >&5
 		
 else
   cat > conftest.$ac_ext <<EOF
-#line 5862 "configure"
+#line 5818 "configure"
 #include "confdefs.h"
 #ifdef __cplusplus
 extern "C" void exit(int);
@@ -5976,7 +5932,7 @@ extern "C" void exit(int);
 				}
 			
 EOF
-if { (eval echo configure:5879: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
+if { (eval echo configure:5835: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
 then
   QT_VERSION_OK=1
 else
@@ -6046,7 +6002,7 @@ if test "${USE_BALLVIEW}" = true ; then
 				# Extract the first word of "moc", so it can be a program name with args.
 set dummy moc; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:5949: checking for $ac_word" >&5
+echo "configure:5905: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_path_MOC'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else

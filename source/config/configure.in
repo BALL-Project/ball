@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.77 2000/03/27 19:43:36 oliver Exp $
+dnl    $Id: configure.in,v 1.78 2000/03/28 17:59:54 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -110,7 +110,7 @@ fi
 if test "$with_opengl_incl" != "" ; then
 	OPENGL_INCPATH=$with_opengl_incl
 fi
-if test "$with_qt_libs" != "" ; then
+if test "$with_opengl_libs" != "" ; then
 	OPENGL_LIBPATH=$with_opengl_libs
 fi
 
@@ -1797,8 +1797,8 @@ if test "${USE_BALLVIEW}" = true ; then
 			if test "${OPENGL_INCPATH}" = "" ; then
 				AC_MSG_RESULT((not found!))
 				AC_MSG_RESULT()
-				AC_MSG_RESULT(no OpenGL headers found! Please modify the top section)
-				AC_MSG_RESULT(of configure and specify the correct path to these headers.)
+				AC_MSG_RESULT(no OpenGL headers found! Please use the option --with-opengl-incl=DIR)
+				AC_MSG_RESULT(of configure to specify the correct path to these headers.)
 				AC_MSG_ERROR(aborted)
 			else
 				AC_MSG_RESULT((${OPENGL_INCPATH}))
@@ -1809,8 +1809,8 @@ if test "${USE_BALLVIEW}" = true ; then
 			if test "${OPENGL_LIBPATH}" = "" ; then
 				AC_MSG_RESULT((not found!))
 				AC_MSG_RESULT()
-				AC_MSG_RESULT(no OpenGL lib found! Please modify the top section)
-				AC_MSG_RESULT(of configure and specify the correct path to these libraries.)
+				AC_MSG_RESULT(no OpenGL lib found! Please use the option --with-opengl-libs=DIR)
+				AC_MSG_RESULT(of configure to specify the correct path to these libraries.)
 				AC_MSG_ERROR(aborted)
 			else
 				AC_MSG_RESULT((${OPENGL_LIBPATH}))
@@ -1821,83 +1821,85 @@ if test "${USE_BALLVIEW}" = true ; then
 			fi
 		fi
 
-		AC_MSG_CHECKING(for QT headers)
-		if test "${QTDIR}" != "" ; then
-			AC_FIND_HEADER(QT_INCPATH,qgl.h,${QTDIR}/include ${BALL_PATH}/contrib/qt/include)
-		else
-			AC_FIND_HEADER(QT_INCPATH,qgl.h,${BALL_PATH}/contrib/qt/include)
-		fi
+		if test "${USE_BALLVIEW}" = true ; then
+			AC_MSG_CHECKING(for QT headers)
+			if test "${QTDIR}" != "" ; then
+				AC_FIND_HEADER(QT_INCPATH,qgl.h,${QTDIR}/include ${BALL_PATH}/contrib/qt/include)
+			else
+				AC_FIND_HEADER(QT_INCPATH,qgl.h,${BALL_PATH}/contrib/qt/include)
+			fi
 
-		if test "${QT_INCPATH}" = "" ; then
-			AC_MSG_RESULT((not found!))
-			AC_MSG_RESULT()
-			AC_MSG_RESULT(No QT header files found! Please specify the path to the QT headers)
-			AC_MSG_RESULT(by passing the option --with-qt-incl=DIR to configure.)
-			AC_MSG_RESULT(You may also set the environment variable QTDIR to the correct)
-			AC_MSG_RESULT(path - configure will recognize this, too.)
-			AC_MSG_RESULT(The QT package can be found under the following URL:)
-			AC_MSG_RESULT(  http://www.troll.no/qt)
-			AC_MSG_ERROR(Building of the visualization component BALLVIEW was disabled!)
-		else
-			AC_MSG_RESULT((${QT_INCPATH}))	
-		fi
+			if test "${QT_INCPATH}" = "" ; then
+				AC_MSG_RESULT((not found!))
+				AC_MSG_RESULT()
+				AC_MSG_RESULT(No QT header files found! Please specify the path to the QT headers)
+				AC_MSG_RESULT(by passing the option --with-qt-incl=DIR to configure.)
+				AC_MSG_RESULT(You may also set the environment variable QTDIR to the correct)
+				AC_MSG_RESULT(path - configure will recognize this, too.)
+				AC_MSG_RESULT(The QT package can be found under the following URL:)
+				AC_MSG_RESULT(  http://www.troll.no/qt)
+				AC_MSG_ERROR(Building of the visualization component BALLVIEW was disabled!)
+			else
+				AC_MSG_RESULT((${QT_INCPATH}))	
+			fi
 
-		AC_MSG_CHECKING(for libqt)
-		if test "${QTDIR}" != "" ; then
-			AC_FIND_LIB(QT_LIBPATH,libqt,${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include)
-		else
-			AC_FIND_LIB(QT_LIBPATH,libqt,${BALL_PATH}/contrib/qt/lib ${BALL_PATH}/contrib/qt/lib/${BINFMT})
-		fi
+			AC_MSG_CHECKING(for libqt)
+			if test "${QTDIR}" != "" ; then
+				AC_FIND_LIB(QT_LIBPATH,libqt,${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include)
+			else
+				AC_FIND_LIB(QT_LIBPATH,libqt,${BALL_PATH}/contrib/qt/lib ${BALL_PATH}/contrib/qt/lib/${BINFMT})
+			fi
 
-		if test "${QT_LIBPATH}" = "" ; then
-			AC_MSG_RESULT((not found!))
-			AC_MSG_RESULT()
-			AC_MSG_RESULT([The QT library could not be found. Please specify the path to libqt])
-			AC_MSG_RESULT([by passing the option --with-qt-libs=DIR to configure.])
-			AC_MSG_RESULT([You may also set the environment variable QTDIR to the correct])
-			AC_MSG_RESULT([path - configure will recognize this, too.])
-			AC_MSG_RESULT([The QT package can be found under the following URL:])
-			AC_MSG_RESULT(  http://www.troll.no/qt)
-			AC_MSG_RESULT()
-			AC_MSG_RESULT([Building of the visualization component BALLVIEW was disabled!])
-		else
-			AC_MSG_RESULT((${QT_LIBPATH}))	
-		fi
+			if test "${QT_LIBPATH}" = "" ; then
+				AC_MSG_RESULT((not found!))
+				AC_MSG_RESULT()
+				AC_MSG_RESULT([The QT library could not be found. Please specify the path to libqt])
+				AC_MSG_RESULT([by passing the option --with-qt-libs=DIR to configure.])
+				AC_MSG_RESULT([You may also set the environment variable QTDIR to the correct])
+				AC_MSG_RESULT([path - configure will recognize this, too.])
+				AC_MSG_RESULT([The QT package can be found under the following URL:])
+				AC_MSG_RESULT(  http://www.troll.no/qt)
+				AC_MSG_RESULT()
+				AC_MSG_RESULT([Building of the visualization component BALLVIEW was disabled!])
+			else
+				AC_MSG_RESULT((${QT_LIBPATH}))	
+			fi
 
-		QGL_LIBPATH=${QT_LIBPATH}
-		AC_MSG_CHECKING(for libqgl)
-		if test "${QTDIR}" != "" ; then
-			AC_FIND_LIB(QGL_LIBPATH,libqgl,${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include)
-		else
-			AC_FIND_LIB(QGL_LIBPATH,libqgl,${BALL_PATH}/contrib/qt/lib ${BALL_PATH}/contrib/qt/lib/${BINFMT})
-		fi
+			QGL_LIBPATH=${QT_LIBPATH}
+			AC_MSG_CHECKING(for libqgl)
+			if test "${QTDIR}" != "" ; then
+				AC_FIND_LIB(QGL_LIBPATH,libqgl,${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include)
+			else
+				AC_FIND_LIB(QGL_LIBPATH,libqgl,${BALL_PATH}/contrib/qt/lib ${BALL_PATH}/contrib/qt/lib/${BINFMT})
+			fi
 
-		if test "${QGL_LIBPATH}" = "" ; then
-			AC_MSG_RESULT((not found!))
-			AC_MSG_RESULT()
-			AC_MSG_RESULT([The QT Opengl library libqgl.a could not be found. Please specify])
-			AC_MSG_RESULT([the path to libqt/libqgl by passing the option --with-qt-libs=DIR])
-			AC_MSG_RESULT([to configure.])
-			AC_MSG_RESULT([You may also set the environment variable QTDIR to the correct])
-			AC_MSG_RESULT([path - configure will recognize this, too.])
-			AC_MSG_RESULT([Perhaps you simple forgot to compile the OpenGl extsions, too?])
-			AC_MSG_RESULT([You find these extensions in ${QTDIR}/extensions/opengl])
-			AC_MSG_RESULT()
-			AC_MSG_RESULT([The complete QT package can be found under the following URL:])
-			AC_MSG_RESULT([  http://www.troll.no/q])
-			AC_MSG_RESULT()
-			AC_MSG_RESULT([Building of the visualization component BALLVIEW was disabled!])
-		else
-			AC_MSG_RESULT((${QT_LIBPATH}))	
-		fi
-		if test "${QGL_PATH}" != "${QT_PATH}" ; then
-			QT_PATH=${QGL_PATH}
-			AC_MSG_RESULT(using ${QT_PATH} to look for liqt.so and libqgl.s)
-		fi
+			if test "${QGL_LIBPATH}" = "" ; then
+				AC_MSG_RESULT((not found!))
+				AC_MSG_RESULT()
+				AC_MSG_RESULT([The QT Opengl library libqgl.a could not be found. Please specify])
+				AC_MSG_RESULT([the path to libqt/libqgl by passing the option --with-qt-libs=DIR])
+				AC_MSG_RESULT([to configure.])
+				AC_MSG_RESULT([You may also set the environment variable QTDIR to the correct])
+				AC_MSG_RESULT([path - configure will recognize this, too.])
+				AC_MSG_RESULT([Perhaps you simple forgot to compile the OpenGl extsions, too?])
+				AC_MSG_RESULT([You find these extensions in ${QTDIR}/extensions/opengl])
+				AC_MSG_RESULT()
+				AC_MSG_RESULT([The complete QT package can be found under the following URL:])
+				AC_MSG_RESULT([  http://www.troll.no/q])
+				AC_MSG_RESULT()
+				AC_MSG_RESULT([Building of the visualization component BALLVIEW was disabled!])
+			else
+				AC_MSG_RESULT((${QT_LIBPATH}))	
+			fi
+			if test "${QGL_PATH}" != "${QT_PATH}" ; then
+				QT_PATH=${QGL_PATH}
+				AC_MSG_RESULT(using ${QT_PATH} to look for liqt.so and libqgl.s)
+			fi
 
-		if test "${QT_INCPATH}" != /usr/include && test "${QT_INCPATH}" != "" ; then
-			BALLVIEW_INCLUDES="${BALLVIEW_INCLUDES} -I${QT_INCPATH}"
-		fi	
+			if test "${QT_INCPATH}" != /usr/include && test "${QT_INCPATH}" != "" ; then
+				BALLVIEW_INCLUDES="${BALLVIEW_INCLUDES} -I${QT_INCPATH}"
+			fi	
+		fi
 	fi
 fi
 
@@ -1929,7 +1931,7 @@ if test "${USE_BALLVIEW}" = true ; then
 	dnl  now try the default guess: Xmu, Xt, and X11 
 	dnl
 	if test "${X_LINKING_OK+set}" != set ; then
-		X11_LIBS="-lXmu -lXt -lX11"
+		X11_LIBS="-lXmu -lXext -lXt -lX11 -lm"
 		SAVE_LIBS=${LIBS}
 		LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
 		AC_TRY_LINK([],[],X_LINKING_OK=1)
@@ -1940,29 +1942,7 @@ if test "${USE_BALLVIEW}" = true ; then
 	dnl  second guess: add SM and ICE
 	dnl
 	if test "${X_LINKING_OK+set}" != set ; then
-		X11_LIBS="-lXmu -lXt -lX11 -lSM -lICE"
-		SAVE_LIBS=${LIBS}
-		LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
-		AC_TRY_LINK([],[],X_LINKING_OK=1)
-		LIBS=${SAVE_LIBS}
-	fi
-	
-	dnl 		
-	dnl  third guess: Xmu, Xext, Xt, and X11 
-	dnl
-	if test "${X_LINKING_OK+set}" != set ; then
-		X11_LIBS="-lXmu -lXext -lXt -lX11"
-		SAVE_LIBS=${LIBS}
-		LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
-		AC_TRY_LINK([],[],X_LINKING_OK=1)
-		LIBS=${SAVE_LIBS}
-	fi
-	
-	dnl 		
-	dnl fourth guess: add SM and ICE
-	dnl
-	if test "${X_LINKING_OK+set}" != set ; then
-		X11_LIBS="-lXmu -lXext -lXt -lX11 -lSM -lICE"
+		X11_LIBS="-lXmu -lXext -lXt -lX11 -lSM -lICE -lm"
 		SAVE_LIBS=${LIBS}
 		LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
 		AC_TRY_LINK([],[],X_LINKING_OK=1)
@@ -2065,7 +2045,7 @@ if test "${USE_BALLVIEW}" = true ; then
 		LIBS=${SAVE_LIBS}
 
 		dnl
-		dnl  could not link agains libMesaGLU/libMesaGL,
+		dnl  could not link against libMesaGLU/libMesaGL,
     dnl  so try libGLU/libGL
 		dnl
 		if test "${HAVE_MESALIBS+set}" != set ; then
@@ -2106,7 +2086,7 @@ if test "${USE_BALLVIEW}" = true ; then
 	if test "${QT_LINKING_OK+set}" != set ; then
 		AC_MSG_RESULT(no)
 		AC_MSG_RESULT()
-		AC_MSG_RESULT(Cannot link agains libqgl/qt - disabling support for visualization!)
+		AC_MSG_RESULT(Cannot link against libqgl/qt - disabling support for visualization!)
 		AC_MSG_RESULT(If qt is installed, please specify the path to the library)
 		AC_MSG_RESULT(using the option --with-qt-libs=DIR)
 		AC_MSG_RESULT()
