@@ -1,9 +1,9 @@
-// $Id: RegularData2D_test.C,v 1.3 2001/06/22 11:07:50 oliver Exp $
+// $Id: RegularData2D_test.C,v 1.4 2001/06/23 02:24:07 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALL/DATATYPE/regularData2D.h>
 
-START_TEST(RegularData2D, "$Id: RegularData2D_test.C,v 1.3 2001/06/22 11:07:50 oliver Exp $")
+START_TEST(RegularData2D, "$Id: RegularData2D_test.C,v 1.4 2001/06/23 02:24:07 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -254,7 +254,7 @@ CHECK(getInterpolatedValue)
 	TEST_EQUAL(g.getInterpolatedValue(v), 0.0)
 
 	v = Vector2(4.0, 9.0);
-	TEST_EQUAL(g.getInterpolatedValue(v), 0.0)
+	TEST_EQUAL(g.getInterpolatedValue(v), 5.0)
 
 	v = Vector2(2.0, 4.5);
 	TEST_EQUAL(g.getInterpolatedValue(v), 2.5)
