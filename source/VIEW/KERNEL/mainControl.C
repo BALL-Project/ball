@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.133 2004/11/13 13:11:45 amoll Exp $
+// $Id: mainControl.C,v 1.134 2004/11/13 13:18:17 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -193,6 +193,7 @@ namespace BALL
 			simulation_icon_->setPixmap(icon);
 			simulation_icon_->hide();
 			simulation_icon_->setFrameShape(QLabel::NoFrame);
+			connect(&timer_, SIGNAL(timeout()), SLOT(clearStatusBarText_()));
 		}
 
 
@@ -1196,13 +1197,13 @@ namespace BALL
 			if (important)
 			{
 				message_label_->setPaletteForegroundColor( QColor(255,0,0) );
-				QTimer::singleShot(4000, this, SLOT(clearStatusBarText_()));
 			}
 			else
 			{
 				message_label_->setPaletteForegroundColor( QColor(0,0,0) );
-				QTimer::singleShot(4000, this, SLOT(clearStatusBarText_()));
 			}
+
+			timer_.start(4000);
 		}
 
 		void MainControl::clearStatusBarText_()
@@ -1211,7 +1212,7 @@ namespace BALL
 			{
 				message_label_->setPaletteForegroundColor( QColor(0,0,0) );
 				important_text_ = false;
-				QTimer::singleShot(4000, this, SLOT(clearStatusBarText_()));
+				timer_.start(4000);
 			}
 
 			message_label_->setText("");

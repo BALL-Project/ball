@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.65 2004/11/12 17:33:05 amoll Exp $
+// $Id: mainControl.h,v 1.66 2004/11/13 13:18:32 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -43,6 +43,7 @@
 #include <qapplication.h>
 #include <qmenubar.h>    // menus
 #include <qlabel.h>			 // statusbar
+#include <qtimer.h>
 
 namespace BALL
 {
@@ -848,6 +849,7 @@ namespace BALL
 
 			bool 								about_to_quit_;
 			bool 								important_text_;
+			QTimer 							timer_;
 };
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS
