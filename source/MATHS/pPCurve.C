@@ -1,4 +1,4 @@
-// $Id: pPCurve.C,v 1.4 2000/07/13 16:27:02 anker Exp $
+// $Id: pPCurve.C,v 1.5 2000/07/14 12:08:07 anker Exp $
 
 #include <BALL/MATHS/pPCurve.h>
 
@@ -115,7 +115,7 @@ namespace BALL
 		float val = 0.0;
 		for (Size i = 0; i < degree_; ++i)
 		{
-			val += coefficients_[coefficients_.size() - 1][i] * pow(x, i);
+			val += coefficients_[coefficients_.size() - 1][i] * pow(x, (int) i);
 		}
 		return val;
 	}
@@ -136,7 +136,7 @@ namespace BALL
 		}
 		for (Size i = 0; i < degree_; ++i)
 		{
-			val += coef[i] * pow((x - sub), i);
+			val += coef[i] * pow((x - sub), (int) i);
 		}
 		return val;
 	}
