@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomVector.C,v 1.8 2002/02/27 12:21:33 sturm Exp $
+// $Id: atomVector.C,v 1.9 2003/02/04 14:27:01 oliver Exp $
 //
 
 #include <BALL/MOLMEC/COMMON/atomVector.h>
@@ -9,6 +9,8 @@
 #include <BALL/MATHS/vector3.h>
 #include <BALL/CONCEPT/composite.h>
 #include <BALL/KERNEL/atom.h>
+
+#define BALL_DEBUG
 
 using namespace std;
 
@@ -121,6 +123,9 @@ namespace BALL
 				for (; it != end(); ++it, ++pos_it, ++grad_it)
 				{
 					(*it)->setPosition(*pos_it + *grad_it * step);
+					#ifdef BALL_DEBUG
+						Log << "   - atom " << (*it)->getFullName() << " @ " << (*it)->getPosition() << std::endl;
+					#endif
 				}
 			}
 			// we don't have saved positions, use the current atom positions
@@ -131,6 +136,9 @@ namespace BALL
 				for (; it != end(); ++it, ++grad_it)
 				{
 					(*it)->getPosition() += *grad_it * step;
+					#ifdef BALL_DEBUG
+						Log << "   - atom " << (*it)->getFullName() << " @ " << (*it)->getPosition() << std::endl;
+					#endif
 				}				
 			}
 		}

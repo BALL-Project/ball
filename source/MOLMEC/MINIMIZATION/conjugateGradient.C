@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.C,v 1.16 2003/02/03 21:38:18 oliver Exp $
+// $Id: conjugateGradient.C,v 1.17 2003/02/04 14:27:01 oliver Exp $
 // Minimize the potential energy of a system using a nonlinear conjugate 
 // gradient method with  line search
 
@@ -368,7 +368,7 @@ namespace BALL
 				}
 
 
-				if ((number_of_iteration_ % restart_frequency == 0))
+				if ((number_of_iterations_ % restart_frequency == 0))
 				{
 					double condition = 0;
 
@@ -483,7 +483,7 @@ namespace BALL
 	} // end of method 'updateDirection'
 
 
-	bool ConjugateGradientMinimizer::findStep()
+	double ConjugateGradientMinimizer::findStep()
 	{		
 		// first, we search along the line by taking a step_ along direction_
 
@@ -632,7 +632,14 @@ namespace BALL
 			}
 		}
 
-		return result;
+		if (result == true)
+		{
+			return lambda_;
+		} 
+		else 
+		{
+			return -1.0;
+		}
 	} // end of method 'findStep'
 
   // The minimizer optimizes the energy of the system 
@@ -702,7 +709,7 @@ namespace BALL
 		// set a limit for the iterations:
 		// If no upper bound for the number of iterations is given, the value stored in 
 		// the options will be the limit
-		Size max_iteration = number_of_iteration_;
+		Size max_iteration = getMaxNumberOfIterations();
 		if (iterations == 0)
 		{
 			max_iteration += maximal_number_of_iterations_;
@@ -716,7 +723,7 @@ namespace BALL
 		atoms.savePositions();
 
 		// iterate: while not converged and not enough iterations
-		while (!isConverged() && (number_of_iteration_ < max_iteration))
+		while (!isConverged() && (getNumberOfIterations() < max_iteration))
 		{
 			// invalidate the current direction: we don't want to
 			// take this direction again. If findStep() 

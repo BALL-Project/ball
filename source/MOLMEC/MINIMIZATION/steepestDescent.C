@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: steepestDescent.C,v 1.12 2003/02/03 21:38:19 oliver Exp $
+// $Id: steepestDescent.C,v 1.13 2003/02/04 14:27:02 oliver Exp $
 
 #include <BALL/MOLMEC/MINIMIZATION/steepestDescent.h>
 #include <BALL/MOLMEC/MINIMIZATION/lineSearch.h>
@@ -16,14 +16,16 @@ namespace BALL
 
 	// default constructor
 	 SteepestDescentMinimizer::SteepestDescentMinimizer()
-		:	EnergyMinimizer ()
+		:	EnergyMinimizer(),
+			line_search_(*this)
 	{
 	}
 
 	// copy constructor 
 	SteepestDescentMinimizer::SteepestDescentMinimizer 
-		(const SteepestDescentMinimizer & line_search_minimizer)
-		: EnergyMinimizer(line_search_minimizer)
+		(const SteepestDescentMinimizer & minimizer)
+		: EnergyMinimizer(minimizer),
+			line_search_(*this)
 	{
 	}
 
@@ -31,44 +33,52 @@ namespace BALL
 	const SteepestDescentMinimizer& SteepestDescentMinimizer::operator =
 		(const SteepestDescentMinimizer& minimizer)
 	{
-		EnergyMinimizer::operator = (minimizer);
+		if (&minimizer != this)
+		{
+			EnergyMinimizer::operator = (minimizer);
+			line_search_ = minimizer.line_search_;
+		}
+
 		return *this;
 	}
 
 	// Constructor initialized with a force field
 	SteepestDescentMinimizer::SteepestDescentMinimizer(ForceField& force_field)
-		:	EnergyMinimizer()
+		:	EnergyMinimizer(),
+			line_search_(*this)
 	{
 		valid_ = setup (force_field);
 
 		if (!valid_)
 		{
-			Log.error() << "SteepestDescentMinimizer: steepest descent minimizer setup failed! " << std::endl;
+			Log.error() << "SteepestDescentMinimizer: setup failed! " << std::endl;
 		}
 	}
 
 	// Constructor initialized with a force field and a snapshot  manager 
 	SteepestDescentMinimizer::SteepestDescentMinimizer(ForceField& force_field, SnapShotManager* ssm)
-		:	EnergyMinimizer()
+		:	EnergyMinimizer(),
+			line_search_(*this)
 	{
 		valid_ = setup (force_field, ssm);
 
 		if (!valid_)
 		{
-			Log.error() << " steepest descent minimizer setup failed! " << std::endl;
+			Log.error() << "SteepestDescentMinimizer: setup failed! " << std::endl;
 		}
 	}
 
 	// Constructor initialized with a force field and a set of options
 	SteepestDescentMinimizer::SteepestDescentMinimizer
 		(ForceField& force_field, const Options& new_options)
-		:	EnergyMinimizer()
+		:	EnergyMinimizer(),
+			line_search_(*this)
 	{
 		valid_ = setup (force_field, new_options);
 
 		if (!valid_)
 		{
-			Log.error() << " steepest descent minimizer setup failed! " << endl;
+			Log.error() << "SteepestDescentMinimizer: setup failed! " << endl;
 		}
 	}
 
@@ -76,13 +86,14 @@ namespace BALL
 	SteepestDescentMinimizer::SteepestDescentMinimizer 
 		(ForceField& force_field, SnapShotManager* ssm,
 		 const Options& new_options)
-		:	EnergyMinimizer()
+		:	EnergyMinimizer(),
+			line_search_(*this)
 	{
 		valid_ = setup(force_field, ssm, new_options);
 
 		if (!valid_)
 		{
-			Log.error() << " steepest descent minimizer setup failed! " << std::endl;
+			Log.error() << "SteepestDescentMinimizer: setup failed! " << std::endl;
 		}
 	}
 
@@ -104,198 +115,126 @@ namespace BALL
 	/*  The minimizer optimizes the energy of the system 
 			using a modified line search algorithm.
 	*/
-	bool SteepestDescentMinimizer::minimize(Size steps, bool restart)
+	bool SteepestDescentMinimizer::minimize(Size iterations, bool restart)
 	{
-		// define some static variables used for restarting
-		static double step_size = maximum_displacement_;	// the current step size
-		static Size last_update = 1;	// last update of gradient (in number of iterations)
-		static Size same_energy_counter = 0;	// number of times the same energy was calculated (in number of iterations)
-		static double gradient_norm = 0;	// norm of the gradient
-		static double last_energy = 0;	// energy of the last iteration
-		static double min_energy = 0;	// minimum energy encountered
-		static double energy = 0;		// last calculated energy
-
-		// Checking the minimizer 
-		if (isValid() == false)
+		// Check for validity of minimizer and force field
+		if (!isValid() || getForceField() == 0 || !getForceField()->isValid())
 		{
-			Log.error() << "The steepest descent minimizer is not valid!" << endl;
+			Log.error() << "SteepestDescentMinimizer: minimizer is not initialized correctly!" << std::endl;
 			return false;
 		}
-
-		// if there are no atoms to optimize, return immediately - we have found the optimal
-		// solution!
-		Size number_of_movable_atoms = force_field_->getNumberOfMovableAtoms ();
-		if (number_of_movable_atoms == 0)
+		
+		// Make sure we have something worth moving.
+		if (getForceField()->getNumberOfMovableAtoms() == 0)
 		{
 			return true;
 		}
 
-		vector<Atom*>::const_iterator it;
-		if (!restart)
+		// Check the arguments
+		if (restart)
 		{
-			// reset the step size to its default value
-			step_size = getMaximumDisplacement();
-
-			// reset the counters
-			force_update_counter_ = 0;
-			energy_update_counter_ = 0;
-
-			// calculate initial gradient and gradient norm
-			force_field_->updateForces ();
-			force_update_counter_++;
-
-			gradient_norm = 0;
-			it = force_field_->getAtoms ().begin ();
-			for (; it != force_field_->getAtoms ().end (); ++it)
-			{
-				gradient_norm += (*it)->getForce().getSquareLength();
-			}
-
-			// calculate the RMS gradient (termination condition)
-			// in units of kJ/(mol A)
-			gradient_norm = sqrt (gradient_norm / (3.0 * (double) number_of_movable_atoms));
-			gradient_norm *= Constants::AVOGADRO / 1e13;
-
-			// if the gradient norm is zero, return (we are converged)
-			if (gradient_norm == 0.0)
-			{
-				return true;
-			}
+			// reset the number of iterations for a restart
+			setNumberOfIterations(0);
 		}
+		Size max_iterations = std::max(getNumberOfIterations() + iterations, getMaxNumberOfIterations());
+		
+		LineSearch line_search(*this);
+		bool converged = false;
 
-		// Iterate and minimize
-		Size iteration = 0;
+		// Some aliases
+		AtomVector& atoms(const_cast<AtomVector&>(getForceField()->getAtoms()));
 
-		// if no limit to the number of steps is given, ignore it
-		if (steps == 0)
+		// Initial step size:
+		double initial_step = 1.0;
+		step_ = initial_step;
+
+		// Compute initial energy and gradient.
+		updateEnergy();
+		updateForces();
+
+		while (!converged && (getNumberOfIterations() < max_iterations))
 		{
-			steps = Limits < Size >::max ();
-		}
+			// store the current atom positions and the current gradient/energy
+			atoms.savePositions();
+			storeGradientEnergy();
 
-		double energy_change = 0.0;
-		float factor;
-
-
-		while (iteration < maximal_number_of_iterations_)
-		{
-			// calculate current energy 
-			energy_change = energy;
-			energy = force_field_->updateEnergy ();
-			energy_update_counter_++;
-			energy_change = energy - energy_change;
-
-			iteration++;
-
-			// check whether the energy changed
-			if (fabs (energy - last_energy) < energy_difference_bound_)
-			{
-				same_energy_counter++;
-				if (same_energy_counter == max_same_energy_)
-				{
-					break;
-				}
-			}
-			else
-			{
-				last_energy = energy;
-				same_energy_counter = 0;
-			}
-
-
-			// accept a taken step if it results in a lower energy
-			if ((energy < min_energy) || (number_of_iteration_ == 0)
-					|| ((restart == false) && (iteration == 0)) || (last_update > 10))
-			{
-				// if the last 10 steps didn't improve energy, we're in trouble
-				// let's recalculate the gradient and increase the step size to get
-				// out of here
-				if (last_update > 10)
-				{
-					step_size *= 500;
-				}
-				else
-				{
-					min_energy = energy;
-				}
-				last_update = 0;
-
-				// update gradient and gradient norm
-				force_field_->updateForces ();
-				force_update_counter_++;
-
-				// If the simulation runs with periodic boundary conditions, update the
-				// list and position of molecules
-				if (force_field_->periodic_boundary.isEnabled () == true)
-					force_field_->periodic_boundary.updateMolecules ();
-
-				// Update the force field pair lists in regular intervals
-				if (number_of_iteration_ % force_field_->getUpdateFrequency () == 0)
-					force_field_->update ();
-
-
-
-				gradient_norm = 0;
-				it = force_field_->getAtoms ().begin ();
-				for (; it != force_field_->getAtoms ().end (); ++it)
-				{
-					gradient_norm += (*it)->getForce ().getSquareLength ();
-				}
-
-				// calculate the RMS gradient (termination condition)
-				// in units of kJ/(mol A)
-				gradient_norm = sqrt (gradient_norm / (3.0 * (double) number_of_movable_atoms));
-				gradient_norm *= Constants::AVOGADRO / 1.0e13;
-
-
-				// check for convergence
-				if (gradient_norm <= max_gradient_)
-				{
-					break;
-				}
-
-
-				// increase step_size
-				step_size *= 1.1;
-
-				// calculate factor for atom displacements
-				factor = Constants::AVOGADRO / 1.0e13 * step_size / gradient_norm;
-
-			}
-			else
-			{
-
-				// this step didn't result in a lower energy
-				// make half a step back and retry        
-
-				// calculate factor for atom displacements
-				factor = -Constants::AVOGADRO / 1.0e13 * (step_size * 0.5) / gradient_norm;	// half step back
-
-				// reduce step size
-				step_size *= 0.5;
-				last_update++;
-			}
-
-
-			//iterate over all movable atoms
-			it = force_field_->getAtoms ().begin ();
-			for (Size i = 0; i < number_of_movable_atoms; ++i, ++it)
-			{
-				(*it)->setPosition ((*it)->getPosition () + factor * (*it)->getForce ());
-			}
+			// Try to find a new step
+			double lambda = findStep();
 			
+			// If the result was less than zero, the line search failed.
+			if (lambda < 0)
+			{
+				#ifdef BALL_DEBUG
+					Log << "SDM: first line search failed." << std::endl;
+				#endif
+				// Try another step with the initial step size
+				step_ = initial_step;
+				lambda = findStep();
+				
+				// Didn't help, we abort the minimization.
+				if (lambda < 0)
+				{
+					break;
+				}
+			}
+	
+			// Accept the step taken and compute new energy/forces.
+			atoms.moveTo(direction_, step_ * lambda * direction_.inv_norm);
+			updateEnergy();
+			updateForces();
+			#ifdef BALL_DEBUG
+				Log << "SDM: step taken with lambda = " << lambda << std::endl;
+			#endif
+
+			// Adjust the step size
+			if (lambda < 0.2) 
+			{
+				step_ *= 0.5;
+			} 
+			else if (lambda > 0.9) 
+			{
+				step_ *= 2.;
+			}
+			#ifdef BALL_DEBUG
+				Log << "SDM: new step size: " << step_ << std::endl;
+			#endif
+	
+			// Check for convergence.
+			converged = isConverged();
+			
+			// End of this iteration: increment iteration counter, update pairlists etc.
 			finishIteration();
-			// count iterations
-			iteration++;
 		}
+		
+		return converged;
+	}
 
-		Log.info () << endl;
-		Log.info () << "No. of force updates : " << force_update_counter_ << endl;
-		Log.info () << "No. of energy updates: " << energy_update_counter_ << endl;
-		Log.info () << endl;
+	double SteepestDescentMinimizer::findStep()
+	{
+		// Perform a line search with the current step size.
+		// We search along the current gradient: direction = current gradient
+		updateDirection();
+		double lambda = -1.0;
+		bool result = line_search_.minimize(lambda, step_ * direction_.inv_norm);
 
+		// If the line search was not successful, return -1, else
+		// the value for the optimal lambda.
+		if (result == false)
+		{
+			return -1.0;
+		}
+		else
+		{
+			return lambda;
+		}
+	}
 
-		// test whether convergence was reached
-		return (gradient_norm <= max_gradient_) || (same_energy_counter == max_same_energy_);
+	void SteepestDescentMinimizer::updateDirection()
+	{
+		// We search along the negative current gradient, which happens to
+		// be stored in initial_gradient
+		getDirection() = getInitialGradient();		
+		getDirection().negate();
 	}
 
 }	// namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SteepestDescentMinimizer_test.C,v 1.2 2003/02/03 21:38:20 oliver Exp $
+// $Id: SteepestDescentMinimizer_test.C,v 1.3 2003/02/04 14:27:03 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +11,7 @@
 #include <BALL/KERNEL/PTE.h>
 ///////////////////////////
 
-START_TEST(ConjugateGradienMinimizer, "$Id: SteepestDescentMinimizer_test.C,v 1.2 2003/02/03 21:38:20 oliver Exp $")
+START_TEST(ConjugateGradienMinimizer, "$Id: SteepestDescentMinimizer_test.C,v 1.3 2003/02/04 14:27:03 oliver Exp $")
 
 using namespace BALL;
 
@@ -23,7 +23,7 @@ AmberFF FF(S);
 	
 SteepestDescentMinimizer*	em;
 CHECK(SteepestDescentMinimizer::SteepestDescentMinimizer())
-	em = new SteepestDescentMinimizer();
+	em = new SteepestDescentMinimizer;
 	TEST_NOT_EQUAL(em, 0)
 RESULT	
 
@@ -110,24 +110,24 @@ RESULT
 
 CHECK(SteepestDescentMinimizer::getNumberOfIteration() const)
 	SteepestDescentMinimizer e_min;
-	TEST_EQUAL(e_min.getNumberOfIteration(), 0)
+	TEST_EQUAL(e_min.getNumberOfIterations(), 0)
 RESULT
 
 CHECK(SteepestDescentMinimizer::setNumberOfIteration(Size))
 	SteepestDescentMinimizer e_min;
-	e_min.setNumberOfIteration(4);
-	TEST_EQUAL(e_min.getNumberOfIteration(), 4)
+	e_min.setNumberOfIterations(4);
+	TEST_EQUAL(e_min.getNumberOfIterations(), 4)
 RESULT
 
-CHECK(SteepestDescentMinimizer::getMaximalNumberOfIterations())
+CHECK(SteepestDescentMinimizer::getMaxNumberOfIterations())
 	SteepestDescentMinimizer e_min;
-	TEST_EQUAL(e_min.getMaximalNumberOfIterations(), 0)
+	TEST_EQUAL(e_min.getMaxNumberOfIterations(), 0)
 RESULT
 
-CHECK(SteepestDescentMinimizer::setMaximalNumberOfIterations(Size))
+CHECK(SteepestDescentMinimizer::setMaxNumberOfIterations(Size))
 	SteepestDescentMinimizer e_min;
-	e_min.setMaximalNumberOfIterations(2000);
-	TEST_EQUAL(e_min.getMaximalNumberOfIterations(), 2000)
+	e_min.setMaxNumberOfIterations(2000);
+	TEST_EQUAL(e_min.getMaxNumberOfIterations(), 2000)
 RESULT
 
 CHECK(SteepestDescentMinimizer::getEnergyOutputFrequency() const)
@@ -171,8 +171,8 @@ CHECK(SteepestDescentMinimizer::minimize(Size, bool))
 	S.insert(*m);
 	m->insert(*a1);
 	m->insert(*a2);
-	a1->setPosition(Vector3(0, 0, 0));
-	a2->setPosition(Vector3(1, 0, 0));
+	a1->setPosition(Vector3(-0.5, 0, 0));
+	a2->setPosition(Vector3(0.5, 0, 0));
 	a1->setElement(PTE[Element::C]);
 	a2->setElement(PTE[Element::C]);
 	a1->setTypeName("C");
@@ -181,39 +181,25 @@ CHECK(SteepestDescentMinimizer::minimize(Size, bool))
 	a2->setCharge(0.0);
 	FF.options[AmberFF::Option::ASSIGN_CHARGES] = "false";
 	FF.setup(S);
-	TEST_REAL_EQUAL(FF.isValid(), true)
+	TEST_EQUAL(FF.isValid(), true)
 	PRECISION(1e-4)
 	FF.updateEnergy();
 	FF.updateForces();
-	Log << a1->getForce() << std::endl;
-	Log << a2->getForce() << std::endl;
-	TEST_REAL_EQUAL(FF.getEnergy(), -1.99725)
-	Log << "Ttl: " << FF.getEnergy() << std::endl;
-	Log << "vdW: " << FF.getVdWEnergy() << std::endl;
-	Log << "ES:  " << FF.getESEnergy() << std::endl;
-	Log << a1->getPosition() << "/" << a2->getPosition() << std::endl;
-	Log << a1->getPosition().getDistance(a2->getPosition()) << std::endl;
+	PRECISION(10)
+	TEST_REAL_EQUAL(FF.getEnergy(), 3.42854e+06)
 	SteepestDescentMinimizer cgm(FF);
 	cgm.setEnergyOutputFrequency(1);
 	cgm.setMaxGradient(0.01);
-	Log << "grad: " << FF.getRMSGradient() << std::endl;
 	TEST_EQUAL(cgm.isValid(), true)
 	TEST_EQUAL(cgm.minimize(20), true)
-	TEST_REAL_EQUAL(FF.getEnergy(), -0.4)
-	Log << a1->getPosition() << "/" << a2->getPosition() << std::endl;
-	Log << a1->getPosition().getDistance(a2->getPosition()) << std::endl;
-	Log << a1->getCharge() << "/" << a2->getCharge() << std::endl;
 	
 	FF.updateEnergy();
 	FF.updateForces();
-	Log << "grad: " << FF.getRMSGradient() << std::endl;
-	Log << a1->getForce() << std::endl;
-	Log << a2->getForce() << std::endl;
-	Log << "Ttl: " << FF.getEnergy() << std::endl;
-	Log << "vdW: " << FF.getVdWEnergy() << std::endl;
-	Log << "ES:  " << FF.getESEnergy() << std::endl;
-	Log << a1->getPosition() << "/" << a2->getPosition() << std::endl;
-	Log << a1->getPosition().getDistance(a2->getPosition()) << std::endl;
+
+	PRECISION(1e-3)
+  TEST_REAL_EQUAL(FF.getEnergy(), -0.359813)
+	PRECISION(7e-3)
+  TEST_REAL_EQUAL(a1->getPosition().getDistance(a2->getPosition()), 3.81244)
 RESULT
 
 /////////////////////////////////////////////////////////////
