@@ -1,4 +1,4 @@
-// $Id: fresno.C,v 1.1.2.21 2003/06/04 15:33:00 anker Exp $
+// $Id: fresno.C,v 1.1.2.22 2003/08/25 17:06:06 anker Exp $
 // Molecular Mechanics: Fresno force field class
 
 #include <BALL/SYSTEM/path.h>
@@ -1007,5 +1007,31 @@ namespace BALL
 		return string;
 	}
 
+	double FresnoFF::calculateBaseFunction(double x, double lower, double upper)
+		throw()
+	{
+		// Quick and dirty. Optimize this.
+
+		double return_value;
+
+		x = fabs(x);
+
+		if (x <= lower)
+		{
+			return_value = 1.0;
+		}
+		else
+		{
+			if (x <= upper)
+			{
+				return_value = 1.0 - ((x - lower)/(upper - lower));
+			}
+			else
+			{
+				return_value = 0.0;
+			}
+		}
+		return return_value;
+	}
 
 } // namespace BALL

@@ -1,4 +1,4 @@
-// $Id: fresnoBuriedPolar.C,v 1.1.2.12 2003/05/07 16:10:40 anker Exp $
+// $Id: fresnoBuriedPolar.C,v 1.1.2.13 2003/08/25 17:06:28 anker Exp $
 // Molecular Mechanics: Fresno force field, buried polar component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -195,7 +195,7 @@ namespace BALL
 			{
 				// we could possibly speed up the next step by using the fact that the
 				// difference between R1 and R2 is constant
-				val = MolmecSupport::calculateFresnoHelperFunction(distance, R1, R2);
+				val = FresnoFF::calculateBaseFunction(distance, R1, R2);
 
 				if (verbosity >= 90)
 				{

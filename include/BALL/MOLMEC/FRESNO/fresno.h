@@ -1,4 +1,4 @@
-// $Id: fresno.h,v 1.1.2.17 2003/06/04 15:32:59 anker Exp $
+// $Id: fresno.h,v 1.1.2.18 2003/08/25 17:04:30 anker Exp $
 
 #ifndef BALL_MOLMEC_FRESNO_FRESNO_H
 #define BALL_MOLMEC_FRESNO_FRESNO_H
@@ -556,6 +556,11 @@ namespace BALL
 		/**
 		*/
 		String getFresnoTypeString(short type) const
+			throw();
+
+		/** Calculate a frequently used function of the Fresno force field
+		*/
+		static double calculateBaseFunction(double x, double lower, double upper)
 			throw();
 		//@}
 

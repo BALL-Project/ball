@@ -1,4 +1,4 @@
-// $Id: fresnoHydrogenBond.C,v 1.1.2.11 2003/05/07 16:10:40 anker Exp $
+// $Id: fresnoHydrogenBond.C,v 1.1.2.12 2003/08/25 17:07:06 anker Exp $
 // Molecular Mechanics: Fresno force field, hydrogen bond component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -257,7 +257,7 @@ namespace BALL
 					{
 						// calculate g1
 
-						val = MolmecSupport::calculateFresnoHelperFunction(distance,
+						val = FresnoFF::calculateBaseFunction(distance,
 								h_bond_distance_lower_, h_bond_distance_upper_);
 
 						// calculate the angle of the hbond. It is necessary to find out
@@ -288,7 +288,7 @@ namespace BALL
 						// if angle is too large, skip the rest
 						if (angle <= h_bond_angle_upper_)
 						{
-							val *= MolmecSupport::calculateFresnoHelperFunction(angle,
+							val *= FresnoFF::calculateBaseFunction(angle,
 									h_bond_angle_lower_, h_bond_angle_upper_);
 							if (already_used_.has(hydrogen))
 							{
