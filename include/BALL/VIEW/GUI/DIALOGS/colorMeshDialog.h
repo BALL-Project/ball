@@ -39,6 +39,9 @@ namespace BALL
 				/** Browse file names.
 				 */
 				void browseLoadFiles();
+
+				/// Cancel button clicked 
+				void cancel();
 		};
 
 	}
