@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.47 2003/09/07 17:24:00 oliver Exp $
+// $Id: mainframe.h,v 1.48 2003/09/07 21:56:20 oliver Exp $
 //
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -74,6 +74,46 @@
 #include <qwidget.h>
 #include <qsplitter.h>
 
+class DockWidget
+  : public QDockWindow,
+		public BALL::VIEW::ModularWidget
+{
+  Q_OBJECT
+
+  public:
+
+  DockWidget(QWidget* parent, const char* title = 0, QWidget* guest = 0)
+    : QDockWindow(QDockWindow::InDock, parent),
+			ModularWidget()
+  {
+		if (title != 0) 
+		{ 
+			setCaption(title);
+		}
+		if (guest != 0)
+		{
+			QPoint p;
+			guest->reparent(this, p, TRUE);
+			setWidget(guest);
+			setMinimumSize(20, 20);
+			setCloseMode(QDockWindow::Always);
+			setResizeEnabled(TRUE);
+
+			ModularWidget* mod_wid = dynamic_cast<ModularWidget*>(guest);
+			if (mod_wid != 0)
+			{
+				std::cout << "registering mod widget " << (title == 0 ? "''" : title) << std::endl;
+				mod_wid->registerWidget(mod_wid);
+			}
+			else
+			{
+				std::cout << "no mod widget!" << std::endl;
+			}
+		}
+	}
+
+	virtual ~DockWidget() throw() {}
+};
 
 namespace BALL
 {
@@ -85,34 +125,34 @@ namespace BALL
 		: public BALL::VIEW::MainControl
 	{
 		Q_OBJECT
-		BALL_EMBEDDABLE(Mainframe)
 
 		public:
+		BALL_EMBEDDABLE(Mainframe)
 
-				/** This class is only intended for usage with multithreading.
-						It notifies the Mainframe, that the thread for simulations has finished and can be deleted.
-						This should only be used internaly.
-				*/
-				class SimulationThreadFinished: public QCustomEvent
-				{
-					public:
-						SimulationThreadFinished()
-							: QCustomEvent( 65431 ){}
-				};
+		/** This class is only intended for usage with multithreading.
+				It notifies the Mainframe, that the thread for simulations has finished and can be deleted.
+				This should only be used internaly.
+		*/
+		class SimulationThreadFinished: public QCustomEvent
+		{
+			public:
+				SimulationThreadFinished()
+					: QCustomEvent( 65431 ){}
+		};
 
-				class SimulationOutput: public QCustomEvent
-				{
-					public:
-						SimulationOutput()
-							: QCustomEvent( 65430 ){}
+		class SimulationOutput: public QCustomEvent
+		{
+			public:
+				SimulationOutput()
+					: QCustomEvent( 65430 ){}
 
-						void setMessage(const String& msg) {message_ = msg;}
+				void setMessage(const String& msg) {message_ = msg;}
 
-						String getMessage() {return message_;}
+				String getMessage() {return message_;}
 
-					protected:
-						String message_;
-				};
+			protected:
+				String message_;
+		};
 
 
 		enum MenuKey

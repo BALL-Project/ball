@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: control.h,v 1.4 2003/09/04 23:14:15 amoll Exp $
+// $Id: control.h,v 1.5 2003/09/07 21:56:20 oliver Exp $
+//
 
 #ifndef BALL_VIEW_WIDGETS_CONTROL_H
 #define BALL_VIEW_WIDGETS_CONTROL_H
@@ -20,6 +21,7 @@
 
 #include <qlistview.h>
 #include <qmessagebox.h>
+#include <qdockwindow.h>
 #include <qpoint.h>
 #include <qpopupmenu.h>
 
@@ -45,7 +47,7 @@ namespace BALL
 				\ingroup ViewWidgets
 		*/
 		class Control
-			: public QListView, 
+			: public QListView,
 				public ModularWidget
 		{
 			Q_OBJECT

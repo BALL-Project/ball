@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: embeddable.h,v 1.16 2003/09/07 17:23:59 oliver Exp $
+// $Id: embeddable.h,v 1.17 2003/09/07 21:56:20 oliver Exp $
 //
 
 #ifndef BALL_CONCEPT_EMBEDDABLE_H
@@ -39,7 +39,7 @@ namespace BALL
 		{ \
 			if (typeid(*this) != typeid(TYPE))\
 			{\
-				Log.error() << "Warning: derived class " << typeid(*this).name() << " was derived from BALL::Embeddable, but the macro " << std::endl\
+				Log.error() << "Warning: derived class " << typeid(*this).name() << " was derived from BALL::Embeddable, but the macro\n"\
                   << "BALL_EMBEDDABLE(...) was not specified in the class declaration!" << std::endl;\
 			}\
 			Embeddable::registerInstance_(typeid(TYPE), this);\

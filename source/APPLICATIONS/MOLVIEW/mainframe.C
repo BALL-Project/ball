@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.73 2003/09/07 17:24:00 oliver Exp $
+// $Id: mainframe.C,v 1.74 2003/09/07 21:56:20 oliver Exp $
 //
 
 #include "mainframe.h"
@@ -36,6 +36,7 @@
 #include <qlabel.h>
 #include <qmenubar.h>
 #include <qsplitter.h>
+#include <qdockwindow.h>
 #include <qstatusbar.h>
 #include <qlabel.h>
 #include <qaccel.h> 
@@ -100,17 +101,14 @@ namespace BALL
 		vert_splitter2_->setOrientation(Vertical);
 		CHECK_PTR(vert_splitter2_);
 		
-		control_ = new MolecularControl(vert_splitter2_);
+		new DockWidget(this, "Structures", control_ = new MolecularControl(0));
 		CHECK_PTR(control_);
-		control_->setMinimumSize(10, 10);
-
-		geometric_control_ = new GeometricControl(vert_splitter2_);
+	
+		new DockWidget(this, "Models", geometric_control_ = new GeometricControl(0));
 		CHECK_PTR(geometric_control_);
-		geometric_control_->setMinimumSize(10, 10);
 
-		trajectory_control_ = new TrajectoryControl(vert_splitter2_);
+		new DockWidget(this, "Trajectories", trajectory_control_ = new TrajectoryControl(0));
 		CHECK_PTR(trajectory_control_);
-		trajectory_control_->setMinimumSize(10,10);
 
 		scene_ = new Scene(hor_splitter_);
 		CHECK_PTR(scene_);

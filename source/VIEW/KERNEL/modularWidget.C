@@ -1,7 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.C,v 1.2 2003/08/26 15:26:32 amoll Exp $
+// $Id: modularWidget.C,v 1.3 2003/09/07 21:56:20 oliver Exp $
+//
+
+#define BALL_VIEW_DEBUG // ????
 
 #include <BALL/VIEW/KERNEL/modularWidget.h>
 #include <BALL/VIEW/KERNEL/message.h>
