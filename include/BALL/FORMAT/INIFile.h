@@ -1,4 +1,4 @@
-// $Id: INIFile.h,v 1.3 2000/01/10 15:51:00 oliver Exp $
+// $Id: INIFile.h,v 1.4 2000/01/13 22:19:30 oliver Exp $
 
 #ifndef BALL_FORMAT_INIFILE_H
 #define BALL_FORMAT_INIFILE_H
@@ -53,10 +53,17 @@ namespace BALL
 		*/
 		virtual ~INIFile();
 
-		/**	Clears all allocated memory.
+		/**	Destroy the contents of the object.
+				{\tt destroy} calls {\tt clear} and also resets
+				the filename to the empty string and invalidates the object.
 		*/
 		void destroy();
 
+		/**	Clear the internal datastructures.
+				{\tt clear} frees all allocated memory but retains the
+				filename set for the {\tt INIFile} object.
+		*/
+		void clear();
 		//@}
 		
 		/**@name	File I/O and related
@@ -239,7 +246,11 @@ namespace BALL
 
 		String								filename_;
 		
+		std::vector<String>		section_names_;
+
 		std::vector<String>		lines_;
+
+		std::vector<Size>			line_section_index_;
 
 		std::vector<Size>			section_start_;
 
@@ -248,6 +259,8 @@ namespace BALL
 		StringHashMap<Size>		section_index_;
 
 		StringHashMap<Size>		section_key_map_;
+
+		Size									original_number_of_lines_;
 
 	};
 
