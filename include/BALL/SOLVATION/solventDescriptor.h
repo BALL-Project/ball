@@ -1,15 +1,14 @@
-// $Id: solventDescriptor.h,v 1.1 2000/08/31 16:47:22 anker Exp $
+// $Id: solventDescriptor.h,v 1.2 2000/09/02 10:15:10 oliver Exp $
 
-// BAUSTELLE: Pfad?
-#ifndef BALL__SOLVENTDESCRIPTOR_H
-#define BALL__SOLVENTDESCRIPTOR_H
+#ifndef BALL_SOLVATION_SOLVENTDESCRIPTOR_H
+#define BALL_SOLVATION_SOLVENTDESCRIPTOR_H
 
 #ifndef BALL_COMMON_H
-#include <BALL/common.h>
+#	include <BALL/common.h>
 #endif
 
 #ifndef BALL_KERNEL_ATOM_H
-#include <BALL/KERNEL/atom.h>
+#	include <BALL/KERNEL/atom.h>
 #endif
 
 namespace BALL
@@ -33,9 +32,8 @@ namespace BALL
 
 
 	/** Solvent Description.
-	The calculation of van-der-Waals energies requires information about the
-	solvent which is stored in this structure.
-	@see 
+			The calculation of van-der-Waals energies requires information about the
+			solvent which is stored in this structure.
 	*/
 	class SolventDescriptor
 	{
@@ -122,4 +120,4 @@ namespace BALL
 	
 
 
-#endif BALL__SOLVENTDESCRIPTOR_H
+#endif // BALL_SOLVATION_SOLVENTDESCRIPTOR_H
