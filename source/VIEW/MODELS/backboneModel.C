@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.17.2.6 2004/12/21 17:21:15 amoll Exp $
+// $Id: backboneModel.C,v 1.17.2.7 2004/12/21 17:48:37 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -273,28 +273,32 @@ have_start_point_ = false;
  			float slides = 8.0 + drawing_precision_ * 8.0;
 			vector<Vector3> points;
 			Vector3 dir = spline_points_[start + 1] - last_point_;
-			Vector3 r = dir % Vector3(1,0,0);
+			Vector3 n = Vector3(1,0,0);
+ 
+			Vector3 r = dir % n;
 			if (Maths::isZero(r.getSquareLength())) 
 			{ 
-				r = dir % Vector3(0,1,0);
+				n = Vector3(0,1,0);
+				r = dir % n;
 				if (Maths::isZero(r.getSquareLength())) 
 				{
-					r = dir % Vector3(0,0,1);
+					n = Vector3(0,0,1);
+					r = dir % n;
 				}
 			}
 			r.normalize();
 			r *= tube_radius_;
 
-			Vector3 x(tube_radius_, 0, 0);
+			Vector3 x = r;
 			
 			Matrix4x4 m;
-			m.setRotation(Angle(360.0 / (slides), false), Vector3(0,1,0));
+			m.setRotation(Angle(360.0 / (slides), false), n % r);
 			points.push_back(last_point_ + x);
 			// initialise a first set of points in a circle around the start position
 			for (float p = 0; p < slides; p++)
 			{
 				x = m * x;
-				points.push_back(last_point_ + x);
+				points.push_back(x);
 			}
 			// add also a dummy for closing of ring
 			points.push_back(points[0]);
@@ -302,8 +306,8 @@ have_start_point_ = false;
 			for (float p = 0; p < points.size() - 1; p++)
 			{
 				Line* line = new Line();
-				line->setVertex1(points[(Size)p]);
-				line->setVertex2(points[(Size)p+1]);
+				line->setVertex1(last_point_ + points[(Size)p]);
+				line->setVertex2(last_point_ + points[(Size)p+1]);
 				geometric_objects_.push_back(line);
 			}
 
@@ -313,13 +317,17 @@ have_start_point_ = false;
 			{
 				Vector3 point 	= spline_points_[p];
 				Vector3 dir_new = spline_points_[p + 1] - point;
-				Vector3 r_new = dir_new % Vector3(1,0,0);
-				if (Maths::isZero(r.getSquareLength())) 
+
+				n = Vector3(1,0,0);
+				Vector3 r_new = dir_new % n;
+				if (Maths::isZero(r_new.getSquareLength())) 
 				{ 
-					r_new = dir_new % Vector3(0,1,0);
-					if (Maths::isZero(r.getSquareLength())) 
+					n = Vector3(0,1,0);
+					r_new = dir % n;
+					if (Maths::isZero(r_new.getSquareLength())) 
 					{
-						r_new = dir_new % Vector3(0,0,1);
+						n = Vector3(0,0,1);
+						r_new = dir_new % n;
 					}
 				}
 				r_new.normalize();
@@ -328,69 +336,19 @@ have_start_point_ = false;
 				Angle angle;
 				GetAngle(r, r_new, angle);
 				Matrix4x4 m;
-				m.setRotation(angle, r);
-				r = m * r;
+				m.setRotation(angle, dir_new % r_new);
 
-
+				for (Position p = 0; p < points.size(); p++)
 				{
 					Line* line = new Line();
-					line->setVertex1(spline_points_[p+1]);
-					line->setVertex2(point);
+					line->setVertex1(last_point_ + points[p]);
+					points[p] = m * points[p];
+					line->setVertex2(point + points[p]);
  					geometric_objects_.push_back(line);
 				}
 
-				/*
-				if (!Maths::isZero(r_new.getSquareLength()))
-				{
-					r.normalize();
-					r *= tube_radius_ * 10;
-					r = r_new;
-					dir = dir_new;
-				}
-				*/
-
-				/*
-				for (float p = 0; p < slides; p++)
-				{
-					Vector3 rv(r.x * cos((360.0/slides)*p), 
-										 r.y * sin((360.0/slides)*p), 
-										 0);
-
-					Line* line = new Line();
-					line->setVertex1(points[(Size)p]);
-					points[(Size)p] = (point + rv);
-					line->setVertex2(points[(Size)p]);
- 					geometric_objects_.push_back(line);
-				}
-				*/
-
-				Line* line = new Line();
-				line->setVertex1(point);
-				line->setVertex2(point + r * 10.0);
- 				geometric_objects_.push_back(line);
-
-
-				/*
-				// build tube connection to the last point
-				Tube* tube = new Tube;
-				if (!tube) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Tube));
-				
-				tube->setRadius(tube_radius_);
-				tube->setVertex1(last_point_);
-				tube->setVertex2(spline_points_[p]);
-				tube->setComposite(atoms_of_spline_points_[p]);
-				geometric_objects_.push_back(tube);
-
-				// create sphere for the point
-				Sphere* sphere = new Sphere;
-				if (!sphere) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Sphere));
-
-				sphere->setRadius(tube_radius_);
-				sphere->setPosition(spline_points_[p]);
-				sphere->setComposite(atoms_of_spline_points_[p]);
-				geometric_objects_.push_back(sphere);
-				last_point_ = spline_points_[p];
-				*/
+				r = r_new;
+				last_point_ = point;
 			}
 
 			have_start_point_ = true;
