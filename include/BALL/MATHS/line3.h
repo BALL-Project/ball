@@ -1,4 +1,4 @@
-// $Id: line3.h,v 1.21 2000/04/29 15:28:35 amoll Exp $
+// $Id: line3.h,v 1.22 2000/05/01 08:20:51 oliver Exp $
 
 #ifndef BALL_MATHS_LINE3_H
 #define BALL_MATHS_LINE3_H
@@ -36,7 +36,7 @@ namespace BALL
       {\bf Definition:} \URL{BALL/MATHS/line3.h}
       \\
 	*/
-	template <class T>
+	template <typename T>
 	class TLine3
 	{
 		public:

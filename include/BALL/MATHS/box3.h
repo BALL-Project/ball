@@ -1,4 +1,4 @@
-// $Id: box3.h,v 1.17 2000/04/30 16:42:49 oliver Exp $
+// $Id: box3.h,v 1.18 2000/05/01 08:20:51 oliver Exp $
 
 #ifndef BALL_MATHS_BOX3_H
 #define BALL_MATHS_BOX3_H
@@ -21,7 +21,7 @@ namespace BALL
 			{\bf Definition:} \URL{BALL/MATHS/box3.h}
 			\\
 	*/
-	template <class T>
+	template <typename T>
 	class TBox3
 	{
 		public:
@@ -215,28 +215,28 @@ namespace BALL
 		//@}
 	};
 
-	template <class T>
+	template <typename T>
 	TBox3<T>::TBox3()
 		:	a(),
 			b()
 	{
 	}
 
-	template <class T>
+	template <typename T>
 	TBox3<T>::TBox3(const TBox3<T>& box)
 		:	a(box.a),
 			b(box.b)
 	{
 	}
 
-	template <class T>
+	template <typename T>
 	TBox3<T>::TBox3(const TVector3<T>& lower, const TVector3<T>& upper)
 		:	a(lower),
 			b(upper)
 	{
 	}
 
-	template <class T>
+	template <typename T>
 	TBox3<T>::TBox3
 		(const T& ax, const T& ay, const T& az,
 		 const T& bx, const T& by, const T& bz)
@@ -245,7 +245,7 @@ namespace BALL
 	{
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	void TBox3<T>::set(const TBox3<T>& box)
 	{
@@ -253,7 +253,7 @@ namespace BALL
 		b.set(box.b);
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	void TBox3<T>::set(const TVector3<T>& lower, const TVector3<T>& upper)
 	{
@@ -261,7 +261,7 @@ namespace BALL
 		b.set(upper);
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	void TBox3<T>::set
 		(const T& ax, const T& ay, const T& az,
@@ -271,7 +271,7 @@ namespace BALL
 		b.set(bx, by, bz);
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE
 	TBox3<T>& TBox3<T>::operator = (const TBox3<T> &box)
 	{
@@ -280,14 +280,14 @@ namespace BALL
 		return *this;
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	void TBox3<T>::get(TBox3<T>& box) const
 	{
 		box.set(*this);
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	void TBox3<T>::get(TVector3<T>& lower, TVector3<T>& upper) const
 	{
@@ -295,7 +295,7 @@ namespace BALL
 		upper.set(b);
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	void TBox3<T>::get(T& ax, T& ay, T& az, T& bx, T& by, T& bz) const
 	{
@@ -303,7 +303,7 @@ namespace BALL
 		b.get(bx, by, bz);
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	void TBox3<T>::swap(TBox3<T>& box)
 	{
@@ -311,7 +311,7 @@ namespace BALL
 		b.swap(box.b);
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	T TBox3<T>::getSurface() const
 	{
@@ -322,7 +322,7 @@ namespace BALL
 		return ((width  * height + width  * depth  + height * depth) * 2);
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	T TBox3<T>::getVolume() const
 	{
@@ -333,27 +333,27 @@ namespace BALL
 		return (width * height * depth);
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	T TBox3<T>::getWidth() const
 	{
 		return Maths::abs(b.x - a.x);
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE T 
 	TBox3<T>::getHeight() const
 	{
 		return Maths::abs(b.y - a.y);
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE T TBox3<T>::getDepth() const
 	{
 		return Maths::abs(b.z - a.z);
 	}
 
-	template <class T>
+	template <typename T>
 	void TBox3<T>::join(const TBox3<T>& box)
 	{
 		T minimum = a.x;
@@ -396,28 +396,28 @@ namespace BALL
 		b.z = maximum;
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	bool TBox3<T>::operator == (const TBox3<T>& box) const
 	{
 		return (a == box.a && b == box.b);
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	bool TBox3<T>::operator != (const TBox3<T> &box) const
 	{
 		return !(*this == box);
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	bool TBox3<T>::isValid() const
 	{
 		return (a.isValid() && b.isValid());
 	}
 
-	template <class T>
+	template <typename T>
 	void TBox3<T>::dump(std::ostream& s, Size depth) const
 	{
 		BALL_DUMP_STREAM_PREFIX(s);

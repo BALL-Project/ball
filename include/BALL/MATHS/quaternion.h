@@ -1,4 +1,4 @@
-// $Id: quaternion.h,v 1.17 2000/04/29 15:28:36 amoll Exp $
+// $Id: quaternion.h,v 1.18 2000/05/01 08:20:52 oliver Exp $
 
 #ifndef BALL_MATHS_QUATERNION_H
 #define BALL_MATHS_QUATERNION_H
@@ -30,7 +30,7 @@ namespace BALL
       {\bf Definition:} \URL{BALL/MATHS/.h}
       \\
 	*/
-	template <class T>
+	template <typename T>
 	class TQuaternion
 	{
 		public:
@@ -213,7 +213,7 @@ namespace BALL
 
 	};
 
-	template <class T>
+	template <typename T>
 	TQuaternion<T>::TQuaternion()
 		:	i((T)0), 
 			j((T)0), 
@@ -222,7 +222,7 @@ namespace BALL
 	{
 	}
 
-	template <class T>
+	template <typename T>
 	TQuaternion<T>::TQuaternion(const TQuaternion& q)
 		:	i(q.i),
 			j(q.j),
@@ -231,24 +231,24 @@ namespace BALL
 	{
 	}
 
-	template <class T>
+	template <typename T>
 	TQuaternion<T>::TQuaternion(const TVector3<T>& axis, const T& angle)
 	{
 		set(axis.x, axis.y, axis.z, angle);
 	}
 
-	template <class T>
+	template <typename T>
 	TQuaternion<T>::TQuaternion(const T& x, const T& y, const T& z, const T& new_angle)
 	{
 		set(x, y, z, new_angle);
 	}
 
-	template <class T>
+	template <typename T>
 	TQuaternion<T>::~TQuaternion()
 	{
 	}
 
-	template <class T>
+	template <typename T>
 	void TQuaternion<T>::set(const TQuaternion<T>& q)
 	{
 		if (this != &q)
@@ -260,14 +260,14 @@ namespace BALL
 		}
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	void TQuaternion<T>::set(const TVector3<T>& axis, const T& new_angle)
 	{
 		set(axis.x, axis.y, axis.z, new_angle);
 	}
 
-	template <class T>
+	template <typename T>
 	void TQuaternion<T>::set(const T& x, const T& y, const T& z, const T& phi)
 	{
 		T length = (T)sqrt(x * x + y * y + z * z);
@@ -287,7 +287,7 @@ namespace BALL
 		}
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	TQuaternion<T>& TQuaternion<T>::operator = (const TQuaternion<T>& q)
 	{
@@ -296,14 +296,14 @@ namespace BALL
 		return *this;
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	void TQuaternion<T>::get(TQuaternion<T>& q) const
 	{
 		q.set(*this);
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	void TQuaternion<T>::setIdentity()
 	{
@@ -311,13 +311,13 @@ namespace BALL
 		angle = (T)1;
 	}
 
-	template <class T>
+	template <typename T>
 	T TQuaternion<T>::getAngle() const
 	{
 		return (T)(2.0 * atan2(sqrt(i * i + j * j + k * k), angle));
 	}
 
-	template <class T>
+	template <typename T>
 	TVector3<T> TQuaternion<T>::getAxis()
 	{
 		TVector3<T> vector(i, j, k);
@@ -334,7 +334,7 @@ namespace BALL
 		return vector;
 	}
 
-	template <class T>
+	template <typename T>
 	TMatrix4x4<T>& TQuaternion<T>::getRotationMatrix(TMatrix4x4<T>& m) const
 	{
 		m.set
@@ -361,7 +361,7 @@ namespace BALL
 		return m;
 	}
 
-	template <class T>
+	template <typename T>
 	TQuaternion<T> TQuaternion<T>::operator - () const
 	{
 		T tmp = ::sqrt(angle * angle + i * i + j * j + k * k);
@@ -376,14 +376,14 @@ namespace BALL
 		}
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	TQuaternion<T> TQuaternion<T>::getInverse() const
 	{
 		return -TQuaternion(*this);
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	TQuaternion<T> TQuaternion<T>::getConjugate() const
 	{
@@ -397,7 +397,7 @@ namespace BALL
 		return tmp;
 	}
 
-	template <class T>
+	template <typename T>
 	TQuaternion<T>& TQuaternion<T>::operator += (const TQuaternion<T>& q)
 	{
 		T tmp_angle = angle * q.angle - i * q.i - j * q.j - k * q.k;
@@ -427,7 +427,7 @@ namespace BALL
 	}
 
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	TQuaternion<T>& TQuaternion<T>::operator -= (const TQuaternion<T>& q)
 	{
@@ -438,7 +438,7 @@ namespace BALL
 	/** Addition operator for two Quaternions
 			@return TQuaternion - the new Quaternion
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	TQuaternion<T> operator + (const TQuaternion<T>& a, const TQuaternion<T>& b)
 	{
@@ -452,7 +452,7 @@ namespace BALL
 	/** Substraction operator for two Quaternions
 			@return TQuaternion - the new Quaternion
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	TQuaternion<T> operator - (const TQuaternion<T>& a, const TQuaternion<T>& b)
 	{
@@ -463,7 +463,7 @@ namespace BALL
 		return q;
 	}
 
-	template <class T>
+	template <typename T>
 	void TQuaternion<T>::swap(TQuaternion<T>& q)
 	{
 		T tmp = q.i;
@@ -483,21 +483,21 @@ namespace BALL
 		angle = tmp;
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	bool  TQuaternion<T>::operator == (const TQuaternion<T>& q) const
 	{
 		return (bool)(i == q.i && j == q.j && k == q.k && angle == q.angle);
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	bool TQuaternion<T>::operator != (const TQuaternion<T>& q) const
 	{
 		return (bool)(i != q.i || j != q.j || k != q.k || angle != q.angle);
 	}
 
-	template <class T>
+	template <typename T>
 	std::istream& operator >>(std::istream& s, TQuaternion<T>& q)
 	{
 		char c;
@@ -513,7 +513,7 @@ namespace BALL
 			{\bf Example:}\\
 			{\tt (0.32 0.45 0.12 1.0)}
 	*/	
-	template <class T>
+	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TQuaternion<T>& q)
 	{
 		s << '(' << q.i << ' ' << q.j << ' '
@@ -522,7 +522,7 @@ namespace BALL
 		return s;
 	}   
 
-	template <class T>
+	template <typename T>
 	void TQuaternion<T>::dump(std::ostream& s, Size depth) const
 	{
 		BALL_DUMP_STREAM_PREFIX(s);

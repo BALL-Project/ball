@@ -1,4 +1,4 @@
-// $Id: sphere3.h,v 1.16 2000/04/29 15:28:37 amoll Exp $
+// $Id: sphere3.h,v 1.17 2000/05/01 08:20:52 oliver Exp $
 
 #ifndef BALL_MATHS_SPHERE3_H
 #define BALL_MATHS_SPHERE3_H
@@ -29,7 +29,7 @@ namespace BALL
       {\bf Definition:} \URL{BALL/MATHS/.h}
       \\
 	*/
-	template <class T>
+	template <typename T>
 	class TSphere3
 	{
 		public:

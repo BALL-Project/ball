@@ -1,4 +1,4 @@
-// $Id: analyticalGeometry.h,v 1.25 2000/04/29 15:28:34 amoll Exp $
+// $Id: analyticalGeometry.h,v 1.26 2000/05/01 08:20:50 oliver Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -48,7 +48,7 @@ namespace BALL
 			@param	m pointer to matrix
 			@param	dim dimension of the matrix
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE
 	T GetDeterminant_(const T* m, Size dim)
 	{
@@ -85,7 +85,7 @@ namespace BALL
 			@param	m pointer to matrix
 			@param	dim dimension of the matrix
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	T GetDeterminant(const T* m, Size dim)
 	{
@@ -111,7 +111,7 @@ namespace BALL
 	/**	Get the determinant of an 2x2 matrix.
 			@param	m pointer to matrix
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	T GetDeterminant2(const T* m)
 	{
@@ -124,7 +124,7 @@ namespace BALL
 			@param	m10 third value of the matrix
 			@param	m11 fourth value of the matrix
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	T GetDeterminant2(const T& m00, const T& m01, const T& m10, const T& m11)
 	{
@@ -134,7 +134,7 @@ namespace BALL
 	/**	Get the determinant of an 3x3 matrix.
 			@param	m pointer to matrix
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	T GetDeterminant3(const T *m)
 	{
@@ -150,7 +150,7 @@ namespace BALL
 	/**	Get the determinant of an 3x3 matrix.
 			@param	m00 - m22 the elements of the matrix
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE T 
 	GetDeterminant3
 		(const T& m00, const T& m01, const T& m02,
@@ -172,7 +172,7 @@ namespace BALL
 			@param  dim the size of the equation system (number of variables)
 			@return bool {\tt true} if a solution is found
 	*/
-	template <class T>
+	template <typename T>
 	bool SolveSystem(const T* m, T* x, const Size dim)
 	{
 		T pivot;
@@ -270,7 +270,7 @@ namespace BALL
 			@param x2 the second solution
 			@return bool {\tt true} if a solution is found
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	bool SolveSystem2
 		(const T& a1, const T& b1, const T& c1,
@@ -299,7 +299,7 @@ namespace BALL
 			@param x2 the second solution
 			@return short the number of solutions (0 - 2)
 	*/
-	template <class T>
+	template <typename T>
 	short	SolveQuadraticEquation
 		(const T& a, const T& b, const T &c,
 		 T &x1, T &x2)
@@ -339,7 +339,7 @@ namespace BALL
 			@param	b the second vector
 			@return TVector3 the partition
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	TVector3<T> GetPartition(const TVector3<T>& a, const TVector3<T>& b)
 	{
@@ -354,7 +354,7 @@ namespace BALL
 			@param  s the ratio factor of the second vector
 			@return TVector3 the partition
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	TVector3<T> GetPartition
 		(const TVector3<T>& a, const TVector3<T>& b,
@@ -376,7 +376,7 @@ namespace BALL
 			@param	b the second point
 			@return T the distance
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	T GetDistance(const TVector3<T>& a, const TVector3<T>& b)
 	{
@@ -392,7 +392,7 @@ namespace BALL
 			@param	point the point
 			@return T the distance
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	T GetDistance(const TLine3<T>& line, const TVector3<T>& point)
 	{
@@ -408,7 +408,7 @@ namespace BALL
 			@param	line the line
 			@return T the distance
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	T GetDistance(const TVector3<T>& point, const TLine3<T>& line)
 	{
@@ -420,7 +420,7 @@ namespace BALL
 			@param	b the second line
 			@return T the distance
 	*/
-	template <class T>
+	template <typename T>
 	T GetDistance(const TLine3<T>& a, const TLine3<T>& b)
 	{
 		T cross_product_length = (a.d % b.d).getLength();
@@ -455,7 +455,7 @@ namespace BALL
 			@param	plane the plane
 			@return T the distance
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	T GetDistance(const TVector3<T>& point, const TPlane3<T>& plane)
 	{
@@ -473,7 +473,7 @@ namespace BALL
 			@param	point the point
 			@return T the distance
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	T GetDistance(const TPlane3<T>& plane, const TVector3<T>& point)
 	{
@@ -486,7 +486,7 @@ namespace BALL
 			@param	plane the plane
 			@return T the distance
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	T GetDistance(const TLine3<T>& line, const TPlane3<T>& plane)
 	{
@@ -503,7 +503,7 @@ namespace BALL
 			@param	line the line
 			@return T the distance
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	T GetDistance(const TPlane3<T>& plane, const TLine3<T>& line)
 	{
@@ -515,7 +515,7 @@ namespace BALL
 			@param	line the line
 			@return T the distance
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	T GetDistance(const TPlane3<T>& a, const TPlane3<T>& b)
 	{
@@ -533,7 +533,7 @@ namespace BALL
 			@param	intersection_angle the resulting angle
 			@return bool, always true
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	bool GetAngle(const TVector3<T>& a, const TVector3<T>& b,
 					  		TAngle<T> &intersection_angle)
@@ -553,7 +553,7 @@ namespace BALL
 			@param	intersection_angle the resulting angle
 			@return bool, true if an angle can be calculated, otherwise false
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	bool GetAngle(const TLine3<T>& a, const TLine3<T>& b, TAngle<T>& intersection_angle)
 	{
@@ -573,7 +573,7 @@ namespace BALL
 			@param	intersection_angle the resulting angle
 			@return bool, true if an angle can be calculated, otherwise false
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	bool GetAngle(const TPlane3<T>& plane, const TVector3<T> &Vector3,
 					 		  TAngle<T> &intersection_angle)
@@ -598,7 +598,7 @@ namespace BALL
 			@param	intersection_angle the resulting angle
 			@return bool, true if an angle can be calculated, otherwise false
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	bool GetAngle
 		(const TVector3<T>& vector ,const TPlane3<T>& plane,
@@ -613,7 +613,7 @@ namespace BALL
 			@param	intersection_angle the resulting angle
 			@return bool, true if an angle can be calculated, otherwise false
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	bool GetAngle
 		(const TPlane3<T>& plane,const TLine3<T>& line,
@@ -639,7 +639,7 @@ namespace BALL
 			@param	intersection_angle the resulting angle
 			@return bool, true if an angle can be calculated, otherwise false
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	bool GetAngle
 		(const TLine3<T>& line, const TPlane3<T>& plane,
@@ -655,7 +655,7 @@ namespace BALL
 			@param	intersection_angle the resulting angle
 			@return bool, true if an angle can be calculated, otherwise false
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	bool GetAngle
 		(const TPlane3<T>& a, const TPlane3<T>& b,
@@ -677,7 +677,7 @@ namespace BALL
 			@param	point the resulting intersection
 			@return bool, true if an intersection can be calculated, otherwise false
 	*/
-	template <class T>
+	template <typename T>
 	bool GetIntersection
 		(const TLine3<T>& a, const TLine3<T>& b,
 		 TVector3<T>& point)
@@ -712,7 +712,7 @@ namespace BALL
 			@param	point the resulting intersection
 			@return bool, true if an intersection can be calculated, otherwise false
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	bool GetIntersection
 		(const TPlane3<T>& plane, const TLine3<T>& line,
@@ -738,7 +738,7 @@ namespace BALL
 			@param	point the resulting intersection
 			@return bool, true if an intersection can be calculated, otherwise false
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	bool GetIntersection
 		(const TLine3<T>& line, const TPlane3<T>& plane,
@@ -753,7 +753,7 @@ namespace BALL
 			@param	line the resulting intersection
 			@return bool, true if an intersection can be calculated, otherwise false
 	*/
-	template <class T>
+	template <typename T>
 	bool GetIntersection
 		(const TPlane3<T>& a, const TPlane3<T>& b, TLine3<T>& line)
 	{
@@ -806,7 +806,7 @@ namespace BALL
 			@param	intersection_point2 the second intersection point
 			@return bool, true if an intersection can be calculated, otherwise false
 	*/
-	template <class T>
+	template <typename T>
 	bool GetIntersection
 		(const TSphere3<T>& sphere, const TLine3<T>& line,
 		 TVector3<T>& intersection_point1, TVector3<T>& intersection_point2)
@@ -837,7 +837,7 @@ namespace BALL
 			@param	intersection_point2 the second intersection point
 			@return bool, true if an intersection can be calculated, otherwise false
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	bool GetIntersection
 		(const TLine3<T>& line, const TSphere3<T>& sphere,
@@ -852,7 +852,7 @@ namespace BALL
 			@param	intersection_circle the intersection circle
 			@return bool, true if an intersection can be calculated, otherwise false
 	*/
-	template <class T>
+	template <typename T>
 	bool GetIntersection
 		(const TSphere3<T>& sphere, const TPlane3<T>& plane,
 		 TCircle3<T>& intersection_circle)
@@ -894,7 +894,7 @@ namespace BALL
 			@param	intersection_circle the intersection circle
 			@return bool, true if an intersection can be calculated, otherwise false
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE bool
 	GetIntersection
 		(const TPlane3<T>& plane, const TSphere3<T>& sphere,
@@ -908,7 +908,7 @@ namespace BALL
 			@param	intersection_circle the intersection circle
 			@return bool, true if an intersection can be calculated, otherwise false
 	*/
-	template <class T>
+	template <typename T>
 	bool GetIntersection
 		(const TSphere3<T>& a, const TSphere3<T>& b, 
 		 TCircle3<T>& intersection_circle)
@@ -941,7 +941,7 @@ namespace BALL
 			@param	b the second vector3
 			@return bool, true or false
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	bool isCollinear(const TVector3<T>& a, const TVector3<T>& b)
 	{
@@ -954,7 +954,7 @@ namespace BALL
 			@param	c the third vector3
 			@return bool, true or false
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	bool isComplanar(const TVector3<T>& a, const TVector3<T>& b, const TVector3<T>& c)
 	{
@@ -968,7 +968,7 @@ namespace BALL
 			@param	d the fourth vector3
 			@return bool, true or false
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	bool isComplanar(const TVector3<T>& a, const TVector3<T>& b, const TVector3<T>& c, const TVector3<T>& d)
 	{
@@ -980,7 +980,7 @@ namespace BALL
 			@param	b the second vector3
 			@return bool, true or false
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	bool isOrthogonal(const TVector3<T>& a, const TVector3<T>& b)
 	{
@@ -992,7 +992,7 @@ namespace BALL
 			@param	line the line
 			@return bool, true or false
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	bool isOrthogonal(const TVector3<T>& vector, const TLine3<T>& line)
 	{
@@ -1004,7 +1004,7 @@ namespace BALL
 			@param	vector the vector
 			@return bool, true or false
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	bool isOrthogonal(const TLine3<T>& line, const TVector3<T>& vector)
 	{
@@ -1016,7 +1016,7 @@ namespace BALL
 			@param	b the second line
 			@return bool, true or false
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	bool isOrthogonal(const TLine3<T>& a, const TLine3<T>& b)
 	{
@@ -1028,7 +1028,7 @@ namespace BALL
 			@param	plane the plane
 			@return bool, true or false
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	bool isOrthogonal(const TVector3<T>& vector, const TPlane3<T>& plane)
 	{
@@ -1040,7 +1040,7 @@ namespace BALL
 			@param	vector the vector3
 			@return bool, true or false
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	bool isOrthogonal(const TPlane3<T>& plane, const TVector3<T>& vector)
 	{
@@ -1052,7 +1052,7 @@ namespace BALL
 			@param	b the second plane
 			@return bool, true or false
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	bool isOrthogonal(const TPlane3<T>& a, const TPlane3<T>& b)
 	{
@@ -1064,7 +1064,7 @@ namespace BALL
 			@param	line the line
 			@return bool, true or false
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	bool isIntersecting(const TVector3<T>& point, const TLine3<T>& line)
 	{
@@ -1076,7 +1076,7 @@ namespace BALL
 			@param	point the point
 			@return bool, true or false
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	bool isIntersecting(const TLine3<T>& line, const TVector3<T>& point)
 	{
@@ -1088,7 +1088,7 @@ namespace BALL
 			@param	b the second line
 			@return bool, true or false
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	bool isIntersecting(const TLine3<T>& a, const TLine3<T>& b)
 	{
@@ -1100,7 +1100,7 @@ namespace BALL
 			@param	plane the plane
 			@return bool, true or false
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	bool isIntersecting(const TVector3<T>& point, const TPlane3<T>& plane)
 	{
@@ -1112,7 +1112,7 @@ namespace BALL
 			@param	point the point
 			@return bool, true or false
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	bool isIntersecting(const TPlane3<T>& plane, const TVector3<T>& point)
 	{
@@ -1124,7 +1124,7 @@ namespace BALL
 			@param	plane the plane
 			@return bool, true or false
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	bool isIntersecting(const TLine3<T>& line, const TPlane3<T>& plane)
 	{
@@ -1136,7 +1136,7 @@ namespace BALL
 			@param	line the line
 			@return bool, true or false
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	bool isIntersecting(const TPlane3<T>& plane, const TLine3<T>& line)
 	{
@@ -1148,7 +1148,7 @@ namespace BALL
 			@param	b the second plane
 			@return bool, true or false
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	bool isIntersecting(const TPlane3<T>& a, const TPlane3<T>& b)
 	{
@@ -1160,7 +1160,7 @@ namespace BALL
 			@param	plane the plane
 			@return bool, true or false
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	bool isParallel(const TLine3<T>& line, const TPlane3<T>& plane)
 	{
@@ -1172,7 +1172,7 @@ namespace BALL
 			@param	line the line
 			@return bool, true or false
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	bool isParallel(const TPlane3<T>& plane, const TLine3<T>& line)
 	{
@@ -1184,7 +1184,7 @@ namespace BALL
 			@param	b the second plane
 			@return bool, true or false
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	bool isParallel(const TPlane3<T>& a, const TPlane3<T>& b)
 	{

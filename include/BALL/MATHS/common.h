@@ -1,4 +1,4 @@
-// $Id: common.h,v 1.8 2000/04/29 15:28:35 amoll Exp $
+// $Id: common.h,v 1.9 2000/05/01 08:20:51 oliver Exp $
 
 #ifndef BALL_MATHS_COMPARISON_H
 #define BALL_MATHS_COMPARISON_H
@@ -30,7 +30,7 @@ namespace BALL
 				@param	t the number
 				@return T the absolute value
 		*/
-		template <class T>
+		template <typename T>
 		inline 
 		T abs(const T& t)
 		{
@@ -41,7 +41,7 @@ namespace BALL
 				@param	t the number
 				@return T the fraction
 		*/
-		template <class T>
+		template <typename T>
 		inline 
 		T frac(const T& t)
 		{ 
@@ -54,7 +54,7 @@ namespace BALL
 				@param	b the second number
 				@return T the greatest number
 		*/
-		template <class T>
+		template <typename T>
 		inline 
 		T max(const T& a, const T& b)
 		{ 
@@ -67,7 +67,7 @@ namespace BALL
 				@param	c the third number
 				@return T the greatest number
 		*/
-		template <class T>
+		template <typename T>
 		inline 
 		T max(const T& a, const T& b, const T &ct)
 		{ 
@@ -79,7 +79,7 @@ namespace BALL
 				@param	b the second number
 				@return T the smallest number
 		*/
-		template <class T>
+		template <typename T>
 		inline 
 		T min(const T& a, const T& b)
 		{ 
@@ -92,7 +92,7 @@ namespace BALL
 				@param	c the third number
 				@return T the smallest number
 		*/
-		template <class T>
+		template <typename T>
 		inline 
 		T min(const T& a, const T& b, const T &ct)
 		{ 
@@ -103,7 +103,7 @@ namespace BALL
 				@param	t the number
 				@return T the result
 		*/
-		template <class T>
+		template <typename T>
 		inline 
 		T round(const T& t)               
 		{ 
@@ -114,7 +114,7 @@ namespace BALL
 				@param	t the number
 				@return Index {\tt -1} t < 0;  {\tt 0} t = 0; {\tt 1} t > 0
 		*/
-		template <class T>
+		template <typename T>
 		inline 
 		T sgn(const T& t)
 		{
@@ -125,7 +125,7 @@ namespace BALL
 				@param	t the number
 				@return bool, {\bf true} if {\tt t} is finite
 		*/
-		template <class T>
+		template <typename T>
 		inline 
 		bool isFinite(const T& t)
 		{
@@ -136,7 +136,7 @@ namespace BALL
 				@param	t the number
 				@return bool, {\bf true} if {\tt t} equals {\tt inf} or {\tt -inf}
 		*/
-		template <class T>
+		template <typename T>
 		inline 
 		bool isInfinite(const T& t)
 		{
@@ -147,7 +147,7 @@ namespace BALL
 				@param	t the number
 				@return bool, {\bf true} if t equals {\tt nan}
 		*/
-		template <class T>
+		template <typename T>
 		inline 
 		bool isNan(const T& t)
 		{
@@ -158,7 +158,7 @@ namespace BALL
 				@param	t the number
 				@return bool, {\bf true} if the absolute value of {\tt t} is below \Ref{Constants::EPSILON}
 		*/
-		template <class T>
+		template <typename T>
 		inline 
 		bool isZero(const T& t)
 		{
@@ -169,7 +169,7 @@ namespace BALL
 				@param	t the number
 				@return bool, {\bf true}, if the absolute value of {\tt t} is at leas \Ref{Constants::EPSILON}
 		*/
-		template <class T>
+		template <typename T>
 		inline 
 		bool isNotZero(const T& t)
 		{
@@ -181,7 +181,7 @@ namespace BALL
 				@param	b the second number
 				@return bool, {\bf true} if the absolute distance of {\tt a} and {\tt b} is below \Ref{Constants::EPSILON}
 		*/
-		template <class T1, class T2>
+		template <typename T1, typename T2>
 		inline 
 		bool isEqual(const T1& a, const T2& b)
 		{
@@ -193,7 +193,7 @@ namespace BALL
 				@param	b the second number
 				@return bool, {\bf true} if the absolute distance of {\tt a} and {\tt b} is at least \Ref{Constants::EPSILON}
 		*/
-		template <class T1, class T2>
+		template <typename T1, typename T2>
 		inline 
 		bool isNotEqual(const T1& a, const T2& b)
 		{
@@ -205,7 +205,7 @@ namespace BALL
 				@param	b the second number
 				@return bool, {\bf true} if {\tt a} is smaller than {\tt b}
 		*/
-		template <class T1, class T2>
+		template <typename T1, typename T2>
 		inline 
 		bool isLess(const T1& a, const T2& b)
 		{
@@ -217,7 +217,7 @@ namespace BALL
 				@param	b the second number
 				@return bool, {\bf true} if {\tt a} is less or equal {\tt b}
 		*/
-		template <class T1, class T2>
+		template <typename T1, typename T2>
 		inline 
 		bool isLessOrEqual(const T1& a, const T2& b)
 		{
@@ -229,7 +229,7 @@ namespace BALL
 				@param	b the second number
 				@return bool, {\bf true} if {\tt a} is greater or equal than {\tt b}
 		*/
-		template <class T1, class T2>
+		template <typename T1, typename T2>
 		inline 
 		bool isGreaterOrEqual(const T1& a, const T2& b)
 		{
@@ -241,7 +241,7 @@ namespace BALL
 				@param	b the second number
 				@return bool, {\bf true} if {\tt a} is greater than {\tt b}
 		*/
-		template <class T1, class T2>
+		template <typename T1, typename T2>
 		inline 
 		bool isGreater(const T1& a, const T2& b)
 		{
@@ -252,7 +252,7 @@ namespace BALL
 				@param	t the number
 				@return T the floor
 		*/
-		template <class T>
+		template <typename T>
 		inline 
 		long floor(const T& t)
 		{
@@ -263,7 +263,7 @@ namespace BALL
 				@param	t the number
 				@return T the ceiling
 		*/
-		template <class T>
+		template <typename T>
 		inline 
 		long ceiling(const T& t)
 		{
@@ -275,7 +275,7 @@ namespace BALL
 				@param	b the second number
 				@return Index {tt -1} a < b; {tt 0} a = b; {tt 1} a > b;
 		*/
-		template <class T1, class T2>
+		template <typename T1, typename T2>
 		inline 
 		Index compare(const T1& a, const T2& b)
 		{
@@ -288,7 +288,7 @@ namespace BALL
 				@param	max_diff the maximum allowed difference between the two numbers
 				@return bool, {\bf true} if the absolute distance between {\tt a} and {\tt b} is below {\tt max_diff}
 		*/
-		template <class T>
+		template <typename T>
 		inline 
 		bool isNear(const T& a, const T& b, const T& max_diff)
 		{

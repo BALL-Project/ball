@@ -1,4 +1,4 @@
-// $Id: plane3.h,v 1.13 2000/04/29 15:28:36 amoll Exp $
+// $Id: plane3.h,v 1.14 2000/05/01 08:20:52 oliver Exp $
 
 #ifndef BALL_MATHS_PLANE3_H
 #define BALL_MATHS_PLANE3_H
@@ -43,7 +43,7 @@ namespace BALL
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TPlane3<T>& plane);
 
-	template <class T>
+	template <typename T>
 	class TPlane3
 	{
 		public:

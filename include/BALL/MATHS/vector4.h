@@ -1,4 +1,4 @@
-// $Id: vector4.h,v 1.25 2000/04/29 15:28:37 amoll Exp $
+// $Id: vector4.h,v 1.26 2000/05/01 08:18:12 oliver Exp $
 
 #ifndef BALL_MATHS_VECTOR4_H
 #define BALL_MATHS_VECTOR4_H
@@ -30,14 +30,14 @@ namespace BALL
 	*/
 	//@{
 
-	template <class T>
+	template <typename T>
 	class TVector4;
 	
-	template <class T>
+	template <typename T>
 	BALL_INLINE
 	TVector4<T> operator + (const TVector4<T>& a, const TVector4<T>& b);
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE
 	TVector4<T> operator - (const TVector4<T>& a, const TVector4<T>& b);
 	
@@ -51,7 +51,7 @@ namespace BALL
 			{\bf Definition:} \URL{BALL/MATHS/vector4.h}
 			\\
 	*/
-	template <class T>
+	template <typename T>
 	class TVector4
 	{
 		public:
@@ -344,7 +344,7 @@ namespace BALL
 		//@}
 	};
 
-	template <class T>
+	template <typename T>
 	TVector4<T>::TVector4()
 		:	x(0),
 			y(0),
@@ -353,7 +353,7 @@ namespace BALL
 	{
 	}
 
-	template <class T>
+	template <typename T>
 	TVector4<T>::TVector4(const T* ptr)
 	{
 		if (ptr == 0)
@@ -367,7 +367,7 @@ namespace BALL
 		h = *ptr;
 	}
 
-	template <class T>
+	template <typename T>
 	TVector4<T>::TVector4(const T& x, const T& y, const T& z, const T& h)
 		: x(x),
 			y(y),
@@ -376,7 +376,7 @@ namespace BALL
 	{
 	}
 
-	template <class T>
+	template <typename T>
 	TVector4<T>::TVector4(const TVector4<T>& v)
 		:	x(v.x),
 			y(v.y),
@@ -385,12 +385,12 @@ namespace BALL
 	{
 	}
 
-	template <class T>
+	template <typename T>
 	TVector4<T>::~TVector4()
 	{
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	void TVector4<T>::set(const T* ptr)
 	{
@@ -403,7 +403,7 @@ namespace BALL
 		h = *ptr;
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	void TVector4<T>::set(const T& rx, const T& ry, const T& rz, const T& rh)
 	{
@@ -413,7 +413,7 @@ namespace BALL
 		h = rh;
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	void TVector4<T>::set(const TVector4<T>& v)
 	{
@@ -423,7 +423,7 @@ namespace BALL
 		h = v.h;
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	TVector4<T>& TVector4<T>::operator = (const T* ptr)
 	{
@@ -438,7 +438,7 @@ namespace BALL
 		return *this;
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	TVector4<T>& TVector4<T>::operator = (const TVector4<T>& v)
 	{
@@ -450,7 +450,7 @@ namespace BALL
 		return *this;
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	void TVector4<T>::get(T* ptr) const
 	{
@@ -463,7 +463,7 @@ namespace BALL
 		*ptr   = h;
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	void TVector4<T>::get(T& rx, T& ry, T& rz, T& rh) const
 	{
@@ -473,7 +473,7 @@ namespace BALL
 		rh = h;
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	void TVector4<T>::get(TVector4<T>& v) const
 	{
@@ -483,7 +483,7 @@ namespace BALL
 		v.h = h;
 	}
 
-	template <class T>
+	template <typename T>
 	void TVector4<T>::swap(TVector4<T>& v)
 	{
 		T temp = x;
@@ -503,21 +503,21 @@ namespace BALL
 		v.h = temp;
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	T TVector4<T>::getLength() const
 	{
 		return (T)sqrt(x * x + y * y + z * z + h * h);
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	T TVector4<T>::getSquareLength() const
 	{
 		return (T)(x * x + y * y + z * z + h * h);
 	}
 
-	template <class T>
+	template <typename T>
 
 	BALL_INLINE
 	TVector4<T>& TVector4<T>::normalize()
@@ -537,7 +537,7 @@ namespace BALL
 		return *this;
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	const TVector4<T>& TVector4<T>::getZero()
 	{
@@ -546,7 +546,7 @@ namespace BALL
 		return null4;
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	const TVector4<T>& TVector4<T>::getUnit()
 	{
@@ -555,14 +555,14 @@ namespace BALL
 		return unit_vector;
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	void TVector4<T>::fill(const T& value)
 	{
 		x = y = z = h = value;
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	T& TVector4<T>::operator [] (Index i)
 	{
@@ -582,7 +582,7 @@ namespace BALL
 		}
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	const T& TVector4<T>::operator [] (Index i) const
 	{
@@ -603,21 +603,21 @@ namespace BALL
 		}
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	TVector4<T> TVector4<T>::operator + () const
 	{
 		return *this;
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	TVector4<T> TVector4<T>::operator - () const
 	{
 		return TVector4<T>(-x, -y, -z, -h);
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	TVector4<T>& TVector4<T>::operator += (const TVector4<T>& v)
 	{
@@ -629,7 +629,7 @@ namespace BALL
 		return *this;
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	TVector4<T>& TVector4<T>::operator -= (const TVector4<T> &v)
 	{
@@ -641,14 +641,14 @@ namespace BALL
 		return *this;
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	TVector4<T> TVector4<T>::operator * (const T& scalar)
 	{
 		return TVector4<T>(x * scalar, y * scalar, z * scalar, h * scalar);
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	TVector4<T>& TVector4<T>::operator *= (const T &scalar)
 	{
@@ -660,7 +660,7 @@ namespace BALL
 		return *this;
 	}
 
-	template <class T>
+	template <typename T>
 	TVector4<T>TVector4<T>::operator / (const T &scalar)
 	{
 		if (Maths::isZero(scalar))
@@ -669,7 +669,7 @@ namespace BALL
 		return TVector4<T>(x / scalar, y / scalar, z / scalar, h / scalar); 
 	}
 
-	template <class T>
+	template <typename T>
 	TVector4<T>& TVector4<T>::operator /= (const T& scalar)
 	{
 		if (Maths::isZero(scalar))
@@ -683,14 +683,14 @@ namespace BALL
 		return *this;
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	T TVector4<T>::operator * (const TVector4<T>& v) const
 	{
 		return (x * v.x + y * v.y + z * v.z + h * v.h);
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	T TVector4<T>::getDistance(const TVector4<T> &v) const
 	{
@@ -702,7 +702,7 @@ namespace BALL
 		return (T)sqrt(da * da + db * db + dc * dc + dd * dd); 
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	T TVector4<T>::getSquareDistance(const TVector4<T> &v) const
 	{
@@ -714,7 +714,7 @@ namespace BALL
 		return (da * da + db * db + dc * dc + dd * dd); 
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	bool TVector4<T>::operator == (const TVector4<T>& v) const
 	{
@@ -722,7 +722,7 @@ namespace BALL
 									&& Maths::isEqual(z, v.z) && Maths::isEqual(h, v.h));
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	bool TVector4<T>::operator != (const TVector4<T>& v) const
 	{
@@ -730,21 +730,21 @@ namespace BALL
 									|| Maths::isNotEqual(z, v.z) || Maths::isNotEqual(h, v.h));
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	bool TVector4<T>::isOrthogonalTo(TVector4<T>& v) const
 	{
 		return Maths::isZero(*this * v);
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	bool TVector4<T>::isValid() const
 	{
 		return true;
 	}
 
-	template <class T>
+	template <typename T>
 	void TVector4<T>::dump(std::ostream& s, Size depth) const
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
@@ -769,7 +769,7 @@ namespace BALL
 	//@{
 	/**	Addition operator for a scalar with a vector
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	TVector4<T> operator + (const TVector4<T>& a, const TVector4<T>& b)
 	{
@@ -779,7 +779,7 @@ namespace BALL
 	/** Subtraction operator for two vectors
   		@return TVector4 the new vector
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	TVector4<T> operator - (const TVector4<T>& a, const TVector4<T>& b)
 	{
@@ -789,7 +789,7 @@ namespace BALL
 	/**	Multiply operator for a scalar with a vector
   		@return TVector4 the new vector
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	TVector4<T> operator * (const T& scalar, const TVector4<T>& v)
 	{
@@ -799,7 +799,7 @@ namespace BALL
 	/**	Multiply operator for a vector with a scalar
   		@return TVector4 the new vector
 	*/
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	TVector4<T> operator * (const TVector4<T>& v, const T& scalar)
 	{
@@ -810,7 +810,7 @@ namespace BALL
 	/**	Input- Operator
 			reads in four {\bf T} : x, y, z, h
 	*/
-	template <class T>
+	template <typename T>
 	std::istream& operator >> (std::istream& s, TVector4<T>& v)
 	{
 		char c;
@@ -824,7 +824,7 @@ namespace BALL
 			{\bf Example:}\\
 			{\tt (0.1 2.0 0 1)}
 	*/
-	template <class T>
+	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TVector4<T>& v)
 	{
 		s << '(' <<v.x << ' ' << v.y << ' ' << v.z << ' ' << v.h << ')';
