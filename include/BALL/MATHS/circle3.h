@@ -1,4 +1,4 @@
-// $Id: circle3.h,v 1.6 2000/01/16 17:28:40 oliver Exp $
+// $Id: circle3.h,v 1.7 2000/02/16 17:06:36 oliver Exp $
 
 #ifndef BALL_MATHS_CIRCLE3_H
 #define BALL_MATHS_CIRCLE3_H
@@ -59,7 +59,7 @@ namespace BALL
 		}
 
 		///
-		TCircle3(const TPoint3<T>& point, const TVector3<T>& normal, const T& radius)
+		TCircle3(const TVector3<T>& point, const TVector3<T>& normal, const T& radius)
 			:	p(point),
 				n(normal),
 				radius(radiuse)
@@ -102,7 +102,7 @@ namespace BALL
 		}
 
 		///
-		void set(const TPoint3<T>& point, const TVector3<T>& normal, const T& radius)
+		void set(const TVector3<T>& point, const TVector3<T>& normal, const T& radius)
 		{
 			p = point;
 			n = normal;
@@ -128,7 +128,7 @@ namespace BALL
 		}
 
 		///
-		void get(TPoint3<T>& point, TVector3<T>& normal, T& radius) const
+		void get(TVector3<T>& point, TVector3<T>& normal, T& radius) const
 		{
 			point = p;
 			normal = n;
@@ -154,7 +154,7 @@ namespace BALL
 
 
 		///
-		bool has(const TPoint3<T>& point, bool on_surface = false) const
+		bool has(const TVector3<T>& point, bool on_surface = false) const
 		{
 			if (on_surface == true)
 			{
@@ -224,7 +224,7 @@ namespace BALL
 		/**	Circle Center.
 				This point describes the center of the circle.
 		*/
-		TPoint3<T> 	p;
+		TVector3<T> 	p;
 
 		/**	Normal vector.
 				This vector is orthogonal to the circle's plane.

@@ -1,4 +1,4 @@
-// $Id: sphere3.h,v 1.5 2000/01/16 17:28:43 oliver Exp $
+// $Id: sphere3.h,v 1.6 2000/02/16 17:08:32 oliver Exp $
 
 #ifndef BALL_MATHS_SPHERE3_H
 #define BALL_MATHS_SPHERE3_H
@@ -59,7 +59,7 @@ namespace BALL
 		}
 
 		///
-		TSphere3(const TPoint3<T>& point, const T& radius)
+		TSphere3(const TVector3<T>& point, const T& radius)
 			: p(point),
 				radius(radius)
 		{
@@ -78,7 +78,7 @@ namespace BALL
 		///
 		void swap(TSphere3& sphere3)
 		{
-			TPoint3<T> temp_point(p);
+			TVector3<T> temp_point(p);
 			p = sphere3.p;
 			sphere3.p = temp_point;
 
@@ -95,7 +95,7 @@ namespace BALL
 		}
 
 		///
-		void set(const TPoint3<T>& point, const T& radius)
+		void set(const TVector3<T>& point, const T& radius)
 		{
 			p = point;
 			radius = radius;
@@ -119,7 +119,7 @@ namespace BALL
 		}
 
 		///
-		void get(TPoint3<T>& point, T& radius) const
+		void get(TVector3<T>& point, T& radius) const
 		{
 			point = p;
 			radius = radius;
@@ -143,7 +143,7 @@ namespace BALL
 		}
 
 		///
-		bool has(const TPoint3<T>& point, bool on_surface = false) const
+		bool has(const TVector3<T>& point, bool on_surface = false) const
 		{
 			if (on_surface == true)
 			{
@@ -209,7 +209,7 @@ namespace BALL
 		//@{
 
 		///
-		TPoint3<T> p;
+		TVector3<T> p;
 
 		///
 		T radius;
