@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.149 2001/08/02 01:10:34 oliver Exp $
+dnl    $Id: configure.in,v 1.150 2001/08/16 01:23:24 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -167,7 +167,7 @@ fi
 # use this switch to enable the python support
 # this also builds libBALLc.so and requires
 # Python.h and libsip.a
-if test "$with_python" != "no" -o "$enable_python" = yes ; then
+if test "$with_python" != "" --a "$with_python" != "no" -o "$enable_python" = yes ; then
 	PYTHON_SUPPORT=true
 else
 	PYTHON_SUPPORT=

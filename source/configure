@@ -1,6 +1,6 @@
 #! /bin/sh
 # Guess values for system-dependent variables and create Makefiles.
-#  $Id: configure,v 1.158 2001/08/02 01:10:37 oliver Exp $
+#  $Id: configure,v 1.159 2001/08/16 01:23:34 oliver Exp $
 
 
 ##################################################
@@ -1370,7 +1370,7 @@ fi
 # use this switch to enable the python support
 # this also builds libBALLc.so and requires
 # Python.h and libsip.a
-if test "$with_python" != "no" -o "$enable_python" = yes ; then
+if test "$with_python" != "" --a "$with_python" != "no" -o "$enable_python" = yes ; then
 	PYTHON_SUPPORT=true
 else
 	PYTHON_SUPPORT=
