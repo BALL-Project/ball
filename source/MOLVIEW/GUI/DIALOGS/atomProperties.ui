@@ -11,7 +11,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>263</width>
+            <width>298</width>
             <height>315</height>
         </rect>
     </property>
@@ -33,6 +33,14 @@
                 <width>70</width>
                 <height>21</height>
             </rect>
+        </property>
+        <property stdset="1">
+            <name>frameShape</name>
+            <enum>NoFrame</enum>
+        </property>
+        <property stdset="1">
+            <name>frameShadow</name>
+            <enum></enum>
         </property>
         <property stdset="1">
             <name>text</name>
@@ -180,30 +188,6 @@
         </property>
     </widget>
     <widget>
-        <class>QPushButton</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>close_button</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>150</x>
-                <y>270</y>
-                <width>80</width>
-                <height>34</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>cancel</string>
-        </property>
-        <property stdset="1">
-            <name>default</name>
-            <bool>true</bool>
-        </property>
-    </widget>
-    <widget>
         <class>QLineEdit</class>
         <property stdset="1">
             <name>name</name>
@@ -214,7 +198,7 @@
             <rect>
                 <x>90</x>
                 <y>10</y>
-                <width>160</width>
+                <width>200</width>
                 <height>21</height>
             </rect>
         </property>
@@ -230,7 +214,7 @@
             <rect>
                 <x>90</x>
                 <y>40</y>
-                <width>160</width>
+                <width>200</width>
                 <height>21</height>
             </rect>
         </property>
@@ -246,7 +230,7 @@
             <rect>
                 <x>90</x>
                 <y>70</y>
-                <width>160</width>
+                <width>200</width>
                 <height>21</height>
             </rect>
         </property>
@@ -262,7 +246,7 @@
             <rect>
                 <x>90</x>
                 <y>100</y>
-                <width>160</width>
+                <width>200</width>
                 <height>21</height>
             </rect>
         </property>
@@ -278,7 +262,7 @@
             <rect>
                 <x>90</x>
                 <y>130</y>
-                <width>160</width>
+                <width>200</width>
                 <height>21</height>
             </rect>
         </property>
@@ -298,7 +282,7 @@
             <rect>
                 <x>90</x>
                 <y>160</y>
-                <width>160</width>
+                <width>200</width>
                 <height>21</height>
             </rect>
         </property>
@@ -322,7 +306,7 @@
             <rect>
                 <x>90</x>
                 <y>190</y>
-                <width>160</width>
+                <width>200</width>
                 <height>21</height>
             </rect>
         </property>
@@ -342,9 +326,33 @@
             <rect>
                 <x>90</x>
                 <y>220</y>
-                <width>160</width>
+                <width>200</width>
                 <height>21</height>
             </rect>
+        </property>
+    </widget>
+    <widget>
+        <class>QPushButton</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>close_button</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>180</x>
+                <y>270</y>
+                <width>90</width>
+                <height>34</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>text</name>
+            <string>cancel</string>
+        </property>
+        <property stdset="1">
+            <name>default</name>
+            <bool>true</bool>
         </property>
     </widget>
     <widget>
@@ -362,7 +370,7 @@
             <rect>
                 <x>30</x>
                 <y>270</y>
-                <width>80</width>
+                <width>90</width>
                 <height>34</height>
             </rect>
         </property>
