@@ -1,4 +1,4 @@
-// $Id: glsphere.h,v 1.6 2001/02/12 12:00:19 amoll Exp $
+// $Id: glsphere.h,v 1.7 2001/05/13 13:59:14 hekl Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLSPHERE_H
 #define BALL_VIEW_GUI_PRIMITIV_GLSPHERE_H
@@ -24,7 +24,7 @@ namespace BALL
 
 		/** GLSphere class.
 				{\bf Framework:} BALL/VIEW/GUI/PRIMITIV\\
-				{\bf Definition:} \URL{BALL/VIEW/GUI/PRIMITIV/glsphere.h}	\\
+				{\bf Definition:} \URL{BALL/VIEW/GUI/PRIMITIV/glsphere.h}	\\ \\
 				An instance of GLSphere represents an instance of the geometric
 				visualization "sphere".
 				The class GLSphere is derived from the classes \Ref{Sphere} and
@@ -34,9 +34,9 @@ namespace BALL
 				sphere. OpenGL code is used for the visualization.
 				See these classes for further information.
 				@memo    GLSphere class (BALL VIEW gui primitiv framework)
-				@author  $Author: amoll $
-				@version $Revision: 1.6 $
-				@date    $Date: 2001/02/12 12:00:19 $
+				@author  $Author: hekl $
+				@version $Revision: 1.7 $
+				@date    $Date: 2001/05/13 13:59:14 $
 		*/
 		class GLSphere
 			: public Sphere,
@@ -50,32 +50,35 @@ namespace BALL
 
 			/** Default Constructor.
 					Construct new glSphere.
-					@return      GLSphere - new constructed glSphere
-					@see         Sphere::Sphere
-					@see         GLObject::GLObject
+					@return      GLSphere new constructed glSphere
+					@see         Sphere
+					@see         GLObject
 			*/
-			GLSphere();
+			GLSphere()
+				throw();
 
 			/** Copy constructor with cloning facility.
 					Construct new glSphere by copying the glSphere {\em glSphere}.
 					The copy is either deep (default) or shallow.
 					@param       glSphere the glSphere to be copied (cloned)
 					@param       deep make a deep (={\tt true}) or shallow (={\tt false})
-					@return      GLSphere - new constructed glSphere copied from {\em glSphere}
-					@see         Sphere::Sphere
-					@see         GLObject::GLObject
+					@return      GLSphere new constructed glSphere copied from {\em glSphere}
+					@see         Sphere
+					@see         GLObject
 			*/
-			GLSphere(const GLSphere& glSphere, bool deep = true);
+			GLSphere(const GLSphere& glSphere, bool deep = true)
+				throw();
 
 			/** Copy constructor from geometricObject.
 					Construct new glSphere by copying the internal values from geometricObject 
 					{\em geometric_object}.
 					@param       geometric_object the geometricObject which internal value should be copied
-					@return      GLSphere - new constructed glSphere initialized from {\em geometric_object}
-					@see         Sphere::Sphere
-					@see         GLObject::GLObject
+					@return      GLSphere new constructed glSphere initialized from {\em geometric_object}
+					@see         Sphere
+					@see         GLObject
 			*/
-			GLSphere(const GeometricObject& geometric_object);
+			GLSphere(const GeometricObject& geometric_object)
+				throw();
 
 			//@}
 
@@ -85,8 +88,8 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} glSphere.
-					Calls \Ref{GLSphere::destroy}.
-					@see         GLSphere::destroy
+					Calls \Ref{destroy}.
+					@see         destroy
 			*/
 			virtual ~GLSphere()
 				throw();
@@ -111,6 +114,58 @@ namespace BALL
 
 			//@}
 
+			/**	@name	Assignment methods
+			*/
+			//@{
+
+			/** Assignment.
+					Assign the glSphere {\em sphere} to {\em *this} glSphere.
+					The copy is either deep (default) or shallow.
+					The value of {\em *this} glSphere is initialized to the value of 
+					the glSphere {\em sphere}.\\
+					@param       sphere the glSphere to be copied
+					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em sphere}
+					@see         Sphere
+					@see         GLObject
+			*/
+			void set(const GLSphere& sphere, bool deep = true)
+				throw();
+
+			/** Assignment operator.
+					Assign the glSphere {\em sphere} to {\em *this} glSphere.
+					The copy is deep.
+					Calls \Ref{set}.
+					The value of {\em *this} glSphere is initialized to the value 
+					of the glSphere {\em sphere}.\\
+					@param       sphere the glSphere to be copied
+					@return      GLSphere& constant reference {\em *this} glSphere
+					@see         set
+			*/
+			const GLSphere& operator = (const GLSphere& sphere)
+				throw();
+
+			/** Copying with cloning facility.
+					Copy {\em *this} glSphere to the glSphere {\em sphere}.
+					The copy is either deep (default) or shallow.
+					Calls \Ref{set}.
+					The value of the glSphere {\em sphere} is initialized to the
+					value of {\em *this} glSphere.\\
+					@param       sphere the glSphere to be assigned to
+					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em sphere}
+					@see         set
+			*/
+			void get(GLSphere& sphere, bool deep = true) const
+				throw();
+
+			/** Swapping of Sphere's.
+					Swap the value of {\em *this} Sphere with the Sphere {\em sphere}.
+					@param       sphere the Sphere being swapped with {\em *this} Sphere 
+					@see         GLSphere
+			*/
+			void swap(GLSphere& sphere)
+				throw();
+			//@}
+
 			protected:
 
 			/** @name Graphical interface methods
@@ -127,22 +182,24 @@ namespace BALL
 					{\em glLoadName} must be used for naming the graphical object 
 					(necessary for picking mode in the scene).
 					@param     with_names flag if the graphical objects must have a name
-					@return    bool - {\tt true} if successful,	{\tt false} otherwise
+					@return    bool {\tt true} if successful,	{\tt false} otherwise
 					@see       GLObject::draw
-					@see       GLPrimitiveManager::GLPrimitiveManager
+					@see       GLPrimitiveManager
 			*/
-			virtual bool draw(bool with_names = false);
+			virtual bool draw(bool with_names = false)
+				throw();
 
 			/** Experimental method.
 					Please avoid using this method.
 			*/
-			virtual bool drawUserDefined();
+			virtual bool drawUserDefined()
+				throw();
 
 			/** Export method.
 					This method handles the export of {\em *this} glSphere into another
 					format (eg. POVRAY, VRML) \\
 				  {\bf Note:} Not yet implemented.
-					@return    bool - {\tt true} if successful,	{\tt false} otherwise
+					@return    bool {\tt true} if successful,	{\tt false} otherwise
 			*/
 			virtual bool extract()
 				throw();

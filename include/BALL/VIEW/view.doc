@@ -1,8 +1,67 @@
-// $Id: view.doc,v 1.7 2001/02/18 20:53:38 amoll Exp $
+// $Id: view.doc,v 1.8 2001/05/13 14:06:35 hekl Exp $
 
 /**@name VIEW.
-	       This chapter contains all relevant information on 
-		     the graphical visualization component VIEW.
+         VIEW is a framework for the implementation of GUI based visualizations.
+         The GUI toolkit used in this framework is QT because it provides a portable GUI framework
+         in C++ and allows the use of the OpenGL library for 3D rendering.
+         View defines several important basic data structures:\\
+         \begin{itemize}
+           \item Geometric primitives: like sphere, tube, point, etc. and base classes for easy creating of such primitives
+           \item Classes to access the OpenGL library for building and handling the display lists required for rendering the visualization
+           \item Widgets that can be used for building an application
+         \end{itemize}
+         There are some geometric primitives already defined but with the help of the classes
+         described in this section \Ref{Kernel classes.} there can be easily created more primitives.
+         The most important classes are the widgets classes for they are needed for creating an
+         application.
+         First, the class \Ref{MainControl} is the most important widget for building an application.
+         The \Ref{MainControl} is the main window of the application. It provides a menu bar and 
+         a status bar that can be initialized and changed by its child widgets. Those child widgets must be derived
+         from \Ref{ModularWidget} that provides interface methods to create, maintain and remove
+         menu entries and preferences tab dialogs. Further the modular widget does all the connectivity
+         needed to insert the widget properly into the \Ref{MainControl} (like setup the menu entries, fetch the preferences
+         and handle the signal/slot mechanism of the underlying QT-widgets).
+         To insert such a widget derived from \Ref{ModularWidget} just create it with \Ref{MainControl} as parent. 
+         Each modular widget is a component that can be used to build an application block for block.
+         They use a \Ref{Message} communication queue which is maintained by the class \Ref{MainControl} that
+         relays all catched messages to all other inserted modular widgets except the one which had
+         originally sent the message.
+         With these messages it is possible for the widgets to notify the \Ref{MainControl} of changes done to the
+         graphical representation of certain objects or to change the contents of the status bar
+         or even notify of objects no longer available.
+         The forth class we introduce is the class \Ref{Scene} that provides the three-dimensional
+         interactive visualization of the above mentioned \Ref{GeometricObject} objects.
+         With this class it is possible to rotate, translate, zoom or pick objects by mouse click.
+         Another important class is the class \Ref{Control}. With the help of this class the
+         hierarchical structure of the visualized objects can be displayed and manipulated.\\ \\ \\ \\
+         The following code is an example for building an application (the includes have been omitted):\\ \\
+         {\tt {\bf int} main({\bf int} argc, {\bf char} **argv)}\\
+         \{\\
+           // creating mainframe and application\\
+           {\tt QApplication app(argc, argv);}\\
+           {\tt MainControl main;}\\
+           {\tt app.setMainWidget(&main);}\\ \\
+           // create a QSplitter for dividing the main window into two\\
+           // sub windows used for displaying both the control and the scene\\
+           {\tt QSplitter *splitter = {\bf new} QSplitter(&main);}\\
+           {\tt main.setCentralWidget(splitter);}\\ \\
+           // create the control and insert it into the splitter\\
+           {\tt {\bf new} Control(splitter);}\\ \\
+           // create the scene and insert it into the splitter\\
+           {\tt {\bf new} Scene(splitter);}\\ \\
+           // start the application\\
+           {\tt main.show();}\\
+           {\tt {\bf return} app.exec();}\\
+         \}\\ \\
+         {\bf Note:} This application only demonstrates how to build an application.
+         It opens a main window with both the \Ref{Control} and \Ref{Scene} but as there are
+         no means by which any geometric object can be added no objects will be shown in either
+         the \Ref{Control} and the \Ref{Scene} widget.
+         In the section MolVIEW there is an example application that extends this example by using
+         several more widgets to allow loading of \Ref{System} objects, changing the
+         visualization of the inserted objects and manipulating those objects.\\ \\
+         For more information about QT widgets and application programming see
+         the documentation of the QT-library.
 */
 //@{
 	/** @name Common data.
@@ -10,7 +69,7 @@
             this section.
   */
 	//@{
-    //@Include: COMMON/common.doc
+		//@Include: COMMON/common.doc
 	//@}
 
 	/** @name Used datatypes.
@@ -21,12 +80,13 @@
 		//@Include: DATATYPE/datatype.doc
 	//@}
 
-  /** @name Functor classes.
-						BAUSTELLE
-  */
-  //@{
-    //@Include: FUNCTOR/functor.doc
-  //@}
+	/** @name Functoren.
+ 	          In this section some usefull visitors and processors are
+	          defined.
+	*/
+	//@{
+		//@Include: FUNCTOR/functor.doc
+	//@}
 
 	/** @name Kernel classes.
             This section contains classes that are responsible for

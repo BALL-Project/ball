@@ -1,4 +1,4 @@
-// $Id: fileDialog.h,v 1.4 2000/12/21 17:03:32 amoll Exp $
+// $Id: fileDialog.h,v 1.5 2001/05/13 13:52:43 hekl Exp $
 
 #ifndef BALL_VIEW_GUI_DIALOGS_FILEDIALOG_H
 #define BALL_VIEW_GUI_DIALOGS_FILEDIALOG_H
@@ -13,9 +13,9 @@
 
 #include <qfiledialog.h>
 
-using namespace std;
-using namespace BALL;
-using namespace BALL::VIEW;
+//using namespace std;
+//using namespace BALL;
+//using namespace BALL::VIEW;
 
 namespace BALL
 {
@@ -23,105 +23,108 @@ namespace BALL
 	namespace VIEW
 	{
 
-		/**		FileDialog class.
+		/** FileDialog class.
+				{\bf Framework:} BALL/VIEW/GUI/DIALOGS\\
+				{\bf Definition:} \URL{BALL/VIEW/GUI/DIALOGS/fileDialog.h}\\ \\
+				The class FileDialog is a base class for file dialogs. Its base classes are
+				\Ref{QFileDialog} (See QT documentation) and \Ref{ModularWidget}.
+				The virtual method \Ref{openFile_} can be overridden for specifying
+				what should be done with the selected file. With the method \Ref{exec}
+				{\em *this} fileDialog can be opened. If a file was selected the path and the file
+				name can be accessed with the methods \Ref{getPathName} and \Ref{getFileName}.
+				@memo    FileDialog class (BALL VIEW gui dialogs framework)
+				@author  $Author: hekl $
+				@version $Revision: 1.5 $
+				@date    $Date: 2001/05/13 13:52:43 $
 		*/
-		class FileDialog: 
-			public QFileDialog,
-			public ModularWidget
+		class FileDialog: public QFileDialog,	public ModularWidget
 		{
 			Q_OBJECT
 
 			public:
 
-			/**	@name	Type Definitions
-			*/
+			/**	@name	Constructors
+			*/	
 			//@{
+
+			/** Default Constructor.
+					Construct new fileDialog.
+					Set the title and the mode of {\em *this} fileDialog to {\em header}.
+					See QT documentation for information concerning modes for file dialogs.
+					Calls \Ref{ModularWidget::registerWidget}
+					@param       header the title of {\em *this} fileDialog
+					@param       mode the mode of {\em *this} fileDialog (See QFileDialog in the QT documentation)
+					@param       parent the parent \Ref{QWidget} of {\em *this} fileDialog (See QFileDialog in the QT documentation)
+					@param       name the name of {\em *this} fileDialog (See QFileDialog in the QT documentation)
+					@return      FileDialog new constructed fileDialog
+					@see         ModularWidget
+			*/
+			FileDialog(string header, QFileDialog::Mode mode, QWidget* parent = 0, const char* name = 0)
+				throw();
+
 			//@}
 
-			
-			/**	@name Constructors and Destructors
+			/** @name Destructors 
 			*/
 			//@{
 
-			/** Constructor. 
-					contruct a file dialog.
-			*/
-			FileDialog(string header, QFileDialog::Mode mode, QWidget* parent = 0, const char* name = 0);
-
 			/** Destructor.
+					Default destruction of {\em *this} fileDialog.
+					Calls \Ref{destroy}.
+					@see         destroy
 			*/
 			virtual ~FileDialog()
 				throw();
+
+			/** Explicit default initialization.
+					Empty for further purpose.
+			*/
+			virtual void clear()
+				throw();
+
+			/** Explicit destructor.
+					Empty for further purpose.
+			*/
+			virtual void destroy()
+				throw();
 			//@}
 
-			/**	@name Exceptions
+			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
+
+			/** Non-mutable inspection of the full path name.
+					Access a constant reference of the full path name of the selected file of 
+					{\em *this} fileDialog.
+					@return  string& a constant reference of the full path name of the selected file of {\em *this} fileDialog
+			*/
+			const string& getPathName() const
+				throw();
+
+			/** Non-mutable inspection of the file name.
+					Access a constant reference of the file name of the selected file of 
+					{\em *this} fileDialog.
+					@return  string& a constant reference of the file name of the selected file of {\em *this} fileDialog
+			*/
+			const string& getFileName() const
+				throw();
 			//@}
 
-			/**	@name	Assignment
-			*/
-			//@{
-			//@}
-
-			/**	@name	Accessors
-			*/
-			//@{
-
-			/** return the full path name.
-			*/
-			const string& getPathName() const;
-
-			/** return only the filename.
-			*/
-			const string& getFileName() const;
-			//@}
-
-			/** @name Modular Widget related methods
-			 */
-			//@{
-			
-			/**     Initialize the file dialog.
-							This method is called automatically
-							immediately before the main application 
-							is started. It adds the dialog's 
-							menu entries and connections.
-							Add here your own menu initialisiations.
-			*/
-			virtual void initializeWidget(MainControl& main_control);
-			
-			/**     Remove the dialog.
-							This method is called by the dialog's destructor.
-							It reverses all actions performed in 
-							initializeWidget (remove menu entries and connections).
-			*/
-			virtual void finalizeWidget(MainControl& main_control);
-			
-			/**     Update all menu entry states.
-							This method is called just before a popup menu
-							is shown (via the QT signal aboutToShow()).
-							It should be used to update the state of 
-							menu entries (e.g. disable or enable entries).
-			*/
-			virtual void checkMenu(MainControl& main_control);
-			//@}
 
 			public slots:
 
-			/** @name Public slot
+			/** @name Public slots
 			*/
 			//@{
 
-			/** start the file dialog.
-				  This function opens the dialog.
+			/** Start the file dialog.
+					Open {\em *this} fileDialog.
+					If a file was successfully selected \Ref{openFile_} will be called.
+					@return int the result code as returned by the \Ref{QFileDialog} (See QT documentation)
+					@see    openFile_
 			*/
 			int exec();
 
-			//@}
-
-			/**	@name	Predicates
-			*/
-			//@{
 			//@}
 
    		protected:
@@ -130,11 +133,13 @@ namespace BALL
 			*/
 			//@{
 			
-			/** open the selected file.
+			/** Open the selected file.
 					Overridable method for defining what should be done with the selected file.
 					(open the file and process it, for example).
+					@see exec
 			*/
-			virtual void openFile_();
+			virtual void openFile_()
+				throw();
 			//@}
 
 

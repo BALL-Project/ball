@@ -1,4 +1,4 @@
-// $Id: glmesh.h,v 1.5 2001/02/11 13:04:39 hekl Exp $
+// $Id: glmesh.h,v 1.6 2001/05/13 13:59:13 hekl Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLMESH_H
 #define BALL_VIEW_GUI_PRIMITIV_GLMESH_H
@@ -23,11 +23,8 @@ namespace BALL
 	{
 
 		/** GLMesh class.
-				
 				{\bf Framework:} BALL/VIEW/GUI/PRIMITIV\\
-				{\bf Definition:} \URL{BALL/VIEW/GUI/PRIMITIV/glmesh.h}
-				\\
-
+				{\bf Definition:} \URL{BALL/VIEW/GUI/PRIMITIV/glmesh.h}\\ \\
 				An instance of GLMesh represents an instance of the geometric
 				visualization "mesh".
 				The class GLMesh is derived from the classes \Ref{Mesh} and
@@ -36,11 +33,10 @@ namespace BALL
 				The drawing method from \Ref{GLObject} is overridden to visualize the
 				mesh. OpenGL code is used for the visualization.
 				See these classes for further information.
-
 				@memo    GLMesh class (BALL VIEW gui primitiv framework)
 				@author  $Author: hekl $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/02/11 13:04:39 $
+				@version $Revision: 1.6 $
+				@date    $Date: 2001/05/13 13:59:13 $
 		*/
 		class GLMesh
 			: public Mesh,
@@ -54,45 +50,46 @@ namespace BALL
 
 			/** Default Constructor.
 					Construct new glMesh.
-
-					@return      GlMesh - new constructed glMesh
-					@see         Mesh::Mesh
-					@see         GLObject::GLObject
+					@return      GLMesh new constructed glMesh
+					@see         Mesh
+					@see         GLObject
 			*/
-			GLMesh();
+			GLMesh()
+				throw();
 
 			/** Copy constructor with cloning facility.
 					Construct new glMesh by copying the glMesh {\em mesh}.
 					The copy is either deep (default) or shallow.
-
 					@param       mesh the glMesh to be copied (cloned)
 					@param       deep make a deep (={\tt true}) or shallow (={\tt false})
-					@return      GlMesh - new constructed glMesh copied from {\em mesh}
-					@see         Mesh::Mesh
-					@see         GLObject::GLObject
+					@return      GLMesh new constructed glMesh copied from {\em mesh}
+					@see         Mesh
+					@see         GLObject
 			*/
-			GLMesh(const GLMesh& mesh, bool deep = true);
+			GLMesh(const GLMesh& mesh, bool deep = true)
+				throw();
 
 			/** Copy constructor from geometricObject.
 					Construct new glMesh by copying the internal values from geometricObject 
 					{\em geometric_object}.
-
 					@param       geometric_object the geometricObject which internal value should be copied
-					@return      GlMesh - new constructed glMesh initialized from {\em geometric_object}
-					@see         Mesh::Mesh
-					@see         GLObject::GLObject
+					@return      GLMesh new constructed glMesh initialized from {\em geometric_object}
+					@see         Mesh
+					@see         GLObject
 			*/
-			GLMesh(const GeometricObject& geometric_object);
+			GLMesh(const GeometricObject& geometric_object)
+				throw();
 
 			//@}
 
-			/** @name Destructors */
+			/** @name Destructors 
+			*/
 			//@{
 
 			/** Destructor.
 					Default destruction of {\em *this} glMesh.
-					Calls \Ref{GlMesh::destroy}.
-					@see         GlMesh::destroy
+					Calls \Ref{destroy}.
+					@see         destroy
 			*/
 			virtual ~GLMesh()
 				throw();
@@ -100,7 +97,6 @@ namespace BALL
 			/** Explicit default initialization.
 					Calls \Ref{Mesh::clear}
 					Calls \Ref{GLObject::clear}
-
 					@see  Mesh::clear
 					@see  GLObject::clear
 			*/
@@ -110,7 +106,6 @@ namespace BALL
 			/** Explicit destructor.
 					Calls \Ref{Mesh::destroy}
 					Calls \Ref{GLObject::destroy}
-
 					@see  Mesh::destroy
 					@see  GLObject::destroy
 			*/
@@ -118,6 +113,57 @@ namespace BALL
 				throw();
 			//@}
 
+			/**	@name	Assignment methods
+			*/
+			//@{
+
+			/** Assignment.
+					Assign the glMesh {\em mesh} to {\em *this} glMesh.
+					The copy is either deep (default) or shallow.
+					The value of {\em *this} glMesh is initialized to the value of 
+					the glMesh {\em mesh}.\\
+					@param       mesh the glMesh to be copied
+					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em mesh}
+					@see         Mesh
+					@see         GLObject
+			*/
+			void set(const GLMesh& mesh, bool deep = true)
+				throw();
+
+			/** Assignment operator.
+					Assign the glMesh {\em mesh} to {\em *this} glMesh.
+					The copy is deep.
+					Calls \Ref{set}.
+					The value of {\em *this} glMesh is initialized to the value 
+					of the glMesh {\em mesh}.\\
+					@param       mesh the glMesh to be copied
+					@return      GLMesh& constant reference {\em *this} glMesh
+					@see         set
+			*/
+			const GLMesh& operator = (const GLMesh& mesh)
+				throw();
+
+			/** Copying with cloning facility.
+					Copy {\em *this} glMesh to the glMesh {\em mesh}.
+					The copy is either deep (default) or shallow.
+					Calls \Ref{set}.
+					The value of the glMesh {\em mesh} is initialized to the
+					value of {\em *this} glMesh.\\
+					@param       mesh the glMesh to be assigned to
+					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em mesh}
+					@see         set
+			*/
+			void get(GLMesh& mesh, bool deep = true) const
+				throw();
+
+			/** Swapping of Mesh's.
+					Swap the value of {\em *this} Mesh with the Mesh {\em mesh}.
+					@param       mesh the Mesh being swapped with {\em *this} Mesh 
+					@see         GLMesh
+			*/
+			void swap(GLMesh& mesh)
+				throw();
+			//@}
 
 			protected:
 
@@ -135,25 +181,24 @@ namespace BALL
 					The parameter {\em with_names} indicates whether the openGL command 
 					{\em glLoadName} must be used for naming the graphical object 
 					(necessary for picking mode in the scene).
-					
 					@param     with_names flag if the graphical objects must have a name
-					@return    bool - {\tt true} if successful,	{\tt false} otherwise
+					@return    bool {\tt true} if successful,	{\tt false} otherwise
 					@see       GLObject::draw
 			*/
-			virtual bool draw(bool with_names = false);
+			virtual bool draw(bool with_names = false)
+				throw();
 
 			/** Experimental method.
 					Please avoid using this method.
 			*/
-			virtual bool drawUserDefined();
+			virtual bool drawUserDefined()
+				throw();
 
 			/** Export method.
 					This method handles the export of {\em *this} glMesh into another
-					format (eg. POVRAY, VRML)
-				  \\
+					format (eg. POVRAY, VRML)\\
 				  {\bf Note:} Not yet implemented.
-
-					@return    bool - {\tt true} if successful,	{\tt false} otherwise
+					@return    bool {\tt true} if successful,	{\tt false} otherwise
 			*/
 			virtual bool extract()
 				throw();

@@ -1,4 +1,4 @@
-// $Id: glpoint.h,v 1.6 2001/02/12 12:00:19 amoll Exp $
+// $Id: glpoint.h,v 1.7 2001/05/13 13:59:14 hekl Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLPOINT_H
 #define BALL_VIEW_GUI_PRIMITIV_GLPOINT_H
@@ -24,7 +24,7 @@ namespace BALL
 
 		/** GLPoint class.				
 				{\bf Framework:} BALL/VIEW/GUI/PRIMITIV\\
-				{\bf Definition:} \URL{BALL/VIEW/GUI/PRIMITIV/glpoint.h}\\
+				{\bf Definition:} \URL{BALL/VIEW/GUI/PRIMITIV/glpoint.h}\\ \\
 				An instance of GLPoint represents an instance of the geometric
 				visualization "point".
 				The class GLPoint is derived from the classes \Ref{Point} and
@@ -34,9 +34,9 @@ namespace BALL
 				point. OpenGL code is used for the visualization.
 				See these classes for further information.
 				@memo    GLPoint class (BALL VIEW gui primitiv framework)
-				@author  $Author: amoll $
-				@version $Revision: 1.6 $
-				@date    $Date: 2001/02/12 12:00:19 $
+				@author  $Author: hekl $
+				@version $Revision: 1.7 $
+				@date    $Date: 2001/05/13 13:59:14 $
 		*/
 		class GLPoint
 			: public Point,
@@ -50,32 +50,35 @@ namespace BALL
 
 			/** Default Constructor.
 					Construct new glPoint.
-					@return      GLPoint - new constructed glPoint
-					@see         Point::Point
-					@see         GLObject::GLObject
+					@return      GLPoint new constructed glPoint
+					@see         Point
+					@see         GLObject
 			*/
-			GLPoint();
+			GLPoint()
+				throw();
 
 			/** Copy constructor with cloning facility.
 					Construct new glPoint by copying the glPoint {\em point}.
 					The copy is either deep (default) or shallow.
 					@param       point the glPoint to be copied (cloned)
 					@param       deep make a deep (={\tt true}) or shallow (={\tt false})
-					@return      GLPoint - new constructed glPoint copied from {\em point}
-					@see         Point::Point
-					@see         GLObject::GLObject
+					@return      GLPoint new constructed glPoint copied from {\em point}
+					@see         Point
+					@see         GLObject
 			*/
-			GLPoint(const GLPoint& point, bool deep = true);
+			GLPoint(const GLPoint& point, bool deep = true)
+				throw();
 
 			/** Copy constructor from geometricObject.
 					Construct new glPoint by copying the internal values from geometricObject 
 					{\em geometric_object}.
 					@param       geometric_object the geometricObject which internal value should be copied
-					@return      GLPoint - new constructed glPoint initialized from {\em geometric_object}
-					@see         Point::Point
-					@see         GLObject::GLObject
+					@return      GLPoint new constructed glPoint initialized from {\em geometric_object}
+					@see         Point
+					@see         GLObject
 			*/
-			GLPoint(const GeometricObject& geometric_object);
+			GLPoint(const GeometricObject& geometric_object)
+				throw();
 
 			//@}
 			/** @name Destructors 
@@ -84,8 +87,8 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} glPoint.
-					Calls \Ref{GLPoint::destroy}.
-					@see         GLPoint::destroy
+					Calls \Ref{destroy}.
+					@see         destroy
 			*/
 			virtual ~GLPoint()
 				throw();
@@ -110,6 +113,58 @@ namespace BALL
 
 			//@}
 
+			/**	@name	Assignment methods
+			*/
+			//@{
+
+			/** Assignment.
+					Assign the glPoint {\em point} to {\em *this} glPoint.
+					The copy is either deep (default) or shallow.
+					The value of {\em *this} glPoint is initialized to the value of 
+					the glPoint {\em point}.\\
+					@param       point the glPoint to be copied
+					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em point}
+					@see         Point
+					@see         GLObject
+			*/
+			void set(const GLPoint& point, bool deep = true)
+				throw();
+
+			/** Assignment operator.
+					Assign the glPoint {\em point} to {\em *this} glPoint.
+					The copy is deep.
+					Calls \Ref{set}.
+					The value of {\em *this} glPoint is initialized to the value 
+					of the glPoint {\em point}.\\
+					@param       point the glPoint to be copied
+					@return      GLPoint& constant reference {\em *this} glPoint
+					@see         set
+			*/
+			const GLPoint& operator = (const GLPoint& point)
+				throw();
+
+			/** Copying with cloning facility.
+					Copy {\em *this} glPoint to the glPoint {\em point}.
+					The copy is either deep (default) or shallow.
+					Calls \Ref{set}.
+					The value of the glPoint {\em point} is initialized to the
+					value of {\em *this} glPoint.\\
+					@param       point the glPoint to be assigned to
+					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em point}
+					@see         set
+			*/
+			void get(GLPoint& point, bool deep = true) const
+				throw();
+
+			/** Swapping of Point's.
+					Swap the value of {\em *this} Point with the Point {\em point}.
+					@param       point the Point being swapped with {\em *this} Point 
+					@see         GLPoint
+			*/
+			void swap(GLPoint& point)
+				throw();
+			//@}
+
 			protected:
 
 			/** @name Graphical interface methods
@@ -125,16 +180,17 @@ namespace BALL
 					{\em glLoadName} must be used for naming the graphical object 
 					(necessary for picking mode in the scene).		
 					@param     with_names flag if the graphical objects must have a name
-					@return    bool - {\tt true} if successful,	{\tt false} otherwise
+					@return    bool {\tt true} if successful,	{\tt false} otherwise
 					@see       GLObject::draw
 			*/
-			virtual bool draw(bool with_names = false);
+			virtual bool draw(bool with_names = false)
+				throw();
 
 			/** Export method.
 					This method handles the export of {\em *this} glPoint into another
 					format (eg. POVRAY, VRML) \\
 				  {\bf Note:} Not yet implemented.
-					@return    bool - {\tt true} if successful,	{\tt false} otherwise
+					@return    bool {\tt true} if successful,	{\tt false} otherwise
 			*/
 			virtual bool extract()
 				throw();

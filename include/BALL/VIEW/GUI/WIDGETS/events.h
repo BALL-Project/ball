@@ -1,4 +1,4 @@
-// $Id: events.h,v 1.3 2000/09/23 14:15:06 hekl Exp $
+// $Id: events.h,v 1.4 2001/05/13 14:03:44 hekl Exp $
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -29,22 +29,26 @@
 #define BALL_VIEW_DECLARE_OPERATOR(event_a, event_b) \
 friend _##event_a##event_b##Event &operator & \
   (const _##event_a##Event &__r_##event_a##Event, \
-   const _##event_b##Event &__r_##event_b##Event); \
+   const _##event_b##Event &__r_##event_b##Event) \
+  throw(Events::EventCombinationNotAllowed); \
 \
 friend _##event_a##event_b##Event &operator & \
   (const _##event_b##Event &__r_##event_b##Event, \
-   const _##event_a##Event &__r_##event_a##Event);
+   const _##event_a##Event &__r_##event_a##Event) \
+  throw(Events::EventCombinationNotAllowed)
 
 
 
 #define BALL_VIEW_DECLARE_OPERATOR_WITH_RETURN_TYPE(event_a, event_b, returntype) \
 friend _##returntype##Event &operator & \
   (const _##event_a##Event &__r_##event_a##Event, \
-   const _##event_b##Event &__r_##event_b##Event); \
+   const _##event_b##Event &__r_##event_b##Event) \
+  throw(Events::EventCombinationNotAllowed); \
 \
 friend _##returntype##Event &operator & \
   (const _##event_b##Event &__r_##event_b##Event, \
-   const _##event_a##Event &__r_##event_a##Event);
+   const _##event_a##Event &__r_##event_a##Event) \
+  throw(Events::EventCombinationNotAllowed)
 
 
 
@@ -53,15 +57,13 @@ Events::_##event_a##event_b##Event & \
 operator & \
   (const Events::_##event_a##Event &__r_##event_a##Event, \
    const Events::_##event_b##Event &__r_##event_b##Event) \
+  throw(Events::EventCombinationNotAllowed) \
 { \
-  BALL_PRECONDITION \
-    (__r_##event_a##Event.getScene() \
-     == __r_##event_b##Event.getScene(), \
-     Ball::callErrorHandler \
-       (Events::getClass(), \
-	NULL, \
-	Events::ERROR__CANNOT_COMBINE_EVENTS_FROM_DIFFERENT_SCENES, \
-	Events::error_messages_[Events::ERROR__CANNOT_COMBINE_EVENTS_FROM_DIFFERENT_SCENES]);); \
+  if (__r_##event_a##Event.getScene() \
+      != __r_##event_b##Event.getScene()) \
+  { \
+    throw Events::EventCombinationNotAllowed(__FILE__, __LINE__); \
+  } \
 \
   return __r_##event_a##Event.getEvent()->##event_a##event_b; \
 } \
@@ -70,6 +72,7 @@ Events::_##event_a##event_b##Event & \
 operator & \
   (const Events::_##event_b##Event &__r_##event_b##Event, \
    const Events::_##event_a##Event &__r_##event_a##Event) \
+  throw(Events::EventCombinationNotAllowed) \
 { \
   return operator &(__r_##event_a##Event, __r_##event_b##Event); \
 }
@@ -81,15 +84,13 @@ Events::_##returntype##Event & \
 operator & \
   (const Events::_##event_a##Event &__r_##event_a##Event, \
    const Events::_##event_b##Event &__r_##event_b##Event) \
+  throw(Events::EventCombinationNotAllowed) \
 { \
-  BALL_PRECONDITION \
-    (__r_##event_a##Event.getScene() \
-     == __r_##event_b##Event.getScene(), \
-     Ball::callErrorHandler \
-       (Events::getClass(), \
-	NULL, \
-	Events::ERROR__CANNOT_COMBINE_EVENTS_FROM_DIFFERENT_SCENES, \
-	Events::error_messages_[Events::ERROR__CANNOT_COMBINE_EVENTS_FROM_DIFFERENT_SCENES]);); \
+  if (__r_##event_a##Event.getScene() \
+      != __r_##event_b##Event.getScene()) \
+  { \
+    throw Events::EventCombinationNotAllowed(__FILE__, __LINE__); \
+  } \
 \
   return __r_##event_a##Event.getEvent()->##returntype; \
 } \
@@ -98,6 +99,7 @@ Events::_##returntype##Event & \
 operator & \
   (const Events::_##event_b##Event &__r_##event_b##Event, \
    const Events::_##event_a##Event &__r_##event_a##Event) \
+  throw(Events::EventCombinationNotAllowed) \
 { \
   return operator &(__r_##event_a##Event, __r_##event_b##Event); \
 }
@@ -112,6 +114,7 @@ class _##name##Event \
 \
     _##name##Event \
       () \
+      throw() \
 	: \
         __mpEvents_(0) \
     { \
@@ -119,6 +122,7 @@ class _##name##Event \
 \
     _##name##Event \
       (Events *__pEvents) \
+      throw() \
 	: \
         __mpEvents_(__pEvents) \
     { \
@@ -126,23 +130,26 @@ class _##name##Event \
 \
     ~_##name##Event \
       () \
+      throw() \
     { \
     } \
 \
     Scene *getScene \
       () const\
+      throw() \
     { \
       return __mpEvents_->getScene(); \
     } \
 \
     Events *getEvent \
       () const\
+      throw() \
     { \
       return __mpEvents_; \
     } \
 \
     Events *__mpEvents_; \
-} name;
+} name
 
 
 
@@ -167,6 +174,7 @@ class _##name##Event: \
 \
     _##name##Event \
       () \
+      throw() \
       : \
       __mfp(0), \
       __mpScene_(0), \
@@ -176,6 +184,7 @@ class _##name##Event: \
 \
     _##name##Event \
       (Scene *__pScene) \
+      throw() \
       : \
       __mfp(0), \
       __mpScene_(__pScene), \
@@ -185,80 +194,98 @@ class _##name##Event: \
 \
     virtual ~_##name##Event \
       () \
+      throw() \
     { \
     } \
 \
     Scene *getScene \
-      () const; \
+      () const \
+      throw(); \
 \
     Scene *getTransmitterScene \
-      () const; \
+      () const \
+      throw(); \
 \
     bool onNotify \
       (_MouseLeftButtonPressedMouseMovedEvent & \
-       __r_MouseLeftButtonPressedMouseMovedEvent); \
+       __r_MouseLeftButtonPressedMouseMovedEvent) \
+      throw(); \
 \
     bool onNotify \
       (_MouseLeftButtonPressedShiftKeyPressedMouseMovedEvent & \
-       __r_MouseLeftButtonPressedShiftKeyPressedMouseMovedEvent); \
+       __r_MouseLeftButtonPressedShiftKeyPressedMouseMovedEvent) \
+      throw(); \
 \
     bool onNotify \
       (_MouseLeftButtonPressedControlKeyPressedMouseMovedEvent & \
-       __r_MouseLeftButtonPressedControlKeyPressedMouseMovedEvent); \
+       __r_MouseLeftButtonPressedControlKeyPressedMouseMovedEvent) \
+      throw(); \
 \
     bool onNotify \
       (_MouseLeftButtonPressedShiftKeyPressedControlKeyPressedMouseMovedEvent & \
-       __r_MouseLeftButtonPressedShiftKeyPressedControlKeyPressedMouseMovedEvent); \
+       __r_MouseLeftButtonPressedShiftKeyPressedControlKeyPressedMouseMovedEvent) \
+      throw(); \
 \
     bool onNotify \
       (_MouseMiddleButtonPressedMouseMovedEvent & \
-       __r_MouseMiddleButtonPressedMouseMovedEvent); \
+       __r_MouseMiddleButtonPressedMouseMovedEvent) \
+      throw(); \
 \
     bool onNotify \
       (_MouseMiddleButtonPressedShiftKeyPressedMouseMovedEvent & \
-       __r_MouseMiddleButtonPressedShiftKeyPressedMouseMovedEvent); \
+       __r_MouseMiddleButtonPressedShiftKeyPressedMouseMovedEvent) \
+      throw(); \
 \
     bool onNotify \
       (_MouseMiddleButtonPressedControlKeyPressedMouseMovedEvent & \
-       __r_MouseMiddleButtonPressedControlKeyPressedMouseMovedEvent); \
+       __r_MouseMiddleButtonPressedControlKeyPressedMouseMovedEvent) \
+      throw(); \
 \
     bool onNotify \
       (_MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedMouseMovedEvent & \
-       __r_MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedMouseMovedEvent); \
+       __r_MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedMouseMovedEvent) \
+      throw(); \
 \
     bool onNotify \
       (_MouseRightButtonPressedMouseMovedEvent & \
-       __r_MouseRightButtonPressedMouseMovedEvent); \
+       __r_MouseRightButtonPressedMouseMovedEvent) \
+      throw(); \
 \
     bool onNotify \
       (_MouseRightButtonPressedShiftKeyPressedMouseMovedEvent & \
-       __r_MouseRightButtonPressedShiftKeyPressedMouseMovedEvent); \
+       __r_MouseRightButtonPressedShiftKeyPressedMouseMovedEvent) \
+      throw(); \
 \
     bool onNotify \
       (_MouseRightButtonPressedControlKeyPressedMouseMovedEvent & \
-       __r_MouseRightButtonPressedControlKeyPressedMouseMovedEvent); \
+       __r_MouseRightButtonPressedControlKeyPressedMouseMovedEvent) \
+      throw(); \
 \
     bool onNotify \
       (_MouseRightButtonPressedShiftKeyPressedControlKeyPressedMouseMovedEvent & \
-       __r_MouseRightButtonPressedShiftKeyPressedControlKeyPressedMouseMovedEvent); \
+       __r_MouseRightButtonPressedShiftKeyPressedControlKeyPressedMouseMovedEvent) \
+      throw(); \
 \
     bool onNotify \
       (_##name##Event & \
-       __r_##name##Event); \
+       __r_##name##Event) \
+      throw(); \
 \
     void register##name## \
-      (void (Scene::*__fp)(Scene *__pScene)); \
+      (void (Scene::*__fp)(Scene *__pScene)) \
+      throw(); \
 \
  private: \
 \
     bool _onNotify \
-      (Scene *__pScene); \
+      (Scene *__pScene) \
+      throw(); \
 \
     void (Scene::*__mfp)(Scene *__pScene); \
 \
     Scene *__mpScene_; \
     Scene *transmitter__mpScene_; \
-} name;
+} name
 
 
 
@@ -267,6 +294,7 @@ BALL_INLINE \
 Scene * \
 Events::_##name##Event::getScene \
   () const \
+  throw() \
 { \
   return __mpScene_; \
 } \
@@ -275,6 +303,7 @@ BALL_INLINE \
 Scene * \
 Events::_##name##Event::getTransmitterScene \
   () const \
+  throw() \
 { \
   return transmitter__mpScene_; \
 } \
@@ -284,6 +313,7 @@ bool \
 Events::_##name##Event::onNotify \
   (_MouseLeftButtonPressedMouseMovedEvent & \
    __r_MouseLeftButtonPressedMouseMovedEvent) \
+  throw() \
 { \
   return _onNotify(__r_MouseLeftButtonPressedMouseMovedEvent.getScene()); \
 } \
@@ -293,6 +323,7 @@ bool \
 Events::_##name##Event::onNotify \
   (_MouseLeftButtonPressedShiftKeyPressedMouseMovedEvent & \
    __r_MouseLeftButtonPressedShiftKeyPressedMouseMovedEvent) \
+  throw() \
 { \
   return _onNotify(__r_MouseLeftButtonPressedShiftKeyPressedMouseMovedEvent.getScene()); \
 } \
@@ -302,6 +333,7 @@ bool \
 Events::_##name##Event::onNotify \
   (_MouseLeftButtonPressedControlKeyPressedMouseMovedEvent & \
    __r_MouseLeftButtonPressedControlKeyPressedMouseMovedEvent) \
+  throw() \
 { \
   return _onNotify(__r_MouseLeftButtonPressedControlKeyPressedMouseMovedEvent.getScene()); \
 } \
@@ -311,6 +343,7 @@ bool \
 Events::_##name##Event::onNotify \
   (_MouseLeftButtonPressedShiftKeyPressedControlKeyPressedMouseMovedEvent & \
    __r_MouseLeftButtonPressedShiftKeyPressedControlKeyPressedMouseMovedEvent) \
+  throw() \
 { \
   return _onNotify(__r_MouseLeftButtonPressedShiftKeyPressedControlKeyPressedMouseMovedEvent.getScene()); \
 } \
@@ -320,6 +353,7 @@ bool \
 Events::_##name##Event::onNotify \
   (_MouseMiddleButtonPressedMouseMovedEvent & \
    __r_MouseMiddleButtonPressedMouseMovedEvent) \
+  throw() \
 { \
   return _onNotify(__r_MouseMiddleButtonPressedMouseMovedEvent.getScene()); \
 } \
@@ -329,6 +363,7 @@ bool \
 Events::_##name##Event::onNotify \
   (_MouseMiddleButtonPressedShiftKeyPressedMouseMovedEvent & \
    __r_MouseMiddleButtonPressedShiftKeyPressedMouseMovedEvent) \
+  throw() \
 { \
   return _onNotify(__r_MouseMiddleButtonPressedShiftKeyPressedMouseMovedEvent.getScene()); \
 } \
@@ -338,6 +373,7 @@ bool \
 Events::_##name##Event::onNotify \
   (_MouseMiddleButtonPressedControlKeyPressedMouseMovedEvent & \
    __r_MouseMiddleButtonPressedControlKeyPressedMouseMovedEvent) \
+  throw() \
 { \
   return _onNotify(__r_MouseMiddleButtonPressedControlKeyPressedMouseMovedEvent.getScene()); \
 } \
@@ -347,6 +383,7 @@ bool \
 Events::_##name##Event::onNotify \
   (_MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedMouseMovedEvent & \
    __r_MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedMouseMovedEvent) \
+  throw() \
 { \
   return _onNotify(__r_MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedMouseMovedEvent. \
 		   getScene()); \
@@ -357,6 +394,7 @@ bool \
 Events::_##name##Event::onNotify \
   (_MouseRightButtonPressedMouseMovedEvent & \
    __r_MouseRightButtonPressedMouseMovedEvent) \
+  throw() \
 { \
   return _onNotify(__r_MouseRightButtonPressedMouseMovedEvent.getScene()); \
 } \
@@ -366,6 +404,7 @@ bool \
 Events::_##name##Event::onNotify \
   (_MouseRightButtonPressedShiftKeyPressedMouseMovedEvent & \
    __r_MouseRightButtonPressedShiftKeyPressedMouseMovedEvent) \
+  throw() \
 { \
   return _onNotify(__r_MouseRightButtonPressedShiftKeyPressedMouseMovedEvent.getScene()); \
 } \
@@ -375,6 +414,7 @@ bool \
 Events::_##name##Event::onNotify \
   (_MouseRightButtonPressedControlKeyPressedMouseMovedEvent & \
    __r_MouseRightButtonPressedControlKeyPressedMouseMovedEvent) \
+  throw() \
 { \
   return _onNotify(__r_MouseRightButtonPressedControlKeyPressedMouseMovedEvent.getScene()); \
 } \
@@ -384,6 +424,7 @@ bool \
 Events::_##name##Event::onNotify \
   (_MouseRightButtonPressedShiftKeyPressedControlKeyPressedMouseMovedEvent & \
    __r_MouseRightButtonPressedShiftKeyPressedControlKeyPressedMouseMovedEvent) \
+  throw() \
 { \
   return _onNotify(__r_MouseRightButtonPressedShiftKeyPressedControlKeyPressedMouseMovedEvent. \
 		   getScene()); \
@@ -394,6 +435,7 @@ bool \
 Events::_##name##Event::onNotify \
   (_##name##Event & \
    __r_##name##Event) \
+  throw() \
 { \
   if (__r_##name##Event.getTransmitterScene()  \
       == transmitter__mpScene_) \
@@ -408,6 +450,7 @@ BALL_INLINE \
 void \
 Events::_##name##Event::register##name## \
   (void (Scene::*__fp)(Scene *__pScene)) \
+  throw() \
 { \
   __mfp = __fp; \
 }
@@ -433,6 +476,7 @@ class _##name##Event: \
 \
     _##name##Event \
       () \
+      throw() \
       : \
       __mfp(0), \
       __mpScene_(0), \
@@ -442,6 +486,7 @@ class _##name##Event: \
 \
     _##name##Event \
       (Scene *__pScene) \
+      throw() \
       : \
       __mfp(0), \
       __mpScene_(__pScene), \
@@ -451,80 +496,98 @@ class _##name##Event: \
 \
     virtual ~_##name##Event \
       () \
+      throw() \
     { \
     } \
 \
     Scene *getScene \
-      () const; \
+      () const \
+      throw(); \
 \
     Scene *getTransmitterScene \
-      () const; \
+      () const \
+      throw(); \
 \
     bool onNotify \
       (_MouseLeftButtonPressedEvent & \
-       __r_MouseLeftButtonPressedEvent); \
+       __r_MouseLeftButtonPressedEvent) \
+      throw(); \
 \
     bool onNotify \
       (_MouseLeftButtonPressedShiftKeyPressedEvent & \
-       __r_MouseLeftButtonPressedShiftKeyPressedEvent); \
+       __r_MouseLeftButtonPressedShiftKeyPressedEvent) \
+      throw(); \
 \
     bool onNotify \
       (_MouseLeftButtonPressedControlKeyPressedEvent & \
-       __r_MouseLeftButtonPressedControlKeyPressedEvent); \
+       __r_MouseLeftButtonPressedControlKeyPressedEvent) \
+      throw(); \
 \
     bool onNotify \
       (_MouseLeftButtonPressedShiftKeyPressedControlKeyPressedEvent & \
-       __r_MouseLeftButtonPressedShiftKeyPressedControlKeyPressedEvent); \
+       __r_MouseLeftButtonPressedShiftKeyPressedControlKeyPressedEvent) \
+      throw(); \
 \
     bool onNotify \
       (_MouseMiddleButtonPressedEvent & \
-       __r_MouseMiddleButtonPressedEvent); \
+       __r_MouseMiddleButtonPressedEvent) \
+      throw(); \
 \
     bool onNotify \
       (_MouseMiddleButtonPressedShiftKeyPressedEvent & \
-       __r_MouseMiddleButtonPressedShiftKeyPressedEvent); \
+       __r_MouseMiddleButtonPressedShiftKeyPressedEvent) \
+      throw(); \
 \
     bool onNotify \
       (_MouseMiddleButtonPressedControlKeyPressedEvent & \
-       __r_MouseMiddleButtonPressedControlKeyPressedEvent); \
+       __r_MouseMiddleButtonPressedControlKeyPressedEvent) \
+      throw(); \
 \
     bool onNotify \
       (_MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedEvent & \
-       __r_MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedEvent); \
+       __r_MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedEvent) \
+      throw(); \
 \
     bool onNotify \
       (_MouseRightButtonPressedEvent & \
-       __r_MouseRightButtonPressedEvent); \
+       __r_MouseRightButtonPressedEvent) \
+      throw(); \
 \
     bool onNotify \
       (_MouseRightButtonPressedShiftKeyPressedEvent & \
-       __r_MouseRightButtonPressedShiftKeyPressedEvent); \
+       __r_MouseRightButtonPressedShiftKeyPressedEvent) \
+      throw(); \
 \
     bool onNotify \
       (_MouseRightButtonPressedControlKeyPressedEvent & \
-       __r_MouseRightButtonPressedControlKeyPressedEvent); \
+       __r_MouseRightButtonPressedControlKeyPressedEvent) \
+      throw(); \
 \
     bool onNotify \
       (_MouseRightButtonPressedShiftKeyPressedControlKeyPressedEvent & \
-       __r_MouseRightButtonPressedShiftKeyPressedControlKeyPressedEvent); \
+       __r_MouseRightButtonPressedShiftKeyPressedControlKeyPressedEvent) \
+      throw(); \
 \
     bool onNotify \
       (_##name##Event & \
-       __r_##name##Event); \
+       __r_##name##Event) \
+      throw(); \
 \
     void register##name## \
-      (void (Scene::*__fp)(Scene *__pScene)); \
+      (void (Scene::*__fp)(Scene *__pScene)) \
+      throw(); \
 \
  private: \
 \
     bool _onNotify \
-      (Scene *__pScene); \
+      (Scene *__pScene) \
+      throw(); \
 \
     void (Scene::*__mfp)(Scene *__pScene); \
 \
     Scene *__mpScene_; \
     Scene *transmitter__mpScene_; \
-} name;
+} name
 
 
 
@@ -533,6 +596,7 @@ BALL_INLINE \
 Scene * \
 Events::_##name##Event::getScene \
   () const \
+  throw() \
 { \
   return __mpScene_; \
 } \
@@ -541,6 +605,7 @@ BALL_INLINE \
 Scene * \
 Events::_##name##Event::getTransmitterScene \
   () const \
+  throw() \
 { \
   return transmitter__mpScene_; \
 } \
@@ -550,6 +615,7 @@ bool \
 Events::_##name##Event::onNotify \
   (_MouseLeftButtonPressedEvent & \
    __r_MouseLeftButtonPressedEvent) \
+  throw() \
 { \
   return _onNotify(__r_MouseLeftButtonPressedEvent.getScene()); \
 } \
@@ -559,6 +625,7 @@ bool \
 Events::_##name##Event::onNotify \
   (_MouseLeftButtonPressedShiftKeyPressedEvent & \
    __r_MouseLeftButtonPressedShiftKeyPressedEvent) \
+  throw() \
 { \
   return _onNotify(__r_MouseLeftButtonPressedShiftKeyPressedEvent.getScene()); \
 } \
@@ -568,6 +635,7 @@ bool \
 Events::_##name##Event::onNotify \
   (_MouseLeftButtonPressedControlKeyPressedEvent & \
    __r_MouseLeftButtonPressedControlKeyPressedEvent) \
+  throw() \
 { \
   return _onNotify(__r_MouseLeftButtonPressedControlKeyPressedEvent.getScene()); \
 } \
@@ -577,6 +645,7 @@ bool \
 Events::_##name##Event::onNotify \
   (_MouseLeftButtonPressedShiftKeyPressedControlKeyPressedEvent & \
    __r_MouseLeftButtonPressedShiftKeyPressedControlKeyPressedEvent) \
+  throw() \
 { \
   return _onNotify(__r_MouseLeftButtonPressedShiftKeyPressedControlKeyPressedEvent.getScene()); \
 } \
@@ -586,6 +655,7 @@ bool \
 Events::_##name##Event::onNotify \
   (_MouseMiddleButtonPressedEvent & \
    __r_MouseMiddleButtonPressedEvent) \
+  throw() \
 { \
   return _onNotify(__r_MouseMiddleButtonPressedEvent.getScene()); \
 } \
@@ -595,6 +665,7 @@ bool \
 Events::_##name##Event::onNotify \
   (_MouseMiddleButtonPressedShiftKeyPressedEvent & \
    __r_MouseMiddleButtonPressedShiftKeyPressedEvent) \
+  throw() \
 { \
   return _onNotify(__r_MouseMiddleButtonPressedShiftKeyPressedEvent.getScene()); \
 } \
@@ -604,6 +675,7 @@ bool \
 Events::_##name##Event::onNotify \
   (_MouseMiddleButtonPressedControlKeyPressedEvent & \
    __r_MouseMiddleButtonPressedControlKeyPressedEvent) \
+  throw() \
 { \
   return _onNotify(__r_MouseMiddleButtonPressedControlKeyPressedEvent.getScene()); \
 } \
@@ -613,6 +685,7 @@ bool \
 Events::_##name##Event::onNotify \
   (_MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedEvent & \
    __r_MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedEvent) \
+  throw() \
 { \
   return _onNotify(__r_MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedEvent. \
 		   getScene()); \
@@ -623,6 +696,7 @@ bool \
 Events::_##name##Event::onNotify \
   (_MouseRightButtonPressedEvent & \
    __r_MouseRightButtonPressedEvent) \
+  throw() \
 { \
   return _onNotify(__r_MouseRightButtonPressedEvent.getScene()); \
 } \
@@ -632,6 +706,7 @@ bool \
 Events::_##name##Event::onNotify \
   (_MouseRightButtonPressedShiftKeyPressedEvent & \
    __r_MouseRightButtonPressedShiftKeyPressedEvent) \
+  throw() \
 { \
   return _onNotify(__r_MouseRightButtonPressedShiftKeyPressedEvent.getScene()); \
 } \
@@ -641,6 +716,7 @@ bool \
 Events::_##name##Event::onNotify \
   (_MouseRightButtonPressedControlKeyPressedEvent & \
    __r_MouseRightButtonPressedControlKeyPressedEvent) \
+  throw() \
 { \
   return _onNotify(__r_MouseRightButtonPressedControlKeyPressedEvent.getScene()); \
 } \
@@ -650,6 +726,7 @@ bool \
 Events::_##name##Event::onNotify \
   (_MouseRightButtonPressedShiftKeyPressedControlKeyPressedEvent & \
    __r_MouseRightButtonPressedShiftKeyPressedControlKeyPressedEvent) \
+  throw() \
 { \
   return _onNotify(__r_MouseRightButtonPressedShiftKeyPressedControlKeyPressedEvent. \
 		   getScene()); \
@@ -660,6 +737,7 @@ bool \
 Events::_##name##Event::onNotify \
   (_##name##Event & \
    __r_##name##Event) \
+  throw() \
 { \
   if (__r_##name##Event.getTransmitterScene()  \
       == transmitter__mpScene_) \
@@ -674,6 +752,7 @@ BALL_INLINE \
 void \
 Events::_##name##Event::register##name## \
   (void (Scene::*__fp)(Scene *__pScene)) \
+  throw() \
 { \
   __mfp = __fp; \
 }
@@ -699,6 +778,7 @@ class _##name##Event: \
 \
     _##name##Event \
       () \
+      throw() \
       : \
       __mfp(0), \
       __mpScene_(0), \
@@ -708,6 +788,7 @@ class _##name##Event: \
 \
     _##name##Event \
       (Scene *__pScene) \
+      throw() \
       : \
       __mfp(0), \
       __mpScene_(__pScene), \
@@ -717,80 +798,98 @@ class _##name##Event: \
 \
     virtual ~_##name##Event \
       () \
+      throw() \
     { \
     } \
 \
     Scene *getScene \
-      () const; \
+      () const \
+      throw(); \
 \
     Scene *getTransmitterScene \
-      () const; \
+      () const \
+      throw(); \
 \
     bool onNotify \
       (_MouseLeftButtonReleasedEvent & \
-       __r_MouseLeftButtonReleasedEvent); \
+       __r_MouseLeftButtonReleasedEvent) \
+      throw(); \
 \
     bool onNotify \
       (_MouseLeftButtonReleasedShiftKeyPressedEvent & \
-       __r_MouseLeftButtonReleasedShiftKeyPressedEvent); \
+       __r_MouseLeftButtonReleasedShiftKeyPressedEvent) \
+      throw(); \
 \
     bool onNotify \
       (_MouseLeftButtonReleasedControlKeyPressedEvent & \
-       __r_MouseLeftButtonReleasedControlKeyPressedEvent); \
+       __r_MouseLeftButtonReleasedControlKeyPressedEvent) \
+      throw(); \
 \
     bool onNotify \
       (_MouseLeftButtonReleasedShiftKeyPressedControlKeyPressedEvent & \
-       __r_MouseLeftButtonReleasedShiftKeyPressedControlKeyPressedEvent); \
+       __r_MouseLeftButtonReleasedShiftKeyPressedControlKeyPressedEvent) \
+      throw(); \
 \
     bool onNotify \
       (_MouseMiddleButtonReleasedEvent & \
-       __r_MouseMiddleButtonReleasedEvent); \
+       __r_MouseMiddleButtonReleasedEvent) \
+      throw(); \
 \
     bool onNotify \
       (_MouseMiddleButtonReleasedShiftKeyPressedEvent & \
-       __r_MouseMiddleButtonReleasedShiftKeyPressedEvent); \
+       __r_MouseMiddleButtonReleasedShiftKeyPressedEvent) \
+      throw(); \
 \
     bool onNotify \
       (_MouseMiddleButtonReleasedControlKeyPressedEvent & \
-       __r_MouseMiddleButtonReleasedControlKeyPressedEvent); \
+       __r_MouseMiddleButtonReleasedControlKeyPressedEvent) \
+      throw(); \
 \
     bool onNotify \
       (_MouseMiddleButtonReleasedShiftKeyPressedControlKeyPressedEvent & \
-       __r_MouseMiddleButtonReleasedShiftKeyPressedControlKeyPressedEvent); \
+       __r_MouseMiddleButtonReleasedShiftKeyPressedControlKeyPressedEvent) \
+      throw(); \
 \
     bool onNotify \
       (_MouseRightButtonReleasedEvent & \
-       __r_MouseRightButtonReleasedEvent); \
+       __r_MouseRightButtonReleasedEvent) \
+      throw(); \
 \
     bool onNotify \
       (_MouseRightButtonReleasedShiftKeyPressedEvent & \
-       __r_MouseRightButtonReleasedShiftKeyPressedEvent); \
+       __r_MouseRightButtonReleasedShiftKeyPressedEvent) \
+      throw(); \
 \
     bool onNotify \
       (_MouseRightButtonReleasedControlKeyPressedEvent & \
-       __r_MouseRightButtonReleasedControlKeyPressedEvent); \
+       __r_MouseRightButtonReleasedControlKeyPressedEvent) \
+      throw(); \
 \
     bool onNotify \
       (_MouseRightButtonReleasedShiftKeyPressedControlKeyPressedEvent & \
-       __r_MouseRightButtonReleasedShiftKeyPressedControlKeyPressedEvent); \
+       __r_MouseRightButtonReleasedShiftKeyPressedControlKeyPressedEvent) \
+      throw(); \
 \
     bool onNotify \
       (_##name##Event & \
-       __r_##name##Event); \
+       __r_##name##Event) \
+      throw(); \
 \
     void register##name## \
-      (void (Scene::*__fp)(Scene *__pScene)); \
+      (void (Scene::*__fp)(Scene *__pScene)) \
+      throw(); \
 \
  private: \
 \
     bool _onNotify \
-      (Scene *__pScene); \
+      (Scene *__pScene) \
+      throw(); \
 \
     void (Scene::*__mfp)(Scene *__pScene); \
 \
     Scene *__mpScene_; \
     Scene *transmitter__mpScene_; \
-} name;
+} name
 
 
 
@@ -799,6 +898,7 @@ BALL_INLINE \
 Scene * \
 Events::_##name##Event::getScene \
   () const \
+  throw() \
 { \
   return __mpScene_; \
 } \
@@ -807,6 +907,7 @@ BALL_INLINE \
 Scene * \
 Events::_##name##Event::getTransmitterScene \
   () const \
+  throw() \
 { \
   return transmitter__mpScene_; \
 } \
@@ -816,6 +917,7 @@ bool \
 Events::_##name##Event::onNotify \
   (_MouseLeftButtonReleasedEvent & \
    __r_MouseLeftButtonReleasedEvent) \
+  throw() \
 { \
   return _onNotify(__r_MouseLeftButtonReleasedEvent.getScene()); \
 } \
@@ -825,6 +927,7 @@ bool \
 Events::_##name##Event::onNotify \
   (_MouseLeftButtonReleasedShiftKeyPressedEvent & \
    __r_MouseLeftButtonReleasedShiftKeyPressedEvent) \
+  throw() \
 { \
   return _onNotify(__r_MouseLeftButtonReleasedShiftKeyPressedEvent.getScene()); \
 } \
@@ -834,6 +937,7 @@ bool \
 Events::_##name##Event::onNotify \
   (_MouseLeftButtonReleasedControlKeyPressedEvent & \
    __r_MouseLeftButtonReleasedControlKeyPressedEvent) \
+  throw() \
 { \
   return _onNotify(__r_MouseLeftButtonReleasedControlKeyPressedEvent.getScene()); \
 } \
@@ -843,6 +947,7 @@ bool \
 Events::_##name##Event::onNotify \
   (_MouseLeftButtonReleasedShiftKeyPressedControlKeyPressedEvent & \
    __r_MouseLeftButtonReleasedShiftKeyPressedControlKeyPressedEvent) \
+  throw() \
 { \
   return _onNotify(__r_MouseLeftButtonReleasedShiftKeyPressedControlKeyPressedEvent.getScene()); \
 } \
@@ -852,6 +957,7 @@ bool \
 Events::_##name##Event::onNotify \
   (_MouseMiddleButtonReleasedEvent & \
    __r_MouseMiddleButtonReleasedEvent) \
+  throw() \
 { \
   return _onNotify(__r_MouseMiddleButtonReleasedEvent.getScene()); \
 } \
@@ -861,6 +967,7 @@ bool \
 Events::_##name##Event::onNotify \
   (_MouseMiddleButtonReleasedShiftKeyPressedEvent & \
    __r_MouseMiddleButtonReleasedShiftKeyPressedEvent) \
+  throw() \
 { \
   return _onNotify(__r_MouseMiddleButtonReleasedShiftKeyPressedEvent.getScene()); \
 } \
@@ -870,6 +977,7 @@ bool \
 Events::_##name##Event::onNotify \
   (_MouseMiddleButtonReleasedControlKeyPressedEvent & \
    __r_MouseMiddleButtonReleasedControlKeyPressedEvent) \
+  throw() \
 { \
   return _onNotify(__r_MouseMiddleButtonReleasedControlKeyPressedEvent.getScene()); \
 } \
@@ -879,6 +987,7 @@ bool \
 Events::_##name##Event::onNotify \
   (_MouseMiddleButtonReleasedShiftKeyPressedControlKeyPressedEvent & \
    __r_MouseMiddleButtonReleasedShiftKeyPressedControlKeyPressedEvent) \
+  throw() \
 { \
   return _onNotify(__r_MouseMiddleButtonReleasedShiftKeyPressedControlKeyPressedEvent. \
 		   getScene()); \
@@ -889,6 +998,7 @@ bool \
 Events::_##name##Event::onNotify \
   (_MouseRightButtonReleasedEvent & \
    __r_MouseRightButtonReleasedEvent) \
+  throw() \
 { \
   return _onNotify(__r_MouseRightButtonReleasedEvent.getScene()); \
 } \
@@ -898,6 +1008,7 @@ bool \
 Events::_##name##Event::onNotify \
   (_MouseRightButtonReleasedShiftKeyPressedEvent & \
    __r_MouseRightButtonReleasedShiftKeyPressedEvent) \
+  throw() \
 { \
   return _onNotify(__r_MouseRightButtonReleasedShiftKeyPressedEvent.getScene()); \
 } \
@@ -907,6 +1018,7 @@ bool \
 Events::_##name##Event::onNotify \
   (_MouseRightButtonReleasedControlKeyPressedEvent & \
    __r_MouseRightButtonReleasedControlKeyPressedEvent) \
+  throw() \
 { \
   return _onNotify(__r_MouseRightButtonReleasedControlKeyPressedEvent.getScene()); \
 } \
@@ -916,6 +1028,7 @@ bool \
 Events::_##name##Event::onNotify \
   (_MouseRightButtonReleasedShiftKeyPressedControlKeyPressedEvent & \
    __r_MouseRightButtonReleasedShiftKeyPressedControlKeyPressedEvent) \
+  throw() \
 { \
   return _onNotify(__r_MouseRightButtonReleasedShiftKeyPressedControlKeyPressedEvent. \
 		   getScene()); \
@@ -926,6 +1039,7 @@ bool \
 Events::_##name##Event::onNotify \
   (_##name##Event & \
    __r_##name##Event) \
+  throw() \
 { \
   if (__r_##name##Event.getTransmitterScene()  \
       == transmitter__mpScene_) \
@@ -940,6 +1054,7 @@ BALL_INLINE \
 void \
 Events::_##name##Event::register##name## \
   (void (Scene::*__fp)(Scene *__pScene)) \
+  throw() \
 { \
   __mfp = __fp; \
 }
@@ -950,6 +1065,7 @@ Events::_##name##Event::register##name## \
 bool \
 Events::_##name##Event::_onNotify \
   (Scene *__pScene) \
+  throw() \
 { \
   transmitter__mpScene_ = __pScene; \
 \
@@ -975,427 +1091,1156 @@ namespace BALL
 		class Scene;
 
 
+		/*
+    !!! do not compile this class !!!
+		!!! class will be included in scene !!!
+		*/
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//    !!! do not compile this class !!!
-//
-// !!! class will be included in scene !!!
-//
-////////////////////////////////////////////////////////////////////////////////
 
+		/**	The Events class.
+				{\bf Framework:} BALL/VIEW/GUI/WIDGETS\\
+				{\bf Definition:} \URL{BALL/VIEW/GUI/WIDGETS/events.h}\\ \\
+				The class Events declares some event classes, the appropriate receiver classes
+				and event combination operators to handle, process and combine events.
+				Macros are used to declare these classes.  The \Ref{Notification} concept of
+				BALL is used for the receivers classes. The class \Ref{Scene} binds its own
+				methods to the receivers classes of {\em *this} events. Further the \Ref{Scene}
+				object uses the combination operators to combine different events together and
+				sent them to other receiving event classes prio registered with the 
+				\Ref{Notification} mechanism of BALL.
+				The names of the methods may seems a bit the long and unreadable but they are only
+				event names and will used and created automatically for the \Ref{Scene} object.
+				@memo    Events class (BALL VIEW gui widgets framework)
+				@author  $Author: hekl $
+				@version $Revision: 1.4 $
+				@date    $Date: 2001/05/13 14:03:44 $
+		*/
 		class Events
 		{
 			public:
 
-			/**	@name	Constructors and Destructors
+			/**	@name Exceptions
+			*/
+			//@{
+			/** EventCombinationNotAllowed exception class.
+					This exception is thrown if events of different \Ref{Scene} objects are
+					combined.
+					@see GeneralException
+					@see Scene
+			*/
+ 			class EventCombinationNotAllowed: public Exception::GeneralException
+			{
+  			public:
+	   			EventCombinationNotAllowed(const char* file, int line)
+						throw();
+			};
+			//@}
+
+			/**	@name	Constructors
+			*/	
+			//@{
+
+			/** Default Constructor.
+					Construct new events.
+					Initialize all own event classes.
+					@param      scene the pointer to a \Ref{Scene} object to bind onto {\em *this} events
+					@return     Events new constructed events
+					@see        Scene
+			*/
+			Events(Scene* scene)
+				throw();
+		
+			//@}
+
+			/** @name Destructors 
 			*/
 			//@{
 
-			Events();
+			/** Destructor.
+					Default destruction of {\em *this} events.
+					Calls \Ref{destroy}.
+					@see         destroy
+			*/
+			virtual ~Events()
+				throw();
 
-			Events(Scene* scene);
+			/** Explicit default initialization.
+					Empty for further purpose.
+			*/
+			virtual void clear()
+				throw();
 		
-			Events(const Events& events, bool deep = true);
-
-			virtual ~Events();
-
-			virtual void clear();
-		
-			virtual void destroy();
+			/** Explicit destructor.
+					Empty for further purpose.
+			*/
+			virtual void destroy()
+				throw();
 			//@}
 		
-			/**	@name	Assignment
+
+			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
-			
 
-			void set(const Events& events, bool deep = true);
-
-			Events& operator = (const Events& events);
-
-			void get(Events& events, bool deep = true) const;
-
-			void swap(Events& events);
+			/** Inspection of the scene.
+					Access a pointer to the \Ref{Scene} object of {\em *this} events.
+					@return Scene* a pointer to the \Ref{Scene} object
+ 			*/
+			Scene *getScene();
 			//@}
 
-			// --- EVENT CLASS DECLARATIONS
 
-		 BALL_VIEW_DECLARE_EVENT_CLASS
-				(ShiftKeyPressed) 
+			/** @name Event classes declaration
+			*/
+			//@{
+			/** Declare event class ShiftKeyPressed.
+					Declare the event class {\em ShiftKeyPressed}. This event will be sent by
+					the \Ref{Scene} object whenever the shift key on the keyboard is pressed.
+			*/
+			BALL_VIEW_DECLARE_EVENT_CLASS
+				(ShiftKeyPressed); 
 
+			/** Declare event class ShiftKeyPressedMouseMoved.
+					Declare the event class {\em ShiftKeyPressedMouseMoved}. This event will be
+					sent by the \Ref{Scene} object whenever the shift key on the keyboard is pressed
+					and at the same moment the mouse is moved.
+			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
-				(ShiftKeyPressedMouseMoved)
+				(ShiftKeyPressedMouseMoved);
 			
+			/** Declare event class ControlKeyPressed.
+					Declare the event class {\em ControlKeyPressed}. This event will be sent by
+					the \Ref{Scene} object whenever the control key on the keyboard is pressed.
+			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
-				(ControlKeyPressed)
+				(ControlKeyPressed);
 			
+			/** Declare event class ControlKeyPressedMouseMoved.
+					Declare the event class {\em ControlKeyPressedMouseMoved}. This event will be
+					sent by the \Ref{Scene} object whenever the control key on the keyboard is pressed
+					and at the same moment the mouse is moved.
+			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
-				(ControlKeyPressedMouseMoved)
+				(ControlKeyPressedMouseMoved);
 			
+			/** Declare event class ShiftKeyPressedControlKeyPressed.
+					Declare the event class {\em ShiftKeyPressedControlKeyPressed}. This event will be
+					sent by the \Ref{Scene} object whenever the shift key on the keyboard is pressed
+					and at the same moment the control key is pressed.
+			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
-				(ShiftKeyPressedControlKeyPressed)
+				(ShiftKeyPressedControlKeyPressed);
 			
+			/** Declare event class ShiftKeyPressedControlKeyPressedMouseMoved.
+					Declare the event class {\em ShiftKeyPressedControlKeyPressedMouseMoved}.
+					This event will be sent by the \Ref{Scene} object whenever the shift key and
+					the control key on the keyboard are pressed and at the same moment the 
+					mouse is  moved.
+			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
-				(ShiftKeyPressedControlKeyPressedMouseMoved)
+				(ShiftKeyPressedControlKeyPressedMouseMoved);
 			
+			/** Declare event class MouseLeftButtonPressed.
+					Declare the event class {\em MouseLeftButtonPressed}. This event will be sent by
+					the \Ref{Scene} object whenever the left button of the mouse is pressed.
+			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
-				(MouseLeftButtonPressed)
+				(MouseLeftButtonPressed);
 			
+			/** Declare event class MouseLeftButtonPressedShiftKeyPressed.
+					Declare the event class {\em MouseLeftButtonPressedShiftKeyPressed}. 
+					This event will be sent by the \Ref{Scene} object whenever 
+					the left button of the mouse is pressed
+					and at the same moment the 
+					shift key on the keyboard is pressed.
+			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
-				(MouseLeftButtonPressedShiftKeyPressed)
+				(MouseLeftButtonPressedShiftKeyPressed);
 			
+			/** Declare event class MouseLeftButtonPressedControlKeyPressed.
+					Declare the event class {\em MouseLeftButtonPressedControlKeyPressed}.
+					This event will be sent by the \Ref{Scene} object whenever 
+					the left button of the mouse is pressed
+					and at the same moment the 
+					control key on the keyboard is pressed.
+			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
-				(MouseLeftButtonPressedControlKeyPressed)
+				(MouseLeftButtonPressedControlKeyPressed);
 			
+			/** Declare event class MouseLeftButtonPressedShiftKeyPressedControlKeyPressed.
+					Declare the event class {\em MouseLeftButtonPressedShiftKeyPressedControlKeyPressed}.
+					This event will be sent by the \Ref{Scene} object whenever 
+					the left button of the mouse is pressed
+					and at the same moment the 
+					shift key and the control key on the keyboard are pressed.
+			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
-				(MouseLeftButtonPressedShiftKeyPressedControlKeyPressed)
+				(MouseLeftButtonPressedShiftKeyPressedControlKeyPressed);
 			
+			/** Declare event class MouseLeftButtonPressedMouseMoved.
+					Declare the event class {\em MouseLeftButtonPressedMouseMoved}.
+					This event will be sent by the \Ref{Scene} object whenever 
+					the left button of the mouse is pressed
+					and at the same moment the 
+					the mouse is moved.
+			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
-				(MouseLeftButtonPressedMouseMoved)
+				(MouseLeftButtonPressedMouseMoved);
 			
+			/** Declare event class MouseLeftButtonPressedShiftKeyPressedMouseMoved.
+					Declare the event class {\em MouseLeftButtonPressedShiftKeyPressedMouseMoved}.
+					This event will be sent by the \Ref{Scene} object whenever 
+					the left button of the mouse is pressed
+					and at the same moment the 
+					the shift key on the keyboard is pressed and the mouse is moved.
+			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
-				(MouseLeftButtonPressedShiftKeyPressedMouseMoved)
+				(MouseLeftButtonPressedShiftKeyPressedMouseMoved);
 			
+			/** Declare event class MouseLeftButtonPressedControlKeyPressedMouseMoved.
+					Declare the event class {\em MouseLeftButtonPressedControlKeyPressedMouseMoved}.
+					This event will be sent by the \Ref{Scene} object whenever 
+					the left button of the mouse is pressed
+					and at the same moment the 
+					the control key on the keyboard is pressed and the mouse is moved.
+			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
-				(MouseLeftButtonPressedControlKeyPressedMouseMoved)
+				(MouseLeftButtonPressedControlKeyPressedMouseMoved);
 			
+			/** Declare event class MouseLeftButtonPressedControlKeyPressedMouseMoved.
+					Declare the event class {\em MouseLeftButtonPressedControlKeyPressedMouseMoved}.
+					This event will be sent by the \Ref{Scene} object whenever 
+					the left button of the mouse is pressed
+					and at the same moment the 
+					the shift key and the control key on the keyboard are pressed and the mouse is moved.
+			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
-				(MouseLeftButtonPressedShiftKeyPressedControlKeyPressedMouseMoved)
+				(MouseLeftButtonPressedShiftKeyPressedControlKeyPressedMouseMoved);
 			
+			/** Declare event class MouseLeftButtonReleased.
+					Declare the event class {\em MouseLeftButtonReleased}. This event will be sent by
+					the \Ref{Scene} object whenever 
+					the left button of the mouse is released.
+			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
-				(MouseLeftButtonReleased)
+				(MouseLeftButtonReleased);
 			
+			/** Declare event class MouseLeftButtonReleasedShiftKeyPressed.
+					Declare the event class {\em MouseLeftButtonReleasedShiftKeyPressed}.
+					This event will be sent by the \Ref{Scene} object whenever 
+					the left button of the mouse is released
+					and at the same moment the 
+					shift key on the keyboard is pressed.
+			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
-				(MouseLeftButtonReleasedShiftKeyPressed)
+				(MouseLeftButtonReleasedShiftKeyPressed);
 			
+			/** Declare event class MouseLeftButtonReleasedControlKeyPressed.
+					Declare the event class {\em MouseLeftButtonReleasedControlKeyPressed}.
+					This event will be sent by the \Ref{Scene} object whenever 
+					the left button of the mouse is released
+					and at the same moment the 
+					control key on the keyboard is pressed.
+			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
-				(MouseLeftButtonReleasedControlKeyPressed)
+				(MouseLeftButtonReleasedControlKeyPressed);
 			
+			/** Declare event class MouseLeftButtonReleasedShiftKeyPressedControlKeyPressed.
+					Declare the event class {\em MouseLeftButtonReleasedShiftKeyPressedControlKeyPressed}.
+					This event will be sent by the \Ref{Scene} object whenever 
+					the left button of the mouse is released
+					and at the same moment the 
+					shift key and the control key on the keyboard are pressed.
+			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
-				(MouseLeftButtonReleasedShiftKeyPressedControlKeyPressed)
+				(MouseLeftButtonReleasedShiftKeyPressedControlKeyPressed);
 			
+			/** Declare event class MouseMiddleButtonPressed.
+					Declare the event class {\em MouseMiddleButtonPressed}. 
+					This event will be sent by the \Ref{Scene} object whenever 
+					the middle button of the mouse is pressed.
+			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
-				(MouseMiddleButtonPressed)
+				(MouseMiddleButtonPressed);
 			
+			/** Declare event class MouseMiddleButtonPressedShiftKeyPressed.
+					Declare the event class {\em MouseMiddleButtonPressedShiftKeyPressed}. 
+					This event will be sent by the \Ref{Scene} object whenever 
+					the middle button of the mouse is pressed
+					and at the same moment the 
+					shift key on the keyboard is pressed.
+			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
-				(MouseMiddleButtonPressedShiftKeyPressed)
+				(MouseMiddleButtonPressedShiftKeyPressed);
 			
+			/** Declare event class MouseMiddleButtonPressedControlKeyPressed.
+					Declare the event class {\em MouseMiddleButtonPressedControlKeyPressed}. 
+					This event will be sent by the \Ref{Scene} object whenever 
+					the middle button of the mouse is pressed
+					and at the same moment the 
+					control key on the keyboard is pressed.
+			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
-				(MouseMiddleButtonPressedControlKeyPressed)
+				(MouseMiddleButtonPressedControlKeyPressed);
 			
+			/** Declare event class MouseMiddleButtonPressedShiftKeyPressedControlKeyPressed.
+					Declare the event class {\em MouseMiddleButtonPressedShiftKeyPressedControlKeyPressed}. 
+					This event will be sent by the \Ref{Scene} object whenever 
+					the middle button of the mouse is pressed
+					and at the same moment the 
+					shift key and the control key on the keyboard are pressed.
+			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
-				(MouseMiddleButtonPressedShiftKeyPressedControlKeyPressed)
+				(MouseMiddleButtonPressedShiftKeyPressedControlKeyPressed);
 			
+			/** Declare event class MouseMiddleButtonPressedMouseMoved.
+					Declare the event class {\em MouseMiddleButtonPressedMouseMoved}. 
+					This event will be sent by the \Ref{Scene} object whenever 
+					the middle button of the mouse is pressed
+					and at the same moment the 
+					mouse is moved.
+			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
-				(MouseMiddleButtonPressedMouseMoved)
+				(MouseMiddleButtonPressedMouseMoved);
 			
+			/** Declare event class MouseMiddleButtonPressedShiftKeyPressedMouseMoved.
+					Declare the event class {\em MouseMiddleButtonPressedShiftKeyPressedMouseMoved}. 
+					This event will be sent by the \Ref{Scene} object whenever 
+					the middle button of the mouse is pressed
+					and at the same moment the 
+					shift key on the keyboard is pressed and the
+					mouse is moved.
+			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
-				(MouseMiddleButtonPressedShiftKeyPressedMouseMoved)
+				(MouseMiddleButtonPressedShiftKeyPressedMouseMoved);
 			
+			/** Declare event class MouseMiddleButtonPressedControlKeyPressedMouseMoved.
+					Declare the event class {\em MouseMiddleButtonPressedControlKeyPressedMouseMoved}. 
+					This event will be sent by the \Ref{Scene} object whenever 
+					the middle button of the mouse is pressed
+					and at the same moment the 
+					control key on the keyboard is pressed and the
+					mouse is moved.
+			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
-				(MouseMiddleButtonPressedControlKeyPressedMouseMoved)
+				(MouseMiddleButtonPressedControlKeyPressedMouseMoved);
 			
+			/** Declare event class MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedMouseMoved.
+					Declare the event class {\em MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedMouseMoved}. 
+					This event will be sent by the \Ref{Scene} object whenever 
+					the middle button of the mouse is pressed
+					and at the same moment the 
+					shift key and the control key on the keyboard are pressed and the
+					mouse is moved.
+			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
-				(MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedMouseMoved)
+				(MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedMouseMoved);
 			
+			/** Declare event class MouseMiddleButtonReleased.
+					Declare the event class {\em MouseMiddleButtonReleased}. 
+					This event will be sent by the \Ref{Scene} object whenever 
+					the middle button of the mouse is released.
+			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
-				(MouseMiddleButtonReleased)
+				(MouseMiddleButtonReleased);
 			
+			/** Declare event class MouseMiddleButtonReleasedShiftKeyPressed.
+					Declare the event class {\em MouseMiddleButtonReleasedShiftKeyPressed}. 
+					This event will be sent by the \Ref{Scene} object whenever 
+					the middle button of the mouse is released
+					and at the same moment the 
+					shift key on the keyboard is pressed.
+			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
-				(MouseMiddleButtonReleasedShiftKeyPressed)
+				(MouseMiddleButtonReleasedShiftKeyPressed);
 			
+			/** Declare event class MouseMiddleButtonReleasedControlKeyPressed.
+					Declare the event class {\em MouseMiddleButtonReleasedControlKeyPressed}. 
+					This event will be sent by the \Ref{Scene} object whenever 
+					the middle button of the mouse is released
+					and at the same moment the 
+					control key on the keyboard is pressed.
+			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
-				(MouseMiddleButtonReleasedControlKeyPressed)
+				(MouseMiddleButtonReleasedControlKeyPressed);
 			
+			/** Declare event class MouseMiddleButtonReleasedShiftKeyPressedControlKeyPressed.
+					Declare the event class {\em MouseMiddleButtonReleasedShiftKeyPressedControlKeyPressed}. 
+					This event will be sent by the \Ref{Scene} object whenever 
+					the middle button of the mouse is released
+					and at the same moment the 
+					shift key and the control key on the keyboard are pressed.
+			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
-				(MouseMiddleButtonReleasedShiftKeyPressedControlKeyPressed)
+				(MouseMiddleButtonReleasedShiftKeyPressedControlKeyPressed);
 			
+			/** Declare event class MouseRightButtonPressed.
+					Declare the event class {\em MouseRightButtonPressed}. 
+					This event will be sent by the \Ref{Scene} object whenever 
+					the right button of the mouse is pressed.
+			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
-				(MouseRightButtonPressed)
+				(MouseRightButtonPressed);
 			
+			/** Declare event class MouseRightButtonPressedShiftKeyPressed.
+					Declare the event class {\em MouseRightButtonPressedShiftKeyPressed}. 
+					This event will be sent by the \Ref{Scene} object whenever 
+					the right button of the mouse is pressed
+					and at the same moment the 
+					shift key on the keyboard is pressed.
+			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
-				(MouseRightButtonPressedShiftKeyPressed)
+				(MouseRightButtonPressedShiftKeyPressed);
 			
+			/** Declare event class MouseRightButtonPressedControlKeyPressed.
+					Declare the event class {\em MouseRightButtonPressedControlKeyPressed}. 
+					This event will be sent by the \Ref{Scene} object whenever 
+					the right button of the mouse is pressed
+					and at the same moment the 
+					control key on the keyboard is pressed.
+			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
-				(MouseRightButtonPressedControlKeyPressed)
+				(MouseRightButtonPressedControlKeyPressed);
 			
+			/** Declare event class MouseRightButtonPressedShiftKeyPressedControlKeyPressed.
+					Declare the event class {\em MouseRightButtonPressedShiftKeyPressedControlKeyPressed}. 
+					This event will be sent by the \Ref{Scene} object whenever 
+					the right button of the mouse is pressed
+					and at the same moment the 
+					shift key and the control key on the keyboard are pressed.
+			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
-				(MouseRightButtonPressedShiftKeyPressedControlKeyPressed)
+				(MouseRightButtonPressedShiftKeyPressedControlKeyPressed);
 			
+			/** Declare event class MouseRightButtonPressedMouseMoved.
+					Declare the event class {\em MouseRightButtonPressedMouseMoved}. 
+					This event will be sent by the \Ref{Scene} object whenever 
+					the right button of the mouse is pressed
+					and at the same moment the 
+					mouse is moved.
+			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
-				(MouseRightButtonPressedMouseMoved)
+				(MouseRightButtonPressedMouseMoved);
 			
+			/** Declare event class MouseRightButtonPressedShiftKeyPressedMouseMoved.
+					Declare the event class {\em MouseRightButtonPressedShiftKeyPressedMouseMoved}. 
+					This event will be sent by the \Ref{Scene} object whenever 
+					the right button of the mouse is pressed
+					and at the same moment the 
+					shift key on the keyboard is pressed and the
+					mouse is moved.
+			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
-				(MouseRightButtonPressedShiftKeyPressedMouseMoved)
+				(MouseRightButtonPressedShiftKeyPressedMouseMoved);
 			
+			/** Declare event class MouseRightButtonPressedControlKeyPressedMouseMoved.
+					Declare the event class {\em MouseRightButtonPressedControlKeyPressedMouseMoved}. 
+					This event will be sent by the \Ref{Scene} object whenever 
+					the right button of the mouse is pressed
+					and at the same moment the 
+					control key on the keyboard is pressed and the
+					mouse is moved.
+			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
-				(MouseRightButtonPressedControlKeyPressedMouseMoved)
+				(MouseRightButtonPressedControlKeyPressedMouseMoved);
 			
+			/** Declare event class MouseRightButtonPressedShiftKeyPressedControlKeyPressedMouseMoved.
+					Declare the event class {\em MouseRightButtonPressedShiftKeyPressedControlKeyPressedMouseMoved}. 
+					This event will be sent by the \Ref{Scene} object whenever 
+					the right button of the mouse is pressed
+					and at the same moment the 
+					shift key and the control key on the keyboard are pressed and the
+					mouse is moved.
+			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
-				(MouseRightButtonPressedShiftKeyPressedControlKeyPressedMouseMoved)
+				(MouseRightButtonPressedShiftKeyPressedControlKeyPressedMouseMoved);
 			
+			/** Declare event class MouseRightButtonReleased.
+					Declare the event class {\em MouseRightButtonReleased}. 
+					This event will be sent by the \Ref{Scene} object whenever 
+					the right button of the mouse is released.
+			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
-				(MouseRightButtonReleased)
+				(MouseRightButtonReleased);
 			
+			/** Declare event class MouseRightButtonReleasedShiftKeyPressed.
+					Declare the event class {\em MouseRightButtonReleasedShiftKeyPressed}. 
+					This event will be sent by the \Ref{Scene} object whenever 
+					the right button of the mouse is released
+					and at the same moment the 
+					shift key on the keyboard is pressed.
+			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
-				(MouseRightButtonReleasedShiftKeyPressed)
+				(MouseRightButtonReleasedShiftKeyPressed);
 			
+			/** Declare event class MouseRightButtonReleasedControlKeyPressed.
+					Declare the event class {\em MouseRightButtonReleasedControlKeyPressed}. 
+					This event will be sent by the \Ref{Scene} object whenever 
+					the right button of the mouse is released
+					and at the same moment the 
+					control key on the keyboard is pressed.
+			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
-				(MouseRightButtonReleasedControlKeyPressed)
+				(MouseRightButtonReleasedControlKeyPressed);
 			
+			/** Declare event class MouseRightButtonReleasedShiftKeyPressedControlKeyPressed.
+					Declare the event class {\em MouseRightButtonReleasedShiftKeyPressedControlKeyPressed}. 
+					This event will be sent by the \Ref{Scene} object whenever 
+					the right button of the mouse is released
+					and at the same moment the 
+					shift key and the control key on the keyboard are pressed.
+			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
-				(MouseRightButtonReleasedShiftKeyPressedControlKeyPressed)
+				(MouseRightButtonReleasedShiftKeyPressedControlKeyPressed);
 			
+			/** Declare event class MouseMoved.
+					Declare the event class {\em MouseMoved}. 
+					This event will be sent by the \Ref{Scene} object whenever 
+					the mouse is moved.
+			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
-				(MouseMoved)
-			 
-			// --- ACCESSORS: INSPECTORS and MUTATORS
-		
-			BALL_VIEW_DECLARE_PRESSED_MOVED_EVENT_CLASS(RotateSystem)
-			BALL_VIEW_DECLARE_PRESSED_MOVED_EVENT_CLASS(ZoomSystem)
-			BALL_VIEW_DECLARE_PRESSED_MOVED_EVENT_CLASS(TranslateSystem)
-			BALL_VIEW_DECLARE_PRESSED_MOVED_EVENT_CLASS(SelectionPressedMoved)
-			BALL_VIEW_DECLARE_PRESSED_EVENT_CLASS(SelectionPressed)
-			BALL_VIEW_DECLARE_RELEASED_EVENT_CLASS(SelectionReleased)
-			BALL_VIEW_DECLARE_PRESSED_MOVED_EVENT_CLASS(DeselectionPressedMoved)
-			BALL_VIEW_DECLARE_PRESSED_EVENT_CLASS(DeselectionPressed)
-			BALL_VIEW_DECLARE_RELEASED_EVENT_CLASS(DeselectionReleased)
+				(MouseMoved);
+			//@}
 
-			
-			// --- OPERATORS
+			/** @name Event receiver classes declaration
+			*/
+			//@{
+			/** Declare event receiver class RotateSystem.
+					This event receiver class catches all pressed and moved events and relates
+					them to the method registered with {\em registerRotateSystem} available in this
+					class. The method registered with {\em registerRotateSystem} must have as
+					parameter a pointer to the \Ref{Scene} object. So you have access in this
+					method to the	\Ref{Scene} object that has sent the event.
+					The method {\em registerRotateSystem} takes as parameter as pointer to
+					a method available in the \Ref{Scene} object.
+			*/
+			BALL_VIEW_DECLARE_PRESSED_MOVED_EVENT_CLASS(RotateSystem);
 
+			/** Declare event receiver class ZoomSystem.
+					This event receiver class catches all pressed and moved events and relates
+					them to the method registered with {\em registerZoomSystem} available in this
+					class. The method registered with {\em registerZoomSystem} must have as
+					parameter a pointer to the \Ref{Scene} object. So you have access in this
+					method to the	\Ref{Scene} object that has sent the event.
+					The method {\em registerZoomSystem} takes as parameter as pointer to
+					a method available in the \Ref{Scene} object.
+			*/
+			BALL_VIEW_DECLARE_PRESSED_MOVED_EVENT_CLASS(ZoomSystem);
+
+			/** Declare event receiver class TranslateSystem.
+					This event receiver class catches all pressed and moved events and relates
+					them to the method registered with {\em registerTranslateSystem} available in this
+					class. The method registered with {\em registerTranslateSystem} must have as
+					parameter a pointer to the \Ref{Scene} object. So you have access in this
+					method to the	\Ref{Scene} object that has sent the event.
+					The method {\em registerTranslateSystem} takes as parameter as pointer to
+					a method available in the \Ref{Scene} object.
+			*/
+			BALL_VIEW_DECLARE_PRESSED_MOVED_EVENT_CLASS(TranslateSystem);
+
+			/** Declare event receiver class SelectionPressedMoved.
+					This event receiver class catches all pressed and moved events and relates
+					them to the method registered with {\em registerSelectionPressedMoved} available in this
+					class. The method registered with {\em registerSelectionPressedMoved} must have as
+					parameter a pointer to the \Ref{Scene} object. So you have access in this
+					method to the	\Ref{Scene} object that has sent the event.
+					The method {\em registerSelectionPressedMoved} takes as parameter as pointer to
+					a method available in the \Ref{Scene} object.
+			*/
+			BALL_VIEW_DECLARE_PRESSED_MOVED_EVENT_CLASS(SelectionPressedMoved);
+
+			/** Declare event receiver class SelectionPressed.
+					This event receiver class catches all pressed events and relates
+					them to the method registered with {\em registerSelectionPressed} available in this
+					class. The method registered with {\em registerSelectionPressed} must have as
+					parameter a pointer to the \Ref{Scene} object. So you have access in this
+					method to the	\Ref{Scene} object that has sent the event.
+					The method {\em registerSelectionPressed} takes as parameter as pointer to
+					a method available in the \Ref{Scene} object.
+			*/
+			BALL_VIEW_DECLARE_PRESSED_EVENT_CLASS(SelectionPressed);
+
+			/** Declare event receiver class SelectionReleased.
+					This event receiver class catches all released events and relates
+					them to the method registered with {\em registerSelectionReleased} available in this
+					class. The method registered with {\em registerSelectionReleased} must have as
+					parameter a pointer to the \Ref{Scene} object. So you have access in this
+					method to the	\Ref{Scene} object that has sent the event.
+					The method {\em registerSelectionReleased} takes as parameter as pointer to
+					a method available in the \Ref{Scene} object.
+			*/
+			BALL_VIEW_DECLARE_RELEASED_EVENT_CLASS(SelectionReleased);
+
+			/** Declare event receiver class DeselectionPressedMoved.
+					This event receiver class catches all pressed and moved events and relates
+					them to the method registered with {\em registerDeselectionPressedMoved} available in this
+					class. The method registered with {\em registerDeselectionPressedMoved} must have as
+					parameter a pointer to the \Ref{Scene} object. So you have access in this
+					method to the	\Ref{Scene} object that has sent the event.
+					The method {\em registerDeselectionPressedMoved} takes as parameter as pointer to
+					a method available in the \Ref{Scene} object.
+			*/
+			BALL_VIEW_DECLARE_PRESSED_MOVED_EVENT_CLASS(DeselectionPressedMoved);
+
+			/** Declare event receiver class DeselectionPressed.
+					This event receiver class catches all pressed events and relates
+					them to the method registered with {\em registerDeselectionPressed} available in this
+					class. The method registered with {\em registerDeselectionPressed} must have as
+					parameter a pointer to the \Ref{Scene} object. So you have access in this
+					method to the	\Ref{Scene} object that has sent the event.
+					The method {\em registerDeselectionPressed} takes as parameter as pointer to
+					a method available in the \Ref{Scene} object.
+			*/
+			BALL_VIEW_DECLARE_PRESSED_EVENT_CLASS(DeselectionPressed);
+
+			/** Declare event receiver class DeselectionReleased.
+					This event receiver class catches all released events and relates
+					them to the method registered with {\em registerDeselectionReleased} available in this
+					class. The method registered with {\em registerDeselectionReleased} must have as
+					parameter a pointer to the \Ref{Scene} object. So you have access in this
+					method to the	\Ref{Scene} object that has sent the event.
+					The method {\em registerDeselectionReleased} takes as parameter as pointer to
+					a method available in the \Ref{Scene} object.
+			*/
+			BALL_VIEW_DECLARE_RELEASED_EVENT_CLASS(DeselectionReleased);
+			//@}
+			
+			/** @name Event combination operators
+			*/
+			//@{
+
+			/** Declare combine operator for events ShiftKeyPressed and ControlKeyPressed.
+					Declare operator & for the two events 
+					{\em ShiftKeyPressed} and {\em ControlKeyPressed}.
+					The return type of this operator is
+					{\em ShiftKeyPressedControlKeyPressed}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(ShiftKeyPressed,
-				 ControlKeyPressed)
+				 ControlKeyPressed);
 			
+			/** Declare combine operator for events ShiftKeyPressed and MouseMoved.
+					Declare operator & for the two events 
+					{\em ShiftKeyPressed} and {\em MouseMoved}.
+					The return type of this operator is
+					{\em ShiftKeyPressedMouseMoved}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(ShiftKeyPressed,
-				 MouseMoved)
+				 MouseMoved);
 			
+			/** Declare combine operator for events ControlKeyPressed and MouseMoved.
+					Declare operator & for the two events 
+					{\em ControlKeyPressed} and {\em MouseMoved}.
+					The return type of this operator is
+					{\em ControlKeyPressedMouseMoved}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(ControlKeyPressed,
-				 MouseMoved)
+				 MouseMoved);
 			
+			/** Declare combine operator for events ShiftKeyPressed and ControlKeyPressedMouseMoved.
+					Declare operator & for the two events 
+					{\em ShiftKeyPressed} and {\em ControlKeyPressedMouseMoved}.
+					The return type of this operator is
+					{\em ShiftKeyPressedControlKeyPressedMouseMoved}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(ShiftKeyPressed,
-				 ControlKeyPressedMouseMoved)
+				 ControlKeyPressedMouseMoved);
 			
+			/** Declare combine operator for events ControlKeyPressed and ShiftKeyPressedMouseMoved.
+					Declare operator & for the two events 
+					{\em ControlKeyPressed} and {\em ShiftKeyPressedMouseMoved}.
+					This operator changes the order in the return type.
+					The return type of this operator is
+					{\em ShiftKeyPressedControlKeyPressedMouseMoved}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR_WITH_RETURN_TYPE
 				(ControlKeyPressed,
 				 ShiftKeyPressedMouseMoved,
-				 ShiftKeyPressedControlKeyPressedMouseMoved)
+				 ShiftKeyPressedControlKeyPressedMouseMoved);
 			
+			/** Declare combine operator for events ShiftKeyPressedControlKeyPressed and MouseMoved.
+					Declare operator & for the two events 
+					{\em ShiftKeyPressedControlKeyPressed} and {\em MouseMoved}.
+					The return type of this operator is
+					{\em ShiftKeyPressedControlKeyPressedMouseMoved}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(ShiftKeyPressedControlKeyPressed,
-				 MouseMoved)
+				 MouseMoved);
 			
+			/** Declare combine operator for events MouseLeftButtonPressed and ShiftKeyPressed.
+					Declare operator & for the two events 
+					{\em MouseLeftButtonPressed} and {\em ShiftKeyPressed}.
+					The return type of this operator is
+					{\em MouseLeftButtonPressedShiftKeyPressed}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseLeftButtonPressed,
-				 ShiftKeyPressed)
+				 ShiftKeyPressed);
 
+			/** Declare combine operator for events MouseLeftButtonPressed and ControlKeyPressed.
+					Declare operator & for the two events 
+					{\em MouseLeftButtonPressed} and {\em ControlKeyPressed}.
+					The return type of this operator is
+					{\em MouseLeftButtonPressedControlKeyPressed}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseLeftButtonPressed,
-				 ControlKeyPressed)
+				 ControlKeyPressed);
 			
+			/** Declare combine operator for events MouseLeftButtonPressed and ShiftKeyPressedControlKeyPressed.
+					Declare operator & for the two events 
+					{\em MouseLeftButtonPressed} and {\em ShiftKeyPressedControlKeyPressed}.
+					The return type of this operator is
+					{\em MouseLeftButtonPressedShiftKeyPressedControlKeyPressed}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseLeftButtonPressed,
-				 ShiftKeyPressedControlKeyPressed)
+				 ShiftKeyPressedControlKeyPressed);
 			
+			/** Declare combine operator for events MouseLeftButtonPressedShiftKeyPressed and ControlKeyPressed.
+					Declare operator & for the two events 
+					{\em MouseLeftButtonPressedShiftKeyPressed} and {\em ControlKeyPressed}.
+					The return type of this operator is
+					{\em MouseLeftButtonPressedShiftKeyPressedControlKeyPressed}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseLeftButtonPressedShiftKeyPressed,
-				 ControlKeyPressed)
+				 ControlKeyPressed);
 			
+			/** Declare combine operator for events MouseLeftButtonPressedControlKeyPressed and ShiftKeyPressed.
+					Declare operator & for the two events 
+					{\em MouseLeftButtonPressedControlKeyPressed} and {\em ShiftKeyPressed}.
+					This operator changes the order in the return type.
+					The return type of this operator is
+					{\em MouseLeftButtonPressedShiftKeyPressedControlKeyPressed}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR_WITH_RETURN_TYPE
 				(MouseLeftButtonPressedControlKeyPressed,
 				 ShiftKeyPressed,
-				 MouseLeftButtonPressedShiftKeyPressedControlKeyPressed)
+				 MouseLeftButtonPressedShiftKeyPressedControlKeyPressed);
 			
+			/** Declare combine operator for events MouseLeftButtonPressed and MouseMoved.
+					Declare operator & for the two events 
+					{\em MouseLeftButtonPressed} and {\em MouseMoved}.
+					The return type of this operator is
+					{\em MouseLeftButtonPressedMouseMoved}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseLeftButtonPressed,
-				 MouseMoved)
+				 MouseMoved);
 			
+			/** Declare combine operator for events MouseLeftButtonPressedShiftKeyPressed and MouseMoved.
+					Declare operator & for the two events 
+					{\em MouseLeftButtonPressedShiftKeyPressed} and {\em MouseMoved}.
+					The return type of this operator is
+					{\em MouseLeftButtonPressedShiftKeyPressedMouseMoved}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseLeftButtonPressedShiftKeyPressed,
-				 MouseMoved)
+				 MouseMoved);
 			
+			/** Declare combine operator for events MouseLeftButtonPressedControlKeyPressed and MouseMoved.
+					Declare operator & for the two events 
+					{\em MouseLeftButtonPressedControlKeyPressed} and {\em MouseMoved}.
+					The return type of this operator is
+					{\em MouseLeftButtonPressedControlKeyPressedMouseMoved}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseLeftButtonPressedControlKeyPressed,
-				 MouseMoved)
+				 MouseMoved);
 			
+			/** Declare combine operator for events MouseLeftButtonPressedShiftKeyPressed and ControlKeyPressedMouseMoved.
+					Declare operator & for the two events 
+					{\em MouseLeftButtonPressedShiftKeyPressed} and {\em ControlKeyPressedMouseMoved}.
+					The return type of this operator is
+					{\em MouseLeftButtonPressedShiftKeyPressedControlKeyPressedMouseMoved}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseLeftButtonPressedShiftKeyPressed,
-				 ControlKeyPressedMouseMoved)
+				 ControlKeyPressedMouseMoved);
 			
+			/** Declare combine operator for events MouseLeftButtonPressedControlKeyPressed and ShiftKeyPressedMouseMoved.
+					Declare operator & for the two events 
+					{\em MouseLeftButtonPressedControlKeyPressed} and {\em ShiftKeyPressedMouseMoved}.
+					This operator changes the order in the return type.
+					The return type of this operator is
+					{\em MouseLeftButtonPressedShiftKeyPressedControlKeyPressed}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR_WITH_RETURN_TYPE
 				(MouseLeftButtonPressedControlKeyPressed,
 				 ShiftKeyPressedMouseMoved,
-				 MouseLeftButtonPressedShiftKeyPressedControlKeyPressed)
+				 MouseLeftButtonPressedShiftKeyPressedControlKeyPressed);
 			
+			/** Declare combine operator for events MouseLeftButtonPressedShiftKeyPressedControlKeyPressed and MouseMoved.
+					Declare operator & for the two events 
+					{\em MouseLeftButtonPressedShiftKeyPressedControlKeyPressed} and {\em MouseMoved}.
+					The return type of this operator is
+					{\em MouseLeftButtonPressedShiftKeyPressedControlKeyPressedMouseMoved}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseLeftButtonPressedShiftKeyPressedControlKeyPressed,
-				 MouseMoved)
+				 MouseMoved);
 			
+			/** Declare combine operator for events MouseLeftButtonReleased and ShiftKeyPressed.
+					Declare operator & for the two events 
+					{\em MouseLeftButtonReleased} and {\em ShiftKeyPressed}.
+					The return type of this operator is
+					{\em MouseLeftButtonReleasedShiftKeyPressed}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseLeftButtonReleased,
-				 ShiftKeyPressed)
+				 ShiftKeyPressed);
 			
+			/** Declare combine operator for events MouseLeftButtonReleased and ControlKeyPressed.
+					Declare operator & for the two events 
+					{\em MouseLeftButtonReleased} and {\em ControlKeyPressed}.
+					The return type of this operator is
+					{\em MouseLeftButtonReleasedControlKeyPressed}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseLeftButtonReleased,
-				 ControlKeyPressed)
+				 ControlKeyPressed);
 			
+			/** Declare combine operator for events MouseLeftButtonReleasedShiftKeyPressed and ControlKeyPressed.
+					Declare operator & for the two events 
+					{\em MouseLeftButtonReleasedShiftKeyPressed} and {\em ControlKeyPressed}.
+					The return type of this operator is
+					{\em MouseLeftButtonReleasedShiftKeyPressedControlKeyPressed}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseLeftButtonReleasedShiftKeyPressed,
-				 ControlKeyPressed)
+				 ControlKeyPressed);
 			
+			/** Declare combine operator for events MouseLeftButtonReleasedControlKeyPressed and ShiftKeyPressed.
+					Declare operator & for the two events 
+					{\em MouseLeftButtonReleasedControlKeyPressed} and {\em ShiftKeyPressed}.
+					This operator changes the order in the return type.
+					The return type of this operator is
+					{\em MouseLeftButtonReleasedShiftKeyPressedControlKeyPressed}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR_WITH_RETURN_TYPE
 				(MouseLeftButtonReleasedControlKeyPressed,
 				 ShiftKeyPressed,
-				 MouseLeftButtonReleasedShiftKeyPressedControlKeyPressed)
+				 MouseLeftButtonReleasedShiftKeyPressedControlKeyPressed);
 			
+			/** Declare combine operator for events MouseMiddleButtonPressed and ShiftKeyPressed.
+					Declare operator & for the two events 
+					{\em MouseMiddleButtonPressed} and {\em ShiftKeyPressed}.
+					The return type of this operator is
+					{\em MouseMiddleButtonPressedShiftKeyPressed}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseMiddleButtonPressed,
-				 ShiftKeyPressed)
+				 ShiftKeyPressed);
 			
+			/** Declare combine operator for events MouseMiddleButtonPressed and ControlKeyPressed.
+					Declare operator & for the two events 
+					{\em MouseMiddleButtonPressed} and {\em ControlKeyPressed}.
+					The return type of this operator is
+					{\em MouseMiddleButtonPressedControlKeyPressed}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseMiddleButtonPressed,
-				 ControlKeyPressed)
+				 ControlKeyPressed);
 			
+			/** Declare combine operator for events MouseMiddleButtonPressed and ShiftKeyPressedControlKeyPressed.
+					Declare operator & for the two events 
+					{\em MouseMiddleButtonPressed} and {\em ShiftKeyPressedControlKeyPressed}.
+					The return type of this operator is
+					{\em MouseMiddleButtonPressedShiftKeyPressedControlKeyPressed}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseMiddleButtonPressed,
-				 ShiftKeyPressedControlKeyPressed)
+				 ShiftKeyPressedControlKeyPressed);
 			
+			/** Declare combine operator for events MouseMiddleButtonPressedShiftKeyPressed and ControlKeyPressed.
+					Declare operator & for the two events 
+					{\em MouseMiddleButtonPressedShiftKeyPressed} and {\em ControlKeyPressed}.
+					The return type of this operator is
+					{\em MouseMiddleButtonPressedShiftKeyPressedControlKeyPressed}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseMiddleButtonPressedShiftKeyPressed,
-				 ControlKeyPressed)
+				 ControlKeyPressed);
 			
+			/** Declare combine operator for events MouseMiddleButtonPressedControlKeyPressed and ShiftKeyPressed.
+					Declare operator & for the two events 
+					{\em MouseMiddleButtonPressedControlKeyPressed} and {\em ShiftKeyPressed}.
+					This operator changes the order in the return type.
+					The return type of this operator is
+					{\em MouseMiddleButtonPressedShiftKeyPressedControlKeyPressed}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR_WITH_RETURN_TYPE
 				(MouseMiddleButtonPressedControlKeyPressed,
 				 ShiftKeyPressed,
-				 MouseMiddleButtonPressedShiftKeyPressedControlKeyPressed)
+				 MouseMiddleButtonPressedShiftKeyPressedControlKeyPressed);
 			
+			/** Declare combine operator for events MouseMiddleButtonPressed and MouseMoved.
+					Declare operator & for the two events 
+					{\em MouseMiddleButtonPressed} and {\em MouseMoved}.
+					The return type of this operator is
+					{\em MouseMiddleButtonPressedMouseMoved}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseMiddleButtonPressed,
-				 MouseMoved)
+				 MouseMoved);
 			
+			/** Declare combine operator for events MouseMiddleButtonPressedShiftKeyPressed and MouseMoved.
+					Declare operator & for the two events 
+					{\em MouseMiddleButtonPressedShiftKeyPressed} and {\em MouseMoved}.
+					The return type of this operator is
+					{\em MouseMiddleButtonPressedShiftKeyPressedMouseMoved}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseMiddleButtonPressedShiftKeyPressed,
-				 MouseMoved)
+				 MouseMoved);
 			
+			/** Declare combine operator for events MouseMiddleButtonPressedControlKeyPressed and MouseMoved.
+					Declare operator & for the two events 
+					{\em MouseMiddleButtonPressedControlKeyPressed} and {\em MouseMoved}.
+					The return type of this operator is
+					{\em MouseMiddleButtonPressedControlKeyPressedMouseMoved}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseMiddleButtonPressedControlKeyPressed,
-				 MouseMoved)
+				 MouseMoved);
 			
+			/** Declare combine operator for events MouseMiddleButtonPressedShiftKeyPressed and ControlKeyPressedMouseMoved.
+					Declare operator & for the two events 
+					{\em MouseMiddleButtonPressedShiftKeyPressed} and {\em ControlKeyPressedMouseMoved}.
+					The return type of this operator is
+					{\em MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedMouseMoved}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseMiddleButtonPressedShiftKeyPressed,
-				 ControlKeyPressedMouseMoved)
+				 ControlKeyPressedMouseMoved);
 			
+			/** Declare combine operator for events MouseMiddleButtonPressedControlKeyPressed and ShiftKeyPressedMouseMoved.
+					Declare operator & for the two events 
+					{\em MouseMiddleButtonPressedControlKeyPressed} and {\em ShiftKeyPressedMouseMoved}.
+					This operator changes the order in the return type.
+					The return type of this operator is
+					{\em MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedMouseMoved}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR_WITH_RETURN_TYPE
 				(MouseMiddleButtonPressedControlKeyPressed,
 				 ShiftKeyPressedMouseMoved,
-				 MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedMouseMoved)
+				 MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedMouseMoved);
 			
+			/** Declare combine operator for events MouseMiddleButtonPressedShiftKeyPressedControlKeyPressed and MouseMoved.
+					Declare operator & for the two events 
+					{\em MouseMiddleButtonPressedShiftKeyPressedControlKeyPressed} and {\em MouseMoved}.
+					The return type of this operator is
+					{\em MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedMouseMoved}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseMiddleButtonPressedShiftKeyPressedControlKeyPressed,
-				 MouseMoved)
+				 MouseMoved);
 			
+			/** Declare combine operator for events MouseMiddleButtonReleased and ShiftKeyPressed.
+					Declare operator & for the two events 
+					{\em MouseMiddleButtonReleased} and {\em ShiftKeyPressed}.
+					The return type of this operator is
+					{\em MouseMiddleButtonReleasedShiftKeyPressed}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseMiddleButtonReleased,
-				 ShiftKeyPressed)
+				 ShiftKeyPressed);
 			
+			/** Declare combine operator for events MouseMiddleButtonReleased and ControlKeyPressed.
+					Declare operator & for the two events 
+					{\em MouseMiddleButtonReleased} and {\em ControlKeyPressed}.
+					The return type of this operator is
+					{\em MouseMiddleButtonReleasedControlKeyPressed}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseMiddleButtonReleased,
-				 ControlKeyPressed)
+				 ControlKeyPressed);
 			
+			/** Declare combine operator for events MouseMiddleButtonReleasedShiftKeyPressed and ControlKeyPressed.
+					Declare operator & for the two events 
+					{\em MouseMiddleButtonReleasedShiftKeyPressed} and {\em ControlKeyPressed}.
+					The return type of this operator is
+					{\em MouseMiddleButtonReleasedShiftKeyPressedControlKeyPressed}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseMiddleButtonReleasedShiftKeyPressed,
-				 ControlKeyPressed)
+				 ControlKeyPressed);
 			
+			/** Declare combine operator for events MouseMiddleButtonReleasedControlKeyPressed and ShiftKeyPressed.
+					Declare operator & for the two events 
+					{\em MouseMiddleButtonReleasedControlKeyPressed} and {\em ShiftKeyPressed}.
+					This operator changes the order in the return type.
+					The return type of this operator is
+					{\em MouseMiddleButtonReleasedShiftKeyPressedControlKeyPressed}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR_WITH_RETURN_TYPE
 				(MouseMiddleButtonReleasedControlKeyPressed,
 				 ShiftKeyPressed,
-				 MouseMiddleButtonReleasedShiftKeyPressedControlKeyPressed)
+				 MouseMiddleButtonReleasedShiftKeyPressedControlKeyPressed);
 			
+			/** Declare combine operator for events MouseRightButtonPressed and ShiftKeyPressed.
+					Declare operator & for the two events 
+					{\em MouseRightButtonPressed} and {\em ShiftKeyPressed}.
+					The return type of this operator is
+					{\em MouseRightButtonPressedShiftKeyPressed}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseRightButtonPressed,
-				 ShiftKeyPressed)
+				 ShiftKeyPressed);
 			
+			/** Declare combine operator for events MouseRightButtonPressed and ControlKeyPressed.
+					Declare operator & for the two events 
+					{\em MouseRightButtonPressed} and {\em ControlKeyPressed}.
+					The return type of this operator is
+					{\em MouseRightButtonPressedControlKeyPressed}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseRightButtonPressed,
-				 ControlKeyPressed)
+				 ControlKeyPressed);
 			
+			/** Declare combine operator for events MouseRightButtonPressed and ShiftKeyPressedControlKeyPressed.
+					Declare operator & for the two events 
+					{\em MouseRightButtonPressed} and {\em ShiftKeyPressedControlKeyPressed}.
+					The return type of this operator is
+					{\em MouseRightButtonPressedShiftKeyPressedControlKeyPressed}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseRightButtonPressed,
-				 ShiftKeyPressedControlKeyPressed)
+				 ShiftKeyPressedControlKeyPressed);
 			
+			/** Declare combine operator for events MouseRightButtonPressedShiftKeyPressed and ControlKeyPressed.
+					Declare operator & for the two events 
+					{\em MouseRightButtonPressedShiftKeyPressed} and {\em ControlKeyPressed}.
+					The return type of this operator is
+					{\em MouseRightButtonPressedShiftKeyPressedControlKeyPressed}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseRightButtonPressedShiftKeyPressed,
-				 ControlKeyPressed)
+				 ControlKeyPressed);
 			
+			/** Declare combine operator for events MouseRightButtonPressedControlKeyPressed and ShiftKeyPressed.
+					Declare operator & for the two events 
+					{\em MouseRightButtonPressedControlKeyPressed} and {\em ShiftKeyPressed}.
+					This operator changes the order in the return type.
+					The return type of this operator is
+					{\em MouseRightButtonPressedShiftKeyPressedControlKeyPressed}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR_WITH_RETURN_TYPE
 				(MouseRightButtonPressedControlKeyPressed,
 				 ShiftKeyPressed,
-				 MouseRightButtonPressedShiftKeyPressedControlKeyPressed)
+				 MouseRightButtonPressedShiftKeyPressedControlKeyPressed);
 			
+			/** Declare combine operator for events MouseRightButtonPressed and MouseMoved.
+					Declare operator & for the two events 
+					{\em MouseRightButtonPressed} and {\em MouseMoved}.
+					The return type of this operator is
+					{\em MouseRightButtonPressedMouseMoved}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseRightButtonPressed,
-				 MouseMoved)
+				 MouseMoved);
 			
+			/** Declare combine operator for events MouseRightButtonPressedShiftKeyPressed and MouseMoved.
+					Declare operator & for the two events 
+					{\em MouseRightButtonPressedShiftKeyPressed} and {\em MouseMoved}.
+					The return type of this operator is
+					{\em MouseRightButtonPressedShiftKeyPressedMouseMoved}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseRightButtonPressedShiftKeyPressed,
-				 MouseMoved)
+				 MouseMoved);
 			
+			/** Declare combine operator for events MouseRightButtonPressedControlKeyPressed and MouseMoved.
+					Declare operator & for the two events 
+					{\em MouseRightButtonPressedControlKeyPressed} and {\em MouseMoved}.
+					The return type of this operator is
+					{\em MouseRightButtonPressedControlKeyPressedMouseMoved}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseRightButtonPressedControlKeyPressed,
-				 MouseMoved)
+				 MouseMoved);
 			
+			/** Declare combine operator for events MouseRightButtonPressedShiftKeyPressed and ControlKeyPressedMouseMoved.
+					Declare operator & for the two events 
+					{\em MouseRightButtonPressedShiftKeyPressed} and {\em ControlKeyPressedMouseMoved}.
+					The return type of this operator is
+					{\em MouseRightButtonPressedShiftKeyPressedControlKeyPressedMouseMoved}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseRightButtonPressedShiftKeyPressed,
-				 ControlKeyPressedMouseMoved)
+				 ControlKeyPressedMouseMoved);
 			
+			/** Declare combine operator for events MouseRightButtonPressedControlKeyPressed and ShiftKeyPressedMouseMoved.
+					Declare operator & for the two events 
+					{\em MouseRightButtonPressedControlKeyPressed} and {\em ShiftKeyPressedMouseMoved}.
+					This operator changes the order in the return type.
+					The return type of this operator is
+					{\em MouseRightButtonPressedShiftKeyPressedControlKeyPressedMouseMoved}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR_WITH_RETURN_TYPE
 				(MouseRightButtonPressedControlKeyPressed,
 				 ShiftKeyPressedMouseMoved,
-				 MouseRightButtonPressedShiftKeyPressedControlKeyPressedMouseMoved)
+				 MouseRightButtonPressedShiftKeyPressedControlKeyPressedMouseMoved);
 			
+			/** Declare combine operator for events MouseRightButtonPressedShiftKeyPressedControlKeyPressed and MouseMoved.
+					Declare operator & for the two events 
+					{\em MouseRightButtonPressedShiftKeyPressedControlKeyPressed} and {\em MouseMoved}.
+					The return type of this operator is
+					{\em MouseRightButtonPressedShiftKeyPressedControlKeyPressedMouseMoved}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseRightButtonPressedShiftKeyPressedControlKeyPressed,
-				 MouseMoved)
+				 MouseMoved);
 			
+			/** Declare combine operator for events MouseRightButtonReleased and ShiftKeyPressed.
+					Declare operator & for the two events 
+					{\em MouseRightButtonReleased} and {\em ShiftKeyPressed}.
+					The return type of this operator is
+					{\em MouseRightButtonReleasedShiftKeyPressed}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseRightButtonReleased,
-				 ShiftKeyPressed)
+				 ShiftKeyPressed);
 			
+			/** Declare combine operator for events MouseRightButtonReleased and ControlKeyPressed.
+					Declare operator & for the two events 
+					{\em MouseRightButtonReleased} and {\em ControlKeyPressed}.
+					The return type of this operator is
+					{\em MouseRightButtonReleasedControlKeyPressed}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseRightButtonReleased,
-				 ControlKeyPressed)
+				 ControlKeyPressed);
 			
+			/** Declare combine operator for events MouseRightButtonReleasedShiftKeyPressed and ControlKeyPressed.
+					Declare operator & for the two events 
+					{\em MouseRightButtonReleasedShiftKeyPressed} and {\em ControlKeyPressed}.
+					The return type of this operator is
+					{\em MouseRightButtonReleasedShiftKeyPressedControlKeyPressed}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseRightButtonReleasedShiftKeyPressed,
-				 ControlKeyPressed)
+				 ControlKeyPressed);
 			
+			/** Declare combine operator for events MouseRightButtonReleasedControlKeyPressed and ShiftKeyPressed.
+					Declare operator & for the two events 
+					{\em MouseRightButtonReleasedControlKeyPressed} and {\em ShiftKeyPressed}.
+					This operator changes the order in the return type.
+					The return type of this operator is
+					{\em MouseRightButtonReleasedShiftKeyPressedControlKeyPressed}.
+			*/
 			BALL_VIEW_DECLARE_OPERATOR_WITH_RETURN_TYPE
 				(MouseRightButtonReleasedControlKeyPressed,
 				 ShiftKeyPressed,
-				 MouseRightButtonReleasedShiftKeyPressedControlKeyPressed)
-
-			Scene *getScene();
-				
-			// --- DEBUGGERS and DIAGNOSTICS
-
-			virtual bool isValid() const;
-
-			virtual void dump
-				(std::ostream& s = std::cout, Size depth = 0) const;
-
-			// --- STORERS
-
-			virtual void read(std::istream& s);
-
-			virtual void write(std::ostream& s) const;
+				 MouseRightButtonReleasedShiftKeyPressedControlKeyPressed);
+			//@}
 
 			
-
 			private:
 
 			Scene* scene_;

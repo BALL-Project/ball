@@ -1,49 +1,57 @@
-// $Id: scene.iC,v 1.6 2000/12/22 19:12:15 amoll Exp $
+// $Id: scene.iC,v 1.7 2001/05/13 14:03:45 hekl Exp $
 
 BALL_INLINE
-void Scene::setRenderMode(RenderMode mode)
+void Scene::setRenderMode_(RenderMode mode)
+	throw()
 {
 	render_mode_ = mode;
 }
 
 BALL_INLINE
-Scene::RenderMode Scene::getRenderMode() const
+Scene::RenderMode Scene::getRenderMode_() const
+	throw()
 {
 	return render_mode_;
 }
 
 BALL_INLINE
 void Scene::setViewPointPosition(const Vector3& v)
+	throw()
 {
   setCameraPosition_(look_at_position_, v, false);
 }
 
 BALL_INLINE
 void Scene::setViewPointPosition(const Real x, const Real y, const Real z)
+	throw()
 {
   setCameraPosition_(look_at_position_, Vector3(x, y, z), false);
 }
 
 BALL_INLINE
-bool Scene::setCamera(const Vector3& look_at, const Vector3& view_point, bool set_origin)
+void Scene::setCamera(const Vector3& look_at, const Vector3& view_point, bool set_origin)
+	throw()
 {
-  return setCameraPosition_(look_at, view_point, set_origin);
+  setCameraPosition_(look_at, view_point, set_origin);
 }
     
 BALL_INLINE
 const Vector3& Scene::getViewPointPosition() const
+	throw()
 {
   return position_;
 }
 
 BALL_INLINE
 void Scene::getViewPointPosition(Vector3& v) const
+	throw()
 {
   v = position_;
 }
 
 BALL_INLINE
 void Scene::getViewPointPosition(Real& x, Real& y, Real& z) const
+	throw()
 {
   x =  position_.x;
   y =  position_.y;
@@ -52,75 +60,87 @@ void Scene::getViewPointPosition(Real& x, Real& y, Real& z) const
 
 BALL_INLINE
 void Scene::setLookAtPosition(const Vector3& v, bool set_origin)
+	throw()
 {
   setCameraPosition_(v, position_, set_origin);  
 }
 
 BALL_INLINE
 void Scene::setLookAtPosition(const Real x, const Real y, const Real z, bool set_origin)
+	throw()
 {
 	setCameraPosition_(Vector3(x, y, z), position_, set_origin);  
 }
 
 BALL_INLINE
 const Vector3& Scene::getLookAtPosition() const
+	throw()
 {
   return look_at_position_;
 }
 
 BALL_INLINE
 void Scene::getLookAtPosition(Vector3& v) const
+	throw()
 {
   v = look_at_position_;
 }
      
 BALL_INLINE
 void Scene::getLookAtPosition(Real& x, Real& y, Real& z) const
+	throw()
 {
   x = look_at_position_.x;
   y = look_at_position_.y;
   z = look_at_position_.z;
 }
-     
+/*     
 BALL_INLINE
-const Vector3& Scene::getLastLookAtPosition() const
+const Vector3& Scene::getLastLookAtPosition_() const
+	throw()
 {
   return last_look_at_position_;
 }
     
 BALL_INLINE
-void Scene::getLastLookAtPosition(Vector3& v) const
+void Scene::getLastLookAtPosition_(Vector3& v) const
+	throw()
 {
   v = last_look_at_position_;
 }
     
 BALL_INLINE
-void Scene::getLastLookAtPosition
+void Scene::getLastLookAtPosition_
   (Real& x, Real& y, Real& z) const
+	throw()
 {
   last_look_at_position_.get(x, y, z);
 }
-
+*/
 BALL_INLINE
-const Vector3& Scene::getZoomVector() const
+const Vector3& Scene::getZoomVector_() const
+	throw()
 {
   return zoom_;
 }
 
 BALL_INLINE
-const Vector3& Scene::getUpVector() const
+const Vector3& Scene::getUpVector_() const
+	throw()
 {
   return up_;
 }
 
 BALL_INLINE
-const Vector3& Scene::getRightVector() const
+const Vector3& Scene::getRightVector_() const
+	throw()
 {
   return right_;
 }
 
 BALL_INLINE
-const Vector3& Scene::getLookUpVector() const
+const Vector3& Scene::getLookUpVector_() const
+	throw()
 {
   return look_up_;
 }
@@ -128,30 +148,29 @@ const Vector3& Scene::getLookUpVector() const
 
 BALL_INLINE
 void Scene::registerGLObjectCollector(const GLObjectCollector& GL_object_collector)
+	throw()
 {
   GL_object_collector_ = (GLObjectCollector *)&GL_object_collector;
 }
 
 BALL_INLINE
 void Scene::unregisterGLObjectCollector()
+	throw()
 {
   GL_object_collector_  = (GLObjectCollector*)&RTTI::getDefault<GLObjectCollector>();
 }
 
 BALL_INLINE
 const GLObjectCollector* Scene::getGLObjectCollector() const
+	throw()
 {
   return GL_object_collector_;
 }
 
 BALL_INLINE
 bool Scene::hasDefaultGLObjectCollector() const
+	throw()
 {
   return (GL_object_collector_ == (GLObjectCollector*)&RTTI::getDefault<GLObjectCollector>());
 }
 
-BALL_INLINE
-bool Scene::hasOtherGLObjectCollector() const
-{
-  return (GL_object_collector_ != (GLObjectCollector*)&RTTI::getDefault<GLObjectCollector>());
-}
