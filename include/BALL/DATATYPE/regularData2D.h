@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2D.h,v 1.35 2003/06/19 13:42:18 anker Exp $
+// $Id: regularData2D.h,v 1.36 2003/06/19 19:19:21 oliver Exp $
 //
 
 #ifndef BALL_DATATYPE_REGULARDATA2D_H
@@ -397,7 +397,7 @@ namespace BALL
 
 		/// The block data type for reading and writing binary data
 		typedef struct { ValueType bt[1024]; } BlockValueType;
-};
+	};
 
 	/**	Default type
 	*/
@@ -667,7 +667,7 @@ namespace BALL
 		(const typename TRegularData2D<ValueType>::IndexType& index) const
 		throw(Exception::OutOfGrid)
 	{	
-		size_type pos = index.x + index.x * size_.x;
+		size_type pos = index.x + index.y * size_.x;
 		if (pos >= data_.size())
 		{
 			throw Exception::OutOfGrid(__FILE__, __LINE__);
@@ -680,7 +680,7 @@ namespace BALL
 	ValueType& TRegularData2D<ValueType>::getData(const typename TRegularData2D<ValueType>::IndexType& index)
 		throw(Exception::OutOfGrid)
 	{	
-		size_type pos = index.x + index.x * size_.x;
+		size_type pos = index.x + index.y * size_.x;
 		if (pos >= data_.size())
 		{
 			throw Exception::OutOfGrid(__FILE__, __LINE__);
