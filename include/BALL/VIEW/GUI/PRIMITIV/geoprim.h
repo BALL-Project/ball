@@ -1,4 +1,4 @@
-// $Id: geoprim.h,v 1.1 2000/09/24 13:13:14 oliver Exp $
+// $Id: geoprim.h,v 1.2 2000/12/12 16:15:42 oliver Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV__H
 #define BALL_VIEW_GUI_PRIMITIV__H
@@ -65,14 +65,16 @@ namespace BALL
 		
 			Sphere(const GeometricObject& geometric_object);
 
-			virtual ~Sphere();
+			virtual ~Sphere()
+				throw();
 			//@}
 
 
 			/**	@name	Debugging and Diagnostics
 			*/
 			//@{
-			virtual void dump(std::ostream& s) const;
+			virtual void dump(std::ostream& s) const
+				throw();
 			//@}
 
 			

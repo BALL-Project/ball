@@ -1,4 +1,4 @@
-// $Id: filter.h,v 1.1 2000/05/16 21:12:47 hekl Exp $
+// $Id: filter.h,v 1.2 2000/12/12 16:15:40 oliver Exp $
 
 #ifndef BALL_VIEW_FUNCTOR_FILTER_H
 #define BALL_VIEW_FUNCTOR_FILTER_H
@@ -50,11 +50,14 @@ namespace BALL
 
 			Filter();
 
-			virtual ~Filter();
+			virtual ~Filter()
+				throw();
 
-			virtual void clear();
+			virtual void clear()
+				throw();
 
-			virtual void destroy();
+			virtual void destroy()
+				throw();
 			//@}
 
 			/**	@name	Asignment
@@ -87,7 +90,8 @@ namespace BALL
 			virtual bool isValid() const;
 
 			virtual void dump
-				(std::ostream& s = std::cout, Size depth = 0) const;
+				(std::ostream& s = std::cout, Size depth = 0) const
+				throw();
 			//@}
 
 

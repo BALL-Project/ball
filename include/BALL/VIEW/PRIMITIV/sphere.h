@@ -1,4 +1,4 @@
-// $Id: sphere.h,v 1.3 1999/12/28 18:37:51 oliver Exp $
+// $Id: sphere.h,v 1.4 2000/12/12 16:15:48 oliver Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_SPHERE_H
 #define BALL_VIEW_PRIMITIV_SPHERE_H
@@ -58,11 +58,14 @@ namespace BALL
 
 			Sphere(const GeometricObject& geometric_object);
 
-			virtual ~Sphere();
+			virtual ~Sphere()
+				throw();
 
-			virtual void clear();
+			virtual void clear()
+				throw();
 
-			virtual void destroy();
+			virtual void destroy()
+				throw();
 			//@}
 
 			
@@ -87,7 +90,8 @@ namespace BALL
 			virtual bool isValid() const;
 
 			virtual void dump
-				(std::ostream&  s = std::cout, Size depth = 0) const;
+				(std::ostream&  s = std::cout, Size depth = 0) const
+				throw();
 			//@}
 
 			/**	@name	Storers

@@ -1,4 +1,4 @@
-// $Id: information.h,v 1.2 2000/10/05 22:30:50 oliver Exp $
+// $Id: information.h,v 1.3 2000/12/12 16:15:40 oliver Exp $
 
 #ifndef BALL_VIEW_FUNCTOR_INFORMATION_H
 #define BALL_VIEW_FUNCTOR_INFORMATION_H
@@ -90,11 +90,14 @@ namespace BALL
 			Information
 				(const Information& info, bool deep = true);
 
-			virtual ~Information();
+			virtual ~Information()
+				throw();
 
-			virtual void clear();
+			virtual void clear()
+				throw();
 
-			virtual void destroy();
+			virtual void destroy()
+				throw();
 			//@}
 
 			/**	@name	Asignment
@@ -136,7 +139,8 @@ namespace BALL
 			virtual bool isValid() const;
 
 			virtual void dump
-				(std::ostream& s = std::cout, Size depth = 0) const;
+				(std::ostream& s = std::cout, Size depth = 0) const
+				throw();
 			//@}
 
 			protected:

@@ -1,4 +1,4 @@
-// $Id: gllabel.h,v 1.1 2000/09/24 13:13:14 oliver Exp $
+// $Id: gllabel.h,v 1.2 2000/12/12 16:15:42 oliver Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLLABEL_H
 #define BALL_VIEW_GUI_PRIMITIV_GLLABEL_H
@@ -44,11 +44,14 @@ namespace BALL
 
 			GLLabel(const GeometricObject& geometric_object);
 
-			virtual ~GLLabel();
+			virtual ~GLLabel()
+				throw();
 
-			virtual void clear();
+			virtual void clear()
+				throw();
 
-			virtual void destroy();
+			virtual void destroy()
+				throw();
 
 			void setText(const String text);
 

@@ -1,4 +1,4 @@
-// $Id: point.h,v 1.3 1999/12/28 18:37:51 oliver Exp $
+// $Id: point.h,v 1.4 2000/12/12 16:15:48 oliver Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_POINT_H
 #define BALL_VIEW_PRIMITIV_POINT_H
@@ -49,11 +49,14 @@ namespace BALL
 
 			Point(const GeometricObject& geometric_object);
 
-			virtual ~Point();
+			virtual ~Point()
+				throw();
 
-			virtual void clear();
+			virtual void clear()
+				throw();
 
-			virtual void destroy();
+			virtual void destroy()
+				throw();
 			//@}
 
 			/**	@name	Assignment
@@ -77,7 +80,8 @@ namespace BALL
 			virtual bool isValid() const;
 
 			virtual void dump
-				(std::ostream&  s = std::cout, Size depth = 0) const;
+				(std::ostream&  s = std::cout, Size depth = 0) const
+				throw();
 			//@}
 
 			/**	@name	Storers

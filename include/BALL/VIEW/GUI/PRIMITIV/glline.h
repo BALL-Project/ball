@@ -1,4 +1,4 @@
-// $Id: glline.h,v 1.1 2000/09/24 13:13:15 oliver Exp $
+// $Id: glline.h,v 1.2 2000/12/12 16:15:42 oliver Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLLINE_H
 #define BALL_VIEW_GUI_PRIMITIV_GLLINE_H
@@ -40,11 +40,14 @@ namespace BALL
 
 			GLLine(const GeometricObject& geometric_object);
 
-			virtual ~GLLine();
+			virtual ~GLLine()
+				throw();
 
-			virtual void clear();
+			virtual void clear()
+				throw();
 
-			virtual void destroy();
+			virtual void destroy()
+				throw();
 			//@}
 
 

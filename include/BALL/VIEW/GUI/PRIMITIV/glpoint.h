@@ -1,4 +1,4 @@
-// $Id: glpoint.h,v 1.1 2000/09/24 13:13:16 oliver Exp $
+// $Id: glpoint.h,v 1.2 2000/12/12 16:15:42 oliver Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLPOINT_H
 #define BALL_VIEW_GUI_PRIMITIV_GLPOINT_H
@@ -40,11 +40,14 @@ namespace BALL
 
 			GLPoint(const GeometricObject& geometric_object);
 
-			virtual ~GLPoint();
+			virtual ~GLPoint()
+				throw();
 
-			virtual void clear();
+			virtual void clear()
+				throw();
 
-			virtual void destroy();
+			virtual void destroy()
+				throw();
 			//@}
 
 			protected:

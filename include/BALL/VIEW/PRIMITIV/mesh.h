@@ -1,4 +1,4 @@
-// $Id: mesh.h,v 1.2 2000/04/30 15:21:26 hekl Exp $
+// $Id: mesh.h,v 1.3 2000/12/12 16:15:48 oliver Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_MESH_H
 #define BALL_VIEW_PRIMITIV_MESH_H
@@ -48,11 +48,14 @@ namespace BALL
 
 			Mesh(const GeometricObject& geometric_object);
 
-			virtual ~Mesh();
+			virtual ~Mesh()
+				throw();
 
-			virtual void clear();
+			virtual void clear()
+				throw();
 
-			virtual void destroy();
+			virtual void destroy()
+				throw();
 			//@}
 
 			
@@ -77,7 +80,8 @@ namespace BALL
 			virtual bool isValid() const;
 
 			virtual void dump
-				(std::ostream&  s = std::cout, Size depth = 0) const;
+				(std::ostream&  s = std::cout, Size depth = 0) const
+				throw();
 			//@}
 
 			/**	@name	Storers
