@@ -1,4 +1,4 @@
-// $Id: atom.h,v 1.7 2000/02/06 19:42:54 oliver Exp $
+// $Id: atom.h,v 1.8 2000/02/10 15:03:14 oliver Exp $
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -84,8 +84,8 @@ namespace BALL
 			
 			@memo    Atom class (BALL kernel framework)
 			@author  $Author: oliver $
-			@version $Revision: 1.7 $
-			@date    $Date: 2000/02/06 19:42:54 $
+			@version $Revision: 1.8 $
+			@date    $Date: 2000/02/10 15:03:14 $
 	*/
 	class Atom
 		: public Composite,
@@ -421,7 +421,7 @@ namespace BALL
 											 mutable reference to the parent fragment of {\em *this} atom,
 											 0 if {\em *this} atom does not have a parent fragment
 			*/
-			Fragment *getFragment();
+			Fragment* getFragment();
 
 			/** Mutable inspection of the atom's parent fragment.
 					Access a constant reference to the parent fragment of {\em *this} atom.
@@ -435,7 +435,7 @@ namespace BALL
 											 constant reference to the parent fragment of {\em *this} atom,
 											 0 if {\em *this} atom does not have a parent fragment
 			*/
-			const Fragment *getFragment() const;
+			const Fragment* getFragment() const;
 
 			/** Change of the atom's name.
 					Change the name of {\em *this} atom to {\em name}.
@@ -468,7 +468,7 @@ namespace BALL
 					will return the name {\tt ILE:CA}. 
 					For N terminal residues, {\tt -N} is appended to the residue name, for C terminal residues {\tt -C}.
 					If the residue is a CYS an involved in a disulphide bridge, an additional {\tt -S} or {\tt S} (for terminal residue)
-					is appended.
+					is appended. Single amino acids (C and N terminal) {\tt -M} is added.\\
 					If the atom is not contained in a residue, the name if the parent fragment 
 					is taken instead of	the residue name. If there is no parent fragment, name of the parent molecule ist taken.
 					If the atom is not contained in any superstructure, getFullname returns getName.
