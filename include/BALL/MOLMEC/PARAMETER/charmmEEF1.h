@@ -1,4 +1,4 @@
-// $Id: charmmEEF1.h,v 1.1 2000/01/30 12:58:49 oliver Exp $
+// $Id: charmmEEF1.h,v 1.2 2000/01/31 16:59:53 oliver Exp $
 // Molecular Mechanics Parameter: class describing the atom type section of a parameter file
  
 #ifndef BALL_MOLMEC_PARAMETER_CHARMMEEF1_H
@@ -32,6 +32,7 @@ namespace BALL
 			float dG_ref;
 			float dG_free;
 			float r_min;
+			float sig_w;
 			float dH_ref;
 			float Cp_ref;
 		};
@@ -94,6 +95,8 @@ namespace BALL
 		float*								Cp_ref_;
 
 		float*								sig_w_;
+
+		float*								r_min_;
 		
 		bool*									is_defined_;
 	};
