@@ -1,0 +1,34 @@
+#!/bin/sh
+
+#apt-get install python-sip4-dev python2.3-sip4-dev sip4 python2.3 python2.3-dev python gcc-3.3 g++-3.3
+
+#adapt to your settings
+export BALL_PATH=/usr/src/BALL
+export PLATFORM=Linux-i386-g++_3.3.5
+export LD_LIBRARY_PATH="$BALL_PATH/lib/$PLATFORM:$LD_LIBRARY_PATH"
+
+cd $BALL_PATH/source 
+rm -f config.cache
+
+$BALL_PATH/source/configure \
+ --x-libraries=/usr/X11R6/lib\
+ --x-includes=/usr/X11R6/include\
+ --enable-debuginfo\
+ --enable-optimization\
+ --with-qt-mt\
+ --with-moc=/usr/bin/moc-qt3\
+ --enable-python 			&&
+ 																			
+cd $BALL_PATH/source/	&&
+make depend 					&&						
+
+make "MAKE=make -j2"  &&
+make install 					&&
+
+cd PYTHON/EXTENSIONS 	&&
+make "MAKE=make -j2" install &&
+
+cd $BALL_PATH/source/APPLICATIONS/BALLVIEW &&
+make clean 						&&
+make  								&&
+BALLView bpti.pdb 
