@@ -1,4 +1,4 @@
-// $Id: vector4.h,v 1.36 2001/06/26 10:00:41 amoll Exp $
+// $Id: vector4.h,v 1.37 2001/07/15 21:21:02 amoll Exp $
 
 #ifndef BALL_MATHS_VECTOR4_H
 #define BALL_MATHS_VECTOR4_H
@@ -934,7 +934,7 @@ namespace BALL
 	}
 
 
-	/**	Input- Operator
+	/**	Input operator
 			Reads four values of type {\bf T} from an input stream and assigns them to 
 			the components x, y, z and h of the vector.
 	*/

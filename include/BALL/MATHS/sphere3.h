@@ -1,4 +1,4 @@
-// $Id: sphere3.h,v 1.23 2001/02/14 01:59:58 amoll Exp $
+// $Id: sphere3.h,v 1.24 2001/07/15 21:21:02 amoll Exp $
 
 #ifndef BALL_MATHS_SPHERE3_H
 #define BALL_MATHS_SPHERE3_H
@@ -266,7 +266,7 @@ namespace BALL
 	*/
 	//@{
 
-	/**	Input- Operator.
+	/**	Input operator.
 			Reads in an instance of TVector3 and a {\bf T} value : p, radius.
 	*/
 	template <typename T>

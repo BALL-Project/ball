@@ -1,4 +1,4 @@
-// $Id: plane3.h,v 1.22 2001/02/14 01:59:58 amoll Exp $
+// $Id: plane3.h,v 1.23 2001/07/15 21:21:02 amoll Exp $
 
 #ifndef BALL_MATHS_PLANE3_H
 #define BALL_MATHS_PLANE3_H
@@ -378,7 +378,7 @@ namespace BALL
 	*/
 	//@{
 
-	/**	Input- Operator
+	/**	Input operator
 			reads in two instances of TVector3: {\bf p, n}
 	*/
 	template <typename T>
@@ -390,7 +390,7 @@ namespace BALL
 		return s;
 	}
 
-	/**	Output- Operator
+	/**	Output operator
 			Prints two instances of TVector3: {\bf p, n}
 	*/
 	template <typename T>

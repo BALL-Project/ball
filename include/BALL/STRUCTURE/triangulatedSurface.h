@@ -1,4 +1,4 @@
-// $Id: triangulatedSurface.h,v 1.19 2001/06/22 11:03:23 oliver Exp $
+// $Id: triangulatedSurface.h,v 1.20 2001/07/15 21:21:02 amoll Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATEDSURFACE_H
 #define BALL_STRUCTURE_TRIANGULATEDSURFACE_H
@@ -356,8 +356,8 @@ namespace BALL
 	};
 	
 
-	/**	Output- Operator
-	*/
+		/**	Output operator
+		*/
 		template <class T>
 		std::ostream& operator << (std::ostream& s, const TTrianglePoint<T>& point)
 		{

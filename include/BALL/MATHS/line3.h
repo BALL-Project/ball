@@ -1,4 +1,4 @@
-// $Id: line3.h,v 1.30 2001/02/14 01:59:58 amoll Exp $
+// $Id: line3.h,v 1.31 2001/07/15 21:21:02 amoll Exp $
 
 #ifndef BALL_MATHS_LINE3_H
 #define BALL_MATHS_LINE3_H
@@ -354,7 +354,7 @@ namespace BALL
 	/**	Stream operators of Line3
 	*/
 	//@{
-	/**	Input- Operator.
+	/**	Input operator.
 			Reads two objcts of type {\bf TVector3} from an {\tt istream} and
 			assigns them to {\tt d} and {\tt p}.
 	*/
@@ -367,7 +367,7 @@ namespace BALL
 		return s;
 	}
 
-	/**	Output-Operator.
+	/**	Output operator.
 			Writes the two public attributes {\tt d} and {\tt p} to an output stream.
 			The values of the two vectors are enclosed in brackets.\\
 			{\bf Example:}\\

@@ -1,4 +1,4 @@
-// $Id: RSVertex.h,v 1.14 2001/07/15 17:03:24 oliver Exp $
+// $Id: RSVertex.h,v 1.15 2001/07/15 21:21:02 amoll Exp $
 
 #ifndef BALL_STRUCTURE_RSVERTEX_H
 #define BALL_STRUCTURE_RSVERTEX_H
@@ -258,7 +258,7 @@ namespace BALL
 	*/
 	//@{
 
-	/**	Input- Operator
+	/**	Input operator
 			reads in a rsvertex
 			@exception NotImplemented
 	*/
@@ -268,7 +268,7 @@ namespace BALL
 		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 
-	/**	Output- Operator
+	/**	Output operator
 			prints out a rsvertex
 	*/
 		template <typename T>

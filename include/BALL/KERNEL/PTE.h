@@ -1,4 +1,4 @@
-// $Id: PTE.h,v 1.15 2001/03/07 22:19:44 amoll Exp $
+// $Id: PTE.h,v 1.16 2001/07/15 21:21:01 amoll Exp $
 
 #ifndef BALL_KERNEL_PTE_H
 #define BALL_KERNEL_PTE_H
@@ -558,7 +558,7 @@ namespace BALL
 			bool operator >(const Element& element) const
 				throw();
 
-			/**	Output- Operator
+			/**	Output operator
 					Prints {\em this} instance of Element.
 			*/
 			friend std::ostream& operator << (std::ostream& s, const Element& element)

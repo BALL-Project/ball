@@ -1,4 +1,4 @@
-// $Id: RSEdge.h,v 1.16 2001/07/15 17:03:24 oliver Exp $
+// $Id: RSEdge.h,v 1.17 2001/07/15 21:21:02 amoll Exp $
 
 #ifndef BALL_STRUCTURE_RSEDGE_H
 #define BALL_STRUCTURE_RSEDGE_H
@@ -397,7 +397,7 @@ namespace BALL
 	*/
 	//@{
 
-	/**	Input- Operator
+	/**	Input operator
 			@exception NotImplemented
 	*/
 
@@ -408,7 +408,7 @@ namespace BALL
 	}
 
 
-	/**	Output- Operator
+	/**	Output operator
 	*/
 		template <typename T>
 		std::ostream& operator << (std::ostream& s, TRSEdge<T>& rsedge)

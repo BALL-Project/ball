@@ -1,4 +1,4 @@
-// $Id: solventExcludedSurface.h,v 1.16 2001/07/15 17:03:25 oliver Exp $
+// $Id: solventExcludedSurface.h,v 1.17 2001/07/15 21:21:02 amoll Exp $
 
 #ifndef BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
 #define BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
@@ -558,7 +558,7 @@ namespace BALL
 		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 
-	/**	Output- Operator.
+	/**	Output operator.
 			Prints out a SolventExcludedSurface
 	*/
 	template <typename T>

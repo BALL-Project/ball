@@ -1,4 +1,4 @@
-// $Id: SESVertex.h,v 1.8 2001/06/21 08:58:41 amoll Exp $
+// $Id: SESVertex.h,v 1.9 2001/07/15 21:21:02 amoll Exp $
 
 #ifndef BALL_STRUCTURE_SESVERTEX_H
 #define BALL_STRUCTURE_SESVERTEX_H
@@ -152,10 +152,10 @@ namespace BALL
 	*/
 	//@{
 
-	// BAUSTELLE : Input-Operator
+	// BAUSTELLE : Input operator
 	
 
-	/**	Output- Operator
+	/**	Output operator
 	*/
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TSESVertex<T>& sesvertex)

@@ -1,4 +1,4 @@
-// $Id: circle3.h,v 1.26 2001/06/21 21:26:54 amoll Exp $
+// $Id: circle3.h,v 1.27 2001/07/15 21:21:02 amoll Exp $
 
 #ifndef BALL_MATHS_CIRCLE3_H
 #define BALL_MATHS_CIRCLE3_H
@@ -310,7 +310,7 @@ namespace BALL
 	*/
 	//@{
 
-	/**	Input- Operator.
+	/**	Input operator.
 			Reads in two TVector3 and a {\bf T} value: p, n, radius
 	*/
 	template <typename T>

@@ -1,4 +1,4 @@
-// $Id: SESFace.h,v 1.11 2001/07/15 21:02:29 oliver Exp $
+// $Id: SESFace.h,v 1.12 2001/07/15 21:21:02 amoll Exp $
 
 #ifndef BALL_STRUCTURE_SESFACE_H
 #define BALL_STRUCTURE_SESFACE_H
@@ -480,9 +480,9 @@ namespace BALL
 	*/
 	//@{
 
-	// BAUSTELLE : Input-Operator
+	// BAUSTELLE : Input operator
 
-	/**	Output- Operator
+	/**	Output operator
 	*/
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TSESFace<T>& sesface)

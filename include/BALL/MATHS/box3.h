@@ -1,4 +1,4 @@
-// $Id: box3.h,v 1.30 2001/02/21 14:27:22 anker Exp $
+// $Id: box3.h,v 1.31 2001/07/15 21:21:02 amoll Exp $
 
 #ifndef BALL_MATHS_BOX3_H
 #define BALL_MATHS_BOX3_H
@@ -601,7 +601,7 @@ namespace BALL
 	*/
 	//@{
 
-	/**	Input- Operator.
+	/**	Input operator.
 			Reads in two objects of type TVector3 a and b 
 	*/
 	template <typename T>
