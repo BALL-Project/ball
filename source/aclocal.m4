@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.54 2004/10/30 10:51:24 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.55 2004/11/05 10:05:05 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -323,6 +323,7 @@ AC_DEFUN(CF_DETECT_OS,[
 	AC_SUBST(BINFMT)
 	AC_SUBST(BINFMT_PATH)
 	AC_SUBST(ARCHITECTURE)
+	RANLIB="echo"
 
 	AC_MSG_CHECKING(your OS)
 	OS=`${UNAME} -s`

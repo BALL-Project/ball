@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile.in,v 1.38 2004/05/27 19:50:03 oliver Exp $
+# $Id: Makefile.in,v 1.39 2004/11/05 10:05:06 oliver Exp $
 #
 
 include config.mak
@@ -72,9 +72,9 @@ libVIEW.@SHARED_LIB_SUFFIX@: libVIEW.objects libBALL.@SHARED_LIB_SUFFIX@
 	$(DYNAR) $(ADD_DYNAROPTS_LIBVIEW) $(DYNAROPTS) libVIEW.@SHARED_LIB_SUFFIX@ `cat libVIEW.objects` -L. -lBALL $(QT_LIBOPTS) $(OPENGL_LIBOPTS) $(X11_LIBOPTS) -lm
 
 .objects.a:	
-	@$(ECHO) "Creating library $@ ..."
-	$(AR) $(AROPTS) $*.a `cat $*.objects`
-	@RANLIB@ $*.a
+	@ $(ECHO) "Creating library $@ ..."
+	@ $(AR) $(AROPTS) $*.a `cat $*.objects`
+	@ @RANLIB@ $*.a
 
 lib:	.Dependencies dirs collect $(SHARED_LIBS)
 	@$(ECHO) " "

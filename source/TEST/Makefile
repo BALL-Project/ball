@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.213 2004/06/15 04:40:03 oliver Exp $
+# $Id: Makefile,v 1.214 2004/11/05 10:05:05 oliver Exp $
 #
 
 DIRECTORY=TEST
@@ -14,8 +14,7 @@ DIRECTORY=TEST
 include Makefile.lst
 
 
-EXECUTABLES = \
-	$(BALL_HAS_XDR:true=$(XDR_DEPENDENT_EXECUTABLES))\
+EXECUTABLES = $(BALL_HAS_XDR:true=$(XDR_DEPENDENT_EXECUTABLES))\
 	$(EXECUTABLES_BASIC)\
 	$(EXECUTABLES_SYSTEM)\
 	$(EXECUTABLES_MATHS)\
