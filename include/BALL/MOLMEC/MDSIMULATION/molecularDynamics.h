@@ -1,4 +1,4 @@
-// $Id: molecularDynamics.h,v 1.6 2000/03/28 15:30:10 oliver Exp $
+// $Id: molecularDynamics.h,v 1.7 2000/05/10 08:38:21 pmueller Exp $
 // MolecularDynamics: A base class for doing molecular dynamics simulations    
 // Useful MD classes must be derived from this class 
 
@@ -76,6 +76,11 @@ namespace BALL
 			 */
 			static const char *MAXIMAL_NUMBER_OF_ITERATIONS;
 
+      /** The maximal simulation time in ps (equivalent to 
+          MAXIMAL_NUMBER_OF_ITERATIONS 
+      */ 
+      static const char *MAXIMAL_SIMULATION_TIME; 
+
 			/**     The current number of iteration 
 			 */
 			static const char *NUMBER_OF_ITERATION;
@@ -110,9 +115,13 @@ namespace BALL
 		{
 
 			/**     The maximal number of iterations to be simulated. 
-			 * Default 10,000
 			 */
 			static const int MAXIMAL_NUMBER_OF_ITERATIONS;
+
+      /** The maximal simulation time in ps (equivalent to 
+          MAXIMAL_NUMBER_OF_ITERATIONS )
+      */ 
+      static const double  MAXIMAL_SIMULATION_TIME; 
 
 			/**     The current number of iteration 
 			 */
@@ -120,12 +129,10 @@ namespace BALL
 
 			/**     After how many iterations shall the current energy/temperature 
 			 * be calculated/saved.
-			 * Default 50  
 			 */
 			static const int ENERGY_OUTPUT_FREQUENCY;
 
 			/**    After how many iterations shall the current positions/velocities be saved.
-			 * Default 1000
 			 */
 			static const int SNAPSHOT_FREQUENCY;
 
@@ -134,7 +141,6 @@ namespace BALL
 			static const double TIME_STEP;
 
 			/**     The reference temperature for the simulated system.
-			 * Default 300 K.
 			 */
 			static const double REFERENCE_TEMPERATURE;
 
@@ -224,9 +230,25 @@ namespace BALL
 		*/
 		void setNumberOfIteration (Size number);
 
-		/**  Set the maximal number of iterations
+		/**  Set the maximal number of iterations that will be
+                     carried out. If the number of the start iteration is 0
+		     (which is the default),
+		     this method sets the total number of simulated iterations.  
 		*/
 		void setMaximalNumberOfIterations (Size number);
+
+		/**  Set the maximal simulation time in ps that will be
+                     carried out. If the start time is zero (which is the
+		     default), then
+		     this method sets the total simulation time. 
+		*/
+                void setMaximalSimulationTime(double time); 
+     
+
+		/** Set the time step in ps
+		    Note that this will change the maximum simulation time.
+		*/
+		virtual void setTimeStep(double step);
 
 		/**  Set the reference temperature for the system 
 		*/
@@ -255,6 +277,14 @@ namespace BALL
 		/**        Get the maximal number of iterations of the MD simulation 
 		*/
 		Size getMaximalNumberOfIterations () const;
+
+		/** Get the maximal simulation time of the MD simulation
+		*/
+		double getMaximalSimulationTime () const;
+
+		/** Get the current time step
+		*/
+		double getTimeStep () const; 
 
 		/**  Get the snapshot frequency
 		*/
@@ -316,42 +346,42 @@ namespace BALL
 
 		protected:
 
-		/**  @name Protected Methods 
+		/*_  @name Protected Methods 
 		*/
 		//@{
 
-		/**        A method for calculating the
+		/*_        A method for calculating the
 		  current temperature in the system
 		*/
 		void updateInstantaneousTemperature ();
 		//@}
 
-		/**  @name Protected Attributes
+		/*_  @name Protected Attributes
 		*/
 		//@{
 
-		/**  The boolean variable indicates if the setup of the 
+		/*_  The boolean variable indicates if the setup of the 
 		  molecular dynamics has been successful 
 		*/
 		bool valid_;
 
 
-		/**  The force field the MD class is bound to          
+		/*_  The force field the MD class is bound to          
 		*/
 		ForceField* force_field_ptr_;
 
-		/**        The system the MD class is bound to
+		/*_        The system the MD class is bound to
 		*/
 		System* system_ptr_;
 
 
-		/**        The list of atoms. The simulation 
+		/*_        The list of atoms. The simulation 
 			will be carried out for these atoms 
 		*/
 		AtomVector atom_vector_;
 
 
-		/**  The current iteration number  
+		/*_  The current iteration number  
 		*/
 		Size number_of_iteration_;
 
@@ -360,40 +390,40 @@ namespace BALL
 		*/
 		Size maximal_number_of_iterations_;
 
-		/**  the time step in picoseconds                  
+		/*_  the time step in picoseconds                  
 		*/
 		double time_step_;
 
-		/**  The reference temperature  in Kelvin 
+		/*_  The reference temperature  in Kelvin 
 		*/
 		double reference_temperature_;
 
-		/**  The current(kinetic) temperatue in Kelvin 
+		/*_  The current(kinetic) temperatue in Kelvin 
 		*/
 		double current_temperature_;
 
-		/**        The current kinetic energy  in kJ/mol
+		/*_        The current kinetic energy  in kJ/mol
 		*/
 		double kinetic_energy_;
 
-		/**        The current total energy in kJ/mol
+		/*_        The current total energy in kJ/mol
 		*/
 		double total_energy_;
 
 
-		/**        The current time of the MD run                 
+		/*_        The current time of the MD run                 
 		*/
 		double current_time_;
 
-		/**  Frequency of energy output (i.e. after how many iterations) 
+		/*_  Frequency of energy output (i.e. after how many iterations) 
 		*/
 		Size energy_output_frequency_;
 
-		/**  Frequency of taking snapshots (i.e. after how many iterations) 
+		/*_  Frequency of taking snapshots (i.e. after how many iterations) 
 		*/
 		Size snapshot_frequency_;
 
-		/**        The Snapshot Manager that is used for taking snapshots
+		/*_        The Snapshot Manager that is used for taking snapshots
 		*/
 		SnapShotManager *snapshot_manager_ptr_;
 		//@}
