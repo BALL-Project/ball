@@ -1,4 +1,4 @@
-// $Id: string.C,v 1.26 2000/07/22 10:56:45 oliver Exp $
+// $Id: string.C,v 1.27 2000/09/16 08:32:23 oliver Exp $
 
 #include <BALL/DATATYPE/string.h>
 #include <BALL/COMMON/limits.h>
@@ -750,6 +750,25 @@ namespace BALL
 		}
 
 		return array_index; 
+	}
+
+	Size String::split(vector<String>& strings, const char* delimiters, Index from) const
+		throw(Exception::IndexUnderflow, Exception::NullPointer)
+	{
+		// clear the vector anyway
+		strings.clear();
+
+		while(from != (Index)npos)
+		{
+			String field = getField(0, delimiters, &from);
+			
+			if (field != "")
+			{
+				strings.push_back(field);
+			}
+		}
+
+		return strings.size(); 
 	}
 
 	String& String::trimLeft(const char* trimmed_chars)
