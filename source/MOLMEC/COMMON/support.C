@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: support.C,v 1.34 2002/12/17 14:48:34 oliver Exp $
+// $Id: support.C,v 1.35 2002/12/17 16:34:09 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/KERNEL/atom.h>
@@ -36,19 +36,12 @@ namespace BALL
 
 			// Iterators for the atom vector
 			AtomVector::ConstIterator atom_it;
-			AtomVector::ConstIterator atom_it2;
 
 			// Position vectors
 			Vector3 position;
 			Vector3 new_position; 
 			Vector3 difference;
 			
-			// the box width / length / depth
-			double period_x = 0.0;
-			double period_y = 0.0;
-			double period_z = 0.0;
-			Vector3 period(box.getWidth(), box.getHeight(), box.getDepth());
-
 			// Are there atoms stored in atom_vector at all?
 			if (atom_vector.size() == 0)
 			{
@@ -56,15 +49,22 @@ namespace BALL
 				return 0;
 			}
 
+			// the box length along each axis
+			double period_x = 0.0;
+			double period_y = 0.0;
+			double period_z = 0.0;
+			Vector3 period;
+
 			// Test whether the periodic boundary is enabled or not and calculate
 			// the box size accordingly
 			if (periodic_boundary_enabled) 
 			{
-				// Just take the box that was given as argument...
+				// the box width / length / depth
+				period = Vector3(box.getWidth(), box.getHeight(), box.getDepth());
 				period_x = period.x;
 				period_y = period.y;
-				period_z = period.z; 
-			
+				period_z = period.z;
+
 				// ... and add at least distance to each coordinate to gain a box
 				// that contains enough neighbouring boxes.
 				if (distance < period_x) 
@@ -126,8 +126,8 @@ namespace BALL
 
 			// now we have the box, let's look which pairs we shall create
 
-			// Counter for the number of neighbored atom pairs.
-			Size	counter = 0;
+			// Remember the initial number of atom pairs in the pair vector.
+			Size number_of_pairs = pair_vector.size();
 
 			// Squared distance
 			double squared_distance = distance * distance;
@@ -145,104 +145,32 @@ namespace BALL
 	
 			if (periodic_boundary_enabled) 
 			{
-				// Check what kind of algorithm should be used for determining the
-				// neighbours
-
-				if (type == BRUTE_FORCE) 
+				// We always use the brute-force algorithm if PBC are enabled.
+				// Brute force algorithm: for every atom, calculate the 
+				// image of every other atom and check whether this atom
+				// is within the cutoff radius.
+				Vector3 position_i;
+				double inverse_period_x = 1.0 / period_x;
+				double inverse_period_y = 1.0 / period_y;
+				double inverse_period_z = 1.0 / period_z;
+				for (Position i = 0; i < atom_vector.size() - 1; i++)
 				{
-					// Brute force algorithm: for every atom calculate the minimum
-					// image of every other atom and check whether this atomis within
-					// the cutoff radius
-					Vector3 position_j;
-					Vector3 position_i;
-					for (atom_it = atom_vector.begin(); atom_it != atom_vector.end();
-							++atom_it) 
+					position_i = atom_vector[i]->getPosition();
+					for (Position j = i + 1; j < atom_vector.size(); j++) 
 					{
-						position_i = (*atom_it)->getPosition();
-						for (atom_it2 = atom_it, atom_it2++; 
-								atom_it2 != atom_vector.end(); ++atom_it2) 
+						difference = position_i - atom_vector[j]->getPosition();
+						difference.x = difference.x - period_x * rint(difference.x * inverse_period_x);
+						difference.y = difference.y - period_y * rint(difference.y * inverse_period_y);
+						difference.z = difference.z - period_z * rint(difference.z * inverse_period_z);
+
+						if ((difference.getSquareLength() < squared_distance) 
+									&& !atom_vector[i]->isBoundTo(*atom_vector[j])
+									&& !atom_vector[i]->isGeminal(*atom_vector[j]))
 						{
-							position_j = (*atom_it2)->getPosition();
-							float r_x = position_i.x - position_j.x;
-							float r_y = position_i.y - position_j.y;
-							float r_z = position_i.z - position_j.z;
-							r_x = r_x - period_x * (int)(r_x / period_x);
-							r_y = r_y - period_y * (int)(r_y / period_y);
-							r_z = r_z - period_z * (int)(r_z / period_z);
-
-							
-							if ((r_x * r_x + r_y * r_y + r_z * r_z) <= squared_distance) 
-							{
-								pair_vector.push_back(pair<Atom*, Atom*>(*atom_it, *atom_it2));
-								counter++;
-							}
+							pair_vector.push_back(pair<Atom*, Atom*>(atom_vector[i], atom_vector[j]));
 						}
-					}	
-				} 
-				else 
-				{ 
-					// HashGrid algorithm.
-					//
-					// Use a hash grid with box length "distance" to determine all
-					// neigboured atom pairs
-
-					Vector3 position_i;
-					Vector3 position_j;
-					for (atom_it = atom_vector.begin(); atom_it != atom_vector.end();
-							++atom_it) 
-					{
-						position_i = (*atom_it)->getPosition();
-
-						// Search all neighbour atoms of "atom_it" that are stored in
-						// the hash grid
-
-						// Calculate the 27 images of the atom and determine their
-						// neighbours
-						for (short x = -1; x < 2 ; x++) 
-						{
-							new_position.x = position_i.x + x * period_x;
-							for (short y = -1; y < 2 ; y++) 
-							{
-								new_position.y = position_i.y + y * period_y;
-								for (short z = -1; z < 2 ; z++) 
-								{
-									new_position.z = position_i.z + z * period_z;
-									hbox = grid.getBox(new_position);
-
-									if (hbox != 0)
-									{
-										// iterate over all neighbouring boxes
-										for (box_it = hbox->beginBox(); +box_it; ++box_it) 
-										{
-											// iterate over all items stored in this box
-											for (data_it = box_it->beginData(); +data_it; ++data_it) 
-											{
-												// difference is the vector pointing from the
-												// current atom to the one that we got from the
-												// gridbox
-												position_j = (*data_it)->getPosition();
-												float r_x = position_i.x - position_j.x;
-												float r_y = position_i.y - position_j.y;
-												float r_z = position_i.z - position_j.z;
-												r_x = r_x - period_x * (int)(r_x / period_x);
-												r_y = r_y - period_y * (int)(r_y / period_y);
-												r_z = r_z - period_z * (int)(r_z / period_z);
-												
-												if ((r_x * r_x + r_y * r_y + r_z * r_z) <= squared_distance) 
-												{
-													pair_vector.push_back(pair<Atom*, Atom*>(*data_it, *atom_it));
-													counter++;
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-						// insert the new atom into the hash grid
-						grid.insert(position, (*atom_it));
 					}
-				}
+				}	
 			} 
 			// periodic boundary not enabled
 			else 
@@ -252,27 +180,23 @@ namespace BALL
 				if (type == BRUTE_FORCE) 
 				{
 					// Brute force algorithm
-					for (Size atom_index_a = 0; atom_index_a < (atom_vector.size() - 1); 
-							++atom_index_a) 
+					for (Position i = 0; i < (atom_vector.size() - 1); ++i) 
 					{
-						position = atom_vector[atom_index_a]->getPosition();
-						for (Size atom_index_b = atom_index_a + 1; 
-								atom_index_b < atom_vector.size(); ++atom_index_b) 
+						position = atom_vector[i]->getPosition();
+						for (Position j = i + 1; j < atom_vector.size(); j++) 
 						{
-							if (((position.getSquareDistance(atom_vector[atom_index_b]->getPosition())) <= squared_distance) 
-									&& !atom_vector[atom_index_a]->isBoundTo(*atom_vector[atom_index_b])
-									&& !atom_vector[atom_index_a]->isGeminal(*atom_vector[atom_index_b]))
+							if (((position.getSquareDistance(atom_vector[j]->getPosition())) < squared_distance) 
+									&& !atom_vector[i]->isBoundTo(*atom_vector[j])
+									&& !atom_vector[i]->isGeminal(*atom_vector[j]))
 							{
-								pair_vector.push_back(pair<Atom*,Atom*>(atom_vector[atom_index_a], atom_vector[atom_index_b]));
-								counter++;
+								pair_vector.push_back(pair<Atom*,Atom*>(atom_vector[i], atom_vector[j]));
 							}
 						}
 					}	
-
 				} 
 				else 
 				{  	
-					// Algorithm using a 3d hash grid
+					// Algorithm using a 3D hash grid
 					//
 					// Use a hash grid with box length "distance" to determine all
 					// neighboring atom pairs
@@ -297,7 +221,6 @@ namespace BALL
 											&& !(*data_it)->isGeminal(**atom_it))
 									{
 										pair_vector.push_back(pair<Atom*,Atom*>(*data_it, *atom_it));
-										counter++;
 									}
 								}
 							}
@@ -314,7 +237,8 @@ namespace BALL
 				}
 			}
 
-			return counter;
+			// Return the number of pairs *added* to the vector.
+			return (pair_vector.size() - number_of_pairs);
 		}
 
 		
@@ -721,47 +645,12 @@ namespace BALL
 		}
 
 
-		// ?????: This will lead to an unnecessary temporary
-		void calculateMinimumImage(Vector3& distance,
-				const Vector3& period)
+		void calculateMinimumImage
+			(Vector3& distance,	const Vector3& period)
 		{
-			Vector3 half_period(period * 0.5);
-
-			if (distance.x <= -half_period.x)
-			{
-				distance.x += period.x;
-			}
-			else 
-			{
-				if (distance.x > half_period.x)
-				{
-					distance.x -= period.x;
-				}
-			}
-
-			if (distance.y <= -half_period.y)
-			{
-				distance.y += period.y;
-			}
-			else 
-			{
-				if (distance.y > half_period.y)
-				{
-					distance.y -= period.y;
-				}
-			}
-
-			if (distance.z <= -half_period.z)
-			{
-				distance.z += period.z;
-			}
-			else 
-			{
-				if (distance.z > half_period.z)
-				{
-					distance.z -= period.z;
-				}
-			}
+			distance.x = distance.x - period.x * rint(distance.x / period.x);
+			distance.y = distance.y - period.y * rint(distance.y / period.y);
+			distance.z = distance.z - period.z * rint(distance.z / period.z);
 		}
 
 	}	// namespace MolmecSupport
