@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.14 2004/09/04 01:50:37 amoll Exp $
+// $Id: backboneModel.C,v 1.15 2004/09/27 15:29:15 oliver Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -22,14 +22,16 @@ namespace BALL
 			: point_(),
 				tangent_(),
 				atom_(0)
-		{}
+		{
+		}
 
 
 		AddBackboneModel::SplinePoint::SplinePoint(const Vector3& point, const Atom* atom)
 			: point_(point),
 				tangent_(),
 				atom_(atom)
-		{}
+		{
+		}
 
 		AddBackboneModel::AddBackboneModel()
 			throw()
@@ -97,10 +99,10 @@ namespace BALL
 						// or we collect P atoms in nucleotides
 						residue.getName().size() == 1 &&
 						(
-						residue.getName() == "C" ||
-						residue.getName() == "G" ||
-						residue.getName() == "T" ||
-						residue.getName() == "A")) &&
+						 residue.getName() == "C" ||
+						 residue.getName() == "G" ||
+						 residue.getName() == "T" ||
+						 residue.getName() == "A")) &&
 						(it->getName() == "P"))
 				{
 					SplinePoint spline_point((*it).getPosition(), &*it);
@@ -217,12 +219,15 @@ namespace BALL
 
 
 		// builds a graphical representation to this point
-		void AddBackboneModel::buildGraphicalRepresentation_(const Vector3 &point, 
-																												 const Atom* atom)
+		void AddBackboneModel::buildGraphicalRepresentation_
+			(const Vector3& point, const Atom* atom)
 		{
 			if (have_start_point_)
 			{
-				if (point == last_point_) return;
+				if (point == last_point_) 
+				{
+					return;	
+				}
 				
 				// build tube connection to the last point
 				Tube* tube = new Tube;
@@ -240,7 +245,10 @@ namespace BALL
 
 			// create sphere for the point
 			Sphere* sphere = new Sphere;
-			if (!sphere) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Sphere));
+			if (!sphere) 
+			{
+				throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Sphere));
+			}
 
 			sphere->setRadius(tube_radius_);
 			sphere->setPosition(point);
@@ -250,7 +258,10 @@ namespace BALL
 
 		bool AddBackboneModel::finish()
 		{
-			if (spline_vector_.size() == 0) return true;
+			if (spline_vector_.size() == 0) 
+			{
+				return true;
+			}
 
 			createBackbone_();
 			spline_.clear();
@@ -258,4 +269,5 @@ namespace BALL
 		}
 		
 	} // namespace VIEW
+
 } // namespace BALL

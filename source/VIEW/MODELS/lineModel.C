@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineModel.C,v 1.9 2003/12/16 21:16:34 amoll Exp $
+// $Id: lineModel.C,v 1.10 2004/09/27 15:29:16 oliver Exp $
 
 #include <BALL/VIEW/MODELS/lineModel.h>
 #include <BALL/KERNEL/atom.h>
@@ -16,84 +16,84 @@ namespace BALL
 	namespace VIEW
 	{
 
-AddLineModel::AddLineModel()
-	throw()
-	: AtomBondModelBaseProcessor()
-{
-}
+		AddLineModel::AddLineModel()
+			throw()
+			: AtomBondModelBaseProcessor()
+		{
+		}
 
-AddLineModel::AddLineModel(const AddLineModel& model)
-	throw()
-	: AtomBondModelBaseProcessor(model)
-{
-}
+		AddLineModel::AddLineModel(const AddLineModel& model)
+			throw()
+			: AtomBondModelBaseProcessor(model)
+		{
+		}
 
-AddLineModel::~AddLineModel()
-	throw()
-{
-	#ifdef BALL_VIEW_DEBUG
-		Log.error() << "Destructing object " << (void *)this 
-							  << " of class " << RTTI::getName<AddLineModel>() << std::endl;
-	#endif 
-}
+		AddLineModel::~AddLineModel()
+			throw()
+		{
+			#ifdef BALL_VIEW_DEBUG
+				Log.error() << "Destructing object " << (void *)this 
+										<< " of class " << RTTI::getName<AddLineModel>() << std::endl;
+			#endif 
+		}
 
-Processor::Result AddLineModel::operator() (Composite &composite)
-{
-	if (!RTTI::isKindOf<Atom>(composite))
-	{
-		return Processor::CONTINUE;
-	}
+		Processor::Result AddLineModel::operator() (Composite &composite)
+		{
+			if (!RTTI::isKindOf<Atom>(composite))
+			{
+				return Processor::CONTINUE;
+			}
 
-	Atom *atom = RTTI::castTo<Atom>(composite);
+			Atom *atom = RTTI::castTo<Atom>(composite);
 
-	Point *point_ptr = new Point;
+			Point *point_ptr = new Point;
 
-	if (point_ptr == 0) throw Exception::OutOfMemory(__FILE__, __LINE__, sizeof(Point));
+			if (point_ptr == 0) throw Exception::OutOfMemory(__FILE__, __LINE__, sizeof(Point));
 
-	point_ptr->setVertexAddress(atom->getPosition());
-	point_ptr->setComposite(atom);
+			point_ptr->setVertexAddress(atom->getPosition());
+			point_ptr->setComposite(atom);
 
-	// append line in Atom
-	geometric_objects_.push_back(point_ptr);
+			// append line in Atom
+			geometric_objects_.push_back(point_ptr);
 
-	// collect used atoms
-	insertAtom_(atom);
+			// collect used atoms
+			insertAtom_(atom);
 
-	return Processor::CONTINUE;
-}
+			return Processor::CONTINUE;
+		}
 
-void AddLineModel::dump(ostream& s, Size depth) const
-	throw()
-{
-	BALL_DUMP_STREAM_PREFIX(s);
-	
-	BALL_DUMP_DEPTH(s, depth);
-	BALL_DUMP_HEADER(s, this, this);
+		void AddLineModel::dump(ostream& s, Size depth) const
+			throw()
+		{
+			BALL_DUMP_STREAM_PREFIX(s);
+			
+			BALL_DUMP_DEPTH(s, depth);
+			BALL_DUMP_HEADER(s, this, this);
 
-	AtomBondModelBaseProcessor::dump(s, depth + 1);
+			AtomBondModelBaseProcessor::dump(s, depth + 1);
 
-	BALL_DUMP_STREAM_SUFFIX(s);
-}
+			BALL_DUMP_STREAM_SUFFIX(s);
+		}
 
-void AddLineModel::visualiseBond_(const Bond& bond)
-	throw()
-{
-	// generate two colored tube
-	TwoColoredLine *line = new TwoColoredLine;
+		void AddLineModel::visualiseBond_(const Bond& bond)
+			throw()
+		{
+			// generate two colored tube
+			TwoColoredLine *line = new TwoColoredLine;
 
-	if (line == 0) throw Exception::OutOfMemory(__FILE__, __LINE__, sizeof(TwoColoredLine));
+			if (line == 0) throw Exception::OutOfMemory(__FILE__, __LINE__, sizeof(TwoColoredLine));
 
-	if (bond.getFirstAtom() == 0 ||
-			bond.getSecondAtom() == 0)
-	{
-		throw Exception::NullPointer(__FILE__, __LINE__);
-	}
-					
-	line->setVertex1Address(bond.getFirstAtom()->getPosition());
-	line->setVertex2Address(bond.getSecondAtom()->getPosition());
-	line->setComposite(&bond);
-	geometric_objects_.push_back(line);
-}
+			if (bond.getFirstAtom() == 0 ||
+					bond.getSecondAtom() == 0)
+			{
+				throw Exception::NullPointer(__FILE__, __LINE__);
+			}
+							
+			line->setVertex1Address(bond.getFirstAtom()->getPosition());
+			line->setVertex2Address(bond.getSecondAtom()->getPosition());
+			line->setComposite(&bond);
+			geometric_objects_.push_back(line);
+		}
 
 	} // namespace VIEW
 } // namespace BALL

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceModel.C,v 1.7 2004/09/02 15:04:06 amoll Exp $
+// $Id: forceModel.C,v 1.8 2004/09/27 15:29:15 oliver Exp $
+//
 
 #include <BALL/VIEW/MODELS/forceModel.h>
 #include <BALL/KERNEL/atom.h>
@@ -74,4 +75,5 @@ namespace BALL
 		}
 
 	} // namespace VIEW
+
 } // namespace BALL

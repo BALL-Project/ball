@@ -1,10 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.30 2004/09/02 11:41:18 amoll Exp $
+// $Id: colorProcessor.C,v 1.31 2004/09/27 15:29:15 oliver Exp $
 //
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
+
+#include <BALL/COMMON/limits.h>
 #include <BALL/VIEW/DATATYPE/colorExtension2.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/KERNEL/bond.h>
@@ -297,7 +299,7 @@ namespace BALL
 			atom_grid_.getIndices(*box, x, y, z);
 
 			const Atom* const* item = 0;
-			float distance = FLT_MAX;
+			float distance = Limits<float>::max();
 			List<HashGridBox3<const Atom*>* > box_list;
 			Size dist = 1;
 			// iterator over neighbour boxes
@@ -453,7 +455,10 @@ namespace BALL
 			max_max_color_.setAlpha(255 - transparency_);
 			max_color_.setAlpha(255 - transparency_);
 			default_color_.setAlpha(255 - transparency_);
+
 			return true;
 		}
+
 	} // namespace VIEW
+
  } // namespace BALL

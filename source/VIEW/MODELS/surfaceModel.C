@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceModel.C,v 1.11 2004/06/07 10:16:58 amoll Exp $
+// $Id: surfaceModel.C,v 1.12 2004/09/27 15:29:16 oliver Exp $
 //
 
 #include <BALL/VIEW/MODELS/surfaceModel.h>
@@ -159,4 +159,5 @@ namespace BALL
 		}
 
 	} // namespace VIEW
+
 } // namespace BALL

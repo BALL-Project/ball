@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBondModelBaseProcessor.C,v 1.12 2004/07/12 21:19:27 amoll Exp $
+// $Id: atomBondModelBaseProcessor.C,v 1.13 2004/09/27 15:29:15 oliver Exp $
+//
 
 #include <BALL/VIEW/MODELS/atomBondModelBaseProcessor.h>
 #include <BALL/KERNEL/forEach.h>
@@ -177,4 +178,5 @@ namespace BALL
 #		endif
 
 	} // namespace VIEW
+
 } // namespace BALL
