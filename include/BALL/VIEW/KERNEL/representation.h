@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.25 2004/10/18 12:00:20 amoll Exp $
+// $Id: representation.h,v 1.26 2004/10/19 09:23:49 oliver Exp $
 //
 
 #ifndef  BALL_VIEW_KERNEL_REPRESENTATION_H
@@ -265,7 +265,7 @@ namespace BALL
 			bool needsUpdate() const
 				throw();
 
-			/// Return true, if the Representation is currently updated by a thread
+			/// Return true, if the Representation is currently updated by another thread
 			bool updateRunning() const
 				throw() { return update_running_;}
 
@@ -293,8 +293,10 @@ namespace BALL
 			CompositesConstIterator end() const
 				throw() { return composites_.end();}
 
+			#ifdef BALL_QT_HAS_THREADS
 			///
 			static UpdateRepresentationThread* getUpdateThread() { return thread_;}
+			#endif
 			
 			//@}
 
@@ -349,10 +351,13 @@ namespace BALL
 			//_
 			bool 								hidden_;
 
+			#ifdef BALL_QT_HAS_THREADS
 			static UpdateRepresentationThread* thread_;
+			#endif
 		};
 
 	} // namespace VIEW
+
 } // namespace BALL
 
 #endif // BALL_VIEW_KERNEL_REPRESENTATION_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.117 2004/10/18 14:32:04 amoll Exp $
+// $Id: mainControl.C,v 1.118 2004/10/19 09:23:50 oliver Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -408,7 +408,9 @@ namespace BALL
 			// overridden in Controls
 			if (delete_id_ != 0) menuBar()->setItemEnabled(delete_id_, false);
 
+			#ifdef BALL_QT_HAS_THREADS
 			setCompositesMuteable(simulation_thread_ == 0 && Representation::getUpdateThread() ==0);
+			#endif
 
 			// checks all modular widgets 
 			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
