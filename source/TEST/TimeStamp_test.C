@@ -1,4 +1,4 @@
-// $Id: TimeStamp_test.C,v 1.7 2001/07/05 17:54:51 oliver Exp $
+// $Id: TimeStamp_test.C,v 1.8 2001/07/16 02:09:16 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,12 +7,12 @@
 
 ///////////////////////////
 
-START_TEST(TimeStamp, "$Id: TimeStamp_test.C,v 1.7 2001/07/05 17:54:51 oliver Exp $")
+START_TEST(TimeStamp, "$Id: TimeStamp_test.C,v 1.8 2001/07/16 02:09:16 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
-#define BUSY_WAIT { double x = 0.0; for (int i = 0; i < 200000; i++, x += 0.1); } 
+#define BUSY_WAIT { double x = 0.0; for (int i = 0; i < 2000000; i++, x += rand()); } 
 
 using namespace BALL;
 
