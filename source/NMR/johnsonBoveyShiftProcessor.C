@@ -1,4 +1,4 @@
-// $Id: johnsonBoveyShiftProcessor.C,v 1.8 2000/09/30 16:41:07 oliver Exp $
+// $Id: johnsonBoveyShiftProcessor.C,v 1.9 2000/10/07 13:24:36 oliver Exp $
 
 #include <BALL/NMR/johnsonBoveyShiftProcessor.h>
 #include <BALL/KERNEL/atomIterator.h>
@@ -194,6 +194,21 @@ namespace BALL
 		String ring_entry;
 		String residue_name;
 		String name_list;
+
+		// make sure the table has all required entries
+		if (!parameter_section.hasVariable("residue_name")
+				|| !parameter_section.hasVariable("radius")
+				|| !parameter_section.hasVariable("electrons")
+				|| !parameter_section.hasVariable("name_list")
+				|| !parameter_section.hasVariable("intensity"))
+		{
+			Log.error() << "JohnsonBoveyShiftProcessor::init: parameter section " 
+								  << parameter_section.getSectionName() << " does not contain "
+								  << "all required variables (residue_name, radius, electrons, name_list, intensity)" 
+									<< endl;
+			return;
+		}
+
 		
 		Position residue_name_column = parameter_section.getColumnIndex("residue_name");
 		Position radius_column = parameter_section.getColumnIndex("radius");
@@ -221,14 +236,19 @@ namespace BALL
 			residues_with_rings_[residue_name] = number;
 			ring_entry = residue_name;
 			ring_entry.append(String(number));
-			
-			new_ring.radius = parameter_section.getValue(key, radius_column).toFloat();
-			
-			new_ring.electrons = parameter_section.getValue(key, electrons_column).toUnsignedInt();
-			
-			new_ring.intensity = parameter_section.getValue(key, intensity_column).toFloat();
-			
-			name_list = parameter_section.getValue(key, name_list_column);
+
+			try 
+			{
+				new_ring.radius = parameter_section.getValue(key, radius_column).toFloat();
+				new_ring.electrons = parameter_section.getValue(key, electrons_column).toUnsignedInt();
+				new_ring.intensity = parameter_section.getValue(key, intensity_column).toFloat();
+				name_list = parameter_section.getValue(key, name_list_column);
+			} catch (Exception::InvalidFormat)
+			{
+				Log.error() << "JohnsonBoveyShiftProcessor::init: error interpreting parameter line with key "
+									  << key << endl;
+				return;
+			}
 
 			vector<String> names;
 			name_list.split(names, ",");
