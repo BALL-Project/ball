@@ -1,4 +1,4 @@
-// $Id: DCDFile.h,v 1.10 2001/04/10 09:47:39 amoll Exp $
+// $Id: DCDFile.h,v 1.11 2001/05/06 21:37:24 oliver Exp $
 
 #ifndef BALL_FORMAT_DCDFILE_H
 #define BALL_FORMAT_DCDFILE_H
@@ -170,7 +170,7 @@ namespace BALL
 			throw();
 
 		/// Detailed constructor
-		DCDFile(const String& name, File::OpenMode open_mode)
+		DCDFile(const String& name, File::OpenMode open_mode = File::IN)
 			throw();
 
 		/// Destructor
