@@ -24,17 +24,12 @@ public:
     ColorMeshDialog( QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
     ~ColorMeshDialog();
 				
-		ColorRGBA	 	color;
-		String 			location;		
+		ColorRGBA	 	selected_color;
 		ColorRGBA		min_min_color;
 		ColorRGBA 	min_color;
 		ColorRGBA   mid_color;
 		ColorRGBA		max_color;
 		ColorRGBA		max_max_color;	
-
-		float minimum;
-		float maximum;
-		Size nr_of_levels;		
 
 		Mesh* mesh;		
 		
@@ -51,6 +46,8 @@ public slots:
     void min_min_clicked();
     void max_max_clicked();
     void tab_changed();		
+protected:
+		QColor setColor(QPushButton* button);
 };
 
 	}

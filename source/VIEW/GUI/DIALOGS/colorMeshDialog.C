@@ -11,6 +11,7 @@
 #include <qspinbox.h>
 #include <qfiledialog.h>
 #include <qcolordialog.h>
+#include <qtabwidget.h>
 
 namespace BALL
 {
@@ -29,25 +30,31 @@ ColorMeshDialog::ColorMeshDialog( QWidget* parent,  const char* name, bool modal
 {
 }
 
-/*  
- *  Destroys the object and frees any allocated resources
- */
 ColorMeshDialog::~ColorMeshDialog()
 {
-    // no need to delete child widgets, Qt does it all for us
+ // no need to delete child widgets, Qt does it all for us
 }
 
-/* 
- * public slot
- */
 void ColorMeshDialog::apply_clicked()
 {
 	String fileName(location_edit->text().latin1());
 
-	if (!fileName.isEmpty())
+	if (surface_tab->currentPage() == by_file)
 	{
+		// coloring by file
 		RegularData3D dat;
-		File infile(fileName, File::IN);
+		String filename = String(location_edit->text());
+		File infile;
+		try
+		{
+			infile = File(fileName, File::IN);
+		}
+		catch(Exception::FileNotFound)
+		{
+			Log.error() << "File could not be found!" << std::endl;
+			return;
+		}
+
 		infile >> dat;
 		infile.close();
 
@@ -78,14 +85,12 @@ void ColorMeshDialog::apply_clicked()
 		}
 	}
 
-	// update of the scene and the composites needed
-	MainControl::getMainControl(this)->updateAll();
+	// repaint of the scene and the composites needed
+	MainControl::getMainControl(this)->repaint();
 
 	hide();
 }
-/* 
- * public slot
- */
+
 void ColorMeshDialog::browse_clicked()
 {
 	// look up the full path of the parameter file
@@ -98,86 +103,110 @@ void ColorMeshDialog::browse_clicked()
 		location_edit->setText(result);
 	}
 }
-/* 
- * public slot
- */
+
 void ColorMeshDialog::cancel_clicked()
 {
 	hide();
 }
-/* 
- * public slot
- */
+
+QColor ColorMeshDialog::setColor(QPushButton* button)
+{
+	QPalette p = button->palette();
+	QColor qcolor = QColorDialog::getColor(button->backgroundColor());
+	p.setColor(QColorGroup::Button, qcolor);
+	p.setColor(QColorGroup::Base, qcolor);
+	p.setColor(QColorGroup::Light, qcolor);
+	p.setColor(QColorGroup::Mid, qcolor);
+	p.setColor(QColorGroup::Midlight, qcolor);
+	p.setColor(QColorGroup::Shadow, qcolor);
+	button->setPalette(p);
+	return qcolor;
+}
+
 void ColorMeshDialog::choose_clicked()
 {
-	choose_button->setBackgroundColor(QColorDialog::getColor(choose_button->backgroundColor()));
-	red_box->setValue(choose_button->backgroundColor().red());
-	blue_box->setValue(choose_button->backgroundColor().blue());
-	green_box->setValue(choose_button->backgroundColor().green());
-	color.set(red_box->value(),
-						blue_box->value(),
-						green_box->value());
+	QColor qcolor = setColor(choose_button);
+	selected_color.set(qcolor.red(), qcolor.blue(), qcolor.green());
+	red_box->setValue(qcolor.red());
+	blue_box->setValue(qcolor.blue());
+	green_box->setValue(qcolor.green());
 }
-/* 
- * public slot
- */
+
 void ColorMeshDialog::color_boxes_changed()
 {
-	choose_button->setBackgroundColor(QColor(red_box->value(), blue_box->value(), green_box->value()));
-			color.set(red_box->value(),
-								blue_box->value(),
-								green_box->value(),
-								alpha_box->value());
+	selected_color.set(red_box->value(),
+										 blue_box->value(),
+										 green_box->value(),
+										 alpha_box->value());
+	QColor qcolor(red_box->value(), blue_box->value(), green_box->value());
+	QPalette p = choose_button->palette();
+	p.setColor(QColorGroup::Button, qcolor);
+	p.setColor(QColorGroup::Base, qcolor);
+	p.setColor(QColorGroup::Light, qcolor);
+	p.setColor(QColorGroup::Mid, qcolor);
+	p.setColor(QColorGroup::Midlight, qcolor);
+	p.setColor(QColorGroup::Shadow, qcolor);
+	choose_button->setPalette(p);
 }
-/* 
- * public slot
- */
+
 void ColorMeshDialog::location_changed()
 {
-	location = String(location_edit->text());
-	if (location.size() != 0) apply_button->setEnabled(true);
+	if (String(location_edit->text()).size() != 0) apply_button->setEnabled(true);
 		else	apply_button->setEnabled(false);
 }
-/* 
- * public slot
- */
+
 void ColorMeshDialog::max_clicked()
 {
-	max_button->setBackgroundColor(QColorDialog::getColor(max_button->backgroundColor()));
-	max_color.set(max_button->backgroundColor().red(),
-								max_button->backgroundColor().blue(),
-								max_button->backgroundColor().green());
-	max_button->setBackgroundColor(QColor(max_color.getRed(), max_color.getBlue(), max_color.getGreen()));
+	QColor qcolor = setColor(max_button);
+	max_color.set(qcolor.red(), qcolor.blue(), qcolor.green());;
 }
-/* 
- * public slot
- */
+
 void ColorMeshDialog::mid_clicked()
 {
+	QColor qcolor = setColor(mid_button);
+	mid_color.set(qcolor.red(), qcolor.blue(), qcolor.green());;
 }
-/* 
- * public slot
- */
+
 void ColorMeshDialog::min_clicked()
 {
+	QColor qcolor = setColor(min_button);
+	min_color.set(qcolor.red(), qcolor.blue(), qcolor.green());;
 }
-/* 
- * public slot
- */
+
 void ColorMeshDialog::min_min_clicked()
 {
+	QColor qcolor = setColor(min_min_button);
+	min_min_color.set(qcolor.red(), qcolor.blue(), qcolor.green());;
 }
-/* 
- * public slot
- */
+
 void ColorMeshDialog::max_max_clicked()
 {
+	QColor qcolor = setColor(max_max_button);
+	max_max_color.set(qcolor.red(), qcolor.blue(), qcolor.green());;
 }
-/* 
- * public slot
- */
+
 void ColorMeshDialog::tab_changed()
 {
+	if (surface_tab->currentPage() == by_file ||
+			surface_tab->currentPage() == colormap_tab)
+	{
+		// in coloring by file, allow apply if filename set
+		if (location_edit->text() == "")
+		{
+			apply_button->setEnabled(false);
+		}
+		else
+		{
+			apply_button->setEnabled(true);
+		}
+		return;
+	}
+
+	if (surface_tab->currentPage() == by_color)
+	{
+		// if coloring by selected color, always enabled
+		apply_button->setEnabled(true);
+	}
 }
 
 
