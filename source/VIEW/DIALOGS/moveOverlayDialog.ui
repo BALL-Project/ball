@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>MoveOverlayDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>156</width>
-            <height>103</height>
+            <height>106</height>
         </rect>
     </property>
     <property name="caption">
@@ -131,6 +131,13 @@
         <slot>close()</slot>
     </connection>
 </connections>
+<tabstops>
+    <tabstop>up_button</tabstop>
+    <tabstop>left_button</tabstop>
+    <tabstop>right_button</tabstop>
+    <tabstop>down_button</tabstop>
+    <tabstop>ok_button</tabstop>
+</tabstops>
 <slots>
     <slot>slotUp()</slot>
     <slot>slotDown()</slot>

@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>441</width>
-            <height>292</height>
+            <height>295</height>
         </rect>
     </property>
     <property name="caption">
@@ -1669,6 +1669,20 @@
         <slot>VDWfactorChanged()</slot>
     </connection>
 </connections>
+<tabstops>
+    <tabstop>tabwidget</tabstop>
+    <tabstop>stick_radius_slider</tabstop>
+    <tabstop>ball_stick_cylinder_radius_slider</tabstop>
+    <tabstop>ball_stick_sphere_radius_slider</tabstop>
+    <tabstop>vdw_radius_factor_slider</tabstop>
+    <tabstop>surface_probe_radius_slider</tabstop>
+    <tabstop>tube_radius_slider</tabstop>
+    <tabstop>cartoon_tube_radius_slider</tabstop>
+    <tabstop>cartoon_helix_radius_slider</tabstop>
+    <tabstop>cartoon_arrow_width_slider</tabstop>
+    <tabstop>cartoon_arrow_height_slider</tabstop>
+    <tabstop>hbonds_radius_slider</tabstop>
+</tabstops>
 <slots>
     <slot>stickRadiusChanged()</slot>
     <slot>VDWfactorChanged()</slot>

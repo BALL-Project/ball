@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>386</width>
-            <height>244</height>
+            <height>247</height>
         </rect>
     </property>
     <property name="caption">
@@ -285,7 +285,7 @@
                 </size>
             </property>
             <property name="cursor">
-                <cursor>6</cursor>
+                <cursor>0</cursor>
             </property>
             <property name="pageStep">
                 <number>5</number>
@@ -549,6 +549,24 @@
         <slot>snapShotInputTest()</slot>
     </connection>
 </connections>
+<tabstops>
+    <tabstop>snapShotSlider</tabstop>
+    <tabstop>firstSnapshotButton</tabstop>
+    <tabstop>hundredBackwardButton</tabstop>
+    <tabstop>tenBackwardButton</tabstop>
+    <tabstop>oneBackwardButton</tabstop>
+    <tabstop>oneForwardButton</tabstop>
+    <tabstop>tenForwardButton</tabstop>
+    <tabstop>hundredForwardButton</tabstop>
+    <tabstop>lastSnapshotButton</tabstop>
+    <tabstop>startSnapshot</tabstop>
+    <tabstop>endSnapshot</tabstop>
+    <tabstop>export_PNG</tabstop>
+    <tabstop>animateButton</tabstop>
+    <tabstop>cancelButton</tabstop>
+    <tabstop>numberOfSnapshots</tabstop>
+    <tabstop>currentSnapshot</tabstop>
+</tabstops>
 <slots>
     <slot>firstSnapshotClicked()</slot>
     <slot>hundredBackwardClicked()</slot>

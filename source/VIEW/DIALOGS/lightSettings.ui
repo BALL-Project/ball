@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>439</width>
-            <height>282</height>
+            <height>285</height>
         </rect>
     </property>
     <property name="maximumSize">
@@ -550,6 +550,24 @@
         <slot>removeLightPressed()</slot>
     </connection>
 </connections>
+<tabstops>
+    <tabstop>lights_list</tabstop>
+    <tabstop>position_x</tabstop>
+    <tabstop>position_y</tabstop>
+    <tabstop>position_z</tabstop>
+    <tabstop>direction_x</tabstop>
+    <tabstop>direction_y</tabstop>
+    <tabstop>direction_z</tabstop>
+    <tabstop>intensity</tabstop>
+    <tabstop>ambient</tabstop>
+    <tabstop>point</tabstop>
+    <tabstop>directional</tabstop>
+    <tabstop>relative</tabstop>
+    <tabstop>not_relative</tabstop>
+    <tabstop>color_button</tabstop>
+    <tabstop>add_lights_button</tabstop>
+    <tabstop>remove_lights_button</tabstop>
+</tabstops>
 <slots>
     <slot>addLightPressed()</slot>
     <slot>colorPressed()</slot>

@@ -801,10 +801,16 @@
     <tabstop>steps_lineedit</tabstop>
     <tabstop>timestep_linedit</tabstop>
     <tabstop>time_lineedit</tabstop>
+    <tabstop>temperature_lineedit</tabstop>
+    <tabstop>refresh_lineedit</tabstop>
+    <tabstop>parameter_file_edit</tabstop>
+    <tabstop>canonical_button</tabstop>
+    <tabstop>enable_dcd</tabstop>
+    <tabstop>export_images</tabstop>
+    <tabstop>dcd_file_edit</tabstop>
     <tabstop>start_button</tabstop>
     <tabstop>cancel_button</tabstop>
-    <tabstop>parameter_file_edit</tabstop>
-    <tabstop>temperature_lineedit</tabstop>
+    <tabstop>advanced_button</tabstop>
 </tabstops>
 <slots>
     <slot access="Protected">browseParameterFiles()</slot>

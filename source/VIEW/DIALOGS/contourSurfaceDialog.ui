@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>458</width>
-            <height>104</height>
+            <height>107</height>
         </rect>
     </property>
     <property name="caption">
@@ -159,6 +159,12 @@
         <slot>valuesChanged()</slot>
     </connection>
 </connections>
+<tabstops>
+    <tabstop>grids</tabstop>
+    <tabstop>threshold</tabstop>
+    <tabstop>buttonOk</tabstop>
+    <tabstop>buttonCancel</tabstop>
+</tabstops>
 <slots>
     <slot>valuesChanged()</slot>
 </slots>

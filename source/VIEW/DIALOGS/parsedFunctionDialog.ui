@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>457</width>
-            <height>145</height>
+            <height>148</height>
         </rect>
     </property>
     <property name="caption">
@@ -164,5 +164,11 @@
         <slot>reject()</slot>
     </connection>
 </connections>
+<tabstops>
+    <tabstop>x_axis</tabstop>
+    <tabstop>y_axis</tabstop>
+    <tabstop>buttonOk</tabstop>
+    <tabstop>buttonCancel</tabstop>
+</tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

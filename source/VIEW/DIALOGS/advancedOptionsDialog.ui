@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>549</width>
-            <height>467</height>
+            <height>470</height>
         </rect>
     </property>
     <property name="caption">
@@ -943,10 +943,24 @@
     </connection>
 </connections>
 <tabstops>
-    <tabstop>parameter_file_edit</tabstop>
     <tabstop>browse_button</tabstop>
+    <tabstop>parameter_file_edit</tabstop>
     <tabstop>constant_button</tabstop>
+    <tabstop>assign_charges_checkBox</tabstop>
+    <tabstop>assign_typenames_checkBox</tabstop>
+    <tabstop>assign_types_checkBox</tabstop>
+    <tabstop>overwrite_charges_checkBox</tabstop>
+    <tabstop>overwrite_typenames_checkBox</tabstop>
+    <tabstop>nonbonded_cutoff_line_edit</tabstop>
+    <tabstop>vdw_cutoff_line_edit</tabstop>
+    <tabstop>vdw_cuton_line_edit</tabstop>
+    <tabstop>electrostatic_cutoff_line_edit</tabstop>
+    <tabstop>electrostatic_cuton_line_edit</tabstop>
+    <tabstop>scaling_electrostatic_1_4_line_edit</tabstop>
+    <tabstop>scaling_vdw_1_4_line_edit</tabstop>
     <tabstop>close_button</tabstop>
+    <tabstop>reset_button</tabstop>
+    <tabstop>cancel_button</tabstop>
 </tabstops>
 <slots>
     <slot>browseParameterFiles()</slot>

@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>435</width>
-            <height>283</height>
+            <height>286</height>
         </rect>
     </property>
     <property name="caption">
@@ -136,6 +136,10 @@
         <slot>colorPressed()</slot>
     </connection>
 </connections>
+<tabstops>
+    <tabstop>color_button</tabstop>
+    <tabstop>coordinate_button</tabstop>
+</tabstops>
 <slots>
     <slot>colorPressed()</slot>
 </slots>

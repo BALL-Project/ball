@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>280</width>
-            <height>113</height>
+            <height>116</height>
         </rect>
     </property>
     <property name="caption">
@@ -39,38 +39,6 @@
                 <width>190</width>
                 <height>22</height>
             </rect>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>ok_button</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>40</x>
-                <y>76</y>
-                <width>82</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>OK</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>cancel_button</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>150</x>
-                <y>76</y>
-                <width>82</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Cancel</string>
         </property>
     </widget>
     <widget class="QLabel">
@@ -103,6 +71,41 @@
         </property>
         <property name="text">
             <string>View point</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>ok_button</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>40</x>
+                <y>76</y>
+                <width>90</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>OK</string>
+        </property>
+        <property name="default">
+            <bool>true</bool>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>cancel_button</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>150</x>
+                <y>76</y>
+                <width>90</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Cancel</string>
         </property>
     </widget>
 </widget>

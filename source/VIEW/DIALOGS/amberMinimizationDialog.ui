@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>478</width>
-            <height>253</height>
+            <height>256</height>
         </rect>
     </property>
     <property name="caption">
@@ -675,10 +675,12 @@
     <tabstop>max_iterations_lineedit</tabstop>
     <tabstop>refresh_iterations_lineedit</tabstop>
     <tabstop>max_grad_lineedit</tabstop>
+    <tabstop>energy_difference_lineedit</tabstop>
+    <tabstop>steepest_button</tabstop>
+    <tabstop>parameter_file_edit</tabstop>
     <tabstop>start_button</tabstop>
     <tabstop>cancel_button</tabstop>
-    <tabstop>parameter_file_edit</tabstop>
-    <tabstop>energy_difference_lineedit</tabstop>
+    <tabstop>advanced_button</tabstop>
 </tabstops>
 <slots>
     <slot access="Protected">browseParameterFiles()</slot>

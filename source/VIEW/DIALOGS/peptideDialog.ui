@@ -1035,12 +1035,6 @@
 </connections>
 <tabstops>
     <tabstop>sequence</tabstop>
-    <tabstop>back_button</tabstop>
-    <tabstop>close_button</tabstop>
-    <tabstop>alpha</tabstop>
-    <tabstop>phi</tabstop>
-    <tabstop>psi</tabstop>
-    <tabstop>omega</tabstop>
     <tabstop>ala</tabstop>
     <tabstop>arg</tabstop>
     <tabstop>asn</tabstop>
@@ -1061,6 +1055,12 @@
     <tabstop>trp</tabstop>
     <tabstop>tyr</tabstop>
     <tabstop>val</tabstop>
+    <tabstop>alpha</tabstop>
+    <tabstop>phi</tabstop>
+    <tabstop>psi</tabstop>
+    <tabstop>omega</tabstop>
+    <tabstop>back_button</tabstop>
+    <tabstop>close_button</tabstop>
 </tabstops>
 <slots>
     <slot>insert_seq()</slot>

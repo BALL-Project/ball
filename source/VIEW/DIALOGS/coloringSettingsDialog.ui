@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>441</width>
-            <height>295</height>
+            <height>298</height>
         </rect>
     </property>
     <property name="caption">
@@ -7172,6 +7172,30 @@
         <slot>maxTFChanged()</slot>
     </connection>
 </connections>
+<tabstops>
+    <tabstop>tabwidget</tabstop>
+    <tabstop>first_residue_button</tabstop>
+    <tabstop>middle_residue_button</tabstop>
+    <tabstop>last_residue_button</tabstop>
+    <tabstop>negative_charge_color_button</tabstop>
+    <tabstop>neutral_charge_color_button</tabstop>
+    <tabstop>positive_charge_color_button</tabstop>
+    <tabstop>null_distance_button</tabstop>
+    <tabstop>max_distance_button</tabstop>
+    <tabstop>max_distance_slider</tabstop>
+    <tabstop>minimum_tf_button</tabstop>
+    <tabstop>maximum_tf_button</tabstop>
+    <tabstop>unassigned_tf_button</tabstop>
+    <tabstop>max_tf_slider</tabstop>
+    <tabstop>minimum_o_button</tabstop>
+    <tabstop>maximum_o_button</tabstop>
+    <tabstop>unassigned_o_button</tabstop>
+    <tabstop>helix_color_button</tabstop>
+    <tabstop>strand_color_button</tabstop>
+    <tabstop>coil_color_button</tabstop>
+    <tabstop>turn_color_button</tabstop>
+    <tabstop>transparency</tabstop>
+</tabstops>
 <slots>
     <slot>minimumOccupancyColorPressed()</slot>
     <slot>middleResidueColorPressed()</slot>

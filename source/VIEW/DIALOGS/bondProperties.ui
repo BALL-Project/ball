@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>299</width>
-            <height>257</height>
+            <height>260</height>
         </rect>
     </property>
     <property name="paletteBackgroundColor">
@@ -92,118 +92,6 @@
             <string>select bond</string>
         </property>
     </widget>
-    <widget class="QLineEdit">
-        <property name="name">
-            <cstring>name_edit</cstring>
-        </property>
-        <property name="enabled">
-            <bool>false</bool>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>87</x>
-                <y>159</y>
-                <width>167</width>
-                <height>21</height>
-            </rect>
-        </property>
-        <property name="paletteForegroundColor">
-            <color>
-                <red>0</red>
-                <green>0</green>
-                <blue>0</blue>
-            </color>
-        </property>
-        <property name="text">
-            <string></string>
-        </property>
-    </widget>
-    <widget class="QLineEdit">
-        <property name="name">
-            <cstring>length_edit</cstring>
-        </property>
-        <property name="enabled">
-            <bool>false</bool>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>87</x>
-                <y>189</y>
-                <width>167</width>
-                <height>21</height>
-            </rect>
-        </property>
-        <property name="paletteForegroundColor">
-            <color>
-                <red>0</red>
-                <green>0</green>
-                <blue>0</blue>
-            </color>
-        </property>
-    </widget>
-    <widget class="QLineEdit">
-        <property name="name">
-            <cstring>type_edit</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>87</x>
-                <y>129</y>
-                <width>167</width>
-                <height>21</height>
-            </rect>
-        </property>
-        <property name="paletteBackgroundColor">
-            <color>
-                <red>238</red>
-                <green>238</green>
-                <blue>230</blue>
-            </color>
-        </property>
-    </widget>
-    <widget class="QLineEdit">
-        <property name="name">
-            <cstring>partner_edit</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>87</x>
-                <y>69</y>
-                <width>168</width>
-                <height>21</height>
-            </rect>
-        </property>
-        <property name="paletteBackgroundColor">
-            <color>
-                <red>238</red>
-                <green>238</green>
-                <blue>230</blue>
-            </color>
-        </property>
-        <property name="readOnly">
-            <bool>true</bool>
-        </property>
-    </widget>
-    <widget class="QLineEdit">
-        <property name="name">
-            <cstring>order_edit</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>87</x>
-                <y>99</y>
-                <width>167</width>
-                <height>21</height>
-            </rect>
-        </property>
-        <property name="paletteBackgroundColor">
-            <color>
-                <red>238</red>
-                <green>238</green>
-                <blue>230</blue>
-            </color>
-        </property>
-    </widget>
     <widget class="QComboBox">
         <property name="name">
             <cstring>bond_box</cstring>
@@ -215,29 +103,6 @@
                 <width>167</width>
                 <height>21</height>
             </rect>
-        </property>
-    </widget>
-    <widget class="QLineEdit">
-        <property name="name">
-            <cstring>atom_edit</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>88</x>
-                <y>5</y>
-                <width>166</width>
-                <height>21</height>
-            </rect>
-        </property>
-        <property name="paletteBackgroundColor">
-            <color>
-                <red>238</red>
-                <green>238</green>
-                <blue>230</blue>
-            </color>
-        </property>
-        <property name="readOnly">
-            <bool>true</bool>
         </property>
     </widget>
     <widget class="QLabel">
@@ -359,6 +224,153 @@
             <bool>true</bool>
         </property>
     </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>length_edit</cstring>
+        </property>
+        <property name="enabled">
+            <bool>false</bool>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>87</x>
+                <y>189</y>
+                <width>167</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property name="paletteForegroundColor">
+            <color>
+                <red>0</red>
+                <green>0</green>
+                <blue>0</blue>
+            </color>
+        </property>
+        <property name="readOnly">
+            <bool>true</bool>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>name_edit</cstring>
+        </property>
+        <property name="enabled">
+            <bool>false</bool>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>87</x>
+                <y>159</y>
+                <width>167</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property name="paletteForegroundColor">
+            <color>
+                <red>0</red>
+                <green>0</green>
+                <blue>0</blue>
+            </color>
+        </property>
+        <property name="text">
+            <string></string>
+        </property>
+        <property name="readOnly">
+            <bool>true</bool>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>type_edit</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>87</x>
+                <y>129</y>
+                <width>167</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property name="paletteBackgroundColor">
+            <color>
+                <red>238</red>
+                <green>238</green>
+                <blue>230</blue>
+            </color>
+        </property>
+        <property name="readOnly">
+            <bool>true</bool>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>order_edit</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>87</x>
+                <y>99</y>
+                <width>167</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property name="paletteBackgroundColor">
+            <color>
+                <red>238</red>
+                <green>238</green>
+                <blue>230</blue>
+            </color>
+        </property>
+        <property name="readOnly">
+            <bool>true</bool>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>partner_edit</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>87</x>
+                <y>69</y>
+                <width>168</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property name="paletteBackgroundColor">
+            <color>
+                <red>238</red>
+                <green>238</green>
+                <blue>230</blue>
+            </color>
+        </property>
+        <property name="readOnly">
+            <bool>true</bool>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>atom_edit</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>88</x>
+                <y>5</y>
+                <width>166</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property name="paletteBackgroundColor">
+            <color>
+                <red>238</red>
+                <green>238</green>
+                <blue>230</blue>
+            </color>
+        </property>
+        <property name="readOnly">
+            <bool>true</bool>
+        </property>
+    </widget>
 </widget>
 <connections>
     <connection>
@@ -386,6 +398,18 @@
         <slot>focusPartner()</slot>
     </connection>
 </connections>
+<tabstops>
+    <tabstop>focus_atom</tabstop>
+    <tabstop>bond_box</tabstop>
+    <tabstop>focus_partner</tabstop>
+    <tabstop>close_button</tabstop>
+    <tabstop>name_edit</tabstop>
+    <tabstop>length_edit</tabstop>
+    <tabstop>type_edit</tabstop>
+    <tabstop>partner_edit</tabstop>
+    <tabstop>order_edit</tabstop>
+    <tabstop>atom_edit</tabstop>
+</tabstops>
 <slots>
     <slot>bondSelected()</slot>
     <slot>focusAtom()</slot>

@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>301</width>
-            <height>158</height>
+            <height>161</height>
         </rect>
     </property>
     <property name="maximumSize">
@@ -196,6 +196,12 @@
         <slot>editColor()</slot>
     </connection>
 </connections>
+<tabstops>
+    <tabstop>label_edit_</tabstop>
+    <tabstop>edit_button</tabstop>
+    <tabstop>apply_button_</tabstop>
+    <tabstop>buttonCancel</tabstop>
+</tabstops>
 <slots>
     <slot>editColor()</slot>
 </slots>

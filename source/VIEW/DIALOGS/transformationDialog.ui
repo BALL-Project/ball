@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>160</width>
-            <height>200</height>
+            <height>203</height>
         </rect>
     </property>
     <property name="caption">
@@ -412,6 +412,23 @@
         <slot>accept()</slot>
     </connection>
 </connections>
+<tabstops>
+    <tabstop>xTranslationButton</tabstop>
+    <tabstop>xNegTranslationButton</tabstop>
+    <tabstop>yTranslationButton</tabstop>
+    <tabstop>yNegTranslationButton</tabstop>
+    <tabstop>zTranslationButton</tabstop>
+    <tabstop>zNegTranslationButton</tabstop>
+    <tabstop>xRotationButton</tabstop>
+    <tabstop>xNegRotationButton</tabstop>
+    <tabstop>yRotationButton</tabstop>
+    <tabstop>yNegRotationButton</tabstop>
+    <tabstop>zRotationButton</tabstop>
+    <tabstop>zNegRotationButton</tabstop>
+    <tabstop>defaultTranslationValue</tabstop>
+    <tabstop>defaultRotationValue</tabstop>
+    <tabstop>closeButton</tabstop>
+</tabstops>
 <slots>
     <slot>xTranslationClicked()</slot>
     <slot>yTranslationClicked()</slot>

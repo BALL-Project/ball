@@ -6,7 +6,7 @@
     </property>
     <property name="geometry">
         <rect>
-            <x>1</x>
+            <x>0</x>
             <y>1</y>
             <width>495</width>
             <height>260</height>
@@ -2563,20 +2563,29 @@
 </connections>
 <tabstops>
     <tabstop>surface_tab</tabstop>
+    <tabstop>grids</tabstop>
     <tabstop>min_min_button</tabstop>
     <tabstop>min_button</tabstop>
     <tabstop>mid_button</tabstop>
     <tabstop>max_button</tabstop>
     <tabstop>max_max_button</tabstop>
+    <tabstop>min_min_alpha</tabstop>
+    <tabstop>min_alpha</tabstop>
+    <tabstop>mid_alpha</tabstop>
+    <tabstop>max_alpha</tabstop>
+    <tabstop>max_max_alpha</tabstop>
     <tabstop>min_box</tabstop>
     <tabstop>mid_box</tabstop>
     <tabstop>max_box</tabstop>
+    <tabstop>autoscale</tabstop>
     <tabstop>levels_box</tabstop>
+    <tabstop>none_button_grid</tabstop>
     <tabstop>red_box</tabstop>
     <tabstop>green_box</tabstop>
     <tabstop>blue_box</tabstop>
     <tabstop>alpha_box</tabstop>
     <tabstop>choose_button</tabstop>
+    <tabstop>none_button_custom</tabstop>
     <tabstop>apply_button</tabstop>
     <tabstop>cancel_button</tabstop>
 </tabstops>

@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>452</width>
-            <height>593</height>
+            <height>596</height>
         </rect>
     </property>
     <property name="caption">
@@ -1399,6 +1399,38 @@
         <slot>browseChargesData()</slot>
     </connection>
 </connections>
+<tabstops>
+    <tabstop>radii_data_button</tabstop>
+    <tabstop>radii_data_lineedit</tabstop>
+    <tabstop>radii_data_browse</tabstop>
+    <tabstop>radii_rules_lineedit</tabstop>
+    <tabstop>radii_rules_browse</tabstop>
+    <tabstop>charges_data_button</tabstop>
+    <tabstop>charges_data_lineedit</tabstop>
+    <tabstop>charges_data_browse</tabstop>
+    <tabstop>charges_rules_lineedit</tabstop>
+    <tabstop>charges_rules_browse</tabstop>
+    <tabstop>dc_solvent</tabstop>
+    <tabstop>dc_interior</tabstop>
+    <tabstop>probe_radius</tabstop>
+    <tabstop>ionic_strenght</tabstop>
+    <tabstop>ion_radius</tabstop>
+    <tabstop>spacing</tabstop>
+    <tabstop>border</tabstop>
+    <tabstop>temperature</tabstop>
+    <tabstop>max_iterations</tabstop>
+    <tabstop>boundary_zero</tabstop>
+    <tabstop>smoothing_none</tabstop>
+    <tabstop>charge_trilinear</tabstop>
+    <tabstop>normalize_names</tabstop>
+    <tabstop>build_bonds</tabstop>
+    <tabstop>add_hydrogens</tabstop>
+    <tabstop>assign_charges</tabstop>
+    <tabstop>assign_radii</tabstop>
+    <tabstop>ok_button</tabstop>
+    <tabstop>cancel_button</tabstop>
+    <tabstop>reset_button</tabstop>
+</tabstops>
 <slots>
     <slot>browseChargesData()</slot>
     <slot>browseChargesRules()</slot>
