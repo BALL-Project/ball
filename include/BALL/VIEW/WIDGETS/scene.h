@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.45 2004/07/01 11:39:23 amoll Exp $
+// $Id: scene.h,v 1.46 2004/07/02 14:16:57 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -366,7 +366,7 @@ namespace BALL
 			///
 			static void setShowLightSources(bool state)
 				throw() { show_light_sources_ = state;}
-
+			
 			///
 			static bool showLightSourcesEnabled() 
 				throw() { return show_light_sources_;}

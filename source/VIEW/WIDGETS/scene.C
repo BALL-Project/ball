@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.94 2004/07/01 11:39:43 amoll Exp $
+// $Id: scene.C,v 1.95 2004/07/02 14:16:52 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1114,6 +1114,21 @@ namespace BALL
 			material_settings_->apply();
 
 			gl_renderer_.updateBackgroundColor(); 
+
+			if (stage_->getFogIntensity() == 0)
+			{
+				glDisable(GL_FOG);
+			}
+			else
+			{
+				glEnable(GL_FOG);
+				GLfloat color[4] = {0.0, 0.0, 0.0, 1};
+				glFogfv(GL_FOG_COLOR, color);
+				glFogf(GL_FOG_START, 2.0);
+				glFogf(GL_FOG_END, 401 - stage_->getFogIntensity());
+				glFogi(GL_FOG_MODE, GL_LINEAR);
+			}
+
 			renderView_(REBUILD_DISPLAY_LISTS);
 		}
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stageSettings.h,v 1.9 2004/06/02 14:24:02 amoll Exp $
+// $Id: stageSettings.h,v 1.10 2004/07/02 14:16:57 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_STAGESETTINGS_H
@@ -65,6 +65,9 @@ namespace BALL
 
 			///
 			void focalDistanceChanged();
+
+			///
+			void fogStateChanged();
 
 			//_ apply values to a Stage
 			void saveSettingsToStage_()

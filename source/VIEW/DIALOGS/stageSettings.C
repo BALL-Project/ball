@@ -45,6 +45,7 @@ void StageSettings::updateFromStage()
 
 	eye_distance_slider->setValue((int) (stage_->getEyeDistance() * 10.0));
 	focal_distance_slider->setValue((int) (stage_->getFocalDistance()));
+	fog_slider->setValue((int) (stage_->getFogIntensity()));
 	eyeDistanceChanged();
 	focalDistanceChanged();
 }
@@ -65,6 +66,15 @@ void StageSettings::apply()
 
 	stage_->setSwapSideBySideStereo(swap_sss_button->isChecked());
 
+	if (enable_fog->isChecked())
+	{
+		stage_->setFogIntensity(fog_slider->value());
+	}
+	else
+	{
+		stage_->setFogIntensity(0);
+	}
+
 	Scene::setShowLightSources(show_lights_->isChecked());
 }
 
@@ -82,6 +92,9 @@ void StageSettings::setDefaultValues()
 	eye_distance_slider->setValue(20);
 	focal_distance_slider->setValue(40);
 	swap_sss_button->setChecked(false);
+
+	enable_fog->setChecked(false);
+	fog_slider->setValue(200);
 }
 
 void StageSettings::eyeDistanceChanged()
@@ -114,6 +127,11 @@ void StageSettings::focalDistanceChanged()
 		text.truncate(text.size() - 1);
 	}
 	focal_distance_label->setText(text.c_str());
+}
+
+void StageSettings::fogStateChanged()
+{
+	fog_slider->setEnabled(enable_fog->isChecked());
 }
 
 

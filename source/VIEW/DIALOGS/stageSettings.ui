@@ -1,624 +1,815 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>StageSettingsData</class>
-<widget class="QWidget">
+<widget class="QDialog">
     <property name="name">
-        <cstring>StageSettingsData</cstring>
+        <cstring>StageSettings</cstring>
     </property>
     <property name="geometry">
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>435</width>
-            <height>299</height>
+            <width>440</width>
+            <height>313</height>
         </rect>
     </property>
     <property name="caption">
         <string>StageSettings</string>
     </property>
-    <widget class="QGroupBox">
+    <widget class="QWidgetStack">
         <property name="name">
-            <cstring>groupBox2</cstring>
+            <cstring>widget_stack</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>10</x>
-                <y>4</y>
-                <width>199</width>
-                <height>147</height>
+                <x>118</x>
+                <y>3</y>
+                <width>323</width>
+                <height>296</height>
             </rect>
         </property>
-        <property name="frameShape">
-            <enum>NoFrame</enum>
-        </property>
-        <property name="title">
-            <string>Background color</string>
-        </property>
-        <property name="alignment">
-            <set>AlignHCenter</set>
-        </property>
-        <property name="toolTip" stdset="0">
-            <string>Set the background color of the Scene.</string>
-        </property>
-        <widget class="QLabel">
+        <widget class="QWidget">
             <property name="name">
-                <cstring>color_sample</cstring>
+                <cstring>WStackPage</cstring>
             </property>
-            <property name="geometry">
-                <rect>
-                    <x>18</x>
-                    <y>17</y>
-                    <width>158</width>
-                    <height>75</height>
-                </rect>
+            <attribute name="id">
+                <number>0</number>
+            </attribute>
+            <widget class="QGroupBox">
+                <property name="name">
+                    <cstring>groupBox2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>0</y>
+                        <width>199</width>
+                        <height>130</height>
+                    </rect>
+                </property>
+                <property name="frameShape">
+                    <enum>NoFrame</enum>
+                </property>
+                <property name="title">
+                    <string>Background color</string>
+                </property>
+                <property name="alignment">
+                    <set>AlignHCenter</set>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Set the background color of the Scene.</string>
+                </property>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>color_button</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>59</x>
+                            <y>98</y>
+                            <width>77</width>
+                            <height>30</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>Edit</string>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>color_sample</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>18</x>
+                            <y>17</y>
+                            <width>158</width>
+                            <height>75</height>
+                        </rect>
+                    </property>
+                    <property name="paletteBackgroundColor">
+                        <color>
+                            <red>255</red>
+                            <green>0</green>
+                            <blue>127</blue>
+                        </color>
+                    </property>
+                    <property name="frameShape">
+                        <enum>Panel</enum>
+                    </property>
+                    <property name="frameShadow">
+                        <enum>Sunken</enum>
+                    </property>
+                    <property name="lineWidth">
+                        <number>1</number>
+                    </property>
+                    <property name="margin">
+                        <number>0</number>
+                    </property>
+                    <property name="midLineWidth">
+                        <number>0</number>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                </widget>
+            </widget>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>coordinate_button</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>140</y>
+                        <width>200</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Show coordinate system</string>
+                </property>
+            </widget>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>show_lights_</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>160</y>
+                        <width>201</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Show lightsources in Scene</string>
+                </property>
+            </widget>
+            <widget class="QGroupBox">
+                <property name="name">
+                    <cstring>groupBox1_2_3</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>190</y>
+                        <width>198</width>
+                        <height>100</height>
+                    </rect>
+                </property>
+                <property name="title">
+                    <string>Fog</string>
+                </property>
+                <property name="alignment">
+                    <set>AlignHCenter</set>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Change the mouse sensitivity. (It also depends on how large the group is, you focused on)</string>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>TextLabel1_2_2_4</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>151</x>
+                            <y>74</y>
+                            <width>34</width>
+                            <height>20</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>max</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignRight</set>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>TextLabel1_3_4</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>10</x>
+                            <y>74</y>
+                            <width>33</width>
+                            <height>20</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>min</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>enable_fog</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>10</x>
+                            <y>20</y>
+                            <width>180</width>
+                            <height>20</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>Enable fog</string>
+                    </property>
+                </widget>
+                <widget class="QSlider">
+                    <property name="name">
+                        <cstring>fog_slider</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>false</bool>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>10</x>
+                            <y>50</y>
+                            <width>180</width>
+                            <height>20</height>
+                        </rect>
+                    </property>
+                    <property name="maxValue">
+                        <number>400</number>
+                    </property>
+                    <property name="value">
+                        <number>200</number>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="tickmarks">
+                        <enum>Below</enum>
+                    </property>
+                    <property name="tickInterval">
+                        <number>50</number>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Intensity of fog</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Intensity of fog</string>
+                    </property>
+                </widget>
+            </widget>
+        </widget>
+        <widget class="QWidget">
+            <property name="name">
+                <cstring>WStackPage</cstring>
             </property>
-            <property name="paletteBackgroundColor">
-                <color>
-                    <red>255</red>
-                    <green>0</green>
-                    <blue>127</blue>
-                </color>
-            </property>
-            <property name="frameShape">
-                <enum>Panel</enum>
-            </property>
-            <property name="frameShadow">
-                <enum>Sunken</enum>
-            </property>
-            <property name="lineWidth">
+            <attribute name="id">
                 <number>1</number>
-            </property>
-            <property name="margin">
-                <number>0</number>
-            </property>
-            <property name="midLineWidth">
-                <number>0</number>
-            </property>
-            <property name="text">
-                <string></string>
-            </property>
+            </attribute>
+            <widget class="QGroupBox">
+                <property name="name">
+                    <cstring>groupBox1</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>10</y>
+                        <width>198</width>
+                        <height>69</height>
+                    </rect>
+                </property>
+                <property name="frameShape">
+                    <enum>NoFrame</enum>
+                </property>
+                <property name="title">
+                    <string>Mouse sensitivity</string>
+                </property>
+                <property name="alignment">
+                    <set>AlignHCenter</set>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Change the mouse sensitivity. (It also depends on how large the group is, you focused on)</string>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>TextLabel1_2</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>151</x>
+                            <y>45</y>
+                            <width>34</width>
+                            <height>20</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>max</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignRight</set>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>TextLabel1</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>10</x>
+                            <y>45</y>
+                            <width>33</width>
+                            <height>20</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>min</string>
+                    </property>
+                </widget>
+                <widget class="QSlider">
+                    <property name="name">
+                        <cstring>slider_</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>10</x>
+                            <y>21</y>
+                            <width>180</width>
+                            <height>20</height>
+                        </rect>
+                    </property>
+                    <property name="maxValue">
+                        <number>10</number>
+                    </property>
+                    <property name="value">
+                        <number>5</number>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="tickmarks">
+                        <enum>Below</enum>
+                    </property>
+                </widget>
+            </widget>
+            <widget class="QGroupBox">
+                <property name="name">
+                    <cstring>groupBox1_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>90</y>
+                        <width>198</width>
+                        <height>69</height>
+                    </rect>
+                </property>
+                <property name="frameShape">
+                    <enum>NoFrame</enum>
+                </property>
+                <property name="title">
+                    <string>Mouse wheel sensitivity</string>
+                </property>
+                <property name="alignment">
+                    <set>AlignHCenter</set>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Change the mouse sensitivity. (It also depends on how large the group is, you focused on)</string>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>TextLabel1_2_2</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>151</x>
+                            <y>45</y>
+                            <width>34</width>
+                            <height>20</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>max</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignRight</set>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>TextLabel1_3</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>10</x>
+                            <y>45</y>
+                            <width>33</width>
+                            <height>20</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>min</string>
+                    </property>
+                </widget>
+                <widget class="QSlider">
+                    <property name="name">
+                        <cstring>wheel_slider_</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>10</x>
+                            <y>21</y>
+                            <width>180</width>
+                            <height>20</height>
+                        </rect>
+                    </property>
+                    <property name="maxValue">
+                        <number>10</number>
+                    </property>
+                    <property name="value">
+                        <number>5</number>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="tickmarks">
+                        <enum>Below</enum>
+                    </property>
+                </widget>
+            </widget>
         </widget>
-        <widget class="QPushButton">
+        <widget class="QWidget">
             <property name="name">
-                <cstring>color_button</cstring>
+                <cstring>WStackPage</cstring>
             </property>
-            <property name="geometry">
-                <rect>
-                    <x>59</x>
-                    <y>98</y>
-                    <width>77</width>
-                    <height>30</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>Edit</string>
-            </property>
+            <attribute name="id">
+                <number>2</number>
+            </attribute>
+            <widget class="QGroupBox">
+                <property name="name">
+                    <cstring>groupBox1_2_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>10</y>
+                        <width>220</width>
+                        <height>69</height>
+                    </rect>
+                </property>
+                <property name="frameShape">
+                    <enum>NoFrame</enum>
+                </property>
+                <property name="title">
+                    <string>Stereo: Eye points distance</string>
+                </property>
+                <property name="alignment">
+                    <set>AlignHCenter</set>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Change the mouse sensitivity. (It also depends on how large the group is, you focused on)</string>
+                </property>
+                <widget class="QSlider">
+                    <property name="name">
+                        <cstring>eye_distance_slider</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>7</x>
+                            <y>18</y>
+                            <width>150</width>
+                            <height>21</height>
+                        </rect>
+                    </property>
+                    <property name="maxValue">
+                        <number>40</number>
+                    </property>
+                    <property name="lineStep">
+                        <number>5</number>
+                    </property>
+                    <property name="pageStep">
+                        <number>5</number>
+                    </property>
+                    <property name="value">
+                        <number>20</number>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="tickmarks">
+                        <enum>Below</enum>
+                    </property>
+                    <property name="tickInterval">
+                        <number>5</number>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>TextLabel1_2_2_2</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>118</x>
+                            <y>42</y>
+                            <width>34</width>
+                            <height>20</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>max</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignRight</set>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>TextLabel1_3_2</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>7</x>
+                            <y>42</y>
+                            <width>33</width>
+                            <height>20</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>min</string>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>eye_distance_label</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>164</x>
+                            <y>17</y>
+                            <width>50</width>
+                            <height>25</height>
+                        </rect>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>50</width>
+                            <height>25</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>35</width>
+                            <height>25</height>
+                        </size>
+                    </property>
+                    <property name="frameShape">
+                        <enum>TabWidgetPanel</enum>
+                    </property>
+                    <property name="text">
+                        <string>99.9</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignCenter</set>
+                    </property>
+                </widget>
+            </widget>
+            <widget class="QGroupBox">
+                <property name="name">
+                    <cstring>groupBox1_2_2_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>90</y>
+                        <width>220</width>
+                        <height>69</height>
+                    </rect>
+                </property>
+                <property name="frameShape">
+                    <enum>NoFrame</enum>
+                </property>
+                <property name="title">
+                    <string>Stereo: focal distance</string>
+                </property>
+                <property name="alignment">
+                    <set>AlignHCenter</set>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Change the mouse sensitivity. (It also depends on how large the group is, you focused on)</string>
+                </property>
+                <widget class="QSlider">
+                    <property name="name">
+                        <cstring>focal_distance_slider</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>7</x>
+                            <y>20</y>
+                            <width>150</width>
+                            <height>21</height>
+                        </rect>
+                    </property>
+                    <property name="minValue">
+                        <number>7</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>100</number>
+                    </property>
+                    <property name="lineStep">
+                        <number>5</number>
+                    </property>
+                    <property name="pageStep">
+                        <number>5</number>
+                    </property>
+                    <property name="value">
+                        <number>40</number>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="tickmarks">
+                        <enum>Below</enum>
+                    </property>
+                    <property name="tickInterval">
+                        <number>5</number>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>TextLabel1_2_2_2_2</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>118</x>
+                            <y>44</y>
+                            <width>34</width>
+                            <height>20</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>max</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignRight</set>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>TextLabel1_3_2_2</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>7</x>
+                            <y>44</y>
+                            <width>33</width>
+                            <height>20</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>min</string>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>focal_distance_label</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>164</x>
+                            <y>16</y>
+                            <width>50</width>
+                            <height>25</height>
+                        </rect>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>50</width>
+                            <height>25</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>35</width>
+                            <height>25</height>
+                        </size>
+                    </property>
+                    <property name="frameShape">
+                        <enum>TabWidgetPanel</enum>
+                    </property>
+                    <property name="text">
+                        <string>99.9</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignCenter</set>
+                    </property>
+                </widget>
+            </widget>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>swap_sss_button</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>170</y>
+                        <width>195</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Swap side by side stereo</string>
+                </property>
+            </widget>
         </widget>
     </widget>
-    <widget class="QGroupBox">
+    <widget class="QListBox">
+        <item>
+            <property name="text">
+                <string>Common</string>
+            </property>
+        </item>
+        <item>
+            <property name="text">
+                <string>Mouse</string>
+            </property>
+        </item>
+        <item>
+            <property name="text">
+                <string>3D Stereo</string>
+            </property>
+        </item>
         <property name="name">
-            <cstring>groupBox1_2_2</cstring>
+            <cstring>list_box</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>217</x>
-                <y>160</y>
-                <width>220</width>
-                <height>69</height>
+                <x>13</x>
+                <y>8</y>
+                <width>100</width>
+                <height>148</height>
             </rect>
         </property>
-        <property name="frameShape">
-            <enum>NoFrame</enum>
-        </property>
-        <property name="title">
-            <string>Stereo: Eye points distance</string>
-        </property>
-        <property name="alignment">
-            <set>AlignHCenter</set>
-        </property>
-        <property name="toolTip" stdset="0">
-            <string>Change the mouse sensitivity. (It also depends on how large the group is, you focused on)</string>
-        </property>
-        <widget class="QSlider">
-            <property name="name">
-                <cstring>eye_distance_slider</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>7</x>
-                    <y>18</y>
-                    <width>150</width>
-                    <height>21</height>
-                </rect>
-            </property>
-            <property name="maxValue">
-                <number>40</number>
-            </property>
-            <property name="lineStep">
-                <number>5</number>
-            </property>
-            <property name="pageStep">
-                <number>5</number>
-            </property>
-            <property name="value">
-                <number>20</number>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-            <property name="tickmarks">
-                <enum>Below</enum>
-            </property>
-            <property name="tickInterval">
-                <number>5</number>
-            </property>
-        </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>TextLabel1_2_2_2</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>118</x>
-                    <y>42</y>
-                    <width>34</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>max</string>
-            </property>
-            <property name="alignment">
-                <set>AlignVCenter|AlignRight</set>
-            </property>
-        </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>TextLabel1_3_2</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>7</x>
-                    <y>42</y>
-                    <width>33</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>min</string>
-            </property>
-        </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>eye_distance_label</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>164</x>
-                    <y>17</y>
-                    <width>50</width>
-                    <height>25</height>
-                </rect>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>0</hsizetype>
-                    <vsizetype>0</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>50</width>
-                    <height>25</height>
-                </size>
-            </property>
-            <property name="maximumSize">
-                <size>
-                    <width>35</width>
-                    <height>25</height>
-                </size>
-            </property>
-            <property name="frameShape">
-                <enum>TabWidgetPanel</enum>
-            </property>
-            <property name="text">
-                <string>99.9</string>
-            </property>
-            <property name="alignment">
-                <set>AlignCenter</set>
-            </property>
-        </widget>
-    </widget>
-    <widget class="QGroupBox">
-        <property name="name">
-            <cstring>groupBox1_2_2_2</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>217</x>
-                <y>230</y>
-                <width>220</width>
-                <height>69</height>
-            </rect>
-        </property>
-        <property name="frameShape">
-            <enum>NoFrame</enum>
-        </property>
-        <property name="title">
-            <string>Stereo: focal distance</string>
-        </property>
-        <property name="alignment">
-            <set>AlignHCenter</set>
-        </property>
-        <property name="toolTip" stdset="0">
-            <string>Change the mouse sensitivity. (It also depends on how large the group is, you focused on)</string>
-        </property>
-        <widget class="QSlider">
-            <property name="name">
-                <cstring>focal_distance_slider</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>7</x>
-                    <y>20</y>
-                    <width>150</width>
-                    <height>21</height>
-                </rect>
-            </property>
-            <property name="minValue">
-                <number>7</number>
-            </property>
-            <property name="maxValue">
-                <number>100</number>
-            </property>
-            <property name="lineStep">
-                <number>5</number>
-            </property>
-            <property name="pageStep">
-                <number>5</number>
-            </property>
-            <property name="value">
-                <number>40</number>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-            <property name="tickmarks">
-                <enum>Below</enum>
-            </property>
-            <property name="tickInterval">
-                <number>5</number>
-            </property>
-        </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>TextLabel1_2_2_2_2</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>118</x>
-                    <y>44</y>
-                    <width>34</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>max</string>
-            </property>
-            <property name="alignment">
-                <set>AlignVCenter|AlignRight</set>
-            </property>
-        </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>TextLabel1_3_2_2</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>7</x>
-                    <y>44</y>
-                    <width>33</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>min</string>
-            </property>
-        </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>focal_distance_label</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>164</x>
-                    <y>16</y>
-                    <width>50</width>
-                    <height>25</height>
-                </rect>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>0</hsizetype>
-                    <vsizetype>0</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>50</width>
-                    <height>25</height>
-                </size>
-            </property>
-            <property name="maximumSize">
-                <size>
-                    <width>35</width>
-                    <height>25</height>
-                </size>
-            </property>
-            <property name="frameShape">
-                <enum>TabWidgetPanel</enum>
-            </property>
-            <property name="text">
-                <string>99.9</string>
-            </property>
-            <property name="alignment">
-                <set>AlignCenter</set>
-            </property>
-        </widget>
-    </widget>
-    <widget class="QGroupBox">
-        <property name="name">
-            <cstring>groupBox1</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>-6</x>
-                <y>161</y>
-                <width>198</width>
-                <height>69</height>
-            </rect>
-        </property>
-        <property name="frameShape">
-            <enum>NoFrame</enum>
-        </property>
-        <property name="title">
-            <string>Mouse sensitivity</string>
-        </property>
-        <property name="alignment">
-            <set>AlignHCenter</set>
-        </property>
-        <property name="toolTip" stdset="0">
-            <string>Change the mouse sensitivity. (It also depends on how large the group is, you focused on)</string>
-        </property>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>TextLabel1_2</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>151</x>
-                    <y>45</y>
-                    <width>34</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>max</string>
-            </property>
-            <property name="alignment">
-                <set>AlignVCenter|AlignRight</set>
-            </property>
-        </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>TextLabel1</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>45</y>
-                    <width>33</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>min</string>
-            </property>
-        </widget>
-        <widget class="QSlider">
-            <property name="name">
-                <cstring>slider_</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>21</y>
-                    <width>180</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property name="maxValue">
-                <number>10</number>
-            </property>
-            <property name="value">
-                <number>5</number>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-            <property name="tickmarks">
-                <enum>Below</enum>
-            </property>
-        </widget>
-    </widget>
-    <widget class="QGroupBox">
-        <property name="name">
-            <cstring>groupBox1_2</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>-6</x>
-                <y>234</y>
-                <width>198</width>
-                <height>69</height>
-            </rect>
-        </property>
-        <property name="frameShape">
-            <enum>NoFrame</enum>
-        </property>
-        <property name="title">
-            <string>Mouse wheel sensitivity</string>
-        </property>
-        <property name="alignment">
-            <set>AlignHCenter</set>
-        </property>
-        <property name="toolTip" stdset="0">
-            <string>Change the mouse sensitivity. (It also depends on how large the group is, you focused on)</string>
-        </property>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>TextLabel1_2_2</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>151</x>
-                    <y>45</y>
-                    <width>34</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>max</string>
-            </property>
-            <property name="alignment">
-                <set>AlignVCenter|AlignRight</set>
-            </property>
-        </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>TextLabel1_3</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>45</y>
-                    <width>33</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>min</string>
-            </property>
-        </widget>
-        <widget class="QSlider">
-            <property name="name">
-                <cstring>wheel_slider_</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>21</y>
-                    <width>180</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property name="maxValue">
-                <number>10</number>
-            </property>
-            <property name="value">
-                <number>5</number>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-            <property name="tickmarks">
-                <enum>Below</enum>
-            </property>
-        </widget>
-    </widget>
-    <widget class="QCheckBox">
-        <property name="name">
-            <cstring>coordinate_button</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>230</x>
-                <y>6</y>
-                <width>200</width>
-                <height>20</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Show coordinate system</string>
-        </property>
-    </widget>
-    <widget class="QCheckBox">
-        <property name="name">
-            <cstring>swap_sss_button</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>228</x>
-                <y>128</y>
-                <width>195</width>
-                <height>20</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Swap side by side stereo</string>
-        </property>
-    </widget>
-    <widget class="QCheckBox">
-        <property name="name">
-            <cstring>show_lights_</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>230</x>
-                <y>36</y>
-                <width>201</width>
-                <height>20</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Show lightsources in Scene</string>
+        <property name="maximumSize">
+            <size>
+                <width>100</width>
+                <height>32767</height>
+            </size>
         </property>
     </widget>
 </widget>
 <connections>
     <connection>
+        <sender>list_box</sender>
+        <signal>highlighted(int)</signal>
+        <receiver>widget_stack</receiver>
+        <slot>raiseWidget(int)</slot>
+    </connection>
+    <connection>
         <sender>color_button</sender>
         <signal>clicked()</signal>
-        <receiver>StageSettingsData</receiver>
+        <receiver>StageSettings</receiver>
         <slot>colorPressed()</slot>
     </connection>
     <connection>
         <sender>eye_distance_slider</sender>
         <signal>valueChanged(int)</signal>
-        <receiver>StageSettingsData</receiver>
+        <receiver>StageSettings</receiver>
         <slot>eyeDistanceChanged()</slot>
     </connection>
     <connection>
         <sender>focal_distance_slider</sender>
         <signal>valueChanged(int)</signal>
-        <receiver>StageSettingsData</receiver>
+        <receiver>StageSettings</receiver>
         <slot>focalDistanceChanged()</slot>
     </connection>
+    <connection>
+        <sender>enable_fog</sender>
+        <signal>stateChanged(int)</signal>
+        <receiver>StageSettings</receiver>
+        <slot>fogStateChanged()</slot>
+    </connection>
 </connections>
-<tabstops>
-    <tabstop>color_button</tabstop>
-    <tabstop>coordinate_button</tabstop>
-</tabstops>
 <includes>
     <include location="global" impldecl="in declaration">BALL/COMMON/global.h</include>
 </includes>
 <slots>
+    <slot>showPage(int)</slot>
     <slot>colorPressed()</slot>
     <slot>eyeDistanceChanged()</slot>
     <slot>focalDistanceChanged()</slot>
+    <slot>fogStateChanged()</slot>
 </slots>
 <exportmacro>BALL_EXPORT</exportmacro>
 <layoutdefaults spacing="6" margin="11"/>
