@@ -1,4 +1,4 @@
-// $Id: property.C,v 1.22 2000/10/19 20:03:26 oliver Exp $
+// $Id: property.C,v 1.23 2000/10/25 19:26:15 oliver Exp $
 
 #include <BALL/CONCEPT/property.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -121,7 +121,9 @@ namespace BALL
 	/// Input operator
 	istream& operator >> (std::istream& s, NamedProperty& property)
   {	
-		s >> (int)property.type_;
+		Index tmp;
+		s >> tmp;
+		property.type_ = (NamedProperty::Type)tmp;
 		s >> property.name_;
 		switch (property.type_)
 		{
