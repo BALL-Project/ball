@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmImproperTorsion.h,v 1.17 2004/05/18 11:21:48 amoll Exp $
+// $Id: charmmImproperTorsion.h,v 1.18 2004/05/18 11:23:06 amoll Exp $
 //
 
 // Molecular Mechanics: Charmm force field, bond stretch component
@@ -29,14 +29,14 @@ namespace BALL
 {
 	/**	Charmm improper torsion component.
 			The CHARMM force field employs a harmonic out-of-plane potential for improper
-			torsions.	An imporper torsion is defined for four atoms {\it A}, {\it B}, {\it C},
-			and {\it D} where {\it A} is the central atom {\it B}, {\it C}, and {\it D} are bound to. \par
+			torsions.	An imporper torsion is defined for four atoms <i>  A </i>, <i>  B </i>, <i>  C </i>,
+			and <i>  D </i> where <i>  A </i> is the central atom <i>  B </i>, <i>  C </i>, and <i>  D </i> are bound to. \par
 			The out-of-plane-angle <b>  phi </b> is defined as the angle between the planes defined 
-			by {\it ABC} and {\it BCD}. 
+			by <i>  ABC </i> and <i>  BCD </i>. 
 			The improper torsion energy $E_{imp}$ is then defined as
 			$ E_{imp} = k (\theta - \theta_0)^2 $
 			where $k$ and $\theta_0$ are constants read from the parameter section and depend on
-			the atom types of {\it A}, {\it B}, {\it C}, and {\it D}.	 \par
+			the atom types of <i>  A </i>, <i>  B </i>, <i>  C </i>, and <i>  D </i>.	 \par
 			
     	\ingroup  CHARMM
 	*/
