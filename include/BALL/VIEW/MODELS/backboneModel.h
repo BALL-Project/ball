@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.h,v 1.13 2004/09/04 01:50:47 amoll Exp $
+// $Id: backboneModel.h,v 1.14 2004/10/22 20:50:48 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_BACKBONEMODEL_H
@@ -147,7 +147,8 @@ namespace BALL
 			//_ create a spline segment between two spline points a and b
 			void createSplineSegment_(const SplinePoint &a, const SplinePoint &b);
 			//_ builds a graphical representation to this point 
-			void buildGraphicalRepresentation_(const Vector3 &point, const Atom* atom);
+			void buildGraphicalRepresentation_(const Vector3 &point, const Atom* atom)
+				throw(Exception::OutOfMemory);
 
 			//_
 			void createBackbone_()

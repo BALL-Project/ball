@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.15 2004/09/27 15:29:15 oliver Exp $
+// $Id: backboneModel.C,v 1.16 2004/10/22 20:50:38 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -37,7 +37,7 @@ namespace BALL
 			throw()
 			: ModelProcessor(),
 				last_parent_(0),
-				tube_radius_(0.4)
+				tube_radius_((float)0.4)
 		{
 		}
 
@@ -147,13 +147,13 @@ namespace BALL
 			{
 				Vector3 tangent;
 
-				tangent.x = 0.8 * (spline_vector_[index + 1].getVector().x - 
+				tangent.x = (float) 0.8 * (spline_vector_[index + 1].getVector().x - 
 													 spline_vector_[index - 1].getVector().x);
 
-				tangent.y = 0.8 * (spline_vector_[index + 1].getVector().y -
+				tangent.y = (float) 0.8 * (spline_vector_[index + 1].getVector().y -
 													 spline_vector_[index - 1].getVector().y);
 
-				tangent.z = 0.8 * (spline_vector_[index + 1].getVector().z -
+				tangent.z = (float) 0.8 * (spline_vector_[index + 1].getVector().z -
 													 spline_vector_[index - 1].getVector().z);
 
 				spline_vector_[index].setTangentialVector(tangent);
@@ -194,17 +194,20 @@ namespace BALL
 
 				Vector3 new_vector;
 
-				new_vector.x = (h1 * a.getVector().x) + 
+				new_vector.x = (float)
+											 (h1 * a.getVector().x) + 
 											 (h2 * b.getVector().x) + 
 											 (h3 * a.getTangentialVector().x) + 
 											 (h4 * b.getTangentialVector().x);
 
-				new_vector.y = (h1 * a.getVector().y) + 
+				new_vector.y = (float)
+											 (h1 * a.getVector().y) + 
 											 (h2 * b.getVector().y) + 
 											 (h3 * a.getTangentialVector().y) + 
 											 (h4 * b.getTangentialVector().y);
 
-				new_vector.z = (h1 * a.getVector().z) + 
+				new_vector.z = (float)
+											 (h1 * a.getVector().z) + 
 											 (h2 * b.getVector().z) + 
 											 (h3 * a.getTangentialVector().z) + 
 											 (h4 * b.getTangentialVector().z);
@@ -221,6 +224,7 @@ namespace BALL
 		// builds a graphical representation to this point
 		void AddBackboneModel::buildGraphicalRepresentation_
 			(const Vector3& point, const Atom* atom)
+			throw(Exception::OutOfMemory)
 		{
 			if (have_start_point_)
 			{
