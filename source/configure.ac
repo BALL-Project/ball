@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl $Id: configure.ac,v 1.21 2005/03/01 07:33:10 oliver Exp $
+dnl $Id: configure.ac,v 1.22 2005/03/01 19:09:27 oliver Exp $
 dnl
 dnl
 
@@ -584,6 +584,7 @@ AC_SUBST(OPENGL_LIBOPTS)    dnl compiler options for OpenGL libs (-Lxxx -lGLU -l
 AC_SUBST(OPENGL_LIBPATH)    dnl path to OpenGL libs (without -L)
 AC_SUBST(QT_LIBOPTS)        dnl copiler options for QT libs (-Lxxx -lqgl -lqt)
 AC_SUBST(QT_LIBPATH)        dnl path to QT libs (without -L)
+AC_SUBST(QT_MT_SUFFIX)      dnl Either "" or "-mt" if multithreading is enabled.
 AC_SUBST(MOC)        				dnl path to QT meta object compiler
 AC_SUBST(X11_LIBOPTS)       dnl compiler options for X11 libs (-Lxx -lXmu -lXt -lX11 [-lSM -lICE])
 AC_SUBST(X11_LIBPATH)       dnl path to X11 libs (without -L)

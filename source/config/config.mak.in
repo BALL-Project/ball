@@ -2,7 +2,7 @@
 # Please do ONLY change config.mak.in, as config.mak is automagically 
 # created by configure from config.mak.in
 #
-# $Id: config.mak.in,v 1.34 2004/11/07 14:44:16 oliver Exp $
+# $Id: config.mak.in,v 1.35 2005/03/01 19:09:28 oliver Exp $
 #
 
 # First, some basic unix commands, including the C++ compiler
@@ -74,6 +74,7 @@ BALL_HAS_FLEX_YACC	= @BALL_HAS_FLEX_YACC@
 OPENGL_LIBPATH      = @OPENGL_LIBPATH@
 OPENGL_LIBOPTS      = @OPENGL_LIBOPTS@
 QT_LIBPATH          = @QT_LIBPATH@
+QT_MT_SUFFIX        = @QT_MT_SUFFIX@
 QT_LIBOPTS          = @QT_LIBOPTS@
 MOC                 = @MOC@
 UIC                 = @UIC@
