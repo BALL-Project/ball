@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.16 2004/01/16 15:12:30 amoll Exp $
+// $Id: representation.h,v 1.17 2004/01/18 20:32:05 oliver Exp $
+//
 
 #ifndef  BALL_VIEW_KERNEL_REPRESENTATION_H
 #define  BALL_VIEW_KERNEL_REPRESENTATION_H
