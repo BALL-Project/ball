@@ -1,4 +1,4 @@
-// $Id: INIFile_test.C,v 1.14 2001/04/23 22:00:14 amoll Exp $
+// $Id: INIFile_test.C,v 1.15 2001/05/10 19:35:52 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -25,7 +25,7 @@ class MyItemCollector
 };
 
 
-START_TEST(INIFile, "$Id: INIFile_test.C,v 1.14 2001/04/23 22:00:14 amoll Exp $")
+START_TEST(INIFile, "$Id: INIFile_test.C,v 1.15 2001/05/10 19:35:52 amoll Exp $")
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
@@ -187,15 +187,21 @@ CHECK(INIFile::insertLine(LineIterator line_it, const String& line))
 
 	INIFile emptyFile;
 	it = emptyFile.getLine(0);
-  TEST_EQUAL(emptyFile.insertLine(it, "test"), false)
+	CAPTURE_OUTPUT(2000)
+		TEST_EQUAL(emptyFile.insertLine(it, "test"), false)
+	COMPARE_OUTPUT("In INIFile  , error while inserting line: test . Illegal iterator!\n")
 RESULT
 
 CHECK(INIFile::appendLine(const String& section_name, const String& line))
 	INIFile ini("data/INIFile_test.ini");
 	ini.read();
 	
-	TEST_EQUAL(ini.appendLine("Section9", "GAU"), false)	
-	TEST_EQUAL(ini.appendLine("Section2", "[AU"), false)	
+	CAPTURE_OUTPUT(2000)
+		TEST_EQUAL(ini.appendLine("Section9", "GAU"), false)
+	COMPARE_OUTPUT("In INIFile data/INIFile_test.ini , error while appending line: GAU . Illegal section-name: Section9\n")
+	CAPTURE_OUTPUT(2000)
+		TEST_EQUAL(ini.appendLine("Section2", "[AU"), false)	
+	COMPARE_OUTPUT("In INIFile data/INIFile_test.ini , error while appending line: [AU . Illegal section-name: Section2\n")
 	TEST_EQUAL(ini.appendLine("Section3", "test1 = 123"), true)	
 	TEST_EQUAL(*ini.getLine(9), "test1 = 123")
 	TEST_EQUAL(ini.getNumberOfLines(), 11)
@@ -385,10 +391,15 @@ CHECK(INIFile::appendSection(const String& section_name))
 	INIFile ini("data/INIFile_test.ini");
 	ini.read();
 	TEST_EQUAL(ini.hasSection(ini.HEADER), true)
-	TEST_EQUAL(ini.appendSection(ini.HEADER), false)
+	CAPTURE_OUTPUT(2000)
+		TEST_EQUAL(ini.appendSection(ini.HEADER), false)
+		const char* output ="In INIFile data/INIFile_test.ini , while adding section: '#HEADER!' already exists.\n";
+	COMPARE_OUTPUT(output)
   TEST_EQUAL(ini.getNumberOfLines(), 10)
 
-	TEST_EQUAL(ini.appendSection("Section1"), false)
+  CAPTURE_OUTPUT(2000)
+		TEST_EQUAL(ini.appendSection("Section1"), false)
+	COMPARE_OUTPUT("In INIFile data/INIFile_test.ini , while adding section: 'Section1' already exists.\n")
   TEST_EQUAL(ini.getNumberOfLines(), 10)
 	TEST_EQUAL(ini.hasSection("Section1"), true)
 
@@ -398,7 +409,9 @@ CHECK(INIFile::appendSection(const String& section_name))
   TEST_EQUAL(*ini.getLine(10), "[Section5]")
 
 	INIFile emptyFile;
-	TEST_EQUAL(emptyFile.appendSection(emptyFile.HEADER), false)
+  CAPTURE_OUTPUT(2000)
+		TEST_EQUAL(emptyFile.appendSection(emptyFile.HEADER), false)
+  COMPARE_OUTPUT("In INIFile  , while adding section: '#HEADER!' already exists.\n")
 	TEST_EQUAL(emptyFile.hasSection(emptyFile.HEADER), true)
 	TEST_EQUAL(emptyFile.appendSection("asd"), true)
 RESULT
