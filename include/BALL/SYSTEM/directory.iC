@@ -1,4 +1,31 @@
-// $Id: directory.iC,v 1.7 2000/07/04 08:16:29 oliver Exp $
+// $Id: directory.iC,v 1.8 2000/12/17 09:38:44 amoll Exp $
+BALL_INLINE
+void Directory::synchronize_()
+{
+  if (::getcwd(NULL, MAX_PATH_LENGTH) != directory_path_)
+  {
+    backup_path_ = ::getcwd(NULL, MAX_PATH_LENGTH);
+    ::chdir(directory_path_.data());
+  }
+}
+
+BALL_INLINE
+bool Directory::desynchronize_(bool result1)
+{
+  if (backup_path_ == "") return result1;
+  bool result2 = (::chdir(backup_path_.data()) == 0);
+  backup_path_ = "";
+  return (result1 && result2);
+}
+
+BALL_INLINE 
+void Directory::clear()
+{
+  dir_ = 0;   
+  dirent_ = 0;
+  directory_path_ = "";
+}
+
 BALL_INLINE 
 void Directory::destroy()
 {
@@ -12,27 +39,19 @@ Directory& Directory::operator = (const Directory& directory)
   return *this;
 }
 
-BALL_INLINE 
-void Directory::get(Directory& directory) const
-{
-  directory.set(*this);
-}
-
-BALL_INLINE 
-void Directory::clear()
-{
-  dir_ = 0;
-  dirent_ = 0;
-  directory_path_ = "";
-}
-
-BALL_INLINE 
+BALL_INLINE
 void Directory::set(const Directory& directory)
 {
   dir_ = 0;
   dirent_ = 0;
   directory_path_ = directory.directory_path_;
-	backup_path_ = "";
+  backup_path_ = "";
+}
+
+BALL_INLINE 
+void Directory::get(Directory& directory) const
+{
+  directory.set(*this);
 }
 
 BALL_INLINE 
@@ -107,22 +126,4 @@ bool Directory::isValid() const
 	return (::opendir(directory_path_.data()) != NULL && directory_path_ != "");
 }
 
-BALL_INLINE 
-void Directory::synchronize_()
-{
-  if (::getcwd(NULL, MAX_PATH_LENGTH) != directory_path_)
-  {
-    backup_path_ = ::getcwd(NULL, MAX_PATH_LENGTH);
-    ::chdir(directory_path_.data());
-  }
-}
-
-BALL_INLINE 
-bool Directory::desynchronize_(bool result1)
-{
-  if (backup_path_ == "") return result1;
-	bool result2 = (::chdir(backup_path_.data()) == 0);
-  backup_path_ = "";
-	return (result1 && result2);
-}
 

@@ -1,21 +1,3 @@
-BALL_INLINE 
-AssignShiftProcessor::AssignShiftProcessor(const AssignShiftProcessor& processor)
-	:	UnaryProcessor<Composite>(),
-		shift_table_(processor.shift_table_),
-		atom_data_(processor.atom_data_),
-		valid_(processor.valid_),
-		molecule_(processor.molecule_),
-		number_of_fragment_(processor.number_of_fragment_)
-{
-}
-			
-BALL_INLINE 
-AssignShiftProcessor::AssignShiftProcessor()
-	: UnaryProcessor<Composite>(),
-		atom_data_(RTTI::getDefault<std::vector<NMRAtomData*> >())
-{
-}
-
 BALL_INLINE
 AssignShiftProcessor::AssignShiftProcessor(const vector<NMRAtomData*>& atom_data)
 	:	atom_data_(atom_data),

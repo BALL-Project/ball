@@ -1,4 +1,4 @@
-// $Id: assignShiftProcessor.C,v 1.21 2000/10/03 02:04:12 amoll Exp $
+// $Id: assignShiftProcessor.C,v 1.22 2000/12/17 09:39:40 amoll Exp $
 
 #include <BALL/NMR/assignShiftProcessor.h>
 #include <BALL/KERNEL/atom.h>
@@ -11,6 +11,22 @@ using namespace std;
 
 namespace BALL
 {
+
+	AssignShiftProcessor::AssignShiftProcessor(const AssignShiftProcessor& processor)
+	  : UnaryProcessor<Composite>(),
+ 	   shift_table_(processor.shift_table_),
+ 	   atom_data_(processor.atom_data_),
+ 	   valid_(processor.valid_),
+ 	   molecule_(processor.molecule_),
+ 	   number_of_fragment_(processor.number_of_fragment_)
+	{
+	}
+
+	AssignShiftProcessor::AssignShiftProcessor()
+ 	 : UnaryProcessor<Composite>(),
+ 	   atom_data_(RTTI::getDefault<std::vector<NMRAtomData*> >())
+	{
+	}
 
 	bool AssignShiftProcessor::start()
 	{
