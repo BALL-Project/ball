@@ -1,4 +1,4 @@
-// $Id: colorExtension3.C,v 1.4 1999/12/30 18:05:45 oliver Exp $
+// $Id: colorExtension3.C,v 1.5 2001/01/26 01:37:42 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/colorExtension3.h>
 
@@ -45,24 +45,21 @@ namespace BALL
 			clear();
 		}
 
-		void ColorExtension3::set
-			(const ColorExtension3& color_extension, bool deep)
+		void ColorExtension3::set(const ColorExtension3& color_extension, bool deep)
 		{
 			ColorExtension2::set(color_extension, deep);
 
 			color3_.set(color_extension.color3_, deep);
 		}
 
-		ColorExtension3& ColorExtension3::operator =
-			(const ColorExtension3& color_extension)
+		ColorExtension3& ColorExtension3::operator = (const ColorExtension3& color_extension)
 		{
 			set(color_extension);
 
 			return *this;
 		}
 
-		void ColorExtension3::get
-			(ColorExtension3& color_extension, bool deep) const
+		void ColorExtension3::get(ColorExtension3& color_extension, bool deep) const
 		{
 			color_extension.set(*this, deep);
 		}
@@ -76,12 +73,11 @@ namespace BALL
 
 		bool ColorExtension3::isValid() const
 		{
-			return (bool)(ColorExtension2::isValid()
-										&& color3_.isValid());
+			return (ColorExtension2::isValid() &&
+							color3_.isValid());
 		}
 
-		void ColorExtension3::dump
-			(ostream& s, Size depth) const
+		void ColorExtension3::dump(ostream& s, Size depth) const
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

@@ -1,4 +1,4 @@
-// $Id: ballAndStickModel.C,v 1.10 2001/01/26 00:20:01 amoll Exp $
+// $Id: ballAndStickModel.C,v 1.11 2001/01/26 01:37:10 amoll Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/ballAndStickModel.h>
 
@@ -202,10 +202,10 @@ namespace BALL
 			s << "stick radius: " << stick_radius_ << endl;
 
 			BALL_DUMP_DEPTH(s, depth);
-			s << "b&s model: " << ((bool)(ball_and_stick_ == true)) << endl;
+			s << "b&s model: " << ball_and_stick_ << endl;
 
 			BALL_DUMP_DEPTH(s, depth);
-			s << "s model: " << ((bool)(ball_and_stick_ == false)) << endl;
+			s << "s model: " << ball_and_stick_ << endl;
 
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}

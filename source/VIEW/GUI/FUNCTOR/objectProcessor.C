@@ -1,4 +1,4 @@
-// $Id: objectProcessor.C,v 1.1 2000/09/23 13:28:32 hekl Exp $
+// $Id: objectProcessor.C,v 1.2 2001/01/26 01:37:28 amoll Exp $
 
 #include <BALL/VIEW/GUI/FUNCTOR/objectProcessor.h>
 
@@ -92,7 +92,7 @@ namespace BALL
 				
 			#endif
 
-			return (bool)(address_array_[address] == value);
+			return (address_array_[address] == value);
 		}
 
    	void ObjectProcessor::applyOn(Composite & /* c */)

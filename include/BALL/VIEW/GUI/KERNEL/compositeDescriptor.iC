@@ -1,4 +1,4 @@
-// $Id: compositeDescriptor.iC,v 1.5 2000/09/23 14:40:11 hekl Exp $
+// $Id: compositeDescriptor.iC,v 1.6 2001/01/26 01:37:05 amoll Exp $
 
 BALL_INLINE 
 void CompositeDescriptor::setName(const String& name)
@@ -74,7 +74,7 @@ BALL_INLINE
 void CompositeDescriptor::setComposite(const Composite* composite, bool allow_deletion)
 {
 	composite_ = const_cast<Composite*>(composite);
-	shallow_copy_ = (bool)(allow_deletion == false);
+	shallow_copy_ = (!allow_deletion);
 }
 
 BALL_INLINE 
@@ -104,13 +104,13 @@ void CompositeDescriptor::registerGLObjectCollector(const GLObjectCollector& col
 BALL_INLINE 
 bool CompositeDescriptor::isShallowCopy() const 
 {
-  return (bool)(shallow_copy_ == true);
+  return (shallow_copy_);
 }
 
 BALL_INLINE 
 bool CompositeDescriptor::isDeepCopy() const
 {
-  return (bool)(shallow_copy_ == false);
+  return (!shallow_copy_);
 }
 
 BALL_INLINE 

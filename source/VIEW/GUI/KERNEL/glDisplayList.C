@@ -1,4 +1,4 @@
-// $Id: glDisplayList.C,v 1.1 2000/09/23 13:28:33 hekl Exp $
+// $Id: glDisplayList.C,v 1.2 2001/01/26 01:37:33 amoll Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/glDisplayList.h>
 #include <BALL/COMMON/exception.h>
@@ -135,7 +135,7 @@ namespace BALL
 
 		bool GLDisplayList::isValid() const
 		{
-			return (bool)(GL_list_ != 0);
+			return (GL_list_ != 0);
 		}
 
 		void GLDisplayList::dump

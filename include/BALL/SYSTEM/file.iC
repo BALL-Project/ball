@@ -1,4 +1,4 @@
-// $Id: file.iC,v 1.12 2000/10/23 17:37:39 amoll Exp $
+// $Id: file.iC,v 1.13 2001/01/26 01:36:59 amoll Exp $
 
 BALL_INLINE 
 void File::clear()
@@ -52,7 +52,7 @@ bool File::remove(String name)
 {
   FileSystem::canonizePath(name);
   
-  return (bool)(::unlink(name.c_str()) == 0);
+  return (::unlink(name.c_str()) == 0);
 }
 
 BALL_INLINE 
@@ -116,7 +116,7 @@ bool File::rename(String old_path, String new_path)
 		throw (Exception::FileNotFound(__FILE__, __LINE__, old_path));
 	}
 
-  return (bool)(::rename(old_path.c_str(), new_path.c_str()) == 0);
+  return (::rename(old_path.c_str(), new_path.c_str()) == 0);
 }
 
 BALL_INLINE 
@@ -143,7 +143,7 @@ bool File::truncate(String path, Size size)
 
   FileSystem::canonizePath(path);
   
-  return (bool)(::truncate(path.c_str(), (long)size) == 0);
+  return (::truncate(path.c_str(), (long)size) == 0);
 }
 
 BALL_INLINE 
@@ -181,7 +181,7 @@ BALL_INLINE
 bool File::isValid() 
 	const	throw()
 {
-  return (bool)((File *)this)->::std::fstream::good();
+  return ((File *)this)->::std::fstream::good();
 }
 
 BALL_INLINE 
@@ -206,7 +206,7 @@ bool File::isCanonized()
 
   FileSystem::canonizePath(canonized_name);
   
-  return (bool)(name_ == canonized_name);
+  return (name_ == canonized_name);
 }
 
 BALL_INLINE 
@@ -215,7 +215,7 @@ bool File::isReadable(String name)
 {
   FileSystem::canonizePath(name);
   
-  return (bool)(::access(name.c_str(), R_OK) == 0);
+  return (::access(name.c_str(), R_OK) == 0);
 }
 
 BALL_INLINE 
@@ -231,7 +231,7 @@ bool File::isWritable(String name)
 {
   FileSystem::canonizePath(name);
   
-  return (bool)(::access(name.c_str(), W_OK) == 0);
+  return (::access(name.c_str(), W_OK) == 0);
 }
 
 BALL_INLINE 
@@ -247,7 +247,7 @@ bool File::isExecutable(String name)
 {
   FileSystem::canonizePath(name);
   
-  return (bool)(::access(name.c_str(), X_OK) == 0);
+  return (::access(name.c_str(), X_OK) == 0);
 }
 
 BALL_INLINE 

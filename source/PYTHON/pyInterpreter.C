@@ -1,4 +1,4 @@
-// $Id: pyInterpreter.C,v 1.2 2000/07/18 16:42:08 oliver Exp $
+// $Id: pyInterpreter.C,v 1.3 2001/01/26 01:37:16 amoll Exp $
 
 #include <BALL/PYTHON/pyInterpreter.h>
 #include <Python.h>
@@ -45,7 +45,7 @@ namespace BALL
 
 	bool PyInterpreter::isInitialized()
 	{
-		return (bool)Py_IsInitialized();
+		return Py_IsInitialized();
 	}
 
 	void PyInterpreter::finalize()

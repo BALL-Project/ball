@@ -1,4 +1,4 @@
-// $Id: objectCreator.C,v 1.1 2000/09/23 13:28:35 hekl Exp $
+// $Id: objectCreator.C,v 1.2 2001/01/26 01:37:33 amoll Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/objectCreator.h>
 
@@ -87,7 +87,7 @@ namespace BALL
 				
 			#endif
 
-			return (bool)(address_array_[address] == value);
+			return (address_array_[address] == value);
 		}
 
  	  void ObjectCreator::initPersistenceManager(TextPersistenceManager & /* pm */)

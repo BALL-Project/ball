@@ -53,11 +53,10 @@ namespace BALL
 
 		bool LogView::isValid() const
 		{
-			return (bool)(true);
+			return true;
 		}
 
-		void LogView::dump
-			(ostream& s, Size depth) const
+		void LogView::dump(ostream& s, Size depth) const
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

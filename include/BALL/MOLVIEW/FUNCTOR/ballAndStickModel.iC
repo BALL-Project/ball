@@ -1,4 +1,4 @@
-// $Id: ballAndStickModel.iC,v 1.3 2000/01/08 20:31:25 hekl Exp $
+// $Id: ballAndStickModel.iC,v 1.4 2001/01/26 01:36:55 amoll Exp $
 
 BALL_INLINE
 Real AddBallAndStickModel::getBallRadius() const
@@ -39,11 +39,11 @@ void AddBallAndStickModel::enableStickModel()
 BALL_INLINE
 bool AddBallAndStickModel::isBallAndStickModel() const
 {
-  return (bool)(ball_and_stick_ == true);
+  return ball_and_stick_;
 }
 
 BALL_INLINE
 bool AddBallAndStickModel::isStickModel() const
 {
-  return (bool)(ball_and_stick_ == false);
+  return (!ball_and_stick_);
 }

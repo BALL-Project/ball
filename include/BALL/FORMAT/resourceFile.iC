@@ -1,4 +1,4 @@
-// $Id: resourceFile.iC,v 1.6 2000/10/24 00:04:07 amoll Exp $
+// $Id: resourceFile.iC,v 1.7 2001/01/26 01:36:49 amoll Exp $
 
 BALL_INLINE 
 void ResourceEntry::set(const ResourceEntry& entry, bool deep)
@@ -59,7 +59,9 @@ ResourceEntry* ResourceEntry::getChild(Position index)
   if (index < (Position)number_children_) 
 	{
     return child_[index];
-  } else {
+  } 
+	else 
+	{
     return 0;
   }
 }
@@ -118,7 +120,9 @@ ResourceEntry* ResourceEntry::insertSibling
 {
   if (parent_ != 0) {
     return parent_->insertChild(key, value, replace_value);
-  } else {
+  }
+	else 
+	{
     return 0;
   }
 }
@@ -137,7 +141,9 @@ ResourceEntry* ResourceEntry::findChild(const String& key)
   if (number_children_ == 0 || findGreaterOrEqual_(key, found) == false) 
 	{
     return 0;
-  } else {
+  }
+	else 
+	{
     return child_[found];
   }
 }
@@ -157,9 +163,12 @@ const ResourceEntry* ResourceEntry::findDescendant(const String& key) const
 BALL_INLINE 
 ResourceEntry* ResourceEntry::findEntry(const String& key)
 {
-  if (key_ == key) {
+  if (key_ == key) 
+	{
     return this;
-  } else {
+  } 
+	else 
+	{
     return findDescendant(key);
   }
 }
@@ -171,7 +180,6 @@ ResourceEntry::findEntry(const String& key) const
   return ((ResourceEntry *)this)->findEntry(key);
 }
 
-
 BALL_INLINE 
 void ResourceEntry::host(Visitor<ResourceEntry>& visitor)
 {
@@ -181,19 +189,19 @@ void ResourceEntry::host(Visitor<ResourceEntry>& visitor)
 BALL_INLINE 
 bool ResourceEntry::hasChild(const String& key) const
 {
-  return (bool)(findChild(key) != 0);
+  return (findChild(key) != 0);
 }
 
 BALL_INLINE 
 bool ResourceEntry::isEmpty() const
 {
-  return (bool)(number_children_ == 0);
+  return (number_children_ == 0);
 }
 
 BALL_INLINE 
 bool ResourceEntry::isParentOf(const ResourceEntry& entry) const
 {
-  return (bool)(entry.parent_ == this);
+  return (entry.parent_ == this);
 }
 
 BALL_INLINE 
@@ -202,7 +210,6 @@ bool ResourceEntry::isChildOf(const ResourceEntry& entry) const
   return entry.isParentOf(*this);
 }
   
-
 BALL_INLINE 
 bool ResourceEntry::isDescendantOf(const ResourceEntry& entry) const
 {
@@ -212,13 +219,13 @@ bool ResourceEntry::isDescendantOf(const ResourceEntry& entry) const
 BALL_INLINE 
 bool ResourceEntry::isRelatedWith(const ResourceEntry& entry) const
 {
-  return (bool)(&entry == this || entry.isAncestorOf(*this) || this->isAncestorOf(entry));
+  return (&entry == this || entry.isAncestorOf(*this) || this->isAncestorOf(entry));
 }
   
 BALL_INLINE 
 bool ResourceEntry::isRoot() const
 {
-  return (bool)(parent_ == 0);
+  return (parent_ == 0);
 }
 
 BALL_INLINE 
@@ -242,7 +249,9 @@ void ResourceEntry::deleteEntry(ResourceEntry* entry) const
 	if ((entry != 0) && (!entry->isAutoDeletable()))
 	{
 		entry->clear();
-	} else {
+	} 
+	else 
+	{
 		delete entry;
 	}
 }
@@ -265,7 +274,6 @@ bool ResourceEntry::operator != (const ResourceEntry& entry) const
 {
 	return !(*this == entry);
 }
-
 
 
 BALL_INLINE 
@@ -331,7 +339,9 @@ String* ResourceFile::getValue(const String& key_path)
   
 	if (entry == 0) {
 		return 0;
-	} else {
+	}
+	else
+	{
 		return &(entry->getValue());
 	}
 }
@@ -363,7 +373,7 @@ void ResourceFile::host(Visitor<ResourceFile>& visitor)
 BALL_INLINE 
 bool ResourceFile::hasKey(const String& key_path) const
 {
-  return (bool)(getEntry(key_path) != 0);
+  return (getEntry(key_path) != 0);
 }
 
 BALL_INLINE 

@@ -30,7 +30,7 @@ namespace BALL
 		
 		bool Preferences::hasTabs()
 		{
-			return (bool)(number_of_tabs_ > 0);
+			return (number_of_tabs_ > 0);
 		}
 
 		void Preferences::insertTab(QWidget *child, const QString &name)

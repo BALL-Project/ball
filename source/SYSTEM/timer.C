@@ -1,4 +1,4 @@
-// $Id: timer.C,v 1.6 2000/10/30 00:20:06 amoll Exp $
+// $Id: timer.C,v 1.7 2001/01/26 01:37:21 amoll Exp $
 
 #include <BALL/SYSTEM/timer.h>
 
@@ -234,7 +234,7 @@ namespace BALL
 
 	bool Timer::operator == (const Timer& timer) const
 	{
-		return (bool)(last_secs_ == timer.last_secs_
+		return (last_secs_ == timer.last_secs_
 									&& last_usecs_ == timer.last_usecs_
 									&& last_user_time_ == timer.last_user_time_
 									&& last_system_time_ == timer.last_system_time_

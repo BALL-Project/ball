@@ -1,4 +1,4 @@
-// $Id: color.iC,v 1.2 1999/12/19 17:19:22 oliver Exp $
+// $Id: color.iC,v 1.3 2001/01/26 01:37:02 amoll Exp $
 
 BALL_INLINE 
 void ColorRGBA::setRed(const ColorUnit& red)
@@ -114,40 +114,40 @@ bool ColorRGBA::isValid() const
 BALL_INLINE 
 bool ColorRGBA::operator == (const ColorRGBA& color) const
 {
-  return (bool)(red_ == color.red_ && green_ == color.green_
+  return (red_ == color.red_ && green_ == color.green_
 								&& blue_ == color.blue_ && alpha_ == color.alpha_);
 }
 
 BALL_INLINE 
 bool ColorRGBA::operator != (const ColorRGBA& color) const
 {
-  return (bool)!(this->operator==(color));
+  return !(this->operator==(color));
 }
 
 BALL_INLINE 
 bool ColorRGBA::operator < (const ColorRGBA& color) const
 {
-  return (bool)(red_ < color.red_ && green_ < color.green_
+  return (red_ < color.red_ && green_ < color.green_
 								&& blue_ < color.blue_ && alpha_ < color.alpha_);
 }
 
 BALL_INLINE 
 bool ColorRGBA::operator > (const ColorRGBA& color) const
 {
-  return (bool)(red_ > color.red_ && green_ > color.green_
+  return (red_ > color.red_ && green_ > color.green_
 								&& blue_ > color.blue_ && alpha_ > color.alpha_);
 }
 
 BALL_INLINE 
 bool ColorRGBA::operator <= (const ColorRGBA& color) const
 {
-  return (bool)!(this->operator>(color));
+  return !(this->operator>(color));
 }
 
 BALL_INLINE 
 bool ColorRGBA::operator >= (const ColorRGBA& color) const
 {
-  return (bool)!(this->operator<(color));  
+  return !(this->operator<(color));  
 }
 
 
@@ -258,7 +258,7 @@ bool ColorHSV::isValid() const
 BALL_INLINE 
 bool ColorHSV::operator == (const ColorHSV& color) const
 {
-  return (bool)(hue_ == color.hue_
+  return (hue_ == color.hue_
 								&& saturation_ == color.saturation_
 								&& value_ == color.value_);
 }
@@ -266,13 +266,13 @@ bool ColorHSV::operator == (const ColorHSV& color) const
 BALL_INLINE 
 bool ColorHSV::operator != (const ColorHSV& color) const
 {
-  return (bool)!(this->operator==(color));
+  return !(this->operator==(color));
 }
 
 BALL_INLINE 
 bool ColorHSV::operator < (const ColorHSV& color) const
 {
-  return (bool)(hue_ < color.hue_
+  return (hue_ < color.hue_
 								&& saturation_ < color.saturation_
 								&& value_ < color.value_);
 }
@@ -280,7 +280,7 @@ bool ColorHSV::operator < (const ColorHSV& color) const
 BALL_INLINE 
 bool ColorHSV::operator > (const ColorHSV &color) const
 {
-  return (bool)(hue_ > color.hue_
+  return (hue_ > color.hue_
 								&& saturation_ > color.saturation_
 								&& value_ > color.value_);
 }
@@ -288,11 +288,11 @@ bool ColorHSV::operator > (const ColorHSV &color) const
 BALL_INLINE 
 bool ColorHSV::operator <= (const ColorHSV &color) const
 {
-  return (bool)!(this->operator>(color));
+  return !(this->operator>(color));
 }
 
 BALL_INLINE 
 bool ColorHSV::operator >= (const ColorHSV &color) const
 {
-  return (bool)!(this->operator<(color));  
+  return !(this->operator<(color));  
 }

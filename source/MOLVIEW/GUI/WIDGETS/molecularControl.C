@@ -1,4 +1,4 @@
-// $Id: molecularControl.C,v 1.4 2000/12/22 19:12:16 amoll Exp $
+// $Id: molecularControl.C,v 1.5 2001/01/26 01:37:12 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/WIDGETS/molecularControl.h>
 #include <qpopupmenu.h>
@@ -27,7 +27,7 @@ MolecularControl::~MolecularControl()
 
 void MolecularControl::checkMenu(MainControl& main_control)
 {
-	bool copy_list_filled = (bool)(getCopyList_().size() > 0);
+	bool copy_list_filled = (getCopyList_().size() > 0);
 
 	// check for paste-slot: enable only if copy_list_ not empty
 	(main_control.menuBar())->setItemEnabled(paste_id_, copy_list_filled);	

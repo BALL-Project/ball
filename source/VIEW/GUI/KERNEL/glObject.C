@@ -1,4 +1,4 @@
-// $Id: glObject.C,v 1.1 2000/09/23 13:28:33 hekl Exp $
+// $Id: glObject.C,v 1.2 2001/01/26 01:37:33 amoll Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/glObject.h>
 
@@ -68,7 +68,7 @@ namespace BALL
 		{
 			if (GL_primitive_manager_ != 0)
 			{
-				return (bool)(GL_primitive_manager_->isValid() == true);
+				return (GL_primitive_manager_->isValid());
 			}
 			
 			return false;

@@ -1,4 +1,4 @@
-// $Id: vertex1.C,v 1.7 2000/07/18 08:30:03 oliver Exp $
+// $Id: vertex1.C,v 1.8 2001/01/26 01:37:42 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/vertex1.h>
 
@@ -89,11 +89,10 @@ namespace BALL
 
 		bool Vertex::isValid() const
 		{
-			return (bool)(vertex1_.isValid() == true);
+			return vertex1_.isValid();
 		}
 
-		void Vertex::dump
-			(ostream& s, Size depth) const
+		void Vertex::dump(ostream& s, Size depth) const
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

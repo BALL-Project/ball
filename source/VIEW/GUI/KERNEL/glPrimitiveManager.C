@@ -1,4 +1,4 @@
-// $Id: glPrimitiveManager.C,v 1.1 2000/09/23 13:28:34 hekl Exp $
+// $Id: glPrimitiveManager.C,v 1.2 2001/01/26 01:37:33 amoll Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/glPrimitiveManager.h>
 
@@ -841,13 +841,12 @@ namespace BALL
 
 		bool GLPrimitiveManager::isValid() const
 		{
-			return (bool)(Sphere.isValid() == true
-										&& Tube.isValid() == true
-										&& SimpleBox.isValid() == true);
+			return (Sphere.isValid() &&
+					    Tube.isValid()   &&
+							SimpleBox.isValid());
 		}
 
-		void GLPrimitiveManager::dump
-			(ostream& s, Size depth) const
+		void GLPrimitiveManager::dump(ostream& s, Size depth) const
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

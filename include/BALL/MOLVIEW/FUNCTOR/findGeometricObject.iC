@@ -1,4 +1,4 @@
-// $Id: findGeometricObject.iC,v 1.4 2000/06/18 16:38:13 hekl Exp $
+// $Id: findGeometricObject.iC,v 1.5 2001/01/26 01:36:55 amoll Exp $
 
 BALL_INLINE
 List<VIEW::GeometricObject*>& FindGeometricObjects::getGeometricObjects()
@@ -15,5 +15,5 @@ const List<VIEW::GeometricObject*>& FindGeometricObjects::getGeometricObjects() 
 BALL_INLINE
 bool FindGeometricObjects::geometricObjectsFound() const
 {
-  return (bool)(geometric_objects_.size() != 0);
+  return (geometric_objects_.size() != 0);
 }

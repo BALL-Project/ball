@@ -1,4 +1,4 @@
-// $Id: bitVector.iC,v 1.18 2000/12/16 21:27:13 amoll Exp $
+// $Id: bitVector.iC,v 1.19 2001/01/26 01:36:42 amoll Exp $
 
 BALL_INLINE 
 BALL::Size BitVector::getSize() const
@@ -200,7 +200,7 @@ bool BitVector::getBit(Index index)
 	throw(Exception::IndexUnderflow, Exception::OutOfMemory)
 {
 	validateIndex_(index);
-	return (bool)((bitset_[block_(index)] & mask_(index)) != 0);
+	return ((bitset_[block_(index)] & mask_(index)) != 0);
 }
 
 BALL_INLINE

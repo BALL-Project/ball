@@ -1,4 +1,4 @@
-// $Id: baseModel.iC,v 1.6 2000/06/25 19:13:52 hekl Exp $
+// $Id: baseModel.iC,v 1.7 2001/01/26 01:36:55 amoll Exp $
 
 BALL_INLINE
 void BaseModelProcessor::enableStaticModel()
@@ -65,31 +65,31 @@ BaseModelConnector* BaseModelProcessor::getModelConnector()
 BALL_INLINE
 bool BaseModelProcessor::isStaticModelEnabled()
 {
-  return (bool)(hasProperty(GeometricObject::PROPERTY__OBJECT_STATIC) == true);
+  return (hasProperty(GeometricObject::PROPERTY__OBJECT_STATIC));
 }
 
 BALL_INLINE
 bool BaseModelProcessor::isStaticModelDisabled()
 {
-  return (bool)(hasProperty(GeometricObject::PROPERTY__OBJECT_STATIC) == false);
+  return (!hasProperty(GeometricObject::PROPERTY__OBJECT_STATIC));
 }
 
 BALL_INLINE
 bool BaseModelProcessor::isDynamicModelEnabled()
 {
-  return (bool)(hasProperty(GeometricObject::PROPERTY__OBJECT_DYNAMIC) == true);
+  return (hasProperty(GeometricObject::PROPERTY__OBJECT_DYNAMIC));
 }
 
 BALL_INLINE
 bool BaseModelProcessor::isDynamicModelDisabled()
 {
-  return (bool)(hasProperty(GeometricObject::PROPERTY__OBJECT_DYNAMIC) == false);
+  return (!hasProperty(GeometricObject::PROPERTY__OBJECT_DYNAMIC));
 }
 
 BALL_INLINE
 bool BaseModelProcessor::isDefaultColorCalculatorRegistered()
 {
-  return (bool)(color_calculator_ == const_cast<ColorCalculator*>((ColorCalculator*)&RTTI::getDefault<ColorCalculator>()));
+  return (color_calculator_ == const_cast<ColorCalculator*>((ColorCalculator*)&RTTI::getDefault<ColorCalculator>()));
 }
 
 BALL_INLINE

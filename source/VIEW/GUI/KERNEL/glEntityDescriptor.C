@@ -1,4 +1,4 @@
-// $Id: glEntityDescriptor.C,v 1.1 2000/09/23 13:28:33 hekl Exp $
+// $Id: glEntityDescriptor.C,v 1.2 2001/01/26 01:37:33 amoll Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/glEntityDescriptor.h>
 #include <BALL/COMMON/exception.h>
@@ -67,7 +67,7 @@ namespace BALL
 
 		bool GLEntityDescriptor::isValid() const
 		{
-			return (bool)(static_display_list_.isValid()
+			return (static_display_list_.isValid()
 										&& static_always_front_display_list_.isValid()
 										&& static_wireframe_display_list_.isValid()
 										&& static_wireframe_always_front_display_list_.isValid()

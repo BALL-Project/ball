@@ -1,4 +1,4 @@
-// $Id: client.C,v 1.6 2000/05/14 15:21:59 hekl Exp $
+// $Id: client.C,v 1.7 2001/01/26 01:37:42 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/client.h>
 
@@ -162,11 +162,10 @@ namespace BALL
 
 		bool Client::isValid() const
 		{
-			return (bool)(host_ != "" && port_ != 0);
+			return (host_ != "" && port_ != 0);
 		}
 
-		void Client::dump
-			(ostream& s, Size depth) const
+		void Client::dump(ostream& s, Size depth) const
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

@@ -1,4 +1,4 @@
-// $Id: resourceFile.h,v 1.11 2000/12/11 21:14:27 oliver Exp $
+// $Id: resourceFile.h,v 1.12 2001/01/26 01:36:49 amoll Exp $
 
 #ifndef BALL_FORMAT_RESOURCEFILE_H
 #define BALL_FORMAT_RESOURCEFILE_H
@@ -386,7 +386,7 @@ namespace BALL
 			
 			bool isSingular() const
 			{
-				return (bool)(bound_ == 0);
+				return (bound_ == 0);
 			}
 			
 			IteratorPosition& getPosition()

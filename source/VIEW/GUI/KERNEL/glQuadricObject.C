@@ -1,4 +1,4 @@
-// $Id: glQuadricObject.C,v 1.1 2000/09/23 13:28:34 hekl Exp $
+// $Id: glQuadricObject.C,v 1.2 2001/01/26 01:37:33 amoll Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/glQuadricObject.h>
 #include <BALL/COMMON/exception.h>
@@ -180,11 +180,10 @@ namespace BALL
 
 		bool GLQuadricObject::isValid() const
 		{
-			return (bool)(GLU_quadric_obj_ != 0);
+			return (GLU_quadric_obj_ != 0);
 		}
 
-		void GLQuadricObject::dump
-			(ostream& s, Size depth) const
+		void GLQuadricObject::dump(ostream& s, Size depth) const
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

@@ -1,4 +1,4 @@
-// $Id: baseModel.C,v 1.9 2000/12/12 16:19:24 oliver Exp $
+// $Id: baseModel.C,v 1.10 2001/01/26 01:37:10 amoll Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/baseModel.h>
 
@@ -133,14 +133,13 @@ namespace BALL
 
 		bool BaseModelProcessor::isValid() const
 		{
-			return (bool)(ExtendedPropertyManager::isValid() == true
-										&& color_calculator_->isValid() == true
-										&& model_connector_->isValid() == true
-										&& find_geometric_object_.isValid() == true);
+			return (ExtendedPropertyManager::isValid()
+						  && color_calculator_->isValid()
+							&& model_connector_->isValid()
+							&& find_geometric_object_.isValid());
 		}
 
-		void BaseModelProcessor::dump
-			(ostream& s, Size depth) const
+		void BaseModelProcessor::dump(ostream& s, Size depth) const
 			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
@@ -170,12 +169,12 @@ namespace BALL
 
 			BALL_DUMP_DEPTH(s, depth);
 			s << "generate static model: "
-					 << ((hasProperty(GeometricObject::PROPERTY__OBJECT_STATIC) == true) ? "yes" : "no")
+					 << ((hasProperty(GeometricObject::PROPERTY__OBJECT_STATIC)) ? "yes" : "no")
 					 << endl;
 
 			BALL_DUMP_DEPTH(s, depth);
 			s << "generate dynamic model: "
-					 << ((hasProperty(GeometricObject::PROPERTY__OBJECT_DYNAMIC) == true) ? "yes" : "no")
+					 << ((hasProperty(GeometricObject::PROPERTY__OBJECT_DYNAMIC)) ? "yes" : "no")
 					 << endl;
 
 			BALL_DUMP_STREAM_SUFFIX(s);

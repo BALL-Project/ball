@@ -1,4 +1,4 @@
-// $Id: molecularInformation.C,v 1.4 2000/12/12 16:19:25 oliver Exp $
+// $Id: molecularInformation.C,v 1.5 2001/01/26 01:37:10 amoll Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/molecularInformation.h>
 
@@ -96,11 +96,10 @@ namespace BALL
 
 		bool MolecularInformation::isValid() const
 		{
-			return (bool)(Information::isValid());
+			return Information::isValid();
 		}
 
-		void MolecularInformation::dump
-			(ostream& s, Size depth) const
+		void MolecularInformation::dump(ostream& s, Size depth) const
 			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);

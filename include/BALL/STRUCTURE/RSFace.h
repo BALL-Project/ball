@@ -1,4 +1,4 @@
-// $Id: RSFace.h,v 1.5 2001/01/24 13:23:24 amoll Exp $
+// $Id: RSFace.h,v 1.6 2001/01/26 01:36:57 amoll Exp $
 
 #ifndef secure
 #define secure
@@ -249,7 +249,7 @@ namespace BALL
 			RSFaceIsValid(*this,__LINE__);
 			RSFaceIsValid(rsface,__LINE__);
 			#endif
-			return (bool)(!(*this == rsface));
+			return (!(*this == rsface));
 		}
 		
 		/** isSingular

@@ -1,4 +1,4 @@
-// $Id: compositeDescriptor.C,v 1.1 2000/09/23 13:28:32 hekl Exp $
+// $Id: compositeDescriptor.C,v 1.2 2001/01/26 01:37:33 amoll Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/compositeDescriptor.h>
 
@@ -35,7 +35,7 @@ namespace BALL
 				entities_(),
 				object_collector_(0),
 				primitive_manager_(0),
-				shallow_copy_((bool)(deep != true)),
+				shallow_copy_(!deep),
 				shallow_copies_()
 		{
 			if (deep == true)
@@ -157,7 +157,7 @@ namespace BALL
 			name_ = composite_descriptor.name_;
 			center_ = composite_descriptor.center_;
 			quaternion_ = composite_descriptor.quaternion_;
-			shallow_copy_ = (bool)(deep != true);
+			shallow_copy_ = (!deep);
 
 			if (deep == true)
 			{

@@ -1,4 +1,4 @@
-// $Id: iterator.h,v 1.4 2000/03/30 10:16:06 oliver Exp $
+// $Id: iterator.h,v 1.5 2001/01/26 01:36:52 amoll Exp $
 
 #ifndef BALL_KERNEL_ITERATOR_H
 #define BALL_KERNEL_ITERATOR_H
@@ -130,7 +130,7 @@ namespace BALL
 	
 		bool isSingular() const
 		{
-			return (bool)(bound_ == 0);
+			return (bound_ == 0);
 		}
 	
 		Composite::SubcompositeIterator& getPosition()
@@ -145,17 +145,17 @@ namespace BALL
 	
 		bool operator ==(const CompositeIteratorTraits_ &traits) const
 		{
-			return (bool)(subcomposite_iterator_ == traits.subcomposite_iterator_);
+			return (subcomposite_iterator_ == traits.subcomposite_iterator_);
 		}
 
 		bool operator !=(const CompositeIteratorTraits_ &traits) const
 		{
-			return (bool)(subcomposite_iterator_ != traits.subcomposite_iterator_);
+			return (subcomposite_iterator_ != traits.subcomposite_iterator_);
 		}
 	
 		bool isValid() const
 		{
-			return (bool)(bound_ != 0 && subcomposite_iterator_.isValid() == true);
+			return (bound_ != 0 && subcomposite_iterator_.isValid() == true);
 		}
 
 		void invalidate()
@@ -168,8 +168,10 @@ namespace BALL
 			()
 		{
 			if (isSingular())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
-
+			}
+			
 			subcomposite_iterator_ = bound_->beginSubcomposite();
 			if (predicate_->operator()(*subcomposite_iterator_) == false)
 			{
@@ -180,8 +182,9 @@ namespace BALL
 		bool isBegin() const
 		{
 			if (isSingular())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
-
+			}
 
 			Composite::SubcompositeIterator sub_iterator = bound_->beginSubcomposite();
 
@@ -189,7 +192,7 @@ namespace BALL
 			{
 				sub_iterator.findNext(*predicate_);
 			}
-			return (bool)(subcomposite_iterator_ == sub_iterator);
+			return (subcomposite_iterator_ == sub_iterator);
 		}
 
 		void toEnd()
@@ -244,7 +247,7 @@ namespace BALL
 			{
 				sub_iterator.findPrevious(*predicate_);
 			}
-			return (bool)(subcomposite_iterator_ == sub_iterator);
+			return (subcomposite_iterator_ == sub_iterator);
 		}
 			
 		void toREnd()

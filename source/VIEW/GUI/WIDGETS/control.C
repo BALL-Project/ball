@@ -1,4 +1,4 @@
-// $Id: control.C,v 1.5 2000/12/22 19:12:17 amoll Exp $
+// $Id: control.C,v 1.6 2001/01/26 01:37:35 amoll Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/control.h>
 #include <qpopupmenu.h>
@@ -458,11 +458,10 @@ bool Control::updateListViewItem_
 		tree_updated = true;
 	}
 
-	return (bool)(recurseUpdate_(attached_item, composite) || tree_updated);
+	return (recurseUpdate_(attached_item, composite) || tree_updated);
 }
 
-QListViewItem* Control::findListViewItem_
-  (Composite* composite)
+QListViewItem* Control::findListViewItem_(Composite* composite)
 {
 	QString address;
 	address.sprintf("%ld", (((unsigned long)((void *)composite))));

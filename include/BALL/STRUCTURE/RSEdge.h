@@ -1,4 +1,4 @@
-// $Id: RSEdge.h,v 1.4 2001/01/24 13:23:24 amoll Exp $
+// $Id: RSEdge.h,v 1.5 2001/01/26 01:36:57 amoll Exp $
 
 #ifndef BALL_STRUCTURE_RSEDGE_H
 #define BALL_STRUCTURE_RSEDGE_H
@@ -476,7 +476,7 @@ namespace BALL
 		*/
 		bool operator != (const TRSEdge& rsedge) const
 		{
-			return (bool)(!(*this == rsedge));
+			return (!(*this == rsedge));
 		}
 		
 		/** isSingular
