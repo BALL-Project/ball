@@ -343,6 +343,60 @@ void Stage::translate(const Vector3& v3)
 	}
 }
 
+Vector3 Stage::calculateRelativeCoordinates(Vector3 pos)
+{
+	// relative in units of view_vector, right_vector and look_up_vector
+	// by calculating the normals to three planes
+	
+	// make sure the three planes are far enough, to be always on one side of them
+	const float d = 1000000.0;
+
+	Vector3 dr(camera_.getRightVector());
+	dr.normalize();
+	dr *= d;
+
+	Vector3 dv(camera_.getViewVector());
+	dv.normalize();
+	dv *= d;
+
+	Vector3 du(camera_.getLookUpVector());
+	du.normalize();
+	du *= d;
+
+	pos -= camera_.getLookAtPosition();
+
+	// calculate the planes
+	const Plane3 plane_rv(dr, dr);
+	const Plane3 plane_uv(du, du);
+	const Plane3 plane_vv(dv, dv);
+
+	// distance of the destion of the light source from the three planes
+	Vector3 result(
+		GetDistance(plane_rv, pos),
+		GetDistance(plane_uv, pos),
+		GetDistance(plane_vv, pos));
+	result -= Vector3(d);
+
+	return -result;
+}
+
+Vector3 Stage::calculateAbsoluteCoordinates(Vector3 pos)
+{
+	Vector3 dv(camera_.getViewVector());
+	dv.normalize();
+
+	Vector3 du(camera_.getLookUpVector());
+	du.normalize();
+
+	Vector3 dr(camera_.getRightVector());
+	dr.normalize();
+
+	return camera_.getLookAtPosition() + 
+		(pos.x * dr + 
+		 pos.y * du + 
+		 pos.z * dv);
+}
+
 void Stage::moveCameraTo(const Camera& new_camera)
 	throw()
 {
