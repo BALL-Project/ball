@@ -1,4 +1,4 @@
-// $Id: global.sip,v 1.2 2000/07/20 19:35:06 oliver Exp $
+// $Id: global.sip,v 1.3 2001/05/07 00:58:11 oliver Exp $
 
 class Index
 {
@@ -59,6 +59,7 @@ class Position
 };
 
 typedef int Size;
+typedef double DoubleReal;
 
 // class Size
 // {

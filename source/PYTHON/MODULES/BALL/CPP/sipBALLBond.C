@@ -215,86 +215,6 @@ static PyObject *sipDo_Bond_finalize(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Bond_set(PyObject *sipThisObj,PyObject *sipArgs)
-{
-	sipThisType *sipThis;
-
-	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Bond)) == NULL)
-		return NULL;
-
-	{
-		const Bond *a0;
-		PyObject *a0obj;
-		long a1 = true;
-
-		if (sipParseArgs(sipArgs,"I|l",sipCanConvertTo_Bond,&a0obj,&a1))
-		{
-			Bond *ptr;
-
-			if ((ptr = (Bond *)sipGetCppPtr(sipThis,sipClass_Bond)) == NULL)
-				return NULL;
-
-			int iserr = 0;
-
-			sipConvertTo_Bond(a0obj,(Bond **)&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			ptr -> Bond::set(* a0, (bool)a1);
-
-			Py_INCREF(Py_None);
-			return Py_None;
-		}
-	}
-
-	// Report an error if the arguments couldn't be parsed.
-
-	sipNoMethod(sipName_BALL_Bond,sipName_BALL_set);
-
-	return NULL;
-}
-
-static PyObject *sipDo_Bond_get(PyObject *sipThisObj,PyObject *sipArgs)
-{
-	sipThisType *sipThis;
-
-	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Bond)) == NULL)
-		return NULL;
-
-	{
-		Bond *a0;
-		PyObject *a0obj;
-		long a1 = true;
-
-		if (sipParseArgs(sipArgs,"I|l",sipCanConvertTo_Bond,&a0obj,&a1))
-		{
-			Bond *ptr;
-
-			if ((ptr = (Bond *)sipGetCppPtr(sipThis,sipClass_Bond)) == NULL)
-				return NULL;
-
-			int iserr = 0;
-
-			sipConvertTo_Bond(a0obj,&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			ptr -> Bond::get(* a0, (bool)a1);
-
-			Py_INCREF(Py_None);
-			return Py_None;
-		}
-	}
-
-	// Report an error if the arguments couldn't be parsed.
-
-	sipNoMethod(sipName_BALL_Bond,sipName_BALL_get);
-
-	return NULL;
-}
-
 static PyObject *sipDo_Bond_swap(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
@@ -1177,7 +1097,7 @@ static void sipDealloc_Bond(sipThisType *sipThis)
 
 static PyObject *sipPyInternalRepr_Bond(sipThisType *sipThis)
 {
-#line 92 "bond.sip"
+#line 90 "bond.sip"
   Bond* ptr;
   if ((ptr = (Bond*)sipGetCppPtr(sipThis,sipClass_Bond)) == NULL)
     return NULL;
@@ -1213,7 +1133,7 @@ static PyObject *sipPyInternalRepr_Bond(sipThisType *sipThis)
 		tmp += " }";
 	}
   return PyString_FromString(tmp.c_str());
-#line 1221 "../CPP/sipBALLBond.cpp"
+#line 1141 "../CPP/sipBALLBond.cpp"
 }
 
 PyObject *sipNew_Bond(PyObject *sipSelf,PyObject *sipArgs)
@@ -1335,8 +1255,6 @@ PyMethodDef sipClassAttrTab_Bond[] = {
 	{sipName_BALL_clear, sipDo_Bond_clear, METH_VARARGS, NULL},
 	{sipName_BALL_destroy, sipDo_Bond_destroy, METH_VARARGS, NULL},
 	{sipName_BALL_finalize, sipDo_Bond_finalize, METH_VARARGS, NULL},
-	{sipName_BALL_set, sipDo_Bond_set, METH_VARARGS, NULL},
-	{sipName_BALL_get, sipDo_Bond_get, METH_VARARGS, NULL},
 	{sipName_BALL_swap, sipDo_Bond_swap, METH_VARARGS, NULL},
 	{sipName_BALL_setFirstAtom, sipDo_Bond_setFirstAtom, METH_VARARGS, NULL},
 	{sipName_BALL_getFirstAtom, sipDo_Bond_getFirstAtom, METH_VARARGS, NULL},

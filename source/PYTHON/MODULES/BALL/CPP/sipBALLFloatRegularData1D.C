@@ -209,7 +209,7 @@ static PyObject *sipDo_FloatRegularData1D_getSize(PyObject *sipThisObj,PyObject 
 	return NULL;
 }
 
-static PyObject *sipDo_FloatRegularData1D_getLower(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_FloatRegularData1D_getLowerBound(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 
@@ -225,7 +225,7 @@ static PyObject *sipDo_FloatRegularData1D_getLower(PyObject *sipThisObj,PyObject
 			if ((ptr = (FloatRegularData1D *)sipGetCppPtr(sipThis,sipClass_FloatRegularData1D)) == NULL)
 				return NULL;
 
-			res = ptr -> FloatRegularData1D::getLower();
+			res = ptr -> FloatRegularData1D::getLowerBound();
 
 			return PyFloat_FromDouble(res);
 		}
@@ -233,12 +233,12 @@ static PyObject *sipDo_FloatRegularData1D_getLower(PyObject *sipThisObj,PyObject
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_FloatRegularData1D,sipName_BALL_getLower);
+	sipNoMethod(sipName_BALL_FloatRegularData1D,sipName_BALL_getLowerBound);
 
 	return NULL;
 }
 
-static PyObject *sipDo_FloatRegularData1D_getUpper(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_FloatRegularData1D_getUpperBound(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 
@@ -254,7 +254,7 @@ static PyObject *sipDo_FloatRegularData1D_getUpper(PyObject *sipThisObj,PyObject
 			if ((ptr = (FloatRegularData1D *)sipGetCppPtr(sipThis,sipClass_FloatRegularData1D)) == NULL)
 				return NULL;
 
-			res = ptr -> FloatRegularData1D::getUpper();
+			res = ptr -> FloatRegularData1D::getUpperBound();
 
 			return PyFloat_FromDouble(res);
 		}
@@ -262,12 +262,12 @@ static PyObject *sipDo_FloatRegularData1D_getUpper(PyObject *sipThisObj,PyObject
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_FloatRegularData1D,sipName_BALL_getUpper);
+	sipNoMethod(sipName_BALL_FloatRegularData1D,sipName_BALL_getUpperBound);
 
 	return NULL;
 }
 
-static PyObject *sipDo_FloatRegularData1D_setUpper(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_FloatRegularData1D_setUpperBound(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 
@@ -284,7 +284,7 @@ static PyObject *sipDo_FloatRegularData1D_setUpper(PyObject *sipThisObj,PyObject
 			if ((ptr = (FloatRegularData1D *)sipGetCppPtr(sipThis,sipClass_FloatRegularData1D)) == NULL)
 				return NULL;
 
-			ptr -> FloatRegularData1D::setUpper( a0);
+			ptr -> FloatRegularData1D::setUpperBound( a0);
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -293,12 +293,12 @@ static PyObject *sipDo_FloatRegularData1D_setUpper(PyObject *sipThisObj,PyObject
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_FloatRegularData1D,sipName_BALL_setUpper);
+	sipNoMethod(sipName_BALL_FloatRegularData1D,sipName_BALL_setUpperBound);
 
 	return NULL;
 }
 
-static PyObject *sipDo_FloatRegularData1D_setLower(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_FloatRegularData1D_setLowerBound(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 
@@ -315,7 +315,7 @@ static PyObject *sipDo_FloatRegularData1D_setLower(PyObject *sipThisObj,PyObject
 			if ((ptr = (FloatRegularData1D *)sipGetCppPtr(sipThis,sipClass_FloatRegularData1D)) == NULL)
 				return NULL;
 
-			ptr -> FloatRegularData1D::setLower( a0);
+			ptr -> FloatRegularData1D::setLowerBound( a0);
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -324,7 +324,7 @@ static PyObject *sipDo_FloatRegularData1D_setLower(PyObject *sipThisObj,PyObject
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_FloatRegularData1D,sipName_BALL_setLower);
+	sipNoMethod(sipName_BALL_FloatRegularData1D,sipName_BALL_setLowerBound);
 
 	return NULL;
 }
@@ -426,10 +426,10 @@ PyMethodDef sipClassAttrTab_FloatRegularData1D[] = {
 	{sipName_BALL_clear, sipDo_FloatRegularData1D_clear, METH_VARARGS, NULL},
 	{sipName_BALL_destroy, sipDo_FloatRegularData1D_destroy, METH_VARARGS, NULL},
 	{sipName_BALL_getSize, sipDo_FloatRegularData1D_getSize, METH_VARARGS, NULL},
-	{sipName_BALL_getLower, sipDo_FloatRegularData1D_getLower, METH_VARARGS, NULL},
-	{sipName_BALL_getUpper, sipDo_FloatRegularData1D_getUpper, METH_VARARGS, NULL},
-	{sipName_BALL_setUpper, sipDo_FloatRegularData1D_setUpper, METH_VARARGS, NULL},
-	{sipName_BALL_setLower, sipDo_FloatRegularData1D_setLower, METH_VARARGS, NULL},
+	{sipName_BALL_getLowerBound, sipDo_FloatRegularData1D_getLowerBound, METH_VARARGS, NULL},
+	{sipName_BALL_getUpperBound, sipDo_FloatRegularData1D_getUpperBound, METH_VARARGS, NULL},
+	{sipName_BALL_setUpperBound, sipDo_FloatRegularData1D_setUpperBound, METH_VARARGS, NULL},
+	{sipName_BALL_setLowerBound, sipDo_FloatRegularData1D_setLowerBound, METH_VARARGS, NULL},
 	{NULL}
 };
 

@@ -1,4 +1,4 @@
-// $Id: bond.sip,v 1.3 2000/08/30 19:59:08 oliver Exp $
+// $Id: bond.sip,v 1.4 2001/05/07 00:58:10 oliver Exp $
 
 class Bond
 	: Composite,
@@ -55,9 +55,7 @@ class Bond
   // void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
   // void persistentRead(PersistenceManager& pm);
   void finalize();
-  void set(const Bond& /bond/, bool /deep/ = true);
   // Bond& operator = (const Bond& bond);
-  void get(Bond& /bond/, bool /deep/ = true) const;
   void swap(Bond& /bond/);
   void setFirstAtom(Atom* /atom/);
   Atom* getFirstAtom();

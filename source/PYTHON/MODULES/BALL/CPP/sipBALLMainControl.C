@@ -23,7 +23,7 @@ static PyTypeObject sipType_MainControl = {
 
 sipMainControl::sipMainControl(const MainControl& a0): MainControl(a0)
 {
-	sipCommonCtor(sipPyMethods,5);
+	sipCommonCtor(sipPyMethods,4);
 }
 
 sipMainControl::~sipMainControl()
@@ -57,20 +57,12 @@ void sipMainControl::destroy()
 	else
 		MainControl::destroy();
 }
-Options * sipMainControl::getOptions()
-{
-	int relLock;
-
-	return sipIsPyMethod(&sipPyMethods[3],sipPyThis,NULL,sipName_BALL_getOptions,&relLock) ?
-		sipMainControl::sipVH_getOptions(&sipPyMethods[3],sipPyThis,relLock) :
-		MainControl::getOptions();
-}
 bool sipMainControl::isValid() const
 {
 	int relLock;
 
-	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[4],sipPyThis,NULL,sipName_BALL_isValid,&relLock) ?
-		sipMainControl::sipVH_isValid(&sipPyMethods[4],sipPyThis,relLock) :
+	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[3],sipPyThis,NULL,sipName_BALL_isValid,&relLock) ?
+		sipMainControl::sipVH_isValid(&sipPyMethods[3],sipPyThis,relLock) :
 		MainControl::isValid();
 }
 
@@ -140,48 +132,6 @@ reportError:
 
 releaseLock:
 	sipCondReleaseLock(sipRelLock);
-}
-
-// The common handler for all classes that inherit this virtual member
-// function.
-
-Options * sipMainControl::sipVH_getOptions(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
-{
-	Options *res;
-	PyObject *resobj;
-	PyObject *sipArgs;
-
-	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
-
-	if (sipArgs == NULL)
-		goto reportError;
-
-	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
-
-	Py_DECREF(sipArgs);
-
-	if (resobj != NULL)
-	{
-		int iserr = 0;
-
-		res = sipForceConvertTo_Options(resobj,&iserr);
-		sipTransferSelfToCpp(resobj);
-
-		Py_DECREF(resobj);
-
-		if (!iserr)
-			goto releaseLock;
-
-		sipBadVirtualResultType(sipName_BALL_MainControl,sipName_BALL_getOptions);
-	}
-
-reportError:
-	PyErr_Print();
-
-releaseLock:
-	sipCondReleaseLock(sipRelLock);
-
-	return res;
 }
 
 // The common handler for all classes that inherit this virtual member
@@ -831,35 +781,6 @@ static PyObject *sipDo_MainControl_updateAll(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_MainControl_getOptions(PyObject *sipThisObj,PyObject *sipArgs)
-{
-	sipThisType *sipThis;
-
-	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MainControl)) == NULL)
-		return NULL;
-
-	{
-		if (sipParseArgs(sipArgs,""))
-		{
-			Options *res;
-			MainControl *ptr;
-
-			if ((ptr = (MainControl *)sipGetCppPtr(sipThis,sipClass_MainControl)) == NULL)
-				return NULL;
-
-			res = ptr -> MainControl::getOptions();
-
-			return sipMapCppToSelf(res,sipClass_Options);
-		}
-	}
-
-	// Report an error if the arguments couldn't be parsed.
-
-	sipNoMethod(sipName_BALL_MainControl,sipName_BALL_getOptions);
-
-	return NULL;
-}
-
 static PyObject *sipDo_MainControl_isInserted(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
@@ -1111,7 +1032,6 @@ PyMethodDef sipClassAttrTab_MainControl[] = {
 	{sipName_BALL_getCenter, sipDo_MainControl_getCenter, METH_VARARGS, NULL},
 	{sipName_BALL_update, sipDo_MainControl_update, METH_VARARGS, NULL},
 	{sipName_BALL_updateAll, sipDo_MainControl_updateAll, METH_VARARGS, NULL},
-	{sipName_BALL_getOptions, sipDo_MainControl_getOptions, METH_VARARGS, NULL},
 	{sipName_BALL_isInserted, sipDo_MainControl_isInserted, METH_VARARGS, NULL},
 	{sipName_BALL_isValid, sipDo_MainControl_isValid, METH_VARARGS, NULL},
 	{sipName_BALL_countInstances, sipDo_MainControl_countInstances, METH_VARARGS, NULL},

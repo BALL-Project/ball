@@ -1,7 +1,7 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.10 2001/01/16 17:21:59 anker Exp $
+# $Id: Makefile,v 1.11 2001/05/07 00:58:01 oliver Exp $
 #
 
 all: libBALLc.so
@@ -50,9 +50,7 @@ SIP_SOURCES_FORMAT=\
 	sipBALLPDBFile.C\
 	sipBALLResourceEntry.C\
 	sipBALLResourceFile.C\
-	sipBALLXYZFile.C\
-	sipBALLDCDFile.C\
-	sipBALLTrajectoryFile.C
+	sipBALLXYZFile.C
 
 SIP_SOURCES_KERNEL=\
 	sipBALLAtom.C\

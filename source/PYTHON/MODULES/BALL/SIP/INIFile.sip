@@ -1,4 +1,5 @@
-// $Id: INIFile.sip,v 1.1 2000/07/18 21:26:55 oliver Exp $
+// $Id: INIFile.sip,v 1.2 2001/05/07 00:58:10 oliver Exp $
+
 class INIFile
 {
 %HeaderCode
@@ -10,7 +11,8 @@ class INIFile
   {
    MAX_LINE_LENGTH = 1024
   };
-
+  static const String UNDEFINED;
+  static const String PREFIX;  
   INIFile();
   INIFile(const String& /filename/);
   ~INIFile();
@@ -21,14 +23,20 @@ class INIFile
   const String& getFilename() const;
   void setFilename(const String& /filename/);
   bool isValid() const;
-  String* getLine(Size /line_number/);
+  const String* getLine(Size /line_number/) const;
   bool setLine(Size /line_number/, const String& /line/);
-  Size getNumberOfLines() const;
+  bool deleteLine(Position /line_number/);
+  bool insertLine(const String& /section_name/, const String& /line/);
+  Size getOriginalNumberOfLines() const;
+  Size getNumberOfLines() const;  
   bool hasSection(const String& /section_name/) const;
+   String* getSectionName(Position /pos/);
+  Size getNumberOfSections() const;
   Size getSectionFirstLine(const String& /section_name/) const;
   Size getSectionLastLine(const String& /section_name/) const; 
   Size getSectionLength(const String& /section_name/) const;
   bool hasEntry(const String& /section/, const String& /key/) const;
   String getValue(const String& /section/, const String& /key/) const;
   bool setValue(const String& /section/, const String& /key/, const String& /value/);
+  bool operator == (const INIFile& /inifile/) const;
 };

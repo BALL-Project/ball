@@ -1,4 +1,4 @@
-// $Id: BALL.sip,v 1.8 2001/01/16 17:26:59 anker Exp $
+// $Id: BALL.sip,v 1.9 2001/05/07 00:58:10 oliver Exp $
 /////////////////////////
 // BALL PYTHON SUPPORT
 /////////////////////////
@@ -167,6 +167,7 @@
 %Include ruleEvaluator.sip
 %Include ruleProcessor.sip
 %Include snapShot.sip
+%Include snapShotManager.sip
 // support.h
 // typeRuleProcessor.h
 // typenameRuleProcessor.h

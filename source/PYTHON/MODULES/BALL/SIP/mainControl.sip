@@ -1,4 +1,4 @@
-// $Id: mainControl.sip,v 1.3 2000/10/24 20:29:17 oliver Exp $
+// $Id: mainControl.sip,v 1.4 2001/05/07 00:58:11 oliver Exp $
 
 class MainControl
 //   :  QMainWindow,
@@ -64,7 +64,7 @@ class MainControl
 	const CompositeDescriptor* getDescriptor(const Vector3& /center/) const;
 	bool update(const Composite& /composite/);
 	void updateAll();
-	virtual Options* getOptions();
+	// virtual Options* getOptions();
 	//	virtual void onNotify(Message *message);
 	bool isInserted(const Composite& /composite/) const;
 	bool isInserted(const CompositeDescriptor& /compositeDescriptor/) const;

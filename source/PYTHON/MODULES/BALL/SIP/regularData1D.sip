@@ -17,10 +17,10 @@ class FloatRegularData1D
 	// const float& operator [] (Position index) const throw(IndexOverflow);
 	// float& operator [] (Position index) throw(IndexOverflow);
 	Size getSize() const throw();
-	double getLower() const throw();
-	double getUpper() const throw();
-	void setUpper(double /upper/) throw();
-	void setLower(double /lower/) throw();
+	double getLowerBound() const throw();
+	double getUpperBound() const throw();
+	void setUpperBound(double /upper/) throw();
+	void setLowerBound(double /lower/) throw();
 	// void resize(Size /new_size/) throw();
 };
 

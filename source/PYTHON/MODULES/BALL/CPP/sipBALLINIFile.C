@@ -249,7 +249,7 @@ static PyObject *sipDo_INIFile_getLine(PyObject *sipThisObj,PyObject *sipArgs)
 
 		if (sipParseArgs(sipArgs,"i",&a0))
 		{
-			String *res;
+			const String *res;
 			INIFile *ptr;
 
 			if ((ptr = (INIFile *)sipGetCppPtr(sipThis,sipClass_INIFile)) == NULL)
@@ -307,6 +307,125 @@ static PyObject *sipDo_INIFile_setLine(PyObject *sipThisObj,PyObject *sipArgs)
 	// Report an error if the arguments couldn't be parsed.
 
 	sipNoMethod(sipName_BALL_INIFile,sipName_BALL_setLine);
+
+	return NULL;
+}
+
+static PyObject *sipDo_INIFile_deleteLine(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_INIFile)) == NULL)
+		return NULL;
+
+	{
+		Position *a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Position,&a0obj))
+		{
+			bool res;
+			INIFile *ptr;
+
+			if ((ptr = (INIFile *)sipGetCppPtr(sipThis,sipClass_INIFile)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			int istemp0 = sipConvertTo_Position(a0obj,&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			res = ptr -> INIFile::deleteLine(* a0);
+
+			if (istemp0)
+				delete a0;
+
+			return sipConvertFromBool((int)res);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_INIFile,sipName_BALL_deleteLine);
+
+	return NULL;
+}
+
+static PyObject *sipDo_INIFile_insertLine(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_INIFile)) == NULL)
+		return NULL;
+
+	{
+		const String *a0;
+		PyObject *a0obj;
+		const String *a1;
+		PyObject *a1obj;
+
+		if (sipParseArgs(sipArgs,"II",sipCanConvertTo_String,&a0obj,sipCanConvertTo_String,&a1obj))
+		{
+			bool res;
+			INIFile *ptr;
+
+			if ((ptr = (INIFile *)sipGetCppPtr(sipThis,sipClass_INIFile)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
+			int istemp1 = sipConvertTo_String(a1obj,(String **)&a1,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			res = ptr -> INIFile::insertLine(* a0,* a1);
+
+			if (istemp0)
+				delete a0;
+
+			if (istemp1)
+				delete a1;
+
+			return sipConvertFromBool((int)res);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_INIFile,sipName_BALL_insertLine);
+
+	return NULL;
+}
+
+static PyObject *sipDo_INIFile_getOriginalNumberOfLines(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_INIFile)) == NULL)
+		return NULL;
+
+	{
+		if (sipParseArgs(sipArgs,""))
+		{
+			int res;
+			INIFile *ptr;
+
+			if ((ptr = (INIFile *)sipGetCppPtr(sipThis,sipClass_INIFile)) == NULL)
+				return NULL;
+
+			res = ptr -> INIFile::getOriginalNumberOfLines();
+
+			return PyInt_FromLong((long)res);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_INIFile,sipName_BALL_getOriginalNumberOfLines);
 
 	return NULL;
 }
@@ -378,6 +497,77 @@ static PyObject *sipDo_INIFile_hasSection(PyObject *sipThisObj,PyObject *sipArgs
 	// Report an error if the arguments couldn't be parsed.
 
 	sipNoMethod(sipName_BALL_INIFile,sipName_BALL_hasSection);
+
+	return NULL;
+}
+
+static PyObject *sipDo_INIFile_getSectionName(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_INIFile)) == NULL)
+		return NULL;
+
+	{
+		Position *a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Position,&a0obj))
+		{
+			String *res;
+			INIFile *ptr;
+
+			if ((ptr = (INIFile *)sipGetCppPtr(sipThis,sipClass_INIFile)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			int istemp0 = sipConvertTo_Position(a0obj,&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			res = ptr -> INIFile::getSectionName(* a0);
+
+			if (istemp0)
+				delete a0;
+
+			return sipMapCppToSelf(res,sipClass_String);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_INIFile,sipName_BALL_getSectionName);
+
+	return NULL;
+}
+
+static PyObject *sipDo_INIFile_getNumberOfSections(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_INIFile)) == NULL)
+		return NULL;
+
+	{
+		if (sipParseArgs(sipArgs,""))
+		{
+			int res;
+			INIFile *ptr;
+
+			if ((ptr = (INIFile *)sipGetCppPtr(sipThis,sipClass_INIFile)) == NULL)
+				return NULL;
+
+			res = ptr -> INIFile::getNumberOfSections();
+
+			return PyInt_FromLong((long)res);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_INIFile,sipName_BALL_getNumberOfSections);
 
 	return NULL;
 }
@@ -658,6 +848,45 @@ static PyObject *sipDo_INIFile_setValue(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
+static PyObject *sipDo_INIFile_Operator__cmp__(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_INIFile)) == NULL)
+		return NULL;
+
+	{
+		const INIFile *a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_INIFile,&a0obj))
+		{
+			bool res;
+			INIFile *ptr;
+
+			if ((ptr = (INIFile *)sipGetCppPtr(sipThis,sipClass_INIFile)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			sipConvertTo_INIFile(a0obj,(INIFile **)&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			res = ptr -> INIFile::operator==(* a0);
+
+			return sipConvertFromBool((int)res);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_INIFile,sipName_BALL_Operator__cmp__);
+
+	return NULL;
+}
+
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
 const void *sipCast_INIFile(const void *ptr,PyObject *targetClass)
@@ -770,14 +999,20 @@ PyMethodDef sipClassAttrTab_INIFile[] = {
 	{sipName_BALL_isValid, sipDo_INIFile_isValid, METH_VARARGS, NULL},
 	{sipName_BALL_getLine, sipDo_INIFile_getLine, METH_VARARGS, NULL},
 	{sipName_BALL_setLine, sipDo_INIFile_setLine, METH_VARARGS, NULL},
+	{sipName_BALL_deleteLine, sipDo_INIFile_deleteLine, METH_VARARGS, NULL},
+	{sipName_BALL_insertLine, sipDo_INIFile_insertLine, METH_VARARGS, NULL},
+	{sipName_BALL_getOriginalNumberOfLines, sipDo_INIFile_getOriginalNumberOfLines, METH_VARARGS, NULL},
 	{sipName_BALL_getNumberOfLines, sipDo_INIFile_getNumberOfLines, METH_VARARGS, NULL},
 	{sipName_BALL_hasSection, sipDo_INIFile_hasSection, METH_VARARGS, NULL},
+	{sipName_BALL_getSectionName, sipDo_INIFile_getSectionName, METH_VARARGS, NULL},
+	{sipName_BALL_getNumberOfSections, sipDo_INIFile_getNumberOfSections, METH_VARARGS, NULL},
 	{sipName_BALL_getSectionFirstLine, sipDo_INIFile_getSectionFirstLine, METH_VARARGS, NULL},
 	{sipName_BALL_getSectionLastLine, sipDo_INIFile_getSectionLastLine, METH_VARARGS, NULL},
 	{sipName_BALL_getSectionLength, sipDo_INIFile_getSectionLength, METH_VARARGS, NULL},
 	{sipName_BALL_hasEntry, sipDo_INIFile_hasEntry, METH_VARARGS, NULL},
 	{sipName_BALL_getValue, sipDo_INIFile_getValue, METH_VARARGS, NULL},
 	{sipName_BALL_setValue, sipDo_INIFile_setValue, METH_VARARGS, NULL},
+	{sipName_BALL_Operator__cmp__, sipDo_INIFile_Operator__cmp__, METH_VARARGS, NULL},
 	{NULL}
 };
 

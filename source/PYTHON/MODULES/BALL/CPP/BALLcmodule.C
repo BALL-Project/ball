@@ -157,7 +157,6 @@ char sipName_BALL_CompositeDescriptor[] = "CompositeDescriptor";
 char sipName_BALL_getInstance[] = "getInstance";
 char sipName_BALL_countInstances[] = "countInstances";
 char sipName_BALL_isInserted[] = "isInserted";
-char sipName_BALL_getOptions[] = "getOptions";
 char sipName_BALL_updateAll[] = "updateAll";
 char sipName_BALL_setCenter[] = "setCenter";
 char sipName_BALL_getDescriptor[] = "getDescriptor";
@@ -202,6 +201,8 @@ char sipName_BALL_getNumberOfFragments[] = "getNumberOfFragments";
 char sipName_BALL_FragmentDistanceCollector[] = "FragmentDistanceCollector";
 char sipName_BALL_getCenter[] = "getCenter";
 char sipName_BALL_GeometricCenterProcessor[] = "GeometricCenterProcessor";
+char sipName_BALL_getUpper[] = "getUpper";
+char sipName_BALL_getLower[] = "getLower";
 char sipName_BALL_BoundingBoxProcessor[] = "BoundingBoxProcessor";
 char sipName_BALL_buildInterFragmentBonds[] = "buildInterFragmentBonds";
 char sipName_BALL_buildFragmentBonds[] = "buildFragmentBonds";
@@ -305,16 +306,28 @@ char sipName_BALL_getBathRelaxationTime[] = "getBathRelaxationTime";
 char sipName_BALL_setBathRelaxationTime[] = "setBathRelaxationTime";
 char sipName_BALL_MolecularDynamics[] = "MolecularDynamics";
 char sipName_BALL_CanonicalMD[] = "CanonicalMD";
-char sipName_BALL_getNumberOfSnapShots[] = "getNumberOfSnapShots";
 char sipName_BALL_flushToDisk[] = "flushToDisk";
-char sipName_BALL_takeSnapShot[] = "takeSnapShot";
+char sipName_BALL_applyLastSnapShot[] = "applyLastSnapShot";
+char sipName_BALL_applyNextSnapShot[] = "applyNextSnapShot";
+char sipName_BALL_applyFirstSnapShot[] = "applyFirstSnapShot";
 char sipName_BALL_getFlushToDiskFrequency[] = "getFlushToDiskFrequency";
 char sipName_BALL_setFlushToDiskFrequency[] = "setFlushToDiskFrequency";
+char sipName_BALL_getTrajectoryFile[] = "getTrajectoryFile";
+char sipName_BALL_setTrajectoryFile[] = "setTrajectoryFile";
+char sipName_BALL_setSystem[] = "setSystem";
 char sipName_BALL_SnapShotManager[] = "SnapShotManager";
+char sipName_BALL_setAtomForces[] = "setAtomForces";
+char sipName_BALL_getAtomForces[] = "getAtomForces";
+char sipName_BALL_setAtomVelocitites[] = "setAtomVelocitites";
+char sipName_BALL_getAtomVelocities[] = "getAtomVelocities";
+char sipName_BALL_setAtomPositions[] = "setAtomPositions";
+char sipName_BALL_getAtomPositions[] = "getAtomPositions";
+char sipName_BALL_applySnapShot[] = "applySnapShot";
+char sipName_BALL_takeSnapShot[] = "takeSnapShot";
 char sipName_BALL_getKineticEnergy[] = "getKineticEnergy";
+char sipName_BALL_setKineticEnergy[] = "setKineticEnergy";
 char sipName_BALL_getPotentialEnergy[] = "getPotentialEnergy";
-char sipName_BALL_getTotalLength[] = "getTotalLength";
-char sipName_BALL_getDataLength[] = "getDataLength";
+char sipName_BALL_setPotentialEnergy[] = "setPotentialEnergy";
 char sipName_BALL_setNumberOfAtoms[] = "setNumberOfAtoms";
 char sipName_BALL_setIndex[] = "setIndex";
 char sipName_BALL_SnapShot[] = "SnapShot";
@@ -486,7 +499,6 @@ char sipName_BALL_getVolume[] = "getVolume";
 char sipName_BALL_getSurface[] = "getSurface";
 char sipName_BALL_Box3[] = "Box3";
 char sipName_BALL_isEquivalent[] = "isEquivalent";
-char sipName_BALL_Operator__cmp__[] = "Operator__cmp__";
 char sipName_BALL_Operator__div__[] = "Operator__div__";
 char sipName_BALL_Operator__sub__[] = "Operator__sub__";
 char sipName_BALL_Operator__neg__[] = "Operator__neg__";
@@ -682,18 +694,26 @@ char sipName_BALL_ResourceEntry[] = "ResourceEntry";
 char sipName_BALL_XYZFile[] = "XYZFile";
 char sipName_BALL_PDBFile[] = "PDBFile";
 char sipName_BALL_MOL2File[] = "MOL2File";
+char sipName_BALL_Operator__cmp__[] = "Operator__cmp__";
 char sipName_BALL_setValue[] = "setValue";
 char sipName_BALL_getValue[] = "getValue";
 char sipName_BALL_hasEntry[] = "hasEntry";
 char sipName_BALL_getSectionLength[] = "getSectionLength";
 char sipName_BALL_getSectionLastLine[] = "getSectionLastLine";
 char sipName_BALL_getSectionFirstLine[] = "getSectionFirstLine";
+char sipName_BALL_getNumberOfSections[] = "getNumberOfSections";
+char sipName_BALL_getSectionName[] = "getSectionName";
 char sipName_BALL_hasSection[] = "hasSection";
 char sipName_BALL_getNumberOfLines[] = "getNumberOfLines";
+char sipName_BALL_getOriginalNumberOfLines[] = "getOriginalNumberOfLines";
+char sipName_BALL_insertLine[] = "insertLine";
+char sipName_BALL_deleteLine[] = "deleteLine";
 char sipName_BALL_setLine[] = "setLine";
 char sipName_BALL_getLine[] = "getLine";
 char sipName_BALL_setFilename[] = "setFilename";
 char sipName_BALL_getFilename[] = "getFilename";
+char sipName_BALL_PREFIX[] = "PREFIX";
+char sipName_BALL_UNDEFINED[] = "UNDEFINED";
 char sipName_BALL_INIFile[] = "INIFile";
 char sipName_BALL_getTemperature[] = "getTemperature";
 char sipName_BALL_getPeriodicBoundary[] = "getPeriodicBoundary";
@@ -803,8 +823,6 @@ char sipName_BALL_setXLower[] = "setXLower";
 char sipName_BALL_setXUpper[] = "setXUpper";
 char sipName_BALL_setYSize[] = "setYSize";
 char sipName_BALL_setXSize[] = "setXSize";
-char sipName_BALL_setLowerBound[] = "setLowerBound";
-char sipName_BALL_setUpperBound[] = "setUpperBound";
 char sipName_BALL_getYUpper[] = "getYUpper";
 char sipName_BALL_getYLower[] = "getYLower";
 char sipName_BALL_getXUpper[] = "getXUpper";
@@ -813,10 +831,10 @@ char sipName_BALL_getYSize[] = "getYSize";
 char sipName_BALL_getXSize[] = "getXSize";
 char sipName_BALL_createGroundState[] = "createGroundState";
 char sipName_BALL_FloatRegularData2D[] = "FloatRegularData2D";
-char sipName_BALL_setLower[] = "setLower";
-char sipName_BALL_setUpper[] = "setUpper";
-char sipName_BALL_getUpper[] = "getUpper";
-char sipName_BALL_getLower[] = "getLower";
+char sipName_BALL_setLowerBound[] = "setLowerBound";
+char sipName_BALL_setUpperBound[] = "setUpperBound";
+char sipName_BALL_getUpperBound[] = "getUpperBound";
+char sipName_BALL_getLowerBound[] = "getLowerBound";
 char sipName_BALL_FloatRegularData1D[] = "FloatRegularData1D";
 char sipName_BALL_readOptionFile[] = "readOptionFile";
 char sipName_BALL_setDefaultBool[] = "setDefaultBool";
@@ -1028,7 +1046,7 @@ static PyObject *sipDo_calculateSASPoints(PyObject *,PyObject *sipArgs)
 
 		return sipMapCppToSelf(res,sipClass_Surface);
 	}
-#line 1036 "../CPP/BALLcmodule.cpp"
+#line 1054 "../CPP/BALLcmodule.cpp"
 	}
 
 	// Report an error if the arguments couldn't be parsed.
@@ -1067,7 +1085,7 @@ static PyObject *sipDo_calculateSASAtomAreas(PyObject *,PyObject *sipArgs)
 
 		return resobj;
 	}
-#line 1075 "../CPP/BALLcmodule.cpp"
+#line 1093 "../CPP/BALLcmodule.cpp"
 	}
 
 	// Report an error if the arguments couldn't be parsed.
@@ -3122,7 +3140,7 @@ static sipClassDef classesTable[] = {
 	{sipName_BALL_MicroCanonicalMD, sipNew_MicroCanonicalMD, &sipClass_MicroCanonicalMD, sipClassAttrTab_MicroCanonicalMD, NULL},
 	{sipName_BALL_MolecularDynamics, sipNew_MolecularDynamics, &sipClass_MolecularDynamics, sipClassAttrTab_MolecularDynamics, sipClassVarHierTab_MolecularDynamics},
 	{sipName_BALL_CanonicalMD, sipNew_CanonicalMD, &sipClass_CanonicalMD, sipClassAttrTab_CanonicalMD, NULL},
-	{sipName_BALL_SnapShotManager, sipNew_SnapShotManager, &sipClass_SnapShotManager, sipClassAttrTab_SnapShotManager, NULL},
+	{sipName_BALL_SnapShotManager, sipNew_SnapShotManager, &sipClass_SnapShotManager, sipClassAttrTab_SnapShotManager, sipClassVarHierTab_SnapShotManager},
 	{sipName_BALL_SnapShot, sipNew_SnapShot, &sipClass_SnapShot, sipClassAttrTab_SnapShot, NULL},
 	{sipName_BALL_AtomProcessor, sipNew_AtomProcessor, &sipClass_AtomProcessor, sipClassAttrTab_AtomProcessor, NULL},
 	{sipName_BALL_RuleEvaluator, sipNew_RuleEvaluator, &sipClass_RuleEvaluator, sipClassAttrTab_RuleEvaluator, NULL},
@@ -3308,6 +3326,17 @@ static PyObject *registerClasses(PyObject *,PyObject *)
 	};
 
 	if (sipAddCharInstances(((PyClassObject *)sipClass_ResourceFile) -> cl_dict,ResourceFilecharInstances) < 0)
+		return NULL;
+
+	// Add the class instances to the dictionary.
+
+	static sipClassInstanceDef INIFileclassInstances[] = {
+		{sipName_BALL_UNDEFINED, &INIFile::UNDEFINED, sipClass_String, SIP_SIMPLE},
+		{sipName_BALL_PREFIX, &INIFile::PREFIX, sipClass_String, SIP_SIMPLE},
+		NULL
+	};
+
+	if (sipAddClassInstances(((PyClassObject *)sipClass_INIFile) -> cl_dict,INIFileclassInstances) < 0)
 		return NULL;
 
 	// Add the class instances to the dictionary.
