@@ -1,4 +1,4 @@
-// $Id: Composite_test.C,v 1.3 1999/09/07 19:36:10 oliver Exp $
+// $Id: Composite_test.C,v 1.4 1999/09/08 15:28:37 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 using namespace BALL;
 ///////////////////////////
 
-START_TEST(Composite, "$Id: Composite_test.C,v 1.3 1999/09/07 19:36:10 oliver Exp $")
+START_TEST(Composite, "$Id: Composite_test.C,v 1.4 1999/09/08 15:28:37 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -536,20 +536,106 @@ TEST_EQUAL(e.hasSibling(), false)
 TEST_EQUAL(f.hasSibling(), false)
 RESULT
 
-// 		bool isSibling() const;
-// 		bool isSiblingOf(const Composite& composite) const;
-// 		bool hasPreviousSibling() const;
-// 		bool isPreviousSibling() const;
-// 		bool isPreviousSiblingOf(const Composite& composite) const;
-// 		bool hasNextSibling() const;
-// 		bool isNextSibling() const;
-// 		bool isNextSiblingOf(const Composite& composite) const;
-// 		bool hasPreceedingSibling() const;
-// 		bool isPreceedingSibling() const;
-// 		bool isPreceedingSiblingOf(const Composite& composite) const;
-// 		bool hasSucceedingSibling() const;
-// 		bool isSucceedingSibling() const;
-// 		bool isSucceedingSiblingOf(const Composite& composite) const;
+CHECK(isSiblingOf() const)
+TEST_EQUAL(a.isSiblingOf(a), false)
+TEST_EQUAL(b.isSiblingOf(a), false)
+TEST_EQUAL(c.isSiblingOf(a), false)
+TEST_EQUAL(d.isSiblingOf(a), false)
+TEST_EQUAL(e.isSiblingOf(a), false)
+TEST_EQUAL(f.isSiblingOf(a), false)
+TEST_EQUAL(a.isSiblingOf(b), false)
+TEST_EQUAL(b.isSiblingOf(b), false)
+TEST_EQUAL(c.isSiblingOf(b), false)
+TEST_EQUAL(d.isSiblingOf(b), false)
+TEST_EQUAL(e.isSiblingOf(b), false)
+TEST_EQUAL(f.isSiblingOf(b), false)
+TEST_EQUAL(a.isSiblingOf(c), false)
+TEST_EQUAL(b.isSiblingOf(c), false)
+TEST_EQUAL(c.isSiblingOf(c), false)
+TEST_EQUAL(d.isSiblingOf(c), true)
+TEST_EQUAL(e.isSiblingOf(c), false)
+TEST_EQUAL(f.isSiblingOf(c), false)
+TEST_EQUAL(a.isSiblingOf(d), false)
+TEST_EQUAL(b.isSiblingOf(d), false)
+TEST_EQUAL(c.isSiblingOf(d), true)
+TEST_EQUAL(d.isSiblingOf(d), false)
+TEST_EQUAL(e.isSiblingOf(d), false)
+TEST_EQUAL(f.isSiblingOf(d), false)
+RESULT
+
+
+CHECK(hasPreviousSibling() const)
+TEST_EQUAL(a.hasPreviousSibling(), false)
+TEST_EQUAL(b.hasPreviousSibling(), false)
+TEST_EQUAL(c.hasPreviousSibling(), false)
+TEST_EQUAL(d.hasPreviousSibling(), true)
+TEST_EQUAL(e.hasPreviousSibling(), false)
+TEST_EQUAL(f.hasPreviousSibling(), false)
+RESULT
+
+CHECK(hasNextSibling() const)
+TEST_EQUAL(a.hasNextSibling(), false)
+TEST_EQUAL(b.hasNextSibling(), false)
+TEST_EQUAL(c.hasNextSibling(), true)
+TEST_EQUAL(d.hasNextSibling(), false)
+TEST_EQUAL(e.hasNextSibling(), false)
+TEST_EQUAL(f.hasNextSibling(), false)
+RESULT
+
+CHECK(isPreviousSiblingOf() const)
+TEST_EQUAL(a.isPreviousSiblingOf(a), false)
+TEST_EQUAL(b.isPreviousSiblingOf(a), false)
+TEST_EQUAL(c.isPreviousSiblingOf(a), false)
+TEST_EQUAL(d.isPreviousSiblingOf(a), false)
+TEST_EQUAL(e.isPreviousSiblingOf(a), false)
+TEST_EQUAL(f.isPreviousSiblingOf(a), false)
+TEST_EQUAL(a.isPreviousSiblingOf(b), false)
+TEST_EQUAL(b.isPreviousSiblingOf(b), false)
+TEST_EQUAL(c.isPreviousSiblingOf(b), false)
+TEST_EQUAL(d.isPreviousSiblingOf(b), false)
+TEST_EQUAL(e.isPreviousSiblingOf(b), false)
+TEST_EQUAL(f.isPreviousSiblingOf(b), false)
+TEST_EQUAL(a.isPreviousSiblingOf(c), false)
+TEST_EQUAL(b.isPreviousSiblingOf(c), false)
+TEST_EQUAL(c.isPreviousSiblingOf(c), false)
+TEST_EQUAL(d.isPreviousSiblingOf(c), false)
+TEST_EQUAL(e.isPreviousSiblingOf(c), false)
+TEST_EQUAL(f.isPreviousSiblingOf(c), false)
+TEST_EQUAL(a.isPreviousSiblingOf(d), false)
+TEST_EQUAL(b.isPreviousSiblingOf(d), false)
+TEST_EQUAL(c.isPreviousSiblingOf(d), true)
+TEST_EQUAL(d.isPreviousSiblingOf(d), false)
+TEST_EQUAL(e.isPreviousSiblingOf(d), false)
+TEST_EQUAL(f.isPreviousSiblingOf(d), false)
+RESULT
+
+CHECK(isNextSiblingOf() const)
+TEST_EQUAL(a.isNextSiblingOf(a), false)
+TEST_EQUAL(b.isNextSiblingOf(a), false)
+TEST_EQUAL(c.isNextSiblingOf(a), false)
+TEST_EQUAL(d.isNextSiblingOf(a), false)
+TEST_EQUAL(e.isNextSiblingOf(a), false)
+TEST_EQUAL(f.isNextSiblingOf(a), false)
+TEST_EQUAL(a.isNextSiblingOf(b), false)
+TEST_EQUAL(b.isNextSiblingOf(b), false)
+TEST_EQUAL(c.isNextSiblingOf(b), false)
+TEST_EQUAL(d.isNextSiblingOf(b), false)
+TEST_EQUAL(e.isNextSiblingOf(b), false)
+TEST_EQUAL(f.isNextSiblingOf(b), false)
+TEST_EQUAL(a.isNextSiblingOf(c), false)
+TEST_EQUAL(b.isNextSiblingOf(c), false)
+TEST_EQUAL(c.isNextSiblingOf(c), false)
+TEST_EQUAL(d.isNextSiblingOf(c), true)
+TEST_EQUAL(e.isNextSiblingOf(c), false)
+TEST_EQUAL(f.isNextSiblingOf(c), false)
+TEST_EQUAL(a.isNextSiblingOf(d), false)
+TEST_EQUAL(b.isNextSiblingOf(d), false)
+TEST_EQUAL(c.isNextSiblingOf(d), false)
+TEST_EQUAL(d.isNextSiblingOf(d), false)
+TEST_EQUAL(e.isNextSiblingOf(d), false)
+TEST_EQUAL(f.isNextSiblingOf(d), false)
+RESULT
+
 // 		bool hasDescendant() const;
 // 		bool isDescendant() const;
 // 		bool isDescendantOf(const Composite& composite) const;
