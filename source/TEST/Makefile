@@ -237,8 +237,8 @@ Skeleton_test:	Skeleton_test.o
 Sphere3_test:	Sphere3_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
-StandardPredicates_test: StandardPredicates_test.o 
-	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+StandardPredicates_test: StandardPredicates_test.o ../KERNEL/standardPredicates.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o ../KERNEL/standardPredicates.o $(LIBS)
 
 StructureMapper_test:	StructureMapper_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
