@@ -1,4 +1,4 @@
-// $Id: file.C,v 1.17 2001/05/17 12:19:25 oliver Exp $
+// $Id: file.C,v 1.18 2001/08/01 01:06:04 oliver Exp $
 
 #include <BALL/SYSTEM/file.h>
 #include <math.h>
@@ -62,6 +62,7 @@ namespace BALL
 	}
 
 	File::~File()
+		throw()
 	{
 		close();
 	}

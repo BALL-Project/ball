@@ -158,7 +158,7 @@ namespace BALL
 	}
 
 	NMRStarFile::NMRStarFile(const NMRStarFile& f)
-		throw ()
+		throw (Exception::FileNotFound)
 		:	LineBasedFile(f),
 			number_of_shifts_		(f.number_of_shifts_),
 			atom_data_sets_			(f.atom_data_sets_),
@@ -189,6 +189,11 @@ namespace BALL
 		{
 			throw Exception::ParseError(__FILE__, __LINE__, "NMRStarFile: caught unexpected exception while reading file.", "");
 		}
+	}
+
+	NMRStarFile::~NMRStarFile()
+		throw()
+	{
 	}
 
 	const NMRStarFile& NMRStarFile::operator = (const NMRStarFile& f)

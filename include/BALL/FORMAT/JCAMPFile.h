@@ -1,4 +1,4 @@
-// $Id: JCAMPFile.h,v 1.6 2001/02/28 01:17:12 amoll Exp $
+// $Id: JCAMPFile.h,v 1.7 2001/08/01 01:06:27 oliver Exp $
 
 #ifndef BALL_FORMAT_JCAMPFILE_H
 #define BALL_FORMAT_JCAMPFILE_H
@@ -33,15 +33,18 @@ namespace BALL
 
 		/** Detailed constructor.
 		*/
-		JCAMPFile(const String& name, OpenMode open_mode = IN);
+		JCAMPFile(const String& name, OpenMode open_mode = IN)
+			throw(Exception::FileNotFound);
 
 		/** Copy constructor.
 		*/
-		JCAMPFile(const JCAMPFile& file);
+		JCAMPFile(const JCAMPFile& file)
+			throw(Exception::FileNotFound);
 
 		/**	Destructor.
 		*/
-		~JCAMPFile();
+		~JCAMPFile()
+			throw();
 
 		//@}
 
@@ -49,7 +52,7 @@ namespace BALL
 		*/
 		void read();
 
-		/** Return file.
+		/** Return file title.
 		*/
 		String title();
 

@@ -1,4 +1,4 @@
-// $Id: lineBasedFile.h,v 1.14 2001/03/06 13:52:48 balltest Exp $
+// $Id: lineBasedFile.h,v 1.15 2001/08/01 01:06:28 oliver Exp $
 #ifndef BALL_FORMAT_LINEBASEDFILE_H
 #define BALL_FORMAT_LINEBASEDFILE_H
 
@@ -44,6 +44,7 @@ namespace BALL
 		};
 
 		//@}
+
 		/**	@name Constructors and Destructors
 		*/
 		//@{
@@ -62,7 +63,8 @@ namespace BALL
 				The file is opened and the same position in it is seeked.
 		*/
 		LineBasedFile(const LineBasedFile& f)
-			throw();
+			throw(Exception::FileNotFound);
+
 
 		/**	Clear method.
 		*/
@@ -70,6 +72,8 @@ namespace BALL
 			throw();
 
 		//@}
+
+
 		/**	@name Equality operators
 		*/
 		//@{

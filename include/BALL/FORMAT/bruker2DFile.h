@@ -1,4 +1,5 @@
-// $Id: bruker2DFile.h,v 1.11 2001/02/28 01:17:12 amoll Exp $
+
+// $Id: bruker2DFile.h,v 1.12 2001/08/01 01:06:28 oliver Exp $
 
 #ifndef BALL_FORMAT_BRUKER2DFILE_H
 #define BALL_FORMAT_BRUKER2DFILE_H
@@ -51,15 +52,18 @@ class Bruker2D
   /**	Constructor.
 			@param name important: name of the Bruker-*directory*
   */
-  Bruker2D(const String& name, OpenMode open_mode = IN|BINARY);
+  Bruker2D(const String& name, OpenMode open_mode = IN|BINARY)
+		throw(Exception::FileNotFound);
 
   /**	Copy-Constructor.
   */
-  Bruker2D(const Bruker2D& file);
+  Bruker2D(const Bruker2D& file)
+		throw(Exception::FileNotFound);
 
   /**	Destructor.
   */
-  ~Bruker2D();
+  ~Bruker2D()
+		throw();
 
   /** Read a spectrum. 
 			It will be stored in spectrum_;

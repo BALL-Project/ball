@@ -1,4 +1,4 @@
-// $Id: file.h,v 1.29 2001/07/16 10:36:49 anker Exp $
+// $Id: file.h,v 1.30 2001/08/01 01:08:16 oliver Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -128,7 +128,8 @@ namespace BALL
 		/** Destructor.
 				The file is closed.
 		*/
-		virtual ~File();
+		virtual ~File()
+			throw();
 
 		//@}
 		/**	@name	Assignment 

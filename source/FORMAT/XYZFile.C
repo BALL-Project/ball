@@ -1,4 +1,4 @@
-// $Id: XYZFile.C,v 1.2 2000/06/20 21:31:42 oliver Exp $
+// $Id: XYZFile.C,v 1.3 2001/08/01 01:04:14 oliver Exp $
 
 #include <BALL/FORMAT/XYZFile.h>
 #include <BALL/DATATYPE/string.h>
@@ -17,16 +17,19 @@ namespace BALL
 	}
 
 	XYZFile::XYZFile(const String& name, File::OpenMode open_mode)
+		throw(Exception::FileNotFound)
 		: File(name, open_mode)
 	{
 	}
 
 	XYZFile::XYZFile(const XYZFile& file)
+		throw(Exception::FileNotFound)
 		: File(file)
 	{
 	}
 
 	XYZFile::~XYZFile()
+		throw()
 	{
 	}
 	

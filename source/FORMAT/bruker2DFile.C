@@ -1,4 +1,4 @@
-// $Id: bruker2DFile.C,v 1.16 2001/07/14 11:31:32 amoll Exp $
+// $Id: bruker2DFile.C,v 1.17 2001/08/01 01:04:15 oliver Exp $
 
 #include <BALL/FORMAT/bruker2DFile.h>
 
@@ -12,6 +12,7 @@ namespace BALL
 	}
 
 	Bruker2D::Bruker2D( const String& name, OpenMode open_mode ) 
+		throw(Exception::FileNotFound)
 		: File( name+"/2rr", open_mode )
 	{
 		parsf1_ = new JCAMPFile( name + "/proc2s" );
@@ -25,11 +26,13 @@ namespace BALL
 	}
 
 	Bruker2D::Bruker2D( const Bruker2D& file ) 
+		throw(Exception::FileNotFound)
 		: File( file )
 	{
 	}
 
 	Bruker2D::~Bruker2D()
+		throw()
 	{
 		if (parsf1_)
 		{

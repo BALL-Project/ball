@@ -1,4 +1,4 @@
-// $Id: MOL2File.h,v 1.8 2001/02/27 01:58:47 amoll Exp $
+// $Id: MOL2File.h,v 1.9 2001/08/01 01:06:27 oliver Exp $
 
 #ifndef BALL_FORMAT_MOL2FILE_H
 #define BALL_FORMAT_MOL2FILE_H
@@ -49,16 +49,20 @@ namespace BALL
 
 		/** Detailed constructor
 		*/
-		MOL2File(const String& filename, File::OpenMode open_mode = File::IN);
+		MOL2File(const String& filename, File::OpenMode open_mode = File::IN)
+			throw(Exception::FileNotFound);
 
 		/**	Copy constructor
 		*/
-		MOL2File(const MOL2File& file);
+		MOL2File(const MOL2File& file)
+			throw(Exception::FileNotFound);
 
 		/// Destructor
-		virtual ~MOL2File();
+		virtual ~MOL2File()
+			throw();
 		
 		//@}
+
 		/**	@name Reading and Writing of Kernel Datastructures
 		*/
 		//@{

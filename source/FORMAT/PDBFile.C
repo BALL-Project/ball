@@ -1,4 +1,4 @@
-// $Id: PDBFile.C,v 1.24 2001/07/20 08:05:57 oliver Exp $
+// $Id: PDBFile.C,v 1.25 2001/08/01 01:04:14 oliver Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 
@@ -37,6 +37,7 @@ namespace BALL
 	}
 
 	PDBFile::PDBFile(const PDBFile& PDB_file)
+		throw(Exception::FileNotFound)
 		:	GenericPDBFile(),
 			PDB_atom_map_(),
 			residue_map_(),
@@ -60,6 +61,7 @@ namespace BALL
 	}
 
 	PDBFile::PDBFile(const String& filename, File::OpenMode open_mode)
+		throw(Exception::FileNotFound)
 		:	PDB_atom_map_(),
 			residue_map_(),
 			ssbond_list_(),

@@ -1,4 +1,4 @@
-// $Id: JCAMPFile.C,v 1.6 2001/02/21 12:33:30 anker Exp $
+// $Id: JCAMPFile.C,v 1.7 2001/08/01 01:04:14 oliver Exp $
 
 #include <BALL/FORMAT/JCAMPFile.h>
 
@@ -6,20 +6,23 @@ namespace BALL
 {
 
 	JCAMPFile::JCAMPFile( const String& name, OpenMode open_mode) 
+		throw(Exception::FileNotFound)
 		: File(name, open_mode), 
 			buffer_(0)
 	{
 	}
 
 	JCAMPFile::JCAMPFile(const JCAMPFile& file) 
+		throw(Exception::FileNotFound)
 		: File(file), 
 			buffer_(0)
 	{
 	}
 
 	JCAMPFile::~JCAMPFile()
+		throw()
 	{
-		if (buffer_)
+		if (buffer_ != 0)
 		{
 			delete[] (buffer_);
 		}

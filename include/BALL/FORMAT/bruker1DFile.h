@@ -1,4 +1,4 @@
-// $Id: bruker1DFile.h,v 1.11 2001/02/28 01:17:12 amoll Exp $
+// $Id: bruker1DFile.h,v 1.12 2001/08/01 01:06:28 oliver Exp $
 
 #ifndef BALL_FORMAT_BRUKER1DFILE_H
 #define BALL_FORMAT_BRUKER1DFILE_H
@@ -48,15 +48,20 @@ namespace BALL
 		/**	Constructor.
 				@param name important: name of the Bruker-*directory*
 		*/
-		Bruker1D(const String& name, OpenMode open_mode = File::IN|File::BINARY);
+		Bruker1D(const String& name, OpenMode open_mode = File::IN|File::BINARY)
+			throw(Exception::FileNotFound);
 
 		/// Copy constructor
-		Bruker1D(const Bruker1D& file);
+		Bruker1D(const Bruker1D& file)
+			throw(Exception::FileNotFound);
 
 		/// Destructor
-		virtual ~Bruker1D();
+		virtual ~Bruker1D()
+			throw();
 
 		//@}
+
+
 		/**	@name Accessors
 		*/
 		//@{
@@ -70,7 +75,7 @@ namespace BALL
 
 	  /** Return a pointer to the spectrum.
 		 */
-		RegularData1D* GetData();
+		RegularData1D* getData();
 
 		/**
 		*/

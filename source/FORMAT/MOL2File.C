@@ -1,4 +1,4 @@
-// $Id: MOL2File.C,v 1.10 2001/05/17 01:30:50 oliver Exp $
+// $Id: MOL2File.C,v 1.11 2001/08/01 01:04:14 oliver Exp $
 
 #include <BALL/FORMAT/MOL2File.h>
 #include <BALL/DATATYPE/string.h>
@@ -22,16 +22,19 @@ namespace BALL
 	}
 
 	MOL2File::MOL2File(const String& name, File::OpenMode open_mode)
+		throw(Exception::FileNotFound)
 		: File(name, open_mode)
 	{
 	}
 
 	MOL2File::MOL2File(const MOL2File& file)
+		throw(Exception::FileNotFound)
 		: File(file)
 	{
 	}
 
 	MOL2File::~MOL2File()
+		throw()
 	{
 	}
 	

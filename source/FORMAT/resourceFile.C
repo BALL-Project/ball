@@ -1,4 +1,4 @@
-// $Id: resourceFile.C,v 1.21 2001/01/26 00:55:20 amoll Exp $
+// $Id: resourceFile.C,v 1.22 2001/08/01 01:04:15 oliver Exp $
 
 #include <BALL/FORMAT/resourceFile.h>
 
@@ -626,6 +626,7 @@ namespace BALL
 
 	
 	ResourceFile::ResourceFile(const String& name)
+		throw(Exception::FileNotFound)
 		:	File(),
 			root_()
 	{
@@ -634,6 +635,7 @@ namespace BALL
 
 	
 	ResourceFile::ResourceFile(const ResourceFile& resource_file)
+		throw(Exception::FileNotFound)
 		:	File(resource_file),
 			root_()
 	{
@@ -649,6 +651,7 @@ namespace BALL
 
 	
 	ResourceFile::~ResourceFile()
+		throw()
 	{
 		close();
 	}

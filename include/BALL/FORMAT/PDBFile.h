@@ -1,4 +1,4 @@
-// $Id: PDBFile.h,v 1.15 2001/07/31 00:29:37 oliver Exp $
+// $Id: PDBFile.h,v 1.16 2001/08/01 01:06:27 oliver Exp $
 
 #ifndef BALL_FORMAT_PDBFILE_H
 #define BALL_FORMAT_PDBFILE_H
@@ -69,15 +69,17 @@ namespace BALL
 				Create a new PDBFile object refering to the same
 				filename (if already set).
 		*/
-		PDBFile(const PDBFile& PDB_file);
+		PDBFile(const PDBFile& PDB_file)
+			throw(Exception::FileNotFound);
 
-		/** Detailled constructor.
+		/** Detailed constructor.
 				The file named {\tt filename} is opened. By default, the file is
 				opened for reading. To open it for writing, use {\tt open_mode = File::OUT}.
 				@param	filename the name of the file to open
 				@param	open_mode the file mode
 		*/
-		PDBFile(const String& filename, File::OpenMode open_mode = File::IN);
+		PDBFile(const String& filename, File::OpenMode open_mode = File::IN)
+			throw(Exception::FileNotFound);
 
 		/// Destructor
 		virtual ~PDBFile()

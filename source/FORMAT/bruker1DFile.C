@@ -1,4 +1,4 @@
-// $Id: bruker1DFile.C,v 1.11 2001/07/09 22:07:17 amoll Exp $
+// $Id: bruker1DFile.C,v 1.12 2001/08/01 01:04:14 oliver Exp $
 
 #include <BALL/FORMAT/bruker1DFile.h>
 
@@ -11,6 +11,7 @@ namespace BALL
   }
 
 	Bruker1D::Bruker1D( const String& name, OpenMode open_mode ) 
+		throw(Exception::FileNotFound)
 		: File( name + FileSystem::PATH_SEPARATOR + "1r", open_mode )
 	{
 		pars_ = new JCAMPFile( name + FileSystem::PATH_SEPARATOR + "procs" );
@@ -20,11 +21,13 @@ namespace BALL
 	}
 
 	Bruker1D::Bruker1D( const Bruker1D& file ) 
+		throw(Exception::FileNotFound)
 		: File( file )
 	{
 	}
 
 	Bruker1D::~Bruker1D()
+		throw()
 	{
 		if (pars_)
 		{
@@ -113,7 +116,7 @@ namespace BALL
 		}
 	}
   
-  RegularData1D* Bruker1D::GetData()
+  RegularData1D* Bruker1D::getData()
   {
     return (&spectrum_);
   }

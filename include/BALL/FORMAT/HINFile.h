@@ -1,4 +1,4 @@
-// $Id: HINFile.h,v 1.13 2001/06/05 15:44:05 anker Exp $
+// $Id: HINFile.h,v 1.14 2001/08/01 01:06:27 oliver Exp $
 
 #ifndef BALL_FORMAT_HINFILE_H
 #define BALL_FORMAT_HINFILE_H
@@ -45,16 +45,20 @@ namespace BALL
 
 		/** Detailed constructor.
 		*/
-		HINFile(const String& filename, File::OpenMode open_mode = File::IN);
+		HINFile(const String& filename, File::OpenMode open_mode = File::IN)
+			throw(Exception::FileNotFound);
 
 		/**	Copy constructor
 		*/
-		HINFile(const HINFile& file);
+		HINFile(const HINFile& file)
+			throw(Exception::FileNotFound);
 
 		/// Destructor
-		virtual ~HINFile();
+		virtual ~HINFile()
+			throw();
 		
 		//@}
+
 		/**	@name Reading and Writing of Kernel Datastructures
 		*/
 		//@{

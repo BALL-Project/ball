@@ -1,4 +1,4 @@
-// $Id: HINFile.C,v 1.35 2001/07/16 02:10:30 oliver Exp $
+// $Id: HINFile.C,v 1.36 2001/08/01 01:04:13 oliver Exp $
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/CONCEPT/composite.h>
@@ -31,6 +31,7 @@ namespace BALL
 	}
 
 	HINFile::HINFile(const String& name, File::OpenMode open_mode)
+		throw(Exception::FileNotFound)
 		: File(name, open_mode),
 			box_(0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
 			temperature_(0.0)
@@ -38,6 +39,7 @@ namespace BALL
 	}
 
 	HINFile::HINFile(const HINFile& file)
+		throw(Exception::FileNotFound)
 		: File(file),
 			box_(0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
 			temperature_(0.0)
@@ -45,6 +47,7 @@ namespace BALL
 	}
 
 	HINFile::~HINFile()
+		throw()
 	{
 	}
 
