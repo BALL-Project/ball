@@ -1,10 +1,22 @@
-// $Id: RSFace.h,v 1.19 2001/11/08 16:46:24 strobel Exp $
+// $Id: RSFace.h,v 1.20 2001/12/08 17:00:53 strobel Exp $
 
 #ifndef BALL_STRUCTURE_RSFACE_H
 #define BALL_STRUCTURE_RSFACE_H
 
 #ifndef BALL_MATHS_VECTOR3_H
 #	include <BALL/MATHS/vector3.h>
+#endif
+
+#ifndef BALL_STRUCTURE_GRAPHEDGE_H
+#	include <BALL/STRUCTURE/graphEdge.h>
+#endif
+
+#ifndef BALL_STRUCTURE_GRAPHFACE_H
+#	include <BALL/STRUCTURE/graphFace.h>
+#endif
+
+#ifndef BALL_STRUCTURE_GRAPHVERTEX_H
+#	include <BALL/STRUCTURE/graphVertex.h>
 #endif
 
 namespace BALL
@@ -31,16 +43,22 @@ namespace BALL
 	template <typename T>
 	class TSESVertex;
 
+	template <typename T>
+	class TTriangulatedSES;
+
 	/** Generic RSFace Class.	
 			{\bf Definition:} \URL{BALL/STRUCTURE/RSFace.h} 
 	*/
 	template <class T>
-	class TRSFace
+	class TRSFace	:	public GraphFace< TRSVertex<T>,TRSEdge<T> >
 	{
 		public:
 
 		/** @name Class friends
 				\begin{itemize}
+					\item class GraphEdge< TRSVertex<T>,TRSFace<T> >
+					\item class GraphFace< TRSVertex<T>,TRSEdge<T> >
+					\item class GraphVertex< TRSEdge<T>,TRSFace<T> >
 					\item class TReducedSurface<T>
 					\item class TRSEdge<T>
 					\item class TRSVertex<T>
@@ -48,8 +66,12 @@ namespace BALL
 					\item class TSESFace<T>
 					\item class TSESEdge<T>
 					\item class TSESVertex<T>
+					\item class TTriangulatedSES<T>
 				\end{itemize}
 		*/
+		friend class GraphEdge< TRSVertex<T>,TRSFace<T> >;
+		friend class GraphFace< TRSVertex<T>,TRSEdge<T> >;
+		friend class GraphVertex< TRSEdge<T>,TRSFace<T> >;
 		friend class TReducedSurface<T>;
 		friend class TRSEdge<T>;
 		friend class TRSVertex<T>;
@@ -57,6 +79,7 @@ namespace BALL
 		friend class TSESFace<T>;
 		friend class TSESEdge<T>;
 		friend class TSESVertex<T>;
+		friend class TTriangulatedSES<T>;
 
 		BALL_CREATE(TRSFace)
 
@@ -120,7 +143,7 @@ namespace BALL
 				@param	deep		if deep = false, all pointers are set to NULL (default). Otherwise the
 												RSFace object is linked to the neighbours of the RSFace object to be copied.
 		*/
-		void set(const TRSFace<T>& rsface, bool deep = false)
+		virtual void set(const TRSFace<T>& rsface, bool deep = false)
 			throw();
 
 		/**	Assign to a lot of nice objects
@@ -133,7 +156,7 @@ namespace BALL
 				@param	singular
 				@param	index			assigned to the index
 		*/
-		void set(TRSVertex<T>* vertex1,
+		virtual void set(TRSVertex<T>* vertex1,
 				TRSVertex<T>* vertex2,
 				TRSVertex<T>* vertex3,
 				TRSEdge<T>* edge1,
@@ -154,7 +177,7 @@ namespace BALL
 				@return bool	{\bf true} if all vertices are similar modulo order	
 											and the normals are equal, {\bf false} otherwise
 		*/
-		bool operator == (const TRSFace& rsface) const
+		virtual bool operator == (const TRSFace& rsface) const
 			throw();
 
 		/**	similar
@@ -168,7 +191,7 @@ namespace BALL
 				@return	bool	{\bf false} if all vertices are similar modulo order	
 											and the normals are equal, {\bf true} otherwise
 		*/
-		bool operator != (const TRSFace<T>& rsface) const
+		virtual bool operator != (const TRSFace<T>& rsface) const
 			throw();
 		
 		/** isSingular
@@ -182,42 +205,6 @@ namespace BALL
 		/**	@name	Accessors
 		*/
 		//@{
-
-		/** Set one of the three RSVertices of the RSFace.
-				@param	i				the first vertex is changed if i = 0,	
-												the second vertex is changed if i = 1,	
-												the third vertex is changed otherwise
-				@param	vertex	a pointer to the new vertex
-		*/
-		void setVertex(Position i, TRSVertex<T>* vertex)
-			throw();
-
-		/** Return one of the three RSVertices of the RSFace.
-				@param	i
-				@return	TRSVertex<T>*	the first RSVertex if i = 0,	
-															the second RSVertex if i = 1,	
-															the third RSVertex if otherwise
-		*/
-		TRSVertex<T>* getVertex(Position i) const
-			throw();
-
-		/** Set one of the three RSEdges of the RSFace.
-				@param	i			the first edge is changed if i = 0,	
-											the second edge is changed if i = 1,	
-											the third edge is changed otherwise
-				@param	edge	a pointer to the new edge
-		*/
-		void setEdge(Position i, TRSEdge<T>* edge)
-			throw();
-
-		/** Return of one of the three RSEdges of the rsface.
-				@param	i
-				@return	RSEdge*	the first RSEdge if i = 0,	
-												the second RSEdge if i = 1,	
-												the third RSEdge if otherwise
-		*/
-		TRSEdge<T>* getEdge(Position i) const
-			throw();
 
 		/** Set the center of the probe sphere defining the RSFace.
 				@param	center	the new center
@@ -248,45 +235,7 @@ namespace BALL
 		void setSingular(bool singular)
 			throw();
 
-		/** Set the index of the RSFace.
-				@param	index	the new index
-		*/
-		void setIndex(Index index)
-			throw();
-
-		/** Return the index of the RSFace.
-				@return	Index	the index of the RSFace
-		*/
-		Index getIndex() const
-			throw();
-
-		/** Find the two RSEdges of this RSFace that belong to the given RSVertex
-				@param	vertex	a pointer to the given vertex
-				@param	edge1		a pointer to the first found edge
-				@param	edge2		a pointer to the second found edge
-				@return	bool		{\bf true} if the edges can be found,	
-												{\bf false} otherwise
-		*/
-		bool getEdges(TRSVertex<T>* vertex, TRSEdge<T>*& edge1, TRSEdge<T>*& edge2)
-			throw();
-		
-		/** Find the RSEdge of this RSFace that belongs to the two given RSVertices
-				@param	vertex1	a pointer to the first given vertex
-				@param	vertex2	a pointer to the second given vertex
-				@param	edge		a pointer to the found edge
-				@return	bool		{\bf true} if the edge can be found,	
-												{\bf false} otherwise
-		*/
-		bool getEdge(TRSVertex<T>* vertex1, TRSVertex<T>* vertex2, TRSEdge<T>*& edge)
-			throw();
-		
-		/** Return the relative index of a RSVertex in the RSFace.
-				@return	Index	the relative index of the RSVertex
-		*/
-		Index getRelativeVertexIndex(TRSVertex<T>* vertex)
-			throw();
-
-		/** Return the third RSVertex of this RSFace.
+		/** Return the third RSVertex of the RSFace.
 				@param	v1						the first vertex
 				@param	v2						the second vertex
 				@return	TRSVertex<T>*	the third vertex
@@ -294,40 +243,39 @@ namespace BALL
 		TRSVertex<T>* thirdVertex(TRSVertex<T>* v1, TRSVertex<T>* v2)
 			throw();
 
-		/** Substitute a RSVertex by an other one.
-				@param	old_vertex	the vertex that has to be substituted
-				@param	new_vertex	the new vertex
-				@return	bool				{\bf true}, if the vertex can be substituted,	
-														{\bf false} otherwise
+		/** Return the third RSEdge of the RSFace.
+				@param	e1					the first edge
+				@param	e2					the second edge
+				@return	TRSEdge<T>*	the third edge
 		*/
-		bool substituteVertex(TRSVertex<T>* old_vertex, TRSVertex<T>* new_vertex)
+		TRSEdge<T>* thirdEdge(TRSEdge<T>* e1, TRSEdge<T>* e2)
 			throw();
 
 		void remove(HashSet<TRSFace<T>*>& faces)
 		{
-			vertex0_->deleteFace(this);
-			vertex1_->deleteFace(this);
-			vertex2_->deleteFace(this);
+			vertex_[0]->deleteFace(this);
+			vertex_[1]->deleteFace(this);
+			vertex_[2]->deleteFace(this);
 			TRSFace<T>* face;
-			if (edge0_ != NULL)
+			if (edge_[0] != NULL)
 			{
-				if ((edge0_->getFace(1) == NULL) && (edge0_->has() == false))
+				if ((edge_[0]->getFace(1) == NULL) && (edge_[0]->has() == false))
 				{
-					edge0_->remove();
+					edge_[0]->remove();
 				}
 				else
 				{
-					face = edge0_->deleteFace(this);
+					face = edge_[0]->deleteFace(this);
 					faces.insert(face);
 				}
 			}
-			if (edge1_ != NULL)
+			if (edge_[1] != NULL)
 			{
-				faces.insert(edge1_->deleteFace(this));
+				faces.insert(edge_[1]->deleteFace(this));
 			}
-			if (edge2_ != NULL)
+			if (edge_[2] != NULL)
 			{
-				faces.insert(edge2_->deleteFace(this));
+				faces.insert(edge_[2]->deleteFace(this));
 			}
 		}
 
@@ -335,24 +283,6 @@ namespace BALL
 
 		protected:
 
-		/*_ The first RSVertex of the RSFace
-		*/
-		TRSVertex<T>* vertex0_;
-		/*_ The second RSVertex of the RSFace
-		*/
-		TRSVertex<T>* vertex1_;
-		/*_ The third RSVertex of the RSFace
-		*/
-		TRSVertex<T>* vertex2_;
-		/*_ The first RSEdge of the RSFace
-		*/
-		TRSEdge<T>* edge0_;
-		/*_ The second RSEdge of the RSFace
-		*/
-		TRSEdge<T>* edge1_;
-		/*_ The third RSEdge of the RSFace
-		*/
-		TRSEdge<T>* edge2_;
 		/*_ The center of the probe sphere defining the RSFace
 		*/
 		TVector3<T> center_;
@@ -362,9 +292,6 @@ namespace BALL
 		/*_ singular
 		*/
 		bool singular_;
-		/* The index of the RSFace
-		*/
-		Index index_;
 
 	};
 
@@ -415,43 +342,30 @@ namespace BALL
 	template <typename T>
 	TRSFace<T>::TRSFace()
 		throw()
-		: vertex0_(NULL),
-			vertex1_(NULL),
-			vertex2_(NULL),
-			edge0_(NULL),
-			edge1_(NULL),
-			edge2_(NULL),
+		: GraphFace< TRSVertex<T>,TRSEdge<T> >(),
 			center_(),
 			normal_(),
-			singular_(false),
-			index_(-1)
+			singular_(false)
 	{
+		vertex_.push_back(NULL);
+		vertex_.push_back(NULL);
+		vertex_.push_back(NULL);
+		number_of_vertices_ = 3;
+		edge_.push_back(NULL);
+		edge_.push_back(NULL);
+		edge_.push_back(NULL);
+		number_of_edges_ = 3;
 	}
 
 
 	template <typename T>
 	TRSFace<T>::TRSFace(const TRSFace<T>& rsface, bool deep)
 		throw()
-		: vertex0_(NULL),
-			vertex1_(NULL),
-			vertex2_(NULL),
-			edge0_(NULL),
-			edge1_(NULL),
-			edge2_(NULL),
+		:	GraphFace< TRSVertex<T>,TRSEdge<T> >(rsface,deep),
 			center_(rsface.center_),
 			normal_(rsface.normal_),
-			singular_(rsface.singular_),
-			index_(rsface.index_)
+			singular_(rsface.singular_)
 	{
-		if (deep)
-		{
-			vertex0_ = rsface.vertex0_;
-			vertex1_ = rsface.vertex1_;
-			vertex2_ = rsface.vertex2_;
-			edge0_ = rsface.edge0_;
-			edge1_ = rsface.edge1_;
-			edge2_ = rsface.edge2_;
-		}
 	}
 
 
@@ -467,17 +381,20 @@ namespace BALL
 			bool singular,
 			Index index)
 		throw(Exception::DivisionByZero)
-		: vertex0_(vertex1),
-			vertex1_(vertex2),
-			vertex2_(vertex3),
-			edge0_(edge1),
-			edge1_(edge2),
-			edge2_(edge3),
+		:	GraphFace< TRSVertex<T>,TRSEdge<T> >(),
 			center_(center),
 			normal_(normal),
-			singular_(singular),
-			index_(index)
+			singular_(singular)
 	{
+		vertex_.push_back(vertex1);
+		vertex_.push_back(vertex2);
+		vertex_.push_back(vertex3);
+		number_of_vertices_ = 3;
+		edge_.push_back(edge1);
+		edge_.push_back(edge2);
+		edge_.push_back(edge3);
+		number_of_edges_ = 3;
+		index_ = index;
 		normal_.normalize();
 	}
 
@@ -495,21 +412,21 @@ namespace BALL
 	{
 		if (deep)
 		{
-			vertex0_ = rsface.vertex0_;
-			vertex1_ = rsface.vertex1_;
-			vertex2_ = rsface.vertex2_;
-			edge0_ = rsface.edge0_;
-			edge1_ = rsface.edge1_;
-			edge2_ = rsface.edge2_;
+			vertex_[0] = rsface.vertex_[0];
+			vertex_[1] = rsface.vertex_[1];
+			vertex_[2] = rsface.vertex_[2];
+			edge_[0] = rsface.edge_[0];
+			edge_[1] = rsface.edge_[1];
+			edge_[2] = rsface.edge_[2];
 		}
 		else
 		{
-			vertex0_ = NULL;
-			vertex1_ = NULL;
-			vertex2_ = NULL;
-			edge0_ = NULL;
-			edge1_ = NULL;
-			edge2_ = NULL;
+			vertex_[0] = NULL;
+			vertex_[1] = NULL;
+			vertex_[2] = NULL;
+			edge_[0] = NULL;
+			edge_[1] = NULL;
+			edge_[2] = NULL;
 		}
 		center_ = rsface.center_;
 		normal_ = rsface.normal_;
@@ -531,12 +448,12 @@ namespace BALL
 			Index index)
 		throw(Exception::DivisionByZero)
 	{
-		vertex0_ = vertex1;
-		vertex1_ = vertex2;
-		vertex2_ = vertex3;
-		edge0_ = edge1;
-		edge1_ = edge2;
-		edge2_ = edge3;
+		vertex_[0] = vertex1;
+		vertex_[1] = vertex2;
+		vertex_[2] = vertex3;
+		edge_[0] = edge1;
+		edge_[1] = edge2;
+		edge_[2] = edge3;
 		center_ = center;
 		normal_ = normal;
 		singular_ = singular;
@@ -550,24 +467,25 @@ namespace BALL
 		throw()
 	{
 		if (normal_ != rsface.normal_)
+		//if (center_ != rsface.center_)
 		{
 			return false;
 		}
-		if ((vertex0_->atom_ != rsface.vertex0_->atom_) &&
-				(vertex0_->atom_ != rsface.vertex1_->atom_) &&
-				(vertex0_->atom_ != rsface.vertex2_->atom_)    )
+		if ((vertex_[0]->atom_ != rsface.vertex_[0]->atom_) &&
+				(vertex_[0]->atom_ != rsface.vertex_[1]->atom_) &&
+				(vertex_[0]->atom_ != rsface.vertex_[2]->atom_)    )
 		{
 			return false;
 		}
-		if ((vertex1_->atom_ != rsface.vertex0_->atom_) &&
-				(vertex1_->atom_ != rsface.vertex1_->atom_) &&
-				(vertex1_->atom_ != rsface.vertex2_->atom_)    )
+		if ((vertex_[1]->atom_ != rsface.vertex_[0]->atom_) &&
+				(vertex_[1]->atom_ != rsface.vertex_[1]->atom_) &&
+				(vertex_[1]->atom_ != rsface.vertex_[2]->atom_)    )
 		{
 			return false;
 		}
-		if ((vertex2_->atom_ != rsface.vertex0_->atom_) &&
-				(vertex2_->atom_ != rsface.vertex1_->atom_) &&
-				(vertex2_->atom_ != rsface.vertex2_->atom_)    )
+		if ((vertex_[2]->atom_ != rsface.vertex_[0]->atom_) &&
+				(vertex_[2]->atom_ != rsface.vertex_[1]->atom_) &&
+				(vertex_[2]->atom_ != rsface.vertex_[2]->atom_)    )
 		{
 			return false;
 		}
@@ -579,21 +497,21 @@ namespace BALL
 	bool TRSFace<T>::similar(const TRSFace& rsface) const
 		throw()
 	{
-		if ((vertex0_->atom_ != rsface.vertex0_->atom_) &&
-				(vertex0_->atom_ != rsface.vertex1_->atom_) &&
-				(vertex0_->atom_ != rsface.vertex2_->atom_)    )
+		if ((vertex_[0]->atom_ != rsface.vertex_[0]->atom_) &&
+				(vertex_[0]->atom_ != rsface.vertex_[1]->atom_) &&
+				(vertex_[0]->atom_ != rsface.vertex_[2]->atom_)    )
 		{
 			return false;
 		}
-		if ((vertex1_->atom_ != rsface.vertex0_->atom_) &&
-				(vertex1_->atom_ != rsface.vertex1_->atom_) &&
-				(vertex1_->atom_ != rsface.vertex2_->atom_)    )
+		if ((vertex_[1]->atom_ != rsface.vertex_[0]->atom_) &&
+				(vertex_[1]->atom_ != rsface.vertex_[1]->atom_) &&
+				(vertex_[1]->atom_ != rsface.vertex_[2]->atom_)    )
 		{
 			return false;
 		}
-		if ((vertex2_->atom_ != rsface.vertex0_->atom_) &&
-				(vertex2_->atom_ != rsface.vertex1_->atom_) &&
-				(vertex2_->atom_ != rsface.vertex2_->atom_)    )
+		if ((vertex_[2]->atom_ != rsface.vertex_[0]->atom_) &&
+				(vertex_[2]->atom_ != rsface.vertex_[1]->atom_) &&
+				(vertex_[2]->atom_ != rsface.vertex_[2]->atom_)    )
 		{
 			return false;
 		}
@@ -614,58 +532,6 @@ namespace BALL
 		throw()
 	{
 		return singular_;
-	}
-
-
-	template <typename T>
-	void TRSFace<T>::setVertex(Position i, TRSVertex<T>* vertex)
-		throw()
-	{
-		switch (i)
-		{
-			case 0  :	vertex0_ = vertex; break;
-			case 1  :	vertex1_ = vertex; break;
-			default :	vertex2_ = vertex; break;
-		}
-	}
-
-
-	template <typename T>
-	TRSVertex<T>* TRSFace<T>::getVertex(Position i) const
-		throw()
-	{
-		switch (i)
-		{
-			case 0  :	return vertex0_;
-			case 1  :	return vertex1_;
-			default :	return vertex2_;
-		}
-	}
-
-
-	template <typename T>
-	void TRSFace<T>::setEdge(Position i, TRSEdge<T>* edge)
-		throw()
-	{
-		switch (i)
-		{
-			case 0  :	edge0_ = edge; break;
-			case 1  :	edge1_ = edge; break;
-			default :	edge2_ = edge; break;
-		}
-	}
-
-
-	template <typename T>
-	TRSEdge<T>* TRSFace<T>::getEdge(Position i) const
-		throw()
-	{
-		switch (i)
-		{
-			case 0  :	return edge0_;
-			case 1  :	return edge1_;
-			default :	return edge2_;
-		}
 	}
 
 
@@ -711,160 +577,48 @@ namespace BALL
 
 
 	template <typename T>
-	void TRSFace<T>::setIndex(Index index)
-		throw()
-	{
-		index_ = index;
-	}
-
-
-	template <typename T>
-	Index TRSFace<T>::getIndex() const
-		throw()
-	{
-		return index_;
-	}
-
-
-	template <typename T>
-	bool TRSFace<T>::getEdges(TRSVertex<T>* vertex,
-			TRSEdge<T>*& edge1,
-			TRSEdge<T>*& edge2)
-		throw()
-	{
-		if ((vertex0_ != vertex) && (vertex1_ != vertex) && (vertex2_ != vertex))
-		{
-			return false;
-		}
-		if ((edge0_ == NULL) || (edge1_ == NULL) || (edge2_ == NULL))
-		{
-			return false;
-		}
-		if ((edge0_->getVertex(0) != vertex) && (edge0_->getVertex(1) != vertex))
-		{
-			edge1 = edge1_;
-			edge2 = edge2_;
-		}
-		else
-		{
-			edge1 = edge0_;
-			if ((edge1_->getVertex(0) == vertex) || (edge1_->getVertex(1) == vertex))
-			{
-				edge2 = edge1_;
-			}
-			else
-			{
-				edge2 = edge2_;
-			}
-		}
-		return true;
-	}
-
-
-	template <typename T>
-	bool TRSFace<T>::getEdge(TRSVertex<T>* vertex1,
-			TRSVertex<T>* vertex2,
-			TRSEdge<T>*& edge)
-		throw()
-	{
-		if ((vertex0_ != vertex1) && (vertex1_ != vertex1) && (vertex2_ != vertex1))
-		{
-			return false;
-		}
-		if ((vertex0_ != vertex2) && (vertex1_ != vertex2) && (vertex2_ != vertex2))
-		{
-			return false;
-		}
-		if ((edge0_ == NULL) || (edge1_ == NULL) || (edge2_ == NULL))
-		{
-			return false;
-		}
-		if ((edge0_->getVertex(0) == vertex1) && (edge0_->getVertex(1) == vertex2) ||
-		    (edge0_->getVertex(1) == vertex1) && (edge0_->getVertex(0) == vertex2))
-		{
-			edge = edge0_;
-			return true;
-		}
-		if ((edge1_->getVertex(0) == vertex1) && (edge1_->getVertex(1) == vertex2) ||
-		    (edge1_->getVertex(1) == vertex1) && (edge1_->getVertex(0) == vertex2))
-		{
-			edge = edge1_;
-			return true;
-		}
-		if ((edge2_->getVertex(0) == vertex1) && (edge2_->getVertex(1) == vertex2) ||
-		    (edge2_->getVertex(1) == vertex1) && (edge2_->getVertex(0) == vertex2))
-		{
-			edge = edge2_;
-			return true;
-		}
-		return false;
-	}
-
-
-	template <typename T>
-	Index TRSFace<T>::getRelativeVertexIndex(TRSVertex<T>* vertex)
-		throw()
-	{
-		if (vertex0_ == vertex)
-		{
-			return 0;
-		}
-		if (vertex1_ == vertex)
-		{
-			return 1;
-		}
-		if (vertex2_ == vertex)
-		{
-			return 2;
-		}
-		return -1;
-	}
-
-
-	template <typename T>
 	TRSVertex<T>* TRSFace<T>::thirdVertex(TRSVertex<T>* v1, TRSVertex<T>* v2)
 		throw()
 	{
-		if ((vertex0_ == v1) || (vertex0_ == v2))
+		if ((vertex_[0] == v1) || (vertex_[0] == v2))
 		{
-			if ((vertex1_ == v1) || (vertex1_ == v2))
+			if ((vertex_[1] == v1) || (vertex_[1] == v2))
 			{
-				return vertex2_;
+				return vertex_[2];
 			}
 			else
 			{
-				return vertex1_;
+				return vertex_[1];
 			}
 		}
 		else
 		{
-			return vertex0_;
+			return vertex_[0];
 		}
 	}
 
 
 	template <typename T>
-	bool TRSFace<T>::substituteVertex(TRSVertex<T>* old_vertex,
-			TRSVertex<T>* new_vertex)
+	TRSEdge<T>* TRSFace<T>::thirdEdge(TRSEdge<T>* e1, TRSEdge<T>* e2)
 		throw()
 	{
-		if (vertex0_ == old_vertex)
+		if ((edge_[0] == e1) || (edge_[0] == e2))
 		{
-			vertex0_ = new_vertex;
-			return true;
+			if ((edge_[1] == e1) || (edge_[1] == e2))
+			{
+				return edge_[2];
+			}
+			else
+			{
+				return edge_[1];
+			}
 		}
-		if (vertex1_ == old_vertex)
+		else
 		{
-			vertex1_ = new_vertex;
-			return true;
+			return edge_[0];
 		}
-		if (vertex2_ == old_vertex)
-		{
-			vertex2_ = new_vertex;
-			return true;
-		}
-		return false;
 	}
+
 
 	
 	
