@@ -1,4 +1,4 @@
-// $Id: displayProperties.C,v 1.13.4.15 2002/12/08 22:56:55 amoll Exp $
+// $Id: displayProperties.C,v 1.13.4.16 2002/12/09 00:49:54 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/displayProperties.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
@@ -521,17 +521,12 @@ namespace BALL
 			List<Composite*> temp_selection_ = selection;
 						
 			List<Composite*>::ConstIterator list_it = temp_selection_.begin();	
-			ChangedCompositeMessage *change_message = new ChangedCompositeMessage;
-			change_message->setDeletable(false);
 			CompositeSelectedMessage* cs_message = new CompositeSelectedMessage(0, true);
 			cs_message->setDeletable(false);
 			for (; list_it != temp_selection_.end(); ++list_it)
 			{
 				(*list_it)->apply(selector_);
 
-				// mark composite for update
-				//change_message->setComposite((*list_it));
-				//notify_(change_message);
 				cs_message->composite_ = *list_it;
 				notify_(cs_message);
 			}
@@ -571,14 +566,14 @@ namespace BALL
 			List<Composite*> temp_selection_ = selection;
 
 			List<Composite*>::ConstIterator list_it = temp_selection_.begin();	
-			ChangedCompositeMessage* change_message = new ChangedCompositeMessage;
-			change_message->setDeletable(false);
+			CompositeSelectedMessage* cs_message = new CompositeSelectedMessage(0, false);
+			cs_message->setDeletable(false);
 			for (; list_it != temp_selection_.end(); ++list_it)
 			{
 				(*list_it)->apply(deselector_);
 				// mark composite for update
-				change_message->setComposite((*list_it));
-				notify_(change_message);
+				cs_message->composite_ = *list_it;
+				notify_(cs_message);
 			}
 
 			// restore old values
@@ -597,7 +592,7 @@ namespace BALL
 
 		void DisplayProperties::centerCamera()
 		{
-			if (MainControl::getMainControl(this)->getControlSelection().size() != 1)
+			if (MainControl::getMainControl(this)->getControlSelection().size() == 0)
 			{
 				return;
 			}
