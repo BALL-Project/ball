@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: INIFile.C,v 1.35 2004/11/17 20:12:27 oliver Exp $
+// $Id: INIFile.C,v 1.36 2004/11/18 16:21:01 amoll Exp $
 //
 
 #include <BALL/FORMAT/INIFile.h>
@@ -46,7 +46,8 @@ namespace BALL
 
 	INIFile::~INIFile()
 	{
-		clear();
+		sections_.clear();
+		section_index_.clear();
 	}
 
 	bool INIFile::isValid() const 
