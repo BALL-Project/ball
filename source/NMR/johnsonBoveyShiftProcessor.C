@@ -1,7 +1,7 @@
-// $Id: johnsonBoveyShiftProcessor.C,v 1.1 2000/09/19 12:07:23 oliver Exp $
+// $Id: johnsonBoveyShiftProcessor.C,v 1.2 2000/09/19 13:34:28 oliver Exp $
 
 
-#include <BALL/NMR/johnsonBovey.h>
+#include <BALL/NMR/johnsonBoveyShiftProcessor.h>
 #include <BALL/KERNEL/atomIterator.h>
 #include <BALL/KERNEL/PTE.h>
 
@@ -40,7 +40,7 @@ namespace BALL
 
 	// die Integral Funktionen
 
-	float JohnsonBoveyShift::carlsonEllipticalIntegral1_(float x,float y,float z)
+	float JohnsonBoveyShiftProcessor::carlsonEllipticalIntegral1_(float x,float y,float z)
 		{
 		// Lokale Konstanten Definitionen :
 		
@@ -63,7 +63,7 @@ namespace BALL
 		
 		if(BALL_MIN3(x, y, z)  < 0.0 || BALL_MIN3(x + y, x + z ,y + z) < TINY || BALL_MAX3(x, y, z) > BIG)
 			{
-			Log.error() << "JohnsonBoveyShiftProcessor::carlsonEllipticalIntegral1_ : Fehler bei den Argumenten" << endl;
+			Log.error() << "JohnsonBoveyShiftProcessorProcessor::carlsonEllipticalIntegral1_ : Fehler bei den Argumenten" << endl;
 			return 0;
 			}
 			else 	
@@ -92,7 +92,7 @@ namespace BALL
 				}
 		}
 		
-	float JohnsonBoveyShift::carlsonEllipticalIntegral2_(float x,float y,float z)
+	float JohnsonBoveyShiftProcessor::carlsonEllipticalIntegral2_(float x,float y,float z)
 	{
 		//Lokale Konstanten Definitionen :
 		
@@ -116,7 +116,7 @@ namespace BALL
 		
 		if(BALL_MIN(x, y) < 0.0 || BALL_MIN(x  +  y, z) < TINY || BALL_MAX3(x, y, z) > BIG)
 			{
-			Log.error() << "JohnsonBoveyShiftProcessor::carlsonEllipticalIntegral2_ : Fehler bei den Argumenten" << endl;
+			Log.error() << "JohnsonBoveyShiftProcessorProcessor::carlsonEllipticalIntegral2_ : Fehler bei den Argumenten" << endl;
 			return 0;
 			}
 			else
@@ -152,7 +152,7 @@ namespace BALL
 				}
 		}
 		
-	float JohnsonBoveyShift::legendreEllipticalIntegral1_(float phi,float ak)
+	float JohnsonBoveyShiftProcessor::legendreEllipticalIntegral1_(float phi,float ak)
 		{
 		/*
 		Legendre elliptic integral of the 1st kind f(phi,k) , evaluated using Carlson's function rf.
@@ -165,7 +165,7 @@ namespace BALL
 		return s*carlsonEllipticalIntegral1_(SQR(cos(phi)),(1.0-s*ak)*(1.0 + s*ak),1.0);
 		}
 		
-	float JohnsonBoveyShift::legendreEllipticalIntegral2_(float phi,float ak)
+	float JohnsonBoveyShiftProcessor::legendreEllipticalIntegral2_(float phi,float ak)
 		{
 		/*
 		Legendre elliptic integral of the 2nd kind E(phi,k). evaluated using Carlson's functions Rd and Rf.
@@ -185,7 +185,7 @@ namespace BALL
 
 	//Konstruktor
 
-	JohnsonBoveyShift::JohnsonBoveyShift()
+	JohnsonBoveyShiftProcessor::JohnsonBoveyShiftProcessor()
 		throw()
 		{
 		ini_filename_ = "/KM/fopra/compbio/burch/BALL/source/NMR/dat/nmr.ini";
@@ -194,18 +194,18 @@ namespace BALL
 		
 	//Destruktor
 
-	JohnsonBoveyShift::~JohnsonBoveyShift()
+	JohnsonBoveyShiftProcessor::~JohnsonBoveyShiftProcessor()
 		throw()
 		{
 		}
 
-	void JohnsonBoveyShift::setFilename(const String& filename)
+	void JohnsonBoveyShiftProcessor::setFilename(const String& filename)
 		throw()
 	{
 		ini_filename_ = filename;
 	}
 
-	const String& JohnsonBoveyShift::getFilename() const
+	const String& JohnsonBoveyShiftProcessor::getFilename() const
 		throw()
 	{
 		return ini_filename_;
@@ -214,10 +214,10 @@ namespace BALL
 
 	//StartFunktion
 
-	bool JohnsonBoveyShift::start()
+	bool JohnsonBoveyShiftProcessor::start()
 		throw()
 	{
-		//cout << "JohnsonBoveyShift::start()" << endl;
+		//cout << "JohnsonBoveyShiftProcessor::start()" << endl;
 		
 		// hier werden die Parameter eingelesen und entsprechende Datenstrukturen aufgebaut
 		
@@ -293,10 +293,10 @@ namespace BALL
 
 	//FinishFunktion
 
-	bool JohnsonBoveyShift::finish()
+	bool JohnsonBoveyShiftProcessor::finish()
 		throw()
 	{
-		// cout <<"JohnsonBoveyShift::finish()" <<endl;
+		// cout <<"JohnsonBoveyShiftProcessor::finish()" <<endl;
 		
 		//Definition der lokalen Variablen:
 		
@@ -466,7 +466,7 @@ namespace BALL
 		
 	//apply Funktion
 
-	Processor::Result JohnsonBoveyShift::operator()(Composite&  object)
+	Processor::Result JohnsonBoveyShiftProcessor::operator()(Composite&  object)
 		throw()
 	{
 		// ueberpruefe fuer jedes Residue ob es in residues_with_rings ist und fuege es in die Liste aromat_list_ ein.

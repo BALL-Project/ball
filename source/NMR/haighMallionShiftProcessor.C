@@ -1,6 +1,6 @@
-// $Id: haighMallionShiftProcessor.C,v 1.1 2000/09/19 12:07:23 oliver Exp $
+// $Id: haighMallionShiftProcessor.C,v 1.2 2000/09/19 13:34:28 oliver Exp $
 
-#include <BALL/NMR/haighMallion.h>
+#include <BALL/NMR/haighMallionShiftProcessor.h>
 #include <BALL/KERNEL/atomIterator.h>
 #include <BALL/KERNEL/PTE.h>
 
@@ -48,7 +48,7 @@ namespace BALL
 	}
 		
 	// default constructor
-	HaighMallionShift::HaighMallionShift()
+	HaighMallionShiftProcessor::HaighMallionShiftProcessor()
 		throw()
 	{
 		asrings_ = new String*[4];
@@ -103,14 +103,14 @@ namespace BALL
 
 		
 	// destructor
-	HaighMallionShift::~HaighMallionShift()
+	HaighMallionShiftProcessor::~HaighMallionShiftProcessor()
 		throw()
 	{
 	}
 
 
 	// Processor start method
-	bool HaighMallionShift::start()
+	bool HaighMallionShiftProcessor::start()
 		throw()
 	{
 		return true;
@@ -119,7 +119,7 @@ namespace BALL
 
 	//FinishFunktion
 
-	bool HaighMallionShift::finish()
+	bool HaighMallionShiftProcessor::finish()
 		throw()
 	{
 		// Hier erfolgt die Berechnung des shifts fuer jedes Proton der liste _proton_list
@@ -299,7 +299,7 @@ namespace BALL
 		
 	//apply Funktion
 
-	Processor::Result HaighMallionShift::operator () (Composite& object)
+	Processor::Result HaighMallionShiftProcessor::operator () (Composite& object)
 		throw()
 	{
 		// Arbeitet als Kollektor :
@@ -309,7 +309,7 @@ namespace BALL
 		
 		
 		// Definition von lokalen Variablen
-		//cout <<endl<<"HaighMallionShift::operator()";
+		//cout <<endl<<"HaighMallionShiftProcessor::operator()";
 		int zaehler;
 		int found;
 		

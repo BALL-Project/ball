@@ -1,6 +1,6 @@
-// $Id: anisotropyShiftProcessor.C,v 1.1 2000/09/19 12:07:22 oliver Exp $
+// $Id: anisotropyShiftProcessor.C,v 1.2 2000/09/19 13:34:27 oliver Exp $
 
-#include<BALL/NMR/anisotropy.h>
+#include<BALL/NMR/anisotropyShiftProcessor.h>
 
 ///////////////////////////////////////////////////////////////////////////////
 // noch zu erledigen :
@@ -13,36 +13,36 @@ namespace BALL
 
 //Konstruktor
 
-	AnIsoShift::AnIsoShift()
+	AnisotropyShiftProcessor::AnisotropyShiftProcessor()
 		throw()
 	{
-		//cout << endl << "AnIsoShift::AnIsoShift()";
+		//cout << endl << "AnisotropyShiftProcessor::AnisotropyShiftProcessor()";
 	}
 
 
 //Destruktor
 
-	AnIsoShift::~AnIsoShift ()
+	AnisotropyShiftProcessor::~AnisotropyShiftProcessor ()
 		throw()
 	{
-		//cout << endl << "AnIsoShift::~AnIsoShift()";
+		//cout << endl << "AnisotropyShiftProcessor::~AnisotropyShiftProcessor()";
 	}
 
 
 //StartFunktion
 
-	bool AnIsoShift::start ()
+	bool AnisotropyShiftProcessor::start ()
 		throw()
 	{
 		// hier passiert nichts
-		//cout << endl << "AnIsoShift::start()";
+		//cout << endl << "AnisotropyShiftProcessor::start()";
 		return 1;
 	}
 
 
 //FinishFunktion
 
-	bool AnIsoShift::finish ()
+	bool AnisotropyShiftProcessor::finish ()
 		throw()
 	{
 		//cout << endl << "Aniso Modul";
@@ -205,7 +205,7 @@ namespace BALL
 
 //apply Funktion
 
-	Processor::Result AnIsoShift::operator () (Composite& composite)
+	Processor::Result AnisotropyShiftProcessor::operator () (Composite& composite)
 		throw()
 	{
 		// hier werden alle Effektorbindungen gesammelt( C=O ) und in eff_list_ gespeichert.

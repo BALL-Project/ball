@@ -1,6 +1,6 @@
-// $Id: randomCoilShiftProcessor.C,v 1.1 2000/09/19 12:07:24 oliver Exp $
+// $Id: randomCoilShiftProcessor.C,v 1.2 2000/09/19 13:34:28 oliver Exp $
 
-#include<BALL/NMR/randomCoil.h>
+#include<BALL/NMR/randomCoilShiftProcessor.h>
 
 using namespace std;
 
@@ -8,7 +8,7 @@ namespace BALL
 {
 	//Konstruktor
 
-	RandomCoilShift::RandomCoilShift()
+	RandomCoilShiftProcessor::RandomCoilShiftProcessor()
 		throw()
 	{
 		ini_filename_="/KM/fopra/compbio/burch/BALL/source/NMR/dat/nmr.ini";
@@ -17,7 +17,7 @@ namespace BALL
 		
 	//Destruktor
 
-	RandomCoilShift::~RandomCoilShift()
+	RandomCoilShiftProcessor::~RandomCoilShiftProcessor()
 		throw()
 	{
 	}
@@ -25,12 +25,12 @@ namespace BALL
 
 	//StartFunktion
 
-	bool RandomCoilShift::start()
+	bool RandomCoilShiftProcessor::start()
 		throw()
 	{
 		// aufbau der ParameterSection ShiftData
 		
-		//cout << "RandomCoilShift::start()" << endl;
+		//cout << "RandomCoilShiftProcessor::start()" << endl;
 		
 		int number_of_keys;
 		int counter;
@@ -62,18 +62,18 @@ namespace BALL
 		return true;
 	}
 
-	bool RandomCoilShift::finish()
+	bool RandomCoilShiftProcessor::finish()
 		throw()
 	{ 
 		return true;
 	}
 
-	Processor::Result RandomCoilShift::operator()(Composite&  object)
+	Processor::Result RandomCoilShiftProcessor::operator()(Composite&  object)
 		throw()
 	{
 		// lese aus der rc_table den entsprechenden Eintrag und addiere zum shift
 
-		//cout << "RandomCoilShift::operator()" << endl;
+		//cout << "RandomCoilShiftProcessor::operator()" << endl;
 
 		parameter_section_.extractSection(parameters_,"RC-ShiftData");
 
