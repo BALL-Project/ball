@@ -1,4 +1,4 @@
-// $Id: triangulation.h,v 1.1 2000/10/10 14:24:59 oliver Exp $
+// $Id: triangulation.h,v 1.2 2000/10/11 08:18:28 oliver Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATION_H
 #define BALL_STRUCTURE_TRIANGULATION_H
@@ -166,7 +166,7 @@ for (Position i = 0; i < toric_borders.size(); i++)
 					{
 						p1 = *in;
 						p2 = *out;
-						p3 = GetNext(in,out,contour_in,contour_out,T(0));
+						p3 = GetNext(in,out,contour_in,contour_out);
 						TTriangulatedSurface<T>::Triangle* t = new TTriangulatedSurface<T>::Triangle();
 						t->point[0] = p1;
 						t->point[2] = p2;
@@ -1045,166 +1045,168 @@ print << "Partner gefunden: " << contour.back()->p << " == " << l->front()->p <<
 
 
 	template <class T>
-	void SortContour(std::set< typename TTriangulatedSurface<T>::Edge* >& border,
-									 typename TTriangulatedSurface<T>::Point* point1, typename TTriangulatedSurface<T>::Point* point2,
- 									 std::list< typename TTriangulatedSurface<T>::Point* >& contour, const T& dummy)
+	void SortContour
+		(std::set< typename TTriangulatedSurface<T>::Edge* >& border,
+		 typename TTriangulatedSurface<T>::Point* point1, typename TTriangulatedSurface<T>::Point* point2,
+ 		 std::list< typename TTriangulatedSurface<T>::Point* >& contour, const T& dummy)
 	{
 		std::set< TTriangulatedSurface<T>::Edge* > border_;
 		border_.insert(border.begin(),border.end());
-//	find the first point: the closest point to point1
+
+		//	find the first point: the closest point to point1
 		TTriangulatedSurface<T>::Edge* next_edge = *border.begin();
 		T dist = point1->p.getDistance(next_edge->point[0]->p);
 		TTriangulatedSurface<T>::Point* first = next_edge->point[0];
 		std::set< TTriangulatedSurface<T>::Edge* >::iterator b;
 		for (b = border_.begin(); b != border_.end(); b++)
+		{
+			if (Maths::isLess(point1->p.getDistance((*b)->point[0]->p),dist))
 			{
-				if (Maths::isLess(point1->p.getDistance((*b)->point[0]->p),dist))
-					{
-						dist = point1->p.getDistance((*b)->point[0]->p);
-						first = (*b)->point[0];
-					}
-				if (Maths::isLess(point1->p.getDistance((*b)->point[1]->p),dist))
-					{
-						dist = point1->p.getDistance((*b)->point[1]->p);
-						first = (*b)->point[1];
-					}
+				dist = point1->p.getDistance((*b)->point[0]->p);
+				first = (*b)->point[0];
 			}
+			if (Maths::isLess(point1->p.getDistance((*b)->point[1]->p),dist))
+			{
+				dist = point1->p.getDistance((*b)->point[1]->p);
+				first = (*b)->point[1];
+			}
+		}
 		contour.push_back(first);
-//	find the second point: the neighbour of the first wich is closest to point2
+
+		//	find the second point: the neighbour of the first wich is closest to point2
 		std::set< TTriangulatedSurface<T>::Point* > candidates;
 		std::list<TTriangulatedSurface<T>::Edge*>::iterator e;
 		for (e = first->edge.begin(); e != first->edge.end(); e++)
+		{
+			if (border.find(*e) != border.end())
 			{
-				if (border.find(*e) != border.end())
-					{
-						candidates.insert((*e)->point[0]);
-						candidates.insert((*e)->point[1]);
-					}
+				candidates.insert((*e)->point[0]);
+				candidates.insert((*e)->point[1]);
 			}
+		}
 		candidates.erase(first);
 		TTriangulatedSurface<T>::Point* second;
 		if (Maths::isLess(point2->p.getDistance((*candidates.begin())->p),
 											point2->p.getDistance((*(--candidates.end()))->p)) )
-			{
-				second = *candidates.begin();
-			}
-			else
-			{
-				second = *(--candidates.end());
-			}
+		{
+			second = *candidates.begin();
+		}
+		else
+		{
+			second = *(--candidates.end());
+		}
 		contour.push_back(second);
 		TTriangulatedSurface<T>::Edge* last_edge;
 		for (e = first->edge.begin(); e != first->edge.end(); e++)
+		{
+			if ( ((*e)->point[0]->p == second->p) ||
+				 ((*e)->point[1]->p == second->p)    )
 			{
-				if ( ((*e)->point[0]->p == second->p) ||
-						 ((*e)->point[1]->p == second->p)    )
-					{
-						last_edge = *e;
-						border_.erase(*e);
-					}
+				last_edge = *e;
+				border_.erase(*e);
 			}
-//	now complete the contour
+		}
+
+		//	now complete the contour
 		while (border_.size() > 0)
+		{
+			TTriangulatedSurface<T>::Point* last_point = contour.back();
+			list< TTriangulatedSurface<T>::Edge* > edge_candidates;
+			list< TTriangulatedSurface<T>::Edge* >::iterator e;
+			for (e = last_point->edge.begin(); e != last_point->edge.end(); e++)
 			{
-				TTriangulatedSurface<T>::Point* last_point = contour.back();
-				list< TTriangulatedSurface<T>::Edge* > edge_candidates;
-				list< TTriangulatedSurface<T>::Edge* >::iterator e;
-				for (e = last_point->edge.begin(); e != last_point->edge.end(); e++)
-					{
-						if (border.find(*e) != border.end())
-							{
-								edge_candidates.push_back(*e);
-							}
-					}
-				edge_candidates.remove(last_edge);
-				next_edge = *edge_candidates.begin();
-				if (next_edge->point[0]->p == last_point->p)
-					{
-						contour.push_back(next_edge->point[1]);
-					}
-					else
-					{
-						contour.push_back(next_edge->point[0]);
-					}
-				border_.erase(next_edge);
-				last_edge = next_edge;
+				if (border.find(*e) != border.end())
+				{
+					edge_candidates.push_back(*e);
+				}
 			}
+			edge_candidates.remove(last_edge);
+			next_edge = *edge_candidates.begin();
+			if (next_edge->point[0]->p == last_point->p)
+			{
+				contour.push_back(next_edge->point[1]);
+			}
+			else
+			{
+				contour.push_back(next_edge->point[0]);
+			}
+			border_.erase(next_edge);
+			last_edge = next_edge;
+		}
 		TTriangulatedSurface<T>::Point* last = *contour.begin();
 		contour.remove(last);
 		contour.push_front(last);
 	}
 
-
 	template <class T>
-	TTriangulatedSurface<T>::Point* GetNext
-		(std::list< typename TTriangulatedSurface<T>::Point* >::iterator& in,
-		 std::list< typename TTriangulatedSurface<T>::Point* >::iterator& out,
-		 std::list< typename TTriangulatedSurface<T>::Point* >& contour_in,
-		 std::list< typename TTriangulatedSurface<T>::Point* >& contour_out,
-		 const T& dummy) // BAUSTELLE: warum braucht man dummy?
+	typename TTriangulatedSurface<T>::Point* GetNext
+		(typename std::list<typename TTriangulatedSurface<T>::Point* >::iterator& in,
+		 typename std::list<typename TTriangulatedSurface<T>::Point* >::iterator& out,
+		 std::list<typename TTriangulatedSurface<T>::Point* >& contour_in,
+		 std::list<typename TTriangulatedSurface<T>::Point* >& contour_out)
 	{
 		if (in == contour_in.end())
-			{
-				out++;
-				return *out;
-			}
+		{
+			out++;
+			return *out;
+		}
 		if (out == contour_out.end())
-			{
-				in++;
-				return *in;
-			}
+		{
+			in++;
+			return *in;
+		}
 		list< TTriangulatedSurface<T>::Point* >::iterator next = out;
 		next++;
 		TTriangulatedSurface<T>::Point* third = *next;
 		list< TTriangulatedSurface<T>::Point* > test_points;
 		if (out == contour_out.begin())
-			{
-				test_points.push_back(contour_out.back());
-			}
-			else
-			{
-				list< TTriangulatedSurface<T>::Point* >::iterator pre = out;
-				pre--;
-				test_points.push_back(*pre);
-			}
+		{
+			test_points.push_back(contour_out.back());
+		}
+		else
+		{
+			list< TTriangulatedSurface<T>::Point* >::iterator pre = out;
+			pre--;
+			test_points.push_back(*pre);
+		}
 		if (next == --contour_out.end())
-			{
-				test_points.push_back(contour_out.front());
-			}
-			else
-			{
-				list< TTriangulatedSurface<T>::Point* >::iterator post = next;
-				post++;
-				test_points.push_back(*post);
-			}
+		{
+			test_points.push_back(contour_out.front());
+		}
+		else
+		{
+			list< TTriangulatedSurface<T>::Point* >::iterator post = next;
+			post++;
+			test_points.push_back(*post);
+		}
 		list< TTriangulatedSurface<T>::Edge* >::iterator e;
 		for (e = (*in)->edge.begin(); e != (*in)->edge.end(); e++)
-			{
-				test_points.push_back((*e)->point[0]);
-				test_points.push_back((*e)->point[1]);
-			}
+		{
+			test_points.push_back((*e)->point[0]);
+			test_points.push_back((*e)->point[1]);
+		}
 		test_points.remove(*in);
 		TVector3<T> norm = ((*in)->p-(*out)->p)%(third->p-(*out)->p);
 		T test_value = norm*(*out)->p;
 		int counter = 0;
 		list< TTriangulatedSurface<T>::Point* >::iterator l;
 		for (l = test_points.begin(); l != test_points.end(); l++)
-			{
-				if (Maths::isLess(norm*(*l)->p,test_value))
-					{
-						counter++;
-					}
-			}
+		{
+			if (Maths::isLess(norm*(*l)->p,test_value))
+				{
+					counter++;
+				}
+		}
 		if ((counter == 0) || (counter == test_points.size()))
-			{
-				out++;
-				return third;
-			}
-			else
-			{
-				in++;
-				return *in;
-			}
+		{
+			out++;
+			return third;
+		}
+		else
+		{
+			in++;
+			return *in;
+		}
 	}
 
 
