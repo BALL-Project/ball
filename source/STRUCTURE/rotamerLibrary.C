@@ -1,4 +1,4 @@
-// $Id: rotamerLibrary.C,v 1.8 1999/09/17 13:47:09 oliver Exp $
+// $Id: rotamerLibrary.C,v 1.9 1999/10/01 12:53:19 oliver Exp $
 
 #include <BALL/STRUCTURE/rotamerLibrary.h>
 #include <BALL/SYSTEM/file.h>
@@ -114,12 +114,16 @@ namespace BALL
 		variants_.clear();
 		valid_ = false;
 
-		File f(filename);
+		// try to find the rotamer library file
+		Path path;
+		String absolute_filename = path.find(filename);
+
+		File f(absolute_filename);
 		
 		// abort if the file could not be opened
 		if (!f)
 		{	
-			return false;
+			throw Exception::FileNotFound(__FILE__, __LINE__, filename);
 		}
 
 		// read the file into a vector of Strings to reparse
