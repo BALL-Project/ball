@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericControl.C,v 1.6 2003/11/23 17:50:33 amoll Exp $
+// $Id: genericControl.C,v 1.7 2003/12/01 18:03:26 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/genericControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -43,7 +43,8 @@ GenericControl::~GenericControl()
   #endif 
 }
 
-	GenericControl::ItemList GenericControl::getSelectedItems()
+
+GenericControl::ItemList GenericControl::getSelectedItems()
 	throw()
 {
 	ItemList selected;
