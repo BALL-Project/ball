@@ -1,4 +1,4 @@
-// $Id: limits.h,v 1.2 2000/01/10 15:50:53 oliver Exp $
+// $Id: limits.h,v 1.3 2000/01/24 20:29:18 oliver Exp $
 
 #ifndef BALL_COMMON_LIMITS_H
 #define BALL_COMMON_LIMITS_H
@@ -7,8 +7,10 @@
 #	include <limits>
 #else
 #	include <limits.h>
+#	ifdef BALL_INCLUDE_FLOAT_H
+#		include <float.h>
+#	endif
 #endif
-
 
 namespace BALL 
 {

@@ -91,6 +91,9 @@
 // Define if numeric_limits is defined in <limits>
 #undef HAVE_NUMERIC_LIMITS
 
+// Define whether float.h has to be included along with limits.h
+#undef BALL_INCLUDE_FLOAT_H 
+
 // Define an unsigned integer type that has the same length as (void*)
 #define BALL_POINTERSIZE_INT int
 

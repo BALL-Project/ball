@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.44 2000/01/24 18:41:28 oliver Exp $
+dnl    $Id: configure.in,v 1.45 2000/01/24 20:29:22 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -1069,6 +1069,7 @@ dnl 	check for standard C headers
 dnl 	and how to run the preprocessor
 AC_HEADER_STDC
 
+dnl
 dnl		check for limits header (class numeric limits, to be precise)
 dnl
 dnl
@@ -1086,8 +1087,54 @@ if ${CXX} /tmp/$$.conftest.c 2>/dev/null >/dev/null; then
 	AC_DEFINE(HAVE_NUMERIC_LIMITS)
 else
 	AC_MSG_RESULT(not available)
+
+	dnl
+	dnl	 we didn't find a numeric limits class, so we implement
+	dnl  it by ourselves. Try to figure out whether we only need 
+	dnl  limts.h or also float.h (sometimes FLT_MIN seems to be missing)
+	dnl
+	AC_MSG_CHECKING(whether float.h has to be included)
+	AC_TRY_COMPILE(
+		[
+			#include <limits.h>
+		],
+		[
+			float a = FLT_MAX;
+			float b = FLT_MIN;
+			float c = DBL_MAX;
+			float d = DBL_MIN;
+		],
+		BALL_INCLUDE_FLOAT_H=false
+	)
+	if test "${BALL_INCLUDE_FLOAT_H}" != false ; then
+		AC_TRY_COMPILE(
+			[
+				#include <float.h>
+			],
+			[
+				float a = FLT_MAX;
+				float b = FLT_MIN;
+				float c = DBL_MAX;
+				float d = DBL_MIN;
+			],
+			BALL_INCLUDE_FLOAT_H=true
+		)
+	fi
+	if test "${BALL_INCLUDE_FLOAT_H+set}" != set ; then
+		AC_MSG_RESULT()
+		AC_MSG_RESULT(limits.h seems to be corrupt or float.h is missing!)
+		AC_MSG_RESULT()
+	else 
+		if test "${BALL_INCLUDE_FLOAT_H}" = true ; then
+			AC_MSG_RESULT(no)
+		else 
+			AC_MSG_RESULT(yes)
+			AC_DEFINE(BALL_INCLUDE_FLOAT_H)	
+		fi
+	fi 
 fi
 rm /tmp/$$.conftest.c a.out 2>/dev/null
+
 
 dnl
 dnl		check for template arguments needed for friends of template
