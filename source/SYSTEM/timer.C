@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: timer.C,v 1.12 2002/12/20 14:01:46 oliver Exp $
+// $Id: timer.C,v 1.13 2002/12/20 16:57:28 oliver Exp $
 
 #include <BALL/SYSTEM/timer.h>
 
@@ -67,8 +67,16 @@ namespace BALL
 	}
 
 	Timer::Timer(Timer& timer)
+		:	is_running_(timer.is_running_),
+			last_secs_(timer.last_secs_),
+			last_usecs_(timer.last_usecs_),
+			last_user_time_(timer.last_user_time_),
+			last_system_time_(timer.last_system_time_),
+			current_secs_(timer.current_secs_),
+			current_usecs_(timer.current_usecs_),
+			current_user_time_(timer.current_user_time_),
+			current_system_time_(timer.current_system_time_)
 	{
-		*this = timer;
 	}
 
 	Timer::~Timer()
@@ -87,9 +95,11 @@ namespace BALL
 	bool Timer::start()
 	{
 		if (is_running_ == true)
-		{ /* tried to start a running timer */
+		{ 
+			/* tried to start a running timer */
 			return false;
 		}
+
 		#ifdef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
 			LARGE_INTEGER tms;
 			FILETIME kt,ut,ct,et;
@@ -307,7 +317,7 @@ namespace BALL
 	/************************************************************************/
 	double Timer::getSystemTime() const
 	{
-		double temp_value;
+		double temp_value = 0.0;
 
 		#ifdef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
 			//struct tms tms_buffer;
@@ -333,15 +343,14 @@ namespace BALL
 				ULARGE_INTEGER user_time; 
 				user_time.HighPart = ut.dwHighDateTime;
 				user_time.LowPart = ut.dwLowDateTime;
-				temp_value = (double)(current_system_time_ + kernel_time.QuadPart / 10 - last_system_time_);
+				temp_value = (double)((double)current_system_time_ + kernel_time.QuadPart / 10.0 - (double)last_system_time_);
 			#endif
 		}
 
 		/* convert from clock ticks to seconds using the */
 		/* cpu-speed value obtained by the constructor   */
 		#ifndef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
-			//return (temp_value / (double)cpu_speed_);
-			return (double)(temp_value/1000000.0);
+			return (double)(temp_value / 1000000.0);
 		#else 
 			return 0.0;
 		#endif

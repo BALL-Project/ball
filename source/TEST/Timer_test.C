@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Timer_test.C,v 1.16 2002/12/20 14:01:47 oliver Exp $
+// $Id: Timer_test.C,v 1.17 2002/12/20 16:57:29 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 #include <unistd.h>
@@ -15,7 +15,7 @@
 #endif
 ///////////////////////////
 
-START_TEST(Timer, "$Id: Timer_test.C,v 1.16 2002/12/20 14:01:47 oliver Exp $")
+START_TEST(Timer, "$Id: Timer_test.C,v 1.17 2002/12/20 16:57:29 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -192,7 +192,7 @@ CHECK(Timer::Timer& operator = (const Timer& timer))
 
 	double diff = t1.getClockTime() - t2.getClockTime();
 	STATUS("t1.getClockTime() = " << t1.getClockTime() << " / diff = " << diff)
-	TEST_EQUAL(diff, 0.0)	
+	TEST_REAL_EQUAL(diff, 0.0)	
 
 	diff = t1.getUserTime() - t2.getUserTime();
 	STATUS("t1.getUserTime() = " << t1.getUserTime() << " / diff = " << diff)

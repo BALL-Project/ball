@@ -6,6 +6,7 @@ EXECUTABLES = \
 	KernelCreation_bench\
 	KernelClone_bench\
 	KernelIteration_bench\
+	FragmentDB_bench\
 	AmberFF_bench\
 	CharmmFF_bench\
 	PDB_bench\

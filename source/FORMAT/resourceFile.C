@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: resourceFile.C,v 1.26 2002/12/20 16:33:48 oliver Exp $
+// $Id: resourceFile.C,v 1.27 2002/12/20 16:57:27 oliver Exp $
 
 #include <BALL/FORMAT/resourceFile.h>
 
@@ -668,9 +668,6 @@ namespace BALL
 
 	bool ResourceFile::open(const String& name)
 	{
-		// DEBUG
-		std::cout << "opening resource file " << name << std::endl;
-		// /DEBUG
 		if (File::open(name.c_str(), File::IN) && good())
 		{
 			*this >> *this;
