@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBondModelBaseProcessor.C,v 1.8 2004/06/07 10:16:58 amoll Exp $
+// $Id: atomBondModelBaseProcessor.C,v 1.9 2004/06/07 13:27:31 amoll Exp $
 
 #include <BALL/VIEW/MODELS/atomBondModelBaseProcessor.h>
 #include <BALL/KERNEL/forEach.h>
@@ -139,6 +139,7 @@ namespace BALL
 			throw()
 		{
 			buildBondModels_();
+			return true;
 		}
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS

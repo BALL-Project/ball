@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.71 2004/06/07 12:58:44 amoll Exp $
+// $Id: scene.C,v 1.72 2004/06/07 13:30:29 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -205,7 +205,6 @@ namespace BALL
 				makeCurrent();
 				RepresentationMessage* rm = RTTI::castTo<RepresentationMessage>(*message);
 				Representation* rep = rm->getRepresentation();
-Log.error() << "#~~#   4 " << rm << " " << rm->getType()   << __FILE__ << "  " << __LINE__<< std::endl;
 				switch (rm->getType())
 				{
 					case RepresentationMessage::ADD:
@@ -235,7 +234,6 @@ Log.error() << "#~~#   4 " << rm << " " << rm->getType()   << __FILE__ << "  " <
 
 			SceneMessage *scene_message = RTTI::castTo<SceneMessage>(*message);
 
-Log.error() << "#~~#   3 "  << scene_message->getType()  << __FILE__ << "  " << __LINE__<< std::endl;
 			switch (scene_message->getType())
 			{
 				case SceneMessage::REDRAW:
