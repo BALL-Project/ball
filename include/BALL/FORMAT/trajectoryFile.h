@@ -1,4 +1,4 @@
-// $Id: trajectoryFile.h,v 1.4 2001/02/28 01:17:13 amoll Exp $
+// $Id: trajectoryFile.h,v 1.5 2001/03/11 19:26:34 anker Exp $
 
 #ifndef BALL_FORMAT_TRAJECTORYFILE_H
 #define BALL_FORMAT_TRAJECTORYFILE_H
@@ -9,6 +9,10 @@
 
 #ifndef BALL_SYSTEM_FILE_H
 #	include <BALL/SYSTEM/file.h>
+#endif
+
+#ifndef BALL_MOLMEC_COMMON_SNAPSHOT_H
+#	include <BALL/MOLMEC/COMMON/snapShot.h>
 #endif
 
 namespace BALL
@@ -75,6 +79,16 @@ namespace BALL
 			throw();
 
 		//@}
+		/// @name Accessors
+		//@{
+
+		/** get the number of snapshots stored in this instance
+				@return the number of snapshots of this instance
+		*/
+		Size getNumberOfSnapShots() const
+			throw();
+
+		//@}
 		/// @name Public methods for file handling
 		//@{
 
@@ -82,13 +96,6 @@ namespace BALL
 				return true if the header could be read successfully, false ow.
 		*/
 		virtual bool readHeader()
-			throw();
-
-		/** Update the internal header with information from the SnapShotManager
-				@param manager the snapshot manager from which data will be written
-				@return true, if the update was successful, false ow.
-		*/
-		virtual bool updateHeader(const SnapShotManager& manager)
 			throw();
 
 		/** Write a header.
@@ -118,6 +125,29 @@ namespace BALL
 		virtual bool append(const SnapShot& snapshot)
 			throw();
 
+		/** Read the next SnapShot from the file.
+				@param snapshot a buffer for result delivery
+				@return {\tt true} if a snapshot could be read, {\tt false} ow.
+		*/
+		virtual bool read(SnapShot& snapshot)
+			throw();
+
+		/** Write several SnapShots to disk.
+				@param buffer a vector of snapshots
+				@return true, if flushing was successful, false ow.
+		*/
+		virtual bool flushToDisk(const ::std::vector<SnapShot> buffer)
+			throw();
+		//@}
+
+		protected:
+
+		//_ @name Protected Members
+		//@{
+
+		//_ The number of snapshots stored in that file
+		Size number_of_snapshots_;
+		
 		//@}
 		
 	};
