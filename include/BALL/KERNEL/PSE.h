@@ -1,4 +1,4 @@
-// $Id: PSE.h,v 1.5 2000/01/17 13:10:37 oliver Exp $
+// $Id: PSE.h,v 1.6 2000/02/06 19:41:54 oliver Exp $
 
 #ifndef BALL_KERNEL_PSE_H
 #define BALL_KERNEL_PSE_H
@@ -345,16 +345,6 @@ namespace BALL
 
 			//@}
 
-
-			/**@name	Debugging and Diagnostics
-			*/
-			//@{
-
-			/**
-			*/
-			static const char *getErrorMessage(ErrorCode error_code);
-
-			//@}
 
 			/**@name	Inspectors and Mutators
 			*/
