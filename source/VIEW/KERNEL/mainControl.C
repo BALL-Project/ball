@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.111 2004/10/07 15:12:04 amoll Exp $
+// $Id: mainControl.C,v 1.112 2004/10/07 15:12:28 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1681,7 +1681,6 @@ namespace BALL
 
 		void MainControl::quit()
 		{
-//   			aboutToExit();
 			QApplication::exit();
 		}
 

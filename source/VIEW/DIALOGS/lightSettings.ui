@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>LightSettingsData</class>
 <widget class="QWidget">
     <property name="name">
@@ -350,186 +350,6 @@
             </property>
         </widget>
     </widget>
-    <widget class="QLayoutWidget">
-        <property name="name">
-            <cstring>layout1</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>155</x>
-                <y>168</y>
-                <width>283</width>
-                <height>28</height>
-            </rect>
-        </property>
-        <hbox>
-            <property name="name">
-                <cstring>unnamed</cstring>
-            </property>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel1</cstring>
-                </property>
-                <property name="sizePolicy">
-                    <sizepolicy>
-                        <hsizetype>7</hsizetype>
-                        <vsizetype>5</vsizetype>
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                    </sizepolicy>
-                </property>
-                <property name="margin">
-                    <number>5</number>
-                </property>
-                <property name="text">
-                    <string>Intensity</string>
-                </property>
-                <property name="alignment">
-                    <set>AlignVCenter|AlignRight</set>
-                </property>
-            </widget>
-            <widget class="QSlider">
-                <property name="name">
-                    <cstring>intensity</cstring>
-                </property>
-                <property name="sizePolicy">
-                    <sizepolicy>
-                        <hsizetype>0</hsizetype>
-                        <vsizetype>0</vsizetype>
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                    </sizepolicy>
-                </property>
-                <property name="minimumSize">
-                    <size>
-                        <width>100</width>
-                        <height>0</height>
-                    </size>
-                </property>
-                <property name="maxValue">
-                    <number>100</number>
-                </property>
-                <property name="orientation">
-                    <enum>Horizontal</enum>
-                </property>
-                <property name="tickmarks">
-                    <enum>Above</enum>
-                </property>
-                <property name="tickInterval">
-                    <number>50</number>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>intensity_label</cstring>
-                </property>
-                <property name="sizePolicy">
-                    <sizepolicy>
-                        <hsizetype>0</hsizetype>
-                        <vsizetype>5</vsizetype>
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                    </sizepolicy>
-                </property>
-                <property name="minimumSize">
-                    <size>
-                        <width>70</width>
-                        <height>0</height>
-                    </size>
-                </property>
-                <property name="font">
-                    <font>
-                        <bold>1</bold>
-                    </font>
-                </property>
-                <property name="frameShape">
-                    <enum>ToolBarPanel</enum>
-                </property>
-                <property name="text">
-                    <string>0</string>
-                </property>
-                <property name="alignment">
-                    <set>AlignCenter</set>
-                </property>
-            </widget>
-        </hbox>
-    </widget>
-    <widget class="QLayoutWidget">
-        <property name="name">
-            <cstring>layout2</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>155</x>
-                <y>207</y>
-                <width>283</width>
-                <height>34</height>
-            </rect>
-        </property>
-        <hbox>
-            <property name="name">
-                <cstring>unnamed</cstring>
-            </property>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel1_2</cstring>
-                </property>
-                <property name="margin">
-                    <number>5</number>
-                </property>
-                <property name="text">
-                    <string>Color</string>
-                </property>
-                <property name="alignment">
-                    <set>AlignVCenter|AlignRight</set>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>color_sample</cstring>
-                </property>
-                <property name="paletteBackgroundColor">
-                    <color>
-                        <red>85</red>
-                        <green>255</green>
-                        <blue>255</blue>
-                    </color>
-                </property>
-                <property name="frameShape">
-                    <enum>WinPanel</enum>
-                </property>
-                <property name="text">
-                    <string></string>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>color of the light</string>
-                </property>
-            </widget>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>color_button</cstring>
-                </property>
-                <property name="minimumSize">
-                    <size>
-                        <width>50</width>
-                        <height>30</height>
-                    </size>
-                </property>
-                <property name="maximumSize">
-                    <size>
-                        <width>70</width>
-                        <height>32767</height>
-                    </size>
-                </property>
-                <property name="text">
-                    <string>Edit</string>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>open a color dialog</string>
-                </property>
-            </widget>
-        </hbox>
-    </widget>
     <widget class="QPushButton">
         <property name="name">
             <cstring>remove_lights_button</cstring>
@@ -584,6 +404,198 @@
         </property>
         <property name="toolTip" stdset="0">
             <string>create a new light</string>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>textLabel1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>156</x>
+                <y>169</y>
+                <width>99</width>
+                <height>26</height>
+            </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>7</hsizetype>
+                <vsizetype>5</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
+        </property>
+        <property name="margin">
+            <number>5</number>
+        </property>
+        <property name="text">
+            <string>Intensity</string>
+        </property>
+        <property name="alignment">
+            <set>AlignVCenter|AlignRight</set>
+        </property>
+    </widget>
+    <widget class="QSlider">
+        <property name="name">
+            <cstring>intensity</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>261</x>
+                <y>171</y>
+                <width>100</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>0</hsizetype>
+                <vsizetype>0</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>100</width>
+                <height>0</height>
+            </size>
+        </property>
+        <property name="maxValue">
+            <number>100</number>
+        </property>
+        <property name="orientation">
+            <enum>Horizontal</enum>
+        </property>
+        <property name="tickmarks">
+            <enum>Above</enum>
+        </property>
+        <property name="tickInterval">
+            <number>50</number>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>intensity_label</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>367</x>
+                <y>169</y>
+                <width>70</width>
+                <height>26</height>
+            </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>0</hsizetype>
+                <vsizetype>5</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>70</width>
+                <height>0</height>
+            </size>
+        </property>
+        <property name="font">
+            <font>
+                <bold>1</bold>
+            </font>
+        </property>
+        <property name="frameShape">
+            <enum>ToolBarPanel</enum>
+        </property>
+        <property name="text">
+            <string>0</string>
+        </property>
+        <property name="alignment">
+            <set>AlignCenter</set>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>textLabel1_2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>156</x>
+                <y>208</y>
+                <width>100</width>
+                <height>32</height>
+            </rect>
+        </property>
+        <property name="margin">
+            <number>5</number>
+        </property>
+        <property name="text">
+            <string>Color</string>
+        </property>
+        <property name="alignment">
+            <set>AlignVCenter|AlignRight</set>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>color_sample</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>262</x>
+                <y>208</y>
+                <width>99</width>
+                <height>32</height>
+            </rect>
+        </property>
+        <property name="paletteBackgroundColor">
+            <color>
+                <red>85</red>
+                <green>255</green>
+                <blue>255</blue>
+            </color>
+        </property>
+        <property name="frameShape">
+            <enum>WinPanel</enum>
+        </property>
+        <property name="text">
+            <string></string>
+        </property>
+        <property name="toolTip" stdset="0">
+            <string>color of the light</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>color_button</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>367</x>
+                <y>209</y>
+                <width>70</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>50</width>
+                <height>30</height>
+            </size>
+        </property>
+        <property name="maximumSize">
+            <size>
+                <width>70</width>
+                <height>32767</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>Edit</string>
+        </property>
+        <property name="toolTip" stdset="0">
+            <string>open a color dialog</string>
         </property>
     </widget>
 </widget>

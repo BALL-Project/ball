@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.71 2004/09/16 11:23:54 amoll Exp $
+// $Id: molecularControl.C,v 1.72 2004/10/07 15:12:05 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1138,6 +1138,7 @@ Size MolecularControl::applySelector()
 	getMainControl()->sendMessage(*nm);
 
 	setStatusbarText(String("Selected " + String(s.getNumberOfSelectedAtoms()) + " Atoms."));
+	listview->setFocus();
 
 	return nr_of_atoms;
 }
