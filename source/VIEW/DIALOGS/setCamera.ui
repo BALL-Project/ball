@@ -143,7 +143,7 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>10</x>
+                <x>11</x>
                 <y>74</y>
                 <width>331</width>
                 <height>35</height>
@@ -152,6 +152,9 @@
         <hbox>
             <property name="name">
                 <cstring>unnamed</cstring>
+            </property>
+            <property name="margin">
+                <number>0</number>
             </property>
             <widget class="QPushButton">
                 <property name="name">
@@ -164,6 +167,12 @@
                         <horstretch>0</horstretch>
                         <verstretch>0</verstretch>
                     </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>0</width>
+                        <height>30</height>
+                    </size>
                 </property>
                 <property name="maximumSize">
                     <size>
@@ -189,6 +198,12 @@
                         <horstretch>0</horstretch>
                         <verstretch>0</verstretch>
                     </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>0</width>
+                        <height>30</height>
+                    </size>
                 </property>
                 <property name="maximumSize">
                     <size>
