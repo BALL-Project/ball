@@ -1,4 +1,4 @@
-// $Id: modularWidget.C,v 1.5 2001/05/13 14:26:25 hekl Exp $
+// $Id: modularWidget.C,v 1.6 2001/06/07 01:34:12 amoll Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
 
@@ -33,8 +33,8 @@ namespace BALL
 			throw()
 		{
       #ifdef BALL_VIEW_DEBUG
-			  cout << "Destructing object " << (void *)this 
-						 << " of class " << RTTI::getName<ModularWidget>() << endl;
+			  Log.info() << "Destructing object " << (void *)this 
+									 << " of class " << RTTI::getName<ModularWidget>() << endl;
       #endif 
 				
 			destroy();
@@ -54,7 +54,7 @@ namespace BALL
 			throw()
 		{
       #ifdef BALL_VIEW_DEBUG
-  			cerr << "registering ModularWidget at " << mwidget << endl;
+  			Log.info() << "registering ModularWidget at " << mwidget << endl;
 			#endif
 
 			QObject* object = dynamic_cast<QObject*>(mwidget);
@@ -66,23 +66,23 @@ namespace BALL
 					mc->addModularWidget(mwidget);
 
           #ifdef BALL_VIEW_DEBUG
-						cerr << "ModularWidget::registered: " <<mwidget << endl;
+						Log.info() << "ModularWidget::registered: " <<mwidget << endl;
 					#endif
 				}
 				else 
 				{
-					cerr << "ModularWidget::ModularWidget: widget is not in a MainControl object!" << endl;
+					Log.error() << "ModularWidget::ModularWidget: widget is not in a MainControl object!" << endl;
 				}
 			}
 		}
 
 		void ModularWidget::initializeWidget(MainControl& /* main_control */)
-			throw()
+		//	throw()
 		{
 		}
 		
 		void ModularWidget::finalizeWidget(MainControl& /* main_control */)
-			throw()
+		//	throw()
 		{
 		}
 		
