@@ -1,4 +1,4 @@
-// $Id: poissonBoltzmann.C,v 1.18 2000/07/03 22:37:02 amoll Exp $ 
+// $Id: poissonBoltzmann.C,v 1.19 2000/07/05 22:27:17 oliver Exp $ 
 // FDPB: Finite Difference Poisson Solver
 
 #include <BALL/SOLVATION/poissonBoltzmann.h>
@@ -218,7 +218,7 @@ namespace BALL
 
 		if (verbosity > 1)
 		{
-			Log.info(2) << "creating array of charged atoms..." << endl;
+			Log.info(2) << "FDPB: creating array of charged atoms..." << endl;
 		}
 					
 		// create a new atom_array
@@ -242,7 +242,7 @@ namespace BALL
 		step_timer.stop();
 		if (print_timing && (verbosity > 1))
 		{
-			Log.info(2) << "setupAtomArray: " << step_timer.getCPUTime() << endl;
+			Log.info(2) << "FDPB: setupAtomArray: " << step_timer.getCPUTime() << endl;
 		}
 			
 		return true;
@@ -348,7 +348,7 @@ namespace BALL
 			{
 				if (verbosity > 5)
 				{
-					Log.info(6) << "creating bounding box..." << endl;
+					Log.info(6) << "FDPB: creating bounding box..." << endl;
 				}
 
 				BoundingBoxProcessor		box_processor;
@@ -365,7 +365,7 @@ namespace BALL
 
 			if (verbosity > 70)
 			{
-				Log.info(70) << "grid border: " << box_distance << endl;
+				Log.info(70) << "FDPB::setup: grid border: " << box_distance << endl;
 			}
 
 			closeness.set(box_distance, box_distance, box_distance);
@@ -393,7 +393,7 @@ namespace BALL
 
 		if (verbosity > 1)
 		{
-			Log.info(2) << "grid:" << lower_ << "/" << upper_ << endl;
+			Log.info(2) << "FDPB::setup: grid:" << lower_ << "/" << upper_ << endl;
 		}
 
 		if (use_offset_)
@@ -454,7 +454,9 @@ namespace BALL
 		if ((eps_grid->getMaxXIndex() != eps_grid->getMaxYIndex()) 
 				|| (eps_grid->getMaxXIndex() != eps_grid->getMaxZIndex()))
 		{
-			Log.error() << "grid is not cubic - please check dimensions!" << endl;
+			Log.error() << "FDPB::setupEpsGrid: grid is not cubic (" << eps_grid->getMaxXIndex() 
+									<< "x" << eps_grid->getMaxYIndex()
+									<< "x" << eps_grid->getMaxZIndex() << ") - please check dimensions!" << endl;
 			return false;
 		}		
 					
