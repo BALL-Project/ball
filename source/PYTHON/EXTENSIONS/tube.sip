@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: tube.sip,v 1.3 2003/11/24 23:37:04 amoll Exp $
+// $Id: tube.sip,v 1.4 2003/11/25 00:02:00 amoll Exp $
 //
 
 class Tube 
@@ -16,7 +16,7 @@ class Tube
   public:
 //  void dump(std::ostream& s = std::cout, Size depth = 0) const throw();
 //  const Tube& operator = (const Tube& tube) throw();
-  Real getRadius() const throw();
+  float getRadius() const throw();
   Tube() throw();
   Tube(const Tube&) throw();
   bool isValid() const throw();
@@ -24,7 +24,7 @@ class Tube
   float getSquareLength() const throw();
   void clear() throw();
   void set(const Tube&) throw();
-  void setRadius(Real) throw();
+  void setRadius(float) throw();
   void swap(Tube&) throw();
   ~Tube() throw();
 };
