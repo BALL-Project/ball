@@ -1,4 +1,4 @@
-// $Id: string.C,v 1.34 2000/12/17 17:10:39 amoll Exp $
+// $Id: string.C,v 1.35 2001/05/10 21:13:04 oliver Exp $
 
 #include <BALL/DATATYPE/string.h>
 #include <BALL/COMMON/limits.h>
@@ -338,15 +338,16 @@ namespace BALL
 	bool String::toBool() const
 		throw()
 	{
-		Size index = (Size)find_first_not_of(CHARACTER_CLASS__WHITESPACE);
+		string::size_type str_index = find_first_not_of(CHARACTER_CLASS__WHITESPACE);
 		
 		if (size() == 0)
 		{
 			return true;
 		}
 
-		if (index != (Size)string::npos)
+		if (str_index != string::npos)
 		{
+			Size index = (Index)str_index;
 			if (!(c_str()[index] == '0' && (isWhitespace(c_str()[index + 1]) == true || c_str()[index + 1] == '\0'))
 					&& !(c_str()[index++] == 'f'
 					&& c_str()[index++] == 'a'
@@ -971,14 +972,14 @@ namespace BALL
 	String& String::trimLeft(const char* trimmed_chars)
 		throw()
 	{
-		if (trimmed_chars == 0)
+		if ((trimmed_chars == 0) || (size() == 0))
 		{
 			return *this;
 		}
 
-		Index index = (Index)find_first_not_of(trimmed_chars);
+		string::size_type index = find_first_not_of(trimmed_chars);
 		
-		if (index > 0)
+		if (index != string::npos)
 		{
 			// erase the whitespace characters on the left
 			erase(0, index);
@@ -1004,9 +1005,9 @@ namespace BALL
 			return *this;
 		}
 
-		Size index = (Size)find_last_not_of(trimmed_chars);
+		string::size_type index = find_last_not_of(trimmed_chars);
 		
-		if (index < (size() - 1))
+		if (index != string::npos)
 		{
 			// delete the whitespace characters on the right hand side
 			erase(index + 1);
@@ -1366,13 +1367,13 @@ namespace BALL
 	{
 		Size replaced_size = (Size)to_replace.size();
 
-		Index found = 0;
+		string::size_type found = 0;
 		if (to_replace != "")
 		{
-			found = (Index)find(to_replace);
+			found = find(to_replace);
 		}
 
-		if (found != (Index)EndPos)
+		if (found != string::npos)
 		{
 			replace(found, replaced_size, replacing);
 		}
