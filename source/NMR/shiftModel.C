@@ -1,4 +1,4 @@
-// $Id: shiftModel.C,v 1.9 2000/09/19 20:32:14 oliver Exp $
+// $Id: shiftModel.C,v 1.10 2000/09/20 11:14:28 oliver Exp $
 
 #include <BALL/NMR/shiftModel.h>
 #include <BALL/FORMAT/parameterSection.h>
@@ -229,9 +229,11 @@ namespace BALL
 			module = (ShiftModule*)(registered_modules_[type])();
 			if (module != 0)
 			{
-				// if we constructed a module, set its name and the parameters
+				// If we constructed a module, set its name and the parameters,
+				// then initialize the shift module.
 				module->setParameters(const_cast<Parameters&>(parameters_));
 				module->setName(name);
+				module->init();
 			}
 		}
 
