@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.125 2004/02/18 11:45:11 bender Exp $
+// $Id: mainframe.C,v 1.126 2004/02/18 16:07:15 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -128,8 +128,8 @@ namespace BALL
 		insertMenuEntry(MainControl::FILE_EXPORT, "POVRa&y scene", this, SLOT(exportPOVRay()), 
 										CTRL+Key_Y, MENU_EXPORT_POVRAYFILE);
 
-		insertMenuEntry(MainControl::FILE_EXPORT, "VRML", this, SLOT(exportVRML()), 
-										CTRL+Key_Y, MENU_EXPORT_VRMLFILE);
+// 		insertMenuEntry(MainControl::FILE_EXPORT, "VRML", this, SLOT(exportVRML()), 
+// 										CTRL+Key_Y, MENU_EXPORT_VRMLFILE);
 		// Display Menu
 		insertMenuEntry(MainControl::DISPLAY, "Toggle Fullscreen", this, SLOT(toggleFullScreen()),
 										ALT+Key_X, MENU_FULLSCREEN);
@@ -249,14 +249,6 @@ namespace BALL
 
 	void Mainframe::about()
 	{
-		/*
- 		if (geometric_control_->getSelection().size() == 0) return;
-		Representation* rep = *geometric_control_->getSelection().begin();
-		Mesh* mesh= (Mesh*) *rep->begin();
-		mesh->dump();
-		
-		return;
-		*/
 		// showing about dialog
 		AboutDialog about;
 		String version = String("(BALL ") +
