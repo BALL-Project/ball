@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.30 2003/12/15 14:25:53 amoll Exp $
+// $Id: scene.C,v 1.31 2003/12/17 15:07:49 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -376,9 +376,9 @@ void Scene::renderView_(RenderMode mode)
 void Scene::renderRepresentations_(RenderMode mode)
 	throw()
 {
-	// draw the representations
 	PrimitiveManager::RepresentationList::ConstIterator it;
 
+	// render all "normal" (non always front and non transparent models)
 	gl_renderer_.initSolid();
 	it = getMainControl()->getPrimitiveManager().getRepresentations().begin();
 	for(; it != getMainControl()->getPrimitiveManager().getRepresentations().end(); it++)
@@ -390,6 +390,7 @@ void Scene::renderRepresentations_(RenderMode mode)
 		}
 	}
 
+	// render all transparent models
 	gl_renderer_.initTransparent();
 	it = getMainControl()->getPrimitiveManager().getRepresentations().begin();
 	for(; it != getMainControl()->getPrimitiveManager().getRepresentations().end(); it++)
@@ -400,6 +401,7 @@ void Scene::renderRepresentations_(RenderMode mode)
 		}
 	}
 
+	// render all always front models
 	gl_renderer_.initSolid();
 	glDisable(GL_DEPTH_TEST);
 	it = getMainControl()->getPrimitiveManager().getRepresentations().begin();

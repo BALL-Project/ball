@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.102 2003/12/17 13:11:47 amoll Exp $
+// $Id: mainframe.C,v 1.103 2003/12/17 15:11:31 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -386,7 +386,7 @@ void Mainframe::computeIsoContourSurface()
 
 	Representation* rep = getPrimitiveManager().createRepresentation();
 	rep->insert(*mesh);
-	rep->setModelType(MODEL_CONTOUR_SURFACE); // Setting Representation type to Surface
+	rep->setModelType(MODEL_CONTOUR_SURFACE); 
 
 	RepresentationMessage* message = new RepresentationMessage(*rep, RepresentationMessage::ADD);
 	notify_(message);
