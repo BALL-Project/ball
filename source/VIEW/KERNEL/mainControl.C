@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.60 2004/02/10 13:17:08 amoll Exp $
+// $Id: mainControl.C,v 1.61 2004/02/10 15:35:35 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -199,9 +199,9 @@ QPopupMenu* MainControl::initPopupMenu(int ID)
 			case TOOLS:
 				menuBar()->insertItem("&Tools", menu, TOOLS, -1);
 				break;
-			case TOOLS_CREATE_GRID:
-				initPopupMenu(MainControl::TOOLS)->insertItem("&Create Grid", menu, TOOLS_CREATE_GRID);
-				break;
+// 			case TOOLS_CREATE_GRID:
+// 				initPopupMenu(MainControl::TOOLS)->insertItem("&Create Grid", menu, TOOLS_CREATE_GRID);
+// 				break;
 			case TOOLS_PYTHON:
 				initPopupMenu(MainControl::TOOLS)->insertItem("&Python", menu, TOOLS_PYTHON);
 				break;
@@ -1239,7 +1239,7 @@ void MainControl::stopSimulation()
 		simulation_thread_ = 0;
 	}
 
-	setStatusbarText("Simulation terminated.");
+	setStatusbarText("Calculation terminated.");
 	stop_simulation_ = false;
 	checkMenus();
 #endif
