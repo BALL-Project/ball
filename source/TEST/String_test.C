@@ -1,4 +1,4 @@
-// $Id: String_test.C,v 1.1 1999/08/26 08:02:36 oliver Exp $
+// $Id: String_test.C,v 1.2 1999/11/30 19:43:36 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -7,15 +7,12 @@
 #include <string.h>
 ///////////////////////////
 
-START_TEST(String,"$Id: String_test.C,v 1.1 1999/08/26 08:02:36 oliver Exp $")
+START_TEST(String,"$Id: String_test.C,v 1.2 1999/11/30 19:43:36 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
-///  insert tests for each member function here         
-///
 
 using namespace BALL;
-
 
 String* s;	
 CHECK(String::String())
@@ -151,15 +148,26 @@ delete s2;
 s2 = 0;
 TEST_EXCEPTION(Exception::IndexUnderflow, s2 = new String(0, "%s", "Halloh"))
 if (s2 != 0)
+{
 	delete s2;
+}
 s2 = 0;
 TEST_EXCEPTION(Exception::NullPointer, s2 = new String(15, (char*)0, "Halloh", 1.5, 1.2))
 if (s2 != 0)
+{
 	delete s2;
+}
 RESULT
 
 CHECK(String::String(strstream))
-//MISSING
+std::strstream instream;
+instream << "ABC" << std::ends << "DEF";
+s2 = new String(instream);
+TEST_EQUAL(*s2, "ABC")
+delete s2;
+s2 = new String(instream);
+TEST_EQUAL(*s2, "ABC")
+delete s2;
 RESULT
 
 CHECK(String::String(char, Size))
@@ -332,7 +340,15 @@ RESULT
 delete s2;
 
 CHECK(String::set(strstream&))
-//BAUSTELLE
+std::strstream instream;
+instream << "ABC" << std::ends << "DEF" << std::ends 
+	<< "GHI" << std::ends << "jkl" << std::ends << "mno" << std::ends;
+s2 = new String;
+s2->set(instream);
+TEST_EQUAL(*s2, "ABC")
+s2->set(instream);
+TEST_EQUAL(*s2, "ABC")
+delete s2;
 RESULT
 
 s2 = new String;
@@ -443,7 +459,15 @@ TEST_EQUAL(s4, "");
 RESULT
 
 CHECK(String::operator = (strstream&))
-// BAUSTELLE
+std::strstream instream;
+instream << "ABC" << std::ends << "DEF" << std::ends 
+	<< "GHI" << std::ends << "jkl" << std::ends << "mno" << std::ends;
+s2 = new String;
+*s2 = instream;
+TEST_EQUAL(*s2, "ABC")
+*s2 = instream;
+TEST_EQUAL(*s2, "ABC")
+delete s2;
 RESULT
 
 CHECK(String::operator = (char))
@@ -754,7 +778,7 @@ TEST_EQUAL(s4.getField(0), "a")
 RESULT
 
 CHECK(String::split(String[], Size, char*, Index))
-//BASUTELLE: argumente 3 und 4 checken!
+//BAUSTELLE: argumente 3 und 4 checken!
 String arr[10];
 s4 = "a b c d e f g";
 TEST_EQUAL(s4.split(arr, 10), 7)
@@ -1708,21 +1732,52 @@ TEST_EQUAL(('a' >= s5), true)
 RESULT
 
 CHECK(String::isValid())
-//BAUSTELLE
+s2 = new String;
+TEST_EQUAL(s2->isValid(), true)
 RESULT
 
 CHECK(String::dump(ostream&, unsigned long))
-//BAUSTELLE
+String tmp_filename;
+NEW_TMP_FILE(tmp_filename);
+std::ofstream dump_stream(tmp_filename.c_str(), std::ios::out);
+s2 = new String("abcdefghijklm");
+s2->dump(dump_stream, 0);
+dump_stream.close();
+TEST_FILE(tmp_filename.c_str(), "data/string_test_dump0.txt", false)
+
+dump_stream.open(tmp_filename.c_str(), std::ios::out);
+s2->dump(dump_stream, 4);
+dump_stream.close();
+TEST_FILE(tmp_filename.c_str(), "data/string_test_dump4.txt", false)
 RESULT
 
 CHECK(String::getline(istream&, char*))
-//BAUSTELLE
+String line;
+std::ifstream instream("data/string_test.txt");
+line.getline(instream);
+TEST_EQUAL(line, "ABC DEF")
+line.getline(instream);
+TEST_EQUAL(line, "GHI jkl")
+line.getline(instream);
+TEST_EQUAL(line, "mno")
 RESULT
 
 CHECK(String::getline(istream&, String&, char*))
-//BAUSTELLE
+std::ifstream test_stream("data/string_test.txt");
+if (!test_stream.good())
+{
+	throw Exception::FileNotFound(__FILE__, __LINE__, "data/string_test.txt");
+}
+String s;
+s.getline(test_stream);
+TEST_EQUAL(s, "ABC DEF")
+s.getline(test_stream);
+TEST_EQUAL(s, "GHI jkl")
+s.getline(test_stream);
+TEST_EQUAL(s, "mno")
+s.getline(test_stream);
+TEST_EQUAL(s, "")
 RESULT
-
 
 
 
@@ -1777,7 +1832,13 @@ delete sub2;
 RESULT
 
 CHECK(Substring::destroy())
-//BAUSTELLE
+String test_destroy("abcdefghij");
+Substring sub(test_destroy, 3, 3);
+TEST_EQUAL(sub.isBound(), true)
+TEST_EQUAL(sub.toString(), "def")
+sub.destroy();
+TEST_EQUAL(sub.isBound(), false)
+TEST_EQUAL(test_destroy, "abcghij")
 RESULT
 
 CHECK(Substring::operator String ())
