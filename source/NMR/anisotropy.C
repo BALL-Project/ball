@@ -1,4 +1,4 @@
-// $Id: anisotropy.C,v 1.4 2000/08/28 16:08:52 oliver Exp $
+// $Id: anisotropy.C,v 1.5 2000/09/08 07:13:24 oliver Exp $
 
 #include<BALL/NMR/anisotropy.h>
 
@@ -201,7 +201,7 @@ namespace BALL
 
 //apply Funktion
 
-	Processor::Result AnIsoShift::operator ()(Object & object)
+	Processor::Result AnIsoShift::operator () (Composite& composite)
 	{
 		// hier werden alle Effektorbindungen gesammelt( C=O ) und in eff_list_ gespeichert.
 		// hier werden alle Wasserstoffe in proton_list_ gespeichert.
@@ -209,13 +209,11 @@ namespace BALL
 		int anzahl, zaehler, n, o, n_zahl;
 		String residue_name;
 
-		if (RTTI::isKindOf < PDBAtom > (object))
+		if (RTTI::isKindOf < PDBAtom > (composite))
 		{
 			//cout  << endl << "Object is ProteinAtom";
 
-			patom_ = RTTI::castTo < PDBAtom > (object);
-			//cout  << endl << "    atom name : " << patom_->getName();
-			//cout  << endl << "    Element : " << (patom_->getElement()).getName();
+			patom_ = RTTI::castTo<PDBAtom>(composite);
 
 			// suche im Backbone
 

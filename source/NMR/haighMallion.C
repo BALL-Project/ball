@@ -1,4 +1,4 @@
-// $Id: haighMallion.C,v 1.2 2000/08/28 16:08:53 oliver Exp $
+// $Id: haighMallion.C,v 1.3 2000/09/08 07:13:24 oliver Exp $
 
 
 #include <BALL/NMR/haighMallion.h>
@@ -144,7 +144,7 @@ namespace
 			atom_iter;
 
 		int
-			zaehler, zaehler2, anzahl, vzaehler, hilf;
+			counter, counter2, anzahl, vcounter, hilf;
 		int
 			index, found;
 		float
@@ -173,84 +173,84 @@ namespace
 				{
 					if (residue_->getName () == "TRP")
 					{
-						zaehler = 0;
+						counter = 0;
 						anzahl = 2;
 						n_ = n1;
 						radius_ = radius1;
 					}
 					if (residue_->getName () == "PHE")
 					{
-						zaehler = 1;
+						counter = 1;
 						anzahl = 1;
 						n_ = n1;
 						radius_ = radius1;
 					}
 					if (residue_->getName () == "TYR")
 					{
-						zaehler = 2;
+						counter = 2;
 						anzahl = 1;
 						n_ = n1;
 						radius_ = radius1;
 					}
 					if (residue_->getName () == "HIS")
 					{
-						zaehler = 3;
+						counter = 3;
 						anzahl = 1;
 						n_ = n2;
 						radius_ = radius2;
 					}
-					vzaehler = 0;
+					vcounter = 0;
 					hilf = 0;
 					do
 					{
 						//Aufbau von _vector_feld
-						for (zaehler2 = hilf; zaehler2 < hilf + 6; zaehler2++)
+						for (counter2 = hilf; counter2 < hilf + 6; counter2++)
 						{
-							if (asrings_[zaehler][1 + zaehler2] == "NULL")
+							if (asrings_[counter][1 + counter2] == "NULL")
 								break;
 							found = 0;
 							for (atom_iter = residue_->beginAtom (); +atom_iter; ++atom_iter)
 							{
-								// cout <<endl<<"asrings_name:"<<asrings_[zaehler][1+zaehler2] <<"  atom_iter Name:"<<(*atom_iter).getName();
-								// cout <<"   vgl:"<<(asrings_[zaehler][1+zaehler2]==(*atom_iter).getName());
-								if (asrings_[zaehler][1 + zaehler2] == (*atom_iter).getName ())
+								// cout <<endl<<"asrings_name:"<<asrings_[counter][1+counter2] <<"  atom_iter Name:"<<(*atom_iter).getName();
+								// cout <<"   vgl:"<<(asrings_[counter][1+counter2]==(*atom_iter).getName());
+								if (asrings_[counter][1 + counter2] == (*atom_iter).getName ())
 								{
-									vector_feld_[vzaehler] = (*atom_iter).getPosition ();
-									vzaehler++;
+									vector_feld_[vcounter] = (*atom_iter).getPosition ();
+									vcounter++;
 									found = 1;
 								}
 								if (found)
 									break;
 							}
 						}
-						//cout <<endl <<"vzaehler : "<<vzaehler;
+						//cout <<endl <<"vcounter : "<<vcounter;
 
-						// _vector_feld ist bestimmt und vzaehler zeigt hinter letzten gueltigen vector
+						// _vector_feld ist bestimmt und vcounter zeigt hinter letzten gueltigen vector
 
 						// bestimme den Mittelpunkt
 
 						mittelpunkt_.set (0.0, 0.0, 0.0);
 
-						for (zaehler2 = 0; zaehler2 < vzaehler; zaehler2++)
-							mittelpunkt_ += vector_feld_[zaehler2];
-						mittelpunkt_ /= vzaehler;
+						for (counter2 = 0; counter2 < vcounter; counter2++)
+							mittelpunkt_ += vector_feld_[counter2];
+						mittelpunkt_ /= vcounter;
 
 						// bestimme den NormalenVektor der Ringebene
 
 						normal_.set (0.0, 0.0, 0.0);
 
-						for (zaehler2 = 0; zaehler2 < vzaehler; zaehler2++)
+						for (counter2 = 0; counter2 < vcounter; counter2++)
 						{
-							index = (zaehler2 + 0) % (vzaehler);
+							index = (counter2 + 0) % (vcounter);
 							links = vector_feld_[index];
-							index = (zaehler2 + 1) % (vzaehler);
+							index = (counter2 + 1) % (vcounter);
 							mitte = vector_feld_[index];
-							index = (zaehler2 + 2) % (vzaehler);
+							index = (counter2 + 2) % (vcounter);
 							rechts = vector_feld_[index];
 							normal_ += (mitte - links) % (mitte - rechts);
 						}
 
-						normal_ /= vzaehler;	// Normalenvektor wurde gemittelt
+						normal_ /= vcounter;	// Normalenvektor wurde gemittelt
 						normal_ /= normal_.getLength ();	//Normalenvektor ist jetzt NormalenEinheitsvektor
 
 						// Die Ringebene wurde ermittelt
@@ -278,12 +278,12 @@ namespace
 
 						gs = 0;
 						ts = 0;
-						for (zaehler2 = 0; zaehler2 < vzaehler; zaehler2++)
+						for (counter2 = 0; counter2 < vcounter; counter2++)
 						{
 							ts = 0;
-							index = (zaehler2 + 0) % (vzaehler);
+							index = (counter2 + 0) % (vcounter);
 							eins = vector_feld_[index];
-							index = (zaehler2 + 1) % (vzaehler);
+							index = (counter2 + 1) % (vcounter);
 							zwei = vector_feld_[index];
 
 							// berechne Abstand von Proton zu eins und zwei
@@ -323,7 +323,7 @@ namespace
 
 						//cout  <<  endl  << "hschift:" << hshift;
 
-						vzaehler = 0;
+						vcounter = 0;
 						anzahl--;
 						hilf = 6;	// fuer den naechsten schleifendurchlauf
 
@@ -349,7 +349,7 @@ namespace
 
 //apply Funktion
 
-	Processor::Result HaighMallionShift::operator ()(Object & object)
+	Processor::Result HaighMallionShift::operator () (Composite& composite)
 	{
 		// Arbeitet als Kollektor :
 		// - Alle Ringe werden in _aromat_list gespeichert
@@ -359,24 +359,22 @@ namespace
 
 		// Definition von lokalen Variablen
 		//cout <<endl<<"HaighMallionShift::operator()";
-		int
-			zaehler;
-		int
-			found;
+		Position counter;
+		Position found;
 
 		// identifiziere die Art des Objectes 
 		// wenn es ein Residue mit aromatischen Ring ist, fuege es in _aromat_list ein
 		// wenn es ein Hydrogen ist, fuege es in _proton_list ein
 
-		if (RTTI::isKindOf < Residue > (object))	// erganze _aromat_listum aromatische Residues     
+		if (RTTI::isKindOf<Residue>(composite))	// erganze _aromat_listum aromatische Residues     
 		{
 			//cout  <<  endl  <<  "Object is residue";
-			residue_ = RTTI::castTo < Residue > (object);
+			residue_ = RTTI::castTo<Residue>(composite);
 			//cout  <<  endl  <<  " residue name : " << residue_->getName();
-			for (zaehler = 0; zaehler < 4; zaehler++)
+			for (counter = 0; counter < 4; counter++)
 			{
 				found = 0;
-				if (asrings_[zaehler][0] == residue_->getName ())
+				if (asrings_[counter][0] == residue_->getName ())
 				{
 					aromat_list_.push_back (residue_);
 					//cout  << "...eingefuegt.";
@@ -387,10 +385,10 @@ namespace
 			}
 		}	// Ende is kind of Residue : die liste wurde um die entsprechenden Residues erweitert
 
-		if (RTTI::isKindOf < PDBAtom > (object))
+		if (RTTI::isKindOf<PDBAtom>(composite))
 		{
 			//cout  << endl << "Object is ProteinAtom";
-			patom_ = RTTI::castTo < PDBAtom > (object);
+			patom_ = RTTI::castTo<PDBAtom>(composite);
 			//cout  << endl << "    atom name : " << patom_->getName();
 			//cout  << endl << "    Element : " << (patom_->getElement()).getName();
 			if (patom_->getElement () == PTE[Element::H])

@@ -1,4 +1,4 @@
-// $Id: LEF.C,v 1.5 2000/09/07 19:38:30 oliver Exp $
+// $Id: LEF.C,v 1.6 2000/09/08 07:13:24 oliver Exp $
 
 #include<BALL/NMR/LEF.h>
 #include<BALL/KERNEL/atom.h>
@@ -99,15 +99,15 @@ namespace BALL
 
 
 	//apply method
-	Processor::Result LEFShift::operator() (Atom& atom)
+	Processor::Result LEFShift::operator() (Composite& composite)
 	{
 		// ist das Objekt ein Atom und noch dazu ein Wasserstoff
 		// und hängt es an einem Kohlenstoff, so wird es in der _proton_list gespeichert
 
-		if (RTTI::isKindOf<Atom>(atom))
+		if (RTTI::isKindOf<Atom>(composite))
 		{
 			// Baustelle : überprüfe ob Hydrogen an einem Kohlenstoff hängt !!
-			patom_ = RTTI::castTo<Atom>(atom);
+			patom_ = RTTI::castTo<Atom>(composite);
 			//cout  << endl << "    atom name : " << patom_->getName();
 			//cout  << endl << "    Element : " << (patom_->getElement()).getName();
 			if (patom_->getElement() == PTE[Element::H])

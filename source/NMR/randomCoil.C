@@ -1,4 +1,4 @@
-// $Id: randomCoil.C,v 1.2 2000/08/28 16:08:54 oliver Exp $
+// $Id: randomCoil.C,v 1.3 2000/09/08 07:13:24 oliver Exp $
 
 #include<BALL/NMR/randomCoil.h>
 
@@ -57,17 +57,17 @@ namespace BALL
 		return 1;
 	}
 
-	Processor::Result RandomCoilShift::operator () (Object & object)
+	Processor::Result RandomCoilShift::operator () (Composite& composite)
 	{
 		// lese aus der rc_table den entsprechenden Eintrag und addiere zum shift
 
 		float rc_shift;
 		String residue, atom, eintrag;
 
-		if (RTTI::isKindOf < PDBAtom > (object))
+		if (RTTI::isKindOf<PDBAtom>(composite))
 		{
 			//cout  << endl << "Object is ProteinAtom";
-			patom_ = RTTI::castTo < PDBAtom > (object);
+			patom_ = RTTI::castTo<PDBAtom>(composite);
 
 			if (patom_->getElement () == PTE[Element::H])
 			{

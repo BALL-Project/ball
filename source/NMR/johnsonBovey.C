@@ -1,4 +1,4 @@
-// $Id: johnsonBovey.C,v 1.8 2000/08/28 16:08:53 oliver Exp $
+// $Id: johnsonBovey.C,v 1.9 2000/09/08 07:13:24 oliver Exp $
 
 
 #include <BALL/NMR/johnsonBovey.h>
@@ -490,7 +490,7 @@ namespace
 
 	//apply Funktion
 
-	Processor::Result JohnsonBoveyShift::operator ()(Object & object)
+	Processor::Result JohnsonBoveyShift::operator () (Composite& composite)
 	{
 		// Definition von lokalen Variablen
 
@@ -503,9 +503,9 @@ namespace
 		// wenn es ein Residue mit aromatischen Ring ist, fuege es in aromat_list_ ein
 		// wenn es ein Hydrogen ist, fuege es in proton_list_ ein
 
-		if (RTTI::isKindOf < Residue > (object))	// erganzearomat_list_ um aromatische Residues      
+		if (RTTI::isKindOf<Residue>(composite))	// erganzearomat_list_ um aromatische Residues      
 		{
-			residue_ = RTTI::castTo < Residue > (object);
+			residue_ = RTTI::castTo<Residue>(composite);
 			for (zaehler = 0; zaehler < 4; zaehler++)
 			{
 				found = 0;
@@ -520,10 +520,10 @@ namespace
 			}
 		}	// Liste um residues erweitert
 
-		if (RTTI::isKindOf < PDBAtom > (object))
+		if (RTTI::isKindOf<PDBAtom>(composite))
 		{
 			//cout  << endl << "Object is PDBAtom";
-			patom_ = RTTI::castTo < PDBAtom > (object);
+			patom_ = RTTI::castTo<PDBAtom>(composite);
 			//cout  << endl << "    atom name :" << patom_->getName();
 			//cout  << endl << "    Element :" << (patom_->getElement()).getName();
 			if (patom_->getElement () == PTE[Element::H])
