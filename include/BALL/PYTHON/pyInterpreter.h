@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyInterpreter.h,v 1.10 2003/08/26 08:04:46 oliver Exp $ 
+// $Id: pyInterpreter.h,v 1.10.2.1 2004/05/19 13:48:09 amoll Exp $ 
 //
 
 #ifndef BALL_PYTHON_PYINTERPRETER_H
@@ -21,10 +21,7 @@ namespace BALL
 			There's just one global instance of the interpreter,
 			so all methods are static. The use of subinterpreters
 			is not yet supported.
-			 \par
-			
-			 \par
-		\ingroup PythonExtensions
+			\ingroup PythonExtensions
 	*/
 	class PyInterpreter
 	{

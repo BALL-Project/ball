@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyAtomList.h,v 1.11 2003/08/26 08:04:46 oliver Exp $
+// $Id: pyAtomList.h,v 1.11.2.1 2004/05/19 13:48:09 amoll Exp $
 //
 
 #ifndef BALL_PYTHON_PYATOMLIST_H
@@ -21,13 +21,11 @@
 
 namespace BALL 
 {
-  /**  \addtogroup  PythonExtensions
-   *  @{
-   */
 	class Atom;
 	class AtomContainer;
 	
-	/**
+	/** Equivalent for a STL::List of Atom Pointers in Python
+			\ingroup PythonExtensions		
 	*/
 	class PyAtomList
 		:	public List<Atom*>
@@ -88,11 +86,12 @@ namespace BALL
 		/**	Destructor
 		*/
 		virtual ~PyAtomList() throw();
-		//@}
 
+		//@}
 		/**	@name Assignment
 		*/
 		//@{
+		
 		/**
 		*/
 		void set(const AtomContainer& fragment, const String& expression = "");

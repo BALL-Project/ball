@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyFragmentList.h,v 1.9 2003/08/26 08:04:46 oliver Exp $
+// $Id: pyFragmentList.h,v 1.9.2.1 2004/05/19 13:48:09 amoll Exp $
 //
 
 #ifndef BALL_PYTHON_PYFRAGMENTLIST_H
@@ -20,8 +20,8 @@ namespace BALL
 	class Fragment;
 	class AtomContainer;
 	
-	/**pyFragmentList
-		\ingroup PythonExtensions
+	/** Equivalent for a STL::List of Fragment Pointers in Python
+			\ingroup PythonExtensions
 	*/
 	class PyFragmentList
 		:	public List<Fragment*>
@@ -51,8 +51,8 @@ namespace BALL
 		typedef List<Fragment*>::const_iterator ConstIterator;
 
 		//@}
-
-		/**	@name	Constructors and Destructors */
+		/**	@name	Constructors and Destructors 
+		*/
 		//@{
 
 		/**	Default constructor.
@@ -76,11 +76,12 @@ namespace BALL
 		/**	Destructor
 		*/
 		virtual ~PyFragmentList() throw();
+		
 		//@}
-
 		/**	@name Assignment
 		*/
 		//@{
+		
 		/**
 		*/
 		void set(const AtomContainer& fragment, bool selected_only = false);

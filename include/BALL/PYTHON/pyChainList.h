@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyChainList.h,v 1.9 2003/08/26 08:04:46 oliver Exp $
+// $Id: pyChainList.h,v 1.9.2.1 2004/05/19 13:48:09 amoll Exp $
 //
 
 #ifndef BALL_PYTHON_PYCHAINLIST_H
@@ -20,8 +20,8 @@ namespace BALL
 	class Chain;
 	class AtomContainer;
 	
-	/** pyChainList
-		\ingroup PythonExtensions
+	/** Equivalent for a STL::List of Chain Pointers in Python
+			\ingroup PythonExtensions
 	*/
 	class PyChainList
 		:	public List<Chain*>
@@ -51,8 +51,8 @@ namespace BALL
 		typedef List<Chain*>::const_iterator ConstIterator;
 
 		//@}
-
-		/**	@name	Constructors and Destructors */
+		/**	@name	Constructors and Destructors 
+		*/
 		//@{
 
 		/**	Default constructor.
@@ -76,11 +76,12 @@ namespace BALL
 		/**	Destructor
 		*/
 		virtual ~PyChainList() throw();
-		//@}
 
+		//@}
 		/**	@name Assignment
 		*/
 		//@{
+		
 		/**
 		*/
 		void set(const AtomContainer& fragment, bool selected_only = false);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyBondList.h,v 1.9 2003/08/26 08:04:46 oliver Exp $
+// $Id: pyBondList.h,v 1.9.2.1 2004/05/19 13:48:09 amoll Exp $
 //
 
 #ifndef BALL_PYTHON_PYBONDLIST_H
@@ -17,14 +17,12 @@
 
 namespace BALL 
 {
-  /**  \addtogroup  PythonExtensions
-   *  @{
-   */
 	class Bond;
 	class Atom;
 	class AtomContainer;
 	
-	/**
+	/** Equivalent for a STL::List of Bond Pointers in Python
+		\ingroup PythonExtensions		
 	*/
 	class PyBondList
 		:	public List<Bond*>
