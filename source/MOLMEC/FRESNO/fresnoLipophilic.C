@@ -1,4 +1,4 @@
-// $Id: fresnoLipophilic.C,v 1.1.2.3 2002/03/15 14:48:02 anker Exp $
+// $Id: fresnoLipophilic.C,v 1.1.2.4 2002/04/03 16:44:51 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -190,7 +190,10 @@ namespace BALL
 		}
 
 		energy_ = factor_ *= E;
-		return E;
+		// DEBUG
+		cout << "LIPO: energy is " << energy_ << endl;
+		// /DEBUG
+		return energy_;
 	}
 
 

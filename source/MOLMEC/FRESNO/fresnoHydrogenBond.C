@@ -1,4 +1,4 @@
-// $Id: fresnoHydrogenBond.C,v 1.1.2.5 2002/03/15 14:48:01 anker Exp $
+// $Id: fresnoHydrogenBond.C,v 1.1.2.6 2002/04/03 16:44:51 anker Exp $
 // Molecular Mechanics: Fresno force field, hydrogen bond component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -305,7 +305,10 @@ namespace BALL
 			}
 		}
 		energy_ = factor_ * E;
-		return E;
+		// DEBUG
+		cout << "HB: energy is " << energy_ << endl;
+		// /DEBUG
+		return energy_;
 	}
 
 

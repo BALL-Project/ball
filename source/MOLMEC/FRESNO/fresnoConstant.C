@@ -1,4 +1,4 @@
-// $Id: fresnoConstant.C,v 1.1.2.1 2002/03/15 14:48:00 anker Exp $
+// $Id: fresnoConstant.C,v 1.1.2.2 2002/04/03 16:44:50 anker Exp $
 // Molecular Mechanics: Fresno force field, additive constant
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -77,6 +77,9 @@ namespace BALL
 	double FresnoConstant::updateEnergy()
 		throw()
 	{
+		// DEBUG
+		cout << "CONST: energy is " << energy_ << endl;
+		// /DEBUG
 		return energy_;
 	}
 

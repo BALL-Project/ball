@@ -1,4 +1,4 @@
-// $Id: fresnoRotation.C,v 1.1.2.4 2002/03/15 14:48:03 anker Exp $
+// $Id: fresnoRotation.C,v 1.1.2.5 2002/04/03 16:44:52 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
 #include <BALL/KERNEL/standardPredicates.h>
@@ -15,6 +15,8 @@
 #include <BALL/MOLMEC/FRESNO/fresno.h>
 #include <BALL/MOLMEC/FRESNO/fresnoRotation.h>
 
+#include <BALL/DATATYPE/stringHashMap.h>
+
 using namespace std;
 
 namespace BALL
@@ -26,6 +28,7 @@ namespace BALL
 			rotatable_bonds_(),
 			N_rot_(0),
 			is_frozen_(),
+			algorithm_type_(0),
 			heavy_atom_fractions_(),
 			grid_(0),
 			grid_spacing_(0.0),
@@ -42,6 +45,7 @@ namespace BALL
 			rotatable_bonds_(),
 			N_rot_(0),
 			is_frozen_(),
+			algorithm_type_(0),
 			heavy_atom_fractions_(),
 			grid_(0),
 			grid_spacing_(0.0),
@@ -58,6 +62,7 @@ namespace BALL
 			rotatable_bonds_(fr.rotatable_bonds_),
 			N_rot_(fr.N_rot_),
 			is_frozen_(fr.is_frozen_),
+			algorithm_type_(fr.algorithm_type_),
 			heavy_atom_fractions_(fr.heavy_atom_fractions_),
 			grid_(fr.grid_),
 			grid_spacing_(fr.grid_spacing_),
@@ -83,6 +88,7 @@ namespace BALL
 		rotatable_bonds_.clear();
 		N_rot_ = 0;
 		is_frozen_.clear();
+		algorithm_type_ = 0;
 		heavy_atom_fractions_.clear();
 		if (grid_ != 0) grid_->clear();
 		grid_spacing_ = 0.0;
@@ -141,8 +147,13 @@ namespace BALL
 		bind_distance_offset_
 			= options.setDefaultReal(FresnoFF::Option::ROT_BIND_OFFSET,
 					FresnoFF::Default::ROT_BIND_OFFSET);
+		algorithm_type_
+			= options.setDefaultInteger(FresnoFF::Option::ROT_ALGORITHM,
+					FresnoFF::Default::ROT_ALGORITHM);
 
 		// create a grid for the receptor and insert all its atoms
+		// this grid is needed to find out whether an atom of the ligand is
+		// bound to the protein
 		grid_ = new HashGrid3<const Atom*>
 			(bb_proc.getLower(), bb_proc.getUpper(), grid_spacing_);
 		AtomConstIterator atom_it = receptor_->beginAtom();
@@ -150,6 +161,37 @@ namespace BALL
 		{
 			grid_->insert(atom_it->getPosition(), &*atom_it);
 		}
+
+		atom_it = ligand->beginAtom();
+		Size n_heavy_atoms = 0;
+		for (; +atom_it; ++atom_it)
+		{
+			if ((atom_it->getElement().getSymbol() != "H")
+//				&& ((*fresno_types_)[&*atom_it] != FresnoFF::LIPOPHILIC)
+				 )
+			{
+				n_heavy_atoms++;
+			}
+		}
+
+		StringHashMap< pair<float, float> > bondlengths;
+
+		// ????
+		// This is not nice
+		pair<float, float> tmp;
+		tmp = pair<float, float>(1.54, 1.55);
+		bondlengths["C"] = tmp;
+		tmp = pair<float, float>(1.47, 1.48);
+		bondlengths["N"] = tmp;
+		tmp = pair<float, float>(1.43, 1.47);
+		bondlengths["O"] = tmp;
+		tmp = pair<float, float>(1.80, 1.84);
+		bondlengths["S"] = tmp;
+
+		Size guessed_bonds = 0;
+
+		String sym1, sym2;
+		StringHashMap< pair<float, float> >::ConstIterator hash_it;
 
 		// define and initialize all variables we need for extracting the
 		// cycles (or rings)
@@ -168,19 +210,9 @@ namespace BALL
 				tree, possible_cycle_bonds, cycle_bonds, cycle_count);
 
 		cout << tree.size() << endl;
+
 		// initialize the data structures for another dfs and count the heavy
 		// atoms in the system 
-		atom_it = ligand->beginAtom();
-		Size n_heavy_atoms = 0;
-		for (; +atom_it; ++atom_it)
-		{
-			if ((atom_it->getElement().getSymbol() != "H")
-				&& ((*fresno_types_)[&*atom_it] != FresnoFF::LIPOPHILIC))
-			{
-				n_heavy_atoms++;
-			}
-		}
-
 		int heavy_atom_count = 0;
 		HashSet<const Bond*>::ConstIterator tree_it = tree.begin();
 
@@ -200,6 +232,8 @@ namespace BALL
 		bool B_sp2;
 		bool B_sp3;
 
+		bool found_rotatable_bond = false;
+
 		// HashSet<const Atom*> tmp;
 
 		// a rotatable bond is *any* bond between sp2-sp3 or sp3-sp3 hybridized
@@ -214,35 +248,111 @@ namespace BALL
 			atom2 = (*tree_it)->getSecondAtom();
 			if (!cycle_bonds.has(*tree_it))
 			{
-				// ?????
-				// make this more efficient
-				A_sp2 = isSp2(*atom1);
-				A_sp3 = isSp3(*atom1);
-				B_sp2 = isSp2(*atom2);
-				B_sp3 = isSp3(*atom2);
 
-				if (((A_sp2 & B_sp3) | (B_sp2 & A_sp3) | (A_sp3 & B_sp3)) == true)
+				if (!(hasCH3Terminal(*atom1)
+							| hasCF3Terminal(*atom1)
+							| hasNH3Terminal(*atom1)
+							| hasNH2Terminal(*atom1)
+							| hasCH3Terminal(*atom2)
+							| hasCF3Terminal(*atom2)
+							| hasNH3Terminal(*atom2)
+							| hasNH2Terminal(*atom2)))
 				{
-					if (!(hasCH3Terminal(*atom1)
-								| hasCF3Terminal(*atom1)
-								| hasNH3Terminal(*atom1)
-								| hasNH2Terminal(*atom1)
-								| hasCH3Terminal(*atom2)
-								| hasCF3Terminal(*atom2)
-								| hasNH3Terminal(*atom2)
-								| hasNH2Terminal(*atom2)))
+
+					if (algorithm_type_ == ALGORITHM__GUESS)
 					{
-						// DEBUG
-						cout << "found possible rotatable bond: " 
-							<< atom1->getFullName() << "---" << atom2->getFullName()
-							<< endl;
-						// /DEBUG
+						float dist = (atom1->getPosition() - atom2->getPosition()).getLength();
+						sym1 = atom1->getElement().getSymbol();
+						sym2 = atom2->getElement().getSymbol();
+
+						if (sym1 == "C")
+						{
+							if (bondlengths.has(sym2))
+							{
+								// DEBUG
+								if (sym2 == "N")
+								{
+									cout << atom1->getFullName() << "---" 
+										<< atom2->getFullName() << endl;
+									cout << "length: " << dist << endl;
+								}
+								// /DEBUG
+								float lower = bondlengths[sym2].first;
+								float upper = bondlengths[sym2].second;
+								if ((dist > (lower * 0.975)) && (dist <= (upper * 1.025)))
+								{
+									cout << "found rotatable bond:" << endl;
+									cout << atom1->getFullName() << "---" << atom2->getFullName() << endl;
+									cout << "length: " << dist << endl;
+									found_rotatable_bond = true;
+									guessed_bonds++;
+								}
+							}
+						}
+						else
+						{
+							if (sym2 == "C")
+							{
+								if (bondlengths.has(sym1))
+								{
+									// DEBUG
+									if (sym2 == "N")
+									{
+										cout << atom1->getFullName() << "---" 
+											<< atom2->getFullName() << endl;
+										cout << "length: " << dist << endl;
+									}
+									// /DEBUG
+									float lower = bondlengths[sym1].first;
+									float upper = bondlengths[sym1].second;
+									if ((dist > (lower * 0.975)) && (dist <= (upper * 1.025)))
+									{
+										cout << "found rotatable bond:" << endl;
+										cout << atom1->getFullName() << "---" << atom2->getFullName() << endl;
+										cout << "length: " << dist << endl;
+										found_rotatable_bond = true;
+										guessed_bonds++;
+									}
+								}
+							}
+						}
+					}
+					else
+					{
+						if (algorithm_type_ == ALGORITHM__DATABASE)
+						{
+							// ?????
+							// make this more efficient
+							A_sp2 = isSp2(*atom1);
+							A_sp3 = isSp3(*atom1);
+							B_sp2 = isSp2(*atom2);
+							B_sp3 = isSp3(*atom2);
+
+							if (((A_sp2 & B_sp3) | (B_sp2 & A_sp3) | (A_sp3 & B_sp3)) == true)
+							{
+								// DEBUG
+								cout << "found possible rotatable bond: " 
+									<< atom1->getFullName() << "---" << atom2->getFullName()
+									<< endl;
+								// /DEBUG
+								found_rotatable_bond = true;
+							}
+							else
+							{
+								Log.error() << "Unknown algorithm type" << endl;
+								return false;
+							}
+						}
+					}
+					if (found_rotatable_bond == true)
+					{
+						found_rotatable_bond = false;
 						rotatable_bonds_.push_back(*tree_it);
 						visited.clear();
 						heavy_atom_count = 0;
 						// tmp.clear();
 						heavyAtomsDFS_(atom1, &**tree_it, visited,
-								heavy_atom_count); // , tmp);
+								heavy_atom_count); 
 						double first_fraction = (double) heavy_atom_count / (double) n_heavy_atoms;
 						double second_fraction = 1.0 - first_fraction;
 						heavy_atom_fractions_.push_back
@@ -276,26 +386,38 @@ namespace BALL
 		throw()
 	{
 
-		double E = 0.0;
-		double val;
-
-		updateFrozenBonds_();
-
-		for (Size i = 0; i < rotatable_bonds_.size(); ++i)
+		if (N_rot_ == 0.0)
 		{
-			if (is_frozen_[i] == true)
-			{
-				val = heavy_atom_fractions_[i].first + heavy_atom_fractions_[i].second;
-				val /= 2.0;
-				cout << "ROT: adding score of " << val << endl;
-				E += val;
-			}
+			energy_ = 0.0;
+			return energy_;
 		}
+		else
+		{
 
-		E *= (1 - 1/N_rot_);
-		E += 1.0;
-		energy_ = E;
-		return E;
+			double E = 0.0;
+			double val;
+
+			updateFrozenBonds_();
+
+			for (Size i = 0; i < rotatable_bonds_.size(); ++i)
+			{
+				if (is_frozen_[i] == true)
+				{
+					val = heavy_atom_fractions_[i].first + heavy_atom_fractions_[i].second;
+					val /= 2.0;
+					cout << "ROT: adding score of " << val << endl;
+					E += val;
+				}
+			}
+
+			E *= (1 - 1/N_rot_);
+			E += 1.0;
+			energy_ = E;
+			// DEBUG
+			cout << "ROT: energy is " << energy_ << endl;
+			// /DEBUG
+			return energy_;
+		}
 
 	}
 

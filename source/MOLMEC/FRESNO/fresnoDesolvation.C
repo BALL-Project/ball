@@ -1,4 +1,4 @@
-// $Id: fresnoDesolvation.C,v 1.1.2.3 2002/03/15 14:48:01 anker Exp $
+// $Id: fresnoDesolvation.C,v 1.1.2.4 2002/04/03 16:44:51 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -115,6 +115,9 @@ namespace BALL
 	double FresnoDesolvation::updateEnergy()
 		throw()
 	{
+		// DEBUG
+		cout << "DESOLV: energy is " << energy_ << endl;
+		// /DEBUG
 		return energy_;
 	}
 

@@ -1,4 +1,4 @@
-// $Id: fresnoRotation.h,v 1.1.2.4 2002/03/15 14:47:52 anker Exp $
+// $Id: fresnoRotation.h,v 1.1.2.5 2002/04/03 16:44:21 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
 #ifndef BALL_MOLMEC_FRESNO_FRESNOROTATION_H
@@ -20,6 +20,14 @@ namespace BALL
 	{
 
 		public:
+
+		enum AlgorithmType
+		{
+			///
+			ALGORITHM__GUESS = 0,
+			///
+			ALGORITHM__DATABASE = 1
+		};
 
 		/** @name	Constructors and Destructors	
 		*/
@@ -109,6 +117,11 @@ namespace BALL
 		 * binding.
 		*/
 		::vector<bool> is_frozen_;
+
+		/* A flag defining which algorithm should be used for finding
+		 * rotatable bonds
+		*/
+		Size algorithm_type_;
 
 		/* The percentages of nonlipophilc heavy atoms on each side of the bond
 		 * (named P(r) in the paper).

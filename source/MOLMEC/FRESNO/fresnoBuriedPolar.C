@@ -1,4 +1,4 @@
-// $Id: fresnoBuriedPolar.C,v 1.1.2.4 2002/03/15 14:48:00 anker Exp $
+// $Id: fresnoBuriedPolar.C,v 1.1.2.5 2002/04/03 16:44:50 anker Exp $
 // Molecular Mechanics: Fresno force field, buried polar component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -198,7 +198,10 @@ namespace BALL
 			}
 		}
 		energy_ = factor_ * E;
-		return E;
+		// DEBUG
+		cout << "BP: energy is " << energy_ << endl;
+		// /DEBUG
+		return energy_;
 	}
 
 
