@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.55 2004/12/20 16:23:54 amoll Exp $
+// $Id: cartoonModel.C,v 1.56 2004/12/20 21:21:39 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -86,41 +86,208 @@ namespace BALL
 			last_parent_ = 0;
 			have_start_point_ = false;
 
-			spline_points_.clear();
+			spline_.clear();
 			last_chain_ = 0;
 			spline_vector_position_ = -1;
-			atoms_of_spline_points_.clear();
+		}
+
+		// -----------------------------------------------------------------
+		void AddCartoonModel::drawDNA_(SecondaryStructure& ss)
+			throw()
+		{
+			ResidueIterator rit = ss.beginResidue();
+			AtomIterator ait;
+			HashMap<Residue*, Atom*> base_atoms;
+
+			// add O5* atom for 1. Residue
+			BALL_FOREACH_ATOM(*rit, ait)
+			{
+				if (ait->getName() == "O5*")
+				{
+					spline_vector_.push_back(SplinePoint((*ait).getPosition(), 0));
+					base_atoms[&*rit] = &*ait;
+					break;
+				}
+			}
+
+			// collect the P atoms for the backbone spline
+			for(; +rit; ++rit)
+			{
+				BALL_FOREACH_ATOM(*rit, ait)
+				{
+					if (ait->getName() == "P")
+					{
+						spline_vector_.push_back(SplinePoint((*ait).getPosition(), 0));
+						base_atoms[&*rit] = &*ait;
+						break;
+					}
+				}
+			}
+			
+			// add O3* atom for last Residue
+			BALL_FOREACH_ATOM(*ss.getCTerminal(), ait)
+			{
+				if (ait->getName() == "O3*")
+				{
+					spline_vector_.push_back(SplinePoint((*ait).getPosition(), 0));
+					break;
+				}
+			}
+
+			tube_radius_ = DNA_helix_radius_;
+			createBackbone_();
+
+			if (!draw_DNA_as_ladder_)
+			{
+				drawWatsonCrickModel_(ss);
+				return;
+			}
+
+			for (rit = ss.beginResidue(); +rit; ++rit)
+			{
+				Residue* r = &*rit;
+
+				// prevent double drawing for complementary bases
+				if (complementary_bases_.has(r) &&
+						complementary_bases_[r] < r) 
+				{
+					continue;
+				}
+
+				Atom* base_atom = base_atoms[r];
+				if (base_atom == 0) 
+				{
+					continue;
+				}
+
+				// ================ draw unpaired bases ===============
+				if (!complementary_bases_.has(r))
+				{
+					String atom_name;
+					if (r->getName() == "A" ||
+							r->getName() == "G")
+					{
+						atom_name = "C6";
+					}
+					else if (r->getName() == "C") atom_name = "C4";
+					else if (r->getName() == "T") atom_name = "N3";
+						
+					Atom* end_atom = 0;
+					BALL_FOREACH_ATOM(*r, ait)
+					{
+						if (ait->getName() == atom_name)
+						{
+							end_atom = &*ait;
+							break;
+						}
+					}
+
+					if (end_atom == 0) continue;
+
+					Tube* tube = new Tube;
+					tube->setVertex1(base_atom->getPosition());
+					tube->setVertex2(end_atom->getPosition());
+					tube->setComposite(r);
+					tube->setRadius(DNA_ladder_radius_);
+					geometric_objects_.push_back(tube);
+
+					Sphere* sphere1 = new Sphere;
+					sphere1->setPosition(end_atom->getPosition());
+					sphere1->setRadius(DNA_ladder_radius_);
+					sphere1->setComposite(r);
+					geometric_objects_.push_back(sphere1);
+
+					continue;
+				}
+
+				// ================ draw paired bases ===============
+				Residue* partner = complementary_bases_[r];
+				Atom* partner_base = 0;
+				BALL_FOREACH_ATOM(*partner, ait)
+				{
+					if (ait->getName() == "P") 
+					{	
+						partner_base = &*ait;
+						break;
+					}
+				}
+
+				if (partner_base == 0)
+				{
+					BALL_FOREACH_ATOM(*partner, ait)
+					{
+						if (ait->getName() == "O5*") 
+						{
+							partner_base = &*ait;
+							break;
+						}
+					}
+
+					if (partner_base == 0) 
+					{
+						continue;
+					}
+				}
+
+				Vector3 v = base_atom->getPosition() - partner_base->getPosition();
+				v /= 2.5;
+
+				Tube* tube = new Tube;
+				tube->setVertex1(base_atom->getPosition());
+				tube->setVertex2(base_atom->getPosition() - v);
+				tube->setComposite(r);
+				tube->setRadius(DNA_ladder_radius_);
+				geometric_objects_.push_back(tube);
+
+				Sphere* sphere1 = new Sphere;
+				sphere1->setPosition(base_atom->getPosition() -v);
+				sphere1->setRadius(DNA_ladder_radius_);
+				sphere1->setComposite(r);
+				geometric_objects_.push_back(sphere1);
+
+				Tube* tube2 = new Tube;
+				tube2->setVertex1(partner_base->getPosition());
+				tube2->setVertex2(partner_base->getPosition() + v);
+				tube2->setComposite(partner);
+				tube2->setRadius(DNA_ladder_radius_);
+				geometric_objects_.push_back(tube2);
+
+				Sphere* sphere2 = new Sphere;
+				sphere2->setPosition(partner_base->getPosition() + v);
+				sphere2->setRadius(DNA_ladder_radius_);
+				sphere2->setComposite(partner);
+				geometric_objects_.push_back(sphere2);
+			}
+
+			have_start_point_ = false;
 		}
 
 
 		void AddCartoonModel::drawStrand_(SecondaryStructure& ss)
 			throw(Exception::OutOfMemory)
 		{
-			// we want to compute the spline ourselves for better smoothing properties
-			vector<Vector3> 			spline_backup 				= spline_points_;
-			vector<SplinePoint> 	spline_vector_backup 	= spline_vector_;
-			vector<const Atom*> 	atoms_backup 					= atoms_of_spline_points_;
-			spline_vector_.clear();
-			spline_points_.clear();
-			atoms_of_spline_points_.clear();
-
+			vector<Vector3> peptide_normals;
+			bool last_residue = false;
 			bool is_terminal_segment = false;
 			bool first_residue = true;
-			bool last_residue = false;
 
-			vector<Vector3> 			peptide_normals;
+			std::vector<Vector3> spline_backup = spline_;
+			std::vector<SplinePoint> spline_vector_backup = spline_vector_;
+
+			// we want to compute the spline ourselves for better smoothing properties
+			spline_vector_.clear();
+			spline_.clear();
 
 			ResidueIterator ri;
 			BALL_FOREACH_RESIDUE(ss, ri)
 			{
-				// we have to find the following atoms:
 				Atom* 	 CA = 0;
 				Atom* 	  N = 0;
 				Atom*		  C = 0;
 				Atom* nextN = 0;
 				Atom*  	  O = 0;
 
-				// find the CA of this residue
+				// first find the CA of this residue
 				AtomIterator ai;
 				BALL_FOREACH_ATOM(*ri, ai)
 				{
@@ -129,7 +296,7 @@ namespace BALL
 						CA = &(*ai);
 						break;
 					}
-				}
+				};
 
 				if (!CA)
 				{
@@ -137,7 +304,7 @@ namespace BALL
 					return;
 				}
 
-				// now find the neighbouring atoms of the CA's: N + C
+				// now find the remaining atoms
 				AtomBondIterator bi;
 				BALL_FOREACH_ATOM_BOND(*CA, bi)
 				{
@@ -146,7 +313,7 @@ namespace BALL
 					{
 						N = partner;
 						continue;
-					}
+					};
 
 					if ((partner->getName() == "C"))
 					{
@@ -183,26 +350,22 @@ namespace BALL
 					return;
 				}	
 
-				// if we are at the last residue break
-				if (!nextN) 
+				if (!nextN) // we are at the last residue
 				{
 					last_residue = true;
 					if (ri->isTerminal()) is_terminal_segment = true;
 					continue;
 				}
 
-				// calculate the normal of this peptide bond
 				Vector3 normal =   (O->getPosition() - C->getPosition()) 
 												 % (nextN->getPosition()  - C->getPosition()) ;
 
 				if (Maths::isZero(normal.getSquareLength())) 
 				{
-					Log.error() << "Could not draw cartoon style: degenerated peptide bond!" << std::endl;
+					Log.error() << "Could not draw cartoon style: degenerate peptide bond!" << std::endl;
 					return;
 				}
-
-				normal.normalize();
-				peptide_normals.push_back(normal);
+				peptide_normals.push_back(normal.normalize());
 
 				// we have computed the normal. now compute the two spline points corresponding to this
 				// amino acid: we take the point between the current N (N) and the C_alpha (CA) and
@@ -213,13 +376,15 @@ namespace BALL
 				// first "real" spline point
 				if (first_residue)
 				{
-					spline_vector_.push_back(SplinePoint(CA->getPosition(), CA));
-					peptide_normals.push_back(normal);
+					SplinePoint sp(CA->getPosition(), CA);
+					spline_vector_.push_back(sp);
+					peptide_normals.push_back(normal.normalize());
 					first_residue = false;
 				}
 
 				Vector3 sv = C->getPosition() + (nextN->getPosition() - C->getPosition())*1./2.;
-				spline_vector_.push_back(SplinePoint(sv, N));	
+				SplinePoint sp(sv, N);
+				spline_vector_.push_back(sp);	
 
 				if (last_residue)
 				{
@@ -229,41 +394,40 @@ namespace BALL
 						return;
 					}
 
-					peptide_normals[peptide_normals.size() - 1] = 
-					peptide_normals[peptide_normals.size() - 2];
+					peptide_normals[peptide_normals.size()-1] = peptide_normals[peptide_normals.size()-2];
 				}
-			} // iteration over all residues of secondary structure
-
+			}
 
 			calculateTangentialVectors_();
+			spline_.push_back(spline_vector_[0].getVector());
+			for (Position i=1; i<spline_vector_.size(); i++)
+			{
+				createSplineSegment2_(spline_vector_[i-1], spline_vector_[i]);
+			}
 
-			spline_points_.push_back(spline_vector_[0].getVector());
-			atoms_of_spline_points_.push_back(spline_vector_[0].getAtom());
-
-			createSplinePath_();
 			
 			// if two adjacent normals differ by more than 90 degrees, we
 			// flip them to ensure a smooth strand representation
-			for (Position i = 0; i < peptide_normals.size() - 1; i++)
+			for (Position i=0; i<peptide_normals.size()-1; i++)
 			{
 				Angle current(fabs(acos(peptide_normals[i]*peptide_normals[i+1])));
-				if ((current <= (float)Constants::PI*3./2.) && (current >= (float)Constants::PI/2.))
+				if ((current <= (float)Constants::PI*3./2.)&&(current >= (float)Constants::PI/2.))
 				{
-					Vector3 rotaxis = (peptide_normals[i] % peptide_normals[i + 1]).normalize();
+					Vector3 rotaxis = (peptide_normals[i]%peptide_normals[i+1]).normalize();
 					Matrix4x4 rotmat;
 					rotmat.rotate(Angle(M_PI), rotaxis);
-					peptide_normals[i + 1] = rotmat * peptide_normals[i + 1];
+					peptide_normals[i+1] = rotmat * peptide_normals[i+1];
 				}
 			}
 			
 			// an additional smoothing run...
-			for (Position i = 0; i < peptide_normals.size() - 1; i++)
+			for (Position i=0; i<peptide_normals.size()-1; i++)
 			{
 				// To smooth the strand representation a bit, we iterate over all normal
 				// vectors and compute the angle in between them.
 				// Then we reduce the angle by an appropriate rotation to a third of the
 				// original angle.
-				Vector3 rotaxis = (peptide_normals[i] % peptide_normals[i+1]);
+				Vector3 rotaxis = (peptide_normals[i]%peptide_normals[i+1]);
 
 				if (rotaxis.getSquareLength() > 1e-2)
 				{
@@ -275,22 +439,22 @@ namespace BALL
 
 					rotmat.rotate(diff_angle, rotaxis);
 
-					peptide_normals[i + 1] = rotmat * peptide_normals[i + 1];
+					peptide_normals[i+1] = rotmat * peptide_normals[i+1];
 				}
 			}
 			
 			// put first four points into the mesh (and first two triangles)
-			Vector3 right = spline_points_[1] - spline_points_[0];
+			Vector3 right = spline_[1] - spline_[0];
 			Vector3 normal = peptide_normals[0];
 
 			// maybe these cases should not happen, but they do...
 			if (!Maths::isZero(normal.getSquareLength())) normal.normalize();
-			if (!Maths::isZero( right.getSquareLength()))  right.normalize();
+			if (!Maths::isZero(right.getSquareLength()))  right.normalize();
 
 			Vector3 perpendic = normal % right; // perpendicular to spline
 			Vector3 last_points[4];
 
-			last_points[0] = spline_points_[0] - (perpendic * arrow_width_/2.) - normal * arrow_height_/2.;
+			last_points[0] = spline_[0] - (perpendic * arrow_width_/2.) - normal * arrow_height_/2.;
 			last_points[1] = last_points[0] + normal * arrow_height_;
 			last_points[2] = last_points[1] + perpendic * arrow_width_;
 			last_points[3] = last_points[2] - normal * arrow_height_;
@@ -346,31 +510,33 @@ namespace BALL
 			Mesh* last_mesh = 0;
 			// iterate over all but the last amino acid (last amino acid becomes the arrow)
 			Position res;
-			for (res = 0; res < spline_vector_.size() - 1; res++)
+			for (res=0; res<spline_vector_.size() - 2; res++)
 			{
 				if (res != 0) 
 				{
 					mesh = new Mesh();
+					vertices = &mesh->vertex;
+					normals  = &mesh->normal;
 					mesh->setComposite(ss.getResidue(res));
 
 					// copy last 8 points from the old mesh
 					for (Position p = 0; p < 8; p++)
 					{
-						mesh->vertex.push_back(last_mesh->vertex[last_mesh->vertex.size() - 8 + p]);
-						mesh->normal.push_back(last_mesh->normal[last_mesh->normal.size() - 8 + p]);
+						vertices->push_back(last_mesh->vertex[last_mesh->vertex.size() - 8 + p]);
+						normals->push_back(last_mesh->normal[last_mesh->normal.size() - 8 + p]);
 					}
 					last_vertices = 0;
 				}
 
 				// iterate over the spline points between two amino acids
-				for (Position j = 0; j < 9; j++)
+				for (Position j=0; j<=8; j++)
 				{
-					right  = spline_points_[res * 9 + j + 1] - spline_points_[res * 9 + j];
+					right  = spline_[res*9+j+1] - spline_[res*9+j];
 
-					normal =   peptide_normals[res    ] *(1 - j * 0.9 / 8.0) 
-									 + peptide_normals[res + 1] *     j * 0.9 / 8.0;
+					normal =   peptide_normals[res  ] *(1-j * 0.9/8.) 
+									 + peptide_normals[res+1] *   j * 0.9/8.;
 
-					drawStrand_(spline_points_[res * 9 + j], normal, right, arrow_width_, last_vertices, *mesh);
+					drawStrand_(spline_[res*9+j], normal, right, arrow_width_, last_vertices, *mesh);
 				}
 
 				last_mesh = mesh;
@@ -378,38 +544,34 @@ namespace BALL
 			}
 
 			// finally, we draw the arrow
-			for (Index j = -1; j <= 6; j++)
+			for (Index j=-1; j<=6; j++)
 			{
 				// interpolate the depth of the box
-				float new_arrow_width = 2 * (1 - j * 0.95 / 6.0) * arrow_width_; 
+				float new_arrow_width = 2*(1-j*0.95/6.)*arrow_width_; 
 				
-				right  = spline_points_[res * 9 + j + 1] - spline_points_[res * 9 + j];
+				right  = spline_[res*9+j+1] - spline_[res*9+j];
 
-				drawStrand_(spline_points_[res * 9 + j], normal, right, new_arrow_width, last_vertices, *mesh);
+				drawStrand_(spline_[res*9+j], normal, right, new_arrow_width, last_vertices, *mesh);
 			}
 
-			last_spline_point_ 	= spline_vector_[spline_vector_.size() - 1];
-//      			last_point_ 				= last_spline_point_.getVector();
-   			last_point_ 				= spline_points_[spline_points_.size() - 1];
-   			have_start_point_ 	= true;
-			/*
+			last_spline_point_ = spline_vector_[spline_vector_.size()-1];
+			last_point_ = last_spline_point_.getVector();
+			have_start_point_ = true;
 			if (!is_terminal_segment)
 			{
 				for (Position k=7; k<=9; k++)
 				{
-					buildGraphicalRepresentation_(spline_points_[res*9+k], spline_vector_[res].getAtom()); 
+					buildGraphicalRepresentation_(spline_[res*9+k], spline_vector_[res].getAtom()); 
 				}
 			}
 			else
 			{
-				buildGraphicalRepresentation_(spline_points_[res*9], spline_vector_[res].getAtom()); 
+				buildGraphicalRepresentation_(spline_[res*9], spline_vector_[res].getAtom()); 
 			}
-			*/
 
 			// restore the old spline vectors
-			spline_vector_ 					= spline_vector_backup;
-			spline_points_        	= spline_backup;
-			atoms_of_spline_points_ = atoms_backup;
+			spline_vector_ = spline_vector_backup;
+			spline_        = spline_backup;
 		}
 
 
@@ -503,9 +665,8 @@ namespace BALL
 			have_start_point_ = true;
 		}
 
-
 		// -------------------------------------------------------------------	
-		Processor::Result AddCartoonModel::operator() (Composite& composite)
+		Processor::Result AddCartoonModel::operator () (Composite& composite)
 		{
 			if (RTTI::isKindOf<Protein>(composite))
 			{
@@ -573,8 +734,7 @@ namespace BALL
 				return;
 			}
 
-			// find first C atom
-			Vector3 c1_position; 
+			Vector3 c1_position; // of first C atom
 			AtomIterator it;
 			BALL_FOREACH_ATOM(ss, it)
 			{
@@ -594,7 +754,7 @@ namespace BALL
 				index = spline_vector_position_ + 1;
 			}
 
-			for (; index < spline_vector_.size(); index++)
+			for (; index<spline_vector_.size(); index++)
 			{
 				if (spline_vector_[index].getVector() == c1_position) 
 				{
@@ -605,21 +765,18 @@ namespace BALL
 
 			Position nr_of_residues = ss.countResidues();
 			Position max = index + nr_of_residues;
- 			if (max > spline_vector_.size() - 1) max = spline_vector_.size() - 1;
+			if (max > spline_vector_.size() -1 ) max = spline_vector_.size() -1;
 
-			/*
 			for (Position pos = index; pos < max ; pos++)
 			{
 				for (Position j = 0; j < 9; j++)
 				{
 					buildGraphicalRepresentation_(
-						spline_points_[pos*9 + j], (j < 5) ? 
+						spline_[pos*9 + j], (j < 5) ? 
 						spline_vector_[pos].getAtom() : 
 						spline_vector_[pos+1].getAtom());
 				}
 			}
-			*/
- 			buildGraphicalRepresentation_(spline_vector_position_ * 10, max * 10); // ?????????? 9 || 10 ?
 
 			have_start_point_ = false;
 		}
@@ -655,14 +812,56 @@ namespace BALL
 
 			calculateTangentialVectors_();
 
-			spline_points_.push_back(spline_vector_[0].getVector());
-			atoms_of_spline_points_.push_back(spline_vector_[0].getAtom());
-			createSplinePath_();
+			spline_.push_back(spline_vector_[0].getVector());
+			
+			for (Position i=1; i<spline_vector_.size(); i++)
+			{
+				createSplineSegment2_(spline_vector_[i-1], spline_vector_[i]);
+			}
 		}
 
 
-		// -----------------------------------------------------------------------
-		// --------------------- DNA -------------------------------------------->
+		void AddCartoonModel::createSplineSegment2_(const SplinePoint &a, const SplinePoint &b)
+		{
+			Size max_step = 9;
+			double time = 0.0;
+			double step = (double)1 / (double)max_step;
+
+			for (Position index = 0; index <= max_step; ++index, time += step)
+			{
+				if (index == 0) continue;
+
+				double t_2 = time * time;
+				double t_3 = t_2 * time;
+				double m2_t_3 = 2.0 * t_3;
+				double m3_t_2 = 3.0 * t_2;
+
+				double h1 = m2_t_3 - m3_t_2 + 1.0;
+				double h2 = - m2_t_3 + m3_t_2;
+				double h3 = t_3 - 2.0 * t_2 + time;
+				double h4 = t_3 - t_2;
+
+				Vector3 new_vector;
+
+				new_vector.x = (h1 * a.getVector().x) + 
+											 (h2 * b.getVector().x) + 
+											 (h3 * a.getTangentialVector().x) + 
+											 (h4 * b.getTangentialVector().x);
+
+				new_vector.y = (h1 * a.getVector().y) + 
+											 (h2 * b.getVector().y) + 
+											 (h3 * a.getTangentialVector().y) + 
+											 (h4 * b.getTangentialVector().y);
+
+				new_vector.z = (h1 * a.getVector().z) + 
+											 (h2 * b.getVector().z) + 
+											 (h3 * a.getTangentialVector().z) + 
+											 (h4 * b.getTangentialVector().z);
+
+				spline_.push_back(new_vector);
+			}
+		}
+
 		void AddCartoonModel::insertTriangle_(Position v1, Position v2, Position v3, Mesh& mesh)
 		{
 			Surface::Triangle t;
@@ -904,7 +1103,7 @@ namespace BALL
 		void AddCartoonModel::drawWatsonCrickModel_(const SecondaryStructure& ss)
 			throw()
 		{
-			vector<Vector3>::iterator old_spline_point = spline_points_.begin();
+			vector<Vector3>::iterator old_spline_point = spline_.begin();
 			Position nr_of_residues = ss.countResidues();
 			for (Position pos = 0; pos < nr_of_residues; pos++)
 			{
@@ -1007,7 +1206,7 @@ namespace BALL
 				// --------------------------------------------
 				float distance = 256;
 				vector<Vector3>::iterator sit = old_spline_point;
-				for (; sit != spline_points_.end(); sit++)
+				for (; sit != spline_.end(); sit++)
 				{
 					float new_distance = ((*sit) - connection_point).getSquareLength();
 					if (new_distance < distance)
@@ -1100,177 +1299,6 @@ namespace BALL
 			return !error;
 		}
 
-		void AddCartoonModel::drawDNA_(SecondaryStructure& ss)
-			throw()
-		{
-			ResidueIterator rit = ss.beginResidue();
-			AtomIterator ait;
-			HashMap<Residue*, Atom*> base_atoms;
-
-			// add O5* atom for 1. Residue
-			BALL_FOREACH_ATOM(*rit, ait)
-			{
-				if (ait->getName() == "O5*")
-				{
-					spline_vector_.push_back(SplinePoint((*ait).getPosition(), 0));
-					base_atoms[&*rit] = &*ait;
-					break;
-				}
-			}
-
-			// collect the P atoms for the backbone spline
-			for(; +rit; ++rit)
-			{
-				BALL_FOREACH_ATOM(*rit, ait)
-				{
-					if (ait->getName() == "P")
-					{
-						spline_vector_.push_back(SplinePoint((*ait).getPosition(), 0));
-						base_atoms[&*rit] = &*ait;
-						break;
-					}
-				}
-			}
-			
-			// add O3* atom for last Residue
-			BALL_FOREACH_ATOM(*ss.getCTerminal(), ait)
-			{
-				if (ait->getName() == "O3*")
-				{
-					spline_vector_.push_back(SplinePoint((*ait).getPosition(), 0));
-					break;
-				}
-			}
-
-			tube_radius_ = DNA_helix_radius_;
-			createBackbone_();
-
-			if (!draw_DNA_as_ladder_)
-			{
-				drawWatsonCrickModel_(ss);
-				return;
-			}
-
-			for (rit = ss.beginResidue(); +rit; ++rit)
-			{
-				Residue* r = &*rit;
-
-				// prevent double drawing for complementary bases
-				if (complementary_bases_.has(r) &&
-						complementary_bases_[r] < r) 
-				{
-					continue;
-				}
-
-				Atom* base_atom = base_atoms[r];
-				if (base_atom == 0) 
-				{
-					continue;
-				}
-
-				// ================ draw unpaired bases ===============
-				if (!complementary_bases_.has(r))
-				{
-					String atom_name;
-					if (r->getName() == "A" ||
-							r->getName() == "G")
-					{
-						atom_name = "C6";
-					}
-					else if (r->getName() == "C") atom_name = "C4";
-					else if (r->getName() == "T") atom_name = "N3";
-						
-					Atom* end_atom = 0;
-					BALL_FOREACH_ATOM(*r, ait)
-					{
-						if (ait->getName() == atom_name)
-						{
-							end_atom = &*ait;
-							break;
-						}
-					}
-
-					if (end_atom == 0) continue;
-
-					Tube* tube = new Tube;
-					tube->setVertex1(base_atom->getPosition());
-					tube->setVertex2(end_atom->getPosition());
-					tube->setComposite(r);
-					tube->setRadius(DNA_ladder_radius_);
-					geometric_objects_.push_back(tube);
-
-					Sphere* sphere1 = new Sphere;
-					sphere1->setPosition(end_atom->getPosition());
-					sphere1->setRadius(DNA_ladder_radius_);
-					sphere1->setComposite(r);
-					geometric_objects_.push_back(sphere1);
-
-					continue;
-				}
-
-				// ================ draw paired bases ===============
-				Residue* partner = complementary_bases_[r];
-				Atom* partner_base = 0;
-				BALL_FOREACH_ATOM(*partner, ait)
-				{
-					if (ait->getName() == "P") 
-					{	
-						partner_base = &*ait;
-						break;
-					}
-				}
-
-				if (partner_base == 0)
-				{
-					BALL_FOREACH_ATOM(*partner, ait)
-					{
-						if (ait->getName() == "O5*") 
-						{
-							partner_base = &*ait;
-							break;
-						}
-					}
-
-					if (partner_base == 0) 
-					{
-						continue;
-					}
-				}
-
-				Vector3 v = base_atom->getPosition() - partner_base->getPosition();
-				v /= 2.5;
-
-				Tube* tube = new Tube;
-				tube->setVertex1(base_atom->getPosition());
-				tube->setVertex2(base_atom->getPosition() - v);
-				tube->setComposite(r);
-				tube->setRadius(DNA_ladder_radius_);
-				geometric_objects_.push_back(tube);
-
-				Sphere* sphere1 = new Sphere;
-				sphere1->setPosition(base_atom->getPosition() -v);
-				sphere1->setRadius(DNA_ladder_radius_);
-				sphere1->setComposite(r);
-				geometric_objects_.push_back(sphere1);
-
-				Tube* tube2 = new Tube;
-				tube2->setVertex1(partner_base->getPosition());
-				tube2->setVertex2(partner_base->getPosition() + v);
-				tube2->setComposite(partner);
-				tube2->setRadius(DNA_ladder_radius_);
-				geometric_objects_.push_back(tube2);
-
-				Sphere* sphere2 = new Sphere;
-				sphere2->setPosition(partner_base->getPosition() + v);
-				sphere2->setRadius(DNA_ladder_radius_);
-				sphere2->setComposite(partner);
-				geometric_objects_.push_back(sphere2);
-			}
-
-			have_start_point_ = false;
-		}
-
-
-
 	} // namespace VIEW
+
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.h,v 1.27 2004/12/20 16:23:57 amoll Exp $
+// $Id: cartoonModel.h,v 1.28 2004/12/20 21:23:52 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_CARTOONMODEL_H
@@ -169,6 +169,9 @@ namespace BALL
 
 			void drawWatsonCrickModel_(const SecondaryStructure& ss)
 				throw();
+
+			//_ create a spline segment between two spline points a and b
+			void createSplineSegment2_(const SplinePoint &a, const SplinePoint &b);
 
 			void computeSpline_(AtomContainer& ac);
 
