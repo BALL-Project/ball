@@ -1,4 +1,4 @@
-// $Id: fileSystem.C,v 1.8 2001/07/31 00:49:39 oliver Exp $
+// $Id: fileSystem.C,v 1.9 2001/08/18 18:34:36 oliver Exp $
 
 #include <BALL/SYSTEM/fileSystem.h>
 
@@ -13,7 +13,6 @@ namespace BALL
 	const char* const FileSystem::PARENT_DIRECTORY = "..";
 	// must be adapted in case of porting to other platforms than UNIX
 	static const char* const REGEXP_CONFORM_PARENT_DIRECTORY = "\\.\\.";
-	static const char* const REGEXP_CONFORM_CURRENT_DIRECTORY = "\\.";
 
 	void FileSystem::canonizePath(String& path)
 		throw()
