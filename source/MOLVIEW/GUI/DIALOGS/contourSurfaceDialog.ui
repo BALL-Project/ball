@@ -155,7 +155,7 @@
                     <rect>
                         <x>10</x>
                         <y>40</y>
-                        <width>290</width>
+                        <width>390</width>
                         <height>26</height>
                     </rect>
                 </property>
@@ -275,30 +275,6 @@
                 <class>QSpinBox</class>
                 <property stdset="1">
                     <name>name</name>
-                    <cstring>red_box</cstring>
-                </property>
-                <property stdset="1">
-                    <name>geometry</name>
-                    <rect>
-                        <x>60</x>
-                        <y>10</y>
-                        <width>50</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property stdset="1">
-                    <name>maxValue</name>
-                    <number>255</number>
-                </property>
-                <property stdset="1">
-                    <name>value</name>
-                    <number>255</number>
-                </property>
-            </widget>
-            <widget>
-                <class>QSpinBox</class>
-                <property stdset="1">
-                    <name>name</name>
                     <cstring>alpha_box</cstring>
                 </property>
                 <property stdset="1">
@@ -368,6 +344,30 @@
                 </property>
             </widget>
             <widget>
+                <class>QSpinBox</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>red_box</cstring>
+                </property>
+                <property stdset="1">
+                    <name>geometry</name>
+                    <rect>
+                        <x>60</x>
+                        <y>10</y>
+                        <width>50</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property stdset="1">
+                    <name>maxValue</name>
+                    <number>255</number>
+                </property>
+                <property stdset="1">
+                    <name>value</name>
+                    <number>255</number>
+                </property>
+            </widget>
+            <widget>
                 <class>QPushButton</class>
                 <property stdset="1">
                     <name>name</name>
@@ -378,7 +378,7 @@
                     <rect>
                         <x>160</x>
                         <y>40</y>
-                        <width>150</width>
+                        <width>220</width>
                         <height>80</height>
                     </rect>
                 </property>
@@ -1744,23 +1744,23 @@
                 </property>
             </widget>
             <widget>
-                <class>QLabel</class>
+                <class>QLineEdit</class>
                 <property stdset="1">
                     <name>name</name>
-                    <cstring>gradient_label</cstring>
+                    <cstring>max_box</cstring>
                 </property>
                 <property stdset="1">
                     <name>geometry</name>
                     <rect>
-                        <x>20</x>
-                        <y>130</y>
-                        <width>381</width>
-                        <height>21</height>
+                        <x>310</x>
+                        <y>20</y>
+                        <width>50</width>
+                        <height>20</height>
                     </rect>
                 </property>
                 <property stdset="1">
                     <name>text</name>
-                    <string> </string>
+                    <string>1.0</string>
                 </property>
             </widget>
             <widget>
@@ -1801,26 +1801,6 @@
                 <property stdset="1">
                     <name>text</name>
                     <string>-1.0</string>
-                </property>
-            </widget>
-            <widget>
-                <class>QLineEdit</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>max_box</cstring>
-                </property>
-                <property stdset="1">
-                    <name>geometry</name>
-                    <rect>
-                        <x>310</x>
-                        <y>20</y>
-                        <width>50</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>1.0</string>
                 </property>
             </widget>
             <widget>
@@ -2064,7 +2044,125 @@
                     <string></string>
                 </property>
             </widget>
+            <widget>
+                <class>QLabel</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>gradient_label</cstring>
+                </property>
+                <property stdset="1">
+                    <name>geometry</name>
+                    <rect>
+                        <x>20</x>
+                        <y>130</y>
+                        <width>381</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string> </string>
+                </property>
+            </widget>
         </widget>
     </widget>
 </widget>
+<connections>
+    <connection>
+        <sender>browse_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ContourSurfaceDialogData</receiver>
+        <slot>browse_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>location_edit</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>ContourSurfaceDialogData</receiver>
+        <slot>location_changed()</slot>
+    </connection>
+    <connection>
+        <sender>apply_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ContourSurfaceDialogData</receiver>
+        <slot>apply_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>cancel_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ContourSurfaceDialogData</receiver>
+        <slot>cancel_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>red_box</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>ContourSurfaceDialogData</receiver>
+        <slot>color_boxes_changed()</slot>
+    </connection>
+    <connection>
+        <sender>green_box</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>ContourSurfaceDialogData</receiver>
+        <slot>color_boxes_changed()</slot>
+    </connection>
+    <connection>
+        <sender>blue_box</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>ContourSurfaceDialogData</receiver>
+        <slot>color_boxes_changed()</slot>
+    </connection>
+    <connection>
+        <sender>choose_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ContourSurfaceDialogData</receiver>
+        <slot>choose_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>min_min_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ContourSurfaceDialogData</receiver>
+        <slot>min_min_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>min_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ContourSurfaceDialogData</receiver>
+        <slot>min_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>mid_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ContourSurfaceDialogData</receiver>
+        <slot>mid_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>max_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ContourSurfaceDialogData</receiver>
+        <slot>max_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>max_max_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ContourSurfaceDialogData</receiver>
+        <slot>max_max_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>surface_tab</sender>
+        <signal>selected(const QString&amp;)</signal>
+        <receiver>ContourSurfaceDialogData</receiver>
+        <slot>tab_changed()</slot>
+    </connection>
+    <slot access="public">apply_clicked()</slot>
+    <slot access="public">browse_clicked()</slot>
+    <slot access="public">cancel_clicked()</slot>
+    <slot access="public">choose_clicked()</slot>
+    <slot access="public">color_boxes_changed()</slot>
+    <slot access="public">location_changed()</slot>
+    <slot access="public">max_clicked()</slot>
+    <slot access="public">mid_clicked()</slot>
+    <slot access="public">min_clicked()</slot>
+    <slot access="public">min_min_clicked()</slot>
+    <slot access="public">max_max_clicked()</slot>
+    <slot access="public">tab_changed()</slot>
+</connections>
 </UI>

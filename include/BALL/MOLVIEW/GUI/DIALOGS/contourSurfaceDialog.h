@@ -1,65 +1,55 @@
-/****************************************************************************
-** Form interface generated from reading ui file 'contourSurfaceDialog.ui'
-**
-** Created: Thu Sep 5 09:25:51 2002
-**      by:  The User Interface Compiler (uic)
-**
-** WARNING! All changes made in this file will be lost!
-****************************************************************************/
-#ifndef BALL_MOLVIEW_GUI_DIALOGS_CONTOURSURFACEDIALOG_H
-#define BALL_MOLVIEW_GUI_DIALOGS_CONTOURSURFACEDIALOG_H
+#ifndef CONTOURSURFACEDIALOG_H
+#define CONTOURSURFACEDIALOG_H
+#include "contourSurfaceDialogData.h"
 
-#ifndef BALL_DATATYPE_STRING_H
-# include <BALL/DATATYPE/string.h>
+#ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
+# include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #endif
-
-#include <qdialog.h>
-
-class QFrame;
-class QLabel;
-class QLineEdit;
-class QPushButton;
 
 namespace BALL
 {
- namespace MOLVIEW
-   {
 
-class ContourSurfaceDialog : public QDialog
+	using VIEW::ColorRGBA;
+
+	namespace MOLVIEW
+	{
+
+class ContourSurfaceDialog : public ContourSurfaceDialogData
 { 
     Q_OBJECT
 
 public:
-    ContourSurfaceDialog( QWidget* parent = 0, const char* name = 0);
+    ContourSurfaceDialog( QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
     ~ContourSurfaceDialog();
+				
+		ColorRGBA	 	color;
+		String 			location;		
+		ColorRGBA		min_min_color;
+		ColorRGBA 	min_color;
+		ColorRGBA   mid_color;
+		ColorRGBA		max_color;
+		ColorRGBA		max_max_color;	
 
-    QLabel* TextLabel1_2_2;
-    QFrame* Line1;
-    QFrame* Line1_2;
-    QLabel* TextLabel1;
-    QLineEdit* threshold_;
-    QLabel* TextLabel1_2;
-    QLineEdit* Loadfile_;
-    QLineEdit* Savefile_;
-    QPushButton* Compute_;
-    QPushButton* Cancel_;
-    QPushButton* Browseload;
-    QPushButton* Browsesave;
-    void setSaveName(const String& filename);
-    void setLoadName(const String& filename);
-    const String& getSaveName() const;
-    const String& getLoadName() const;
-    //double getThreshold() const;
-
+		float minimum;
+		float maximum;
+		Size nr_of_levels;		
+		
 public slots:
-    virtual void new_slot();
-
- protected slots: 
-     virtual void browseLoadFiles(); 
-     virtual void browseSaveFiles();
-
+    void apply_clicked();
+    void browse_clicked();
+    void cancel_clicked();
+    void choose_clicked();
+    void color_boxes_changed();
+    void location_changed();
+    void max_clicked();
+    void mid_clicked();
+    void min_clicked();
+    void min_min_clicked();
+    void max_max_clicked();
+    void tab_changed();		
 };
-}
+
+	}
 }
 
-#endif // BALL_MOLVIEW_GUI_DIALOGS_CONTOURSURFACEDIALOG_H
+#endif // CONTOURSURFACEDIALOG_H
