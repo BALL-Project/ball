@@ -1,4 +1,4 @@
-// $Id: kernel.doc,v 1.8 2001/05/24 14:51:34 anker Exp $
+// $Id: kernel.doc,v 1.9 2001/06/27 01:34:38 oliver Exp $
 
 /**@name	Kernel
 		This chapter contains all relevant information on 
@@ -18,7 +18,6 @@
   //@Include: residue.h
   //@Include: secondaryStructure.h
   //@Include: system.h
-  //@Include: universe.h
 
 	/** @name Iterator classes.
 			Iterators for KERNEL classes
