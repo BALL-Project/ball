@@ -6,6 +6,7 @@
 */
 //@{
 
+	//@Include: common.h
 	/**	@name	Primitive datatypes
 	*/
 	//@{
@@ -26,10 +27,10 @@
 		//@Include: sphere3.h
 		//@Include: surface.h
 	//@}
-	//@Include: common.h
 	//@Include: analyticalGeometry.h
 	//@Include: function.h
 	//@Include: numericalIntegrator.h
+	//@Include: rombergIntegrator.h
   //@Include: piecewiseFunction.h
   //@Include: piecewisePolynomial.h
 //@}
