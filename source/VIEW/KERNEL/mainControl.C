@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.100 2004/07/27 12:46:16 amoll Exp $
+// $Id: mainControl.C,v 1.101 2004/08/16 12:36:52 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -269,6 +269,10 @@ namespace BALL
 					break;
 				case DISPLAY_STEREO:
 					initPopupMenu(DISPLAY)->insertItem("&Stereo", menu, DISPLAY_STEREO);
+					break;
+				case DISPLAY_ANIMATION:
+					initPopupMenu(DISPLAY)->insertItem("&Animation", menu, DISPLAY_ANIMATION);
+					menu->setCheckable(true);
 					break;
 				case MOLECULARMECHANICS:
 					menuBar()->insertItem("&Molecular Mechanics", menu, MOLECULARMECHANICS, -1);

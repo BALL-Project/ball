@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.118 2004/08/15 22:17:26 amoll Exp $
+// $Id: scene.C,v 1.119 2004/08/16 12:36:52 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -14,6 +14,7 @@
 #include <BALL/VIEW/DIALOGS/lightSettings.h>
 #include <BALL/VIEW/DIALOGS/stageSettings.h>
 #include <BALL/VIEW/DIALOGS/materialSettings.h>
+#include <BALL/VIEW/DIALOGS/animationDialog.h>
 
 #include <BALL/VIEW/PRIMITIVES/simpleBox.h>
 #include <BALL/VIEW/PRIMITIVES/label.h>
@@ -146,6 +147,7 @@ namespace BALL
 			quaternion_.setIdentity();
 
 			stage_->clear();
+			animation_points_.clear();
 		}
 
 		void Scene::set(const Scene& scene)
@@ -1243,6 +1245,9 @@ namespace BALL
 		void Scene::initializeWidget(MainControl& main_control)
 			throw()
 		{
+			anim_dialog_ = new AnimationDialog(this);
+			CHECK_PTR(anim_dialog_);
+
 			(main_control.initPopupMenu(MainControl::DISPLAY))->setCheckable(true);
 
 			String hint;
@@ -1289,6 +1294,16 @@ namespace BALL
 			main_control.insertMenuEntry(MainControl::DISPLAY, "New Clipping Plane", this, 
 					SLOT(createNewClippingPlane()), 0, -1, hint);   
 
+			// ======================== ANIMATION ===============================================
+			hint = "Record an animation for later processing";
+			record_animation_id_ = main_control.insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Record", this, 
+					SLOT(recordAnimationClicked()), 0, -1, hint);   
+ 			menuBar()->setItemChecked(record_animation_id_, false) ;
+			
+			clear_animation_id_ = main_control.insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Clear", this, SLOT(clearRecordedAnimation()));
+			start_animation_id_ = main_control.insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Start", anim_dialog_, SLOT(show()));
+
+
 			setCursor(QCursor(Qt::SizeAllCursor));
 		}
 
@@ -1316,6 +1331,8 @@ namespace BALL
 		{
 			menuBar()->setItemChecked(rotate_id_, 	(current_mode_ == ROTATE__MODE));
 			menuBar()->setItemChecked(picking_id_,  (current_mode_ == PICKING__MODE));		
+			menuBar()->setItemEnabled(start_animation_id_, animation_points_.size() > 0 && getMainControl()->compositesAreMuteable());
+			menuBar()->setItemEnabled(clear_animation_id_, animation_points_.size() > 0);
 		}
 
 		//##########################EVENTS#################################
@@ -1398,6 +1415,11 @@ namespace BALL
 
 				default:
 					break;
+			}
+
+			if (menuBar()->isItemChecked(record_animation_id_))
+			{
+				animation_points_.push_back(stage_->getCamera());
 			}
 		}
 
@@ -1755,6 +1777,23 @@ namespace BALL
 		{
 			stage_->moveCameraTo(camera);
 			updateCamera_();
+		}
+
+		void Scene::clearRecordedAnimation()
+			throw()
+		{
+			animation_points_.clear();
+		}
+
+		void Scene::startAnimation()
+			throw()
+		{
+		}
+
+		void Scene::recordAnimationClicked()
+			throw()
+		{
+			menuBar()->setItemChecked(record_animation_id_, !menuBar()->isItemChecked(record_animation_id_));
 		}
 
 } }// namespaces

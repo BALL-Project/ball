@@ -21,6 +21,7 @@ AnimationDialog::AnimationDialog( QWidget* parent,  const char* name, bool modal
  : AnimationDialogData( parent, name, modal, fl ),
 	 animation_thread_(0)
 {
+	animate_button->setEnabled(true);
 }
 
 AnimationDialog::~AnimationDialog()
@@ -31,7 +32,9 @@ AnimationDialog::~AnimationDialog()
 
 void AnimationDialog::animatePressed()
 {
-	if (cameras_.size() < 2) return;
+	Scene* scene = ((Scene*) Scene::getInstance(0));
+	if (scene->getAnimationPoints().size() < 2) return;
+// 	if (cameras_.size() < 2) return;
 
 	stop_ = false;
 	cancel_button->setEnabled(true);
@@ -50,11 +53,14 @@ void AnimationDialog::animatePressed()
 
 void AnimationDialog::animate_()
 {
-	List<Camera>::Iterator it = cameras_.begin();
+	Scene* scene = ((Scene*) Scene::getInstance(0));
+//	List<Camera>::Iterator it =  cameras_.begin();
+	List<Camera>::Iterator it = scene->getAnimationPoints().begin();
 	Camera last_camera = *it;
 	it++;
 
-	for (; it != cameras_.end(); it++)
+// 	for (; it != cameras_.end(); it++)
+	for (; it != scene->getAnimationPoints().end(); it++)
 	{
 		if (*it == last_camera) continue;
  
@@ -65,25 +71,26 @@ void AnimationDialog::animate_()
 
 		Vector3 max = diff_viewpoint;
 		if (diff_look_at.getLength() > max.getLength()) max = diff_look_at;
+		
 		Size steps = (Size) (max.getLength() * smoothness->value());
+		if (steps == 0) steps = 1;
+		
 		diff_viewpoint /= steps;
 		diff_up /= steps;
 		diff_look_at /= steps;
 
 		for (Size i = 0; i < steps && !stop_; i++)
 		{
-
-#ifdef BALL_QT_HAS_THREADS
-			while (qApp->hasPendingEvents())
-			{
-   	 		animation_thread_->mySleep(50);
-			}
-#endif
+			#ifdef BALL_QT_HAS_THREADS
+				while (qApp->hasPendingEvents())
+				{
+					animation_thread_->mySleep(50);
+				}
+			#endif
 
 			camera.setViewPoint(camera.getViewPoint() - diff_viewpoint);
 			camera.setLookUpVector(camera.getLookUpVector() - diff_up);
 			camera.setLookAtPosition(camera.getLookAtPosition() - diff_look_at);
-			Scene* scene = ((Scene*) Scene::getInstance(0));
 
 			Scene::SceneSetCameraEvent* e = new Scene::SceneSetCameraEvent();
 			e->camera = camera;
@@ -121,6 +128,7 @@ void AnimationDialog::closePressed()
 
 void AnimationDialog::gotoPressed()
 {
+	/*
  	if (entries->selectedItem() == 0) return;
 
 	Position p;
@@ -134,10 +142,12 @@ void AnimationDialog::gotoPressed()
 		}
 		it++;
 	}
+	*/
 }
 
 void AnimationDialog::deletePressed()
 {
+	/*
  	if (entries->selectedItem() == 0) return;
 
 	Position p;
@@ -159,10 +169,12 @@ void AnimationDialog::deletePressed()
 
 		it ++;
 	}
+	*/
 }
 
 void AnimationDialog::addPressed()
 {
+	/*
 	Camera& camera = ((Scene*) Scene::getInstance(0))->getStage()->getCamera();
 	String text;
 	text += "V: " + vector3ToString(camera.getViewPoint());
@@ -172,6 +184,7 @@ void AnimationDialog::addPressed()
 	cameras_.push_back(camera);
 
 	animate_button->setEnabled(true);
+	*/
 }
 
 void AnimationDialog::entrySelected()

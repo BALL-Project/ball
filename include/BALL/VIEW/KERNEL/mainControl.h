@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.53 2004/07/27 12:45:06 amoll Exp $
+// $Id: mainControl.h,v 1.54 2004/08/16 12:36:57 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -161,6 +161,9 @@ namespace BALL
 				
 				/// Display Stereo submenu
 				DISPLAY_STEREO,
+				
+				/// Display Animation submenu
+				DISPLAY_ANIMATION,
 
 				/// Simulations menu
 				MOLECULARMECHANICS = 10400,

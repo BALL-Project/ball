@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.50 2004/08/15 22:17:10 amoll Exp $
+// $Id: scene.h,v 1.51 2004/08/16 12:36:57 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -34,6 +34,7 @@ namespace BALL
 		class LightSettings;
 		class StageSettings;
 		class MaterialSettings;
+		class AnimationDialog;
 
 		/**	Scene is the main visualization widget that shows the graphical Representation 's.
 				To do this, the class Scene must be a child of the MainControl.
@@ -350,6 +351,10 @@ namespace BALL
 				throw();
 
 			///
+			List<Camera>& getAnimationPoints()
+				throw() { return animation_points_;}
+
+			///
 			void setDefaultLighting(bool update_GL = true)
 				throw();
 
@@ -496,6 +501,18 @@ namespace BALL
 			void enterDualStereo()
 				throw();
 
+			///
+			void clearRecordedAnimation()
+				throw();
+			
+			///
+			void startAnimation()
+				throw();
+
+			///
+			void recordAnimationClicked()
+				throw();
+
 			protected slots:
 
 			//@}
@@ -589,6 +606,7 @@ namespace BALL
 			// Menu entry IDs
 			Index rotate_id_, picking_id_;
 			Index no_stereo_id_, active_stereo_id_, dual_stereo_id_;
+			Index record_animation_id_, start_animation_id_, clear_animation_id_;
 			
 			Vector3 system_origin_;
 			Quaternion quaternion_;
@@ -621,6 +639,8 @@ namespace BALL
 
 			MaterialSettings* material_settings_;
 
+			AnimationDialog* anim_dialog_;
+
 			Position screenshot_nr_,
 							 pov_nr_;
 
@@ -628,6 +648,7 @@ namespace BALL
 
 			static QGLFormat gl_format_;
 			GLint  current_clipping_plane_;
+			List<Camera> animation_points_;
 		};
 
 } } // namespaces

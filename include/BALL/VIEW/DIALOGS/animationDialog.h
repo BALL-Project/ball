@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: animationDialog.h,v 1.4 2004/08/15 23:36:45 amoll Exp $
+// $Id: animationDialog.h,v 1.5 2004/08/16 12:36:57 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_ANIMATIONDIALOG_H
@@ -55,9 +55,9 @@ namespace BALL
  			protected:
 				void animate_();
 
-				List<Camera> cameras_;
+// 				List<Camera> cameras_;
 				bool stop_;
-				AnimationThread* animation_thread_;
+ 				AnimationThread* animation_thread_;
 		};
 
 #ifdef BALL_QT_HAS_THREADS
