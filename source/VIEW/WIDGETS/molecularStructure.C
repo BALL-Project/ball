@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.50 2004/06/10 16:51:00 amoll Exp $
+// $Id: molecularStructure.C,v 1.51 2004/06/10 21:56:58 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -122,7 +122,11 @@ namespace BALL
 
 			hint = "Recalculate the secondary structure for a structure.";
 			calculate_ss_id_ = insertMenuEntry(MainControl::TOOLS, "Calculate sec&ondary structure", this,
-																									 SLOT(calculateSecondaryStructure()), ALT+Key_O, -1, hint);
+																				 SLOT(calculateSecondaryStructure()), ALT+Key_O, -1, hint);
+
+			hint = "Calculate a Ramachandran Plot for a Protein.";
+			calculate_ramachandran_ = insertMenuEntry(MainControl::TOOLS, "Ramachandran Plot", this,
+																				 SLOT(calculateRamachandranPlot()), 0, -1, hint);
 
 			hint = "To assign H-bonds, one System has to be selected.";
 			calculate_hbonds_id_ = insertMenuEntry(MainControl::TOOLS, "Calculate H-B&onds", this, SLOT(calculateHBonds()),
@@ -167,6 +171,9 @@ namespace BALL
 																											SLOT(createGridFromDistance()));   
 			main_control.removeMenuEntry(MainControl::BUILD, "Calculate Secondary Structure", this,
 																											SLOT(calculateSecondaryStructure()));
+			main_control.removeMenuEntry(MainControl::BUILD, "Ramachandran Plot", this,
+																											SLOT(calculateRamachandranPlot()));
+
 
 //			main_control.removeMenuEntry(MainControl::BUILD, " Map two Proteins", this,
 // 																											SLOT(mapProteins()));
@@ -448,6 +455,8 @@ namespace BALL
 // 																									 composites_muteable);
 			menuBar()->setItemEnabled(calculate_RMSD_id_, (number_of_selected_objects == 2) &&
 																										composites_muteable); 
+			menuBar()->setItemEnabled(calculate_ramachandran_, (number_of_selected_objects == 1) &&
+							RTTI::isKindOf<Protein>(**getMainControl()->getMolecularControlSelection().begin()));
 		}
 
 
@@ -1191,6 +1200,54 @@ namespace BALL
 			}
 		}
 
-	} // namespace VIEW
 
+		void MolecularStructure::calculateRamachandranPlot()
+		{
+			List<Composite*> selection = getMainControl()->getMolecularControlSelection();
+			if (!selection.size() != 1 ||
+					!RTTI::isKindOf<Protein>(**selection.begin()))
+			{
+				setStatusbarText("Exacly one Protein has to be selected for Ramachandran Plot!");
+			}
+
+			Protein* protein = ((Protein*) *selection.begin());
+			RegularData2D* rd = new RegularData2D(Vector2(-180,-180), Vector2(361, 361), Vector2(1,1));
+
+			// now, iterate over all residues
+			Size unassigned_residues = 0;
+			Size   assigned_residues = 0;
+			ResidueIterator res_it = protein->beginResidue();
+			for (;+res_it; ++res_it)
+			{
+				// torsion angle phi does not exist for N terminal residues
+				// torsion angle psi does not exist for C terminal residues
+				if (res_it->hasTorsionPhi() &&
+				    res_it->hasTorsionPsi())
+				{
+					// calculate the torsion angle and print its value in degree
+					Angle phi = res_it->getTorsionPhi();
+					Angle psi = res_it->getTorsionPsi();
+//				 	cout << "phi(" << res_it->getName() << res_it->getID() << ") = " << phi.toDegree() << endl;
+// 					cout << "psi(" << res_it->getName() << res_it->getID() << ") = " << psi.toDegree() << endl;
+					(*rd).getClosestValue(Vector2(phi.toDegree(), psi.toDegree())) ++;
+					assigned_residues++;
+				}
+				else
+				{ 
+					unassigned_residues++;
+				}
+			}
+
+			String text = String(  assigned_residues) + " residues assigned, " +
+										String(unassigned_residues) + " residues unassigned.";
+			setStatusbarText(text);
+			Log.info() << text << std::endl;
+
+			RegularData2DMessage* msg = new RegularData2DMessage(RegularData2DMessage::NEW);
+			msg->setData(*rd);
+			msg->setCompositeName(protein->getName() + " Ramachandran Plot");
+			notify_(msg);
+		}
+
+	} // namespace VIEW
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.h,v 1.17 2004/04/23 13:07:40 amoll Exp $
+// $Id: molecularStructure.h,v 1.18 2004/06/10 21:57:21 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARSTRUCTURE_H
@@ -210,6 +210,9 @@ namespace BALL
 			/// Calculate the H-Bonds for a Protein
 			void calculateHBonds();
 
+			/// Calculate a Ramachandran Plot
+			void calculateRamachandranPlot();
+
 			// Calculate the charges for a Molecule
 //	 		void assignCharges();
 
@@ -263,6 +266,7 @@ namespace BALL
 			Index	amber_ff_id_;
 			Index	charmm_ff_id_;
 			Index setup_ff_;
+			Index calculate_ramachandran_;
 			
 			bool use_amber_;
 
