@@ -24,6 +24,7 @@ CPP_SOURCES= \
 	nucleicAcid.C\
 	nucleotide.C\
 	PDBAtom.C\
+	predicate.C\
 	protein.C\
 	PTE.C\
 	residue.C\

@@ -17,7 +17,9 @@ CPP_SOURCES= \
 	graphEdge.C\
 	graphFace.C\
 	graphVertex.C\
+	molecularGraph.C\
 	numericalSAS.C\
+	peptides.C\
 	radialDistributionFunction.C\
 	reconstructFragmentProcessor.C\
 	RDFIntegrator.C\

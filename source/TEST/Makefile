@@ -16,6 +16,7 @@ EXECUTABLES_MATHS = \
 	AnalyticalGeometry_test\
 	Angle_test\
 	Vector2_test\
+	Vector3_test\
 	Vector4_test\
 	Quaternion_test\
 	Matrix44_test\
@@ -55,6 +56,7 @@ EXECUTABLES_DATATYPES = \
 	String_test2\
 	String_test3\
 	String_test4\
+	Substring_test\
 	Triple_test\
 	Quadruple_test\
 	RegularData1D_test\
@@ -64,6 +66,7 @@ EXECUTABLES_DATATYPES = \
 EXECUTABLES_CONCEPTS = $(BALL_HAS_XDR:true=$(XDR_DEPENDENT_EXECUTABLES))\
 	LogStream_test\
 	AutoDeletable_test\
+	Factory_test\
 	Object_test\
 	PersistentObject_test\
 	PersistenceManager_test\
@@ -107,6 +110,7 @@ EXECUTABLES_MOLMEC = \
 	AtomVector_test\
 	AmberFF_test\
 	CharmmFF_test\
+	MolmecSupport_test\
 	EnergyMinimizer_test\
 	SnapShot_test\
 	SnapShotManager_test
@@ -152,7 +156,9 @@ EXECUTABLES_ENERGY = \
 EXECUTABLES_STRUCTURE = \
 	Enumerator_test\
 	AnalyticalSES_test\
+	MolecularGraph_test\
 	NumericalSAS_test\
+	Peptides_test\
 	RadialDistributionFunction_test\
 	RDFIntegrator_test\
 	RDFParameter_test\

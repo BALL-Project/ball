@@ -6,9 +6,11 @@ XDR_SOURCES=$(BALL_HAS_XDR:true=XDRPersistenceManager.C)
 
 CPP_SOURCES= $(XDR_SOURCES)\
 	autoDeletable.C\
+	callback.C\
 	composite.C\
 	embeddable.C\
 	enumerator.C\
+	factory.C\
 	notification.C\
 	object.C\
 	persistenceManager.C\
