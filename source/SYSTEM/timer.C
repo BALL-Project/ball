@@ -1,4 +1,4 @@
-// $Id: timer.C,v 1.7.4.6 2002/12/09 12:55:56 crauser Exp $
+// $Id: timer.C,v 1.7.4.7 2002/12/09 19:35:39 oliver Exp $
 
 #include <BALL/SYSTEM/timer.h>
 
@@ -327,7 +327,7 @@ namespace BALL
 	{
 		float temp_value;
 
-		#ifndef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
+		#ifdef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
 			//struct tms tms_buffer;
 			FILETIME kt,ut,ct,et;
 		#endif												
@@ -340,7 +340,7 @@ namespace BALL
 		else 
 		{ 
 			/* timer is on, return accumulated plus current */
-			#ifndef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
+			#ifdef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
 				//times(&tms_buffer);
 				HANDLE my_id=GetCurrentProcess();
 				GetProcessTimes(my_id,&ct,&et,&kt,&ut);
