@@ -1,4 +1,4 @@
-// $Id: hashGrid.h,v 1.3 1999/09/01 09:41:45 oliver Exp $
+// $Id: hashGrid.h,v 1.4 1999/09/07 16:20:27 oliver Exp $
 
 #ifndef BALL_DATATYPE_HASHGRID_H
 #define BALL_DATATYPE_HASHGRID_H
@@ -598,8 +598,12 @@ namespace BALL {
 	Item* HashGridBox3<Item>::find(const Item& item)
 	{
 		for (DataItem_* item_ = first_item_; item != 0; item = item->next_)
+		{
 			if (item->item_ == item)
+			{
 				return &(item->item_);
+			}
+		}
 
 		return 0;
 	}
@@ -615,9 +619,9 @@ namespace BALL {
 	Size HashGridBox3<Item>::getSize() const
 	{
 		Size size = 0;
-		
-		for (const DataItem_ *item = first_item_; item != 0; item = item->next_)
-			++size;
+
+		// count all items in the box
+		for (const DataItem_* item = first_item_; item != 0; item = item->next_, size++);
 		
 		return size;
 	}
@@ -637,13 +641,19 @@ namespace BALL {
 			if (item_ptr->item_ == item)
 			{
 				if (item_ptr == first_item_)
+				{
 					first_item_ = first_item_->next_;
+				}
 			
 				if (item_ptr->next_ != 0)
+				{
 					item_ptr->next_->previous_ = item_ptr->previous_;
+				}
 			
 				if (item_ptr->previous_ != 0)
+				{
 					item_ptr->previous_->next_ = item_ptr->next_;
+				}
 			
 				delete item_ptr;
 				
@@ -668,13 +678,19 @@ namespace BALL {
 			if (item_ptr->item_ == item)
 			{
 				if (item_ptr == first_item_)
+				{
 					first_item_ = first_item_->next_;
+				}
 				
 				if (item_ptr->next_ != 0)
+				{
 					item_ptr->next_->previous_ = item_ptr->previous_;
+				}
 			
 				if (item_ptr->previous_ != 0)
+				{
 					item_ptr->previous_->next_ = item_ptr->next_;
+				}
 			
 				delete item_ptr;
 				
@@ -701,8 +717,12 @@ namespace BALL {
 		const DataItem_* b = box.first_item_;
 		
 		for (; a != 0 && b != 0; a = a->next_, b = b->next_)
+		{
 			if (a->item_ != b->item_)
+			{
 				return false;
+			}
+		}
 		
 		return (bool)(a == b);
 	}
@@ -732,35 +752,39 @@ namespace BALL {
 	bool HashGridBox3<Item>::isValid() const
 	{
 		Size size = 0;
-		NeighbourBoxItem_ *item_ptr_ = 0;
+		NeighbourBoxItem_* item_ptr_ = 0;
 		
 		for (item_ptr_ = first_neighbour_; item_ptr_ != 0; item_ptr_ = item_ptr_->next_)
 		{
 			++size;
 
 			if (item_ptr_->next_ == 0)
+			{
 				break;
+			}
 		}
 		
-		for (; item_ptr_ != 0; item_ptr_ = item_ptr_->previous_)
-			--size;
+		for (; item_ptr_ != 0; item_ptr_ = item_ptr_->previous_, --size);
 		
 		if (size != 0)
+		{
 			return false;
+		}
 		
 		size = 0;
-		DataItem_ *item = 0;
+		DataItem_* item = 0;
 		
 		for (item = first_item_; item != 0; item = item->next_)
 		{
 			++size;
 			
 			if (item->next_ == 0)
+			{
 				break;
+			}
 		}
 		
-		for (; item != 0; item = item->previous_)
-			--size;
+		for (; item != 0; item = item->previous_, --size);
 		
 		return (bool)(size == 0);
 	}
@@ -798,7 +822,9 @@ namespace BALL {
 	bool HashGridBox3<Item>::apply(UnaryProcessor<Item>& processor)
 	{
 		if (processor.start() == false)
+		{
 			return false;
+		}
 
 		Processor::Result result;
 			
@@ -807,7 +833,9 @@ namespace BALL {
 			result = processor(item->item_);
 
 			if (result <= Processor::BREAK)
+			{
 				return (result == Processor::BREAK) ? true : false;
+			}
 		}
 
 		return preocessor->finish(); 
@@ -817,7 +845,9 @@ namespace BALL {
 	bool HashGridBox3<Item>::apply(UnaryProcessor< HashGridBox3<Item> >& processor)
 	{
     if (processor.start() == false)
+		{
       return false;
+		}
  
 		Processor::Result result;
 
@@ -827,7 +857,9 @@ namespace BALL {
 			result = processor(*(neighbour_item->box_));
 
 			if (result <= Processor::BREAK)
+			{
 				return (result == Processor::BREAK) ? true : false;
+			}
 		}
 
 		return processor->finish(); 
@@ -849,13 +881,19 @@ namespace BALL {
 			if (neighbour_item->box_ == box)
 			{
 				if (neighbour_item == first_neighbour_)
+				{
 					first_neighbour_ = first_neighbour_->next_;
+				}
 				
 				if (neighbour_item->next_ != 0)
+				{
 					neighbour_item->next_->previous_ = neighbour_item->previous_;
+				}
 			
 				if (neighbour_item->previous_ != 0)
+				{
 					neighbour_item->previous_->next_ = neighbour_item->next_;
+				}
 			
 				delete neighbour_item;
 				
@@ -892,7 +930,7 @@ namespace BALL {
 			 Size dimension_x, Size dimension_y, 
 			 Size dimension_z, float spacing);
 
-		/// Constructor using three vectors
+		/// Constructor using two vectors
 		HashGrid3(const Vector3& origin, const Vector3& size, float spacing);
 
 		/// Copy constructor
@@ -1208,8 +1246,6 @@ namespace BALL {
 
 		//@}
 
-		protected:
-
 		private:
 
 		Index getIndex_(const HashGridBox3<Item>& box) const;
@@ -1218,8 +1254,8 @@ namespace BALL {
 
 		bool remove_(HashGridBox3<Item>* box, const Item& item);
 
-		HashGridBox3<Item> *box_;
-		HashGridBox3<Item> *first_nonempty_;
+		HashGridBox3<Item>* box_;
+		HashGridBox3<Item>* first_nonempty_;
 		Vector3 origin_;
 		Vector3 unit_;
 		Size	dimension_x_;
@@ -1241,7 +1277,6 @@ namespace BALL {
 			dimension_y_(0),
 			dimension_z_(0)
 	{
-		box_ = new HashGridBox3<Item>[getSize()];
 	}
 
 	template <class Item>
@@ -1257,13 +1292,13 @@ namespace BALL {
 			dimension_y_(dimension_y),
 			dimension_z_(dimension_z)
 	{
-		box_ = new HashGridBox3<Item>[getSize()];
+		box_ = new HashGridBox3<Item>[dimension_x * dimension_y * dimension_z];
 	}
 
 	template <class Item>
 	HashGrid3<Item>::HashGrid3
 		(const Vector3& origin,
-		Size dimension_x, Size dimension_y, Size dimension_z, float spacing)
+		 Size dimension_x, Size dimension_y, Size dimension_z, float spacing)
 	 :	box_(0),
 			first_nonempty_(0),
 			origin_(origin),
@@ -1272,7 +1307,7 @@ namespace BALL {
 			dimension_y_(dimension_y),
 			dimension_z_(dimension_z)
 	{
-		box_ = new HashGridBox3<Item>[getSize()];
+		box_ = new HashGridBox3<Item>[dimension_x * dimension_y * dimension_z];
 	}
 
 	template <class Item>
@@ -1285,7 +1320,7 @@ namespace BALL {
 			dimension_y_((Size)(size.y / spacing + 1.0)),
 			dimension_z_((Size)(size.z / spacing + 1.0))
 	{
-		box_ = new HashGridBox3<Item>[getSize()];
+		box_ = new HashGridBox3<Item>[dimension_x_ * dimension_y_ * dimension_z_];
 	}
 
 	template <class Item>
@@ -1308,18 +1343,21 @@ namespace BALL {
 	template <class Item>
 	void HashGrid3<Item>::clear()
 	{
-		Size size = getSize();
-
-		for (Position index = 0; index < (Position)size; ++index)
+		if (box_ != 0)
 		{
-			box_[index].clear();
-		}
+			for(HashGridBox3<Item>* nextbox = 0; first_nonempty_ != 0; first_nonempty_ = nextbox)
+			{
+				nextbox = first_nonempty_->next_;
+				
+				first_nonempty_->previous_ = first_nonempty_->next_ = 0;
+			}
 
-		for(HashGridBox3<Item> *nextbox = 0; first_nonempty_ != 0; first_nonempty_ = nextbox)
-		{
-			nextbox = first_nonempty_->next_;
-			
-			first_nonempty_->previous_ = first_nonempty_->next_ = 0;
+			Size size = dimension_x_ * dimension_y_ * dimension_z_;
+
+			for (Position index = 0; index < (Position)size; ++index)
+			{
+				box_[index].clear();
+			}
 		}
 	}
 
@@ -1496,70 +1534,65 @@ namespace BALL {
 		return size;
 	}
 
+	BALL_INLINE 
 	template <class Item>
-	Size 
-	HashGrid3<Item>::getSize
-		() const
+	Size HashGrid3<Item>::getSize() const
 	{
 		return (dimension_x_ * dimension_y_ * dimension_z_);
 	}
 
+	BALL_INLINE 
 	template <class Item>
-	BALL_INLINE Vector3 &
-	HashGrid3<Item>::getOrigin
-		()
+	Vector3& HashGrid3<Item>::getOrigin()
 	{
 		return origin_;
 	}
 
 	template <class Item>
-	BALL_INLINE const Vector3 &
-	HashGrid3<Item>::getOrigin
-		() const
+	BALL_INLINE 
+	const Vector3& HashGrid3<Item>::getOrigin() const
 	{
 		return origin_;
 	}
 
 	template <class Item>
-	BALL_INLINE Vector3 &
-	HashGrid3<Item>::getUnit
-		()
+	BALL_INLINE 
+	Vector3& HashGrid3<Item>::getUnit()
 	{
 		return unit_;
 	}
 
 	template <class Item>
-	BALL_INLINE const Vector3 &
-	HashGrid3<Item>::getUnit
-		() const
+	BALL_INLINE 
+	const Vector3& HashGrid3<Item>::getUnit() const
 	{
 		return unit_;
 	}
 
 	template <class Item>
-	BALL_INLINE Size
-	HashGrid3<Item>::getSizeX() const
+	BALL_INLINE 
+	Size HashGrid3<Item>::getSizeX() const
 	{
 		return dimension_x_;
 	}
 
 	template <class Item>
-	BALL_INLINE Size
-	HashGrid3<Item>::getSizeY() const
+	BALL_INLINE 
+	Size HashGrid3<Item>::getSizeY() const
 	{
 		return dimension_y_;
 	}
 
 	template <class Item>
-	BALL_INLINE Size
-	HashGrid3<Item>::getSizeZ() const
+	BALL_INLINE 
+	Size HashGrid3<Item>::getSizeZ() const
 	{
 		return dimension_z_;
 	}
 
 	template <class Item>
-	HashGridBox3<Item>* HashGrid3<Item>::getBox
-		(Position x, Position y, Position z)
+	BALL_INLINE
+	HashGridBox3<Item>* HashGrid3<Item>::getBox(Position x, Position y, Position z)
 	{
 		if (x >= (Position)dimension_x_
 				|| y >= (Position)dimension_y_
