@@ -1,4 +1,4 @@
-// $Id: hashMap.h,v 1.26 2001/05/17 01:30:45 oliver Exp $ 
+// $Id: hashMap.h,v 1.27 2001/06/05 15:41:18 anker Exp $ 
 
 #ifndef BALL_DATATYPE_HASHMAP_H
 #define BALL_DATATYPE_HASHMAP_H
@@ -756,7 +756,7 @@ namespace BALL
 	const T& HashMap<Key, T>::operator [] (const Key& key) const
 		throw(HashMap<Key, T>::IllegalKey)
 	{
-		Iterator it = find(key);
+		ConstIterator it = find(key);
 		if (it == end())
 		{
 			throw IllegalKey(__FILE__, __LINE__);
