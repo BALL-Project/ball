@@ -1,4 +1,4 @@
-// $Id: vector3.h,v 1.34 2000/04/29 15:28:37 amoll Exp $
+// $Id: vector3.h,v 1.35 2000/05/01 08:16:29 oliver Exp $
 
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -770,9 +770,9 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE
-	TVector3<T> TVector3<T>::operator + () const	
+	const TVector3<T>& TVector3<T>::operator + () const	
 	{
-		return TVector3<T>(x, y, z);
+		return *this;
 	}
 
 	template <typename T>
@@ -922,7 +922,7 @@ namespace BALL
 			 diff1.x * diff2.y - diff1.y * diff2.x);
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE
 	T TVector3<T>::getSpatProduct
 		(const TVector3<T>& a,
