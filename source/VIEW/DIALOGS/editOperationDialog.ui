@@ -1,0 +1,70 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>EditOperationDialogData</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>EditOperationDialogData</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>305</width>
+            <height>217</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Undo list</string>
+    </property>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>pushButton1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>20</x>
+                <y>160</y>
+                <width>111</width>
+                <height>41</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>undo</string>
+        </property>
+    </widget>
+    <widget class="QListBox">
+        <property name="name">
+            <cstring>undo_operation_list</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>20</y>
+                <width>281</width>
+                <height>120</height>
+            </rect>
+        </property>
+        <property name="cursor">
+            <cursor>1</cursor>
+        </property>
+    </widget>
+</widget>
+<connections>
+    <connection>
+        <sender>undo_operation_list</sender>
+        <signal>highlighted(int)</signal>
+        <receiver>EditOperationDialogData</receiver>
+        <slot>operationSelected(int)</slot>
+    </connection>
+    <connection>
+        <sender>pushButton1</sender>
+        <signal>clicked()</signal>
+        <receiver>EditOperationDialogData</receiver>
+        <slot>undo()</slot>
+    </connection>
+</connections>
+<slots>
+    <slot>operationSelected(int)</slot>
+    <slot>undo()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>
