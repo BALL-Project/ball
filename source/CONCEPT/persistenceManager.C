@@ -1,4 +1,4 @@
-// $Id: persistenceManager.C,v 1.9 2000/10/24 21:38:51 amoll Exp $
+// $Id: persistenceManager.C,v 1.10 2000/10/30 21:51:15 oliver Exp $
 
 #include <BALL/CONCEPT/persistenceManager.h>
 #include <BALL/KERNEL/system.h>
@@ -131,6 +131,7 @@ namespace BALL
 		
 	void PersistenceManager::startOutput()
 	{
+		initializeOutputStream();
 		object_out_.clear();
 		object_out_needed_.clear();
 		writeStreamHeader();
@@ -141,6 +142,23 @@ namespace BALL
 		writeStreamTrailer();
 		addNeededObjects_();
 		writeStreamTrailer();
+		finalizeOutputStream();
+	}
+
+	void PersistenceManager::initializeInputStream()
+	{
+	}
+
+	void PersistenceManager::finalizeInputStream()
+	{
+	}
+
+	void PersistenceManager::initializeOutputStream()
+	{
+	}
+
+	void PersistenceManager::finalizeOutputStream()
+	{
 	}
 
 	PersistenceManager& PersistenceManager::operator << (const PersistentObject& object)
@@ -171,6 +189,9 @@ namespace BALL
 		
 		String						type_name;
 		LongPointerType		ptr;
+
+		// prepare the input stream
+		initializeInputStream();
 
 		// if an error happened, just exit the loop 
 		// to clean up the mess 
@@ -237,6 +258,9 @@ namespace BALL
 				first_object = obj;
 			}
 		}
+
+		// prepare the input stream for closing
+		finalizeInputStream();
 
 		if (error)
 		{ 

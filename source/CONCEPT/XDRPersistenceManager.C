@@ -1,24 +1,41 @@
-// $Id: XDRPersistenceManager.C,v 1.9 2000/10/29 22:31:59 oliver Exp $
+// $Id: XDRPersistenceManager.C,v 1.10 2000/10/30 21:51:15 oliver Exp $
 
 #include <BALL/CONCEPT/XDRPersistenceManager.h>
 
-//#define BALL_DEBUG_PERSISTENCE
+#define BALL_DEBUG_PERSISTENCE
 
 using namespace std;
 
 namespace BALL 
 {
 
-	extern "C" int XDRReadStream_(void*, char*, int)
+	extern "C" int XDRReadStream_(void* stream_ptr, char* buffer, int number)
 	{
-		// BAUSTELLE: need to read something from the istream
-		return 0;
+		istream& is = *(istream*)stream_ptr;
+
+		streampos number_read = is.gcount();
+		if (stream_ptr != 0)
+		{
+			is.get(buffer, number);
+		}
+		number_read = is.gcount() - number_read;
+
+		Log.info() << "read " << number_read << " bytes." << endl;
+
+		return (int)number_read;
 	}
 
-	extern "C" int XDRWriteStream_(void*, char*, int)
+	extern "C" int XDRWriteStream_(void* stream_ptr, char* buffer, int number)
 	{
-		// BAUSTELLE: need to write something to the ostream
-		return 0;
+		ostream& os = *(ostream*)stream_ptr;
+		
+		if (stream_ptr != 0)
+		{
+			os.write(buffer, number);
+		}
+
+		Log.info() << "wrote " << number << " bytes." << endl;
+		return number;
 	}
 
 	extern "C" int XDRError_(void*, char*, int)
@@ -54,6 +71,7 @@ namespace BALL
 
   void XDRPersistenceManager::writeHeader(const char* type_name, const char* name, LongPointerType ptr)
   {
+		Log.info() << "writing header for " << name << "/" << type_name << endl;
     if ((name != 0) && (!strcmp(name, "")))
     {
 			put(String(type_name));
@@ -67,11 +85,55 @@ namespace BALL
 
 	void XDRPersistenceManager::writeStreamHeader()
 	{
-		xdrrec_create(&xdr_in_, 0, 0, 0, XDRReadStream_, XDRError_);
-		xdrrec_create(&xdr_out_, 0, 0, 0, XDRError_, XDRWriteStream_);
-		xdr_in_.x_op = XDR_DECODE;
+		if (ostr_ == 0)
+		{
+			Log.error() << "XDRPersistenceManager::writeStreamHeader: no output stream defined!" << std::endl;
+			return;
+		}
+		const caddr_t ostr_ptr = (const caddr_t)ostr_;
+		xdrrec_create(&xdr_out_, 0, 0, ostr_ptr, XDRError_, XDRWriteStream_);
 		xdr_out_.x_op = XDR_ENCODE;
 		put(STREAM_HEADER);
+
+		Log.info() << "wrote stream header" << endl;
+	}
+
+	void XDRPersistenceManager::initializeOutputStream()
+	{
+		if (ostr_ == 0)
+		{
+			Log.error() << "XDRPersistenceManager::initializeOutputStream: no output stream defined!" << std::endl;
+			return;
+		}
+		const caddr_t ostr_ptr = (const caddr_t)ostr_;
+		xdrrec_create(&xdr_out_, 0, 0, ostr_ptr, XDRError_, XDRWriteStream_);
+		xdr_out_.x_op = XDR_ENCODE;
+		Log.info() << "initialized output stream." << endl;
+	}
+
+	void XDRPersistenceManager::initializeInputStream()
+	{
+		if (istr_ == 0)
+		{
+			Log.error() << "XDRPersistenceManager::initializeInputStream: no input stream defined!" << std::endl;
+			return;
+		}
+		const caddr_t istr_ptr = (const caddr_t)istr_;
+		xdrrec_create(&xdr_in_, 0, 0, istr_ptr, XDRReadStream_, XDRError_);
+		xdr_in_.x_op = XDR_DECODE;
+		Log.info() << "initialized output stream." << endl;
+	}
+
+	void XDRPersistenceManager::finalizeOutputStream()
+	{
+		// destroy the XDR stream
+		xdr_destroy(&xdr_out_);
+	}
+
+	void XDRPersistenceManager::finalizeInputStream()
+	{
+		// destroy the XDR stream
+		xdr_destroy(&xdr_in_);
 	}
 
 	bool XDRPersistenceManager::checkStreamHeader()
@@ -83,23 +145,24 @@ namespace BALL
 		// skip to the next/first XDR record
 		xdrrec_skiprecord(&xdr_in_);
 
-		Size header;
-		get(header);
+		Size header = 0;
+		xdr_u_int(&xdr_in_, &header);
 
-		bool result = ((xdr_u_int(&xdr_in_, &header) == 1) 
-									 && (header == STREAM_HEADER));
+		bool result = (header == STREAM_HEADER);
 
-		// destroy the XDR streams
-		xdr_destroy(&xdr_in_);
-		xdr_destroy(&xdr_out_);
+		//Log.info() << "checkStreamHeader = " << result << " (" << hex << header << "/" << STREAM_HEADER << ")" << endl;
+		Log.info() << "BAEH!" << endl;
 
 		return result;
 	}
 
 	void XDRPersistenceManager::writeStreamTrailer()
 	{
+		// write a trailer to identify the end of the stream
 		put(STREAM_TRAILER);
 		xdrrec_endofrecord(&xdr_out_, 1);
+
+		Log.info() << "wrote stream trailer" << endl;
 	}
 
 	bool XDRPersistenceManager::checkStreamTrailer()
@@ -108,10 +171,16 @@ namespace BALL
 			Log.info() << "entering checkStreamTrailer()" << endl;
 #		endif
 
+		// check for the correct trailer
 		Size trailer;
 		get(trailer);
 
-		return (trailer == STREAM_TRAILER);
+		// destroy the XDR stream
+		xdr_destroy(&xdr_in_);
+
+		Log.info() << "checkStreamTrailer = " << (trailer == STREAM_TRAILER) << endl;
+
+		return (trailer == STREAM_TRAILER);		
 	}
 
 #	ifdef BALL_DEBUG_PERSISTENCE
@@ -407,11 +476,13 @@ namespace BALL
 	void XDRPersistenceManager::get(char& c)
 	{
 		xdr_char(&xdr_in_, &c);
+		Log.info() << "read char: " << c << endl;
 	}
 
 	void XDRPersistenceManager::get(unsigned char& c)
 	{
 		xdr_u_char(&xdr_in_, &c);
+		Log.info() << "read unsigned char: " << c << endl;
 	}
 
 	void XDRPersistenceManager::get(bool& b)
@@ -419,6 +490,7 @@ namespace BALL
 		char c;
 		xdr_char(&xdr_in_, &c);
 		b = (c == (char)1);
+		Log.info() << "read bool: " << b << endl;
 	}
 
 	void XDRPersistenceManager::get(string& s)
@@ -427,26 +499,31 @@ namespace BALL
 		char* ptr = &(buf[0]);
 		xdr_string(&xdr_in_, &ptr, 65535);
 		s = ptr;
+		Log.info() << "read string: " << s << endl;
 	}
 
 	void XDRPersistenceManager::get(short& s)
 	{
 		xdr_short(&xdr_in_, &s);
+		Log.info() << "read short: " << s << endl;
 	}
 
 	void XDRPersistenceManager::get(unsigned short& s)
 	{
 		xdr_u_short(&xdr_in_, &s);
+		Log.info() << "read unsigned short: " << s  << endl;
 	}
 
 	void XDRPersistenceManager::get(int& s)
 	{
 		xdr_int(&xdr_in_, &s);
+		Log.info() << "read int: " << s  << endl;
 	}
 
 	void XDRPersistenceManager::get(unsigned int& s)
 	{
 		xdr_u_int(&xdr_in_, &s);
+		Log.info() << "read unsigned int: " << s << "/" << hex << s << endl;
 	}
 
 	void XDRPersistenceManager::get(long& s)
@@ -486,6 +563,8 @@ namespace BALL
 		long ptr_long;
 		xdr_long(&xdr_in_, &ptr_long);
 		ptr = (void*)ptr_long;
+
+		Log.info() << "get ptr: " << hex << (long)ptr_long << endl;
 	}
 
 } // namespace BALL
