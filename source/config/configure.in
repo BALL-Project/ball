@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.41 2000/01/16 22:36:21 oliver Exp $
+dnl    $Id: configure.in,v 1.42 2000/01/16 23:14:45 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -907,8 +907,8 @@ else
 			dnl  and writing to it will omit the first 16k written to the stream. Nasty, but confirmed with SGI
 			dnl  and fixed in 7.3.1.1m
 			if test "${CXX_VERSION_1}" = 7 -a "${CXX_VERSION_2}" = 3 \
-							-a "${CXX_VERSION_3}" = 1m -a "${CXX_VERSION_4}" = ""; then
-				
+							-a "${CXX_VERSION_3}" = 1m -a "${CXX_VERSION_4}" = ""\
+							-o ${CXX_VERSION_1}" = 7 -a "{CXX_VERSION_2}" = 30 ; then
 				COMMENTS="${COMMENTS}\nPlease take care - this version of SGI CC (7.3.1m) contains serious bugs\n"
 				COMMENTS="${COMMENTS}in its implementaion of fstream/iostream. This may lead to strange behaviour\n"
 				COMMENTS="${COMMENTS}and causes PDBFile_test to fail. Please update your compiler.\n\n"
