@@ -1,4 +1,4 @@
-// $Id: ooiEnergy.h,v 1.1 2000/02/12 19:36:44 oliver Exp $
+// $Id: ooiEnergy.h,v 1.2 2000/05/30 10:42:46 oliver Exp $
 
 #ifndef BALL_SOLVATION_OOIENERGY_H
 #define BALL_SOLVATION_OOIENERGY_H
@@ -7,12 +7,14 @@
 #	include <BALL/common.h>
 #endif
 
-#ifndef BALL_KERNEL_SYSTEM_H
-#	include <BALL/KERNEL/system.h>
+#ifndef BALL_MOLMEC_COMMON_TYPERULEPROCESSOR_H
+#	include <BALL/MOLMEC/COMMON/typeRuleProcessor.h>
 #endif
 
 namespace BALL 
 {
+
+	class BaseFragment;
 
 	/** Calculate the solvation energy.
 			Calculates the solvation energy after
@@ -26,7 +28,7 @@ namespace BALL
 			{\bf Definition:} \URL{BALL/SOLVATION/ooiEnergy.h}
 			\\
 	*/ 
-	double calculateOoiEnergy(Composite& composite);
+	double calculateOoiEnergy(BaseFragment& fragment);
 
 		
 } // namespace BALL
