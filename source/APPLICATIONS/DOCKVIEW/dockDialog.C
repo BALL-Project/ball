@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.6 2005/03/07 14:28:16 leonhardt Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.7 2005/03/17 13:39:32 leonhardt Exp $
 //
 
 #include "dockDialog.h"
@@ -68,6 +68,9 @@ namespace BALL
 			//build HashMap for advanced option dialogs
 			GeometricFitDialog* geo_fit = new GeometricFitDialog(this);
 			addEntry("Geometric Fit", GEOMETRIC_FIT, geo_fit);
+			
+			result_dialog_ = new DockResultDialog(this);
+			
 			hide(); 
 		}
 
@@ -326,10 +329,12 @@ namespace BALL
 			Log.error() << "finished docking" << std::endl;
 			
 			ConformationSet rc = geo_fit.getConformationSet(options_.getInteger(GeometricFit::Option::BEST_NUM));
-	 		rc.writeDCDFile("docking.dcd");
-
-	 		System* docked_system = new System(rc.getSystem());
+	 		
+			System* docked_system = new System(rc.getSystem());
 			getMainControl()->insert(*docked_system, "Docked System");
+			
+			result_dialog_->exec();
+	 		
 
 			Log.info() << "End of calculate" << std::endl;
 			return true;
@@ -447,13 +452,6 @@ namespace BALL
 			Log.error() << "End of applyProcessors" << std::endl;
 			
 			return true;
-		}
-		
-		/// merge two systems into one
-		void DockDialog::mergeSystems()
-			throw()
-		{
-		
 		}
 		
 		// ------------------------- SLOTS ------------------------------------------------

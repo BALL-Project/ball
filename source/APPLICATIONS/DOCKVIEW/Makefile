@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.1.2.8.2.2 2005/02/17 12:51:24 haid Exp $
+# $Id: Makefile,v 1.1.2.8.2.3 2005/03/17 13:39:32 leonhardt Exp $
 #
 
 EXECUTABLE=DOCKView
@@ -21,9 +21,11 @@ CPP_SOURCES=\
 	dockDialog.C\
 	geometricFitDialog.C\
 	dockingProgressDialog.C\
+	dockResultDialog.C\
 	dockDialogData.C\
 	geometricFitDialogData.C\
 	dockingProgressDialogData.C\
+	dockResultDialogData.C\
 	icons.C\
 	main.C\
 	mainframe.C
@@ -36,6 +38,8 @@ MOC_SOURCES=\
 	geometricFitDialogData_moc.C\
 	dockingProgressDialog_moc.C\
 	dockingProgressDialogData_moc.C\
+	dockResultDialog_moc.C\
+	dockResultDialogData_moc.C\
 	mainframe_moc.C
 	
 UIC_FILES=\
@@ -46,7 +50,9 @@ UIC_FILES=\
 	geometricFitDialogData.C\
 	geometricFitDialogData.h\
 	dockingProgressDialogData.C\
-	dockingProgressDialogData.h
+	dockingProgressDialogData.h\
+	dockResultDialogData.h\
+	dockResultDialogData.C
 
 DOCKView:	$(OBJECTS)	$(SPECIAL_OBJECTS)
 	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(VIEW_LIBS) $(BALL_INCLUDES) $(PYTHON_LIBS) 
@@ -65,6 +71,9 @@ geometricFitDialogData.h: geometricFitDialog.ui
 	
 dockingProgressDialogData.h: dockingProgressDialog.ui
 	$(UIC) dockingProgressDialog.ui > dockingProgressDialogData.h
+	
+dockResultDialogData.h: dockResultDialog.ui
+	$(UIC) dockResultDialog.ui > dockResultDialogData.h	
 	
 #moc C files
 mainframe_moc.C:	mainframe.h
@@ -90,6 +99,12 @@ dockingProgressDialog_moc.C: dockingProgressDialog.h
 	
 dockingProgressDialogData_moc.C: dockingProgressDialogData.h
 	$(MOC) dockingProgressDialogData.h -o $@
+	
+dockResultDialog_moc.C: dockResultDialog.h
+	$(MOC) dockResultDialog.h -o $@
+
+dockResultDialogData_moc.C: dockResultDialogData.h
+	$(MOC) dockResultDialogData.h -o $@
 
 #C files
 aboutDialog.C: aboutDialog.h
@@ -103,6 +118,9 @@ geometricFitDialogData.C: geometricFitDialogData.h
 	
 dockingProgressDialogData.C: dockingProgressDialogData.h
 	$(UIC) -impl dockingProgressDialogData.h dockingProgressDialog.ui > dockingProgressDialogData.C
+	
+dockResultDialogData.C: dockResultDialogData.h
+	$(UIC) -impl dockResultDialogData.h dockResultDialog.ui > dockResultDialogData.C
 
 clean: clean_moc_uic
 

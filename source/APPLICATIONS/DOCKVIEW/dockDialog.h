@@ -51,7 +51,10 @@
 
 #ifndef BALL_STRUCTURE_DOCKING_GEOMETRICFIT_H
 # include <BALL/STRUCTURE/DOCKING/geometricFit.h>
-#endif 
+#endif
+
+
+#include "dockResultDialog.h"
 
 #include "dockDialogData.h"
 
@@ -114,10 +117,6 @@ namespace BALL
 
 				/// dock the two systems
 				bool calculate()
-					throw();
-					
-				/// merge two systems into one
-				void mergeSystems()
 					throw();
 				
 				/// Set the systems for docking
@@ -186,6 +185,9 @@ namespace BALL
 					
 					// key: Algorithm(enum), value: advanced options dialog
 					HashMap<int, QDialog*> algorithm_dialogs_;
+					
+					
+					DockResultDialog* result_dialog_;
 				
 					//pointer to docking partners
 					System* docking_partner1_;
