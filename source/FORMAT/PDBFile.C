@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.C,v 1.33 2003/05/07 13:33:17 oliver Exp $
+// $Id: PDBFile.C,v 1.34 2003/05/22 15:14:15 oliver Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 
@@ -870,8 +870,8 @@ namespace BALL
 
 			BALL_FOREACH_BOND(*protein, atom_it, bond_it)
 			{
-				residue[0] = (*bond_it).getFirstAtom()->getAncestor(RTTI::getDefault<Residue>());
-				residue[1] = (*bond_it).getSecondAtom()->getAncestor(RTTI::getDefault<Residue>());
+				residue[0] = bond_it->getFirstAtom()->getResidue();
+				residue[1] = bond_it->getSecondAtom()->getResidue();
 
 				if (residue[0] == 0 || residue[1] == 0
 						|| residue[0] == residue[1]

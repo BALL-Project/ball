@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HINFile.C,v 1.54 2003/05/08 20:55:35 oliver Exp $
+// $Id: HINFile.C,v 1.55 2003/05/22 15:14:15 oliver Exp $
 //
 
 #include <BALL/FORMAT/HINFile.h>
@@ -810,7 +810,7 @@ namespace BALL
 							{
 								name.erase(0, 1);
 							}
-							if (name[-1] == '"')
+							if (name[name.size() - 1] == '"')
 							{
 								name.erase(name.size() - 1, 1);
 							}

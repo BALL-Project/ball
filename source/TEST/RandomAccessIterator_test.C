@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RandomAccessIterator_test.C,v 1.9 2002/02/27 12:24:49 sturm Exp $
+// $Id: RandomAccessIterator_test.C,v 1.10 2003/05/22 15:14:18 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -202,6 +202,26 @@ class VectorIteratorTraits_
 		return *(&bound_->operator [] (position_));
 	}
 
+	const DataType& getData() const
+		throw(Exception::InvalidIterator)
+	{
+		if (bound_ == 0)
+		{
+			throw(Exception::InvalidIterator(__FILE__, __LINE__));
+		}
+		if (position_ >= (VectorIteratorPosition_)bound_->size())
+		{
+			throw(Exception::InvalidIterator(__FILE__, __LINE__));
+		}
+		
+		if (position_ < 0)
+		{
+			throw(Exception::InvalidIterator(__FILE__, __LINE__));
+		}
+
+		return *(&bound_->operator [] (position_));
+	}
+
 	void forward()
 		throw(Exception::InvalidIterator)
 	{
@@ -335,7 +355,7 @@ class VectorIteratorTraits_
 
 typedef RandomAccessIterator<vector<float>, float, VectorIteratorPosition_, VectorIteratorTraits_<float> > MyIterator;
 
-START_TEST(RandomAccessIterator, "$Id: RandomAccessIterator_test.C,v 1.9 2002/02/27 12:24:49 sturm Exp $")
+START_TEST(RandomAccessIterator, "$Id: RandomAccessIterator_test.C,v 1.10 2003/05/22 15:14:18 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
