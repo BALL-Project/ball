@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.74 2004/07/15 12:05:46 amoll Exp $
+// $Id: displayProperties.C,v 1.75 2004/07/22 15:09:33 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -978,6 +978,12 @@ bool DisplayProperties::getSettingsFromString(const String& data)
 	void DisplayProperties::setTransparency(int value)
 	{
 		transparency_slider->setValue(value);
+	}
+
+	void DisplayProperties::setCustomColor(const ColorRGBA& color)
+	{
+		custom_color_ = color;
+		color_sample->setBackgroundColor(custom_color_.getQColor());
 	}
 	
 } } // namespaces

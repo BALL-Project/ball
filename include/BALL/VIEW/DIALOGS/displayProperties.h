@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.33 2004/07/10 16:39:33 amoll Exp $
+// $Id: displayProperties.h,v 1.34 2004/07/22 15:09:35 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
@@ -223,6 +223,8 @@ namespace BALL
 
 			///
 			virtual void setTransparency(int value);
+
+			virtual void setCustomColor(const ColorRGBA& color);
 			
 			/** Indicates the apply button was pressed.
 					Applies the selected model with its selected properties to 
