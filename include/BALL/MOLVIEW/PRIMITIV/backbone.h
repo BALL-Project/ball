@@ -1,11 +1,7 @@
-// $Id: backbone.h,v 1.6 2001/07/16 14:49:28 amoll Exp $
+// $Id: backbone.h,v 1.6.4.1 2002/10/19 13:40:22 amoll Exp $
 
 #ifndef BALL_MOLVIEW_PRIMITIV_BACKBONE_H
 #define BALL_MOLVIEW_PRIMITIV_BACKBONE_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_DATATYPE_LIST_H
 #	include <BALL/DATATYPE/list.h>
@@ -39,7 +35,6 @@ using namespace BALL::VIEW;
 
 namespace BALL
 {
-	
 	namespace MOLVIEW
 	{
 
@@ -95,7 +90,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -121,9 +115,8 @@ namespace BALL
 			*/
 			virtual void destroy()
 				throw();
-			//@}
-
 			
+			//@}
 			/**	@name	Assignment methods
 			*/
 			//@{
@@ -189,11 +182,10 @@ namespace BALL
 				throw();
 
 			//@}
-
-
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
+			
 			/** Set the atom list for the backbone.
 					Set a list of atoms that should be used to create a backbone representation.
 					{\em *this} backbone will create a spline path through these atoms
@@ -254,8 +246,6 @@ namespace BALL
 				throw();
 
 			//@}
-
-
 			/**	@name	debuggers and diagnostics
 			*/
 			//@{
@@ -267,8 +257,8 @@ namespace BALL
 					(self-validated) and 
 					consistent {\tt true} is returned, {\tt false} otherwise. 
 					Calls {GeometricObject::isValid}.
-					@return			bool {\tt true} if the internal state of {\em *this} backbone is correct (self-validated) and consistent,
-					 						{\tt false} otherwise
+					@return			bool {\tt true} if the internal state of {\em *this} backbone 
+											is correct (self-validated) and consistent, {\tt false} otherwise
 					@see        GeometricObject::isValid
 			*/
  			virtual bool isValid() const
@@ -287,8 +277,6 @@ namespace BALL
 				throw();
 
 			//@}
-
-
 			/**	@name	Storers
 			*/
 			//@{
@@ -312,7 +300,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 
 			protected:
 			
