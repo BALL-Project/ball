@@ -1,4 +1,4 @@
-// $Id: regularData1D.h,v 1.23.4.1 2002/08/16 13:24:00 anhi Exp $
+// $Id: regularData1D.h,v 1.23.4.2 2002/08/22 18:04:17 oliver Exp $
 
 #ifndef BALL_DATATYPE_REGULARDATA1D_H
 #define BALL_DATATYPE_REGULARDATA1D_H
@@ -227,6 +227,8 @@ namespace BALL
 	template <typename T>
 	TRegularData1D<T>::TRegularData1D()
 		throw()
+		:	lower_(0.0),
+			upper_(0.0)
 	{
 	}
 

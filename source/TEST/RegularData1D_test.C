@@ -1,13 +1,14 @@
-// $Id: RegularData1D_test.C,v 1.11 2001/07/16 00:26:37 oliver Exp $
+// $Id: RegularData1D_test.C,v 1.11.4.1 2002/08/22 18:04:21 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 
 #include <BALL/DATATYPE/regularData1D.h>
+#include <BALL/COMMON/limits.h>
 
 ///////////////////////////
 
-START_TEST(RegularData1D, "$Id: RegularData1D_test.C,v 1.11 2001/07/16 00:26:37 oliver Exp $")
+START_TEST(RegularData1D, "$Id: RegularData1D_test.C,v 1.11.4.1 2002/08/22 18:04:21 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
