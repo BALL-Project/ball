@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: support.C,v 1.45 2005/01/27 00:48:12 amoll Exp $
+// $Id: support.C,v 1.46 2005/01/31 14:45:32 amoll Exp $
 //
 
 #include <BALL/MOLMEC/COMMON/support.h>
@@ -194,10 +194,13 @@ namespace BALL
 				// neighbours
 				if (type != BRUTE_FORCE)
 				{
-					float memory = SysInfo::getAvailableMemory() * 0.7;
-					float min_spacing = HashGrid3<const Atom*>::calculateMinSpacing(memory, 
-																												upper - lower + Vector3(0.2F));
-					if (min_spacing > distance) type = BRUTE_FORCE;
+					float memory = SysInfo::getAvailableMemory();
+					if (memory != -1)
+					{
+						memory *= 0.7;
+						float min_spacing = HashGrid3<const Atom*>::calculateMinSpacing((LongSize)memory, upper - lower + Vector3(0.2F));
+						if (min_spacing > distance) type = BRUTE_FORCE;
+					}
 				}
 
        	if (type == BRUTE_FORCE)
