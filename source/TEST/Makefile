@@ -42,6 +42,7 @@ EXECUTABLES = \
 	Matrix44_test\
 	Molecule_test\
 	NumericalSAS_test\
+	Nucleotide_test\
 	Options_test\
 	PDBFile_test\
 	Plane3_test\
@@ -49,6 +50,7 @@ EXECUTABLES = \
 	PoissonBoltzmann_test\
 	PropertyManager_test\
 	Quaternion_test\
+	Residue_test\
 	ResourceFile_test\
 	RTTI_test\
 	Socket_test\
@@ -161,6 +163,9 @@ Molecule_test:	Molecule_test.o
 NucleicAcid_test:	NucleicAcid_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
+Nucleotide_test:	Nucleotide_test.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
 Options_test:	Options_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
@@ -183,6 +188,9 @@ PropertyManager_test:	PropertyManager_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 Quaternion_test: Quaternion_test.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
+Residue_test:	Residue_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 ResourceFile_test:	ResourceFile_test.o
