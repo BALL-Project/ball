@@ -1,4 +1,4 @@
-// $Id: NMRStarFile_test.C,v 1.8 2000/10/06 12:02:10 oliver Exp $
+// $Id: NMRStarFile_test.C,v 1.9 2000/10/26 14:22:36 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 using namespace BALL;
 
-START_TEST(String,"$Id: NMRStarFile_test.C,v 1.8 2000/10/06 12:02:10 oliver Exp $")
+START_TEST(String,"$Id: NMRStarFile_test.C,v 1.9 2000/10/26 14:22:36 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -34,9 +34,11 @@ CHECK(NMRStarFile::operator = (const NMRStarFile& f))
 	NMRStarFile f2 = f1;
 RESULT
 
+NMRStarFile rs;
+
 CHECK(NMRStarFile::NMRStarFile(filename))
 	PRECISION(1e-3)
-	NMRStarFile rs("data/bmr4318.str");
+	rs = NMRStarFile("data/bmr4318.str");
 	TEST_EQUAL(rs.getData().size(), 1)
 	TEST_EQUAL(rs.getNumberOfAtoms(), 1914)
 	if (rs.getData().size() == 1 && rs.getNumberOfAtoms() == 1914)
@@ -75,6 +77,38 @@ CHECK(NMRStarFile::NMRStarFile(filename))
 	}
 	*/
 RESULT
+
+NMRStarFile f2;
+
+CHECK(NMRStarFile::operator == (const NMRStarFile& f))
+	NMRStarFile f1;
+	TEST_EQUAL(f1 == f2, true)
+	f2 = NMRStarFile("data/bmr4318.str");
+	TEST_EQUAL(f1 == f2, false)
+RESULT
+
+CHECK(NMRStarFile::operator != (const NMRStarFile& f))
+	NMRStarFile f1;
+	TEST_EQUAL(f1 != f1, false)
+	TEST_EQUAL(f1 != f2, true)
+RESULT
+
+CHECK(NMRStarFile::clear())
+	TEST_EQUAL(f2.getData().size(), 1)
+	TEST_EQUAL(f2.getNumberOfAtoms(), 1914)
+	f2.clear();
+	TEST_EQUAL(f2.getData().size(), 0)
+	TEST_EQUAL(f2.getNumberOfAtoms(), 0)
+RESULT
+
+CHECK(NMRStarFile::BALL_CREATE(NMRStarFile))
+	NMRStarFile* v_ptr = (NMRStarFile*)rs.create();
+	TEST_NOT_EQUAL(v_ptr, 0)
+	TEST_EQUAL(v_ptr->getNumberOfAtoms(), 1914)
+	TEST_EQUAL(v_ptr->getData()[0]->reference->elements[0]->mol_common_name, "DSS")
+	delete v_ptr;
+RESULT
+
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
