@@ -279,8 +279,6 @@ Mainframe::Mainframe
 	checkServer();
 
 	// building internal connection ------------------------------------------------
-	registerConnectionObject(*scene_);
-	registerConnectionObject(*control_);
 	registerConnectionObject(*display_properties_);
 	registerConnectionObject(*label_properties_);
 	registerConnectionObject(*open_hin_file_);
