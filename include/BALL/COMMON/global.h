@@ -1,4 +1,4 @@
-// $Id: global.h,v 1.9.4.4 2002/08/27 11:58:11 oliver Exp $
+// $Id: global.h,v 1.9.4.5 2002/11/29 19:54:59 oliver Exp $
 
 #ifndef BALL_COMMON_GLOBAL_H
 #define BALL_COMMON_GLOBAL_H
@@ -14,15 +14,22 @@
 #	include <BALL/COMMON/memory.h>
 #endif
 
+#ifdef BALL_INCLUDE_BASETSD_H
+#	include <basetsd.h>
+#endif
+
 // If possible use the ISO C99-compliant header stdint.h
 // to define the portable integer types.
 #ifdef BALL_INCLUDE_STDINT
 #	include <stdint.h>
 #endif
 
+// Added to avoid warnings with MS Visual Studio .NET
+#pragma warning( disable : 4290 )
+
 namespace BALL
 {
-
+	 
 	typedef int (*ComparatorType)(const void *, const void *);
 
 
