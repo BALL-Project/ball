@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.26 2004/07/14 16:51:50 amoll Exp $
+// $Id: common.h,v 1.27 2004/07/20 11:25:49 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -10,6 +10,11 @@
 #ifndef BALL_DATATYPE_STRING_H
  #include <BALL/DATATYPE/string.h>
 #endif
+
+#ifndef BALL_MATHS_VECTOR3
+ #include <BALL/MATHS/vector3.h>
+#endif
+
 
 namespace BALL
 {
@@ -289,6 +294,17 @@ namespace BALL
 		///
 		GeometricObjectType getGeometricObjectType(const GeometricObject& object);
 
+		
+		/////////////////////////////////////////////////////////
+
+		///
+		String vector3ToString(const Vector3& v)
+			throw();
+
+		///
+		bool stringToVector3(const String& data, Vector3& v)
+			throw();
+		
 		//@}
 
 	} // namespace VIEW

@@ -175,5 +175,34 @@ GeometricObjectType getGeometricObjectType(const GeometricObject& object)
 	return TYPE__UNKNOWN;
 }
 
+String vector3ToString(const Vector3& v)
+	throw()
+{
+	String out;
+	out += String("(") + String(v.x) + "," + 
+											 String(v.y) + "," +
+											 String(v.z) + ") ";
+	return out;
+}
+
+
+bool stringToVector3(const String& data, Vector3& v)
+	throw()
+{
+	try
+	{
+		vector<String> fields;
+		if (data.split(fields, ",()") != 3) return false;
+		v.x = fields[0].toFloat();
+		v.y = fields[1].toFloat();
+		v.z = fields[2].toFloat();
+		return true;
+	}
+	catch(...)
+	{
+	}
+
+	return false;
+}
 
 } } //namespaces

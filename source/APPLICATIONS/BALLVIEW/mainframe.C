@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.15 2004/07/07 18:41:11 amoll Exp $
+// $Id: mainframe.C,v 1.16 2004/07/20 11:25:45 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -400,6 +400,7 @@ namespace BALL
 			PersistentObject* po = pm.readObject();
 			if (!RTTI::isKindOf<System>(*po))
 			{
+				return;
 			}
 			new_system = (System*) po;
 			infile.close();
@@ -487,6 +488,9 @@ namespace BALL
 		}
 
 		display_properties_->enableCreationForNewMolecules(true);
+
+		Scene::getInstance(0)->fetchPreferences(in);
+		Scene::getInstance(0)->applyPreferences();
 	}
 
 	void Mainframe::setSelection_(Composite* c, HashSet<Position>& hash_set, Position& current)

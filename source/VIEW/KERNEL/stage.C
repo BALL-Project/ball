@@ -155,15 +155,9 @@ String Camera::toString() const
 	throw()
 {
 	String out;
-	out += String("(") + String(view_point_.x) + "," + 
-											 String(view_point_.y) + "," +
-											 String(view_point_.z) + ") " +
-	out += String("(") + String(look_at_.x) + "," + 
-											 String(look_at_.y) + "," +
-											 String(look_at_.z) + ") " +
-	out += String("(") + String(look_up_vector_.x) + "," + 
-											 String(look_up_vector_.y) + "," +
-											 String(look_up_vector_.z) + ") ";
+	out += vector3ToString(view_point_) + " ";
+	out += vector3ToString(look_at_) + " ";
+	out += vector3ToString(look_up_vector_);
 
 	return out;
 }
@@ -173,29 +167,18 @@ bool Camera::readFromString(const String& data)
 {
 	vector<String> fields;
 	if (data.split(fields) != 3) return false;
-	try
-	{
-		Vector3 results[3];
-		for (Position p = 0; p < 3; p++)
-		{
-			vector<String> fields2;
-			if (fields[p].split(fields2, ",()") != 3) return false;
-			results[p].x = fields2[0].toFloat();
-			results[p].y = fields2[1].toFloat();
-			results[p].z = fields2[2].toFloat();
-		}
 
-		view_point_ = results[0];
-		look_at_ 		= results[1];
-		look_up_vector_ = results[2];
-		
-		return true;
-	}
-	catch(...)
+	Vector3 results[3];
+	for (Position p = 0; p < 3; p++)
 	{
+		if (!stringToVector3(fields[p], results[p])) return false;
 	}
 
-	return false;
+	view_point_ = results[0];
+	look_at_ 		= results[1];
+	look_up_vector_ = results[2];
+	
+	return true;
 }
 		
 
