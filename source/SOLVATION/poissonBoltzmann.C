@@ -1,4 +1,4 @@
-// $Id: poissonBoltzmann.C,v 1.26 2001/08/16 00:57:28 oliver Exp $ 
+// $Id: poissonBoltzmann.C,v 1.27 2001/08/31 09:23:52 amoll Exp $ 
 // FDPB: Finite Difference Poisson Solver
 
 #include <BALL/SOLVATION/poissonBoltzmann.h>
@@ -152,7 +152,9 @@ namespace BALL
 
 
 	FDPB::FDPB(const FDPB& fdpb)
-		:	eps_grid(fdpb.eps_grid == 0 ? 0 : new TRegularData3D<Vector3>(*fdpb.eps_grid)),
+		:	options(fdpb.options),
+			results(fdpb.results),
+			eps_grid(fdpb.eps_grid == 0 ? 0 : new TRegularData3D<Vector3>(*fdpb.eps_grid)),
 			kappa_grid(fdpb.kappa_grid == 0 ? 0 : new TRegularData3D<float>(*fdpb.kappa_grid)),
 			q_grid(fdpb.q_grid == 0 ? 0 : new TRegularData3D<float>(*fdpb.kappa_grid)),
 			phi_grid(fdpb.phi_grid == 0 ? 0 : new TRegularData3D<float>(*fdpb.phi_grid)),
@@ -161,13 +163,12 @@ namespace BALL
 			lower_(fdpb.lower_),
 			upper_(fdpb.upper_),
 			use_offset_(fdpb.use_offset_),
+			spacing_(fdpb.spacing_),
 			energy_(fdpb.energy_),
 			reaction_field_energy_(fdpb.reaction_field_energy_),
 			boundary_points_(fdpb.boundary_points_),
 			number_of_iterations_(fdpb.number_of_iterations_),
-			error_code_(fdpb.error_code_),
-			options(fdpb.options),
-			results(fdpb.results)
+			error_code_(fdpb.error_code_)
 	{
 	}
 
