@@ -1,4 +1,4 @@
-// $Id: parameterSection.h,v 1.8 2000/10/17 17:13:55 anker Exp $
+// $Id: parameterSection.h,v 1.9 2000/10/18 12:40:17 oliver Exp $
 // Format: general  parameter section class
 
 #ifndef BALL_FORMAT_PARAMETERSECTION_H
@@ -133,7 +133,8 @@ namespace BALL
 		//@{
 
 		/**	Clear method.  */
-		virtual void clear() throw();
+		virtual void clear() 
+			throw();
 
 		/** Assignment operator */
 		const ParameterSection& operator = (const ParameterSection& section)
