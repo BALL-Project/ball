@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pair6_12InteractionEnergyProcessor.C,v 1.19 2003/02/17 14:51:32 anker Exp $
+// $Id: pair6_12InteractionEnergyProcessor.C,v 1.20 2003/02/22 12:56:04 anker Exp $
 
 #include <BALL/SYSTEM/path.h>
 #include <BALL/KERNEL/PTE.h>
@@ -61,6 +61,7 @@ namespace BALL
 		options.setDefault(Option::SOLVENT_FILENAME, Default::SOLVENT_FILENAME);
 		options.setDefault(Option::SURFACE_TYPE, Default::SURFACE_TYPE);
 		options.setDefault(Option::SURFACE_FILENAME, Default::SURFACE_FILENAME);
+		options.setDefault(Option::LJ_FILENAME, Default::LJ_FILENAME);
 	}
 
 
@@ -181,11 +182,21 @@ namespace BALL
 		bool use_rdf = options.getBool(Option::USE_RDF);
 		// the file containing the rdf descriptions
 		Path path;
-		String rdf_filename = path.find(options.get(Option::RDF_FILENAME));
-		if (rdf_filename == "")
+		String rdf_filename;
+		if (use_rdf == true)
 		{
-			rdf_filename = options.get(Option::RDF_FILENAME);
+			rdf_filename = path.find(options.get(Option::RDF_FILENAME));
+			if (rdf_filename == "")
+			{
+				rdf_filename = options.get(Option::RDF_FILENAME);
+			}
+			if (verbosity > 0)
+			{
+				Log.info() << "Using " << rdf_filename << " as RDF description" 
+					<< endl;
+			}
 		}
+
 		// the file contacining the solvent description
 		String solvent_filename = path.find(options.get(Option::SOLVENT_FILENAME));
 		if (solvent_filename == "")
@@ -196,9 +207,25 @@ namespace BALL
 		String surface_filename = options.get(Option::SURFACE_FILENAME);
 
 		// define the solvent
-		ForceFieldParameters ffparam(solvent_filename);
+		
+		String lj_param_filename = path.find(options.get(Option::LJ_FILENAME));
+		if (lj_param_filename == "") 
+		{
+			lj_param_filename = options.get(Option::LJ_FILENAME);
+		}
+		if (verbosity > 0)
+		{
+			Log.info() << "Using " << lj_param_filename << " as LJ param file"
+				<< endl;
+		}
+		ForceFieldParameters lj_param(lj_param_filename);
+		
+		// [anker] wieso extract_section mit ffparam?
+
+		// TODO Wo kommt der Name her?
+		Parameters solvent_parameters(solvent_filename);
 		SolventParameter solvent_parameter_section;
-		if (!solvent_parameter_section.extractSection(ffparam,
+		if (!solvent_parameter_section.extractSection(solvent_parameters,
 			"SolventDescription"))
 		{
 			Log.error() << "Pair6_12InteractionEnergyProcessor::finish(); "
@@ -249,7 +276,7 @@ namespace BALL
 		}
 
 		LennardJones lennard_jones;
-		lennard_jones.extractSection(ffparam, "LennardJones");
+		lennard_jones.extractSection(lj_param, "LennardJones");
 
 		// iterate over all different atom types in the solvent
 
@@ -369,7 +396,7 @@ namespace BALL
 
 				// ?????: This should work -- but it doesn't!
 				// type_j = solute_iterator->getType();
-				type_j = ffparam.getAtomTypes().getType(solute_iterator->getTypeName());
+				type_j = lj_param.getAtomTypes().getType(solute_iterator->getTypeName());
 				atom_center = solute_iterator->getPosition();
 				R_m = solute_iterator->getRadius();
 				if (verbosity > 2)
@@ -394,8 +421,8 @@ namespace BALL
 						<< "Cannot assign force field parameters for types " 
 						<< type_i << "/" << type_j << endl;
 					// DEBUG
-					Log.error() << "TYPENAME = " << solute_iterator->getTypeName() << endl;
-					Log.error() << "FULLNAME = " << solute_iterator->getFullName() << endl;
+					Log.error() << "solute: TYPENAME = " << solute_iterator->getTypeName() << endl;
+					Log.error() << "solute: FULLNAME = " << solute_iterator->getFullName() << endl;
 					return false;
 				}
 
