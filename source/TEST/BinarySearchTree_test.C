@@ -1,4 +1,4 @@
-// $Id: BinarySearchTree_test.C,v 1.5 2000/08/01 12:53:08 amoll Exp $
+// $Id: BinarySearchTree_test.C,v 1.6 2000/08/05 15:17:18 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -66,7 +66,7 @@ class BSTreeItemCollector
 };
 
 
-START_TEST(class_name, "$Id: BinarySearchTree_test.C,v 1.5 2000/08/01 12:53:08 amoll Exp $")
+START_TEST(class_name, "$Id: BinarySearchTree_test.C,v 1.6 2000/08/05 15:17:18 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -213,7 +213,11 @@ CHECK(applyPreorder(UnaryProcessor<BSTreeItem>& processor))
 	item.applyPreorder(myproc);
 	myproc.reset();
 	TEST_EQUAL(myproc.getSize(), 7)
-	TEST_EQUAL(myproc.getPointer(), &left)
+	void* ptr_a = (void*)myproc.getPointer();
+	void* ptr_b = (void*)&left;
+	STATUS(ptr_a)
+	STATUS(ptr_b)
+	TEST_EQUAL((int)ptr_a, (int)ptr_b)
 RESULT
 
 CHECK(applyInorder(UnaryProcessor<BSTreeItem>& processor))
