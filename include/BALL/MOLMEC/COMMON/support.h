@@ -1,4 +1,4 @@
-// $Id: support.h,v 1.11 2001/03/02 00:34:15 amoll Exp $
+// $Id: support.h,v 1.12 2001/03/06 14:06:35 anker Exp $
 
 #ifndef BALL_MOLMEC_COMMON_SUPPORT_H
 #define BALL_MOLMEC_COMMON_SUPPORT_H
@@ -60,7 +60,7 @@ namespace BALL
 			
 		/**	Create a pair vector for non-bonded interactions.
 				Calculates a vector of atom pairs whose distance is smaller than
-				distance.  The {\tt type} determines if a brute force algorithm
+				{\tt distance}.  The {\tt type} determines if a brute force algorithm
 				({\tt type == BRUTE_FORCE}) or a more sophisticated grid method
 				({\tt type == HASH_GRID}) is used.
 				@param	pair_vector the vector containing pairs of interacting atoms
