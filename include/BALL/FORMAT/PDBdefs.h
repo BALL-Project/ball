@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBdefs.h,v 1.2 2005/02/12 23:08:26 oliver Exp $
+// $Id: PDBdefs.h,v 1.3 2005/02/13 22:38:48 oliver Exp $
 //
 
 #ifndef BALL_FORMAT_PDBDEFS_H
@@ -11,8 +11,25 @@
 #	include <BALL/common.h>
 #endif
 
+#ifndef BALL_KERNEL_ATOM_H
+#	include <BALL/KERNEL/atom.h>
+#endif
+
+#ifndef BALL_KERNEL_SECONDARYSTRUCTURE_H
+#	include <BALL/KERNEL/secondaryStructure.h>
+#endif
+
+#ifndef BALL_KERNEL_CHAIN_H
+#	include <BALL/KERNEL/chain.h>
+#endif
+
+#ifndef BALL_KERNEL_RESIDUE_H
+#	include <BALL/KERNEL/residue.h>
+#endif
+
 namespace BALL 
 {
+
 
 	/**	PDB namespace.
 			This namespace collects some type and format definitions related to the PDB format.
@@ -91,6 +108,116 @@ namespace BALL
 			ALL_RECORD_TYPES
 		};
 
+		/**	@name PDB record format definitions */
+		//@{
+		extern const char* FORMAT_UNKNOWN;
+		extern const char* FORMAT_ANISOU;
+		extern const char* FORMAT_ATOM;
+		extern const char* FORMAT_ATOM_PARTIAL_CRG;
+		extern const char* FORMAT_AUTHOR;
+		extern const char* FORMAT_CAVEAT;
+		extern const char* FORMAT_CISPEP;
+		extern const char* FORMAT_COMPND;
+		extern const char* FORMAT_CONECT;
+		extern const char* FORMAT_CRYST1;
+		extern const char* FORMAT_DBREF;
+		extern const char* FORMAT_END;
+		extern const char* FORMAT_ENDMDL;
+		extern const char* FORMAT_EXPDTA;
+		extern const char* FORMAT_FORMUL;
+		extern const char* FORMAT_FTNOTE;
+		extern const char* FORMAT_HEADER;
+		extern const char* FORMAT_HELIX;
+		extern const char* FORMAT_HET;
+		extern const char* FORMAT_HETATM;
+		extern const char* FORMAT_HETNAM;
+		extern const char* FORMAT_HYDBND;
+		extern const char* FORMAT_JRNL;
+		extern const char* FORMAT_KEYWDS;
+		extern const char* FORMAT_LINK;
+		extern const char* FORMAT_MASTER;
+		extern const char* FORMAT_MODEL;
+		extern const char* FORMAT_MODRES;
+		extern const char* FORMAT_MTRIX1;
+		extern const char* FORMAT_MTRIX2;
+		extern const char* FORMAT_MTRIX3;
+		extern const char* FORMAT_OBSLTE;
+		extern const char* FORMAT_ORIGX1;
+		extern const char* FORMAT_ORIGX2;
+		extern const char* FORMAT_ORIGX3;
+		extern const char* FORMAT_REMARK;
+		extern const char* FORMAT_REVDAT;
+		extern const char* FORMAT_SCALE1;
+		extern const char* FORMAT_SCALE2;
+		extern const char* FORMAT_SCALE3;
+		extern const char* FORMAT_SEQRES;
+		extern const char* FORMAT_SHEET;
+		extern const char* FORMAT_SIGATM;
+		extern const char* FORMAT_SIGUIJ;
+		extern const char* FORMAT_SITE;
+		extern const char* FORMAT_SLTBRG;
+		extern const char* FORMAT_SOURCE;
+		extern const char* FORMAT_SSBOND;
+		extern const char* FORMAT_TER;
+		extern const char* FORMAT_TITLE;
+		extern const char* FORMAT_TURN;
+		extern const char* FORMAT_TVECT;
+		//@}
+
+		/**	@name PDB record tag names */
+		//@{
+		extern const char* RECORD_TAG_ANISOU;
+		extern const char* RECORD_TAG_ATOM;
+		extern const char* RECORD_TAG_AUTHOR;
+		extern const char* RECORD_TAG_CAVEAT;
+		extern const char* RECORD_TAG_CISPEP;
+		extern const char* RECORD_TAG_COMPND;
+		extern const char* RECORD_TAG_CONECT;
+		extern const char* RECORD_TAG_CRYST1;
+		extern const char* RECORD_TAG_DBREF;
+		extern const char* RECORD_TAG_END;
+		extern const char* RECORD_TAG_ENDMDL;
+		extern const char* RECORD_TAG_EXPDTA;
+		extern const char* RECORD_TAG_FORMUL;
+		extern const char* RECORD_TAG_FTNOTE;
+		extern const char* RECORD_TAG_HEADER;
+		extern const char* RECORD_TAG_HELIX;
+		extern const char* RECORD_TAG_HET;
+		extern const char* RECORD_TAG_HETATM;
+		extern const char* RECORD_TAG_HETNAM;
+		extern const char* RECORD_TAG_HYDBND;
+		extern const char* RECORD_TAG_JRNL;
+		extern const char* RECORD_TAG_KEYWDS;
+		extern const char* RECORD_TAG_LINK;
+		extern const char* RECORD_TAG_MASTER;
+		extern const char* RECORD_TAG_MODEL;
+		extern const char* RECORD_TAG_MODRES;
+		extern const char* RECORD_TAG_MTRIX1;
+		extern const char* RECORD_TAG_MTRIX2;
+		extern const char* RECORD_TAG_MTRIX3;
+		extern const char* RECORD_TAG_OBSLTE;
+		extern const char* RECORD_TAG_ORIGX1;
+		extern const char* RECORD_TAG_ORIGX2;
+		extern const char* RECORD_TAG_ORIGX3;
+		extern const char* RECORD_TAG_REMARK;
+		extern const char* RECORD_TAG_REVDAT;
+		extern const char* RECORD_TAG_SCALE1;
+		extern const char* RECORD_TAG_SCALE2;
+		extern const char* RECORD_TAG_SCALE3;
+		extern const char* RECORD_TAG_SEQRES;
+		extern const char* RECORD_TAG_SHEET;
+		extern const char* RECORD_TAG_SIGATM;
+		extern const char* RECORD_TAG_SIGUIJ;
+		extern const char* RECORD_TAG_SITE;
+		extern const char* RECORD_TAG_SLTBRG;
+		extern const char* RECORD_TAG_SOURCE;
+		extern const char* RECORD_TAG_SSBOND;
+		extern const char* RECORD_TAG_TER;
+		extern const char* RECORD_TAG_TITLE;
+		extern const char* RECORD_TAG_TURN;
+		extern const char* RECORD_TAG_TVECT;
+		//@}
+
 		/** @name Some typedefs for simplifying parsing.
 		*/
 		//@{
@@ -108,7 +235,6 @@ namespace BALL
 		typedef char   IDcode[5];
 		///
 		typedef long   Integer;
-		// typedef char   Token[CPDBFile::SIZE_OF_PDB_RECORD_LINE + 1];
 		///
 		typedef char   PDBList[SIZE_OF_PDB_RECORD_LINE + 1];
 		///
@@ -168,6 +294,7 @@ namespace BALL
 		/** @name Structs for storing records.
 		*/
 		//@{
+
 		/**
 		*/
 		struct RecordTypeFormat
@@ -177,6 +304,32 @@ namespace BALL
 			char					string[7];
 			const char*		format_string;
 		};
+
+		struct Residue
+		{
+			ResidueName name;
+			Character   chain_ID;
+			Integer     sequence_number;
+			AChar       insertion_code;
+			
+			Residue() { clear(); }
+			void clear()
+			{
+				name[0] = '\0';
+				chain_ID = ' ';
+				sequence_number = 0;
+				insertion_code = ' ';
+			}
+			void set(const ::BALL::Residue& residue)
+			{
+				strncpy(name, residue.getName().c_str(), 3);
+				sequence_number = residue.getID().toInt();
+				const Chain* chain = residue.getChain();
+				chain_ID = (chain == 0 ? ' ' : chain->getName().c_str()[0]);
+				insertion_code = residue.getInsertionCode();
+			}
+		};
+
 
 		/**
 		*/
@@ -194,10 +347,7 @@ namespace BALL
 			Integer     serial_number;
 			Atom        atom_name;
 			Character   alternate_location_indicator;
-			ResidueName residue_name;
-			Character   chain_ID;
-			Integer     residue_sequence_number;
-			AChar       insertion_code;
+			Residue			residue;
 			Integer     u11;
 			Integer     u22;
 			Integer     u33;
@@ -218,10 +368,7 @@ namespace BALL
 			Integer     serial_number;
 			Atom        atom_name;
 			Character   alternate_location_indicator;
-			ResidueName residue_name;
-			Character   chain_ID;
-			Integer     residue_sequence_number;
-			AChar       insertion_code;
+			Residue			residue;
 			Real        orthogonal_vector[3];
 			Real        occupancy;
 			Real        temperature_factor;
@@ -260,14 +407,7 @@ namespace BALL
 			RecordType     record_type;
 			RecordName     record_name;
 			Integer        record_serial_number;
-			///
-			struct CisPeptide
-			{
-				ResidueName residue_name;
-				Character   chain_ID;
-				Integer     residue_sequence_number;
-				AChar       insertion_code;
-			} cis_peptide[2];
+			Residue				 residue[2];
 			Integer        specific_model_ID;
 			Real           angle_measure;
 		};
@@ -412,25 +552,25 @@ namespace BALL
 			RecordName    record_name;
 			Integer       serial_number;
 			LString3      helix_ID;
-			///
-			struct InitialResidue
-			{
-				ResidueName residue_name;
-				Character   chain_ID;
-				Integer     sequence_number;
-				AChar       insertion_code;
-			} initial_residue;
-			///
-			struct TerminalResidue
-			{
-				ResidueName residue_name;
-				Character   chain_ID;
-				Integer     sequence_number;
-				AChar       insertion_code;
-			} terminal_residue;
+			Residue				initial_residue;
+			Residue				terminal_residue;
 			Integer       helix_class;
 			PDBString     comment;
 			Integer       length;
+
+			RecordHELIX() { clear(); }
+			void clear()
+			{
+				record_type = RECORD_TYPE__HELIX;
+				strncpy(record_name, RECORD_TAG_HELIX, 6);
+				serial_number = 0;
+				helix_ID[0] = '\0';
+				initial_residue.clear();
+				terminal_residue.clear();
+				helix_class = 0;
+				comment[0] = '\0';
+				length = 0;
+			}
 		};
 		
 		///
@@ -438,10 +578,7 @@ namespace BALL
 		{
 			RecordType record_type;
 			RecordName record_name;
-			LString3   het_ID;
-			Character  chain_ID;
-			Integer    sequence_number;
-			AChar      insertion_code;
+			Residue		 residue;
 			Integer    number_of_HETATM_records;
 			PDBString  text;
 		};
@@ -454,10 +591,7 @@ namespace BALL
 			Integer     serial_number;
 			Atom        atom_name;
 			Character   alternate_location_indicator;
-			ResidueName residue_name;
-			Character   chain_ID;
-			Integer     residue_sequence_number;
-			AChar       insertion_code;
+			Residue			residue;
 			Real        orthogonal_vector[3];
 			Real        occupancy;
 			Real        temperature_factor;
@@ -486,25 +620,14 @@ namespace BALL
 			{
 				Atom           atom_name;
 				Character      alternate_location_indicator;
-				struct Residue
-				{
-					ResidueName  residue_name;
-					Character    chain_ID;
-					Integer      sequence_number;
-					AChar        insertion_code;
-				} residue;
+				Residue				 residue;
 			} hydrogen_partner_atom[2];
 			///
 			struct HydrogenAtom
 			{
 				Atom           atom_name;
 				Character      alternate_location_indicator;
-				struct Residue
-				{
-					Character    chain_ID;
-					Integer      sequence_number;
-					AChar        insertion_code;
-				} residue;
+				Residue				 residue;
 			} hydrogen_atom;
 			SymmetryOperator first_non_hydrogen_atom;
 			SymmetryOperator second_non_hydrogen_atom;
@@ -535,13 +658,7 @@ namespace BALL
 			{
 				Atom          atom_name;
 				Character     alternate_location_indicator;
-				struct Residue
-				{
-					ResidueName residue_name;
-					Character   chain_ID;
-					Integer     sequence_number;
-					AChar       insertion_code;
-				} residue;
+				Residue				residue;
 			} link_partner[2];
 			SymmetryOperator first_atom;
 			SymmetryOperator second_atom;
@@ -577,10 +694,7 @@ namespace BALL
 			RecordType  record_type;
 			RecordName  record_name;
 			IDcode      entry_code;
-			ResidueName residue_name;
-			Character   chain_ID;
-			Integer     sequence_number;
-			AChar       insertion_code;
+			Residue			residue;
 			ResidueName standard_residue_name;
 			PDBString   comment;
 		};
@@ -614,8 +728,8 @@ namespace BALL
 		///
 		struct RecordOBSLTE
 		{
-			RecordType  record_type;
-			RecordName  record_name;
+			RecordType	 record_type;
+			RecordName	 record_name;
 			Continuation continuation;
 			Date         entry_replaced_date;
 			IDcode       entry_code;
@@ -696,6 +810,33 @@ namespace BALL
 			Character   chain_ID;
 			Integer     number_of_residues_in_chain;
 			ResidueName residue_name[13];
+
+			RecordSEQRES()
+			{
+				clear();
+			}
+
+			void clear()
+			{
+				record_type = RECORD_TYPE__SEQRES;
+				strncpy(record_name, RECORD_TAG_SEQRES, 6);
+				serial_number = 0;
+				chain_ID = ' ';
+				number_of_residues_in_chain = 0L;
+				residue_name[0][0] = '\0';
+				residue_name[1][0] = '\0';
+				residue_name[2][0] = '\0';
+				residue_name[3][0] = '\0';
+				residue_name[4][0] = '\0';
+				residue_name[5][0] = '\0';
+				residue_name[6][0] = '\0';
+				residue_name[7][0] = '\0';
+				residue_name[8][0] = '\0';
+				residue_name[9][0] = '\0';
+				residue_name[10][0] = '\0';
+				residue_name[11][0] = '\0';
+				residue_name[12][0] = '\0';
+			}
 		};
 
 		///
@@ -706,41 +847,30 @@ namespace BALL
 			Integer       strand_number;
 			LString3      sheet_ID;
 			Integer       number_of_strands;
-			///
-			struct InitialResidue
-			{
-				ResidueName residue_name;
-				Character   chain_ID;
-				Integer     sequence_number;
-				AChar       insertion_code;
-			} initial_residue;
-			///
-			struct TerminalResidue
-			{
-				ResidueName residue_name;
-				Character   chain_ID;
-				Integer     sequence_number;
-				AChar       insertion_code;
-			} terminal_residue;
+			Residue				initial_residue;
+			Residue				terminal_residue;
 			Integer       sense_of_strand;
 			Atom          atom_name_in_current_strand;
-			///
-			struct ResidueInCurrentStrand
-			{
-				ResidueName residue_name;
-				Character   chain_ID;
-				Integer     sequence_number;
-				AChar       insertion_code;
-			} residue_in_current_strand;
+			Residue				residue_in_current_strand;
 			Atom          atom_name_in_previous_strand;
-			///
-			struct ResidueInPreviousStrand
+			Residue				residue_in_previous_strand;
+
+			RecordSHEET() { clear(); }
+			void clear()
 			{
-				ResidueName residue_name;
-				Character   chain_ID;
-				Integer     sequence_number;
-				AChar       insertion_code;
-			} residue_in_previous_strand;
+				record_type = RECORD_TYPE__SHEET;
+				strncpy(record_name, RECORD_TAG_SHEET, 6);
+				strand_number = 0;
+				sheet_ID[0] = '\0';;
+				number_of_strands = 0; 
+				initial_residue.clear();
+				terminal_residue.clear();
+				sense_of_strand = 0;
+				atom_name_in_current_strand[0] = '\0';
+				residue_in_current_strand.clear();
+				atom_name_in_previous_strand[0] = '\0';
+				residue_in_previous_strand.clear();
+			}
 		};
 
 		///
@@ -751,10 +881,7 @@ namespace BALL
 			Integer     serial_number;
 			Atom        atom_name;
 			Character   alternate_location_indicator;
-			ResidueName residue_name;
-			Character   chain_ID;
-			Integer     residue_sequence_number;
-			AChar       insertion_code;
+			Residue			residue;
 			Real        standard_vector_deviation[3];
 			Real        standard_occupancy_deviation;
 			Real        standard_temperature_deviation;
@@ -770,11 +897,8 @@ namespace BALL
 			RecordName  record_name;
 			Integer     serial_number;
 			Atom        atom_name;
-			Character   alternate_location_indicator;
-			ResidueName residue_name;
-			Character   chain_ID;
-			Integer     residue_sequence_number;
-			AChar       insertion_code;
+			Character   alternate_location_indicator;	
+			Residue			residue;
 			Integer     sig11;
 			Integer     sig22;
 			Integer     sig33;
@@ -794,14 +918,7 @@ namespace BALL
 			Integer       sequence_number;
 			LString3      name;
 			Integer       number_of_residues;
-			///
-			struct Residue
-			{
-				ResidueName residue_name;
-				Character   chain_ID;
-				Integer     sequence_number;
-				AChar       insertion_code;
-			} residue[4];
+			Residue				residue[4];
 		};
 
 		///
@@ -814,14 +931,7 @@ namespace BALL
 			{
 				Atom          atom_name;
 				Character     alternate_location_indicator;
-				///
-				struct Residue
-				{
-					ResidueName residue_name;
-					Character   chain_ID;
-					Integer     sequence_number;
-					AChar       insertion_code;
-				} residue;
+				Residue				residue;
 			} partner_atom[2];
 			SymmetryOperator first_atom;
 			SymmetryOperator second_atom;
@@ -842,15 +952,20 @@ namespace BALL
 			RecordType    record_type;
 			RecordName    record_name;
 			Integer       serial_number;
-			///
-			struct PartnerResidue
+			Residue				partner_residue[2];
+			SymmetryOperator symmetry_operator[2];
+			
+			RecordSSBOND() { clear(); }
+			void clear()
 			{
-				ResidueName residue_name;
-				Character   chain_ID;
-				Integer     sequence_number;
-				AChar       insertion_code;
-				SymmetryOperator symmetry_operator;
-			} partner_residue[2];
+				record_type = RECORD_TYPE__SSBOND;
+				strncpy(record_name, RECORD_TAG_SSBOND, 6);
+				serial_number = 0;
+				partner_residue[0].clear();
+				partner_residue[1].clear();
+				symmetry_operator[0] = 0;
+				symmetry_operator[1] = 0;
+			}
 		};
 
 		/**
@@ -860,10 +975,7 @@ namespace BALL
 			RecordType  record_type;
 			RecordName  record_name;
 			Integer     serial_number;
-			ResidueName residue_name;
-			Character   chain_ID;
-			Integer     residue_sequence_number;
-			AChar       insertion_code;
+			Residue			residue;
 		};
 
 		/**
@@ -884,21 +996,21 @@ namespace BALL
 			RecordName    record_name;
 			Integer       sequence_number;
 			LString3      turn_ID;
-			struct InitialResidue
-			{
-				ResidueName residue_name;
-				Character   chain_ID;
-				Integer     sequence_number;
-				AChar       insertion_code;
-			} initial_residue;
-			struct TerminalResidue
-			{
-				ResidueName residue_name;
-				Character   chain_ID;
-				Integer     sequence_number;
-				AChar       insertion_code;
-			} terminal_residue;
+			Residue				initial_residue;
+			Residue				terminal_residue;
 			PDBString     comment;
+			
+			RecordTURN() { clear(); }
+			void clear()
+			{
+ 				record_type = RECORD_TYPE__TURN;
+				strncpy(record_name, RECORD_TAG_TURN, 6);
+				sequence_number = 0;
+				turn_ID[0] = '\0';;
+				initial_residue.clear();
+				terminal_residue.clear();
+				comment[0] = '\0';
+			}
 		};
 
 		/**
@@ -913,61 +1025,116 @@ namespace BALL
 		};
 		//@}
 
-		/**	@name PDB record format definitions */
-		//@{
+		/** This struct contains the number of records in a PDB file
+				as required for the MASTER record.		
+		*/
+		struct BookKeeping
+		{
+			Size remark_records;
+			Size het_records;
+			Size helix_records;
+			Size sheet_records;
+			Size turn_records;
+			Size site_records;
+			Size coordinate_transformation_records;
+			Size atomic_coordinate_records;
+			Size ter_records;
+			Size conect_records;
+			Size seqres_records;
+			
+			BookKeeping()
+			{
+				clear();
+			}
 
-		extern const char* FORMAT_UNKNOWN;
-		extern const char* FORMAT_ANISOU;
-		extern const char* FORMAT_ATOM;
-		extern const char* FORMAT_ATOM_PARTIAL_CRG;
-		extern const char* FORMAT_AUTHOR;
-		extern const char* FORMAT_CAVEAT;
-		extern const char* FORMAT_CISPEP;
-		extern const char* FORMAT_COMPND;
-		extern const char* FORMAT_CONECT;
-		extern const char* FORMAT_CRYST1;
-		extern const char* FORMAT_DBREF;
-		extern const char* FORMAT_END;
-		extern const char* FORMAT_ENDMDL;
-		extern const char* FORMAT_EXPDTA;
-		extern const char* FORMAT_FORMUL;
-		extern const char* FORMAT_FTNOTE;
-		extern const char* FORMAT_HEADER;
-		extern const char* FORMAT_HELIX;
-		extern const char* FORMAT_HET;
-		extern const char* FORMAT_HETATM;
-		extern const char* FORMAT_HETNAM;
-		extern const char* FORMAT_HYDBND;
-		extern const char* FORMAT_JRNL;
-		extern const char* FORMAT_KEYWDS;
-		extern const char* FORMAT_LINK;
-		extern const char* FORMAT_MASTER;
-		extern const char* FORMAT_MODEL;
-		extern const char* FORMAT_MODRES;
-		extern const char* FORMAT_MTRIX1;
-		extern const char* FORMAT_MTRIX2;
-		extern const char* FORMAT_MTRIX3;
-		extern const char* FORMAT_OBSLTE;
-		extern const char* FORMAT_ORIGX1;
-		extern const char* FORMAT_ORIGX2;
-		extern const char* FORMAT_ORIGX3;
-		extern const char* FORMAT_REMARK;
-		extern const char* FORMAT_REVDAT;
-		extern const char* FORMAT_SCALE1;
-		extern const char* FORMAT_SCALE2;
-		extern const char* FORMAT_SCALE3;
-		extern const char* FORMAT_SEQRES;
-		extern const char* FORMAT_SHEET;
-		extern const char* FORMAT_SIGATM;
-		extern const char* FORMAT_SIGUIJ;
-		extern const char* FORMAT_SITE;
-		extern const char* FORMAT_SLTBRG;
-		extern const char* FORMAT_SOURCE;
-		extern const char* FORMAT_SSBOND;
-		extern const char* FORMAT_TER;
-		extern const char* FORMAT_TITLE;
-		extern const char* FORMAT_TURN;
-		extern const char* FORMAT_TVECT;
+			void clear()
+			{
+				remark_records = 0;
+				het_records = 0;
+				helix_records = 0;
+				sheet_records = 0;
+				turn_records = 0;
+				site_records = 0;
+				coordinate_transformation_records = 0;
+				atomic_coordinate_records = 0;
+				ter_records = 0;
+				conect_records = 0;
+				seqres_records = 0;
+			}
+		};
+
+
+		struct Structure	
+		{
+			struct AtomEntry
+			{
+				const BALL::Atom* atom;
+				const BALL::Residue* residue;
+				const BALL::SecondaryStructure* sec_struct;
+				const BALL::Chain* chain;
+				AtomEntry(const BALL::Atom& a)
+				{
+					atom = &a;
+					residue = a.getResidue();
+					sec_struct = a.getSecondaryStructure();
+					chain = a.getChain();
+				}
+			};
+			
+			std::vector<AtomEntry> atoms;
+
+			std::vector<const Bond*> covalent_hetero_bonds;
+			std::vector<const Bond*> covalent_atom_bonds;
+			std::vector<const Bond*> hydrogen_bonds;
+			std::vector<const Bond*> saltbridges;
+			std::vector<const Bond*> ssbonds;
+
+			std::vector<std::pair<AChar, String> >		chain_residue_names;
+			std::vector<const SecondaryStructure*>		sec_structs;
+
+			void clear()
+			{
+				atoms.clear();
+				covalent_hetero_bonds.clear();
+				covalent_atom_bonds.clear();
+				hydrogen_bonds.clear();
+				saltbridges.clear();
+				ssbonds.clear();
+			}
+
+		};
+
+		/**	A structure tracking the current values of all auxiliary information required to write ATOM or HETATM records.
+				This is used for keeping track of chain and residue names while writing multiple atoms.
+		*/
+		struct AdditionalAtomInfo
+		{
+			const Chain* current_chain;
+			const ::BALL::Residue* current_residue;
+			Integer residue_id;
+			AChar residue_insertion_code;
+			AChar	chain_id;
+			LString3 residue_name;
+			LString4 pdb_id;
+			Position number; // number of the ATOM/HETATM/TER record
+			
+
+			AdditionalAtomInfo()
+				:	current_chain(0),
+					current_residue(0),
+					residue_id(1),
+					residue_insertion_code(' '),
+					chain_id(' '),
+					number(1)
+			{
+				strncpy(residue_name, "UNK", 4);
+				strncpy(pdb_id, "    ", 5);
+			}
+		};
+
+		/**	Maps all record formats and tags to the record type.
+		*/
+    extern const RecordTypeFormat RECORD_TYPE_FORMAT [];
 
 	} // namespace PDB
 

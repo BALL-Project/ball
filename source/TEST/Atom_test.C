@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Atom_test.C,v 1.24 2004/11/07 08:25:36 oliver Exp $
+// $Id: Atom_test.C,v 1.25 2005/02/13 22:38:49 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -13,12 +13,14 @@
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/fragment.h>
 #include <BALL/KERNEL/residue.h>
+#include <BALL/KERNEL/secondaryStructure.h>
+#include <BALL/KERNEL/chain.h>
 #include <BALL/CONCEPT/textPersistenceManager.h>
 
 #include "ItemCollector.h"
 ///////////////////////////
 
-START_TEST(Atom, "$Id: Atom_test.C,v 1.24 2004/11/07 08:25:36 oliver Exp $")
+START_TEST(Atom, "$Id: Atom_test.C,v 1.25 2005/02/13 22:38:49 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -703,6 +705,34 @@ CHECK(const Residue* getResidue() const throw())
 	Residue r;
 	r.append(*(PDBAtom*) &a);
 	TEST_EQUAL(a.getResidue(), &r)
+RESULT
+
+CHECK(const Chain* getChain() const throw())
+	Atom a;
+	TEST_EQUAL(a.getChain(), 0)
+	Fragment f;
+	f.append(a);
+	TEST_EQUAL(a.getChain(), 0)
+	Residue r;
+	SecondaryStructure ss;
+	ss.insert(r);
+	Chain c;
+	c.insert(ss);
+	r.append(*(PDBAtom*) &a);
+	TEST_EQUAL(a.getChain(), &c)
+RESULT
+
+CHECK(const SecondaryStructure* getSecondaryStructure() const throw())
+	Atom a;
+	TEST_EQUAL(a.getSecondaryStructure(), 0)
+	Fragment f;
+	f.append(a);
+	TEST_EQUAL(a.getSecondaryStructure(), 0)
+	Residue r;
+	SecondaryStructure ss;
+	ss.insert(r);
+	r.append(*(PDBAtom*) &a);
+	TEST_EQUAL(a.getSecondaryStructure(), &ss)
 RESULT
 
 CHECK(const StaticAtomAttributes* getAttributePtr() const)

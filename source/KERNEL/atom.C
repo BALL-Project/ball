@@ -1,12 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.C,v 1.53 2005/02/08 19:41:20 oliver Exp $
+// $Id: atom.C,v 1.54 2005/02/13 22:38:49 oliver Exp $
 //
 
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/fragment.h>
+#include <BALL/KERNEL/chain.h>
+#include <BALL/KERNEL/secondaryStructure.h>
 #include <BALL/KERNEL/residue.h>
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/PTE.h> 
@@ -334,22 +336,29 @@ namespace BALL
 		atom.index_ = tmp_index;
 	}
 		
-	Molecule* Atom::getMolecule()
-		throw()
+	Molecule* Atom::getMolecule() throw()
 	{
 		return Composite::getAncestor(RTTI::getDefault<Molecule>());
 	}
 
-	Fragment* Atom::getFragment()
-		throw()
+	Fragment* Atom::getFragment() throw()
 	{
 		return Composite::getAncestor(RTTI::getDefault<Fragment>());
 	}
 					                                                                                                                              
-	const Residue* Atom::getResidue() const
-		throw()
+	const Residue* Atom::getResidue() const throw()
 	{
 		return Composite::getAncestor(RTTI::getDefault<Residue>());
+	}
+ 
+	const Chain* Atom::getChain() const throw()
+	{
+		return Composite::getAncestor(RTTI::getDefault<Chain>());
+	}
+ 
+	const SecondaryStructure* Atom::getSecondaryStructure() const throw()
+	{
+		return Composite::getAncestor(RTTI::getDefault<SecondaryStructure>());
 	}
  
 	String Atom::getFullName(Atom::FullNameType type) const

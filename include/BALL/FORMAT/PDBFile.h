@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.h,v 1.30 2005/02/12 23:08:26 oliver Exp $
+// $Id: PDBFile.h,v 1.31 2005/02/13 22:38:48 oliver Exp $
 //
 
 #ifndef BALL_FORMAT_PDBFILE_H
@@ -625,9 +625,6 @@ namespace BALL
 		void clear_();
 
 		//_
-		static const PDB::RecordTypeFormat record_type_format_[];
-
-		//_
 		PDBFile(const File& pdbf) throw(Exception::FileNotFound);
 
 		//_
@@ -638,15 +635,87 @@ namespace BALL
 		*/
 		void init_() throw();
 
-		// 
-		void write_(const Composite& composite, bool system = false);
-
 		void postprocessSSBonds_();
 		void postprocessHelices_();
 		void postprocessSheetsTurns_(QuadrupleList& sectruct_list, SecStructList& new_secstruct_list);
 		void postprocessRandomCoils_();
 
+		
 
+		// Method related to the writing of PDB files
+
+		// 
+		void write_(const AtomContainer& ac, const PDBInfo& info = PDBInfo());
+
+		/** Write a record to the stream using a predefined record type.
+				This method updates the internal book keeping data structure required
+				for writing the MASTER record.
+				@see PDB::RecordType
+		*/
+		void writeRecord_(PDB::RecordType record, ...);
+
+		/** Write a record to the stream using a predefined format string.
+				You should not use this method unless you know what you are doing.
+				Use \link writeRecord_ \endlink instead, as this method also updates
+				the record book keeping required for the MASTER record.
+				If you use it, you'll have to update the book keeping structure yourself!
+		*/
+		void writeRawRecord_(const char* format, const char* tag, ...);
+		
+		/// Add all records of a specific type in the info object to the current stream.
+		void addAllRecords_(const PDBInfo& info, PDB::RecordType type);
+		
+		/**	Write a SEQRES record to the current stream */
+		void writeRecord_(const PDB::RecordSEQRES& seqres);
+		/**	Write a HELIX record to the current stream */
+		void writeRecord_(const PDB::RecordHELIX& helix);
+		/**	Write a SHEET record to the current stream */
+		void writeRecord_(const PDB::RecordSHEET& helix);
+		/**	Write a TURN record to the current stream */
+		void writeRecord_(const PDB::RecordTURN& helix);
+		/**	Write a SSBOND record to the current stream */
+		void writeRecord_(const PDB::RecordSSBOND& helix);
+		/**	Write a CONECT record to the current stream */
+		void writeRecord_(const PDB::RecordCONECT& helix);
+		
+		void writeAtom_(const PDB::Structure::AtomEntry& atom, PDB::AdditionalAtomInfo& cr, bool hetatm = false);
+		
+		void writeTitleSection_(const PDB::Structure& structure, const PDBInfo& info);
+    void writePrimaryStructureSection_(const PDB::Structure& structure, const PDBInfo& info);
+    void writeHeterogenSection_(const PDB::Structure& structure, const PDBInfo& info);
+    void writeSecondaryStructureSection_(const PDB::Structure& structure, const PDBInfo& info);
+    void writeConnectivityAnnotationSection_(const PDB::Structure& structure, const PDBInfo& info);
+    void writeMiscellaneousFeaturesSection_(const PDB::Structure& structure, const PDBInfo& info);
+    void writeCrystallographicSection_(const PDB::Structure& structure, const PDBInfo& info);
+    void writeCoordinateSection_(const PDB::Structure& structure, const PDBInfo& info);
+    void writeConnectivitySection_(const PDB::Structure& structure, const PDBInfo& info);
+    void writeBookKeepingSection_(const PDB::Structure& structure, const PDBInfo& info);
+
+		void writeSEQRESSection_(const std::vector<std::pair<char, String> >& chain_residues);
+		void writeHELIXSection_(const PDB::Structure& structure);
+		void writeSHEETSection_(const PDB::Structure& structure);
+		void writeTURNSection_(const PDB::Structure& structure);
+		void writeSSBONDSection_(const PDB::Structure& structure);
+		void writeHYDBNDSection_(const PDB::Structure& structure);
+		void writeSLTBRGSection_(const PDB::Structure& structure);
+
+		/**	Extract the atom and bond information from an atom container prior to writing a PDB file.
+				This method is called by \link write_ \endlink.
+		*/
+		static void extractStructure_(const AtomContainer& ac, PDB::Structure& structure);
+		
+		/**	Determine whether an atom is a hetero atom or part of a standard amino acid or nucleotide.
+				This test is performed by checking for the corresponding properties defined in Residue.
+		*/
+		static bool isHeteroAtom_(const Atom& atom);
+		
+		/**	Compute the current name and id of chain and residue.
+				This method guesses more or less correct values for names and IDs or uses decent
+				default values. It does so only of the pointers to the residue and chain in cr
+				differ from the values in atom.
+		*/
+		static void updateAdditionalAtomInfo_(const PDB::Structure::AtomEntry& atom, PDB::AdditionalAtomInfo& cr);
+			
 
 		char line_buffer_[PDB::SIZE_OF_PDB_LINE_BUFFER];
 
@@ -682,61 +751,11 @@ namespace BALL
 		PDBAtom* current_PDB_atom_;
 		const Atom* current_const_atom_;
 		String name_;
+		HashMap<const Atom*, Position> atom_map_;
+		
+		/// Book keeping struct for the number of records written
+		PDB::BookKeeping book_keeping_;
 
-		union
-		{
-			PDB::RecordUNKNOWN record_UNKNOWN;
-			PDB::RecordANISOU  record_ANISOU;
-			PDB::RecordATOM    record_ATOM;
-			PDB::RecordAUTHOR  record_AUTHOR;
-			PDB::RecordCAVEAT  record_CAVEAT;
-			PDB::RecordCISPEP  record_CISPEP;
-			PDB::RecordCOMPND  record_COMPND;
-			PDB::RecordCONECT  record_CONECT;
-			PDB::RecordCRYST1  record_CRYST1;
-			PDB::RecordDBREF   record_DBREF;
-			PDB::RecordEND     record_END;
-			PDB::RecordENDMDL  record_ENDMDL;
-			PDB::RecordEXPDTA  record_EXPDTA;
-			PDB::RecordFORMUL  record_FORMUL;
-			PDB::RecordFTNOTE  record_FTNOTE;
-			PDB::RecordHEADER  record_HEADER;
-			PDB::RecordHELIX   record_HELIX;
-			PDB::RecordHET     record_HET;
-			PDB::RecordHETATM  record_HETATM;
-			PDB::RecordHETNAM  record_HETNAM;
-			PDB::RecordHYDBND  record_HYDBND;
-			PDB::RecordJRNL    record_JRNL;
-			PDB::RecordKEYWDS  record_KEYWDS;
-			PDB::RecordLINK    record_LINK;
-			PDB::RecordMASTER  record_MASTER;
-			PDB::RecordMODEL   record_MODEL;
-			PDB::RecordMODRES  record_MODRES;
-			PDB::RecordMTRIX1  record_MTRIX1;
-			PDB::RecordMTRIX2  record_MTRIX2;
-			PDB::RecordMTRIX3  record_MTRIX3;
-			PDB::RecordOBSLTE  record_OBSLTE;
-			PDB::RecordORIGX1  record_ORIGX1;
-			PDB::RecordORIGX2  record_ORIGX2;
-			PDB::RecordORIGX3  record_ORIGX3;
-			PDB::RecordREMARK  record_REMARK;
-			PDB::RecordREVDAT  record_REVDAT;
-			PDB::RecordSCALE1  record_SCALE1;
-			PDB::RecordSCALE2  record_SCALE2;
-			PDB::RecordSCALE3  record_SCALE3;
-			PDB::RecordSEQRES  record_SEQRES;
-			PDB::RecordSHEET   record_SHEET;
-			PDB::RecordSIGATM  record_SIGATM;
-			PDB::RecordSIGUIJ  record_SIGUIJ;
-			PDB::RecordSITE    record_SITE;
-			PDB::RecordSLTBRG  record_SLTBRG;
-			PDB::RecordSOURCE  record_SOURCE;
-			PDB::RecordSSBOND  record_SSBOND;
-			PDB::RecordTER     record_TER;
-			PDB::RecordTITLE   record_TITLE;
-			PDB::RecordTURN    record_TURN;
-			PDB::RecordTVECT   record_TVECT;
-		};
 		///_Verbosity level
 		int verbosity_;
 

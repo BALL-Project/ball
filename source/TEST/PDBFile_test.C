@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile_test.C,v 1.25 2005/02/12 23:08:28 oliver Exp $
+// $Id: PDBFile_test.C,v 1.26 2005/02/13 22:38:49 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -14,7 +14,26 @@
 
 ///////////////////////////
 
-START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.25 2005/02/12 23:08:28 oliver Exp $")
+namespace BALL
+{
+	class TestPDBFile
+		:	public PDBFile
+	{
+		public:
+		TestPDBFile(const String& filename, File::OpenMode open_mode)
+			:	PDBFile(filename, open_mode)
+		{
+		}
+
+		// make protected members public for testing
+		PDBFile::writeRawRecord_;
+		PDBFile::writeRecord_;
+	};
+	
+
+}
+
+START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.26 2005/02/13 22:38:49 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -30,6 +49,7 @@ RESULT
 CHECK(~PDBFile() throw())
 	delete pdb_file;
 RESULT
+
 
 CHECK(void read(System& system))
 	PDBFile f;
@@ -152,6 +172,33 @@ CHECK([EXTRA]PDBFile strict line checking)
 	f.read(s);
 	TEST_EQUAL(s.countAtoms(), 2)
 RESULT
+
+CHECK(void writeRawRecord_(const char* format, const char* tag, ...))
+	String filename;
+	NEW_TMP_FILE(filename);
+	TestPDBFile f(filename, File::OUT);
+	f.writeRawRecord_("%s-%d", "HEADER", "55", 6);
+	f.close();
+RESULT
+
+CHECK(void writeRecord_(PDB::RecordType record, ...))
+	String filename;
+	NEW_TMP_FILE(filename);
+	TestPDBFile f(filename, File::OUT);
+	f.writeRecord_(PDB::RECORD_TYPE__ENDMDL);
+	f.writeRecord_(PDB::RECORD_TYPE__AUTHOR, "AA", "BB", "CC", 1L, 2L, 3L);
+	f.close();
+RESULT
+
+CHECK(void writeRecord_(const PDB::RecordSEQRES& seqres))
+	PDB::RecordSEQRES sr;
+	String filename;
+	NEW_TMP_FILE(filename);
+	TestPDBFile f(filename, File::OUT);
+	f.writeRecord_(sr);
+	f.close();
+RESULT
+
 
 CHECK(bool write(const System& system) throw(File::CannotWrite))
 	PDBFile f;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBInfo.C,v 1.1 2005/02/08 17:32:37 oliver Exp $
+// $Id: PDBInfo.C,v 1.2 2005/02/13 22:38:49 oliver Exp $
 //
 
 #include <BALL/FORMAT/PDBInfo.h>
@@ -83,6 +83,23 @@ namespace BALL
 		model_read_ = 0;
 		number_of_atom_records_ = 0;
 		number_of_hetatm_records_ = 0;
+	}
+
+	std::list<Position> PDBInfo::getRecordIndices(PDB::RecordType record) const
+	{
+		std::list<Position> indices;
+
+		String tag(PDB::RECORD_TYPE_FORMAT[record].string);
+		Position i = 0;
+		for (PDBRecords::ConstIterator it(skipped_records_.begin()); it != skipped_records_.end(); ++it, ++i)
+		{
+			if (it->hasPrefix(tag))
+			{
+				indices.push_back(i);
+			}
+		}
+		
+		return indices;
 	}
 
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBInfo.h,v 1.1 2005/02/08 17:32:36 oliver Exp $
+// $Id: PDBInfo.h,v 1.2 2005/02/13 22:38:48 oliver Exp $
 //
 
 #ifndef BALL_FORMAT_PDBINFO_H
@@ -12,6 +12,10 @@
 
 #ifndef BALL_FORMAT_PDBRECORDS_H
 #	include <BALL/FORMAT/PDBRecords.h>
+#endif
+
+#ifndef BALL_FORMAT_PDBDEFS_H
+#	include <BALL/FORMAT/PDBdefs.h>
 #endif
 
 namespace BALL 
@@ -101,6 +105,15 @@ namespace BALL
 		Size& getNumberOfHETATMRecords() { return number_of_hetatm_records_; }
 		/// Set the number of hetatm records read
 		void setNumberOfHETATMRecords(Size n) { number_of_hetatm_records_ = n; }
+		/// Return the name of the system as contained in the HEADER record
+		const String& getName() const { return name_; }
+ 		/// Set the name of the system. This is written to the HEADER record (truncated!).
+		void setName(const String& name) { name_ = name; }
+		/**	Return a list of indices matchin a specific record type.
+				This list is constructed by a linear search over all records currently
+				stored in the skipped indices.
+		*/
+		std::list<Position> getRecordIndices(PDB::RecordType record) const;
 		//@}
 
 		protected:
@@ -112,6 +125,8 @@ namespace BALL
 		String filename_;
 		/// PDB ID
 		String id_;
+		/// Name 
+		String name_;
 		/// Total file size in bytes
 		Size number_of_records_;
 		/// Total number of models

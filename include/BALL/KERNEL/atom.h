@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.h,v 1.69 2005/02/08 19:41:20 oliver Exp $
+// $Id: atom.h,v 1.70 2005/02/13 22:38:49 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_ATOM_H
@@ -41,6 +41,8 @@ namespace BALL
 	class Element;
 	class Fragment;
 	class Residue;
+	class Chain;
+	class SecondaryStructure;
 	class Molecule;
 
 	/** Atom class.
@@ -392,7 +394,7 @@ namespace BALL
 					 \par
 					Use  \link Fragment::insert Fragment::insert \endlink  to insert an atom into a fragment and
 					 \link Fragment::remove Fragment::remove \endlink  to remove it.
-					@return   Fragment* - mutable pointer to the parent fragment
+					@return   Fragment* - mutable pointer to the fragment
 			*/
 			Fragment* getFragment()
 				throw();
@@ -402,32 +404,43 @@ namespace BALL
 					 \par
 					Use  \link Fragment::insert Fragment::insert \endlink  to insert an atom into a fragment and
 					 \link Fragment::remove Fragment::remove \endlink  to remove it.					
-					@return   Fragment* -	constant pointer to the parent fragment
+					@return   Fragment* -	constant pointer to the fragment
 			*/
 			const Fragment* getFragment() const
 				throw();
 
-			/** Constant inspection of the atom's parent residue.
+			/** Return the residue the atom is contained in.
 					A NULL pointer is returned if this atom is not part of a residue.
 					 \par
 					Use  \link Residue::insert Residue::insert \endlink  to insert an atom into a residue and
 					 \link Residue::remove Residue::remove \endlink  to remove it.					
-					@return   Residue* -	constant pointer to the parent residue
+					@return   Residue* -	constant pointer to the residue
 			*/
-			const Residue* getResidue() const
-				throw();
+			const Residue* getResidue() const	throw();
+
+			/** Return the secondary structure the atom is contained in.
+					A NULL pointer is returned if this atom is not part of a secondary structure.
+					 \par
+					@return   SecondaryStructure* -	constant pointer to the secondary structure
+			*/
+			const SecondaryStructure* getSecondaryStructure() const throw();
+
+			/** Return the chain the atom is contained in.
+					A NULL pointer is returned if this atom is not part of a chain.
+					 \par
+					@return   Chain* -	constant pointer to the chain
+			*/
+			const Chain* getChain() const throw();
 
 			/** Set the atom name.
 					@param   name the new name
 			*/
-			void setName(const String& name)
-				throw();
+			void setName(const String& name) throw();
 
 			/** Return the atom name
 					@return  String& - constant reference to the name
 			*/
-			const String& getName() const
-				throw();
+			const String& getName() const throw();
 
 			/** Assemble a fully specified atom name.
 					This method returns at fully specified atom name as used for charge and 

@@ -18,7 +18,8 @@ CPP_SOURCES=\
 	parameters.C\
 	parameterSection.C\
 	PDBdefs.C\
-	PDBFile.C\
+	PDBFileGeneral.C\
+	PDBFileDetails.C\
 	PDBInfo.C\
 	PDBRecords.C\
 	resourceFile.C\
