@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.C,v 1.14 2001/06/24 21:25:20 oliver Exp $
+// $Id: amberNonBonded.C,v 1.15 2001/06/25 12:52:37 anker Exp $
 
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -229,7 +229,7 @@ namespace BALL
 		}
 
 		// clear vector of non-bonded atom pairs
-		non_bonded_.clear();
+		clear();
  
 		// Set the options for the non-bonded atom pairs
 		Options& options = getForceField()->options;
