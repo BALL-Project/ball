@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.46 2002/12/12 09:58:28 oliver Exp $
-
 #include "mainframe.h"
 #include "icons.h"
 #include "DIALOGS/DlgAbout.h"
@@ -132,8 +130,6 @@ Mainframe::Mainframe(QWidget* parent, const char* name)
 									CTRL+Key_F, MENU__FILE_EXPORT_POVRAYFILE);
 
 	// Build Menu -------------------------------------------------------------------
-	insertMenuEntry(MainControl::BUILD, "Check St&ructure", this, SLOT(checkResidue()), 
-									CTRL+Key_R, MENU__BUILD_CHECK_RESIDUE);
 	insertMenuEntry(MainControl::BUILD, "Assign &Charges", this, SLOT(assignCharges()), 
 									CTRL+Key_H, MENU__BUILD_ASSIGN_CHARGES);
 	insertMenuEntry(MainControl::BUILD, "Calculate AMBER &Energy", this, SLOT(calculateAmberEnergy()), 
@@ -185,8 +181,6 @@ Mainframe::~Mainframe()
 void Mainframe::onNotify(Message *message)
 	throw()
 {
-	if (message == 0) return;
-
 	MainControl::onNotify(message);
 }
 
@@ -195,19 +189,18 @@ void Mainframe::checkMenuEntries()
 	bool selected;
 	int number_of_selected_objects = 0;
 
-	if (selection_.size() == 0)
+	if (control_selection_.size() == 0)
 	{
 		selected = false;
 	}
 	else
 	{
-		number_of_selected_objects = selection_.size();
+		number_of_selected_objects = control_selection_.size();
 		selected = (number_of_selected_objects > 0);
 	}
 
 	bool all_systems = (number_of_selected_objects > 0);
 
-	menuBar()->setItemEnabled(MENU__BUILD_CHECK_RESIDUE, selected);
 	menuBar()->setItemEnabled(MENU__BUILD_ASSIGN_CHARGES, selected);
 
 	// AMBER methods are available only for single systems
@@ -232,37 +225,6 @@ void Mainframe::exportPOVRay()
 	removeModularWidget(&pov);	
 }
 	
-
-void Mainframe::checkResidue()
-{
-	if (selection_.size() == 0)  return;
-
-	QString message;
-	message.sprintf("selecting %d objects...", selection_.size());
-	statusBar()->message(message);
-	QWidget::update();
-
-	ResidueChecker res_check(fragment_db_);
-	bool okay = true;
-	HashSet<Composite*>::ConstIterator list_it = selection_.begin();	
-	for (; list_it != selection_.end(); ++list_it)
-	{	
-		(*list_it)->apply(res_check);
-		okay = okay && res_check.getStatus();	
-	}
-
-	if (okay)
-	{
-		Log.info() << "ResidueChecker: no errors found." << endl;
-		statusBar()->message("no errors.");
-	} 
-	else 
-	{
-		statusBar()->message("errors found!");
-	}
-
-	QWidget::update();
-}
 
 void Mainframe::assignCharges()
 {
@@ -634,9 +596,6 @@ void Mainframe::fetchPreferences(INIFile& inifile)
 void Mainframe::writePreferences(INIFile& inifile)
 	throw()
 {
-	inifile.clear();
-	inifile.appendSection("WINDOWS");
-	// 
 	// the splitter positions
 	QValueList<int> size_list = hor_splitter_->sizes();
 	String value_string = "";
@@ -656,9 +615,9 @@ void Mainframe::writePreferences(INIFile& inifile)
 	}
 	inifile.insertValue("WINDOWS", "Main::vert_splitter", value_string);
 
-	MainControl::writePreferences(inifile);
-	display_properties_->writePreferences(inifile);
 	minimization_dialog_->writePreferences(inifile);
+
+	MainControl::writePreferences(inifile);
 }
 
 

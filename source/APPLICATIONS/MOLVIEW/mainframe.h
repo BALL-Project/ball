@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.33 2002/12/12 09:58:28 oliver Exp $
+// $Id: mainframe.h,v 1.34 2002/12/12 17:14:55 amoll Exp $
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
 #define BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -82,15 +82,10 @@ class Mainframe
 		MENU__EDIT_COPY,
 		MENU__EDIT_PASTE,
 		MENU__EDIT_DELETE,
-		MENU__EDIT_SELECT,
-		MENU__EDIT_DESELECT,
 		MENU__EDIT_CLEAR_CLIPBOARD,
 
 		MENU__INSERT_LABEL,
 
-		MENU__BUILD_CHECK_RESIDUE,
-		MENU__BUILD_BUILD_BONDS,
-		MENU__BUILD_ADD_HYDROGENS,
 		MENU__BUILD_ASSIGN_CHARGES,
 		MENU__BUILD_AMBER_ENERGY,
 		MENU__BUILD_AMBER_MINIMIZATION,
@@ -131,7 +126,6 @@ class Mainframe
 	void exportPOVRay();
 
 	// Build menu
-	void checkResidue();
 	void assignCharges();
 	void calculateAmberEnergy();
 	void amberMinimization();
@@ -172,5 +166,3 @@ class Mainframe
 #		endif
 
 #endif // BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
-
-
