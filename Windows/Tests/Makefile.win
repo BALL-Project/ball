@@ -1,0 +1,36 @@
+#----------------------------------------------------------------
+# WINDOWS-Makefile BALL-Tests
+# by Andreas Crauser 
+#---------------------------------------------------------------
+
+CC = cl -c -nologo -MTd -Zm1200 -TP -EHsc -GR -DBALL_PATH="\"$(BALL_PATH)\"" 
+LD = cl -nologo -MTd 
+
+
+
+
+BALL_LIB = ..\..\lib\libBall.lib
+ 
+#XLIB = user32.lib gdi32.lib comdlg32.lib shell32.lib advapi32.lib wsock32.lib 
+XLIB = kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib wsock32.lib
+
+
+INCL = -I ..\..\Windows\include -I ..\..\include -I ..\..\Windows\Contrib\regex-0.12 -I ..\..\Windows\Contrib\ONC_RPC
+
+o = .obj
+e = .exe
+
+.obj.exe:
+	$(LD) $(LFLAGS) $*.obj  $(BALL_LIB) $(XLIB)
+
+.c.obj:
+	$(CC) $(CFLAGS) $(DFLAGS) $(IFLAGS) $(INCL) $(*).C
+
+.c.exe:
+	$(CC) $(CFLAGS) $(DFLAGS) $(IFLAGS) $(INCL) $(*).C
+	$(LD) $(LFLAGS) $*.obj  $(BALL_LIB) $(XLIB)
+
+
+!include Make.lst
+
+
