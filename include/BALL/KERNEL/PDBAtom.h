@@ -1,4 +1,4 @@
-// $Id: PDBAtom.h,v 1.21 2001/07/15 16:14:21 oliver Exp $
+// $Id: PDBAtom.h,v 1.22 2001/07/15 20:23:56 oliver Exp $
 
 #ifndef BALL_KERNEL_PDBATOM_H
 #define BALL_KERNEL_PDBATOM_H
@@ -30,6 +30,8 @@ namespace BALL
 			This class represents atoms read from PDB files.
 			It contains additional attributes to hold the crystallographic properties
 			of atoms from a PDB file (e.g., temperature factor, occupancy).
+			For details on the PDB format and the detailed meaning of those fields,
+			please refer to the PDB documentation at \URL{http://www.rcsb.org}.
 			\\
 			{\bf Definition:}\URL{BALL/KERNEL/PDBAtom.h}
 			@see PDBFile
@@ -47,7 +49,7 @@ namespace BALL
 		*/
 		//@{
 
-		/** BAUSTELLE
+		/** Possible values for the PDB remoteness indicator
 		*/
 		enum RemotenessIndicator
 		{
@@ -323,23 +325,23 @@ namespace BALL
 		void clear_()
 			throw();
 
-		/*_ BAUSTELLE
+		/*_ The PDB branch designator
 		*/
 		char 	branch_designator_;
 
-		/*_ BAUSTELLE
+		/*_ The PDB remoteness indicator
 		*/
 		char	remoteness_indicator_;
 
-		/*_ BAUSTELLE
+		/*_ The PDB alternate location indicator
 		*/
 		char 	alternate_location_indicator_;
 
-		/*_ BAUSTELLE
+		/*_ The PDB occupancy
 		*/
 		float occupancy_;
 
-		/*_ BAUSTELLE
+		/*_ The PDB temperature factor
 		*/
 		float temperature_factor_;
 

@@ -1,4 +1,4 @@
-// $Id: atomIterator.h,v 1.7 2001/07/04 15:57:03 anker Exp $
+// $Id: atomIterator.h,v 1.8 2001/07/15 20:23:57 oliver Exp $
 
 #ifndef BALL_KERNEL_ATOMITERATOR_H
 #define BALL_KERNEL_ATOMITERATOR_H
@@ -32,26 +32,20 @@ namespace BALL
 
 		BALL_CREATE_DEEP(AtomIteratorTraits_)
 
-		/// BAUSTELLE
 		AtomIteratorTraits_()
 			throw();
 			
-		/// BAUSTELLE
 		AtomIteratorTraits_(const Composite& composite)
 			throw();
 
-		/// BAUSTELLE
 		AtomIteratorTraits_(const AtomIteratorTraits_& traits, bool /* deep */)
 			throw();
 			
-		/// BAUSTELLE
 		AtomIteratorTraits_& operator = (const AtomIteratorTraits_& traits)
 			throw();
 
-		/// BAUSTELLE
 		void resetPredicate()
 			throw();
-
 	};
 
 

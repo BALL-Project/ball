@@ -1,4 +1,4 @@
-// $Id: selector.h,v 1.16 2001/07/13 13:13:47 anker Exp $
+// $Id: selector.h,v 1.17 2001/07/15 20:23:04 oliver Exp $
 
 #ifndef BALL_KERNEL_SELECTOR_H
 #define BALL_KERNEL_SELECTOR_H
@@ -51,9 +51,8 @@ namespace BALL
 			throw();
 
 		/** Construct a Selector with a string.
-				Note: Implementation of using the expression not yet implemented.
+				The selector's expression is set to {\tt expression_string}.
 		*/
-		// BAUSTELLE
 		Selector(const String& expression_string)
 			throw();
 
@@ -93,11 +92,10 @@ namespace BALL
 		//@{
 
 		/** Access operator.
-				All atom instances contained in the given composite instance are
-				selected and counted.
-				@see Composite::select
+				If the given Composite is an \Ref{Atom} and the current
+				\Ref{expression_} is fulfilled for that atom, select it by
+				calling \Ref{Composite::select}.
 		*/
-		// BAUSTELLE
 		virtual Processor::Result operator () (Composite& composite)
 			throw();
 		

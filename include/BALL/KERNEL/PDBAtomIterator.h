@@ -1,4 +1,4 @@
-// $Id: PDBAtomIterator.h,v 1.10 2001/07/15 16:14:21 oliver Exp $ 
+// $Id: PDBAtomIterator.h,v 1.11 2001/07/15 20:23:56 oliver Exp $ 
 
 #ifndef BALL_KERNEL_PDBATOMITERATOR_H
 #define BALL_KERNEL_PDBATOMITERATOR_H
@@ -32,24 +32,19 @@ namespace BALL
 
 		BALL_CREATE_DEEP(PDBAtomIteratorTraits_)
 
-		/// BAUSTELLE
 		PDBAtomIteratorTraits_()
 			throw();
 			
-		/// BAUSTELLE
 		PDBAtomIteratorTraits_(const Composite& composite)
 			throw();
 			
-		/// BAUSTELLE
 		PDBAtomIteratorTraits_(const PDBAtomIteratorTraits_& traits, 
 				bool /* deep */ = true)
 			throw();
 			
-		/// BAUSTELLE
 		PDBAtomIteratorTraits_& operator = (const PDBAtomIteratorTraits_ &traits)
 			throw();
 
-		/// BAUSTELLE
 		void resetPredicate()
 			throw();
 
