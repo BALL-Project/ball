@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.14 2003/10/28 00:23:18 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.15 2003/11/03 02:05:45 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -156,6 +156,8 @@ namespace BALL
 
 		ColorRGBA ElementColorProcessor::getColor(const Composite* composite)
 		{
+			if (composite->isSelected()) return BALL_SELECTED_COLOR;
+
 			if (!RTTI::isKindOf<Atom>(*composite))
 			{
 				return default_color_;
@@ -222,6 +224,8 @@ namespace BALL
 
 		ColorRGBA ResidueNameColorProcessor::getColor(const Composite* composite)
 		{
+			if (composite->isSelected()) return BALL_SELECTED_COLOR;
+
 			if (composite->getParent() == 0 ||
 					 !RTTI::isKindOf<Residue>(*composite->getParent()))
 			{
@@ -272,6 +276,8 @@ namespace BALL
 
 		ColorRGBA ResidueNumberColorProcessor::getColor(const Composite* composite)
 		{
+			if (composite->isSelected()) return BALL_SELECTED_COLOR;
+
 			if (composite->getParent() == 0 ||
 					!RTTI::isKindOf<Residue>(*composite->getParent()))
 			{
@@ -316,6 +322,8 @@ namespace BALL
 
 		ColorRGBA AtomChargeColorProcessor::getColor(const Composite* composite)
 		{
+			if (composite->isSelected()) return BALL_SELECTED_COLOR;
+
 			if (!RTTI::isKindOf<Atom>(*composite))
 			{
 				return default_color_;
@@ -421,6 +429,8 @@ namespace BALL
 
 		ColorRGBA AtomDistanceColorProcessor::getColor(const Composite* composite)
 		{
+			if (composite->isSelected()) return BALL_SELECTED_COLOR;
+
 			if (!RTTI::isKindOf<Atom>(*composite))
 			{
 				return default_color_;
@@ -512,14 +522,6 @@ namespace BALL
 		}
 			
 		////////////////////////////////////////////////////////////////////
-		void CustomColorProcessor::colorMeshFromGrid_(Mesh& mesh)
-			throw()
-		{
-			mesh.colorList.clear();
-			mesh.colorList.push_back(default_color_);
-		}
-
-		////////////////////////////////////////////////////////////////////
 		TemperatureFactorColorProcessor::TemperatureFactorColorProcessor()
 			: InterpolateColorProcessor()
 		{
@@ -532,6 +534,8 @@ namespace BALL
 
 		ColorRGBA TemperatureFactorColorProcessor::getColor(const Composite* composite)
 		{
+			if (composite->isSelected()) return BALL_SELECTED_COLOR;
+
 			if (!RTTI::isKindOf<PDBAtom>(*composite))
 			{
 				return default_color_;
@@ -553,6 +557,8 @@ namespace BALL
 
 		ColorRGBA OccupancyColorProcessor::getColor(const Composite* composite)
 		{
+			if (composite->isSelected()) return BALL_SELECTED_COLOR;
+
 			const PDBAtom* atom = dynamic_cast<const PDBAtom*>(composite);
 			if (atom == 0)			
 			{

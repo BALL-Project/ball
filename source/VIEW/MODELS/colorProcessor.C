@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.19 2003/11/03 00:23:30 amoll Exp $
+// $Id: colorProcessor.C,v 1.20 2003/11/03 02:05:45 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -244,6 +244,18 @@ namespace BALL
 		{ 
 			transparency_ = value;
 			default_color_.setAlpha(255 - value);
+		}
+
+		ColorRGBA ColorProcessor::getColor(const Composite* composite)
+		{
+			if (composite->isSelected())
+			{
+				return BALL_SELECTED_COLOR;
+			}
+			else
+			{
+				return default_color_;
+			}
 		}
 		//////////////////////////////////////////////////////////////////////
 		InterpolateColorProcessor::InterpolateColorProcessor()

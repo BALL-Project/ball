@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.h,v 1.10 2003/10/20 21:52:44 amoll Exp $
+// $Id: standardColorProcessor.h,v 1.11 2003/11/03 02:06:20 amoll Exp $
 
 #ifndef BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
 #define BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
@@ -339,7 +339,6 @@ namespace BALL
 
 
 		/** CustomColorProcessor colorizes every GeometricObject with the default color.
-		 		An extra class had to be created, because colorMeshFromGrid_ doesnt need the grid here.
 				\ingroup  ViewModels
 		*/
 		class CustomColorProcessor
@@ -349,10 +348,6 @@ namespace BALL
 				CustomColorProcessor()
 					: ColorProcessor()
 				{}
-
-			protected:
-				void colorMeshFromGrid_(Mesh& mesh)
-					throw();
 		};
 
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.h,v 1.15 2003/11/03 00:23:51 amoll Exp $
+// $Id: colorProcessor.h,v 1.16 2003/11/03 02:06:20 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_COLORPROCESSOR_H
@@ -128,8 +128,7 @@ namespace BALL
 					Here it just returns the default color.
 					You have to overload this operator in derived classes.
 			*/
-			virtual ColorRGBA getColor(const Composite* /*composite*/)
-			{ return default_color_;}
+			virtual ColorRGBA getColor(const Composite* composite);
 
 			///
 			Size getTransparency() const
