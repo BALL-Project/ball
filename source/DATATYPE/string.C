@@ -1,4 +1,4 @@
-// $Id: string.C,v 1.3 1999/09/18 19:10:14 oliver Exp $
+// $Id: string.C,v 1.4 1999/09/19 20:54:12 oliver Exp $
 
 #include <BALL/DATATYPE/string.h>
 
@@ -456,7 +456,9 @@ namespace BALL
 				current_delimiter = (char*)strchr(delimiters, *current_char);
 				
 				if (current_delimiter == 0)
+				{
 					break;
+				}
 			}
 
 			if (current_index == index)
@@ -468,7 +470,9 @@ namespace BALL
 					current_delimiter = (char*)strchr(delimiters, *current_char);
 
 						if (current_delimiter != 0)
+						{
 							break;
+						}
 				}
 
 				if (from_and_next_field != 0)
@@ -482,7 +486,9 @@ namespace BALL
 				}
 
 				if (field_begin < end)
+				{
 					return String(field_begin, 0, (Size)(current_char - field_begin));
+				}
 			}
 
 			++current_index;
@@ -492,7 +498,9 @@ namespace BALL
 				current_delimiter = (char*)strchr(delimiters, *current_char);
 				
 				if (current_delimiter != 0)
+				{
 					break;
+				}
 			}
 		}
 
@@ -509,17 +517,23 @@ namespace BALL
 		Size	array_index = 0;
 
 		if (array_size < 1)
+		{
 			return 0;
+		}
 
 		while(from != (Index)npos)
 		{
 			string_array[array_index] = getField(0, delimiters, &from);
 			
 			if (string_array[array_index] != "")
+			{
 				array_index++;
+			}
 
 			if (array_index == array_size)
+			{
 				return array_index;
+			}
 		}
 
 		return array_index; 
@@ -983,7 +997,7 @@ namespace BALL
 
 	void String::validateRange_(Index& from, Size& len) const
 	{
-		Size string_size =size();
+		Size string_size = size();
 		
     // indices may be given as negative arguments: start from the end
     // -1 therefore means the last character of the string.
