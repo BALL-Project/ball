@@ -1,4 +1,4 @@
-// $Id: fresnoRingStacking.C,v 1.1.2.3 2005/01/30 14:04:12 anker Exp $
+// $Id: fresnoRingStacking.C,v 1.1.2.4 2005/02/10 10:48:03 anker Exp $
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 
@@ -308,6 +308,16 @@ namespace BALL
 		HX_projected_distance_upper_ 
 			= options.getReal(Option::HX_PROJECTED_DISTANCE_UPPER);
 
+		// ??? The following values are hardcoded.
+		// The distance tolerance for creating smooth scores in interaction
+		// estimation (in units of Angstrom). This is just half of the
+		// tolerance, so double this value in order to get the full tolerance
+		// width.
+		distance_tolerance_ = 0.25f;
+		// The angular tolerance in units of degrees
+		angle_tolerance_ = 20.0f;
+		// The cutoff limit for stacking scoring terms
+		limit_ = 0.01;
 
 		// read the protein and the ligand 
 		// of which the binding sites have to be found 
@@ -445,9 +455,17 @@ namespace BALL
 		// Reset the energy value.
 		energy_ = 0.0f;
 
-		// Two temporyr vectors we need for the angle calculation
+		// Two temporary vectors we need for the angle calculation
 		Vector3 HC;
 		Vector3 HX;
+
+		// The different scores
+		float CX_score;
+		float CHX_score;
+		float HX_score;
+
+		// Some temporary variables
+		float distance;
 
 		// Iterate over all possible interactions
 		vector< pair<const AromaticRing*, const CHGroup*> >::const_iterator 
@@ -458,8 +476,22 @@ namespace BALL
 			const Vector3& ring_centre = inter_it->first->getCentre();
 			const Vector3& C_atom = inter_it->second->getCAtom()->getPosition();
 
-			// Check distance C --- X
-			if ((ring_centre - C_atom).getLength() < CX_distance_upper_)
+			// calculate the distance ring center <--> C atom
+			distance = (ring_centre - C_atom).getLength();
+
+			// compute a score for that interaction
+
+			CX_score 
+				= ((FresnoFF*)getForceField())->base_function->calculate(distance,
+						CX_distance_upper_ - distance_tolerance_,
+						CX_distance_upper_ + distance_tolerance_);
+			// DEBUG
+			std::cout << "CX_score = " << CX_score << " (" << limit_ << ")"
+				<< std::endl;
+			// /DEBUG
+
+			// 
+			if (CX_score > limit_)
 			{
 #ifdef DEBUG
 					Log.info() << "distance C --- x: " 
@@ -472,6 +504,18 @@ namespace BALL
 				HC = C_atom - H_atom;
 				HX = ring_centre - H_atom;
 				float angle_CHX = HC.getAngle(HX).toDegree();
+
+				// Calculate the angle score. Note that lower tolerance has to be
+				// greater than the upper tolerance because we have to invert the
+				// function
+				CHX_score 
+					= ((FresnoFF*)getForceField())->base_function->calculate(distance,
+							CHX_angle_lower_ + angle_tolerance_,
+							CHX_angle_lower_ - angle_tolerance_);
+				// DEBUG
+				std::cout << "CHX_score = " << CHX_score << std::endl;
+				// /DEBUG
+
 				if (angle_CHX >= CHX_angle_lower_)
 				{
 #ifdef DEBUG
@@ -482,69 +526,68 @@ namespace BALL
 					float projected_distance_XH 
 						= (ring_centre + (-HX * normal) * normal - H_atom).getLength();
 
-#ifdef DEBUG
-					Atom* atom_ptr_H = new Atom();
-					atom_ptr_H->setElement(PTE[Element::Fe]);
-					atom_ptr_H->setName("H");
-					atom_ptr_H->setPosition(H_atom);
 
-					Atom* atom_ptr_X = new Atom();
-					atom_ptr_X->setElement(PTE[Element::Fe]);
-					atom_ptr_X->setName("X");
-					atom_ptr_X->setPosition(ring_centre);
+					// Calculate a score for the H---X distance. Note that the upper
+					// and lower limits in the first base_function() have to be
+					// chosen so that lower > upper in order to invert the base
+					// function. The whole term has to provide something similar to a
+					// Gauss curve.
+					HX_score 
+						= ((FresnoFF*)getForceField())->base_function->calculate(
+								projected_distance_XH,
+								HX_projected_distance_lower_ + distance_tolerance_,
+								HX_projected_distance_lower_ - distance_tolerance_)
+						* ((FresnoFF*)getForceField())->base_function->calculate(
+								projected_distance_XH,
+								HX_projected_distance_upper_ - distance_tolerance_,
+								HX_projected_distance_upper_ + distance_tolerance_);
 
-					Atom* atom_ptr_N = new Atom();
-					atom_ptr_N->setElement(PTE[Element::S]);
-					atom_ptr_N->setName("N");
-					atom_ptr_N->setPosition(ring_centre + normal);
-
-					Atom* atom_ptr_L = new Atom();
-					atom_ptr_L->setElement(PTE[Element::K]);
-					atom_ptr_L->setName("L");
-					atom_ptr_L->setPosition(ring_centre + (-HX * normal) * normal);
-
-					atom_ptr_H->createBond(*atom_ptr_L);
-					atom_ptr_X->createBond(*atom_ptr_N);
-					atom_ptr_X->createBond(*atom_ptr_L);
-
-					debug_molecule.insert(*atom_ptr_H);
-					debug_molecule.insert(*atom_ptr_X);
-					debug_molecule.insert(*atom_ptr_N);
-					debug_molecule.insert(*atom_ptr_L);
-					Log.info() << "[projected distance H --- X: " 
-						<< projected_distance_XH << "]" << endl;
-#endif
-
-					if (projected_distance_XH >= HX_projected_distance_lower_ 
-						&& projected_distance_XH <= HX_projected_distance_upper_)
+					if (HX_score > limit_)
 					{
+						float e = 1.0f / 3.0f * (CX_score + CHX_score + HX_score);
 						// Found an interaction, count it.
-#ifdef DEBUG
-						Log.info() << "projected distance H --- X: " 
-							<< projected_distance_XH << endl;
 
+#ifdef DEBUG
 						Atom* atom_ptr_H = new Atom();
 						atom_ptr_H->setElement(PTE[Element::Fe]);
-						atom_ptr_H->setName("CHPI");
+						atom_ptr_H->setName("H");
 						atom_ptr_H->setPosition(H_atom);
+						atom_ptr_H->setCharge(e);
 
 						Atom* atom_ptr_X = new Atom();
 						atom_ptr_X->setElement(PTE[Element::Fe]);
-						atom_ptr_X->setName("CHPI");
+						atom_ptr_X->setName("X");
 						atom_ptr_X->setPosition(ring_centre);
+						atom_ptr_X->setCharge(0.0f);
 
-						atom_ptr_H->createBond(*atom_ptr_X);
+						Atom* atom_ptr_N = new Atom();
+						atom_ptr_N->setElement(PTE[Element::S]);
+						atom_ptr_N->setName("N");
+						atom_ptr_N->setPosition(ring_centre + normal);
+						atom_ptr_N->setCharge(-1.0f);
+
+						Atom* atom_ptr_L = new Atom();
+						atom_ptr_L->setElement(PTE[Element::K]);
+						atom_ptr_L->setName("L");
+						atom_ptr_L->setPosition(ring_centre + (-HX * normal) * normal);
+						atom_ptr_L->setCharge(e);
+
+						atom_ptr_H->createBond(*atom_ptr_L);
+						atom_ptr_X->createBond(*atom_ptr_N);
+						atom_ptr_X->createBond(*atom_ptr_L);
 
 						debug_molecule.insert(*atom_ptr_H);
 						debug_molecule.insert(*atom_ptr_X);
+						debug_molecule.insert(*atom_ptr_N);
+						debug_molecule.insert(*atom_ptr_L);
 #endif
 #ifdef STATISTICS
-							Log.info() << "STATISTICS:\t" 
-								<< (ring_centre - C_atom).getLength() << "\t"
-								<< angle_CHX << "\t"
-								<< projected_distance_XH << endl;
+						Log.info() << "STATISTICS:\t" 
+							<< (ring_centre - C_atom).getLength() << "\t"
+							<< angle_CHX << "\t"
+							<< projected_distance_XH << endl;
 #endif
-						energy_ += 1.0f;
+						energy_ += e;
 					}
 				}
 			}
