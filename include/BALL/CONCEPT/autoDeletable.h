@@ -1,4 +1,4 @@
-// $Id: autoDeletable.h,v 1.7 2000/09/27 07:13:56 oliver Exp $
+// $Id: autoDeletable.h,v 1.8 2000/12/09 20:53:44 amoll Exp $
 
 #ifndef BALL_CONCEPT_AUTODELETABLE_H
 #define BALL_CONCEPT_AUTODELETABLE_H
@@ -52,7 +52,8 @@ namespace BALL
 
 		/**	Destructor
 		*/
-		virtual ~AutoDeletable();
+		virtual ~AutoDeletable()
+			throw();
 
 		/**	{\bf new} operator.
 				This operator allocates storage for the object and remembers its pointer.
@@ -60,14 +61,16 @@ namespace BALL
 				As this operator is only invoked for the creation of single dynamic 
 				objects, arrays and static objects can be identified.
 		*/
-		void* operator new(size_t size) throw();
+		void* operator new(size_t size) 
+			throw();
 	
 		/**	{\bf delete} operator.
 				This operator frees the space allocated for an Autodeletable object. It is implemented
 				solely to achieve a consistent interface and to avoid warnings issued by some compilers
 				if operator new/delete do not appear in pairs.
 		*/
-		void operator delete(void* ptr) throw();
+		void operator delete(void* ptr) 
+			throw();
 	
 		/**	Placement {\bf new} operator.
 				This operator allocates storage for the object and remembers its pointer.
@@ -75,14 +78,17 @@ namespace BALL
 				As this operator is only invoked for the creation of single dynamic 
 				objects, arrays and static objects can be identified.
 		*/
-		void* operator new(size_t size, void* ptr) throw();
+		void* operator new(size_t size, void* ptr)
+			throw();
 	
 		/**	Placement {\bf delete} operator.
 				This operator frees the space allocated for an Autodeletable object. It is implemented
 				solely to achieve a consistent interface and to avoid warnings issued by some compilers
 				if operator new/delete do not appear in pairs.
 		*/
-		void operator delete(void* ptr, void*) throw();
+		void operator delete(void* ptr, void*)
+			throw();
+
 	
 		//@}
 	
@@ -96,7 +102,8 @@ namespace BALL
 				You should never set static objects to autodeletable, as 
 				invoking {\bf delete} on a static object may result in a crash.
 		*/
-		void setAutoDeletable(bool enable);
+		void setAutoDeletable(bool enable)
+			throw();
 
 		//@}
 
@@ -110,15 +117,18 @@ namespace BALL
 				Recursive destruction methods should honor this flag and 
 				should not call the destructor for objects that return {\bf true}.
 		*/
-		bool isAutoDeletable() const;
+		bool isAutoDeletable() const
+			throw();
 		//@}
 
 
 		protected:
 
-		AutoDeletable();
+		AutoDeletable()
+			throw();
 
-		AutoDeletable(const AutoDeletable& auto_deletable, bool deep = false);
+		AutoDeletable(const AutoDeletable& auto_deletable, bool deep = false)
+			throw();
 
 
 		private:
