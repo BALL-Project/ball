@@ -1,4 +1,4 @@
-# $Id: Makefile,v 1.3 2000/03/27 09:09:01 oliver Exp $
+# $Id: Makefile,v 1.4 2000/03/27 19:58:56 oliver Exp $
 #========================
 # BALL/TUTORIAL Makefile
 #========================
@@ -8,6 +8,9 @@ EXECUTABLES=tutorial1
 all:	$(EXECUTABLES)
 
 include ../common.mak
+
+# remove the library specific flags
+BALL_CXXFLAGS=
 
 clean:	default_clean
 	@$(RM) $(EXECUTABLES)
