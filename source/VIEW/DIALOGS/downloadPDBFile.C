@@ -253,7 +253,7 @@ namespace BALL
 		void DownloadPDBFile::displayHTML(const QString& url)
 		{
 			try
-			{
+ 			{
 				QString filename;
 
 				if (url.find("http://") == -1)
@@ -277,6 +277,8 @@ namespace BALL
 					}
 					catch(...){}
 				}
+
+				search_result = LineBasedFile(thread_->getFilename());
 #endif
 
 				setStatusbarText("Please wait, while loading images...");
@@ -333,11 +335,23 @@ namespace BALL
 
 				connect(qb_, SIGNAL(linkClicked(const QString&)), this, SLOT(displayHTML(const QString&)));
 
+				Log.info() << "Finished download of HTML page" << std::endl;
+
 				qb_->showMaximized();
 				qb_->show();
+	 		}
+ 			catch (...)
+ 			{ 
+			 	setStatusbarText("Failed to download HTML page.");
 			}
-			catch (...)
-			{ }
+
+#ifdef BALL_QT_HAS_THREADS
+			try
+			{
+				File::remove(thread_->getFilename());
+			}
+			catch(...){}
+#endif
 		} 
 
 
