@@ -1,4 +1,4 @@
-// $Id: fresnoHydrogenBond.C,v 1.1.2.13 2004/04/28 16:05:04 anker Exp $
+// $Id: fresnoHydrogenBond.C,v 1.1.2.14 2004/06/13 14:19:32 anker Exp $
 // Molecular Mechanics: Fresno force field, hydrogen bond component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -8,6 +8,12 @@
 
 #include <BALL/MOLMEC/FRESNO/fresno.h>
 #include <BALL/MOLMEC/FRESNO/fresnoHydrogenBond.h>
+
+#define DEBUG 1
+
+#ifdef DEBUG
+#include <BALL/FORMAT/HINFile.h>
+#endif
 
 using namespace std;
 
@@ -211,6 +217,10 @@ namespace BALL
 		throw()
 	{
 
+		#ifdef DEBUG
+		Molecule debug_molecule;
+		#endif
+
 		// clear the already-used-flags
 		HashMap<const Atom*, bool>::Iterator au_it = already_used_.begin();
 		for (; +au_it; ++au_it)
@@ -301,6 +311,33 @@ namespace BALL
 									<< "already_used_ doesn't know this hydrogen." << endl;
 							}
 							// /PARANOIA
+					
+#ifdef DEBUG
+							Atom* atom_ptr_H = new Atom();
+							atom_ptr_H->setElement(PTE[Element::Fe]);
+							atom_ptr_H->setName("H");
+							atom_ptr_H->setPosition(hydrogen->getPosition());
+							atom_ptr_H->setCharge(val);
+
+							Atom* atom_ptr_acceptor = new Atom();
+							atom_ptr_acceptor->setElement(PTE[Element::Fe]);
+							atom_ptr_acceptor->setName("ACC");
+							atom_ptr_acceptor->setPosition(acceptor->getPosition());
+							atom_ptr_acceptor->setCharge(val);
+
+							Atom* atom_ptr_donor = new Atom();
+							atom_ptr_donor->setElement(PTE[Element::Fe]);
+							atom_ptr_donor->setName("DON");
+							atom_ptr_donor->setPosition(hydrogen->getBond(0)->getPartner(*hydrogen)->getPosition());
+							atom_ptr_donor->setCharge(val);
+
+							atom_ptr_H->createBond(*atom_ptr_acceptor);
+							atom_ptr_H->createBond(*atom_ptr_donor);
+
+							debug_molecule.insert(*atom_ptr_H);
+							debug_molecule.insert(*atom_ptr_acceptor);
+							debug_molecule.insert(*atom_ptr_donor);
+#endif
 
 							// Print all single energy cotributions
 							if (verbosity >= 0)
@@ -344,6 +381,12 @@ namespace BALL
 		{
 			Log.info() << "HB: energy is " << energy_ << endl;
 		}
+		
+#ifdef DEBUG
+		HINFile debug_file("HB_debug.hin", std::ios::out);
+		debug_file << debug_molecule;
+		debug_file.close();
+#endif
 
 		return energy_;
 	}

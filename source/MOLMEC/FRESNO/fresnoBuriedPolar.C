@@ -1,4 +1,4 @@
-// $Id: fresnoBuriedPolar.C,v 1.1.2.14 2004/04/28 15:52:07 anker Exp $
+// $Id: fresnoBuriedPolar.C,v 1.1.2.15 2004/06/13 14:19:31 anker Exp $
 // Molecular Mechanics: Fresno force field, buried polar component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -6,6 +6,12 @@
 
 #include <BALL/MOLMEC/FRESNO/fresno.h>
 #include <BALL/MOLMEC/FRESNO/fresnoBuriedPolar.h>
+
+#define DEBUG 1
+
+#ifdef DEBUG
+#include <BALL/FORMAT/HINFile.h>
+#endif
 
 using namespace std;
 
@@ -164,6 +170,10 @@ namespace BALL
 		throw()
 	{
 
+		#ifdef DEBUG
+		Molecule debug_molecule;
+		#endif
+
 		Size verbosity
 			= getForceField()->options.getInteger(FresnoFF::Option::VERBOSITY);
 
@@ -216,9 +226,33 @@ namespace BALL
 						<< ", R2 " << R2 << ")" << endl;
 				}
 
+#ifdef DEBUG
+				Atom* atom_ptr_L1 = new Atom();
+				atom_ptr_L1->setElement(atom1->getElement());
+				atom_ptr_L1->setName("L1");
+				atom_ptr_L1->setPosition(atom1->getPosition());
+				atom_ptr_L1->setCharge(val);
+
+				Atom* atom_ptr_L2 = new Atom();
+				atom_ptr_L2->setElement(atom2->getElement());
+				atom_ptr_L2->setName("L2");
+				atom_ptr_L2->setPosition(atom2->getPosition());
+				atom_ptr_L2->setCharge(val);
+
+				atom_ptr_L1->createBond(*atom_ptr_L2);
+
+				debug_molecule.insert(*atom_ptr_L1);
+				debug_molecule.insert(*atom_ptr_L2);
+#endif
 				energy_ += val;
 			}
 		}
+
+#ifdef DEBUG
+		HINFile debug_file("BP_debug.hin", std::ios::out);
+		debug_file << debug_molecule;
+		debug_file.close();
+#endif
 
 		energy_ = factor_ * energy_;
 
