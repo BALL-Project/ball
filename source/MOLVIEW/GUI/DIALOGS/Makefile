@@ -13,7 +13,8 @@ CPP_SOURCES=\
 	openBruker1DFile.C\
 	openBruker2DFile.C\
 	DlgMoveOverlay.C\
-	DlgMoveOverlayData.C
+	DlgMoveOverlayData.C\
+	contourSurfaceDialog.C
 
 MOC_SOURCES=\
 	displayProperties_moc.C\
@@ -25,7 +26,8 @@ MOC_SOURCES=\
 	openBruker1DFile_moc.C\
 	openBruker2DFile_moc.C\
 	DlgMoveOverlay_moc.C\
-	DlgMoveOverlayData_moc.C
+	DlgMoveOverlayData_moc.C\
+	contourSurfaceDialog_moc.C
 
 include ../../../common.mak
 include .Dependencies
@@ -61,3 +63,6 @@ DlgMoveOverlay_moc.C:	$(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/DlgMoveOverl
 
 DlgMoveOverlayData_moc.C:	$(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/DlgMoveOverlayData.h
 	$(MOC) $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/DlgMoveOverlayData.h -o DlgMoveOverlayData_moc.C
+
+contourSurfaceDialog_moc.C:	$(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/contourSurfaceDialog.h
+	$(MOC) $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/contourSurfaceDialog.h -o contourSurfaceDialog_moc.C
