@@ -1,4 +1,4 @@
-// $Id: haighMallionShiftProcessor.C,v 1.7 2000/09/25 14:11:05 oliver Exp $
+// $Id: haighMallionShiftProcessor.C,v 1.8 2000/09/25 21:23:48 oliver Exp $
 
 #include <BALL/NMR/haighMallionShiftProcessor.h>
 #include <BALL/KERNEL/atomIterator.h>
@@ -129,7 +129,7 @@ namespace BALL
 			return false;
 		}
 		
-		// Berechnung des shifts fuer jedes Proton der liste _proton_list
+		// Berechnung des shifts fuer jedes Proton der liste proton_list
 				
 		// hshift bezeichnet den chemicalshift der durch den gerade abgearbeiteten Ring verursacht wird.
 			
@@ -193,7 +193,7 @@ namespace BALL
 						intensity_factor = 1.04;
 					}
 
-					//Aufbau von _vector_feld
+					//Aufbau von vector_feld
 					for(Position pos = hilf; pos < hilf + 6; pos++ )
 					{
 						if (asrings_[zaehler][1 + pos] == "NULL")
@@ -296,11 +296,11 @@ namespace BALL
 		throw()
 	{
 		// Arbeitet als Kollektor :
-		// - Alle Ringe werden in _aromat_list gespeichert
-		// - Alle Protonen werden in _protonlist gespeichert
+		// - Alle Ringe werden in aromat_list gespeichert
+		// - Alle Protonen werden in protonlist gespeichert
 		// - die Berechnung erfolgt dann in der Finish Prozedur
 		
-		// erganze _aromat_list um aromatische Residues
+		// erganze aromat_list um aromatische Residues
 		if ( RTTI::isKindOf<Residue>(object) ) 
 		{
 			Residue* residue = RTTI::castTo<Residue>(object);
