@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RandomAccessIterator_test.C,v 1.12 2003/06/28 19:18:37 oliver Exp $
+// $Id: RandomAccessIterator_test.C,v 1.13 2003/06/29 09:12:44 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -17,34 +17,37 @@ using namespace std;
 typedef Index VectorIteratorPosition_;
 
 template <typename DataType>
-class VectorIteratorTraits_
+class VectorIteratorTraits
 {
 	public:
+	
+	typedef DataType* pointer;
+	typedef DataType& reference;
+	typedef DataType value_type;
+	typedef const DataType& const_reference;
 
-	BALL_CREATE_DEEP(VectorIteratorTraits_)
-
-	VectorIteratorTraits_()
+	VectorIteratorTraits()
 		throw()
 		: bound_(0),
 			position_(0)
 	{
 	}
 	
-	VectorIteratorTraits_(const vector<DataType>& container)
+	VectorIteratorTraits(const vector<DataType>& container)
 		throw()
 		: bound_((vector<DataType>*)& container),
 			position_(0)
 	{
 	}
 	
-	VectorIteratorTraits_(const VectorIteratorTraits_& traits, bool /* deep */ = true)
+	VectorIteratorTraits(const VectorIteratorTraits& traits, bool /* deep */ = true)
 		throw()
 		: bound_(traits.bound_),
 			position_(traits.position_)
 	{
 	}
 	
-	const VectorIteratorTraits_& operator = (const VectorIteratorTraits_& traits)
+	const VectorIteratorTraits& operator = (const VectorIteratorTraits& traits)
 		throw()
 	{
 		bound_ = traits.bound_;
@@ -80,7 +83,7 @@ class VectorIteratorTraits_
 		return position_;
 	}
 
-	bool operator == (const VectorIteratorTraits_& traits) const
+	bool operator == (const VectorIteratorTraits& traits) const
 		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
@@ -90,7 +93,7 @@ class VectorIteratorTraits_
 		return (position_ == traits.position_);
 	}
 
-	bool operator != (const VectorIteratorTraits_& traits) const
+	bool operator != (const VectorIteratorTraits& traits) const
 		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
@@ -100,7 +103,7 @@ class VectorIteratorTraits_
 		return (position_ != traits.position_);
 	}
 	
-	bool operator < (const VectorIteratorTraits_& traits) const
+	bool operator < (const VectorIteratorTraits& traits) const
 		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
@@ -110,7 +113,7 @@ class VectorIteratorTraits_
 		return (position_ < traits.position_);
 	}
 	
-	bool operator > (const VectorIteratorTraits_& traits) const
+	bool operator > (const VectorIteratorTraits& traits) const
 		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
@@ -120,7 +123,7 @@ class VectorIteratorTraits_
 		return (position_ > traits.position_);
 	}
 
-	Distance getDistance(const VectorIteratorTraits_& traits) const
+	Distance getDistance(const VectorIteratorTraits& traits) const
 		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
@@ -354,10 +357,10 @@ class VectorIteratorTraits_
 	VectorIteratorPosition_  position_;
 };
 
-typedef RandomAccessIterator<vector<float>, float, VectorIteratorPosition_, VectorIteratorTraits_<float> > MyIterator;
-typedef reverse_iterator<RandomAccessIterator<vector<float>, float, VectorIteratorPosition_, VectorIteratorTraits_<float> > > MyReverseIterator;
+typedef RandomAccessIterator<vector<float>, float, VectorIteratorPosition_, VectorIteratorTraits<float> > MyIterator;
+typedef reverse_iterator<RandomAccessIterator<vector<float>, float, VectorIteratorPosition_, VectorIteratorTraits<float> > > MyReverseIterator;
 
-START_TEST(RandomAccessIterator, "$Id: RandomAccessIterator_test.C,v 1.12 2003/06/28 19:18:37 oliver Exp $")
+START_TEST(RandomAccessIterator, "$Id: RandomAccessIterator_test.C,v 1.13 2003/06/29 09:12:44 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
