@@ -1,4 +1,4 @@
-// $Id: haighMallionShiftProcessor.C,v 1.8 2000/09/25 21:23:48 oliver Exp $
+// $Id: haighMallionShiftProcessor.C,v 1.9 2000/09/27 07:18:28 oliver Exp $
 
 #include <BALL/NMR/haighMallionShiftProcessor.h>
 #include <BALL/KERNEL/atomIterator.h>
@@ -12,35 +12,10 @@ namespace BALL
 
   const char* HaighMallionShiftProcessor::PROPERTY__RING_CURRENT_SHIFT = "RingCurrentShift[HM]";
 
-	const float HaighMallionShiftProcessor::B_ = 5.455e-6;					//Konstante in IBG(r)
+	const float HaighMallionShiftProcessor::B_ = 5.455e-6;					//Konstante in iBG(r)
 	const float cut_off2 = 225.0; // cut off: nuclei that are further than 15A away from the center
 																// of a ring are no affected by this ring (cut of is squared for efficiency)
 
-	float getLambda(const Vector3& v1, const Vector3& v2)
-	{
-		if (v2.x==0)
-		{
-			if (v2.y==0)
-			{
-				if (v2.z==0)
-				{
-					return 0;
-				}
-				else
-				{
-					return (v1.z/v2.z);
-				}
-			}
-			else
-			{
-				return (v1.y/v2.y);
-			}
-		}
-		else
-		{
-			return (v1.x/v2.x);
-		}
-	}
 	
 	HaighMallionShiftProcessor::HaighMallionShiftProcessor()
 		throw()
@@ -63,12 +38,13 @@ namespace BALL
 
 
 		// BAUSTELLE: diese C-Arrays verschwinden! 
-		//		Und END-Marker wird es auch nicht mehr geben!
+		//		Und END-Marker wird es auch nicht mehr geben, 
+		//		geschweigenn denn "NULL" Strings!
 		asrings_ = new String*[4];
 		
 		asrings_[0] = new String[13];
 		
-		asrings_[0][0]  = "TRP";
+ 		asrings_[0][0]  = "TRP";
 		asrings_[0][1]  = "CG";
 		asrings_[0][2]  = "CD1";
 		asrings_[0][3]  = "NE1";
@@ -139,7 +115,7 @@ namespace BALL
 		Vector3* ring_positions = new Vector3[6];
 
 		Size zaehler, number_of_rings;
-		for (list<PDBAtom*>::iterator proton_iter = proton_list_.begin();
+		for (list<Atom*>::iterator proton_iter = proton_list_.begin();
 				 proton_iter != proton_list_.end(); ++proton_iter)
 		{
 			float shift = 0;
@@ -194,18 +170,17 @@ namespace BALL
 					}
 
 					//Aufbau von vector_feld
-					for(Position pos = hilf; pos < hilf + 6; pos++ )
+					for (Position pos = hilf; pos < hilf + 6; pos++ )
 					{
 						if (asrings_[zaehler][1 + pos] == "NULL")
 						{
 							break;
 						}
 
-						for(AtomIterator atom_iter = residue.beginAtom();
-								+ atom_iter;
-								++ atom_iter)
+						for	(AtomIterator atom_iter = residue.beginAtom();
+								+atom_iter; ++atom_iter)
 						{
-							if	(asrings_[zaehler][1 + pos] == (*atom_iter).getName())
+							if (asrings_[zaehler][1 + pos] == (*atom_iter).getName())
 							{
 								ring_positions[number_of_ring_atoms] = (*atom_iter).getPosition();
 								number_of_ring_atoms++ ;
@@ -215,64 +190,71 @@ namespace BALL
 					}
 				
 					// BAUSTELLE: check for missing ring atoms!
-				
-					// determine the ring center				
-					Vector3 center;
-					for (Position pos = 0; pos < number_of_ring_atoms; pos++)
+					if (number_of_ring_atoms < 5)
 					{
-						center += ring_positions[pos];
+						Log.error() << "HMSP:finish: could not identify all ring atoms for " 
+								<< residue.getName() << residue.getID() << ": found " << number_of_ring_atoms << endl;
 					}
-					center /= number_of_ring_atoms;
-				
-					// if the center of the ring is within the cut off,
-					// perform the shift calculation
-					Vector3 nucleus_pos = (*proton_iter)->getPosition();					
-					if (nucleus_pos.getSquareDistance(center) <= cut_off2)
+					else	
 					{
-						// determine the normal vector of the ring plane
-						Vector3 normal;
+						// determine the ring center				
+						Vector3 center;
 						for (Position pos = 0; pos < number_of_ring_atoms; pos++)
 						{
-							const Vector3& left  = ring_positions[(pos + 0) % (number_of_ring_atoms)];
-							const Vector3& middle  = ring_positions[(pos + 1) % (number_of_ring_atoms)];
-							const Vector3& right = ring_positions[(pos + 2) % (number_of_ring_atoms)];
-							normal += (middle - right) % (middle - left);  
+							center += ring_positions[pos];
 						}
-						// normalize the normal vector to unit length
-						normal.normalize(); 
-
-						// determine the sign of the normal
-						float normal_sign = 1.0;
-						
-						Vector3 d1 = ring_positions[0] - center;
-						Vector3 d2 = ring_positions[1] - center;
-						Vector3 vp = d1 % d2;
-						if ((vp * normal) > 0.0)
+						center /= number_of_ring_atoms;
+					
+						// if the center of the ring is within the cut off,
+						// perform the shift calculation
+						Vector3 nucleus_pos = (*proton_iter)->getPosition();					
+						if (nucleus_pos.getSquareDistance(center) <= cut_off2)
 						{
-							normal_sign = -1.0;
-						}
-						
-						// loop over all ring bonds
-						float sum = 0;
-						for (Position pos = 0; pos < number_of_ring_atoms; pos++ )
-						{
-							// determine the contributions of one ring bond
-							Vector3 r_1 = ring_positions[(pos + 0) % (number_of_ring_atoms)] - nucleus_pos;
-							Vector3 r_2 = ring_positions[(pos + 1) % (number_of_ring_atoms)] - nucleus_pos;
+							// determine the normal vector of the ring plane
+							Vector3 normal;
+							for (Position pos = 0; pos < number_of_ring_atoms; pos++)
+							{
+								const Vector3& left  = ring_positions[(pos + 0) % (number_of_ring_atoms)];
+								const Vector3& middle  = ring_positions[(pos + 1) % (number_of_ring_atoms)];
+								const Vector3& right = ring_positions[(pos + 2) % (number_of_ring_atoms)];
+								normal += (middle - right) % (middle - left);  
+							}
+							// normalize the normal vector to unit length
+							normal.normalize(); 
 
-							//          <r_1, (r_2 x n)>   /    1              1    \
-							// value =  ---------------- * |---------   +  ---------|
-							//	               2           \ |r_1|^3        |r_2|^3 /
-							float value  = r_1 * (r_2 % normal) 
-										* 0.5 * (1.0 / (r_1.getSquareLength() * r_1.getLength()) 
-														 +  1.0 / (r_2.getSquareLength() * r_2.getLength()));
+							// determine the sign of the normal
+							float normal_sign = 1.0;
 							
-							// add the contributions of this ring
-							sum += value;
-						}
+							Vector3 d1 = ring_positions[0] - center;
+							Vector3 d2 = ring_positions[1] - center;
+							Vector3 vp = d1 % d2;
+							if ((vp * normal) > 0.0)
+							{
+								normal_sign = -1.0;
+							}
+							
+							// loop over all ring bonds
+							float sum = 0;
+							for (Position pos = 0; pos < number_of_ring_atoms; pos++ )
+							{
+								// determine the contributions of one ring bond
+								Vector3 r_1 = ring_positions[(pos + 0) % (number_of_ring_atoms)] - nucleus_pos;
+								Vector3 r_2 = ring_positions[(pos + 1) % (number_of_ring_atoms)] - nucleus_pos;
 
-						// add up all contributions
-						shift +=  intensity_factor * B_ * normal_sign * sum;
+								//          <r_1, (r_2 x n)>   /    1              1    \
+								// value =  ---------------- * |---------   +  ---------|
+								//	               2           \ |r_1|^3        |r_2|^3 /
+								float value  = r_1 * (r_2 % normal) 
+											* 0.5 * (1.0 / (r_1.getSquareLength() * r_1.getLength()) 
+															 +  1.0 / (r_2.getSquareLength() * r_2.getLength()));
+								
+								// add the contributions of this ring
+								sum += value;
+							}
+
+							// add up all contributions
+							shift +=  intensity_factor * B_ * normal_sign * sum;
+						}
 					}
 
 					number_of_ring_atoms = 0;
@@ -292,36 +274,39 @@ namespace BALL
 		return true;
 	}
 		
-	Processor::Result HaighMallionShiftProcessor::operator () (Composite& object)
+	Processor::Result HaighMallionShiftProcessor::operator () (Composite& composite)
 		throw()
 	{
-		// Arbeitet als Kollektor :
-		// - Alle Ringe werden in aromat_list gespeichert
-		// - Alle Protonen werden in protonlist gespeichert
-		// - die Berechnung erfolgt dann in der Finish Prozedur
-		
-		// erganze aromat_list um aromatische Residues
-		if ( RTTI::isKindOf<Residue>(object) ) 
+		// Here, we collect all aromatic residues (effectors)
+		// and all protons whose shift is to be calculated
+
+		// First, let's see if this is a residue...
+		Residue* residue = dynamic_cast<Residue*>(&composite);
+		if (residue != 0)
 		{
-			Residue* residue = RTTI::castTo<Residue>(object);
-			for(Position pos = 0; pos < 4; pos++ )
+			// It is! Check whether its name matches any of our list
+			// of aromatic residue names.
+			for	(Position pos = 0; pos < 4; pos++ )
 			{
 				if (asrings_[pos][0] == residue->getName())
 				{
+					// The name matches, store the pointer in the list.
 					aromat_list_.push_back(residue);
-					break; // gefunden und schleife hinterher beenden
+					break; 
 				}
 			}		
+
 			return Processor::CONTINUE;
 		} 
 
-		// erganze proton_list_	um H
-		if (RTTI::isKindOf<PDBAtom>(object))
+		// store all hydrogen atoms in the proton_list_
+		Atom* atom = dynamic_cast<Atom*>(&composite);
+		if (atom != 0)
 		{
-			PDBAtom* atom_ptr = RTTI::castTo<PDBAtom>(object);
-			if (atom_ptr->getElement() == PTE[Element::H])
+			// BAUSTELLE: should be parameterizable
+			if (atom->getElement() == PTE[Element::H])
 			{
-				proton_list_.push_back(atom_ptr);
+				proton_list_.push_back(atom);
 			}
 		}
 		
