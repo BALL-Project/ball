@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: directory.h,v 1.26 2004/05/27 19:49:47 oliver Exp $
+// $Id: directory.h,v 1.27 2004/12/07 15:28:36 amoll Exp $
 //
 
 #ifndef BALL_SYSTEM_DIRECTORY_H
@@ -267,6 +267,14 @@ namespace BALL
 				@return bool, <b>true</b> if the name of both directories are inequal
 		*/
 		bool operator != (const Directory& directory) const;
+
+		/// Get the home directory of the current user
+		static String getUserHomeDir()
+			throw();
+		
+		/// Goto the home directory of the current user
+		static bool changeToUserHomeDir()
+			throw();
 
 		//@}
 

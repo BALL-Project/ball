@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: directory.C,v 1.27 2004/12/02 02:10:29 amoll Exp $
+// $Id: directory.C,v 1.28 2004/12/07 15:28:48 amoll Exp $
 //
 
 #include <BALL/SYSTEM/directory.h>
@@ -704,6 +704,55 @@ namespace BALL
 				return true;
 			}
 		#endif
+	}
+
+	String Directory::getUserHomeDir()
+		throw()
+	{
+		String homedir;
+
+		// default for UNIX/LINUX
+		char* home = getenv("HOME");
+		if (home != 0) 
+		{
+			homedir = String(home);
+		}
+		else
+		{
+			// windows
+			char* home_drive = getenv("HOMEDRIVE");
+			char* home_path = getenv("HOMEPATH");
+			if (home_drive != 0 && home_path != 0)
+			{
+				homedir = String(home_drive) + "\\" + home_path;
+			}
+		}
+
+		if (homedir == "")
+		{
+			return "";
+		}
+
+		// backup current position
+		Directory current;
+		
+		// changedir to the homedir
+		Directory dir(homedir);
+		if (!dir.setCurrent()) return "";
+
+		current.setCurrent();
+
+		return homedir;
+	}
+
+
+	bool Directory::changeToUserHomeDir()
+		throw()
+	{
+		String home = getUserHomeDir();
+		if (home == "") return false;
+		Directory d(home);
+ 		return d.setCurrent();
 	}
 
 #ifdef BALL_NO_INLINE_FUNCTIONS
