@@ -1,4 +1,4 @@
-// $Id: geometricObjectSelector.h,v 1.1 2000/01/08 20:31:26 hekl Exp $
+// $Id: geometricObjectSelector.h,v 1.2 2000/02/06 19:50:43 oliver Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_GEOMETRICOBJECTSELECTOR_H
 #define BALL_MOLVIEW_FUNCTOR_GEOMETRICOBJECTSELECTOR_H
@@ -61,15 +61,6 @@ namespace BALL
 			public:
 
 			BALL_CREATE(GeometricObjectSelector)
-
-			enum ErrorCode
-			{
-				ERROR__NONE                             = -1,
-				ERROR__UNKNOWN                          = 0,
-				ERROR__NOT_IMPLEMENTED                  = 1,
-
-				NUMBER_OF_GEOMETRICOBJECTSELECTOR_ERRORS
-			};
 
 			/**	@name	Constructors and Destructors
 			*/

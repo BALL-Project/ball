@@ -1,4 +1,4 @@
-// $Id: forceFieldComponent.h,v 1.2 1999/12/04 18:34:23 oliver Exp $
+// $Id: forceFieldComponent.h,v 1.3 2000/02/06 19:46:45 oliver Exp $
 // Molecular Mechanics: general force field component class
 
 #ifndef BALL_MOLMEC_FORCEFIELDCOMPONENT_H
@@ -31,28 +31,11 @@ namespace BALL
 
 		public:
 
-		/**	@name Enums
-		*/
-		//@{
-
-		/**	Error codes of the ForceFieldComponent class
-		*/
-		enum ErrorCode 
-		{
-			ERROR__NONE	= -1,
-			ERROR__UNKNOWN,
-			ERROR__NOT_IMPLEMENTED,
-
-			NUMBER_OF_ERRORS
-		};
-		//@}
-
 		/**	@name	Constructors and Destructors 
 		*/
 		//@{
 
 		public:
-
 
 		BALL_CREATE(ForceFieldComponent)
 

@@ -1,4 +1,4 @@
-// $Id: steepestDescent.h,v 1.5 2000/01/10 15:51:05 oliver Exp $
+// $Id: steepestDescent.h,v 1.6 2000/02/06 19:47:47 oliver Exp $
 // Line Search Minimizer: A special class for the line search minimization algorithm
 
 #ifndef BALL_MOLMEC_MINIMIZATION_STEEPESTDESCENT_H
@@ -50,24 +50,6 @@ namespace BALL
 
 
 		public:
-
-
-		/**	@name	Enums
-		*/
-		//@{
-
-		/**	Error codes of the ForceField class
-		*/
-		enum	ErrorCode 
-		{
-			ERROR__NONE	= -1,
-			ERROR__UNKNOWN,
-			ERROR__NOT_IMPLEMENTED,
-
-			NUMBER_OF_ERRORS
-		};
-
-		//@}
 
 
 		/**	@name	Options definitions

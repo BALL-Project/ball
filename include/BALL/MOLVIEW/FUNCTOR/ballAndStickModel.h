@@ -1,4 +1,4 @@
-// $Id: ballAndStickModel.h,v 1.3 1999/12/28 18:38:05 oliver Exp $
+// $Id: ballAndStickModel.h,v 1.4 2000/02/06 19:50:43 oliver Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BALLANDSTICKMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_BALLANDSTICKMODEL_H
@@ -63,21 +63,6 @@ namespace BALL
 			: public BaseModelProcessor
 		{
 			public:
-
-			enum ErrorCode
-			{
-				ERROR__NONE                             = -1,
-				ERROR__UNKNOWN                          = 0,
-				ERROR__NOT_IMPLEMENTED                  = 1,
-				ERROR__CANNOT_CREATE_SPHERE             = 2,
-				ERROR__CANNOT_CREATE_TUBE               = 3,
-				ERROR__CANNOT_CREATE_2CTUBE             = 4,
-				ERROR_BALL_RADIUS_LOWER_OR_EQUAL_ZERO  = 5,
-				ERROR__STICK_RADIUS_LOWER_OR_EQUAL_ZERO = 6,
-
-
-				NUMBER_OF_BALLANDSTICKMODEL_ERRORS
-			};
 
 			/**	@name	Constructors and Destructors
 			*/

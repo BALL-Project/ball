@@ -1,4 +1,4 @@
-// $Id: amberTorsion.h,v 1.4 2000/01/28 16:39:42 oliver Exp $
+// $Id: amberTorsion.h,v 1.5 2000/02/06 19:45:01 oliver Exp $
 // Molecular Mechanics: Amber force field, bond stretch component
 
 #ifndef BALL_MOLMEC_AMBER_AMBERTORSION_H
@@ -25,21 +25,6 @@ namespace BALL
 		: public ForceFieldComponent
 	{
 		public:
-
-		/**	@name	Enums	*/
-		//@{
-
-		/**	Error codes of the AmberTorsion class
-		*/
-		enum ErrorCode 
-		{
-			ERROR__UNKNOWN = 0,
-
-			NUMBER_OF_ERRORS
-		};
-
-		//@}
-
 
 		/**	@name	Type Definitions	*/
 		//@{

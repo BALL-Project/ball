@@ -1,4 +1,4 @@
-// $Id: energyMinimizer.h,v 1.11 2000/01/15 18:54:53 oliver Exp $
+// $Id: energyMinimizer.h,v 1.12 2000/02/06 19:47:46 oliver Exp $
 // Energy Minimizer: A class for minimizing the energy of molecular systems
 
 #ifndef BALL_MOLMEC_MINIMIZATION_ENERGYMINIMIZER_H
@@ -46,23 +46,6 @@ namespace BALL
 	class EnergyMinimizer
 	{
 		public:
-
-		/**	@name	Enums
-		*/
-		//@{
-
-		/**	Error codes of the ForceField class
-		*/
-		enum	ErrorCode 
-		{
-			ERROR__NONE	= -1,
-			ERROR__UNKNOWN,
-			ERROR__NOT_IMPLEMENTED,
-
-			NUMBER_OF_ERRORS
-		};
-
-		//@}
 
 		/**	@name	Option definitions
 		*/

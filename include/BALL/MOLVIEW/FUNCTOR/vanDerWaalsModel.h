@@ -1,4 +1,4 @@
-// $Id: vanDerWaalsModel.h,v 1.3 2000/01/08 20:31:28 hekl Exp $
+// $Id: vanDerWaalsModel.h,v 1.4 2000/02/06 19:50:44 oliver Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_VANDERWAALSMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_VANDERWAALSMODEL_H
@@ -46,16 +46,6 @@ namespace BALL
 			: public BaseModelProcessor
 		{
 			public:
-
-			enum ErrorCode
-			{
-				ERROR__NONE                 = -1,
-				ERROR__UNKNOWN              = 0,
-				ERROR__NOT_IMPLEMENTED      = 1,
-				ERROR__CANNOT_CREATE_SPHERE = 2,
-
-				NUMBER_OF_VANDERWAALSMODEL_ERRORS
-			};
 
 			/**	@name	Constructors and Destructors
 			*/

@@ -1,4 +1,4 @@
-// $Id: color.h,v 1.4 2000/01/13 22:22:27 oliver Exp $
+// $Id: color.h,v 1.5 2000/02/06 19:52:08 oliver Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLOR_H
 #define BALL_VIEW_DATATYPE_COLOR_H
@@ -356,29 +356,6 @@ namespace BALL
 				*/
 				COMPONENT__VALUE       = 2
 			};
-
-			/**
-			*/
-			enum ErrorCode
-			{
-				/**
-				*/
-				ERROR__NONE                        = -1,
-				/**
-				*/
-				ERROR__UNKOWN                      = 0,
-				/**
-				*/
-				ERROR__NOT_IMPLEMENTED             = 1,
-				/**
-				*/
-				ERROR__STRING_HAS_INCORRECT_LENGTH = 2,
-
-				/**
-				*/
-				NUMBER_OF_COLORHSV_ERRORS
-			};
-			//@}
 
 			/**	@name	Constructors and Destructors
 			*/

@@ -1,4 +1,4 @@
-// $Id: amber.h,v 1.5 1999/12/04 18:34:21 oliver Exp $ 
+// $Id: amber.h,v 1.6 2000/02/06 19:45:00 oliver Exp $ 
 // Molecular Mechanics: Amber force field class
 
 #ifndef BALL_MOLMEC_AMBER_AMBER_H
@@ -132,21 +132,6 @@ namespace BALL
 
 		//@}
 
-
-		/**	@name Enums
-		*/
-		//@{
-
-		/**	Error codes of the AmberFF class
-		*/
-		enum ErrorCode 
-		{
-			ERROR__UNKNOWN = 0,
-
-			NUMBER_OF_ERRORS
-		};
-
-		//@}
 
 		/**@name	Constructors and Destructors
 		*/

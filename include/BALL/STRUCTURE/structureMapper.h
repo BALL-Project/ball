@@ -1,4 +1,4 @@
-// $Id: structureMapper.h,v 1.3 2000/01/10 15:51:08 oliver Exp $
+// $Id: structureMapper.h,v 1.4 2000/02/06 19:51:30 oliver Exp $
 
 #ifndef BALL_STRUCTURE_STRUCTUREMAPPER_H
 #define BALL_STRUCTURE_STRUCTUREMAPPER_H
@@ -47,15 +47,8 @@ namespace BALL
 	{
 		public:
 
-		enum ErrorCodes 
+		struct AtomPairStruct 
 		{
-			ERROR__NONE = -1,
-			ERROR__UNKNOWN,
-
-			NUMBER_OF_ERRORS
-		};
-
-		struct AtomPairStruct {
 			Atom*	first;
 			Atom*	second;
 		};

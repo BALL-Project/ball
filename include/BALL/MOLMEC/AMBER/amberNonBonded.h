@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.h,v 1.5 1999/12/04 18:34:22 oliver Exp $
+// $Id: amberNonBonded.h,v 1.6 2000/02/06 19:45:00 oliver Exp $
 // Molecular Mechanics: Amber force field, bond stretch component
 
 #ifndef BALL_MOLMEC_AMBER_NONBONDED_H
@@ -29,20 +29,6 @@ namespace BALL
 		: public ForceFieldComponent
 	{
 		public:
-
-		/**	@name	Enums	*/
-		//@{
-
-		/**	Error codes of the AmberNonBonded class
-		*/
-		enum ErrorCode 
-		{
-			ERROR__UNKNOWN = 0,
-
-			NUMBER_OF_ERRORS
-		};
-
-		//@}
 
 		/**	@name	Constructors and Destructors	
 		*/

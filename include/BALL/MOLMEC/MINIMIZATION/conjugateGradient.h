@@ -1,4 +1,4 @@
-// $Id: conjugateGradient.h,v 1.2 1999/12/19 17:18:27 oliver Exp $ 
+// $Id: conjugateGradient.h,v 1.3 2000/02/06 19:47:46 oliver Exp $ 
 // A conjugate gradient minimizer for geometry optimisation
 
 #ifndef BALL_MOLMEC_MINIMIZATION_CONJUGATEGRADIENT_H 
@@ -52,23 +52,6 @@ namespace BALL
   class ConjugateGradientMinimizer : public EnergyMinimizer
     {
     public:
-    /**	@name	Enums
-    */
-    //@{
-
-    /**	Error codes of the ForceField class
-    */
-    enum	ErrorCode 
-      {
-      ERROR__NONE	= -1,
-                          ERROR__UNKNOWN,
-			  ERROR__NOT_IMPLEMENTED,
-  			  NUMBER_OF_ERRORS
-      };
-
-    //@}
-
-
     /**	@name	Options names         
     */
     //@{

@@ -1,4 +1,4 @@
-// $Id: molecularDynamics.h,v 1.3 2000/01/04 11:59:41 oliver Exp $
+// $Id: molecularDynamics.h,v 1.4 2000/02/06 19:47:15 oliver Exp $
 // MolecularDynamics: A base class for doing molecular dynamics simulations    
 // Useful MD classes must be derived from this class 
 
@@ -63,23 +63,6 @@ namespace BALL
 	class MolecularDynamics 
 	  {
  	  public:
-
-	  /**	@name	Enums
-	  */
-
-	  //@{
-       	  /**	Error codes of the MolecularDynamics class 
-	  */
-	  enum	ErrorCode 
-	    {
-	    ERROR__NONE	= -1,
-	    ERROR__UNKNOWN,
-	    ERROR__NOT_IMPLEMENTED,
-	    NUMBER_OF_ERRORS
-	    };
-
-	  //@}
-
 
           /**     Local classes for option names and default option values 
                   for all MD (sub)classes 

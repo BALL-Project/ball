@@ -1,4 +1,4 @@
-// $Id: forceFieldParameters.h,v 1.2 1999/12/04 18:34:23 oliver Exp $
+// $Id: forceFieldParameters.h,v 1.3 2000/02/06 19:49:32 oliver Exp $
 // Molecular Mechanics: general force field parameter class
 
 #ifndef BALL_MOLMEC_FORCEFIELDPARAMETERS_H
@@ -34,17 +34,6 @@ namespace BALL
 		public:
 
 		friend class ForceField;
-
-		/**	Error codes of the ForceFieldParameters class
-		*/
-		enum ErrorCode 
-		{
-			ERROR__NONE	= -1,
-			ERROR__UNKNOWN,
-			ERROR__NOT_IMPLEMENTED,
-
-			NUMBER_OF_ERRORS
-		};
 
 		/**@name	Constructors and destructor	*/
 		//@{

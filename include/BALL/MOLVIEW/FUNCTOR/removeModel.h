@@ -1,4 +1,4 @@
-// $Id: removeModel.h,v 1.2 1999/12/28 18:38:07 oliver Exp $
+// $Id: removeModel.h,v 1.3 2000/02/06 19:50:44 oliver Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_REMOVEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_REMOVEMODEL_H
@@ -48,15 +48,6 @@ namespace BALL
 			: public BaseModelProcessor
 		{
 			public:
-
-			enum ErrorCode
-			{
-				ERROR__NONE                             = -1,
-				ERROR__UNKNOWN                          = 0,
-				ERROR__NOT_IMPLEMENTED                  = 1,
-
-				NUMBER_OF_REMOVEMODEL_ERRORS
-			};
 
 			/**	@name	Constructors and Destructors
 			*/
