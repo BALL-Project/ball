@@ -1,4 +1,4 @@
-// $Id: support.C,v 1.15 2001/01/29 17:36:03 anker Exp $
+// $Id: support.C,v 1.16 2001/01/31 05:42:25 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/KERNEL/atom.h>
@@ -53,7 +53,6 @@ namespace BALL
 
 			// Test if periodic boundary is enabled or not and calculate the box
 			// size accordingly
-
 			if (periodic_boundary_enabled) 
 			{
 				// Just take the box that was given as argument...
@@ -333,7 +332,6 @@ namespace BALL
 			(System& system, const HashGrid3<Atom*>& solute_grid, 
 			 const System& solvent, const Box3& box, double distance)
 		{
-
 			Molecule* old_molecule = 0;
 			Molecule* new_molecule = 0;
 			bool add = true;
