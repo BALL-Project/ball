@@ -1,4 +1,4 @@
-// $Id: NMRSpectrum.h,v 1.5 2000/09/22 13:18:14 amoll Exp $
+// $Id: NMRSpectrum.h,v 1.6 2000/09/22 13:21:19 amoll Exp $
 
 #ifndef BALL_NMR_NMRSPECTRUM_H
 #define BALL_NMR_NMRSPECTRUM_H
@@ -157,7 +157,7 @@ namespace BALL
 				Another file is written (second String) containing the atoms fullname
 				its chemical shift and its difference to the shift of the second system
 		*/
-		friend void setDifference(NMRSpectrum*, NMRSpectrum*, String, String);
+		friend void setDifference(NMRSpectrum*, NMRSpectrum*, const String&, const String&);
 
 		//@}
 
