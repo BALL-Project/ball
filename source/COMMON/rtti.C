@@ -1,4 +1,4 @@
-// $Id: rtti.C,v 1.2 2000/01/10 15:51:09 oliver Exp $
+// $Id: rtti.C,v 1.3 2000/01/14 20:28:59 oliver Exp $
 
 #include <BALL/COMMON/rtti.h>
 #include <typeinfo>
@@ -32,7 +32,8 @@ namespace BALL
  
 #ifdef __GNUC__
 
-	namespace GNUDemangling {
+	namespace GNUDemangling 
+	{
 
 		string decode_mangling(string& s)
 		{
