@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: contour.h,v 1.10 2002/02/27 12:18:31 sturm Exp $
+// $Id: contour.h,v 1.11 2003/01/06 10:37:03 amoll Exp $
 
 #ifndef BALL_DATATYPE_CONTOUR_H
 #define BALL_DATATYPE_CONTOUR_H
@@ -16,7 +16,6 @@
 
 #include <vector>
 
-using namespace BALL;
 
 namespace BALL
 {
