@@ -1,4 +1,4 @@
-// $Id: contour.h,v 1.4 2000/12/08 08:54:28 oliver Exp $
+// $Id: contour.h,v 1.5 2000/12/08 16:58:24 anhi Exp $
 
 #ifndef BALL_DATATYPE_CONTOUR_H
 #define BALL_DATATYPE_CONTOUR_H
@@ -12,6 +12,8 @@
 #endif
 
 #include <vector>
+
+using namespace BALL;
 
 namespace BALL
 {
@@ -78,11 +80,11 @@ namespace BALL
 
 		protected:
 			
-		typename std::vector<typename TContourLine<T> > lines_;
+		std::vector< TContourLine<T> > lines_;
 		Size num_lines_;
 		double start_;
 		double end_;
-		typename std::vector<typename TContourLine<T> >::const_iterator it_;
+		typename std::vector< TContourLine<T> >::const_iterator it_;
 		Position index_;
 	};
 
