@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.16 2003/12/09 14:34:25 amoll Exp $
+// $Id: common.h,v 1.17 2003/12/17 15:11:11 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -98,10 +98,43 @@ enum DrawingPrecision
 /// MAXIMAL_DRAWING_PRECISION * MAXIMAL_DRAWING_MODE
 #define BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE  12  
 
+/** Enumeration of Events
+ 		These events are used to communicate between different threads.
+		Have a look at QWidget::customEvent(QCustomEvent) to learn about
+		QT and its events concept. This enum is used to give every type
+		of derived QCustomEvent its individual type id.
+*/
+enum EventsIDs
+{
+	/// see SceneUpdateEvent
+	SCENE_UPDATE_EVENT = 60000,
+
+	/// see Mainframe::SimulationThreadFinished
+	SIMULATION_THREAD_FINISHED_EVENT,
+
+	/// see SimulationOutput
+	SIMULATION_OUTPUT_EVENT,
+
+	/// see UpdateCompositeEvent
+	UPDATE_COMPOSITE_EVENT
+};
+
+//@}
+/** @name Model types
+ 		Enums and methods to describe the models.
+		 \ingroup ViewKernelOther
+*/
+//@{
 
 /** This properties define the available models.
 		Add new model entries directly before MODEL_LABEL if you want them to show up 
 		in the DisplayProperties dialog!
+		You may have to modify the following methods, if you add a new ModelType:
+		@see getModelName(ModelType type)
+		@see getColoringName(ColoringMethod type)
+		@see isSurfaceModel(ModelType type)
+		@see modelMuteableByDisplayProperties(ModelType type)
+		@see modelMustBeRebuild(ModelType type)
 */
 enum ModelType
 {
@@ -148,7 +181,7 @@ enum ModelType
 
 
 /** Coloring Methods
-		Add new coloring methods before COLORING_CUSTOM
+		Add new coloring methods before COLORING_CUSTOM.
 */
 enum ColoringMethod
 {
@@ -187,6 +220,8 @@ enum ColoringMethod
 	COLORING_UNKNOWN
 };
 
+
+
 /// Get a name for a ModelType
 String getModelName(ModelType type) 
 	throw();
@@ -195,28 +230,20 @@ String getModelName(ModelType type)
 String getColoringName(ColoringMethod type) 
 	throw();
 
-
-/** Enumeration of Events
- 		These events are used to communicate between different threads.
-		Have a look at QWidget::customEvent(QCustomEvent) to learn about
-		QT and its events concept. This enum is used to give every type
-		of derived QCustomEvent its individual type id.
+/** Define, which Models are Surfaces.
+ 		Add new kinds of Surfaces to this function!
 */
-enum EventsIDs
-{
-	/// see SceneUpdateEvent
-	SCENE_UPDATE_EVENT = 60000,
+bool isSurfaceModel(ModelType type)
+	throw();
 
-	/// see Mainframe::SimulationThreadFinished
-	SIMULATION_THREAD_FINISHED_EVENT,
+/// Model can be modified with DisplayProperitesDialog
+bool modelMuteableByDisplayProperties(ModelType type)
+	throw();
 
-	/// see SimulationOutput
-	SIMULATION_OUTPUT_EVENT,
+/// Model must be rebuild, if Composite changes
+bool modelMustBeRebuild(ModelType type)
+	throw();
 
-	/// see UpdateCompositeEvent
-	UPDATE_COMPOSITE_EVENT
-};
-	
 //@}
 
 } } //namespaces
