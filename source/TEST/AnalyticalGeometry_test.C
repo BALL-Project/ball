@@ -1,4 +1,4 @@
-// $Id: AnalyticalGeometry_test.C,v 1.21 2000/09/05 19:09:27 amoll Exp $
+// $Id: AnalyticalGeometry_test.C,v 1.22 2000/09/06 19:57:36 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 #include <BALL/MATHS/analyticalGeometry.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: AnalyticalGeometry_test.C,v 1.21 2000/09/05 19:09:27 amoll Exp $")
+START_TEST(class_name, "$Id: AnalyticalGeometry_test.C,v 1.22 2000/09/06 19:57:36 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -26,7 +26,7 @@ Line3 l1, l2, l3, l4;
 Angle a1, a2, a3, a4;
 Plane3 p1, p2, p3, p4;
 
-CHECK(GetDeterminant_(const T* m, Size dim))
+CHECK(getDeterminant_(const T* m, Size dim))
 	float m[16];
 	float x, x1;
 	for (Size i = 0; i < 16; i++ )
@@ -35,7 +35,7 @@ CHECK(GetDeterminant_(const T* m, Size dim))
 	}
 	m[5] = (float)6;
 	m[6] = (float)5;
-	x = GetDeterminant_(m, 4);
+	x = getDeterminant_(m, 4);
 
 	m[0] = (float)4;
 	m[1] = (float)6;
@@ -45,17 +45,17 @@ CHECK(GetDeterminant_(const T* m, Size dim))
 	m[5] = (float)1;
 	m[6] = (float)2;
 	m[7] = (float)3;
-	x1 = GetDeterminant_(m, 4);
+	x1 = getDeterminant_(m, 4);
 	TEST_REAL_EQUAL(-x, x1)
 	for (int i = 0; i < 16 ; i++ )
 	{
 		m[i] = (float) i * 2;
 	}
-	x = GetDeterminant_(m, 4);
+	x = getDeterminant_(m, 4);
 	TEST_REAL_EQUAL(x * 2, x1)
 RESULT
 
-CHECK(GetDeterminant(const T* m, Size dim))
+CHECK(getDeterminant(const T* m, Size dim))
 	float m[16];
 	float x, x1;
 	for (Size i = 0; i < 16; i++ )
@@ -64,7 +64,7 @@ CHECK(GetDeterminant(const T* m, Size dim))
 	}
 	m[5] = (float)6;
 	m[6] = (float)5;
-	x = GetDeterminant(m, 4);
+	x = getDeterminant(m, 4);
 
 	m[0] = (float)4;
 	m[1] = (float)6;
@@ -74,72 +74,72 @@ CHECK(GetDeterminant(const T* m, Size dim))
 	m[5] = (float)1;
 	m[6] = (float)2;
 	m[7] = (float)3;
-	x1 = GetDeterminant(m, 4);
+	x1 = getDeterminant(m, 4);
 	TEST_REAL_EQUAL(-x, x1)
 	for (int i = 0; i < 16 ; i++ )
 	{
 		m[i] = (float) i * 2;
 	}
-	x = GetDeterminant(m, 4);
+	x = getDeterminant(m, 4);
 	TEST_REAL_EQUAL(x * 2, x1)
 RESULT
 
-CHECK(GetDeterminant2(const T* m))
+CHECK(getDeterminant2(const T* m))
 	float m[16], x, x1;
 	m[0] = 0;
 	m[1] = 1;
 	m[2] = 2;
 	m[3] = 3;
-	x1 = GetDeterminant2(m);
+	x1 = getDeterminant2(m);
 	m[0] = 2;
 	m[1] = 3;
 	m[2] = 0;
 	m[3] = 1;
-	x = GetDeterminant2(m);
+	x = getDeterminant2(m);
 	TEST_REAL_EQUAL(-x, x1)
 	m[0] = 4;
 	m[1] = 6;
 	m[2] = 0;
 	m[3] = 2;
-	x1 = GetDeterminant2(m);
+	x1 = getDeterminant2(m);
 	TEST_REAL_EQUAL(x * 4, x1)
 RESULT
 
-CHECK(GetDeterminant2(const T& m00, const T& m01, const T& m10, const T& m11))
+CHECK(getDeterminant2(const T& m00, const T& m01, const T& m10, const T& m11))
 	float x, x1;
-	x = GetDeterminant2(0, 1, 2, 3);
-	x1 = GetDeterminant2(2, 3, 0, 1);
+	x = getDeterminant2(0, 1, 2, 3);
+	x1 = getDeterminant2(2, 3, 0, 1);
 	TEST_REAL_EQUAL(-x, x1)
 RESULT
 
-CHECK(GetDeterminant3(const T *m))
+CHECK(getDeterminant3(const T *m))
 	float m[9], x, x1;
 	for (int i = 0; i < 9 ; i++ )
 	{
 		m[i] = (float) i;
 	}
-	x = GetDeterminant3(m);
+	x = getDeterminant3(m);
 	m[0] = 3;
 	m[1] = 4;
 	m[2] = 5;
 	m[3] = 0;
 	m[4] = 1;
 	m[5] = 2;
-	x1 = GetDeterminant3(m);
+	x1 = getDeterminant3(m);
 	TEST_REAL_EQUAL(-x, x1)
 	for (int i = 0; i < 9 ; i++ )
 	{
 		m[i] = (float) i * 2;
 	}
-	x = GetDeterminant3(m);
+	x = getDeterminant3(m);
 	TEST_REAL_EQUAL(x * 2, x1)
 RESULT
 
-CHECK(GetDeterminant3(const T& m00, const T& m01, const T& m02,
+CHECK(getDeterminant3(const T& m00, const T& m01, const T& m02,
 								  		const T& m10, const T& m11, const T& m12,
 											const T& m20, const T& m21, const T& m22))
-	float x = GetDeterminant3(0, 1, 2, 3, 4, 5, 6, 7, 8);
-	float x1 = GetDeterminant3(3, 4, 5, 0, 1, 2, 6, 7, 8);
+	float x = getDeterminant3(0, 1, 2, 3, 4, 5, 6, 7, 8);
+	float x1 = getDeterminant3(3, 4, 5, 0, 1, 2, 6, 7, 8);
 	TEST_REAL_EQUAL(x, -x1)
 RESULT
 
