@@ -1,4 +1,4 @@
-// $Id: property.C,v 1.19 2000/08/31 18:54:09 amoll Exp $
+// $Id: property.C,v 1.20 2000/09/03 20:01:55 oliver Exp $
 
 #include <BALL/CONCEPT/property.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -89,19 +89,19 @@ namespace BALL
 		s << endl;
 		switch (property.type_)
 		{
-			case NamedProperty::BOOL : 	s << property.data_.b; break;
-			case NamedProperty::INT : 	s << property.data_.i; break;
-			case NamedProperty::UNSIGNED_INT : 	s << property.data_.ui; break;
-			case NamedProperty::FLOAT : s << property.data_.f; break;
-			case NamedProperty::DOUBLE :s << property.data_.d; break;
-			case NamedProperty::STRING :s << *property.data_.s; break;
-			case NamedProperty::OBJECT :
-			{
-				TextPersistenceManager pm;
-				pm.setOstream(s);
-				pm.writeObjectPointer(property.data_.object, "data_.object");
-				break;
-			}
+			case NamedProperty::BOOL:					s << property.data_.b; break;
+			case NamedProperty::INT:					s << property.data_.i; break;
+			case NamedProperty::UNSIGNED_INT: s << property.data_.ui; break;
+			case NamedProperty::FLOAT:				s << property.data_.f; break;
+			case NamedProperty::DOUBLE:				s << property.data_.d; break;
+			case NamedProperty::STRING:				s << *property.data_.s; break;
+			case NamedProperty::OBJECT:
+				{
+					TextPersistenceManager pm;
+					pm.setOstream(s);
+					pm.writeObjectPointer(property.data_.object, "data_.object");
+					break;
+				}
 			case NamedProperty::NONE : break;
 			default:
 				Log.error() << "Unknown type while writing NamedProperty: " << (int)property.type_ << endl;
