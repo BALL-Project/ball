@@ -1,4 +1,4 @@
-// $Id: PiecewiseFunction_test.C,v 1.2 2000/08/31 12:33:25 anker Exp $
+// $Id: PiecewiseFunction_test.C,v 1.3 2000/10/18 19:23:54 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: PiecewiseFunction_test.C,v 1.2 2000/08/31 12:33:25 anker Exp $")
+START_TEST(class_name, "$Id: PiecewiseFunction_test.C,v 1.3 2000/10/18 19:23:54 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -84,35 +84,12 @@ CHECK(PiecewiseFunction::clear())
 RESULT
 
 
-CHECK(PiecewiseFunction::destroy())
-	PiecewiseFunction PWF2(intervals, coefs);
-	PWF2.destroy();
-	std::vector<Interval> i2 = PWF2.getIntervals();
-	std::vector<Interval> i3;
-	bool test = (i2 == i3);
-	TEST_EQUAL(test, true);
-RESULT
-
-
 CHECK(PiecewiseFunction::set(const std::vector<Interval>& intervals, const std::vector<Coefficients>& coeffs))
 	PiecewiseFunction PWF2;
 	PWF2.set(intervals, coefs);
 	bool test = (PWF2.getIntervals() == intervals);
 	TEST_EQUAL(test, true)
 	test = (PWF2.getCoefficients() == coefs);
-	TEST_EQUAL(test, true);
-	std::vector<Coefficients> naught;
-	test = (PWF2.getCoefficients() == naught);
-	TEST_EQUAL(test, false)
-RESULT
-
-CHECK(PiecewiseFunction::set(const PiecewiseFunction& function))
-	PiecewiseFunction PWF2;
-	PiecewiseFunction PWF3(intervals, coefs);
-	PWF2.set(PWF3);
-	bool test = (PWF2.getIntervals() == PWF3.getIntervals());
-	TEST_EQUAL(test, true)
-	test = (PWF2.getCoefficients() == PWF3.getCoefficients());
 	TEST_EQUAL(test, true);
 	std::vector<Coefficients> naught;
 	test = (PWF2.getCoefficients() == naught);

@@ -1,4 +1,4 @@
-// $Id: RadialDistributionFunction_test.C,v 1.2 2000/09/02 16:19:24 anker Exp $
+// $Id: RadialDistributionFunction_test.C,v 1.3 2000/10/18 19:23:54 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: RadialDistributionFunction_test.C,v 1.2 2000/09/02 16:19:24 anker Exp $")
+START_TEST(class_name, "$Id: RadialDistributionFunction_test.C,v 1.3 2000/10/18 19:23:54 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -86,32 +86,6 @@ CHECK(RadialDistributionFunction::clear())
 	TEST_EQUAL(test, true)
 	std::vector<Coefficients> naught;
 	test = (RDF.getRepresentation().getCoefficients() == naught);
-	TEST_EQUAL(test, true)
-RESULT
-
-
-CHECK(RadialDistributionFunction::destroy())
-	RadialDistributionFunction RDF(poly);
-	RDF.destroy();
-	TEST_EQUAL(RDF.getRepresentation().getDegree(), 0)
-	std::vector<Interval> nope;
-	bool test = (RDF.getRepresentation().getIntervals() == nope);
-	TEST_EQUAL(test, true)
-	std::vector<Coefficients> naught;
-	test = (RDF.getRepresentation().getCoefficients() == naught);
-	TEST_EQUAL(test, true)
-RESULT
-
-
-CHECK(RadialDistributionFunction::set(const RadialDistributionFunction& rdf))
-	RadialDistributionFunction RDF;
-	RadialDistributionFunction RDF2(poly);
-	RDF.set(RDF2);
-	TEST_EQUAL(RDF.getRepresentation().getDegree(), 4)
-	bool test = (RDF.getRepresentation().getIntervals() == intervals);
-	TEST_EQUAL(test, true)
-	std::vector<Coefficients> naught;
-	test = (RDF.getRepresentation().getCoefficients() == coefs);
 	TEST_EQUAL(test, true)
 RESULT
 

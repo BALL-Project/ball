@@ -1,4 +1,4 @@
-// $Id: PiecewisePolynomial_test.C,v 1.3 2000/09/22 09:32:01 anker Exp $
+// $Id: PiecewisePolynomial_test.C,v 1.4 2000/10/18 19:23:54 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: PiecewisePolynomial_test.C,v 1.3 2000/09/22 09:32:01 anker Exp $")
+START_TEST(class_name, "$Id: PiecewisePolynomial_test.C,v 1.4 2000/10/18 19:23:54 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -104,22 +104,6 @@ CHECK(PiecewisePolynomial::destroy())
 	std::vector<Coefficients> c3;
 	test = (c2 == c3);
 	TEST_EQUAL(test, true);
-	// BAUSTELLE: Spezialfälle
-RESULT
-
-
-CHECK(PiecewisePolynomial::set(const PiecewisePolynomial& function))
-	PiecewisePolynomial poly2;
-	PiecewisePolynomial poly3(4, intervals, coefs);
-	poly2.set(poly3);
-	TEST_EQUAL(poly2.getDegree(), 4)
-	bool test = (poly2.getIntervals() == poly3.getIntervals());
-	TEST_EQUAL(test, true)
-	test = (poly2.getCoefficients() == poly3.getCoefficients());
-	TEST_EQUAL(test, true);
-	std::vector<Coefficients> naught;
-	test = (poly2.getCoefficients() == naught);
-	TEST_EQUAL(test, false)
 	// BAUSTELLE: Spezialfälle
 RESULT
 
