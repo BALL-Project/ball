@@ -1,12 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.60 2003/08/27 12:23:18 amoll Exp $
+// $Id: mainframe.C,v 1.61 2003/08/27 14:09:35 amoll Exp $
 
 
 #include "mainframe.h"
 #include "icons.h"
-//#include "DIALOGS/DlgAbout.h"
 
 #include <BALL/MOLMEC/AMBER/amber.h>
 #include <BALL/MOLMEC/MINIMIZATION/conjugateGradient.h>
@@ -26,6 +25,7 @@
 #include <BALL/STRUCTURE/residueChecker.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/SYSTEM/path.h>
+#include <BALL/FORMAT/DCDFile.h>
 
 #ifdef BALL_PYTHON_SUPPORT
 #	include <BALL/VIEW/WIDGETS/pyWidget.h>
@@ -38,6 +38,7 @@
 #include <qlabel.h>
 #include <qaccel.h> 
 
+#undef QT_THREAD_SUPPORT
 #ifdef QT_THREAD_SUPPORT
  #include "threads.h"
 #endif
@@ -541,6 +542,7 @@ void Mainframe::amberMDSimulation()
 #else
 	// ============================= WITHOUT MULTITHREADING ==============================
 	// iterate until done and refresh the screen every "steps" iterations
+	/*
 	String dcdfile = md_dialog_->getDCDFile();
 	bool store_dcd = dcdfile.size() != 0;
 	DCDFile dcd;
@@ -568,7 +570,7 @@ void Mainframe::amberMDSimulation()
  	}
 
 	if (store_dcd) manager.flushToDisk();
-
+*/
 	Log.info() << std::endl << "simulation terminated." << std::endl << endl;
 	printAmberResults(*amber);
 	Log.info() << "final RMS gadient    : " << amber->getRMSGradient() << " kJ/(mol A)   after " 
