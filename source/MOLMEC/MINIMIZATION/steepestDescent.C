@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: steepestDescent.C,v 1.23 2004/02/23 20:18:50 anhi Exp $
+// $Id: steepestDescent.C,v 1.24 2004/02/23 20:20:45 anhi Exp $
 //
 
 #include <BALL/MOLMEC/MINIMIZATION/steepestDescent.h>
@@ -108,8 +108,8 @@ namespace BALL
 	bool SteepestDescentMinimizer::specificSetup()
 	{
 		maximal_number_of_iterations_ = (Size)options.setDefaultInteger
-			(SteepestDescentMinimizer::Option::MAX_STEPS, 
-			 (long)SteepestDescentMinimizer::Default::MAX_STEPS);
+			(SteepestDescentMinimizer::Option::MAXIMAL_NUMBER_OF_ITERATIONS, 
+			 (long)SteepestDescentMinimizer::Default::MAXIMAL_NUMBER_OF_ITERATIONS);
 
 		return true;
 	}
