@@ -67,7 +67,9 @@
 \newpage
 \addtocontents{toc}{\protect\contentsline{chapter}{Index}{\thepage}}
 \printindex
-\include{bib/bibliography}
-
+\renewcommand{\bibname}{References}
+\addtocontents{toc}{\protect\contentsline{chapter}{References}{\thepage}}
+\bibliographystyle{abbrv}
+\bibliography{tutorial}
 
 \end{document}

@@ -10,8 +10,6 @@
    	\item Linux/x86 2.x using Kuck \& Associate (KAI) \CPP 4.0b
    	\item Solaris/SPARC 8 using g{\tt ++} 2.95.3
    	\item Solaris/SPARC 8 using Kuck \& Associate (KAI) \CPP 4.0b
-   	\item Solaris/SPARC 8 using SUN Workshop CC 6.0
-   	\item Solaris/x86 2.6 using g{\tt ++} 2.95.3
    	\item IRIX 6.5 using CC 7.3.1.1m (32 and 64 bit)
    	\item Compaq Tru64 Unix V4.0f using Compaq \CPP 6.3
  	\end{itemize}
@@ -19,7 +17,7 @@
 \subsection{External software and libraries}
 The compilation of the visualization component BALLVIEW also requires
 the QT library (version 2.x) which is available from
-\URL{http://www.troll.no/qt}.
+\URL{http://www.troll.no/qt}/.
 
 If QT was not installed in one of the standard library paths or the
 QT header files were not installed in one of the compiler's default
@@ -153,7 +151,7 @@ An overview of these options can also be obtained by executing "{\tt configure
 For example, to compile BALL without the visualization component BALLVIEW,
 specify 
 \begin{lstlisting}{}
-  configure --without-BALLVIEW
+  configure --disable-BALLVIEW
 \end{lstlisting}
 
 To include BALLVIEW using the QT installation in /opt/qt/lib and /opt/qt/include, specify
@@ -168,7 +166,7 @@ like this:
 
 \begin{lstlisting}{}	
   configure --with-qt-libs=/opt/qt/lib 
-		--with-qt-incl=/opt/qt/include --without-opengl
+		--with-qt-incl=/opt/qt/include
     --with-opengl-libs=/opt/mesa/lib 
 		--with-opengl-incl=/opt/mesa/include
 \end{lstlisting}
@@ -185,7 +183,7 @@ There exist three different libraries:
 	\end{tabular}
 \end{center}
 
-The latter two libraries are not built if "\option{--without-BALLVIEW}" is specified or configure
+The latter two libraries are not built if "\option{--disable-BALLVIEW}" is specified or configure
 cannot find X libraries, OpenGL libraries, or QT libraries (and the respective headers).
 
 It is also possible (although not recommended) to build the corresponding static libraries
