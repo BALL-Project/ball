@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineModel.C,v 1.8 2003/12/12 17:51:51 amoll Exp $
+// $Id: lineModel.C,v 1.9 2003/12/16 21:16:34 amoll Exp $
 
 #include <BALL/VIEW/MODELS/lineModel.h>
 #include <BALL/KERNEL/atom.h>
@@ -50,7 +50,7 @@ Processor::Result AddLineModel::operator() (Composite &composite)
 
 	if (point_ptr == 0) throw Exception::OutOfMemory(__FILE__, __LINE__, sizeof(Point));
 
-	point_ptr->setVertex(atom->getPosition());
+	point_ptr->setVertexAddress(atom->getPosition());
 	point_ptr->setComposite(atom);
 
 	// append line in Atom
