@@ -1,4 +1,4 @@
-// $Id: hashSet.h,v 1.25 2001/02/10 20:01:00 amoll Exp $ 
+// $Id: hashSet.h,v 1.26 2001/05/15 08:41:09 anker Exp $ 
 
 #ifndef BALL_DATATYPE_HASHSET_H
 #define BALL_DATATYPE_HASHSET_H
@@ -728,7 +728,7 @@ namespace BALL
 			it.getTraits().bucket_ = bucket;
 		}
 
-		return std::pair<Iterator, bool>(it, true);
+		return ::std::pair<Iterator, bool>(it, true);
 	}
 
 	template <class Key>
