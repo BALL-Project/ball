@@ -1,4 +1,4 @@
-// $Id: Selector_test.C,v 1.6 2001/07/15 20:24:22 oliver Exp $
+// $Id: Selector_test.C,v 1.7 2001/07/16 12:38:26 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +11,7 @@
 
 ///////////////////////////
 
-START_TEST(Selector, "$Id: Selector_test.C,v 1.6 2001/07/15 20:24:22 oliver Exp $")
+START_TEST(Selector, "$Id: Selector_test.C,v 1.7 2001/07/16 12:38:26 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -62,8 +62,7 @@ CHECK(Selector::Processor::Result operator () (Composite& composite) throw())
 
 	HashMap<String, Size> test_expressions;
 	test_expressions.insert(pair<String, Size>("true()", 6));
-	// BAUSTELLE
-	// test_expressions.insert(pair<String, Size>("connectedTo(H)", 2));
+	test_expressions.insert(pair<String, Size>("connectedTo((-H))", 2));
 	test_expressions.insert(pair<String, Size>("element(H)", 4));
 	test_expressions.insert(pair<String, Size>("element(O)", 1));
 	test_expressions.insert(pair<String, Size>("element(C)", 1));
@@ -106,8 +105,7 @@ CHECK(Selector::getNumberOfSelectedAtoms() const  throw())
 
 	HashMap<String, Size> test_expressions;
 	test_expressions.insert(pair<String, Size>("true()", 6));
-	// BAUSTELLE
-	// test_expressions.insert(pair<String, Size>("connectedTo(H)", 2));
+	test_expressions.insert(pair<String, Size>("connectedTo((-H))", 2));
 	test_expressions.insert(pair<String, Size>("element(H)", 4));
 	test_expressions.insert(pair<String, Size>("element(O)", 1));
 	test_expressions.insert(pair<String, Size>("element(C)", 1));

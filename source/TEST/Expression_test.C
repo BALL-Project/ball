@@ -1,4 +1,4 @@
-// $Id: Expression_test.C,v 1.10 2001/07/15 17:32:39 amoll Exp $
+// $Id: Expression_test.C,v 1.11 2001/07/16 12:38:25 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -18,7 +18,7 @@ using namespace BALL;
 
 ///////////////////////////
 
-START_TEST(Expression, "$Id: Expression_test.C,v 1.10 2001/07/15 17:32:39 amoll Exp $")
+START_TEST(Expression, "$Id: Expression_test.C,v 1.11 2001/07/16 12:38:25 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -620,7 +620,7 @@ RESULT
 
 
 CHECK(Expression::Expression(const Expression& expression) throw())
-	String expression("connectedTo(H)");
+	String expression("connectedTo((-H))");
 	Expression e1(expression);
 	Expression e2;
 
@@ -670,8 +670,7 @@ CHECK(Expression::bool operator () (const Atom& atom) const  throw())
 	file.read(S);
 	HashMap<String, Size> test_expressions;
 	test_expressions.insert(pair<String, Size>("true()", 6));
-	// BAUSTELLE
-	// test_expressions.insert(pair<String, Size>("connectedTo(H)", 2));
+	test_expressions.insert(pair<String, Size>("connectedTo((-H))", 2));
 	test_expressions.insert(pair<String, Size>("element(H)", 4));
 	test_expressions.insert(pair<String, Size>("element(O)", 1));
 	test_expressions.insert(pair<String, Size>("element(C)", 1));
@@ -717,7 +716,7 @@ RESULT
 
 
 CHECK(Expression::setExpression(const String& expression) throw())
-	String test_expression("connectedTo(H)");
+	String test_expression("connectedTo((-H))");
 	Expression e;
 	e.setExpression(test_expression);
 	TEST_EQUAL(e.getExpressionString(), test_expression)
@@ -725,20 +724,20 @@ RESULT
 
 
 CHECK(Expression::getExpressionString() const  throw())
-	Expression e("connectedTo(H)");
-	TEST_EQUAL("connectedTo(H)", e.getExpressionString())
+	Expression e("connectedTo((-H))");
+	TEST_EQUAL("connectedTo((-H))", e.getExpressionString())
 RESULT
 
 
 CHECK(Expression::getExpressionTree() const  throw())
-	Expression e("connectedTo(H)");
+	Expression e("connectedTo((-H))");
 	const ExpressionTree* tree = e.getExpressionTree();
 	TEST_NOT_EQUAL(tree, 0)
 RESULT
 
 
 CHECK(Expression::Expression& operator = (const Expression& expression) throw())
-	Expression e1("connectedTo(H)");
+	Expression e1("connectedTo((-H))");
 	Expression e2;
 	bool test = (e1 == e2);
 	TEST_NOT_EQUAL(test, true)
@@ -751,7 +750,7 @@ RESULT
 
 CHECK(Expression::clear() throw())
 	Expression empty;
-	Expression nonempty("connectedTo(H)");
+	Expression nonempty("connectedTo((-H))");
 	bool test = (empty == nonempty);
 	TEST_NOT_EQUAL(test, true)
 
