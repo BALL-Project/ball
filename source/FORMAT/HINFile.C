@@ -1,4 +1,4 @@
-// $Id: HINFile.C,v 1.43 2002/01/13 18:28:17 oliver Exp $
+// $Id: HINFile.C,v 1.44 2002/01/16 00:21:24 oliver Exp $
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/CONCEPT/composite.h>
@@ -59,7 +59,17 @@ namespace BALL
 		String name = atom.getName();
 		if (name != "") 
 		{
-			getFileStream() << name.trim() << " ";
+			// if the filename contains blanks or some bullshit like that, 
+			// truncate it to the first field and complain about it
+			if (name.countFields() > 1)
+			{
+				getFileStream() << name.getField(0) <<  " ";
+				Log.warn() << "HINFile::write: truncated atom name '" << name << "' to '" << name.getField(0) << "'." << std::endl;
+			}
+			else
+			{
+				getFileStream() << name.trim() << " ";
+			}
 		} 
 		else 
 		{
