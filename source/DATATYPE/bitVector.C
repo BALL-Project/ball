@@ -1,4 +1,4 @@
-// $Id: bitVector.C,v 1.15 2000/08/03 12:39:38 amoll Exp $
+// $Id: bitVector.C,v 1.16 2000/08/24 12:07:27 amoll Exp $
 
 #include <BALL/DATATYPE/bitVector.h>
 #include <BALL/MATHS/common.h>
@@ -19,12 +19,11 @@ namespace BALL
 	const Size BitVector::BlockSize = BALL_BLOCK_BITS;
 
 	BitVector::BitVector()
-		:	size_(BlockSize),
+		:	size_(0),
 			block_size_(BALL_BLOCK_SIZE(BlockSize)),
 			resizable_(true)
 	{
 		bitset_ = new BlockType[block_size_];
-
 		memset
 			(bitset_, 
 			 BALL_BLOCK_ALL_BITS_CLEARED, 
@@ -35,18 +34,10 @@ namespace BALL
 		:	size_(size),
 			block_size_(BALL_BLOCK_SIZE(size)),
 			resizable_(true)
-	{
-		if (size <= 0) 
-		{
-			size = 1;
-			throw Exception::InvalidRange(__FILE__, __LINE__);
-		}
-				
+	{				
 		bitset_ = new BlockType[block_size_];
-
 		memset
-			(bitset_, 
-			 BALL_BLOCK_ALL_BITS_CLEARED, 
+			(bitset_, BALL_BLOCK_ALL_BITS_CLEARED, 
 			 block_size_ << (sizeof(BlockType) - 1));
 	}
 
@@ -58,8 +49,7 @@ namespace BALL
 		bitset_ = new BlockType[block_size_];
 
 		memcpy
-			(bitset_, 
-			 bit_vector.bitset_, 
+			(bitset_, bit_vector.bitset_, 
 			 block_size_ << (sizeof(BlockType) - 1));
 	}
 
@@ -175,7 +165,7 @@ namespace BALL
 
 		if ((Size)index >= size_)
 		{
-			setSize(index - 1);
+			setSize(index + 1);
 		}
 	}
 
@@ -253,6 +243,10 @@ namespace BALL
 
 	void BitVector::fill(bool bit, Index first, Index last)
 	{
+		if (size_ == 0)
+		{
+			return;
+		}
 		validateRange_(first, last);
 		for (Index i = first; i <= last; i++) 
 		{
