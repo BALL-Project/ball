@@ -1,4 +1,4 @@
-// $Id: displayProperties.C,v 1.13.4.13 2002/12/06 01:02:47 amoll Exp $
+// $Id: displayProperties.C,v 1.13.4.14 2002/12/06 17:01:39 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/displayProperties.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
@@ -226,7 +226,7 @@ namespace BALL
 		{
 			(main_control.menuBar())->setItemChecked(id_, isVisible());
 
-			Size number_of_selected_objects = MainControl::getMainControl(this)->getSelection().size(); 
+			Size number_of_selected_objects = MainControl::getMainControl(this)->getControlSelection().size(); 
 			bool selected = (number_of_selected_objects != 0);
 
 			(main_control.menuBar())->setItemEnabled(select_id_, selected);
@@ -499,7 +499,7 @@ namespace BALL
 			}
 
 			// disable apply button if selection is empty
-			if (MainControl::getMainControl(this)->getSelection().size() == 0)
+			if (MainControl::getMainControl(this)->getControlSelection().size() == 0)
 			{
 				apply_button->setEnabled(false);
 			}
@@ -603,13 +603,13 @@ namespace BALL
 
 		void DisplayProperties::centerCamera()
 		{
-			if (MainControl::getMainControl(this)->getSelection().size() != 1)
+			if (MainControl::getMainControl(this)->getControlSelection().size() != 1)
 			{
 				return;
 			}
 
 			// use specified object processor for calculating the center
-			calculateCenter_(**MainControl::getMainControl(this)->getSelection().begin());
+			calculateCenter_(**MainControl::getMainControl(this)->getControlSelection().begin());
 
 			Vector3 view_point = getViewCenter_();
 
@@ -626,7 +626,7 @@ namespace BALL
 
 		void DisplayProperties::buildBonds()
 		{
-			if (MainControl::getMainControl(this)->getSelection().size() == 0)
+			if (MainControl::getMainControl(this)->getControlSelection().size() == 0)
 			{
 				return;
 			}
@@ -635,8 +635,8 @@ namespace BALL
 			setStatusbarText_("building bonds ...");
 
 			// copy the selection_, it can change after a changemessage event
-			HashSet<Composite*> temp_selection_ = MainControl::getMainControl(this)->getSelection();
-			HashSet<Composite*>::ConstIterator it = temp_selection_.begin();	
+			List<Composite*> temp_selection_ = MainControl::getMainControl(this)->getControlSelection();
+			List<Composite*>::ConstIterator it = temp_selection_.begin();	
 			
 			ChangedCompositeMessage *change_message = new ChangedCompositeMessage;
 			change_message->setDeletable(false);
@@ -667,7 +667,7 @@ namespace BALL
 
 		void DisplayProperties::addHydrogens()
 		{
-			if (MainControl::getMainControl(this)->getSelection().size() == 0)
+			if (MainControl::getMainControl(this)->getControlSelection().size() == 0)
 			{
 				return;
 			}
@@ -681,8 +681,8 @@ namespace BALL
 			notify_(window_message);
 
 			// copy the selection_, it can change after a changemessage event
-			HashSet<Composite*> temp_selection_ = MainControl::getMainControl(this)->getSelection();
-			HashSet<Composite*>::ConstIterator it = temp_selection_.begin();	
+			List<Composite*> temp_selection_ = MainControl::getMainControl(this)->getControlSelection();
+			List<Composite*>::ConstIterator it = temp_selection_.begin();	
 
 			ChangedCompositeMessage *change_message = new ChangedCompositeMessage;
 			change_message->setDeletable(false);
@@ -716,7 +716,7 @@ namespace BALL
 		void DisplayProperties::applyButtonClicked()
 		{
 			// no selection present => return
-			if (MainControl::getMainControl(this)->getSelection().size() == 0)
+			if (MainControl::getMainControl(this)->getControlSelection().size() == 0)
 			{
 				return;
 			}
@@ -727,8 +727,8 @@ namespace BALL
 				distance_color_calculator_.destroy();
 
 				// for each element in the selection => perform generation
-				HashSet<Composite*>::Iterator it = ((HashSet<Composite*>) MainControl::getMainControl(this)->getSelection()).begin();
-				for (; it != MainControl::getMainControl(this)->getSelection().end(); ++it)
+				List<Composite*>::Iterator it = MainControl::getMainControl(this)->getControlSelection().begin();
+				for (; it != MainControl::getMainControl(this)->getControlSelection().end(); ++it)
 				{
 					(**it).apply(*((UnaryProcessor<Composite>*)&distance_color_calculator_));
 				}
@@ -741,15 +741,10 @@ namespace BALL
 			setupStaticProcessor_();
 			setupDynamicProcessor_();
 			List<Composite*> updates;
-			HashSet<Composite*>::ConstIterator it = MainControl::getMainControl(this)->getSelection().begin();
-			for (; it != MainControl::getMainControl(this)->getSelection().end(); ++it)
+			List<Composite*>::ConstIterator it = MainControl::getMainControl(this)->getControlSelection().begin();
+			for (; it != MainControl::getMainControl(this)->getControlSelection().end(); ++it)
 			{
-				if ( (*it)->getParent() == 0 ||
-						//!MainControl::getMainControl(this)->getSelection().has((*it)->getParent())) 
-						!(*it)->getParent()->isSelected()) 
-				{
-					updates.push_back(*it);
-				}
+				updates.push_back(*it);
 			}
 
 			List<Composite*>::Iterator updates_it = updates.begin();
