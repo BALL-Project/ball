@@ -1,4 +1,4 @@
-// $Id: angle.h,v 1.28 2000/12/19 00:42:24 amoll Exp $
+// $Id: angle.h,v 1.29 2001/01/21 21:10:13 amoll Exp $
 
 #ifndef BALL_MATHS_ANGLE_H
 #define BALL_MATHS_ANGLE_H
@@ -106,8 +106,16 @@ namespace BALL
 			throw()
 		{
 		}
-		//@}
 
+		/** Clear method
+				The value is set to 0.
+		*/
+		virtual void clear()
+			throw()
+		{
+			value = (T)0;
+		}
+		//@}
 
 		/**	@name	Assignment
 		*/
@@ -133,12 +141,10 @@ namespace BALL
 		void set(const TAngle& angle)
 			throw();
 
-
 		/**	Assignment operator
 		*/
 		const TAngle& operator = (const TAngle& angle)
 			throw();
-
 
 		/**	Assignment operator for floats.
 				Assign a float value to the angle.
@@ -466,7 +472,6 @@ namespace BALL
 		return *this;
 	}
 
-
 	template <typename T>
 	const TAngle<T>& TAngle<T>::operator = (const T& new_value)
 		throw()
@@ -474,7 +479,6 @@ namespace BALL
 		value = new_value;
 		return *this;
 	}
-
 
 	template <typename T>
 	void TAngle<T>::get(TAngle& angle) const

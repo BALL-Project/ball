@@ -1,4 +1,4 @@
-// $Id: vector4.h,v 1.32 2000/12/19 00:42:25 amoll Exp $
+// $Id: vector4.h,v 1.33 2001/01/21 21:10:14 amoll Exp $
 
 #ifndef BALL_MATHS_VECTOR4_H
 #define BALL_MATHS_VECTOR4_H
@@ -109,6 +109,16 @@ namespace BALL
 		*/	
 		virtual ~TVector4()
 			throw();
+
+		/** Clear method
+				The value are set to 0.
+		*/
+		virtual void clear()
+			throw()
+		{
+			x = y = z = h = (T)0;
+		}
+
 		//@}
 
 		/**	@name	Assignment

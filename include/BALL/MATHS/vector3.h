@@ -1,4 +1,4 @@
-// $Id: vector3.h,v 1.47 2000/12/20 00:36:59 amoll Exp $
+// $Id: vector3.h,v 1.48 2001/01/21 21:10:14 amoll Exp $
 
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -170,6 +170,15 @@ namespace BALL
 		virtual ~TVector3()
 			throw()
 		{
+		}
+
+		/** Clear method
+				The value are set to 0.
+		*/
+		virtual void clear()
+			throw()
+		{
+			x = y = z = (T)0;
 		}
 
 		//@}

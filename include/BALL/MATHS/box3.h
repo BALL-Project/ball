@@ -1,4 +1,4 @@
-// $Id: box3.h,v 1.27 2000/12/19 00:42:24 amoll Exp $
+// $Id: box3.h,v 1.28 2001/01/21 21:10:13 amoll Exp $
 
 #ifndef BALL_MATHS_BOX3_H
 #define BALL_MATHS_BOX3_H
@@ -75,6 +75,13 @@ namespace BALL
 			throw()
 		{
 		}
+
+		/** Clear method
+				The values are set to 0.
+		*/
+		virtual void clear()
+			throw();
+
 		//@}
 
 		/**	@name	Assignment
@@ -144,10 +151,6 @@ namespace BALL
 		void swap(TBox3& box)
 			throw();
 
-		/**	Clear methods.
-		*/
-		virtual void clear() 
-			throw();
 		//@}
 
 

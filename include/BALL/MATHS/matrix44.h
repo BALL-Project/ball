@@ -1,4 +1,4 @@
-// $Id: matrix44.h,v 1.35 2000/12/19 00:42:24 amoll Exp $
+// $Id: matrix44.h,v 1.36 2001/01/21 21:10:14 amoll Exp $
 
 #ifndef BALL_MATHS_MATRIX44_H
 #define BALL_MATHS_MATRIX44_H
@@ -131,6 +131,13 @@ namespace BALL
 			throw()
 		{
 		}
+
+		/**	Clear method.
+				The value are set to 0.
+		*/
+		virtual void clear() 
+			throw();
+
 		//@}
 
 		/**	@name	Assignment
@@ -938,6 +945,13 @@ namespace BALL
 			m41(m41), m42(m42), m43(m43), m44(m44)
 	{
 		initializeComponentPointers_();
+	}
+
+	template <typename T>
+	void TMatrix4x4<T>::clear()
+		throw()
+	{
+		set((T)0);
 	}
 
 	template <typename T>

@@ -1,4 +1,4 @@
-// $Id: line3.h,v 1.28 2000/12/19 00:42:24 amoll Exp $
+// $Id: line3.h,v 1.29 2001/01/21 21:10:14 amoll Exp $
 
 #ifndef BALL_MATHS_LINE3_H
 #define BALL_MATHS_LINE3_H
@@ -114,6 +114,17 @@ namespace BALL
 			throw()
 		{
 		}
+
+		/**	Clear method.
+				The value are set to 0.
+		*/
+		virtual void clear() 
+			throw()
+		{
+			p.clear();
+			d.clear();
+		}
+
 		//@}
 
 		/**	@name	Assignment	

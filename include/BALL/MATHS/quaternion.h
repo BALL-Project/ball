@@ -1,4 +1,4 @@
-// $Id: quaternion.h,v 1.23 2000/12/19 00:42:24 amoll Exp $
+// $Id: quaternion.h,v 1.24 2001/01/21 21:10:14 amoll Exp $
 
 #ifndef BALL_MATHS_QUATERNION_H
 #define BALL_MATHS_QUATERNION_H
@@ -80,6 +80,13 @@ namespace BALL
 		*/
 		virtual ~TQuaternion()
 			throw();
+
+		/**	Clear method.
+				The value are set to 0.
+		*/
+		virtual void clear() 
+			throw();
+
 		//@}
 
 		/**	@name	Assignment
@@ -270,6 +277,13 @@ namespace BALL
 		throw()
 	{
 		set(x, y, z, new_angle);
+	}
+
+	template <typename T>
+	void clear()
+		throw()
+	{
+		i = j = k = angle = (T)0;
 	}
 
 	template <typename T>

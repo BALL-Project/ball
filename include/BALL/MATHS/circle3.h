@@ -1,4 +1,4 @@
-// $Id: circle3.h,v 1.22 2000/12/19 00:42:24 amoll Exp $
+// $Id: circle3.h,v 1.23 2001/01/21 21:10:14 amoll Exp $
 
 #ifndef BALL_MATHS_CIRCLE3_H
 #define BALL_MATHS_CIRCLE3_H
@@ -98,6 +98,18 @@ namespace BALL
 			throw()
 		{
 		}
+
+		/**	Clear method.
+				The value are set to 0.
+		*/
+		virtual void clear() 
+			throw()
+		{
+			p.clear();
+			n.clear();
+			radius = (T)0;
+		}
+
 		//@}
 
 		/**	@name	Assignment
