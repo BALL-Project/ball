@@ -1,4 +1,4 @@
-// $Id: primitiveManager.C,v 1.1.2.2 2002/11/24 20:32:07 amoll Exp $
+// $Id: primitiveManager.C,v 1.1.2.3 2002/11/25 01:26:27 amoll Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/primitiveManager.h>
 #include <stdio.h>
@@ -52,7 +52,7 @@ namespace BALL
 
 				// parent->childs schachteln
 				List_it start_it;
-				if (composite == 0 || composite->getParent() || ! hasComposite(composite->getParent()))
+				if (composite == 0 || composite->getParent() == 0 || ! hasComposite(composite->getParent()))
 				{
 		   		start_it = objects_list_.insert(objects_list_.end(), object);
 				}
@@ -61,7 +61,9 @@ namespace BALL
 					Composite* parent = composite->getParent();
 
 					// insert childs geometric objects after parents objects
-					start_it = objects_list_.insert(getSecondIterator(parent), object);
+					List_it parent_it = getSecondIterator(parent);
+					parent_it++;
+					start_it = objects_list_.insert(parent_it, object);
 
 					// set new end iterator for parent
 					It_pair parent_pair(getFirstIterator(parent), start_it);
@@ -78,7 +80,7 @@ namespace BALL
 			// ok, composite exists already
 
 			List_it list_it = objects_list_.insert(getSecondIterator(composite), object);			
-			composite_to_objects_[composite] = It_pair(getFirstIterator(composite), list_it);
+			composite_to_objects_[composite] = It_pair(list_it, getSecondIterator(composite));
 			return true;
 		}		
 
@@ -134,7 +136,15 @@ namespace BALL
 			List_const_it it = objects_list_.begin();
 			for(;it != objects_list_.end(); it++)
 			{
-				s << "GeometricObject: " << *it <<	" Composite: " << (*it)->getComposite() << endl;
+				s << "GeometricObject: " << *it <<	" Composite: " << (*it)->getComposite();
+			
+				for (Composite* composite = (*it)->getComposite(); composite != 0; )
+				{
+					if (it == getFirstIterator(composite)) s << " >";
+					if (it == getSecondIterator(composite)) s << " <";
+					composite = composite->getParent();
+				}
+				s << endl;
 			}
 
 			BALL_DUMP_STREAM_SUFFIX(s);
@@ -208,7 +218,6 @@ namespace BALL
 			{
 				return 0;
 			}
-
 			Size nr = 1;
 			List_const_it it = getFirstIterator(composite);
 			for (; it != getSecondIterator(composite); it++)
