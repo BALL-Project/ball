@@ -1,4 +1,4 @@
-// $Id: support.C,v 1.11 2000/07/06 14:44:09 oliver Exp $
+// $Id: support.C,v 1.12 2000/07/10 21:22:48 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/DATATYPE/hashGrid.h>
@@ -288,103 +288,107 @@ namespace BALL
 			return counter;
 		}
 
-		// Add solvent molecules to systemA if they lie in the box "box" and if
-		// they do not overlap with molecules in systemA. The solvent molecules
-		// are added to systemA.
-
+		// Add solvent molecules from "solvent" to "solute" if they lie 
+		// in the box "box" and if they do not overlap with molecules in "solute".
 		Size addNonOverlappingMolecules
-			(System&  system_A, const System& system_B, 
-			 const Box3& box, double distance)
+			(System& solute, const System& solvent, const Box3& box, double distance)
 		{
-			Vector3	vector(distance);
+			// Initialize HashGrid for storing atoms of solute
+			// (we add 1% of the distance to make sure we get no points
+			// on the grid boundary)
+			Vector3	vector(distance * 1.02);
+			HashGrid3<Atom*> grid(box.a - vector, box.b - box.a + vector + vector, distance);
 
-			// Initialize HashGrid for storing atoms of system_A
-			HashGrid3<Atom*> grid(box.a - vector, box.b + vector, distance);
-
-
-			// Insert the atoms into the hash grid
-			AtomIterator atom_it;
-			for (atom_it = system_A.beginAtom(); +atom_it; ++atom_it) 
+			// Insert the atoms of the solute into the hash grid
+			AtomIterator atom_it = solute.beginAtom();
+			for ( ; +atom_it; ++atom_it) 
 			{
 				grid.insert(atom_it->getPosition(), &*atom_it);
 			}
 
+
 			Molecule* old_molecule = 0;
 			Molecule* new_molecule = 0;
-			bool	add = false;
+			bool add = true;
 			Size atom_counter = 0;
 			Size mol_counter = 0;
 			double square_distance = distance * distance;
 			double mass = 0;
 			Vector3	center_of_gravity(0.0);
 
-			// Iterate over all atoms in system_B and test the different molecules as follows:
+			// Iterate over all atoms in solvent and test the different molecules as follows:
 			// Calculate the number of atoms of the molecule and its mass. If the number of molecules
 			// is larger 0 and the mass is larger 0, then a another test has to be carried out whether
-			// the center of gravity is in the box. If so, the molecule will be inserted in system_A:
+			// the center of gravity is in the box. If so, the molecule will be inserted in solute:
 	 
-			atom_it = system_B.beginAtom();
-			old_molecule = atom_it->getMolecule();
-			for (	; +atom_it; ++atom_it) 
+			atom_it = solvent.beginAtom();
+			if (atom_it != solvent.endAtom())
 			{
-				// Test if a new molecule is reached and if the old can be inserted into sytemA
-
-				new_molecule = atom_it->getMolecule();
-				if (new_molecule != old_molecule) 
+				old_molecule = atom_it->getMolecule();
+				for (	; +atom_it; ++atom_it) 
 				{
-					if (add == true) 
+					// Test if a new molecule is reached and if the old can be inserted
+					// into the solute system
+					new_molecule = atom_it->getMolecule();
+					if (new_molecule != old_molecule) 
 					{
-						if (atom_counter > 0 && mass != 0) 
+						if (add == true) 
 						{
-							center_of_gravity /= mass;
-							if (center_of_gravity.x >= box.a.x && center_of_gravity.x <= box.b.x &&
-									center_of_gravity.y >= box.a.y && center_of_gravity.y <= box.b.y &&
-									center_of_gravity.z >= box.a.z && center_of_gravity.z <= box.b.z ) 
+							if ((atom_counter > 0) && (mass != 0)) 
 							{
-										system_A.insert(*new Molecule(*old_molecule));
-										mol_counter++;
+								center_of_gravity /= mass;
+								if ((center_of_gravity.x >= box.a.x) && (center_of_gravity.x <= box.b.x)
+										&& (center_of_gravity.y >= box.a.y) && (center_of_gravity.y <= box.b.y) 
+										&& (center_of_gravity.z >= box.a.z) && (center_of_gravity.z <= box.b.z)) 
+								{
+									// copy the solvent molecule and insert it into
+									// the solute system 
+									Molecule* solvent_molecule = new Molecule(*old_molecule);
+									solute.insert(*solvent_molecule);
+									mol_counter++;
+								}
+							}
+						}
+
+						old_molecule = new_molecule;
+						add = true;
+						center_of_gravity.x = 0;
+						center_of_gravity.y = 0;
+						center_of_gravity.z = 0;
+						atom_counter = 0;
+						mass = 0;
+					}
+
+
+					Vector3 position = atom_it->getPosition();
+
+					float atomic_mass = atom_it->getElement().getAtomicWeight();
+					center_of_gravity += atomic_mass * position;
+					mass += atomic_mass; 
+					atom_counter++;
+					
+					// check for all collisions with any of the solute's atoms
+					HashGridBox3<Atom*>* hbox = grid.getBox(position);
+					if ((hbox != 0) && add)
+					{	
+						HashGridBox3<Atom*>::DataIterator data_it;
+						HashGridBox3<Atom*>::BoxIterator box_it;
+						for (box_it = hbox->beginBox(); +box_it && add; ++box_it)
+						{
+							for (data_it = box_it->beginData(); +data_it && add; ++data_it)
+							{
+								if ((position.getSquareDistance((*data_it)->getPosition())) < square_distance)
+								{
+									add = false;
+								}
 							}
 						}
 					}
-
-					old_molecule = new_molecule;
-					add = true;
-					center_of_gravity.x = 0;
-					center_of_gravity.y = 0;
-					center_of_gravity.z = 0;
-					atom_counter = 0;
-					mass = 0;
-				}
-
-
-				HashGridBox3<Atom*>* hbox;
-				HashGridBox3<Atom*>::BoxIterator box_it;
-				HashGridBox3<Atom*>::DataIterator data_it;
-				Vector3 position = (*atom_it).getPosition();
-
-				float atomic_mass = atom_it->getElement().getAtomicWeight();
-				center_of_gravity += (atomic_mass * position);
-				mass += atomic_mass; 
-				atom_counter++;
-				
-				hbox = grid.getBox(position);
-
-				if (hbox != 0)
-				{	
-					for (box_it = hbox->beginBox(); +box_it && add; ++box_it)
-					{
-						for (data_it = box_it->beginData(); +data_it && add ; ++data_it)
-						{
-							if ((position.getSquareDistance((*data_it)->getPosition())) < square_distance)
-							{
-								add = false;
-							}
-						}
-					}
-				}
+				}	
 			}
 
-			return(mol_counter);
+			// return the number of solvent molecules
+			return mol_counter;
 		}
 
 	}	// namespace MolmecSupport
