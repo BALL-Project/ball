@@ -1,4 +1,4 @@
-// $Id: parameterSection.h,v 1.5 2000/10/05 17:30:12 anker Exp $
+// $Id: parameterSection.h,v 1.6 2000/10/07 13:19:58 oliver Exp $
 // Format: general  parameter section class
 
 #ifndef BALL_FORMAT_PARAMETERSECTION_H
@@ -64,6 +64,13 @@ namespace BALL
 				@return bool - {\bf true} if the section could be read, {\bf false} otherwise
 		*/
 		bool extractSection(Parameters& parameters, const String& section_name);
+
+		/**	Return the name of the section read.
+				The section name is empty befor \Ref{extractSection} was called.
+				@return the	name of the section extracted
+		*/
+		const String& getSectionName() const
+			throw();
 
 		/** Returns the value associated with the key and returns the value of the
 				given variable.
