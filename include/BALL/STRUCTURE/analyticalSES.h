@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: analyticalSES.h,v 1.10 2002/02/27 12:19:43 sturm Exp $
+// $Id: analyticalSES.h,v 1.11 2003/02/25 13:27:55 sturm Exp $
 
 #ifndef BALL_STRUCTURE_ANALYTICALSES_H
 #define BALL_STRUCTURE_ANALYTICALSES_H
@@ -12,6 +12,9 @@
 
 namespace BALL 
 {
+    /** \ingroup Surface
+     *  @{
+     */
 	// forward declarations
 	class Atom;
 	class AtomContainer;
@@ -47,7 +50,7 @@ namespace BALL
 	*/
 	float calculateSESVolume
 		(const AtomContainer& fragment, float probe_radius = 1.5);
-	
+   /** @} */
 } // namespace BALL
 
 #endif // BALL_STRUCTURE_ANALYTICALSES_H

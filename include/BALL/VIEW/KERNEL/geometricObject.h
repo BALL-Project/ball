@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricObject.h,v 1.24 2003/02/21 16:07:58 anhi Exp $
+// $Id: geometricObject.h,v 1.25 2003/02/25 13:28:23 sturm Exp $
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
 #define BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
@@ -25,6 +25,9 @@ namespace BALL
 {
 	namespace VIEW
 	{
+    /** \ingroup ViewKernelGeometricPrimitives
+     *  @{
+     */
 		/** GeometricObject class.
 				The class GeometricObject is the most important base class for a
 				geometric primitive.  All geometric primitives must be derived from
@@ -411,7 +414,7 @@ namespace BALL
 #		ifndef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/KERNEL/geometricObject.iC>
 #		endif
-		
+  /** @} */
 	} // namespace VIEW
 } // namespace BALL
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorRGBA.h,v 1.9 2003/02/21 16:07:09 anhi Exp $
+// $Id: colorRGBA.h,v 1.10 2003/02/25 13:28:06 sturm Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
 #define BALL_VIEW_DATATYPE_COLORRGBA_H
@@ -25,7 +25,9 @@ namespace BALL
 {
 	namespace VIEW 
 	{
-
+    /** \ingroup ViewDatatypeColors
+     *  @{
+     */
 		// forward declarations 
 		class ColorHSV;
 
@@ -593,7 +595,7 @@ namespace BALL
 #		ifndef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/DATATYPE/colorRGBA.iC>
 #		endif
-		
+  /** @} */		
 	} // namespace VIEW
 
 } // namespace BALL

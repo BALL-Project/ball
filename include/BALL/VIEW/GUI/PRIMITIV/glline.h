@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glline.h,v 1.10 2003/02/21 16:07:34 anhi Exp $
+// $Id: glline.h,v 1.11 2003/02/25 13:28:15 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLLINE_H
 #define BALL_VIEW_GUI_PRIMITIV_GLLINE_H
@@ -24,7 +24,9 @@ namespace BALL
 
 	namespace VIEW
 	{
-
+    /** \ingroup ViewGuiPrimitives
+     *  @{
+     */
 		/** GLLine class.
 				An instance of GLLine represents an instance of the geometric
 				visualization "line".
@@ -195,7 +197,7 @@ namespace BALL
 
 			//@}
 		};
-
+  /** @} */
 	} // namespace VIEW
 
 } // namespace BALL

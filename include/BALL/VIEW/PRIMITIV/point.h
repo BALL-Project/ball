@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: point.h,v 1.14 2003/02/21 16:08:06 anhi Exp $
+// $Id: point.h,v 1.15 2003/02/25 13:28:26 sturm Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_POINT_H
 #define BALL_VIEW_PRIMITIV_POINT_H
@@ -32,7 +32,10 @@ namespace BALL
 
 	namespace VIEW
 	{
-
+        /** \ingroup ViewPrimitives
+         *  @{
+         */
+    
 		/** Point class.
 				An instance of Point represents an instance of the geometric representation "point".
 				A point has the following properties. 
@@ -227,7 +230,7 @@ namespace BALL
 			virtual bool extract()
 				throw();
 		};
-
+  /** @} */
 	} // namespace VIEW
 
 } // namespace BALL

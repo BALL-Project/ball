@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: structureMapper.h,v 1.13 2003/02/21 16:06:58 anhi Exp $
+// $Id: structureMapper.h,v 1.14 2003/02/25 13:28:00 sturm Exp $
 
 #ifndef BALL_STRUCTURE_STRUCTUREMAPPER_H
 #define BALL_STRUCTURE_STRUCTUREMAPPER_H
@@ -39,7 +39,9 @@
 
 namespace BALL 
 {
-
+    /** \ingroup Structure
+     *  @{
+     */
 	using std::vector;
 	using std::map;
 
@@ -174,7 +176,7 @@ namespace BALL
 #	ifndef	BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/STRUCTURE/structureMapper.iC>
 #	endif
-
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_STRUCTURE_STRUCTUREMAPPER_H

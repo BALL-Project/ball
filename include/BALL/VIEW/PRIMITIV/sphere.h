@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sphere.h,v 1.15 2003/02/21 16:08:08 anhi Exp $
+// $Id: sphere.h,v 1.16 2003/02/25 13:28:27 sturm Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_SPHERE_H
 #define BALL_VIEW_PRIMITIV_SPHERE_H
@@ -31,7 +31,10 @@ namespace BALL
 	
 	namespace VIEW
 	{
-
+        /** \ingroup ViewPrimitives
+         *  @{
+         */
+       
 		/** Sphere class.			
 				An instance of Sphere represents an instance of the geometric representation "sphere".
 				A sphere has the following properties. 
@@ -260,7 +263,7 @@ namespace BALL
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/PRIMITIV/sphere.iC>
 #	endif
-		
+  /** @} */		
 	} // namespace VIEW
 
 } // namespace BALL

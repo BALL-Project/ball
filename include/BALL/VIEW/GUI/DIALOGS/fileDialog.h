@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fileDialog.h,v 1.11 2003/02/21 16:07:17 anhi Exp $
+// $Id: fileDialog.h,v 1.12 2003/02/25 13:28:09 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_DIALOGS_FILEDIALOG_H
 #define BALL_VIEW_GUI_DIALOGS_FILEDIALOG_H
@@ -16,7 +16,9 @@ namespace BALL
 {
 	namespace VIEW
 	{
-
+    /** \ingroup ViewGuiDialogs
+     *  @{
+     */
 		/** FileDialog class.
 				The class FileDialog is a base class for file dialogs. Its base classes are
 				 \link QFileDialog QFileDialog \endlink  (See QT documentation) and  \link ModularWidget ModularWidget \endlink .
@@ -136,7 +138,7 @@ namespace BALL
 #ifndef BALL_NO_INLINE_FUNCTIONS
 #	include <BALL/VIEW/GUI/DIALOGS/fileDialog.iC>
 #endif 
-
+  /** @} */
 		} // namespace VIEW
 
 	} // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: label.h,v 1.12 2003/02/21 16:08:03 anhi Exp $
+// $Id: label.h,v 1.13 2003/02/25 13:28:25 sturm Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_LABEL_H
 #define BALL_VIEW_PRIMITIV_LABEL_H
@@ -18,7 +18,7 @@
 #	include <BALL/VIEW/KERNEL/colorExtension1.h>
 #endif
 
-#ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
+#ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT
 # include <BALL/VIEW/KERNEL/geometricObject.h>
 #endif
 
@@ -30,6 +30,9 @@ namespace BALL
 {
 	namespace VIEW
 	{
+        /** \ingroup ViewPrimitives
+         *  @{
+         */
 
 		/** Label class.
 				An instance of Label represents an instance of the geometric representation "label".
@@ -270,6 +273,8 @@ namespace BALL
 #		ifndef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/PRIMITIV/label.iC>
 #		endif
+
+  /** @} */
 		
 	} // namespace VIEW
 

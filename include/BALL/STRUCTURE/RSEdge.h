@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RSEdge.h,v 1.25 2003/02/21 16:06:30 anhi Exp $
+// $Id: RSEdge.h,v 1.26 2003/02/25 13:27:53 sturm Exp $
 
 #ifndef BALL_STRUCTURE_RSEDGE_H
 #define BALL_STRUCTURE_RSEDGE_H
@@ -24,7 +24,9 @@
 
 namespace BALL
 {
-
+    /** \ingroup Surface
+     *  @{
+     */
 	class RSFace;
 	class RSVertex;
 	class ReducedSurface;
@@ -401,7 +403,7 @@ namespace BALL
 	//@}
 
 
-
+   /** @} */
 } // namespace BALL
 
 #endif // BALL_STRUCTURE_RSEDGE_H

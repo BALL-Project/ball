@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glsimpleBox.h,v 1.11 2003/02/21 16:07:38 anhi Exp $
+// $Id: glsimpleBox.h,v 1.12 2003/02/25 13:28:16 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLSIMPLEBOX_H
 #define BALL_VIEW_GUI_PRIMITIV_GLSIMPLEBOX_H
@@ -24,7 +24,9 @@ namespace BALL
 	
 	namespace VIEW
 	{
-
+    /** \ingroup ViewGuiPrimitives
+     *  @{
+     */
 		/** GLSimpleBox class.
 				An instance of GLSimpleBox represents an instance of the geometric
 				visualization "simpleBox".
@@ -197,7 +199,7 @@ namespace BALL
 
 			//@}
 		};
-
+  /** @} */
 	} // namespace VIEW
 
 } // namespace BALL

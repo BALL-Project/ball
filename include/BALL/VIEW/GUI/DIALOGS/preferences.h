@@ -18,7 +18,9 @@ namespace BALL
 {
 	namespace VIEW
 	{
-
+    /** \ingroup ViewGuiDialogs
+     *  @{
+     */
 		/** Preferences class.
 				The class Preferences is a tab dialog for other preference dialogs to be
 				inserted. An interface for adding and removing other tab dialogs is
@@ -149,7 +151,7 @@ namespace BALL
 
 			int number_of_tabs_;
 		};
-
+  /** @} */
 	} // namespace VIEW
 
 } // namespace BALL

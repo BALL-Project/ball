@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: path.h,v 1.5 2003/02/21 16:06:10 anhi Exp $
+// $Id: path.h,v 1.6 2003/02/25 13:28:04 sturm Exp $
 
 #ifndef BALL_COMMON_PATH_H
 #define BALL_COMMON_PATH_H
@@ -18,7 +18,9 @@ using std::vector;
 
 namespace BALL 
 {
-
+    /** \ingroup System
+     *  @{
+     */
 	/**	Data path management class.
 			This class is intended to provide a unique interface to 
 			directories where the data files needed by BALL reside.	 \par
@@ -95,7 +97,7 @@ namespace BALL
 		bool environment_checked_;
 		std::vector<std::string>	path_array_;
 	};
-
+  /** @} */
 } // namespace BALL
 
 

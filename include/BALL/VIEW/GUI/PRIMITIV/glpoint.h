@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glpoint.h,v 1.12 2003/02/21 16:07:36 anhi Exp $
+// $Id: glpoint.h,v 1.13 2003/02/25 13:28:16 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLPOINT_H
 #define BALL_VIEW_GUI_PRIMITIV_GLPOINT_H
@@ -24,7 +24,9 @@ namespace BALL
 
 	namespace VIEW
 	{
-
+    /** \ingroup ViewGuiPrimitives
+     *  @{
+     */
 		/** GLPoint class.				
 				An instance of GLPoint represents an instance of the geometric
 				visualization "point".
@@ -194,7 +196,7 @@ namespace BALL
 				throw();
 			//@}
 		};
-
+  /** @} */
 	} // namespace VIEW
 
 } // namespace BALL

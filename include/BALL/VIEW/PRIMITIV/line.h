@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: line.h,v 1.13 2003/02/21 16:08:04 anhi Exp $
+// $Id: line.h,v 1.14 2003/02/25 13:28:26 sturm Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_LINE_H
 #define BALL_VIEW_PRIMITIV_LINE_H
@@ -28,7 +28,11 @@ namespace BALL
 
 	namespace VIEW
 	{
-
+        /** \ingroup ViewPrimitives
+         *  @{
+         */
+         
+         
 		/** Line class.
 				An instance of Line represents an instance of the geometric representation "line".
 				A line has the following properties. 
@@ -228,7 +232,7 @@ namespace BALL
 			virtual bool extract()
 				throw();
 		};
-
+  /** @} */
 	} // namespace VIEW
 
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glPrimitiveManager.h,v 1.12 2003/02/21 16:07:28 anhi Exp $
+// $Id: glPrimitiveManager.h,v 1.13 2003/02/25 13:28:13 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLPRIMITIVEMANAGER_H
 #define BALL_VIEW_GUI_KERNEL_GLPRIMITIVEMANAGER_H
@@ -24,6 +24,9 @@ namespace BALL
 {
 	namespace VIEW
 	{
+    /** \ingroup ViewGuiKernelOpenGLPredefined
+     *  @{
+     */
 		/**	GLDisplayListObject_ class.
 				The class GLDisplayListObject_ is a base class for the concrete display list
 				classes  \link GLSphereDisplayLists_ GLSphereDisplayLists_ \endlink ,  \link GLTubeDisplayLists_ GLTubeDisplayLists_ \endlink  and
@@ -686,7 +689,7 @@ namespace BALL
 #			include <BALL/VIEW/GUI/KERNEL/glPrimitiveManager.iC>
 #		endif 
 
-
+  /** @} */
 	} // namespace VIEW
 
 } // namespace BALL

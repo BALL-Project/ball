@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.12 2003/02/21 16:07:47 anhi Exp $
+// $Id: scene.h,v 1.13 2003/02/25 13:28:19 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_SCENE_H
 #define BALL_VIEW_GUI_WIDGETS_SCENE_H
@@ -57,7 +57,9 @@ namespace BALL
 {
 	namespace VIEW
 	{
-
+    /** \ingroup ViewGuiWidgets
+     *  @{
+     */
 		// necessary forward declaration
 		class ExternalRenderer;
 
@@ -879,7 +881,7 @@ namespace BALL
 #		ifndef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/GUI/WIDGETS/scene.iC>
 #		endif
-
+  /** @} */
 	} // namespace VIEW
 
 } // namespace BALL

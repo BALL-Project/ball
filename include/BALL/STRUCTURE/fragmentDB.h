@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentDB.h,v 1.18 2003/02/21 16:06:41 anhi Exp $
+// $Id: fragmentDB.h,v 1.19 2003/02/25 13:27:55 sturm Exp $
 
 #ifndef BALL_STRUCTURE_FRAGMENTDB_H
 #define BALL_STRUCTURE_FRAGMENTDB_H
@@ -51,7 +51,9 @@
 
 namespace BALL 
 {
-
+    /** \ingroup Structure
+     *  @{
+     */
 	/**	FragmentDB - fragment database class.
 			The fragment database is used to store commonly
 			used subunits as amino acids, sugars and the like.
@@ -502,7 +504,7 @@ namespace BALL
 
 		StringHashMap<StringHashMap<String>*>	standards_;
 	};
-
+  /** @} */
 } // namespace BALL 
 
 

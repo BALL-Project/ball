@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricProperties.h,v 1.15 2003/02/21 16:06:42 anhi Exp $
+// $Id: geometricProperties.h,v 1.16 2003/02/25 13:27:56 sturm Exp $
 
 #ifndef BALL_STRUCTURE_GEOMETRICPROPERTIES_H
 #define BALL_STRUCTURE_GEOMETRICPROPERTIES_H
@@ -40,7 +40,9 @@ using std::vector;
 
 namespace BALL 
 {
-
+    /** \ingroup Structure
+     *  @{
+     */
 	/**	@name	Geometric property processors.
 			The applicators, processors, and collectors described in 
 			this chapter are used to extract geometric properties out
@@ -315,7 +317,7 @@ namespace BALL
 		throw(Exception::IllegalPosition);
 
 	//@}
-
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_STRUCTURE_GEOMETRICPROPERTIES_H

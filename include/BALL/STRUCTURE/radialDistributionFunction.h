@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: radialDistributionFunction.h,v 1.14 2003/02/21 16:06:50 anhi Exp $
+// $Id: radialDistributionFunction.h,v 1.15 2003/02/25 13:27:57 sturm Exp $
 
 #ifndef BALL_STRUCTURE_RADIALDISTRIBUTIONFUNCTION_H
 #define BALL_STRUCTURE_RADIALDISTRIBUTIONFUNCTION_H
@@ -12,7 +12,9 @@
 
 namespace BALL
 {
-
+    /** \ingroup RDF
+     *  @{
+     */
 	/** Radial distribution function.
 			This class provides an interface for the use of radial distribution
 			functions. These functions describe the deviation of the number density
@@ -134,7 +136,7 @@ namespace BALL
 		bool								valid_;
 
 	};
-
+   /** @} */
 }
 
 #endif // BALL_STRUCTURE_RADIALDISTRIBUTIONFUNCTION_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SESFace.h,v 1.21 2003/02/21 16:06:37 anhi Exp $
+// $Id: SESFace.h,v 1.22 2003/02/25 13:27:54 sturm Exp $
 
 #ifndef BALL_STRUCTURE_SESFACE_H
 #define BALL_STRUCTURE_SESFACE_H
@@ -24,7 +24,9 @@
 
 namespace BALL
 {
-
+    /** \ingroup Surface
+     *  @{
+     */
 	class SESEdge;
 	class SESVertex;
 	class SolventExcludedSurface;
@@ -301,7 +303,7 @@ namespace BALL
 
 	//@}
 
-
+   /** @} */
 } // namespace BALL
 
 #endif // BALL_STRUCTURE_SESFACE_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2DWidget.h,v 1.20 2003/01/06 17:42:37 amoll Exp $
+// $Id: regularData2DWidget.h,v 1.21 2003/02/25 13:28:19 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGET_REGULARDATA2DWIDGET_H
 #define BALL_VIEW_GUI_WIDGET_REGULARDATA2DWIDGET_H
@@ -62,7 +62,9 @@ namespace BALL
 {
 	namespace VIEW
 	{
-
+    /** \ingroup ViewGuiWidgets
+     *  @{
+     */
 /** New RegularData2D Message Class.
  */
 class NewRegularData2DMessage
@@ -330,7 +332,7 @@ class RegularData2DWidget
   bool isOverlay_;
 	
 };
-
+  /** @} */
 } } // namespaces
 
 #endif

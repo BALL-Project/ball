@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rotamerLibrary.h,v 1.19 2003/02/21 16:06:54 anhi Exp $
+// $Id: rotamerLibrary.h,v 1.20 2003/02/25 13:27:59 sturm Exp $
 
 #ifndef BALL_STRUCTURE_ROTAMERLIBRARY_H
 #define BALL_STRUCTURE_ROTAMERLIBRARY_H
@@ -24,7 +24,9 @@
 
 namespace BALL
 {
-
+    /** \ingroup Structure
+     *  @{
+     */
 	/** Rotamer class.
 			<b>Definition:</b> BALL/STRUCTURE/rotamerLibrary.h
 	*/
@@ -322,7 +324,7 @@ namespace BALL
 #ifndef BALL_NO_INLINE_FUNCTIONS
 #	include <BALL/STRUCTURE/rotamerLibrary.iC>
 #endif
-
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_STRUCTURE_ROTAMERLIBRARY_H

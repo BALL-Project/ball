@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorUnit.h,v 1.14 2003/02/21 16:07:10 anhi Exp $
+// $Id: colorUnit.h,v 1.15 2003/02/25 13:28:06 sturm Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLORUNIT_H
 #define BALL_VIEW_DATATYPE_COLORUNIT_H
@@ -21,7 +21,9 @@ namespace BALL
 {
 	namespace VIEW
 	{
-
+    /** \ingroup ViewDatatypeFormat
+     *  @{
+     */
 		/** ColorUnit class.
 				An instance of ColorUnit can represent a value for the red, green, blue
 				and alpha component of the class  \link ColorRGBA ColorRGBA \endlink . Furthermore this class is
@@ -835,7 +837,7 @@ namespace BALL
 #		ifndef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/DATATYPE/colorUnit.iC>
 #		endif
-
+  /** @} */
 	} // namespace VIEW
 
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fileSystem.h,v 1.8 2003/02/21 16:06:09 anhi Exp $
+// $Id: fileSystem.h,v 1.9 2003/02/25 13:28:04 sturm Exp $
 
 #ifndef BALL_SYSTEM_FILESYSTEM_H
 #define BALL_SYSTEM_FILESYSTEM_H
@@ -30,7 +30,9 @@
 
 namespace BALL 
 {
-
+    /** \ingroup System
+     *  @{
+     */
 	/**	File System Class
 			This class is a wrapper around some very basic properties
 			of the machine's file system properties.
@@ -106,7 +108,7 @@ namespace BALL
 		static void expandTilde_(String& path)
 			throw();
 	};
-
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_SYSTEM_FILESYSTEM_H

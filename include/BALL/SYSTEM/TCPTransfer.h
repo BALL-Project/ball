@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer.h,v 1.12 2003/02/21 16:06:06 anhi Exp $
+// $Id: TCPTransfer.h,v 1.13 2003/02/25 13:28:03 sturm Exp $
 
 #ifndef BALL_SYSTEM_TCPTRANSFER
 #define BALL_SYSTEM_TCPTRANSFER
@@ -20,7 +20,9 @@
 
 namespace BALL
 {
-
+    /** \ingroup System
+     *  @{
+     */
 	/** Class for TCPTransfers.
 	 * 	You can use http and ftp protocol to transfer files
 	 * 	from the internet and store them in an ofstream.
@@ -284,7 +286,7 @@ namespace BALL
 				void operator = (TCPTransfer)
 					throw();
 	};
-
+  /** @} */
 }
 
 #endif // BALL_SYSTEM_TCPTRANSFER_H 

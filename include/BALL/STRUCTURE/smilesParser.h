@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smilesParser.h,v 1.6 2003/02/21 16:06:55 anhi Exp $
+// $Id: smilesParser.h,v 1.7 2003/02/25 13:27:59 sturm Exp $
 
 #ifndef BALL_STRUCTURE_SMILES_PARSER_H
 #define BALL_STRUCTURE_SMILES_PARSER_H
@@ -24,7 +24,9 @@
 
 namespace BALL 
 {
-
+    /** \ingroup Structure
+     *  @{
+     */
 	/** @name	SMILES Parser.
 			A simple parser for SMILES strings. Output is a system, the atom coordinates
 			however are all zero! The system contains only connectivity data (topology) of
@@ -173,7 +175,7 @@ namespace BALL
 		std::vector<SPAtom*>	all_atoms_;
 		static SmilesParser*	current_parser_;
 	};
-
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_STRUCTURE_SMILES_PARSER_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.h,v 1.4 2003/02/21 16:07:20 anhi Exp $
+// $Id: POVRenderer.h,v 1.5 2003/02/25 13:28:09 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_FUNCTOR_POVRENDERER_H
 #define BALL_VIEW_GUI_FUNCTOR_POVRENDERER_H
@@ -18,6 +18,9 @@ namespace BALL
 {
 	namespace VIEW
 	{
+    /** \ingroup ViewGuiFunctors
+     *  @{
+     */
 		/** POVRenderer class.
 		 		This class walks over all the geometric primitives in a  \link Scene Scene \endlink 
 				and exports them into a data file in the POVRay 1.5 format, which can
@@ -110,7 +113,7 @@ namespace BALL
 				File outfile_;
 
 		};
-
+  /** @} */
 	} // namespace BALL
 } // namespace VIEW
 

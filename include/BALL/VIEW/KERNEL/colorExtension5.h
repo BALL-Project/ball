@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorExtension5.h,v 1.10 2003/02/21 16:07:56 anhi Exp $
+// $Id: colorExtension5.h,v 1.11 2003/02/25 13:28:23 sturm Exp $
 
 #ifndef BALL_VIEW_KERNEL_COLOREXTENSION5_H
 #define BALL_VIEW_KERNEL_COLOREXTENSION5_H
@@ -23,7 +23,9 @@ namespace BALL
 
 	namespace VIEW
 	{
-
+    /** \ingroup ViewKernelGeometricPrimitives
+     *  @{
+     */
 		/** ColorExtension5 class.
 				The class ColorExtension5 is used as a base class for all geometric 
 				objects that needs five colors  \link ColorRGBA ColorRGBA \endlink . It provides the derived
@@ -308,7 +310,7 @@ namespace BALL
 #		ifndef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/KERNEL/colorExtension5.iC>
 #		endif
-
+  /** @} */
 	} // namespace VIEW
 
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: gltube.h,v 1.11 2003/02/21 16:07:40 anhi Exp $
+// $Id: gltube.h,v 1.12 2003/02/25 13:28:17 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLTUBE_H
 #define BALL_VIEW_GUI_PRIMITIV_GLTUBE_H
@@ -24,7 +24,9 @@ namespace BALL
 
 	namespace VIEW
 	{
-
+    /** \ingroup ViewGuiPrimitives
+     *  @{
+     */
 		/** GLTube class.
 				An instance of GLTube represents an instance of the geometric
 				visualization "tube".
@@ -199,7 +201,7 @@ namespace BALL
 
 			//@}
 		};
-
+  /** @} */
 	} // namespace VIEW
 
 } // namespace BALL

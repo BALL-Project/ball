@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: connectionObject.h,v 1.12 2003/02/21 16:07:57 anhi Exp $
+// $Id: connectionObject.h,v 1.13 2003/02/25 13:28:23 sturm Exp $
 
 #ifndef BALL_VIEW_KERNEL_CONNECTIONOBJECT_H
 #define BALL_VIEW_KERNEL_CONNECTIONOBJECT_H
@@ -37,6 +37,10 @@ namespace BALL
 
 	namespace VIEW
 	{
+
+    /** \ingroup ViewKernelConnectivity
+     *  @{
+     */
 		/** ConnectionObject class.		
 				The class ConnectionObject is a base class for all widgets and dialogs that
 				handles communication between these classes through message posting.
@@ -261,7 +265,7 @@ namespace BALL
 #		ifndef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/KERNEL/connectionObject.iC>
 #		endif
-		
+  /** @} */		
 	} // namespace VIEW
 
 } // namespace BALL

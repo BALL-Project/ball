@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertex1.h,v 1.10 2003/02/21 16:08:01 anhi Exp $
+// $Id: vertex1.h,v 1.11 2003/02/25 13:28:24 sturm Exp $
 
 #ifndef BALL_VIEW_KERNEL_VERTEX1_H
 #define BALL_VIEW_KERNEL_VERTEX1_H
@@ -19,7 +19,9 @@ namespace BALL
 	
 	namespace VIEW
 	{
-
+    /** \ingroup ViewKernelGeometricPrimitives
+     *  @{
+     */
 		/** Vertex class.
 				The class Vertex is used as a base class for all geometric objects that
 				have a single vertex. It provides the derived class with methods for accessing
@@ -299,7 +301,7 @@ namespace BALL
 #		ifndef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/KERNEL/vertex1.iC>
 #		endif
-		
+  /** @} */
 	} // namespace VIEW
 	
 } // namespace BALL

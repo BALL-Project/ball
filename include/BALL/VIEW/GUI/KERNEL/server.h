@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: server.h,v 1.14 2003/02/21 16:07:32 anhi Exp $
+// $Id: server.h,v 1.15 2003/02/25 13:28:14 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_SERVER_H
 #define BALL_VIEW_GUI_KERNEL_SERVER_H
@@ -52,7 +52,9 @@ namespace BALL
 {
 	namespace VIEW
 	{
-
+    /** \ingroup ViewGuiKernelServer
+     *  @{
+     */
 		/** Server class.
 				The class Server handles all incoming  \link PersistentObject PersistentObject \endlink  objects,
 				converts them into  \link Composite Composite \endlink  objects (if possible) and sents
@@ -397,7 +399,7 @@ namespace BALL
 #		ifndef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/GUI/KERNEL/server.iC>
 #		endif
-
+  /** @} */
 	}// namespace VIEW
 		
 }// namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1DWidget.h,v 1.10 2003/01/06 17:42:37 amoll Exp $
+// $Id: regularData1DWidget.h,v 1.11 2003/02/25 13:28:19 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGET_REGULARDATA1DWIDGET_H
 #define BALL_VIEW_GUI_WIDGET_REGULARDATA1DWIDGET_H
@@ -41,7 +41,9 @@ namespace BALL
 {
 	namespace VIEW
 	{
-
+    /** \ingroup ViewGuiWidgets
+     *  @{
+     */
 /**  New RegularData1D Message Classic.
  */
 class NewRegularData1DMessage: public CompositeMessage
@@ -173,6 +175,6 @@ class RegularData1DWidget
   RegularData1D* spec_;
 	
 };
-
+  /** @} */
 } } // namespaces
 #endif // BALL_VIEW_GUI_WIDGET_REGULARDATA1DWIDGET_H

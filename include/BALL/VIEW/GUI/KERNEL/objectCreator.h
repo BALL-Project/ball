@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: objectCreator.h,v 1.9 2003/02/21 16:07:31 anhi Exp $
+// $Id: objectCreator.h,v 1.10 2003/02/25 13:28:14 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_OBJECTCREATOR_H
 #define BALL_VIEW_GUI_KERNEL_OBJECTCREATOR_H
@@ -32,7 +32,9 @@ namespace BALL
 {
 	namespace VIEW
 	{
-
+    /** \ingroup ViewGuiKernelServer
+     *  @{
+     */
 		/** ObjectCreator class.
 				The class ObjectCreator is a base class for converting  \link PersistentObject PersistentObject \endlink 
 				objects into  \link Composite Composite \endlink  objects. It defines methods for initialization
@@ -139,7 +141,7 @@ namespace BALL
 			TextPersistenceManager pm_;
 		};
 
-
+  /** @} */
 	}// namespace VIEW
 		
 }// namespace BALL

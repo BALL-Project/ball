@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: events.h,v 1.10 2003/02/21 16:07:42 anhi Exp $
+// $Id: events.h,v 1.11 2003/02/25 13:28:17 sturm Exp $
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -918,7 +918,9 @@ namespace BALL
 
 	namespace VIEW
 	{
-
+    /** \ingroup ViewGuiWidgets
+     *  @{
+     */
 		/* forward */
 		class Scene;
 
@@ -2042,7 +2044,7 @@ namespace BALL
 #		ifndef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/GUI/WIDGETS/events.iC>
 #		endif
-
+  /** @} */
 	} // namespace VIEW
 
 } // namespace BALL

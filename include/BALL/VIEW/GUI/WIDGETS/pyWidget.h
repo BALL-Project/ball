@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.8 2003/02/21 16:07:45 anhi Exp $
+// $Id: pyWidget.h,v 1.9 2003/02/25 13:28:18 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_PYWIDGET_H
 #define BALL_VIEW_GUI_WIDGETS_PYWIDGET_H
@@ -24,7 +24,9 @@ namespace BALL
 {
 	namespace VIEW
 	{
-
+    /** \ingroup ViewGuiWidgets
+     *  @{
+     */
 /** Python Widget class.
 		<b>Definition:</b> BALL/VIEW/GUI/WIDGETS/pyWidget.h
 */
@@ -150,7 +152,7 @@ class PyWidget
 	Position				history_position_;
 	String					current_line_;
 }; 
-
+  /** @} */
 } } // namespaces
 	
 #endif // BALL_VIEW_GUI_WIDGETS_PYWIDGET_H

@@ -20,7 +20,9 @@ namespace BALL
 {
 	namespace VIEW
 	{
-
+    /** \ingroup ViewGuiDialogs
+     *  @{
+     */
 		class ColorMeshDialog 
 			: public ColorMeshDialogData
 		{ 
@@ -55,7 +57,7 @@ namespace BALL
 		protected:
 				QColor setColor(QPushButton* button);
 		};
-
+  /** @} */
 	}
 }
 

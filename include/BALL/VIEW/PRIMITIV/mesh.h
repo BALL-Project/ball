@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mesh.h,v 1.14 2003/02/21 16:08:05 anhi Exp $
+// $Id: mesh.h,v 1.15 2003/02/25 13:28:26 sturm Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_MESH_H
 #define BALL_VIEW_PRIMITIV_MESH_H
@@ -31,7 +31,11 @@ namespace BALL
 	
 	namespace VIEW
 	{
-
+        /** \ingroup ViewPrimitives
+         *  @{
+         */
+         
+         
 		/** Mesh class.			
 				An instance of Mesh represents an instance of the geometric representation "mesh".
 				A mesh has the following properties. 
@@ -227,7 +231,7 @@ namespace BALL
 			virtual bool extract()
 				throw();
 		};
-
+  /** @} */
 	} // namespace VIEW
 
 } // namespace BALL

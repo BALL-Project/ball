@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: information.h,v 1.9 2003/02/21 16:07:15 anhi Exp $
+// $Id: information.h,v 1.10 2003/02/25 13:28:08 sturm Exp $
 
 #ifndef BALL_VIEW_FUNCTOR_INFORMATION_H
 #define BALL_VIEW_FUNCTOR_INFORMATION_H
@@ -53,7 +53,9 @@ namespace BALL
 
 	namespace VIEW
 	{
-		
+    /** \ingroup ViewFunctors
+     *  @{
+     */		
 		/** Information class.
 				The class Information is a base class for information objects.
 				This class retrieves information concerning
@@ -242,7 +244,7 @@ namespace BALL
 #			ifndef BALL_NO_INLINE_FUNCTIONS
 #				include <BALL/VIEW/FUNCTOR/information.iC>
 #			endif
-
+  /** @} */
 	} // namespace VIEW
 
 } // namespace BALL

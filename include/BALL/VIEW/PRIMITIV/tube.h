@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: tube.h,v 1.15 2003/02/21 16:08:09 anhi Exp $
+// $Id: tube.h,v 1.16 2003/02/25 13:28:27 sturm Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_TUBE_H
 #define BALL_VIEW_PRIMITIV_TUBE_H
@@ -26,7 +26,10 @@ namespace BALL
 {
 	namespace VIEW
 	{
-
+        /** \ingroup ViewPrimitives
+         *  @{
+         */
+         
 		/** Tube class.				
 				An instance of Tube represents an instance of the geometric representation "tube".
 				A tube has the following properties. 
@@ -277,7 +280,7 @@ namespace BALL
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/PRIMITIV/tube.iC>
 #	endif
-		
+  /** @} */		
 	} // namespace VIEW
 	 
 } // namespace BALL

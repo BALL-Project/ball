@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.h,v 1.13 2003/02/21 16:07:44 anhi Exp $
+// $Id: modularWidget.h,v 1.14 2003/02/25 13:28:18 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
 #define BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
@@ -34,6 +34,9 @@ namespace BALL
 {
 	namespace VIEW
 	{
+    /** \ingroup ViewGuiWidgets
+     *  @{
+     */
 		/**	The ModularWidget class.
 				The base class for all modular widgets.
 				BALLVIEW provides a simple mechanism for Rapid Application Prototyping based 
@@ -248,7 +251,7 @@ namespace BALL
 				throw();
 			//@}			
 		}; 
-
+  /** @} */
 	} // namespace VIEW
 
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: gllabel.h,v 1.9 2003/02/21 16:07:33 anhi Exp $
+// $Id: gllabel.h,v 1.10 2003/02/25 13:28:15 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLLABEL_H
 #define BALL_VIEW_GUI_PRIMITIV_GLLABEL_H
@@ -28,7 +28,9 @@ namespace BALL
 	
 	namespace VIEW
 	{
-
+    /** \ingroup ViewGuiPrimitives
+     *  @{
+     */
 		/** GLLabel class.
 				An instance of GLLabel represents an instance of the geometric
 				visualization "label".
@@ -263,7 +265,7 @@ namespace BALL
 #		ifndef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/GUI/PRIMITIV/gllabel.iC>
 #		endif
-		
+	/** @} */
 	} // namespace VIEW
 
 } // namespace BALL

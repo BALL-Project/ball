@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: externalRenderer.h,v 1.5 2003/02/21 16:07:22 anhi Exp $
+// $Id: externalRenderer.h,v 1.6 2003/02/25 13:28:10 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_FUNCTOR_EXTERNALRENDERER_H
 #define BALL_VIEW_GUI_FUNCTOR_EXTERNALRENDERER_H
@@ -18,7 +18,9 @@ namespace BALL
 {
 	namespace VIEW
 	{
-
+    /** \ingroup ViewGuiFunctors
+     *  @{
+     */
 		/** ExternalRenderer class.
 		    This class provides an interface for exporting the glObjects contained
 				in a Scene to the file format of an external renderer.
@@ -85,7 +87,7 @@ namespace BALL
 		  protected:
 			  const Scene *scene_;
 		};
-
+  /** @} */
 	} // namespace VIEW
 
 }  // namespace BALL

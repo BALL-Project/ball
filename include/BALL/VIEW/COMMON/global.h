@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: global.h,v 1.10 2003/02/21 16:07:06 anhi Exp $
+// $Id: global.h,v 1.11 2003/02/25 13:28:05 sturm Exp $
 
 #ifndef BALL_VIEW_COMMON_GLOBAL_H
 #define BALL_VIEW_COMMON_GLOBAL_H
@@ -14,6 +14,9 @@ namespace BALL
 {
 	namespace VIEW
 	{
+    /** \ingroup ViewCommon
+     *  @{
+     */
 		/**     @name Type aliases defined by VIEW
 						These predefined types are used in VIEW for portability and
 						comprehensibility.
@@ -79,7 +82,7 @@ namespace BALL
 				{
     		}
 		};
-    
+  /** @} */    
 	} // namespace VIEW
 
 } // namespace BALL

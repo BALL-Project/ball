@@ -34,7 +34,9 @@ namespace BALL
 	
 	namespace VIEW
 	{
-
+    /** \ingroup ViewKernelLogView
+     *  @{
+     */
 		/** LogView class.
 				The class LogView records all messages sent to the  \link Log Log \endlink  object and
 				displays them as a text history. The class is derived from 
@@ -123,7 +125,7 @@ namespace BALL
 
 			std::stringstream strstream_;
 		};
-
+  /** @} */	
 	}// namespace VIEW
 		
 }// namespace BALL

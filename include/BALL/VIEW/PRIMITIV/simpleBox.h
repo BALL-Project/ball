@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: simpleBox.h,v 1.13 2003/02/21 16:08:07 anhi Exp $
+// $Id: simpleBox.h,v 1.14 2003/02/25 13:28:27 sturm Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_SIMPLEBOX_H
 #define BALL_VIEW_PRIMITIV_SIMPLEBOX_H
@@ -32,7 +32,10 @@ namespace BALL
 	
 	namespace VIEW
 	{
-
+        /** \ingroup ViewPrimitives
+         *  @{
+         */
+      
 		/** SimpleBox class.	
 				An instance of SimpleBox represents an instance of the geometric representation "Box".
 				A simpleBox is a box whose sides are parallel to the coordinate axes. Therefore only
@@ -234,7 +237,7 @@ namespace BALL
 			virtual bool extract()
 				throw();
 		};
-
+  /** @} */
 	} // namespace VIEW
 
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: socket.h,v 1.29 2003/02/21 16:06:11 anhi Exp $
+// $Id: socket.h,v 1.30 2003/02/25 13:28:04 sturm Exp $
 
 #ifndef BALL_SYSTEM_SOCKET_H
 #define BALL_SYSTEM_SOCKET_H
@@ -105,7 +105,9 @@
 
 namespace BALL 
 {
-	
+	  /** \ingroup System
+     *  @{
+     */
 	void errnoError_(const char* method_name);
 
 	/**	@name	Network socket support 
@@ -1037,7 +1039,7 @@ namespace BALL
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/SYSTEM/socket.iC>
 #	endif
-	
+  /** @} */
 } // namespace BALL
 
 #endif	// BALL_SYSTEM_SOCKET_H

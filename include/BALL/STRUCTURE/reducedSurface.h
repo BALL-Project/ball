@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reducedSurface.h,v 1.38 2003/02/21 16:06:52 anhi Exp $
+// $Id: reducedSurface.h,v 1.39 2003/02/25 13:27:58 sturm Exp $
 
 #ifndef BALL_STRUCTURE_REDUCEDSURFACE_H
 #define BALL_STRUCTURE_REDUCEDSURFACE_H
@@ -52,7 +52,9 @@
 
 namespace BALL
 {
-
+    /** \ingroup Surface
+     *  @{
+     */
 	class RSComputer;
 	class SolventExcludedSurface;
 	class SESComputer;
@@ -877,7 +879,7 @@ namespace BALL
 	};
 
 
-
+   /** @} */
 } // namespace BALL
 
 #endif  // BALL_STRUCTURE_REDUCEDSURFACE_H

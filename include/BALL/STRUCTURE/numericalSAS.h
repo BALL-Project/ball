@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: numericalSAS.h,v 1.20 2003/02/21 16:06:48 anhi Exp $
+// $Id: numericalSAS.h,v 1.21 2003/02/25 13:27:57 sturm Exp $
 
 #ifndef BALL_STRUCTURE_NUMERICALSAS_H
 #define BALL_STRUCTURE_NUMERICALSAS_H
@@ -20,6 +20,9 @@
 
 namespace BALL 
 {
+    /** \ingroup Surface
+     *  @{
+     */
 	class Atom;
 	class AtomContainer;
 	template <typename Key, typename T>
@@ -103,7 +106,7 @@ namespace BALL
 	float calculateSASAtomPoints(const AtomContainer& fragment, 
 											 				 std::vector< std::pair<Vector3, Surface> >& atom_surfaces,
 															 float probe_radius = 1.5,  Size number_of_dots = 400);
-
+   /** @} */
 } // namespace BALL
 
 #endif // BALL_STRUCTURE_NUMERICALSAS_H

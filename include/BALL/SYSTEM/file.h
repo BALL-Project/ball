@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.h,v 1.43 2003/02/21 16:06:08 anhi Exp $
+// $Id: file.h,v 1.44 2003/02/25 13:28:03 sturm Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -63,7 +63,9 @@
 
 namespace BALL 
 {
-
+    /** \ingroup System
+     *  @{
+     */
 	/**	This class handles automatic file transformation methods.
 		   \link File File \endlink  provides the ability to transform files on the fly using predefined 
 			transformation commands  (e.g. unix-style filters). For example, compressed 
@@ -763,7 +765,7 @@ namespace BALL
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/SYSTEM/file.iC>
 #	endif
-
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_SYSTEM_FILE_H
