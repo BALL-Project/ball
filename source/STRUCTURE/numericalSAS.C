@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: numericalSAS.C,v 1.22.4.1 2002/08/22 17:20:31 oliver Exp $
+// $Id: numericalSAS.C,v 1.22.4.2 2002/11/30 14:11:44 oliver Exp $
 
 #include <BALL/STRUCTURE/numericalSAS.h>
 #include <BALL/KERNEL/atom.h>
@@ -9,7 +9,7 @@
 #include <BALL/KERNEL/atomContainer.h>
 #include <BALL/MATHS/surface.h>
 
-#ifdef BALL_INCLUDE_VALUES
+#ifdef BALL_HAS_VALUES_H
 # include <values.h>
 #endif
 

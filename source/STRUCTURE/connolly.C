@@ -1,10 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: connolly.C,v 1.9.4.2 2002/08/22 17:20:31 oliver Exp $
+// $Id: connolly.C,v 1.9.4.3 2002/11/30 14:11:44 oliver Exp $
 
 #include <math.h>
-#ifdef BALL_INCLUDE_VALUES
+#ifdef BALL_HAS_VALUES_H
 # include <values.h> // required for M_PI on some systems
 #endif
 
