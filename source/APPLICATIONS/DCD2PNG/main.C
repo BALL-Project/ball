@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.8 2004/07/16 15:49:51 amoll Exp $
+// $Id: main.C,v 1.9 2004/07/20 11:50:11 amoll Exp $
 //
 
 // order of includes is important: first qapplication, than BALL includes
@@ -82,7 +82,7 @@ int main(int argc, char **argv)
 	// =============== initialize Mainframe ============================================
 	QApplication application(argc, argv);
 	BALL::Mainframe mainframe;
-//  	application.setMainWidget(&mainframe);
+ 	application.setMainWidget(&mainframe);
 	mainframe.setIdentifier("MAIN");
 	mainframe.registerThis();
 
@@ -98,8 +98,9 @@ int main(int argc, char **argv)
 	String dcd_file_name;
 	String molecular_file_name;
 	String working_dir = ".";
+	String project_file = "";
 	bool error = false;
-	System* system;
+	System* system = 0;
 	Position nr = 100000000;
 
 	DisplayProperties::getInstance(0)->enableCreationForNewMolecules(false);
@@ -110,7 +111,8 @@ int main(int argc, char **argv)
 		if (argument.hasSuffix(".bvp"))
 		{
 			DisplayProperties::getInstance(0)->enableCreationForNewMolecules(true);
-			mainframe.loadBALLViewProjectFile(argument);
+		 	mainframe.loadBALLViewProjectFile(argument);
+			project_file = argument;
 			continue;
 		}
 
@@ -164,7 +166,7 @@ int main(int argc, char **argv)
 		return 0;
 	}
 
-	if (dcd_file_name == "")
+	if (project_file == "")
 	{
 		DisplayProperties::getInstance(0)->enableCreationForNewMolecules(true);
  		DisplayProperties::getInstance(0)->applyButtonClicked();
@@ -256,9 +258,9 @@ int main(int argc, char **argv)
 			}
 
 			String pov_arg = povray_options + String(nr) + ".png" ;
-	   	execl ("/home/student/amoll/bin/povray", "povray", pov_arg.c_str(), 0);
-// 			std::cout << std::endl;
-// 	  	execl ("/bin/cat", "cat", 0);
+ 	   	execl ("/home/student/amoll/bin/povray", "povray", pov_arg.c_str(), 0);
+ 			std::cout << std::endl;
+ 	  	execl ("/bin/cat", "cat", 0);
 		}
 
 		nr++;
@@ -266,9 +268,10 @@ int main(int argc, char **argv)
 	}
 
 	std::cout << "Written " + String(nr2) + " images." << std::endl;
+	
 
-// 	mainframe.show();
-//   return application.exec();
+ 	mainframe.show();
+  return application.exec();
 	return 0;
 }
 

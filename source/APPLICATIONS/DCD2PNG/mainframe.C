@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.1 2004/07/15 15:20:02 amoll Exp $
+// $Id: mainframe.C,v 1.2 2004/07/20 11:50:11 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -38,11 +38,8 @@ namespace BALL
 		control_ = new MolecularControl(this, "Structures");
 		CHECK_PTR(control_);
 
-		geometric_control_ = new GeometricControl(this, "Representations");
-		CHECK_PTR(geometric_control_);
-
-		dataset_control_ = new DatasetControl(this, "Datasets");
-		CHECK_PTR(dataset_control_);
+ 		geometric_control_ = new GeometricControl(this, "Representations");
+ 		CHECK_PTR(geometric_control_);
 
 		scene_ = new Scene(this, "3D View");
 		CHECK_PTR(scene_);
@@ -55,8 +52,8 @@ namespace BALL
 		file_dialog_ = new MolecularFileDialog(this, "MolecularFileDialog");
 		CHECK_PTR(file_dialog_);
 
-		molecular_structure_ = new MolecularStructure(this, "MolecularStructure");
-		CHECK_PTR(molecular_structure_);
+ 		molecular_structure_ = new MolecularStructure(this, "MolecularStructure");
+ 		CHECK_PTR(molecular_structure_);
 
 
 			// initialize own preferences tab
@@ -92,25 +89,6 @@ namespace BALL
 	Mainframe::~Mainframe()
 		throw()
 	{
-	}
-
-	void Mainframe::exportPOVRay()
-	{
-		QFileDialog fd(this, "", true);
-		fd.setMode(QFileDialog::AnyFile);
-		fd.setCaption("Export POVRay File");
-		fd.setViewMode(QFileDialog::Detail);
-
-		if (!fd.exec()== QDialog::Accepted) return;
-
-		POVRenderer pr(fd.selectedFile().ascii());
-		scene_->exportScene(pr);
-	}
-
-	void Mainframe::openFile(const String& file)
-		throw()
-	{
-		file_dialog_->openFile(file);
 	}
 
 	void Mainframe::loadBALLViewProjectFile(const String& filename)
@@ -230,6 +208,9 @@ namespace BALL
 		}
 
 		display_properties_->enableCreationForNewMolecules(true);
+
+		Scene::getInstance(0)->fetchPreferences(in);
+		Scene::getInstance(0)->applyPreferences();
 	}
 
 	void Mainframe::setSelection_(Composite* c, HashSet<Position>& hash_set, Position& current)
