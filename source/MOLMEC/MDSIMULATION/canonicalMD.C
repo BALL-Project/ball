@@ -1,15 +1,16 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: canonicalMD.C,v 1.17 2002/02/27 12:21:36 sturm Exp $
+// $Id: canonicalMD.C,v 1.18 2004/04/17 14:14:55 oliver Exp $
 
-// BALL includes 
 #include <BALL/MOLMEC/MDSIMULATION/canonicalMD.h>
+#include <BALL/MOLMEC/COMMON/atomVector.h>
+#include <BALL/MOLMEC/COMMON/forceField.h>
+#include <BALL/MOLMEC/COMMON/snapShotManager.h>
+#include <BALL/KERNEL/PTE.h>
 
 namespace BALL
 {
-	using namespace std;
-
 	// The default constructor with no arguments
 	CanonicalMD::CanonicalMD()
 		throw()
@@ -52,9 +53,9 @@ namespace BALL
 
 
 	// The copy constructor 
-	CanonicalMD::CanonicalMD(const CanonicalMD& rhs, bool deep)
+	CanonicalMD::CanonicalMD(const CanonicalMD& rhs)
 		throw()
-		:	MolecularDynamics (rhs, deep)
+		:	MolecularDynamics (rhs)
 	{
 		// copy class specific variables 
 		mass_factor_ = rhs.mass_factor_;
@@ -89,8 +90,7 @@ namespace BALL
 		if (myforcefield.isValid() == false)
 		{
 			// The setup has failed for some reason. Output an error message.
-			Log.error() << "CanonicalMD::setup(): "
-				<< "forcefield is not valid." << endl;
+			Log.error() << "CanonicalMD::setup(): "	<< "forcefield is not valid." << std::endl;
 			valid_ = false;
 			return false;
 		}
@@ -155,7 +155,7 @@ namespace BALL
 		mass_factor_.clear();
 
 		vector<Atom*>::iterator it;
-		Aux_Factors item;
+		AuxFactors item;
 		Atom* atom_ptr;
 		Size index = 0;
 		mass_factor_.resize(atom_vector_.size());
@@ -181,8 +181,7 @@ namespace BALL
 	{
 		if (!valid_)	
 		{
-			Log.error() << "CanonicalMD::specificSetup(): "
-				<< "Instance is not valid." << endl;
+			Log.error() << "CanonicalMD::specificSetup(): "	<< "Instance is not valid." << std::endl;
 			return false;
 		}
 
@@ -228,7 +227,7 @@ namespace BALL
 		Size iteration;
 
 		vector <Atom*>::iterator atom_it;
-		vector <Aux_Factors>::iterator factor_it;
+		vector <AuxFactors>::iterator factor_it;
 
 		if (restart == false)
 		{
@@ -255,7 +254,7 @@ namespace BALL
 				|| (force_field_ptr_->isValid () == false))
 		{
 			Log.error() << "CanonicalMD::simulateIterations(): "
-				<< "MD simulation not possible, class is not valid." << endl;
+				<< "MD simulation not possible, class is not valid." << std::endl;
 			return;
 		}
 
@@ -309,16 +308,15 @@ namespace BALL
 				// update the current values for energy and temperature and 
 				// output them 
 				current_energy = force_field_ptr_->updateEnergy();
-				// updateInstantaneousTemperature();
 
 				Log.info()
 					<< "Canonical MD simulation System has potential energy "
 					<< current_energy << " kJ/mol at time " 
-					<< current_time_ + (double) iteration *time_step_ << " ps" << endl;
+					<< current_time_ + (double) iteration *time_step_ << " ps" << std::endl;
 				Log.info()
 					<< "Canonical MD simulation System has temperature  "
 					<< current_temperature_ << " at time " 
-					<< current_time_ + (double) iteration *time_step_ << " ps " << endl;
+					<< current_time_ + (double) iteration *time_step_ << " ps " << std::endl;
 			}
 
 			// check whether the rescaling will be successful
