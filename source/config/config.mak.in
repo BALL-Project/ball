@@ -2,7 +2,7 @@
 # Please do ONLY change config.mak.in, as config.mak is automagically 
 # created by configure from config.mak.in
 #
-# RCS ID: $Id: config.mak.in,v 1.6 2000/01/07 22:05:51 oliver Exp $
+# RCS ID: $Id: config.mak.in,v 1.7 2000/01/16 21:31:10 oliver Exp $
 #
 # author:    $author$
 # date:      $date$
@@ -58,6 +58,7 @@ OPENGL_LIBPATH      = @OPENGL_LIBPATH@
 OPENGL_LIBOPTS      = @OPENGL_LIBOPTS@
 QT_LIBPATH          = @QT_LIBPATH@
 QT_LIBOPTS          = @QT_LIBOPTS@
+MOC                 = @MOC@
 X11_LIBPATH         = @X11_LIBPATH@
 X11_LIBOPTS         = @X11_LIBOPTS@
 X11_LIBS            = @X11_LIBS@
@@ -82,8 +83,9 @@ CPPFLAGS_D		= @CPPFLAGS_D@
 CPPFLAGS_O		= @CPPFLAGS_O@
 BALL_CPPFLAGS = @BALL_CPPFLAGS@
 
-# MODE_FLAGS is set to DEBUG_FLAGS or OPTIMIZE_FLAGS, depending on the
-# BALL_DEBUG entry in configure.in
+# MODE_FLAGS is set to DEBUG_FLAGS or OPTIMIZE_FLAGS, this
+# can be controlled by specifying the configure switch 
+# --enable-optimization
 CPP_MODE_FLAGS	= @CPP_MODE_FLAGS@
 
 # CPP_MODE_FLAGS_NO_OPTIMIZATION is used in the (luckily quite rare!)
