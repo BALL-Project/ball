@@ -5,6 +5,7 @@ EXECUTABLES = \
 	AnalyticalGeometry_test\
 	AnalyticalSES_test\
 	Angle_test\
+	AssignShiftProcessor_test\
 	Atom_test\
 	AtomContainer_test\
 	AtomicContactEnergy_test\
