@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.h,v 1.27.2.3 2005/01/13 01:18:29 amoll Exp $
+// $Id: standardColorProcessor.h,v 1.27.2.4 2005/01/21 13:34:30 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
@@ -398,6 +398,10 @@ namespace BALL
 			private:
 
 			void colorGeometricObject_(GeometricObject& object);
+
+			//_ Colorize the mesh with the computed grid.
+			virtual void colorMeshFromGrid_(Mesh& mesh)
+				throw();
 
 			typedef HashMap<const Atom*, float> AtomDistanceHashMap;
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.50.2.6 2005/01/14 13:11:54 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.50.2.7 2005/01/21 13:34:02 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -599,7 +599,7 @@ namespace BALL
 
 			if (two_colored == 0)
 			{
-				if (composite->isSelected())
+				if (show_selection_ && composite->isSelected())
 				{
 					object.setColor(selection_color_);
 				}
@@ -722,6 +722,36 @@ namespace BALL
 			return Processor::CONTINUE;
 		}
 			
+		void AtomDistanceColorProcessor::colorMeshFromGrid_(Mesh& mesh)
+			throw()
+		{
+			if (atom_grid_.isEmpty()) return;
+			
+			mesh.colorList.resize(mesh.vertex.size());
+			
+			for (Position p = 0; p < mesh.vertex.size(); p++)
+			{
+				// make sure we found an atom
+				const Atom* atom = getClosestItem_(mesh.vertex[p]);
+
+				if (atom == 0)
+				{
+ 					mesh.colorList[p] = default_color_;
+				}
+				else
+				{
+					if (show_selection_ && atom->isSelected())
+					{
+						mesh.colorList[p] = selection_color_;
+					}
+					else
+					{
+ 						getColor(*atom, mesh.colorList[p]);
+					}
+				}
+			}
+		}
+
 		////////////////////////////////////////////////////////////////////
 		TemperatureFactorColorProcessor::TemperatureFactorColorProcessor()
 			: InterpolateColorProcessor()

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertexBuffer.C,v 1.1.2.12 2005/01/19 13:52:19 amoll Exp $
+// $Id: vertexBuffer.C,v 1.1.2.13 2005/01/21 13:34:21 amoll Exp $
 
 // prevent typedef clash under Linux
 #define QT_CLEAN_NAMESPACE
@@ -251,7 +251,7 @@ bool MeshBuffer::draw()
 	}
 	else if (drawing_mode == DRAWING_MODE_WIREFRAME)
 	{
-		glDrawElements(GL_TRIANGLE_STRIP, mesh_->triangle.size() * 3, GL_UNSIGNED_INT, 0);
+		// do nothing
 	}
 	else // dots
 	{
