@@ -1,13 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: buildBondsProcessor.h,v 1.5 2005/02/25 18:23:01 bertsch Exp $
+// $Id: buildBondsProcessor.h,v 1.6 2005/03/03 12:17:05 bertsch Exp $
 //
 
 /** TODO
-	* - method to reestimate bond orders of rings (due to bad aromatic
-	*		bond order detection, bc it is hard to distinguish between 
-	*		double and aromatic bonds)
+	* -	add more testing refine paramters
 	*/
 
 
@@ -77,6 +75,13 @@ namespace BALL
 				 *  aromatic rings.
 				 */
 				static const char* REESTIMATE_BONDORDERS_RINGS;
+
+				/** If this option is set to true an additional 
+				 * 	cleaning step is performed. Overpredicted bonds
+				 * 	like at multiple bonds at hydrogen or halogens
+				 * 	are deleted, only the shortest bond will stay.
+				 */
+				static const char* DELETE_OVERESTIMATED_BONDS;
 			};
 
 			/// Default values for options
@@ -90,6 +95,9 @@ namespace BALL
 
 				/// this option is off by default
 				static const bool REESTIMATE_BONDORDERS_RINGS;
+
+				/// this option is off by default
+				static const bool DELETE_OVERESTIMATED_BONDS;
 			};
 			//@}
 		
@@ -157,6 +165,12 @@ namespace BALL
 		
 			/// after the bonds are built, the orders are estimated
 			void estimateBondOrders_(AtomContainer& ac);
+
+			/// reestimate the bond orders of rings, as aromatic rings are often detected wrong
+			void reestimateBondOrdersRings_(AtomContainer& ac);
+
+			/// deletes bonds, like from multiple bonded hydrogens or halogens
+			void deleteOverestimatedBonds_(AtomContainer& ac);
 			
 			/// method to read the paramter file
 			void readBondLengthsFromFile_(const String& file_name = "") throw(Exception::FileNotFound);

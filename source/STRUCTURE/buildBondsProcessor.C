@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: buildBondsProcessor.C,v 1.5 2005/02/25 18:23:01 bertsch Exp $
+// $Id: buildBondsProcessor.C,v 1.6 2005/03/03 12:17:05 bertsch Exp $
 //
 
 #include <BALL/STRUCTURE/buildBondsProcessor.h>
@@ -16,6 +16,7 @@
 #include <BALL/MATHS/common.h>
 #include <BALL/FORMAT/resourceFile.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
+#include <BALL/QSAR/ringPerceptionProcessor.h>
 
 #include <cmath>
 
@@ -26,9 +27,11 @@ namespace BALL
 	const char* BuildBondsProcessor::Option::BONDLENGTHS_FILENAME = "bondlengths_filename";
 	const char* BuildBondsProcessor::Option::DELETE_EXISTING_BONDS = "delete_existing_bonds";
 	const char* BuildBondsProcessor::Option::REESTIMATE_BONDORDERS_RINGS = "reestimate_bondorders_rings";
+	const char* BuildBondsProcessor::Option::DELETE_OVERESTIMATED_BONDS = "delete_overestimated_bonds";
 	const char* BuildBondsProcessor::Default::BONDLENGTHS_FILENAME = "bond_lengths/bond_lengths.db";
 	const bool  BuildBondsProcessor::Default::DELETE_EXISTING_BONDS = false;
 	const bool  BuildBondsProcessor::Default::REESTIMATE_BONDORDERS_RINGS = false;
+	const bool  BuildBondsProcessor::Default::DELETE_OVERESTIMATED_BONDS = false;
 	
 	BuildBondsProcessor::BuildBondsProcessor()
 		: UnaryProcessor<AtomContainer>(),
@@ -109,7 +112,12 @@ namespace BALL
 
 		if (options.getBool(BuildBondsProcessor::Option::REESTIMATE_BONDORDERS_RINGS))
 		{
-			// TODO
+			reestimateBondOrdersRings_(ac);
+		}
+	
+		if (options.getBool(BuildBondsProcessor::Option::DELETE_OVERESTIMATED_BONDS))
+		{
+			deleteOverestimatedBonds_(ac);
 		}
 		
 		return Processor::CONTINUE;
@@ -214,7 +222,7 @@ namespace BALL
 		}
 		return num_bonds;
 	}
-
+	
 	void BuildBondsProcessor::estimateBondOrders_(AtomContainer& ac)
 	{
 		// iterate over all bonds
@@ -234,6 +242,94 @@ namespace BALL
 		}
 	}
 
+	void BuildBondsProcessor::reestimateBondOrdersRings_(AtomContainer& ac)
+	{
+		RingPerceptionProcessor rpp;
+		vector<vector<Atom*> > sssr;
+		typedef vector<vector<Atom*> >::iterator rit;
+		Size num_rings = rpp.calculateSSSR(sssr, ac);
+		if (num_rings != 0)
+		{
+			for (rit it=sssr.begin();it!=sssr.end();++it)
+			{
+				// count bonds and aromatic bonds
+				Size num_bonds(0), num_aro(0);
+				HashSet<Bond*> bonds;
+				for (vector<Atom*>::iterator ait1=it->begin();ait1!=it->end();++ait1)
+				{
+					vector<Atom*>::iterator ait2=ait1;
+					++ait2;
+					for (;ait2!=it->end();++ait2)
+					{
+						if ((*ait1)->isBoundTo(**ait2))
+						{
+							++num_bonds;
+							Bond * b = (*ait1)->getBond(**ait2);
+							bonds.insert(b);
+							if (b->getOrder() == Bond::ORDER__AROMATIC)
+							{
+								++num_aro;
+							}
+						}
+					}
+				}
+				// estimate if ring is aromatic or not
+				if (double(num_aro)/double(num_bonds) >= 0.5)
+				{
+					for (HashSet<Bond*>::Iterator bit=bonds.begin();bit!=bonds.end();++bit)
+					{
+						(*bit)->setOrder(Bond::ORDER__AROMATIC);
+					}
+				}
+				else
+				{
+					for (HashSet<Bond*>::Iterator bit=bonds.begin(); +bit;++bit)
+					{
+						if ((*bit)->getOrder() == Bond::ORDER__AROMATIC)
+						{
+							(*bit)->setOrder(Bond::ORDER__SINGLE);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	void BuildBondsProcessor::deleteOverestimatedBonds_(AtomContainer& ac)
+	{
+		AtomIterator ait;
+		BALL_FOREACH_ATOM(ac, ait)
+		{
+			Size group = ait->getElement().getGroup();
+			if (group == 1 || group == 17)
+			{
+				if (ait->countBonds() > 1)
+				{
+					Atom::BondIterator bit;
+					Bond * min_bond = 0;
+					float length= Limits<float>::max();
+					HashSet<Bond*> bonds;
+					for (bit=ait->beginBond(); +bit;++bit)
+					{
+						if (length > bit->getLength())
+						{
+							min_bond = &*bit;
+							length = bit->getLength();
+						}
+						bonds.insert(&*bit);
+					}
+					for (HashSet<Bond*>::ConstIterator it=bonds.begin(); +it; ++it)
+					{
+						if (*it != min_bond)
+						{
+							(*it)->destroy();
+						}
+					}
+				}
+			}
+		}
+	}
+	
 	bool BuildBondsProcessor::getMinBondLength_(float& length, Size an1, Size an2)
 	{
 		if (min_bond_lengths_.has(an1) && min_bond_lengths_[an1].has(an2))
@@ -332,7 +428,9 @@ namespace BALL
 													 BuildBondsProcessor::Default::REESTIMATE_BONDORDERS_RINGS);
 		options.setDefaultBool(BuildBondsProcessor::Option::DELETE_EXISTING_BONDS,
 													 BuildBondsProcessor::Default::DELETE_EXISTING_BONDS);
-
+		options.setDefaultBool(BuildBondsProcessor::Option::DELETE_OVERESTIMATED_BONDS,
+													 BuildBondsProcessor::Default::DELETE_OVERESTIMATED_BONDS);
+		
 		// test file or set default file
 		String filename(file_name);
 		if (file_name == "")
@@ -366,6 +464,7 @@ namespace BALL
 
 		if (entry1 == 0)
 		{
+			delete tree;
 			throw Exception::ParseError(__FILE__, __LINE__, filename, "BondLengthsDB");			
 		}
 
@@ -441,6 +540,8 @@ namespace BALL
 				}
 			}
 		}
+		delete tree;
 	}
+	
 	
 } // namespace BALL
