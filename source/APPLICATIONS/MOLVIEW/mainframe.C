@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.132 2004/03/04 17:14:00 amoll Exp $
+// $Id: mainframe.C,v 1.133 2004/04/07 15:21:05 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -21,6 +21,10 @@
 
 #include <qmenubar.h>
 #include <qlabel.h>
+
+#include <qprinter.h>
+#include <qpainter.h>
+#include <qpicture.h>
 
 namespace BALL
 {
@@ -129,6 +133,9 @@ namespace BALL
 		// File Menu
 		insertMenuEntry(MainControl::FILE_EXPORT, "POVRa&y scene", this, SLOT(exportPOVRay()), 
 										CTRL+Key_Y);
+
+		insertMenuEntry(MainControl::FILE, "Print", this, SLOT(printScene()));
+
 		// Display Menu
 		insertMenuEntry(MainControl::DISPLAY, "Toggle Fullscreen", this, SLOT(toggleFullScreen()),
 										ALT+Key_X);
@@ -256,4 +263,22 @@ namespace BALL
 	{
 		file_dialog_->openFile(file);
 	}
+
+
+	void Mainframe::printScene()
+	{
+		QPrinter printer;
+		if (!printer.setup(this)) return;
+		setStatusbarText("printing..");
+
+		QPainter p;
+		if(!p.begin(&printer)) return; 
+		QPicture pic;
+		pic.load(scene_->exportPNG().c_str());
+		p.drawPicture(0,0, pic);	
+		p.end();
+
+		setStatusbarText("finished printing");
+	}
+
 } 

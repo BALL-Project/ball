@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.68 2004/03/04 15:47:24 amoll Exp $
+// $Id: mainframe.h,v 1.69 2004/04/07 15:21:07 amoll Exp $
 //
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -90,6 +90,8 @@ namespace BALL
 		void exportPOVRay();
 
 		void exportVRML();
+
+		void printScene();
 
 		// Build menu
 		void computeIsoContourSurface();
