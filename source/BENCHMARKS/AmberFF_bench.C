@@ -1,4 +1,4 @@
-// $Id: AmberFF_bench.C,v 1.3.4.2 2002/02/27 02:37:11 oliver Exp $
+// $Id: AmberFF_bench.C,v 1.3.4.3 2002/02/28 03:54:48 oliver Exp $
 #include <BALL/CONCEPT/benchmark.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 
 using namespace BALL;
 
-START_BENCHMARK(AmberFF, 1.0, "$Id: AmberFF_bench.C,v 1.3.4.2 2002/02/27 02:37:11 oliver Exp $")
+START_BENCHMARK(AmberFF, 1.0, "$Id: AmberFF_bench.C,v 1.3.4.3 2002/02/28 03:54:48 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -29,7 +29,7 @@ START_SECTION(Setup, 0.05)
 	STOP_TIMER
 END_SECTION
 
-START_SECTION(Update w/o selection, 0.2)
+START_SECTION(Update w/o selection, 0.05)
 	START_TIMER
 		for (int i = 0; i < 20; i++)
 		{
@@ -40,16 +40,16 @@ END_SECTION
 
 START_SECTION(Energy calculation w/o selection, 0.2)
 	START_TIMER
-		for (int i = 0; i < 20; i++)
+		for (int i = 0; i < 50; i++)
 		{
 			amber.updateEnergy();	
 		}
 	STOP_TIMER
 END_SECTION
 
-START_SECTION(Second energy calculation w/o selection, 0.2)
+START_SECTION(Force calculation w/o selection, 0.2)
 	START_TIMER
-		for (int i = 0; i < 20; i++)
+		for (int i = 0; i < 50; i++)
 		{
 			amber.updateEnergy();
 		}
@@ -57,9 +57,9 @@ START_SECTION(Second energy calculation w/o selection, 0.2)
 END_SECTION
 
 S.beginResidue()->select();
-START_SECTION(Update w/ selection, 0.2)
+START_SECTION(Update w/ selection, 0.05)
 	START_TIMER
-		for (int i = 0; i < 20; i++)
+		for (int i = 0; i < 50; i++)
 		{
 			amber.update();
 		}
@@ -68,7 +68,16 @@ END_SECTION
 
 START_SECTION(Energy calculation w/ selection, 0.2)
 	START_TIMER
-		for (int i = 0; i < 20; i++)
+		for (int i = 0; i < 200; i++)
+		{
+			amber.updateEnergy();
+		}
+	STOP_TIMER
+END_SECTION
+
+START_SECTION(Force calculation w/ selection, 0.2)
+	START_TIMER
+		for (int i = 0; i < 200; i++)
 		{
 			amber.updateEnergy();
 		}
