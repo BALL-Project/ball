@@ -1,4 +1,4 @@
-// $Id: vertex2.h,v 1.5 2001/05/13 13:47:49 hekl Exp $
+// $Id: vertex2.h,v 1.6 2001/07/09 18:10:06 sturm Exp $
 
 #ifndef BALL_VIEW_KERNEL_VERTEX2_H
 #define BALL_VIEW_KERNEL_VERTEX2_H
@@ -29,9 +29,9 @@ namespace BALL
 				as well. To avoid segmentation faults these vector addresses must be 
 				valid as long as {\em *this} vertex2 exists.
 				@memo    Vertex2 class (BALL VIEW kernel framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/05/13 13:47:49 $
+				@author  $Author: sturm $
+				@version $Revision: 1.6 $
+				@date    $Date: 2001/07/09 18:10:06 $
 		*/
 		class Vertex2
 		{
@@ -181,10 +181,7 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the first vector of {\em *this} vertex2.
-					Access the constant reference of the first vector of {\em *this} vertex2.
-					@return      Vector3& constant reference to the first vector of {\em *this} vertex2
-					@see         setVertex1
-					@see         Vector3
+					For further information see \Ref{getVertex1}.
 			*/
 			const Vector3& getVertex1() const
 				throw();
@@ -284,10 +281,7 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the second vector of {\em *this} vertex2.
-					Access the constant reference of the second vector of {\em *this} vertex2.
-					@return      Vector3& constant reference to the second vector of {\em *this} vertex2
-					@see         setVertex2
-					@see         Vector3
+					For further information see \Ref{getVertex2}.
 			*/
 			const Vector3& getVertex2() const
 				throw();
