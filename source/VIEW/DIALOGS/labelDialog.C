@@ -116,14 +116,10 @@ void LabelDialog::onNotify(Message *message)
 		ControlSelectionMessage* selection = RTTI::castTo<ControlSelectionMessage>(*message);
 		selection_ = selection->getSelection();
 	}
-	else
-	{
-		// no molecular selection => clear the selection
-		selection_.clear();
-	}
 
 	// disabled apply button, if selection is empty
 	apply_button_->setEnabled(!selection_.empty());
+	getMainControl()->menuBar()->setItemEnabled(id_, !selection_.empty());
 }
 
 void LabelDialog::initializeWidget(MainControl& main_control)
@@ -132,47 +128,35 @@ void LabelDialog::initializeWidget(MainControl& main_control)
 	main_control.initPopupMenu(MainControl::DISPLAY)->setCheckable(true);
 
 	id_ = main_control.insertMenuEntry(MainControl::DISPLAY, "Add &Label", this,
-																		 SLOT(openDialog()), CTRL+Key_L);   
+																		 SLOT(show()), CTRL+Key_L);   
 }
 
 void LabelDialog::finalizeWidget(MainControl& main_control)
 	throw()
 {
 	main_control.removeMenuEntry(MainControl::DISPLAY, "Add &Label", this,
-															 SLOT(openDialog()), CTRL+Key_L);   
+															 SLOT(show()), CTRL+Key_L);   
 }
 
-void LabelDialog::checkMenu(MainControl& main_control)
-	throw()
+void LabelDialog::show()
 {
-	bool selected = (selection_.empty() ? false : true);
-
-	main_control.menuBar()->setItemEnabled(id_, selected);
-	main_control.menuBar()->setItemChecked(id_, isVisible());
-}
-
-void LabelDialog::openDialog()
-{
-	show();
+	LabelDialogData::show();
 	raise();
 }
 
 void LabelDialog::accept()
 {
 	// no selection present => return
-	if (selection_.empty())
-	{
-		return;
-	}
+	if (selection_.empty()) return;
 
 	// number of objects
-	unsigned long number_of_objects = 0;
+	Size number_of_objects = 0;
 
 	// center processor
 	GeometricCenterProcessor center_processor;
 	
 	// center to which the label will be attached
-	Vector3 center(0,0,0);
+	Vector3 center;
 
 	// process all objects in the selection list
 	List<Composite*>::Iterator list_it = selection_.begin();
@@ -210,7 +194,7 @@ void LabelDialog::accept()
 	notify_(scene_message);
 	
 	// clear status bar
-	setStatusbarText("");
+	setStatusbarText("Label added.");
 }
 
 void LabelDialog::editColor()
