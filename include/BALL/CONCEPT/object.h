@@ -1,4 +1,4 @@
-// $Id: object.h,v 1.9 2000/12/19 12:50:49 amoll Exp $ 
+// $Id: object.h,v 1.10 2001/01/19 23:54:18 amoll Exp $ 
 
 #ifndef BALL_CONCEPT_OBJECT_H
 #define BALL_CONCEPT_OBJECT_H
@@ -82,7 +82,7 @@ namespace BALL
 		/**	@name Comparison operators */
 		//@{
 		///
-		virtual bool operator == (const Object& object) const
+		bool operator == (const Object& object) const
 			throw();
 
 		///
