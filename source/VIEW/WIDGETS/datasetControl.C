@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.35 2004/11/27 20:56:08 amoll Exp $
+// $Id: datasetControl.C,v 1.35.4.1 2005/04/01 14:34:17 haid Exp $
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -17,6 +17,8 @@
 
 #include <BALL/VIEW/WIDGETS/regularData1DWidget.h>
 #include <BALL/VIEW/WIDGETS/regularData2DWidget.h>
+
+#include <../source/APPLICATIONS/DOCKVIEW/dockResult.h>
 
 #include <qpopupmenu.h>
 #include <qmenubar.h>
@@ -133,6 +135,8 @@ void DatasetControl::addTrajectory()
 void DatasetControl::insertTrajectory_(TrajectoryFile* file, System& system)
 	throw()
 {
+	Log.info() << " in insertTrajectory_ !!!!!!!!!!!!! " << std::endl;
+
 	if (file->getNumberOfAtoms() != system.countAtoms())
 	{
 		setStatusbarText("Number of atoms do not match. Aborting...");
@@ -155,6 +159,22 @@ void DatasetControl::insertTrajectory_(TrajectoryFile* file, System& system)
 	
 	QListViewItem* item = new QListViewItem(listview, name.c_str(), system.getName().c_str(), "Trajectory");
 	item_to_trajectory_[item] = manager;
+	insertComposite_(&system, item);
+}
+
+//
+void DatasetControl::addDockResult()
+	throw()
+{
+}
+
+void DatasetControl::insertDockResult_(DockResult* dock_res, System& system)
+	throw()
+{
+	QString name = dock_res->getDockingAlgorithm();
+	
+	QListViewItem* item = new QListViewItem(listview, name, system.getName().c_str(), "DockResult");
+	item_to_dock_result_[item] = dock_res;
 	insertComposite_(&system, item);
 }
 
@@ -211,6 +231,12 @@ void DatasetControl::onNotify(Message *message)
 		insertTrajectory_(ntm->getTrajectoryFile(), *(System*)ntm->getComposite());
 		return;
 	}
+	else if (RTTI::isKindOf<NewDockResultMessage>(*message))
+	{
+		NewDockResultMessage* dock_res_m = RTTI::castTo<NewDockResultMessage>(*message);
+		insertDockResult_(dock_res_m->getDockResult(), *(System*)dock_res_m->getComposite());
+		return;
+	}  
 	else if (RTTI::isKindOf<CompositeMessage>(*message))
   {
     CompositeMessage *composite_message = RTTI::castTo<CompositeMessage>(*message);
@@ -226,7 +252,7 @@ void DatasetControl::onNotify(Message *message)
 		{
 			deleteItem_(**lit);
 		}
-	}   
+	}
 }
 
 void DatasetControl::deleteItems_()
@@ -244,7 +270,8 @@ void DatasetControl::deleteItem_(QListViewItem& item)
 	if (!item_to_trajectory_.has(&item) &&
 			!item_to_grid1_.has(&item) &&
 			!item_to_grid2_.has(&item) &&
-			!item_to_grid3_.has(&item))
+			!item_to_grid3_.has(&item) &&
+			!item_to_dock_result_.has(&item))
 	{
 		return;
 	}
@@ -255,6 +282,13 @@ void DatasetControl::deleteItem_(QListViewItem& item)
 		item_to_trajectory_.erase(&item);
 		delete ssm;
 		setStatusbarText("deleted trajectory");
+	}
+	else if (item_to_dock_result_.has(&item))
+	{
+		DockResult* dock_res = item_to_dock_result_[&item];
+		item_to_dock_result_.erase(&item);
+		delete dock_res;
+		setStatusbarText("deleted dock result");
 	}
 	else if (item_to_grid1_.has(&item))
 	{
@@ -317,6 +351,11 @@ void DatasetControl::onContextMenu_(QListViewItem* item,  const QPoint& point, i
 		menu_entry_pos = context_menu.insertItem("Load into RAM", this, SLOT(bufferTrajectory_()));
 		if (nr_items > 1) context_menu.setItemEnabled(menu_entry_pos, false);
 	}
+	else if (item_to_dock_result_.has(item))
+	{
+		menu_entry_pos = context_menu.insertItem("Show Dock Results", this, SLOT(showDockResult_()));
+		if (nr_items > 1) context_menu.setItemEnabled(menu_entry_pos, false);
+	}
 	else if (item_to_grid1_.has(item))
 	{
 		menu_entry_pos = context_menu.insertItem("Save", this, SLOT(save1DGrid_()));
@@ -371,6 +410,23 @@ void DatasetControl::bufferTrajectory_()
 			setStatusbarText("Could not read trajectories into buffer! Out of memory?");
 		}
 	}
+}
+
+void DatasetControl::showDockResult_()
+{
+	if(result_dialog_ != 0)
+	{
+		result_dialog_->hide();
+		delete result_dialog_;
+		result_dialog_ = 0;
+	}
+	
+	result_dialog_ = new DockResultDialog(this);
+	
+	// setup result_dialog 
+	result_dialog_->setDockResult(item_to_dock_result_[context_item_]);
+	
+	result_dialog_->show();
 }
 
 void DatasetControl::visualiseGrid_()
