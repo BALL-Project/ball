@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>ColoringSettingsDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -7840,28 +7840,6 @@
                     <bool>true</bool>
                 </property>
             </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel1_4_3_3_7</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>4</x>
-                        <y>79</y>
-                        <width>130</width>
-                        <height>30</height>
-                    </rect>
-                </property>
-                <property name="minimumSize">
-                    <size>
-                        <width>130</width>
-                        <height>0</height>
-                    </size>
-                </property>
-                <property name="text">
-                    <string>max value</string>
-                </property>
-            </widget>
             <widget class="QPushButton">
                 <property name="name">
                     <cstring>force_max_color_button</cstring>
@@ -7901,7 +7879,51 @@
             </widget>
             <widget class="QLabel">
                 <property name="name">
-                    <cstring>force_max_value_label</cstring>
+                    <cstring>textLabel1_4_3_3_7_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>5</x>
+                        <y>117</y>
+                        <width>130</width>
+                        <height>30</height>
+                    </rect>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>130</width>
+                        <height>0</height>
+                    </size>
+                </property>
+                <property name="text">
+                    <string>max value</string>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel1_4_3_3_7</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>4</x>
+                        <y>79</y>
+                        <width>130</width>
+                        <height>30</height>
+                    </rect>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>130</width>
+                        <height>0</height>
+                    </size>
+                </property>
+                <property name="text">
+                    <string>min value</string>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>force_min_value_label</cstring>
                 </property>
                 <property name="geometry">
                     <rect>
@@ -7935,9 +7957,45 @@
                     <set>WordBreak|AlignCenter</set>
                 </property>
             </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>force_max_value_label</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>232</x>
+                        <y>117</y>
+                        <width>50</width>
+                        <height>30</height>
+                    </rect>
+                </property>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>5</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>50</width>
+                        <height>30</height>
+                    </size>
+                </property>
+                <property name="frameShape">
+                    <enum>TabWidgetPanel</enum>
+                </property>
+                <property name="text">
+                    <string>50.0</string>
+                </property>
+                <property name="alignment">
+                    <set>WordBreak|AlignCenter</set>
+                </property>
+            </widget>
             <widget class="QSlider">
                 <property name="name">
-                    <cstring>force_max_value_slider</cstring>
+                    <cstring>force_min_value_slider</cstring>
                 </property>
                 <property name="geometry">
                     <rect>
@@ -7951,7 +8009,35 @@
                     <number>1</number>
                 </property>
                 <property name="maxValue">
-                    <number>500</number>
+                    <number>30</number>
+                </property>
+                <property name="orientation">
+                    <enum>Horizontal</enum>
+                </property>
+                <property name="tickmarks">
+                    <enum>Above</enum>
+                </property>
+                <property name="tickInterval">
+                    <number>10</number>
+                </property>
+            </widget>
+            <widget class="QSlider">
+                <property name="name">
+                    <cstring>force_max_value_slider</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>141</x>
+                        <y>121</y>
+                        <width>85</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="minValue">
+                    <number>1</number>
+                </property>
+                <property name="maxValue">
+                    <number>250</number>
                 </property>
                 <property name="orientation">
                     <enum>Horizontal</enum>
@@ -7986,16 +8072,22 @@
         <slot>forceMaxColorPressed()</slot>
     </connection>
     <connection>
+        <sender>force_min_color_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ColoringSettingsDialog</receiver>
+        <slot>forceMinColorPressed()</slot>
+    </connection>
+    <connection>
         <sender>force_max_value_slider</sender>
         <signal>valueChanged(int)</signal>
         <receiver>ColoringSettingsDialog</receiver>
         <slot>forceMaxValueChanged()</slot>
     </connection>
     <connection>
-        <sender>force_min_color_button</sender>
-        <signal>clicked()</signal>
+        <sender>force_min_value_slider</sender>
+        <signal>valueChanged(int)</signal>
         <receiver>ColoringSettingsDialog</receiver>
-        <slot>forceMinColorPressed()</slot>
+        <slot>forceMinValueChanged()</slot>
     </connection>
     <connection>
         <sender>helix_color_button</sender>
@@ -8004,16 +8096,22 @@
         <slot>helixColorPressed()</slot>
     </connection>
     <connection>
-        <sender>max_distance_slider</sender>
-        <signal>valueChanged(int)</signal>
+        <sender>list_box</sender>
+        <signal>highlighted(int)</signal>
         <receiver>ColoringSettingsDialog</receiver>
-        <slot>maxDistanceChanged()</slot>
+        <slot>showPage(int)</slot>
     </connection>
     <connection>
         <sender>max_distance_button</sender>
         <signal>clicked()</signal>
         <receiver>ColoringSettingsDialog</receiver>
         <slot>maxDistanceColorPressed()</slot>
+    </connection>
+    <connection>
+        <sender>max_distance_slider</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>ColoringSettingsDialog</receiver>
+        <slot>maxDistanceChanged()</slot>
     </connection>
     <connection>
         <sender>maximum_o_button</sender>
@@ -8064,16 +8162,16 @@
         <slot>neutralChargeColorPressed()</slot>
     </connection>
     <connection>
+        <sender>null_distance_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ColoringSettingsDialog</receiver>
+        <slot>nullDistanceColorPressed()</slot>
+    </connection>
+    <connection>
         <sender>positive_charge_color_button</sender>
         <signal>clicked()</signal>
         <receiver>ColoringSettingsDialog</receiver>
         <slot>positiveChargeColorPressed()</slot>
-    </connection>
-    <connection>
-        <sender>list_box</sender>
-        <signal>highlighted(int)</signal>
-        <receiver>ColoringSettingsDialog</receiver>
-        <slot>showPage(int)</slot>
     </connection>
     <connection>
         <sender>strand_color_button</sender>
@@ -8098,12 +8196,6 @@
         <signal>clicked()</signal>
         <receiver>ColoringSettingsDialog</receiver>
         <slot>unassignedTFColorPressed()</slot>
-    </connection>
-    <connection>
-        <sender>null_distance_button</sender>
-        <signal>clicked()</signal>
-        <receiver>ColoringSettingsDialog</receiver>
-        <slot>nullDistanceColorPressed()</slot>
     </connection>
 </connections>
 <includes>
@@ -8134,6 +8226,7 @@
     <slot>forceMaxColorPressed()</slot>
     <slot>forceMinColorPressed()</slot>
     <slot>forceMaxValueChanged()</slot>
+    <slot>forceMinValueChanged()</slot>
 </slots>
 <exportmacro>BALL_EXPORT</exportmacro>
 <layoutdefaults spacing="6" margin="11"/>

@@ -145,6 +145,8 @@ void ColoringSettingsDialog::writePreferences(INIFile& file)
 			String((float)max_tf_slider->value() / 10.0).c_str());
 	file.insertValue("COLORING_OPTIONS", "force_max_value", 
 			String((float)force_max_value_slider->value() / 10.0).c_str());
+	file.insertValue("COLORING_OPTIONS", "force_min_value", 
+			String((float)force_min_value_slider->value() / 10.0).c_str());
 }
 
 void ColoringSettingsDialog::fetchPreferences(const INIFile& file)
@@ -215,6 +217,12 @@ void ColoringSettingsDialog::fetchPreferences(const INIFile& file)
 	{
 		force_max_value_slider->setValue((Size)(file.getValue("COLORING_OPTIONS", "force_max_value").toFloat() * 10.0));
 	}
+
+	if (file.hasEntry("COLORING_OPTIONS", "force_min_value")) 
+	{
+		force_min_value_slider->setValue((Size)(file.getValue("COLORING_OPTIONS", "force_min_value").toFloat() * 10.0));
+	}
+
 
 	setLabelColorsFromValues_();
 }
@@ -326,6 +334,7 @@ void ColoringSettingsDialog::setDefaults(bool all)
 		force_min_color_.set(0,0,255);
 		force_max_color_.set(255,0,0);
 		force_max_value_slider->setValue(10 * 10);
+		force_min_value_slider->setValue(0 * 10);
 	}
 
 
@@ -452,6 +461,7 @@ void ColoringSettingsDialog::applySettingsTo(ColorProcessor& cp) const
 		dp.setMinColor(force_min_color_);
 		dp.setMaxColor(force_max_color_);
 		dp.setMaxValue(((float)force_max_value_slider->value()) / 10.0);
+		dp.setMinValue(((float)force_min_value_slider->value()) / 10.0);
 		return;
 	}
 }
@@ -591,6 +601,15 @@ void ColoringSettingsDialog::forceMaxValueChanged()
 	if (text.hasSuffix(".")) text += "0";
 	force_max_value_label->setText(text.c_str());
 }
+
+void ColoringSettingsDialog::forceMinValueChanged()
+{
+	String text = String(((float)force_min_value_slider->value()) / 10.0);
+	text = text.trimRight("0");
+	if (text.hasSuffix(".")) text += "0";
+	force_min_value_label->setText(text.c_str());
+}
+
 
 void ColoringSettingsDialog::setColorToLabel_(QLabel* label, const ColorRGBA& color)
 	throw()
@@ -802,6 +821,7 @@ void ColoringSettingsDialog::getSettings(const ColorProcessor& cp)
 		force_min_color_ = dp.getMinColor();
 		force_max_color_ = dp.getMaxColor();
 		force_max_value_slider->setValue((Size)(dp.getMaxValue() * 10.0));
+		force_min_value_slider->setValue((Size)(dp.getMinValue() * 10.0));
 	}
 
 	setLabelColorsFromValues_();
