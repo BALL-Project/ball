@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.24 2003/12/10 15:27:24 amoll Exp $
+// $Id: mainControl.h,v 1.25 2003/12/10 15:51:05 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -333,8 +333,7 @@ namespace BALL
 			 		This Method should only be used from the Python Interface. 
 					Otherwise, you should prefer to use ModularWidget::notify_.
 					The MainControl itself also reacts to a Message, send with this method.
-					The Message has to be created on the heap, because it will be deleted, after
-					it was send to all ModularWidget's.
+					The Message will not be deleted, after it was send to all ModularWidget's.
 			*/
 			void sendMessage(Message& message)
 				throw();

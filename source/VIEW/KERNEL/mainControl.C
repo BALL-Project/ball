@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.29 2003/12/10 15:27:16 amoll Exp $
+// $Id: mainControl.C,v 1.30 2003/12/10 15:51:08 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1095,6 +1095,7 @@ bool MainControl::remove(Representation& rep)
 void MainControl::sendMessage(Message& message)
 	throw()
 {
+	message.setDeletable(false);
 	notify_(&message);
 	onNotify_(&message);
 }
