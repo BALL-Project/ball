@@ -4,14 +4,15 @@
 // $Id:
 
 #include <BALL/STRUCTURE/geometricProperties.h>
-#include <qcolordialog.h>
-#include <qpopupmenu.h>
-#include <qmenubar.h>
+#include <BALL/FORMAT/INIFile.h>
 #include <BALL/VIEW/DIALOGS/labelDialog.h>
 #include <BALL/VIEW/PRIMITIVES/label.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
-#include <BALL/FORMAT/INIFile.h>
+#include <BALL/VIEW/KERNEL/common.h>
 
+#include <qcolordialog.h>
+#include <qpopupmenu.h>
+#include <qmenubar.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qlineedit.h>
@@ -189,9 +190,7 @@ void LabelDialog::accept()
 	}
 
 	// create Label and Representation
-
 	Label* label = new Label;
-
 	label->setText(label_edit_->text().ascii());
 	label->setColor(custom_color_);
 	label->setVertex(center);
@@ -199,7 +198,7 @@ void LabelDialog::accept()
 	Representation* rep = getMainControl()->getPrimitiveManager().createRepresentation();
 	rep->insert(*label);
 	rep->setProperty(Representation::PROPERTY__ALWAYS_FRONT);
-	rep->setModelType(6);
+	rep->setModelType(MODEL_LABEL);
 	RepresentationMessage* arm = new RepresentationMessage;
 	arm->setRepresentation(rep);
 	arm->setType(RepresentationMessage::ADD);
