@@ -1,4 +1,4 @@
-// $Id: surface.C,v 1.5 2000/05/15 19:19:50 oliver Exp $
+// $Id: surface.C,v 1.6 2000/06/02 07:12:41 oliver Exp $
 
 #include <BALL/MATHS/surface.h>
 
@@ -12,67 +12,39 @@ namespace BALL
 	{
 	}
 
-	Surface::Surface(const Surface& /* surface */)
+	Surface::Surface(const Surface& surface)
+		:	vertex(surface.vertex),
+			normal(surface.normal),
+			triangle(surface.triangle),
+			valid_(surface.valid_)
 	{
-		// BAUSTELLE
 	}
 
 	Surface::~Surface()
 	{
+		valid_ = false;
 	}
 
-	Size Surface::getNumberOfVertices() const
+	void Surface::clear()
 	{
-		return vertices_.size();
+		valid_ = true;
+		vertex.clear();
+		normal.clear();
+		triangle.clear();
 	}
 	
-	Size Surface::getNumberOfTriangles() const
+	void Surface::destroy()
 	{
-		return triangles_.size();
-	}
-
-	void Surface::smoothNormals()
-	{
-		if (valid_ == false)
-		{
-			return;
-		}
-
-		Size i;
-		// clear all normals
-		for (i = 0; i < normals_.size(); i++)
-		{
-			normals_[i].set(0.0);
-		}
-
-		// iterate over all triangles, calculate their normals
-		// and add them to the vertices` normals
-		for (i = 0; i < triangles_.size(); i++)
-		{
-			Vector3 v1 = vertices_[triangles_[i].v1];
-			Vector3 v2 = vertices_[triangles_[i].v2];
-			Vector3 v3 = vertices_[triangles_[i].v3];
-			Vector3 normal = (v2 - v1) % (v3 - v1);
-			normal.normalize();
-			normals_[triangles_[i].v1] += normal;
-			normals_[triangles_[i].v2] += normal;
-			normals_[triangles_[i].v3] += normal;
-		}
-
-		// iterate over all normals and normalize them
-		for (i = 0; i < normals_.size(); ++i)
-		{
-			normals_[i].normalize();
-		}
+		clear();
 	}
 	
-
-	void Surface::readMSMSFile(const String& vert_filename, const String& face_filename)
+	void Surface::readMSMSFile
+		(const String& vert_filename, const String& face_filename)
 	{
 		// delete old contents
-		normals_.clear();
-		vertices_.clear();
-		triangles_.clear();
+		normal.clear();
+		vertex.clear();
+		triangle.clear();
 
 		ifstream file(vert_filename.c_str());
 		if (!file)
@@ -93,8 +65,8 @@ namespace BALL
 		{
 			// read the vertex coordinates and the normal vector 
 			line.split(s, 6);
-			vertices_.push_back(Vector3(s[0].toFloat(), s[1].toFloat(), s[2].toFloat()));
-			normals_.push_back(Vector3(s[3].toFloat(), s[4].toFloat(), s[5].toFloat()));
+			vertex.push_back(Vector3(s[0].toFloat(), s[1].toFloat(), s[2].toFloat()));
+			normal.push_back(Vector3(s[3].toFloat(), s[4].toFloat(), s[5].toFloat()));
 			
 			// read the next line
 			line.getline(file);
@@ -118,7 +90,7 @@ namespace BALL
 		}
 		
 		Triangle t;
-		Size number_of_vertices = vertices_.size();
+		Size number_of_vertices = vertex.size();
 		while (file && (line.countFields() == 5))
 		{
 			// read the vertex indices
@@ -132,7 +104,7 @@ namespace BALL
 					&& (t.v1 < (Index)number_of_vertices) && (t.v1 >= 0)
 					&& (t.v1 < (Index)number_of_vertices) && (t.v1 >= 0))
 			{
-				triangles_.push_back(t);
+				triangle.push_back(t);
 			}
 			
 			// read the next line
@@ -141,21 +113,15 @@ namespace BALL
 		file.close();
 	}
 
-	float Surface::getVolume() const
-	{
-		// BAUSTELLE
-		return 0;
-	}
-
 	float Surface::getArea() const
 	{
 		float area = 0;
 		// add the areas of all triangles
-		for (Size i = 0; i < triangles_.size(); i++)
+		for (Size i = 0; i < triangle.size(); i++)
 		{
-			//Vector3 v1 = vertices_[triangles_[i].v1];
-			//Vector3 v2 = vertices_[triangles_[i].v2];
-			//Vector3 v3 = vertices_[triangles_[i].v3];
+			//Vector3 v1 = vertex[triangle[i].v1];
+			//Vector3 v2 = vertex[triangle[i].v2];
+			//Vector3 v3 = vertex[triangle[i].v3];
 			
 			// projection of v3 onto v1-v2
 			//Vector3	v4 = 
@@ -163,21 +129,6 @@ namespace BALL
 		}
 		
 		return area;
-	}
-
-	Surface::Triangle Surface::triangle(Size index) const
-	{
-		return triangles_[index];
-	}
-
-	Vector3 Surface::vertex(Size index) const
-	{
-		return vertices_[index];
-	}
-
-	Vector3 Surface::normal(Size index) const
-	{
-		return normals_[index];
 	}
 
 } // namespace BALL
