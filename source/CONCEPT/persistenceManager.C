@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: persistenceManager.C,v 1.19 2003/08/26 09:17:45 oliver Exp $
+// $Id: persistenceManager.C,v 1.20 2004/11/05 10:04:39 oliver Exp $
 //
 
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -10,7 +10,13 @@
 #include <BALL/KERNEL/nucleicAcid.h>
 #include <BALL/KERNEL/bond.h>
 
-// #define DEBUG_PERSISTENCE
+// #define BALL_DEBUG_PERSISTENCE
+
+#ifdef BALL_DEBUG_PERSISTENCE
+# define DEBUG(a) Log.info() << a << endl;
+#else
+# define DEBUG(a)
+#endif
 
 using namespace std;
 
@@ -127,6 +133,7 @@ namespace BALL
 	PersistenceManager& PersistentObject::operator >> (PersistenceManager& pm) const
 		throw(Exception::GeneralException)
 	{ 
+		DEBUG("PersistenceManager: entering operator >>")
 		pm.startOutput();
 		persistentWrite(pm, "");
 		pm.endOutput();
@@ -152,14 +159,12 @@ namespace BALL
 	void* PersistenceManager::createObject(String signature) const
 		throw()
 	{
+		DEBUG("PersistenceManager: createObject(" << signature)
 		if (create_methods_.has(signature)) 
 		{
 			CreateMethod method = create_methods_[signature];
 
-#			ifdef DEBUG_PERSISTENCE
-				Log.info() << "PersistenceManager: created object of type" << signature << endl;
-#			endif
-
+			DEBUG("PersistenceManager: created object of type" << signature)
 			return method();
 			
 		} 
@@ -246,6 +251,7 @@ namespace BALL
 	PersistentObject*	PersistenceManager::readObject()
 		throw(Exception::GeneralException)
 	{
+		DEBUG("PersistenceManager: entering readObject")
 		if (istr_ == 0)
 		{
 			return 0;
@@ -286,16 +292,16 @@ namespace BALL
 			} 
 			
 			// Create an instance of type_name 
-
 			CreateMethod	m = create_methods_[type_name];
 			obj = (PersistentObject*)m();
+			DEBUG("PersistenceManager: created object of type " << type_name << " @ " << (void*)obj)
 
 			// check whether the creation was successful
 			if (obj == 0)
 			{
 				Log.level(LogStream::ERROR) << "Could not create object of type " 
 																		<< type_name << "!" << endl;
-				error = false;
+				error = true;
 				break;
 			}
 
@@ -314,16 +320,19 @@ namespace BALL
 			addPointerPair_(ptr, (void*)obj);
 				
 			// make the new object read itself
-			(*obj).persistentRead(*this);
+			DEBUG("PersistenceManager: calling persistentRead on new object.")
+			obj->persistentRead(*this);
+
 
 			if (!checkObjectTrailer("") || !checkStreamTrailer())
 			{
-				error = false;
+				DEBUG("PersistenceManager: check for object trailer or stream trailer failed")
+				error = true;
 				break;
 			}
 
-			// remember the first object created to -
-			// this is our return valued
+			// remember the first object created.
+			// this is our return value
 			if (first_object == 0)
 			{
 				first_object = obj;
@@ -331,6 +340,7 @@ namespace BALL
 		}
 
 		// prepare the input stream for closing
+		DEBUG("PersistenceManager: calling finalizeInputStream")
 		finalizeInputStream();
 
 		if (error)
@@ -359,10 +369,7 @@ namespace BALL
 	void PersistenceManager::addPointerPair_(PointerSizeUInt old_ptr, void* new_ptr)
 		throw()
 	{
-#		ifdef DEBUG_PERSISTENCE
-			Log.info() << "PersistenceManager: pointer pair (" << old_ptr << "/" << new_ptr << ")" << endl;
-#		endif
-
+		DEBUG("PersistenceManager: pointer pair (" << hex << old_ptr << "/" << new_ptr << ")")
 		pointer_map_.insert(pair<PointerSizeUInt, void*>(old_ptr, new_ptr));
 	}
 
@@ -400,8 +407,9 @@ namespace BALL
 			} 
 			else 
 			{ 
-				Log.level(LogStream::ERROR) << "PersistenceManager: Could not assign object for pointer to "
-																		<< (*it).second << endl;
+				Log.error() << "PersistenceManager: size of pointer map: " << pointer_map_.size() << std::endl;
+				Log.error() << "PersistenceManager: Could not assign object for pointer to "
+																				<< hex << (unsigned int)(*it).second << endl;
 				result = false;
 			}
 		}
@@ -410,7 +418,7 @@ namespace BALL
 	}
 
 #ifdef BALL_NO_INLINE_FUNCTIONS
-#include <BALL/CONCEPT/persistenceManager.iC>
+#	include <BALL/CONCEPT/persistenceManager.iC>
 #endif
 
 } // namespace BALL

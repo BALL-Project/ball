@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XDRPersistenceManager_test.C,v 1.17 2004/11/03 13:55:14 amoll Exp $
+// $Id: XDRPersistenceManager_test.C,v 1.18 2004/11/05 10:04:38 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -16,7 +16,7 @@
 
 ///////////////////////////
 
-START_TEST(XDRPersistenceManager, "$Id: XDRPersistenceManager_test.C,v 1.17 2004/11/03 13:55:14 amoll Exp $")
+START_TEST(XDRPersistenceManager, "$Id: XDRPersistenceManager_test.C,v 1.18 2004/11/05 10:04:38 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -434,7 +434,13 @@ CHECK([Extra] full_test0)
 
 	ifstream is(filename.c_str(), std::ios::in);
 	XDRPersistenceManager pm2(is);
-	PersistentObject* po =  pm2.readObject();
+
+	PersistentObject* po =  0;
+	STATUS("Before initializeInputStream.")
+	pm2.initializeInputStream();
+	STATUS("Before readObject...")
+	po = pm2.readObject();
+	STATUS("After readObject...")
 	is.close();
 	TEST_EQUAL(RTTI::isKindOf<Bond>(*po), true)
 	delete po;
@@ -445,20 +451,19 @@ CHECK([Extra] full_test1)
 	String filename;
 
 	System s1;
-	Protein p1;
-	Chain c1;
-	SecondaryStructure ss1;
-	Residue r1;
-	PDBAtom a1;
-	PDBAtom a2;
-	s1.insert(p1);
-	p1.insert(c1);
-	c1.insert(ss1);
-	ss1.insert(r1);
-	r1.insert(a1);
-	r1.insert(a2);
-	Bond b1;
-	TEST_NOT_EQUAL(b1.createBond(b1, a2, a1), 0)
+	Protein* p1 = new Protein;
+	Chain* c1 = new Chain;
+	SecondaryStructure* ss1 = new SecondaryStructure;
+	Residue* r1  = new Residue;
+	PDBAtom* a1 = new PDBAtom;
+	PDBAtom* a2 = new PDBAtom;
+	s1.insert(*p1);
+	p1->insert(*c1);
+	c1->insert(*ss1);
+	ss1->insert(*r1);
+	r1->insert(*a1);
+	r1->insert(*a2);
+	TEST_NOT_EQUAL(a1->createBond(*a2), 0)
 
 	NEW_TMP_FILE(filename);
 	ofstream os(filename.c_str(), std::ios::out | std::ios::binary);
@@ -466,14 +471,41 @@ CHECK([Extra] full_test1)
 	s1 >> pm;
 	os.close();
 
-	ifstream is(filename.c_str(), std::ios::in);
+	ifstream is(filename.c_str(), std::ios::in | std::ios::binary);
 	XDRPersistenceManager pm2(is);
-	PersistentObject* po =  pm2.readObject();
-	System* s2 = (System*) po;
+	System* s2 = (System*) pm2.readObject();
 	is.close();
+
+	TEST_NOT_EQUAL(s2, 0)
+	ABORT_IF(s2 == 0)
 
 	TEST_EQUAL(s1.countAtoms(), s2->countAtoms())
 	delete s2;
+RESULT
+
+CHECK([Extra] full_test1)
+	String filename;
+
+	Fragment f;
+	f.insert(*new Atom);
+
+	NEW_TMP_FILE(filename);
+	ofstream os(filename.c_str(), std::ios::out | std::ios::binary);
+	XDRPersistenceManager pm(os);
+	f >> pm;
+	os.close();
+	STATUS("wrote file")
+
+	ifstream is(filename.c_str(), std::ios::in);
+	XDRPersistenceManager pm2(is);
+	Fragment* f2 = (Fragment*) pm2.readObject();
+	is.close();
+
+	TEST_NOT_EQUAL(f2, 0)
+	ABORT_IF(f2 == 0)
+
+	TEST_EQUAL(f.countAtoms(), f2->countAtoms())
+	delete f2;
 RESULT
 
 
@@ -489,10 +521,13 @@ CHECK([EXTRA] full_test2)
 	s >> pm;
 	os.close();
 
-	ifstream is(filename.c_str(), std::ios::in);
+	ifstream is(filename.c_str(), std::ios::in | std::ios::binary);
 	XDRPersistenceManager pm2(is);
 	System* s2 = (System*) pm2.readObject();
 	is.close();
+
+	TEST_NOT_EQUAL(s2, 0)
+	ABORT_IF(s2 == 0)
 
 	TEST_EQUAL(s.countAtoms(), s2->countAtoms())
 	AtomIterator ai = s.beginAtom();
@@ -525,10 +560,13 @@ CHECK([Extra] full_test3)
 	s >> pm;
 	os.close();
 
-	ifstream is(filename.c_str(), std::ios::in);
+	ifstream is(filename.c_str(), std::ios::in | std::ios::binary);
 	XDRPersistenceManager pm2(is);
 	System* s2 = (System*) pm2.readObject();
 	is.close();
+
+	TEST_NOT_EQUAL(s2, 0)
+	ABORT_IF(s2 == 0)
 
 	TEST_EQUAL(s.countAtoms(), s2->countAtoms())
 	TEST_EQUAL(s.countBonds(), s2->countBonds())
