@@ -1,4 +1,4 @@
-// $Id: amberBend.C,v 1.7 2000/02/14 22:44:02 oliver Exp $
+// $Id: amberBend.C,v 1.8 2000/02/15 18:14:51 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberBend.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -53,7 +53,7 @@ namespace BALL
 
 		if (getForceField() == 0) 
 		{
-			Log.level(LogStream::ERROR) << "AmberBend::setup: component not bound to force field" << endl;
+			Log.error() << "AmberBend::setup: component not bound to force field" << endl;
 			return false;
 		}
 
@@ -66,7 +66,7 @@ namespace BALL
 
 			if (result == false) 
 			{
-				Log.level(LogStream::ERROR) << "cannot find section QuadraticAngleBend" << endl;
+				Log.error() << "AmberBend::setup: cannot find section QuadraticAngleBend" << endl;
 				return false;
 		
 			}
@@ -81,12 +81,12 @@ namespace BALL
 		{
 			for (it2 = (*atom_it)->beginBond(); +it2 ; ++it2) 
 			{
-				for (it1 = it2, ++it1; +it1 ; ++it1 ) 
+				for (it1 = it2, ++it1; +it1 ; ++it1) 
 				{
 				
-					this_bend.atom1 = (*it2).getPartner(**atom_it);
+					this_bend.atom1 = it2->getPartner(**atom_it);
 					this_bend.atom2 = *atom_it;
-					this_bend.atom3 = (*it1).getPartner(**atom_it);
+					this_bend.atom3 = it1->getPartner(**atom_it);
 
 					if (getForceField()->getUseSelection() == false ||
 					   (getForceField()->getUseSelection() == true && 
@@ -97,29 +97,18 @@ namespace BALL
 						Atom::Type atom_type_a2 = this_bend.atom2->getType();
 						Atom::Type atom_type_a3 = this_bend.atom3->getType();
 
-						QuadraticAngleBend::Values values;
-
-						if (bend_parameters.hasParameters(atom_type_a1, atom_type_a2, atom_type_a3))
+						// check for parameters
+						if (!bend_parameters.assignParameters(this_bend.values, atom_type_a1, atom_type_a2, atom_type_a3))
 						{
-							bend_parameters.assignParameters(values, atom_type_a1, atom_type_a2, atom_type_a3);
-						}
-						else if (bend_parameters.hasParameters(atom_type_a3, atom_type_a2, atom_type_a1))
-						{
-							bend_parameters.assignParameters(values, atom_type_a3, atom_type_a2, atom_type_a1);
-						}
-						else 
-						{
-							Log.level(LogStream::ERROR) << "cannot find bend parameters for atom types:"
+							// complain if nothing was found
+							Log.error() << "AmberBend::setup: cannot find bend parameters for atom types:"
 								<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a1) << "-"
 								<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a2) << "-"
 								<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a3) << endl;
-
-							values.k = 0.0;
-							values.theta0 = 0.0;
+						} else {
+							// store the bend parameters otherwise
+							bend_.push_back(this_bend);
 						}
-
-						this_bend.values = values;
-						bend_.push_back(this_bend);
 					}
 				}
 			}
