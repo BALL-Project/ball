@@ -35,12 +35,6 @@ include .Dependencies
 
 BALL_INCLUDES=$(BALLVIEW_INCLUDES)
 
-displayProperties_moc.C:	$(HEADER_DIR)/displayProperties.h
-	$(MOC) $< -o $@
-
-displayPropertiesData_moc.C:	$(HEADER_DIR)/displayPropertiesData.h
-	$(MOC) $< -o $@
-
 labelProperties_moc.C:	$(HEADER_DIR)/labelProperties.h
 	$(MOC) $< -o $@
 
@@ -62,17 +56,59 @@ contourSurfaceDialog_moc.C:	$(HEADER_DIR)/contourSurfaceDialog.h
 contourSurfaceDialogData_moc.C:	$(HEADER_DIR)/contourSurfaceDialogData.h
 	$(MOC) $< -o $@
 
-atomProperties_moc.C:	$(HEADER_DIR)/atomProperties.h
-	$(MOC) $< -o $@
-
-atomPropertiesData_moc.C:	$(HEADER_DIR)/atomPropertiesData.h
-	$(MOC) $< -o $@
-
-$(HEADER_DIR)/displayPropertiesData.h:  displayProperties.ui
+$(HEADER_DIR)/contourSurfaceDialogData.h:  contourSurfaceDialog.ui
 	$(UIC) -o $@ $<
 
+contourSurfaceDialogData.C:  $(HEADER_DIR)/contourSurfaceDialogData.h
+	$(UIC) -o $@ -impl $< contourSurfaceDialog.ui
+
+<<<<<<< Makefile
+contourSurfaceDialog_moc.C:	$(HEADER_DIR)/contourSurfaceDialog.h
+	$(MOC) $< -o $@
+=======
+displayProperties_moc.C:	$(HEADER_DIR)/displayProperties.h
+	$(MOC) $< -o $@
+>>>>>>> 1.15
+
+<<<<<<< Makefile
+contourSurfaceDialogData_moc.C:	$(HEADER_DIR)/contourSurfaceDialogData.h
+	$(MOC) $< -o $@
+=======
+displayPropertiesData_moc.C:	$(HEADER_DIR)/displayPropertiesData.h
+	$(MOC) $< -o $@
+>>>>>>> 1.15
+
+<<<<<<< Makefile
+atomProperties_moc.C:	$(HEADER_DIR)/atomProperties.h
+	$(MOC) $< -o $@
+=======
+$(HEADER_DIR)/displayPropertiesData.h:  displayProperties.ui
+	$(UIC) -o $@ $<
+>>>>>>> 1.15
+
+<<<<<<< Makefile
+atomPropertiesData_moc.C:	$(HEADER_DIR)/atomPropertiesData.h
+	$(MOC) $< -o $@
+=======
 displayPropertiesData.C:  $(HEADER_DIR)/displayPropertiesData.h
 	$(UIC) -o $@ -impl $< displayProperties.ui
+>>>>>>> 1.15
+
+<<<<<<< Makefile
+$(HEADER_DIR)/displayPropertiesData.h:  displayProperties.ui
+	$(UIC) -o $@ $<
+=======
+atomProperties_moc.C:	$(HEADER_DIR)/atomProperties.h
+	$(MOC) $< -o $@
+>>>>>>> 1.15
+
+<<<<<<< Makefile
+displayPropertiesData.C:  $(HEADER_DIR)/displayPropertiesData.h
+	$(UIC) -o $@ -impl $< displayProperties.ui
+=======
+atomPropertiesData_moc.C:	$(HEADER_DIR)/atomPropertiesData.h
+	$(MOC) $< -o $@
+>>>>>>> 1.15
 
 $(HEADER_DIR)/atomPropertiesData.h:  atomProperties.ui
 	$(UIC) -o $@ $<

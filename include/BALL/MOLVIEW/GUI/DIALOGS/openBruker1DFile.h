@@ -1,33 +1,31 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: openBruker1DFile.h,v 1.4.2.1 2003/01/07 13:18:29 anker Exp $
+// $Id: openBruker1DFile.h,v 1.4.2.2 2003/02/05 15:31:25 anker Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_OPENBRUKER1DFILE_H
 #define BALL_MOLVIEW_GUI_DIALOGS_OPENBRUKER1DFILE_H
 
 #ifndef BALL_COMMON_H
-#       include <BALL/common.h>
+# include <BALL/common.h>
 #endif
 
 #ifndef BALL_VIEW_GUI_WIDGETS_REGULARDATA1DWIDGET_H
-#       include <BALL/VIEW/GUI/WIDGETS/regularData1DWidget.h>
+# include <BALL/VIEW/GUI/WIDGETS/regularData1DWidget.h>
 #endif
 
 #ifndef BALL_VIEW_GUI_DIALOGS_FILEDIALOG_H
-#       include <BALL/VIEW/GUI/DIALOGS/fileDialog.h>
+# include <BALL/VIEW/GUI/DIALOGS/fileDialog.h>
 #endif
 
 #ifndef BALL_FORMAT_BRUKER1DFILE_H
-#       include <BALL/FORMAT/bruker1DFile.h>
+# include <BALL/FORMAT/bruker1DFile.h>
 #endif
-
-using namespace std;
-using namespace BALL;
-using namespace BALL::VIEW;
 
 namespace BALL
 {
+	using VIEW::MainControl;
+	using VIEW::FileDialog;
 
 	namespace MOLVIEW
 	{

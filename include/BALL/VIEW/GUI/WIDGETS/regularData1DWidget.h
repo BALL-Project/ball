@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1DWidget.h,v 1.8.2.1 2003/01/07 13:19:43 anker Exp $
+// $Id: regularData1DWidget.h,v 1.8.2.2 2003/02/05 15:32:04 anker Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGET_REGULARDATA1DWIDGET_H
 #define BALL_VIEW_GUI_WIDGET_REGULARDATA1DWIDGET_H
@@ -37,8 +37,10 @@
 # include <BALL/DATATYPE/regularData1D.h>
 #endif
 
-using namespace BALL;
-using namespace BALL::VIEW;
+namespace BALL
+{
+	namespace VIEW
+	{
 
 /**  New RegularData1D Message Classic.
  */
@@ -172,4 +174,5 @@ class RegularData1DWidget
 	
 };
 
+} } // namespaces
 #endif // BALL_VIEW_GUI_WIDGET_REGULARDATA1DWIDGET_H

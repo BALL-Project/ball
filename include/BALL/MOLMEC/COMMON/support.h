@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: support.h,v 1.15.2.3 2003/02/05 15:01:16 anker Exp $
+// $Id: support.h,v 1.15.2.4 2003/02/05 15:31:11 anker Exp $
 
 #ifndef BALL_MOLMEC_COMMON_SUPPORT_H
 #define BALL_MOLMEC_COMMON_SUPPORT_H
@@ -237,111 +237,6 @@ namespace BALL
 			// return the number of torsions computed
 			return number_of_added_torsions;
 		}
-=======
-		/**	Compute all torsions in a given set of molecules.
-				@return the number of torsions added to {\tt torsions}
-				@param start an iterator pointing to the start of the atoms
-				@param end a past-the-end iterator for the atoms 
-				@param use_selection if set to {\bf true}, a torsion will be added only if all four atoms are selected
-		*/
-    template <typename TorsionType, typename AtomIteratorType>
-    Size computeTorsions
-			(const AtomIteratorType& start, const AtomIteratorType& end,
-			 std::vector<TorsionType>& torsions, bool use_selection = false);
-    //@}
-
-
-
-		// 
-		template <typename TorsionType, typename AtomIteratorType>
-		Size computeTorsions
-			(const AtomIteratorType& start, const AtomIteratorType& end, 
-			 std::vector<TorsionType>& torsions, bool use_selection)
-		{
-			// pointers to the four atoms
-			Atom*	a1;
-			Atom*	a2;
-			Atom*	a3;
-			Atom*	a4;
-
-			Size number_of_added_torsions = 0;
-
-			// Iterate over all atoms...
-			// 
-			AtomIteratorType atom_it = start;
-			for (; atom_it != end; ++atom_it) 
-			{
-				// ...and check each bond whether it is part of 
-				// a torsion.
-				Atom::BondIterator it1 = (*atom_it)->beginBond();
-				for (; +it1 ; ++ it1) 
-				{
-					// Consider each bond just once by making sure that
-					// our start atom is the *first* atom of the bond.
-					if (*atom_it == it1->getFirstAtom()) 
-					{
-						// We know have the two central atoms of a potential
-						// torsion and store them in a2 and a3.
-						a2 = *atom_it;
-						a3 = const_cast<Atom*>(it1->getSecondAtom());
-
-						// Now, find all other atoms (atoms 1 and 4)
-						Atom::BondIterator it2;
-						Atom::BondIterator it3;
-						for (it2 = (*atom_it)->beginBond(); +it2 ; ++it2) 
-						{
-							if (it2->getSecondAtom() != it1->getSecondAtom()) 
-							{
-								// determine the first atom
-								if (it2->getFirstAtom() == *atom_it) 
-								{
-									a1 = const_cast<Atom*>(it2->getSecondAtom());
-								} 
-								else 
-								{
-									a1 = const_cast<Atom*>(it2->getFirstAtom());
-								}
-	 
-								for (it3 = const_cast<Atom*>(it1->getSecondAtom())->beginBond(); +it3 ; ++it3) 
-								{
-									if (it3->getFirstAtom() != a2 ) 
-									{
-										// determine the fourth atom a4
-										if (it3->getFirstAtom() == a3)
-										{
-											a4 = const_cast<Atom*>(it3->getSecondAtom());
-										} 
-										else 
-										{
-											a4 = const_cast<Atom*>(it3->getFirstAtom());
-										}
-
-										if (use_selection == false 
-												|| (use_selection == true 
-														&& (a1->isSelected() || a2->isSelected() || a3->isSelected() || a4->isSelected())))
-										{
-											// Push the torsion onto the torsion vector.
-											TorsionType tmp;
-											tmp.atom1 = a1;
-											tmp.atom2 = a2;
-											tmp.atom3 = a3;
-											tmp.atom4 = a4;
-
-											torsions.push_back(tmp);
-											number_of_added_torsions++;
-										}
-									} 
-								}
-							}
-						}
-					}
-				}
-			}
-
-			// return the number of torsions computed
-			return number_of_added_torsions;
-		}
->>>>>>> 1.17
 
 	} // namespace MolmecSupport
 

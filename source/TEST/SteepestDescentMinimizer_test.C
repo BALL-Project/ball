@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SteepestDescentMinimizer_test.C,v 1.3 2003/02/04 14:27:03 oliver Exp $
+// $Id: SteepestDescentMinimizer_test.C,v 1.3.2.1 2003/02/05 15:34:24 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +11,7 @@
 #include <BALL/KERNEL/PTE.h>
 ///////////////////////////
 
-START_TEST(ConjugateGradienMinimizer, "$Id: SteepestDescentMinimizer_test.C,v 1.3 2003/02/04 14:27:03 oliver Exp $")
+START_TEST(ConjugateGradienMinimizer, "$Id: SteepestDescentMinimizer_test.C,v 1.3.2.1 2003/02/05 15:34:24 anker Exp $")
 
 using namespace BALL;
 

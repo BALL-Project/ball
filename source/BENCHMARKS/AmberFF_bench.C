@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: AmberFF_bench.C,v 1.3.2.1 2003/01/07 13:20:23 anker Exp $
+// $Id: AmberFF_bench.C,v 1.3.2.2 2003/02/05 15:32:27 anker Exp $
 
 #include <BALL/CONCEPT/benchmark.h>
 
@@ -15,7 +15,11 @@
 
 using namespace BALL;
 
-START_BENCHMARK(AmberFF, 1.0, "$Id: AmberFF_bench.C,v 1.3.2.1 2003/01/07 13:20:23 anker Exp $")
+<<<<<<< AmberFF_bench.C
+START_BENCHMARK(AmberFF, 1.0, "$Id: AmberFF_bench.C,v 1.3.2.2 2003/02/05 15:32:27 anker Exp $")
+=======
+START_BENCHMARK(AmberFF, 1.0, "$Id: AmberFF_bench.C,v 1.3.2.2 2003/02/05 15:32:27 anker Exp $")
+>>>>>>> 1.5
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

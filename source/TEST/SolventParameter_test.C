@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SolventParameter_test.C,v 1.12.2.1 2003/01/07 13:22:54 anker Exp $
+// $Id: SolventParameter_test.C,v 1.12.2.2 2003/02/05 15:34:23 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/SOLVATION/solventParameter.h>
 ///////////////////////////
 
-START_TEST(SolventParameter, "$Id: SolventParameter_test.C,v 1.12.2.1 2003/01/07 13:22:54 anker Exp $")
+START_TEST(SolventParameter, "$Id: SolventParameter_test.C,v 1.12.2.2 2003/02/05 15:34:23 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -44,28 +44,28 @@ CHECK(extractSection(ForceFieldParameters& parameters, const String& section_nam
 
 	ForceFieldParameters param("data/SolventParameter_test1.ini");
 	param.init();
-	CAPTURE_OUTPUT(2000)	
+	CAPTURE_OUTPUT_LEVEL(2000)	
 	result = s_ptr.extractSection(param,"SolventDescription");
 	COMPARE_OUTPUT("SolventParameter::extractSection(): Variable missing.\n")
 	TEST_EQUAL(result,false)
 	
 	param = ForceFieldParameters("data/SolventParameter_test2.ini");
 	param.init();
-	CAPTURE_OUTPUT(2000)	
+	CAPTURE_OUTPUT_LEVEL(2000)	
 	result = s_ptr.extractSection(param,"SolventDescription");
 	COMPARE_OUTPUT("SolventParameter::extractSection(): no name given.\n")
 	TEST_EQUAL(result,true)
 	
 	param = ForceFieldParameters("data/SolventParameter_test3.ini");
 	param.init();
-	CAPTURE_OUTPUT(2000)	
+	CAPTURE_OUTPUT_LEVEL(2000)	
 	result = s_ptr.extractSection(param,"SolventDescription");
 	COMPARE_OUTPUT("SolventParameter::extractSection(): no number density given.\n")
 	TEST_EQUAL(result,true)
 
 	param = ForceFieldParameters("data/SolventParameter_test4.ini");
 	param.init();
-	CAPTURE_OUTPUT(2000)	
+	CAPTURE_OUTPUT_LEVEL(2000)	
 	result = s_ptr.extractSection(param,"SolventDescription");
 	COMPARE_OUTPUT("SolventParameter::extractSection(): Cannot assign atom type.\n")
 	TEST_EQUAL(result,true)

@@ -1,54 +1,61 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: EnergyMinimizer_test.C,v 1.2.2.1 2003/01/07 13:22:22 anker Exp $
+// $Id: EnergyMinimizer_test.C,v 1.2.2.2 2003/02/05 15:33:56 anker Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
+
 #include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
 #include <BALL/DATATYPE/options.h>
+#include <BALL/KERNEL/system.h>
+#include <BALL/KERNEL/molecule.h>
+#include <BALL/KERNEL/atom.h>
+
 ///////////////////////////
 
-START_TEST(EnergyMinimizer, "$Id: EnergyMinimizer_test.C,v 1.2.2.1 2003/01/07 13:22:22 anker Exp $")
+START_TEST(EnergyMinimizer, "$Id: EnergyMinimizer_test.C,v 1.2.2.2 2003/02/05 15:33:56 anker Exp $")
 
 using namespace BALL;
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
-AmberFF FF;
+System S;
+Molecule* M = new Molecule;
+M->insert(*new Atom);
+S.insert(*M);
+AmberFF FF(S);
 	
-EnergyMinimizer*	em;
+EnergyMinimizer* em;
 CHECK(EnergyMinimizer::EnergyMinimizer())
-em = new EnergyMinimizer();
+	em = new EnergyMinimizer();
+	TEST_NOT_EQUAL(em, 0)
 RESULT	
 
 CHECK(EnergyMinimizer::~EnergyMinimizer())
-delete em;
-RESULT
-
-CHECK(EnergyMinimizer::EnergyMinimizer(ForceField&))
-em = new EnergyMinimizer(FF);
-delete em;
+	delete em;
 RESULT
 
 CHECK(EnergyMinimizer::getForceField())
-em = new EnergyMinimizer;
-TEST_EQUAL(em->getForceField(), 0)
-delete em;
-em = new EnergyMinimizer(FF);
-TEST_EQUAL(em->getForceField(), &FF)
-delete em;
+	EnergyMinimizer em;
+	TEST_EQUAL(em.getForceField(), 0)
+RESULT
+
+CHECK(EnergyMinimizer::EnergyMinimizer(ForceField&))
+	EnergyMinimizer em(FF);
+	TEST_EQUAL(em.getForceField(), &FF)
 RESULT
 
 CHECK(EnergyMinimizer::EnergyMinimizer(ForceField&, const Options&))
-Options options;
-options.set("ABC", "DEF");
-em = new EnergyMinimizer(FF, options);
-TEST_EQUAL(em->getForceField(), &FF)
-TEST_EQUAL(em->options["ABC"], "DEF")
-delete em;
+	Options options;
+	options.set("ABC", "DEF");
+	em = new EnergyMinimizer(FF, options);
+	TEST_EQUAL(em->getForceField(), &FF)
+	TEST_EQUAL(em->options["ABC"], "DEF")
+	delete em;
 RESULT
 
 CHECK(EnergyMinimizer::EnergyMinimizer(const EnergyMinimizer&, bool))
@@ -75,12 +82,12 @@ CHECK(EnergyMinimizer::operator = (const EnergyMinimizer&))
 RESULT
 
 CHECK(EnergyMinimizer::isValid() const)
-em = new EnergyMinimizer;
-TEST_EQUAL(em->isValid(), false)
-delete em;
-em = new EnergyMinimizer(FF);
-TEST_EQUAL(em->isValid(), true)
-delete em;
+	em = new EnergyMinimizer;
+	TEST_EQUAL(em->isValid(), false)
+	delete em;
+	em = new EnergyMinimizer(FF);
+	TEST_EQUAL(em->isValid(), true)
+	delete em;
 RESULT
 
 CHECK(EnergyMinimizer::setup(ForceField&))
@@ -103,7 +110,9 @@ CHECK(EnergyMinimizer::setup(ForceField&, const Options&))
 RESULT
 
 CHECK(EnergyMinimizer::specificSetup())
-//?????
+	EnergyMinimizer em;
+	TEST_EQUAL(em.specificSetup(),true)
+	// specificSetup() shouldn't do anything except returning true
 RESULT
 
 CHECK(EnergyMinimizer::getNumberOfIteration() const)
@@ -150,19 +159,21 @@ CHECK(EnergyMinimizer::setEnergyDifferenceBound(float))
 	TEST_EQUAL(e_min.getEnergyDifferenceBound(), 9.0)
 RESULT
 
-CHECK(EnergyMinimizer::getMaximalShift() const)
+CHECK(EnergyMinimizer::getMaximumDisplacement() const)
 	EnergyMinimizer e_min;
-	TEST_EQUAL(e_min.getMaximalShift(), 0.0)
+	TEST_EQUAL(e_min.getMaximumDisplacement(), 0.0)
 RESULT
 
-CHECK(EnergyMinimizer::setMaximalShift(float))
+CHECK(EnergyMinimizer::setMaximumDisplacement(float))
 	EnergyMinimizer e_min;
-	e_min.setMaximalShift(56.0);
-	TEST_EQUAL(e_min.getMaximalShift(), 56.0)
+	e_min.setMaximumDisplacement(56.0);
+	TEST_EQUAL(e_min.getMaximumDisplacement(), 56.0)
 RESULT
 
 CHECK(EnergyMinimizer::minimize(Size, bool))
-//?????
+	EnergyMinimizer em;
+	TEST_EXCEPTION(Exception::NotImplemented, em.minimize())
+	// this shouldn't do anything
 RESULT
 
 /////////////////////////////////////////////////////////////

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: complex.C,v 1.4 2002/12/12 10:22:09 oliver Exp $
+// $Id: complex.C,v 1.4.2.1 2003/02/05 15:32:53 anker Exp $
 
 #include <BALL/MATHS/complex.h>
 

@@ -1,8 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ConjugateGradientMinimizer_test.C,v 1.5 2003/02/05 13:00:18 oliver Exp $
-
+// $Id: ConjugateGradientMinimizer_test.C,v 1.5.2.1 2003/02/05 15:33:54 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +11,7 @@
 #include <BALL/KERNEL/PTE.h>
 ///////////////////////////
 
-START_TEST(ConjugateGradienMinimizer, "$Id: ConjugateGradientMinimizer_test.C,v 1.5 2003/02/05 13:00:18 oliver Exp $")
+START_TEST(ConjugateGradienMinimizer, "$Id: ConjugateGradientMinimizer_test.C,v 1.5.2.1 2003/02/05 15:33:54 anker Exp $")
 
 using namespace BALL;
 
@@ -109,26 +108,26 @@ CHECK(ConjugateGradientMinimizer::specificSetup())
 	// specificSetup() shouldn't do anything except returning true
 RESULT
 
-CHECK(ConjugateGradientMinimizer::getNumberOfIterations() const)
+CHECK(ConjugateGradientMinimizer::getNumberOfIteration() const)
 	ConjugateGradientMinimizer e_min;
-	TEST_EQUAL(e_min.getNumberOfIterations(), 0)
+	TEST_EQUAL(e_min.getNumberOfIteration(), 0)
 RESULT
 
 CHECK(ConjugateGradientMinimizer::setNumberOfIteration(Size))
 	ConjugateGradientMinimizer e_min;
-	e_min.setNumberOfIterations(4);
-	TEST_EQUAL(e_min.getNumberOfIterations(), 4)
+	e_min.setNumberOfIteration(4);
+	TEST_EQUAL(e_min.getNumberOfIteration(), 4)
 RESULT
 
-CHECK(ConjugateGradientMinimizer::getMaxNumberOfIterations())
+CHECK(ConjugateGradientMinimizer::getMaximalNumberOfIterations())
 	ConjugateGradientMinimizer e_min;
-	TEST_EQUAL(e_min.getMaxNumberOfIterations(), 0)
+	TEST_EQUAL(e_min.getMaximalNumberOfIterations(), 0)
 RESULT
 
-CHECK(ConjugateGradientMinimizer::setMaxNumberOfIterations(Size))
+CHECK(ConjugateGradientMinimizer::setMaximalNumberOfIterations(Size))
 	ConjugateGradientMinimizer e_min;
-	e_min.setMaxNumberOfIterations(2000);
-	TEST_EQUAL(e_min.getMaxNumberOfIterations(), 2000)
+	e_min.setMaximalNumberOfIterations(2000);
+	TEST_EQUAL(e_min.getMaximalNumberOfIterations(), 2000)
 RESULT
 
 CHECK(ConjugateGradientMinimizer::getEnergyOutputFrequency() const)
@@ -183,7 +182,7 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool))
 	FF.options[AmberFF::Option::ASSIGN_CHARGES] = "false";
 	FF.setup(S);
 
-	TEST_EQUAL(FF.isValid(), true)
+	TEST_REAL_EQUAL(FF.isValid(), true)
 	FF.updateEnergy();
 	FF.updateForces();
 	PRECISION(10)

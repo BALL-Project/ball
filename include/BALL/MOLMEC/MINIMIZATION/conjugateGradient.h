@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.h,v 1.10.2.1 2003/01/07 13:18:11 anker Exp $ 
+// $Id: conjugateGradient.h,v 1.10.2.2 2003/02/05 15:31:12 anker Exp $ 
 
 #ifndef BALL_MOLMEC_MINIMIZATION_CONJUGATEGRADIENT_H 
 #define BALL_MOLMEC_MINIMIZATION_CONJUGATEGRADIENT_H 
@@ -110,7 +110,7 @@ namespace BALL
 
     //@}
 
-    BALL_CREATE_DEEP(ConjugateGradientMinimizer)
+    BALL_CREATE(ConjugateGradientMinimizer)
 
     /**	@name	Constructors and Destructors	
     */
@@ -139,7 +139,7 @@ namespace BALL
 
     /**	Copy constructor
     */
-    ConjugateGradientMinimizer(const ConjugateGradientMinimizer& rhs, bool deep = true);
+    ConjugateGradientMinimizer(const ConjugateGradientMinimizer& rhs);
 
     /**	Destructor.
     */
@@ -152,9 +152,10 @@ namespace BALL
 
     /**	Assignment operator
     */
-    ConjugateGradientMinimizer& operator = (const ConjugateGradientMinimizer& rhs);
+    const ConjugateGradientMinimizer& operator = (const ConjugateGradientMinimizer& rhs);
 
     //@}
+
     /**	@name	Setup methods. They do all necessary preparations. 
     */
     //@{
@@ -164,6 +165,7 @@ namespace BALL
     virtual bool specificSetup();
 
     //@}
+
     /**	@name	Accessors 
     */
     //@{
@@ -190,7 +192,7 @@ namespace BALL
 				@return	bool {\bf true} if the line search found an acceptable solution
 				@see	EnergyMinimizer::findStep
 		*/
-		virtual bool findStep();
+		virtual double findStep();
 			
 		/**	Update the search direction.
 				This method updates the search direction.
@@ -209,23 +211,12 @@ namespace BALL
     virtual bool minimize(Size iterations = 0, bool restart = false); 
 
     //@}
-    /**	@name	Public Attributes
-    */
-    //@{
-
-    /**	Force field options
-    */
-    Options	options;
-		
 
     protected:
 
-    //@}
-    /*_	@name	Protected Attributes 
+    /**	@name	Protected Attributes 
 		*/
-    //_@{
-
-		Size number_of_atoms_;
+    //@{
 
     /*_ The step length used in the line search 
     */
@@ -235,11 +226,15 @@ namespace BALL
     */
     double lambda_; 
 
+    /*_ The number of movable atoms.
+    */
+		Size number_of_atoms_; 
+
 		/*_	The update method used for the CG
 		*/
 		UpdateMethod method_;
 
-    //_@}
+    //@}
 
 	};
 

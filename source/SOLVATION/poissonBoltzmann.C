@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: poissonBoltzmann.C,v 1.29.2.6 2003/01/07 13:21:54 anker Exp $ 
+// $Id: poissonBoltzmann.C,v 1.29.2.7 2003/02/05 15:33:35 anker Exp $ 
+
 // FDPB: Finite Difference Poisson Solver
 
 #include <BALL/SOLVATION/poissonBoltzmann.h>
@@ -14,6 +15,11 @@
 #include <BALL/SYSTEM/timer.h>
 #include <BALL/COMMON/limits.h>
 #include <BALL/KERNEL/PTE.h>
+
+// DEBUG
+#include <BALL/KERNEL/PTE.h>
+#include <BALL/SYSTEM/file.h>
+// /DEBUG
 
 // DEBUG
 #include <BALL/KERNEL/PTE.h>
@@ -1195,6 +1201,7 @@ namespace BALL
 		delete kappa_grid;
 		kappa_grid = new TRegularData3D<float>(lower_, upper_, spacing_);
 
+<<<<<<< poissonBoltzmann.C
 		if (kappa_grid->getSize() != SAS_grid->getSize())
 		{
 			Log.error() << "FDPB::setupKappaGrid() : "
@@ -1215,6 +1222,29 @@ namespace BALL
 			}
 		}
 
+=======
+		if (kappa_grid->getSize() != SAS_grid->getSize())
+		{
+			Log.error() << "FDPB::setupKappaGrid() : "
+				<< "kappa_grid and SAS_grid seem to have different dimensions, aborting."
+				<< endl;
+				return false;
+		}
+
+		for (Size i = 0; i < kappa_grid->getSize(); ++i)
+		{
+			if ((*SAS_grid)[i] == CCONN__INSIDE)
+			{
+				(*kappa_grid)[i] = kappa_square;
+			}
+			else
+			{
+				(*kappa_grid)[i] = 0.0;
+			}
+		}
+
+
+>>>>>>> 1.34
 		// we don't need the SAS grid anymore
 		delete SAS_grid;
 		SAS_grid = 0;
@@ -1986,6 +2016,7 @@ namespace BALL
 				for (k = 1; k < (Nx - 1); k++)
 				{
 					l = i + j * Nx + k * Nxy;
+<<<<<<< poissonBoltzmann.C
 
 					if (ionic_strength == 0.0 || solvent_dielectric_constant == 1.0)
 					{
@@ -2006,6 +2037,29 @@ namespace BALL
 								+ (*eps_grid)[(Index)(l - Nxy)].z
 								+ (*kappa_grid)[l]);
 					}
+=======
+
+					if (ionic_strength == 0.0 || solvent_dielectric_constant == 1.0)
+					{
+						d = 1 / ((*eps_grid)[(Index)l].x
+								+ (*eps_grid)[(Index)l].y
+								+ (*eps_grid)[(Index)l].z
+								+ (*eps_grid)[(Index)(l - 1)].x
+								+ (*eps_grid)[(Index)(l - Nx)].y
+								+ (*eps_grid)[(Index)(l - Nxy)].z);
+					}
+					else
+					{
+						d = 1 / ((*eps_grid)[(Index)l].x
+								+ (*eps_grid)[(Index)l].y
+								+ (*eps_grid)[(Index)l].z
+								+ (*eps_grid)[(Index)(l - 1)].x
+								+ (*eps_grid)[(Index)(l - Nx)].y
+								+ (*eps_grid)[(Index)(l - Nxy)].z
+								+ (*kappa_grid)[l]);
+					}
+
+>>>>>>> 1.34
 
 					T[(Index)(6 * l)    ]  = (*eps_grid)[(Index)l].x * d;
 					T[(Index)(6 * l + 1)]  = (*eps_grid)[(Index)(l - 1)].x * d;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.C,v 1.35.2.1 2003/01/07 13:20:50 anker Exp $
+// $Id: atom.C,v 1.35.2.2 2003/02/05 15:32:46 anker Exp $
 
 #include <BALL/KERNEL/atom.h>
 
@@ -19,6 +19,7 @@ using namespace std;
 namespace BALL 
 {
 
+<<<<<<< atom.C
 	Atom::AttributeVector			Atom::static_attributes_;
 	Atom::AtomIndexList				Atom::free_list_;
 	
@@ -53,6 +54,56 @@ namespace BALL
 
 	
 
+=======
+	Atom::AttributeVector			Atom::static_attributes_;
+	Atom::AtomIndexList				Atom::free_list_;
+	
+	void Atom::StaticAtomAttributes::clear()
+	{
+		charge = BALL_ATOM_DEFAULT_CHARGE;
+		type = BALL_ATOM_DEFAULT_TYPE;
+		position.set(BALL_ATOM_DEFAULT_POSITION);
+		velocity.set(BALL_ATOM_DEFAULT_VELOCITY);
+		force.set(BALL_ATOM_DEFAULT_FORCE);
+	}
+
+	void Atom::StaticAtomAttributes::swap(Atom::StaticAtomAttributes& attr)
+	{
+		std::swap(charge, attr.charge);
+		std::swap(type, attr.type);
+		std::swap(ptr, attr.ptr);
+		position.swap(attr.position);
+		velocity.swap(attr.velocity);
+		force.swap(attr.force);		
+	}
+
+	void Atom::StaticAtomAttributes::set(Atom::StaticAtomAttributes& attr)
+	{
+		charge = attr.charge;
+		type = attr.type;
+		// Do not assign the back pointer!
+		// ptr = attr.ptr;
+		position = attr.position;
+		velocity = attr.velocity;
+		force = attr.force;		
+	}
+
+	
+	const Atom::StaticAtomAttributes& Atom::StaticAtomAttributes::operator = 
+		(const Atom::StaticAtomAttributes& attr)
+	{
+		charge = attr.charge;
+		type = attr.type;
+		// Do not assigne the back pointer!
+		// ptr = attr.ptr;
+		position = attr.position;
+		velocity = attr.velocity;
+		force = attr.force;		
+
+		return *this;
+	}	
+
+>>>>>>> 1.39
 	Atom::Atom()
 		throw()
 		:	Composite(),

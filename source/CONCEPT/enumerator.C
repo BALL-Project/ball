@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: enumerator.C,v 1.10.2.1 2003/01/07 13:20:31 anker Exp $
+// $Id: enumerator.C,v 1.10.2.2 2003/02/05 15:32:32 anker Exp $
 
 #include <BALL/COMMON/global.h>
 #include <BALL/COMMON/exception.h>
@@ -48,7 +48,7 @@ namespace BALL
 		{
 			operator[](i)++;
 			add_one = false;
-			if (operator[](i) >= modulus_[i])
+			if ((operator[](i)) >= modulus_[i])
 			{
 				operator[](i) = 0;
 				add_one = true;

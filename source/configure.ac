@@ -1,9 +1,17 @@
-dnl    $Id: configure.ac,v 1.2.2.1 2003/01/07 13:20:05 anker Exp $
+dnl    $Id: configure.ac,v 1.2.2.2 2003/02/05 15:32:20 anker Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
+dnl
+dnl    Disable caching in MULTI_BUILD mode - just to be sure
+dnl
+if test "${MULTI_BUILD}" = "true" ; then
+	${RM} config.cache
+fi
+
+
 dnl 
-dnl    some initialization stuff...
+dnl    Some initialization stuff...
 dnl 
 AC_INIT(BALL, 1.0, ball-bugs@bioinf.uni-sb.de)
 AC_CONFIG_HEADER([
@@ -27,11 +35,12 @@ AC_ARG_WITH(cxxflags,          [  --with-cxxflags=FLAGS   add FLAGS to the C++ c
 AC_ARG_WITH(ldflags,           [  --with-ldflags=FLAGS    add FLAGS to the linker flags (commas are converted to blanks)])
 AC_ARG_WITH(arflags,           [  --with-arflags=FLAGS    add FLAGS to the flags for the creation of the static libraries])
 AC_ARG_WITH(dynarflags,        [  --with-dynarflags=FLAGS add FLAGS to the flags for the creation of the shared libraries])
+AC_ARG_WITH(qt,                [  --with-qt=QTDIR         QT is installed in QTDIR. Prefer this over the following options.])
 AC_ARG_WITH(qt-incl,           [  --with-qt-incl=DIR      QT header files are in DIR])
 AC_ARG_WITH(qt-libs,           [  --with-qt-libs=DIR      QT libraries are in DIR])
 AC_ARG_WITH(qt-mt,             [  --with-qt-mt            use a threadsafe version of the QT lib (libqt-mt)])
 AC_ARG_WITH(moc,               [  --with-moc=MOC          use MOC as the absolute path to the QT meta object compiler (moc)])
-AC_ARG_WITH(uic,               [  --with-moc=UIC          use UIC as the absolute path to the QT user interface compiler (uic)])
+AC_ARG_WITH(uic,               [  --with-uic=UIC          use UIC as the absolute path to the QT user interface compiler (uic)])
 AC_ARG_WITH(opengl-incl,       [  --with-opengl-incl=DIR  OpenGL/Mesa header files are in DIR/GL])
 AC_ARG_WITH(opengl-libs,       [  --with-opengl-libs=DIR  OpenGL/Mesa libraries are in DIR/GL])
 AC_ARG_WITH(mesa,              [  --with-mesa             use MESA instead of OpenGL])
@@ -91,6 +100,9 @@ if test "$with_arflags" != "" ; then
 	AROPTS="${AROPTS}`echo $with_arflags|tr ,  \  `"
 fi
 
+if test "$with_qt" != "" ; then
+	QTDIR=$with_qt
+fi
 if test "$with_qt_incl" != "" ; then
 	QT_INCPATH=$with_qt_incl
 fi
@@ -600,49 +612,33 @@ SUBDIRS="COMMON CONCEPT DATATYPE ENERGY FORMAT KERNEL MATHS MOLMEC NMR QSAR SOLV
 AC_SUBST(SUBDIRS)
 BINFMT_PATH=""
 
-dnl keep that for now for compatibility
-AC_OUTPUT([
- 	config.mak:config/config.mak.in 
-	common.mak:config/common.mak.in 
-])
-
-AC_OUTPUT([Makefile:config/Makefile.in])
- 
-dnl AC_PREFIX_DEFAULT(${BALL_PATH})
 AC_PREFIX_DEFAULT(`cd ..; pwd`)
 
 dnl
-dnl    copy config.h to the includes directory
-dnl    remove obsolete dependency file
+dnl   Check for multi-platform build.
 dnl
-
-dnl	
-dnl move that damned file only if it differs from the previous
-dnl version. Otherwise we have to rebuild _everything_ after each configure
-dnl
-if test -f $BALL_PATH/include/BALL/CONFIG/config.h ; then
-	if test "`${DIFF} config.h $BALL_PATH/include/BALL/CONFIG/config.h`" != "" ; then
-		${MV} -f config.h $BALL_PATH/include/BALL/CONFIG/config.h
-	fi
-else 
-	dnl
-	dnl  create the directory BALL/include/CONFIG
-	dnl  and move config.h to that directory
-	dnl
-	mkdir ${BALL_PATH}/include/BALL/CONFIG 2>/dev/null
-	${MV} -f config.h $BALL_PATH/include/BALL/CONFIG/config.h
-fi
-	
-
+CF_CHECK_MULTI_BUILD
 
 dnl
-dnl		make sure the dependencies and object lists are (re)built
+dnl 	Create output files. Move them to temporary location
+dnl		only, because some of them will require additional
+dnl		modification (in MULTI_BUILD mode).
 dnl
-${RM}  .Dependencies 2>/dev/null
-${RM}  lib*.objects 2>/dev/null
+AC_OUTPUT([
+ 	config.mak.tmp:config/config.mak.in 
+	common.mak.tmp:config/common.mak.in 
+	Makefile.tmp:config/Makefile.in
+])
+CF_MULTI_BUILD_SHADOW
+CF_MOVE_CONFIG_FILES
 
 dnl
-dnl Just give another helpful message and exit
+dnl		Make sure the dependencies and object lists are (re)built.
+dnl
+CF_CLEAR_DEP_FILES
+
+dnl
+dnl Just give another helpful message and exit.
 dnl
 
 AC_MSG_RESULT()

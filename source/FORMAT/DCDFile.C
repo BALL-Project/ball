@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile.C,v 1.18.2.3 2003/01/27 15:58:41 anker Exp $
+// $Id: DCDFile.C,v 1.18.2.4 2003/02/05 15:32:40 anker Exp $
 
 #include <BALL/FORMAT/DCDFile.h>
 #include <BALL/MOLMEC/COMMON/snapShot.h>
@@ -417,6 +417,7 @@ namespace BALL
 			return false;
 		}
 
+<<<<<<< DCDFile.C
 
 		if (count_snapshots == true)
 		{
@@ -440,6 +441,32 @@ namespace BALL
 			number_of_snapshots_ = count;
 		}
 
+=======
+
+		if (count_snapshots == true)
+		{
+			SnapShot dummy;
+			Size count = 0;
+
+			Position pos = tellg();
+
+			seekg(0, ios::end);
+			int end = tellg();
+			seekg(pos);
+
+			do
+			{
+				if (read(dummy) == true) count++;
+				else break;
+			}
+			while ((tellg() > 0) && (tellg() < end));
+
+			seekg(pos);
+
+			number_of_snapshots_ = count;
+		}
+
+>>>>>>> 1.23
 		return true;
 
 	}
@@ -449,9 +476,15 @@ namespace BALL
 		throw()
 	{
 
+<<<<<<< DCDFile.C
 		// DEBUG
 		Log.info() << good() << " " << bad() << endl;
 		// /DEBUG
+=======
+		// DEBUG
+		// Log.info() << good() << " " << bad() << endl;
+		// /DEBUG
+>>>>>>> 1.23
 		Size i;
 
 		// write the info block
@@ -460,6 +493,7 @@ namespace BALL
 		{
 			*this << BinaryFileAdaptor<char>(CORD_[i]);
 		}
+<<<<<<< DCDFile.C
 		// DEBUG
 		Log.info() << "wH: number_of_snapshots_ " << number_of_snapshots_ << endl;
 		// /DEBUG
@@ -467,6 +501,15 @@ namespace BALL
 		*this << BinaryFileAdaptor<Size>(step_number_of_starting_time_);
 		*this << BinaryFileAdaptor<Size>(steps_between_saves_);
 		*this << BinaryFileAdaptor<Size>((Size)has_velocities_);
+=======
+		// DEBUG
+		// Log.info() << "wH: number_of_snapshots_ " << number_of_snapshots_ << endl;
+		// /DEBUG
+		*this << BinaryFileAdaptor<Size>(number_of_snapshots_);
+		*this << BinaryFileAdaptor<Size>(step_number_of_starting_time_);
+		*this << BinaryFileAdaptor<Size>(steps_between_saves_);
+		*this << BinaryFileAdaptor<Size>((Size)has_velocities_);
+>>>>>>> 1.23
 		for (i = 0; i < 5; ++i)
 		{
 			*this << BinaryFileAdaptor<Size>(0);
@@ -476,6 +519,7 @@ namespace BALL
 		{
 			*this << BinaryFileAdaptor<Size>(0);
 		}
+<<<<<<< DCDFile.C
 		*this << BinaryFileAdaptor<Size>(84);
 
 		// write the comment block
@@ -495,6 +539,27 @@ namespace BALL
 		*this << BinaryFileAdaptor<Size>(number_of_atoms_);
 		*this << BinaryFileAdaptor<Size>(4);
 
+=======
+		*this << BinaryFileAdaptor<Size>(84);
+
+		// write the comment block
+		*this << BinaryFileAdaptor<Size>((number_of_comments_*80)+4);
+		*this << BinaryFileAdaptor<Size>(number_of_comments_);
+		for (i = 0; i < (number_of_comments_*80); ++i)
+		{
+			*this << BinaryFileAdaptor<char>(' ');
+		}
+		*this << BinaryFileAdaptor<Size>((number_of_comments_*80)+4);
+
+		// write the atom number block
+		*this << BinaryFileAdaptor<Size>(4);
+		// DEBUG
+		// Log.info() << "wH: number_of_atoms_ " << number_of_atoms_ << endl;
+		// /DEBUG
+		*this << BinaryFileAdaptor<Size>(number_of_atoms_);
+		*this << BinaryFileAdaptor<Size>(4);
+
+>>>>>>> 1.23
 		return true;
 	}
 
@@ -502,6 +567,7 @@ namespace BALL
 	bool DCDFile::append(const SnapShot& snapshot)
 		throw()
 	{
+<<<<<<< DCDFile.C
 		// DEBUG
 		Log.info() << good() << " " << bad() << endl;
 		// /DEBUG
@@ -516,6 +582,22 @@ namespace BALL
 		// increase the snapshot counter for a correct header
 		number_of_snapshots_++;
 
+=======
+		// DEBUG
+		// Log.info() << good() << " " << bad() << endl;
+		// /DEBUG
+
+		// ?????
+		// We should check here whether this is the *correct* number of atoms,
+		// i. e. whether earlier snapshots had the same number.
+		number_of_atoms_ = snapshot.getNumberOfAtoms();
+		// DEBUG
+		// Log.info() << "append: number_of_atoms_ " << number_of_atoms_ << endl;
+		// /DEBUG
+		// increase the snapshot counter for a correct header
+		number_of_snapshots_++;
+
+>>>>>>> 1.23
 		const vector<Vector3>& positions = snapshot.getAtomPositions();
 		if (positions.size() == 0)
 		{

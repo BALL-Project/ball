@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logStream.C,v 1.25.2.1 2003/01/07 13:20:28 anker Exp $
+// $Id: logStream.C,v 1.25.2.2 2003/02/05 15:32:29 anker Exp $
 
 #include <limits.h>
 #include <BALL/COMMON/logStream.h>
@@ -284,7 +284,7 @@ namespace BALL
 	}
 
 	// create a new buffer
-	LogStream::LogStream(const bool& associate_stdio)
+	LogStream::LogStream(bool associate_stdio)
 		: BALL_IOS(new LogStreamBuf),
 			BALL_OSTREAM(new LogStreamBuf),
 			delete_buffer_(true)

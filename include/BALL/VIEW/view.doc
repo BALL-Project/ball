@@ -1,6 +1,6 @@
-// $Id: view.doc,v 1.10 2001/08/01 12:29:51 amoll Exp $
+// $Id: view.doc,v 1.10.2.1 2003/02/05 15:31:46 anker Exp $
 
-/**@name VIEW.
+/**@name VIEW
          VIEW is a framework for the implementation of GUI based visualizations.
          The GUI toolkit used in this framework is QT because it provides a portable GUI framework
          in C++ and allows the use of the OpenGL library for 3D rendering.
@@ -70,44 +70,40 @@
          the documentation of the QT-library.
 */
 //@{
-	/** @name Common data.
-            Some overall used data and data structures are defined in
-            this section.
+	/** @name Common data
+            Some overall used data and data structures are defined in this section.
   */
 	//@{
 		//@Include: COMMON/common.doc
 	//@}
 
-	/** @name Used datatypes.
- 	          In this section the color datatypes and their
-            help classes are defined.
+	/** @name Used datatypes
+ 	          In this section the color datatypes and their help classes are defined.
 	*/
 	//@{
 		//@Include: DATATYPE/datatype.doc
 	//@}
 
-	/** @name Functoren.
- 	          In this section some usefull visitors and processors are
-	          defined.
+	/** @name Functoren
+ 	          In this section some usefull visitors and processors are defined.
 	*/
 	//@{
 		//@Include: FUNCTOR/functor.doc
 	//@}
 
-	/** @name Gui classes.
+	/** @name Gui classes
 	          Description on the render engine and the handling of composites
 	          can be obtained here. Further predefined openGL primitives (an
             extension of the primitives in the Kernel section) are located
             in this directory.
             There are some dialogs and widgets (like the scene) that are
-            an important part of the View component described in this 
-	          section.
+            an important part of the View component described in this section.
 	*/
 	//@{
 		//@Include: GUI/gui.doc
 	//@}
 
-	/** @name Kernel classes.
+	/** @name Kernel classes
             This section contains classes that are responsible for
 	          building geometric primitives, handling client requests
 	          and building a connection with message queuing between
@@ -117,7 +113,7 @@
 		//@Include: KERNEL/kernel.doc
 	//@}
 
-	/** @name Predefined primitives (without graphical representation).
+	/** @name Predefined primitives (without graphical representation)
             In this section some predefined primitives can be found.
             They represent the primitives only in the sense of geometric 
 	          properties. The graphical visualization implementation is

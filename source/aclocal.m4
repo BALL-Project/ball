@@ -1,15 +1,6 @@
-# aclocal.m4 generated automatically by aclocal 1.6.3 -*- Autoconf -*-
-
-# Copyright 1996, 1997, 1998, 1999, 2000, 2001, 2002
-# Free Software Foundation, Inc.
-# This file is free software; the Free Software Foundation
-# gives unlimited permission to copy and/or distribute it,
-# with or without modifications, as long as this notice is preserved.
-
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY, to the extent permitted by law; without
-# even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-# PARTICULAR PURPOSE.
+dnl		$Id: aclocal.m4,v 1.9.2.2 2003/02/05 15:32:15 anker Exp $
+dnl		Autoconf M4 macros used by configure.ac.
+dnl
 
 dnl
 dnl		display the license and abort if not accepted
@@ -78,7 +69,7 @@ dnl    syntax: AC_FIND_HEADER(<PATH_VAR>,<header.h>,<additional dirnames>)
 dnl    
 dnl        PATH_VAR will be set to the include path or to empty string (if not found)
 dnl        header.h is the header file name (e.g. wait.h, GL/gl.h)
-dnl        additional dirnames are included in searches these should be absolute names!
+dnl        additional dirnames are included in searches these should be absolute names.
 dnl 
 
 AC_DEFUN(CF_FIND_HEADER,[
@@ -168,7 +159,7 @@ dnl    syntax: CF_FIND_LIB(<PATH_VAR>,<libXXX>,<additional dirnames>)
 dnl    
 dnl        PATH_VAR will be set to the library path or to empty string (if not found)
 dnl        libXXX is the header file name (e.g. libGLUT, libGL) .a, .so etc. should be omitted
-dnl        additional dirnames are included in searches these should be absolute names!
+dnl        additional dirnames are included in searches these should be absolute names.
 dnl 
 
 AC_DEFUN(CF_FIND_LIB,[
@@ -520,11 +511,14 @@ AC_DEFUN(CF_DIGEST_CXX_VERSION,[
 	if test "${CXX_VERSION_LENGTH}" -ge 4 ; then
 		CXX_VERSION_4=`echo ${CXX_VERSION} | ${CUT} -d. -f4`
 	fi
+	AC_DEFINE_UNQUOTED(BALL_COMPILER_VERSION_MAJOR, ${CXX_VERSION_1})
+	AC_DEFINE_UNQUOTED(BALL_COMPILER_VERSION_MINOR, ${CXX_VERSION_2})
+	AC_DEFINE_UNQUOTED(BALL_COMPILER_VERSION_MINOR_MINOR, ${CXX_VERSION_3})
 	])
 
 dnl
 dnl		Check whether CXX is a GNU compiler and retrieve its
-dnl			version number
+dnl			version number.
 dnl
 AC_DEFUN(CF_IDENTIFY_GXX,[
 	AC_MSG_CHECKING(for GNU compiler)
@@ -542,12 +536,18 @@ EOF
 		HAS_GPLUSPLUS=true
 		CXX_NAME="g++"
 		CXX_IDENTIFIED=true
+
+		dnl 
+		dnl 	Define a symbol for G++.
+		dnl
+		AC_DEFINE(BALL_COMPILER_GXX, )
+		AC_DEFINE(BALL_COMPILER, GXX)
 	else
 		AC_MSG_RESULT(no)
 		HAS_GPLUSPLUS=false
 	fi
 	${RM} /tmp/$$.conftest.c
-
+	
 ])
 
 AC_DEFUN(CF_GXX_OPTIONS, [
@@ -641,6 +641,12 @@ AC_DEFUN(CF_IDENTIFY_KAI, [
 		AC_MSG_RESULT(yes)
 		CXX_NAME="KAI"
 		CXX_IDENTIFIED=true
+
+		dnl 
+		dnl 	Define a symbol for KAI C++.
+		dnl
+		AC_DEFINE(BALL_COMPILER_KAI, )
+		AC_DEFINE(BALL_COMPILER, KAI)
 	else
 		IS_KCC=false
 		AC_MSG_RESULT(no)
@@ -729,11 +735,16 @@ AC_DEFUN(CF_IDENTIFY_INTEL, [
 		CXX_NAME="Intel"
 		CXX_IDENTIFIED=true
 
+
+		dnl 
+		dnl 	Define a symbol for Intel C++.
+		dnl
+		AC_DEFINE(BALL_COMPILER_INTEL, )
+		AC_DEFINE(BALL_COMPILER, INTEL)
 	else
 		IS_INTELCC=false
 		AC_MSG_RESULT(no)
 	fi
-
 ])
 
 
@@ -786,6 +797,12 @@ AC_DEFUN(CF_IDENTIFY_COMPAQ,[
 		AC_MSG_RESULT(yes)
 		CXX_NAME="Compaq"
 		CXX_IDENTIFIED=true
+
+		dnl 
+		dnl 	Define a symbol for Compaq C++.
+		dnl
+		AC_DEFINE(BALL_COMPILER_COMPAQ, )
+		AC_DEFINE(BALL_COMPILER, COMPAQ)
 	else
 		IS_DIGITALCXX=false
 		AC_MSG_RESULT(no)
@@ -796,7 +813,7 @@ AC_DEFUN(CF_IDENTIFY_COMPAQ,[
 AC_DEFUN(CF_COMPAQ_OPTIONS, [
 		AC_MSG_CHECKING(compiler version)
 		echo "int main(){}" > conftest.C
-		CXX_VERSION=`${CXX} -V  2>/dev/null| ${GREP} "C++" | ${CUT} -d" " -f3 | tr -d V`
+		CXX_VERSION=`${CXX} -V  2>/dev/null| ${GREP} "C++" | ${SED} "s/^.*C++ //" | ${CUT} -d" " -f1 | ${TR} -d V | ${TR} "-" "."`
 		CXX_NAME=`${CXX} -V | ${GREP} "C++" | ${CUT} -d" " -f1`
 		VERSION_OUTPUT="${CXX_NAME} C++ ${CXX_VERSION}"
 		CXX_COMPILER_NAME="Digital"
@@ -822,7 +839,14 @@ AC_DEFUN(CF_COMPAQ_OPTIONS, [
   MAKEDEP_CXX_OPTS="-M -noimplicit_include"
   MAKEDEP_CXX_SUFFIX=" >.Dependencies"
 
-  CXXFLAGS="${CXXFLAGS} -ieee -nopure_cname"
+	dnl 
+	dnl  CXX 6.2 does not provide the -nopure_cname flag
+	if test "${CXX_VERSION_2}" -lt 3 ; then
+	  CXXFLAGS="${CXXFLAGS} -ieee"
+	else
+	  CXXFLAGS="${CXXFLAGS} -ieee -nopure_cname"
+	fi
+
   LIB_CXXFLAGS="${LIB_CXXFLAGS} -ptr \$(BALL_PATH)/source/cxx_rep"
   CXXFLAGS_O="${CXXFLAGS_O} -O3"
 
@@ -846,11 +870,16 @@ AC_DEFUN(CF_IDENTIFY_SGI, [
 		AC_MSG_RESULT(yes)
 		CXX_NAME="MIPSpro"
 		CXX_IDENTIFIED=true
+
+		dnl 
+		dnl 	Define a symbol for SGI C++.
+		dnl
+		AC_DEFINE(BALL_COMPILER_MIPSPRO, )
+		AC_DEFINE(BALL_COMPILER, MIPSPRO)
 	else
 		IS_MIPSPRO=false
 		AC_MSG_RESULT(no)
 	fi
-
 ])
 
 AC_DEFUN(CF_MIPSPRO_OPTIONS, [
@@ -959,11 +988,16 @@ AC_DEFUN(CF_IDENTIFY_SUN, [
 		AC_MSG_RESULT(yes)
 		CXX_NAME="SunCC"
 		CXX_IDENTIFIED=true
+
+		dnl 
+		dnl 	Define a symbol for SUNPro C++.
+		dnl
+		AC_DEFINE(BALL_COMPILER_SUNPRO)
+		AC_DEFINE(BALL_COMPILER, SUNPRO)
 	else
 		IS_SUNCC=false
 		AC_MSG_RESULT(no)
 	fi
-
 ])
 
 AC_DEFUN(CF_SUNCC_OPTIONS, [
@@ -2290,7 +2324,6 @@ AC_DEFUN(CF_CHECK_XDR, [
 dnl
 dnl FFTW -- Fastest Fourier Transform in the West
 dnl
-
 AC_DEFUN(CF_CHECK_FFTW_SUPPORT, [
 	if test "${FFTW_SUPPORT}" = true ; then
 		FFTW_SUPPORT=true
@@ -2397,22 +2430,29 @@ AC_DEFUN(CF_CHECK_FFTW_SUPPORT, [
 
 
 		AC_MSG_CHECKING(linking against libfftw)
-		dnl ????
-		if test "${X_LINKING_OK+set}" != set ; then
-			X11_LIBS="-lXmu -lXext -lXt -lX11 -lm"
-			SAVE_LIBS=${LIBS}
-			SAVE_LDFLAGS=${LDFLAGS}
-			LIBS="${FFTW_LIB}/libfftw.a ${LIBS}"
-			LDFLAGS=
-			FFTW_LINKING_OK=0
-			AC_TRY_LINK([
-									],
-									[
-									], FFTW_LINKING_OK=1)
-			LIBS=${SAVE_LIBS}
-			LDFLAGS=${SAVE_LDFLAGS}
+		SAVE_LIBS=${LIBS}
+		SAVE_LDFLAGS=${LDFLAGS}
+		LIBS="${FFTW_LIB}/libfftw.a ${LIBS}"
+		LDFLAGS=
+		FFTW_LINKING_OK=0
+		AC_TRY_LINK([
+									#include <fftw.h>
+								],
+								[
+									fftw_create_plan(1, 10, 0);
+								], FFTW_LINKING_OK=1)
+		LIBS=${SAVE_LIBS}
+		LDFLAGS=${SAVE_LDFLAGS}
+		if test "${FFTW_LINKING_OK+set}" != "set" ; then
+			AC_MSG_RESULT(no)
+			AC_MSG_RESULT()
+			AC_MSG_RESULT([Cannot link against libfftw. Please check config.log and])
+			AC_MSG_RESULT([specify appropriate options to configure (e.g. --with-fftw-lib/incl).])
+			AC_MSG_RESULT()
+			AC_MSG_ERROR(Aborted)
+		else
+			AC_MSG_RESULT(yes)
 		fi
-
 	fi
 	AC_DEFINE_UNQUOTED(BALL_COMPLEX_TYPE, ${BALL_COMPLEX_TYPE})
 ])
@@ -3026,11 +3066,6 @@ AC_DEFUN(CF_PYTHON, [
 	AC_SUBST(PYTHON_LIBS)
 
 	if test "${PYTHON_SUPPORT}" = true ; then
-		AC_MSG_RESULT()
-		AC_MSG_RESULT(Python support temporarily disabled in this version!)
-		AC_MSG_RESULT()
-		AC_MSG_RESULT()
-		AC_MSG_ERROR(Aborted)
 		dnl
 		dnl Python support won't work without BALLVIEW!
 		dnl (at least for the moment...)
@@ -3162,17 +3197,17 @@ AC_DEFUN(CF_PYTHON, [
 		AC_MSG_RESULT(${SIP})
 
 		dnl
-		dnl libsip.a 
+		dnl libsip.so 
 		dnl
-		AC_MSG_CHECKING(libsip.a)
-		if test -r "${SIP_LIBPATH}/libsip.a" ; then
-			SIP_LIB=${SIP_LIBPATH}/libsip.a
+		AC_MSG_CHECKING(libsip.so)
+		if test -r "${SIP_LIBPATH}/libsip.so" ; then
+			SIP_LIB=" -L${SIP_LIBPATH} -lsip"
 			AC_MSG_RESULT(${SIP_LIB})
 		else
 			AC_MSG_RESULT(not found in ${SIP_LIBPATH})
 			AC_MSG_RESULT()
 			AC_MSG_RESULT(Please specify the path to the directory that contains)
-			AC_MSG_RESULT(libsip.a using the option --with-sip-lib=DIR.)
+			AC_MSG_RESULT(libsip.so using the option --with-sip-lib=DIR.)
 			AC_MSG_RESULT([If you do not have that file, you should obtain SIP])
 			AC_MSG_RESULT(from)
 			AC_MSG_RESULT(  www.thekompany.com/projects/pykde)
@@ -4063,3 +4098,124 @@ if test "$LEX" = :; then
   LEX=${am_missing_run}flex
 fi])
 
+
+AC_DEFUN(CF_CHECK_MULTI_BUILD,[
+	if test "${MULTI_BUILD}" = "true" ; then
+		AC_MSG_CHECKING(multi-platform build)
+		AC_MSG_RESULT(enabled)
+
+		dnl   add the binary format to the list of supported binary formats
+		dnl   held in config/binary_formats. Avoid double entries
+		dnl
+		if test "${MULTI_BUILD}" = "true" ; then
+			touch ${BINFORMAT_FILE}
+			if test "`${GREP} \^${BINFMT}\\$ ${BINFORMAT_FILE}`" = "" ; then
+				echo ${BINFMT} >> ${BINFORMAT_FILE}
+			fi
+		fi
+
+		dnl
+		dnl   create the global config.h (the one including the platform specific
+		dnl   config.h.${BINFMT})
+		dnl
+		${CAT} config/config.h.header | ${SED} 1,2d > config.h
+
+		dnl
+		dnl add an error line to catch all compilations without -DBMFT=
+		dnl (this is usually a problem with a missing "include config.mak" in the makefile.
+		dnl
+		echo "#ifndef BFMT" >> config.h
+		echo "# error BALL was configured in MULTI BUILD mode! Please specify -DBMFT!" >> config.h
+		echo "#endif" >> config.h
+		echo "" >> config.h
+
+		LINES=`cat config/binary_formats | wc -l`
+		i=1
+		while test $i -le $LINES ; do
+			BFMT=`cat ${BINFORMAT_FILE} | ${SED} -n ${i}p`
+			echo "#if ( BFMT == $i )" >> config.h
+			echo "# include <BALL/CONFIG/config.h.${BFMT}>" >> config.h
+			echo "#endif" >> config.h
+			echo " " >> config.h
+			i=`expr $i + 1`
+		done
+		${CAT} config/config.h.footer | ${SED} 1,2d >> config.h
+		${MKDIR} ${BALL_PATH}/include/BALL/CONFIG 2>/dev/null
+		if test -f ${BALL_PATH}/include/BALL/CONFIG/config.h ; then
+			if test "`${DIFF} ${BALL_PATH}/include/BALL/CONFIG/config.h config.h`" != "" ; then
+				${RM} ${BALL_PATH}/include/BALL/CONFIG/config.h
+				${MV} config.h  ${BALL_PATH}/include/BALL/CONFIG/config.h
+			else
+				${RM} config.h
+			fi
+		else
+			${MV} config.h  ${BALL_PATH}/include/BALL/CONFIG/config.h
+		fi
+
+		dnl   define the string to substitute in common.mak
+		BINFMT_PATH="/${BINFMT}"
+		BINFMT_INDEX="-DBFMT="`${GREP} -n ${BINFMT} ${BINFORMAT_FILE} | ${CUT} -d: -f1 | ${TAIL} -1`
+	else
+		BINFMT_INDEX=""
+		BINFMT_PATH=""
+	fi
+])
+
+AC_DEFUN(CF_MULTI_BUILD_SHADOW, [
+	if test "${MULTI_BUILD}" = "true" ; then
+		AC_MSG_RESULT(creating shadow directories...)
+		config/shadowsource.sh `pwd`"/${BINFMT}" `pwd` "${SUBDIRS} TEST BENCHMARKS EXAMPLES TUTORIAL APPLICATIONS"
+		${RM} -fr `pwd`/${BINFMT}/TEST/data 2>/dev/null
+		${RM} -fr `pwd`/${BINFMT}/BENCHMARKS/data 2>/dev/null
+		${LN} -s `pwd`/TEST/data `pwd`/${BINFMT}/TEST 2>/dev/null
+		${LN} -s `pwd`/TEST/runtests `pwd`/${BINFMT}/TEST 2>/dev/null
+		${LN} -s `pwd`/BENCHMARKS/data `pwd`/${BINFMT}/BENCHMARKS 2>/dev/null
+		${LN} -s `pwd`/BENCHMARKS/runbenchmarks `pwd`/${BINFMT}/BENCHMARKS 2>/dev/null
+
+		${CP} config/Makefile.multiplatform Makefile
+	fi
+])
+
+AC_DEFUN(CF_MOVE_CONFIG_FILES, [
+	if test "${MULTI_BUILD}" = "true" ; then
+		${MV} Makefile.tmp ${BINFMT}/Makefile
+		${MV} common.mak.tmp ${BINFMT}/common.mak
+		${MV} config.mak.tmp ${BINFMT}/config.mak
+	  mkdir ${BALL_PATH}/include/BALL/CONFIG 2>/dev/null
+	  ${MV} -f config.h $BALL_PATH/include/BALL/CONFIG/config.h.${BINFMT}
+	else
+		${MV} Makefile.tmp Makefile
+		${MV} common.mak.tmp common.mak
+		${MV} config.mak.tmp config.mak
+
+		dnl
+		dnl move that damned file only if it differs from the previous
+		dnl version. Otherwise we have to rebuild _everything_ after each configure
+		dnl
+		if test -f $BALL_PATH/include/BALL/CONFIG/config.h ; then
+			if test "`${DIFF} config.h $BALL_PATH/include/BALL/CONFIG/config.h`" != "" ; then
+				${MV} -f config.h $BALL_PATH/include/BALL/CONFIG/config.h
+			fi
+		else
+			dnl
+			dnl  create the directory BALL/include/CONFIG
+			dnl  and move config.h to that directory
+			dnl
+			mkdir ${BALL_PATH}/include/BALL/CONFIG 2>/dev/null
+			${MV} -f config.h $BALL_PATH/include/BALL/CONFIG/config.h
+		fi
+	fi
+])
+
+AC_DEFUN(CF_CLEAR_DEP_FILES, [
+	dnl
+	dnl   make sure the dependencies and object lists are (re)built
+	dnl
+	if test "${MULTI_BUILD}" = "true" ; then
+		${RM}  ${BINFMT}/.Dependencies 2>/dev/null
+		${RM}  ${BINFMT}/lib*.objects 2>/dev/null
+	else
+		${RM}  .Dependencies 2>/dev/null
+		${RM}  lib*.objects 2>/dev/null
+	fi
+])

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: File_test.C,v 1.34.2.1 2003/01/07 13:22:25 anker Exp $
+// $Id: File_test.C,v 1.34.2.2 2003/02/05 15:33:58 anker Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -20,7 +20,7 @@ using namespace std;
 #	define sleep(a) _sleep(1000 * a)
 #endif
 
-START_TEST(File, "$Id: File_test.C,v 1.34.2.1 2003/01/07 13:22:25 anker Exp $")
+START_TEST(File, "$Id: File_test.C,v 1.34.2.2 2003/02/05 15:33:58 anker Exp $")
 
 
 /////////////////////////////////////////////////////////////
@@ -41,8 +41,9 @@ CHECK(File(const String& name, OpenMode open_mode = std::ios::in))
 	File f("data/File_test.txt");
 	TEST_EQUAL(f.getSize(), 100)
 
-	TEST_EXCEPTION(Exception::FileNotFound, File f2(""))
-	TEST_EXCEPTION(Exception::FileNotFound, File f2("sdffsdf"))
+	File* f2;
+	TEST_EXCEPTION(Exception::FileNotFound, f2 = new File("x"))
+	TEST_EXCEPTION(Exception::FileNotFound, f2 = new File("sdffsdf"))
 RESULT
 
 CHECK(File(const File& file))

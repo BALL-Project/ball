@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Residue_test.C,v 1.20.2.1 2003/01/07 13:22:49 anker Exp $
+// $Id: Residue_test.C,v 1.20.2.2 2003/02/05 15:34:19 anker Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -16,7 +16,7 @@
 #include <BALL/MATHS/common.h>
 ///////////////////////////
 
-START_TEST(Residue, "$Id: Residue_test.C,v 1.20.2.1 2003/01/07 13:22:49 anker Exp $")
+START_TEST(Residue, "$Id: Residue_test.C,v 1.20.2.2 2003/02/05 15:34:19 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -189,17 +189,21 @@ RESULT
 
 CHECK(Residue::hasTorsionPhi() const )
 	Residue r;
+	r.setProperty(Residue::PROPERTY__AMINO_ACID);
 	TEST_EQUAL(r.hasTorsionPhi(), false)	
 	Chain c;
 	c.insert(r);
 	TEST_EQUAL(r.hasTorsionPhi(), false)	
 	Residue r2;
-	c.insert(r2);
-	TEST_EQUAL(r.hasTorsionPhi(), true)
+	r2.setProperty(Residue::PROPERTY__AMINO_ACID);
+	c.append(r2);
+	TEST_EQUAL(r.hasTorsionPhi(), false)
 	Residue r3;
+	r3.setProperty(Residue::PROPERTY__AMINO_ACID);
 	c.append(r3);
-	TEST_EQUAL(r.hasTorsionPhi(), true)
+	TEST_EQUAL(r.hasTorsionPhi(), false)
 	Residue r4;
+	r4.setProperty(Residue::PROPERTY__AMINO_ACID);
 	c.prepend(r4);
 	TEST_EQUAL(r.hasTorsionPhi(), true)
 RESULT
@@ -220,17 +224,21 @@ RESULT
 
 CHECK(Residue::hasTorsionPsi() const )
 	Residue r;
+	r.setProperty(Residue::PROPERTY__AMINO_ACID);
 	TEST_EQUAL(r.hasTorsionPsi(), false)	
 	Chain c;
 	c.insert(r);
 	TEST_EQUAL(r.hasTorsionPsi(), false)	
 	Residue r2;
+	r2.setProperty(Residue::PROPERTY__AMINO_ACID);
 	c.insert(r2);
 	TEST_EQUAL(r.hasTorsionPsi(), true)
 	Residue r3;
+	r3.setProperty(Residue::PROPERTY__AMINO_ACID);
 	c.prepend(r3);
 	TEST_EQUAL(r.hasTorsionPsi(), true)
 	Residue r4;
+	r4.setProperty(Residue::PROPERTY__AMINO_ACID);
 	c.append(r4);
 	TEST_EQUAL(r.hasTorsionPsi(), true)
 RESULT

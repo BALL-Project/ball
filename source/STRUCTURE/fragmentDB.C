@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentDB.C,v 1.41.2.1 2003/01/07 13:22:01 anker Exp $
+// $Id: fragmentDB.C,v 1.41.2.2 2003/02/05 15:33:40 anker Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 
@@ -929,6 +929,7 @@ namespace BALL
 
 	void FragmentDB::NormalizeNamesProcessor::setNamingStandard(const String& naming_standard) 
 	{
+		// ????? we should check for legal standard names here.
 		naming_standard_ = naming_standard;
 	}
 

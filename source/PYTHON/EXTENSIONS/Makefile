@@ -1,7 +1,7 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.10.2.1 2003/01/07 13:21:42 anker Exp $
+# $Id: Makefile,v 1.10.2.2 2003/02/05 15:33:26 anker Exp $
 #
 
 DIRECTORY=PYTHON/EXTENSIONS

@@ -14,6 +14,8 @@
 
 namespace BALL
 {
+	using namespace VIEW;
+
 	namespace MOLVIEW
 	{
 

@@ -1,4 +1,4 @@
-// $Id: FFT3D.C,v 1.3 2003/01/13 20:53:43 anhi Exp $
+// $Id: FFT3D.C,v 1.3.2.1 2003/02/05 15:32:51 anker Exp $
 
 #include <BALL/MATHS/FFT3D.h>
 

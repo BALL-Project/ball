@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ClassTest_test.C,v 1.8.2.1 2003/01/07 13:22:18 anker Exp $
+// $Id: ClassTest_test.C,v 1.8.2.2 2003/02/05 15:33:53 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 using namespace BALL;
 
-START_TEST(ClassTest, "$Id: ClassTest_test.C,v 1.8.2.1 2003/01/07 13:22:18 anker Exp $")
+START_TEST(ClassTest, "$Id: ClassTest_test.C,v 1.8.2.2 2003/02/05 15:33:53 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -68,18 +68,18 @@ CHECK("ABORT_IF(condition)")
 	TEST_EQUAL(1, 0)
 RESULT
 
-CHECK("CAPTURE_OUTPUT(level)/COMPARE_OUTPUT(text)")
-	CAPTURE_OUTPUT(123)
+CHECK("CAPTURE_OUTPUT_LEVEL(level)/COMPARE_OUTPUT(text)")
+	CAPTURE_OUTPUT_LEVEL(123)
 		Log.level(123) << "TEST123" << std::endl;
 		Log.level(124) << "TEST124" << std::endl;
 		Log.level(122) << "TEST122" << std::endl;
 	COMPARE_OUTPUT("TEST123\n")
 
-	CAPTURE_OUTPUT(123);
+	CAPTURE_OUTPUT_LEVEL(123);
 		Log.level(124) << "TEST124" << std::endl;
 	COMPARE_OUTPUT("")
 
-	CAPTURE_OUTPUT(124)
+	CAPTURE_OUTPUT_LEVEL(124)
 		Log.level(124) << "TEST124" << std::endl;
 	COMPARE_OUTPUT("TEST124\n")
 RESULT

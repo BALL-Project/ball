@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.11.2.1 2003/01/07 13:18:27 anker Exp $
+// $Id: displayProperties.h,v 1.11.2.2 2003/02/05 15:31:25 anker Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
 #define BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
@@ -56,9 +56,21 @@
 
 namespace BALL
 {
+<<<<<<< displayProperties.h
+=======
+	using VIEW::ModularWidget;
+	using VIEW::Message;
+	using VIEW::MainControl;
+	using VIEW::BALL_SELECTED_COLOR;
+	using VIEW::CenterCameraMessage;
+	using VIEW::DrawMessage;
+	using VIEW::SceneMessage;
+
+>>>>>>> 1.21
 	namespace MOLVIEW
 	{
 
+<<<<<<< displayProperties.h
 			/// Exception to be thrown if invalid option is given for a modelprocessor
  			class InvalidOption: public Exception::GeneralException
 			{
@@ -67,6 +79,17 @@ namespace BALL
 					throw();
 			};
 
+=======
+		/// Exception to be thrown if invalid option is given for a modelprocessor
+ 		class InvalidOption: public Exception::GeneralException
+		{
+  		public:
+
+	   		InvalidOption(const char* file, int line, int option)
+					throw();
+		};
+
+>>>>>>> 1.21
 		/**	The DisplayProperties class.
 				The class DisplayProperties is a dialog used for changing the graphical
 				representation of a selection of molecular objects.
@@ -128,8 +151,13 @@ namespace BALL
 					@see        ModularWidget
 			*/
 			DisplayProperties(QWidget *parent = NULL, const char* name = NULL)
+<<<<<<< displayProperties.h
 					throw();
 
+=======
+				throw();
+
+>>>>>>> 1.21
 			//@}
 			/** @name Destructors 
 			*/

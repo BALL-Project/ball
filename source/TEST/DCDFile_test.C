@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile_test.C,v 1.8.2.1 2003/01/07 13:22:21 anker Exp $
+// $Id: DCDFile_test.C,v 1.8.2.2 2003/02/05 15:33:55 anker Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(DCDFile, "$Id: DCDFile_test.C,v 1.8.2.1 2003/01/07 13:22:21 anker Exp $")
+START_TEST(DCDFile, "$Id: DCDFile_test.C,v 1.8.2.2 2003/02/05 15:33:55 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -22,11 +22,6 @@ using namespace BALL;
 ///  insert tests for each member function here         
 
 String dcd_test_file("data/DCD_test.dcd");
-
-CHECK(DCDFile::DCDHeader::DCDHeader() throw())
-  DCDFile::DCDHeader* p = new DCDFile::DCDHeader;
-	TEST_NOT_EQUAL(p, 0)
-RESULT
 
 DCDFile* p = new DCDFile;
 
@@ -115,7 +110,6 @@ CHECK(DCDFile::writeHeader() throw())
 	one.writeHeader();
 	one.close();
 	DCDFile two(temporary, std::ios::in);
-	bool test = two.readHeader();
 	TEST_EQUAL(test, true);
 RESULT
 
@@ -131,11 +125,9 @@ CHECK(DCDFile::append(const SnapShot& snapshot) throw())
 	DCDFile one(temporary, File::out);
 	one.writeHeader();
 	for (Size i = 0; i < 100; i++) one.append(snap);
-	// one.updateHeader();
 	one.close();
 	DCDFile two(temporary, std::ios::in);
 	SnapShot snap2;
-	two.readHeader();
 	two.read(snap2);
 	// ?????
 	// DCDFile lacks something like updateHeader(). As long as such a

@@ -1,0 +1,30 @@
+<node>ACN
+	<node>Names
+		<node>Acetone</node>
+		<node>Aceton</node>
+		<node>Acn</node>
+	</node>
+	<node>Atoms
+		<node>C1<value>C -1.31 -0.73 0</value></node>
+		<node>1H1<value>H -1.104 -1.708 0</value></node>
+		<node>2H1<value>H -1.841 -0.502 0.816</value></node>
+		<node>3H1<value>H -1.841 -0.502 -0.816</value></node>
+		<node>C<value>C 0 0.07 0</value></node>
+		<node>C2<value>C 1.34 -0.66 0</value></node>
+		<node>1H2<value>H 1.182 -1.647 0</value></node>
+		<node>2H2<value>H 1.859 -0.406 -0.816</value></node>
+		<node>3H2<value>H 1.859 -0.406 0.816</value></node>
+		<node>O<value>O -0.03 1.3 0</value></node>
+	</node>
+	<node>Bonds
+		<node>1<value>C1 C s</value></node>
+		<node>2<value>C1 1H1 s</value></node>
+		<node>3<value>C1 2H1 s</value></node>
+		<node>4<value>C1 3H1 s</value></node>
+		<node>5<value>C C2 s</value></node>
+		<node>6<value>C O d</value></node>
+		<node>7<value>C2 1H2 s</value></node>
+		<node>8<value>C2 2H2 s</value></node>
+		<node>9<value>C2 3H2 s</value></node>
+	</node>
+</node>

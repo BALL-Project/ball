@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2DWidget.h,v 1.17.2.1 2003/01/07 13:19:43 anker Exp $
+// $Id: regularData2DWidget.h,v 1.17.2.2 2003/02/05 15:32:04 anker Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGET_REGULARDATA2DWIDGET_H
 #define BALL_VIEW_GUI_WIDGET_REGULARDATA2DWIDGET_H
@@ -57,9 +57,17 @@
 #ifndef BALL_VIEW_GUI_DIALOGS_DLGMOVEOVERLAY_H
 # include <BALL/VIEW/GUI/DIALOGS/dlgMoveOverlay.h>
 #endif
+<<<<<<< regularData2DWidget.h
 
 using namespace BALL;
 using namespace BALL::VIEW;
+=======
+
+namespace BALL
+{
+	namespace VIEW
+	{
+>>>>>>> 1.20
 
 /** New RegularData2D Message Class.
  */
@@ -328,5 +336,7 @@ class RegularData2DWidget
   bool isOverlay_;
 	
 };
+
+} } // namespaces
 
 #endif

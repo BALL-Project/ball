@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: trajectoryFile.C,v 1.7.2.2 2003/01/20 10:47:07 anker Exp $
+// $Id: trajectoryFile.C,v 1.7.2.3 2003/02/05 15:32:45 anker Exp $
 
 #include <BALL/FORMAT/trajectoryFile.h>
 
