@@ -15,7 +15,8 @@ namespace BALL
 
 	// Expression class, frontend to ExpressionTree
 
-	Expression::Expression() : expression_tree_(0)
+	Expression::Expression() 
+		: expression_tree_(0)
 	{
 		registerStandardPredicates_();
 	}
@@ -27,6 +28,7 @@ namespace BALL
 	}
 
 	Expression::Expression(const String& expression_string)
+		:	expression_tree_(0)
 	{
 		registerStandardPredicates_();
 		setExpression(expression_string);
@@ -75,6 +77,7 @@ namespace BALL
 	void Expression::setExpression(const String& expression)
 	{
 		delete expression_tree_;
+		expression_tree_ = 0;
 
 		SyntaxTree tree(expression);
 		tree.parse();
