@@ -1,4 +1,4 @@
-// $Id: fragmentDB.C,v 1.13 2000/01/19 17:56:01 oliver Exp $
+// $Id: fragmentDB.C,v 1.14 2000/02/10 15:18:15 oliver Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 
@@ -991,8 +991,6 @@ namespace BALL
 
 		// after having identified the map, use it to replace the names
 		// first, get the map
-		
-		
 		if (table.find(map_name) != table.end())
 		{
 			map = (*table.find(map_name)).second;
@@ -1751,13 +1749,16 @@ namespace BALL
 		if (fragment_list_.size() >= 2)
 		{
 
-			// iterate over all pairs of consecutive fragments 
+			// iterate over all pairs of fragments 
 			// in the list and try to construct bonds between them
 			list<Fragment*>::iterator it1 = fragment_list_.begin();
 			list<Fragment*>::iterator it2 = it1;
-			for (++it2 ; it2 != fragment_list_.end(); ++it1, ++it2)
+			for (; it1 != fragment_list_.end(); ++it1)
 			{
-				bonds_built_ += buildInterFragmentBonds(**it1, **it2);
+				for (it2 = it1, ++it2; it2 != fragment_list_.end(); ++it2)
+				{
+					bonds_built_ += buildInterFragmentBonds(**it1, **it2);	
+				}
 			}
 		}
 
@@ -1901,7 +1902,6 @@ namespace BALL
 			//		(C-term C N-term 1.33 0.5):
 			//			This will build a connection to a fragment with a N-term connection
 			//			if the two atoms are 1.33+/-0.5 Angstrom apart.
-
 			it1->getValue().split(s1, 5);
 
 			// check if the connection of the first fragment
@@ -1923,8 +1923,10 @@ namespace BALL
 								&& (fabs(distance - s2[2].toFloat()) < s2[3].toFloat()))
 						{
 							// create the bond
-							a1->createBond(*a2);
-							bonds_built++;
+							if (a1->createBond(*a2))
+							{
+								bonds_built++;
+							}
 						}
 					}
 				}
