@@ -1,4 +1,4 @@
-// $Id: lennardJones.h,v 1.10 2000/07/04 07:59:40 oliver Exp $
+// $Id: lennardJones.h,v 1.11 2000/09/22 16:32:02 anker Exp $
 // Molecular Mechanics Parameter: class describing the atom type section of a parameter file
  
 #ifndef BALL_MOLMEC_PARAMETER_LENNARDJONES_H
@@ -92,9 +92,10 @@ namespace BALL
 		//@}
 		
 		/**	Reads a parameter section from an INI file.
-				This method reads the section given in section\_name from ini\_file,
-				interprets (if given) a format line, reads the data from this section according to 
-				the format, and builds some datastructures for fast and easy acces this data.
+				This method reads the section given in section\_name from
+				ini\_file, interprets (if given) a format line, reads the data from
+				this section according to the format, and builds some
+				datastructures for fast and easy access to this data.
 		*/
 		virtual bool extractSection(ForceFieldParameters& parameters, const String& section_name);
 		virtual bool extractSection(Parameters& parameters, const String& section_name);
