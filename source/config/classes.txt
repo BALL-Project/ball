@@ -52,7 +52,7 @@ HashSet                             DX          /       store methods
       Node
       IteratorTraits_
 List                                /           /
-Options                             X           /	isValid
+Options                             X           /       isValid
 Quadruple                           /           /
 RegularData1D                       /           X
 RegularData2D                       X           Z
@@ -63,21 +63,21 @@ Substring                           D           /
       UnboundSubstring
       InvalidSubstring
 StringHashMap                       /           /
-TContour														DE          Z
-TContourLine												E						Z
+TContour                            DE          Z
+TContourLine                        E            Z
 ------------------------CONCEPT---------------------------------------------
-BaseIterator                        I,          Z     clear fehlt, BALL_CREATE_DEEP
+BaseIterator                        I,          Z       clear fehlt, BALL_CREATE_DEEP
 ConstBaseIterator                   I,          Z
 BidirectionalIterator               I           Z
 ConstBidirectionalIterator          I           Z
 ForwardIterator                     DIX,        /
 ConstForwardIterator                DIX,        /
 
-AutoDeletable                       I,          X
+AutoDeletable                       /           X       Interface so lassen!
 Callback                            DI,         Z
 Classtest                           /           /
 Comparator                          D           Z
-Composite                           D,          X ausgabe in test
+Composite                           D,          X       ausgabe in test
       AncestorIteratorTraits_       DI          Z
       ChildCompositeIteratorTraits_ DI          Z
       CompositeIteratorPosition_    DI          Z
@@ -99,7 +99,7 @@ NotificationTarget                  DI          Z
 NotificationTarget1                 DI          Z
 NotificationTarget2                 DI          Z
 
-Object                              DX,         Z	read/write
+Object                              DX,         Z       read/write
 PersistenceManager                  I           Z
 PersistentObject                    I           Z
 RandomAccessIterator                DI          Z
@@ -112,7 +112,7 @@ Selectable                          /           /
 Singleton                           DI          Z
 TextPersistenceManager              EI          Z
 TimeStamp                           /           X
-PreciseTime													/						X
+PreciseTime                         /           X
 Visitor                             DI          Z
 XDRPersistenceManager               IX          Z
 
@@ -146,7 +146,7 @@ Parameters                          E           X
 ParameterSection                    I,          X
 PDBFile                             DEI,        X
 XYZFile                             DEI,        /
-DCDFile				    X?		Z
+DCDFile                             X?          Z
 ------------------------KERNEL----------------------------------------------
 Atom                                DX          /           read, write fehlt
             BondIteratorTraits_     DEI         Z
@@ -158,7 +158,7 @@ Bond                                D           /
 Chain                               X           /           read, write fehlt
 ChainIteratorTraits_                EI
 CompositeIteratorTraits_            EI          Z
-Expression                          EIX		      X
+Expression                          EIX         X
 ExpressionPredicate                 EIX
 ExpressionTree                      EIX         
 SyntaxTree                          EI
@@ -169,7 +169,7 @@ PTE_                                D           /
 KernelPredicate                     I           /
 Molecule                            X           /           read, write fehlt
 MoleculeIteratorTraits_             EI          Z
-NucleicAcid                         X           /           read, write fehlt
+NucleicAcid                         IX          /           read, write fehlt
 NucleicAcidIteratorTraits_          EI          Z
 Nucleotide                          X           /           read, write fehlt
 NucleotideIteratorTraits_           EI          Z
@@ -184,32 +184,32 @@ SecondaryStructureIteratorTraits_   EI          Z
 Selector                            EI
 System                              X           /           read, write fehlt
 
- AromaticBondsPredicate             EI          /
- AtomNamePredicate                  EI          /
- AtomTypePredicate                  EI          /           
- BackBonePredicate                  EI          /
- ChainPredicate                     EI          /
- ConnectedToPredicate               EIX         /
- DoubleBondsPredicate               EI          /
- ElementPredicate                   EI          /
- InRingPredicate                    EI          Z
- MoleculePredicate                  EI          Z
- NucleicAcidPredicate               EI          Z
- NucleotidePredicate                EI          Z
- NumberOfBondsPredicate             EI          /
- ProteinPredicate                   EI          /
- ResidueIDPredicate                 EI          /
- ResiduePredicate                   EI          /
- SecondaryStructurePredicate        EI          /
- SelectedPredicate                  EI          /
- SingleBondsPredicate               EI          /
- SolventPredicate                   EI          Z
- Sp2HybridizedPredicate             EI          /
- Sp3HybridizedPredicate             EI          /
- SpHybridizedPredicate              EI          /
- TripleBondsPredicate               EI          /
- TruePredicate                      EI          /
-------------------------MATHS-----------------------------------------------
+ AromaticBondsPredicate             /           /           OCI nicht notwendig
+ AtomNamePredicate                  /           /           OCI nicht notwendig
+ AtomTypePredicate                  /           /           OCI nicht notwendig
+ BackBonePredicate                  /           /           OCI nicht notwendig
+ ChainPredicate                     /           /           OCI nicht notwendig
+ ConnectedToPredicate               (X)         /           OCI nicht notwendig
+ DoubleBondsPredicate               /           /           OCI nicht notwendig
+ ElementPredicate                   /           /           OCI nicht notwendig
+ InRingPredicate                    /           /           OCI nicht notwendig
+ MoleculePredicate                  /           /           OCI nicht notwendig
+ NucleicAcidPredicate               /           Z           OCI nicht notwendig
+ NucleotidePredicate                /           Z           OCI nicht notwendig
+ NumberOfBondsPredicate             /           /           OCI nicht notwendig
+ ProteinPredicate                   /           /           OCI nicht notwendig
+ ResidueIDPredicate                 /           /           OCI nicht notwendig
+ ResiduePredicate                   /           /           OCI nicht notwendig
+ SecondaryStructurePredicate        /           /           OCI nicht notwendig
+ SelectedPredicate                  /           /           OCI nicht notwendig
+ SingleBondsPredicate               /           /           OCI nicht notwendig
+ SolventPredicate                   /           Z           OCI nicht notwendig
+ Sp2HybridizedPredicate             /           /           OCI nicht notwendig
+ Sp3HybridizedPredicate             /           /           OCI nicht notwendig
+ SpHybridizedPredicate              /           /           OCI nicht notwendig
+ TripleBondsPredicate               /           /           OCI nicht notwendig
+ TruePredicate                      /           /           OCI nicht notwendig
+------------------------MATHS-----------------------------------------------           OCI nicht notwendig
 TAngle                              /           /
 TBox3                               /           /
 TCircle3                            /           /
@@ -217,15 +217,15 @@ TLine3                              /           /
 TMatrix4x4                          /           /
 PiecewiseFunction                   IX          X
 PiecewisePolynomial                 IX          X
-RombergIntegrator										X           Z  cout
+RombergIntegrator                   X           Z         cout
 TPlane3                             /           /
 TQuaternion                         /           /
 TSphere3                            /           /
 TSurface                            X           Z    
 TVector3                            /           /
 TVector4                            /           /
-Function			                      IX		      X
-NumericalIntegrator		              ?	         	Z
+Function                            IX          X
+NumericalIntegrator                 ?           Z
 ------------------------MOLMEC----------------------------------------------
                         ---------AMBER-----
 amberBend                           DEI         Z
@@ -295,7 +295,7 @@ BaseModelConnector                  DEIX        Z
 BaseModelProcessor                  DEI         Z
 ColorCalculator                     DEI         Z
 ElementColorCalculator              DEI         Z
-  ResidueNameColorCalculator	    X
+  ResidueNameColorCalculator      X
   AtomChargeColorCalculator
   AtomDistanceColorCalculator
 FindGeometricObjects                DEI         Z
@@ -325,8 +325,8 @@ GLTwoColoredTube                    DEI         Z
 Control                             DEI         Z
 MolecularControl                    DEI         Z
 MolecularProperties                 DEI         Z
-GLBackbone			    DEIX	Z
-ExtendedGLObjectCollector	    DEIX	Z
+GLBackbone                          DEIX        Z
+ExtendedGLObjectCollector           DEIX        Z
                         -----KERNEL------
 ExtendedPropertyManager             DEI         Z
 GeometricConvertor                  DEI         Z
@@ -393,7 +393,7 @@ ClearRadiusProcessor                EI          Z
 (connolly)                          DEIX        /           der code ist furchtbar!
 BoundingBoxProcessor                EI          Z
 FragmentDistanceCollector           EI          Z
-GeometricCenterProcessor            IX          Z	    angle-calculation should be done somewhere else
+GeometricCenterProcessor            IX          Z           angle-calculation should be done somewhere else
 
 FragmentDB                          EIX         X               
             NoFragmentNode          EI          Z
