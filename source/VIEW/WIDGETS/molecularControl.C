@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.67 2004/09/15 11:47:06 amoll Exp $
+// $Id: molecularControl.C,v 1.69 2004/09/15 11:51:09 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1267,6 +1267,8 @@ Size MolecularControl::applySelector(const String& expression)
 void MolecularControl::moveItems(const Matrix4x4& m)
 	throw()
 {
+	if (selected_.size() == 0) return;
+
 	// copy list, because selection could change
 	List<Composite*> selection = selected_;
 	List<Composite*>::Iterator it = selection.begin();
