@@ -1,4 +1,7 @@
-// $Id: displayProperties.C,v 1.22 2002/12/17 18:52:27 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: displayProperties.C,v 1.23 2002/12/18 16:00:36 sturm Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/displayProperties.h>
 #include <BALL/MOLVIEW/KERNEL/molecularMessage.h>

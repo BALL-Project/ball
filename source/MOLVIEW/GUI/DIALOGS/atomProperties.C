@@ -1,3 +1,6 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
 #include <BALL/MOLVIEW/GUI/DIALOGS/atomProperties.h>
 #include <BALL/KERNEL/PTE.h>
 #include <qlineedit.h>

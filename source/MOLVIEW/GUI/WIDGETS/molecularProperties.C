@@ -1,4 +1,7 @@
-// $Id: molecularProperties.C,v 1.12 2002/12/15 14:23:39 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: molecularProperties.C,v 1.13 2002/12/18 16:00:37 sturm Exp $
 
 #include <BALL/MOLVIEW/GUI/WIDGETS/molecularProperties.h>
 #include <BALL/MOLVIEW/KERNEL/molecularMessage.h>

@@ -1,3 +1,6 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
 // stdafx.h : Includedatei für Standardsystem-Includedateien,
 //  oder projektspezifische Includedateien, die häufig benutzt, aber
 // in unregelmäßigen Abständen geändert werden.

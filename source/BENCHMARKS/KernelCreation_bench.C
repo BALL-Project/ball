@@ -1,4 +1,7 @@
-// $Id: KernelCreation_bench.C,v 1.1 2002/12/17 19:40:45 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: KernelCreation_bench.C,v 1.2 2002/12/18 16:00:33 sturm Exp $
 #include <BALL/CONCEPT/benchmark.h>
 
 ///////////////////////////
@@ -11,7 +14,7 @@
 
 using namespace BALL;
 
-START_BENCHMARK(KernelIteration, 1.0, "$Id: KernelCreation_bench.C,v 1.1 2002/12/17 19:40:45 oliver Exp $")
+START_BENCHMARK(KernelIteration, 1.0, "$Id: KernelCreation_bench.C,v 1.2 2002/12/18 16:00:33 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

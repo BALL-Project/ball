@@ -1,4 +1,7 @@
-// $Id: MolmecSupport_bench.C,v 1.3 2002/12/17 16:33:26 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: MolmecSupport_bench.C,v 1.4 2002/12/18 16:00:33 sturm Exp $
 #include <BALL/CONCEPT/benchmark.h>
 
 ///////////////////////////
@@ -11,7 +14,7 @@
 using namespace BALL;
 
 // args: benchmark name (without '"'), reference time in seconds, CVS ID string
-START_BENCHMARK(MolmecSupport, 4.0, "$Id: MolmecSupport_bench.C,v 1.3 2002/12/17 16:33:26 oliver Exp $")
+START_BENCHMARK(MolmecSupport, 4.0, "$Id: MolmecSupport_bench.C,v 1.4 2002/12/18 16:00:33 sturm Exp $")
 
 
 /////////////////////////////////////////////////////////////

@@ -1,4 +1,7 @@
-// $Id: parsedFunction.h,v 1.2 2002/12/12 16:58:50 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: parsedFunction.h,v 1.3 2002/12/18 16:00:26 sturm Exp $
 
 #ifndef BALL_MATHS_PARSEDFUNCTION_H
 #define BALL_MATHS_PARSEDFUNCTION_H

@@ -1,4 +1,4 @@
-#!/usr/bin/gawk -f
+#!/opt/sfw/bin/gawk
 BEGIN\
 {
 	errors = 0
@@ -111,7 +111,7 @@ match($0, "[^A-Z]TRandom[a-zA-Z]*") > 0 \
 		start = match($0,"// \\$Id")
 		if (start != 1)
 		{
-			print FILENAME":"FNR" : missing RCS Id in line 1. Please add \"// $Id: check_coding,v 1.4 2001/07/29 17:38:09 oliver Exp $\" in the first line."
+			print FILENAME":"FNR" : missing RCS Id in line 1. Please add \"// $Id: check_coding,v 1.5 2002/12/18 16:00:44 sturm Exp $\" in the first line."
 			errors++
 		}
 

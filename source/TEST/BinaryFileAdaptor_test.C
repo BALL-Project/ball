@@ -1,4 +1,7 @@
-// $Id: BinaryFileAdaptor_test.C,v 1.7 2002/12/17 16:51:11 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: BinaryFileAdaptor_test.C,v 1.8 2002/12/18 16:00:38 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +10,7 @@
 
 ///////////////////////////
 
-START_TEST(BinaryFileAdaptor, "$Id: BinaryFileAdaptor_test.C,v 1.7 2002/12/17 16:51:11 anker Exp $")
+START_TEST(BinaryFileAdaptor, "$Id: BinaryFileAdaptor_test.C,v 1.8 2002/12/18 16:00:38 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

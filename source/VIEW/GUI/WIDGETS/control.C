@@ -1,4 +1,7 @@
-// $Id: control.C,v 1.14 2002/12/17 20:12:20 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: control.C,v 1.15 2002/12/18 16:00:43 sturm Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/control.h>
 #include <BALL/KERNEL/atom.h>

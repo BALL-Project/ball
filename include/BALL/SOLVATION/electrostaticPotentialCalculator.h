@@ -1,4 +1,7 @@
-// $Id: electrostaticPotentialCalculator.h,v 1.3 2002/12/18 14:01:43 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: electrostaticPotentialCalculator.h,v 1.4 2002/12/18 16:00:29 sturm Exp $
 
 #ifndef BALL_SOLVATION_ELECTROSTATICPOTENTIALCALCULATOR_H
 #define BALL_SOLVATION_ELECTROSTATICPOTENTIALCALCULATOR_H

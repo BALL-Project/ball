@@ -1,4 +1,7 @@
-// $Id: externalRenderer.h,v 1.2 2002/12/12 09:33:55 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: externalRenderer.h,v 1.3 2002/12/18 16:00:31 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_FUNCTOR_EXTERNALRENDERER_H
 #define BALL_VIEW_GUI_FUNCTOR_EXTERNALRENDERER_H

@@ -1,3 +1,6 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
 #ifndef ATOMPROPERTIES_H
 #define ATOMPROPERTIES_H
 #include "atomPropertiesData.h"

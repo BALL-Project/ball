@@ -1,4 +1,7 @@
-// $Id: CompositeClone_bench.C,v 1.3 2002/12/17 21:32:05 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: CompositeClone_bench.C,v 1.4 2002/12/18 16:00:32 sturm Exp $
 #include <BALL/CONCEPT/benchmark.h>
 
 ///////////////////////////
@@ -9,7 +12,7 @@
 
 using namespace BALL;
 
-START_BENCHMARK(CompositeClone, 1.0, "$Id: CompositeClone_bench.C,v 1.3 2002/12/17 21:32:05 oliver Exp $")
+START_BENCHMARK(CompositeClone, 1.0, "$Id: CompositeClone_bench.C,v 1.4 2002/12/18 16:00:32 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,4 +1,7 @@
-// $Id: solventAccessibleSurface.h,v 1.3 2002/12/17 14:13:12 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: solventAccessibleSurface.h,v 1.4 2002/12/18 16:00:30 sturm Exp $
 
 #ifndef BALL_STRUCTURE_SOLVENTACCESSIBLESURFACE_H
 #define BALL_STRUCTURE_SOLVENTACCESSIBLESURFACE_H

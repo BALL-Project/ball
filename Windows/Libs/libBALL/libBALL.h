@@ -1,3 +1,6 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
 // Folgender ifdef-Block ist die Standardmethode zum Erstellen von Makros, die das Exportieren 
 // aus einer DLL vereinfachen. Alle Dateien in der DLL werden mit dem LIBBALL_EXPORTS-Symbol
 // kompiliert, das in der Befehlszeile definiert wurde. Das Symbol darf nicht für ein Projekt definiert werden,

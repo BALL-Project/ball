@@ -1,3 +1,6 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
 #include <BALL/VIEW/GUI/DIALOGS/colorMeshDialog.h>
 #include <BALL/SYSTEM/path.h>
 #include <BALL/DATATYPE/regularData3D.h>

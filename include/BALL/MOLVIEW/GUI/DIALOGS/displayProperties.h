@@ -1,4 +1,7 @@
-// $Id: displayProperties.h,v 1.19 2002/12/17 17:57:39 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: displayProperties.h,v 1.20 2002/12/18 16:00:27 sturm Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
 #define BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H

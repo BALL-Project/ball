@@ -1,4 +1,7 @@
-// $Id: molecularControl.C,v 1.10 2002/12/13 13:26:32 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: molecularControl.C,v 1.11 2002/12/18 16:00:36 sturm Exp $
 
 #include <BALL/MOLVIEW/GUI/WIDGETS/molecularControl.h>
 #include <BALL/MOLVIEW/KERNEL/molecularMessage.h>

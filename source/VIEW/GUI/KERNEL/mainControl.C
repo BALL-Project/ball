@@ -1,4 +1,7 @@
-// $Id: mainControl.C,v 1.33 2002/12/18 02:30:44 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: mainControl.C,v 1.34 2002/12/18 16:00:43 sturm Exp $
 
 // this is required for QMenuItem
 #define INCLUDE_MENUITEM_DEF
