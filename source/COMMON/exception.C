@@ -1,4 +1,4 @@
-// $Id: exception.C,v 1.20 2000/12/20 00:23:47 amoll Exp $
+// $Id: exception.C,v 1.21 2000/12/20 08:11:53 anker Exp $
 
 #include <BALL/COMMON/exception.h>
 #include <BALL/COMMON/logStream.h>
@@ -193,6 +193,11 @@ namespace BALL
 				globalHandler.setMessage(message_);
 			}
 
+			FileNotFound::~FileNotFound()
+				throw()
+			{
+			}
+
 			string FileNotFound::getFilename() const
 				throw()
 			{
@@ -208,6 +213,11 @@ namespace BALL
 				message_.append(s + "' to a number.");
 
 				globalHandler.setMessage(message_);
+			}
+
+			InvalidFormat::~InvalidFormat()
+				throw()
+			{
 			}
 		
 			DEF_EXCEPTION(DivisionByZero, "a division by zero was requested")

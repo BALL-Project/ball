@@ -1,4 +1,4 @@
-// $Id: exception.h,v 1.20 2000/12/20 00:23:43 amoll Exp $
+// $Id: exception.h,v 1.21 2000/12/20 08:11:49 anker Exp $
    
 #ifndef BALL_COMMON_EXCEPTION_H
 #define BALL_COMMON_EXCEPTION_H
@@ -30,22 +30,25 @@ namespace BALL
 		/**	General exception class.
 				This class is intended as a base class for all other exceptions.
 				Each exception class should define a constructor taking a string
-				and an int as parameters. These two values are interpreted as the current
-				filename and line number and is usually printed in case of an uncaught exception.
-				To support this feature, each {\bf throw} directive should look as follows:
+				and an int as parameters. These two values are interpreted as the
+				current filename and line number and is usually printed in case of
+				an uncaught exception.  To support this feature, each {\bf throw}
+				directive should look as follows: \\
 				{\tt {\bf throw Exception::GeneralException}(\_\_FILE\_\_, \_\_LINE\_\_);}\\
-				{\tt \_\_FILE\_\_} and {\tt \_\_LINE\_\_} are built-in preprocessor macros that hold the
-				desired information.\\
-
-				BALL provides its own \Ref{terminate} handler. This handler extracts as much information
-				as possible from the exception, prints it to {\tt cerr} and \Ref{Log}, and finally calls
-				exits the program cleanly (with exit code 1).
-				This can be rather inconvenient for debugging, since you are told where the exception was 
-				thrown, but in general you do not know anything about the context.
-				Therefore {\tt terminate} can also create a core dump. Using a debugger (e.g. dbx or gdb)
-				you can then create a stack traceback.
-				To create a core dump, you should set the environment variable {\tt BALL_DUMP_CORE}
-				to any (non empty) value.\\
+				{\tt \_\_FILE\_\_} and {\tt \_\_LINE\_\_} are built-in preprocessor
+				macros that hold the desired information.
+				\\
+				BALL provides its own \Ref{terminate} handler. This handler
+				extracts as much information as possible from the exception, prints
+				it to {\tt cerr} and \Ref{Log}, and finally calls exits the program
+				cleanly (with exit code 1).  This can be rather inconvenient for
+				debugging, since you are told where the exception was thrown, but
+				in general you do not know anything about the context.  Therefore
+				{\tt terminate} can also create a core dump. Using a debugger (e.g.
+				dbx or gdb) you can then create a stack traceback.  To create a
+				core dump, you should set the environment variable {\tt
+				BALL_DUMP_CORE} to any (non empty) value.
+				\\
 				{\bf Definition:}\URL{BALL/COMMON/exception.h}
 				\\
 		*/
@@ -109,10 +112,10 @@ namespace BALL
 	
 	
 		/**	Index underflow.
-				Throw this exception to indicate an index that was smaller than allowed.
-				The constructor has two additional arguments, the values of which should be 
-				set to the index that caused the failure and the smallest allowed value to 
-				simplify debugging.
+				Throw this exception to indicate an index that was smaller than
+				allowed.  The constructor has two additional arguments, the values
+				of which should be set to the index that caused the failure and the
+				smallest allowed value to simplify debugging.
 				@param	index the value of the index causing the problem
 				@param	size	smallest value allowed for index
 		*/
@@ -133,8 +136,9 @@ namespace BALL
 
 		/**	Size underflow.
 				Throw this exception to indicate a size was smaller than allowed.
-				The constructor has an additional argument: the value of of the requested size.
-				This exception is thrown, if buffer sizes are insufficient.
+				The constructor has an additional argument: the value of of the
+				requested size.  This exception is thrown, if buffer sizes are
+				insufficient.
 				@param	size the size causing the problem
 		*/
 		class SizeUnderflow 
@@ -150,10 +154,10 @@ namespace BALL
 		};
 
 		/**	Index overflow.
-				Throw this exception to indicate an index that was larger than allowed.
-				The constructor has two additional arguments, the values of which should be 
-				set to the index that caused the failure and the largest allowed value to 
-				simplify debugging.
+				Throw this exception to indicate an index that was larger than
+				allowed.  The constructor has two additional arguments, the values
+				of which should be set to the index that caused the failure and the
+				largest allowed value to simplify debugging.
 				@param	index the value of the index causing the problem
 				@param	size	largest value allowed for index
 		*/
@@ -196,8 +200,8 @@ namespace BALL
 
 		/**	Invalid format.
 				This exception indicates a conversion problem when converting from
-				one type to another. It is thrown, if a conversion from ascii to numeric 
-				formats or vice versa failed.
+				one type to another. It is thrown, if a conversion from ascii to
+				numeric formats or vice versa failed.
 		*/
 		class InvalidFormat 
 			: public GeneralException
@@ -206,14 +210,18 @@ namespace BALL
 			InvalidFormat(const char* file, int line, const string& s = "")
 				throw();
 			
+			~InvalidFormat()
+				throw();
+
 			protected:
 
 			string format_;
 		};
 
 		/**	Illegal self operation.	
-				Throw this excpetion to indicate an invalid operation on the object itself. In general
-				these operations are self assignments or related methods.
+				Throw this excpetion to indicate an invalid operation on the object
+				itself. In general these operations are self assignments or related
+				methods.
 		*/
 		class IllegalSelfOperation
 			: public GeneralException
@@ -224,8 +232,8 @@ namespace BALL
 		};
 
 		/**	Null pointer argument is invalid.
-				Use this exception to indicate a failure due to an argument not containing
-				a pointer to a valid object, but a null pointer.
+				Use this exception to indicate a failure due to an argument not
+				containing a pointer to a valid object, but a null pointer.
 		*/
 		class NullPointer 
 			: public GeneralException
@@ -247,7 +255,8 @@ namespace BALL
 		};
 
 		/**	Incompatible iterator.
-				The iterators could not be assigned because they are bound to different containers.
+				The iterators could not be assigned because they are bound to
+				different containers.
 		*/
 		class IncompatibleIterators
 			: public GeneralException
@@ -258,9 +267,10 @@ namespace BALL
 		};
 
 		/**	Not implemented exception. 
-				This exception should be thrown to indicate not yet inplemented methods.
-				If you take the time to use the detailed constructor instead of the default constructor,
-				identification of the concerned source will get {\em much} easier!
+				This exception should be thrown to indicate not yet inplemented
+				methods.  If you take the time to use the detailed constructor
+				instead of the default constructor, identification of the concerned
+				source will get {\em much} easier!
 		*/
 		class NotImplemented
 			: public GeneralException
@@ -342,6 +352,8 @@ namespace BALL
 			FileNotFound(const char* file, int line, const string& filename)
 				throw();
 
+			~FileNotFound()
+				throw();
 			string getFilename() const
 				throw();
 
