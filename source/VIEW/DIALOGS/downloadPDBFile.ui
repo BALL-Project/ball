@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>DownloadPDBFileData</class>
 <widget class="QDialog">
     <property name="name">
@@ -44,28 +44,6 @@
         </property>
         <property name="toolTip" stdset="0">
             <string>You can also enter a PDB id directly.</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>showDetails</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>370</x>
-                <y>273</y>
-                <width>141</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>0</width>
-                <height>30</height>
-            </size>
-        </property>
-        <property name="text">
-            <string>PDBFile Details</string>
         </property>
     </widget>
     <widget class="QLabel">
@@ -269,6 +247,28 @@
             </widget>
         </widget>
     </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>showDetails</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>370</x>
+                <y>273</y>
+                <width>141</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>0</width>
+                <height>30</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>PDBFile Details</string>
+        </property>
+    </widget>
     <widget class="QLayoutWidget">
         <property name="name">
             <cstring>layout95</cstring>
@@ -285,12 +285,21 @@
             <property name="name">
                 <cstring>unnamed</cstring>
             </property>
+            <property name="margin">
+                <number>0</number>
+            </property>
             <widget class="QPushButton">
                 <property name="name">
                     <cstring>download</cstring>
                 </property>
                 <property name="enabled">
                     <bool>false</bool>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>0</width>
+                        <height>30</height>
+                    </size>
                 </property>
                 <property name="text">
                     <string>Download</string>
@@ -311,8 +320,8 @@
                 </property>
                 <property name="minimumSize">
                     <size>
-                        <width>30</width>
-                        <height>0</height>
+                        <width>0</width>
+                        <height>30</height>
                     </size>
                 </property>
                 <property name="text">
@@ -328,6 +337,12 @@
             <widget class="QPushButton">
                 <property name="name">
                     <cstring>buttonClose</cstring>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>0</width>
+                        <height>30</height>
+                    </size>
                 </property>
                 <property name="text">
                     <string>&amp;Close</string>

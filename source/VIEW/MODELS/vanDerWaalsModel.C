@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vanDerWaalsModel.C,v 1.8 2004/06/07 10:16:58 amoll Exp $
+// $Id: vanDerWaalsModel.C,v 1.9 2004/12/13 14:03:19 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/vanDerWaalsModel.h>
@@ -51,7 +51,14 @@ namespace BALL
 			Sphere* sphere_ptr = new Sphere;
 			if (sphere_ptr == 0) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Sphere));
 			sphere_ptr->setComposite(atom);
-			sphere_ptr->setRadius(atom->getElement().getVanDerWaalsRadius() * radius_factor_);
+			if (atom->getElement().getVanDerWaalsRadius() != 0.0)
+			{
+				sphere_ptr->setRadius(atom->getElement().getVanDerWaalsRadius() * radius_factor_);
+			}
+			else
+			{
+				sphere_ptr->setRadius(radius_factor_);
+			}
 			sphere_ptr->setPositionAddress(atom->getPosition());
 			geometric_objects_.push_back(sphere_ptr);
 			
