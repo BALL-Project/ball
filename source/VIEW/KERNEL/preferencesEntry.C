@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferencesEntry.C,v 1.5 2004/09/29 12:29:09 oliver Exp $
+// $Id: preferencesEntry.C,v 1.6 2004/09/29 18:58:15 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/preferencesEntry.h>
@@ -71,7 +71,8 @@ namespace BALL
 					int id = -1;
 					if (qbg != 0)
 					{
-						qbg->id(qbg->selected());
+						if (qbg->selected() == 0) continue;
+						id = qbg->id(qbg->selected());
 					}
 					inifile.insertValue(inifile_section_name_, name, String(id));
 				}
