@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.7 2004/05/27 18:13:07 oliver Exp $
+// $Id: mainframe.C,v 1.8 2004/06/10 20:50:14 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -73,8 +73,8 @@ namespace BALL
 		// ---------------------
 		// Logstream setup -----
 		// ---------------------
-		Log.remove(std::cout);
-		Log.remove(std::cerr);
+//		Lo g.remove(std::cout);
+// 		Log.remove(std::cerr);
 		setLoggingFilename("BALLView.log");
 
 		control_ = new MolecularControl(this, "Structures");
@@ -178,7 +178,7 @@ namespace BALL
 	{
 		if (menu_cs_ == -1) return;
 		menuBar()->setItemEnabled( menu_FPDB_, (getSelectedSystem() != 0) && composites_muteable_);
- 	  menuBar()->setItemEnabled(menu_cs_, composites_muteable_ && (dataset_control_->countGrids() != 0));
+ 	  menuBar()->setItemEnabled(menu_cs_, composites_muteable_ && (dataset_control_->count3DGrids() != 0));
 		MainControl::checkMenus();
 	}
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2DWidget.C,v 1.9 2004/06/10 20:34:39 amoll Exp $
+// $Id: regularData2DWidget.C,v 1.10 2004/06/10 20:47:47 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/regularData2DWidget.h> 
@@ -56,9 +56,7 @@ void RegularData2DWidget::createPlot()
 	colorList[2] = ColorRGBA(0.,0.,1.,1.);
 
 	color_table_.setBaseColors(colorList, 3);
-	color_table_.setNumberOfColors(53);
-	color_table_.setRange(-1,1);
-	color_table_.createTable();
+	color_table_.setNumberOfColors(100);
 	
 	// determine the minimal and maximal values in data_
 	float min = (*data_)[0];
@@ -69,13 +67,15 @@ void RegularData2DWidget::createPlot()
 		if      ((*data_)[i] < min) min = (*data_)[i];
 		else if ((*data_)[i] > max) max = (*data_)[i];
 	}			
+	color_table_.setRange(min, max);
+	color_table_.createTable();
 	
 	//maximal number of Lines and Columns
 	Size max_x = (*data_).getSize().x;
 	Size max_y = (*data_).getSize().y;
 
 	// Draw the points
-	QPixmap pixmap;								// = pixItem->getPixmap();
+	QPixmap pixmap;								
 	pixmap.resize(max_x, max_y);
 	pixmap.fill();           			// delete the old picture
 	QPainter paint;     
@@ -86,12 +86,8 @@ void RegularData2DWidget::createPlot()
 	{
 		for (Position x=0; x<=max_x; x++) 
 		{
-			//get the QTColor from BallColor
 			ColorRGBA mapcolor = color_table_.map((*data_)[x + y * max_x]);
 			pCol = QColor(mapcolor.getRed(), mapcolor.getGreen(), mapcolor.getBlue());
-Log.error() << "#~~#   " << (*data_)[x+y*max_x] << " "   
-					 << pCol  << " "   << __FILE__ << "  " << __LINE__<< std::endl;
-
 			paint.setPen(pCol);
 			paint.drawPoint(x, y);
 		}
@@ -101,18 +97,11 @@ Log.error() << "#~~#   " << (*data_)[x+y*max_x] << " "
 
 	//put the pixmapItem into objects
 	PixmapItem* pixItem = new PixmapItem(&canvas_, pixmap);
+	pixItem->show();
 	objects_.push_back(dynamic_cast<QCanvasItem*> (pixItem)); 
 
 	// resize the canvas to fit the data
 	canvas_.resize(max_x, max_y);
-
-
-	//				polygon_ = new QCanvasPolygon(&canvas_);
-	//			polygon_ = new QCanvasSpline(&canvas_);	
-	// polygon_->setControlPoints((QPointArray)point_data_, false);
-	
-		//insert the polygon into vector<canvasItem*> of canvasWidget
-	//				objects_.push_back(dynamic_cast<QCanvasItem*> (polygon_));
 }
 
 
