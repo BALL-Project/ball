@@ -1,9 +1,12 @@
-// $Id: selectable.C,v 1.2 1999/12/04 18:34:27 oliver Exp $
+// $Id: selectable.C,v 1.3 1999/12/28 18:19:41 oliver Exp $
 
 #include <BALL/CONCEPT/selectable.h>
 #include <BALL/CONCEPT/persistenceManager.h>
 
-namespace BALL {
+using namespace std;
+
+namespace BALL 
+{
 
 	Selectable::Selectable()
 		:	selected_(BALL_SELECTABLE_DEFAULT_SELECTION)
@@ -19,7 +22,7 @@ namespace BALL {
 	{
 	}
 
-	void Selectable::dump(ostream &s, unsigned long depth) const
+	void Selectable::dump(ostream& s, Size depth) const
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 

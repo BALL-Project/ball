@@ -1,4 +1,4 @@
-// $Id: object.C,v 1.3 1999/12/19 17:10:17 oliver Exp $
+// $Id: object.C,v 1.4 1999/12/28 18:19:40 oliver Exp $
 
 #include <BALL/CONCEPT/object.h>
 
@@ -82,7 +82,7 @@ namespace BALL
 #		endif // BALL_SUPPORT_OBJECT_MANAGER
 	}
 
-	void	Object::dump(ostream& s, unsigned long depth) const
+	void	Object::dump(ostream& s, Size depth) const
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 
@@ -176,7 +176,7 @@ namespace BALL
 		return (bool)(size == number_of_objects_);
 	}
 
-	void ObjectManager::dump (ostream &s, unsigned long depth)
+	void ObjectManager::dump (ostream& s, Size depth)
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 

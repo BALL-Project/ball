@@ -1,12 +1,11 @@
-// $Id: composite.C,v 1.8 1999/10/30 12:53:31 oliver Exp $
+// $Id: composite.C,v 1.9 1999/12/28 18:19:40 oliver Exp $
 
 #include <BALL/CONCEPT/composite.h>
 #include <BALL/CONCEPT/persistenceManager.h>
 #include <BALL/DATATYPE/listSort.mac>
 #include <BALL/KERNEL/predicate.h>
 
-using std::ostream;
-using std::endl;
+using namespace std;
 
 namespace BALL 
 {
@@ -1264,7 +1263,7 @@ namespace BALL
 		return true;
 	}
 
-	void Composite::dump(std::ostream &s, unsigned long depth) const
+	void Composite::dump(std::ostream &s, Size depth) const
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 

@@ -1,4 +1,4 @@
-// $Id: defaultProcessors.C,v 1.3 1999/09/22 17:45:44 oliver Exp $
+// $Id: defaultProcessors.C,v 1.4 1999/12/28 18:17:10 oliver Exp $
 
 #include <BALL/STRUCTURE/defaultProcessors.h>
 
@@ -9,6 +9,8 @@
 #include <stdio.h>
 #include <math.h>
 #include <values.h>
+
+using namespace std;
 
 namespace BALL 
 {

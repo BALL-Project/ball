@@ -1,4 +1,4 @@
-// $Id: rotamerLibrary.C,v 1.9 1999/10/01 12:53:19 oliver Exp $
+// $Id: rotamerLibrary.C,v 1.10 1999/12/28 18:17:12 oliver Exp $
 
 #include <BALL/STRUCTURE/rotamerLibrary.h>
 #include <BALL/SYSTEM/file.h>
@@ -9,6 +9,7 @@
 #include <BALL/KERNEL/bondIterator.h>
 #include <BALL/KERNEL/bond.h>
 
+using namespace std;
 
 namespace BALL
 {
@@ -151,7 +152,7 @@ namespace BALL
 		vector<String> variant_names;
 		
 		
-		HashSet<String>::const_iterator set_it = amino_acids.begin();
+		HashSet<String>::ConstIterator set_it = amino_acids.begin();
 		list<String>::const_iterator list_it;
 		String s[18];
 		String name, variant_name;

@@ -1,4 +1,4 @@
-// $Id: atom.C,v 1.5 1999/12/04 18:34:29 oliver Exp $
+// $Id: atom.C,v 1.6 1999/12/28 18:17:49 oliver Exp $
 
 #include <BALL/KERNEL/atom.h>
 
@@ -7,6 +7,7 @@
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/PSE.h> 
 
+using namespace std;
 
 namespace BALL 
 {
@@ -587,7 +588,7 @@ namespace BALL
 		return true;
 	}
 
-	void Atom::dump(ostream& s, unsigned long depth) const
+	void Atom::dump(ostream& s, Size depth) const
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 		

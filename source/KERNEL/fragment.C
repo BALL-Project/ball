@@ -1,6 +1,8 @@
-// $Id: fragment.C,v 1.2 1999/12/04 18:34:30 oliver Exp $
+// $Id: fragment.C,v 1.3 1999/12/28 18:17:50 oliver Exp $
 
 #include <BALL/KERNEL/fragment.h>
+
+using namespace std;
 
 namespace BALL 
 {
@@ -61,7 +63,7 @@ namespace BALL
 		return BaseFragment::isValid();
 	}
 
-	void Fragment::dump(ostream& s, unsigned long depth) const
+	void Fragment::dump(ostream& s, Size depth) const
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 		

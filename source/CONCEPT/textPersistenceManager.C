@@ -1,8 +1,10 @@
-// $Id: textPersistenceManager.C,v 1.2 1999/09/06 22:21:50 oliver Exp $
+// $Id: textPersistenceManager.C,v 1.3 1999/12/28 18:19:41 oliver Exp $
 
 #include <BALL/CONCEPT/textPersistenceManager.h>
 
 // #define BALL_DEBUG_PERSISTENCE
+
+using namespace std;
 
 namespace BALL 
 {
@@ -128,7 +130,12 @@ namespace BALL
 	bool TextPersistenceManager::checkHeader(const char* type_name, const char* name, void*& ptr)
 	{
 #		ifdef BALL_DEBUG_PERSISTENCE
-			Log.level(LogStream::INFORMATION) << "entering checkHeader(" << type_name << ", " << name << ")" << endl;
+			if (name == 0)
+			{
+				Log.level(LogStream::INFORMATION) << "entering checkHeader(" << type_name << ", 0)" << endl;
+			} else {
+				Log.level(LogStream::INFORMATION) << "entering checkHeader(" << type_name << ", " << name << ")" << endl;
+			}
 #		endif
 		if (name == 0) 
 		{

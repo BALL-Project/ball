@@ -1,4 +1,4 @@
-// $Id: structureMapper.C,v 1.4 1999/12/04 18:34:34 oliver Exp $
+// $Id: structureMapper.C,v 1.5 1999/12/28 18:17:12 oliver Exp $
 
 #include <BALL/STRUCTURE/structureMapper.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
@@ -11,12 +11,10 @@
 #include <vector>
 #include <map>
 
-namespace BALL {
+using namespace std;
 
-	using std::vector;
-	using std::stack;
-	using std::pair;
-	using std::map;
+namespace BALL 
+{
 
 	/* Default constructor */
 	StructureMapper::StructureMapper()

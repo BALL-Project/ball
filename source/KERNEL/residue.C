@@ -1,9 +1,11 @@
-// $Id: residue.C,v 1.3 1999/12/04 18:34:30 oliver Exp $
+// $Id: residue.C,v 1.4 1999/12/28 18:17:51 oliver Exp $
 
 #include <BALL/KERNEL/residue.h>
 
 #include <BALL/KERNEL/chain.h>
 #include <BALL/KERNEL/protein.h>
+
+using namespace std;
 
 namespace BALL 
 {
@@ -297,7 +299,7 @@ namespace BALL
 		return true;
 	}
 
-	void Residue::dump(ostream& s, unsigned long depth) const
+	void Residue::dump(ostream& s, Size depth) const
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 		

@@ -1,4 +1,4 @@
-// $Id: fragmentDB.C,v 1.4 1999/10/27 08:04:55 oliver Exp $
+// $Id: fragmentDB.C,v 1.5 1999/12/28 18:17:10 oliver Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 
@@ -22,6 +22,8 @@
 */
 
 #define FRAGMENT_DB_INCLUDE_TAG "#include:"
+
+using namespace std;
 
 namespace BALL 
 {
@@ -883,7 +885,7 @@ namespace BALL
 		StringHashMap<StringHashMap<String>*>	table;
 		table = fragment_db_->getNamingStandards();
 
-		StringHashMap<StringHashMap<String>*>::iterator		it;
+		StringHashMap<StringHashMap<String>*>::Iterator		it;
 
 		StringHashMap<Index>																usable_maps;
 
@@ -897,10 +899,10 @@ namespace BALL
 			}
 		}
 				
-		std::list<Fragment*>::iterator	frag_it;				
+		list<Fragment*>::iterator				frag_it;				
 		AtomIterator										atom_it;
 		StringHashMap<String>*					map;
-		StringHashMap<Index>::iterator	map_iterator;
+		StringHashMap<Index>::Iterator	map_iterator;
 		String													match_name;
 		String													atom_name;
 		String													res_name;

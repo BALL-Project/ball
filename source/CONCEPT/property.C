@@ -1,9 +1,12 @@
-// $Id: property.C,v 1.2 1999/12/04 18:34:27 oliver Exp $
+// $Id: property.C,v 1.3 1999/12/28 18:19:41 oliver Exp $
 
 #include <BALL/CONCEPT/property.h>
 #include <BALL/CONCEPT/persistenceManager.h>
 
-namespace BALL {
+using namespace std;
+
+namespace BALL 
+{
 
 	NamedProperty::NamedProperty(const string& name)	
 		: type_(NONE),
@@ -147,7 +150,7 @@ namespace BALL {
 
 	string NamedProperty::getString() const
 	{
-		return (type_ == STRING ? *data_.s : "");
+		return (type_ == STRING ? data_.s->c_str() : "");
 	}
 
 	unsigned int NamedProperty::getUnsignedInt() const
@@ -343,7 +346,7 @@ namespace BALL {
 		return false;
 	}
 
-	void PropertyManager::dump(ostream& s, unsigned long depth) const
+	void PropertyManager::dump(ostream& s, Size depth) const
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 

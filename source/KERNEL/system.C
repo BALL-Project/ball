@@ -1,4 +1,4 @@
-// $Id: system.C,v 1.3 1999/12/04 18:34:31 oliver Exp $
+// $Id: system.C,v 1.4 1999/12/28 18:17:52 oliver Exp $
 
 #include <BALL/KERNEL/system.h>
 
@@ -6,6 +6,8 @@
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/fragment.h>
 #include <BALL/KERNEL/protein.h>
+
+using namespace std;
 
 namespace BALL 
 {
@@ -220,7 +222,7 @@ namespace BALL
 		return true;
 	}
 
-	void System::dump(ostream& s, unsigned long depth) const
+	void System::dump(ostream& s, Size depth) const
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 		

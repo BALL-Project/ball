@@ -1,7 +1,9 @@
-// $Id: numericalSAS.C,v 1.2 1999/08/31 22:01:18 oliver Exp $
+// $Id: numericalSAS.C,v 1.3 1999/12/28 18:17:11 oliver Exp $
 
 #include <BALL/STRUCTURE/numericalSAS.h>
 #include <BALL/KERNEL/atom.h>
+
+using namespace std;
 
 namespace BALL
 {

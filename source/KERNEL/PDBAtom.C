@@ -1,10 +1,12 @@
-// $Id: PDBAtom.C,v 1.2 1999/12/04 18:34:28 oliver Exp $
+// $Id: PDBAtom.C,v 1.3 1999/12/28 18:17:49 oliver Exp $
 
 #include <BALL/KERNEL/PDBAtom.h>
 
 #include <BALL/KERNEL/chain.h>
 #include <BALL/KERNEL/protein.h>
 #include <BALL/KERNEL/residue.h>
+
+using namespace std;
 
 namespace BALL 
 {
@@ -259,7 +261,7 @@ namespace BALL
 		return Atom::isValid();
 	}
 
-	void PDBAtom::dump(ostream& s, unsigned long depth) const
+	void PDBAtom::dump(ostream& s, Size depth) const
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 		

@@ -1,10 +1,12 @@
-// $Id: residueChecker.C,v 1.4 1999/09/17 17:18:13 oliver Exp $
+// $Id: residueChecker.C,v 1.5 1999/12/28 18:17:12 oliver Exp $
 
 #include <BALL/STRUCTURE/residueChecker.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/chain.h>
 #include <BALL/DATATYPE/hashSet.h>
+
+using namespace std;
 
 namespace BALL
 {
@@ -101,7 +103,7 @@ namespace BALL
 				if (reference_names.size() > 0)
 				{
 					Log.warn() << "ResidueChecker: did not find the following atoms in " << res_name << ": ";
-					HashSet<String>::iterator set_it = reference_names.begin();
+					HashSet<String>::Iterator set_it = reference_names.begin();
 					for (; set_it != reference_names.end(); ++set_it)
 					{
 						Log.warn() << *set_it << " ";

@@ -1,8 +1,10 @@
-// $Id: persistenceManager.C,v 1.1 1999/08/26 08:02:35 oliver Exp $
+// $Id: persistenceManager.C,v 1.2 1999/12/28 18:19:40 oliver Exp $
 
 #include <BALL/CONCEPT/persistenceManager.h>
 
 // #define DEBUG_PERSISTENCE
+
+using namespace std;
 
 namespace BALL 
 {

@@ -1,4 +1,4 @@
-// $Id: HINFile.C,v 1.6 1999/11/05 10:38:13 oliver Exp $
+// $Id: HINFile.C,v 1.7 1999/12/28 18:21:08 oliver Exp $
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/KERNEL/residue.h>
@@ -10,7 +10,10 @@
 
 #include <stack>
 
-namespace BALL {
+using namespace std;
+
+namespace BALL 
+{
 
   struct HINFileBondStruct
   {

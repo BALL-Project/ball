@@ -1,6 +1,8 @@
-// $Id: surface.C,v 1.2 1999/08/31 22:01:17 oliver Exp $
+// $Id: surface.C,v 1.3 1999/12/28 18:15:29 oliver Exp $
 
 #include <BALL/MATHS/surface.h>
+
+using namespace std;
 
 namespace BALL
 {

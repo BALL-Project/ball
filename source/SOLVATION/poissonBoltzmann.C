@@ -1,4 +1,4 @@
-// $Id: poissonBoltzmann.C,v 1.7 1999/12/04 18:34:33 oliver Exp $ 
+// $Id: poissonBoltzmann.C,v 1.8 1999/12/28 18:16:08 oliver Exp $ 
 // FDPB: Finite Difference Poisson Solver
 
 #include <BALL/SOLVATION/poissonBoltzmann.h>
@@ -7,6 +7,8 @@
 #include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/SYSTEM/timer.h>
+
+using namespace std;
 
 namespace BALL 
 {

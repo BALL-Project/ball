@@ -1,8 +1,10 @@
-// $Id: INIFile.C,v 1.3 1999/12/04 18:34:28 oliver Exp $
+// $Id: INIFile.C,v 1.4 1999/12/28 18:21:23 oliver Exp $
 
 #include <BALL/FORMAT/INIFile.h>
 
 #include <fstream>
+
+using namespace std;
 
 namespace BALL 
 {

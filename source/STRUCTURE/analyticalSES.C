@@ -1,8 +1,9 @@
-// $Id: analyticalSES.C,v 1.2 1999/08/31 22:01:18 oliver Exp $
-// $Id: analyticalSES.C,v 1.2 1999/08/31 22:01:18 oliver Exp $
+// $Id: analyticalSES.C,v 1.3 1999/12/28 18:17:09 oliver Exp $
+// $Id: analyticalSES.C,v 1.3 1999/12/28 18:17:09 oliver Exp $
 
 #include <BALL/STRUCTURE/analyticalSES.h>
 #include <BALL/KERNEL/atom.h>
+#include <BALL/DATATYPE/hashSet.h>
 
 namespace BALL
 {

@@ -1,4 +1,4 @@
-// $Id: selector.C,v 1.2 1999/08/31 22:01:17 oliver Exp $
+// $Id: selector.C,v 1.3 1999/12/28 18:17:51 oliver Exp $
 
 #include <BALL/KERNEL/selector.h>
 
@@ -6,6 +6,8 @@
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/PSE.h>
 #include <BALL/KERNEL/residue.h>
+
+using namespace std;
 
 namespace BALL 
 {

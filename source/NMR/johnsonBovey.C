@@ -1,4 +1,4 @@
-// $Id: johnsonBovey.C,v 1.2 1999/09/22 17:43:01 oliver Exp $
+// $Id: johnsonBovey.C,v 1.3 1999/12/28 18:16:00 oliver Exp $
 
 
 #include <BALL/NMR/johnsonBovey.h>
@@ -24,7 +24,8 @@
 #include <BALL/KERNEL/PSE.h>
 
 #include <list>
-using std::list;
+
+using namespace std;
 
 namespace BALL 
 {

@@ -1,9 +1,11 @@
-// $Id: bond.C,v 1.3 1999/12/04 18:34:29 oliver Exp $
+// $Id: bond.C,v 1.4 1999/12/28 18:17:50 oliver Exp $
 
 #include <BALL/KERNEL/bond.h>
 
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/baseFragment.h>
+
+using namespace std;
 
 namespace BALL 
 {
@@ -398,8 +400,7 @@ namespace BALL
 									&& second_->hasBond(*this) == true);
 	}
 
-	void Bond::dump(ostream& s,
-		 unsigned long depth) const
+	void Bond::dump(ostream& s, Size depth) const
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 		
