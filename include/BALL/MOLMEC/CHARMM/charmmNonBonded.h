@@ -1,4 +1,4 @@
-// $Id: charmmNonBonded.h,v 1.7 2001/02/28 01:17:38 amoll Exp $
+// $Id: charmmNonBonded.h,v 1.8 2001/05/17 18:23:38 anker Exp $
 // Molecular Mechanics: Charmm force field, bond stretch component
 
 #ifndef BALL_MOLMEC_CHARMM_NONBONDED_H
@@ -47,19 +47,49 @@ namespace BALL
 
 		/**	Default constructor.
 		*/
-		CharmmNonBonded();
+		CharmmNonBonded()
+			throw();
 
 		/**	Constructor.
 		*/
-		CharmmNonBonded(ForceField& force_field);
+		CharmmNonBonded(ForceField& force_field)
+			throw();
 
 		/**	Copy constructor
 		*/
-		CharmmNonBonded(const CharmmNonBonded& charmm_non_bonded, bool clone_deep = true);
+		CharmmNonBonded(const CharmmNonBonded& charmm_non_bonded, bool clone_deep = true)
+			throw();
 
 		/**	Destructor.
 		*/
-		virtual ~CharmmNonBonded();
+		virtual ~CharmmNonBonded()
+			throw();
+
+		//@}
+		/** @name Assignment
+		*/
+		//@{
+		
+		/** Assignment operator
+		*/
+		const CharmmNonBonded& operator = 
+			(const CharmmNonBonded& charmm_non_bonded)
+			throw();
+
+		/** Clear method
+		*/
+		virtual void clear()
+			throw();
+
+		//@}
+		/** @name Predicates
+		*/
+		//@{
+
+		/** Equality operator
+		*/
+		bool operator == (const CharmmNonBonded& charmm_non_bonded)
+			throw(Exception::NotImplemented);
 
 		//@}
 		/**	@name	Setup Methods	
@@ -68,7 +98,8 @@ namespace BALL
 
 		/**	Setup method.
 		*/
-		virtual bool setup();
+		virtual bool setup()
+			throw();
 
 		//@}
 		/**	@name	Accessors	
@@ -77,23 +108,28 @@ namespace BALL
 
 		/**	Calculates and returns the component's energy.
 		*/
-		virtual double updateEnergy();
+		virtual double updateEnergy()
+			throw();
 
 		/**	Calculates and returns the component's forces.
 		*/
-		virtual void updateForces();
+		virtual void updateForces()
+			throw();
 
 		/**	Return the electrostatic energy.
 		*/
-		virtual double getElectrostaticEnergy() const;
+		virtual double getElectrostaticEnergy() const
+			throw();
 
 		/**	Return the Van-der-Waals energy.
 		*/
-		virtual double getVdwEnergy() const;
+		virtual double getVdwEnergy() const
+			throw();
 
 		/** Return the solvation energy.
 		*/
-		virtual double getSolvationEnergy() const;
+		virtual double getSolvationEnergy() const
+			throw();
 
 
 		//@}
@@ -104,12 +140,14 @@ namespace BALL
 		/**	Computes the most efficient way to calculate the non-bonded atom pairs
 		*/
 		virtual MolmecSupport::PairListAlgorithmType	
-			determineMethodOfAtomPairGeneration();
+			determineMethodOfAtomPairGeneration()
+			throw();
 
 		/**	Build a vector of non-bonded atom pairs with the vdw parameters
 		*/
 		virtual void buildVectorOfNonBondedAtomPairs
-			(const vector< pair<Atom*, Atom*> >& atom_vector);
+			(const vector< pair<Atom*, Atom*> >& atom_vector)
+			throw();
 
 		//@}
 
@@ -141,11 +179,12 @@ namespace BALL
 		/*_	Vector array with all atom pairs whose distance is smaller than cut_off
 		*/
 		vector<LennardJones::Data>	non_bonded_;
-
-		/*_	Vector with parameters for the solvation component
+		
+		/*_ A helper array for buildVectorOfNonBondedAtomPairs(). This is
+				declared here to save the ctor within the method.
 		*/
-		vector<CharmmEEF1::Values> solvation_values_;
- 
+		vector<bool> is_torsion_;
+
 		/*_	Number of 1-4 interactions in the vector non_bonded
 		*/
 		Size	number_of_1_4_;	
@@ -174,6 +213,10 @@ namespace BALL
 		*/
 		float	cut_off_solvation_;
 
+		/*_	Start of the switch function for the solvation contribution (EEF1)
+		*/
+		float	cut_on_solvation_;
+
 		/*_	Inverse cube of the difference of cutoff and cuton for vdW
 		*/
 		float inverse_difference_off_on_vdw_3_;
@@ -185,10 +228,6 @@ namespace BALL
 		/*_	Inverse cube of the difference of cutoff and cuton for electrostatic
 		*/
 		float inverse_difference_off_on_electrostatic_3_;
-
-		/*_	Start of the switch function for the solvation contribution (EEF1)
-		*/
-		float	cut_on_solvation_;
 
 		/*_	Scaling factor for vdw_1_4_interactions
 		*/
