@@ -1,4 +1,4 @@
-// $Id: amber.C,v 1.5 1999/09/08 14:08:22 oliver Exp $
+// $Id: amber.C,v 1.6 1999/09/17 13:17:03 pmueller Exp $
 // Molecular Mechanics: Amber force field class
 
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -16,12 +16,14 @@ namespace BALL
 	const char* AmberFF::Option::ELECTROSTATIC_CUTOFF = "electrostatic_cutoff";
 	const char* AmberFF::Option::SCALING_VDW_1_4 = "SCAB";
 	const char* AmberFF::Option::SCALING_ELECTROSTATIC_1_4 = "SCEE";
+        const char* AmberFF::Option::DISTANCE_DEPENDENT_DIELECTRIC = "DDDC"; 
  
 	const float AmberFF::Default::NONBONDED_CUTOFF = 20.0;
 	const float AmberFF::Default::VDW_CUTOFF = 15.0;
 	const float AmberFF::Default::ELECTROSTATIC_CUTOFF = 15.0;
 	const float AmberFF::Default::SCALING_ELECTROSTATIC_1_4 = 0.5;
 	const float AmberFF::Default::SCALING_VDW_1_4 = 0.5;
+        const bool  AmberFF::Default::DISTANCE_DEPENDENT_DIELECTRIC = false;   
  
 	// Default constructor
 	AmberFF::AmberFF() 
