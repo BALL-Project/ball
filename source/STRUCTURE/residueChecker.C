@@ -1,4 +1,4 @@
-// $Id: residueChecker.C,v 1.14 2000/11/14 12:38:31 oliver Exp $
+// $Id: residueChecker.C,v 1.15 2001/01/09 15:05:05 anker Exp $
 
 #include <BALL/STRUCTURE/residueChecker.h>
 #include <BALL/KERNEL/forEach.h>
@@ -176,6 +176,8 @@ namespace BALL
 												 << first->getName() << " is " 
 												 << first->getElement().getSymbol() << " should be "
 												 << bond_it->getFirstAtom()->getElement().getSymbol() << endl;
+												 // This could be the anchor of a ResidueRectfifier...
+												 // (const_cast<Atom*> (first))->setElement(bond_it->getFirstAtom()->getElement());
 							status_ = false;
 						}
 						if (second->getElement() != bond_it->getSecondAtom()->getElement())
