@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.96 2000/06/27 07:45:39 oliver Exp $
+dnl    $Id: configure.in,v 1.97 2000/06/27 13:27:23 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -156,9 +156,14 @@ fi
 PYTHON_INCLUDE_PATH=$with_python_incl
 
 # the paths to the SIP library, header, and executable
-SIP_LIB_PATH=$with_sip_lib
+SIP_LIBPATH=$with_sip_lib
 SIP_INCLUDE_PATH=$with_sip_incl
 SIP=$with_sip
+
+
+
+
+
 dnl
 dnl 	global definitions
 dnl
@@ -580,7 +585,7 @@ dnl
 
 AC_MSG_RESULT(searching for a C++ compiler:)
 if test "${CXX}" != "" ; then
-	if test -f "${CXX}" ; then
+	if test -x "${CXX}" ; then
 		AC_MSG_RESULT(predefined in configure: ${CXX})
 	else
 		AC_PATH_PROG(CXXPATH,${CXX},no)
@@ -2297,9 +2302,6 @@ if test "${PYTHON_SUPPORT}" = true ; then
 	fi
 
 
-	# temporary hack // BAUSTELLE
-	SIP_LIB=${SIP_LIB_PATH}/libsip.a
-
 	dnl
 	dnl	 SIP
 	dnl
@@ -2307,14 +2309,14 @@ if test "${PYTHON_SUPPORT}" = true ; then
 	AC_MSG_RESULT(${SIP})
 
 	dnl
-	dnl libsip.a (method to be tested: sipOMInit)
+	dnl libsip.a 
 	dnl
-	AC_MSG_CHECKING(sip (static) library)
-	AC_FIND_LIB(SIP_LIBPATH,libsip.a,${SIP_LIB_PATH})
-	if test "${SIPLIB_OK}" = true ; then
+	AC_MSG_CHECKING(libsip.a)
+	if test -r "${SIP_LIBPATH}/libsip.a" ; then
+		SIP_LIB=${SIP_LIBPATH}/libsip.a
 		AC_MSG_RESULT(${SIP_LIB})
 	else
-		AC_MSG_RESULT(not found!)
+		AC_MSG_RESULT(not found in ${SIP_LIBPATH})
 		AC_MSG_RESULT()
 		AC_MSG_RESULT(Please specify the path to the directory that contains)
 		AC_MSG_RESULT(libsip.a using the option --with-sip-lib=DIR.)
@@ -2322,20 +2324,20 @@ if test "${PYTHON_SUPPORT}" = true ; then
 		AC_MSG_RESULT(from www.thekompany.com/projects/pykde)
 		AC_MSG_ERROR(Aborted.)
 	fi
-	AC_CHECK_LIB(sip, sipOMInit, SIPLIB_OK=true)
 	
 	dnl
 	dnl	sip.h
 	dnl
 	AC_MSG_CHECKING(sip headers (sip.h))
-	AC_FIND_HEADER(SIP_INC_PATH, Python.h, ${SIP_INCLUDE_PATH})
+	AC_FIND_HEADER(SIP_INC_PATH, sip.h, ${SIP_INCLUDE_PATH})
 	if test "${SIP_INC_PATH}" = "" ; then
 		AC_MSG_RESULT(not found!)
 		AC_MSG_RESULT()
 		AC_MSG_RESULT(Please specify the path to the directory that contains)
 		AC_MSG_RESULT(sip.h using the option --with-sip-incl=DIR.)
 		AC_MSG_RESULT(If you do not have that file, you should obtain SIP)
-		AC_MSG_RESULT(from www.thekompany.com/projects/pykde)
+		AC_MSG_RESULT(from)
+		AC_MSG_RESULT(  www.thekompany.com/projects/pykde)
 		AC_MSG_ERROR(Aborted.)
 	else
 		AC_MSG_RESULT(${SIP_INC_PATH})
