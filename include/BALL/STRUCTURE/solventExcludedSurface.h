@@ -1,4 +1,4 @@
-// $Id: solventExcludedSurface.h,v 1.11 2001/02/23 02:40:45 amoll Exp $
+// $Id: solventExcludedSurface.h,v 1.12 2001/02/27 21:33:08 strobel Exp $
 
 #ifndef BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
 #define BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
@@ -133,32 +133,33 @@ namespace BALL
 					print << pre << "~SolventExcludedSurface\n";
 					pre += "  ";
 					#endif
-			for (Position i = 0; i < vertices.size(); i++)
+			Position i;
+			for (i = 0; i < vertices.size(); i++)
 			{
 				delete vertices[i];
 			}
-			for (Position i = 0; i < edges.size(); i++)
+			for (i = 0; i < edges.size(); i++)
 			{
 				if (edges[i] != NULL)
 				{
 					delete edges[i];
 				}
 			}
-			for (Position i = 0; i < contact_faces.size(); i++)
+			for (i = 0; i < contact_faces.size(); i++)
 			{
 				if (contact_faces[i] != NULL)
 				{
 					delete contact_faces[i];
 				}
 			}
-			for (Position i = 0; i < toric_faces.size(); i++)
+			for (i = 0; i < toric_faces.size(); i++)
 			{
 				if (toric_faces[i] != NULL)
 				{
 					delete toric_faces[i];
 				}
 			}
-			for (Position i = 0; i < spheric_faces.size(); i++)
+			for (i = 0; i < spheric_faces.size(); i++)
 			{
 				if (spheric_faces[i] != NULL)
 				{
