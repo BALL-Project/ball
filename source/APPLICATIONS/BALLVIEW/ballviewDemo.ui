@@ -553,10 +553,116 @@ molecules, we have a nice color interpolation from red at the beginning of the m
                                 <property name="text">
                                     <string>&lt;blockquote&gt;
 A Stick model colored by the different aminoacids.
-
 BALLView has many more coloring methods, but lets do something else now.
+&lt;br&gt;&lt;br&gt;
 When you press OK, a molecular dynamics simulation will start. You can watch 
-the movements of the molecule, just like it would in the real world.
+the movements of the molecule, just like it would move in the real world.
+The MD Simulation takes a moment to start. We will perform 50 steps, the current
+step number is shown in the statusbar at the bottom of the main window.
+&lt;/blockquote&gt;</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>WordBreak|AlignJustify|AlignTop</set>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="QWidget">
+                        <property name="name">
+                            <cstring>WStackPage</cstring>
+                        </property>
+                        <attribute name="id">
+                            <number>14</number>
+                        </attribute>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel" row="0" column="0">
+                                <property name="name">
+                                    <cstring>textLabel3_2_2_4_5_2_2_2_2_2</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>7</hsizetype>
+                                        <vsizetype>7</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="text">
+                                    <string>&lt;blockquote&gt;
+Now we will calculate the molecules electrostatics.&lt;br&gt;
+This will take a second.
+&lt;/blockquote&gt;</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>WordBreak|AlignJustify|AlignTop</set>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="QWidget">
+                        <property name="name">
+                            <cstring>WStackPage</cstring>
+                        </property>
+                        <attribute name="id">
+                            <number>15</number>
+                        </attribute>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel" row="0" column="0">
+                                <property name="name">
+                                    <cstring>textLabel3_2_2_4_5_2_2_2_2_2_2</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>7</hsizetype>
+                                        <vsizetype>7</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="text">
+                                    <string>&lt;blockquote&gt;
+Well this didn't change much, but now we create a Isocontour Surface with 
+the data grid.
+&lt;/blockquote&gt;</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>WordBreak|AlignJustify|AlignTop</set>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="QWidget">
+                        <property name="name">
+                            <cstring>WStackPage</cstring>
+                        </property>
+                        <attribute name="id">
+                            <number>16</number>
+                        </attribute>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel" row="0" column="0">
+                                <property name="name">
+                                    <cstring>textLabel3_2_2_4_5_2_2_2_2_2_2_2</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>7</hsizetype>
+                                        <vsizetype>7</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="text">
+                                    <string>&lt;blockquote&gt;
+bla
 &lt;/blockquote&gt;</string>
                                 </property>
                                 <property name="alignment">

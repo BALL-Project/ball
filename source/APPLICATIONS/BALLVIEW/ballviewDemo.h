@@ -14,6 +14,8 @@
 # include <BALL/VIEW/KERNEL/message.h>
 #endif
 
+#include <BALL/DATATYPE/regularData3D.h>
+
 #include "ballviewDemoData.h"
 
 namespace BALL
@@ -92,6 +94,7 @@ namespace BALL
 			private:
 
 			List<Composite*> composites_;
+			RegularData3D* grid_;
 		};
 
 } } // namespaces

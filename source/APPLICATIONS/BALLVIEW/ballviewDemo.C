@@ -9,7 +9,10 @@
 #include <BALL/KERNEL/system.h>
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
+#include <BALL/VIEW/DIALOGS/FDPBDialog.h>
 #include <BALL/FORMAT/PDBFile.h>
+#include <BALL/DATATYPE/contourSurface.h>
+#include <BALL/VIEW/PRIMITIVES/mesh.h>
 
 #include <qlabel.h>
 #include <qpushbutton.h>
@@ -44,14 +47,15 @@ BALLViewDemo::~BALLViewDemo()
 void BALLViewDemo::show()
 {
 	DisplayProperties* dp = DisplayProperties::getInstance(0);
+	dp->setDrawingPrecision(DRAWING_PRECISION_HIGH);
 	dp->enableCreationForNewMolecules(false);
 	System* system = new System();
 
 	PDBFile file;
 	try
 	{
-//   		file.open("bpti.pdb");
-		file.open("AlaAla.pdb");
+   		file.open("bpti.pdb");
+//   		file.open("AlaAla.pdb");
 		file >> *system;
 		getMainControl()->insert(*system, "demo");
 	}
@@ -80,12 +84,38 @@ void BALLViewDemo::onNotify(Message *message)
 
 	Index id = widget_stack->id(widget_stack->visibleWidget());
 
-	if (id <= MODEL_HBONDS + 6 &&
+	if (id == MODEL_HBONDS + 5)
+	{
+Log.error() << "#~~#   8 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+		if (RTTI::isKindOf<FinishedSimulationMessage>(*message))
+		{
+Log.error() << "#~~#   9 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+			nextStep_();
+		}
+		return;
+	}
+
+
+	if (id == MODEL_HBONDS + 6)
+	{
+		RegularData3DMessage* msg = RTTI::castTo<RegularData3DMessage>(*message);
+		if (msg != 0 &&
+			  ((RegularData3DMessage::RegularDataMessageType)msg->getType()) == RegularDataMessage::NEW)
+		{
+			grid_ = msg->getData();
+			nextStep_();
+		}
+		return;
+	}
+
+	if (//id <= MODEL_HBONDS + 6 &&
 		  rmsg != 0 && 
 			rmsg->getType() == RepresentationMessage::UPDATE)
 	{
 		nextStep_();
 	}
+
+	
 }
 
 void BALLViewDemo::nextStep_()
@@ -98,6 +128,7 @@ void BALLViewDemo::accept()
 {
 	Index id = widget_stack->id(widget_stack->visibleWidget());
 	MolecularStructure* ms = MolecularStructure::getInstance(0);
+	bool disable_button = true;
 
 //   	if (id < MODEL_HBONDS + 1)
 	{
@@ -114,7 +145,8 @@ void BALLViewDemo::accept()
 
 	if (id < MODEL_HBONDS)
 	{
-		CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, (ModelType) id, COLORING_ELEMENT);
+//   		CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, (ModelType) id, COLORING_ELEMENT);
+CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_ELEMENT);
 		notify_(crmsg);
 	}
 	else if (id == MODEL_HBONDS)
@@ -156,12 +188,35 @@ void BALLViewDemo::accept()
 		notify_(crmsg);
 
 		ms->chooseAmberFF();
-		ms->MDSimulation();
-		ms->md_dialog_->apply();
+		ms->getMDSimulationDialog().setTimeStep(0.001);
+		ms->getMDSimulationDialog().setNumberOfSteps(50);
+		ms->MDSimulation(false);
 	}
-				
+	else if (id == MODEL_HBONDS + 6) //FDPB
+	{
+		ms->calculateFDPB();
+		ms->getFDPBDialog()->okPressed();
+		disable_button = false;
+	}
+	else if (id == MODEL_HBONDS + 6) // ContourSurface
+	{
+		ContourSurface cs(*grid_, 0.01);
+		Mesh* mesh = new Mesh;
+		mesh->Surface::operator = (static_cast<Surface&>(cs));
 
-	buttonOk->setEnabled(false);
+		// Create a new representation containing the contour surface.
+		Representation* rep = getMainControl()->getPrimitiveManager().createRepresentation();
+		rep->insert(*mesh);
+		rep->setModelType(MODEL_CONTOUR_SURFACE); 
+
+		// Make sure BALLView knows about the new representation.
+		RepresentationMessage* message = new RepresentationMessage(*rep, RepresentationMessage::ADD);
+		notify_(message);
+
+ 		disable_button = false;
+	}
+
+	buttonOk->setEnabled(!disable_button);
 }
 
 
