@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.91 2003/11/03 16:49:33 amoll Exp $
+// $Id: mainframe.C,v 1.92 2003/11/12 00:41:19 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -468,6 +468,7 @@ void Mainframe::amberMinimization()
 	thread->setEnergyMinimizer(minimizer);
 	thread->setNumberOfStepsBetweenUpdates(minimization_dialog_->getRefresh());
 	thread->setMainframe(this);
+	thread->setComposite(system);
 	thread->start();
 #else
 	// ============================= WITHOUT MULTITHREADING =================================
@@ -475,7 +476,7 @@ void Mainframe::amberMinimization()
 	while (!minimizer->minimize(minimization_dialog_->getRefresh(), true) &&
 					minimizer->getNumberOfIterations() < minimizer->getMaxNumberOfIterations())
 	{
-		MainControl::update(system->getRoot());
+		MainControl::update(*system);
 
 		QString message;
 		message.sprintf("Iteration %d: energy = %f kJ/mol, RMS gradient = %f kJ/mol A", 
@@ -601,7 +602,7 @@ void Mainframe::amberMDSimulation()
 	while (mds->getNumberOfIterations() < md_dialog_->getNumberOfSteps())
 	{
 		mds->simulateIterations(steps, true);
-		MainControl::update(system->getRoot());
+		MainControl::update(*system);
 		if (md_dialog_->saveImages()) 
 		{
 			Scene* scene= (Scene*) Scene::getInstance(0);
@@ -773,6 +774,12 @@ void Mainframe::customEvent( QCustomEvent * e )
 	if ( e->type() == (QEvent::Type)UPDATE_COMPOSITE_EVENT)
 	{
 		UpdateCompositeEvent* so = (UpdateCompositeEvent*) e;
+		if (so->getComposite() == 0) 
+		{
+			Log.warn() << "Could not update visualisation in " << __FILE__ << __LINE__ << std::endl;
+			return;
+		}
+
 		update(*(Composite*)so->getComposite());
 		return;
 	}
