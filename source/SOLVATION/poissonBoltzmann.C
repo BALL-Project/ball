@@ -1,4 +1,4 @@
-// $Id: poissonBoltzmann.C,v 1.11 2000/03/14 12:36:05 oliver Exp $ 
+// $Id: poissonBoltzmann.C,v 1.12 2000/03/14 19:28:12 oliver Exp $ 
 // FDPB: Finite Difference Poisson Solver
 
 #include <BALL/SOLVATION/poissonBoltzmann.h>
@@ -7,6 +7,7 @@
 #include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/SYSTEM/timer.h>
+#include <BALL/COMMON/limits.h>
 
 using namespace std;
 
@@ -1133,8 +1134,9 @@ namespace BALL
 		}
 		else 
 		{
-			// if the ionic strength equals zero, set beta to zero as well
-			beta = 0.0;
+			// if the ionic strength equals zero, set beta to MAX_FLOAT
+			// since the Debye length becomes infinity
+			beta = Limits<float>::max();
 		}
 													
 
@@ -1375,20 +1377,6 @@ namespace BALL
 																	 * solvent_dielectric_constant * VACUUM_PERMITTIVITY )
 																	 * exp(- distance / beta) / distance;
 							} 
-							else 
-							{
-								// if beta is zero, Debye reduces to Coulomb:
-								(*phi_grid)[idx] += e0 * positive_charge / (4.0  * PI 
-																	 * solvent_dielectric_constant * VACUUM_PERMITTIVITY )
-																	 / distance;
-
-								// and now for the negative charge
-								distance = negative_vector.getDistance(phi_grid->getGridCoordinates(idx)) * 1e-10;
-
-								(*phi_grid)[idx] += e0 * negative_charge / (4.0  * PI 
-																	 * solvent_dielectric_constant * VACUUM_PERMITTIVITY )
-																	 / distance;
-							}	
 						}
 		
 				if (verbosity > 3)
