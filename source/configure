@@ -1,6 +1,6 @@
 #! /bin/sh
 
-#  $Id: configure,v 1.126 2000/12/08 09:18:01 oliver Exp $
+#  $Id: configure,v 1.127 2000/12/13 10:53:31 oliver Exp $
 
 
 ##################################################
@@ -3301,7 +3301,7 @@ else
 	fi
 fi
 cat >> confdefs.h <<EOF
-#define BALL_64BIT_UINT ${BALL_64BIT_UINT}
+#define BALL_64BIT_UINT_TYPE ${BALL_64BIT_UINT}
 EOF
 
 

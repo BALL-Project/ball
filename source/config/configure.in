@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.118 2000/12/08 09:18:05 oliver Exp $
+dnl    $Id: configure.in,v 1.119 2000/12/13 10:53:35 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -1537,7 +1537,7 @@ else
 		fi
 	fi
 fi
-AC_DEFINE_UNQUOTED(BALL_64BIT_UINT, ${BALL_64BIT_UINT})
+AC_DEFINE_UNQUOTED(BALL_64BIT_UINT_TYPE, ${BALL_64BIT_UINT})
 
 dnl
 dnl	define a 32 bit type for Size and Index
