@@ -1,4 +1,4 @@
-// $Id: hash.C,v 1.5 2000/06/06 17:46:22 amoll Exp $
+// $Id: hash.C,v 1.6 2000/06/07 14:27:14 amoll Exp $
 
 #include <BALL/COMMON/hash.h>
 
@@ -49,34 +49,6 @@ namespace BALL
 		for(;	*s != '\0'; )
 			index = pseudo_random_permuted_key[index ^ (*s++)];
 
-		return index;
-	}
-
-	/* Summary: A portable one word summary of a string.
-	 * Taken from: Tcl, DOC++ (McHashTable.cpp)
-	 */
-	HashIndex hashString2(register const char *s)
-	{
-		register Index index = 0;
-
-//		for (register char c = *s++; c != '\0'; index += (index << 3) + c);
-		for (; *s != '\0'; index += (index << 3) + *s++);
-		return index;
-	}
-
-	/* Summary: A portable one word summary of a string.
-	 * Taken from: DOC++ (nametable.cpp)
-	 */
-	HashIndex hashString3(register const char *s)
-	{
-		register Index index = 0;
-
-		while (*s != '\0')
-		{
-			index *= 'A';
-			index += (*s++ - '0');
-		}
-		
 		return index;
 	}
 

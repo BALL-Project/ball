@@ -1,4 +1,4 @@
-// $Id: hash.h,v 1.5 2000/06/06 09:44:24 oliver Exp $
+// $Id: hash.h,v 1.6 2000/06/07 14:27:21 amoll Exp $
 
 #ifndef BALL_COMMON_HASH_H
 #define BALL_COMMON_HASH_H
@@ -46,14 +46,6 @@ namespace BALL
 	/**
 	*/
   extern HashIndex hashString(const char* str);
-
-	/**
-	*/
-  extern HashIndex hashString2(const char* str);
-
-	/**
-	*/
-  extern HashIndex hashString3(const char* str);
 
 	/**
 	*/
