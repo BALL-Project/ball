@@ -1,4 +1,4 @@
-// $Id: rotamerLibrary.h,v 1.12 2001/03/06 00:12:23 amoll Exp $
+// $Id: rotamerLibrary.h,v 1.13 2001/03/07 22:04:10 amoll Exp $
 
 #ifndef BALL_STRUCTURE_ROTAMERLIBRARY_H
 #define BALL_STRUCTURE_ROTAMERLIBRARY_H
@@ -95,7 +95,7 @@ namespace BALL
 
 		BALL_CREATE_DEEP(ResidueRotamerSet)
 
-		/**	Default constructor
+		/**	Default constructor.
 		*/
 		ResidueRotamerSet();
 

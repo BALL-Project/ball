@@ -1,4 +1,4 @@
-// $Id: numericalSAS.h,v 1.16 2001/03/06 00:12:23 amoll Exp $
+// $Id: numericalSAS.h,v 1.17 2001/03/07 22:04:10 amoll Exp $
 
 #ifndef BALL_STRUCTURE_NUMERICALSAS_H
 #define BALL_STRUCTURE_NUMERICALSAS_H
@@ -75,7 +75,7 @@ namespace BALL
 			normals to the SAS in that point, their length equals the 
 			fraction of the surface area represented by this point in $ A^2$:
 			\[	
-					|\vec{n_i}| = \frac{\mathrm{SAS of atom} i}{\mathrm{number of points on the SAS of atom} i}
+					|\vec{n_i}| = \frac{\mathrm{SAS\quad\ of \quad atom} \quad i}{\mathrm{number\quad of\quad points\quad on\quad the\quad SAS\quad of\quad atom} \quad i}     
 			\]
 			Atoms with a radius of 0 are ignored.
 			@param  surface_points a surface object containing the point coordinates and their normals (returned)
