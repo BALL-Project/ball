@@ -1,4 +1,4 @@
-// $Id: property.h,v 1.20 2001/01/21 23:00:19 amoll Exp $
+// $Id: property.h,v 1.21 2001/06/14 11:46:24 oliver Exp $
 
 #ifndef BALL_CONCEPT_PROPERTY_H
 #define BALL_CONCEPT_PROPERTY_H
@@ -337,6 +337,8 @@ namespace BALL
 	class PropertyManager
 	{
 		public:
+		
+		BALL_CREATE(PropertyManager)
 
 		/**	@name	Constructors and Destructors */
 		//@{
@@ -346,7 +348,7 @@ namespace BALL
 			throw();
 
 		/// Copy constructor
-		PropertyManager(const PropertyManager& property_manager, bool deep = true)
+		PropertyManager(const PropertyManager& property_manager)
 			throw();
 
 		/// Destructor
@@ -368,9 +370,8 @@ namespace BALL
 
 		/** Assign properties from another property manager
 				@param property_manager the PropertyManager object to copy from
-				@param deep ignored (just for interface compatibility)
 		*/
-		void set(const PropertyManager& property_manager, bool deep = true)
+		void set(const PropertyManager& property_manager)
 			throw();
 
 		/** Assignment operator.
@@ -386,9 +387,8 @@ namespace BALL
 				This method copies the contents of the PropertyManager object
 				to the given {\tt property_manager}.
 				@param	property_manager the target object
-				@param	deep ignored (just for interface compatibility)
 		*/
-		void get(PropertyManager& property_manager, bool deep = true) const
+		void get(PropertyManager& property_manager) const
 			throw();
 
 		/** Swap the properties with another property manager.

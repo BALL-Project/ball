@@ -1,4 +1,4 @@
-// $Id: property.iC,v 1.18 2001/05/17 01:30:45 oliver Exp $
+// $Id: property.iC,v 1.19 2001/06/14 11:46:24 oliver Exp $
 
 using namespace std;
 
@@ -205,7 +205,7 @@ PropertyManager::PropertyManager()
 }
 
 BALL_INLINE 
-PropertyManager::PropertyManager(const PropertyManager &property_manager, bool)
+PropertyManager::PropertyManager(const PropertyManager& property_manager)
 	throw()
 	:	bitvector_(property_manager.bitvector_),
 		named_properties_(property_manager.named_properties_)
@@ -242,10 +242,10 @@ const PropertyManager& PropertyManager::operator = (const PropertyManager& prope
 }
 
 BALL_INLINE 
-void PropertyManager::get(PropertyManager& property_manager, bool deep) const
+void PropertyManager::get(PropertyManager& property_manager) const
 	throw()
 {
-  property_manager.set(*this, deep);
+  property_manager.set(*this);
 }
 
 BALL_INLINE 
