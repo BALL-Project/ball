@@ -74,14 +74,21 @@ void ColorMeshDialog::applyPressed()
 		
 	// repaint of the scene and the composites needed
 	
-	DrawMessage* message = new DrawMessage;
-	message->setComposite(composite_);
-	notify_(message);
-	  
 	ChangedCompositeMessage *changed_message = new ChangedCompositeMessage;
 	changed_message->setComposite(*composite_);
 	changed_message->setDeletable(true);
 	notify_(changed_message);
+
+	/*
+	DrawMessage* message = new DrawMessage;
+	message->setComposite(composite_);
+	notify_(message);
+*/
+
+	// update scene
+	SceneMessage* scene_message = new SceneMessage;
+	scene_message->updateOnly();
+	notify_(scene_message);
 }
 
 
