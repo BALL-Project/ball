@@ -1,6 +1,8 @@
-// $Id: piecewiseFunction.C,v 1.2 2000/08/31 12:32:30 anker Exp $
+// $Id: piecewiseFunction.C,v 1.3 2000/08/31 21:53:24 oliver Exp $
 
 #include <BALL/MATHS/piecewiseFunction.h>
+
+using namespace std;
 
 namespace BALL
 {
