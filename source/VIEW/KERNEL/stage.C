@@ -429,75 +429,27 @@ void Stage::moveCameraTo(const Camera& new_camera)
 	// relative in units of view_vector, right_vector and look_up_vector
 	// by calculating the normals to three planes
 	
-	// make sure the three planes are far enough, to be always on one side of them
-	const float d = 1000000.0;
-	Vector3 dv(camera_.getViewVector());
-	dv.normalize();
-	dv *= d;
-
-	Vector3 du(camera_.getLookUpVector());
-	du.normalize();
-	du *= d;
-
-	Vector3 dr(camera_.getRightVector());
-	dr.normalize();
-	dr *= d;
-
-	// calculate the planes
-	const Vector3 vp = camera_.getLookAtPosition();
-	const Plane3 plane_vv(vp + dv, camera_.getViewVector());
-	const Plane3 plane_rv(vp + dr, camera_.getRightVector());
-	const Plane3 plane_uv(vp + du, camera_.getLookUpVector());
-
-	// normalize the vectors
-	Vector3 new_vv = new_camera.getViewVector();
-	new_vv.normalize();
-	Vector3 new_rv = new_camera.getRightVector();
-	new_rv.normalize();
-	Vector3 new_uv = new_camera.getLookUpVector();
-	new_uv.normalize();
+	list<Vector3> dirs, poss;
 
 	// iterate over all light sources
 	List<LightSource>::Iterator it = light_sources_.begin();
 	for (; it != light_sources_.end(); it++)
 	{
 		if (!it->isRelativeToCamera()) continue;
-
-		LightSource& light = *it;
-
- 		const Vector3 dest(light.getPosition() + light.getDirection());
-		const Vector3& pos = light.getPosition();
-
-		// distance of the destion of the light source from the three planes
-		const float dvd = GetDistance(plane_vv, dest) - d;
-		const float drd = GetDistance(plane_rv, dest) - d;
-		const float dud = GetDistance(plane_uv, dest) - d;
-
-		// distance of the position of the light source from the three planes
-		const float pvd = GetDistance(plane_vv, pos) - d;
-		const float prd = GetDistance(plane_rv, pos) - d;
-		const float pud = GetDistance(plane_uv, pos) - d;
-
-		// new position of the lightsource
-		Vector3 new_pos = new_vv * pvd + 
-											new_rv * prd +
-											new_uv * pud;
-		new_pos *= -1.0;
-		new_pos += new_camera.getLookAtPosition();
-
-		// new destination of the lightsource
-		Vector3 new_dest = new_vv * dvd + 
-											 new_rv * drd +
-											 new_uv * dud;
-		new_dest *= -1.0;
-		new_dest += new_camera.getLookAtPosition();
-
-		// apply new values
-		light.setPosition(new_pos);
-		light.setDirection(new_dest - new_pos);
+ 		poss.push_back(calculateRelativeCoordinates(it->getPosition()));
+ 		dirs.push_back(calculateRelativeCoordinates(it->getDirection()));
 	}
 
 	camera_ = new_camera;
+
+	for (it = light_sources_.begin(); it != light_sources_.end(); it++)
+	{
+		if (!it->isRelativeToCamera()) continue;
+		it->setPosition(calculateAbsoluteCoordinates(*poss.begin()));
+		it->setDirection(calculateAbsoluteCoordinates(*dirs.begin()));
+		poss.pop_front();
+		dirs.pop_front();
+	}
 }
 
 
