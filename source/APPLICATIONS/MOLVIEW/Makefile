@@ -18,6 +18,8 @@ SOURCES=\
 	DIALOGS/DlgDisplayPropertiesData.C\
 	DIALOGS/DlgAmberMinimization.C\
 	DIALOGS/DlgAmberMinimizationData.C\
+	DIALOGS/DlgLabelProperties.C\
+	DIALOGS/DlgLabelPropertiesData.C\
 	DIALOGS/DlgPreferences.C\
 	DIALOGS/DlgPreferencesData.C\
 	DIALOGS/DlgPreferencesGeneral.C\
@@ -37,6 +39,8 @@ MOC_SOURCES=\
 	DIALOGS/DlgDisplayPropertiesData_moc.C\
 	DIALOGS/DlgAmberMinimization_moc.C\
 	DIALOGS/DlgAmberMinimizationData_moc.C\
+	DIALOGS/DlgLabelProperties_moc.C\
+	DIALOGS/DlgLabelPropertiesData_moc.C\
 	DIALOGS/DlgPreferences_moc.C\
 	DIALOGS/DlgPreferencesData_moc.C\
 	DIALOGS/DlgPreferencesGeneral_moc.C\
@@ -96,6 +100,12 @@ DIALOGS/DlgAmberMinimization_moc.C:     DIALOGS/DlgAmberMinimization.h
 
 DIALOGS/DlgAmberMinimizationData_moc.C: DIALOGS/DlgAmberMinimizationData.h
 				$(MOC) DIALOGS/DlgAmberMinimizationData.h -o $@
+
+DIALOGS/DlgLabelProperties_moc.C:     DIALOGS/DlgLabelProperties.h
+				$(MOC) DIALOGS/DlgLabelProperties.h -o $@
+
+DIALOGS/DlgLabelPropertiesData_moc.C: DIALOGS/DlgLabelPropertiesData.h
+				$(MOC) DIALOGS/DlgLabelPropertiesData.h -o $@
 
 mainframe_moc.C:	mainframe.h
 					$(MOC) mainframe.h -o $@

@@ -1,4 +1,4 @@
-// $Id: mainframe.h,v 1.16 2000/05/28 17:30:04 hekl Exp $
+// $Id: mainframe.h,v 1.17 2000/06/04 17:49:48 hekl Exp $
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
 #define BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -49,6 +49,10 @@
 # include <BALL/VIEW/OPENGL/WIDGETS/scene.h>
 #endif
 
+#ifndef BALL_MOLVIEW_KERNEL_GEOMETRICCONVERTOR_H
+# include <BALL/MOLVIEW/KERNEL/geometricConvertor.h>
+#endif
+
 #ifndef BALL_MOLVIEW_OPENGL_WIDGETS_MOLECULARCONTROL_H
 # include <BALL/MOLVIEW/OPENGL/WIDGETS/molecularControl.h>
 #endif
@@ -76,6 +80,7 @@
 #include "DIALOGS/DlgDisplayProperties.h"
 #include "DIALOGS/DlgPreferences.h"
 #include "DIALOGS/DlgAmberMinimization.h"
+#include "DIALOGS/DlgLabelProperties.h"
 
 using namespace BALL;
 using namespace BALL::VIEW;
@@ -106,6 +111,8 @@ class Mainframe
 		MENU__EDIT_SELECT,
 		MENU__EDIT_DESELECT,
 		MENU__EDIT_CLEAR_CLIPBOARD,
+
+		MENU__INSERT_LABEL,
 
 		MENU__BUILD_CHECK_RESIDUE,
 		MENU__BUILD_BUILD_BONDS,
@@ -157,6 +164,9 @@ class Mainframe
 	void select();
 	void deselect();
 
+	// insert menu
+	void insertLabel();
+
 	// Control menu
 	void rotateMode();
 	void pickingMode();
@@ -192,10 +202,12 @@ class Mainframe
 	DlgDisplayProperties* display_properties_;
 	DlgPreferences*				preferences_dialog_;
 	DlgAmberMinimization*	minimization_dialog_;
+	DlgLabelProperties*	  label_properties_;
 	OpenHINFile*					open_hin_file_;
 	OpenPDBFile*					open_pdb_file_;
 	MolecularProperties*  molecular_properties_;
 	Server*   						server_;
+	GeometricConvertor*   geometric_convertor_;
 
 	MoleculeGLObjectCollector		GL_object_collector_;
 	MoleculeObjectProcessor			object_processor_;

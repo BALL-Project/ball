@@ -27,10 +27,12 @@ Mainframe::Mainframe
 		display_properties_(0),
 		preferences_dialog_(0),
 		minimization_dialog_(0),
+		label_properties_(0),
 		open_hin_file_(0),
 		open_pdb_file_(0),
 		molecular_properties_(0),
 		server_(0),
+		geometric_convertor_(0),
 		GL_object_collector_(),
 		object_processor_(),
 		fragment_db_(),
@@ -86,6 +88,9 @@ Mainframe::Mainframe
 	minimization_dialog_ = new DlgAmberMinimization(this);
 	CHECK_PTR(minimization_dialog_);
 
+	label_properties_ = new DlgLabelProperties(this);
+	CHECK_PTR(label_properties_);
+
 	open_hin_file_ = new OpenHINFile();
 	CHECK_PTR(open_hin_file_);
 
@@ -97,6 +102,9 @@ Mainframe::Mainframe
 
 	server_ = new Server();
 	CHECK_PTR(server_);
+
+	geometric_convertor_ = new GeometricConvertor();
+	CHECK_PTR(geometric_convertor_);
 
 	logview_ = new LogView(vert_splitter_);
 	CHECK_PTR(logview_);
@@ -133,6 +141,7 @@ Mainframe::Mainframe
 	display_properties_->getPreferences(preferences_);
 	preferences_dialog_->getPreferences(preferences_);
 	minimization_dialog_->getPreferences(preferences_);
+	label_properties_->getPreferences(preferences_);
 
 	// ---------------------
 	// Control setup -------
@@ -225,6 +234,15 @@ Mainframe::Mainframe
 												 SLOT(amberMinimization()), CTRL+Key_W, MENU__BUILD_AMBER_MINIMIZATION);
 			
 
+	// Insert -Menu ------------------------------------------------------------------
+
+	QPopupMenu* insert_menu = new QPopupMenu(this);
+	CHECK_PTR(insert_menu);
+	popup_menus_.push_back(insert_menu);
+
+	insert_menu->insertItem("&Label", this, SLOT(insertLabel()), CTRL+Key_L, MENU__INSERT_LABEL);
+	//	insert_menu->setItemEnabled(MENU__INSERT_LABEL, FALSE);
+
   // Display Menu -------------------------------------------------------------------
 
 	QPopupMenu* display_menu = new QPopupMenu(this);
@@ -249,7 +267,7 @@ Mainframe::Mainframe
 	popup_menus_.push_back(control_menu);
 	control_menu->setCheckable(TRUE);
 
-	control_menu->insertItem("&Rotate Mode", this, SLOT(rotateMode()), CTRL+Key_R, MENU__CONTROL_ROTATE_MODE);
+	control_menu->insertItem("&Move Mode", this, SLOT(rotateMode()), CTRL+Key_R, MENU__CONTROL_ROTATE_MODE);
 	control_menu->insertItem("&Picking Mode", this, SLOT(pickingMode()), CTRL+Key_P, MENU__CONTROL_PICKING_MODE);
 
 	control_menu->setItemEnabled(MENU__CONTROL_ROTATE_MODE, TRUE);
@@ -267,6 +285,7 @@ Mainframe::Mainframe
 
 	menuBar()->insertItem("&File", file_menu);
 	menuBar()->insertItem("&Edit", edit_menu_);
+	menuBar()->insertItem("&Insert", insert_menu);
 	menuBar()->insertItem("&Control", control_menu);
 	menuBar()->insertItem("&Build", build_menu);
 	menuBar()->insertItem("&Display", display_menu);
@@ -279,6 +298,10 @@ Mainframe::Mainframe
 	// ---------------------
 
 	connect(display_menu,
+					SIGNAL(aboutToShow()),
+					this,
+					SLOT(checkMenuEntries()));
+	connect(insert_menu,
 					SIGNAL(aboutToShow()),
 					this,
 					SLOT(checkMenuEntries()));
@@ -315,10 +338,12 @@ Mainframe::Mainframe
 	registerConnectionObject(*scene_);
 	registerConnectionObject(*control_);
 	registerConnectionObject(*display_properties_);
+	registerConnectionObject(*label_properties_);
 	registerConnectionObject(*open_hin_file_);
 	registerConnectionObject(*open_pdb_file_);
 	registerConnectionObject(*molecular_properties_);
 	registerConnectionObject(*server_);
+	registerConnectionObject(*geometric_convertor_);
 }
 
 Mainframe::~Mainframe()
@@ -331,6 +356,7 @@ Mainframe::~Mainframe()
 	display_properties_->setPreferences(preferences_);
 	preferences_dialog_->setPreferences(preferences_);
 	minimization_dialog_->setPreferences(preferences_);
+	label_properties_->setPreferences(preferences_);
 
 	//
 	// write the preferences
@@ -395,6 +421,7 @@ void Mainframe::checkMenuEntries()
 	menuBar()->setItemEnabled(MENU__BUILD_ASSIGN_CHARGES, selected);
 	menuBar()->setItemEnabled(MENU__BUILD_CHECK_RESIDUE, selected);
 	menuBar()->setItemEnabled(MENU__BUILD_BUILD_BONDS, selected);
+	//	menuBar()->setItemEnabled(MENU__INSERT_LABEL, selected);
 	
 	// these menu points for single items only
 	menuBar()->setItemEnabled(MENU__DISPLAY_CENTER_CAMERA, selected && (number_of_selected_objects == 1));
@@ -683,10 +710,18 @@ void Mainframe::deselect()
 	QWidget::update();
 }
 
+void Mainframe::insertLabel()
+{
+	label_properties_->show();
+	label_properties_->raise();
+}
+
 void Mainframe::rotateMode()
 {
 	rotate_mode_ = true;
+	scene_->setRenderMode(Scene::RENDER_MODE__COMPILE);
 	
+	// unregister picking mode controls
 	NotificationUnregister
 		(scene_->events.MouseLeftButtonPressed);
 	
@@ -696,20 +731,47 @@ void Mainframe::rotateMode()
 	NotificationUnregister
 		(scene_->events.MouseLeftButtonReleased);
 
+	NotificationUnregister
+		(scene_->events.MouseRightButtonPressed);
+	
+	NotificationUnregister
+		(scene_->events.MouseRightButtonPressed & scene_->events.MouseMoved);
+	
+	NotificationUnregister
+		(scene_->events.MouseRightButtonReleased);
 
+
+	// register rotation mode controls
 	NotificationRegister
-		(scene_->events.MouseLeftButtonPressed & scene_->events.MouseMoved,
+		(scene_->events.MouseLeftButtonPressed & scene_->events.MouseMoved, 
 		 scene_->events.RotateSystem);
+	
+	NotificationRegister
+		(scene_->events.MouseMiddleButtonPressed & scene_->events.MouseMoved, 
+		 scene_->events.ZoomSystem);
+	
+	NotificationRegister
+		(scene_->events.MouseRightButtonPressed & scene_->events.MouseMoved, 
+		 scene_->events.TranslateSystem);
 }
 
 void Mainframe::pickingMode()
 {
 	rotate_mode_ = false;
+	scene_->setRenderMode(Scene::RENDER_MODE__DO_NOT_COMPILE);
 
+	// unregister rotation mode controls
 	NotificationUnregister
 		(scene_->events.MouseLeftButtonPressed & scene_->events.MouseMoved);
 
+	NotificationUnregister
+		(scene_->events.MouseMiddleButtonPressed & scene_->events.MouseMoved);
 
+	NotificationUnregister
+		(scene_->events.MouseRightButtonPressed & scene_->events.MouseMoved);
+
+
+	// register picking mode controls
 	NotificationRegister
 		(scene_->events.MouseLeftButtonPressed,
 		 scene_->events.SelectionPressed);
@@ -721,6 +783,18 @@ void Mainframe::pickingMode()
 	NotificationRegister
 		(scene_->events.MouseLeftButtonReleased, 
 		 scene_->events.SelectionReleased);
+
+	NotificationRegister
+		(scene_->events.MouseRightButtonPressed,
+		 scene_->events.DeselectionPressed);
+	
+	NotificationRegister
+		(scene_->events.MouseRightButtonPressed & scene_->events.MouseMoved, 
+		 scene_->events.DeselectionPressedMoved);
+	
+	NotificationRegister
+		(scene_->events.MouseRightButtonReleased, 
+		 scene_->events.DeselectionReleased);
 }
 
 void Mainframe::checkResidue()
