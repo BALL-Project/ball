@@ -1,4 +1,4 @@
-// $Id: events.h,v 1.4 2001/05/13 14:03:44 hekl Exp $
+// $Id: events.h,v 1.5 2001/06/29 06:16:07 sturm Exp $
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -1108,12 +1108,12 @@ namespace BALL
 				object uses the combination operators to combine different events together and
 				sent them to other receiving event classes prio registered with the 
 				\Ref{Notification} mechanism of BALL.
-				The names of the methods may seems a bit the long and unreadable but they are only
+				The names of the methods may seems a bit too long and unreadable but they are only
 				event names and will used and created automatically for the \Ref{Scene} object.
 				@memo    Events class (BALL VIEW gui widgets framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/05/13 14:03:44 $
+				@author  $Author: sturm $
+				@version $Revision: 1.5 $
+				@date    $Date: 2001/06/29 06:16:07 $
 		*/
 		class Events
 		{
@@ -1201,7 +1201,7 @@ namespace BALL
 				(ShiftKeyPressed); 
 
 			/** Declare event class ShiftKeyPressedMouseMoved.
-					Declare the event class {\em ShiftKeyPressedMouseMoved}. This event will be
+					This event will be
 					sent by the \Ref{Scene} object whenever the shift key on the keyboard is pressed
 					and at the same moment the mouse is moved.
 			*/
@@ -1209,14 +1209,14 @@ namespace BALL
 				(ShiftKeyPressedMouseMoved);
 			
 			/** Declare event class ControlKeyPressed.
-					Declare the event class {\em ControlKeyPressed}. This event will be sent by
+					This event will be sent by
 					the \Ref{Scene} object whenever the control key on the keyboard is pressed.
 			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
 				(ControlKeyPressed);
 			
 			/** Declare event class ControlKeyPressedMouseMoved.
-					Declare the event class {\em ControlKeyPressedMouseMoved}. This event will be
+					This event will be
 					sent by the \Ref{Scene} object whenever the control key on the keyboard is pressed
 					and at the same moment the mouse is moved.
 			*/
@@ -1224,7 +1224,7 @@ namespace BALL
 				(ControlKeyPressedMouseMoved);
 			
 			/** Declare event class ShiftKeyPressedControlKeyPressed.
-					Declare the event class {\em ShiftKeyPressedControlKeyPressed}. This event will be
+					This event will be
 					sent by the \Ref{Scene} object whenever the shift key on the keyboard is pressed
 					and at the same moment the control key is pressed.
 			*/
@@ -1232,7 +1232,6 @@ namespace BALL
 				(ShiftKeyPressedControlKeyPressed);
 			
 			/** Declare event class ShiftKeyPressedControlKeyPressedMouseMoved.
-					Declare the event class {\em ShiftKeyPressedControlKeyPressedMouseMoved}.
 					This event will be sent by the \Ref{Scene} object whenever the shift key and
 					the control key on the keyboard are pressed and at the same moment the 
 					mouse is  moved.
@@ -1241,14 +1240,13 @@ namespace BALL
 				(ShiftKeyPressedControlKeyPressedMouseMoved);
 			
 			/** Declare event class MouseLeftButtonPressed.
-					Declare the event class {\em MouseLeftButtonPressed}. This event will be sent by
+					This event will be sent by
 					the \Ref{Scene} object whenever the left button of the mouse is pressed.
 			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
 				(MouseLeftButtonPressed);
 			
 			/** Declare event class MouseLeftButtonPressedShiftKeyPressed.
-					Declare the event class {\em MouseLeftButtonPressedShiftKeyPressed}. 
 					This event will be sent by the \Ref{Scene} object whenever 
 					the left button of the mouse is pressed
 					and at the same moment the 
@@ -1258,7 +1256,6 @@ namespace BALL
 				(MouseLeftButtonPressedShiftKeyPressed);
 			
 			/** Declare event class MouseLeftButtonPressedControlKeyPressed.
-					Declare the event class {\em MouseLeftButtonPressedControlKeyPressed}.
 					This event will be sent by the \Ref{Scene} object whenever 
 					the left button of the mouse is pressed
 					and at the same moment the 
@@ -1268,7 +1265,6 @@ namespace BALL
 				(MouseLeftButtonPressedControlKeyPressed);
 			
 			/** Declare event class MouseLeftButtonPressedShiftKeyPressedControlKeyPressed.
-					Declare the event class {\em MouseLeftButtonPressedShiftKeyPressedControlKeyPressed}.
 					This event will be sent by the \Ref{Scene} object whenever 
 					the left button of the mouse is pressed
 					and at the same moment the 
@@ -1278,7 +1274,6 @@ namespace BALL
 				(MouseLeftButtonPressedShiftKeyPressedControlKeyPressed);
 			
 			/** Declare event class MouseLeftButtonPressedMouseMoved.
-					Declare the event class {\em MouseLeftButtonPressedMouseMoved}.
 					This event will be sent by the \Ref{Scene} object whenever 
 					the left button of the mouse is pressed
 					and at the same moment the 
@@ -1288,7 +1283,6 @@ namespace BALL
 				(MouseLeftButtonPressedMouseMoved);
 			
 			/** Declare event class MouseLeftButtonPressedShiftKeyPressedMouseMoved.
-					Declare the event class {\em MouseLeftButtonPressedShiftKeyPressedMouseMoved}.
 					This event will be sent by the \Ref{Scene} object whenever 
 					the left button of the mouse is pressed
 					and at the same moment the 
@@ -1298,7 +1292,6 @@ namespace BALL
 				(MouseLeftButtonPressedShiftKeyPressedMouseMoved);
 			
 			/** Declare event class MouseLeftButtonPressedControlKeyPressedMouseMoved.
-					Declare the event class {\em MouseLeftButtonPressedControlKeyPressedMouseMoved}.
 					This event will be sent by the \Ref{Scene} object whenever 
 					the left button of the mouse is pressed
 					and at the same moment the 
@@ -1308,7 +1301,6 @@ namespace BALL
 				(MouseLeftButtonPressedControlKeyPressedMouseMoved);
 			
 			/** Declare event class MouseLeftButtonPressedControlKeyPressedMouseMoved.
-					Declare the event class {\em MouseLeftButtonPressedControlKeyPressedMouseMoved}.
 					This event will be sent by the \Ref{Scene} object whenever 
 					the left button of the mouse is pressed
 					and at the same moment the 
@@ -1318,7 +1310,7 @@ namespace BALL
 				(MouseLeftButtonPressedShiftKeyPressedControlKeyPressedMouseMoved);
 			
 			/** Declare event class MouseLeftButtonReleased.
-					Declare the event class {\em MouseLeftButtonReleased}. This event will be sent by
+					This event will be sent by
 					the \Ref{Scene} object whenever 
 					the left button of the mouse is released.
 			*/
@@ -1326,7 +1318,6 @@ namespace BALL
 				(MouseLeftButtonReleased);
 			
 			/** Declare event class MouseLeftButtonReleasedShiftKeyPressed.
-					Declare the event class {\em MouseLeftButtonReleasedShiftKeyPressed}.
 					This event will be sent by the \Ref{Scene} object whenever 
 					the left button of the mouse is released
 					and at the same moment the 
@@ -1336,7 +1327,6 @@ namespace BALL
 				(MouseLeftButtonReleasedShiftKeyPressed);
 			
 			/** Declare event class MouseLeftButtonReleasedControlKeyPressed.
-					Declare the event class {\em MouseLeftButtonReleasedControlKeyPressed}.
 					This event will be sent by the \Ref{Scene} object whenever 
 					the left button of the mouse is released
 					and at the same moment the 
@@ -1346,7 +1336,6 @@ namespace BALL
 				(MouseLeftButtonReleasedControlKeyPressed);
 			
 			/** Declare event class MouseLeftButtonReleasedShiftKeyPressedControlKeyPressed.
-					Declare the event class {\em MouseLeftButtonReleasedShiftKeyPressedControlKeyPressed}.
 					This event will be sent by the \Ref{Scene} object whenever 
 					the left button of the mouse is released
 					and at the same moment the 
@@ -1356,7 +1345,6 @@ namespace BALL
 				(MouseLeftButtonReleasedShiftKeyPressedControlKeyPressed);
 			
 			/** Declare event class MouseMiddleButtonPressed.
-					Declare the event class {\em MouseMiddleButtonPressed}. 
 					This event will be sent by the \Ref{Scene} object whenever 
 					the middle button of the mouse is pressed.
 			*/
@@ -1364,7 +1352,6 @@ namespace BALL
 				(MouseMiddleButtonPressed);
 			
 			/** Declare event class MouseMiddleButtonPressedShiftKeyPressed.
-					Declare the event class {\em MouseMiddleButtonPressedShiftKeyPressed}. 
 					This event will be sent by the \Ref{Scene} object whenever 
 					the middle button of the mouse is pressed
 					and at the same moment the 
@@ -1374,7 +1361,6 @@ namespace BALL
 				(MouseMiddleButtonPressedShiftKeyPressed);
 			
 			/** Declare event class MouseMiddleButtonPressedControlKeyPressed.
-					Declare the event class {\em MouseMiddleButtonPressedControlKeyPressed}. 
 					This event will be sent by the \Ref{Scene} object whenever 
 					the middle button of the mouse is pressed
 					and at the same moment the 
@@ -1384,7 +1370,6 @@ namespace BALL
 				(MouseMiddleButtonPressedControlKeyPressed);
 			
 			/** Declare event class MouseMiddleButtonPressedShiftKeyPressedControlKeyPressed.
-					Declare the event class {\em MouseMiddleButtonPressedShiftKeyPressedControlKeyPressed}. 
 					This event will be sent by the \Ref{Scene} object whenever 
 					the middle button of the mouse is pressed
 					and at the same moment the 
@@ -1394,7 +1379,6 @@ namespace BALL
 				(MouseMiddleButtonPressedShiftKeyPressedControlKeyPressed);
 			
 			/** Declare event class MouseMiddleButtonPressedMouseMoved.
-					Declare the event class {\em MouseMiddleButtonPressedMouseMoved}. 
 					This event will be sent by the \Ref{Scene} object whenever 
 					the middle button of the mouse is pressed
 					and at the same moment the 
@@ -1404,7 +1388,6 @@ namespace BALL
 				(MouseMiddleButtonPressedMouseMoved);
 			
 			/** Declare event class MouseMiddleButtonPressedShiftKeyPressedMouseMoved.
-					Declare the event class {\em MouseMiddleButtonPressedShiftKeyPressedMouseMoved}. 
 					This event will be sent by the \Ref{Scene} object whenever 
 					the middle button of the mouse is pressed
 					and at the same moment the 
@@ -1415,7 +1398,6 @@ namespace BALL
 				(MouseMiddleButtonPressedShiftKeyPressedMouseMoved);
 			
 			/** Declare event class MouseMiddleButtonPressedControlKeyPressedMouseMoved.
-					Declare the event class {\em MouseMiddleButtonPressedControlKeyPressedMouseMoved}. 
 					This event will be sent by the \Ref{Scene} object whenever 
 					the middle button of the mouse is pressed
 					and at the same moment the 
@@ -1426,7 +1408,6 @@ namespace BALL
 				(MouseMiddleButtonPressedControlKeyPressedMouseMoved);
 			
 			/** Declare event class MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedMouseMoved.
-					Declare the event class {\em MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedMouseMoved}. 
 					This event will be sent by the \Ref{Scene} object whenever 
 					the middle button of the mouse is pressed
 					and at the same moment the 
@@ -1437,7 +1418,6 @@ namespace BALL
 				(MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedMouseMoved);
 			
 			/** Declare event class MouseMiddleButtonReleased.
-					Declare the event class {\em MouseMiddleButtonReleased}. 
 					This event will be sent by the \Ref{Scene} object whenever 
 					the middle button of the mouse is released.
 			*/
@@ -1445,7 +1425,6 @@ namespace BALL
 				(MouseMiddleButtonReleased);
 			
 			/** Declare event class MouseMiddleButtonReleasedShiftKeyPressed.
-					Declare the event class {\em MouseMiddleButtonReleasedShiftKeyPressed}. 
 					This event will be sent by the \Ref{Scene} object whenever 
 					the middle button of the mouse is released
 					and at the same moment the 
@@ -1455,7 +1434,6 @@ namespace BALL
 				(MouseMiddleButtonReleasedShiftKeyPressed);
 			
 			/** Declare event class MouseMiddleButtonReleasedControlKeyPressed.
-					Declare the event class {\em MouseMiddleButtonReleasedControlKeyPressed}. 
 					This event will be sent by the \Ref{Scene} object whenever 
 					the middle button of the mouse is released
 					and at the same moment the 
@@ -1465,7 +1443,6 @@ namespace BALL
 				(MouseMiddleButtonReleasedControlKeyPressed);
 			
 			/** Declare event class MouseMiddleButtonReleasedShiftKeyPressedControlKeyPressed.
-					Declare the event class {\em MouseMiddleButtonReleasedShiftKeyPressedControlKeyPressed}. 
 					This event will be sent by the \Ref{Scene} object whenever 
 					the middle button of the mouse is released
 					and at the same moment the 
@@ -1475,7 +1452,6 @@ namespace BALL
 				(MouseMiddleButtonReleasedShiftKeyPressedControlKeyPressed);
 			
 			/** Declare event class MouseRightButtonPressed.
-					Declare the event class {\em MouseRightButtonPressed}. 
 					This event will be sent by the \Ref{Scene} object whenever 
 					the right button of the mouse is pressed.
 			*/
@@ -1483,7 +1459,6 @@ namespace BALL
 				(MouseRightButtonPressed);
 			
 			/** Declare event class MouseRightButtonPressedShiftKeyPressed.
-					Declare the event class {\em MouseRightButtonPressedShiftKeyPressed}. 
 					This event will be sent by the \Ref{Scene} object whenever 
 					the right button of the mouse is pressed
 					and at the same moment the 
@@ -1493,7 +1468,6 @@ namespace BALL
 				(MouseRightButtonPressedShiftKeyPressed);
 			
 			/** Declare event class MouseRightButtonPressedControlKeyPressed.
-					Declare the event class {\em MouseRightButtonPressedControlKeyPressed}. 
 					This event will be sent by the \Ref{Scene} object whenever 
 					the right button of the mouse is pressed
 					and at the same moment the 
@@ -1503,7 +1477,6 @@ namespace BALL
 				(MouseRightButtonPressedControlKeyPressed);
 			
 			/** Declare event class MouseRightButtonPressedShiftKeyPressedControlKeyPressed.
-					Declare the event class {\em MouseRightButtonPressedShiftKeyPressedControlKeyPressed}. 
 					This event will be sent by the \Ref{Scene} object whenever 
 					the right button of the mouse is pressed
 					and at the same moment the 
@@ -1513,7 +1486,6 @@ namespace BALL
 				(MouseRightButtonPressedShiftKeyPressedControlKeyPressed);
 			
 			/** Declare event class MouseRightButtonPressedMouseMoved.
-					Declare the event class {\em MouseRightButtonPressedMouseMoved}. 
 					This event will be sent by the \Ref{Scene} object whenever 
 					the right button of the mouse is pressed
 					and at the same moment the 
@@ -1523,7 +1495,6 @@ namespace BALL
 				(MouseRightButtonPressedMouseMoved);
 			
 			/** Declare event class MouseRightButtonPressedShiftKeyPressedMouseMoved.
-					Declare the event class {\em MouseRightButtonPressedShiftKeyPressedMouseMoved}. 
 					This event will be sent by the \Ref{Scene} object whenever 
 					the right button of the mouse is pressed
 					and at the same moment the 
@@ -1534,7 +1505,6 @@ namespace BALL
 				(MouseRightButtonPressedShiftKeyPressedMouseMoved);
 			
 			/** Declare event class MouseRightButtonPressedControlKeyPressedMouseMoved.
-					Declare the event class {\em MouseRightButtonPressedControlKeyPressedMouseMoved}. 
 					This event will be sent by the \Ref{Scene} object whenever 
 					the right button of the mouse is pressed
 					and at the same moment the 
@@ -1545,7 +1515,6 @@ namespace BALL
 				(MouseRightButtonPressedControlKeyPressedMouseMoved);
 			
 			/** Declare event class MouseRightButtonPressedShiftKeyPressedControlKeyPressedMouseMoved.
-					Declare the event class {\em MouseRightButtonPressedShiftKeyPressedControlKeyPressedMouseMoved}. 
 					This event will be sent by the \Ref{Scene} object whenever 
 					the right button of the mouse is pressed
 					and at the same moment the 
@@ -1556,7 +1525,6 @@ namespace BALL
 				(MouseRightButtonPressedShiftKeyPressedControlKeyPressedMouseMoved);
 			
 			/** Declare event class MouseRightButtonReleased.
-					Declare the event class {\em MouseRightButtonReleased}. 
 					This event will be sent by the \Ref{Scene} object whenever 
 					the right button of the mouse is released.
 			*/
@@ -1564,7 +1532,6 @@ namespace BALL
 				(MouseRightButtonReleased);
 			
 			/** Declare event class MouseRightButtonReleasedShiftKeyPressed.
-					Declare the event class {\em MouseRightButtonReleasedShiftKeyPressed}. 
 					This event will be sent by the \Ref{Scene} object whenever 
 					the right button of the mouse is released
 					and at the same moment the 
@@ -1574,7 +1541,6 @@ namespace BALL
 				(MouseRightButtonReleasedShiftKeyPressed);
 			
 			/** Declare event class MouseRightButtonReleasedControlKeyPressed.
-					Declare the event class {\em MouseRightButtonReleasedControlKeyPressed}. 
 					This event will be sent by the \Ref{Scene} object whenever 
 					the right button of the mouse is released
 					and at the same moment the 
@@ -1584,7 +1550,6 @@ namespace BALL
 				(MouseRightButtonReleasedControlKeyPressed);
 			
 			/** Declare event class MouseRightButtonReleasedShiftKeyPressedControlKeyPressed.
-					Declare the event class {\em MouseRightButtonReleasedShiftKeyPressedControlKeyPressed}. 
 					This event will be sent by the \Ref{Scene} object whenever 
 					the right button of the mouse is released
 					and at the same moment the 
@@ -1594,7 +1559,6 @@ namespace BALL
 				(MouseRightButtonReleasedShiftKeyPressedControlKeyPressed);
 			
 			/** Declare event class MouseMoved.
-					Declare the event class {\em MouseMoved}. 
 					This event will be sent by the \Ref{Scene} object whenever 
 					the mouse is moved.
 			*/
