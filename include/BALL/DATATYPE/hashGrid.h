@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hashGrid.h,v 1.38 2004/02/18 18:19:02 anhi Exp $
+// $Id: hashGrid.h,v 1.39 2004/10/28 14:45:49 amoll Exp $
 //
 
 #ifndef BALL_DATATYPE_HASHGRID_H
@@ -1947,7 +1947,12 @@ namespace BALL
 		float y = (vector.y - origin_.y) / unit_.y;
 		float z = (vector.z - origin_.z) / unit_.z;
 
-		return getBox((Index)Maths::floor(x), (Index)Maths::floor(y), (Index)Maths::floor(z));
+		// workaround for MSVC 7, dont change this !!!
+		Index x1 = (Index) Maths::floor(x);
+		Index y1 = (Index) Maths::floor(y);
+		Index z1 = (Index) Maths::floor(z);
+
+		return getBox(x1, y1, z1);
 	}
 
 	template <typename Item>
