@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorTable.C,v 1.7 2002/12/16 12:23:05 sturm Exp $
+// $Id: colorTable.C,v 1.8 2003/06/04 15:46:29 amoll Exp $
 
 #include <BALL/VIEW/DATATYPE/colorTable.h>
 #include <BALL/COMMON/rtti.h>
@@ -123,6 +123,18 @@ namespace BALL
 		{
 			return color_number_;
 		}
+		
+		/*
+		void ColorTable::setBaseColors(const ColorRGBA* color_array, Size array_size)
+			throw()
+		{
+			clear();
+			for (Size i = 0; i < array_size; i++)
+			{
+				push_back(color_array[i]);
+			}
+		}	
+		*/
 
 		void ColorTable::setAlphaBlending(const bool blending)
 			throw()
@@ -147,24 +159,20 @@ namespace BALL
 
 			Index old_number_of_colors = (Index)size();
 
-			// we won't *reduce* the number of colors, so if we should, we
-			// just return
+			// we won't *reduce* the number of colors, so if we should, we just return
 			if (color_number_ < old_number_of_colors)
 			{
 				return old_number_of_colors;
 			}
-		
+			
 			// how many colors do we have to put between two of the old ones?
 			Index number_of_interpolation_steps = (Index)floor((double)(color_number_ - old_number_of_colors) / (old_number_of_colors - 1));
 	
 			// adjust the number of colors so that there are no remainders after the interpolation
-			if (color_number_ != (old_number_of_colors + number_of_interpolation_steps*(old_number_of_colors-1)))  
-			{
-				color_number_ = old_number_of_colors + (number_of_interpolation_steps*(old_number_of_colors-1));
-			}
+			color_number_ = old_number_of_colors + (number_of_interpolation_steps*(old_number_of_colors-1));
 			
 			ColorRGBA col1, col2;
-			float pos;
+			double pos; // had to use double here, instead of float...
 			
 			for (Index i=0; i<old_number_of_colors-1; i++)
 			{
@@ -190,7 +198,7 @@ namespace BALL
 			new_table[color_number_-1] = (*this)[old_number_of_colors-1]; 
 
 			// This can probably done much faster...
-			(*this).resize(color_number_);
+			(*this).resize(new_table.size());
 
 			copy(new_table.begin(), new_table.end(), (*this).begin());
 			
