@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: config.h.in,v 1.41 2003/12/12 11:11:52 oliver Exp $ 
+// $Id: config.h.in,v 1.42 2004/02/10 13:20:06 amoll Exp $ 
 //
 
 #ifndef BALL_CONFIG_CONFIG_H
@@ -200,6 +200,7 @@
 #undef BALL_QT_HAS_THREADS
 #undef BALL_QT_VERSION
 #undef BALL_QT_VERSION_STR
+#define QT_THREAD_SUPPORT
 
 // Define whether to use the ARM style or ANSI style access modifications
 //   ARM style:   BaseClass::foo;
