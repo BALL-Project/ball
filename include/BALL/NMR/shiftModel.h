@@ -1,4 +1,4 @@
-// $Id: shiftModel.h,v 1.3 2000/09/19 20:33:40 oliver Exp $
+// $Id: shiftModel.h,v 1.4 2000/09/25 19:09:54 oliver Exp $
 
 #ifndef BALL_NMR_SHIFTMODEL_H
 #define BALL_NMR_SHIFTMODEL_H
@@ -173,6 +173,26 @@ namespace BALL
 		*/
 		Options options;
 
+		//@}
+
+		/**	@name	Processor related methods
+		*/
+		//@{
+
+		/**	Start method
+		*/
+		bool start()
+			throw();
+
+		/**	Finish method
+		*/
+		bool finish()
+			throw();
+
+		/**	Application method
+		*/
+		Processor::Result operator () (Composite& composite)
+			throw();
 		//@}
 
 		protected:
