@@ -1,4 +1,4 @@
-// $Id: support.C,v 1.27 2001/06/05 15:55:00 anker Exp $
+// $Id: support.C,v 1.28 2001/06/06 08:34:53 anker Exp $
 
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/KERNEL/atom.h>
@@ -397,7 +397,7 @@ namespace BALL
 		// in the box "box" and if they do not overlap with molecules in 
 		// "solute_grid"
 		Size addNonOverlappingMolecules
-			(System& system, const HashGrid3<Atom*>& solute_grid, 
+			(System& system, const HashGrid3<const Atom*>& solute_grid, 
 			 const System& solvent, const Box3& box, double distance)
 		{
 			const Molecule* old_molecule = 0;
@@ -426,8 +426,8 @@ namespace BALL
 			Vector3 position;
 			Vector3 new_position;
 			float atomic_mass;
-			HashGridBox3<Atom*>::ConstDataIterator data_it;
-			HashGridBox3<Atom*>::ConstBoxIterator box_it;
+			HashGridBox3<const Atom*>::ConstDataIterator data_it;
+			HashGridBox3<const Atom*>::ConstBoxIterator box_it;
 			Vector3	additional_space(distance * 1.02);
 			HashGrid3<const Atom*> solvent_grid(box.a - additional_space,
 					box.b - box.a + additional_space + additional_space, distance);
@@ -490,7 +490,7 @@ namespace BALL
 					atom_counter++;
 					
 					// check for all collisions with any of the solute's atoms
-					const HashGridBox3<Atom*>* hbox = solute_grid.getBox(position);
+					const HashGridBox3<const Atom*>* hbox = solute_grid.getBox(position);
 					if ((hbox != 0) && add)
 					{	
 						for (box_it = hbox->beginBox(); +box_it && add; ++box_it)
@@ -545,7 +545,7 @@ namespace BALL
 					// are at a boundary
 
 					position = atom_it->getPosition();
-					const HashGridBox3<Atom*>* hbox = solvent_grid.getBox(position);
+					const HashGridBox3<const Atom*>* hbox = solvent_grid.getBox(position);
 					solvent_grid.getIndices(*hbox, index_x, index_y, index_z);
 
 					// indices below 1 and above max - 1 are at the border, because
