@@ -4,7 +4,7 @@
 #   Sitkoff, Sharp, and Honig: Accurate Calculation of Hydration Free Energies 
 #   Using Macroscopic Solvent Models, H. Phys. Chem, (1994), 98, 1978-1988
 #
-# $Id: PARSE.rul,v 1.1 2000/05/30 12:36:47 oliver Exp $
+# $Id: PARSE.rul,v 1.2 2000/05/31 17:36:25 oliver Exp $
 #
 [ChargeRules:H]
 ; -NH-CH=NH+-CH= (imidazolium) - NH hydrogen
@@ -64,6 +64,8 @@
 ; -C-NH-C+(NH2)2 (guanidinium)
  0.35  = connectedTo((-*)(-N(-H)(-C(~N(-H)(-H))(~N(-H)(-H)))))
  0.35  = connectedTo((~N(-H)(-H))(~N(-H)(-H))(-N(-H)(-C)))
+; guanidine (e.g. ARG) -C-N=C(NH2)2
+ 0.28  = connectedTo((-*)(-N(=C(-N(-H)(-H))(-N(-H)(-H))))) OR connectedTo((=N(-C(-*)))(-N(-H)(-H))(-N(-H)(-H)))
 ; dialkylsulfide (MET) (CHn is a united atom group -> RadiusRule)
 ; 0.265  = connectedTo((-S(-C))) AND sp3Hybridized()
  0.265  = connectedTo((-S(-C(-H)(-H)(-*))))
@@ -88,8 +90,6 @@
  0.55  = connectedTo((=O)(-N(-H)(-H))(-*))
 ; secondary carboxylic acid amide
  0.55  = connectedTo((=O)(-N(H)(-*))(-*))
-; guanidine (e.g. ARG) -C-N=C(NH2)2
- 0.28  = connectedTo((-*)(-N(=C(-N(-H)(-H))(-N(-H)(-H))))) OR connectedTo((=N(-C(-*)))(-N(-H)(-H))(-N(-H)(-H)))
 ; aromatic carbons and aromatic carbons with aliphatic groups (benzene, methylbenzene)
 -0.125 = connectedTo((-H)(~*)(~*)) OR connectedTo((-C(-H)(-H)(-H))(~*)(~*))
 ; pyridine carbons 
