@@ -1,4 +1,4 @@
-// $Id: INIFile.C,v 1.13 2001/03/14 00:50:39 amoll Exp $
+// $Id: INIFile.C,v 1.14 2001/03/14 14:19:31 amoll Exp $
 
 #include <BALL/FORMAT/INIFile.h>
 #include <fstream>
@@ -9,6 +9,7 @@ namespace BALL
 {
 
 	const String INIFile::UNDEFINED = "[UNDEFINED!]";
+	const String INIFile::PREFIX = "#PREFIX!";	
 
 	// Default constructor
 	INIFile::INIFile()
@@ -86,8 +87,8 @@ namespace BALL
     // create the prefix; this has to be done to prevent problems 
 		// with the positions in the vectors; the prefix is section 0
 		Index section_nr = 0;
-		section_names_.push_back("[PREFIX!]");
-		section_index_["[PREFIX!]"] = 0;
+ 		section_names_.push_back(PREFIX);
+		section_index_[PREFIX] = 0;
 		section_start_.push_back(0);
 
 		// read all lines from the file

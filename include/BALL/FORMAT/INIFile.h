@@ -1,4 +1,4 @@
-// $Id: INIFile.h,v 1.12 2001/03/14 00:50:07 amoll Exp $
+// $Id: INIFile.h,v 1.13 2001/03/14 14:19:07 amoll Exp $
 
 #ifndef BALL_FORMAT_INIFILE_H
 #define BALL_FORMAT_INIFILE_H
@@ -39,6 +39,11 @@ namespace BALL
 				"[UNDEFINED!]"
 		*/
 		static const String UNDEFINED;
+		
+		/** Name of the prefix section:
+				"#PREFIX!"
+		*/
+		static const String PREFIX;		
 		
 		/** @name	Constructors and Destructors
 		*/
