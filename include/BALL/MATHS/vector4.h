@@ -1,4 +1,4 @@
-// $Id: vector4.h,v 1.16 2000/02/28 01:28:15 oliver Exp $
+// $Id: vector4.h,v 1.17 2000/03/01 21:26:04 oliver Exp $
 
 #ifndef BALL_MATHS_VECTOR4_H
 #define BALL_MATHS_VECTOR4_H
@@ -361,7 +361,9 @@ namespace BALL
 	TVector4<T>::TVector4(const T* ptr)
 	{
 		if (ptr == 0)
+		{
 			throw Exception::NullPointer(__FILE__, __LINE__);
+		}
 		
 		x = *ptr++;
 		y = *ptr++;
