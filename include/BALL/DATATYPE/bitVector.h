@@ -1,4 +1,4 @@
-// $Id: bitVector.h,v 1.8 2000/07/22 10:41:12 amoll Exp $
+// $Id: bitVector.h,v 1.9 2000/07/23 14:10:15 amoll Exp $
 
 #ifndef BALL_DATATYPE_BITVECTOR_H
 #define BALL_DATATYPE_BITVECTOR_H
@@ -119,8 +119,8 @@ namespace BALL
 
 
 	/**	Bit vector class 
-			In this class negative indices can be used.
-			-1 is interpreted as the last element and so on.
+			Indices may be given as negative arguments: start from the end
+			-1 therefore means the last bit.
 			Some functions resize the instance if a index greater than the
 			size of the instance is given.
 			Other functions throw exception in this case.
@@ -168,6 +168,7 @@ namespace BALL
 		/**	Clear method
 		*/
 		void clear();
+		// groesse bleibt unveraendert???
 		//@}
 
 
@@ -210,7 +211,7 @@ namespace BALL
 
 		/** Set the size of this instance.
 				@param size the new size
-				@param keep ???????????
+				@param keep ???
 		*/
 		void setSize(Size size, bool keep = true);
 
@@ -227,8 +228,8 @@ namespace BALL
 		/** Get the max index.
 				This is the last accessible value.
 		*/
-		// ?????????? unnoetig?
-		Index getMaxIndex() const;
+		// ??? unnoetig?
+		//Index getMaxIndex() const;
 	
 		/** Return a muteable pointer to the values of this instance.
 				@return unsigned char*	a muteable pointer to the values of this instance
@@ -246,7 +247,8 @@ namespace BALL
 				@return Bit a Bit pointing to the given element of this instance
 		*/
 		Bit operator []	(Index index);
-	
+		//casting meistens notwendig wenn vergleich mit bool ???
+
 		/**	Constant random access to the components.
 				If the given index is greater than the size of this instance an exception is thrown.
 				@return bool the value of the given index
@@ -269,6 +271,7 @@ namespace BALL
 				@return bool the value of the element
 		*/
 		bool getBit(Index index);
+		//nicht const version ist ein wenig schneller, deswegen drin lassen ???
 
 		/** Get the value of an element.
 				If the given index is greater than the size of this instance an exception is thrown.
@@ -298,59 +301,80 @@ namespace BALL
 				@param last the last element to be filled
 		*/
 		void toggle(Index first = 0, Index last = -1);
-
-		/// ?????????????
+/*
+		/// ???
 		void setUnsignedChar(unsigned char bit_pattern);
 
-		/// ?????????????/
+		/// ???/
 		unsigned char getUnsignedChar() const;
 
-		/// ?????????????/
+		/// ???/
 		void setUnsignedShort(unsigned short bit_pattern);
 
-		/// ?????????????/
+		/// ???/
 		unsigned short getUnsignedShort() const;
 
-		/// ?????????????/
+		/// ???/
 		void setUnsignedInt(unsigned int bit_pattern);
 
-		/// ?????????????/
+		/// ???/
 		unsigned int getUnsignedInt() const;
 
-		/// ?????????????/
+		/// ???/
 		void setUnsignedLong(unsigned long bit_pattern);
 
-		/// ?????????????/
-		unsigned long getUnsignedLong() const;
+		/// ???/
+		unsigned long getUnsignedLong() const;*/
 
+		// ??? kann man auch private setzen, da operator existiert
 		///
 		void bitwiseOr(const BitVector& bit_vector);
 
+		// ??? kann man auch private setzen, da operator existiert
 		///
 		void bitwiseXor(const BitVector& bit_vector);
 
+		// ??? kann man auch private setzen, da operator existiert
 		///
 		void bitwiseAnd(const BitVector& bit_vector);
 
-		///
+		/** Or Operator.
+				Creates a new BitVector object and fills it with the result of
+				{\em this or bit_Vector).
+		*/
 		BitVector operator | (const BitVector& bit_vector);
 
-		///
+		/** Compute {\em this or bit_vector}.
+				The result is saved in this instance.
+		*/
 		BitVector& operator |= (const BitVector& bit_vector);
 
-		///
+		/** And Operator.
+				Creates a new BitVector object and fills it with the result of
+				{\em this and bit_Vector).
+		*/
 		BitVector operator & (const BitVector& bit_vector);
 
-		///
+		/** Compute {\em this and bit_vector}.
+				The result is saved in this instance.
+		*/
 		BitVector& operator &= (const BitVector& bit_vector);
 
-		///
+		/** Xor Operator.
+				Creates a new BitVector object and fills it with the result of
+				{\em this Xor bit_Vector).
+		*/
 		BitVector operator ^ (const BitVector& bit_vector);
 
-		///
+		/** Compute {\em this xor bit_vector}.
+				The result is saved in this instance.
+		*/
 		BitVector& operator ^= (const BitVector& bit_vector);
 
-		///
+		/** Negate Operator.
+				Creates a new BitVector object and fills it with the negate 
+				result of this instance.
+		*/
 		BitVector operator ~ ();
 		//@}
 
@@ -368,7 +392,7 @@ namespace BALL
 				@param first the index to start searching
 				@param last the index to stop searching
 		*/
-		// ?????? besser rueckgabewert index mit dem 1. auftreten des wertes
+		// ??? besser rueckgabewert index mit dem 1. auftreten des wertes
 		bool isAnyBit(bool value, Index first = 0, Index last = -1) const;
 
 		/** Test if every bit in a given range has the given value
@@ -379,7 +403,6 @@ namespace BALL
 		bool isEveryBit(bool value, Index first = 0, Index last = -1) const;
 
 		//@}
-
 
 		/**	@name	Debugging and Diagnostics */
 		//@{
@@ -405,12 +428,12 @@ namespace BALL
 
 		/**	Read the values of of type {\em bool} from an istream.
 		*/
-		//????? wirklich notwendig? read <======> Input- Operator ???????
+		//wirklich notwendig? read <======> Input- Operator ???
 		virtual void read(std::istream& s);
 
 		/**	Write the values of of type {\em bool} to an ostream.
 		*/
-		//????? wirklich notwendig? write <======> Output- Operator ???????
+		//wirklich notwendig? write <======> Output- Operator ???
 		virtual void write(std::ostream& s) const;
 
 		/**	Storable write method.

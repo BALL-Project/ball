@@ -1,4 +1,4 @@
-// $Id: bitVector.iC,v 1.7 2000/07/20 23:43:25 amoll Exp $
+// $Id: bitVector.iC,v 1.8 2000/07/23 14:10:15 amoll Exp $
 
 BALL_INLINE
 BitVector::BlockType BitVector::mask_(Index index) const
@@ -16,7 +16,6 @@ BALL_INLINE
 BitVector& BitVector::operator = (const BitVector& bit_vector)
 {
   set(bit_vector);
-
   return *this;
 }
 
@@ -24,7 +23,6 @@ BALL_INLINE
 BitVector& BitVector::operator = (const char* bit_string)
 {
   set(bit_string);
-
   return *this;
 }
 
@@ -39,12 +37,12 @@ BALL::Size BitVector::getSize() const
 {
   return size_;
 }
-
+/*
 BALL_INLINE 
 BALL::Index BitVector::getMaxIndex() const
 {
   return (Index)size_ - 1;
-}
+}*/
   
 BALL_INLINE 
 BALL::BitVector::BlockType* BitVector::getBitSet()
@@ -62,9 +60,7 @@ BALL_INLINE
 BitVector BitVector::operator | (const BitVector& bit_vector)
 {
   BitVector temp(*this);
-
   temp.bitwiseOr(bit_vector);
-
   return temp;
 }
 
@@ -72,7 +68,6 @@ BALL_INLINE
 BitVector& BitVector::operator |= (const BitVector &bit_vector)
 {
   bitwiseOr(bit_vector);
-
   return *this;
 }
 
@@ -80,9 +75,7 @@ BALL_INLINE
 BitVector BitVector::operator & (const BitVector& bit_vector)
 {
   BitVector temp(*this);
-
   temp.bitwiseAnd(bit_vector);
-
   return temp;
 }
 
@@ -90,7 +83,6 @@ BALL_INLINE
 BitVector& BitVector::operator &= (const BitVector &bit_vector)
 {
   bitwiseAnd(bit_vector);
-
   return *this;
 }
 
@@ -98,9 +90,7 @@ BALL_INLINE
 BitVector BitVector::operator ^ (const BitVector& bit_vector)
 {
   BitVector temp(*this);
-
   temp.bitwiseXor(bit_vector);
-
   return temp;
 }
 
@@ -108,7 +98,6 @@ BALL_INLINE
 BitVector& BitVector::operator ^= (const BitVector &bit_vector)
 {
   bitwiseXor(bit_vector);
-
   return *this;
 }
 
@@ -116,9 +105,7 @@ BALL_INLINE
 BitVector BitVector::operator ~ ()
 {
   BitVector temp(*this);
-
   temp.toggle();
-
   return temp;
 }
 
@@ -138,7 +125,6 @@ BALL_INLINE
 Bit BitVector::operator [] (Index index)
 {
 	block_(index);
-
 	return Bit(*this, index);
 }
 
@@ -153,17 +139,14 @@ BALL_INLINE
 bool BitVector::getBit(Index index) const
 {
 	validateIndex_(index);
-
 	BitVector* const  const_this = const_cast<BitVector *>(this);
-
 	return const_this->getBit(index);
 }
 
 BALL_INLINE
 bool BitVector::operator [] (Index index) const
 {
-	validateIndex_(index);
-
+	//validateIndex_(index);
 	return getBit(index);
 }
  
@@ -184,7 +167,6 @@ BALL_INLINE
 void BitVector::toggleBit(Index index)
 {
 	validateIndex_(index);
-
 	bitset_[block_(index)] ^= mask_(index);
 }
 
@@ -192,9 +174,8 @@ BALL_INLINE
 bool Bit::operator == (bool bit) const
 {
 	if (bitvector_ == 0)
-	{
 		throw Exception::NullPointer(__FILE__, __LINE__);
-	}
+	
 	return bitvector_->getBit(index_) == bit;
 }
 
@@ -202,9 +183,8 @@ BALL_INLINE
 bool Bit::operator != (bool bit) const
 {
 	if (bitvector_ == 0)
-	{
 		throw Exception::NullPointer(__FILE__, __LINE__);
-	}
+	
 	return bitvector_->getBit(index_) != bit;
 }
 
@@ -212,9 +192,8 @@ BALL_INLINE
 bool Bit::operator == (const Bit& bit) const
 {
 	if (bitvector_ == 0)
-	{
 		throw Exception::NullPointer(__FILE__, __LINE__);
-	}
+
 	return bitvector_->getBit(index_) == bit.bitvector_->getBit(index_);
 }
 
@@ -222,20 +201,16 @@ BALL_INLINE
 bool Bit::operator != (const Bit& bit) const
 {
 	if (bitvector_ == 0)
-	{
 		throw Exception::NullPointer(__FILE__, __LINE__);
-	}
+
 	return bitvector_->getBit(index_) != bit.bitvector_->getBit(index_);
 }
-
 
 BALL_INLINE
 Bit::operator bool() const
 {
 	if (bitvector_ == 0)
-	{
 		throw Exception::NullPointer(__FILE__, __LINE__);
-	}
 
 	return bitvector_->getBit(index_);
 }
@@ -243,9 +218,8 @@ Bit::operator bool() const
 BALL_INLINE
 Bit& Bit::operator = (const Bit& bit)	{
 	if (bitvector_ == 0)
-	{
 		throw Exception::NullPointer(__FILE__, __LINE__);
-	}
+
 	bitvector_ = bit.bitvector_;
 	index_ = bit.index_;
 	return *this;
@@ -255,9 +229,8 @@ BALL_INLINE
 Bit& Bit::operator = (const bool bit)
 {
 	if (bitvector_ == 0)
-	{
 		throw Exception::NullPointer(__FILE__, __LINE__);
-	}
+
 	bitvector_->setBit(index_, bit);
 	return *this;
 }
