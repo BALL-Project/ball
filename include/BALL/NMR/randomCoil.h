@@ -1,109 +1,96 @@
-// $Id: randomCoil.h,v 1.3 2000/09/08 07:09:49 oliver Exp $
+// $Id: randomCoil.h,v 1.4 2000/09/16 07:43:16 oliver Exp $
 
-#include<BALL/SOLVATION/poissonBoltzmann.h>
-#include<BALL/COMMON/constants.h>
-#include<BALL/KERNEL/system.h>
-#include<BALL/KERNEL/atom.h>
-#include<BALL/KERNEL/bond.h>
-#include<BALL/KERNEL/residue.h>
-#include<BALL/KERNEL/molecule.h>
-#include<BALL/KERNEL/protein.h>
-#include<BALL/KERNEL/residue.h>
-#include<BALL/KERNEL/PDBAtom.h>
-#include<BALL/DATATYPE/string.h>
-#include<BALL/DATATYPE/stringHashMap.h>
-#include<BALL/KERNEL/PTE.h>
+#ifndef BALL_NMR_SHIFTMODULE_H
+#	include<BALL/NMR/shiftModule.h>
+#endif
 
-#ifndef SHIFT_MODULE
-#include<BALL/NMR/shiftModule.h>
+#ifndef BALL_DATAYTPE_STRINGHASHMAP_H
+#	include<BALL/NMR/shiftModule.h>
+#endif
+
+#ifndef BALL_KERNEL_EXPRESSION_H
+#	include<BALL/KERNEL/expression.h>
+#endif
+
+#ifndef BALL_FORMAT_PARAMETERS_H
+#	include<BALL/FORMAT/parameters.h>
+#endif
+
+#ifndef BALL_FORMAT_PARAMETERSECTION_H
+#	include<BALL/FORMAT/parameterSection.h>
 #endif
 
 #include <list>
-using std::list;
 
-
-namespace BALL {
+namespace BALL 
+{
 		
-/**@name	random Coil
-*/
-//@{		
 
-/**	adding random coil shifts to Hydrogens
-*/
-
-
-
-class RandomCoilShift:public ShiftModule
+	/**	adding random coil shifts to Hydrogens
+	*/
+	class RandomCoilShift
+		:	public ShiftModule
 	{
-	public:
-	
-	/**@name	Constructors and Destructors
-	*/
-	//@{
-
-	/**	Default constructor.
-	*/
-	RandomCoilShift();
-	
-	/**	Destructor
-	*/
-	virtual ~RandomCoilShift();
-	
-	//@}
-
-	
-	/**@name	Processor specific functions.
-	*/
-	//@{
-	
-	/**	Start method.
-		A StringHashMap of floats is built and named {\tt rc\_table\_}
-		A file called "random.dat" is opened ,it contains the randomcoilshift date for
-		every residue´s atoms. The random coil shift is stored in {\tt rc\_table\_}
-		under [residue_name:atom_name].
-
-	*/
-	virtual bool start();
-	
-	/**	Finish method.
-		nothing is done here
+		public:
 		
-	*/
-	virtual bool finish();
+		/**@name	Constructors and Destructors
+		*/
+		//@{
 
-	/**	Application method
-		if current object is a PDBAtom of kind Hydrogen its random coil shift has to be looked up
-		in {\tt rc\_table}.
-		Get Hydrogens residue name append ":" and its name, the lookup entry is reconstruced.
-		If this entry is found within the table the randomcoil shift is added to the Hydrogens
-		chemical shift.
-		If this entry is not found the random coil shift is set to 1000 and added as well to the
-		Hydrogens chemical shift,to mark that Hydrogen not to have a random coil shift table entry.
- 
+		/**	Default constructor.
+		*/
+		RandomCoilShift();
 		
+		/**	Destructor
+		*/
+		virtual ~RandomCoilShift();
 		
-	*/
-	virtual Processor::Result operator () (Composite& composite);
-	//@}
-	
+		//@}
 
-	private:
-	
-	// private Variablen :
+		
+		/**@name	Processor specific functions.
+		*/
+		//@{
+		
+		/**	Start method.
+			A StringHashMap of floats is built and named {\tt rc\_table\_}
+			A file called "random.dat" is opened ,it contains the randomcoilshift date for
+			every residue´s atoms. The random coil shift is stored in {\tt rc\_table\_}
+			under [residue_name:atom_name].
 
-	StringHashMap<float> rc_table_;
-	list<PDBAtom*> proton_list_;	
-	PDBAtom* patom_;
-	float shift_;
-	char *file_;
+		*/
+		virtual bool start();
+		
+		/**	Finish method.
+			nothing is done here
+			
+		*/
+		virtual bool finish();
 
-	// private Funktionen :
-	
-	
-	
-};
+		/**	Application method
+			if current object is a PDBAtom of kind Hydrogen its random coil shift has to be looked up
+			in {\tt rc\_table}.
+			Get Hydrogens residue name append ":" and its name, the lookup entry is reconstruced.
+			If this entry is found within the table the randomcoil shift is added to the Hydrogens
+			chemical shift.
+			If this entry is not found the random coil shift is set to 1000 and added as well to the
+			Hydrogens chemical shift,to mark that Hydrogen not to have a random coil shift table entry.
+	 
+			
+			
+		*/
+		virtual Processor::Result operator () (Composite& composite);
+		//@}
+		
 
-} // namespace Ball
+		protected:
 
+		StringHashMap<float>		rc_table_;
+		std::list<PDBAtom*>			proton_list_;	
+		String									ini_filename_;
+		Parameters							parameters_;
+		ParameterSection				parameter_section_;
+		std::vector<Expression>	expressions_;
+	};
 
-//@}
+} // namespace BALL
