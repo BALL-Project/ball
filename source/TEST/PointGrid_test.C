@@ -1,9 +1,9 @@
-// $Id: PointGrid_test.C,v 1.9 2000/07/05 21:47:01 oliver Exp $
+// $Id: PointGrid_test.C,v 1.10 2000/07/06 14:14:26 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALL/DATATYPE/pointGrid.h>
 
-START_TEST(PointGrid, "$Id: PointGrid_test.C,v 1.9 2000/07/05 21:47:01 oliver Exp $")
+START_TEST(PointGrid, "$Id: PointGrid_test.C,v 1.10 2000/07/06 14:14:26 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -29,6 +29,7 @@ CHECK(PointGrid<T>(float, float, float, float, float, float, Size, Size, Size))
 															10.0, 10.0, 10.0,
 															11, 11, 11);
 	TEST_NOT_EQUAL(grid, 0)
+	TEST_EQUAL(grid->getSize(), 1331)
 	delete grid;
 RESULT
 
@@ -39,6 +40,7 @@ Vector3	upper(10.0, 10.0, 10.0);
 CHECK(PointGrid<T>(const Vector3& lower, const Vector3& upper, float spacing))
 	grid = new PointGrid<float>(lower, upper, 1.0);
 	TEST_NOT_EQUAL(grid, 0)
+	TEST_EQUAL(grid->getSize(), 1331)
 	delete grid;
 RESULT
 
