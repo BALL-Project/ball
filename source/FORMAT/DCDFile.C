@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile.C,v 1.22 2003/01/29 11:49:49 anker Exp $
+// $Id: DCDFile.C,v 1.23 2003/01/29 20:25:25 anker Exp $
 
 #include <BALL/FORMAT/DCDFile.h>
 #include <BALL/MOLMEC/COMMON/snapShot.h>
@@ -432,6 +432,7 @@ namespace BALL
 			do
 			{
 				if (read(dummy) == true) count++;
+				else break;
 			}
 			while ((tellg() > 0) && (tellg() < end));
 

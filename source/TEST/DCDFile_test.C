@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile_test.C,v 1.12 2002/12/20 17:45:31 anker Exp $
+// $Id: DCDFile_test.C,v 1.13 2003/01/29 20:25:29 anker Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(DCDFile, "$Id: DCDFile_test.C,v 1.12 2002/12/20 17:45:31 anker Exp $")
+START_TEST(DCDFile, "$Id: DCDFile_test.C,v 1.13 2003/01/29 20:25:29 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -22,11 +22,6 @@ using namespace BALL;
 ///  insert tests for each member function here         
 
 String dcd_test_file("data/DCD_test.dcd");
-
-CHECK(DCDFile::DCDHeader::DCDHeader() throw())
-  DCDFile::DCDHeader* p = new DCDFile::DCDHeader;
-	TEST_NOT_EQUAL(p, 0)
-RESULT
 
 DCDFile* p = new DCDFile;
 
@@ -121,21 +116,25 @@ RESULT
 
 
 CHECK(DCDFile::append(const SnapShot& snapshot) throw())
+	System system;
+	Molecule mol;
 	Atom atom;
-	::std::vector<Vector3> atom_positions;
-	atom_positions.push_back(atom.getPosition());
+
+	atom.setPosition(Vector3(1.0, 2.0, 3.0));
+
+	mol.insert(atom);
+	system.insert(mol);
+
 	SnapShot snap;
-	snap.setAtomPositions(atom_positions);
+	snap.takeSnapShot(system);
+
 	String temporary;
 	NEW_TMP_FILE(temporary)
-	DCDFile one(temporary, File::out);
-	one.writeHeader();
+	DCDFile one(temporary, std::ios::out);
 	for (Size i = 0; i < 100; i++) one.append(snap);
-	// one.updateHeader();
 	one.close();
 	DCDFile two(temporary, std::ios::in);
 	SnapShot snap2;
-	two.readHeader();
 	two.read(snap2);
 	// ?????
 	// DCDFile lacks something like updateHeader(). As long as such a
