@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reverseBidirectionalIterator.h,v 1.17 2003/05/08 18:19:30 oliver Exp $
+// $Id: reverseBidirectionalIterator.h,v 1.18 2003/05/08 20:48:17 oliver Exp $
 
 #ifndef BALL_CONCEPT_REVERSEBIDIRECTIONALITERATOR_H
 #define BALL_CONCEPT_REVERSEBIDIRECTIONALITERATOR_H
@@ -120,16 +120,16 @@ namespace BALL
 		ReverseBidirectionalIterator operator -- (int)
 			throw(Exception::InvalidIterator);
 
-		static ReverseBidirectionalIterator begin(const Container &container)
+		static ReverseBidirectionalIterator begin(const Container& container)
 			throw(Exception::InvalidIterator);
 
-		static ReverseBidirectionalIterator end(const Container &container)
+		static ReverseBidirectionalIterator end(const Container& container)
 			throw(Exception::InvalidIterator);
 
-		static ReverseBidirectionalIterator rbegin(const Container &container)
+		static ReverseBidirectionalIterator rbegin(const Container& container)
 			throw(Exception::InvalidIterator);
 
-		static ReverseBidirectionalIterator rend(const Container &container)
+		static ReverseBidirectionalIterator rend(const Container& container)
 			throw(Exception::InvalidIterator);
 
 		protected:
