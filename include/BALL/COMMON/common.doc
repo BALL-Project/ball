@@ -1,4 +1,4 @@
-// $Id: common.doc,v 1.2 1999/12/28 18:29:49 oliver Exp $
+// $Id: common.doc,v 1.3 2000/05/29 12:56:02 oliver Exp $
 
 /**@name	Common Definitions
 		This chapter contains all relevant information on 
@@ -16,7 +16,6 @@
 	//@Include: hash.h
 	//@Include: logStream.h
 	//@Include: macros.h
-	//@Include: memory.h
 	//@Include: path.h
 	//@Include: rtti.h
 
