@@ -1,6 +1,8 @@
-// $Id: notification.C,v 1.6 2001/06/24 14:15:32 oliver Exp $
+// $Id: notification.C,v 1.7 2001/07/15 18:56:11 oliver Exp $
 
 #include <BALL/CONCEPT/notification.h>
+#include <iostream>
+#include <fstream>
 
 namespace BALL 
 {
