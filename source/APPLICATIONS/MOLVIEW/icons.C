@@ -1,31 +1,6 @@
-// $Id: icons.C,v 1.3 2000/04/04 15:05:43 oliver Exp $
+// $Id: icons.C,v 1.4 2000/11/12 15:16:14 hekl Exp $
 
 // this file contains the icons needed by MolVIEW in XPM format
-
-// the network server activity icon
-const char * mini_ray_xpm[] =
-{
-	"16 14 4 1",
-	"   c None",
-	".  c black",
-	"X  c yellow",
-	"o  c gray50",
-	"     .........  ",
-	"     .XXXXXX.o  ",
-	"    .XXXXXX.o   ",
-	"    .XXXXX.o    ",
-	"   .XXXXX.o     ",
-	"   .XXXX.....   ",
-	"  .XXXXXXXX.o   ",
-	"  .....XXX.o    ",
-	"   oo.XXX.o     ",
-	"     .XX.o      ",
-	"    .XX.o       ",
-	"    .X.o        ",
-	"   .X.o         ",
-	"   ..o          "
-};
- 
 
 // the application icon - the BALL bucky (64x64)
 const char * bucky_64x64_xpm[] = 
