@@ -1,4 +1,4 @@
-// $Id: TCPTransfer_test.C,v 1.14 2002/01/09 15:48:54 amoll Exp $
+// $Id: TCPTransfer_test.C,v 1.15 2002/01/09 16:35:31 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -17,7 +17,7 @@ using namespace std;
 
 #include "networkTest.h"
 
-START_TEST(TCPTransfer, "$Id: TCPTransfer_test.C,v 1.14 2002/01/09 15:48:54 amoll Exp $")
+START_TEST(TCPTransfer, "$Id: TCPTransfer_test.C,v 1.15 2002/01/09 16:35:31 amoll Exp $")
 
 
 /////////////////////////////////////////////////////////////
@@ -102,15 +102,11 @@ CHECK(ftp)
 	TEST_FILE(filename.c_str(), "data/ftp_test.txt", false)
 RESULT
 
-CHECK(ftp/debug)
-	ABORT_IF(!NetworkTest::test("ftp.mpi-sb.mpg.de", NetworkTest::FTP))
-	File::createTemporaryFilename(filename);	
+CHECK(http/exception)
+	File::createTemporaryFilename(filename);
 	ofstream out(filename.c_str(), std::ios::out);
-#define DEBUG
-	TCPTransfer tcp_t(out, "ftp://ftp.mpi-sb.mpg.de/pub/outgoing/BALL/ftp_test.txt");
-#undef DEBUG
+	TEST_EXCEPTION(TCPTransfer::TransferFailed, TCPTransfer tcp_t(out, "ftp://xcajsjddnnakadnndakndna.de/ffaadad.caadd"))
 	out.close();
-	TEST_FILE(filename.c_str(), "data/ftp_test.txt", false)
 RESULT
 
 /////////////////////////////////////////////////////////////
