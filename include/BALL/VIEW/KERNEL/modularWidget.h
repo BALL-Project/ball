@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.h,v 1.15 2004/07/03 12:10:10 amoll Exp $
+// $Id: modularWidget.h,v 1.16 2004/08/29 17:33:48 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MODULARWIDGET_H
@@ -83,16 +83,17 @@ namespace BALL
 			//@{
 
 			/** Destructor.
+			 		If the ModularWidget was registered, it will call MainControl::removeModularWidget.
 			*/
 			virtual ~ModularWidget()
 				throw();
 
 			///
 			virtual void destroy()
-				throw() {};
+				throw() { clear(); };
 
 			/** Explicit default initialization.
-					Empty for further purpose.
+			 		Currently does nothing.
 			*/
 			virtual void clear()
 				throw();

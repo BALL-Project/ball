@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.47 2004/07/26 13:45:10 amoll Exp $
+// $Id: geometricControl.C,v 1.48 2004/08/29 17:31:59 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -612,7 +612,6 @@ namespace BALL
 
 			if (transformation_dialog_) 
 			{
-				getMainControl()->removeModularWidget(transformation_dialog_);
 				transformation_dialog_->hide();
 				delete transformation_dialog_;
 			}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.61 2004/07/26 22:06:58 amoll Exp $
+// $Id: molecularControl.C,v 1.62 2004/08/29 17:31:59 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -919,7 +919,6 @@ void MolecularControl::move()
 
 	if (transformation_dialog_) 
 	{
-		getMainControl()->removeModularWidget(transformation_dialog_);
 		transformation_dialog_->hide();
 		delete transformation_dialog_;
 	}
