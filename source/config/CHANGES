@@ -1,6 +1,7 @@
 Changes Since Version 1.0 (02.06.04):
 
 Added:
+- Esc key now switches to last used modus in Scene
 - Documentation for BALLView in the folder BALL/doc/BALLView
 - Stereo Modi: Side-by-Side and for shutter googles 
 - Clipping Planes
