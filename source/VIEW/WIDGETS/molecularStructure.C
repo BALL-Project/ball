@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.80 2005/02/06 20:57:12 oliver Exp $
+// $Id: molecularStructure.C,v 1.81 2005/02/07 22:09:47 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -1203,9 +1203,7 @@ namespace BALL
 			// so we have to make sure the rest of the world realizes something might have changed.
 			if (!use_amber_)
 			{
-				CompositeMessage* change_message = 
-					new CompositeMessage(*system, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
-				notify_(change_message);
+				getMainControl()->update(*system, true);
 			}
 
 			if (!ok)
@@ -1217,7 +1215,6 @@ namespace BALL
 			
 			ff.updateEnergy();
 
-			
 			// Create an instance of the molecular dynamics simulation.
 			MolecularDynamics* mds = 0;
 			if (md_dialog_.useMicroCanonical())

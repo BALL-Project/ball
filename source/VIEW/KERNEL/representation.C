@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.61 2005/02/06 20:57:09 oliver Exp $
+// $Id: representation.C,v 1.62 2005/02/07 22:09:47 amoll Exp $
 //
 
 
@@ -575,7 +575,7 @@ namespace BALL
 		void Representation::update(bool rebuild)
 			throw()
 		{
-			rebuild_ = rebuild;
+			rebuild_ |= rebuild;
 
 #ifdef BALL_QT_HAS_THREADS
 			MainControl* mc = getMainControl();
