@@ -1,4 +1,4 @@
-// $Id: system.h,v 1.8 2000/05/02 14:03:25 amoll Exp $
+// $Id: system.h,v 1.9 2000/05/09 16:21:34 amoll Exp $
 
 #ifndef BALL_KERNEL_SYSTEM_H
 #define BALL_KERNEL_SYSTEM_H
@@ -88,7 +88,6 @@ namespace BALL
 
 		/** Assignment operator.
 				Assign {\em system} to {\em *this}.
-				The assignment is either deep or shallow (default).
 				@param   system the System to be copied (cloned)
 				@return  System& - {\em *this}
 				@see     System::set
@@ -108,6 +107,22 @@ namespace BALL
 
 		/**	@name	Accessors */
 		//@{
+
+		/** Get a pointer to a child Molecule at a given position.
+				The reference is 0 if {\em *this} does not have a Molecule at this position.
+				@param   position the position of the child molecule
+				@return  Molecule* -
+								 mutable reference to the child molecule at {\em position} of {\em *this},
+		*/
+		Molecule* getMolecule(Position position);
+
+		/** Get a pointer to a child Molecule at a given position.
+				The reference is 0 if {\em *this} does not have a Molecule at this position.
+				@param   position the position of the child molecule
+				@return  Molecule* -
+								 constant reference to the child molecule at {\em position} of {\em *this},
+		*/
+		const Molecule* getMolecule(Position position) const;
 
 		/** Count the molecules in this system
 				@return Size the number of molecules
@@ -169,9 +184,7 @@ namespace BALL
 		void spliceAfter(System& system);
 
 		/**	Move the children of {\tt system} into {\em *this}.
-				The children of {\tt system} are inserted at the position of 
-				{\tt system} if it is a child of {\tt this}.
-				Otherwise the children are inserted using \Ref{spliceBefore}.
+				The children are inserted using \Ref{spliceBefore}.
 		*/
 		void splice(System& system);		
 		//@}

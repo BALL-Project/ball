@@ -1,4 +1,4 @@
-// $Id: system.C,v 1.8 2000/05/02 14:03:34 amoll Exp $
+// $Id: system.C,v 1.9 2000/05/09 16:21:42 amoll Exp $
 
 #include <BALL/KERNEL/system.h>
 
@@ -63,6 +63,21 @@ namespace BALL
 	{
 		system.set(*this, deep);
 	}
+
+	Molecule *System::getMolecule(Position position)
+	{
+		for (MoleculeIterator res_it = beginMolecule(); !res_it.isEnd(); ++res_it)
+			if (position-- == 0)
+				return &(*res_it);
+
+		return 0;
+	}
+
+	const Molecule *System::getMolecule(Position position) const
+	{
+		return ((System *)this)->getMolecule(position);
+	}
+
 			
 	Size System::countMolecules() const
 	{
