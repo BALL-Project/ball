@@ -1,4 +1,4 @@
-// $Id: forceField.C,v 1.9 1999/12/30 18:05:35 oliver Exp $
+// $Id: forceField.C,v 1.10 2000/01/03 15:18:31 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
 
@@ -156,20 +156,20 @@ namespace BALL
 		// check for selected atoms
 		// if any of the atoms is selected, the atoms_ array holds
 		// the selected atoms first (0 < i < number_of_movable_atoms_) 
-		use_selection_ = false;
+		use_selection_ = system.containsSelection();
 		number_of_movable_atoms_ = 0;
 		AtomIterator atom_it = system.beginAtom();
-		for (; +atom_it; ++atom_it)
+		if (use_selection_ == true)
 		{
-			if (atom_it->isSelected() == false && use_selection_ == false)
+			for (; +atom_it; ++atom_it)
 			{
-				atoms_.push_back(&(*atom_it));
-			} else if (atom_it->isSelected() == true && use_selection_ == false)
-			{
-				atoms_.clear();
-				atoms_.push_back(&(*atom_it));
-				use_selection_ = true;
-			} else if (atom_it->isSelected() == true && use_selection_ == true)
+				if (atom_it->isSelected() == true)
+				{
+					atoms_.push_back(&(*atom_it));
+				}
+			}
+		} else {
+			for (; +atom_it; ++atom_it)
 			{
 				atoms_.push_back(&(*atom_it));
 			}
