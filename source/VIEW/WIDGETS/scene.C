@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.92 2004/06/28 15:22:56 amoll Exp $
+// $Id: scene.C,v 1.93 2004/07/01 11:38:33 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1531,8 +1531,11 @@ namespace BALL
 
 		String Scene::exportPNG()
 		{
+Log.error() << "#~~#   1 " << this   << __FILE__ << "  " << __LINE__<< std::endl;
 			makeCurrent();
+Log.error() << "#~~#   2 "    << __FILE__ << "  " << __LINE__<< std::endl;
 			QImage image = grabFrameBuffer();
+Log.error() << "#~~#   3 "    << __FILE__ << "  " << __LINE__<< std::endl;
 
 			String filename = String("BALLView_screenshot" + String(screenshot_nr_) +".png");
 			bool result = image.save(filename.c_str(), "PNG");
@@ -1541,6 +1544,7 @@ namespace BALL
 			if (result) setStatusbarText("Saved screenshot to " + filename);
 			else 				setStatusbarText("Could not save screenshot to " + filename);
 
+Log.error() << "#~~#   4 "    << __FILE__ << "  " << __LINE__<< std::endl;
 			return filename;
 		}
 
@@ -1556,12 +1560,12 @@ namespace BALL
 			else 				setStatusbarText("Could not save POVRay to " + filename);
 		}
 
-		void Scene::customEvent( QCustomEvent * e )
+		void Scene::customEvent(QCustomEvent * e)
 		{
-			// It must be a SceneUpdateEvent
-			if ( e->type() == (QEvent::Type)SCENE_UPDATE_EVENT) 
+			// It must be a SceneExportPNGEvent
+			if (e->type() == (QEvent::Type)SCENE_EXPORTPNG_EVENT) 
 			{  
-				update(true);
+				exportPNG();
 			}
 		}
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.44 2004/06/28 15:55:30 amoll Exp $
+// $Id: scene.h,v 1.45 2004/07/01 11:39:23 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -89,14 +89,13 @@ namespace BALL
 			BALL_EMBEDDABLE(Scene, ModularWidget)
 
 			/** This class is only intended for usage with multithreading.
-			 		It induces a rebuild of the display lists and an update of the Scene and
-					should only be used internaly.
+			 		It provides a mean for other threads to make the Scene export a PNG.
 			*/
-			class BALL_EXPORT SceneUpdateEvent : public QCustomEvent
+			class BALL_EXPORT SceneExportPNGEvent : public QCustomEvent
 			{
 				public:
-					SceneUpdateEvent()
-						: QCustomEvent( SCENE_UPDATE_EVENT){}
+					SceneExportPNGEvent()
+						: QCustomEvent( SCENE_EXPORTPNG_EVENT){}
 			};
 			
 			/** @name Type definitions 

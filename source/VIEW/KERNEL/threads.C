@@ -95,6 +95,20 @@ namespace BALL
 			qApp->postEvent(main_control_, se);
 		}
 
+		void SimulationThread::exportSceneToPNG()
+		{
+			if (main_control_->stopedSimulation()) 
+			{
+				return;
+			}
+
+			Scene* scene = Scene::getInstance(0);
+			if (scene == 0) return;
+
+			Scene::SceneExportPNGEvent* e = new Scene::SceneExportPNGEvent();
+			qApp->postEvent(scene, e);
+		}
+
 		void SimulationThread::output_(const String& string)
 		{
 			if (main_control_->stopedSimulation()) return;
@@ -215,8 +229,7 @@ namespace BALL
 					
 					if (save_images_) 
 					{
-						Scene* scene= (Scene*) Scene::getInstance(0);
-						scene->exportPNG();
+						exportSceneToPNG();
 					}
 
 					if (dcd_file_) manager.takeSnapShot();
