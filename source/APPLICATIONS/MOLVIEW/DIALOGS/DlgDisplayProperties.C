@@ -180,7 +180,7 @@ void DlgDisplayProperties::initializeWidget(MainControl& main_control)
 
 	id_ = main_control.insertMenuEntry
 		      (MainControl::DISPLAY, "D&isplay Properties", this,
-					 SLOT(openDisplayPropertiesDialog()), 
+					 SLOT(openDialog()), 
 					 CTRL+Key_I);   
 }
 
@@ -188,7 +188,7 @@ void DlgDisplayProperties::finalizeWidget(MainControl& main_control)
 {
 	main_control.removeMenuEntry
 		(MainControl::DISPLAY, "D&isplay Properties", this,
-		 SLOT(openDisplayPropertiesDialog()), 
+		 SLOT(openDialog()), 
 		 CTRL+Key_I);   
 }
 
