@@ -1,4 +1,4 @@
-// $Id: kernel.doc,v 1.4 2001/02/06 22:24:14 amoll Exp $
+// $Id: kernel.doc,v 1.5 2001/02/11 13:04:40 hekl Exp $
 
         /**     @name Client request handling.
                       With the help of the class {\em Client} it is possible
@@ -48,7 +48,7 @@
                 //@Include: vertex2.h
         //@}
 
-	      /** @name LogView Widget (will be moved into WIDGETS directory)
+	      /** @name LogView Widget (will be moved into WIDGETS directory).
         */
         //@{
 								//@Include: logView.h

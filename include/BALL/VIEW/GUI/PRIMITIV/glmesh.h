@@ -1,4 +1,4 @@
-// $Id: glmesh.h,v 1.4 2001/02/04 15:58:19 hekl Exp $
+// $Id: glmesh.h,v 1.5 2001/02/11 13:04:39 hekl Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLMESH_H
 #define BALL_VIEW_GUI_PRIMITIV_GLMESH_H
@@ -39,8 +39,8 @@ namespace BALL
 
 				@memo    GLMesh class (BALL VIEW gui primitiv framework)
 				@author  $Author: hekl $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/02/04 15:58:19 $
+				@version $Revision: 1.5 $
+				@date    $Date: 2001/02/11 13:04:39 $
 		*/
 		class GLMesh
 			: public Mesh,
@@ -157,6 +157,8 @@ namespace BALL
 			*/
 			virtual bool extract()
 				throw();
+
+			//@}
 		};
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS

@@ -1,4 +1,4 @@
-// $Id: colorUnitHue.h,v 1.5 2001/02/04 15:58:18 hekl Exp $
+// $Id: colorUnitHue.h,v 1.6 2001/02/11 13:04:38 hekl Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLORUNITHUE_H
 #define BALL_VIEW_DATATYPE_COLORUNITHUE_H
@@ -37,8 +37,8 @@ namespace BALL
 
 				@memo    ColorUnitHue class (BALL VIEW datatype framework)
 				@author  $Author: hekl $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/02/04 15:58:18 $
+				@version $Revision: 1.6 $
+				@date    $Date: 2001/02/11 13:04:38 $
 		*/
 		class ColorUnitHue
 		{
@@ -63,7 +63,7 @@ namespace BALL
 			*/
 			ColorUnitHue(const ColorUnitHue& colcor_h_unit);
 
-			/** Constructor with Parameter char*
+			/** Constructor with Parameter char*.
 					Construct new colorUnitHue by initialising its value with the given pointer to
 					a string representing a value in hex format (00 - 168h).
 
@@ -74,7 +74,7 @@ namespace BALL
 			*/
 			ColorUnitHue(const char* value);
 
-			/** Constructor with Parameter String
+			/** Constructor with Parameter String.
 					Construct new colorUnitHue by initialising its value with the given 
 					string representing a value in hex format (00 - 168h).
 
@@ -95,7 +95,7 @@ namespace BALL
 			*/
 			ColorUnitHue(const short value);
 
-			/** Constructor with Parameter unsigned short
+			/** Constructor with Parameter unsigned short.
 					Construct new colorUnitHue by initialising its value with the given 
 					unsigned short representing a value in integer format (0 - 360).
 
@@ -105,7 +105,7 @@ namespace BALL
 			*/
 			ColorUnitHue(const unsigned short value);
 
-			/** Constructor with Parameter int
+			/** Constructor with Parameter int.
 					Construct new colorUnitHue by initialising its value with the given 
 					int representing a value in integer format (0 - 360).
 
@@ -115,7 +115,7 @@ namespace BALL
 			*/
 			ColorUnitHue(const int value);
 		
-			/** Constructor with Parameter unsigned int
+			/** Constructor with Parameter unsigned int.
 					Construct new colorUnitHUe by initialising its value with the given 
 					unsigned int representing a value in integer format (0 - 360).
 
@@ -125,7 +125,7 @@ namespace BALL
 			*/
 			ColorUnitHue(const unsigned int value);
 
-			/** Constructor with Parameter long
+			/** Constructor with Parameter long.
 					Construct new colorUnitHue by initialising its value with the given 
 					long representing a value in integer format (0 - 360).
 
@@ -135,7 +135,7 @@ namespace BALL
 			*/
 			ColorUnitHue(const long value);
 
-			/** Constructor with Parameter unsigned long
+			/** Constructor with Parameter unsigned long.
 					Construct new colorUnitHue by initialising its value with the given 
 					unsigned long representing a value in integer format (0 - 360).
 
@@ -145,7 +145,7 @@ namespace BALL
 			*/
 			ColorUnitHue(const unsigned long value);
 		
-			/** Constructor with Parameter float
+			/** Constructor with Parameter float.
 					Construct new colorUnitHue by initialising its value with the given 
 					float representing a value of range (0 - 1.0).
 
@@ -155,7 +155,7 @@ namespace BALL
 			*/
 			ColorUnitHue(const float value);
 		
-			/** Constructor with Parameter double
+			/** Constructor with Parameter double.
 					Construct new colorUnitHue by initialising its value with the given 
 					double representing a value of range (0 - 1.0).
 
@@ -165,7 +165,7 @@ namespace BALL
 			*/
 			ColorUnitHue(const double value);
 
-			/** Constructor with Parameter long double
+			/** Constructor with Parameter long double.
 					Construct new colorUnitHue by initialising its value with the given 
 					long double representing a value of range (0 - 1.0).
 

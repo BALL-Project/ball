@@ -1,4 +1,4 @@
-// $Id: glObject.h,v 1.4 2001/02/04 15:58:19 hekl Exp $
+// $Id: glObject.h,v 1.5 2001/02/11 13:04:38 hekl Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLOBJECT_H
 #define BALL_VIEW_GUI_KERNEL_GLOBJECT_H
@@ -41,8 +41,8 @@ namespace BALL
 				
 				@memo    GLObject class (BALL VIEW gui kernel framework)
 				@author  $Author: hekl $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/02/04 15:58:19 $
+				@version $Revision: 1.5 $
+				@date    $Date: 2001/02/11 13:04:38 $
 		*/
 		class GLObject
 		{
@@ -73,7 +73,7 @@ namespace BALL
 					Construct new glObject by copying the glObject {\em GL_object}.
 					The glPrimitiveManager of {\em *this} glObject is initialized to the glPrimitiveManager of the glObject {\em GL_object}.\\
 
-					@param       GL_object - the glObject to be copied 
+					@param       GL_object the glObject to be copied 
 					@return      GLObject - new constructed glObject cloned from {\em GL_object}
 					@see         GLPrimitiveManager::GLPrimitiveManager
 			*/
@@ -109,7 +109,7 @@ namespace BALL
 					Assign the glObject {\em GL_object} to {\em *this} glObject.
 					The glPrimitiveManager of {\em *this} glObject is initialized to the glPrimitiveManager of the glObject {\em GL_object}.\\
 
-					@param       GL_object - the glObject to be copied
+					@param       GL_object the glObject to be copied
 					@see         GLObject::GLObject
 			*/
 			void set(const GLObject& GL_object);
@@ -119,7 +119,7 @@ namespace BALL
 					Calls \Ref{GLObject::set}.
 					The glPrimitiveManager of {\em *this} glObject is initialized to the glPrimitiveManager of the glObject {\em GL_object}.\\
 
-					@param       GL_object - the glObject to be copied
+					@param       GL_object the glObject to be copied
 					@return      GLObject& - {\em *this} glObject
 					@see         GLObject::set
 			*/
@@ -130,7 +130,7 @@ namespace BALL
 					Calls \Ref{GLObject::set}.
 					The glPrimitiveManager of {\em *this} glObject is initialized to the glPrimitiveManager of the glObject {\em GL_object}.\\
 
-					@param       GL_object - the glObject to be assigned to
+					@param       GL_object the glObject to be assigned to
 					@see         GLObject::set
 			*/
 			void get(GLObject& GL_object) const;
@@ -139,7 +139,7 @@ namespace BALL
 					Swap the glPrimitiveManagers of {\em *this} glObject with the glObject
 					{\em GL_object}.
 
-					@param       GL_object - the glObject being swapped with {\em *this} glObject 
+					@param       GL_object the glObject being swapped with {\em *this} glObject 
 					@see         GLObject::GLObject
 			*/
 			void swap(GLObject& GL_object);
@@ -166,8 +166,8 @@ namespace BALL
 					Dump the current state of {\em *this} glObject to 
 					the output ostream {\em s} with dumping depth {\em depth}.
 
-					@param   s - output stream where to output the state of {\em *this} glObject
-					@param   depth - the dumping depth
+					@param   s output stream where to output the state of {\em *this} glObject
+					@param   depth the dumping depth
 			*/
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 			//@}
@@ -182,7 +182,7 @@ namespace BALL
 				 \\
 				 {\bf Note:} Not yet implemented.
 		 
-				 @param       s - input stream from where to restore the internal state of {\em *this} glObject
+				 @param       s input stream from where to restore the internal state of {\em *this} glObject
 					@exception   NotImplemented - always
 			*/
 			virtual void read(std::istream& s);
@@ -193,7 +193,7 @@ namespace BALL
 				 \\
 				 {\bf Note:} Not yet implemented.
 		 
-				 @param       s - output stream to where to store the internal state of {\em *this} glObject
+				 @param       s output stream to where to store the internal state of {\em *this} glObject
 					@exception   NotImplemented - always
 			*/
 			virtual void write(std::ostream& s) const;
@@ -215,7 +215,7 @@ namespace BALL
 					must be used for naming the graphical object (necessary for picking mode in the
 					scene).
 					
-					@param     with_names - flag if the graphical objects must have a name
+					@param     with_names flag if the graphical objects must have a name
 					@return    bool - {\tt true} if successful,	{\tt false} otherwise
 					@see       GLObject::getGLPrimitiveManager
 			*/
@@ -248,7 +248,7 @@ namespace BALL
 					be called for each \Ref{Scene} by the render engine before calling the method
 					draw. 
 
-					@param    GL_primitive_manager - the primitive manager for the current scene
+					@param    GL_primitive_manager the primitive manager for the current scene
 					@see      GLObject::draw
 					@see      GLPrimitiveManager::GLPrimitiveManager
 					@see      Scene::Scene

@@ -1,4 +1,4 @@
-// $Id: colorUnit.h,v 1.6 2001/02/04 15:58:18 hekl Exp $
+// $Id: colorUnit.h,v 1.7 2001/02/11 13:04:38 hekl Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLORUNIT_H
 #define BALL_VIEW_DATATYPE_COLORUNIT_H
@@ -38,8 +38,8 @@ namespace BALL
 
 				@memo    ColorUnit class (BALL VIEW datatype framework)
 				@author  $Author: hekl $
-				@version $Revision: 1.6 $
-				@date    $Date: 2001/02/04 15:58:18 $
+				@version $Revision: 1.7 $
+				@date    $Date: 2001/02/11 13:04:38 $
 		*/
 		class ColorUnit
 		{
@@ -82,7 +82,7 @@ namespace BALL
 			*/
 			ColorUnit(const ColorUnit& color_unit);
 
-			/** Constructor with Parameter char*
+			/** Constructor with Parameter char*.
 					Construct new colorUnit by initialising its value with the given pointer to
 					a string representing a value in hex format (00 - FF, or 00 - ff).
 
@@ -93,7 +93,7 @@ namespace BALL
 			*/
 			ColorUnit(const char* value);
 
-			/** Constructor with Parameter String
+			/** Constructor with Parameter String.
 					Construct new colorUnit by initialising its value with the given 
 					string representing a value in hex format (00 - FF, or 00 - ff).
 
@@ -104,7 +104,7 @@ namespace BALL
 			*/
 			ColorUnit(const String& value);
 
-			/** Constructor with Parameter unsigned char
+			/** Constructor with Parameter unsigned char.
 					Construct new colorUnit by initialising its value with the given 
 					unsigned char representing a value in integer format (0 - 255).
 
@@ -113,7 +113,7 @@ namespace BALL
 			*/
 			ColorUnit(const unsigned char value);
 
-			/** Constructor with Parameter short
+			/** Constructor with Parameter short.
 					Construct new colorUnit by initialising its value with the given 
 					short representing a value in integer format (0 - 255).
 
@@ -123,7 +123,7 @@ namespace BALL
 			*/
 			ColorUnit(const short value);
 
-			/** Constructor with Parameter unsigned short
+			/** Constructor with Parameter unsigned short.
 					Construct new colorUnit by initialising its value with the given 
 					unsigned short representing a value in integer format (0 - 255).
 
@@ -133,7 +133,7 @@ namespace BALL
 			*/
 			ColorUnit(const unsigned short value);
 
-			/** Constructor with Parameter int
+			/** Constructor with Parameter int.
 					Construct new colorUnit by initialising its value with the given 
 					int representing a value in integer format (0 - 255).
 
@@ -143,7 +143,7 @@ namespace BALL
 			*/
 			ColorUnit(const int value);
 		
-			/** Constructor with Parameter unsigned int
+			/** Constructor with Parameter unsigned int.
 					Construct new colorUnit by initialising its value with the given 
 					unsigned int representing a value in integer format (0 - 255).
 
@@ -153,7 +153,7 @@ namespace BALL
 			*/
 			ColorUnit(const unsigned int value);
 
-			/** Constructor with Parameter long
+			/** Constructor with Parameter long.
 					Construct new colorUnit by initialising its value with the given 
 					long representing a value in integer format (0 - 255).
 
@@ -163,7 +163,7 @@ namespace BALL
 			*/
 			ColorUnit(const long value);
 
-			/** Constructor with Parameter unsigned long
+			/** Constructor with Parameter unsigned long.
 					Construct new colorUnit by initialising its value with the given 
 					unsigned long representing a value in integer format (0 - 255).
 
@@ -173,7 +173,7 @@ namespace BALL
 			*/
 			ColorUnit(const unsigned long value);
 		
-			/** Constructor with Parameter float
+			/** Constructor with Parameter float.
 					Construct new colorUnit by initialising its value with the given 
 					float representing a value of range (0 - 1.0).
 
@@ -183,7 +183,7 @@ namespace BALL
 			*/
 			ColorUnit(const float value);
 		
-			/** Constructor with Parameter double
+			/** Constructor with Parameter double.
 					Construct new colorUnit by initialising its value with the given 
 					double representing a value of range (0 - 1.0).
 
@@ -193,7 +193,7 @@ namespace BALL
 			*/
 			ColorUnit(const double value);
 
-			/** Constructor with Parameter long double
+			/** Constructor with Parameter long double.
 					Construct new colorUnit by initialising its value with the given 
 					long double representing a value of range (0 - 1.0).
 

@@ -1,4 +1,4 @@
-// $Id: gltube.h,v 1.4 2001/02/04 15:58:20 hekl Exp $
+// $Id: gltube.h,v 1.5 2001/02/11 13:04:40 hekl Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLTUBE_H
 #define BALL_VIEW_GUI_PRIMITIV_GLTUBE_H
@@ -39,8 +39,8 @@ namespace BALL
 
 				@memo    GLTube class (BALL VIEW gui primitiv framework)
 				@author  $Author: hekl $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/02/04 15:58:20 $
+				@version $Revision: 1.5 $
+				@date    $Date: 2001/02/11 13:04:40 $
 		*/
 		class GLTube
 			: public Tube,
@@ -158,6 +158,8 @@ namespace BALL
 			*/
 			virtual bool extract()
 				throw();
+
+			//@}
 		};
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS

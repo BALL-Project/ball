@@ -1,7 +1,7 @@
-// $Id: mainControl.iC,v 1.8 2000/12/22 19:12:14 amoll Exp $
+// $Id: mainControl.iC,v 1.9 2001/02/11 13:04:39 hekl Exp $
 
 BALL_INLINE 
-int MainControl::getNextID()
+int MainControl::getNextID_()
 	throw()
 {
 	return current_id_++;

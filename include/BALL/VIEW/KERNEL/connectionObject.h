@@ -1,4 +1,4 @@
-// $Id: connectionObject.h,v 1.5 2001/02/08 16:04:04 amoll Exp $
+// $Id: connectionObject.h,v 1.6 2001/02/11 13:04:40 hekl Exp $
 
 #ifndef BALL_VIEW_KERNEL_CONNECTIONOBJECT_H
 #define BALL_VIEW_KERNEL_CONNECTIONOBJECT_H
@@ -65,9 +65,9 @@ namespace BALL
 				If a message if statically created in the {\em onNotify} method there is the possibility
 				that the message is already destroyed when it should be processed.
 				@memo    ConnectionObject class (BALL VIEW kernel framework)
-				@author  $Author: amoll $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/02/08 16:04:04 $
+				@author  $Author: hekl $
+				@version $Revision: 1.6 $
+				@date    $Date: 2001/02/11 13:04:40 $
 		*/
 		class ConnectionObject
 		{
@@ -135,8 +135,9 @@ namespace BALL
 
 			/** Test if connectionObject is registered.
 					Test if {\em object} connectionObject is a child of {\em *this} connectionObject.
+
 					@param   object the connectionObject to be tested
-					@return  bool - {\tt true} if {\em object} is a child of {\em *this} connectionObject, {\tt false} oterhwise
+					@return  bool - {\tt true} if {\em object} is a child of {\em *this} connectionObject, {\tt false} otherwise
 					@see     ConnectionObject::registerConnectionObject
 					@see     ConnectionObject::unregisterConnectionObject
 			*/
@@ -178,10 +179,10 @@ namespace BALL
 					(self-validated) and consistent {\tt true} is returned, {\tt false} otherwise. 
 					Checks the tree structure if all connections (in both ways: up and down) are 
 					without error.
-					@return	bool -
-									{\tt true} if the internal data structure of {\em *this} connectionObject 
-										is correct (self-validated) and consistent,
-					 				{\tt false} otherwise
+
+					@return			bool - {\tt true} if the internal data structure of {\em *this}
+                      connectionObject is correct (self-validated) and consistent,
+					 						{\tt false} otherwise
 			*/
 			virtual bool isValid() const;
 

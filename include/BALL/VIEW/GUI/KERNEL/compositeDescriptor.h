@@ -1,4 +1,4 @@
-// $Id: compositeDescriptor.h,v 1.4 2001/02/04 15:58:19 hekl Exp $
+// $Id: compositeDescriptor.h,v 1.5 2001/02/11 13:04:38 hekl Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_COMPOSITEDESCRIPTOR_H
 #define BALL_VIEW_GUI_KERNEL_COMPOSITEDESCRIPTOR_H
@@ -85,20 +85,24 @@ namespace BALL
 
 				@memo    CompositeDescriptor class (BALL VIEW gui kernel framework)
 				@author  $Author: hekl $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/02/04 15:58:19 $
+				@version $Revision: 1.5 $
+				@date    $Date: 2001/02/11 13:04:38 $
 		*/
 		class CompositeDescriptor
 		{
 			public:
 
- 			BALL_CREATE_DEEP(CompositeDescriptor)
+			/** @name Deep cloning facility.
+			*/
+			//@{
+			BALL_CREATE_DEEP(CompositeDescriptor)
+			//@}
 
 			/**	@name	Constructors
 			*/	
 			//@{
 
-			/** Default Constructor
+			/** Default Constructor.
 					Construct new compositeDescriptor.
 					The state of {\em *this} compositeDescriptor is:
 					\begin{itemize}
@@ -123,7 +127,7 @@ namespace BALL
 			 */
 			CompositeDescriptor();
 			
-			/** Copy constructor
+			/** Copy constructor.
 					Construct new compositeDescriptor by copying the compositeDescriptor
 					{\em composite_descriptor}.
 					The copy is either deep (default) or shallow. In this case deep means
@@ -147,7 +151,8 @@ namespace BALL
 
 			//@}
 
-			/** @name Destructors */
+			/** @name Destructors 
+			*/
 			//@{
 
 			/** Destructor.

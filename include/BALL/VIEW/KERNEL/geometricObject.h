@@ -1,4 +1,4 @@
-// $Id: geometricObject.h,v 1.13 2001/02/04 15:58:20 hekl Exp $
+// $Id: geometricObject.h,v 1.14 2001/02/11 13:04:40 hekl Exp $
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
 #define BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
@@ -65,8 +65,8 @@ namespace BALL
 				
 				@memo    GeometricObject class (BALL VIEW kernel framework)
 				@author  $Author: hekl $
-				@version $Revision: 1.13 $
-				@date    $Date: 2001/02/04 15:58:20 $
+				@version $Revision: 1.14 $
+				@date    $Date: 2001/02/11 13:04:40 $
 		*/
 		class GeometricObject
 			: public Composite,
@@ -84,17 +84,17 @@ namespace BALL
 			friend class Scene;
 
 			public:
+
 			
-			BALL_CREATE_DEEP(GeometricObject)
-			
-			/**	@name	Enumerations.
+			/** @name Deep cloning facility.
 			*/
 			//@{
+			BALL_CREATE_DEEP(GeometricObject)
+			//@}
 
-			enum
-			{
-				THIS_IS_ONLY_NONSENS
-			};
+			/** @name Enumerations.
+			*/
+			//@{
 
 			/** Anonymous enumeration.
 					Unnamed enumeration of all non-categorized constants.
@@ -206,7 +206,8 @@ namespace BALL
 					@see         Composite::Composite
 					@see         PropertyManager::PropertyManager
 			*/
-			GeometricObject();
+			GeometricObject()
+				throw();
 				
 			/** Copy constructor.
 					Construct new geometricObject by copying the geometricObject {\em object}.
@@ -220,7 +221,8 @@ namespace BALL
 					@see         Composite::Composite
 					@see         PropertyManager::PropertyManager
 			*/
-			GeometricObject(const GeometricObject& object, bool deep = true);
+			GeometricObject(const GeometricObject& object, bool deep = true)
+				throw();
 
 			//@}
 
@@ -232,7 +234,8 @@ namespace BALL
 					Calls \Ref{GeometricObject::destroy}.
 					@see         GeometricObject::destroy
 			*/
-			virtual ~GeometricObject();
+			virtual ~GeometricObject()
+				throw();
 
 			/** Explicit default initialization.
 					Set the state of {\em *this} geometricObject to the default values.
@@ -254,7 +257,8 @@ namespace BALL
 					Calls \Ref{Composite::clear}.
 					Calls \Ref{PropertyManager::clear}.
 			*/
-			virtual void clear();
+			virtual void clear()
+				throw();
 
 			/** Explicit destructor.
 					Destroy {\em *this} geometricObject.
@@ -264,7 +268,8 @@ namespace BALL
 					@see         Composite::destroy
 					@see         PropertyManager::destroy
 			*/
-			virtual void destroy();
+			virtual void destroy()
+				throw();
 			//@}
 
 			/**	@name	Assignment methods
@@ -281,7 +286,8 @@ namespace BALL
 					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em object}
 					@see         GeometricObject::GeometricObject
 			*/
-			void set(const GeometricObject& object, bool deep = true);
+			void set(const GeometricObject& object, bool deep = true)
+				throw();
 
 			/** Assignment operator.
 					Assign the geometricObject {\em object} to {\em *this} geometricObject.
@@ -294,7 +300,8 @@ namespace BALL
 					@return      GeometricObject& - {\em *this} geometricObject
 					@see         GeometricObject::set
 			*/
-			GeometricObject& operator = (const GeometricObject& object);
+			GeometricObject& operator = (const GeometricObject& object)
+				throw();
 
 			/** Copying with cloning facility.
 					Copy {\em *this} geometricObject to the geometricObject {\em object}.
@@ -306,7 +313,8 @@ namespace BALL
 					@param       object the geometricObject to be assigned to
 					@see         GeometricObject::set
 			*/
-			void get(GeometricObject& object, bool deep = true) const;
+			void get(GeometricObject& object, bool deep = true) const
+				throw();
 
 			/** Swapping of geometricObjects.
 					Swap the states of {\em *this} geometricObject with the geometricObject
@@ -315,7 +323,8 @@ namespace BALL
 					@param       object the geometricObject being swapped with {\em *this} geometricObject 
 					@see         GeometricObject::GeometricObject
 			*/
-			void swap(GeometricObject& object);
+			void swap(GeometricObject& object)
+				throw();
 			//@}
 
 			/**	@name	Accessors: inspectors and mutators 
@@ -329,7 +338,8 @@ namespace BALL
 
 					@param       property the new property of {\em *this} geometricObject
 			*/
-			void setProperty(Property property);
+			void setProperty(Property property)
+				throw();
 
 			/** Change the selected color of {\em *this} geometricObject.
 					If the geometric object is selected not its own color will be used but
@@ -430,7 +440,7 @@ namespace BALL
 			*/
 			String& getName();
 
-			/** Non-nutable inspection of the name of {\em *this} geometricObject.
+			/** Non-mutable inspection of the name of {\em *this} geometricObject.
 					Access the constant reference of the name of {\em *this} geometricObject.
 					
 					@return      String& - constant reference to the name of {\em *this} geometricObject
@@ -457,7 +467,8 @@ namespace BALL
 					@return  String - the type name of {\em *this} geometricObject
 					@see     Control::Control
 			*/
-			virtual String getTypeName() const;
+			virtual String getTypeName() const
+				throw();
 			//@}
 		
 			/**	@name	debuggers and diagnostics
@@ -477,7 +488,8 @@ namespace BALL
 					@see        Composite::isValid
 					@see        PropertyManager::isValid
 			*/
-			virtual bool isValid() const;
+			virtual bool isValid() const
+				throw();
 
 			/** Internal value dump.
 					Dump the current state of {\em *this} geometricObject to 
@@ -489,7 +501,8 @@ namespace BALL
 					@see     Composite::dump
 					@see     PropertyManager::dump
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
+				throw();
 			//@}
 
 			/**	@name	Storers
@@ -505,7 +518,8 @@ namespace BALL
 				 @param       s input stream from where to restore the internal state of {\em *this} geometricObject
 					@exception   NotImplemented - always
 			*/
-			virtual void read(std::istream& s);
+			virtual void read(std::istream& s)
+				throw();
 
 			/** Persistent stream output and state storage.
   			 Write persistent geometricObject data to the output stream {\em s} and 
@@ -516,7 +530,8 @@ namespace BALL
 				 @param       s output stream to where to store the internal state of {\em *this} geometricObject
 					@exception   NotImplemented - always
 			*/
-			virtual void write(std::ostream& s) const;
+			virtual void write(std::ostream& s) const
+				throw();
 			//@}
 
 			
@@ -534,7 +549,8 @@ namespace BALL
 
 					@return    bool {\tt true} if successful,	{\tt false} otherwise
 			*/
-			virtual bool extract();
+			virtual bool extract()
+				throw();
 
 			/** Inspection of the drawing mode and drawing precision of {\em *this} geometricObject.
 					Access the drawing mode and the drawing precision as integers. The properties
@@ -545,12 +561,14 @@ namespace BALL
 					@return   mode - the drawing mode. Converted from property to int.
 					@return   precision - the drawing precision. Converted from property to int.
 			*/
-			void getDrawingModeAndPrecision(unsigned int& mode, unsigned int& precision) const;
+			void getDrawingModeAndPrecision(unsigned int& mode, unsigned int& precision) const
+				throw();
 			//@}
 
 			private:
 
-			void clear_();
+			void clear_()
+				throw();
 		
 			/* color of the selected object */
 			ColorRGBA selected_color_;
