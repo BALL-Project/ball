@@ -1,10 +1,12 @@
-// $Id: fragmentDB.sip,v 1.2 2000/08/07 11:13:41 oliver Exp $
+// $Id: fragmentDB.sip,v 1.3 2000/08/07 11:53:44 oliver Exp $
 
 class FragmentDB 
 {
+%HeaderCode
+	#include <BALL/STRUCTURE/fragmentDB.h>
+	using namespace BALL;
+%End
   public:
-  class AddHydrogensProcessor;
-  // friend class FragmentDB::AddHydrogensProcessor;
   enum FragmentTypes 
   {
    TYPE__UNKNOWN = -1,
@@ -13,14 +15,9 @@ class FragmentDB
    TYPE__MOLECULE
   };
   typedef short Type;
+
   // BALL_CREATE(FragmentDB)
 
-  class NoFragmentNode
-   : public Exception::GeneralException
-  {
-   public:
-   NoFragmentNode(const char* file, int line, const string& filename);
-  };
 
   FragmentDB();
   FragmentDB(const String& /filename/);
@@ -32,7 +29,8 @@ class FragmentDB
   const String& getFilename() const;
   bool has(const String& /fragment_name/) const;
   FragmentDB::Type getFragmentType(const String& /fragment_name/) const;
-  list<String> getVariantNames(const String& /name/) const;
+	// BAUSTELLE
+  // list<String> getVariantNames(const String& /name/) const;
   const Fragment* getFragment(const String& /fragment_name/) const;
   const Fragment* getReferenceFragment(const Fragment& /fragment/) const;
   const Residue* getResidue(const String& /fragment_name/) const;
@@ -40,7 +38,8 @@ class FragmentDB
   Molecule* getMoleculeCopy(const String& /fragment_name/) const;
   Residue* getResidueCopy(const String& /fragment_name/) const;
   const String& getDefaultNamingStandard() const;
-  StringHashMap<StringHashMap<String>*>& getNamingStandards();
+	// BAUSTELLE
+  // StringHashMap<StringHashMap<String>*>& getNamingStandards();
   bool isValid() const;
 
   NormalizeNamesProcessor  normalize_names;
@@ -48,6 +47,18 @@ class FragmentDB
   BuildBondsProcessor    build_bonds;
   ResourceEntry* tree;
 };
+
+
+//class NoFragmentNode
+// : GeneralException
+//{
+//%HeaderCode
+//	#using <BALL/STRUCTURE/fragmentDB.h>
+//	using namespace BALL;
+//%End
+// public:
+// NoFragmentNode(const char* /file/, int /line/, const String& /filename/);
+//};
 
 class NormalizeNamesProcessor 
 //  : public UnaryProcessor<Fragment>
@@ -61,11 +72,12 @@ class NormalizeNamesProcessor
 	public:
 	NormalizeNamesProcessor();
 	NormalizeNamesProcessor(FragmentDB& /db/);
-	virtual ~NormalizeNamesProcessor();
+	~NormalizeNamesProcessor();
 	void setFragmentDB(FragmentDB& /db/);
 	void setNamingStandard(const String& /naming_standard/);
 	const String& getNamingStandard();
-	bool matchName(String&  /res_name/, String&  /atom_name/, const StringHashMap<String>* /map/) const;
+	// BAUSTELLE
+	// bool matchName(String&  /res_name/, String&  /atom_name/, const StringHashMap<String>* /map/) const;
 	virtual bool start();
 	virtual bool finish();
 	virtual Processor::Result operator () (Fragment& /fragment/);

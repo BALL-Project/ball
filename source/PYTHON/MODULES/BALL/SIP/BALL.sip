@@ -1,4 +1,4 @@
-// $Id: BALL.sip,v 1.1 2000/07/18 21:26:52 oliver Exp $
+// $Id: BALL.sip,v 1.2 2000/08/07 11:53:44 oliver Exp $
 /////////////////////////
 // BALL PYTHON SUPPORT
 /////////////////////////
@@ -204,6 +204,7 @@
 %Include pyAtomDict.sip
 %Include pyAtomList.sip
 %Include pyAtomProcessor.sip
+%Include pyFragmentProcessor.sip
 %Include pyCompositeDescriptorList.sip
 %Include pyCompositeProcessor.sip
 %Include pyBondList.sip
@@ -227,7 +228,7 @@
 // STRUCTURE
 // %Include analyticalSES.sip
 %Include defaultProcessors.sip
-// %Include fragmentDB.sip
+%Include fragmentDB.sip
 %Include geometricProperties.sip
 %Include geometricTransformations.sip
 %Include numericalSAS.sip 

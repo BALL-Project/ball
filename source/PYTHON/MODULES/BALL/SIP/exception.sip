@@ -1,3 +1,5 @@
+// $Id: exception.sip,v 1.2 2000/08/07 11:53:44 oliver Exp $
+
 class GeneralException 
 {
 %HeaderCode
