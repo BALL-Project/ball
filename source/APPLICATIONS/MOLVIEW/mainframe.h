@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.49 2003/09/08 16:49:46 amoll Exp $
+// $Id: mainframe.h,v 1.50 2003/09/14 17:48:38 amoll Exp $
 //
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -72,7 +72,6 @@
 #endif
 
 #include <qwidget.h>
-#include <qsplitter.h>
 
 namespace BALL
 {
@@ -197,15 +196,12 @@ namespace BALL
 		FDPBDialog*  							FDPB_dialog_;
 		Server*   								server_;
 
-		QSplitter*								hor_splitter_;
-		QSplitter*								vert_splitter_;
-		QSplitter*								vert_splitter2_;
-		QSplitter*								vert_splitter3_;
 		LogView*									logview_;
 		SimulationThread* 				simulation_thread_;
 		
 		bool 											fullscreen_;
 		bool 											stop_simulation_;
+		QString s;
 	};
 
 }

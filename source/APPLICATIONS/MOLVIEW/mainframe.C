@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.76 2003/09/09 21:07:23 oliver Exp $
+// $Id: mainframe.C,v 1.77 2003/09/14 17:48:38 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -35,11 +35,11 @@
 
 #include <qlabel.h>
 #include <qmenubar.h>
-#include <qsplitter.h>
 #include <qdockwindow.h>
 #include <qstatusbar.h>
 #include <qlabel.h>
 #include <qaccel.h> 
+#include <qsettings.h>
 
 #ifdef QT_THREAD_SUPPORT
 #	include "threads.h"
@@ -66,9 +66,6 @@ namespace BALL
 			molecular_properties_(0),
 			file_dialog_(0),
 			server_(0),
-			hor_splitter_(0),
-			vert_splitter_(0),
-			vert_splitter2_(0),
 			logview_(0),
 			simulation_thread_(0),
 			fullscreen_(false),
@@ -86,21 +83,6 @@ namespace BALL
 		// ---------------------
 		Log.remove(std::cout);
 
-		// ---------------------
-		// create widgets ------
-		// ---------------------
-		vert_splitter_ = new QSplitter(this, "VertSplitter");
-		CHECK_PTR(vert_splitter_);
-		vert_splitter_->setOrientation(Vertical);
-		setCentralWidget(vert_splitter_);
-
-		hor_splitter_ = new QSplitter(vert_splitter_, "HorSplitter");
-		CHECK_PTR(hor_splitter_);
-/*
-		vert_splitter2_ = new QSplitter(hor_splitter_, "VertSplitter2");
-		vert_splitter2_->setOrientation(Vertical);
-		CHECK_PTR(vert_splitter2_);
-*/		
 		control_ = new MolecularControl(this, "Structures");
 		CHECK_PTR(control_);
 	
@@ -110,35 +92,36 @@ namespace BALL
 		trajectory_control_ = new TrajectoryControl(this, "Datasets");
 		CHECK_PTR(trajectory_control_);
 
-		scene_ = new Scene(hor_splitter_);
+		scene_ = new Scene(this, "Scene");
 		CHECK_PTR(scene_);
 		scene_->setMinimumSize(10, 10);
+		setCentralWidget(scene_);
 
-		display_properties_ = new DisplayProperties(this);
+		display_properties_ = new DisplayProperties(this, "DisplayProperties");
 		CHECK_PTR(display_properties_);
 
-		minimization_dialog_ = new AmberMinimizationDialog(this);
+		minimization_dialog_ = new AmberMinimizationDialog(this, "AmberMinimizationDialog");
 		CHECK_PTR(minimization_dialog_);
 
-		md_dialog_ = new MolecularDynamicsDialog(this);
+		md_dialog_ = new MolecularDynamicsDialog(this, "MolecularDynamicsDialog");
 		CHECK_PTR(md_dialog_);
 
-		surface_dialog_ = new ContourSurfaceDialog(this);
+		surface_dialog_ = new ContourSurfaceDialog(this, "ContourSurfaceDialog");
 		CHECK_PTR(surface_dialog_);
 
-		label_dialog_ = new LabelDialog(this);
+		label_dialog_ = new LabelDialog(this, "LabelDialog");
 		CHECK_PTR(label_dialog_);
 		
-		file_dialog_ = new MolecularFileDialog(this);
+		file_dialog_ = new MolecularFileDialog(this, "MolecularFileDialog");
 		CHECK_PTR(file_dialog_);
 
-		molecular_properties_ = new MolecularProperties(this);
+		molecular_properties_ = new MolecularProperties(this, "MolecularProperties");
 		CHECK_PTR(molecular_properties_);
 
 		server_ = new Server(this);
 		CHECK_PTR(server_);
 
-		logview_ = new LogView(vert_splitter_);
+		logview_ = new LogView(this, "Logs");
 		CHECK_PTR(logview_);
 		logview_->setMinimumSize(10, 10);
 
@@ -146,10 +129,7 @@ namespace BALL
 		CHECK_PTR(FDPB_dialog_);
 
 		#ifdef BALL_PYTHON_SUPPORT
-			vert_splitter3_ = new QSplitter(vert_splitter_, "VertSplitter3");
-			CHECK_PTR(vert_splitter3_);
-
-			PyWidget* pywidget = new PyWidget(vert_splitter3_);
+			PyWidget* pywidget = new PyWidget(this, "Python Interpreter");
 			CHECK_PTR(pywidget);
 			pywidget->startInterpreter();
 		#endif
@@ -275,17 +255,10 @@ namespace BALL
 			return;
 		}
 
-
 		HBondProcessor proc;
 		if (!getSelectedSystem()) return;
 		getSelectedSystem()->apply(proc);
 		MainControl::update(*getSelectedSystem());
-		/*
-		ChangedCompositeMessage* message = new ChangedCompositeMessage;
-		message->setDeletable(true);
-		message->setComposite(getSelectedSystem());
-		notify_(message);
-	*/
 		setStatusbarText("calculated H-bonds");
 	}
 
@@ -627,53 +600,6 @@ namespace BALL
 	void Mainframe::fetchPreferences(INIFile& inifile)
 		throw()
 	{
-		// the splitter positions
-		QValueList<int> value_list;
-		String value_string;
-		if (inifile.hasEntry("WINDOWS", "Main::hor_splitter"))
-		{
-			value_string = inifile.getValue("WINDOWS", "Main::hor_splitter");
-			for (Size i = 0; i < value_string.countFields(); i++)
-			{
-				value_list.append(value_string.getField(i).toInt());
-			}
-			hor_splitter_->setSizes(value_list);
-			value_list.clear();
-		}
-		if (inifile.hasEntry("WINDOWS", "Main::vert_splitter"))
-		{
-			value_string = inifile.getValue("WINDOWS", "Main::vert_splitter");
-			for (Size i = 0; i < value_string.countFields(); i++)
-			{
-				value_list.append(value_string.getField(i).toInt());
-			}
-			vert_splitter_->setSizes(value_list);
-			value_list.clear();
-		}
-		if (inifile.hasEntry("WINDOWS", "Main::vert_splitter2"))
-		{
-			value_string = inifile.getValue("WINDOWS", "Main::vert_splitter2");
-			for (Size i = 0; i < value_string.countFields(); i++)
-			{
-				value_list.append(value_string.getField(i).toInt());
-			}
-			//vert_splitter2_->setSizes(value_list);
-			value_list.clear();
-		}
-
-		#ifdef BALL_PYTHON_SUPPORT
-			if (inifile.hasEntry("WINDOWS", "Main::vert_splitter3"))
-			{
-				value_string = inifile.getValue("WINDOWS", "Main::vert_splitter3");
-				for (Size i = 0; i < value_string.countFields(); i++)
-				{
-					value_list.append(value_string.getField(i).toInt());
-				}
-				vert_splitter3_->setSizes(value_list);
-				value_list.clear();
-			}
-		#endif
-
 		// preferences for the dialogs
 		minimization_dialog_->readPreferences(inifile);
 		md_dialog_->readPreferences(inifile);
@@ -684,50 +610,8 @@ namespace BALL
 	void Mainframe::writePreferences(INIFile& inifile)
 		throw()
 	{
-		// the splitter positions
-		QValueList<int> size_list = hor_splitter_->sizes();
-		String value_string = "";
-		QValueListConstIterator<int> list_it = size_list.begin();
-		for (; list_it != size_list.end(); ++list_it)
-		{
-			value_string += String(*list_it) + " ";
-		}
-		inifile.insertValue("WINDOWS", "Main::hor_splitter", value_string);
-
-		// --------------------------------
-		value_string = "";
-		size_list = vert_splitter_->sizes();
-		list_it = size_list.begin();
-		for (; list_it != size_list.end(); ++list_it)
-		{
-			value_string += String(*list_it) + " ";
-		}
-		inifile.insertValue("WINDOWS", "Main::vert_splitter", value_string);
-
-		// --------------------------------
-		/*
-		value_string = "";
-		size_list = vert_splitter2_->sizes();
-		list_it = size_list.begin();
-		for (; list_it != size_list.end(); ++list_it)
-		{
-			value_string += String(*list_it) + " ";
-		}
-		inifile.insertValue("WINDOWS", "Main::vert_splitter2", value_string);
-*/
 		minimization_dialog_->writePreferences(inifile);
 		md_dialog_->writePreferences(inifile);
-
-		#ifdef BALL_PYTHON_SUPPORT
-			value_string = "";
-			size_list = vert_splitter3_->sizes();
-			list_it = size_list.begin();
-			for (; list_it != size_list.end(); ++list_it)
-			{
-				value_string += String(*list_it) + " ";
-			}
-			inifile.insertValue("WINDOWS", "Main::vert_splitter3", value_string);
-		#endif
 
 		MainControl::writePreferences(inifile);
 	}
