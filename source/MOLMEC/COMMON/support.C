@@ -1,4 +1,4 @@
-// $Id: support.C,v 1.22 2001/02/23 10:17:34 anker Exp $
+// $Id: support.C,v 1.23 2001/02/23 14:39:27 anker Exp $
 
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/KERNEL/atom.h>
@@ -161,9 +161,9 @@ namespace BALL
 						{
 							new_position = position;
 							difference = position - (*atom_it2)->getPosition();
-							new_position = calculateMinimumImage(difference, period);
+							// BAUSTELLE
+							// calculateMinimumImage(difference, period);
 
-							/*
 							if (difference.x < -half_period_x) 
 							{
 								new_position.x += period_x;
@@ -199,7 +199,6 @@ namespace BALL
 									new_position.z -= period_z;
 								}
 							}
-							*/
 
 							if ((new_position.getSquareDistance((*atom_it2)->getPosition())) 
 									<= squared_distance) 
@@ -582,48 +581,47 @@ namespace BALL
 		}
 
 
-		Vector3& calculateMinimumImage(const Vector3& distance,
+		// BAUSTELLE: This will lead to an unnecessary temporary
+		void calculateMinimumImage(Vector3& distance,
 				const Vector3& period)
 		{
 			Vector3 half_period(period * 0.5);
-			Vector3 result;
 
 			if (distance.x <= -half_period.x)
 			{
-				result.x += period.x;
+				distance.x += period.x;
 			}
 			else 
 			{
 				if (distance.x > half_period.x)
 				{
-					result.x -= period.x;
+					distance.x -= period.x;
 				}
 			}
 
 			if (distance.y <= -half_period.y)
 			{
-				result.y += period.y;
+				distance.y += period.y;
 			}
 			else 
 			{
 				if (distance.y > half_period.y)
 				{
-					result.y -= period.y;
+					distance.y -= period.y;
 				}
 			}
 
 			if (distance.z <= -half_period.z)
 			{
-				result.z += period.z;
+				distance.z += period.z;
 			}
 			else 
 			{
 				if (distance.z > half_period.z)
 				{
-					result.z -= period.z;
+					distance.z -= period.z;
 				}
 			}
-			return result;
 		}
 
 	}	// namespace MolmecSupport
