@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: graphVertex.h,v 1.7 2002/12/17 14:13:11 anker Exp $
+// $Id: graphVertex.h,v 1.8 2002/12/17 17:22:08 oliver Exp $
 
 #ifndef BALL_STRUCTURE_GRAPHVERTEX_H
 #define BALL_STRUCTURE_GRAPHVERTEX_H
@@ -497,7 +497,7 @@ namespace BALL
 
 
 	template <typename Vertex, typename Edge, typename Face>
-	GraphVertex<Vertex,Edge,Face>::EdgeIterator
+	typename GraphVertex<Vertex,Edge,Face>::EdgeIterator
 			GraphVertex<Vertex,Edge,Face>::beginEdge()
 		throw()
 	{
@@ -506,7 +506,7 @@ namespace BALL
 
 
 	template <typename Vertex, typename Edge, typename Face>
-	GraphVertex<Vertex,Edge,Face>::ConstEdgeIterator
+	typename GraphVertex<Vertex,Edge,Face>::ConstEdgeIterator
 			GraphVertex<Vertex,Edge,Face>::beginEdge() const
 		throw()
 	{
@@ -515,7 +515,7 @@ namespace BALL
 
 
 	template <typename Vertex, typename Edge, typename Face>
-	GraphVertex<Vertex,Edge,Face>::EdgeIterator
+	typename GraphVertex<Vertex,Edge,Face>::EdgeIterator
 			GraphVertex<Vertex,Edge,Face>::endEdge()
 		throw()
 	{
@@ -524,7 +524,7 @@ namespace BALL
 
 
 	template <typename Vertex, typename Edge, typename Face>
-	GraphVertex<Vertex,Edge,Face>::ConstEdgeIterator
+	typename GraphVertex<Vertex,Edge,Face>::ConstEdgeIterator
 			GraphVertex<Vertex,Edge,Face>::endEdge() const
 		throw()
 	{
@@ -533,7 +533,7 @@ namespace BALL
 
 
 	template <typename Vertex, typename Edge, typename Face>
-	GraphVertex<Vertex,Edge,Face>::FaceIterator
+	typename GraphVertex<Vertex,Edge,Face>::FaceIterator
 			GraphVertex<Vertex,Edge,Face>::beginFace()
 		throw()
 	{
@@ -542,7 +542,7 @@ namespace BALL
 
 
 	template <typename Vertex, typename Edge, typename Face>
-	GraphVertex<Vertex,Edge,Face>::ConstFaceIterator
+	typename GraphVertex<Vertex,Edge,Face>::ConstFaceIterator
 			GraphVertex<Vertex,Edge,Face>::beginFace() const
 		throw()
 	{
@@ -551,7 +551,7 @@ namespace BALL
 
 
 	template <typename Vertex, typename Edge, typename Face>
-	GraphVertex<Vertex,Edge,Face>::FaceIterator
+	typename GraphVertex<Vertex,Edge,Face>::FaceIterator
 			GraphVertex<Vertex,Edge,Face>::endFace()
 		throw()
 	{
@@ -560,7 +560,7 @@ namespace BALL
 
 
 	template <typename Vertex, typename Edge, typename Face>
-	GraphVertex<Vertex,Edge,Face>::ConstFaceIterator
+	typename GraphVertex<Vertex,Edge,Face>::ConstFaceIterator
 			GraphVertex<Vertex,Edge,Face>::endFace() const
 		throw()
 	{
