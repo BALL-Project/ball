@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.34 2002/12/12 17:14:55 amoll Exp $
+// $Id: mainframe.h,v 1.35 2003/06/05 10:29:14 amoll Exp $
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
 #define BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -52,6 +52,10 @@
 
 #ifndef BALL_VIEW_GUI_DIALOGS_MOLECULARFILEDIALOG_H
 # include <BALL/MOLVIEW/GUI/DIALOGS/molecularFileDialog.h>
+#endif
+
+#ifndef BALL_VIEW_GUI_DIALOGS_FDPBDIALOG_H
+# include <BALL/VIEW/GUI/DIALOGS/FDPBDialog.h>
 #endif
 
 #include "DIALOGS/DlgAmberMinimization.h"
@@ -156,6 +160,7 @@ class Mainframe
 	LogView*			logview_;
 	QVBoxLayout*	vboxlayout_;
 	
+	FDPBDialog*  					FDPB_dialog_;
 	List<QPopupMenu*> popup_menus_;
 
 	QLabel*						tool_box_;

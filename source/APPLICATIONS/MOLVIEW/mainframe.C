@@ -106,6 +106,9 @@ Mainframe::Mainframe(QWidget* parent, const char* name)
 	logview_ = new LogView(vert_splitter_);
 	CHECK_PTR(logview_);
 
+	FDPB_dialog_ = new FDPBDialog(this);
+	CHECK_PTR(FDPB_dialog_);
+
 	#ifdef BALL_PYTHON_SUPPORT
 		PyWidget* py_widget = new PyWidget(vert_splitter_);
 		CHECK_PTR(py_widget);
