@@ -1,4 +1,4 @@
-// $Id: snapShot.C,v 1.9 2000/03/25 22:54:45 oliver Exp $
+// $Id: snapShot.C,v 1.10 2000/03/26 20:38:15 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/snapShot.h>
 #include <BALL/CONCEPT/XDRPersistenceManager.h>
@@ -14,7 +14,7 @@ namespace BALL
 	const unsigned int SnapShotManager::Default::FLUSH_TO_DISK_FREQUENCY = 100;
 
 	// The default constructor of the SnapShot class. 
-	  SnapShot::SnapShot()
+  SnapShot::SnapShot()
 	{
 		valid = false;
 		index = 0;
@@ -22,7 +22,7 @@ namespace BALL
 
 	// The constructor of this class expects the number of atoms in the system
 	// and reserves the necessary amount of memory for the data
-	SnapShot::SnapShot (Size number)
+	SnapShot::SnapShot(const Size number)
 	{
 		Vector3 tmp;
 
