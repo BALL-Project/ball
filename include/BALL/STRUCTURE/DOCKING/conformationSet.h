@@ -49,6 +49,9 @@ namespace BALL
 
 				const System& getSystem() const
 					throw();
+					
+				/*System& getSystem()
+					throw();*/
 
 				/** Use score as the new scoring information.
 				 */
@@ -96,7 +99,7 @@ namespace BALL
 				std::vector<Conformation> snapshot_order_;
 
 				/** The original system on which the SnapShots are based
-				*/	
+				*/
 				System system_;
 
 				/** The SnapShots
