@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.24 2003/12/10 17:16:53 amoll Exp $
+// $Id: molecularControl.C,v 1.25 2003/12/18 12:06:08 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -381,7 +381,7 @@ void MolecularControl::onContextMenu_(QListViewItem* item,  const QPoint& point,
 	// show the context menu if it is not empty
 	if (context_menu_.count())
 	{
-		context_menu_.exec(point);
+		context_menu_.popup(point);
 	}
 }
 

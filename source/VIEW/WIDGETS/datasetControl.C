@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.15 2003/12/10 15:10:27 amoll Exp $
+// $Id: datasetControl.C,v 1.16 2003/12/18 12:07:09 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -252,7 +252,7 @@ void DatasetControl::onContextMenu_(QListViewItem* item,  const QPoint& point, i
 	context_menu.insertItem("Delete", this, SLOT(deleteItems_()));
 
 	// show the context menu if it is not empty
-	if (context_menu.count()) context_menu.exec(point);
+	if (context_menu.count()) context_menu.popup(point);
 }
 
 void DatasetControl::visualiseTrajectory_()

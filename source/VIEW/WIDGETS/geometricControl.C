@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.22 2003/12/17 15:10:42 amoll Exp $
+// $Id: geometricControl.C,v 1.23 2003/12/18 12:07:09 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -311,7 +311,7 @@ void GeometricControl::onContextMenu_(QListViewItem* item,  const QPoint& point,
 	// is the context menu not empty
 	if (context_menu_.count())
 	{
-		context_menu_.exec(point);
+		context_menu_.popup(point);
 	}
 }
 
