@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: downloadPDBFile.h,v 1.10 2004/12/08 16:26:30 amoll Exp $
+// $Id: downloadPDBFile.h,v 1.11 2004/12/10 19:08:46 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DOWNLOADPDBFILE_H
@@ -91,11 +91,13 @@ namespace BALL
 				void downloadEnded_()
 					throw();
 
-				void threadedDownload_(const String& url);
+				bool threadedDownload_(const String& url);
+				void removeFile_(const String& filename);
 				
 				QTextBrowser 						*qb_;
 				FetchHTMLThread 				*thread_;
 				bool 										aborted_;
+				bool 										error_;
 
 				HashMap<String, QImage> image_cache_;
 
