@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberTorsion.C,v 1.28 2003/08/26 09:17:51 oliver Exp $
+// $Id: amberTorsion.C,v 1.29 2004/03/10 20:15:38 oliver Exp $
 //
 
 #include <BALL/MOLMEC/AMBER/amberTorsion.h>
@@ -136,7 +136,7 @@ namespace BALL
 
 									if (getForceField()->getUseSelection() == false ||
 											(getForceField()->getUseSelection() == true &&
-											 (a1->isSelected() || a2->isSelected() || a3->isSelected() || a4->isSelected())))
+											 (a1->isSelected() && a2->isSelected() && a3->isSelected() && a4->isSelected())))
 									{
 										// search torsion parameters for (a1,a2,a3,a4)
 										Atom::Type type_a1 = a1->getType();
@@ -308,7 +308,7 @@ namespace BALL
 
 								if	(getForceField()->getUseSelection() == false ||
 										 (getForceField()->getUseSelection() == true &&
-											(a1->isSelected() || a2->isSelected() || a3->isSelected() || a4->isSelected())))
+											(a1->isSelected() && a2->isSelected() && a3->isSelected() && a4->isSelected())))
 								{
 									Atom::Type type_a1 = a1->getType();
 									Atom::Type type_a2 = a2->getType();

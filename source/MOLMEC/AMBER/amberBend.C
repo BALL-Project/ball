@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberBend.C,v 1.20 2003/12/01 07:35:11 oliver Exp $
+// $Id: amberBend.C,v 1.21 2004/03/10 20:15:38 oliver Exp $
 //
 
 #include <BALL/MOLMEC/AMBER/amberBend.h>
@@ -88,8 +88,8 @@ namespace BALL
 					if (getForceField()->getUseSelection() == false ||
 					   (getForceField()->getUseSelection() == true && 
 					   (this_bend.atom1->ptr->isSelected() 
-							|| this_bend.atom2->ptr->isSelected() 
-							|| this_bend.atom3->ptr->isSelected())))
+							&& this_bend.atom2->ptr->isSelected() 
+							&& this_bend.atom3->ptr->isSelected())))
 					{ 
 
 						Atom::Type atom_type_a1 = this_bend.atom1->type;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberStretch.C,v 1.19 2003/12/01 07:35:11 oliver Exp $
+// $Id: amberStretch.C,v 1.20 2004/03/10 20:15:38 oliver Exp $
 //
 
 #include <BALL/MOLMEC/AMBER/amberStretch.h>
@@ -88,7 +88,7 @@ namespace BALL
 
 					if (use_selection == false ||
 					   (use_selection == true && 
-					   (bond.getFirstAtom()->isSelected() || bond.getSecondAtom()->isSelected())))
+					   (bond.getFirstAtom()->isSelected() && bond.getSecondAtom()->isSelected())))
 					{
 						Atom::Type atom_type_A = bond.getFirstAtom()->getType();
 						Atom::Type atom_type_B = bond.getSecondAtom()->getType();

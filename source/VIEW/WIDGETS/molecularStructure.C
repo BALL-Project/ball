@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.33 2004/03/06 15:14:17 oliver Exp $
+// $Id: molecularStructure.C,v 1.34 2004/03/10 20:15:38 oliver Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -867,6 +867,7 @@ namespace BALL
 		setStatusbarText("setting up force field...");
 		
 		ForceField& ff = getForceField();
+		ff.setUseSelection(false);
 		if (!ff.setup(*system))
 		{
 			setStatusbarText("Force field setup failed. See log for details.");
@@ -883,6 +884,7 @@ namespace BALL
 		}
 
 		// Start the simulation
+		ff.setUseSelection(true);
 		setStatusbarText("Starting minimization...");
 		ff.updateEnergy();
 
