@@ -1247,69 +1247,6 @@
         <widget class="QComboBox">
             <item>
                 <property name="text">
-                    <string>low</string>
-                </property>
-            </item>
-            <item>
-                <property name="text">
-                    <string>medium</string>
-                </property>
-            </item>
-            <item>
-                <property name="text">
-                    <string>high</string>
-                </property>
-            </item>
-            <item>
-                <property name="text">
-                    <string>ultra</string>
-                </property>
-            </item>
-            <property name="name">
-                <cstring>mode_resolution_combobox_static</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>90</x>
-                    <y>50</y>
-                    <width>140</width>
-                    <height>24</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>140</width>
-                    <height>24</height>
-                </size>
-            </property>
-            <property name="maximumSize">
-                <size>
-                    <width>140</width>
-                    <height>24</height>
-                </size>
-            </property>
-            <property name="backgroundMode">
-                <enum>NoBackground</enum>
-            </property>
-            <property name="focusPolicy">
-                <enum>StrongFocus</enum>
-            </property>
-            <property name="sizeLimit">
-                <number>10</number>
-            </property>
-            <property name="maxCount">
-                <number>2147483647</number>
-            </property>
-            <property name="insertionPolicy">
-                <enum>AtBottom</enum>
-            </property>
-            <property name="duplicatesEnabled">
-                <bool>true</bool>
-            </property>
-        </widget>
-        <widget class="QComboBox">
-            <item>
-                <property name="text">
                     <string>none</string>
                 </property>
             </item>
@@ -1350,6 +1287,64 @@
                 <rect>
                     <x>90</x>
                     <y>20</y>
+                    <width>140</width>
+                    <height>24</height>
+                </rect>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>140</width>
+                    <height>24</height>
+                </size>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>140</width>
+                    <height>24</height>
+                </size>
+            </property>
+            <property name="backgroundMode">
+                <enum>NoBackground</enum>
+            </property>
+            <property name="focusPolicy">
+                <enum>StrongFocus</enum>
+            </property>
+            <property name="sizeLimit">
+                <number>10</number>
+            </property>
+            <property name="maxCount">
+                <number>2147483647</number>
+            </property>
+            <property name="insertionPolicy">
+                <enum>AtBottom</enum>
+            </property>
+            <property name="duplicatesEnabled">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="QComboBox">
+            <item>
+                <property name="text">
+                    <string>low</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>medium</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>high</string>
+                </property>
+            </item>
+            <property name="name">
+                <cstring>mode_resolution_combobox_static</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>90</x>
+                    <y>50</y>
                     <width>140</width>
                     <height>24</height>
                 </rect>
@@ -1731,69 +1726,6 @@
         <widget class="QComboBox">
             <item>
                 <property name="text">
-                    <string>low</string>
-                </property>
-            </item>
-            <item>
-                <property name="text">
-                    <string>medium</string>
-                </property>
-            </item>
-            <item>
-                <property name="text">
-                    <string>high</string>
-                </property>
-            </item>
-            <item>
-                <property name="text">
-                    <string>ultra</string>
-                </property>
-            </item>
-            <property name="name">
-                <cstring>mode_resolution_combobox_dynamic</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>90</x>
-                    <y>50</y>
-                    <width>140</width>
-                    <height>24</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>140</width>
-                    <height>24</height>
-                </size>
-            </property>
-            <property name="maximumSize">
-                <size>
-                    <width>140</width>
-                    <height>24</height>
-                </size>
-            </property>
-            <property name="backgroundMode">
-                <enum>NoBackground</enum>
-            </property>
-            <property name="focusPolicy">
-                <enum>StrongFocus</enum>
-            </property>
-            <property name="sizeLimit">
-                <number>10</number>
-            </property>
-            <property name="maxCount">
-                <number>2147483647</number>
-            </property>
-            <property name="insertionPolicy">
-                <enum>AtBottom</enum>
-            </property>
-            <property name="duplicatesEnabled">
-                <bool>true</bool>
-            </property>
-        </widget>
-        <widget class="QComboBox">
-            <item>
-                <property name="text">
                     <string>none</string>
                 </property>
             </item>
@@ -1834,6 +1766,64 @@
                 <rect>
                     <x>90</x>
                     <y>20</y>
+                    <width>140</width>
+                    <height>24</height>
+                </rect>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>140</width>
+                    <height>24</height>
+                </size>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>140</width>
+                    <height>24</height>
+                </size>
+            </property>
+            <property name="backgroundMode">
+                <enum>NoBackground</enum>
+            </property>
+            <property name="focusPolicy">
+                <enum>StrongFocus</enum>
+            </property>
+            <property name="sizeLimit">
+                <number>10</number>
+            </property>
+            <property name="maxCount">
+                <number>2147483647</number>
+            </property>
+            <property name="insertionPolicy">
+                <enum>AtBottom</enum>
+            </property>
+            <property name="duplicatesEnabled">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="QComboBox">
+            <item>
+                <property name="text">
+                    <string>low</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>medium</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>high</string>
+                </property>
+            </item>
+            <property name="name">
+                <cstring>mode_resolution_combobox_dynamic</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>90</x>
+                    <y>50</y>
                     <width>140</width>
                     <height>24</height>
                 </rect>
