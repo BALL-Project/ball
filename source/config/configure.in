@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.19 1999/12/30 18:05:52 oliver Exp $
+dnl    $Id: configure.in,v 1.20 2000/01/03 15:46:18 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -823,6 +823,20 @@ else
 					fi
 				fi
 
+				dnl  issue a warning about an old compiler with a broken ostream implementation: reopening a fstream
+				dnl  and writing to it will omit the first 16k written to the stream. Nasty, but confirmed with SGI
+				dnl  and fixed in 7.3.1.1m
+				if test "${CXX_VERSION_1}" = 7 -a "${CXX_VERSION_2}" = 3 \
+								-a "${CXX_VERSION_3}" = 1m -a "${CXX_VERSION_4}" = ""; then
+					
+					COMMENTS="${COMMENTS}\nPlease take care - this version of SGI CC (7.3.1m) contains serious bugs\n"
+					COMMENTS="${COMMENTS}in its implementaion of fstream/iostream. This may lead to strange behaviour\n"
+					COMMENTS="${COMMENTS}and causes PDBFile_test to fail. Please update your compiler.\n\n"
+					AC_MSG_RESULT(${COMMENTS})
+					ADDITIONAL_COMMENTS="${ADDITIONAL_COMMENTS}${COMMENTS}"
+					COMMENTS=""
+				fi
+
 				CXX_MAKEDEPEND="${CXX}"
 				MAKEDEP_CXX_OPTS="-M"
 				MAKEDEP_CXX_SUFFIX=" >.Dependencies 2>/dev/null"
@@ -835,7 +849,7 @@ else
 					CPPFLAGS_D="${CPPFLAGS_D} -g -fullwarn -multigot -G 6-DEBUG:woff=1375,3201,1424,1110,1209"
 					LDFLAGS="$LDFLAGS -64 -LANG:std"
 					AC_DEFINE(IRIX64,)
-					ADDITIONAL_COMMENTS="Please remember to use LD_LIBRARY64_PATH instead of\n LD_LIBRARY_PATH - you are using 64 bit objects!"
+					ADDITIONAL_COMMENTS="${ADDITIONAL_COMMENTS}Please remember to use LD_LIBRARY64_PATH instead of\n LD_LIBRARY_PATH - you are using 64 bit objects!"
 				fi
 				if test "${IRIX_BINFMT}" = N32 ; then
 					DEF_BOOL=false
@@ -845,7 +859,7 @@ else
 					CPPFLAGS_D="${CPPFLAGS_D} -g -fullwarn -multigot -G 6 -DEBUG:woff=1375,3201,1424,1110,1209"
 					LDFLAGS="$LDFLAGS -n32 -LANG:std"
 					AC_DEFINE(IRIX32,)
-					ADDITIONAL_COMMENTS="Please remember to use LD_LIBRARYN32_PATH instead of\n LD_LIBRARY_PATH - you are using new style 32 bit objects."
+					ADDITIONAL_COMMENTS="${ADDITIONAL_COMMENTS}Please remember to use LD_LIBRARYN32_PATH instead of\n LD_LIBRARY_PATH - you are using new style 32 bit objects."
 				fi
 			fi
 
