@@ -1,4 +1,4 @@
-// $Id: mainControl.C,v 1.17 2001/07/15 15:17:06 oliver Exp $
+// $Id: mainControl.C,v 1.18 2001/07/25 11:38:12 oliver Exp $
 
 // this is required for QMenuItem
 #define INCLUDE_MENUITEM_DEF
@@ -47,6 +47,18 @@ namespace BALL
 			preferences_.read();
 
 			connect(qApp,	SIGNAL(aboutToQuit()), this, SLOT(aboutToExit()));
+		}
+		
+		MainControl::MainControl(const MainControl& main_control)
+			throw()
+			:	QMainWindow(0, ""),
+				composite_map_(),
+				descriptor_map_(),
+				descriptors_(),
+				main_control_preferences_(0),
+				preferences_dialog_(0),
+				preferences_id_(-1)
+		{
 		}
 		
 		MainControl::~MainControl()
