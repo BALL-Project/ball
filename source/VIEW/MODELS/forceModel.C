@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceModel.C,v 1.2 2004/07/09 16:14:26 amoll Exp $
+// $Id: forceModel.C,v 1.3 2004/07/12 13:33:12 amoll Exp $
 
 #include <BALL/VIEW/MODELS/forceModel.h>
 #include <BALL/KERNEL/atom.h>
@@ -46,15 +46,17 @@ Processor::Result ForceModel::operator() (Composite &composite)
 
 	Vector3 force = atom->getForce();
 	if (force.getSquareLength() == 0) return Processor::CONTINUE;
-	force.normalize();
-	force *= 10000000000.0;
+	float forcev = std::log(force.getLength() * 10000000000.0); 
 
-	float forcev = std::log(force.getLength());
 	if (forcev < 0) return Processor::CONTINUE;
 	if (forcev > 10)
 	{
 		forcev = 10;
 	}	
+
+	// prevent problems in normalize
+	force *= 10000000000.0;
+	force.normalize();
 	force *= forcev;
 
 	Line* line = new Line();
