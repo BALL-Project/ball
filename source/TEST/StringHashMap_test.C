@@ -1,4 +1,4 @@
-// $Id: StringHashMap_test.C,v 1.1 2000/12/01 14:11:11 amoll Exp $
+// $Id: StringHashMap_test.C,v 1.2 2000/12/01 16:10:42 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -30,7 +30,7 @@ class MyVisitor
 	}
 };
 
-START_TEST(StringHashMap, "$Id: StringHashMap_test.C,v 1.1 2000/12/01 14:11:11 amoll Exp $")
+START_TEST(StringHashMap, "$Id: StringHashMap_test.C,v 1.2 2000/12/01 16:10:42 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -262,9 +262,7 @@ CHECK(HashMap::apply(UnaryProcessor))
 	hm.insert("a", 0);
 	hm.insert("b", 1);
 	ItemCollector<pair<String,int> > myproc;
-	myproc.start();
 	TEST_EQUAL(hm.apply(myproc), true)
-	myproc.reset();
 	TEST_EQUAL(myproc.getSize(), 2)
 	TEST_EQUAL(myproc.getPointer()->first, "b") myproc.forward();
 	TEST_EQUAL(myproc.getPointer()->first, "a") myproc.forward();

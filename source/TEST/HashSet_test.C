@@ -1,4 +1,4 @@
-// $Id: HashSet_test.C,v 1.10 2000/12/01 14:10:49 amoll Exp $
+// $Id: HashSet_test.C,v 1.11 2000/12/01 16:10:52 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -36,7 +36,7 @@ class MyVisitor
 	}
 };
 
-START_TEST(HashSet<T>, "$Id: HashSet_test.C,v 1.10 2000/12/01 14:10:49 amoll Exp $")
+START_TEST(HashSet<T>, "$Id: HashSet_test.C,v 1.11 2000/12/01 16:10:52 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -433,9 +433,7 @@ CHECK(HashSet::apply(UnaryProcessor))
 	hs.insert(2);
 	hs.insert(3);
 	ItemCollector<int> myproc;
-	myproc.start();
 	TEST_EQUAL(hs.apply(myproc), true)
-	myproc.reset();
 	TEST_EQUAL(myproc.getSize(), 3)
 	TEST_EQUAL(*myproc.getPointer(), 3) myproc.forward();
 	TEST_EQUAL(*myproc.getPointer(), 1) myproc.forward();
