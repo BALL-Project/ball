@@ -1,4 +1,4 @@
-// $Id: RDFParameter.h,v 1.1 2000/08/31 13:43:06 anker Exp $
+// $Id: RDFParameter.h,v 1.2 2000/09/01 10:25:04 anker Exp $
 
 #ifndef BALL__RDFPARAMETER_H
 #define BALL__RDFPARAMETER_H
@@ -33,7 +33,7 @@ namespace BALL
 
 		public:
 
-		// BALL_CREATE_NODEEP(RDFParameter)
+		BALL_CREATE(RDFParameter)
 
 		/** @name Constructors and destructors. */
 		//@{
