@@ -1,4 +1,4 @@
-// $Id: mainframe.h,v 1.30 2001/10/11 00:47:26 oliver Exp $
+// $Id: mainframe.h,v 1.30.4.1 2002/06/27 02:38:28 oliver Exp $
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
 #define BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -6,8 +6,6 @@
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
 #endif
-
-#include <strstream>
 
 #include <qmetaobject.h>
 #include <qmainwindow.h>

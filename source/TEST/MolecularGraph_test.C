@@ -1,4 +1,4 @@
-// $Id: MolecularGraph_test.C,v 1.1.2.2 2002/06/05 00:29:02 oliver Exp $
+// $Id: MolecularGraph_test.C,v 1.1.2.3 2002/06/27 02:38:29 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 
 ///////////////////////////
 
-START_TEST(MolecularGraph, "$Id: MolecularGraph_test.C,v 1.1.2.2 2002/06/05 00:29:02 oliver Exp $")
+START_TEST(MolecularGraph, "$Id: MolecularGraph_test.C,v 1.1.2.3 2002/06/27 02:38:29 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -98,7 +98,11 @@ CHECK(MolecularGraph::deleteNode(const Atom& atom))
 	MolecularGraph mg;
 	Atom a1;
 	Atom a2;
+	TEST_EQUAL(mg.getNumberOfNodes(), 0)
+	TEST_EQUAL(mg.getNumberOfEdges(), 0)
 	mg.newNode(a1);
+	TEST_EQUAL(mg.getNumberOfNodes(), 1)
+	TEST_EQUAL(mg.getNumberOfEdges(), 0)
 	mg.newNode(a2);
 	TEST_EQUAL(mg.getNumberOfNodes(), 2)
 	TEST_EQUAL(mg.getNumberOfEdges(), 0)

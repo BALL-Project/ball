@@ -1,4 +1,4 @@
-// $Id: energyMinimizer.h,v 1.22 2001/07/11 23:59:32 amoll Exp $
+// $Id: energyMinimizer.h,v 1.22.4.1 2002/06/27 02:38:27 oliver Exp $
 // Energy Minimizer: A class for minimizing the energy of molecular systems
 
 #ifndef BALL_MOLMEC_MINIMIZATION_ENERGYMINIMIZER_H
@@ -356,7 +356,7 @@ namespace BALL
     /** Set the maximum RMS gradient (first convergence criterion).
       The gradient unit of the gradient is {\bf kJ/(mol \AA)}.
     */
-    void  setMaxGradient(float max_gradient);
+    void setMaxGradient(float max_gradient);
 
     /** Get the maximum RMS gradient (first convergence criterion).
         The gradient unit of the gradient is {\bf kJ/(mol \AA)}.

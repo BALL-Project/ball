@@ -8,6 +8,7 @@ CPP_SOURCES=\
 	labelProperties.C\
 	labelPropertiesData.C\
 	openHINFile.C\
+	openMOLFile.C\
 	openMOL2File.C\
 	openPDBFile.C\
 	openBruker1DFile.C\
@@ -21,6 +22,8 @@ MOC_SOURCES=\
 	labelProperties_moc.C\
 	labelPropertiesData_moc.C\
 	openHINFile_moc.C\
+	openMOLFile_moc.C\
+	openMOL2File_moc.C\
 	openPDBFile_moc.C\
 	openBruker1DFile_moc.C\
 	openBruker2DFile_moc.C\
@@ -46,6 +49,12 @@ labelPropertiesData_moc.C:	$(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/labelPr
 
 openHINFile_moc.C:	$(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/openHINFile.h
 	$(MOC) $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/openHINFile.h -o openHINFile_moc.C
+
+openMOLFile_moc.C:	$(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/openMOLFile.h
+	$(MOC) $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/openMOLFile.h -o openMOLFile_moc.C
+
+openMOL2File_moc.C:	$(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/openMOL2File.h
+	$(MOC) $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/openMOL2File.h -o openMOL2File_moc.C
 
 openPDBFile_moc.C:	$(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/openPDBFile.h
 	$(MOC) $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/openPDBFile.h -o openPDBFile_moc.C

@@ -1,4 +1,4 @@
-// $Id: enumerator.h,v 1.19.4.5 2002/06/14 01:48:43 oliver Exp $
+// $Id: enumerator.h,v 1.19.4.6 2002/06/27 02:38:26 oliver Exp $
 
 #ifndef BALL_CONCEPT_ENUMERATOR_H
 #define BALL_CONCEPT_ENUMERATOR_H
@@ -617,7 +617,7 @@ namespace BALL
 		};
 
 		// the default mutation method (calling asignment operator)
-		inline void defaultAssign_(Variant& a, const Variant& b)
+		static inline void defaultAssign_(Variant& a, const Variant& b)
 		{
 			a = b;
 		}

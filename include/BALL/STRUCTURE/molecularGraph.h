@@ -1,4 +1,4 @@
-// $Id: molecularGraph.h,v 1.1.2.4 2002/06/05 00:29:00 oliver Exp $
+// $Id: molecularGraph.h,v 1.1.2.5 2002/06/27 02:38:27 oliver Exp $
 
 #ifndef BALL_STRUCTURE_MOLECULARGRAPH_H
 #define BALL_STRUCTURE_MOLECULARGRAPH_H
@@ -291,7 +291,7 @@ namespace BALL
 	template <typename Node, typename Edge>
 	bool TMolecularGraph<Node, Edge>::deleteNode(const Atom& atom)
 	{
-		if (atom_to_node_.has(const_cast<Atom*>(&atom)))
+		if (!atom_to_node_.has(const_cast<Atom*>(&atom)))
 		{
 			return false;
 		}
@@ -302,7 +302,7 @@ namespace BALL
 	template <typename Node, typename Edge>
 	bool TMolecularGraph<Node, Edge>::deleteEdge(const Bond& bond)
 	{
-		if (bond_to_edge_.has(const_cast<Bond*>(&bond)))
+		if (!bond_to_edge_.has(const_cast<Bond*>(&bond)))
 		{
 			return false;
 		}
@@ -313,7 +313,6 @@ namespace BALL
 	template <typename Node, typename Edge>
 	bool TMolecularGraph<Node, Edge>::deleteNode(TMolecularGraph<Node, Edge>::NodeItemType& node)
 	{
-		cout << "entering deleteNode(atom = " << node.getAtom() <<  ")" << endl;
 		NodeIterator node_it = std::find(nodes_.begin(), nodes_.end(), node);
 		if (node_it == nodes_.end())
 		{
@@ -332,7 +331,6 @@ namespace BALL
 			}
 		}
 
-		std::cout << "Deleted edges... " << std::endl;
 		atom_to_node_.erase(node_it->getAtom());
 		nodes_.erase(node_it);
 	
@@ -342,16 +340,14 @@ namespace BALL
 	template <typename Node, typename Edge>
 	bool TMolecularGraph<Node, Edge>::deleteEdge(TMolecularGraph<Node, Edge>::EdgeItemType& edge)
 	{
-		cout << "entering deleteEdge(edge = " << edge.getBond() <<  ")" << endl;
 		typename std::list<EdgeItemType>::iterator edge_it = std::find(edges_.begin(), edges_.end(), edge);
 		if (edge_it == edges_.end())
 		{
-			cout << "Can't delete edge: " << edge.getBond() << " (false)" << std::endl;
 			return false;
 		}
-		cout << "Deleted edge " << edge.getBond() << std::endl;
 		edge.getSource().deleteEdge_(&edge);
 		edge.getTarget().deleteEdge_(&edge);
+		bond_to_edge_.erase(edge_it->getBond());
 		edges_.erase(edge_it);
 		
 		return true;
@@ -455,16 +451,10 @@ namespace BALL
 	void NodeItem<Node, Edge>::deleteEdge_(EdgeItemType* item)
 		throw()
 	{
-		cout << "entering deleteEdge_(atom = " << getAtom() << ", bond = " << item->getBond() << ")" << endl;
 		Iterator it(find(adjacent_edges_.begin(), adjacent_edges_.end(), item));
 		if (it != adjacent_edges_.end())
 		{
-			cout << "erasing edge " << item->getBond() << endl;
 			adjacent_edges_.erase(it);
-		}
-		else
-		{
-			cout << "cannot erase edge " << item->getBond() << endl;
 		}
 	}
 

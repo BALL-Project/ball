@@ -1,4 +1,4 @@
-// $Id: BALL.sip,v 1.7 2002/02/15 01:57:28 oliver Exp $
+// $Id: BALL.sip,v 1.7.2.1 2002/06/27 02:38:29 oliver Exp $
 /////////////////////////
 // BALL PYTHON SUPPORT
 /////////////////////////
@@ -251,6 +251,7 @@
 // %Include analyticalSES.sip
 %Include defaultProcessors.sip
 %Include fragmentDB.sip
+%Include reconstructFragmentProcessor.sip
 %Include geometricProperties.sip
 %Include geometricTransformations.sip
 %Include numericalSAS.sip 

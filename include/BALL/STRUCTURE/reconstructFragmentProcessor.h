@@ -1,4 +1,4 @@
-// $Id: reconstructFragmentProcessor.h,v 1.1.2.2 2002/05/14 10:55:07 oliver Exp $
+// $Id: reconstructFragmentProcessor.h,v 1.1.2.3 2002/06/27 02:38:27 oliver Exp $
 
 #ifndef BALL_STRUCTURE_RECONSTRUCTFRAGMENTPROCESSOR_H
 #define BALL_STRUCTURE_RECONSTRUCTFRAGMENTPROCESSOR_H
@@ -57,8 +57,9 @@ namespace BALL
 		/** Destructor 
 		*/
 		virtual ~ReconstructFragmentProcessor();
-
 		//@}			
+
+
 		/** @name Processor-related methods 
 		*/
 		//@{
