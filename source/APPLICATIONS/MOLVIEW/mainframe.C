@@ -621,11 +621,15 @@ void Mainframe::buildPeptide()
 
 	System* system = new System;
 	system->insert(*protein);
-	NewCompositeMessage* new_message = new NewCompositeMessage;
-	new_message->setDeletable(false);
-	new_message->setComposite(system);
-	new_message->setCompositeName("Peptide");
-	notify_(new_message);
+	insert(*system);
+
+	// repaint of the scene and the composites needed
+	for (Position p = 0; ; p++)
+	{
+		Scene* scene= (Scene*) Scene::getInstance(p);
+		if (scene == 0) return;
+		scene->update(true);
+	}
 }
 
 #ifdef BALL_NO_INLINE_FUNCTIONS
