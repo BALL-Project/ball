@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Socket_test.C,v 1.9 2003/05/08 13:55:26 anhi Exp $
+// $Id: Socket_test.C,v 1.10 2003/07/03 11:55:05 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -28,13 +28,13 @@ void socket_listener(void*)
 	s.get(c);
 }
 
-START_TEST(Socket, "$Id: Socket_test.C,v 1.9 2003/05/08 13:55:26 anhi Exp $")
+START_TEST(Socket, "$Id: Socket_test.C,v 1.10 2003/07/03 11:55:05 amoll Exp $")
 using namespace BALL;
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 	  
-CHECK(simple socket transmission)
+CHECK([EXTRA]simple socket transmission)
 	
 	sock_inet_buf.bind();
 	int port = sock_inet_buf.localport();
