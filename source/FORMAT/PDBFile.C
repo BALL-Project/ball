@@ -1,4 +1,4 @@
-// $Id: PDBFile.C,v 1.25 2001/08/01 01:04:14 oliver Exp $
+// $Id: PDBFile.C,v 1.26 2001/08/24 01:26:52 oliver Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 
@@ -469,7 +469,7 @@ namespace BALL
 		SecondaryStructureConstIterator sheet_it;
 		ResidueConstIterator residue_it;
 		ResidueConstReverseIterator reverse_residue_it;
-		PDBAtomConstIterator atom_iterator;
+		AtomConstIterator atom_iterator;
 		AtomConstIterator atom_it;
 		Atom::BondConstIterator bond_it;
 		unsigned long secstruc_serial_number = 0;
@@ -496,7 +496,6 @@ namespace BALL
 		unsigned long number_of_conect_records = 0;
 		unsigned long number_of_seqres_records = 0;
 		PDB::RecordType record_type = PDB::RECORD_TYPE__UNKNOWN;
-		// Residue*							residue[13] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 		vector<const Residue*> residue(13);
 		const SecondaryStructure*		current_sec_struc = 0;
 		const Atom*									current_atom = 0;
@@ -948,25 +947,27 @@ namespace BALL
 					if (current_const_residue_->hasProperty(Residue::PROPERTY__AMINO_ACID) == true)
 					{
 						record_type = PDB::RECORD_TYPE__ATOM;
-					}	else {
+					}	
+					else 
+					{
 						record_type = PDB::RECORD_TYPE__HETATM;
 					}
 
-					BALL_FOREACH_PDBATOM(*current_const_residue_, atom_iterator)
+					BALL_FOREACH_ATOM(*current_const_residue_, atom_iterator)
 					{
 						++number_of_atomic_coordinate_records;
 						
-						current_const_PDB_atom_ = &(*atom_iterator);
+						current_const_atom_ = &(*atom_iterator);
 
 						// get the element symbol
-						strcpy(element_symbol, current_const_PDB_atom_->getElement().getSymbol().c_str());
+						strcpy(element_symbol, current_const_atom_->getElement().getSymbol().c_str());
 
 						// normalize the atom name:
 						//  if the atom name starts with the element name and the element
 						//	name is a single character (e.g. C, N, O, H and the name is not
 						//  prefixed by a number) then the name should pe prefixed by
 						//  a blank to distinguish CA (carbon alpha) from CA (calcium)
-						String name = current_const_PDB_atom_->getName();
+						String name = current_const_atom_->getName();
 						name.trim();
 						Index offset;
 						if ((name.size() < 4) && name.hasPrefix(element_symbol) && (strlen(element_symbol) == 1))
@@ -987,21 +988,34 @@ namespace BALL
 							chain_name = BALL_CHAIN_DEFAULT_NAME;
 						}
 
+						// define a few defaults for the case that
+						// we don't have a PDBAtom, but only an Atom
+						char alternate_location = ' ';
+						float occupancy = 1.0;
+						float temperature_factor = 20.0;
+						if (RTTI::isKindOf<const PDBAtom>(*current_const_atom_))
+						{
+							const PDBAtom& pdb_atom = *dynamic_cast<const PDBAtom*>(current_const_atom_);
+							alternate_location = pdb_atom.getAlternateLocationIndicator();
+							occupancy = pdb_atom.getOccupancy();
+							temperature_factor = pdb_atom.getTemperatureFactor();
+						}
+												
 						sprintf(line_buffer, 
 							record_type_format_[record_type].format_string,
 							record_type_format_[record_type].string,
 							++atom_serial_number,
 							PDB_atom_name,
-							current_const_PDB_atom_->getAlternateLocationIndicator(),
+							alternate_location,
 							PDB_residue_name[0],
 							chain_name,
 							current_const_residue_->getID().toLong(),
 							current_const_residue_->getInsertionCode(),
-							current_const_PDB_atom_->getPosition().x,
-							current_const_PDB_atom_->getPosition().y,
-							current_const_PDB_atom_->getPosition().z,
-							current_const_PDB_atom_->getOccupancy(),
-							current_const_PDB_atom_->getTemperatureFactor(),
+							current_const_atom_->getPosition().x,
+							current_const_atom_->getPosition().y,
+							current_const_atom_->getPosition().z,
+							occupancy,
+							temperature_factor,
 							PDB_code,
 							element_symbol,
 							""); // CHARGE NOT YET SUPPORTED
@@ -1009,7 +1023,7 @@ namespace BALL
 						line_buffer[PDB::SIZE_OF_PDB_RECORD_LINE + 1] = '\0';
 						File::getFileStream() << line_buffer << endl;
 
-						atom_map[(void *)current_const_PDB_atom_] =  (long)atom_serial_number;
+						atom_map[(void *)current_const_atom_] =  (long)atom_serial_number;
 					}
 				}
 			
@@ -1089,8 +1103,8 @@ namespace BALL
 									current_atom->getPosition().x,
 									current_atom->getPosition().y,
 									current_atom->getPosition().z,
-									0.0f,
-									0.0f,
+									1.0f,
+									20.0f,
 									"",
 									"",
 									""); // CHARGE NOT YET SUPPORTED
@@ -1158,8 +1172,8 @@ namespace BALL
 	      current_atom->getPosition().x,
 	      current_atom->getPosition().y,
 	      current_atom->getPosition().z,
-	      0.0f,
-	      0.0f,
+	      1.0f,
+	      20.0f,
 	      "",
 	      "",
 	      ""); // CHARGE NOT YET SUPPORTED
