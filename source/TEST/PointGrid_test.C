@@ -1,9 +1,9 @@
-// $Id: PointGrid_test.C,v 1.4 2000/07/02 01:23:14 amoll Exp $
+// $Id: PointGrid_test.C,v 1.5 2000/07/03 23:03:14 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 #include <BALL/DATATYPE/pointGrid.h>
 
-START_TEST(PointGrid, "$Id: PointGrid_test.C,v 1.4 2000/07/02 01:23:14 amoll Exp $")
+START_TEST(PointGrid, "$Id: PointGrid_test.C,v 1.5 2000/07/03 23:03:14 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -145,6 +145,9 @@ CHECK(getData/1/2)
 	lower = grid->getOrigin();
 	TEST_REAL_EQUAL(*(grid->getData(0)), 5.4321);
 	TEST_REAL_EQUAL(*(grid->getData(0)), *(grid->getData(lower)));
+	TEST_EXCEPTION(Exception::OutOfGrid, g.getData(9999))
+	lower.set(10.1, 0, 0);
+	TEST_EXCEPTION(Exception::OutOfGrid, g.getData(lower))
 RESULT
 
 CHECK(operator[]/1/2)
@@ -178,7 +181,7 @@ RESULT
 CHECK(getBoxIndices)
 	lower.set(2, 2, 2);
 	Position p1, p2, p3, p4, p5, p6, p7, p8;
-	TEST_EQUAL(g.getBoxIndices(lower, p1, p2, p3, p4, p5, p6, p7, p8), true)
+	g.getBoxIndices(lower, p1, p2, p3, p4, p5, p6, p7, p8);
 	TEST_EQUAL(p1, 266);
 	TEST_EQUAL(p2, 267);
 	TEST_EQUAL(p3, 277);
@@ -189,7 +192,7 @@ CHECK(getBoxIndices)
 	TEST_EQUAL(p8, 399);
 
 	lower.set(2.1, 2.1, 2.1);
-	TEST_EQUAL(g.getBoxIndices(lower, p1, p2, p3, p4, p5, p6, p7, p8), true)
+	g.getBoxIndices(lower, p1, p2, p3, p4, p5, p6, p7, p8);
 	TEST_EQUAL(p1, 266);
 	TEST_EQUAL(p2, 267);
 	TEST_EQUAL(p3, 277);
@@ -200,7 +203,7 @@ CHECK(getBoxIndices)
 	TEST_EQUAL(p8, 399);
 
 	lower.set(10.1, 2.1, 2.1);
-	TEST_EQUAL(g.getBoxIndices(lower, p1, p2, p3, p4, p5, p6, p7, p8), false)
+	TEST_EXCEPTION(Exception::OutOfGrid, g.getBoxIndices(lower, p1, p2, p3, p4, p5, p6, p7, p8))
 RESULT
 
 CHECK(getBoxData)
@@ -214,7 +217,7 @@ CHECK(getBoxData)
 	g[388] = 6;
 	g[398] = 7;
 	g[399] = 8;
-	TEST_EQUAL(g.getBoxData(lower, p1, p2, p3, p4, p5, p6, p7, p8), true)
+	g.getBoxData(lower, p1, p2, p3, p4, p5, p6, p7, p8);
 	TEST_EQUAL(p1, 1);
 	TEST_EQUAL(p2, 2);
 	TEST_EQUAL(p3, 3);
@@ -225,7 +228,7 @@ CHECK(getBoxData)
 	TEST_EQUAL(p8, 8);
 
 	lower.set(10.1, 2.1, 2.1);
-	TEST_EQUAL(g.getBoxData(lower, p1, p2, p3, p4, p5, p6, p7, p8), false)
+	TEST_EXCEPTION(Exception::OutOfGrid, g.getBoxData(lower, p1, p2, p3, p4, p5, p6, p7, p8))
 RESULT
 
 CHECK(getOrigin)
@@ -267,7 +270,14 @@ CHECK(getDimension)
 RESULT
 
 CHECK(getInterpolatedValue)
-///
+	lower.set(2, 2, 2);
+	TEST_EQUAL(g.getInterpolatedValue(lower), 1)
+	lower.set(0, 0, 0);
+	TEST_EQUAL(g.getInterpolatedValue(lower), 0)
+	lower.set(3, 3, 3);
+	TEST_EQUAL(g.getInterpolatedValue(lower), 8)
+	lower.set(10.1, 0, 0);
+	TEST_EXCEPTION(Exception::OutOfGrid, g.getInterpolatedValue(lower))
 RESULT
 
 /////////////////////////////////////////////////////////////
