@@ -8,3 +8,4 @@ CPP_SOURCES=\
 	steepestDescent.C
 
 include ../../common.mak
+include .Dependencies

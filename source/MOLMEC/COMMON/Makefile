@@ -11,3 +11,4 @@ CPP_SOURCES=\
 	support.C
 
 include ../../common.mak
+include .Dependencies
