@@ -1,4 +1,4 @@
-// $Id: file.h,v 1.32 2001/08/20 14:49:16 amoll Exp $
+// $Id: file.h,v 1.33 2001/09/06 14:54:29 anker Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -624,6 +624,14 @@ namespace BALL
 		throw()
 		: data_(data)
 	{
+	}
+
+	template <typename T>
+	BALL_INLINE
+	void BinaryFileAdaptor<T>::setData(const T& data)
+		throw()
+	{
+		data_ = data;
 	}
 
 	template <typename T>
