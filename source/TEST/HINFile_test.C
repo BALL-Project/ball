@@ -1,4 +1,4 @@
-// $Id: HINFile_test.C,v 1.5 2001/03/12 01:10:14 amoll Exp $
+// $Id: HINFile_test.C,v 1.6 2001/04/03 14:24:58 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(HINFile, "$Id: HINFile_test.C,v 1.5 2001/03/12 01:10:14 amoll Exp $")
+START_TEST(HINFile, "$Id: HINFile_test.C,v 1.6 2001/04/03 14:24:58 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -27,21 +27,20 @@ CHECK(HINFile::~HINFile())
   delete ptr;
 RESULT
 
+HINFile hin;
 
 CHECK(HINFile::HINFile(const String& filename, File::OpenMode open_mode = File::IN))
-  //BAUSTELLE
+  hin = HINFile("data/HINFile_test.hin");
 RESULT
 
+CHECK(HINFile::read(System& system))
+	System system;
+  hin.read(system);
+RESULT
 
 CHECK(HINFile::write(const System& system))
   //BAUSTELLE
 RESULT
-
-
-CHECK(HINFile::read(System& system))
-  //BAUSTELLE
-RESULT
-
 
 CHECK(HINFile::HINFile& operator >> (System& system))
   //BAUSTELLE
@@ -54,13 +53,13 @@ RESULT
 
 
 CHECK(HINFile::hasPeriodicBoundary() const )
-  HINFile box("data/HINFile_test.hin");
-	TEST_EQUAL(box.hasPeriodicBoundary(), true)
+	TEST_EQUAL(hin.hasPeriodicBoundary(), true)
 RESULT
 
 
 CHECK(HINFile::getPeriodicBoundary() const )
-  HINFile box("data/HINFile_test.hin");
+	Box3 box3(-9.35068, -9.35068, -9.35068, 9.35068, 9.35068, 9.35068);
+	TEST_EQUAL(hin.getPeriodicBoundary(), box3)
 RESULT
 
 
