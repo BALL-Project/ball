@@ -1,4 +1,4 @@
-// $Id: structure.doc,v 1.8 2002/12/12 09:48:56 oliver Exp $
+// $Id: structure.doc,v 1.9 2002/12/18 18:19:56 amoll Exp $
 
 /**	@name	Molecular Structure
 		This chapter contains all relevant information on 
@@ -34,11 +34,8 @@
 		//@Include: analyticalSES.h
 		//@Include: numericalSAS.h
 		//@Include: reducedSurface.h
-		//@Include: singularities.h
 		//@Include: solventExcludedSurface.h
 		//@Include: triangulatedSurface.h
-		//@Include: triangulation.h
-		//@Include: BSDTree.h
 		//@Include: RSEdge.h
 		//@Include: RSFace.h
 		//@Include: RSVertex.h
