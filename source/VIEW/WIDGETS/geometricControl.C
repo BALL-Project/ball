@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.58 2004/10/15 11:59:21 amoll Exp $
+// $Id: geometricControl.C,v 1.59 2004/10/15 12:49:08 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -330,23 +330,21 @@ namespace BALL
 			List<Representation*>::Iterator it = reps.begin();
 			for (; it != reps.end(); ++it)
 			{
-				getMainControl()->getPrimitiveManager().remove(**it);
 				if ((*it)->hasProperty(Representation::PROPERTY__IS_COORDINATE_SYSTEM))
 				{
 					SceneMessage *scene_message = new SceneMessage(SceneMessage::REMOVE_COORDINATE_SYSTEM);
 					notify_(scene_message);
 				}
-				else if ((*it)->hasProperty("D"))
+				else if ((*it)->hasProperty("AX"))
 				{
 					SceneMessage *scene_message = new SceneMessage(SceneMessage::REBUILD_DISPLAY_LISTS);
 					notify_(scene_message);
 				}
 					
-				RepresentationMessage* message = new RepresentationMessage(**it, 
-																																	 RepresentationMessage::REMOVE);
-				notify_(message);
+//   				removeRepresentation(**it);
 
-				removeRepresentation(**it);
+				RepresentationMessage* message = new RepresentationMessage(**it, RepresentationMessage::REMOVE);
+				notify_(message);
 			}
 
 			setStatusbarText("Deleted representation.");
@@ -492,8 +490,7 @@ namespace BALL
 			ItemList selected = ((GeometricControl*)this)->getSelectedItems();
 			for (ItemList::Iterator it = selected.begin(); it != selected.end(); ++it)
 			{
-				Representation* rep = ((SelectableListViewItem*) *it)->getRepresentation();
-				selection.push_back(rep);
+				selection.push_back(((GeometricControl*) this)->getRepresentation(**it));
 			}
 			return selection;
 		}

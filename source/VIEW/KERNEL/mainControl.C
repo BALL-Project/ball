@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.115 2004/10/15 11:27:43 amoll Exp $
+// $Id: mainControl.C,v 1.116 2004/10/15 12:49:07 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -659,6 +659,23 @@ namespace BALL
 				if (!composites_muteable_) return;
 				moveItems(((TransformationMessage*) message)->getMatrix());
 			}
+			else if (RTTI::isKindOf<RepresentationMessage>(*message))
+			{
+				RepresentationMessage* msg = RTTI::castTo<RepresentationMessage>(*message);
+				switch (msg->getType())
+				{
+					case RepresentationMessage::ADD:
+						insert(*msg->getRepresentation());
+						break;
+
+					case RepresentationMessage::REMOVE:
+						remove(*msg->getRepresentation());
+						break;
+
+					default:
+						break;
+				}	
+			}
 		}
 
 
@@ -1308,7 +1325,6 @@ namespace BALL
 			throw()
 		{
 			if (!primitive_manager_.has(rep)) return false;
-
 
 			RepresentationMessage* rm = new RepresentationMessage(rep, RepresentationMessage::REMOVE);
 			notify_(rm);
