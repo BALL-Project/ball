@@ -1,4 +1,4 @@
-// $Id: macros.h,v 1.3 2000/01/10 15:50:54 oliver Exp $
+// $Id: macros.h,v 1.4 2000/05/29 12:53:57 oliver Exp $
 
 #ifndef BALL_COMMON_MACROS_H
 #define BALL_COMMON_MACROS_H
@@ -12,7 +12,6 @@
 #endif
 
 #include <math.h>     // needed for fabs
-//#include <iostream>		// needed for ipfx, isfx, opfx, osfx
 #include <limits.h>   // needed for CHAR_BIT
 #include <typeinfo>		// needed for typeid
 
