@@ -1,3 +1,5 @@
+// $Id: classes.txt,v 1.27 2002/01/16 00:06:45 oliver Exp $
+
 D documentation deficiencies
 E exception qualifier
 I interface deficiencies
