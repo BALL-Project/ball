@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rotamerLibrary.C,v 1.20 2002/12/12 14:51:35 oliver Exp $
+// $Id: rotamerLibrary.C,v 1.21 2003/04/01 21:18:09 oliver Exp $
 
 #include <BALL/STRUCTURE/rotamerLibrary.h>
 
@@ -208,10 +208,10 @@ namespace BALL
 			side_chain_(),
 			atom_name_map_(),
 			rotamers_(),
-			moveable_atoms_chi1_(),
-			moveable_atoms_chi2_(),
-			moveable_atoms_chi3_(),
-			moveable_atoms_chi4_(),
+			movable_atoms_chi1_(),
+			movable_atoms_chi2_(),
+			movable_atoms_chi3_(),
+			movable_atoms_chi4_(),
 			number_of_torsions_(0)
 	{
 	}
@@ -258,85 +258,85 @@ namespace BALL
 		// Determine the atoms for chi1 and the set of movable atoms
 		if (atom_name_map_.has("N") && atom_name_map_.has("CA") && atom_name_map_.has("CB") && (number_of_torsions_ > 0))
 		{
-			moveable_atoms_chi1_.push_back("N");
-			moveable_atoms_chi1_.push_back("CA");
-			moveable_atoms_chi1_.push_back("CB");
+			movable_atoms_chi1_.push_back("N");
+			movable_atoms_chi1_.push_back("CA");
+			movable_atoms_chi1_.push_back("CB");
 
-			if (atom_name_map_.has("CG"))  moveable_atoms_chi1_.push_back("CG");
-			if (atom_name_map_.has("CG1")) moveable_atoms_chi1_.push_back("CG1");
-			if (atom_name_map_.has("OG"))  moveable_atoms_chi1_.push_back("OG");
-			if (atom_name_map_.has("OG1")) moveable_atoms_chi1_.push_back("OG1"); 
-			if (atom_name_map_.has("NG"))  moveable_atoms_chi1_.push_back("NG");
-			if (atom_name_map_.has("NG1")) moveable_atoms_chi1_.push_back("NG1"); 
-			if (atom_name_map_.has("SG"))  moveable_atoms_chi1_.push_back("SG");
-			if (atom_name_map_.has("SG1")) moveable_atoms_chi1_.push_back("SG1"); 
+			if (atom_name_map_.has("CG"))  movable_atoms_chi1_.push_back("CG");
+			if (atom_name_map_.has("CG1")) movable_atoms_chi1_.push_back("CG1");
+			if (atom_name_map_.has("OG"))  movable_atoms_chi1_.push_back("OG");
+			if (atom_name_map_.has("OG1")) movable_atoms_chi1_.push_back("OG1"); 
+			if (atom_name_map_.has("NG"))  movable_atoms_chi1_.push_back("NG");
+			if (atom_name_map_.has("NG1")) movable_atoms_chi1_.push_back("NG1"); 
+			if (atom_name_map_.has("SG"))  movable_atoms_chi1_.push_back("SG");
+			if (atom_name_map_.has("SG1")) movable_atoms_chi1_.push_back("SG1"); 
 
-			if (moveable_atoms_chi1_.size() > 3)
+			if (movable_atoms_chi1_.size() > 3)
 			{
-				addMoveable_(moveable_atoms_chi1_, *(atom_name_map_[moveable_atoms_chi1_[2]])); 
-				addMoveable_(moveable_atoms_chi1_, *(atom_name_map_[moveable_atoms_chi1_[3]])); 
+				addMovable_(movable_atoms_chi1_, *(atom_name_map_[movable_atoms_chi1_[2]])); 
+				addMovable_(movable_atoms_chi1_, *(atom_name_map_[movable_atoms_chi1_[3]])); 
 			}
 		} 
 		// Determine the atoms for chi2 and the set of movable atoms
-		if (moveable_atoms_chi1_.size() >= 4 && (number_of_torsions_ > 1))
+		if (movable_atoms_chi1_.size() >= 4 && (number_of_torsions_ > 1))
 		{
-			moveable_atoms_chi2_.push_back(moveable_atoms_chi1_[1]);
-			moveable_atoms_chi2_.push_back(moveable_atoms_chi1_[2]);
-			moveable_atoms_chi2_.push_back(moveable_atoms_chi1_[3]);
+			movable_atoms_chi2_.push_back(movable_atoms_chi1_[1]);
+			movable_atoms_chi2_.push_back(movable_atoms_chi1_[2]);
+			movable_atoms_chi2_.push_back(movable_atoms_chi1_[3]);
 
-			if (atom_name_map_.has("CD"))  moveable_atoms_chi2_.push_back("CD");
-			if (atom_name_map_.has("CD1")) moveable_atoms_chi2_.push_back("CD1");
-			if (atom_name_map_.has("OD"))  moveable_atoms_chi2_.push_back("OD");
-			if (atom_name_map_.has("OD1")) moveable_atoms_chi2_.push_back("OD1"); 
-			if (atom_name_map_.has("ND"))  moveable_atoms_chi2_.push_back("ND");
-			if (atom_name_map_.has("ND1")) moveable_atoms_chi2_.push_back("ND1"); 
-			if (atom_name_map_.has("SD"))  moveable_atoms_chi2_.push_back("SD");
-			if (atom_name_map_.has("SD1")) moveable_atoms_chi2_.push_back("SD1"); 
+			if (atom_name_map_.has("CD"))  movable_atoms_chi2_.push_back("CD");
+			if (atom_name_map_.has("CD1")) movable_atoms_chi2_.push_back("CD1");
+			if (atom_name_map_.has("OD"))  movable_atoms_chi2_.push_back("OD");
+			if (atom_name_map_.has("OD1")) movable_atoms_chi2_.push_back("OD1"); 
+			if (atom_name_map_.has("ND"))  movable_atoms_chi2_.push_back("ND");
+			if (atom_name_map_.has("ND1")) movable_atoms_chi2_.push_back("ND1"); 
+			if (atom_name_map_.has("SD"))  movable_atoms_chi2_.push_back("SD");
+			if (atom_name_map_.has("SD1")) movable_atoms_chi2_.push_back("SD1"); 
 
-			if (moveable_atoms_chi2_.size() > 3)
+			if (movable_atoms_chi2_.size() > 3)
 			{
-				addMoveable_(moveable_atoms_chi2_, *(atom_name_map_[moveable_atoms_chi2_[2]])); 
-				addMoveable_(moveable_atoms_chi2_, *(atom_name_map_[moveable_atoms_chi2_[3]])); 
+				addMovable_(movable_atoms_chi2_, *(atom_name_map_[movable_atoms_chi2_[2]])); 
+				addMovable_(movable_atoms_chi2_, *(atom_name_map_[movable_atoms_chi2_[3]])); 
 			}
 		}
 		// Determine the atoms for chi3 and the set of movable atoms
-		if (moveable_atoms_chi2_.size() >= 4 && (number_of_torsions_ > 2))
+		if (movable_atoms_chi2_.size() >= 4 && (number_of_torsions_ > 2))
 		{
-			moveable_atoms_chi3_.push_back(moveable_atoms_chi2_[1]);
-			moveable_atoms_chi3_.push_back(moveable_atoms_chi2_[2]);
-			moveable_atoms_chi3_.push_back(moveable_atoms_chi2_[3]);
+			movable_atoms_chi3_.push_back(movable_atoms_chi2_[1]);
+			movable_atoms_chi3_.push_back(movable_atoms_chi2_[2]);
+			movable_atoms_chi3_.push_back(movable_atoms_chi2_[3]);
 
-			if (atom_name_map_.has("CE"))  moveable_atoms_chi3_.push_back("CE");
-			if (atom_name_map_.has("CE1")) moveable_atoms_chi3_.push_back("CE1");
-			if (atom_name_map_.has("OE"))  moveable_atoms_chi3_.push_back("OE");
-			if (atom_name_map_.has("OE1")) moveable_atoms_chi3_.push_back("OE1"); 
-			if (atom_name_map_.has("NE"))  moveable_atoms_chi3_.push_back("NE");
-			if (atom_name_map_.has("NE1")) moveable_atoms_chi3_.push_back("NE1"); 
-			if (atom_name_map_.has("SE"))  moveable_atoms_chi3_.push_back("SE");
-			if (atom_name_map_.has("SE1")) moveable_atoms_chi3_.push_back("SE1"); 
+			if (atom_name_map_.has("CE"))  movable_atoms_chi3_.push_back("CE");
+			if (atom_name_map_.has("CE1")) movable_atoms_chi3_.push_back("CE1");
+			if (atom_name_map_.has("OE"))  movable_atoms_chi3_.push_back("OE");
+			if (atom_name_map_.has("OE1")) movable_atoms_chi3_.push_back("OE1"); 
+			if (atom_name_map_.has("NE"))  movable_atoms_chi3_.push_back("NE");
+			if (atom_name_map_.has("NE1")) movable_atoms_chi3_.push_back("NE1"); 
+			if (atom_name_map_.has("SE"))  movable_atoms_chi3_.push_back("SE");
+			if (atom_name_map_.has("SE1")) movable_atoms_chi3_.push_back("SE1"); 
 
-			if (moveable_atoms_chi3_.size() > 3)
+			if (movable_atoms_chi3_.size() > 3)
 			{
-				addMoveable_(moveable_atoms_chi3_, *(atom_name_map_[moveable_atoms_chi3_[2]])); 
-				addMoveable_(moveable_atoms_chi3_, *(atom_name_map_[moveable_atoms_chi3_[3]])); 
+				addMovable_(movable_atoms_chi3_, *(atom_name_map_[movable_atoms_chi3_[2]])); 
+				addMovable_(movable_atoms_chi3_, *(atom_name_map_[movable_atoms_chi3_[3]])); 
 			}
 		}
 		// Determine the atoms for chi4 and the set of movable atoms
-		if (moveable_atoms_chi3_.size() >= 4 && (number_of_torsions > 3))
+		if (movable_atoms_chi3_.size() >= 4 && (number_of_torsions > 3))
 		{
-			moveable_atoms_chi4_.push_back(moveable_atoms_chi3_[1]);
-			moveable_atoms_chi4_.push_back(moveable_atoms_chi3_[2]);
-			moveable_atoms_chi4_.push_back(moveable_atoms_chi3_[3]);
+			movable_atoms_chi4_.push_back(movable_atoms_chi3_[1]);
+			movable_atoms_chi4_.push_back(movable_atoms_chi3_[2]);
+			movable_atoms_chi4_.push_back(movable_atoms_chi3_[3]);
 
-			if (atom_name_map_.has("CZ"))  moveable_atoms_chi4_.push_back("CZ");
-			if (atom_name_map_.has("OZ"))  moveable_atoms_chi4_.push_back("OZ");
-			if (atom_name_map_.has("NZ"))  moveable_atoms_chi4_.push_back("NZ");
-			if (atom_name_map_.has("SZ"))  moveable_atoms_chi4_.push_back("SZ");
+			if (atom_name_map_.has("CZ"))  movable_atoms_chi4_.push_back("CZ");
+			if (atom_name_map_.has("OZ"))  movable_atoms_chi4_.push_back("OZ");
+			if (atom_name_map_.has("NZ"))  movable_atoms_chi4_.push_back("NZ");
+			if (atom_name_map_.has("SZ"))  movable_atoms_chi4_.push_back("SZ");
 
-			if (moveable_atoms_chi4_.size() > 3)
+			if (movable_atoms_chi4_.size() > 3)
 			{
-				addMoveable_(moveable_atoms_chi4_, *(atom_name_map_[moveable_atoms_chi4_[2]])); 
-				addMoveable_(moveable_atoms_chi4_, *(atom_name_map_[moveable_atoms_chi4_[3]])); 
+				addMovable_(movable_atoms_chi4_, *(atom_name_map_[movable_atoms_chi4_[2]])); 
+				addMovable_(movable_atoms_chi4_, *(atom_name_map_[movable_atoms_chi4_[3]])); 
 			}
 		}
 
@@ -350,10 +350,10 @@ namespace BALL
 			side_chain_(residue_rotamer_set.side_chain_),
 			atom_name_map_(),
 			rotamers_(residue_rotamer_set.rotamers_),
-			moveable_atoms_chi1_(residue_rotamer_set.moveable_atoms_chi1_),
-			moveable_atoms_chi2_(residue_rotamer_set.moveable_atoms_chi2_),
-			moveable_atoms_chi3_(residue_rotamer_set.moveable_atoms_chi3_),
-			moveable_atoms_chi4_(residue_rotamer_set.moveable_atoms_chi4_),
+			movable_atoms_chi1_(residue_rotamer_set.movable_atoms_chi1_),
+			movable_atoms_chi2_(residue_rotamer_set.movable_atoms_chi2_),
+			movable_atoms_chi3_(residue_rotamer_set.movable_atoms_chi3_),
+			movable_atoms_chi4_(residue_rotamer_set.movable_atoms_chi4_),
 			number_of_torsions_(residue_rotamer_set.number_of_torsions_),
 			original_coordinates_(residue_rotamer_set.original_coordinates_)
 	{
@@ -381,7 +381,7 @@ namespace BALL
 	{
 	}
 
-	ResidueRotamerSet& ResidueRotamerSet::operator = (const ResidueRotamerSet& residue_rotamer_set)
+	const ResidueRotamerSet& ResidueRotamerSet::operator = (const ResidueRotamerSet& residue_rotamer_set)
 	{
 		if (this != &residue_rotamer_set)
 		{
@@ -410,10 +410,10 @@ namespace BALL
 			}
 
 			rotamers_ = residue_rotamer_set.rotamers_;
-			moveable_atoms_chi1_ = residue_rotamer_set.moveable_atoms_chi1_;
-			moveable_atoms_chi2_ = residue_rotamer_set.moveable_atoms_chi2_;
-			moveable_atoms_chi3_ = residue_rotamer_set.moveable_atoms_chi3_;
-			moveable_atoms_chi4_ = residue_rotamer_set.moveable_atoms_chi4_;
+			movable_atoms_chi1_ = residue_rotamer_set.movable_atoms_chi1_;
+			movable_atoms_chi2_ = residue_rotamer_set.movable_atoms_chi2_;
+			movable_atoms_chi3_ = residue_rotamer_set.movable_atoms_chi3_;
+			movable_atoms_chi4_ = residue_rotamer_set.movable_atoms_chi4_;
 		}
 
 		return (*this);
@@ -443,9 +443,10 @@ namespace BALL
 		rotamers_.push_back(rotamer);
 	}
 
-	// This method builds a rotamer from the template sidechain and the
-	// given rotamer (torsion angles) 
-	Residue* ResidueRotamerSet::buildRotamer(const Rotamer& rotamer) 
+	/** This method modifies the atom position of the template side chain
+			and then returns a copy of that.
+	*/
+	Residue* ResidueRotamerSet::buildRotamer(const Rotamer& rotamer)
 	{
 		// restore original atom coordinates (see setRotamer)
 		AtomIterator atom_it = side_chain_.beginAtom();
@@ -456,10 +457,10 @@ namespace BALL
 
 		// Transform the residue template side_chain_ such that the torsion angles of the template
 		// are set to the values stored in rotamer
-		setTorsionAngle_(moveable_atoms_chi1_, rotamer.chi1);
-		setTorsionAngle_(moveable_atoms_chi2_, rotamer.chi2);
-		setTorsionAngle_(moveable_atoms_chi3_, rotamer.chi3);
-		setTorsionAngle_(moveable_atoms_chi4_, rotamer.chi4);
+		setTorsionAngle_(movable_atoms_chi1_, rotamer.chi1);
+		setTorsionAngle_(movable_atoms_chi2_, rotamer.chi2);
+		setTorsionAngle_(movable_atoms_chi3_, rotamer.chi3);
+		setTorsionAngle_(movable_atoms_chi4_, rotamer.chi4);
 
 		Residue* r = new Residue(side_chain_); 
 		return r; 
@@ -472,7 +473,7 @@ namespace BALL
 	}
 
 	// Set the name of the residue rotamer set
-	void ResidueRotamerSet::setName(String& name)
+	void ResidueRotamerSet::setName(const String& name)
 	{
 		name_ = name;
 	}
@@ -497,7 +498,7 @@ namespace BALL
 	}
 	
 	// Function for filling the vectors of movable atoms
-	void ResidueRotamerSet::addMoveable_(vector<String>& moveable, Atom& a)
+	void ResidueRotamerSet::addMovable_(vector<String>& movable, Atom& a)
 	{
 		Atom::BondIterator bond_it = a.beginBond();
 		
@@ -506,20 +507,20 @@ namespace BALL
 			Atom* b = (*bond_it).getPartner(a);
 			String pattern = b->getName();
 
-			if (find(moveable.begin(), moveable.end(), pattern) == moveable.end())
+			if (find(movable.begin(), movable.end(), pattern) == movable.end())
 			{
-				moveable.push_back(pattern);
-				addMoveable_(moveable, *b);
+				movable.push_back(pattern);
+				addMovable_(movable, *b);
 			}
 		}
 	}
 
 	// Determine a transformation that sets the torsion of the 4 atoms to the given angle
-	void ResidueRotamerSet::setTorsionAngle_(const vector<String>& moveable, Angle angle)
+	void ResidueRotamerSet::setTorsionAngle_(const vector<String>& movable, Angle angle)
 	{
 
 		// Test if there is a real torsion
-		if (moveable.size() < 4)
+		if (movable.size() < 4)
 		{
 			return ;
 		}
@@ -528,10 +529,10 @@ namespace BALL
 		TransformationProcessor proc;
 
 		// Compute transformation that moves the torsion atoms into normal position
-		Vector3 a1(atom_name_map_[moveable[0]]->getPosition());
-		Vector3 a2(atom_name_map_[moveable[1]]->getPosition());
-		Vector3 a3(atom_name_map_[moveable[2]]->getPosition());
-		Vector3 a4(atom_name_map_[moveable[3]]->getPosition());
+		Vector3 a1(atom_name_map_[movable[0]]->getPosition());
+		Vector3 a2(atom_name_map_[movable[1]]->getPosition());
+		Vector3 a3(atom_name_map_[movable[2]]->getPosition());
+		Vector3 a4(atom_name_map_[movable[3]]->getPosition());
 		Vector3	v1(0.0,0.0,0.0);
 		Vector3 v2(1.0,0.0,0.0);
 		Vector3 v3(0.0,1.0,0.0);
@@ -578,9 +579,9 @@ namespace BALL
 			R.m33 =  R.m22;
 
 			// Rotate all atoms with index larger equal 3
-			for (Size i = 3; i < moveable.size(); i++)
+			for (Size i = 3; i < movable.size(); i++)
 			{
-				(atom_name_map_[moveable[i]])->setPosition((R * (atom_name_map_[moveable[i]])->getPosition()));
+				(atom_name_map_[movable[i]])->setPosition((R * (atom_name_map_[movable[i]])->getPosition()));
 			}
 		}
 							
@@ -604,19 +605,19 @@ namespace BALL
 		// are set to the values stored in rotamer
 		if (number_of_torsions_ > 0)
 		{
-			setTorsionAngle_(moveable_atoms_chi1_, rotamer.chi1);
+			setTorsionAngle_(movable_atoms_chi1_, rotamer.chi1);
 		}
 		if (number_of_torsions_ > 1)
 		{
-			setTorsionAngle_(moveable_atoms_chi2_, rotamer.chi2);
+			setTorsionAngle_(movable_atoms_chi2_, rotamer.chi2);
 		}
 		if (number_of_torsions_ > 2)
 		{
-			setTorsionAngle_(moveable_atoms_chi3_, rotamer.chi3);
+			setTorsionAngle_(movable_atoms_chi3_, rotamer.chi3);
 		}
 		if (number_of_torsions_ > 3)
 		{
-			setTorsionAngle_(moveable_atoms_chi4_, rotamer.chi4);
+			setTorsionAngle_(movable_atoms_chi4_, rotamer.chi4);
 		}
 
 		// Initiate vectors
@@ -684,9 +685,9 @@ namespace BALL
 		{
 			if (atom_name_map_.has(atom_it->getName()))
 			{
-				for (Size i = 3; i < moveable_atoms_chi1_.size(); ++i)
+				for (Size i = 3; i < movable_atoms_chi1_.size(); ++i)
 				{
-					if (moveable_atoms_chi1_[i] == atom_it->getName())
+					if (movable_atoms_chi1_[i] == atom_it->getName())
 					{
 						atom_it->setPosition(atom_name_map_[atom_it->getName()]->getPosition());
 						break;
@@ -722,22 +723,22 @@ namespace BALL
 			count = 0;
 			for (atom_it = residue.beginAtom(); +atom_it; ++atom_it)
 			{
-				if (atom_it->getName() == moveable_atoms_chi1_[0])
+				if (atom_it->getName() == movable_atoms_chi1_[0])
 				{
 					a1 = &*atom_it;
 					count++;
 				}
-				if (atom_it->getName() == moveable_atoms_chi1_[1])
+				if (atom_it->getName() == movable_atoms_chi1_[1])
 				{
 					a2 = &*atom_it;
 					count++;
 				}
-				if (atom_it->getName() == moveable_atoms_chi1_[2])
+				if (atom_it->getName() == movable_atoms_chi1_[2])
 				{
 					a3 = &*atom_it;
 					count++;
 				}
-				if (atom_it->getName() == moveable_atoms_chi1_[3])
+				if (atom_it->getName() == movable_atoms_chi1_[3])
 				{
 					a4 = &*atom_it;
 					count++;
@@ -756,22 +757,22 @@ namespace BALL
 			count = 0;
 			for (atom_it = residue.beginAtom(); +atom_it; ++atom_it)
 			{
-				if (atom_it->getName() == moveable_atoms_chi2_[0])
+				if (atom_it->getName() == movable_atoms_chi2_[0])
 				{
 					a1 = &*atom_it;
 					count++;
 				}
-				if (atom_it->getName() == moveable_atoms_chi2_[1])
+				if (atom_it->getName() == movable_atoms_chi2_[1])
 				{
 					a2 = &*atom_it;
 					count++;
 				}
-				if (atom_it->getName() == moveable_atoms_chi2_[2])
+				if (atom_it->getName() == movable_atoms_chi2_[2])
 				{
 					a3 = &*atom_it;
 					count++;
 				}
-				if (atom_it->getName() == moveable_atoms_chi2_[3])
+				if (atom_it->getName() == movable_atoms_chi2_[3])
 				{
 					a4 = &*atom_it;
 					count++;
@@ -790,22 +791,22 @@ namespace BALL
 			count = 0;
 			for (atom_it = residue.beginAtom(); +atom_it; ++atom_it)
 			{
-				if (atom_it->getName() == moveable_atoms_chi3_[0])
+				if (atom_it->getName() == movable_atoms_chi3_[0])
 				{
 					a1 = &*atom_it;
 					count++;
 				}
-				if (atom_it->getName() == moveable_atoms_chi3_[1])
+				if (atom_it->getName() == movable_atoms_chi3_[1])
 				{
 					a2 = &*atom_it;
 					count++;
 				}
-				if (atom_it->getName() == moveable_atoms_chi3_[2])
+				if (atom_it->getName() == movable_atoms_chi3_[2])
 				{
 					a3 = &*atom_it;
 					count++;
 				}
-				if (atom_it->getName() == moveable_atoms_chi3_[3])
+				if (atom_it->getName() == movable_atoms_chi3_[3])
 				{
 					a4 = &*atom_it;
 					count++;
@@ -824,22 +825,22 @@ namespace BALL
 			count = 0;
 			for (atom_it = residue.beginAtom(); +atom_it; ++atom_it)
 			{
-				if (atom_it->getName() == moveable_atoms_chi4_[0])
+				if (atom_it->getName() == movable_atoms_chi4_[0])
 				{
 					a1 = &*atom_it;
 					count++;
 				}
-				if (atom_it->getName() == moveable_atoms_chi4_[1])
+				if (atom_it->getName() == movable_atoms_chi4_[1])
 				{
 					a2 = &*atom_it;
 					count++;
 				}
-				if (atom_it->getName() == moveable_atoms_chi4_[2])
+				if (atom_it->getName() == movable_atoms_chi4_[2])
 				{
 					a3 = &*atom_it;
 					count++;
 				}
-				if (atom_it->getName() == moveable_atoms_chi4_[3])
+				if (atom_it->getName() == movable_atoms_chi4_[3])
 				{
 					a4 = &*atom_it;
 					count++;
