@@ -1,8 +1,9 @@
-// $Id: QTTimer.C,v 1.11 2001/05/13 16:30:10 hekl Exp $
+// $Id: QTTimer.C,v 1.12 2001/07/29 17:38:09 oliver Exp $
 
 
 #include <BALL/VIEW/KERNEL/QTTimer.h>
 #include <BALL/COMMON/exception.h>
+#include <BALL/DATATYPE/string.h>
 #include <stdio.h>
 
 using namespace std;

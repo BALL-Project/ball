@@ -183,7 +183,7 @@ namespace BALL
 		}
 		catch (Exception::GeneralException e)
 		{
-			throw Exception::ParseError(e.getFile().c_str(), e.getLine(), string("NMRStarFile: " + e.getMessage()).c_str(), "");
+			throw Exception::ParseError(e.getFile(), e.getLine(), String("NMRStarFile: ") + e.getMessage(), "");
 		}
 		catch (...)
 		{

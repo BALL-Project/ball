@@ -1,7 +1,8 @@
-// $Id: glDisplayList.C,v 1.4 2001/05/13 14:28:36 hekl Exp $
+// $Id: glDisplayList.C,v 1.5 2001/07/29 17:38:09 oliver Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/glDisplayList.h>
 #include <BALL/COMMON/exception.h>
+#include <BALL/DATATYPE/string.h>
 
 using namespace std;
 
@@ -17,19 +18,19 @@ namespace BALL
 
 		GLDisplayList::NestedDisplayList::NestedDisplayList(const char* file, int line)
 			throw()
-			:	Exception::GeneralException(file, line, string("NestedDisplayList"), string("display list definition inside another is not allowed."))
+			:	Exception::GeneralException(file, line, String("NestedDisplayList"), String("display list definition inside another is not allowed."))
 		{
 		}
 
 		GLDisplayList::NoDisplayListAvailable::NoDisplayListAvailable(const char* file, int line)
 			throw()
-			:	Exception::GeneralException(file, line, string("NoDisplayListAvailable"), string("memory allocation for display list failed."))
+			:	Exception::GeneralException(file, line, String("NoDisplayListAvailable"), String("memory allocation for display list failed."))
 		{
 		}
 
 		GLDisplayList::DisplayListRedeclaration::DisplayListRedeclaration(const char* file, int line)
 			throw()
-			:	Exception::GeneralException(file, line, string("DisplayListRedeclaration"), string("display list already defined."))
+			:	Exception::GeneralException(file, line, String("DisplayListRedeclaration"), String("display list already defined."))
 		{
 		}
 

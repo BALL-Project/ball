@@ -1,7 +1,8 @@
-// $Id: glQuadricObject.C,v 1.4 2001/05/13 14:28:36 hekl Exp $
+// $Id: glQuadricObject.C,v 1.5 2001/07/29 17:38:09 oliver Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/glQuadricObject.h>
 #include <BALL/COMMON/exception.h>
+#include <BALL/DATATYPE/string.h>
 
 using namespace std;
 
@@ -13,25 +14,25 @@ namespace BALL
 
 	  GLQuadricObject::WrongDrawingStyle::WrongDrawingStyle(const char* file, int line)
 			throw()
-			: Exception::GeneralException(file, line, string("WrongDrawingStyle"), string("wrong drawing style for quadric objects."))
+			: Exception::GeneralException(file, line, String("WrongDrawingStyle"), String("wrong drawing style for quadric objects."))
 		{
     }
   
 	  GLQuadricObject::WrongOrientationStyle::WrongOrientationStyle(const char* file, int line)
 			throw()
-			: Exception::GeneralException(file, line, string("WrongOrientationStyle"), string("wrong orientation style for quadric objects."))
+			: Exception::GeneralException(file, line, String("WrongOrientationStyle"), String("wrong orientation style for quadric objects."))
 		{
     }
   
 	  GLQuadricObject::WrongNormalStyle::WrongNormalStyle(const char* file, int line)
 			throw()
-			: Exception::GeneralException(file, line, string("WrongNormalStyle"), string("wrong normal style for quadric objects."))
+			: Exception::GeneralException(file, line, String("WrongNormalStyle"), String("wrong normal style for quadric objects."))
 		{
     }
   
 	  GLQuadricObject::NoQuadricObjectAvailable::NoQuadricObjectAvailable(const char* file, int line)
 			throw()
-			: Exception::GeneralException(file, line, string("NoQuadricObjectAvailable"), string("memory allocation for quadric objects failed."))
+			: Exception::GeneralException(file, line, String("NoQuadricObjectAvailable"), String("memory allocation for quadric objects failed."))
 		{
     }
   
