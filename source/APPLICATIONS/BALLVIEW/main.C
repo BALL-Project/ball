@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.13 2004/10/09 08:53:05 amoll Exp $
+// $Id: main.C,v 1.14 2004/10/09 15:35:53 amoll Exp $
 //
 
 // order of includes is important: first qapplication, than BALL includes
@@ -116,6 +116,14 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, PSTR cmd_line, int )
 
 		mainframe.openFile(argument);
 	}
+
+	// enable ending of program from python script
+	if (mainframe.isAboutToQuit()) 
+	{
+		mainframe.aboutToExit();
+		return 0;
+	}
+
 
   // Hand over control to the application.
   return application.exec();

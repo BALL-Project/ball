@@ -6,8 +6,13 @@ Added:
 - Clipping Planes
 - new Move-Mode for molecular entities and Clipping Planes
 - Writing and loading of BALLView project files
-- Esc key now switches to last used modus in Scene
-- Hotkey support for starting any (BALL-)Python command from BALLView
+- Esc key now switches to last used mode in Scene
+- Python:
+	- Hotkey support for starting any (BALL-)Python command from BALLView
+  - support to quit program from Python interpreter
+  - support for starting Python script from command line
+  - added more classes to the Python SIP interface
+	- Benchmark scripts for BALLView
 - new application: DCD2PNG to create series of PNG-images from a DCD trajectory file
 - new rotate mode for Scene
 - Backbone Model for DNA
@@ -22,11 +27,9 @@ Added:
 - Ability to create animations, either as on-screen presentations or for movies
 - Fog in Scene and its settings to Preferences
 - new model: visualisation of forces
-- Benchmark scripts for BALLView
 - Visualisation for double-, triple- and aromatic bonds in BallAndStick model
 - Coloring by residue name now also works for DNA
 - Preferences for material parameters in OpenGL
-- added more classes to the Python SIP interface
 
 Fixed:
 - selection in MolecularControl with CRTG and SHIFT modifier

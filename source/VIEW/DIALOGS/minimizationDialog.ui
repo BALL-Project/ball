@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>MinimizationDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -614,17 +614,42 @@
         <property name="alignment">
             <set>AlignHCenter</set>
         </property>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>advanced_button</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>118</x>
+                    <y>50</y>
+                    <width>170</width>
+                    <height>30</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>&amp;Force field options</string>
+            </property>
+            <property name="accel">
+                <string>Alt+F</string>
+            </property>
+        </widget>
         <widget class="QLayoutWidget">
             <property name="name">
                 <cstring>layout2</cstring>
             </property>
             <property name="geometry">
                 <rect>
-                    <x>8</x>
+                    <x>7</x>
                     <y>16</y>
                     <width>422</width>
                     <height>31</height>
                 </rect>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>0</width>
+                    <height>20</height>
+                </size>
             </property>
             <hbox>
                 <property name="name">
@@ -633,6 +658,12 @@
                 <widget class="QRadioButton">
                     <property name="name">
                         <cstring>useAmberRadioButton</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>0</width>
+                            <height>20</height>
+                        </size>
                     </property>
                     <property name="text">
                         <string>Use AmberFF</string>
@@ -656,25 +687,6 @@
                     </property>
                 </widget>
             </hbox>
-        </widget>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>advanced_button</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>118</x>
-                    <y>50</y>
-                    <width>170</width>
-                    <height>30</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>&amp;Force field options</string>
-            </property>
-            <property name="accel">
-                <string>Alt+F</string>
-            </property>
         </widget>
     </widget>
 </widget>

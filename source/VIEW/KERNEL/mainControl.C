@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.112 2004/10/07 15:12:28 amoll Exp $
+// $Id: mainControl.C,v 1.113 2004/10/09 15:36:06 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -465,7 +465,6 @@ namespace BALL
 		#ifdef BALL_VIEW_DEBUG
 			Log.error() << "MainControl::aboutToExit()" << std::endl;
 		#endif
-
 			about_to_quit_ = true;
 			
 			stopSimulation();
@@ -1681,7 +1680,8 @@ namespace BALL
 
 		void MainControl::quit()
 		{
-			QApplication::exit();
+ 			QApplication::exit();
+			about_to_quit_ = true;
 		}
 
 

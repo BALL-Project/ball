@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.40 2004/09/30 16:16:30 amoll Exp $
+// $Id: pyWidget.C,v 1.41 2004/10/09 15:36:06 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -247,6 +247,23 @@ namespace BALL
 			history_position_ = history_.size();
 
 			line.trimRight();
+
+			if (line == "quit" || line == "quit()")
+			{
+				stop_script_ = true;
+				stopInterpreter();
+				MainControl::getInstance(0)->quit();
+				return true;
+			}
+
+			if (line.hasPrefix("run("))
+			{
+				vector<String> tokens;
+				Size nr = line.split(tokens, String("(\")").c_str());
+				if (nr < 2) return false;
+				((PyWidget*)parent())->run(tokens[1]);
+				return true;
+			}
 			
 			if (!multi_line_mode_)
 			{
@@ -496,7 +513,7 @@ namespace BALL
 				if (stop_script_) 
 				{
 					stop_script_ = false;
-					((PyWidget*)parent())->setStatusbarText("Aborted script");
+ 					((PyWidget*)parent())->setStatusbarText("Aborted script");
 					append("> aborted...");
 					newPrompt_();
 					return;
