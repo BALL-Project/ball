@@ -1,4 +1,4 @@
-// $Id: createSpectrumProcessor.C,v 1.16 2001/12/31 19:05:51 oliver Exp $
+// $Id: createSpectrumProcessor.C,v 1.17 2002/01/04 11:34:37 oliver Exp $
 
 #include <BALL/NMR/createSpectrumProcessor.h>
 #include <BALL/NMR/shiftModule.h>
@@ -95,7 +95,7 @@ namespace BALL
 				vector<String> equivalencies;
 				atoms.split(equivalencies, ",");
 				equivalency_residues_.push_back(residue);
-				equivalency_atoms_.push_back();
+				equivalency_atoms_.push_back(equivalencies);
 			}
 		}
 
