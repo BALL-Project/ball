@@ -1,26 +1,32 @@
-// $Id: ParameterSection_test.C,v 1.2 2000/09/19 15:53:02 oliver Exp $
+// $Id: ParameterSection_test.C,v 1.3 2000/09/19 20:26:28 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 
 #include <BALL/FORMAT/parameterSection.h>
+#include <BALL/FORMAT/parameters.h>
 
 ///////////////////////////
 
-START_TEST(Parameters, "$Id: ParameterSection_test.C,v 1.2 2000/09/19 15:53:02 oliver Exp $")
+START_TEST(Parameters, "$Id: ParameterSection_test.C,v 1.3 2000/09/19 20:26:28 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
 
+Parameters param("data/ParameterSection_test.ini");
+param.init();
+
+ParameterSection* ps = 0;
 CHECK(ParameterSection::ParameterSection())
-  //BAUSTELLE
+	ps = new ParameterSection;
+	TEST_NOT_EQUAL(ps, 0)
 RESULT
 
 
 CHECK(ParameterSection::~ParameterSection())
-  //BAUSTELLE
+	delete ps;
 RESULT
 
 
@@ -30,7 +36,21 @@ RESULT
 
 
 CHECK(ParameterSection::extractSection(Parameters& parameters, const String& section_name))
-  //BAUSTELLE
+	ParameterSection ps;
+	bool result = ps.extractSection(param, "Section1");
+	TEST_EQUAL(result, false)
+	result = ps.extractSection(param, "Section2");
+	TEST_EQUAL(result, true)
+	result = ps.extractSection(param, "Section3");
+	TEST_EQUAL(result, true)
+	result = ps.extractSection(param, "Section4");
+	TEST_EQUAL(result, true)
+	result = ps.extractSection(param, "Section5");
+	TEST_EQUAL(result, true)
+	result = ps.extractSection(param, "Section6");
+	TEST_EQUAL(result, false)
+	result = ps.extractSection(param, "");
+	TEST_EQUAL(result, false)
 RESULT
 
 
@@ -83,8 +103,6 @@ CHECK(ParameterSection::isValid() const )
   //BAUSTELLE
 RESULT
 
-
-											
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
