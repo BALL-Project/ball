@@ -1,4 +1,4 @@
-// $Id: solventDescriptor.h,v 1.6 2001/03/05 01:55:44 amoll Exp $
+// $Id: solventDescriptor.h,v 1.7 2001/06/28 18:01:21 amoll Exp $
 
 #ifndef BALL_SOLVATION_SOLVENTDESCRIPTOR_H
 #define BALL_SOLVATION_SOLVENTDESCRIPTOR_H
@@ -13,6 +13,10 @@
 
 namespace BALL
 {
+
+	/** @name Solvent Classes
+	*/
+	//@{
 
 	/** This struct contains the information for one atom type of the solvent 
 	*/
@@ -159,6 +163,6 @@ namespace BALL
 	};
 }
 	
-
+//@}
 
 #endif // BALL_SOLVATION_SOLVENTDESCRIPTOR_H
