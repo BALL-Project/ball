@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.10 2002/01/08 00:48:03 oliver Exp $
+dnl    $Id: configure.in,v 1.11 2002/01/13 19:57:19 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -6,7 +6,7 @@ dnl
 dnl    disable caching in MULTI_BUILD mode - just to be sure
 dnl   
 if test "${MULTI_BUILD}" = "true" ; then
-	rm config.cache
+	${RM} config.cache
 fi
 
 dnl 
@@ -730,7 +730,7 @@ else
 	AC_MSG_RESULT(no)
 	HAS_GPLUSPLUS=false
 fi
-rm /tmp/$$.conftest.c
+${RM} /tmp/$$.conftest.c
 
 dnl
 dnl		Check for KAI C++ (if no GNU compiler found!)
@@ -1410,7 +1410,7 @@ else
 		fi
 	fi 
 fi
-rm /tmp/$$.conftest.c a.out 2>/dev/null
+${RM} /tmp/$$.conftest.c a.out 2>/dev/null
 
 
 
@@ -2416,8 +2416,20 @@ if test "${USE_BALLVIEW}" = true ; then
 			QT_VERSION=`${GREP} "#define QT_VERSION[^_]" ${QT_INCPATH}/qglobal.h | ${TR} '\011' ' ' | ${TR} -s ' ' | ${CUT} -d\  -f3`
 			QT_VERSION_STR=`${GREP} "#define QT_VERSION_STR" ${QT_INCPATH}/qglobal.h | ${TR} '\011' ' ' | ${TR} -s ' ' | ${CUT} -d\  -f3`
 			AC_MSG_CHECKING(for QT version number in qglobal.h)
-			AC_MSG_RESULT([${QT_VERSION} (${QT_VERSION_STR})])
-			
+			if test "${QT_VERSION}" = "" ; then
+				AC_MSG_RESULT([<unknown>])
+				AC_MSG_RESULT()
+				AC_MSG_RESULT([  Could not determine version number of QT library -- please])
+				AC_MSG_RESULT([  check config.log for details.])
+				AC_MSG_RESULT([  You might have a problem with your LD_LIBRARY_PATH.])
+				AC_MSG_RESULT([  Please check the settings of QTDIR as well or specify])
+				AC_MSG_RESULT([  the path to the library/headers with])
+				AC_MSG_RESULT([    --with-qt-libs=<DIR> / --with-qt-incl=<DIR>])
+				AC_MSG_RESULT()
+				AC_MSG_ERROR(Aborted.)
+			else
+				AC_MSG_RESULT([${QT_VERSION} (${QT_VERSION_STR})])
+			fi			
 	
 			dnl
 			dnl  QT libraries befor release 2.0 contained the OGL support in a separate
@@ -2744,7 +2756,7 @@ if test "${USE_BALLVIEW}" = true ; then
 			dnl  test whether this version is the right one
 			dnl  (2.x.y and at least 2.0.2
 			dnl
-			rm qt.version 2>/dev/null
+			${RM} qt.version 2>/dev/null
 			QT_MAJOR=`echo ${QT_VERSION_STRING} | ${CUT} -d. -f1`
 			if test "${QT_MAJOR}" != 2 ; then
 				AC_MSG_RESULT()
