@@ -1,11 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cosineTorsion.C,v 1.12 2005/03/01 16:41:53 oliver Exp $
+// $Id: cosineTorsion.C,v 1.13 2005/03/02 12:32:38 amoll Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/cosineTorsion.h>
 #include <BALL/MOLMEC/PARAMETER/forceFieldParameters.h>
+
+using namespace std;
 
 namespace BALL 
 {
