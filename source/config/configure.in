@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.95 2000/06/22 21:29:12 oliver Exp $
+dnl    $Id: configure.in,v 1.96 2000/06/27 07:45:39 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -2311,7 +2311,7 @@ if test "${PYTHON_SUPPORT}" = true ; then
 	dnl
 	AC_MSG_CHECKING(sip (static) library)
 	AC_FIND_LIB(SIP_LIBPATH,libsip.a,${SIP_LIB_PATH})
-	if test "${SIPLIB_OK}" = true ; do
+	if test "${SIPLIB_OK}" = true ; then
 		AC_MSG_RESULT(${SIP_LIB})
 	else
 		AC_MSG_RESULT(not found!)
