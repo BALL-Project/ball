@@ -1,4 +1,4 @@
-// $Id: directory.C,v 1.10 2000/06/21 13:17:21 amoll Exp $
+// $Id: directory.C,v 1.11 2000/06/27 09:08:52 oliver Exp $
 
 #include <dirent.h>
 #include <stdio.h>
@@ -22,7 +22,7 @@ namespace BALL
 		else directory_path_ = "";
 	}
 
-	Directory::Directory(const String& directory_path, bool set_current = false)
+	Directory::Directory(const String& directory_path, bool set_current)
 	{
 		if (!set(directory_path, set_current)) directory_path_ = "";
 	}
