@@ -1,4 +1,4 @@
-// $Id: fragmentDB.C,v 1.31 2001/06/05 15:53:30 anker Exp $
+// $Id: fragmentDB.C,v 1.32 2001/06/24 14:22:06 oliver Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 
@@ -1566,17 +1566,23 @@ namespace BALL
 			current++;
 		}
 		
-		if (atom_list.size() == 4)
+		// copy the three reference atoms to the result 
+		// (omit the first atom, which is the center atom!)
+		result.first = (atom_list.size() == 4);
+		current = atom_list.begin();
+		current++;
+		if (current != atom_list.end())
 		{
-			// copy the three reference atoms to the result 
-			// (omit the first atom, which is the center atom!)
-			result.first = true;
-			current = atom_list.begin();
-			current++;
 			result.second = *current;
 			current++;
+		}
+		if (current != atom_list.end())
+		{
 			result.third  = *current;
 			current++;
+		}
+		if (current != atom_list.end())
+		{
 			result.fourth = *current;
 		}
 
@@ -1698,37 +1704,87 @@ namespace BALL
 			}
 			Atom& center_atom = *atom_name_map[ref_center_atom.getName()];
 
-			// BFS marsch!
+			// Go, BFS, go!
 			Quadruple<bool, const Atom*, const Atom*, const Atom*> result(getThreeReferenceAtoms_(ref_center_atom));
 
-			if (result.first == false)
+			const Atom* ref_atom_1 = result.second;
+			const Atom* atom_1 = 0;
+			static Atom dummy_ref_atom_1;
+			static Atom dummy_atom_1;
+			if (result.second != 0)
 			{
-				Log.error() << "FragmentDB::AddHydrogensProcessor: could not find reference atoms for "
-									  << ref_hydrogen.getName() << " in reference residue " 
-										<< reference_fragment->getName() << ". Check fragment database for missing bonds!" << endl;
-				continue;
+				if (atom_name_map.has(ref_atom_1->getName()))
+				{
+					atom_1 = atom_name_map[ref_atom_1->getName()];					
+				}
+				else
+				{
+					Log.error() << "AddHydrogenProcessor: cannot identify reference atom for " << ref_hydrogen.getName() << endl;
+					continue;
+				}
+			} 
+			else
+			{
+				ref_atom_1 = &dummy_ref_atom_1;
+				dummy_ref_atom_1.setPosition(ref_center_atom.getPosition() + Vector3(1.0, 0.0, 0.0));
+				atom_1 = &dummy_atom_1;
+				dummy_atom_1.setPosition(center_atom.getPosition() + Vector3(1.0, 0.0, 0.0));
+			}
+			
+
+			const Atom* ref_atom_2 = result.third;
+			const Atom* atom_2 = 0;
+			static Atom dummy_ref_atom_2;
+			static Atom dummy_atom_2;
+			if (result.third != 0)
+			{
+				if (atom_name_map.has(ref_atom_2->getName()))
+				{
+					atom_2 = atom_name_map[ref_atom_2->getName()];
+				}
+				else
+				{
+					Log.error() << "AddHydrogenProcessor: cannot identify reference atom for " << ref_hydrogen.getName() << endl;
+					continue;
+				}
+			} 
+			else
+			{
+				ref_atom_2 = &dummy_ref_atom_2;
+				dummy_ref_atom_2.setPosition(ref_center_atom.getPosition() + Vector3(0.0, 1.0, 0.0));
+				atom_2 = &dummy_atom_2;
+				dummy_atom_2.setPosition(center_atom.getPosition() + Vector3(0.0, 1.0, 0.0));
 			}
 
-			const Atom& ref_atom_1 = *result.second;
-			const Atom& ref_atom_2 = *result.third;
-			const Atom& ref_atom_3 = *result.fourth;
-			
-			// determine the equivalent atoms in the current residue
-			if (!atom_name_map.has(ref_atom_1.getName()) 
-					|| !atom_name_map.has(ref_atom_2.getName())
-					|| !atom_name_map.has(ref_atom_3.getName()))
+
+			const Atom* ref_atom_3 = result.fourth;
+			const Atom* atom_3 = 0;
+			static Atom dummy_ref_atom_3;
+			static Atom dummy_atom_3;
+			if (result.fourth != 0)
 			{
-				Log.error() << "FragmentDB::AddHydrogensProcessor: could not identify all reference atoms in residue for "
-									  << ref_hydrogen.getName() << " in " << residue.getName() << ":" << residue.getID() << std::endl;
-				continue;
+				if (atom_name_map.has(ref_atom_3->getName()))
+				{
+					atom_3 = atom_name_map[ref_atom_3->getName()];
+				}
+				else
+				{
+					Log.error() << "AddHydrogenProcessor: cannot identify reference atom for " << ref_hydrogen.getName() << endl;
+					continue;
+				}
+			} 
+			else
+			{
+				ref_atom_3 = &dummy_ref_atom_3;
+				dummy_ref_atom_3.setPosition(ref_center_atom.getPosition() + Vector3(0.0, 0.0, 1.0));
+				atom_3 = &dummy_atom_3;
+				dummy_atom_3.setPosition(center_atom.getPosition() + Vector3(0.0, 0.0, 1.0));
 			}
-			const Atom& atom_1 = *atom_name_map[ref_atom_1.getName()];
-			const Atom& atom_2 = *atom_name_map[ref_atom_2.getName()];
-			const Atom& atom_3 = *atom_name_map[ref_atom_3.getName()];
-			
+
+
 			// create a new hydrogen at an appropriate position
-			PDBAtom* new_hydrogen = createNewHydrogen_(ref_hydrogen, center_atom, atom_1, atom_2, atom_3,
-																							ref_center_atom, ref_atom_1, ref_atom_2, ref_atom_3);
+			PDBAtom* new_hydrogen = createNewHydrogen_(ref_hydrogen, center_atom, *atom_1, *atom_2, *atom_3,
+																							ref_center_atom, *ref_atom_1, *ref_atom_2, *ref_atom_3);
 			
 			// check whether we could create the new hydrogen
 			if (new_hydrogen != 0)
