@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.9 2002/12/15 12:31:19 amoll Exp $
+// $Id: scene.C,v 1.10 2002/12/20 21:01:16 anhi Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/scene.h>
 #include <BALL/VIEW/GUI/FUNCTOR/externalRenderer.h>
@@ -1245,7 +1245,19 @@ namespace BALL
 					 ++descriptor_iterator)
 			{
 				CompositeDescriptor *composite_descriptor = *descriptor_iterator;
-				composite_descriptor->getComposite()->apply(collector);
+				
+				Composite *composite = composite_descriptor->getComposite();
+				
+				if (RTTI::isKindOf<GeometricObject>(*composite) != false)
+				{
+					GeometricObject *geometric_object = RTTI::castTo<GeometricObject>(*composite);
+
+					if (!(geometric_object->hasProperty(GeometricObject::PROPERTY__OBJECT_DYNAMIC)))
+					{
+						composite_descriptor->getComposite()->apply(collector);
+					}
+				}
+																
 			}			
 
 			message->setSelection(collector.getCollection());
