@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularGraph.h,v 1.8 2003/03/26 15:59:27 anhi Exp $
+// $Id: molecularGraph.h,v 1.9 2003/05/08 09:09:16 sneumann Exp $
 
 #ifndef BALL_STRUCTURE_MOLECULARGRAPH_H
 #define BALL_STRUCTURE_MOLECULARGRAPH_H
@@ -169,7 +169,7 @@ namespace BALL
 		EdgeConstIterator endEdge() const { return edges_.end(); }
 		
 		bool has(const Atom& atom) const { return atom_to_node_.has(const_cast<Atom*>(&atom)); }
-		bool has(const Bond& atom) const { return bond_to_bond_.has(const_cast<Bond*>(&bond)); }
+		bool has(const Bond& bond) const { return bond_to_edge_.has(const_cast<Bond*>(&bond)); }
 
 		NodeItemType& getNode(Position index) { return nodes_[index]; };
 		const NodeItemType& getNode(Position index) const { return nodes_[index]; };
