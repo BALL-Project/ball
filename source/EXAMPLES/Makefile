@@ -1,10 +1,10 @@
-# $Id: Makefile,v 1.17 2003/09/06 10:22:12 oliver Exp $
+# $Id: Makefile,v 1.18 2004/05/10 12:16:32 amoll Exp $
 #========================
 # BALL/EXAMPLES Makefile
 #========================
 
 DIRECTORY=EXAMPLES
-EXECUTABLES=proteinMapper PDB2discover amberEnergy bindingEnergy ramachandran PDBChecker addHydrogens MOLVIEWClient
+EXECUTABLES=proteinMapper PDB2discover amberEnergy bindingEnergy ramachandran PDBChecker addHydrogens BALLVIEWClient
 
 all:	$(EXECUTABLES)
 
@@ -28,7 +28,7 @@ amberEnergy:	amberEnergy.o
 bindingEnergy:	bindingEnergy.o 
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
-MOLVIEWClient:	MOLVIEWClient.o 
+BALLVIEWClient:	BALLVIEWClient.o 
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(VIEW_LIBS)
 
 ramachandran:	ramachandran.o 
