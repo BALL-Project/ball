@@ -1,4 +1,4 @@
-// $Id: Sphere3_test.C,v 1.1 2000/03/03 02:07:15 amoll Exp $
+// $Id: Sphere3_test.C,v 1.2 2000/03/03 11:54:50 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -6,7 +6,7 @@
 #	include <BALL/MATHS/vector3.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Sphere3_test.C,v 1.1 2000/03/03 02:07:15 amoll Exp $")
+START_TEST(class_name, "$Id: Sphere3_test.C,v 1.2 2000/03/03 11:54:50 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -175,7 +175,7 @@ CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const)
 	s = Sphere3(v2, 4.0);
   String filename;
 	NEW_TMP_FILE(filename)
-	std::ofstream outfile(filename.c_str(), ios::out);
+	std::ofstream outfile(filename.c_str(), std::ios::out);
 	s.dump(outfile);
 	outfile.close();
 	TEST_FILE(filename.c_str(), "data/Sphere3_test.txt", true)
