@@ -1,4 +1,4 @@
-// $Id: colorUnit.h,v 1.4 2000/01/13 22:22:11 oliver Exp $
+// $Id: colorUnit.h,v 1.5 2000/01/17 14:55:57 oliver Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLORUNIT_H
 #define BALL_VIEW_DATATYPE_COLORUNIT_H
@@ -12,7 +12,7 @@
 #endif
 
 #include <iostream>
-
+#include <stdio.h>
 
 namespace BALL
 {
