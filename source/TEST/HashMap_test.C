@@ -1,19 +1,39 @@
-// $Id: HashMap_test.C,v 1.4 2000/08/30 22:21:27 oliver Exp $
+// $Id: HashMap_test.C,v 1.5 2000/08/31 22:36:13 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
-
 #include <BALL/DATATYPE/hashMap.h>
-
+#include <BALL/CONCEPT/visitor.h>
 ///////////////////////////
-
-START_TEST(HashMap<T>, "$Id: HashMap_test.C,v 1.4 2000/08/30 22:21:27 oliver Exp $")
-
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
 
 using namespace BALL;
 using namespace std;
+
+class myVisitor : public Visitor <pair<int, int> >
+{
+	public:
+	int value;
+	void visit(pair<int, int>& v)
+	{
+		value = v.first;
+	}
+};
+/*
+class myVisitor : public Visitor <HashMap<int, int> >
+{
+	public:
+	int value;
+	void visit(HashMap<int, int>& v)
+	{
+		value = v[0];
+	}
+};*/
+
+
+START_TEST(HashMap, "$Id: HashMap_test.C,v 1.5 2000/08/31 22:36:13 amoll Exp $")
+
+/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
 
 HashMap<int, int>* map_ptr;
 CHECK(HashMap::HashMap())
@@ -118,12 +138,18 @@ CHECK(HashMap::erase(const KeyType& key))
 	TEST_EQUAL(hm.getSize(), 2)
 RESULT
 
-CHECK(HashMap::erase(Iterator pos))
-	// BAUSTELLE
-RESULT
-
-CHECK(HashMap::erase(Iterator first, Iterator last))
-	// BAUSTELLE
+CHECK(HashMap::erase(Iterator first, Iterator last))/*
+	HashMap<int, int> hm;
+	hm.insert(HashMap<int, int>::ValueType(0, 0));
+	hm.insert(HashMap<int, int>::ValueType(1, 1));
+	hm.insert(HashMap<int, int>::ValueType(2, 2));
+	hm.insert(HashMap<int, int>::ValueType(3, 3));
+	hm.erase((hm.begin()+1), (hm.end()-1));
+	TEST_EQUAL(hm.getSize(), 2)
+	hm.erase(hm.begin(), hm.end());
+	hm.erase(hm.find(1), hm.find(2));
+	TEST_EQUAL(hm.getSize(), 0)*/
+	// Not yet implemented BAUSTELLE
 RESULT
 
 CHECK(HashMap::operator [] (const int& key))
@@ -164,15 +190,35 @@ CHECK(HashMap::operator [] (const int& key) const)
 RESULT
 
 CHECK(HashMap::HashMap(const HashMap&, bool))
-	// BAUSTELLE
+	HashMap<int, int> hm;
+	hm.insert(HashMap<int, int>::ValueType(0, 0));
+	hm.insert(HashMap<int, int>::ValueType(1, 1));
+	hm.insert(HashMap<int, int>::ValueType(2, 2));
+	hm.insert(HashMap<int, int>::ValueType(3, 3));
+
+	HashMap<int, int> hm2(hm);
+	TEST_EQUAL(hm2[0], 0)
+	TEST_EQUAL(hm2[1], 1)
+	TEST_EQUAL(hm2[2], 2)
+	TEST_EQUAL(hm2[3], 3)
 RESULT
 
 CHECK(HashMap::clear())
-	// BAUSTELLE
+	HashMap<int, int> hm;
+	hm.insert(HashMap<int, int>::ValueType(0, 0));
+	hm.clear();
+	TEST_EQUAL(hm.getSize(), 0)
+	TEST_EQUAL(hm.getCapacity(), 4)
+	TEST_EQUAL(hm.getBucketSize(), 3)
 RESULT
 
 CHECK(HashMap::destroy())
-	// BAUSTELLE
+	HashMap<int, int> hm;
+	hm.insert(HashMap<int, int>::ValueType(0, 0));
+	hm.destroy();
+	TEST_EQUAL(hm.getSize(), 0)
+	TEST_EQUAL(hm.getCapacity(), 4)
+	TEST_EQUAL(hm.getBucketSize(), 3)
 RESULT
 
 CHECK(HashMap::set(const HashMap&, bool))
@@ -194,40 +240,111 @@ CHECK(HashMap::set(const HashMap&, bool))
 RESULT
 
 CHECK(HashMap::get(HashMap&, bool) const)
-	// BAUSTELLE
+	HashMap<int, int> hm, hm2;
+	hm.insert(HashMap<int, int>::ValueType(0, 0));
+	hm.insert(HashMap<int, int>::ValueType(1, 1));
+
+	hm.get(hm2);
+	TEST_EQUAL(hm2[0], 0)
+	TEST_EQUAL(hm2[1], 1)
 RESULT
 
 CHECK(HashMap::swap(HashMap&, bool))
-	// BAUSTELLE
+	HashMap<int, int> hm, hm2;
+	hm.insert(HashMap<int, int>::ValueType(0, 0));
+	hm.insert(HashMap<int, int>::ValueType(1, 1));
+
+	hm.insert(HashMap<int, int>::ValueType(10, 10));
+	hm.insert(HashMap<int, int>::ValueType(11, 11));
+
+	hm.swap(hm2);
+	TEST_EQUAL(hm[10], 10)
+	TEST_EQUAL(hm[11], 11)
+	TEST_EQUAL(hm2[0], 0)
+	TEST_EQUAL(hm2[1], 1)
 RESULT
 
 CHECK(HashMap::operator = (const HashMap&))
-	// BAUSTELLE
+	HashMap<int, int> hm, hm2;
+	hm.insert(HashMap<int, int>::ValueType(0, 0));
+	hm.insert(HashMap<int, int>::ValueType(1, 1));
+
+	hm2 = hm;
+	TEST_EQUAL(hm2[0], 0)
+	TEST_EQUAL(hm2[1], 1)
 RESULT
 
-
 CHECK(HashMap::host(Visitor<int>&))
-	// BAUSTELLE
+	HashMap<int, int> hm;
+	hm.insert(HashMap<int, int>::ValueType(0, 0));
+	hm.insert(HashMap<int, int>::ValueType(1, 1));
+
+	myVisitor mv;
+	//hm.host(mv);
+	TEST_EQUAL(mv.value, 0)
 RESULT
 
 CHECK(HashMap::has(const Key&))
-	// BAUSTELLE
+	HashMap<int, int> hm;
+	hm.insert(HashMap<int, int>::ValueType(0, 0));
+	hm.insert(HashMap<int, int>::ValueType(1, 1));
+	TEST_EQUAL(hm.has(0), true)
+	TEST_EQUAL(hm.has(1), true)
+	TEST_EQUAL(hm.has(2), false)
 RESULT
 
 CHECK(HashMap::isEmpty())
-	// BAUSTELLE
+	HashMap<int, int> hm;
+	TEST_EQUAL(hm.isEmpty(), true)
+	hm.insert(HashMap<int, int>::ValueType(0, 0));
+	TEST_EQUAL(hm.isEmpty(), false)
+	hm.clear();
+	TEST_EQUAL(hm.isEmpty(), true)
 RESULT
 
 CHECK(HashMap::operator == (const HashMap&) const)
-	// BAUSTELLE
+	HashMap<int, int> hm;
+	HashMap<int, int> hm2;
+	TEST_EQUAL(hm == hm2, true)
+
+	hm.insert(HashMap<int, int>::ValueType(0, 0));
+	hm.insert(HashMap<int, int>::ValueType(1, 1));
+
+	hm2.insert(HashMap<int, int>::ValueType(0, 0));
+	hm2.insert(HashMap<int, int>::ValueType(1, 1));
+
+	TEST_EQUAL(hm == hm2, true)
+	hm2.insert(HashMap<int, int>::ValueType(2, 1));
+	TEST_EQUAL(hm == hm2, false)
 RESULT
 
 CHECK(HashMap::operator != (const HashMap&) const)
-	// BAUSTELLE
+	HashMap<int, int> hm;
+	HashMap<int, int> hm2;
+
+	TEST_EQUAL(hm != hm2, false)
+	hm.insert(HashMap<int, int>::ValueType(0, 0));
+	hm.insert(HashMap<int, int>::ValueType(1, 1));
+
+	hm2.insert(HashMap<int, int>::ValueType(0, 0));
+	hm2.insert(HashMap<int, int>::ValueType(1, 1));
+
+	TEST_EQUAL(hm != hm2, false)
+	hm2.insert(HashMap<int, int>::ValueType(2, 1));
+	TEST_EQUAL(hm != hm2, true)
 RESULT
 
 CHECK(HashMap::dump(std::ostream&, Size) const)
-	// BAUSTELLE
+	HashMap<int, int> hm;
+	hm.insert(HashMap<int, int>::ValueType(0, 0));
+	hm.insert(HashMap<int, int>::ValueType(1, 1));
+
+  String filename;
+	NEW_TMP_FILE(filename)
+	std::ofstream outfile(filename.c_str(), File::OUT);
+	hm.dump(outfile);
+	outfile.close();
+	TEST_FILE(filename.c_str(), "data/HashMap_test.txt", true)
 RESULT
 
 CHECK(HashMap::isValid() const)
