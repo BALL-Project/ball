@@ -1,4 +1,4 @@
-// $Id: molecularProperties.h,v 1.2 2000/10/08 17:45:45 hekl Exp $
+// $Id: molecularProperties.h,v 1.3 2000/11/05 14:38:19 hekl Exp $
 
 #ifndef BALL_MOLVIEW_GUI_WIDGETS_MOLECULARPROPERTIES_H
 #define BALL_MOLVIEW_GUI_WIDGETS_MOLECULARPROPERTIES_H
@@ -49,7 +49,8 @@ namespace BALL
 		/**
 		 */
 		class MolecularProperties
-			: public ConnectionObject
+			: public QWidget,
+			  public ModularWidget
 		{
 		public:
 			
@@ -65,7 +66,7 @@ namespace BALL
 			 */
 			//@{
 			
-			MolecularProperties();
+			MolecularProperties(QWidget* parent = 0, const char* name = 0);
 			
 			virtual ~MolecularProperties();
 			//@}
@@ -73,25 +74,34 @@ namespace BALL
 			/**	@name Exceptions
 			 */
 			//@{
-			class FragmentDBMissing
-				: public Exception::GeneralException
-			{
-			  public:
-				  FragmentDBMissing(const char* file, int line, const string& data);
-			};
 			//@}
 			
 			/**	@name	Accessors
 			 */
 			//@{
-			void registerFragmentDB(const FragmentDB &fragment_db);
-			
 			void onNotify(Message *message);
+			//@}
+
+			
+			/**	ModularWidget methods.
+			*/
+			//@{
+			/**
+			*/
+			virtual void initializeWidget(MainControl& main_control);
+		
+			/**
+			*/
+			virtual void finalizeWidget(MainControl& main_control);
+		
+			/**
+			*/
+			virtual void checkMenu(MainControl& main_control);
 			//@}
 
 		private:
 			
-			FragmentDB* fragment_db_;  			
+			FragmentDB fragment_db_;  			
 		};
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS

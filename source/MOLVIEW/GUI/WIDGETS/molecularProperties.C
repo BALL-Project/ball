@@ -1,4 +1,4 @@
-// $Id: molecularProperties.C,v 1.1 2000/09/23 15:39:17 hekl Exp $
+// $Id: molecularProperties.C,v 1.2 2000/11/05 14:35:25 hekl Exp $
 
 #include <BALL/MOLVIEW/GUI/WIDGETS/molecularProperties.h>
 
@@ -10,16 +10,13 @@ namespace BALL
 	namespace MOLVIEW
 	{
 
-	  MolecularProperties::FragmentDBMissing::FragmentDBMissing
-		  (const char* file, int line, const string& data)
-			: Exception::GeneralException(file, line, string("FragmentDB missing"), data)
-		{
-    }
-
-  	MolecularProperties::MolecularProperties()
-			:	ConnectionObject(),
-				fragment_db_(0)
+  	MolecularProperties::MolecularProperties(QWidget* parent, const char* name)
+			:	QWidget(parent, name),
+				ModularWidget(name),
+				fragment_db_()
     {
+			// register ModularWidget
+			registerWidget(this);
     }
 
   	MolecularProperties::~MolecularProperties()
@@ -50,14 +47,9 @@ namespace BALL
 				AtomContainer* atom_container 
 					= RTTI::castTo<AtomContainer>(*(composite_message->getComposite()));
 				
-				if (fragment_db_ == 0)
-				{
-					throw ::BALL::MOLVIEW::MolecularProperties::FragmentDBMissing(__FILE__, __LINE__, "");
-				}
-
 				try
 				{
-					atom_container->apply(fragment_db_->normalize_names);
+					atom_container->apply(fragment_db_.normalize_names);
 				}
 				catch(...)
 				{
@@ -69,7 +61,7 @@ namespace BALL
 				
 				try
 				{
-					atom_container->apply(fragment_db_->build_bonds);
+					atom_container->apply(fragment_db_.build_bonds);
 				}
 				catch(...)
 				{
@@ -95,6 +87,18 @@ namespace BALL
 			}
     }
 
+		void MolecularProperties::initializeWidget(MainControl& /* main_control */)
+		{
+		}
+		
+		void MolecularProperties::finalizeWidget(MainControl& /* main_control */)
+		{
+		}
+		
+		void MolecularProperties::checkMenu(MainControl& /* main_control */)
+		{
+		}
+		
 #		ifdef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/MOLVIEW/GUI/WIDGETS/molecularProperties.iC>
 #		endif
