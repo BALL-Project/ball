@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularProperties.h,v 1.11 2004/01/14 16:20:10 amoll Exp $
+// $Id: molecularProperties.h,v 1.12 2004/01/15 13:03:36 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARPROPERTIES_H
 #define BALL_VIEW_WIDGETS_MOLECULARPROPERTIES_H
@@ -150,7 +150,7 @@ class MolecularProperties
 	virtual void calculateSecondaryStructure();
 
 	///
-	virtual void calculateRMSD();
+	virtual void mapProteins();
 
 	//@}
 
@@ -170,7 +170,7 @@ private:
 				deselect_id_, 
 				create_distance_grid_id_,
 				calculate_ss_,
-				calculate_RMSD_;
+				map_proteins_;
 
 	
 	Vector3 										view_center_vector_;
