@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.8 2004/06/10 20:50:14 amoll Exp $
+// $Id: mainframe.C,v 1.9 2004/06/13 23:58:53 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -244,7 +244,7 @@ namespace BALL
 		about.BALLView_version_label->setText(QString("BALLView ") + BALL_RELEASE_STRING);
 		font.setPixelSize(18);
 		about.BALLView_version_label->setFont(font);
-		about.BALL_version_label->setText(QString("(BALL ") + BALL_RELEASE_STRING + ")");
+		about.BALL_version_label->setText(__DATE__);
 		about.exec(); 
 	}
 
