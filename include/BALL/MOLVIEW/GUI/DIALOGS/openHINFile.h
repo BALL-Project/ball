@@ -1,4 +1,4 @@
-// $Id: openHINFile.h,v 1.4 2001/05/13 14:55:24 hekl Exp $
+// $Id: openHINFile.h,v 1.5 2001/07/06 13:59:09 aubertin Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_OPENHINFILE_H
 #define BALL_MOLVIEW_GUI_DIALOGS_OPENHINFILE_H
@@ -38,9 +38,9 @@ namespace BALL
 				into a \Ref{Composite} object. See \Ref{openFile} for information
 				concerning conversion and notification.
 				@memo    OpenHINFile class (BALL MOLVIEW gui dialogs framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/05/13 14:55:24 $
+				@author  $Author: aubertin $
+				@version $Revision: 1.5 $
+				@date    $Date: 2001/07/06 13:59:09 $
 		*/
 		class OpenHINFile: public FileDialog
 		{
@@ -51,8 +51,8 @@ namespace BALL
 			//@{
 
 			/** Default Constructor.
-					Construct new openHINFile.
-					Set the title and the mode of {\em *this} openHINFile to {\em Import HIN file}.
+					Constructs new openHINFile.
+					Sets the title and the mode of {\em *this} openHINFile to {\em Import HIN file}.
 					@param       parent the parent \Ref{QWidget} of {\em *this} openHINFile (See QFileDialog in the QT documentation)
 					@param       name the name of {\em *this} openHINFile (See QFileDialog in the QT documentation)
 					@return      OpenHINFile new constructed openHINFile
@@ -77,9 +77,9 @@ namespace BALL
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
-			/**	Initialize the widget.
-					Initialize the menu {\em File} with its submenu {\em Import}.
-					Add menu entry {\em HIN File}.
+			/**	Initializes the widget.
+					Initializes the menu {\em File} with its submenu {\em Import}.
+					Adds menu entry {\em HIN File}.
 					This method is called automatically	immediately before the main application 
 					is started. 
 					This method will be called by \Ref{show} from the \Ref{MainControl} object.
@@ -91,9 +91,9 @@ namespace BALL
 			virtual void initializeWidget(MainControl& main_control)
 				throw();
 			
-			/**	Remove the widget.
-					Reverse all actions performed in \Ref{initializeWidget}
-					(remove menu entries of {\em *this} openHINFile).
+			/**	Removes the widget.
+					Reverses all actions performed in \Ref{initializeWidget}
+					(removes menu entries of {\em *this} openHINFile).
 					This method will be called by \Ref{aboutToExit} from the \Ref{MainControl}
 					object.
 					@param main_control the \Ref{MainControl} object to be finalized with {\em *this} openHINFile
@@ -111,9 +111,9 @@ namespace BALL
 			*/
 			//@{
 
-			/** Open the hin file.
-					Open the selected hin file and if successfull convert it into a \Ref{System}
-					and sent the message \Ref{NewCompositeMessage} containing the \Ref{Composite}
+			/** Opens the hin file.
+					Opens the selected hin file and if successful converts it into a \Ref{System}
+					and sents the message \Ref{NewCompositeMessage} containing the \Ref{Composite}
 					object to the other \Ref{ConnectionObject} objects.
 					If the hin file contains a bounding box a transparent \Ref{GLSimpleBox} will 
 					be constructed and added to the \Ref{System}.
