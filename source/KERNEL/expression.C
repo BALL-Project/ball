@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expression.C,v 1.39 2003/05/23 10:26:02 oliver Exp $
+// $Id: expression.C,v 1.40 2003/05/26 14:22:51 oliver Exp $
+//
 
 #include <BALL/KERNEL/expression.h>
 #include <BALL/KERNEL/expressionParser.h>
@@ -237,7 +238,6 @@ namespace BALL
 		}
 		else
 		{
-
       for (ExpressionParser::SyntaxTree::ConstIterator it = t.begin(); it != t.end(); ++it)
       {
         root->appendChild(constructExpressionTree_(**it));

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expressionTree.C,v 1.8 2002/12/12 10:20:16 oliver Exp $
+// $Id: expressionTree.C,v 1.9 2003/05/26 14:22:51 oliver Exp $
+//
 
 #include <BALL/KERNEL/expressionTree.h>
 
@@ -20,7 +21,7 @@ namespace BALL
 	}
 
 
-	void ExpressionTree::dump(::std::ostream& os, Size depth) const
+	void ExpressionTree::dump(std::ostream& os, Size depth) const
 		throw()
 	{
 		BALL_DUMP_STREAM_PREFIX(os);
@@ -64,9 +65,21 @@ namespace BALL
 		throw()
 		:	type_(tree.type_),
 			negate_(tree.negate_),
-			predicate_(tree.predicate_),
-			children_(tree.children_)
+			predicate_(0),
+			children_()
 	{
+		// Clone the predicate
+		if (tree.predicate_ != 0)
+		{
+			predicate_ = (ExpressionPredicate*)tree.predicate_->create();
+		}
+
+		// Clone the children.
+		std::list<const ExpressionTree*>::const_iterator it(tree.children_.begin());
+		for (; it != tree.children_.end(); ++it)
+		{
+			children_.push_back(new ExpressionTree(**it));
+		}
 	}
 			
 
@@ -82,21 +95,47 @@ namespace BALL
 	{
 		type_ = INVALID;
 		negate_ = false;
+		
+		// Delete the predicate.
+		delete predicate_;
 		predicate_ = 0;
+
+		// Delete the node's children.
+		std::list<const ExpressionTree*>::const_iterator it(children_.begin());
+		for (; it != children_.end(); ++it)
+		{
+			delete *it;
+		}
 		children_.clear();
 	}
 
 
-	const ExpressionTree& ExpressionTree::operator = 
-		(const ExpressionTree& tree)
+	const ExpressionTree& ExpressionTree::operator = (const ExpressionTree& tree)
 		throw()
 	{
+		// Avoid self assignment.
+		if (&tree == this)
+		{
+			return *this;
+		}
+
 		clear();
 
 		type_ = tree.type_;
 		negate_ = tree.negate_;
-		predicate_ = tree.predicate_;
-		children_ = tree.children_;
+
+		// Clone the predicate.
+		if (tree.predicate_ != 0)
+		{
+			predicate_ = (ExpressionPredicate*)tree.predicate_->create();
+		}
+
+		// Clone the children.
+		std::list<const ExpressionTree*>::const_iterator it(tree.children_.begin());
+		for (; it != tree.children_.end(); ++it)
+		{
+			children_.push_back(new ExpressionTree(**it));
+		}
 
 		return *this;
 	}
@@ -172,8 +211,6 @@ namespace BALL
 			// both pointers are null pointers. Expressions should have null
 			// pointers only if they are default constructed, so a consistency
 			// check might be useful 
-
-
 			return ((type_ == tree.type_)
 					&& (negate_ == tree.negate_)
 					&& compareChildren_(tree));
@@ -252,7 +289,7 @@ namespace BALL
 	void ExpressionTree::setPredicate(ExpressionPredicate* predicate)
 		throw()
 	{
-		predicate_= predicate;
+		predicate_ = predicate;
 	}
 
 

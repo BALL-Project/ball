@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ClaverieParameter_test.C,v 1.7 2003/01/22 17:16:57 anker Exp $
+// $Id: ClaverieParameter_test.C,v 1.8 2003/05/26 14:22:53 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +11,7 @@
 
 ///////////////////////////
 
-START_TEST(ClaverieParameter, "$Id: ClaverieParameter_test.C,v 1.7 2003/01/22 17:16:57 anker Exp $")
+START_TEST(ClaverieParameter, "$Id: ClaverieParameter_test.C,v 1.8 2003/05/26 14:22:53 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -23,12 +23,13 @@ ClaverieParameter* cp_ptr = 0;
 CHECK(ClaverieParameter::ClaverieParameter())
 	cp_ptr = new ClaverieParameter;
 	TEST_NOT_EQUAL(cp_ptr, 0)
-	::std::vector< ::std::pair<float, float> > test_params;
+	std::vector<std::pair<float, float> > test_params;
 	bool test = (test_params == cp_ptr->getParameters());
 	TEST_EQUAL(test, true)
 	HashMap<Atom::Type, Index> test_indices;
 	test = (test_indices == cp_ptr->getIndices());
 	TEST_EQUAL(test, true)
+	delete cp_ptr;
 RESULT
 
 

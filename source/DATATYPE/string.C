@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: string.C,v 1.47 2003/05/25 21:59:34 amoll Exp $
+// $Id: string.C,v 1.48 2003/05/26 14:22:51 oliver Exp $
 //
 
 #include <BALL/DATATYPE/string.h>
@@ -1814,25 +1814,25 @@ String String::decodeBase64()
     unsigned char digit1 = in[0];
     if (digit1 > 127 || base64val_ (digit1) == -1) //-1 == BAD
 		{
-			return "";
+			return String::EMPTY;
 		}
 		
 		unsigned char digit2 = in[1];
     if (digit2 > 127 || base64val_ (digit2) == -1)
 		{
-			return "";
+			return String::EMPTY;
 		}
 		
 		unsigned char digit3 = in[2];
     if (digit3 > 127 || ((digit3 != '=') && (base64val_ (digit3) == -1)))
 		{
-			return "";
+			return String::EMPTY;
 		}
 		
 		digit4 = in[3];
     if (digit4 > 127 || ((digit4 != '=') && (base64val_ (digit4) == -1)))
 		{
-			return "";
+			return String::EMPTY;
 		}
 		
 		in += 4;

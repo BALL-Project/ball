@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: triangulatedSES.C,v 1.5 2003/04/15 19:23:21 strobel Exp $
+// $Id: triangulatedSES.C,v 1.6 2003/05/26 14:22:53 oliver Exp $
+//
 
 #include <BALL/STRUCTURE/solventExcludedSurface.h>
 #include <BALL/STRUCTURE/triangle.h>
@@ -110,7 +111,7 @@ namespace BALL
 
 	SESTriangulator::SESTriangulator()
 		throw()
-		:	tses_(NULL),
+		:	tses_(0),
 			point_(),
 			edge_(),
 			template_spheres_(),
@@ -808,9 +809,8 @@ namespace BALL
 				return;
 			}
 			// get a template sphere for the face to triangulate
-			HashMap< Size,std::list<TrianglePoint*> >::ConstIterator s
-					= template_spheres_.find(numberOfRefinements(tses_->density_,
-																	sphere.radius));
+			HashMap<Size, std::list<TrianglePoint*> >::ConstIterator s
+					= template_spheres_.find(numberOfRefinements(tses_->density_,	sphere.radius));
 			std::list<TrianglePoint*>::const_iterator p;
 			TrianglePoint* point;
 			TriangulatedSES part;
@@ -823,6 +823,7 @@ namespace BALL
 				part.number_of_points_++;
 			}
 			part.blowUp(sphere.radius);
+
 			// cut the face with all its edges
 			TPlane3<double> plane;
 			std::list<SESEdge*>::iterator edge;
@@ -830,7 +831,7 @@ namespace BALL
 			{
 				plane.p = (*edge)->circle_.p-sphere.p;
 				plane.n = (*edge)->circle_.n;
-				part.cut(plane,0.05);
+				part.cut(plane, 0.05);
 			}
 			part.shift(sphere.p);
 			buildSphericTriangles(face,part,sphere);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceField.C,v 1.30 2003/02/02 21:53:59 oliver Exp $
+// $Id: forceField.C,v 1.31 2003/05/26 14:22:52 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
 
@@ -553,11 +553,14 @@ namespace BALL
 	void ForceField::removeComponent(const ForceFieldComponent* force_field_component)
 	{
 		// call each component - test if equal - remove
-		vector<ForceFieldComponent*>::iterator		it;
+		vector<ForceFieldComponent*>::iterator it;
 		for (it = components_.begin(); it != components_.end(); ++it)
 		{
 			if ((*it) == force_field_component) 
 			{
+				// Destruct the component -- we are responsible for the mem management.
+				delete *it;
+
 				components_.erase(it);
 				break ;
 			}
@@ -573,6 +576,9 @@ namespace BALL
 		{
 			if ((*it)->getName() == name) 
 			{
+				// Destruct the component -- we are responsible for the mem management.
+				delete *it;
+
 				components_.erase(it);
 				break ;
 			}
@@ -589,7 +595,9 @@ namespace BALL
 	ForceFieldComponent* ForceField::getComponent(const Size index) const
 	{
 		if (index >= components_.size())
+		{
 			return 0;
+		}
 
 		return components_[index];
 	}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceField.h,v 1.25 2003/03/26 13:56:38 anhi Exp $
+// $Id: forceField.h,v 1.26 2003/05/26 14:22:50 oliver Exp $
 
 #ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
 #define BALL_MOLMEC_COMMON_FORCEFIELD_H
@@ -251,10 +251,13 @@ namespace BALL
 			throw();
 		
 		/**	Insert a new component into the force field's component list.
+				Responsability for the destruction of the component is passed on to
+				the ForceField instance.
 		*/
 		void insertComponent(ForceFieldComponent* force_field_component);
 
 		/**	Remove a component from the force field's component list.
+				The ForceFieldComponent will be destructed and removed from the component list.
 		*/
 		void removeComponent(const ForceFieldComponent* force_field_component);
 
@@ -272,7 +275,7 @@ namespace BALL
 		/**	Return a pointer to the specified force field component.
 				If a component with the specified name does not exist, 0 is returned.
 		*/
-		ForceFieldComponent*	getComponent(const String& name) const;
+		ForceFieldComponent* getComponent(const String& name) const;
 
 		/**	Return the sum of energies of all registered force field components. 
 				No calculation will be performed. This method simply returns the 

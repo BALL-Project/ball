@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: haighMallionShiftProcessor.C,v 1.15 2002/12/20 19:12:58 oliver Exp $
+// $Id: haighMallionShiftProcessor.C,v 1.16 2003/05/26 14:22:52 oliver Exp $
 
 #include <BALL/NMR/haighMallionShiftProcessor.h>
 #include <BALL/KERNEL/atomIterator.h>
@@ -22,7 +22,8 @@ namespace BALL
 	
 	HaighMallionShiftProcessor::HaighMallionShiftProcessor()
 		throw()
-		:	ShiftModule()
+		:	ShiftModule(),
+			asrings_(0)
 	{
 	}
 
@@ -98,6 +99,14 @@ namespace BALL
 	HaighMallionShiftProcessor::~HaighMallionShiftProcessor()
 		throw()
 	{
+		if (asrings_ != 0)
+		{
+			delete [] asrings_[0];
+			delete [] asrings_[1];
+			delete [] asrings_[2];
+			delete [] asrings_[3];
+		}
+		delete [] asrings_;
 	}		
 
 	bool HaighMallionShiftProcessor::finish()
@@ -115,7 +124,7 @@ namespace BALL
 		// iteriere ueber alle Protonen
 		// fuer jedes Proton iteriere ueber alle Ringe und berechne chemical_shift
 		
-		Vector3* ring_positions = new Vector3[6];
+		Vector3 ring_positions[6];
 
 		Size counter = 0;
 		Size number_of_rings = 0;
@@ -184,9 +193,9 @@ namespace BALL
 						for	(AtomConstIterator atom_iter = residue.beginAtom();
 								+atom_iter; ++atom_iter)
 						{
-							if (asrings_[counter][1 + pos] == (*atom_iter).getName())
+							if (asrings_[counter][1 + pos] == atom_iter->getName())
 							{
-								ring_positions[number_of_ring_atoms] = (*atom_iter).getPosition();
+								ring_positions[number_of_ring_atoms] = atom_iter->getPosition();
 								number_of_ring_atoms++ ;
 								break;
 							}	

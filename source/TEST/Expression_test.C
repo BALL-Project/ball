@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Expression_test.C,v 1.34 2003/05/23 10:26:03 oliver Exp $
+// $Id: Expression_test.C,v 1.35 2003/05/26 14:22:53 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -21,7 +21,7 @@ using namespace BALL;
 
 ///////////////////////////
 
-START_TEST(Expression, "$Id: Expression_test.C,v 1.34 2003/05/23 10:26:03 oliver Exp $")
+START_TEST(Expression, "$Id: Expression_test.C,v 1.35 2003/05/26 14:22:53 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -167,13 +167,13 @@ RESULT
 
 
 CHECK(ExpressionTree::ExpressionTree(const ExpressionTree& tree) throw())
-	ExpressionPredicate ep;
+	ExpressionPredicate* ep = new ExpressionPredicate;
 	ExpressionTree et1;
-	ExpressionTree child;
+	ExpressionTree* child = new ExpressionTree;
 	et1.setType(ExpressionTree::LEAF);
 	et1.setNegate(true);
-	et1.setPredicate(&ep);
-	et1.appendChild(&child);
+	et1.setPredicate(ep);
+	et1.appendChild(child);
 
 	ExpressionTree et2;
 	bool test = (et1 == et2);
@@ -186,10 +186,10 @@ RESULT
 
 
 CHECK(ExpressionTree::ExpressionTree(ExpressionPredicate* predicate, bool negate = false) throw())
-	ExpressionPredicate ep;
+	ExpressionPredicate* ep = new ExpressionPredicate;
 	ExpressionTree et1;
 
-	ExpressionTree et2(&ep, true);
+	ExpressionTree et2(ep, true);
 	bool test = (et1 == et2);
 	TEST_NOT_EQUAL(test, true)
 
@@ -197,21 +197,21 @@ CHECK(ExpressionTree::ExpressionTree(ExpressionPredicate* predicate, bool negate
 	test = (et1 == et2);
 	TEST_NOT_EQUAL(test, true)
 
-	et1.setPredicate(&ep);
+	et1.setPredicate(new ExpressionPredicate);
 	test = (et1 == et2);
 	TEST_EQUAL(test, true)
 RESULT
 
 
 CHECK(ExpressionTree::ExpressionTree(Type type, list<ExpressionTree*> children, bool negate = false) throw())
-	ExpressionTree child1;
-	ExpressionTree child2;
-	ExpressionTree child3;
+	ExpressionTree* child1 = new ExpressionTree;
+	ExpressionTree* child2 = new ExpressionTree;
+	ExpressionTree* child3 = new ExpressionTree;
 	
-	::std::list<const ExpressionTree*> children;
-	children.push_back(&child1);
-	children.push_back(&child2);
-	children.push_back(&child3);
+	std::list<const ExpressionTree*> children;
+	children.push_back(child1);
+	children.push_back(child2);
+	children.push_back(child3);
 
 	ExpressionTree et1;
 
@@ -226,18 +226,6 @@ CHECK(ExpressionTree::ExpressionTree(Type type, list<ExpressionTree*> children, 
 	et1.setNegate(true);
 	test = (et1 == et2);
 	TEST_NOT_EQUAL(test, true)
-
-	et1.appendChild(&child1);
-	test = (et1 == et2);
-	TEST_NOT_EQUAL(test, true)
-
-	et1.appendChild(&child2);
-	test = (et1 == et2);
-	TEST_NOT_EQUAL(test, true)
-
-	et1.appendChild(&child3);
-	test = (et1 == et2);
-	TEST_EQUAL(test, true)
 RESULT
 
 
@@ -247,13 +235,13 @@ RESULT
 
 
 CHECK(ExpressionTree::bool operator == (const ExpressionTree& tree) const  throw())
-	ExpressionPredicate ep;
+	ExpressionPredicate* ep = new ExpressionPredicate;
 	ExpressionTree et1;
-	ExpressionTree child;
+	ExpressionTree* child = new ExpressionTree;
 	et1.setType(ExpressionTree::LEAF);
 	et1.setNegate(true);
-	et1.setPredicate(&ep);
-	et1.appendChild(&child);
+	et1.setPredicate(ep);
+	et1.appendChild(child);
 
 	ExpressionTree et2;
 	bool test = (et1 == et2);
@@ -267,11 +255,11 @@ CHECK(ExpressionTree::bool operator == (const ExpressionTree& tree) const  throw
 	test = (et1 == et2);
 	TEST_NOT_EQUAL(test, true)
 
-	et2.setPredicate(&ep);
+	et2.setPredicate(new ExpressionPredicate);
 	test = (et1 == et2);
 	TEST_NOT_EQUAL(test, true)
 
-	et2.appendChild(&child);
+	et2.appendChild(new ExpressionTree);
 	test = (et1 == et2);
 	TEST_EQUAL(test, true)
 RESULT
@@ -328,64 +316,32 @@ RESULT
 
 
 CHECK(ExpressionTree::appendChild(const ExpressionTree* child) throw())
-	ExpressionTree child1;
-	ExpressionTree child2;
-	ExpressionTree child3;
+	ExpressionTree* child1 = new ExpressionTree;
+	ExpressionTree* child2 = new ExpressionTree;
+	ExpressionTree* child3 = new ExpressionTree;
 	
-	::std::list<const ExpressionTree*> children;
-	children.push_back(&child1);
-	children.push_back(&child2);
-	children.push_back(&child3);
+	std::list<const ExpressionTree*> children;
+	children.push_back(child1);
+	children.push_back(child2);
+	children.push_back(child3);
 
-	ExpressionTree et;
+	ExpressionTree et(ExpressionTree::OR, children);
 	bool test = (et.getChildren() == children);
-	TEST_NOT_EQUAL(test, true)
-
-	et.appendChild(&child1);
-	test = (et.getChildren() == children);
-	TEST_NOT_EQUAL(test, true)
-
-	et.appendChild(&child2);
-	test = (et.getChildren() == children);
-	TEST_NOT_EQUAL(test, true)
-
-	et.appendChild(&child3);
-	test = (et.getChildren() == children);
 	TEST_EQUAL(test, true)
+
+	et.appendChild(new ExpressionTree);
+	test = (et.getChildren() == children);
+	TEST_EQUAL(test, false)
 RESULT
 
 
 CHECK(ExpressionTree::getChildren() const throw())
-	ExpressionTree child1;
-	ExpressionTree child2;
-	ExpressionTree child3;
-	
-	::std::list<const ExpressionTree*> children;
-	children.push_back(&child1);
-	children.push_back(&child2);
-	children.push_back(&child3);
-
-	ExpressionTree et;
-	bool test = (et.getChildren() == children);
-	TEST_NOT_EQUAL(test, true)
-
-	et.appendChild(&child1);
-	test = (et.getChildren() == children);
-	TEST_NOT_EQUAL(test, true)
-
-	et.appendChild(&child2);
-	test = (et.getChildren() == children);
-	TEST_NOT_EQUAL(test, true)
-
-	et.appendChild(&child3);
-	test = (et.getChildren() == children);
-	TEST_EQUAL(test, true)
+	// Tested above.
 RESULT
 
 
 CHECK(ExpressionTree::ExpressionTree& operator = (const ExpressionTree& tree) throw())
-	ExpressionPredicate ep;
-	ExpressionTree et1(&ep, true);
+	ExpressionTree et1(new ExpressionPredicate, true);
 	ExpressionTree et2;
 	bool test = (et1 == et2);
 	TEST_NOT_EQUAL(test, true)
@@ -396,8 +352,7 @@ RESULT
 
 
 CHECK(ExpressionTree::clear() throw())
-	ExpressionPredicate ep;
-	ExpressionTree nonempty(&ep, true);
+	ExpressionTree nonempty(new ExpressionPredicate, true);
 	ExpressionTree empty;
 	bool test = (empty == nonempty);
 	TEST_NOT_EQUAL(test, true)

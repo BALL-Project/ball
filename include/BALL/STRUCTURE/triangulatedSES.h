@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: triangulatedSES.h,v 1.16 2003/03/26 13:08:42 sturm Exp $
+// $Id: triangulatedSES.h,v 1.17 2003/05/26 14:22:50 oliver Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATEDSES_H
 #define BALL_STRUCTURE_TRIANGULATEDSES_H
@@ -344,8 +344,8 @@ namespace BALL
 
 		TriangulatedSES* tses_;
 		std::vector<TrianglePoint*> point_;
-		std::vector< std::list<TriangleEdge*> > edge_;
-		HashMap< Size,std::list<TrianglePoint*> > template_spheres_;
+		std::vector<std::list<TriangleEdge*> > edge_;
+		HashMap<Size, std::list<TrianglePoint*> > template_spheres_;
 		double sqrt_density_;
 
 		//@}

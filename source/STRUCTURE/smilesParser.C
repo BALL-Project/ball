@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smilesParser.C,v 1.10 2003/05/25 21:38:09 oliver Exp $
+// $Id: smilesParser.C,v 1.11 2003/05/26 14:22:52 oliver Exp $
 
 #include <BALL/STRUCTURE/smilesParser.h>
 #include <BALL/KERNEL/PTE.h>
@@ -121,6 +121,7 @@ namespace BALL
 			// Clean up allocated memory (atoms).
 			for (Position i = 0; i < all_atoms_.size(); i++)
 			{
+				all_atoms_[i]->destroy();
 				delete all_atoms_[i];
 			}
 
