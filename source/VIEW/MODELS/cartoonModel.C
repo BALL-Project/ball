@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.54.2.5 2004/12/21 00:28:34 amoll Exp $
+// $Id: cartoonModel.C,v 1.54.2.6 2004/12/21 00:38:34 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -1002,6 +1002,11 @@ void AddCartoonModel::drawWatsonCrickModel_(const SecondaryStructure& ss)
 			tube->setVertex2(*old_spline_point);
 			tube->setRadius(DNA_base_radius_);
 			geometric_objects_.push_back(tube);
+		}
+		else
+		{
+			Log.error() << "Could not draw connection to backbone of DNA in " 
+									<< __FILE__ << " " << __LINE__ << std::endl;
 		}
 
 		for (Position p = 0; p < hbond_atoms.size(); p++)

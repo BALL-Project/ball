@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.17.2.2 2004/12/20 23:43:19 amoll Exp $
+// $Id: backboneModel.C,v 1.17.2.3 2004/12/21 00:38:28 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -81,6 +81,9 @@ namespace BALL
 					spline_vector_.size() > 0) 
 			{
 				createBackbone_();
+				spline_vector_.clear();
+				spline_points_.clear();
+				atoms_of_spline_points_.clear();
 			}
 			
 			last_parent_ = residue.getParent()->getParent();
@@ -142,9 +145,6 @@ namespace BALL
 			calculateTangentialVectors_();
 			createSplinePath_();
 			buildGraphicalRepresentation_();
-			spline_vector_.clear();
-			spline_points_.clear();
-			atoms_of_spline_points_.clear();
 		}
 
 
@@ -245,6 +245,17 @@ namespace BALL
 			{
 				last_point_ = spline_points_[start];
 			}
+			else
+			{
+				// create sphere for the point
+				Sphere* sphere = new Sphere;
+				if (!sphere) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Sphere));
+
+				sphere->setRadius(tube_radius_);
+				sphere->setPosition(last_point_);
+				sphere->setComposite(atoms_of_spline_points_[start]);
+				geometric_objects_.push_back(sphere);
+			}
 
 			for (Position p = start; p < end; p++)
 			{
@@ -281,6 +292,8 @@ namespace BALL
 
 			createBackbone_();
 			spline_points_.clear();
+			spline_vector_.clear();
+			atoms_of_spline_points_.clear();
 			return true;
 		}
 		
