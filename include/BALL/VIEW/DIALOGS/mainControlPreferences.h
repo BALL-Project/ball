@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControlPreferences.h,v 1.10 2004/04/30 13:17:21 amoll Exp $
+// $Id: mainControlPreferences.h,v 1.10.2.1 2004/05/18 14:41:01 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MAINCONTROLPREFERENCES_H
@@ -19,8 +19,10 @@ namespace BALL
 	{
 
 /** MainControlPreferences is a widget that will be inserted into the
-		tab dialog Preferences. It contains the style preferences 
-		of the MainControl.
+		tab dialog Preferences. It contains the following settings:
+		- the used QT style 
+		- if DockWidget 's contain a label with their name
+		- if logging to a file is enabled
 		\ingroup ViewDialogs
 */
 class BALL_EXPORT MainControlPreferences 
@@ -62,7 +64,7 @@ class BALL_EXPORT MainControlPreferences
 	QStyle* getStyle()
 		throw();
 
-	/// Inspection, wheter the name labels in the GenericControl instances should be enabled.
+	/// Inspection, wheter the name labels in the DockWidget instances should be enabled.
 	bool showLabelsEnabled() const
 		throw();
 

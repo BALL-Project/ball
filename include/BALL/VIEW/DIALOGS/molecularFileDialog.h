@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.h,v 1.14 2004/04/21 15:06:28 amoll Exp $
+// $Id: molecularFileDialog.h,v 1.14.2.1 2004/05/18 14:46:01 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MOLECULARFILEDIALOG_H
@@ -31,6 +31,10 @@ namespace BALL
 				This class can also take a System and write it in one of the
 				supported file formats.
 				This class is derived from ModularWidget.
+				@see HINFile
+				@see MOLFile
+				@see MOL2File
+				@see PDBFile
 				\ingroup ViewDialogs
 		 */
 		class BALL_EXPORT MolecularFileDialog
@@ -66,7 +70,7 @@ namespace BALL
 			*/ 
 			//@{ 
 			
-			/** Initializes the menuentries in <b>File</b>.
+			/** Initializes the menu entries in <b>File</b>.
 					This method is called automatically immediately before the main application is started.
 					This method will be called MainControl::show().
 					\param	main_control the MainControl object to be initialized 
@@ -96,6 +100,7 @@ namespace BALL
 
 			/** Open a given molecular file.
 					The file type is identified by the filename extension.
+					This method can be used to load molecular files, which were given as command line arguments.
 			*/
 			virtual void openFile(const String& file)
 				throw();

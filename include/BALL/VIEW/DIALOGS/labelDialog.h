@@ -24,13 +24,10 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		/**	Dialog for creating labels.
-				The class LabelDialog is a dialog for appending to a selection of 
-				molecular objects a label which text and color can be changed.
+		/**	Dialog for creating labels for a selection of molecular objects.
 				The class  MolecularControl is responsible for creating such a selection.
-				If this dialog is used, it should be created with  MainControl as parent.
-				The class LabelDialogData contains the definition of the layout of
-				this dialog and is therefore not necessary for understanding.  \par
+ 				The text and color of the labels can be changed.
+				If this dialog is used, it should be created with MainControl as parent.
     		\ingroup  ViewDialogs
 		*/
 		class BALL_EXPORT LabelDialog : 
@@ -142,7 +139,6 @@ namespace BALL
 			 		Creates a new Representation with the Label and notifies the widgets.
 					@see  GeometricCenterProcessor
 					@see  RepresentationMessage
-					@see  SceneMessage
 			*/
 			virtual void accept();
 			

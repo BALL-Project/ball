@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: downloadPDBFile.h,v 1.6 2004/04/30 11:15:39 amoll Exp $
+// $Id: downloadPDBFile.h,v 1.6.2.1 2004/05/18 14:33:00 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DOWNLOADPDBFILE_H
@@ -22,7 +22,7 @@ namespace BALL
 
  		class FetchHTMLThread;
 
-		/** Dialog to search for and download structure files from the PDB data bank
+		/** Dialog to search for and download structure files from the <a href="http://www.rcsb.org/">PDB data bank</a>.
 				\ingroup ViewDialogs
 		*/
 		class BALL_EXPORT DownloadPDBFile 
@@ -48,8 +48,6 @@ namespace BALL
 			/** Removes the widget.
 					Reverses all actions performed in initializeWidget()
 					This method will be called by MainControl::aboutToExit()
-					\param		main_control the MainControl object to be finalized with
-										this MolecularFileDialog
 					\see			removeMenuEntry
 			*/
 			virtual void finalizeWidget(VIEW::MainControl& main_control)
