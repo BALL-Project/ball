@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Atom_test.C,v 1.13 2003/01/15 10:51:35 anhi Exp $
+// $Id: Atom_test.C,v 1.14 2003/05/22 21:57:20 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -14,7 +14,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(Atom, "$Id: Atom_test.C,v 1.13 2003/01/15 10:51:35 anhi Exp $")
+START_TEST(Atom, "$Id: Atom_test.C,v 1.14 2003/05/22 21:57:20 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -467,6 +467,8 @@ CHECK(compact(const AtomIndexList& indices))
 		STATUS((*ptr_it)->getType() << " - " << (*ptr_it)->getIndex())
 	}
 RESULT
+delete atom3;
+delete atom4;
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Vector2_test.C,v 1.8 2002/12/12 11:34:46 oliver Exp $
+// $Id: Vector2_test.C,v 1.9 2003/05/22 21:57:22 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,13 +12,23 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(TVector2, "$Id: Vector2_test.C,v 1.8 2002/12/12 11:34:46 oliver Exp $")
+START_TEST(TVector2, "$Id: Vector2_test.C,v 1.9 2003/05/22 21:57:22 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
 using namespace std;
+
+Vector2* vector2_ptr = 0;
+CHECK(TVector2();)
+	vector2_ptr = new Vector2;
+	TEST_NOT_EQUAL(vector2_ptr, 0)
+RESULT								
+
+CHECK(~TVector2();)
+	delete vector2_ptr;
+RESULT		
 
 CHECK(TVector2::BALL_CREATE(TVector2<T>))
 	Vector2 v(1.0, 2.0);
@@ -31,18 +41,6 @@ CHECK(TVector2::BALL_CREATE(TVector2<T>))
 	TEST_REAL_EQUAL(v_ptr->y, 2.0)
 	delete v_ptr;
 RESULT
-
-CHECK(TVector2();)
-  Vector2* v;
-	v = new Vector2();
-	TEST_NOT_EQUAL(v, 0)
-RESULT								
-
-CHECK(~TVector2();)
-  Vector2* v;
-	v = new Vector2();
-	delete v;
-RESULT		
 
 Vector2 v;
 Vector2 v1;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: String_test1.C,v 1.6 2003/03/14 13:45:34 oliver Exp $
+// $Id: String_test1.C,v 1.7 2003/05/22 21:57:21 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -11,7 +11,7 @@
 #include <string>
 ///////////////////////////
 
-START_TEST(String,"$Id: String_test1.C,v 1.6 2003/03/14 13:45:34 oliver Exp $")
+START_TEST(String,"$Id: String_test1.C,v 1.7 2003/05/22 21:57:21 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -71,6 +71,7 @@ CHECK(String::String(string&))
 	TEST_EQUAL(s2->size(), 0)
 	TEST_EQUAL(strcmp(s2->c_str(), ""), 0)
 	delete s3;
+	delete s2;
 RESULT
 
 String empty;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Sphere3_test.C,v 1.10 2002/12/12 11:34:44 oliver Exp $
+// $Id: Sphere3_test.C,v 1.11 2003/05/22 21:57:21 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -10,7 +10,7 @@
 #	include <BALL/MATHS/vector3.h>
 ///////////////////////////
 
-START_TEST(Sphere3, "$Id: Sphere3_test.C,v 1.10 2002/12/12 11:34:44 oliver Exp $")
+START_TEST(Sphere3, "$Id: Sphere3_test.C,v 1.11 2003/05/22 21:57:21 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -34,16 +34,14 @@ CHECK(TSphere3::BALL_CREATE(TSphere3))
 	delete s_ptr;
 RESULT
 
+Sphere3* sphere3_ptr = 0;
 CHECK(TSphere3();)
-  Sphere3* s;
-	s = new Sphere3();
-	TEST_NOT_EQUAL(0, s)
+	sphere3_ptr = new Sphere3;
+	TEST_NOT_EQUAL(sphere3_ptr, 0)
 RESULT			
 
 CHECK(~TSphere3();)
-  Sphere3* s;
-	s = new Sphere3();
-	delete s;
+	delete sphere3_ptr;
 RESULT	
 
 Sphere3 s, s1, s2;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Plane3_test.C,v 1.13 2002/12/12 11:34:43 oliver Exp $
+// $Id: Plane3_test.C,v 1.14 2003/05/22 21:57:21 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -11,7 +11,7 @@
 #include <BALL/MATHS/line3.h>
 ///////////////////////////
 
-START_TEST(Plane3, "$Id: Plane3_test.C,v 1.13 2002/12/12 11:34:43 oliver Exp $")
+START_TEST(Plane3, "$Id: Plane3_test.C,v 1.14 2003/05/22 21:57:21 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -41,16 +41,14 @@ CHECK(TPlane3::BALL_CREATE(TPlane3<T>))
 	delete p_ptr;
 RESULT
 
+Plane3* plane3_ptr = 0;
 CHECK(TPlane3();)
-  Plane3* p;
-	p = new Plane3();
-	TEST_NOT_EQUAL(0, p)
+	plane3_ptr = new Plane3;
+	TEST_NOT_EQUAL(plane3_ptr, 0)
 RESULT		
 
 CHECK(~TPlane3();)
-  Plane3* p;
-	p = new Plane3();
-	delete p;
+	delete plane3_ptr;
 RESULT		
 
 CHECK(TPlane3::bool operator == (const TPlane3& plane) const )

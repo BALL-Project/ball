@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: String_test4.C,v 1.3 2002/12/18 16:00:40 sturm Exp $
+// $Id: String_test4.C,v 1.4 2003/05/22 21:57:21 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -11,7 +11,7 @@
 #include <string>
 ///////////////////////////
 
-START_TEST(String,"$Id: String_test4.C,v 1.3 2002/12/18 16:00:40 sturm Exp $")
+START_TEST(String,"$Id: String_test4.C,v 1.4 2003/05/22 21:57:21 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -19,7 +19,6 @@ START_TEST(String,"$Id: String_test4.C,v 1.3 2002/12/18 16:00:40 sturm Exp $")
 using namespace BALL;
 using std::string;
 
-String* s;	
 String* s2;
 String hall("Hall");
 String halloh("Halloh");
@@ -526,6 +525,7 @@ RESULT
 CHECK(String::isValid())
 	s2 = new String;
 	TEST_EQUAL(s2->isValid(), true)
+	delete s2;
 RESULT
 
 CHECK(String::dump(ostream&, Size))
@@ -543,6 +543,7 @@ CHECK(String::dump(ostream&, Size))
 	s2->dump(dump_stream2, 4);
 	dump_stream2.close();
 	TEST_FILE_REGEXP(tmp_filename.c_str(), "data/string_test_dump4.txt")
+	delete s2;
 RESULT
 
 CHECK(String::getline(istream&, char*))

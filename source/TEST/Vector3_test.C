@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Vector3_test.C,v 1.35 2002/12/12 11:34:46 oliver Exp $
+// $Id: Vector3_test.C,v 1.36 2003/05/22 21:57:22 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -13,7 +13,7 @@
 #include <BALL/MATHS/angle.h>
 ///////////////////////////
 
-START_TEST(TVector3, "$Id: Vector3_test.C,v 1.35 2002/12/12 11:34:46 oliver Exp $")
+START_TEST(TVector3, "$Id: Vector3_test.C,v 1.36 2003/05/22 21:57:22 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -21,16 +21,14 @@ START_TEST(TVector3, "$Id: Vector3_test.C,v 1.35 2002/12/12 11:34:46 oliver Exp 
 using namespace BALL;
 using namespace std;
 
+Vector3* vector3_ptr = 0;
 CHECK(TVector3();)
-  Vector3* v;
-	v = new Vector3();
-	TEST_NOT_EQUAL(v, 0)
+	vector3_ptr = new Vector3;
+	TEST_NOT_EQUAL(vector3_ptr, 0)
 RESULT								
 
 CHECK(~TVector3();)
-  Vector3* v;
-	v = new Vector3();
-	delete v;
+	delete vector3_ptr;
 RESULT		
 
 Vector3 v;

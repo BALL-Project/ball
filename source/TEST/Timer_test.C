@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Timer_test.C,v 1.20 2003/02/05 13:00:19 oliver Exp $
+// $Id: Timer_test.C,v 1.21 2003/05/22 21:57:21 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 #include <unistd.h>
@@ -15,7 +15,7 @@
 #endif
 ///////////////////////////
 
-START_TEST(Timer, "$Id: Timer_test.C,v 1.20 2003/02/05 13:00:19 oliver Exp $")
+START_TEST(Timer, "$Id: Timer_test.C,v 1.21 2003/05/22 21:57:21 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -26,15 +26,15 @@ using namespace BALL;
 	STATUS("WAITING")\
 	{ double x = 0.0; for (int i = 0; i < 5e6; i++, x += rand()); }
 
+Timer* timer_ptr = 0;
 CHECK(Timer::Timer())
-	Timer* t1 = new Timer();
-	TEST_NOT_EQUAL(t1, 0)
-	TEST_EQUAL(t1->isRunning(), false)
+	timer_ptr = new Timer;
+	TEST_NOT_EQUAL(timer_ptr, 0)
+	TEST_EQUAL(timer_ptr->isRunning(), false)
 RESULT
 
 CHECK(Timer::~Timer())
-	Timer* t1 = new Timer();
-	delete t1;
+	delete timer_ptr;
 RESULT
 
 CHECK(Timer::Timer(Timer& timer))

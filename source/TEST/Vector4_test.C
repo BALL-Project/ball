@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Vector4_test.C,v 1.27 2002/12/12 11:34:46 oliver Exp $
+// $Id: Vector4_test.C,v 1.28 2003/05/22 21:57:22 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -9,7 +9,7 @@
 #include <BALL/MATHS/vector4.h>
 ///////////////////////////
 
-START_TEST(TVector4, "$Id: Vector4_test.C,v 1.27 2002/12/12 11:34:46 oliver Exp $")
+START_TEST(TVector4, "$Id: Vector4_test.C,v 1.28 2003/05/22 21:57:22 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -21,16 +21,14 @@ String filename;
 using std::ofstream;
 using std::ios;
 
+Vector4* vector4_ptr = 0;
 CHECK(TVector4();)
-  Vector4* v;
-	v = new Vector4();
-	TEST_NOT_EQUAL(0, v)
+	vector4_ptr = new Vector4;
+	TEST_NOT_EQUAL(vector4_ptr, 0)
 RESULT								
 
 CHECK(~TVector4();)
-  Vector4* v;
-	v = new Vector4();
-	delete v;
+	delete vector4_ptr;
 RESULT		
 
 CHECK(clear())

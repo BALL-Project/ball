@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Triple_test.C,v 1.3 2002/02/27 12:25:02 sturm Exp $
+// $Id: Triple_test.C,v 1.4 2003/05/22 21:57:22 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/DATATYPE/triple.h>
 ///////////////////////////
 
-START_TEST(Triple, "$Id: Triple_test.C,v 1.3 2002/02/27 12:25:02 sturm Exp $")
+START_TEST(Triple, "$Id: Triple_test.C,v 1.4 2003/05/22 21:57:22 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -35,7 +35,6 @@ CHECK(Triple::Triple() throw())
 RESULT
 
 CHECK(Triple::~Triple() throw())
-	Triple<int, int, int>* q = new Triple<int, int, int>;
 	delete q;
 RESULT
 

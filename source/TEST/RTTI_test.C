@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RTTI_test.C,v 1.10 2002/02/27 12:24:49 sturm Exp $
+// $Id: RTTI_test.C,v 1.11 2003/05/22 21:57:21 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -18,7 +18,7 @@ class TC
 {
 };
 
-START_TEST(RTTI, "$Id: RTTI_test.C,v 1.10 2002/02/27 12:24:49 sturm Exp $")
+START_TEST(RTTI, "$Id: RTTI_test.C,v 1.11 2003/05/22 21:57:21 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -101,13 +101,13 @@ CHECK(RTTI::isInstanceOf<>())
 	TEST_EQUAL(isInstanceOf<AtomContainer>(*b_ptr), true)
 	TEST_EQUAL(isInstanceOf<Residue>(*b_ptr), false)
 
-	Atom*					a_ptr = new Atom();
-	System*				s_ptr = new System();
-	PDBAtom*		 pa_ptr = new PDBAtom();
-	Bond*				 bo_ptr = new Bond();
-	NucleicAcid* na_ptr = new NucleicAcid();
-	Nucleotide*  nu_ptr = new Nucleotide();
-	Chain*				c_ptr = new Chain();
+	Atom*					a_ptr = new Atom;
+	System*				s_ptr = new System;
+	PDBAtom*		 pa_ptr = new PDBAtom;
+	Bond*				 bo_ptr = new Bond;
+	NucleicAcid* na_ptr = new NucleicAcid;
+	Nucleotide*  nu_ptr = new Nucleotide;
+	Chain*				c_ptr = new Chain;
 	SecondaryStructure* ss_ptr = new SecondaryStructure;
 	TEST_EQUAL(isInstanceOf<Atom>(*a_ptr), true)
 	TEST_EQUAL(isInstanceOf<System>(*s_ptr), true)
@@ -117,6 +117,13 @@ CHECK(RTTI::isInstanceOf<>())
 	TEST_EQUAL(isInstanceOf<Nucleotide>(*nu_ptr), true)
 	TEST_EQUAL(isInstanceOf<Chain>(*c_ptr), true)
 	TEST_EQUAL(isInstanceOf<SecondaryStructure>(*ss_ptr), true)
+	delete a_ptr;
+	delete s_ptr;
+	delete pa_ptr;
+	delete bo_ptr;
+	delete na_ptr;
+	delete nu_ptr;
+	delete c_ptr;
 RESULT											
 
 CHECK(getDefault<>())
