@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.41 2003/12/12 11:11:47 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.42 2003/12/16 17:39:26 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -2715,7 +2715,7 @@ AC_DEFUN(CF_VIEW, [
 					AC_MSG_RESULT([${QT_VERSION} (${QT_VERSION_STR})])
 					AC_DEFINE_UNQUOTED(BALL_QT_VERSION, ${QT_VERSION})
 					AC_DEFINE_UNQUOTED(BALL_QT_VERSION_STR, ${QT_VERSION_STR})
-					if test "${QT_LIB_SUFFIX}" = "-mt" ; then
+					if test "${QT_MT_SUFFIX}" = "-mt" ; then
 						AC_DEFINE(BALL_QT_HAS_THREADS,)
 					fi
 				fi			

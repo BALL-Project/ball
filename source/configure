@@ -17575,7 +17575,7 @@ _ACEOF
 #define BALL_QT_VERSION_STR ${QT_VERSION_STR}
 _ACEOF
 
-					if test "${QT_LIB_SUFFIX}" = "-mt" ; then
+					if test "${QT_MT_SUFFIX}" = "-mt" ; then
 						cat >>confdefs.h <<\_ACEOF
 #define BALL_QT_HAS_THREADS
 _ACEOF
