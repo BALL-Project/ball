@@ -1,0 +1,14 @@
+// $Id: glObject.iC,v 1.5 2000/09/23 14:40:12 hekl Exp $
+
+BALL_INLINE 
+void GLObject::setGLPrimitiveManager
+  (const GLPrimitiveManager& GL_primitive_manager)
+{
+  GL_primitive_manager_ = (GLPrimitiveManager*)&GL_primitive_manager;
+}
+
+BALL_INLINE 
+GLPrimitiveManager* GLObject::getGLPrimitiveManager() const
+{
+  return GL_primitive_manager_;
+}
