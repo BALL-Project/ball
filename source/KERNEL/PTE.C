@@ -1,4 +1,4 @@
-// $Id: PTE.C,v 1.4 2000/07/18 08:29:53 oliver Exp $
+// $Id: PTE.C,v 1.5 2000/12/08 09:20:00 oliver Exp $
 
 #include <BALL/KERNEL/PTE.h>
 
@@ -28,46 +28,46 @@ namespace BALL
 
 	Element PTE_::element_[] =
 	{
-	//Element      NAME                       SYMBOL       GROUP  PERIOD NUMBER   WEIGHT      ATOMIC COV.  VDW   EN    
-		Element("Actinium",                "Ac"/*227*/,  3,    7,      89,     227.0278,    1.88,  0.0,  0.0,  1.3),
-		Element("Aluminium",               "Al",        13,    3,      13,      26.981539,  1.43,  1.25, 2.05, 1.61),
-		Element("Americium",               "Am"/*243*/,  0,    7,      95,     243.0614,    1.73,  0.0,  0.0,  1.3), 
-		Element("Antimony"/*Stibium*/,     "Sb",        15,    5,      51,     121.76,      1.82,  1.41, 2.2,  2.05),
+		//Element      NAME              SYMBOL       GROUP  PERIOD NUMBER   WEIGHT      ATOMIC COV.  VDW   EN    
+		Element("Actinium",                "Ac",				 3,    7,      89,     227.0278,    1.88,  0.0,  0.0,  1.3),
+		Element("Aluminum",                "Al",        13,    3,      13,      26.981539,  1.43,  1.25, 2.05, 1.61),
+		Element("Americium",               "Am",				 0,    7,      95,     243.0614,    1.73,  0.0,  0.0,  1.3), 
+		Element("Antimony",								 "Sb",        15,    5,      51,     121.76,      1.82,  1.41, 2.2,  2.05),
 		Element("Argon",                   "Ar",        18,    3,      18,      39.948,     1.74,  0.0,  1.91, 0.0),
 		Element("Arsenic",                 "As",        15,    4,      33,      74.92159,   1.25,  1.21, 2.0,  2.18),
-		Element("Astatine",                "At"/*210*/, 17,    6,      85,     209.9871,    0.0,   0.0,  0.0,  1.96), 
+		Element("Astatine",                "At",				17,    6,      85,     209.9871,    0.0,   0.0,  0.0,  1.96), 
 		Element("Barium",                  "Ba",         2,    6,      56,     137.327,     2.17,  1.98, 0.0,  0.89),
-		Element("Berkelium",               "Bk"/*247*/,  0,    7,      97,     247.0703,    1.70,  0.0,  0.0,  1.3), 
+		Element("Berkelium",               "Bk",				 0,    7,      97,     247.0703,    1.70,  0.0,  0.0,  1.3), 
 		Element("Beryllium",               "Be",         2,    2,       4,       9.012182,  1.13,  0.89, 0.0,  1.57),
-		Element("Bismuth"/*Wismut*/,       "Bi",        15,    6,      83,     208.98037,   1.55,  1.52, 2.4,  2.0),
-		Element("Bohrium",                 "Bh"/*262*/,  7,    7,     107,     262.12,      0.0,   0.0,  0.0,  0.0),
+		Element("Bismuth",								 "Bi",        15,    6,      83,     208.98037,   1.55,  1.52, 2.4,  2.0),
+		Element("Bohrium",                 "Bh",				 7,    7,     107,     262.12,      0.0,   0.0,  0.0,  0.0),
 		Element("Boron",                   "B",         13,    2,       5,      10.811,     0.83,  0.88, 2.08, 2.04),
 		Element("Bromine",                 "Br",        17,    4,      35,      79.904,     0.0,   1.14, 1.95, 2.96),
 		Element("Cadmium",                 "Cd",        12,    5,      48,     112.411,     1.49,  1.41, 0.0,  1.69),
 		Element("Caesium",                 "Cs",         1,    6,      55,     132.90543,   2.654, 2.35, 2.62, 0.79),
 		Element("Calcium",                 "Ca",         2,    4,      20,      40.078,     1.97,  1.74, 0.0,  1.0),
-		Element("Californium",             "Cf"/*251*/,  0,    7,      98,     251.0796,    1.69,  0.0,  0.0,  1.3), 
-		Element("Carbon"/*Carboneum*/,     "C",         14,    2,       6,      12.011,     0.77,  0.77, 1.85, 2.55), // cov. single bond 0.77, cov. double bond 0.67, cov. triple bond 0.60 
+		Element("Californium",             "Cf",				 0,    7,      98,     251.0796,    1.69,  0.0,  0.0,  1.3), 
+		Element("Carbon",									 "C",         14,    2,       6,      12.011,     0.77,  0.77, 1.85, 2.55),
 		Element("Cerium",                  "Ce",         0,    6,      58,     140.115,     1.825, 1.65, 0.0,  1.12),
 		Element("Chlorine",                "Cl",        17,    3,      17,      35.4527,    0.0,   0.99, 1.81, 3.16),
 		Element("Chromium",                "Cr",         6,    4,      24,      51.9961,    1.25,  0.0,  0.0,  1.66),
 		Element("Cobalt",                  "Co",         9,    4,      27,      58.9332,    1.25,  1.16, 0.0,  1.88),
-		Element("Copper"/*Cuprum*/,        "Cu",        11,    4,      29,      63.546,     1.28,  1.17, 0.0,  1.9),
-		Element("Curium",                  "Cm"/*247*/,  0,    7,      96,     247.0703,    1.74,  0.0,  0.0,  1.3), 
-		Element("Dubnium",                 "Db"/*261*/,  4,    7,     104,     261.11,      0.0,   0.0,  0.0,  0.0),
+		Element("Copper",									 "Cu",        11,    4,      29,      63.546,     1.28,  1.17, 0.0,  1.9),
+		Element("Curium",                  "Cm",				 0,    7,      96,     247.0703,    1.74,  0.0,  0.0,  1.3), 
+		Element("Dubnium",                 "Db",				 4,    7,     104,     261.11,      0.0,   0.0,  0.0,  0.0),
 		Element("Dysprosium",              "Dy",         0,    6,      66,     162.5,       1.77,  1.59, 0.0,  1.23),
-		Element("Einsteinium",             "Es"/*252*/,  0,    7,      99,     252.083,     2.03,  0.0,  0.0,  1.3), 
+		Element("Einsteinium",             "Es",				 0,    7,      99,     252.083,     2.03,  0.0,  0.0,  1.3), 
 		Element("Erbium",                  "Er",         0,    6,      68,     167.26,      1.76,  1.57, 0.0,  1.25),
 		Element("Europium",                "Eu",         0,    6,      63,     151.965,     2.04,  1.85, 0.0,  1.2),
-		Element("Fermium",                 "Fm"/*257*/,  0,    7,     100,     257.0951,    0.0,   0.0,  0.0,  1.3), 
+		Element("Fermium",                 "Fm",				 0,    7,     100,     257.0951,    0.0,   0.0,  0.0,  1.3), 
 		Element("Fluorine",                "F",         17,    2,       9,      18.9984032, 0.709, 0.58, 1.35, 3.98),
-		Element("Francium",                "Fr"/*223*/,  1,    7,      87,     223.0197,    2.7,   0.0,  0.0,  0.7), 
+		Element("Francium",                "Fr",				 1,    7,      87,     223.0197,    2.7,   0.0,  0.0,  0.7), 
 		Element("Gadolinium",              "Gd",         0,    6,      64,     157.25,      1.8,   1.61, 0.0,  0.94),
 		Element("Gallium",                 "Ga",        13,    4,      31,      69.723,     1.22,  1.25, 0.0,  1.81),
 		Element("Germanium",               "Ge",        14,    4,      32,      72.61,      1.23,  1.22, 0.0,  2.01),
 		Element("Gold"/*Aurum*/,           "Au",        11,    6,      79,     196.96654,   1.44,  1.34, 0.0,  2.0),
 		Element("Hafnium",                 "Hf",         4,    6,      72,     178.49,      1.56,  1.44, 0.0,  1.5),
-		Element("Hahnium",                 "Hn"/*265*/,  8,    7,     108,       0.0,       0.0,   0.0,  0.0,  0.0),
+		Element("Hahnium",                 "Hn",				 8,    7,     108,       0.0,       0.0,   0.0,  0.0,  0.0),
 		Element("Helium",                  "He",        18,    1,       2,       4.002602,  1.28,  0.0,  1.22, 0.0),
 		Element("Holmium",                 "Ho",         0,    6,      67,     164.93032,   1.77,  1.58, 0.0,  1.24),
 		Element("Hydrogen"/*Hydrogenium*/, "H",          1,    1,       1,       1.00797,   0.78,  0.3,  1.2,  2.2),
@@ -147,7 +147,7 @@ namespace BALL
 	{
 		{"AC",  &PTE_::element_[Element::ACTINIUM]},
 		{"AG",  &PTE_::element_[Element::SILVER]},
-		{"AL",  &PTE_::element_[Element::ALUMINIUM]},
+		{"AL",  &PTE_::element_[Element::ALUMINUM]},
 		{"AM",  &PTE_::element_[Element::AMERICIUM]},
 		{"AR",  &PTE_::element_[Element::ARGON]},
 		{"AS",  &PTE_::element_[Element::ARSENIC]},
@@ -273,7 +273,7 @@ namespace BALL
 		&PTE_::element_[Element::NEON],
 		&PTE_::element_[Element::SODIUM],
 		&PTE_::element_[Element::MAGNESIUM],
-		&PTE_::element_[Element::ALUMINIUM],
+		&PTE_::element_[Element::ALUMINUM],
 		&PTE_::element_[Element::SILICON],
 		&PTE_::element_[Element::PHOSPHORUS],
 		&PTE_::element_[Element::SULPHUR],
@@ -389,7 +389,7 @@ namespace BALL
 	{
 	}
 
-	Element::Element(const Element& element, bool /* deep */)
+	Element::Element(const Element& element)
 			:	PropertyManager(),
 				name_(element.name_),
 				symbol_(element.symbol_),
@@ -457,8 +457,9 @@ namespace BALL
 	{
 	}
 
-	PTE_::PTE_(const PTE_&, bool)
+	PTE_::PTE_(const PTE_& /* pte */)
 	{
+		// no nonstatic members to copy
 	}
 
 	PTE_::~PTE_()
