@@ -1,4 +1,4 @@
-// $Id: global.h,v 1.9.4.2 2002/11/14 15:45:59 amoll Exp $
+// $Id: global.h,v 1.9.4.3 2002/11/14 17:49:34 amoll Exp $
 
 #ifndef BALL_KERNEL_GLOBAL_H
 #define BALL_KERNEL_GLOBAL_H
@@ -100,7 +100,7 @@ namespace BALL
 			{
 				Atom* a1 = atom_map[(*list_iter)->getFirstAtom()];
 				Atom* a2 = atom_map[(*list_iter)->getSecondAtom()];
-				Bond*	tmp_bond = static_cast<Bond*>((*list_iter)->createDefault());
+				Bond*	tmp_bond = static_cast<Bond*>((*list_iter)->create(false, true));
 				tmp_bond->createBond(*tmp_bond, *a1, *a2);
 				(*tmp_bond) = (**list_iter);
 				tmp_bond->setFirstAtom(a1);
