@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.38 2004/09/10 14:07:04 amoll Exp $
+// $Id: cartoonModel.C,v 1.39 2004/09/10 14:33:21 amoll Exp $
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
 
@@ -1046,6 +1046,7 @@ namespace BALL
 
 				AtomIterator it;
 				bool error = false;
+				Vector3 connection_point;
 				Atom* atoms[9];
 				for (Position p = 0; p < 9; p++)
 				{
@@ -1079,6 +1080,7 @@ namespace BALL
 					// all atoms found?
 					if (error) continue;
 
+					connection_point = atoms[0]->getPosition();
 					createTriangle_(*mesh, *atoms[1], *atoms[0], *atoms[8], atoms[1], atoms[0], atoms[8]); 	// C4,N9,C8
 					createTriangle_(*mesh, *atoms[6], *atoms[1], *atoms[8], 0, 0, 0); 										 	// C5,C4,C8
 					createTriangle_(*mesh, *atoms[6], *atoms[7], *atoms[8], atoms[6], atoms[7], atoms[8]); 	// C5,N7,C8
@@ -1113,6 +1115,7 @@ namespace BALL
 					// all atoms found?
 					if (error) continue;
 
+					connection_point = atoms[0]->getPosition();
 					createTriangle_(*mesh, *atoms[1], *atoms[2], *atoms[3], atoms[1], atoms[2], atoms[3]); 	// C2,N3,C4
 					createTriangle_(*mesh, *atoms[0], *atoms[1], *atoms[3], atoms[0], atoms[1], 0); 			  // N1,C2,C4
 					createTriangle_(*mesh, *atoms[0], *atoms[3], *atoms[4], atoms[3], atoms[4], 0); 				// N1,C4,C5
@@ -1144,13 +1147,44 @@ namespace BALL
 					// all atoms found?
 					if (error) continue;
 
+					connection_point = atoms[5]->getPosition();
 					createTriangle_(*mesh, *atoms[1], *atoms[2], *atoms[3], atoms[1], atoms[2], atoms[3]); 	// N3,C4,C5
 					createTriangle_(*mesh, *atoms[0], *atoms[1], *atoms[3], atoms[0], atoms[1], 0); 			  // C2,N3,C5
 					createTriangle_(*mesh, *atoms[0], *atoms[3], *atoms[4], atoms[3], atoms[4], 0); 				// C2,C5,C6
 					createTriangle_(*mesh, *atoms[0], *atoms[5], *atoms[4], atoms[0], atoms[5], atoms[4]); 	// C2,N1,C6
 					// we are done for T
-					continue;
 				}
+
+				// --------------------------------------------
+				// draw connection to backbone
+				// --------------------------------------------
+				float distance = 256;
+				Vector3 base;
+				vector<Vector3>::iterator sit = spline_.begin();
+				for (; sit != spline_.end(); sit++)
+				{
+					float new_distance = ((*sit) - connection_point).getSquareLength();
+					if (new_distance < distance && distance > 0.1)
+					{
+						distance = new_distance;
+						base = (*sit);
+					}
+				}
+
+				if (distance < 256)
+				{
+					Tube* tube = new Tube;
+					tube->setComposite(r);
+					Vector3 v = connection_point - base;
+					Vector3 vn = v.normalize();
+					vn *= 0.1;
+					tube->setVertex1(connection_point + vn);
+					tube->setVertex2(base);
+					tube->setRadius(0.1);
+					geometric_objects_.push_back(tube);
+				}
+
+				// done for Residue r
 			}
 		}
 
