@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer.C,v 1.19 2002/02/27 12:24:18 sturm Exp $
+// $Id: TCPTransfer.C,v 1.20 2002/03/16 11:43:39 amoll Exp $
 
 // workaround for Solaris -- this should be caught by configure -- OK / 15.01.2002
 #define BSD_COMP
@@ -712,6 +712,7 @@ TCPTransfer::Status TCPTransfer::getFTP_()
 	// now connecting to passive ftp port
 	if(connect(socket2, (struct sockaddr*)&host, sizeof(struct sockaddr)) == -1)
 	{
+		close(socket2);
 		status_ = CONNECT_ERROR;
 		return status_;
 	}
@@ -724,6 +725,7 @@ TCPTransfer::Status TCPTransfer::getFTP_()
 	received_bytes_ = read(socket_, buffer_, BUFFER_SIZE);
 	if (received_bytes_ < 0)
 	{
+		close(socket2);
 		return RECV_ERROR;
 	}
 	buffer_[received_bytes_] = '\0';
@@ -735,6 +737,7 @@ TCPTransfer::Status TCPTransfer::getFTP_()
 	// we get a code 200 if FTP-server will use binary mode
 	if (getFTPStatus_() != 200)
 	{
+		close(socket2);
 		return status_;
 	}
 
