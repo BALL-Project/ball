@@ -1,4 +1,4 @@
-// $Id: JohnsonBoveyShiftProcessor_test.C,v 1.7 2001/07/14 19:45:09 oliver Exp $
+// $Id: JohnsonBoveyShiftProcessor_test.C,v 1.8 2001/12/20 01:14:19 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 
 ///////////////////////////
 
-START_TEST(JohnsonBoveyShiftProcessor, "$Id: JohnsonBoveyShiftProcessor_test.C,v 1.7 2001/07/14 19:45:09 oliver Exp $")
+START_TEST(JohnsonBoveyShiftProcessor, "$Id: JohnsonBoveyShiftProcessor_test.C,v 1.8 2001/12/20 01:14:19 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -96,6 +96,7 @@ CHECK(chemical shifts/without rings)
 RESULT
 
 
+S.destroy();
 f.open("data/JohnsonBoveyShiftProcessor_test2.hin");
 f >> S;
 CHECK(chemical shifts/with rings)

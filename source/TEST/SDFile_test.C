@@ -1,4 +1,4 @@
-// $Id: SDFile_test.C,v 1.1 2001/12/18 01:20:13 oliver Exp $
+// $Id: SDFile_test.C,v 1.2 2001/12/20 01:14:19 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -14,7 +14,7 @@
 
 ///////////////////////////
 
-START_TEST(SDFile, "$Id: SDFile_test.C,v 1.1 2001/12/18 01:20:13 oliver Exp $")
+START_TEST(SDFile, "$Id: SDFile_test.C,v 1.2 2001/12/20 01:14:19 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -34,12 +34,41 @@ CHECK(SDFile::~SDFile())
 RESULT
 
 
+CHECK(Molecule* SDFile::read())
+	SDFile f("data/SDFile_test1.sdf");
+	Molecule* molecule = f.read();
+	TEST_NOT_EQUAL(molecule, 0)
+	ABORT_IF(molecule == 0)
+	TEST_EQUAL(molecule->countAtoms(), 39)
+	TEST_EQUAL(molecule->countBonds(), 42)
+RESULT
+
 CHECK(SDFile::read(System& system))
 	SDFile f("data/SDFile_test1.sdf");
 	System system;
 	f.read(system);
-	TEST_EQUAL(system.countAtoms(), 23)
-	TEST_EQUAL(system.countBonds(), 26)
+	TEST_EQUAL(system.countAtoms(), 518)
+	TEST_EQUAL(system.countBonds(), 528)
+	TEST_EQUAL(system.countMolecules(), 11)
+
+	ABORT_IF(system.countMolecules() == 0)
+	Molecule& m = *system.beginMolecule();
+	TEST_EQUAL(m.hasProperty("NAME"), true)
+	TEST_EQUAL(m.hasProperty("b_1rotN"), true)
+	TEST_EQUAL(m.hasProperty("Weight"), true)
+	TEST_EQUAL(m.hasProperty("TPSA"), true)
+	TEST_EQUAL(m.hasProperty("a_acc"), true)
+	TEST_EQUAL(m.hasProperty("a_don"), true)
+	TEST_EQUAL(m.hasProperty("logP(o/w)"), true)
+	TEST_EQUAL(m.hasProperty("SlogP"), true)
+	TEST_EQUAL(m.getProperty("NAME").getString(), "Abacavir_sulfate")
+	TEST_EQUAL(m.getProperty("b_1rotN").getString(), "6")
+	TEST_EQUAL(m.getProperty("Weight").getString(), "286.339")
+	TEST_EQUAL(m.getProperty("TPSA").getString(), "101.88")
+	TEST_EQUAL(m.getProperty("a_acc").getString(), "4")
+	TEST_EQUAL(m.getProperty("a_don").getString(), "3")
+	TEST_EQUAL(m.getProperty("logP(o/w)").getString(), "0.40906")
+	TEST_EQUAL(m.getProperty("SlogP").getString(), "1.1878")
 RESULT
 
 
@@ -47,9 +76,9 @@ CHECK(SDFile::SDFile(const String& filename, File::OpenMode open_mode))
 	SDFile f("data/SDFile_test1.sdf", File::IN);
 	System system;
 	f.read(system);
-	TEST_EQUAL(system.countAtoms(), 23)
-	TEST_EQUAL(system.countMolecules(), 1)
-	TEST_EQUAL(system.countBonds(), 26)
+	TEST_EQUAL(system.countAtoms(), 518)
+	TEST_EQUAL(system.countMolecules(), 11)
+	TEST_EQUAL(system.countBonds(), 528)
 RESULT
 
 
@@ -63,6 +92,8 @@ CHECK(SDFile::write(const System& system))
 	Atom* a2 = new Atom;
 	m->insert(*a1);
 	m->insert(*a2);
+	m->setProperty("TESTPROPERTY1", 123.456);
+	m->setProperty("TESTPROPERTY2", String("TP2"));
 
 	a1->setName("A1");
 	a1->setElement(PTE[Element::N]);
@@ -93,9 +124,9 @@ CHECK(SDFile::SDFile& operator >> (System& system))
 	System S;
 	f >> S;
 	f.close();
-	TEST_EQUAL(S.countAtoms(), 23)
-	TEST_EQUAL(S.countBonds(), 26)
-	TEST_EQUAL(S.countMolecules(), 1)
+	TEST_EQUAL(S.countAtoms(), 518)
+	TEST_EQUAL(S.countBonds(), 528)
+	TEST_EQUAL(S.countMolecules(), 11)
 RESULT
 
 CHECK(SDFile::SDFile& operator << (const System& system))
@@ -108,6 +139,8 @@ CHECK(SDFile::SDFile& operator << (const System& system))
 	Atom* a2 = new Atom();
 	m->insert(*a1);
 	m->insert(*a2);
+	m->setProperty("TESTPROPERTY1", 123.456);
+	m->setProperty("TESTPROPERTY2", String("TP2"));
 
 	a1->setName("A1");
 	a1->setElement(PTE[Element::N]);
@@ -129,7 +162,7 @@ CHECK(SDFile::SDFile& operator << (const System& system))
 	f << S;	
 	f.close();
 	
-	TEST_FILE(filename.c_str(), "data/SDFile_test.sdf", true)
+	TEST_FILE(filename.c_str(), "data/SDFile_test2.sdf", true)
 RESULT
 
 /////////////////////////////////////////////////////////////

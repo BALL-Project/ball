@@ -1,7 +1,7 @@
-// $Id: HINFile.sip,v 1.1 2001/09/03 16:53:02 oliver Exp $
+// $Id: HINFile.sip,v 1.2 2001/12/20 01:13:02 oliver Exp $
 
 class HINFile
-	: File
+	: GenericMolFile
 {
 %HeaderCode
 	#include <BALL/FORMAT/HINFile.h>
@@ -16,9 +16,9 @@ class HINFile
 		throw();
 
   virtual void write(System&);
-  virtual void read(System&);
+  virtual bool read(System&);
   virtual HINFile& operator >> (System& /system/);
-  virtual HINFile& operator << (System& /system/);
+  virtual HINFile& operator << (const System& /system/);
   bool hasPeriodicBoundary() const;
   Box3 getPeriodicBoundary() const;
   float getTemperature() const;

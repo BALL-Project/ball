@@ -1,4 +1,4 @@
-// $Id: exception.sip,v 1.1 2001/09/03 16:53:07 oliver Exp $
+// $Id: exception.sip,v 1.2 2001/12/20 01:13:03 oliver Exp $
 
 class GeneralException 
 {
@@ -208,6 +208,22 @@ class FileNotFound
   FileNotFound(const char* /file/, int /line/, const String& /filename/);
   String getFilename() const;
 };
+
+class ParseError
+	: GeneralException
+{
+%HeaderCode
+	#include <BALL/COMMON/exception.h>
+	using namespace BALL;
+	using namespace BALL::Exception;
+%End
+	public:
+	ParseError(const char* /file/, int /line/, const String& /expression/,
+ 	  				 const String& /message/)
+							throw();
+};
+
+
 
 class GlobalExceptionHandler
 {

@@ -1,4 +1,4 @@
-// $Id: genericMolFile.h,v 1.6 2001/12/19 02:40:23 oliver Exp $
+// $Id: genericMolFile.h,v 1.7 2001/12/20 01:10:49 oliver Exp $
 
 #ifndef BALL_FORMAT_GENERICMOLFILE_H
 #define BALL_FORMAT_GENERICMOLFILE_H
@@ -14,6 +14,40 @@ namespace BALL
 	class Molecule;
 
 	/**	Base class for all molecule file format classes. 
+			This class provides an interface for all molecular
+			structure formats (except for PDB files, due to their 
+			complex and capricious structure and contents).\\
+			GenericMolFile supports two type of operations: 
+			reading/writing single molecules and reading/writing 
+			systems (i.e. collections of molecules).\\
+			When reading molecules, the structures are read one at
+			a time from the file in the order they are stored.
+			In contrast, reading systems retrieves all structures
+			contained in the file. For file formats that do not support
+			multiple structure in a file (e.g. the MDL \Ref{MOLFile}),
+			those two operations are basically equivalent.
+			A fundamental difference however is the fact that
+			reading a molecule {\em create} a new molecule, whereas
+			reading a system adds the molecules read to an
+			existing instance of \Ref{System}. This implies that
+			the system has to be cleared prior to reading a system
+			if that incremental behaviour is not desired.\\
+			The user interface of the class is mainly provided through
+			the stream operator. A typical example for reading a structure 
+			from a HyperChem file might look as follows:\\
+			\begin{verbatim}
+				HINFile hinfile(filename);
+				System S;
+				hinfile >> S;
+			\end{verbatim}
+			This interface applies to all derived classes as well, so that
+			file formats can be exchanged conveniently.\\
+			GenericMolFile is derived from \Ref{LineBasedFile} since most
+			molecular structure formats are line-based tagged formats,
+			often containing Fortran-style formatted sections. 
+			\Ref{LineBasedFile} provides a number of convenient methods
+			to parse that kind of format.
+			\\
 			{\bf Definition:} \URL{BALL/FORMAT/genericMolFile.h} 
 	*/
 	class GenericMolFile
@@ -30,7 +64,7 @@ namespace BALL
 		GenericMolFile()
 			throw();
 
-		/** Detailed constructor.
+		/** Detailed constructor
 		*/
 		GenericMolFile(const String& filename, File::OpenMode open_mode = std::ios::in)
 			throw(Exception::FileNotFound);
@@ -45,14 +79,30 @@ namespace BALL
 			throw();
 		
 		//@}
+
 		/**	@name Reading and Writing of Kernel Datastructures
 		*/
 		//@{
+
+		/**	Initialize internals for read.
+				This method is called by the default implementation 
+				of \Ref{read(System& system)}. Its purpose is the 
+				initialization of internal members holding, for example,
+				header information from the file.
+				The default implementation provided is empty.
+		*/
+		virtual void initRead();
+			
+		/**	Initialize internals for write.
+				Same functionality as \Ref{initRead}, but is called 
+				prior to writing a system.
+		*/
+		virtual void initWrite();
 		
 		/**	Write the molecules of a system.
 				If the file format does not support multiple 
-				molecules in a single file, a warning is printed
-				and only the first molecule is stored.\\
+				molecules in a single file, a warning should be printed
+				and only the first molecule should be stored.\\
 				The default implementation iterates over
 				the system and calls \Ref{write(const Molecule& molecule)} 
 				for each molecule. 
@@ -107,11 +157,13 @@ namespace BALL
 		GenericMolFile& operator << (const System& system);
 
 		/** Stream operator for reading a molecule.
+				Calls \Ref{read()}
 		*/
 		GenericMolFile& operator >> (Molecule& molecule)
 			throw(Exception::ParseError);
 		
-		/**	Stream operator for writing a molecule of molecules.
+		/**	Stream operator for writing a system of molecules.
+				Calls \Ref{write()}
 		*/
 		GenericMolFile& operator << (const Molecule& molecule);
 		//@}

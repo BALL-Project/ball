@@ -1,4 +1,4 @@
-// $Id: HINFile.h,v 1.16 2001/12/19 02:40:22 oliver Exp $
+// $Id: HINFile.h,v 1.17 2001/12/20 01:10:48 oliver Exp $
 
 #ifndef BALL_FORMAT_HINFILE_H
 #define BALL_FORMAT_HINFILE_H
@@ -68,6 +68,12 @@ namespace BALL
 		*/
 		virtual bool read(System& system)
 			throw(Exception::ParseError);
+
+		/**	Initialize internals.
+				Initialize temperature and box dimensions prior to
+				reading a system.
+		*/
+		virtual void initRead();
 		//@}
 
 		/**	@name	Accessors

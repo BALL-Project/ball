@@ -1,10 +1,7 @@
-// $Id: lineBasedFile.h,v 1.16 2001/12/17 01:41:44 oliver Exp $
+// $Id: lineBasedFile.h,v 1.17 2001/12/20 01:10:49 oliver Exp $
+
 #ifndef BALL_FORMAT_LINEBASEDFILE_H
 #define BALL_FORMAT_LINEBASEDFILE_H
-
-#ifndef BALL_DATATYPE_String_H
-# include <BALL/DATATYPE/string.h>
-#endif
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -20,7 +17,7 @@
 namespace BALL 
 {
 
-	/** This class is intended for use with Line Based File Formats.
+	/** A class for the convenient parsing of line-based file formats.
 			{\bf Definition:} \URL{BALL/FORMAT/lineBasedFile.h} \\
 	*/
 	class LineBasedFile
@@ -29,21 +26,6 @@ namespace BALL
 		public:
 
 		BALL_CREATE(LineBasedFile)
-
-		/**	@name Exceptions
-		*/
-		//@{
-
-		/** Exception thrown if a file could not be processed right.
-		*/
-		class LineBasedFileError
-			: public Exception::GeneralException
-		{
-			public:
-			LineBasedFileError(const char* file, int line, const LineBasedFile* f = 0, const string& message = "");
-		};
-
-		//@}
 
 		/**	@name Constructors and Destructors
 		*/
@@ -124,52 +106,54 @@ namespace BALL
 				@return true if a line could be read, false if End Of File.
 		*/
 		bool readLine()
-			throw(LineBasedFile::LineBasedFileError);
+			throw(Exception::ParseError);
 
 		/** Skip a given number of lines.
 				@return false, if EOF occurs.
 		*/
 		bool skipLines(Size number = 1)
-			throw(LineBasedFile::LineBasedFileError);
+			throw(Exception::ParseError);
 
-		/** Function to search for a line starting with a given String.
-				The search is started at the current line.
-				@param return_to_point : true -> if line can not be found return to the starting position
-				@return true if line could be found
+		/** Search for a line starting with a given string.
+				Search starts at the current line and ends at the end of the file 
+				(no wrap around).
+				@param return_to_start if set to {\bf true}, the current line is reset to its value prior to the invocation
+				@return {\bf true} if line could be found
 		*/
-		bool search(const String& text, bool return_to_point = false)
-			throw(LineBasedFile::LineBasedFileError);
+		bool search(const String& text, bool return_to_start = false)
+			throw(Exception::ParseError);
 
-		/** Like search above, but stop search when coming to a line starting with stop
+		/* Search for a line starting with a given string, abort at a stop tag.
 		*/
-		bool search(const String& text, const String& stop, bool
-				return_to_point = false)
-			throw(LineBasedFile::LineBasedFileError);
+		bool search(const String& text, const String& stop, 
+								bool return_to_start = false)
+			throw(Exception::ParseError);
 
 		/** Go to a given line.
 				@return false if EOF occurs
 		*/
 		bool goToLine(Position line_number)
-			throw(LineBasedFile::LineBasedFileError);
+			throw(Exception::ParseError);
 
-		/// Rewind file to start
+		/** Rewind file to start
+		*/
 		void rewind()
-			throw(LineBasedFile::LineBasedFileError);
+			throw(Exception::ParseError);
 
-		/** Tests a condition.
-				If false: Throw an exception and terminate the programm.
-				The method is implemented for use in derived classes.
-				Example: \\
-				test(__FILE__, __LINE__, shift_reference->elements.size() > 0,
-						 "no data for shift references found");
+		/** Test for a condition.
+				Throw an exception if a given condition is not met.
+				\begin{verbatim}
+					abort(__FILE__, __LINE__, shift_reference->elements.size() > 0,
+								"no data for shift references found");
+				\end{verbatim}
 				@param file should be used for __FILE__
 				@param line should be used for __LINE__
-				@param condition bool value to test
+				@param condition to be tested
 				@param msg this string is used as message in the exception
-				@exception LineBasedFile if {\tt condition} is not fulfilled
+				@exception ParseError if {\tt condition} is not fulfilled
 		*/
 		void test(const char* file, int line, bool condition, const String& msg) 
-			const throw(LineBasedFile::LineBasedFileError);
+			const throw(Exception::ParseError);
 
 		/** Function to get a field surrounded by delimiter
 		*/
@@ -181,7 +165,7 @@ namespace BALL
 		bool startsWith(const String& text) 
 			const throw();
 
-		/// Return true if the current line has text
+		/// Return true if the current line contains text
 		bool has(const String& text) 
 			const throw();
 

@@ -171,8 +171,8 @@ EXECUTABLES_SOLVATION = \
 	PairExpRDFIntegrator_test
 
 EXECUTABLES_QSAR = \
-	Descriptor_test.C\
-	SimpleDescriptors_test.C
+	Descriptor_test\
+	SimpleDescriptors_test
 
 EXECUTABLES = \
 	$(EXECUTABLES_BASIC)\

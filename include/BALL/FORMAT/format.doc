@@ -1,8 +1,18 @@
-// $Id: format.doc,v 1.9 2001/12/17 01:42:08 oliver Exp $
+// $Id: format.doc,v 1.10 2001/12/20 01:10:49 oliver Exp $
 
-/**@name	Fileformats
-		This chapter contains all relevant information on 
-		BALL file formats and how to use them.
+/**@name	File Formats
+	BALL supports a number of different file formats and offers 
+	a set of classes do read and write thos formats.
+	Some of these classes provide interfaces for the format
+	classes, e.g. \Ref{GenericMolFile}, which implements a
+	generic interface for molecular file formats. Others
+	implement specific formats. In addition, classes like
+	\Ref{LineBasedFile} provide simple interface to allow
+	the user the rapid implementation of user-defined file	
+	formats or for parsing specialized formats.
+	All file format classes are derived from \Ref{File}
+	and provide the features implemented there, e.g.
+	on-the-fly transformation and URL retrieval.
 */
 //@{
 
@@ -20,31 +30,32 @@
 
 	//@}
 
-	/**	@name	Support for Windows-style INI files
+
+	/** @name Molecular Dynamics Trajectory File Formats
+	*/
+	//@{
+		//@Include: trajectoryFile.h
+		//@Include: DCDFile.h
+		//@Include: TRRFile.h
+	//@}
+
+	/**	@name	General Purpose File Formats
 	*/
 	//@{
 		//@Include: INIFile.h
 		//@Include: parameters.h
 		//@Include: parameterSection.h
+		//@Include: resourceFile.h
+		//@Include: lineBasedFile.h
 	//@}
-	//@Include: resourceFile.h
-	//@Include: lineBasedFile.h
 
-	/**	@name	NMR file formats
+	/**	@name	NMR File Formats
 	*/
 	//@{
 		//@Include: JCAMPFile.h
 		//@Include: bruker1DFile.h
 		//@Include: bruker2DFile.h
     //@Include: NMRStarFile.h
-	//@}
-
-	/** @name Molecular Dynamics file formats
-	*/
-	//@{
-		//@Include: trajectoryFile.h
-		//@Include: DCDFile.h
-		//@Include: TRRFile.h
 	//@}
 	
 //@}

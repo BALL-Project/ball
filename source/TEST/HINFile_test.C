@@ -1,4 +1,4 @@
-// $Id: HINFile_test.C,v 1.14 2001/12/19 04:13:01 oliver Exp $
+// $Id: HINFile_test.C,v 1.15 2001/12/20 01:14:19 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 
 ///////////////////////////
 
-START_TEST(HINFile, "$Id: HINFile_test.C,v 1.14 2001/12/19 04:13:01 oliver Exp $")
+START_TEST(HINFile, "$Id: HINFile_test.C,v 1.15 2001/12/20 01:14:19 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -70,6 +70,16 @@ CHECK(HINFile::read(System& system))
 	TEST_REAL_EQUAL(hin.getPeriodicBoundary().b.y, 9.35068)
 	TEST_REAL_EQUAL(hin.getPeriodicBoundary().b.z, 9.35068)
 	PRECISION(1e-5)
+
+	System S2;
+	HINFile hin2("data/AlaGlySer.hin");
+	hin2 >> S2;
+	TEST_EQUAL(S2.countAtoms(), 31)
+	TEST_EQUAL(S2.countProteins(), 1)
+	TEST_EQUAL(S2.countResidues(), 3)
+	TEST_EQUAL(S2.countChains(), 1)
+	TEST_EQUAL(S2.countMolecules(), 1)
+	TEST_EQUAL(S2.countBonds(), 30)
 RESULT
 
 CHECK(HINFile::write(const System& system))

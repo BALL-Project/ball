@@ -1,4 +1,4 @@
-// $Id: HaighMallionShiftProcessor_test.C,v 1.5 2000/09/25 14:12:02 oliver Exp $
+// $Id: HaighMallionShiftProcessor_test.C,v 1.6 2001/12/20 01:14:19 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 
 ///////////////////////////
 
-START_TEST(HaighMallionShiftProcessor, "$Id: HaighMallionShiftProcessor_test.C,v 1.5 2000/09/25 14:12:02 oliver Exp $")
+START_TEST(HaighMallionShiftProcessor, "$Id: HaighMallionShiftProcessor_test.C,v 1.6 2001/12/20 01:14:19 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -97,7 +97,7 @@ CHECK(chemical shifts/without rings)
 	}	
 RESULT
 
-
+S.destroy();
 f.open("data/HaighMallionShiftProcessor_test2.hin");
 f >> S;
 CHECK(chemical shifts/with rings)
