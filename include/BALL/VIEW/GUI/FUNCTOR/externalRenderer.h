@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: externalRenderer.h,v 1.3 2002/12/18 16:00:31 sturm Exp $
+// $Id: externalRenderer.h,v 1.4 2002/12/18 17:36:51 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_FUNCTOR_EXTERNALRENDERER_H
 #define BALL_VIEW_GUI_FUNCTOR_EXTERNALRENDERER_H
@@ -30,7 +30,7 @@ namespace BALL
 
 			/** @name Constructors and Destructors.
 			 */
-			//@[
+			//@{
 
 			/** Default Constructor.
 			 		Construct a new ExternalRenderer.
@@ -90,6 +90,5 @@ namespace BALL
 
 }  // namespace BALL
 
-			//@}
 			
 #endif // BALL_VIEW_GUI_FUNCTOR_EXTERNALRENDERER_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: parsedFunction.h,v 1.3 2002/12/18 16:00:26 sturm Exp $
+// $Id: parsedFunction.h,v 1.4 2002/12/18 17:36:46 sturm Exp $
 
 #ifndef BALL_MATHS_PARSEDFUNCTION_H
 #define BALL_MATHS_PARSEDFUNCTION_H
@@ -66,7 +66,8 @@ namespace BALL
 		 */
 		double operator () (arg p)
 			throw(Exception::ParseError);
-		
+	
+		//@}
 		/** @name Parsing
 		 */
 		//@{
