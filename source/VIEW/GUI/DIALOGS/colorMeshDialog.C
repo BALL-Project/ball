@@ -93,6 +93,7 @@ void ColorMeshDialog::apply_clicked()
 	}
 		
 	// repaint of the scene and the composites needed
+	MainControl::getMainControl(this)->updateAll();
 	MainControl::getMainControl(this)->repaint();
 
 	hide();
