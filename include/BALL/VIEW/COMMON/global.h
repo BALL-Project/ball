@@ -59,6 +59,13 @@ namespace BALL
 		{
 			RANGE__ADDRESS = 50
 		};
+
+		/**     Value enums
+		*/
+		enum Value
+		{
+			VALUE__INVALID              = -1
+		};
 		//@}
 
 	} // namespace VIEW
