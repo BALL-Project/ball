@@ -1,4 +1,4 @@
-// $Id: BaseFragment_test.C,v 1.11 2000/04/28 06:49:23 amoll Exp $
+// $Id: BaseFragment_test.C,v 1.12 2000/05/07 11:28:37 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -9,13 +9,12 @@
 ///////////////////////////
 
 
-START_TEST(BaseFragment, "$Id: BaseFragment_test.C,v 1.11 2000/04/28 06:49:23 amoll Exp $")
+START_TEST(BaseFragment, "$Id: BaseFragment_test.C,v 1.12 2000/05/07 11:28:37 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
-using namespace std;
 String filename;
 NEW_TMP_FILE(filename)
 
@@ -43,11 +42,15 @@ RESULT
 CHECK(BaseFragment(BaseFragment&, bool))
 	BaseFragment* bf1 = new BaseFragment;
 	bf1->setName("testname");
+	Atom a;
+	a.setName("a");
+	bf1->insert(a);
 	BaseFragment* bf2 = new BaseFragment(*bf1, true);
 	TEST_NOT_EQUAL(bf2, 0)
 	if (bf2 != 0)
 	{
 		TEST_EQUAL(bf2->getName(), "testname")
+		TEST_EQUAL(bf2->getAtom(0)->getName(), "a")
 		delete bf2;
 	}
 	bf2 = new BaseFragment(*bf1, false);
@@ -121,6 +124,7 @@ CHECK(getBaseFragment(Position))
 	}
 	bf3 = bf1.getBaseFragment(1);
 	TEST_EQUAL(bf3, 0)
+	TEST_EQUAL(bf1.getBaseFragment(-1), 0)
 RESULT
 
 CHECK(getBaseFragment(Position) const)
@@ -216,7 +220,7 @@ pm.registerClass(getStreamName<Atom>(), Atom::createDefault);
 String filename;
 NEW_TMP_FILE(filename)
 CHECK(persistentWrite(PersistenceManager&, String, bool))
-	ofstream	ofile(filename.c_str(), ios::out);
+	std::ofstream	ofile(filename.c_str(), std::ios::out);
 	BaseFragment* bf1 = new BaseFragment("name1");
 	BaseFragment* bf2 = new BaseFragment("name2");
 	bf1->insert(*bf2);
@@ -228,7 +232,7 @@ RESULT
 */
 /*
 CHECK(persistentRead(PersistenceManager&))
-	ifstream	ifile(filename.c_str());
+	std::ifstream	ifile(filename.c_str());
 	pm.setIstream(ifile);
 	PersistentObject*	ptr = pm.readObject();
 	TEST_NOT_EQUAL(ptr, 0)
@@ -393,6 +397,7 @@ CHECK(getAtom(Position))
 	TEST_EQUAL(ptr, 0)
 	ptr = bf1.getAtom(25);
 	TEST_EQUAL(ptr, 0)
+	TEST_EQUAL(bf1.getAtom(-1), 0)
 RESULT
 
 CHECK(getAtom(Position) const)
@@ -404,6 +409,7 @@ CHECK(getAtom(Position) const)
 	bf1.remove(a);
 	TEST_EQUAL(bf1.getAtom(0), 0)
 	TEST_EQUAL(bf1.getAtom(24), 0)
+	TEST_EQUAL(bf1.getAtom(-1), 0)
 RESULT
 
 CHECK(countAtoms())
@@ -705,14 +711,14 @@ CHECK(dump(ostream&, Size))
 	Atom a1;
 	a1.setName("A1");
 	bf2.append(a1);
-	ofstream outfile(filename.c_str(), ios::out);
+	std::ofstream outfile(filename.c_str(), ios::out);
 	bf1.dump(outfile);
 	outfile.close();
 	TEST_FILE(filename.c_str(), "data/Base_Fragment.txt", true)
 RESULT
 
 CHECK(read(istream&)) // NotImplemented
-/*	ifstream instr("data/Base_Fragment.txt2.txt");
+/*	std::ifstream instr("data/Base_Fragment.txt2.txt");
 	BaseFragment bf3;
 	bf3.read(instr);
 	instr.close();
@@ -730,7 +736,7 @@ CHECK(write(ostream&)) // NotImplemented
 	bf2.append(a1);
 	bf1.setName("BF1");
 	bf2.setName("BF2");
-	ofstream outstr(filename.c_str(), ios::out);
+	std::ofstream outstr(filename.c_str(), std::ios::out);
 	bf1.write(outstr);
 	outstr.close();
 	TEST_FILE(filename.c_str(), "data/Base_Fragment.txt2", false)*/
