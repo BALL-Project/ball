@@ -1,10 +1,12 @@
-// $Id: gradient.C,v 1.2 2000/07/18 08:29:55 oliver Exp $
+// $Id: gradient.C,v 1.3 2000/10/06 10:01:26 anker Exp $
 // Atom gradient class: this class represents the gradient (i.e. the negative forces)
 // for a given system as a vector<Vector3>. THe gradient is stored in units of kJ/(mol A)
 
 #include <BALL/MOLMEC/COMMON/gradient.h>
 #include <BALL/MOLMEC/COMMON/atomVector.h>
 #include <BALL/KERNEL/atom.h>
+
+using namespace std;
 
 namespace BALL
 {

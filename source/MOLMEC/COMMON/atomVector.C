@@ -1,4 +1,4 @@
-// $Id: atomVector.C,v 1.2 2000/07/18 08:29:55 oliver Exp $
+// $Id: atomVector.C,v 1.3 2000/10/06 10:00:31 anker Exp $
 //
 
 #include <BALL/MOLMEC/COMMON/atomVector.h>
@@ -6,6 +6,8 @@
 #include <BALL/MATHS/vector3.h>
 #include <BALL/CONCEPT/composite.h>
 #include <BALL/KERNEL/atom.h>
+
+using namespace std;
 
 namespace BALL
 {
