@@ -1,4 +1,4 @@
-// $Id: resourceFile.C,v 1.4 1999/11/23 13:10:48 oliver Exp $
+// $Id: resourceFile.C,v 1.5 1999/12/28 18:20:53 oliver Exp $
 
 #include <BALL/FORMAT/resourceFile.h>
 
@@ -97,8 +97,8 @@ namespace BALL
 			++key;
 		}
 
-		for (char* sep = strchr(key, ResourceFile::SEPARATOR);
-				 sep != 0; sep = strchr(key, ResourceFile::SEPARATOR))
+		for (char* sep = const_cast<char*>(strchr(key, ResourceFile::SEPARATOR));
+				 sep != 0; sep = const_cast<char*>(strchr(key, ResourceFile::SEPARATOR)))
 		{
 			old = *sep;
 			*sep = 0;
@@ -317,8 +317,8 @@ namespace BALL
 			++key;
 		}
 
-		for (char *sep = strchr(key, ResourceFile::SEPARATOR);
-				 sep != 0; sep = strchr(key, ResourceFile::SEPARATOR))
+		for (char* sep = const_cast<char*>(strchr(key, ResourceFile::SEPARATOR));
+				 sep != 0; sep = const_cast<char*>(strchr(key, ResourceFile::SEPARATOR)))
 		{
 			oldc = *sep;
 			*sep = 0;
@@ -399,8 +399,8 @@ namespace BALL
 			++key;
 		}
 
-		for (char *sep = strchr(key, ResourceFile::SEPARATOR);
-				 sep != 0; sep = strchr(key, ResourceFile::SEPARATOR))
+		for (char *sep = const_cast<char*>(strchr(key, ResourceFile::SEPARATOR));
+				 sep != 0; sep = const_cast<char*>(strchr(key, ResourceFile::SEPARATOR)))
 		{
 			oldc = *sep;
 			*sep = 0;
