@@ -1,4 +1,4 @@
-// $Id: vector4.h,v 1.15 2000/02/27 18:49:47 amoll Exp $
+// $Id: vector4.h,v 1.16 2000/02/28 01:28:15 oliver Exp $
 
 #ifndef BALL_MATHS_VECTOR4_H
 #define BALL_MATHS_VECTOR4_H
