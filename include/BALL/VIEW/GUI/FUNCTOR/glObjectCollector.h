@@ -1,4 +1,4 @@
-// $Id: glObjectCollector.h,v 1.4 2001/05/13 13:54:47 hekl Exp $
+// $Id: glObjectCollector.h,v 1.5 2001/07/09 18:26:43 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_FUNCTOR_GLOBJECTCOLLECTOR_H
 #define BALL_VIEW_GUI_FUNCTOR_GLOBJECTCOLLECTOR_H
@@ -38,9 +38,9 @@ namespace BALL
 				This class will be used internally from the \Ref{CompositeDescriptor} class
 				to collect {\em *this} objects.
 				@memo    GLObjectCollector class (BALL VIEW gui functor framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/05/13 13:54:47 $
+				@author  $Author: sturm $
+				@version $Revision: 1.5 $
+				@date    $Date: 2001/07/09 18:26:43 $
 		*/
 		class GLObjectCollector: public UnaryProcessor<Composite>
 		{
@@ -118,13 +118,7 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the static list.
-					Access a constant reference of the static list of {\em *this} glObjectCollector.
-					See \Ref{GeometricObject} for information concerning the different
-					properties an object can have.
-					@return  list<GLObject*>& constant reference of the static list of {\em *this} glObjectCollector
-					@see    appendToStaticList
-					@see    GLObject
-					@see    GeometricObject
+					For further information see \Ref{getStaticList}.
 			*/
 			const list<GLObject *>& getStaticList() const
 				throw();
@@ -156,14 +150,7 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the static always front list.
-					Access a constant reference of the static always front list of {\em *this}
-					glObjectCollector.
-					See \Ref{GeometricObject} for information concerning the different
-					properties an object can have.
-					@return  list<GLObject*>& constant reference of the static always front list of {\em *this} glObjectCollector
-					@see    appendToStaticAlwaysFrontList
-					@see    GLObject
-					@see    GeometricObject
+			For further information see \Ref{getStaticAlwaysFrontList}.
 			*/
 			const list<GLObject *>& getStaticAlwaysFrontList() const
 				throw();
@@ -195,14 +182,7 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the static wireframe list.
-					Access a constant reference of the static wireframe list of {\em *this}
-					glObjectCollector.
-					See \Ref{GeometricObject} for information concerning the different
-					properties an object can have.
-					@return  list<GLObject*>& constant reference of the static wireframe list of {\em *this} glObjectCollector
-					@see    appendToStaticWireframeList
-					@see    GLObject
-					@see    GeometricObject
+					For further information see \Ref{getStaticWireframeList}.
 			*/
 			const list<GLObject *>& getStaticWireframeList() const
 				throw();
@@ -234,14 +214,7 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the static wireframe always front list.
-					Access a constant reference of the static wireframe always front list of {\em *this}
-					glObjectCollector.
-					See \Ref{GeometricObject} for information concerning the different
-					properties an object can have.
-					@return  list<GLObject*>& constant reference of the static wireframe always front list of {\em *this} glObjectCollector
-					@see    appendToStaticWireframeAlwaysFrontList
-					@see    GLObject
-					@see    GeometricObject
+					For further information see \Ref{getStaticWireframeAlwaysFrontList}.
 			*/
 			const list<GLObject *>& getStaticWireframeAlwaysFrontList() const
 				throw();
@@ -273,14 +246,7 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the dynamic list.
-					Access a constant reference of the dynamic list of {\em *this}
-					glObjectCollector.
-					See \Ref{GeometricObject} for information concerning the different
-					properties an object can have.
-					@return  list<GLObject*>& constant reference of the dynamic list of {\em *this} glObjectCollector
-					@see    appendToDynamicList
-					@see    GLObject
-					@see    GeometricObject
+					For further information see \Ref{getDynamicList}.
 			*/
 			const list<GLObject *>& getDynamicList() const
 				throw();
@@ -312,14 +278,7 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the dynamic always front list.
-					Access a constant reference of the dynamic always front list of {\em *this}
-					glObjectCollector.
-					See \Ref{GeometricObject} for information concerning the different
-					properties an object can have.
-					@return  list<GLObject*>& constant reference of the dynamic always front list of {\em *this} glObjectCollector
-					@see    appendToDynamicAlwaysFrontList
-					@see    GLObject
-					@see    GeometricObject
+					For further information see \Ref{getDynamicAlwaysFrontList}.
 			*/
 			const list<GLObject *>& getDynamicAlwaysFrontList() const
 				throw();
@@ -351,14 +310,7 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the transparent list.
-					Access a constant reference of the transparent list of {\em *this}
-					glObjectCollector.
-					See \Ref{GeometricObject} for information concerning the different
-					properties an object can have.
-					@return  list<GLObject*>& constant reference of the transparent list of {\em *this} glObjectCollector
-					@see    appendToTransparentList
-					@see    GLObject
-					@see    GeometricObject
+					For further information see \Ref{getTransparentList}.
 			*/
 			const list<GLObject *>& getTransparentList() const
 				throw();
@@ -390,14 +342,7 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the transparent always front list.
-					Access a constant reference of the transparent always front list of {\em *this}
-					glObjectCollector.
-					See \Ref{GeometricObject} for information concerning the different
-					properties an object can have.
-					@return  list<GLObject*>& constant reference of the transparent always front list of {\em *this} glObjectCollector
-					@see    appendToTransparentAlwaysFrontList
-					@see    GLObject
-					@see    GeometricObject
+					For further information see \Ref{getTransparentAlwaysFrontList}.
 			*/
 			const list<GLObject *>& getTransparentAlwaysFrontList() const
 				throw();
