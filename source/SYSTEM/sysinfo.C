@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sysinfo.C,v 1.5 2005/01/25 17:15:50 amoll Exp $
+// $Id: sysinfo.C,v 1.6 2005/01/27 12:39:15 amoll Exp $
 //
 
 #include <BALL/SYSTEM/sysinfo.h>
@@ -38,7 +38,7 @@ namespace BALL
 			*/
 			MEMORYSTATUSEX statex;
 			GlobalMemoryStatusEx (&statex);
-			return (float) statex.ullAvailPhys
+			return (float) statex.ullAvailPhys;
 #else
 			try
 			{
@@ -80,7 +80,7 @@ namespace BALL
 			*/
  			MEMORYSTATUSEX statex;
 			GlobalMemoryStatusEx (&statex);
-			return (float) statex.ullFullPhys
+			return (float) statex.ullTotalPhys;
 #else
 			struct sysinfo info;
 			float result = sysinfo(&info);
@@ -137,7 +137,7 @@ namespace BALL
 		Index getNumberOfProcessors()
 		{
 #ifdef BALL_PLATFORM_WINDOWS
-			struct SYSTEM_INFO sysinfo;
+			SYSTEM_INFO sysinfo;
 			GetSystemInfo(&sysinfo);
 			return sysinfo.dwNumberOfProcessors;
 #else
