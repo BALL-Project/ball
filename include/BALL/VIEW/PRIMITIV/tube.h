@@ -1,4 +1,4 @@
-// $Id: tube.h,v 1.9 2001/05/13 13:40:38 hekl Exp $
+// $Id: tube.h,v 1.10 2001/06/25 14:12:53 sturm Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_TUBE_H
 #define BALL_VIEW_PRIMITIV_TUBE_H
@@ -45,9 +45,9 @@ namespace BALL
 				See these classes for further information concerning
 				interface and additional methods.
 				@memo    Tube class (BALL VIEW primitiv framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.9 $
-				@date    $Date: 2001/05/13 13:40:38 $
+				@author  $Author: sturm $
+				@version $Revision: 1.10 $
+				@date    $Date: 2001/06/25 14:12:53 $
 		*/
 		class Tube
 			: public GeometricObject,
@@ -83,7 +83,7 @@ namespace BALL
 					Construct new tube by copying the tube {\em tube}.
 					The copy is either deep (default) or shallow.
 					@param       tube the tube to be copied (cloned)
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false})
+					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy
 					@return      Tube new constructed tube copied from {\em tube}
 					@see         GeometricObject
 					@see         ColorExtension
