@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HBondModel.h,v 1.1 2003/09/03 12:34:38 amoll Exp $
+// $Id: HBondModel.h,v 1.2 2003/11/10 15:54:33 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_HBONDMODELPROCESSOR_H
@@ -95,6 +95,18 @@ namespace BALL
 					the method insertAtom_().
 			*/
 			virtual Processor::Result operator() (Composite& composite);
+
+			///
+			void setRadius(float radius)
+				throw() { radius_ = radius;}
+
+			///
+			float getRadius() const
+				throw() { return radius_;}
+			
+			protected:
+
+			float radius_;
 
 			//@} 
 		};
