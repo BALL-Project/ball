@@ -1,4 +1,4 @@
-// $Id: regExp.h,v 1.14.4.4 2002/12/01 13:49:10 oliver Exp $
+// $Id: regExp.h,v 1.14.4.5 2002/12/01 14:05:10 oliver Exp $
 
 #ifndef BALL_DATATYPE_REGEXP_H
 #define BALL_DATATYPE_REGEXP_H
@@ -17,7 +17,11 @@
 #endif
 
 #ifdef BALL_HAS_REGEX_H
-#	define __STDC__ 1
+	// make sure __STDC__ is set when including the
+  // GNU regex headers under Windows
+# ifdef BALL_COMPILER_MSVC
+#		define __STDC__ 1
+#	endif
 #	include <regex.h>
 #endif
 
