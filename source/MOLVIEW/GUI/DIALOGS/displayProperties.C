@@ -1,4 +1,4 @@
-// $Id: displayProperties.C,v 1.13.4.14 2002/12/06 17:01:39 amoll Exp $
+// $Id: displayProperties.C,v 1.13.4.15 2002/12/08 22:56:55 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/displayProperties.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
@@ -450,15 +450,6 @@ namespace BALL
 			}
 		}
 
-		void DisplayProperties::setStatusbarText_(String text)
-			throw()
-		{
-			WindowMessage *window_message = new WindowMessage;
-			window_message->setStatusBar(text);
-			window_message->setDeletable(true);
-			notify_(window_message);
-		}
-
 //////////////////////////////////////////////////////////////////////////////////////////
 //----------------------------------------------------to be moved:
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -512,60 +503,64 @@ namespace BALL
 
 		void DisplayProperties::select()
 		{
-/*
-			if (selection_.size() == 0)
+			List<Composite*>& selection = MainControl::getMainControl(this)->getControlSelection();
+			if (selection.size() == 0)
 			{
 				return;
 			}
 
 			// notify the main window
-			setStatusbarText_("selecting " + String(selection_.size()) + " objects...");
+			setStatusbarText("selecting " + String(selection.size()) + " objects...");
+
+			selector_.clear();
 
 			int value_static = getValue_(ADDRESS__STATIC_MODEL);
 			int value_dynamic = getValue_(ADDRESS__DYNAMIC_MODEL);
 
-			selector_.clear();
-
 			// copy list because the selection_ list can change after a changemessage event
-			List<Composite*> temp_selection_ = selection_;
+			List<Composite*> temp_selection_ = selection;
 						
 			List<Composite*>::ConstIterator list_it = temp_selection_.begin();	
 			ChangedCompositeMessage *change_message = new ChangedCompositeMessage;
 			change_message->setDeletable(false);
+			CompositeSelectedMessage* cs_message = new CompositeSelectedMessage(0, true);
+			cs_message->setDeletable(false);
 			for (; list_it != temp_selection_.end(); ++list_it)
 			{
 				(*list_it)->apply(selector_);
 
 				// mark composite for update
-				change_message->setComposite((*list_it));
-				notify_(change_message);
+				//change_message->setComposite((*list_it));
+				//notify_(change_message);
+				cs_message->composite_ = *list_it;
+				notify_(cs_message);
 			}
 
 			// restore old values
 			setValue_(ADDRESS__STATIC_MODEL, value_static);
 			setValue_(ADDRESS__DYNAMIC_MODEL, value_dynamic);
-
+			
 			// update scene
 			SceneMessage *scene_message = new SceneMessage;
 			scene_message->updateOnly();
 			scene_message->setDeletable(true);
 			notify_(scene_message);
 
-			setStatusbarText_("");
-*/
+			setStatusbarText("");
 		}
 
 
 		void DisplayProperties::deselect()
 		{
-/*
-			if (selection_.size() == 0)
+			List<Composite*>& selection = MainControl::getMainControl(this)->getControlSelection();
+
+			if (selection.size() == 0)
 			{
 				return;
 			}
 
 			// notify the main window
-			setStatusbarText_("deselecting " + String(selection_.size()) + "objects...");
+			setStatusbarText("deselecting " + String(selection.size()) + "objects...");
 
 			int value_static = getValue_(ADDRESS__STATIC_MODEL);
 			int value_dynamic = getValue_(ADDRESS__DYNAMIC_MODEL);
@@ -573,7 +568,7 @@ namespace BALL
 			deselector_.clear();
 
 			// copy list because the selection_ list can change after a changemessage event
-			List<Composite*> temp_selection_ = selection_;
+			List<Composite*> temp_selection_ = selection;
 
 			List<Composite*>::ConstIterator list_it = temp_selection_.begin();	
 			ChangedCompositeMessage* change_message = new ChangedCompositeMessage;
@@ -596,8 +591,7 @@ namespace BALL
 			scene_message->setDeletable(true);
 			notify_(scene_message);
 
-			setStatusbarText_("");
-*/
+			setStatusbarText("");
 		}
 
 
@@ -632,7 +626,7 @@ namespace BALL
 			}
 
 			// notify the main window
-			setStatusbarText_("building bonds ...");
+			setStatusbarText("building bonds ...");
 
 			// copy the selection_, it can change after a changemessage event
 			List<Composite*> temp_selection_ = MainControl::getMainControl(this)->getControlSelection();
@@ -659,7 +653,7 @@ namespace BALL
 			scene_message->setDeletable(true);
 			notify_(scene_message);
 
-			setStatusbarText_("");
+			setStatusbarText("");
 
 			Log.info() << "Added " << number_of_bonds << " bonds." << std::endl;
 		}
@@ -673,12 +667,7 @@ namespace BALL
 			}
 
 			// notify the main window
-			WindowMessage *window_message = new WindowMessage;
-			QString message;
-			message.sprintf("adding hydrogens ...");
-			window_message->setStatusBar(message.ascii());
-			window_message->setDeletable(true);
-			notify_(window_message);
+			setStatusbarText("adding hydrogens ...");
 
 			// copy the selection_, it can change after a changemessage event
 			List<Composite*> temp_selection_ = MainControl::getMainControl(this)->getControlSelection();
@@ -709,7 +698,7 @@ namespace BALL
 			scene_message->setDeletable(true);
 			notify_(scene_message);
 
-			setStatusbarText_("");
+			setStatusbarText("");
 		}
 
 
@@ -760,7 +749,7 @@ namespace BALL
 			SceneMessage scene_message;
 			scene_message.updateOnly();
 			notify_(scene_message);
-			setStatusbarText_("");
+			setStatusbarText("");
 			hide();
 		}
 
