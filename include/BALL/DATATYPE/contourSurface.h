@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: contourSurface.h,v 1.1 2002/08/30 16:09:26 aubertin Exp $
+// $Id: contourSurface.h,v 1.2 2002/09/06 10:38:35 aubertin Exp $
 
 #ifndef BALL_DATATYPE_CONTOURSURFACE_H
 #define BALL_DATATYPE_CONTOURSURFACE_H
@@ -36,13 +36,9 @@ namespace BALL
 {
 	typedef pair<Position,Position> KeyType;
 
-  template<>
 
-  HashIndex BALL::Hash(const KeyType& p)
-	{
-		return (HashIndex)(p.first + p.second);
-	}
-  
+	template<>
+	HashIndex BALL::Hash(const KeyType& p);
 
 static int init_facet_data[NUM_BASIS_CUBES][NUM_CUBE_EDGES] = {
 	  /* 7654 3210 (corners markers) */
@@ -440,7 +436,7 @@ void TContourSurface<T>::generateFacetData() {
                     {
                       if (init_facet_data[j][l]>=0) 
                         { 
-                          if(height_>0)
+                          if(true)
 														{
                           facet_data[i][11-l] = edge_rotation[k][init_facet_data[j][l]];
                           facet_data[0xFF-i][l] = edge_rotation[k][init_facet_data[j][l]];
@@ -453,7 +449,7 @@ void TContourSurface<T>::generateFacetData() {
                         }
                       else 
                         { 
-                          if(height_>0)
+                          if(true)
 														{
                           facet_data[i][11-l] = (-1);
                           facet_data[0xFF-i][l] = (-1);
