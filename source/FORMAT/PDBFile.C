@@ -1,4 +1,4 @@
-// $Id: PDBFile.C,v 1.5 1999/12/01 13:26:17 oliver Exp $
+// $Id: PDBFile.C,v 1.6 1999/12/17 13:57:15 oliver Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 
@@ -390,17 +390,35 @@ namespace BALL
 
 	void PDBFile::write(const System& system)
 	{
-		Protein p;
-	
-		((Composite&)p).splice((Composite &)system);
-		write_(p, true);
-		((Composite&)system).splice((Composite &)p);
+		Size number_of_proteins = system.count(RTTI<KernelPredicate<Protein> >::getDefault());
+		if (number_of_proteins > 1)
+		{
+			Log.error() << "PDBFile::write: cannot write a system with multiple proteins to a PDB file." << endl;
+			return;
+		}
+		
+		if (number_of_proteins == 0)
+		{
+			Protein p;
+			((Composite&)p).splice((Composite&)system);
+			write_(p, true);
+			((Composite&)system).splice((Composite &)p);
+		} else {
+			Composite::SubcompositeIterator it = system.beginSubcomposite();
+			for (; +it && !RTTI<Protein>::isKindOf(*it); ++it);
+			if (+it)
+			{
+				write_(*it, true);
+			} else {
+				Log.error() << "PDBFile::write: cannot find a protein in the current system." << endl;
+			}
+		}
 	}
 	
 	void PDBFile::write_(const Composite& composite, bool system)
 	{
-		const Protein *protein = RTTI<Protein>::castTo(composite);
-		const Molecule &molecule = *RTTI<Molecule>::castTo(composite);
+		const Protein* protein = RTTI<Protein>::castTo(composite);
+		const Molecule& molecule = *RTTI<Molecule>::castTo(composite);
   
 		char line_buffer[PDB::SIZE_OF_PDB_LINE_BUFFER];
 		ChainIterator chain_it;

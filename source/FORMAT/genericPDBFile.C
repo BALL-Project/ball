@@ -1,4 +1,4 @@
-// $Id: genericPDBFile.C,v 1.2 1999/10/30 12:53:35 oliver Exp $
+// $Id: genericPDBFile.C,v 1.3 1999/12/17 13:57:16 oliver Exp $
 
 #include <BALL/FORMAT/genericPDBFile.h>
 
@@ -889,7 +889,7 @@ namespace BALL
 
 	bool GenericPDBFile::readLine(char* line, Size size, bool extract_values)
 	{
-		static PDB::RecordTypeFormat *record_type_format = 0;
+		static PDB::RecordTypeFormat* record_type_format = 0;
 
 		if (record_type_format == 0
 				|| memcmp(record_type_format->string, line, 6) != 0)
