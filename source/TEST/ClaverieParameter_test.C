@@ -1,4 +1,4 @@
-// $Id: ClaverieParameter_test.C,v 1.4 2001/07/16 21:18:13 amoll Exp $
+// $Id: ClaverieParameter_test.C,v 1.5 2001/09/05 16:20:28 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(ClaverieParameter, "$Id: ClaverieParameter_test.C,v 1.4 2001/07/16 21:18:13 amoll Exp $")
+START_TEST(ClaverieParameter, "$Id: ClaverieParameter_test.C,v 1.5 2001/09/05 16:20:28 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -95,9 +95,9 @@ CHECK(ClaverieParameter::getParameters(Atom::Type solvent_type, Atom::Type solut
 	cp.extractSection(fffparam, "ClaverieParameters");
 
 	Atom::Type type_HW = fffparam.getAtomTypes().getType("HW");
-	Atom::Type type_OW = fffparam.getAtomTypes().getType("OW");
+	//Atom::Type type_OW = fffparam.getAtomTypes().getType("OW");
 	Atom::Type type_CT = fffparam.getAtomTypes().getType("CT");
-	Atom::Type type_HC = fffparam.getAtomTypes().getType("HC");
+	//Atom::Type type_HC = fffparam.getAtomTypes().getType("HC");
 
 	::std::pair<float, float> params;
 	
@@ -109,7 +109,24 @@ RESULT
 
 
 CHECK(ClaverieParameter::extractSection(ForceFieldParameters& parameters, const String& section_name))
-  //BAUSTELLE
+	ClaverieParameter cp;
+	
+	ForceFieldParameters ffparam;
+	bool test = cp.extractSection(ffparam, "Egal");
+	TEST_EQUAL(test, false)
+	cp.clear();
+	
+	ForceFieldParameters fffparam("data/ClaverieParameter_test.ini");
+	CAPTURE_OUTPUT(2000);
+	test = cp.extractSection(fffparam, "ClaverieParameters2");
+	COMPARE_OUTPUT("Variable missing.\n");
+	TEST_EQUAL(test, false)
+	cp.clear();
+	
+	CAPTURE_OUTPUT(2000);
+	test = cp.extractSection(fffparam, "ClaverieParameters3");
+	COMPARE_OUTPUT("Cannot assign atom type XX\n");
+	TEST_EQUAL(test, false)
 RESULT
 
 
