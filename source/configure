@@ -15797,7 +15797,7 @@ echo $ECHO_N "checking for FFT library... $ECHO_C" >&6
 	fi
 
 	if test "${FFTW_LIBPATH}" = "" ; then
-		_LIBDIRS="/usr/lib /opt/lib"
+		_LIBDIRS="/usr/lib /opt/lib /usr/local/lib"
 	else
 		_LIBDIRS="${FFTW_LIBPATH}"
 	fi
@@ -15805,7 +15805,6 @@ echo $ECHO_N "checking for FFT library... $ECHO_C" >&6
 	if test "${_LIBS}" = "" ; then
 		for i in ${_LIBDIRS} ; do
 			for j in $i/libfftw.* ; do
-				echo "checking for ${_LIBS} in $j..."
 				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
 				fi
@@ -16558,7 +16557,7 @@ echo $ECHO_N "checking for Mesa library... $ECHO_C" >&6
 	fi
 
 	if test "${OPENGL_LIBPATH} ${X11_LIBPATH}" = "" ; then
-		_LIBDIRS="/usr/lib /opt/lib"
+		_LIBDIRS="/usr/lib /opt/lib /usr/local/lib"
 	else
 		_LIBDIRS="${OPENGL_LIBPATH} ${X11_LIBPATH}"
 	fi
@@ -16566,7 +16565,6 @@ echo $ECHO_N "checking for Mesa library... $ECHO_C" >&6
 	if test "${_LIBS}" = "" ; then
 		for i in ${_LIBDIRS} ; do
 			for j in $i/libMesaGL.* ; do
-				echo "checking for ${_LIBS} in $j..."
 				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
 				fi
@@ -16639,7 +16637,7 @@ echo $ECHO_N "checking for Mesa library... $ECHO_C" >&6
 	fi
 
 	if test "${OPENGL_LIBPATH} ${X11_LIBPATH}" = "" ; then
-		_LIBDIRS="/usr/lib /opt/lib"
+		_LIBDIRS="/usr/lib /opt/lib /usr/local/lib"
 	else
 		_LIBDIRS="${OPENGL_LIBPATH} ${X11_LIBPATH}"
 	fi
@@ -16647,7 +16645,6 @@ echo $ECHO_N "checking for Mesa library... $ECHO_C" >&6
 	if test "${_LIBS}" = "" ; then
 		for i in ${_LIBDIRS} ; do
 			for j in $i/libGL.* ; do
-				echo "checking for ${_LIBS} in $j..."
 				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
 				fi
@@ -16868,7 +16865,7 @@ echo $ECHO_N "checking for OpenGL library... $ECHO_C" >&6
 	fi
 
 	if test "" = "" ; then
-		_LIBDIRS="/usr/lib /opt/lib"
+		_LIBDIRS="/usr/lib /opt/lib /usr/local/lib"
 	else
 		_LIBDIRS=""
 	fi
@@ -16876,7 +16873,6 @@ echo $ECHO_N "checking for OpenGL library... $ECHO_C" >&6
 	if test "${_LIBS}" = "" ; then
 		for i in ${_LIBDIRS} ; do
 			for j in $i/libGL.* ; do
-				echo "checking for ${_LIBS} in $j..."
 				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
 				fi
@@ -17217,7 +17213,7 @@ echo $ECHO_N "checking for libqt${QT_MT_SUFFIX}... $ECHO_C" >&6
 	fi
 
 	if test "${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include" = "" ; then
-		_LIBDIRS="/usr/lib /opt/lib"
+		_LIBDIRS="/usr/lib /opt/lib /usr/local/lib"
 	else
 		_LIBDIRS="${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include"
 	fi
@@ -17225,7 +17221,6 @@ echo $ECHO_N "checking for libqt${QT_MT_SUFFIX}... $ECHO_C" >&6
 	if test "${_LIBS}" = "" ; then
 		for i in ${_LIBDIRS} ; do
 			for j in $i/libqt${QT_MT_SUFFIX}.* ; do
-				echo "checking for ${_LIBS} in $j..."
 				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
 				fi
@@ -17306,7 +17301,7 @@ echo $ECHO_N "checking for libqt${QT_MT_SUFFIX}... $ECHO_C" >&6
 	fi
 
 	if test "${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include" = "" ; then
-		_LIBDIRS="/usr/lib /opt/lib"
+		_LIBDIRS="/usr/lib /opt/lib /usr/local/lib"
 	else
 		_LIBDIRS="${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include"
 	fi
@@ -17314,7 +17309,6 @@ echo $ECHO_N "checking for libqt${QT_MT_SUFFIX}... $ECHO_C" >&6
 	if test "${_LIBS}" = "" ; then
 		for i in ${_LIBDIRS} ; do
 			for j in $i/libqt${QT_MT_SUFFIX}.* ; do
-				echo "checking for ${_LIBS} in $j..."
 				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
 				fi
@@ -17389,7 +17383,7 @@ echo $ECHO_N "checking for libqt${QT_MT_SUFFIX}... $ECHO_C" >&6
 	fi
 
 	if test "${BALL_PATH}/contrib/qt/lib ${BALL_PATH}/contrib/qt/lib/${BINFMT}" = "" ; then
-		_LIBDIRS="/usr/lib /opt/lib"
+		_LIBDIRS="/usr/lib /opt/lib /usr/local/lib"
 	else
 		_LIBDIRS="${BALL_PATH}/contrib/qt/lib ${BALL_PATH}/contrib/qt/lib/${BINFMT}"
 	fi
@@ -17397,7 +17391,6 @@ echo $ECHO_N "checking for libqt${QT_MT_SUFFIX}... $ECHO_C" >&6
 	if test "${_LIBS}" = "" ; then
 		for i in ${_LIBDIRS} ; do
 			for j in $i/libqt${QT_MT_SUFFIX}.* ; do
-				echo "checking for ${_LIBS} in $j..."
 				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
 				fi

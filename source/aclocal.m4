@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.36 2003/10/26 10:28:56 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.37 2003/10/26 17:52:23 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -194,7 +194,7 @@ AC_DEFUN(CF_FIND_LIB,[
 	fi
 
 	if test "$3" = "" ; then
-		_LIBDIRS="/usr/lib /opt/lib"
+		_LIBDIRS="/usr/lib /opt/lib /usr/local/lib"
 	else
 		_LIBDIRS="$3"
 	fi
@@ -202,7 +202,6 @@ AC_DEFUN(CF_FIND_LIB,[
 	if test "${_LIBS}" = "" ; then
 		for i in ${_LIBDIRS} ; do
 			for j in $i/$2.* ; do
-				echo "checking for ${_LIBS} in $j..."
 				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
 				fi
