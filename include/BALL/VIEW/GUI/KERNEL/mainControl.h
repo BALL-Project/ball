@@ -1,4 +1,4 @@
-// $Id: mainControl.h,v 1.7 2000/10/24 20:33:28 oliver Exp $
+// $Id: mainControl.h,v 1.8 2000/11/05 14:36:57 hekl Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
 #define BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
@@ -43,6 +43,7 @@
 #	include <BALL/DATATYPE/list.h>
 #endif
 
+#include <qapplication.h>
 #include <qwidget.h>
 #include <qmainwindow.h>
 
@@ -456,11 +457,24 @@ namespace BALL
 				(int ID, const String& name, const QObject* receiver = 0, 
 				 const char* slot = 0, int accel = 0, int entry_ID = -1);
  
-			/**
+			/** insert a new menu entry to menu ID (creates menu ID if not existent)
+					@param ID - the menu ID to which the new menu entry should be inserted
+					@param name - the name of the new menu entry
+					@param receiver - the object to which the menu action will be connected
+					@param slot - the function that will be called by activation of the menu entry
+					@param accel - the acceleration key
+					@param entry_ID - the id for the new menu entry (default: -1, will create a new one)
+					@return int - the new entry_ID
 			*/
 			int insertMenuEntry
 				(int ID, const String& name, const QObject* receiver = 0, 
 				 const char* slot = 0, int accel = 0, int entry_ID = -1);
+			
+			/** insert a separator into a popup menu specified by ID
+					@param ID - the id of the menu to which a speparator will be inserted
+			*/
+			void insertPopupMenuSeparator
+				(int ID);
  
 			/**	Create a unique item ID.
 			*/
