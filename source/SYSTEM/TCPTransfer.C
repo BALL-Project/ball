@@ -1,4 +1,4 @@
-// $Id: TCPTransfer.C,v 1.11 2002/01/09 15:50:07 amoll Exp $
+// $Id: TCPTransfer.C,v 1.12 2002/01/09 16:36:05 amoll Exp $
 
 #include <BALL/SYSTEM/TCPTransfer.h>
 #include <BALL/SYSTEM/timer.h>
@@ -19,8 +19,14 @@
 namespace BALL
 {
 
+TCPTransfer::TransferFailed::TransferFailed(const char* file, int line, Index error_code)
+	throw()
+	: Exception::GeneralException(file, line, string("TransferFailed"), string("Error Code: ") + String(error_code))
+{
+}
+
 TCPTransfer::TCPTransfer(::std::ofstream& file, const String& address)
-	throw() 
+	throw(TransferFailed) 
 {
 	buffer_ = new char[BUFFER_SIZE];
 	if (!set(file, address))
@@ -29,6 +35,10 @@ TCPTransfer::TCPTransfer(::std::ofstream& file, const String& address)
 	}
 
 	status_ = transfer();
+	if (status_ != NO_ERROR)
+	{
+		throw(TransferFailed(__FILE__, __LINE__, status_));
+	}
 }
 
 TCPTransfer::~TCPTransfer()

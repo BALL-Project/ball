@@ -1,4 +1,4 @@
-// $Id: TCPTransfer.h,v 1.7 2002/01/09 15:49:20 amoll Exp $
+// $Id: TCPTransfer.h,v 1.8 2002/01/09 16:36:05 amoll Exp $
 
 #ifndef BALL_SYSTEM_TCPTRANSFER
 #define BALL_SYSTEM_TCPTRANSFER
@@ -70,6 +70,16 @@ namespace BALL
 				FTP_PROTOCOL			= 2
 			};
 			
+			/** TransferFailed exception.
+			 		This exception is thrown if a transfer fails.
+			*/
+			class TransferFailed : public Exception::GeneralException
+			{
+				 public:
+
+					TransferFailed(const char* file, int line, Index error_code)
+						throw();
+				};
 			
 			/** Default constructor.
 					The instance is set to UNINITIALIZED_ERROR.
@@ -85,7 +95,7 @@ namespace BALL
 			 *	http[ftp]://login:pass@server.com:port/fileaddress
 			 */
 			TCPTransfer(::std::ofstream& file, const String& address)
-				throw();
+				throw(TransferFailed);
 			
 			/// Destructor.
 			~TCPTransfer()
