@@ -1,4 +1,4 @@
-// $Id: TimeStamp_test.C,v 1.4 2000/10/17 09:26:28 oliver Exp $
+// $Id: TimeStamp_test.C,v 1.5 2000/10/18 12:36:58 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(TimeStamp, "$Id: TimeStamp_test.C,v 1.4 2000/10/17 09:26:28 oliver Exp $")
+START_TEST(TimeStamp, "$Id: TimeStamp_test.C,v 1.5 2000/10/18 12:36:58 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -15,21 +15,23 @@ START_TEST(TimeStamp, "$Id: TimeStamp_test.C,v 1.4 2000/10/17 09:26:28 oliver Ex
 using namespace BALL;
 
 TimeStamp* ts = 0;
-CHECK(Time::TimeStamp::TimeStamp())
+CHECK(TimeStamp::TimeStamp())
 	ts = new TimeStamp;
 	TEST_NOT_EQUAL(ts, 0)
 RESULT
 
 
-CHECK(Time::TimeStamp::~TimeStamp())
+CHECK(TimeStamp::~TimeStamp())
 	delete ts;
 RESULT
 
 
-CHECK(Time::TimeStamp::getTime() const  throw())
+CHECK(TimeStamp::getTime() const  throw())
   TimeStamp* t1 = new TimeStamp;	
+	t1->stamp();
 	STATUS(*t1)
   TimeStamp* t2 = new TimeStamp;
+	t2->stamp();
 	STATUS(*t2)
 	TEST_NOT_EQUAL(t1->getTime(), t2->getTime())
 	TEST_EQUAL((t1->getTime() < t2->getTime()), true)
@@ -38,11 +40,13 @@ CHECK(Time::TimeStamp::getTime() const  throw())
 	delete t2;
 RESULT
 
-CHECK(Time::TimeStamp::isNewerThan(const Time& time) const  throw())
+CHECK(TimeStamp::isNewerThan(const Time& time) const  throw())
 	TimeStamp* ts1 = new TimeStamp;
-	STATUS(ts1)
+	ts1->stamp();
+	STATUS(*ts1)
 	TimeStamp* ts2 = new TimeStamp;
-	STATUS(ts2)
+	ts2->stamp();
+	STATUS(*ts2)
 	TEST_EQUAL(ts1->isNewerThan(ts1->getTime()), false)
 	TEST_EQUAL(ts1->isNewerThan(ts2->getTime()), false)
 	TEST_EQUAL(ts2->isNewerThan(ts1->getTime()), true)
@@ -52,11 +56,13 @@ CHECK(Time::TimeStamp::isNewerThan(const Time& time) const  throw())
 RESULT
 
 
-CHECK(Time::TimeStamp::isOlderThan(const Time& time) const  throw())
+CHECK(TimeStamp::isOlderThan(const Time& time) const  throw())
 	TimeStamp* ts1 = new TimeStamp;
-	STATUS(ts1)
+	ts1->stamp();
+	STATUS(*ts1)
 	TimeStamp* ts2 = new TimeStamp;
-	STATUS(ts2)
+	ts2->stamp();
+	STATUS(*ts2)
 	TEST_EQUAL(ts1->isOlderThan(ts1->getTime()), false)
 	TEST_EQUAL(ts1->isOlderThan(ts2->getTime()), true)
 	TEST_EQUAL(ts2->isOlderThan(ts1->getTime()), false)
@@ -66,11 +72,13 @@ CHECK(Time::TimeStamp::isOlderThan(const Time& time) const  throw())
 RESULT
 
 
-CHECK(Time::TimeStamp::isNewerThan(const TimeStamp& stamp) const  throw())
+CHECK(TimeStamp::isNewerThan(const TimeStamp& stamp) const  throw())
 	TimeStamp* ts1 = new TimeStamp;
-	STATUS(ts1)
+	ts1->stamp();
+	STATUS(*ts1)
 	TimeStamp* ts2 = new TimeStamp;
-	STATUS(ts2)
+	ts2->stamp();
+	STATUS(*ts2)
 	TEST_EQUAL(ts1->isNewerThan(*ts1), false)
 	TEST_EQUAL(ts1->isNewerThan(*ts2), false)
 	TEST_EQUAL(ts2->isNewerThan(*ts1), true)
@@ -80,11 +88,13 @@ CHECK(Time::TimeStamp::isNewerThan(const TimeStamp& stamp) const  throw())
 RESULT
 
 
-CHECK(Time::TimeStamp::isOlderThan(const TimeStamp& stamp) const  throw())
+CHECK(TimeStamp::isOlderThan(const TimeStamp& stamp) const  throw())
 	TimeStamp* ts1 = new TimeStamp;
-	STATUS(ts1)
+	ts1->stamp();
+	STATUS(*ts1)
 	TimeStamp* ts2 = new TimeStamp;
-	STATUS(ts2)
+	ts2->stamp();
+	STATUS(*ts2)
 	TEST_EQUAL(ts1->isOlderThan(*ts1), false)
 	TEST_EQUAL(ts1->isOlderThan(*ts2), true)
 	TEST_EQUAL(ts2->isOlderThan(*ts1), false)
@@ -94,11 +104,13 @@ CHECK(Time::TimeStamp::isOlderThan(const TimeStamp& stamp) const  throw())
 RESULT
 
 
-CHECK(Time::TimeStamp::stamp(const Time& time = Time::ZERO) throw())
+CHECK(TimeStamp::stamp(const Time& time = ZERO) throw())
   TimeStamp* ts1 = new TimeStamp;
-	STATUS(ts1)
+	ts1->stamp();
+	STATUS(*ts1)
   TimeStamp* ts2 = new TimeStamp;
-	STATUS(ts2)
+	ts2->stamp();
+	STATUS(*ts2)
 	TEST_EQUAL(ts1->isNewerThan(*ts1), false)
 	TEST_EQUAL(ts1->isNewerThan(*ts2), false)
 	TEST_EQUAL(ts2->isNewerThan(*ts1), true)
@@ -113,12 +125,12 @@ CHECK(Time::TimeStamp::stamp(const Time& time = Time::ZERO) throw())
 RESULT
 
 
-CHECK(Time::TimeStamp::write(PersistenceManager& pm) const )
+CHECK(TimeStamp::write(PersistenceManager& pm) const )
   //BAUSTELLE
 RESULT
 
 
-CHECK(Time::TimeStamp::read(PersistenceManager& pm))
+CHECK(TimeStamp::read(PersistenceManager& pm))
   //BAUSTELLE
 RESULT
 
