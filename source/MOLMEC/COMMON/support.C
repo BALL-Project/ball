@@ -1,4 +1,4 @@
-// $Id: support.C,v 1.30.2.1 2002/02/14 17:02:53 anker Exp $
+// $Id: support.C,v 1.30.2.2 2002/02/14 19:37:43 anker Exp $
 
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/KERNEL/atom.h>
@@ -804,6 +804,8 @@ namespace BALL
 			// Quick and dirty. Optimize this.
 
 			double return_value;
+
+			x = fabs(x);
 
 			if (x <= lower)
 			{
