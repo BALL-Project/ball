@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.22 2003/10/20 21:51:15 amoll Exp $
+// $Id: displayProperties.C,v 1.23 2003/10/21 15:37:20 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -142,7 +142,7 @@ void DisplayProperties::initializeWidget(MainControl& main_control)
 {
 	(main_control.initPopupMenu(MainControl::DISPLAY))->setCheckable(true);
 
-	String hint("Create a new representation or modify an existing");
+	String hint("Create a new representation or modify an existing one");
 	id_ = main_control.insertMenuEntry(MainControl::DISPLAY, "D&isplay Properties", this, 
 																		 SLOT(show()), CTRL+Key_I, -1, hint);   
 }
@@ -176,21 +176,28 @@ void DisplayProperties::createRepresentationMode()
 	coloring_method_combobox->setCurrentItem(coloring_method_);
 	precision_combobox->setCurrentItem(precision_);
 	model_type_combobox->setCurrentItem(model_type_);
+	mode_combobox->setCurrentItem(mode_);
 	apply_button->setEnabled(getMainControl()->getControlSelection().size());
 }
 
 void DisplayProperties::modifyRepresentationMode()
 {
 	setCaption("modify Representation");
-	coloring_method_combobox->setCurrentItem(coloring_method_);
-	precision_combobox->setCurrentItem(precision_);
-	model_type_combobox->setCurrentItem(model_type_);
+	coloring_method_combobox->setCurrentItem(rep_->getColoringType());
+	precision_combobox->setCurrentItem(rep_->getDrawingPrecision());
+	model_type_combobox->setCurrentItem(rep_->getModelType());
+	mode_combobox->setCurrentItem(rep_->getDrawingMode());
+
+	custom_color_ = rep_->getColorProcessor()->getDefaultColor();
+	QColor qcolor(custom_color_.getRed(), custom_color_.getGreen(), custom_color_.getBlue());
+	color_sample->setBackgroundColor(qcolor);
+
 	apply_button->setEnabled(true);
 }
 
 void DisplayProperties::selectPrecision(int index)
 {
-	if (index > 2)
+	if (index > DRAWING_PRECISION_HIGH)
 	{
 		throw(InvalidOption(__FILE__, __LINE__, index));
 	}
@@ -307,8 +314,6 @@ void DisplayProperties::editColor()
 										(float)qcolor.green() / 255.0,
 										(float)qcolor.blue() / 255.0);
 
-	coloring_method_combobox->setCurrentItem(COLORING_CUSTOM);
-	coloring_method_ = COLORING_CUSTOM;
 	update();
 }
 
@@ -351,16 +356,16 @@ void DisplayProperties::createRepresentation_(const Composite* composite)
 		case MODEL_SE_SURFACE:
 			{
 				AddSurfaceModel* surface_model = new AddSurfaceModel;
-				model_processor = surface_model;
 				surface_model->setType(SurfaceProcessor::SOLVENT_EXCLUDED_SURFACE);	
+				model_processor = surface_model;
 			}
 			break;
 			
 		case MODEL_SA_SURFACE:
 			{
 				AddSurfaceModel* surface_model = new AddSurfaceModel;
-				model_processor = surface_model;
 				surface_model->setType(SurfaceProcessor::SOLVENT_ACCESSIBLE_SURFACE);
+				model_processor = surface_model;
 			}
 			break;
 			
@@ -435,14 +440,24 @@ void DisplayProperties::createRepresentation_(const Composite* composite)
 										255 - transparency->value());
 	color_processor->setDefaultColor(custom_color_);
 
+	bool rebuild_representation = false;
 	PrimitiveManager& pm = getMainControl()->getPrimitiveManager();
 	Representation* rep = 0;
 	if (rep_ == 0)
 	{
+		// create a new Representation
 		rep = new Representation(model_type_, precision_, mode_);
+		rebuild_representation = true;
 	}
 	else 
 	{
+		// modify an existing Representation
+		// If the represenation has the same ModelProcessor as the currently selected,
+		// we dont have to rebuild the geometric objects.
+		if (rep_->getModelType() != model_type_)
+		{
+			rebuild_representation = true;
+		}
 		rep = rep_;
 	}
 
@@ -478,7 +493,8 @@ void DisplayProperties::createRepresentation_(const Composite* composite)
 		rep_->setDrawingMode(mode_);
 	}
 
-	rep->update();
+	rep->setColoringType(coloring_method_);
+	rep->update(rebuild_representation);
 
 	// no refocus, if a representation already exists
 	bool focus = (getMainControl()->getPrimitiveManager().getRepresentations().size() == 1 && rep_ == 0);
