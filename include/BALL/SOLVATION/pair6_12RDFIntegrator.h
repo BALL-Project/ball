@@ -1,4 +1,4 @@
-// $Id: pair6_12RDFIntegrator.h,v 1.4 2000/10/17 17:14:35 anker Exp $
+// $Id: pair6_12RDFIntegrator.h,v 1.5 2000/11/06 17:58:22 anker Exp $
 
 #ifndef BALL_SOLVATION_PAIR6_12RDFINTEGRATOR_H
 #define BALL_SOLVATION_PAIR6_12RDFINTEGRATOR_H
@@ -51,6 +51,21 @@ namespace BALL
 				@see Default::VERBOSITY
 				@param verbosity integer
 			 */
+
+			static const char* METHOD;
+			/** The integration method.
+				Use integer values with this option.
+				@see Default::METHOD
+				@param integration_method integer
+			 */
+
+			static const char* SAMPLES;
+			/** This option sets the number of samples to be used in numerical
+			 * integration.
+				Use integer values with this option.
+				@see Default::SAMPLES
+				@param samples integer
+			 */
 			static const char* VERBOSITY;
 		};
 
@@ -60,7 +75,27 @@ namespace BALL
 				@see Option::VERBOSITY
 			 */
 			static const int VERBOSITY;
+			
+			/** Default integration method.
+				@see Option::METHOD
+			 */
+			static const int METHOD;
+
+			/** Default number of inetgartion samples.
+				@see Option::SAMPLES
+			 */
+			static const int SAMPLES;
 		};
+
+
+		/** The available methods for integration */
+		enum IntegrationMethod
+		{
+			METHOD__UNKNOWN = 0,
+			METHOD__ANALYTICAL = 1,
+			METHOD__TRAPEZIUM = 2
+		};
+
 
 		/** @name Constructors and destructors */
 		//@{
@@ -175,8 +210,10 @@ namespace BALL
 
 		/*_ Integrate an interval analytically. This method does the actual
 		 * work. */
-		double analyticallyIntegrateInterval(Interval interval,
-				Coefficients coeffs, Position index) const throw();
+		double analyticallyIntegrateInterval(const Interval& interval,
+				const Coefficients& coeffs, Position index) const throw();
+		double numericallyIntegrateInterval(const Interval& interval) const
+			throw();
 		/*_ Project a number from the integration beam to the projection beam
 		 * of an atom center for the rdf thingy. */
 		double project(double x) const throw();
