@@ -84,6 +84,7 @@
 #include "sipBALLPyAtomDict.h"
 #include "sipBALLPyAtomList.h"
 #include "sipBALLAtomProcessor.h"
+#include "sipBALLFragmentProcessor.h"
 #include "sipBALLPyCompositeDescriptorList.h"
 #include "sipBALLCompositeProcessor.h"
 #include "sipBALLPyBondList.h"
@@ -101,6 +102,10 @@
 #include "sipBALLClearRadiusProcessor.h"
 #include "sipBALLAssignRadiusProcessor.h"
 #include "sipBALLAssignChargeProcessor.h"
+#include "sipBALLFragmentDB.h"
+#include "sipBALLNormalizeNamesProcessor.h"
+#include "sipBALLAddHydrogensProcessor.h"
+#include "sipBALLBuildBondsProcessor.h"
 #include "sipBALLBoundingBoxProcessor.h"
 #include "sipBALLGeometricCenterProcessor.h"
 #include "sipBALLFragmentDistanceCollector.h"
@@ -187,6 +192,28 @@ char sipName_BALL_GeometricCenterProcessor[] = "GeometricCenterProcessor";
 char sipName_BALL_getUpper[] = "getUpper";
 char sipName_BALL_getLower[] = "getLower";
 char sipName_BALL_BoundingBoxProcessor[] = "BoundingBoxProcessor";
+char sipName_BALL_buildInterFragmentBonds[] = "buildInterFragmentBonds";
+char sipName_BALL_buildFragmentBonds[] = "buildFragmentBonds";
+char sipName_BALL_getNumberOfBondsBuilt[] = "getNumberOfBondsBuilt";
+char sipName_BALL_BuildBondsProcessor[] = "BuildBondsProcessor";
+char sipName_BALL_getNumberOfInsertedH[] = "getNumberOfInsertedH";
+char sipName_BALL_AddHydrogensProcessor[] = "AddHydrogensProcessor";
+char sipName_BALL_getNamingStandard[] = "getNamingStandard";
+char sipName_BALL_setNamingStandard[] = "setNamingStandard";
+char sipName_BALL_setFragmentDB[] = "setFragmentDB";
+char sipName_BALL_NormalizeNamesProcessor[] = "NormalizeNamesProcessor";
+char sipName_BALL_tree[] = "tree";
+char sipName_BALL_build_bonds[] = "build_bonds";
+char sipName_BALL_add_hydrogens[] = "add_hydrogens";
+char sipName_BALL_normalize_names[] = "normalize_names";
+char sipName_BALL_getDefaultNamingStandard[] = "getDefaultNamingStandard";
+char sipName_BALL_getResidueCopy[] = "getResidueCopy";
+char sipName_BALL_getMoleculeCopy[] = "getMoleculeCopy";
+char sipName_BALL_getFragmentCopy[] = "getFragmentCopy";
+char sipName_BALL_getReferenceFragment[] = "getReferenceFragment";
+char sipName_BALL_getFragmentType[] = "getFragmentType";
+char sipName_BALL_init[] = "init";
+char sipName_BALL_FragmentDB[] = "FragmentDB";
 char sipName_BALL_getTotalCharge[] = "getTotalCharge";
 char sipName_BALL_AssignChargeProcessor[] = "AssignChargeProcessor";
 char sipName_BALL_getNumberOfErrors[] = "getNumberOfErrors";
@@ -206,6 +233,7 @@ char sipName_BALL_PyFragmentList[] = "PyFragmentList";
 char sipName_BALL_PyBaseFragmentList[] = "PyBaseFragmentList";
 char sipName_BALL_PyBondList[] = "PyBondList";
 char sipName_BALL_PyCompositeDescriptorList[] = "PyCompositeDescriptorList";
+char sipName_BALL_FragmentProcessor[] = "FragmentProcessor";
 char sipName_BALL_finish[] = "finish";
 char sipName_BALL_AtomProcessor[] = "AtomProcessor";
 char sipName_BALL_PyAtomList[] = "PyAtomList";
@@ -933,7 +961,7 @@ static PyObject *sipDo_calculateSASPoints(PyObject *,PyObject *sipArgs)
 
 		return sipMapCppToSelf(res,sipClass_Surface);
 	}
-#line 941 "../CPP/BALLcmodule.cpp"
+#line 969 "../CPP/BALLcmodule.cpp"
 	}
 
 	// Report an error if the arguments couldn't be parsed.
@@ -972,7 +1000,7 @@ static PyObject *sipDo_calculateSASAtomAreas(PyObject *,PyObject *sipArgs)
 
 		return resobj;
 	}
-#line 980 "../CPP/BALLcmodule.cpp"
+#line 1008 "../CPP/BALLcmodule.cpp"
 	}
 
 	// Report an error if the arguments couldn't be parsed.
@@ -2997,6 +3025,10 @@ static sipClassDef classesTable[] = {
 	{sipName_BALL_FragmentDistanceCollector, sipNew_FragmentDistanceCollector, &sipClass_FragmentDistanceCollector, sipClassAttrTab_FragmentDistanceCollector, NULL},
 	{sipName_BALL_GeometricCenterProcessor, sipNew_GeometricCenterProcessor, &sipClass_GeometricCenterProcessor, sipClassAttrTab_GeometricCenterProcessor, NULL},
 	{sipName_BALL_BoundingBoxProcessor, sipNew_BoundingBoxProcessor, &sipClass_BoundingBoxProcessor, sipClassAttrTab_BoundingBoxProcessor, NULL},
+	{sipName_BALL_BuildBondsProcessor, sipNew_BuildBondsProcessor, &sipClass_BuildBondsProcessor, sipClassAttrTab_BuildBondsProcessor, NULL},
+	{sipName_BALL_AddHydrogensProcessor, sipNew_AddHydrogensProcessor, &sipClass_AddHydrogensProcessor, sipClassAttrTab_AddHydrogensProcessor, NULL},
+	{sipName_BALL_NormalizeNamesProcessor, sipNew_NormalizeNamesProcessor, &sipClass_NormalizeNamesProcessor, sipClassAttrTab_NormalizeNamesProcessor, NULL},
+	{sipName_BALL_FragmentDB, sipNew_FragmentDB, &sipClass_FragmentDB, sipClassAttrTab_FragmentDB, sipClassVarHierTab_FragmentDB},
 	{sipName_BALL_AssignChargeProcessor, sipNew_AssignChargeProcessor, &sipClass_AssignChargeProcessor, sipClassAttrTab_AssignChargeProcessor, NULL},
 	{sipName_BALL_AssignRadiusProcessor, sipNew_AssignRadiusProcessor, &sipClass_AssignRadiusProcessor, sipClassAttrTab_AssignRadiusProcessor, NULL},
 	{sipName_BALL_ClearRadiusProcessor, sipNew_ClearRadiusProcessor, &sipClass_ClearRadiusProcessor, sipClassAttrTab_ClearRadiusProcessor, NULL},
@@ -3013,6 +3045,7 @@ static sipClassDef classesTable[] = {
 	{NULL, NULL, NULL, NULL, NULL},
 	{NULL, NULL, NULL, NULL, NULL},
 	{NULL, NULL, NULL, NULL, NULL},
+	{sipName_BALL_FragmentProcessor, sipNew_FragmentProcessor, &sipClass_FragmentProcessor, sipClassAttrTab_FragmentProcessor, NULL},
 	{sipName_BALL_AtomProcessor, sipNew_AtomProcessor, &sipClass_AtomProcessor, sipClassAttrTab_AtomProcessor, NULL},
 	{NULL, NULL, NULL, NULL, NULL},
 	{NULL, NULL, NULL, NULL, NULL},
@@ -3103,7 +3136,7 @@ static sipClassDef classesTable[] = {
 
 static sipModuleDef sipModule = {
 	sipName_BALL_BALL,
-	112,
+	117,
 	classesTable
 };
 
