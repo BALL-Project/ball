@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stringHashMap.h,v 1.24 2003/08/26 08:04:12 oliver Exp $
+// $Id: stringHashMap.h,v 1.25 2004/05/06 21:39:37 oliver Exp $
 //
 
 #ifndef BALL_DATATYPE_STRINGHASHMAP_H
@@ -119,8 +119,7 @@ namespace BALL
 			}
 		}
 
-		/** Assign a hash map from another.
-		*/
+		/// Assign a hash map from another
 		const StringHashMap& operator = (const StringHashMap& hash_map)
 			throw()
 		{

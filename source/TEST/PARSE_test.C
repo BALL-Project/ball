@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PARSE_test.C,v 1.4 2003/04/30 06:05:18 oliver Exp $
+// $Id: PARSE_test.C,v 1.5 2004/05/06 21:39:38 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -18,7 +18,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: PARSE_test.C,v 1.4 2003/04/30 06:05:18 oliver Exp $")
+START_TEST(class_name, "$Id: PARSE_test.C,v 1.5 2004/05/06 21:39:38 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -29,7 +29,7 @@ HINFile hinfile;
 PDBFile pdbfile;
 System system;
 System ref_system;
-FragmentDB db;
+FragmentDB db("");
 
 Path path;
 String tmp = path.find("solvation/PARSE.rul");

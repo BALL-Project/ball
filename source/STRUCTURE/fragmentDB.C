@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentDB.C,v 1.57 2004/05/06 12:54:36 amoll Exp $
+// $Id: fragmentDB.C,v 1.58 2004/05/06 21:39:38 oliver Exp $
 //
 
 #include <BALL/STRUCTURE/fragmentDB.h>
@@ -1044,26 +1044,31 @@ namespace BALL
 
 	bool FragmentDB::NormalizeNamesProcessor::finish() 
 	{
-		String		map_name = "-" + naming_standard_;
+		if (fragment_db_ == 0)
+		{
+			return false;
+		}
+
+		String map_name = "-" + naming_standard_;
 
 		StringHashMap<StringHashMap<String>*>	table;
 		table = fragment_db_->getNamingStandards();
 
-		StringHashMap<StringHashMap<String>*>::Iterator		it;
+		StringHashMap<StringHashMap<String>*>::Iterator it;
 
 		StringHashMap<Index> usable_maps;
 
-		int number_of_tables = 0;
-		for (it = table.begin(); !(it == table.end()); ++it)
+		Size number_of_tables = 0;
+		for (it = table.begin(); it != table.end(); ++it)
 		{
-			if ((*it).first.hasSubstring(map_name))
+			if (it->first.hasSubstring(map_name))
 			{
 				number_of_tables++;
-				usable_maps[(*it).first] = 0;
+				usable_maps[it->first] = 0;
 			}
 		}
 				
-		list<Fragment*>::iterator				frag_it;				
+		list<Fragment*>::iterator	frag_it;				
 		AtomIterator										atom_it;
 		StringHashMap<String>*					map;
 		StringHashMap<Index>::Iterator	map_iterator;
@@ -1107,7 +1112,7 @@ namespace BALL
 
 				for (atom_it = (*frag_it)->beginAtom(); +atom_it; ++atom_it)
 				{
-					atom_name = (*atom_it).getName();
+					atom_name = atom_it->getName();
 
 					// first, try to match exactly
 					match_name = res_name + res_name_suffix;
@@ -1143,7 +1148,7 @@ namespace BALL
 			}
 
 			// update hit_count for each map
-			(*map_iterator).second = hit_counter;
+			map_iterator->second = hit_counter;
 		}
 
 		// these two variables are needed to store the best map
@@ -1153,7 +1158,7 @@ namespace BALL
 		// look for the best map
 		for (map_iterator = usable_maps.begin(); !(map_iterator == usable_maps.end()); ++map_iterator)
 		{
-			if ((*map_iterator).second > max_hits)
+			if (map_iterator->second > max_hits)
 			{
 				max_hits = (*map_iterator).second;
 				map_name = (*map_iterator).first;
