@@ -1,4 +1,4 @@
-// $Id: composite.C,v 1.5 1999/09/07 19:35:37 oliver Exp $
+// $Id: composite.C,v 1.6 1999/09/21 06:47:07 oliver Exp $
 
 #include <BALL/CONCEPT/composite.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -259,25 +259,39 @@ namespace BALL
 	{
 		if (!selected_)
 		{
+			// select all children
 			Composite* child = first_child_;
 			for (; child != 0; child = child->next_)
 			{
 				if (!child->selected_)
 				{
+					// select the child only if it is not already selected
 					child->select_(false);
 				}
 			}
+			
+			// all children are selected, so this node is selected, too
 			number_of_selected_children_ = number_of_children_;
 			number_of_children_containing_selection_ = number_of_children_;
 			selected_ = true;
-			contains_selection_ = true;
 
-			if (update_parent && parent_ != 0)	
+			// check whether we have to inform the parent
+			if (update_parent && (parent_ != 0))
 			{
+				// we were not selected beforehand, so increase
+				// the corresponding counters
 				parent_->number_of_selected_children_++;
-				parent_->number_of_children_containing_selection_++;
+				if (!contains_selection_)
+				{
+					// increase the corresponding counter in the parent
+					parent_->number_of_children_containing_selection_++;
+				}
+				contains_selection_ = true;
 				parent_->updateSelection_();
+			} else {
+				contains_selection_ = true;
 			}
+
 		}
 	}
 	
@@ -289,8 +303,8 @@ namespace BALL
 	void Composite::deselect_(bool update_parent)
 	{
 		// if anything is selected, deselect everything below
-		if (selected_ || number_of_selected_children_ > 0 
-				|| number_of_children_containing_selection_ > 0)
+		if (selected_ || (number_of_selected_children_ > 0)
+				|| (number_of_children_containing_selection_ > 0))
 		{
 			Composite* child = first_child_;
 			for (; child != 0; child = child->next_)
@@ -302,10 +316,11 @@ namespace BALL
 			}
 			
 			selected_ = false;
+			contains_selection_ = false;
 			number_of_selected_children_ = 0;
 			number_of_children_containing_selection_ = 0;
 
-			if (update_parent && parent_ != 0)
+			if (update_parent && (parent_ != 0))
 			{
 				parent_->updateSelection_();
 			}
@@ -317,8 +332,8 @@ namespace BALL
 		// calculate the new selection flags according 
 		// to the current contents of the counters
 		bool new_selected = ((number_of_selected_children_ == number_of_children_)
-												 || (number_of_children_ == 0 && selected_));
-		bool new_contains_selection = (number_of_children_containing_selection_ > 0) || new_selected;
+												 || ((number_of_children_ == 0) && selected_));
+		bool new_contains_selection = ((number_of_children_containing_selection_ > 0) || new_selected);
 		
 		// now check for transitions in the node's state
 		if (((selected_ != new_selected) || (new_contains_selection != contains_selection_)) && (parent_ != 0))
