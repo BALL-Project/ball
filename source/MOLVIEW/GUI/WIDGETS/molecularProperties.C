@@ -1,4 +1,4 @@
-// $Id: molecularProperties.C,v 1.7.4.3 2002/11/29 00:39:00 amoll Exp $
+// $Id: molecularProperties.C,v 1.7.4.4 2002/12/02 20:58:57 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/WIDGETS/molecularProperties.h>
 #include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
@@ -141,6 +141,7 @@ namespace BALL
 			}
 			else if(RTTI::isKindOf<CompositeSelectedMessage>(*message))
 			{
+//				Log.error() << "MolecularProperties" << std::endl;			
 				// Information from Control: 1 Composite selected or deselected.
 				CompositeSelectedMessage * selection_message = RTTI::castTo<CompositeSelectedMessage>(*message);
 				if (selection_message->selected_) 
@@ -156,9 +157,8 @@ namespace BALL
 					selection_message->composite_->apply(deselector);
 				}
 				// Inform the Scene of the changes
-				ChangedCompositeMessage* cc_message = new ChangedCompositeMessage;
-				cc_message->setComposite(selection_message->composite_);
-				notify_(cc_message);
+				
+				MainControl::getMainControl(this)->update(selection_message->composite_->getRoot());
 
 				SceneMessage* scene_message = new SceneMessage;
 				scene_message->updateOnly();
