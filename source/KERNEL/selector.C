@@ -1,4 +1,4 @@
-// $Id: selector.C,v 1.13 2000/03/27 21:37:05 oliver Exp $
+// $Id: selector.C,v 1.14 2000/05/19 08:11:10 anker Exp $
 
 #include <BALL/KERNEL/selector.h>
 
@@ -7,27 +7,154 @@
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/residue.h>
 #include <BALL/KERNEL/nucleotide.h>
+#include <BALL/KERNEL/bond.h>
 
 using namespace std;
 
 namespace BALL 
 {
 	
-	// nested classes of Selector: ExpressionNode
+	// Expression class, frontend to ExpressionTree
 
-	Selector::ExpressionNode::ExpressionNode()
+	Expression::Expression() : expression_tree_(0)
+	{
+		registerStandardPredicates_();
+	}
+
+	Expression::Expression(const Expression& expression)
+		:	create_methods_(expression.create_methods_),
+		  expression_tree_(new ExpressionTree(*expression.expression_tree_))
+	{
+	}
+
+	Expression::Expression(const String& expression_string)
+	{
+		registerStandardPredicates_();
+		setExpression(expression_string);
+	}
+
+	Expression::~Expression()
+	{
+		delete expression_tree_;
+	}
+
+	bool Expression::hasPredicate(const String& name)
+	{
+		return create_methods_.has(name);
+	}
+
+	bool Expression::operator () (const Atom& atom)
+	{
+		if (expression_tree_ != 0)
+		{
+			return expression_tree_->operator () (atom);
+		}
+		else 
+		{
+			Log.error() << "Expression::operator (): no expression set" << endl;
+			return false;
+		}
+	}
+
+	ExpressionPredicate* Expression::getPredicate
+		(const String& name, const String& args) const
+  {
+    CreationMethod create_method = create_methods_[name];
+    ExpressionPredicate* predicate = (ExpressionPredicate*)(create_method)();
+
+    predicate->setArgument(args);
+
+    return predicate;
+	}
+
+	void Expression::registerPredicate
+		(const String& name, CreationMethod creation_method)
+	{
+		create_methods_.insert(name, creation_method);
+	}
+
+	void Expression::setExpression(const String& expression)
+	{
+		delete expression_tree_;
+
+		SyntaxTree tree(expression);
+		tree.parse();
+
+		expression_tree_ = constructExpressionTree_(tree);
+	}
+
+  ExpressionTree* Expression::constructExpressionTree_(const SyntaxTree& t)
+  {
+    ExpressionTree* root = new ExpressionTree();
+    root->setType(t.type);
+    root->setNegate(t.negate);
+
+    if (t.type == ExpressionTree::LEAF)
+    {
+      if (hasPredicate(t.expression))
+      {
+        root->setPredicate(getPredicate(t.expression, t.argument));
+			}
+			else
+			{
+        Log.error() << "could not find predicate for expression " << t.expression << "(" << t.argument << ")" << endl;
+        root->setType(ExpressionTree::INVALID);
+			}
+
+		}
+		else
+		{
+
+      for (SyntaxTree::ConstIterator it = t.begin(); it != t.end(); ++it)
+      {
+        root->appendChild(constructExpressionTree_(**it));
+			}
+		}
+
+    return root;
+	}
+
+	void Expression::registerStandardPredicates_()
+	{
+		using namespace RTTI;
+		create_methods_.insert("name", AtomNamePredicate::createDefault);
+		create_methods_.insert("type", AtomTypePredicate::createDefault);
+		create_methods_.insert("element", ElementPredicate::createDefault);
+		create_methods_.insert("residue", ResiduePredicate::createDefault);
+		create_methods_.insert("residueID", ResidueIDPredicate::createDefault);
+		create_methods_.insert("protein", ProteinPredicate::createDefault);
+		create_methods_.insert("secondarystruct", SecondaryStructurePredicate::createDefault);
+		create_methods_.insert("solvent", SolventPredicate::createDefault);
+		create_methods_.insert("backbone", BackBonePredicate::createDefault);
+		create_methods_.insert("chain", ChainPredicate::createDefault);
+		create_methods_.insert("nucleotide", NucleotidePredicate::createDefault);
+		create_methods_.insert("inRing", inRingPredicate::createDefault);
+		create_methods_.insert("doubleBonds", doubleBondsPredicate::createDefault);
+		create_methods_.insert("tripleBonds", tripleBondsPredicate::createDefault);
+		create_methods_.insert("aromaticBonds", aromaticBondsPredicate::createDefault);
+		create_methods_.insert("numberOfBonds", numberOfBondsPredicate::createDefault);
+		create_methods_.insert("connectedTo", connectedToPredicate::createDefault);
+		create_methods_.insert("sp3Hybridized", sp3HybridizedPredicate::createDefault);
+		create_methods_.insert("sp2Hybridized", sp2HybridizedPredicate::createDefault);
+		create_methods_.insert("spHybridized", spHybridizedPredicate::createDefault);
+	}
+
+
+	// no more nested classes of Selector: ExpressionTree
+
+	ExpressionTree::ExpressionTree()
 		:	type_(INVALID),
 			negate_(false),
 			predicate_(0)
 	{
 	}
 
-	Selector::ExpressionNode::~ExpressionNode()
+	ExpressionTree::~ExpressionTree()
 	{
 	}
 
-	Selector::ExpressionNode::ExpressionNode
-		(Type type, list<ExpressionNode*>	children, bool negate)
+	ExpressionTree::ExpressionTree
+		(Type type, list<ExpressionTree*>	children, bool negate)
 		:	type_(type),
 			negate_(negate),
 			predicate_(0),
@@ -35,7 +162,7 @@ namespace BALL
 	{
 	}
 	
-	bool Selector::ExpressionNode::operator () (const Atom& atom) const
+	bool ExpressionTree::operator () (const Atom& atom) const
 	{
     bool result;
     if (type_ == LEAF)
@@ -44,11 +171,15 @@ namespace BALL
       if (predicate_ != 0)
       {
         result = (negate_ ^ (predicate_->operator () (atom)));
-			} else {
+			} 
+			else 
+			{
         result = false;
 			}
 
-		} else {
+		} 
+		else 
+		{
 
       // the empty clause is always true
       if (children_.size() == 0)
@@ -57,7 +188,7 @@ namespace BALL
 			}
 
 			// evaluated all children
-      list<ExpressionNode*>::const_iterator list_it = children_.begin();
+      list<ExpressionTree*>::const_iterator list_it = children_.begin();
       bool abort = false;
       for (; !abort && list_it != children_.end(); ++list_it)
       {
@@ -71,7 +202,9 @@ namespace BALL
             abort = true;
 					}
 				// AND expressions may be aborted, if the first subexpression yields false
-				} else {
+				}
+				else
+				{
           if (result == false)
           {
             abort = true;
@@ -83,36 +216,36 @@ namespace BALL
     return result; 
 	}
 
-	void Selector::ExpressionNode::setType(Type type)
+	void ExpressionTree::setType(Type type)
 	{
 		type_= type;
 	}
 
-	void Selector::ExpressionNode::setNegate(bool negate)
+	void ExpressionTree::setNegate(bool negate)
 	{
 		negate_= negate;
 	}
 
-	void Selector::ExpressionNode::setPredicate(ExpressionPredicate* predicate)
+	void ExpressionTree::setPredicate(ExpressionPredicate* predicate)
 	{
 		predicate_= predicate;
 	}
 
-	void Selector::ExpressionNode::appendChild(ExpressionNode* child)
+	void ExpressionTree::appendChild(ExpressionTree* child)
 	{
 		children_.push_back(child);
 	}
 
-	Selector::SyntaxTree::SyntaxTree(const String& s)
+	SyntaxTree::SyntaxTree(const String& s)
 		:	expression(s),
 			argument(""),
 			evaluated(false),
 			negate(false),
-			type(ExpressionNode::INVALID)			
+			type(ExpressionTree::INVALID)			
 	{
 	}
 
-	Selector::SyntaxTree::~SyntaxTree()
+	SyntaxTree::~SyntaxTree()
 	{
 		for (Iterator it = begin(); it != end(); ++it)
 		{
@@ -120,27 +253,27 @@ namespace BALL
 		}
 	}
 
-	Selector::SyntaxTree::Iterator Selector::SyntaxTree::begin()
+	SyntaxTree::Iterator SyntaxTree::begin()
 	{
 		return children.begin();
 	}
 	
-	Selector::SyntaxTree::ConstIterator Selector::SyntaxTree::begin() const
+	SyntaxTree::ConstIterator SyntaxTree::begin() const
 	{
 		return children.begin();
 	}
 	
-	Selector::SyntaxTree::Iterator Selector::SyntaxTree::end()
+	SyntaxTree::Iterator SyntaxTree::end()
 	{
 		return children.end();
 	}
 	
-	Selector::SyntaxTree::ConstIterator Selector::SyntaxTree::end() const
+	SyntaxTree::ConstIterator SyntaxTree::end() const
 	{
 		return children.end();
 	}
 
-	void Selector::SyntaxTree::mergeLeft(SyntaxTree* tree)
+	void SyntaxTree::mergeLeft(SyntaxTree* tree)
 	{
     if (tree->children.empty())
     {
@@ -159,7 +292,7 @@ namespace BALL
     delete tree;
 	}
 
-	void Selector::SyntaxTree::mergeRight(SyntaxTree* tree)
+	void SyntaxTree::mergeRight(SyntaxTree* tree)
 	{
     if (tree->children.empty())
     {
@@ -177,7 +310,7 @@ namespace BALL
     delete tree;
 	}
 
-	void Selector::SyntaxTree::parse()
+	void SyntaxTree::parse()
 	{
     if (!evaluated)
     {
@@ -187,7 +320,7 @@ namespace BALL
 		}
 	}
  
-	void Selector::SyntaxTree::expandBrackets_()
+	void SyntaxTree::expandBrackets_()
 	{
     // we do not try to expand already processed nodes
     if (evaluated == true)
@@ -211,37 +344,49 @@ namespace BALL
     ex = s.find_first_of('(');
     if (ex == string::npos)
     {
-      type = ExpressionNode::INVALID;
+			Log.error() << "Need at least on opening bracket in expression {" << s << "}" << endl;
+      type = ExpressionTree::INVALID;
       return;
 		}
     sy = ex;
     sy++;
     Size bracket_count = 1;
     Size i;
+		bool are_there_brackets = false;
     for (i = sy; i < s.size() && bracket_count > 0; ++i)
     {
       switch (s[i])
       {
-        case '(': bracket_count++; break;
-        case ')': bracket_count--; break;
+        case '(': bracket_count++; are_there_brackets = true; break;
+        case ')': bracket_count--; are_there_brackets = true; break;
+				
 			}
 		}
 
-    if (bracket_count != 0)
-    {
-      type = ExpressionNode::INVALID;
-      Log.error() << "Didn't find closing ')' in expression: {" << s << "}" << endl;
-      return;
+		if (bracket_count < 0)
+		{
+			type = ExpressionTree::INVALID;
+			Log.error() << "Didn't find closing ')' in expression: {" << s << "}" << endl;
+			return;
+		}
+
+		if (bracket_count > 0)
+		{
+			type = ExpressionTree::INVALID;
+			Log.error() << "Found too many closing ')' in expression: {" << s << "}" << endl;
+			return;
 		}
 
     ey = i;
     if (ey >= s.size())
     {
       sz = s.size();
-		} else {
+		} 
+		else 
+		{
       sz = ++i;
 		}
-     // we identified the first expresion in brackets.
+    // we identified the first expresion in brackets.
     // now decide, whether it is a predicate or a bracket expresion
     // or something strange
     String left(s, (Index)sx, ex);
@@ -258,7 +403,9 @@ namespace BALL
       children.push_front(new_t);
       new_t->expandBrackets_();
 
-		} else {
+		} 
+		else 
+		{
 
       // get word directly to the left of the opening bracket
       String left_word = left.getField((Index)number_of_fields - 1);
@@ -271,7 +418,9 @@ namespace BALL
         if (left_word == "!")
         {
           new_t->negate = true;
-				} else {
+				}
+				else
+				{
           new_t = new SyntaxTree(left_word);
           new_t->evaluated = false;
           children.push_front(new_t);
@@ -291,10 +440,12 @@ namespace BALL
 				}
         ex = sx;
 
-			} else {
+			}
+			else
+			{
 
         SyntaxTree* new_t = new SyntaxTree(String(s, (Index)sy, ey - sy - 1));
-        new_t->type = ExpressionNode::LEAF;
+        new_t->type = ExpressionTree::LEAF;
         new_t->argument = new_t->expression;
         new_t->expression = left_word;
         new_t->evaluated = true;
@@ -347,7 +498,7 @@ namespace BALL
 		}
 	}
  
-	void Selector::SyntaxTree::collapseANDs_()
+	void SyntaxTree::collapseANDs_()
 	{
     if (children.size() < 3)
     {
@@ -377,7 +528,7 @@ namespace BALL
       SyntaxTree* t = new SyntaxTree("AND");
       it = start;
       children.insert(start, t);
-      t->type = ExpressionNode::AND;
+      t->type = ExpressionTree::AND;
       t->evaluated = true;
       t->collapseANDs_();
 
@@ -400,7 +551,7 @@ namespace BALL
 	}
  
 
-  void Selector::SyntaxTree::collapseORs_()
+  void SyntaxTree::collapseORs_()
   {
     Iterator  it = begin();
 
@@ -425,7 +576,7 @@ namespace BALL
       SyntaxTree* t = new SyntaxTree("OR");
       it = start;
       children.insert(start, t);
-      t->type = ExpressionNode::OR;
+      t->type = ExpressionTree::OR;
       t->evaluated = true;
       t->collapseORs_();
 
@@ -449,60 +600,23 @@ namespace BALL
  
 
 	Selector::Selector()
-		:	expression_tree_(0),
-			number_of_selected_atoms_(0)
+		:	number_of_selected_atoms_(0)
 	{
-		registerStandardPredicates_();
 	}
 	
-	Selector::Selector(const String& expression)
-		:	expression_tree_(0),
-			number_of_selected_atoms_(0)
+	Selector::Selector(const String& expression_string)
+		:	number_of_selected_atoms_(0)
 	{
-		registerStandardPredicates_();
-		setExpression(expression);
+		Expression(expression_string);
 	}
 
 	Selector::Selector(const Selector& selector)
-		:	expression_tree_(new ExpressionNode(*selector.expression_tree_)),
-			number_of_selected_atoms_(selector.number_of_selected_atoms_)
+		:	number_of_selected_atoms_(selector.number_of_selected_atoms_)
 	{
 	}
 
 	Selector::~Selector()
 	{
-		delete expression_tree_;
-	}
-
-	void Selector::registerStandardPredicates_()
-	{
-		using namespace RTTI;
-		create_methods_.insert("name", AtomNamePredicate::createDefault);
-		create_methods_.insert("type", AtomTypePredicate::createDefault);
-		create_methods_.insert("element", ElementPredicate::createDefault);
-		create_methods_.insert("residue", ResiduePredicate::createDefault);
-		create_methods_.insert("residueID", ResidueIDPredicate::createDefault);
-		create_methods_.insert("protein", ProteinPredicate::createDefault);
-		create_methods_.insert("secondarystruct", SecondaryStructurePredicate::createDefault);
-		create_methods_.insert("solvent", SolventPredicate::createDefault);
-		create_methods_.insert("backbone", BackBonePredicate::createDefault);
-		create_methods_.insert("chain", ChainPredicate::createDefault);
-		create_methods_.insert("nucleotide", NucleotidePredicate::createDefault);
-	}
-
-	void Selector::setExpression(const String& expression)
-	{
-		delete expression_tree_;
-
-		SyntaxTree	tree(expression);
-		tree.parse();
-
-		expression_tree_ = constructExpressionTree_(tree);
-	}
-
-	bool Selector::hasPredicate(const String& name)
-	{
-		return create_methods_.has(name);
 	}
 
 	Size Selector::getNumberOfSelectedAtoms() const
@@ -510,43 +624,7 @@ namespace BALL
 		return number_of_selected_atoms_;
 	}
 
-	ExpressionPredicate* Selector::getPredicate
-		(const String& name, const String& args) const
-  {
-    CreationMethod create_method = create_methods_[name];
-    ExpressionPredicate* predicate = (ExpressionPredicate*)(create_method)();
 
-    predicate->setArgument(args);
-
-    return predicate;
-	}
-
-  Selector::ExpressionNode* Selector::constructExpressionTree_(const SyntaxTree& t)
-  {
-    ExpressionNode* root = new ExpressionNode();
-    root->setType(t.type);
-    root->setNegate(t.negate);
-
-    if (t.type == ExpressionNode::LEAF)
-    {
-      if (hasPredicate(t.expression))
-      {
-        root->setPredicate(getPredicate(t.expression, t.argument));
-			} else {
-        Log.error() << "could not find predicate for expression " << t.expression << "(" << t.argument << ")" << endl;
-        root->setType(ExpressionNode::INVALID);
-			}
-
-		} else {
-
-      for (SyntaxTree::ConstIterator it = t.begin(); it != t.end(); ++it)
-      {
-        root->appendChild(constructExpressionTree_(**it));
-			}
-		}
-
-    return root;
-	}
 
 	bool Selector::start() 
 	{
@@ -563,7 +641,7 @@ namespace BALL
 		if (RTTI::isKindOf<Atom>(composite))
 		{
 			Atom& atom = dynamic_cast<Atom&>(composite);
-			if (expression_tree_->operator () (atom))
+			if (expression_.operator () (atom))
 			{
 				// select the atoms and increase the atom counter
 				atom.select();
@@ -572,12 +650,6 @@ namespace BALL
 		}
 
     return Processor::CONTINUE;
-	}
-
-	void Selector::registerPredicate
-		(const String& name, CreationMethod creation_method)
-	{
-		create_methods_.insert(name, creation_method);
 	}
 
 	////////////////////////////////////////////////////
@@ -699,5 +771,295 @@ namespace BALL
 	{
 		return RTTI::isKindOf<Nucleotide>(atom);
 	}
+
+	bool inRingPredicate::operator () (const Atom& atom) const
+	{
+		// BAUSTELLE
+		return false;
+	}
+
+	bool doubleBondsPredicate::operator () (const Atom& atom) const
+	{
+		String s = argument_;
+		s.trim();
+		int n = ((String) s[1]).toInt();
+		int count = 0;
+		Size i;
+		for (i = 0; i < atom.countBonds(); ++i)
+		{
+			if ((atom.getBond(i))->getOrder() == Bond::ORDER__DOUBLE)
+			{
+				count++;
+			}
+		}
+
+		String op = s[0];
+		if (op == "<")
+		{
+			if (count < n)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			if (op == ">") 
+			{
+				if (count > n)
+				{
+					return true;
+				}
+				else 
+				{
+					return false;
+				}
+			}
+			else
+			{
+				if (count == n)
+				{
+					return true;
+				}
+				else 
+				{
+					return false;
+				}
+			}
+		}
+		Log.error() << "doubleBond::operator (): Illegal operator " << s[0] << endl;
+		return false;
+	}
 	
+	bool tripleBondsPredicate::operator () (const Atom& atom) const
+	{
+		String s = argument_;
+		s.trim();
+		int n = ((String) s[1]).toInt();
+		int count = 0;
+		Size i;
+		for (i = 0; i < atom.countBonds(); ++i)
+		{
+			if ((atom.getBond(i))->getOrder() == Bond::ORDER__TRIPLE)
+			{
+				count++;
+			}
+		}
+		String op = s[0];
+		if (op == "<")
+		{
+				if (count < n)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+		}
+		else
+		{
+			if (op == ">") 
+			{
+				if (count > n)
+				{
+					return true;
+				}
+				else 
+				{
+					return false;
+				}
+			}
+			else
+			{
+				if (count == n)
+				{
+					return true;
+				}
+				else 
+				{
+					return false;
+				}
+			}
+		}
+		Log.error() << "tripleBond::operator (): Illegal operator " << s[0] << endl;
+		return false;
+	}
+	
+	bool aromaticBondsPredicate::operator () (const Atom& atom) const
+	{
+		String s = argument_;
+		s.trim();
+		int n = ((String) s[1]).toInt();
+		int count = 0;
+		Size i;
+		for (i = 0; i < atom.countBonds(); ++i)
+		{
+			if ((atom.getBond(i))->getOrder() == Bond::ORDER__AROMATIC)
+			{
+				count++;
+			}
+		}
+		String op = s[0];
+		if (op == "<")
+		{
+			if (count < n)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			if (op == ">") 
+			{
+				if (count > n)
+				{
+					return true;
+				}
+				else 
+				{
+					return false;
+				}
+			}
+			else
+			{
+				if (count == n)
+				{
+					return true;
+				}
+				else 
+				{
+					return false;
+				}
+			}
+		}
+		Log.error() << "aromaticBond::operator (): Illegal operator " << s[0] << endl;
+		return false;
+	}
+	
+	bool numberOfBondsPredicate::operator () (const Atom& atom) const
+	{
+		String s = argument_;
+		s.trim();
+		int n = ((String) s[1]).toInt();
+		int count = atom.countBonds(); 
+		String op = s[0];
+		if (op == "<")
+		{
+			if (count < n)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			if (op == ">") 
+			{
+				if (count > n)
+				{
+					return true;
+				}
+				else 
+				{
+					return false;
+				}
+			}
+			else
+			{
+				if (count == n)
+				{
+					return true;
+				}
+				else 
+				{
+					return false;
+				}
+			}
+		}
+		Log.error() << "numberOfBonds::operator (): Illegal operator " << s[0] << endl;
+		return false;
+	}
+	
+	bool connectedToPredicate::operator () (const Atom& atom) const
+	{
+		//BAUSTELLE
+		return false;
+	}
+
+	bool sp3HybridizedPredicate::operator () (const Atom& atom) const
+	{
+		Size i;
+		for (i = 0; i < atom.countBonds(); ++i)
+		{
+			if ((atom.getBond(i))->getOrder() != Bond::ORDER__SINGLE)
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
+	bool sp2HybridizedPredicate::operator () (const Atom& atom) const
+	{
+		int dcount = 0;
+		int acount = 0;
+		Size i;
+		for (i = 0; i < atom.countBonds(); ++i)
+		{
+			if ((atom.getBond(i))->getOrder() != Bond::ORDER__DOUBLE)
+			{
+				dcount++;
+			}
+			if ((atom.getBond(i))->getOrder() != Bond::ORDER__AROMATIC)
+			{
+				acount++;
+			}
+		}
+		if ((dcount == 1) || (acount > 1))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	bool spHybridizedPredicate::operator () (const Atom& atom) const
+	{
+		int dcount = 0;
+		int tcount = 0;
+		Size i;
+		for (i = 0; i < atom.countBonds(); ++i)
+		{
+			if ((atom.getBond(i))->getOrder() != Bond::ORDER__DOUBLE)
+			{
+				dcount++;
+			}
+			if ((atom.getBond(i))->getOrder() != Bond::ORDER__TRIPLE)
+			{
+				tcount++;
+			}
+		}
+		if ((dcount == 2) || (tcount == 1))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
 } // namespace BALL
