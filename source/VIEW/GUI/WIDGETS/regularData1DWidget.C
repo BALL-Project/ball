@@ -1,9 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1DWidget.C,v 1.9 2002/02/27 12:25:20 sturm Exp $
+// $Id: regularData1DWidget.C,v 1.10 2002/12/12 11:43:25 oliver Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/regularData1DWidget.h>
+#include <qpointarray.h>
+#include <qpainter.h>
+#include <qwmatrix.h>
 
 using std::endl;
 using std::cout;

@@ -1,11 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glDisplayList.C,v 1.6 2002/02/27 12:25:13 sturm Exp $
+// $Id: glDisplayList.C,v 1.7 2002/12/12 11:43:24 oliver Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/glDisplayList.h>
 #include <BALL/COMMON/exception.h>
 #include <BALL/DATATYPE/string.h>
+#include <BALL/COMMON/rtti.h>
 
 using namespace std;
 
@@ -73,7 +74,7 @@ namespace BALL
 		}
 
 		void GLDisplayList::startDefinition()
-			throw(NestedDisplayList, NoDisplayListAvailable, DisplayListRedeclaration)
+			throw(GLDisplayList::NestedDisplayList, GLDisplayList::NoDisplayListAvailable, GLDisplayList::DisplayListRedeclaration)
 		{
 			if (GL_list_ == 0)
 			{

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: client.C,v 1.10 2002/02/27 12:25:22 sturm Exp $
+// $Id: client.C,v 1.11 2002/12/12 11:43:26 oliver Exp $
 
 #include <BALL/VIEW/KERNEL/client.h>
 
@@ -70,7 +70,7 @@ namespace BALL
 		}
 
 	  void Client::insert(Composite &composite)
-			throw(InvalidClient, NoPersistentObject)
+			throw(Client::InvalidClient, Client::NoPersistentObject)
     {
 			if (!isValid())
 			{
@@ -94,6 +94,7 @@ namespace BALL
 			iostream_socket->close();
     }
 
+		// ????????????
 		/*
 		void Client::setCreatorValue(int address, int value)
     {
@@ -205,10 +206,6 @@ namespace BALL
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/KERNEL/client.iC>
-#		endif 
-		
 	} // namespace VIEW
 
 } // namespace BALL

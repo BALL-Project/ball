@@ -1,37 +1,27 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.7 2002/02/27 12:25:20 sturm Exp $
+// $Id: scene.C,v 1.8 2002/12/12 11:43:25 oliver Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/scene.h>
-
-#include <qpainter.h>
-#include <qkeycode.h>
-#include <qpopupmenu.h>
-#include <qmenubar.h>
-#include <qgl.h>
-
+#include <BALL/VIEW/GUI/FUNCTOR/externalRenderer.h>
+#include <BALL/VIEW/FUNCTOR/geometricCollector.h>
 #include "events.C"
 
-using namespace std;
+#include <qpainter.h>
+#include <qmenubar.h>
+
+using std::endl;
+using std::ostream;
+using std::istream;
 
 namespace BALL
 {
-
 	namespace VIEW
 	{
-
-	  Scene::MainControlMissing::MainControlMissing
-		  (const char* file, int line, const string& data)
-			throw()
-			: Exception::GeneralException(file, line, string("MainControlMissing"), data)
-		{
-    }
-    
 		// --------------------------------------------------------------------------
 		// ---- Scene Constructors --------------------------------------------------
 		// --------------------------------------------------------------------------
-		/*
 		Scene::Scene()
 			throw()
 			:	QGLWidget(),
@@ -60,9 +50,8 @@ namespace BALL
 				up_()
 		{
 		}
-		*/
-		Scene::Scene
-			(QWidget* parent_widget, const char* name, WFlags w_flags)
+
+		Scene::Scene(QWidget* parent_widget, const char* name, WFlags w_flags)
 			throw()
 			:	QGLWidget(parent_widget, name, 0, w_flags),
 				ModularWidget(name),
@@ -94,40 +83,23 @@ namespace BALL
 			events.TranslateSystem.registerTranslateSystem(&BALL::VIEW::Scene::translateSystem_);
 			events.ZoomSystem.registerZoomSystem(&BALL::VIEW::Scene::zoomSystem_);
 
-			events.SelectionPressedMoved.
-				registerSelectionPressedMoved(&BALL::VIEW::Scene::selectionPressedMoved_);
-			events.SelectionPressed.
-				registerSelectionPressed(&BALL::VIEW::Scene::selectionPressed_);
-			events.SelectionReleased.
-				registerSelectionReleased(&BALL::VIEW::Scene::selectionReleased_);
+			events.SelectionPressedMoved.registerSelectionPressedMoved(&BALL::VIEW::Scene::selectionPressedMoved_);
+			events.SelectionPressed.registerSelectionPressed(&BALL::VIEW::Scene::selectionPressed_);
+			events.SelectionReleased.registerSelectionReleased(&BALL::VIEW::Scene::selectionReleased_);
 
-			events.DeselectionPressedMoved.
-				registerDeselectionPressedMoved(&BALL::VIEW::Scene::deselectionPressedMoved_);
-			events.DeselectionPressed.
-				registerDeselectionPressed(&BALL::VIEW::Scene::deselectionPressed_);
-			events.DeselectionReleased.
-				registerDeselectionReleased(&BALL::VIEW::Scene::deselectionReleased_);
+			events.DeselectionPressedMoved.registerDeselectionPressedMoved(&BALL::VIEW::Scene::deselectionPressedMoved_);
+			events.DeselectionPressed.registerDeselectionPressed(&BALL::VIEW::Scene::deselectionPressed_);
+			events.DeselectionReleased.registerDeselectionReleased(&BALL::VIEW::Scene::deselectionReleased_);
 
-
-			NotificationRegister
-				(events.MouseLeftButtonPressed & events.MouseMoved, 
-				 events.RotateSystem);
-
-			NotificationRegister
-				(events.MouseMiddleButtonPressed & events.MouseMoved, 
-				 events.ZoomSystem);
-
-			NotificationRegister
-				(events.MouseRightButtonPressed & events.MouseMoved, 
-				 events.TranslateSystem);
+			NotificationRegister(events.MouseLeftButtonPressed & events.MouseMoved, events.RotateSystem);
+			NotificationRegister(events.MouseMiddleButtonPressed & events.MouseMoved, events.ZoomSystem);
+			NotificationRegister(events.MouseRightButtonPressed & events.MouseMoved, events.TranslateSystem);
 
 			// the widget with the MainControl
 			registerWidget(this);
 		}
 
-		Scene::Scene
-			(const Scene& scene, QWidget* parent_widget,
-			 const char* name, WFlags w_flags)
+		Scene::Scene(const Scene& scene, QWidget* parent_widget, const char* name, WFlags w_flags)
 			throw()
 			:	QGLWidget(parent_widget, name, 0, w_flags),
 				ModularWidget(scene),
@@ -156,33 +128,17 @@ namespace BALL
 			events.TranslateSystem.registerTranslateSystem(&BALL::VIEW::Scene::translateSystem_);
 			events.ZoomSystem.registerZoomSystem(&BALL::VIEW::Scene::zoomSystem_);
 
-			events.SelectionPressedMoved.
-				registerSelectionPressedMoved(&BALL::VIEW::Scene::selectionPressedMoved_);
-			events.SelectionPressed.
-				registerSelectionPressed(&BALL::VIEW::Scene::selectionPressed_);
-			events.SelectionReleased.
-				registerSelectionReleased(&BALL::VIEW::Scene::selectionReleased_);
+			events.SelectionPressedMoved.registerSelectionPressedMoved(&BALL::VIEW::Scene::selectionPressedMoved_);
+			events.SelectionPressed.registerSelectionPressed(&BALL::VIEW::Scene::selectionPressed_);
+			events.SelectionReleased.registerSelectionReleased(&BALL::VIEW::Scene::selectionReleased_);
 
-			events.DeselectionPressedMoved.
-				registerDeselectionPressedMoved(&BALL::VIEW::Scene::deselectionPressedMoved_);
-			events.DeselectionPressed.
-				registerDeselectionPressed(&BALL::VIEW::Scene::deselectionPressed_);
-			events.DeselectionReleased.
-				registerDeselectionReleased(&BALL::VIEW::Scene::deselectionReleased_);
+			events.DeselectionPressedMoved.registerDeselectionPressedMoved(&BALL::VIEW::Scene::deselectionPressedMoved_);
+			events.DeselectionPressed.registerDeselectionPressed(&BALL::VIEW::Scene::deselectionPressed_);
+			events.DeselectionReleased.registerDeselectionReleased(&BALL::VIEW::Scene::deselectionReleased_);
 
-
-
-			NotificationRegister
-				(events.MouseLeftButtonPressed & events.MouseMoved,
-				 events.RotateSystem);
-
-			NotificationRegister
-				(events.MouseMiddleButtonPressed & events.MouseMoved,
-				 events.ZoomSystem);
-
-			NotificationRegister
-				(events.MouseRightButtonPressed & events.MouseMoved,
-				 events.TranslateSystem);
+			NotificationRegister(events.MouseLeftButtonPressed & events.MouseMoved, events.RotateSystem);
+			NotificationRegister(events.MouseMiddleButtonPressed & events.MouseMoved, events.ZoomSystem);
+			NotificationRegister(events.MouseRightButtonPressed & events.MouseMoved, events.TranslateSystem); 
 
 			resize((int)width_, (int)height_);
 
@@ -194,8 +150,7 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<Scene>() << endl;
+				cout << "Destructing object " << (void *)this << " of class " << RTTI::getName<Scene>() << endl;
 			#endif 
 
 			destroy();
@@ -204,8 +159,7 @@ namespace BALL
 		void Scene::clear()
 			throw()
 		{
-			GL_object_collector_ 
-				= (GLObjectCollector *)&RTTI::getDefault<GLObjectCollector>();
+			GL_object_collector_ = (GLObjectCollector *)&RTTI::getDefault<GLObjectCollector>();
 
 			system_origin_.set(0.0, 0.0, 0.0);
 			quaternion_.setIdentity();
@@ -261,7 +215,7 @@ namespace BALL
 			throw(MainControlMissing)
 		{
 			// rebuild displaylists
-			if (rebuild_displaylists == true)
+			if (rebuild_displaylists)
 			{
 				MainControl::DescriptorIterator descriptor_iterator;
 				
@@ -270,20 +224,16 @@ namespace BALL
 				
 				if (main_control == 0)
 				{
-					throw ::BALL::VIEW::Scene::MainControlMissing(__FILE__, __LINE__, "");
+					throw MainControlMissing(__FILE__, __LINE__, "");
 				}
 
 				// redraw the system
-				for (descriptor_iterator 
-							 = main_control->getDescriptorList().begin();
-						 descriptor_iterator != main_control->getDescriptorList().end(); 
-						 ++descriptor_iterator)
-					{
-						CompositeDescriptor *composite_descriptor
-							= *descriptor_iterator;
-						
-						composite_descriptor->update();
-					}
+				descriptor_iterator = main_control->getDescriptorList().begin();
+				for (; descriptor_iterator != main_control->getDescriptorList().end(); ++descriptor_iterator)
+				{
+					CompositeDescriptor *composite_descriptor = *descriptor_iterator;
+					composite_descriptor->update();
+				}
 			}
 
 			updateGL();
@@ -298,11 +248,28 @@ namespace BALL
 
 				if (scene_message->isUpdateOnly() == false)
 				{
-					setCamera(scene_message->getCameraLookAt(),
-										scene_message->getCameraViewPoint());
+					setCamera(scene_message->getCameraLookAt(), scene_message->getCameraViewPoint());
 				}
 
 				update(false);
+			}
+		}
+
+		void Scene::exportScene(ExternalRenderer &er) const
+			throw()
+		{
+			er.setScene(*this);
+			ConnectionObject *object = getParent();
+			MainControl *main_control = RTTI::castTo<MainControl>(*object);
+			MainControl::DescriptorIterator descriptor_iterator;
+			// do we have to do that for all entries in the descriptor list? That might become
+			// a problem...
+			for (descriptor_iterator = main_control->getDescriptorList().begin();
+					 descriptor_iterator != main_control->getDescriptorList().end(); 
+					 ++descriptor_iterator)
+			{
+				CompositeDescriptor *composite_descriptor = *descriptor_iterator;
+				composite_descriptor->getComposite()->apply(er);
 			}
 		}
 
@@ -322,9 +289,7 @@ namespace BALL
 		bool Scene::isValid() const
 			throw()
 		{
-			return (getParent() != 0 &&
-							GL_primitive_manager_.isValid() &&
-							system_origin_.isValid());
+			return (getParent() != 0 && GL_primitive_manager_.isValid() && system_origin_.isValid());
 		}
 
 		void Scene::dump(ostream& s, Size depth) const
@@ -393,12 +358,12 @@ namespace BALL
 		{
 			if (!format().rgba())
 			{
-				cerr << "no rgba mode for OpenGL available." << endl;
+				Log.error() << "no rgba mode for OpenGL available." << endl;
 			}
 
 			glFrontFace(GL_CCW);
-			glCullFace(GL_BACK);
-			glEnable(GL_CULL_FACE);
+//			glCullFace(GL_BACK);
+//			glEnable(GL_CULL_FACE);
 
 			glEnable(GL_NORMALIZE);
 
@@ -431,9 +396,7 @@ namespace BALL
 		void Scene::paintGL()
 		{
 			makeCurrent();
-
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 			renderView_();
 		}
 
@@ -457,9 +420,7 @@ namespace BALL
 			glMatrixMode(GL_PROJECTION);
 			glLoadIdentity();
 
-			glFrustum
-				(-2.0 * x_scale_, 2.0 * x_scale_, -2.0 * y_scale_,
-					2.0 * y_scale_, 1.5, 300);
+			glFrustum (-2.0 * x_scale_, 2.0 * x_scale_, -2.0 * y_scale_, 2.0 * y_scale_, 1.5, 300);
 
 			setCamera_();
 
@@ -767,7 +728,6 @@ namespace BALL
 			if (need_update_ == true)
 			{
 				updateGL();
-
 				need_update_ = false;
 			}
 		}
@@ -778,37 +738,17 @@ namespace BALL
 			setRenderMode_(Scene::RENDER_MODE__COMPILE);
 	
 			// unpicking mode controls
-			NotificationUnregister
-				(events.MouseLeftButtonPressed);
-			
-			NotificationUnregister
-				(events.MouseLeftButtonPressed & events.MouseMoved);
-			
-			NotificationUnregister
-				(events.MouseLeftButtonReleased);
-			
-			NotificationUnregister
-				(events.MouseRightButtonPressed);
-			
-			NotificationUnregister
-				(events.MouseRightButtonPressed & events.MouseMoved);
-			
-			NotificationUnregister
-				(events.MouseRightButtonReleased);
-			
+			NotificationUnregister(events.MouseLeftButtonPressed);
+			NotificationUnregister(events.MouseLeftButtonPressed & events.MouseMoved);
+			NotificationUnregister(events.MouseLeftButtonReleased);
+			NotificationUnregister(events.MouseRightButtonPressed);
+			NotificationUnregister(events.MouseRightButtonPressed & events.MouseMoved);
+			NotificationUnregister(events.MouseRightButtonReleased);
 			
 			// rotation mode controls
-			NotificationRegister
-				(events.MouseLeftButtonPressed & events.MouseMoved, 
-				 events.RotateSystem);
-			
-			NotificationRegister
-				(events.MouseMiddleButtonPressed & events.MouseMoved, 
-				 events.ZoomSystem);
-			
-			NotificationRegister
-				(events.MouseRightButtonPressed & events.MouseMoved, 
-				 events.TranslateSystem);			
+			NotificationRegister(events.MouseLeftButtonPressed & events.MouseMoved, events.RotateSystem);
+			NotificationRegister(events.MouseMiddleButtonPressed & events.MouseMoved, events.ZoomSystem); 
+			NotificationRegister(events.MouseRightButtonPressed & events.MouseMoved, events.TranslateSystem);			
 		}
 
 		void Scene::pickingMode_()
@@ -817,40 +757,17 @@ namespace BALL
 			setRenderMode_(Scene::RENDER_MODE__DO_NOT_COMPILE);
 			
 			// unrotation mode controls
-			NotificationUnregister
-				(events.MouseLeftButtonPressed & events.MouseMoved);
-			
-			NotificationUnregister
-				(events.MouseMiddleButtonPressed & events.MouseMoved);
-			
-			NotificationUnregister
-				(events.MouseRightButtonPressed & events.MouseMoved);
-			
+			NotificationUnregister(events.MouseLeftButtonPressed & events.MouseMoved); 
+			NotificationUnregister(events.MouseMiddleButtonPressed & events.MouseMoved); 
+			NotificationUnregister(events.MouseRightButtonPressed & events.MouseMoved); 
 			
 			// picking mode controls
-			NotificationRegister
-				(events.MouseLeftButtonPressed,
-				 events.SelectionPressed);
-			
-			NotificationRegister
-				(events.MouseLeftButtonPressed & events.MouseMoved, 
-				 events.SelectionPressedMoved);
-			
-			NotificationRegister
-				(events.MouseLeftButtonReleased, 
-				 events.SelectionReleased);
-			
-			NotificationRegister
-				(events.MouseRightButtonPressed,
-				 events.DeselectionPressed);
-			
-			NotificationRegister
-				(events.MouseRightButtonPressed & events.MouseMoved, 
-				 events.DeselectionPressedMoved);
-			
-			NotificationRegister
-				(events.MouseRightButtonReleased, 
-				 events.DeselectionReleased);
+			NotificationRegister(events.MouseLeftButtonPressed, events.SelectionPressed); 
+			NotificationRegister(events.MouseLeftButtonPressed & events.MouseMoved, events.SelectionPressedMoved); 
+			NotificationRegister(events.MouseLeftButtonReleased, events.SelectionReleased); 
+			NotificationRegister(events.MouseRightButtonPressed, events.DeselectionPressed); 
+			NotificationRegister(events.MouseRightButtonPressed & events.MouseMoved, events.DeselectionPressedMoved); 
+			NotificationRegister(events.MouseRightButtonReleased, events.DeselectionReleased);
 		}
 
 		// --------------------------------------------------------------------------
@@ -869,8 +786,6 @@ namespace BALL
 			#ifdef BALL_VIEW_DEBUG
 				cout << "rendering." << endl;
 			#endif
-
-				//			glEnable(GL_COLOR_MATERIAL);
 
 			Matrix4x4 m;
 			GLfloat matrix[4][4];
@@ -895,14 +810,14 @@ namespace BALL
 			
 			if (object == 0)
 			{
-				throw ::BALL::VIEW::Scene::MainControlMissing(__FILE__, __LINE__, "");
+				throw MainControlMissing(__FILE__, __LINE__, "");
 			}
 			
 			MainControl *main_control = RTTI::castTo<MainControl>(*object);
 
 			if (main_control == 0)
 			{
-				throw ::BALL::VIEW::Scene::MainControlMissing(__FILE__, __LINE__, "");
+				throw MainControlMissing(__FILE__, __LINE__, "");
 			}
 			
 			// draw the system
@@ -910,8 +825,7 @@ namespace BALL
 					 descriptor_iterator != main_control->getDescriptorList().end(); 
 					 ++descriptor_iterator)
 			{
-				CompositeDescriptor *composite_descriptor
-					= *descriptor_iterator;
+				CompositeDescriptor *composite_descriptor = *descriptor_iterator;
 
 				// the primitive manager: used to get the right displaylists
 				composite_descriptor->registerPrimitiveManager(GL_primitive_manager_);
@@ -930,38 +844,31 @@ namespace BALL
 
 				center -= system_origin_;
 
-				glTranslatef((GLfloat)center.x,
-										 (GLfloat)center.y,
-										 (GLfloat)center.z); 
+				glTranslatef((GLfloat)center.x, (GLfloat)center.y, (GLfloat)center.z); 
 
 				// calculate the objects rotation matrix 
 				composite_descriptor->getQuaternion().getRotationMatrix(m);
-
 				convertMatrix_(m, matrix);
-				
 				glMultMatrixf(&matrix[0][0]);
 
 				/* pull displaylist to its center */
 				center = composite_descriptor->getCenter();
-
-				glTranslatef((GLfloat)-center.x,
-										 (GLfloat)-center.y,
-										 (GLfloat)-center.z); 
+				glTranslatef((GLfloat)-center.x, (GLfloat)-center.y, (GLfloat)-center.z); 
 
 				switch(phase_)
 				{
 					case Scene::PHASE__STATIC_SCENE:
+					{
+						if (render_mode_ == Scene::RENDER_MODE__COMPILE) // use compiled lists
 						{
-							if (render_mode_ == Scene::RENDER_MODE__COMPILE) // use compiled lists
-							{
-								composite_descriptor->drawEntity();
-							}
-							else // draw the objects directly
-							{
-								composite_descriptor->drawDirect(false, with_names);
-							}
+							composite_descriptor->drawEntity();
 						}
-						break;
+						else // draw the objects directly
+						{
+							composite_descriptor->drawDirect(false, with_names);
+						}
+					}
+					break;
 
 					case Scene::PHASE__DYNAMIC_SCENE:
 					{
@@ -981,8 +888,6 @@ namespace BALL
 			}
 
 			glPopMatrix();
-
-			//			glDisable(GL_COLOR_MATERIAL);
 
 			// return to saved render mode, if names were turned on
 			if (with_names)
@@ -1026,7 +931,6 @@ namespace BALL
 		void Scene::zoomSystem_(Scene *scene)
 		{
 			Vector3 view = getViewPointPosition();
-			//			Vector3 look_at = getLastLookAtPosition_();
 			Vector3 look_at = getLookAtPosition();
 
 			Real distance = view.getDistance(look_at);
@@ -1050,7 +954,6 @@ namespace BALL
     {
 			x_window_pick_pos_first_ = x_window_pos_old_;
 			y_window_pick_pos_first_ = y_window_pos_old_;
-			
 			x_window_pick_pos_second_ = x_window_pos_old_;
 			y_window_pick_pos_second_ = y_window_pos_old_;
     }
@@ -1058,11 +961,17 @@ namespace BALL
   	void Scene::selectionReleased_(Scene* /* scene */)
     {
 			selectObjects_(true);
-			
 			need_update_ = true;
-			
 			updateGL();
     }
+
+  	void Scene::deselectionReleased_(Scene* /* scene */)
+    {
+			selectObjects_(false);
+			need_update_ = true;
+			updateGL();
+    }
+
 
 	  void Scene::selectionPressedMoved_(Scene* /* scene */)
     {
@@ -1094,55 +1003,6 @@ namespace BALL
     }
 
 
-	  void Scene::deselectionPressed_(Scene* /* scene */)
-    {
-			x_window_pick_pos_first_ = x_window_pos_old_;
-			y_window_pick_pos_first_ = y_window_pos_old_;
-			
-			x_window_pick_pos_second_ = x_window_pos_old_;
-			y_window_pick_pos_second_ = y_window_pos_old_;
-    }
-
-  	void Scene::deselectionReleased_(Scene* /* scene */)
-    {
-			selectObjects_(false);
-			
-			need_update_ = true;
-			
-			updateGL();
-    }
-
-	  void Scene::deselectionPressedMoved_(Scene* /* scene */)
-    {
-			x_window_pick_pos_second_ = x_window_pos_new_;
-			y_window_pick_pos_second_ = y_window_pos_new_;
-
-			int x_pick_old_i = (int)x_window_pick_pos_first_;
-			int y_pick_old_i = (int)y_window_pick_pos_first_;
-			int x_pos_old_i  = (int)x_window_pos_old_;
-			int y_pos_old_i  = (int)y_window_pos_old_;
-			int x_pos_new_i  = (int)x_window_pos_new_;
-			int y_pos_new_i  = (int)y_window_pos_new_;
-
-			QPainter painter(this);
-			painter.setPen(white);
-			painter.setRasterOp(XorROP);
-  
-			painter.drawRect(x_pick_old_i,
-											 y_pick_old_i,
-											 x_pos_old_i - x_pick_old_i,
-											 y_pos_old_i - y_pick_old_i);
-			
-			painter.drawRect(x_pick_old_i,
-											 y_pick_old_i,
-											 x_pos_new_i - x_pick_old_i,
-											 y_pos_new_i - y_pick_old_i);
-
-			painter.end();
-    }
-
-
-
 		//////////////////////////////////////////////////////////////////////////////////
 		// registerable functions end
 		//////////////////////////////////////////////////////////////////////////////////
@@ -1165,20 +1025,15 @@ namespace BALL
 		Vector3 Scene::translateObjectZ_(const Real distance)
 		{
 			Real delta_y = y_window_pos_new_ - y_window_pos_old_;
-			
 			return (delta_y / (float)height_ * distance) * getZoomVector_();  
 		}
 
 		Vector3 Scene::calculateRotatedVector_(const Vector3& v, const Quaternion& q)
 		{
 			Matrix4x4 m;
-			
 			q.getRotationMatrix(m);
-			
 			Vector4 tmp(v.x, v.y, v.z);
-			
 			tmp = m * tmp;
-			
 			return Vector3(tmp.x, tmp.y, tmp.z);
 		}
 
@@ -1272,11 +1127,8 @@ namespace BALL
 			glLoadIdentity();
 			
 			// calculate picking rectangle
-			int width = BALL_ABS((int)x_window_pick_pos_second_ 
-													 - (int)x_window_pick_pos_first_);
-			
-			int height = BALL_ABS((int)y_window_pick_pos_second_ 
-															 - (int)y_window_pick_pos_first_);
+			int width  = BALL_ABS((int)x_window_pick_pos_second_ - (int)x_window_pick_pos_first_);
+			int height = BALL_ABS((int)y_window_pick_pos_second_ - (int)y_window_pick_pos_first_);
 			
 			int center_x = BALL_MIN((int)x_window_pick_pos_second_,
 															(int)x_window_pick_pos_first_) + width / 2;
@@ -1298,12 +1150,7 @@ namespace BALL
 										viewport);
 			
 			// prepare camera
-			glFrustum(-2.0 * x_scale_,
-								2.0 * x_scale_,
-								-2.0 * y_scale_,
-								2.0 * y_scale_,
-								1.5,
-								300);
+			glFrustum(-2.0 * x_scale_, 2.0 * x_scale_, -2.0 * y_scale_, 2.0 * y_scale_, 1.5, 300);
 			
 			gluLookAt((GLfloat)(getViewPointPosition().x), 
 								(GLfloat)(getViewPointPosition().y),
@@ -1317,15 +1164,10 @@ namespace BALL
 			
 			glMatrixMode(GL_MODELVIEW);
 			
-			// last action: not picking
-			//			if (!was_picking_)
-			{
-				// render with names
-				renderView_(true);
-			}
-			
+			// render with names
+			renderView_(true);
+		
 			glPopMatrix();
-			
 			glFlush();
 			
 			// get number of hits
@@ -1335,7 +1177,6 @@ namespace BALL
 			if (number_of_hits == 0)
 			{
 				setCamera_();
-				
 				return;
 			}
 			
@@ -1348,8 +1189,7 @@ namespace BALL
 			message->setDeletable(true);
 
 			// collect only the nearest Object
-			if (width <= 3
-					&& height <= 3) 
+			if (width <= 3 && height <= 3) 
 			{
 				unsigned int z_coord;
 				
@@ -1357,9 +1197,7 @@ namespace BALL
 				for (int index = 0; index < number_of_hits; ++index)
 				{
 					names = *object_buffer_ptr;
-
 					++object_buffer_ptr;
-					
 					z_coord = *object_buffer_ptr;
 					
 					++object_buffer_ptr;
@@ -1368,7 +1206,6 @@ namespace BALL
 					if (z_coord <= minimum_z_coord)
 					{
 						minimum_z_coord = z_coord;
-						
 						nearest_name = (GLPrimitiveManager::Name)*object_buffer_ptr;
 					}
 					
@@ -1417,35 +1254,25 @@ namespace BALL
 			GeometricCollector collector;
 			collector.collectSelectedGeometricObjects(true);
 
-			MainControl::DescriptorIterator descriptor_iterator;
-
 			ConnectionObject *object = getParent();
-			
 			if (object == 0)
 			{
-				throw ::BALL::VIEW::Scene::MainControlMissing(__FILE__, __LINE__, "");
+				throw MainControlMissing(__FILE__, __LINE__, "");
 			}
 			
 			MainControl *main_control = RTTI::castTo<MainControl>(*object);
 
 			// collect selected objects
+			MainControl::DescriptorIterator descriptor_iterator;
 			for (descriptor_iterator = main_control->getDescriptorList().begin();
 					 descriptor_iterator != main_control->getDescriptorList().end(); 
 					 ++descriptor_iterator)
 			{
-				CompositeDescriptor *composite_descriptor
-					= *descriptor_iterator;
-
+				CompositeDescriptor *composite_descriptor = *descriptor_iterator;
 				composite_descriptor->getComposite()->apply(collector);
-
-				// mark composite for update
-				ChangedCompositeMessage change_message;
-				change_message.setComposite(composite_descriptor->getComposite());
-				notify_(change_message);
 			}			
 
 			message->setSelection(collector.getCollection());
-
 			// sent collected objects
 			notify_(message);
 
@@ -1459,11 +1286,9 @@ namespace BALL
 
 		void Scene::convertMatrix_(const Matrix4x4 &matrix, GLfloat GL_float_array[4][4])
 		{
-			int i, j;
-
-			for (i = 0; i < 4; ++i)
+			for (int i = 0; i < 4; ++i)
 			{
-				for (j = 0; j < 4; ++j)
+				for (int j = 0; j < 4; ++j)
 				{
 					GL_float_array[i][j] = (GLfloat)matrix(i, j);
 				}
@@ -1471,8 +1296,9 @@ namespace BALL
 		}
 
 
-		// Camera section -------
-
+		//////////////////////////////////////////////////////////////////////////////////
+		// Camera section 																														  // 
+		//////////////////////////////////////////////////////////////////////////////////
 		void Scene::initViewVectors_()
 		{
 			zoom_ = look_at_position_ - position_;
@@ -1563,11 +1389,8 @@ namespace BALL
 		void Scene::finalizeWidget(MainControl& main_control)
 			throw()
 		{
-			main_control.removeMenuEntry
-				(MainControl::DISPLAY, "&Rotate Mode", this, SLOT(rotateMode_()), CTRL+Key_R);
-			
-			main_control.removeMenuEntry
-				(MainControl::DISPLAY, "&Picking Mode", this, SLOT(pickingMode_()), CTRL+Key_P);		
+			main_control.removeMenuEntry(MainControl::DISPLAY, "&Rotate Mode", this, SLOT(rotateMode_()), CTRL+Key_R);
+			main_control.removeMenuEntry(MainControl::DISPLAY, "&Picking Mode", this, SLOT(pickingMode_()), CTRL+Key_P);		
 		}
 
 		void Scene::checkMenu(MainControl& main_control)

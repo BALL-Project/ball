@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: color.C,v 1.6 2002/02/27 12:25:09 sturm Exp $
+// $Id: color.C,v 1.7 2002/12/12 11:43:19 oliver Exp $
 
 #include <BALL/VIEW/DATATYPE/color.h>
 using namespace std;
@@ -20,7 +20,7 @@ namespace BALL
 		{
 		}
 
-		ColorRGBA::ColorRGBA(const ColorRGBA& color, bool /* deep */ )
+		ColorRGBA::ColorRGBA(const ColorRGBA& color)
 			:	red_(color.red_),
 				green_(color.green_),
 				blue_(color.blue_),
@@ -86,7 +86,7 @@ namespace BALL
 			return String(&temp[0]);  
 		}
 
-		void ColorRGBA::set(const ColorRGBA& color, bool /* deep */)
+		void ColorRGBA::set(const ColorRGBA& color)
 		{
 			red_ = color.red_;
 			green_ = color.green_;
@@ -649,7 +649,7 @@ namespace BALL
 					
 				if ((length != 6) && (length != 7))
 				{
-					throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__);
+					throw BALL::Exception::InvalidRange(__FILE__, __LINE__);
 				}
 								
 			#endif
@@ -698,7 +698,7 @@ namespace BALL
 		}
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/DATATYPE/color.iC>
+//#			include <BALL/VIEW/DATATYPE/color.iC>
 #		endif
 
 	} // namespace VIEW

@@ -1,9 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorExtension2.C,v 1.8 2002/02/27 12:25:22 sturm Exp $
+// $Id: colorExtension2.C,v 1.9 2002/12/12 11:43:26 oliver Exp $
 
 #include <BALL/VIEW/KERNEL/colorExtension2.h>
+#include <BALL/COMMON/rtti.h>
 
 using namespace std;
 

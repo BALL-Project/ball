@@ -1,10 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorRGBA.C,v 1.3 2002/02/27 12:25:09 sturm Exp $
+// $Id: colorRGBA.C,v 1.4 2002/12/12 11:43:19 oliver Exp $
 
 #include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #include <BALL/VIEW/DATATYPE/colorHSV.h>
+#include <BALL/COMMON/rtti.h>
 using namespace std;
 
 namespace BALL
@@ -13,6 +14,8 @@ namespace BALL
 	namespace VIEW
 	{
 
+		ColorRGBA BALL_SELECTED_COLOR(255, 255, 0, 255);
+		
 		ColorRGBA::ColorRGBA()
 			throw()
 			:	red_(),

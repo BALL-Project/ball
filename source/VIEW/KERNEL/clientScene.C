@@ -1,9 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: clientScene.C,v 1.7 2002/02/27 12:25:22 sturm Exp $
+// $Id: clientScene.C,v 1.8 2002/12/12 11:43:26 oliver Exp $
 
 #include <BALL/VIEW/KERNEL/clientScene.h>
+
+#include <BALL/VIEW/COMMON/global.h>
 
 using namespace std;
 
@@ -15,11 +17,10 @@ namespace BALL
 
 
 		ClientScene::ClientScene()
-			:
-			host_(0),
-			port_(0),
-			scenehandle_(0),
-			pm_()
+			: host_(0),
+				port_(0),
+				scenehandle_(0),
+				pm_()
 		{
 		}
 
@@ -33,11 +34,10 @@ namespace BALL
 
 		ClientScene::ClientScene
 			(const ClientScene&  clientScene , bool /* deep */)
-				:
-			host_(clientScene.host_),
-			port_(clientScene.port_),
-			scenehandle_(clientScene.scenehandle_),
-			pm_()
+			:	host_(clientScene.host_),
+				port_(clientScene.port_),
+				scenehandle_(clientScene.scenehandle_),
+				pm_()
 		{
 		}
 
@@ -53,6 +53,7 @@ namespace BALL
 
 		void ClientScene::clear()
 		{
+			// ??????????
 			/*
 			host_ = 0;
 			port_ = 0;
@@ -146,7 +147,7 @@ namespace BALL
 			iostream_socket->close();
     }
 
-	  void ClientScene::insert(Composite &composite)
+	  void ClientScene::insert(Composite& composite)
     {
 			#ifdef BALL_VIEW_DEBUG
 					
@@ -376,10 +377,6 @@ namespace BALL
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/KERNEL/clientScene.iC>
-#		endif 
-		
 	} // namespace VIEW
 
 } // namespace BALL

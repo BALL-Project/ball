@@ -1,18 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: gllabel.C,v 1.7 2002/02/27 12:25:16 sturm Exp $
+// $Id: gllabel.C,v 1.8 2002/12/12 11:43:25 oliver Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/gllabel.h>
-#include <GL/gl.h>
-
-#include <qdialog.h>
-
-using namespace std;
 
 namespace BALL
 {
-
 	namespace VIEW
 	{
 
@@ -66,7 +60,7 @@ namespace BALL
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<GLLabel>() << endl;
+					<< " of class " << RTTI::getName<GLLabel>() << std::endl;
 			#endif 
 
 			destroy();
@@ -158,10 +152,10 @@ namespace BALL
 			}
 			else
 			{
-				glColor4ub((unsigned char)getSelectedColor().getRed(),
-									 (unsigned char)getSelectedColor().getGreen(),
-									 (unsigned char)getSelectedColor().getBlue(),
-									 (unsigned char)getSelectedColor().getAlpha());
+				glColor4ub((unsigned char)BALL_SELECTED_COLOR.getRed(),
+									 (unsigned char)BALL_SELECTED_COLOR.getGreen(),
+									 (unsigned char)BALL_SELECTED_COLOR.getBlue(),
+									 (unsigned char)BALL_SELECTED_COLOR.getAlpha());
 			}
 
 			if (with_names)
@@ -217,10 +211,9 @@ namespace BALL
 				  p.setPen(c2);
 				  p.drawText(-r.x() + border, -r.y() + border, getText().c_str());
 				p.end();
-						
+
 				// convert to image (acces to single pixel is allowed here)
 				QImage image = pm.convertToImage();
-				
 				width_ = image.width();
 				int width = (width_ + 7) / 8;
 				height_ = image.height();
@@ -246,18 +239,17 @@ namespace BALL
 				
 				// copy image to char array
 				int offset = (height_-1)*width;
-				
+
 				for (int i = 0; i < height_; ++i, offset -= width)
 				{
 					for (int j = 0; j < width_; ++j)
 					{
-						if (image.pixel(j,i) != 0)
-						{
-							*(text_array_ + (j>>3) + offset) |= (128 >> (j&7));
+							if (qGray(image.pixel(j,i)) != 0)
+							{
+								*(text_array_ + (j>>3) + offset) |= (128 >> (j&7)); 
+							}
 						}
-					}
 				}
-
 				// save old values 
 				old_font_ = actual_font_;
 				old_text_ = getText();

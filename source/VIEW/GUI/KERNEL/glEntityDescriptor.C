@@ -1,10 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glEntityDescriptor.C,v 1.5 2002/02/27 12:25:14 sturm Exp $
+// $Id: glEntityDescriptor.C,v 1.6 2002/12/12 11:43:24 oliver Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/glEntityDescriptor.h>
 #include <BALL/COMMON/exception.h>
+#include <BALL/COMMON/rtti.h>
 
 using namespace std;
 

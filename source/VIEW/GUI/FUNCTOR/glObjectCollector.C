@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glObjectCollector.C,v 1.3 2002/02/27 12:25:12 sturm Exp $
+// $Id: glObjectCollector.C,v 1.4 2002/12/12 11:43:23 oliver Exp $
 
 #include <BALL/VIEW/GUI/FUNCTOR/glObjectCollector.h>
 
@@ -87,7 +87,7 @@ namespace BALL
 			return true;
 		}
 				
-		Processor::Result GLObjectCollector::operator()
+		Processor::Result GLObjectCollector::operator ()
 			(Composite& composite)
 			throw()
 		{

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: objectCreator.C,v 1.4 2002/02/27 12:25:15 sturm Exp $
+// $Id: objectCreator.C,v 1.5 2002/12/12 11:43:24 oliver Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/objectCreator.h>
 
@@ -83,10 +83,6 @@ namespace BALL
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/GUI/KERNEL/objectCreator.iC>
-#		endif 
 
 	} // namespace VIEW
 

@@ -1,17 +1,17 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glPrimitiveManager.C,v 1.8 2002/02/27 12:25:14 sturm Exp $
+// $Id: glPrimitiveManager.C,v 1.9 2002/12/12 11:43:24 oliver Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/glPrimitiveManager.h>
+#include <BALL/VIEW/GUI/KERNEL/glQuadricObject.h>
 
-#include <math.h>
-
-using namespace std;
+using std::endl;
+using std::ostream;
+using std::istream;
 
 namespace BALL
 {
-
 	namespace VIEW
 	{
 
@@ -37,16 +37,6 @@ namespace BALL
 			throw()
 		{
 		}
-
-		const GLDisplayList& 
-		GLDisplayListObject_::operator ()
-			(unsigned int drawing_mode, unsigned int drawing_precision) const
-			throw(WrongModes)
-		{
-			return ((GLDisplayListObject_ *)this)->operator()
-								(drawing_mode, drawing_precision);
-		}
-
 
 
 #		define BALL_VIEW_DISPLAY_LIST_MANAGER__X .525731112119133606
@@ -103,7 +93,7 @@ namespace BALL
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<GLSphereDisplayLists_>() << endl;
+						 << " of class " << RTTI::getName<GLSphereDisplayLists_>() << endl;
 			#endif 
 
 			destroy();
@@ -121,7 +111,7 @@ namespace BALL
 		}
 
 		void GLSphereDisplayLists_::init()
-			throw(NoGLDisplayListsAvailable)
+			throw(GLSphereDisplayLists_::NoGLDisplayListsAvailable)
 		{
 			if (GL_display_list_ == 0)
 			{
@@ -138,10 +128,9 @@ namespace BALL
 
 		GLDisplayList& GLSphereDisplayLists_::operator ()
 			 (unsigned int drawing_mode, unsigned int drawing_precision)
-			throw(WrongModes)
+			throw(GLSphereDisplayLists_::WrongModes)
 		{
-			if (drawing_mode >= 3
-					|| drawing_precision >= 4)
+			if (drawing_mode >= 3 || drawing_precision >= 4)
 			{
 				throw WrongModes(__FILE__, __LINE__);
 			}
@@ -152,24 +141,20 @@ namespace BALL
 		bool GLSphereDisplayLists_::isValid() const
 			throw()
 		{
-			if (GL_display_list_ != 0)
-			{
-				for (int i = 0; i < BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE; ++i)
-				{
-					if (GL_display_list_[i].isValid() == false)
-					{
-						return false;
-					}
-				}
-
-				return true;
-			}
+			if (GL_display_list_ == 0) return false;
 			
-			return false;
+			for (int i = 0; i < BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE; ++i)
+			{
+				if (!GL_display_list_[i].isValid())
+				{
+					return false;
+				}
+			}
+
+			return true;
 		}
 
-		void GLSphereDisplayLists_::dump
-			(ostream& s, Size depth) const
+		void GLSphereDisplayLists_::dump(ostream& s, Size depth) const
 			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
@@ -190,7 +175,7 @@ namespace BALL
 		{
 			// building point display list
 			GL_display_list_[0 * 4 + 0].startDefinition();
-			buildDottedSphere_(1);
+			buildDottedSphere_(1); // Precision 0 is far too evil here
 			GL_display_list_[0 * 4 + 0].endDefinition();
 
 			GL_display_list_[0 * 4 + 1].startDefinition();
@@ -230,8 +215,6 @@ namespace BALL
 			GL_display_list_[1 * 4 + 3].endDefinition();
 			
 			GL_quadric_object.setDrawStyle(GLU_FILL);
-			GL_quadric_object.setNormals(GLU_SMOOTH);
-			GL_quadric_object.setOrientation(GLU_OUTSIDE);
 
 			// building solid display list
 			GL_display_list_[2 * 4 + 0].startDefinition();
@@ -251,7 +234,7 @@ namespace BALL
 			GL_display_list_[2 * 4 + 3].endDefinition();
 		}
 
-		void GLSphereDisplayLists_::buildDottedSphere_(int precisioni)
+		void GLSphereDisplayLists_::buildDottedSphere_(int precision)
 			throw()
 		{
 			Vector3 v1;
@@ -260,7 +243,7 @@ namespace BALL
 
 			glBegin(GL_POINTS);
 
-			for (register int i = 0; i < 20; ++i)
+			for (int i = 0; i < 20; ++i)
 			{
 				v1.set(vertices_[indices_[i][0]][0],
 							 vertices_[indices_[i][0]][1],
@@ -274,31 +257,18 @@ namespace BALL
 							 vertices_[indices_[i][2]][1],
 							 vertices_[indices_[i][2]][2]);
 				
-				subdivideTriangle_(v1, v2, v3, precisioni);
+				subdivideTriangle_(v1, v2, v3, precision);
 			}
 
 			glEnd();
 		}
 
-		void GLSphereDisplayLists_::drawPoint_
-			(Vector3& v)
-			throw()
-		{
-			/*
-			glNormal3f((GLfloat)v[0], (GLfloat)v[1], (GLfloat)v[2]);
-			*/
-			glVertex3f((GLfloat)v[0], (GLfloat)v[1], (GLfloat)v[2]);
-		}
-
-		void GLSphereDisplayLists_::subdivideTriangle_
-			(Vector3& v1, Vector3& v2, Vector3& v3, int precision)
+		void GLSphereDisplayLists_::subdivideTriangle_(Vector3& v1, Vector3& v2, Vector3& v3, int precision)
 			throw()
 		{
 			if (precision == 0)
 			{
-				Vector3 result;
-
-				result = v1 + v2 + v3;
+				Vector3 result = v1 + v2 + v3;
 				result.normalize();
 
 				drawPoint_(result);
@@ -306,24 +276,17 @@ namespace BALL
 				return;
 			}
 
-			Vector3 v12;
-			Vector3 v23;
-			Vector3 v31;
-
-			v12 = v1 + v2;
-			v23 = v2 + v3;
-			v31 = v3 + v1;
+			Vector3 v12 = v1 + v2;
+			Vector3 v23 = v2 + v3;
+			Vector3 v31 = v3 + v1;
 			
 			v12.normalize();
 			v23.normalize();
 			v31.normalize();
 
 			subdivideTriangle_(v1, v12, v31, precision - 1);
-
 			subdivideTriangle_(v2, v23, v12, precision - 1);
-
 			subdivideTriangle_(v3, v31, v23, precision - 1);
-
 			subdivideTriangle_(v12, v23, v31, precision - 1);
 		}
 
@@ -340,7 +303,7 @@ namespace BALL
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<GLTubeDisplayLists_>() << endl;
+						 << " of class " << RTTI::getName<GLTubeDisplayLists_>() << endl;
 			#endif 
 
 			destroy();
@@ -358,12 +321,11 @@ namespace BALL
 		}
 
 		void GLTubeDisplayLists_::init()
-			throw(NoGLDisplayListsAvailable)
+			throw(GLTubeDisplayLists_::NoGLDisplayListsAvailable)
 		{
 			if (GL_display_list_ == 0)
 			{
-				GL_display_list_ 
-					= new GLDisplayList[BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE]();
+				GL_display_list_ = new GLDisplayList[BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE]();
 
 				if (GL_display_list_ == 0)
 				{
@@ -376,10 +338,9 @@ namespace BALL
 
 		GLDisplayList& GLTubeDisplayLists_::operator ()
 			 (unsigned int drawing_mode, unsigned int drawing_precision)
-			throw(WrongModes)
+			throw(GLTubeDisplayLists_::WrongModes)
 		{
-			if (drawing_mode >= 3
-					|| drawing_precision >= 4)
+			if (drawing_mode >= 3 || drawing_precision >= 4)
 			{
 				throw WrongModes(__FILE__, __LINE__);
 			}
@@ -394,7 +355,7 @@ namespace BALL
 			{
 				for (int i = 0; i < BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE; ++i)
 				{
-					if (GL_display_list_[i].isValid() == false)
+					if (!GL_display_list_[i].isValid())
 					{
 						return false;
 					}
@@ -406,8 +367,7 @@ namespace BALL
 			return false;
 		}
 
-		void GLTubeDisplayLists_::dump
-			(ostream& s, Size depth) const
+		void GLTubeDisplayLists_::dump(ostream& s, Size depth) const
 			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
@@ -522,12 +482,11 @@ namespace BALL
 		}
 
 		void GLSimpleBoxDisplayLists_::init()
-			throw(NoGLDisplayListsAvailable)
+			throw(GLSimpleBoxDisplayLists_::NoGLDisplayListsAvailable)
 		{
 			if (GL_display_list_ == 0)
 			{
-				GL_display_list_ 
-					= new GLDisplayList[BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE]();
+				GL_display_list_ = new GLDisplayList[BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE]();
 
 				if (GL_display_list_ == 0)
 				{
@@ -540,10 +499,9 @@ namespace BALL
 
 		GLDisplayList& GLSimpleBoxDisplayLists_::operator ()
 			 (unsigned int drawing_mode, unsigned int drawing_precision)
-			throw(WrongModes)
+			throw(GLSimpleBoxDisplayLists_::WrongModes)
 		{
-			if (drawing_mode >= 3
-					|| drawing_precision >= 4)
+			if (drawing_mode >= 3 || drawing_precision >= 4)
 			{
 				throw WrongModes(__FILE__, __LINE__);
 			}
@@ -558,7 +516,7 @@ namespace BALL
 			{
 				for (int i = 0; i < BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE; ++i)
 				{
-					if (GL_display_list_[i].isValid() == false)
+					if (!GL_display_list_[i].isValid())
 					{
 						return false;
 					}
@@ -757,7 +715,6 @@ namespace BALL
 
 
 
-
 		GLPrimitiveManager::GLPrimitiveManager()
 			throw()
 			:	Sphere(),
@@ -774,7 +731,7 @@ namespace BALL
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<GLPrimitiveManager>() << endl;
+					   << " of class " << RTTI::getName<GLPrimitiveManager>() << endl;
 			#endif 
 
 			destroy();
@@ -788,23 +745,6 @@ namespace BALL
 			SimpleBox.destroy();
 
 			clearNames();
-		}
-
-		void GLPrimitiveManager::init()
-			throw()
-		{
-			Sphere.init();
-			Tube.init();
-			SimpleBox.init();
-		}
-		
-		void GLPrimitiveManager::clearNames()
-			throw()
-		{
-			name_to_object_.clear();
-			object_to_name_.clear();
-
-			all_names_ = 0;
 		}
 
 		GLPrimitiveManager::Name GLPrimitiveManager::getName(const GeometricObject& object)
@@ -840,14 +780,6 @@ namespace BALL
 			return it->second;
 		}
 
-		bool GLPrimitiveManager::isValid() const
-			throw()
-		{
-			return (Sphere.isValid() &&
-					    Tube.isValid()   &&
-							SimpleBox.isValid());
-		}
-
 		void GLPrimitiveManager::dump(ostream& s, Size depth) const
 			throw()
 		{
@@ -875,289 +807,10 @@ namespace BALL
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
-		/*
-		::System::GLlist GLPrimitiveManager::buildSphereDisplayLists2_
-			(int slices, int stacks)
-		{
-			int i, j;
-			GLfloat theta, dtheta, rho, drho;
-			GLfloat x, y, z;
-			::System::GLlist GL_list = glGenLists(1);
 
-			#ifdef BALL_DEBUG
-
-				BALL_PRECONDITION
-					(GL_list != ::System::DISPLAYLIST_NOT_DEFINED,
-					 BALL_VIEW_GLPRIMITIVEMANAGER_ERROR_HANDLER
-						 (GLPrimitiveManager::ERROR__NO_DISPLAY_LIST_AVAILABLE),
-					 if (GL_list == ::System::DISPLAYLIST_NOT_DEFINED)
-					 {
-						 return ::System::DISPLAYLIST_NOT_DEFINED;
-					 });
-
-			#endif
-
-			drho = (GLfloat)180 / (GLfloat) stacks;
-			dtheta = (GLfloat)360 / (GLfloat) slices;
-		 
-			glNewList(GL_list, GL_COMPILE);
-
-			// Triangle Fan
-			glBegin( GL_TRIANGLE_FAN );
-
-			glNormal3f( 0.0, 0.0, 1.0 );
-			glVertex3f( 0.0, 0.0, 1.0 );
-
-			for (j = 0; j <= slices ; ++j)
-			{
-				x = -sin(j * dtheta * M_PI / 180.0);
-				y = cos(j * dtheta * M_PI / 180.0);
-				z = cos(drho * M_PI / 180.0);
-
-				glNormal3f(x, y, z);
-				glVertex3f(x, y, z);
-			}
-
-			glEnd();
-
-			GLfloat theta_step;
-		 
-			// Triangle Strip 
-			// how many strips (stacks minus 2) 
-
-			calcStrips_(drho, 2 * drho, dtheta, 0, slices);
-
-			drho += drho;// * (stacks - 2);
-			theta_step = dtheta / 2;// * (stacks & 1);
-
-			glBegin( GL_TRIANGLE_FAN );
-
-			glNormal3f( 0.0, 0.0, -1.0 );
-			glVertex3f( 0.0, 0.0, -1.0 );
-
-			for (j = 0; j <= slices ; ++j)
-			{
-				x = sin(j * dtheta * M_PI / 180.0 + theta_step * M_PI / 180.0);
-				y = cos(j * dtheta * M_PI / 180.0 + theta_step * M_PI / 180.0);
-				z = cos(drho * M_PI / 180.0);
-
-				glNormal3f(x, y, z);
-				glVertex3f(x, y, z);
-			}
-
-			glEnd();
-
-			glEndList();
-		 
-			return GL_list;
-		}
-
-
-		void GLPrimitiveManager::calcStrips_
-			(const GLfloat rho1, const GLfloat rho2,
-			 const GLfloat theta, const GLfloat theta_step,
-			 const unsigned int slices)
-		{
-			GLfloat x, y, z;
-			unsigned int j;
-			
-			glBegin(GL_TRIANGLE_STRIP);
-			
-			for (j = 0; j <= slices ; ++j)
-			{
-				x = -sin(j * theta * M_PI / 180.0 + theta_step * M_PI / 180.0);
-				y = cos(j * theta * M_PI / 180.0 + theta_step * M_PI / 180.0);
-				z = cos(rho1 * M_PI / 180.0);
-				
-				glNormal3f(x, y, z);
-				glVertex3f(x, y, z);
-				
-				x = -sin(j * theta * M_PI / 180.0 + theta / 2* M_PI / 180.0 + theta_step * M_PI / 180.0);
-				y = cos(j * theta * M_PI / 180.0 + theta / 2* M_PI / 180.0 + theta_step * M_PI / 180.0);
-				z = cos(rho2 * M_PI / 180.0);
-				
-				glNormal3f(x, y, z);
-				glVertex3f(x, y, z);
-			}    
-			
-			glEnd();
-		}
-
-
-		::System::GLlist GLPrimitiveManager::buildTubeDisplayLists_
-			(GLUquadricObj* GLU_quadric_object,
-			 int slices, int stacks)
-		{
-			::System::GLlist GL_list = glGenLists(1);
-
-			BALL_PRECONDITION
-				(GL_list != ::System::DISPLAYLIST_NOT_DEFINED,
-				 BALL_VIEW_GLPRIMITIVEMANAGER_ERROR_HANDLER
-					 (GLPrimitiveManager::ERROR__NO_DISPLAY_LIST_AVAILABLE));
-
-			glNewList(GL_list, GL_COMPILE);
-			gluCylinder(GLU_quadric_object, 1.0, 1.0, 1.0, slices, stacks);
-			glEndList();
-
-			return GL_list;
-		}
-
-
-		::System::GLlist GLPrimitiveManager::buildFilledTubeDisplayLists_
-			(int slices, bool closed)
-		{
-			int i;
-			::System::GLlist GL_list = glGenLists(1);
-
-			BALL_PRECONDITION
-				(GL_list != ::System::DISPLAYLIST_NOT_DEFINED,
-				 BALL_VIEW_GLPRIMITIVEMANAGER_ERROR_HANDLER
-					 (GLPrimitiveManager::ERROR__NO_DISPLAY_LIST_AVAILABLE));
-
-			glNewList(GL_list, GL_COMPILE);
-			glBegin( GL_QUAD_STRIP );
-
-			GLfloat phi = (GLfloat)2.0 * M_PI / (GLfloat)slices;
-
-			for (i = 0; i <= slices; i++)
-			{
-				GLfloat x = -sin((GLfloat)i * phi);
-				GLfloat y = cos((GLfloat)i * phi);
-				GLdouble length = sqrt( x * x + y * y );
-
-				if (length > 0.00001F)
-				{
-					glNormal3f( x / length, y / length, 0.0 );   
-				}
-
-				glVertex3f( x, y, 1.0 );
-				glVertex3f( x, y, 0.0 );   
-			}                         
-			
-			glEnd();
-
-			if (closed == true)
-			{
-				glBegin(GL_TRIANGLE_FAN);
-
-				glNormal3f( 0.0, 0.0, -1.0 );   
-				glVertex3f(0.0, 0.0, 0.0);
-
-				for (i = slices; i >= 0; i--)
-				{
-					GLfloat x = -sin((GLfloat)i * phi);
-					GLfloat y = cos((GLfloat)i * phi);
-
-					glVertex3f( x, y, 0.0 );
-				}        
-
-				glEnd();
-
-				glBegin(GL_TRIANGLE_FAN);
-
-				glNormal3f( 0.0, 0.0, 1.0 );   
-				glVertex3f(0.0, 0.0, 1.0);
-
-				for (i = 0; i <= slices; i++)
-				{
-					GLfloat x = -sin((GLfloat)i * phi);
-					GLfloat y = cos((GLfloat)i * phi);
-
-					glVertex3f( x, y, 1.0 );
-				}        
-
-				glEnd();
-			}                 
-
-			glEndList();
-
-			return GL_list;
-		}
-
-
-		::System::GLlist GLPrimitiveManager::buildConeDisplayLists_
-			(GLUquadricObj* GLU_quadric_object,
-			 int slices, int stacks)
-		{
-			::System::GLlist GL_list = glGenLists(1);
-
-			BALL_PRECONDITION
-				(GL_list != ::System::DISPLAYLIST_NOT_DEFINED,
-				 BALL_VIEW_GLPRIMITIVEMANAGER_ERROR_HANDLER
-					 (GLPrimitiveManager::ERROR__NO_DISPLAY_LIST_AVAILABLE));
-			
-			glNewList(GL_list, GL_COMPILE);
-			gluCylinder(GLU_quadric_object, 1.0, 0.0, 1.0, slices, stacks);
-			glEndList();
-
-			return GL_list;
-		}
-
-
-		::System::GLlist GLPrimitiveManager::buildFilledConeDisplayLists_
-			(int slices, bool closed)
-		{
-			::System::GLlist GL_list = glGenLists(1);
-
-			BALL_PRECONDITION
-				(GL_list != ::System::DISPLAYLIST_NOT_DEFINED,
-				 BALL_VIEW_GLPRIMITIVEMANAGER_ERROR_HANDLER
-					 (GLPrimitiveManager::ERROR__NO_DISPLAY_LIST_AVAILABLE));
-
-			glNewList(GL_list, GL_COMPILE);
-
-			GLfloat phi = (GLfloat)2.0 * M_PI / (GLfloat)slices;
-
-			glBegin(GL_TRIANGLE_FAN);
-
-			glNormal3f( 0.0, 0.0, 1.0 );   
-			glVertex3f(0.0, 0.0, 1.0);
-			
-			for (int  = 0; i <= slices; i++)
-			{
-				GLfloat x = -sin((GLfloat)i * phi);
-				GLfloat y = cos((GLfloat)i * phi);
-				
-				GLdouble length = sqrt( x * x + y * y );
-
-				if (length > 0.00001F)
-				{
-					glNormal3f( x / length, y / length, 0.0 );   
-				}
-
-				glVertex3f( x, y, 0.0 );
-			}        
-			
-			glEnd();
-		 
-			if (closed == true)
-			{
-				glBegin(GL_TRIANGLE_FAN);
-
-				glNormal3f( 0.0, 0.0, -1.0 );   
-				glVertex3f(0.0, 0.0, 0.0);
-
-				for (int i = slices; i >= 0; i--)
-				{
-					GLfloat x = -sin((GLfloat)i * phi);
-					GLfloat y = cos((GLfloat)i * phi);
-
-					glVertex3f( x, y, 0.0 );
-				}        
-
-				glEnd();
-			}                 
-
-			glEndList();
-
-			return GL_list;
-		}
-		*/
-
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/GUI/KERNEL/glPrimitiveManager.iC>
-#		endif
+#ifdef BALL_NO_INLINE_FUNCTIONS
+#	include <BALL/VIEW/GUI/KERNEL/glPrimitiveManager.iC>
+#	endif 
 
 	} // namespace VIEW
 

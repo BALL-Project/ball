@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: simpleBox.C,v 1.7 2002/02/27 12:25:27 sturm Exp $
+// $Id: simpleBox.C,v 1.8 2002/12/12 11:43:28 oliver Exp $
 
 #include <BALL/VIEW/PRIMITIV/simpleBox.h>
 
@@ -132,10 +132,6 @@ namespace BALL
 		{
 			return true;  
 		}
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/PRIMITIV/simpleBox.iC>
-#		endif
 
 	} // namespace VIEW
 

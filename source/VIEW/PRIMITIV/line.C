@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: line.C,v 1.9 2002/02/27 12:25:26 sturm Exp $
+// $Id: line.C,v 1.10 2002/12/12 11:43:27 oliver Exp $
 
 #include <BALL/VIEW/PRIMITIV/line.h>
 
@@ -132,10 +132,6 @@ namespace BALL
 		{
 			return true;  
 		}
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/PRIMITIV/line.iC>
-#		endif
 
 	} // namespace VIEW
 

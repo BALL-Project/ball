@@ -1,10 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: server.C,v 1.7 2002/02/27 12:25:15 sturm Exp $
+// $Id: server.C,v 1.8 2002/12/12 11:43:24 oliver Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/server.h>
-#include <BALL/COMMON/logStream.h>
 
 #include <qstatusbar.h>
 #include <qpixmap.h>
@@ -15,7 +14,6 @@ using namespace std;
 
 namespace BALL
 {
-  
 	namespace VIEW
 	{
 		const char* Server::mini_ray_xpm_[] =
@@ -69,8 +67,8 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<Server>() << endl;
+				Log.error() << "Destructing object " << (void *)this 
+										<< " of class " << RTTI::getName<Server>() << endl;
 			#endif 
 
 			destroy();
@@ -224,11 +222,7 @@ namespace BALL
 					QToolTip::add(server_icon_, "VIEW Server disabled");
 				}
 
-				// notify the main window
-				WindowMessage *window_message_2 = new WindowMessage;
-				window_message_2->setStatusBar("");
-				window_message_2->setDeletable(true);
-				notify_(window_message_2);
+				setStatusbarText("");
  			}
 		}
 		
@@ -315,7 +309,7 @@ namespace BALL
 		}
 
 	  void Server::sendObject(IOStreamSocket &iostream_socket)
-				throw(NotCompositeObject)
+				throw(Server::NotCompositeObject)
     {
 			Log.info() << "Server: receiving object ... " << endl;
 
@@ -387,8 +381,7 @@ namespace BALL
 			*/
 			
 			// insert into hashmap
-			composite_hashmap_.
-				insert(CompositeHashMap::ValueType(object_handle, new_composite_ptr));
+			composite_hashmap_.insert(CompositeHashMap::ValueType(object_handle, new_composite_ptr));
  			
 			// notify main window
 			NewCompositeMessage new_message;

@@ -1,12 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: QTTimer.C,v 1.13 2002/02/27 12:25:21 sturm Exp $
+// $Id: QTTimer.C,v 1.14 2002/12/12 11:43:26 oliver Exp $
 
 
 #include <BALL/VIEW/KERNEL/QTTimer.h>
 #include <BALL/COMMON/exception.h>
 #include <BALL/DATATYPE/string.h>
+#include <BALL/COMMON/rtti.h>
 #include <stdio.h>
 
 using namespace std;
@@ -47,7 +48,7 @@ namespace BALL
 				throw()
 		{
 #ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
+				Log.info() << "Destructing object " << (void *)this 
 					<< " of class " << RTTI::getName<QTTimer>() << endl;
 #endif 
 
@@ -104,7 +105,7 @@ namespace BALL
 		}
 
 		void QTTimer::setInterval(int interval)
-				throw(NoValidInterval)
+				throw(QTTimer::NoValidInterval)
 		{
 			if (interval <= 0)
 			{

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mesh.C,v 1.7 2002/02/27 12:25:27 sturm Exp $
+// $Id: mesh.C,v 1.8 2002/12/12 11:43:28 oliver Exp $
 
 #include <BALL/VIEW/PRIMITIV/mesh.h>
 
@@ -17,7 +17,9 @@ namespace BALL
 			throw()
 			:	GeometricObject(),
 				ColorExtension(),
-				Surface()
+				Surface(),
+				colorList()
+
 		{
 		}
 
@@ -25,7 +27,8 @@ namespace BALL
 			throw()
 			:	GeometricObject(mesh, deep),
 				ColorExtension(mesh),
-				Surface(mesh)
+				Surface(mesh),
+				colorList(mesh.colorList)
 		{
 		}
 
@@ -33,7 +36,8 @@ namespace BALL
 			throw()
 			:	GeometricObject(geometric_object),
 				ColorExtension(),
-				Surface()
+				Surface(),
+				colorList()
 		{
 		}
 
@@ -53,6 +57,7 @@ namespace BALL
 		{
 			GeometricObject::clear();
 			ColorExtension::clear();
+	//		colorList.clear();
 		}
 
 		void Mesh::destroy()
@@ -60,6 +65,7 @@ namespace BALL
 		{ 
 			GeometricObject::destroy();
 			ColorExtension::destroy();
+//			colorList.clear();
 		}
 
 		void Mesh::set(const Mesh& mesh, bool deep)
@@ -68,6 +74,7 @@ namespace BALL
 			GeometricObject::set(mesh, deep);
 			ColorExtension::set(mesh);
 			//			Surface::set(mesh);
+			colorList = mesh.colorList;
 		}
 
 		const Mesh& Mesh::operator = (const Mesh& mesh)
@@ -89,6 +96,9 @@ namespace BALL
 			GeometricObject::swap(mesh);
 			ColorExtension::swap(mesh);
 			//			Surface::swap(mesh);
+			vector<ColorRGBA> dummy = mesh.colorList;
+			mesh.colorList = colorList;
+			colorList = dummy;
 		}
 
 		bool Mesh::isValid() const
@@ -108,7 +118,8 @@ namespace BALL
 
 			GeometricObject::dump(s, depth + 1);
 			ColorExtension::dump(s, depth + 1);
-
+			//colorList.dump();
+			
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
 
@@ -129,10 +140,6 @@ namespace BALL
 		{
 			return true;  
 		}
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/PRIMITIV/mesh.iC>
-#		endif
 
 	} // namespace VIEW
 
