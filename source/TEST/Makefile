@@ -167,7 +167,8 @@ EXECUTABLES_STRUCTURE = \
 	SmilesParser_test\
 	StructureMapper_test\
 	TransformationApplicator_test\
-	TranslationApplicator_test
+	TranslationApplicator_test\
+	SurfaceProcessor_test
 
 EXECUTABLES_SOLVATION = \
 	PoissonBoltzmann_test\
