@@ -1,4 +1,4 @@
-// $Id: hashGrid.h,v 1.9 2000/08/30 19:58:01 oliver Exp $
+// $Id: hashGrid.h,v 1.10 2000/10/05 08:27:25 oliver Exp $
 
 #ifndef BALL_DATATYPE_HASHGRID_H
 #define BALL_DATATYPE_HASHGRID_H
@@ -54,7 +54,7 @@ namespace BALL
 		// BUG in egcs: destructor may not be virtual, if a template class contains
 		// structs/classes and is contained in a namespace
 		// Destructor
-		~HashGridBox3();
+		virtual ~HashGridBox3();
 
 		/** Clears the grid box
 		*/
