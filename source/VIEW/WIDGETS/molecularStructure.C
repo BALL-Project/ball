@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.7 2004/02/05 14:45:20 amoll Exp $
+// $Id: molecularStructure.C,v 1.8 2004/02/05 17:02:31 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -96,22 +96,24 @@ namespace BALL
 		hint = "Deselect a molecular object.";
 		deselect_id_ = insertMenuEntry(MainControl::EDIT, "&Deselect", this, SLOT(deselect()), ALT+Key_D, -1, hint);
 		// Tools Menu -------------------------------------------------------------------
- 		getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS);
 		hint = "Calculate the energy of a System with the AMBER force field.";
-		insertMenuEntry(MainControl::TOOLS, "Single Point Energy", this, SLOT(calculateAmberEnergy()), 
-										CTRL+Key_A, amber_energy_id_, hint);
+		insertMenuEntry(MainControl::MOLECULARMECHANICS, "Single Point Energy", this, SLOT(calculateAmberEnergy()), 
+										CTRL+Key_A, MainControl::MOLECULARMECHANICS + 12, hint);
 			
 		hint = "To perform an Energy Minimization, first select the molecular structures.";
-		amber_minimization_id_ = insertMenuEntry(MainControl::SIMULATIONS, "&Energy Minimization", this, 
-															SLOT(amberMinimization()), CTRL+Key_E, MainControl::SIMULATIONS + 10, hint);
-		hint = "To perform a MD simulation , first select the molecular structures.";
-		amber_mdsimulation_id_ = insertMenuEntry(MainControl::SIMULATIONS, "Molecular &Dynamics", this, 
-															SLOT(amberMDSimulation()), CTRL+Key_D, MainControl::SIMULATIONS + 11, hint);
+		amber_minimization_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "&Energy Minimization", this, 
+															SLOT(amberMinimization()), CTRL+Key_E, MainControl::MOLECULARMECHANICS+ 10, hint);
 
+		hint = "To perform a MD simulation , first select the molecular structures.";
+		amber_mdsimulation_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Molecular &Dynamics", this, 
+															SLOT(amberMDSimulation()), CTRL+Key_D, MainControl::MOLECULARMECHANICS + 11, hint);
+
+		// Tools Menu -------------------------------------------------------------------
 		hint = "Create a grid with the distance to the geometric center of a structure.";
 		create_distance_grid_id_ = insertMenuEntry(MainControl::TOOLS_CREATE_GRID, 
 																				"&Distance Grid", this, SLOT(createGridFromDistance()), 0, -1, hint);   
 
+		getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS);
 		hint = "Map two proteins.";
 		map_proteins_id_ = insertMenuEntry(MainControl::TOOLS, "&Map two Proteins", this, SLOT(mapProteins()), 0, -1, hint);
 
