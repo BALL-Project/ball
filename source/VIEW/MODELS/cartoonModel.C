@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.40 2004/09/13 10:52:35 amoll Exp $
+// $Id: cartoonModel.C,v 1.41 2004/09/13 11:11:56 amoll Exp $
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
 
@@ -1045,41 +1045,16 @@ namespace BALL
 				mesh->setComposite(r);
 				geometric_objects_.push_back(mesh);
 
-				AtomIterator it;
-				bool error = false;
 				Vector3 connection_point;
 				Atom* atoms[9];
-				for (Position p = 0; p < 9; p++)
-				{
-					atoms[p] = 0;
-				}
+				for (Position p = 0; p < 9; p++) atoms[p] = 0;
+
 
 				if (r->getName() == "A" ||
 						r->getName() == "G")
 				{
-					BALL_FOREACH_ATOM(*r, it)
-					{
-						if 			(it->getName() == "N9") atoms[0] = &*it;
-						else if (it->getName() == "C4") atoms[1] = &*it;
-						else if (it->getName() == "N3") atoms[2] = &*it;
-						else if (it->getName() == "C2") atoms[3] = &*it;
-						else if (it->getName() == "N1") atoms[4] = &*it;
-						else if (it->getName() == "C6") atoms[5] = &*it;
-						else if (it->getName() == "C5") atoms[6] = &*it;
-						else if (it->getName() == "N7") atoms[7] = &*it;
-						else if (it->getName() == "C8") atoms[8] = &*it;
-					}
-
-					for (Position p = 0; p < 9; p++)
-					{
-						if (atoms[p] == 0)
-						{
-							error = true;
-							break;
-						}
-					}
-					// all atoms found?
-					if (error) continue;
+					String atom_names[9] = {"N9", "C4", "N3", "C2", "N1", "C6", "C5", "N7", "C8"};
+					if (!assignNucleotideAtoms_(*r, 9, atom_names, atoms)) continue;
 
 					connection_point = atoms[0]->getPosition();
 					createTriangle_(*mesh, *atoms[1], *atoms[0], *atoms[8], atoms[1], atoms[0], atoms[8]); 	// C4,N9,C8
@@ -1089,71 +1064,30 @@ namespace BALL
 					createTriangle_(*mesh, *atoms[1], *atoms[2], *atoms[4], atoms[1], atoms[2], 0); 				// C4,N3,N1
 					createTriangle_(*mesh, *atoms[1], *atoms[4], *atoms[5], atoms[4], atoms[5], 0); 				// C4,N1,C6
 					createTriangle_(*mesh, *atoms[1], *atoms[5], *atoms[6], atoms[5], atoms[6], 0); 				// C4,C6,C5
-					// we are done for A + G
 				}
-
 				// -------------------------------------------------
 				else if (r->getName() == "C")
 				{
-					BALL_FOREACH_ATOM(*r, it)
-					{
-						if 			(it->getName() == "N1") atoms[0] = &*it;
-						else if (it->getName() == "C2") atoms[1] = &*it;
-						else if (it->getName() == "N3") atoms[2] = &*it;
-						else if (it->getName() == "C4") atoms[3] = &*it;
-						else if (it->getName() == "C5") atoms[4] = &*it;
-						else if (it->getName() == "C6") atoms[5] = &*it;
-					}
-
-					for (Position p = 0; p < 6; p++)
-					{
-						if (atoms[p] == 0)
-						{
-							error = true;
-							break;
-						}
-					}
-					// all atoms found?
-					if (error) continue;
+					String atom_names[9] = {"N1", "C2", "N3", "C4", "C5", "C6", "", "", ""};
+					if (!assignNucleotideAtoms_(*r, 6, atom_names, atoms)) continue;
 
 					connection_point = atoms[0]->getPosition();
 					createTriangle_(*mesh, *atoms[1], *atoms[2], *atoms[3], atoms[1], atoms[2], atoms[3]); 	// C2,N3,C4
 					createTriangle_(*mesh, *atoms[0], *atoms[1], *atoms[3], atoms[0], atoms[1], 0); 			  // N1,C2,C4
 					createTriangle_(*mesh, *atoms[0], *atoms[3], *atoms[4], atoms[3], atoms[4], 0); 				// N1,C4,C5
 					createTriangle_(*mesh, *atoms[0], *atoms[5], *atoms[4], atoms[0], atoms[5], atoms[4]); 	// N1,C6,C5
-					// we are done for C
 				}
-
 				// -------------------------------------------------
 				else if (r->getName() == "T")
 				{
-					BALL_FOREACH_ATOM(*r, it)
-					{
-						if 			(it->getName() == "C2") atoms[0] = &*it;
-						else if (it->getName() == "N3") atoms[1] = &*it;
-						else if (it->getName() == "C4") atoms[2] = &*it;
-						else if (it->getName() == "C5") atoms[3] = &*it;
-						else if (it->getName() == "C6") atoms[4] = &*it;
-						else if (it->getName() == "N1") atoms[5] = &*it;
-					}
-
-					for (Position p = 0; p < 6; p++)
-					{
-						if (atoms[p] == 0)
-						{
-							error = true;
-							break;
-						}
-					}
-					// all atoms found?
-					if (error) continue;
+					String atom_names[9] = {"C2", "N3", "C4", "C5", "C6", "N1", "", "", ""};
+					if (!assignNucleotideAtoms_(*r, 6, atom_names, atoms)) continue;
 
 					connection_point = atoms[5]->getPosition();
 					createTriangle_(*mesh, *atoms[1], *atoms[2], *atoms[3], atoms[1], atoms[2], atoms[3]); 	// N3,C4,C5
 					createTriangle_(*mesh, *atoms[0], *atoms[1], *atoms[3], atoms[0], atoms[1], 0); 			  // C2,N3,C5
 					createTriangle_(*mesh, *atoms[0], *atoms[3], *atoms[4], atoms[3], atoms[4], 0); 				// C2,C5,C6
 					createTriangle_(*mesh, *atoms[0], *atoms[5], *atoms[4], atoms[0], atoms[5], atoms[4]); 	// C2,N1,C6
-					// we are done for T
 				}
 				else
 				{
@@ -1193,6 +1127,34 @@ namespace BALL
 			}
 		}
 
+		bool AddCartoonModel::assignNucleotideAtoms_(Residue& r, Size nr_atoms, String atom_names[9], Atom* atoms[9])
+			throw()
+		{
+			AtomIterator it;
+			BALL_FOREACH_ATOM(r, it)
+			{
+				for (Position p = 0; p < nr_atoms; p++)
+				{
+					if (it->getName() == atom_names[p])
+					{
+						atoms[p] = &*it;
+						break;
+					}
+				}
+			}
+
+			bool error = false;
+			for (Position p = 0; p < nr_atoms; p++)
+			{
+				if (atoms[p] == 0)
+				{
+					error = true;
+					break;
+				}
+			}
+
+			return !error;
+		}
 
 	} // namespace VIEW
 } // namespace BALL
