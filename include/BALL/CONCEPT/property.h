@@ -1,4 +1,4 @@
-// $Id: property.h,v 1.8 2000/03/16 12:07:53 oliver Exp $
+// $Id: property.h,v 1.9 2000/08/19 20:25:35 amoll Exp $
 
 #ifndef BALL_CONCEPT_PROPERTY_H
 #define BALL_CONCEPT_PROPERTY_H
@@ -16,10 +16,10 @@
 #endif
 
 #include <iostream>
-
+/*
 #define BALL_PROPERTY_DEFAULT_VALUE                1
 #define BALL_PROPERTY_DEFAULT_INVALID_NAME_VALUE   0
-
+*/
 namespace BALL 
 {
 
@@ -82,6 +82,11 @@ namespace BALL
 		//@{
 
 		BALL_CREATE_NODEEP(NamedProperty)
+
+		/*	The default constructor
+		*/
+		NamedProperty();
+
 		/**	Standard constructor.
 				Creates an object of type NONE. Use this constructor to create
 				it properties with user defined names.
@@ -226,11 +231,6 @@ namespace BALL
 		string getString() const;
 		//@}
 
-		
-		
-		/*	The default constructor
-		*/
-		NamedProperty();
 
 		private:
 

@@ -1,4 +1,4 @@
-// $Id: property.C,v 1.9 2000/08/19 17:24:33 amoll Exp $
+// $Id: property.C,v 1.10 2000/08/19 20:26:00 amoll Exp $
 
 #include <BALL/CONCEPT/property.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -7,84 +7,6 @@ using namespace std;
 
 namespace BALL 
 {
-
-	NamedProperty::NamedProperty(const string& name)	
-		: PersistentObject(),
-			type_(NONE),
-			name_(name)
-	{
-	}
-
-	NamedProperty::NamedProperty(const string& name, bool value)
-		:	PersistentObject(),
-			type_(BOOL),
-			name_(name)
-	{
-		data_.b = value;
-	}
-
-	NamedProperty::NamedProperty(const string& name, int value)
-		:	PersistentObject(),
-			type_(INT),
-			name_(name)
-	{
-		data_.i = value;
-	}
-
-	NamedProperty::NamedProperty(const string& name, unsigned int value)
-		:	PersistentObject(),
-			type_(UNSIGNED_INT),
-			name_(name)
-	{
-		data_.ui = value;
-	}
-
-	NamedProperty::NamedProperty(const string& name, float value)
-		:	PersistentObject(),
-			type_(FLOAT),
-			name_(name)
-	{
-		data_.f = value;
-	}
-
-	NamedProperty::NamedProperty(const string& name, double value)
-		:	PersistentObject(),
-			type_(DOUBLE),
-			name_(name)
-	{
-		data_.d = value;
-	}
-
-	NamedProperty::NamedProperty(const string& name, string& str)
-		:	PersistentObject(),
-			type_(STRING),
-			name_(name)
-	{
-		data_.s = &str;
-	}
-
-	NamedProperty::NamedProperty(const string& name, PersistentObject& po)
-		:	PersistentObject(),
-			type_(OBJECT),
-			name_(name)
-	{
-		data_.object = &po;
-	}
-
-	NamedProperty::~NamedProperty()
-	{
-		if ((type_ == STRING) && (data_.s != 0))
-		{
-			delete data_.s;
-		}
-	}
-		
-	NamedProperty::NamedProperty() 
-		: PersistentObject(),
-			type_(NONE),
-			name_("")
-	{
-	}
 
 	NamedProperty::NamedProperty(const NamedProperty& property) 
 		: PersistentObject(property),
@@ -155,77 +77,18 @@ namespace BALL
 				Log.error() << "Unknwown type while reading NamedProperty: " << (int)type_ << endl;
 		}
 	}
- 
-	int NamedProperty::getInt() const
-	{
-		return (type_ == INT ? data_.i : 0);
-	}
-
-	float NamedProperty::getFloat() const
-	{
-		return (type_ == FLOAT ? data_.f : 0.0);
-	}
-
-	double NamedProperty::getDouble() const
-	{
-		return (type_ == DOUBLE ? data_.d : 0.0);
-	}
-
-	string NamedProperty::getString() const
-	{
-		return (type_ == STRING ? data_.s->c_str() : "");
-	}
-
-	unsigned int NamedProperty::getUnsignedInt() const
-	{
-		return (type_ == UNSIGNED_INT ? data_.ui : 0);
-	}
-
-	string NamedProperty::getName() const
-	{
-		return name_;
-	}
-
-	NamedProperty::Type NamedProperty::getType() const
-	{
-		return type_;
-	}
-
-	PersistentObject* NamedProperty::getObject() const
-	{
-		return (type_ == OBJECT ? data_.object : 0);
-	}
-
-	bool NamedProperty::getBool() const
-	{
-		return (type_ == BOOL ? data_.b : false);
-	}
-
-	PropertyManager::PropertyManager()
-	{
-	}
-
-	PropertyManager::PropertyManager(const PropertyManager &property_manager, bool)
-		:	bitvector_(property_manager.bitvector_),
-			named_properties_(property_manager.named_properties_)
-	{
-	}
-
-	PropertyManager::~PropertyManager()
-	{
-	}
-		
-	void PropertyManager::clear()
-	{
-		bitvector_.clear();
-		named_properties_.clear();
-	}
 
   ostream& operator << (ostream& s, const PropertyManager& property_manager)
   {	
     s << property_manager.bitvector_;		
 		
 		// BAUSTELLE named properties still missing
+
+		vector<const NamedProperty>::iterator it = property_manager.named_properties_.begin();
+		for (; it != property_manager.named_properties_.end(); ++it)
+		{
+			s << it;
+		}
 
 		return s;
 	}
@@ -313,41 +176,6 @@ namespace BALL
 
 		// add the new content
 		named_properties_.push_back(NamedProperty(name));
-	}
-
-	void PropertyManager::setProperty(const string& name, bool value)
-	{
-		setProperty(NamedProperty(name, value));
-	}
-
-	void PropertyManager::setProperty(const string& name, float value)
-	{
-		setProperty(NamedProperty(name, value));
-	}
-
-	void PropertyManager::setProperty(const string& name, double value)
-	{
-		setProperty(NamedProperty(name, value));
-	}
-
-	void PropertyManager::setProperty(const string& name, unsigned int value)
-	{
-		setProperty(NamedProperty(name, value));
-	}
-
-	void PropertyManager::setProperty(const string& name, int value)
-	{
-		setProperty(NamedProperty(name, value));
-	}
-
-	void PropertyManager::setProperty(const string& name, const string& value)
-	{
-		setProperty(NamedProperty(name, const_cast<string&>(value)));
-	}
-
-	void PropertyManager::setProperty(const string& name, const PersistentObject& value)
-	{
-		setProperty(NamedProperty(name, const_cast<PersistentObject&>(value)));
 	}
 
 	const NamedProperty& PropertyManager::getProperty(const string& name) const

@@ -1,4 +1,173 @@
-// $Id: property.iC,v 1.2 1999/12/04 18:34:11 oliver Exp $
+// $Id: property.iC,v 1.4 2000/08/22 17:03:27 amoll Exp $
+
+
+BALL_INLINE 
+NamedProperty::NamedProperty(const string& name)	
+	: PersistentObject(),
+		type_(NONE),
+		name_(name)
+{
+}
+
+BALL_INLINE 
+NamedProperty::NamedProperty(const string& name, bool value)
+	:	PersistentObject(),
+		type_(BOOL),
+		name_(name)
+{
+	data_.b = value;
+}
+
+BALL_INLINE 
+NamedProperty::NamedProperty(const string& name, int value)
+	:	PersistentObject(),
+		type_(INT),
+		name_(name)
+{
+	data_.i = value;
+}
+
+BALL_INLINE 
+NamedProperty::NamedProperty(const string& name, unsigned int value)
+	:	PersistentObject(),
+		type_(UNSIGNED_INT),
+		name_(name)
+{
+	data_.ui = value;
+}
+
+BALL_INLINE 
+NamedProperty::NamedProperty(const string& name, float value)
+	:	PersistentObject(),
+		type_(FLOAT),
+		name_(name)
+{
+	data_.f = value;
+}
+
+BALL_INLINE 
+NamedProperty::NamedProperty(const string& name, double value)
+	:	PersistentObject(),
+		type_(DOUBLE),
+		name_(name)
+{
+	data_.d = value;
+}
+
+BALL_INLINE 
+NamedProperty::NamedProperty(const string& name, string& str)
+	:	PersistentObject(),
+		type_(STRING),
+		name_(name)
+{
+	data_.s = &str;
+}
+
+BALL_INLINE 
+NamedProperty::NamedProperty(const string& name, PersistentObject& po)
+	:	PersistentObject(),
+		type_(OBJECT),
+		name_(name)
+{
+	data_.object = &po;
+}
+
+BALL_INLINE 
+NamedProperty::~NamedProperty()
+{/*
+	if ((type_ == STRING) && (data_.s != 0))
+	{
+		delete data_.s;
+	}*/
+}
+	
+BALL_INLINE 
+NamedProperty::NamedProperty() 
+	: PersistentObject(),
+		type_(NONE),
+		name_("")
+{
+}
+
+BALL_INLINE 
+int NamedProperty::getInt() const
+{
+	return (type_ == INT ? data_.i : 0);
+}
+
+BALL_INLINE 
+float NamedProperty::getFloat() const
+{
+	return (type_ == FLOAT ? data_.f : 0.0);
+}
+
+BALL_INLINE 
+double NamedProperty::getDouble() const
+{
+	return (type_ == DOUBLE ? data_.d : 0.0);
+}
+
+BALL_INLINE 
+string NamedProperty::getString() const
+{
+	return (type_ == STRING ? data_.s->c_str() : "");
+}
+
+BALL_INLINE 
+unsigned int NamedProperty::getUnsignedInt() const
+{
+	return (type_ == UNSIGNED_INT ? data_.ui : 0);
+}
+
+BALL_INLINE 
+string NamedProperty::getName() const
+{
+	return name_;
+}
+
+BALL_INLINE 
+NamedProperty::Type NamedProperty::getType() const
+{
+	return type_;
+}
+
+BALL_INLINE 
+PersistentObject* NamedProperty::getObject() const
+{
+	return (type_ == OBJECT ? data_.object : 0);
+}
+
+BALL_INLINE 
+bool NamedProperty::getBool() const
+{
+	return (type_ == BOOL ? data_.b : false);
+}
+
+BALL_INLINE 
+PropertyManager::PropertyManager()
+{
+}
+
+BALL_INLINE 
+PropertyManager::PropertyManager(const PropertyManager &property_manager, bool)
+	:	bitvector_(property_manager.bitvector_),
+		named_properties_(property_manager.named_properties_)
+{
+}
+
+BALL_INLINE 
+PropertyManager::~PropertyManager()
+{
+}
+	
+BALL_INLINE 
+void PropertyManager::clear()
+{
+	bitvector_.clear();
+	named_properties_.clear();
+}
+
+
 
 BALL_INLINE 
 void PropertyManager::destroy()
@@ -46,6 +215,48 @@ void PropertyManager::setProperty(Property property)
 }
 
 BALL_INLINE 
+void PropertyManager::setProperty(const string& name, bool value)
+{
+	setProperty(NamedProperty(name, value));
+}
+
+BALL_INLINE 
+void PropertyManager::setProperty(const string& name, float value)
+{
+	setProperty(NamedProperty(name, value));
+}
+
+BALL_INLINE 
+void PropertyManager::setProperty(const string& name, double value)
+{
+	setProperty(NamedProperty(name, value));
+}
+
+BALL_INLINE 
+void PropertyManager::setProperty(const string& name, unsigned int value)
+{
+	setProperty(NamedProperty(name, value));
+}
+
+BALL_INLINE 
+void PropertyManager::setProperty(const string& name, int value)
+{
+	setProperty(NamedProperty(name, value));
+}
+
+BALL_INLINE 
+void PropertyManager::setProperty(const string& name, const string& value)
+{
+	setProperty(NamedProperty(name, const_cast<string&>(value)));
+}
+
+BALL_INLINE 
+void PropertyManager::setProperty(const string& name, const PersistentObject& value)
+{
+	setProperty(NamedProperty(name, const_cast<PersistentObject&>(value)));
+}
+
+BALL_INLINE 
 void PropertyManager::clearProperty(Property property)
 {
   bitvector_.setBit(property, false);
@@ -60,7 +271,7 @@ void PropertyManager::toggleProperty(Property property)
 BALL_INLINE 
 void PropertyManager::swap(PropertyManager& property_manager)
 {
-  bitvector_.swap(property_manager);
+  bitvector_.swap(property_manager.bitvector_);
 	named_properties_.swap(property_manager.named_properties_);
 }
 
