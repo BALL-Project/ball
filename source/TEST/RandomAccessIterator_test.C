@@ -1,4 +1,4 @@
-// $Id: RandomAccessIterator_test.C,v 1.3 2001/06/24 16:35:59 oliver Exp $
+// $Id: RandomAccessIterator_test.C,v 1.4 2001/06/30 15:38:40 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -129,7 +129,7 @@ class VectorIteratorTraits_
 	bool isValid() const
 		throw()
 	{
-		return (bound_ != 0 && position_ >= 0);
+		return (bound_ != 0 && position_ >= 0 && position_ < (VectorIteratorPosition_)bound_->size());
 	}
 
 	void invalidate()
@@ -207,10 +207,11 @@ class VectorIteratorTraits_
 			throw(Exception::InvalidIterator(__FILE__, __LINE__));
 		}
 
-		cout << "@" << position_ <<"@"<< bound_->size() << endl;
+		//cout << "@" << position_ <<"@"<< bound_->size() << endl;
 		if (position_ >= (Index) bound_->size())
 		{
-			throw(Exception::IndexOverflow(__FILE__, __LINE__, position_ + 1, bound_->size() - 1));
+			throw(Exception::InvalidIterator(__FILE__, __LINE__));
+			//throw(Exception::IndexOverflow(__FILE__, __LINE__, position_ + 1, bound_->size() - 1));
 		}
 		++position_;
 	}
@@ -282,6 +283,12 @@ class VectorIteratorTraits_
 		{
 			throw(Exception::InvalidIterator(__FILE__, __LINE__));
 		}
+
+		if (position_ < 0)
+		{
+			throw(Exception::InvalidIterator(__FILE__, __LINE__));
+		}
+		
 		--position_;
 	}
 
@@ -292,6 +299,12 @@ class VectorIteratorTraits_
 		{
 			throw(Exception::InvalidIterator(__FILE__, __LINE__));
 		}
+
+		if (position_ - distance < -1)
+		{
+			throw(Exception::InvalidIterator(__FILE__, __LINE__));
+		}
+		
 		position_ -= distance;
 	}
 
@@ -302,6 +315,12 @@ class VectorIteratorTraits_
 		{
 			throw(Exception::InvalidIterator(__FILE__, __LINE__));
 		}
+	
+		if (position_ + distance > (VectorIteratorPosition_)(bound_->size()))
+		{
+			throw(Exception::InvalidIterator(__FILE__, __LINE__));
+		}
+		
 		position_ += distance;
 	}
 
@@ -312,6 +331,18 @@ class VectorIteratorTraits_
 		{
 			throw(Exception::InvalidIterator(__FILE__, __LINE__));
 		}
+		
+		if (index >= (VectorIteratorPosition_)bound_->size())
+		{
+			throw(Exception::IndexOverflow(__FILE__, __LINE__, index, bound_->size() - 1));
+		}
+		
+		if (index < 0)
+		{
+			throw(Exception::IndexUnderflow(__FILE__, __LINE__, index, 0));
+		}
+
+
 		return *(bound_->operator [] (index));
 	}
 
@@ -340,7 +371,7 @@ class MyIterator
 };
 
 
-START_TEST(class_name, "$Id: RandomAccessIterator_test.C,v 1.3 2001/06/24 16:35:59 oliver Exp $")
+START_TEST(class_name, "$Id: RandomAccessIterator_test.C,v 1.4 2001/06/30 15:38:40 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -410,7 +441,6 @@ RESULT
 CHECK(toEnd)
 	TEST_REAL_EQUAL(*m, 0.2)
 	m.toEnd();
-	//BAUSTELLE
 	TEST_EXCEPTION(Exception::InvalidIterator, *m)
 	--m;
 	TEST_REAL_EQUAL(*m, 0.4)	
@@ -466,9 +496,71 @@ CHECK(operator ++)
 	TEST_REAL_EQUAL(*m, 0.2)
 
 	m.toEnd();
-	//TEST_EXCEPTION(Exception::IndexOverflow, ++m)
+	TEST_EXCEPTION(Exception::InvalidIterator, ++m)
 
-	TEST_EXCEPTION(Exception::InvalidIterator, n.toREnd())
+	TEST_EXCEPTION(Exception::InvalidIterator, ++n)
 RESULT
+
+CHECK(operator ++ POSTFIX)
+	m.toBegin();
+	TEST_REAL_EQUAL(*m, 0.1)
+	m++;
+	TEST_REAL_EQUAL(*m, 0.2)
+
+	m.toEnd();
+	TEST_EXCEPTION(Exception::InvalidIterator, m++)
+
+	TEST_EXCEPTION(Exception::InvalidIterator, n++)
+RESULT
+
+
+CHECK(operator --)
+	m.toEnd();
+	--m;
+	TEST_REAL_EQUAL(*m, 0.4)
+
+	m.toREnd();
+	TEST_EXCEPTION(Exception::InvalidIterator, --m)
+
+	TEST_EXCEPTION(Exception::InvalidIterator, --n)
+RESULT
+
+
+CHECK(operator -- POSTFIX)
+	m.toEnd();
+	m--;
+	TEST_REAL_EQUAL(*m, 0.4)
+
+	m.toREnd();
+	TEST_EXCEPTION(Exception::InvalidIterator, m--)
+
+	TEST_EXCEPTION(Exception::InvalidIterator, n--)
+RESULT
+
+
+CHECK(operator +=(distance))
+	m.toBegin();
+	m+=2;
+	TEST_REAL_EQUAL(*m, 0.3)
+	m+=2;
+	TEST_EQUAL(m.isEnd(), true)
+	TEST_EXCEPTION(Exception::InvalidIterator, m+=1)
+
+	TEST_EXCEPTION(Exception::InvalidIterator, n+=1)
+RESULT
+
+
+CHECK(operator -=(distance))
+	m.toEnd();
+	m-=2;
+	TEST_REAL_EQUAL(*m, 0.3)
+	m-=3;
+	TEST_EQUAL(m.isREnd(), true)
+	TEST_EXCEPTION(Exception::InvalidIterator, m-=1)
+
+	TEST_EXCEPTION(Exception::InvalidIterator, n-=1)
+RESULT
+
+
 
 END_TEST
