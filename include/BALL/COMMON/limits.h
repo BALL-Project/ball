@@ -1,9 +1,9 @@
-// $Id: limits.h,v 1.3 2000/01/24 20:29:18 oliver Exp $
+// $Id: limits.h,v 1.4 2000/01/28 10:54:26 oliver Exp $
 
 #ifndef BALL_COMMON_LIMITS_H
 #define BALL_COMMON_LIMITS_H
 
-#ifdef HAVE_NUMERIC_LIMITS
+#ifdef BALL_HAVE_NUMERIC_LIMITS
 #	include <limits>
 #else
 #	include <limits.h>
@@ -31,7 +31,7 @@ namespace BALL
 	{
 		public:
 
-#	ifdef HAVE_NUMERIC_LIMITS
+#	ifdef BALL_HAVE_NUMERIC_LIMITS
 
 
 		/**	Return the minimum value.
@@ -61,7 +61,7 @@ namespace BALL
 #	endif
 	};
 
-#ifndef BALL_HAS_NUMERIC_LIMITS
+#ifndef BALL_HAVE_NUMERIC_LIMITS
 	
 	template <> 
 	class Limits<float>
@@ -212,12 +212,12 @@ namespace BALL
 	{
 		public:
 			
-		static int min() throw()
+		static unsigned int min() throw()
 		{
 			return 0;
 		}
 
-		static int max() throw()
+		static unsigned int max() throw()
 		{
 			return UINT_MAX;
 		}
@@ -255,7 +255,7 @@ namespace BALL
 		}
 	};
 
-#endif // BALL_HAS_NUMERIC_LIMITS
+#endif // BALL_HAVE_NUMERIC_LIMITS
 
 }	// namespace BALL
 
