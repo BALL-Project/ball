@@ -1,4 +1,4 @@
-// $Id: PSE.iC,v 1.2 1999/12/04 18:34:17 oliver Exp $
+// $Id: PTE.iC,v 1.1 2000/03/27 21:33:35 oliver Exp $
 
 BALL_INLINE 
 void Element::setName(const String& name)
@@ -177,43 +177,43 @@ bool Element::isUnknown() const
 
 
 BALL_INLINE 
-Element& PSE_::operator [](const String& symbol)
+Element& PTE_::operator [](const String& symbol)
 {
   return getElement(symbol);
 }
 
 BALL_INLINE 
-const Element& PSE_::operator [](const String& symbol) const
+const Element& PTE_::operator [](const String& symbol) const
 {
   return getElement(symbol);
 }
 
 BALL_INLINE 
-Element& PSE_::operator [](Element::Name name)
+Element& PTE_::operator [](Element::Name name)
 {
   return element_[name];
 }
 
 BALL_INLINE 
-const Element& PSE_::operator [](Element::Name name) const
+const Element& PTE_::operator [](Element::Name name) const
 {
   return element_[name];
 }
 
 BALL_INLINE 
-Element& PSE_::operator [](Element::Symbol symbol)
+Element& PTE_::operator [](Element::Symbol symbol)
 {
   return element_[symbol];
 }
 
 BALL_INLINE 
-const Element& PSE_::operator [](Element::Symbol symbol) const
+const Element& PTE_::operator [](Element::Symbol symbol) const
 {
   return element_[symbol];
 }
 
 BALL_INLINE 
-Element& PSE_::operator [](Index index)
+Element& PTE_::operator [] (Index index)
 {
   return ((index >= 1 && index <= Element::NUMBER_OF_ELEMENTS)
 	  ? *atomic_number_to_element_[index - 1]
@@ -221,7 +221,7 @@ Element& PSE_::operator [](Index index)
 }
 
 BALL_INLINE 
-const Element& PSE_::operator [](Index index) const
+const Element& PTE_::operator [] (Index index) const
 {
-  return ((PSE_ *)this)->operator[](index);
+  return ((PTE_ *)this)->operator[](index);
 }

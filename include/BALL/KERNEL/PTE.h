@@ -1,7 +1,7 @@
-// $Id: PSE.h,v 1.6 2000/02/06 19:41:54 oliver Exp $
+// $Id: PTE.h,v 1.1 2000/03/27 21:33:34 oliver Exp $
 
-#ifndef BALL_KERNEL_PSE_H
-#define BALL_KERNEL_PSE_H
+#ifndef BALL_KERNEL_PTE_H
+#define BALL_KERNEL_PTE_H
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -22,7 +22,7 @@
 #	include <BALL/CONCEPT/processor.h>
 #endif
 
-/**@name	Periodic System of Elements
+/**@name	Periodic Table of Elements
 */
 //@{
 
@@ -539,14 +539,14 @@ namespace BALL
 	};
 
 
-	/**	Periodic System class
+	/**	Periodic Table of Elements Class
 	*/
-	class PSE_
+	class PTE_
 		: public PropertyManager
 	{
 		public:
 
-			BALL_CREATE(PSE_)
+			BALL_CREATE(PTE_)
 
 			/**	
 			*/
@@ -561,15 +561,15 @@ namespace BALL
 
 			/**	Default constructor
 			*/
-			PSE_();
+			PTE_();
 
 			/**	Default constructor
 			*/
-			PSE_(const PSE_& pse, bool deep);
+			PTE_(const PTE_& pse, bool deep);
 
 			/**	Destructor
 			*/
-			virtual ~PSE_();
+			virtual ~PTE_();
 
 			//@}
 
@@ -658,18 +658,18 @@ namespace BALL
 	};
 
 
-	/**	@memo	Global static instance of periodic system.
+	/**	@memo	Global static instance of the periodic table.
 	*/
-	extern PSE_ PSE;
+	extern PTE_ PTE;
 
 	//@}
 
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS
-#		include <BALL/KERNEL/PSE.iC>
+#		include <BALL/KERNEL/PTE.iC>
 #	endif
 
 } //namespace BALL 
 
 
-#endif // BALL_KERNEL_PSE_H
+#endif // BALL_KERNEL_PTE_H
