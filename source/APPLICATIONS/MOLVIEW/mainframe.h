@@ -1,4 +1,4 @@
-// $Id: mainframe.h,v 1.3 2000/01/09 17:46:32 hekl Exp $
+// $Id: mainframe.h,v 1.4 2000/01/10 15:28:23 oliver Exp $
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
 #define BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -19,10 +19,6 @@
 #include <qlayout.h>
 #include <qstring.h>
 #include <qfiledialog.h>
-
-#ifndef BALL_COMMON_LOGSTREAM_H
-#	include <BALL/COMMON/logStream.h>
-#endif
 
 #ifndef BALL_CONCEPT_NOTIFICATION_H
 #	include <BALL/CONCEPT/notification.h>
@@ -66,7 +62,8 @@ using namespace BALL::VIEW;
 using namespace BALL::MOLVIEW;
 
 
-class Mainframe: public QWidget
+class Mainframe	
+	: public QWidget
 {
 	Q_OBJECT
 

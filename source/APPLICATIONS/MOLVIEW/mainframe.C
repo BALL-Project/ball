@@ -1,4 +1,5 @@
 #include "mainframe.h"
+#include "DlgAbout.h"
 
 using namespace std;
 
@@ -325,8 +326,7 @@ void Mainframe::exportPovray()
 	QMessageBox::about(this, "export Povray", "available in Version 2.0");
 }
 
-void Mainframe::about
-  (void)
+void Mainframe::about(void)
 {
 	/*
 	list<int> __list = __mLogStream_.getLineIndices(150,150);
@@ -344,7 +344,8 @@ void Mainframe::about
 	//	__mpQTextView_->setText(QString(__string));
 	
 	
-	QMessageBox::about(this, "About Molview", "Version 0.01");
+	DlgAbout about_box;
+	about_box.show();
 }
 
 void Mainframe::updateEditMenuFromSelection(bool selected__bool, bool residue__bool)
