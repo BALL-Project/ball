@@ -1,4 +1,4 @@
-// $Id: INIFile_test.C,v 1.1 2000/05/26 18:57:53 oliver Exp $
+// $Id: INIFile_test.C,v 1.2 2000/08/23 15:45:18 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(INIFile, "$Id: INIFile_test.C,v 1.1 2000/05/26 18:57:53 oliver Exp $")
+START_TEST(INIFile, "$Id: INIFile_test.C,v 1.2 2000/08/23 15:45:18 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -81,6 +81,9 @@ RESULT
 
 
 CHECK(INIFile::getNumberOfLines() const )
+	INIFile ini("data/amber91.ini");
+	ini.read();
+	TEST_EQUAL(ini.getNumberOfLines(), 1379)
   //BAUSTELLE
 RESULT
 
