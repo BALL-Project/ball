@@ -2,15 +2,6 @@ default:	all
 
 DIRECTORY=TEST
 
-include ../common.mak
-include .Dependencies
-
-# remove the library specific flags
-BALL_CXXFLAGS=
-
-# do not optimize tests (reduces compile time drastically)
-CPP_MODE_FLAGS=$(CPP_MODE_FLAGS_NO_OPTIMIZATION)
-
 EXECUTABLES = \
 	AmberFF_test\
 	AnalyticalGeometry_test\
@@ -78,14 +69,21 @@ EXECUTABLES = \
 	Vector4_test\
 	XYZFile_test
 
-CPP_SOURCES=$(EXECUTABLE:=.C)
+include ../common.mak
+include .Dependencies
+
+# remove the library specific flags
+BALL_CXXFLAGS=
+
+# do not optimize tests (reduces compile time drastically)
+CPP_MODE_FLAGS=$(CPP_MODE_FLAGS_NO_OPTIMIZATION)
+
+CPP_SOURCES=$(EXECUTABLES:=.C)
 OBJECTS=$(EXECUTABLES:=.o)
 
 
 %_test: %_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
-
-
 
 all:	$(EXECUTABLES)
 
