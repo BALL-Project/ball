@@ -1,4 +1,4 @@
-// $Id: geometricCollector.h,v 1.4 2001/07/08 11:19:55 aubertin Exp $
+// $Id: geometricCollector.h,v 1.5 2001/07/11 15:14:18 aubertin Exp $
 
 #ifndef BALL_VIEW_FUNCTOR_GEOMETRICCOLLECTOR_H
 #define BALL_VIEW_FUNCTOR_GEOMETRICCOLLECTOR_H
@@ -40,8 +40,8 @@ namespace BALL
 				@see     Scene
 				@memo    GeometricCollector class (BALL VIEW functor framework)
 				@author  $Author: aubertin $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/07/08 11:19:55 $
+				@version $Revision: 1.5 $
+				@date    $Date: 2001/07/11 15:14:18 $
 		*/
 		class GeometricCollector: public UnaryProcessor<Composite>
 		{
@@ -111,14 +111,7 @@ namespace BALL
 				throw();
 			
 			/** Non-mutable inspection of the collection list.
-					Accesses the constant reference of the collected \Ref{GeometricObject}
-					objects as a list of \Ref{Composite} objects from {\em *this}
-					geometricCollector.
-					@return  List<Composite*> a constant reference to the collected \Ref{GeometricObject} objects returned as a list of \Ref{Composite} objects
-					@see     collectSelectedGeometricObjects
-					@see     collectingSelectedGeometricObjects
-					@see     Composite
-					@see     GeometricObject
+			                For further information see {\em List<Composite *>& getCollection()}.
 			*/
 			const List<Composite *>& getCollection() const
 				throw();
