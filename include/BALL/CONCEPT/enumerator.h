@@ -1,4 +1,4 @@
-// $Id: enumerator.h,v 1.3 2000/06/16 08:31:29 oliver Exp $
+// $Id: enumerator.h,v 1.4 2000/06/16 10:40:53 anker Exp $
 
 #ifndef BALL_CONCEPT_ENUMERATOR_H
 #define BALL_CONCEPT_ENUMERATOR_H
@@ -9,6 +9,10 @@
 
 #ifndef BALL_COMMON_EXCEPTION_H
 # include <BALL/COMMON/exception.h>
+#endif
+
+#ifndef BALL_COMMON_RTTI_H
+# include <BALL/COMMON/rtti.h>
 #endif
 
 #ifndef BALL_CONCEPT_FORWARDITERATOR_H
@@ -58,7 +62,7 @@ namespace BALL
 		 */
 		EnumeratorIndex();
 
-		/** Detailled Constructor
+		/** Detailed Constructor
 		 *  @param variant_list the list of variants to be applied
 		 */
 		template <typename Variant, typename VariantIterator>
@@ -236,6 +240,8 @@ namespace BALL
 		/** Default Constructor
 		*/
 		Enumerator()
+			: container_(const_cast<Container&>(RTTI::getDefault<Container>())),
+				mutator_(0)
 		{
 		}
 		
@@ -314,7 +320,7 @@ namespace BALL
 		{
 			if (index.size() != variant_sites_.size())
 			{
-				throw EnumeratorIndex::IncompatibleIndex();
+				throw EnumeratorIndex::IncompatibleIndex(__FILE__, __LINE__);
 			}
 
 			SiteList::iterator it = variant_sites_.begin();
