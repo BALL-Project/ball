@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reducedSurface.h,v 1.33 2002/04/18 18:17:03 strobel Exp $
+// $Id: reducedSurface.h,v 1.34 2002/06/19 12:42:02 strobel Exp $
 
 #ifndef BALL_STRUCTURE_REDUCEDSURFACE_H
 #define BALL_STRUCTURE_REDUCEDSURFACE_H
@@ -128,6 +128,12 @@ namespace BALL
 	template <typename T>
 	class TTriangulatedSES;
 
+	template <typename T>
+	class TSolventAccessibleSurface;
+
+	template <typename T>
+	class TTriangulatedSAS;
+
 	/** Generic ReducedSurface Class.
 			{\bf Definition:} \URL{BALL/STRUCTURE/reducedSurface.h}
 	*/
@@ -140,10 +146,14 @@ namespace BALL
 				\begin{itemize}
 					\item class TSolventExcludedSurface<T>
 					\item class TTriangulatedSES<T>
+					\itme class TSolventAccessibleSurface<T>;
+					\item class TTriangulatedSAS<T>
 				\end{itemize}
 		*/
 		friend class TSolventExcludedSurface<T>;
+		friend class TSolventAccessibleSurface<T>;
 		friend class TTriangulatedSES<T>;
+		friend class TTriangulatedSAS<T>;
 
 		BALL_CREATE(TReducedSurface)
 
@@ -161,9 +171,9 @@ namespace BALL
 		{
 			STATUS_OK  = 0,
 			STATUS_NOT_OK = 1,
-			STATUS_NOT_TESTED = 2,
-			STATUS_JUST_TREATED = 3,
-			STATUS_NOT_EXISTING = 4
+			STATUS_NOT_TESTED = 2
+			//STATUS_JUST_TREATED = 3,
+			//STATUS_NOT_EXISTING = 4
 		};
 
 		/** status of an atom
@@ -2793,10 +2803,11 @@ namespace BALL
 			probe = i->second;
 			if (atom_status_[a3] == STATUS_UNKNOWN)
 			{
-				if (checkProbe(probe,a1,a2,a3))
-				{
-					found = true;
-				}
+				//if (checkProbe(probe,a1,a2,a3))
+				//{
+				//	found = true;
+				//}
+				found = checkProbe(probe,a1,a2,a3);
 			}
 			i++;
 		}
@@ -2838,7 +2849,6 @@ namespace BALL
 			atom_status_[a1] = STATUS_INSIDE;
 			atom_status_[a2] = STATUS_INSIDE;
 			return NULL;
-			//throw Exception::GeneralException(__FILE__,__LINE__,"XXX","xxx");
 		}
 	}
 
@@ -2880,19 +2890,9 @@ namespace BALL
 		TRSVertex<T>* vertex2 = new TRSVertex<T>(a2);
 		neighboursOfTwoAtoms(a1,a2);
 		TRSEdge<T>* edge = createFreeEdge(vertex1,vertex2,neighbours_of_two_[a1][a2]);
-		//TCircle3<T> circle1;
-		//TCircle3<T> circle2;
-		//TCircle3<T> circle3;
-		//if (getCircles(a1,a2,circle1,circle2,circle3) &&
-		//		Maths::isGreater(circle1.radius,probe_radius_)		 )
 		if (edge != NULL)
 		{
-			//TVector3<T> vector(0,0,0);
-			//TRSEdge<T>* edge = new TRSEdge<T>(vertex1,vertex2,NULL,NULL,
-			//		 															circle1.p,circle1.radius,
-			//																	TAngle<T>(2*Constants::PI,true),
-			//																	circle2,circle3,
-			//																	vector,vector,false,number_of_edges_);
+			edge->index_ = number_of_edges_;
 			edges_.push_back(edge);
 			number_of_edges_++;
 			vertex1->edges_.insert(edge);
@@ -3565,7 +3565,6 @@ namespace BALL
 			a2 = a3;
 			a3 = tmp;
 		}
-		//PROBE_COUNTER1++;
 		typename HashMap< Position,HashMap< Position,HashMap< Position,ProbePosition* > > >::Iterator pp1;
 		typename HashMap< Position,HashMap< Position,ProbePosition* > >::Iterator pp2;
 		typename HashMap< Position,ProbePosition* >::Iterator pp3;
@@ -3596,7 +3595,6 @@ namespace BALL
 		}
 		if (found == false)
 		{
-			//PROBE_COUNTER2++;
 			TSphere3<double> s1(TVector3<double>((double)atom_[a1].p.x,
 																					 (double)atom_[a1].p.y,
 																					 (double)atom_[a1].p.z ),
