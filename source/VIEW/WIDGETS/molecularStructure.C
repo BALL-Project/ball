@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.78.2.2 2005/01/21 01:31:22 amoll Exp $
+// $Id: molecularStructure.C,v 1.78.2.3 2005/01/21 12:37:52 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -701,7 +701,7 @@ namespace BALL
 
 			Index not_matched = max(a1->countAtoms() - sm.getBijection().size(), 
 															a2->countAtoms() - sm.getBijection().size());
-			rmsd_text += "WARNING: " + String(not_matched) + " atoms were not mapped and are now selected";
+			rmsd_text += "  WARNING: " + String(not_matched) + " atoms were not mapped and are now selected";
 			setStatusbarText(rmsd_text, true);
 
 			HashSet<Atom*> atom_set;
