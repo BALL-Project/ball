@@ -456,6 +456,9 @@
 					RelativePath="..\..\..\source\VIEW\KERNEL\objectCreator.C">
 				</File>
 				<File
+					RelativePath="..\..\..\source\VIEW\KERNEL\preferencesEntry.C">
+				</File>
+				<File
 					RelativePath="..\..\..\source\VIEW\KERNEL\primitiveManager.C">
 				</File>
 				<File
@@ -2518,6 +2521,9 @@
 				</File>
 				<File
 					RelativePath="..\..\..\include\BALL\VIEW\KERNEL\objectCreator.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\KERNEL\preferencesEntry.h">
 				</File>
 				<File
 					RelativePath="..\..\..\include\BALL\VIEW\KERNEL\primitiveManager.h">

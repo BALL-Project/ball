@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferencesEntry.C,v 1.11 2004/10/01 14:20:16 amoll Exp $
+// $Id: preferencesEntry.C,v 1.12 2004/10/18 13:42:00 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/preferencesEntry.h>
@@ -128,7 +128,7 @@ namespace BALL
 					}
 					else if (RTTI::isKindOf<QLineEdit>(**it))
 					{
-						((QLineEdit*)(*it))->setText(value);
+						((QLineEdit*)(*it))->setText(value.c_str());
 					}
 					else if (RTTI::isKindOf<QCheckBox>(**it))
 					{
