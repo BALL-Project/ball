@@ -1,4 +1,4 @@
-// $Id: rotamerLibrary.C,v 1.5 1999/08/27 15:42:08 len Exp $
+// $Id: rotamerLibrary.C,v 1.6 1999/08/28 08:33:41 oliver Exp $
 
 #include <BALL/STRUCTURE/rotamerLibrary.h>
 #include <BALL/SYSTEM/file.h>
@@ -72,36 +72,41 @@ namespace BALL
 	// BAUSTELLE
 	ResidueRotamerSet* RotamerLibrary::getRotamerSet(const Residue& residue)
 	{
-	return 0; 
+		return 0; 
 	}
 
 	ResidueRotamerSet* RotamerLibrary::getRotamerSet(const String& name)
 	{
-	vector<ResidueRotamerSet>::iterator it = variants_.begin();
+		vector<ResidueRotamerSet>::iterator it = variants_.begin();
 
-	for(; it != variants_.end(); ++it)
-	{
-	if( name == it->getName())
-	  {
-	  return &(*it);  
-	  }
+		for(; it != variants_.end(); ++it)
+		{
+			if( name == it->getName())
+			{
+				return &(*it);  
+			}
+		}
+
+		// the for-loop search was not successful 
+		return  0; 
 	}
 
-	// the for-loop search was not successful 
-        return  0; 
-	}
 
-
-	// BAUSTELLE
 	Size RotamerLibrary::getNumberOfVariants() const 
 	{
-	return 0;
+		return variants_.size();
 	}
 
-	// BAUSTELLE
 	Size RotamerLibrary::getNumberOfRotamers() const 
 	{
-	return 0;
+		Size number = 0;
+		vector<ResidueRotamerSet>::iterator it = variants_.begin();
+		for (; it != variants_.end(); ++it)
+		{
+			number += it->getNumberOfRotamers();
+		}
+
+		return number;
 	}
 
 

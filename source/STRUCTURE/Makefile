@@ -8,7 +8,6 @@ CPP_SOURCES=\
 	geometricProperties.C\
 	geometricTransformations.C\
 	numericalSAS.C\
-	structureMapper.C \
-	rotamerLibrary.C 
+	structureMapper.C
 
 include ../common.mak
