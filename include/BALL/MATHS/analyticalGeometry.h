@@ -1,4 +1,4 @@
-// $Id: analyticalGeometry.h,v 1.10 2000/03/22 00:47:23 amoll Exp $
+// $Id: analyticalGeometry.h,v 1.11 2000/03/22 21:12:15 oliver Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -864,9 +864,11 @@ namespace BALL
 			@return bool, true if an intersection can be calculated, otherwise false
 	*/
 	template <class T>
-	bool GetIntersection(const TSphere3<T>& a, const TSphere3<T>& b, TCircle3<T>& intersection_circle)
+	bool GetIntersection
+		(const TSphere3<T>& a, const TSphere3<T>& b, 
+		 TCircle3<T>& intersection_circle)
 	{
-		TPlane3<T> Plane
+		TPlane3<T> plane
 			(-2 * b.p.x + 2 * a.p.x,
 			 -2 * b.p.y + 2 * a.p.y,
 			 -2 * b.p.z + 2 * a.p.z,
@@ -879,13 +881,12 @@ namespace BALL
 			 - a.p.z * a.p.z
 			 + a.radius * a.radius);
 
-		Plane.hessify();
+		plane.hessify();
 
-		T tmp_a, tmp_b, c, d;
+		T d = - (plane.n * plane.p);
+		plane.get(tmp_a, tmp_b, c, d);
 
-		Plane.get(tmp_a, tmp_b, c, d);
-
-		intersection_circle.set(- d * Plane.n, Plane.n, sqrt(tmp_a.radius * tmp_a.radius - d * d));
+		intersection_circle.set(- d * plane.n, plane.n, sqrt(a.radius * a.radius - d * d));
 
 		return true;
 	}
