@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: energyMinimizer.h,v 1.42 2005/01/25 01:04:07 amoll Exp $
+// $Id: energyMinimizer.h,v 1.43 2005/02/18 13:13:29 amoll Exp $
 //
 
 // Energy Minimizer: A class for minimizing the energy of molecular systems
@@ -414,7 +414,7 @@ namespace BALL
 				the minimization continues with the former step width and settings.	
 				@param		steps maximum number of steps to be taken
 				@param		resume <b>true</b> if the minimization is to be resumed with the previous settings
-				@return		bool - <b>true</b> if the minimization is terminated
+				@return		bool - <b>true</b> if the minimization has converged
 		*/
 		virtual bool	minimize(Size steps = 0, bool resume = false);
 
