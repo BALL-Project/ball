@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.10 2002/12/18 16:00:36 sturm Exp $
+// $Id: molecularFileDialog.C,v 1.11 2002/12/18 19:40:13 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/molecularFileDialog.h>
 
@@ -142,6 +142,9 @@ namespace BALL
 			QFileDialog *fd = new QFileDialog(MainControl::getMainControl((QObject *)this), "Molecular File Dialog", true);
 			fd->setMode(QFileDialog::AnyFile);
 			fd->setFilter("PDB Files (*.pdb)");
+			fd->addFilter("HIN Files (*.hin)");
+			fd->addFilter("MOL Files (*.mol)");
+			fd->addFilter("MOL2 Files (*.mol2)");
 
 			fd->setSelectedFilter(0);
 
@@ -151,48 +154,125 @@ namespace BALL
 			fd->exec();
 
 			String filename(fd->selectedFile());
+			String filter(fd->selectedFilter());
 			
-			bool ok = false;
-			try
+			if (filename == "/" || filename == "\\") 
 			{
-				if (File::isWritable(filename)) ok = true;
+				setStatusbarText("");	
+				return false;
 			}
-			catch(...)
-			{}
-
-			if (!ok || filename == "/" || filename == "\\") return false;
-
 
 			const System& system = *(const System*) (*selection.begin());
 
-			try
+			bool result;
+
+			if (filter.hasSubstring("PDB"))
 			{
-				PDBFile pdb_file(filename, std::ios::out);
-				pdb_file << system;
-				pdb_file.close();
+				result = writePDBFile(filename, system);
 			}
-			catch(...)
+			else if (filter.hasSubstring("HIN"))
 			{
-				Log.info() << "> write PDB file failed." << std::endl;
-				return false;
+				result = writeHINFile(filename, system);
 			}
-			
-			Log.info() << "> written " << system.countAtoms() << " atoms to PDB file \"" << filename << "\"" << std::endl;
+			else if (filter.hasSubstring("MOL"))
+			{
+				result = writeMOLFile(filename, system);
+			}
+			else if (filter.hasSubstring("MOL2"))
+			{
+				result = writeMOL2File(filename, system);
+			}
+
+			if (!result) return false;
+		
+			Log.info() << "> written " << system.countAtoms() << " atoms to file \"" << filename << "\"" << std::endl;
 
 			setStatusbarText("");
 
 			return true;
 		}
 
+		bool MolecularFileDialog::writePDBFile(String filename, const System& system)
+			throw()
+		{
+			try
+			{
+				PDBFile file(filename, std::ios::out);
+				file << system;
+				file.close();
+			}
+			catch(...)
+			{
+				Log.info() << "> write PDB file failed." << std::endl;
+				return false;
+			}
+
+			return true;
+		}
+
+
+		bool MolecularFileDialog::writeHINFile(String filename, const System& system)
+			throw()
+		{
+			try
+			{
+				HINFile file(filename, std::ios::out);
+				file << system;
+				file.close();
+			}
+			catch(...)
+			{
+				Log.info() << "> write HIN file failed." << std::endl;
+				return false;
+			}
+
+			return true;
+		}
+
+
+		bool MolecularFileDialog::writeMOLFile(String filename, const System& system)
+			throw()
+		{
+			try
+			{
+				MOLFile file(filename, std::ios::out);
+				file << system;
+				file.close();
+			}
+			catch(...)
+			{
+				Log.info() << "> write MOL file failed." << std::endl;
+				return false;
+			}
+
+			return true;
+		}
+
+
+		bool MolecularFileDialog::writeMOL2File(String filename, const System& system)
+			throw()
+		{
+			try
+			{
+				MOL2File file(filename, std::ios::out);
+				file << system;
+				file.close();
+			}
+			catch(...)
+			{
+				Log.info() << "> write MOL2 file failed." << std::endl;
+				return false;
+			}
+
+			return true;		
+		}
+
 
 		bool MolecularFileDialog::readPDBFile(String filename, String system_name)
 			throw()
 		{
-
-			// open a PDB File
 			setStatusbarText("reading PDB file...");
 
-			// reading PDB File
 			System* system = new System();
 
 			try
@@ -218,10 +298,8 @@ namespace BALL
 			bool has_periodic_boundary = false;
 			Box3 bounding_box;
 
-			// notify the main window
 			setStatusbarText("reading HIN file...");
 
-			// reading HIN File
 			System* system = new System();
 
 			try
@@ -268,10 +346,8 @@ namespace BALL
 		bool MolecularFileDialog::readMOLFile(String filename, String system_name)
 			throw()
 		{
-			// notify the main window
 			setStatusbarText("reading MOL file...");
 
-			// reading MOL2 File
 			System* system = new System();
 
 			try
@@ -294,10 +370,8 @@ namespace BALL
 		bool MolecularFileDialog::readMOL2File(String filename, String system_name)
 			throw()
 		{
-			// notify the main window
 			setStatusbarText("reading MOL2 file...");
 
-			// reading MOL2 File
 			System* system = new System();
 
 			try

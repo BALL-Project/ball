@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.h,v 1.4 2002/12/18 16:00:28 sturm Exp $
+// $Id: molecularFileDialog.h,v 1.5 2002/12/18 19:39:37 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_MOLECULARFILEDIALOG_H
 #define BALL_MOLVIEW_GUI_DIALOGS_MOLECULARFILEDIALOG_H
@@ -115,7 +115,6 @@ namespace BALL
 
 			/** Write a molecular file.
 			 		This method takes a \Ref{System} and saves it into a molecular file, selected from a QFileDialog.
-					@param	system the \Ref{System} that is saved into a file
 			 */
 			virtual bool writeFile();
 		
@@ -138,6 +137,27 @@ namespace BALL
 			 */
 			bool readMOL2File(String filename, String system_name)
 				throw();
+
+			/** Write a PDB file
+			 */
+			bool writePDBFile(String filename, const System& system)
+				throw();
+			
+			/** Write a HIN file
+			 */
+			bool writeHINFile(String filename, const System& system)
+				throw();
+			
+			/** Write a MOL file
+			 */
+			bool writeMOLFile(String filename, const System& system)
+				throw();
+			
+			/** Write a MOL2 file
+			 */
+			bool writeMOL2File(String filename, const System& system)
+				throw();
+			
 			//@}
 			
 			protected:
