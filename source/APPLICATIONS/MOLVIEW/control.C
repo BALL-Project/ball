@@ -1,4 +1,4 @@
-// $Id: control.C,v 1.6 2000/01/10 18:24:47 oliver Exp $
+// $Id: control.C,v 1.7 2000/01/10 20:37:44 hekl Exp $
 
 #include "control.h"
 
@@ -19,7 +19,7 @@ Control::Control
 			display_properties_dialog_(0)
 {
 	setRootIsDecorated(TRUE);
-	setMultiSelection(TRUE);
+	//	setMultiSelection(TRUE);
 	setSorting(-1);
 
 	connect(this, 
@@ -630,6 +630,8 @@ Control::ContextMenu
 		return;
 	}
 
+	bool no_context_available__bool = false;
+	
 	// select the current listviewitem
 	setSelected(__pQListViewItem, TRUE);
 
@@ -652,8 +654,6 @@ Control::ContextMenu
 	switch (getType(__pComposite))
 	{
 	  case TYPE__RESIDUE:
-			__QPopupMenu.insertItem("check Residue", RESIDUE__CHECK);
-			__QPopupMenu.insertSeparator();
 	  case TYPE__SYSTEM:
 	  case TYPE__PROTEIN:
 	  case TYPE__MOLECULE:
@@ -661,6 +661,8 @@ Control::ContextMenu
 	  case TYPE__SECONDARY_STRUCTURE:
 	  case TYPE__FRAGMENT:
 			{
+				__QPopupMenu.insertItem("check Residue", RESIDUE__CHECK);
+				__QPopupMenu.insertSeparator();
 				__QPopupMenu.insertItem("cut", OBJECT__CUT);
 				__QPopupMenu.insertItem("copy", OBJECT__COPY);
 				__QPopupMenu.insertItem("paste", OBJECT__PASTE);
@@ -687,14 +689,16 @@ Control::ContextMenu
 				__QPopupMenu.insertItem("select", SELECT);
 				__QPopupMenu.insertItem("deselect", DESELECT);
 	
-//				if (__pComposite->isSelected())
-//				{
-//  				__QPopupMenu.setItemEnabled(DESELECT, TRUE);
-//				}
-//				else
-//				{
-//				__QPopupMenu.setItemEnabled(DESELECT, FALSE);
-//			}
+				if (__pComposite->isSelected())
+				{
+  				__QPopupMenu.setItemEnabled(SELECT, FALSE);
+  				__QPopupMenu.setItemEnabled(DESELECT, TRUE);
+				}
+				else
+				{
+					__QPopupMenu.setItemEnabled(SELECT, TRUE);
+					__QPopupMenu.setItemEnabled(DESELECT, FALSE);
+				}
 	
 				__QPopupMenu.insertSeparator();
 				__QPopupMenu.insertItem("center Camera", CAMERA__CENTER);
@@ -702,7 +706,13 @@ Control::ContextMenu
 			break;
 
 	  default:
+			no_context_available__bool = true;
 			break;
+	}
+
+	if (no_context_available__bool)
+	{
+		return;
 	}
 
 	// execute the action
@@ -766,7 +776,7 @@ Control::objectSelected
 		selected_type__mQString_ = "unkown";
 		selected_root_type__mQString_ = "unkown";
 
-		emit itemSelected(false, false);
+		emit itemSelected(false);
 
 		return;
 	}
@@ -784,14 +794,7 @@ Control::objectSelected
 	selected_type__mQString_ = _getTypeName(__pQListViewItem);
 	selected_root_type__mQString_ = _getRootTypeName(__pQListViewItem);
 
-	if (getType(selected__mpComposite_) == TYPE__RESIDUE)
-	{
-		emit itemSelected(true, true);
-	}
-	else
-	{
-		emit itemSelected(true, false);
-	}
+	emit itemSelected(true);
 }
 
 void 
@@ -912,7 +915,10 @@ Control::checkResidue()
 		return;
 	}
 
-	__mpMoleculeObjectProcessor_->checkResidue(*selected__mpComposite_);
+	if (__mpMoleculeObjectProcessor_->checkResidue(*selected__mpComposite_) == true)
+	{
+		Log.info() << "ResidueChecker: OK." << endl;
+	}
 }
 
 void 
@@ -1005,6 +1011,8 @@ void
 Control::openDisplay()
 {
 	__mDisplayProperties_.show();
+	__mDisplayProperties_.raise();
+
 	display_properties_dialog_.show();
 }
 
@@ -1105,6 +1113,24 @@ Control::_getCompositeAddress(QListViewItem *__pQListViewItem)
 	return __pComposite;
 }
 
+List<QListViewItem *> 
+Control::_getSelectedListViewItems()
+{
+	List<QListViewItem *> listviewitem__List;
+
+	QListViewItemIterator __QListViewItemIterator(this);
+
+	for (; __QListViewItemIterator.current(); ++__QListViewItemIterator)
+	{
+		if (__QListViewItemIterator.current()->isSelected())
+		{
+			listviewitem__List.push_back(__QListViewItemIterator.current());
+		}
+	}
+
+	return listviewitem__List;
+}
+
 void 
 Control::_genListViewItem
   (QListViewItem *__pQListViewItem,
@@ -1167,7 +1193,7 @@ Control::_genListViewItem
 				
 				for(__FragmentIterator = __pMolecule->beginFragment();
 						__FragmentIterator != __pMolecule->endFragment();
-						__FragmentIterator++)
+						++__FragmentIterator)
 				{
 					QString fragname__QString;
 					fragname__QString.sprintf("Fragment_%d", ++index__i);
@@ -1183,7 +1209,7 @@ Control::_genListViewItem
 				
 				for(__AtomIterator = __pMolecule->beginAtom();
 						__AtomIterator != __pMolecule->endAtom();
-						__AtomIterator++)
+						++__AtomIterator)
 				{
 					QString atom__QString;
 					atom__QString.sprintf("Atom_%d", ++index__i);
@@ -1229,7 +1255,7 @@ Control::_genListViewItem
 				
 				for(__ChainIterator = __pProtein->beginChain();
 						__ChainIterator != __pProtein->endChain();
-						__ChainIterator++)
+						++__ChainIterator)
 				{
 					QString chain__QString;
 					chain__QString.sprintf("Chain_%d", ++index__i);
@@ -1275,7 +1301,7 @@ Control::_genListViewItem
 				
 				for(__MoleculeIterator = __pSystem->beginMolecule();
 						__MoleculeIterator != __pSystem->endMolecule();
-						__MoleculeIterator++)
+						++__MoleculeIterator)
 				{
 					Composite *__pComposite;
 					QString molprotname__QString;
@@ -1326,13 +1352,45 @@ Control::_genListViewItem
 					CHECK_PTR(new__pQListViewItem);
 				}
 
+				Composite::ChildCompositeIterator __ChildCompositeIterator;
+				int residue_index__i = 0;
+				int sstructure_index__i = 0;
+
+				for(__ChildCompositeIterator = __pComposite->beginChildComposite();
+						__ChildCompositeIterator != __pComposite->endChildComposite();
+						++__ChildCompositeIterator)
+				{
+					Composite *actual__pComposite = (Composite *)&(*__ChildCompositeIterator);
+
+					if (RTTI::isKindOf<Residue>(*actual__pComposite))
+					{
+						QString residue__QString;
+						residue__QString.sprintf("Residue_%d", ++residue_index__i);
+						
+						_genListViewItem(new__pQListViewItem, 
+														 actual__pComposite,
+														 &residue__QString);
+					}
+					else
+					{
+						QString secondaryStructure__QString;
+						secondaryStructure__QString.sprintf("SecondaryStructure_%d", ++sstructure_index__i);
+						
+						_genListViewItem(new__pQListViewItem, 
+														 actual__pComposite,
+														 &secondaryStructure__QString);
+					}
+				}
+
+
+				/*
 				Chain *__pChain = RTTI::castTo<Chain>(*__pComposite);
 				SecondaryStructureIterator __SecondaryStructureIterator;
 				int index__i = 0;
 				
 				for(__SecondaryStructureIterator = __pChain->beginSecondaryStructure();
 						__SecondaryStructureIterator != __pChain->endSecondaryStructure();
-						__SecondaryStructureIterator++)
+						++__SecondaryStructureIterator)
 				{
 					QString secondaryStructure__QString;
 					secondaryStructure__QString.sprintf("SecondaryStructure_%d", ++index__i);
@@ -1348,7 +1406,7 @@ Control::_genListViewItem
 				
 				for(__ResidueIterator = __pChain->beginResidue();
 						__ResidueIterator != __pChain->endResidue();
-						__ResidueIterator++)
+						++__ResidueIterator)
 				{
 					QString residue__QString;
 					residue__QString.sprintf("Residue_%d", ++index__i);
@@ -1357,6 +1415,7 @@ Control::_genListViewItem
 													 (Composite *)&(*__ResidueIterator),
 													 &residue__QString);
 				}
+				*/
 			}	
 			break;
 
@@ -1394,7 +1453,7 @@ Control::_genListViewItem
 				
 				for(__ResidueIterator = __pSecondaryStructure->beginResidue();
 						__ResidueIterator != __pSecondaryStructure->endResidue();
-						__ResidueIterator++)
+						++__ResidueIterator)
 				{
 					QString residue__QString;
 					residue__QString.sprintf("Residue_%d", ++index__i);
@@ -1440,7 +1499,7 @@ Control::_genListViewItem
 				
 				for(__AtomIterator = __pResidue->beginAtom();
 						__AtomIterator != __pResidue->endAtom();
-						__AtomIterator++)
+						++__AtomIterator)
 				{
 					QString atom__QString;
 					atom__QString.sprintf("Atom_%d", ++index__i);
@@ -1487,7 +1546,7 @@ Control::_genListViewItem
 				
 				for(__AtomIterator = __pFragment->beginAtom();
 						__AtomIterator != __pFragment->endAtom();
-						__AtomIterator++)
+						++__AtomIterator)
 				{
 					QString atom__QString;
 					atom__QString.sprintf("Atom_%d", ++index__i);

@@ -1,4 +1,4 @@
-// $Id: control.h,v 1.4 2000/01/10 18:24:47 oliver Exp $
+// $Id: control.h,v 1.5 2000/01/10 20:35:11 hekl Exp $
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_CONTROL_H
 #define BALL_APPLICATIONS_MOLVIEW_CONTROL_H
@@ -199,7 +199,7 @@ class Control
 
   signals:
 
-		void itemSelected(bool selected__bool, bool residue__bool);
+		void itemSelected(bool selected__bool);
 		void itemCutOrCopied(bool copied__bool);
 
 	
@@ -213,6 +213,8 @@ class Control
 		QString _getTypeName(QListViewItem *__pQListViewItem);
 		QString _getRootTypeName(QListViewItem *__pQListViewItem);
 		Composite *_getCompositeAddress(QListViewItem *__pQListViewItem);
+
+		List<QListViewItem *> _getSelectedListViewItems();
 
 	  void _genListViewItem
 			(QListViewItem *__pQListViewItem,
