@@ -1,4 +1,4 @@
-// $Id: file.C,v 1.12 2000/10/19 20:12:34 amoll Exp $
+// $Id: file.C,v 1.13 2000/10/20 08:52:17 amoll Exp $
 
 #include <BALL/SYSTEM/file.h>
 #include <math.h>
@@ -74,7 +74,7 @@ namespace BALL
 		
 		FileSystem::canonizePath(name_);
 
-		if (!isAccessible(name_))
+		if (open_mode == IN && !isAccessible(name_))
 		{
 			throw (Exception::FileNotFound(__FILE__, __LINE__, name_));
 		}
