@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.115 2004/02/02 17:20:16 amoll Exp $
+// $Id: mainframe.C,v 1.116 2004/02/02 18:56:46 anhi Exp $
 //
 
 #include "mainframe.h"
@@ -96,6 +96,9 @@ namespace BALL
 		
 		file_dialog_ = new MolecularFileDialog(this, "MolecularFileDialog");
 		CHECK_PTR(file_dialog_);
+
+		download_pdb_dialog_ = new DownloadPDBFile(this, "DownloadPDBFile", false);
+		CHECK_PTR(download_pdb_dialog_);
 
 		molecular_structure_ = new MolecularStructure(this, "MolecularStructure");
 		CHECK_PTR(molecular_structure_);

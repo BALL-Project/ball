@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.30 2004/01/20 15:07:42 amoll Exp $
+# $Id: Makefile,v 1.31 2004/02/02 18:57:51 anhi Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -27,6 +27,8 @@ CPP_SOURCES=\
 	coloringSettingsDialogData.C\
 	contourSurfaceDialog.C\
 	contourSurfaceDialogData.C\
+	downloadPDBFile.C\
+	downloadPDBFileData.C\
 	displayProperties.C\
 	displayPropertiesData.C\
 	FDPBDialog.C\
@@ -80,6 +82,8 @@ MOC_SOURCES=\
 	colorMeshDialogData_moc.C\
 	contourSurfaceDialog_moc.C\
 	contourSurfaceDialogData_moc.C\
+	downloadPDBFile_moc.C\
+	downloadPDBFileData_moc.C\
 	displayProperties_moc.C\
 	displayPropertiesData_moc.C\
 	FDPBDialog_moc.C\
@@ -126,6 +130,7 @@ UIC_SOURCES=\
 	coloringSettingsDialogData.C\
 	colorMeshDialogData.C\
 	contourSurfaceDialogData.C\
+	downloadPDBFileData.C\
 	displayPropertiesData.C\
 	FDPBDialogData.C\
 	labelDialogData.C\

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.61 2004/02/02 17:20:16 amoll Exp $
+// $Id: mainframe.h,v 1.62 2004/02/02 18:56:47 anhi Exp $
 //
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -21,6 +21,10 @@
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
 # include <BALL/VIEW/WIDGETS/scene.h>
+#endif
+
+#ifndef BALL_VIEW_DIALOGS_DOWNLOADPDBFILE_H
+# include <BALL/VIEW/DIALOGS/downloadPDBFile.h>
 #endif
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
@@ -133,6 +137,11 @@ namespace BALL
 		void openFile(const String& file)
 			throw();
 
+		/** Download a structure file
+		 */
+		//void downloadStructure()
+		//	throw();
+
 		private:
 
 		Scene*										scene_;
@@ -144,6 +153,7 @@ namespace BALL
 		LabelDialog*	    				label_dialog_;
 		MolecularStructure*  			molecular_structure_;
 		MolecularFileDialog*  		file_dialog_;
+		DownloadPDBFile*					download_pdb_dialog_;
 		FDPBDialog*  							FDPB_dialog_;
 		SelectorDialog  					selector_dialog_;
 		Server*   								server_;
