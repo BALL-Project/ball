@@ -1,4 +1,4 @@
-// $Id: classTest.h,v 1.18 2001/02/05 00:51:33 amoll Exp $
+// $Id: classTest.h,v 1.19 2001/05/06 22:58:35 oliver Exp $
 
 #include <BALL/common.h>
 #include <BALL/SYSTEM/file.h>
@@ -537,14 +537,14 @@ int main(int argc, char **argv)\
 				} else {\
 					std::cout << "false";\
 				}\
-				std::cout << ") : " << " cannot open file: ";\
+				std::cout << ") : " << " cannot open file: \"";\
 				if (!TEST::infile.good())\
 				{\
-					std::cout << #filename << " (input file) ";\
+					std::cout << filename << "\" (input file) ";\
 				}\
 				if (!TEST::templatefile.good())\
 				{\
-					std::cout << #templatename << " (template file) ";\
+					std::cout << templatename << "\" (template file) ";\
 				}\
 				std::cout << std::endl;\
 				\
