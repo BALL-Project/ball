@@ -1,4 +1,4 @@
-// $Id: JCAMPFile.C,v 1.5 2000/12/08 09:23:22 oliver Exp $
+// $Id: JCAMPFile.C,v 1.6 2001/02/21 12:33:30 anker Exp $
 
 #include <BALL/FORMAT/JCAMPFile.h>
 
@@ -45,10 +45,10 @@ namespace BALL
 
 	void JCAMPFile::read()
 	{
-		Position line_index = 0, title_index=0, i;
+		// Position line_index = 0, title_index=0, i;
 
-		// First I try to read the title. Only parameters appearing *after* the title
-		// are used.
+		// First I try to read the title. Only parameters appearing *after* the
+		// title are used.
 		while ( nextLine_() )
 		{
 			if (line_.find( "##TITLE=", 0 ) != string::npos )
