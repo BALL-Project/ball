@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.17 2004/07/16 14:03:13 amoll Exp $
+// $Id: POVRenderer.C,v 1.18 2004/07/21 13:01:28 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -224,6 +224,7 @@ namespace BALL
 			{
 				(*outfile_) << "// look up: " << stage.getCamera().getLookUpVector() << std::endl;
 				(*outfile_) << "// look at: " << stage.getCamera().getLookAtPosition() << std::endl;
+				(*outfile_) << "// view point: " << stage.getCamera().getViewPoint() << std::endl;
 			}
 
 			// Set the light sources
