@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: peakList.h,v 1.15 2003/05/08 09:02:46 sneumann Exp $
+// $Id: peakList.h,v 1.16 2003/06/19 19:19:35 oliver Exp $
 
 #ifndef BALL_NMR_PEAKLIST_H
 #define BALL_NMR_PEAKLIST_H
@@ -120,32 +120,6 @@ namespace BALL
 			return min;
 		}
 
-		/**	Determine the minimum position of the spectrum (all dimensions)
-		*/
-		Position getMinPosition() const
-		{
-			ConstIterator it = List<PT>::begin();
-			PeakList<PT>::Position min = Limits<PeakList<PT>::Position>::max();
-			for (; it != List<PT>::end(); ++it)
-			{
-				min = std::min(min, it->getPosition());
-			}
-			return min;
-		}
-
-		/**	Determine the maximum position of the spectrum (all dimensions)
-		*/
-		Position getMaxPosition() const
-		{
-			ConstIterator it = List<PT>::begin();
-			PeakList<PT>::Position max = -Limits<PeakList<PT>::Position>::max();
-			for (; it != List<PT>::end(); ++it)
-			{
-				max = std::max(max, it->getPosition());
-			}
-
-			return max;
-		}
 		//@}
 	};
 
