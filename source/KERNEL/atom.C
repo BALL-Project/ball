@@ -1,4 +1,4 @@
-// $Id: atom.C,v 1.14 2000/03/27 21:37:05 oliver Exp $
+// $Id: atom.C,v 1.15 2000/04/13 23:07:32 amoll Exp $
 
 #include <BALL/KERNEL/atom.h>
 
@@ -290,9 +290,13 @@ namespace BALL
 
 	Bond* Atom::getBond(Position index)
 	{
+		if (index < 0)
+			{
+				throw Exception::IndexUnderflow(__FILE__, __LINE__, (Index)index, (Size)MAX_NUMBER_OF_BONDS);
+			}		
 		if (index >= (Index)MAX_NUMBER_OF_BONDS)
 		{
-			throw Exception::IndexUnderflow(__FILE__, __LINE__, (Index)index, (Size)MAX_NUMBER_OF_BONDS);
+			throw Exception::IndexOverflow(__FILE__, __LINE__, (Index)index, (Size)MAX_NUMBER_OF_BONDS);
 		}
 
 		return ((Size)index < number_of_bonds_) ? bond_[index] : 0;
