@@ -99,7 +99,7 @@ namespace BALL
 			virtual void writePreferences(INIFile &inifile)
 				throw();
 				
-			/**	Initializes the popup menu {\em Display} with its checkable submenu {\em Add Label}; 
+			/**	Initializes the popup menu <b>  Display </b> with its checkable submenu <b>  Add Label </b>; 
 					This method is called automatically	immediately before the main application is started. 
 					@param main_control the  MainControl object to be initialized 
 					@see   openDialog
@@ -109,7 +109,7 @@ namespace BALL
 			virtual void initializeWidget(MainControl& main_control)
 				throw();
 			
-			/**	Removes the checkable submenu {\em Label Dialog} from the popup menu {\em Display}.
+			/**	Removes the checkable submenu <b>  Label Dialog </b> from the popup menu <b>  Display </b>.
 					This method will be called by  MainControl::aboutToExit.
 					@param main_control the  MainControl to be finalized 
 					@see   initializeWidget

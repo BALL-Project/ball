@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: global.h,v 1.21 2003/08/26 08:04:18 oliver Exp $
+// $Id: global.h,v 1.21.2.1 2004/05/18 11:45:23 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_GLOBAL_H
@@ -22,7 +22,7 @@ namespace BALL
 			AtomContainers.  As Bonds are not integrated in the Composite tree
 			structure of kernel objects, a simple deep cloning of a composite
 			only copies all composites down to atoms. Bonds are not included
-			because they are not {\em children} of the atoms but stored in a bond
+			because they are not <b>  children </b> of the atoms but stored in a bond
 			array.  However, cloning of any kernel objects should naturally clone
 			bonds, too. The implementation of this {\em cloning-with-bonds} is
 			divided in two parts: first, a deep (recursive) cloning of all

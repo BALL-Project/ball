@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: shiftModel.h,v 1.14 2003/08/26 08:04:45 oliver Exp $
+// $Id: shiftModel.h,v 1.14.2.1 2004/05/18 11:45:28 amoll Exp $
 //
 
 #ifndef BALL_NMR_SHIFTMODEL_H
@@ -196,7 +196,7 @@ namespace BALL
 
 		/*_	Initialize the model from the parameter file.
 				This method assumes that object has a valid	parameter file assigned.
-				It sets {\tt valid_} to {\bf true} if it could create a shift model 
+				It sets {\tt valid_} to <b>  true </b> if it could create a shift model 
 				from the contents of the parameter file.
 		*/
 		bool init_()
@@ -227,7 +227,7 @@ namespace BALL
 		CreateMethodMap	registered_modules_;
 
 		/*_	The validity flag.
-				Set to {\bf true} if the object was initialized correctly.
+				Set to <b>  true </b> if the object was initialized correctly.
 		*/
 		bool valid_;
 	};

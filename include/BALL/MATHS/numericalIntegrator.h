@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: numericalIntegrator.h,v 1.16 2004/02/23 15:20:00 anhi Exp $
+// $Id: numericalIntegrator.h,v 1.16.2.1 2004/05/18 11:45:26 amoll Exp $
 //
 
 #ifndef BALL_MATHS_NUMERICALINTEGRATOR_H
@@ -81,9 +81,9 @@ namespace BALL
 		*/
 		Function& getFunction()	throw() { return function_; }
 
-		/** Get the value of the function at position {\em x}
+		/** Get the value of the function at position <b>  x </b>
 				@param x the position at which <tt>function\_</tt> is to be evaluated
-				@return the value of <tt>function\_</tt> at {\em x}
+				@return the value of <tt>function\_</tt> at <b>  x </b>
 		*/
 		DataType getValue(const DataType& x) const
 			throw();

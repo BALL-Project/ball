@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: matrix44.h,v 1.48 2004/02/23 15:20:00 anhi Exp $
+// $Id: matrix44.h,v 1.48.2.1 2004/05/18 11:45:26 amoll Exp $
 //
 
 #ifndef BALL_MATHS_MATRIX44_H
@@ -238,7 +238,7 @@ namespace BALL
 		void get(TMatrix4x4& m) const
 			throw();
 
-		/**	Assign to four variables of type {\em TVector4}.
+		/**	Assign to four variables of type <b>  TVector4 </b>.
 				@param col1 the TVector4 to obtain the values of the first column
 				@param col2 the TVector4 to obtain the values of the second column
 				@param col3 the TVector4 to obtain the values of the third column
@@ -475,7 +475,7 @@ namespace BALL
 		TMatrix4x4& operator *= (const TMatrix4x4& m)
 			throw();
 
-		/**	Multiplication by an instance of type {\em TVector4}.
+		/**	Multiplication by an instance of type <b>  TVector4 </b>.
 				@return TMatrix4x4&, {\em *this}
 		*/
 		TVector4<T> operator * (const TVector4<T>& vector) const
@@ -483,7 +483,7 @@ namespace BALL
 
 		/**	Invert the matrix.
 				Tests if the matrix can be inverted.
-				If possible, the result will be inverted and the result returned in {\em inverse}.
+				If possible, the result will be inverted and the result returned in <b>  inverse </b>.
 				@param inverse is assigned the inverse matrix 
 				@return bool true if the inverse matrix could be calculated, otherwise false.
 		*/
@@ -733,7 +733,7 @@ namespace BALL
 
 		/** Internal state dump.
 				Dump the current internal state of {\em *this} to 
-				the output ostream {\em s} with dumping depth {\em depth}.
+				the output ostream <b>  s </b> with dumping depth <b>  depth </b>.
 				@param   s - output stream where to output the internal state of {\em *this}
 				@param   depth - the dumping depth
 		*/

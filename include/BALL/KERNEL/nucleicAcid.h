@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nucleicAcid.h,v 1.32 2003/08/26 08:04:18 oliver Exp $ 
+// $Id: nucleicAcid.h,v 1.32.2.1 2004/05/18 11:45:23 amoll Exp $ 
 //
 
 #ifndef BALL_KERNEL_NUCLEICACID_H
@@ -149,7 +149,7 @@ namespace BALL
 				given position.
 				@param		position the position of the child Nucleotide
 				@return		Nucleotide* - mutable pointer to the child Nucleotide at
-									{\em positon}
+									<b>  positon </b>
 		*/
 		Nucleotide* getNucleotide(Position position)
 			throw();
@@ -159,7 +159,7 @@ namespace BALL
 				given position.
 				@param		position the position of the child Nucleotide
 				@return		Nucleotide* - constant pointer to the child Nucleotide at
-									{\em positon}
+									<b>  positon </b>
 		*/
 		const Nucleotide* getNucleotide(Position position) const
 			throw();
@@ -248,7 +248,7 @@ namespace BALL
 
 			/** Internal state dump.
 					Dump the current internal state of this instance to the output
-					ostream {\em s} with dumping depth {\em depth}.
+					ostream <b>  s </b> with dumping depth <b>  depth </b>.
 					@param	s - output stream where to output the internal state of
 									this instance
 					@param	depth - the dumping depth

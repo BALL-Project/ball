@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: composite.h,v 1.58 2004/04/25 12:04:17 oliver Exp $
+// $Id: composite.h,v 1.58.2.1 2004/05/18 11:45:19 amoll Exp $
 //
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
@@ -120,8 +120,8 @@ namespace BALL
 			throw();
 
 		/**	Copy constructor.
-				Creates a copy of a composite. {\em Deep} copies include the whole
-				composite tree, {\em shallow} copies contain anly a single composite.
+				Creates a copy of a composite. <b>  Deep </b> copies include the whole
+				composite tree, <b>  shallow </b> copies contain anly a single composite.
 				@param	composite the composite to be cloned (the root of the tree in 
 								the case of a deep copy)
 				@param	deep make a deep copy (<b>true</b>) or shallow copy 
@@ -166,7 +166,7 @@ namespace BALL
 
 		/**	Non-virtual destroy method.
 				This method behaves exactly like destroy except for a small
-				difference: when called with <b>true</b>, it calls the {\em virtual}
+				difference: when called with <b>true</b>, it calls the <b>  virtual </b>
 				clear function. If called with <b>false</b> it calls the original
 				clear function of Composite. This is useful when implementing the
 				behaviour of derived classes.
@@ -368,7 +368,7 @@ namespace BALL
 		*/
 		const Composite* getParent() const throw();
 
-		/**	Return the {\em index}th child of this composite.
+		/**	Return the <b>  index </b>th child of this composite.
 				If no such child exists, 0 is returned.
 				The index of the first child is <b>0</b>.
 				@param	index the index of the child to return
@@ -376,7 +376,7 @@ namespace BALL
 		*/
 		Composite* getChild(Index index) throw();
 	
-		/**	Return a const pointer to the {\em index}th child of this composite.
+		/**	Return a const pointer to the <b>  index </b>th child of this composite.
 				If no such child exists, 0 is returned.
 				The index of the first child is <b>0</b>.
 				@param	index the index of the child to return

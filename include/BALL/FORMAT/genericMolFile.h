@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericMolFile.h,v 1.22 2004/03/07 20:17:01 oliver Exp $
+// $Id: genericMolFile.h,v 1.22.2.1 2004/05/18 11:45:21 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_GENERICMOLFILE_H
@@ -31,7 +31,7 @@ namespace BALL
 			multiple structure in a file (e.g. the MDL  \link MOLFile MOLFile \endlink ),
 			those two operations are basically equivalent.
 			A fundamental difference however is the fact that
-			reading a molecule {\em create} a new molecule, whereas
+			reading a molecule <b>  create </b> a new molecule, whereas
 			reading a system adds the molecules read to an
 			existing instance of  \link System System \endlink . This implies that
 			the system has to be cleared prior to reading a system

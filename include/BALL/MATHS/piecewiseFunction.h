@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: piecewiseFunction.h,v 1.20 2003/08/26 08:04:22 oliver Exp $
+// $Id: piecewiseFunction.h,v 1.20.2.1 2004/05/18 11:45:26 amoll Exp $
 //
 
 #ifndef BALL_MATHS_PIECEWISEFUNCTION_H
@@ -34,7 +34,7 @@ namespace BALL
 			This class provides the interface for piecewise functions needed as
 			representation of radial distribution functions (@see RadialDistributionFunction). 
 			It implements the <tt>Function</tt> interface. \par
-			Note that intervals {\em must} be disjunct and interval limits have to
+			Note that intervals <b>  must </b> be disjunct and interval limits have to
 			meet. We require the intervals to be sorted such that the lowest interval
 			limit is the first interval of the vector. \par
 			

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: angle.h,v 1.44 2004/02/23 17:26:02 anhi Exp $
+// $Id: angle.h,v 1.44.2.1 2004/05/18 11:45:25 amoll Exp $
 //
 
 #ifndef BALL_MATHS_ANGLE_H
@@ -404,7 +404,7 @@ namespace BALL
 
 		/** Internal state dump.
 				Dump the current internal state of {\em *this} to 
-				the output ostream {\em s} with dumping depth {\em depth}.
+				the output ostream <b>  s </b> with dumping depth <b>  depth </b>.
 				@param   s - output stream where to output the internal state of {\em *this}
 				@param   depth - the dumping depth
 		*/

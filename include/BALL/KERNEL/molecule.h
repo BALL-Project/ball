@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecule.h,v 1.31 2003/08/26 08:04:18 oliver Exp $
+// $Id: molecule.h,v 1.31.2.1 2004/05/18 11:45:23 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_MOLECULE_H
@@ -236,7 +236,7 @@ namespace BALL
 
 		/** Internal state dump.
 				Dump the current internal state to the 
-				output ostream {\em s} with dumping depth {\em depth}.
+				output ostream <b>  s </b> with dumping depth <b>  depth </b>.
 				@param	s output stream where to output the internal state
 				@param  depth the dumping depth
 		*/

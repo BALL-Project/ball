@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: resourceFile.h,v 1.24.2.1 2004/05/11 18:55:06 oliver Exp $
+// $Id: resourceFile.h,v 1.24.2.2 2004/05/18 11:45:21 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_RESOURCEFILE_H
@@ -65,7 +65,7 @@ namespace BALL
 		/**	Create a new resource entry.
 				An entry with <tt>key</tt> and <tt>value</tt> is created. If <tt>parent</tt> is given,
 				the new entries parent pointer is set to this value. Take care: the parents
-				child array is {\em not} updated - so use this option only if you really know 
+				child array is <b>  not </b> updated - so use this option only if you really know 
 				what you are doing. To keep this data consistent, use  \link insertChild insertChild \endlink .
 				@param	key the key of the new entry
 				@param	value the value of the new entry

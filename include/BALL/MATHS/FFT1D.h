@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FFT1D.h,v 1.11 2004/02/23 15:19:58 anhi Exp $
+// $Id: FFT1D.h,v 1.11.2.1 2004/05/18 11:45:24 amoll Exp $
 //
 
 #ifndef BALL_MATHS_FFT1D_H
@@ -114,17 +114,17 @@ namespace BALL
 		void doiFFT()
 			throw();
 
-		/** Translate the origin in physical space about {\em transOrigin}.
+		/** Translate the origin in physical space about <b>  transOrigin </b>.
 			If the result is out of bounds, the function does nothing and
-			returns {\em false}.
+			returns <b>  false </b>.
 		 */
 		bool translate(double trans_origin)
 			throw();
 
-		/** Set the step width in physical space to {\em newWidth}.
+		/** Set the step width in physical space to <b>  newWidth </b>.
 			The step width in fourier space is automatically adjusted
-			accordingly. {\em newWidth} must be positive, otherwise
-			the function does nothing and retuns {\em false}.
+			accordingly. <b>  newWidth </b> must be positive, otherwise
+			the function does nothing and retuns <b>  false </b>.
 		 */
 		bool setPhysStepWidth(double new_width)
 			throw();
@@ -159,7 +159,7 @@ namespace BALL
 		double getFourierSpaceMax() const
 			throw();
 
-		/** Returns the data at the grid position closest to {\em pos},
+		/** Returns the data at the grid position closest to <b>  pos </b>,
 			and automatically includes
 			the correct phase factor and normalization.
 		 */
@@ -174,20 +174,20 @@ namespace BALL
 		Complex getInterpolatedValue(double pos) const
 			throw(Exception::OutOfGrid);
 
-		/** Sets the data point at the grid position closest to {\em pos}
-			to the value {\em val}, and -- if called in fourier space --
+		/** Sets the data point at the grid position closest to <b>  pos </b>
+			to the value <b>  val </b>, and -- if called in fourier space --
 			automatically includes the correct phase factor and normalization.
 		 */
 		void setData(double pos, Complex val)
 			throw(Exception::OutOfGrid);
 
-		/** Access the data at the grid position closest to {\em pos}.
+		/** Access the data at the grid position closest to <b>  pos </b>.
 			This function returns the "raw" data at that position.
 		 */
 		Complex& operator [] (const double pos)
 			throw(Exception::OutOfGrid);
 
-		/** Access the data at the grid position closest to {\em pos}.
+		/** Access the data at the grid position closest to <b>  pos </b>.
 				This function returns the "raw" data at that position.
 			*/
 		const Complex& operator [] (const double pos) const

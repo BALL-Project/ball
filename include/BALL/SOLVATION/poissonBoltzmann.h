@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: poissonBoltzmann.h,v 1.28 2004/02/23 17:26:04 anhi Exp $ 
+// $Id: poissonBoltzmann.h,v 1.28.2.1 2004/05/18 11:45:29 amoll Exp $ 
 //
 
 // Finite Difference Poisson Boltzmann Solver
@@ -426,7 +426,7 @@ namespace BALL
 							\phi_{x,y,z} = \sum_i \frac{1}{4 \pi \varepsilon \varepsilon_0}
 													\frac{q_i}{r} e^{-\frac{r}{d}}
 					\f]
-					This options tends to become {\em very} slow for large grids.
+					This options tends to become <b>  very </b> slow for large grids.
 			*/
 			static const String DEBYE;
 
@@ -685,7 +685,7 @@ namespace BALL
 		/**	Destroys all allocated grids and the atom array.
 				This method reverts the FDPB object to the state it had prior to
 				a call to setup. Especially it frees all memory intensive datastructures. \par
-				{\em destroyGrids} deletes eps_grid, kappa_grid, q_grid, phi_grid, and SAS_grid.
+				<b>  destroyGrids </b> deletes eps_grid, kappa_grid, q_grid, phi_grid, and SAS_grid.
 				Contrary to destroy, it doesnt't clear options and results. \par
 				@see	destroy
 				@see	setup

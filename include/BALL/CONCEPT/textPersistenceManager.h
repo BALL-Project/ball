@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: textPersistenceManager.h,v 1.17 2004/02/23 15:19:57 anhi Exp $
+// $Id: textPersistenceManager.h,v 1.17.2.1 2004/05/18 11:45:20 amoll Exp $
 //
 
 #ifndef BALL_CONCEPT_TEXTPERSISTENCEMANAGER_H
@@ -17,7 +17,7 @@ namespace BALL
 	/**	Text-format-based persistence manager.
 			This class implements a persistnece manager that reads and writes
 			its objects in a human-readable text format.
-			This is slow and objects get {\em huge}, but the format is clear and
+			This is slow and objects get <b>  huge </b>, but the format is clear and
 			comprehensible - the ideal format to debug persistence-related programs.
 			For production use, the XDRPersistenceManager is preferred.
 			@see	XDRPersistenceManager

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: simpleBox3.h,v 1.6 2004/02/23 17:26:03 anhi Exp $
+// $Id: simpleBox3.h,v 1.6.2.1 2004/05/18 11:45:26 amoll Exp $
 //
 
 #ifndef BALL_MATHS_SIMPLEBOX3_H
@@ -26,7 +26,6 @@ namespace BALL
 			This class describes a three-dimensional box with edges parallel to
 			the coordinate system. Hence, a box is given by the coordinates of
 			the lower left front corner and ther upper right back corner.\\
-			{\bf Definition:} \URL{BALL/MATHS/SimpleBox3.h}\\
 	*/
 	template <typename T>
 	class TSimpleBox3
@@ -55,20 +54,20 @@ namespace BALL
 
 		/**	Detailed constructor.
 				Create a new TSimpleBox3 object from two instances of TVector3.
-				@param	a assigned to {\tt a}
-				@param	b assigned to {\tt b}
+				@param	a assigned to <TT>  a </TT>
+				@param	b assigned to <TT>  b </TT>
 		*/
 		TSimpleBox3(const TVector3<T>& a, const TVector3<T>& b)
 			throw();
 
 		/**	Detailed constructor.
-				Create a new TSimpleBox3 object from six variables of type {\tt T}.
-				@param	ax assigned to {\tt a.x}
-				@param	ay assigned to {\tt a.y}
-				@param	az assigned to {\tt a.z}
-				@param	bx assigned to {\tt b.x}
-  			@param	by assigned to {\tt b.y}
-				@param	bz assigned to {\tt b.z}
+				Create a new TSimpleBox3 object from six variables of type <TT>  T </TT>.
+				@param	ax assigned to <TT>  a.x </TT>
+				@param	ay assigned to <TT>  a.y </TT>
+				@param	az assigned to <TT>  a.z </TT>
+				@param	bx assigned to <TT>  b.x </TT>
+  			@param	by assigned to <TT>  b.y </TT>
+				@param	bz assigned to <TT>  b.z </TT>
 		*/
 		TSimpleBox3(const T& ax, const T& ay, const T& az,
 					const T& bx, const T& by, const T& bz)
@@ -107,13 +106,13 @@ namespace BALL
 		void set(const TVector3<T>& lower, const TVector3<T>& upper)
 			throw();
 
-		/**	Assign from six values of type {\tt T}.
-				@param	ax assigned to {\tt a.x}
-				@param	ay assigned to {\tt a.y}
-				@param	az assigned to {\tt a.z}
-				@param	bx assigned to {\tt b.x}
-  			@param	by assigned to {\tt b.y}
-				@param	bz assigned to {\tt b.z}
+		/**	Assign from six values of type <TT>  T </TT>.
+				@param	ax assigned to <TT>  a.x </TT>
+				@param	ay assigned to <TT>  a.y </TT>
+				@param	az assigned to <TT>  a.z </TT>
+				@param	bx assigned to <TT>  b.x </TT>
+  			@param	by assigned to <TT>  b.y </TT>
+				@param	bz assigned to <TT>  b.z </TT>
 		*/
 		void set(const T& ax, const T& ay, const T& az,
 						 const T& bx, const T& by, const T& bz)
@@ -133,20 +132,20 @@ namespace BALL
 		void get(TSimpleBox3& box) const
 			throw();
 
-		/**	Assign to two variables of type {\tt TVector3}.
+		/**	Assign to two variables of type <TT>  TVector3 </TT>.
 				@param lower the lower corner of the box
 				@param upper the upper corner of the box
 		*/
 		void get(TVector3<T>& lower, TVector3<T>& upper) const
 			throw();
 
-		/**	Assign to six variables of type {\tt T}.
-				@param	ax is assigned {\tt a.x}
-				@param	ay is assigned {\tt a.y}
-				@param	az is assigned {\tt a.z}
-				@param	bx is assigned {\tt b.x}
-				@param	by is assigned {\tt b.y}
-				@param	bz is assigned {\tt b.z}
+		/**	Assign to six variables of type <TT>  T </TT>.
+				@param	ax is assigned <TT>  a.x </TT>
+				@param	ay is assigned <TT>  a.y </TT>
+				@param	az is assigned <TT>  a.z </TT>
+				@param	bx is assigned <TT>  b.x </TT>
+				@param	by is assigned <TT>  b.y </TT>
+				@param	bz is assigned <TT>  b.z </TT>
 		*/
 		void get(T& ax, T& ay, T& az, T& bx, T& by, T& bz) const
 			throw();
@@ -207,13 +206,13 @@ namespace BALL
 		//@{
 
 		/**	Equality operator.
-				@return bool, {\bf true} if all box components are equal, {\bf false} otherwise
+				@return bool, <b>  true </b> if all box components are equal, <b>  false </b> otherwise
 		*/
 		bool operator == (const TSimpleBox3& box) const
 			throw();
 
 		/**	Inequality operator.
-				@return bool, {\bf true} if the two boxes differ in at least one component, {\bf false} otherwise
+				@return bool, <b>  true </b> if the two boxes differ in at least one component, <b>  false </b> otherwise
 		*/
 		bool operator != (const TSimpleBox3& box) const
 			throw();
@@ -222,14 +221,14 @@ namespace BALL
 				Optional it can be testet, if the point lies on the surface.
 				@param point the point to be tested
 				@param on_surface true to test the surface (default = false)
-				@return bool, {\bf true} or {\bf false}
+				@return bool, <b>  true </b> or <b>  false </b>
 		*/
 		bool has(const TVector3<T>& point, bool on_surface = false) const
 			throw();
 
 		/**	Test if two boxes intersect.
 				@param box the box to be tested
-				@return bool, {\bf true} if the two boxes are intersecting, {\bf false} otherwise
+				@return bool, <b>  true </b> if the two boxes are intersecting, <b>  false </b> otherwise
 		*/
 		bool isIntersecting(const TSimpleBox3& box) const
 			throw();
@@ -241,14 +240,14 @@ namespace BALL
 
 		/**	Test whether instance is valid.
 				Always returns true.
-				@return bool {\bf true}
+				@return bool <b>  true </b>
 		*/
 		bool isValid() const
 			throw();
 
 		/** Internal state dump.
 				Dump the current internal state of {\em *this} to 
-				the output ostream {\em s} with dumping depth {\em depth}.
+				the output ostream <b>  s </b> with dumping depth <b>  depth </b>.
 				@param   s - output stream where to output the internal state of {\em *this}
 				@param   depth - the dumping depth
 		*/

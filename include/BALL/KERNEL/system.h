@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: system.h,v 1.34 2003/08/26 08:04:20 oliver Exp $
+// $Id: system.h,v 1.34.2.1 2004/05/18 11:45:24 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_SYSTEM_H
@@ -130,7 +130,7 @@ namespace BALL
 		/** Get a pointer to a child Molecule at a given position.
 				The pointer is 0 if this instance does not have a Molecule at this position.
 				@param   position the position of the child molecule
-				@return  Molecule* - mutable pointer to the child molecule at {\em position}
+				@return  Molecule* - mutable pointer to the child molecule at <b>  position </b>
 		*/
 		Molecule* getMolecule(Position position)
 			throw();
@@ -138,7 +138,7 @@ namespace BALL
 		/** Get a pointer to a child Molecule at a given position.
 				The pointer is 0 if this instance does not have a Molecule at this position.
 				@param   position the position of the child molecule
-				@return  Molecule* - constant pointer to the child molecule at {\em position}
+				@return  Molecule* - constant pointer to the child molecule at <b>  position </b>
 		*/
 		const Molecule* getMolecule(Position position) const
 			throw();

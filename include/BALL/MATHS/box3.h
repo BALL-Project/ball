@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: box3.h,v 1.42 2004/02/25 18:46:45 anhi Exp $
+// $Id: box3.h,v 1.42.2.1 2004/05/18 11:45:25 amoll Exp $
 //
 
 #ifndef BALL_MATHS_BOX3_H
@@ -27,7 +27,6 @@ namespace BALL
 			This class describes a three-dimensional box.
 			A box is given by the coordinates of the lower left front corner,
 			width, height, depth and the right vector.\\
-			{\bf Definition:} \URL{BALL/MATHS/box3.h}\\
 	*/
 	template <typename T>
 	class TBox3
@@ -222,7 +221,7 @@ namespace BALL
 
 		/** Internal state dump.
 				Dump the current internal state of {\em *this} to 
-				the output ostream {\em s} with dumping depth {\em depth}.
+				the output ostream <b>  s </b> with dumping depth <b>  depth </b>.
 				@param   s - output stream where to output the internal state of {\em *this}
 				@param   depth - the dumping depth
 		*/

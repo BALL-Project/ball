@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: plane3.h,v 1.36 2004/02/23 15:20:00 anhi Exp $
+// $Id: plane3.h,v 1.36.2.1 2004/05/18 11:45:26 amoll Exp $
 //
 
 #ifndef BALL_MATHS_PLANE3_H
@@ -342,7 +342,7 @@ namespace BALL
 
 		/** Internal state dump.
 				Dump the current internal state of {\em *this} to 
-				the output ostream {\em s} with dumping depth {\em depth}.
+				the output ostream <b>  s </b> with dumping depth <b>  depth </b>.
 				@param   s - output stream where to output the internal state of {\em *this}
 				@param   depth - the dumping depth
 		*/

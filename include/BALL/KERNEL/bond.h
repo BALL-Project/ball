@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bond.h,v 1.42 2004/02/25 10:47:08 oliver Exp $
+// $Id: bond.h,v 1.42.2.1 2004/05/18 11:45:22 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_BOND_H
@@ -411,7 +411,7 @@ namespace BALL
 		/** Determine whether the bond belongs to an atom.
 				Calls  \link Atom::hasBond Atom::hasBond \endlink .
 				@param atom the atom that is queried to connect this bond to another atom
-				@return  bool - <tt>true</tt> if bond connects the atom {\em atom} with another atom, 
+				@return  bool - <tt>true</tt> if bond connects the atom <b>  atom </b> with another atom, 
 												<tt>false</tt> otherwise
 				@see     Atom::hasBond
 		*/
@@ -419,7 +419,7 @@ namespace BALL
 			throw();
 
 		/** Determine whether this bond contains any atom.
-				@return   bool - <tt>true</tt> if bond connects the atom {\em atom} with another atom, 
+				@return   bool - <tt>true</tt> if bond connects the atom <b>  atom </b> with another atom, 
 												 <tt>false</tt> otherwise
 				@see      Atom::hasBond
 		*/
@@ -483,8 +483,8 @@ namespace BALL
 			throw();
 
 		/** Internal state dump.
-				Dump the current internal state of this bond to the output ostream {\em s}
-				with dumping depth {\em depth}.
+				Dump the current internal state of this bond to the output ostream <b>  s </b>
+				with dumping depth <b>  depth </b>.
 				@param	s output stream where to output the internal state of this bond
 				@param  depth the dumping depth
 		*/

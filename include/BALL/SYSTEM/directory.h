@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: directory.h,v 1.24 2004/02/23 17:26:08 anhi Exp $
+// $Id: directory.h,v 1.24.2.1 2004/05/18 11:45:30 amoll Exp $
 //
 
 #ifndef BALL_SYSTEM_DIRECTORY_H
@@ -83,9 +83,9 @@ namespace BALL
 		Directory(const String& directory_path, bool set_current = false);
 
 		/** Copy constructor.
-				Construct new Directory object by copying {\em directory}.
+				Construct new Directory object by copying <b>  directory </b>.
 				@param  directory the Directory object to be copied (cloned)
-				@return Directory - new constructed Directory cloned from {\em directory}
+				@return Directory - new constructed Directory cloned from <b>  directory </b>
 		*/
 		Directory(const Directory& directory);
 
@@ -124,12 +124,12 @@ namespace BALL
 		void set(const Directory& directory);
 
 		/** Assignment operator.
-				Assign {\em directory} to this instance.
+				Assign <b>  directory </b> to this instance.
 		*/
 		Directory& operator = (const Directory& directory);
 
 		/** Copying with cloning facility.
-				Copy this instance to {\em directory}.
+				Copy this instance to <b>  directory </b>.
 				@param directory the directory to be assigned to
 		*/
 		void get(Directory& directory) const;
