@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularProperties.C,v 1.9 2003/10/15 13:31:56 amoll Exp $
+// $Id: molecularProperties.C,v 1.10 2003/11/03 17:55:42 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularProperties.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -9,6 +9,7 @@
 #include <BALL/STRUCTURE/residueChecker.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/STRUCTURE/fragmentDB.h>
+#include <BALL/STRUCTURE/secondaryStructureProcessor.h>
 #include <BALL/KERNEL/system.h>
 
 #include <qmenubar.h>
@@ -36,21 +37,31 @@ MolecularProperties::MolecularProperties(QWidget* parent, const char* name)
 	hint = "focus the camera on one or multiple objects";
 	center_camera_id_ = main_control.insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "&Focus Camera", this, 
 																										SLOT(centerCamera()), CTRL+Key_F, -1, hint);
+	
 	hint = "add missing missing bonds to a selected structure";
 	build_bonds_id_ = main_control.insertMenuEntry(MainControl::BUILD, "&Build Bonds", this, 
 																										SLOT(buildBonds()), CTRL+Key_B, -1, hint);
+	
 	hint = "add missing missing H-atoms to a selected structure";
 	add_hydrogens_id_ = main_control.insertMenuEntry(MainControl::BUILD, "Add &Hydrogens", this, 
 																										SLOT(addHydrogens()), CTRL+Key_H);
+	
 	hint = "check a structure against the fragment database";
 	check_structure_id_ = main_control.insertMenuEntry(MainControl::BUILD, "Chec&k Structure", this, 
 																										SLOT(checkResidue()), CTRL+Key_K, -1, hint);
+	
+	hint = "recalulate the secondary structure";
+	calculate_ss_ = main_control.insertMenuEntry(MainControl::BUILD, "Calculate Secondary Structure", this,
+																							 SLOT(calculateSecondaryStructure()), ALT+Key_2, -1, hint);
+	
 	hint = "select a molecular object to see its position in the scene or to mark it for a simulation";
 	select_id_ = main_control.insertMenuEntry(MainControl::EDIT, "&Select", this, 
 																										SLOT(select()), ALT+Key_S, -1, hint);   
+	
 	hint = "deselect a molecular object";
 	deselect_id_ = main_control.insertMenuEntry(MainControl::EDIT, "&Deselect", this, 
 																										SLOT(deselect()), ALT+Key_D, -1, hint);
+	
 	hint = "create a grid with the distance to the gemetric conter of a structure";
 	create_distance_grid_id_ = main_control.insertMenuEntry(MainControl::TOOLS_CREATE_GRID, 
 																			"&Distance Grid", this, SLOT(createGridFromDistance()));   
@@ -71,7 +82,9 @@ MolecularProperties::~MolecularProperties()
 	main_control.removeMenuEntry(MainControl::EDIT, "&Select", this, SLOT(select()), ALT+Key_S);   
 	main_control.removeMenuEntry(MainControl::EDIT, "&Deselect", this, SLOT(deselect()), ALT+Key_D);   
 	main_control.removeMenuEntry(MainControl::TOOLS_CREATE_GRID, "&Distance Grid", this, 
-																													SLOT(createGridFromDistance()));   
+																									SLOT(createGridFromDistance()));   
+	main_control.removeMenuEntry(MainControl::BUILD, "Calculate Secondary Structure", this,
+																									SLOT(calculateSecondaryStructure()));
 }
 
 void MolecularProperties::onNotify(Message *message)
@@ -301,6 +314,9 @@ void MolecularProperties::checkMenu(MainControl& main_control)
 	(main_control.menuBar())->setItemEnabled(build_bonds_id_, selected);
 	(main_control.menuBar())->setItemEnabled(check_structure_id_, selected);
 
+	(main_control.menuBar())->setItemEnabled(calculate_ss_, getMainControl()->getSelectedSystem() && 
+																					 								getMainControl()->compositesAreMuteable());
+
 	// these menu points for single items only
 	(main_control.menuBar()) ->setItemEnabled(center_camera_id_, number_of_selected_objects == 1);
 
@@ -483,5 +499,19 @@ void MolecularProperties::createGridFromDistance()
 	message->setRegularData3D(regdat);
 	notify_(message);
 }
+
+void MolecularProperties::calculateSecondaryStructure()
+{
+	if (!getMainControl()->getSelectedSystem()) return;
+	System& s = *(System*) getMainControl()->getSelectedSystem();
+	SecondaryStructureProcessor ssp;
+	s.apply(ssp);
+
+	CompositeMessage *change_message = 
+		new CompositeMessage(s, CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL);
+	notify_(change_message);
+	setStatusbarText("Calculated Secondary Structure");
+}
+
 	
 } } // namespaces
