@@ -1,4 +1,4 @@
-// $Id: INIFile.h,v 1.14 2001/04/08 23:29:35 amoll Exp $
+// $Id: INIFile.h,v 1.15 2001/04/09 11:26:41 amoll Exp $
 
 #ifndef BALL_FORMAT_INIFILE_H
 #define BALL_FORMAT_INIFILE_H
@@ -74,11 +74,9 @@ namespace BALL
 		};
 
 		typedef List<Section>::Iterator Section_iterator;
-		typedef List<Section>::ConstIterator ConstSection_iterator;
 	
 		class IteratorTraits_
 		{
-
 			friend class INIFile;
 
 			public:
@@ -136,11 +134,11 @@ namespace BALL
 			{
 				return *position_;
 			}
-
+/*
 			const String& getLine() const
 			{
 				return *position_;
-			}
+			}*/
 
 			IteratorTraits_& operator ++ ()
 			{
@@ -149,7 +147,7 @@ namespace BALL
 					return *this;
 				}
 
-				if (!isSectionEnd())
+				if (!isSectionLastLine())
 				{
 					position_++;
 
@@ -164,6 +162,18 @@ namespace BALL
 				}
 
 				position_ = section_->lines_.begin();
+
+				return *this;
+			}
+
+			IteratorTraits_& getSectionNextLine()
+			{
+				if (bound_ == 0)
+				{
+					return *this;
+				}
+
+				position_++;
 
 				return *this;
 			}
@@ -205,22 +215,32 @@ namespace BALL
 			void toSectionEnd()
 			{
 				position_ = section_->lines_.end();
-				position_--;
 			}
 			
 			bool isSectionEnd() const
 			{
-				List<String>::Iterator last(section_->lines_.end());
-				last--;
-				return (position_ == last);
+				return (position_ == section_->lines_.end());
 			}
 			
-			//protected:
+			bool isSectionLastLine() const
+			{
+				List<String>::Iterator it = section_->lines_.end();
+				it--;
+				return (position_ == it);
+			}
 
+			protected:
+/*
 			String& operator *()
 			{
 				return *position_;
+			}*/
+
+			void setLine_(const String& line)
+			{
+				(*position_) = line;
 			}
+
 
 			private:
 
@@ -441,15 +461,20 @@ namespace BALL
 		*/	
 		bool hasSection(const String& section_name) const;
 
-
-		/** Return the name of a section at a given position.
+		/** Return an iterator to a section with a given name.
 				@return String* \begin{itemize}
-											   \item the pointer to the section-name, or 
-											   \item 0, if pos is too high
+											   \item iterator to the section
+											   \item 0, if no section with this name exists
 										    \end{itemize}
 		*/
 	  Section_iterator getSection(const String& section_name);
 
+		/** Return an iterator to a section at a given position.
+				@return String* \begin{itemize}
+											   \item iterator to the section
+											   \item 0, if pos is too high
+										    \end{itemize}
+		*/
 	  Section_iterator getSection(Position pos);
 
 		/**	Count all sections.
@@ -457,27 +482,20 @@ namespace BALL
 		*/	
 		Size getNumberOfSections() const;
 
-		/**	Returns the index of the first line of a section.
-				The first line of a section is the line immediately following the 
-				section name (in square brackets).
- 				Remember: Lines that are inserted after a INIFile was read are not counted here.
+		/**	Returns an iterator to the first line of a section.
+				The first line of a section is the line with the section name (in square brackets).
 				@return	Size \begin{itemize}
-											\item the index of the first line, or 
-											\item INVALID_SIZE if the section could not be found or has no lines
+											\item iterator to the first line of the section
+											\item unvalid iterator, if section does not exist
 										 \end{itemize}
 				@param	section_name	the name of the section to be found
 		*/	
 		LineIterator getSectionFirstLine(const String& section_name);
 
-		/**	Returns the index of the last line of a section.
-				The last line of a section is either the last line 
-				before a new section definition (starting with square brackets) 
-				or the last line of a file.
-				Remember: Lines that are inserted after a INIFile was read are not counted here.
-				If the section does not have read lines, INVALID_SIZE is returned.
+		/**	Returns an iterator to the last line of a section.
 				@return	Size \begin{itemize}
-											\item the index of the last line, or 
-											\item INVALID_SIZE if the section could not be found or has no lines
+											\item iterator to the last line of the section
+											\item unvalid iterator, if section does not exist
 											\end{itemize}
 				@param	section_name	the name of the section to be found
 		*/	
@@ -532,7 +550,7 @@ namespace BALL
 		*/	
 		bool setValue(const String& section, const String& key, const String& value);
 
-		/**	
+		/**	Apply a processor to all lines of the file.
 		*/
 		bool apply(UnaryProcessor<LineIterator>& processor);
 
@@ -547,7 +565,7 @@ namespace BALL
 
 		//@}
 
-		//protected:	
+		protected:
 
 		bool									valid_;
 

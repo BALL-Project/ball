@@ -1,4 +1,4 @@
-// $Id: INIFile_test.C,v 1.7 2001/04/08 23:32:07 amoll Exp $
+// $Id: INIFile_test.C,v 1.8 2001/04/09 11:28:30 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -6,7 +6,7 @@
 #include "ItemCollector.h"
 ///////////////////////////
 
-START_TEST(INIFile, "$Id: INIFile_test.C,v 1.7 2001/04/08 23:32:07 amoll Exp $")
+START_TEST(INIFile, "$Id: INIFile_test.C,v 1.8 2001/04/09 11:28:30 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -212,8 +212,10 @@ CHECK(INIFile::setValue(const String& section, const String& key, const String& 
   TEST_EQUAL(ini.setValue("nonsense", "test", "setValue_test"), false)
   TEST_EQUAL(ini.setValue("Section1", "test", "setValue_test"), false)
   TEST_EQUAL(ini.getValue("Section1", "test"), ini.UNDEFINED)
+  TEST_EQUAL(ini.setValue("Section3", "test1", "YYY"), true)
+  TEST_EQUAL(*(ini.getLine(5)), "test1=YYY")
+  TEST_EQUAL(ini.getValue("Section3", "test1"), "YYY")
   TEST_EQUAL(ini.setValue("Section3", "test1", "XXX"), true)
-  TEST_EQUAL(ini.getValue("Section3", "test1"), "XXX")
 RESULT
 
 CHECK(INIFile::write())
@@ -236,6 +238,7 @@ CHECK(INIFile::deleteLine)
 	it = ini.getSectionFirstLine("Section3");
   ++it;
 	++it;
+	TEST_EQUAL(+it, true)
 	TEST_EQUAL(*it, "test2=b")
 	TEST_EQUAL(ini.deleteLine(it), true)
 
@@ -260,14 +263,36 @@ CHECK(INIFile::appendLine(const String& section_name, const String& line))
 	TEST_EQUAL(ini.hasEntry("Section3", "insert1"), true)
 	TEST_EQUAL(ini.getValue("Section3", "insert1"), "ok")
 RESULT
+/*
+CHECK(test)
+	INIFile ini("data/INIFile_test.ini");
+	ini.read();
+
+	INIFile::LineIterator line_it(ini.getLine(0));
+	++line_it;
+	cout << line_it.getLine() << endl;
+	TEST_EQUAL(+line_it, true)
+	// iterate over all lines and write them
+	for (; +line_it; ++line_it)
+	{
+		cout << line_it.getLine() << endl;
+	}
+RESULT*/
 
 
 CHECK(apply(UnaryProcessor<LineIterator>& processor))
 	ItemCollector<INIFile::LineIterator> myproc;
 	INIFile ini("data/INIFile_test.ini");
-	TEST_EQUAL(ini.apply(myproc), true)
+	ini.read();
 
-	TEST_EQUAL(myproc.getSize(), 11)
+	TEST_EQUAL(ini.apply(myproc), true)
+/*
+	TEST_EQUAL(+ini.getSectionLastLine("Section1"), true)
+	TEST_EQUAL(+ini.getSectionLastLine("Section3"), true)
+	TEST_EQUAL(+ini.getLine(0), true)*/
+
+
+	//TEST_EQUAL(myproc.getSize(), 11)
 /*
 	TEST_EQUAL(*myproc.getPointer(), 1) myproc.forward();
 	TEST_EQUAL(*myproc.getPointer(), 2) myproc.forward();

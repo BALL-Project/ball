@@ -1,4 +1,4 @@
-// $Id: INIFile.C,v 1.15 2001/04/08 23:30:03 amoll Exp $
+// $Id: INIFile.C,v 1.16 2001/04/09 11:26:55 amoll Exp $
 
 #include <BALL/FORMAT/INIFile.h>
 #include <fstream>
@@ -169,7 +169,7 @@ namespace BALL
 			return false;
 		}
 
-		LineIterator	line_it(getLine(0));
+		LineIterator line_it(getLine(0));
 		// iterate over all lines and write them
 		for (; +line_it; ++line_it)
 		{
@@ -215,9 +215,7 @@ namespace BALL
 	bool INIFile::setLine(LineIterator line_it, const String& line)
 	{
 		// section lines cannot be changed with this method
-		if ( line_it.getSection() == sections_.end() ||
-				 ! +line_it ||
-				 (*line_it)[0] == '[')
+		if (!+line_it || (*line_it)[0] == '[')
 		{
 			return false;
 		}
@@ -238,7 +236,7 @@ namespace BALL
 			}
 		}
 
-		*line_it = line;
+		line_it.setLine_(line);
 
 		if (line.find_first_of("=") > 0)
 		{
@@ -256,16 +254,13 @@ namespace BALL
 		{
 			return false;
 		}
-
 		// falls key, entfernen		
 		if ((*line_it).find_first_of("=") > 0)
 		{
 			String key((*line_it).before("="));
 			key.trim();
-
 			line_it.getSection()->key_map_.remove(key);
 		}
-
 		line_it.getSection()->lines_.erase(line_it.position_);
 
 		return true;
@@ -441,7 +436,6 @@ namespace BALL
 		LineIterator line_it(getLine(0));
 		for (; +line_it; ++line_it)
 		{
-			cout << endl << *line_it;
 			Processor::Result result = processor(line_it);
 		
 			if (result <= Processor::BREAK)
