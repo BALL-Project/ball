@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PiecewiseFunction_test.C,v 1.9 2003/06/12 14:50:13 anker Exp $
+// $Id: PiecewiseFunction_test.C,v 1.10 2003/06/12 15:15:11 anker Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(PiecewiseFunction, "$Id: PiecewiseFunction_test.C,v 1.9 2003/06/12 14:50:13 anker Exp $")
+START_TEST(PiecewiseFunction, "$Id: PiecewiseFunction_test.C,v 1.10 2003/06/12 15:15:11 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -54,7 +54,6 @@ CHECK(~PiecewiseFunction() throw())
 RESULT
 
 CHECK(PiecewiseFunction(const PiecewiseFunction& function) throw())
-	// ?????
 	PiecewiseFunction PWF;
 	PWF.setIntervals(intervals);
 	PiecewiseFunction PWF2(PWF);
@@ -153,7 +152,6 @@ CHECK(void setCoefficients(const vector<Coefficients>& coefficients) throw())
 	PWF2.setCoefficients(coefs);
 	bool test = (PWF2.getCoefficients() == coefs);
 	TEST_EQUAL(test, true)
-	// ?????: false
 RESULT
 
 
@@ -202,19 +200,46 @@ CHECK(BALL_CREATE(PiecewiseFunction))
 RESULT
 
 CHECK(bool operator == (const PiecewiseFunction& function) const throw())
-  // ???
+	PiecewiseFunction PWF2;
+	PiecewiseFunction PWF3;
+	bool test = (PWF2 == PWF3);
+	TEST_EQUAL(test, true)
+	PWF2.setCoefficients(coefs);
+	test = (PWF2 == PWF3);
+	TEST_NOT_EQUAL(test, true)
+	PWF3.setCoefficients(coefs);
+	test = (PWF2 == PWF3);
+	TEST_EQUAL(test, true)
+	PWF2.setIntervals(intervals);
+	test = (PWF2 == PWF3);
+	TEST_NOT_EQUAL(test, true)
+	PWF3.setIntervals(intervals);
+	test = (PWF2 == PWF3);
+	TEST_EQUAL(test, true)
 RESULT
 
 CHECK(const std::vector<Coefficients>& getCoefficients() const throw())
-  // ???
+	PiecewiseFunction PWF2;
+	TEST_EQUAL(PWF2.getCoefficients().size(), 0)
+	PWF2.setCoefficients(coefs);
+	TEST_EQUAL(PWF2.getCoefficients().size(), 3)
 RESULT
 
 CHECK(const std::vector<Interval>& getIntervals() const throw())
-  // ???
+	PiecewiseFunction PWF2;
+	TEST_EQUAL(PWF2.getIntervals().size(), 0)
+	PWF2.setIntervals(intervals);
+	TEST_EQUAL(PWF2.getIntervals().size(), 3)
 RESULT
 
 CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw())
-  // ???
+	PiecewiseFunction PWF2(intervals, coefs);
+	String filename;
+	NEW_TMP_FILE(filename)
+	std::ofstream outfile(filename.c_str(), std::ios::out);
+	PWF2.dump(outfile);
+	outfile.close();
+	TEST_FILE(filename.c_str(), "data/PiecewiseFunction_test.txt")
 RESULT
 
 /////////////////////////////////////////////////////////////
