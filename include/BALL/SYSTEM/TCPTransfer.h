@@ -1,4 +1,4 @@
-// $Id: TCPTransfer.h,v 1.4 2001/09/11 21:52:14 amoll Exp $
+// $Id: TCPTransfer.h,v 1.5 2001/10/16 23:37:00 amoll Exp $
 
 #ifndef BALL_SYSTEM_TCPTRANSFER
 #define BALL_SYSTEM_TCPTRANSFER
@@ -238,28 +238,44 @@ namespace BALL
 				bool				debug_;
 				::std::ofstream*  fstream_;
 				
+				/*_ Send data through the socket.
+				 */
+				Status sendData_(const String& query, Socket socket)
+					throw();
+				
 				/*_ Logon to a server.
 				 *  @param query string to send to the server as first contact
 				 */
-				Status	logon_(const String& query);
+				Status	logon_(const String& query)
+					throw();
 				
 				//_ Specified method for transfering per FTP-protocol
-				Status	getFTP_();
+				Status	getFTP_()
+					throw();
 				
 				//_ Specified method for transfering per HTTP-protocol
-				Status	getHTTP_();
+				Status	getHTTP_()
+					throw();
 
 				//_ Compute the status of a ftp server from its response
-				Status	getFTPStatus_();
+				Status	getFTPStatus_()
+					throw();
+
+				//_ Compute the status of a http server from its response
+				Status	getHTTPStatus_()
+					throw();
 
 				//_ Set a socket to blocking or nonblocking mode.
-				Status	setBlock_(Socket socket, bool block = true);
+				Status	setBlock_(Socket socket, bool block = true)
+					throw();
 
 				//_ Wait a given time for output from the Socket.
-				bool 		waitForOutput_(const String& key, Size seconds);
+				bool 		waitForOutput_(const String& key, Size seconds)
+					throw();
 				
 				//_ Debug method
-				void 		output_();
+				void 		output_()
+					throw();
 	};
 
 }
