@@ -1,4 +1,4 @@
-// $Id: Bond_test.C,v 1.18 2000/08/30 19:59:15 oliver Exp $
+// $Id: Bond_test.C,v 1.19 2000/12/19 23:59:01 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +11,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(Bond, "$Id: Bond_test.C,v 1.18 2000/08/30 19:59:15 oliver Exp $")
+START_TEST(Bond, "$Id: Bond_test.C,v 1.19 2000/12/19 23:59:01 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -293,9 +293,9 @@ CHECK(getLength())
 	Bond b1("bond", a1, a2);
 	TEST_REAL_EQUAL(b1.getLength(), ::sqrt(3.0))
 	Bond b2;
-	TEST_EXCEPTION(Exception::NullPointer, b2.getLength())
+	TEST_EXCEPTION(Bond::NotBounded, b2.getLength())
 	b2.setFirstAtom(&a1);
-	TEST_EXCEPTION(Exception::NullPointer, b2.getLength())
+	TEST_EXCEPTION(Bond::NotBounded, b2.getLength())
 	b2.setSecondAtom(&a2);
 	TEST_REAL_EQUAL(b2.getLength(), ::sqrt(3.0))
 RESULT
@@ -527,6 +527,15 @@ CHECK(persistentRead(PersistenceManager&))
 		throw Exception::NullPointer(__FILE__, __LINE__);
 	}
 RESULT
+
+CHECK(operator ==)
+	Bond b1;
+	Bond b2;
+	TEST_EQUAL(b1 == b2, false)
+	b1 = b2;
+	TEST_EQUAL(b1 == b1, true)
+RESULT
+
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
