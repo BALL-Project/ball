@@ -1,4 +1,4 @@
-// $Id: AnalyticalGeometry_test.C,v 1.20 2000/09/05 09:56:17 oliver Exp $
+// $Id: AnalyticalGeometry_test.C,v 1.21 2000/09/05 19:09:27 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 #include <BALL/MATHS/analyticalGeometry.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: AnalyticalGeometry_test.C,v 1.20 2000/09/05 09:56:17 oliver Exp $")
+START_TEST(class_name, "$Id: AnalyticalGeometry_test.C,v 1.21 2000/09/05 19:09:27 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -873,12 +873,53 @@ CHECK(TAngle<T> getTorsionAngle
 										(float)0, (float)0, (float)0, (float)0, (float)0, (float)0))
 RESULT
 
+PRECISION(1E-5)
 CHECK(TAngle<T> getOrientedAngle<T>(T ax, T ay, T az, T bx, T by, T bz, T nx, T ny, T nz))
-	// BAUSTELLE
+	a1 = getOrientedAngle((float)0.0,  (float)0.0,  (float)10.0,
+											  (float)0.0,  (float)10.0, (float)0.0,
+											  (float)10.0, (float)0.0,	(float)0.0);
+	Angle res(90, false);
+	TEST_EQUAL(a1, res)
+
+	a1 = getOrientedAngle((float)0.0,  (float)10.0, (float)0.0,
+											  (float)0.0,  (float)0.0,	(float)10.0,
+											  (float)-10.0, (float)0.0,	(float)0.0);
+	res.set(90, false);
+	TEST_EQUAL(a1, res)
+
+	a1 = getOrientedAngle((float)0.0, (float)0.0, (float)10.0,
+											  (float)0.0, (float)0.0, (float)-10.0,
+											  (float)0.0, (float)0.0, (float)0.0);
+	res.set(0, false);
+	TEST_EQUAL(a1, res)
+	a1 = getOrientedAngle((float)0.0,  (float)0.0,   (float)10.0,
+											  (float)0.0,  (float)0.0,   (float)-10.0,
+											  (float)10.0, (float)-10.0, (float)0.0);
+	TEST_EXCEPTION(Exception::DivisionByZero, 
+		getOrientedAngle((float)0, (float)0, (float)0,
+										 (float)0, (float)0, (float)0, 
+										 (float)0, (float)0, (float)0))
 RESULT
 
 CHECK(TAngle<T> getOrientedAngle<T>(const TVector<T>& a, const TVector3<T>& b, const TVector3<T>& normal))
-	// BAUSTELLE
+	Vector3 v1, v2, v3;
+
+	v1.set(0.0, 0.0, 10.0);
+	v2.set(0.0, 10.0, 0.0);
+	v3.set(10.0, 0.0, 0.0);
+	a1 = getOrientedAngle(v1, v2, v3);
+	Angle res(90, false);
+	TEST_EQUAL(a1, res)
+
+	v1.set(0.0, 10.0, 0.0);
+	v2.set(0.0, 0.0, 10.0);
+	v3.set(-10.0, 0.0, 0.0);
+	a1 = getOrientedAngle(v1, v2, v3);
+	res.set(90, false);
+	TEST_EQUAL(a1, res)
+
+	v1.set(0.0, 0.0, 0.0);
+	TEST_EXCEPTION(Exception::DivisionByZero, getOrientedAngle(v1, v1, v1))
 RESULT
 
 END_TEST
