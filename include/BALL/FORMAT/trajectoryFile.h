@@ -1,4 +1,4 @@
-// $Id: trajectoryFile.h,v 1.9 2001/09/11 12:29:13 anker Exp $
+// $Id: trajectoryFile.h,v 1.10 2002/01/15 02:00:08 oliver Exp $
 
 #ifndef BALL_FORMAT_TRAJECTORYFILE_H
 #define BALL_FORMAT_TRAJECTORYFILE_H
@@ -129,7 +129,7 @@ namespace BALL
 				@param buffer a vector of snapshots
 				@return true, if flushing was successful, false ow.
 		*/
-		virtual bool flushToDisk(const ::std::vector<SnapShot> buffer)
+		virtual bool flushToDisk(const std::vector<SnapShot>& buffer)
 			throw();
 		//@}
 

@@ -1,4 +1,4 @@
-// $Id: TRRFile.h,v 1.1 2001/09/13 11:45:15 anhi Exp $
+// $Id: TRRFile.h,v 1.2 2002/01/15 02:00:08 oliver Exp $
 
 #ifndef BALL_FORMAT_TRRFILE_H
 #define BALL_FORMAT_TRRFILE_H
@@ -246,7 +246,7 @@ namespace BALL
 		
 		/**
 		*/
-		virtual bool flushToDisk(const ::std::vector<SnapShot> buffer)
+		virtual bool flushToDisk(const std::vector<SnapShot>& buffer)
 			throw();
 		//@}
 		/// @name Accessors 

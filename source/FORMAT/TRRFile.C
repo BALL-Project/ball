@@ -1,4 +1,4 @@
-// $Id: TRRFile.C,v 1.1 2001/09/13 11:45:10 anhi Exp $
+// $Id: TRRFile.C,v 1.2 2002/01/15 02:00:12 oliver Exp $
 
 #include <BALL/FORMAT/TRRFile.h>
 #include <BALL/MOLMEC/COMMON/snapShot.h>
@@ -690,10 +690,10 @@ namespace BALL
 	}
 	
 
-	bool TRRFile::flushToDisk(const ::std::vector<SnapShot> buffer)
+	bool TRRFile::flushToDisk(const std::vector<SnapShot>& buffer)
 		throw()
 	{
-		::std::vector<SnapShot>::const_iterator it = buffer.begin();
+		std::vector<SnapShot>::const_iterator it = buffer.begin();
 
 		reopen(File::APP | File::BINARY);
 		for(; it != buffer.end(); ++it)
