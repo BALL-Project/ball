@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile_test.C,v 1.22 2004/03/17 13:37:35 amoll Exp $
+// $Id: DCDFile_test.C,v 1.23 2004/03/17 22:18:00 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -14,7 +14,7 @@
 #include <BALL/MOLMEC/AMBER/amber.h>
 ///////////////////////////
 
-START_TEST(DCDFile, "$Id: DCDFile_test.C,v 1.22 2004/03/17 13:37:35 amoll Exp $")
+START_TEST(DCDFile, "$Id: DCDFile_test.C,v 1.23 2004/03/17 22:18:00 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -92,9 +92,12 @@ RESULT
 
 String filename;
 System system;
+Size nr_of_atoms;
 CHECK([EXTRA] full test writing)
 	PDBFile pfile("data/DCDFile_test.pdb");
 	pfile.read(system);
+	nr_of_atoms = system.countAtoms();
+	TEST_EQUAL(system.getAtom(0)->getPosition(), Vector3(11.936, 104.294, 10.149))
 	AmberFF amberFF;
 	NEW_TMP_FILE(filename);
 	DCDFile dcd(filename, std::ios::out);
@@ -119,6 +122,8 @@ CHECK(bool read(SnapShot& snapshot) throw())
 	bool result = dcd.read(ss);
 	TEST_EQUAL(result, true)
 	ss.applySnapShot(system);
+	TEST_EQUAL(ss.getNumberOfAtoms(), nr_of_atoms)
+	TEST_EQUAL(ss.getAtomPositions()[0], Vector3(11.936, 104.294, 10.149))
 	TEST_EQUAL(system.getAtom(0)->getPosition(), Vector3(11.936, 104.294, 10.149))
 	TEST_EQUAL(system.getAtom(0)->getVelocity(), Vector3(0,0,0))
 	result = dcd.read(ss);
