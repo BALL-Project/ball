@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vanDerWaalsModel.C,v 1.5 2003/11/13 21:49:54 amoll Exp $
+// $Id: vanDerWaalsModel.C,v 1.6 2003/12/12 15:11:01 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/vanDerWaalsModel.h>
@@ -39,17 +39,6 @@ namespace BALL
 			#endif 
 		}
 
-		void AddVanDerWaalsModel::clear()
-			throw()
-		{
-			AtomBondModelBaseProcessor::clear();
-		}
-
-		bool AddVanDerWaalsModel::start()
-		{
-			return AtomBondModelBaseProcessor::start();
-		}
-				
 		bool AddVanDerWaalsModel::finish()
 		{
 			return true;

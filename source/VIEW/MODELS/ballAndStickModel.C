@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.C,v 1.6 2003/11/24 23:53:35 amoll Exp $
+// $Id: ballAndStickModel.C,v 1.7 2003/12/12 15:11:48 amoll Exp $
 
 #include <BALL/VIEW/MODELS/ballAndStickModel.h>
 #include <BALL/KERNEL/atom.h>
@@ -114,11 +114,6 @@ void AddBallAndStickModel::setStickRadius(const float radius)
 	stick_radius_ = radius;
 }
 
-bool AddBallAndStickModel::start()
-{
-	return AtomBondModelBaseProcessor::start();
-}
-		
 bool AddBallAndStickModel::finish()
 {
 	buildBondModels_();

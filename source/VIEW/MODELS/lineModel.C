@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineModel.C,v 1.5 2003/10/17 16:17:37 amoll Exp $
+// $Id: lineModel.C,v 1.6 2003/12/12 15:07:37 amoll Exp $
 
 #include <BALL/VIEW/MODELS/lineModel.h>
 #include <BALL/KERNEL/atom.h>
@@ -38,14 +38,6 @@ AddLineModel::~AddLineModel()
 	#endif 
 }
 
-bool AddLineModel::start()
-{
-	// init model connector
-	//getModelConnector()->setProperties(*this);
-
-	return AtomBondModelBaseProcessor::start();
-}
-		
 bool AddLineModel::finish()
 {
 	buildBondModels_();

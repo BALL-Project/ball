@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vanDerWaalsModel.h,v 1.5 2003/11/13 21:49:27 amoll Exp $
+// $Id: vanDerWaalsModel.h,v 1.6 2003/12/12 15:11:17 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_VANDERWAALSMODEL_H
@@ -44,23 +44,11 @@ namespace BALL
 			virtual ~AddVanDerWaalsModel()
 				throw();
 
-			/** Explicit default initialization.
-					Calls AtomBondModelBaseProcessor::clear.
-			*/
-			virtual void clear()
-				throw();
-
 			//@}
 			/**	@name Processor specific methods 
 			*/ 
 			//@{
 
-			/** Start method.
-					Calls AtomBondModelBaseProcessor::start.
-					\return bool true if the start of was successful
-			*/
-			virtual bool start();
-			
 			/** Finish method.
 					This method will be internally called from the processor mechanism if the processor
 					has finished processing the Composite tree.

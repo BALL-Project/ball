@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineModel.h,v 1.4 2003/09/01 10:27:42 amoll Exp $
+// $Id: lineModel.h,v 1.5 2003/12/12 15:07:41 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_LINEMODEL_H
@@ -50,13 +50,6 @@ namespace BALL
 			*/ 
 			//@{
 
-			/** Start method.
-					Initialize the properties of the BaseModelConnector to this AddLineModel.
-					Calls AtomBondModelBaseProcessor::start.
-					\return bool true if the start was successful
-			*/
-			virtual bool start();
-			
 			/** Finish method.
 					This method will be internally called from the processor mechanism if the processor
 					has finished processing the Composite tree.

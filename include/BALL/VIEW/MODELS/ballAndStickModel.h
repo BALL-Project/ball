@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.h,v 1.6 2003/11/24 23:54:38 amoll Exp $
+// $Id: ballAndStickModel.h,v 1.7 2003/12/12 15:12:02 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_BALLANDSTICKMODEL_H
@@ -145,12 +145,6 @@ namespace BALL
 			*/ 
 			//@{
 
-			/** Start method.
-					Calls AtomBondModelBaseProcessor::start.
-					\return bool true if the start was successful, false otherwise
-			*/
-			virtual bool start();
-			
 			/** Finish method.
 					This method will be internally called from the processor mechanism if the processor
 					has finished processing the Composite tree.
