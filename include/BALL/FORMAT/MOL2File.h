@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOL2File.h,v 1.20 2003/03/26 13:56:23 anhi Exp $
+// $Id: MOL2File.h,v 1.21 2003/07/11 15:27:03 amoll Exp $
 
 #ifndef BALL_FORMAT_MOL2FILE_H
 #define BALL_FORMAT_MOL2FILE_H
@@ -69,7 +69,8 @@ namespace BALL
 		
 		/**	Write a system to the MOL2 file
 		*/
-		virtual void write(const System& system);
+		virtual bool write(const System& system)
+			throw(File::CanNotWrite);
 		
 		/**	Read a system from the MOL2 file
 		*/
@@ -83,7 +84,8 @@ namespace BALL
 
 		/**	
 		*/
-		virtual void write(const Molecule& molecule);
+		virtual bool write(const Molecule& molecule)
+			throw(File::CanNotWrite);
 		//@}
 
 		protected:

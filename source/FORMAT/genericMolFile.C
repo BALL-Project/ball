@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericMolFile.C,v 1.7 2003/07/09 12:55:38 amoll Exp $
+// $Id: genericMolFile.C,v 1.8 2003/07/11 15:27:44 amoll Exp $
 
 #include <BALL/FORMAT/genericMolFile.h>
 #include <BALL/KERNEL/system.h>
@@ -65,23 +65,32 @@ namespace BALL
 		return 0;
 	}
 
-	void GenericMolFile::write(const Molecule& /* molecule */)
+	bool GenericMolFile::write(const Molecule& /* molecule */)
+		throw(File::CanNotWrite)
 	{
+		if (!isOpen() || getOpenMode() != File::OUT)
+		{
+			throw (File::CanNotWrite(__FILE__, __LINE__, name_));
+		}
+		return true;
 	}
 
-	void GenericMolFile::write(const System& system)
+	bool GenericMolFile::write(const System& system)
+		throw(File::CanNotWrite)
 	{
-		if (!isOpen())
+		if (!isOpen() || getOpenMode() != File::OUT)
 		{
-			return;
+			throw (File::CanNotWrite(__FILE__, __LINE__, name_));
 		}
 
 		initWrite_();
 		MoleculeConstIterator molecule = system.beginMolecule();
 		for (; +molecule; ++molecule)
 		{
-			write(*molecule);
+			if (!write(*molecule)) return false;
 		}
+		
+		return true;
 	}
 
 	GenericMolFile& GenericMolFile::operator >> (System& system)
@@ -92,6 +101,7 @@ namespace BALL
 	}
  
 	GenericMolFile& GenericMolFile::operator << (const System& system)
+		throw(File::CanNotWrite)
 	{
 		write(system);
 		return *this;
@@ -110,6 +120,7 @@ namespace BALL
 	}
  
 	GenericMolFile& GenericMolFile::operator << (const Molecule& molecule)
+		throw(File::CanNotWrite)
 	{
 		write(molecule);
 		return *this;

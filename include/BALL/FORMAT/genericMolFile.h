@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericMolFile.h,v 1.19 2003/07/09 12:54:47 amoll Exp $
+// $Id: genericMolFile.h,v 1.20 2003/07/11 15:27:03 amoll Exp $
 
 #ifndef BALL_FORMAT_GENERICMOLFILE_H
 #define BALL_FORMAT_GENERICMOLFILE_H
@@ -106,14 +106,16 @@ namespace BALL
 				the system and calls  \link write(const Molecule& molecule) write(const Molecule& molecule) \endlink  
 				for each molecule. 
 		*/
-		virtual void write(const System& system);
+		virtual bool write(const System& system)
+			throw(File::CanNotWrite);
 		
 		/**	Write a molecule.
 				Repeated invocations of this method append
 				molecules to the same file. \par
 				The default implementation does nothing.
 		*/
-		virtual void write(const Molecule& molecule);
+		virtual bool write(const Molecule& molecule)
+			throw(File::CanNotWrite);
 		
 		/**	Read a system.
 				This method will read all molecules contained in the file
@@ -154,7 +156,8 @@ namespace BALL
 		/**	Stream operator for writing a system of molecules.
 				Calls  \link write(const System& system) const write(const System& system) const \endlink .
 		*/
-		virtual GenericMolFile& operator << (const System& system);
+		virtual GenericMolFile& operator << (const System& system)
+			throw(File::CanNotWrite);
 
 		/** Stream operator for reading a molecule.
 				Calls  \link read() read() \endlink 
@@ -165,7 +168,8 @@ namespace BALL
 		/**	Stream operator for writing a system of molecules.
 				Calls  \link write() write() \endlink 
 		*/
-		virtual GenericMolFile& operator << (const Molecule& molecule);
+		virtual GenericMolFile& operator << (const Molecule& molecule)
+			throw(File::CanNotWrite);
 		//@}
 		
 		protected:

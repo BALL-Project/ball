@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XYZFile.C,v 1.4 2002/02/27 12:21:18 sturm Exp $
+// $Id: XYZFile.C,v 1.5 2003/07/11 15:27:44 amoll Exp $
 
 #include <BALL/FORMAT/XYZFile.h>
 #include <BALL/DATATYPE/string.h>
@@ -36,8 +36,14 @@ namespace BALL
 	{
 	}
 	
-	void XYZFile::write(const System& system)
+	bool XYZFile::write(const System& system)
+		throw(File::CanNotWrite)
 	{
+		if (!isOpen() || getOpenMode() != File::OUT)
+		{
+			throw (File::CanNotWrite(__FILE__, __LINE__, name_));
+		}
+
 		// write the first and the second line:
 		//  - the number of atoms
 		//  - a comment line
@@ -54,6 +60,8 @@ namespace BALL
 										 << it->getPosition().y << " "
 									   << it->getPosition().z << endl;
 		}
+
+		return true;
 	}
 
 	void XYZFile::read(System& system)

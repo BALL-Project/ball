@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XYZFile.h,v 1.14 2003/07/03 11:36:39 amoll Exp $
+// $Id: XYZFile.h,v 1.15 2003/07/11 15:27:03 amoll Exp $
 
 #ifndef BALL_FORMAT_XYZFILE_H
 #define BALL_FORMAT_XYZFILE_H
@@ -67,7 +67,8 @@ namespace BALL
 		
 		/**	Write a system to the XYZ file
 		*/
-		virtual void write(const System&	system);
+		virtual bool write(const System&	system)
+			throw(File::CanNotWrite);
 		
 		/**	Read a system from the XYZ file
 		*/

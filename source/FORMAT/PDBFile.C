@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.C,v 1.40 2003/07/03 13:30:36 oliver Exp $
+// $Id: PDBFile.C,v 1.41 2003/07/11 15:27:44 amoll Exp $
 //
 
 #include <BALL/FORMAT/PDBFile.h>
@@ -434,13 +434,19 @@ namespace BALL
 		system.insert(*protein);
 	}
 
-	void PDBFile::write(const System& system)
+	bool PDBFile::write(const System& system)
+		throw(File::CanNotWrite)
 	{
+		if (!isOpen() || getOpenMode() != File::OUT)
+		{
+			throw (File::CanNotWrite(__FILE__, __LINE__, name_));
+		}
+
 		Size number_of_proteins = system.count(RTTI::getDefault<KernelPredicate<Protein> >());
 		if (number_of_proteins > 1)
 		{
 			Log.error() << "PDBFile::write(): cannot write a system with multiple proteins to a PDB file." << endl;
-			return;
+			return true;
 		}
 		
 		if (number_of_proteins == 0)
@@ -449,7 +455,7 @@ namespace BALL
 			{
 				Log.error() << "PDBFile::write(System): "
 					<< "Cannot write empty/multiple molecules to a PDB file." << endl;
-					return;
+					return false;
 			}
 			else
 			{
@@ -475,6 +481,8 @@ namespace BALL
 				Log.error() << "PDBFile::write: cannot find a protein in the current system." << endl;
 			}
 		}
+
+		return true;
 	}
 	
 	void PDBFile::write_(const Composite& composite, bool system)

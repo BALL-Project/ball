@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: trajectoryFile.h,v 1.18 2003/07/03 11:36:40 amoll Exp $
+// $Id: trajectoryFile.h,v 1.19 2003/07/11 15:27:04 amoll Exp $
 
 #ifndef BALL_FORMAT_TRAJECTORYFILE_H
 #define BALL_FORMAT_TRAJECTORYFILE_H
@@ -129,7 +129,7 @@ namespace BALL
 				@return true, if flushing was successful, false ow.
 		*/
 		virtual bool flushToDisk(const std::vector<SnapShot>& buffer)
-			throw();
+			throw(File::CanNotWrite);
 		//@}
 
 		protected:

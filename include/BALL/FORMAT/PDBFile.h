@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.h,v 1.26 2003/07/03 11:36:39 amoll Exp $
+// $Id: PDBFile.h,v 1.27 2003/07/11 15:27:03 amoll Exp $
 
 #ifndef BALL_FORMAT_PDBFILE_H
 #define BALL_FORMAT_PDBFILE_H
@@ -196,7 +196,8 @@ namespace BALL
 
 		/**	Write a system to the PDBfile
 		*/
-		virtual void write(const System& system);
+		virtual bool write(const System& system)
+			throw(File::CanNotWrite);
 
 		/**	Read a system from the PDBfile
 		*/
@@ -209,7 +210,8 @@ namespace BALL
 
 		/**	Write a protein to the PDBfile
 		*/
-    virtual void write(const Protein& protein);
+    virtual bool write(const Protein& protein)
+			throw(File::CanNotWrite);
 
 		/**	Read a protein from the PDBfile
 		*/

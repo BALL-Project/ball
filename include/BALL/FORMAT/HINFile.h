@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HINFile.h,v 1.26 2003/07/09 12:56:26 amoll Exp $
+// $Id: HINFile.h,v 1.27 2003/07/11 15:27:03 amoll Exp $
 
 #ifndef BALL_FORMAT_HINFILE_H
 #define BALL_FORMAT_HINFILE_H
@@ -70,10 +70,12 @@ namespace BALL
 		/**	Write a system to a HIN file.
 				Note that this changes the properties of atoms in the system.
 		*/
-		virtual void write(const Molecule& molecule);
+		virtual bool write(const Molecule& molecule)
+			throw(File::CanNotWrite);
 			
 		///
-		virtual void write(const System& system);
+		virtual bool write(const System& system)
+			throw(File::CanNotWrite);
 		
 		/**	Read a system from the HIN file
 		*/

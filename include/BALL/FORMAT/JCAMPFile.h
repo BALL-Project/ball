@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: JCAMPFile.h,v 1.17 2003/07/09 12:56:42 amoll Exp $
+// $Id: JCAMPFile.h,v 1.18 2003/07/11 15:27:03 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_JCAMPFILE_H
@@ -23,7 +23,7 @@ namespace BALL
 			in Bruker instruments.
 			\par
 			This class has rudimentary support for the format only. The most severe
-			drawback currently is the lcak of support for writing JCAMP files.
+			drawback currently is the lack of support for writing JCAMP files.
 			
     	\ingroup  NMRFileFormats
 	*/
@@ -98,7 +98,8 @@ namespace BALL
 			throw(Exception::ParseError);
 
 		/// Write the file.
-		void write();
+		bool write()
+			throw(File::CanNotWrite);
 
 		///
 		HeaderMap& getHeader() throw() { return header_; }
@@ -116,10 +117,12 @@ namespace BALL
 		const JCAMPValue& operator [] (const String& name) const { return entries_[name]; }
 
 		///
-		double getDoubleValue(const String& name) const throw();
+		double getDoubleValue(const String& name) const 
+			throw(Exception::InvalidFormat);
 		
 		///
-		Index getIntValue(const String& name) const throw();
+		Index getIntValue(const String& name) const 
+			throw(Exception::InvalidFormat);
 
 		/// 
 		bool hasEntry(const String& name) const throw() { return entries_.has(name); }

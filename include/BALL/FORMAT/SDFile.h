@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SDFile.h,v 1.12 2003/07/09 12:56:42 amoll Exp $
+// $Id: SDFile.h,v 1.13 2003/07/11 15:27:03 amoll Exp $
 
 #ifndef BALL_FORMAT_SDFILE_H
 #define BALL_FORMAT_SDFILE_H
@@ -61,11 +61,13 @@ namespace BALL
 				SD file. All named properties are included in the
 				property section.
 		*/
-		virtual void write(const System& system);
-		
+		virtual bool write(const System& system)
+			throw(File::CanNotWrite);
+
 		/**	Append a single molecule to the SD file.
 		*/
-		virtual void write(const Molecule& molecule);
+		virtual bool write(const Molecule& molecule)
+			throw(File::CanNotWrite);
 
 		/**	Read a system from the SD file
 		*/

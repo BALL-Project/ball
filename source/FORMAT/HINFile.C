@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HINFile.C,v 1.57 2003/07/09 12:56:13 amoll Exp $
+// $Id: HINFile.C,v 1.58 2003/07/11 15:27:43 amoll Exp $
 //
 
 #include <BALL/FORMAT/HINFile.h>
@@ -144,15 +144,22 @@ namespace BALL
 								 << atom.getVelocity().z << std::endl;
 	}
 
-	void HINFile::write(const Molecule& molecule)
+	bool HINFile::write(const Molecule& molecule)
+		throw(File::CanNotWrite)
 	{
 		System S;
 		S.insert(*(Molecule*)molecule.create(true));
-		write(S);
+		return write(S);
 	}
 	
-	void HINFile::write(const System& system)
+	bool HINFile::write(const System& system)
+		throw(File::CanNotWrite)
 	{
+		if (!isOpen() || getOpenMode() != File::OUT)
+		{
+			throw(File::CanNotWrite(__FILE__, __LINE__, name_));
+		}
+
 		// the atom_vector contains the atoms in the order of
 		// the atom iterator
 		vector<const Atom*> atom_vector;
@@ -388,6 +395,8 @@ namespace BALL
 		{
 			(const_cast<Atom&>(*atom_it)).clearProperty("__HINFILE_INDEX");
 		}
+
+		return true;
 	}
 
 	bool HINFile::read(System& system)

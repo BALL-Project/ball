@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOL2File.C,v 1.20 2003/07/03 13:30:36 oliver Exp $
+// $Id: MOL2File.C,v 1.21 2003/07/11 15:27:43 amoll Exp $
 //
 
 #include <BALL/FORMAT/MOL2File.h>
@@ -47,8 +47,14 @@ namespace BALL
 	const String MOL2File::TRIPOS = "@<TRIPOS>";
 	const Size MOL2File::MAX_LENGTH_ = 4096;
 
-	void MOL2File::write(const System& system)
+	bool MOL2File::write(const System& system)
+		throw(File::CanNotWrite)
 	{
+		if (!isOpen() || getOpenMode() != File::OUT)
+		{
+			throw (File::CanNotWrite(__FILE__, __LINE__, name_));
+		}
+
 		// create a shorthand for the file of the MOL2File object
 		File& f = static_cast<File&>(*this);
 
@@ -243,6 +249,7 @@ namespace BALL
 		}
 
 		// done with writing.
+		return false;
 	}
 
 
@@ -311,9 +318,10 @@ namespace BALL
 		return GenericMolFile::read();
 	}
 				
-	void MOL2File::write(const Molecule& molecule)
+	bool MOL2File::write(const Molecule& molecule)
+		throw(File::CanNotWrite)
 	{
-		GenericMolFile::write(molecule);
+		return GenericMolFile::write(molecule);
 	}
 
 	void MOL2File::readAtomSection_()

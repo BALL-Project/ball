@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile.C,v 1.24 2003/07/06 16:23:11 amoll Exp $
+// $Id: DCDFile.C,v 1.25 2003/07/11 15:27:43 amoll Exp $
 
 #include <BALL/FORMAT/DCDFile.h>
 #include <BALL/MOLMEC/COMMON/snapShot.h>
@@ -842,18 +842,11 @@ namespace BALL
 
 
 	bool DCDFile::flushToDisk(const ::std::vector<SnapShot>& buffer)
-		throw()
+		throw(File::CanNotWrite)
 	{
-		if (!isOpen())
+		if (!isOpen() || getOpenMode() != File::OUT)
 		{
-			Log.error() << "Could not flushToDisk because file is not open" << std::endl;
-			return false;
-		}
-
-		if (open_mode_ != File::OUT) 
-		{
-			Log.error() << "Could not flushToDisk because wrong file mode" << std::endl;
-			return false;
+			throw (File::CanNotWrite(__FILE__, __LINE__, name_));
 		}
 
 		// adjust the number of snapshots for header

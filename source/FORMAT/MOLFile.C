@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOLFile.C,v 1.13 2002/12/12 10:19:13 oliver Exp $
+// $Id: MOLFile.C,v 1.14 2003/07/11 15:27:43 amoll Exp $
 
 #include <BALL/FORMAT/MOLFile.h>
 #include <BALL/KERNEL/atom.h>
@@ -80,8 +80,14 @@ namespace BALL
 	{
 	}
 
-	void MOLFile::write(const Molecule& molecule)
+	bool MOLFile::write(const Molecule& molecule)
+		throw(File::CanNotWrite)
 	{
+		if (!isOpen() || getOpenMode() != File::OUT)
+		{
+			throw (File::CanNotWrite(__FILE__, __LINE__, name_));
+		}
+
 		// write header block
 		String name = molecule.getName();
 		if ((name.size() > 80) || (name.has('\n')))
@@ -197,17 +203,21 @@ namespace BALL
 
 		// write propery section
 		getFileStream() << "M  END" << std::endl;
+		
+		return true;
 	}
 
-	void MOLFile::write(const System& system)
+	bool MOLFile::write(const System& system)
+		throw(File::CanNotWrite)
 	{
 		MoleculeConstIterator mol = system.beginMolecule();
-		write(*mol);
+		if (!write(*mol)) return false;
 		mol++;
 		if (mol != system.endMolecule())
 		{
 			Log.warn() << "MOLFile::write: found more than one molecule in system while writing -- all molecules after the first one are ignored!" << std::endl;
 		}
+		return true;
 	}
 
 	Molecule* MOLFile::readCTAB_(vector<Atom*>& atom_map)
