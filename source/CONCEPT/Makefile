@@ -17,8 +17,7 @@ CPP_SOURCES=\
 	singleton.C\
 	textPersistenceManager.C\
 	timeStamp.C\
-	visitor.C\
-	XDRPersistenceManager.C
+	visitor.C
 
 include ../common.mak
 include .Dependencies
