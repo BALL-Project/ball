@@ -1,4 +1,4 @@
-// $Id: standardPredicates.C,v 1.30 2002/01/10 14:40:16 anker Exp $
+// $Id: standardPredicates.C,v 1.30.2.1 2002/04/07 17:39:00 anker Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -940,22 +940,56 @@ namespace BALL
 	bool Sp3HybridizedPredicate::operator () (const Atom& atom) const
 		throw()
 	{
-		Size i;
-		if (atom.countBonds() != 4)
+		// This predicate ONLY works for C, N and O. The rest will be silently
+		// treated as not hybridzed.
+
+		String symbol = atom.getElement().getSymbol();
+		// DEBUG
+		cout << "SYMBOL " << symbol << endl;
+		// /DEBUG
+		if (symbol == "C")
 		{
-			return false;
+			if (atom.countBonds() != 4)
+			{
+				return false;
+			}
 		}
 		else
 		{
-			for (i = 0; i < atom.countBonds(); ++i)
+			if (symbol == "N")
 			{
-				if ((atom.getBond(i))->getOrder() != Bond::ORDER__SINGLE)
+				if (atom.countBonds() < 3)
 				{
 					return false;
 				}
 			}
-			return true;
+			else
+			{
+				if (symbol == "O")
+				{
+					if (atom.countBonds() != 2)
+					{
+						return false;
+					}
+				}
+				else
+				{
+					// ?????
+					// What about the rest of the world?
+					return false;
+				}
+			}
 		}
+
+		for (Size i = 0; i < atom.countBonds(); ++i)
+		{
+			if ((atom.getBond(i))->getOrder() != Bond::ORDER__SINGLE)
+			{
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 
