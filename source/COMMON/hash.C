@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hash.C,v 1.10 2002/02/27 12:20:34 sturm Exp $
+// $Id: hash.C,v 1.11 2003/05/19 09:00:31 oliver Exp $
 
 #include <BALL/COMMON/hash.h>
 
@@ -29,6 +29,11 @@ namespace BALL
 	HashIndex hashString(const char *s)
 		throw()
 	{
+		if (char == 0)
+		{
+			return (HashIndex)0;
+		}
+
 		static const unsigned char pseudo_random_permuted_key[256] = 
 		{ 
 			1  ,87 ,49 ,12 ,176,178,102,166,121,193,6  ,84 ,249,230,44 ,163,
@@ -49,14 +54,13 @@ namespace BALL
 			51 ,65 ,28 ,144,254,221,93 ,189,194,139,112,43 ,71 ,109,184,209 
 		};
 
-		Index index = 0;
-
-		for(;	*s != '\0'; )
+		unsigned char hash = 0;
+		for(;	*s != '\0'; s++)
 		{
-			index = pseudo_random_permuted_key[index ^ (*s++)];
+			hash = pseudo_random_permuted_key[hash ^ *s];
 		}
 
-		return index;
+		return (HashIndex)hash;
 	}
 
 	/* Summary: A portable adaptation of Peter Weinberger's (PJW) (AT&T Bell Labs) 
