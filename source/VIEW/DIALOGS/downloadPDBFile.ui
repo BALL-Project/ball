@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>DownloadPDBFileData</class>
 <widget class="QDialog">
     <property name="name">
@@ -280,22 +280,6 @@
     </widget>
     <widget class="QPushButton">
         <property name="name">
-            <cstring>showDetails</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>388</x>
-                <y>232</y>
-                <width>120</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>PDBFile Details</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
             <cstring>button_abort</cstring>
         </property>
         <property name="enabled">
@@ -341,6 +325,22 @@
             <string>You can also enter a PDB id directly.</string>
         </property>
     </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>showDetails</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>388</x>
+                <y>232</y>
+                <width>120</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>PDBFile Details</string>
+        </property>
+    </widget>
 </widget>
 <connections>
     <connection>
@@ -366,6 +366,18 @@
         <signal>textChanged(const QString&amp;)</signal>
         <receiver>downloadPDBFile</receiver>
         <slot>idChanged()</slot>
+    </connection>
+    <connection>
+        <sender>searchbutton</sender>
+        <signal>clicked()</signal>
+        <receiver>downloadPDBFile</receiver>
+        <slot>slotSearch()</slot>
+    </connection>
+    <connection>
+        <sender>showDetails</sender>
+        <signal>clicked()</signal>
+        <receiver>downloadPDBFile</receiver>
+        <slot>slotShowDetail()</slot>
     </connection>
 </connections>
 <tabstops>

@@ -27,10 +27,11 @@ namespace BALL
 	namespace VIEW
 	{
 
-DownloadPDBFile::DownloadPDBFile( QWidget* parent, const char* name, bool modal, WFlags fl )
+DownloadPDBFile::DownloadPDBFile(QWidget* parent, const char* name, bool modal, WFlags fl)
 	throw()
 	: DownloadPDBFileData(parent, name, modal, fl),
 		ModularWidget(name),
+		qb_(0),
 		thread_(0),
 		aborted_(false)
 {
@@ -90,21 +91,17 @@ void DownloadPDBFile::slotSearch()
 	QString search_contents = searchField->text();
 	QUrl::encode(search_contents);
 	
-	filename+=search_contents;
-	filename+="&Lucene::keyword_op=";
-
-	filename+=(fullText->isOn()) ? "fullText" : "name";
+	filename += search_contents;
+	filename += "&Lucene::keyword_op=";
+	filename += (fullText->isOn()) ? "fullText" : "name";
 	
-	if (exactMatch->isOn())
-		filename+="&exact=1";
-	else
-		filename+="&exact=0";
+	if (exactMatch->isOn()) filename+="&exact=1";
+	else 									  filename+="&exact=0";
 
-	if (removeSimilar->isOn())
-		filename+="&SelectorRedundFilt::on=1";
+	if (removeSimilar->isOn()) filename+="&SelectorRedundFilt::on=1";
 	
-
-	try {
+	try 
+	{
 		LineBasedFile search_result;
 #ifndef BALL_QT_HAS_THREADS
 		search_result = LineBasedFile(filename.latin1());
@@ -123,20 +120,19 @@ void DownloadPDBFile::slotSearch()
 #endif
 
 		vector<String> result;
-		String tmp;
 		while (search_result.readLine())
 		{
-			tmp = search_result.getLine();
+			String tmp = search_result.getLine();
 			Size pos = tmp.find("name=\"PDBID_");
 
 			if (pos != string::npos)
 			{
 				Size end_pos = tmp.find("\"", pos+12);
-				result.push_back(tmp.substr(pos+12,end_pos-(pos+12)));
+				result.push_back(tmp.substr(pos + 12, end_pos - (pos + 12)));
 			}
 		}
 
-		for (Size i=0; i<result.size(); i++)
+		for (Size i = 0; i < result.size(); i++)
 		{
 			results->insertItem(result[i].c_str());
 		}
@@ -146,7 +142,10 @@ void DownloadPDBFile::slotSearch()
 			pdbId->setText(result[0].c_str());
 		}
 	}
-	catch (...) { }
+	catch (...)
+	{ 
+		setStatusbarText("Could not download search result from PDB.org", true);
+	}
 
 	downloadEnded_();
 }
@@ -254,7 +253,7 @@ void DownloadPDBFile::slotDownload()
 
 void DownloadPDBFile::slotShowDetail()
 {
-	setStatusbarText("Downloading information, please wait...");
+	setStatusbarText("Downloading information, please wait...", true);
 	QString filename = "http://www.rcsb.org/pdb/cgi/explore.cgi?job=summary&pdbId=";
 	filename += pdbId->text();
 	filename += "&page=";
@@ -273,38 +272,34 @@ void DownloadPDBFile::displayHTML(const QString& url)
 	{
 		QString filename;
 
-		if (url.find("http://") == -1)
-			filename = "http://www.rcsb.org/"+url;	
-		else
-			filename = url;
+		if (url.find("http://") == -1) filename = "http://www.rcsb.org/"+url;	
+		else 													 filename = url;
 
-		Log.info() << "Reading " << filename << std::endl;
+		setStatusbarText(String("Reading ") + filename.ascii(), true);
 
 		LineBasedFile search_result;
 #ifndef BALL_QT_HAS_THREADS
 		search_result = LineBasedFile(filename.latin1());
 #else
 		threadedDownload_(filename.ascii());
-		if (aborted_)
-		{
-			return;
-		}
+		if (aborted_) return;
 
 		search_result = LineBasedFile(thread_->getFilename());
 #endif
 
-		setStatusbarText("Please wait, while loading images...");
+		setStatusbarText("Please wait, while loading images...", true);
 
-		if (qb_ != 0) delete qb_;
-		qb_ = new QTextBrowser();
+//   		if (qb_ != 0) delete qb_;
+//   		qb_ = new QTextBrowser();
+ 		if (qb_ == 0) qb_ = new QTextBrowser();
+
 		String result;
 
-		HashMap<String, QImage> hm;
-		String current_line;
+		List<String> images;
 
 		while (search_result.readLine())
 		{
-			current_line = search_result.getLine();
+			String current_line = search_result.getLine();
 			result += current_line + "\n";
 
 			// find out all the images
@@ -319,11 +314,12 @@ void DownloadPDBFile::displayHTML(const QString& url)
 				pos_2 = current_line.find("\"", pos_1+9);
 
 				String img_url = current_line.substr(pos_1+5, pos_2 - (pos_1+5));
-				if (!hm.has(img_url))
+				images.push_back(img_url);
+				if (!unsupported_images_.has(img_url) && !image_cache_.has(img_url))
 				{
-					File img("http://www.rcsb.org/"+img_url);
-					String tmp_filename;
+					File img("http://www.rcsb.org/" + img_url);
 
+					String tmp_filename;
 					File::createTemporaryFilename(tmp_filename);
 					img.copyTo(tmp_filename);
 
@@ -332,29 +328,45 @@ void DownloadPDBFile::displayHTML(const QString& url)
 
 					File::remove(tmp_filename);
 
-					hm[img_url] = qi;
+					if (qi.isNull())
+					{
+						unsupported_images_.insert(img_url);
+					}
+					else
+					{
+						image_cache_[img_url] = qi;
+					}
 				}
 			}
 		}
 
-		HashMap<String, QImage>::Iterator hi;
-		for (hi = hm.begin(); hi!=hm.end(); hi++)
+		QImage empty;
+		List<String>::Iterator it = images.begin();
+		for (; it != images.end(); it++)
 		{
-			qb_->mimeSourceFactory()->setImage(hi->first.c_str(), hi->second);
+			if (!unsupported_images_.has(*it))
+			{
+				qb_->mimeSourceFactory()->setImage((*it).c_str(), image_cache_[*it]);
+			}
+			else
+			{
+				qb_->mimeSourceFactory()->setImage((*it).c_str(), empty);
+			}
 		}
 
 		qb_->setText(QString(result.c_str()));
 
 		connect(qb_, SIGNAL(linkClicked(const QString&)), this, SLOT(displayHTML(const QString&)));
 
-		Log.info() << "Finished download of HTML page" << std::endl;
+		downloadEnded_();
+		setStatusbarText("Finished download of HTML page", true);
 
 		qb_->showMaximized();
 		qb_->show();
 	}
 	catch (...)
 	{ 
-		setStatusbarText("Failed to download HTML page.");
+		setStatusbarText("Failed to download HTML page.", true);
 	}
 
 #ifdef BALL_QT_HAS_THREADS
@@ -393,7 +405,7 @@ void DownloadPDBFile::downloadStarted_()
 	throw()
 {
 	aborted_ = false;
-	setStatusbarText("Started download, please wait...");
+	setStatusbarText("Started download, please wait...", true);
 	button_abort->setEnabled(true);
 	download->setEnabled(false);
 	pdbId->setEnabled(false);
@@ -407,11 +419,11 @@ void DownloadPDBFile::downloadEnded_()
 {
 	if (!aborted_)
 	{
-		setStatusbarText("Finished downloading, please wait...");
+		setStatusbarText("Finished downloading, please wait...", true);
 	}
 	else
 	{
-		setStatusbarText("Aborted download");
+		setStatusbarText("Aborted download", true);
 	}
 	button_abort->setEnabled(false);
 	download->setEnabled(true);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: downloadPDBFile.h,v 1.9 2004/12/02 15:37:51 amoll Exp $
+// $Id: downloadPDBFile.h,v 1.10 2004/12/08 16:26:30 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DOWNLOADPDBFILE_H
@@ -13,7 +13,12 @@
 # include <BALL/VIEW/KERNEL/modularWidget.h>
 #endif
 
+#ifndef BALL_DATATYPE_HASHSET_H
+# include <BALL/DATATYPE/hashSet.h>
+#endif
+
 #include <qtextbrowser.h>
+#include <qimage.h>
 
 namespace BALL
 {
@@ -88,9 +93,14 @@ namespace BALL
 
 				void threadedDownload_(const String& url);
 				
-				QTextBrowser 		*qb_;
-				FetchHTMLThread *thread_;
-				bool 						aborted_;
+				QTextBrowser 						*qb_;
+				FetchHTMLThread 				*thread_;
+				bool 										aborted_;
+
+				HashMap<String, QImage> image_cache_;
+
+				// e.g. gif images if not supported
+				HashSet<String> 				unsupported_images_;
 		};
 
 	} 
