@@ -1,49 +1,54 @@
-Unpack the contrib.zip package into this directory and
-compile bison, flex and librpc.lib.
+You will need Microsoft Visual Studio .NET (MSVC 7) in order to compile BALL.
+
+BALL requires some standard Unix tools and libraries that are not usually 
+found on Windows systems. We provide an archive file with the installer 
+files for this tools:
+http://voyager.bioinf.uni-sb.de/OK/BALL/Downloads/Contrib/Contrib-1.0.zip
+
+This file contains:
+
+  - FLEX: a fast lexical analyser
+
+  - BISON: a parser generator
+
+  - regex: a regular expression library
+
+  - RPC: the remote procedure call library (for XDR)
+  
+All needed tools must be copied/installed in the appropriate subfolders 
+in the BALL\Windows\Contrib directory. (These subfolders already exist.)
+
+The regex package is provided as source code and does not require further 
+installation, please copy it in the folder regex-0.12. (Be sure, not to create
+an other subdir regex-0.12 in this directory!)
+
+For the other packages, please start the individual installers and make sure
+they install their contents to respective subfolder in the Contrib directory 
+(the directory this file is in). The installers are:
+  - bison-1.875-1.exe (BISON)
+  - flex-2.5.4a-1-bin (FLEX)
+  - oncrpc.exe
+
 ------------------------------------------------------------------------
-You will need Microsoft Visual Studio .NET (MSVC 7) in order to compile
-BALL.
-
-You need to build the following additional packages:
-  - flex -- required for: lexer
-     You can use the MSVC project folder in    
-       flex-2.5.4/MISC/MSVC/msvc.sln
-     to build it. make sure you build the "Release" configuration
-     rather than the "Debug" one.
-
-  - bison -- parser
-     The best way to get it is the installation of CygWin
-     (www.cygwin.com). Cygwin also provides the executable
-		 (make sure to select bison for installation!) in 
-     c:\cygwin\bin\bison.exe (if you do not install everything to 
-     c:\cygwin, you will have to change the path in the settings
-     of the user-defined build steps of all the .y files).
-		 You will have to copy the executable (bison.exe) as well as the 
-     three required DLLs (cygwin1.dll, cygintl-2.dll, cygiconv-2.dll) 
-		 from /usr/bin to BALL\Windows\Contrib\bin.
-
-  - regex -- regular expressions
-     No installation is required for the regular expression package.
-     If the .c- and .h-file are in Contrib/regex-0.12, the BALL
-     project folder will automatically find and compile it.
-
-  - ONC RPC -- portable data format (XDR)
-     This package is prepared for compilation with MSVC.
-     Under Windows, open a command shell (cmd), set the environment
-     variables (run vcvars32.bat from your Microsoft Visual Studio .NET
-     directory), and type "make" to build the RPC library.
+Updated versions of these packages are available from GNUWIN32 project at
+http://gnuwin32.sourceforge.net/packages/flex.htm and 
+http://gnuwin32.sourceforge.net/packages/bison.htm and RWTH Aaachen (ONCRPC) at
+http://www.plt.rwth-aachen.de/ks/english/oncrpc.html.
+------------------------------------------------------------------------
 
 Now you can open the BALL project folder in BALL/Windows
 and (hopefully) compile BALL. 
 
 Please choose the configuration "Python Multihreaded" in the Configuration
-Manager, as this is the only configuration, that is currently working...
+Manager, as this is currently the only working configuration.
 
 If you want to compile the visualization component of BALL as well,
 you will need a QT license (QT 3.2.0 or higher, commercial or academic license).
-If you install a version different than 3.2.3 you might have to adjust the
-linker settings to reflect the correct library names.
-
+If you install a version different than 3.2.3 you have to adjust the
+linker settings to reflect the correct QT library name.
+To do so, open the properties dialog in MSVC for the entry of the libVIEW 
+library. In the field for additional dependencies, adjust the name of the
+QT-library.
 
 Please report any problems you  have with this (still clumsy) setup to
 
