@@ -149,8 +149,8 @@ namespace BALL
 			const throw();
 
 		/// Return the position of line_ in data or -1 if it does not exist in data
-		Index switchString(const std::vector<String>& data) 
-			const throw();
+		Index switchString(const std::vector<String>& data) const 
+			throw();
 
 		//_@}
 
