@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.C,v 1.31 2004/09/30 16:09:03 amoll Exp $
+// $Id: modelSettingsDialog.C,v 1.32 2004/10/01 14:20:15 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modelSettingsDialog.h>
@@ -63,13 +63,13 @@ namespace BALL
 
 			registerObject_(hbonds_radius_slider);
 
-			setDefaults(true);
+			setDefaultValues(true);
 
 			insertEntry(this, "Models");
 			setWidgetStack(widget_stack);
 		}
 
-		void ModelSettingsDialog::setDefaults(bool all)
+		void ModelSettingsDialog::setDefaultValues(bool all)
 			throw()
 		{
 			Position current = widget_stack->id(widget_stack->visibleWidget());
@@ -143,12 +143,6 @@ namespace BALL
 			s.trimRight("0");
 			if (s.hasSuffix(".")) s+= "0";
 			label->setText(s.c_str());
-		}
-
-		void ModelSettingsDialog::setDefaultValues()
-			throw()
-		{
-			setDefaults(false);
 		}
 
 		void ModelSettingsDialog::applySettingsTo(ModelProcessor& mp) const
@@ -342,50 +336,44 @@ namespace BALL
 			}
 		}
 
-		void ModelSettingsDialog::showPage(ModelType type)
+		QWidget* ModelSettingsDialog::getEntryFor(ModelType type)
 			throw()
 		{
 			switch (type)
 			{
 				case MODEL_LINES:
-					break;
+					return 0;
 					
 				case MODEL_STICK:
-					showEntry((unsigned int) 0);
-					break;
+					return widget_stack->widget(0);
 
 				case MODEL_BALL_AND_STICK:
-					showEntry(1);
-					break;
+					return widget_stack->widget(1);
 					
 				case MODEL_SE_SURFACE:
 				case MODEL_SA_SURFACE:
-					showEntry(3);
-					break;
+					return widget_stack->widget(3);
 					
 				case MODEL_VDW:
-					showEntry(2);
-					break;
+					return widget_stack->widget(2);
 
 				case MODEL_BACKBONE:
-					showEntry(4);
-					break;
+					return widget_stack->widget(4);
 
 				case MODEL_CARTOON:
-					showEntry(5);
-					break;
+					return widget_stack->widget(5);
 					
 				case MODEL_HBONDS:
-					showEntry(6);
-					break;
+					return widget_stack->widget(6);
 
 				case MODEL_FORCES:
-					showEntry(7);
-					break;
+					return widget_stack->widget(7);
 
 				default:
 					break;
 			}
+
+			return 0;
 		}
 
 	} // namespace VIEW

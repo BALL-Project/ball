@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.55 2004/09/14 15:20:12 amoll Exp $
+// $Id: scene.h,v 1.56 2004/10/01 14:20:23 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -392,10 +392,6 @@ namespace BALL
 			virtual void cancelPreferences()
 				throw();
 				
-			/// Set default values for the current page in Preferences
-			virtual void defaultPreferences()
-				throw();
-			
 			///
 			static void setMouseSensitivity(float sensitivity)
 				throw() { mouse_sensitivity_ = sensitivity; }

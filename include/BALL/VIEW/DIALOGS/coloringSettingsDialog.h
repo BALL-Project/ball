@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: coloringSettingsDialog.h,v 1.19 2004/09/30 16:16:25 amoll Exp $
+// $Id: coloringSettingsDialog.h,v 1.20 2004/10/01 14:20:21 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_COLORINGSETTINGSDIALOG_H
@@ -107,12 +107,8 @@ namespace BALL
 			///
 			void readPreferenceEntries(const INIFile& inifile);
 
-			/// 
-			virtual void setDefaults(bool all = true)
-				throw();
-			
 			/// Called when defaults is pressed in Preferences, calls setDefaults
-			virtual void setDefaultValues()
+			virtual void setDefaultValues(bool all = false)
 				throw();
 
 			///
@@ -128,7 +124,7 @@ namespace BALL
 				throw();
 
 			///
-			void showPage(ColoringMethod method)
+			QWidget* getEntryFor(ColoringMethod method)
 				throw();
 
 			///

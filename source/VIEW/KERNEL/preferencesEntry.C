@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferencesEntry.C,v 1.10 2004/09/30 16:16:30 amoll Exp $
+// $Id: preferencesEntry.C,v 1.11 2004/10/01 14:20:16 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/preferencesEntry.h>
@@ -248,6 +248,12 @@ namespace BALL
 			}
 		}
 
+
+		Position PreferencesEntry::currentEntry() const
+		{
+			if (widget_stack_ == 0) return 0;
+			return widget_stack_->id(widget_stack_->visibleWidget());
+		}
 
 	} // namespace VIEW
 } // namespace BALL

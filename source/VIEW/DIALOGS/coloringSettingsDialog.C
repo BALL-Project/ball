@@ -102,7 +102,7 @@ ColoringSettingsDialog::ColoringSettingsDialog( QWidget* parent,  const char* na
 
 	element_table_ = new QColorTable(widget_stack->widget(0));
 	residue_table_ = new QColorTable(widget_stack->widget(2));
-	setDefaults();
+	setDefaultValues(true);
 
 	registerObject_(first_residue_label);
 	registerObject_(middle_residue_label);
@@ -185,15 +185,17 @@ void ColoringSettingsDialog::readPreferenceEntries(const INIFile& inifile)
 	}
 }
 
-void ColoringSettingsDialog::setDefaults(bool all)
+void ColoringSettingsDialog::setDefaultValues(bool all)
 	throw()
 {
 	vector<String> 		names;
 	vector<ColorRGBA> colors;
 
+	Position current = widget_stack->id(widget_stack->visibleWidget());
+
 	// =============================================================
 	// setting element colors
-	if (all || widget_stack->id(widget_stack->visibleWidget()) == 0)
+	if (all || current == 0)
 	{
 		// create a dummy processor to get the default values
 		ElementColorProcessor elp;
@@ -218,7 +220,7 @@ void ColoringSettingsDialog::setDefaults(bool all)
 	// =============================================================
 	// setting residue name colors
 	// create a dummy processor to get the default values
-	if (all || widget_stack->id(widget_stack->visibleWidget()) == 2)
+	if (all || current == 2)
 	{
 		ResidueNameColorProcessor rcp;
 		const StringHashMap<ColorRGBA>& color_map = rcp.getColorMap();
@@ -234,7 +236,6 @@ void ColoringSettingsDialog::setDefaults(bool all)
 		residue_table_->setContent(names, colors);
 	}
 		
-	Position current = widget_stack->id(widget_stack->visibleWidget());
 	// =============================================================
 	// setting residue number colors
 	if (all || current == 1)
@@ -544,13 +545,6 @@ void ColoringSettingsDialog::forceMinValueChanged()
 }
 
 
-void ColoringSettingsDialog::setDefaultValues()
-	throw()
-{
-	setDefaults(false);
-}
-
-
 ColorProcessor* ColoringSettingsDialog::createColorProcessor(ColoringMethod method) const
 	throw(Exception::InvalidOption)
 {
@@ -659,7 +653,7 @@ void ColoringSettingsDialog::getSettings(const ColorProcessor& cp)
 	if (RTTI::isKindOf<SecondaryStructureColorProcessor>(cp))
 	{
 		SecondaryStructureColorProcessor& dp = (*(SecondaryStructureColorProcessor*)&cp);
-
+//   
 		setLabelColor_(helix_color_label, dp.getHelixColor());
 		setLabelColor_(coil_color_label, dp.getCoilColor());
 		setLabelColor_(strand_color_label, dp.getStrandColor());
@@ -687,50 +681,43 @@ void ColoringSettingsDialog::getSettings(const ColorProcessor& cp)
 	}
 }
 
-void ColoringSettingsDialog::showPage(ColoringMethod method)
+QWidget* ColoringSettingsDialog::getEntryFor(ColoringMethod method)
 	throw()
 {
 	switch (method)
 	{
 		case COLORING_ELEMENT:
-			showEntry((unsigned int)0);
-			break;
+			return widget_stack->widget(0);
 
 		case COLORING_RESIDUE_NAME:
-			showEntry(2);
-			break;
+			return widget_stack->widget(2);
 
 		case COLORING_RESIDUE_INDEX:
-			showEntry(1);
-			break;
+			return widget_stack->widget(1);
 
 		case COLORING_SECONDARY_STRUCTURE:
-			showEntry(7);
-			break;
+			return widget_stack->widget(7);
 
 		case COLORING_ATOM_CHARGE:
-			showEntry(3);
-			break;
+			return widget_stack->widget(3);
 
 		case COLORING_DISTANCE:
-			showEntry(4);
-			break;
+			return widget_stack->widget(4);
 
 		case COLORING_TEMPERATURE_FACTOR:
-			showEntry(5);
-			break;
+			return widget_stack->widget(5);
 
 		case COLORING_OCCUPANCY:
-			showEntry(6);
-			break;
+			return widget_stack->widget(6);
 
 		case COLORING_FORCES:
-			showEntry(8);
-			break;
+			return widget_stack->widget(8);
 
 		default:
 			break;
 	}
+
+	return 0;
 }
 
 

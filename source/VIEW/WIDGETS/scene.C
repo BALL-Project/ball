@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.143 2004/09/30 16:16:30 amoll Exp $
+// $Id: scene.C,v 1.144 2004/10/01 14:20:16 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -842,7 +842,6 @@ namespace BALL
 		void Scene::setDefaultLighting(bool update_GL)
 			throw()
 		{
-
 			LightSource light;
 			light.setType(LightSource::POSITIONAL);
 			light.setPosition(stage_->getCamera().getViewPoint() - 
@@ -1077,29 +1076,6 @@ namespace BALL
 				material_settings_= 0;
 			}
 		}
-
-		void Scene::defaultPreferences()
-			throw()
-		{
-			// are we initialized ?
-			if (light_settings_ == 0) return;
-
-			const QWidget* current_page = getMainControl()->getPreferences()->currentPage();
-
-			if (current_page == stage_settings_)
-			{
-				stage_settings_->setDefaultValues();
-			}
-			else if (current_page == light_settings_)
-			{
-				light_settings_->setDefaultValues();
-			}
-			else if (current_page == material_settings_)
-			{
-				material_settings_->setDefaultValues();
-			}
-		}
-
 
 		void Scene::applyPreferences()
 			throw()

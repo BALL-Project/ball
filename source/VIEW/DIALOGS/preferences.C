@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferences.C,v 1.11 2004/09/30 15:51:22 amoll Exp $
+// $Id: preferences.C,v 1.12 2004/10/01 14:20:15 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/preferences.h>
@@ -147,6 +147,13 @@ namespace BALL
 			}
 
 			QListViewItem* item = widget_to_item_[child];
+			entries_listview->setSelected(item, true);
+
+			if (item->parent() != 0)
+			{
+				item->parent()->setOpen(true);
+			}
+
 			if (widget_stack->id(child) != -1)
 			{
 				if (item->firstChild() == 0)
@@ -180,6 +187,21 @@ namespace BALL
 		void Preferences::entrySelected(QListViewItem* item)
 		{
 			showEntry(item_to_widget_[item]);
+		}
+
+		void Preferences::setDefaultValues()
+		{
+			QListViewItem* item = entries_listview->selectedItem();
+			if (item == 0) return;
+			
+			if (item_to_entry_.has(item))
+			{
+				item_to_entry_[item]->setDefaultValues();
+			}
+			else
+			{
+				item_to_entry_[item->parent()]->setDefaultValues();
+			}
 		}
 
 	} // namespace VIEW

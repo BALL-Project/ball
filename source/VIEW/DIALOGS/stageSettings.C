@@ -88,23 +88,33 @@ void StageSettings::apply()
 }
 
 
-void StageSettings::setDefaultValues()
+void StageSettings::setDefaultValues(bool all)
 	throw()
 {
-	color_sample->setBackgroundColor(black);
-	coordinate_button->setChecked(false);
+	Position current = widget_stack->id(widget_stack->visibleWidget());
+	if (all || current == 0)
+	{
+		color_sample->setBackgroundColor(black);
+		animation_smoothness->setValue(25);
+		coordinate_button->setChecked(false);
+		show_lights_->setChecked(false);
 
-	slider_->setValue(5);
+		enable_fog->setChecked(false);
+		fog_slider->setValue(200);
+	}
 
-	show_lights_->setChecked(false);
+	if (all || current == 1)
+	{
+		slider_->setValue(5);
+		wheel_slider_->setValue(5);
+	}
 
-	eye_distance_slider->setValue(20);
-	focal_distance_slider->setValue(40);
-	swap_sss_button->setChecked(false);
-
-	enable_fog->setChecked(false);
-	fog_slider->setValue(200);
-	animation_smoothness->setValue(25);
+	if (all || current == 2)
+	{
+		eye_distance_slider->setValue(20);
+		focal_distance_slider->setValue(40);
+		swap_sss_button->setChecked(false);
+	}
 }
 
 void StageSettings::eyeDistanceChanged()

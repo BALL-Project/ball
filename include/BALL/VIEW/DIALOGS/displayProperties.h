@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.37 2004/09/29 21:14:02 amoll Exp $
+// $Id: displayProperties.h,v 1.38 2004/10/01 14:20:22 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
@@ -145,10 +145,6 @@ namespace BALL
 
 			///
 			void applyPreferences()
-				throw();
-
-			///
-			void defaultPreferences()
 				throw();
 
 			/**	Menu checking method.

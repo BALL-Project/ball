@@ -196,13 +196,19 @@
         <receiver>PreferencesData</receiver>
         <slot>entrySelected(QListViewItem*)</slot>
     </connection>
+    <connection>
+        <sender>defaults_button</sender>
+        <signal>clicked()</signal>
+        <receiver>PreferencesData</receiver>
+        <slot>setDefaultValues()</slot>
+    </connection>
 </connections>
 <includes>
     <include location="global" impldecl="in declaration">BALL/COMMON/global.h</include>
 </includes>
 <slots>
     <slot>entrySelected(QListViewItem*)</slot>
-    <slot>defaultsClicked()</slot>
+    <slot>setDefaultValues()</slot>
 </slots>
 <exportmacro>BALL_EXPORT</exportmacro>
 <layoutdefaults spacing="6" margin="11"/>

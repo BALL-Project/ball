@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.h,v 1.22 2004/09/30 16:16:25 amoll Exp $
+// $Id: modelSettingsDialog.h,v 1.23 2004/10/01 14:20:22 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MODELSETTINGSDIALOG_H
@@ -51,13 +51,9 @@ namespace BALL
 			~ModelSettingsDialog() {}
 
 			///
-			void setDefaults(bool all = true)
+			void setDefaultValues(bool all = true)
 				throw();
 			
-			/// Called when defaults is pressed in Preferences, calls setDefaults
-			virtual void setDefaultValues()
-				throw();
-
 			///
 			void applySettingsTo(ModelProcessor& cp) const
 				throw();
@@ -71,7 +67,7 @@ namespace BALL
 				throw();
 
 			///
-			void showPage(ModelType type)
+			QWidget* getEntryFor(ModelType type)
 				throw();
 
 			///

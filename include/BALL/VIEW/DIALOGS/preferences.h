@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferences.h,v 1.13 2004/09/30 16:16:25 amoll Exp $
+// $Id: preferences.h,v 1.14 2004/10/01 14:20:22 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_PREFERENCES_H
@@ -126,6 +126,9 @@ namespace BALL
 						
 			///
 			void entrySelected(QListViewItem* item);
+
+			///
+			void setDefaultValues();
 
 			protected:
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.88 2004/09/30 15:51:21 amoll Exp $
+// $Id: displayProperties.C,v 1.89 2004/10/01 14:20:15 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -500,8 +500,7 @@ void DisplayProperties::coloringOptionsPressed()
 {
 	if (preferences_ == 0) return;
 
-	preferences_->showEntry(coloring_settings_);
-	coloring_settings_->showEntry((ColoringMethod) coloring_method_combobox->currentItem());
+	preferences_->showEntry(coloring_settings_->getEntryFor((ColoringMethod) coloring_method_combobox->currentItem()));
 	preferences_->show();
 }
 
@@ -509,10 +508,7 @@ void DisplayProperties::modelOptionsPressed()
 {
 	if (preferences_ == 0) return;
 
-	preferences_->showEntry(model_settings_);
-
-	model_settings_->showEntry((ModelType) model_type_combobox->currentItem());
-
+	preferences_->showEntry(model_settings_->getEntryFor((ModelType) model_type_combobox->currentItem()));
 	preferences_->show();
 }
 
@@ -620,24 +616,6 @@ void DisplayProperties::applyPreferences()
 	}
 }
 
-void DisplayProperties::defaultPreferences()
-	throw()
-{
-	// are we initialized ?
-	if (model_settings_    == 0)  return;
-		
-	const QWidget* current_page = getMainControl()->getPreferences()->currentPage();
-
-	if (current_page == model_settings_)
-	{
-		model_settings_->setDefaultValues();
-	}
-	else if (current_page == coloring_settings_) 
-	{
-		coloring_settings_->setDefaultValues();
-	}
-}
-
 bool DisplayProperties::getSettingsFromString(const String& data)
 	throw()
 {
@@ -656,36 +634,37 @@ bool DisplayProperties::getSettingsFromString(const String& data)
 		setSurfaceDrawingPrecision(fields[3].toFloat());
 		selectColoringMethod(fields[4].toUnsignedInt());
 		setTransparency((Position)(fields[5].toFloat() / 2.55));
+		return true;
 	}
 	catch(...)
 	{
-		return false;
 	}
 
-	return true;
-	}
+	return false;
+}
 
 
-	void DisplayProperties::setSurfaceDrawingPrecision(float value)
-	{
-		if (value < 0.1) return;
-		precision_slider->setValue((int)(value * 10.0));
-	}
-			
-	void DisplayProperties::setDrawingPrecision(int value)
-	{
-		precision_combobox->setCurrentItem(value);
-	}
+void DisplayProperties::setSurfaceDrawingPrecision(float value)
+{
+	if (value < 0.1) return;
+	precision_slider->setValue((int)(value * 10.0));
+}
+		
+void DisplayProperties::setDrawingPrecision(int value)
+{
+	precision_combobox->setCurrentItem(value);
+}
 
-	void DisplayProperties::setTransparency(int value)
-	{
-		transparency_slider->setValue(value);
-	}
+void DisplayProperties::setTransparency(int value)
+{
+	transparency_slider->setValue(value);
+}
 
-	void DisplayProperties::setCustomColor(const ColorRGBA& color)
-	{
-		custom_color_ = color;
-		custom_color_label->setBackgroundColor(custom_color_.getQColor());
-	}
+void DisplayProperties::setCustomColor(const ColorRGBA& color)
+{
+	custom_color_ = color;
+	custom_color_label->setBackgroundColor(custom_color_.getQColor());
+}
 	
+
 } } // namespaces
