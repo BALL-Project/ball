@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.64 2004/09/14 15:25:56 amoll Exp $
+// $Id: molecularControl.C,v 1.65 2004/09/14 16:02:34 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1276,12 +1276,42 @@ void MolecularControl::moveItems(const Matrix4x4& m)
 {
 	// copy list, because selection could change
 	List<Composite*> selection = selected_;
-
-	TransformationProcessor tp(m);
 	List<Composite*>::Iterator it = selection.begin();
-	for(; it != selection.end(); it++)
+
+	if (m.m14 == 0 && m.m24 == 0 && m.m34 == 0)
 	{
-		(*it)->apply(tp);
+		GeometricCenterProcessor center_processor;
+		Vector3 center;
+		for(; it != selection.end(); it++)
+		{
+			(*it)->apply(center_processor);
+			center += center_processor.getCenter();
+		}
+		
+		center /= (float) selection.size();
+
+		Matrix4x4 mym1, mym2;
+		mym1.setTranslation(center * -1);
+		mym2.setTranslation(center);
+
+		TransformationProcessor tp1(mym1);
+		TransformationProcessor tp2(m);
+		TransformationProcessor tp3(mym2);
+
+		for (it = selection.begin(); it != selection.end(); it++)
+		{
+			(*it)->apply(tp1);
+ 			(*it)->apply(tp2);
+			(*it)->apply(tp3) ;
+		}
+	}
+	else
+	{
+		TransformationProcessor tp(m);
+		for(; it != selection.end(); it++)
+		{
+			(*it)->apply(tp);
+		}
 	}
 
 	it = selection.begin();
