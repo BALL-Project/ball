@@ -1,7 +1,20 @@
 FILE=/tmp/mytmp-$USER
+FILE2=/tmp/mytmp-$USER2
 check_test $1 \
  | sed -e "s/  '/  /" \
  | sed -e "s/'//" > $FILE
 
-grep "ostream" $FILE | sed -e "s/^/\/\//"
-grep "operator =" $FILE | sed -e "s/^/\/\//"
+grep "ostream" $FILE | sed -e "s/^/\/\//" > $FILE2
+grep "operator = (" $FILE | sed -e "s/^/\/\//" >> $FILE2
+
+cat $FILE 								\
+ | sed "/ostream/d" 			\
+ | sed "/operator = (/d"	\
+ | sed -e "s/ = .*,/,/)/"	\
+ | sed -e "s/ = .*)/)/"		\
+ | sed -e "s/ [a-z_0-9]*)/)/" \
+ | sed -e "s/ [a-z_0-9]*,/,/"
+>> $FILE2
+
+cat $FILE2
+
