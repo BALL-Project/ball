@@ -43,7 +43,7 @@ void ColorMeshDialog::apply_clicked()
 	{
 		// coloring by file
 		RegularData3D dat;
-		String filename = String(location_edit->text());
+		String filename = String(location_edit->text().latin1());
 		File infile;
 		
 		try
@@ -114,7 +114,7 @@ void ColorMeshDialog::browse_clicked()
 {
 	// look up the full path of the parameter file
 	Path p;
-	String filename = p.find((String)location_edit->text());
+	String filename = p.find((String)location_edit->text().latin1());
 	QString result = QFileDialog::getOpenFileName(filename.c_str(), "*", 0, "Select a RegularData file");
 	if (!result.isEmpty())
 	{
@@ -170,7 +170,7 @@ void ColorMeshDialog::color_boxes_changed()
 
 void ColorMeshDialog::location_changed()
 {
-	if (String(location_edit->text()).size() != 0) apply_button->setEnabled(true);
+	if (String(location_edit->text().latin1()).size() != 0) apply_button->setEnabled(true);
 		else	apply_button->setEnabled(false);
 }
 
