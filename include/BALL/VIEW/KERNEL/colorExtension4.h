@@ -1,4 +1,4 @@
-// $Id: colorExtension4.h,v 1.5 2001/05/13 13:47:46 hekl Exp $
+// $Id: colorExtension4.h,v 1.6 2001/07/09 17:40:11 sturm Exp $
 
 #ifndef BALL_VIEW_KERNEL_COLOREXTENSION4_H
 #define BALL_VIEW_KERNEL_COLOREXTENSION4_H
@@ -28,9 +28,9 @@ namespace BALL
 				objects that needs four colors \Ref{ColorRGBA}. It provides the derived
 				class with methods for accessing these colors.
 				@memo    ColorExtension4 class (BALL VIEW kernel framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/05/13 13:47:46 $
+				@author  $Author: sturm $
+				@version $Revision: 1.6 $
+				@date    $Date: 2001/07/09 17:40:11 $
 		*/
 		class ColorExtension4: public ColorExtension3
 		{
@@ -194,11 +194,7 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the fourth color of {\em *this} colorExtension4.
-					Access the constant reference of the fourth color of {\em *this}
-					colorExtension4.
-					@return      ColorRGBA& constant reference to the fourth color of {\em *this} colorExtension4
-					@see         setColor4
-					@see         ColorRGBA
+				  For further information see \Ref{getColor4}.
 			*/
 			const ColorRGBA& getColor4() const
 				throw();
