@@ -163,6 +163,7 @@ void StageSettings::fogStateChanged()
 }
 
 void StageSettings::getGLSettings()
+	throw()
 {
 	GLRenderer& renderer = ((Scene*)Scene::getInstance(0))->getGLRenderer();
 	if (renderer.getVendor() == "") return;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertexBuffer.C,v 1.1.2.16 2005/01/23 23:20:00 amoll Exp $
+// $Id: vertexBuffer.C,v 1.1.2.17 2005/01/24 00:08:33 amoll Exp $
 
 // prevent typedef clash under Linux
 #define QT_CLEAN_NAMESPACE
@@ -63,6 +63,7 @@ namespace BALL
 
 bool MeshBuffer::initGL()
 {
+	if (glGenBuffersARB != 0) return true;
 	// obtain gl method pointers
 #ifdef _WINDOWS
 		glGenBuffersARB = (PFNGLGENBUFFERSARBPROC) wglGetProcAddress("glGenBuffersARB");

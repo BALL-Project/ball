@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.57.2.28 2005/01/23 23:19:59 amoll Exp $
+// $Id: glRenderer.C,v 1.57.2.29 2005/01/24 00:08:33 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -1542,10 +1542,13 @@ namespace BALL
 			else       Log.info() << "Disabling Vertex Buffer" << std::endl;
 
 			use_vertex_buffer_ = state;
+
+			if (use_vertex_buffer_) MeshBuffer::initGL();
 			return true;
 		}
 
 		void GLRenderer::clearVertexBuffersFor(Representation& rep)
+			throw()
 		{
 			List<GeometricObject*>& geometric_objects = rep.getGeometricObjects();
 			List<GeometricObject*>::Iterator it = geometric_objects.begin();
