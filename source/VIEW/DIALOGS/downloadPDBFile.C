@@ -221,7 +221,7 @@ namespace BALL
 							img.copyTo(tmp_filename);
 
 							QImage qi;
-							qi.load(tmp_filename);
+							qi.load(tmp_filename.c_str());
 
 							File temp(tmp_filename);
 							temp.remove();
