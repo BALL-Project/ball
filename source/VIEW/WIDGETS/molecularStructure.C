@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.83 2005/02/18 13:48:02 amoll Exp $
+// $Id: molecularStructure.C,v 1.84 2005/02/18 13:49:07 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -1009,7 +1009,7 @@ namespace BALL
 			amber_dialog_.accept();
 
 			// Set up the force field.
-			setStatusbarText("setting up force field...", true);
+			setStatusbarText("setting up force field...", false);
 			
 			ForceField& ff = getForceField();
 			ff.disableSelection();
@@ -1050,7 +1050,7 @@ namespace BALL
 			// Start the simulation. Make sure that potential selections
 			// are now honored.
 			ff.enableSelection();
-			setStatusbarText("Starting minimization...", true);
+			setStatusbarText("Starting minimization...", false);
 			ff.updateEnergy();
 
 			EnergyMinimizer* minimizer;
@@ -1177,7 +1177,7 @@ namespace BALL
 			}
 
 			// set up the force field
-			setStatusbarText("setting up force field...", true);
+			setStatusbarText("setting up force field...", false);
 		
 			// Setup the force field.
 			ForceField& ff = getForceField();
