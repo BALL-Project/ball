@@ -1,6 +1,7 @@
-// $Id: createSpectrumProcessor.h,v 1.2 2000/07/03 21:08:50 oliver Exp $
+// $Id: createSpectrumProcessor.h,v 1.3 2000/09/07 19:37:04 oliver Exp $
 
-#define CREATE_SPECTRUM_PROCESSOR
+#ifndef BALL_NMR_CREATESPECTRUMPROCESSOR_H
+#define BALL_NMR_CREATESPECTRUMPROCESSOR_H
 
 #include<BALL/COMMON/constants.h>
 #include<BALL/KERNEL/system.h>
@@ -15,87 +16,79 @@
 #include<BALL/DATATYPE/stringHashMap.h>
 #include<BALL/KERNEL/PTE.h>
 
-#ifndef BALL_NMR_PEAK
+#ifndef BALL_NMR_PEAK_H
 #	include<BALL/NMR/peak.h>
 #endif
 
 #include <list>
-using std::list;
 
-namespace BALL {
-/**@name	CreateSpectrumProcessor
-*/
+namespace BALL 
+{
+	/**@name	CreateSpectrumProcessor
+	*/
 
-//@{
+	//@{
 
-/**	Processor creates {\tt peaklist\_}. Each atom큦 chemical shift will create a new peak.
-	thist peak큦 {\tt atomlist\_} will contain the corresponding atom.
-*/
+	/**	Processor creates {\tt peaklist\_}. Each atom큦 chemical shift will create a new peak.
+		thist peak큦 {\tt atomlist\_} will contain the corresponding atom.
+	*/
 
-class CreateSpectrumProcessor:public UnaryProcessor<Object>
+	class CreateSpectrumProcessor
+		:	public UnaryProcessor<Atom>
 	{
-	private:
-	PDBAtom* patom_;
-	list<peak> peaklist_;
-	float *wert_;
-	float raster_;
-	
-	public:
+		public:
 
-	/**@name	Constructors and Destructors
-	*/
-	
-	//@{
+		/**@name	Constructors and Destructors
+		*/
+		
+		//@{
 
-	/**	Default Constructor
-	*/	
-	CreateSpectrumProcessor();
-	
-	/**	Destructor
-	*/
-	virtual ~CreateSpectrumProcessor();
-	
-	//@}
+		/**	Default Constructor
+		*/	
+		CreateSpectrumProcessor();
+		
+		/**	Destructor
+		*/
+		virtual ~CreateSpectrumProcessor();
+		
+		//@}
 
-	/**@name	class special functions
-	*/
+		/**@name	class special functions
+		*/
 
-	//@{
+		//@{
 
-	/**	start-function
-		nothing is done here
-	*/
-	virtual bool start();
-	
-	/**	finish-function
-		noting is done here
-	*/
-	virtual bool finish();
-	
-	/**	operator-function
-		if object is kind of PDBAtom a new peak is created ,
-		peak큦 parameters are set and the atom is added to the peak큦
-		{\tt atomlist\_}
-	*/
-	virtual Processor::Result operator()(Object&);
-	
+		/**	start-function
+			nothing is done here
+		*/
+		virtual bool start();
+		
+		/**	finish-function
+			noting is done here
+		*/
+		virtual bool finish();
+		
+		/**	operator-function
+			if object is kind of PDBAtom a new peak is created ,
+			peak큦 parameters are set and the atom is added to the peak큦
+			{\tt atomlist\_}
+		*/
+		virtual Processor::Result operator () (Atom& atom);
+		
 
-	/**	returns a pointer to {\tt peaklist\_}
-	*/
-	list<peak>* get_peaklist();
-	
-	/**	returns {\tt raster\_}, actually unused
-	*/
-	float get_raster();
-	
-	/** 	sets {\tt raster\_}, actually unused
-	*/
-	void set_raster(float);
+		/**	returns a pointer to {\tt peaklist\_}
+		*/
+		const list<Peak1D>& getPeakList() const;
+		
+		//@}
+		protected:
 
-	//@}
+		list<Peak1D> peaklist_;
+		float raster_;
 	};
 
-//@}
+	//@}
 
 } //namespace Ball
 	 
+#endif // BALL_NMR_CREATESPECTRUMPROCESSOR_H

@@ -1,44 +1,47 @@
-// $Id: shiftModule.h,v 1.2 2000/07/03 21:08:51 oliver Exp $
+// $Id: shiftModule.h,v 1.3 2000/09/07 19:37:04 oliver Exp $
 
-#define SHIFT_MODULE
+#ifndef BALL_NMR_SHIFTMODULE_H
+#define BALL_NMR_SHIFTMODULE_H
 
 #include<BALL/KERNEL/system.h>
 #include<BALL/DATATYPE/string.h>
 #include<BALL/CONCEPT/processor.h>
 #include<BALL/CONCEPT/object.h>
 
-namespace BALL {
+namespace BALL 
+{
 
-/**@name	 ShiftModule
-*/
+	/**@name	 ShiftModule
+	*/
 
-//@{		
+	//@{		
 
-/**		is derived from UnaryProcessor.
-		This way its secure just to have shift modules in the processor list of NMRSpectrum.
-*/
+	/**		is derived from UnaryProcessor.
+			This way its secure just to have shift modules in the processor list of NMRSpectrum.
+	*/
 
-class ShiftModule 
-: public UnaryProcessor <Object>
+	class ShiftModule 
+		: public UnaryProcessor <Atom>
 	{
-	private:
-	String* module_name_;
-	
-	public:	
-	/**@name	Constructors and Destructors
-	*/
-	//@{
-	
-	/** 	Default Constructor
-	*/
-	ShiftModule();
+		public:	
+		/**@name	Constructors and Destructors
+		*/
+		//@{
+		
+		/** 	Default Constructor
+		*/
+		ShiftModule();
 
-	/**	Destructor
-	*/
-	~ShiftModule();
+		/**	Destructor
+		*/
+		~ShiftModule();
 
-	//@}
+		//@}
+		protected:
+		String module_name_;		
 	};
-//@}
+	//@}
 
 } // namespace Ball
+
+#endif // BALL_NMR_SHIFTMODULE_H

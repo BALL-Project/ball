@@ -1,143 +1,120 @@
-// $Id: peak.h,v 1.2 2000/07/03 21:08:51 oliver Exp $
+// $Id: peak.h,v 1.3 2000/09/07 19:37:04 oliver Exp $
 
-#define BALL_NMR_PEAK
+#ifndef BALL_NMR_PEAK_H
+#define BALL_NMR_PEAK_H
 
-#include<BALL/KERNEL/PDBAtom.h>
+#include <iostream>
 
-#include <list>
-using std::list;
+namespace BALL 
+{
+	
+	class Atom;
 
-using namespace std;
+	/**@name 	One-dimensional (NMR) Peaks.
+	*/
 
-namespace BALL {
+	//@{
 
-/**@name 	peak
-*/
-
-//@{
-
-/**	represents the peak datastructure.
-	each peak may contain several atoms, by now the {\tt atomlist\_} contains just one atom.
-	Probably this structure will be changed in near future.
-	There are several floats describing the peak, in fact only one of them is used, which
-	is {\tt ppm\_} set to the chemical shift of the atom.
-*/
-
-class peak
+	/**	1D Peak Class.
+			Each peak contains a pointer to an associated atom (in the case of NMR: the atom that causes
+      this peak).																													
+	*/
+	class Peak1D
 	{
-	private:
-	
-	float min_,max_;
-	float ppm_,breadth_,height_;
-	list<PDBAtom*> atomlist_;
-	float anzahl_;
-	
-	public:
+		public:
 
-	/**@name	Constructors and Destructors
-	*/
-	
-	//@{
+		/**@name	Constructors and Destructors
+		*/
+		
+		//@{
 
-	/**	Default Constructor
-	*/
-	peak();
-	
-	/**	Copy Constructor
-	*/
-	peak(peak,int);
-	
-	/**	Destructor
-	*/
-	~peak();
-	
-	//@}
+		/**	Default Constructor
+		*/
+		Peak1D();
+		
+		/**	Copy Constructor
+		*/
+		Peak1D(const Peak1D& peak);
+		
+		/**	Destructor
+		*/
+		~Peak1D();
+		
+		//@}
 
-	/**@name class special functions
-	*/
+		/**@name Accessors
+		*/
+		//@{
 
-	//@{
+		/** Return the peak position.
+		*/
+		float getValue() const;
 
-	/** returns the value of {\tt ppm\_} in fact the chemical shift
-	*/
-	float get_ppm() const;
+		/** Return the peak width.
+		*/
+		float getWidth() const;
+		
+		/** Return the peak height (amplitude).
+		*/
+		float getHeight() const;
+		
+		/** Set the peak position.
+		*/
+		void setValue(float value);
 
-	/** returns the value of {\tt breadth\_} the breadth of the peak, actually unused and set to 0
-	*/
-	float get_breadth();
-	
-	/** returns the value of {\tt height\_} the height of the peak, actually unused and set to 0
-	*/
-	float get_height();
-	
-	/** returns the value of {\tt raster\_} actually unused and set to 0
-	*/
-	float get_raster();
-	
-	/** returns the value of {\tt anzahl\_} the number of atoms of the peak
-	*/
-	float get_anzahl();
-	
-	/** returns the value of {\tt min\_} the lowest chemicalshift of atoms in {\tt atomlist\_}
-	*/
-	float get_min();
-	
-	/** returns the value of {\tt max\_} the highest chemicalshift of atoms in {\\t atomlist\_}
-	*/
-	float get_max();
-	
-	/** returns {\tt atomlist\_}
-	*/
-	list<PDBAtom*> get_atomlist();
+		/** Set the peak width
+		*/
+		void setWidth(float width);
+		
+		/** Set the peak height
+		*/
+		void setHeight(float height);
 
-	/** sets the value of {\tt ppm\_}
-	*/
-	void set_ppm(float);
+		/**	Return the atom pointer.
+		*/
+		const Atom* getAtom() const;
 
-	/** sets the value of {\tt breadth\_}
-	*/
-	void set_breadth(float);
-	
-	/** sets the value of {\tt height\_}
-	*/
-	void set_height(float);
-	
-	/** sets the value of {\tt raster\_}
-	*/
-	void set_raster(float);
-	
-	/** sets the value of {\tt anzahl\_}
-	*/
-	void set_anzahl(float);
-	
-	/** sets the value of {\tt min\_}
-	*/
-	void set_min(float);
-	
-	/** sets the value of {\tt max\_}
-	*/
-	void set_max(float);
-	
-	/** assigns a list of atoms to {\tt atomlist\_}
-	*/
-	void set_atomlist(list<PDBAtom*>);
+		/**	Set the atom pointer.
+		*/
+		void setAtom(const Atom* atom);
+		//@}
 
-	/** Assignment Operator
-	*/
-	void operator=(peak);
+			
+		/**	@name Assignment
+		*/
+		//@{
+		/** Assignment Operator
+		*/
+		void operator = (const Peak1D& peak);
+		//@}
 
-	/** adding a PDBAtom to {\tt atomlist\_} and appropriate reassignment of above parameters
-	*/
-	void add(PDBAtom*);
-	
-	//@}
+
+		/**	@name Predicates
+		*/
+		//@{
+		/**	Equality operator
+		*/
+		bool operator == (const Peak1D& peak) const;
+
+		/**	Lesser than operator
+		*/
+		bool operator < (const Peak1D& peak) const;
+		//@}
+
+		protected:
+
+		float value_;
+		float width_;
+		float height_;
+		const Atom*	atom_;
 	};
 
-bool operator==(peak,peak);
-bool operator<(peak,peak);
-ostream& operator<<(ostream&,peak&);
+	/**	Output operator
+	*/
+	ostream& operator << (ostream& os, const Peak1D& peak);
 
 //@}
 
-} // namespace Ball
+} // namespace BALL
 
+#endif // BALL_NMR_PEAK_H

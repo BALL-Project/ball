@@ -1,6 +1,7 @@
-// $Id: makeSpectrumProcessor.h,v 1.2 2000/07/03 21:08:50 oliver Exp $
+// $Id: makeSpectrumProcessor.h,v 1.3 2000/09/07 19:37:04 oliver Exp $
 
-#define MAKE_SPECTRUM_PROCESSOR
+#ifndef BALL_NMR_MAKESPECTRUMPROCESSOR_H
+#define BALL_NMR_MAKESPECTRUMPROCESSOR_H
 
 #include<BALL/KERNEL/system.h>
 #include<BALL/KERNEL/PTE.h>
@@ -23,12 +24,9 @@ namespace BALL
 /** 	Processor designed to built the well known processor user Interface of NMRSpectrum
 */
 
-class MakeSpectrumProcessor:public UnaryProcessor<Object>
-	{
-	private:
-	System *system_;
-	NMRSpectrum *spectrum_;
-
+class MakeSpectrumProcessor
+	:	public UnaryProcessor<Atom>
+{
 	public:
 	
 	/**@name Constructors and Destructors
@@ -53,25 +51,25 @@ class MakeSpectrumProcessor:public UnaryProcessor<Object>
 
 	//@{
 
-	/**	start function
-		nothing is done here
-	*/
-	virtual bool start();
-	
 	/**	finish funcion
-		NMRSpectrum function calculate_shifts() is called
+			NMRSpectrum function calculate_shifts() is called
 	*/
 	virtual bool finish();
 	
 	/**	operator function
-		if object is kind of system 
-		the {\tt system\_} variable of NMRSpectrum {\tt spectrum\_} is set to this system
+			if object is kind of system 
+			the {\tt system\_} variable of NMRSpectrum {\tt spectrum\_} is set to this system
 	*/
-	virtual Processor::Result operator()(Object&);
+	virtual Processor::Result operator () (Atom& atom);
 	
 	//@}
-	};
+	protected:
+	System*			system_;
+	NMRSpectrum spectrum_;
+};
 
 //@}
 
 } // namespace BALL	 
+
+#endif // BALL_NMR_MAKESPECTRUMPROCESSOR_H
