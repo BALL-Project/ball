@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.31 2004/04/18 17:15:47 amoll Exp $
+// $Id: representation.C,v 1.32 2004/04/18 18:12:24 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/representation.h>
 #include <BALL/VIEW/MODELS/modelProcessor.h>
@@ -232,10 +232,20 @@ namespace BALL
 		void Representation::update(bool rebuild) 
 			throw()
 		{
+			MainControl* mc = MainControl::getInstance(0);
+			
+			// ????? dirty trick to avoid getInstance problem under windows
+#ifdef BALL_PLATFORM_WINDOWS
+			mc = dynamic_cast<MainControl*>(qApp->mainWidget());
+#endif
+
 			// no need to update hidden representations
 			if (hasProperty(PROPERTY__HIDDEN)) 
 			{
 				needs_update_ = true;
+				// update of GeometricControl, also if Representation is hidden
+				RepresentationMessage* msg = new RepresentationMessage(*this, RepresentationMessage::UPDATE);
+				mc->sendMessage(*msg);
 				return;
 			}
 			else
@@ -245,13 +255,6 @@ namespace BALL
 #ifndef BALL_QT_HAS_THREADS
 			update_(rebuild);
 #else
-			MainControl* mc = MainControl::getInstance(0);
-			
-			// ????? dirty trick to avoid getInstance problem under windows
-#ifdef BALL_PLATFORM_WINDOWS
-			mc = dynamic_cast<MainControl*>(qApp->mainWidget());
-#endif
-
 			if (mc == 0)
 			{
 				update_(rebuild);
