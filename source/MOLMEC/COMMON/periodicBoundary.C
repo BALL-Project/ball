@@ -1,4 +1,4 @@
-// $Id: periodicBoundary.C,v 1.3 1999/12/28 17:50:06 oliver Exp $
+// $Id: periodicBoundary.C,v 1.4 2000/02/02 09:53:39 len Exp $
 
 #include <BALL/MOLMEC/COMMON/periodicBoundary.h>
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -16,15 +16,22 @@ using namespace std;
 namespace BALL 
 {
 
-	const char* PeriodicBoundary::PERIODIC_BOX_LOWER = "periodic_box_lower";
-	const char* PeriodicBoundary::PERIODIC_BOX_UPPER = "periodic_box_upper";
-	const char* PeriodicBoundary::PERIODIC_BOX_ENABLED = "periodic_box_enabled";
-	const char* PeriodicBoundary::PERIODIC_BOX_DISTANCE = "periodic_box_distance";
-	const char* PeriodicBoundary::PERIODIC_BOX_ADD_SOLVENT = "periodic_box_add_solvent";
-	const char* PeriodicBoundary::PERIODIC_BOX_SOLVENT_FILE = "periodic_box_solvent_file";
-	const char* PeriodicBoundary::PERIODIC_BOX_SOLVENT_SOLUTE_DISTANCE = "periodic_box_solvent_solute_distance";
-	const char* PeriodicBoundary::PERIODIC_WATER_FILE = "water.hin";
+	const char* PeriodicBoundary::Option::PERIODIC_BOX_LOWER = "periodic_box_lower";
+	const char* PeriodicBoundary::Option::PERIODIC_BOX_UPPER = "periodic_box_upper";
+	const char* PeriodicBoundary::Option::PERIODIC_BOX_ENABLED = "periodic_box_enabled";
+	const char* PeriodicBoundary::Option::PERIODIC_BOX_DISTANCE = "periodic_box_distance";
+	const char* PeriodicBoundary::Option::PERIODIC_BOX_ADD_SOLVENT = "periodic_box_add_solvent";
+	const char* PeriodicBoundary::Option::PERIODIC_BOX_SOLVENT_FILE = "periodic_box_solvent_file";
+	const char* PeriodicBoundary::Option::PERIODIC_BOX_SOLVENT_SOLUTE_DISTANCE = "periodic_box_solvent_solute_distance";
+	const char* PeriodicBoundary::Option::PERIODIC_WATER_FILE = "periodic_water_file";
  
+	const bool    PeriodicBoundary::Default::PERIODIC_BOX_ENABLED = false;
+	const float   PeriodicBoundary::Default::PERIODIC_BOX_DISTANCE = 5.0;
+	const bool    PeriodicBoundary::Default::PERIODIC_BOX_ADD_SOLVENT = true;
+	const char*   PeriodicBoundary::Default::PERIODIC_BOX_SOLVENT_FILE = "solvents/water.hin";
+	const float   PeriodicBoundary::Default::PERIODIC_BOX_SOLVENT_SOLUTE_DISTANCE = 2.3;
+	const char*   PeriodicBoundary::Default::PERIODIC_WATER_FILE = "solvents/water.hin";
+
 	// Default Constructor
 	PeriodicBoundary::PeriodicBoundary()
 		:	force_field_(0), 
@@ -59,10 +66,10 @@ namespace BALL
 	PeriodicBoundary& PeriodicBoundary::operator = (const PeriodicBoundary& periodic_boundary)
 	{
 		force_field_	= periodic_boundary.force_field_;
-		enabled_			= periodic_boundary.enabled_;
-		options				= periodic_boundary.options;
-		box_					= periodic_boundary.box_;
-		molecules_		= periodic_boundary.molecules_;
+		enabled_	= periodic_boundary.enabled_;
+		options		= periodic_boundary.options;
+		box_		= periodic_boundary.box_;
+		molecules_	= periodic_boundary.molecules_;
 
 		return *this;
 	}
@@ -177,39 +184,20 @@ namespace BALL
 		}
 	}
 
-	// Setup the periodic boundary	
-	bool PeriodicBoundary::setup()
+	Size PeriodicBoundary::generateMoleculesVector()
 	{
-		// we have no options from the force field: give up
-		if (options == 0)
-		{
-			Log.level(LogStream::WARNING) << "PeriodicBoundary not bound to a force field!" << endl;
-			return false;
-		}
-
-		// check whether the box is enabled 
-		if (options->has(PERIODIC_BOX_ENABLED))
-		{
-			enabled_ = options->getBool(PERIODIC_BOX_ENABLED);
-		}
-
-		// Periodic boundary not enabled
-		if (!enabled_)
-		{
-			return true;
-		}
-
 		// Periodic boundary is enabled:
 		// Generate molecules_ with the start and end indices of the atoms of the molecules in atom_. 
-
 		vector<Atom*>::const_iterator it = force_field_->getAtoms().begin();
-		Molecule* old_molecule;
+		Molecule* old_molecule = (*it)->getMolecule();
 		Molecule* new_molecule;
 		Size start = 0;
 		Size end = 0;
 		float mass = 0;
 
-		for (old_molecule = (*it)->getMolecule() ; it != force_field_->getAtoms().end() ; ++it, ++end) 
+		molecules_.clear();
+
+		for ( ; it != force_field_->getAtoms().end() ; ++it, ++end) 
 		{
 			new_molecule = (*it)->getMolecule();
 			if (new_molecule != old_molecule) {
@@ -226,23 +214,55 @@ namespace BALL
 			}
 		}
 
-		
-		
-		// first, check whether the box dimensions are already set
-		if (options->has(PERIODIC_BOX_LOWER) && options->has(PERIODIC_BOX_UPPER))
+		return(molecules_.size());
+	}
+
+	// Setup the periodic boundary	
+	bool PeriodicBoundary::setup()
+	{
+		// we have no options from the force field: give up
+		if (options == 0)
 		{
+			Log.level(LogStream::WARNING) << "PeriodicBoundary not bound to a force field!" << endl;
+			return false;
+		}
+
+		// check whether the box is enabled 
+		if (options->has(Option::PERIODIC_BOX_ENABLED))
+		{
+			enabled_ = options->getBool(Option::PERIODIC_BOX_ENABLED);
+		}
+
+		// Periodic boundary not enabled
+		if (!enabled_)
+		{
+			return true;
+		}
+
+		// set default values if necessary
+		options->setDefaultBool(Option::PERIODIC_BOX_ENABLED, true);
+		options->setDefault(Option::PERIODIC_BOX_SOLVENT_FILE, Default::PERIODIC_BOX_SOLVENT_FILE);
+		options->setDefaultBool(Option::PERIODIC_BOX_ADD_SOLVENT,Default::PERIODIC_BOX_ADD_SOLVENT);
+		options->setDefaultReal(Option::PERIODIC_BOX_DISTANCE, Default::PERIODIC_BOX_DISTANCE);
+		options->setDefaultReal(Option::PERIODIC_BOX_SOLVENT_SOLUTE_DISTANCE, Default::PERIODIC_BOX_SOLVENT_SOLUTE_DISTANCE);
+		options->setDefault(Option::PERIODIC_WATER_FILE, Default::PERIODIC_WATER_FILE);
+
+		// first, check whether the box dimensions are already set
+		if (options->has(Option::PERIODIC_BOX_LOWER) && options->has(Option::PERIODIC_BOX_UPPER))
+		{
+
 			// now check whether the options contain valid coordinates
-			Vector3 tmp_lower = options->getVector(PERIODIC_BOX_LOWER);
-			Vector3 tmp_upper = options->getVector(PERIODIC_BOX_UPPER);
+			Vector3 tmp_lower = options->getVector(Option::PERIODIC_BOX_LOWER);
+			Vector3 tmp_upper = options->getVector(Option::PERIODIC_BOX_UPPER);
 			
 			// store the box
 			box_.set(tmp_lower, tmp_upper);
 		} else {
 			// we didn`t find box dimensions - perhaps we got a distance?
 
-			if (options->has(PERIODIC_BOX_DISTANCE))
+			if (options->has(Option::PERIODIC_BOX_DISTANCE))
 			{
-				float dist = options->getReal(PERIODIC_BOX_DISTANCE);
+				float dist = options->getReal(Option::PERIODIC_BOX_DISTANCE);
 				
 				// make sure we have a system
 				if (force_field_->getSystem() == 0)
@@ -271,29 +291,30 @@ namespace BALL
 		
 		
 		// ensure that the box is non-degenerate
-		if ((box_.a.x < box_.b.x) || (box_.a.y < box_.b.y) || (box_.a.z < box_.b.z))
+		if ((box_.a.x >= box_.b.x) || (box_.a.y >= box_.b.y) || (box_.a.z >= box_.b.z))
 		{
 			Log.level(LogStream::ERROR) << "Illegal coordinates for periodic boundary: " << box_.a << "/" << box_.b << endl;
 			return false;
 		}
 
 		// check whether we should add water
-		if (options->has(PERIODIC_BOX_ADD_SOLVENT) && options->isBool(PERIODIC_BOX_ADD_SOLVENT))
+		if (options->has(Option::PERIODIC_BOX_ADD_SOLVENT) && options->isBool(Option::PERIODIC_BOX_ADD_SOLVENT))
 		{
-			String filename(PERIODIC_WATER_FILE);
+			String filename(Option::PERIODIC_WATER_FILE);
 			
-			if (options->has(PERIODIC_BOX_SOLVENT_FILE))
+			if (options->has(Option::PERIODIC_BOX_SOLVENT_FILE))
 			{
-				filename = options->get(PERIODIC_BOX_SOLVENT_FILE);
+				filename = options->get(Option::PERIODIC_BOX_SOLVENT_FILE);
 			}
 			
 			// avoid further addition of water
-			options->setBool(PERIODIC_BOX_ADD_SOLVENT, false);
+			options->setBool(Option::PERIODIC_BOX_ADD_SOLVENT, false);
+
 
 			// add the solvent
 			try 
 			{
-				addSolvent(options->get(PERIODIC_BOX_SOLVENT_FILE));
+				addSolvent(filename);
 			}
 			catch (Exception::FileNotFound e)
 			{
@@ -304,8 +325,8 @@ namespace BALL
 
 
 		// store the box dimensions in the options
-		options->setVector(PERIODIC_BOX_LOWER, box_.a);
-		options->setVector(PERIODIC_BOX_UPPER, box_.b);
+		options->setVector(Option::PERIODIC_BOX_LOWER, box_.a);
+		options->setVector(Option::PERIODIC_BOX_UPPER, box_.b);
 		Log.level(LogStream::INFORMATION) << "PeriodicBoundary dimensions: " << box_.a << "/" << box_.b << endl;
 	
 		return true;
@@ -348,9 +369,9 @@ namespace BALL
 		
 		// get the minimum solvent-solute distance from the options
 		float solvent_solute_distance = 0.0;
-		if (options->has(PERIODIC_BOX_SOLVENT_SOLUTE_DISTANCE))
+		if (options->has(Option::PERIODIC_BOX_SOLVENT_SOLUTE_DISTANCE))
 		{
-			solvent_solute_distance = options->getReal(PERIODIC_BOX_SOLVENT_SOLUTE_DISTANCE);
+			solvent_solute_distance = options->getReal(Option::PERIODIC_BOX_SOLVENT_SOLUTE_DISTANCE);
 		}
 
 
@@ -381,15 +402,25 @@ namespace BALL
 			{
 				for (Size k = 0; k < N_z; ++k)
 				{
-					translation.setTranslation(basis + Vector3
-					 ((float)i * width, (float)j * height, (float)k * depth));
+					Vector3 tmp;
+					tmp.x = basis.x + (float)i * width;
+					tmp.y = basis.y + (float)j * height;
+					tmp.z = basis.z + (float)k * depth;
+					translation.setTranslation(tmp);
 					system.apply(translation);
 					
 					// check for overlaps and insert solvent molecules
 					added_molecules += MolmecSupport::addNonOverlappingMolecules
-																							(*force_field_->getSystem(), 
-																							 system, box_, 
-																							 solvent_solute_distance);
+															(*force_field_->getSystem(), 
+																system, box_, 
+																solvent_solute_distance);
+
+					tmp.x = -tmp.x;
+					tmp.y = -tmp.y;
+					tmp.z = -tmp.z;
+
+					translation.setTranslation(tmp);
+					system.apply(translation);
 				}
 			}
 		}
