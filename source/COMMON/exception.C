@@ -1,4 +1,4 @@
-// $Id: exception.C,v 1.25 2001/07/11 17:06:01 anker Exp $
+// $Id: exception.C,v 1.26 2001/07/15 13:45:32 oliver Exp $
 
 #include <BALL/COMMON/exception.h>
 #include <BALL/COMMON/logStream.h>
@@ -347,5 +347,13 @@ namespace BALL
 			GlobalExceptionHandler globalHandler;
 
 	} // namespace Exception
+
+	std::ostream& operator << (std::ostream& os, const Exception::GeneralException& e)
+	{
+		os << e.getName() << " @ " << e.getFile() << ":" << e.getLine() << ": " << e.getMessage();
+
+		return os;
+	}
+
 
 } // namespace BALL

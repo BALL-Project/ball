@@ -1,4 +1,4 @@
-// $Id: exception.h,v 1.25 2001/07/11 17:05:34 anker Exp $
+// $Id: exception.h,v 1.26 2001/07/15 13:44:54 oliver Exp $
    
 #ifndef BALL_COMMON_EXCEPTION_H
 #define BALL_COMMON_EXCEPTION_H
@@ -108,8 +108,7 @@ namespace BALL
 			string 	name_;
 			string 	message_;
 		};		
-	
-	
+
 		/**	Index underflow.
 				Throw this exception to indicate an index that was smaller than
 				allowed.  The constructor has two additional arguments, the values
@@ -466,6 +465,25 @@ namespace BALL
 
 		//@}
 	}
-}
+		/**	Output operator for exceptions.
+				All BALL exceptions can be printed to an arbitrary output stream.
+				Information written contains the exception class, the error message,
+        and the location (file, line number). The following code block
+        can thus be used to catch any BALL exceptions and convert them to
+        human readable information:
+				\begin{verbatim}
+				try
+				{
+					.... // some code which potentially throws an exception
+				}
+				catch (Exception::GeneralException e)
+				{
+					Log.error() << "caught exception: " << e << std::endl;
+				}
+				\end{verbatim}
+		*/
+		std::ostream& operator << (std::ostream& os, const Exception::GeneralException& e);
+	
+} // namespace BALL
 
 #endif // BALL_COMMON_EXCEPTION_H
