@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.23 2002/12/18 16:00:36 sturm Exp $
+// $Id: displayProperties.C,v 1.24 2002/12/20 20:20:36 anhi Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/displayProperties.h>
 #include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
@@ -320,7 +320,8 @@ namespace BALL
 			else if (string == "surface")
 			{
 				setValue_(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_SURFACE);
-				setValue_(ADDRESS__DYNAMIC_DRAWING_MODE, VALUE__DRAWING_MODE_DOTS);
+//				setValue_(ADDRESS__DYNAMIC_DRAWING_MODE, VALUE__DRAWING_MODE_DOTS);
+				setValue_(ADDRESS__DYNAMIC_DRAWING_MODE, VALUE__DRAWING_MODE_WIREFRAME);
 			}
 			else if (string == "van der Waals")
 			{
@@ -488,6 +489,8 @@ namespace BALL
 				// perform update of the composites
 				ccm->setComposite(*updates_it);
 				notify_(ccm);
+			
+						
 			}
 				
 			// update scene
@@ -554,6 +557,18 @@ namespace BALL
 			// apply static visualization processor
 			if (getValue_(ADDRESS__STATIC_MODEL) == VALUE__MODEL_SURFACE) composite.apply(remove_model_static_);
 			composite.apply(*static_base_model_pointer_);
+			
+			// this is a workaround to ensure that if we have a dynamic and a static surface, both appear in the list
+			if ( (getValue_(ADDRESS__STATIC_MODEL) == VALUE__MODEL_SURFACE) &&
+			  	 (getValue_(ADDRESS__DYNAMIC_MODEL) == VALUE__MODEL_SURFACE)    )
+			{
+				// send the message again
+				ChangedCompositeMessage* ccm = new ChangedCompositeMessage;
+				ccm->setDeletable(true);
+				ccm->setComposite(composite);
+				notify_(ccm);
+			}	
+			
 			if (getValue_(ADDRESS__DYNAMIC_MODEL) == VALUE__MODEL_SURFACE) composite.apply(remove_model_dynamic_);
 			composite.apply(*dynamic_base_model_pointer_);
 		}
