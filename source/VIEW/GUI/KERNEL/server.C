@@ -1,9 +1,12 @@
-// $Id: server.C,v 1.1 2000/09/23 13:28:35 hekl Exp $
+// $Id: server.C,v 1.2 2000/11/12 15:20:44 hekl Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/server.h>
-
 #include <BALL/COMMON/logStream.h>
 
+#include <qstatusbar.h>
+#include <qpixmap.h>
+#include <qtooltip.h>
+#include <qstring.h>
 
 using namespace std;
 
@@ -12,28 +15,44 @@ namespace BALL
   
 	namespace VIEW
 	{
+		const char* Server::mini_ray_xpm_[] =
+		{
+        "16 14 4 1",
+        "   c None",
+        ".  c black",
+        "X  c yellow",
+        "o  c gray50",
+        "     .........  ",
+        "     .XXXXXX.o  ",
+        "    .XXXXXX.o   ",
+        "    .XXXXX.o    ",
+        "   .XXXXX.o     ",
+        "   .XXXX.....   ",
+        "  .XXXXXXXX.o   ",
+        "  .....XXX.o    ",
+        "   oo.XXX.o     ",
+        "     .XX.o      ",
+        "    .XX.o       ",
+        "    .X.o        ",
+        "   .X.o         ",
+        "   ..o          "
+		};        
   
-		Server::Server()
-			:	QTTimer(),
-				ConnectionObject(),
+		Server::Server(QWidget* parent, const char* name)
+			:	QTTimer(parent, name),
+				ModularWidget(name),
 				object_creator_(0),
 				composite_hashmap_(),
 				iostream_socket_(0),
 				sock_inet_buf_(0),
-				port_(VIEW_DEFAULT_PORT)
+				port_(VIEW_DEFAULT_PORT),
+				server_preferences_(0),
+				server_icon_(0)
 		{
+			// register ModularWidget
+			registerWidget(this);
+			
 			deregisterObjectCreator();
-		}
-
-		Server::Server(const Server& server, bool deep)
-			:	QTTimer(server, deep),
-				ConnectionObject(server, deep),
-				object_creator_(server.object_creator_),
-				composite_hashmap_(),
-				iostream_socket_(0),
-				sock_inet_buf_(0),
-				port_(server.port_)
-		{
 		}
 
 		Server::~Server()
@@ -104,6 +123,104 @@ namespace BALL
 			port_ = port;
 		}
 		
+		void Server::initializeWidget(MainControl& main_control)
+		{
+			server_icon_ = new QLabel(main_control.statusBar());
+			main_control.statusBar()->addWidget(server_icon_, 1, TRUE );
+			QToolTip::add(server_icon_, "VIEW server status");
+			QPixmap icon(mini_ray_xpm_);
+
+			server_icon_->setPixmap(icon);
+			server_icon_->show();
+ 		}
+
+		void Server::finalizeWidget(MainControl& main_control)
+		{
+			main_control.statusBar()->removeWidget(server_icon_);	
+			delete server_icon_;
+		}
+			
+		void Server::checkMenu(MainControl& /* main_control */)
+		{
+		}
+
+		void Server::initializePreferencesTab(Preferences &preferences)
+		{
+			server_preferences_ = new ServerPreferences();
+			CHECK_PTR(server_preferences_);
+
+			preferences.insertTab(server_preferences_, "Server");
+		}
+
+		void Server::finalizePreferencesTab(Preferences &preferences)
+		{
+			if (server_preferences_ != 0)
+			{
+				preferences.removeTab(server_preferences_);
+		
+				delete server_preferences_;
+				server_preferences_ = 0;
+			}
+		}
+		
+		void Server::applyPreferences(Preferences & /* preferences */)
+		{
+			if (server_preferences_ != 0)
+			{
+				// get server mode
+				bool start_server = server_preferences_->getServerStatus();
+		
+				if (start_server)
+				{
+					// retrieve the port number
+					int port = server_preferences_->getPort();
+
+					// set the port and active the server
+					setPort(port);
+					activate();
+	
+					// adjust the tool tip and update the server icon
+					QString tip;
+					tip.sprintf("VIEW Server listening on port %d", port); 
+					QToolTip::add(server_icon_, tip);
+					server_icon_->show();
+				}
+				else
+				{
+					// stop the server
+					deactivate();
+
+					// hide the icon
+					server_icon_->hide();
+					QToolTip::add(server_icon_, "VIEW Server disabled");
+				}
+
+				// notify the main window
+				WindowMessage *window_message_2 = new WindowMessage;
+				window_message_2->setStatusBar("");
+				window_message_2->setDeletable(true);
+				notify_(window_message_2);
+ 			}
+		}
+		
+		void Server::fetchPreferences(INIFile &inifile)
+		{
+			// the default preferences tab (if existent)
+			if (server_preferences_ != 0)
+			{
+				server_preferences_->fetchPreferences(inifile);
+			}
+		}
+		
+		void Server::writePreferences(INIFile &inifile)
+		{
+			// the default preferences tab (if existent)
+			if (server_preferences_ != 0)
+			{
+				server_preferences_->writePreferences(inifile);
+			}
+		}
+
 		bool Server::isValid() const
 		{
 			return (bool)(QTTimer::isValid() == true
