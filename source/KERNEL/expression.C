@@ -1,4 +1,4 @@
-// $Id: expression.C,v 1.26 2001/07/15 20:57:41 oliver Exp $
+// $Id: expression.C,v 1.27 2001/07/16 12:59:50 anker Exp $
 
 #include <BALL/KERNEL/expression.h>
 #include <BALL/KERNEL/standardPredicates.h>
@@ -97,7 +97,7 @@ namespace BALL
 			// pointers only if they are default constructed, so a consistency
 			// check might be useful (the string should be empty; maybe later)
 
-			return ((create_methods_ == expression.create_methods_)
+			return ((create_methods_.size() == expression.create_methods_.size())
 					&& (expression_string_ == expression.expression_string_));
 		}
 		else
@@ -115,7 +115,7 @@ namespace BALL
 
 			// compare everything.
 
-			return ((create_methods_ == expression.create_methods_)
+			return ((create_methods_.size() == expression.create_methods_.size())
 					&& (*expression_tree_ == *expression.expression_tree_)
 					&& (expression_string_ == expression.expression_string_));
 			}
