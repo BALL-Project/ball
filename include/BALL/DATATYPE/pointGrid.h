@@ -1,4 +1,4 @@
-// $Id: pointGrid.h,v 1.12 2000/07/03 22:58:35 amoll Exp $ 
+// $Id: pointGrid.h,v 1.13 2000/07/05 21:46:28 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_POINTGRID_H
 #define BALL_DATATYPE_POINTGRID_H
@@ -596,6 +596,7 @@ namespace BALL
 		 const Size grid_points_x,
 		 const Size grid_points_y,
 		 const Size grid_points_z) 
+		: data(0)
 	{
 		*this = PointGrid(lower.x, lower.y, lower.z, upper.x, upper.y, upper.z,
 											grid_points_x, grid_points_y, grid_points_z);
@@ -603,9 +604,10 @@ namespace BALL
 
 	template <class GridDataType>
 	PointGrid<GridDataType>::PointGrid
-		(const Vector3 &lower,
-		 const Vector3 &upper,
+		(const Vector3& lower,
+		 const Vector3& upper,
 		 const float spacing) 
+		: data(0)
 	{
 		*this = PointGrid(lower.x, lower.y, lower.z, upper.x, upper.y, upper.z,
 											spacing, spacing, spacing);
