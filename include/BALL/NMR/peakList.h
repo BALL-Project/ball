@@ -1,4 +1,4 @@
- // $Id: peakList.h,v 1.6 2002/01/05 02:54:28 oliver Exp $
+ // $Id: peakList.h,v 1.7 2002/01/05 03:21:30 oliver Exp $
 
 #ifndef BALL_NMR_PEAKLIST_H
 #define BALL_NMR_PEAKLIST_H
@@ -188,65 +188,18 @@ namespace BALL
 		return max;
 	}
 
+	// partial specializations:
 	template <>
-	PeakList<Peak2D>::Position PeakList<Peak2D>::getMinPosition() const
-	{
-		ConstIterator it = begin();
-		Peak2D::Position min(Limits<float>::max(), Limits<float>::max());
-		for (; it != end(); ++it)
-		{
-			min.x = std::min(min.x, it->getPosition().x);
-			min.y = std::min(min.y, it->getPosition().y);
-		}
-
-		return min;
-	}
+	PeakList<Peak2D>::Position PeakList<Peak2D>::getMinPosition() const;
 
 	template <>
-	PeakList<Peak2D>::Position PeakList<Peak2D>::getMaxPosition() const
-	{
-		ConstIterator it = begin();
-		Peak2D::Position max(-Limits<float>::max(), -Limits<float>::max());
-		for (; it != end(); ++it)
-		{
-			max.x = std::max(max.x, it->getPosition().x);
-			max.y = std::max(max.y, it->getPosition().y);
-		}
-
-		return max;
-	}
+	PeakList<Peak2D>::Position PeakList<Peak2D>::getMaxPosition() const;
 
 	template <>
-	PeakList<Peak3D>::Position PeakList<Peak3D>::getMinPosition() const
-	{
-		ConstIterator it = begin();
-		Peak3D::Position min(Limits<float>::max(), Limits<float>::max(), Limits<float>::max());
-		for (; it != end(); ++it)
-		{
-			min.x = std::min(min.x, it->getPosition().x);
-			min.y = std::min(min.y, it->getPosition().y);
-			min.z = std::min(min.z, it->getPosition().z);
-		}
-
-		return min;
-	}
+	PeakList<Peak3D>::Position PeakList<Peak3D>::getMinPosition() const;
 
 	template <>
-	PeakList<Peak3D>::Position PeakList<Peak3D>::getMaxPosition() const
-	{
-		ConstIterator it = begin();
-		Peak3D::Position max(-Limits<float>::max(), -Limits<float>::max(), -Limits<float>::max());
-		for (; it != end(); ++it)
-		{
-			max.x = std::max(max.x, it->getPosition().x);
-			max.y = std::max(max.y, it->getPosition().y);
-			max.z = std::max(max.z, it->getPosition().z);
-		}
-
-		return max;
-	}
-
-
+	PeakList<Peak3D>::Position PeakList<Peak3D>::getMaxPosition() const;
 
 } // namespace BALL
 
