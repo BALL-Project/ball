@@ -1,6 +1,7 @@
-// $Id: assign_typenames_from_rules.C,v 1.2 2003/03/28 14:41:40 anker Exp $
+// $Id: assign_typenames_from_rules.C,v 1.3 2003/10/04 09:38:17 anker Exp $
 
 #include <BALL/common.h>
+#include <BALL/KERNEL/system.h>
 #include <BALL/FORMAT/INIFile.h>
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/SYSTEM/path.h>
