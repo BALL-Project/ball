@@ -1,4 +1,4 @@
-// $Id: glSurfaceModel.C,v 1.3 2001/05/13 15:02:41 hekl Exp $
+// $Id: glSurfaceModel.C,v 1.3.4.1 2002/08/16 13:31:21 oliver Exp $
 
 #include <BALL/MOLVIEW/GUI/FUNCTOR/glSurfaceModel.h>
 
@@ -9,12 +9,10 @@ namespace BALL
 	{
 
 		using VIEW::GLMesh;
-
 			
 		AddGLSurfaceModel::AddGLSurfaceModel()
 			throw()
-				:
-				AddSurfaceModel()
+			:	AddSurfaceModel()
 		{
 		}
 
@@ -22,8 +20,7 @@ namespace BALL
 			(const AddGLSurfaceModel &add_gl_surface_model,
 			 bool deep)
 			throw()
-				:
-				AddSurfaceModel(add_gl_surface_model, deep)
+			:	AddSurfaceModel(add_gl_surface_model, deep)
 		{
 		}
 
@@ -38,9 +35,7 @@ namespace BALL
 			AddSurfaceModel::destroy();
 		}
 
-		Mesh *
-		AddGLSurfaceModel::createMesh_
-			()
+		Mesh* AddGLSurfaceModel::createMesh_()
 		{
 			return (Mesh *)(new GLMesh());
 		}
