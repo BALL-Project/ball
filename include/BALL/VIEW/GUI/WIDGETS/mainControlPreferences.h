@@ -55,8 +55,7 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} mainControlPreferences.
-					Calls \Ref{destroy}.
-					@see         destroy
+					Calls \Ref{clear}.
 			*/
 			virtual ~MainControlPreferences()
 				throw();
@@ -67,11 +66,6 @@ namespace BALL
 			virtual void clear()
 				throw();
 
-			/** Explicit destructor.
-					Empty for further purpose.
-			*/
-			virtual void destroy()
-				throw();
 			//@}
 
 			/**	@name	Accessors: inspectors and mutators 

@@ -44,7 +44,7 @@ colorMeshDialogData_moc.C:	$(HEADER_DIR)/colorMeshDialogData.h
 	$(MOC) $< -o $@
 
 $(HEADER_DIR)/colorMeshDialogData.h:	colorMeshDialog.ui
-	$(UIC) -o $@ $<
+	$(UIC) -o $@ colorMeshDialog.ui
 
 colorMeshDialogData.C:	$(HEADER_DIR)/colorMeshDialogData.h
-	$(UIC) -o $@ -impl $< colorMeshDialog.ui
+	$(UIC) -o $@ -impl $(HEADER_DIR)/colorMeshDialogData.h colorMeshDialog.ui

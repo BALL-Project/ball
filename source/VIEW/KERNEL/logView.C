@@ -58,11 +58,6 @@ namespace BALL
 		{
 		}
 
-		void LogView::destroy()
-			throw()
-		{
-		}
-
 	  bool LogView::onNotify(LogStreamNotifier& /* source */)
 			throw()
 		{

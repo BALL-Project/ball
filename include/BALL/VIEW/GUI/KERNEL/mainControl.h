@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.23 2002/12/16 12:22:49 sturm Exp $
+// $Id: mainControl.h,v 1.24 2002/12/16 15:52:10 oliver Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
 #define BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
@@ -193,8 +193,7 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} MainControl.
-					Calls \Ref{destroy}
-					@see  destroy
+					Calls \Ref{clear}
 			*/
 			virtual ~MainControl()
 				throw();
@@ -209,15 +208,8 @@ namespace BALL
 			virtual void clear()
 				throw();
 
-			/** Explicit destructor.
-					Clears all inserted \Ref{CompositeDescriptor}
-					Calls \Ref{clear}
-					@see  clear
-			*/
-			virtual void destroy()
-				throw();
-
 			//@}
+
 			/**	@name	Accessors
 			*/
 			//@{

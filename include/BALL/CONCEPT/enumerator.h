@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: enumerator.h,v 1.21 2002/12/12 09:46:22 oliver Exp $
+// $Id: enumerator.h,v 1.22 2002/12/16 15:52:10 oliver Exp $
 
 #ifndef BALL_CONCEPT_ENUMERATOR_H
 #define BALL_CONCEPT_ENUMERATOR_H
@@ -471,6 +471,9 @@ namespace BALL
 			typedef Enumerator<Container, SiteIterator, Variant>* 
 				ContainerPointer;
 
+			typedef const Enumerator<Container, SiteIterator, Variant>* 
+				ContainerConstPointer;
+
 			typedef EnumeratorIndex
 				IteratorPosition;
 
@@ -493,7 +496,7 @@ namespace BALL
 			{
 			}
 			
-			const ContainerPointer getContainer() const	
+			ContainerConstPointer getContainer() const	
 				throw()
 			{
 				return bound_;

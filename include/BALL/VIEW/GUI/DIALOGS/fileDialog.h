@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fileDialog.h,v 1.9 2002/12/12 09:33:08 oliver Exp $
+// $Id: fileDialog.h,v 1.10 2002/12/16 15:52:10 oliver Exp $
 
 #ifndef BALL_VIEW_GUI_DIALOGS_FILEDIALOG_H
 #define BALL_VIEW_GUI_DIALOGS_FILEDIALOG_H
@@ -61,8 +61,7 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} fileDialog.
-					Calls \Ref{destroy}.
-					@see         destroy
+					Calls \Ref{clear}.
 			*/
 			virtual ~FileDialog()
 				throw();
@@ -72,14 +71,8 @@ namespace BALL
 			*/
 			virtual void clear()
 				throw();
-
-			/** Explicit destructor.
-					Empty for further purpose.
-			*/
-			virtual void destroy()
-				throw();
-							
 			//@}
+
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{

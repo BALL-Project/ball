@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RSVertex.h,v 1.24 2002/06/19 12:36:18 strobel Exp $
+// $Id: RSVertex.h,v 1.25 2002/12/16 15:52:10 oliver Exp $
 
 #ifndef BALL_STRUCTURE_RSVERTEX_H
 #define BALL_STRUCTURE_RSVERTEX_H
@@ -292,7 +292,6 @@ namespace BALL
 											{\bf false} otherwise
 		*/
 		virtual bool operator *= (const TRSVertex<T>& rsvertex) const
-		//bool similar(const TRSVertex<T>& rsvertex) const
 			throw();
 
 		/**	Test if the vertex is meber of a given RSFace.

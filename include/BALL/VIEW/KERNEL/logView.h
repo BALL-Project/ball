@@ -86,8 +86,7 @@ namespace BALL
 			/** Destructor.
 					Default destruction of {\em *this} logView.
 					Remove the connection between the \Ref{Log} object and {\em *this} logView.
-					Calls \Ref{destroy}.
-					@see         destroy
+					Calls \Ref{clear}.
 			*/
 			virtual ~LogView()
 				throw();
@@ -98,12 +97,6 @@ namespace BALL
 			virtual void clear()
 				throw();
 
-			/** Explicit destructor.
-					Destroy {\em *this} logView.
-					Empty for further purpose.
-			*/
-			virtual void destroy()
-				throw();
 			//@}
 
 			/**	@name	Storers

@@ -37,15 +37,10 @@ namespace BALL
 					<< " of class " << RTTI::getName<Preferences>() << endl;
 			#endif 
 
-			destroy();
+			clear();
 		}
 		
 		void Preferences::clear()
-			throw()
-		{
-		}
-
-		void Preferences::destroy()
 			throw()
 		{
 		}

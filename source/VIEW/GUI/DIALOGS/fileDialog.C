@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fileDialog.C,v 1.7 2002/12/12 11:43:23 oliver Exp $
+// $Id: fileDialog.C,v 1.8 2002/12/16 15:52:11 oliver Exp $
 
 #include <BALL/VIEW/GUI/DIALOGS/fileDialog.h>
  
@@ -35,15 +35,10 @@ namespace BALL
 									<< " of class FileDialog" << std::endl; //<< RTTI::getName<FileDialog>() << std::endl;
 			#endif 
 
-			destroy();
+			clear();
 		}
 
 		void FileDialog::clear()
-			throw()
-		{
-		}
-
-		void FileDialog::destroy()
 			throw()
 		{
 		}

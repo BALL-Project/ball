@@ -1,4 +1,4 @@
-// $Id: mainControl.C,v 1.28 2002/12/16 12:23:07 sturm Exp $
+// $Id: mainControl.C,v 1.29 2002/12/16 15:52:11 oliver Exp $
 
 // this is required for QMenuItem
 #define INCLUDE_MENUITEM_DEF
@@ -70,7 +70,7 @@ namespace BALL
 				Log.info() << "Destructing object " << (void *)this << " of class " << RTTI::getName<MainControl>() << endl;
 			#endif 
 
-			destroy();
+			clear();
 		}
 
 		QPopupMenu* MainControl::initPopupMenu(int ID)
@@ -140,18 +140,12 @@ namespace BALL
 				delete *it;
 			}
 
-			descriptors_.destroy();
-			composite_map_.destroy();
-			descriptor_map_.destroy();
+			descriptors_.clear();
+			composite_map_.clear();
+			descriptor_map_.clear();
 			selection_.clear();
 		}
 			
-		void MainControl::destroy()
-			throw()
-		{
-			clear();
-		}
-
 		void MainControl::show()
 		{
 			#ifdef BALL_VIEW_DEBUG

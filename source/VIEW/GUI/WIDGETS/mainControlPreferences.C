@@ -104,15 +104,10 @@ namespace BALL
 					<< " of class " << RTTI::getName<MainControlPreferences>() << endl;
 			#endif 
 
-			destroy();
+			clear();
 		}
 		
 		void MainControlPreferences::clear()
-			throw()
-		{
-		}
-
-		void MainControlPreferences::destroy()
 			throw()
 		{
 		}

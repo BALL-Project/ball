@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: solventExcludedSurface.h,v 1.30 2002/12/16 09:08:27 oliver Exp $
+// $Id: solventExcludedSurface.h,v 1.31 2002/12/16 15:52:10 oliver Exp $
 
 #ifndef BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
 #define BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
@@ -1400,8 +1400,8 @@ namespace BALL
 		TVector3<double> v2((double)v2_.x,(double)v2_.y,(double)v2_.z);
 		TVector3<T> n_(edge->circle_.n);
 		TVector3<double> n((double)n_.x,(double)n_.y,(double)n_.z);
-		TAngle<T> test_phi(getOrientedAngle(v1,v2,n));
-TAngle<T> tf(getOrientedAngle(edge->vertex_[0]->point_-edge->circle_.p,
+		TAngle<T> test_phi((T)getOrientedAngle(v1, v2, n));
+		TAngle<T> tf(getOrientedAngle(edge->vertex_[0]->point_-edge->circle_.p,
 															edge->vertex_[1]->point_-edge->circle_.p,
 															edge->circle_.n));
 		if ((test_phi.value-(double)Constants::PI)*((double)edge->rsedge_->phi_.value-(double)Constants::PI) < 0)

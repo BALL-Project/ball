@@ -65,7 +65,7 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} preferences.
-					Calls \Ref{destroy}.
+					Calls \Ref{clear}.
 					@see         destroy
 			*/
 			virtual ~Preferences()
@@ -76,14 +76,8 @@ namespace BALL
 			*/
 			virtual void clear()
 				throw();
-
-			/** Explicit destructor.
-					Empty for further purpose.
-			*/
-			virtual void destroy()
-				throw();
-
 			//@}
+
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
