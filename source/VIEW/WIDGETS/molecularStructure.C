@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.43.2.4 2004/05/22 21:33:17 oliver Exp $
+// $Id: molecularStructure.C,v 1.43.2.5 2004/05/25 17:54:43 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -114,8 +114,8 @@ namespace BALL
 
 			// Tools Menu -------------------------------------------------------------------
 			getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS);
-			hint = "Map two proteins.";
-			map_proteins_id_ = insertMenuEntry(MainControl::TOOLS, "&Map two Proteins", this, SLOT(mapProteins()), 0, -1, hint);
+//			hint = " Map two proteins.";
+// 			map_proteins_id_ = insertMenuEntry(MainControl::TOOLS, "&Map two Proteins", this, SLOT(mapProteins()), 0, -1, hint);
 
 			hint = "Calculate RMSD for two molecules or fragments of molecules.";
 			calculate_RMSD_id_ = insertMenuEntry(MainControl::TOOLS, "&Calculate RMSD", this, SLOT(calculateRMSD()), 0, -1, hint);
@@ -171,8 +171,8 @@ namespace BALL
 			main_control.removeMenuEntry(MainControl::BUILD, "Calculate Secondary Structure", this,
 																											SLOT(calculateSecondaryStructure()));
 
-			main_control.removeMenuEntry(MainControl::BUILD, "Map two Proteins", this,
-																											SLOT(mapProteins()));
+//			main_control.removeMenuEntry(MainControl::BUILD, " Map two Proteins", this,
+// 																											SLOT(mapProteins()));
 		}
 
 
@@ -447,8 +447,8 @@ namespace BALL
 			menuBar()->setItemEnabled(center_camera_id_, one_item && composites_muteable);
 			menuBar()->setItemEnabled(create_distance_grid_id_, one_item && composites_muteable);
 
-			menuBar()->setItemEnabled(map_proteins_id_, (number_of_selected_objects == 2) && 
-																									 composites_muteable);
+//			menuBar()->setItemEnabled( map_proteins_id_, (number_of_selected_objects == 2) && 
+// 																									 composites_muteable);
 			menuBar()->setItemEnabled(calculate_RMSD_id_, (number_of_selected_objects == 2) &&
 																										composites_muteable); 
 		}
