@@ -1,4 +1,4 @@
-// $Id: baseIterator.h,v 1.13 2001/06/22 15:18:23 anker Exp $
+// $Id: baseIterator.h,v 1.14 2001/06/29 14:10:11 anker Exp $
 
 #ifndef BALL_CONCEPT_BASEITERATOR_H
 #define BALL_CONCEPT_BASEITERATOR_H
@@ -228,12 +228,12 @@ namespace BALL
 
 		protected:
 
-		/*_
+		/*_ BAUSTELLE: Why is this ctor protected?
 		*/
 		ConstBaseIterator(const Container& container)
 			throw();
 
-		//_
+		//_ 
 		static ConstBaseIterator*& getFirstIterator_();
 
 		//_
@@ -547,12 +547,12 @@ namespace BALL
 		*/
 		//@{
 
-		/**
+		/** Return a mutable reference of the traits of this iterator
 		*/
 		Traits& getTraits() const
 			throw();
 
-		/**
+		/** Return a mutable pointer to the bound container.
 		*/
 		Container* getContainer() const
 			throw();
