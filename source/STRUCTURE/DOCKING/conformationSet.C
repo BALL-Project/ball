@@ -22,7 +22,7 @@ namespace BALL
 		throw()
 	{
 		system_ = system;
-	}			
+	}
   
 	void ConformationSet::add(const float score, const System& conformation)
 	  throw()
@@ -40,6 +40,12 @@ namespace BALL
 	{
 		return system_;
 	}
+	
+	/*System& ConformationSet::getSystem()
+		throw()
+	{
+		return system_;
+	}*/
 
 	const std::vector<ConformationSet::Conformation>& ConformationSet::getScoring() const
 		throw()

@@ -1161,6 +1161,9 @@ namespace BALL
 		System S2 = system_backup_b_;
 
 		S.splice(S2);
+		String docking_name = S.getName() + "_" + S2.getName();
+		
+		S.setName(docking_name);
 		ConformationSet rc(S);
 	
 		// iterate over all peaks
