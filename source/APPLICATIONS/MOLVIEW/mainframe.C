@@ -285,8 +285,8 @@ Mainframe::Mainframe
 	//--------------------------------
 
   // registering object generator
-  MoleculeObjectCreator object_creator;
-  server_->registerObjectCreator(object_creator);
+  MoleculeObjectCreator* object_creator = new MoleculeObjectCreator;
+  server_->registerObjectCreator(*object_creator);
 
 	// check whether we should start the server
 	// and on which port
