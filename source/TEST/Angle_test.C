@@ -1,4 +1,4 @@
-// $Id: Angle_test.C,v 1.6 2000/03/02 23:17:42 oliver Exp $
+// $Id: Angle_test.C,v 1.7 2000/03/03 08:13:03 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Angle_test.C,v 1.6 2000/03/02 23:17:42 oliver Exp $")
+START_TEST(class_name, "$Id: Angle_test.C,v 1.7 2000/03/03 08:13:03 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -370,8 +370,8 @@ RESULT
 //line 242: method TAngle::bool operator <        (const TAngle& angle) const 
 CHECK(TAngle::bool operator <   (const TAngle& angle) const )
 	b = Angle(1);
-	TEST_EQUAL(b<a, false )
-	TEST_EQUAL(a<b, true )
+	TEST_EQUAL(b < a, false)
+	TEST_EQUAL(a < b, true)
 RESULT
 
 
@@ -386,27 +386,27 @@ RESULT
 //line 246: method TAngle::bool operator <= (const TAngle& angle) const 
 CHECK(TAngle::bool operator <= (const TAngle& angle) const )
 	b = Angle(0);
-	TEST_EQUAL(b <= a, true )
+	TEST_EQUAL(b <= a, true)
 	b = Angle(3);
-	TEST_EQUAL(b <= a, false )
+	TEST_EQUAL(b <= a, false)
 RESULT
 
 
 //line 248: method TAngle::bool operator >=       (const TAngle& angle) const 
 CHECK(TAngle::bool operator >=  (const TAngle& angle) const )
 	b = Angle(4);
-	TEST_EQUAL(b >= a, true )
+	TEST_EQUAL(b >= a, true)
 	b = Angle(0);
-	TEST_EQUAL(b >= a, false )
+	TEST_EQUAL(b >= a, false)
 RESULT
 
 
 //line 250: method TAngle::bool operator > (const TAngle& angle) const 
 CHECK(TAngle::bool operator > (const TAngle& angle) const )
 	b = Angle(1);
-	TEST_EQUAL(b>a, true )
+	TEST_EQUAL(b > a, true)
 	b = Angle(0);
-	TEST_EQUAL(b>a, false )
+	TEST_EQUAL(b > a, false)
 RESULT
 
 
