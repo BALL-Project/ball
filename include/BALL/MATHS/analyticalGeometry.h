@@ -1,4 +1,4 @@
-// $Id: analyticalGeometry.h,v 1.44 2001/03/12 10:49:42 oliver Exp $
+// $Id: analyticalGeometry.h,v 1.45 2001/06/18 16:43:28 strobel Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -772,54 +772,69 @@ namespace BALL
 	}
 
 	/**	Get the intersection line between two planes.
-			@param	a the first plane
-			@param	b the second plane
+			@param	plane1 the first plane
+			@param	plane2 the second plane
 			@param	line the resulting intersection
 			@return bool, true if an intersection can be calculated, otherwise false
 	*/
 	template <typename T>
-	bool GetIntersection(const TPlane3<T>& a, const TPlane3<T>& b, TLine3<T>& line)
+	bool GetIntersection(const TPlane3<T>& plane1, const TPlane3<T>& plane2, TLine3<T>& line)
 		throw()
 	{
-		TVector3<T> p;
-		T aa, ab, ac, ad;
-		T ba, bb, bc, bd;
-		T x1, x2;
-
-		aa = a.n.x;
-		ab = a.n.y;
-		ac = a.n.z;
-		ad = -(a.n * a.p);
-
-		ba = b.n.x;
-		bb = b.n.y;
-		bc = b.n.z;
-		bd = -(b.n * b.p);
-
-		if (SolveSystem2(aa, ab, -ad, ba, bb, -bd,x1, x2) == false)
+		T u = plane1.p*plane1.n;
+		T v = plane2.p*plane2.n;
+		T det = plane1.n.x*plane2.n.y-plane1.n.y*plane2.n.x;
+		if (Maths::isZero(det))
 		{
-			if (SolveSystem2(aa, ac, -ad, ba, bc, -bd, x1, x2) == false)
+			det = plane1.n.x*plane2.n.z-plane1.n.z*plane2.n.x;
+			if (Maths::isZero(det))
 			{
-				if (SolveSystem2(ab, ac, -ad, bb, bc, -bd, x1, x2) == false)
+				det = plane1.n.y*plane2.n.z-plane1.n.z*plane2.n.y;
+				if (Maths::isZero(det))
 				{
 					return false;
-				} 
-				else 
-				{
-					p.set(0, x1, x2);
 				}
-			} 
-			else 
-			{
-				p.set(x1, 0, x2);
+				else
+				{
+					T a = plane2.n.z/det;
+					T b = -plane1.n.z/det;
+					T c = -plane2.n.y/det;
+					T d = plane1.n.y/det;
+					line.p.x = 0;
+					line.p.y = a*u+b*v;
+					line.p.z = c*u+d*v;
+					line.d.x = -1;
+					line.d.y = a*plane1.n.x+b*plane2.n.x;
+					line.d.z = c*plane1.n.x+d*plane2.n.x;
+				}
 			}
-		} 
-		else 
-		{
-			p.set(x1, x2, 0);
+			else
+			{
+				T a = plane2.n.z/det;
+				T b = -plane1.n.z/det;
+				T c = -plane2.n.x/det;
+				T d = plane1.n.x/det;
+				line.p.x = a*u+b*v;
+				line.p.y = 0;
+				line.p.z = c*u+d*v;
+				line.d.x = a*plane1.n.y+b*plane2.n.y;
+				line.d.y = -1;
+				line.d.z = c*plane1.n.y+d*plane2.n.y;
+			}
 		}
-
-		line.set(p, a.n % b.n);
+		else
+		{
+			T a = plane2.n.y/det;
+			T b = -plane1.n.y/det;
+			T c = -plane2.n.x/det;
+			T d = plane1.n.x/det;
+			line.p.x = a*u+b*v;
+			line.p.y = c*u+d*v;
+			line.p.z = 0;
+			line.d.x = a*plane1.n.z+b*plane2.n.z;
+			line.d.y = c*plane1.n.z+d*plane2.n.z;
+			line.d.z = -1;
+		}
 		return true;
 	}
 
@@ -964,6 +979,89 @@ namespace BALL
 
 		return true;
 	}
+
+	/**	Get the intersection points between three spheres.
+			@param	s1 the first sphere
+			@param	s2 the second sphere
+			@param	s3 the third sphere
+			@param	p1 the first intersection point
+			@param	p2 the second intersection point
+			@return bool, {\bf true} if an intersection can be calculated, otherwise {\bf false}
+	*/
+	template <class T>
+	bool GetIntersection(const TSphere3<T>& s1,
+											 const TSphere3<T>& s2,
+											 const TSphere3<T>& s3,
+											 TVector3<T>& p1,
+											 TVector3<T>& p2)
+	{
+		T r1_square = s1.radius*s1.radius;
+		T r2_square = s2.radius*s2.radius;
+		T r3_square = s3.radius*s3.radius;
+		T p1_square_length = s1.p*s1.p;
+		T p2_square_length = s2.p*s2.p;
+		T p3_square_length = s3.p*s3.p;
+		T u = (r2_square-r1_square-p2_square_length+p1_square_length)/2;
+		T v = (r3_square-r1_square-p3_square_length+p1_square_length)/2;
+		TPlane3<T> plane1;
+		TPlane3<T> plane2;
+		try
+		{
+			plane1 = TPlane3<T>(s2.p.x-s1.p.x,s2.p.y-s1.p.y,s2.p.z-s1.p.z,u);
+			plane2 = TPlane3<T>(s3.p.x-s1.p.x,s3.p.y-s1.p.y,s3.p.z-s1.p.z,v);
+		}
+		catch (Exception::GeneralException)
+		{
+			return false;
+		}
+		TLine3<T> line;
+		if (GetIntersection(plane1,plane2,line))
+		{
+			TVector3<T> diff(s1.p-line.p);
+			T x1, x2;
+			if (SolveQuadraticEquation(line.d*line.d,
+																 -diff*line.d*2,
+																 diff*diff-r1_square,
+																 x1,x2) > 0)
+			{
+				p1 = line.p+x1*line.d;
+				p2 = line.p+x2*line.d;
+				TVector3<T> test = s1.p-p1;
+				if (Maths::isNotEqual(test*test,r1_square))
+				{
+					return false;
+				}
+				test = s1.p-p2;
+				if (Maths::isNotEqual(test*test,r1_square))
+				{
+					return false;
+				}
+				test = s2.p-p1;
+				if (Maths::isNotEqual(test*test,r2_square))
+				{
+					return false;
+				}
+				test = s2.p-p2;
+				if (Maths::isNotEqual(test*test,r2_square))
+				{
+					return false;
+				}
+				test = s3.p-p1;
+				if (Maths::isNotEqual(test*test,r3_square))
+				{
+					return false;
+				}
+				test = s3.p-p2;
+				if (Maths::isNotEqual(test*test,r3_square))
+				{
+					return false;
+				}
+				return true;
+			}
+		}
+		return false;
+	}
+
 
 	/**	Test whether two vector3 are collinear
 			@param	a the first vector3
