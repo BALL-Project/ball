@@ -1,4 +1,4 @@
-// $Id: bond.C,v 1.22 2001/06/27 01:57:55 oliver Exp $
+// $Id: bond.C,v 1.23 2001/06/27 10:43:10 oliver Exp $
 
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/system.h>
@@ -310,9 +310,21 @@ namespace BALL
 	}
 	const Atom* Bond::getBoundAtom(const Atom& atom) const
 		throw()
-	{
-		return ((Bond *)this)->getBoundAtom(atom);
-	}
+  {
+    if (first_ == &atom)
+    {
+      return second_;
+		}
+    else
+    {
+      if (second_ == &atom)
+      {
+        return first_;
+			}
+		}
+ 
+    return 0;
+	}                                                                                                                                           
 
 	bool Bond::isBondOf(const Atom& atom) const
 		throw()
