@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.C,v 1.13 2003/09/20 15:37:16 amoll Exp $
+// $Id: message.C,v 1.14 2003/11/23 23:04:49 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/COMMON/rtti.h>
@@ -239,6 +239,27 @@ RegularData3DMessage::RegularData3DMessage(Type type)
 	#endif
 	setType(type);
 }
+
+
+CreateRepresentationMessage::CreateRepresentationMessage()
+	throw() 
+	: Message(), 
+		composites_(),
+		model_type_(MODEL_UNKNOWN),
+		coloring_method_(COLORING_UNKNOWN)
+{
+}
+
+CreateRepresentationMessage::CreateRepresentationMessage(const List<Composite*>& composites, 
+		ModelType model_type, ColoringMethod coloring_method)
+ 	throw() 
+	: Message(),
+		composites_(composites), 
+		model_type_(model_type),
+		coloring_method_(coloring_method)
+{
+}
+		
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/KERNEL/message.iC>

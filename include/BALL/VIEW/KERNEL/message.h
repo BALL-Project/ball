@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.32 2003/10/15 14:22:53 amoll Exp $
+// $Id: message.h,v 1.33 2003/11/23 23:03:54 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -13,6 +13,10 @@
 
 #ifndef BALL_DATATYPE_REGULARDATA3D_H
 # include <BALL/DATATYPE/regularData3D.h>
+#endif
+
+#ifndef BALL_VIEW_KERNEL_COMMON_H
+# include <BALL/VIEW/KERNEL/common.h>
 #endif
 
 namespace BALL
@@ -569,6 +573,42 @@ class ShowDisplayPropertiesMessage
 		ShowDisplayPropertiesMessage()
 			: Message(){};
 };
+
+/** Notify the DisplayPropertiesDialog so that it creates a new Representation. 
+ 		This message is send by the MolecularControl.
+*/
+class CreateRepresentationMessage
+	:public Message
+{
+	public:
+		///
+		CreateRepresentationMessage()
+			throw();
+
+		///
+		CreateRepresentationMessage(const List<Composite*>& composites, 
+																ModelType model_type, 
+																ColoringMethod coloring_method)
+			throw();   
+
+		///
+		const List<Composite*>& getComposites() const
+			throw() { return composites_;}
+
+		///
+		ModelType getModelType() const
+ 			throw() { return model_type_;}
+		
+		///
+		ColoringMethod getColoringMethod() const
+			throw() { return coloring_method_;} 
+	
+ 		private: 
+		List<Composite*> 	composites_;
+		ModelType 				model_type_;
+		ColoringMethod 		coloring_method_;
+};
+	
 
 ///
 class NewTrajectoryMessage
