@@ -1,4 +1,4 @@
-// $Id: MOL2File_test.C,v 1.5 2000/07/12 19:36:46 oliver Exp $
+// $Id: MOL2File_test.C,v 1.6 2001/07/07 02:51:03 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -14,7 +14,7 @@
 
 ///////////////////////////
 
-START_TEST(MOL2File, "$Id: MOL2File_test.C,v 1.5 2000/07/12 19:36:46 oliver Exp $")
+START_TEST(MOL2File, "$Id: MOL2File_test.C,v 1.6 2001/07/07 02:51:03 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -34,11 +34,6 @@ CHECK(MOL2File::~MOL2File())
 RESULT
 
 
-CHECK(MOL2File::MOL2File(const String& filename, File::OpenMode open_mode))
-  //BAUSTELLE
-RESULT
-
-
 CHECK(MOL2File::read(System& system))
 	MOL2File f("data/AAG.mol2");
 	System system;
@@ -53,6 +48,25 @@ CHECK(MOL2File::read(System& system))
 		number_of_bonds++;
 	}
 	TEST_EQUAL(number_of_bonds, 29)
+RESULT
+
+
+CHECK(MOL2File::MOL2File(const String& filename, File::OpenMode open_mode))
+	MOL2File f("data/AAG.mol2", File::IN);
+	System system;
+	f.read(system);
+	TEST_EQUAL(system.countAtoms(), 30)
+	TEST_EQUAL(system.countResidues(), 3)
+	Size number_of_bonds = 0;
+	Atom::BondIterator bond_it;
+	AtomIterator atom_it;
+	BALL_FOREACH_BOND(system, atom_it, bond_it)
+	{
+		number_of_bonds++;
+	}
+	TEST_EQUAL(number_of_bonds, 29)
+
+	// writing is tested below...
 RESULT
 
 
