@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.17.2.14 2004/12/25 18:41:28 amoll Exp $
+// $Id: backboneModel.C,v 1.17.2.15 2004/12/25 18:45:23 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -294,6 +294,7 @@ namespace BALL
 				}
 			}
 					
+			////////////////////////////////////////////////////////////
 			Vector3 n = Vector3(0,1,0);
 			// normal vector to direction vector dir, with length of radius
 			Vector3 r = dir % n;
@@ -309,7 +310,7 @@ namespace BALL
 			r.normalize();
 			r *= tube_radius_;
 
-			
+			////////////////////////////////////////////////////////////
 			// initialise a first set of points in a circle around the start position
 			vector<Vector3> points1, points2;
 			Matrix4x4 m;
@@ -323,8 +324,10 @@ namespace BALL
 			}
 			// add also a dummy for closing of ring
 			points1.push_back(points1[0]);
+
 			points2.resize(points1.size());
 
+			////////////////////////////////////////////////////////////
 			// same data structures for faster access
 			Mesh::Triangle t;
 			vector<Vector3>*  new_points = &points2;
@@ -349,6 +352,7 @@ namespace BALL
 				r_new.normalize();
 				r_new *= tube_radius_;
 
+				////////////////////////////////////////////////////////////
 				// rotate all points of the circle according to new normal
 				m.setRotation(slides_angle, dir_new);
 				x = r_new;
@@ -368,9 +372,10 @@ namespace BALL
 
 				// dont forget the dummy for closing the ring
  				(*new_points)[new_points->size() - 1] = (*new_points)[0];
+				////////////////////////////////////////////////////////////
 
+				// create a new mesh with the points and triangles
 				Mesh* mesh = new Mesh();
-
 				for (Position point_pos = 0; point_pos < slides; point_pos++)
 				{
 					mesh->vertex.push_back(last_point_ + (*last_points)[point_pos]);
@@ -383,7 +388,7 @@ namespace BALL
 					mesh->normal.push_back((*last_points)[point_pos + 1]);
 					mesh->normal.push_back((*new_points)[point_pos + 1]);
 
-					Size s = mesh->vertex.size() -1;
+					const Size s = mesh->vertex.size() -1;
 					t.v1 = s - 3;
 					t.v2 = s - 1;
 					t.v3 = s;
