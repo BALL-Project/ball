@@ -1,4 +1,4 @@
-// $Id: pairExpRDFIntegrator.C,v 1.11 2000/09/28 12:17:37 anker Exp $
+// $Id: pairExpRDFIntegrator.C,v 1.12 2000/09/28 17:20:46 anker Exp $
 
 #include <BALL/SOLVATION/pairExpRDFIntegrator.h>
 
@@ -119,27 +119,22 @@ namespace BALL
 
 		PiecewisePolynomial poly = getRDF().getRepresentation();
 		Interval interval;
+		double FROM;
 		double val = 0.0;
 
-		Size k = poly.getIntervalIndex(from);
+		FROM = project(from);
+
+		Size k = poly.getIntervalIndex(FROM);
 		if (k == INVALID_POSITION)
 		{
+			// no error message, because getIntervalIndex() handles this
 			return 0.0;
 		}
 
-		// the last interval has to be defined to infinity
 		Size number_of_intervals = poly.getIntervals().size();
 		interval = poly.getInterval(number_of_intervals - 1);
-		// the point from where the integration to inf will start.
-		double lower_inf;
-		if (from < interval.first)
-		{
-			lower_inf = interval.first;
-		}
-		else
-		{
-			lower_inf = from;
-		}
+
+		// the last interval has to be defined to infinity
 		if (interval.second != INFINITY)
 		{
 			Log.error() << "PairExpRDFIntegrator::integrateToInf(): "
@@ -147,51 +142,29 @@ namespace BALL
 			getRDF().dump();
 			return 0.0;
 		}
+		double lower_inf = interval.first;
 
-		// first "finish" the interval we start at, if this isn't already the
-		// last interval
-
-		if (k < number_of_intervals - 1)
+		// the point from where the integration to inf will start.
+		if (FROM < interval.first)
 		{
-			interval = poly.getInterval(k);
-			val += integrate(from, interval.second);
-			++k;
-
-			// then sum up all following intervals
-			for (; k < number_of_intervals - 1; ++k)
-			{
-				interval = poly.getInterval(k);
-				val += integrate(interval.first, interval.second);
-			}
-		}
-
-		// now add the last interval (to infinity)
-
-		Coefficients a = poly.getCoefficients(number_of_intervals - 1);
-		if ((a[1] != 0.0) || (a[2] != 0.0) || (a[3] != 0.0)) 
-		{
-			Log.warn() << "RDF::integralToInf(): Got a non-constant polynomial."
-				<< " There might be something wrong." << endl;
+			interval = Interval(from, unproject(lower_inf));
+			val = numericallyIntegrateInterval(interval);
 		}
 
 		// only for readibility
+
+		double a = poly.getCoefficients(number_of_intervals - 1)[0];
 		double r = lower_inf;
 		double b = alpha_ / R_ij_o_;
 		double d = pow(R_ij_o_, 6);
 		double exp_br = exp( - b * r );
 		double r3 = r * r * r;
-		double infval = a[0] / (3 * pow(b, 3) * r3) *
+		double infval = a / (3 * pow(b, 3) * r3) *
 			(
 				  C1_ * 3 * b * b * r3 * r * r * exp_br
 				+ C1_ * 6 * b * r3 * r * exp_br
 				+ C1_ * 6 * r3 * exp_br
 				- C2_ * d * b * b * b
-				/*
-			 		2 * C1_                   * R_ij_o_ * R_ij_o_ * E * r3
-				+ 2 * C1_ * alpha_          * R_ij_o_           * E * r3 * from
-				+     C1_ * alpha_ * alpha_                     * E * r3 * from * from
-				-     C2_ * alpha_ * alpha_ * alpha_  * pow(R_ij_o_, 5)
-				*/
 			);
 		val += infval;
 		return val;
@@ -208,43 +181,8 @@ namespace BALL
 
 	double PairExpRDFIntegrator::integrate(double from, double to) const
 	{
-
-		PiecewisePolynomial poly = getRDF().getRepresentation();
-
-		Size from_index = poly.getIntervalIndex(from);
-		Size to_index = poly.getIntervalIndex(to);
-
-		if ((from_index == INVALID_POSITION) || (to_index == INVALID_POSITION))
-		{
-			return 0.0;
-		}
-
 		Interval interval(from, to);
-		Coefficients coeffs = poly.getCoefficients(from_index);
-
-		if (from_index == to_index)
-		{
-			return numericallyIntegrateInterval(interval);
-		}
-
-		// if we didn't return, the indices weren't equal.
-
-		interval.second = poly.getInterval(from_index).second;
-		double val = numericallyIntegrateInterval(interval);
-
-		for (Size k = from_index + 1; k < to_index; ++k)
-		{
-			coeffs = poly.getCoefficients(k);
-			interval = poly.getInterval(k);
-			val += numericallyIntegrateInterval(interval);
-		}
-
-		coeffs = poly.getCoefficients(to_index);
-		interval = poly.getInterval(to_index);
-		interval.second = to;
-		val += numericallyIntegrateInterval(interval);
-		
-		return val;
+		return numericallyIntegrateInterval(interval);
 	}
 
 
@@ -348,6 +286,18 @@ namespace BALL
 		stream << "k1_ = " << k1_ << endl;
 		stream << "k2_ = " << k2_ << endl;
 		getRDF().dump();
+	}
+
+
+	double PairExpRDFIntegrator::project(double x) const 
+	{
+		return sqrt(x*x + k1_ * x + k2_);
+	}
+
+
+	double PairExpRDFIntegrator::unproject(double x) const 
+	{
+		return sqrt(x*x - k1_*k1_ / 4 - k2_) - k1_ / 2;
 	}
 
 } // namespace BALL
