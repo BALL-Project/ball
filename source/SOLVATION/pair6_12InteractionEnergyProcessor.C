@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pair6_12InteractionEnergyProcessor.C,v 1.18 2002/12/16 12:14:12 anker Exp $
+// $Id: pair6_12InteractionEnergyProcessor.C,v 1.19 2003/02/17 14:51:32 anker Exp $
 
 #include <BALL/SYSTEM/path.h>
 #include <BALL/KERNEL/PTE.h>
@@ -24,6 +24,8 @@ namespace BALL
 		= "use_rdf";
 	const char* Pair6_12InteractionEnergyProcessor::Option::RDF_FILENAME
 		= "rdf_filename";
+	const char* Pair6_12InteractionEnergyProcessor::Option::LJ_FILENAME
+		= "lj_filename";
 	const char* Pair6_12InteractionEnergyProcessor::Option::SOLVENT_FILENAME
 		= "solvent_filename";
 	const char* Pair6_12InteractionEnergyProcessor::Option::SURFACE_TYPE
@@ -36,6 +38,8 @@ namespace BALL
 	const bool Pair6_12InteractionEnergyProcessor::Default::USE_RDF = false;
 	const char* Pair6_12InteractionEnergyProcessor::Default::RDF_FILENAME
 		= "data/solvation/RDF-AMBER.ini";
+	const char* Pair6_12InteractionEnergyProcessor::Default::LJ_FILENAME
+		= "data/Amber/amber94.ini";
 	const char* Pair6_12InteractionEnergyProcessor::Default::SOLVENT_FILENAME
 		= "data/solvents/PCM-water.ini";
 	const Size Pair6_12InteractionEnergyProcessor::Default::SURFACE_TYPE
