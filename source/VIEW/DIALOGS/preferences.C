@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferences.C,v 1.12 2004/10/01 14:20:15 amoll Exp $
+// $Id: preferences.C,v 1.13 2004/10/01 14:45:02 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/preferences.h>
@@ -68,7 +68,7 @@ namespace BALL
 			entries_.insert(child);
 
 			PreferencesEntry::EntriesList::Iterator it = child->getEntries().begin();
-			QListViewItem* item = new QListViewItem(entries_listview, (*it).second);
+			QListViewItem* item = new QListViewItem(entries_listview, (*it).second.c_str());
 			entries_listview->insertItem(item);
 			item_to_widget_[item] = (*it).first;
 			item_to_entry_[item] = child;
@@ -76,7 +76,7 @@ namespace BALL
 			it++;
 			for (; it != child->getEntries().end(); it++)
 			{
-				QListViewItem* new_item = new QListViewItem(item, (*it).second);
+				QListViewItem* new_item = new QListViewItem(item, (*it).second.c_str());
 				item->insertItem(new_item);
 				item_to_widget_[new_item] = (*it).first;
 				widget_to_item_[(*it).first] = new_item;
