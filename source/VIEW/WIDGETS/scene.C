@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.147 2004/10/15 11:59:21 amoll Exp $
+// $Id: scene.C,v 1.148 2004/10/21 11:31:46 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -101,6 +101,7 @@ namespace BALL
 				stage_settings_(0),
 				screenshot_nr_(10000),
 				pov_nr_(10000),
+				animation_thread_(0),
 				stop_animation_(false)
 		{
 #ifdef BALL_VIEW_DEBUG
