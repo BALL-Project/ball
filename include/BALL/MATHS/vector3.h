@@ -1,4 +1,4 @@
-// $Id: vector3.h,v 1.46 2000/12/19 00:42:24 amoll Exp $
+// $Id: vector3.h,v 1.47 2000/12/20 00:36:59 amoll Exp $
 
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -827,12 +827,7 @@ namespace BALL
 	BALL_INLINE 
 	T& TVector3<T>::operator [] (Position position)
 		throw(Exception::IndexOverflow)
-	{/*
-		if (index < 0)
-		{
-			throw Exception::IndexUnderflow(__FILE__, __LINE__);
-		}
-*/
+	{
 		if (position > 2)
 		{
 			throw Exception::IndexOverflow(__FILE__, __LINE__);
@@ -851,12 +846,7 @@ namespace BALL
 	BALL_INLINE 
 	const T& TVector3<T>::operator [] (Position position) const
 		throw(Exception::IndexOverflow)
-	{/*
-		if (index < 0)
-		{
-			throw Exception::IndexUnderflow(__FILE__, __LINE__);
-		}
-*/
+	{
 		if (position > 2)
 		{
 			throw Exception::IndexOverflow(__FILE__, __LINE__);
