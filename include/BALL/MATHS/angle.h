@@ -1,4 +1,4 @@
-// $Id: angle.h,v 1.9 2000/02/21 17:57:07 amoll Exp $
+// $Id: angle.h,v 1.10 2000/02/25 21:16:12 amoll Exp $
 
 #ifndef BALL_MATHS_ANGLE_H
 #define BALL_MATHS_ANGLE_H
@@ -495,9 +495,9 @@ namespace BALL
 	}
 
 	template <typename T>
-	TAngle<T>& TAngle<T>::operator += (const T& value1) 
+	TAngle<T>& TAngle<T>::operator += (const T& rhs) 
 	{
-		value += value1;
+		value += rhs;
 		return *this;
 	}
 
