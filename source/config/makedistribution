@@ -1,6 +1,6 @@
-#!/usr/local/bin/bash
+#!/bin/bash
 #
-#  $Id: makedistribution,v 1.6 2001/07/31 02:00:37 oliver Exp $
+#  $Id: makedistribution,v 1.7 2004/02/19 13:25:28 oliver Exp $
 #
 
 # check whether the revision number is given as the first argument
@@ -18,7 +18,7 @@ cd /tmp
 rm -fr BALL-dist 2>/dev/null
 mkdir BALL-dist
 cd BALL-dist
-cvs -q co -r ${TAG} BALL 1>cvs_extract.log 2>cvs_extract_err.log || echo "cannot extract revision ${TAG} of BALL" >&0 | exit
+cvs -q co -r ${TAG} BALL 1>cvs_extract.log 2>cvs_extract_err.log || ( echo "cannot extract revision ${TAG} of BALL" >&0 && exit )
 # remove CVS information
 find . -name CVS -exec rm -fr {} \;
 cd BALL/source
@@ -27,7 +27,9 @@ mv config/Makefile.dummy .
 cd ../../
 
 echo "creating archive ${FILE}..."
-tar cf ${FILE} BALL
+DIR=`basename ${FILE} .tar` 
+mv BALL ${DIR}
+tar cf ${FILE} ${DIR}
 
 echo "compressing archive $FILE..."
 gzip -9 $FILE
