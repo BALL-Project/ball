@@ -13,12 +13,7 @@
 #include <qlabel.h>
 #include <qlineedit.h>
 #include <qpushbutton.h>
-#include <qlayout.h>
-#include <qvariant.h>
-#include <qtooltip.h>
-#include <qwhatsthis.h>
 #include <qfiledialog.h>
-
 
 /* 
  *  Constructs a contourSurfaceDialog which is a child of 'parent', with the 
@@ -36,8 +31,8 @@ namespace BALL
 ContourSurfaceDialog::ContourSurfaceDialog( QWidget* parent,  const char* name )
     : QDialog( parent, name, TRUE, 0 )
 {
-    if ( !name )
-	setName( "contourSurfaceDialog" );
+    if ( !name ) setName( "contourSurfaceDialog" );
+				
     resize( 424, 318 ); 
     setCaption( tr( "Contour Surface" ) );
 
@@ -108,7 +103,7 @@ ContourSurfaceDialog::~ContourSurfaceDialog()
 
 void ContourSurfaceDialog::new_slot()
 {
-    qWarning( "contourSurfaceDialog::new_slot(): Not implemented yet!" );
+  qWarning( "contourSurfaceDialog::new_slot(): Not implemented yet!" );
 }
 
 /*double ContourSurfaceDialog::getThreshold() const	

@@ -1,36 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.30.4.6 2002/10/29 17:30:08 amoll Exp $
+// $Id: mainframe.h,v 1.30.4.7 2002/10/30 20:57:37 amoll Exp $
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
 #define BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
-#include <strstream>
-
-#include <qmetaobject.h>
-#include <qmainwindow.h>
-#include <qwidget.h>
-#include <qmenubar.h>
-#include <qkeycode.h>
-#include <qapplication.h>
-#include <qmessagebox.h>
-#include <qpopupmenu.h>
-#include <qlayout.h>
-#include <qbutton.h>
-#include <qstring.h>
-#include <qsplitter.h>
-#include <qstatusbar.h>
-#include <qlabel.h>
-#include <qtooltip.h>
-
-#include <BALL/MOLVIEW/GUI/DIALOGS/contourSurfaceDialog.h>
-#include <BALL/DATATYPE/regularData3D.h>
-#include <BALL/DATATYPE/contourSurface.h>
 
 #ifndef BALL_VIEW_KERNEL_LOGVIEW_H
 #	include <BALL/VIEW/KERNEL/logView.h>
@@ -70,6 +44,10 @@
 
 #ifndef BALL_VIEW_GUI_FUNCTOR_POVRENDERER_H
 # include <BALL/VIEW/GUI/FUNCTOR/POVRenderer.h>
+#endif
+
+#ifndef BALL_MOLVIEW_GUI_DIALOGS_CONTOURSURFACEDIALOG_H
+# include <BALL/MOLVIEW/GUI/DIALOGS/contourSurfaceDialog.h>
 #endif
 
 #include "DIALOGS/DlgAmberMinimization.h"
