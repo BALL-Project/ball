@@ -1,4 +1,4 @@
-// $Id: HINFile.C,v 1.15 2000/05/23 05:44:15 oliver Exp $
+// $Id: HINFile.C,v 1.16 2000/05/23 19:39:42 anker Exp $
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/CONCEPT/composite.h>
@@ -524,7 +524,9 @@ namespace BALL
 							}
 						}
 
-					}	else {
+					}	
+					else 
+					{
 
 						ERROR_HEADER << "<atom> tag may appear only inside a <mol> or <res>!" << endl;
 					}
