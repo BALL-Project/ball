@@ -7,7 +7,7 @@
     <property name="geometry">
         <rect>
             <x>0</x>
-            <y>1</y>
+            <y>0</y>
             <width>505</width>
             <height>335</height>
         </rect>
@@ -61,6 +61,9 @@
                 </property>
                 <property name="default">
                     <bool>true</bool>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>One grid and one Surface must be selected in the controls to color by grid.</string>
                 </property>
             </widget>
             <widget class="QPushButton">
@@ -1870,27 +1873,11 @@
                         <property name="value">
                             <number>50</number>
                         </property>
+                        <property name="toolTip" stdset="0">
+                            <string>Number of interpolated colors</string>
+                        </property>
                     </widget>
                 </hbox>
-            </widget>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>autoscale</cstring>
-                </property>
-                <property name="enabled">
-                    <bool>false</bool>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>409</x>
-                        <y>143</y>
-                        <width>87</width>
-                        <height>25</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>autoscale</string>
-                </property>
             </widget>
             <widget class="QLabel">
                 <property name="name">
@@ -1962,6 +1949,28 @@
                 </property>
                 <property name="toolTip" stdset="0">
                     <string>Choose the grid in the Dataset control</string>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>autoscale</cstring>
+                </property>
+                <property name="enabled">
+                    <bool>false</bool>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>409</x>
+                        <y>143</y>
+                        <width>87</width>
+                        <height>25</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>autoscale</string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Interpolate between the minimum, maximum and the mean value of the grid.</string>
                 </property>
             </widget>
         </widget>
