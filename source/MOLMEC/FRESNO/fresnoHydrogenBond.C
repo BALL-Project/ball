@@ -1,4 +1,4 @@
-// $Id: fresnoHydrogenBond.C,v 1.1.2.7 2002/04/06 20:04:27 anker Exp $
+// $Id: fresnoHydrogenBond.C,v 1.1.2.8 2002/04/08 16:38:08 anker Exp $
 // Molecular Mechanics: Fresno force field, hydrogen bond component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -143,13 +143,13 @@ namespace BALL
 							{
 								possible_hydrogen_bonds_.push_back(pair<const Atom*, const Atom*>(&*A_it, &*B_it));
 								// DEBUG
-								cout << "found possible HB: " 
-									<< A_it->getBond(0)->getPartner(*A_it)->getFullName() << "---"
-									<< A_it->getFullName() << "..." << B_it->getFullName()
-									<< " (length: " 
-									<< (A_it->getPosition() - B_it->getPosition()).getLength() 
-									<< " A) " 
-									<< endl;
+								// cout << "found possible HB: " 
+								// 	<< A_it->getBond(0)->getPartner(*A_it)->getFullName() << "---"
+								// 	<< A_it->getFullName() << "..." << B_it->getFullName()
+								// 	<< " (length: " 
+								// 	<< (A_it->getPosition() - B_it->getPosition()).getLength() 
+								// 	<< " A) " 
+								// 	<< endl;
 								// /DEBUG
 							}
 						}
@@ -158,14 +158,14 @@ namespace BALL
 			}
 		}
 
-		for (; +B_it; ++B_it)
+		for (B_it = B->beginAtom(); +B_it; ++B_it)
 		{
 			if (fresno_types.has(&*B_it))
 			{
 				if (fresno_types[&*B_it] == FresnoFF::HBOND_HYDROGEN)
 				{
 					already_used_.insert(pair<const Atom*, bool>(&*B_it, false));
-					for (A_it = B->beginAtom(); +A_it; ++A_it)
+					for (A_it = A->beginAtom(); +A_it; ++A_it)
 					{
 						if (fresno_types.has(&*A_it))
 						{
@@ -174,13 +174,13 @@ namespace BALL
 							{
 								possible_hydrogen_bonds_.push_back(pair<const Atom*, const Atom*>(&*B_it, &*A_it));
 								// DEBUG
-								cout << "found possible HB: " 
-									<< B_it->getBond(0)->getPartner(*B_it)->getFullName() << "-"
-									<< B_it->getFullName() << "..." << A_it->getFullName()
-									<< " (length: " 
-									<< (B_it->getPosition() - A_it->getPosition()).getLength() 
-									<< " A) " 
-									<< endl;
+								// cout << "found possible HB: " 
+								// 	<< B_it->getBond(0)->getPartner(*B_it)->getFullName() << "-"
+								// 	<< B_it->getFullName() << "..." << A_it->getFullName()
+								// 	<< " (length: " 
+								// 	<< (B_it->getPosition() - A_it->getPosition()).getLength() 
+								// 	<< " A) " 
+								// 	<< endl;
 								// /DEBUG
 							}
 						}
@@ -287,21 +287,27 @@ namespace BALL
 							// PARANOIA
 							else
 							{
-								cerr << "FresnoHydrogenBond::setup(): "
+								Log.error() << "FresnoHydrogenBond::setup(): "
 									<< "already_used_ doesn't know this hydrogen." << endl;
 							}
 							// /PARANOIA
 
 							// DEBUG
-							cout << "HB: adding score of " << val 
-								<< "(distance " << distance
-								<< ", angle " << angle << ")"
-								<< endl;
+							// cout << "HB: adding score of " << val 
+							// 	<< "(distance " << distance
+							// 	<< ", angle " << angle << ")"
+							// 	<< endl;
 							// /DEBUG
 							E += val;
 						}
 					}
 				}
+			}
+			else
+			{
+				Log.error() << "FresnoHydrogenBond::updateEnergy(): "
+					<< "ERROR: hydrogen not found in the already_used list." 
+					<< endl;
 			}
 		}
 		energy_ = factor_ * E;
