@@ -1,0 +1,6 @@
+forcefield amber
+sys 0 0 1
+seed 0
+mol 1
+atom 1 C C CT - -0.1104584 -3.151337 2.942799 -1.229936 0
+endmol 1

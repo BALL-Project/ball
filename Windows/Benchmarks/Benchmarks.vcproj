@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding = "Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Visual C++"
+	Version="7.00"
+	Name="Benchmarks"
+	ProjectGUID="{253B8927-6644-43B8-A48F-847A4D338C59}"
+	Keyword="MakeFileProj">
+	<Platforms>
+		<Platform
+			Name="Win32"/>
+	</Platforms>
+	<Configurations>
+		<Configuration
+			Name="Debug|Win32"
+			OutputDirectory="Debug"
+			IntermediateDirectory="Debug"
+			ConfigurationType="0">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="cd ..\..\source\BENCHMARKS
+nmake /F &quot;$(ProjectDir)\Makefile.win&quot; BALL_PATH=&quot;$(ProjectDir)..\BALL&quot;"
+				ReBuildCommandLine="cd ..\..\source\BENCHMARKS
+del *.obj
+del *.exe
+nmake /F &quot;$(ProjectDir)\Makefile.win&quot;"
+				CleanCommandLine="cd ..\..\source\BENCHMARKS
+del *.obj
+del *.exe"
+				Output="BENCHMARKS.log"/>
+		</Configuration>
+		<Configuration
+			Name="Release|Win32"
+			OutputDirectory="Release"
+			IntermediateDirectory="Release"
+			ConfigurationType="0">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="cd ..\..\source\BENCHMARKS
+nmake /F &quot;$(ProjectDir)\Makefile.win&quot; BALL_PATH=&quot;$(ProjectDir)..\BALL&quot;"
+				ReBuildCommandLine="cd ..\..\source\BENCHMARKS
+del *.obj
+del *.exe
+nmake /F &quot;$(ProjectDir)\Makefile.win&quot;"
+				CleanCommandLine="cd ..\..\source\BENCHMARKS
+del *.obj
+del *.exe"
+				Output="BENCHMARKS.log"/>
+		</Configuration>
+	</Configurations>
+	<Files>
+		<File
+			RelativePath="Make.lst">
+		</File>
+		<File
+			RelativePath="Makefile.win">
+		</File>
+	</Files>
+	<Globals>
+	</Globals>
+</VisualStudioProject>
