@@ -9,13 +9,15 @@
 		<node>1HH3<value>H -0.167239 -2.98461 0.880642</value></node>
 		<node>2HH3<value>H 1.1711 -2.24422 -0.00400307</value></node>
 		<node>3HH3<value>H -0.176322 -2.99236 -0.868617</value></node>
+		<node>OXT<value>O -0.0809243 0.0851695 -0.000720861</value></node>
 	</node>
 	<node>Bonds
 		<node>1<value>C CH3 s</value></node>
 		<node>2<value>C O d</value></node>
-		<node>3<value>CH3 1HH3 s</value></node>
-		<node>4<value>CH3 2HH3 s</value></node>
-		<node>5<value>CH3 3HH3 s</value></node>
+		<node>3<value>C OXT a</value></node>
+		<node>4<value>CH3 1HH3 s</value></node>
+		<node>5<value>CH3 2HH3 s</value></node>
+		<node>6<value>CH3 3HH3 s</value></node>
 	</node>
 	<node>Connections
 		<node>C-term<value>C N-term s 1.33 0.5</value></node>
@@ -28,16 +30,7 @@
 			<node>Delete
 				<node>OXT</node>
 			</node>
-			<node>Rename	
-				<node>1H<value>H</value></node>
-			</node>
 			<node>Properties
-				<node>N_TERMINAL</node>
-			</node>
-		</node>
-		<node>NME-M
-			<node>Properties
-				<node>C_TERMINAL</node>
 				<node>N_TERMINAL</node>
 			</node>
 		</node>
