@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.21 2003/12/09 15:09:18 amoll Exp $
+// $Id: mainControl.h,v 1.22 2003/12/09 16:21:47 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -696,9 +696,6 @@ namespace BALL
 			
 			static int 									current_id_;
 			bool 												composites_muteable_;
-
-			// used to acces the global instance of MainControl
-//			static MainControl* 				 theMainControl_;
 
 			/*_	A list containing all modular widgets.
 					This list is modified by addModularWidget and
