@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rtti.C,v 1.11 2002/12/23 08:26:13 oliver Exp $
+// $Id: rtti.C,v 1.12 2003/01/14 21:36:59 oliver Exp $
 
 #include <BALL/COMMON/global.h>
 #include <BALL/COMMON/rtti.h>
@@ -10,10 +10,26 @@
 #include <ctype.h>
 
 
-// nasty hack to support the stupid name mangling scheme in g++
-// Stating V3.0 we use libiberty to demangle the names...
-#ifdef __GNUC__
-	extern "C" char* cplus_demangle(const char* s, int options); 
+// Nasty hacks to demangle the stupid name mangling schemes 
+// of diverse compilers.
+
+// GNU g++:
+// Starting V3.0 we use __cxa_demangle to demangle the names,
+// which is declared in <cxxabi.h>.
+#ifdef BALL_COMPILER_GXX
+#	if (BALL_COMPILER_VERSION_MAJOR > 2)
+		#include <cxxabi.h>
+#	endif
+#endif
+
+#ifdef BALL_COMPILER_INTEL
+	// Declare the __cxa_demangle method for Intel's C++ compiler.
+	// Intel does not provide the cxxabi.h header G++ provides, so 
+	// this hack is somewhat rough.
+	namespace abi
+	{
+		extern "C" char* __cxa_demangle(const char*, char*, unsigned int*, int*);
+	}
 #endif
 
 namespace BALL 
@@ -21,14 +37,17 @@ namespace BALL
 
 	string streamClassName(const std::type_info& t)
 	{
-#ifdef __GNUC__
-    #if (__GNUC__ < 3)
+#if (defined(BALL_COMPILER_GXX) || defined(BALL_COMPILER_INTEL))
+    #if (BALL_COMPILER_VERSION_MAJOR < 3)
 			string s(t.name());
       s = GNUDemangling::demangle(s);
     #else
+			char buf[BALL_MAX_LINE_LENGTH];
+			unsigned int length = BALL_MAX_LINE_LENGTH - 1;
+			int status = 0;
       string s("_Z");
       s += t.name();
-      char* name = cplus_demangle(s.c_str(), 1 << 8);
+      char* name = abi::__cxa_demangle(s.c_str(), buf, &length, &status);
       if (name != 0)
       {
         s = name;
@@ -62,7 +81,8 @@ namespace BALL
 		return s;
 	}
  
-#ifdef __GNUC__
+#ifdef BALL_COMPILER_GXX
+#	if (BALL_COMPILER_VERSION_MAJOR < 3)
 
 	namespace GNUDemangling 
 	{
@@ -219,7 +239,8 @@ namespace BALL
 
 	} // namespace GNUDemangling 
 
-#endif // __GNUC__
+#	endif // (BALL_COMPILER_VERSION_MAJOR < 3)
+#endif // BALL_COMPILER_GXX
 
 } // namespace BALL
 
