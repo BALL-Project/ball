@@ -1,4 +1,4 @@
-// $Id: fragmentDB.C,v 1.6 1999/12/30 18:05:41 oliver Exp $
+// $Id: fragmentDB.C,v 1.7 2000/01/03 15:19:15 oliver Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 
@@ -12,13 +12,8 @@
 /*			Things still missing (among others)
 				===================================
 				- check for unique atom names
-				- add hydrogen processor modifications: removal of (addh ..) entries from database
-				- create bond processor
 				- saving of fragment databases
 				- dynamic import of databases
-				- check for completeness of a residue
-				- hydrogen optimization using a simple force field
-				- standard-path for fragment databases
 */
 
 #define FRAGMENT_DB_INCLUDE_TAG "#include:"
@@ -72,7 +67,7 @@ namespace BALL
 			{
 				// if the include directive is invalid,
 				// remove the entry
-				Log.level(LogStream::ERROR) << "illegal #include directive: " << key << endl;
+				Log.error() << "illegal #include directive: " << key << endl;
 				root_entry.getParent()->removeChild(key, 0);
 
 				return false;
@@ -92,13 +87,13 @@ namespace BALL
 				file = new ResourceFile(value_fields[0]);
 				if ((file == 0) || !file->isValid())
 				{
-					Log.level(LogStream::ERROR) << "error opening include file: " << value_fields[0] << endl;
+					Log.error() << "error opening include file: " << value_fields[0] << endl;
 					delete file;
 					return false;
 				} else {
 					tree = file->getRoot().getEntry(value_fields[1]);
 					if (tree == 0){
-						Log.level(LogStream::ERROR) << "cannot find node " << value_fields[1] << " in file " << value_fields[0] << endl;
+						Log.error() << "cannot find node " << value_fields[1] << " in file " << value_fields[0] << endl;
 					} else {
 						entry = parent->insertChild(key_fields[1], tree->getValue());
 						entry->mergeChildrenOf(*tree);
@@ -245,7 +240,7 @@ namespace BALL
 			{
 				if ((*entry_iterator).getValue().countFields(" ") != 4)
 				{
-					Log.level(LogStream::ERROR) << "Wrong entry for atom " << (*entry_iterator).getKey() 
+					Log.error() << "Wrong entry for atom " << (*entry_iterator).getKey() 
 							 << ": " << (*entry_iterator).getValue() << endl;
 				} else {
 					// create a new atom...
@@ -305,14 +300,14 @@ namespace BALL
 				if ((atom1 == 0) || (atom2 == 0))
 				{
 					// if at least on of the atoms doesn`t exist: complain about it
-					Log.level(LogStream::ERROR) << "Bond to a non-existing atom: " 
+					Log.error() << "Bond to a non-existing atom: " 
 																			<< fields[0] << "-"
 																			<< fields[1] << endl;
 				} else {
 					// otherwise create the bond, if valences free
 					if ((atom1->countBonds() > 7) || (atom2->countBonds() > 7))
 					{
-						Log.level(LogStream::ERROR) << "Too many bonds - cannot create bond: " 
+						Log.error() << "Too many bonds - cannot create bond: " 
 																				<< atom1->getName() << "-" << atom2->getName()
 																				<< " in fragment " << fragment.getName() << endl;
 					} else {
@@ -346,7 +341,7 @@ namespace BALL
 				if (atom == 0)
 				{
 					// if the atom to be deleted doesn`t exist - complain about it!
-					Log.level(LogStream::ERROR) << "Cannot delete non-existing atom: "
+					Log.error() << "Cannot delete non-existing atom: "
 																			<< (*entry_iterator).getKey() << endl;
 				} else {
 					// otherwise delete the atom
@@ -380,7 +375,7 @@ namespace BALL
 				if (atom == 0)
 				{
 					// if the atom to be renamed doesn`t exist - complain about it!
-					Log.level(LogStream::ERROR) << "Cannot rename non-existing atom: "
+					Log.error() << "Cannot rename non-existing atom: "
 																			<< (*entry_iterator).getKey() << endl;
 				} else {
 					// otherwise rename the atom
@@ -530,7 +525,7 @@ namespace BALL
 				entry = (*frag_entry_iterator).getEntry("Atoms");
 				if (entry == 0)
 				{
-					Log.level(LogStream::ERROR) << "Cannot find Atoms entry for " 
+					Log.error() << "Cannot find Atoms entry for " 
 						<< fragment_name << endl;
 					return;
 				} else {
@@ -1066,7 +1061,7 @@ namespace BALL
 
 		// if we couldn't find an appropriate table, complain about it!
 		if ((number_of_tables == 0) || (max_hits < 0)){
-			Log.level(LogStream::ERROR) << "cannot locate an appropriate name conversion table!" << endl;
+			Log.error() << "cannot locate an appropriate name conversion table!" << endl;
 			return false;
 		}
 
@@ -1134,8 +1129,6 @@ namespace BALL
 		(String atom_name, Atom* bindungs_atom, Vector3& a, Vector3& b,Vector3& c, Vector3& d,
 		 Vector3& xa, Vector3& xb,Vector3& xc, Vector3& xd, Vector3& xtarget)
 	{
-		//cout << endl << "Erreiche jetzt calculate Funktion";
-		
 		// setting of local variables    
 		// variables beginning with x, are related to             
 		// the prototypes of the fragment Databas
@@ -1277,7 +1270,6 @@ namespace BALL
 				
 		if (fabs( z - n ) > 0.0001)
 		{
-			//cerr <<endl<<"Winkel wird korrigiert";
 			w = -(acos(z / n)) / 2;
 											 
 			test1=c_a - xc_a;
@@ -1386,22 +1378,18 @@ namespace BALL
 		} 
 		catch (Bond::TooManyBonds)
 		{
-			Log.level(LogStream::ERROR) << "Cannot create bond between "
+			Log.error() << "Cannot create bond between "
 				<< atom_name << " and " << bindungs_atom->getName() << ": too many bonds!" << endl;
 		}
 
 		residue_->insert(atom);
 
 		count_h_++;
-		
-		//cout << endl <<"Verlasse jetzt die calculate Funktion";
-		
 	}
 	
 	// adds the structure of a template to the hashtable prot_table
 	void FragmentDB::AddHydrogensProcessor::addToTemplateTable_(const Fragment* tplate)  
 	{
-		//cout << endl <<" buildProtonTable()- anfang";
 		// Setzen der lokalen Variablen        
 		String residue_name;
 		String atom_name;
@@ -1409,18 +1397,13 @@ namespace BALL
 		
 		residue_name = tplate->getName();
 
-		//cout << endl << "fuege jetzt ein :"<< residue_name;
-
 		for(atom_iter = tplate->beginAtom(); +atom_iter; ++atom_iter) 
-			{
+		{
 			atom_name = (*atom_iter).getName();
 			atom_name.append(":");
 			atom_name.append(residue_name);
-			//cout << endl <<"..."<<atom_name<<" eingefuegt.";
 			prot_table_[atom_name] = *atom_iter;
-			}
-
-		//cout << endl << "buildProtonTable() -Ende";			 
+		}
 	}
 
 	// start function of AddHydorgensProcessor
@@ -1428,8 +1411,6 @@ namespace BALL
 	bool FragmentDB::AddHydrogensProcessor::start()
 	{
 		count_h_ = 0;
-		//cout << endl << "addh::start()";				
-		// einlesen der Prototypen und Aufbau von prot_table__
 		
 		return true;
 	}
@@ -1446,8 +1427,6 @@ namespace BALL
 
 	Processor::Result FragmentDB::AddHydrogensProcessor::operator () (Fragment& object)
 	{
-		//cout << endl <<"addh::operator()";
-
 		// setting of local variables
 		
 		// check variable for already inserted hydrogens
@@ -1492,9 +1471,6 @@ namespace BALL
 			if (tmp != 0)
 			{
 				String variant_name = tmp->getName();
-				//cout << "reference variant for " << residue_->getName() << " is: " << variant_name << endl;
-				//cout << endl << "suche Wasserstoffe";
-				
 				// the name is known, searching the residue prototype for hydrogens to be added
 				// save them in h_table_
 				
@@ -1502,7 +1478,6 @@ namespace BALL
 				{
 					h_atoms_ = h_table_[variant_name];
 				} else {
-					//cout << endl <<"Eintrag muss aufgebaut werden";
 					// constructing hashtable entry using prototype information
 					
 					// iterating the fragment and save the name of every hydrogen
@@ -1514,7 +1489,6 @@ namespace BALL
 							zaehler1++;
 							}
 						}
-					// cout << endl << zaehler1;
 					h_zaehler=zaehler1;
 					h_atoms_=new String[h_zaehler+1];
 					zaehler1=0;
@@ -1527,20 +1501,16 @@ namespace BALL
 							atom_name.append(variant_name);
 							h_atoms_[zaehler1]=atom_name;
 							zaehler1++;
-							// cout << endl << zaehler1;
 							}
 						}
 						h_atoms_[zaehler1]="NULL";
 						h_table_[variant_name]=h_atoms_;
-						// cout << endl <<"Eintrag ist eingefuegt";
 				}
 				
 				// iterating the hydrogens		
 				while(h_atoms_[k] != "NULL")	
 				{
 					inserted = false;
-					//cout << endl <<" ist Wasserstoff schon enthalten ?";
-					
 					// test wethe hydrogen is already inserted
 					for (atom_iter = residue_->beginAtom(); +atom_iter; ++atom_iter)
 					{
@@ -1556,20 +1526,16 @@ namespace BALL
 					}
 					
 					if (inserted) 
-					{      //  cout << endl <<"...ja";
+					{     
 						k++;
 					} else {
-						// cout << endl <<"...nein";
-						// cout << endl <<" k: "<<k;
 						if(ini_table_.has(h_atoms_[k]))	
 						{
 							// identify the atoms needed to get the new atom's coordinates
 							atoms_ = ini_table_[h_atoms_[k]]; 
 						} else {
-							// cout << endl << "ini_table EIntrag muss aufgebaut werden";
 							// constructing hashtable entry
 							atoms_=new String[5];
-							// cout << endl << " suche jetzt im Prototypen das Wasserstoff";
 							// searching prototype for h_atoms_[k] 
 							for(atom_iter=tmp->beginAtom();+atom_iter;++atom_iter)
 								{
@@ -1578,26 +1544,15 @@ namespace BALL
 								atom_name.append(variant_name);
 								if (atom_name==h_atoms_[k]) 
 									{
-									// cout << endl <<"found";
 									 atom=&(*atom_iter);
 									 }
-								//cout << endl << "test";
 								}
-							//cout << endl <<"Wasserstoff ist identifiziert";
-							//cout << endl;
-							//atom->dump(cout);
-							
 							// access hydrogen bound and get first reference atom
-							
-							// cout << atom->isBonded();
-							
 							atom=atom->getBond(0)->getBondedAtomOf(*atom);
 							atom_feld[0]=atom;
 							zaehler1=0;
 							zaehler2=1;
 							bond_zaehler=0;
-							// cout << endl << "erstes Referenzatom gespeichert : "<< atom->getName();
-							// cout << endl << " suche jetzt den Rest";
 							
 							// searching for more reference atoms
 							// if the actual atom has no more bonds start over with next
@@ -1608,11 +1563,9 @@ namespace BALL
 								atom=atom_feld[zaehler1];
 								if (atom->getBond(bond_zaehler))
 									{
-									// cout << endl <<"naechste Bindung des Atoms";
 									atom=atom->getBond(bond_zaehler)->getBondedAtomOf(*atom);
 									if (atom->getElement()!=PSE[Element::H])
 										{
-										// cout << endl <<"Ueberpruefe ob Atom schon gespeichert ist ";
 										test_zaehler=0;
 										inserted=0;
 										while (test_zaehler < zaehler2)
@@ -1623,21 +1576,17 @@ namespace BALL
 										// next reference atom found and stored in atom_feld	
 										if (!inserted)
 											{
-											// cout << endl <<"ein Referenzatom gefunden und gespeichert : "<<atom->getName();
 											atom_feld[zaehler2]=atom;
 											zaehler2++;
-											// cout << endl <<"zaehler2 :" << zaehler2;
 											}
 										}
 									bond_zaehler++;
 									}
 									else {  
-										// cout << endl << "atom hat keine Bindung mehr, nehme naechstes im Feld";
 										zaehler1++;
 										bond_zaehler=0;
 										}
 								}
-							// cout << endl << " alle Referenzatome sind gefunden.";
 							zaehler1=0;
 							while (zaehler1<4)
 								{
@@ -1649,11 +1598,7 @@ namespace BALL
 								}
 							atoms_[4]="NULL";
 							ini_table_[h_atoms_[k] ]=atoms_;
-							// cout <<endl <<"EIntrag ist aufgebatu";
-							
 						}
-						
-						// cout << endl <<"fuege jetzt das Wasserstoff ein";
 						
 						// hydrogen is going to be inserted
 					
@@ -1667,14 +1612,11 @@ namespace BALL
 								} else {
 									// if template is not known in prot_table
 									// it has to be added
-									//cout << endl << "Fuege das Template in die Hashtabelle ein";
 									addToTemplateTable_(tmp);
 									atom = (PDBAtom*)&prot_table_[atoms_[i]];
 									xx[i] = atom->getPosition();
 								}
 							}
-						
-						//cout  << endl <<"Habe Prototype Referenzatome gefunden";
 						
 						// getting the position of reference hydrogen
 							if (prot_table_.has(h_atoms_[k]))
@@ -1682,13 +1624,10 @@ namespace BALL
 								atom = (PDBAtom*)&prot_table_[h_atoms_[k]];
 								xtarget = atom->getPosition(); 
 							} else {
-								Log.level(LogStream::ERROR) << "prot_table_ Eintrag nicht gefunden :"<< h_atoms_[k] << endl;
-								//cout << endl <<"ERROR :: Wasserstoff nicht in prot_table gefunden";
+								Log.error() << "prot_table_ Eintrag nicht gefunden :"<< h_atoms_[k] << endl;
 								continue;
 							}
 					
-						//cout << endl <<"Habe Prototype Wasserstoff gefunden";
-						
 						// getting position of reference atoms of actual residue
 							for (i = 0; i <= 3; i++)
 							{
@@ -1708,8 +1647,6 @@ namespace BALL
 								}
 							}
 		
-						//cout << endl <<"Beginne jetzt die Berechnung";
-						
 						// xtarget is calculated
 							calculate_(h_atoms_[k], &bindungs_atom,
 												 x[0], x[1], x[2], x[3],
@@ -1717,7 +1654,6 @@ namespace BALL
 												 xtarget); 
 							
 							k++;
-							// cout << endl << "Wasserstoff ist eingefuegt...:"<<k;
 		
 					}
 				}
