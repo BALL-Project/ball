@@ -1,4 +1,4 @@
-// $Id: line3.h,v 1.26 2000/08/30 19:58:13 oliver Exp $
+// $Id: line3.h,v 1.27 2000/10/28 22:35:25 amoll Exp $
 
 #ifndef BALL_MATHS_LINE3_H
 #define BALL_MATHS_LINE3_H
@@ -150,7 +150,9 @@ namespace BALL
 			if (form == FORM__PARAMETER) 
 			{
 				d = vector;
-			} else {
+			}
+			else 
+			{
 				d = vector - point;
 			}
 		}
@@ -192,7 +194,9 @@ namespace BALL
 			if (form == FORM__PARAMETER) 
 			{
 				vector = d;
-			} else {
+			}
+			else 
+			{
 				vector - point = d;
 			}
 		}
@@ -245,19 +249,28 @@ namespace BALL
 
 				return (bool)(Maths::isEqual(p.y + c * d.y, point.y)
 											&& Maths::isEqual(p.z + c * d.z, point.z));
-			} else if (Maths::isNotZero(d.y))
-			{
-				T c = (point.y - p.y) / d.y;
-
-				return (bool)(Maths::isEqual(p.x, point.x)   // invariant: d.x == 0
-											&& Maths::isEqual(p.z + c * d.z, point.z));
 			}
-			else if (Maths::isNotZero(d.z))
+			else 
 			{
-				return (bool)(Maths::isEqual(p.x, point.x)   // invariant: d.x == 0
-											&& Maths::isEqual(p.y, point.y)); // invariant: d.y == 0
-			} else {
-				return false;
+				if (Maths::isNotZero(d.y))
+				{
+					T c = (point.y - p.y) / d.y;
+
+					return (bool)(Maths::isEqual(p.x, point.x)   // invariant: d.x == 0
+												&& Maths::isEqual(p.z + c * d.z, point.z));
+				}
+				else 
+				{
+					if (Maths::isNotZero(d.z))
+					{
+						return (bool)(Maths::isEqual(p.x, point.x)   // invariant: d.x == 0
+													&& Maths::isEqual(p.y, point.y)); // invariant: d.y == 0
+					}
+					else 
+					{
+						return false;
+					}
+				}
 			}
 		}
 		//@}

@@ -1,4 +1,4 @@
-// $Id: matrix44.h,v 1.33 2000/08/30 19:58:13 oliver Exp $
+// $Id: matrix44.h,v 1.34 2000/10/28 22:35:25 amoll Exp $
 
 #ifndef BALL_MATHS_MATRIX44_H
 #define BALL_MATHS_MATRIX44_H
@@ -649,71 +649,67 @@ namespace BALL
 		*/
 		//@{
 
-		/**
-				1st cell in the 1st row
+		/**	1st cell in the 1st row
 		*/
 		T m11;
-		/**
-				2nd cell in the 1st row
+
+		/**	2nd cell in the 1st row
 		*/
 		T m12;
-		/**
-				3rd cell in the 1st row
+
+		/**	3rd cell in the 1st row
 		*/
 		T m13;
-		/**
-				4th cell in the 1st row
+
+		/**	4th cell in the 1st row
 		*/
 		T m14;
 
-		/**
-				1st cell in the 2nd row
+		/**	1st cell in the 2nd row
 		*/
 		T m21;
-		/**
-				2nd cell in the 2nd row
+
+		/**	2nd cell in the 2nd row
 		*/
 		T m22;
-		/**
-				3rd cell in the 2nd row
+
+		/**	3rd cell in the 2nd row
 		*/
 		T m23;
-		/**
-				4th cell in the 2nd row
+
+		/**	4th cell in the 2nd row
 		*/
 		T m24;
 
-		/**
-				1st cell in the 3rd row
+		/**	1st cell in the 3rd row
 		*/
 		T m31;
-		/**
-				2nd cell in the 3rd row
+
+		/**	2nd cell in the 3rd row
 		*/
 		T m32;
-		/**
-				3rd cell in the 3rd row
+
+		/**	3rd cell in the 3rd row
 		*/
 		T m33;
-		/**
-				4th cell in the 3rd row
+
+		/**	4th cell in the 3rd row
 		*/
 		T m34;
 
-		/**
-				1st cell in the 4th row
+		/**	1st cell in the 4th row
 		*/
 		T m41;
-		/**
-				2nd cell in the 4th row
+
+		/**	2nd cell in the 4th row
 		*/
 		T m42;
-		/**
-				3rd cell in the 4th row
+
+		/**	3rd cell in the 4th row
 		*/
 		T m43;
-		/**
-				4th cell in the 4th row
+
+		/**	4th cell in the 4th row
 		*/
 		T m44;
 		//@}
@@ -1053,7 +1049,6 @@ namespace BALL
 		*ptr++ = m43; 
 		*ptr   = m44; 
 	}
-
 
 	template <typename T>
 	void TMatrix4x4<T>::get(TMatrix4x4<T>& m) const
@@ -1910,13 +1905,10 @@ namespace BALL
 	{
 		m33 = m44 = 1;
 
-			m13 = m14 
-		= m23 = m24 
-		= m31 = m32 = m34 
-		= m41 = m42 = m43 
-		= 0;
+		m13 = m14 = m23 = m24 = m31 = 
+		m32 = m34 = m41 = m42 = m43 = 0;
 
-		m11 = m22 = cos(phi);
+		m11 =  m22 = cos(phi);
 		m12 = -(m21 = sin(phi));
 	}
 

@@ -1,4 +1,4 @@
-// $Id: circle3.h,v 1.20 2000/09/02 19:46:12 oliver Exp $
+// $Id: circle3.h,v 1.21 2000/10/28 22:35:25 amoll Exp $
 
 #ifndef BALL_MATHS_CIRCLE3_H
 #define BALL_MATHS_CIRCLE3_H
@@ -45,7 +45,6 @@ namespace BALL
 		public:
 
 		BALL_CREATE(TCircle3<T>)
-
 
 		/**	@name	Constructors and Destructors
 		*/
@@ -94,7 +93,6 @@ namespace BALL
 		{
 		}
 		//@}
-
 
 		/**	@name	Assignment
 		*/
@@ -197,7 +195,6 @@ namespace BALL
 			return (bool)(p != circle.p || n != circle.n || Maths::isNotEqual(radius, circle.radius));
 		}
 
-
 		/**	Test if a given point is a member of the circle.
 				Optional it can be testet, if it is a member of the surface.
 				@param point the point to be tested
@@ -217,7 +214,6 @@ namespace BALL
 		}
 		//@}
 
-
 		/**	@name	Debugging and Diagnostics
 		*/
 		//@{
@@ -231,7 +227,12 @@ namespace BALL
 			return true;
 		}
 
-		///
+		/** Internal state dump.
+				Dump the current internal state of {\em *this} to 
+				the output ostream {\em s} with dumping depth {\em depth}.
+				@param   s - output stream where to output the internal state of {\em *this}
+				@param   depth - the dumping depth
+		*/
 		void dump(std::ostream& s = std::cout, Size depth = 0) const
 		{
 			BALL_DUMP_STREAM_PREFIX(s);

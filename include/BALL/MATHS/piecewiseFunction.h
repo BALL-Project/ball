@@ -1,4 +1,4 @@
-// $Id: piecewiseFunction.h,v 1.5 2000/10/23 10:20:06 anker Exp $
+// $Id: piecewiseFunction.h,v 1.6 2000/10/28 22:35:25 amoll Exp $
 
 #ifndef BALL_MATHS_PIECEWISEFUNCTION_H
 #define BALL_MATHS_PIECEWISEFUNCTION_H
@@ -59,7 +59,6 @@ namespace BALL
 
 		//@}
 
-
 		/** @name Assignemnt */
 		//@{
 
@@ -70,7 +69,6 @@ namespace BALL
 		void clear() throw();
 
 		//@}
-
 
 		/** @name Accessors */
 		//@{
@@ -124,7 +122,6 @@ namespace BALL
 
 		//@}
 
-
 		/** @name Predicates */
 		//@{
 
@@ -139,7 +136,6 @@ namespace BALL
 
 		//@}
 
-
 		/** @name Debugging and Diagnostics */
 		//@{
 
@@ -147,7 +143,6 @@ namespace BALL
 		virtual void dump (std::ostream& s = std::cout, Size depth = 0) const throw();
 
 		//@}
-
 
 		protected:
 
@@ -157,7 +152,6 @@ namespace BALL
 		std::vector<Coefficients> coefficients_;
 
 		bool valid_;
-
 
 		private:
 

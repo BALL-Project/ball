@@ -1,4 +1,4 @@
-// $Id: plane3.h,v 1.18 2000/08/30 19:58:13 oliver Exp $
+// $Id: plane3.h,v 1.19 2000/10/28 22:35:26 amoll Exp $
 
 #ifndef BALL_MATHS_PLANE3_H
 #define BALL_MATHS_PLANE3_H
@@ -121,7 +121,6 @@ namespace BALL
 				p.set(0, 0, -d / c);
 			}
 		}
-
 
 		/**	Destructor.	
 				Destructs the TPlane3 object. As there are no dynamic
