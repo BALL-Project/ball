@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Stretch.C,v 1.1.2.4 2005/03/22 01:17:58 amoll Exp $
+// $Id: MMFF94Stretch.C,v 1.1.2.5 2005/03/22 15:41:11 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Stretch.h>
@@ -74,53 +74,57 @@ namespace BALL
 
 		bool use_selection = getForceField()->getUseSelection();
 
+		// a working instance to put the current values in and push it back
 		Stretch dummy_stretch;
 
 		AtomVector::ConstIterator atom_it = getForceField()->getAtoms().begin();
-//   		Atom::AttributeVector& attributes = Atom::getAttributes();
-		for ( ; atom_it != getForceField()->getAtoms().end(); ++atom_it)
+		for (; atom_it != getForceField()->getAtoms().end(); ++atom_it)
 		{
 			for (Atom::BondIterator it = (*atom_it)->beginBond(); +it ; ++it) 
 			{
+				// make sure we process each bond only once
 				if (*atom_it != it->getFirstAtom()) continue;
 				
-				Bond&	bond = const_cast<Bond&>(*it);
+				Bond&	bond = *it;
 				if (bond.getType() == Bond::TYPE__HYDROGEN)
 				{	
 					// Ignore hydrogen bonds!
 					continue;
 				}
 
-				if (!use_selection ||
-						(use_selection && bond.getFirstAtom()->isSelected() && 
-															bond.getSecondAtom()->isSelected()))
+			  Atom& atom1(*(Atom*)bond.getFirstAtom());
+			  Atom& atom2(*(Atom*)bond.getSecondAtom());
+
+				const bool make_it = !use_selection || (use_selection && atom1.isSelected() && atom2.isSelected());
+
+				const Atom::Type atom_type_A = atom1.getType();
+				const Atom::Type atom_type_B = atom2.getType();
+
+				if (!make_it) continue;
+ 
+				if (!parameters_.getParameters(bond, dummy_stretch.kb, dummy_stretch.r0))
 				{
-					const Atom::Type atom_type_A = bond.getFirstAtom()->getType();
-					const Atom::Type atom_type_B = bond.getSecondAtom()->getType();
-					if (!parameters_.getParameters(atom_type_A, atom_type_B, dummy_stretch.kb, dummy_stretch.r0))
-					{
-						getForceField()->error() << "cannot find stretch parameters for atom types " 
-								<< atom_type_A << " " << atom_type_B 
-								<< " (atoms are: " 
-								<< bond.getFirstAtom()->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) << " " 
-								<< bond.getSecondAtom()->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) << ")" << std::endl;
+					getForceField()->error() << "cannot find stretch parameters for atom types " 
+							<< atom_type_A << " " << atom_type_B 
+							<< " (atoms are: " 
+							<< atom1.getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) << " " 
+							<< atom2.getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) << ")" << std::endl;
 
-						getForceField()->getUnassignedAtoms().insert(bond.getFirstAtom());
-						getForceField()->getUnassignedAtoms().insert(bond.getSecondAtom());
-						continue;
-					}
+					getForceField()->getUnassignedAtoms().insert(&atom1);
+					getForceField()->getUnassignedAtoms().insert(&atom2);
+					continue;
+				}
 
-					dummy_stretch.atom1 = (Atom*) bond.getFirstAtom();
-					dummy_stretch.atom2 = (Atom*) bond.getSecondAtom();
+				dummy_stretch.atom1 = &atom1; 
+				dummy_stretch.atom2 = &atom2;
 
 #ifdef BALL_DEBUG_MMFF
-					Log.info() << bond.getFirstAtom()->getFullName() << " -> " 
-						         << bond.getSecondAtom()->getFullName() << " : "
-										 << atom_type_A << " " << atom_type_B << std::endl;
+				Log.info() << atom1.getFullName() << " -> " 
+					         << atom2.getFullName() << " : "
+									 << atom_type_A << " " << atom_type_B << std::endl;
 #endif
 
-					stretch_.push_back(dummy_stretch);
-				}
+				stretch_.push_back(dummy_stretch);
 			}
 		}
 
@@ -140,17 +144,15 @@ namespace BALL
 		// initial energy is zero
 		energy_ = 0;
 
-//   		bool use_selection = getForceField()->getUseSelection();
-
 		for (Size i = 0 ; i < stretch_.size(); i++)
 		{
 			const Vector3 direction(stretch_[i].atom1->getPosition() - stretch_[i].atom2->getPosition());
 			double distance = direction.getLength(); 
-			const float delta(::std::fabs(distance - stretch_[i].r0));
-			const float delta_2(delta * delta);
+			const double delta(::std::fabs(distance - (double) stretch_[i].r0));
+			const double delta_2(delta * delta);
 
-			float eb_ij = 143.9325 * stretch_[i].kb / 2.0 * delta_2 *
-				            (1.0 + CUBIC_STRENGTH_CONSTANT * delta + 7.0 / 12.0 * CUBIC_STRENGTH_CONSTANT * CUBIC_STRENGTH_CONSTANT * delta_2);
+			double eb_ij = K0 * (double) stretch_[i].kb * delta_2 *
+				            (1.0L + CUBIC_STRENGTH_CONSTANT * delta + KCS * delta_2);
 
 #ifdef BALL_DEBUG_MMFF
 			Log.info() << stretch_[i].atom1->getFullName() << " -> " 

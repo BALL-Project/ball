@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.C,v 1.1.2.1 2005/03/21 16:42:54 amoll Exp $
+// $Id: MMFF94Parameters.C,v 1.1.2.2 2005/03/22 15:41:11 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field parameters 
 //
@@ -15,7 +15,8 @@ using namespace std;
 namespace BALL 
 {
 	MMFF94BondStretchParameters::MMFF94BondStretchParameters()
-		: is_initialized_(false)
+		: is_initialized_(false),
+			nr_of_atom_types_(100)
 	{
 	}
 
@@ -37,8 +38,15 @@ namespace BALL
 		return *this;
 	}
 
-	bool MMFF94BondStretchParameters::getParameters(Position atom_type1, Position atom_type2, float& kb, float& r0) const
+	bool MMFF94BondStretchParameters::getParameters(const Bond& bond, float& kb, float& r0) const
 	{
+		const Atom& atom1 = *bond.getFirstAtom();
+		const Atom& atom2 = *bond.getSecondAtom();
+		Position atom_type1(atom1.getType());
+		Position atom_type2(atom2.getType());
+
+		// make sure atom_type1 is smaller or equal atom_type2
+		// because the parameters are not mirrored
 		if (atom_type2 < atom_type1)
 		{
 			Position temp(atom_type1);
@@ -46,14 +54,35 @@ namespace BALL
 			atom_type2 = temp;
 		}
 
-		StretchMap::ConstIterator it = parameters_.find(atom_type1);
-		if (it == parameters_.end()) return false;	
+		const Position index(getIndex_(atom_type1, atom_type2));
 
-		HashMap<Position, pair<float, float> >::ConstIterator it2 = it->second.find(atom_type2);
-		if (it2 == it->second.end()) return false;
+		// take the sbmb value if :
 
-		kb = it2->second.first;
-		r0 = it2->second.second;
+		// is there an optional sbmb value ?
+		// is the bond order == 1 ?
+		// are both atoms sp or sp2 hypridised?
+		StretchMap::ConstIterator it = parameters_optional_sbmb_.find(index);
+
+		const bool get_sbmb = 
+			it != parameters_optional_sbmb_.end() 	&&
+			bond.getOrder() == 1   									&&
+			(isSp_(atom1) || isSp2_(atom1)) 				&&
+			(isSp_(atom2) || isSp2_(atom2));
+
+		if (get_sbmb)
+		{
+			kb = it->second.first;
+			r0 = it->second.second;
+			return true;
+		}
+
+		// take the standard value
+
+		it = parameters_.find(index);
+		if (it == parameters_.end()) return false;
+
+		kb = it->second.first;
+		r0 = it->second.second;
 
 		return true;
 	}
@@ -80,9 +109,29 @@ namespace BALL
 					return false;
 				}
 
-				parameters_[fields[1].toUnsignedInt()]
-									 [fields[2].toUnsignedInt()] = pair<float, float>(fields[3].toFloat(), 
-																																		fields[4].toFloat());
+				const Position type1 = fields[1].toUnsignedInt();
+				const Position type2 = fields[2].toUnsignedInt();
+				const Position index = getIndex_(type1, type2);
+
+				// the data values r0 and kb
+				pair<float, float> values(fields[3].toFloat(), fields[4].toFloat());
+
+				// if the value already exists, put it into the optional sbmb hashmap
+				if (parameters_.has(index))
+				{
+					if (fields[0] != "1")
+					{
+						Log.error() << "Problem while reading bond parameter file: Invalid SBMB entry: " 
+												<< infile.getLine() << std::endl;
+						return false;
+					}
+
+					parameters_optional_sbmb_[index] = values;
+					continue;
+				}
+
+				// put the values into the standard values hashmap
+				parameters_[index] = values;
 			}
 		}
 		catch(...)
