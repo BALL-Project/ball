@@ -1,4 +1,4 @@
-// $Id: pair6_12RDFIntegrator.C,v 1.7 2000/11/29 14:52:07 anker Exp $
+// $Id: pair6_12RDFIntegrator.C,v 1.9 2000/12/01 15:25:39 anker Exp $
 
 #include <BALL/MATHS/common.h>
 #include <BALL/SOLVATION/pair6_12RDFIntegrator.h>
@@ -73,6 +73,7 @@ namespace BALL
 		k1_ = 0.0;
 		k2_ = 0.0;
 		// BAUSTELLE: options.clear() ?
+		options.clear(); 
 		RDFIntegrator::clear();
 	}
 
@@ -98,6 +99,17 @@ namespace BALL
 		B_ = B;
 		k1_ = k1;
 		k2_ = k2;
+	}
+
+
+	void Pair6_12RDFIntegrator::getConstants(double& A, double& B, double& k1, 
+			double& k2) 
+		throw()
+	{
+		A = A_;
+		B = B_;
+		k1 = k1_;
+		k2 = k2_;
 	}
 
 
@@ -134,7 +146,8 @@ namespace BALL
 			return 0.0;
 		}
 
-		if (fabs(k2_) < MIN_DISTANCE)
+		// k2_ is always > 0, so we don't have to fabs() here
+		if (k2_ < MIN_DISTANCE)
 		{
 
 			// the point from where the integration to inf will start.
@@ -238,7 +251,8 @@ namespace BALL
 			double FROM;
 			double TO;
 
-			if (fabs(k2_) < MIN_DISTANCE)
+			// k2_ is always > 0, so we don't have to fabs() here
+			if (k2_ < MIN_DISTANCE)
 			{
 				FROM = from;
 				TO = to;
@@ -263,6 +277,7 @@ namespace BALL
 			
 			Interval interval(from, to);
 			Coefficients coeffs = poly.getCoefficients(from_index);
+			double x0 = poly.getInterval(from_index).first;
 
 			// If the (projected) limits yield one interval, just compute and
 			// return the value of it.
@@ -277,7 +292,7 @@ namespace BALL
 				}
 				else
 				{
-					return analyticallyIntegrateInterval(interval, coeffs, from_index);
+					return analyticallyIntegrateInterval(interval, coeffs, x0);
 				}
 			}
 
@@ -289,14 +304,16 @@ namespace BALL
 
 			double val = 0.0;
 
-			if (fabs(k2_) < MIN_DISTANCE)
+			// k2_ is always > 0, so we don't have to fabs() here
+			if (k2_ < MIN_DISTANCE)
 			{
-				interval.second = poly.getInterval(from_index).second;
 
 				// this REQUIRES that the first integral is the one starting at
 				// zero, i. e. has zero parameters, yielding a computed value of zero
 				if (from_index > 0) 
 				{
+					interval.second = poly.getInterval(from_index).second;
+					x0 = poly.getInterval(from_index).first;
 					val = analyticallyIntegrateInterval(interval, coeffs, from_index);
 				}
 
@@ -306,7 +323,8 @@ namespace BALL
 				{
 					coeffs = poly.getCoefficients(k);
 					interval = poly.getInterval(k);
-					val += analyticallyIntegrateInterval(interval, coeffs, k);
+					x0 = poly.getInterval(k).first;
+					val += analyticallyIntegrateInterval(interval, coeffs, x0);
 				}
 
 				// if the decision from_index == to_index was false, to_index should
@@ -315,19 +333,20 @@ namespace BALL
 				coeffs = poly.getCoefficients(to_index);
 				interval = poly.getInterval(to_index);
 				interval.second = to;
-				val += analyticallyIntegrateInterval(interval, coeffs, to_index);
+				x0 = poly.getInterval(to_index).first;
+				val += analyticallyIntegrateInterval(interval, coeffs, x0);
 
 				return val;
 			}
 			else
 			{
-				interval.second = unproject(poly.getInterval(from_index).second);
-
 				// this REQUIRES that the first integral is the one starting at
 				// zero, i. e. has zero parameters, yielding a computed value of zero
 				if (from_index > 0) 
 				{
-					val = analyticallyIntegrateInterval(interval, coeffs, from_index);
+					interval.second = unproject(poly.getInterval(from_index).second);
+					x0 = unproject(poly.getInterval(from_index).first);
+					val = analyticallyIntegrateInterval(interval, coeffs, x0);
 				}
 
 				Interval INTERVAL;
@@ -337,9 +356,10 @@ namespace BALL
 				{
 					coeffs = poly.getCoefficients(k);
 					INTERVAL = poly.getInterval(k);
+					x0 = unproject(poly.getInterval(k).first);
 					interval.first = unproject(INTERVAL.first);
 					interval.second = unproject(INTERVAL.second);
-					val += analyticallyIntegrateInterval(interval, coeffs, k);
+					val += analyticallyIntegrateInterval(interval, coeffs, x0);
 				}
 
 				// if the decision from_index == to_index was false, to_index should
@@ -348,7 +368,8 @@ namespace BALL
 				INTERVAL = poly.getInterval(to_index);
 				interval.first = unproject(INTERVAL.first);
 				interval.second = to;
-				val += analyticallyIntegrateInterval(interval, coeffs, to_index);
+				x0 = unproject(poly.getInterval(to_index).first);
+				val += analyticallyIntegrateInterval(interval, coeffs, x0);
 
 				return val;
 			}
@@ -390,10 +411,8 @@ namespace BALL
 	bool Pair6_12RDFIntegrator::operator == (const Pair6_12RDFIntegrator&
 	integrator) const throw()
 	{
-		// BAUSTELLE
-		// return ((RDFIntegrator::operator == (integrator))
-		//	&& (A_ == integrator.A_)
-		return ((A_ == integrator.A_)
+		return ((RDFIntegrator::operator == (integrator))
+			&& (A_ == integrator.A_)
 			&& (B_ == integrator.B_)
 			&& (k1_ == integrator.k1_)
 			&& (k2_ == integrator.k2_));
@@ -466,11 +485,10 @@ namespace BALL
 
 
 	double Pair6_12RDFIntegrator::analyticallyIntegrateInterval
-		(const Interval& interval, const Coefficients& a, Position index) 
+		(const Interval& interval, const Coefficients& a, float x0) 
 		const throw()
 	{
 
-		double x0 = unproject(rdf_.getRepresentation().getInterval(index).first);
 		double r = interval.first;
 		double R = interval.second;
 		if (BALL::Maths::isNan(r) || BALL::Maths::isNan(R))
@@ -482,7 +500,8 @@ namespace BALL
 			Log.error() << "R = " << R << endl;
 		}
 
-		if (fabs(k2_) < MIN_DISTANCE)
+		// k2_ is always > 0, so we don't have to fabs() here
+		if (k2_ < MIN_DISTANCE)
 		{
 
 			// This is the case where no projection has to be done, because the
@@ -596,7 +615,7 @@ namespace BALL
 			{
 				Log.warn() << "Return value is NaN." << endl;
 				Log.warn() << "Error occured while integrating [" << r << ","
-					<< R << ") - " << x0 << " (this is index " << index << ")" << endl
+					<< R << ") - " << x0 << endl
 					<< "Coefs: " << a[0] << " " << a[1] << " " << a[2] << " " 
 					<< a[3] << endl;
 				dump();
@@ -622,52 +641,50 @@ namespace BALL
 
 	double Pair6_12RDFIntegrator::project(double x) const throw()
 	{
-		if (x == 0.0)
+		// k2_ is always > 0, so we don't have to fabs() here
+		if (k2_ < MIN_DISTANCE)
 		{
-			// BAUSTELLE: Ain't that evil?
-			Log.warn() << "Pair6_12RDFIntegrator::project(): " 
-				<< "got 0, returning 0" << endl;
-			return  0.0;
+			Log.warn() << "project called with k2_ == " << k2_ 
+				<< ". Something seemeingly went wrong." << endl;
+			return x;
+		}
+
+		double arg = x*x + k1_ * x + k2_;
+		if (arg < 0)
+		{
+			Log.error() << "Pair6_12RDFIntegrator::project(): " 
+				<< "square root of negative term!" << endl;
+			dump();
+			return 0.0;
 		}
 		else
 		{
-			double arg = x*x + k1_ * x + k2_;
-			if (arg < 0)
-			{
-				Log.error() << "Pair6_12RDFIntegrator::project(): " 
-					<< "square root of negative term!" << endl;
-				return 0.0;
-			}
-			else
-			{
-				return sqrt(arg);
-			}
+			return sqrt(arg);
 		}
 	}
 
 
 	double Pair6_12RDFIntegrator::unproject(double x) const throw()
 	{
-		if (x == 0.0)
+		// k2_ is always > 0, so we don't have to fabs() here
+		if (k2_ < MIN_DISTANCE)
 		{
-			// BAUSTELLE: Ain't that evil?
-			Log.warn() << "Pair6_12RDFIntegrator::unproject(): " 
-				<< "got 0, returning 0" << endl;
-			return  0.0;
+			Log.warn() << "unproject called with k2_ == " << k2_ 
+				<< ". Something seemeingly went wrong." << endl;
+			return x;
+		}
+
+		double arg = x*x + k1_*k1_ / 4 - k2_;
+		if (arg < 0)
+		{
+			Log.error() << "Pair6_12RDFIntegrator::unproject(): " 
+				<< "square root of negative term! " << x << endl;
+			dump();
+			return 0.0;
 		}
 		else
 		{
-			double arg = x*x + k1_*k1_ / 4 - k2_;
-			if (arg < 0)
-			{
-				Log.error() << "Pair6_12RDFIntegrator::unproject(): " 
-					<< "square root of negative term! " << x << endl;
-				return 0.0;
-			}
-			else
-			{
-				return sqrt(arg) - k1_ / 2;
-			}
+			return sqrt(arg) - k1_ / 2;
 		}
 	}
 
