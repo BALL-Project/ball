@@ -3,7 +3,7 @@
 ############################################################
 # source directory shadow builder for multiplatform builds #
 ############################################################
-# $Id: binfmt.sh,v 1.8 2000/01/28 17:36:22 oliver Exp $
+# $Id: binfmt.sh,v 1.9 2000/01/28 17:56:44 oliver Exp $
 ############################################################
 
 UNAME=uname
@@ -114,8 +114,13 @@ else
 	for i in ${FORMATS} ; do
 		FORMAT="$i"
 	done
-	GREP_FORMAT="`echo ${FORMAT} | ${SED} s/\\\\+/\\\\\\\\+/g`"
-	FORMAT_INDEX=`${GREP} -n "${GREP_FORMAT}" ${BINFORMAT_FILE} | ${TAIL} -1 | ${CUT} -d: -f1`
+	if test "${FORMAT}" != "" ; then
+		GREP_FORMAT="`echo ${FORMAT} | ${SED} s/\\\\+/\\\\\\\\+/g`"
+		FORMAT_INDEX=`${GREP} -n "${GREP_FORMAT}" ${BINFORMAT_FILE} | ${TAIL} -1 | ${CUT} -d: -f1`
+	else
+		FORMAT_INDEX=-1
+		FORMAT="(unknown)"
+	fi
 fi
 if test "$1" != "-i" ; then
 	echo ${FORMAT}

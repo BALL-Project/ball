@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.53 2000/01/28 17:35:36 oliver Exp $
+dnl    $Id: configure.in,v 1.54 2000/01/28 17:56:44 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -900,14 +900,12 @@ if test "${COMPILER_DONE}" != true -a "${IS_KCC}" = true ; then
 	dnl
 	if test "${OS}" = "Solaris" -a "${ARCHITECTURE}" = sparc ; then
 		if test "${BINFMT_64_BIT}" = true ; then
-			BINFMT="${BINFMT}_V9"
 			CXX_NAME="${CXX_NAME}_V9"
 			LDFLAGS="${LDFLAGS} -xarch=v9"
 			CPPFLAGS="${CPPLAGS} -xarch=v9"
 			AROPTS="${AROPTS} -xarch=v9"
 			DYNAROPTS="${DYNAROPTS} -xarch=v9"
 		else
-			BINFMT="${BINFMT}_V8"
 			CXX_NAME="${CXX_NAME}_V8"
 		fi
 	fi
