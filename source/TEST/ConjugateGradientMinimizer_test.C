@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ConjugateGradientMinimizer_test.C,v 1.12 2003/03/22 09:40:44 anhi Exp $
+// $Id: ConjugateGradientMinimizer_test.C,v 1.13 2003/03/22 11:51:39 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -16,7 +16,7 @@
 #include <BALL/STRUCTURE/residueChecker.h>
 ///////////////////////////
 
-START_TEST(ConjugateGradienMinimizer, "$Id: ConjugateGradientMinimizer_test.C,v 1.12 2003/03/22 09:40:44 anhi Exp $")
+START_TEST(ConjugateGradienMinimizer, "$Id: ConjugateGradientMinimizer_test.C,v 1.13 2003/03/22 11:51:39 oliver Exp $")
 
 using namespace BALL;
 
@@ -285,7 +285,7 @@ RESULT
 
 CHECK(ConjugateGradientMinimizer::minimize(Size, bool, SHANNO))// AlaAla)
 	System S;
-	HINFile f("data/AlaAla.hin");
+	HINFile f("data/AA.hin");
 	f >> S;
 	S.deselect();
 	
@@ -294,7 +294,10 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, SHANNO))// AlaAla)
 	ResidueChecker checker(fd);
 	S.apply(checker);
 	
-//	FF.options[AmberFF::Option::ASSIGN_CHARGES] = "false";
+	FF.options[AmberFF::Option::ASSIGN_CHARGES] = "true";
+	FF.options[AmberFF::Option::ASSIGN_TYPENAMES] = "true";
+	FF.options[AmberFF::Option::OVERWRITE_CHARGES] = "true";
+	FF.options[AmberFF::Option::OVERWRITE_TYPENAMES] = "true";
 	FF.setup(S);
 
 	TEST_EQUAL(FF.isValid(), true)
@@ -317,7 +320,7 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, SHANNO))// AlaAla)
 	TEST_EQUAL(cgm.isValid(), true)
 	FF.updateEnergy();
 	FF.updateForces();
-	result = cgm.minimize(55);
+	result = cgm.minimize(500);
 
 	TEST_EQUAL(result, true)
 	float energy = FF.updateEnergy();
