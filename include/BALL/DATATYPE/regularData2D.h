@@ -1,4 +1,4 @@
-// $Id: regularData2D.h,v 1.13 2001/07/09 21:14:44 amoll Exp $
+// $Id: regularData2D.h,v 1.14 2001/07/16 02:08:41 oliver Exp $
 
 #ifndef BALL_DATATYPE_TRegularData2D_H
 #define BALL_DATATYPE_TRegularData2D_H
@@ -349,7 +349,7 @@ namespace BALL
 														& + & v_4 (1 - dx) (1 - dy) dz\\
 					\end{eqnarray*}
 				}
-				@exception OutOfGrid if the point is outside the grid
+				@exception OutOfGrid if the point is outside the grid or the grid has fewer then two points in any dimension
 				@param	vector the position to evaluate
 		*/
 		GridDataType getInterpolatedValue(const Vector2& vector) const throw(Exception::OutOfGrid);
@@ -942,25 +942,35 @@ namespace BALL
 	GridDataType TRegularData2D<GridDataType>::getInterpolatedValue(const Vector2& vector) const
 		throw(Exception::OutOfGrid)
 	{
-		if (!has(vector))
+		if (!has(vector) || (number_of_points_x_ < 2) || (number_of_points_y_ < 2))
 		{
 			throw Exception::OutOfGrid(__FILE__, __LINE__);
 		}		
 
 		Vector2 h(vector.x - origin_.x, vector.y - origin_.y);
-		Position x = (int)(h.x / spacing_.x);
-		Position y = (int)(h.y / spacing_.y);
+		Position x = (Position)(h.x / spacing_.x);
+		Position y = (Position)(h.y / spacing_.y);
 
-		unsigned long Nx = number_of_points_x_;
-		unsigned long l = x + Nx * y;
+		// correct for numerical inaccuracies
+		if (x >= (number_of_points_x_ - 1))
+		{
+			x = number_of_points_x_ - 2;
+		}
+		if (y >= (number_of_points_y_ - 1))
+		{
+			y = number_of_points_y_ - 2;
+		}
+
+		Size Nx = number_of_points_x_;
+		Size l = x + Nx * y;
 		Vector2 r_0(getGridCoordinates((Position)l));
-		float dx = 1 - ((vector.x  - r_0.x ) / getXSpacing());
-		float dy = 1 - ((vector.y - r_0.y) / getYSpacing());
+		double dx = 1.0 - ((vector.x - r_0.x) / getXSpacing());
+		double dy = 1.0 - ((vector.y - r_0.y) / getYSpacing());
 
 		return  data[l] * dx * dy
-					+ data[l + 1] * (1 - dx) * dy
-					+ data[l + Nx] * dx * (1 - dy)
-					+ data[l + Nx + 1] * (1 - dx) * (1 - dy);
+					+ data[l + 1] * (1.0 - dx) * dy
+					+ data[l + Nx] * dx * (1.0 - dy)
+					+ data[l + Nx + 1] * (1.0 - dx) * (1.0 - dy);
 	}
 
 	template <typename GridDataType>
