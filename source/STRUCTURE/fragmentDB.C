@@ -1,4 +1,4 @@
-// $Id: fragmentDB.C,v 1.17 2000/04/30 15:07:43 oliver Exp $
+// $Id: fragmentDB.C,v 1.18 2000/05/15 19:18:54 oliver Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 
@@ -1767,7 +1767,23 @@ namespace BALL
 			{
 				for (it2 = it1, ++it2; it2 != fragment_list_.end(); ++it2)
 				{
-					bonds_built_ += buildInterFragmentBonds(**it1, **it2);	
+					Size inter_fragment_bonds = buildInterFragmentBonds(**it1, **it2);
+					bonds_built_ += inter_fragment_bonds;
+
+					// check for the special case of cyclic structures (peptides)
+					Residue* res1 = dynamic_cast<Residue*>(&**it1);
+					Residue* res2 = dynamic_cast<Residue*>(&**it2);
+					if ((inter_fragment_bonds > 0) && (res1 != 0) && (res2 != 0)
+							&& res1->isTerminal() && res2->isTerminal())
+					{
+						// BAUSTELLE: wie sieht es bei terminal CYS-verbrueckten 
+						//   Peptiden aus?
+						// assign them the CYCLIC property and thus prevent
+						// getNTerminal/getCTerminal to recognize them
+						// as terminal from now on
+						(**it1).setProperty(Residue::PROPERTY__CYCLIC);
+						(**it2).setProperty(Residue::PROPERTY__CYCLIC);
+					}
 				}
 			}
 		}
