@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.18.2.13 2005/01/28 18:24:35 amoll Exp $
+// $Id: POVRenderer.C,v 1.18.2.14 2005/01/31 14:17:10 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -647,13 +647,14 @@ namespace BALL
 					// color index
 					mesh.colorList[mesh.triangle[i].v1].get(color_temp);
 					out << colors[color_temp] << ", ";
-					mesh.colorList[mesh.triangle[i].v1].get(color_temp);
+					mesh.colorList[mesh.triangle[i].v2].get(color_temp);
 					out << colors[color_temp] << ", ";
-					mesh.colorList[mesh.triangle[i].v1].get(color_temp);
+					mesh.colorList[mesh.triangle[i].v3].get(color_temp);
 					out << colors[color_temp] << endl;
 				}
 			}
 			out << "\t\t}" << endl;
+			out << "\t inside_vector <0, 0, 1>" << endl;
 			out << "\t}" << endl;
 		}
 				
