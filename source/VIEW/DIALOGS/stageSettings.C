@@ -27,7 +27,7 @@ StageSettings::StageSettings( QWidget* parent,  const char* name, WFlags fl )
 	scene_ = (Scene*) parent;
 	updateFromStage();
 
-	insertEntry(this, "OpenGL");
+	insertEntry(this, "Display");
 	setWidgetStack(widget_stack);
 }
 
