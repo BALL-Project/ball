@@ -1,4 +1,11 @@
-// $Id: ramachandran.C,v 1.2 2000/01/10 19:18:40 oliver Exp $
+// $Id: ramachandran.C,v 1.3 2000/01/17 13:12:18 oliver Exp $
+
+//============================================================================
+// BALL - Ramachandran plot example
+//============================================================================
+// this example reads a PDB file and calculates the backbone torsion angles
+// Phi and Psi that are needed to create ramachandran plots.
+
 
 #include <BALL/MOLMEC/AMBER/amber.h>
 #include <BALL/STRUCTURE/fragmentDB.h>
@@ -47,6 +54,7 @@ int main(int argc, char** argv)
 		AtomIterator atom_it = res_it->beginAtom();
 		for (; +atom_it; ++atom_it)
 		{
+			// remember the backbone atoms  C, N, and CA of residue i
 			if (atom_it->getName() == "C") C = &*atom_it;
 			if (atom_it->getName() == "N") N = &*atom_it;
 			if (atom_it->getName() == "CA") CA = &*atom_it;
@@ -55,7 +63,7 @@ int main(int argc, char** argv)
 		// phi is not defined for N-terminal residues
 		if (!res_it->isNTerminal())
 		{	
-			// find C(i-1)
+			// find C(i-1), the C atom of the previous residue
 			ResidueIterator last_res = res_it;
 			last_res--;
 			Atom* last_C = 0;
@@ -99,7 +107,6 @@ int main(int argc, char** argv)
 				cout << "psi(" << res_it->getName() << res_it->getID() << ") = " << psi.toDegree() << endl;
 			}
 		}
-				
 	}
 
 	// done

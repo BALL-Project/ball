@@ -1,6 +1,5 @@
-// $Id: PDB2discover.C,v 1.3 2000/01/07 22:01:57 oliver Exp $
+// $Id: PDB2discover.C,v 1.4 2000/01/17 13:12:17 oliver Exp $
 
-#include <BALL/common.h>
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/FORMAT/PDBFile.h>
 
@@ -10,39 +9,43 @@ using namespace std;
 int main(int argc, char** argv) 
 {
 
-	if (argc < 2)
+	// check for command line arguments
+	if (argc != 3)
 	{
-		cerr << "filename required" << endl;
+		Log.error() << argv[0] << " <PDB file> <new PDB file>" << endl;
+		Log.error() << "  read a PDB file from <PDB file>, add hydrogen atoms where needed" << endl;
+		Log.error() << "  convert the atom names to the Discover naming scheme, and write" << endl;
+		Log.error() << "  everything to <new PDB file>." << endl << endl;
 		return 1;
 	}
 	
-	cout << "reading file " << argv[1] << endl;
+	PDBFile	pdb_file(argv[1]);
+	if (pdb_file.bad())
+	{
+		Log.error() << "cannot read PDB file " << argv[1] << endl;
+		return 2;
+	}
 
-	PDBFile	pdb_file;
-	Protein	protein;
-
-	pdb_file.open(argv[1]);
-	pdb_file >> protein;
+	// read the contents of the file into a System
+	Log << "reading file " << argv[1] << endl;
+	System S;
+	pdb_file >> S;
 	pdb_file.close();
-	
-	Log.insert(cout);
-	
-	cout << "opening fragment database" << endl;
-	FragmentDB	db("/KM/comp-bio/BALL-data/fragments/Fragments.db");
 
+	Log << "opening fragment database" << endl;
+	FragmentDB	db;
 
-	cout << "adding hydrogens...";
-	protein.apply(*db.addHydrogens);
-	cout << "added " << db.addHydrogens->getNumberOfInsertedH() << endl;
+	Log << "adding hydrogens..." << endl;
+	S.apply(*db.addHydrogens);
 
-	cout << "normalizing atom names" << endl;
+	Log << "normalizing atom names" << endl;
 	db.normalizeNames->setNamingStandard("Discover");
-	protein.apply(*db.normalizeNames);
+	S.apply(*db.normalizeNames);
 
-	cout << "writing file test.pdb" << endl;
-	pdb_file.open("test.pdb", ios::out);
-	pdb_file << protein;
-	pdb_file.close();
+	Log << "writing file " << argv[2] << endl;
+	pdb_file2.open(argv[2], ios::out);
+	pdb_file2 << S;
+	pdb_file2.close();
 
 	return 0;
 }

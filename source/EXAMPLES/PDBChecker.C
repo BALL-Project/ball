@@ -1,25 +1,33 @@
+// $Id: PDBChecker.C,v 1.2 2000/01/17 13:12:17 oliver Exp $
+
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/STRUCTURE/defaultProcessors.h>
 #include <BALL/STRUCTURE/residueChecker.h>
 
 using namespace BALL;
+using namespace std;
 
 int main(int argc, char** argv)
 {
 	// print a suage message, if called with the wrong number
 	// of arguments
-	Log.insert(cout);
 	if (argc != 2)
 	{
-		cerr << argv[0] << " <pdbfile>" << endl;
-		cerr << "  checks the PDB file for consistency." << endl;
+		Log.error() << argv[0] << " <pdbfile>" << endl;
+		Log.error() << "  checks the PDB file for consistency." << endl;
+		return 1;
 	}
 
 	// create a System and read the contents of the PDB file
 	System S;
-	PDBFile file(argv[1]);
-	file >> S;
-	file.close();
+	PDBFile pdb_file(argv[1]);
+	if (pdb_file.bad())
+	{
+		Log.error() << "cannot open file " << argv[1] << endl;
+		return 2;
+	}
+	pdb_file >> S;
+	pdb_file.close();
 
 	// create a fragment database
 	// The fragment database contains information on

@@ -1,13 +1,18 @@
-// $Id: proteinMapper.C,v 1.2 1999/12/22 16:52:44 oliver Exp $
+// $Id: proteinMapper.C,v 1.3 2000/01/17 13:12:17 oliver Exp $
 
-#include <BALL/common.h>
-#include <iostream>
+//========================================================================
+// protein mapper example
+//========================================================================
+
+
 #include <BALL/SYSTEM/timer.h>
 #include <BALL/KERNEL/protein.h>
 #include <BALL/KERNEL/PSE.h>
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/STRUCTURE/structureMapper.h>
 #include <BALL/MATHS/matrix44.h>
+
+#include <iostream>
 #include <map>
 
 using namespace std;
@@ -21,8 +26,7 @@ int main(int argc, char** argv)
 	float lower = 4.0;
 	float tolerance = 0.6;
 
-
-	// usage
+	// print usage information
 	if ((argc < 4) || (argc > 7)) 
 	{
 		cout << argv[0] << " <filenameA> <filenameB> <outfilename> [<upper> [<lower> [<tolerance>]]]" << endl;
@@ -129,9 +133,9 @@ int main(int argc, char** argv)
 	mapper.setTransformation(T);
 	protein1.apply(mapper);
 
-	pdb_file.open(argv[3], ios::out);
-	pdb_file << protein1;
-	pdb_file.close();
+	PDBFile pdb_file2(argv[3], ios::out);
+	pdb_file2 << protein1;
+	pdb_file2.close();
 
 	cout << "done." << endl << endl;
 
