@@ -63,3 +63,4 @@ changed:
 - ~ModularWidget now calls MainControl::removeModularWidget, so
   from ModularWidget derived classes no longer have to deregister themselves
 - improved the code for the BALLView termination process
+- fixed core dump in RingPerception Processesor

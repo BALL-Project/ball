@@ -226,10 +226,13 @@ namespace BALL
 				}
 
 				system->setProperty("FROM_FILE", filename);
+				close();
 				getMainControl()->insert(*system, pdbId->text().latin1());
 				CompositeMessage* message = new CompositeMessage(*system, CompositeMessage::CENTER_CAMERA);
 				notify_(message);
-				close();
+				download->setDefault(true);
+				pdbId->setText("");
+				pdbId->setFocus();
 			}
 			catch(...)
 			{
