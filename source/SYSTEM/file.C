@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.C,v 1.49 2004/02/20 09:15:05 oliver Exp $
+// $Id: file.C,v 1.50 2004/03/20 15:24:25 amoll Exp $
 //
 
 #include <BALL/SYSTEM/file.h>
@@ -238,7 +238,7 @@ namespace BALL
 		is_temporary_ = false;
 
 		// we are reading files
-		if (open_mode == IN)
+		if (open_mode & IN)
 		{
 			// check
 			String transformation_command = transformation_manager_.findTransformation(name_);
