@@ -1,4 +1,4 @@
-// $Id: anisotropyShiftProcessor.C,v 1.9 2001/12/30 13:28:52 sturm Exp $
+// $Id: anisotropyShiftProcessor.C,v 1.10 2002/01/10 01:32:29 oliver Exp $
 
 #include <BALL/NMR/anisotropyShiftProcessor.h>
 
@@ -16,7 +16,21 @@ namespace BALL
 
 	AnisotropyShiftProcessor::AnisotropyShiftProcessor()
 		throw()
-		:	ignore_other_chain_(false)
+		:	ShiftModule(),
+			proton_list_(),
+			eff_list_(),
+			eff_list_2_(),
+			ignore_other_chain_(false)
+	{
+	}
+
+	AnisotropyShiftProcessor::AnisotropyShiftProcessor(const AnisotropyShiftProcessor& processor)
+		throw()
+		:	ShiftModule(processor),
+			proton_list_(processor.proton_list_),
+			eff_list_(processor.eff_list_),
+			eff_list_2_(processor.eff_list_2_),
+			ignore_other_chain_(processor.ignore_other_chain_)
 	{
 	}
 
