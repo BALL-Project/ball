@@ -1,4 +1,4 @@
-// $Id: NMRSpectrum.h,v 1.7 2000/09/22 14:14:50 amoll Exp $
+// $Id: NMRSpectrum.h,v 1.8 2000/09/26 19:28:51 oliver Exp $
 
 #ifndef BALL_NMR_NMRSPECTRUM_H
 #define BALL_NMR_NMRSPECTRUM_H
@@ -18,41 +18,16 @@
 #include <list>
 
 
-/* shift Module sind alle von Prozessoren abgeleitet
-   NMRSpectrum verwaltet eine Liste mit Prozessoren
-   verbesserung : eine von Prozessor abgeleitete gemeinsame Basisklasse 
-   		  der shift Module entwerfen und die Liste darauf definieren
-   		  stellt sicher das nur shift module in der Liste abgelegt 
-   		  werden koennen.
-
-   Shift Module koennen ueber Strings definiert werden.
-   neue Module erforden eine neue Zeile in insert_shift_module(CBallString)
-   und dementsprechung eine neu compilierung. besser waere es die Neucompilierung
-   auf das neue Modulzu beschraenken.
-   
-*/
-
 ///////////////////////////////////////////////////////////////////////////
 
 namespace BALL 
 {
 
-	/**@name	NMRSpectrum
-	*/
-
-	//@{
-
 	/**	Realizing the NMRSpectrum Datastructure
 			containing a pointer to a system named {\tt system\_} from which the spectrum will be
 			calculated.
 			the spectrum is realized with a list of peaks called {\tt spectrum\_}.
-			A list of shift modules named {\tt processorlist\_} contains the modules which are used
-			to do the calculation.
-			{\tt names_} points to the names instance, which correlates the shiftmodules with their 
-			stringnames.
-			The CreateSpectrumProcessor {\tt create\_spectrum\_\ will create {\tt spectrum\_}
 	*/
-
 	class NMRSpectrum
 	{
 		public:
@@ -97,6 +72,10 @@ namespace BALL
 		*/
 		const list<Peak1D>& getPeakList() const;	
 		
+		/**	Sets {\tt spectrum\_} to a peaklist.
+		*/
+		void setPeakList(const list<Peak1D>& spectrum);
+		
 		/**	Returns the ppm of the lowest peak of {\tt spectrum\_}.
 		*/
 		float getSpectrumMin() const;
@@ -104,10 +83,6 @@ namespace BALL
 		/**	Returns the ppm of the highest peak of {\tt spectrum\_}.
 		*/
 		float getSpectrumMax() const;
-		
-		/**	Sets {\tt spectrum\_} to a peaklist.
-		*/
-		void setPeakList(const list<Peak1D>& spectrum);
 		
 		/**	Explicitly sorts the peaklist {\tt spectrum\_}.
 		*/
@@ -133,7 +108,15 @@ namespace BALL
 		/**	Returns the value of {\tt density\_}.
 		*/
 		Size getDensity() const;	
-		
+
+		/**	Set the shift model.
+		*/
+		void setShiftModel(const ShiftModel& model);
+			
+		/**	Return the current shift model.
+		*/
+		const ShiftModel& getShiftModel() const;
+			
 		//@}
 
 		/**@name 	friend functions
@@ -145,15 +128,6 @@ namespace BALL
 				The float describes the tolerance.
 		*/
 		friend void makeDifference(const float&, const String&, const String&, const String&);
-
-		/**	Compares the chemical shifts of the atoms of the passed systems.
-				Atoms with identical full names are compared. The difference is set
-				as occupancy of the atom of the system of the first NMRSpectrum.
-				This changed system is written as new PDBFile (first String).
-				Another file is written (second String) containing the atoms fullname
-				its chemical shift and its difference to the shift of the second system
-		*/
-		friend void setDifference(NMRSpectrum*, NMRSpectrum*, const String&, const String&);
 
 		//@}
 
