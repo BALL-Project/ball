@@ -12,14 +12,15 @@ namespace BALL
 	{
 
 SnapshotVisualisationDialog::SnapshotVisualisationDialog
-	(QWidget* parent,  const char* name, bool modal, WFlags fl)
-	: SnapshotVisualisationDialogData(parent, name, modal, fl)
+	(QWidget* parent,  const char* name)//, bool modal, WFlags fl)
+	: SnapshotVisualisationDialogData(parent, name),//, modal, fl),
+		ModularWidget(name)
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "new SnapshotVisualisationDialog" << this << std::endl;
 #endif
-	registerWidget(this);
 	tmp_.setNum(1);
+	ModularWidget::registerWidget(this);
 }
 
 SnapshotVisualisationDialog::~SnapshotVisualisationDialog() throw()
@@ -72,7 +73,7 @@ void SnapshotVisualisationDialog::hundredBackwardClicked()
 void SnapshotVisualisationDialog::lastSnapshotClicked()
 {
 	if (snap_shot_manager_->applySnapShot(
-		snap_shot_manager_->getTrajectoryFile()->getNumberOfSnapShots()))
+				snap_shot_manager_->getTrajectoryFile()->getNumberOfSnapShots()))
 	{
 		update_();
 	}
@@ -88,22 +89,32 @@ void SnapshotVisualisationDialog::animateClicked()
 	for( Size i=getStartSnapshot(); i <= tempo; i ++)
 	{
   	tmp_.setNum(i, 10);
-		if (!snap_shot_manager_->applySnapShot(i)) return;
+		// speed things up after first snapshot is read
+		if (i == getStartSnapshot())
+		{
+			if (!snap_shot_manager_->applySnapShot(i)) return;
+		}
+		else
+		{
+			if (!snap_shot_manager_->applyNextSnapShot()) return;
+		}
+
+		setCaption("CurrentSnapshot: " + String(i));
 		update_();
 		if (export_PNG->isChecked())
 		{
-			Scene* scene= (Scene*) Scene::getInstance(0);
-			scene->exportPNG();
+			SceneMessage* message = new SceneMessage(SceneMessage::EXPORT_PNG);
+			notify_(message);
 		}
-//		Log.error() << "CurrentSnapshot: " << i << std::endl;
 	}
+	setCaption("Snapshot Visualisation");
 }
 
 void SnapshotVisualisationDialog::close()
 {
   lastSnapshotClicked();
 	update_();
-	if (snap_shot_manager_->getTrajectoryFile() != 0)
+	if (snap_shot_manager_->getTrajectoryFile())
 	{
 		delete snap_shot_manager_->getTrajectoryFile();
 	}
@@ -162,7 +173,6 @@ Size SnapshotVisualisationDialog::getStartSnapshot() const
 	catch(...)
 	{
 		Log.error() << "Invalid Start-Snapshot" << std::endl;
-		
 		return 1;
 	}
 }
@@ -184,13 +194,10 @@ Size SnapshotVisualisationDialog::getEndSnapshot() const
 void SnapshotVisualisationDialog::update_()
 {
   currentSnapshot->setText(tmp_);
-	/*
+	
 	SceneMessage* new_message = new SceneMessage;
 	new_message->setType(SceneMessage::REBUILD_DISPLAY_LISTS);
 	notify_(new_message);
-	*/
-	Scene* scene= (Scene*) Scene::getInstance(0);
-	scene->update(true);
 }
 
 void SnapshotVisualisationDialog::setSnapShotManager(SnapShotManager* snapshot_manager)  
@@ -205,4 +212,4 @@ void SnapshotVisualisationDialog::setSnapShotManager(SnapShotManager* snapshot_m
 }
   
 } } // namespace
-//////////////
+
