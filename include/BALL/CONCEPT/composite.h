@@ -1,4 +1,4 @@
-// $Id: composite.h,v 1.3 1999/09/07 14:28:11 oliver Exp $
+// $Id: composite.h,v 1.4 1999/09/07 19:35:33 oliver Exp $
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #define BALL_CONCEPT_COMPOSITE_H
@@ -449,15 +449,6 @@ namespace BALL
 		bool isInterior() const;
 	
 		///
-		bool isInteriorOf(const Composite& composite) const;
-
-		///
-		bool isLeaf() const;
-
-		///
-		bool isLeafOf(const Composite& composite) const;
-
-		///
 		bool hasChild() const;
 
 		///
@@ -491,16 +482,10 @@ namespace BALL
 		bool hasSibling() const;
 			
 		///
-		bool isSibling() const;
-			
-		///
 		bool isSiblingOf(const Composite& composite) const;
 			
 		///
 		bool hasPreviousSibling() const;
-	
-		///
-		bool isPreviousSibling() const;
 	
 		///
 		bool isPreviousSiblingOf(const Composite& composite) const;
@@ -509,29 +494,8 @@ namespace BALL
 		bool hasNextSibling() const;
 
 		///
-		bool isNextSibling() const;
-
-		///
 		bool isNextSiblingOf(const Composite& composite) const;
 	
-		///
-		bool hasPreceedingSibling() const;
-
-		///
-		bool isPreceedingSibling() const;
-
-		///
-		bool isPreceedingSiblingOf(const Composite& composite) const;
-	
-		///
-		bool hasSucceedingSibling() const;
-
-		///
-		bool isSucceedingSibling() const;
-
-		///
-		bool isSucceedingSiblingOf(const Composite& composite) const;
-
 		///
 		bool hasDescendant() const;
 	

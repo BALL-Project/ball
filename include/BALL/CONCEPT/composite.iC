@@ -1,4 +1,4 @@
-// $Id: composite.iC,v 1.3 1999/09/07 14:28:12 oliver Exp $
+// $Id: composite.iC,v 1.4 1999/09/07 19:35:33 oliver Exp $
 
 BALL_INLINE 
 void Composite::set(const Composite& composite, UnaryPredicate<Composite>& predicate)
@@ -215,24 +215,6 @@ bool Composite::isInterior() const
 }
 
 BALL_INLINE 
-bool Composite::isInteriorOf(const Composite &composite) const
-{
-  return (parent_ != 0 && first_child_ != 0 && isDescendantOf(composite) == true);
-}
-
-BALL_INLINE 
-bool Composite::isLeaf() const
-{
-  return (first_child_ == 0);
-}
-
-BALL_INLINE 
-bool Composite::isLeafOf(const Composite &composite) const
-{
-  return (first_child_ == 0 && isDescendantOf(composite) == true);
-}
-
-BALL_INLINE 
 bool Composite::hasChild() const
 {
   return (first_child_ != 0);
@@ -299,12 +281,6 @@ bool Composite::hasSibling() const
 }
 
 BALL_INLINE 
-bool Composite::isSibling() const
-{
-  return (parent_ != 0 && parent_->number_of_children_ > 1);
-}
-
-BALL_INLINE 
 bool Composite::isSiblingOf(const Composite &composite) const
 {
   return (composite.parent_ == parent_);
@@ -314,12 +290,6 @@ BALL_INLINE
 bool Composite::hasPreviousSibling() const
 {
   return (previous_ != 0);
-}
-
-BALL_INLINE 
-bool Composite::isPreviousSibling() const
-{
-  return (next_ != 0);
 }
 
 BALL_INLINE 
@@ -335,39 +305,9 @@ bool Composite::hasNextSibling() const
 }
 
 BALL_INLINE 
-bool Composite::isNextSibling() const
-{
-  return (previous_ != 0);
-}
-
-BALL_INLINE 
 bool Composite::isNextSiblingOf(const Composite &composite) const
 {
   return (previous_ == &composite);
-}
-
-BALL_INLINE 
-bool Composite::hasPreceedingSibling() const
-{
-  return (previous_ != 0);
-}
-
-BALL_INLINE 
-bool Composite::isPreceedingSibling() const
-{
-  return (next_ != 0);
-}
-
-BALL_INLINE 
-bool Composite::hasSucceedingSibling() const
-{
-  return (next_ != 0);
-}
-
-BALL_INLINE 
-bool Composite::isSucceedingSibling() const
-{
-  return (previous_ != 0);
 }
 
 BALL_INLINE 

@@ -1,4 +1,4 @@
-// $Id: composite.C,v 1.4 1999/09/07 14:28:19 oliver Exp $
+// $Id: composite.C,v 1.5 1999/09/07 19:35:37 oliver Exp $
 
 #include <BALL/CONCEPT/composite.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -1083,36 +1083,6 @@ namespace BALL
 		{
 			composite.parent_->determineSelection_();
 		}
-	}
-
-	bool Composite::isPreceedingSiblingOf(const Composite& composite) const
-	{
-		// walk forward the sibling list
-		for (Composite* composite_ptr = next_;
-				 composite_ptr != 0; composite_ptr = composite_ptr->next_)
-		{
-			if (composite_ptr == &composite)
-			{
-				// we arrived - this is a preceeding sibling, indeed
-				return true;
-			}
-		}
-		
-		return false;
-	}
-
-	bool Composite::isSucceedingSiblingOf(const Composite& composite) const
-	{
-		for (Composite *composite_ptr = previous_;
-				 composite_ptr != 0; composite_ptr = composite_ptr->previous_)
-		{
-			if (composite_ptr ==& composite)
-			{
-				return true;
-			}
-		}
-
-		return false;
 	}
 
 	bool Composite::isDescendantOf(const Composite& composite) const
