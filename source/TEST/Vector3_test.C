@@ -1,4 +1,4 @@
-// $Id: Vector3_test.C,v 1.14 2000/03/02 23:18:50 oliver Exp $ #include
+// $Id: Vector3_test.C,v 1.15 2000/03/09 14:47:08 oliver Exp $ #include
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 #include <BALL/MATHS/angle.h>
 ///////////////////////////
 
-START_TEST(TVector3, "$Id: Vector3_test.C,v 1.14 2000/03/02 23:18:50 oliver Exp $")
+START_TEST(TVector3, "$Id: Vector3_test.C,v 1.15 2000/03/09 14:47:08 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -294,7 +294,7 @@ RESULT
 CHECK(TVector3::normalize())
 	v = Vector3(4, 9, 16);
 	v.normalize();
-	float erg = sqrt (4 *4 + 9 * 9 + 16 * 16);
+	float erg = sqrt (4.0 *4.0 + 9.0 * 9.0 + 16.0 * 16.0);
 	TEST_REAL_EQUAL(v[0], 4 / erg)
 	TEST_REAL_EQUAL(v[1], 9 / erg)
 	TEST_REAL_EQUAL(v[2], 16 / erg)
