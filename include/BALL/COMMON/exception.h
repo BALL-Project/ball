@@ -1,4 +1,4 @@
-// $Id: exception.h,v 1.4 1999/09/01 12:11:37 oliver Exp $
+// $Id: exception.h,v 1.5 1999/09/22 17:46:26 oliver Exp $
    
 #ifndef BALL_COMMON_EXCEPTION_H
 #define BALL_COMMON_EXCEPTION_H
@@ -219,6 +219,20 @@ namespace BALL
 		{
 			public:
 			NotImplemented(const char* file, int line);
+		};
+
+		/**	Out of memory.
+				Throw this exception to indicate that an allocation failed.
+				@param	size	the number of bytes that should have been allocated
+		*/
+		class OutOfMemory
+			: public GeneralException
+		{
+			public:
+			OutOfMemory(const char* file, int line, Size size = 0);
+
+			protected:
+			Size size_;
 		};
 
 		/**	Buffer overflow exception.	
