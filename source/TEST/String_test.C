@@ -1,4 +1,4 @@
-// $Id: String_test.C,v 1.32 2001/07/07 08:53:17 amoll Exp $
+// $Id: String_test.C,v 1.33 2001/08/22 09:10:41 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -8,7 +8,7 @@
 #include <string>
 ///////////////////////////
 
-START_TEST(String,"$Id: String_test.C,v 1.32 2001/07/07 08:53:17 amoll Exp $")
+START_TEST(String,"$Id: String_test.C,v 1.33 2001/08/22 09:10:41 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -815,6 +815,19 @@ CHECK(String::after(String&, Index))
 	TEST_EQUAL(s4.after("i").isValid(), false)
 	res = s4.after("");
 	TEST_EQUAL(res, s4)
+
+	// BAUSTELLE: we have a serious problem here
+	String string;
+	for (Position i = 0; i < 2; i++)
+	{
+		for (Position pos = 0; pos < 255; pos ++)
+		{
+			string += (char) pos;
+		}
+	}
+
+	string = string.after(string);
+
 RESULT
 
 CHECK(String::countFields(char*))
