@@ -26,7 +26,7 @@ PythonHotkeys::PythonHotkeys( QWidget* parent,  const char* name, WFlags fl )
 	modifier_ << "None" << "Shift" << "Alt";
 	for (Position p = 1; p < 13; p++)
 	{
-		keys_ << String("F") + String(p).c_str();
+		keys_ << (String("F") + String(p)).c_str();
 	}
 	
 	setDefaults();
