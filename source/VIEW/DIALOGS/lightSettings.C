@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lightSettings.C,v 1.19 2005/02/15 13:34:52 amoll Exp $
+// $Id: lightSettings.C,v 1.20 2005/02/15 17:33:52 leonhardt Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/lightSettings.h>
@@ -141,7 +141,10 @@ void LightSettings::saveSettingsToLight_()
 	throw()
 {
 	if (current_light_ == -1 ||
-			current_light_ >= lights_.size()) return;
+			current_light_ >= (Index)lights_.size()) 
+	{
+		return;
+	}
 
 	LightSource& light = lights_[current_light_];
 	light.setColor(color_sample->backgroundColor());
