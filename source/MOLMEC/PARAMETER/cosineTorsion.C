@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cosineTorsion.C,v 1.8 2002/02/27 12:21:39 sturm Exp $
+// $Id: cosineTorsion.C,v 1.9 2003/03/28 14:43:50 anker Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/cosineTorsion.h>
@@ -119,7 +119,7 @@ namespace BALL
 					Size n = getValue(key, "div").toUnsignedInt();
 					if ((n < 1) || (n > 3))
 					{
-						Log.error() << "CosineTorsion::extractSection: wrong number of torsion of torsion terms for "
+						Log.error() << "CosineTorsion::extractSection: wrong number of torsion terms for "
 							<< key << ": " << n << endl;
 					} 
 					else 
