@@ -1,4 +1,4 @@
-// $Id: poissonBoltzmann.C,v 1.21 2001/05/17 01:30:58 oliver Exp $ 
+// $Id: poissonBoltzmann.C,v 1.22 2001/07/15 21:04:17 oliver Exp $ 
 // FDPB: Finite Difference Poisson Solver
 
 #include <BALL/SOLVATION/poissonBoltzmann.h>
@@ -609,7 +609,7 @@ namespace BALL
 			// (marked by 1.0) and the solute DC to al points inside (0.0)
 			// We do it in parallel for all three intermediate points...
 			(*eps_grid)[i] *= (solvent_dielectric_constant - solute_dielectric_constant);
-			(*eps_grid)[i] += solute_dielectric_constant;
+			(*eps_grid)[i] += Vector3(solute_dielectric_constant);
 		}
 
 		// execute the dielectric smoothing (if any)
