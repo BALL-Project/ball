@@ -26,6 +26,10 @@
 // (see socket.C)
 #define BALL_USE_SOCKET_SHUTDOWN
 
+// this idefine is used in string.C and enables a workaround
+// on on of these ppor systems that do not define vsnprintf
+#undef BALL_HAVE_VSNPRINTF
+
 // these two flags are set by configure according to 
 // the OS and compiler found. HAS_BOOL_TYPE and 
 // _CC_BOOL_DEF_ are required for compatibility

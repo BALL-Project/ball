@@ -1,9 +1,9 @@
-// $Id: string.C,v 1.13 2000/01/21 14:17:28 oliver Exp $
+// $Id: string.C,v 1.14 2000/01/24 21:00:47 oliver Exp $
 
 #include <BALL/DATATYPE/string.h>
 
-#include <stdarg.h>
 #include <stdio.h>
+#include <stdarg.h>
 
 #include <algorithm>
 
@@ -17,12 +17,27 @@ using std::ends;
 namespace BALL 
 {
 
-	const char *String::CHARACTER_CLASS__ASCII_ALPHA = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	const char *String::CHARACTER_CLASS__ASCII_ALPHANUMERIC = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-	const char *String::CHARACTER_CLASS__ASCII_LOWER = "abcdefghijklmnopqrstuvwxyz";
-	const char *String::CHARACTER_CLASS__ASCII_NUMERIC = "0123456789";
-	const char *String::CHARACTER_CLASS__ASCII_UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	const char *String::CHARACTER_CLASS__WHITESPACE = " \n\t\r\f\v";
+#ifndef BALL_HAVE_VSNPRINTF
+	int BALLString_vsnprintf(char* s, size_t n, const char* format,  va_list ap)
+	{
+		// this is an ugly hack - this is safe only up to
+		// the static buffer size - no time to implement
+		// something more sophisticated... OK
+		char* tmp = new char[65536];
+		vsprintf(tmp, format, ap);
+		strncpy(s, tmp, n);
+		delete [] tmp;
+		return strlen(s);
+	}
+#	define vsnprintf BALLString_vsnprintf
+#endif
+
+	const char* String::CHARACTER_CLASS__ASCII_ALPHA = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	const char* String::CHARACTER_CLASS__ASCII_ALPHANUMERIC = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+	const char* String::CHARACTER_CLASS__ASCII_LOWER = "abcdefghijklmnopqrstuvwxyz";
+	const char* String::CHARACTER_CLASS__ASCII_NUMERIC = "0123456789";
+	const char* String::CHARACTER_CLASS__ASCII_UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	const char* String::CHARACTER_CLASS__WHITESPACE = " \n\t\r\f\v";
 
 	String::CompareMode String::compare_mode_ = String::CASE_SENSITIVE;
 

@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.45 2000/01/24 20:29:22 oliver Exp $
+dnl    $Id: configure.in,v 1.46 2000/01/24 21:00:47 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -1335,6 +1335,14 @@ else
 fi
 AC_DEFINE_UNQUOTED(BALL_ULONG64_TYPE, ${BALL_ULONG64_TYPE})
 	
+
+dnl
+dnl		check whether vsnprintf is defined
+dnl
+AC_CHECK_FUNC(vsnprintf)
+if test "${HAVE_VSNPRINTF+set}" = set ; then
+	AC_DEFINE(BALL_HAVE_VSNPRINTF)
+fi
 
 dnl   
 dnl   check for some network stuff needed for socket class
