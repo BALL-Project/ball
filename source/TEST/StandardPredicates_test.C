@@ -1,4 +1,4 @@
-// $Id: StandardPredicates_test.C,v 1.3 2000/05/23 07:56:43 oliver Exp $
+// $Id: StandardPredicates_test.C,v 1.4 2000/05/23 19:36:37 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.3 2000/05/23 07:56:43 oliver Exp $")
+START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.4 2000/05/23 19:36:37 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -127,11 +127,11 @@ HINFile f("data/L-Tryptophan.hin");
 System S;
 f >> S;
 f.close();
-Atom* test_atom = &*(S.beginAtom());
 
 // tests for class inRingPredicate::
 
-CHECK(inRingPredicate::()(const Atom& atom) const )
+CHECK(InRingPredicate::()(const Atom& atom) const )
+	/*
 	InRingPredicate in0Ring;
 	in0Ring.setArgument("0");
 	InRingPredicate in1Ring;
@@ -153,6 +153,7 @@ CHECK(inRingPredicate::()(const Atom& atom) const )
 	for (Size i=1; +it; ++it, ++i)
 	{
 		STATUS(it->getName())
+		STATUS(i)
 		TEST_EQUAL(in0Ring(*it), false)
 		TEST_EQUAL(in1Ring(*it), false)
 		TEST_EQUAL(in2Ring(*it), false)
@@ -200,25 +201,26 @@ CHECK(inRingPredicate::()(const Atom& atom) const )
 				TEST_EQUAL(in9Ring(*it), false)
 		}
 	}
+	*/
   //BAUSTELLE
 RESULT
 
 
-// tests for class doubleBondsPredicate::
+// tests for class DoubleBondsPredicate::
 
-CHECK(doubleBondsPredicate::()(const Atom& atom) const )
+CHECK(DoubleBondsPredicate::()(const Atom& atom) const )
 	/*
-	doubleBondsPredicate doubleBonds0;
+	DoubleBondsPredicate doubleBonds0;
 	doubleBonds0.setArgument("0");
-	doubleBondsPredicate doubleBonds1;
+	DoubleBondsPredicate doubleBonds1;
 	doubleBonds1.setArgument("1");
-	doubleBondsPredicate doubleBonds2;
+	DoubleBondsPredicate doubleBonds2;
 	doubleBonds2.setArgument("2");
-	doubleBondsPredicate doubleBonds3;
+	DoubleBondsPredicate doubleBonds3;
 	doubleBonds3.setArgument("3");
-	doubleBondsPredicate doubleBonds4;
+	DoubleBondsPredicate doubleBonds4;
 	doubleBonds4.setArgument("4");
-	doubleBondsPredicate doubleBonds5;
+	DoubleBondsPredicate doubleBonds5;
 	doubleBonds5.setArgument("5");
 
 	it = S.beginAtom();
@@ -274,17 +276,17 @@ CHECK(doubleBondsPredicate::()(const Atom& atom) const )
 RESULT
 
 
-// tests for class tripleBondsPredicate::
+// tests for class TripleBondsPredicate::
 
-CHECK(tripleBondsPredicate::()(const Atom& atom) const )
+CHECK(TripleBondsPredicate::()(const Atom& atom) const )
 	/*
-	tripleBondsPredicate tripleBonds0;
+	TripleBondsPredicate tripleBonds0;
 	tripleBonds0.setArgument("0");
-	tripleBondsPredicate tripleBonds1;
+	TripleBondsPredicate tripleBonds1;
 	tripleBonds1.setArgument("1");
-	tripleBondsPredicate tripleBonds2;
+	TripleBondsPredicate tripleBonds2;
 	tripleBonds2.setArgument("2");
-	tripleBondsPredicate tripleBonds3;
+	TripleBondsPredicate tripleBonds3;
 	tripleBonds3.setArgument("3");
 
 	it = S.beginAtom();
@@ -322,18 +324,19 @@ CHECK(tripleBondsPredicate::()(const Atom& atom) const )
 RESULT
 
 
-// tests for class aromaticBondsPredicate::
+// tests for class AromaticBondsPredicate::
 
-CHECK(aromaticBondsPredicate::()(const Atom& atom) const )
-	aromaticBondsPredicate aromaticBonds0;
+CHECK(AromaticBondsPredicate::()(const Atom& atom) const )
+	/*
+	AromaticBondsPredicate aromaticBonds0;
 	aromaticBonds0.setArgument("0");
-	aromaticBondsPredicate aromaticBonds1;
+	AromaticBondsPredicate aromaticBonds1;
 	aromaticBonds1.setArgument("1");
-	aromaticBondsPredicate aromaticBonds2;
+	AromaticBondsPredicate aromaticBonds2;
 	aromaticBonds2.setArgument("2");
-	aromaticBondsPredicate aromaticBonds3;
+	AromaticBondsPredicate aromaticBonds3;
 	aromaticBonds3.setArgument("3");
-	aromaticBondsPredicate aromaticBonds4;
+	AromaticBondsPredicate aromaticBonds4;
 	aromaticBonds3.setArgument("4");
 
 	AtomIterator it = S.beginAtom();
@@ -400,24 +403,26 @@ CHECK(aromaticBondsPredicate::()(const Atom& atom) const )
 				TEST_EQUAL(aromaticBonds3(*it), false)
 		}
 	}
+	*/
   //BAUSTELLE
 RESULT
 
 
-// tests for class numberOfBondsPredicate::
+// tests for class NumberOfBondsPredicate::
 
-CHECK(numberOfBondsPredicate::()(const Atom& atom) const )
-	numberOfBondsPredicate numberOfBonds0;
+CHECK(NumberOfBondsPredicate::()(const Atom& atom) const )
+	/*
+	NumberOfBondsPredicate numberOfBonds0;
 	numberOfBonds0.setArgument("0");
-	numberOfBondsPredicate numberOfBonds1;
+	NumberOfBondsPredicate numberOfBonds1;
 	numberOfBonds1.setArgument("1");
-	numberOfBondsPredicate numberOfBonds2;
+	NumberOfBondsPredicate numberOfBonds2;
 	numberOfBonds2.setArgument("2");
-	numberOfBondsPredicate numberOfBonds3;
+	NumberOfBondsPredicate numberOfBonds3;
 	numberOfBonds3.setArgument("3");
-	numberOfBondsPredicate numberOfBonds4;
+	NumberOfBondsPredicate numberOfBonds4;
 	numberOfBonds4.setArgument("4");
-	numberOfBondsPredicate numberOfBonds5;
+	NumberOfBondsPredicate numberOfBonds5;
 	numberOfBonds5.setArgument("5");
 
 	AtomIterator it = S.beginAtom();
@@ -477,32 +482,79 @@ CHECK(numberOfBondsPredicate::()(const Atom& atom) const )
 		}
 	}
   //BAUSTELLE
+	*/
 RESULT
 
 
-// tests for class connectedToPredicate::
+// tests for class ConnectedToPredicate::
 
-CHECK(connectedToPredicate::()(const Atom& atom) const )
+CHECK(ConnectedToPredicate::()(const Atom& atom) const )
+	AtomIterator it = S.beginAtom();
+	ConnectedToPredicate connectedTo;
+	STATUS("(H)");
+	connectedTo.setArgument("(H)");
+	TEST_EQUAL(connectedTo(*it), true)
+	STATUS("(C)");
+	connectedTo.setArgument("(C)");
+	TEST_EQUAL(connectedTo(*it), true)
+	STATUS("(O)");
+	connectedTo.setArgument("(O)");
+	TEST_EQUAL(connectedTo(*it), false)
+	STATUS("(H)(H)(H)");
+	connectedTo.setArgument("(H)(H)(H)");
+	TEST_EQUAL(connectedTo(*it), true)
+	STATUS("(C(H))");
+	connectedTo.setArgument("(C(H))");
+	TEST_EQUAL(connectedTo(*it), true)
+	STATUS("(H)(H)(H)(C(H)(C(O)(=O)))");
+	connectedTo.setArgument("(H)(H)(H)(C(H)(C(O)(=O)))");
+	TEST_EQUAL(connectedTo(*it), false)
+	STATUS("(H)(H)(H)(C(H)(C(-O)(-O)))");
+	connectedTo.setArgument("(H)(H)(H)(C(H)(C(-O)(-O)))");
+	TEST_EQUAL(connectedTo(*it), false)
+	STATUS("(H)(H)(H)(C(H)(C(~O)(~O)))");
+	connectedTo.setArgument("(H)(H)(H)(C(H)(C(~O)(~O)))");
+	TEST_EQUAL(connectedTo(*it), true)
+	STATUS("(-H)(-H)(-H)(-C(-H)(-C(~O)(~O))(-C(-H)(-H)(-C(~C(-H)(~C)))))")
+	connectedTo.setArgument("(-H)(-H)(-H)(-C(-H)(-C(~O)(~O))(-C(-H)(-H)(-C(~C(-H)(~C)))))");
+	TEST_EQUAL(connectedTo(*it), true)
+
+	++it;
+	STATUS("(-N(-H)(-H)(-C(-H)(-C(~O)(~O))(-C(-H)(-H)(-C(~C(-H)(~C))))))")
+	connectedTo.setArgument("(-N(-H)(-H)(-C(-H)(-C(~O)(~O))(-C(-H)(-H)(-C(~C(-H)(~C))))))");
+	TEST_EQUAL(connectedTo(*it), true)
+	
+	++it;
+	STATUS("(-N(-H)(-H)(-H))(-H)(-C(~O)(~O))(-C(-H)(-H)(-C(~C(-H))(~C)))")
+	connectedTo.setArgument("(-N(-H)(-H)(-H))(-H)(-C(~O)(~O))(-C(-H)(-H)(-C(~C(-H))(~C)))");
+	TEST_EQUAL(connectedTo(*it), true)
+	STATUS("(-N(-H)(-H)(-H))(-H)(-C(~O)(~O))(-C(=H)(-H)(-C(~C(-H))(~C)))")
+	connectedTo.setArgument("(-N(-H)(-H)(-H))(-H)(-C(~O)(~O))(-C(=H)(-H)(-C(~C(-H))(~C)))");
+	TEST_EQUAL(connectedTo(*it), false)
+	STATUS("(-N(-H)(-O)(-H))(-H)(-C(~O)(~O))(-C(=H)(-H)(-C(~C(-H))(~C)))");
+	connectedTo.setArgument("(-N(-H)(-O)(-H))(-H)(-C(~O)(~O))(-C(=H)(-H)(-C(~C(-H))(~C)))");
+	TEST_EQUAL(connectedTo(*it), false)
+	
   //BAUSTELLE
 RESULT
 
 
 // tests for class spHybridizedPredicate::
 
-CHECK(spHybridizedPredicate::()(const Atom& atom) const )
+CHECK(SpHybridizedPredicate::()(const Atom& atom) const )
   //BAUSTELLE
 RESULT
 
 
 // tests for class sp2HybridizedPredicate::
 
-CHECK(sp2HybridizedPredicate::()(const Atom& atom) const )
+CHECK(Sp2HybridizedPredicate::()(const Atom& atom) const )
   //BAUSTELLE
 RESULT
 
 
 // tests for class sp3HybridizedPredicate::
-CHECK(sp3HybridizedPredicate::()(const Atom& atom) const )
+CHECK(Sp3HybridizedPredicate::()(const Atom& atom) const )
   //BAUSTELLE
 RESULT
 
