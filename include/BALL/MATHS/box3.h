@@ -1,4 +1,4 @@
-// $Id: box3.h,v 1.11 2000/03/26 21:57:33 oliver Exp $
+// $Id: box3.h,v 1.12 2000/03/28 15:24:50 oliver Exp $
 
 #ifndef BALL_MATHS_BOX3_H
 #define BALL_MATHS_BOX3_H
@@ -139,27 +139,27 @@ namespace BALL
 		*/
 		//@{
 		/**	Return the surface of the box.
-				@return {\tt T} the surface
+				@return T the surface
 		*/
 		T getSurface() const;
 
 		/**	Return the volume of the box.
-				@return {\tt T} the volume
+				@return T the volume
 		*/
 		T getVolume() const;
 
 		/**	Return the width of the box.
-				@return {\tt T} the width
+				@return T the width
 		*/
 		T getWidth() const;
 	
 		/**	Return the geight of the box.
-				@return {\tt T} the height
+				@return T the height
 		*/
 		T getHeight() const;
 	
 		/**	Return the depth of the box.
-				@return {\tt T} the depth
+				@return T the depth
 		*/
 		T getDepth() const;
 	

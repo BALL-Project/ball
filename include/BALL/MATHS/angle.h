@@ -1,4 +1,4 @@
-// $Id: angle.h,v 1.18 2000/03/26 21:57:33 oliver Exp $
+// $Id: angle.h,v 1.19 2000/03/28 15:24:50 oliver Exp $
 
 #ifndef BALL_MATHS_ANGLE_H
 #define BALL_MATHS_ANGLE_H
@@ -55,16 +55,16 @@ namespace BALL
 
 		/** form of range of the angle:
 				{\tt RANGE__UNLIMITED = 0} no limitations
-				{\tt RANGE__UNSIGNED  = 1} 0° <= angle <= 360°, 0 <= angle <= PI * 2
-				{\tt RANGE__SIGNED    = 2} -180° <= angle <= 180°, -PI <= angle <= PI
+				{\tt RANGE__UNSIGNED  = 1} 0 <= angle <= 360, 0 <= angle <= PI * 2
+				{\tt RANGE__SIGNED    = 2} -180 <= angle <= 180, -PI <= angle <= PI
 		*/
 		enum Range
 		{
 			// no limitations
 			RANGE__UNLIMITED = 0, 
-			// 0° <= angle <= 360°, 0 <= angle <= (Constants::PI * 2)
+			// 0 <= angle <= 360, 0 <= angle <= (Constants::PI * 2)
 			RANGE__UNSIGNED  = 1, 
-			// -180° <= angle <= 180°, -Constants::PI <= angle <= Constants::PI
+			// -180 <= angle <= 180, -Constants::PI <= angle <= Constants::PI
 			RANGE__SIGNED    = 2 
 		};
 		//@}
@@ -154,7 +154,7 @@ namespace BALL
 		*/
 		//@{
 
-		/** Casting operator
+		/** Cast operator
 				@return value in radians
 		*/
 		operator T () const;
@@ -184,8 +184,8 @@ namespace BALL
 		/**	Normalize the angle.
 				@param range :
 				{\tt RANGE__UNLIMITED = 0} no limitations
-				{\tt RANGE__UNSIGNED  = 1} 0° <= angle <= 360°, 0 <= angle <= PI * 2
-				{\tt RANGE__SIGNED    = 2} -180° <= angle <= 180°, -PI <= angle <= PI
+				{\tt RANGE__UNSIGNED  = 1} $0 \le \mathtt{angle} \le 360, 0 \le angle \le 2 \pi$
+				{\tt RANGE__SIGNED    = 2} $-180 \le \mathtt{angle} \le 180, -\pi \le \mathtt{angle} \le \pi$
 		*/		
 		void normalize(Range range);
 
@@ -203,65 +203,65 @@ namespace BALL
 
 		/**	Add an angle to this angle.
 				@param angle the angle to add
-				@return TAngle&, {\tt *this}
+				@return TAngle, {\tt *this}
 		*/
 		TAngle& operator += (const TAngle& angle);
 
 		/**	Add a value to this angle.
 				@param value the value to add
-				@return TAngle&, {\tt *this}
+				@return TAngle, {\tt *this}
 		*/
 		TAngle& operator += (const T& val);
 
 		/**	Add this angle to another and return the result.
 				@param angle the angle to add
-				@return TAngle&, the new angle
+				@return TAngle, the new angle
 		*/
 		TAngle operator +	(const TAngle& angle);
 
 		/**	Substract a angle from this angle.
 				@param angle the angle to substract
-				@return TAngle&, {\tt *this}
+				@return TAngle, {\tt *this}
 		*/
 		TAngle& operator -= (const TAngle& angle);
 
 		/**	Substract a value from this angle.
 				@param val the value to substract
-				@return TAngle&, {\tt *this}
+				@return TAngle, {\tt *this}
 		*/
 		TAngle &operator -= (const T& val);
 
 		/**	Subtraction an angle from this 
 				angle and return the result.
 				@param angle the angle to substract
-				@return TAngle&, the new angle
+				@return TAngle, the new angle
 		*/
 		TAngle operator - (const TAngle& angle);
 
 		/**	Multiply an angle with this angle.
 				@param angle the angle to multiply with
-				@return TAngle&, {\tt *this}
+				@return TAngle, {\tt *this}
 		*/
 		TAngle& operator *= (const TAngle& angle);
 
 		/**	Multiply a value with this 
 				angle and return the result.
 				@param val the value to multiply with
-				@return TAngle&, {\tt *this}
+				@return TAngle, {\tt *this}
 		*/
 		TAngle& operator *=	(const T& val);
 
 
 		/**	Calculate the division of this angle by an other.
 				@param angle the angle to divide by
-				@return TAngle&, {\tt *this}
+				@return TAngle, {\tt *this}
 		*/
 		TAngle& operator /= (const TAngle& angle);
 
 
 		/**	Calculate the division of this angle by an value.
 				@param val the angle to divide by
-				@return TAngle&, {\tt *this}
+				@return TAngle, {\tt *this}
 		*/
 		TAngle& operator /=	(const T& val);
 
@@ -269,7 +269,7 @@ namespace BALL
 		/**	Calculate the division of this angle by an value
 				and return the result.
 				@param val the angle to divide by
-				@return TAngle&, the new angle
+				@return TAngle, the new angle
 		*/
 		TAngle operator /	(const TAngle& val);
 		//@}
@@ -278,53 +278,53 @@ namespace BALL
 		*/
 		//@{
 
-		/**	Equality operator.
+		/**	Equality operator
 				@param angle the angle to compare with
-				@return bool
+				@return bool {\bf true} if the two angles are equal
 		*/
 		bool operator == (const TAngle& angle) const;
 
 
-		/**	Inequality operator.
+		/**	Inequality operator
 				@param angle the angle to compare with
-				@return bool
+				@return bool {\bf true} if the two angles are not equal
 		*/
 		bool operator != (const TAngle& angle) const;
 
 
 		/**	Is less operator.
 				@param angle the angle to compare with
-				@return bool
+				@return bool -
 		*/
 		bool operator <	(const TAngle& angle) const;
 
 		/**	Is less operator.
 				@param val the value to compare with
-				@return bool
+				@return bool -
 		*/
 		bool operator <	(const T& val) const;
 
 		/**	Is less or equal operator.
 				@param angle the angle to compare with
-				@return bool
+				@return bool -
 		*/
 		bool operator <= (const TAngle& angle) const;
 
 		/**	Is greater or equal operator.
 				@param angle the angle to compare with
-				@return bool
+				@return bool -
 		*/
 		bool operator >=	(const TAngle& angle) const;
 
 		/**	Is greater operator.
 				@param angle the angle to compare with
-				@return bool
+				@return bool -
 		*/
 		bool operator > (const TAngle& angle) const;
 
 		/**	Test if an angle ist equivalent
 				@param angle the angle to compare with
-				@return bool
+				@return bool -
 		*/
 		bool isEquivalent(TAngle angle) const;
 		//@}
