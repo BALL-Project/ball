@@ -143,7 +143,7 @@ void MDSimulationThread::run()
 										amber.getRMSGradient());
 		output_(message.ascii());
 		
-		//msleep(90);
+		msleep(90);
 		
 		if (save_images_) 
 		{
