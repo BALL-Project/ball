@@ -1,4 +1,4 @@
-// $Id: AmberFF_test.C,v 1.7 2000/02/15 18:16:53 oliver Exp $
+// $Id: AmberFF_test.C,v 1.8 2000/02/15 20:00:46 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -6,7 +6,7 @@
 #include <BALL/FORMAT/HINFile.h>
 ///////////////////////////
 
-START_TEST(AmberFF, "$Id: AmberFF_test.C,v 1.7 2000/02/15 18:16:53 oliver Exp $")
+START_TEST(AmberFF, "$Id: AmberFF_test.C,v 1.8 2000/02/15 20:00:46 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -121,7 +121,7 @@ TEST_REAL_EQUAL(amber91.getVdWEnergy(), -0.08817236)
 TEST_REAL_EQUAL(amber91.getESEnergy(), 0.0)
 RESULT
 
-CHECK(energy test 1 (AlaGlySer) [AMBER91])
+CHECK(energy test 5 (AlaGlySer) [AMBER91])
 HINFile f("data/AlaGlySer.hin");	
 System s;
 f >> s;
@@ -158,7 +158,7 @@ TEST_REAL_EQUAL(amber91.getESEnergy(), -346.797)
 RESULT
 
 
-CHECK(energy test 2 (AlaGlySer) [AMBER94])
+CHECK(energy test 6 (AlaGlySer) [AMBER94])
 HINFile f("data/AlaGlySer2.hin");	
 System s;
 f >> s;
@@ -185,7 +185,7 @@ TEST_REAL_EQUAL(amber94.getVdWEnergy(), 45.4436)
 TEST_REAL_EQUAL(amber94.getESEnergy(), -163.8814224)
 RESULT
 
-CHECK(torsion test 1 (HNCO) [AMBER94])
+CHECK(force test 1 (Torsion) [AMBER94])
 HINFile f("data/AMBER_test_1.hin");	
 System s;
 f >> s;
