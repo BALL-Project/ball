@@ -171,7 +171,7 @@ namespace BALL
 			Position _position_ = 31;
 			number_of_shifts_ = getToken_(_position_).toUnsignedInt();
 		}
-		catch (Exception::ReadFileError)
+		catch (ReadFile::ReadFileError)
 		{
 			Log.warn() << "Number of assigned chemical shifts could not be read" << endl;
 		}
@@ -204,7 +204,7 @@ namespace BALL
 			}
 			system_name_ = word;
 		}
-		catch (Exception::ReadFileError)
+		catch (ReadFile::ReadFileError)
 		{
 			Log.warn() << "The name of the molecular system could not be read." << endl;
 		}
@@ -279,7 +279,7 @@ namespace BALL
 				sample_conditions_.push_back(condition);
 			}
 		}
-		catch (Exception::ReadFileError)
+		catch (ReadFile::ReadFileError)
 		{
 			Log.warn() << "Sample Conditions could not be read." << endl;
 		}
@@ -545,7 +545,7 @@ namespace BALL
 					}
 				}				
 			}
-			catch (Exception::ReadFileError)
+			catch (ReadFile::ReadFileError)
 			{
 				rewind_();
 			}
@@ -568,7 +568,7 @@ namespace BALL
 					}
 				}			
 			}
-			catch (Exception::ReadFileError)
+			catch (ReadFile::ReadFileError)
 			{
 				rewind_();
 			}
