@@ -1,4 +1,4 @@
-// $Id: fresnoNonPolar.h,v 1.1.2.1 2002/10/31 14:51:41 anker Exp $
+// $Id: fresnoNonPolar.h,v 1.1.2.2 2002/11/12 16:26:03 anker Exp $
 
 #ifndef BALL_MOLMEC_FRESNO_FRESNONONPOLAR_H
 #define BALL_MOLMEC_FRESNO_FRESNONONPOLAR_H
@@ -6,6 +6,7 @@
 #include <BALL/MOLMEC/COMMON/forceFieldComponent.h>
 #include <BALL/SOLVATION/uhligCavFreeEnergyProcessor.h>
 #include <BALL/SOLVATION/PCMCavFreeEnergyProcessor.h>
+#include <BALL/SOLVATION/pair6_12InteractionEnergyProcessor.h>
 
 namespace BALL
 {
@@ -34,7 +35,15 @@ namespace BALL
 
 			/**
 			*/
-			CALCULATION__PCM
+			CALCULATION__PCM,
+
+			/** 
+			*/
+			CALCULATION__VDW_SOLVENT,
+
+			/** 
+			*/
+			CALCULATION__VDW_INTERACTION
 
 		};
 
@@ -153,6 +162,10 @@ namespace BALL
 		/*_
 		*/
 		PCMCavFreeEnergyProcessor pcm_;
+
+		/*_
+		*/
+		Pair6_12InteractionEnergyProcessor vdw_solvent_;
 
 	};
 

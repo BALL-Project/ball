@@ -1,4 +1,4 @@
-// $Id: fresnoNonPolar.C,v 1.1.2.1 2002/10/31 14:51:42 anker Exp $
+// $Id: fresnoNonPolar.C,v 1.1.2.2 2002/11/12 16:26:02 anker Exp $
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
 
@@ -176,19 +176,60 @@ namespace BALL
 
 		if (calculation_method_ == CALCULATION__UHLIG)
 		{
+			if (probe_radius_ != 0.0)
+			{
+				uhlig_.options.setInteger(UhligCavFreeEnergyProcessor::Option::PROBE_RADIUS, probe_radius_);
+			}
+			if (surface_tension_ != 0.0)
+			{
+				uhlig_.options.setInteger(UhligCavFreeEnergyProcessor::Option::SURFACE_TENSION, surface_tension_);
+			}
+			if (constant_ != 0.0)
+			{
+				uhlig_.options.setInteger(UhligCavFreeEnergyProcessor::Option::CONSTANT, constant_);
+			}
 			processor = &uhlig_;
 		}
 		else
 		{
 			if (calculation_method_ == CALCULATION__PCM)
 			{
+				if (probe_radius_ != 0.0)
+				{
+					pcm_.options.setInteger(PCMCavFreeEnergyProcessor::Option::PROBE_RADIUS, probe_radius_);
+				}
+				if (absolute_temperature_ != 0.0)
+				{
+					pcm_.options.setInteger(PCMCavFreeEnergyProcessor::Option::ABSOLUTE_TEMPERATURE, absolute_temperature_);
+				}
+				if (solvent_number_density_ != 0.0)
+				{
+					pcm_.options.setInteger(PCMCavFreeEnergyProcessor::Option::SOLVENT_NUMBER_DENSITY, solvent_number_density_);
+				}
 				processor = &pcm_;
 			}
 			else
 			{
-				Log.error() << "FresnoNonPolar::setup(): "
-					<< "unknown model" << endl;
-				return false;
+				if (calculation_method_ == CALCULATION__VDW_SOLVENT)
+				{
+					processor = &vdw_solvent_;
+				}
+				else
+				{
+					if (calculation_method_ == CALCULATION__VDW_INTERACTION)
+					{
+						Log.error() << "FresnoNonPolar::setup(): "
+							<< "CALCULATION__VDW_INTERACTION) not yet implemented." << endl;
+						return false;
+						// processor = &vdw_interaction_;
+					}
+					else
+					{
+						Log.error() << "FresnoNonPolar::setup(): "
+							<< "unknown model" << endl;
+						return false;
+					}
+				}
 			}
 		}
 
@@ -207,7 +248,8 @@ namespace BALL
 		Log.info() << "dG_protein = " << dG_protein << endl;
 		Log.info() << "dG_ligand = " << dG_ligand << endl;
 		Log.info() << "dG_complex = " << dG_complex << endl;
-		Log.info() << "NONPOLAR: score is " << energy_ << endl;
+		Log.info() << "NONPOLAR" << calculation_method_ << ": score is " 
+			<< energy_ << endl;
 		// /DEBUG
 
 		return true;
