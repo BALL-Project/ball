@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.8 2003/08/27 12:23:19 amoll Exp $
+# $Id: Makefile,v 1.9 2003/08/27 13:39:44 amoll Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -21,8 +21,6 @@ CPP_SOURCES=\
 	contourSurfaceDialogData.C\
 	displayProperties.C\
 	displayPropertiesData.C\
-	dlgMoveOverlay.C\
-	dlgMoveOverlayData.C\
 	FDPBDialog.C\
 	FDPBDialogData.C\
 	labelDialog.C\
@@ -58,8 +56,6 @@ MOC_SOURCES=\
 	colorMeshDialogData_moc.C\
 	displayProperties_moc.C\
 	displayPropertiesData_moc.C\
-	dlgMoveOverlay_moc.C\
-	dlgMoveOverlayData_moc.C\
 	FDPBDialog_moc.C\
 	FDPBDialogData_moc.C\
 	labelDialog_moc.C\
@@ -128,12 +124,6 @@ contourSurfaceDialog_moc.C:	$(HEADER_DIR)/contourSurfaceDialog.h
 
 displayProperties_moc.C:	$(HEADER_DIR)/displayProperties.h
 	$(MOC) $(HEADER_DIR)/displayProperties.h -o $@
-
-dlgMoveOverlay_moc.C:	$(HEADER_DIR)/dlgMoveOverlay.h
-	$(MOC) $(HEADER_DIR)/dlgMoveOverlay.h -o $@
-
-dlgMoveOverlayData_moc.C:	$(HEADER_DIR)/dlgMoveOverlayData.h
-	$(MOC) $(HEADER_DIR)/dlgMoveOverlayData.h -o $@
 
 labelDialog_moc.C:	$(HEADER_DIR)/labelDialog.h
 	$(MOC) $(HEADER_DIR)/labelDialog.h -o $@

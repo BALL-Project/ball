@@ -1,10 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: twoColoredTube.h,v 1.2 2003/08/26 15:32:57 amoll Exp $
+// $Id: twoColoredTube.h,v 1.3 2003/08/27 13:39:43 amoll Exp $
 
-#ifndef BALL_VIEW_PRIMITIV_TWOCOLOREDTUBE_H
-#define BALL_VIEW_PRIMITIV_TWOCOLOREDTUBE_H
+#ifndef BALL_VIEW_PRIMITIVES_TWOCOLOREDTUBE_H
+#define BALL_VIEW_PRIMITIVES_TWOCOLOREDTUBE_H
 
 #ifndef BALL_VIEW_DATATYPE_COLOREXTENSION2_H
 #	include <BALL/VIEW/DATATYPE/colorExtension2.h>
@@ -239,10 +239,10 @@ namespace BALL
 		};
 
 	#ifndef BALL_NO_INLINE_FUNCTIONS
-	# include <BALL/VIEW/PRIMITIV/twoColoredTube.iC>
+	# include <BALL/VIEW/PRIMITIVES/twoColoredTube.iC>
 	#endif
 
 	} // namespace VIEW
 } // namespace BALL
 
-#endif // BALL_VIEW_PRIMITIV_TWOCOLOREDTUBE_H
+#endif // BALL_VIEW_PRIMITIVES_TWOCOLOREDTUBE_H
