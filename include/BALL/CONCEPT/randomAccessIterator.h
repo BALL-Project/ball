@@ -1,4 +1,4 @@
-// $Id: randomAccessIterator.h,v 1.7 2001/06/22 10:46:40 oliver Exp $ 
+// $Id: randomAccessIterator.h,v 1.8 2001/06/23 10:29:17 amoll Exp $ 
 
 #ifndef BALL_CONCEPT_RANDOMACCESSITERATOR_H
 #define BALL_CONCEPT_RANDOMACCESSITERATOR_H
@@ -1061,19 +1061,19 @@ namespace BALL
 		 const ConstRandomAccessIterator<Container, DataType, Position, Traits>& b)
 		throw(Exception::InvalidIterator, Exception::IncompatibleIterators)
 	{
-		if (!a.getTraits()->isValid())
+		if (!a.getTraits().isValid())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
-		if (!b.getTraits()->isValid())
+		if (!b.getTraits().isValid())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
-		if (a.getTratis()->getContainer() != b.getTraits->getContainer())
+		if (a.getTraits().getContainer() != b.getTraits().getContainer())
 		{
 			throw Exception::IncompatibleIterators(__FILE__, __LINE__);
 		}
-		return a.getTraits()->getDistance(*(b.getTraits()));
+		return a.getTraits().getDistance((b.getTraits()));
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
