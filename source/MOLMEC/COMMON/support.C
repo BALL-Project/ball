@@ -1,4 +1,4 @@
-// $Id: support.C,v 1.26 2001/05/16 01:46:48 oliver Exp $
+// $Id: support.C,v 1.27 2001/06/05 15:55:00 anker Exp $
 
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/KERNEL/atom.h>
@@ -400,8 +400,8 @@ namespace BALL
 			(System& system, const HashGrid3<Atom*>& solute_grid, 
 			 const System& solvent, const Box3& box, double distance)
 		{
-			Molecule* old_molecule = 0;
-			Molecule* new_molecule = 0;
+			const Molecule* old_molecule = 0;
+			const Molecule* new_molecule = 0;
 			bool add = true;
 			bool keep = true;
 			Size atom_counter = 0;
@@ -429,7 +429,7 @@ namespace BALL
 			HashGridBox3<Atom*>::ConstDataIterator data_it;
 			HashGridBox3<Atom*>::ConstBoxIterator box_it;
 			Vector3	additional_space(distance * 1.02);
-			HashGrid3<Atom*> solvent_grid(box.a - additional_space,
+			HashGrid3<const Atom*> solvent_grid(box.a - additional_space,
 					box.b - box.a + additional_space + additional_space, distance);
 
 			// determine the maximum indices of gridboxes
@@ -439,7 +439,7 @@ namespace BALL
 			max_z = solute_grid.getSizeZ();
 			Position index_x, index_y, index_z;
 
-			AtomIterator atom_it = solvent.beginAtom();
+			AtomConstIterator atom_it = solvent.beginAtom();
 			if (+atom_it)
 			{
 				old_molecule = atom_it->getMolecule();
@@ -532,6 +532,7 @@ namespace BALL
 
 			// now we have to check for collisions at the periodic boundary
 
+#ifndef CHECK
 			MoleculeIterator mol_it = system.beginMolecule();
 			HashSet<Molecule*> delete_set;
 
@@ -688,6 +689,7 @@ namespace BALL
 			{
 				delete *del_it;
 			}
+#endif
 
 			// return the number of processed solvent molecules
 			return mol_counter;
