@@ -1,4 +1,4 @@
-// $Id: parsedFunction.C,v 1.2 2002/12/12 10:22:09 oliver Exp $
+// $Id: parsedFunction.C,v 1.3 2002/12/17 09:45:24 anhi Exp $
 
 #include <BALL/MATHS/parsedFunction.h>
 
@@ -15,9 +15,9 @@ namespace BALL
 	template <typename arg>
 	ParsedFunction<arg>::ParsedFunction()
 		throw()
-		:	expression_(""),
+		:	constants_(),
 			functions_(),
-			constants_()
+			expression_("")
 	{
 		initTable();
 	}
@@ -25,9 +25,9 @@ namespace BALL
 	template <typename arg>
 	ParsedFunction<arg>::ParsedFunction(String expression)
 		throw()
-		: expression_(expression),
+		:	constants_(),
 			functions_(),
-			constants_()
+			expression_(expression)
 	{
 		initTable();
 	}
@@ -36,9 +36,10 @@ namespace BALL
 	template <>
 	ParsedFunction<float>::ParsedFunction(String expression)
 		throw()
-		: expression_(expression),
+		: constants_(),
 			functions_(),
-			constants_()
+			expression_(expression)
+			
 	{
 		initTable();
 	}
