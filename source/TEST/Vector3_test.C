@@ -1,4 +1,4 @@
-// $Id: Vector3_test.C,v 1.10 2000/02/24 15:10:50 amoll Exp $ #include
+// $Id: Vector3_test.C,v 1.11 2000/02/25 16:01:57 oliver Exp $ #include
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 #include <BALL/MATHS/angle.h>
 ///////////////////////////
 
-START_TEST(TVector3, "$Id: Vector3_test.C,v 1.10 2000/02/24 15:10:50 amoll Exp $")
+START_TEST(TVector3, "$Id: Vector3_test.C,v 1.11 2000/02/25 16:01:57 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -17,7 +17,17 @@ using namespace BALL;
 
 //line 64
 CHECK(TVector3::BALL_CREATE(TVector3<T>))
-  //BAUSTELLE
+	Vector3 v(1, 2, 3);
+	Vector3* v_ptr = (Vector3*)v.create(false, true);
+	TEST_REAL_EQUAL(v_ptr->x, 0.0)
+	TEST_REAL_EQUAL(v_ptr->y, 0.0)
+	TEST_REAL_EQUAL(v_ptr->z, 0.0)
+	delete v_ptr;
+	Vector3* v_ptr = (Vector3*)v.create();
+	TEST_REAL_EQUAL(v_ptr->x, 1.0)
+	TEST_REAL_EQUAL(v_ptr->y, 2.0)
+	TEST_REAL_EQUAL(v_ptr->z, 3.0)
+	delete v_ptr;
 RESULT
 
 //line 74
@@ -41,7 +51,7 @@ Vector3 v2;
 //line 321
 CHECK(TVector3::T& operator [] (Index index) const)
 	v = Vector3(1.0, 2.0, 3.0);
-	TEST_REAL_EQUAL(v[0], 1)
+	TEST_REAL_EQUAL(v[0], 1.0)
 	TEST_REAL_EQUAL(v[1], 2.0)
 	TEST_REAL_EQUAL(v[2], 3.0)
 	TEST_EXCEPTION(Exception::IndexUnderflow, v[-1])
@@ -72,10 +82,10 @@ RESULT
 
 //line 118
 CHECK(TVector3(const T& x, const T& y, const T& z);)
-	v = Vector3(1, 2, 3);
-	TEST_EQUAL(v[0], 1)
-	TEST_EQUAL(v[1], 2)
-	TEST_EQUAL(v[2], 3)
+	v = Vector3(1.0, 2.0, 3.0);
+	TEST_REAL_EQUAL(v[0], 1.0)
+	TEST_REAL_EQUAL(v[1], 2.0)
+	TEST_REAL_EQUAL(v[2], 3.0)
 RESULT
 
 //line 131
@@ -102,13 +112,42 @@ RESULT
 //line 160 s.o.
 
 //line 174
+String filename;
+using std::ofstream;
+using std::ios;
+using namespace RTTI;
+TextPersistenceManager pm;
 CHECK(virtual void persistentWrite(PersistenceManager& pm, const char* name = 0) const;)
-	/// BAUSTELLE
+	Vector3 v(1.0, 2.0, 3.0);
+	NEW_TMP_FILE(filename)
+	ofstream  ofile(filename.c_str(), ios::out);
+	pm.setOstream(ofile);
+	pm.registerClass(getStreamName<Vector3>(), getNew<Vector3>);
+	*v >> pm;
+	ofile.close();	
 RESULT
 
 //line 180
+using std::ifstream;
+using std::cout;
 CHECK(virtual void persistentRead(PersistenceManager& pm);)
-	/// BAUSTELLE
+	ifstream  ifile(filename.c_str());
+	pm.setIstream(ifile);
+	PersistentObject* ptr;
+	ptr = pm.readObject();
+	ifile.close();
+	TEST_NOT_EQUAL(ptr, 0)
+	if (ptr != 0)
+	{
+		TEST_EQUAL(isKindOf<Vector3>(*ptr), true)
+		if (isKindOf<Vector3>(*ptr))
+		{
+			Vector3* v_ptr = castTo<Vector3>(*ptr);
+			TEST_REAL_EQUAL(v_ptr->x, 1.0)
+			TEST_REAL_EQUAL(v_ptr->y, 2.0)
+			TEST_REAL_EQUAL(v_ptr->z, 3.0)
+		}
+	}
 RESULT
 
 //line 194
@@ -123,7 +162,6 @@ CHECK(TVector3<T>::set(const T* ptr))
 	TEST_REAL_EQUAL(v[1], 2)
 	TEST_REAL_EQUAL(v[2], 3)
 	TEST_EXCEPTION(Exception::NullPointer, v.set((float*)0))
-
 RESULT
 
 //line 200
@@ -266,16 +304,16 @@ RESULT
 
 //line 305
 CHECK(TVector3::getZero())
-	TEST_REAL_EQUAL(Vector3::getZero().x, 0)
-	TEST_REAL_EQUAL(Vector3::getZero().y, 0)
-	TEST_REAL_EQUAL(Vector3::getZero().z, 0)
+	TEST_REAL_EQUAL(Vector3::getZero().x, 0.0)
+	TEST_REAL_EQUAL(Vector3::getZero().y, 0.0)
+	TEST_REAL_EQUAL(Vector3::getZero().z, 0.0)
 RESULT
 
 //line 309
 CHECK(TVector3::getUnit())
-	TEST_REAL_EQUAL(Vector3::getUnit().x, 1)
-	TEST_REAL_EQUAL(Vector3::getUnit().y, 1)
-	TEST_REAL_EQUAL(Vector3::getUnit().z, 1)
+	TEST_REAL_EQUAL(Vector3::getUnit().x, 1.0)
+	TEST_REAL_EQUAL(Vector3::getUnit().y, 1.0)
+	TEST_REAL_EQUAL(Vector3::getUnit().z, 1.0)
 RESULT
 
 //line 315
@@ -427,18 +465,7 @@ CHECK(TVector3<T> TVector3<T>::getOrthogonalProjection(const TVector3<T>& direct
 	TEST_EQUAL(v2 == (v1 * v / (v1 * v1) * v1), true)
 RESULT
 
-//line 426 /// BAUSTELLE code in vector 3 could be improved!
-CHECK(TVector3<T> TVector3<T>::getPerpendicularNormalization())
-	v  = Vector3(1, 2, 3);
-	v1 = Vector3(9, 8, 7);
-	v2 = Vector3(4, 5, 6);
-	Vector3 e, f;
-	e.getPerpendicularNormalization(v, v1, v2);
-	f = Vector3(-6, 12, -6);
-	TEST_EQUAL(e == f , true);
-RESULT
-
-//line 436 /// BAUSTELLE code in vector 3 could be improved!
+//line 436
 CHECK(TAngle<T> TVector3<T>::getTorsionTAngle())
 	Vector3 a, b, c, d, e;
 	Angle angle;
@@ -494,7 +521,14 @@ RESULT
 
 //line 471
 CHECK(TVector3::dump(std::ostream& s = std::cout, Size depth = 0) const )
-  //BAUSTELLE
+	Vector3 v(1.2, 2.3, 3.4);
+  String filename;
+	NEW_TMP_FILENAME(filename)
+	std::ofstream outfile(filename.c_str(), ios::out);
+	v.dump(outfile);
+	outfile.close();
+	
+	TEST_FILE(filename.c_str(), "data/Vector3_test.txt", false)
 RESULT
 
 //line 477
@@ -523,7 +557,6 @@ CHECK(TVector3 operator - (const TVector3<T>& a, const TVector3<T>& b))
 	TEST_REAL_EQUAL(v[2], 1)
 RESULT
 
-/* /// BAUSTELLE doesnt work, dont know why...
 //line 1020
 CHECK(TVector3 operator * (const T& scalar, const TVector3<T>& vector))
  	v = Vector3(1, 2, 3);
@@ -532,7 +565,6 @@ CHECK(TVector3 operator * (const T& scalar, const TVector3<T>& vector))
 	TEST_REAL_EQUAL(v[1], 4)
 	TEST_REAL_EQUAL(v[2], 6)
 RESULT
-*/
 
 //line 1028
 CHECK(TVector3 operator * (const TVector3<T>& vector, const T& scalar))
@@ -545,21 +577,26 @@ RESULT
 
 //line 
 CHECK(std::istream& operator >> (std::istream& s, TVector3<T>& vector))
-	//std::ostream ostream;
-	//v = Vector3(1, 2, 3);
-	//ostream = << v;
-	//TEST_REAL_EQUAL(ostream, << 1 << 2 << 3)  //BAUSTELLE
+	std::ifstream instr("data/Vector3_test2.txt");
+	Vector3 v(1, 2, 3);
+	instr >> v;
+	instr.close();
+	TEST_REAL_EQUAL(v.x, 1.2)
+	TEST_REAL_EQUAL(v.y, 2.3)
+	TEST_REAL_EQUAL(v.z, 3.4)
 RESULT
 
+
 //line 
+NEW_TMP_FILE(filename)
 CHECK(std::ostream& operator << (std::ostream& s, const TVector3<T>& vector))
-	//std::istream instream;
-	//instream >> 1 >> 2 >> 3 ;
-	//v  = Vector3(instream);  //BAUSTELLE
-	//TEST_REAL_EQUAL(v[0], 1)
-	//TEST_REAL_EQUAL(v[1], 2)
-	//TEST_REAL_EQUAL(v[2], 3)
+	Vector3 v(1.2, 2.3, 3.4);
+	std::ofstream outstr(filename.c_str(), std::ios::out);
+	outstr << v;
+	outstr.close();
+	TEST_FILE(filename.c_str(), "data/Vector3_test2.txt", false)
 RESULT
+
 
 /////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
