@@ -1,4 +1,4 @@
-// $Id: PDBFile.h,v 1.3 1999/11/05 12:21:25 oliver Exp $
+// $Id: PDBFile.h,v 1.4 1999/12/17 14:28:36 oliver Exp $
 
 #ifndef BALL_FORMAT_PDBFILE_H
 #define BALL_FORMAT_PDBFILE_H
@@ -166,26 +166,37 @@ namespace BALL
 			 PDB::RecordTURN::TerminalResidue& terminal_residue,
 			 PDB::PDBString comment);
 
+		/**	@name	Reading and Writing Files */
+		//@{
+
 		virtual void read(Protein& protein);
 
+		/**
+		*/
 		virtual void read(System& system);
 
 		PDBFile& operator >> (Protein& protein);
 
+		/**
+		*/
 		PDBFile& operator >> (System& system);
 
 		virtual void write(const Molecule& molecule);
 
     virtual void write(const Protein& protein);
 
+		/**
+		*/
 		virtual void write(const System& system);
 
-		PDBFile &operator << (const Molecule& molecule);
+		PDBFile& operator << (const Molecule& molecule);
   
     PDBFile& operator << (const Protein& protein);
 		
+		/**
+		*/
 		PDBFile& operator << (const System& system);
-
+		//@}
 
 
 		protected:
