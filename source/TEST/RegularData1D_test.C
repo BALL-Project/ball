@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RegularData1D_test.C,v 1.20 2004/03/16 05:31:10 oliver Exp $
+// $Id: RegularData1D_test.C,v 1.21 2004/03/17 22:24:45 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(RegularData1D, "$Id: RegularData1D_test.C,v 1.20 2004/03/16 05:31:10 oliver Exp $")
+START_TEST(RegularData1D, "$Id: RegularData1D_test.C,v 1.21 2004/03/17 22:24:45 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -360,7 +360,9 @@ CHECK(ConstIterator begin() const throw())
 RESULT
 
 CHECK(ConstIterator end() const throw())
-	TEST_REAL_EQUAL(*(--rd_it.end()), 1.4);
+	RegularData1D::ConstIterator it(rd_it.end());
+	--it;
+	TEST_REAL_EQUAL(*it, 1.4);
 RESULT
 
 CHECK(Iterator begin() throw())
@@ -368,7 +370,9 @@ CHECK(Iterator begin() throw())
 RESULT
 
 CHECK(Iterator end() throw())
-	TEST_REAL_EQUAL(*(--rd_it.end()), 1.4);
+	RegularData1D::Iterator it(rd_it.end());
+	--it;
+	TEST_REAL_EQUAL(*it, 1.4);
 RESULT
 
 CHECK(CoordinateType getCoordinates(const IndexType& index) const throw(Exception::OutOfGrid))
