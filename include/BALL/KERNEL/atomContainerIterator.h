@@ -1,4 +1,4 @@
-// $Id: atomContainerIterator.h,v 1.5 2001/07/15 20:23:57 oliver Exp $ 
+// $Id: atomContainerIterator.h,v 1.6 2002/01/04 03:19:48 oliver Exp $ 
 
 #ifndef BALL_KERNEL_ATOMCONTAINERITERATOR_H
 #define BALL_KERNEL_ATOMCONTAINERITERATOR_H
@@ -32,18 +32,18 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE_DEEP(AtomContainerIteratorTraits_)
-
-		AtomContainerIteratorTraits_()
+		inline AtomContainerIteratorTraits_()
 			throw();
 			
 		AtomContainerIteratorTraits_(const Composite& composite)
 			throw();
 			
-		AtomContainerIteratorTraits_(const AtomContainerIteratorTraits_& traits, bool /* deep */ = true)
+		inline AtomContainerIteratorTraits_(const AtomContainerIteratorTraits_& traits, bool /* deep */ = true)
 			throw();
 			
-		AtomContainerIteratorTraits_ &operator =
+		BALL_CREATE(AtomContainerIteratorTraits_)
+
+		AtomContainerIteratorTraits_& operator =
 			(const AtomContainerIteratorTraits_& traits)
 			throw();
 

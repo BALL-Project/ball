@@ -1,4 +1,4 @@
-// $Id: atomIterator.h,v 1.8 2001/07/15 20:23:57 oliver Exp $
+// $Id: atomIterator.h,v 1.9 2002/01/04 03:19:48 oliver Exp $
 
 #ifndef BALL_KERNEL_ATOMITERATOR_H
 #define BALL_KERNEL_ATOMITERATOR_H
@@ -30,17 +30,26 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE_DEEP(AtomIteratorTraits_)
-
-		AtomIteratorTraits_()
-			throw();
+		inline AtomIteratorTraits_()
+			throw()
+			:	CompositeIteratorTraits_()
+		{
+			predicate_ = &RTTI::getDefault<KernelPredicate<Atom> >();
+		}
 			
+		inline AtomIteratorTraits_(const AtomIteratorTraits_& traits)
+			throw()
+			:	CompositeIteratorTraits_(traits)
+		{
+		}
+		
+			
+		BALL_CREATE(AtomIteratorTraits_)
+
 		AtomIteratorTraits_(const Composite& composite)
 			throw();
 
-		AtomIteratorTraits_(const AtomIteratorTraits_& traits, bool /* deep */)
-			throw();
-			
+		
 		AtomIteratorTraits_& operator = (const AtomIteratorTraits_& traits)
 			throw();
 
@@ -50,26 +59,11 @@ namespace BALL
 
 
 	inline
-	AtomIteratorTraits_::AtomIteratorTraits_()
-		throw()
-		:	CompositeIteratorTraits_()
-	{
-		predicate_ = &RTTI::getDefault<KernelPredicate<Atom> >();
-	}
-		
-	inline
 	AtomIteratorTraits_::AtomIteratorTraits_(const Composite& composite)
 		throw()
 		:	CompositeIteratorTraits_(composite)
 	{
 		predicate_ = &RTTI::getDefault<KernelPredicate<Atom> >();
-	}
-		
-	inline
-	AtomIteratorTraits_::AtomIteratorTraits_(const AtomIteratorTraits_& traits, bool /* deep */ = true)
-		throw()
-		:	CompositeIteratorTraits_(traits)
-	{
 	}
 		
 	inline

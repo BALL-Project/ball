@@ -1,4 +1,4 @@
-// $Id: chainIterator.h,v 1.8 2001/07/15 20:23:57 oliver Exp $
+// $Id: chainIterator.h,v 1.9 2002/01/04 03:19:48 oliver Exp $
 
 #ifndef BALL_KERNEL_CHAINITERATOR_H
 #define BALL_KERNEL_CHAINITERATOR_H
@@ -31,15 +31,15 @@ namespace BALL
 
 		public:
 
-		BALL_CREATE_DEEP(ChainIteratorTraits_)
+		BALL_CREATE(ChainIteratorTraits_)
 
-		ChainIteratorTraits_()
+		inline ChainIteratorTraits_()
 			throw();
 			
 		ChainIteratorTraits_(const Composite& composite)
 			throw();
 			
-		ChainIteratorTraits_(const ChainIteratorTraits_& traits, bool /* deep */ = true)
+		inline ChainIteratorTraits_(const ChainIteratorTraits_& traits)
 			throw();
 			
 		ChainIteratorTraits_& operator = (const ChainIteratorTraits_& traits)
@@ -66,7 +66,7 @@ namespace BALL
 	}
 		
 	inline
-	ChainIteratorTraits_::ChainIteratorTraits_(const ChainIteratorTraits_& traits, bool /* deep */)
+	ChainIteratorTraits_::ChainIteratorTraits_(const ChainIteratorTraits_& traits)
 		throw()
 		:	CompositeIteratorTraits_(traits)
 	{

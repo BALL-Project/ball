@@ -1,4 +1,4 @@
-// $Id: fragmentIterator.h,v 1.5 2001/07/15 20:23:57 oliver Exp $
+// $Id: fragmentIterator.h,v 1.6 2002/01/04 03:19:48 oliver Exp $
 
 #ifndef BALL_KERNEL_FRAGMENTITERATOR_H
 #define BALL_KERNEL_FRAGMENTITERATOR_H
@@ -32,18 +32,18 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE_DEEP(FragmentIteratorTraits_)
-
-		FragmentIteratorTraits_()
+		inline FragmentIteratorTraits_()
 			throw();
 
 		FragmentIteratorTraits_(const Composite& composite)
 			throw();
 
-		FragmentIteratorTraits_(const FragmentIteratorTraits_& traits, bool /* deep */ = true)
+		inline FragmentIteratorTraits_(const FragmentIteratorTraits_& traits)
 			throw();
 
-		FragmentIteratorTraits_ &operator =(const FragmentIteratorTraits_& traits)
+		BALL_CREATE(FragmentIteratorTraits_)
+
+		FragmentIteratorTraits_& operator = (const FragmentIteratorTraits_& traits)
 			throw();
 
 		void resetPredicate()
@@ -67,7 +67,7 @@ namespace BALL
 	}
 
 	inline
-	FragmentIteratorTraits_::FragmentIteratorTraits_(const FragmentIteratorTraits_& traits, bool /* deep */)
+	FragmentIteratorTraits_::FragmentIteratorTraits_(const FragmentIteratorTraits_& traits)
 		throw()
 		:	CompositeIteratorTraits_(traits)
 	{

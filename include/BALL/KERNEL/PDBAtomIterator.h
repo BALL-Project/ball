@@ -1,4 +1,4 @@
-// $Id: PDBAtomIterator.h,v 1.11 2001/07/15 20:23:56 oliver Exp $ 
+// $Id: PDBAtomIterator.h,v 1.12 2002/01/04 03:19:48 oliver Exp $ 
 
 #ifndef BALL_KERNEL_PDBATOMITERATOR_H
 #define BALL_KERNEL_PDBATOMITERATOR_H
@@ -30,19 +30,18 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE_DEEP(PDBAtomIteratorTraits_)
-
-		PDBAtomIteratorTraits_()
+		inline PDBAtomIteratorTraits_()
 			throw();
 			
 		PDBAtomIteratorTraits_(const Composite& composite)
 			throw();
 			
-		PDBAtomIteratorTraits_(const PDBAtomIteratorTraits_& traits, 
-				bool /* deep */ = true)
+		inline PDBAtomIteratorTraits_(const PDBAtomIteratorTraits_& traits)
 			throw();
 			
-		PDBAtomIteratorTraits_& operator = (const PDBAtomIteratorTraits_ &traits)
+		BALL_CREATE(PDBAtomIteratorTraits_)
+
+		PDBAtomIteratorTraits_& operator = (const PDBAtomIteratorTraits_& traits)
 			throw();
 
 		void resetPredicate()
@@ -59,7 +58,7 @@ namespace BALL
 	}
 
 	inline
-	PDBAtomIteratorTraits_::PDBAtomIteratorTraits_(const PDBAtomIteratorTraits_& traits, bool /* deep */)
+	PDBAtomIteratorTraits_::PDBAtomIteratorTraits_(const PDBAtomIteratorTraits_& traits)
 		throw()
 		:	CompositeIteratorTraits_(traits)
 	{
