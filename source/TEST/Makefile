@@ -123,8 +123,7 @@ EXECUTABLES_NMR = \
 	ShiftModel_test\
 	ShiftModule_test\
 	Spectrum_test\
-	Peak_test\
-	PeakList_test
+	Peak_test
 
 EXECUTABLES_FORMATS =\
 	LineBasedFile_test\
