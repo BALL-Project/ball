@@ -1,4 +1,4 @@
-// $Id: rotamerLibrary.h,v 1.2 1999/08/27 12:10:09 oliver Exp $
+// $Id: rotamerLibrary.h,v 1.3 1999/08/27 14:02:16 oliver Exp $
 
 #ifndef BALL_STRUCTURE_ROTAMERLIBRARY_H
 #define BALL_STRUCTURE_ROTAMERLIBRARY_H
@@ -11,6 +11,9 @@
 #endif
 #ifndef BALL_KERNEL_RESIDUE_H
 #	include <BALL/KERNEL/residue.h>
+#endif
+#ifndef BALL_KERNEL_FRAGMENT_DB_H
+#	include <BALL/KERNEL/fragmentDB.h>
 #endif
 
 namespace BALL
@@ -190,7 +193,7 @@ namespace BALL
 
 		//@}
 
-		bool readSQWRLLibraryFile(const String& filename);
+		bool readSQWRLLibraryFile(const String& filename, const FragmentDB& fragment_db);
 
 		ResidueRotamerSet& getRotamerSet(const Residue& residue);
 
