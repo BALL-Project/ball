@@ -15,7 +15,9 @@ namespace BALL
 	namespace VIEW
 	{
 
-///
+/** Dialog for performing energy minimisations
+		\ingroup ViewDialogs
+*/
 class AmberMinimizationDialog 
 	: public AmberMinimizationDialogData
 {

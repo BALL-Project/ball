@@ -19,6 +19,9 @@ namespace BALL
 	namespace VIEW
 	{
 
+/** Dialog for moving molecular objects.
+		\ingroup ViewDialogs
+*/
 class TransformationDialog 
 	:	public TransformationDialogData,
 		public ModularWidget

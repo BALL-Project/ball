@@ -17,6 +17,7 @@ namespace BALL
 	namespace VIEW
 	{
 		/** Dialog for building peptides
+				\ingroup ViewDialogs
 		*/
 		class PeptideDialog
 			: public PeptideDialogData,

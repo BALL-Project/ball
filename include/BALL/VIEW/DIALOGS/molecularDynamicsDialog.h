@@ -15,7 +15,9 @@ namespace BALL
 	namespace VIEW
 	{
 
-///
+/** Dialog for performing MD simulations
+		\ingroup ViewDialogs
+*/
 class MolecularDynamicsDialog 
 	: public MolecularDynamicsDialogData
 {

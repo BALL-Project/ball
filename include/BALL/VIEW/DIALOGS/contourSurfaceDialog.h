@@ -13,7 +13,7 @@ namespace BALL
  namespace VIEW
    {
 
-/** ContourSurfaceDialog
+/** Dialog for creating contour surfaces from RegularData3D
     \ingroup  ViewDialogs
  */
 class ContourSurfaceDialog 

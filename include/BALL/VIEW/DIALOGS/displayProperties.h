@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.7 2003/09/04 19:03:55 amoll Exp $
+// $Id: displayProperties.h,v 1.8 2003/09/04 22:17:45 amoll Exp $
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
 #define BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
@@ -23,16 +23,7 @@ namespace BALL
 
 class Representation;
 
-/// Exception to be thrown if invalid option is given for a modelprocessor
-class InvalidOption: public Exception::GeneralException
-{
-	public:
-
-		InvalidOption(const char* file, int line, int option)
-			throw();
-};
-
-/**	The DisplayProperties class.
+/**	Dialog for creating and changing representations.
 		The class DisplayProperties is a dialog used for changing the graphical
 		representation of a selection of molecular objects.
 		With the help of various combo boxes it is possible to customize the look of
@@ -67,6 +58,7 @@ class InvalidOption: public Exception::GeneralException
 		If this dialog is used, it should be created with MainControl as parent.
 		The class DisplayPropertiesData contains the definition of the layout of
 		this dialog and is therefore not necessary for understanding. \par
+		\ingroup ViewDialogs
 */
 class DisplayProperties 
 	: public DisplayPropertiesData,
@@ -77,6 +69,15 @@ class DisplayProperties
 	public:
 	
 	BALL_EMBEDDABLE(DisplayProperties)
+
+	/// Exception to be thrown if invalid option is given for a modelprocessor
+	class InvalidOption: public Exception::GeneralException
+	{
+		public:
+
+			InvalidOption(const char* file, int line, int option)
+				throw();
+	};
 
 	/**	@name	Constructors and Destructors
 	*/	

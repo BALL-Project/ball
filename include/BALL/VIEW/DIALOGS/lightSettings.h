@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lightSettings.h,v 1.2 2003/08/26 15:01:22 amoll Exp $
+// $Id: lightSettings.h,v 1.3 2003/09/04 22:17:45 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_LIGHTSETTINGS_H
@@ -28,6 +28,7 @@ namespace BALL
 		 		This dialog allows the control of the lighting of a scene.
 				Lights can be added, removed and adjusted. Also a standard value
 				to reset the lighting can be stored.
+				\ingroup ViewDialogs
 		*/
 		class LightSettings 
 			: public LightSettingsData

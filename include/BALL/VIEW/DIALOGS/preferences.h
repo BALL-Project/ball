@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferences.h,v 1.2 2003/08/26 15:01:22 amoll Exp $
+// $Id: preferences.h,v 1.3 2003/09/04 22:17:47 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_PREFERENCES_H
@@ -22,6 +22,7 @@ namespace BALL
 				MainControl. The MainControl will add other tab dialogs of
 				ModularWidget objects to this preferences dialog if those
 				other ModularWidget objects have preferences tab dialogs. \par
+				\ingroup ViewDialogs
 		*/
 		class Preferences 
 			: public QTabDialog

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.h,v 1.2 2003/08/26 15:01:21 amoll Exp $
+// $Id: colorMeshDialog.h,v 1.3 2003/09/04 22:17:44 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_COLORMESHDIALOG_H
@@ -30,6 +30,9 @@ namespace BALL
 	namespace VIEW
 	{
 
+		/** Dialog for coloring of surfaces
+				\ingroup ViewDialogs
+		*/
 		class ColorMeshDialog 
 			: public ColorMeshDialogData
 		{ 

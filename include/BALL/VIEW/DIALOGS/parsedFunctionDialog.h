@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: parsedFunctionDialog.h,v 1.2 2003/08/26 15:01:22 amoll Exp $
+// $Id: parsedFunctionDialog.h,v 1.3 2003/09/04 22:17:47 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_PARSEDFUNCTIONDIALOG_H
@@ -13,6 +13,9 @@ namespace BALL
 {
 	namespace VIEW
 	{
+		/** Dialog to visualise a parsed function
+				\ingroup ViewDialogs
+		*/
 		class ParsedFunctionDialog 
 			: public ParsedFunctionDialogData
 		{ 
@@ -24,7 +27,6 @@ namespace BALL
 
 				virtual void accept();
 		};
-	}
-}
 
+} } //namespaces
 #endif

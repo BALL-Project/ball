@@ -15,6 +15,7 @@ namespace BALL
 	namespace VIEW
 	{
 		/** Dialog for setting the Python preferences.
+				\ingroup ViewDialogs
 		*/
 		class PythonSettings 
 			: public PythonSettingsData

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControlPreferences.h,v 1.4 2003/08/28 21:16:29 amoll Exp $
+// $Id: mainControlPreferences.h,v 1.5 2003/09/04 22:17:46 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MAINCONTROLPREFERENCES_H
@@ -17,13 +17,13 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		/** MainControlPreferences class.
+		/** Preferences tab for the MainControl.
 				The class MainControlPreferences is a widget that will be inserted into the
 				tab dialog Preferences. It contains the style preferences 
 				of the MainControl.
 				this mainControlPreferences will be created in the MainControl
 				object and will be inserted into the Preferences dialog.
-		\ingroup ViewGuiWidgets		
+				\ingroup ViewDialogs
 		*/
 		class MainControlPreferences 
 			: public MainControlPreferencesData

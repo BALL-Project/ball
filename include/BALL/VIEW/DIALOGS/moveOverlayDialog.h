@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: moveOverlayDialog.h,v 1.1 2003/08/28 16:43:21 amoll Exp $
+// $Id: moveOverlayDialog.h,v 1.2 2003/09/04 22:17:46 amoll Exp $
 
 #ifndef BALL_VIEW_DIALOGS_MOVEOVERLAYDIALOG_H
 #define BALL_VIEW_DIALOGS_MOVEOVERLAYDIALOG_H 
@@ -9,7 +9,7 @@
 #include <BALL/VIEW/UIC/moveOverlayDialogData.h>
 
 /** MoveOverlayDialog
-		\ingroup ViewGuiDialogs
+		\ingroup ViewDialogs
 */
 class MoveOverlayDialog 
 	: public MoveOverlayDialogData

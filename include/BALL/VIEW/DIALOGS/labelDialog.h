@@ -24,14 +24,13 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		/**	The LabelDialog class.
+		/**	Dialog for creating labels.
 				The class LabelDialog is a dialog for appending to a selection of 
 				molecular objects a label which text and color can be changed.
 				The class  \link MolecularControl MolecularControl \endlink  is responsible for creating such a selection.
 				If this dialog is used, it should be created with  \link MainControl MainControl \endlink  as parent.
 				The class LabelDialogData contains the definition of the layout of
 				this dialog and is therefore not necessary for understanding.  \par
-				
     		\ingroup  ViewDialogs
 		*/
 		class LabelDialog : 

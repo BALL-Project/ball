@@ -15,6 +15,9 @@ namespace BALL
 	namespace VIEW
 	{
 
+/** Dialog for visualising SnapShot instances
+		\ingroup ViewDialogs
+*/
 class SnapshotVisualisationDialog 
 	: public SnapshotVisualisationDialogData, 
 		public ModularWidget

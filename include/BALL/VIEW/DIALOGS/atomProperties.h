@@ -15,7 +15,7 @@ namespace BALL
 	namespace VIEW
 	{
 
-/** AtomProperties
+/** Dialog for showing and changing the properties of an atom
     \ingroup  ViewDialogs
 */
 class AtomProperties : public AtomPropertiesData
@@ -34,7 +34,7 @@ public slots:
 private:
 	Atom* atom_;
 };
-	}
-}
+
+} } // namespaces
 
 #endif // BALL_VIEW_DIALOGS_ATOMPROPERTIES_H

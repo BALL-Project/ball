@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: serverPreferences.h,v 1.3 2003/08/27 13:58:38 amoll Exp $
+// $Id: serverPreferences.h,v 1.4 2003/09/04 22:17:48 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_SERVERPREFERENCES_H
@@ -17,14 +17,11 @@ namespace BALL
 
 	namespace VIEW
 	{
-		/** ServerPreferences class.
-				The class ServerPreferences is a widget that will be inserted into the
-				tab dialog Preferences. It contains the preferences 
-				of the Server. The Server will access those preferences
-				if the apply-button on the Preferences is pressed.
-				this serverPreferences will be created by the Server
+		/** Preferences tab for the Server.
+				It will be created by the Server
 				object in the Server::initializePreferencesTab and will be inserted
 				into the Preferences dialog by the MainControl.
+				\ingroup ViewDialogs
 		*/
 		class ServerPreferences : public QWidget
 		{

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BALL.doc,v 1.21 2003/08/26 08:04:02 oliver Exp $
+// $Id: BALL.doc,v 1.22 2003/09/04 22:19:06 amoll Exp $
 //
 
 
@@ -58,7 +58,7 @@
 	\defgroup Modeling Molecular Modeling
 */
 
-/**	\defgroup Visualization Visualization
+/**	\defgroup Visualisation Visualisation
 */
 
 /**	\defgroup Python Python

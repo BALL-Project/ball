@@ -37,7 +37,9 @@ namespace BALL
 	namespace VIEW
 	{
 
-		///
+		/** Dialog for performing Finite Distance Poisson Bolzmann calculations
+				\ingroup ViewDialogs
+		*/
 		class FDPBDialog 
 			: public FDPBDialogData,
 				public ModularWidget
