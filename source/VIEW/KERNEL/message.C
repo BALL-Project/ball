@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.C,v 1.8 2003/08/27 14:35:38 amoll Exp $
+// $Id: message.C,v 1.9 2003/09/02 10:58:00 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/COMMON/rtti.h>
@@ -300,6 +300,15 @@ namespace BALL
 
 			type_ = type;
 		}
+
+
+		NewTrajectoryMessage::NewTrajectoryMessage()
+			throw()
+			: CompositeMessage(),
+				file_(0)
+		{
+		}
+			
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/KERNEL/message.iC>
