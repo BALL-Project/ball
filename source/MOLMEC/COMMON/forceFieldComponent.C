@@ -1,4 +1,4 @@
-// $Id: forceFieldComponent.C,v 1.4 2000/03/12 22:28:47 oliver Exp $
+// $Id: forceFieldComponent.C,v 1.5 2000/03/25 22:51:56 oliver Exp $
 
 
 #include <BALL/MOLMEC/COMMON/forceFieldComponent.h>
@@ -68,16 +68,16 @@ namespace BALL
 		force_field_ = force_field;
 	}
 
-	float ForceFieldComponent::getEnergy() const
+	double ForceFieldComponent::getEnergy() const
 	{
 		return energy_;
 	}
 
-	float ForceFieldComponent::updateEnergy()
+	double ForceFieldComponent::updateEnergy()
 	{
 		return 0.0;
 	}
-	
+
 	void ForceFieldComponent::updateForces() 
 	{
 	}
