@@ -76,7 +76,15 @@ static PyObject *sipDo_BitVector_set(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-			ptr -> BitVector::set(* a0, (bool)a1);
+					try
+		{
+ptr -> BitVector::set(* a0, (bool)a1);
+		}
+		catch (OutOfMemory e)
+		{
+			PyErr_SetString(PyExc_Exception, "OutOfMemory");
+			return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -93,7 +101,15 @@ static PyObject *sipDo_BitVector_set(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (BitVector *)sipGetCppPtr(sipThis,sipClass_BitVector)) == NULL)
 				return NULL;
 
-			ptr -> BitVector::set( a0);
+					try
+		{
+ptr -> BitVector::set( a0);
+		}
+		catch (OutOfMemory e)
+		{
+			PyErr_SetString(PyExc_Exception, "OutOfMemory");
+			return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -133,7 +149,15 @@ static PyObject *sipDo_BitVector_get(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-			ptr -> BitVector::get(* a0, (bool)a1);
+					try
+		{
+ptr -> BitVector::get(* a0, (bool)a1);
+		}
+		catch (OutOfMemory e)
+		{
+			PyErr_SetString(PyExc_Exception, "OutOfMemory");
+			return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -204,7 +228,15 @@ static PyObject *sipDo_BitVector_setSize(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (BitVector *)sipGetCppPtr(sipThis,sipClass_BitVector)) == NULL)
 				return NULL;
 
-			ptr -> BitVector::setSize( a0, (bool)a1);
+					try
+		{
+ptr -> BitVector::setSize( a0, (bool)a1);
+		}
+		catch (OutOfMemory e)
+		{
+			PyErr_SetString(PyExc_Exception, "OutOfMemory");
+			return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -278,76 +310,6 @@ static PyObject *sipDo_BitVector_countValue(PyObject *sipThisObj,PyObject *sipAr
 	return NULL;
 }
 
-static PyObject *sipDo_BitVector_Operator__getitem__(PyObject *sipThisObj,PyObject *sipArgs)
-{
-	sipThisType *sipThis;
-
-	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_BitVector)) == NULL)
-		return NULL;
-
-	{
-		Index *a0;
-		PyObject *a0obj;
-
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Index,&a0obj))
-		{
-			Bit *res;
-			BitVector *ptr;
-
-			if ((ptr = (BitVector *)sipGetCppPtr(sipThis,sipClass_BitVector)) == NULL)
-				return NULL;
-
-			int iserr = 0;
-
-			int istemp0 = sipConvertTo_Index(a0obj,&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			res = new Bit(ptr -> BitVector::operator[](* a0));
-
-			if (istemp0)
-				delete a0;
-
-			return sipNewCppToSelf(res,sipClass_Bit,SIP_SIMPLE | SIP_PY_OWNED);
-		}
-	}
-
-	{
-		Index *a0;
-		PyObject *a0obj;
-
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Index,&a0obj))
-		{
-			bool res;
-			BitVector *ptr;
-
-			if ((ptr = (BitVector *)sipGetCppPtr(sipThis,sipClass_BitVector)) == NULL)
-				return NULL;
-
-			int iserr = 0;
-
-			int istemp0 = sipConvertTo_Index(a0obj,&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			res = ptr -> BitVector::operator[](* a0);
-
-			if (istemp0)
-				delete a0;
-
-			return sipConvertFromBool((int)res);
-		}
-	}
-
-	// Report an error if the arguments couldn't be parsed.
-
-	sipNoMethod(sipName_BALL_BitVector,sipName_BALL_Operator__getitem__);
-
-	return NULL;
-}
-
 static PyObject *sipDo_BitVector_setBit(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
@@ -374,7 +336,20 @@ static PyObject *sipDo_BitVector_setBit(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-			ptr -> BitVector::setBit(* a0, (bool)a1);
+					try
+		{
+ptr -> BitVector::setBit(* a0, (bool)a1);
+		}
+		catch (IndexUnderflow e)
+		{
+			PyErr_SetString(PyExc_Exception, "IndexUnderflow");
+			return NULL;
+		}
+		catch (OutOfMemory e)
+		{
+			PyErr_SetString(PyExc_Exception, "OutOfMemory");
+			return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -417,7 +392,20 @@ static PyObject *sipDo_BitVector_getBit(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-			res = ptr -> BitVector::getBit(* a0);
+					try
+		{
+res = ptr -> BitVector::getBit(* a0);
+		}
+		catch (IndexUnderflow e)
+		{
+			PyErr_SetString(PyExc_Exception, "IndexUnderflow");
+			return NULL;
+		}
+		catch (OutOfMemory e)
+		{
+			PyErr_SetString(PyExc_Exception, "OutOfMemory");
+			return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -445,7 +433,20 @@ static PyObject *sipDo_BitVector_getBit(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-			res = ptr -> BitVector::getBit(* a0);
+					try
+		{
+res = ptr -> BitVector::getBit(* a0);
+		}
+		catch (IndexUnderflow e)
+		{
+			PyErr_SetString(PyExc_Exception, "IndexUnderflow");
+			return NULL;
+		}
+		catch (IndexOverflow e)
+		{
+			PyErr_SetString(PyExc_Exception, "IndexOverflow");
+			return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -486,7 +487,20 @@ static PyObject *sipDo_BitVector_toggleBit(PyObject *sipThisObj,PyObject *sipArg
 			if (iserr)
 				return NULL;
 
-			ptr -> BitVector::toggleBit(* a0);
+					try
+		{
+ptr -> BitVector::toggleBit(* a0);
+		}
+		catch (IndexUnderflow e)
+		{
+			PyErr_SetString(PyExc_Exception, "IndexUnderflow");
+			return NULL;
+		}
+		catch (OutOfMemory e)
+		{
+			PyErr_SetString(PyExc_Exception, "OutOfMemory");
+			return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -532,7 +546,20 @@ static PyObject *sipDo_BitVector_fill(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-			ptr -> BitVector::fill( (bool)a0,* a1,* a2);
+					try
+		{
+ptr -> BitVector::fill( (bool)a0,* a1,* a2);
+		}
+		catch (IndexUnderflow e)
+		{
+			PyErr_SetString(PyExc_Exception, "IndexUnderflow");
+			return NULL;
+		}
+		catch (OutOfMemory e)
+		{
+			PyErr_SetString(PyExc_Exception, "OutOfMemory");
+			return NULL;
+		}
 
 			if (istemp1)
 				delete a1;
@@ -580,7 +607,20 @@ static PyObject *sipDo_BitVector_toggle(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-			ptr -> BitVector::toggle(* a0,* a1);
+					try
+		{
+ptr -> BitVector::toggle(* a0,* a1);
+		}
+		catch (IndexUnderflow e)
+		{
+			PyErr_SetString(PyExc_Exception, "IndexUnderflow");
+			return NULL;
+		}
+		catch (OutOfMemory e)
+		{
+			PyErr_SetString(PyExc_Exception, "OutOfMemory");
+			return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -596,6 +636,186 @@ static PyObject *sipDo_BitVector_toggle(PyObject *sipThisObj,PyObject *sipArgs)
 	// Report an error if the arguments couldn't be parsed.
 
 	sipNoMethod(sipName_BALL_BitVector,sipName_BALL_toggle);
+
+	return NULL;
+}
+
+static PyObject *sipDo_BitVector_setUnsignedChar(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_BitVector)) == NULL)
+		return NULL;
+
+	{
+		unsigned char a0;
+
+		if (sipParseArgs(sipArgs,"c",&a0))
+		{
+			BitVector *ptr;
+
+			if ((ptr = (BitVector *)sipGetCppPtr(sipThis,sipClass_BitVector)) == NULL)
+				return NULL;
+
+			ptr -> BitVector::setUnsignedChar( a0);
+
+			Py_INCREF(Py_None);
+			return Py_None;
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_BitVector,sipName_BALL_setUnsignedChar);
+
+	return NULL;
+}
+
+static PyObject *sipDo_BitVector_getUnsignedChar(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_BitVector)) == NULL)
+		return NULL;
+
+	{
+		if (sipParseArgs(sipArgs,""))
+		{
+			unsigned char res;
+			BitVector *ptr;
+
+			if ((ptr = (BitVector *)sipGetCppPtr(sipThis,sipClass_BitVector)) == NULL)
+				return NULL;
+
+			res = ptr -> BitVector::getUnsignedChar();
+
+			return PyString_FromStringAndSize((char *)&res,1);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_BitVector,sipName_BALL_getUnsignedChar);
+
+	return NULL;
+}
+
+static PyObject *sipDo_BitVector_setUnsignedShort(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_BitVector)) == NULL)
+		return NULL;
+
+	{
+		unsigned short a0;
+
+		if (sipParseArgs(sipArgs,"h",&a0))
+		{
+			BitVector *ptr;
+
+			if ((ptr = (BitVector *)sipGetCppPtr(sipThis,sipClass_BitVector)) == NULL)
+				return NULL;
+
+			ptr -> BitVector::setUnsignedShort( a0);
+
+			Py_INCREF(Py_None);
+			return Py_None;
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_BitVector,sipName_BALL_setUnsignedShort);
+
+	return NULL;
+}
+
+static PyObject *sipDo_BitVector_getUnsignedShort(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_BitVector)) == NULL)
+		return NULL;
+
+	{
+		if (sipParseArgs(sipArgs,""))
+		{
+			unsigned short res;
+			BitVector *ptr;
+
+			if ((ptr = (BitVector *)sipGetCppPtr(sipThis,sipClass_BitVector)) == NULL)
+				return NULL;
+
+			res = ptr -> BitVector::getUnsignedShort();
+
+			return PyInt_FromLong((long)res);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_BitVector,sipName_BALL_getUnsignedShort);
+
+	return NULL;
+}
+
+static PyObject *sipDo_BitVector_setUnsignedLong(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_BitVector)) == NULL)
+		return NULL;
+
+	{
+		unsigned long a0;
+
+		if (sipParseArgs(sipArgs,"l",&a0))
+		{
+			BitVector *ptr;
+
+			if ((ptr = (BitVector *)sipGetCppPtr(sipThis,sipClass_BitVector)) == NULL)
+				return NULL;
+
+			ptr -> BitVector::setUnsignedLong( a0);
+
+			Py_INCREF(Py_None);
+			return Py_None;
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_BitVector,sipName_BALL_setUnsignedLong);
+
+	return NULL;
+}
+
+static PyObject *sipDo_BitVector_getUnsignedLong(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_BitVector)) == NULL)
+		return NULL;
+
+	{
+		if (sipParseArgs(sipArgs,""))
+		{
+			unsigned long res;
+			BitVector *ptr;
+
+			if ((ptr = (BitVector *)sipGetCppPtr(sipThis,sipClass_BitVector)) == NULL)
+				return NULL;
+
+			res = ptr -> BitVector::getUnsignedLong();
+
+			return PyInt_FromLong((long)res);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_BitVector,sipName_BALL_getUnsignedLong);
 
 	return NULL;
 }
@@ -625,7 +845,15 @@ static PyObject *sipDo_BitVector_bitwiseOr(PyObject *sipThisObj,PyObject *sipArg
 			if (iserr)
 				return NULL;
 
-			ptr -> BitVector::bitwiseOr(* a0);
+					try
+		{
+ptr -> BitVector::bitwiseOr(* a0);
+		}
+		catch (OutOfMemory e)
+		{
+			PyErr_SetString(PyExc_Exception, "OutOfMemory");
+			return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -664,7 +892,15 @@ static PyObject *sipDo_BitVector_bitwiseXor(PyObject *sipThisObj,PyObject *sipAr
 			if (iserr)
 				return NULL;
 
-			ptr -> BitVector::bitwiseXor(* a0);
+					try
+		{
+ptr -> BitVector::bitwiseXor(* a0);
+		}
+		catch (OutOfMemory e)
+		{
+			PyErr_SetString(PyExc_Exception, "OutOfMemory");
+			return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -703,7 +939,15 @@ static PyObject *sipDo_BitVector_bitwiseAnd(PyObject *sipThisObj,PyObject *sipAr
 			if (iserr)
 				return NULL;
 
-			ptr -> BitVector::bitwiseAnd(* a0);
+					try
+		{
+ptr -> BitVector::bitwiseAnd(* a0);
+		}
+		catch (OutOfMemory e)
+		{
+			PyErr_SetString(PyExc_Exception, "OutOfMemory");
+			return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -747,7 +991,20 @@ static PyObject *sipDo_BitVector_isAnyBit(PyObject *sipThisObj,PyObject *sipArgs
 			if (iserr)
 				return NULL;
 
-			res = ptr -> BitVector::isAnyBit( (bool)a0,* a1,* a2);
+					try
+		{
+res = ptr -> BitVector::isAnyBit( (bool)a0,* a1,* a2);
+		}
+		catch (IndexUnderflow e)
+		{
+			PyErr_SetString(PyExc_Exception, "IndexUnderflow");
+			return NULL;
+		}
+		catch (IndexOverflow e)
+		{
+			PyErr_SetString(PyExc_Exception, "IndexOverflow");
+			return NULL;
+		}
 
 			if (istemp1)
 				delete a1;
@@ -796,7 +1053,20 @@ static PyObject *sipDo_BitVector_isEveryBit(PyObject *sipThisObj,PyObject *sipAr
 			if (iserr)
 				return NULL;
 
-			res = ptr -> BitVector::isEveryBit( (bool)a0,* a1,* a2);
+					try
+		{
+res = ptr -> BitVector::isEveryBit( (bool)a0,* a1,* a2);
+		}
+		catch (IndexUnderflow e)
+		{
+			PyErr_SetString(PyExc_Exception, "IndexUnderflow");
+			return NULL;
+		}
+		catch (IndexOverflow e)
+		{
+			PyErr_SetString(PyExc_Exception, "IndexOverflow");
+			return NULL;
+		}
 
 			if (istemp1)
 				delete a1;
@@ -893,7 +1163,15 @@ PyObject *sipNew_BitVector(PyObject *sipSelf,PyObject *sipArgs)
 
 		if (sipParseArgs(sipArgs,"-i",&a0))
 		{
+		try
+		{
 			sipNew = new BitVector( a0);
+		}
+		catch (OutOfMemory e)
+		{
+			PyErr_SetString(PyExc_Exception, "OutOfMemory");
+			return NULL;
+		}
 	}
 	}
 
@@ -905,6 +1183,8 @@ PyObject *sipNew_BitVector(PyObject *sipSelf,PyObject *sipArgs)
 
 		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_BitVector,&a0obj,&a1))
 		{
+		try
+		{
 			int iserr = 0;
 
 			sipConvertTo_BitVector(a0obj,(BitVector **)&a0,1,&iserr);
@@ -913,6 +1193,12 @@ PyObject *sipNew_BitVector(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new BitVector(* a0, (bool)a1);
+		}
+		catch (OutOfMemory e)
+		{
+			PyErr_SetString(PyExc_Exception, "OutOfMemory");
+			return NULL;
+		}
 	}
 	}
 
@@ -922,7 +1208,15 @@ PyObject *sipNew_BitVector(PyObject *sipSelf,PyObject *sipArgs)
 
 		if (sipParseArgs(sipArgs,"-s",&a0))
 		{
+		try
+		{
 			sipNew = new BitVector( a0);
+		}
+		catch (OutOfMemory e)
+		{
+			PyErr_SetString(PyExc_Exception, "OutOfMemory");
+			return NULL;
+		}
 	}
 	}
 
@@ -972,12 +1266,17 @@ PyMethodDef sipClassAttrTab_BitVector[] = {
 	{sipName_BALL_setSize, sipDo_BitVector_setSize, METH_VARARGS, NULL},
 	{sipName_BALL_getSize, sipDo_BitVector_getSize, METH_VARARGS, NULL},
 	{sipName_BALL_countValue, sipDo_BitVector_countValue, METH_VARARGS, NULL},
-	{sipName_BALL_Operator__getitem__, sipDo_BitVector_Operator__getitem__, METH_VARARGS, NULL},
 	{sipName_BALL_setBit, sipDo_BitVector_setBit, METH_VARARGS, NULL},
 	{sipName_BALL_getBit, sipDo_BitVector_getBit, METH_VARARGS, NULL},
 	{sipName_BALL_toggleBit, sipDo_BitVector_toggleBit, METH_VARARGS, NULL},
 	{sipName_BALL_fill, sipDo_BitVector_fill, METH_VARARGS, NULL},
 	{sipName_BALL_toggle, sipDo_BitVector_toggle, METH_VARARGS, NULL},
+	{sipName_BALL_setUnsignedChar, sipDo_BitVector_setUnsignedChar, METH_VARARGS, NULL},
+	{sipName_BALL_getUnsignedChar, sipDo_BitVector_getUnsignedChar, METH_VARARGS, NULL},
+	{sipName_BALL_setUnsignedShort, sipDo_BitVector_setUnsignedShort, METH_VARARGS, NULL},
+	{sipName_BALL_getUnsignedShort, sipDo_BitVector_getUnsignedShort, METH_VARARGS, NULL},
+	{sipName_BALL_setUnsignedLong, sipDo_BitVector_setUnsignedLong, METH_VARARGS, NULL},
+	{sipName_BALL_getUnsignedLong, sipDo_BitVector_getUnsignedLong, METH_VARARGS, NULL},
 	{sipName_BALL_bitwiseOr, sipDo_BitVector_bitwiseOr, METH_VARARGS, NULL},
 	{sipName_BALL_bitwiseXor, sipDo_BitVector_bitwiseXor, METH_VARARGS, NULL},
 	{sipName_BALL_bitwiseAnd, sipDo_BitVector_bitwiseAnd, METH_VARARGS, NULL},

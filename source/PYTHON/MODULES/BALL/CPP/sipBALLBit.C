@@ -21,6 +21,93 @@ static PyTypeObject sipType_Bit = {
 	0,
 };
 
+sipBit::sipBit(): Bit()
+{
+	sipCommonCtor(sipPyMethods,1);
+}
+
+sipBit::sipBit(const Bit& a0): Bit(a0)
+{
+	sipCommonCtor(sipPyMethods,1);
+}
+
+sipBit::~sipBit()
+{
+	sipCommonDtor(sipPyThis);
+}
+void sipBit::clear()
+{
+	int relLock;
+
+	if (sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_clear,&relLock))
+		sipBit::sipVH_clear(&sipPyMethods[0],sipPyThis,relLock);
+	else
+		Bit::clear();
+}
+
+// The common handler for all classes that inherit this virtual member
+// function.
+
+void sipBit::sipVH_clear(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
+{
+	PyObject *resobj;
+	PyObject *sipArgs;
+
+	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
+
+	if (sipArgs == NULL)
+		goto reportError;
+
+	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
+
+	Py_DECREF(sipArgs);
+
+	if (resobj != NULL)
+	{
+		Py_DECREF(resobj);
+
+		if (resobj == Py_None)
+			goto releaseLock;
+
+		sipBadVirtualResultType(sipName_BALL_Bit,sipName_BALL_clear);
+	}
+
+reportError:
+	PyErr_Print();
+
+releaseLock:
+	sipCondReleaseLock(sipRelLock);
+}
+
+static PyObject *sipDo_Bit_clear(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Bit)) == NULL)
+		return NULL;
+
+	{
+		if (sipParseArgs(sipArgs,""))
+		{
+			Bit *ptr;
+
+			if ((ptr = (Bit *)sipGetCppPtr(sipThis,sipClass_Bit)) == NULL)
+				return NULL;
+
+			ptr -> Bit::clear();
+
+			Py_INCREF(Py_None);
+			return Py_None;
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_Bit,sipName_BALL_clear);
+
+	return NULL;
+}
+
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
 const void *sipCast_Bit(const void *ptr,PyObject *targetClass)
@@ -35,8 +122,14 @@ static void sipDealloc_Bit(sipThisType *sipThis)
 {
 	if (sipThis -> u.cppPtr != NULL)
 	{
+		if (!sipIsSimple(sipThis))
+			((sipBit *)sipThis -> u.cppPtr) -> sipPyThis = NULL;
+
 		if (sipIsPyOwned(sipThis))
-			delete (Bit *)sipThis -> u.cppPtr;
+			if (sipIsSimple(sipThis))
+				delete (Bit *)sipThis -> u.cppPtr;
+			else
+				delete (sipBit *)sipThis -> u.cppPtr;
 	}
 
 	sipDeleteThis(sipThis);
@@ -58,25 +151,9 @@ PyObject *sipNew_Bit(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		const BitVector *a0;
-		PyObject *a0obj;
-		Index *a1 = NULL;
-		PyObject *a1obj = NULL;
-
-		if (sipParseArgs(sipArgs,"-I|I",sipCanConvertTo_BitVector,&a0obj,sipCanConvertTo_Index,&a1obj))
+		if (sipParseArgs(sipArgs,"-"))
 		{
-			int iserr = 0;
-
-			sipConvertTo_BitVector(a0obj,(BitVector **)&a0,1,&iserr);
-			int istemp1 = sipConvertTo_Index(a1obj,&a1,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			sipNew = new Bit(* a0,* a1);
-
-			if (istemp1)
-				delete a1;
+			sipNew = new sipBit();
 	}
 	}
 
@@ -94,7 +171,7 @@ PyObject *sipNew_Bit(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-			sipNew = new Bit(* a0);
+			sipNew = new sipBit(* a0);
 	}
 	}
 
@@ -109,16 +186,23 @@ PyObject *sipNew_Bit(PyObject *sipSelf,PyObject *sipArgs)
 	if ((sipThis = sipCreateThis(sipSelf,sipNew,&sipType_Bit,sipFlags,&et)) == NULL)
 	{
 		if (sipFlags & SIP_PY_OWNED)
-			delete (Bit *)sipNew;
+			if (sipFlags & SIP_SIMPLE)
+				delete (Bit *)sipNew;
+			else
+				delete (sipBit *)sipNew;
 
 		return NULL;
 	}
+
+	if (!(sipFlags & SIP_SIMPLE))
+		((sipBit *)sipNew) -> sipPyThis = sipThis;
 
 	Py_INCREF(Py_None);
 	return Py_None;
 }
 
 PyMethodDef sipClassAttrTab_Bit[] = {
+	{sipName_BALL_clear, sipDo_Bit_clear, METH_VARARGS, NULL},
 	{NULL}
 };
 

@@ -120,25 +120,6 @@ PyObject *sipNew_PTE_(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		const PTE_ *a0;
 		PyObject *a0obj;
-		long a1;
-
-		if (sipParseArgs(sipArgs,"-Il",sipCanConvertTo_PTE_,&a0obj,&a1))
-		{
-			int iserr = 0;
-
-			sipConvertTo_PTE_(a0obj,(PTE_ **)&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			sipNew = new PTE_(* a0, (bool)a1);
-	}
-	}
-
-	if (sipNew == NULL)
-	{
-		const PTE_ *a0;
-		PyObject *a0obj;
 
 		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_PTE_,&a0obj))
 		{

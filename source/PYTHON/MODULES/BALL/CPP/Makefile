@@ -1,7 +1,7 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.9 2000/11/15 20:29:41 oliver Exp $
+# $Id: Makefile,v 1.10 2001/01/16 17:21:59 anker Exp $
 #
 
 all: libBALLc.so
@@ -31,7 +31,9 @@ SIP_SOURCES_CONCEPT=\
 
 SIP_SOURCES_DATATYPE=\
 	sipBALLGridIndex.C\
-	sipBALLFloatPointGrid.C\
+	sipBALLFloatRegularData1D.C\
+	sipBALLFloatRegularData2D.C\
+	sipBALLFloatRegularData3D.C\
 	sipBALLOptions.C\
 	sipBALLRegularExpression.C\
 	sipBALLString.C\
@@ -48,7 +50,9 @@ SIP_SOURCES_FORMAT=\
 	sipBALLPDBFile.C\
 	sipBALLResourceEntry.C\
 	sipBALLResourceFile.C\
-	sipBALLXYZFile.C
+	sipBALLXYZFile.C\
+	sipBALLDCDFile.C\
+	sipBALLTrajectoryFile.C
 
 SIP_SOURCES_KERNEL=\
 	sipBALLAtom.C\
@@ -119,6 +123,7 @@ SIP_SOURCES_MOLMEC_COMMON=\
 	sipBALLRadiusRuleProcessor.C\
 	sipBALLRuleEvaluator.C\
 	sipBALLRuleProcessor.C\
+	sipBALLSnapShot.C\
 	sipBALLSnapShotManager.C
 
 SIP_SOURCES_NMR=

@@ -724,25 +724,6 @@ PyObject *sipNew_Element(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		const Element *a0;
 		PyObject *a0obj;
-		long a1 = true;
-
-		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_Element,&a0obj,&a1))
-		{
-			int iserr = 0;
-
-			sipConvertTo_Element(a0obj,(Element **)&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			sipNew = new Element(* a0, (bool)a1);
-	}
-	}
-
-	if (sipNew == NULL)
-	{
-		const Element *a0;
-		PyObject *a0obj;
 
 		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_Element,&a0obj))
 		{

@@ -26,11 +26,6 @@ sipAtomProcessor::sipAtomProcessor(): AtomProcessor()
 	sipCommonCtor(sipPyMethods,1);
 }
 
-sipAtomProcessor::sipAtomProcessor(const AtomProcessor& a0): AtomProcessor(a0)
-{
-	sipCommonCtor(sipPyMethods,1);
-}
-
 sipAtomProcessor::~sipAtomProcessor()
 {
 	sipCommonDtor(sipPyThis);
@@ -233,24 +228,6 @@ PyObject *sipNew_AtomProcessor(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new sipAtomProcessor();
-	}
-	}
-
-	if (sipNew == NULL)
-	{
-		const AtomProcessor *a0;
-		PyObject *a0obj;
-
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_AtomProcessor,&a0obj))
-		{
-			int iserr = 0;
-
-			sipConvertTo_AtomProcessor(a0obj,(AtomProcessor **)&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			sipNew = new sipAtomProcessor(* a0);
 	}
 	}
 
