@@ -1,4 +1,4 @@
-// $Id: options.h,v 1.11 2000/12/01 13:30:34 anker Exp $
+// $Id: options.h,v 1.12 2000/12/18 12:21:05 anker Exp $
 
 #ifndef BALL_DATATYPE_OPTIONS_H
 #define BALL_DATATYPE_OPTIONS_H
@@ -116,7 +116,7 @@ namespace BALL
 		/**		Returns true, if the value associated with the 
 					given key is a real number
 					@param	key String
-					@return	true, if {\key} is a real number
+					@return	true, if {\em key} is a real number
 					@memo
 		*/
 		bool isReal(const String& key) const throw();
