@@ -1,4 +1,4 @@
-// $Id: timer.C,v 1.7.4.4 2002/12/01 21:45:23 oliver Exp $
+// $Id: timer.C,v 1.7.4.5 2002/12/01 22:25:13 oliver Exp $
 
 #include <BALL/SYSTEM/timer.h>
 
@@ -32,7 +32,10 @@ namespace BALL
 {
 
 	long Timer::cpu_speed_ = 0L;
+
+	#ifdef BALL_COMPILER_MSVC
 	long Timer::clock_speed_ = 0L;
+	#endif
 
 	Timer::Timer()
 	{
