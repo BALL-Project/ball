@@ -1,0 +1,25 @@
+// $Id: PairExpInteractionEnergyProcessor_test.C,v 1.1 2000/08/31 18:24:33 anker Exp $
+#include <BALL/CONCEPT/classTest.h>
+
+///////////////////////////
+
+// insert includes here
+#include <BALL/SOLVATION/pairExpInteractionEnergyProcessor.h>
+
+///////////////////////////
+
+START_TEST(class_name, "$Id: PairExpInteractionEnergyProcessor_test.C,v 1.1 2000/08/31 18:24:33 anker Exp $")
+
+/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
+
+using namespace BALL;
+
+///  insert tests for each member function here         
+///
+	
+// GROSSBAUSTELLE
+
+/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
+END_TEST
