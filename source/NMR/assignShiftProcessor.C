@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: assignShiftProcessor.C,v 1.26 2003/08/26 09:18:09 oliver Exp $
+// $Id: assignShiftProcessor.C,v 1.27 2004/05/07 13:07:47 amoll Exp $
 //
 
 #include <BALL/NMR/assignShiftProcessor.h>
@@ -20,36 +20,36 @@ namespace BALL
 	  : UnaryProcessor<Composite>(),
  	   shift_table_(processor.shift_table_),
  	   atom_data_(processor.atom_data_),
- 	   valid_(processor.valid_),
  	   molecule_(processor.molecule_),
- 	   number_of_fragment_(processor.number_of_fragment_)
+ 	   number_of_fragment_(processor.number_of_fragment_),
+		 fragment_db_(processor.fragment_db_)
 	{
 	}
 
 	AssignShiftProcessor::AssignShiftProcessor()
  	 : UnaryProcessor<Composite>(),
- 	   atom_data_(RTTI::getDefault<std::vector<NMRAtomData> >())
+ 	   atom_data_(RTTI::getDefault<std::vector<NMRAtomData> >()),
+		 fragment_db_(0)
 	{
 	}
 
 	bool AssignShiftProcessor::start()
 	{
-		if (!valid_)
+		if (!isValid())
 		{
 			Log.error() << "AssignShiftProcessor: shift data were not assigned" << endl;
 			return false;
 		}
 
 		// ----------transforming the names from STAR-FILE-STANDARD to PDB------
-		FragmentDB frag_db;
-		if (!frag_db.getNamingStandards().has("Star-PDB"))
+		if (!fragment_db_->getNamingStandards().has("Star-PDB"))
 		{
 			 Log.error() << "AssignShiftProcessor::start: "
 									 << "no appropriate map found for name conversion" << endl;
 			return false;
 		}
 
-		StringHashMap<String>* map = frag_db.getNamingStandards()["Star-PDB"];
+		StringHashMap<String>* map = fragment_db_->getNamingStandards()["Star-PDB"];
 
 		// ---------------------read translate table ------------------------
 		Path path;
@@ -83,7 +83,7 @@ namespace BALL
 			bool normalized = false;
 			if (map != 0)
 			{
-				normalized = frag_db.normalize_names.matchName(residue_name, atom_name, map);
+				normalized = fragment_db_->normalize_names.matchName(residue_name, atom_name, map);
 			}
 
 			const String entry(residue_name + ":" + atom_name);
