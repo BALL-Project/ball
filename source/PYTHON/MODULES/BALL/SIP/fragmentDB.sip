@@ -1,4 +1,4 @@
-// $Id: fragmentDB.sip,v 1.1 2000/07/18 21:27:37 oliver Exp $
+// $Id: fragmentDB.sip,v 1.2 2000/08/07 11:13:41 oliver Exp $
 
 class FragmentDB 
 {
@@ -42,56 +42,73 @@ class FragmentDB
   const String& getDefaultNamingStandard() const;
   StringHashMap<StringHashMap<String>*>& getNamingStandards();
   bool isValid() const;
-  class NormalizeNamesProcessor 
-  //  : public UnaryProcessor<Fragment>
-		: FragmentProcessor
-  {
-   public:
-   NormalizeNamesProcessor();
-   NormalizeNamesProcessor(FragmentDB& /db/);
-   virtual ~NormalizeNamesProcessor();
-   void setFragmentDB(FragmentDB& /db/);
-   void setNamingStandard(const String& /naming_standard/);
-   const String& getNamingStandard();
-   bool matchName(String&  /res_name/, String&  /atom_name/, const StringHashMap<String>* /map/) const;
-   virtual bool start();
-   virtual bool finish();
-   virtual Processor::Result operator () (Fragment& /fragment/);
-  };
-  class AddHydrogensProcessor 
-  //  : public UnaryProcessor<Fragment> 
-		: FragmentProcessor
-  {
-   public:
-   AddHydrogensProcessor();
-   AddHydrogensProcessor(const FragmentDB& /db/);
-   ~AddHydrogensProcessor();
-   virtual bool start();
-   virtual bool finish();
-   virtual Processor::Result operator()(Fragment&);
-   Size getNumberOfInsertedH();
-   void setFragmentDB(const FragmentDB& /fragment_db/);
-  };
-
-  class BuildBondsProcessor 
-  // : public UnaryProcessor<Fragment> 
-		: FragmentProcessor
-  {
-   public:
-   BuildBondsProcessor();
-   BuildBondsProcessor(const FragmentDB& /db/);
-   ~BuildBondsProcessor();
-   virtual bool finish();
-   virtual bool start();
-   virtual Processor::Result operator () (Fragment& /fragment/);
-   Size getNumberOfBondsBuilt();
-   void setFragmentDB(const FragmentDB& /fragment_db/);
-   Size buildFragmentBonds(Fragment& /fragment/) const;
-   Size buildInterFragmentBonds(Fragment& /first/, Fragment& /second/) const;
-  };
 
   NormalizeNamesProcessor  normalize_names;
   AddHydrogensProcessor   add_hydrogens;
   BuildBondsProcessor    build_bonds;
   ResourceEntry* tree;
 };
+
+class NormalizeNamesProcessor 
+//  : public UnaryProcessor<Fragment>
+	: FragmentProcessor
+{
+%HeaderCode
+	#include <BALL/STRUCTURE/fragmentDB.h>
+	typedef FragmentDB::NormalizeNamesProcessor NormalizeNamesProcessor;
+	using namespace BALL;
+%End
+	public:
+	NormalizeNamesProcessor();
+	NormalizeNamesProcessor(FragmentDB& /db/);
+	virtual ~NormalizeNamesProcessor();
+	void setFragmentDB(FragmentDB& /db/);
+	void setNamingStandard(const String& /naming_standard/);
+	const String& getNamingStandard();
+	bool matchName(String&  /res_name/, String&  /atom_name/, const StringHashMap<String>* /map/) const;
+	virtual bool start();
+	virtual bool finish();
+	virtual Processor::Result operator () (Fragment& /fragment/);
+};
+class AddHydrogensProcessor 
+//  : public UnaryProcessor<Fragment> 
+	: FragmentProcessor
+{
+%HeaderCode
+	#include <BALL/STRUCTURE/fragmentDB.h>
+	typedef FragmentDB::AddHydrogensProcessor AddHydrogensProcessor;
+	using namespace BALL;
+%End
+	public:
+	AddHydrogensProcessor();
+	AddHydrogensProcessor(const FragmentDB& /db/);
+	~AddHydrogensProcessor();
+	virtual bool start();
+	virtual bool finish();
+	virtual Processor::Result operator()(Fragment&);
+	Size getNumberOfInsertedH();
+	void setFragmentDB(const FragmentDB& /fragment_db/);
+};
+
+class BuildBondsProcessor 
+// : public UnaryProcessor<Fragment> 
+	: FragmentProcessor
+{
+%HeaderCode
+	#include <BALL/STRUCTURE/fragmentDB.h>
+	typedef FragmentDB::BuildBondsProcessor BuildBondsProcessor;
+	using namespace BALL;
+%End
+	public:
+	BuildBondsProcessor();
+	BuildBondsProcessor(const FragmentDB& /db/);
+	~BuildBondsProcessor();
+	virtual bool finish();
+	virtual bool start();
+	virtual Processor::Result operator () (Fragment& /fragment/);
+	Size getNumberOfBondsBuilt();
+	void setFragmentDB(const FragmentDB& /fragment_db/);
+	Size buildFragmentBonds(Fragment& /fragment/) const;
+	Size buildInterFragmentBonds(Fragment& /first/, Fragment& /second/) const;
+};
+
