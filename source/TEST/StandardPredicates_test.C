@@ -1,4 +1,4 @@
-// $Id: StandardPredicates_test.C,v 1.9 2000/05/25 09:07:51 oliver Exp $
+// $Id: StandardPredicates_test.C,v 1.10 2000/05/26 09:22:54 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -15,7 +15,7 @@
 
 ///////////////////////////
 
-START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.9 2000/05/25 09:07:51 oliver Exp $")
+START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.10 2000/05/26 09:22:54 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -79,10 +79,11 @@ RESULT
 // tests for class ResiduePredicate::
 
 CHECK(ResiduePredicate::operator () (const Atom& atom) const )
+	ResiduePredicate pred;
+
 	Residue res;
 	PDBAtom* a1 = new PDBAtom;
 	res.insert(*a1);
-	ResiduePredicate pred;
 	res.setName("ARG");
 	TEST_EQUAL(pred(*a1), false)
 	pred.setArgument("ARG");
@@ -100,28 +101,94 @@ RESULT
 // tests for class ResidueIDPredicate::
 
 CHECK(ResidueIDPredicate::operator () (const Atom& atom) const )
-  //BAUSTELLE
+	ResidueIDPredicate pred;
+
+	Residue res;
+	PDBAtom* a1 = new PDBAtom;
+	res.insert(*a1);
+	res.setID("ARG");
+	TEST_EQUAL(pred(*a1), false)
+	pred.setArgument("ARG");
+	TEST_EQUAL(pred(*a1), true)
+	pred.setArgument("");
+	TEST_EQUAL(pred(*a1), false)
+	res.setID("");
+	TEST_EQUAL(pred(*a1), true)
+	res.remove(*a1);
+	TEST_EQUAL(pred(*a1), false)
+	delete a1;
 RESULT
 
 
 // tests for class ProteinPredicate::
 
 CHECK(ProteinPredicate::operator () (const Atom& atom) const )
-  //BAUSTELLE
+	ProteinPredicate pred;
+
+	Protein  p;
+	Residue& res = *new Residue;
+	PDBAtom* a1 = new PDBAtom;
+	p.insert(res);
+	res.insert(*a1);
+	p.setName("ARG");
+	TEST_EQUAL(pred(*a1), false)
+	pred.setArgument("ARG");
+	TEST_EQUAL(pred(*a1), true)
+	pred.setArgument("");
+	TEST_EQUAL(pred(*a1), false)
+	p.setName("");
+	TEST_EQUAL(pred(*a1), true)
+	res.remove(*a1);
+	TEST_EQUAL(pred(*a1), false)
+	delete a1;
 RESULT
 
 
 // tests for class ChainPredicate::
 
 CHECK(ChainPredicate::operator () (const Atom& atom) const )
-  //BAUSTELLE
+	ChainPredicate pred;
+
+	Chain chain;
+	Residue& res = *new Residue;
+	PDBAtom* a1 = new PDBAtom;
+	chain.insert(res);
+	res.insert(*a1);
+	chain.setName("ARG");
+	TEST_EQUAL(pred(*a1), false)
+	pred.setArgument("ARG");
+	TEST_EQUAL(pred(*a1), true)
+	pred.setArgument("");
+	TEST_EQUAL(pred(*a1), false)
+	chain.setName("");
+	TEST_EQUAL(pred(*a1), true)
+	res.remove(*a1);
+	TEST_EQUAL(pred(*a1), false)
+	delete a1;
 RESULT
 
 
 // tests for class SecondaryStructurePredicate::
 
 CHECK(SecondaryStructurePredicate::operator () (const Atom& atom) const )
-  //BAUSTELLE
+	SecondaryStructurePredicate pred;
+
+	SecondaryStructure sec_struct;
+	Residue& res = *new Residue;
+	PDBAtom* a1 = new PDBAtom;
+	sec_struct.insert(res);
+	res.insert(*a1);
+	sec_struct.setName("ARG");
+	TEST_EQUAL(pred(*a1), false)
+	pred.setArgument("ARG");
+	TEST_EQUAL(pred(*a1), true)
+	pred.setArgument("");
+	TEST_EQUAL(pred(*a1), false)
+	sec_struct.setName("");
+	TEST_EQUAL(pred(*a1), true)
+	res.remove(*a1);
+	TEST_EQUAL(pred(*a1), false)
+	delete a1;
 RESULT
 
 
@@ -135,13 +202,6 @@ RESULT
 // tests for class MoleculePredicate::
 
 CHECK(MoleculePredicate::operator () (const Atom& atom) const )
-  //BAUSTELLE
-RESULT
-
-
-// tests for class BackBonePredicate::
-
-CHECK(BackBonePredicate::operator () (const Atom& atom) const )
   //BAUSTELLE
 RESULT
 
@@ -165,6 +225,30 @@ f >> S;
 f.close();
 
 // tests for class inRingPredicate::
+
+// tests for class BackBonePredicate::
+
+CHECK(BackBonePredicate::operator () (const Atom& atom) const )
+	BackBonePredicate pred;
+
+	AtomIterator it = S.beginAtom();
+	for (Size i=1; +it; ++it, ++i)
+	{	
+		STATUS("testing atom" << it->getFullName())
+		switch (i)
+		{
+			case 1:
+			case 3:
+			case 5:
+			case 6:
+				TEST_EQUAL(pred(*it), true)
+				break;
+			default:
+				TEST_EQUAL(pred(*it), false)
+		}
+	}
+RESULT
+
 
 CHECK(InRingPredicate::operator () (const Atom& atom) const )
 	InRingPredicate in0Ring;
@@ -241,8 +325,21 @@ RESULT
 // tests for class ConnectedToPredicate::
 
 CHECK(ConnectedToPredicate::operator () (const Atom& atom) const )
-	AtomIterator it = S.beginAtom();
+	// we may not walk back again!
+	Atom* a1 = new Atom;
+	Atom* a2 = new Atom;
+	a1->setElement(PTE[Element::C]);
+	a2->setElement(PTE[Element::N]);
+	Bond* bond = a1->createBond(*a2);
+	bond->setOrder(Bond::ORDER__SINGLE);
+	STATUS("(-N(-C(-N(-C(-N(-C(-N(-C(-N(-C(-N)))))))))))")
 	ConnectedToPredicate connectedTo;
+	connectedTo.setArgument("(-N(-C(-N(-C(-N(-C(-N(-C(-N(-C(-N)))))))))))");
+	TEST_EQUAL(connectedTo(*a1), false)
+	delete a1;
+	delete a2;
+
+	AtomIterator it = S.beginAtom();
 	STATUS("(H)");
 	connectedTo.setArgument("(H)");
 	TEST_EQUAL(connectedTo(*it), true)
