@@ -1,4 +1,4 @@
-// $Id: displayProperties.h,v 1.11.4.8 2002/12/08 23:26:02 amoll Exp $
+// $Id: displayProperties.h,v 1.11.4.9 2002/12/10 00:12:26 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
 #define BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
@@ -49,10 +49,6 @@
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_REMOVEMODEL_H
 # include <BALL/MOLVIEW/FUNCTOR/removeModel.h>
-#endif
-
-#ifndef BALL_MOLVIEW_GUI_FUNCTOR_OBJECTSELECTOR_H
-# include <BALL/MOLVIEW/FUNCTOR/objectSelector.h>
 #endif
 
 namespace BALL
@@ -575,9 +571,8 @@ namespace BALL
 			AddGLBackboneModel 					backbone_model_dynamic_;
 			RemoveModel 								remove_model_static_;
 			RemoveModel 								remove_model_dynamic_;
-			AddGLLineModel 							line_model_;
-			ObjectSelector 							selector_;			
-			ObjectDeselector 						deselector_;			
+			AddGLLineModel 							line_model_static_;
+			AddGLLineModel 							line_model_dynamic_;
 
 			BaseModelProcessor* 				static_base_model_pointer_;
 			BaseModelProcessor* 				dynamic_base_model_pointer_;
