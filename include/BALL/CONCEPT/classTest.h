@@ -1,4 +1,4 @@
-// $Id: classTest.h,v 1.14 2000/07/04 16:43:48 oliver Exp $
+// $Id: classTest.h,v 1.15 2000/09/05 20:25:37 oliver Exp $
 
 #include <BALL/common.h>
 #include <BALL/SYSTEM/file.h>
@@ -346,7 +346,7 @@ int main(int argc, char **argv)\
 			TEST::newline = true;\
 			std::cout << std::endl;\
 		}\
- 		std::cout << "    (line " << __LINE__ << ": TEST_REAL_EQUAL("<< #a << ", " << #b << "): got " << (a) << ", expected " << (b) << ") ";\
+ 		std::cout << "    (line " << __LINE__ << " TEST_REAL_EQUAL("<< #a << ", " << #b << "): got " << (a) << ", expected " << (b) << ") ";\
 		if (TEST::this_test)\
 			std::cout << " + " << std::endl;\
 		else \
