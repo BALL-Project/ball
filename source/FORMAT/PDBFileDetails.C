@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFileDetails.C,v 1.3 2005/02/14 13:08:00 amoll Exp $
+// $Id: PDBFileDetails.C,v 1.4 2005/02/14 17:25:15 oliver Exp $
 //
 
 // This file contains the more or less implementation specific portion of PDBFile.
@@ -1465,6 +1465,7 @@ namespace BALL
 			}
 		}
 	}
+
 	void PDBFile::writeTURNSection_(const PDB::Structure& structure)
 	{
 		PDB::RecordTURN tr;
@@ -1483,6 +1484,7 @@ namespace BALL
 			}
 		}
 	}
+
   void PDBFile::writeSSBONDSection_(const PDB::Structure& structure)
 	{
 		PDB::RecordSSBOND sr;
@@ -1522,7 +1524,8 @@ namespace BALL
 		writeSSBONDSection_(structure);
 			
 		// --- LINK   ---
-		// ????
+		// Add LINK records read from the fie before
+		addAllRecords_(info, PDB::RECORD_TYPE__LINK);
 
 		// --- HYDBND ---
 		writeHYDBNDSection_(structure);
@@ -1531,13 +1534,13 @@ namespace BALL
 		writeSLTBRGSection_(structure);
 		
 		// --- CISPEP ---
-		// ????
+		// Add CISPEP records skipped when reading the file.
+		addAllRecords_(info, PDB::RECORD_TYPE__CISPEP);
 	}
 
 	void PDBFile::writeSecondaryStructureSection_
 		(const PDB::Structure& structure, const BALL::PDBInfo& /* info */)
 	{
-
 		// --- HELIX ---
 		writeHELIXSection_(structure);
 		// --- SHEET ---
@@ -1550,56 +1553,59 @@ namespace BALL
 		(const PDB::Structure& structure, const BALL::PDBInfo& info)
 	{
 		// --- CRYST1 ---
-		// ????
+		addAllRecords_(info, PDB::RECORD_TYPE__CRYST1);
 		// --- ORIGX1 ---
-		// ????
+		addAllRecords_(info, PDB::RECORD_TYPE__ORIGX1);
 		// --- ORIGX2 ---
-		// ????
+		addAllRecords_(info, PDB::RECORD_TYPE__ORIGX2);
 		// --- ORIGX3 ---
-		// ????
+		addAllRecords_(info, PDB::RECORD_TYPE__ORIGX3);
 		// --- SCALE1 ---
-		// ????
+		addAllRecords_(info, PDB::RECORD_TYPE__SCALE1);
 		// --- SCALE2 ---
-		// ????
+		addAllRecords_(info, PDB::RECORD_TYPE__SCALE2);
 		// --- SCALE3 ---
-		// ????
+		addAllRecords_(info, PDB::RECORD_TYPE__SCALE3);
 		// --- MTRIX1 ---
-		// ????
+		addAllRecords_(info, PDB::RECORD_TYPE__MTRIX1);
 		// --- MTRIX2 ---
-		// ????
+		addAllRecords_(info, PDB::RECORD_TYPE__MTRIX2);
 		// --- MTRIX3 ---
-		// ????
+		addAllRecords_(info, PDB::RECORD_TYPE__MTRIX3);
 		// --- TVECT ---
-		// ????
+		addAllRecords_(info, PDB::RECORD_TYPE__TVECT);
 	}
 
 	void BALL::PDBFile::writePrimaryStructureSection_
 		(const PDB::Structure& structure, const BALL::PDBInfo& info)
 	{
 		// --- DBREF  ---
-		// ????
+		addAllRecords_(info, PDB::RECORD_TYPE__DBREF);
 		// --- SEQADV ---
 		// ????
 		// --- SEQRES ---
 		writeSEQRESSection_(structure.chain_residue_names);
-		// --- MODRES ---		
-		// ????
+		// --- MODRES ---
+		addAllRecords_(info, PDB::RECORD_TYPE__MODRES);
 	}
 	void PDBFile::writeMiscellaneousFeaturesSection_
 		(const PDB::Structure& structure, const BALL::PDBInfo& info)
 	{
 		// --- SITE ---
-		// ????
+		addAllRecords_(info, PDB::RECORD_TYPE__SITE);
 	}
 
 	void PDBFile::writeHeterogenSection_
 		(const PDB::Structure& structure, const BALL::PDBInfo& info)
 	{
 		// --- HET    ---
+		addAllRecords_(info, PDB::RECORD_TYPE__HET);
 		// --- HETNAM ---
+		addAllRecords_(info, PDB::RECORD_TYPE__HETNAM);
 		// --- HETSYN ---
+		// ???? addAllRecords_(info, PDB::RECORD_TYPE__HETSYN);
 		// --- FORMUL ---
-		// ????
+		addAllRecords_(info, PDB::RECORD_TYPE__FORMUL);
 	}
 
 	void PDBFile::writeBookKeepingSection_
@@ -1685,6 +1691,9 @@ namespace BALL
 
 	void PDBFile::writeRecord_(const PDB::RecordCONECT& cr)
 	{
+		// writeRecord_(PDB:RECORD_TYPE__CONECT,
+		//						 // ????
+		//						 );
 	}
 
 } // namespace BALL
