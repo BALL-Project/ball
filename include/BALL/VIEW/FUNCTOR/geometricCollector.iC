@@ -1,25 +1,29 @@
-// $Id: geometricCollector.iC,v 1.1 2000/06/04 17:54:49 hekl Exp $
+// $Id: geometricCollector.iC,v 1.2 2001/05/13 13:35:16 hekl Exp $
 
 BALL_INLINE
 void GeometricCollector::collectSelectedGeometricObjects(bool selected)
+	throw()
 {
 	only_selected_objects_ = selected;
 }
 
 BALL_INLINE
 bool GeometricCollector::collectingSelectedGeometricObjects() const
+	throw()
 {
 	return only_selected_objects_;
 }
 
 BALL_INLINE
 List<Composite *>& GeometricCollector::getCollection()
+	throw()
 {
   return collection_;
 }
 
 BALL_INLINE
 const List<Composite *>& GeometricCollector::getCollection() const
+	throw()
 {
   return collection_;
 }

@@ -1,19 +1,22 @@
-// $Id: information.iC,v 1.1 2000/05/04 17:25:37 hekl Exp $
+// $Id: information.iC,v 1.2 2001/05/13 13:35:16 hekl Exp $
 
 BALL_INLINE
 Information::Type Information::getType() const
+	throw()
 {
 	return type_;
 }
 			
 BALL_INLINE
 String Information::getTypeName() const
+	throw()
 {
 	return type_name_;
 }
 			
 BALL_INLINE
 String Information::getName() const
+  throw()
 {
 	return name_;
 }

@@ -1,10 +1,6 @@
-// $Id: functor.doc,v 1.1 2001/02/18 20:54:21 amoll Exp $
+// $Id: functor.doc,v 1.2 2001/05/13 13:35:15 hekl Exp $
 
-/** Functor methods
-*/
-//@{
-		//@Include: filter.h
-    //@Include: geometricCollector.h
-    //@Include: information.h
-//@}
+//Include: filter.h
+//@Include: geometricCollector.h
+//@Include: information.h
 

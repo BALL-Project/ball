@@ -1,37 +1,43 @@
-// $Id: filter.iC,v 1.1 2000/05/16 21:12:47 hekl Exp $
+// $Id: filter.iC,v 1.2 2001/05/13 13:35:15 hekl Exp $
 
 BALL_INLINE
 bool Filter::getResult() const
+  throw()
 {
 	return object_passed_;
 }
 
 BALL_INLINE
 Filter::operator bool () const
+  throw()
 {
 	return object_passed_;
 }
 
 BALL_INLINE
 Filter::operator int () const
+  throw()
 {
 	return (int)((object_passed_ == true) ? 1 : 0);
 }
 
 BALL_INLINE
 Filter::operator long () const
+  throw()
 {
 	return (long)((object_passed_ == true) ? 1 : 0);
 }
 
 BALL_INLINE
 Filter::operator void* () const
+  throw()
 {
 	return (void*)((object_passed_ == true) ? 1 : 0);
 }
 
 BALL_INLINE
 void Filter::setResult_(bool result)
+  throw()
 {
 	object_passed_ = result;
 }

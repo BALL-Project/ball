@@ -1,4 +1,4 @@
-// $Id: filter.h,v 1.2 2000/12/12 16:15:40 oliver Exp $
+// $Id: filter.h,v 1.3 2001/05/13 13:35:15 hekl Exp $
 
 #ifndef BALL_VIEW_FUNCTOR_FILTER_H
 #define BALL_VIEW_FUNCTOR_FILTER_H
@@ -26,79 +26,152 @@ namespace BALL
 	namespace VIEW
 	{
 		
-		/**
+		/** Filter class.
+				{\bf Framework:} BALL/VIEW/FUNCTOR\\
+				{\bf Definition:} \URL{BALL/VIEW/FUNCTOR/filter.h}\\ 
+				{\bf Concept:} visitor design pattern\\ \\
+				The class Filter is a base class for filter objects. This class filters
+				\Ref{Composite} objects. Override the method \Ref{visit} to
+				specify the needed filter criteria und use the method \Ref{setResult_} 
+				to set the result of the applied filter criteria.
+				In this class the default implementation filters for \Ref{GeometricObjects}.
+				So if a \Ref{Composite} object that if of kind \Ref{GeometricObject} is visited 
+				from this class the method \Ref{getResult} returns {\tt true}, otherwise
+				{\tt false}.
+				This class is used by the class \Ref{Control} to filter for \Ref{GeometricObject}
+				objects.
+				@see     Control
+				@memo    Filter class (BALL VIEW functor framework)
+				@author  $Author: hekl $
+				@version $Revision: 1.3 $
+				@date    $Date: 2001/05/13 13:35:15 $
 		*/
-		class Filter
-			: public Visitor<Composite>
+		class Filter: public Visitor<Composite>
 		{
 			public:
 			
-			/**	@name	Enums
-			 */
+			/**	@name	Constructors
+			*/	
 			//@{
+
+			/** Default Constructor.
+					Construct new filter.
+					The state of {\em *this} filter is: result is {\tt false}.
+					@return      Filter new constructed filter
+			*/
+			Filter()
+				throw();
 			//@}
 
-
-			/**	@name	Type definitions
-			*/
-			//@{
-			//@}
-
-			/**	@name	Constructors and Destructors
+			/** @name Destructors 
 			*/
 			//@{
 
-			Filter();
-
+			/** Destructor.
+					Default destruction of {\em *this} filter.
+					Calls \Ref{destroy}.
+					@see         destroy
+			*/
 			virtual ~Filter()
 				throw();
 
+			/** Explicit default initialization.
+					Set the result of {\em *this} filter to {\tt false}.
+			*/
 			virtual void clear()
 				throw();
 
+			/** Explicit destructor.
+					Empty for further purpose.
+					@see  ~Filter
+			*/
 			virtual void destroy()
 				throw();
 			//@}
 
-			/**	@name	Asignment
+			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
+			/** Inspection of the result.
+					Access the result of {\em *this} filter.
+					@return bool {\tt true} if the \Ref{Composite} object passed through {\em *this} filter, {\tt false} otherwise
+					@see    setResult_
+			*/
+			bool getResult() const
+				throw();
+
+			/** Visit method.
+					Override this method for defining the filter criteria. 
+					Set the result if the \Ref{Composite} object passed with the 
+					\Ref{setResult_} method.
+					This method sets the result to {\tt true} if the \Ref{Composite} object
+					is of kind \Ref{GeometricObject} (Default implementation). 
+					@param  composite the \Ref{Composite} object to be filtered by {\em *this} filter.
+					@see    setResult_
+			*/
+			virtual void visit(Composite& composite)
+				throw();
 			//@}
-
 			
-			/**	@name	Accessors
+			/** @name Conversion methods
 			*/
 			//@{
-			bool getResult() const;
-
-			operator bool () const;
-
-			operator int () const;
-
-			operator long () const;
-
-			operator void* () const;
-
-			virtual void visit(Composite& composite);
-			//@}
-			
-
-			/**	@name	Debugging and Diagnostics
+			/** Conversion to bool.
+					Cast {\em *this} filter to a boolean value.
+					@return  bool {\tt true} if the \Ref{Composite} object passed through {\em *this} filter, {\tt false} otherwise
+					@see     getResult
+					@see     setResult_
 			*/
-			//@{
+			operator bool () const
+				throw();
 
-			virtual bool isValid() const;
+			/** Conversion to int.
+					Cast {\em *this} filter to a integer value.
+					@return  int {\tt 1} if the \Ref{Composite} object passed through {\em *this} filter, {\tt 0} otherwise
+					@see     getResult
+					@see     setResult_
+			*/
+			operator int () const
+				throw();
 
-			virtual void dump
-				(std::ostream& s = std::cout, Size depth = 0) const
+			/** Conversion to long.
+					Cast {\em *this} filter to a long value.
+					@return  int {\tt 1} if the \Ref{Composite} object passed through {\em *this} filter, {\tt 0} otherwise
+					@see     getResult
+					@see     setResult_
+			*/
+			operator long () const
+				throw();
+
+			/** Conversion to void*.
+					Cast {\em *this} filter to a void* value.
+					@return  int {\tt (void*)1} if the \Ref{Composite} object passed through {\em *this} filter, {\tt (void*)0} otherwise
+					@see     getResult
+					@see     setResult_
+			*/
+			operator void* () const
 				throw();
 			//@}
 
-
 			protected:
 
-			void setResult_(bool result);
-
+			/** @name Protected methods.
+			*/
+			//@{
+			/** Change the result.
+					Change the result of {\em *this} filter to the value of the parameter
+					{\em result}. With this method a derived class can set the result
+					value of {\em *this} filter so all the implemented access methods
+					are still functioning.
+					Use this method to set the result value in a derived class in the overriden
+					method \Ref{visit}.
+					@param  result the new result value of {\em *this} filter.
+					@see    visit
+					@see    getResult
+			*/
+			void setResult_(bool result)
+				throw();
+			//@}
 			
   		private:
 
