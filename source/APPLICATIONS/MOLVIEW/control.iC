@@ -1,0 +1,30 @@
+// $Id: control.iC,v 1.1 2000/01/08 12:29:38 oliver Exp $
+
+BALL_INLINE
+void Control::setScene
+  (const Scene &__rScene)
+{
+  __mpScene_ = (Scene *)&__rScene;
+}
+
+BALL_INLINE
+Scene* Control::getScene
+	(void) const
+{
+  return __mpScene_;
+}
+
+BALL_INLINE
+void Control::setMoleculeObjectProcessor
+	(const MoleculeObjectProcessor &__rMoleculeObjectProcessor)
+{
+	__mpMoleculeObjectProcessor_ = (MoleculeObjectProcessor *)&__rMoleculeObjectProcessor;
+}
+
+BALL_INLINE
+MoleculeObjectProcessor* 
+Control::getMoleculeObjectProcessor
+	(void) const
+{
+	return __mpMoleculeObjectProcessor_;
+}
