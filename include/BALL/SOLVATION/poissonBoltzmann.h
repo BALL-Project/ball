@@ -1,4 +1,4 @@
-// $Id: poissonBoltzmann.h,v 1.7 2000/05/04 19:15:09 oliver Exp $ 
+// $Id: poissonBoltzmann.h,v 1.8 2000/12/05 13:01:57 amoll Exp $ 
 // Finite Difference Poisson Boltzmann Solver
 
 #ifndef BALL_SOLVATION_POISSONBOLTZMANN_H
@@ -9,7 +9,7 @@
 #endif
 
 #ifndef BALL_DATATYPE_POINTGRID_H
-#	include <BALL/DATATYPE/pointGrid.h>
+#	include <BALL/DATATYPE/regularData3D.h>
 #endif
 
 #ifndef BALL_KERNEL_SYSTEM_H
@@ -62,7 +62,7 @@ namespace BALL
 			ERROR__CANNOT_CREATE_ATOM_ARRAY,
 
 			/**	Unable to create SAS grid/out of memory.
-					FDPB uses a PointGrid<char> (FDPB::SAS_grid) to describe 
+					FDPB uses a RegularData3D<char> (FDPB::SAS_grid) to describe 
 					whether a point in space is inside the ion exclusion layer.
 					This grid is created by FDPB::setupSASGrid(). On failure
 					this error code is set. It usually indicates a lack of virtual memory.
@@ -70,7 +70,7 @@ namespace BALL
 			ERROR__CANNOT_CREATE_SAS_GRID,
 
 			/**	Unable to create dielectric grid/out of memory.
-					FDPB uses a {\tt PointGrid<float>} (\Ref{FDPB::eps_grid}) to describe the
+					FDPB uses a {\tt RegularData3D<float>} (\Ref{FDPB::eps_grid}) to describe the
 					dielectric constant $\varepsilon$ as a function of space.
 					This grid is created by calling FDPB::setupEpsGrid().
 					It contains the relative dielectric constant between neighbouring grid points.\\
@@ -81,7 +81,7 @@ namespace BALL
 
 			/**	Unable to create grid for the modified Debye Hueckel parameter/out of memory.
 					The modified Debye Hueckel parameter $\bar{\kappa}$ is also a function of
-					space and therefore represented by a PointGrid<float> (FDPB::kappa_grid).
+					space and therefore represented by a RegularData3D<float> (FDPB::kappa_grid).
 					The grid is created by FDPB::setupKappaGrid().\\
 					If the creation of this grid fails due to a alack of virtual memory
 					this error code is set.
@@ -97,7 +97,7 @@ namespace BALL
 			ERROR__CANNOT_CREATE_CHARGE_GRID,
 		
 			/**	Unable to create electrostatic potential grid/out of memory.
-					FDPB::setupPhiGrid() creates a PointGrid<float> (FDPB::phi_grid)
+					FDPB::setupPhiGrid() creates a RegularData3D<float> (FDPB::phi_grid)
 					containing the electrostatic potential as a function of space.
 					If the creation of this grid fails due to a lack of virtual memory,
 					this error code is set.
@@ -727,12 +727,12 @@ namespace BALL
 				The (relative) dielectric constant is unitless.
 				@see	setupEpsGrid
 		*/
-		PointGrid<Vector3>*	eps_grid;
+		RegularData3D<Vector3>*	eps_grid;
 
 		/**	The grid containing the modified Debye Hueckel parameter.
 				@see	setupKappaGrid
 		*/
-		PointGrid<float>*	kappa_grid;
+		RegularData3D<float>*	kappa_grid;
 
 		/**	The grid containing the atom charges (distributed).
 				Each atom's charge is distributed on the grid by setupQGrid, according
@@ -742,7 +742,7 @@ namespace BALL
 				@see	BALL_ELEMENTARY_CHARGE
 				@see	setupQGrid
 		*/
-		PointGrid<float>*	q_grid;
+		RegularData3D<float>*	q_grid;
 
 		/**	The grid containing the electrostatic potential. 
 				Before a calculation this is grid is initialized with
@@ -753,11 +753,11 @@ namespace BALL
 				@see		setupBoundary()
 				@see		solve()
 		*/
-		PointGrid<float>*	phi_grid;
+		RegularData3D<float>*	phi_grid;
 
 		/**	The grid describing the solvent accessible surface of the system.
 		*/
-		PointGrid<char>*	SAS_grid;
+		RegularData3D<char>*	SAS_grid;
 
 		/**	An array containing a fast represenetation of all atoms in the system.
 				@see		FastAtom

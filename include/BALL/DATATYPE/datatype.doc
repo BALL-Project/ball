@@ -1,4 +1,4 @@
-/* $Id: datatype.doc,v 1.7 2000/10/06 12:03:19 oliver Exp $ */
+/* $Id: datatype.doc,v 1.8 2000/12/05 12:58:50 amoll Exp $ */
 
 /**@name	General datastructures
 		This section contains all relevant information on 
@@ -10,7 +10,7 @@
 	*/
 	//@{
 		//@Include: regularData1D.h
-		//@Include: pointGrid.h
+		//@Include: regularData3D.h
 	//@}
 
 	/**	@name	Generic Hash Associative Containers
