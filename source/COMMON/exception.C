@@ -1,4 +1,4 @@
-// $Id: exception.C,v 1.17 2000/10/05 08:42:05 oliver Exp $
+// $Id: exception.C,v 1.18 2000/10/08 23:28:55 amoll Exp $
 
 #include <BALL/COMMON/exception.h>
 #include <BALL/COMMON/logStream.h>
@@ -173,21 +173,6 @@ namespace BALL
 				globalHandler.setMessage(message_);
 			}
 		
-			ReadFileError::ReadFileError(const char* file, int line, const string& message,
-																	 const string& line_contents, int file_line)
-				: GeneralException(file, line, "ReadFileError", "")
-			{
-				message_ = message;
-				message_ += "; last read line number = ";
-				char buf[40];
-				sprintf(buf, "%i", line);
-				message_ += buf;
-				message_ += "\n contents of line: \n";
-				message_ += line_contents;
-
-				globalHandler.setMessage(message_);
-			}
-
 			DEF_EXCEPTION(DivisionByZero, "a division by zero was requested")
 
 			DEF_EXCEPTION(InvalidRange, "the range of the operation was invalid")

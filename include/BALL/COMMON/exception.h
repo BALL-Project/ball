@@ -1,4 +1,4 @@
-// $Id: exception.h,v 1.17 2000/10/03 18:56:17 amoll Exp $
+// $Id: exception.h,v 1.18 2000/10/08 23:28:51 amoll Exp $
    
 #ifndef BALL_COMMON_EXCEPTION_H
 #define BALL_COMMON_EXCEPTION_H
@@ -306,18 +306,6 @@ namespace BALL
 
 			protected:
 			string filename_;
-		};
-
-		/** Exception thrown if a file could not be processed right.
-		*/
-		class ReadFileError
-			: public GeneralException
-		{
-			friend class ReadFile;
-
-			public:
-			ReadFileError(const char* file, int line, const string& message = "",
-										const string& line_contents = "", int file_line = -1);
 		};
 
 		/**
