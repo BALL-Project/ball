@@ -1,10 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: electrostaticPotentialCalculator.C,v 1.3 2002/12/18 16:00:37 sturm Exp $
+// $Id: electrostaticPotentialCalculator.C,v 1.4 2004/05/10 11:47:17 amoll Exp $
 
 #include <BALL/SOLVATION/electrostaticPotentialCalculator.h>
-#include <math.h>
+#include <BALL/STRUCTURE/fragmentDB.h>
 
 namespace BALL
 {
@@ -35,13 +35,15 @@ namespace BALL
 	{
 	}
 
-	void ElectrostaticPotentialCalculator::Apply(System &S)
-		throw()
+	void ElectrostaticPotentialCalculator::apply(System &S)
+		throw(Exception::NullPointer)
 	{
+		if (frag_db_ == 0)
+		{
+			throw(Exception::NullPointer(__FILE__, __LINE__));
+		}
 		mySys_ = S;
 
-		// TODO: This should be controled by much more options...
-		frag_db_ = new FragmentDB;
 		mySys_.apply(frag_db_->normalize_names);
 
 		radii_.setFilename("PARSE.siz");
@@ -95,6 +97,17 @@ namespace BALL
 		
 		return phi_nonloc;
 	}
-}	
 
-	
+	void ElectrostaticPotentialCalculator::setFragmentDB(const FragmentDB* db)
+		throw()
+	{
+		frag_db_ = (FragmentDB*) db;
+	}
+
+	const FragmentDB* ElectrostaticPotentialCalculator::getFragmentDB() const
+		throw()
+	{
+		return frag_db_;
+	}
+
+}	// namespace

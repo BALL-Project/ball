@@ -1,45 +1,35 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: electrostaticPotentialCalculator.h,v 1.8 2003/08/26 08:04:48 oliver Exp $
+// $Id: electrostaticPotentialCalculator.h,v 1.9 2004/05/10 11:47:10 amoll Exp $
 //
 
 #ifndef BALL_SOLVATION_ELECTROSTATICPOTENTIALCALCULATOR_H
 #define BALL_SOLVATION_ELECTROSTATICPOTENTIALCALCULATOR_H
 
-#ifndef BALL_COMMON_H
-# include <BALL/common.h>
-#endif
-
 #ifndef BALL_KERNEL_SYSTEM_H
-# include <BALL/KERNEL/system.h>
+ # include <BALL/KERNEL/system.h>
 #endif
 
 #ifndef BALL_DATATYPE_OPTIONS_H
-# include <BALL/DATATYPE/options.h>
-#endif
-
-#ifndef BALL_STRUCTURE_FRAGMENTDB_H
-# include <BALL/STRUCTURE/fragmentDB.h>
+ # include <BALL/DATATYPE/options.h>
 #endif
 
 #ifndef BALL_STRUCTURE_DEFAULTPROCESSORS_H
-# include <BALL/STRUCTURE/defaultProcessors.h>
-#endif
-
-#ifndef BALL_MOLMEC_COMMON_RADIUSRULEPROCESSOR_H
-# include <BALL/MOLMEC/COMMON/radiusRuleProcessor.h>
+ # include <BALL/STRUCTURE/defaultProcessors.h>
 #endif
 
 namespace BALL
 {
+	class FragmentDB;
+
 	/** This class is used to compute the electrostatic potential for
 	    of a system. It is intended that several different models will
 			be implemented. Right now, the only model is the nonlocal electrostatic
 			potential of a sum of Born ions.
+			Dont forget to set the FragmentDB before using this class.
       \ingroup Solvation
 	 */
-
 	class ElectrostaticPotentialCalculator
 	{
 		BALL_CREATE(ElectrostaticPotentialCalculator)
@@ -85,19 +75,27 @@ namespace BALL
 		 */
 		virtual ~ElectrostaticPotentialCalculator()
 			throw();
+
 		//@}
-		
 		/** @name Assignment
 		 */
 		//@{
 		
 		/** Apply the current model to the System S and prepare everything for a calculation.
+		 		@exception NullPointer if FragmentDB is not set
 		 */
-		void Apply(System &S)
+		void apply(System &S)
+			throw(Exception::NullPointer);
+
+		///
+		void setFragmentDB(const FragmentDB* db)
+			throw();
+
+		///
+		const FragmentDB* getFragmentDB() const
 			throw();
 
 		//@}
-		
 		/** @name Accessors
 		 */
 		//@{
@@ -106,8 +104,8 @@ namespace BALL
 		 */
 		float operator() (const Vector3& pos)
 			throw();
-		//@}
 
+		//@}
 		/** @name Options
 		 */
 		//@{
@@ -117,10 +115,10 @@ namespace BALL
 		Options options;
 
 		//@}
-		
 		/** @name Protected Attributes.
 		 */
 		//_@{
+		protected:
 
 		System mySys_;
 
