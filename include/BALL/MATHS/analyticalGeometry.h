@@ -1,4 +1,4 @@
-// $Id: analyticalGeometry.h,v 1.20 2000/04/03 07:55:27 oliver Exp $
+// $Id: analyticalGeometry.h,v 1.21 2000/04/03 18:12:36 amoll Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -59,7 +59,7 @@ namespace BALL
 		{
 			T* submatrix = new T[dim1 * dim1];
 
-			for (Index i = 0; i < dim; ++i) 
+			for (Index i = 0; i < (Index)dim; ++i) 
 			{
 				for (Index j = 0; j < dim1; ++j) 
 				{
@@ -101,9 +101,7 @@ namespace BALL
 							- BALL_CELL(0,2) * BALL_CELL(1,1) * BALL_CELL(2,0) 
 							- BALL_CELL(0,0) * BALL_CELL(1,2) * BALL_CELL(2,1) 
 							- BALL_CELL(0,1) * BALL_CELL(1,0) * BALL_CELL(2,2)); 
-		} 
-		else 
-		{
+		} else {
 			return GetDeterminant_(m, dim);
 		}
 	}
@@ -165,6 +163,13 @@ namespace BALL
 						- m01 * m10 * m22); 
 	}
 
+	/**	Solve a system of equations of a given size in the form
+		  $a_1 x_1 + b_1 x_2 + .. + N_x x_n = c_1$.
+			@param	m pointer to the factors in the equations
+			@param	x pointer in which the results are stored
+			@param  dim the size of the equation system (number of variables)
+			@return bool {\tt true} if a solution is found
+	*/
 	template <class T>
 	bool SolveSystem(const T* m, T* x, const Size dim)
 	{
@@ -180,11 +185,11 @@ namespace BALL
 			*target++ = *source++;
 		}
 
-		for (i = 0; i < dim; ++i)
+		for (i = 0; i < (Index)dim; ++i)
 		{
 			pivot = BALL_MATRIX_CELL(matrix, dim, i, i);
 			p = i;
-			for (j = i + 1; j < dim; ++j)
+			for (j = i + 1; j < (Index)dim; ++j)
 			{
 				if (Maths::isLess(pivot, BALL_MATRIX_CELL(matrix, dim, j, i)))
 				{
@@ -197,7 +202,7 @@ namespace BALL
 			{
 				T tmp;
 
-				for (k = i; k < dim + 1; ++k)
+				for (k = i; k < (Index)dim + 1; ++k)
 				{
 					tmp = BALL_MATRIX_CELL(matrix, dim, i, k);
 					BALL_MATRIX_CELL(matrix, dim, i, k) = BALL_MATRIX_CELL(matrix, dim, p, k);
@@ -217,7 +222,7 @@ namespace BALL
 				BALL_MATRIX_CELL(matrix, dim, i, j) /= pivot;
 			}
 
-			for (j = i + 1; j < dim; ++j)
+			for (j = i + 1; j < (Index)dim; ++j)
 			{
 				pivot = BALL_MATRIX_CELL(matrix, dim, j, i);
 
@@ -232,7 +237,7 @@ namespace BALL
 		{
 			x[i] = BALL_MATRIX_CELL(matrix, dim, i, dim);
 
-			for (j = i + 1; j < dim; ++j) 
+			for (j = i + 1; j < (Index)dim; ++j) 
 			{
 				x[i] -= BALL_MATRIX_CELL(matrix, dim, i, j) * x[j];	
 			}
@@ -245,6 +250,19 @@ namespace BALL
 
 	#undef BALL_CELL
 
+	/**	Solve a system of two equations of the form
+		  a_1 x_1 + b_1 x_2 = c_1
+		  a_2 x_1 + b_2 x_2 = c_2.
+			@param	a1
+			@param	a2
+			@param	a1 
+			@param	a2
+			@param	c1 
+			@param	c2
+			@param x1 the first solution
+			@param x2 the second solution
+			@return bool {\tt true} if a solution is found
+	*/
 	template <class T>
 	BALL_INLINE 
 	bool SolveSystem2
@@ -263,10 +281,11 @@ namespace BALL
 		return true;
 	}
 
-	/**	Solve a square equation. ???
-			@param	a the 
-			@param	b the 
-			@param	c the 
+	/**	Solve a square equation of the form
+			a x^2 + b x + c = 0.
+			@param	a
+			@param	b 
+			@param	c 
 			@param x1 the first solution
 			@param x2 the second solution
 			@return short the number of solutions (0 - 2)
@@ -276,6 +295,15 @@ namespace BALL
 		(const T& a, const T& b, const T &c,
 		 T &x1, T &x2)
 	{
+		if (a == 0)
+		{
+			if (b == 0)
+			{
+				return 0;
+			}
+			x1 = x2 = c / b;
+			return 1;
+		}
 		T discriminant = b * b - 4 * a * c;
 
 		if (Maths::isLess(discriminant, 0))
@@ -287,9 +315,7 @@ namespace BALL
 			x1 = x2 = -b / (2 * a);
 
 			return 1;
-		} 
-		else 
-		{
+		} else {
 			x1 = (-b + sqrt_discriminant) / (2 * a);
 			x2 = (-b - sqrt_discriminant) / (2 * a);
 
@@ -395,18 +421,14 @@ namespace BALL
 				throw Exception::DivisionByZero(__FILE__, __LINE__);
 			}					
 			return ((a.d % (b.p - a.p)).getLength() / a.d.getLength());
-		} 
-		else 
-		{
+		} else {
 			T spat_product = TVector3<T>::getSpatProduct(a.d, b.d, b.p - a.p);
 
 			if (Maths::isNotZero(spat_product))
 			{ // invariant: windschiefe lines
 				
 				return (Maths::abs(spat_product) / cross_product_length);
-			} 
-			else 
-			{ // invariant: intersecting lines
+			} else { // invariant: intersecting lines
 
 				return 0;
 			}
@@ -546,9 +568,7 @@ namespace BALL
 		if (Maths::isZero(length_product))
 		{
 			return false;
-		} 
-		else 
-		{
+		} else {
 			intersection_angle = asin(Maths::abs(plane.n * Vector3) / sqrt(length_product));
 			
 			return true;
@@ -587,9 +607,7 @@ namespace BALL
 		if (Maths::isZero(length_product))
 		{
 			return false;
-		} 
-		else 
-		{
+		} else {
 			intersection_angle = asin(Maths::abs(plane.n * line.d) / sqrt(length_product));
 			
 			return true;
@@ -662,9 +680,7 @@ namespace BALL
 			point.set(a.p.x + a.d.x * c1, a.p.y + a.d.y * c1, a.p.z + a.d.z * c1);
 			
 			return true;
-		} 
-		else 
-		{
+		} else {
 			return false;
 		}
 	}
@@ -742,19 +758,13 @@ namespace BALL
 				if (SolveSystem2(ab, ac, -ad, bb, bc, -bd, x1, x2) == false)
 				{
 					return false;
-				} 
-				else 
-				{
+				} else {
 					p.set(0, x1, x2);
 				}
-			} 
-			else 
-			{
+			} else {
 				p.set(x1, 0, x2);
 			}
-		} 
-		else 
-		{
+		} else {
 			p.set(x1, x2, 0);
 		}
 
@@ -835,9 +845,7 @@ namespace BALL
 			intersection_circle.set(sphere.p + sphere.radius * Vector3, plane.n, 0);
 
 			return true;
-		} 
-		else 
-		{
+		} else {
 			TVector3<T> Vector3(plane.n);
 
 			Vector3.normalize();
