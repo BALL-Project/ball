@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.8 2003/12/12 15:30:41 amoll Exp $
+// $Id: glRenderer.h,v 1.9 2004/02/12 16:17:40 amoll Exp $
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
 #define BALL_VIEW_RENDERING_GLRENDERER_H
@@ -97,7 +97,7 @@ namespace BALL
 			/** Initialise the display lists.
 			 		This method is called by Scene::initializeGL.
 			*/
-			virtual void init(const Stage& stage)
+			virtual bool init(const Stage& stage, float width, float height)
 				throw();
 
 			/// Set the light sources according to the stage

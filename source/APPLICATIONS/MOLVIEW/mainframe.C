@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.122 2004/02/11 18:52:28 oliver Exp $
+// $Id: mainframe.C,v 1.123 2004/02/12 16:18:57 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -192,11 +192,7 @@ namespace BALL
 		delete fd;
 
 		POVRenderer pr(filename);
-		pr.width  = scene_->width();
-		pr.height = scene_->height(); 
-		pr.init(*(scene_->getStage()));
 		scene_->exportScene(pr);
-		pr.finish();
 	}
 
 	void Mainframe::exportVRML()

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.h,v 1.3 2003/09/04 23:14:14 amoll Exp $
+// $Id: POVRenderer.h,v 1.4 2004/02/12 16:17:39 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_POVRENDERER_H
@@ -53,6 +53,11 @@ namespace BALL
 			POVRenderer(const String& name)
 				throw(Exception::FileNotFound);
 			
+			// Only for Python
+			POVRenderer(const POVRenderer& renderer)
+				throw();
+
+
 			/// Destructor.
 			virtual ~POVRenderer()
 				throw();
@@ -95,7 +100,7 @@ namespace BALL
 			/** Start method. 
 			    This method creates the file and writes the header.
 			 */
-			virtual bool init(const Stage& stage)
+			virtual bool init(const Stage& stage, float width, float height)
 				throw();
 
 			/** Finish method.
@@ -120,14 +125,12 @@ namespace BALL
 				throw();
 			//@}
 
-				Size width, height;
 			protected:
-				
+
 				File outfile_;
 
 				Vector3   origin_;
 				Matrix4x4 rotation_;
-
 		};
   
 	} // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.4 2004/02/08 00:03:39 amoll Exp $
+// $Id: POVRenderer.C,v 1.5 2004/02/12 16:17:25 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -36,11 +36,17 @@ namespace BALL
 		{
 		}
 
+		POVRenderer::POVRenderer(const POVRenderer& renderer)
+			throw()
+			: Renderer(renderer),
+				outfile_(renderer.outfile_)
+		{
+		}
+
+
 		POVRenderer::POVRenderer(const String& name)
 			throw(Exception::FileNotFound)
-			: Renderer(),
-			  width(600),
-				height(600)
+			: Renderer()
 		{
 			outfile_.open(name, std::ios::out);
 		}
@@ -133,14 +139,14 @@ namespace BALL
 
 		// init must be called right before the rendering starts, since
 		// we need to fix the camera, light sources, etc...
-		bool POVRenderer::init(const Stage& stage)
+		bool POVRenderer::init(const Stage& stage, float width, float height)
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG_PROCESSORS
 				Log.info() << "Start the POVRender output..." << std::endl;
 			#endif
 
-			stage_ = &stage;
+			if (!Renderer::init(stage, width, height)) return false;
 
 			outfile_	<< "// POVRay file created by the BALL POVRenderer" 
 								<< std::endl 
@@ -197,7 +203,7 @@ namespace BALL
 //			up_vector += origin_;
 			up_vector  = rotation_ * up_vector;
 			up_vector.normalize();
-			up_vector *= (float)height / (float)width;
+			up_vector *= (float)height_ / (float)width_;
 
 			outfile_ << "\tup       ";
 			output = "<"; output+=String(up_vector.x);

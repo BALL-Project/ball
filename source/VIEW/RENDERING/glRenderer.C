@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.20 2004/01/14 11:24:16 amoll Exp $
+// $Id: glRenderer.C,v 1.21 2004/02/12 16:17:26 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -64,10 +64,10 @@ namespace BALL
 			all_names_ = 0;
 		}
 
-		void GLRenderer::init(const Stage& stage)
+		bool GLRenderer::init(const Stage& stage, float width, float height)
 			throw()
 		{
-			stage_ = &stage;
+			Renderer::init(stage, width, height);
 
 			glFrontFace(GL_CCW);     // selects counterclockwise polygons as front-facing
 			glCullFace(GL_BACK);		 // specify whether front- or back-facing facets can be culled
@@ -123,7 +123,7 @@ namespace BALL
 
 
 			// if displaylists were already calculated, return
-			if (GL_spheres_list_ != 0) return;
+			if (GL_spheres_list_ != 0) return true;
 
 			GL_spheres_list_ = new GLDisplayList[BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE]();
 			GL_tubes_list_   = new GLDisplayList[BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE]();
@@ -132,6 +132,8 @@ namespace BALL
 			createSpheres_();
 			createTubes_();
 			createBoxes_();
+
+			return true;
 		}
 
 

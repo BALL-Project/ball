@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: renderer.h,v 1.3 2003/09/04 23:14:14 amoll Exp $
+// $Id: renderer.h,v 1.4 2004/02/12 16:17:40 amoll Exp $
 
 #ifndef BALL_VIEW_RENDERING_RENDERER_H
 #define BALL_VIEW_RENDERING_RENDERER_H
@@ -66,6 +66,16 @@ namespace BALL
 			*/
 			virtual void clear()
 				throw() {}
+
+			/** Initialisation with the Stage.
+			 		Called by Scene::exportScene().
+			 */
+			virtual bool init(const Stage& stage, float height, float width)
+				throw();
+
+			///
+			virtual bool finish()
+				throw();
 
 			//@}
 			/**	@name	Accessors

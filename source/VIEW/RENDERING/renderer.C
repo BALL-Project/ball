@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: renderer.C,v 1.4 2003/12/15 14:57:47 amoll Exp $
+// $Id: renderer.C,v 1.5 2004/02/12 16:17:26 amoll Exp $
 
 #include <BALL/VIEW/RENDERING/renderer.h>
 #include <BALL/VIEW/KERNEL/stage.h>
@@ -73,6 +73,22 @@ namespace BALL
 			throw() 
 		{ 
 			return stage_ != &RTTI::getDefault<Stage>();
+		}
+
+
+		bool Renderer::init(const Stage& stage, float width, float  height)
+			throw()
+		{
+			stage_ = &stage;
+			width_ = width;
+			height_ = height;
+			return true;
+		}
+
+		bool Renderer::finish()
+			throw()
+		{
+			return true;
 		}
 
 } } // namespaces
