@@ -1,4 +1,4 @@
-// $Id: file.h,v 1.10 2000/07/12 19:42:33 oliver Exp $
+// $Id: file.h,v 1.11 2000/07/12 20:44:41 oliver Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -51,17 +51,17 @@ namespace BALL
 		*/
 		//{
 		/// Open for input (default)
-		static const OpenMode IN;
+		static const OpenMode IN = std::ios::in;
 		/// Open for output
-		static const OpenMode OUT;
+		static const OpenMode OUT = std::ios::out;
 			/// Append. Seek to end before each write operation
-		static const OpenMode APP;
+		static const OpenMode APP = std::ios::app;
 			/// Binary mode
-		static const OpenMode BINARY;
+		static const OpenMode BINARY = std::ios::binary;
 			/// Seek to end directly after opening.
-		static const OpenMode ATE;
+		static const OpenMode ATE = std::ios::ate;
 			/// Truncate an existing file.
-		static const OpenMode TRUNC;
+		static const OpenMode TRUNC = std::ios::trunc;
 		//@}
 
 		/**	@name	Enums
