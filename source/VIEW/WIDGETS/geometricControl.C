@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.15 2003/10/05 15:36:41 amoll Exp $
+// $Id: geometricControl.C,v 1.16 2003/10/15 13:28:38 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -330,7 +330,6 @@ void GeometricControl::updateSelection()
 
 	if (item == 0) 
 	{
-		setStatusbarText("");
 		colorMeshDlg_->setMesh(0,0);
 		return;
 	}
@@ -342,7 +341,6 @@ void GeometricControl::updateSelection()
 
 	if (rep->getComposites().size() == 0) 
 	{
-		setStatusbarText("");
 		return;
 	}
 
