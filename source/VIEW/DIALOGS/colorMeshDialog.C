@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.C,v 1.5 2003/09/19 18:17:57 amoll Exp $
+// $Id: colorMeshDialog.C,v 1.6 2003/09/19 23:36:19 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
@@ -435,14 +435,6 @@ void ColorMeshDialog::loadSettings_()
 			
 	QWidget::update();
 }
-	
-void ColorMeshDialog::setRepresentation(Representation& rep)
-	throw()
-{
-	if (!rep_ == 0) saveSettings_();
-	rep_ = &rep;
-	loadSettings_();
-}
 
 void ColorMeshDialog::onNotify(Message *message)
 	throw()
@@ -459,6 +451,13 @@ void ColorMeshDialog::onNotify(Message *message)
 			if (!rm->getRegularData3D())
 			{
 				invalidateGrid_();
+				return;
+			}
+
+			if (!mesh_) 
+			{
+				grid_ = rm->getRegularData3D();
+				grid_label->setText(rm->getCompositeName());
 				return;
 			}
 			
@@ -485,5 +484,20 @@ void ColorMeshDialog::invalidateGrid_()
 		apply_button->setEnabled(false);
 	}
 }
+
+void ColorMeshDialog::setMesh(Mesh* mesh, Representation* rep)
+	throw()
+{
+	mesh_ = mesh;
+	rep_ = rep;
+	if (!mesh || !rep)
+	{
+		apply_button->setEnabled(false);
+		return;
+	}
+
+	apply_button->setEnabled(grid_);
+}
+
 
 } } // namespaces
