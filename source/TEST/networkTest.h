@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: networkTest.h,v 1.7 2002/12/23 08:26:15 oliver Exp $
+// $Id: networkTest.h,v 1.8 2003/05/08 13:53:39 anhi Exp $
 
 // ugly workaround for Intel C++ 7.0/Linux w/ optimization
 #ifdef __OPTIMIZE__
@@ -40,6 +40,12 @@ class NetworkTest
 	
 	static bool test(const String& hostname, ConnectionType type)
 	{
+#ifdef 		BALL_USE_WINSOCK
+		WORD    wsa_vers = 0x0101;
+		WSADATA wsa_data;
+   
+		WSAStartup(wsa_vers, &wsa_data);	
+#endif
 		bool result = false;
 		typedef int Socket;
 		Socket my_socket;
@@ -54,7 +60,6 @@ class NetworkTest
 			{
 				return false;
 			}  
-
 			my_socket = socket(AF_INET, SOCK_STREAM, 0); 
 			if (my_socket == -1)
 			{
@@ -95,7 +100,9 @@ class NetworkTest
 			
 			result = (connect(my_socket, (struct sockaddr*)&host, sizeof(struct sockaddr)) != -1);
 		}
-
+#ifdef 		BALL_USE_WINSOCK
+		WSACleanup();
+#endif
 		return result;
 	}
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Socket_test.C,v 1.8 2002/12/17 16:40:43 oliver Exp $
+// $Id: Socket_test.C,v 1.9 2003/05/08 13:55:26 anhi Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -28,7 +28,7 @@ void socket_listener(void*)
 	s.get(c);
 }
 
-START_TEST(Socket, "$Id: Socket_test.C,v 1.8 2002/12/17 16:40:43 oliver Exp $")
+START_TEST(Socket, "$Id: Socket_test.C,v 1.9 2003/05/08 13:55:26 anhi Exp $")
 using namespace BALL;
 
 /////////////////////////////////////////////////////////////
@@ -48,6 +48,7 @@ CHECK(simple socket transmission)
 	int result = sio->connect(sock_inet_buf.localhost(), port);
 	STATUS("B:connect = " << result)
 	sio.put((char)123);
+	sio.flush();
 	STATUS("B:done.")
 #else
 	if (fork())

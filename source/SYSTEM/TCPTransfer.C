@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer.C,v 1.25 2002/12/23 08:26:14 oliver Exp $
+// $Id: TCPTransfer.C,v 1.26 2003/05/08 13:55:52 anhi Exp $
 
 // workaround for Solaris -- this should be caught by configure -- OK / 15.01.2002
 #define BSD_COMP
@@ -344,7 +344,11 @@ namespace BALL
 		// receive the rest
 		do
 		{
+#			ifdef BALL_USE_WINSOCK
+			bytes = (int)::recv(socket_, buffer_, BUFFER_SIZE, 0);
+#			else
 			bytes = read(socket_, buffer_, BUFFER_SIZE);
+#			endif
 			if (bytes < 0)
 			{
 				return RECV_ERROR;
@@ -364,11 +368,19 @@ namespace BALL
 	TCPTransfer::Status TCPTransfer::setBlock_(Socket socket, bool block)
 		throw()
 	{
-		int temp = !block;
-
+		
 		// WIN port
 		#ifndef BALL_USE_WINSOCK
+			int temp = !block;
+
 			if (ioctl(socket, FIONBIO, &temp) == -1)
+			{
+				return (Status)CONNECT_ERROR;
+			}
+		#else
+			u_long temp = !block;
+
+			if (ioctlsocket(socket, FIONBIO, &temp) == -1)
 			{
 				return (Status)CONNECT_ERROR;
 			}
@@ -399,7 +411,6 @@ namespace BALL
 			status_ = GETHOSTBYNAME_ERROR;
 			return status_;
 		}  
-
 		if (socket_ != 0)
 		{
 			close(socket_);
@@ -416,27 +427,27 @@ namespace BALL
 		host.sin_family = AF_INET;
 		host.sin_port	  = htons(port_);
 		host.sin_addr 	= *(struct in_addr*)ht->h_addr;  
-		
+
 		if(connect(socket_, (struct sockaddr*)&host, sizeof(struct sockaddr)) == -1)
 		{
 			status_ = CONNECT_ERROR;
 			return status_;
 		}
-		
 		if (!query.isEmpty())
 		{
 			sendData_(query, socket_);
 		}
-
-		received_bytes_ = read(socket_, buffer_, BUFFER_SIZE);
-
+#			ifdef BALL_USE_WINSOCK
+			received_bytes_ = (int)::recv(socket_, buffer_, BUFFER_SIZE, 0);
+#			else
+			received_bytes_ = read(socket_, buffer_, BUFFER_SIZE);
+#			endif
 		if (received_bytes_ < 0)
 		{
 			status_ = RECV_ERROR;
 			return status_;
 		}
 		buffer_[received_bytes_] = '\0';
-		
 		#ifdef DEBUG
 			output_();
 		#endif
@@ -492,7 +503,6 @@ namespace BALL
 			status_ = SEND_ERROR;
 			return status_;
 		}
-
 		return (Status)OK;
 	}
 
@@ -505,7 +515,11 @@ namespace BALL
 		timer.start();
 		while (timer.getClockTime() < seconds)
 		{
+#			ifdef BALL_USE_WINSOCK
+			received_bytes_ = (int)::recv(socket_, buffer_, BUFFER_SIZE, 0);
+#			else
 			received_bytes_ = read(socket_, buffer_, BUFFER_SIZE);
+#			endif
 			if (received_bytes_ > 0)
 			{
 				buffer_[received_bytes_] = '\0';
@@ -549,7 +563,11 @@ namespace BALL
 		timer.start();
 		do		
 		{	
+#			ifdef BALL_USE_WINSOCK
+			received_bytes_ = (int)::recv(socket_, buffer_, BUFFER_SIZE, 0);
+#			else
 			received_bytes_ = read(socket_, buffer_, BUFFER_SIZE);
+#			endif
 			if (received_bytes_ > 0)
 			{
 				buffer_[received_bytes_] = '\0';
@@ -638,7 +656,6 @@ namespace BALL
 		{
 			return status_;
 		}
-
 		// we will use a passive connection
 		query = "PASV\n";
 		sendData_(query, socket_);	
@@ -704,7 +721,6 @@ namespace BALL
 			return status_;
 		}
 		setBlock_(socket2, false);
-		
 		// ----------------------------------- setting binary mode
 		query = "TYPE I\n";
 		sendData_(query, socket_);	
@@ -740,7 +756,12 @@ namespace BALL
 		int bytes = -1;
 		while (control_bytes < 1 && bytes != 0)
 		{			
+#			ifdef BALL_USE_WINSOCK
+			bytes = (int)::recv(socket2, buffer_, BUFFER_SIZE, 0);
+#			else
 			bytes = read(socket2, buffer_, BUFFER_SIZE);
+#			endif
+
 			if (bytes > 0)
 			{
 				for (Position i = 0; i < (Position)bytes; i++)
@@ -749,8 +770,11 @@ namespace BALL
 				}
 				received_bytes_ += bytes;
 			}
-			
+#			ifdef BALL_USE_WINSOCK
+			control_bytes = (int)::recv(socket_, buffer_, BUFFER_SIZE, 0);
+#			else
 			control_bytes = read(socket_, buffer_, BUFFER_SIZE);
+#			endif			
 			#ifdef DEBUG
 				if (control_bytes > 0)
 				{	
@@ -761,7 +785,6 @@ namespace BALL
 			#endif
 		}
 		// im moment noch kein zeitabbruch	
-		
 		
 		// we dont need the second socket anymore
 		close(socket2);

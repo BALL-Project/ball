@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: socket.C,v 1.29 2002/12/23 09:16:36 oliver Exp $
+// $Id: socket.C,v 1.30 2003/05/08 13:55:05 anhi Exp $
 
 // stupid workaround for Intel C++ 7.0/Linux w/ optimization enabled
 #ifdef __OPTIMIZE__
@@ -487,11 +487,17 @@ namespace BALL
 		}
 		
 		int	rval;
+#		ifdef BALL_USE_WINSOCK
+		if ((rval = (int)::recv(rep->sock, (char*) buf, len, 0)) == -1)
+		{
+			errnoError_("SocketBuf::read()");
+		}
+#		else
 		if ((rval = (int)::read(rep->sock, (char*) buf, len)) == -1)
 		{
 			errnoError_("SocketBuf::read()");
 		}
-
+#endif
 		return (rval==0) ? EOF: rval;
 	}
 
@@ -543,12 +549,21 @@ namespace BALL
 		int	wlen=0;
 		while(len>0) 
 		{
+#			ifdef BALL_USE_WINSOCK
+			int	wval;
+			if ((wval = (int)::send (rep->sock, (char*) buf, len, 0)) == -1) 
+			{
+				errnoError_("SocketBuf::write()");
+				return wval;
+			}
+#			else
 			int	wval;
 			if ((wval = (int)::write (rep->sock, (char*) buf, len)) == -1) 
 			{
 				errnoError_("SocketBuf::write()");
 				return wval;
 			}
+#endif
 
 			len -= wval;
 			wlen += wval;
