@@ -1,4 +1,4 @@
-// $Id: TextPersistenceManager_test.C,v 1.4 2002/01/09 02:17:04 oliver Exp $
+// $Id: TextPersistenceManager_test.C,v 1.5 2002/01/09 03:02:39 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(TextPersistenceManager, "$Id: TextPersistenceManager_test.C,v 1.4 2002/01/09 02:17:04 oliver Exp $")
+START_TEST(TextPersistenceManager, "$Id: TextPersistenceManager_test.C,v 1.5 2002/01/09 03:02:39 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -64,8 +64,8 @@ CHECK(TextPersistenceManager::writeHeader(const char* type_name, const char* nam
 	ofstream os(filename.c_str(), ios::out);
 	TextPersistenceManager pm;
 	pm.setOstream(os);
-	pm.writeHeader("TYPENAME1", "NAME", (PointerSizeInt)123456678);
-	pm.writeHeader("TYPENAME2", (const char*)0, (PointerSizeInt)345667890);
+	pm.writeHeader("TYPENAME1", "NAME", (PointerSizeInt)12345678);
+	pm.writeHeader("TYPENAME2", (const char*)0, (PointerSizeInt)34567890);
 	os.close();
 	TEST_FILE(filename.c_str(), "data/TextPersistenceManager_test.writeHeader.txt", false)
 RESULT
@@ -76,7 +76,7 @@ CHECK(TextPersistenceManager::checkHeader(const char* type_name, const char* nam
 	TextPersistenceManager pm;
 	pm.setIstream(is);
 	PointerSizeInt ptr;
-	bool result = pm.checkHeader("TYPENAME", "NAME", ptr);
+	bool result = pm.checkHeader("TYPENAME1", "NAME", ptr);
 	TEST_EQUAL(result, true)
 	TEST_EQUAL(ptr, 12345678)
 	result = pm.checkHeader("TYPENAME2", (const char*)0, ptr);
@@ -115,7 +115,7 @@ CHECK(TextPersistenceManager::checkTrailer(const char* name = 0))
 	TEST_EQUAL(result, true)
 	result = pm.checkTrailer((const char*)0);
 	TEST_EQUAL(result, false)
-	result = pm.checkTrailer((const char*)0);
+	result = pm.checkTrailer("TMP");
 	TEST_EQUAL(result, false)
 	is.close();
 RESULT
