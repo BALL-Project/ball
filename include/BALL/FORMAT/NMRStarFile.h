@@ -103,7 +103,7 @@ namespace BALL
 
 	/** @name	NMRStarFile.
 			This class is designed to read a NMR-Star-File.
-			To read a file simpy use the NMRStarFile(char* filename)- Konstruktor.
+			To read a file simpy use the NMRStarFile(const String filename)- Konstruktor.
 			All usefall data are extracted and stored.
 			To get access to the data use getData().
 			{\bf Definition:} \URL{BALL/NMR/NMRStarFile.h}
@@ -117,7 +117,7 @@ namespace BALL
 			/** Detailled constuctor.
 					Opens the given file and extracts all usefull data.
 			*/
-			NMRStarFile(char* filename);
+			NMRStarFile(const String filename);
 
 			/** Get the maiximum number of atoms in all shift sets
 			*/
