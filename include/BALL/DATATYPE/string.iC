@@ -1,4 +1,4 @@
-// $Id: string.iC,v 1.5 1999/11/30 19:47:16 oliver Exp $
+// $Id: string.iC,v 1.6 1999/12/19 17:34:00 oliver Exp $
 
 BALL_INLINE 
 bool String::operator == (const char *char_ptr) const
@@ -439,6 +439,7 @@ unsigned char String::toUnsignedChar() const
 BALL_INLINE 
 short String::toShort() const
 {
+	errno = 0;
   short s = (short)atoi(c_str());
 
 	if (errno == ERANGE)
@@ -452,6 +453,7 @@ short String::toShort() const
 BALL_INLINE 
 unsigned short String::toUnsignedShort() const
 {
+	errno = 0;
   unsigned short us = (unsigned short)atoi(c_str());
 
   if (errno == ERANGE)
@@ -465,6 +467,7 @@ unsigned short String::toUnsignedShort() const
 BALL_INLINE
 int String::toInt() const
 {
+	errno = 0;
   int i = atoi(c_str());
 
   if (errno == ERANGE)
@@ -478,6 +481,7 @@ int String::toInt() const
 BALL_INLINE 
 unsigned int String::toUnsignedInt() const
 {
+	errno = 0;
   unsigned int ui = (unsigned int)strtoul(c_str(), (char **)0, 10);
 
   if (errno == ERANGE)
@@ -491,6 +495,7 @@ unsigned int String::toUnsignedInt() const
 BALL_INLINE 
 long String::toLong() const
 {
+	errno = 0;
   long l = atol(c_str());
 
   if (errno == ERANGE)
@@ -504,6 +509,7 @@ long String::toLong() const
 BALL_INLINE 
 unsigned long String::toUnsignedLong() const
 {
+	errno = 0;
   unsigned long ul = strtoul(c_str(), (char **)0, 10);
 
   if (errno == ERANGE)
@@ -517,6 +523,7 @@ unsigned long String::toUnsignedLong() const
 BALL_INLINE 
 float String::toFloat() const
 {
+	errno = 0;
   float f = (float)atof(c_str());
 
   if (errno == ERANGE)
@@ -530,6 +537,7 @@ float String::toFloat() const
 BALL_INLINE 
 double String::toDouble() const
 {
+	errno = 0;
   double d = atof(c_str());
 
   if (errno == ERANGE)
