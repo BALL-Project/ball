@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.71 2004/11/27 10:58:11 amoll Exp $
+// $Id: molecularStructure.C,v 1.72 2004/11/27 11:37:57 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -155,7 +155,8 @@ namespace BALL
 			charmm_dialog_.setCharmmFF(charmm_);
 			charmm_dialog_.accept();
 
-			use_amber_= true; // use amber force field by default
+			// use amber force field by default
+			chooseAmberFF();
 		}
 
 		MolecularStructure::~MolecularStructure()
@@ -809,7 +810,9 @@ namespace BALL
 
 		ForceField& MolecularStructure::getForceField() throw()
 		{
-			return ((use_amber_) ? reinterpret_cast<ForceField&>(amber_) : reinterpret_cast<ForceField&>(charmm_));
+			return ((use_amber_) ? 
+						reinterpret_cast<ForceField&>(amber_) : 
+						reinterpret_cast<ForceField&>(charmm_));
 		}
 
 		void MolecularStructure::fetchPreferences(INIFile& inifile)
@@ -819,6 +822,17 @@ namespace BALL
 			md_dialog_.readPreferences(inifile);
 			amber_dialog_.fetchPreferences(inifile);
 			charmm_dialog_.fetchPreferences(inifile);
+			if (inifile.hasEntry("FORCEFIELD", "selected"))
+			{
+				if (inifile.getValue("FORCEFIELD", "selected") == "AMBER")
+				{
+					chooseAmberFF();
+				}
+				else
+				{
+					chooseCharmmFF();
+				}
+			}
 		}
 
 
@@ -829,6 +843,15 @@ namespace BALL
 			md_dialog_.writePreferences(inifile);
 			amber_dialog_.writePreferences(inifile);
 			charmm_dialog_.writePreferences(inifile);
+			inifile.appendSection("FORCEFIELD");
+			if (use_amber_)
+			{
+				inifile.insertValue("FORCEFIELD", "selected", "AMBER");
+			}
+			else
+			{
+				inifile.insertValue("FORCEFIELD", "selected", "CHARMM");
+			}
 		}
 
 
@@ -911,7 +934,14 @@ namespace BALL
 			}
 			// Remember which force field was selected and update the force field's 
 			// settings from the appropriate dialog.
-			use_amber_ = minimization_dialog_.getUseAmber();
+			if (minimization_dialog_.getUseAmber())
+			{
+				chooseAmberFF();
+			}
+			else
+			{
+				chooseCharmmFF();
+			}
 			charmm_dialog_.accept();
 			amber_dialog_.accept();
 
@@ -1051,7 +1081,14 @@ namespace BALL
 			}
 
 			// Get the force field.
-			use_amber_ = md_dialog_.getUseAmber();
+			if (md_dialog_.getUseAmber())
+			{
+				chooseAmberFF();
+			}
+			else
+			{
+				chooseCharmmFF();
+			}
 			ForceField& ff = getForceField();
 
 			// set up the force field
