@@ -1,4 +1,4 @@
-// $Id: global.h,v 1.4 2000/06/27 23:10:56 oliver Exp $
+// $Id: global.h,v 1.5 2000/10/18 12:39:03 oliver Exp $
 
 #ifndef BALL_COMMON_GLOBAL_H
 #define BALL_COMMON_GLOBAL_H
@@ -8,6 +8,7 @@
 #endif
 
 #include <limits.h>
+#include <time.h>
 
 #if defined(BALL_LOG_MEMORY) && !defined(BALL_COMMON_MEMORY_H)
 #	include <BALL/COMMON/memory.h>
@@ -49,6 +50,12 @@ namespace BALL
 			Variables of type Size are unsigned.
 	*/
 	typedef BALL_SIZE_TYPE 	Size;
+
+	/**	Time type.
+			Use this type to represent a point in time
+			(as a replaecement for time_t).
+	*/
+	typedef time_t 	Time;
 
 	/**	HashIndex type.
 			Use this type to access the result of a hash functions. All hash functions
