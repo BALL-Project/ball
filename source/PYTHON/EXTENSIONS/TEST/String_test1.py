@@ -1,7 +1,7 @@
 #! python
 from ClassTest import *
 
-START_TEST(String,"$Id: String_test1.py,v 1.1 2003/04/20 16:40:18 oliver Exp $")
+START_TEST(String,"$Id: String_test1.py,v 1.2 2003/04/21 12:33:39 oliver Exp $")
 
 CHECK('String::String()')
 s = String()
@@ -47,109 +47,67 @@ TEST_EQUAL((non_empty == "Halla"), false)
 TEST_EQUAL((non_empty == non_empty.c_str()), true)
 RESULT()
 
-#String hall("Hall")
-#String halloh("Halloh")
-#CHECK('String::operator == (String&)')
-#	TEST_EQUAL((empty == non_empty), false)
-#	TEST_EQUAL((empty == empty), true)
-#	TEST_EQUAL((non_empty == non_empty), true)
-#	TEST_EQUAL((non_empty == hall), false)
-#	TEST_EQUAL((non_empty == halloh), false)
-#RESULT()
-#
-#CHECK('String::create(bool, bool)')
-#	s2 = (String*)(halloh.create(true, false))
-#	TEST_EQUAL(*s2, halloh)
-#	delete s2
-#	s2 = (String*)(halloh.create(false, false))
-#	TEST_EQUAL(*s2, halloh)
-#	delete s2
-#	s2 = (String*)(halloh.create(true, true))
-#	TEST_EQUAL(*s2, "")
-#	delete s2
-#	s2 = (String*)(halloh.create(false, true))
-#	TEST_EQUAL(*s2, "")
-#	delete s2
-#RESULT()
-#
-#CHECK('String::String(String&, Index, Size)')
-#	s2 = String(halloh, 2, 4)
-#	TEST_EQUAL(*s2, "lloh")
-#	delete s2
-#	s2 = String(halloh, 4, 2)
-#	TEST_EQUAL(*s2, "oh")
-#	delete s2
-#	s2 = String(halloh, 3)
-#	TEST_EQUAL(*s2, "loh")
-#	delete s2
-#	s2 = String(halloh, -2)
-#	TEST_EQUAL(*s2, "oh")
-#	delete s2
-#	s2 = String(halloh, 0, 0)
-#	TEST_EQUAL(*s2, "")
-#	delete s2
-#	s2 = String(halloh, -1)
-#	TEST_EQUAL(*s2, "h")
-#	delete s2
-#	s2 = 0
-#	TEST_EXCEPTION(Exception::IndexOverflow, s2 = String(halloh, 1, 7))
-#	if (s2 != 0)
-#		delete s2
-#RESULT()
-#
-#CHECK('String::String(const char*, Index, Size)')
-#	s2 = String("halloh")
-#	TEST_EQUAL(*s2, "halloh")
-#	delete s2
-#	s2 = String("halloh", 1)
-#	TEST_EQUAL(*s2, "alloh")
-#	delete s2
-#	s2 = String("halloh", 1, 2)
-#	TEST_EQUAL(*s2, "al")
-#	delete s2
-#	s2 = String("halloh", -1, 0)
-#	TEST_EQUAL(*s2, "")
-#	delete s2
-#	s2 = String("halloh", -5)
-#	TEST_EQUAL(*s2, "alloh")
-#	delete s2
-#	s2 = String("halloh", 2, 3)
-#	TEST_EQUAL(*s2, "llo")
-#	delete s2
-#	s2 = 0
-#	TEST_EXCEPTION(Exception::IndexOverflow, s2 = String("halloh", 0, 8))
-#	if (s2 != 0)
-#		delete s2
-#	s2 = 0
-#	TEST_EXCEPTION(Exception::IndexUnderflow, s2 = String("halloh", -12))
-#	if (s2 != 0)
-#		delete s2
-#RESULT()
-#
-#CHECK('String::String(Size, char*, ... )')
-#	s2 = String(15, "%s", "halloh")
-#	TEST_EQUAL(*s2, "halloh")
-#	delete s2
-#	s2 = String(2, "%s", "halloh")
-#	TEST_EQUAL(*s2, "h")
-#	delete s2
-#	s2 = String(15, "%3.1f", 1.2)
-#	TEST_EQUAL(*s2, "1.2")
-#	delete s2
-#	s2 = 0
-#	TEST_EXCEPTION(Exception::IndexUnderflow, s2 = String(0, "%s", "Halloh"))
-#	if (s2 != 0)
-#	{
-#		delete s2
-#	}
-#	s2 = 0
-#	TEST_EXCEPTION(Exception::NullPointer, s2 = String(15, (char*)0, "Halloh", 1.5, 1.2))
-#	if (s2 != 0)
-#	{
-#		delete s2
-#	}
-#RESULT()
-#
+hall = String("Hall")
+halloh = String("Halloh")
+CHECK('String::operator == (String&)')
+TEST_EQUAL((empty == non_empty), false)
+TEST_EQUAL((empty == empty), true)
+TEST_EQUAL((non_empty == non_empty), true)
+TEST_EQUAL((non_empty == hall), false)
+TEST_EQUAL((non_empty == halloh), false)
+RESULT()
+
+CHECK('String::String(String&, Index, Size)')
+s2 = String(halloh, 2, 4)
+TEST_EQUAL(s2, "lloh")
+
+s2 = String(halloh, 4, 2)
+TEST_EQUAL(s2, "oh")
+
+s2 = String(halloh, 3)
+TEST_EQUAL(s2, "loh")
+
+s2 = String(halloh, -2)
+TEST_EQUAL(s2, "oh")
+
+s2 = String(halloh, 0, 0)
+TEST_EQUAL(s2, "")
+
+s2 = String(halloh, -1)
+TEST_EQUAL(s2, "h")
+
+try:
+	s2 = String(halloh, 1, 7)
+	FAIL()
+except:
+	pass
+RESULT()
+
+CHECK('String::String(const char*, Index, Size)')
+s2 = String("halloh")
+TEST_EQUAL(s2, "halloh")
+s2 = String("halloh", 1)
+TEST_EQUAL(s2, "alloh")
+s2 = String("halloh", 1, 2)
+TEST_EQUAL(s2, "al")
+s2 = String("halloh", -1, 0)
+TEST_EQUAL(s2, "")
+s2 = String("halloh", -5)
+TEST_EQUAL(s2, "alloh")
+s2 = String("halloh", 2, 3)
+TEST_EQUAL(s2, "llo")
+try:
+	s2 = String("halloh", 0, 8)
+	FAIL()
+except:
+	pass
+try:
+	s2 = String("halloh", -12)
+	FAIL()
+except:
+	pass
+RESULT()
+
 #CHECK('String::String(stringstream)')
 ##ifdef BALL_HAS_SSTREAM
 #	std::stringstream instream("ABC DEF")
