@@ -1,4 +1,4 @@
-// $Id: periodicBoundary.C,v 1.14 2001/01/26 15:00:27 anker Exp $
+// $Id: periodicBoundary.C,v 1.15 2001/02/21 14:35:04 anker Exp $
 
 #include <BALL/MOLMEC/COMMON/periodicBoundary.h>
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -123,44 +123,48 @@ namespace BALL
 	}
 
 	// Accessor for updating the positions of the molecules:
-	// If the center of gravity of a molecules lies outside the box of the periodic boundary,
-	// the molecule is moved according to the periodic boundary conditions.
+	// If the center of gravity of a molecule lies outside the box of the
+	// periodic boundary, the molecule is moved according to the periodic
+	// boundary conditions.
 	void PeriodicBoundary::updateMolecules()
 	{
+		// the mass of a molecule
 		float mass;
+		// the mass of one atom according to its type
 		float atomic_mass;
+		// the center of gravity of one molecule
 		Vector3 center_of_gravity;
+		// the atoms of the system
 		AtomVector& atom = const_cast<AtomVector&>(force_field_->getAtoms());
+		// 
 		float shift_x = box_.b.x - box_.a.x;
 		float shift_y = box_.b.y - box_.a.y;
 		float shift_z = box_.b.z - box_.a.z;
+		// flag indicating the need of a shift
 		bool shift;
+		// the actual translation which has to be performed
 		Vector3 translation;
 
 		AtomIndexArray::iterator it = molecules_.begin();
 
 		// Iterate over all molecules stored in molecule_
-		for ( ; it != molecules_.end() ; ++it) 
+		for (; it != molecules_.end(); ++it) 
 		{
 			mass = 0;
-			center_of_gravity.x = 0;
-			center_of_gravity.y = 0;
-			center_of_gravity.z = 0;
 			shift = false;
-			translation.x = 0;
-			translation.y = 0;
-			translation.z = 0;
+			center_of_gravity.clear();
+			translation.clear();
 
-			// Iterate over all atoms of the molecule and calculate the center of gravity 
-			for (Size i = (*it).first; i < (*it).second ; i++) 
+			// Iterate over all atoms of the molecule and calculate the center of
+			// gravity 
+
+			for (Size i = it->first; i < it->second; i++) 
 			{
 				atomic_mass = atom[i]->getElement().getAtomicWeight();
 				mass += atomic_mass;
 				center_of_gravity += (atom[i]->getPosition() * atomic_mass);
 			}  
-
 			center_of_gravity /= mass;
-
 
 			// Test if the center of gravity is outside the box and determine 
 			// the translation (according to the periodic boundary definition)
@@ -202,21 +206,24 @@ namespace BALL
 			// Translate the atoms of the molecule if it has to be shifted
 			if (shift) 
 			{
-				for (Size i = (*it).first; i < (*it).second ; i++) 
+				for (Size i = it->first; i < it->second; i++) 
 				{
 					// BAUSTELLE: debugging code
 					Log.info() << "PerBound: translating molecule " 
-							<< atom[i]->getFullName() << "/" << i << " by " << translation << endl;
+						<< atom[i]->getFullName() << "/" << i << " by " 
+						<< translation << endl;
 					atom[i]->setPosition(atom[i]->getPosition() + translation);
 				}
 			}
 		}
 	}
 
+
+	// Periodic boundary is enabled:
+	// Generate molecules_ with the start and end indices of the atoms of the
+	// molecules in atom_. 
 	Size PeriodicBoundary::generateMoleculesVector()
 	{
-		// Periodic boundary is enabled:
-		// Generate molecules_ with the start and end indices of the atoms of the molecules in atom_. 
 		vector<Atom*>::const_iterator it = force_field_->getAtoms().begin();
 		Molecule* old_molecule = (*it)->getMolecule();
 		Molecule* new_molecule;
@@ -226,7 +233,7 @@ namespace BALL
 
 		molecules_.clear();
 
-		for ( ; it != force_field_->getAtoms().end() ; ++it, ++end) 
+		for (; it != force_field_->getAtoms().end(); ++it, ++end) 
 		{
 			new_molecule = (*it)->getMolecule();
 			if (new_molecule != old_molecule) 
@@ -425,7 +432,7 @@ namespace BALL
 
 		// Insert the atoms of the solute into the hash grid
 		AtomIterator atom_it = system->beginAtom();
-		for ( ; +atom_it; ++atom_it) 
+		for (; +atom_it; ++atom_it) 
 		{
 			solute_grid.insert(atom_it->getPosition(), &*atom_it);
 		}
