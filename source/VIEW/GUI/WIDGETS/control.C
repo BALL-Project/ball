@@ -1,4 +1,4 @@
-// $Id: control.C,v 1.7.4.6 2002/11/27 23:30:06 oliver Exp $
+// $Id: control.C,v 1.7.4.7 2002/11/28 17:13:07 amoll Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/control.h>
 #include <qpopupmenu.h>
@@ -266,7 +266,7 @@ void Control::filterSelection_(Filter& filter)
 			{
 				composite->host(filter);
 				
-				if (filter == true)
+				if (filter)
 				{
 					selected_.push_back(composite);
 				}
