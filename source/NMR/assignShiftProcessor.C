@@ -1,4 +1,4 @@
-// $Id: assignShiftProcessor.C,v 1.22 2000/12/17 09:39:40 amoll Exp $
+// $Id: assignShiftProcessor.C,v 1.23 2001/07/17 00:42:07 oliver Exp $
 
 #include <BALL/NMR/assignShiftProcessor.h>
 #include <BALL/KERNEL/atom.h>
@@ -182,12 +182,7 @@ namespace BALL
 		if (shift_table_.has(full_name))
 		{
 			patom->setProperty(ShiftModule::PROPERTY__SHIFT, shift_table_[full_name]);
-			Log.info() << "atom found " << full_name << endl;
 		}
-		else 
-		{
-			Log.info() << "AssignShiftProcessor: entry not found: " << full_name << endl;   
-		}               
 
 		return Processor::CONTINUE;
 	}
