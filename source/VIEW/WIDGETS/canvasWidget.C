@@ -109,8 +109,8 @@ namespace BALL
       //if((visHeigth != 0 ) && ( visWidth!=0))
       if((conWidth !=0.) && (conHeight!=0.))
       {
-      	xfactor = width()/conWidth;
-	yfactor = height()/conHeight;
+      	xfactor = (float)width()/(float)conWidth;
+				yfactor = (float)height()/(float)conHeight;
 	//xfactor = conWidth/width();
 	//yfactor = conHeight/height();
       }

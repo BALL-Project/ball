@@ -12,8 +12,10 @@ namespace BALL
       : DockWidget(parent,"Dockable RegularData1D Widget"),
         canWidget_(data, this)
     {
-       canWidget_.createPolygon();
        setGuest(canWidget_);
+       canWidget_.createPolygon();
+			 getWidget().resize(size());
+			 canWidget_.zoomToFit();
     }
 
     /*  DockableRegularData1DWidget::DockableRegularData1DWidget(QWidget *parent)
