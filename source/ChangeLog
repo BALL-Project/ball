@@ -1,4 +1,46 @@
+1.0a (bugfix 1): 30.07.2001
+---------------------------
+Bugs fixed:
+	- genericPDBFile: assigned incorrect element if the element columns did not
+    contain a valid element symbol
+  - FileSystem: canonizePath expanded ../../ to .., thus leading to problems with
+    relative paths for in File and derived classes (PDBFile, HINFile, etc.)
+  - APPLICATIONS/PB: Makefile used incorrect linker options correctly on Tru64
+  - configure: did not abort if neither gethostname, nor sysinfo were found 
+    (see unfixed bug below)
+  - FragmentDB::AddHydrogensProcessor caused a core dump for residues where
+    only one reference atom was available (e.g. water)
+
+Known, but not fixed:
+  - Expression does not evaluate all bracketed expressions correctly
+  - configure causes some problems on Tru64 (fails to find gethostname)
+    Workaround: in BALL/source type "touch config/configure.in;make configure" 
+      and proceed as usual. The problem is probably somehow caused by some 
+			incompatibility between certain autoconf versions and some Tru64 header
+      header files, but I couldn't nail it down yet...
+
+Added, changed: 
+  - ResidueChecker: checks for overlapping atoms and duplicate atom names in a residue
+  - Test for FileSystem
+  - Python support functional (though still experimental, requires a patched version of SIP-2.5pre4, available
+    from the BALL website). Recommended for seasoned Python veterans only.
+  - BALL exceptions are know derived from std::exception
+  - added fragment for Zinc (ZN.db)
+  - The interface of GeneralException was slightly modified to achieve compatibility
+    with the Python wrapper classes
+  - The interface of RegularData2D::getMinValue/getMaxValue has changed
+  - The interface of Object has changed (ever so slightly)
+  - Changed the GridIndex typed of RegularData2D and RegularData3D (towards a more consistent IF)
+  - The structure of ResidueChecker was modified to make way for a more modular design
+    in the future
+ 
+
+1.0a: 19.07.2001
+------------------
+  Way to many changes to enumerate here....
+
 0.95a: 05.05.2000
+-----------------
 		New:
 			- tutorial (at least a beginning)
 			- support for Tru64 Unix with Compaq C++ 6.2, Solaris 8
