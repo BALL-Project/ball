@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: secondaryStructure.C,v 1.21 2003/08/26 09:17:50 oliver Exp $
+// $Id: secondaryStructure.C,v 1.21.2.1 2004/05/22 16:21:32 amoll Exp $
 //
 
 #include <BALL/KERNEL/secondaryStructure.h>
@@ -54,6 +54,7 @@ namespace BALL
   {
     pm.writeObjectHeader(this, name);
       AtomContainer::persistentWrite(pm);
+			pm.writePrimitive((Index)type_, "type_");
     pm.writeObjectTrailer(name);
 	}
 
@@ -63,6 +64,9 @@ namespace BALL
     pm.checkObjectHeader(RTTI::getStreamName<AtomContainer>());
 			AtomContainer::persistentRead(pm);
     pm.checkObjectTrailer(0);
+		Index type;
+ 		pm.readPrimitive(type, "type_");
+		type_ = (Type) type;
 	}
  
 	void SecondaryStructure::set(const SecondaryStructure& secondary_structure, bool deep)
