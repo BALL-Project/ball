@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.64 2005/02/21 21:36:46 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.65 2005/02/24 14:52:46 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -3280,7 +3280,7 @@ AC_DEFUN(CF_VIEW, [
 		else
 			AC_MSG_RESULT(yes)
 			AC_MSG_CHECKING(uic version)
-			UIC_VERSION=`${UIC} -version 2>&1 | ${TR} -d "()" | ${SED} "s/.*version //"`
+			UIC_VERSION=`${UIC} -version 2>&1 | ${GREP} version | ${TR} -d "()" | ${SED} "s/.*version //"`
 			AC_MSG_RESULT(${UIC_VERSION})
 			
 			if test "${UIC_VERSION}" != "${QT_VERSION_STR}" ; then

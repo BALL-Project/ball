@@ -5910,7 +5910,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  BALL_HAS_INLINE_TPL_ARGS=yes
+  BALL_HAS_INLINE_TPL_ARGS=true
 
 else
   echo "$as_me: failed program was:" >&5
@@ -5918,8 +5918,17 @@ sed 's/^/| /' conftest.$ac_ext >&5
 
 fi
 rm -f conftest.$ac_objext conftest.$ac_ext
-	echo "$as_me:$LINENO: result: $BALL_HAS_INLINE_TPL_ARGS" >&5
-echo "${ECHO_T}$BALL_HAS_INLINE_TPL_ARGS" >&6
+	if test "${BALL_HAS_INLINE_TPL_ARGS}" = true ; then
+		echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+		cat >>confdefs.h <<\_ACEOF
+#define BALL_HAS_INLINE_TPL_ARGS 1
+_ACEOF
+
+	else
+		echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+	fi
 
 
 	echo "$as_me:$LINENO: checking for ANSI compliant iostream" >&5
@@ -19765,7 +19774,7 @@ echo "$as_me: error: Aborted." >&2;}
 echo "${ECHO_T}yes" >&6
 			echo "$as_me:$LINENO: checking uic version" >&5
 echo $ECHO_N "checking uic version... $ECHO_C" >&6
-			UIC_VERSION=`${UIC} -version 2>&1 | ${TR} -d "()" | ${SED} "s/.*version //"`
+			UIC_VERSION=`${UIC} -version 2>&1 | ${GREP} version | ${TR} -d "()" | ${SED} "s/.*version //"`
 			echo "$as_me:$LINENO: result: ${UIC_VERSION}" >&5
 echo "${ECHO_T}${UIC_VERSION}" >&6
 
