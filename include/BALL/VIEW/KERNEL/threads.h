@@ -134,6 +134,9 @@ namespace VIEW
 			*/
 			void setUpdateRunning(bool state) { update_vis_running_ = state;}
 
+			///
+			void exportSceneToPNG();
+
 			protected:
 
 			/// Provokes an update of the Scene with rebuild of the display-lists

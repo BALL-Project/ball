@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.22 2004/06/25 14:37:16 amoll Exp $
+// $Id: common.h,v 1.23 2004/07/01 12:27:32 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -71,8 +71,8 @@ namespace BALL
 		*/
 		enum EventsIDs
 		{
-			/// see SceneUpdateEvent
-			SCENE_UPDATE_EVENT = 60000,
+			///
+			SCENE_EXPORTPNG_EVENT = 60000,
 
 			/// see Mainframe::SimulationThreadFinished
 			SIMULATION_THREAD_FINISHED_EVENT,
