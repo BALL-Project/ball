@@ -1,4 +1,4 @@
-// $Id: bitVector.C,v 1.20 2000/11/13 15:27:40 anker Exp $
+// $Id: bitVector.C,v 1.21 2000/11/24 02:12:25 amoll Exp $
 
 #include <BALL/DATATYPE/bitVector.h>
 #include <BALL/MATHS/common.h>
@@ -9,31 +9,6 @@ using namespace std;
 
 namespace BALL 
 {
-
-	Bit::Bit() throw()
-		: bitvector_(0),
-			index_(0)
-	{
-	}
-
-	Bit::Bit(const BitVector& bit_vector, Index index) 
-		throw()
-		:	bitvector_((BitVector *)&bit_vector),
-			index_(index)
-	{
-	}
-
-	Bit::~Bit()
-		throw()
-	{
-		clear();
-	}
-
-	void Bit::clear() throw()
-	{
-		bitvector_ = 0;
-		index_ = 0;
-	}
 
 	const Size BitVector::BlockSize = BALL_BLOCK_BITS;
 
