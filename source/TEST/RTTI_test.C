@@ -1,4 +1,4 @@
-// $Id: RTTI_test.C,v 1.8 2000/08/30 19:59:16 oliver Exp $
+// $Id: RTTI_test.C,v 1.9 2001/06/23 02:23:32 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +10,12 @@
 #include <BALL/KERNEL/secondaryStructure.h>
 ///////////////////////////
 
-START_TEST(RTTI, "$Id: RTTI_test.C,v 1.8 2000/08/30 19:59:16 oliver Exp $")
+template <typename T>
+class TC
+{
+};
+
+START_TEST(RTTI, "$Id: RTTI_test.C,v 1.9 2001/06/23 02:23:32 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -188,8 +193,13 @@ CHECK(getName<>())
 RESULT
 
 CHECK(getStreamName<>())
-// there is not much to check - each damned compiler 
-// tries his own demangling!
+	// there is not much to check - each damned compiler 
+	// tries his own demangling!
+	TEST_EQUAL(getStreamName<float>(), String("float"))
+	TEST_EQUAL(getStreamName<Index>(), String("BALL::Index"))
+	TEST_EQUAL(getStreamName<bool>(), String("bool"))
+	TEST_EQUAL(getStreamName<char>(), String("char"))
+	TEST_EQUAL(getStreamName<TC<float> >(), String("TC<float>"))
 	TEST_EQUAL(getStreamName<Protein>(), String("BALL::Protein"))
 	TEST_EQUAL(getStreamName<Atom>(), String("BALL::Atom"))
 	TEST_EQUAL(getStreamName<System>(), String("BALL::System"))
