@@ -1,4 +1,4 @@
-// $Id: forceField.C,v 1.25 2001/06/26 02:38:12 oliver Exp $
+// $Id: forceField.C,v 1.26 2001/12/14 01:14:53 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
 
@@ -319,12 +319,39 @@ namespace BALL
 	// Returns the number of atoms stored in the vector atoms_
 	Size ForceField::getNumberOfAtoms() const
 	{
+		// if the force field is invalid, there's not much we can do
+		if (!isValid())
+		{
+			return 0;
+		}
+
 		return (Size)atoms_.size();
 	}
 
 	// Returns the number of movable (non-fixed) atoms stored in the vector atoms_
 	Size ForceField::getNumberOfMovableAtoms() const
 	{
+		// if the force field is invalid, there's not much we can do
+		if (!isValid())
+		{
+			return 0;
+		}
+
+		// check whether the selection changed since the last call
+		// to update and call update otherwise
+		if (update_time_stamp_.isOlderThan(system_->getSelectionTime()))
+		{
+			// Call update if the selection time stamp changed since
+			// the last call to update. This ensures consistency of
+			// the selection information in pair lists, bond lists, etc.
+			// Also make sure the movable atoms are still in the front
+			// of the atom vevtor.
+			// we have to do a bit of nasty casting to hide this, but that's OK here --
+			// it still is *kind of* const :-)
+			const_cast<ForceField*>(this)->sortSelectedAtomVector_();
+			const_cast<ForceField*>(this)->update();
+		}
+		
 		return number_of_movable_atoms_;
 	}
 
@@ -389,7 +416,7 @@ namespace BALL
 		use_selection_ = system_->containsSelection();
 
 		// check whether the selection changed since the last call
-		// to update and call update oterwise
+		// to update and call update otherwise
 		if (update_time_stamp_.isOlderThan(system_->getSelectionTime()))
 		{
 			// Call update if the selection time stamp changed since
@@ -458,6 +485,7 @@ namespace BALL
 			// Call update if the selection time stamp changed since
 			// the last call to update. This ensures consistency of
 			// the selection information in pair lists, bond lists, etc.
+			sortSelectedAtomVector_();
 			update();
 		}
 
