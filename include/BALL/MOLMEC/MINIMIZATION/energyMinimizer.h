@@ -1,4 +1,4 @@
-// $Id: energyMinimizer.h,v 1.17 2000/10/05 22:29:53 oliver Exp $
+// $Id: energyMinimizer.h,v 1.18 2000/11/08 15:33:48 amoll Exp $
 // Energy Minimizer: A class for minimizing the energy of molecular systems
 
 #ifndef BALL_MOLMEC_MINIMIZATION_ENERGYMINIMIZER_H
@@ -53,23 +53,23 @@ namespace BALL
 		*/
 		//@{
 
-		/**     Option names
+		/**   Option names
 		*/
 		struct Option
 		{
-			/**     Maximal number of iterations
+			/** Maximal number of iterations
 			*/
 			static const char* MAXIMAL_NUMBER_OF_ITERATIONS;
 
-			/**     Energy output frequency
+			/** Energy output frequency
 			*/
 			static const char* ENERGY_OUTPUT_FREQUENCY;
 
-			/**    Trajectory ouput frequency 
+			/** Trajectory ouput frequency 
 			*/
 			static const char* SNAPSHOT_FREQUENCY;
 
-			/**    Number of iteration 
+			/** Number of iteration 
 			*/
 			static const char* NUMBER_OF_ITERATION;
 
@@ -94,19 +94,19 @@ namespace BALL
 
 		struct Default
 		{
-			/**     Maximal number of iterations
+			/** Maximal number of iterations
 			*/
 			static Size MAXIMAL_NUMBER_OF_ITERATIONS;
 
-			/**     Energy output frequency
+			/** Energy output frequency
 			*/
 			static Size ENERGY_OUTPUT_FREQUENCY;
 
-			/**    Snapshot frequency 
+			/** Snapshot frequency 
 			*/
 			static Size SNAPSHOT_FREQUENCY;
 
-			/**    Number of iteration 
+			/** Number of iteration 
 			*/
 			static Size NUMBER_OF_ITERATION;
 
@@ -196,7 +196,6 @@ namespace BALL
 		*/
 		bool	setup(ForceField& force_field, SnapShotManager *ssm,
                                                      const Options& options);
-
 		/**	Sets up the energy minimizer.
 		*/
 		bool	setup(ForceField& force_field, const Options& options);
@@ -350,7 +349,7 @@ namespace BALL
 
 		/** Set the energy difference bound for convergence 
 		*/
-		void  	setEnergyDifferenceBound(float energy_difference_bound);
+		void  setEnergyDifferenceBound(float energy_difference_bound);
 
 		/**	Get the energy difference bound
 		*/
@@ -366,14 +365,13 @@ namespace BALL
     */
     float getMaxGradient() const;
 
-
-		/**     Set the maximal shift value
+		/** Set the maximal shift value
 		*/
-		void    setMaximalShift( float maximal_shift );
+		void  setMaximalShift( float maximal_shift );
 
-		/**     Get the maximal shift value
+		/** Get the maximal shift value
 		*/
-		float   getMaximalShift( void ) const;
+		float getMaximalShift( void ) const;
 
 		/**	Set the snapshot frequency
 		*/
