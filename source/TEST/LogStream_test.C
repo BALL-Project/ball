@@ -1,4 +1,4 @@
-// $Id: LogStream_test.C,v 1.12 2001/05/11 00:23:28 amoll Exp $
+// $Id: LogStream_test.C,v 1.13 2001/06/24 17:08:30 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 #include <BALL/MATHS/common.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: LogStream_test.C,v 1.12 2001/05/11 00:23:28 amoll Exp $")
+START_TEST(class_name, "$Id: LogStream_test.C,v 1.13 2001/06/24 17:08:30 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -264,24 +264,10 @@ CHECK(filterLines(const int min_level = LogStreamBuf::MIN_LEVEL, const int max_l
 	liste.clear();	
 RESULT
 
+// this tests a problem I (Andreas M.) accountered with long strings
+// as attributes for Log.error.
 CHECK(special)
-//kein fehler!!!:
-/*
-String out;
-for (int i=0; i< 200; i++)
-{
-	out+="a";
-	//Log.error() << i << endl;
-	Log.error() << out << endl;
-}
-*/
-
-//fehler:
-//String test="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-//Log.error() << test << endl;
-
-//fehler:
-Log.error()	<< "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" << endl;
+	Log.error()	<< "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" << endl;
 RESULT
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
