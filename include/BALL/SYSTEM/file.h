@@ -1,4 +1,4 @@
-// $Id: file.h,v 1.22 2001/02/26 00:23:29 amoll Exp $
+// $Id: file.h,v 1.23 2001/03/07 17:32:17 anker Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -479,6 +479,10 @@ namespace BALL
 
 
 	/** Helper class for data conversion.	\\
+			BinaryFileAdaptors are used to read and write binary data from and to
+			streams. This is done by reading the member {\tt data} as a byte stream
+			through an explicit cast and utilizing the stream read() and write() 
+			functions.\\
 			{\bf Definition:} \URL{BALL/SYSTEM/file.h} \\
 	*/
 	template <typename T>
@@ -490,11 +494,11 @@ namespace BALL
 		/// @name Constructors and destructor
 		//@{
 
-		///
+		/// Default constructor
 		BinaryFileAdaptor()
 			throw();
 
-		///
+		/// Detailed constructor
 		BinaryFileAdaptor(const T& data)
 			throw();
 
@@ -502,11 +506,21 @@ namespace BALL
 		///@name Accessors
 		//@{
 
-		///
+		/** Sets the member {\tt data} to the desired value.
+				@param data data of type T
+		*/
+		void setData(const T& data)
+			throw();
+
+		/** Returns a const reference to the data stored in the adaptor
+				@return a const reference to {\tt data}
+		*/
 		const T& getData() const
 			throw();
 
-		///
+		/** Returns a mutable reference to the data stored in the adaptor
+				@return a mutable reference to {\tt data}
+				*/
 		T& getData()
 			throw();
 
@@ -514,7 +528,7 @@ namespace BALL
 
 		protected:
 
-		//_
+		//_ The member data.
 		T data_;
 
 	};
@@ -551,6 +565,7 @@ namespace BALL
 		return data_;
 	}
 
+	/// Output stream for BinaryFileAdaptors
 	template <typename T>
 	std::ostream& operator << (std::ostream& os, const BinaryFileAdaptor<T>& data)
 	{
@@ -558,6 +573,7 @@ namespace BALL
 		return os;
 	}
 
+	/// Input stream for BinaryFileAdaptors
 	template <typename T>
 	std::istream& operator >> (std::istream& is, BinaryFileAdaptor<T>& data)
 	{
