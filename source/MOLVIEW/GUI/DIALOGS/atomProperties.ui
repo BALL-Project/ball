@@ -11,8 +11,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>364</width>
-            <height>315</height>
+            <width>365</width>
+            <height>350</height>
         </rect>
     </property>
     <property stdset="1">
@@ -43,73 +43,13 @@
         <class>QLabel</class>
         <property stdset="1">
             <name>name</name>
-            <cstring>TextLabel2</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>10</x>
-                <y>40</y>
-                <width>70</width>
-                <height>21</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>type name:</string>
-        </property>
-    </widget>
-    <widget>
-        <class>QLabel</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>TextLabel3</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>10</x>
-                <y>70</y>
-                <width>70</width>
-                <height>21</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>element:</string>
-        </property>
-    </widget>
-    <widget>
-        <class>QLabel</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>TextLabel8</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>10</x>
-                <y>100</y>
-                <width>70</width>
-                <height>21</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>radius:</string>
-        </property>
-    </widget>
-    <widget>
-        <class>QLabel</class>
-        <property stdset="1">
-            <name>name</name>
             <cstring>TextLabel4</cstring>
         </property>
         <property stdset="1">
             <name>geometry</name>
             <rect>
                 <x>10</x>
-                <y>130</y>
+                <y>160</y>
                 <width>70</width>
                 <height>21</height>
             </rect>
@@ -123,13 +63,141 @@
         <class>QLabel</class>
         <property stdset="1">
             <name>name</name>
+            <cstring>TextLabel8</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>10</x>
+                <y>130</y>
+                <width>70</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>text</name>
+            <string>radius:</string>
+        </property>
+    </widget>
+    <widget>
+        <class>QLabel</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>TextLabel3</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>10</x>
+                <y>100</y>
+                <width>70</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>text</name>
+            <string>element:</string>
+        </property>
+    </widget>
+    <widget>
+        <class>QPushButton</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>apply_button</cstring>
+        </property>
+        <property stdset="1">
+            <name>enabled</name>
+            <bool>false</bool>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>60</x>
+                <y>300</y>
+                <width>100</width>
+                <height>34</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>text</name>
+            <string>apply</string>
+        </property>
+    </widget>
+    <widget>
+        <class>QPushButton</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>close_button</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>210</x>
+                <y>300</y>
+                <width>100</width>
+                <height>34</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>text</name>
+            <string>cancel</string>
+        </property>
+        <property stdset="1">
+            <name>default</name>
+            <bool>true</bool>
+        </property>
+    </widget>
+    <widget>
+        <class>QLabel</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>TextLabel6</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>10</x>
+                <y>250</y>
+                <width>70</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>text</name>
+            <string>force:</string>
+        </property>
+    </widget>
+    <widget>
+        <class>QLabel</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>TextLabel5</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>10</x>
+                <y>220</y>
+                <width>70</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>text</name>
+            <string>velocity:</string>
+        </property>
+    </widget>
+    <widget>
+        <class>QLabel</class>
+        <property stdset="1">
+            <name>name</name>
             <cstring>TextLabel7</cstring>
         </property>
         <property stdset="1">
             <name>geometry</name>
             <rect>
                 <x>10</x>
-                <y>160</y>
+                <y>190</y>
                 <width>70</width>
                 <height>21</height>
             </rect>
@@ -151,40 +219,40 @@
         <class>QLabel</class>
         <property stdset="1">
             <name>name</name>
-            <cstring>TextLabel5</cstring>
+            <cstring>TextLabel2</cstring>
         </property>
         <property stdset="1">
             <name>geometry</name>
             <rect>
                 <x>10</x>
-                <y>190</y>
+                <y>40</y>
                 <width>70</width>
                 <height>21</height>
             </rect>
         </property>
         <property stdset="1">
             <name>text</name>
-            <string>velocity:</string>
+            <string>type name:</string>
         </property>
     </widget>
     <widget>
         <class>QLabel</class>
         <property stdset="1">
             <name>name</name>
-            <cstring>TextLabel6</cstring>
+            <cstring>TextLabel2_2</cstring>
         </property>
         <property stdset="1">
             <name>geometry</name>
             <rect>
                 <x>10</x>
-                <y>220</y>
+                <y>70</y>
                 <width>70</width>
                 <height>21</height>
             </rect>
         </property>
         <property stdset="1">
             <name>text</name>
-            <string>force:</string>
+            <string>type:</string>
         </property>
     </widget>
     <widget>
@@ -207,13 +275,29 @@
         <class>QLineEdit</class>
         <property stdset="1">
             <name>name</name>
-            <cstring>type_edit</cstring>
+            <cstring>type_name_edit</cstring>
         </property>
         <property stdset="1">
             <name>geometry</name>
             <rect>
                 <x>90</x>
                 <y>40</y>
+                <width>260</width>
+                <height>21</height>
+            </rect>
+        </property>
+    </widget>
+    <widget>
+        <class>QLineEdit</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>type_edit</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>90</x>
+                <y>70</y>
                 <width>260</width>
                 <height>21</height>
             </rect>
@@ -229,7 +313,7 @@
             <name>geometry</name>
             <rect>
                 <x>90</x>
-                <y>70</y>
+                <y>100</y>
                 <width>260</width>
                 <height>21</height>
             </rect>
@@ -245,7 +329,7 @@
             <name>geometry</name>
             <rect>
                 <x>90</x>
-                <y>100</y>
+                <y>130</y>
                 <width>260</width>
                 <height>21</height>
             </rect>
@@ -261,7 +345,7 @@
             <name>geometry</name>
             <rect>
                 <x>90</x>
-                <y>130</y>
+                <y>160</y>
                 <width>260</width>
                 <height>21</height>
             </rect>
@@ -281,7 +365,7 @@
             <name>geometry</name>
             <rect>
                 <x>90</x>
-                <y>160</y>
+                <y>190</y>
                 <width>260</width>
                 <height>21</height>
             </rect>
@@ -305,7 +389,7 @@
             <name>geometry</name>
             <rect>
                 <x>90</x>
-                <y>190</y>
+                <y>220</y>
                 <width>260</width>
                 <height>21</height>
             </rect>
@@ -325,58 +409,10 @@
             <name>geometry</name>
             <rect>
                 <x>90</x>
-                <y>220</y>
+                <y>250</y>
                 <width>260</width>
                 <height>21</height>
             </rect>
-        </property>
-    </widget>
-    <widget>
-        <class>QPushButton</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>apply_button</cstring>
-        </property>
-        <property stdset="1">
-            <name>enabled</name>
-            <bool>false</bool>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>60</x>
-                <y>270</y>
-                <width>100</width>
-                <height>34</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>apply</string>
-        </property>
-    </widget>
-    <widget>
-        <class>QPushButton</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>close_button</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>210</x>
-                <y>270</y>
-                <width>100</width>
-                <height>34</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>cancel</string>
-        </property>
-        <property stdset="1">
-            <name>default</name>
-            <bool>true</bool>
         </property>
     </widget>
 </widget>
@@ -400,7 +436,7 @@
         <slot>changed()</slot>
     </connection>
     <connection>
-        <sender>type_edit</sender>
+        <sender>type_name_edit</sender>
         <signal>textChanged(const QString&amp;)</signal>
         <receiver>AtomPropertiesData</receiver>
         <slot>changed()</slot>
@@ -413,6 +449,12 @@
     </connection>
     <connection>
         <sender>charge_edit</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>AtomPropertiesData</receiver>
+        <slot>changed()</slot>
+    </connection>
+    <connection>
+        <sender>element_box</sender>
         <signal>textChanged(const QString&amp;)</signal>
         <receiver>AtomPropertiesData</receiver>
         <slot>changed()</slot>

@@ -20,7 +20,8 @@ AtomProperties::AtomProperties( Atom* atom, QWidget* parent,  const char* name, 
 			atom_(atom)
 {
 	name_edit->setText(atom_->getName().c_str());
-	type_edit->setText(atom_->getTypeName().c_str());
+	type_edit->setText(String(atom_->getType()).c_str());
+	type_name_edit->setText(atom_->getTypeName().c_str());
 	charge_edit->setText(String(atom_->getCharge()).c_str());
 	radius_edit->setText(String(atom_->getRadius()).c_str());
 	position_edit->setText((String("(") + 
@@ -44,10 +45,10 @@ AtomProperties::AtomProperties( Atom* atom, QWidget* parent,  const char* name, 
 		element = PTE.getElement(nr);
 		if (element == Element::UNKNOWN) break;
 
-		element_box->insertItem(element.getName().c_str());
+		element_box->insertItem(element.getSymbol().c_str());
 	}
 
-	element_box->setCurrentItem(atom->getElement().getAtomicNumber());
+	element_box->setCurrentText(atom->getElement().getSymbol().c_str());
 
 	apply_button->setEnabled(false);
 	show();
@@ -78,7 +79,8 @@ void AtomProperties::applyClicked()
 	try
 	{
 		atom_->setName(String(name_edit->text()));
-		atom_->setTypeName(String(type_edit->text()));
+		atom_->setType(String(type_edit->text()).toShort());
+		atom_->setTypeName(String(type_name_edit->text()));
 		atom_->setCharge(String(charge_edit->text()).toFloat());
 		atom_->setRadius(String(radius_edit->text()).toFloat());
 		atom_->setElement(PTE[(String(element_box->currentText()))]);

@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form interface generated from reading ui file 'atomProperties.ui'
 **
-** Created: Tue Dec 10 16:07:37 2002
+** Created: Tue Dec 10 17:33:58 2002
 **      by:  The User Interface Compiler (uic)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -27,15 +27,19 @@ public:
     AtomPropertiesData( QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
     ~AtomPropertiesData();
 
-    QLabel* TextLabel7;
-    QLabel* TextLabel6;
-    QLabel* TextLabel5;
+    QLabel* TextLabel1;
     QLabel* TextLabel4;
     QLabel* TextLabel8;
     QLabel* TextLabel3;
+    QPushButton* apply_button;
+    QPushButton* close_button;
+    QLabel* TextLabel6;
+    QLabel* TextLabel5;
+    QLabel* TextLabel7;
     QLabel* TextLabel2;
-    QLabel* TextLabel1;
+    QLabel* TextLabel2_2;
     QLineEdit* name_edit;
+    QLineEdit* type_name_edit;
     QLineEdit* type_edit;
     QComboBox* element_box;
     QLineEdit* radius_edit;
@@ -43,8 +47,6 @@ public:
     QLineEdit* position_edit;
     QLineEdit* velocity_edit;
     QLineEdit* force_edit;
-    QPushButton* close_button;
-    QPushButton* apply_button;
 
 public slots:
     virtual void applyClicked();
