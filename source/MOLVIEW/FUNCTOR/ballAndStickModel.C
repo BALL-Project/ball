@@ -1,4 +1,4 @@
-// $Id: ballAndStickModel.C,v 1.7 2000/06/18 16:33:37 hekl Exp $
+// $Id: ballAndStickModel.C,v 1.8 2000/06/25 19:06:35 hekl Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/ballAndStickModel.h>
 
@@ -13,24 +13,21 @@ namespace BALL
 		AddBallAndStickModel::AddBallAndStickModel
 			()
 				: 
-				BaseModelProcessor(),
+				AtomBondModelBaseProcessor(),
 				ball_radius_((Real)0.4),
 				stick_radius_((Real)0.2),
-				ball_and_stick_(true),
-				used_atoms_()
+				ball_and_stick_(true)
 		{
-			setProperty(GeometricObject::PROPERTY__MODEL_BALL_AND_STICK);
 		}
 
 		AddBallAndStickModel::AddBallAndStickModel
 			(const AddBallAndStickModel &add_ball_and_stick,
 			 bool deep)
 				:
-				BaseModelProcessor(add_ball_and_stick, deep),
+				AtomBondModelBaseProcessor(add_ball_and_stick, deep),
 				ball_radius_(add_ball_and_stick.ball_radius_),
 				stick_radius_(add_ball_and_stick.stick_radius_),
-				ball_and_stick_(add_ball_and_stick.ball_and_stick_),
-				used_atoms_()
+				ball_and_stick_(add_ball_and_stick.ball_and_stick_)
 		{
 		}
 
@@ -49,21 +46,22 @@ namespace BALL
 		AddBallAndStickModel::clear
 			()
 		{
-			BaseModelProcessor::clear();
+			AtomBondModelBaseProcessor::clear();
 
 			ball_radius_ = (Real)0.4;
 			stick_radius_ = (Real)0.2;
 			ball_and_stick_ = true;
-
-			used_atoms_.clear();
 		}
 
 		void 
 		AddBallAndStickModel::destroy
 			()
 		{
-			BaseModelProcessor::destroy();
-			used_atoms_.destroy();
+			AtomBondModelBaseProcessor::destroy();
+
+			ball_radius_ = (Real)0.4;
+			stick_radius_ = (Real)0.2;
+			ball_and_stick_ = true;
 		}
 
 		void 
@@ -71,7 +69,7 @@ namespace BALL
 			(const AddBallAndStickModel &add_ball_and_stick,
 			 bool deep)
 		{
-			BaseModelProcessor::set(add_ball_and_stick, deep);
+			AtomBondModelBaseProcessor::set(add_ball_and_stick, deep);
 
 			ball_radius_ = add_ball_and_stick.ball_radius_;
 			stick_radius_ = add_ball_and_stick.stick_radius_;
@@ -99,7 +97,7 @@ namespace BALL
 		AddBallAndStickModel::swap
 			(AddBallAndStickModel &add_ball_and_stick)
 		{
-			BaseModelProcessor::swap(add_ball_and_stick);
+			AtomBondModelBaseProcessor::swap(add_ball_and_stick);
 
 			Real temp__Real = ball_radius_;
 			ball_radius_ = add_ball_and_stick.ball_radius_;
@@ -142,105 +140,20 @@ namespace BALL
 		AddBallAndStickModel::start
 			()
 		{
-			used_atoms_.clear();
+			// init model connector
+			getModelConnector()->setProperties(*this);
+			getModelConnector()->setProperty(String("STICK_RADIUS"), (float)stick_radius_);
+			getModelConnector()->setProperty(String("BALL_RADIUS"), (float)ball_radius_);
 
-			return BaseModelProcessor::start();
+			return AtomBondModelBaseProcessor::start();
 		}
 				
 		bool 
 		AddBallAndStickModel::finish
 			()
 		{
-			// generate StickPrimitives
-			Atom *first__pAtom = 0;
-			Atom *second__pAtom = 0;
-			Bond *__pBond = 0;
-			AtomBondIterator bond__Iterator;
-			ColorRGBA first__ColorRGBA;
-			ColorRGBA second__ColorRGBA;
-
-			List<Atom*>::Iterator list_iterator;
-
-			// for all used atoms
-			for (list_iterator = used_atoms_.begin();
-					 list_iterator != used_atoms_.end(); ++list_iterator)
-			{
-				first__pAtom = *list_iterator;
-
-				// for all bonds connected from first- to second atom
-				BALL_FOREACH_ATOM_BOND(*first__pAtom, bond__Iterator)
-				{
-					__pBond = &(*bond__Iterator);
-					
-					second__pAtom = __pBond->getSecondAtom();
-
-					// use only atoms with greater handles than first atom
-					if (*first__pAtom < *second__pAtom)
-					{
-						// remove all models append to bond
-						getSearcher_().clearProperty(GeometricObject::PROPERTY__MODEL_BALL_AND_STICK);				
-						removeGeometricObjects_(*__pBond, true);
-
-						// search for BallAndStick representants
-						getSearcher_().setProperty(GeometricObject::PROPERTY__MODEL_BALL_AND_STICK);
-						second__pAtom->applyChild(getSearcher_());
-
-						// if found, build a Tube between them
-						if (getSearcher_().geometricObjectsFound() == true)
-						{
-							// get colors from both atoms
-							first__pAtom->host(*getColorCalculator());
-							first__ColorRGBA = getColorCalculator()->getColor();
-							
-							second__pAtom->host(*getColorCalculator());
-							second__ColorRGBA = getColorCalculator()->getColor();
-							
-							// if both colors are identical
-							if (first__ColorRGBA == second__ColorRGBA)
-							{
-								// generate single colored tube
-								Tube *__pTube = createTube_();
-								
-								BALL_PRECONDITION
-									(__pTube != 0,
-									 BALL_MOLVIEW_BALLANDSTICKMODEL_ERROR_HANDLER
-									 (AddBallAndStickModel::ERROR__CANNOT_CREATE_TUBE));
-								
-								__pTube->PropertyManager::set(*this);
-								__pTube->setRadius(stick_radius_);
-								__pTube->setVertex1Address(first__pAtom->getPosition());
-								__pTube->setVertex2Address(second__pAtom->getPosition());
-								__pTube->setColor(first__ColorRGBA);
-								
-								__pBond->Composite::appendChild(*__pTube);
-							}
-							else
-							{
-								// generate two colored tube
-								TwoColoredTube *__pTwoColoredTube = createTwoColoredTube_();
-								
-								BALL_PRECONDITION
-									(__pTwoColoredTube != 0,
-									 BALL_MOLVIEW_BALLANDSTICKMODEL_ERROR_HANDLER
-									 (AddBallAndStickModel::ERROR__CANNOT_CREATE_2CTUBE));
-								
-								__pTwoColoredTube->PropertyManager::set(*this);
-								__pTwoColoredTube->setRadius(stick_radius_);
-								__pTwoColoredTube->setVertex1Address(first__pAtom->getPosition());
-								__pTwoColoredTube->setVertex2Address(second__pAtom->getPosition());
-								__pTwoColoredTube->setColor1(first__ColorRGBA);
-								__pTwoColoredTube->setColor2(second__ColorRGBA);
-								
-								__pBond->Composite::appendChild(*__pTwoColoredTube);
-							}
-						}
-					}
-				}
-			}
+			buildBondModels_();
 			
-			// clear search model
-			getSearcher_().clearProperty(GeometricObject::PROPERTY__MODEL_BALL_AND_STICK);
-
 			return true;
 		}
 				
@@ -267,7 +180,11 @@ namespace BALL
 				 BALL_MOLVIEW_BALLANDSTICKMODEL_ERROR_HANDLER
 				 (AddBallAndStickModel::ERROR__CANNOT_CREATE_SPHERE));
 
+			// carry on selected flag
+			__pSphere->Selectable::set(*atom);
+
 			__pSphere->PropertyManager::set(*this);
+			__pSphere->PropertyManager::setProperty(GeometricObject::PROPERTY__MODEL_BALL_AND_STICK);
 
 			if (ball_and_stick_ == true)
 			{
@@ -288,7 +205,7 @@ namespace BALL
 			composite.appendChild(*__pSphere);
 
 			// collect used atoms
-			used_atoms_.push_back(atom);
+			insertAtom_(atom);
 
 			return Processor::CONTINUE;
 		}
@@ -302,7 +219,7 @@ namespace BALL
 			BALL_DUMP_DEPTH(s, depth);
 			BALL_DUMP_HEADER(s, this, this);
 
-			BaseModelProcessor::dump(s, depth + 1);
+			AtomBondModelBaseProcessor::dump(s, depth + 1);
 
 			BALL_DUMP_DEPTH(s, depth);
 			s << "ball radius: " << ball_radius_ << endl;

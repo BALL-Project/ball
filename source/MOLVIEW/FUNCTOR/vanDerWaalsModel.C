@@ -1,4 +1,4 @@
-// $Id: vanDerWaalsModel.C,v 1.5 2000/06/18 16:33:38 hekl Exp $
+// $Id: vanDerWaalsModel.C,v 1.6 2000/06/25 19:06:36 hekl Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/vanDerWaalsModel.h>
 
@@ -13,16 +13,15 @@ namespace BALL
 		AddVanDerWaalsModel::AddVanDerWaalsModel
 			()
 				:
-				BaseModelProcessor()
+				AtomBondModelBaseProcessor()
 		{
-			setProperty(GeometricObject::PROPERTY__MODEL_VDW);
-		}
+ 		}
 
 		AddVanDerWaalsModel::AddVanDerWaalsModel
 			(const AddVanDerWaalsModel &__rAddVanDerWaalsModel,
 			 bool deep)
 				:
-				BaseModelProcessor(__rAddVanDerWaalsModel, deep)
+				AtomBondModelBaseProcessor(__rAddVanDerWaalsModel, deep)
 		{
 		}
 
@@ -41,7 +40,7 @@ namespace BALL
 		AddVanDerWaalsModel::clear
 			()
 		{
-			BaseModelProcessor::clear();
+			AtomBondModelBaseProcessor::clear();
 
 			setProperty(GeometricObject::PROPERTY__MODEL_VDW);
 		}
@@ -50,22 +49,25 @@ namespace BALL
 		AddVanDerWaalsModel::destroy
 			()
 		{
-			BaseModelProcessor::destroy();
+			AtomBondModelBaseProcessor::destroy();
 		}
 
 		bool 
 		AddVanDerWaalsModel::start
 			()
 		{
-			getSearcher_().setProperty(GeometricObject::PROPERTY__MODEL_VDW);
+			// init model connector
+			getModelConnector()->setProperties(*this);
 
-			return BaseModelProcessor::start();
+			return AtomBondModelBaseProcessor::start();
 		}
 				
 		bool 
 		AddVanDerWaalsModel::finish
 			()
 		{
+			buildBondModels_();
+
 			return true;
 		}
 				
@@ -91,7 +93,11 @@ namespace BALL
 				 BALL_MOLVIEW_VANDERWAALSMODEL_ERROR_HANDLER
 				 (AddVanDerWaalsModel::ERROR__CANNOT_CREATE_SPHERE));
 
+			// carry on selected flag
+			__pSphere->Selectable::set(*atom);
+
 			__pSphere->PropertyManager::set(*this);
+			__pSphere->PropertyManager::setProperty(GeometricObject::PROPERTY__MODEL_VDW);
 			__pSphere->setRadius((atom->getElement()).getVanDerWaalsRadius());
 			__pSphere->setVertexAddress(atom->getPosition());
 
@@ -101,7 +107,37 @@ namespace BALL
 			
 			composite.appendChild(*__pSphere);
 			
+			insertAtom_(atom);
+			
 			return Processor::CONTINUE;
+		}
+
+		void 
+		AddVanDerWaalsModel::dump
+			(ostream& s, Size depth) const
+		{
+			BALL_DUMP_STREAM_PREFIX(s);
+			
+			BALL_DUMP_DEPTH(s, depth);
+			BALL_DUMP_HEADER(s, this, this);
+
+			AtomBondModelBaseProcessor::dump(s, depth + 1);
+
+			BALL_DUMP_STREAM_SUFFIX(s);
+		}
+
+		void 
+		AddVanDerWaalsModel::read
+			(istream & /* s */)
+		{
+			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
+		}
+
+		void 
+		AddVanDerWaalsModel::write
+			(ostream & /* s */) const
+		{
+			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		Sphere *

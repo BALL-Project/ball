@@ -1,4 +1,4 @@
-// $Id: lineModel.C,v 1.6 2000/06/18 16:33:38 hekl Exp $
+// $Id: lineModel.C,v 1.7 2000/06/25 19:06:36 hekl Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/lineModel.h>
 
@@ -14,18 +14,15 @@ namespace BALL
 		AddLineModel::AddLineModel
 			()
 				: 
-				BaseModelProcessor(),
-				used_atoms_()
+				AtomBondModelBaseProcessor()
 		{
-			setProperty(GeometricObject::PROPERTY__MODEL_LINES);
 		}
 
 		AddLineModel::AddLineModel
 			(const AddLineModel &__rAddLineModel,
 			 bool deep)
 				:
-				BaseModelProcessor(__rAddLineModel, deep),
-				used_atoms_()
+				AtomBondModelBaseProcessor(__rAddLineModel, deep)
 		{
 		}
 
@@ -44,19 +41,14 @@ namespace BALL
 		AddLineModel::clear
 			()
 		{
-			BaseModelProcessor::clear();
-
-			setProperty(GeometricObject::PROPERTY__MODEL_LINES);
-
-			used_atoms_.clear();
+			AtomBondModelBaseProcessor::clear();
 		}
 
 		void 
 		AddLineModel::destroy
 			()
 		{
-			BaseModelProcessor::destroy();
-			used_atoms_.destroy();
+			AtomBondModelBaseProcessor::destroy();
 		}
 
 		void 
@@ -64,7 +56,7 @@ namespace BALL
 			(const AddLineModel &__rAddLineModel,
 			 bool deep)
 		{
-			BaseModelProcessor::set(__rAddLineModel, deep);
+			AtomBondModelBaseProcessor::set(__rAddLineModel, deep);
 		}
 
 		AddLineModel &
@@ -88,112 +80,25 @@ namespace BALL
 		AddLineModel::swap
 			(AddLineModel &__rAddLineModel)
 		{
-			BaseModelProcessor::swap(__rAddLineModel);
+			AtomBondModelBaseProcessor::swap(__rAddLineModel);
 		}
 
-		bool 
-		AddLineModel::start
-			()
+		bool AddLineModel::start()
 		{
-			used_atoms_.clear();
-
 			if (hasProperty(GeometricObject::PROPERTY__DRAWING_MODE_SOLID) == true)
 			{
 				setProperty(GeometricObject::PROPERTY__DRAWING_MODE_WIREFRAME);
 			}
 
-			return BaseModelProcessor::start();
+			// init model connector
+			getModelConnector()->setProperties(*this);
+
+			return AtomBondModelBaseProcessor::start();
 		}
 				
-		bool 
-		AddLineModel::finish
-			()
+		bool AddLineModel::finish()
 		{
-			// generate Lines
-			Atom *first__pAtom = 0;
-			Atom *second__pAtom = 0;
-			Bond *__pBond = 0;
-			AtomBondIterator bond__Iterator;
-			ColorRGBA first__ColorRGBA;
-			ColorRGBA second__ColorRGBA;
-
-			List<Atom *>::Iterator list__Iterator;
-
-			// for all used atoms
-			for (list__Iterator = used_atoms_.begin();
-					 list__Iterator != used_atoms_.end();
-					 ++list__Iterator)
-			{
-				first__pAtom = *list__Iterator;
-
-				// for all bonds connected from first- to second atom
-				BALL_FOREACH_ATOM_BOND(*first__pAtom, bond__Iterator)
-				{
-					__pBond = &(*bond__Iterator);
-
-					second__pAtom = __pBond->getSecondAtom();
-
-					// use only atoms with greater handles than first atom
-					if (*first__pAtom < *second__pAtom)
-					{
-						// remove all models appended to bond
-						getSearcher_().clearProperty(GeometricObject::PROPERTY__MODEL_LINES);
-						removeGeometricObjects_(*__pBond, true);
-
-						// search for Line representants
-						getSearcher_().setProperty(GeometricObject::PROPERTY__MODEL_LINES);
-						second__pAtom->applyChild(getSearcher_());
-						
-						// if found, build a Line between them
-						if (getSearcher_().geometricObjectsFound() == true)
-						{
-							// get colors from both atoms
-							first__pAtom->host(*getColorCalculator());
-							first__ColorRGBA = getColorCalculator()->getColor();
-							
-							second__pAtom->host(*getColorCalculator());
-							second__ColorRGBA = getColorCalculator()->getColor();
-							
-							// if both colors are identical
-							if (first__ColorRGBA == second__ColorRGBA)
-							{
-								// generate single colored line
-								Line *__pLine = createLine_();
-								
-								BALL_PRECONDITION
-									(__pLine != 0,
-									 BALL_MOLVIEW_LINEMODEL_ERROR_HANDLER
-									 (AddLineModel::ERROR__CANNOT_CREATE_LINE));
-								
-								__pLine->PropertyManager::set(*this);
-								__pLine->setVertex1Address(first__pAtom->getPosition());
-								__pLine->setVertex2Address(second__pAtom->getPosition());
-								__pLine->setColor(first__ColorRGBA);
-								
-								__pBond->Composite::appendChild(*__pLine);
-							}
-							else
-							{
-								// generate two colored line
-								TwoColoredLine *__pTwoColoredLine = createTwoColoredLine_();
-								
-								BALL_PRECONDITION
-									(__pTwoColoredLine != 0,
-									 BALL_MOLVIEW_LINEMODEL_ERROR_HANDLER
-									 (AddLineModel::ERROR__CANNOT_CREATE_2CLINE));
-								
-								__pTwoColoredLine->PropertyManager::set(*this);
-								__pTwoColoredLine->setVertex1Address(first__pAtom->getPosition());
-								__pTwoColoredLine->setVertex2Address(second__pAtom->getPosition());
-								__pTwoColoredLine->setColor1(first__ColorRGBA);
-								__pTwoColoredLine->setColor2(second__ColorRGBA);
-								
-								__pBond->Composite::appendChild(*__pTwoColoredLine);
-							}
-						}
-					}
-				}
-			}
+			buildBondModels_();
 
 			return true;
 		}
@@ -221,7 +126,11 @@ namespace BALL
 				 BALL_MOLVIEW_LINEMODEL_ERROR_HANDLER
 				 (AddLineModel::ERROR__CANNOT_CREATE_POINT));
 
+			// carry on selected flag
+			__pPoint->Selectable::set(*atom);
+
 			__pPoint->PropertyManager::set(*this);
+			__pPoint->PropertyManager::setProperty(GeometricObject::PROPERTY__MODEL_LINES);
 			__pPoint->setVertexAddress(atom->getPosition());
 			
 			atom->host(*getColorCalculator());
@@ -232,7 +141,7 @@ namespace BALL
 			composite.appendChild(*__pPoint);
 
 			// collect used atoms
-			used_atoms_.push_back(atom);
+			insertAtom_(atom);
 
 			return Processor::CONTINUE;
 		}
@@ -246,7 +155,7 @@ namespace BALL
 			BALL_DUMP_DEPTH(s, depth);
 			BALL_DUMP_HEADER(s, this, this);
 
-			BaseModelProcessor::dump(s, depth + 1);
+			AtomBondModelBaseProcessor::dump(s, depth + 1);
 
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}

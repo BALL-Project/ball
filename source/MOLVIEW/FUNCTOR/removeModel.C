@@ -1,4 +1,4 @@
-// $Id: removeModel.C,v 1.5 2000/06/18 16:33:38 hekl Exp $
+// $Id: removeModel.C,v 1.6 2000/06/25 19:06:36 hekl Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/removeModel.h>
 
@@ -13,8 +13,7 @@ namespace BALL
 		RemoveModel::RemoveModel
 			()
 				: 
-				BaseModelProcessor(),
-				used_atoms_()
+				AtomBondModelBaseProcessor()
 		{
 		}
 
@@ -22,8 +21,7 @@ namespace BALL
 			(const RemoveModel &model,
 			 bool deep)
 				:
-				BaseModelProcessor(model, deep),
-				used_atoms_()
+				AtomBondModelBaseProcessor(model, deep)
 		{
 		}
 
@@ -42,18 +40,14 @@ namespace BALL
 		RemoveModel::clear
 			()
 		{
-			BaseModelProcessor::clear();
-
-			used_atoms_.clear();
+			AtomBondModelBaseProcessor::clear();
 		}
 
 		void 
 		RemoveModel::destroy
 			()
 		{
-			BaseModelProcessor::destroy();
-
-			used_atoms_.destroy();
+			AtomBondModelBaseProcessor::destroy();
 		}
 
 		void 
@@ -61,7 +55,7 @@ namespace BALL
 			(const RemoveModel &model,
 			 bool deep)
 		{
-			BaseModelProcessor::set(model, deep);
+			AtomBondModelBaseProcessor::set(model, deep);
 		}
 
 		RemoveModel &
@@ -85,17 +79,16 @@ namespace BALL
 		RemoveModel::swap
 			(RemoveModel &model)
 		{
-			BaseModelProcessor::swap(model);
+			AtomBondModelBaseProcessor::swap(model);
 		}
 
 		bool 
 		RemoveModel::start
 			()
 		{
-			used_atoms_.clear();
 			getSearcher_().clear();
 
-			return BaseModelProcessor::start();
+			return AtomBondModelBaseProcessor::start();
 		}
 				
 		bool 
@@ -111,8 +104,8 @@ namespace BALL
 			List<Atom*>::Iterator list_iterator;
 
 			// for all used atoms
-			for (list_iterator = used_atoms_.begin();
-					 list_iterator != used_atoms_.end(); ++list_iterator)
+			for (list_iterator = getAtomList_().begin();
+					 list_iterator != getAtomList_().end(); ++list_iterator)
 			{
 				first__pAtom = *list_iterator;
 
@@ -159,7 +152,7 @@ namespace BALL
 			}
 
 			// collect atom with geometric object for deletion
-			used_atoms_.push_back(atom);
+			insertAtom_(atom);
 
 			return Processor::CONTINUE;
 		}
@@ -173,7 +166,7 @@ namespace BALL
 			BALL_DUMP_DEPTH(s, depth);
 			BALL_DUMP_HEADER(s, this, this);
 
-			BaseModelProcessor::dump(s, depth + 1);
+			AtomBondModelBaseProcessor::dump(s, depth + 1);
 
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
