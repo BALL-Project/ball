@@ -1,12 +1,8 @@
-// $Id: dialogs.doc,v 1.5.4.1 2002/06/27 02:38:27 oliver Exp $
+// $Id: dialogs.doc,v 1.5.4.2 2002/12/12 00:28:14 amoll Exp $
 
 //@Include: displayProperties.h
 //@Include: labelProperties.h
 //@Include: openBruker1DFile.h
 //@Include: openBruker2DFile.h
-//@Include: openHINFile.h
-//@Include: openMOLFile.h
-//@Include: openMOL2File.h
-//@Include: openPDBFile.h
 
 

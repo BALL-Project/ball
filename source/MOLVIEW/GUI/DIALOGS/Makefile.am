@@ -20,10 +20,6 @@ CURRENTDIR_SOURCES=\
 	displayPropertiesData.C\
 	labelProperties.C\
 	labelPropertiesData.C\
-	openHINFile.C\
-	openMOLFile.C\
-	openMOL2File.C\
-	openPDBFile.C\
 	openBruker1DFile.C\
 	openBruker2DFile.C\
 	contourSurfaceDialog.C\
