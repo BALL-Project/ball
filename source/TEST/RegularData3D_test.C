@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RegularData3D_test.C,v 1.6 2002/12/12 11:34:44 oliver Exp $
+// $Id: RegularData3D_test.C,v 1.7 2002/12/16 17:06:07 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALL/DATATYPE/regularData3D.h>
 
-START_TEST(RegularData3D, "$Id: RegularData3D_test.C,v 1.6 2002/12/12 11:34:44 oliver Exp $")
+START_TEST(RegularData3D, "$Id: RegularData3D_test.C,v 1.7 2002/12/16 17:06:07 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -32,7 +32,6 @@ CHECK(RegularData3D<T>(float, float, float, float, float, float, Size, Size, Siz
 															11, 11, 11);
 	TEST_NOT_EQUAL(grid, 0)
 	TEST_EQUAL(grid->getSize(), 1331)
-	TEST_EQUAL(*grid, RegularData3D(0.0, 0.0, 0.0, 10.0, 10.0, 10.0, 11, 11, 11))
 	delete grid;
 RESULT
 
