@@ -1,4 +1,4 @@
-// $Id: regularData2DWidget.h,v 1.10 2001/03/12 10:36:00 oliver Exp $
+// $Id: regularData2DWidget.h,v 1.11 2001/03/12 22:37:01 anker Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGET_REGULARDATA2DWIDGET_H
 #define BALL_VIEW_GUI_WIDGET_REGULARDATA2DWIDGET_H
@@ -106,9 +106,10 @@ class PixWid
   public:
     PixWid( QWidget *parent );
   public slots:
-			//void mouseMoveEvent( QMouseEvent *e );
-			//void mousePressEvent( QMouseEvent *e );
-			//void mouseReleaseEvent( QMouseEvent *e );
+		// BAUSTELLE
+		//void mouseMoveEvent( QMouseEvent *e );
+		//void mousePressEvent( QMouseEvent *e );
+		//void mouseReleaseEvent( QMouseEvent *e );
   signals:
     void mouseMoved(Position, Position);
     void selected( QPoint, QPoint );
