@@ -1,4 +1,4 @@
-// $Id: support.h,v 1.6 2001/01/26 16:07:04 anker Exp $
+// $Id: support.h,v 1.7 2001/01/31 21:33:11 amoll Exp $
 
 #ifndef BALL_MOLMEC_COMMON_SUPPORT_H
 #define BALL_MOLMEC_COMMON_SUPPORT_H
@@ -63,11 +63,9 @@ namespace BALL
 				({\tt type == HASH_GRID}) is used.
 				@param	pair_vector the vector containing pairs of interacting atoms
 				@param	atom_vector the atoms to be considered for pairs
-				@param	box	the periodic boundary used (if {\tt
-				periodic_boundary_enabled == true})
+				@param	box	the periodic boundary used (if {\tt	periodic_boundary_enabled == true})
 				@param	distance the maximum distance (cut-off distance) for two atoms
-				@param	periodic_boundary_enabled flag indicating the use of
-				periodic boundary conditions
+				@param	periodic_boundary_enabled flag indicating the use of periodic boundary conditions
 				@param	type	the type of algorithm used to calculate the pair vector
 				@return	the number of pairs generated ({\tt pair_vector.size()})
 		*/

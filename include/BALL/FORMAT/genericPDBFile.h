@@ -1,4 +1,4 @@
-// $Id: genericPDBFile.h,v 1.7 2000/12/11 21:14:27 oliver Exp $
+// $Id: genericPDBFile.h,v 1.8 2001/01/31 21:32:27 amoll Exp $
 
 #ifndef BALL_FORMAT_GENERICPDBFILE_H
 #define BALL_FORMAT_GENERICPDBFILE_H
@@ -18,7 +18,7 @@
 namespace BALL 
 {
 	
-	/**	PDB namespace
+	/*	PDB namespace
 	*/
 	namespace PDB 
 	{
