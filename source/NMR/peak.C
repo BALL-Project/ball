@@ -1,19 +1,17 @@
-// $Id: peak.C,v 1.4 2000/09/07 19:38:31 oliver Exp $
+// $Id: peak.C,v 1.5 2000/09/21 23:05:12 amoll Exp $
 
 #include<BALL/NMR/peak.h>
 #include<BALL/MATHS/common.h>
-
-using namespace std;
 
 namespace BALL
 {
 
 	Peak1D::Peak1D()
+		: value_(0),
+			width_(0.1),
+			height_(1),
+			atom_(0)
 	{
-		value_ = 0;
-		width_ = 0.1;
-		height_ = 1;
-		atom_ = 0;
 	}
 
 	Peak1D::Peak1D(const Peak1D& peak)
