@@ -1,4 +1,4 @@
-// $Id: cosineTorsion.h,v 1.6 2000/10/05 17:34:15 anker Exp $
+// $Id: cosineTorsion.h,v 1.7 2000/10/18 10:40:03 anker Exp $
 // Molecular Mechanics Parameter: class describing the parameter
 // section required for torsions using a cosine type potential function
  
@@ -130,7 +130,7 @@ namespace BALL
 		CosineTorsion(const CosineTorsion& cosine_torsion);
 
 		/**	Destructor.  */
-		virtual ~CosineTorsion();
+		virtual ~CosineTorsion() throw();
 
 		//@}
 		
@@ -164,7 +164,7 @@ namespace BALL
 		//@{
 
 		/**	Clear method.  */
-		virtual void clear();
+		virtual void clear() throw();
 
 		/** Assignment operator */
 		const CosineTorsion& operator = (const CosineTorsion& cosine_torsion);

@@ -1,4 +1,4 @@
-// $Id: quadraticAngleBend.h,v 1.7 2000/10/05 17:34:16 anker Exp $
+// $Id: quadraticAngleBend.h,v 1.8 2000/10/18 10:40:03 anker Exp $
 // Molecular Mechanics Parameter: class describing the parameters required to
 // implement a harmonic potential describing angles
  
@@ -49,7 +49,7 @@ namespace BALL
 
 		/**	Destructor.
 		*/
-		virtual ~QuadraticAngleBend();
+		virtual ~QuadraticAngleBend() throw();
 
 		/**	Reads a parameter section from an INI file.
 				This method reads the section given in section\_name from ini\_file,
@@ -81,7 +81,7 @@ namespace BALL
 		//@{
 
 		/**	Clear method. */
-		virtual void clear();
+		virtual void clear() throw();
 
 		//@}
 

@@ -1,4 +1,4 @@
-// $Id: quadraticAngleBend.C,v 1.8 2000/10/05 17:34:24 anker Exp $
+// $Id: quadraticAngleBend.C,v 1.9 2000/10/18 10:40:07 anker Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/quadraticAngleBend.h>
@@ -15,12 +15,12 @@ namespace BALL
 	{
 	}
 
-	QuadraticAngleBend::~QuadraticAngleBend()
+	QuadraticAngleBend::~QuadraticAngleBend() throw()
 	{
 		clear();
 	}
 
-	void QuadraticAngleBend::clear() 
+	void QuadraticAngleBend::clear() throw()
 	{
 		// clear allocatd parameter fields
 		values_.clear();

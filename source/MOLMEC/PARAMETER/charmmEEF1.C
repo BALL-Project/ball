@@ -1,4 +1,4 @@
-// $Id: charmmEEF1.C,v 1.4 2000/10/05 17:34:23 anker Exp $
+// $Id: charmmEEF1.C,v 1.5 2000/10/18 10:40:06 anker Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/charmmEEF1.h>
@@ -9,7 +9,7 @@ using namespace std;
 namespace BALL 
 {
 
-	CharmmEEF1::CharmmEEF1()
+	CharmmEEF1::CharmmEEF1() throw()
 		:	ParameterSection(),
 			V_(0),
 			dG_ref_(0),
@@ -23,7 +23,7 @@ namespace BALL
 	}
 
 
-	CharmmEEF1::CharmmEEF1(const CharmmEEF1& charmm_EEF1)
+	CharmmEEF1::CharmmEEF1(const CharmmEEF1& charmm_EEF1) throw()
 		:	ParameterSection(charmm_EEF1),
 			V_(charmm_EEF1.V_),
 			dG_ref_(charmm_EEF1.dG_ref_),
@@ -36,12 +36,16 @@ namespace BALL
 	{
 	}
 
-	CharmmEEF1::~CharmmEEF1()
+
+	CharmmEEF1::~CharmmEEF1() throw()
 	{
 		clear();
-	}
 
-	void CharmmEEF1::clear() 
+		valid_ = false;
+	}
+	
+
+	void CharmmEEF1::clear()  throw()
 	{
 		// clear allocated parameter fields
 		delete [] V_;
@@ -55,12 +59,16 @@ namespace BALL
 		ParameterSection::clear();
 	}
 
-	bool CharmmEEF1::extractSection(Parameters& parameters, const String& section_name)
+
+	bool CharmmEEF1::extractSection(Parameters& parameters, 
+			const String& section_name) throw()
 	{
 		return ParameterSection::extractSection(parameters, section_name);
 	}
 
-	bool CharmmEEF1::extractSection(ForceFieldParameters& parameters, const String& section_name)
+
+	bool CharmmEEF1::extractSection(ForceFieldParameters& parameters, 
+			const String& section_name) throw()
 	{
 		// check whether the parameters are valid
 		if (!parameters.isValid())
@@ -273,7 +281,7 @@ namespace BALL
 	}
 
 
-	bool CharmmEEF1::hasParameters(Atom::Type I) const 
+	bool CharmmEEF1::hasParameters(Atom::Type I) const throw()
 	{
 		if ((I < 0) && ((Size)I >= number_of_atom_types_))
 		{
@@ -285,7 +293,7 @@ namespace BALL
 
 
 	CharmmEEF1::Values CharmmEEF1::getParameters
-		(Atom::Type I) const 
+		(Atom::Type I) const throw()
 	{
 		CharmmEEF1::Values parameters;
 		assignParameters(parameters, I);
@@ -294,7 +302,7 @@ namespace BALL
 
 
 	bool CharmmEEF1::assignParameters
-		(CharmmEEF1::Values& parameters, Atom::Type I) const 
+		(CharmmEEF1::Values& parameters, Atom::Type I) const throw()
 	{
 		if (hasParameters(I)) 
 		{
@@ -315,6 +323,7 @@ namespace BALL
 
 
 	const CharmmEEF1& CharmmEEF1::operator = (const CharmmEEF1& charmm_EEF1)
+		throw()
 	{
 		number_of_atom_types_ = charmm_EEF1.number_of_atom_types_;
 		V_ = charmm_EEF1.V_;
@@ -331,6 +340,7 @@ namespace BALL
 
 	
 	bool CharmmEEF1::operator == (const CharmmEEF1& charmm_EEF1) const
+		throw()
 	{
 		if (!ParameterSection::operator == (charmm_EEF1))
 		{

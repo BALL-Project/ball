@@ -1,4 +1,4 @@
-// $Id: residueTorsions.C,v 1.5 2000/10/05 17:34:25 anker Exp $
+// $Id: residueTorsions.C,v 1.6 2000/10/18 10:40:07 anker Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/residueTorsions.h>
@@ -14,12 +14,12 @@ namespace BALL
 	{
 	}
 
-	ResidueTorsions::~ResidueTorsions()
+	ResidueTorsions::~ResidueTorsions() throw()
 	{
 		clear();
 	}
 
-	void ResidueTorsions::clear() 
+	void ResidueTorsions::clear() throw()
 	{
 		ParameterSection::clear();
 	}

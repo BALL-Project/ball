@@ -1,4 +1,4 @@
-// $Id: quadraticImproperTorsion.h,v 1.4 2000/10/05 17:34:18 anker Exp $
+// $Id: quadraticImproperTorsion.h,v 1.5 2000/10/18 10:40:03 anker Exp $
 // Molecular Mechanics Parameter: class describing the parameters required to
 // describe a harmonic improper torsion (out-of-plane) potential
  
@@ -16,7 +16,9 @@
 namespace BALL 
 {
 		
-	/**
+	/** missing documentation for QuadraticImproperTorsion
+			\\
+			{\bf Definition:} \URL{include/BALL/MOLMEC/PARAMETER/quadraticImproperTorsion.h}
 	*/
 	class QuadraticImproperTorsion 
 		:	public ParameterSection
@@ -32,6 +34,17 @@ namespace BALL
 		{
 			float phase;
 			float k;
+
+			bool operator == (const Values& values) const throw()
+			{
+				return ((phase == values.phase) && (k == values.k));
+			}
+
+			bool operator != (const Values& values) const throw()
+			{
+				return !(operator == (values));
+			}
+
 		};
 
 		struct Data
@@ -44,44 +57,85 @@ namespace BALL
 			Values	values;
 		};
 
+		BALL_CREATE(QuadraticImproperTorsion)
+
+		/** @name Constructors and destructor */
+		//@{
+
 		/**	Default constructor.
 		*/
-		QuadraticImproperTorsion();
+		QuadraticImproperTorsion() throw();
+
+		/** Copy constructor. */
+		QuadraticImproperTorsion(const QuadraticImproperTorsion& torsion)
+			throw();
 
 		/**	Destructor.
 		*/
-		virtual ~QuadraticImproperTorsion();
+		virtual ~QuadraticImproperTorsion() throw();
+
+		//@}
+
+
+		/** @name Parameter extraction */
+		//@{
 
 		/**	Reads a parameter section from an INI file.
 				This method reads the section given in section\_name from ini\_file,
-				interprets (if given) a format line, reads the data from this section according to 
-				the format, and builds some datastructures for fast and easy acces this data.
+				interprets (if given) a format line, reads the data from this
+				section according to the format, and builds some datastructures for
+				fast and easy acces this data.
 		*/
-		virtual bool extractSection(ForceFieldParameters& parameters, const String& section_name);
-		virtual bool extractSection(Parameters& parameters, const String& section_name);
+		virtual bool extractSection(ForceFieldParameters& parameters,
+				const String& section_name) throw();
+		virtual bool extractSection(Parameters& parameters,
+				const String& section_name) throw();
+
+		//@}
+
 
 		/** Queries whether a parameter set is defined for the given atom types.
 		*/
-		bool hasParameters(Atom::Type I, Atom::Type J, Atom::Type K, Atom::Type L) const;
+		bool hasParameters(Atom::Type I, Atom::Type J, Atom::Type K, Atom::Type L) 
+			const throw();
 		
 		/**	Returns the parameters for a given atom type combination.
 		*/
-		QuadraticImproperTorsion::Values getParameters(Atom::Type I, Atom::Type J, Atom::Type K, Atom::Type L) const;
+		QuadraticImproperTorsion::Values getParameters(Atom::Type I, Atom::Type J,
+				Atom::Type K, Atom::Type L) const throw();
 		
 		/**	Assign the parameters for a given atom type combination.
 				If no parameters are defined for this combination, false is
 				returned and nothing is changed.
 		*/
-		bool assignParameters(QuadraticImproperTorsion::Values& parameters, Atom::Type I, Atom::Type J, Atom::Type K, Atom::Type L) const;
+		bool assignParameters(QuadraticImproperTorsion::Values& parameters,
+				Atom::Type I, Atom::Type J, Atom::Type K, Atom::Type L) const
+			throw();
+
 
 		/** @name Assignment */
 		//@{
 
 		/**	Clear method. */
-		virtual void clear();
+		virtual void clear() throw();
+
+		/** Assignment operator */
+		const QuadraticImproperTorsion& operator = 
+			(const QuadraticImproperTorsion& torsion) throw();
 
 		//@}
 		
+
+		/** @name Predicates */
+		//@{
+
+		/** Equality operator */
+		bool operator == (const QuadraticImproperTorsion& torsion) const
+			throw();
+
+		//@}
+
+
 		protected:
 
 		Size									number_of_atom_types_;

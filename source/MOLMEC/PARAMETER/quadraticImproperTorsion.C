@@ -1,4 +1,4 @@
-// $Id: quadraticImproperTorsion.C,v 1.4 2000/10/05 17:34:24 anker Exp $
+// $Id: quadraticImproperTorsion.C,v 1.5 2000/10/18 10:40:07 anker Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/quadraticImproperTorsion.h>
@@ -9,31 +9,79 @@ using namespace std;
 namespace BALL 
 {
 
-	QuadraticImproperTorsion::QuadraticImproperTorsion()
+	QuadraticImproperTorsion::QuadraticImproperTorsion() throw()
 		:	ParameterSection(),
-			torsions_()
+			number_of_atom_types_(0),
+			torsions_(),
+			torsion_hash_map_()
 	{
 	}
 
-	QuadraticImproperTorsion::~QuadraticImproperTorsion()
+
+	QuadraticImproperTorsion::QuadraticImproperTorsion
+		(const QuadraticImproperTorsion& torsion) throw()
+		:	ParameterSection(torsion),
+			number_of_atom_types_(torsion.number_of_atom_types_),
+			torsions_(torsion.torsions_),
+			torsion_hash_map_(torsion.torsion_hash_map_)
+	{
+	}
+
+
+	QuadraticImproperTorsion::~QuadraticImproperTorsion() throw()
 	{
 		clear();
+
+		valid_ = false;
 	}
 
-	void QuadraticImproperTorsion::clear() 
+
+	void QuadraticImproperTorsion::clear() throw()
 	{
+		number_of_atom_types_ = 0;
+		torsions_.clear();
+		torsion_hash_map_.clear();
+
 		ParameterSection::clear();
 	}
 
+
+	const QuadraticImproperTorsion& QuadraticImproperTorsion::operator =
+		(const QuadraticImproperTorsion& torsion) throw()
+	{
+		ParameterSection::operator = (torsion);
+
+		number_of_atom_types_ = torsion.number_of_atom_types_;
+		torsions_ = torsion.torsions_;
+		torsion_hash_map_ = torsion.torsion_hash_map_;
+
+		return *this;
+	}
+
+
+	bool QuadraticImproperTorsion::operator ==
+		(const QuadraticImproperTorsion& torsion) const throw()
+	{
+		return (ParameterSection::operator == (torsion)
+			&& (number_of_atom_types_ == torsion.number_of_atom_types_)
+			&& (torsions_ == torsion.torsions_)
+			&& (torsion_hash_map_ == torsion.torsion_hash_map_));
+	}
+
+
 	bool QuadraticImproperTorsion::extractSection
-		(Parameters& parameters, const String& section_name)
+		(Parameters& parameters, const String& section_name) throw()
 	{
 		return ParameterSection::extractSection(parameters, section_name);
 	}
 
 	bool QuadraticImproperTorsion::extractSection
-		(ForceFieldParameters& parameters, const String& section_name)
+		(ForceFieldParameters& parameters, const String& section_name) throw()
 	{
+		// first clear the fields
+
+		clear();
+
 		// check whether the parameters are valid
 		if (!parameters.isValid())
 		{
@@ -134,7 +182,7 @@ namespace BALL
 
 
 	bool QuadraticImproperTorsion::hasParameters
-		(Atom::Type I, Atom::Type J, Atom::Type K, Atom::Type L) const 
+		(Atom::Type I, Atom::Type J, Atom::Type K, Atom::Type L) const throw()
 	{
 		if ((I < 0) || ((Size)I >= number_of_atom_types_))
 		{
@@ -176,8 +224,9 @@ namespace BALL
 		return result;
 	}
 
+
 	QuadraticImproperTorsion::Values QuadraticImproperTorsion::getParameters
-		(Atom::Type I, Atom::Type J, Atom::Type K, Atom::Type L) const 
+		(Atom::Type I, Atom::Type J, Atom::Type K, Atom::Type L) const throw()
 	{
 		QuadraticImproperTorsion::Values parameters;
 		assignParameters(parameters, I, J, K, L);
@@ -187,7 +236,7 @@ namespace BALL
 
 	bool QuadraticImproperTorsion::assignParameters
 		(QuadraticImproperTorsion::Values& parameters,
-		 Atom::Type I, Atom::Type J, Atom::Type K, Atom::Type L) const 
+		 Atom::Type I, Atom::Type J, Atom::Type K, Atom::Type L) const throw()
 	{
 		// calculate the key for this combination of atom types
 		Size index = I + number_of_atom_types_ * J 
@@ -215,4 +264,5 @@ namespace BALL
 		return result;
 	}
 	 
+
 } // namespace BALL

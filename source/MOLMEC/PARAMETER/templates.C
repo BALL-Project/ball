@@ -1,4 +1,4 @@
-// $Id: templates.C,v 1.10 2000/10/05 17:34:25 anker Exp $
+// $Id: templates.C,v 1.11 2000/10/18 10:40:07 anker Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/templates.h>
@@ -23,7 +23,7 @@ namespace BALL
 	}
 
 
-	void Templates::clear()
+	void Templates::clear() throw()
 	{
 		charges_.clear();
 		type_names_.clear();
@@ -31,9 +31,8 @@ namespace BALL
 		ParameterSection::clear();
 	}
 
-		
 
-	Templates::~Templates()
+	Templates::~Templates() throw()
 	{
 		clear();
 	}

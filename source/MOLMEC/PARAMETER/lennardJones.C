@@ -1,4 +1,4 @@
-// $Id: lennardJones.C,v 1.9 2000/10/05 17:34:24 anker Exp $
+// $Id: lennardJones.C,v 1.10 2000/10/18 10:40:07 anker Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/lennardJones.h>
@@ -9,41 +9,82 @@ using namespace std;
 namespace BALL 
 {
 
-	LennardJones::LennardJones()
+	LennardJones::LennardJones() throw()
 		:	ParameterSection(),
 			A_(0),
 			B_(0),
+			N_(0),
 			Aij_(0),
 			Bij_(0),
-			is_defined_(0)
+			is_defined_(0),
+			format_(),
+			names_()
 	{
 	}
 
-	LennardJones::~LennardJones()
+
+	LennardJones::LennardJones(const LennardJones& lj) throw()
+		:	ParameterSection(lj),
+			A_(lj.A_),
+			B_(lj.B_),
+			N_(lj.N_),
+			Aij_(lj.Aij_),
+			Bij_(lj.Bij_),
+			is_defined_(lj.is_defined_),
+			format_(lj.format_),
+			names_(lj.names_)
+	{
+	}
+
+
+	LennardJones::~LennardJones() throw()
 	{
 		clear();
 	}
 
-	void LennardJones::clear() 
+
+	void LennardJones::clear() throw()
 	{
 		// clear allocated parameter fields
-		delete [] A_;
-		delete [] B_;
-		delete [] Aij_;
-		delete [] Bij_;
-		delete [] is_defined_;
+		A_.clear();
+		B_.clear();
+		N_.clear();
+		Aij_.clear();
+		Bij_.clear();
+		is_defined_.clear();
+		// format_.clear();
+		names_.clear();
 
 		ParameterSection::clear();
 	}
 
+
+	const LennardJones& LennardJones::operator = (const LennardJones& lj)
+		throw()
+	{
+		ParameterSection::operator = (lj);
+		A_ = lj.A_;
+		B_ = lj.B_;
+		N_ = lj.N_;
+		Aij_ = lj.Aij_;
+		Bij_ = lj.Bij_;
+		is_defined_ = lj.is_defined_;
+		format_ = lj.format_;
+		names_ = lj.names_;
+
+		return *this;
+	}
+
+
 	bool LennardJones::extractSection
-		(Parameters& parameters, const String& section_name)
+		(Parameters& parameters, const String& section_name) throw()
 	{
 		return ParameterSection::extractSection(parameters, section_name);
 	}
 
+
 	bool LennardJones::extractSection
-		(ForceFieldParameters& parameters, const String& section_name)
+		(ForceFieldParameters& parameters, const String& section_name) throw()
 	{
 		// check whether the parameters are valid
 		if (!parameters.isValid())
@@ -96,11 +137,11 @@ namespace BALL
 		number_of_atom_types_ = atom_types.getNumberOfTypes();
 		
 		// allocate two onedimensional fields for the two parameters
-		A_ = new float[number_of_atom_types_];
-		B_ = new float[number_of_atom_types_];
-		Aij_ = new float[number_of_atom_types_ * number_of_atom_types_];
-		Bij_ = new float[number_of_atom_types_ * number_of_atom_types_];
-		is_defined_ = new bool[number_of_atom_types_];
+		A_.resize(number_of_atom_types_);
+		B_.resize(number_of_atom_types_);
+		Aij_.resize(number_of_atom_types_ * number_of_atom_types_);
+		Bij_.resize(number_of_atom_types_ * number_of_atom_types_);
+		is_defined_.resize(number_of_atom_types_);
 
 		for (i = 0; i < number_of_atom_types_; i++) 
 		{
@@ -249,7 +290,8 @@ namespace BALL
 	}
 
 
-	bool LennardJones::hasParameters(Atom::Type I, Atom::Type J) const 
+	bool LennardJones::hasParameters(Atom::Type I, Atom::Type J) const
+		throw()
 	{
 		if ((I < 0) && ((Size)I >= number_of_atom_types_))
 		{
@@ -266,7 +308,7 @@ namespace BALL
 
 
 	LennardJones::Values LennardJones::getParameters
-		(Atom::Type I, Atom::Type J) const 
+		(Atom::Type I, Atom::Type J) const throw()
 	{
 		LennardJones::Values parameters;
 		assignParameters(parameters, I, J);
@@ -276,7 +318,7 @@ namespace BALL
 
 	bool LennardJones::assignParameters
 		(LennardJones::Values& parameters,
-		 Atom::Type I, Atom::Type J) const 
+		 Atom::Type I, Atom::Type J) const throw()
 	{
 		if (hasParameters(I, J)) 
 		{
@@ -287,6 +329,16 @@ namespace BALL
 		}
 
 		return false;
+	}
+
+
+	bool LennardJones::operator == (const LennardJones& lj) const throw()
+	{
+		return (ParameterSection::operator == (lj)
+			&& (A_ == lj.A_)
+			&& (B_ == lj.B_)
+			&& (Aij_ == lj.Aij_)
+			&& (Bij_ == lj.Bij_));
 	}
 	 
 } // namespace BALL

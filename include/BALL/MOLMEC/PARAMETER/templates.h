@@ -1,4 +1,4 @@
-// $Id: templates.h,v 1.4 2000/10/05 17:34:19 anker Exp $
+// $Id: templates.h,v 1.5 2000/10/18 10:40:04 anker Exp $
 // Molecular Mechanics Parameter: class describing the atom type section of a parameter file
 
 #ifndef BALL_MOLMEC_PARAMETER_TEMPLATES_H
@@ -38,7 +38,7 @@ namespace BALL
 
 		/**	Destructor.
 		*/
-		virtual ~Templates();
+		virtual ~Templates() throw();
 
 		//@}
 		
@@ -85,7 +85,7 @@ namespace BALL
 		//@{
 
 		/**	Clear method. */
-		virtual void clear();
+		virtual void clear() throw();
 
 		/**	Assignment operator.
 				copy the contents of {\tt templates} into {\tt this}

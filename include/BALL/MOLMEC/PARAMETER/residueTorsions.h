@@ -1,4 +1,4 @@
-// $Id: residueTorsions.h,v 1.7 2000/10/05 17:34:18 anker Exp $
+// $Id: residueTorsions.h,v 1.8 2000/10/18 10:40:04 anker Exp $
 // Molecular Mechanics Parameter: class describing the ResidueTorsions section of a parameter file
  
 #ifndef BALL_MOLMEC_PARAMETER_RESIDUETORSIONS_H
@@ -76,7 +76,7 @@ namespace BALL
 
 		/**	Destructor.
 		*/
-		virtual ~ResidueTorsions();
+		virtual ~ResidueTorsions() throw();
 
 		//@}
 		
@@ -115,7 +115,7 @@ namespace BALL
 		//@{
 
 		/**	Clear method.  */
-		virtual void clear();
+		virtual void clear() throw();
 
 		//@}
 

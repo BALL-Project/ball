@@ -1,4 +1,4 @@
-// $Id: lennardJones.h,v 1.13 2000/10/05 17:34:16 anker Exp $
+// $Id: lennardJones.h,v 1.14 2000/10/18 10:40:03 anker Exp $
 // Molecular Mechanics Parameter: class describing the atom type section of a parameter file
  
 #ifndef BALL_MOLMEC_PARAMETER_LENNARDJONES_H
@@ -16,8 +16,9 @@ namespace BALL
 {
 		
 	/**	Lennard Jones parameter section.
-			This section read parameters for a Lennard Jones potental (usually a 6-12 Potential).
-			Parameters may we given in three different formats (no mixing of formats is allowed).
+			This section read parameters for a Lennard Jones potental (usually a
+			6-12 Potential). Parameters may we given in three different formats
+			(no mixing of formats is allowed).
 			\begin{itemize}
 				\item {\em A} and {\em B} are given directly (\Ref{A_B_FORMAT})
 				\item well depth and minimum radii (\Ref{EPSILON_R_FORMAT})
@@ -80,11 +81,14 @@ namespace BALL
 
 		/**	Default constructor.
 		*/
-		LennardJones();
+		LennardJones() throw();
+
+		/** Copy constructor. */
+		LennardJones(const LennardJones& lj) throw();
 
 		/**	Destructor.
 		*/
-		virtual ~LennardJones();
+		virtual ~LennardJones() throw();
 
 		//@}
 		
@@ -94,50 +98,66 @@ namespace BALL
 				this section according to the format, and builds some
 				datastructures for fast and easy access to this data.
 		*/
-		virtual bool extractSection(ForceFieldParameters& parameters, const String& section_name);
-		virtual bool extractSection(Parameters& parameters, const String& section_name);
+		virtual bool extractSection(ForceFieldParameters& parameters, 
+				const String& section_name) throw();
+		virtual bool extractSection(Parameters& parameters, 
+				const String& section_name) throw();
 
 		/** Queries whether a parameter set is defined for the given atom types.
 		*/
-		bool hasParameters(Atom::Type I, Atom::Type J) const;
+		bool hasParameters(Atom::Type I, Atom::Type J) const throw();
 		
 		/**	Returns the parameters for a given atom type combination.
 		*/
-		Values getParameters(Atom::Type I, Atom::Type J) const;
+		Values getParameters(Atom::Type I, Atom::Type J) const throw();
 		
 		/**	Assign the parameters for a given atom type combination.
 				If no parameters are defined for this combination, false is
 				returned and nothing is changed.
 		*/
-		bool assignParameters(Values& parameters, Atom::Type I, Atom::Type J) const;
+		bool assignParameters(Values& parameters, Atom::Type I, Atom::Type J)
+			const throw();
 
 		/** @name Assignment */
 		//@{
 
 		/**	Clear method. */
-		virtual void clear();
+		virtual void clear() throw();
+
+		/** Assignment operator */
+		const LennardJones& operator = (const LennardJones& lj) throw();
 
 		//@}
+
+
+		/** @name Predicates */
+		//@{
+
+		/** Equality operator */
+		bool operator == (const LennardJones& lj) const throw();
+
+		//@}
+
 
 		protected:
 
 		Size									number_of_atom_types_;
 
-		float*								A_;
+		std::vector<float>		A_;
 		
-		float*								B_;
+		std::vector<float>		B_;
 
-		float*								N_;
+		std::vector<float>		N_;
 
-		float*								Aij_;
+		std::vector<float>		Aij_;
 		
-		float*								Bij_;
+		std::vector<float>		Bij_;
 
-		bool*									is_defined_;
+		std::vector<bool>			is_defined_;
 
 		FormatType						format_;
 			
-		String*								names_;
+		std::vector<String>		names_;
 	};
 
 } // namespace BALL

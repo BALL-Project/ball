@@ -1,4 +1,4 @@
-// $Id: cosineTorsion.C,v 1.4 2000/10/05 17:34:23 anker Exp $
+// $Id: cosineTorsion.C,v 1.5 2000/10/18 10:40:06 anker Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/cosineTorsion.h>
@@ -15,12 +15,12 @@ namespace BALL
 	{
 	}
 
-	CosineTorsion::~CosineTorsion()
+	CosineTorsion::~CosineTorsion() throw()
 	{
 		clear();
 	}
 
-	void CosineTorsion::clear() 
+	void CosineTorsion::clear() throw()
 	{
 		ParameterSection::clear();
 	}

@@ -1,4 +1,4 @@
-// $Id: atomTypes.h,v 1.4 2000/10/05 17:34:15 anker Exp $
+// $Id: atomTypes.h,v 1.5 2000/10/18 10:40:03 anker Exp $
 // Molecular Mechanics Parameter: class describing the atom type section of a parameter file
 
 #ifndef BALL_MOLMEC_PARAMETER_ATOMTYPES_H
@@ -21,6 +21,7 @@ namespace BALL
 	class ForceFieldParameters;
 
 	/**	Force Field Atom Type Class.	
+			\\
 			{\bf Definition:} \URL{BALL/MOLMEC/PARAMETER/atomTypes.h}
 			\\
 	*/
@@ -35,15 +36,15 @@ namespace BALL
 		
 		/**	Default constructor.
 		*/
-		AtomTypes();
+		AtomTypes() throw();
 
 		/**	Copy constructor.
 		*/
-		AtomTypes(const AtomTypes& atom_types, bool deep = true);
+		AtomTypes(const AtomTypes& atom_types) throw();
 
 		/**	Destructor.
 		*/
-		virtual ~AtomTypes();
+		virtual ~AtomTypes() throw();
 
 		//@}
 		
@@ -56,23 +57,24 @@ namespace BALL
 				interprets (if given) a format line, reads the data from this section according to 
 				the format, and builds some datastructures for fast and easy acces this data.
 		*/
-		virtual bool extractSection(Parameters& parameters, const String& section_name);
+		virtual bool extractSection(Parameters& parameters, 
+				const String& section_name) throw();
 
 		/**	Returns the numeric type for a given string.
 		*/
-		Atom::Type getType(const String& name) const;
+		Atom::Type getType(const String& name) const throw();
 
 		/**	Queries whether a given atom type is defined
 		*/
-		bool hasType(const String& name) const;
+		bool hasType(const String& name) const throw();
 
 		/**	Returns the name for a given index 
 		*/
-		String getTypeName(Atom::Type type) const;
+		String getTypeName(Atom::Type type) const throw();
 
 		/**	
 		*/
-		Size getNumberOfTypes() const;
+		Size getNumberOfTypes() const throw();
 		//@}
 
 		/**	@name	Assignment
@@ -80,14 +82,14 @@ namespace BALL
 		//@{
 
 		/** Clear method */
-		virtual void clear();
+		virtual void clear() throw();
 
 		/**	Assignment operator.
 				copy the contents of {\tt atom\_types} into {\tt this}
 				atom types object.
 				@param	atom_types the atom types object to be copied
 		*/
-		AtomTypes& operator = (const AtomTypes& atom_types);
+		AtomTypes& operator = (const AtomTypes& atom_types) throw();
 
 		//@}
 
@@ -96,7 +98,7 @@ namespace BALL
 		//@{
 
 		/** Equality operator */
-		bool operator == (const AtomTypes& atom_types) const;
+		bool operator == (const AtomTypes& atom_types) const throw();
 
 		//@}
 

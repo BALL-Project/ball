@@ -1,4 +1,4 @@
-// $Id: quadraticBondStretch.C,v 1.6 2000/10/05 17:34:24 anker Exp $
+// $Id: quadraticBondStretch.C,v 1.7 2000/10/18 10:40:07 anker Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/quadraticBondStretch.h>
@@ -17,12 +17,12 @@ namespace BALL
 	{
 	}
 
-	QuadraticBondStretch::~QuadraticBondStretch()
+	QuadraticBondStretch::~QuadraticBondStretch() throw()
 	{
 		clear();
 	}
 
-	void QuadraticBondStretch::clear() 
+	void QuadraticBondStretch::clear() throw()
 	{
 		// clear allocated parameter fields
 		delete [] k_;

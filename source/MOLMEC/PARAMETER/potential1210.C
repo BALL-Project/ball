@@ -1,4 +1,4 @@
-// $Id: potential1210.C,v 1.6 2000/10/05 17:34:24 anker Exp $
+// $Id: potential1210.C,v 1.7 2000/10/18 10:40:07 anker Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/potential1210.h>
@@ -9,38 +9,90 @@ using namespace std;
 namespace BALL 
 {
 
-	Potential1210::Potential1210()
+	Potential1210::Potential1210() throw()
 		:	ParameterSection(),
+			number_of_atom_types_(0),
 			A_(0),
 			B_(0),
-			is_defined_(0)
+			is_defined_(0),
+			names_(0)
 	{
 	}
 
-	Potential1210::~Potential1210()
+
+	Potential1210::Potential1210(const Potential1210& pot1210) throw()
+		:	ParameterSection(pot1210),
+			number_of_atom_types_(pot1210.number_of_atom_types_),
+			A_(pot1210.A_),
+			B_(pot1210.B_),
+			is_defined_(pot1210.is_defined_),
+			names_(pot1210.names_)
+	{
+	}
+
+
+	Potential1210::~Potential1210() throw()
 	{
 		clear();
+		
+		valid_ = false;
 	}
 
-	void Potential1210::clear() 
+
+	void Potential1210::clear() throw()
 	{
 		// clear parameter fields
-		delete [] A_;
-		delete [] B_;
-		delete [] is_defined_;
+		number_of_atom_types_ = 0;
+		A_.clear();
+		B_.clear();
+		is_defined_.clear();
+		names_.clear();
 
 		ParameterSection::clear();
 	}
 
+
+	const Potential1210& Potential1210::operator = (const Potential1210& pot1210) 
+		throw()
+	{
+		ParameterSection::operator = (pot1210);
+
+		number_of_atom_types_ = pot1210.number_of_atom_types_;
+		A_ = pot1210.A_;
+		B_ = pot1210.B_;
+		is_defined_ = pot1210.is_defined_;
+		names_ = pot1210.names_;
+
+		return *this;
+	}
+
+
+	bool Potential1210::operator == (const Potential1210& pot1210) const throw()
+	{
+		return (ParameterSection::operator == (pot1210)
+			&& (number_of_atom_types_ == pot1210.number_of_atom_types_)
+			&& (A_ == pot1210.A_)
+			&& (B_ == pot1210.B_)
+			&& (is_defined_ == pot1210.is_defined_)
+			&& (names_ == pot1210.names_));
+	}
+
+
 	bool Potential1210::extractSection
-		(Parameters& parameters, const String& section_name)
+		(Parameters& parameters, const String& section_name) throw()
 	{
 		return ParameterSection::extractSection(parameters, section_name);
 	}
 
+
 	bool Potential1210::extractSection
-		(ForceFieldParameters& parameters, const String& section_name)
+		(ForceFieldParameters& parameters, const String& section_name) throw()
 	{
+
+		// clear the fields first
+
+		clear();
+
 		// check whether the parameters are valid
 		if (!parameters.isValid())
 		{
@@ -65,9 +117,9 @@ namespace BALL
 		number_of_atom_types_ = atom_types.getNumberOfTypes();
 		
 		// allocate two onedimensional fields for the two parameters
-		A_  = new float[number_of_atom_types_ * number_of_atom_types_];
-		B_ = new float[number_of_atom_types_ * number_of_atom_types_];
-		is_defined_ = new bool[number_of_atom_types_ * number_of_atom_types_];
+		A_.resize(number_of_atom_types_ * number_of_atom_types_);
+		B_.resize(number_of_atom_types_ * number_of_atom_types_);
+		is_defined_.resize(number_of_atom_types_ * number_of_atom_types_);
 
 		for (i = 0; i < number_of_atom_types_ * number_of_atom_types_; i++) 
 		{
@@ -135,7 +187,8 @@ namespace BALL
 	}
 
 
-	bool Potential1210::hasParameters(Atom::Type I, Atom::Type J) const 
+	bool Potential1210::hasParameters(Atom::Type I, Atom::Type J) const
+		throw()
 	{
 		if ((I < 0) || ((Size)I >= number_of_atom_types_))
 			return false;
@@ -148,7 +201,7 @@ namespace BALL
 
 
 	Potential1210::Values Potential1210::getParameters
-		(Atom::Type I, Atom::Type J) const 
+		(Atom::Type I, Atom::Type J) const throw()
 	{
 		Potential1210::Values parameters;
 		assignParameters(parameters, I, J);
@@ -158,7 +211,7 @@ namespace BALL
 
 	bool Potential1210::assignParameters
 		(Potential1210::Values& parameters,
-		 Atom::Type I, Atom::Type J) const 
+		 Atom::Type I, Atom::Type J) const throw()
 	{
 		if (hasParameters(I, J)) 
 		{
@@ -170,5 +223,6 @@ namespace BALL
 
 		return false;
 	}
+
 	 
 } // namespace BALL

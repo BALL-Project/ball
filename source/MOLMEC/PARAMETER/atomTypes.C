@@ -1,4 +1,4 @@
-// $Id: atomTypes.C,v 1.7 2000/10/05 17:34:23 anker Exp $
+// $Id: atomTypes.C,v 1.8 2000/10/18 10:40:06 anker Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/atomTypes.h>
@@ -10,26 +10,30 @@ namespace BALL
 {
 
 
-	AtomTypes::AtomTypes()
-		: ParameterSection()
+	AtomTypes::AtomTypes() throw()
+		: ParameterSection(),
+			type_map_(),
+			names_()
 	{
 	}
 
 
-	AtomTypes::AtomTypes(const AtomTypes& atom_types, bool /* deep */)
-		: ParameterSection(atom_types)
+	AtomTypes::AtomTypes(const AtomTypes& atom_types) throw()
+		: ParameterSection(atom_types),
+			type_map_(atom_types.type_map_),
+			names_(atom_types.names_)
 	{
-		names_ = atom_types.names_;
-		type_map_ = atom_types.type_map_;
 	}
 
 
-	AtomTypes::~AtomTypes()
+	AtomTypes::~AtomTypes() throw()
 	{
 		clear();
+
+		valid_ = false;
 	}
 
-	void AtomTypes::clear()
+	void AtomTypes::clear() throw()
 	{
 		names_.clear();
 		type_map_.clear();
@@ -38,7 +42,7 @@ namespace BALL
 	}
 
 
-	AtomTypes& AtomTypes::operator = (const AtomTypes& atom_types)
+	AtomTypes& AtomTypes::operator = (const AtomTypes& atom_types) throw()
 	{
 		clear();
 
@@ -48,8 +52,9 @@ namespace BALL
 		return *this;
 	}
 
+
 	bool AtomTypes::extractSection
-		(Parameters& parameters, const String& section_name)
+		(Parameters& parameters, const String& section_name) throw()
 	{
 		valid_ = true;
 		// extract the basis information
@@ -81,12 +86,14 @@ namespace BALL
 		return true;
 	}
 
-	bool AtomTypes::hasType(const String& name) const 
+
+	bool AtomTypes::hasType(const String& name) const throw()
 	{
 		return type_map_.has(name);
 	}
 
-	Atom::Type AtomTypes::getType(const String& name) const 
+
+	Atom::Type AtomTypes::getType(const String& name) const throw()
 	{
 		// try to find the name in the hash map
 		StringHashMap<Atom::Type>::ConstIterator it = type_map_.find(name);
@@ -98,7 +105,8 @@ namespace BALL
 		}
 	}
 
-	String AtomTypes::getTypeName(Atom::Type type) const 
+
+	String AtomTypes::getTypeName(Atom::Type type) const throw()
 	{
 		static const String empty_string;
 		if ((type < 0) || (type >= (Index)names_.size()))
@@ -109,16 +117,16 @@ namespace BALL
 		return names_[type];
 	}
 
-	Size AtomTypes::getNumberOfTypes() const 
+
+	Size AtomTypes::getNumberOfTypes() const throw()
 	{
 		return names_.size();
 	}
 
 
-	bool AtomTypes::operator == (const AtomTypes& atom_types) const
+	bool AtomTypes::operator == (const AtomTypes& atom_types) const throw()
 	{
-		bool equal = ParameterSection::operator == (atom_types);
-		return (equal
+		return (ParameterSection::operator == (atom_types)
 			&& (type_map_ == atom_types.type_map_)
 			&& (names_ == atom_types.names_));
 	}

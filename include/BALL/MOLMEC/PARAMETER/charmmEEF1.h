@@ -1,4 +1,4 @@
-// $Id: charmmEEF1.h,v 1.6 2000/10/05 17:34:15 anker Exp $
+// $Id: charmmEEF1.h,v 1.7 2000/10/18 10:40:03 anker Exp $
 // Molecular Mechanics Parameter: class describing parameters needed 
 // for the EEF1 solvation component in the CHARMM force field
  
@@ -51,13 +51,13 @@ namespace BALL
 		//@{
 
 		/**	Default constructor.  */
-		CharmmEEF1();
+		CharmmEEF1() throw();
 
 		/** Copy constructor */
-		CharmmEEF1(const CharmmEEF1& charmm_EEF1);
+		CharmmEEF1(const CharmmEEF1& charmm_EEF1) throw();
 
 		/**	Destructor.  */
-		virtual ~CharmmEEF1();
+		virtual ~CharmmEEF1() throw();
 
 		//@}
 
@@ -66,32 +66,35 @@ namespace BALL
 				interprets (if given) a format line, reads the data from this section according to 
 				the format, and builds some datastructures for fast and easy acces this data.
 		*/
-		virtual bool extractSection(ForceFieldParameters& parameters, const String& section_name);
-		virtual bool extractSection(Parameters& parameters, const String& section_name);
+		virtual bool extractSection(ForceFieldParameters& parameters, 
+				const String& section_name) throw();
+		virtual bool extractSection(Parameters& parameters, 
+				const String& section_name) throw();
 
 		/** Queries whether a parameter set is defined for the given atom type.
 		*/
-		bool hasParameters(Atom::Type I) const;
+		bool hasParameters(Atom::Type I) const throw();
 		
 		/**	Returns the parameters for a given atom type combination.
 		*/
-		CharmmEEF1::Values getParameters(Atom::Type I) const;
+		CharmmEEF1::Values getParameters(Atom::Type I) const throw();
 		
 		/**	Assign the parameters for a given atom type combination.
 				If no parameters are defined for this combination, false is
 				returned and nothing is changed.
 		*/
-		bool assignParameters(CharmmEEF1::Values& parameters, Atom::Type I) const;
+		bool assignParameters(CharmmEEF1::Values& parameters, Atom::Type I)
+			const throw();
 
 
 		/** @name Assignment */
 		//@{
 
 		/**	Clear method.  */
-		virtual void clear();
+		virtual void clear() throw();
 
 		/** Assignment operator */
-		const CharmmEEF1& operator = (const CharmmEEF1& charmm_EEF1);
+		const CharmmEEF1& operator = (const CharmmEEF1& charmm_EEF1) throw();
 
 		//@}
 		
@@ -100,9 +103,10 @@ namespace BALL
 		//@{
 
 		/** Equality operator */
-		bool operator == (const CharmmEEF1& charmm_EEF1) const;
+		bool operator == (const CharmmEEF1& charmm_EEF1) const throw();
 
 		//@}
+
 
 		protected:
 
