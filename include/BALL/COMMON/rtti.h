@@ -1,4 +1,4 @@
-// $Id: rtti.h,v 1.5 2000/01/13 22:48:44 oliver Exp $
+// $Id: rtti.h,v 1.6 2000/01/14 20:38:49 oliver Exp $
 
 #ifndef BALL_COMMON_RTTI_H
 #define BALL_COMMON_RTTI_H
@@ -86,12 +86,20 @@ namespace BALL
 		/**	Return the name of the class.
 				This method returns the name of the class as given by {\tt typeid(<class instance>.name())}.
 				No additional name demangling and whitespace substitution are performed.
-				@see	
 		*/
 		template <typename T>
 		const char* getName()
 		{
 			return typeid(getDefault<T>()).name();
+		}
+
+		/**	Return a void pointer that is unique for each class.
+		*/
+		template <typename T>
+		void* getClassID()
+		{
+			static char dummy;
+			return (void*)&dummy;
 		}
 
 		/**	Return the demangled class name.
