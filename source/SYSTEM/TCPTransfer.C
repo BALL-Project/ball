@@ -1,4 +1,4 @@
-// $Id: TCPTransfer.C,v 1.16 2002/01/17 03:29:56 oliver Exp $
+// $Id: TCPTransfer.C,v 1.17 2002/01/17 15:04:53 amoll Exp $
 
 // workaround for Solaris -- this should be caught by configure -- OK / 15.01.2002
 #define BSD_COMP
@@ -28,10 +28,7 @@ TCPTransfer::TCPTransfer(std::ofstream& file, const String& address)
 	throw(TransferFailed) 
 	:	buffer_(new char[BUFFER_SIZE + 1])
 {
-	if (!set(file, address))
-	{
-		return; 
-	}
+	set(file, address);
 
 	status_ = transfer();
 	if (status_ != NO_ERROR)
