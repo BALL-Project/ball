@@ -1,4 +1,4 @@
-// $Id: Box3_test.C,v 1.12 2000/09/05 09:59:13 oliver Exp $
+// $Id: Box3_test.C,v 1.13 2000/09/06 00:09:08 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -6,7 +6,7 @@
 #	include <BALL/MATHS/vector3.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Box3_test.C,v 1.12 2000/09/05 09:59:13 oliver Exp $")
+START_TEST(class_name, "$Id: Box3_test.C,v 1.13 2000/09/06 00:09:08 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -146,11 +146,50 @@ CHECK(TBox3::isValid() const )
 RESULT
 
 CHECK(bool TBox3::has(const TVector3<T>& point, bool on_surface = false) const)
-	// BAUSTELLE
+	v1 = Vector3(0.0, 0.0, 0.0);
+	v2 = Vector3(4.0, 5.0, 6.0);
+	v3 = Vector3(4.0, 5.1, 6.0);
+	box = Box3(v1, v2);
+	TEST_EQUAL(box.has(v3, true), false)
+	v3 = Vector3(4.0, 5.0, 6.0);
+	TEST_EQUAL(box.has(v3, true), true)
+	TEST_EQUAL(box.has(v3, false), true)
+	v3 = Vector3(4.0, 4.0, 6.0);
+	TEST_EQUAL(box.has(v3, false), true)
+
+	v2 = Vector3(0.0, 0.0, 0.0);
+	v1 = Vector3(4.0, 5.0, 6.0);
+	v3 = Vector3(4.0, 5.1, 6.0);
+	box = Box3(v1, v2);
+	TEST_EQUAL(box.has(v3, true), false)
+	v3 = Vector3(4.0, 5.0, 6.0);
+	TEST_EQUAL(box.has(v3, true), true)
+	TEST_EQUAL(box.has(v3, false), true)
+	v3 = Vector3(4.0, 4.0, 6.0);
+	TEST_EQUAL(box.has(v3, false), true)
 RESULT
 
 CHECK(bool TBox3::isIntersecting(const TBox3& box) const)
-	// BAUSTELLE
+	v1 = Vector3(0.0, 0.0, 0.0);
+	v2 = Vector3(4.0, 5.0, 6.0);
+	box = Box3(v1, v2);
+
+	v1 = Vector3(0.0, 0.0, 0.0);
+	v2 = Vector3(-4.0, -5.0, -6.0);
+	box2 = Box3(v1, v2);
+	TEST_EQUAL(box.isIntersecting(box2) , true)
+
+	v1 = Vector3(-0.1, 0.0, 0.0);
+	v2 = Vector3(-4.0, -5.0, -6.0);
+	box2 = Box3(v1, v2);
+	TEST_EQUAL(box.isIntersecting(box2) , false)
+
+	v2 = Vector3(0.0, 0.0, 0.0);
+	v1 = Vector3(-4.0, -5.0, -6.0);
+	box2 = Box3(v1, v2);
+	TEST_EQUAL(box2.isIntersecting(box) , true)
+
+	TEST_EQUAL(box2.isIntersecting(box2) , true)
 RESULT
 
 CHECK(TBox3::set(const TBox3<T>& box, bool /* deep */))
@@ -160,6 +199,8 @@ CHECK(TBox3::set(const TBox3<T>& box, bool /* deep */))
 RESULT
 
 CHECK(TBox3::set(const T& ax, const T& ay, const T& az, const T& bx, const T& by, const T& bz))
+	v1 = Vector3(1.0, 2.0, 3.0);
+	v2 = Vector3(6.0, 5.0, 4.0);
 	box = Box3(v1, v2);
 	box2.set(1.0, 2.0, 3.0, 6.0, 5.0, 4.0);
 	TEST_EQUAL(box == box2, true)
