@@ -1,4 +1,4 @@
-// $Id: energyMinimizer.h,v 1.10 2000/01/10 15:51:04 oliver Exp $
+// $Id: energyMinimizer.h,v 1.11 2000/01/15 18:54:53 oliver Exp $
 // Energy Minimizer: A class for minimizing the energy of molecular systems
 
 #ifndef BALL_MOLMEC_MINIMIZATION_ENERGYMINIMIZER_H
@@ -313,7 +313,7 @@ namespace BALL
 				the minimization continues with the former step width.	
 				@param		steps maximum number of steps to be taken
 				@param		restart {\bf true} if the minimization is to be continued
-				@return		{\bf true} if the convergence criterion is fulfilled
+				@return		{\bf true} if the minimization is terminated
 		*/
 		virtual bool	minimize(Size steps = 0, bool restart = false);
 
