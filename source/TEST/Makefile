@@ -60,6 +60,7 @@ EXECUTABLES = \
 	RTTI_test\
 	RuleEvaluator_test\
 	SecondaryStructure_test\
+	Selectable_test\
 	Socket_test\
 	Sphere3_test\
 	SplayTree_test\
