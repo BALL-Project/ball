@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glPrimitiveManager.C,v 1.10 2002/12/16 12:23:07 sturm Exp $
+// $Id: glPrimitiveManager.C,v 1.11 2002/12/17 15:43:48 amoll Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/glPrimitiveManager.h>
 #include <BALL/VIEW/GUI/KERNEL/glQuadricObject.h>
@@ -21,9 +21,10 @@ namespace BALL
 		{
 		}
 
-		GLDisplayListObject_::WrongModes::WrongModes(const char* file, int line)
+		GLDisplayListObject_::WrongModes::WrongModes(const char* file, int line, int mode, int precision)
 			throw()
-			:	Exception::GeneralException(file, line, string("WrongModes"), string("the drawing precision or the drawing mode are not allowed."))
+			:	Exception::GeneralException(file, line, string("WrongModes"), string("the drawing precision " + String(precision) + 
+																											 " or the drawing mode " + String(mode) + " are not allowed."))
 		{
 		}
 
@@ -126,13 +127,12 @@ namespace BALL
 			}
 		}
 
-		GLDisplayList& GLSphereDisplayLists_::operator ()
-			 (unsigned int drawing_mode, unsigned int drawing_precision)
+		GLDisplayList& GLSphereDisplayLists_::operator () (unsigned int drawing_mode, unsigned int drawing_precision)
 			throw(GLSphereDisplayLists_::WrongModes)
 		{
-			if (drawing_mode >= 3 || drawing_precision >= 4)
+			if (drawing_mode >= 3 || drawing_precision >= 5)
 			{
-				throw WrongModes(__FILE__, __LINE__);
+				throw WrongModes(__FILE__, __LINE__, drawing_mode, drawing_precision);
 			}
 			
 			return GL_display_list_[drawing_mode * 4 + drawing_precision];
@@ -340,9 +340,9 @@ namespace BALL
 			 (unsigned int drawing_mode, unsigned int drawing_precision)
 			throw(GLTubeDisplayLists_::WrongModes)
 		{
-			if (drawing_mode >= 3 || drawing_precision >= 4)
+			if (drawing_mode >= 3 || drawing_precision >= 5)
 			{
-				throw WrongModes(__FILE__, __LINE__);
+				throw WrongModes(__FILE__, __LINE__, drawing_mode, drawing_precision);
 			}
 			
 			return GL_display_list_[drawing_mode * 4 + drawing_precision];
@@ -501,9 +501,9 @@ namespace BALL
 			 (unsigned int drawing_mode, unsigned int drawing_precision)
 			throw(GLSimpleBoxDisplayLists_::WrongModes)
 		{
-			if (drawing_mode >= 3 || drawing_precision >= 4)
+			if (drawing_mode >= 3 || drawing_precision >= 5)
 			{
-				throw WrongModes(__FILE__, __LINE__);
+				throw WrongModes(__FILE__, __LINE__, drawing_mode, drawing_precision);
 			}
 			
 			return GL_display_list_[drawing_mode * 4 + drawing_precision];
