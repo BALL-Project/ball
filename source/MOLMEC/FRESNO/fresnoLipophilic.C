@@ -1,4 +1,4 @@
-// $Id: fresnoLipophilic.C,v 1.1.2.1 2002/02/14 17:02:55 anker Exp $
+// $Id: fresnoLipophilic.C,v 1.1.2.2 2002/03/05 22:56:43 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -84,15 +84,6 @@ namespace BALL
 		// the fresno types
 
 		System* system = force_field->getSystem();
-		if (system->countMolecules() != 2)
-		{
-			Log.warn() << "FresnoLipophilic::setup(): "
-				<< "need two molecules for lipophilic evaluation, skipping"
-				<< endl;
-			possible_lipophilic_interactions_.clear();
-			return true;
-		}
-
 		FresnoFF* fff = dynamic_cast<FresnoFF*>(force_field);
 
 		// ?????
@@ -126,6 +117,14 @@ namespace BALL
 						if (type_B == FresnoFF::LIPOPHILIC)
 						{
 							possible_lipophilic_interactions_.push_back(pair<const Atom*, const Atom*>(&*A_it, &*B_it));
+							// DEBUG
+							cout << "found possible lipophilic int.: " 
+								<< A_it->getFullName() << "..." << B_it->getFullName()
+								<< " (length: " 
+								<< (A_it->getPosition() - B_it->getPosition()).getLength() 
+								<< " A) " 
+								<< endl;
+							// /DEBUG
 						}
 					}
 				}
@@ -169,12 +168,6 @@ namespace BALL
 
 			distance = (atom1->getPosition() - atom2->getPosition()).getLength();
 
-			// DEBUG
-			// cout << "LIP distance: " << distance << endl;
-			// cout << "R1: " << R1 << endl;
-			// cout << "R2: " << R2 << endl;
-			// /DEBUG
-
 			// if the distance is too large, the product of g1 and g2 is zero, so
 			// we can skip the rest
 
@@ -183,12 +176,17 @@ namespace BALL
 				// we could possibly speed up the next step by using the fact that the
 				// difference between R1 and R2 is constant
 				val = MolmecSupport::calculateFresnoHelperFunction(distance, R1, R2);
+				// DEBUG
+				cout << "LIPO: adding score of " << val
+					<< " (distance " << distance << ", R1 " << R1 << ", R2 " << R2 << ")"
+					<< endl;
+				// /DEBUG
+				
+				E += val;
 			}
 		}
 
-		E = val;
 		return E;
-		
 	}
 
 
