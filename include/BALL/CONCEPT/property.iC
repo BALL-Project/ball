@@ -1,4 +1,4 @@
-// $Id: property.iC,v 1.5 2000/08/24 12:00:00 amoll Exp $
+// $Id: property.iC,v 1.6 2000/08/28 14:21:25 amoll Exp $
 
 BALL_INLINE 
 NamedProperty::NamedProperty(const string& name)	
@@ -59,7 +59,7 @@ NamedProperty::NamedProperty(const string& name, string& str)
 		type_(STRING),
 		name_(name)
 {
-	data_.s = &str;
+	data_.s = new string(str);
 }
 
 BALL_INLINE 
@@ -73,11 +73,11 @@ NamedProperty::NamedProperty(const string& name, PersistentObject& po)
 
 BALL_INLINE 
 NamedProperty::~NamedProperty()
-{/*
+{
 	if ((type_ == STRING) && (data_.s != 0))
 	{
 		delete data_.s;
-	}*/
+	}
 }
 	
 BALL_INLINE 
