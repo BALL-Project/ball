@@ -24,7 +24,7 @@ External software and libraries:
   easy to install.
 
   The compilation of the visualization component BALLVIEW also requires
-  the QT library (version 2.x) which is available from
+  the QT library (version 3.x) which is available from
 
     http://www.troll.no/qt
 
@@ -207,4 +207,4 @@ and libMOLVIEW.so), the qt libraries (libqt.so, libqgl.so), and the
 OpenGL/Mesa libraries (libGL.so, libGLU.so).
 
 --------------------------------------------------------------------
-document revision: $Id: INSTALLATION,v 1.10 2002/12/23 15:39:54 anker Exp $
+document revision: $Id: INSTALLATION,v 1.11 2003/03/17 09:52:36 oliver Exp $
