@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logStream.C,v 1.35 2004/04/22 23:32:53 amoll Exp $
+// $Id: logStream.C,v 1.35.2.1 2004/05/24 20:13:55 oliver Exp $
 //
 
 #include <limits>
@@ -120,7 +120,7 @@ namespace BALL
 					// remove cr/lf from the end of the line				
 					while (outstring[outstring.size() - 1] == 10 || outstring[outstring.size() - 1] == 13)
 					{
-						outstring.erase(outstring.end());
+						outstring.erase(--outstring.end());
 					}
 		
 					// store the line 
