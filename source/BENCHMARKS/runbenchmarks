@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # the total time of the (imaginary) reference system
-REF_TIME=4.0
+REF_TIME=258.98
 
 # try to figure out which syntax we need
 # to prevent a linefeed at the end of echo
