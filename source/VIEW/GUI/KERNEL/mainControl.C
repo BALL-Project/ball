@@ -1,10 +1,11 @@
-// $Id: mainControl.C,v 1.22.4.4 2002/11/07 19:31:20 amoll Exp $
+// $Id: mainControl.C,v 1.22.4.5 2002/11/29 00:54:58 amoll Exp $
 
 // this is required for QMenuItem
 #define INCLUDE_MENUITEM_DEF
 
 #include <BALL/VIEW/GUI/KERNEL/mainControl.h>
 #include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
+#include <BALL/KERNEL/system.h>
 
 #include <qapplication.h>
 #include <qwidget.h>
@@ -30,6 +31,7 @@ namespace BALL
 		MainControl::MainControl(QWidget* parent, const char* name, String inifile)
 			throw()
 			:	QMainWindow(parent, name),
+				selection_(),
 				composite_map_(),
 				descriptor_map_(),
 				descriptors_(),
@@ -49,6 +51,7 @@ namespace BALL
 			:	QMainWindow(0, ""),
 				ConnectionObject(main_control),
 				Embeddable(main_control),
+				selection_(),
 				composite_map_(),
 				descriptor_map_(),
 				descriptors_(),
@@ -78,10 +81,7 @@ namespace BALL
 				menu = new QPopupMenu(this);
 				CHECK_PTR(menu);
 
-				connect(menu,
-								SIGNAL(aboutToShow()),
-								this,
-								SLOT(checkMenus()));
+				connect(menu, SIGNAL(aboutToShow()), this, SLOT(checkMenus()));
 
 				#ifdef BALL_VIEW_DEBUG
 					Log.info() << "new menu entry: " << ID << endl;	
@@ -93,8 +93,7 @@ namespace BALL
 						menuBar()->insertItem("&File", menu, FILE, 0);
 						break;
    				case FILE_IMPORT:
-						initPopupMenu(MainControl::FILE)
-							->insertItem("&Import File", menu, FILE_IMPORT);
+						initPopupMenu(MainControl::FILE)->insertItem("&Import File", menu, FILE_IMPORT);
 						break;
 					case EDIT:
 						menuBar()->insertItem("&Edit", menu, EDIT, (1 <= max_id) ? 1 : -1);
@@ -136,16 +135,13 @@ namespace BALL
 			list<CompositeDescriptor *>::iterator it = descriptors_.begin();
 			for (; it != descriptors_.end(); ++it)
 			{
-				// ?????:
-				// Segmentation Fault nach Beenden des Programms, obwohl ueberhaupt
-				// keine Descriptoren angelegt wurden
-
 				delete *it;
 			}
 
 			descriptors_.destroy();
 			composite_map_.destroy();
 			descriptor_map_.destroy();
+			selection_.clear();
 		}
 			
 		void MainControl::destroy()
@@ -169,10 +165,7 @@ namespace BALL
 			}
 
 			// establish connection 
-			connect(preferences_dialog_,
-							SIGNAL(applyButtonPressed()),
-							this,
-							SLOT(applyPreferencesTab()));
+			connect(preferences_dialog_, SIGNAL(applyButtonPressed()), this, SLOT(applyPreferencesTab()));
 
 			// initialize own preferences tab
 			initializePreferencesTab(*preferences_dialog_);
@@ -281,8 +274,7 @@ namespace BALL
 		bool MainControl::remove(const Composite& composite, bool sent_message)
 			throw()
 		{
-			ListIteratorHashMap::Iterator map_iterator 
-				= composite_map_.find((void*)&composite);
+			ListIteratorHashMap::Iterator map_iterator = composite_map_.find((void*)&composite);
 
 			if (map_iterator != composite_map_.end())
 			{
@@ -320,17 +312,13 @@ namespace BALL
 		bool MainControl::remove(const CompositeDescriptor& composite_descriptor)
 			throw()
 		{
-			ListIteratorHashMap::Iterator map_iterator 
-				= descriptor_map_.find((void*)&composite_descriptor);
+			ListIteratorHashMap::Iterator map_iterator = descriptor_map_.find((void*)&composite_descriptor);
 
 			if (map_iterator != descriptor_map_.end())
 			{
-				composite_map_.erase((void*)composite_descriptor.getComposite());
-
+				 composite_map_.erase((void*)composite_descriptor.getComposite());
 				descriptor_map_.erase((void*)&composite_descriptor);
-
 				delete (CompositeDescriptor*)map_iterator->first;
-
 				descriptors_.erase(map_iterator->second);
 
 				return true;
@@ -358,8 +346,7 @@ namespace BALL
 		String* MainControl::getName(const Composite& composite)
 			throw()
 		{
-			ListIteratorHashMap::Iterator map_iterator = 
-				composite_map_.find((void*)&composite);
+			ListIteratorHashMap::Iterator map_iterator = composite_map_.find((void*)&composite);
 
 			if (map_iterator != composite_map_.end())
 			{
@@ -388,13 +375,11 @@ namespace BALL
 		bool MainControl::setCenter(const Composite& composite, const Vector3& v)
 			throw()
 		{
-			ListIteratorHashMap::Iterator map_iterator =
-				composite_map_.find((void*)&composite);
+			ListIteratorHashMap::Iterator map_iterator = composite_map_.find((void*)&composite);
 
 			if (map_iterator != composite_map_.end())
 			{
 				(*map_iterator->second)->setCenter(v);
-
 				return true;
 			}
 
@@ -478,26 +463,22 @@ namespace BALL
 				remove(*composite, true);
 			}
 
-        // create a new composite descriptor and enable the self deletion mechanism
-        // for the composite
-        List<CompositeDescriptor*>::Iterator list_iterator = descriptors_.end();
+			// create a new composite descriptor and enable the self deletion mechanism
+			// for the composite
+			List<CompositeDescriptor*>::Iterator list_iterator = descriptors_.end();
 
-        CompositeDescriptor* composite_descriptor =
-          new CompositeDescriptor();
+			CompositeDescriptor* composite_descriptor = new CompositeDescriptor();
 
-        composite_descriptor->setComposite(composite, true);
-        composite_descriptor->setName(name);
-				composite_descriptor->setCenter(center);
+			composite_descriptor->setComposite(composite, true);
+			composite_descriptor->setName(name);
+			composite_descriptor->setCenter(center);
 
-        descriptors_.push_back(composite_descriptor);
-        list_iterator = descriptors_.end();
-        list_iterator--;
+			descriptors_.push_back(composite_descriptor);
+			list_iterator = descriptors_.end();
+			list_iterator--;
 
-        composite_map_.
-          insert(ListIteratorHashMap::ValueType((void *)composite, list_iterator));
-
-        descriptor_map_.
-          insert(ListIteratorHashMap::ValueType((void *)composite_descriptor, list_iterator));
+			 composite_map_.insert(ListIteratorHashMap::ValueType((void *)composite, list_iterator));
+			descriptor_map_.insert(ListIteratorHashMap::ValueType((void *)composite_descriptor, list_iterator));
  		}	
 
 		void MainControl::onNotify(Message *message)
@@ -512,25 +493,36 @@ namespace BALL
 			}
 			else if (RTTI::isKindOf<NewCompositeMessage>(*message))
 			{
-				NewCompositeMessage* new_message 
-				  = RTTI::castTo<NewCompositeMessage>(*message);
-
-				insert(new_message->getComposite(),
-							 new_message->getCompositeName());
+				NewCompositeMessage* new_message = RTTI::castTo<NewCompositeMessage>(*message);
+				insert(new_message->getComposite(), new_message->getCompositeName());
  			}
 			else if (RTTI::isKindOf<RemovedCompositeMessage>(*message))
 			{
-				RemovedCompositeMessage *composite_message 
-					= RTTI::castTo<RemovedCompositeMessage>(*message);
-
+				RemovedCompositeMessage *composite_message = RTTI::castTo<RemovedCompositeMessage>(*message);
 				remove(*composite_message->getComposite(), false);
 			}
 			else if (RTTI::isKindOf<ChangedCompositeMessage>(*message))
 			{
-				ChangedCompositeMessage *composite_message
-					= RTTI::castTo<ChangedCompositeMessage>(*message);
-
+				ChangedCompositeMessage *composite_message = RTTI::castTo<ChangedCompositeMessage>(*message);
 				update(composite_message->getComposite()->getRoot());
+			}
+			else if (RTTI::isKindOf<GeometricObjectSelectionMessage>(*message))
+			{
+				GeometricObjectSelectionMessage* selection_message = RTTI::castTo<GeometricObjectSelectionMessage>(*message);
+				selectComposites_(*selection_message);
+			}
+			else if(RTTI::isKindOf<CompositeSelectedMessage>(*message))
+			{
+				CompositeSelectedMessage * selection_message = RTTI::castTo<CompositeSelectedMessage>(*message);
+				if (selection_message->selected_ == selection_.has(selection_message->composite_)) return;
+				if (selection_message->selected_) 
+				{
+					selection_.insert(selection_message->composite_);
+				}
+				else
+				{
+					selection_.erase(selection_message->composite_);
+				}
 			}
     }
 
@@ -594,8 +586,7 @@ namespace BALL
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
-		CompositeDescriptor*  MainControl::insert_
-			(const Composite& composite, const String& s, const Vector3& v)
+		CompositeDescriptor*  MainControl::insert_(const Composite& composite, const String& s, const Vector3& v)
 			throw()
 		{
 			if (composite_map_.has((void *)&composite) == true)
@@ -840,8 +831,37 @@ namespace BALL
 			#endif
 			modular_widgets_.remove(widget);
 		}
+
+		void MainControl::selectComposites_(GeometricObjectSelectionMessage& message)
+			throw()
+		{
+			// wird GeometricObject list
+			List<Composite*>& objects = message.getSelection();
+			List<Composite*>::Iterator it = objects.begin();
+
+			selection_.clear();
+
+			for (; it != objects.end(); it++)
+			{
+				if ((*it)->getParent() == 0) continue;
+				if (!selection_.has((*it)->getParent())) selection_.insert(*it);
+			}
+			NewSelectionMessage* new_message = new NewSelectionMessage;
+			notify_(new_message);
+		}
  
+		const HashSet<Composite*>& MainControl::getSelection() const
+			throw()
+		{
+			return selection_;
+		}
   
+		bool MainControl::isSystemSelected()
+			throw()
+		{
+			return (selection_.size() == 1 && RTTI::isKindOf<System>(**selection_.begin()));
+		}
+
 #		ifdef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/GUI/KERNEL/mainControl.iC>
 #		endif
