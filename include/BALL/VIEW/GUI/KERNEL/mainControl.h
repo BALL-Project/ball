@@ -1,4 +1,4 @@
-// $Id: mainControl.h,v 1.3 2000/09/23 14:15:04 hekl Exp $
+// $Id: mainControl.h,v 1.4 2000/10/05 10:54:50 oliver Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
 #define BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
@@ -88,6 +88,7 @@ namespace BALL
 		{
 			Q_OBJECT
 			public:
+			BALL_CREATE(MainControl)
 			BALL_EMBEDDABLE(MainControl)
 
 			/**	@name	Type Definitions
@@ -139,6 +140,10 @@ namespace BALL
 					@return	MainControl - new constructed MainControl				
 			*/
 			MainControl(QWidget* parent = 0, const char* name = 0 , String option_filename = ".BALL.options");
+
+			/**	Copy constructor.
+			*/
+			MainControl(const MainControl& main_control);
 
 			/** Destructor
 					Default destruction of {\em *this} MainControl.
