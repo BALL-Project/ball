@@ -1,7 +1,7 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.29 2004/02/16 11:27:06 oliver Exp $
+# $Id: Makefile,v 1.30 2004/02/20 11:15:01 oliver Exp $
 #
 
 DIRECTORY=PYTHON/EXTENSIONS
@@ -61,7 +61,7 @@ PYBALL_OBJECTS  = $(PYBALL_SOURCES:.C=.o)
 CPP_SOURCES = $(SIP_SOURCES:.h=.C) $(PYBALL_SOURCES)
 CPP_OBJECTS = $(SIP_OBJECTS) $(PYBALL_OBJECTS)
 
-BALLmodule.so: BALLcmodule.o
+BALLmodule.so: sipBALLcmodule.o
 
 sip:
 	@if test ! -d SIP ; then mkdir SIP 2>/dev/null ; fi
