@@ -1,4 +1,4 @@
-// $Id: string.h,v 1.40 2001/12/30 13:28:37 sturm Exp $
+// $Id: string.h,v 1.41 2002/02/23 11:57:10 oliver Exp $
 
 #ifndef BALL_DATATYPE_STRING_H
 #define BALL_DATATYPE_STRING_H
@@ -184,7 +184,7 @@ namespace BALL
 				successive construction of multiple strings from the same {\tt strstream}
 				object leads to identical copies.
 		*/
-		String(::std::strstream& s)
+		String(std::strstream& s)
 			throw();
 
 		/** Creates a new string from len copies of c.
@@ -269,7 +269,7 @@ namespace BALL
 		/** Assign a String from a {\bf strstream}.
 				The contents of the {\tt strstream} object are not modified.
 		*/
-		void set(::std::strstream& s)
+		void set(std::strstream& s)
 			throw();
 
 		/// Assign a String from the result of repeating {\bf c} {\bf len} times
@@ -327,7 +327,7 @@ namespace BALL
 		/** Assign a string from a {\bf strstream}.
 				The contents of the {\tt strstream} object are not modified.
 		*/
-		const String& operator = (::std::strstream& s)
+		const String& operator = (std::strstream& s)
 			throw();
 
 		/// Assign a String from a single char
@@ -893,7 +893,7 @@ namespace BALL
 			throw();
 
 		///
-		void dump(::std::ostream& s = ::std::cout, Size depth = 0) const
+		void dump(std::ostream& s = std::cout, Size depth = 0) const
 			throw();
 
 		//@}			
@@ -902,11 +902,11 @@ namespace BALL
 		//@{
 
 		///
-		::std::istream& getline(::std::istream& s = ::std::cin, char delimiter = '\n')
+		std::istream& getline(std::istream& s = std::cin, char delimiter = '\n')
 			throw();
 
 		///
-		friend ::std::istream& getline(::std::istream& s,  String& string,  char delimiter = '\n')
+		friend std::istream& getline(std::istream& s,  String& string,  char delimiter = '\n')
 			throw();
 
 		//@}
@@ -1223,7 +1223,7 @@ namespace BALL
 		//@{
 
 		/// Writes the substring to a stream
-		friend ::std::ostream& operator << (::std::ostream& s, const Substring& substring)
+		friend std::ostream& operator << (std::ostream& s, const Substring& substring)
 			throw();
 
 		//@}
@@ -1239,7 +1239,7 @@ namespace BALL
 			throw();
 
 		///	Dumps the substring object (including the values of its private members)
-		void dump(::std::ostream& s = ::std::cout, Size depth = 0) const 
+		void dump(std::ostream& s = std::cout, Size depth = 0) const 
 			throw(Substring::UnboundSubstring);
 
 		//@}
