@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.h,v 1.62 2003/12/15 18:10:35 amoll Exp $
+// $Id: atom.h,v 1.63 2004/02/23 20:38:17 anker Exp $
 //
 
 #ifndef BALL_KERNEL_ATOM_H
@@ -790,6 +790,9 @@ namespace BALL
 
 				const BondIteratorPosition& getPosition() const	throw()	{ return position_;	}
 
+				// Comparison: We do net check whether these traits are bound to
+				// the same container here for efficiency reasons.
+
 				bool operator == (const BondIteratorTraits& traits) const	throw()
 				{
 					return (position_ == traits.position_);
@@ -895,7 +898,7 @@ namespace BALL
 					return *(bound_->bond_[index]);
 				}
 
-				const Bond &getData(Index index) const
+				const Bond& getData(Index index) const
 					throw()
 				{
 					return *(bound_->bond_[index]);
@@ -1010,7 +1013,8 @@ namespace BALL
 
 			/** Swap the contents of the two attributes.
 					Adjusts the <tt>ptr</tt> and <tt>index_</tt> members of
-					 \link StaticAtomAttributes StaticAtomAttributes \endlink  and  \link Atom Atom \endlink .
+					\link StaticAtomAttributes StaticAtomAttributes \endlink  and  
+					\link Atom Atom \endlink .
 			*/
 			void swap(StaticAtomAttributes& attr);
 
@@ -1023,7 +1027,6 @@ namespace BALL
 			StaticAtomAttributes& operator = (const StaticAtomAttributes& attr);
 		};
 
-		
 		///
 		class AttributeVector
 			:	public std::vector<StaticAtomAttributes>
