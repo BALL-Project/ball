@@ -1,4 +1,4 @@
-// $Id: embeddable.h,v 1.1 2000/07/16 16:09:23 oliver Exp $
+// $Id: embeddable.h,v 1.2 2000/07/16 19:27:27 oliver Exp $
 
 #ifndef BALL_CONCEPT_EMBEDDABLE_H
 #define BALL_CONCEPT_EMBEDDABLE_H
@@ -73,7 +73,7 @@ namespace BALL
 				definition.
 				@see getInstanceList
 		*/
-		virtual void registerThis() throw() = 0;	
+		virtual void registerThis() throw();	
 
 		//@}
 			
