@@ -16,6 +16,7 @@ EXECUTABLES = \
 	BitVector_test\
 	Bond_test\
 	BaseFragment_test\
+        Box3_test\
 	CharmmFF_test\
 	ClassTest_test\
 	Composite_test\
@@ -27,6 +28,7 @@ EXECUTABLES = \
 	HashSet_test\
 	KernelPredicate_test\
 	Limits_test\
+        Line3_test\
 	List_test\
 	NumericalSAS_test\
 	Options_test\
@@ -72,6 +74,9 @@ Bond_test:	Bond_test.o
 BitVector_test:	BitVector_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
+Box3_test:	Box3_test.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
 CharmmFF_test:	CharmmFF_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
@@ -103,6 +108,9 @@ KernelPredicate_test:	KernelPredicate_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 Limits_test:	Limits_test.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
+Line3_test:	Line3_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 List_test:	List_test.o
