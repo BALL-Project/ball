@@ -1,10 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorExtension2.h,v 1.1 2003/08/26 12:11:00 oliver Exp $
+// $Id: colorExtension2.h,v 1.2 2003/08/27 13:05:29 amoll Exp $
 
-#ifndef BALL_VIEW_KERNEL_COLOREXTENSION2_H
-#define BALL_VIEW_KERNEL_COLOREXTENSION2_H
+#ifndef BALL_VIEW_DATATYPE_COLOREXTENSION2_H
+#define BALL_VIEW_DATATYPE_COLOREXTENSION2_H
 
 #ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
 # include <BALL/VIEW/DATATYPE/colorRGBA.h>
@@ -49,7 +49,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -122,8 +121,8 @@ namespace BALL
 			*/
 			void swap(ColorExtension2& color_extension)
 				throw();
+			
 			//@}
-
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
@@ -230,13 +229,11 @@ namespace BALL
 			ColorRGBA color2_;
 		};
 
-
 #		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/KERNEL/colorExtension2.iC>
+#			include <BALL/VIEW/DATATYPE/colorExtension2.iC>
 #		endif
 
 	} // namespace VIEW
-
 } // namespace BALL
 
 #endif // BALL_VIEW_KERNEL_COLOREXTENSION2_H

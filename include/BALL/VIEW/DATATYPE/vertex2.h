@@ -1,10 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertex2.h,v 1.3 2003/08/26 14:08:03 amoll Exp $
+// $Id: vertex2.h,v 1.4 2003/08/27 13:05:29 amoll Exp $
 
-#ifndef BALL_VIEW_KERNEL_VERTEX2_H
-#define BALL_VIEW_KERNEL_VERTEX2_H
+#ifndef BALL_VIEW_DATATYPE_VERTEX2_H
+#define BALL_VIEW_DATATYPE_VERTEX2_H
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -17,7 +17,6 @@
 
 namespace BALL
 {
-	
 	namespace VIEW
 	{
 
@@ -523,11 +522,10 @@ namespace BALL
 
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/KERNEL/vertex2.iC>
+#			include <BALL/VIEW/DATATYPE/vertex2.iC>
 #		endif
 	
 	} // namespace VIEW
-
 } // namespace BALL
 
-#endif // BALL_VIEW_KERNEL_VERTEX2_H
+#endif // BALL_VIEW_DATATYPE_VERTEX2_H
