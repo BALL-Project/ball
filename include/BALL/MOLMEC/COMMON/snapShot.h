@@ -1,4 +1,4 @@
-// $Id: snapShot.h,v 1.7 2000/05/10 08:36:32 pmueller Exp $
+// $Id: snapShot.h,v 1.8 2000/07/24 15:04:55 oliver Exp $
 // This file contains the definitions of the classes 
 // SnapshotManager and Snapshot. 
 // They can be used to obtain snapshots from an MD simulation or an energy 
@@ -177,36 +177,42 @@ namespace BALL
 
 
 
-  // This class manages a list of single snapshot objects 
-  // Snapshots are numbered starting with 1 
+  /**	snapshot management for MD simulations.
+			This class manages a list of single snapshot objects.
+			Snapshots are numbered starting with 1.
+			\\
+			{\bf Definition:}\URL{BALL/MOLMEC/COMMON/snapShot.h}
+			\\
+	*/
   class SnapShotManager
-    {
+  {
     public:
 
     //  Local class for handling options
     struct Option
-      {
+    {
       /** After how many snapshots shall  they be flushed to the hard disk 
       */
       static const char *FLUSH_TO_DISK_FREQUENCY; 
-      };
+    };
 
-     // Local class for handling default values for the options
-     struct Default
-       {
-       /** After how many snapshots shall  they be flushed to the hard disk
-       */
-       static  const unsigned int FLUSH_TO_DISK_FREQUENCY; 
-       }; 
+    // Local class for handling default values for the options
+    struct Default
+    {
+      /** After how many snapshots shall  they be flushed to the hard disk
+      */
+      static  const unsigned int FLUSH_TO_DISK_FREQUENCY; 
+    }; 
 
+
+    BALL_CREATE(SnapShotManager)
 
     /** @name Constructors and Destructors
     */
 
     //@{
-    BALL_CREATE(SnapShotManager)
 
-    // The default constructor which does nothing at all 
+    /// Default constructor
     SnapShotManager(); 
 
     /** This constructor expects a valid system and a valid force field
@@ -215,22 +221,26 @@ namespace BALL
         be overwritten, otherwise the new data will be appended provided that the
         systems match. 
     */
-    SnapShotManager(System &my_system, ForceField &my_force_field,
-                             String my_snapshot_file,bool overwrite); 
+    SnapShotManager
+			(System& my_system, ForceField& my_force_field,
+			 const String& my_snapshot_file,bool overwrite); 
 
     /** This constructor expects a valid system and a valid force field
         and the name of a snapshot file and options.
         If the boolean 'overwrite' is true then any existing file of the given name will
         be overwritten, otherwise the new data will be appended provided that the
         systems match. 
+				@param overwrite {\bf true}: overwrite existing snapshot file, {\bf false}: append to the file.
+				@param filename the name of the snapshot file
     */
-    SnapShotManager(System &my_system, ForceField &my_force_field,
-                           String my_snapshot_file, bool overwrite,Options &myoptions);
+    SnapShotManager	
+			(System& my_system, ForceField& my_force_field, Options& myoptions,
+			 const String& filename, bool overwrite = true);
 
 
     /** The copy constructor 
     */
-    SnapShotManager(const  SnapShotManager &rhs, bool deep = true);
+    SnapShotManager(const  SnapShotManager& rhs, bool deep = true);
 
     /** The destructor
     */
@@ -244,8 +254,9 @@ namespace BALL
     //@{
     /** The setup method does all preparations for using the SnapshotManager
     */
-    virtual bool setup( System &my_system, ForceField &my_force_field,
-                             String my_snapshot_file, bool overwrite,Options &myoptions);
+    virtual bool setup
+			(System& my_system, ForceField& my_force_field, Options& my_options,
+			 const String& filename, bool overwrite = true);
 
     //@}
 
@@ -253,9 +264,10 @@ namespace BALL
     */
 
     //@{
-    /** The assignment operator.  BAUSTELLE Am besten sperren?
+		// BAUSTELLE Am besten sperren?
+    /** The assignment operator.  
     */
-    SnapShotManager &operator=(const SnapShotManager &rhs);
+    SnapShotManager& operator = (const SnapShotManager& rhs);
 
     //@}
 
