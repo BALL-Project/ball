@@ -1,4 +1,4 @@
-// $Id: system.h,v 1.9 2000/05/09 16:21:34 amoll Exp $
+// $Id: system.h,v 1.10 2000/05/15 21:17:30 amoll Exp $
 
 #ifndef BALL_KERNEL_SYSTEM_H
 #define BALL_KERNEL_SYSTEM_H
@@ -124,17 +124,22 @@ namespace BALL
 		*/
 		const Molecule* getMolecule(Position position) const;
 
-		/** Count the molecules in this system
+		/** Count the molecules in this system.
 				@return Size the number of molecules
 		*/
 		Size countMolecules() const;
 
-		/** Count the fragments in this system
+		/** Count the fragments in this system.
 				@return Size the number of fragments
 		*/
 		Size countFragments() const;
 
-		/** Count the atoms in this system
+		/** Count the residues in this system.
+				@return Size the number of residues
+		*/
+		Size countResidues() const;
+
+		/** Count the atoms in this system.
 				@return Size the number of atoms
 		*/
 		Size countAtoms() const;
