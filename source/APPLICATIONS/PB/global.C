@@ -1,4 +1,4 @@
-// $Id: global.C,v 1.2 2000/05/25 11:02:40 oliver Exp $
+// $Id: global.C,v 1.3 2000/05/27 10:38:59 oliver Exp $
 #include "global.h"
 
 FragmentDB*           frag_db = 0;
@@ -21,4 +21,4 @@ bool clear_charges = false;
 bool normalize_names = false;
 bool use_charge_rules = false;
 bool use_radius_rules = false;
-
+bool calculate_solvation_energy = false;

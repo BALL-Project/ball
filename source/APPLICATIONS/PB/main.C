@@ -1,4 +1,4 @@
-// $Id: main.C,v 1.2 2000/05/25 11:02:41 oliver Exp $
+// $Id: main.C,v 1.3 2000/05/27 10:38:59 oliver Exp $
 
 #include "global.h"
 #include "reading.h"
@@ -21,6 +21,8 @@ void usage()
 	Log.error() << "     -r <FILE>            read radii from <FILE>" << endl;
 	Log.error() << "     -u <FILE>            read charge and type rules form <FILE>" << endl;
 	Log.error() << "     -0                   clear all charges in subsequently read structures" << endl;
+	Log.error() << "     -s                   calculate the solvation free energy by performing a second" << endl;
+	Log.error() << "                          FDPB calculation in vacuum" << endl;
 	Log.error() << "     -n                   normalize all atom names in subsequently read structures" << endl;
 	Log.error() << "     -d <FILE>            dump the atom charges and radii to <FILE> (for debugging)" << endl;
 	Log.error() << "     -v                   verbose output (implies ``verbosity 99'' in the" << endl;
@@ -98,6 +100,10 @@ int main(int argc, char** argv)
 				readRuleFile(argv[++i]);
 				break;
 
+			case 's':		// calculate solvation energy
+				calculate_solvation_energy = true;
+				break;
+
 			case 'd':		// dump the final results
 				dump_file = argv[++i];
 				break;
@@ -152,6 +158,13 @@ int main(int argc, char** argv)
 		Log.info() << "FDPB setup CPU time: " << T.getCPUTime() << endl;
 	}
 
+	if (calculate_solvation_energy)
+	{
+		Log.info() << "Calculating the solvation free energy." << endl;
+		Log.info() << "first calculation step: solvent dielectric constant = " 
+							 << fdpb.options[FDPB::Option::SOLVENT_DC] << endl;
+	}
+
 	// solve the PB equation
 	T.reset();
 	fdpb.solve();
@@ -166,6 +179,56 @@ int main(int argc, char** argv)
 	Log.info() << "total energy:          " << fdpb.getEnergy() << " kJ/mol" << endl;
 	Log.info() << "reaction field energy: " << fdpb.getReactionFieldEnergy() << " kJ/mol" << endl;
 
+	if (calculate_solvation_energy)
+	{
+		Log.info() << "Calculating the solvation free energy." << endl;
+		Log.info() << "first calculation step: solvent dielectric constant = " 
+							 << fdpb.options[FDPB::Option::SOLVENT_DC] << endl;
+	}
+
+	T.start();
+	fdpb.setup(S, options);
+	if (verbose)
+	{
+		Log.info() << "FDPB setup CPU time: " << T.getCPUTime() << endl;
+	}
+
+	if (calculate_solvation_energy)
+	{
+		Log.info() << "second calculation step: solvent dielectric constant = 1.0 (vacuum)"  << endl;
+
+		// store the old energies
+		double dG = fdpb.getEnergy();
+		double dG_RF = fdpb.getReactionFieldEnergy();
+
+		T.reset();
+		options[FDPB::Option::SOLVENT_DC] = 1.0;
+		fdpb.setup(S, options);
+		if (verbose)
+		{
+			Log.info() << "FDPB setup CPU time: " << T.getCPUTime() << endl;
+		}
+
+		// solve the PB equation
+		T.reset();
+		fdpb.solve();
+		if (verbose)
+		{
+			Log.info() << "FDPB solve CPU time: " << T.getCPUTime() << endl;
+			// dump the options for documentation purposes
+			fdpb.options.dump(Log);
+		}
+
+		// print the energies
+		Log.info() << "total energy:          " << fdpb.getEnergy() << " kJ/mol" << endl;
+		Log.info() << "reaction field energy: " << fdpb.getReactionFieldEnergy() << " kJ/mol" << endl;
+		Log.info() << endl;
+		
+		Log.info() << "Solvation energy as change of the total energy:   " 
+							 << dG - fdpb.getEnergy()<< " kJ/mol" << endl;
+		Log.info() << "Solvation energy as change of the reaction field: " 
+							 << dG_RF - fdpb.getReactionFieldEnergy() << " kJ/mol" << endl;
+	}
 
 	// done
 	return 0;

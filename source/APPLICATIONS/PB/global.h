@@ -1,4 +1,4 @@
-// $Id: global.h,v 1.2 2000/05/25 11:02:41 oliver Exp $
+// $Id: global.h,v 1.3 2000/05/27 10:38:59 oliver Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/SOLVATION/poissonBoltzmann.h>
@@ -47,4 +47,6 @@ extern bool normalize_names;
 extern bool use_charge_rules;
 extern bool use_radius_rules;
 
-
+// true, if the solvation free energy ist ot be calculated
+// (difference calculation solvent/vacuum)
+extern bool calculate_solvation_energy;
