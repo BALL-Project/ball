@@ -1,4 +1,4 @@
-// $Id: RSVertex.h,v 1.6 2001/04/03 13:13:02 strobel Exp $
+// $Id: RSVertex.h,v 1.7 2001/04/03 13:35:09 strobel Exp $
 
 #ifndef BALL_STRUCTURE_RSVERTEX_H
 #define BALL_STRUCTURE_RSVERTEX_H
@@ -260,7 +260,7 @@ namespace BALL
 		*/
 		bool operator == (const TRSVertex& rsvertex) const
 		{
-			if (atom_ != rsvertex.getAtom())
+			if (atom_ != rsvertex.atom_)
 			{
 				return false;
 			}
@@ -303,7 +303,7 @@ namespace BALL
 				@return	bool,	{\bf true} if the vertices differ in one component,
 											{\bf false} otherwise
 		*/
-		bool operator != (TRSVertex& rsvertex) const
+		bool operator != (const TRSVertex& rsvertex) const
 		{
 			return ( ! (*this == rsvertex) );
 		}
@@ -312,7 +312,7 @@ namespace BALL
 				@return	bool,	{\bf true} if the atoms are equal,
 											{\bf false} otherwise
 		*/
-		bool similar(/*const*/ TRSVertex<T>& rsvertex)
+		bool similar(const TRSVertex<T>& rsvertex)
 		{
 			return (atom_ == rsvertex.atom_);
 		}
