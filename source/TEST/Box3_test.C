@@ -1,4 +1,4 @@
-// $Id: Box3_test.C,v 1.2 2000/02/23 13:19:28 amoll Exp $
+// $Id: Box3_test.C,v 1.3 2000/02/27 18:20:07 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -6,7 +6,7 @@
 #	include <BALL/MATHS/vector3.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Box3_test.C,v 1.2 2000/02/23 13:19:28 amoll Exp $")
+START_TEST(class_name, "$Id: Box3_test.C,v 1.3 2000/02/27 18:20:07 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -15,8 +15,18 @@ using namespace BALL;
 
 
 //line 33: method TBox3::BALL_CREATE(TBox3<T>)
-CHECK(TBox3::BALL_CREATE(TBox3<T>))
-  //BAUSTELLE
+CHECK(TVector3::BALL_CREATE(TBox3<T>))
+	Vector3 v1(1, 2, 3), v2(1, 2, 3);
+	Vector3 v0;
+	Box3 v(v1, v2);
+	Box3* v_ptr = (Box3*)v.create(false, true);
+	TEST_REAL_EQUAL(v_ptr->a == v0, true)
+	TEST_REAL_EQUAL(v_ptr->b == v0, true)
+	delete v_ptr;
+	v_ptr = (Box3*)v.create();
+	TEST_REAL_EQUAL(v_ptr->a == v1, true)
+	TEST_REAL_EQUAL(v_ptr->b == v2, true)
+	delete v_ptr;
 RESULT
 
 //line 39
@@ -195,9 +205,38 @@ RESULT
 
 
 //line 424: method TBox3<T>::dump(std::ostream& s, Size depth) const
-CHECK(TBox3<T>::dump(std::ostream& s, Size depth) const)
-	//BAUSTELLE
+CHECK(TVector3::dump(std::ostream& s = std::cout, Size depth = 0) const )
+	Box3 v(1, 2, 3, 4, 5, 6);
+  String filename;
+	NEW_TMP_FILE(filename)
+	std::ofstream outfile(filename.c_str(), ios::out);
+	v.dump(outfile);
+	outfile.close();
+	TEST_FILE(filename.c_str(), "data/Box3_test.txt", true)
 RESULT
+
+/* not (yet?) included in Box3.h
+//line 
+CHECK(std::istream& operator >> (std::istream& s, TBox3<T>& Box3))
+	std::ifstream instr("data/Box3_test2.txt");
+	Box3 v(10, 20, 30, 40, 50, 60);
+	instr >> v;
+	instr.close();
+	Box3 v1(1, 2, 3, 4, 5, 6);
+	TEST_EQUAL(v, v1)
+RESULT
+
+
+//line 
+NEW_TMP_FILE(filename)
+CHECK(std::ostream& operator << (std::ostream& s, const TBox3<T>& Box3))
+	Box3 v(1, 2, 3, 4, 5, 6);
+	std::ofstream outstr(filename.c_str(), std::ios::out);
+	outstr << v;
+	outstr.close();
+	TEST_FILE(filename.c_str(), "data/Box3_test2.txt", false)
+RESULT
+*/
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST
