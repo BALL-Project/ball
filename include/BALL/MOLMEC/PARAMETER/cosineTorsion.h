@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cosineTorsion.h,v 1.17 2003/08/26 08:04:27 oliver Exp $
+// $Id: cosineTorsion.h,v 1.18 2005/03/01 16:41:53 oliver Exp $
 //
  
 #ifndef BALL_MOLMEC_PARAMETER_COSINETORSION_H
@@ -56,12 +56,18 @@ namespace BALL
 					n(0)
 			{
 			}
+
+			bool operator == (const SingleValues& rhs)
+			{
+				return ((phase == rhs.phase) && (V == rhs.V) 
+								&& (f == rhs.f) && (n == rhs.n));
+			}
 		};
 
 		struct Values 
 		{
 			///
-			unsigned char 	n;
+			Size 	n;
 			///
 			SingleValues*		values;
 
@@ -81,7 +87,7 @@ namespace BALL
 			{
 				n = v.n;
 				values = new SingleValues[n];
-				for (int i = 0; i < n; i++)
+				for (Position i = 0; i < n; i++)
 				{
 					values[i].phase = v.values[i].phase;
 					values[i].V = v.values[i].V;
@@ -96,7 +102,7 @@ namespace BALL
 
 				n = v.n;
 				values = new SingleValues[n];
-				for (int i = 0; i < n; i++)
+				for (Position i = 0; i < n; i++)
 				{
 					values[i] = v.values[i];
 				}
@@ -105,6 +111,22 @@ namespace BALL
 			~Values()
 			{
 				delete [] values;
+			}
+				
+			bool operator == (const Values& rhs) const
+			{
+				if (n != rhs.n) 
+				{
+					return false;
+				}
+				for (Position i = 0; i < n; ++i)
+				{
+					if (!(values[i] == rhs.values[i]))
+					{
+						return false;
+					}
+				}
+				return true;
 			}
 		};
 
@@ -187,9 +209,10 @@ namespace BALL
 
 		/** Assignment operator 
 		*/
-		const CosineTorsion& operator = (const CosineTorsion& cosine_torsion);
+		CosineTorsion& operator = (const CosineTorsion& cosine_torsion);
 		
 		//@}
+
 		/** @name Predicates 
 		*/
 		//@{
@@ -208,6 +231,7 @@ namespace BALL
 		
 		HashMap<Size, Size>		torsion_hash_map_;
 	};
+
 } // namespace BALL
 
 #endif // BALL_MOLMEC_PARAMETER_COSINETORSION_H

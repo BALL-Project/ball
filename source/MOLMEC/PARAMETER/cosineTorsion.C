@@ -1,19 +1,28 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
+// $Id: cosineTorsion.C,v 1.12 2005/03/01 16:41:53 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/cosineTorsion.h>
 #include <BALL/MOLMEC/PARAMETER/forceFieldParameters.h>
-
-using namespace std;
 
 namespace BALL 
 {
 
 	CosineTorsion::CosineTorsion()
 		:	ParameterSection(),
-			torsions_()
+			number_of_atom_types_(0),
+			torsions_(),
+			torsion_hash_map_()
+	{
+	}
+
+	CosineTorsion::CosineTorsion(const CosineTorsion& rhs)
+		:	ParameterSection(rhs),
+			number_of_atom_types_(rhs.number_of_atom_types_),
+			torsions_(rhs.torsions_),
+			torsion_hash_map_(rhs.torsion_hash_map_)
 	{
 	}
 
@@ -25,6 +34,9 @@ namespace BALL
 	void CosineTorsion::clear() throw()
 	{
 		ParameterSection::clear();
+		number_of_atom_types_ = 0;
+		torsions_.clear();
+		torsion_hash_map_.clear();
 	}
 
 	bool CosineTorsion::extractSection(Parameters& parameters, const String& section_name)
@@ -44,7 +56,7 @@ namespace BALL
 		if (!ParameterSection::extractSection(parameters, section_name))
 		{
 			Log.error() << "CosineTorison::extractSection: Could not find section " 
-				<< section_name << " in parameter file!" << endl;
+				<< section_name << " in parameter file!" << std::endl;
 			return false;
 		}
 		
@@ -53,7 +65,7 @@ namespace BALL
 				|| !hasVariable("phi0") || !hasVariable("f"))
 		{
 			Log.error() << "CosineTorsion::extractSection: CosineTorsion section (" << section_name 
-				<< ") needs columns div, V, phi0, and f!" << endl;
+				<< ") needs columns div, V, phi0, and f!" << std::endl;
 			return false;
 		}
 
@@ -119,7 +131,7 @@ namespace BALL
 					if ((n < 1) || (n > 4))
 					{
 						Log.error() << "CosineTorsion::extractSection: wrong number of torsion terms for "
-							<< key << ": " << n << endl;
+							<< key << ": " << n << std::endl;
 					} 
 					else 
 					{
@@ -157,7 +169,7 @@ namespace BALL
 			} 
 			else 
 			{
-				Log.error() << "CosineTorsion::extractSection: could not interpret key " << key << endl;
+				Log.error() << "CosineTorsion::extractSection: could not interpret key " << key << std::endl;
 			}
 		}
 
@@ -302,5 +314,31 @@ namespace BALL
 
 		return result;
 	}
+
+
+
+	CosineTorsion& CosineTorsion::operator = (const CosineTorsion& rhs)
+	{
+		// Avoid self assignment
+		if (this != &rhs)
+		{
+			ParameterSection::operator = (rhs);
+			number_of_atom_types_ = rhs.number_of_atom_types_;
+			torsions_ = rhs.torsions_;
+			torsion_hash_map_ = rhs.torsion_hash_map_;
+		}
+
+		return *this;
+	}
+
+	bool CosineTorsion::operator == (const CosineTorsion& cosine_torsion) const
+	{
+		// There's no real need to compare the hash map -- it should contain
+		// nothing that is not already contained in torsions_.
+		return ((number_of_atom_types_ == cosine_torsion.number_of_atom_types_)
+						&& (torsions_ == cosine_torsion.torsions_));
+	}
+
 	 
 } // namespace BALL
+
