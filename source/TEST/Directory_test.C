@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Directory_test.C,v 1.13 2004/03/18 00:47:43 amoll Exp $
+// $Id: Directory_test.C,v 1.13.2.1 2004/05/13 15:25:31 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -17,7 +17,7 @@
 
 
 
-START_TEST(Directory, "$Id: Directory_test.C,v 1.13 2004/03/18 00:47:43 amoll Exp $")
+START_TEST(Directory, "$Id: Directory_test.C,v 1.13.2.1 2004/05/13 15:25:31 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -244,7 +244,7 @@ RESULT
 
 CHECK(Size countDirectories())
 	Directory d0(test_dir + PS + "dir_a" + PS + "dir_c");
-	TEST_EQUAL(d0.countDirectories(), 2)
+	TEST_EQUAL(d0.countDirectories(), 1)
 	Directory d1(test_dir + PS + "dir_a" + PS + "dir_c" + PS + "test1");
 	TEST_EQUAL(d1.countDirectories(), 4)
 	d1.remove("test2");
