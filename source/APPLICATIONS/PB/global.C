@@ -1,10 +1,10 @@
-// $Id: global.C,v 1.6 2000/06/06 13:16:10 oliver Exp $
+// $Id: global.C,v 1.7 2000/06/22 10:20:40 oliver Exp $
 #include "global.h"
 
 FragmentDB*           frag_db = 0;
 FDPB                  fdpb;
-AssignChargeProcessor charges("/KM/comp-bio/BALL-data/charges/PARSE.crg");
-AssignRadiusProcessor radii("/KM/comp-bio/BALL-data/radii/PARSE.siz");
+AssignChargeProcessor charges("charges/PARSE.crg");
+AssignRadiusProcessor radii("radii/PARSE.siz");
 ClearChargeProcessor	clear_charge_proc;
 
 ChargeRuleProcessor   charge_rules;

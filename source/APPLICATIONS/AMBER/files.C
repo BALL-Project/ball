@@ -1,4 +1,4 @@
-// $Id: files.C,v 1.2 2000/06/10 12:51:30 oliver Exp $
+// $Id: files.C,v 1.3 2000/06/22 10:21:04 oliver Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/FORMAT/HINFile.h>
@@ -170,7 +170,7 @@ void checkStructures()
 void singlePoint()
 {
 	double energy = amber.updateEnergy();
-	Log.info() << "single point energy: " << amber.getEnergy() << " kJ/mol" << endl;
+	Log.info() << "single point energy: " << energy << " kJ/mol" << endl;
 	Log.info() << "  - stretch      :" << amber.getStretchEnergy() << " kJ/mol" << endl;
 	Log.info() << "  - bend         :" << amber.getBendEnergy() << " kJ/mol" << endl;
 	Log.info() << "  - torsion      :" << amber.getTorsionEnergy() << " kJ/mol" << endl;
