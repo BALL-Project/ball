@@ -1,4 +1,4 @@
-// $Id: add_hydrogens.C,v 1.4 2003/07/15 13:27:46 anker Exp $
+// $Id: add_hydrogens.C,v 1.5 2003/12/11 14:03:22 anker Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -15,58 +15,70 @@
 #include <BALL/MOLMEC/MINIMIZATION/steepestDescent.h>
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/STRUCTURE/residueChecker.h>
+#include <BALL/DATATYPE/string.h>
+#include <BALL/SYSTEM/path.h>
 
 using namespace std;
 using namespace BALL;
 
 int main(int argc, char** argv)
 {
-	if (argc != 3)
+	if ((argc < 3) || (argc > 4))
 	{
-		Log.error() << "A small hydrogen adder." << endl;
-		Log.error() << "Need two filenames: infile.pdb outfile.pdb " << endl;
+		cerr << "A small hydrogen adder." << endl;
+		cerr << "Need two filenames: infile.pdb outfile.pdb " << endl;
+		cerr << "A third argument can optionally define the amber parameter file"
+			<< endl;
 		return 1;
 	}
 
-	Log.info() << "Loading " << argv[1] << "..." << endl;
+	cout << "Loading " << argv[1] << "..." << endl;
 	PDBFile infile(argv[1]);
 	System system;
 	infile >> system;
-	Log.info() << "done." << endl;
+	cout << "done." << endl;
 
-	Log.info() << "Initializing FragmentDB..." << endl;
+	cout << "Initializing FragmentDB..." << endl;
 	FragmentDB db;
-	Log.info() << "done." << endl;
-	Log.info() << "Adding hydrogens..." << endl;
+	cout << "done." << endl;
+	cout << "Adding hydrogens..." << endl;
 	system.apply(db.add_hydrogens);
-	Log.info() << "done." << endl;
-	Log.info() << "Building Bonds..." << endl;
+	cout << "done." << endl;
+	cout << "Building Bonds..." << endl;
 	system.apply(db.build_bonds);
-	Log.info() << "done." << endl;
-	Log.info() << "Normalizing names..." << endl;
+	cout << "done." << endl;
+	cout << "Normalizing names..." << endl;
 	system.apply(db.normalize_names);
-	Log.info() << "done." << endl;
+	cout << "done." << endl;
 
-	Log.info() << "Applying ResidueChecker..." << endl << endl;
+	cout << "Applying ResidueChecker..." << endl << endl;
 	ResidueChecker check;
 	system.apply(check);
-	Log.info() << "done." << endl;
+	cout << "done." << endl;
 
-	Log.info() << "Initializing force field..." << endl;
-	AmberFF amber_ff(system);
-	Log.info() << "done." << endl;
-	Log.info() << "Selecting H atoms..." << endl;
+	cout << "Initializing force field..." << endl;
+	AmberFF amber_ff;
+	if (argc == 4)
+	{
+		Path path;
+		String tmp = path.find(argv[3]);
+		if (tmp == "") tmp = argv[3];
+		amber_ff.options.set(AmberFF::Option::FILENAME, tmp);
+	}
+	amber_ff.setup(system);
+	cout << "done." << endl;
+	cout << "Selecting H atoms..." << endl;
 	Selector h_select("element(H)");
 	system.apply(h_select);
-	Log.info() << "done." << endl;
-	Log.info() << "Starting minimizer: " << endl << endl;
+	cout << "done." << endl;
+	cout << "Starting minimizer: " << endl << endl;
 	ConjugateGradientMinimizer cgm(amber_ff);
 	cgm.minimize(1000);
 
-	Log.info() << "Writing " << argv[2] << "..." << endl;
+	cout << "Writing " << argv[2] << "..." << endl;
 	PDBFile outfile(argv[2], File::OUT);
 	outfile << system;
-	Log.info() << "done." << endl;
+	cout << "done." << endl;
 
 	return 0;
 }
