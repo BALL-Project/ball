@@ -1,4 +1,4 @@
-// $Id: hashSet.h,v 1.30.4.1 2002/05/18 02:07:25 oliver Exp $ 
+// $Id: hashSet.h,v 1.30.4.2 2002/05/22 22:52:51 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_HASHSET_H
 #define BALL_DATATYPE_HASHSET_H
@@ -161,18 +161,6 @@ namespace BALL
 		*/
 		const HashSet& operator = (const HashSet& rhs)	throw();
 
-		/**	Intersection operator.
-				Replace the contents of the current hash set by
-				its intersection with {\tt rhs}.
-		*/
-		const HashSet& operator &= (const HashSet& rhs) throw();
-		
-		/**	Union operator.
-				Replace the contents of the current hash set by
-				its union with {\tt rhs}.
-		*/
-		const HashSet& operator |= (const HashSet& rhs) throw();
-		
 		/** Assign another HashSet with the contents of this HashSet
 				@param hash_set the HashSet to assign to
 		*/
@@ -233,6 +221,34 @@ namespace BALL
 
 		//@}
 
+		/**	@name	Operators
+		*/
+		//@{
+		/**	Intersection operator.
+				Replace the contents of the current hash set by
+				its intersection with {\tt rhs}.
+		*/
+		const HashSet& operator &= (const HashSet& rhs) throw();
+		
+		/**	Union operator.
+				Replace the contents of the current hash set by
+				its union with {\tt rhs}.
+		*/
+		const HashSet& operator |= (const HashSet& rhs) throw();
+		
+		/**	Intersection operator.
+				Compute the intersection of the two hash sets.
+				The left-hand set is not modified.
+		*/
+		HashSet operator & (const HashSet& rhs) const throw();
+		
+		/**	Union operator.
+				Compute the union of the two hash sets.
+				The left-hand set is not modified.
+		*/
+		HashSet operator | (const HashSet& rhs) const throw();
+		//@}
+
 		/**	@name Miscellaneous
 		*/
 		//@{
@@ -282,22 +298,14 @@ namespace BALL
 
 		// --- INTERNAL ITERATORS
 
+		/**	@name Iteration
+		*/
+		//@{
 		/** Apply a processor to all keys in this instance.
 				@return true if the processor could be applied.
 		*/
-		bool apply(UnaryProcessor<ValueType>& processor)	throw();
-
-		// --- STORERS
-
-		/*
-		friend istream& operator >> BALL_TEMPLATE_NULL_ARGS (std::istream& s, HashSet& hash_set);
-			
-		friend ostream& operator << BALL_TEMPLATE_NULL_ARGS (std::ostream& s, const HashSet& hash_set);
-
-		void read(std::istream& s);
-
-		void write(std::ostream& s) const;
-		*/      
+		bool apply(UnaryProcessor<ValueType>& processor) throw();
+		//@}
 
 		// --- EXTERNAL ITERATORS
 		struct Node
@@ -704,6 +712,38 @@ namespace BALL
 		}
 
 		return *this;
+	}
+
+	template <class Key>
+	BALL_INLINE 
+	HashSet<Key> HashSet<Key>::operator & (const HashSet& rhs) const
+		throw()
+	{
+		// Create an empty hash set...
+		HashSet<Key> tmp;
+		ConstIterator it = begin();
+		
+		// ...and copy all the elements contained in the rhs hash set.
+		for (; +it; ++it)
+		{
+			if (rhs.has(*it))
+			{
+				tmp.insert(*it);
+			}
+		}
+
+		return tmp;
+	}
+
+	template <class Key>
+	BALL_INLINE 
+	HashSet<Key> HashSet<Key>::operator | (const HashSet<Key>& rhs) const
+		throw()
+	{
+		HashSet<Key> tmp(*this);
+		tmp |= rhs;
+
+		return tmp;
 	}
 
 	template <class Key>
