@@ -1,10 +1,14 @@
-// $Id: RSEdge.h,v 1.9 2001/04/03 13:16:40 strobel Exp $
+// $Id: RSEdge.h,v 1.10 2001/06/18 17:11:16 strobel Exp $
 
 #ifndef BALL_STRUCTURE_RSEDGE_H
 #define BALL_STRUCTURE_RSEDGE_H
 
 #ifndef BALL_MATHS_VECTOR3_H
 #	include <BALL/MATHS/vector3.h>
+#endif
+
+#ifndef BALL_MATHS_SPHERE3_H
+#	include <BALL/MATHS/sphere3.h>
 #endif
 
 #ifndef BALL_MATHS_CIRCLE3_H
@@ -168,7 +172,7 @@ namespace BALL
 				@param i the first vertex is changed if i = 0, the second otherwise
 				@param vertex the new vertex
 		*/
-		void setVertices(const Position i, TRSVertex<T>* vertex)
+		void setVertices(Position i, TRSVertex<T>* vertex)
 		{
 			if (i == 0)
 			{
@@ -184,7 +188,7 @@ namespace BALL
 				@return RSVertex the first rsvertex if i = 0,
 												 the second rsvertex otherwise
 		*/
-		TRSVertex<T>* getVertex(const Position i)
+		TRSVertex<T>* getVertex(Position i)
 		{
 			if (i == 0)
 			{
@@ -200,7 +204,7 @@ namespace BALL
 				@param i the first face is changed if i = 0, the second otherwise
 				@param face a pointer to the the new face
 		*/
-		void  setFaces(const Position i, TRSFace<T>* face)
+		void  setFaces(Position i, TRSFace<T>* face)
 		{
 			if (i == 0)
 			{
@@ -215,7 +219,7 @@ namespace BALL
 		/** Return one of the two rsfaces of the rsedge.
 				@return Index the first rsface if i = 0, the second rsface otherwise
 		*/
-		TRSFace<T>* getFace(const Position i)
+		TRSFace<T>* getFace(Position i)
 		{
 			if (i == 0)
 			{
@@ -224,6 +228,22 @@ namespace BALL
 			else
 			{
 				return face1_;
+			}
+		}
+
+		/** Set one of the two rsfaces of the rsedge.
+				@param	i			change the first face, if i=0, the second otherwise
+				@param	face	a pointer to the new rsface
+		*/
+		void setFace(Position i, TRSFace<T>* face)
+		{
+			if (i == 0)
+			{
+				face0_ = face;
+			}
+			else
+			{
+				face1_ = face;
 			}
 		}
 
@@ -281,7 +301,7 @@ namespace BALL
 				@param i the first contact circle is changed if i = 0, the second otherwise
 				@param circle the new contact circle
 		*/
-		void  setContactCircle(const Position i, const TCircle3<T>&  circle)
+		void  setContactCircle(Position i, const TCircle3<T>&  circle)
 		{
 			if (i == 0)
 			{
@@ -297,7 +317,7 @@ namespace BALL
 				@return TCircle3<T> the contact circle with the first rsvertex if i = 0,
 														the contact circle with the second rsvertex otherwise
 		*/
-		TCircle3<T> getContactCircle(const Position i)
+		TCircle3<T> getContactCircle(Position i)
 		{
 			if (i == 0)
 			{
@@ -313,7 +333,7 @@ namespace BALL
 				@param i the first intersection point is changed if i = 0, the second otherwise
 				@param point the new intersection point
 		*/
-		void setIntersectionPointsFaces(const Position i, const TVector3<T>& point)
+		void setIntersectionPointsFaces(Position i, const TVector3<T>& point)
 		{
 			if (i == 0)
 			{
@@ -329,7 +349,7 @@ namespace BALL
 				@return TVector3<T> the intersection point near to the first rsvertex if i = 0,
 														the intersection point near to the second rsvertex otherwise
 		*/
-		TVector3<T> getIntersectionPoint(const Position i)
+		TVector3<T> getIntersectionPoint(Position i)
 		{
 			if (singular_ == false)
 			{
@@ -347,7 +367,7 @@ namespace BALL
 
 		/** Change singular
 		*/
-		void setSingular(const bool singular)
+		void setSingular(bool singular)
 		{
 			singular_ = singular;
 		}
