@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.46 2004/02/23 16:27:16 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.47 2004/02/25 17:18:41 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -349,7 +349,10 @@ AC_DEFUN(CF_DETECT_OS,[
 			ARCHITECTURE=alpha
 			BINFMT=Linux-alpha
 		fi
-
+		if test `echo $PROCESSOR` = x86_64 ; then
+			ARCHITECTURE=x86_64
+			BINFMT=Linux-Opteron
+		fi
 		if test "${ARCHITECTURE}" = "unknown" -a "${BALL_IGNORE_ARCH}" = ""; then
 			AC_MSG_RESULT(OS: ${OS} / hardware: ${PROCESSOR})
 			AC_MSG_RESULT(Sorry - this architecture is currently not supported...)
