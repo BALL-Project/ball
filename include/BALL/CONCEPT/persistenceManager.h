@@ -1,4 +1,4 @@
-// $Id: persistenceManager.h,v 1.16 2000/06/06 13:18:57 oliver Exp $
+// $Id: persistenceManager.h,v 1.17 2000/08/26 14:58:15 amoll Exp $
 
 #ifndef BALL_CONCEPT_PERSISTENCE_H
 #define BALL_CONCEPT_PERSISTENCE_H
@@ -180,13 +180,13 @@ namespace BALL
 				This method tries to read a persistent object from the stream, creates
 				the object and all dependend objects, finally demangles all pointers and
 				references.\\
-				If no object could be read or the format was nnot correct, a null pointer 
+				If no object could be read or the format was not correct, a null pointer 
 				is returned.
 				@return 0 if no object could be read, the object's {\tt this} pointer otherwise
 		*/	
 		PersistentObject*	readObject();
 
-		/**	Write a persistent object from the stream
+		/**	Write a persistent object to the stream
 				This method writes a persistent object to a stream.
 		*/
 		PersistenceManager& operator << (const PersistentObject& object);
@@ -497,11 +497,12 @@ namespace BALL
 		virtual bool checkTrailer(const char* name = 0) = 0;
 
 
+
 		/**	Write a start marker to the output stream.
 		*/
 		virtual void writeStreamHeader() = 0;
 
-		/**	Write a end marker to the output stream.
+		/**	Write an end marker to the output stream.
 		*/
 		virtual void writeStreamTrailer() = 0;
 
@@ -514,10 +515,12 @@ namespace BALL
 		virtual bool checkStreamTrailer() = 0;
 
 		/**	Get an (unknown) object header.
-				The name (if set) is ignored. the type name is returned in {\tt type\_name}
+				The name (if set) is ignored. The type name is returned in {\tt type\_name}
 				and the address of the object is read but not inserted into the table.
 		*/
 		virtual bool getObjectHeader(String& type_name, LongPointerType& ptr) = 0;
+
+
 
 		/**	Write a variable/member name.
 		*/
@@ -526,8 +529,6 @@ namespace BALL
 		/** Check for variable/member name.
 		*/
 		virtual bool checkName(const char* name) = 0;
-
-
 
 		/**	Write storable object header.
 		*/

@@ -1,4 +1,4 @@
-// $Id: XDRPersistenceManager.h,v 1.8 2000/03/14 22:46:17 oliver Exp $
+// $Id: XDRPersistenceManager.h,v 1.9 2000/08/26 14:58:15 amoll Exp $
 
 #ifndef BALL_CONCEPT_XDRPERSISTENCEMANAGER_H
 #define BALL_CONCEPT_XDRPERSISTENCEMANAGER_H
@@ -14,7 +14,7 @@ namespace BALL
 {
 
 	/**	XDR-format-based persistence manager.
-			This class implements a persistnece manager that reads and writes
+			This class implements a persistence manager that reads and writes
 			its objects in a portable binary format.
 			@see	TextPersistenceManager
 	*/
@@ -49,7 +49,7 @@ namespace BALL
 		//@{
 
 		/**	Write an object header.
-				This method write an obejct header. It starts with the current number of spaces
+				This method writes an object header. It starts with the current number of spaces
 				needed for a correct indentation.
 				If {\tt name} is a null pointer, the object is a base object of the current
 				object. This method then writes the string {\tt BASEOBJECT}. If {\tt name}
@@ -86,7 +86,7 @@ namespace BALL
 		*/
 		virtual void writeStreamHeader();
 
-		/**	Write a end marker to the output stream.
+		/**	Write an end marker to the output stream.
 		*/
 		virtual void writeStreamTrailer();
 

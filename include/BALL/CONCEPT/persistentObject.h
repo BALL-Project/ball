@@ -1,4 +1,4 @@
-// $Id: persistentObject.h,v 1.2 2000/01/10 15:50:55 oliver Exp $
+// $Id: persistentObject.h,v 1.3 2000/08/26 14:58:15 amoll Exp $
 
 #ifndef BALL_CONCEPT_PERSISTENTOBJECT_H
 #define BALL_CONCEPT_PERSISTENTOBJECT_H
@@ -43,7 +43,7 @@ namespace BALL
 			
 		/**	Stream operator.
 				This operator is used to serialize an instance of PersistentObject.
-				The method first calls {\tt pm.startOutput()} to write the neccessary
+				The method first calls {\tt pm.startOutput()} to write the necessary
 				headers. Then, {\tt persistentWrite(pm)} is called to serialize
 				the object. Finally, a call to {\tt pm.stopOutput()} writes all
 				dependend objects and the end marker to the persistent stream.
