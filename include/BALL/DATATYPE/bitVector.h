@@ -1,4 +1,4 @@
-// $Id: bitVector.h,v 1.25 2001/07/15 21:20:56 amoll Exp $
+// $Id: bitVector.h,v 1.26 2001/07/16 02:18:54 oliver Exp $
 
 #ifndef BALL_DATATYPE_BITVECTOR_H
 #define BALL_DATATYPE_BITVECTOR_H
@@ -215,6 +215,7 @@ namespace BALL
 			throw(Exception::OutOfMemory);
 
 		/** Detailled constructor from an array of char.
+				{\em Caveat:} the array of char has to be zero-terminated!
 		*/
 		BitVector(const char* bit_string)
 		 throw(Exception::OutOfMemory);
@@ -239,6 +240,7 @@ namespace BALL
 
 		/** Assignment from a char string.
 				If a char is different from '0', it is interpreted as true.
+				{\em Caveat:} the array of char has to be zero-terminated!
 		*/
 		void set(const char* bit_string)
 		  throw(Exception::OutOfMemory);
