@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: System_test.C,v 1.11 2002/12/12 11:34:45 oliver Exp $
+// $Id: System_test.C,v 1.12 2003/01/21 11:06:29 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -13,7 +13,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(System, "$Id: System_test.C,v 1.11 2002/12/12 11:34:45 oliver Exp $")
+START_TEST(System, "$Id: System_test.C,v 1.12 2003/01/21 11:06:29 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -510,6 +510,45 @@ CHECK(operator !=)
 
 	TEST_EQUAL(c2 != c2, false)
 RESULT
+
+CHECK(Chain iteration)
+	System S;
+	Protein p1;
+	Protein p2;
+	Protein p3;
+	Chain c1;
+	Chain c2;
+	Chain c3;
+	Chain c4;
+	c1.setName("C1");
+	c2.setName("C2");
+	c3.setName("C3");
+	c4.setName("C4");
+	p2.insert(c1);
+	p2.insert(c2);
+	p2.insert(c3);
+	p3.insert(c4);
+	S.insert(p1);
+	S.insert(p2);
+	S.insert(p3);
+
+	ChainIterator ci = S.beginChain();
+	TEST_EQUAL(+ci, true)
+	ABORT_IF(!+ci)
+	TEST_EQUAL(ci->getName(), "C1")
+	ci++;
+	ABORT_IF(!+ci)
+	TEST_EQUAL(ci->getName(), "C2")
+	ci++;
+	ABORT_IF(!+ci)
+	TEST_EQUAL(ci->getName(), "C3")
+	ci++;
+	ABORT_IF(!+ci)
+	TEST_EQUAL(ci->getName(), "C4")
+	ci++;
+	TEST_EQUAL(+ci, false)
+RESULT
+
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
