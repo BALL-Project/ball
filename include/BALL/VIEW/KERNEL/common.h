@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.32.2.3 2005/01/10 13:27:38 amoll Exp $
+// $Id: common.h,v 1.32.2.4 2005/01/12 16:45:25 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -13,6 +13,10 @@
 
 #ifndef BALL_MATHS_VECTOR3
  #include <BALL/MATHS/vector3.h>
+#endif
+
+#ifndef BALL_CONCEPT_COMPOSITE_H
+ #include <BALL/CONCEPT/composite.h>
 #endif
 
 #include <qevent.h>
@@ -247,6 +251,13 @@ namespace BALL
 			///
 			COLORING_UNKNOWN
 		};
+
+		/** A special Composite, which is ignored by all ColoringProcessors,
+		 		the GeometricObjects, which have this Composite set, will be colored
+				by the default color.
+		*/
+		extern Composite composite_to_be_ignored_for_colorprocessors_;
+
 
 		/// Enumeration of GeometricObject Types
 		enum GeometricObjectType

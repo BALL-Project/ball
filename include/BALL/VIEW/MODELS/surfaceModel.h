@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceModel.h,v 1.12.2.1 2005/01/12 16:44:56 amoll Exp $
+// $Id: surfaceModel.h,v 1.12.2.2 2005/01/12 16:45:13 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_SURFACEMODEL_H
@@ -121,8 +121,6 @@ namespace BALL
 			SurfaceProcessor::SurfaceType type_;
 
 			float 						probe_radius_;
-
-			Composite* 				composite_;
 		};
 
 	} // namespace VIEW

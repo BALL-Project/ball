@@ -23,6 +23,8 @@ namespace BALL
 
 bool BALL_VIEW_DOCKWINDOWS_SHOW_LABELS = true;
 
+Composite composite_to_be_ignored_for_colorprocessors_;
+
 String getModelName(ModelType type) 
 	throw()
 {
