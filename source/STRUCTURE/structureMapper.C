@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: structureMapper.C,v 1.26 2003/09/02 07:02:20 oliver Exp $
+// $Id: structureMapper.C,v 1.27 2003/09/02 12:46:07 oliver Exp $
 //
 
 #include <BALL/STRUCTURE/structureMapper.h>
@@ -234,9 +234,14 @@ namespace BALL
 				// Throw away the hash map entry in order to avoid
 				// 1:n mappings.
 				A_names.erase(ai->getFullName());
+				std::cerr << "found " << ai->getFullName() << std::endl;
+			}
+			else
+			{
+				std::cerr << "did not find " << ai->getFullName() << std::endl;
 			}
 		}
-		
+
 		// Check whether we could map anything.
 		if (bijection_.size() == 0)	
 		{
@@ -275,7 +280,6 @@ namespace BALL
 			}
 		}
 	}
-
 
 	Size StructureMapper::countFragments_(const AtomContainer & ac) const
 	{
@@ -695,7 +699,6 @@ namespace BALL
 					if (j == indices_CF[i].size())
 					{
 						i--;
-						// ?????: change top + pop to pop
 						j =(Size) index_stack.top() + 1;
 						index_stack.pop();
 					}
