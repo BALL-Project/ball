@@ -1,4 +1,4 @@
-// $Id: parameterSection.h,v 1.6 2000/10/07 13:19:58 oliver Exp $
+// $Id: parameterSection.h,v 1.7 2000/10/09 10:58:23 anker Exp $
 // Format: general  parameter section class
 
 #ifndef BALL_FORMAT_PARAMETERSECTION_H
@@ -186,7 +186,7 @@ namespace BALL
 
 		/*_	One-dimensional array of the keys read from the section.
 		*/
-		vector<String>	keys_;
+		std::vector<String>	keys_;
 
 		/*_	The number of variables specified in the format line.
 				Variables also include "ver:" entries.
