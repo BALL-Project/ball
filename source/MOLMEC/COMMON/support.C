@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: support.C,v 1.47 2005/02/08 19:41:21 oliver Exp $
+// $Id: support.C,v 1.47.6.1 2005/04/05 15:30:14 amoll Exp $
 //
 
 #include <BALL/MOLMEC/COMMON/support.h>
@@ -25,7 +25,6 @@ using namespace std;
 
 namespace BALL 
 {
-
 	namespace MolmecSupport 
 	{
 
@@ -234,7 +233,6 @@ namespace BALL
  					HashGrid3<Atom*> grid(lower - Vector3(0.1F), upper - lower + Vector3(0.2F), 
 																distance + 0.1F);
 
-					
 					for (atom_it = atom_vector.begin(); atom_it != atom_vector.end(); ++atom_it) 
 					{
 						grid.insert((*atom_it)->getPosition(), *atom_it); // insert atom into grid
@@ -308,48 +306,6 @@ namespace BALL
 							} // yi
 						}  // xi
 					} // for all boxes
-
-
-// old version slower and scales worser ???? to be removed?
-/*
-					HashGrid3<Atom*> grid(lower - Vector3(0.1F), upper - lower + Vector3(0.2F), distance);
-					HashGridBox3<Atom*>* hbox;
-					HashGridBox3<Atom*>::BoxIterator box_it;
-					HashGridBox3<Atom*>::DataIterator data_it;
-
-					for (atom_it = atom_vector.begin(); atom_it != atom_vector.end(); ++atom_it) 
-					{
-						position = (*atom_it)->getPosition();
-
-						// Search all neighbor atoms of "atom_it" that are stored in the hash grid
-
-						hbox = grid.getBox(position);
-						if (hbox != 0)
-						{
-							for (box_it = hbox->beginBox(); +box_it; ++box_it) 
-							{
-								for (data_it = (*box_it).beginData(); +data_it; ++data_it) 
-								{
-									// remove 1-2 and 1-3 pairs!
-									if (((position.getSquareDistance((*data_it)->getPosition())) < squared_distance) 
-											&& !(*data_it)->isBoundTo(**atom_it)
-											&& !(*data_it)->isGeminal(**atom_it))
-									{
-										pair_vector.push_back(pair<Atom*,Atom*>(*data_it, *atom_it));
-									}
-								}
-							}
-						} 
-						else 
-						{
-							Log.warn() << "calculateNonBondedAtomPairs: hbox = 0 for position " << position
-								<< " (grid dimensions: " << grid.getOrigin() << ")" << endl;
-						}
-						// Insert the new atom into the hash grid
-						grid.insert(position, (*atom_it));
-					}
-*/
-					
 				}
 			}
 #ifdef BALL_BENCHMARK

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94StretchBend.C,v 1.1.2.5 2005/03/31 16:36:47 amoll Exp $
+// $Id: MMFF94StretchBend.C,v 1.1.2.6 2005/04/05 15:30:14 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
@@ -130,17 +130,35 @@ namespace BALL
 			}
 
 			// store delta_r for i->j
-			Position pos1 = stretch_it1->second;
-			sb.delta_r_ij = &stretches[pos1].delta_r;
-			
 			// store delta_r for j->k
+			Position pos1 = stretch_it1->second;
 			Position pos2 = stretch_it2->second;
+
+			// make sure calculateSBTIJK gets the sbmb in the right order:
+			// pair with the smaller atom type partner first !
+			Size sum_types_pos1 = stretches[pos1].atom1->getType() +
+														stretches[pos1].atom2->getType();
+
+			Size sum_types_pos2 = stretches[pos2].atom1->getType() +
+														stretches[pos2].atom2->getType();
+
+			// do we need to flip?
+			if (sum_types_pos2 < sum_types_pos1)
+			{
+				Position temp = pos1;
+				pos1 = pos2;
+				pos2 = temp;
+			}
+			
+			sb.delta_r_ij = &stretches[pos1].delta_r;
 			sb.delta_r_kj = &stretches[pos2].delta_r;
 
 			// calculate SBTIJK
 			Index sbtijk = calculateSBTIJK(bends[bend_pos].ATIJK, 
 																		 stretches[pos1].sbmb,
 																		 stretches[pos2].sbmb);
+
+			sb.sbtijk = sbtijk;
 
 			// get kba_ijk and kba_kji
 			if (sbtijk == -1 ||
@@ -152,6 +170,11 @@ namespace BALL
 				continue;
 			}
 
+/*
+Log.info() << sb.atom1->ptr->getName() << " " << sb.atom2->ptr->getName() << " "<< sb.atom3->ptr->getName() << " "  
+					 << sb.atom1->type << " " << sb.atom2->type << " " << sb.atom3->type << " :"
+					 << sb.kba_ijk << " " << sb.kba_kji << " " << sbtijk << std::endl;
+*/
 			// we are done for this bend
 			stretch_bends_.push_back(sb);
 		}
@@ -192,6 +215,9 @@ Log.info() << "MMFF94 SB "
 	<< sb.atom1->ptr->getName() << " "
 	<< sb.atom2->ptr->getName() << " "
 	<< sb.atom3->ptr->getName() << " "
+	<< sb.atom1->type << " "
+	<< sb.atom2->type << " "
+	<< sb.atom3->type << " :"
 	<< sb.kba_ijk << " " 
 	<< sb.kba_kji  << " r_ij: " 
 	<< *sb.delta_r_ij << " r_ik: " 
@@ -226,7 +252,7 @@ Log.info() << "MMFF94 SB "
 	 -----------------------------------------------------------
 						0             0               0               0
 						1             1               1               0
-						2             2               0               1
+						2             1(*)            0               1 		* error in CHARMM docu
 						3             2               1               1
 						4             4               0               0
 						5             3               0               0
@@ -235,19 +261,20 @@ Log.info() << "MMFF94 SB "
 						8             6               1               1
 						9             7               1               0
 					 10             7               0               1
-					 11             7               1               1
+					 11             8 (*)           1               1
 	*/
 	Index MMFF94StretchBend::calculateSBTIJK(Position angle_type, 
 																					 bool bond_type1, bool bond_type2)
 	{
-		if (angle_type  < 2 || angle_type == 4) return angle_type;
+		if (angle_type  == 0 || angle_type == 4) return angle_type;
 
-		if (angle_type == 2)
+		if (angle_type == 1)
 		{
-			if (bond_type1 && bond_type2) return 3;
-			if (bond_type2) return 2;
+			if (bond_type1) return 1;
+			return 2;
 		}
 
+		if (angle_type == 2) return 3;
 		if (angle_type == 3) return 5;
 
 		if (angle_type == 5)
@@ -260,11 +287,11 @@ Log.info() << "MMFF94 SB "
 
 		if (angle_type == 7)
 		{
-			if (bond_type1 && bond_type2) return 11;
-
 			if (bond_type1) return 9;
 			else 						return 10;
 		}
+
+		if (angle_type == 8) return 11;
 
 		Log.error() << "MMFF94 StretchBend: Could not calculate sbtijk " << angle_type << " " 
 								<< bond_type1 << " " << bond_type2 << std::endl;
