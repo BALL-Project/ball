@@ -1,4 +1,4 @@
-// $Id: RDFIntegrator.h,v 1.2 2000/08/31 21:15:46 oliver Exp $
+// $Id: RDFIntegrator.h,v 1.3 2000/09/01 05:56:28 oliver Exp $
 
 #ifndef BALL_STRUCTURE_RDFINTEGRATOR_H
 #define BALL_STRUCTURE_RDFINTEGRATOR_H
@@ -17,7 +17,7 @@ namespace BALL
 	 */
 
 	class RDFIntegrator
-		:	RadialDistributionFunction
+		:	public RadialDistributionFunction
 	{
 
 		public:
