@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.12 2005/03/28 12:39:11 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.13 2005/03/31 14:52:45 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -18,6 +18,7 @@
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94Stretch.h>
+#include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94Bend.h>
 
 
@@ -97,7 +98,7 @@ vector<float> getResults(String filename)
 	return results;
 }
 
-bool testStretch(MMFF94& mmff, const String& filename)
+bool testStretch(MMFF94& mmff, const String& filename, bool compare)
 {
 	String full_file_name = (dir +FileSystem::PATH_SEPARATOR + filename + ".stretch");
 	LineBasedFile infile(full_file_name);
@@ -150,6 +151,8 @@ bool testStretch(MMFF94& mmff, const String& filename)
 		}
 	}
 
+	if (!compare) return true;
+
 	vector<float> results = getResults(dir +FileSystem::PATH_SEPARATOR + filename);
 
 	float stretch_diff = std::fabs(mmff.getEnergy() - results[1]);
@@ -164,18 +167,17 @@ bool testStretch(MMFF94& mmff, const String& filename)
 }
 
 ///////////////////////////////////////////////////////////
-bool testStretchBend(MMFF94& mmff, const String& filename)
+bool testStretchBend(MMFF94& mmff, const String& filename, bool compare)
 {
-	/*
-	String full_file_name = (dir +FileSystem::PATH_SEPARATOR + filename + ".bend");
+	String full_file_name = (dir +FileSystem::PATH_SEPARATOR + filename + ".stretchbend");
 	LineBasedFile infile(full_file_name);
 	vector<String> atoms1, atoms2, atoms3;
 	vector<Position>   type;
-	vector<float>  theta0, delta, energy;
+	vector<float>  energy, f_ij;
 	while (infile.readLine())
 	{
 		vector<String> fields;
-		if (infile.getLine().split(fields) < 7)
+		if (infile.getLine().split(fields) < 6)
 		{
 			Log.error() << "Problem: " << __FILE__ << __LINE__ << std::endl;
 			continue;
@@ -185,51 +187,69 @@ bool testStretchBend(MMFF94& mmff, const String& filename)
 		atoms2.push_back(fields[1]);
 		atoms3.push_back(fields[2]);
 		type.push_back(fields[3].toUnsignedInt());
-		theta0.push_back(fields[4].toFloat());
-		delta.push_back(fields[5].toFloat());
-		energy.push_back(fields[6].toFloat());
+		energy.push_back(fields[4].toFloat());
+		f_ij.push_back(fields[5].toFloat());
 	}
 
-	MMFF94Bend* bend = (MMFF94Bend*) mmff.getComponent("MMFF94 Bend");
-	for (Position poss = 0; poss < bend->getBends().size(); poss++)
+	MMFF94StretchBend* comp= (MMFF94StretchBend*) mmff.getComponent("MMFF94 StretchBend");
+	for (Position poss = 0; poss < comp->getStretchBends().size(); poss++)
 	{
-		const MMFF94Bend::Bend& s = bend->getBends()[poss];
-		bool found = false;
+		const MMFF94StretchBend::StretchBend& s = comp->getStretchBends()[poss];
+		Position found = 0;
+		vector<float> constants;
+		vector<float> constants_ours;
+		constants_ours.push_back(s.kba_kji);
+		constants_ours.push_back(s.kba_ijk);
 
+		float energy1 = 0.0;
 		for (Position poss2 = 0; poss2 < atoms1.size(); poss2++)
 		{
-			if (atoms1[poss2] != s.atom1->ptr->getName() ||
-					atoms2[poss2] != s.atom2->ptr->getName() ||
-					atoms3[poss2] != s.atom3->ptr->getName())
+			if ((atoms1[poss2] == s.atom1->ptr->getName() &&
+					atoms2[poss2] == s.atom2->ptr->getName() &&
+					atoms3[poss2] == s.atom3->ptr->getName()) 
+					||
+			   (atoms3[poss2] == s.atom1->ptr->getName() &&
+					atoms2[poss2] == s.atom2->ptr->getName() &&
+					atoms1[poss2] == s.atom3->ptr->getName()))
 			{
-				continue;
+				energy1 += energy[poss2];
+				constants.push_back(f_ij[poss2]);
+				found ++;
 			}
 
-			float delta = std::fabs(s.energy - energy[poss2]);
-			found = true;
-			if (s.theta0 != theta0[poss2] ||
-					delta > energy[poss2] / 20.0 && delta > 0.001)
+
+			if (found != 2) continue;
+
+			float deltae = std::fabs(energy1 - s.energy);
+
+			sort(constants.begin(), constants.end());
+			sort(constants_ours.begin(), constants_ours.end());
+
+			if (constants[0] != constants_ours[0] ||
+					constants[1] != constants_ours[1] ||
+					(deltae > std::fabs(energy1 / 20.0) && 
+					std::fabs(deltae) > 0.001))
 			{
 				Log.error() << std::endl
-										<< "Problem Bend:   " << filename << "   " 
-										<< s.atom1->ptr->getName() << " " << s.atom2->ptr->getName() 
-										<< " " << s.atom3->ptr->getName()  << std::endl
-										<< "got " << s.theta0 << "   " << s.ATIJK << "   " << s.energy << std::endl
-										<< "was " << theta0[poss2] << "   " << type[poss2] << "   " << energy[poss2]
-										<< std::endl;
+										<< "Problem StretchBend:   " << filename << "   " 
+										<< s.atom1->ptr->getName() << " " << s.atom2->ptr->getName() << " " << s.atom3->ptr->getName()  << std::endl
+										<< "got " << constants_ours[0] << " " << constants_ours[1] << "   " << s.energy << std::endl
+										<< "was " << constants[0] << " " << constants[1]  << "   " << energy1 << std::endl;
 			}
 
 			break;
 		}
 		
-		if (!found) 
+		if (found != 2)  
 		{
-			Log.error() << "Could not find atoms " << atoms1[poss] 
-				<< " " << atoms2[poss] << " "
-				<< " " << atoms3[poss] << std::endl;
+ 			Log.error() << "Could not find atoms [sb] " << s.atom1->ptr->getName() << " "	
+																							    << s.atom2->ptr->getName() << " "
+																									<< s.atom3->ptr->getName() << " " << std::endl;
 		}
 	}
-*/
+
+	if (!compare) return true;
+
 	vector<float> results = getResults(dir +FileSystem::PATH_SEPARATOR + filename);
 
 	float s_plus_b = results[2] + results[1];
@@ -247,7 +267,7 @@ bool testStretchBend(MMFF94& mmff, const String& filename)
 
 
 ///////////////////////////////////////////////////////////
-bool testBend(MMFF94& mmff, const String& filename)
+bool testBend(MMFF94& mmff, const String& filename, bool compare)
 {
 	String full_file_name = (dir +FileSystem::PATH_SEPARATOR + filename + ".bend");
 	LineBasedFile infile(full_file_name);
@@ -287,17 +307,17 @@ bool testBend(MMFF94& mmff, const String& filename)
 				continue;
 			}
 
-			float delta = std::fabs(s.energy - energy[poss2]);
+			float deltae = std::fabs(s.energy - energy[poss2]);
 			found = true;
 			if (s.theta0 != theta0[poss2] ||
-					delta > energy[poss2] / 20.0 && delta > 0.001)
+					deltae > energy[poss2] / 20.0 && deltae > 0.001)
 			{
 				Log.error() << std::endl
 										<< "Problem Bend:   " << filename << "   " 
 										<< s.atom1->ptr->getName() << " " << s.atom2->ptr->getName() 
 										<< " " << s.atom3->ptr->getName()  << std::endl
-										<< "got " << s.theta0 << "   " << s.ATIJK << "   " << s.energy << std::endl
-										<< "was " << theta0[poss2] << "   " << type[poss2] << "   " << energy[poss2]
+										<< "got " << s.delta_theta << "  " << s.theta0 << "   " << s.ATIJK << "   " << s.energy << std::endl
+										<< "was " << delta[poss2] << " " <<  theta0[poss2] << "   " << type[poss2] << "   " << energy[poss2]
 										<< std::endl;
 			}
 
@@ -306,11 +326,11 @@ bool testBend(MMFF94& mmff, const String& filename)
 		
 		if (!found) 
 		{
-			Log.error() << "Could not find atoms " << atoms1[poss] 
-				<< " " << atoms2[poss] << " "
-				<< " " << atoms3[poss] << std::endl;
+			Log.error() << "Could not find atoms [b] " << atoms1[poss] << " " << atoms2[poss] << " " << atoms3[poss] << std::endl;
 		}
 	}
+
+	if (!compare) return true;
 
 	vector<float> results = getResults(dir +FileSystem::PATH_SEPARATOR + filename);
 
@@ -348,9 +368,9 @@ int runtests(const vector<String>& filenames)
 
 		mmff.updateEnergy();
 
-//    		if (testStretch(mmff, filenames[pos])) ok++;
-//   		if (testBend(mmff, filenames[pos])) ok++;
-		if (testStretchBend(mmff, filenames[pos])) ok++;
+ 		testStretch(mmff, filenames[pos], false);
+ 		testBend(mmff, filenames[pos], false);
+		if (testStretchBend(mmff, filenames[pos], true)) ok++;
 	}
 
 	Log.info() << "Tested " << filenames.size() << " files, " << ok << " files ok" << std::endl;

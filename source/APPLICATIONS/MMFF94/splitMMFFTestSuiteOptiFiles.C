@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: splitMMFFTestSuiteOptiFiles.C,v 1.1.2.4 2005/03/26 00:13:49 amoll Exp $
+// $Id: splitMMFFTestSuiteOptiFiles.C,v 1.1.2.5 2005/03/31 14:52:45 amoll Exp $
 //
 // A small program for spliting the Optimol log file from the MMFF94 test suite
 // into smaller files, which are better to handle for parsing 
@@ -163,7 +163,6 @@ int main(int argc, char** argv)
 		
 		/// bend
 		if (infile.getLine() == "  I       J       K     I    J    K  CLASS    ANGLE       ANGLE      DIFF.      ENERGY   CONSTANT")
-
 		{
 			File outfile(dir + FileSystem::PATH_SEPARATOR + file_name + ".bend", std::ios::out);
 
@@ -178,6 +177,25 @@ int main(int argc, char** argv)
 								<< fields[3] << " " << fields[7] << " " 
 								<< fields[9] << " " << fields[10] << " " 
 								<< fields[11]  << std::endl;
+			}
+		}
+		
+
+		/// stretch bend
+		if (infile.getLine() == "  I       J       K     I    J    K  CLASS    ANGLE       ANGLE      R(I,J)    ENERGY       I-J")
+		{
+			File outfile(dir + FileSystem::PATH_SEPARATOR + file_name + ".stretchbend", std::ios::out);
+
+			infile.readLine();
+			while (infile.readLine() && infile.getLine() != "")
+			{
+				vector<String> fields;
+				infile.getLine().split(fields);
+
+				// I J K type energy f_ij
+				outfile << fields[0] << " " << fields[1] << " " 
+								<< fields[3] << " " << fields[7] << " " 
+								<< fields[11] << " " << fields[12] << " " << std::endl;
 			}
 		}
 	}
