@@ -1,4 +1,4 @@
-// $Id: control.C,v 1.7.4.9 2002/12/02 20:52:39 amoll Exp $
+// $Id: control.C,v 1.7.4.10 2002/12/03 10:41:20 oliver Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/control.h>
 #include <BALL/KERNEL/atom.h>
@@ -768,9 +768,8 @@ void Control::eraseGeometricObject()
 }
 
 void Control::selectedComposite(Composite* composite, bool state)
-	throw()
 {
-//Log.error() << "Control::selectedComposite " << composite << "  " << state << std::endl;
+	//Log.error() << "Control::selectedComposite " << composite << "  " << state << std::endl;
 	const HashSet<Composite*>& selection =	MainControl::getMainControl(this)->getSelection();
 	if (selection.has(composite) == state)
 	{
