@@ -1,7 +1,7 @@
 
 // vi: set ts=2:
 //
-// $Id: PTE.h,v 1.23 2003/03/26 14:16:45 anhi Exp $
+// $Id: PTE.h,v 1.24 2003/06/19 13:16:54 oliver Exp $
 
 #ifndef BALL_KERNEL_PTE_H
 #define BALL_KERNEL_PTE_H
@@ -377,7 +377,7 @@ namespace BALL
 					@param   element the Element to be copied (cloned)
 					@return  Element& - this instance
 			*/
-			const Element& operator = (const Element& element)
+			Element& operator = (const Element& element)
 				throw();
 
 			//@}
@@ -731,7 +731,7 @@ namespace BALL
 					Does not assign anything.
 					Implemented just for the OCI.
 			*/
-			const PTE_& operator = (const PTE_& /*pte*/)
+			PTE_& operator = (const PTE_& /*pte*/)
 				throw();
 			
 			//@}

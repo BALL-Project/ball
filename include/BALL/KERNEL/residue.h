@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residue.h,v 1.36 2003/06/11 08:08:55 oliver Exp $
+// $Id: residue.h,v 1.37 2003/06/19 13:16:55 oliver Exp $
 
 #ifndef BALL_KERNEL_RESIDUE_H
 #define BALL_KERNEL_RESIDUE_H
@@ -154,7 +154,7 @@ namespace BALL
 
 		/**	Assignment operator	
 		*/
-		const Residue& operator = (const Residue& residue)
+		Residue& operator = (const Residue& residue)
 			throw();
 
 		/**	Assign a Residue object from another instance.

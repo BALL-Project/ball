@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: selector.h,v 1.23 2003/03/26 13:56:34 anhi Exp $
+// $Id: selector.h,v 1.24 2003/06/19 13:16:55 oliver Exp $
 
 #ifndef BALL_KERNEL_SELECTOR_H
 #define BALL_KERNEL_SELECTOR_H
@@ -75,7 +75,7 @@ namespace BALL
 
 		/** Assignment operator.
 		*/
-		const Selector& operator = (const Selector& selector)
+		Selector& operator = (const Selector& selector)
 			throw();
 
 		//@}

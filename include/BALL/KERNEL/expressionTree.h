@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expressionTree.h,v 1.9 2003/03/26 15:59:21 anhi Exp $
+// $Id: expressionTree.h,v 1.10 2003/06/19 13:16:54 oliver Exp $
 
 #ifndef BALL_KERNEL_EXPRESSIONTREE_H
 #define BALL_KERNEL_EXPRESSIONTREE_H
@@ -157,7 +157,7 @@ namespace BALL
 
 		/** Asignment operator 
 		 */
-		const ExpressionTree& operator = (const ExpressionTree& tree) 
+		ExpressionTree& operator = (const ExpressionTree& tree) 
 			throw();
 
 		/** Clear method 

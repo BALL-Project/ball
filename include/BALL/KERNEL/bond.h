@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bond.h,v 1.37 2003/03/26 15:59:20 anhi Exp $
+// $Id: bond.h,v 1.38 2003/06/19 13:16:54 oliver Exp $
 
 #ifndef BALL_KERNEL_BOND_H
 #define BALL_KERNEL_BOND_H
@@ -309,7 +309,7 @@ namespace BALL
 				@return Bond - this bond
 				@see    Bond::set
 		*/
-		const Bond& operator = (const Bond& bond)
+		Bond& operator = (const Bond& bond)
 			throw();
 
 		/** Swap the contents of two bonds

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.h,v 1.56 2003/06/19 13:09:54 oliver Exp $
+// $Id: atom.h,v 1.57 2003/06/19 13:16:54 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_ATOM_H
@@ -762,34 +762,34 @@ namespace BALL
 
 			typedef Index BondIteratorPosition_;
 
-			class BondIteratorTraits_
+			class BondIteratorTraits
 			{
 				public:
 
-				BALL_CREATE_DEEP(BondIteratorTraits_)
+				BALL_CREATE_DEEP(BondIteratorTraits)
 
-				BondIteratorTraits_()
+				BondIteratorTraits()
 					throw()
 					:	bound_(0),
 						position_(0)
 				{
 				}
 				
-				BondIteratorTraits_(const Atom& atom)
+				BondIteratorTraits(const Atom& atom)
 					throw()
 					:	bound_((Atom*)&atom),
 						position_(0)
 				{
 				}
 				
-				BondIteratorTraits_(const BondIteratorTraits_& traits, bool /* deep */ = true)
+				BondIteratorTraits(const BondIteratorTraits& traits, bool /* deep */ = true)
 					throw()
 					:	bound_(traits.bound_),
 						position_(traits.position_)
 				{
 				}
 				
-				const BondIteratorTraits_& operator = (const BondIteratorTraits_& traits)
+				BondIteratorTraits& operator = (const BondIteratorTraits& traits)
 					throw()
 				{
 					bound_ = traits.bound_;
@@ -827,25 +827,25 @@ namespace BALL
 					return position_;
 				}
 
-				bool operator == (const BondIteratorTraits_& traits) const
+				bool operator == (const BondIteratorTraits& traits) const
 					throw()
 				{
 					return (position_ == traits.position_);
 				}
 
-				bool operator != (const BondIteratorTraits_& traits) const
+				bool operator != (const BondIteratorTraits& traits) const
 					throw()
 				{
 					return (position_ != traits.position_);
 				}
 				
-				bool operator < (const BondIteratorTraits_& traits) const
+				bool operator < (const BondIteratorTraits& traits) const
 					throw()
 				{
 					return (position_ < traits.position_);
 				}
 
-				Distance getDistance(const BondIteratorTraits_& traits) const
+				Distance getDistance(const BondIteratorTraits& traits) const
 					throw()
 				{
 					return (Distance)(position_ - traits.position_);
@@ -906,7 +906,7 @@ namespace BALL
 					++position_;
 				}
 
-				friend std::ostream& operator << (std::ostream& s, const BondIteratorTraits_& traits)
+				friend std::ostream& operator << (std::ostream& s, const BondIteratorTraits& traits)
 					throw()
 				{
 					return (s << traits.position_ << ' ');
@@ -979,12 +979,12 @@ namespace BALL
 
 			};
 
-			friend class BondIteratorTraits_;
+			friend class BondIteratorTraits;
 
 			/** Random access iterator for bonds.
 			*/
 			typedef RandomAccessIterator
-				<Atom, Bond, BondIteratorPosition_, BondIteratorTraits_>
+				<Atom, Bond, BondIteratorPosition_, BondIteratorTraits>
 				BondIterator;
 			
 			/// Return a bond iterator pointing to the first bond of the atom
@@ -1003,7 +1003,7 @@ namespace BALL
 
 			/// Constant random access iterator for bonds
 			typedef ConstRandomAccessIterator
-				<Atom, Bond, BondIteratorPosition_, BondIteratorTraits_>
+				<Atom, Bond, BondIteratorPosition_, BondIteratorTraits>
 				BondConstIterator;
 
 			/// Return a constant bond iterator pointing to the first bond

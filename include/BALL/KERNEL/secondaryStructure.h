@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: secondaryStructure.h,v 1.33 2003/06/11 08:08:55 oliver Exp $
+// $Id: secondaryStructure.h,v 1.34 2003/06/19 13:16:55 oliver Exp $
 
 #ifndef BALL_KERNEL_SECONDARYSTRUCTURE_H
 #define BALL_KERNEL_SECONDARYSTRUCTURE_H
@@ -134,7 +134,7 @@ namespace BALL
 				@return  Secondary_structure& - this instance
 				@see     SecondaryStructure::set
 		*/
-		const SecondaryStructure& operator =(const SecondaryStructure& secondary_structure)
+		SecondaryStructure& operator = (const SecondaryStructure& secondary_structure)
 			throw();
 
 		/** Copy this instance to {\em secondary_structure}.

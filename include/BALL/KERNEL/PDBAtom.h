@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBAtom.h,v 1.29 2003/03/26 15:59:19 anhi Exp $
+// $Id: PDBAtom.h,v 1.30 2003/06/19 13:16:53 oliver Exp $
 
 #ifndef BALL_KERNEL_PDBATOM_H
 #define BALL_KERNEL_PDBATOM_H
@@ -187,7 +187,7 @@ namespace BALL
 				@param   pdb_atom the PDBAtom to be copied (cloned)
 				@return  pdb_atom& - the instance
 		*/
-		const PDBAtom& operator = (const PDBAtom& pdb_atom)
+		PDBAtom& operator = (const PDBAtom& pdb_atom)
 			throw();
 
 		/** Swapping of PDBAtoms.

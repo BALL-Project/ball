@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nucleicAcid.h,v 1.29 2003/03/26 15:59:22 anhi Exp $ 
+// $Id: nucleicAcid.h,v 1.30 2003/06/19 13:16:54 oliver Exp $ 
 
 #ifndef BALL_KERNEL_NUCLEICACID_H
 #define BALL_KERNEL_NUCLEICACID_H
@@ -118,7 +118,7 @@ namespace BALL
 
 		/**	Assignment operator.
 		*/
-		const NucleicAcid& operator = (const NucleicAcid& nucleic_acid)
+		NucleicAcid& operator = (const NucleicAcid& nucleic_acid)
 			throw();
 
 		/**	Assign a NucleicAcid object from another.

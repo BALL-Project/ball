@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragment.h,v 1.23 2003/03/26 15:59:21 anhi Exp $
+// $Id: fragment.h,v 1.24 2003/06/19 13:16:54 oliver Exp $
 
 #ifndef BALL_KERNEL_FRAGMENT_H
 #define BALL_KERNEL_FRAGMENT_H
@@ -95,7 +95,7 @@ namespace BALL
 				@param   fragment the Fragment to be copied (cloned)
 				@return  Fragment& - this instance
 		*/
-		const Fragment& operator = (const Fragment& fragment)
+		Fragment& operator = (const Fragment& fragment)
 			throw();
 
 		//@}

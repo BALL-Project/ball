@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: chain.h,v 1.32 2003/03/26 15:59:21 anhi Exp $
+// $Id: chain.h,v 1.33 2003/06/19 13:16:54 oliver Exp $
 
 #ifndef BALL_KERNEL_CHAIN_H
 #define BALL_KERNEL_CHAIN_H
@@ -111,7 +111,7 @@ namespace BALL
 				@return  chain& - this instance.
 				@see     chain::set
 		*/
-		const Chain& operator = (const Chain& chain)
+		Chain& operator = (const Chain& chain)
 			throw();
 
 		/** Copying with cloning facility.

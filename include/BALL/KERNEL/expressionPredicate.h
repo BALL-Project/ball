@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expressionPredicate.h,v 1.9 2003/03/26 13:56:30 anhi Exp $
+// $Id: expressionPredicate.h,v 1.10 2003/06/19 13:16:54 oliver Exp $
 
 #ifndef BALL_KERNEL_EXPRESSIONPREDICATE_H
 #define BALL_KERNEL_EXPRESSIONPREDICATE_H
@@ -61,7 +61,7 @@ namespace BALL
 
 		/** Assignment operator 
 		 */
-		const ExpressionPredicate& operator = (const ExpressionPredicate& predicate) 
+		ExpressionPredicate& operator = (const ExpressionPredicate& predicate) 
 			throw();
 
 		/** Clear method 

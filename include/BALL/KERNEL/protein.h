@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: protein.h,v 1.26 2003/03/26 15:59:23 anhi Exp $ 
+// $Id: protein.h,v 1.27 2003/06/19 13:16:55 oliver Exp $ 
 
 #ifndef BALL_KERNEL_PROTEIN_H
 #define BALL_KERNEL_PROTEIN_H
@@ -129,7 +129,7 @@ namespace BALL
 				@param   protein the Protein to be copied (cloned)
 				@return  Protein& - this instance
 		*/
-		const Protein& operator = (const Protein& protein)
+		Protein& operator = (const Protein& protein)
 			throw();
 
 		/** Copy this instance to {\em protein}.

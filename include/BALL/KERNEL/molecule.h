@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecule.h,v 1.28 2003/03/26 15:59:22 anhi Exp $
+// $Id: molecule.h,v 1.29 2003/06/19 13:16:54 oliver Exp $
 
 #ifndef BALL_KERNEL_MOLECULE_H
 #define BALL_KERNEL_MOLECULE_H
@@ -103,7 +103,7 @@ namespace BALL
 		/**	Assignment operator.
 				@param molecule the Molecule to assign from
 		**/
-		const Molecule& operator = (const Molecule& molecule)
+		Molecule& operator = (const Molecule& molecule)
 			throw();
 
 		/**	Assign to another Molecule.

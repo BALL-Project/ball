@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PTE.iC,v 1.7 2002/02/27 12:18:44 sturm Exp $
+// $Id: PTE.iC,v 1.8 2003/06/19 13:16:54 oliver Exp $
 
 BALL_INLINE 
 void Element::clear()
@@ -273,7 +273,7 @@ bool PTE_::operator == (const PTE_& /*pte*/) const
 }
 
 BALL_INLINE 
-const PTE_& PTE_::operator = (const PTE_& /*pte*/)
+PTE_& PTE_::operator = (const PTE_& /*pte*/)
 	throw()
 {
 	return *this;

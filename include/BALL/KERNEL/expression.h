@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expression.h,v 1.26 2003/03/26 13:56:29 anhi Exp $
+// $Id: expression.h,v 1.27 2003/06/19 13:16:54 oliver Exp $
 
 #ifndef BALL_KERNEL_EXPRESSION_H
 #define BALL_KERNEL_EXPRESSION_H
@@ -148,7 +148,7 @@ namespace BALL
 
 		/** Assignment operator 
 		 */
-		const Expression& operator = (const Expression& expression) 
+		Expression& operator = (const Expression& expression) 
 			throw();
 
 		/** Clear method 
