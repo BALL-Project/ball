@@ -1,4 +1,4 @@
-// $Id: bitVector.C,v 1.25 2000/12/16 21:27:18 amoll Exp $
+// $Id: bitVector.C,v 1.26 2001/10/11 00:31:35 oliver Exp $
 
 #include <BALL/DATATYPE/bitVector.h>
 #include <BALL/MATHS/common.h>
@@ -39,53 +39,33 @@ namespace BALL
 	BitVector::BitVector()
 		throw()
 		:	size_(0),
-			block_size_(BALL_BLOCK_SIZE(BlockSize))
+			bitset_(1)
 	{
-		bitset_ = new BlockType[block_size_];
-
-		if (bitset_ == 0)
-		{
-			throw Exception::OutOfMemory(__FILE__, __LINE__, size_);
-		}
-
-		memset(bitset_, BALL_BLOCK_ALL_BITS_CLEARED, block_size_ << (sizeof(BlockType) - 1));
+		bitset_[0] = (BlockType)0;
 	}
 
 	BitVector::BitVector(Size size)
 		throw(Exception::OutOfMemory)
-		:	size_(size),
-			block_size_(BALL_BLOCK_SIZE(size))
+		:	size_(size)
 	{				
-		bitset_ = new BlockType[block_size_];
-
-		if (bitset_ == 0)
+		bitset_.resize(BALL_BLOCK_SIZE(size));
+		for (Position i = 0; i < bitset_.size(); i++)
 		{
-			throw Exception::OutOfMemory(__FILE__, __LINE__, size_);
+			bitset_[i] = (BlockType)0;
 		}
-
-		memset(bitset_, BALL_BLOCK_ALL_BITS_CLEARED, block_size_ << (sizeof(BlockType) - 1));
 	}
 
 	BitVector::BitVector(const BitVector& bit_vector, bool /* deep */)
 		throw(Exception::OutOfMemory)
 		:	size_(bit_vector.size_),
-			block_size_(bit_vector.block_size_)
+			bitset_(bit_vector.bitset_)
 	{
-		bitset_ = new BlockType[block_size_];
-
-		if (bitset_ == 0)
-		{
-			throw Exception::OutOfMemory(__FILE__, __LINE__, size_);
-		}
-
-		memcpy(bitset_, bit_vector.bitset_, block_size_ << (sizeof(BlockType) - 1));
 	}
 
 	BitVector::BitVector(const char* bit_string)
 		throw(Exception::OutOfMemory)
-		: size_(BALL_BLOCK_BITS),
-			block_size_(BALL_BLOCK_SIZE(BALL_BLOCK_BITS)),
-			bitset_(new BlockType[1])
+		: size_(0),
+			bitset_()
 	{
 		set(bit_string);
 	}
@@ -93,43 +73,25 @@ namespace BALL
 	BitVector::~BitVector()
 		throw()
 	{
-		delete[] bitset_;
-		bitset_ = 0;
 	}
 
 	void BitVector::set(const BitVector& bit_vector, bool /* deep */)
   	throw(Exception::OutOfMemory)
 	{
-		if (block_size_ != bit_vector.block_size_) 
-		{
-			delete[] bitset_;
-			bitset_ = new BlockType[bit_vector.block_size_];
-
-			if (bitset_ == 0)
-			{
-				throw Exception::OutOfMemory(__FILE__, __LINE__, bit_vector.block_size_);
-			}
-
-			block_size_ = bit_vector.block_size_;
-		}
-
-		memcpy(bitset_, bit_vector.bitset_, block_size_ << (sizeof(BlockType) - 1));
-		size_				= bit_vector.size_;
+		bitset_= bit_vector.bitset_;
+		size_	= bit_vector.size_;
 	}
 
 	void BitVector::swap(BitVector& bit_vector)
 		throw()
 	{
-		BALL::Size temp				 = size_;
-		BALL::Size temp_block	 = block_size_;
-		BlockType* temp_bitset = bitset_;
+		Size temp = size_;
+		VectorType temp_bitset = bitset_;
 
 		size_				= bit_vector.size_;
-		block_size_ = bit_vector.block_size_;
 		bitset_			= bit_vector.bitset_;
 
 		bit_vector.size_				= temp;
-		bit_vector.block_size_  = temp_block;
 		bit_vector.bitset_			= temp_bitset;
 	}
 
@@ -427,101 +389,44 @@ namespace BALL
 	}
 
 	void BitVector::bitwiseXor(const BitVector& bit_vector)
-		throw(Exception::OutOfMemory)
+		throw (Exception::OutOfMemory)
 	{
-		BALL::Size block_size = block_size_;
-
-		if (block_size_ < bit_vector.block_size_)
-		{
-			setSize(bit_vector.size_, true);
-			block_size = block_size_;
-		} 
-		else 
-		{
-			if (block_size_ > bit_vector.block_size_)
-			{
-				block_size = bit_vector.block_size_;
-			}
-		}
-
-		BlockType *source = bit_vector.bitset_;
-		BlockType *target = bitset_;
-
-		for (; block_size >= 1; block_size--, target++, source++)
-		{
-			*target ^= *source;
-		}
-
 		if (size_ < bit_vector.size_)
 		{
-			size_ = bit_vector.size_;
-			block_size_ = bit_vector.block_size_;
+			setSize(bit_vector.size_, true);
+		} 
+
+		for (Position i = 0; i < bit_vector.size_; i++)
+		{
+			bitset_[i] ^= bit_vector.bitset_[i];
 		}
 	}
 
 	void BitVector::bitwiseOr(const BitVector& bit_vector)
-		throw(Exception::OutOfMemory)
+		throw (Exception::OutOfMemory)
 	{
-		BALL::Size block_size = block_size_;
-
-		if (block_size_ < bit_vector.block_size_)
+		if (bitset_.size() < bit_vector.bitset_.size())
 		{
 			setSize(bit_vector.size_, true);
-			block_size = block_size_;
-		}
-		else 
-		{
-			if (block_size_ > bit_vector.block_size_)
-			{
-				block_size = bit_vector.block_size_;
-			}
 		}
 
-		BlockType *source = bit_vector.bitset_;
-		BlockType *target = bitset_;
-
-		for (; block_size >= 1; block_size--, target++, source++)
+		for (Position i = 0; i < size_; i++)
 		{
-			*target |= *source;
-		}
-
-		if (size_ < bit_vector.size_)
-		{
-			size_ = bit_vector.size_;
-			block_size_ = bit_vector.block_size_;
+			bitset_[i] |= bit_vector.bitset_[i];
 		}
 	}
 
 	void BitVector::bitwiseAnd(const BitVector& bit_vector)
-		throw(Exception::OutOfMemory)
+		throw (Exception::OutOfMemory)
 	{
-		BALL::Size block_size = block_size_;
-
-		if (block_size_ < bit_vector.block_size_)
+		if (bitset_.size() < bit_vector.bitset_.size())
 		{
 			setSize(bit_vector.size_, true);
-			block_size = block_size_;
-		}
-		else 
-		{
-			if (block_size_ > bit_vector.block_size_)
-			{
-				block_size = bit_vector.block_size_;
-			}
 		}
 
-		BlockType *source = bit_vector.bitset_;
-		BlockType *target = bitset_;
-
-		for (; block_size >= 1; block_size--, target++, source++)
+		for (Position i = 0; i < size_; i++)
 		{
-			*target &= *source;
-		}
-
-		if (size_ < bit_vector.size_)
-		{
-			size_ = bit_vector.size_;
-			block_size_ = bit_vector.block_size_;
+			bitset_[i] &= bit_vector.bitset_[i];
 		}
 	}
 
@@ -545,7 +450,7 @@ namespace BALL
 	}
 
 	bool BitVector::isAnyBit(bool bit, Index first, Index last) const
-	 throw(Exception::IndexUnderflow, Exception::IndexOverflow)
+		throw(Exception::IndexUnderflow, Exception::IndexOverflow)
 	{
 		validateRange_(first, last);
 
@@ -682,27 +587,11 @@ namespace BALL
 		
 		if ((Size)index >= size_)
 		{
-			BALL::Size block_size = (BALL::Size)((index + BALL_BLOCK_BITS) >> BALL_BLOCK_SHIFT);
+			Size block_size = (Size)((index + BALL_BLOCK_BITS) >> BALL_BLOCK_SHIFT);
 
-			if (block_size > block_size_)
+			if (block_size > bitset_.size())
 			{
-				BlockType* bitset = new BlockType[block_size]; 
-
-				if (bitset == 0)
-				{
-					throw Exception::OutOfMemory(__FILE__, __LINE__, index);
-				}
-
-				memset(bitset + block_size_, BALL_BLOCK_ALL_BITS_CLEARED, 
-							 (block_size - block_size_) << (sizeof(BlockType) - 1));
-
-				memcpy(bitset, bitset_, 
-							 block_size_ << (sizeof(BlockType) - 1));
-
-				delete[] bitset_;
-
-				bitset_			= bitset;
-				block_size_ = block_size;
+				setSize(block_size);
 			}
 		
 			size_ = index + 1; 
@@ -712,49 +601,32 @@ namespace BALL
 	}
 
 	void BitVector::setSize(Size size, bool keep) 
-	 throw(Exception::OutOfMemory)
+		throw(Exception::OutOfMemory)
 	{
 		// calculate new block size
 		Size	block_size		 = (Size)((size  + BALL_BLOCK_MASK) >> BALL_BLOCK_SHIFT);
-		Size	old_block_size = (Size)((size_ + BALL_BLOCK_MASK) >> BALL_BLOCK_SHIFT);
 
 		if (keep) 
 		{
-			if (block_size == block_size_) 
+			if (block_size != bitset_.size()) 
 			{
-				size_ = size;
-				return;
-			} 
-
-			// allocate a new Block
-			BlockType*	tmp = new BlockType[block_size];
-
-			if (tmp == 0)
-			{
-				throw Exception::OutOfMemory(__FILE__, __LINE__, size);
+				// resize the block array and reset its
+				bitset_.resize(block_size);
 			}
 
-			memset(tmp, BALL_BLOCK_ALL_BITS_CLEARED, block_size << (sizeof(BlockType) - 1));
-			memcpy(tmp, bitset_, old_block_size << (sizeof(BlockType) - 1));
-			
-			delete[] bitset_;	
-			bitset_ = tmp;
+			// reset the new contents to zero
+			for (Position i = size_; i < size; i++)
+			{		
+				(*this)[i] = false;
+			}
 		} 
 		else 
 		{
-			delete[] bitset_;
-			bitset_ = new BlockType[block_size];
-
-			if (bitset_ == 0)
-			{
-				throw Exception::OutOfMemory(__FILE__, __LINE__, size);
-			}
-
-			memset(bitset_, BALL_BLOCK_ALL_BITS_CLEARED,
-						 block_size << (sizeof(BlockType) - 1));
+			// resize the array and clear its contents
+			bitset_.resize(block_size);
+			bitset_.clear();
 		}
 
-		block_size_ = block_size;
 		size_ = size;
 	}
 
