@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Stretch.h,v 1.1.2.6 2005/03/23 00:09:56 amoll Exp $ 
+// $Id: MMFF94Stretch.h,v 1.1.2.7 2005/03/23 14:57:56 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field, bond stretch component
@@ -59,7 +59,8 @@ namespace BALL
 			Atom* atom2;
 			float kb;
 			float r0;
-			bool  sbmb;
+			bool  sbmb; // debuging
+			int reason; // debuging
 		};
 
 		BALL_CREATE(MMFF94Stretch)
@@ -117,7 +118,7 @@ namespace BALL
 
 		private:
 
-		bool isInOneRing_(const Bond& bond);
+		bool isInOneAromaticRing_(const Bond& bond);
 		
 		/*_	@name	Private Attributes	
 		*/

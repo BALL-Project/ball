@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Stretch.C,v 1.1.2.8 2005/03/23 13:44:03 amoll Exp $
+// $Id: MMFF94Stretch.C,v 1.1.2.9 2005/03/23 14:57:51 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Stretch.h>
@@ -107,7 +107,9 @@ namespace BALL
 			}
 		}
 		
-Log.error() << "#~~#   1 "  << rings_.size()           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+#ifdef BALL_DEBUG_MMFF
+Log.info() << "MMFF94Strech Number of rings: "  << rings_.size() << std::endl;
+#endif
 
 		bool use_selection = getForceField()->getUseSelection();
 
@@ -149,52 +151,16 @@ Log.error() << "#~~#   1 "  << rings_.size()           << " "  << __FILE__ << " 
 					(isSp_(atom1) || isSp2_(atom1)) 				&&
 					(isSp_(atom2) || isSp2_(atom2))					&&
  					!isInOneAromaticRing_(bond);
-/*
-Log.info() << "-----------------------------------------------------" << std::endl;
-Log.info() << atom1.getFullName() << " 1> " 
-					 << atom2.getFullName() << " : "
-					 << atom_type_A << " " << atom_type_B << std::endl;
-
-get_sbmb = parameters_.hasOptionalSBMBParameter(atom_type_A, atom_type_B);
-	
-if (get_sbmb)
-{
-	Log.info() << atom1.getFullName() << " 2> " 
-						 << atom2.getFullName() << " : "
-						 << atom_type_A << " " << atom_type_B << std::endl;
-}
-
-get_sbmb &= (bond.getOrder() == 1);
-
-if (get_sbmb)
-{
-	Log.info() << atom1.getFullName() << " 3> " 
-						 << atom2.getFullName() << " : "
-						 << atom_type_A << " " << atom_type_B << std::endl;
-}
 
 
-get_sbmb &= (
-	(isSp_(atom1) || isSp2_(atom1)) 				&&
-	(isSp_(atom2) || isSp2_(atom2)));
+int reason = 0;
+if (!parameters_.hasOptionalSBMBParameter(atom_type_A, atom_type_B)) reason = 1;
+if (bond.getOrder() != 1) reason = 2;
+if (! ((isSp_(atom1) || isSp2_(atom1)) && (isSp_(atom2) || isSp2_(atom2)))) reason = 3;
+if (isInOneAromaticRing_(bond)) reason = 4;
 
-if (get_sbmb)
-{
-	Log.info() << atom1.getFullName() << " 4> " 
-						 << atom2.getFullName() << " : "
-						 << atom_type_A << " " << atom_type_B << std::endl;
-}
+dummy_stretch.reason = reason;
 
-
-get_sbmb &= !isInOneRing_(bond);
-
-if (get_sbmb)
-{
-	Log.info() << atom1.getFullName() << " 5> " 
-						 << atom2.getFullName() << " : "
-						 << atom_type_A << " " << atom_type_B << std::endl;
-}
-*/
 
 				dummy_stretch.sbmb = get_sbmb;
 
@@ -270,7 +236,7 @@ if (get_sbmb)
 		{
 			const Vector3 direction(stretch_[i].atom1->getPosition() - stretch_[i].atom2->getPosition());
 			double distance = direction.getLength(); 
-			const double delta(::std::fabs(distance - (double) stretch_[i].r0));
+			const double delta(distance - (double) stretch_[i].r0);
 			const double delta_2(delta * delta);
 
 			double eb_ij = K0 * (double) stretch_[i].kb * delta_2 *
@@ -298,36 +264,25 @@ if (get_sbmb)
 			return;
 		}
 
-//   		bool use_selection = getForceField()->getUseSelection();
-
-		/*
 		// iterate over all bonds, update the forces
 		for (Size i = 0 ; i < stretch_.size(); i++)
 		{
-			Atom::StaticAtomAttributes& atom1(*stretch_[i].atom1);
-			Atom::StaticAtomAttributes& atom2(*stretch_[i].atom2);
-			Vector3 direction(atom1.position - atom2.position);
-			double distance = direction.getLength(); 
+			Vector3 direction(stretch_[i].atom1->getPosition() - stretch_[i].atom2->getPosition());
+			const double r0(stretch_[i].r0);
+			const double delta(direction.getLength() - r0);
 
-			if (distance != 0.0) 
-			{
-				// unit conversion: from kJ/(mol A) -> N
-				//   kJ -> J: 1e3
-				//   A  -> m: 1e10
-				//   J/mol -> J: Avogadro
-//   				direction *= 1e13 / Constants::AVOGADRO * 2 * stretch_[i].values.k * (distance - stretch_[i].values.r0) / distance;
+			const double a(143.9325 / 2  * r0);
 
-				if (!use_selection || atom1.ptr->isSelected()) 
-				{
-					atom1.force -= direction;
-				}
-				if (!use_selection || atom2.ptr->isSelected()) 
-				{
-					atom2.force += direction;
-				}
-			}
+			double force = -(2 * a * delta + 
+											 3 * a * CUBIC_STRENGTH_CONSTANT * delta * delta + 
+											 4 * a * KCS * delta * delta);
+
+			direction.normalize();
+			direction *= force;
+
+			stretch_[i].atom1->getForce()-= direction;
+			stretch_[i].atom2->getForce()+= direction;
 		}                                                                                                          
-		*/
 	}
 
 } // namespace BALL
