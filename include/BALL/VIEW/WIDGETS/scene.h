@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.57 2004/10/07 17:12:05 amoll Exp $
+// $Id: scene.h,v 1.58 2004/10/15 10:53:32 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -482,13 +482,7 @@ namespace BALL
 
 			/// Catch key events
 			void keyPressEvent(QKeyEvent* e);
-			
-			//_ state of the scene: picking or rotate mode?
-			ModeType current_mode_;
-
-			//_ last state of the scene: picking or rotate mode?
-			ModeType last_mode_;
-			
+		
 			public slots:
 
 			/// Export PNG image and return the filename
@@ -654,7 +648,13 @@ namespace BALL
 			
 			virtual void renderClippingPlane_(const Representation& rep)
 				throw();
+			
+			//_ state of the scene: picking or rotate mode?
+			ModeType current_mode_;
 
+			//_ last state of the scene: picking or rotate mode?
+			ModeType last_mode_;
+	
 			// Menu entry IDs
 			Index rotate_id_, picking_id_, move_id_;
 			Index no_stereo_id_, active_stereo_id_, dual_stereo_id_;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.145 2004/10/07 17:12:00 amoll Exp $
+// $Id: scene.C,v 1.146 2004/10/15 10:53:37 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -604,7 +604,8 @@ namespace BALL
 
 		void Scene::rotateSystem2_(Scene* /*scene*/)
 		{
-			if (x_window_pos_old_ == x_window_pos_new_) return;
+			if (current_mode_ != ROTATE__MODE ||
+					x_window_pos_old_ == x_window_pos_new_) return;
 
 			float angle = (x_window_pos_new_ - x_window_pos_old_) * (mouse_sensitivity_ / (ROTATE_FACTOR * -30));
 				
@@ -1526,11 +1527,6 @@ namespace BALL
 					break;
 				}
 
-				// ===================== rotate2 ===========================
-				case (Qt::LeftButton | Qt::RightButton):
-				case (Qt::LeftButton | Qt::ShiftButton | Qt::ControlButton):
-					break;
-
 				// rotate
 				case Qt::LeftButton:
 				{
@@ -1547,6 +1543,9 @@ namespace BALL
 					break;
 				}
 
+				// ===================== rotate2 ===========================
+				case (Qt::LeftButton | Qt::RightButton):
+				case (Qt::LeftButton | Qt::ShiftButton | Qt::ControlButton):
 				default:
 					delete msg;
 					return;
