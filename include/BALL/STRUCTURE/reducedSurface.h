@@ -1,4 +1,4 @@
-// $Id: reducedSurface.h,v 1.14 2001/06/19 21:07:00 strobel Exp $
+// $Id: reducedSurface.h,v 1.15 2001/06/20 12:45:04 anker Exp $
 
 #ifndef BALL_STRUCTURE_REDUCEDSURFACE_H
 #define BALL_STRUCTURE_REDUCEDSURFACE_H
@@ -56,7 +56,6 @@
 #include <list>
 #include <fstream>
 
-
 namespace BALL
 {
 
@@ -96,7 +95,7 @@ namespace BALL
 	/** Generic ReducedSurface Class.	\\
 			{\bf Definition:} \URL{BALL/STRUCTURE/reducedSurface.h}
 	*/
-	template <class T>
+	template <typename T>
 	class TReducedSurface
 	{
 		public:
@@ -120,10 +119,10 @@ namespace BALL
 		TReducedSurface(const TReducedSurface<T>& reduced_surface)
 			throw();
 
-		/**	Detailled constructor.
+		/**	Detailed constructor.
 				Create a new ReducedSurface object from a list of spheres.
 		*/
-		TReducedSurface(const std::vector< TSphere3<T> >& spheres,
+		TReducedSurface(const ::std::vector< TSphere3<T> >& spheres,
 				const T& probe_radius)
 			throw();
 
@@ -197,7 +196,7 @@ namespace BALL
 		/** Return the vertices
 				@return vector< TRSVertex<T>* > all vertices
 		*/
-		std::vector< TRSVertex<T>* > getVertices()
+		::std::vector< TRSVertex<T>* > getVertices()
 			throw();
 
 		/** Return the i'th rsvertex.
@@ -210,7 +209,7 @@ namespace BALL
 		/** Return the edges
 				@return vector< TRSEdge<T>* > all edges
 		*/
-		std::vector< TRSEdge<T>* > getEdges()
+		::std::vector< TRSEdge<T>* > getEdges()
 			throw();
 
 		/** Return the i'th rsedge.
@@ -223,7 +222,7 @@ namespace BALL
 		/** Return the faces
 				@return vector< TRSFace<T>* > all faces
 		*/
-		std::vector< TRSFace<T>* > getFaces()
+		::std::vector< TRSFace<T>* > getFaces()
 			throw();
 
 		/** Return the i'th rsface.
@@ -2169,7 +2168,6 @@ namespace BALL
 		return NULL;
 	}
 
-
 	template <typename T>
 	bool TReducedSurface<T>::centerOfProbe
 		 (Index				 a1,
@@ -2226,7 +2224,6 @@ namespace BALL
 		}
 		return true;
 	}
-
 
 
 } // namespace BALL
