@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.147 2004/11/29 19:52:41 amoll Exp $
+// $Id: mainControl.C,v 1.148 2004/11/29 23:02:55 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -499,11 +499,17 @@ namespace BALL
 			for (; it != modular_widgets_.end(); ++it)
 			{
 				(*it)->writePreferences(preferences_);
+			}
+
+			writePreferences(preferences_);
+
+			it = modular_widgets_.begin(); 
+			for (; it != modular_widgets_.end(); ++it)
+			{
 				(*it)->finalizePreferencesTab(*preferences_dialog_);
 				(*it)->finalizeWidget(*this);
 			}
 
-			writePreferences(preferences_);
 
 			for (it = modular_widgets_.begin(); it != modular_widgets_.end(); ++it)
 			{
