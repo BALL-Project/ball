@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.30 2004/02/05 15:41:16 amoll Exp $
+// $Id: geometricControl.C,v 1.31 2004/02/09 13:49:53 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -13,6 +13,7 @@
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
 #include <qpopupmenu.h>
 #include <qmenubar.h>
+#include <qtooltip.h> 
 
 using std::endl;
 
@@ -52,12 +53,17 @@ GeometricControl::GeometricControl(QWidget* parent, const char* name)
 	Log.error() << "new GeometricControl " << this << std::endl;
 #endif
 	listview->addColumn("[visible] Model");
-	listview->addColumn("Coloring");
+	listview->addColumn("Color");
 	listview->addColumn("Properties");
 	listview->setColumnWidth(0, 60);
 	listview->setColumnWidth(1, 60);
 	listview->setColumnWidth(2, 60);
+	String txt = String("List of the representations: \n") +
+							"1.column: model type and name of the molecular entity, the model was created from\n" +
+							"2.column: used coloring method\n" +
+							"3.column: number of used molecular entities, number of geometric objects. ";
 
+	QToolTip::add(listview, txt.c_str());
 	connect(listview, SIGNAL(selectionChanged()), this, SLOT(updateSelection()));
 }
 
