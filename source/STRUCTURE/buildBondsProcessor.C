@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: buildBondsProcessor.C,v 1.8 2005/03/24 22:25:48 bertsch Exp $
+// $Id: buildBondsProcessor.C,v 1.9 2005/03/26 11:09:15 bertsch Exp $
 //
 
 #include <BALL/STRUCTURE/buildBondsProcessor.h>
@@ -39,6 +39,7 @@ namespace BALL
 			num_bonds_(0),
 			max_length_(0.0f)
 	{
+		setDefaultOptions();
 		readBondLengthsFromFile_();
 	}
 
@@ -64,6 +65,7 @@ namespace BALL
 
 	BuildBondsProcessor::~BuildBondsProcessor()
 	{
+		setDefaultOptions();
 	}
 
 	BuildBondsProcessor& BuildBondsProcessor::operator = (const BuildBondsProcessor& bbp)
@@ -445,16 +447,6 @@ namespace BALL
 
 	void BuildBondsProcessor::readBondLengthsFromFile_(const String& file_name) throw(Exception::FileNotFound)
 	{
-
-		options.setDefault(BuildBondsProcessor::Option::BONDLENGTHS_FILENAME,
-													 BuildBondsProcessor::Default::BONDLENGTHS_FILENAME);
-		options.setDefaultBool(BuildBondsProcessor::Option::REESTIMATE_BONDORDERS_RINGS,
-													 BuildBondsProcessor::Default::REESTIMATE_BONDORDERS_RINGS);
-		options.setDefaultBool(BuildBondsProcessor::Option::DELETE_EXISTING_BONDS,
-													 BuildBondsProcessor::Default::DELETE_EXISTING_BONDS);
-		options.setDefaultBool(BuildBondsProcessor::Option::DELETE_OVERESTIMATED_BONDS,
-													 BuildBondsProcessor::Default::DELETE_OVERESTIMATED_BONDS);
-		
 		// test file or set default file
 		String filename(file_name);
 		if (file_name == "")
@@ -565,5 +557,16 @@ namespace BALL
 		delete tree;
 	}
 	
+	void BuildBondsProcessor::setDefaultOptions()
+	{
+		options.setDefault(BuildBondsProcessor::Option::BONDLENGTHS_FILENAME,
+											 BuildBondsProcessor::Default::BONDLENGTHS_FILENAME);
+		options.setDefaultBool(BuildBondsProcessor::Option::REESTIMATE_BONDORDERS_RINGS,
+													 BuildBondsProcessor::Default::REESTIMATE_BONDORDERS_RINGS);
+		options.setDefaultBool(BuildBondsProcessor::Option::DELETE_EXISTING_BONDS,
+													 BuildBondsProcessor::Default::DELETE_EXISTING_BONDS);
+		options.setDefaultBool(BuildBondsProcessor::Option::DELETE_OVERESTIMATED_BONDS,
+													 BuildBondsProcessor::Default::DELETE_OVERESTIMATED_BONDS);
+	}
 	
 } // namespace BALL

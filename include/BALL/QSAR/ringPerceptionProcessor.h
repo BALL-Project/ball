@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ringPerceptionProcessor.h,v 1.7 2005/03/25 13:19:02 bertsch Exp $
+// $Id: ringPerceptionProcessor.h,v 1.8 2005/03/26 11:09:16 bertsch Exp $
 //
 
 #ifndef BALL_QSAR_RINGPERCEPTIONPROCESSOR_H
@@ -120,7 +120,14 @@ namespace BALL
 			*/
 			Size findAllBCC(std::vector<MolecularGraph*>& bcc, MolecularGraph& graph);
 
-	
+			/*_ Options for the ring perception
+			*/
+			Options options;									
+
+			/** sets the default options of this processor
+			*/
+			void setDefaultOptions();
+
 		protected:
 	
 			/*_ @name Accessors
@@ -221,16 +228,7 @@ namespace BALL
 			/*_ Implementation of the Balducci/Pearlman algorithm 
 			*/
 			Size BalducciPearlmanAlgorithm_(std::vector<std::vector<Atom*> >& sssr, MolecularGraph& graph);
-
-			/*_ Options for the ring perception
-			*/
-			Options options;
-
-			/*_ sets the default options of this processor
-			*/
-			void setDefaultOptions_();
-			//@}
-		};
+	};
 } // namespace BALL
 
 #endif // BALL_QSAR_RINGPERCEPTIONPROCESSOR_H

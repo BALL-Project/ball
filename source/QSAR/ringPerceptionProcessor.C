@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ringPerceptionProcessor.C,v 1.11 2005/03/25 13:19:03 bertsch Exp $
+// $Id: ringPerceptionProcessor.C,v 1.12 2005/03/26 11:09:15 bertsch Exp $
 //
 
 #include <BALL/QSAR/ringPerceptionProcessor.h>
@@ -31,7 +31,7 @@ namespace BALL
 	RingPerceptionProcessor::RingPerceptionProcessor()
 		:	UnaryProcessor<AtomContainer>()
 	{
-		setDefaultOptions_();
+		setDefaultOptions();
 	}
 
 	RingPerceptionProcessor::RingPerceptionProcessor(const RingPerceptionProcessor& rp)
@@ -46,10 +46,10 @@ namespace BALL
 
 	RingPerceptionProcessor::~RingPerceptionProcessor()
 	{
-		setDefaultOptions_();
+		setDefaultOptions();
 	}
 
-	void RingPerceptionProcessor::setDefaultOptions_()
+	void RingPerceptionProcessor::setDefaultOptions()
 	{
 		options.setDefault(Option::ALGORITHM_NAME, Default::ALGORITHM_NAME);
 	}

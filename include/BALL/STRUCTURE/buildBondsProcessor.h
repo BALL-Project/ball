@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: buildBondsProcessor.h,v 1.8 2005/03/14 16:20:59 amoll Exp $
+// $Id: buildBondsProcessor.h,v 1.9 2005/03/26 11:09:15 bertsch Exp $
 //
 
 #ifndef BALL_STRUCTURE_BUILDBONDSPROCESSOR_H
@@ -149,6 +149,10 @@ namespace BALL
 			//@{
 			/// options
 			Options options;
+
+			/** reset the options to default values
+			*/
+			void setDefaultOptions();
 			//@}
 			
 		protected:
