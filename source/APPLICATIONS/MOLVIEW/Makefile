@@ -10,9 +10,9 @@ include .Dependencies
 
 BALL_INCLUDES=$(BALLVIEW_INCLUDES) $(PYTHON_INCLUDES)
 
-# PYTHON_LIBS=/opt/misc/lib/python1.5/config/libpython1.5.a -lsocket -lnsl -ldl  -lpthread -lthread -lreadline -ltermcap
+PYTHON_LIBS=/opt/misc/lib/python1.5/config/libpython1.5.a -lsocket -lnsl -ldl  -lpthread -lthread -lreadline -ltermcap
 
-SOURCES=\
+CPP_SOURCES=\
 	DIALOGS/DlgAbout.C\
 	DIALOGS/DlgAboutData.C\
 	DIALOGS/DlgDisplayProperties.C\
@@ -52,8 +52,6 @@ MOC_SOURCES=\
 	DIALOGS/DlgPreferencesNetworkData_moc.C\
 	mainframe_moc.C
 
-
-CPP_SOURCES=$(SOURCES)
 
 SPECIAL_OBJECTS=
 

@@ -3,11 +3,6 @@
 
 #include "mainframe.h"
 
-using namespace BALL;
-using namespace BALL::VIEW;
-using namespace BALL::MOLVIEW;
-
-
 int main(int argc, char **argv)
 {
   QApplication application(argc, argv);
@@ -16,8 +11,13 @@ int main(int argc, char **argv)
 	Mainframe mainframe;
 	application.setMainWidget(&mainframe);
 
-	// start the application
+	#ifdef BALL_PYTHON_SUPPORT
+	// initialize the Python interface
+	mainframe.setIdentifier("MAIN");
 	mainframe.registerThis();
+	#endif
+
+	// start the application
 	mainframe.show();
   return application.exec();
 }

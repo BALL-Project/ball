@@ -13,6 +13,9 @@
 
 #include <BALL/MOLVIEW/OPENGL/KERNEL/moleculeObjectCreator.h>
 
+#ifdef BALL_PYTHON_SUPPORT
+#	include <BALL/VIEW/OPENGL/WIDGETS/pyWidget.h>
+#endif
 
 using namespace std;
 
@@ -37,9 +40,6 @@ Mainframe::Mainframe
 		hor_splitter_(0),
 		vert_splitter_(0),
 		logview_(0),
-		#ifdef BALL_PYTHON_SUPPORT
-			py_widget_(0),
-		#endif
 		vboxlayout_(0),
 		popup_menus_(),
 		selection_(),
@@ -110,8 +110,8 @@ Mainframe::Mainframe
 	CHECK_PTR(logview_);
 
 	#ifdef BALL_PYTHON_SUPPORT
-		py_widget_ = new PyWidget(vert_splitter_);
-		CHECK_PTR(py_widget_);
+		PyWidget* py_widget = new PyWidget(vert_splitter_);
+		CHECK_PTR(py_widget);
 	#endif
 
 	QLabel* message_label = new QLabel(tr("Ready."), statusBar());
@@ -176,8 +176,8 @@ Mainframe::Mainframe
 	// PyWidget setup
 	// ---------------------
 	#ifdef BALL_PYTHON_SUPPORT
-		py_widget_->setFont(f);
-		py_widget_->startInterpreter();
+		py_widget->setFont(f);
+		py_widget->startInterpreter();
 	#endif
 	
 
