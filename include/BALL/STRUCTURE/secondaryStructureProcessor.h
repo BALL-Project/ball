@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: secondaryStructureProcessor.h,v 1.6 2005/02/06 11:15:36 oliver Exp $
+// $Id: secondaryStructureProcessor.h,v 1.7 2005/02/14 17:24:21 amoll Exp $
 //
 
 #ifndef BALL_SECONDARY_STRUCTURE_PROCESSOR_H
@@ -45,6 +45,7 @@ namespace BALL
 
 
 		protected:
+
 		/// Compute the secondary structure
 		void compute_();
 			
