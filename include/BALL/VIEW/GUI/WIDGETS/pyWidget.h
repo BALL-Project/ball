@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.16 2003/03/31 15:18:49 amoll Exp $
+// $Id: pyWidget.h,v 1.17 2003/04/01 00:50:26 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_PYWIDGET_H
 #define BALL_VIEW_GUI_WIDGETS_PYWIDGET_H
@@ -26,6 +26,7 @@ namespace BALL
 
 	namespace VIEW
 	{
+		class PythonSettings;
 
 /** Python Widget class.
 	\ingroup ViewGuiWidgets	
@@ -75,12 +76,15 @@ class PyWidget
 			This is a QT <b>SLOT</b>.
 	*/
 	virtual void startInterpreter();
-	
+
 	/**	Stop the interpreter.
 			The interpreter is stoped by calling <tt>Py_Finish()</tt>.
 			This is a QT <b>SLOT</b>.
 	*/
 	virtual void stopInterpreter();
+
+	///
+	virtual void scriptDialog();
 
 	/**	Run a Python program from a file.
 			@param filename the name of the program file
@@ -102,6 +106,31 @@ class PyWidget
 	*/
 	virtual void finalizeWidget(MainControl& main_control);
 	
+
+	///
+	virtual void fetchPreferences(INIFile& inifile)
+		throw();
+			
+	///
+	virtual void writePreferences(INIFile& inifile)
+		throw();
+			
+	///
+	void initializePreferencesTab(Preferences &preferences)
+		throw();
+	
+	///
+	void finalizePreferencesTab(Preferences &preferences)
+		throw();
+
+	///
+	void applyPreferences(Preferences & /* preferences */)
+		throw();
+
+	///
+	void cancelPreferences(Preferences&)
+		throw();
+
 	public:
 
 	//@}
@@ -112,12 +141,6 @@ class PyWidget
 			overwrite them in derived classes.
 	*/
 	//@{
-	
-	///
-	virtual bool cursorUp();
-	
-	///
-	virtual bool cursorDown();
 	
 	///
 	virtual bool returnPressed();
@@ -169,6 +192,8 @@ class PyWidget
 	vector<String>	history_;
 	Position				history_position_;
 	String					current_line_;
+	String 					startup_script_;
+	PythonSettings* python_settings_;
 }; 
   
 } } // namespaces

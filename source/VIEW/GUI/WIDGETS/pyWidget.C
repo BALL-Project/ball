@@ -1,17 +1,18 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.15 2003/03/31 15:18:43 amoll Exp $
+// $Id: pyWidget.C,v 1.16 2003/04/01 00:50:27 amoll Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/pyWidget.h>
 #include <BALL/VIEW/GUI/KERNEL/mainControl.h>
+#include <BALL/VIEW/GUI/DIALOGS/pythonSettings.h>
 #include <BALL/PYTHON/pyInterpreter.h>
+#include <BALL/VIEW/GUI/DIALOGS/preferences.h>
 #include <BALL/FORMAT/lineBasedFile.h>
-//#include <BALL/COMMON/exception.h>
 #include <Python.h>
 
 #include <qscrollbar.h>
-#include <qnamespace.h> 
+#include <qfiledialog.h>
 
 namespace BALL
 {
@@ -30,6 +31,7 @@ PyWidget::PyWidget(const PyWidget& widget)
 	:	QTextEdit(),
 		ModularWidget(widget)
 {
+	ModularWidget::registerWidget(this);
 }
 
 PyWidget::~PyWidget()
@@ -41,12 +43,14 @@ PyWidget::~PyWidget()
 void PyWidget::initializeWidget(MainControl& main_control)
 {
 	main_control.insertMenuEntry(MainControl::TOOLS, "&Restart Python", this, SLOT(startInterpreter()));
+	main_control.insertMenuEntry(MainControl::TOOLS, "&Run Python Script", this, SLOT(scriptDialog()));
 }
 
 
 void PyWidget::finalizeWidget(MainControl& main_control)
 {
 	main_control.removeMenuEntry(MainControl::TOOLS, "&Restart Python", this, SLOT(startInterpreter()));
+	main_control.removeMenuEntry(MainControl::TOOLS, "&Run Python Script", this, SLOT(scriptDialog()));
 }
 
 
@@ -74,7 +78,6 @@ void PyWidget::startInterpreter()
 
 void PyWidget::retrieveHistoryLine_(Position index)
 {
-
 	if (index > history_.size()) 
 	{
 		history_position_ = history_.size();
@@ -119,21 +122,6 @@ void PyWidget::mousePressEvent(QMouseEvent* /* m */)
 {
 	// we ignore the mouse events! 
 	// they might place the cursor anywhere!
-}
-
-
-bool PyWidget::cursorUp()
-{
-	if (history_position_ == 0) return false;
-	retrieveHistoryLine_(history_position_ - 1);
-	return false;
-}
-
-
-bool PyWidget::cursorDown()
-{
-	retrieveHistoryLine_(history_position_ + 1);
-	return false;
 }
 
 
@@ -241,8 +229,6 @@ void PyWidget::newPrompt_()
 {
 	append(getPrompt_());
 	setCursorPosition(lines() - 1, 4);
-
-	emit textChanged();
 }
 
 
@@ -250,41 +236,38 @@ void PyWidget::keyPressEvent(QKeyEvent* e)
 {
 	int row, col;
 	getCursorPosition(&row, &col);
-	bool qt_continue = true;
 
 	if (e->key() == Key_Left || e->key() == Key_Backspace)
 	{
-		qt_continue = (col > 4);
+		if (col <= 4) return;
 	}
 	else if (e->key() == Key_Right)
 	{
 		setCursorPosition(row, col+1);
-		qt_continue = false;
+		return;
 	}
 	else if (e->key() == Key_Up)
 	{
-		qt_continue = cursorUp();
+		if (history_position_ != 0) retrieveHistoryLine_(history_position_ - 1);
+		return;
 	}
 	else if (e->key() == Key_Down)
 	{
-		qt_continue = cursorDown();
+		retrieveHistoryLine_(history_position_ + 1);
+		return;
 	}
 	else if (e->key() == Key_Home)
 	{
 		setCursorPosition(row, 4);
-		qt_continue = false;
+		return;
 	}
 	else if (e->key() == Key_Return)
 	{
-		qt_continue = returnPressed();
+		if (!returnPressed()) return;
 	}
 
-	if (qt_continue)
-	{
-		QTextEdit::keyPressEvent(e);
-	}
+	QTextEdit::keyPressEvent(e);
 } 
-
 
 
 void PyWidget::dump(std::ostream& s, Size depth) const
@@ -326,8 +309,10 @@ String PyWidget::getCurrentLine_()
 	return String(text(row).ascii());
 }
 
+
 void PyWidget::runFile(const String& filename)
 {
+	append(String("> running File " + filename + "\n").c_str());
 	bool result;
 	String result_string;
 	LineBasedFile file;
@@ -335,9 +320,11 @@ void PyWidget::runFile(const String& filename)
 	{
 		file.open(filename);
 	}
-	catch(Exception::FileNotFound e)
+	catch(Exception::GeneralException e)
 	{
-		Log.error() << "Could not find file " << filename << std::endl;
+		append(String("> Could not find file " + filename + "\n").c_str());
+		newPrompt_();
+		return;
 	}
 
 	while (file.readLine())
@@ -345,13 +332,98 @@ void PyWidget::runFile(const String& filename)
 		result_string = PyInterpreter::run(file.getLine(), result);
 		if (!result)
 		{
-			result_string += "Error in Line " + String(file.getLineNumber()) + " in file " + filename;
+			result_string += "> Error in Line " + String(file.getLineNumber()) + " in file " + filename + "\n";
 			append(result_string.c_str());
+			newPrompt_();
 			return;
 		}
 
 		append(result_string.c_str());
 	}
+	append("> finished...");
+	newPrompt_();
 }
+
+void PyWidget::scriptDialog()
+{
+	// no throw specifier because of that #$%@* moc
+	QFileDialog *fd = new QFileDialog(this, "Run Python Script", true);
+	fd->setMode(QFileDialog::ExistingFile);
+	fd->addFilter("Python Scripts(*.py)");
+	fd->setSelectedFilter(1);
+
+	fd->setCaption("Run Python Script");
+	fd->setViewMode(QFileDialog::Detail);
+	fd->setGeometry(300, 150, 400, 400);
+
+	int result_dialog = fd->exec();
+	if (!result_dialog == QDialog::Accepted) return;
+
+	String filename(fd->selectedFile().ascii());
+
+	runFile(filename);
+}
+
+
+void PyWidget::fetchPreferences(INIFile& inifile)
+	throw()
+{
+	if (!inifile.hasEntry("PYTHON", "StartupScript")) return;
+
+	startup_script_ =	inifile.getValue("PYTHON", "StartupScript");
+	python_settings_->setFilename(startup_script_);
+	runFile(startup_script_);
+}
+
+
+void PyWidget::writePreferences(INIFile& inifile)
+	throw()
+{
+	inifile.appendSection("PYTHON");
+	inifile.insertValue("PYTHON", "StartupScript", startup_script_);
+}
+
+
+void PyWidget::initializePreferencesTab(Preferences &preferences)
+	throw()
+{
+	python_settings_= new PythonSettings(this);
+	python_settings_->setFilename(startup_script_);
+	CHECK_PTR(python_settings_);
+
+	preferences.insertTab(python_settings_, "Python");
+}
+
+
+void PyWidget::finalizePreferencesTab(Preferences &preferences)
+	throw()
+{
+	if (python_settings_ != 0)
+	{
+		preferences.removeTab(python_settings_);
+
+		delete python_settings_;
+		python_settings_ = 0;
+	}
+}
+
+
+void PyWidget::applyPreferences(Preferences & /* preferences */)
+	throw()
+{
+	if (python_settings_ == 0) return;
+	startup_script_ = python_settings_->getFilename();
+}
+
+
+void PyWidget::cancelPreferences(Preferences&)
+	throw()
+{
+	if (python_settings_ != 0)
+	{
+		python_settings_->setFilename(startup_script_);
+	}
+}
+
 
 } } // namespace
