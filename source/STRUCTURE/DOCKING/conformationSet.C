@@ -82,20 +82,31 @@ namespace BALL
 		return structures_[snapshot_order_[pos].first];		
 	}		
 
-	void ConformationSet::writeDCDFile(const String& filename, const Size num)
+	bool ConformationSet::writeDCDFile(const String& filename, const Size num)
 	{
-		ForceField ff(system_);
-		DCDFile dcd(filename, std::ios::out);
-		
-		SnapShotManager ssm(&system_, &ff, &dcd);
-		
-		Size min = (num < snapshot_order_.size()) ? num : snapshot_order_.size();
-	
-		for (Size i=0; i<min; i++)
+		try
 		{
-			structures_[snapshot_order_[i].first].applySnapShot(system_);
-			ssm.takeSnapShot();
+			ForceField ff(system_);
+			DCDFile dcd(filename, std::ios::out);
+		
+			SnapShotManager ssm(&system_, &ff, &dcd);
+		
+			Size min = ((num < snapshot_order_.size()) && (num != 0)) ? num : snapshot_order_.size();
+	
+			for (Size i=0; i<min; i++)
+			{
+				structures_[snapshot_order_[i].first].applySnapShot(system_);
+				ssm.takeSnapShot();
+			}
+		
+			dcd.close();
 		}
+		catch(...)
+		{
+			return false;
+		}
+		
+		return true;
 	}
 
 	Size ConformationSet::size() const
