@@ -1,4 +1,4 @@
-// $Id: solventExcludedSurface.h,v 1.20 2001/12/30 13:28:43 sturm Exp $
+// $Id: solventExcludedSurface.h,v 1.21 2002/01/14 21:01:34 strobel Exp $
 
 #ifndef BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
 #define BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
@@ -1147,23 +1147,41 @@ namespace BALL
 		TSphere3<T> s1(face1->rsface_->center_,radius_of_probe);
 		TSphere3<T> s2(face2->rsface_->center_,radius_of_probe);
 		GetIntersection(s1,s2,circle);
-		TSESEdge<T>* edge = new TSESEdge<T>(NULL,NULL,face1,face2,circle,NULL,
-																				TSESEdge<T>::TYPE_CONCAVE,number_of_edges_);
-		edges_.push_back(edge);
-		number_of_edges_++;
-		face1->edge_.push_back(edge);
-		face1->number_of_edges_++;
-		face2->edge_.push_back(edge);
-		face2->number_of_edges_++;
-		if (Maths::isGreater(circle.n*face1->rsface_->center_,circle.n*circle.p))
+		// test wether the circle is really an edge
+		TVector3<T> normal(face1->rsface_->normal_);
+		TVector3<T> point1(reduced_surface_->atom_[face1->rsface_->vertex_[0]->atom_].p);
+		TVector3<T> point2(reduced_surface_->atom_[face1->rsface_->vertex_[1]->atom_].p);
+		TVector3<T> point3(reduced_surface_->atom_[face1->rsface_->vertex_[2]->atom_].p);
+		TVector3<T> u(normal%(point1-point2));
+		TVector3<T> v(normal%(point2-point3));
+		TVector3<T> w(normal%(point3-point1));
+		TVector3<T> diff1(point1-circle.p);
+		TVector3<T> diff2(point2-circle.p);
+		T test1 = u*diff1;
+		T test2 = v*diff2;
+		T test3 = w*diff1;
+		if ((Maths::isLess(test1,(T)0) && Maths::isLess(test2,(T)0) && Maths::isLess(test3,(T)0)) ||
+				(Maths::isGreater(test1,(T)0) && Maths::isGreater(test2,(T)0) && Maths::isGreater(test3,(T)0)))
 		{
-			face1->orientation_.push_back(0);
-			face2->orientation_.push_back(1);
-		}
-		else
-		{
-			face1->orientation_.push_back(1);
-			face2->orientation_.push_back(0);
+			TSESEdge<T>* edge = new TSESEdge<T>(NULL,NULL,face1,face2,circle,NULL,
+																					TSESEdge<T>::TYPE_SINGULAR,number_of_edges_);
+			edges_.push_back(edge);
+			singular_edges_.push_back(edge);
+			number_of_edges_++;
+			face1->edge_.push_back(edge);
+			face1->number_of_edges_++;
+			face2->edge_.push_back(edge);
+			face2->number_of_edges_++;
+			if (Maths::isGreater(circle.n*face1->rsface_->center_,circle.n*circle.p))
+			{
+				face1->orientation_.push_back(0);
+				face2->orientation_.push_back(1);
+			}
+			else
+			{
+				face1->orientation_.push_back(1);
+				face2->orientation_.push_back(0);
+			}
 		}
 	}
 
@@ -1189,8 +1207,16 @@ namespace BALL
 		{
 			tmp = edge;
 			tmp++;
-			treatSingularEdge(*edge,faces,tree);
-			edge = tmp;
+			if (tmp == singular_edges_.end())
+			{
+				treatSingularEdge(*edge,faces,tree);
+				edge = singular_edges_.end();
+			}
+			else
+			{
+				treatSingularEdge(*edge,faces,tree);
+				edge = tmp;
+			}
 		}
 	}
 
@@ -1207,6 +1233,10 @@ namespace BALL
 				if (STOP_SINGULARITIES == 0) std::cin >> STOP_SINGULARITIES;
 					 else { STOP_SINGULARITIES--; std::cout << "\n"; }
 				#endif
+		if (edge->vertex_[0] == NULL)
+		{
+			return;
+		}
 		T radius_of_probe = reduced_surface_->probe_radius_;
 		HashSet<Index> candidates;
 		tree->get(edge->circle_.p,edge->circle_.radius+radius_of_probe,candidates);
