@@ -1,4 +1,4 @@
-// $Id: function.h,v 1.6 2001/02/19 12:41:23 anker Exp $
+// $Id: function.h,v 1.7 2001/03/06 14:02:18 balltest Exp $
 
 #ifndef BALL_MATHS_FUNCTION_H
 #define BALL_MATHS_FUNCTION_H
@@ -1060,7 +1060,8 @@ namespace BALL
 
 	template <typename DataType>
 	BALL_INLINE
-	MutableConstant<DataType>::MutableConstant(const MutableConstant& constant)
+	MutableConstant<DataType>::MutableConstant(const
+			MutableConstant<DataType>& constant)
 		throw()
 		: constant_(constant.constant_)
 	{
