@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.23 2003/08/29 10:36:40 amoll Exp $
+// $Id: message.h,v 1.24 2003/09/01 09:21:49 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -585,7 +585,10 @@ namespace BALL
 				REMOVE,
 
 				/// Update the Representation
-				UPDATE
+				UPDATE,
+
+				/// Representation was selected in GeometriControl
+				SELECTED
 			};
 
 			///
@@ -804,6 +807,14 @@ namespace BALL
 			//@}
 		
 			private:
+		};
+
+		class ShowDisplayPropertiesMessage
+			:public Message
+		{
+			public:
+				ShowDisplayPropertiesMessage()
+					: Message(){};
 		};
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS
