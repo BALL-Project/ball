@@ -3,11 +3,12 @@
 ############################################################
 # source directory shadow builder for multiplatform builds #
 ############################################################
-# $Id: binfmt.sh,v 1.1 1999/08/26 08:02:33 oliver Exp $
+# $Id: binfmt.sh,v 1.2 1999/08/26 12:40:33 oliver Exp $
 ############################################################
 
 UNAME=uname
 CUT=cut
+SED=sed
 GREP=egrep
 TAIL=tail
 EXE_DIR=`dirname $0`
@@ -105,15 +106,23 @@ if test "${FORMATS}" = "" ; then
 	echo "no binary format defined for this platform - run configure first!" >&2
 	FORMAT="undefined"
 else
-	if test "${FORMATS}" != `echo ${FORMATS} | cut -d\  -f1` ; then
-		echo "WARNING: multiple binary formats defined for this platform:" >&2
-		echo "${FORMATS}" >&2
-		echo " " >&2
+	if test "${FORMATS}" != "`echo ${FORMATS} | cut -d\  -f1`" ; then
+		if test "${COMPILER_NAME}" != "" ; then
+			COMPILER_NAME="`echo ${COMPILER_NAME} | ${SED} s/\\\\+/\\\\\\\\+/g`"
+			FORMATS=`${GREP} "^${BINFMT}-" ${BINFORMAT_FILE} | ${GREP} "-e-${COMPILER_NAME}\$"`
+		fi
+		if test "${FORMATS}" != "`echo ${FORMATS} | cut -d\  -f1`" ; then
+			echo "WARNING: multiple binary formats defined for this platform:" >&2
+			echo "${FORMATS}" >&2
+			echo " " >&2
+		fi
 	fi
 	
-	FORMAT=`${GREP} "^${BINFMT}-" ${BINFORMAT_FILE} | ${TAIL} -1` 
-	FORMAT_INDEX=`${GREP} -n "${BINFMT}-" ${BINFORMAT_FILE} | ${TAIL} -1 | ${CUT} -d: -f1`
-	
+	for i in ${FORMATS} ; do
+		FORMAT="$i"
+	done
+	GREP_FORMAT="`echo ${FORMAT} | ${SED} s/\\\\+/\\\\\\\\+/g`"
+	FORMAT_INDEX=`${GREP} -n "${GREP_FORMAT}" ${BINFORMAT_FILE} | ${TAIL} -1 | ${CUT} -d: -f1`
 	echo "selected binary format is: ${FORMAT} (index ${FORMAT_INDEX})" >&2
 fi
 if test "$1" != "-i" ; then
