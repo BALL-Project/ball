@@ -1,4 +1,4 @@
-// $Id: INIFile.h,v 1.23 2001/08/16 00:37:28 oliver Exp $
+// $Id: INIFile.h,v 1.24 2001/08/19 09:40:33 amoll Exp $
 
 #ifndef BALL_FORMAT_INIFILE_H
 #define BALL_FORMAT_INIFILE_H
@@ -72,7 +72,7 @@ namespace BALL
 			StringHashMap<List<String>::Iterator>		key_map_;
 		};
 
-		typedef List<Section>::Iterator Section_iterator;
+		typedef List<Section>::Iterator SectionIterator;
 	
 		class IteratorTraits_
 		{
@@ -91,7 +91,7 @@ namespace BALL
 			}
 			
 			IteratorTraits_(List<Section>& list, 
-											Section_iterator section, 
+											SectionIterator section, 
 											List<String>::Iterator line)
 				:	bound_(&list),
 					section_(section),
@@ -124,7 +124,7 @@ namespace BALL
 				return position_;
 			}
 
-			Section_iterator getSection()
+			SectionIterator getSection()
 			{
 				return section_;
 			}
@@ -134,6 +134,11 @@ namespace BALL
 				return *position_;
 			}
 
+			const String& operator -> () const
+			{
+				return *position_;
+			}
+				
 			IteratorTraits_& operator ++ ()
 			{
 				if (bound_ == 0)
@@ -293,7 +298,7 @@ namespace BALL
 			private:
 
 			List<Section>*					bound_;
-			Section_iterator				section_;
+			SectionIterator					section_;
 			List<String>::Iterator	position_;
 		};
 
@@ -499,7 +504,7 @@ namespace BALL
 											   \item 0, if no section with this name exists
 										    \end{itemize}
 		*/
-	  Section_iterator getSection(const String& section_name);
+	  SectionIterator getSection(const String& section_name);
 
 		/** Return an iterator to a section at a given position.
 				@return String* \begin{itemize}
@@ -507,7 +512,7 @@ namespace BALL
 											   \item 0, if pos is too high
 										    \end{itemize}
 		*/
-	  Section_iterator getSection(Position pos);
+	  SectionIterator getSection(Position pos);
 
 		/**	Count all sections.
 				The HEADER is not counted!
@@ -612,7 +617,7 @@ namespace BALL
 
     /** Test if the given iterator is valid for this instance.
     */
-    bool isValid(const Section_iterator& it) const;
+    bool isValid(const SectionIterator& it) const;
 
 		//@}
 
@@ -641,7 +646,7 @@ namespace BALL
 		List<Section>											sections_;
 
 		// hashmap with the section names  => index
-		StringHashMap<Section_iterator>		section_index_;
+		StringHashMap<SectionIterator>		section_index_;
 	};
 
 } // namespace BALL

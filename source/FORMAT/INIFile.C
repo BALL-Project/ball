@@ -1,4 +1,4 @@
-// $Id: INIFile.C,v 1.26 2001/05/17 09:18:59 amoll Exp $
+// $Id: INIFile.C,v 1.27 2001/08/19 09:41:09 amoll Exp $
 
 #include <BALL/FORMAT/INIFile.h>
 #include <fstream>
@@ -169,7 +169,7 @@ namespace BALL
 		int nr(-1);
 		LineIterator line_it;		
 
-		Section_iterator section_it(sections_.begin());
+		SectionIterator section_it(sections_.begin());
 		for (; (section_it != sections_.end() && nr != line_nr); ++section_it)
 		{
 			if ((int)section_it->lines_.size() + nr < line_nr)
@@ -295,7 +295,7 @@ namespace BALL
 
 		if (section_name == "")
 		{
-			Section_iterator it(sections_.end());
+			SectionIterator it(sections_.end());
 			it--;
 			section_name = it->getName();
 		}
@@ -362,24 +362,24 @@ namespace BALL
 		return section_index_.has(section_name);
 	}
 
-	INIFile::Section_iterator INIFile::getSection(const String& section_name)
+	INIFile::SectionIterator INIFile::getSection(const String& section_name)
 	{
 		if (!section_index_.has(section_name)) 
 		{
-			return Section_iterator(sections_.end());
+			return SectionIterator(sections_.end());
 		}
 		return section_index_[section_name];
 	}
 
 
-	INIFile::Section_iterator INIFile::getSection(Position pos)
+	INIFile::SectionIterator INIFile::getSection(Position pos)
 	{
 		if (pos >= sections_.size())
 		{
-			return Section_iterator(sections_.end());
+			return SectionIterator(sections_.end());
 		}
 
-		Section_iterator it = sections_.begin();
+		SectionIterator it = sections_.begin();
 		for (Position i = 0; i < pos && it != sections_.end(); i++)
 		{
 			++it;
@@ -513,7 +513,7 @@ namespace BALL
 		section.name_ = line;
 		sections_.push_back(section);
 
-		Section_iterator section_it(sections_.end());
+		SectionIterator section_it(sections_.end());
 		section_it--;
 
 		// remember the current section_name
@@ -563,7 +563,7 @@ namespace BALL
 		return (sections_ == inifile.sections_);
 	}
 
-	bool INIFile::isValid(const Section_iterator& it) const
+	bool INIFile::isValid(const SectionIterator& it) const
 	{
 		return ((List<Section>::ConstIterator)it != sections_.end());
 	}
