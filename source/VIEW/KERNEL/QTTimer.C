@@ -1,4 +1,4 @@
-// $Id: QTTimer.C,v 1.4 1999/12/30 18:05:44 oliver Exp $
+// $Id: QTTimer.C,v 1.5 2000/01/15 19:01:57 oliver Exp $
 
 #include <BALL/VIEW/KERNEL/QTTimer.h>
 
@@ -28,10 +28,10 @@ namespace BALL
 
 		QTTimer::~QTTimer()
 		{
-			#ifdef BALL_VIEW_DEBUG
+#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
 					<< " of class " << RTTI::getName<QTTimer>() << endl;
-			#endif 
+#endif 
 
 			destroy();
 		}
