@@ -1,4 +1,4 @@
-dnl    $Id: configure.ac,v 1.1.2.1 2002/11/28 10:19:29 oliver Exp $
+dnl    $Id: configure.ac,v 1.1.2.2 2002/11/28 13:28:06 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -216,458 +216,35 @@ CF_MSG_PATH_PROG(FIND,find,no)
 CF_MSG_PATH_PROG(DIFF,diff,no)
 CF_MSG_PATH_PROG(TAIL,tail,no)
 CF_MSG_PATH_PROG(GREP,grep,no)
+CF_MSG_PATH_PROG(EGREP,egrep,no)
 CF_MSG_PATH_PROG(CAT,cat,no)
 
 dnl
-dnl 	check for whether the default shell (/bin/sh) understands "echo -e"
+dnl 		Check whether the default shell (/bin/sh) understands "echo -e".
 dnl
 CF_CHECK_ECHO
-
-dnl   
-dnl   check whether find can be called with the parameter -path
-dnl   (needed to find headers in a certain path like GL/libgl.h
-dnl
-if test "${FIND}" != "no" ; then
-	RESULT=`${FIND} KERNEL -path . -print 2>&1`
-	if test "${RESULT}" != "" ; then     dnl    did get an error message ... bad.
-		FIND_KNOWS_PATH=false
-	else
-		FIND_KNOWS_PATH=true
-	fi
-fi
-		
+CF_CHECK_FIND
 
 dnl
-dnl    determine OS and architecture and all this stuff
+dnl   	Determine OS and architecture and all this stuff.
 dnl
 CF_DETECT_OS
 
 
-dnl		
-dnl		Declare compiler search order
-dnl			1) look for compiler defined in configure
-dnl			2) look for vendor supplied compilers (CC)
-dnl			3) check for g++, egcs, eg++, gcc
-dnl		Except for Solaris, where the vendor supplied compiler
-dnl		CC (at least releases 5.0 and below) is not usable.
-if test "${OS}" = "Solaris" ; then
-	CXX_SEARCH_ORDER="egcs g++ eg++ CC "
-else 
-	if test "${OS}" = "OSF1" ; then
-		CXX_SEARCH_ORDER="cxx CC egcs g++ eg++ "
-	else
-		CXX_SEARCH_ORDER="CC egcs g++ eg++ "
-	fi
-fi
-CXX_NAME=""
-
-dnl		
-dnl		If we are running IRIX, search for the older compilers, too
 dnl
-if test "${OS}" = "IRIX" ; then
-	CXX_SEARCH_ORDER="${CXX_SEARCH_ORDER} NCC DCC OCC"
-	CC_SEARCH_ORDER="${CC_SEARCH_ORDER} ncc dcc occ"
-fi
-
-
+dnl			Search for the C++ compiler in the (OS-determined) search order.
+CF_SEARCH_CXX
 
 dnl
-dnl		Search for the C++ compiler
+dnl  		Try to identify the compiler and determine its version number.
 dnl
-
-AC_MSG_RESULT(searching for a C++ compiler:)
-if test "${CXX}" != "" ; then
-	if test -x "${CXX}" ; then
-		AC_MSG_RESULT(from the command line: ${CXX})
-	else
-		AC_PATH_PROG(CXXPATH,${CXX},no)
-		if test "${CXXPATH}" = no ; then
-			AC_MSG_RESULT()
-			AC_MSG_RESULT(Cannot find ${CXX}. Please add it to your PATH)
-			AC_MSG_RESULT(or specify an absolute path in configure.)
-			AC_MSG_ERROR(aborted)
-		else
-			CXX=${CXXPATH}
-		fi
-	fi
-else
-	CXXPATH=""
-	while test "${CXXPATH}" = "" ; do
-		CXX=`echo ${CXX_SEARCH_ORDER}|${CUT} -d\  -f1`
-		if test _`echo ${CXX} | ${TR} -d " "`_ = __ ; then
-			CXXPATH="END"
-		fi
-		if test "${CXXPATH}" != "END" ; then
-			AC_PATH_PROG(CXXPATH,${CXX},no)
-			if test "${CXXPATH}" = no ; then
-				CXXPATH=""
-				unset ac_cv_path_CXXPATH
-			else
-				CXX=${CXXPATH}
-			fi
-		fi
-			
-		CXX_SEARCH_ORDER=`echo "${CXX_SEARCH_ORDER} " |${CUT} -d\  -f2-`
-	done
-
-	if test "${CXXPATH}" = "end" ; then
-		AC_MSG_RESULT()
-		AC_MSG_RESULT(Could not find a C++ compiler. Please change the settings)
-		AC_MSG_RESULT(of your PATH environment variable (using setenv export))
-		AC_MSG_RESULT(or specify an absolute path in configure by setting the variable)
-		AC_MSG_RESULT(CXX=<pathname> or specify the compiler by passing the option)
-		AC_MSG_RESULT(--with-compiler=<compiler> to configure.)
-		AC_MSG_RESULT()
-		AC_MSG_ERROR(aborted)
-	fi
-fi
-
-dnl
-dnl		extract the executable name of the compiler 
-dnl 	as default compiler name (CXX_NAME is needed
-dnl		to name the default directory the libraries 
-dnl		reside in)
-dnl
-
-if test "${CXX_PATH}" = "" ; then
-	if test "${CXX}" = "" ; then
-		CXX_NAME=unknown
-	else
-		CXX_NAME="${CXX}"
-	fi
-else
-	CXX_NAME="${CXX_PATH}"
-fi
-	
-while test "`echo ${CXX_NAME}|  ${GREP} /`" != "" ; do
-	CXX_NAME=`echo ${CXX_NAME} |  ${CUT} -d/ -f2-`
-done
-
-
-dnl
-dnl		Check whether the C++ compiler is a GNU compiler
-dnl
-
-AC_MSG_CHECKING(for GNU compiler)
-cat > /tmp/$$.conftest.c << EOF
-#ifdef __GNUC__
-GXX:true
-#else
-GXX:false
-#endif
-EOF
-
-IS_GXX=`${CXX} -E /tmp/$$.conftest.c 2>/dev/null |egrep GXX|${CUT} -d: -f2|${TR} -d " "`
-if test "${IS_GXX}" = "true" ; then
-	AC_MSG_RESULT(yes)
-	HAS_GPLUSPLUS=true
-	CXX_NAME="g++"
-else
-	AC_MSG_RESULT(no)
-	HAS_GPLUSPLUS=false
-fi
-${RM} /tmp/$$.conftest.c
-
-dnl
-dnl		Check for KAI C++ (if no GNU compiler found!)
-dnl		At least under linux the damned frontend won't tell 
-dnl		its version number, so we try to extract the word kai 
-dnl		from its drivers options when called in verbose mode.
-dnl		Nasty - but seems to work. Anybody with a better solution 
-dnl 	should feel free to inform me!
-dnl
-if test "${IS_GXX}" = "false" ; then
-	AC_MSG_CHECKING(for KAI C++ compiler)
-	KAI=`${CXX} -v --version 2>&1 | sed "s/.*KAI.*/__KAI__/g" |sed "s/.*kai.*/__KAI__/g" | egrep "^__KAI__$" | sed -n 1p`
-	if test "${KAI}" = "__KAI__" ; then
-		IS_KCC=true
-		AC_MSG_RESULT(yes)
-		CXX_NAME="KCC"
-	else
-		IS_KCC=false
-		AC_MSG_RESULT(no)
-	fi
-fi
-
-dnl
-dnl		Check for Intel C++ (if no GNU compiler found!)
-dnl
-if test "${IS_GXX}" = "false" -a "${IS_KCC}" = "false" ; then
-	AC_MSG_CHECKING(for Intel C++ compiler)
-	ICC=`${CXX} -V 2>&1 | ${SED} -n 1p | ${SED} "s/Intel(R) C++ Compiler.*/__INTELCC__/g" | egrep "^__INTELCC__$" | sed -n 1p`
-	if test "${ICC}" = "__INTELCC__" ; then
-		IS_INTELCC=true
-		AC_MSG_RESULT(yes)
-		CXX_NAME="icc"
-	else
-		IS_INTELCC=false
-		AC_MSG_RESULT(no)
-	fi
-fi
-
-dnl 
-dnl  	check for the Digital C++ compiler
-dnl
-dnl
-if test "${IS_GXX}" = false -a "${IS_INTELCC}" = false -a "${IS_KCC}" = false ; then
-	AC_MSG_CHECKING(for Digital/Compaq C++ compiler)
-	DIGITAL_CXX=`${CXX} -V 2>/dev/null | ${GREP} "C++" | ${CUT} -d" " -f-2` 
-	if test "${DIGITAL_CXX}" = "DIGITAL C++" -o "${DIGITAL_CXX}" = "Compaq C++"; then
-		IS_DIGITALCXX=true
-		AC_MSG_RESULT(yes)
-		CXX_NAME="Digital"
-	else
-		IS_DIGITALCXX=false
-		AC_MSG_RESULT(no)
-	fi	
-fi
-
-dnl
-dnl 	Try to find out the exact compiler release on different
-dnl		operating systems and differentiate between gcc/egcs
-dnl
-if test "${IS_GXX}" = "true" ; then
-	AC_MSG_CHECKING(compiler version)
-	CXX_VERSION=`${CXX} --version | ${SED} -n 1p | ${SED} ["]s/^[[^0-9]]*//["] | ${CUT} -f1 -d" "`
-	if test `echo ${CXX_VERSION}|${CUT} -c1-4` = "egcs" ; then
-		IS_EGXX=true
-		CXX_NAME="egcs"
-		CXX_VERSION=`${CXX} -v 2>&1 | grep release | ${CUT} -d\( -f2 | cut -d\) -f1 | ${SED} "s/egcs-//" | ${CUT} -d" " -f1`
-		VERSION_OUTPUT="egcs ${CXX_VERSION}"
-		CXX_COMPILER_NAME="egcs"
-	else
-		IS_EGXX=false
-		VERSION_OUTPUT="g++ ${CXX_VERSION}"
-		CXX_COMPILER_NAME="g++"
-	fi
-	
-	AC_MSG_RESULT(${VERSION_OUTPUT})
-
-	CXX_VERSION_1=`echo ${CXX_VERSION} | ${CUT} -d. -f1`
-	CXX_VERSION_LENGTH=`echo ${CXX_VERSION} | sed "s/[^.]//g" | wc -c`
-	if test "${CXX_VERSION_LENGTH}" -ge 2 ; then
-		CXX_VERSION_2=`echo ${CXX_VERSION} | ${CUT} -d. -f2`
-	fi
-	if test "${CXX_VERSION_LENGTH}" -ge 3 ; then
-		CXX_VERSION_3=`echo ${CXX_VERSION} | ${CUT} -d. -f3`
-	fi
-	if test "${CXX_VERSION_LENGTH}" -ge 4 ; then
-		CXX_VERSION_4=`echo ${CXX_VERSION} | ${CUT} -d. -f4`
-	fi
-
-	dnl  Debugging of compiler version output
-	dnl
-	dnl AC_MSG_RESULT()
-	dnl AC_MSG_RESULT(V1: ${CXX_VERSION_1})
-	dnl AC_MSG_RESULT(V2: ${CXX_VERSION_2})
-	dnl AC_MSG_RESULT(V3: ${CXX_VERSION_3})
-	dnl AC_MSG_RESULT(V4: ${CXX_VERSION_4})
-
-	if test "${IS_EGXX}" = "true" ; then	
-		AC_MSG_RESULT()
-		AC_MSG_RESULT(egcs won't compile BALL due to several internal compiler errors.)
-		AC_MSG_RESULT(Please upgrade to a more recent version of GNU g++ (e.g. 2.95.2).)
-		AC_MSG_RESULT(If you have already installed a different compiler, you may)
-		AC_MSG_RESULT(specify the path to this compiler by passing the option)
-		AC_MSG_RESULT( --with-compiler=<compiler> to configure.)
-		AC_MSG_RESULT()
-		AC_MSG_ERROR(aborted)
-	fi
-	if test "${CXX_VERSION_1}" -lt 2 \
-		-o "${CXX_VERSION_1}" = 2 -a "${CXX_VERSION_2}" -lt 95 ; then
-		AC_MSG_RESULT()
-		AC_MSG_RESULT([The version of gcc you are using is not supported by BALL.])
-		AC_MSG_RESULT([Please update to a newer version of g++ (at least 2.95.x)])
-		AC_MSG_RESULT([which can be obtained from])
-		AC_MSG_RESULT([  ftp://gcc.gnu.org/pub/gcc/releases/index.html])
-		AC_MSG_RESULT([or specify a different compiler using the option --with-compiler=])
-		AC_MSG_RESULT()
-		AC_MSG_ERROR(aborted)
-	fi
-
-	if test "${CXX_VERSION_1}" -ge 3 ; then
-		LIBS="${LIBS} -liberty"	
-		AC_MSG_CHECKING(whether libiberty is required)
-		AC_MSG_RESULT(yes)
-	fi
-fi
-
-dnl
-dnl identify the KAI version
-dnl
-if test "${IS_KCC}" = true ; then
-	AC_MSG_CHECKING(compiler version)
-	echo "int main(){}" > conftest.C
-	CXX_VERSION=`${CXX} -v --version conftest.C 2>&1| ${GREP} "KAI C++ " | ${CUT} -d" " -f3`
-	CXX_NAME="KCC"
-	VERSION_OUTPUT="KAI C++ ${CXX_VERSION}"
-	CXX_COMPILER_NAME="KCC"
-	
-	AC_MSG_RESULT(${VERSION_OUTPUT})
-
-	CXX_VERSION_1=`echo ${CXX_VERSION} | ${CUT} -d. -f1`
-	CXX_VERSION_LENGTH=`echo ${CXX_VERSION} | sed "s/[^.]//g" | wc -c`
-	if test "${CXX_VERSION_LENGTH}" -ge 2 ; then
-		CXX_VERSION_2=`echo ${CXX_VERSION} | ${CUT} -d. -f2`
-	fi
-	if test "${CXX_VERSION_LENGTH}" -ge 3 ; then
-		CXX_VERSION_3=`echo ${CXX_VERSION} | ${CUT} -d. -f3`
-	fi
-	if test "${CXX_VERSION_LENGTH}" -ge 4 ; then
-		CXX_VERSION_4=`echo ${CXX_VERSION} | ${CUT} -d. -f4`
-	fi
-fi
-
-dnl
-dnl identify the Intel CC version
-dnl
-if test "${IS_INTELCC}" = true ; then
-	AC_MSG_CHECKING(compiler version)
-	echo "int main(){}" > conftest.C
-	CXX_VERSION=`${CXX} -V conftest.C 2>&1| ${GREP} "Intel(R) C++" | ${SED} -n 1p | ${SED} "s/.*Version //" | ${CUT} -d" " -f1`
-	CXX_NAME="icc"
-	VERSION_OUTPUT="Intel C++ Compiler ${CXX_VERSION}"
-	CXX_COMPILER_NAME="icc"
-	
-	AC_MSG_RESULT(${VERSION_OUTPUT})
-
-	CXX_VERSION_1=`echo ${CXX_VERSION} | ${CUT} -d. -f1`
-	CXX_VERSION_LENGTH=`echo ${CXX_VERSION} | sed "s/[^.]//g" | wc -c`
-	if test "${CXX_VERSION_LENGTH}" -ge 2 ; then
-		CXX_VERSION_2=`echo ${CXX_VERSION} | ${CUT} -d. -f2`
-	fi
-	if test "${CXX_VERSION_LENGTH}" -ge 3 ; then
-		CXX_VERSION_3=`echo ${CXX_VERSION} | ${CUT} -d. -f3`
-	fi
-	if test "${CXX_VERSION_LENGTH}" -ge 4 ; then
-		CXX_VERSION_4=`echo ${CXX_VERSION} | ${CUT} -d. -f4`
-	fi
-fi
-
-dnl
-dnl identify the Digital C++ version
-dnl
-if test "${IS_DIGITALCXX}" = true ; then
-	AC_MSG_CHECKING(compiler version)
-	echo "int main(){}" > conftest.C
-	CXX_VERSION=`${CXX} -V  2>/dev/null| ${GREP} "C++" | ${CUT} -d" " -f3 | tr -d V`
-	CXX_NAME=`${CXX} -V | ${GREP} "C++" | ${CUT} -d" " -f1` 
-	VERSION_OUTPUT="${CXX_NAME} C++ ${CXX_VERSION}"
-	CXX_COMPILER_NAME="Digital"
-	
-	AC_MSG_RESULT(${VERSION_OUTPUT})
-
-	CXX_VERSION_1=`echo ${CXX_VERSION} | ${CUT} -d. -f1 | tr -d "A-Za-z"`
-	CXX_VERSION_LENGTH=`echo ${CXX_VERSION} | sed "s/[^.-]//g" | wc -c`
-	if test "${CXX_VERSION_LENGTH}" -ge 2 ; then
-		CXX_VERSION_2=`echo ${CXX_VERSION} | ${CUT} -d. -f2 | ${CUT} -d- -f1`
-	fi
-	if test "${CXX_VERSION_LENGTH}" -ge 3 ; then
-		CXX_VERSION_3=`echo ${CXX_VERSION} | ${CUT} -d. -f2 | ${CUT} -d- -f2`
-	fi
-
-	if test "${CXX_VERSION_1}" -lt 6 -o "${CXX_VERSION_1}" -eq 6 -a "${CXX_VERSION_2}" -lt 2 ; then
-		AC_MSG_RESULT()
-		AC_MSG_RESULT(Your version of Digital/Compaq C++ does not provide all)
-		AC_MSG_RESULT(ANSI C++ features required by BALL.)
-		AC_MSG_RESULT(Please upgrade to release 6.2 or above.)
-		AC_MSG_RESULT()
-		AC_MSG_ERROR(aborted.)
-	fi
-fi
-
-if test "${IS_GXX}" != true -a "${IS_KCC}" != true -a "${IS_DIGITALCXX}" != true ; then
-	dnl
-	dnl		Now we got a problem: we have to identify the compiler
-	dnl		This is nearly impossible, but we give our best...
-	dnl
-	if test "${OS}" = "IRIX" ; then
-		AC_MSG_CHECKING(compiler version)
-		CXX_VERSION_STRING=`${CXX} -n32 -version 2>&1 | egrep ersion`
-		if test "${CXX_VERSION_STRING}" = "" ; then
-			CF_BASENAME(${CXX})
-			CXX_VERSION="${TMP__NAME}"
-			CXX_VERSION_OUTPUT="${CXX_VERSION} (unknown version)"
-		else
-			CXX_VERSION=`echo ${CXX_VERSION_STRING} | ${SED} "s/^.*ersion //g"`
-			CXX_COMPILER_NAME=`echo ${CXX_VERSION_STRING} | ${CUT} -d\  -f1`
-			CXX_VERSION_OUTPUT="${CXX_VERSION} (${CXX_COMPILER_NAME})"
-		fi
-
-		CXX_VERSION_1=`echo ${CXX_VERSION} | ${CUT} -d. -f1`
-		CXX_VERSION_LENGTH=`echo ${CXX_VERSION} | sed "s/[^.]//g" | wc -c`
-		if test "${CXX_VERSION_LENGTH}" -ge 2 ; then
-			CXX_VERSION_2=`echo ${CXX_VERSION} | ${CUT} -d. -f2`
-		fi
-		if test "${CXX_VERSION_LENGTH}" -ge 3 ; then
-			CXX_VERSION_3=`echo ${CXX_VERSION} | ${CUT} -d. -f3`
-		fi
-		if test "${CXX_VERSION_LENGTH}" -ge 4 ; then
-			CXX_VERSION_4=`echo ${CXX_VERSION} | ${CUT} -d. -f4`
-		fi
-
-		AC_MSG_RESULT(${CXX_VERSION_OUTPUT})
-	fi
-
-	if test "${OS}" = "Solaris" ; then
-		AC_MSG_CHECKING(compiler version)
-
-		CXX_VERSION_STRING=`${CXX} -V 2>&1 | egrep CC:`
-
-		CXX_VERSION=`echo ${CXX_VERSION_STRING} | ${TR} -d "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ:" | ${TR} -s " " | ${CUT} -d\  -f2`
-		changequote(<<,>>)
-		CXX_VERSION_TEST=`echo ${CXX_VERSION} | ${SED} s/\^\\[0-9\\.\\]*[a-zA-Z\\.]*//g`
-		changequote([,])
-		if test "${CXX_VERSION_TEST}" != "" ; then
-			CF_BASENAME(${CXX})
-			CXX_VERSION="${TMP__NAME}"
-			CXX_VERSION_OUTPUT="${CXX_VERSION} (unknown version)"
-		else
-			CXX_VERSION_1=`echo ${CXX_VERSION} | ${CUT} -d. -f1`
-			CXX_VERSION_LENGTH=`echo ${CXX_VERSION} | sed "s/[^.]//g" | wc -c`
-			if test "${CXX_VERSION_LENGTH}" -ge 2 ; then
-				CXX_VERSION_2=`echo ${CXX_VERSION} | ${CUT} -d. -f2`
-			fi
-			if test "${CXX_VERSION_LENGTH}" -ge 3 ; then
-				CXX_VERSION_3=`echo ${CXX_VERSION} | ${CUT} -d. -f3`
-			fi
-			if test "${CXX_VERSION_LENGTH}" -ge 4 ; then
-				CXX_VERSION_4=`echo ${CXX_VERSION} | ${CUT} -d. -f4`
-			fi
-			CXX_VERSION_OUTPUT="${CXX_VERSION}"
-		fi
-		AC_MSG_RESULT(${CXX_VERSION_OUTPUT})
-
-		if test "${CXX_VERSION_1}" -lt 6 ; then
-			AC_MSG_RESULT()
-			AC_MSG_RESULT(Wrong version of CC! CC before release 6 is not ANSI C++ compliant)
-			AC_MSG_RESULT(Please upgrade to a more recent version of CC.)
-			AC_MSG_ERROR(aborted)
-		fi
-	fi
-fi
-
-dnl
-dnl		Assemble the complete compiler name by adding
-dnl		the release numbers (if known) of the compiler
-dnl
-
-AC_MSG_CHECKING(standardized compiler name)
-if test "${CXX_VERSION_1}" != "" ; then
-	CXX_NAME="${CXX_NAME}_${CXX_VERSION_1}"
-	if test "${CXX_VERSION_2}" != "" ; then
-		CXX_NAME="${CXX_NAME}.${CXX_VERSION_2}"
-		if test "${CXX_VERSION_3}" != "" ; then
-			CXX_NAME="${CXX_NAME}.${CXX_VERSION_3}"
-			if test "${CXX_VERSION_4}" != "" ; then
-				CXX_NAME="${CXX_NAME}.${CXX_VERSION_4}"
-			fi
-		fi
-	fi
-fi
-
-AC_MSG_RESULT(${CXX_NAME})
-
+CF_IDENTIFY_GXX
+if test "${CXX_IDENTIFIED}" != true ; then CF_IDENTIFY_KAI fi
+if test "${CXX_IDENTIFIED}" != true ; then CF_IDENTIFY_SUN fi
+if test "${CXX_IDENTIFIED}" != true ; then CF_IDENTIFY_SGI fi
+if test "${CXX_IDENTIFIED}" != true ; then CF_IDENTIFY_COMPAQ fi
+if test "${CXX_IDENTIFIED}" != true ; then CF_IDENTIFY_INTEL fi
+CF_BUILD_FULL_CXX_NAME
 
 dnl
 dnl		default makedepend name
@@ -723,13 +300,13 @@ if test "${HAS_GPLUSPLUS}" = "true" ; then
 			BALL_TYPENAME=typename
 		fi
 	fi
-	COMPILER_DONE=true
+	CXX_IDENTIFIED=true
 fi
 
 dnl
 dnl		KAI C++ specific options
 dnl
-if test "${COMPILER_DONE}" != true -a "${IS_KCC}" = true ; then
+if test "${CXX_IDENTIFIED}" != true -a "${IS_KCC}" = true ; then
 	dnl		KAI C++ stores a list of instantiated templates
 	dnl		in directories called ti_files
 	dnl		make clean should remove these
@@ -784,13 +361,13 @@ if test "${COMPILER_DONE}" != true -a "${IS_KCC}" = true ; then
 		fi
 	fi
 
-	COMPILER_DONE=true
+	CXX_IDENTIFIED=true
 fi
 
 dnl
 dnl		Intel C++ specific options
 dnl
-if test "${COMPILER_DONE}" != true -a "${IS_INTELCC}" = true ; then
+if test "${CXX_IDENTIFIED}" != true -a "${IS_INTELCC}" = true ; then
 	dnl		KAI C++ stores a list of instantiated templates
 	dnl		in directories called ti_files
 	dnl		make clean should remove these
@@ -813,13 +390,13 @@ if test "${COMPILER_DONE}" != true -a "${IS_INTELCC}" = true ; then
 	CXXFLAGS_D="${CXXFLAGS_D} -O0 -g -w1"
 	CXXFLAGS_DI="${CXXFLAGS_DI}"
 
-	COMPILER_DONE=true
+	CXX_IDENTIFIED=true
 fi
 
 dnl
 dnl		Digital C++ specific options
 dnl
-if test "${COMPILER_DONE}" != true -a "${IS_DIGITALCXX}" = true ; then
+if test "${CXX_IDENTIFIED}" != true -a "${IS_DIGITALCXX}" = true ; then
 	TEMPLATE_DIR="cxx_rep"
 	AR="ar"
 	DYNAR="${CXX}"
@@ -844,14 +421,14 @@ if test "${COMPILER_DONE}" != true -a "${IS_DIGITALCXX}" = true ; then
 		MAKEDEP_CXX_OPTS="${MAKEDEP_CXX_OPTS} -std strict_ansi"
 	fi
 
-	COMPILER_DONE=true
+	CXX_IDENTIFIED=true
 fi
 
 dnl
 dnl try to identify the compiler for each OS
 dnl
 dnl
-if test "${COMPILER_DONE}" != true ; then
+if test "${CXX_IDENTIFIED}" != true ; then
 	if test "${OS}" = IRIX ; then
 		dnl  set the name for the template repository
 		dnl
@@ -1381,62 +958,8 @@ dnl
 dnl   check for endianness of the architecture
 dnl
 dnl
-AC_MSG_CHECKING(for byte order)
-AC_TRY_RUN(
-		[
-			#include <iostream>
-			#include <fstream>
-			int main(int, char**)
-			{
-		] ${BALL_SIZE_TYPE} endian_one = 1; [
-			std::ofstream os("config.endian.log", std::ios::out);
+CF_C_BIGENDIAN
 
-	    if (*(char*)&endian_one == '\001')
-      {
-				// big endian
-				os << "LITTLE" << std::endl;
-      }
-	    else
-      {
-				// little endian
-				os << "BIG" << std::endl;
-      }
-			os.close();
-			
-			return 0;
-			}
-		],
-		BALL_ENDIAN_TEST=true,
-		DUMMY=0,
-		DUMMY=0
-)
-if test "${BALL_ENDIAN_TEST+set}" != set ; then
-	AC_MSG_RESULT(<cannot determine>)
-	AC_MSG_RESULT()
-	AC_MSG_ERROR(Cannot determine endianness of machine.)
-else
-	dnl
-	dnl	read the result of the endian test from the file
-	dnl and delete the file
-	dnl
-	ENDIAN_TYPE=`${CAT} config.endian.log`
-	${RM} config.endian.log 2>/dev/null
-	if test "${ENDIAN_TYPE}" = "LITTLE" ; then
-		BALL_LITTLE_ENDIAN=true
-		AC_DEFINE(BALL_LITTLE_ENDIAN, true)
-		AC_MSG_RESULT(little endian)
-	else
-		if test "${ENDIAN_TYPE}" = "BIG" ; then
-			BALL_BIG_ENDIAN=true
-			AC_DEFINE(BALL_BIG_ENDIAN, true)
-			AC_MSG_RESULT(big endian)
-		else
-			AC_MSG_RESULT(<cannot determine>)
-			AC_MSG_RESULT()
-			AC_MSG_ERROR(Cannot determine endianness of machine.)
-		fi
-	fi
-fi
 
 dnl
 dnl		check whether vsnprintf is defined
