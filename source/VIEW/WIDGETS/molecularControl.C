@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.91.2.1 2005/01/13 12:59:23 amoll Exp $
+// $Id: molecularControl.C,v 1.91.2.2 2005/01/13 23:04:22 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -299,11 +299,13 @@ bool MolecularControl::reactToMessages_(Message* message)
  				addComposite(composite_message->getComposite()->getRoot());
 
 				List<Composite*>::Iterator lit = open_items.begin();
+				HashMap<Composite*, SelectableListViewItem*>::Iterator to_find;
 				for (; lit != open_items.end(); lit++)
 				{
-					if (!composite_to_item_.has(*lit)) continue;
+					to_find = composite_to_item_.find(*lit);
+					if (to_find == composite_to_item_.end()) continue;
 
-					composite_to_item_[*lit]->setOpen(true);
+					composite_to_item_[to_find->first]->setOpen(true);
 				}
 
 				return true;
@@ -637,14 +639,18 @@ void MolecularControl::addComposite(Composite& composite, QString* own_name)
 Size MolecularControl::removeComposite(Composite& composite)
 	throw()
 {
-	if (!composite_to_item_.has(&composite)) 
+	HashMap<Composite*, SelectableListViewItem*>::Iterator to_find = 
+		composite_to_item_.find(&composite);
+
+	if (to_find == composite_to_item_.end())
 	{
-		setStatusbarText(String("Tried to remove an invalid Composite in ") + __FILE__ + __LINE__, true);
+		setStatusbarText(String("Tried to remove an invalid Composite in ") 
+														 + __FILE__ + " " + __LINE__, true);
 		return 0;
 	}
 
 	nr_items_removed_ = 1;
-	removeRecursive_(composite_to_item_[&composite]);
+	removeRecursive_(to_find->second);
 	return nr_items_removed_;
 }
 
@@ -945,14 +951,17 @@ MolecularControl::SelectableListViewItem*
 void MolecularControl::updateListViewItem_(SelectableListViewItem* parent, Composite& composite)
 	throw()
 {
+	HashMap<Composite*, SelectableListViewItem*>::Iterator to_find = 
+		composite_to_item_.find(&composite);
+
 	// an item does not exist => create a new SelectableListViewItem 
-	if (!composite_to_item_.has(&composite))
+	if (to_find == composite_to_item_.end())
 	{
 		generateListViewItem_(parent, composite);
 		return;
 	}
 
-	recurseUpdate_(composite_to_item_[&composite], composite);
+	recurseUpdate_(to_find->second, composite);
 }
 
 
