@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.54.2.19 2005/01/07 13:40:10 amoll Exp $
+// $Id: cartoonModel.C,v 1.54.2.20 2005/01/07 14:45:47 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -769,9 +769,13 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 		start++;
 	}
 
+	// overall direction of the helix
 	Vector3 helix_dir = spline_points_[end] - spline_points_[start];
 	helix_dir.normalize();
-	helix_dir *= (ribbon_width_ * 0.5);
+//   	helix_dir *= (ribbon_width_ * 0.5);
+
+	// distance vector between the two tubes
+	Vector3 tube_diff;
 
 	// create sphere for the point
 	Sphere* sphere = new Sphere;
@@ -855,16 +859,16 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 	geometric_objects_.push_back(mesh2);
 	
 	// insert connection between tubes 2 times, because of trouble with normals
-	mesh2->vertex.push_back(last_point_ + helix_dir);
-	mesh2->vertex.push_back(last_point_ - helix_dir);
+	mesh2->vertex.push_back(last_point_ + tube_diff);
+	mesh2->vertex.push_back(last_point_ - tube_diff);
 	Vector3 vn(-(dir % helix_dir));
 	mesh2->normal.push_back(vn);
 	mesh2->normal.push_back(vn);
 
 	for (Position p = 0; p < slides; p++)
 	{
-		mesh1->vertex.push_back(last_point_ + helix_dir + new_points[p]);
-		mesh1->vertex.push_back(last_point_ - helix_dir + new_points[p]);
+		mesh1->vertex.push_back(last_point_ + tube_diff + new_points[p]);
+		mesh1->vertex.push_back(last_point_ - tube_diff + new_points[p]);
 		mesh1->normal.push_back(new_points[p]);
 		mesh1->normal.push_back(new_points[p]);
 	}
@@ -949,10 +953,19 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 		////////////////////////////////////////////////////////////
 		// insert connection between tubes
 		////////////////////////////////////////////////////////////
+		if (p < start + 10)
+		{
+			tube_diff += helix_dir * 0.125;
+		}
+		else if (p > end - 11)
+		{
+			tube_diff -= helix_dir * 0.125;
+		}
+
 		Vector3 vn(-(dir_new % helix_dir));
-		mesh2->vertex.push_back(point + helix_dir);
+		mesh2->vertex.push_back(point + tube_diff);
 		mesh2->normal.push_back(vn);
-		mesh2->vertex.push_back(point - helix_dir);
+		mesh2->vertex.push_back(point - tube_diff);
 		mesh2->normal.push_back(vn);
 
 		const Size sn = mesh2->vertex.size() - 1;
@@ -977,7 +990,7 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 		//------------------------------------------------------>
 		for (Position point_pos = 0; point_pos < slides ; point_pos++)
 		{
-			mesh1->vertex.push_back(point + helix_dir + new_points[point_pos]);
+			mesh1->vertex.push_back(point + tube_diff + new_points[point_pos]);
 			mesh1->normal.push_back(new_points[point_pos]);
 
 			t.v1 = s_old;			// last lower
@@ -993,7 +1006,7 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 			s_old++;
 			s_new++;
 
-			mesh1->vertex.push_back(point - helix_dir + new_points[point_pos]);
+			mesh1->vertex.push_back(point - tube_diff + new_points[point_pos]);
 			mesh1->normal.push_back(new_points[point_pos]);
 
 			t.v1 = s_old;			// last lower
