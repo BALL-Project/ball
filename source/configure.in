@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.19 2002/02/12 01:35:35 oliver Exp $
+dnl    $Id: configure.in,v 1.19.4.1 2002/05/23 23:51:58 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -72,6 +72,9 @@ AC_ARG_WITH(sip,   	           [  --with-sip=DIR          the SIP executable res
 AC_ARG_WITH(sip-lib,   	       [  --with-sip-lib=DIR      the SIP library resides in DIR])
 AC_ARG_WITH(sip-incl,   	     [  --with-sip-incl=DIR     the SIP header file resides in DIR])
 AC_ARG_WITH(xdr,               [  --without-xdr           no RPC/XDR headers available - do not build portable binary persistence support])
+AC_ARG_WITH(fftw,              [  --with-fftw 		        enable the build of BALL with support for FFTW (a FFT library)])
+AC_ARG_WITH(fftw-lib,          [  --with-fftw-lib=DIR     libfftw is in DIR])
+AC_ARG_WITH(fftw-incl,         [  --with-fftw-incl=DIR    fftw includes are in DIR])
 
 dnl
 dnl    interpret switches...
@@ -192,7 +195,18 @@ SIP_LIBPATH=$with_sip_lib
 SIP_INCLUDE_PATH=$with_sip_incl
 SIP=$with_sip
 
-
+# support for fftw (FFT lib)
+if test "$with_fftw" != "" -a "$with_fftw" != "no" -o "$enable_fftw" = yes ; then
+	FFTW_SUPPORT=true
+	if test "${with_fftw_lib}" != "" ; then
+		FFTW_LIB=${with_fftw_lib}
+	else
+		FFTW_LIB="libfftw.a"
+	fi
+	FFTW_INCL=${with_fftw_incl}
+else
+	FFTW_SUPPORT=
+fi
 
 
 
@@ -792,7 +806,7 @@ dnl		operating systems and differentiate between gcc/egcs
 dnl
 if test "${IS_GXX}" = "true" ; then
 	AC_MSG_CHECKING(compiler version)
-	CXX_VERSION=`${CXX} --version`
+	CXX_VERSION=`${CXX} --version | ${SED} -n 1p | ${SED} s/^[[^0-9]]*//`
 	if test `echo ${CXX_VERSION}|${CUT} -c1-4` = "egcs" ; then
 		IS_EGXX=true
 		CXX_NAME="egcs"
@@ -3088,6 +3102,12 @@ else
 	PYTHON=
 fi
 
+
+
+
+dnl
+dnl		include the default BALL include path
+dnl
 BALL_INCLUDES="-I$BALL_PATH/include"
 
 dnl
