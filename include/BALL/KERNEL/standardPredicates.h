@@ -1,4 +1,4 @@
-// $Id: standardPredicates.h,v 1.20 2002/01/09 01:14:50 oliver Exp $
+// $Id: standardPredicates.h,v 1.20.4.1 2002/05/16 00:28:10 oliver Exp $
 
 #ifndef BALL_KERNEL_STANDARDPREDICATES_H
 #define BALL_KERNEL_STANDARDPREDICATES_H
@@ -534,6 +534,27 @@ namespace BALL
 			*/
 			virtual bool operator () (const Atom& atom) const
 				throw();
+	};
+
+	/** Charge predicate
+	 */
+	class ChargePredicate
+		:	public	ExpressionPredicate
+	{
+		public:
+		BALL_CREATE(ChargePredicate)
+
+		/** Return true if the charge is in the indicated range.
+				The argument of this predicate is either a number,
+				in which case the charge of the atom has to be equal to 
+				that number (down to the specified accuracy for floating 
+				point comparisons, \Ref{EPSILON}), or an operator followed	
+				by a number. Possible operators are: {\tt <}, {\tt >}, {\tt >=}, {\tt <=}, {\tt =}.
+				@param atom the atom to test
+				@return true, if the predicate is true, false otherwise
+		*/
+		virtual bool operator () (const Atom& atom) const
+			throw();
 	};
 
 	//@}	
