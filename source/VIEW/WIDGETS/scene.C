@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.57.2.1 2004/05/22 10:42:21 amoll Exp $
+// $Id: scene.C,v 1.57.2.2 2004/06/03 13:54:40 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -870,7 +870,7 @@ namespace BALL
 				createCoordinateSystem_();
 			}
 			gl_renderer_.updateBackgroundColor(); 
-			renderView_(DISPLAY_LISTS_RENDERING);
+			renderView_(REBUILD_DISPLAY_LISTS);
 			updateGL();
 		}
 
