@@ -21,14 +21,14 @@
  <node>ARG:CA<value>ARG:CA</value></node>
  <node>ARG:HA<value>ARG:HA</value></node>
  <node>ARG:CB<value>ARG:CB</value></node>
- <node>ARG:HB1<value>ARG:1HB</value></node>
- <node>ARG:HB2<value>ARG:2HB</value></node>
+ <node>ARG:HB2<value>ARG:1HB</value></node>
+ <node>ARG:HB3<value>ARG:2HB</value></node>
  <node>ARG:CG<value>ARG:CG</value></node>
- <node>ARG:HG1<value>ARG:1HG</value></node>
- <node>ARG:HG2<value>ARG:2HG</value></node>
+ <node>ARG:HG2<value>ARG:1HG</value></node>
+ <node>ARG:HG3<value>ARG:2HG</value></node>
  <node>ARG:CD<value>ARG:CD</value></node>
- <node>ARG:HD1<value>ARG:1HD</value></node>
- <node>ARG:HD2<value>ARG:2HD</value></node>
+ <node>ARG:HD2<value>ARG:1HD</value></node>
+ <node>ARG:HD3<value>ARG:2HD</value></node>
  <node>ARG:NE<value>ARG:NE</value></node>
  <node>ARG:HE<value>ARG:HE</value></node>
  <node>ARG:CZ<value>ARG:CZ</value></node>
@@ -80,8 +80,8 @@
  <node>GLN:HB2<value>GLN:1HB</value></node>
  <node>GLN:HB3<value>GLN:2HB</value></node>
  <node>GLN:CG<value>GLN:CG</value></node>
- <node>GLN:HG1<value>GLN:1HG</value></node>
- <node>GLN:HG2<value>GLN:2HG</value></node>
+ <node>GLN:HG2<value>GLN:1HG</value></node>
+ <node>GLN:HG3<value>GLN:2HG</value></node>
  <node>GLN:CD<value>GLN:CD</value></node>
  <node>GLN:OE1<value>GLN:OE1</value></node>
  <node>GLN:NE2<value>GLN:NE2</value></node>

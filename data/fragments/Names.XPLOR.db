@@ -6,6 +6,7 @@
  <node>*:O<value>*:O</value></node>
  <node>*:C<value>*:C</value></node>
  <node>*:HN<value>*:H</value></node>
+ <node>*:H<value>*:H</value></node>
  <node>ALA:CA<value>ALA:CA</value></node>
  <node>ALA:HA<value>ALA:HA</value></node>
  <node>ALA:CB<value>ALA:CB</value></node>
