@@ -1,4 +1,4 @@
-// $Id: HINFile.C,v 1.10 2000/01/13 22:28:06 oliver Exp $
+// $Id: HINFile.C,v 1.11 2000/02/01 14:38:31 oliver Exp $
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/CONCEPT/composite.h>
@@ -741,9 +741,9 @@ namespace BALL
 				if (tag == "box")
 				{
 					// retrieve the periodic boundary
-					box_.b.x = line.getField(2).toFloat();
-					box_.b.y = line.getField(3).toFloat();
-					box_.b.z = line.getField(4).toFloat();
+					box_.b.x = line.getField(1).toFloat();
+					box_.b.y = line.getField(2).toFloat();
+					box_.b.z = line.getField(3).toFloat();
 					
 					continue;
 				}
