@@ -1,4 +1,4 @@
-// $Id: common.h,v 1.10 2000/06/25 19:17:38 hekl Exp $
+// $Id: common.h,v 1.11 2001/01/07 15:47:46 hekl Exp $
 
 #ifndef BALL_MOLVIEW_COMMON_COMMON_H
 #define BALL_MOLVIEW_COMMON_COMMON_H
@@ -43,6 +43,7 @@ namespace BALL
 			VALUE__MODEL_SURFACE        = 4,
 			VALUE__MODEL_VAN_DER_WAALS  = 5,
 			VALUE__MODEL_REMOVE         = 6,
+			VALUE__MODEL_BACKBONE       = 7,
 			VALUE__SELECT               = 20,
 			VALUE__DESELECT             = 21,
 
