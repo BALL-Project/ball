@@ -1,4 +1,4 @@
-// $Id: File_test.C,v 1.11 2000/10/20 18:09:13 amoll Exp $
+// $Id: File_test.C,v 1.12 2000/10/21 10:34:56 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 #include <sys/stat.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: File_test.C,v 1.11 2000/10/20 18:09:13 amoll Exp $")
+START_TEST(class_name, "$Id: File_test.C,v 1.12 2000/10/21 10:34:56 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -43,7 +43,7 @@ CHECK(File(const String& name, OpenMode open_mode = File::IN))
 	TEST_EXCEPTION(Exception::FileNotFound, File f2("sdffsdf"))
 RESULT
 
-			File  file("data/File_test.txt");
+File  file("data/File_test.txt");
 const File& f  = file;
 
 CHECK(File(const File& file))

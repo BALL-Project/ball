@@ -1,4 +1,4 @@
-// $Id: resourceFile.C,v 1.13 2000/10/21 09:11:50 oliver Exp $
+// $Id: resourceFile.C,v 1.14 2000/10/21 10:34:33 oliver Exp $
 
 #include <BALL/FORMAT/resourceFile.h>
 
@@ -659,7 +659,6 @@ namespace BALL
 			{
 				clear();
 			}
-
 		} 
 		else 
 		{
