@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.19 2003/11/17 17:37:32 amoll Exp $
+// $Id: mainControl.C,v 1.20 2003/11/18 14:46:10 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1030,6 +1030,40 @@ bool MainControl::remove(Composite& composite)
 	notify_(cm);
 	remove_(composite);
 
+	return true;
+}
+
+bool MainControl::insert(Representation& rep)
+	throw()
+{
+	if (!primitive_manager_.has(rep)) return false;
+	primitive_manager_.insert(rep);
+
+	RepresentationMessage* rm = new RepresentationMessage(&rep, RepresentationMessage::ADD);
+	notify_(rm);
+
+	return true;
+}
+
+bool MainControl::update(Representation& rep)
+	throw()
+{
+	if (!primitive_manager_.has(rep)) return false;
+
+	RepresentationMessage* rm = new RepresentationMessage(&rep, RepresentationMessage::UPDATE);
+	notify_(rm);
+
+	return true;
+}
+
+bool MainControl::remove(Representation& rep)
+	throw()
+{
+	if (!primitive_manager_.has(rep)) return false;
+
+	RepresentationMessage* rm = new RepresentationMessage(&rep, RepresentationMessage::REMOVE);
+	notify_(rm);
+	primitive_manager_.remove(rep);
 	return true;
 }
 // ======================= StatusbarTimer =========================
