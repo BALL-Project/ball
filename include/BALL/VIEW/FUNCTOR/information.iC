@@ -1,0 +1,20 @@
+// $Id: information.iC,v 1.1 2000/05/04 17:25:37 hekl Exp $
+
+BALL_INLINE
+Information::Type Information::getType() const
+{
+	return type_;
+}
+			
+BALL_INLINE
+String Information::getTypeName() const
+{
+	return type_name_;
+}
+			
+BALL_INLINE
+String Information::getName() const
+{
+	return name_;
+}
+
