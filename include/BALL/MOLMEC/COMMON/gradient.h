@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: gradient.h,v 1.18 2003/08/26 08:04:25 oliver Exp $ 
+// $Id: gradient.h,v 1.19 2005/01/24 16:21:13 amoll Exp $ 
 //
 
 // A conjugate gradient minimizer for geometry optimisation
@@ -55,6 +55,15 @@ namespace BALL
 		/**	Const iterator type
 		*/
 		typedef std::vector<Vector3>::const_iterator ConstIterator;
+
+		/**	Iterator type
+		*/
+		typedef std::vector<Vector3>::reverse_iterator ReverseIterator;
+
+		/**	Const iterator type
+		*/
+		typedef std::vector<Vector3>::const_reverse_iterator ConstReverseIterator;
+
 
 		//@}
     /**	@name	Constructors and Destructors	
@@ -155,6 +164,19 @@ namespace BALL
 		//?????: GCC3 using std::vector<Vector3>::end;
 		Iterator end() { return vector<Vector3>::end(); }
 		ConstIterator end() const { return vector<Vector3>::end(); }
+
+		/**	Return an iterator to the reverse begining of the vector
+		*/
+		//?????: GCC3 using std::vector<Vector3>::begin;
+		ReverseIterator rbegin() { return vector<Vector3>::rbegin(); }
+		ConstReverseIterator rbegin() const { return vector<Vector3>::rbegin(); }
+
+		/**	Return a reverse past-the-end vector.
+		*/
+		//?????: GCC3 using std::vector<Vector3>::end;
+		ReverseIterator rend() { return vector<Vector3>::rend(); }
+		ConstReverseIterator rend() const { return vector<Vector3>::rend(); }
+
 
 		//@}
 
