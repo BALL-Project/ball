@@ -1,4 +1,4 @@
-// $Id: bond.h,v 1.6 2000/03/30 10:16:05 oliver Exp $
+// $Id: bond.h,v 1.7 2000/04/09 23:23:02 amoll Exp $
 
 #ifndef BALL_KERNEL_BOND_H
 #define BALL_KERNEL_BOND_H
@@ -61,9 +61,9 @@ namespace BALL
 			\end{itemize}
 			
 			@memo    Bond class (BALL kernel framework)
-			@author  $Author: oliver $
-			@version $Revision: 1.6 $
-			@date    $Date: 2000/03/30 10:16:05 $
+			@author  $Author: amoll $
+			@version $Revision: 1.7 $
+			@date    $Date: 2000/04/09 23:23:02 $
 	*/
 	class Bond
 		: public Composite,
@@ -344,7 +344,9 @@ namespace BALL
 			/** @name Accessors: inspectors and mutators */
 			//@{ 
 
-			// UNDOCUMENTED: BAUSTELLE
+			/** Set the first Atom.
+					@param atom the atom to set
+			*/
 			void setFirstAtom(Atom* atom);
 		
 			/** Mutable inspection of the first bond atom.
@@ -383,7 +385,9 @@ namespace BALL
 			*/
 			Atom* getPartner(const Atom& atom) const;
 
-			// UNDOCUMENTED
+			/** Set the second Atom.
+					@param atom the atom to set
+			*/
 			void setSecondAtom(Atom* atom);
 		
 			/** Mutable inspection of the second bond atom.
