@@ -16,6 +16,7 @@ Added:
   - BALLView
   	- Documentation for BALLView in the folder BALL/doc/BALLView  
     - new models for rendering nucleic acids and for visualizing forces
+		- ribbons for Cartoon model
 		- atoms for which the setup of a force field fails can now become highlighted
   	- calculation of Ramachandran plots for proteins
 		- improved ball&stick model now renders double-, triple- and aromatic bonds
