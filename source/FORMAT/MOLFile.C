@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOLFile.C,v 1.19 2004/03/29 17:12:23 oliver Exp $
+// $Id: MOLFile.C,v 1.20 2004/04/23 17:40:06 amoll Exp $
 //
 
 
@@ -445,7 +445,7 @@ namespace BALL
 				}
 				else
 				{
-					Log.warn() << "MOLFile::readCTAB_: ignoring property entry " << getLine() << std::endl;
+					Log.warn() << "MOLFile::readCTAB_: ignoring property entry " << tag << std::endl;
 				}
 			}
 		}
