@@ -1,4 +1,4 @@
-// $Id: nucleicAcid.C,v 1.8 2001/01/21 21:06:41 amoll Exp $
+// $Id: nucleicAcid.C,v 1.9 2001/05/24 14:46:20 anker Exp $
 
 #include <BALL/KERNEL/nucleicAcid.h>
 #include <BALL/KERNEL/global.h>
@@ -184,13 +184,13 @@ namespace BALL
 	}
 
 	void NucleicAcid::read(istream& /* s */)
-		throw()
+		throw(Exception::NotImplemented)
 	{
 		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 
 	void NucleicAcid::write(ostream&  /* s */) const
-		throw()
+		throw(Exception::NotImplemented)
 	{
 		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
