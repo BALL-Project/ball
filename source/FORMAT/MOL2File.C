@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOL2File.C,v 1.22 2003/08/26 09:17:46 oliver Exp $
+// $Id: MOL2File.C,v 1.23 2004/02/24 13:05:47 anker Exp $
 //
 
 #include <BALL/FORMAT/MOL2File.h>
@@ -50,7 +50,7 @@ namespace BALL
 	bool MOL2File::write(const System& system)
 		throw(File::CannotWrite)
 	{
-		if (!isOpen() || getOpenMode() != File::OUT)
+		if (!isOpen() || getOpenMode() != std::ios::out)
 		{
 			throw (File::CannotWrite(__FILE__, __LINE__, name_));
 		}

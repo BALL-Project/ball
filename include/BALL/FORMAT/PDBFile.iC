@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.iC,v 1.7 2003/08/26 08:04:14 oliver Exp $
+// $Id: PDBFile.iC,v 1.8 2004/02/24 13:05:48 anker Exp $
 //
 
 BALL_INLINE 
@@ -60,7 +60,7 @@ BALL_INLINE
 bool PDBFile::write(const Protein& protein)
 	throw(File::CannotWrite)
 {
-	if (!isOpen() || getOpenMode() != File::OUT)
+	if (!isOpen() || getOpenMode() != std::ios::out)
 	{
 		throw (File::CannotWrite(__FILE__, __LINE__, name_));
 	}

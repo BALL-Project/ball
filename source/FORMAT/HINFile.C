@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HINFile.C,v 1.62 2004/02/18 13:57:29 oliver Exp $
+// $Id: HINFile.C,v 1.63 2004/02/24 13:05:47 anker Exp $
 //
 
 #include <BALL/FORMAT/HINFile.h>
@@ -160,7 +160,7 @@ namespace BALL
 	bool HINFile::write(const System& system)
 		throw(File::CannotWrite)
 	{
-		if (!isOpen() || getOpenMode() != File::OUT)
+		if (!isOpen() || getOpenMode() != std::ios::out)
 		{
 			throw(File::CannotWrite(__FILE__, __LINE__, name_));
 		}

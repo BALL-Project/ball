@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOLFile.C,v 1.17 2004/02/17 16:07:19 oliver Exp $
+// $Id: MOLFile.C,v 1.18 2004/02/24 13:05:47 anker Exp $
 //
 
 
@@ -86,7 +86,7 @@ namespace BALL
 	bool MOLFile::write(const Molecule& molecule)
 		throw(File::CannotWrite)
 	{
-		if (!isOpen() || getOpenMode() != File::OUT)
+		if (!isOpen() || getOpenMode() != std::ios::out)
 		{
 			throw (File::CannotWrite(__FILE__, __LINE__, name_));
 		}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XYZFile.C,v 1.6 2003/08/26 09:17:47 oliver Exp $
+// $Id: XYZFile.C,v 1.7 2004/02/24 13:05:47 anker Exp $
 //
 
 #include <BALL/FORMAT/XYZFile.h>
@@ -40,7 +40,7 @@ namespace BALL
 	bool XYZFile::write(const System& system)
 		throw(File::CannotWrite)
 	{
-		if (!isOpen() || getOpenMode() != File::OUT)
+		if (!isOpen() || getOpenMode() != std::ios::out)
 		{
 			throw (File::CannotWrite(__FILE__, __LINE__, name_));
 		}

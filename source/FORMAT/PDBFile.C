@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.C,v 1.44 2004/02/23 17:58:32 oliver Exp $
+// $Id: PDBFile.C,v 1.45 2004/02/24 13:05:47 anker Exp $
 //
 
 #include <BALL/FORMAT/PDBFile.h>
@@ -437,7 +437,7 @@ namespace BALL
 	bool PDBFile::write(const System& system)
 		throw(File::CannotWrite)
 	{
-		if (!isOpen() || getOpenMode() != File::OUT)
+		if (!isOpen() || getOpenMode() != std::ios::out)
 		{
 			throw (File::CannotWrite(__FILE__, __LINE__, name_));
 		}
