@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularProperties.C,v 1.10 2003/11/03 17:55:42 amoll Exp $
+// $Id: molecularProperties.C,v 1.11 2003/12/06 00:07:24 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularProperties.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -101,14 +101,6 @@ void MolecularProperties::onNotify(Message *message)
 			case CompositeMessage::NEW_COMPOSITE:
 				addComposite_(*cmessage->getComposite(), cmessage->getCompositeName());
 				return;
-			case CompositeMessage::SELECTED_COMPOSITE:
-			case CompositeMessage::DESELECTED_COMPOSITE:
-			{
-				SceneMessage* scene_message = new SceneMessage(SceneMessage::REBUILD_DISPLAY_LISTS);
-				notify_(scene_message);
-				getMainControl()->printSelectionInfos();
-				return;
-			}
 			case CompositeMessage::CENTER_CAMERA:
 				centerCamera(cmessage->getComposite());
 				return;
