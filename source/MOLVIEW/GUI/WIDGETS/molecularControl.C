@@ -1,4 +1,4 @@
-// $Id: molecularControl.C,v 1.6.4.13 2002/12/09 16:56:30 amoll Exp $
+// $Id: molecularControl.C,v 1.6.4.14 2002/12/09 16:59:38 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/WIDGETS/molecularControl.h>
 #include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
@@ -127,7 +127,7 @@ bool MolecularControl::reactToMessages_(Message* message)
     ChangedCompositeMessage *composite_message = RTTI::castTo<ChangedCompositeMessage>(*message);
 		update = updateComposite(&(composite_message->getComposite()->getRoot()));
 	}
-	else if (RTTI::isKindOf<VIEW::NewSelectionMessage> (*message))
+	else if (RTTI::isKindOf<NewSelectionMessage> (*message))
 	{
 		setSelection_();
 		update = true;
