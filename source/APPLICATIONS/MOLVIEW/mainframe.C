@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.101 2003/12/16 17:58:49 amoll Exp $
+// $Id: mainframe.C,v 1.102 2003/12/17 13:11:47 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -755,7 +755,7 @@ void Mainframe::stopSimulation()
 		}
 
 		DCDFile* file = simulation_thread_->getDCDFile();
-		if (file)
+		if (file != 0)
 		{
 			file->close();
 			String filename = file->getName();
@@ -767,6 +767,9 @@ void Mainframe::stopSimulation()
 			notify_(message);
 		}
 		
+		// needed to prevent warning
+		simulation_thread_->getMutex().unlock();
+ 
 		delete simulation_thread_;
 		simulation_thread_ = 0;
 	}
@@ -796,12 +799,12 @@ void Mainframe::customEvent( QCustomEvent * e )
 	e->type(); // prevent warning for single thread build
 
 #ifdef BALL_QT_HAS_THREADS
-	if ( e->type() == (QEvent::Type)SIMULATION_THREAD_FINISHED_EVENT)
+	if (e->type() == (QEvent::Type)SIMULATION_THREAD_FINISHED_EVENT)
 	{
 		stopSimulation();
 		return;
 	}
-	if ( e->type() == (QEvent::Type)SIMULATION_OUTPUT_EVENT)
+	if (e->type() == (QEvent::Type)SIMULATION_OUTPUT_EVENT)
 	{
 		SimulationOutput* so = (SimulationOutput*) e;
 		Log.info() << so->getMessage() << std::endl;
@@ -818,13 +821,21 @@ void Mainframe::customEvent( QCustomEvent * e )
 
 		qApp->wakeUpGuiThread();
  		qApp->processEvents();
-		if (simulation_thread_ == 0) return;
+		if (simulation_thread_ == 0 ||
+				stop_simulation_) 
+		{
+			return;
+		}
 
 		updateRepresentationsOf(*(Composite*)so->getComposite(), true);
 
 		qApp->wakeUpGuiThread();
  		qApp->processEvents();
-		if (simulation_thread_ == 0) return;
+		if (simulation_thread_ == 0 || 
+				stop_simulation_) 
+		{
+			return;
+		}
 
 		// ok, continue simulation
 		simulation_thread_->getMutex().unlock();
