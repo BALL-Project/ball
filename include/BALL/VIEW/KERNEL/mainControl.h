@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.32 2004/02/02 17:12:50 amoll Exp $
+// $Id: mainControl.h,v 1.33 2004/02/05 17:02:44 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -156,7 +156,7 @@ namespace BALL
 				DISPLAY_VIEWPOINT,
 
 				/// Simulations menu
-				SIMULATIONS = 10400,
+				MOLECULARMECHANICS = 10400,
 
 				/// Tools menu
 				TOOLS = 10500,

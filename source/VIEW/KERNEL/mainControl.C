@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.58 2004/02/04 10:56:48 amoll Exp $
+// $Id: mainControl.C,v 1.59 2004/02/05 17:02:28 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -193,8 +193,8 @@ QPopupMenu* MainControl::initPopupMenu(int ID)
 			case DISPLAY_VIEWPOINT:
 				initPopupMenu(MainControl::DISPLAY)->insertItem("&Viewpoint", menu, DISPLAY_VIEWPOINT);
 				break;
-			case SIMULATIONS:
-				menuBar()->insertItem("&Simulation", menu, SIMULATIONS, -1);
+			case MOLECULARMECHANICS:
+				menuBar()->insertItem("&MolecularMechanics", menu, MOLECULARMECHANICS, -1);
 				break;
 			case TOOLS:
 				menuBar()->insertItem("&Tools", menu, TOOLS, -1);
@@ -252,11 +252,11 @@ void MainControl::show()
 
 	connect(initPopupMenu(MainControl::BUILD), SIGNAL(aboutToShow()), this, SLOT(checkMenus()));
 	connect(initPopupMenu(MainControl::TOOLS), SIGNAL(aboutToShow()), this, SLOT(checkMenus()));
-	connect(initPopupMenu(MainControl::SIMULATIONS), SIGNAL(aboutToShow()), this, SLOT(checkMenus()));
+	connect(initPopupMenu(MainControl::MOLECULARMECHANICS), SIGNAL(aboutToShow()), this, SLOT(checkMenus()));
 
 	#ifdef BALL_QT_HAS_THREADS
 		String hint = "Abort a running simulation thread";
-		insertMenuEntry(MainControl::SIMULATIONS, "Abort Calculation", this, SLOT(stopSimulation()),
+		insertMenuEntry(MainControl::MOLECULARMECHANICS, "Abort Calculation", this, SLOT(stopSimulation()),
 				ALT+Key_C, MENU_STOPSIMULATION, hint);
 	#endif
 
