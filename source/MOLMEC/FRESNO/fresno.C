@@ -1,4 +1,4 @@
-// $Id: fresno.C,v 1.1.2.16 2002/11/21 20:28:53 anker Exp $
+// $Id: fresno.C,v 1.1.2.17 2002/11/22 18:36:32 anker Exp $
 // Molecular Mechanics: Fresno force field class
 
 #include <BALL/SYSTEM/path.h>
@@ -32,6 +32,7 @@ namespace BALL
 	const char* FresnoFF::Option::BP = "bp";
 	const char* FresnoFF::Option::DESOLV = "desolv";
 	const char* FresnoFF::Option::METAL = "metal";
+	const char* FresnoFF::Option::NONPOLAR = "nonpolar";
 	const char* FresnoFF::Option::HB_IDEAL_LENGTH = "hb_ideal_length";
 	const char* FresnoFF::Option::HB_IDEAL_ANGLE = "hb_ideal_angle";
 	const char* FresnoFF::Option::HB_DIST_LOWER = "hb_dist_lower";
@@ -72,6 +73,7 @@ namespace BALL
 	// const float FresnoFF::Default::BP = 0.021;
 	// const float FresnoFF::Default::DESOLV = 0.026;
 	// const float FresnoFF::Default::METAL = -6.03;
+
 	const float FresnoFF::Default::CONST = 1.0;
 	const float FresnoFF::Default::HB = 1.0;
 	const float FresnoFF::Default::LIPO = 1.0;
@@ -79,6 +81,8 @@ namespace BALL
 	const float FresnoFF::Default::BP = 1.0;
 	const float FresnoFF::Default::DESOLV = 1.0;
 	const float FresnoFF::Default::METAL = 1.0;
+	const float FresnoFF::Default::NONPOLAR = 1.0;
+
 	const float FresnoFF::Default::HB_IDEAL_LENGTH = 1.85;
 	const float FresnoFF::Default::HB_IDEAL_ANGLE = 180;
 	const float FresnoFF::Default::HB_DIST_LOWER = 0.25;
@@ -115,7 +119,7 @@ namespace BALL
 		throw()
 	{
 		// create the component list
-		insertComponent(new FresnoConstant(*this));
+		// insertComponent(new FresnoConstant(*this));
 		insertComponent(new FresnoHydrogenBond(*this));
 		insertComponent(new FresnoBuriedPolar(*this));
 		insertComponent(new FresnoLipophilic(*this));
@@ -262,6 +266,10 @@ namespace BALL
 		throw()
 	{
 
+		Size verbosity
+			= options.setDefaultInteger(FresnoFF::Option::VERBOSITY,
+					FresnoFF::Default::VERBOSITY);
+
 		// check whether the system is assigned
 		System* system = getSystem();
 		if (system == 0)
@@ -358,16 +366,17 @@ namespace BALL
 						{
 							it->second = FresnoFF::HBOND_ACCEPTOR_DONOR;
 							++acc_don_counter;
-							// DEBUG
-							// cout << it->first->getFullName() << ": ACC_DON" << endl;
-							// /DEBUG
+							if (verbosity >= 90)
+							{
+								Log.info() << it->first->getFullName() << ": ACC_DON" << endl;
+							}
 						}
 						else
 						{
 							it->second = FresnoFF::HBOND_DONOR;
 							++donor_counter;
 							// DEBUG
-							// cout << it->first->getFullName() << ": DON" << endl;
+							// Log.info() << it->first->getFullName() << ": DON" << endl;
 							// /DEBUG
 						}
 					}
@@ -379,7 +388,7 @@ namespace BALL
 						it->second = FresnoFF::HBOND_ACCEPTOR;
 						++acc_counter;
 						// DEBUG
-						// cout << it->first->getFullName() << ": ACC" << endl;
+						// Log.info() << it->first->getFullName() << ": ACC" << endl;
 						// /DEBUG
 					}
 					else
@@ -387,7 +396,7 @@ namespace BALL
 						it->second = FresnoFF::POLAR;
 						++polar_counter;
 						// DEBUG
-						// cout << it->first->getFullName() << ": POL" << endl;
+						// Log.info() << it->first->getFullName() << ": POL" << endl;
 						// /DEBUG
 					}
 				}
@@ -402,7 +411,7 @@ namespace BALL
 						it->second = FresnoFF::HBOND_HYDROGEN;
 						++hyd_counter;
 						// DEBUG
-						// cout << it->first->getFullName() << ": HYD" << endl;
+						// Log.info() << it->first->getFullName() << ": HYD" << endl;
 						// /DEBUG
 					}
 					connectedTo.setArgument("(N)");
@@ -411,7 +420,7 @@ namespace BALL
 						it->second = FresnoFF::HBOND_HYDROGEN;
 						++hyd_counter;
 						// DEBUG
-						// cout << it->first->getFullName() << ": HYD" << endl;
+						// Log.info() << it->first->getFullName() << ": HYD" << endl;
 						// /DEBUG
 					}
 				}
@@ -427,7 +436,7 @@ namespace BALL
 								it->second = FresnoFF::HBOND_ACCEPTOR_DONOR;
 								++acc_don_counter;
 								// DEBUG
-								// cout << it->first->getFullName() << ": DON" << endl;
+								// Log.info() << it->first->getFullName() << ": DON" << endl;
 								// /DEBUG
 							}
 						}
@@ -436,7 +445,7 @@ namespace BALL
 							it->second = FresnoFF::HBOND_ACCEPTOR;
 							++acc_counter;
 							// DEBUG
-							// cout << it->first->getFullName() << ": ACC" << endl;
+							// Log.info() << it->first->getFullName() << ": ACC" << endl;
 							// /DEBUG
 						}
 					}
@@ -446,7 +455,7 @@ namespace BALL
 						{
 							it->second = FresnoFF::POLAR;
 							// DEBUG
-							// cout << it->first->getFullName() << ": POL" << endl;
+							// Log.info() << it->first->getFullName() << ": POL" << endl;
 							// /DEBUG
 							++polar_counter;
 						}
@@ -458,7 +467,7 @@ namespace BALL
 								{
 									it->second = FresnoFF::POLAR;
 									// DEBUG
-									// cout << it->first->getFullName() << ": POL" << endl;
+									// Log.info() << it->first->getFullName() << ": POL" << endl;
 									// /DEBUG
 									++polar_counter;
 								}
@@ -473,7 +482,7 @@ namespace BALL
 									{
 										it->second = FresnoFF::POLAR;
 										// DEBUG
-										// cout << it->first->getFullName() << ": POL" << endl;
+										// Log.info() << it->first->getFullName() << ": POL" << endl;
 										// /DEBUG
 										++polar_counter;
 									}
@@ -484,7 +493,7 @@ namespace BALL
 										{
 											it->second = FresnoFF::POLAR;
 											// DEBUG
-											// cout << it->first->getFullName() << ": POL" << endl;
+											// Log.info() << it->first->getFullName() << ": POL" << endl;
 											// /DEBUG
 											++polar_counter;
 										}
@@ -500,7 +509,7 @@ namespace BALL
 										{
 											it->second = FresnoFF::LIPOPHILIC;
 											// DEBUG
-											// cout << it->first->getFullName() << ": LIP" << endl;
+											// Log.info() << it->first->getFullName() << ": LIP" << endl;
 											// /DEBUG
 											++lipo_counter;
 										}
@@ -508,7 +517,7 @@ namespace BALL
 										{
 											it->second = FresnoFF::HBOND_ACCEPTOR;
 											// DEBUG
-											// cout << it->first->getFullName() << ": ACC" << endl;
+											// Log.info() << it->first->getFullName() << ": ACC" << endl;
 											// /DEBUG
 											++acc_counter;
 										}
@@ -521,21 +530,22 @@ namespace BALL
 			}
 		}
 
-		// DEBUG
-		cout << "STEP 1 statistics:" << endl << endl;
-		cout << "lipophilic atoms:        " << lipo_counter << endl;
-		cout << "h bond acceptors:        " << acc_counter << endl;
-		cout << "h bond acceptors/donors: " << acc_don_counter << endl;
-		cout << "h bond donors:           " << donor_counter << endl;
-		cout << "h bond hydrogens:        " << hyd_counter << endl;
-		cout << "polar atoms:             " << polar_counter << endl;
-		cout << "metal atoms:             " << metal_counter << endl;
-		cout << "remaining atoms:         " 
-			<< getSystem()->countAtoms() - lipo_counter - acc_counter 
-			- acc_don_counter - donor_counter - polar_counter - hyd_counter
-			- metal_counter
-			<< endl << endl;
-		// /DEBUG
+		if (verbosity > 8)
+		{
+			Log.info() << "STEP 1 statistics:" << endl << endl;
+			Log.info() << "lipophilic atoms:        " << lipo_counter << endl;
+			Log.info() << "h bond acceptors:        " << acc_counter << endl;
+			Log.info() << "h bond acceptors/donors: " << acc_don_counter << endl;
+			Log.info() << "h bond donors:           " << donor_counter << endl;
+			Log.info() << "h bond hydrogens:        " << hyd_counter << endl;
+			Log.info() << "polar atoms:             " << polar_counter << endl;
+			Log.info() << "metal atoms:             " << metal_counter << endl;
+			Log.info() << "remaining atoms:         " 
+				<< getSystem()->countAtoms() - lipo_counter - acc_counter 
+				- acc_don_counter - donor_counter - polar_counter - hyd_counter
+				- metal_counter
+				<< endl << endl;
+		}
 
 		// STEP 2
 		// ======
@@ -577,7 +587,7 @@ namespace BALL
 								{
 									it->second = FresnoFF::POLAR;
 									// DEBUG
-									// cout << it->first->getFullName() << ": POL" << endl;
+									// Log.info() << it->first->getFullName() << ": POL" << endl;
 									// /DEBUG
 									++polar_counter;
 									break;
@@ -633,7 +643,7 @@ namespace BALL
 										{
 											it->second = FresnoFF::POLAR;
 											// DEBUG
-											// cout << it->first->getFullName() << ": POL" << endl;
+											// Log.info() << it->first->getFullName() << ": POL" << endl;
 											// /DEBUG
 											++polar_counter;
 											break;
@@ -671,21 +681,22 @@ namespace BALL
 			}
 		}
 
-		// DEBUG
-		cout << "STEP 2 statistics:" << endl << endl;
-		cout << "lipophilic atoms:        " << lipo_counter << endl;
-		cout << "h bond acceptors:        " << acc_counter << endl;
-		cout << "h bond acceptors/donors: " << acc_don_counter << endl;
-		cout << "h bond donors:           " << donor_counter << endl;
-		cout << "h bond hydrogens:        " << hyd_counter << endl;
-		cout << "polar atoms:             " << polar_counter << endl;
-		cout << "metal atoms:             " << metal_counter << endl;
-		cout << "remaining atoms:         " 
-			<< getSystem()->countAtoms() - lipo_counter - acc_counter 
-			- acc_don_counter - donor_counter - polar_counter - hyd_counter
-			- metal_counter
-			<< endl << endl;
-		// /DEBUG
+		if (verbosity > 8)
+		{
+			Log.info() << "STEP 2 statistics:" << endl << endl;
+			Log.info() << "lipophilic atoms:        " << lipo_counter << endl;
+			Log.info() << "h bond acceptors:        " << acc_counter << endl;
+			Log.info() << "h bond acceptors/donors: " << acc_don_counter << endl;
+			Log.info() << "h bond donors:           " << donor_counter << endl;
+			Log.info() << "h bond hydrogens:        " << hyd_counter << endl;
+			Log.info() << "polar atoms:             " << polar_counter << endl;
+			Log.info() << "metal atoms:             " << metal_counter << endl;
+			Log.info() << "remaining atoms:         " 
+				<< getSystem()->countAtoms() - lipo_counter - acc_counter 
+				- acc_don_counter - donor_counter - polar_counter - hyd_counter
+				- metal_counter
+				<< endl << endl;
+		}
 
 		// STEP 3
 		// ======
@@ -713,7 +724,7 @@ namespace BALL
 					// /PARANOIA
 					it->second = FresnoFF::LIPOPHILIC;
 					// DEBUG
-					// cout << it->first->getFullName() << ": LIP" << endl;
+					// Log.info() << it->first->getFullName() << ": LIP" << endl;
 					// /DEBUG
 					++lipo_counter;
 				}
@@ -737,7 +748,7 @@ namespace BALL
 						// /PARANOIA
 						it->second = FresnoFF::LIPOPHILIC;
 						// DEBUG
-						// cout << it->first->getFullName() << ": LIP" << endl;
+						// Log.info() << it->first->getFullName() << ": LIP" << endl;
 						// /DEBUG
 						++lipo_counter;
 					}
@@ -745,21 +756,22 @@ namespace BALL
 			}
 		}
 
-		// DEBUG
-		cout << "STEP 3 statistics:" << endl << endl;
-		cout << "lipophilic atoms:        " << lipo_counter << endl;
-		cout << "h bond acceptors:        " << acc_counter << endl;
-		cout << "h bond acceptors/donors: " << acc_don_counter << endl;
-		cout << "h bond donors:           " << donor_counter << endl;
-		cout << "h bond hydrogens:        " << hyd_counter << endl;
-		cout << "polar atoms:             " << polar_counter << endl;
-		cout << "metal atoms:             " << metal_counter << endl;
-		cout << "remaining atoms:         " 
-			<< getSystem()->countAtoms() - lipo_counter - acc_counter 
-			- acc_don_counter - donor_counter - polar_counter - hyd_counter
-			- metal_counter
-			<< endl << endl;
-		// /DEBUG
+		if (verbosity > 8)
+		{
+			Log.info() << "STEP 3 statistics:" << endl << endl;
+			Log.info() << "lipophilic atoms:        " << lipo_counter << endl;
+			Log.info() << "h bond acceptors:        " << acc_counter << endl;
+			Log.info() << "h bond acceptors/donors: " << acc_don_counter << endl;
+			Log.info() << "h bond donors:           " << donor_counter << endl;
+			Log.info() << "h bond hydrogens:        " << hyd_counter << endl;
+			Log.info() << "polar atoms:             " << polar_counter << endl;
+			Log.info() << "metal atoms:             " << metal_counter << endl;
+			Log.info() << "remaining atoms:         " 
+				<< getSystem()->countAtoms() - lipo_counter - acc_counter 
+				- acc_don_counter - donor_counter - polar_counter - hyd_counter
+				- metal_counter
+				<< endl << endl;
+		}
 
 		// DEBUG
 		/*

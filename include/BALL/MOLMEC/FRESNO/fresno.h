@@ -1,4 +1,4 @@
-// $Id: fresno.h,v 1.1.2.13 2002/11/21 20:28:54 anker Exp $
+// $Id: fresno.h,v 1.1.2.14 2002/11/22 18:36:31 anker Exp $
 
 #ifndef BALL_MOLMEC_FRESNO_FRESNO_H
 #define BALL_MOLMEC_FRESNO_FRESNO_H
@@ -67,6 +67,10 @@ namespace BALL
 			/**
 			*/
 			static const char* METAL;
+
+			/**
+			*/
+			static const char* NONPOLAR;
 
 			/**
 			*/
@@ -206,6 +210,10 @@ namespace BALL
 			/**
 			*/
 			static const float DESOLV;
+
+			/**
+			*/
+			static const float NONPOLAR;
 
 			/**
 			*/
