@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmBend.C,v 1.12 2004/12/27 17:06:11 amoll Exp $
+// $Id: charmmBend.C,v 1.13 2005/01/24 23:45:04 amoll Exp $
 //
 
 #include <BALL/MOLMEC/CHARMM/charmmBend.h>
@@ -113,7 +113,7 @@ namespace BALL
 								<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a3) << ")" << endl;
 
 							getForceField()->getUnassignedAtoms().insert(it2->getPartner(**atom_it));
-							getForceField()->getUnassignedAtoms().insert((const Atom*)&*atom_it);
+							getForceField()->getUnassignedAtoms().insert(*atom_it);
 							getForceField()->getUnassignedAtoms().insert(it1->getPartner(**atom_it));
 							// this stretch will not cause energies or forces
 							values.k = 0.0;
