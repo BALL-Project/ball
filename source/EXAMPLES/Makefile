@@ -20,3 +20,6 @@ PDB2discover:	PDB2discover.o
 amberEnergy:	amberEnergy.o 
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
+bindingEnergy:	bindingEnergy.o 
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
