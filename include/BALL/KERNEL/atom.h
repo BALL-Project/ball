@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.h,v 1.45 2002/12/12 09:48:45 oliver Exp $
+// $Id: atom.h,v 1.46 2003/01/15 10:50:56 anhi Exp $
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -1090,6 +1090,10 @@ namespace BALL
 			/** Assign the contents from a different atom attribute.
 			*/
 			void set(StaticAtomAttributes& attr);
+
+			/** Assign the contents from a different atom attribute.
+			*/
+			const StaticAtomAttributes& operator = (const StaticAtomAttributes& attr);
 		};
 
 		

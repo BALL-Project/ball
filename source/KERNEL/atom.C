@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.C,v 1.37 2002/12/12 10:20:16 oliver Exp $
+// $Id: atom.C,v 1.38 2003/01/15 10:51:08 anhi Exp $
 
 #include <BALL/KERNEL/atom.h>
 
@@ -45,13 +45,25 @@ namespace BALL
 	{
 		charge = attr.charge;
 		type = attr.type;
-		ptr = attr.ptr;
+		//ptr = attr.ptr;
 		position = attr.position;
 		velocity = attr.velocity;
 		force = attr.force;		
 	}
 
 	
+	const Atom::StaticAtomAttributes& 
+		Atom::StaticAtomAttributes::operator = (const Atom::StaticAtomAttributes& attr)
+	{
+		charge = attr.charge;
+		type = attr.type;
+		//ptr = attr.ptr;
+		position = attr.position;
+		velocity = attr.velocity;
+		force = attr.force;		
+
+		return *this;
+	}	
 
 	Atom::Atom()
 		throw()
