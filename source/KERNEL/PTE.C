@@ -1,4 +1,4 @@
-// $Id: PTE.C,v 1.2 2000/04/27 15:09:33 amoll Exp $
+// $Id: PTE.C,v 1.3 2000/04/27 19:14:16 oliver Exp $
 
 #include <BALL/KERNEL/PTE.h>
 
@@ -466,7 +466,7 @@ namespace BALL
 
 	Element& PTE_::getElement(Position position)
 	{
-		return ((position >= 0 && position < Element::NUMBER_OF_ELEMENTS)
+		return ((position < Element::NUMBER_OF_ELEMENTS)
 						 ? element_[position]
 						 : Element::UNKNOWN);
 	}
