@@ -1,4 +1,4 @@
-# $Id: Makefile,v 1.5 2000/05/05 18:20:13 oliver Exp $
+# $Id: Makefile,v 1.6 2001/07/31 00:46:49 oliver Exp $
 # Makefile for Finite Difference Poisson-Boltzmann Application
 #
 
@@ -13,13 +13,16 @@ clean:	default_clean
 include ../../common.mak
 include .Dependencies
 
-SOURCES=\
+# remove the library specific flags
+# and replace them by the aplication specific
+# flags
+LIB_CXXFLAGS=$(NONLIB_CXXFLAGS)
+
+CPP_SOURCES=\
 	main.C\
 	global.C\
 	reading.C\
 	assignment.C
-
-CPP_SOURCES=$(SOURCES)
 
 SPECIAL_OBJECTS=
 
