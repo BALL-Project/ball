@@ -1,4 +1,4 @@
-// $Id: message.h,v 1.5 2001/06/28 18:40:34 sturm Exp $
+// $Id: message.h,v 1.6 2001/07/09 17:11:17 sturm Exp $
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
 #define BALL_VIEW_KERNEL_MESSAGE_H
@@ -55,8 +55,8 @@ namespace BALL
 				and message posting.
 				@memo    Message class (BALL VIEW kernel framework)
 				@author  $Author: sturm $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/06/28 18:40:34 $
+				@version $Revision: 1.6 $
+				@date    $Date: 2001/07/09 17:11:17 $
 		*/
 		class Message
 		{
@@ -174,8 +174,8 @@ namespace BALL
 				\Ref{ConnectionObject} objects that must react to \Ref{Composite} changes.
 				@memo    CompositeMessage class (BALL VIEW kernel framework)
 				@author  $Author: sturm $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/06/28 18:40:34 $
+				@version $Revision: 1.6 $
+				@date    $Date: 2001/07/09 17:11:17 $
 		*/
 		class CompositeMessage: public Message
 		{
@@ -288,8 +288,8 @@ namespace BALL
 				objects.
 				@memo    NewCompositeMessage class (BALL VIEW kernel framework)
 				@author  $Author: sturm $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/06/28 18:40:34 $
+				@version $Revision: 1.6 $
+				@date    $Date: 2001/07/09 17:11:17 $
 		*/
 		class NewCompositeMessage: public CompositeMessage
 		{
@@ -346,8 +346,8 @@ namespace BALL
 				objects.
 				@memo    RemovedCompositeMessage class (BALL VIEW kernel framework)
 				@author  $Author: sturm $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/06/28 18:40:34 $
+				@version $Revision: 1.6 $
+				@date    $Date: 2001/07/09 17:11:17 $
 		*/
 		class RemovedCompositeMessage: public CompositeMessage
 		{
@@ -404,8 +404,8 @@ namespace BALL
 				objects.
 				@memo    ChangedCompositeMessage class (BALL VIEW kernel framework)
 				@author  $Author: sturm $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/06/28 18:40:34 $
+				@version $Revision: 1.6 $
+				@date    $Date: 2001/07/09 17:11:17 $
 		*/
 		class ChangedCompositeMessage: public CompositeMessage
 		{
@@ -484,8 +484,8 @@ namespace BALL
 				or change the camera positions.
 				@memo    SceneMessage class (BALL VIEW kernel framework)
 				@author  $Author: sturm $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/06/28 18:40:34 $
+				@version $Revision: 1.6 $
+				@date    $Date: 2001/07/09 17:11:17 $
 		*/
 		class SceneMessage: public Message
 		{
@@ -578,11 +578,7 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the {\em look at} component of the camera position.
-					Access the constant reference of the {\em look at} component of the camera position
-					of {\em *this} sceneMessage.
-					@return      const Vector3& constant reference to the {\em look at} component of the camera position of {\em *this} sceneMessage
-					@see         setCameraLookAt
-					@see         Vector3
+				  For further information see \Ref{getCameraLookAt}
 			*/
 			const Vector3& getCameraLookAt() const
 				throw();
@@ -637,8 +633,8 @@ namespace BALL
 				\Ref{ConnectionObject} object has sent through the \Ref{ConnectionObject} tree.
 				@memo    WindowMessage class (BALL VIEW kernel framework)
 				@author  $Author: sturm $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/06/28 18:40:34 $
+				@version $Revision: 1.6 $
+				@date    $Date: 2001/07/09 17:11:17 $
 		*/
 		class WindowMessage: public Message
 		{
@@ -724,8 +720,8 @@ namespace BALL
 				objects.
 				@memo    SelectionMessage class (BALL VIEW kernel framework)
 				@author  $Author: sturm $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/06/28 18:40:34 $
+				@version $Revision: 1.6 $
+				@date    $Date: 2001/07/09 17:11:17 $
 		*/
 		class SelectionMessage: public Message
 		{
@@ -815,8 +811,8 @@ namespace BALL
 				objects.
 				@memo    GeometricObjectSelectionMessage class (BALL VIEW kernel framework)
 				@author  $Author: sturm $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/06/28 18:40:34 $
+				@version $Revision: 1.6 $
+				@date    $Date: 2001/07/09 17:11:17 $
 		*/
 		class GeometricObjectSelectionMessage: public SelectionMessage
 		{
