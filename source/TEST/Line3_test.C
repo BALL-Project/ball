@@ -1,4 +1,4 @@
-// $Id: Line3_test.C,v 1.5 2000/05/26 19:25:02 amoll Exp $
+// $Id: Line3_test.C,v 1.6 2000/06/27 23:14:23 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -6,7 +6,7 @@
 #	include <BALL/MATHS/line3.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Line3_test.C,v 1.5 2000/05/26 19:25:02 amoll Exp $")
+START_TEST(class_name, "$Id: Line3_test.C,v 1.6 2000/06/27 23:14:23 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -57,7 +57,9 @@ CHECK(TLine3(const TVector3<T>& point, const TVector3<T>& vector,
 	TEST_EQUAL(v2, v4)
 
 	line = Line3(v1, v2, Line3::FORM__TWO_POINTS);
-	line.get(v3, v4, Line3::FORM__TWO_POINTS);
+	line.get(v1, v2);
+	v3.set(0, 1, 2);
+	v4.set(3, 3, 3);
 	TEST_EQUAL(v1, v3)
 	TEST_EQUAL(v2, v4)
 RESULT
