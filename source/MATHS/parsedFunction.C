@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: parsedFunction.C,v 1.6 2002/12/21 11:10:30 oliver Exp $
+// $Id: parsedFunction.C,v 1.7 2003/09/18 04:11:31 oliver Exp $
+//
 
 #include <BALL/MATHS/parsedFunction.h>
 
