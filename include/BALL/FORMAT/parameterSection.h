@@ -1,4 +1,4 @@
-// $Id: parameterSection.h,v 1.14 2001/08/14 20:47:15 sturm Exp $
+// $Id: parameterSection.h,v 1.15 2002/01/10 01:29:06 oliver Exp $
 // Format: general  parameter section class
 
 #ifndef BALL_FORMAT_PARAMETERSECTION_H
@@ -57,6 +57,7 @@ namespace BALL
 		};
 
 		//@}
+
 		/**	@name	Constructors and Destructors
 		*/
 		//@{
