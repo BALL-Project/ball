@@ -1,4 +1,4 @@
-// $Id: poissonBoltzmann.C,v 1.29.2.4 2002/11/22 18:39:20 anker Exp $ 
+// $Id: poissonBoltzmann.C,v 1.29.2.5 2002/12/04 09:55:43 anker Exp $ 
 // FDPB: Finite Difference Poisson Solver
 
 #include <BALL/SOLVATION/poissonBoltzmann.h>
@@ -2456,6 +2456,14 @@ namespace BALL
 	
 	double FDPB::calculateReactionFieldEnergy() const
 	{
+
+		if (options[Option::DIELECTRIC_SMOOTHING] 
+			!= FDPB::DielectricSmoothing::NONE)
+		{
+			Log.error() << "Cannot calculate reaction field energy when dielectric smoothing is turned on." << endl;
+			return(0.0);
+		}
+
 		// create a timer to determine the method's runtime
 		Timer	step_timer;
 		step_timer.start();
