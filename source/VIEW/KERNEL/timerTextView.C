@@ -81,12 +81,8 @@ namespace BALL
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
-		// main event loop
 	  bool TimerTextView::onNotify(LogStreamNotifier &source)
 		{
-			cerr << "." << endl;
-
-			history_string_ = text();
 			string line;
 			
 			char c;
