@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControlPreferences.C,v 1.6 2003/08/29 07:02:45 oliver Exp $
+// $Id: mainControlPreferences.C,v 1.7 2003/09/02 14:24:54 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/mainControlPreferences.h>
@@ -47,9 +47,9 @@ namespace BALL
 			{
 				style = inifile.getValue("WINDOWS", "style");
 			}
-			if (QStyleFactory::keys().grep(style).size() > 0)
+			if (QStyleFactory::keys().grep(style.c_str()).size() > 0)
 			{
-				style_box_->setCurrentText(*QStyleFactory::keys().grep(style).begin());
+				style_box_->setCurrentText(*QStyleFactory::keys().grep(style.c_str()).begin());
 			}
 		}
 		
