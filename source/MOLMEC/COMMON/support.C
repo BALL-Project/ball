@@ -1,4 +1,4 @@
-// $Id: support.C,v 1.19 2001/02/20 10:31:59 anker Exp $
+// $Id: support.C,v 1.20 2001/02/21 18:20:13 anker Exp $
 
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/KERNEL/atom.h>
@@ -41,6 +41,7 @@ namespace BALL
 			double period_x;
 			double period_y;
 			double period_z;
+			Vector3 period;
 
 			// Are there atoms stored in atom_vector at all?
 			if (atom_vector.size() == 0)
@@ -58,6 +59,7 @@ namespace BALL
 				period_x = box.getWidth();
 				period_y = box.getHeight();
 				period_z = box.getDepth(); 
+				period = Vector3(period_x, period_y, period_z);
 			
 				// ... and add at least distance to each coordinate to gain a box
 				// that contains enough neighbouring boxes.
@@ -159,7 +161,9 @@ namespace BALL
 						{
 							new_position = position;
 							difference = position - (*atom_it2)->getPosition();
+							new_position = calculateMinimumImage(difference, period);
 
+							/*
 							if (difference.x < -half_period_x) 
 							{
 								new_position.x += period_x;
@@ -195,6 +199,7 @@ namespace BALL
 									new_position.z -= period_z;
 								}
 							}
+							*/
 
 							if ((new_position.getSquareDistance((*atom_it2)->getPosition())) 
 									<= squared_distance) 
@@ -573,6 +578,49 @@ namespace BALL
 			Log.info() << "processed " << mol_count << " solvent molecules" << endl;
 		}
 
+
+		Vector3& calculateMinimumImage(const Vector3& distance,
+				const Vector3& period)
+		{
+			Vector3 half_period(period * 0.5);
+			Vector3 result;
+
+			if (distance.x <= -half_period.x)
+			{
+				result.x += period.x;
+			}
+			else 
+			{
+				if (distance.x > half_period.x)
+				{
+					result.x -= period.x;
+				}
+			}
+
+			if (distance.y <= -half_period.y)
+			{
+				result.y += period.y;
+			}
+			else 
+			{
+				if (distance.y > half_period.y)
+				{
+					result.y -= period.y;
+				}
+			}
+
+			if (distance.z <= -half_period.z)
+			{
+				result.z += period.z;
+			}
+			else 
+			{
+				if (distance.z > half_period.z)
+				{
+					result.z -= period.z;
+				}
+			}
+		}
 
 	}	// namespace MolmecSupport
 

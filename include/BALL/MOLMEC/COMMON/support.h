@@ -1,4 +1,4 @@
-// $Id: support.h,v 1.8 2001/02/18 20:51:19 amoll Exp $
+// $Id: support.h,v 1.9 2001/02/21 18:20:10 anker Exp $
 
 #ifndef BALL_MOLMEC_COMMON_SUPPORT_H
 #define BALL_MOLMEC_COMMON_SUPPORT_H
@@ -103,12 +103,18 @@ namespace BALL
 				because of a different defintion of the periodic boundary. This
 				function adapts such boxes to our definition by simply translating
 				such molecules to the opposite boundary wall such that their center
-				of gravity lies in the box afterwards.
+				of gravity lies in the box afterwards.\\
+				This might be obsoleted by PeriodicBoundarry::updateMolecules()
 				@param system the system containing the water box which is to be
 				adapted
 				@param box the box definition for the periodic boundary
 		*/
 		void adaptWaterBox(System& system, const Box3& box);
+
+		/** Compute the minimum image
+		*/
+		Vector3& calculateMinimumImage(const Vector3& distance, 
+				const Vector3& period);
 
 		//@}
 

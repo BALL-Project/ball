@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.C,v 1.5 2001/02/20 09:04:40 anker Exp $
+// $Id: amberNonBonded.C,v 1.6 2001/02/21 18:20:17 anker Exp $
 
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -412,48 +412,10 @@ namespace BALL
 	BALL_INLINE
 	void AMBERcalculateMinimumImage
     (Vector3& difference, const Vector3& period)
-  {
-		Vector3 half_period(period * 0.5);
-		// difference.x -= period.x * (float)(long)(difference.x / period.x);
-		// difference.y -= period.y * (float)(long)(difference.y / period.y);
-		// difference.z -= period.z * (float)(long)(difference.z / period.z);
-
-    if (difference.x < -half_period.x)
-    {
-      difference.x += period.x;
-		}
-    else 
-		{
-			if (difference.x > half_period.x)
-			{
-				difference.x -= period.x;
-			}
-		}
-
-    if (difference.y < -half_period.y)
-    {
-      difference.y += period.y;
-		}
-    else 
-		{
-			if (difference.y > half_period.y)
-			{
-				difference.y -= period.y;
-			}
-		}
-
-    if (difference.z < -half_period.z)
-    {
-      difference.z += period.z;
-		}
-    else 
-		{
-			if (difference.z > half_period.z)
-			{
-				difference.z -= period.z;
-			}
-		}
-  }
+	{
+		Vector3 tmp(MolmecSupport::calculateMinimumImage(difference, period));
+		difference = tmp;
+	}
 
 
 
