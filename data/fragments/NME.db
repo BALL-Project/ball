@@ -1,0 +1,47 @@
+<node>NME
+	<node>Names
+		<node>Methylamine</node>
+	</node>
+	<node>Atoms
+		<node>N<value>N  0.724  0.000 -0.079</value></node>
+		<node>CH3<value>C -0.742  0.000  0.011</value></node>
+		<node>1H<value>H 1.046  0.810  0.431</value></node>
+		<node>2H<value>H 1.046 -0.810  0.431</value></node>
+		<node>1HH3<value>H -1.139 -0.861 -0.527</value></node>
+		<node>2HH3<value>H -1.042 -0.056  1.057</value></node>
+		<node>3HH3<value>H -1.133  0.917 -0.431</value></node>
+	</node>
+	<node>Bonds
+		<node>1<value>N CH3 s</value></node>
+		<node>2<value>N 1H s</value></node>
+		<node>3<value>N 2H s</value></node>
+		<node>4<value>CH3 1HH3 s</value></node>
+		<node>5<value>CH3 2HH3 s</value></node>
+		<node>6<value>CH3 3HH3 s</value></node>
+	</node>
+	<node>Connections
+		<node>N-term<value>N C-term s 1.33 0.5</value></node>
+	</node>
+	<node>Properties
+		<node>AMINO_ACID</node>
+	</node>
+	<node>Variants
+		<node>NME-C
+			<node>Delete
+				<node>2H</node>
+			</node>
+			<node>Rename	
+				<node>1H<value>H</value></node>
+			</node>
+			<node>Properties
+				<node>C_TERMINAL</node>
+			</node>
+		</node>
+		<node>NME-M
+			<node>Properties
+				<node>C_TERMINAL</node>
+				<node>N_TERMINAL</node>
+			</node>
+		</node>
+	</node>
+</node>
