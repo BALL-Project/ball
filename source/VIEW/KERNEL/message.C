@@ -1,12 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.C,v 1.23 2004/09/14 13:43:15 amoll Exp $
+// $Id: message.C,v 1.24 2004/11/13 10:09:12 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/COMMON/rtti.h>
 
 using namespace std;
+
+// #define BALL_VIEW_DEBUG
 
 namespace BALL
 {
@@ -286,6 +288,9 @@ CreateRepresentationMessage::CreateRepresentationMessage()
 		model_type_(MODEL_UNKNOWN),
 		coloring_method_(COLORING_UNKNOWN)
 {
+	#ifdef BALL_VIEW_DEBUG
+		Log.error() << "new CreateRepresentationMessage" << std::endl;		
+	#endif
 }
 
 CreateRepresentationMessage::CreateRepresentationMessage(const List<Composite*>& composites, 
@@ -296,6 +301,9 @@ CreateRepresentationMessage::CreateRepresentationMessage(const List<Composite*>&
 		model_type_(model_type),
 		coloring_method_(coloring_method)
 {
+	#ifdef BALL_VIEW_DEBUG
+		Log.error() << "new CreateRepresentationMessage" << std::endl;		
+	#endif
 }
 
 TransformationMessage::TransformationMessage()
@@ -303,6 +311,9 @@ TransformationMessage::TransformationMessage()
 	: Message(),
 		matrix_()
 {
+	#ifdef BALL_VIEW_DEBUG
+		Log.error() << "new TransformationMessage" << std::endl;		
+	#endif
 }
 
 TransformationMessage::TransformationMessage(const Matrix4x4& m)
@@ -310,6 +321,9 @@ TransformationMessage::TransformationMessage(const Matrix4x4& m)
 	: Message(),
 		matrix_(m)
 {
+	#ifdef BALL_VIEW_DEBUG
+		Log.error() << "new TransformationMessage" << std::endl;		
+	#endif
 }
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
