@@ -1,18 +1,12 @@
 
                     BALL  -  Biochemical ALgorithm Library
                     --------------------------------------
-                           public beta release 1.0pre1
+                       public release candidate 1.0pre2
 ------------------------------------------------------------------------------
-         T. Aubertin, N. P. Boghossian, A. Burchardt, A. Hildebrandt, 
-            H. Klein, A. Kerzmann, O. Kohlbacher, H.-P. Lenhof, 
-                A. Moll, P. Mueller, S. Strobel, M. Sturm
+         T. Aubertin, N. P. Boghossian, A. Burchardt, A. Crauser, 
+          A. Hildebrandt, H. Klein, A. Kerzmann, O. Kohlbacher, 
+			   H.-P. Lenhof, A. Moll, P. Mueller, S. Strobel, M. Sturm
 	
-
-
-+++ 
-In memory of our friend Nicolas Pascal Boghossian 
-                            14.08.1972 - 12.01.2002 
-+++
 
 
 To install BALL it should be sufficient to type the following
@@ -36,22 +30,20 @@ or setenv LD_LIBRARY_PATH ...                                (csh-like shells)
                                  (only if you had OpenGL/Mesa and QT installed)
 
 The configuration of the visualization component BALLVIEW is a bit tricky
-since it requires OpenGL (or Mesa) and QT to be installed.
-The details of your local installation have to be passed to configure as
-command line arguments. A list of these arguments can be obtained by 
-calling configure with --help. Please refer to the file INSTALLATION for more 
-detailled instructions.
+since it requires OpenGL (or Mesa) and QT to be installed.  The details of
+your local installation have to be passed to configure as command line
+arguments. A list of these arguments can be obtained by calling configure with
+--help. Please refer to the file INSTALLATION for more detailled instructions.
 
 After building the libraries, please remember to set the shared library search
 path (environment variable LD_LIBRARY_PATH) to the location of the libraries
 (this location is printed after the execution of make install).
 
-Please remember: this is an ALPHA release! Help us to improve the quality
-of this library by sending all the problems you ran into, all criticism,
-encouragements, improvements, bug reports, and wishes for further 
-functionality to 
+Please help us to improve the quality of this library by sending all the
+problems you ran into, all criticism, encouragements, improvements, bug
+reports, and wishes for further functionality to 
   
-  ball-bugs@mpi-sb.mpg.de
+  ball-bugs@bioinf.uni-sb.de
 
 Please have a look at our website as well: 
 
