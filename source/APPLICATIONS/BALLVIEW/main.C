@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.17 2005/03/01 16:12:53 amoll Exp $
+// $Id: main.C,v 1.18 2005/03/01 18:33:38 oliver Exp $
 //
 
 // order of includes is important: first qapplication, than BALL includes
@@ -44,7 +44,6 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, PSTR cmd_line, int )
 
 	QApplication application(argc, argv);
 
-
 	// =============== testing for opengl support ======================================
 	if (!QGLFormat::hasOpenGL())
 	{
@@ -53,7 +52,6 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, PSTR cmd_line, int )
 				QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton);
 		return -1;
 	}
-
 
 	// =============== testing if we can write in current directoy =====================
 	BALL::String home_dir = BALL::Directory::getUserHomeDir();

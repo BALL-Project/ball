@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.5 2005/02/28 16:26:28 amoll Exp $
+# $Id: Makefile,v 1.6 2005/03/01 18:33:38 oliver Exp $
 #
 
 EXECUTABLE=BALLView
@@ -89,3 +89,28 @@ clean: clean_moc_uic
 
 clean_moc_uic:
 	@$(RM) -f $(UIC_FILES)
+
+macos_app: $(EXECUTABLE) BALLView.app/Contents/MacOS/../PkgInfo BALLView.app/Contents/MacOS/../Info.plist 
+	@mv BALLView BALLView.app/Contents/MacOS
+
+BALLView.app/Contents/MacOS/../PkgInfo: 
+	@test -d BALLView.app/Contents/MacOS/ || mkdir -p BALLView.app/Contents/MacOS/
+	@-$(RM) -f BALLView.app/Contents/MacOS/../PkgInfo 2>/dev/null
+	@echo "APPL????" >BALLView.app/Contents/MacOS/../PkgInfo
+
+BALLView.app/Contents/MacOS/../Info.plist: 
+	@test -d BALLView.app/Contents/MacOS/ || mkdir -p BALLView.app/Contents/MacOS/
+	@-$(RM) -f BALLView.app/Contents/MacOS/../Info.plist 2>/dev/null
+	@sed -e "s,@ICON@,application.icns,g" -e "s,@EXECUTABLE@,BALLView,g" "../../../MacOSX/BALLView/Info.plist.app" >"BALLView.app/Contents/MacOS/../Info.plist"
+
+
+macos_pkg: $(EXECUTABLE)
+	@-$(RM) -fr $(BALL_PATH)/MacOSX/BALLPackage/Library/BALL 2>/dev/null | true
+	@-mkkdir $(BALL_PATH)/MacOSX/BALLPackage 2>/dev/null | true
+	@-mkdir $(BALL_PATH)/MacOSX/BALLPackage/Library 2>/dev/null | true
+	@-mkdir $(BALL_PATH)/MacOSX/BALLPackage/Library/BALL 2>/dev/null | true
+	@$(CP) -r $(BALL_PATH)/data $(BALL_PATH)/MacOSX/BALLPackage/Library/BALL
+	@$(MV) BALLView $(BALL_PATH)/MacOSX/BALLPackage/Applications/BALLView.app/Contents/MacOS/
+	@echo "Package is prepared!"
+	
+	
