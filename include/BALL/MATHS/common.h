@@ -1,4 +1,4 @@
-// $Id: common.h,v 1.3 2000/02/16 17:07:15 oliver Exp $
+// $Id: common.h,v 1.4 2000/03/13 18:11:41 amoll Exp $
 
 #ifndef BALL_MATHS_COMPARISON_H
 #define BALL_MATHS_COMPARISON_H
@@ -197,6 +197,13 @@ namespace BALL
 			return (Maths::isLess(a, b) ? -1 : Maths::isEqual(a, b) ? 0 : 1);
 		}
 
+		///
+		template <class T1, class T2, class T3>
+		inline 
+		bool isNear(const T1& a, const T2& b, const T3& maxDiff)
+		{
+			return (Maths::isLessOrEqual( abs(abs(a) - abs(b)), abs(maxDiff) ) );
+		}
 
 	//@}
 		
