@@ -1,4 +1,4 @@
-// $Id: options.C,v 1.13 2000/07/26 14:38:14 amoll Exp $ 
+// $Id: options.C,v 1.14 2000/07/26 15:07:40 amoll Exp $ 
 
 #include <BALL/DATATYPE/options.h>
 
@@ -114,8 +114,11 @@ namespace BALL
 
 	double Options::getReal(const String& key) const 
 	{
+		if (!has(key))
+		{
+			return 0.0;
+		}
 		double value;
-
 		errno = 0;
 		value = atof((*find(key)).second.c_str());
 		
@@ -151,6 +154,10 @@ namespace BALL
 
 	bool Options::getBool(const String& key) const 
 	{
+		if (!has(key))
+		{
+			return false;
+		}
 		ConstIterator it = find(key);
 		if ((it != end()) && (it->second == "true"))
 		{
@@ -162,13 +169,17 @@ namespace BALL
 
 	long Options::getInteger(const String& key) const 
 	{
+		if (!has(key))
+		{
+			return 0;
+		}
 		long value;
-
 		errno = 0;
 		ConstIterator it = find(key);
 		if (it == end())
+		{
 			return 0;
-
+		}
 		value = atol((*it).second.c_str());
 		
 		if (errno == 0)
@@ -278,6 +289,10 @@ namespace BALL
 
 	String Options::get(const String& key) const
 	{
+		if (!has(key))
+		{
+			return "";
+		}
 		ConstIterator it = find(key);
 
 		if (it == end())
@@ -344,7 +359,7 @@ namespace BALL
 
 		stream << "!-----------------------------------" << endl;
 		
-		filename.close();
+		stream.close();
 		entry_list.clear();
 		return true;
 	}
