@@ -1,4 +1,4 @@
-// $Id: BaseFragment_test.C,v 1.9 2000/04/17 11:18:21 oliver Exp $
+// $Id: BaseFragment_test.C,v 1.10 2000/04/27 19:10:05 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -9,7 +9,7 @@
 ///////////////////////////
 
 
-START_TEST(BaseFragment, "$Id: BaseFragment_test.C,v 1.9 2000/04/17 11:18:21 oliver Exp $")
+START_TEST(BaseFragment, "$Id: BaseFragment_test.C,v 1.10 2000/04/27 19:10:05 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -121,7 +121,6 @@ CHECK(getBaseFragment(Index))
 	}
 	bf3 = bf1.getBaseFragment(1);
 	TEST_EQUAL(bf3, 0)
-	TEST_EXCEPTION(BALL::Exception::IndexUnderflow, bf3 = bf1.getBaseFragment(-1))
 RESULT
 
 CHECK(getBaseFragment(Index) const)
@@ -139,7 +138,6 @@ CHECK(getBaseFragment(Index) const)
 	}
 	bf3 = bf1.getBaseFragment(1);
 	TEST_EQUAL(bf3, 0)
-	TEST_EXCEPTION(BALL::Exception::IndexUnderflow, bf3 = bf1.getBaseFragment(-1))
 RESULT
 
 CHECK(clear())
@@ -395,7 +393,6 @@ CHECK(getAtom(Index))
 	TEST_EQUAL(ptr, 0)
 	ptr = bf1.getAtom(25);
 	TEST_EQUAL(ptr, 0)
-	TEST_EXCEPTION(Exception::IndexUnderflow, ptr = bf1.getAtom(-1))
 RESULT
 
 CHECK(getAtom(Index) const)
@@ -407,7 +404,6 @@ CHECK(getAtom(Index) const)
 	bf1.remove(a);
 	TEST_EQUAL(bf1.getAtom(0), 0)
 	TEST_EQUAL(bf1.getAtom(24), 0)
-	TEST_EXCEPTION(Exception::IndexUnderflow, bf1.getAtom(-1))
 RESULT
 
 CHECK(countAtoms())
