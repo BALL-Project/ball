@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: exception.C,v 1.36 2004/09/01 12:38:12 amoll Exp $
+// $Id: exception.C,v 1.37 2004/12/27 18:08:51 amoll Exp $
 //
 
 #include <BALL/COMMON/exception.h>
@@ -293,6 +293,13 @@ namespace BALL
 				: GeneralException(file, line, "Invalid option: ", option)
 			{
 			}
+
+			TooManyErrors::TooManyErrors(const char* file, int line)
+				throw()
+				: GeneralException(file, line, "Too many errors", "")
+			{
+			}
+
 
 			DEF_EXCEPTION(DivisionByZero, "a division by zero was requested")
 
