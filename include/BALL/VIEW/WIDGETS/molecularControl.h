@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.20 2004/02/10 15:51:35 amoll Exp $
+// $Id: molecularControl.h,v 1.21 2004/02/11 12:52:52 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -211,6 +211,7 @@ namespace BALL
 					  - cut 
 					  - copy 
 					  - paste 
+						- delete
 					  - clear clipboard
 					\par
 					This method is called automatically	immediately before the main application 

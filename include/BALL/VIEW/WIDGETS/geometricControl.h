@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.h,v 1.11 2004/02/06 16:44:17 amoll Exp $
+// $Id: geometricControl.h,v 1.12 2004/02/11 12:52:52 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
 #define BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
@@ -169,6 +169,10 @@ namespace BALL
 			/// Overloaded from GenericControl, calls deleteRepresentation_()
 			virtual void deleteCurrentItems()
 				throw() {deleteRepresentation_();}
+
+			/// Overloaded from ModularWidget
+			virtual void checkMenu(MainControl& main_control)
+				throw();
 
 			public slots:
 				

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericControl.h,v 1.10 2004/02/10 15:51:35 amoll Exp $
+// $Id: genericControl.h,v 1.11 2004/02/11 12:52:52 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GENERICCONTROL_H
 #define BALL_VIEW_WIDGETS_GENERICCONTROL_H
@@ -99,6 +99,16 @@ namespace BALL
 			 		Call this Method in the derived Classes in their onNotify().
 			*/
 			virtual void onNotify(Message *message)
+				throw();
+
+			/**	Initialize the menu entries:
+					  - delete
+					\par
+					This method is called automatically	immediately before the main application 
+					is started by MainControl::show.
+					\param main_control the MainControl object to be initialized with this ModularWidget
+			*/
+			virtual void initializeWidget(MainControl& main_control)
 				throw();
 
 			//@}
