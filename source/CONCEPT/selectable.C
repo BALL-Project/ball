@@ -1,4 +1,4 @@
-// $Id: selectable.C,v 1.3 1999/12/28 18:19:41 oliver Exp $
+// $Id: selectable.C,v 1.4 2000/01/07 21:57:54 oliver Exp $
 
 #include <BALL/CONCEPT/selectable.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -27,9 +27,10 @@ namespace BALL
 		BALL_DUMP_STREAM_PREFIX(s);
 
 		BALL_DUMP_DEPTH(s, depth);
-
+    BALL_DUMP_HEADER(s, this, this)
+ 
 		BALL_DUMP_DEPTH(s, depth);
-		s << "  selectable: " << selected_ << endl;
+		s << "  selected: " << selected_ << endl;
 
 		BALL_DUMP_STREAM_SUFFIX(s);
 	}  
