@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: support.C,v 1.37 2003/02/06 12:21:23 anker Exp $
+// $Id: support.C,v 1.38 2003/02/06 12:26:59 anker Exp $
 
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/KERNEL/atom.h>
@@ -663,33 +663,6 @@ namespace BALL
 			distance.x = distance.x - period.x * rint(distance.x / period.x);
 			distance.y = distance.y - period.y * rint(distance.y / period.y);
 			distance.z = distance.z - period.z * rint(distance.z / period.z);
-		}
-
-		double calculateFresnoHelperFunction(double x, double lower, double upper)
-			throw()
-		{
-			// Quick and dirty. Optimize this.
-
-			double return_value;
-
-			x = fabs(x);
-
-			if (x <= lower)
-			{
-				return_value = 1.0;
-			}
-			else
-			{
-				if (x <= upper)
-				{
-					return_value = 1.0 - ((x - lower)/(upper - lower));
-				}
-				else
-				{
-					return_value = 0.0;
-				}
-			}
-			return return_value;
 		}
 
 	}	// namespace MolmecSupport
