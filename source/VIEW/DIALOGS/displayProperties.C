@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.72 2004/07/09 23:35:21 amoll Exp $
+// $Id: displayProperties.C,v 1.73 2004/07/10 15:40:43 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -433,7 +433,7 @@ void DisplayProperties::editSelectionColor()
 // Model Processor methods
 // ------------------------------------------------------------------------
 
-void DisplayProperties::createRepresentation_(const List<Composite*>& composites)
+Representation* DisplayProperties::createRepresentation_(const List<Composite*>& composites)
 	throw(InvalidOption)
 {
 	ModelProcessor* model_processor = 0;
@@ -670,6 +670,7 @@ void DisplayProperties::createRepresentation_(const List<Composite*>& composites
 
 	advanced_options_modified_ = false;
 	setStatusbarText("finished drawing");
+	return rep;
 }
 
 
