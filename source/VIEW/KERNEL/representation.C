@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.60.2.3 2005/01/14 14:36:42 amoll Exp $
+// $Id: representation.C,v 1.60.2.4 2005/01/14 15:28:31 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/representation.h>
@@ -326,6 +326,7 @@ namespace BALL
 					t.stop();
 					logString("Calculating Model time: " + String(t.getCPUTime()));
 					t.reset();
+					t.start();
 #endif
 				}
 			}
