@@ -1,22 +1,26 @@
-// $Id: XDRPersistenceManager.C,v 1.10 2000/10/30 21:51:15 oliver Exp $
+// $Id: XDRPersistenceManager.C,v 1.11 2000/11/02 18:25:49 oliver Exp $
 
 #include <BALL/CONCEPT/XDRPersistenceManager.h>
 
-#define BALL_DEBUG_PERSISTENCE
+// #define BALL_DEBUG_PERSISTENCE
 
 using namespace std;
 
 namespace BALL 
 {
 
+#ifdef BALL_XDRREC_CREATE_VOID_CHAR_INT
 	extern "C" int XDRReadStream_(void* stream_ptr, char* buffer, int number)
+#else
+	extern "C" int XDRReadStream_(void* stream_ptr, void* buffer, unsigned int number)
+#endif
 	{
 		istream& is = *(istream*)stream_ptr;
 
 		streampos number_read = is.gcount();
 		if (stream_ptr != 0)
 		{
-			is.get(buffer, number);
+			is.get((char*)buffer, number);
 		}
 		number_read = is.gcount() - number_read;
 
@@ -25,22 +29,32 @@ namespace BALL
 		return (int)number_read;
 	}
 
+#ifdef BALL_XDRREC_CREATE_VOID_CHAR_INT
 	extern "C" int XDRWriteStream_(void* stream_ptr, char* buffer, int number)
+#else
+	extern "C" int XDRWriteStream_(void* stream_ptr, void* buffer, unsigned int number)
+#endif
 	{
 		ostream& os = *(ostream*)stream_ptr;
 		
 		if (stream_ptr != 0)
 		{
-			os.write(buffer, number);
+			char* buffer_ptr = (char*)buffer;
+			os.write(buffer_ptr, number);
 		}
 
 		Log.info() << "wrote " << number << " bytes." << endl;
 		return number;
 	}
 
-	extern "C" int XDRError_(void*, char*, int)
+
+#ifdef BALL_XDRREC_CREATE_VOID_CHAR_INT
+	extern "C" int XDRError_(void* , char*, int)
+#else
+	extern "C" int XDRError_(void* , void*, unsigned int)
+#endif
 	{
-		Log.error() << "XDRPersistenceManager: error wrong access mode fro XDR stream." << endl;
+		Log.error() << "XDRPersistenceManager: error wrong access mode for XDR stream." << endl;
 
 		return 0;
 	}
@@ -90,7 +104,7 @@ namespace BALL
 			Log.error() << "XDRPersistenceManager::writeStreamHeader: no output stream defined!" << std::endl;
 			return;
 		}
-		const caddr_t ostr_ptr = (const caddr_t)ostr_;
+		const caddr_t ostr_ptr = (caddr_t)ostr_;
 		xdrrec_create(&xdr_out_, 0, 0, ostr_ptr, XDRError_, XDRWriteStream_);
 		xdr_out_.x_op = XDR_ENCODE;
 		put(STREAM_HEADER);
@@ -105,7 +119,7 @@ namespace BALL
 			Log.error() << "XDRPersistenceManager::initializeOutputStream: no output stream defined!" << std::endl;
 			return;
 		}
-		const caddr_t ostr_ptr = (const caddr_t)ostr_;
+		const caddr_t ostr_ptr = (caddr_t)ostr_;
 		xdrrec_create(&xdr_out_, 0, 0, ostr_ptr, XDRError_, XDRWriteStream_);
 		xdr_out_.x_op = XDR_ENCODE;
 		Log.info() << "initialized output stream." << endl;
@@ -118,7 +132,7 @@ namespace BALL
 			Log.error() << "XDRPersistenceManager::initializeInputStream: no input stream defined!" << std::endl;
 			return;
 		}
-		const caddr_t istr_ptr = (const caddr_t)istr_;
+		const caddr_t istr_ptr = (caddr_t)istr_;
 		xdrrec_create(&xdr_in_, 0, 0, istr_ptr, XDRReadStream_, XDRError_);
 		xdr_in_.x_op = XDR_DECODE;
 		Log.info() << "initialized output stream." << endl;
