@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.6 2003/10/17 16:17:37 amoll Exp $
+// $Id: cartoonModel.C,v 1.7 2003/10/18 11:08:26 amoll Exp $
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
@@ -156,7 +156,7 @@ namespace BALL
 
 			Vector3 normal = peptide_normals[0];
 
-			// maybe this cases should not happen, but they do...
+			// maybe these cases should not happen, but they do...
 			if (!Maths::isZero(normal.getSquareLength())) normal.normalize();
 			if (!Maths::isZero(right.getSquareLength()))  right.normalize();
 
@@ -346,7 +346,7 @@ namespace BALL
 
 			last_point_ = spline_[i*9+6];
 			for (Position k=7; k<=9; k++)
-				buildGraphicalRepresentation_(spline_[i*9+k], spline_vector_[i].getColor());
+				buildGraphicalRepresentation_(spline_[i*9+k], spline_vector_[i].getAtom());
 
 			last_point_ = last->getPosition();
 		}
@@ -382,18 +382,17 @@ namespace BALL
 			tube->setRadius(2.4);
 			tube->setVertex1(first->getPosition());
 			tube->setVertex2(last->getPosition());
-			ColorRGBA color(1.0,0,0);
-			tube->setColor(color);
+			tube->setComposite(&ss);
 			geometric_objects_.push_back(tube);
 
 			Disc* disc = new Disc( Circle3(first->getPosition(), Vector3(first->getPosition() - last->getPosition()), 2.4));
 			if (!disc) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Disc));
-			disc->setColor(color);
+			disc->setComposite(&ss);
 			geometric_objects_.push_back(disc);
 
 			disc = new Disc(Circle3(last->getPosition(), Vector3(last->getPosition() - first->getPosition() ), 2.4));
 			if (!disc) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Disc));
-			disc->setColor(color);
+			disc->setComposite(&ss);
 			geometric_objects_.push_back(disc);
 
 			Position p1=0, p2=0;
@@ -473,8 +472,8 @@ namespace BALL
 					{
 						buildGraphicalRepresentation_(
 								spline_[(i+index)*9 + j], (j < 5) ? 
-								spline_vector_[i+index].getColor() : 
-								spline_vector_[i+index+1].getColor());
+								spline_vector_[i+index].getAtom() : 
+								spline_vector_[i+index+1].getAtom());
 					}
 				}
 			}
@@ -505,11 +504,8 @@ namespace BALL
 			{
 				if (it->getName() == "C")
 				{
-					/*
-					getColorProcessor()->operator() (&*it);
-					SplinePoint spline_point(it->getPosition(), getColorProcessor()->getColor());
+					SplinePoint spline_point(it->getPosition(), &*it);
 					spline_vector_.push_back(spline_point);
-					*/
 				}
 			}
 

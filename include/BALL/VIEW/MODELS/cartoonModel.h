@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.h,v 1.6 2003/10/16 06:27:41 oliver Exp $
+// $Id: cartoonModel.h,v 1.7 2003/10/18 11:08:44 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_CARTOONMODEL_H
@@ -74,7 +74,7 @@ namespace BALL
 			/** Finish method.
 					This method will be internally called from the processor mechanism when the processor
 					has finished processing the Composite tree.
-					All previously inserted Atom objects and their calculated colors
+					All previously inserted Atom objects 
 					(inserted in the method operator()) will be used to create a Cartoon.
 					\return bool true if the finish was successful, false otherwise
 					@exeception OutOfMemory thrown if the memory allocation failed
@@ -86,12 +86,7 @@ namespace BALL
 					Composite tree. If a Composite is of kind Atom and has the
 					substring <b>CA</b> in its name (this method collects only <b>CA</b>-atoms) than
 					that atom	is stored for later processing in the finish method.
-					The color for that Atom object is calculated with the ColorCalculator
-					object retrieved with the method getColorCalculator() and stored for later
-					generation of the Cartoon model.
 					\param  composite the Composite object that will be processed
-					\see    ColorCalculator
-					\see    getColorCalculator()
 			*/
 			virtual Processor::Result operator() (Composite& composite);
 
@@ -129,7 +124,6 @@ namespace BALL
 	};
 
 	} // namespace VIEW
-
 } // namespace BALL
 
 #endif // BALL_VIEW_MODELS_CARTOONMODEL_H
