@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.14 2002/01/26 21:37:21 oliver Exp $
+dnl    $Id: configure.in,v 1.15 2002/01/27 02:27:40 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -753,11 +753,27 @@ if test "${IS_GXX}" = "false" ; then
 	fi
 fi
 
+dnl
+dnl		Check for Intel C++ (if no GNU compiler found!)
+dnl
+if test "${IS_GXX}" = "false" -a "${IS_KCC}" = "false" ; then
+	AC_MSG_CHECKING(for Intel C++ compiler)
+	ICC=`${CXX} -V 2>&1 | ${SED} -n 1p | ${SED} "s/Intel(R) C++ Compiler.*/__INTELCC__/g" | egrep "^__INTELCC__$" | sed -n 1p`
+	if test "${ICC}" = "__INTELCC__" ; then
+		IS_INTELCC=true
+		AC_MSG_RESULT(yes)
+		CXX_NAME="icc"
+	else
+		IS_INTELCC=false
+		AC_MSG_RESULT(no)
+	fi
+fi
+
 dnl 
 dnl  	check for the Digital C++ compiler
 dnl
 dnl
-if test "${IS_GXX}" = false -a "${IS_KCC}" = false ; then
+if test "${IS_GXX}" = false -a "${IS_INTELCC}" = false -a "${IS_KCC}" = false ; then
 	AC_MSG_CHECKING(for Digital/Compaq C++ compiler)
 	DIGITAL_CXX=`${CXX} -V 2>/dev/null | ${GREP} "C++" | ${CUT} -d" " -f-2` 
 	if test "${DIGITAL_CXX}" = "DIGITAL C++" -o "${DIGITAL_CXX}" = "Compaq C++"; then
@@ -842,6 +858,32 @@ if test "${IS_KCC}" = true ; then
 	CXX_NAME="KCC"
 	VERSION_OUTPUT="KAI C++ ${CXX_VERSION}"
 	CXX_COMPILER_NAME="KCC"
+	
+	AC_MSG_RESULT(${VERSION_OUTPUT})
+
+	CXX_VERSION_1=`echo ${CXX_VERSION} | ${CUT} -d. -f1`
+	CXX_VERSION_LENGTH=`echo ${CXX_VERSION} | sed "s/[^.]//g" | wc -c`
+	if test "${CXX_VERSION_LENGTH}" -ge 2 ; then
+		CXX_VERSION_2=`echo ${CXX_VERSION} | ${CUT} -d. -f2`
+	fi
+	if test "${CXX_VERSION_LENGTH}" -ge 3 ; then
+		CXX_VERSION_3=`echo ${CXX_VERSION} | ${CUT} -d. -f3`
+	fi
+	if test "${CXX_VERSION_LENGTH}" -ge 4 ; then
+		CXX_VERSION_4=`echo ${CXX_VERSION} | ${CUT} -d. -f4`
+	fi
+fi
+
+dnl
+dnl identify the Intel CC version
+dnl
+if test "${IS_INTELCC}" = true ; then
+	AC_MSG_CHECKING(compiler version)
+	echo "int main(){}" > conftest.C
+	CXX_VERSION=`${CXX} -V conftest.C 2>&1| ${GREP} "Intel(R) C++" | ${SED} -n 1p | ${SED} "s/.*Version //" | ${CUT} -d" " -f1`
+	CXX_NAME="icc"
+	VERSION_OUTPUT="Intel C++ Compiler ${CXX_VERSION}"
+	CXX_COMPILER_NAME="icc"
 	
 	AC_MSG_RESULT(${VERSION_OUTPUT})
 
@@ -1097,6 +1139,35 @@ if test "${COMPILER_DONE}" != true -a "${IS_KCC}" = true ; then
 			CXX_NAME="${CXX_NAME}_V8"
 		fi
 	fi
+
+	COMPILER_DONE=true
+fi
+
+dnl
+dnl		Intel C++ specific options
+dnl
+if test "${COMPILER_DONE}" != true -a "${IS_INTELCC}" = true ; then
+	dnl		KAI C++ stores a list of instantiated templates
+	dnl		in directories called ti_files
+	dnl		make clean should remove these
+	TEMPLATE_DIR=""
+	AR="${CXX}"
+	DYNAR="${CXX}"
+	AROPTS="${AROPTS} -o"
+	DYNAROPTS="${DYNAROPTS} -o"
+	CXX_MAKEDEPEND="${CXX}"
+	MAKEDEP_CXX_OPTS="-M"
+	MAKEDEP_CXX_SUFFIX=" >.Dependencies"
+
+	CXXFLAGS="${CXXFLAGS} -KPIC"
+	
+	dnl		optimze as on highest level: this compiler 
+	CXXFLAGS_O="${CXXFLAGS_O} -O3 -ipo -unroll -openmp"
+	
+	dnl		avoid high level optimization to
+	dnl		get debuggable code...
+	CXXFLAGS_D="${CXXFLAGS_D} -g +K0 -w1"
+	CXXFLAGS_DI="${CXXFLAGS_DI}"
 
 	COMPILER_DONE=true
 fi
@@ -1908,7 +1979,7 @@ if test "${BALL_SOCKLEN_TYPE}" = "" ; then
 	AC_MSG_RESULT(could not find a matching type for socket length argument)
 	AC_MSG_RESULT(in call to getsockname)
 	AC_MSG_RESULT(please check the setting for BALL_SOCKLEN_TYPE in config.mak)
-	AC_MSG_RESULT(and set it to the type needed for the third arguemnt of  getsockname)
+	AC_MSG_RESULT(and set it to the type needed for the third argument of getsockname)
 	AC_MSG_RESULT()
 else
 	AC_MSG_RESULT($BALL_SOCKLEN_TYPE)

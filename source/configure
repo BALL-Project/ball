@@ -2680,7 +2680,23 @@ echo "${ECHO_T}no" >&6
 	fi
 fi
 
-if test "${IS_GXX}" = false -a "${IS_KCC}" = false ; then
+if test "${IS_GXX}" = "false" -a "${IS_KCC}" = "false" ; then
+	echo "$as_me:$LINENO: checking for Intel C++ compiler" >&5
+echo $ECHO_N "checking for Intel C++ compiler... $ECHO_C" >&6
+	ICC=`${CXX} -V 2>&1 | ${SED} -n 1p | ${SED} "s/Intel(R) C++ Compiler.*/__INTELCC__/g" | egrep "^__INTELCC__$" | sed -n 1p`
+	if test "${ICC}" = "__INTELCC__" ; then
+		IS_INTELCC=true
+		echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+		CXX_NAME="icc"
+	else
+		IS_INTELCC=false
+		echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+	fi
+fi
+
+if test "${IS_GXX}" = false -a "${IS_INTELCC}" = false -a "${IS_KCC}" = false ; then
 	echo "$as_me:$LINENO: checking for Digital/Compaq C++ compiler" >&5
 echo $ECHO_N "checking for Digital/Compaq C++ compiler... $ECHO_C" >&6
 	DIGITAL_CXX=`${CXX} -V 2>/dev/null | ${GREP} "C++" | ${CUT} -d" " -f-2`
@@ -2784,6 +2800,31 @@ echo $ECHO_N "checking compiler version... $ECHO_C" >&6
 	CXX_NAME="KCC"
 	VERSION_OUTPUT="KAI C++ ${CXX_VERSION}"
 	CXX_COMPILER_NAME="KCC"
+
+	echo "$as_me:$LINENO: result: ${VERSION_OUTPUT}" >&5
+echo "${ECHO_T}${VERSION_OUTPUT}" >&6
+
+	CXX_VERSION_1=`echo ${CXX_VERSION} | ${CUT} -d. -f1`
+	CXX_VERSION_LENGTH=`echo ${CXX_VERSION} | sed "s/^.//g" | wc -c`
+	if test "${CXX_VERSION_LENGTH}" -ge 2 ; then
+		CXX_VERSION_2=`echo ${CXX_VERSION} | ${CUT} -d. -f2`
+	fi
+	if test "${CXX_VERSION_LENGTH}" -ge 3 ; then
+		CXX_VERSION_3=`echo ${CXX_VERSION} | ${CUT} -d. -f3`
+	fi
+	if test "${CXX_VERSION_LENGTH}" -ge 4 ; then
+		CXX_VERSION_4=`echo ${CXX_VERSION} | ${CUT} -d. -f4`
+	fi
+fi
+
+if test "${IS_INTELCC}" = true ; then
+	echo "$as_me:$LINENO: checking compiler version" >&5
+echo $ECHO_N "checking compiler version... $ECHO_C" >&6
+	echo "int main(){}" > conftest.C
+	CXX_VERSION=`${CXX} -V conftest.C 2>&1| ${GREP} "Intel(R) C++" | ${SED} -n 1p | ${SED} "s/.*Version //" | ${CUT} -d" " -f1`
+	CXX_NAME="icc"
+	VERSION_OUTPUT="Intel C++ Compiler ${CXX_VERSION}"
+	CXX_COMPILER_NAME="icc"
 
 	echo "$as_me:$LINENO: result: ${VERSION_OUTPUT}" >&5
 echo "${ECHO_T}${VERSION_OUTPUT}" >&6
@@ -3025,6 +3066,26 @@ if test "${COMPILER_DONE}" != true -a "${IS_KCC}" = true ; then
 			CXX_NAME="${CXX_NAME}_V8"
 		fi
 	fi
+
+	COMPILER_DONE=true
+fi
+
+if test "${COMPILER_DONE}" != true -a "${IS_INTELCC}" = true ; then
+				TEMPLATE_DIR=""
+	AR="${CXX}"
+	DYNAR="${CXX}"
+	AROPTS="${AROPTS} -o"
+	DYNAROPTS="${DYNAROPTS} -o"
+	CXX_MAKEDEPEND="${CXX}"
+	MAKEDEP_CXX_OPTS="-M"
+	MAKEDEP_CXX_SUFFIX=" >.Dependencies"
+
+	CXXFLAGS="${CXXFLAGS} -KPIC"
+
+		CXXFLAGS_O="${CXXFLAGS_O} -O3 -ipo -unroll -openmp"
+
+			CXXFLAGS_D="${CXXFLAGS_D} -g +K0 -w1"
+	CXXFLAGS_DI="${CXXFLAGS_DI}"
 
 	COMPILER_DONE=true
 fi
@@ -8623,8 +8684,8 @@ echo "${ECHO_T}could not find a matching type for socket length argument" >&6
 echo "${ECHO_T}in call to getsockname" >&6
 	echo "$as_me:$LINENO: result: please check the setting for BALL_SOCKLEN_TYPE in config.mak" >&5
 echo "${ECHO_T}please check the setting for BALL_SOCKLEN_TYPE in config.mak" >&6
-	echo "$as_me:$LINENO: result: and set it to the type needed for the third arguemnt of  getsockname" >&5
-echo "${ECHO_T}and set it to the type needed for the third arguemnt of  getsockname" >&6
+	echo "$as_me:$LINENO: result: and set it to the type needed for the third argument of getsockname" >&5
+echo "${ECHO_T}and set it to the type needed for the third argument of getsockname" >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
 else
