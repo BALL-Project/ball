@@ -189,12 +189,6 @@
 						RelativePath="..\..\..\source\MOLVIEW\GUI\DIALOGS\atomPropertiesData.C">
 					</File>
 					<File
-						RelativePath="..\..\..\source\MOLVIEW\GUI\DIALOGS\contourSurfaceDialog.C">
-					</File>
-					<File
-						RelativePath="..\..\..\source\MOLVIEW\GUI\DIALOGS\contourSurfaceDialogData.C">
-					</File>
-					<File
 						RelativePath="..\..\..\source\MOLVIEW\GUI\DIALOGS\displayProperties.C">
 					</File>
 					<File
@@ -305,10 +299,10 @@
 					RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\atomProperties_moc.C">
 				</File>
 				<File
-					RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\contourSurfaceDialogData_moc.C">
+					RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\contourSurfaceDialog_moc.C">
 				</File>
 				<File
-					RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\contourSurfaceDialog_moc.C">
+					RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\countourSurfaceDialogData_moc.C">
 				</File>
 				<File
 					RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\displayPropertiesData_moc.C">
@@ -478,23 +472,13 @@
 						</FileConfiguration>
 					</File>
 					<File
-						RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\contourSurfaceDialogData.h">
+						RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\countourSurfaceDialogData.h">
 						<FileConfiguration
 							Name="Debug|Win32">
 							<Tool
 								Name="VCCustomBuildTool"
 								Description="Running MOC on $(InputFileName)"
-								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
-"
-								Outputs="$(InputDir)$(InputName)_moc.C"/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Release|Win32">
-							<Tool
-								Name="VCCustomBuildTool"
-								Description="Running MOC on $(InputFileName)"
-								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
-"
+								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;"
 								Outputs="$(InputDir)$(InputName)_moc.C"/>
 						</FileConfiguration>
 					</File>
@@ -605,9 +589,25 @@
 					</File>
 					<File
 						RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\openBruker1DFile.h">
+						<FileConfiguration
+							Name="Debug|Win32">
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="Running MOC on $(InputFileName)"
+								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;"
+								Outputs="$(InputDir)$(InputName)_moc.C"/>
+						</FileConfiguration>
 					</File>
 					<File
 						RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\openBruker2DFile.h">
+						<FileConfiguration
+							Name="Debug|Win32">
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="Running MOC on $(InputFileName)"
+								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;"
+								Outputs="$(InputDir)$(InputName)_moc.C"/>
+						</FileConfiguration>
 					</File>
 				</Filter>
 				<Filter
@@ -759,6 +759,17 @@ $(QTDIR)\bin\uic -o &quot;$(InputDir)\atomPropertiesData.C&quot; -impl &quot;..\
 $(QTDIR)\bin\uic -o &quot;$(InputDir)\atomPropertiesData.C&quot; -impl &quot;..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\atomPropertiesData.h&quot; &quot;$(InputPath)&quot;
 "
 						Outputs="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\atomPropertiesData.h;$(InputDir)atomPropertiesData.C"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\MOLVIEW\GUI\DIALOGS\contourSurfaceDialog.ui">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\countourSurfaceDialogData.h&quot; &quot;$(InputPath)&quot;"
+						Outputs="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\contourSurfaceDialogData.h;$(InputDir)contourSurfaceDialogData.C"/>
 				</FileConfiguration>
 			</File>
 			<File

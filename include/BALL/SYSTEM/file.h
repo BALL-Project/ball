@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.h,v 1.49 2003/04/22 17:54:33 oliver Exp $
+// $Id: file.h,v 1.50 2003/04/22 21:46:15 oliver Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -21,6 +21,10 @@
 #ifndef BALL_SYSTEM_FILESYSTEM_H
 #	include <BALL/SYSTEM/fileSystem.h>
 #endif
+
+#include <stdlib.h>                   // 'getenv'
+#include <sys/stat.h>         // 'stat', 'lstat'
+#include <stdio.h>                    // 'rename'
 
 #ifdef BALL_COMPILER_MSVC
 #	define S_ISREG _S_ISREG

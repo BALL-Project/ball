@@ -1372,6 +1372,9 @@
 					RelativePath="..\..\..\source\STRUCTURE\numericalSAS.C">
 				</File>
 				<File
+					RelativePath="..\..\..\source\STRUCTURE\peptideBuilder.C">
+				</File>
+				<File
 					RelativePath="..\..\..\source\STRUCTURE\peptides.C">
 				</File>
 				<File
@@ -2388,6 +2391,9 @@
 				</File>
 				<File
 					RelativePath="..\..\..\include\BALL\STRUCTURE\numericalSAS.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\STRUCTURE\peptideBuilder.h">
 				</File>
 				<File
 					RelativePath="..\..\..\include\BALL\STRUCTURE\peptides.h">

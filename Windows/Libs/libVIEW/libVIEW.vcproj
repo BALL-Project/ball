@@ -516,17 +516,7 @@
 							<Tool
 								Name="VCCustomBuildTool"
 								Description="Running MOC on $(InputFileName)"
-								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
-"
-								Outputs="$(InputDir)$(InputName)_moc.C"/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Release|Win32">
-							<Tool
-								Name="VCCustomBuildTool"
-								Description="Running MOC on $(InputFileName)"
-								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
-"
+								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;"
 								Outputs="$(InputDir)$(InputName)_moc.C"/>
 						</FileConfiguration>
 					</File>
@@ -537,17 +527,7 @@
 							<Tool
 								Name="VCCustomBuildTool"
 								Description="Running MOC on $(InputFileName)"
-								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
-"
-								Outputs="$(InputDir)$(InputName)_moc.C"/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Release|Win32">
-							<Tool
-								Name="VCCustomBuildTool"
-								Description="Running MOC on $(InputFileName)"
-								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
-"
+								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;"
 								Outputs="$(InputDir)$(InputName)_moc.C"/>
 						</FileConfiguration>
 					</File>
@@ -871,8 +851,8 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Running UIC on $(InputPath)"
-						CommandLine="$(QTDIR)\bin\uic -o &quot;..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\colorMeshDialogData.h&quot; &quot;$(InputPath)&quot;
-$(QTDIR)\bin\uic -o &quot;$(InputDir)\colorMeshDialogData.C&quot; -impl &quot;..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\colorMeshDialogData.h&quot; &quot;$(InputPath)&quot;
+						CommandLine="$(QTDIR)\bin\uic -o &quot;..\..\..\include\BALL\VIEW\GUI\DIALOGS\colorMeshDialogData.h&quot; &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\colorMeshDialogData.C&quot; -impl &quot;..\..\..\include\BALL\VIEW\GUI\DIALOGS\colorMeshDialogData.h&quot; &quot;$(InputPath)&quot;
 "
 						Outputs="..\..\..\include\BALL\VIEW\GUI\DIALOGS\colorMeshDialogData.h;$(InputDir)colorMeshDialogData.C"/>
 				</FileConfiguration>
@@ -885,6 +865,17 @@ $(QTDIR)\bin\uic -o &quot;$(InputDir)\colorMeshDialogData.C&quot; -impl &quot;..
 $(QTDIR)\bin\uic -o &quot;$(InputDir)\colorMeshDialogData.C&quot; -impl &quot;..\..\..\include\BALL\VIEW\GUI\DIALOGS\colorMeshDialogData.h&quot; &quot;$(InputPath)&quot;
 "
 						Outputs="..\..\..\include\BALL\VIEW\GUI\DIALOGS\colorMeshDialogData.h;$(InputDir)\colorMeshDialogData.C"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\VIEW\GUI\DIALOGS\pythonSettingsData.ui">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\colorMeshDialogData.h&quot; &quot;$(InputPath)&quot;"
+						Outputs="..\..\..\include\BALL\VIEW\GUI\DIALOGS\pythonSettingsData.h;$(InputDir)pythonSettingsData.C"/>
 				</FileConfiguration>
 			</File>
 		</Filter>

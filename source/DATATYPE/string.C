@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: string.C,v 1.43 2003/03/07 15:55:17 sneumann Exp $
+// $Id: string.C,v 1.44 2003/04/22 21:46:15 oliver Exp $
 
 #include <BALL/DATATYPE/string.h>
 #include <BALL/COMMON/limits.h>
@@ -200,10 +200,10 @@ namespace BALL
 	}
 
 #ifdef BALL_HAS_SSTREAM
-	String::String(stringstream& s)
+	String::String(std::stringstream& s)
 			throw()
 #else
-	String::String(strstream& s)
+	String::String(std::strstream& s)
 			throw()
 #endif
 		: string("")
