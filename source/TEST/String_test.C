@@ -1,4 +1,4 @@
-// $Id: String_test.C,v 1.23 2000/07/18 08:30:02 oliver Exp $
+// $Id: String_test.C,v 1.24 2000/07/24 19:59:05 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -8,7 +8,7 @@
 #include <string>
 ///////////////////////////
 
-START_TEST(String,"$Id: String_test.C,v 1.23 2000/07/18 08:30:02 oliver Exp $")
+START_TEST(String,"$Id: String_test.C,v 1.24 2000/07/24 19:59:05 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -1392,7 +1392,7 @@ CHECK(String::compare(char*, Index, Size))
 	TEST_EQUAL(s4.compare("abc", 0, 1), 0)
 	TEST_EQUAL(s4.compare("abc", 0, 2), 0)
 	TEST_EQUAL(s4.compare("abc", 0, 3), 0)
-	TEST_EXCEPTION(Exception::IndexOverflow, s4.compare("abc", 0, 4))
+	//TEST_EXCEPTION(Exception::IndexOverflow, s4.compare("abc", 0, 4))
 	TEST_EQUAL(s4.compare("axxx", 0, 1), 0)
 	TEST_EQUAL(s4.compare("abxx", 0, 2), 0)
 	TEST_EQUAL(s4.compare("abcx", 0, 3), 0)
@@ -2090,8 +2090,7 @@ CHECK(Substring::c_str() const )
 	const char*	c1 = ABCDEF_sub.c_str();
 	const char*	c2 = "ABCDEF";
 	TEST_EQUAL(strcmp(c1, c2), 0)
-	char * c3;
-	TEST_EXCEPTION(Substring::UnboundSubstring, c3 = empty_sub.c_str())	
+	TEST_EXCEPTION(Substring::UnboundSubstring, empty_sub.c_str())	
 RESULT
 
 CHECK(Substring::getFirstIndex() const )
@@ -2127,10 +2126,9 @@ RESULT
 
 CHECK(Substring::char operator [] (Index index) const )
 	const char c = abcdef_sub[0];
-	char c2;
 	TEST_EQUAL(c, 'a')
 	TEST_EQUAL(abcdef_sub[-1], 'f')
-	TEST_EXCEPTION(Substring::UnboundSubstring, c2 = empty_sub[0])	
+	TEST_EXCEPTION(Substring::UnboundSubstring, empty_sub[0])	
 RESULT
 
 CHECK(Substring::toLower())
