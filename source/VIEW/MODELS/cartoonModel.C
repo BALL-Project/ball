@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.54.2.33 2005/01/12 16:44:51 amoll Exp $
+// $Id: cartoonModel.C,v 1.54.2.34 2005/01/24 13:38:58 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -608,7 +608,11 @@ Processor::Result AddCartoonModel::operator() (Composite& composite)
 		}
 		else
 		{
+			Position start = ss_to_spline_start_[&ss];
+			buildGraphicalRepresentation_(last_spline_point_, (start	+ 1)* interpolation_steps_);
+
 			drawHelix_(ss);
+			last_spline_point_ = (start + ss_nr_splines_[&ss] - 1) * interpolation_steps_ - 1;
 		}
 	}
 	else
