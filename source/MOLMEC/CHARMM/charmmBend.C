@@ -1,0 +1,276 @@
+// $Id: charmmBend.C,v 1.1 2000/02/06 19:57:52 oliver Exp $
+
+#include <BALL/MOLMEC/CHARMM/charmmBend.h>
+#include <BALL/MOLMEC/CHARMM/charmm.h>
+#include <BALL/KERNEL/atom.h>
+#include <BALL/KERNEL/bond.h>
+
+using namespace std;
+
+namespace BALL 
+{
+
+	// default constructor
+	CharmmBend::CharmmBend()
+		:	ForceFieldComponent()
+	{	
+		// set component name
+		setName("CHARMM Bend");
+
+		setForceField(0);
+	}
+
+
+	// constructor
+	CharmmBend::CharmmBend(ForceField* force_field)
+		:	ForceFieldComponent(force_field)
+	{
+		// set component name
+		setName( "CHARMM Bend" );
+
+		setForceField(force_field);
+	}
+
+
+	// copy constructor
+	CharmmBend::CharmmBend(const CharmmBend&	component, bool deep)
+		:	ForceFieldComponent(component, deep)
+	{
+		bend_ = component.bend_;
+	}
+
+	// destructor
+	CharmmBend::~CharmmBend()
+	{
+	}
+
+
+	// setup the internal datastructures for the component
+	bool CharmmBend::setup()
+	{
+		// clear old bends:
+		bend_.clear();
+
+		if (getForceField() == 0) 
+		{
+			Log.level(LogStream::ERROR) << "CharmmBend::setup: component not bound to force field" << endl;
+			return false;
+		}
+
+		// extract parameter section (if necessary)
+		CharmmFF* charmm_force_field = dynamic_cast<CharmmFF*>(force_field_);
+		if ((charmm_force_field == 0) || !charmm_force_field->hasInitializedParameters())
+		{
+			bool result = false;
+			result = bend_parameters_.extractSection(getForceField()->getParameters(), "QuadraticAngleBend");
+
+			if (result == false) 
+			{
+				Log.level(LogStream::ERROR) << "cannot find section QuadraticAngleBend" << endl;
+				return false;
+			}
+		}
+
+		// retrieve all bend parameters
+		vector<Atom*>::const_iterator	atom_it = getForceField()->getAtoms().begin();
+		Atom::BondIterator it1;
+		Atom::BondIterator it2;
+		FFPSQuadraticAngleBend::QuadraticAngleBend	this_bend;
+		for ( ; atom_it != getForceField()->getAtoms().end(); ++atom_it) 
+		{
+			for (it2 = (*atom_it)->beginBond(); +it2 ; ++it2) 
+			{
+				for (it1 = it2, ++it1; +it1 ; ++it1 ) 
+				{
+				
+					this_bend.atom1 = (*it2).getPartner(**atom_it);
+					this_bend.atom2 = *atom_it;
+					this_bend.atom3 = (*it1).getPartner(**atom_it);
+
+					if (getForceField()->getUseSelection() == false ||
+					   (getForceField()->getUseSelection() == true && 
+					   (this_bend.atom1->isSelected() && this_bend.atom2->isSelected() && this_bend.atom3->isSelected())))
+					{ 
+
+						Atom::Type atom_type_a1 = this_bend.atom1->getType();
+						Atom::Type atom_type_a2 = this_bend.atom2->getType();
+						Atom::Type atom_type_a3 = this_bend.atom3->getType();
+
+						FFPSQuadraticAngleBend::Values values;
+
+						if (bend_parameters_.hasParameters(atom_type_a1, atom_type_a2, atom_type_a3))
+						{
+							bend_parameters_.assignParameters(values, atom_type_a1, atom_type_a2, atom_type_a3);
+						}
+						else if (bend_parameters_.hasParameters(atom_type_a3, atom_type_a2, atom_type_a1))
+						{
+							bend_parameters_.assignParameters(values, atom_type_a3, atom_type_a2, atom_type_a1);
+						}
+						else 
+						{
+							Log.level(LogStream::ERROR) << "cannot find bend parameters for atom types:"
+								<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a1) << "-"
+								<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a2) << "-"
+								<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a3) << endl;
+
+							values.k = 0.0;
+							values.theta0 = 0.0;
+						}
+
+						this_bend.values = values;
+						bend_.push_back(this_bend);
+					}
+				}
+			}
+		}
+
+		// everything went well
+		return true;
+	}
+
+	// calculates the current energy of this component
+	float CharmmBend::updateEnergy()
+	{
+		float length;
+		energy_ = 0;
+
+		for (Size i = 0 ; i < bend_.size() ; i++) 
+		{
+
+			if (getForceField()->getUseSelection() == false ||
+					(getForceField()->getUseSelection() == true  &&
+					(bend_[i].atom1->isSelected() || bend_[i].atom2->isSelected() || bend_[i].atom3->isSelected())))
+			{
+
+				Vector3 v1 = bend_[i].atom1->getPosition() - bend_[i].atom2->getPosition();
+				length = v1.getLength();
+
+				if (length == 0) 
+				{
+					continue;
+				}
+
+				float inverse_length = 1 / length;
+				v1 *= inverse_length;
+				Vector3 v2 = bend_[i].atom3->getPosition() - bend_[i].atom2->getPosition();
+				length = v2.getLength();
+
+				if (length == 0) 
+				{
+					continue;
+				}
+
+				inverse_length = 1/length;
+				v2 *= inverse_length;
+
+				float costheta = v1 * v2;
+				float theta;
+				if (costheta > 1.0) 
+				{	
+					theta = 0.0;
+				}
+				else if (costheta < -1.0) 
+				{
+					theta = Constants::PI;
+				}
+				else 
+				{
+					theta = acos(costheta);
+				}
+			
+
+				energy_ += bend_[i].values.k * (theta - bend_[i].values.theta0) * (theta - bend_[i].values.theta0);
+			}
+
+		}
+
+		return energy_;
+	}
+
+	// calculates and adds its forces to the current forces of the force field
+	void CharmmBend::updateForces()
+	{
+
+		float length;
+
+		for (Size i = 0; i < bend_.size(); i++) 
+		{
+			if (getForceField()->getUseSelection() == false ||
+					(getForceField()->getUseSelection()  == true  &&
+					(bend_[i].atom1->isSelected() || bend_[i].atom2->isSelected() || bend_[i].atom3->isSelected())))
+			{
+
+				// Calculate the vector between atom1 and atom2,
+				// test if the vector has length larger than 0 and normalize it
+
+				Vector3 v1 = bend_[i].atom1->getPosition() - bend_[i].atom2->getPosition();
+				length = v1.getLength();
+				if (length == 0) continue;
+				float inverse_length_v1 = 1/length;
+				v1 *= inverse_length_v1 ;
+
+				// Calculate the vector between atom3 and atom2,
+				// test if the vector has length larger than 0 and normalize it
+
+				Vector3 v2 = bend_[i].atom3->getPosition() - bend_[i].atom2->getPosition();
+				length = v2.getLength();
+				if (length == 0) continue;
+				float inverse_length_v2 = 1/length;
+				v2 *= inverse_length_v2;
+
+				// Calculate the cos of theta and then theta
+				float costheta = v1 * v2;
+				float theta;
+				if (costheta > 1.0) theta = 0.0;
+				else if (costheta < -1.0) theta = Constants::PI;
+				else theta = acos(costheta);
+
+				// unit conversion: kJ/(mol A) -> N
+				// kJ -> J: 1e3
+				// A -> m : 1e10
+				// J/mol -> mol: Avogadro
+				float factor = 1e13 / Constants::AVOGADRO * 2 * bend_[i].values.k * (theta - bend_[i].values.theta0);
+
+				// Calculate the cross product of v1 and v2, test if it has length unequal 0,
+				// and normalize it.
+
+				Vector3 cross = v1 % v2;
+				if ((length = cross.getLength()) != 0) 
+				{
+					cross *= (1/length);
+				} else {
+					continue;
+				}
+
+				Vector3 n1 = v1 % cross;
+				Vector3 n2 = v2 % cross; 
+				n1 *= factor * inverse_length_v1;
+				n2 *= factor * inverse_length_v2;
+
+				if (getForceField()->getUseSelection() == false)
+				{
+					bend_[i].atom1->getForce() -= n1;
+					bend_[i].atom2->getForce() += n1;
+					bend_[i].atom2->getForce() -= n2;
+					bend_[i].atom3->getForce() += n2;
+				} else {
+					if (bend_[i].atom1->isSelected()) 
+					{
+						bend_[i].atom1->getForce() -= n1;
+					}
+	
+					if (bend_[i].atom2->isSelected())
+					{
+						bend_[i].atom2->getForce() += n1;
+						bend_[i].atom2->getForce() -= n2;
+					}
+					if (bend_[i].atom3->isSelected())
+					{
+						bend_[i].atom3->getForce() += n2;
+					}
+				}
+			}
+		}
+	}
+
+} // namespace BALL 
