@@ -4,7 +4,10 @@
 #   Sitkoff, Sharp, and Honig: Accurate Calculation of Hydration Free Energies 
 #   Using Macroscopic Solvent Models, H. Phys. Chem, (1994), 98, 1978-1988
 #
-# $Id: PARSE-ab_initio.rul,v 1.1 2000/06/05 15:28:19 anker Exp $
+#  This parameter set uses charges that were determined by ab initio
+#  calculations
+#
+# $Id: PARSE-ab_initio.rul,v 1.2 2000/10/23 10:19:08 anker Exp $
 #
 [ChargeRules:H]
 ; -NH-CH=NH+-CH= (imidazolium) - NH hydrogen
