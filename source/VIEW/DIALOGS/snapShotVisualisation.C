@@ -1,14 +1,13 @@
 #include <BALL/VIEW/DIALOGS/snapShotVisualisation.h>
-#include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/MOLMEC/COMMON/snapShotManager.h>
 #include <BALL/FORMAT/trajectoryFile.h>
+
 #include <qlineedit.h>
 #include <qcheckbox.h>
 #include <qslider.h>
 #include <qpushbutton.h>
 #include <qradiobutton.h>
-
 #include <qprogressdialog.h>
 
 namespace BALL
@@ -16,8 +15,7 @@ namespace BALL
 	namespace VIEW
 	{
 
-SnapshotVisualisationDialog::SnapshotVisualisationDialog
-	(QWidget* parent,  const char* name)//, bool modal, WFlags fl)
+SnapshotVisualisationDialog::SnapshotVisualisationDialog(QWidget* parent,  const char* name)
 	: SnapshotVisualisationDialogData(parent, name),//, modal, fl),
 		ModularWidget(name)
 {
@@ -92,20 +90,22 @@ void SnapshotVisualisationDialog::lastSnapshotClicked()
 
 void SnapshotVisualisationDialog::animateClicked()
 {
+	error_ = false;
 	Size tempo = getEndSnapshot();
 	Size speed = animationSpeedSlider->value();
 	bool forward = true;
-	QProgressDialog progress( "SnapShot Visualisation", "Abort Animation", tempo, this, "progress", TRUE );
+	QProgressDialog progress("SnapShot Visualisation", "Abort Animation", tempo, 0, "progress", true);
 	
-	for(Size i = getStartSnapshot(); i < tempo;)
+	for (Size i = getStartSnapshot(); i < tempo && 
+			!error_ &&
+			!progress.wasCancelled(); )
 	{
-		progress.setProgress( i );
-		if ( progress.wasCancelled() )
-			break;
+		progress.setProgress(i);
 			
 		setCaption((String("CurrentSnapshot: ") + String(i)).c_str());
 		snapShotSlider->setValue(i);
 		update_();
+
 		if (export_PNG->isChecked())
 		{
 			SceneMessage* message = new SceneMessage(SceneMessage::EXPORT_PNG);
@@ -122,16 +122,16 @@ void SnapshotVisualisationDialog::animateClicked()
 		// speed things up after first snapshot is read
 		if (i == getStartSnapshot())
 		{
-			if (!snap_shot_manager_->applySnapShot(i)) return;
+			if (!snap_shot_manager_->applySnapShot(i)) break;
 		}
 		else
 		{
-			if (!snap_shot_manager_->applyNextSnapShot()) return;
+			if (!snap_shot_manager_->applyNextSnapShot()) break;
 		}
 
 		if (forward)
 		{
-			if (speed>=(tempo-i))
+			if (speed >= tempo - i)
 			{
 				i = tempo;
 				setCaption((String("CurrentSnapshot: ") + String(i)).c_str());
@@ -161,20 +161,24 @@ void SnapshotVisualisationDialog::animateClicked()
 				}
 			}
 			else
+			{
 				i += speed;
+			}
 		}
-		
 		else
+		{
 			if (speed<=i)
+			{
 				i -= speed;
+			}
 			else
 			{
 				i = 1;
 				forward = true;
 			}
+		}
 	}
 	
-	progress.setProgress( tempo );
 	setCaption("Snapshot Visualisation");
 }
 
@@ -194,43 +198,38 @@ void SnapshotVisualisationDialog::backward(Size nr)
 	if (nr > (Size)currentSnapshot->text().toInt()) 
 	{
 		firstSnapshotClicked();
-		return;
 	}
 
   Position tmpnr = (currentSnapshot->text().toInt()) - nr;
  
-  if (snap_shot_manager_->applySnapShot(tmpnr))
-	{
-		snapShotSlider->setValue(tmpnr);
-		tmp_.setNum(tmpnr);
-		update_();
-	}
-  else
+  if (!snap_shot_manager_->applySnapShot(tmpnr)) 
 	{
 		Log.error() << "Could not apply  snapshot" <<std::endl;
-	} 
+		error_ = true;
+	}
+
+	snapShotSlider->setValue(tmpnr);
+	tmp_.setNum(tmpnr);
+	update_();
 }
 
 void SnapshotVisualisationDialog::forward(Size nr)
 {
 	Size tmpnr = (currentSnapshot->text().toInt()) + nr;
-  	if (tmpnr >= snap_shot_manager_->getTrajectoryFile()->getNumberOfSnapShots())
-  	{
-  		lastSnapshotClicked();
-  	}
-	else
+  if (tmpnr >= snap_shot_manager_->getTrajectoryFile()->getNumberOfSnapShots())
+  {
+  	lastSnapshotClicked();
+  }
+	
+	if (!snap_shot_manager_->applySnapShot(tmpnr))
 	{
-		if (snap_shot_manager_->applySnapShot(tmpnr))
-		{
-			snapShotSlider->setValue(tmpnr);
-	  		tmp_.setNum(tmpnr);
-			update_();
-		}
-		else
-		{
-	  		Log.error() << "Could not apply  snapshot" <<std::endl;
-		} 
+	  Log.error() << "Could not apply  snapshot" << std::endl;
+		error_ = true;
 	}
+
+	snapShotSlider->setValue(tmpnr);
+	tmp_.setNum(tmpnr);
+	update_();
 }
 
 
@@ -274,6 +273,7 @@ void SnapshotVisualisationDialog::sliderMovedToPos()
 	else
 	{
 		Log.error() << "Could not apply  snapshot" <<std::endl;
+		error_ = true;
 	} 
 }
 
@@ -305,11 +305,11 @@ void SnapshotVisualisationDialog::snapShotInputTest()
 	String endSnap = endSnapshot->text().ascii();
 	String valid_char = "0123456789";
 	//test if input is valid
-	if(startSnap.size()!=0)
+	if (startSnap.size()!=0)
 	{
-		for(unsigned int i = 0; i!=startSnap.size(); i++)
+		for (Size i = 0; i!=startSnap.size(); i++)
 		{
-			if(valid_char.find(startSnap.substr(i,1)) == string::npos)
+			if (valid_char.find(startSnap.substr(i,1)) == string::npos)
 			{
 				//if written char is not a number, set string to old string
 				startSnap = startSnap.substr(0,(startSnap.size()-1)); 
@@ -318,11 +318,11 @@ void SnapshotVisualisationDialog::snapShotInputTest()
 			}
 		}
 	}
-	if(endSnap.size()!=0)
+	if (endSnap.size()!=0)
 	{
-		for(unsigned int i = 0; i!=endSnap.size(); i++)
+		for (Size i = 0; i!=endSnap.size(); i++)
 		{
-			if(valid_char.find(endSnap.substr(i,1)) == string::npos)
+			if (valid_char.find(endSnap.substr(i,1)) == string::npos)
 			{
 				//if written char is not a number, set string to old string
 				endSnap = endSnap.substr(0,(endSnap.size()-1)); 
@@ -348,8 +348,8 @@ void SnapshotVisualisationDialog::snapShotInputTest()
 	{
 		endSnapshot->setText(num_of_shots.c_str()); 
 	}
-	if (num_startsnap == 0)
-		startSnapshot->setText(String(1).c_str());
+
+	if (num_startsnap == 0) startSnapshot->setText(String(1).c_str());
 }
 
 void SnapshotVisualisationDialog::animationSpeedChanged()
@@ -360,24 +360,21 @@ void SnapshotVisualisationDialog::animationSpeedChanged()
 
 void SnapshotVisualisationDialog::checkNoLoop()
 {
-		if(!noLoopButton->isChecked())
-			noLoopButton->setChecked(true);
-		forwardLoopButton->setChecked(false);
-		rockLoopButton->setChecked(false);
+	if(!noLoopButton->isChecked()) noLoopButton->setChecked(true);
+	forwardLoopButton->setChecked(false);
+	rockLoopButton->setChecked(false);
 }
 void SnapshotVisualisationDialog::checkLoop()
 {
-		if(!forwardLoopButton->isChecked())
-			forwardLoopButton->setChecked(true);
-		noLoopButton->setChecked(false);
-		rockLoopButton->setChecked(false);
+	if(!forwardLoopButton->isChecked()) forwardLoopButton->setChecked(true);
+	noLoopButton->setChecked(false);
+	rockLoopButton->setChecked(false);
 }
 void SnapshotVisualisationDialog::checkRock()
 {
-		if(!rockLoopButton->isChecked())
-			rockLoopButton->setChecked(true);
-		noLoopButton->setChecked(false);
-		forwardLoopButton->setChecked(false);
+	if(!rockLoopButton->isChecked()) rockLoopButton->setChecked(true);
+	noLoopButton->setChecked(false);
+	forwardLoopButton->setChecked(false);
 }
 
 } } // namespace
