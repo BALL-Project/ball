@@ -1,4 +1,4 @@
-// $Id: forceField.h,v 1.6 2000/02/17 00:30:44 oliver Exp $
+// $Id: forceField.h,v 1.7 2000/03/26 12:43:14 oliver Exp $
 // Molecular Mechanics: general force field class
 
 #ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
@@ -26,6 +26,10 @@
 
 #ifndef BALL_MOLMEC_COMMON_PERIODIC_BOUNDARY_H
 #	include <BALL/MOLMEC/COMMON/periodicBoundary.h>
+#endif
+
+#ifndef BALL_MOLMEC_COMMON_ATOMVECTOR_H
+#	include <BALL/MOLMEC/COMMON/atomVector.h>
 #endif
 
 #include <vector>
@@ -182,9 +186,9 @@ namespace BALL
 		*/
 		Size	getNumberOfMovableAtoms() const;
 
-		/**	Returns  a pointer to the atom array
+		/**	Returns a reference to the atom vector
 		*/
-		const	vector<Atom*>&  getAtoms() const;
+		const	AtomVector&  getAtoms() const;
 
 		/**	Returns a pointer to the system
 		*/
@@ -236,13 +240,13 @@ namespace BALL
 		/**	Return the sum of energies of all registered force field components. 
 				No calculation will be performed. This method simply returns the 
 				last value for the total energy calculated by updateEnergy.
-				@return	float - energy in kJ/mol
+				@return	double - energy in kJ/mol
 		*/
-		float	getEnergy() const;
+		double getEnergy() const;
 
 		/**	Calculate the sum of energies of all force field components and returns its value.
 		*/
-		float	updateEnergy();
+		double	updateEnergy();
 
 
 		/**	Calculate the forces caused by each component and updates the current forces.
@@ -251,7 +255,7 @@ namespace BALL
 
 		/**	Calculates the RMS of the current gradient
 		*/
-		float	getRMSGradient() const;
+		double	getRMSGradient() const;
 
 		/**	Return the update frequency for pair lists etc.
 				This method is used by minimzers or the MD simulation to determine the number
@@ -300,7 +304,7 @@ namespace BALL
 
 		/*_	The atoms in the simulated system
 		*/
-		vector<Atom*>	atoms_;
+		AtomVector	atoms_;
 
 		/*_     An object containing the force field parameters read from a file
 		*/
@@ -316,7 +320,7 @@ namespace BALL
 
 		/*_	The total energy
 		*/
-		float	energy_;
+		double	energy_;
 		
 		/*_	The components of the force field
 		*/
