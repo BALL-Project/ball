@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.27 2003/09/18 12:51:42 amoll Exp $
+// $Id: message.h,v 1.28 2003/09/18 13:07:27 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -135,14 +135,23 @@ class CompositeMessage: public Message
 
 	enum Types
 	{
+		/// undefinded (default) type
 		UNDEFINED = -1,
+		/// a new composite to be added
 		NEW_COMPOSITE,
+		/// a composite to be removed
 		REMOVED_COMPOSITE,
+		/// update all datas for a composite (but not in the MolecularControl)
 		CHANGED_COMPOSITE,
+		/// update all datas for a composite
 		CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL,
+		/// selected a composite (e.g. per checkboxes in MolecularControl)
 		SELECTED_COMPOSITE,
+		/// deselected a composite (e.g. per checkboxes in MolecularControl)
 		DESELECTED_COMPOSITE,
+		/// center the camera on a composite
 		CENTER_CAMERA,
+		/// a new molecule
 		NEW_MOLECULE
 	};
 	/**	@name	Constructors and Destructors
