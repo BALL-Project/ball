@@ -1,0 +1,16 @@
+// $Id: qsar.doc,v 1.1 2001/12/16 23:22:29 oliver Exp $
+
+/**@name QSAR -- Qunatitative Structure Activity Relationship.
+		This chapter contains all relevant information on 
+		BALL classes related to QSAR methods.
+*/
+//@{
+
+	/**	@name	Molecular Descriptors
+	*/
+	//@{
+		//@Include: descriptor.h
+		//@Include:	simpleDescriptors.h
+	//@}
+
+//@}
