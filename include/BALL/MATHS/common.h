@@ -1,4 +1,4 @@
-// $Id: common.h,v 1.6 2000/04/02 16:39:42 amoll Exp $
+// $Id: common.h,v 1.7 2000/04/04 21:29:22 oliver Exp $
 
 #ifndef BALL_MATHS_COMPARISON_H
 #define BALL_MATHS_COMPARISON_H
@@ -123,7 +123,7 @@ namespace BALL
 
 		/**	Test if a number is finite.
 				@param	t the number
-				@return bool
+				@return bool, {\bf true} if {\tt t} is finite
 		*/
 		template <class T>
 		inline 
@@ -134,7 +134,7 @@ namespace BALL
 
 		/**	Test if a number is infinite.
 				@param	t the number
-				@return bool
+				@return bool, {\bf true} if {\tt t} equals {\tt inf} or {\tt -inf}
 		*/
 		template <class T>
 		inline 
@@ -145,7 +145,7 @@ namespace BALL
 
 		/**	Test if a value is not a number.
 				@param	t the number
-				@return bool
+				@return bool, {\bf true} if t equals {\tt nan}
 		*/
 		template <class T>
 		inline 
@@ -156,7 +156,7 @@ namespace BALL
 
 		/**	Test if a number is zero.
 				@param	t the number
-				@return bool
+				@return bool, {\bf true} if the absolute value of {\tt t} is below \Ref{Constants::EPSILON}
 		*/
 		template <class T>
 		inline 
@@ -167,7 +167,7 @@ namespace BALL
 
 		/**	Test if a number is not zero.
 				@param	t the number
-				@return bool
+				@return bool, {\bf true}, if the absolute value of {\tt t} is at leas \Ref{Constants::EPSILON}
 		*/
 		template <class T>
 		inline 
@@ -179,7 +179,7 @@ namespace BALL
 		/**	Test if a number is equal to an other.
 				@param	a the first number
 				@param	b the second number
-				@return bool
+				@return bool, {\bf true} if the absolute distance of {\tt a} and {\tt b} is below \Ref{Constants::EPSILON}
 		*/
 		template <class T1, class T2>
 		inline 
@@ -191,7 +191,7 @@ namespace BALL
 		/**	Test if a number is not equal to an other.
 				@param	a the first number
 				@param	b the second number
-				@return bool
+				@return bool, {\bf true} if the absolute distance of {\tt a} and {\tt b} is at least \Ref{Constants::EPSILON}
 		*/
 		template <class T1, class T2>
 		inline 
@@ -203,7 +203,7 @@ namespace BALL
 		/**	Test if a number is less compared to an other.
 				@param	a the first number
 				@param	b the second number
-				@return bool
+				@return bool, {\bf true} if {\tt a} is smaller than {\tt b}
 		*/
 		template <class T1, class T2>
 		inline 
@@ -215,7 +215,7 @@ namespace BALL
 		/**	Test if a number is less or equal compared to an other.
 				@param	a the first number
 				@param	b the second number
-				@return bool
+				@return bool, {\bf true} if {\tt a} is less or equal {\tt b}
 		*/
 		template <class T1, class T2>
 		inline 
@@ -224,10 +224,10 @@ namespace BALL
 			return (a - b < Constants::EPSILON);
 		}
 
-		/**	Test if a number is greater or equal compared to an other.
+		/**	Test if a number is greater or equal compared to another.
 				@param	a the first number
 				@param	b the second number
-				@return bool
+				@return bool, {\bf true} if {\tt a} is greater or equal than {\tt b}
 		*/
 		template <class T1, class T2>
 		inline 
@@ -239,7 +239,7 @@ namespace BALL
 		/**	Test if a number is greater compared to an other.
 				@param	a the first number
 				@param	b the second number
-				@return bool
+				@return bool, {\bf true} if {\tt a} is greater than {\tt b}
 		*/
 		template <class T1, class T2>
 		inline 
@@ -282,17 +282,17 @@ namespace BALL
 			return (Maths::isLess(a, b) ? -1 : Maths::isEqual(a, b) ? 0 : 1);
 		}
 
-		/**	Test if two numbers are near eachother.
+		/**	Test if two numbers are close each other.
 				@param	a the first number
 				@param	b the second number
-				@param	maxDiff the maximum allowed difference between the two numbers
-				@return bool
+				@param	max_diff the maximum allowed difference between the two numbers
+				@return bool, {\bf true} if the absolute distance between {\tt a} and {\tt b} is below {\tt max_diff}
 		*/
-		template <class T1, class T2, class T3>
+		template <class T>
 		inline 
-		bool isNear(const T1& a, const T2& b, const T3& maxDiff)
+		bool isNear(const T& a, const T& b, const T& max_diff)
 		{
-			return (Maths::isLessOrEqual( abs(abs(a) - abs(b)), abs(maxDiff) ) );
+			return (abs((double)a - (double)b) < abs((double)max_diff));
 		}
 
 	//@}

@@ -1,4 +1,4 @@
-// $Id: analyticalGeometry.h,v 1.22 2000/04/03 18:15:35 amoll Exp $
+// $Id: analyticalGeometry.h,v 1.23 2000/04/04 21:29:21 oliver Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -281,8 +281,8 @@ namespace BALL
 		return true;
 	}
 
-	/**	Solve a square equation of the form
-			a x^2 + b x + c = 0.
+	/**	Solve a quadratic equation of the form
+			a $x^2 + b x + c = 0$.
 			@param	a
 			@param	b 
 			@param	c 
@@ -291,7 +291,7 @@ namespace BALL
 			@return short the number of solutions (0 - 2)
 	*/
 	template <class T>
-	short	SolveSquaredEquality
+	short	SolveQuadraticEquation
 		(const T& a, const T& b, const T &c,
 		 T &x1, T &x2)
 	{
@@ -786,7 +786,7 @@ namespace BALL
 	{
 		T x1, x2;
 		short number_of_solutions 
-			= SolveSquaredEquality
+			= SolveQuadraticEquation
 					(line.d * line.d,
 					 (line.p - sphere.p) * line.d * 2,
 					 (line.p - sphere.p) * (line.p - sphere.p) - sphere.radius * sphere.radius,

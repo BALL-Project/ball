@@ -1,4 +1,4 @@
-// $Id: angle.h,v 1.20 2000/04/03 21:21:57 amoll Exp $
+// $Id: angle.h,v 1.21 2000/04/04 21:29:22 oliver Exp $
 
 #ifndef BALL_MATHS_ANGLE_H
 #define BALL_MATHS_ANGLE_H
@@ -280,51 +280,51 @@ namespace BALL
 
 		/**	Equality operator
 				@param angle the angle to compare with
-				@return bool {\bf true} if the two angles are equal
+				@return bool, {\bf true} if the two angles are equal
 		*/
 		bool operator == (const TAngle& angle) const;
 
 
 		/**	Inequality operator
 				@param angle the angle to compare with
-				@return bool {\bf true} if the two angles are not equal
+				@return bool, {\bf true} if the two angles are not equal
 		*/
 		bool operator != (const TAngle& angle) const;
 
 
 		/**	Is less operator.
 				@param angle the angle to compare with
-				@return bool
+				@return bool, {\bf true} if {\tt this} angle is smaller than {\tt value}
 		*/
 		bool operator <	(const TAngle& angle) const;
 
 		/**	Is less operator.
 				@param val the value to compare with
-				@return bool
+				@return bool, {\bf true} if {\tt this} angle is smaller than {\tt value}
 		*/
 		bool operator <	(const T& val) const;
 
 		/**	Is less or equal operator.
 				@param angle the angle to compare with
-				@return bool
+				@return bool, {\bf true} if {\tt this} angle is smaller or equal than {\tt value}
 		*/
 		bool operator <= (const TAngle& angle) const;
 
 		/**	Is greater or equal operator.
 				@param angle the angle to compare with
-				@return bool
+				@return bool, {\bf true} if {\tt this} angle is greater or equal than {\tt value}
 		*/
 		bool operator >=	(const TAngle& angle) const;
 
 		/**	Is greater operator.
 				@param angle the angle to compare with
-				@return bool
+				@return bool, {\bf true} if {\tt this} angle is greater than {\tt value}
 		*/
 		bool operator > (const TAngle& angle) const;
 
 		/**	Test if an angle ist equivalent
 				@param angle the angle to compare with
-				@return bool
+				@return bool, {\bf true} if {\tt this} angle is equal to {\tt value}
 		*/
 		bool isEquivalent(TAngle angle) const;
 		//@}
