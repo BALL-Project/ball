@@ -1,5 +1,5 @@
 %{
-	// $Id: check_test.l,v 1.8 2003/06/19 10:50:47 oliver Exp $
+	// $Id: check_test.l,v 1.9 2003/06/19 19:20:02 oliver Exp $
 	// C++ scanner
 
 	#define YY_NO_UNPUT 
@@ -478,6 +478,13 @@
 		type.erase();
 		name.erase();
 		pushType(CLASS);
+		countLine();
+		GOTO(ClassName);
+	}
+
+<FindMembers>typedef[ \n\t]*"struct"[ \t\n]+	{RULE
+		// struct definition
+		pushType(STRUCT);
 		countLine();
 		GOTO(ClassName);
 	}
