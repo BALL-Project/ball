@@ -1,4 +1,4 @@
-// $Id: amber.C,v 1.4 1999/09/07 11:49:50 len Exp $
+// $Id: amber.C,v 1.5 1999/09/08 14:08:22 oliver Exp $
 // Molecular Mechanics: Amber force field class
 
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -29,7 +29,7 @@ namespace BALL
 		: ForceField()
 	{
 		// set the force field name
-		setName( "Amber" );
+		setName("Amber");
 
 		// create the component list
 		insertComponent(new AmberStretch( this ));
@@ -43,7 +43,7 @@ namespace BALL
     : ForceField()
   {
 		// set the force field name
-		setName( "Amber" );
+		setName("Amber");
 
 		// create the component list
 		insertComponent(new AmberStretch( this ));
@@ -65,7 +65,7 @@ namespace BALL
     : ForceField()
   {
 		// set the force field name
-		setName( "Amber" );
+		setName("Amber");
 
 		// create the component list
 		insertComponent(new AmberStretch( this ));
@@ -106,7 +106,6 @@ namespace BALL
 
  
 		// open parameter file
-
 		Path    path;
 		String  filename(path.find("Amber/amber91.ini"));
 
