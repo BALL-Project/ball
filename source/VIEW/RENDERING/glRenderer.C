@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.18 2003/12/18 02:10:09 amoll Exp $
+// $Id: glRenderer.C,v 1.19 2004/01/13 19:09:09 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -282,8 +282,7 @@ namespace BALL
 		{
 			if (!display_lists_.has(&rep)) 
 			{
-//	 			Log.error() << "Could not draw Representation " << &rep << std::endl;
-				return;
+				buildDisplayListFor(rep);
 			}
 
 			if (rep.hasProperty(Representation::PROPERTY__HIDDEN))
@@ -300,6 +299,7 @@ namespace BALL
 		{
 			if (representation.hasProperty(Representation::PROPERTY__HIDDEN))
 			{
+				display_lists_.erase(&representation);
 				return true;
 			}
 
