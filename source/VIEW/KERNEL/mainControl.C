@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.158 2004/12/19 13:33:57 amoll Exp $
+// $Id: mainControl.C,v 1.158.2.1 2004/12/27 14:55:00 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -451,12 +451,18 @@ namespace BALL
 		{
 			// apply on own preferences tab
 			applyPreferences();
+			setPreferencesEnabled_(false);
 
 			// checks all modular widgets 
 			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
 			for (; it != modular_widgets_.end(); ++it)
 			{
 				(*it)->applyPreferences();
+			}
+
+			if (!updateOfRepresentationRunning())
+			{
+				setPreferencesEnabled_(true);
 			}
 		}
 
@@ -2048,6 +2054,11 @@ namespace BALL
 		{
 			setSelection_(c->getChild(p), hash_set, current);
 		}
+	}
+
+	void MainControl::setPreferencesEnabled_(bool state)
+	{
+		preferences_dialog_->ok_button->setEnabled(state);
 	}
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS

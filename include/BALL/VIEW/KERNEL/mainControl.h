@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.70 2004/12/13 22:43:59 amoll Exp $
+// $Id: mainControl.h,v 1.70.2.1 2004/12/27 14:54:55 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -810,6 +810,9 @@ namespace BALL
 			/** Show a busy cursor and a busy icon in the statusbar.
 			*/
 			void setBusyMode_(bool state);
+
+			//_
+			void setPreferencesEnabled_(bool state);
 
 			//_
 			FragmentDB fragment_db_;

@@ -1,7 +1,7 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.34 2004/12/09 12:58:49 amoll Exp $
+// $Id: primitiveManager.C,v 1.34.2.1 2004/12/27 14:55:01 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -370,6 +370,7 @@ void PrimitiveManager::finishedUpdate_()
 		update_running_ = false;
 		update_pending_ = false;
 		update_finished_.wakeAll();
+		main_control_->setPreferencesEnabled_(true);
 		return;
 	}
 
