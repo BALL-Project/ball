@@ -1,4 +1,4 @@
-// $Id: surfaceProcessor.h,v 1.7 2000/12/08 14:48:03 strobel Exp $
+// $Id: surfaceProcessor.h,v 1.8 2000/12/13 15:14:28 strobel Exp $
 
 #include <BALL/STRUCTURE/reducedSurface.h>
 #include <BALL/STRUCTURE/solventExcludedSurface.h>
@@ -68,21 +68,21 @@ namespace BALL
 	{
 		double old_epsilon = Constants::EPSILON;
 		Constants::EPSILON = 1e-4;
-		                probe_radius_ = 1.5;
+				probe_radius_ = 1.5;
 				/*cout << "probe radius:    "; cin >> probe_radius_;
 				spheres_.clear();
 				char* filename;
 				string name;
-				std::cout << "xyzr-file:       "; std::cin >> name;
+				cout << "xyzr-file:       "; cin >> name;
 				filename = (char*)malloc(sizeof(char)*(name.size()+1));
 				for (Position i = 0; i < name.size(); i++)
 				{
 					filename[i] = name[i];
 				}
 				filename[name.size()] = '\0';
-				std::cout << filename << "\n";
+				cout << filename << "\n";
 				float std_radius;
-				std::cout << "standart radius: "; std::cin >> std_radius;
+				cout << "standart radius: "; cin >> std_radius;
 				std::ifstream input(filename);
 				Position size;
 				input >> size;
@@ -100,13 +100,12 @@ namespace BALL
 					}
 				}*/
 				std::cerr << "initialising reduced surface ...\n";
-
 		ReducedSurface* rs = new ReducedSurface(spheres_,probe_radius_);
 				std::cerr << "... ok\ncomputing reduced surface ...\n";
 		rs->compute();
-				/*std::ofstream rsfile("ReducedSurface.log");
+				std::ofstream rsfile("ReducedSurface.log");
 				rsfile << *rs;
-				rsfile.close();*/
+				rsfile.close();
 				/*for (Position p = 0; p < rs->numberOfVertices(); p++)
 				{
 					Index atom = rs->getVertex(p)->getAtom();
@@ -140,9 +139,9 @@ namespace BALL
 		SolventExcludedSurface* ses = new SolventExcludedSurface(rs);
 				std::cerr << "... ok\ncomputing solvent excluded surface ...\n";
 		ses->get(rs);
-				/*std::ofstream sesfile("SolventExcludedSurface.log");
+				std::ofstream sesfile("SolventExcludedSurface.log");
 				sesfile << *ses;
-				sesfile.close();*/
+				sesfile.close();
 				std::cerr << "... ok\ntreating singularities ...\n";
 		//TreatSingularities(ses,probe_radius_);
 				density_ = 0.25;
@@ -151,7 +150,7 @@ namespace BALL
 				std::cerr << "... ok\n";
 				//cout << *surface;
 				std::cerr << "exporting surface ...\n";
-		surface_ = surface->exportSurface();
+		surface->exportSurface(surface_);
 				std::cerr << "... ok\ndeleting surface ...\n";
 		delete surface;
 				std::cerr << "... ok\ndeleting solvent excluded surface ...\n";
@@ -200,10 +199,3 @@ namespace BALL
 	}
 
 }
-
-
-
-
-
-
-

@@ -1,7 +1,7 @@
-// $Id: reducedSurface.h,v 1.6 2000/12/08 05:48:27 oliver Exp $
+// $Id: reducedSurface.h,v 1.7 2000/12/13 15:14:28 strobel Exp $
 
 //#define debug_rs
-//#define print std::cout
+//#define print cout
 
 #ifndef BALL_STRUCTURE_REDUCEDSURFACE_H
 #define BALL_STRUCTURE_REDUCEDSURFACE_H
@@ -343,7 +343,7 @@ namespace BALL
 					{
 						case 2 :	while (extendComponent(indices,new_vertices,vertices));
 											break;
-						case 3 :	//std::cout << "Start-Face gefunden: " << *start_face; //cin >> HALT;
+						case 3 :	//cout << "Start-Face gefunden: " << *start_face; //cin >> HALT;
 											getRSComponent(indices,start_face,new_vertices,vertices);
 											while (extendComponent(indices,new_vertices,vertices));
 											break;
@@ -356,7 +356,7 @@ namespace BALL
 					{
 						clear();
 						indices = all_indices;
-						std::cout << "\nProbeSphere berührt vier Atome, starte neu ...\n\n";
+						cout << "\nProbeSphere berührt vier Atome, starte neu ...\n\n";
 						compute();
 						return;
 					}
@@ -405,11 +405,11 @@ namespace BALL
 			//int counter = 0;
 			while (new_edges.size() > 0)
 			{
-				//std::cout << "new_edges enthält " << new_edges.size() << " Edges"; //cin >> HALT;
+				//cout << "new_edges enthält " << new_edges.size() << " Edges"; //cin >> HALT;
 				//std::ofstream file("rs.log");
 				//file << *this;
 				//file.close();
-				//std::cout << "RS besteht aus " << edges_.size() << " Edges und " << faces_.size() << " Faces";
+				//cout << "RS besteht aus " << edges_.size() << " Edges und " << faces_.size() << " Faces";
 				//cin >> HALT;
 				treatEdge(new_edges.front(),indices,new_edges,new_vertices,vertices);
 				//if (counter > 36)
@@ -435,11 +435,11 @@ namespace BALL
 			print << pre << "treat " << *edge << "\n";
 			pre += "  ";
 			#endif
-			//std::cout << "behandle " << *edge; //cin >> HALT;
+			//cout << "behandle " << *edge; //cin >> HALT;
 			TAngle<T> phi;
 			TSphere3<T> probe;
 			TRSFace<T>* start_face(edge->getFace(0));
-			//std::cout << "starting face: " << *start_face; //cin >> HALT;
+			//cout << "starting face: " << *start_face; //cin >> HALT;
 			#ifdef debug_rs
 			print << pre << "starting face: " << *start_face << "\n";
 			#endif
@@ -448,13 +448,13 @@ namespace BALL
 			TRSVertex<T>* vertex3(NULL);
 			Index atom1(vertex1->getAtom());
 			Index atom2(vertex2->getAtom());
-			//std::cout << "Vertex1: " << *vertex1 << " auf " << atom1 << "\n";
-			//std::cout << "Vertex2: " << *vertex2 << " auf " << atom2; //cin >> HALT;
+			//cout << "Vertex1: " << *vertex1 << " auf " << atom1 << "\n";
+			//cout << "Vertex2: " << *vertex2 << " auf " << atom2; //cin >> HALT;
 			Index atom3(thirdAtom(vertex1,vertex2,start_face,probe,phi));
-			//std::cout << "Also:\n";
-			//std::cout << "Vertex1: " << *vertex1 << " auf " << atom1 << "\n";
-			//std::cout << "Vertex2: " << *vertex2 << " auf " << atom2 << "\n";
-			//std::cout << "Vertex3 auf " << atom3; //cin >> HALT;
+			//cout << "Also:\n";
+			//cout << "Vertex1: " << *vertex1 << " auf " << atom1 << "\n";
+			//cout << "Vertex2: " << *vertex2 << " auf " << atom2 << "\n";
+			//cout << "Vertex3 auf " << atom3; //cin >> HALT;
 			if (atom3 == -1)
 			{
 				throw Exception::GeneralException(__FILE__,__LINE__,"CanNotTreatEdge","no third atom found");
@@ -465,9 +465,9 @@ namespace BALL
 			TSphere3<T> sphere1(atom_[atom1]);
 			TSphere3<T> sphere2(atom_[atom2]);
 			TSphere3<T> sphere3(atom_[atom3]);
-			//std::cout << "Atom1: " << sphere1 << "\n";
-			//std::cout << "Atom2: " << sphere2 << "\n";
-			//std::cout << "Atom3: " << sphere3; //cin >> HALT;
+			//cout << "Atom1: " << sphere1 << "\n";
+			//cout << "Atom2: " << sphere2 << "\n";
+			//cout << "Atom3: " << sphere3; //cin >> HALT;
 			// build a new face and two new edges
 			vertex3 = new TRSVertex<T>(atom3);
 			TRSEdge<T>* edge1;
@@ -475,35 +475,35 @@ namespace BALL
 			TRSFace<T>* new_face
 					= new TRSFace<T>(vertex1,vertex2,vertex3,NULL,NULL,NULL,
 													 probe.p,getFaceNormal(sphere1,sphere2,sphere3,probe),false,-1);
-			//std::cout << "neuer Vertex: " << *vertex3; //cin >> HALT;
-			//std::cout << "neue Face: " << *new_face; //cin >> HALT;
+			//cout << "neuer Vertex: " << *vertex3; //cin >> HALT;
+			//cout << "neue Face: " << *new_face; //cin >> HALT;
 			#ifdef debug_rs
 			print << pre << "face " << *new_face << " gebaut\n";
 			#endif
-			//std::cout << "Teste, ob face schon existiert"; //cin >> HALT;
+			//cout << "Teste, ob face schon existiert"; //cin >> HALT;
 			TRSFace<T>* test = faceExists(new_face,vertices[vertex1->getAtom()]);
-			//std::cout << "Test erfolgreich"; //cin >> HALT;
+			//cout << "Test erfolgreich"; //cin >> HALT;
 			if (test == NULL)
 			{
-				//std::cout << "Face existiert noch nicht"; //cin >> HALT;
+				//cout << "Face existiert noch nicht"; //cin >> HALT;
 				vertex3->setIndex(vertices_.size());
 				vertices_.push_back(vertex3);
 				indices.remove(atom3);
 				new_vertices.push_back(vertex3);
-				//std::cout << "Vertex3 in vertices_ gepusht"; //cin >> HALT;
+				//cout << "Vertex3 in vertices_ gepusht"; //cin >> HALT;
 				vertices[atom3].push_back(vertex3);
-				//std::cout << "Vertex3 in vertices[" << atom3 << "] gepusht"; //cin >> HALT;
+				//cout << "Vertex3 in vertices[" << atom3 << "] gepusht"; //cin >> HALT;
 				edge1 = new TRSEdge<T>();
 				edge2 = new TRSEdge<T>();
-				//std::cout << "zwei neue Edges erzeugt"; //cin >> HALT;
+				//cout << "zwei neue Edges erzeugt"; //cin >> HALT;
 				updateFaceAndEdges(vertex1,vertex2,vertex3,probe,6,new_face,edge,edge1,edge2);
 				new_face->setIndex(faces_.size());
 				faces_.push_back(new_face);
-				//std::cout << "Face und Edges geupdatet:\n";
-				//std::cout << *new_face << "\n";
-				//std::cout << *edge << "\n";
-				//std::cout << *edge1 << "\n";
-				//std::cout << *edge2; //cin >> HALT;
+				//cout << "Face und Edges geupdatet:\n";
+				//cout << *new_face << "\n";
+				//cout << *edge << "\n";
+				//cout << *edge1 << "\n";
+				//cout << *edge2; //cin >> HALT;
 				vertex1->pushFace(new_face);
 				vertex2->pushFace(new_face);
 				vertex3->pushFace(new_face);
@@ -513,10 +513,10 @@ namespace BALL
 				vertex3->pushEdge(edge2);
 				new_edges.push_back(edge1);
 				new_edges.push_back(edge2);
-				//std::cout << "Vertices geupdatet:\n";
-				//std::cout << *vertex1 << "\n";
-				//std::cout << *vertex2 << "\n";
-				//std::cout << *vertex3; //cin >> HALT;
+				//cout << "Vertices geupdatet:\n";
+				//cout << *vertex1 << "\n";
+				//cout << *vertex2 << "\n";
+				//cout << *vertex3; //cin >> HALT;
 				#ifdef debug_rs
 				print << pre << "... geupdatet " << *new_face << "\n";
 				print << pre << "... in vertices_[" << vertex1->getIndex() << "], vertices_["
@@ -530,7 +530,7 @@ namespace BALL
 				#ifdef debug_rs
 				print << pre << "... existiert schon: " << *test << "\n";
 				#endif
-				//std::cout << "Face existiert schon: " << *test; //cin >> HALT;
+				//cout << "Face existiert schon: " << *test; //cin >> HALT;
 				Index i = 0;
 				TRSEdge<T>* test_edge(test->getEdge(0));
 				while (test_edge->similar(*edge) == false)
@@ -543,92 +543,92 @@ namespace BALL
 					}
 					test_edge = test->getEdge(i);
 				}
-				//std::cout << "Korrespondierende Edge gefunden: " << *test_edge; //cin >> HALT;
+				//cout << "Korrespondierende Edge gefunden: " << *test_edge; //cin >> HALT;
 				TRSVertex<T>* test_vertex1 = test_edge->getVertex(0);
 				TRSVertex<T>* test_vertex2 = test_edge->getVertex(1);
-				//std::cout << "Vertices der korrespondierenden Edge:\n";
-				//std::cout << "  " << *test_vertex1 << "\n";
-				//std::cout << "  " << *test_vertex2; //cin >> HALT;
+				//cout << "Vertices der korrespondierenden Edge:\n";
+				//cout << "  " << *test_vertex1 << "\n";
+				//cout << "  " << *test_vertex2; //cin >> HALT;
 				if (test_vertex1->similar(*vertex1))
 				{
-					//std::cout << "Korrespondierende Vertices:\n";
-					//std::cout << *vertex1 << " - " << *test_vertex1 << "\n";
-					//std::cout << *vertex2 << " - " << *test_vertex2; //cin >> HALT;
+					//cout << "Korrespondierende Vertices:\n";
+					//cout << *vertex1 << " - " << *test_vertex1 << "\n";
+					//cout << *vertex2 << " - " << *test_vertex2; //cin >> HALT;
 					if (*vertex1 != *test_vertex1)
 					{
-						//std::cout << "erstes Paar verschieden, vereinige und ersetze"; //cin >> HALT;
+						//cout << "erstes Paar verschieden, vereinige und ersetze"; //cin >> HALT;
 						vertex1->join(*test_vertex1);
 						test_vertex1->substitute(vertex1);
 						vertices_[test_vertex1->getIndex()] = NULL;
 						new_vertices.remove(test_vertex1);
 						vertices[test_vertex1->getAtom()].remove(test_vertex1);
-						//std::cout << *vertex1; //cin >> HALT;
-						//std::cout << "lösche " << *test_vertex1; //cin >> HALT;
+						//cout << *vertex1; //cin >> HALT;
+						//cout << "lösche " << *test_vertex1; //cin >> HALT;
 						delete test_vertex1;
 					}
 					if (*vertex2 != *test_vertex2)
 					{
-						//std::cout << "zweites Paar verschieden, vereinige und ersetze"; //cin >> HALT;
+						//cout << "zweites Paar verschieden, vereinige und ersetze"; //cin >> HALT;
 						vertex2->join(*test_vertex2);
 						test_vertex2->substitute(vertex2);
 						vertices_[test_vertex2->getIndex()] = NULL;
 						new_vertices.remove(test_vertex2);
 						vertices[test_vertex2->getAtom()].remove(test_vertex2);
-						//std::cout << *vertex2; //cin >> HALT;
-						//std::cout << "lösche " << *test_vertex2; //cin >> HALT;
+						//cout << *vertex2; //cin >> HALT;
+						//cout << "lösche " << *test_vertex2; //cin >> HALT;
 						delete test_vertex2;
 					}
-					//std::cout << "lösche korrespondierende Edge aus Vertex1 und Vertex2"; //cin >> HALT;
+					//cout << "lösche korrespondierende Edge aus Vertex1 und Vertex2"; //cin >> HALT;
 					vertex1->deleteEdge(test_edge);
 					vertex2->deleteEdge(test_edge);
 				}
 				else
 				{
-					//std::cout << "Korrespondierende Vertices:\n";
-					//std::cout << *vertex1 << " - " << *test_vertex2 << "\n";
-					//std::cout << *vertex2 << " - " << *test_vertex1; //cin >> HALT;
+					//cout << "Korrespondierende Vertices:\n";
+					//cout << *vertex1 << " - " << *test_vertex2 << "\n";
+					//cout << *vertex2 << " - " << *test_vertex1; //cin >> HALT;
 					if (*vertex1 != *test_vertex2)
 					{
-						//std::cout << "erstes Paar verschieden, vereinige und ersetze"; //cin >> HALT;
+						//cout << "erstes Paar verschieden, vereinige und ersetze"; //cin >> HALT;
 						vertex1->join(*test_vertex2);
 						test_vertex2->substitute(vertex1);
 						vertices_[test_vertex2->getIndex()] = NULL;
 						new_vertices.remove(test_vertex2);
 						vertices[test_vertex2->getAtom()].remove(test_vertex2);
-						//std::cout << *vertex1; //cin >> HALT;
-						//std::cout << "lösche " << *test_vertex2; //cin >> HALT;
+						//cout << *vertex1; //cin >> HALT;
+						//cout << "lösche " << *test_vertex2; //cin >> HALT;
 						delete test_vertex2;
 					}
 					if (*vertex2 != *test_vertex1)
 					{
-						//std::cout << "zweites Paar verschieden, vereinige und ersetze"; //cin >> HALT;
+						//cout << "zweites Paar verschieden, vereinige und ersetze"; //cin >> HALT;
 						vertex2->join(*test_vertex1);
 						test_vertex1->substitute(vertex2);
 						vertices_[test_vertex1->getIndex()] = NULL;
 						new_vertices.remove(test_vertex1);
 						vertices[test_vertex1->getAtom()].remove(test_vertex1);
-						//std::cout << *vertex2; //cin >> HALT;
-						//std::cout << "lösche " << *test_vertex1; //cin >> HALT;
+						//cout << *vertex2; //cin >> HALT;
+						//cout << "lösche " << *test_vertex1; //cin >> HALT;
 						delete test_vertex1;
 					}
-					//std::cout << "lösche korrespondierende Edge aus Vertex1 und Vertex2"; //cin >> HALT;
+					//cout << "lösche korrespondierende Edge aus Vertex1 und Vertex2"; //cin >> HALT;
 					vertex1->deleteEdge(test_edge);
 					vertex2->deleteEdge(test_edge);
 				}
-				//std::cout << "ersetze korrespondierende Edge in existierender Face"; //cin >> HALT;
+				//cout << "ersetze korrespondierende Edge in existierender Face"; //cin >> HALT;
 				test->setEdge(i,edge);
-				//std::cout << *test; //cin >> HALT;
+				//cout << *test; //cin >> HALT;
 				#ifdef debug_rs
 				print << pre << i << ". edge ersetzt: " << *test << "\n";
 				#endif
-				//std::cout << "lösche korrespondierende Edge aus new_edges"; //cin >> HALT;
+				//cout << "lösche korrespondierende Edge aus new_edges"; //cin >> HALT;
 				new_edges.remove(test_edge);
 				delete new_face;
 				delete test_edge;
 				delete vertex3;
-				//std::cout << "erzeugte face gelöscht"; //cin >> HALT;
-				//std::cout << "korrespondierende Edge gelöscht"; //cin >> HALT;
-				//std::cout << "erzeugter vertex gelöscht"; //cin >> HALT;
+				//cout << "erzeugte face gelöscht"; //cin >> HALT;
+				//cout << "korrespondierende Edge gelöscht"; //cin >> HALT;
+				//cout << "erzeugter vertex gelöscht"; //cin >> HALT;
 				#ifdef debug_rs
 				print << pre << "konstruierte face gelöscht\n";
 				#endif
@@ -638,7 +638,7 @@ namespace BALL
 			#ifdef debug_rs
 			print << pre << "updating " << *edge << ":\n";
 			#endif
-			//std::cout << "update " << *edge; //cin >> HALT;
+			//cout << "update " << *edge; //cin >> HALT;
 			TCircle3<T> circle1;
 			TCircle3<T> circle2;
 			TCircle3<T> circle3;
@@ -653,7 +653,7 @@ namespace BALL
 			}
 			edge->set(vertex1,vertex2,start_face,new_face,circle1.p,circle1.radius,phi,
 								circle2,circle3,ip1,ip2,singular,edges_.size());
-			//std::cout << "erfolgreich"; //cin >> HALT;
+			//cout << "erfolgreich"; //cin >> HALT;
 			#ifdef debug_rs
 			print << pre << "... " << *edge << "\n";
 			#endif
@@ -663,8 +663,8 @@ namespace BALL
 			pre.replace(0,2,"");
 			print << pre << "end        // treat " << *edge << "\n";
 			#endif
-			//std::cout << "Edge aus new_edges gelöscht, in edges_ gepusht"; //cin >> HALT;
-			//std::cout << "Ergebnis:\n"
+			//cout << "Edge aus new_edges gelöscht, in edges_ gepusht"; //cin >> HALT;
+			//cout << "Ergebnis:\n"
 			//		 << *start_face << "\n  "
 			//		 << *start_face->getEdge(0) << "\n  "
 			//		 << *start_face->getEdge(1) << "\n  "

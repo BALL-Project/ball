@@ -1,11 +1,7 @@
-// $Id: triangulation.h,v 1.9 2000/12/08 05:48:28 oliver Exp $
+// $Id: triangulation.h,v 1.10 2000/12/13 15:14:29 strobel Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATION_H
 #define BALL_STRUCTURE_TRIANGULATION_H
-
-#ifndef BALL_MATHS_ANGLE_H
-#	include <BALL/MATHS/angle.h>
-#endif
 
 #ifndef BALL_STRUCTURE_SESVERTEX_H
 #	include <BALL/STRUCTURE/SESVertex.h>
@@ -19,12 +15,16 @@
 #	include <BALL/STRUCTURE/SESFace.h>
 #endif
 
+#ifndef BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
+#	include <BALL/STRUCTURE/solventExcludedSurface.h>
+#endif
+
 #ifndef BALL_STRUCTURE_TRIANGULATEDSURFACE_H
 #	include <BALL/STRUCTURE/triangulatedSurface.h>
 #endif
 
-#ifndef BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
-#	include <BALL/STRUCTURE/solventExcludedSurface.h>
+#ifndef BALL_MATHS_ANGLE_H
+#	include <BALL/MATHS/angle.h>
 #endif
 
 #ifndef BALL_MATHS_QUATERNION_H
@@ -45,13 +45,14 @@
 
 #include <vector>
 #include <list>
-#include <set>
 #include <fstream>
 #include <BALL/DATATYPE/string.h>
 
-
 namespace BALL
 {
+
+	//template <class T>
+	//typedef std::list< std::pair< Index,std::list<TTriangulatedSurface<T>::Edge*> > > Contour;
 
 	/**
 	*/
@@ -67,25 +68,36 @@ namespace BALL
 		TTriangulatedSurface<T>* probe = new TTriangulatedSurface<T>;
 		probe->icosaeder(false);
 		probe->refineSphere(0,false);
-		std::vector< TTriangulatedSurface<T>* > triangulated_toric_faces(ses->toric_faces.size(),NULL);
-		std::vector< TTriangulatedSurface<T>* >	triangulated_contact_faces;
-		std::vector< TTriangulatedSurface<T>* >	triangulated_spheric_faces;
-//		std::vector< Position > atom_number;
-//		std::vector< Position > probe_number;
-		std::vector< std::list< TTriangulatedSurface<T>::Point* > > toric_borders(ses->edges.size());
-		std::vector< std::set< TTriangulatedSurface<T>::Edge* > > contact_borders;
-		std::vector< std::set< TTriangulatedSurface<T>::Edge* > > spheric_borders;
-		std::vector< std::vector< TSESEdge<T>* > > contact_contours;
-		std::vector< std::vector< TSESEdge<T>* > > spheric_contours;
+		std::vector< TTriangulatedSurface<T>* > triangulated_toric_face(ses->toric_faces.size(),NULL);
+		std::vector< TTriangulatedSurface<T>* >	triangulated_contact_face;
+		std::vector< TTriangulatedSurface<T>* >	triangulated_spheric_face;
+		std::vector< std::list< TTriangulatedSurface<T>::Point* > > toric_contour(ses->edges.size());
+		//std::vector< Contour<T> > contact_contour;
+		std::vector< std::list< std::pair< Index,std::list<TTriangulatedSurface<T>::Edge*> > > > contact_contour;
+		//std::vector< Contour<T> > spheric_contour;
+		std::vector< std::list< std::pair< Index,std::list<TTriangulatedSurface<T>::Edge*> > > > spheric_contour;
+		std::vector< std::vector< TSESEdge<T>* > > contact_border;
+		std::vector< std::vector< TSESEdge<T>* > > spheric_border;
 		for (Position i = 0; i < ses->toric_faces.size(); i++)
 		{
 			if (ses->toric_faces[i] != NULL)
 			{
-				triangulated_toric_faces[i] = new TTriangulatedSurface<T>;
-				TriangulateToricFace(ses->toric_faces[i],ses,radius_of_probe,size,
-														 *triangulated_toric_faces[i],toric_borders);
-				*surface += (*triangulated_toric_faces[i]);
+				triangulated_toric_face[i] = new TTriangulatedSurface<T>;
+				TriangulateToricFace(ses->toric_faces[i],radius_of_probe,size,
+														 *triangulated_toric_face[i],toric_contour);
+				*surface += (*triangulated_toric_face[i]);
 			}
+		}
+		for (Position i = 0; i < ses->singular_edges.size(); i++)
+		{
+			TTriangulatedSurface<T>::Point* p = new TTriangulatedSurface<T>::Point;
+			p->p = ses->singular_edges[i]->vertex1->p;
+			p->n = p->p-ses->singular_edges[i]->circle.p;
+			toric_contour[ses->singular_edges[i]->index].push_back(p);
+			p = new TTriangulatedSurface<T>::Point;
+			p->p = ses->singular_edges[i]->vertex2->p;
+			p->n = p->p-ses->singular_edges[i]->circle.p;
+			toric_contour[ses->singular_edges[i]->index].push_back(p);
 		}
 		for (Position i = 0; i < ses->contact_faces.size(); i++)
 		{
@@ -93,32 +105,34 @@ namespace BALL
 			{
 				TSphere3<T> atom_(rs->getSphere(ses->contact_faces[i]->rsvertex->getAtom()));
 				TriangulateSphericFace(ses->contact_faces[i],atom_,true,// *atom,
-															 triangulated_contact_faces,contact_borders,contact_contours);
-//				TriangulateSphericFace(ses->contact_faces[i],atom_,true,// *atom,
-//															 triangulated_contact_faces,atom_number,contact_borders,contact_contours);
+															 triangulated_contact_face,contact_contour,contact_border);
 			}
 		}
 		for (Position i = 0; i < ses->spheric_faces.size(); i++)
 		{
 			TSphere3<T> probe_sphere(ses->spheric_faces[i]->rsface->getCenter(),radius_of_probe);
 			TriangulateSphericFace(ses->spheric_faces[i],probe_sphere,false,// *probe,
-														 triangulated_spheric_faces,spheric_borders,spheric_contours);
-//			TriangulateSphericFace(ses->spheric_faces[i],probe_sphere,false,// *probe,
-//														 triangulated_spheric_faces,probe_number,spheric_borders,spheric_contours);
+														 triangulated_spheric_face,spheric_contour,spheric_border);
 		}
-		for (Position i = 0; i < triangulated_contact_faces.size(); i++)
+		for (Position i = 0; i < triangulated_contact_face.size(); i++)
 		{
-std::cout << "c" << i << "\n";
-			*surface += (*triangulated_contact_faces[i]);
-			TVector3<T> center(rs->getSphere(ses->contact_faces[i]->rsvertex->getAtom()).p);
-			Sew(contact_borders[i],contact_contours[i],toric_borders,center,true,surface);
+					cout << "c " << i << "\n";
+			*surface += (*triangulated_contact_face[i]);
+					cout << "  ... hinzugefügt\n";
+			TSphere3<T> sphere(rs->getSphere(ses->contact_faces[i]->rsvertex->getAtom()));
+					cout << "  ... Mittelpunkt ermittelt\n";
+			SewFace(contact_contour[i],toric_contour,sphere,true,surface);
+					cout << "  ... genäht\n";
 		}
-		for (Position i = 0; i < triangulated_spheric_faces.size(); i++)
+		for (Position i = 0; i < triangulated_spheric_face.size(); i++)
 		{
-std::cout << "s" << i << "\n";
-			*surface += (*triangulated_spheric_faces[i]);
-			TVector3<T> center(ses->spheric_faces[i]->rsface->getCenter());
-			Sew(spheric_borders[i],spheric_contours[i],toric_borders,center,false,surface);
+					cout << "s " << i << "\n";
+			*surface += (*triangulated_spheric_face[i]);
+					cout << "  ... hinzugefügt\n";
+			TSphere3<T> sphere(ses->spheric_faces[i]->rsface->getCenter(),radius_of_probe);
+					cout << "  ... Mittelpunkt ermittelt\n";
+			SewFace(spheric_contour[i],toric_contour,sphere,false,surface);
+					cout << "  ... genäht\n";
 		}
 		return surface;
 	}
@@ -126,8 +140,7 @@ std::cout << "s" << i << "\n";
 
 	template <class T>
 	void TriangulateToricFace
-				(TSESFace<T>* face, TSolventExcludedSurface<T>* ses,
-				 const T& radius_of_probe, const T& size,
+				(TSESFace<T>* face, const T& radius_of_probe, const T& size,
 				 TTriangulatedSurface<T>& surface,
 				 std::vector< std::list< typename TTriangulatedSurface<T>::Point* > >& border)
 	{
@@ -136,108 +149,49 @@ std::cout << "s" << i << "\n";
 			TriangulateFreeToricFace(face,radius_of_probe,size,surface,border);
 			return;
 		}
-std::ofstream print("Toric.log");
-		TSESEdge<T>* edge0;
-		TSESEdge<T>* edge1;
-		TSESEdge<T>* edge2;
-		TSESEdge<T>* edge3;
-		TSESVertex<T>* p0;
-		TSESVertex<T>* p1;
-		TSESVertex<T>* p2;
-		TSESVertex<T>* p3;
-		Index i = 0;
-		while (face->edge[i]->type != 1)
+		if (face->rsedge->isSingular())
 		{
-			i++;
+			TriangulateSingularToricFace(face,radius_of_probe,size,surface,border);
+			return;
 		}
-		edge0 = face->edge[i];								// edge0 = first concave edge
-		i++;
-		while (face->edge[i]->type != 1)
-		{
-			i++;
-		}
-		edge2 = face->edge[i];								// edge2 = second concave edge
-		p0 = edge0->vertex1;
-		p1 = edge0->vertex2;
-		Index e;
-		if (face->getEdge(p1->index,edge2->vertex1->index,e))
-		{
-			edge1 = ses->edges[e];
-			p2 = edge2->vertex1;
-			p3 = edge2->vertex2;
-		}
-		else
-		{
-			if (face->getEdge(p1->index,edge2->vertex2->index,e))
-			{
-				edge1 = ses->edges[e];
-				p2 = edge2->vertex2;
-				p3 = edge2->vertex1;
-			}
-			else
-			{
-				// should never happen
-			}
-		}
-		if (face->getEdge(p0->index,p3->index,e))
-		{
-			edge3 = ses->edges[e];
-		}
-		else
-		{
-			// should never happen
-		}
-std::cout << *face << ":\n";
-std::cout << "  rsedge: " << *face->rsedge << "\n";
-std::cout << "  point0: " << *p0 << "\n";
-std::cout << "  point1: " << *p1 << "\n";
-std::cout << "  point2: " << *p2 << "\n";
-std::cout << "  point3: " << *p3 << "\n";
-std::cout << "  edge0:  " << *edge0 << "\n";
-std::cout << "  edge1:  " << *edge1 << "\n";
-std::cout << "  edge2:  " << *edge2 << "\n";
-std::cout << "  edge3:  " << *edge3 << "\n";
+				//std::ofstream print("Toric.log");
+		face->normalize(false);
+		TSESEdge<T>* edge0 = face->edge[0];
+		TSESEdge<T>* edge1 = face->edge[1];
+		TSESEdge<T>* edge2 = face->edge[2];
+		TSESEdge<T>* edge3 = face->edge[3];
+		TSESVertex<T>* p0 = face->vertex[0];
+		TSESVertex<T>* p1 = face->vertex[1];
+		TSESVertex<T>* p2 = face->vertex[2];
+		TSESVertex<T>* p3 = face->vertex[3];
 		Size number_of_segments = (int)Maths::round(face->rsedge->getPhi().toRadian()*edge3->circle.radius/size);
 		if (number_of_segments == 0)
 		{
 			number_of_segments++;
 		}
-std::cout << "number_of_segments: " << number_of_segments << "\n";
 		TAngle<T> psi(face->rsedge->getPhi().toRadian()/number_of_segments,true);
 		vector< TVector3<T> > edge3_segments;
 		vector< TVector3<T> > edge1_segments;
 		TVector3<T> normal((p0->p-edge3->circle.p)%(p3->p-edge3->circle.p));
-std::cout << "berechne Drechachse ... ";
 		if (Maths::isGreater(face->rsedge->getPhi().toRadian(),Constants::PI))
 		{
 			normal.negate();
-std::cout << "negiert ... ";
 		}
-std::cout << normal << "\n";
 		TCircle3<T> circle3(edge3->circle.p,normal,edge3->circle.radius);
 		TCircle3<T> circle1(edge1->circle.p,normal,edge1->circle.radius);
-std::cout << "partitioniere edge3:\n";
 		edge3_segments = PartitionOfCircle(circle3,p0->p,psi,number_of_segments);
 		edge3_segments.pop_back();
 		edge3_segments.push_back(p3->p);
-for (Position i = 0; i < edge3_segments.size(); i++)
-std::cout << "  " << edge3_segments[i] << (circle3.has(edge3_segments[i],true) ? " ... true\n" : " ... false\n");
-std::cout << "partitioniere edge1:\n";
 		edge1_segments = PartitionOfCircle(circle1,p1->p,psi,number_of_segments);
 		edge1_segments.pop_back();
 		edge1_segments.push_back(p2->p);
-for (Position i = 0; i < edge1_segments.size(); i++)
-std::cout << "  " << edge1_segments[i] << (circle1.has(edge1_segments[i],true) ? " ... true\n" : " ... false\n");
 		TCircle3<T> center_circle(face->rsedge->getCenterOfTorus(),
 															normal,
 															face->rsedge->getMajorRadiusOfTorus());
 		vector< TVector3<T> > centers;
-std::cout << "berechne Mittelpunkte:\n";
 		centers = PartitionOfCircle(center_circle,edge0->circle.p,psi,number_of_segments);
 		centers.pop_back();
 		centers.push_back(edge2->circle.p);
-for (Position i = 0; i < centers.size(); i++)
-std::cout << "  " << centers[i] << (center_circle.has(centers[i],true) ? " ... true\n" : " ... false\n");
 		BuildTriangles(face,edge0,edge1,edge2,edge3,centers,edge1_segments,edge3_segments,
 									 radius_of_probe,size,surface,border);
 		bool swap = false;
@@ -297,46 +251,128 @@ std::cout << "  " << centers[i] << (center_circle.has(centers[i],true) ? " ... t
 
 
 	template <class T>
-	void TriangulateSphericFace(TSESFace<T>* face, const TSphere3<T>& sphere,
-															bool out,
-//															const TTriangulatedSurface<T>& triangulated_sphere,
-															std::vector<TTriangulatedSurface<T>*>& triangulated_faces,
-															std::vector< std::set<typename TTriangulatedSurface<T>::Edge*> >& borders,
-															std::vector< std::vector< TSESEdge<T>* > >& contours)
+	void TriangulateSingularToricFace
+				(TSESFace<T>* face, const T& radius_of_probe, const T& size,
+				 TTriangulatedSurface<T>& surface,
+				 std::vector< std::list< typename TTriangulatedSurface<T>::Point* > >& border)
+	{
+		face->normalize(true);
+		Size number_of_segments
+				= (Size)Maths::round(face->rsedge->getPhi().toRadian()*face->edge[1]->circle.radius/size);
+		if (number_of_segments == 0)
+		{
+			number_of_segments++;
+		}
+		TAngle<T> psi(face->rsedge->getPhi().toRadian()/number_of_segments,true);
+		TVector3<T> normal((face->vertex[0]->p-face->edge[0]->circle.p)%
+											 (face->vertex[2]->p-face->edge[0]->circle.p));
+		if (Maths::isGreater(face->rsedge->getPhi().toRadian(),Constants::PI))
+		{
+			normal.negate();
+		}
+		Position offset = 0;
+		list<TTriangulatedSurface<T>::Triangle*>::iterator last = surface.triangles.end();
+		for (Position counter = 0; counter < 2; counter++)
+		{
+			TCircle3<T> circle(face->edge[0+offset]->circle.p,
+												 normal,
+												 face->edge[0+offset]->circle.radius);
+			vector< TVector3<T> > edge_segments;
+			edge_segments = PartitionOfCircle(circle,face->vertex[0+offset]->p,psi,number_of_segments);
+			edge_segments.pop_back();
+			edge_segments.push_back(face->vertex[0+offset]->p);
+			vector< TVector3<T> > point;
+			for (Position i = 0; i < number_of_segments; i++)
+			{
+				point.push_back(face->vertex[1+offset]->p);
+			}
+			TCircle3<T> center_circle(face->rsedge->getCenterOfTorus(),
+																normal,
+																face->rsedge->getMajorRadiusOfTorus());
+			vector< TVector3<T> > centers;
+			centers = PartitionOfCircle(center_circle,face->edge[1+offset]->circle.p,psi,number_of_segments);
+			centers.pop_back();
+			centers.push_back(face->edge[2+offset]->circle.p);
+			TSESEdge<T>* dummy(NULL);
+			BuildTriangles(face,face->edge[1+offset],face->edge[0+offset],face->edge[2+offset],dummy,
+										 centers,edge_segments,point,radius_of_probe,size,surface,border);
+			offset += 3;
+			TTriangulatedSurface<T>::Triangle* test_triangle;
+			if (last == surface.triangles.end())
+			{
+				test_triangle = surface.triangles.front();
+				last--;
+			}
+			else
+			{
+				last++;
+				test_triangle = *last;
+			}
+			bool swap = false;
+			TVector3<T> orth( (test_triangle->point[1]->p-test_triangle->point[0]->p) %
+												(test_triangle->point[2]->p-test_triangle->point[0]->p));
+			if (Maths::isGreater(orth*test_triangle->point[0]->p,orth*centers[0]))
+			{
+				swap = true;
+			}
+			if (swap == true)
+			{
+				std::list<TTriangulatedSurface<T>::Triangle*>::iterator t;
+				for (t = surface.triangles.begin(); t != surface.triangles.end(); t++)
+				{
+					TTriangulatedSurface<T>::Point* temp = (*t)->point[0];
+					(*t)->point[0] = (*t)->point[1];
+					(*t)->point[1] = temp;
+				}
+			}
+		}
+	}
+
+
+	template <class T>
+	void TriangulateSphericFace
+		(TSESFace<T>* face, const TSphere3<T>& sphere,
+		 bool out,
+		 //const TTriangulatedSurface<T>& triangulated_sphere,
+		 std::vector<TTriangulatedSurface<T>*>& triangulated_faces,
+		 //std::vector< Contour<T> > contour,
+		 std::vector< std::list< std::pair< Index,std::list<TTriangulatedSurface<T>::Edge*> > > >& contour,
+		 std::vector< std::vector< TSESEdge<T>* > >& border)
 	{
 		TTriangulatedSurface<T>* triangulated_face = new TTriangulatedSurface<T>;
-//																							 new TTriangulatedSurface<T>(triangulated_sphere);
+																							 //new TTriangulatedSurface<T>(triangulated_sphere);
 				triangulated_face->icosaeder(out);
 				triangulated_face->refineSphere(2,out);
 		triangulated_face->blow_up(sphere.radius);
 		triangulated_face->shift(sphere.p);
-		std::set<TTriangulatedSurface<T>::Edge*> border;
+		std::list< std::pair< Index,std::list<TTriangulatedSurface<T>::Edge*> > > this_contour;
+		//Contour<T> this_contour;
 		if (face->edge.size() > 0)
 		{
-			CutSphericFace(face,*triangulated_face,border);
+			CutSphericFace(face,*triangulated_face,this_contour);
 		}
 		triangulated_faces.push_back(triangulated_face);
-		borders.push_back(border);
-		contours.push_back(face->edge);
+		contour.push_back(this_contour);
+		border.push_back(face->edge);
 	}
 
 
-/*	template <class T>
+	/*template <class T>
 	void TriangulateSphericFace(TSESFace<T>* face, const TSphere3<T>& sphere,
 															bool out,
-//															const TTriangulatedSurface<T>& triangulated_sphere,
+															//const TTriangulatedSurface<T>& triangulated_sphere,
 															std::vector<TTriangulatedSurface<T>*>& triangulated_faces,
 															std::vector< Position >& sphere_number,
-															std::vector< std::set<typename TTriangulatedSurface<T>::Edge*> >& borders,
+															std::vector< HashSet<typename TTriangulatedSurface<T>::Edge*> >& borders,
 															std::vector< std::vector< TSESEdge<T>* > >& contours)
 	{
 		std::vector< std::vector< TSESEdge<T>* > > this_contours = GetFaceContours(face);
 		if (this_contours.size() == 0)
 		{
 			TTriangulatedSurface<T>* triangulated_face = new TTriangulatedSurface<T>;
-//																								 new TTriangulatedSurface<T>(triangulated_sphere);
-triangulated_face->icosaeder(out);
-triangulated_face->refineSphere(2,out);
+																								 //new TTriangulatedSurface<T>(triangulated_sphere);
+					triangulated_face->icosaeder(out);
+					triangulated_face->refineSphere(2,out);
 			triangulated_face->blow_up(sphere.radius);
 			triangulated_face->shift(sphere.p);
 			triangulated_faces.push_back(triangulated_face);
@@ -347,12 +383,12 @@ triangulated_face->refineSphere(2,out);
 			TSESFace<T>* face_part = new TSESFace<T>(*face);
 			face_part->edge = this_contours[c];
 			TTriangulatedSurface<T>* triangulated_face = new TTriangulatedSurface<T>;
-//																								 new TTriangulatedSurface<T>(triangulated_sphere);
-triangulated_face->icosaeder(out);
-triangulated_face->refineSphere(2,out);
+																								 //new TTriangulatedSurface<T>(triangulated_sphere);
+					triangulated_face->icosaeder(out);
+					triangulated_face->refineSphere(2,out);
 			triangulated_face->blow_up(sphere.radius);
 			triangulated_face->shift(sphere.p);
-			std::set<TTriangulatedSurface<T>::Edge*> border;
+			HashSet<TTriangulatedSurface<T>::Edge*> border;
 			CutSphericFace(face_part,*triangulated_face,border);
 			triangulated_faces.push_back(triangulated_face);
 			sphere_number.push_back(face->index);
@@ -364,111 +400,39 @@ triangulated_face->refineSphere(2,out);
 
 	template <class T>
 	void CutSphericFace(TSESFace<T>* face, TTriangulatedSurface<T>& surface,
-											std::set< typename TTriangulatedSurface<T>::Edge* >& border)
+											std::list< std::pair< Index,std::list<TTriangulatedSurface<T>::Edge*> > >& contour)
+											//Contour<T>& contour)
 	{
+		std::vector< TPlane3<T> > planes;
 		for (Position i = 0; i < face->edge.size(); i++)
 		{
 			if (face->edge[i] != NULL)
 			{
-				list< TTriangulatedSurface<T>::Point* >::iterator p;
-				for (p = surface.points.begin(); p != surface.points.end(); p++)
-				{
-					(*p)->state = 0;
-				}
-				TVector3<T> norm = face->edge[i]->circle.n;
-				if (face->orientation[i] == 1)
-				{
-					norm.negate();
-				}
-				T test_value = norm*face->edge[i]->circle.p;
-				list< TTriangulatedSurface<T>::Triangle* >::iterator t = surface.triangles.begin();
-				while (t != surface.triangles.end())
-				{
-					TTriangulatedSurface<T>::Triangle* triangle = *t;
-					t++;
-					Position del = 0;
-					Position offset = 1;
-					for (Position j = 0; j < 3; j++)
-					{
-						switch (triangle->point[j]->state)
-						{
-							case 0 :	if (Maths::isLess(norm*triangle->point[j]->p,test_value))
-												{
-													triangle->point[j]->state = 1;
-													del += offset;
-												}
-												else
-												{
-													triangle->point[j]->state = 2;
-												}
-												break;
-							case 1 :	del += offset;
-												break;
-							case 2 :	break;
-						}
-						offset *= 2;
-					}
-					if (del != 0)
-					{
-						surface.triangles.remove(triangle);
-						for (Position k = 0; k < 3; k++)
-						{
-							triangle->edge[k]->del(triangle);
-							triangle->point[k]->triangle.remove(triangle);
-						}
-						delete triangle;
-					}
-				}
+				TPlane3<T> plane(face->edge[i]->circle.p,face->edge[i]->circle.n);
+				planes.push_back(plane);
 			}
 		}
-		HashSet< TTriangulatedSurface<T>::Edge* > existing_edges;
-		HashSet< TTriangulatedSurface<T>::Point* > existing_points;
-		list< TTriangulatedSurface<T>::Triangle* >::iterator t;
-		for (t = surface.triangles.begin(); t != surface.triangles.end(); t++)
+		std::vector< list<TTriangulatedSurface<T>::Edge*> > contours;
+		surface.cut(planes,contours);
+		Position counter = 0;
+		for (Position i = 0; i < face->edge.size(); i++)
 		{
-			for (Position k = 0; k < 3; k++)
+			if (face->edge[i] != NULL)
 			{
-				TTriangulatedSurface<T>::Edge* edge = (*t)->edge[k];
-				existing_edges.insert(edge);
-				surface.edges.remove(edge);
-				if ((edge->triangle[0] == NULL) || (edge->triangle[1] == NULL))
-				{
-					border.insert(edge);
-				}
-				TTriangulatedSurface<T>::Point* point = (*t)->point[k];
-				existing_points.insert(point);
-				surface.points.remove(point);
+				pair< Position,std::list<TTriangulatedSurface<T>::Edge*> > this_contour;
+				this_contour.first = face->edge[i]->index;
+				this_contour.second = contours[counter];
+				contour.push_back(this_contour);
+				counter++;
 			}
-		}
-		while (surface.edges.size() > 0)
-		{
-			TTriangulatedSurface<T>::Edge* edge = surface.edges.front();
-			edge->point[0]->edge.remove(edge);
-			edge->point[1]->edge.remove(edge);
-			delete edge;
-			surface.edges.pop_front();
-		}
-		while (surface.points.size() > 0)
-		{
-			delete surface.points.front();
-			surface.points.pop_front();
-		}
-		HashSet< TTriangulatedSurface<T>::Edge* >::Iterator e;
-		for (e = existing_edges.begin(); e != existing_edges.end(); e++)
-		{
-			surface.edges.push_back(*e);
-		}
-		HashSet< TTriangulatedSurface<T>::Point* >::Iterator point;
-		for (point = existing_points.begin(); point != existing_points.end(); point++)
-		{
-			surface.points.push_back(*point);
 		}
 	}
 
 
 	template <class T>
-	vector< TVector3<T> > PartitionOfCircle(const TCircle3<T>& circle, const TVector3<T>& p0,
-																					const TAngle<T>& phi, Size number_of_segments)
+	vector< TVector3<T> > PartitionOfCircle
+			(const TCircle3<T>& circle, const TVector3<T>& p0,
+			 const TAngle<T>& phi, Size number_of_segments)
 	{
 		TVector4<T> p;
 		if (circle.has(p0,true))
@@ -486,8 +450,7 @@ triangulated_face->refineSphere(2,out);
 			p.normalize();
 			p *= circle.radius;
 		}
-		TVector3<T> axis(circle.n);
-		TQuaternion<T> rotate(axis,phi);
+		TQuaternion<T> rotate(circle.n,phi);
 		TMatrix4x4<T> rotation;
 		rotate.getRotationMatrix(rotation);
 		vector< TVector3<T> > back;
@@ -498,152 +461,6 @@ triangulated_face->refineSphere(2,out);
 			back.push_back(TVector3<T>(p.x,p.y,p.z)+circle.p);
 		}
 		return back;
-	}
-
-
-	template <class T>
-	bool BuildTriangles(TSESFace<T>* face,
-											TSESEdge<T>* edge0, TSESEdge<T>* edge1, TSESEdge<T>* edge2, TSESEdge<T>* edge3,
-											const std::vector< TVector3<T> >& centers,
-											const std::vector< TVector3<T> >& edge1_points,
-											const std::vector< TVector3<T> >& edge3_points,
-											const T& radius_of_probe, const T& size,
-											TTriangulatedSurface<T>& surface,
-											std::vector< std::list< typename TTriangulatedSurface<T>::Point* > >& border)
-	{
-std::ofstream print("Triangulation.log");
-print << "trianguliere " << *face << "\n";
-print << "edges:\n";
-print << "  " << edge0; if (edge0 != NULL) print << ": " << *edge0; print << "\n";
-print << "  " << edge1; if (edge1 != NULL) print << ": " << *edge1; print << "\n";
-print << "  " << edge2; if (edge2 != NULL) print << ": " << *edge2; print << "\n";
-print << "  " << edge3; if (edge3 != NULL) print << ": " << *edge3; print << "\n";
-print << "Punkte von edge1:\n";
-for (Position i = 0; i < edge1_points.size(); i++) print << "  " << edge1_points[i] << "\n";
-print << "Punkte von edge3:\n";
-for (Position i = 0; i < edge3_points.size(); i++) print << "  " << edge3_points[i] << "\n";
-print << "Mittelpunkte:\n";
-for (Position i = 0; i < centers.size(); i++) print << "  " << centers[i] << "\n";
-		TAngle<T> pi(Constants::PI,true);
-		TAngle<T> psi;
-		psi = getOrientedAngle(edge1_points[0]-centers[0],edge3_points[0]-centers[0],
-													 (edge1_points[0]-centers[0])%(edge3_points[0]-centers[0]))+pi;
-		Size number_of_triangles = (int)Maths::round(psi.toRadian()*radius_of_probe/size);
-		TAngle<T> phi(psi/number_of_triangles,true);
-		Size number_of_segments = centers.size()-1;
-		std::vector< TTriangulatedSurface<T>::Point* > points((number_of_segments+1)*(number_of_triangles+1));
-print << "berechne restliche Punkte:\n";
-		for (Position i = 0; i < centers.size(); i++)
-		{
-			TCircle3<T> circle(centers[i],
-												 (edge1_points[i]-centers[i])%(edge3_points[i]-centers[i]),
-												 radius_of_probe);
-print << "  Kreis: " << circle << "  von: " << edge1_points[i] << "  bis: " << edge3_points[i] << "\n";
-TPlane3<T> plane(centers[i],edge1_points[i],edge3_points[i]);
-print << "  Ebene durch " << centers[i] << ", " << edge1_points[i] << ", " << edge3_points[i] << ": "
-			<< plane << "\n";
-			vector< TVector3<T> > line;
-			line = PartitionOfCircle(circle,edge1_points[i],phi,number_of_triangles);
-			for (Position j = 0; j < line.size(); j++)
-			{
-				TTriangulatedSurface<T>::Point* point = new TTriangulatedSurface<T>::Point;
-				point->p = line[j];
-print << "    " << line[j] << "\n";
-				point->n = centers[i]-line[j];
-				point->index = i*(number_of_triangles+1)+j;
-				points[i*(number_of_triangles+1)+j] = point;
-				if (j == 0)
-				{
-					border[edge1->index].push_back(point);
-				}
-				else
-				{
-					if (j == line.size()-1)
-					{
-						border[edge3->index].push_back(point);
-					}
-				}
-				if ((i == 0) && (edge0 != NULL))
-				{
-					border[edge0->index].push_back(point);
-				}
-				else
-				{
-					if ((i == centers.size()-1) && (edge2 != NULL))
-					{
-						border[edge2->index].push_back(point);
-					}
-				}
-			}
-		}
-		std::vector< TTriangulatedSurface<T>::Triangle* > triangles(2*number_of_segments*number_of_triangles);
-print << "Punkte:\n";
-for (Position i = 0; i < points.size(); i++) print << "  " << i << " " << points[i]->p << "\n";
-print << "baue Dreiecke:\n";
-		for (Position i = 0; i < number_of_triangles; i++)
-		{
-			for (Position j = 0; j < number_of_segments; j++)
-			{
-				TTriangulatedSurface<T>::Triangle* t1 = new TTriangulatedSurface<T>::Triangle;
-					t1->point[0] = points[  j  *(number_of_triangles+1)+ i ];
-					t1->point[1] = points[  j  *(number_of_triangles+1)+i+1];
-					t1->point[2] = points[(j+1)*(number_of_triangles+1)+i+1];
-					points[  j  *(number_of_triangles+1)+ i ]->triangle.push_back(t1);
-					points[  j  *(number_of_triangles+1)+i+1]->triangle.push_back(t1);
-					points[(j+1)*(number_of_triangles+1)+i+1]->triangle.push_back(t1);
-					t1->index = 2*(number_of_segments*i+j);
-print << "  Dreieck" << 2*(number_of_segments*i+j) << ": " << j*(number_of_triangles+1)+i << ", "
-			<< (j+1)*(number_of_triangles+1)+i+1 << ", " << j*(number_of_triangles+1)+i+1 << "\n";
-					triangles[2*(number_of_segments*i+j)] = t1;
-				TTriangulatedSurface<T>::Triangle* t2 = new TTriangulatedSurface<T>::Triangle;
-					t2->point[0] = points[  j  *(number_of_triangles+1)+ i ];
-					t2->point[1] = points[(j+1)*(number_of_triangles+1)+i+1];
-					t2->point[2] = points[(j+1)*(number_of_triangles+1)+ i ];
-					points[  j  *(number_of_triangles+1)+ i ]->triangle.push_back(t2);
-					points[(j+1)*(number_of_triangles+1)+i+1]->triangle.push_back(t2);
-					points[(j+1)*(number_of_triangles+1)+ i ]->triangle.push_back(t2);
-					t2->index = 2*(number_of_segments*i+j)+1;
-print << "  Dreieck" << 2*(number_of_segments*i+j)+1 << ": " << j*(number_of_triangles+1)+i << ", "
-			<< (j+1)*(number_of_triangles+1)+i << ", " << (j+1)*(number_of_triangles+1)+i+1 << "\n";
-					triangles[2*(number_of_segments*i+j)+1] = t2;
-			}
-		}
-		if (edge0 == NULL)
-		{
-			Position offset = number_of_segments*(number_of_triangles+1);
-			for (Position i = 0; i < number_of_triangles; i++)
-			{
-				TTriangulatedSurface<T>::Triangle* t1 = new TTriangulatedSurface<T>::Triangle;
-					t1->point[0] = points[offset+ i ];
-					t1->point[1] = points[offset+i+1];
-					t1->point[2] = points[       i+1];
-					points[offset+ i ]->triangle.push_back(t1);
-					points[offset+i+1]->triangle.push_back(t1);
-					points[       i+1]->triangle.push_back(t1);
-					t1->index = triangles.size();
-print << "  Dreieck" << triangles.size() << ": " << offset+i << ", " << i+1 << ", " << offset+i+1 << "\n";
-					triangles.push_back(t1);
-				TTriangulatedSurface<T>::Triangle* t2 = new TTriangulatedSurface<T>::Triangle;
-					t2->point[0] = points[offset+ i ];
-					t2->point[1] = points[       i+1];
-					t2->point[2] = points[        i ];
-					points[offset+ i ]->triangle.push_back(t2);
-					points[       i+1]->triangle.push_back(t2);
-					points[        i ]->triangle.push_back(t2);
-					t2->index = triangles.size();
-print << "  Dreieck" << triangles.size() << ": " << offset+i << ", " << i << ", " << i+1 << "\n";
-					triangles.push_back(t2);
-			}
-		}
-		for (Position i = 0; i < points.size(); i++)
-		{
-			surface.points.push_back(points[i]);
-		}
-		for (Position i = 0; i < triangles.size(); i++)
-		{
-			surface.triangles.push_back(triangles[i]);
-		}
-		return true;
 	}
 
 
@@ -719,133 +536,56 @@ print << "  Dreieck" << triangles.size() << ": " << offset+i << ", " << i << ", 
 	}
 
 
-	template <class  T>
-	std::vector< std::vector< TSESEdge<T>* > > GetFaceContours(TSESFace<T>* face)
+	template <class T>
+	void SewFace(std::list< std::pair< Index,std::list<TTriangulatedSurface<T>::Edge*> > >& contour,
+							 std::vector< std::list<typename TTriangulatedSurface<T>::Point* > >& edge_contours,
+							 const TSphere3<T>& sphere, bool convex,
+							 TTriangulatedSurface<T>* surface)
 	{
-		std::vector< std::vector< TSESEdge<T>* > > back;
-		if (face->edge.size() == 0)
+		HashSet<Position> empty;
+		std::list< std::pair< Index,std::list<TTriangulatedSurface<T>::Edge*> > >::iterator c;
+		c = contour.begin();
+		while (c != contour.end())
 		{
-			return back;
-		}
-		std::list< TSESEdge<T>* > edges;
-		for (Position i = 0; i < face->edge.size(); i++)
-		{
-			edges.push_back(face->edge[i]);
-		}
-		while (edges.size() > 0)
-		{
-			std::vector< TSESEdge<T>* > contour;
-			TSESEdge<T>* first_edge = NULL;
-			while (first_edge == NULL)
+			if (c->second.size() == 0)
 			{
-				first_edge = edges.front();
-				edges.pop_front();
+				empty.insert(c->first);
+						cout << "    " << c->first << "\n    ... empty\n";
 			}
-			contour.push_back(first_edge);
-			TSESVertex<T>* first_vertex = first_edge->vertex1;
-			TSESVertex<T>* next_vertex = first_edge->vertex2;
-			while (next_vertex != first_vertex)
+			else
 			{
-				bool found = false;
-				std::list< TSESEdge<T>* >::iterator i = edges.begin();
-				while (found == false)
-				{
-					while ((*i) == NULL)
-					{
-						i++;
-					}
-					if ((*i)->vertex1 == next_vertex)
-					{
-						found = true;
-						contour.push_back(*i);
-						next_vertex = (*i)->vertex2;
-						edges.remove(*i);
-					}
-					else
-					{
-						if ((*i)->vertex2 == next_vertex)
-						{
-							found = true;
-							contour.push_back(*i);
-							next_vertex = (*i)->vertex1;
-							edges.remove(*i);
-						}
-						else
-						{
-							i++;
-						}
-					}
-				}
+				std::list< TTriangulatedSurface<T>::Point* > contour_in;
+				std::list< TTriangulatedSurface<T>::Point* > contour_out;
+						cout << "    " << c->first << "\n";
+				contour_out = edge_contours[c->first];
+						cout << "    ... " << contour_out.size() << " Punkte außen\n";
+						cout << "    ... " << c->second.size()+1 << " Punkte innen\n";
+				SortContour(c->second,contour_out,contour_in,(T)0);
+						cout << "    ... innen sortiert\n";
+				SewContours(contour_in,contour_out,sphere.p,convex,surface);
+						cout << "    ... genäht\n";
 			}
-			back.push_back(contour);
+			c++;
 		}
-		return back;
+		cout << "    ... behandle leere Contouren\n";
+		if (empty.size() == contour.size())
+		{
+			SewEmptyContour(contour,edge_contours,sphere,convex,surface);
+		}
+		else
+		{
+			//SewEmptyEdges(contour,edge_contours,empty,surface);
+		}
+		cout << "    ... fertig\n";
 	}
 
 
 	template <class T>
-	void Sew(std::set<typename TTriangulatedSurface<T>::Edge* > contour, std::vector< TSESEdge<T>* > border,
-					 std::vector< std::list<typename TTriangulatedSurface<T>::Point* > > edge_contours,
-					 const TVector3<T>& center, bool convex,
-					 TTriangulatedSurface<T>* surface)
+	void SewContours(list<TTriangulatedSurface<T>::Point*>& contour_in,
+									 list<TTriangulatedSurface<T>::Point*>& contour_out,
+									 const TVector3<T>& center, bool convex,
+									 TTriangulatedSurface<T>* surface)
 	{
-		if (contour.size() == 0)
-		{
-			throw Exception::GeneralException(__FILE__,__LINE__,"can't sew faces","no edge in contour");
-		}
-		std::list< TTriangulatedSurface<T>::Point* > contour_out;
-std::cout << "$1\n";
-		GetContour(border,edge_contours,contour_out);
-std::cout << "$2\n";
-		std::list< TTriangulatedSurface<T>::Point* > contour_in;
-std::cout << "$3\n";
-		SortContour(contour,contour_out.front(),*(++(contour_out.begin())),contour_in,(T)0);
-/*				Molecule* molecule = new Molecule;
-				std::list< TTriangulatedSurface<T>::Point* >::iterator it;
-				Atom* atom = new Atom;
-				atom->setElement(PTE[Element::O]);
-				atom->setPosition(contour_out.front()->p);
-				molecule->insert(*atom);
-				Position counter = 0;
-				for (it = ++contour_out.begin(); it != --contour_out.end(); it++)
-				{
-					atom = new Atom;
-					if ((counter & 1) == 1) atom->setElement(PTE[Element::H]); else atom->setElement(PTE[Element::P]);
-					atom->setPosition((*it)->p);
-					molecule->insert(*atom);
-					counter++;
-				}
-				atom = new Atom;
-				atom->setElement(PTE[Element::N]);
-				atom->setPosition(contour_out.back()->p);
-				molecule->insert(*atom);
-				atom = new Atom;
-				atom->setElement(PTE[Element::O]);
-				atom->setPosition(contour_in.front()->p);
-				molecule->insert(*atom);
-				counter = 0;
-				for (it = ++contour_in.begin(); it != --contour_in.end(); it++)
-				{
-					atom = new Atom;
-					if ((counter & 1) == 1) atom->setElement(PTE[Element::H]); else atom->setElement(PTE[Element::P]);
-					atom->setPosition((*it)->p);
-					molecule->insert(*atom);
-					counter++;
-				}
-				atom = new Atom;
-				atom->setElement(PTE[Element::C]);
-				atom->setPosition(contour_in.back()->p);
-				molecule->insert(*atom);
-				System* system = new System;
-				system->insert(*molecule);
-				String file;
-				std::cout << "output-file: ";
-				cin >> file;
-				HINFile output(file,ios::out);
-				output << *system;
-				output.close();
-				delete system;*/
-std::cout << "$4\n";
 		std::list< TTriangulatedSurface<T>::Triangle* >::iterator old_last = surface->triangles.end();
 		old_last--;
 		std::list< TTriangulatedSurface<T>::Point* >::iterator in = contour_in.begin();
@@ -853,15 +593,11 @@ std::cout << "$4\n";
 		TTriangulatedSurface<T>::Point* p1;
 		TTriangulatedSurface<T>::Point* p2;
 		TTriangulatedSurface<T>::Point* p3;
-/*				ofstream logfile;
-				if (file == "hin/contactborder0.hin") logfile.open("sew0.log"); else logfile.open("sew1.log");*/
 		while ((out != --contour_out.end()) || (in != --contour_in.end()))
 		{
 			p1 = *in;
 			p2 = *out;
 			p3 = GetNext(in,out,contour_in,contour_out,(T)0);
-/*					logfile << p1->p << "(in)  " << p2->p << "(out)  " << p3->p;
-					if (p1->p == (*in)->p) logfile << "(out)\n"; else logfile << "(in)\n";*/
 			TTriangulatedSurface<T>::Triangle* t = new TTriangulatedSurface<T>::Triangle;
 			t->point[0] = p1;
 			t->point[1] = p2;
@@ -873,18 +609,11 @@ std::cout << "$4\n";
 		t->point[1] = contour_out.back();
 		t->point[2] = contour_in.front();
 		surface->triangles.push_back(t);
-/*
-				logfile << t->point[0]->p << "(in)  " << t->point[1]->p << "(out)  " << t->point[2]->p << "(in)\n";
-*/
 		t = new TTriangulatedSurface<T>::Triangle;
 		t->point[0] = contour_in.front();
 		t->point[1] = contour_out.back();
 		t->point[2] = contour_out.front();
 		surface->triangles.push_back(t);
-/*
-				logfile << t->point[0]->p << "(in)  " << t->point[1]->p << "(out)  " << t->point[2]->p << "(out)\n";
-				logfile.close();
-*/
 		std::list< TTriangulatedSurface<T>::Triangle* >::iterator new_triangle = old_last;
 		new_triangle++;
 		TVector3<T> norm( ((*new_triangle)->point[1]->p-(*new_triangle)->point[0]->p) %
@@ -904,146 +633,487 @@ std::cout << "$4\n";
 
 
 	template <class T>
-	void GetContour(std::vector< TSESEdge<T>* >& border,
-									std::vector< std::list<typename TTriangulatedSurface<T>::Point* > > edge_contours,
-									std::list< typename TTriangulatedSurface<T>::Point* >& contour)
+	void SortContour
+			(std::list<TTriangulatedSurface<T>::Edge*>& edges,
+			 std::list<TTriangulatedSurface<T>::Point*>& counterpart,
+			 std::list<TTriangulatedSurface<T>::Point*>& contour, const T& /*dummy*/)
 	{
-		if (border.size() == 1)
+		std::list<TTriangulatedSurface<T>::Edge*> sorted_edges;
+		TTriangulatedSurface<T>::Edge* start_edge = edges.front();
+		TTriangulatedSurface<T>::Point* start_point = start_edge->point[0];
+		edges.pop_front();
+		TTriangulatedSurface<T>::Edge* last_edge = start_edge;
+		TTriangulatedSurface<T>::Point* last_point = start_point;
+		sorted_edges.push_back(last_edge);
+		contour.push_back(last_point);
+		bool found = true;
+		while ((edges.size() > 0) && found)
 		{
-			contour = edge_contours[border[0]->index];
-			return;
+			found = false;
+			std::list<TTriangulatedSurface<T>::Edge*>::iterator e = edges.begin();
+			while (e != edges.end())
+			{
+				if ((*e)->point[0] == last_point)
+				{
+					last_edge = *e;
+					last_point = last_edge->point[1];
+					found = true;
+					sorted_edges.push_back(last_edge);
+					contour.push_back(last_point);
+					edges.erase(e);
+					e = edges.end();
+				}
+				else
+				{
+					if ((*e)->point[1] == last_point)
+					{
+						last_edge = *e;
+						last_point = last_edge->point[0];
+						found = true;
+						sorted_edges.push_back(last_edge);
+						contour.push_back(last_point);
+						edges.erase(e);
+						e = edges.end();
+					}
+					else
+					{
+						e++;
+					}
+				}
+			}
 		}
-		std::list<TTriangulatedSurface<T>::Point*> current = edge_contours[border[0]->index];
-		TSESVertex<T>* last_point = border[0]->vertex2;
-		if (current.front()->p != border[0]->vertex1->p)
+		last_edge = start_edge;
+		last_point = last_edge->point[1];
+		contour.push_front(last_point);
+		found = true;
+		while ((edges.size() > 0) && found)
 		{
-			current.reverse();
+			found = false;
+			std::list<TTriangulatedSurface<T>::Edge*>::iterator e = edges.begin();
+			while (e != edges.end())
+			{
+				if ((*e)->point[0] == last_point)
+				{
+					last_edge = *e;
+					last_point = last_edge->point[1];
+					found = true;
+					sorted_edges.push_front(last_edge);
+					contour.push_front(last_point);
+					edges.erase(e);
+					e = edges.end();
+				}
+				else
+				{
+					if ((*e)->point[1] == last_point)
+					{
+						last_edge = *e;
+						last_point = last_edge->point[0];
+						found = true;
+						sorted_edges.push_front(last_edge);
+						contour.push_front(last_point);
+						edges.erase(e);
+						e = edges.end();
+					}
+					else
+					{
+						e++;
+					}
+				}
+			}
 		}
-		std::list<TTriangulatedSurface<T>::Point*>::iterator p;
-		for (p = current.begin(); p != current.end(); p++)
+		edges = sorted_edges;
+		HashMap<TTriangulatedSurface<T>::Point*,TTriangulatedSurface<T>::Point*> map;
+		std::vector<TTriangulatedSurface<T>::Point*> p(4);
+		p[0] = contour.front();	    p[1] = contour.back();
+		p[2] = counterpart.front();	p[3] = counterpart.back();
+		T d02 = p[0]->p.getDistance(p[2]->p);
+		T d03 = p[0]->p.getDistance(p[3]->p);
+		T d12 = p[1]->p.getDistance(p[2]->p);
+		T d13 = p[1]->p.getDistance(p[3]->p);
+		map[p[0]] = ((Maths::isLess(d02,d03)) ? p[2] : p[3]);
+		map[p[1]] = ((Maths::isLess(d12,d13)) ? p[2] : p[3]);
+		map[p[2]] = ((Maths::isLess(d02,d12)) ? p[0] : p[1]);
+		map[p[3]] = ((Maths::isLess(d03,d13)) ? p[0] : p[1]);
+		std::list<TTriangulatedSurface<T>::Point*> four_points;
+		four_points.push_back(p[0]); four_points.push_back(p[1]);
+		four_points.push_back(p[2]); four_points.push_back(p[3]);
+		for (Position i = 0; i < 4; i++)
 		{
-			contour.push_back(*p);
+			four_points.remove(map[p[i]]);
 		}
-		contour.pop_back();
-		for (Position i = 1; i < border.size(); i++)
+		std::list<TTriangulatedSurface<T>::Point*>::iterator k;
+		for (k = four_points.begin(); k != four_points.end(); k++)
 		{
-			current = edge_contours[border[i]->index];
-			if (border[i]->vertex1 == last_point)
-			{
-				last_point = border[i]->vertex2;
-			}
-			else
-			{
-				last_point = border[i]->vertex1;
-			}
-			if (current.front()->p == last_point->p)
-			{
-				current.reverse();
-			}
-			for (p = current.begin(); p != current.end(); p++)
-			{
-				contour.push_back(*p);
-			}
-			contour.pop_back();
+			map[map[*k]] = *k;
+		}
+		if (map[p[0]] == p[3])
+		{
+			contour.reverse();
+			edges.reverse();
 		}
 	}
 
 
 	template <class T>
-	void SortContour
-		(std::set< typename TTriangulatedSurface<T>::Edge* >& border,
-		 typename TTriangulatedSurface<T>::Point* point1, typename TTriangulatedSurface<T>::Point* point2,
- 		 std::list< typename TTriangulatedSurface<T>::Point* >& contour, const T& /*dummy*/)
+	void SewEmptyContour
+			(std::list< std::pair< Index,std::list<TTriangulatedSurface<T>::Edge*> > >& contour,
+			 std::vector< std::list<typename TTriangulatedSurface<T>::Point* > >& edge_contours,
+			 const TSphere3<T>& sphere, bool convex,
+			 TTriangulatedSurface<T>* surface)
 	{
-				std::cout << border.size() << "\n";
-		std::set< TTriangulatedSurface<T>::Edge* > border_;
-		border_.insert(border.begin(),border.end());
-		//	find the first point: the closest point to point1
-		TTriangulatedSurface<T>::Edge* next_edge = *border.begin();
-		T dist = point1->p.getDistance(next_edge->point[0]->p);
-		TTriangulatedSurface<T>::Point* first = next_edge->point[0];
-		std::set< TTriangulatedSurface<T>::Edge* >::iterator b;
-		for (b = border_.begin(); b != border_.end(); b++)
+		TVector3<T> point(0,0,0);
+		Size n = 0;
+		std::list< std::pair< Index,std::list<TTriangulatedSurface<T>::Edge*> > >::iterator c;
+		for (c = contour.begin(); c != contour.end(); c++)
 		{
-			if (Maths::isLess(point1->p.getDistance((*b)->point[0]->p),dist))
-			{
-				dist = point1->p.getDistance((*b)->point[0]->p);
-				first = (*b)->point[0];
-			}
-			if (Maths::isLess(point1->p.getDistance((*b)->point[1]->p),dist))
-			{
-				dist = point1->p.getDistance((*b)->point[1]->p);
-				first = (*b)->point[1];
-			}
+			point += edge_contours[c->first].front()->p;
+			point += edge_contours[c->first].back()->p;
+			n += 2;
 		}
-		contour.push_back(first);
-				std::cout << "found first\n";
-		//	find the second point: the neighbour of the first wich is closest to point2
-		std::set< TTriangulatedSurface<T>::Point* > candidates;
-		std::list<TTriangulatedSurface<T>::Edge*>::iterator e;
-		for (e = first->edge.begin(); e != first->edge.end(); e++)
+		point -= (sphere.p*n);
+		point.normalize();
+		point *= sphere.radius;
+		point += sphere.p;
+		TTriangulatedSurface<T>::Point* center = new TTriangulatedSurface<T>::Point;
+		center->p = point;
+		center->n = (convex ? point-sphere.p : sphere.p-point);
+		surface->points.push_back(center);
+		for (c = contour.begin(); c != contour.end(); c++)
 		{
-			if (border.find(*e) != border.end())
+			std::list<TTriangulatedSurface<T>::Point*>::iterator p = edge_contours[c->first].begin();
+			p++;
+			TTriangulatedSurface<T>::Triangle* t = new TTriangulatedSurface<T>::Triangle;
+			t->point[0] = center;
+			t->point[1] = edge_contours[c->first].front();
+			t->point[2] = *p;
+			surface->triangles.push_back(t);
+			while (p != --edge_contours[c->first].end())
 			{
-				candidates.insert((*e)->point[0]);
-				candidates.insert((*e)->point[1]);
-			}
-		}
-		candidates.erase(first);
-		TTriangulatedSurface<T>::Point* second;
-		if (Maths::isLess(point2->p.getDistance((*candidates.begin())->p),
-											point2->p.getDistance((*(--candidates.end()))->p)) )
-		{
-			second = *candidates.begin();
-		}
-		else
-		{
-			second = *(--candidates.end());
-		}
-		contour.push_back(second);
-				std::cout << "found second\n";
-		TTriangulatedSurface<T>::Edge* last_edge;
-		for (e = first->edge.begin(); e != first->edge.end(); e++)
-		{
-			if ( ((*e)->point[0]->p == second->p) ||
-					 ((*e)->point[1]->p == second->p)    )
-			{
-				last_edge = *e;
-				border_.erase(*e);
+				t = new TTriangulatedSurface<T>::Triangle;
+				t->point[0] = center;
+				t->point[1] = *p;
+				p++;
+				t->point[2] = *p;
+				surface->triangles.push_back(t);
 			}
 		}
-		//	now complete the contour
-				std::cout << "found first edge\n";
-		while (border_.size() > 0)
+	}
+
+
+	template <class T>
+	void SewEmptyEdges
+			(std::list< std::pair< Index,std::list<TTriangulatedSurface<T>::Edge*> > >& contour,
+			 std::vector< std::list<typename TTriangulatedSurface<T>::Point* > >& edge_contours,
+			 HashSet<Position>& empty,
+			 TTriangulatedSurface<T>* surface)
+	{
+		cout << "#1\n";
+		std::list<TTriangulatedSurface<T>::Point*> points;
+		std::list< std::pair< Index,std::list<TTriangulatedSurface<T>::Edge*> > >::iterator c;
+		HashSet<Position>::Iterator e;
+		std::list<TTriangulatedSurface<T>::Point*>::iterator p;
+		cout << "#2\n";
+		while (empty.size() > 0)
 		{
-			TTriangulatedSurface<T>::Point* last_point = contour.back();
-			list< TTriangulatedSurface<T>::Edge* > edge_candidates;
-			list< TTriangulatedSurface<T>::Edge* >::iterator e;
-			for (e = last_point->edge.begin(); e != last_point->edge.end(); e++)
+			Position edge = *empty.begin();
+			empty.erase(edge);
+		cout << "#3\n";
+			for (p = edge_contours[edge].begin(); p != edge_contours[edge].end(); p++)
 			{
-				if (border.find(*e) != border.end())
+				points.push_back(*p);
+			}
+		cout << "#4\n";
+			bool done = true;
+			while (done)
+			{
+		cout << "#5\n";
+				done = false;
+				e = empty.begin();
+		cout << "#6\n";
+				while (e != empty.end())
 				{
-					edge_candidates.push_back(*e);
+		cout << "#7\n";
+					if (edge_contours[*e].front() == points.front())
+					{
+						for (p = ++edge_contours[*e].begin(); p != edge_contours[*e].end(); p++)
+						{
+							points.push_front(*p);
+						}
+						empty.erase(*e);
+						done = true;
+					}
+		cout << "#8\n";
+					if (edge_contours[*e].front() == points.back())
+					{
+						for (p = ++edge_contours[*e].begin(); p != edge_contours[*e].end(); p++)
+						{
+							points.push_back(*p);
+						}
+						empty.erase(*e);
+						done = true;
+					}
+		cout << "#9\n";
+					if (edge_contours[*e].back() == points.front())
+					{
+						for (p = edge_contours[*e].end(); p != edge_contours[*e].begin();)
+						{
+							points.push_front(*(--p));
+						}
+						empty.erase(*e);
+						done = true;
+					}
+		cout << "#10\n";
+					if (edge_contours[*e].back() == points.back())
+					{
+						for (p = edge_contours[*e].end(); p != edge_contours[*e].begin();)
+						{
+							points.push_back(*(--p));
+						}
+						empty.erase(*e);
+						done = true;
+					}
+		cout << "#11\n";
+					e++;
 				}
 			}
-			edge_candidates.remove(last_edge);
-			next_edge = *edge_candidates.begin();
-			if (next_edge->point[0]->p == last_point->p)
+		cout << "#12\n";
+			TTriangulatedSurface<T>::Point* middle;
+			c = contour.begin();
+		cout << "#13\n";
+			while (c != contour.end())
 			{
-				contour.push_back(next_edge->point[1]);
+		cout << "#14\n";
+				if (edge_contours[c->first].front() == points.front())
+				{
+					c = contour.end();
+					middle = c->second.front()->point[0];
+				}
+				else
+				{
+					if (edge_contours[c->first].back() == points.front())
+					{
+						c = contour.end();
+						middle = c->second.back()->point[1];
+					}
+					else
+					{
+						c++;
+					}
+				}
 			}
-			else
+		cout << "#15\n";
+			p = points.begin();
+			p++;
+			TTriangulatedSurface<T>::Triangle* t = new TTriangulatedSurface<T>::Triangle;
+			t->point[0] = middle;
+			t->point[1] = points.front();
+			t->point[2] = *p;
+			surface->triangles.push_back(t);
+		cout << "#16\n";
+			while (p != --points.end())
 			{
-				contour.push_back(next_edge->point[0]);
+				t = new TTriangulatedSurface<T>::Triangle;
+				t->point[0] = middle;
+				t->point[1] = *p;
+				p++;
+				t->point[2] = *p;
+				surface->triangles.push_back(t);
 			}
-			border_.erase(next_edge);
-			last_edge = next_edge;
-					std::cout << "found next edge \n";
+		cout << "#17\n";
 		}
-		TTriangulatedSurface<T>::Point* last = *contour.begin();
-		contour.remove(last);
-		contour.push_front(last);
+		cout << "#18\n";
 	}
+
+
+
+	/********** BUILDTRIANGLES **************************************************/
+
+	template <class T>
+	bool BuildTriangles
+		 (TSESFace<T>* face,
+			TSESEdge<T>* edge0, TSESEdge<T>* edge1,
+			TSESEdge<T>* edge2, TSESEdge<T>* edge3,
+			const std::vector< TVector3<T> >& centers,
+			const std::vector< TVector3<T> >& edge1_points,
+			const std::vector< TVector3<T> >& edge3_points,
+			const T& radius_of_probe, const T& size,
+			TTriangulatedSurface<T>& surface,
+			std::vector< std::list< typename TTriangulatedSurface<T>::Point* > >& border)
+	{
+						std::ofstream print("Triangulation.log");
+						print << "trianguliere " << *face << "\n";
+						print << "edges:\n";
+						print << "  " << edge0; if (edge0 != NULL) print << ": " << *edge0; print << "\n";
+						print << "  " << edge1; if (edge1 != NULL) print << ": " << *edge1; print << "\n";
+						print << "  " << edge2; if (edge2 != NULL) print << ": " << *edge2; print << "\n";
+						print << "  " << edge3; if (edge3 != NULL) print << ": " << *edge3; print << "\n";
+						print << "Punkte von edge1:\n";
+						for (Position i = 0; i < edge1_points.size(); i++) print << "  " << edge1_points[i] << "\n";
+						print << "Punkte von edge3:\n";
+						for (Position i = 0; i < edge3_points.size(); i++) print << "  " << edge3_points[i] << "\n";
+						print << "Mittelpunkte:\n";
+						for (Position i = 0; i < centers.size(); i++) print << "  " << centers[i] << "\n";
+		TAngle<T> pi(Constants::PI,true);
+		TAngle<T> psi;
+		psi = getOrientedAngle(edge1_points[0]-centers[0],edge3_points[0]-centers[0],
+													 (edge1_points[0]-centers[0])%(edge3_points[0]-centers[0]))+pi;
+		Size number_of_triangles = (Size)Maths::round(psi.toRadian()*radius_of_probe/size);
+		TAngle<T> phi(psi/number_of_triangles,true);
+		Size number_of_segments = centers.size()-1;
+		Size number_of_points = ((edge3 != NULL) ? (number_of_segments+1)*(number_of_triangles+1)
+																						 : (number_of_segments+1)* number_of_triangles +1 );
+		std::vector< TTriangulatedSurface<T>::Point* > points(number_of_points);
+		if (edge3 == NULL)
+		{
+			TTriangulatedSurface<T>::Point* point = new TTriangulatedSurface<T>::Point;
+			point->p = edge3_points[0];
+			point->n = centers[centers.size()-1]-point->p;
+			point->index = (number_of_segments+1)*number_of_triangles;
+			points[(number_of_segments+1)*number_of_triangles] = point;
+		}
+		Position end = ((edge3 != NULL) ? number_of_triangles+1 : number_of_triangles);
+				print << "berechne restliche Punkte:\n";
+		for (Position i = 0; i < centers.size(); i++)
+		{
+			TCircle3<T> circle(centers[i],
+												 (edge1_points[i]-centers[i])%(edge3_points[i]-centers[i]),
+												 radius_of_probe);
+					print << "  Kreis: " << circle
+								<< "  von: " << edge1_points[i] << "  bis: " << edge3_points[i] << "\n";
+					TPlane3<T> plane(centers[i],edge1_points[i],edge3_points[i]);
+					print << "  Ebene durch " << centers[i] << ", " << edge1_points[i] << ", "
+								<< edge3_points[i] << ": " << plane << "\n";
+			vector< TVector3<T> > line;
+			line = PartitionOfCircle(circle,edge1_points[i],phi,number_of_triangles);
+			for (Position j = 0; j < end; j++)
+			{
+				TTriangulatedSurface<T>::Point* point = new TTriangulatedSurface<T>::Point;
+				point->p = line[j];
+						print << "    " << line[j] << "\n";
+				point->n = centers[i]-line[j];
+				point->index = i*end+j;
+				points[i*end+j] = point;
+				if (j == 0)
+				{
+					border[edge1->index].push_back(point);
+				}
+				else
+				{
+					if (j == line.size()-1)
+					{
+						border[edge3->index].push_back(point);
+					}
+				}
+				if ((i == 0) && (edge0 != NULL))
+				{
+					border[edge0->index].push_back(point);
+				}
+				else
+				{
+					if ((i == centers.size()-1) && (edge2 != NULL))
+					{
+						border[edge2->index].push_back(point);
+					}
+				}
+			}
+		}
+				print << "Punkte:\n";
+				for (Position i = 0; i < points.size(); i++) print << "  " << i << " " << points[i]->p << "\n";
+				print << "baue Dreiecke:\n";
+		Size triangle_number
+				= ((edge3 != NULL) ? 2*number_of_segments*number_of_triangles
+													 : 2*number_of_segments*(number_of_triangles-1));
+		std::vector< TTriangulatedSurface<T>::Triangle* >	triangles(triangle_number);
+		for (Position i = 0; i < end-1; i++)
+		{
+			for (Position j = 0; j < number_of_segments; j++)
+			{
+				TTriangulatedSurface<T>::Triangle* t1 = new TTriangulatedSurface<T>::Triangle;
+					t1->point[0] = points[  j  *end+ i ];
+					t1->point[1] = points[  j  *end+i+1];
+					t1->point[2] = points[(j+1)*end+i+1];
+					points[  j  *end+ i ]->triangle.push_back(t1);
+					points[  j  *end+i+1]->triangle.push_back(t1);
+					points[(j+1)*end+i+1]->triangle.push_back(t1);
+					t1->index = 2*(number_of_segments*i+j);
+							print << "  Dreieck" << 2*(number_of_segments*i+j) << ": "
+										<< j*end+i << ", "	<< (j+1)*end+i+1
+										<< ", " << j*end+i+1 << "\n";
+					triangles[2*(number_of_segments*i+j)] = t1;
+				TTriangulatedSurface<T>::Triangle* t2 = new TTriangulatedSurface<T>::Triangle;
+					t2->point[0] = points[  j  *end+ i ];
+					t2->point[1] = points[(j+1)*end+i+1];
+					t2->point[2] = points[(j+1)*end+ i ];
+					points[  j  *end+ i ]->triangle.push_back(t2);
+					points[(j+1)*end+i+1]->triangle.push_back(t2);
+					points[(j+1)*end+ i ]->triangle.push_back(t2);
+					t2->index = 2*(number_of_segments*i+j)+1;
+							print << "  Dreieck" << 2*(number_of_segments*i+j)+1 << ": "
+										<< j*end+i << ", " << (j+1)*end+i
+										<< ", " << (j+1)*end+i+1 << "\n";
+					triangles[2*(number_of_segments*i+j)+1] = t2;
+			}
+		}
+		if (edge0 == NULL)
+		{
+			Position offset = number_of_segments*end;
+			for (Position i = 0; i < number_of_triangles; i++)
+			{
+				TTriangulatedSurface<T>::Triangle* t1 = new TTriangulatedSurface<T>::Triangle;
+					t1->point[0] = points[offset+ i ];
+					t1->point[1] = points[offset+i+1];
+					t1->point[2] = points[       i+1];
+					points[offset+ i ]->triangle.push_back(t1);
+					points[offset+i+1]->triangle.push_back(t1);
+					points[       i+1]->triangle.push_back(t1);
+					t1->index = triangles.size();
+							print << "  Dreieck" << triangles.size() << ": " << offset+i << ", " << i+1 << ", "
+										<< offset+i+1 << "\n";
+					triangles.push_back(t1);
+				TTriangulatedSurface<T>::Triangle* t2 = new TTriangulatedSurface<T>::Triangle;
+					t2->point[0] = points[offset+ i ];
+					t2->point[1] = points[       i+1];
+					t2->point[2] = points[        i ];
+					points[offset+ i ]->triangle.push_back(t2);
+					points[       i+1]->triangle.push_back(t2);
+					points[        i ]->triangle.push_back(t2);
+					t2->index = triangles.size();
+							print << "  Dreieck" << triangles.size() << ": " << offset+i << ", " << i << ", "
+										<< i+1 << "\n";
+					triangles.push_back(t2);
+			}
+		}
+		if (edge3 == NULL)
+		{
+			Position last = (number_of_segments+1)*number_of_triangles;
+			Position offset = last-number_of_segments;
+			for (Position i = 0; i < number_of_segments; i++)
+			{
+				TTriangulatedSurface<T>::Triangle* t = new TTriangulatedSurface<T>::Triangle;
+					t->point[0] = points[offset+ i ];
+					t->point[1] = points[last];
+					t->point[2] = points[offset+i+1];
+					points[offset+ i ]->triangle.push_back(t);
+					points[       i+1]->triangle.push_back(t);
+					points[last]->triangle.push_back(t);
+					t->index = triangles.size();
+							print << "  Dreieck" << triangles.size() << ": " << offset+i << ", " << last << ", "
+										<< offset+i+1 << "\n";
+					triangles.push_back(t);
+			}
+		}
+		for (Position i = 0; i < points.size(); i++)
+		{
+			surface.points.push_back(points[i]);
+		}
+		for (Position i = 0; i < triangles.size(); i++)
+		{
+			surface.triangles.push_back(triangles[i]);
+		}
+		return true;
+	}
+
+
 
 
 }	// namespace BALL

@@ -1,4 +1,4 @@
-// $Id: solventExcludedSurface.h,v 1.7 2000/12/08 05:48:27 oliver Exp $
+// $Id: solventExcludedSurface.h,v 1.8 2000/12/13 15:14:28 strobel Exp $
 
 #ifndef BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
 #define BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
@@ -78,8 +78,7 @@ namespace BALL
 			print << pre << "SolventExcludedSurface(reducedSurface)\n";
 			pre += "  ";
 			#endif
-
-			vector<TRSVertex<T>*> rs_vertices(reduced_surface->getVertices());
+			vector< TRSVertex<T>* > rs_vertices(reduced_surface->getVertices());
 			for (Position i = 0; i < rs_vertices.size(); i++)
 			{
 				if (rs_vertices[i] != NULL)
@@ -97,7 +96,7 @@ namespace BALL
 					contact_faces.push_back(NULL);
 				}
 			}
-			vector<TRSEdge<T>*> rs_edges(reduced_surface->getEdges());
+			vector< TRSEdge<T>* > rs_edges(reduced_surface->getEdges());
 			for (Position i = 0; i < rs_edges.size(); i++)
 			{
 				TSESFace<T>* face = new TSESFace<T>();
@@ -369,46 +368,16 @@ namespace BALL
 		void treatSingularToricFace(Position i, const T& radius_of_probe)
 		{
 			TSESFace<T>* face = toric_faces[i];
-			TSESEdge<T>* edge0;
-			TSESEdge<T>* edge1;
-			TSESEdge<T>* edge2;
-			TSESEdge<T>* edge3;
-			TSESVertex<T>* p0;
-			TSESVertex<T>* p1;
-			TSESVertex<T>* p2;
-			TSESVertex<T>* p3;
+			face->normalize(false);
+			TSESEdge<T>* edge0 = face->edge[0];
+			TSESEdge<T>* edge1 = face->edge[1];
+			TSESEdge<T>* edge2 = face->edge[2];
+			TSESEdge<T>* edge3 = face->edge[3];
+			TSESVertex<T>* p0 = face->vertex[0];
+			TSESVertex<T>* p1 = face->vertex[1];
+			TSESVertex<T>* p2 = face->vertex[2];
+			TSESVertex<T>* p3 = face->vertex[3];
 			Position j = 0;
-			while (face->edge[j]->type != 1)
-			{
-				j++;
-			}
-			edge0 = face->edge[j];								// edge0 = first concave edge
-			j++;
-			while (face->edge[j]->type != 1)
-			{
-				j++;
-			}
-			edge2 = face->edge[j];								// edge2 = second concave edge
-			p0 = edge0->vertex1;
-			p1 = edge0->vertex2;
-			Index e;
-			if (face->getEdge(p1->index,edge2->vertex1->index,e))
-			{
-				edge1 = edges[e];
-				p2 = edge2->vertex1;
-				p3 = edge2->vertex2;
-			}
-			else
-			{
-				face->getEdge(p1->index,edge2->vertex2->index,e);					//	  	____e3____
-				edge1 = edges[e];                                         //     /          \					x
-				p2 = edge2->vertex2;                                      //  p0 \          /p3
-				p3 = edge2->vertex1;                                      //      \        /
-			}                                                           //    e0|        |e2
-			if (face->getEdge(p0->index,p3->index,e))                   //      |        |
-			{                                                           //      /________\					x
-				edge3 = edges[e];                                         //   p1/   e1     \p2
-			}
 			Position ip1 = ((p1->atom == face->rsedge->getVertex(0)->getAtom()) ? 0 : 1);
 			Position ip3 = 1-ip1;
 			// create the new points
@@ -449,6 +418,7 @@ namespace BALL
 			GetIntersection(probe1,probe2,intersection_circle);
 			TSESEdge<T>* new_edge4 = new TSESEdge<T>(new_point1,new_point3,neighbour0,neighbour2,
 																							 intersection_circle,face->rsedge,edges.size());
+			new_edge4->type = 2;
 			edges.push_back(new_edge4);
 			singular_edges.push_back(new_edge4);
 			// update the neighbour faces
@@ -510,7 +480,7 @@ namespace BALL
 			face_edges[5] = new_edge3;
 			TSESFace<T>* new_face =
 					new TSESFace<T>(TSESFace<T>::TYPE_TORIC_SINGULAR,NULL,face->rsedge,NULL,
-													face_vertices,face_edges,orientations,singular_toric_faces.size());
+													face_vertices,face_edges,orientations,face->index);
 			new_edge0->face1 = new_face;
 			new_edge0->face2 = neighbour0;
 			new_edge1->face1 = new_face;
@@ -523,7 +493,6 @@ namespace BALL
 			edge1->face2 = new_face;
 			edge3->face1 = edge3->other(face);
 			edge3->face2 = new_face;
-			singular_toric_faces.push_back(new_face);
 			// delete the intersecting edges
 			Position index = edge0->index;
 			delete edge0;
@@ -531,8 +500,8 @@ namespace BALL
 			index = edge2->index;
 			delete edge2;
 			edges[index] = NULL;
-			// move the toric face into the list of singular toric faces
-			toric_faces[face->index] = NULL;
+			// replace the old edge by the new
+			toric_faces[face->index] = new_face;
 			delete face;
 		}
 

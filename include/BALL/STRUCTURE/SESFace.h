@@ -1,4 +1,4 @@
-// $Id: SESFace.h,v 1.2 2000/10/19 14:24:51 strobel Exp $
+// $Id: SESFace.h,v 1.3 2000/12/13 15:14:28 strobel Exp $
 
 #ifndef BALL_STRUCTURE_SESFACE_H
 #define BALL_STRUCTURE_SESFACE_H
@@ -124,32 +124,32 @@ namespace BALL
 			bool test1 = false;
 			bool test2 = false;
 			for (Position i = 0; i < vertex.size(); i++)
+			{
+				if (vertex[i]->index == v1)
 				{
-					if (vertex[i]->index == v1)
-						{
-							test1 = true;
-						}
-					if (vertex[i]->index == v2)
-						{
-							test2 = true;
-						}
+					test1 = true;
 				}
+				if (vertex[i]->index == v2)
+				{
+					test2 = true;
+				}
+			}
 			if ((test1 && test2) == false)
-				{
-					return false;
-				}
+			{
+				return false;
+			}
 			for (Position i = 0; i < edge.size(); i++)
+			{
+				if (edge[i] != NULL)
 				{
-					if (edge[i] != NULL)
-						{
-							if (((edge[i]->vertex1->index == v1) && (edge[i]->vertex2->index == v2)) ||
-							    ((edge[i]->vertex2->index == v1) && (edge[i]->vertex1->index == v2))    )
-								{
-									e = edge[i]->index;
-									return true;
-								}
-						}
+					if (((edge[i]->vertex1->index == v1) && (edge[i]->vertex2->index == v2)) ||
+					    ((edge[i]->vertex2->index == v1) && (edge[i]->vertex1->index == v2))    )
+					{
+						e = i;
+						return true;
+					}
 				}
+			}
 			return false;
 		}
 
@@ -180,70 +180,220 @@ namespace BALL
 			return -1;
 		}
 
-/*		bool substituteVertex(TSESVertex<T>* old, TSESVertex<T>* new_)
-		{
-			for (Position i = 0;  i < vertex.size(); i++)
-				{
-					if (vertex[i] == old)
-						{
-							vertex[i] = new_;
-							return true;
-						}
-				}
-			return false;
-		}*/
 
 		bool substituteEdge(TSESEdge<T>* old, TSESEdge<T>* new_)
 		{
 			bool back = false;
 			for (Position i = 0;  i < edge.size(); i++)
+			{
+				if (edge[i] == old)
 				{
-					if (edge[i] == old)
-						{
-							edge[i] = new_;
-							back = true;
-						}
+					edge[i] = new_;
+					back = true;
 				}
+			}
 			if (back)
+			{
+				if (old->vertex1->p == new_->vertex1->p)
 				{
-					if (old->vertex1->p == new_->vertex1->p)
+					for (Position i = 0;  i < edge.size(); i++)
+					{
+						if (edge[i] != NULL)
 						{
-							for (Position i = 0;  i < edge.size(); i++)
-								{
-									if (edge[i] != NULL)
-										{
-											edge[i]->substituteVertex(old->vertex1,new_->vertex1);
-											edge[i]->substituteVertex(old->vertex2,new_->vertex2);
-										}
-								}
+							edge[i]->substituteVertex(old->vertex1,new_->vertex1);
+							edge[i]->substituteVertex(old->vertex2,new_->vertex2);
 						}
-						else
-						{
-							for (Position i = 0;  i < edge.size(); i++)
-								{
-									if (edge[i] != NULL)
-										{
-											edge[i]->substituteVertex(old->vertex1,new_->vertex2);
-											edge[i]->substituteVertex(old->vertex2,new_->vertex1);
-										}
-								}
-						}
-					for (Position i = 0;  i < vertex.size(); i++)
-						{
-							if (vertex[i] == old->vertex1)
-								{
-									vertex[i] = new_->vertex1;
-								}
-								else
-								{
-									if (vertex[i] == old->vertex2)
-										{
-											vertex[i] = new_->vertex2;
-										}
-								}
-						}
+					}
 				}
+				else
+				{
+					for (Position i = 0;  i < edge.size(); i++)
+					{
+						if (edge[i] != NULL)
+						{
+							edge[i]->substituteVertex(old->vertex1,new_->vertex2);
+							edge[i]->substituteVertex(old->vertex2,new_->vertex1);
+						}
+					}
+				}
+				for (Position i = 0;  i < vertex.size(); i++)
+				{
+					if (vertex[i] == old->vertex1)
+					{
+						vertex[i] = new_->vertex1;
+					}
+					else
+					{
+						if (vertex[i] == old->vertex2)
+						{
+							vertex[i] = new_->vertex2;
+						}
+					}
+				}
+			}
 			return back;
+		}
+
+
+		void normalize(bool singular)
+		{
+			if ((type != TSESFace<T>::TYPE_TORIC) &&
+					(type != TSESFace<T>::TYPE_TORIC_SINGULAR))
+			{
+				return;
+			}
+			if (rsedge->isFree())
+			{
+				return;
+			}
+			cout << *this << "\n";
+			if (singular == false)
+			{
+				TSESEdge<T>* edge0;
+				TSESEdge<T>* edge1;
+				TSESEdge<T>* edge2;
+				TSESEdge<T>* edge3;
+				TSESVertex<T>* p0;
+				TSESVertex<T>* p1;
+				TSESVertex<T>* p2;
+				TSESVertex<T>* p3;
+				Index i = 0;
+				while (edge[i]->type != 1)
+				{
+					i++;
+				}
+				edge0 = edge[i];								// edge0 = first concave edge
+				i++;
+				while (edge[i]->type != 1)
+				{
+					i++;
+				}   	
+				edge2 = edge[i];								// edge2 = second concave edge
+				p0 = edge0->vertex1;
+				p1 = edge0->vertex2;
+				Index e;
+				if (getEdge(p1->index,edge2->vertex1->index,e))
+				{
+					edge1 = edge[e];
+					p2 = edge2->vertex1;
+					p3 = edge2->vertex2;
+				}
+				else
+				{
+					getEdge(p1->index,edge2->vertex2->index,e);	//	  	____e3____
+					edge1 = edge[e];														//     /          \					x
+					p2 = edge2->vertex2;												//  p0 \          /p3
+					p3 = edge2->vertex1;												//      \        /
+				}																							//    e0|        |e2
+				getEdge(p0->index,p3->index,e);								//      |        |
+				edge3 = edge[e];															//      /________\					x
+				edge[0] = edge0;															//   p1/   e1     \p2
+				edge[1] = edge1;
+				edge[2] = edge2;
+				edge[3] = edge3;
+				vertex[0] = p0;
+				vertex[1] = p1;
+				vertex[2] = p2;
+				vertex[3] = p3;
+			}
+			else
+			{
+				TSESEdge<T>* edge0;
+				TSESEdge<T>* edge1;
+				TSESEdge<T>* edge2;
+				TSESEdge<T>* edge3;
+				TSESEdge<T>* edge4;
+				TSESEdge<T>* edge5;
+				TSESVertex<T>* p0;
+				TSESVertex<T>* p1;
+				TSESVertex<T>* p2;
+				TSESVertex<T>* p3;
+				TSESVertex<T>* p4;
+				TSESVertex<T>* p5;
+				Index i = 0;
+				while (edge[i]->type != 0)
+				{
+					i++;
+				}
+				edge0 = edge[i];								// edge0 = first convex edge
+				p0 = edge0->vertex1;
+				p2 = edge0->vertex2;
+				i++;
+				while (edge[i]->type != 0)
+				{
+					i++;
+				}   	
+				edge3 = edge[i];								// edge3 = second convex edge
+				p3 = edge3->vertex1;
+				p5 = edge3->vertex2;
+				for (Position i = 0; i < edge.size(); i++)
+				{
+					if ((edge[i]->vertex1 == p0) && (edge[i] != edge0))
+					{
+						edge1 = edge[i];
+						p1 = edge1->vertex2;
+					}
+					else
+					{
+						if (edge[i]->vertex2 == p0)
+						{
+							edge1 = edge[i];
+							p1 = edge1->vertex1;
+						}
+					}
+				}
+				for (Position i = 0; i < edge.size(); i++)
+				{
+					if (((edge[i]->vertex1 == p1) && (edge[i]->vertex2 == p2)) ||
+							((edge[i]->vertex2 == p1) && (edge[i]->vertex1 == p2))		)
+					{
+						edge2 = edge[i];
+					}
+				}
+				for (Position i = 0; i < edge.size(); i++)
+				{
+					if ((edge[i]->vertex1 == p3) && (edge[i] != edge3))
+					{
+						edge4 = edge[i];
+						p4 = edge4->vertex2;
+					}
+					else
+					{
+						if (edge[i]->vertex2 == p3)
+						{
+							edge4 = edge[i];
+							p4 = edge4->vertex1;
+						}
+					}
+				}
+				for (Position i = 0; i < edge.size(); i++)
+				{
+					if (((edge[i]->vertex1 == p5) && (edge[i]->vertex2 == p4)) ||
+							((edge[i]->vertex2 == p5) && (edge[i]->vertex1 == p4))		)
+					{
+						edge5 = edge[i];
+					}
+				}
+				if (edge1->circle != edge4->circle)
+				{
+					TSESEdge<T>* temp = edge5;
+					edge5 = edge4;
+					edge4 = temp;
+				}
+				edge[0] = edge0;
+				edge[1] = edge1;
+				edge[2] = edge2;
+				edge[3] = edge3;
+				edge[4] = edge4;
+				edge[5] = edge5;
+				vertex[0] = p0;
+				vertex[1] = p1;
+				vertex[2] = p2;
+				vertex[3] = p3;
+				vertex[4] = p4;
+				vertex[5] = p5;
+			}
+			cout << *this << "\n";
 		}
 
 		//@}
