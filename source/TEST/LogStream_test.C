@@ -1,4 +1,4 @@
-// $Id: LogStream_test.C,v 1.8 2000/07/12 19:36:46 oliver Exp $
+// $Id: LogStream_test.C,v 1.9 2000/10/18 12:37:22 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 #include <BALL/MATHS/common.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: LogStream_test.C,v 1.8 2000/07/12 19:36:46 oliver Exp $")
+START_TEST(class_name, "$Id: LogStream_test.C,v 1.9 2000/10/18 12:37:22 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -213,11 +213,11 @@ RESULT
 
 CHECK(getLineTime(Index index))
 	LogStream l1;
-	time_t timer;
+	Time timer;
   timer = time(NULL);
 	l1.error() << "TEST" <<endl;
 	TEST_EQUAL(timer, l1.getLineTime(0))
-	TEST_EQUAL(Maths::isNear(timer, l1.getLineTime(0), (long)1), true)
+	TEST_EQUAL(Maths::isNear(timer, l1.getLineTime(0), (Time)1), true)
 RESULT
 
 CHECK(getLineLevel(Index index))
@@ -227,7 +227,7 @@ CHECK(getLineLevel(Index index))
 RESULT
 
 CHECK(filterLines(const int min_level = INT_MIN, const int max_level = INT_MAX,
-									const time_t earliest = 0, const time_t latest = LONG_MAX, const string& s = ""))
+									const Time earliest = 0, const Time latest = Limits<Time>::max(), const string& s = ""))
 	LogStream l1;
   using std::list;													
 	list<int>	liste;
@@ -235,8 +235,8 @@ CHECK(filterLines(const int min_level = INT_MIN, const int max_level = INT_MAX,
 	l1.level(0) << "TEST1" << endl;
 	l1.level(1) << "TEST2" << endl;
 	l1.level(2) << "XXXXX" << endl;
-	time_t timer = time(NULL);
-	time_t x = timer;
+	Time timer = time(NULL);
+	Time x = timer;
 	while (x == timer)
 	{
 		x = time(NULL);
@@ -246,19 +246,19 @@ CHECK(filterLines(const int min_level = INT_MIN, const int max_level = INT_MAX,
 	l1.level(4) << "TEST4" << endl;
 	TEST_EQUAL(l1.getNumberOfLines(), 5)
 
-	liste = l1.filterLines(1, 2, 0, LONG_MAX, "" );
+	liste = l1.filterLines(1, 2, 0, Limits<Time>::max(), "" );
 	TEST_EQUAL(liste.size(), 2)
 	TEST_EQUAL(liste.front(), 1)
 	liste.pop_front();
 	TEST_EQUAL(liste.front(), 2)
 	liste.clear();
 
-	liste = l1.filterLines(1, 2, 0, LONG_MAX, "XXXXX" );
+	liste = l1.filterLines(1, 2, 0, Limits<Time>::max(), "XXXXX" );
 	TEST_EQUAL(liste.size(), 1)
 	TEST_EQUAL(liste.front(), 2)
 	liste.clear();
 
-	liste = l1.filterLines(3, 3, timer, LONG_MAX, "XXXXX");
+	liste = l1.filterLines(3, 3, timer, Limits<Time>::max(), "XXXXX");
 	TEST_EQUAL(liste.size(), 1)
 	TEST_EQUAL(liste.front(), 3)
 	liste.clear();	
