@@ -1,4 +1,4 @@
-// $Id: ParameterSection_test.C,v 1.3 2000/09/19 20:26:28 oliver Exp $
+// $Id: ParameterSection_test.C,v 1.4 2000/10/05 17:16:56 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(Parameters, "$Id: ParameterSection_test.C,v 1.3 2000/09/19 20:26:28 oliver Exp $")
+START_TEST(Parameters, "$Id: ParameterSection_test.C,v 1.4 2000/10/05 17:16:56 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -30,8 +30,15 @@ CHECK(ParameterSection::~ParameterSection())
 RESULT
 
 
-CHECK(ParameterSection::destroy())
+CHECK(ParameterSection::clear())
   //BAUSTELLE
+	ParameterSection ps;
+	ps.extractSection(param, "Section2");
+	ps.clear();
+	ParameterSection ps_new;
+	// assumes that operator == () is correct.
+	bool result = (ps == ps_new);
+	TEST_EQUAL(result, true);
 RESULT
 
 
@@ -100,6 +107,16 @@ RESULT
 
 
 CHECK(ParameterSection::isValid() const )
+  //BAUSTELLE
+RESULT
+
+
+CHECK(const ParameterSection& ParameterSection::operator = (const ParameterSection& parameter_section))
+  //BAUSTELLE
+RESULT
+
+
+CHECK(bool ParameterSection::operator == (const ParameterSection& parameter_section))
   //BAUSTELLE
 RESULT
 
