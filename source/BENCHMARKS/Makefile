@@ -4,7 +4,8 @@ EXECUTABLES = \
 	PDB_bench\
 	KernelIteration_bench\
 	AmberFF_bench\
-	PoissonBoltzmann_bench
+	PoissonBoltzmann_bench\
+	MolmecSupport_bench
 
 # default target
 all:	$(EXECUTABLES)
