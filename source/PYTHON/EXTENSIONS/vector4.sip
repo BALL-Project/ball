@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector4.sip,v 1.5 2003/10/29 22:54:48 oliver Exp $
+// $Id: vector4.sip,v 1.6 2003/11/01 09:27:41 oliver Exp $
 //
 
 class Vector4
@@ -34,6 +34,10 @@ class Vector4
   static const Vector4& getUnit();
   void set(float /value/ = 1);
   float operator [] (Index /index/);
+%MethodCode
+	sipRes = sipCpp->operator [] (*a0);
+%End
+
   // float operator [] (Index /index/) const;
   // ???? Vector4 operator + () const;
   // ???? Vector4 operator - () const;

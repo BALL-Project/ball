@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBAtom.sip,v 1.6 2003/10/29 22:54:35 oliver Exp $
+// $Id: PDBAtom.sip,v 1.7 2003/11/01 09:27:36 oliver Exp $
 //
 
 class PDBAtom
@@ -58,16 +58,11 @@ class PDBAtom
 	//  virtual void dump(ostream& s = cout, unsigned long depth = 0) const;
 	//  virtual void read(istream& s);
 	//  virtual void write(ostream& s) const;
-  char *__str__() /NonLazy/;
+  SIP_PYOBJECT __str__();
 %MethodCode
-  PDBAtom* ptr;
-
-  if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_PDBAtom,&ptr))
-  {
-	  return PyString_FromString(String(String("PDBAtom ") + ptr->getName()
-        + " { " + ptr->getElement().getSymbol() + " @ ("
-        + String(ptr->getPosition().x) + " " + String(ptr->getPosition().y) + " "
-        + String(ptr->getPosition().z) + " }").c_str());
-	}
+	sipRes = PyString_FromString(String(String("PDBAtom ") + sipCpp->getName()
+        + " { " + sipCpp->getElement().getSymbol() + " @ ("
+        + String(sipCpp->getPosition().x) + " " + String(sipCpp->getPosition().y) + " "
+        + String(sipCpp->getPosition().z) + " }").c_str());
 %End
 };

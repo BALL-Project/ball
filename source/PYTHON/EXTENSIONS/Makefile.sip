@@ -7,5 +7,8 @@ SIP_OBJECTS	=	\
 
 SIP_HEADERS = \
 	$$(PYBALL_SOURCES:.C=.h) \
+
+SIP_HEADER_FILES =\
+	$H
 	
 %End

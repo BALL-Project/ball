@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: matrix44.sip,v 1.6 2003/10/29 22:54:41 oliver Exp $
+// $Id: matrix44.sip,v 1.7 2003/11/01 09:27:38 oliver Exp $
 //
 
 class Matrix4x4
@@ -64,9 +64,17 @@ class Matrix4x4
   bool isEqual(const Matrix4x4& /m/) const;
   Vector4 getDiagonal() const;
   float operator () (Position /row/, Position /col/);
+%MethodCode
+	sipRes = sipCpp->operator () (*a0, *a1);
+%End
+
   // float operator () (Position /row/, Position /col/) const;
   // float operator [] (Position /index/) const;
   float operator [] (Position /index/);
+%MethodCode
+	sipRes = sipCpp->operator [] (*a0);
+%End
+
   // ???? Matrix4x4 operator + () const;
   // ???? Matrix4x4 operator - () const;
   Matrix4x4 operator + (const Matrix4x4& /m/) const;

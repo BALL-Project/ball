@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragment.sip,v 1.6 2003/10/29 22:54:40 oliver Exp $
+// $Id: fragment.sip,v 1.7 2003/11/01 09:27:37 oliver Exp $
 //
 
 class Fragment
@@ -29,14 +29,9 @@ class Fragment
   // virtual void write(std::ostream& s) const;
 
 
-  char* __str__() /NonLazy/;
+  SIP_PYOBJECT __str__();
 %MethodCode
-  Fragment* ptr;
-
-    if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_Fragment,&ptr))
-    {
-		  return PyString_FromString(String(String("Fragment ") + ptr->getName()
-    			    + " { " + String(ptr->countAtoms()) + " atoms }").c_str());
-		}
+	sipRes = PyString_FromString(String(String("Fragment ") + sipCpp->getName()
+    			    + " { " + String(sipCpp->countAtoms()) + " atoms }").c_str());
 %End
 };

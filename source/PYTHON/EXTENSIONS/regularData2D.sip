@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2D.sip,v 1.7 2003/10/29 22:54:45 oliver Exp $
+// $Id: regularData2D.sip,v 1.8 2003/11/01 09:27:39 oliver Exp $
 //
 
 typedef float GridDataType;
@@ -59,11 +59,21 @@ class RegularData2D
   // float getData(const IndexType& /index/) throw(OutOfGrid);
   // float getData(Position /index/) const throw(OutOfGrid);
 	// float getData(Position /index/) throw(OutOfGrid);
-  // float operator [] (const IndexType& /index/) const throw();
-  // float operator [] (const IndexType& /index/) throw();
-  float operator [] (Position /index/) const throw();
-  // float operator [] (Position /index/) throw();
+	// 	float operator [] (const IndexType& /index/) const throw();
+
+  float operator [] (const IndexType& /index/) throw();
+%MethodCode
+  sipRes = sipCpp->operator [] (*a0);
+%End
+
+	//  float operator [] (Position /index/) const throw();
+ 	// float operator [] (Position /index/) throw();
+
   float operator () (const Vector2& /x/) const throw();
+%MethodCode
+  sipRes = sipCpp->operator () (*a0);
+%End
+
   float getInterpolatedValue(const Vector2& /x/) const throw(OutOfGrid);
   float getClosestValue(const Vector2& /x/) const throw(OutOfGrid);
   // float getClosestValue(const Vector2& /x/) throw(OutOfGrid);

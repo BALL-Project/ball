@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector2.sip,v 1.9 2003/10/31 23:15:50 oliver Exp $
+// $Id: vector2.sip,v 1.10 2003/11/01 09:27:40 oliver Exp $
 //
 
 //Vector2 operator * (float scalar, const Vector2& vector)
@@ -69,8 +69,10 @@ class Vector2
 		throw();
 	// float& operator [] (Position /position/)
 	//	throw(IndexOverflow);
-	float operator [] (Position /position/) const
-		throw(IndexOverflow);
+	float operator [] (Position /position/) const throw(IndexOverflow);
+%MethodCode
+	sipRes = sipCpp->operator [] (*a0);
+%End
 
 	// ???? const Vector2& operator + () const throw();
 	// ???? Vector2 operator - () const	throw();

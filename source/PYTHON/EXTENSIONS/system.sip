@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: system.sip,v 1.8 2003/10/29 22:54:47 oliver Exp $
+// $Id: system.sip,v 1.9 2003/11/01 09:27:40 oliver Exp $
 //
 
 class System
@@ -48,15 +48,10 @@ class System
 	//  template <typename T>
 	//  bool apply(UnaryProcessor<T>& processor)
 
-	char* __str__() /NonLazy/;
+	SIP_PYOBJECT __str__();
 %MethodCode
-    System *ptr;
-
-    if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_System,&ptr))
-    {
-		  return PyString_FromString(String(String("System ") + ptr->getName() 
-							+ " { " + String(ptr->countMolecules()) + " molecules,  " 
-							+ String(ptr->countAtoms()) + " atoms }").c_str());
-    }
+	sipRes = PyString_FromString(String(String("System ") + sipCpp->getName() 
+							+ " { " + String(sipCpp->countMolecules()) + " molecules,  " 
+							+ String(sipCpp->countAtoms()) + " atoms }").c_str());
 %End
 };

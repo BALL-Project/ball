@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HINFile.sip,v 1.11 2003/10/31 23:15:48 oliver Exp $
+// $Id: HINFile.sip,v 1.12 2003/11/01 09:27:35 oliver Exp $
 //
 
 class HINFile
@@ -14,10 +14,8 @@ class HINFile
   public:
   HINFile();
 	// default open mode is "IN"
-  HINFile(String&, File::OpenMode /openmode/ = std::ios::in)
-		throw(FileNotFound);
-	~HINFile()
-		throw();
+  HINFile(String&, File::OpenMode /openmode/ = std::ios::in) throw(FileNotFound);
+	~HINFile() throw();
 
   virtual bool write(const System& /system/) throw(CannotWrite);
 	virtual bool write(const Molecule& /molecule/) throw(CannotWrite);
@@ -25,6 +23,6 @@ class HINFile
 	virtual Molecule* read() throw(ParseError);
 
   bool hasPeriodicBoundary() const;
-  Box3 getPeriodicBoundary() const;
+  SimpleBox3 getPeriodicBoundary() const;
   float getTemperature() const;
 };

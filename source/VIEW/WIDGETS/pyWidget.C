@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.10 2003/10/31 23:15:51 oliver Exp $
+// $Id: pyWidget.C,v 1.11 2003/11/01 09:27:41 oliver Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -493,6 +493,11 @@ namespace BALL
 		void PyWidget::startInterpreter()
 		{
 			text_edit_->startInterpreter();
+		}
+
+		void PyWidget::stopInterpreter()
+		{
+			text_edit_->stopInterpreter();
 		}
 
 	} // namespace VIEW

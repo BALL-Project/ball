@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: secondaryStructure.sip,v 1.6 2003/10/29 22:54:46 oliver Exp $
+// $Id: secondaryStructure.sip,v 1.7 2003/11/01 09:27:40 oliver Exp $
 //
 
 class SecondaryStructure
@@ -61,15 +61,10 @@ class SecondaryStructure
 	//  virtual void write(ostream& s) const;
 
 
-  char* __str__() /NonLazy/;
+  SIP_PYOBJECT __str__();
 %MethodCode
-	  SecondaryStructure* ptr;
-
-    if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_Residue,&ptr))
-    {
-		  return PyString_FromString(String(String("SecondaryStructure ") + ptr->getName() 
-						+ " { " + String(ptr->countResidues()) + " residues }").c_str());
-		}
+	return PyString_FromString(String(String("SecondaryStructure ") + sipCpp->getName() 
+						+ " { " + String(sipCpp->countResidues()) + " residues }").c_str());
 %End
 
 };

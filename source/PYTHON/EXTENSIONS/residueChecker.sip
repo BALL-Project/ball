@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residueChecker.sip,v 1.4 2003/10/29 22:54:46 oliver Exp $
+// $Id: residueChecker.sip,v 1.5 2003/11/01 09:27:39 oliver Exp $
 //
 
 class ResidueChecker
@@ -43,6 +43,9 @@ class ResidueChecker
 
   bool getStatus() const;
   Processor::Result operator () (Residue& /residue/);
+%MethodCode
+  sipRes = sipCpp->operator () (*a0);
+%End
   bool start();
   bool finish();
 }; 

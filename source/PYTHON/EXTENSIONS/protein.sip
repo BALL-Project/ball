@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: protein.sip,v 1.6 2003/10/29 22:54:43 oliver Exp $
+// $Id: protein.sip,v 1.7 2003/11/01 09:27:38 oliver Exp $
 //
 
 class Protein
@@ -48,15 +48,10 @@ class Protein
 	//  virtual void write(ostream& s) const;
 
 
-  char* __str__() /NonLazy/;
+  SIP_PYOBJECT __str__();
 %MethodCode
-	  Protein* ptr;
-
-    if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_Protein,&ptr))
-    {
-		  return PyString_FromString(String(String("Protein ") + ptr->getName() 
-						+ " { " + String(ptr->countResidues()) + " residues }").c_str());
-		}
+	sipRes = PyString_FromString(String(String("Protein ") + sipCpp->getName() 
+						+ " { " + String(sipCpp->countResidues()) + " residues }").c_str());
 %End
 
 };

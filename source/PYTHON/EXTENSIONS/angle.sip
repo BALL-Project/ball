@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: angle.sip,v 1.8 2003/10/29 22:54:36 oliver Exp $
+// $Id: angle.sip,v 1.9 2003/11/01 09:27:36 oliver Exp $
 //
 
 class Angle
@@ -60,12 +60,8 @@ class Angle
   bool isValid () const;
   // void dump(std::ostream& s = std::cout, Size depth = 0) const;
 
-  char *__str__() /NonLazy/;
+  SIP_PYOBJECT __str__();
 %MethodCode
-  Angle* ptr;
-  if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_Angle,&ptr))
-  {
-	  return PyString_FromString(String(ptr->toRadian()).c_str());
-	}
+	sipRes = PyString_FromString(String(sipCpp->toRadian()).c_str());
 %End
 };

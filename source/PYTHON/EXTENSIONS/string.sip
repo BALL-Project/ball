@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: string.sip,v 1.12 2003/10/29 22:54:47 oliver Exp $
+// $Id: string.sip,v 1.13 2003/11/01 09:27:40 oliver Exp $
 //
 
 class Substring
@@ -49,6 +49,10 @@ class Substring
   Size size() const;
   // char& operator [] (Index /index/);
   char operator [] (Index /index/) const;
+%MethodCode
+	sipRes = sipCpp->operator [] (*a0);
+%End
+
   Substring& toLower();
   Substring& toUpper();
   bool isBound() const;
@@ -161,6 +165,10 @@ class String
   void toUpper(Index /from/ = 0, Size /len/ = String::EndPos);
   Substring getSubstring(Index /from/ = 0, Size /len/ = String::EndPos) const; 
   Substring operator () (Index /from/, Size /len/ = String::EndPos) const; 
+%MethodCode
+	sipRes = new Substring(sipCpp->operator () (*a0));
+%End
+
   Substring before(const String& /s/, Index /from/ = 0) const;
   Substring through(const String& /s/, Index /from/ = 0) const;
   Substring from(const String& /s/, Index /from/ = 0) const;
@@ -241,25 +249,19 @@ class String
 	
 	// std::string compatibility methods
 	int size() const;
-  char* c_str();
   const char* c_str() const;
 
 
-  char *__str__() /NonLazy/;
+  SIP_PYOBJECT __str__();
 %MethodCode
-    String *ptr;
-
-    if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_String,&ptr))
-    {
-			if (ptr == 0)
-			{
-				return PyString_FromString("");
-			}
-			else
-			{
-				return PyString_FromString(ptr->c_str());
-			}
-    }
+	if (sipCpp == 0)
+	{
+		sipRes = PyString_FromString("");
+	}
+	else
+	{
+		sipRes = PyString_FromString(sipCpp->c_str());
+	}
 %End
 
 %ConvertToTypeCode

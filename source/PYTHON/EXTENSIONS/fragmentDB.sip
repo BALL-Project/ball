@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentDB.sip,v 1.5 2003/10/29 22:54:40 oliver Exp $
+// $Id: fragmentDB.sip,v 1.6 2003/11/01 09:27:37 oliver Exp $
 //
 
 class FragmentDB 
@@ -86,6 +86,9 @@ class NormalizeNamesProcessor
 	virtual bool start();
 	virtual bool finish();
 	Processor::Result operator () (Fragment& /fragment/);
+%MethodCode
+  sipRes = sipCpp->operator () (*a0);
+%End
 };
 
 
@@ -105,6 +108,9 @@ class BuildBondsProcessor
 	virtual bool finish();
 	virtual bool start();
 	Processor::Result operator () (Fragment& /fragment/);
+%MethodCode
+  sipRes = sipCpp->operator () (*a0);
+%End
 	Size getNumberOfBondsBuilt();
 	void setFragmentDB(const FragmentDB& /fragment_db/);
 	Size buildFragmentBonds(Fragment& /fragment/) const;

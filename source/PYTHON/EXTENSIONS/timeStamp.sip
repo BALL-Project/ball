@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: timeStamp.sip,v 1.8 2003/10/29 22:54:47 oliver Exp $
+// $Id: timeStamp.sip,v 1.9 2003/11/01 09:27:40 oliver Exp $
 //
 
 class PreciseTime
@@ -31,20 +31,15 @@ class PreciseTime
 
   SIP_PYOBJECT __str__();
 %MethodCode
-  PreciseTime* ptr;
+	static char buf[128];
+	time_t secs = sipCpp->getSeconds();
+	strftime(buf, 127, "\045Y\045m\045d\045H\045M\045S", localtime(&secs));
+	String time_str(buf);
+	time_str.append(".");
+	String usec_str(sipCpp->getMicroSeconds() / 1.0e6);
+	time_str.append(usec_str.after("."));
 
-  if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_PreciseTime,&ptr))
-  {
-		char buf[128];
-		time_t secs = ptr->getSeconds();
-		strftime(buf, 127, "\045Y\045m\045d\045H\045M\045S", localtime(&secs));
-		String time_str(buf);
-		time_str.append(".");
-		String usec_str(ptr->getMicroSeconds() / 1.0e6);
-		time_str.append(usec_str.after("."));
-
-		return PyString_FromString(time_str.c_str());
-	}
+	sipRes = PyString_FromString(time_str.c_str());
 %End
 };
 
@@ -67,22 +62,17 @@ class TimeStamp
   //  void write(PersistenceManager& pm) const;
   //  bool read(PersistenceManager& pm);
 
-  char *__str__() /NonLazy/;
+  SIP_PYOBJECT __str__();
 %MethodCode
-  TimeStamp* ptr;
+	time_t secs = sipCpp->getTime().getSeconds();
+	static char buf[128];
+	strftime(buf, 127, "\045Y\045m\045d\045H\045M\045S", localtime(&secs));
+	String time_str(buf);
+	time_str.append(".");
+	String usec_str(sipCpp->getTime().getMicroSeconds() / 1.0e6);
+	time_str.append(usec_str.after("."));
 
-  if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_TimeStamp,&ptr))
-  {
-		time_t secs = ptr->getTime().getSeconds();
-		char buf[128];
-		strftime(buf, 127, "\045Y\045m\045d\045H\045M\045S", localtime(&secs));
-		String time_str(buf);
-		time_str.append(".");
-		String usec_str(ptr->getTime().getMicroSeconds() / 1.0e6);
-		time_str.append(usec_str.after("."));
-
-		return PyString_FromString(time_str.c_str());
-	}
+	sipRes = PyString_FromString(time_str.c_str());
 %End
 };
 

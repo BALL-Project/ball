@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.38 2003/10/29 22:08:33 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.39 2003/11/01 09:27:30 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -64,7 +64,7 @@ AC_DEFUN(CF_ERROR,[
 	if test -f $TARFILE ; then 
 		${RM} $TARFILE ; 
 	fi
-  tar cf $TARFILE configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
 	AC_MSG_ERROR(Aborted.)
 ])
 
@@ -3321,6 +3321,26 @@ AC_DEFUN(CF_PYTHON, [
 			AC_MSG_RESULT(option or make sure it is in your current PATH.)
 			CF_ERROR
 		fi
+
+		dnl
+		dnl		SIP version
+		dnl
+		AC_MSG_CHECKING(sip version)
+		SIP_VERSION=`$SIP -V`
+		AC_MSG_RESULT(${SIP_VERSION})
+		SIP_VERS_NUM=`echo ${SIP_VERSION}| ${CUT} -d\  -f1`
+		SIP_VERS_MAJOR=`echo ${SIP_VERS_NUM} | ${CUT} -d. -f1`
+		SIP_VERS_MINOR=`echo ${SIP_VERS_NUM} | ${CUT} -d. -f2`
+		if test "${SIP_VERS_MAJOR}" -lt 4 ; then
+			AC_MSG_RESULT()
+			AC_MSG_RESULT(SIP release 4.0 or above required.)
+			AC_MSG_RESULT(Your version: ${SIP_VERSION}")
+			AC_MSG_RESULT(Please upgrade or specify the location of the correct SIP using the)
+			AC_MSG_RESULT( --with-sip=PATH)
+			AC_MSG_RESULT()
+			CF_ERROR
+		fi
+	
 
 		dnl
 		dnl	SIP header file (sip.h)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: options.sip,v 1.6 2003/10/29 22:54:42 oliver Exp $
+// $Id: options.sip,v 1.7 2003/11/01 09:27:38 oliver Exp $
 //
 
 class IllegalKey
@@ -26,7 +26,7 @@ class Options
   public:
   static const Size MAX_ENTRY_LENGTH;
   Options();
-  Options(const Options& /options/, bool /deep/ = true);
+  Options(const Options& /options/);
   ~Options();
   bool isInteger(const String& /key/) const;
   bool isBool(const String& /key/) const;
@@ -52,20 +52,17 @@ class Options
   bool readOptionFile(const String& /filename/);
   // virtual void dump (std::ostream& s = std::cout, Size depth = 0) const;
 	// methods inherited from HashMap<String, String>
-	String& operator [] (const String& /key/) 
-		throw();
-	const String& operator [] (const String& /key/) const
-		throw(IllegalKey);
+	// String& operator [] (const String& /key/) throw();
 
-  char* __str__() /NonLazy/;
+	const String& operator [] (const String& /key/) const	throw(IllegalKey);
 %MethodCode
-	  Options* ptr;
+  sipRes = new String(sipCpp->operator [] (*a0));
+%End
 
-    if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_Options,&ptr))
-    {
-		  return PyString_FromString(String(String("Options ") + ptr->getName()
-    			    + " { " + String(ptr->getSize()) + " entries }").c_str());
-	}
+  SIP_PYOBJECT __str__();
+%MethodCode
+	sipRes = PyString_FromString(String(String("Options ") + sipCpp->getName()
+    			    + " { " + String(sipCpp->getSize()) + " entries }").c_str());
 %End
 
 	

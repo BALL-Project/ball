@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector3.sip,v 1.9 2003/10/31 23:15:50 oliver Exp $
+// $Id: vector3.sip,v 1.10 2003/11/01 09:27:41 oliver Exp $
 //
 
 class Vector3
@@ -37,6 +37,10 @@ class Vector3
   static const Vector3& getZero();
   static const Vector3& getUnit();
   float operator [] (Index /index/);
+%MethodCode
+	sipRes = sipCpp->operator [] (*a0);
+%End
+
   // float operator [] (Index /index/) const;
   // ???? const Vector3& operator + () const;
   // ???? Vector3 operator - () const;

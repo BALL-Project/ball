@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomContainer.sip,v 1.6 2003/10/29 22:54:36 oliver Exp $
+// $Id: atomContainer.sip,v 1.7 2003/11/01 09:27:36 oliver Exp $
 //
 
 class AtomContainer
@@ -75,14 +75,9 @@ class AtomContainer
 	bool apply(ResidueProcessor& /processor/);
 
 	
-  char* __str__() /NonLazy/;
+  SIP_PYOBJECT __str__();
 %MethodCode
-  AtomContainer* ptr;
-
-  if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_AtomContainer,&ptr))
-  {
-	  return PyString_FromString(String(String("AtomContainer ") + ptr->getName() 
-						+ " { " + String(ptr->countAtoms()) + " atoms }").c_str());
-	}
+	sipRes = PyString_FromString(String(String("AtomContainer ") + sipCpp->getName() 
+						+ " { " + String(sipCpp->countAtoms()) + " atoms }").c_str());
 %End
 };

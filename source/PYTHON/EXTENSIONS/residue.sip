@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residue.sip,v 1.6 2003/10/29 22:54:46 oliver Exp $
+// $Id: residue.sip,v 1.7 2003/11/01 09:27:39 oliver Exp $
 //
 
 class Residue
@@ -76,14 +76,9 @@ class Residue
   // virtual void write(std::ostream& s) const;
   // BALL_KERNEL_DEFINE_ITERATOR_CREATORS(PDBAtom)
 
-  char* __str__() /NonLazy/;
+  SIP_PYOBJECT __str__();
 %MethodCode
-	  Residue* ptr;
-
-    if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_Residue,&ptr))
-    {
-		  return PyString_FromString(String(String("Residue ") + ptr->getName() + ptr->getID()
-    			    + " { " + String(ptr->countAtoms()) + " atoms }").c_str());
-		}
+	sipRes = PyString_FromString(String(String("Residue ") + sipCpp->getName() + sipCpp->getID()
+    			    + " { " + String(sipCpp->countAtoms()) + " atoms }").c_str());
 %End
 };

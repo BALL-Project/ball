@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ruleEvaluator.sip,v 1.3 2003/10/29 22:54:46 oliver Exp $
+// $Id: ruleEvaluator.sip,v 1.4 2003/11/01 09:27:40 oliver Exp $
 //
 
 class RuleEvaluator
@@ -24,6 +24,10 @@ class RuleEvaluator
   // const RuleEvaluator& operator = (const RuleEvaluator& /evaluator/);
   virtual void clear() throw();
   String operator () (const Atom& /atom/) const;
+%MethodCode
+  sipRes = new String(sipCpp->operator () (*a0));
+%End
+
   bool operator == (const RuleEvaluator& /evaluator/) const;
   bool isValid() const throw();
   // void dump(ostream& s = std::cout, Size indent_depth = 0) const throw();

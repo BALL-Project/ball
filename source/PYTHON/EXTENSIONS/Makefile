@@ -1,7 +1,7 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.22 2003/10/31 23:15:48 oliver Exp $
+# $Id: Makefile,v 1.23 2003/11/01 09:27:36 oliver Exp $
 #
 
 DIRECTORY=PYTHON/EXTENSIONS
@@ -9,8 +9,8 @@ DIRECTORY=PYTHON/EXTENSIONS
 # allow processing of SIP files
 .SUFFIXES: .sip
 
-# default target: the BALL Python extensions in libBALLc.so
-all:	libBALLc.so
+# default target: the BALL Python extensions in BALLmodule.so
+all:	BALLmodule.so
 
 #
 include ../../common.mak
@@ -26,6 +26,7 @@ ADD_INCLUDES=$(PYTHON_INCLUDES) $(SIP_INCLUDES)
  
 PYBALL_SOURCES = \
 	extractors.C \
+	pyBALLSipHelper.C\
 	pyAtomList.C \
 	pyBondList.C \
 	pyConstant.C \
@@ -58,18 +59,18 @@ sip:
 	@for i in SIP/*; do if cmp -s $$i `basename $$i`; then true ; else echo " - $$i"; cp $$i . ; fi ; done
 
 
-libBALLc.so:  $(CPP_OBJECTS)
-	$(DYNAR) $(DYNAROPTS) libBALLc.so $(SIP_OBJECTS) $(PYBALL_OBJECTS) $(SIP_LIB) -L$(BALL_PATH)/lib/$(BINFMT) $(BALL_LIBS)
+BALLmodule.so:  $(CPP_OBJECTS)
+	$(DYNAR) $(DYNAROPTS) BALLmodule.so $(SIP_OBJECTS) $(PYBALL_OBJECTS) $(SIP_LIB) -L$(BALL_PATH)/lib/$(BINFMT) $(BALL_LIBS)
 
-install:	libBALLc.so
-	cp libBALLc.so BALL.py $(BALL_PATH)/lib/$(BINFMT)
+install:	BALLmodule.so
+	cp BALLmodule.so BALL.py $(BALL_PATH)/lib/$(BINFMT)
 	 
 CLEAN_FILES = \
-	BALL.pyc \
-	BALL.py \
+	BALLmodule.so\
 	$(CPP_OBJECTS) \
 	$(SIP_SOURCES) \
 	$(SIP_HEADERS) \
+	$(SIP_HEADER_FILES) \
 	$(SIP_OBJECTS)
  
 clean:

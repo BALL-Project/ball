@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bitVector.sip,v 1.6 2003/10/29 22:54:37 oliver Exp $
+// $Id: bitVector.sip,v 1.7 2003/11/01 09:27:36 oliver Exp $
 //
 class Bit
 {
@@ -55,20 +55,21 @@ class BitVector
 	//	throw(OutOfMemory);
 	// const BitVector& operator = (const char *bit_string)
 	// 	throw(OutOfMemory);
-	void get(BitVector& /bitvector/) const
-		throw(OutOfMemory);
-	BitVector operator () (Index /first/, Index /last/) const
-		throw(IndexUnderflow, IndexOverflow);
-	void setSize(Size /size/, bool /keep/ = true)
-		throw(OutOfMemory);
+	void get(BitVector& /bitvector/) const throw(OutOfMemory);
+	BitVector operator () (Index /first/, Index /last/) const	throw(IndexUnderflow, IndexOverflow);
+%MethodCode
+	sipRes = new BitVector(sipCpp->operator() (*a0, *a1));
+%End
+	void setSize(Size /size/, bool /keep/ = true) throw(OutOfMemory);
 	Size getSize() const throw();
 	Size countValue(bool /value/) const throw();
 	// BlockType* getBitSet() throw();
 	// const BlockType* getBitSet() const throw();
-	Bit operator [] (Index /index/)
-		throw(IndexUnderflow, OutOfMemory);
-	bool operator [] (Index /index/) const
-		throw(IndexUnderflow, IndexOverflow);
+	// Bit operator [] (Index /index/)	throw(IndexUnderflow, OutOfMemory);
+	bool operator [] (Index /index/) const throw(IndexUnderflow, IndexOverflow);
+%MethodCode
+	sipRes = sipCpp->operator[](*a0);
+%End
 	void setBit(Index /index/, bool /value/ = true)
 		throw(IndexUnderflow, OutOfMemory);
 	bool getBit(Index /index/) const
@@ -97,7 +98,7 @@ class BitVector
 	BitVector& operator &= (const BitVector& /bit_vector/) throw(OutOfMemory);
 	BitVector operator ^ (const BitVector& /bit_vector/) throw(OutOfMemory);
 	BitVector& operator ^= (const BitVector& /bit_vector/) throw(OutOfMemory);
-	BitVector operator ~ () throw(OutOfMemory);
+	// BitVector operator ~ () throw(OutOfMemory);
 	bool operator == (const BitVector& /bit_vector/) const throw();
 	bool operator != (const BitVector& /bit_vector/) const throw();
 	bool isAnyBit(bool /value/, Index /first/ = 0, Index /last/ = -1) const

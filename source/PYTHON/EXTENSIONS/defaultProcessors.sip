@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: defaultProcessors.sip,v 1.4 2003/10/29 22:54:39 oliver Exp $
+// $Id: defaultProcessors.sip,v 1.5 2003/11/01 09:27:37 oliver Exp $
 //
 
 class ClearChargeProcessor
@@ -14,6 +14,9 @@ class ClearChargeProcessor
 %End
   public:
   Processor::Result operator () (Atom& /atom/);
+%MethodCode
+  sipRes = sipCpp->operator () (*a0);
+%End
 };
 
 class ClearRadiusProcessor
@@ -27,8 +30,7 @@ class ClearRadiusProcessor
   public:
   Processor::Result operator () (Atom& /atom/);
 %MethodCode
-	printf("TEST\n");
-	return 0;
+  sipRes = sipCpp->operator () (*a0);
 %End
 };
 
@@ -46,6 +48,9 @@ class AssignRadiusProcessor
   virtual bool start();
   virtual bool finish();
   Processor::Result operator() (Atom& /atom/);
+%MethodCode
+  sipRes = sipCpp->operator () (*a0);
+%End
   void setFilename(const String& /filename/);
   String& getFilename();
   Size getNumberOfAssignments();
@@ -64,6 +69,9 @@ class AssignChargeProcessor
   AssignChargeProcessor(const String& /filename/);
   virtual bool start();
   Processor::Result operator () (Atom& /atom/);
+%MethodCode
+  sipRes = sipCpp->operator () (*a0);
+%End
   float getTotalCharge();
 };
  

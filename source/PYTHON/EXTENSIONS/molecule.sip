@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecule.sip,v 1.6 2003/10/29 22:54:41 oliver Exp $
+// $Id: molecule.sip,v 1.7 2003/11/01 09:27:38 oliver Exp $
 //
 
 class Molecule
@@ -46,14 +46,9 @@ class Molecule
 	//  virtual void read(istream& s);
 	//  virtual void write(ostream& s) const;
 
-  char* __str__() /NonLazy/;
+  SIP_PYOBJECT __str__();
 %MethodCode
-	  Molecule* ptr;
-
-    if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_Molecule,&ptr))
-    {
-		  return PyString_FromString(String(String("Molecule ") + ptr->getName() 
-						+ " { " + String(ptr->countAtoms()) + " atoms }").c_str());
-		}
+	sipRes = PyString_FromString(String(String("Molecule ") + sipCpp->getName() 
+						+ " { " + String(sipCpp->countAtoms()) + " atoms }").c_str());
 %End
 };

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricProperties.sip,v 1.5 2003/10/31 23:15:49 oliver Exp $
+// $Id: geometricProperties.sip,v 1.6 2003/11/01 09:27:37 oliver Exp $
 //
 
 class BoundingBoxProcessor
@@ -17,6 +17,9 @@ class BoundingBoxProcessor
   virtual bool start() throw();
   virtual bool finish() throw();
   Processor::Result operator()(Atom& /atom/) throw();
+%MethodCode
+  sipRes = sipCpp->operator () (*a0);
+%End
 	SimpleBox3 getBox() const;
   const Vector3& getLower() const;
   const Vector3& getUpper() const;
@@ -35,6 +38,9 @@ class GeometricCenterProcessor
   virtual bool start() throw();
   virtual bool finish() throw();
   Processor::Result operator()(Atom& /atom/) throw();
+%MethodCode
+  sipRes = sipCpp->operator () (*a0);
+%End
   Vector3& getCenter();
 };
 
@@ -55,6 +61,9 @@ class FragmentDistanceCollector
   virtual bool start() throw();
   virtual bool finish() throw();
   Processor::Result operator()(Composite& /composite/) throw();
+%MethodCode
+  sipRes = sipCpp->operator () (*a0);
+%End
   Size getNumberOfFragments();
   void setComposite(const Composite& /composite/);
   const Composite* getComposite() const;

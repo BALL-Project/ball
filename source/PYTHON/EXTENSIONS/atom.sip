@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.sip,v 1.7 2003/10/29 22:54:36 oliver Exp $
+// $Id: atom.sip,v 1.8 2003/11/01 09:27:36 oliver Exp $
 //
 
 class Atom
@@ -99,17 +99,12 @@ class Atom
    // bool applyBonds(UnaryProcessor<Bond>& processor);
 	
 	// convert the atom to a string representation
-	char *__str__() /NonLazy/;
+	SIP_PYOBJECT __str__();
 %MethodCode
-    Atom *ptr;
-
-    if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_Atom,&ptr))
-    {
-		  return PyString_FromString(String(String("Atom ") + ptr->getName() 
-						+ " { " + ptr->getElement().getSymbol() + " @ (" 
-						+ String(ptr->getPosition().x) + " " + String(ptr->getPosition().y) + " " 
-						+ String(ptr->getPosition().z) + " }").c_str());
-    }
+	sipRes = PyString_FromString(String(String("Atom ") + sipCpp->getName() 
+						+ " { " + sipCpp->getElement().getSymbol() + " @ (" 
+						+ String(sipCpp->getPosition().x) + " " + String(sipCpp->getPosition().y) + " " 
+						+ String(sipCpp->getPosition().z) + " }").c_str());
 %End
 
 
@@ -136,14 +131,9 @@ class AtomType
 	return 0;
 %End
 
-	char *__str__() /NonLazy/;
+	SIP_PYOBJECT __str__();
 %MethodCode
-	Atom::Type* ptr;
-
-  if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_String,&ptr))
-  {
-	  return PyString_FromString(String(*ptr).c_str());
-	}
+	sipRes = PyString_FromString(String(*sipCpp).c_str());
 %End
 };
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: chain.sip,v 1.6 2003/10/29 22:54:37 oliver Exp $
+// $Id: chain.sip,v 1.7 2003/11/01 09:27:37 oliver Exp $
 //
 
 class Chain
@@ -59,15 +59,10 @@ class Chain
 	//  virtual void read(istream& s);
 	//  virtual void write(ostream& s) const;
 	
-  char* __str__() /NonLazy/;
+  SIP_PYOBJECT __str__();
 %MethodCode
-	  Chain* ptr;
-
-	  if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_Chain,&ptr))
-	  {
-		  return PyString_FromString(String(String("Chain ") + ptr->getName()
-						+ " { " + String(ptr->countResidues()) + " residues }").c_str());
-		}
+	sipRes = PyString_FromString(String(String("Chain ") + sipCpp->getName()
+						+ " { " + String(sipCpp->countResidues()) + " residues }").c_str());
 %End
 
 };

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expression.sip,v 1.4 2003/10/29 22:54:39 oliver Exp $
+// $Id: expression.sip,v 1.5 2003/11/01 09:27:37 oliver Exp $
 //
 
 class ExpressionPredicate
@@ -18,6 +18,10 @@ class ExpressionPredicate
   ExpressionPredicate(const String& /argument/);
 	~ExpressionPredicate() throw();
   bool operator () (const Atom& /atom/) const throw();
+%MethodCode
+	sipRes = sipCpp->operator () (*a0);
+%End
+
   virtual void setArgument(const String& /argument/) throw();
 };
 
@@ -86,6 +90,10 @@ class Expression
   ~Expression() throw();
   bool hasPredicate(const String& /name/);
   bool operator () (const Atom& /atom/) const throw();
+%MethodCode
+	sipRes = sipCpp->operator () (*a0);
+%End
+
   ExpressionPredicate* getPredicate(const String& /name/, const String& /args/ = "") const;
   // void registerPredicate(const String& name, CreationMethod creation_method);
   void setExpression(const String& /expression/);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: typeRuleProcessor.sip,v 1.4 2003/10/29 22:54:48 oliver Exp $
+// $Id: typeRuleProcessor.sip,v 1.5 2003/11/01 09:27:40 oliver Exp $
 //
 
 class TypeRuleProcessor
@@ -19,4 +19,7 @@ class TypeRuleProcessor
 	~TypeRuleProcessor();
 
 	Processor::Result operator () (Atom& /atom/);
+%MethodCode
+  sipRes = sipCpp->operator () (*a0);
+%End
 };

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: selectable.sip,v 1.3 2003/10/29 22:54:46 oliver Exp $
+// $Id: selectable.sip,v 1.4 2003/11/01 09:27:40 oliver Exp $
 //
 
 class Selectable
@@ -15,7 +15,6 @@ using namespace BALL;
   Selectable(const Selectable&, bool = true) throw();
   ~Selectable() throw();
   void clear() throw();
-  void destroy() throw();
  	void set(const Selectable&, bool = true) throw();
   // Selectable& operator = (const Selectable&);
   void get(Selectable&, bool = true) const throw();

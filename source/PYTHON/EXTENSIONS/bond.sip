@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bond.sip,v 1.6 2003/10/29 22:54:37 oliver Exp $
+// $Id: bond.sip,v 1.7 2003/11/01 09:27:36 oliver Exp $
 //
 
 class Bond
@@ -88,43 +88,38 @@ class Bond
   // convert the atom to a string representation
 
 
-  char* __str__() /NonLazy/;
+  SIP_PYOBJECT __str__();
 %MethodCode
-  Bond* ptr;
-
-  if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_Bond,&ptr))
-  {
-		const Atom* a1 = ptr->getFirstAtom();
-		const Atom* a2 = ptr->getSecondAtom();
-		String tmp("Bond {");
-		if ((a1 != 0) && (a2 != 0))
+	const Atom* a1 = sipCpp->getFirstAtom();
+	const Atom* a2 = sipCpp->getSecondAtom();
+	String tmp("Bond {");
+	if ((a1 != 0) && (a2 != 0))
+	{
+		tmp += a1->getFullName();
+		tmp += " - ";
+		tmp += a2->getFullName();
+		tmp += ", ";
+		tmp += String(sipCpp->getLength());
+		tmp += " A";
+		switch (sipCpp->getOrder())
 		{
-			tmp += a1->getFullName();
-			tmp += " - ";
-			tmp += a2->getFullName();
-			tmp += ", ";
-			tmp += String(ptr->getLength());
-			tmp += " A";
-			switch (ptr->getOrder())
-			{
-				case Bond::ORDER__SINGLE:
-					tmp += ", single";
-					break;
-				case Bond::ORDER__DOUBLE:
-					tmp += ", double";
-					break;
-				case Bond::ORDER__AROMATIC:
-					tmp += ", aromatic";
-					break;
-				case Bond::ORDER__TRIPLE:
-					tmp += ", triple";
-					break;
-				default:
-					tmp += ", unknown";
-			}
-			tmp += " }";
+			case Bond::ORDER__SINGLE:
+				tmp += ", single";
+				break;
+			case Bond::ORDER__DOUBLE:
+				tmp += ", double";
+				break;
+			case Bond::ORDER__AROMATIC:
+				tmp += ", aromatic";
+				break;
+			case Bond::ORDER__TRIPLE:
+				tmp += ", triple";
+				break;
+			default:
+				tmp += ", unknown";
 		}
-		return PyString_FromString(tmp.c_str());
+		tmp += " }";
 	}
+	return PyString_FromString(tmp.c_str());
 %End
 };

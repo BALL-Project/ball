@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricTransformations.sip,v 1.4 2003/10/29 22:54:40 oliver Exp $
+// $Id: geometricTransformations.sip,v 1.5 2003/11/01 09:27:38 oliver Exp $
 //
 
 class TranslationProcessor
@@ -19,6 +19,9 @@ class TranslationProcessor
   void setTranslation(const Vector3& /translation/);
   const Vector3& getTranslation() const;
   Processor::Result operator()(Atom& /atom/);
+%MethodCode
+  sipRes = sipCpp->operator () (*a0);
+%End
 };
 
 class TransformationProcessor
@@ -36,4 +39,7 @@ class TransformationProcessor
   void setTransformation(const Matrix4x4& /transformation/);
   const Matrix4x4& getTransformation() const;
   Processor::Result operator()(Atom& /atom/);
+%MethodCode
+  sipRes = sipCpp->operator () (*a0);
+%End
 };
