@@ -1,7 +1,8 @@
-// $Id: ramachandran.C,v 1.1 2000/01/10 18:54:59 oliver Exp $
+// $Id: ramachandran.C,v 1.2 2000/01/10 19:18:40 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amber.h>
 #include <BALL/STRUCTURE/fragmentDB.h>
+#include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/ENERGY/atomicContactEnergy.h>
 #include <BALL/ENERGY/coulomb.h>
 #include <BALL/FORMAT/PDBFile.h>
@@ -37,7 +38,7 @@ int main(int argc, char** argv)
 	S.apply(*db.normalizeNames);
 	
 	// now, iterate over all residues
-	ResidueIterator res_it = S.begin();
+	ResidueIterator res_it = S.beginResidue();
 	for (;+res_it; ++res_it)
 	{
 		Atom* C = 0;
@@ -47,7 +48,7 @@ int main(int argc, char** argv)
 		for (; +atom_it; ++atom_it)
 		{
 			if (atom_it->getName() == "C") C = &*atom_it;
-			if (atom_it->getName() == "N") H = &*atom_it;
+			if (atom_it->getName() == "N") N = &*atom_it;
 			if (atom_it->getName() == "CA") CA = &*atom_it;
 		}
 		
