@@ -1,4 +1,4 @@
-// $Id: options.C,v 1.19 2000/12/01 13:01:53 anker Exp $ 
+// $Id: options.C,v 1.20 2000/12/01 13:25:19 anker Exp $ 
 
 #include <BALL/DATATYPE/options.h>
 
@@ -440,7 +440,9 @@ namespace BALL
 	const Options& Options::operator = (const Options& options)
 	 throw()
 	{
-		*this = Options(options);
+		StringHashMap<String>::operator = (options);
+		name_ = options.name_;
+
 		return *this;
 	}
 
