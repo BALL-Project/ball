@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Vector4_test.C,v 1.25.2.2 2003/02/05 13:20:48 anker Exp $
+// $Id: Vector4_test.C,v 1.25.2.3 2003/02/05 13:22:08 anker Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -9,11 +9,7 @@
 #include <BALL/MATHS/vector4.h>
 ///////////////////////////
 
-<<<<<<< Vector4_test.C
-START_TEST(TVector4, "$Id: Vector4_test.C,v 1.25.2.2 2003/02/05 13:20:48 anker Exp $")
-=======
-START_TEST(TVector4, "$Id: Vector4_test.C,v 1.25.2.2 2003/02/05 13:20:48 anker Exp $")
->>>>>>> 1.27
+START_TEST(TVector4, "$Id: Vector4_test.C,v 1.25.2.3 2003/02/05 13:22:08 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
