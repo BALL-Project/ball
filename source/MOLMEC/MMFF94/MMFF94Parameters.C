@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.C,v 1.1.2.7 2005/03/25 21:07:39 amoll Exp $
+// $Id: MMFF94Parameters.C,v 1.1.2.8 2005/03/25 21:38:35 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field parameters 
 //
@@ -66,7 +66,9 @@ namespace BALL
 				
 				if (infile.getLine().split(fields) < 9)
 				{
-					Log.error() << "Error in " << filename << " Not 9 fields in one line " << infile.getLine() << std::endl;
+					Log.error() << "Error in " << __FILE__ << " " << __LINE__ << " : " 
+										  << filename << " Not 9 fields in one line " 
+											<< infile.getLine() << std::endl;
 					return false;
 				}
 
@@ -164,10 +166,11 @@ namespace BALL
 					continue;
 				}
 				
-				if (infile.getLine().split(fields) != 6)
+				if (infile.getLine().split(fields) < 6)
 				{
-					Log.error() << "Error in " << filename << " Not 6 fields in one line " 
-										  << infile.getLine() << std::endl;
+					Log.error() << "Error in " << __FILE__ << " " << __LINE__ << " : " 
+										  << filename << " Not 6 fields in one line " 
+											<< infile.getLine() << std::endl;
 					return false;
 				}
 
@@ -289,7 +292,8 @@ namespace BALL
 				
 				if (infile.getLine().split(fields) < 7)
 				{
-					Log.error() << "Error in " << filename << " Not 6 fields in one line " 
+					Log.error() << "Error in " << __FILE__ << " " << __LINE__ << " : " 
+										  << filename << " Not 6 fields in one line " 
 											<< infile.getLine() << std::endl;
 					return false;
 				}

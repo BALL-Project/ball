@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Bend.C,v 1.1.2.3 2005/03/25 21:07:38 amoll Exp $
+// $Id: MMFF94Bend.C,v 1.1.2.4 2005/03/25 21:38:35 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Bend.h>
@@ -178,14 +178,7 @@ namespace BALL
 			const float& ka = bend_it->ka;
 			const float& theta0 = bend_it->theta0;
 
-			if (bend_it->is_linear)
-			{
-				const float energy = 143.9325 * ka * (1.0 + cos(theta0 * degree_to_radian));
-Log.error() << "#~~#   1 " << energy            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-				energy_ += energy;
-				continue;
-			}
-			
+		
 			v1 = bend_it->atom1->position - bend_it->atom2->position;
 			v2 = bend_it->atom3->position - bend_it->atom2->position;
 			const double square_length = v1.getSquareLength() * v2.getSquareLength();
@@ -220,9 +213,16 @@ Log.info() << "Bend " << bend_it->atom1->ptr->getName() << " "
 											<< theta << "  T0: " << theta0 << " ka " << ka;
 #endif
 
-			theta -= theta0;
-
-			const float energy = K0 * ka * theta * theta * (1.0 + k1 * theta);
+			float energy;
+			if (bend_it->is_linear)
+			{ 
+				energy = 143.9325 * ka * (1.0 + cos(theta));
+			}
+			else
+			{
+				theta -= theta0;
+				energy = K0 * ka * theta * theta * (1.0 + k1 * theta);
+			}
 
 #ifdef BALL_DEBUG_MMFF
 	Log.info() << "  E: "<< energy << std::endl;
