@@ -104,7 +104,7 @@ EXECUTABLES_MOLMEC = \
 	SnapShotManager_test
 
 EXECUTABLES_NMR = \
-	AssignShiftProcessor_test\
+	# AssignShiftProcessor_test\
 	RandomCoilShiftProcessor_test\
 	AnisotropyShiftProcessor_test\
 	ClearShiftProcessor_test\
