@@ -1,4 +1,4 @@
-// $Id: analyticalGeometry.h,v 1.47 2001/06/26 09:02:46 anker Exp $
+// $Id: analyticalGeometry.h,v 1.48 2001/07/02 15:41:04 strobel Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -174,12 +174,12 @@ namespace BALL
 	/**	Solve a system of linear equations.
 		  Given a system of linear equations
 			\[
-				\begin{aligned}
+				\begin{array}{ccccccccc}
 				 a_{1,1} x_1 & + & a_{1,2} x_2 & + & \ldots & + & a_{1,n} x_n & = & a_{1,(n+1)}\\
 				 a_{2,1} x_1 & + & a_{2,2} x_2 & + & \ldots & + & a_{2,n} x_n & = & a_{2,(n+1)}\\
-				   \cdots &&  \cdots    &&   \ldots &&    \ddots &&   \cdots\\
+				   \vdots    &   &   \vdots    &   & \ddots &   &   \vdots    &   &   \vdots\\
 				 a_{n,1} x_1 & + & a_{n,2} x_2 & + & \ldots & + & a_{n,n} x_n & = & a_{n,(n+1)}\\
-				\end{aligned}
+				\end{array}
 			\]
 			in matrix form, identify the solution $x = (x_1, x_2,\ldots x_N)$.
 			{\tt m} should point to a C-style array containing the $n\times(n+1)$ matrix {\bf A}.
@@ -187,7 +187,7 @@ namespace BALL
 			\[
 				a_{1,1}, a_{1,2}, \cdot, a_{1,(n+1)}, a_{2,1}, \ldots a_{n,(n+1)}
 			\]
-			{\tt x} points to a C-style array that will contain the solution vector {\bf x} 
+			{\tt x} points to a C-style array that will contain the solution vector {\bf x}
 			upon successful termination of the function.
 			If there is no solution or the system is under-determined, return {\bf false}.
 			@param	m pointer to the factors in the equations
@@ -966,13 +966,13 @@ namespace BALL
 		T radius2_square = b.radius * b.radius;
 		T u = radius1_square - radius2_square + square_dist;
 		T length = u / (2 * square_dist);
-		intersection_circle.p = a.p + (norm * length);
 		T square_radius = radius1_square - u * length / 2;
-		if (Maths::isLess(square_radius, 0))
+		if (square_radius < 0)
 		{
 			return false;
 		}
 
+		intersection_circle.p = a.p + (norm * length);
 		intersection_circle.radius = sqrt(square_radius);
 		intersection_circle.n = norm / dist;
 
@@ -993,6 +993,7 @@ namespace BALL
 											 const TSphere3<T>& s3,
 											 TVector3<T>& p1,
 											 TVector3<T>& p2)
+		throw()
 	{
 		T r1_square = s1.radius*s1.radius;
 		T r2_square = s2.radius*s2.radius;
@@ -1009,7 +1010,7 @@ namespace BALL
 			plane1 = TPlane3<T>(s2.p.x-s1.p.x,s2.p.y-s1.p.y,s2.p.z-s1.p.z,u);
 			plane2 = TPlane3<T>(s3.p.x-s1.p.x,s3.p.y-s1.p.y,s3.p.z-s1.p.z,v);
 		}
-		catch (Exception::GeneralException)
+		catch (Exception::DivisionByZero)
 		{
 			return false;
 		}
