@@ -19,6 +19,7 @@ EXECUTABLES = \
 	Limits_test\
 	NumericalSAS_test\
 	Options_test\
+	PDBFile_test\
 	PointGrid_test\
 	PoissonBoltzmann_test\
 	PropertyManager_test\
@@ -83,6 +84,9 @@ Options_test:	Options_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 NumericalSAS_test:	NumericalSAS_test.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
+PDBFile_test:	PDBFile_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 PointGrid_test:	PointGrid_test.o
