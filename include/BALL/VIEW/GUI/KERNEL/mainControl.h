@@ -1,4 +1,4 @@
-// $Id: mainControl.h,v 1.16 2001/06/28 20:30:03 sturm Exp $
+// $Id: mainControl.h,v 1.17 2001/07/09 19:06:59 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
 #define BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
@@ -101,8 +101,8 @@ namespace BALL
 				registered \Ref{ModularWidget} objects if the preferences has changed.
 				@memo    MainControl class (BALL VIEW gui kernel framework)
 				@author  $Author: sturm $
-				@version $Revision: 1.16 $
-				@date    $Date: 2001/06/28 20:30:03 $
+				@version $Revision: 1.17 $
+				@date    $Date: 2001/07/09 19:06:59 $
 		*/
 		class MainControl
 			: public QMainWindow,
@@ -362,14 +362,7 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of a compositeDescriptor.
-					Access a constant pointer to the \Ref{CompositeDescriptor} of the inserted
-					\Ref{Composite} {\em composite}. If {\em composite} is not inserted into
-					{\em *this} mainControl then {\tt 0} is returned.
-					@param   composite the inserted \Ref{Composite} whose \Ref{CompositeDescriptor} should be returned
-					@return  const CompositeDescriptor* constant pointer to \Ref{CompositeDescriptor}, {\tt 0} if {\em composite} is not inserted into {\em *this} mainControl
-					@see     insert
-					@see     Composite
-					@see     CompositeDescriptor
+					For further information see \Ref{getDescriptor}.
 			*/
 			const CompositeDescriptor* getDescriptor(const Composite& composite) const
 				throw();
@@ -387,13 +380,7 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of of all compositeDescriptor objects.
-					Access a constant reference to the list of \Ref{CompositeDescriptor} objects
-					of {\em *this} mainControl. Empty if {\em *this} mainControl has no objects
-					yet.			
-					@return  const List<CompositeDescriptor*>& constant reference to the list of \Ref{CompositeDescriptor} objects of {\em *this} mainControl
-					@see     insert
-					@see     getDescriptor
-					@see     CompositeDescriptor
+					For further information see \Ref{getDescriptorList}.
 			*/
 			const List<CompositeDescriptor*>& getDescriptorList() const
 				throw();
@@ -426,15 +413,7 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the name.
-					Access a constant pointer to the name of {\em composite}. If the 
-					{\em composite} is not inserted into {\em *this} mainControl then {\tt 0}
-					is returned.
-					@param   composite the \Ref{Composite} whose name should be retrieved
-					@return  const String* constant pointer to the name ({\tt 0} if no such composite is inserted)
-					@see     setName
-					@see     insert
-					@see     Composite
-					@see     String
+					For further information see \Ref{getName}.
 			*/
 			const String* getName(const Composite& composite) const
 				throw();
@@ -457,18 +436,7 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of a compositeDescriptor to a given name.
-					Access a constant pointer to the \Ref{CompositeDescriptor} of a
-					\Ref{Composite} inserted into {\em *this} mainControl with a given string
-					{\em name}.
-					If more such names are available then the first found 
-					\Ref{CompositeDescriptor} with this {\em name} will be returned.
-					@param   name the name whose \Ref{CompositeDescriptor} should be retrieved
-					@return  const CompositeDescriptor* constant pointer to the \Ref{CompositeDescriptor} ({\tt 0} if no such \Ref{Composite} with such a name exists)
-					@see     setName
-					@see     insert
-					@see     Composite
-					@see     CompositeDescriptor
-					@see     String
+					For further information see \Ref{getDescriptor}.
 			*/
 			const CompositeDescriptor* getDescriptor(const String& name) const
 				throw();
@@ -501,14 +469,7 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the center vector.
-					Access a constant pointer to the center \Ref{Vector3} of the given
-					\Ref{Composite} {\em composite}.
-					@param   composite the \Ref{Composite} whose center vector should be retrieved
-					@return  const Vector3* constant pointer to the center vector ({\tt 0} if no such \Ref{Composite} exists)
-					@see     setCenter
-					@see     insert
-					@see     Composite
-					@see     Vector3
+					For further information see \Ref{getCenter}.
 			*/
 			const Vector3* getCenter(const Composite& composite) const
 				throw();
@@ -531,18 +492,7 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of a compositeDescriptor to a given center vector.
-					Access a constant pointer to the \Ref{CompositeDescriptor} of a
-					\Ref{Composite} inserted into {\em *this} mainControl with a given 
-					\Ref{Vector3} {\em center}.
-					If more such center \Ref{Vector3} are available then the first found 
-					\Ref{CompositeDescriptor} with this {\em center} vector will be returned.
-					@param   center the center \Ref{Vector3} whose \Ref{CompositeDescriptor} should be retrieved
-					@return  const CompositeDescriptor* constant pointer to the \Ref{CompositeDescriptor} ({\tt 0} if no such \Ref{Composite} with such a center vector exists)
-					@see     setCenter
-					@see     insert
-					@see     Composite
-					@see     CompositeDescriptor
-					@see     Vector3
+					For further information see \Ref{getDescriptor}.
 			*/
 			const CompositeDescriptor* getDescriptor(const Vector3& center) const
 				throw();
@@ -585,9 +535,7 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the inifile.
-					Access the constant reference of the \Ref{INIFile} of {\em *this} mainControl.
-					@return      const INIFile& constant reference to the inifile of {\em *this} mainControl
-					@see         INIFile
+					For further information see \Ref{getINIFile}.
 			*/
 			const INIFile& getINIFile() const
 				throw();
