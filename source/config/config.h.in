@@ -1,3 +1,7 @@
+// $Id: config.h.in,v 1.23 2001/02/21 18:28:00 anker Exp $ 
+
+#ifndef BALL_CONFIG_CONFIG_H
+#define BALL_CONFIG_CONFIG_H
 
 // here are some global configuration flags for BALL
 
@@ -164,3 +168,5 @@
 
 // Define for activated PYTHON support
 #undef BALL_PYTHON_SUPPORT
+
+#endif // BALL_CONFIG_CONFIG_H
