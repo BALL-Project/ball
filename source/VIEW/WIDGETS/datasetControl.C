@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.5 2003/09/20 15:35:56 amoll Exp $
+// $Id: datasetControl.C,v 1.6 2003/09/23 15:00:08 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -158,10 +158,16 @@ void DatasetControl::onNotify(Message *message)
 		insertGrid_(ntm->getRegularData3D(), *(System*)ntm->getComposite(), ntm->getCompositeName());
 		return;
 	}
+	else if (RTTI::isKindOf<NewTrajectoryMessage>(*message))
+	{
+		NewTrajectoryMessage* ntm = RTTI::castTo<NewTrajectoryMessage>(*message);
+		insertTrajectory_(ntm->getTrajectoryFile(), *(System*)ntm->getComposite());
+		return;
+	}
 	else if (RTTI::isKindOf<CompositeMessage>(*message))
   {
     CompositeMessage *composite_message = RTTI::castTo<CompositeMessage>(*message);
-		if (!composite_message->getType() == CompositeMessage::REMOVED_COMPOSITE) return;
+		if (composite_message->getType() != CompositeMessage::REMOVED_COMPOSITE) return;
     Composite* composite = (Composite *)composite_message->getComposite();
 		if (!composite_to_items_.has(composite)) return;
 
@@ -176,12 +182,6 @@ void DatasetControl::onNotify(Message *message)
 			deleteGrid_();
 		}
 	}   
-	else if (RTTI::isKindOf<NewTrajectoryMessage>(*message))
-	{
-		NewTrajectoryMessage* ntm = RTTI::castTo<NewTrajectoryMessage>(*message);
-		insertTrajectory_(ntm->getTrajectoryFile(), *(System*)ntm->getComposite());
-		return;
-	}
 }
 
 void DatasetControl::deleteTrajectory_()
