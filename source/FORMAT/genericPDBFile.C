@@ -1,4 +1,4 @@
-// $Id: genericPDBFile.C,v 1.15 2001/08/23 10:29:34 oliver Exp $
+// $Id: genericPDBFile.C,v 1.16 2001/09/28 08:40:56 anker Exp $
 
 #include <BALL/FORMAT/genericPDBFile.h>
 
@@ -833,8 +833,16 @@ namespace BALL
 				}
 
 				temp2 = temp = format_column;
+
+				// BAUSTELLE:
+				// does isdigit() return false if it encounters a \0? otherwise
+				// this loop could run over the end of the string and into
+				// nirvana...
+
+				Log.info() << "before loop: " << format_column << endl;
 				for (; isdigit(*format_column); ++format_column)
 				{
+					Log.info() << "loop: " << *format_column << endl;
 				}
 
 				if (*format_column == '.')
@@ -1179,1054 +1187,1054 @@ namespace BALL
 					 record_CONECT.salt_bridged_atom_serial_number);
 			
 
-				
+
 			case PDB::RECORD_TYPE__CRYST1:
 
 				parseLine
-		(line,
-		 size, 
-		 record_type_format->format_string,
-		 record_CRYST1.record_name,
-		 &record_CRYST1.unit_cell.a,
-		 &record_CRYST1.unit_cell.b,
-		 &record_CRYST1.unit_cell.c,
-		 &record_CRYST1.unit_cell.alpha,
-		 &record_CRYST1.unit_cell.beta,
-		 &record_CRYST1.unit_cell.gamma,
-		 record_CRYST1.unit_cell.space_group,
-		 &record_CRYST1.unit_cell.z_value);
+					(line,
+					 size, 
+					 record_type_format->format_string,
+					 record_CRYST1.record_name,
+					 &record_CRYST1.unit_cell.a,
+					 &record_CRYST1.unit_cell.b,
+					 &record_CRYST1.unit_cell.c,
+					 &record_CRYST1.unit_cell.alpha,
+					 &record_CRYST1.unit_cell.beta,
+					 &record_CRYST1.unit_cell.gamma,
+					 record_CRYST1.unit_cell.space_group,
+					 &record_CRYST1.unit_cell.z_value);
 
 				return readRecordCRYST1
-		(record_CRYST1.unit_cell);
+					(record_CRYST1.unit_cell);
 
 
-				
+
 			case PDB::RECORD_TYPE__DBREF:
 
 				parseLine
-		(line,
-		 size, 
-		 record_type_format->format_string,
-		 record_DBREF.record_name,
-		 record_DBREF.entry_code,
-		 &record_DBREF.chain_ID,
-		 &record_DBREF.initial_sequence.number,
-		 &record_DBREF.initial_sequence.insertion_code,
-		 &record_DBREF.ending_sequence.number,
-		 &record_DBREF.ending_sequence.insertion_code,
-		 record_DBREF.sequence_database_name,
-		 record_DBREF.sequence_database_accession_code,
-		 record_DBREF.sequence_database_ID_code,
-		 &record_DBREF.chain_ID,
-		 &record_DBREF.initial_database_segment.number,
-		 &record_DBREF.initial_database_segment.insertion_code,
-		 &record_DBREF.ending_database_segment.number,
-		 &record_DBREF.ending_database_segment.insertion_code);
+					(line,
+					 size, 
+					 record_type_format->format_string,
+					 record_DBREF.record_name,
+					 record_DBREF.entry_code,
+					 &record_DBREF.chain_ID,
+					 &record_DBREF.initial_sequence.number,
+					 &record_DBREF.initial_sequence.insertion_code,
+					 &record_DBREF.ending_sequence.number,
+					 &record_DBREF.ending_sequence.insertion_code,
+					 record_DBREF.sequence_database_name,
+					 record_DBREF.sequence_database_accession_code,
+					 record_DBREF.sequence_database_ID_code,
+					 &record_DBREF.chain_ID,
+					 &record_DBREF.initial_database_segment.number,
+					 &record_DBREF.initial_database_segment.insertion_code,
+					 &record_DBREF.ending_database_segment.number,
+					 &record_DBREF.ending_database_segment.insertion_code);
 
 				return readRecordDBREF
-		(record_DBREF.entry_code,
-		 record_DBREF.chain_ID,
-		 record_DBREF.initial_sequence,
-		 record_DBREF.ending_sequence,
-		 record_DBREF.sequence_database_name,
-		 record_DBREF.sequence_database_accession_code,
-		 record_DBREF.sequence_database_ID_code,
-		 record_DBREF.initial_database_segment,
-		 record_DBREF.ending_database_segment);
+					(record_DBREF.entry_code,
+					 record_DBREF.chain_ID,
+					 record_DBREF.initial_sequence,
+					 record_DBREF.ending_sequence,
+					 record_DBREF.sequence_database_name,
+					 record_DBREF.sequence_database_accession_code,
+					 record_DBREF.sequence_database_ID_code,
+					 record_DBREF.initial_database_segment,
+					 record_DBREF.ending_database_segment);
 
 
-				
+
 			case PDB::RECORD_TYPE__END:
 
 				parseLine
-		(line,
-		 size, 
-		 record_type_format->format_string,
-		 record_END.record_name);
-				
+					(line,
+					 size, 
+					 record_type_format->format_string,
+					 record_END.record_name);
+
 				return readRecordEND();
 
 
-				
+
 			case PDB::RECORD_TYPE__ENDMDL:
 
 				parseLine
-		(line,
-		 size, 
-		 record_type_format->format_string,
-		 record_ENDMDL.record_name);
+					(line,
+					 size, 
+					 record_type_format->format_string,
+					 record_ENDMDL.record_name);
 
 				current_model_ = INVALID_INDEX;
 
 				return readRecordENDMDL();
 
 
-				
+
 			case PDB::RECORD_TYPE__EXPDTA:
 
 				parseLine
-		(line,
-		 size, 
-		 record_type_format->format_string,
-		 record_EXPDTA.record_name,
-		 &record_EXPDTA.continuation,
-		 record_EXPDTA.technique);
+					(line,
+					 size, 
+					 record_type_format->format_string,
+					 record_EXPDTA.record_name,
+					 &record_EXPDTA.continuation,
+					 record_EXPDTA.technique);
 
 				return readRecordEXPDTA
-		(record_EXPDTA.continuation,
-		 record_EXPDTA.technique);
+					(record_EXPDTA.continuation,
+					 record_EXPDTA.technique);
 
 
-				
+
 			case PDB::RECORD_TYPE__FORMUL:
 
 				parseLine
-		(line,
-		 size, 
-		 record_type_format->format_string,
-		 record_FORMUL.record_name,
-		 &record_FORMUL.component_number,
-		 record_FORMUL.het_ID,
-		 &record_FORMUL.continuation_number,
-		 &record_FORMUL.is_water,
-		 record_FORMUL.chemical_formula);
-				
+					(line,
+					 size, 
+					 record_type_format->format_string,
+					 record_FORMUL.record_name,
+					 &record_FORMUL.component_number,
+					 record_FORMUL.het_ID,
+					 &record_FORMUL.continuation_number,
+					 &record_FORMUL.is_water,
+					 record_FORMUL.chemical_formula);
+
 				return readRecordFORMUL
-		(record_FORMUL.component_number,
-		 record_FORMUL.het_ID,
-		 record_FORMUL.continuation_number,
-		 record_FORMUL.is_water,
-		 record_FORMUL.chemical_formula);
+					(record_FORMUL.component_number,
+					 record_FORMUL.het_ID,
+					 record_FORMUL.continuation_number,
+					 record_FORMUL.is_water,
+					 record_FORMUL.chemical_formula);
 
 
-				
+
 			case PDB::RECORD_TYPE__FTNOTE:
 
 				parseLine
-		(line,
-		 size, 
-		 record_type_format->format_string,
-		 record_FTNOTE.record_name,
-		 &record_FTNOTE.number,
-		 record_FTNOTE.text);
+					(line,
+					 size, 
+					 record_type_format->format_string,
+					 record_FTNOTE.record_name,
+					 &record_FTNOTE.number,
+					 record_FTNOTE.text);
 
 				return readRecordFTNOTE
-		(record_FTNOTE.number,
-		 record_FTNOTE.text);
+					(record_FTNOTE.number,
+					 record_FTNOTE.text);
 
 
-				
+
 			case PDB::RECORD_TYPE__HEADER:
 
 				parseLine
-		(line,
-		 size, 
-		 record_type_format->format_string,
-		 record_HEADER.record_name,
-		 record_HEADER.classification,
-		 record_HEADER.deposition_date,
-		 record_HEADER.ID_code);
-				
+					(line,
+					 size, 
+					 record_type_format->format_string,
+					 record_HEADER.record_name,
+					 record_HEADER.classification,
+					 record_HEADER.deposition_date,
+					 record_HEADER.ID_code);
+
 				return readRecordHEADER
-		(record_HEADER.classification,
-		 record_HEADER.deposition_date,
-		 record_HEADER.ID_code);
+					(record_HEADER.classification,
+					 record_HEADER.deposition_date,
+					 record_HEADER.ID_code);
 
 
-				
+
 			case PDB::RECORD_TYPE__HELIX:
 
 				parseLine
-		(line,
-		 size, 
-		 record_type_format->format_string,
-		 record_HELIX.record_name,
-		 &record_HELIX.serial_number,
-		 record_HELIX.helix_ID,
-		 record_HELIX.initial_residue.residue_name,
-		 &record_HELIX.initial_residue.chain_ID,
-		 &record_HELIX.initial_residue.sequence_number,
-		 &record_HELIX.initial_residue.insertion_code,
-		 record_HELIX.terminal_residue.residue_name,
-		 &record_HELIX.terminal_residue.chain_ID,
-		 &record_HELIX.terminal_residue.sequence_number,
-		 &record_HELIX.terminal_residue.insertion_code,
-		 &record_HELIX.helix_class,
-		 record_HELIX.comment,
-		 &record_HELIX.length);
-				
+					(line,
+					 size, 
+					 record_type_format->format_string,
+					 record_HELIX.record_name,
+					 &record_HELIX.serial_number,
+					 record_HELIX.helix_ID,
+					 record_HELIX.initial_residue.residue_name,
+					 &record_HELIX.initial_residue.chain_ID,
+					 &record_HELIX.initial_residue.sequence_number,
+					 &record_HELIX.initial_residue.insertion_code,
+					 record_HELIX.terminal_residue.residue_name,
+					 &record_HELIX.terminal_residue.chain_ID,
+					 &record_HELIX.terminal_residue.sequence_number,
+					 &record_HELIX.terminal_residue.insertion_code,
+					 &record_HELIX.helix_class,
+					 record_HELIX.comment,
+					 &record_HELIX.length);
+
 				return readRecordHELIX
-		(record_HELIX.serial_number,
-		 record_HELIX.helix_ID,
-		 record_HELIX.initial_residue,
-		 record_HELIX.terminal_residue,
-		 record_HELIX.helix_class,
-		 record_HELIX.comment,
-		 record_HELIX.length);
+					(record_HELIX.serial_number,
+					 record_HELIX.helix_ID,
+					 record_HELIX.initial_residue,
+					 record_HELIX.terminal_residue,
+					 record_HELIX.helix_class,
+					 record_HELIX.comment,
+					 record_HELIX.length);
 
 
-				
+
 			case PDB::RECORD_TYPE__HET:
 
 				parseLine
-		(line,
-		 size, 
-		 record_type_format->format_string,
-		 record_HET.record_name,
-		 record_HET.het_ID,
-		 &record_HET.chain_ID,
-		 &record_HET.sequence_number,
-		 &record_HET.insertion_code,
-		 &record_HET.number_of_HETATM_records,
-		 record_HET.text);
+					(line,
+					 size, 
+					 record_type_format->format_string,
+					 record_HET.record_name,
+					 record_HET.het_ID,
+					 &record_HET.chain_ID,
+					 &record_HET.sequence_number,
+					 &record_HET.insertion_code,
+					 &record_HET.number_of_HETATM_records,
+					 record_HET.text);
 
 				return readRecordHET
-		(record_HET.het_ID,
-		 record_HET.chain_ID,
-		 record_HET.sequence_number,
-		 record_HET.insertion_code,
-		 record_HET.number_of_HETATM_records,
-		 record_HET.text);
+					(record_HET.het_ID,
+					 record_HET.chain_ID,
+					 record_HET.sequence_number,
+					 record_HET.insertion_code,
+					 record_HET.number_of_HETATM_records,
+					 record_HET.text);
 
-		
+
 
 			case PDB::RECORD_TYPE__HETATM:
 
 				if (selected_model_ != 0
-			&& selected_model_ != current_model_)
+						&& selected_model_ != current_model_)
 				{
-		return true;
+					return true;
 				}
 
 				parseLine
-		(line,
-		 size, 
-		 record_type_format->format_string,
-		 record_HETATM.record_name,
-		 &record_HETATM.serial_number,
-		 record_HETATM.atom_name,
-		 &record_HETATM.alternate_location_indicator,
-		 record_HETATM.residue_name,
-		 &record_HETATM.chain_ID,
-		 &record_HETATM.residue_sequence_number,
-		 &record_HETATM.insertion_code,
-		 &record_HETATM.orthogonal_vector[0],
-		 &record_HETATM.orthogonal_vector[1],
-		 &record_HETATM.orthogonal_vector[2],
-		 &record_HETATM.occupancy,
-		 &record_HETATM.temperature_factor,
-		 record_HETATM.segment_ID,
-		 record_HETATM.element_symbol,
-		 record_HETATM.charge);
+					(line,
+					 size, 
+					 record_type_format->format_string,
+					 record_HETATM.record_name,
+					 &record_HETATM.serial_number,
+					 record_HETATM.atom_name,
+					 &record_HETATM.alternate_location_indicator,
+					 record_HETATM.residue_name,
+					 &record_HETATM.chain_ID,
+					 &record_HETATM.residue_sequence_number,
+					 &record_HETATM.insertion_code,
+					 &record_HETATM.orthogonal_vector[0],
+					 &record_HETATM.orthogonal_vector[1],
+					 &record_HETATM.orthogonal_vector[2],
+					 &record_HETATM.occupancy,
+					 &record_HETATM.temperature_factor,
+					 record_HETATM.segment_ID,
+					 record_HETATM.element_symbol,
+					 record_HETATM.charge);
 
 				return readRecordHETATM
-		(record_HETATM.serial_number,
-		 record_HETATM.atom_name,
-		 record_HETATM.alternate_location_indicator,
-		 record_HETATM.residue_name,
-		 record_HETATM.chain_ID,
-		 record_HETATM.residue_sequence_number,
-		 record_HETATM.insertion_code,
-		 record_HETATM.orthogonal_vector,
-		 record_HETATM.occupancy,
-		 record_HETATM.temperature_factor,
-		 record_HETATM.segment_ID,
-		 record_HETATM.element_symbol,
-		 record_HETATM.charge);
+					(record_HETATM.serial_number,
+					 record_HETATM.atom_name,
+					 record_HETATM.alternate_location_indicator,
+					 record_HETATM.residue_name,
+					 record_HETATM.chain_ID,
+					 record_HETATM.residue_sequence_number,
+					 record_HETATM.insertion_code,
+					 record_HETATM.orthogonal_vector,
+					 record_HETATM.occupancy,
+					 record_HETATM.temperature_factor,
+					 record_HETATM.segment_ID,
+					 record_HETATM.element_symbol,
+					 record_HETATM.charge);
 
 
-				
+
 			case PDB::RECORD_TYPE__HETNAM:
 
 				parseLine
-		(line,
-		 size, 
-		 record_type_format->format_string,
-		 record_HETNAM.record_name,
-		 &record_HETNAM.continuation,
-		 record_HETNAM.het_ID,
-		 record_HETNAM.chemical_name);
+					(line,
+					 size, 
+					 record_type_format->format_string,
+					 record_HETNAM.record_name,
+					 &record_HETNAM.continuation,
+					 record_HETNAM.het_ID,
+					 record_HETNAM.chemical_name);
 
 				return readRecordHETNAM
-		(record_HETNAM.continuation,
-		 record_HETNAM.het_ID,
-		 record_HETNAM.chemical_name);
+					(record_HETNAM.continuation,
+					 record_HETNAM.het_ID,
+					 record_HETNAM.chemical_name);
 
 
-				
+
 			case PDB::RECORD_TYPE__HYDBND:
 
 				parseLine
-		(line,
-		 size, 
-		 record_type_format->format_string,
-		 record_HYDBND.record_name,
-		 record_HYDBND.hydrogen_partner_atom[0].atom_name,
-		 &record_HYDBND.hydrogen_partner_atom[0].alternate_location_indicator,
-		 record_HYDBND.hydrogen_partner_atom[0].residue.residue_name,
-		 &record_HYDBND.hydrogen_partner_atom[0].residue.chain_ID,
-		 &record_HYDBND.hydrogen_partner_atom[0].residue.sequence_number,
-		 &record_HYDBND.hydrogen_partner_atom[0].residue.insertion_code,
-		 record_HYDBND.hydrogen_atom.atom_name,
-		 &record_HYDBND.hydrogen_atom.alternate_location_indicator,
-		 &record_HYDBND.hydrogen_atom.residue.chain_ID,
-		 &record_HYDBND.hydrogen_atom.residue.sequence_number,
-		 &record_HYDBND.hydrogen_atom.residue.insertion_code,
-		 record_HYDBND.hydrogen_partner_atom[1].atom_name,
-		 &record_HYDBND.hydrogen_partner_atom[1].alternate_location_indicator,
-		 record_HYDBND.hydrogen_partner_atom[1].residue.residue_name,
-		 &record_HYDBND.hydrogen_partner_atom[1].residue.chain_ID,
-		 &record_HYDBND.hydrogen_partner_atom[1].residue.sequence_number,
-		 &record_HYDBND.hydrogen_partner_atom[1].residue.insertion_code,
-		 &record_HYDBND.first_non_hydrogen_atom,
-		 &record_HYDBND.second_non_hydrogen_atom);
+					(line,
+					 size, 
+					 record_type_format->format_string,
+					 record_HYDBND.record_name,
+					 record_HYDBND.hydrogen_partner_atom[0].atom_name,
+					 &record_HYDBND.hydrogen_partner_atom[0].alternate_location_indicator,
+					 record_HYDBND.hydrogen_partner_atom[0].residue.residue_name,
+					 &record_HYDBND.hydrogen_partner_atom[0].residue.chain_ID,
+					 &record_HYDBND.hydrogen_partner_atom[0].residue.sequence_number,
+					 &record_HYDBND.hydrogen_partner_atom[0].residue.insertion_code,
+					 record_HYDBND.hydrogen_atom.atom_name,
+					 &record_HYDBND.hydrogen_atom.alternate_location_indicator,
+					 &record_HYDBND.hydrogen_atom.residue.chain_ID,
+					 &record_HYDBND.hydrogen_atom.residue.sequence_number,
+					 &record_HYDBND.hydrogen_atom.residue.insertion_code,
+					 record_HYDBND.hydrogen_partner_atom[1].atom_name,
+					 &record_HYDBND.hydrogen_partner_atom[1].alternate_location_indicator,
+					 record_HYDBND.hydrogen_partner_atom[1].residue.residue_name,
+					 &record_HYDBND.hydrogen_partner_atom[1].residue.chain_ID,
+					 &record_HYDBND.hydrogen_partner_atom[1].residue.sequence_number,
+					 &record_HYDBND.hydrogen_partner_atom[1].residue.insertion_code,
+					 &record_HYDBND.first_non_hydrogen_atom,
+					 &record_HYDBND.second_non_hydrogen_atom);
 
-				return readRecordHYDBND
-		(record_HYDBND.hydrogen_partner_atom,
-		 record_HYDBND.hydrogen_atom,
-		 record_HYDBND.first_non_hydrogen_atom,
-		 record_HYDBND.second_non_hydrogen_atom);
+					 return readRecordHYDBND
+						 (record_HYDBND.hydrogen_partner_atom,
+							record_HYDBND.hydrogen_atom,
+							record_HYDBND.first_non_hydrogen_atom,
+							record_HYDBND.second_non_hydrogen_atom);
 
 
-				
+
 			case PDB::RECORD_TYPE__JRNL:
 
-				parseLine
-		(line,
-		 size, 
-		 record_type_format->format_string,
-		 record_JRNL.record_name,
-		 record_JRNL.text);
+					 parseLine
+						 (line,
+							size, 
+							record_type_format->format_string,
+							record_JRNL.record_name,
+							record_JRNL.text);
 
-				return readRecordJRNL
-		(record_JRNL.text);
+					 return readRecordJRNL
+						 (record_JRNL.text);
 
 
-				
+
 			case PDB::RECORD_TYPE__KEYWDS:
 
-				parseLine
-		(line,
-		 size, 
-		 record_type_format->format_string,
-		 record_KEYWDS.record_name,
-		 &record_KEYWDS.continuation,
-		 record_KEYWDS.keywords);
-				
-				return readRecordKEYWDS
-		(record_KEYWDS.continuation,
-		 record_KEYWDS.keywords);
+					 parseLine
+						 (line,
+							size, 
+							record_type_format->format_string,
+							record_KEYWDS.record_name,
+							&record_KEYWDS.continuation,
+							record_KEYWDS.keywords);
+
+					 return readRecordKEYWDS
+						 (record_KEYWDS.continuation,
+							record_KEYWDS.keywords);
 
 
-				
+
 			case PDB::RECORD_TYPE__LINK:
 
-				parseLine
-		(line,
-		 size, 
-		 record_type_format->format_string,
-		 record_LINK.record_name,
-		 record_LINK.link_partner[0].atom_name,
-		 &record_LINK.link_partner[0].alternate_location_indicator,
-		 record_LINK.link_partner[0].residue.residue_name,
-		 &record_LINK.link_partner[0].residue.chain_ID,
-		 &record_LINK.link_partner[0].residue.sequence_number,
-		 &record_LINK.link_partner[0].residue.insertion_code,
-		 record_LINK.link_partner[1].atom_name,
-		 &record_LINK.link_partner[1].alternate_location_indicator,
-		 record_LINK.link_partner[1].residue.residue_name,
-		 &record_LINK.link_partner[1].residue.chain_ID,
-		 &record_LINK.link_partner[1].residue.sequence_number,
-		 &record_LINK.link_partner[1].residue.insertion_code,
-		 &record_LINK.first_atom,
-		 &record_LINK.second_atom);
+					 parseLine
+						 (line,
+							size, 
+							record_type_format->format_string,
+							record_LINK.record_name,
+							record_LINK.link_partner[0].atom_name,
+							&record_LINK.link_partner[0].alternate_location_indicator,
+							record_LINK.link_partner[0].residue.residue_name,
+							&record_LINK.link_partner[0].residue.chain_ID,
+							&record_LINK.link_partner[0].residue.sequence_number,
+							&record_LINK.link_partner[0].residue.insertion_code,
+							record_LINK.link_partner[1].atom_name,
+							&record_LINK.link_partner[1].alternate_location_indicator,
+							record_LINK.link_partner[1].residue.residue_name,
+							&record_LINK.link_partner[1].residue.chain_ID,
+							&record_LINK.link_partner[1].residue.sequence_number,
+							&record_LINK.link_partner[1].residue.insertion_code,
+							&record_LINK.first_atom,
+							&record_LINK.second_atom);
 
-				return readRecordLINK
-		(record_LINK.link_partner,
-		 record_LINK.first_atom,
-		 record_LINK.second_atom);
+					 return readRecordLINK
+						 (record_LINK.link_partner,
+							record_LINK.first_atom,
+							record_LINK.second_atom);
 
 
-				
+
 			case PDB::RECORD_TYPE__MASTER:
 
-				parseLine
-		(line,
-		 size, 
-		 record_type_format->format_string,
-		 record_MASTER.record_name,
-		 &record_MASTER.number_of_REMARK_records,
-		 &record_MASTER.zero,
-		 &record_MASTER.number_of_HET_records,
-		 &record_MASTER.number_of_HELIX_records,
-		 &record_MASTER.number_of_SHEET_records,
-		 &record_MASTER.number_of_TURN_records,
-		 &record_MASTER.number_of_SITE_records,
-		 &record_MASTER.number_of_ORIGX_SCALE_MTRIX_records,
-		 &record_MASTER.number_of_ATOM_HETATM_records,
-		 &record_MASTER.number_of_TER_records,
-		 &record_MASTER.number_of_CONECT_records,
-		 &record_MASTER.number_of_SEQRES_records);
+					 parseLine
+						 (line,
+							size, 
+							record_type_format->format_string,
+							record_MASTER.record_name,
+							&record_MASTER.number_of_REMARK_records,
+							&record_MASTER.zero,
+							&record_MASTER.number_of_HET_records,
+							&record_MASTER.number_of_HELIX_records,
+							&record_MASTER.number_of_SHEET_records,
+							&record_MASTER.number_of_TURN_records,
+							&record_MASTER.number_of_SITE_records,
+							&record_MASTER.number_of_ORIGX_SCALE_MTRIX_records,
+							&record_MASTER.number_of_ATOM_HETATM_records,
+							&record_MASTER.number_of_TER_records,
+							&record_MASTER.number_of_CONECT_records,
+							&record_MASTER.number_of_SEQRES_records);
 
-				return readRecordMASTER
-		(record_MASTER.number_of_REMARK_records,
-		 record_MASTER.zero,
-		 record_MASTER.number_of_HET_records,
-		 record_MASTER.number_of_HELIX_records,
-		 record_MASTER.number_of_SHEET_records,
-		 record_MASTER.number_of_TURN_records,
-		 record_MASTER.number_of_SITE_records,
-		 record_MASTER.number_of_ORIGX_SCALE_MTRIX_records,
-		 record_MASTER.number_of_ATOM_HETATM_records,
-		 record_MASTER.number_of_TER_records,
-		 record_MASTER.number_of_CONECT_records,
-		 record_MASTER.number_of_SEQRES_records);
+					 return readRecordMASTER
+						 (record_MASTER.number_of_REMARK_records,
+							record_MASTER.zero,
+							record_MASTER.number_of_HET_records,
+							record_MASTER.number_of_HELIX_records,
+							record_MASTER.number_of_SHEET_records,
+							record_MASTER.number_of_TURN_records,
+							record_MASTER.number_of_SITE_records,
+							record_MASTER.number_of_ORIGX_SCALE_MTRIX_records,
+							record_MASTER.number_of_ATOM_HETATM_records,
+							record_MASTER.number_of_TER_records,
+							record_MASTER.number_of_CONECT_records,
+							record_MASTER.number_of_SEQRES_records);
 
 
-				
+
 			case PDB::RECORD_TYPE__MODEL:
 
-				parseLine
-		(line,
-		 size, 
-		 record_type_format->format_string,
-		 record_MODEL.record_name,
-		 &record_MODEL.model_serial_number);
+					 parseLine
+						 (line,
+							size, 
+							record_type_format->format_string,
+							record_MODEL.record_name,
+							&record_MODEL.model_serial_number);
 
-				current_model_ = (Index)record_MODEL.model_serial_number;
+					 current_model_ = (Index)record_MODEL.model_serial_number;
 
-				return readRecordMODEL
-		(record_MODEL.model_serial_number);
+					 return readRecordMODEL
+						 (record_MODEL.model_serial_number);
 
 
-				
+
 			case PDB::RECORD_TYPE__MODRES:
 
-				parseLine
-		(line,
-		 size, 
-		 record_type_format->format_string,
-		 record_MODRES.record_name,
-		 record_MODRES.entry_code,
-		 record_MODRES.residue_name,
-		 &record_MODRES.chain_ID,
-		 &record_MODRES.sequence_number,
-		 &record_MODRES.insertion_code,
-		 record_MODRES.standard_residue_name,
-		 record_MODRES.comment);
-				
-				return readRecordMODRES
-		(record_MODRES.entry_code,
-		 record_MODRES.residue_name,
-		 record_MODRES.chain_ID,
-		 record_MODRES.sequence_number,
-		 record_MODRES.insertion_code,
-		 record_MODRES.standard_residue_name,
-		 record_MODRES.comment);
+					 parseLine
+						 (line,
+							size, 
+							record_type_format->format_string,
+							record_MODRES.record_name,
+							record_MODRES.entry_code,
+							record_MODRES.residue_name,
+							&record_MODRES.chain_ID,
+							&record_MODRES.sequence_number,
+							&record_MODRES.insertion_code,
+							record_MODRES.standard_residue_name,
+							record_MODRES.comment);
+
+					 return readRecordMODRES
+						 (record_MODRES.entry_code,
+							record_MODRES.residue_name,
+							record_MODRES.chain_ID,
+							record_MODRES.sequence_number,
+							record_MODRES.insertion_code,
+							record_MODRES.standard_residue_name,
+							record_MODRES.comment);
 
 
-				
+
 			case PDB::RECORD_TYPE__MTRIX1:
 
-				parseLine
-		(line,
-		 size, 
-		 record_type_format->format_string,
-		 record_MTRIX1.record_name,
-		 &record_MTRIX1.serial_number,
-		 &record_MTRIX1.transformation_matrix[0],
-		 &record_MTRIX1.transformation_matrix[1],
-		 &record_MTRIX1.transformation_matrix[2],
-		 &record_MTRIX1.transformation_matrix[3],
-		 &record_MTRIX1.is_given);
-				
-				return readRecordMTRIX1
-		(record_MTRIX1.serial_number,
-		 record_MTRIX1.transformation_matrix,
-		 record_MTRIX1.is_given);
+					 parseLine
+						 (line,
+							size, 
+							record_type_format->format_string,
+							record_MTRIX1.record_name,
+							&record_MTRIX1.serial_number,
+							&record_MTRIX1.transformation_matrix[0],
+							&record_MTRIX1.transformation_matrix[1],
+							&record_MTRIX1.transformation_matrix[2],
+							&record_MTRIX1.transformation_matrix[3],
+							&record_MTRIX1.is_given);
+
+					 return readRecordMTRIX1
+						 (record_MTRIX1.serial_number,
+							record_MTRIX1.transformation_matrix,
+							record_MTRIX1.is_given);
 
 
-				
+
 			case PDB::RECORD_TYPE__MTRIX2:
 
-				parseLine
-		(line,
-		 size, 
-		 record_type_format->format_string,
-		 record_MTRIX2.record_name,
-		 &record_MTRIX2.serial_number,
-		 &record_MTRIX2.transformation_matrix[0],
-		 &record_MTRIX2.transformation_matrix[1],
-		 &record_MTRIX2.transformation_matrix[2],
-		 &record_MTRIX2.transformation_matrix[3],
-		 &record_MTRIX2.is_given);
-				
-				return readRecordMTRIX2
-		(record_MTRIX2.serial_number,
-		 record_MTRIX2.transformation_matrix,
-		 record_MTRIX2.is_given);
+					 parseLine
+						 (line,
+							size, 
+							record_type_format->format_string,
+							record_MTRIX2.record_name,
+							&record_MTRIX2.serial_number,
+							&record_MTRIX2.transformation_matrix[0],
+							&record_MTRIX2.transformation_matrix[1],
+							&record_MTRIX2.transformation_matrix[2],
+							&record_MTRIX2.transformation_matrix[3],
+							&record_MTRIX2.is_given);
+
+					 return readRecordMTRIX2
+						 (record_MTRIX2.serial_number,
+							record_MTRIX2.transformation_matrix,
+							record_MTRIX2.is_given);
 
 
-				
+
 			case PDB::RECORD_TYPE__MTRIX3:
 
-				parseLine
-		(line,
-		 size, 
-		 record_type_format->format_string,
-		 record_MTRIX3.record_name,
-		 &record_MTRIX3.serial_number,
-		 &record_MTRIX3.transformation_matrix[0],
-		 &record_MTRIX3.transformation_matrix[1],
-		 &record_MTRIX3.transformation_matrix[2],
-		 &record_MTRIX3.transformation_matrix[3],
-		 &record_MTRIX3.is_given);
+					 parseLine
+						 (line,
+							size, 
+							record_type_format->format_string,
+							record_MTRIX3.record_name,
+							&record_MTRIX3.serial_number,
+							&record_MTRIX3.transformation_matrix[0],
+							&record_MTRIX3.transformation_matrix[1],
+							&record_MTRIX3.transformation_matrix[2],
+							&record_MTRIX3.transformation_matrix[3],
+							&record_MTRIX3.is_given);
 
-				return readRecordMTRIX3
-		(record_MTRIX3.serial_number,
-		 record_MTRIX3.transformation_matrix,
-		 record_MTRIX3.is_given);
+					 return readRecordMTRIX3
+						 (record_MTRIX3.serial_number,
+							record_MTRIX3.transformation_matrix,
+							record_MTRIX3.is_given);
 
 
-				
+
 			case PDB::RECORD_TYPE__OBSLTE:
 
-				parseLine
-		(line,
-		 size, 
-		 record_type_format->format_string,
-		 record_OBSLTE.record_name,
-		 &record_OBSLTE.continuation,
-		 record_OBSLTE.entry_replaced_date,
-		 record_OBSLTE.entry_code,
-		 record_OBSLTE.replacing_entry_code[0],
-		 record_OBSLTE.replacing_entry_code[1],
-		 record_OBSLTE.replacing_entry_code[2],
-		 record_OBSLTE.replacing_entry_code[3],
-		 record_OBSLTE.replacing_entry_code[4],
-		 record_OBSLTE.replacing_entry_code[5],
-		 record_OBSLTE.replacing_entry_code[6],
-		 record_OBSLTE.replacing_entry_code[7]);
-				
-				return readRecordOBSLTE
-		(record_OBSLTE.continuation,
-		 record_OBSLTE.entry_replaced_date,
-		 record_OBSLTE.entry_code,
-		 record_OBSLTE.replacing_entry_code);
+					 parseLine
+						 (line,
+							size, 
+							record_type_format->format_string,
+							record_OBSLTE.record_name,
+							&record_OBSLTE.continuation,
+							record_OBSLTE.entry_replaced_date,
+							record_OBSLTE.entry_code,
+							record_OBSLTE.replacing_entry_code[0],
+							record_OBSLTE.replacing_entry_code[1],
+							record_OBSLTE.replacing_entry_code[2],
+							record_OBSLTE.replacing_entry_code[3],
+							record_OBSLTE.replacing_entry_code[4],
+							record_OBSLTE.replacing_entry_code[5],
+							record_OBSLTE.replacing_entry_code[6],
+							record_OBSLTE.replacing_entry_code[7]);
+
+					 return readRecordOBSLTE
+						 (record_OBSLTE.continuation,
+							record_OBSLTE.entry_replaced_date,
+							record_OBSLTE.entry_code,
+							record_OBSLTE.replacing_entry_code);
 
 
-				
+
 			case PDB::RECORD_TYPE__ORIGX1:
 
-				parseLine
-		(line,
-		 size, 
-		 record_type_format->format_string,
-		 record_ORIGX1.record_name,
-		 &record_ORIGX1.transformation_matrix[0],
-		 &record_ORIGX1.transformation_matrix[1],
-		 &record_ORIGX1.transformation_matrix[2],
-		 &record_ORIGX1.transformation_matrix[3]);
-				
-				return readRecordORIGX1
-		(record_ORIGX1.transformation_matrix);
+					 parseLine
+						 (line,
+							size, 
+							record_type_format->format_string,
+							record_ORIGX1.record_name,
+							&record_ORIGX1.transformation_matrix[0],
+							&record_ORIGX1.transformation_matrix[1],
+							&record_ORIGX1.transformation_matrix[2],
+							&record_ORIGX1.transformation_matrix[3]);
+
+					 return readRecordORIGX1
+						 (record_ORIGX1.transformation_matrix);
 
 
-				
+
 			case PDB::RECORD_TYPE__ORIGX2:
 
-				parseLine
-		(line,
-		 size, 
-		 record_type_format->format_string,
-		 record_ORIGX2.record_name,
-		 &record_ORIGX2.transformation_matrix[0],
-		 &record_ORIGX2.transformation_matrix[1],
-		 &record_ORIGX2.transformation_matrix[2],
-		 &record_ORIGX2.transformation_matrix[3]);
-				
-				return readRecordORIGX2
-		(record_ORIGX2.transformation_matrix);
+					 parseLine
+						 (line,
+							size, 
+							record_type_format->format_string,
+							record_ORIGX2.record_name,
+							&record_ORIGX2.transformation_matrix[0],
+							&record_ORIGX2.transformation_matrix[1],
+							&record_ORIGX2.transformation_matrix[2],
+							&record_ORIGX2.transformation_matrix[3]);
+
+					 return readRecordORIGX2
+						 (record_ORIGX2.transformation_matrix);
 
 
-				
+
 			case PDB::RECORD_TYPE__ORIGX3:
 
-				parseLine
-		(line,
-		 size,
-		 record_type_format->format_string,
-		 record_ORIGX3.record_name,
-		 &record_ORIGX3.transformation_matrix[0],
-		 &record_ORIGX3.transformation_matrix[1],
-		 &record_ORIGX3.transformation_matrix[2],
-		 &record_ORIGX3.transformation_matrix[3]);
+					 parseLine
+						 (line,
+							size,
+							record_type_format->format_string,
+							record_ORIGX3.record_name,
+							&record_ORIGX3.transformation_matrix[0],
+							&record_ORIGX3.transformation_matrix[1],
+							&record_ORIGX3.transformation_matrix[2],
+							&record_ORIGX3.transformation_matrix[3]);
 
-				return readRecordORIGX3
-		(record_ORIGX3.transformation_matrix);
+					 return readRecordORIGX3
+						 (record_ORIGX3.transformation_matrix);
 
 
-				
+
 			case PDB::RECORD_TYPE__REMARK:
 
-				parseLine
-		(line,
-		 size, 
-		 record_type_format->format_string,
-		 record_REMARK.record_name,
-		 &record_REMARK.remark_number,
-		 record_REMARK.text);
-				
-				return readRecordREMARK
-		(record_REMARK.remark_number,
-		 record_REMARK.text);
+					 parseLine
+						 (line,
+							size, 
+							record_type_format->format_string,
+							record_REMARK.record_name,
+							&record_REMARK.remark_number,
+							record_REMARK.text);
+
+					 return readRecordREMARK
+						 (record_REMARK.remark_number,
+							record_REMARK.text);
 
 
-				
+
 			case PDB::RECORD_TYPE__REVDAT:
 
-				parseLine
-		(line,
-		 size, 
-		 record_type_format->format_string,
-		 record_REVDAT.record_name,
-		 &record_REVDAT.modification_number,
-		 &record_REVDAT.continuation,
-		 record_REVDAT.modification_date,
-		 record_REVDAT.modification_ID,
-		 &record_REVDAT.modification_type,
-		 record_REVDAT.name_of_modified_record[0],
-		 record_REVDAT.name_of_modified_record[1],
-		 record_REVDAT.name_of_modified_record[2],
-		 record_REVDAT.name_of_modified_record[3]);
-				
-				return readRecordREVDAT
-		(record_REVDAT.modification_number,
-		 record_REVDAT.continuation,
-		 record_REVDAT.modification_date,
-		 record_REVDAT.modification_ID,
-		 record_REVDAT.modification_type,
-		 record_REVDAT.name_of_modified_record);
+					 parseLine
+						 (line,
+							size, 
+							record_type_format->format_string,
+							record_REVDAT.record_name,
+							&record_REVDAT.modification_number,
+							&record_REVDAT.continuation,
+							record_REVDAT.modification_date,
+							record_REVDAT.modification_ID,
+							&record_REVDAT.modification_type,
+							record_REVDAT.name_of_modified_record[0],
+							record_REVDAT.name_of_modified_record[1],
+							record_REVDAT.name_of_modified_record[2],
+							record_REVDAT.name_of_modified_record[3]);
+
+					 return readRecordREVDAT
+						 (record_REVDAT.modification_number,
+							record_REVDAT.continuation,
+							record_REVDAT.modification_date,
+							record_REVDAT.modification_ID,
+							record_REVDAT.modification_type,
+							record_REVDAT.name_of_modified_record);
 
 
-				
+
 			case PDB::RECORD_TYPE__SCALE1:
 
-				parseLine
-		(line,
-		 size, 
-		 record_type_format->format_string,
-		 record_SCALE1.record_name,
-		 &record_SCALE1.transformation_matrix[0],
-		 &record_SCALE1.transformation_matrix[1],
-		 &record_SCALE1.transformation_matrix[2],
-		 &record_SCALE1.transformation_matrix[3]);
-				
-				return readRecordSCALE1
-		(record_SCALE1.transformation_matrix);
+					 parseLine
+						 (line,
+							size, 
+							record_type_format->format_string,
+							record_SCALE1.record_name,
+							&record_SCALE1.transformation_matrix[0],
+							&record_SCALE1.transformation_matrix[1],
+							&record_SCALE1.transformation_matrix[2],
+							&record_SCALE1.transformation_matrix[3]);
+
+					 return readRecordSCALE1
+						 (record_SCALE1.transformation_matrix);
 
 
-				
+
 			case PDB::RECORD_TYPE__SCALE2:
 
-				parseLine
-		(line,
-		 size, 
-		 record_type_format->format_string,
-		 record_SCALE2.record_name,
-		 &record_SCALE2.transformation_matrix[0],
-		 &record_SCALE2.transformation_matrix[1],
-		 &record_SCALE2.transformation_matrix[2],
-		 &record_SCALE2.transformation_matrix[3]);
-				
-				return readRecordSCALE2
-		(record_SCALE2.transformation_matrix);
+					 parseLine
+						 (line,
+							size, 
+							record_type_format->format_string,
+							record_SCALE2.record_name,
+							&record_SCALE2.transformation_matrix[0],
+							&record_SCALE2.transformation_matrix[1],
+							&record_SCALE2.transformation_matrix[2],
+							&record_SCALE2.transformation_matrix[3]);
+
+					 return readRecordSCALE2
+						 (record_SCALE2.transformation_matrix);
 
 
-				
+
 			case PDB::RECORD_TYPE__SCALE3:
 
-				parseLine
-		(line,
-		 size, 
-		 record_type_format->format_string,
-		 record_SCALE3.record_name,
-		 &record_SCALE3.transformation_matrix[0],
-		 &record_SCALE3.transformation_matrix[1],
-		 &record_SCALE3.transformation_matrix[2],
-		 &record_SCALE3.transformation_matrix[3]);
-				
-				return readRecordSCALE3
-		(record_SCALE3.transformation_matrix);
+					 parseLine
+						 (line,
+							size, 
+							record_type_format->format_string,
+							record_SCALE3.record_name,
+							&record_SCALE3.transformation_matrix[0],
+							&record_SCALE3.transformation_matrix[1],
+							&record_SCALE3.transformation_matrix[2],
+							&record_SCALE3.transformation_matrix[3]);
+
+					 return readRecordSCALE3
+						 (record_SCALE3.transformation_matrix);
 
 
-				
+
 			case PDB::RECORD_TYPE__SEQRES:
 
-				parseLine
-		(line,
-		 size, 
-		 record_type_format->format_string,
-		 record_SEQRES.record_name,
-		 &record_SEQRES.serial_number,
-		 &record_SEQRES.chain_ID,
-		 &record_SEQRES.number_of_residues_in_chain,
-		 record_SEQRES.residue_name[0],
-		 record_SEQRES.residue_name[1],
-		 record_SEQRES.residue_name[2],
-		 record_SEQRES.residue_name[3],
-		 record_SEQRES.residue_name[4],
-		 record_SEQRES.residue_name[5],
-		 record_SEQRES.residue_name[6],
-		 record_SEQRES.residue_name[7],
-		 record_SEQRES.residue_name[8],
-		 record_SEQRES.residue_name[9],
-		 record_SEQRES.residue_name[10],
-		 record_SEQRES.residue_name[11],
-		 record_SEQRES.residue_name[12]);
+					 parseLine
+						 (line,
+							size, 
+							record_type_format->format_string,
+							record_SEQRES.record_name,
+							&record_SEQRES.serial_number,
+							&record_SEQRES.chain_ID,
+							&record_SEQRES.number_of_residues_in_chain,
+							record_SEQRES.residue_name[0],
+							record_SEQRES.residue_name[1],
+							record_SEQRES.residue_name[2],
+							record_SEQRES.residue_name[3],
+							record_SEQRES.residue_name[4],
+							record_SEQRES.residue_name[5],
+							record_SEQRES.residue_name[6],
+							record_SEQRES.residue_name[7],
+							record_SEQRES.residue_name[8],
+							record_SEQRES.residue_name[9],
+							record_SEQRES.residue_name[10],
+							record_SEQRES.residue_name[11],
+							record_SEQRES.residue_name[12]);
 
-				return readRecordSEQRES
-		(record_SEQRES.serial_number,
-		 record_SEQRES.chain_ID,
-		 record_SEQRES.number_of_residues_in_chain,
-		 record_SEQRES.residue_name);
+					 return readRecordSEQRES
+						 (record_SEQRES.serial_number,
+							record_SEQRES.chain_ID,
+							record_SEQRES.number_of_residues_in_chain,
+							record_SEQRES.residue_name);
 
 
-				
+
 			case PDB::RECORD_TYPE__SHEET:
 
-				parseLine
-		(line,
-		 size, 
-		 record_type_format->format_string,
-		 record_SHEET.record_name,
-		 &record_SHEET.strand_number,
-		 record_SHEET.sheet_ID,
-		 &record_SHEET.number_of_strands,
-		 record_SHEET.initial_residue.residue_name,
-		 &record_SHEET.initial_residue.chain_ID,
-		 &record_SHEET.initial_residue.sequence_number,
-		 &record_SHEET.initial_residue.insertion_code,
-		 record_SHEET.terminal_residue.residue_name,
-		 &record_SHEET.terminal_residue.chain_ID,
-		 &record_SHEET.terminal_residue.sequence_number,
-		 &record_SHEET.terminal_residue.insertion_code,
-		 &record_SHEET.sense_of_strand,
-		 record_SHEET.atom_name_in_current_strand,
-		 record_SHEET.residue_in_current_strand.residue_name,
-		 &record_SHEET.residue_in_current_strand.chain_ID,
-		 &record_SHEET.residue_in_current_strand.sequence_number,
-		 &record_SHEET.residue_in_current_strand.insertion_code,
-		 record_SHEET.atom_name_in_previous_strand,
-		 record_SHEET.residue_in_previous_strand.residue_name,
-		 &record_SHEET.residue_in_previous_strand.chain_ID,
-		 &record_SHEET.residue_in_previous_strand.sequence_number,
-		 &record_SHEET.residue_in_previous_strand.insertion_code);
+					 parseLine
+						 (line,
+							size, 
+							record_type_format->format_string,
+							record_SHEET.record_name,
+							&record_SHEET.strand_number,
+							record_SHEET.sheet_ID,
+							&record_SHEET.number_of_strands,
+							record_SHEET.initial_residue.residue_name,
+							&record_SHEET.initial_residue.chain_ID,
+							&record_SHEET.initial_residue.sequence_number,
+							&record_SHEET.initial_residue.insertion_code,
+							record_SHEET.terminal_residue.residue_name,
+							&record_SHEET.terminal_residue.chain_ID,
+							&record_SHEET.terminal_residue.sequence_number,
+							&record_SHEET.terminal_residue.insertion_code,
+							&record_SHEET.sense_of_strand,
+							record_SHEET.atom_name_in_current_strand,
+							record_SHEET.residue_in_current_strand.residue_name,
+							&record_SHEET.residue_in_current_strand.chain_ID,
+							&record_SHEET.residue_in_current_strand.sequence_number,
+							&record_SHEET.residue_in_current_strand.insertion_code,
+							record_SHEET.atom_name_in_previous_strand,
+							record_SHEET.residue_in_previous_strand.residue_name,
+							&record_SHEET.residue_in_previous_strand.chain_ID,
+							&record_SHEET.residue_in_previous_strand.sequence_number,
+							&record_SHEET.residue_in_previous_strand.insertion_code);
 
-				return readRecordSHEET
-		(record_SHEET.strand_number,
-		 record_SHEET.sheet_ID,
-		 record_SHEET.number_of_strands,
-		 record_SHEET.initial_residue,
-		 record_SHEET.terminal_residue,
-		 record_SHEET.sense_of_strand,
-		 record_SHEET.atom_name_in_current_strand,
-		 record_SHEET.residue_in_current_strand,
-		 record_SHEET.atom_name_in_previous_strand,
-		 record_SHEET.residue_in_previous_strand);
+							return readRecordSHEET
+								(record_SHEET.strand_number,
+								 record_SHEET.sheet_ID,
+								 record_SHEET.number_of_strands,
+								 record_SHEET.initial_residue,
+								 record_SHEET.terminal_residue,
+								 record_SHEET.sense_of_strand,
+								 record_SHEET.atom_name_in_current_strand,
+								 record_SHEET.residue_in_current_strand,
+								 record_SHEET.atom_name_in_previous_strand,
+								 record_SHEET.residue_in_previous_strand);
 
 
-				
+
 			case PDB::RECORD_TYPE__SIGATM:
 
-				if (selected_model_ != 0
-						&& selected_model_ != current_model_)
-				{
-					return true;
-				}
+							if (selected_model_ != 0
+									&& selected_model_ != current_model_)
+							{
+								return true;
+							}
 
-				parseLine
-		(line,
-		 size, 
-		 record_type_format->format_string,
-		 record_SIGATM.record_name,
-		 &record_SIGATM.serial_number,
-		 record_SIGATM.atom_name,
-		 &record_SIGATM.alternate_location_indicator,
-		 record_SIGATM.residue_name,
-		 &record_SIGATM.chain_ID,
-		 &record_SIGATM.residue_sequence_number,
-		 &record_SIGATM.insertion_code,
-		 &record_SIGATM.standard_vector_deviation[0],
-		 &record_SIGATM.standard_vector_deviation[1],
-		 &record_SIGATM.standard_vector_deviation[2],
-		 &record_SIGATM.standard_occupancy_deviation,
-		 &record_SIGATM.standard_temperature_deviation,
-		 record_SIGATM.segment_ID,
-		 record_SIGATM.element_symbol,
-		 record_SIGATM.charge);
-				
-				return readRecordSIGATM
-		(record_SIGATM.serial_number,
-		 record_SIGATM.atom_name,
-		 record_SIGATM.alternate_location_indicator,
-		 record_SIGATM.residue_name,
-		 record_SIGATM.chain_ID,
-		 record_SIGATM.residue_sequence_number,
-		 record_SIGATM.insertion_code,
-		 record_SIGATM.standard_vector_deviation,
-		 record_SIGATM.standard_occupancy_deviation,
-		 record_SIGATM.standard_temperature_deviation,
-		 record_SIGATM.segment_ID,
-		 record_SIGATM.element_symbol,
-		 record_SIGATM.charge);
+							parseLine
+								(line,
+								 size, 
+								 record_type_format->format_string,
+								 record_SIGATM.record_name,
+								 &record_SIGATM.serial_number,
+								 record_SIGATM.atom_name,
+								 &record_SIGATM.alternate_location_indicator,
+								 record_SIGATM.residue_name,
+								 &record_SIGATM.chain_ID,
+								 &record_SIGATM.residue_sequence_number,
+								 &record_SIGATM.insertion_code,
+								 &record_SIGATM.standard_vector_deviation[0],
+								 &record_SIGATM.standard_vector_deviation[1],
+								 &record_SIGATM.standard_vector_deviation[2],
+								 &record_SIGATM.standard_occupancy_deviation,
+								 &record_SIGATM.standard_temperature_deviation,
+								 record_SIGATM.segment_ID,
+								 record_SIGATM.element_symbol,
+								 record_SIGATM.charge);
+
+							return readRecordSIGATM
+								(record_SIGATM.serial_number,
+								 record_SIGATM.atom_name,
+								 record_SIGATM.alternate_location_indicator,
+								 record_SIGATM.residue_name,
+								 record_SIGATM.chain_ID,
+								 record_SIGATM.residue_sequence_number,
+								 record_SIGATM.insertion_code,
+								 record_SIGATM.standard_vector_deviation,
+								 record_SIGATM.standard_occupancy_deviation,
+								 record_SIGATM.standard_temperature_deviation,
+								 record_SIGATM.segment_ID,
+								 record_SIGATM.element_symbol,
+								 record_SIGATM.charge);
 
 
-				
+
 			case PDB::RECORD_TYPE__SIGUIJ:
 
-				if (selected_model_ != 0
-						&& selected_model_ != current_model_)
-				{
-		return true;
-				}
+							if (selected_model_ != 0
+									&& selected_model_ != current_model_)
+							{
+								return true;
+							}
 
-				parseLine
-		(line,
-		 size,
-		 record_type_format->format_string,
-		 record_SIGUIJ.record_name,
-		 &record_SIGUIJ.serial_number,
-		 record_SIGUIJ.atom_name,
-		 &record_SIGUIJ.alternate_location_indicator,
-		 record_SIGUIJ.residue_name,
-		 &record_SIGUIJ.chain_ID,
-		 &record_SIGUIJ.residue_sequence_number,
-		 &record_SIGUIJ.insertion_code,
-		 &record_SIGUIJ.sig11,
-		 &record_SIGUIJ.sig22,
-		 &record_SIGUIJ.sig33,
-		 &record_SIGUIJ.sig12,
-		 &record_SIGUIJ.sig13,
-		 &record_SIGUIJ.sig23,
-		 record_SIGUIJ.segment_ID,
-		 record_SIGUIJ.element_symbol,
-		 record_SIGUIJ.charge);
-				
-				return readRecordSIGUIJ
-		(record_SIGUIJ.serial_number,
-		 record_SIGUIJ.atom_name,
-		 record_SIGUIJ.alternate_location_indicator,
-		 record_SIGUIJ.residue_name,
-		 record_SIGUIJ.chain_ID,
-		 record_SIGUIJ.residue_sequence_number,
-		 record_SIGUIJ.insertion_code,
-		 record_SIGUIJ.sig11,
-		 record_SIGUIJ.sig22,
-		 record_SIGUIJ.sig33,
-		 record_SIGUIJ.sig12,
-		 record_SIGUIJ.sig13,
-		 record_SIGUIJ.sig23,
-		 record_SIGUIJ.segment_ID,
-		 record_SIGUIJ.element_symbol,
-		 record_SIGUIJ.charge);
+							parseLine
+								(line,
+								 size,
+								 record_type_format->format_string,
+								 record_SIGUIJ.record_name,
+								 &record_SIGUIJ.serial_number,
+								 record_SIGUIJ.atom_name,
+								 &record_SIGUIJ.alternate_location_indicator,
+								 record_SIGUIJ.residue_name,
+								 &record_SIGUIJ.chain_ID,
+								 &record_SIGUIJ.residue_sequence_number,
+								 &record_SIGUIJ.insertion_code,
+								 &record_SIGUIJ.sig11,
+								 &record_SIGUIJ.sig22,
+								 &record_SIGUIJ.sig33,
+								 &record_SIGUIJ.sig12,
+								 &record_SIGUIJ.sig13,
+								 &record_SIGUIJ.sig23,
+								 record_SIGUIJ.segment_ID,
+								 record_SIGUIJ.element_symbol,
+								 record_SIGUIJ.charge);
 
-				
-			
+							return readRecordSIGUIJ
+								(record_SIGUIJ.serial_number,
+								 record_SIGUIJ.atom_name,
+								 record_SIGUIJ.alternate_location_indicator,
+								 record_SIGUIJ.residue_name,
+								 record_SIGUIJ.chain_ID,
+								 record_SIGUIJ.residue_sequence_number,
+								 record_SIGUIJ.insertion_code,
+								 record_SIGUIJ.sig11,
+								 record_SIGUIJ.sig22,
+								 record_SIGUIJ.sig33,
+								 record_SIGUIJ.sig12,
+								 record_SIGUIJ.sig13,
+								 record_SIGUIJ.sig23,
+								 record_SIGUIJ.segment_ID,
+								 record_SIGUIJ.element_symbol,
+								 record_SIGUIJ.charge);
+
+
+
 			case PDB::RECORD_TYPE__SITE:
 
-				parseLine
-		(line,
-		 size, 
-		 record_type_format->format_string,
-		 record_SITE.record_name,
-		 &record_SITE.sequence_number,
-		 record_SITE.name,
-		 &record_SITE.number_of_residues,
-		 record_SITE.residue[0].residue_name,
-		 &record_SITE.residue[0].chain_ID,
-		 &record_SITE.residue[0].sequence_number,
-		 &record_SITE.residue[0].insertion_code,
-		 record_SITE.residue[1].residue_name,
-		 &record_SITE.residue[1].chain_ID,
-		 &record_SITE.residue[1].sequence_number,
-		 &record_SITE.residue[1].insertion_code,
-		 record_SITE.residue[2].residue_name,
-		 &record_SITE.residue[2].chain_ID,
-		 &record_SITE.residue[2].sequence_number,
-		 &record_SITE.residue[2].insertion_code,
-		 record_SITE.residue[3].residue_name,
-		 &record_SITE.residue[3].chain_ID,
-		 &record_SITE.residue[3].sequence_number,
-		 &record_SITE.residue[3].insertion_code);
-				
-				return readRecordSITE
-		(record_SITE.sequence_number,
-		 record_SITE.name,
-		 record_SITE.number_of_residues,
-		 record_SITE.residue);
-				
+							parseLine
+								(line,
+								 size, 
+								 record_type_format->format_string,
+								 record_SITE.record_name,
+								 &record_SITE.sequence_number,
+								 record_SITE.name,
+								 &record_SITE.number_of_residues,
+								 record_SITE.residue[0].residue_name,
+								 &record_SITE.residue[0].chain_ID,
+								 &record_SITE.residue[0].sequence_number,
+								 &record_SITE.residue[0].insertion_code,
+								 record_SITE.residue[1].residue_name,
+								 &record_SITE.residue[1].chain_ID,
+								 &record_SITE.residue[1].sequence_number,
+								 &record_SITE.residue[1].insertion_code,
+								 record_SITE.residue[2].residue_name,
+								 &record_SITE.residue[2].chain_ID,
+								 &record_SITE.residue[2].sequence_number,
+								 &record_SITE.residue[2].insertion_code,
+								 record_SITE.residue[3].residue_name,
+								 &record_SITE.residue[3].chain_ID,
+								 &record_SITE.residue[3].sequence_number,
+								 &record_SITE.residue[3].insertion_code);
 
-				
+								 return readRecordSITE
+									 (record_SITE.sequence_number,
+										record_SITE.name,
+										record_SITE.number_of_residues,
+										record_SITE.residue);
+
+
+
 			case PDB::RECORD_TYPE__SLTBRG:
 
-				parseLine
-		(line,
-		 size, 
-		 record_type_format->format_string,
-		 record_SLTBRG.record_name,
-		 record_SLTBRG.partner_atom[0].atom_name,
-		 &record_SLTBRG.partner_atom[0].alternate_location_indicator,
-		 record_SLTBRG.partner_atom[0].residue.residue_name,
-		 &record_SLTBRG.partner_atom[0].residue.chain_ID,
-		 &record_SLTBRG.partner_atom[0].residue.sequence_number,
-		 &record_SLTBRG.partner_atom[0].residue.insertion_code,
-		 record_SLTBRG.partner_atom[1].atom_name,
-		 &record_SLTBRG.partner_atom[1].alternate_location_indicator,
-		 record_SLTBRG.partner_atom[1].residue.residue_name,
-		 &record_SLTBRG.partner_atom[1].residue.chain_ID,
-		 &record_SLTBRG.partner_atom[1].residue.sequence_number,
-		 &record_SLTBRG.partner_atom[1].residue.insertion_code,
-		 &record_SLTBRG.first_atom,
-		 &record_SLTBRG.second_atom);
-				
-				return readRecordSLTBRG
-		(record_SLTBRG.partner_atom,
-		 record_SLTBRG.first_atom,
-		 record_SLTBRG.second_atom);
+								 parseLine
+									 (line,
+										size, 
+										record_type_format->format_string,
+										record_SLTBRG.record_name,
+										record_SLTBRG.partner_atom[0].atom_name,
+										&record_SLTBRG.partner_atom[0].alternate_location_indicator,
+										record_SLTBRG.partner_atom[0].residue.residue_name,
+										&record_SLTBRG.partner_atom[0].residue.chain_ID,
+										&record_SLTBRG.partner_atom[0].residue.sequence_number,
+										&record_SLTBRG.partner_atom[0].residue.insertion_code,
+										record_SLTBRG.partner_atom[1].atom_name,
+										&record_SLTBRG.partner_atom[1].alternate_location_indicator,
+										record_SLTBRG.partner_atom[1].residue.residue_name,
+										&record_SLTBRG.partner_atom[1].residue.chain_ID,
+										&record_SLTBRG.partner_atom[1].residue.sequence_number,
+										&record_SLTBRG.partner_atom[1].residue.insertion_code,
+										&record_SLTBRG.first_atom,
+										&record_SLTBRG.second_atom);
+
+								 return readRecordSLTBRG
+									 (record_SLTBRG.partner_atom,
+										record_SLTBRG.first_atom,
+										record_SLTBRG.second_atom);
 
 
-				
+
 			case PDB::RECORD_TYPE__SOURCE:
 
-				parseLine
-		(line,
-		 size, 
-		 record_type_format->format_string,
-		 record_SOURCE.record_name,
-		 &record_SOURCE.continuation,
-		 record_SOURCE.sources);
-				
-				return readRecordSOURCE
-		(record_SOURCE.continuation,
-		 record_SOURCE.sources);
-				
+								 parseLine
+									 (line,
+										size, 
+										record_type_format->format_string,
+										record_SOURCE.record_name,
+										&record_SOURCE.continuation,
+										record_SOURCE.sources);
 
-				
+								 return readRecordSOURCE
+									 (record_SOURCE.continuation,
+										record_SOURCE.sources);
+
+
+
 			case PDB::RECORD_TYPE__SSBOND:
 
-				parseLine
-		(line,
-		 size, 
-		 record_type_format->format_string,
-		 record_SSBOND.record_name,
-		 &record_SSBOND.serial_number,
-		 record_SSBOND.partner_residue[0].residue_name,
-		 &record_SSBOND.partner_residue[0].chain_ID,
-		 &record_SSBOND.partner_residue[0].sequence_number,
-		 &record_SSBOND.partner_residue[0].insertion_code,
-		 record_SSBOND.partner_residue[1].residue_name,
-		 &record_SSBOND.partner_residue[1].chain_ID,
-		 &record_SSBOND.partner_residue[1].sequence_number,
-		 &record_SSBOND.partner_residue[1].insertion_code,
-		 &record_SSBOND.partner_residue[0].symmetry_operator,
-		 &record_SSBOND.partner_residue[1].symmetry_operator);
+								 parseLine
+									 (line,
+										size, 
+										record_type_format->format_string,
+										record_SSBOND.record_name,
+										&record_SSBOND.serial_number,
+										record_SSBOND.partner_residue[0].residue_name,
+										&record_SSBOND.partner_residue[0].chain_ID,
+										&record_SSBOND.partner_residue[0].sequence_number,
+										&record_SSBOND.partner_residue[0].insertion_code,
+										record_SSBOND.partner_residue[1].residue_name,
+										&record_SSBOND.partner_residue[1].chain_ID,
+										&record_SSBOND.partner_residue[1].sequence_number,
+										&record_SSBOND.partner_residue[1].insertion_code,
+										&record_SSBOND.partner_residue[0].symmetry_operator,
+										&record_SSBOND.partner_residue[1].symmetry_operator);
 
-				return readRecordSSBOND
-		(record_SSBOND.serial_number,
-		 record_SSBOND.partner_residue);
+								 return readRecordSSBOND
+									 (record_SSBOND.serial_number,
+										record_SSBOND.partner_residue);
 
 
-				
+
 			case PDB::RECORD_TYPE__TER:
 
-				if (selected_model_ != 0
-						&& selected_model_ != current_model_)
-				{
-					return true;
-				}
+								 if (selected_model_ != 0
+										 && selected_model_ != current_model_)
+								 {
+									 return true;
+								 }
 
-				parseLine
-		(line,
-		 size, 
-		 record_type_format->format_string,
-		 record_TER.record_name,
-		 &record_TER.serial_number,
-		 record_TER.residue_name,
-		 &record_TER.chain_ID,
-		 &record_TER.residue_sequence_number,
-		 &record_TER.insertion_code);
+								 parseLine
+									 (line,
+										size, 
+										record_type_format->format_string,
+										record_TER.record_name,
+										&record_TER.serial_number,
+										record_TER.residue_name,
+										&record_TER.chain_ID,
+										&record_TER.residue_sequence_number,
+										&record_TER.insertion_code);
 
-				return readRecordTER
-		(record_TER.serial_number,
-		 record_TER.residue_name,
-		 record_TER.chain_ID,
-		 record_TER.residue_sequence_number,
-		 record_TER.insertion_code);
-				
+								 return readRecordTER
+									 (record_TER.serial_number,
+										record_TER.residue_name,
+										record_TER.chain_ID,
+										record_TER.residue_sequence_number,
+										record_TER.insertion_code);
 
-				
+
+
 			case PDB::RECORD_TYPE__TITLE:
 
-				parseLine
-		(line,
-		 size, 
-		 record_type_format->format_string,
-		 record_TITLE.record_name,
-		 &record_TITLE.continuation,
-		 record_TITLE.title);
-				
-				return readRecordTITLE
-		(record_TITLE.continuation,
-		 record_TITLE.title);
+								 parseLine
+									 (line,
+										size, 
+										record_type_format->format_string,
+										record_TITLE.record_name,
+										&record_TITLE.continuation,
+										record_TITLE.title);
+
+								 return readRecordTITLE
+									 (record_TITLE.continuation,
+										record_TITLE.title);
 
 
-				
+
 			case PDB::RECORD_TYPE__TURN:
 
-				parseLine
-		(line,
-		 size, 
-		 record_type_format->format_string,
-		 record_TURN.record_name,
-		 &record_TURN.sequence_number,
-		 record_TURN.turn_ID,
-		 record_TURN.initial_residue.residue_name,
-		 &record_TURN.initial_residue.chain_ID,
-		 &record_TURN.initial_residue.sequence_number,
-		 &record_TURN.initial_residue.insertion_code,
-		 record_TURN.terminal_residue.residue_name,
-		 &record_TURN.terminal_residue.chain_ID,
-		 &record_TURN.terminal_residue.sequence_number,
-		 &record_TURN.terminal_residue.insertion_code,
-		 record_TURN.comment);
+								 parseLine
+									 (line,
+										size, 
+										record_type_format->format_string,
+										record_TURN.record_name,
+										&record_TURN.sequence_number,
+										record_TURN.turn_ID,
+										record_TURN.initial_residue.residue_name,
+										&record_TURN.initial_residue.chain_ID,
+										&record_TURN.initial_residue.sequence_number,
+										&record_TURN.initial_residue.insertion_code,
+										record_TURN.terminal_residue.residue_name,
+										&record_TURN.terminal_residue.chain_ID,
+										&record_TURN.terminal_residue.sequence_number,
+										&record_TURN.terminal_residue.insertion_code,
+										record_TURN.comment);
 
-				return readRecordTURN
-		(record_TURN.sequence_number,
-		 record_TURN.turn_ID,
-		 record_TURN.initial_residue,
-		 record_TURN.terminal_residue,
-		 record_TURN.comment);
+								 return readRecordTURN
+									 (record_TURN.sequence_number,
+										record_TURN.turn_ID,
+										record_TURN.initial_residue,
+										record_TURN.terminal_residue,
+										record_TURN.comment);
 
 
-				
+
 			case PDB::RECORD_TYPE__TVECT:
 
-				parseLine
-		(line,
-		 size, 
-		 record_type_format->format_string,
-		 record_TVECT.record_name,
-		 &record_TVECT.serial_number,
-		 &record_TVECT.translation_vector[0],
-		 &record_TVECT.translation_vector[1],
-		 &record_TVECT.translation_vector[2],
-		 record_TVECT.comment);
-				
-				return readRecordTVECT
-		(record_TVECT.serial_number,
-		 record_TVECT.translation_vector,
-		 record_TVECT.comment);
+								 parseLine
+									 (line,
+										size, 
+										record_type_format->format_string,
+										record_TVECT.record_name,
+										&record_TVECT.serial_number,
+										&record_TVECT.translation_vector[0],
+										&record_TVECT.translation_vector[1],
+										&record_TVECT.translation_vector[2],
+										record_TVECT.comment);
+
+								 return readRecordTVECT
+									 (record_TVECT.serial_number,
+										record_TVECT.translation_vector,
+										record_TVECT.comment);
 
 
 
