@@ -1,4 +1,4 @@
-// $Id: snapShot.C,v 1.15 2000/12/19 13:31:39 anker Exp $
+// $Id: snapShot.C,v 1.16 2000/12/19 14:02:39 anker Exp $
 
 // BALL includes 
 #include <BALL/MOLMEC/COMMON/snapShot.h>
@@ -667,11 +667,12 @@ namespace BALL
 		}
 
 		trajectory_file_->reopen(File::IN | File::BINARY);
+		// BAUSTELLE
 		// trajectory_file_->readHeader();
 
 		trajectory_file_->updateHeader(*this);
 
-		trajectory_file_->reopen(File::OUT | File::BINARY);
+		trajectory_file_->reopen(File::IN | File::OUT | File::BINARY);
 		trajectory_file_->writeHeader();
 
 		trajectory_file_->reopen(File::APP | File::BINARY);
