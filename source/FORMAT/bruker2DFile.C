@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bruker2DFile.C,v 1.20 2003/05/03 17:29:32 oliver Exp $
+// $Id: bruker2DFile.C,v 1.21 2003/06/01 09:13:41 oliver Exp $
+//
 
 #include <BALL/FORMAT/bruker2DFile.h>
 
@@ -12,54 +13,50 @@ namespace BALL
 	Bruker2D::Bruker2D() 
 		: File()
 	{
+		//????
 	}
 
-	Bruker2D::Bruker2D( const String& name, OpenMode open_mode ) 
+	Bruker2D::Bruker2D(const String& name, OpenMode open_mode) 
 		throw(Exception::FileNotFound)
-		: File( name+"/2rr", open_mode )
+		: File(name + FileSystem::PATH_SEPARATOR + "2rr", open_mode)
 	{
-		parsf1_ = new JCAMPFile( name + "/proc2s" );
-		parsf2_ = new JCAMPFile( name + "/procs"  );
-		parsf1_->read();
-		parsf2_->read();
-		miny_ = (int) parsf1_->parameter( "YMIN_p" );
-		maxy_ = (int) parsf1_->parameter( "YMAX_p" );
-		minx_ = (int) parsf2_->parameter( "YMIN_p" );
-		maxx_ = (int) parsf2_->parameter( "YMAX_p" );
+		JCAMPFile parsf1_(name + FileSystem::PATH_SEPARATOR + "proc2s");
+		JCAMPFile parsf2_(name + FileSystem::PATH_SEPARATOR + "procs");
+		parsf1_.read();
+		parsf2_.read();
+		miny_ = (int)parsf1_.getIntValue("YMIN_p");
+		maxy_ = (int)parsf1_.getIntValue("YMAX_p");
+		minx_ = (int)parsf2_.getIntValue("YMIN_p");
+		maxx_ = (int)parsf2_.getIntValue("YMAX_p");
 	}
 
 	Bruker2D::Bruker2D( const Bruker2D& file ) 
 		throw(Exception::FileNotFound)
-		: File( file )
+		: File(file)
 	{
+		//????
 	}
 
 	Bruker2D::~Bruker2D()
 		throw()
 	{
-		if (parsf1_)
-		{
-			delete parsf1_;
-		}
-		if (parsf2_)
-		{
-			delete parsf2_;
-		}
 	}
 
 	void Bruker2D::read(const String& name)
 	{
-		parsf1_ = new JCAMPFile( name + "/proc2s" );
-		parsf2_ = new JCAMPFile( name + "/procs"  );
-		parsf1_->read();
-		parsf2_->read();
-		miny_ = (int) parsf1_->parameter( "YMIN_p" );
-		maxy_ = (int) parsf1_->parameter( "YMAX_p" );
-		minx_ = (int) parsf2_->parameter( "YMIN_p" );
-		maxx_ = (int) parsf2_->parameter( "YMAX_p" );
+		JCAMPFile parsf1(name + FileSystem::PATH_SEPARATOR + "proc2s");
+		JCAMPFile parsf2_(name + FileSystem::PATH_SEPARATOR + "procs");
+		parsf1_.read();
+		parsf2_.read();
+		parsf1_.close();
+		parsf2_.close();
+		miny_ = (int)parsf1_.getIntValue("YMIN_p");
+		maxy_ = (int)parsf1_.getIntValue("YMAX_p");
+		minx_ = (int)parsf2_.getIntValue("YMIN_p");
+		maxx_ = (int)parsf2_.getIntValue("YMAX_p");
 		
 	  close();
-	  open(name+"/2rr");
+	  open(name + FileSystem::PATH_SEPARATOR + "2rr");
 	  read();
 	}
 
@@ -82,30 +79,30 @@ namespace BALL
 	    littleEndian = false;
 	  }
 
-	  int SIF1_   = (int) parsf1_->parameter( "SI"   ); // Y - spacing
-	  int SIF2_   = (int) parsf2_->parameter( "SI"   ); // X - spacing
-	  int XDIMF1_ = (int) parsf1_->parameter( "XDIM" );
-	  int XDIMF2_ = (int) parsf2_->parameter( "XDIM" );
+	  int SIF1_   = (int) parsf1_.getIntValue( "SI"   ); // Y - spacing
+	  int SIF2_   = (int) parsf2_.getIntValue( "SI"   ); // X - spacing
+	  int XDIMF1_ = (int) parsf1_.getIntValue( "XDIM" );
+	  int XDIMF2_ = (int) parsf2_.getIntValue( "XDIM" );
 
 	  // prepare the regularData
 	  //spectrum_.setXSize(SIF2_);
 	  //spectrum_.setYSize(SIF1_);
 	  //spectrum_.resize(SIF2_, SIF1_);
 
-	  double a = parsf2_->parameter( "OFFSET" );
-	  double b = parsf2_->parameter( "OFFSET" ) - (parsf2_->parameter( "SW_p" ) / parsf2_->parameter( "SF" ));
+	  double a = parsf2_.getIntValue( "OFFSET" );
+	  double b = parsf2_.getIntValue( "OFFSET" ) - (parsf2_.getIntValue( "SW_p" ) / parsf2_.getIntValue( "SF" ));
 	  
 		double lower_x = (a<b) ? a : b;
 		double upper_x = (a>b) ? a : b;
 		
-	  a = parsf1_->parameter( "OFFSET" );
-	  b = parsf1_->parameter( "OFFSET" ) - (parsf1_->parameter( "SW_p" ) / parsf1_->parameter( "SF" ));
+	  a = parsf1_.getIntValue( "OFFSET" );
+	  b = parsf1_.getIntValue( "OFFSET" ) - (parsf1_.getIntValue( "SW_p" ) / parsf1_.getIntValue( "SF" ));
 
 		double lower_y = (a<b) ? a : b;
 		double upper_y = (a>b) ? a : b;
 
-	  //spectrum_.setLowerBound(parsf1_->parameter( "YMIN_p" ));
-	  //spectrum_.setUpperBound(parsf1_->parameter( "YMAX_p" ));
+	  //spectrum_.setLowerBound(parsf1_.getIntValue( "YMIN_p" ));
+	  //spectrum_.setUpperBound(parsf1_.getIntValue( "YMAX_p" ));
 
 		spectrum_ = RegularData2D(Vector2(lower_x, lower_y), Vector2(upper_x, upper_y), 
 															Vector2(SIF2_, SIF1_));
@@ -128,7 +125,7 @@ namespace BALL
 					}
 
 					f.read(c, 4);
-					if (parsf1_->parameter( "BYTORDP" ) == 1) 
+					if (parsf1_.getIntValue( "BYTORDP" ) == 1) 
 					{
 						if (littleEndian == false)
 						{
@@ -162,18 +159,11 @@ namespace BALL
 		}
 	}
 
-  /** Return a reference to the spectrum.
-  */
-  RegularData2D* Bruker2D::GetData()
-  {
-    return(&spectrum_);
-  }
-
   /** Returns the shift corresponding to a position in the bitmap.
   */
-  pair<double, double> Bruker2D::GetShift(Position x, Position y)
+  std::pair<double, double> Bruker2D::getShift(Position x, Position y)
   {
-    pair<double, double> res;
+    std::pair<double, double> res;
 
     res.first  = soffsetf2_ - (double) x / spointnumf2_ * (double)swidthf2_ / bfreqf2_;
     res.second = soffsetf1_ - (double) y / spointnumf1_ * (double)swidthf1_ / bfreqf1_;
@@ -183,7 +173,7 @@ namespace BALL
 
   /** Returns the coordinates of a point in the original data next to the given coordinates.
   */
-  pair<Position, Position> Bruker2D::GetPosition(double x, double y)
+  std::pair<Position, Position> Bruker2D::getPosition(double x, double y)
   {
     pair<Position, Position> res;
     res.first  = (Position) (((double)(soffsetf2_ - x)) * spointnumf2_ * bfreqf2_ / swidthf2_);
@@ -195,12 +185,12 @@ namespace BALL
   /** Returns a list of peaks found in the spectrum. 
 			Peaks at the edge are ignored.
   */
-  list< pair<int, int> > &Bruker2D::GetPeakList()
+	std::list<std::pair<int, int> > Bruker2D::getPeakList() const
   {
-    list< pair<int, int> > *retlist = new list< pair<int, int> >;
+		std::list<std::pair<int, int> > retlist;
 
-    Size xdim = (Size) parsf2_->parameter("SI");
-    Size ydim = (Size) parsf1_->parameter("SI");
+    Size xdim = (Size)parsf2_.getIntValue("SI");
+    Size ydim = (Size)parsf1_.getIntValue("SI");
 
     for (Position y = 1; y < ydim - 1; y++) // ignore edges -> y=1..ydim-1
     {
@@ -216,18 +206,15 @@ namespace BALL
 					  (numdum > spectrum_[x + (xdim*(y+1))])   &&  // lower middle
 					  (numdum > spectrum_[x+1 + (xdim*(y+1))]) )   // lower right
 				{
-					pair<int, int>* dummy = new pair<int, int>;
-					dummy->first  = x;
-					dummy->second = y;
-					retlist->push_back(*dummy);
+					retlist.push_back(std::pair<int, int>(x, y));
 				}
 			}
 		}
 
-		return (*retlist);
+		return retlist;
   }
 
-  void Bruker2D::SetShiftRange(double offsetf1, double offsetf2, double swidthf1, double swidthf2, 
+  void Bruker2D::setShiftRange(double offsetf1, double offsetf2, double swidthf1, double swidthf2, 
 															 double bfreqf1, double bfreqf2, double spointnumf1, double spointnumf2)
   {
     soffsetf1_ = offsetf1;
@@ -242,12 +229,12 @@ namespace BALL
 		/*
     spectrum_.setXSize(spointnumf2_);
     spectrum_.setYSize(spointnumf1_);
-    double dum1 = GetShift(0,0).first;
-    double dum2 = GetShift(spointnumf2_,0).first;
+    double dum1 = getShift(0,0).first;
+    double dum2 = getShift(spointnumf2_,0).first;
     spectrum_.setXLower((dum1<dum2) ? dum1 : dum2);
     spectrum_.setXUpper((dum1>dum2) ? dum1 : dum2);
-    dum1 = GetShift(0,0).second;
-    dum2 = GetShift(0, spointnumf1_).second;
+    dum1 = getShift(0,0).second;
+    dum2 = getShift(0, spointnumf1_).second;
     spectrum_.setYLower((dum1<dum2) ? dum1 : dum2);
     spectrum_.setYUpper((dum1>dum2) ? dum1 : dum2);
 		*/

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bruker1DFile.h,v 1.20 2003/03/26 13:56:24 anhi Exp $
+// $Id: bruker1DFile.h,v 1.21 2003/06/01 09:13:40 oliver Exp $
 
 #ifndef BALL_FORMAT_BRUKER1DFILE_H
 #define BALL_FORMAT_BRUKER1DFILE_H
@@ -73,30 +73,28 @@ namespace BALL
 		/**	Read a spectrum from <tt>name</tt>. 
 				It will be stored in spectrum_
 		*/
-		void read(const String &name);
+		void read(const String& name);
 
 		void read();
 
 	  /** Return a pointer to the spectrum.
 		 */
-		RegularData1D* getData();
+		const RegularData1D& getData() const { return spectrum_; }
 
-		/**
-		*/
-		JCAMPFile* getParameters();
+		///
+		const JCAMPFile::EntryMap& getParameters() const;
+		///
+		const JCAMPFile::HeaderMap& getHeader() const;
 
 		//@}
 
 		protected:
 
-		/**
-		 * This class gives access to the parameters used in
-		 * acquiring this spectrum.
-		 */
-		JCAMPFile* pars_;
-		
 		Size min_;
 		Size max_;
+
+		/// The parameters from the procs file
+		JCAMPFile pars_;
 
 		RegularData1D spectrum_;
 	};

@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.188 2003/05/28 16:51:10 oliver Exp $
+# $Id: Makefile,v 1.189 2003/06/01 09:13:42 oliver Exp $
 #
 
 DIRECTORY=TEST
@@ -149,7 +149,10 @@ EXECUTABLES_NMR = \
 EXECUTABLES_FORMATS =\
 	LineBasedFile_test\
 	BinaryFileAdaptor_test\
+	Bruker1DFile_test\
+	Bruker2DFile_test\
 	INIFile_test\
+	JCAMPFile_test\
 	Parameters_test\
 	ParameterSection_test\
 	ResourceFile_test\

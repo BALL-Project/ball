@@ -1,13 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: JCAMPFile.h,v 1.14 2003/03/26 13:56:23 anhi Exp $
+// $Id: JCAMPFile.h,v 1.15 2003/06/01 09:13:40 oliver Exp $
+//
 
 #ifndef BALL_FORMAT_JCAMPFILE_H
 #define BALL_FORMAT_JCAMPFILE_H
 
-#ifndef BALL_SYSTEM_FILE_H
-#	include <BALL/SYSTEM/file.h>
+#ifndef BALL_FORMAT_LINEBASEDFILE__H
+#	include <BALL/FORMAT/lineBasedFile.h>
 #endif
 
 #ifndef BALL_DATATYPE_STRING_H
@@ -20,63 +21,125 @@
 
 namespace BALL
 {
-	/**	JCAMP file.
-			This class....	 \par
+	/**	JCAMP file class.
+			This class parses JCAMP files, which are often
+			used to store parameter files in spectroscopy (NMR, IR, MS), e.g. 
+			in Bruker instruments.
+			\par
+			This class has rudimentary support for the format only. The most severe
+			drawback currently is the lcak of support for writing JCAMP files.
 			
     	\ingroup  NMRFileFormats
 	*/
 	class JCAMPFile 
-		: public File
+		: public LineBasedFile
 	{
 		public:
+
+		/** Type definitions 
+		*/
+		//@{
+		// The value types supported by JCAMP
+		enum ContentType
+		{
+			///
+			STRING,
+			///
+			NUMERIC,
+			///
+			ARRAY
+		};
+
+		///
+		class JCAMPValue
+		{
+		  public:
+			///
+			String string_value;
+			///
+			std::vector<double> numeric_value;
+			///
+			ContentType type;
+			
+			JCAMPValue() : string_value(""), numeric_value(), type(STRING) {}
+		};
+
+		/// a key-value pair
+		typedef std::pair<String, JCAMPValue> KeyValuePair;
+
+		/// A hash map containing the JCAMP entries
+		typedef StringHashMap<JCAMPValue> EntryMap;
+
+		/// A hash map containing the header entries
+		typedef StringHashMap<String> HeaderMap;
+		//@}
+
 
 		/**	@name	Constructors and Destructors
 		*/
 		//@{
 
-		/** Detailed constructor.
-		*/
-			JCAMPFile(const String& name, OpenMode open_mode = std::ios::in)
+		///
+		JCAMPFile() throw() {}
+
+		///
+		JCAMPFile(const String& name, OpenMode open_mode = std::ios::in)
 			throw(Exception::FileNotFound);
 
-		/** Copy constructor.
-		*/
+		/// Copy constructor.
 		JCAMPFile(const JCAMPFile& file)
 			throw(Exception::FileNotFound);
 
-		/**	Destructor.
-		*/
-		~JCAMPFile()
-			throw();
-
+		///	Destructor.
+		virtual ~JCAMPFile() throw() {}
 		//@}
 
-		/** Read the file.
-		*/
-		void read();
+		/** @name Accessors
+		 */
+		//@{
 
-		/** Return file title.
-		*/
-		String title();
+		/// Read the file.
+		void read() 
+			throw(Exception::ParseError);
 
-		/**	Return parameter name
-		*/
-		double parameter(const String& name) const;
+		/// Write the file.
+		void write();
 
-		/**	Exists the parameter <tt>name</tt>?
-		*/
-		bool has(const String& name) const;
+		///
+		HeaderMap& getHeader() throw() { return header_; }
 
+		///
+		const HeaderMap& getHeader() const throw() { return header_; }
+
+		///
+		EntryMap& getEntries() throw() { return entries_; }
+
+		///
+		const EntryMap& getEntries() const throw() { return entries_; }
+
+		///
+		const JCAMPValue& operator [] (const String& name) const { return entries_[name]; }
+
+		///
+		double getDoubleValue(const String& name) const throw();
+		
+		///
+		Index getIntValue(const String& name) const throw();
+
+		/// 
+		bool hasEntry(const String& name) const throw() { return entries_.has(name); }
+
+		/// 
+		bool hasHeader(const String& name) const throw() { return header_.has(name); }
+		//@}
+		
 		protected:
 
-		bool nextLine_();
+		/// Entries from the header section 
+		HeaderMap header_;
 
-		String								line_;
-		String								title_;
-		StringHashMap<double> parameters_;
-		char*									buffer_;
-
-		static const Size			MAX_LENGTH_;
+		/// Entries from the key-value section
+		EntryMap entries_;
 	};
 }
 

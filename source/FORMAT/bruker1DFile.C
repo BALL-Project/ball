@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bruker1DFile.C,v 1.15 2003/05/03 17:29:32 oliver Exp $
+// $Id: bruker1DFile.C,v 1.16 2003/06/01 09:13:41 oliver Exp $
 
 #include <BALL/FORMAT/bruker1DFile.h>
 
@@ -9,41 +9,48 @@ namespace BALL
 {
 
   Bruker1D::Bruker1D()
-    : File()
+    : File(),
+			min_(0),
+			max_(1),
+			pars_()
   {
   }
 
-	Bruker1D::Bruker1D( const String& name, OpenMode open_mode ) 
+	Bruker1D::Bruker1D(const String& name, OpenMode open_mode) 
 		throw(Exception::FileNotFound)
-		: File( name + FileSystem::PATH_SEPARATOR + "1r", open_mode )
+		: File(name + FileSystem::PATH_SEPARATOR + "1r", open_mode),
+			min_(0),
+			max_(1),
+			pars_()
 	{
-		pars_ = new JCAMPFile( name + FileSystem::PATH_SEPARATOR + "procs" );
-		pars_->read();
-		min_ = (Size) pars_->parameter( "YMIN_p" );
-		max_ = (Size) pars_->parameter( "YMAX_p" );
+		pars_.open(name + FileSystem::PATH_SEPARATOR + "procs");
+		pars_.read();
+		min_ = (Size)pars_.getDoubleValue("YMIN_p");
+		max_ = (Size)pars_.getDoubleValue("YMAX_p");
+		pars_.close();
 	}
 
-	Bruker1D::Bruker1D( const Bruker1D& file ) 
+	Bruker1D::Bruker1D(const Bruker1D& file) 
 		throw(Exception::FileNotFound)
-		: File( file )
+		: File(file),
+			min_(file.min_),
+			max_(file.max_),
+			pars_(file.pars_)
 	{
 	}
 
 	Bruker1D::~Bruker1D()
 		throw()
 	{
-		if (pars_)
-		{
-			delete pars_;
-		}
 	}
 
 	void Bruker1D::read(const String &name)
 	{
-	  pars_ = new JCAMPFile(name + FileSystem::PATH_SEPARATOR + "procs");
-	  pars_->read();
-	  min_ = (Size) pars_->parameter( "YMIN_p" );
-	  max_ = (Size) pars_->parameter( "YMAX_p" );
+	  pars_.open(name + FileSystem::PATH_SEPARATOR + "procs");
+	  pars_.read();
+	  min_ = (Size)pars_.getDoubleValue("YMIN_p");
+	  max_ = (Size)pars_.getDoubleValue("YMAX_p");
+		pars_.close();
 	  
 	  close();
 	  open(name + FileSystem::PATH_SEPARATOR + "1r");
@@ -70,15 +77,15 @@ namespace BALL
 	    littleEndian = false;
 	  }
 	  
-	  spectrum_.resize( (Size)pars_->parameter( "SI" ) );
-	  spectrum_.setOrigin(pars_->parameter("YMIN_p"));
-		spectrum_.setDimension(pars_->parameter("YMAX_p") - pars_->parameter("YMIN_p"));
+	  spectrum_.resize( (Size)pars_.getDoubleValue("SI"));
+	  spectrum_.setOrigin(pars_.getDoubleValue("YMIN_p"));
+		spectrum_.setDimension(pars_.getDoubleValue("YMAX_p") - pars_.getDoubleValue("YMIN_p"));
 
 	  // back to beginning of file
 	  f.reopen();
 	  
 	  // read data
-	  for (int i = 0; i < (int)pars_->parameter("SI"); i++)
+	  for (Position i = 0; i < (Size)pars_.getDoubleValue("SI"); i++)
 		{
 		  if (!f.good())
 		  {
@@ -87,7 +94,7 @@ namespace BALL
 			}
 			
 		  f.get(c[0]); f.get(c[1]); f.get(c[2]); f.get(c[3]);
-		  if (pars_->parameter( "BYTORDP" ) == 1) 
+		  if (pars_.getDoubleValue("BYTORDP") == 1) 
 			{
 			 	if (littleEndian == false)
 			 	{ // conversion from little to big
@@ -119,15 +126,4 @@ namespace BALL
 				
 		}
 	}
-  
-  RegularData1D* Bruker1D::getData()
-  {
-    return (&spectrum_);
-  }
-
-  JCAMPFile* Bruker1D::getParameters()
-  {
-    return pars_;
-  }
-
 }

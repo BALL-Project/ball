@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bruker2DFile.h,v 1.20 2003/03/26 13:56:25 anhi Exp $
+// $Id: bruker2DFile.h,v 1.21 2003/06/01 09:13:41 oliver Exp $
+//
 
 #ifndef BALL_FORMAT_BRUKER2DFILE_H
 #define BALL_FORMAT_BRUKER2DFILE_H
@@ -78,42 +79,48 @@ namespace BALL
 		*/
 		void read(const String &name);
 
-		/** Return a reference to the spectrum.
-		*/
-		RegularData2D* GetData();
+		/// Return a reference to the spectrum.
+		const RegularData2D getData() const { return spectrum_; }
+		///
+		RegularData2D getData() { return spectrum_; }
 
 		/**	Returns a list of peaks found in the spectrum.
 		*/
-		std::list<std::pair<int, int> >& GetPeakList();
+		std::list<std::pair<int, int> > getPeakList() const;
 
 		/** Returns the shift corresponding to a position in the bitmap.
 		*/
-		std::pair<double, double> GetShift(Position x, Position y);
+		std::pair<double, double> getShift(Position x, Position y);
 
 		/** Returns the coordinates of a point in the original data next to the given coordinates.
 		*/
-		std::pair<Position, Position> GetPosition(double x, double y);
+		std::pair<Position, Position> getPosition(double x, double y);
 
 		/** Set the parameters needed for conversion index<->shift.
 		*/
-		void SetShiftRange(double offsetf1, double offsetf2, double swidthf1, double swidthf2, 
+		void setShiftRange(double offsetf1, double offsetf2, double swidthf1, double swidthf2, 
 											 double bfreqf1, double bfreqf2, double spointnumf1, double spointnumf2);
 
-		/** These classes give access to the parameters used in aqcuiring the spectrum.
-		*/
-		JCAMPFile *parsf1_, *parsf2_;
+	  protected:
+		/// These classes give access to the parameters used in aqcuiring the spectrum.
+		JCAMPFile parsf1_;
+		JCAMPFile parsf2_;
 
-	 protected:
 		Size minx_;
 		Size maxx_;
 		Size miny_;
 		Size maxy_;
+
 		// To be replaced by regularData2D
-		vector<double> *dat_;
-		double soffsetf1_, soffsetf2_;
-		double swidthf1_, swidthf2_;
-		double bfreqf1_, bfreqf2_;
-		Size spointnumf1_, spointnumf2_;
+		RegularData2D dat_;
+		double soffsetf1_;
+		double soffsetf2_;
+		double swidthf1_;
+		double swidthf2_;
+		double bfreqf1_;
+		double bfreqf2_;
+		Size spointnumf1_;
+		Size spointnumf2_;
 		RegularData2D spectrum_;
 	};
 }
