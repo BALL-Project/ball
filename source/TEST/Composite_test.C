@@ -1,4 +1,4 @@
-// $Id: Composite_test.C,v 1.1 1999/09/06 22:22:30 oliver Exp $
+// $Id: Composite_test.C,v 1.2 1999/09/07 14:28:28 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 using namespace BALL;
 ///////////////////////////
 
-START_TEST(Composite, "$Id: Composite_test.C,v 1.1 1999/09/06 22:22:30 oliver Exp $")
+START_TEST(Composite, "$Id: Composite_test.C,v 1.2 1999/09/07 14:28:28 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -282,82 +282,163 @@ TEST_EQUAL(d.containsSelection(), false);
 TEST_EQUAL(e.containsSelection(), true);
 RESULT
 
-CHECK(set(const Composite&, UnaryPredicate<Composite>&))
-RESULT
-
-CHECK(set(const Composite&, bool))
-RESULT
-
-CHECK(operator = (const Composite&))
-RESULT
-
-CHECK(get(Composite&, UnaryPredicate<Composite>&) const)
-RESULT
-
-CHECK(get(Composite&, bool) const)
-RESULT
-
-CHECK(count(const KernelPredicateType&) const)
-RESULT
-
-
 CHECK(getPathLength(const Composite&, const Composite&) const)
+Composite a, b, c, d, e, f;
+a.appendChild(b);
+b.appendChild(c);
+b.appendChild(d);
+c.appendChild(e);
+TEST_EQUAL(Composite::getPathLength(a, a), 0)
+TEST_EQUAL(Composite::getPathLength(a, b), 1)
+TEST_EQUAL(Composite::getPathLength(b, a), 1)
+TEST_EQUAL(Composite::getPathLength(b, c), 1)
+TEST_EQUAL(Composite::getPathLength(c, b), 1)
+TEST_EQUAL(Composite::getPathLength(c, d), INVALID_SIZE)
+TEST_EQUAL(Composite::getPathLength(d, c), INVALID_SIZE)
+TEST_EQUAL(Composite::getPathLength(d, a), 2)
+TEST_EQUAL(Composite::getPathLength(a, d), 2)
+TEST_EQUAL(Composite::getPathLength(c, a), 2)
+TEST_EQUAL(Composite::getPathLength(a, c), 2)
+TEST_EQUAL(Composite::getPathLength(e, a), 3)
+TEST_EQUAL(Composite::getPathLength(a, e), 3)
+TEST_EQUAL(Composite::getPathLength(b, e), 2)
+TEST_EQUAL(Composite::getPathLength(e, b), 2)
+TEST_EQUAL(Composite::getPathLength(a, f), INVALID_SIZE)
+TEST_EQUAL(Composite::getPathLength(f, a), INVALID_SIZE)
 RESULT
 
 CHECK(getDepth(const Composite&))
+Composite a, b, c, d, e, f;
+a.appendChild(b);
+b.appendChild(c);
+b.appendChild(d);
+c.appendChild(e);
+TEST_EQUAL(a.getDepth(), 0)
+TEST_EQUAL(b.getDepth(), 1)
+TEST_EQUAL(c.getDepth(), 2)
+TEST_EQUAL(d.getDepth(), 2)
+TEST_EQUAL(e.getDepth(), 3)
+TEST_EQUAL(f.getDepth(), 0)
 RESULT
 
 CHECK(getDepth() const)
-RESULT
-
-CHECK(getHeight(const Composite&))
+Composite a, b, c, d, e, f;
+a.appendChild(b);
+b.appendChild(c);
+b.appendChild(d);
+c.appendChild(e);
+const Composite& c_a = a;
+const Composite& c_b = b;
+const Composite& c_c = c;
+const Composite& c_d = d;
+const Composite& c_e = e;
+const Composite& c_f = f;
+TEST_EQUAL(c_a.getDepth(), 0)
+TEST_EQUAL(c_b.getDepth(), 1)
+TEST_EQUAL(c_c.getDepth(), 2)
+TEST_EQUAL(c_d.getDepth(), 2)
+TEST_EQUAL(c_e.getDepth(), 3)
+TEST_EQUAL(c_f.getDepth(), 0)
 RESULT
 
 CHECK(getHeight() const)
+Composite a, b, c, d, e, f;
+a.appendChild(b);
+b.appendChild(c);
+b.appendChild(d);
+c.appendChild(e);
+TEST_EQUAL(a.getHeight(), 3)
+TEST_EQUAL(b.getHeight(), 2)
+TEST_EQUAL(c.getHeight(), 1)
+TEST_EQUAL(d.getHeight(), 0)
+TEST_EQUAL(e.getHeight(), 0)
+TEST_EQUAL(f.getHeight(), 0)
 RESULT
 
 CHECK(getRoot())
+Composite a, b, c, d, e, f;
+a.appendChild(b);
+b.appendChild(c);
+b.appendChild(d);
+c.appendChild(e);
+TEST_EQUAL(&a.getRoot(), &a)
+TEST_EQUAL(&b.getRoot(), &a)
+TEST_EQUAL(&c.getRoot(), &a)
+TEST_EQUAL(&d.getRoot(), &a)
+TEST_EQUAL(&e.getRoot(), &a)
+TEST_EQUAL(&f.getRoot(), &f)
 RESULT
 
 CHECK(getRoot() const)
+Composite a, b, c, d, e, f;
+a.appendChild(b);
+b.appendChild(c);
+b.appendChild(d);
+c.appendChild(e);
+const Composite& c_a = a;
+const Composite& c_b = b;
+const Composite& c_c = c;
+const Composite& c_d = d;
+const Composite& c_e = e;
+const Composite& c_f = f;
+TEST_EQUAL(&c_a.getRoot(), &a)
+TEST_EQUAL(&c_b.getRoot(), &a)
+TEST_EQUAL(&c_c.getRoot(), &a)
+TEST_EQUAL(&c_d.getRoot(), &a)
+TEST_EQUAL(&c_e.getRoot(), &a)
+TEST_EQUAL(&c_f.getRoot(), &f)
 RESULT
 
-// 		Composite* getLowestCommonAncestor(Composite& composite);
-// 		const Composite* getLowestCommonAncestor(const Composite& composite) const;
-// 
-// 		template <class T> Composite* getAncestor(const T& /* t */)
-// 		template <class T> const Composite* getAncestor(const T& t) const
-// 		Composite* getParent();
-// 		const Composite* getParent() const;
-// 		Composite* getChild(Index index);
-// 		const Composite* getChild(Index index) const;
-// 		Composite* getSibling(Index index);
-// 		const Composite* getSibling(Index index) const;
-// 		Composite* getFirstChild();
-// 		const Composite* getFirstChild() const;
-// 		Composite* getLastChild();
-// 		const Composite* getLastChild() const;
-// 		void expand();
-// 		void collapse();
-// 		static bool insertParent
-// 			(Composite& parent, Composite& first, 
-// 			 Composite& last, bool destroy_parent = true);
-// 
-// 		void insertBefore(Composite& composite);
-// 		void insertAfter(Composite& composite);
-// 		void spliceBefore(Composite& composite);
-// 		void spliceAfter(Composite& composite);
-// 		void splice(Composite& composite);
-// 		bool removeChild(Composite& child);
-// 		void replace(Composite& composite);
-// 		void swap(Composite& composite);
-// 
-// 		bool isExpanded() const;
-// 		bool isCollapsed() const;
-// 		bool isEmpty() const;
-// 		bool isFree() const;
-// 		bool isRoot() const;
-// 		bool isRootOf(const Composite& composite) const;
+
+CHECK(isEmpty() const)
+Composite a, b, c, d, e, f;
+a.appendChild(b);
+b.appendChild(c);
+b.appendChild(d);
+c.appendChild(e);
+TEST_EQUAL(a.isEmpty(), false)
+TEST_EQUAL(b.isEmpty(), false)
+TEST_EQUAL(c.isEmpty(), false)
+TEST_EQUAL(d.isEmpty(), true)
+TEST_EQUAL(e.isEmpty(), true)
+TEST_EQUAL(f.isEmpty(), true)
+RESULT
+
+CHECK(isRoot() const)
+Composite a, b, c, d, e, f;
+a.appendChild(b);
+b.appendChild(c);
+b.appendChild(d);
+c.appendChild(e);
+TEST_EQUAL(a.isRoot(), true)
+TEST_EQUAL(b.isRoot(), false)
+TEST_EQUAL(c.isRoot(), false)
+TEST_EQUAL(d.isRoot(), false)
+TEST_EQUAL(e.isRoot(), false)
+TEST_EQUAL(f.isRoot(), true)
+RESULT
+
+CHECK(isRootOf() const)
+Composite a, b, c, d, e, f;
+a.appendChild(b);
+b.appendChild(c);
+b.appendChild(d);
+c.appendChild(e);
+TEST_EQUAL(a.isRootOf(a), true)
+TEST_EQUAL(a.isRootOf(b), true)
+TEST_EQUAL(b.isRootOf(a), false)
+TEST_EQUAL(c.isRootOf(a), false)
+TEST_EQUAL(d.isRootOf(a), false)
+TEST_EQUAL(e.isRootOf(a), false)
+TEST_EQUAL(f.isRootOf(a), false)
+TEST_EQUAL(f.isRootOf(f), true)
+TEST_EQUAL(a.isRootOf(b), true)
+TEST_EQUAL(a.isRootOf(c), true)
+TEST_EQUAL(a.isRootOf(d), true)
+TEST_EQUAL(a.isRootOf(e), true)
+TEST_EQUAL(a.isRootOf(f), false)
+RESULT
+
 // 		bool isInterior() const;
 // 		bool isInteriorOf(const Composite& composite) const;
 // 		bool isLeaf() const;
@@ -396,6 +477,40 @@ RESULT
 // 		bool isAncestorOf(const Composite& composite) const
 // 		bool isRelatedWith(const Composite& composite) const;
 // 		bool isHomomorph(const Composite& composite) const;
+
+
+// 		Composite* getLowestCommonAncestor(Composite& composite);
+// 		const Composite* getLowestCommonAncestor(const Composite& composite) const;
+// 
+// 		template <class T> Composite* getAncestor(const T& /* t */)
+// 		template <class T> const Composite* getAncestor(const T& t) const
+// 		Composite* getParent();
+// 		const Composite* getParent() const;
+// 		Composite* getChild(Index index);
+// 		const Composite* getChild(Index index) const;
+// 		Composite* getSibling(Index index);
+// 		const Composite* getSibling(Index index) const;
+// 		Composite* getFirstChild();
+// 		const Composite* getFirstChild() const;
+// 		Composite* getLastChild();
+// 		const Composite* getLastChild() const;
+// 		void expand();
+// 		void collapse();
+// 		static bool insertParent
+// 			(Composite& parent, Composite& first, 
+// 			 Composite& last, bool destroy_parent = true);
+// 
+// 		void insertBefore(Composite& composite);
+// 		void insertAfter(Composite& composite);
+// 		void spliceBefore(Composite& composite);
+// 		void spliceAfter(Composite& composite);
+// 		void splice(Composite& composite);
+// 		bool removeChild(Composite& child);
+// 		void replace(Composite& composite);
+// 		void swap(Composite& composite);
+// 
+// 		bool isExpanded() const;
+// 		bool isCollapsed() const;
 // 
 // 		void host(Visitor<Composite>& visitor);
 // 		bool applyAncestor(UnaryProcessor<Composite>& processor);
@@ -407,6 +522,31 @@ RESULT
 // 		bool applyPostorder(UnaryProcessor<Composite>& processor);
 // 		bool apply(UnaryProcessor<Composite>& processor);
 // 		bool applyLevel(UnaryProcessor<Composite>& processor, long level);
+
+CHECK(set(const Composite&, UnaryPredicate<Composite>&))
+//BAUSTELLE
+RESULT
+
+CHECK(set(const Composite&, bool))
+//BAUSTELLE
+RESULT
+
+CHECK(operator = (const Composite&))
+//BAUSTELLE
+RESULT
+
+CHECK(get(Composite&, UnaryPredicate<Composite>&) const)
+//BAUSTELLE
+RESULT
+
+CHECK(get(Composite&, bool) const)
+//BAUSTELLE
+RESULT
+
+CHECK(count(const KernelPredicateType&) const)
+//BAUSTELLE
+RESULT
+
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
