@@ -1,4 +1,4 @@
-// $Id: RegularExpression_test.C,v 1.2 2000/07/07 13:25:10 amoll Exp $
+// $Id: RegularExpression_test.C,v 1.3 2000/07/09 22:29:11 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,13 +7,15 @@
 
 ///////////////////////////
 
-START_TEST(RegularExpression, "$Id: RegularExpression_test.C,v 1.2 2000/07/07 13:25:10 amoll Exp $")
+START_TEST(RegularExpression, "$Id: RegularExpression_test.C,v 1.3 2000/07/09 22:29:11 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
 String filename;
+using std::ofstream;
+using std::ios;
 
 RegularExpression* re;
 
