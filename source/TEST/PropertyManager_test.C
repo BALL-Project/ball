@@ -1,4 +1,4 @@
-// $Id: PropertyManager_test.C,v 1.13 2000/10/22 21:01:24 oliver Exp $
+// $Id: PropertyManager_test.C,v 1.14 2001/07/14 18:44:37 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: PropertyManager_test.C,v 1.13 2000/10/22 21:01:24 oliver Exp $")
+START_TEST(class_name, "$Id: PropertyManager_test.C,v 1.14 2001/07/14 18:44:37 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -113,12 +113,23 @@ RESULT
 
 CHECK(NamedProperty::NamedProperty(const NamedProperty&))
 	float x = -99.9;
-	NamedProperty* np2;
-  np2 = new NamedProperty(*np);
-	TEST_NOT_EQUAL(np2, 0)
-	TEST_EQUAL(np2->getType(), NamedProperty::FLOAT)
-	TEST_EQUAL(np2->getName(), "test")
-	TEST_REAL_EQUAL(np2->getFloat(), x)
+	NamedProperty np2(*np);
+	TEST_EQUAL(np2.getType(), NamedProperty::FLOAT)
+	TEST_EQUAL(np2.getName(), "test")
+	TEST_REAL_EQUAL(np2.getFloat(), x)
+	
+	NamedProperty np3(String("TESTPROP"), String("STR"));
+	TEST_EQUAL(np3.getType(), NamedProperty::STRING)
+	TEST_EQUAL(np3.getString(), "STR")
+	NamedProperty np4(np3);
+	TEST_EQUAL(np4.getType(), NamedProperty::STRING)
+	TEST_EQUAL(np4.getString(), "STR")
+	np3.clear();
+	TEST_EQUAL(np3.getType(), NamedProperty::NONE)
+	TEST_EQUAL(np4.getType(), NamedProperty::STRING)
+	TEST_EQUAL(np4.getString(), "STR")
+	np4.clear();
+	TEST_EQUAL(np4.getType(), NamedProperty::NONE)
 RESULT
 
 String filename;
@@ -711,11 +722,14 @@ CHECK(PropertyManager::std::ostream& operator << (std::ostream& s, const Propert
 	TEST_FILE(filename.c_str(), "data/PropertyManager_test/PropertyManager_test_ostream1.txt", true)
 RESULT
 
-/*
+
 CHECK(PropertyManager::std::istream& operator >> (std::istream& s, PropertyManager& property_manager))
 	std::ifstream instr("data/PropertyManager_test/PropertyManager_test_ostream2.txt");
-	instr >> m; // wenn file nicht existiert bleibt er hier haengen ???
+	PropertyManager m;
+	TEST_EQUAL(m.countNamedProperties(), 0)
+	instr >> m;
 	instr.close();
+	TEST_EQUAL(m.countNamedProperties(), 8)
 	TEST_EQUAL(m.hasProperty("PROP1"), true)
 	TEST_EQUAL(m.hasProperty("PROP2"), true)
 	TEST_EQUAL(m.hasProperty("PROP3"), true)
@@ -737,7 +751,7 @@ CHECK(PropertyManager::std::istream& operator >> (std::istream& s, PropertyManag
 	TEST_EQUAL(m.getBitVector().getBit(1), false)
 	TEST_EQUAL(m.getBitVector().getBit(2), true)
 RESULT
-*/
+
 
 CHECK(PropertyManager::write(PersistenceManager& pm) const )
 	NEW_TMP_FILE(filename)
@@ -748,10 +762,10 @@ CHECK(PropertyManager::write(PersistenceManager& pm) const )
 	TEST_FILE(filename.c_str(), "data/PropertyManager_test/PropertyManager_test_write.txt", true)
 RESULT
 
-/*
+
 CHECK(PropertyManager::read(PersistenceManager& pm))
 	PropertyManager m;
-	ifstream  ifile("data/PersistenceManager_test_write.txt");
+	ifstream  ifile("data/PropertyManager_test/PropertyManager_test_read.txt");
 	pm.setIstream(ifile);
 	TEST_EQUAL(m.read(pm), true)
 	TEST_EQUAL(m.hasProperty("PROP1"), true)
@@ -766,17 +780,17 @@ CHECK(PropertyManager::read(PersistenceManager& pm))
 	TEST_EQUAL(m.getProperty("PROP1").getBool(), true)	
 	TEST_EQUAL(m.getProperty("PROP2").getInt(), -12345)
 	TEST_EQUAL(m.getProperty("PROP3").getUnsignedInt(), 12345)
-	TEST_EQUAL(m.getProperty("PROP4").getFloat(), 1.2345)
-	TEST_EQUAL(m.getProperty("PROP5").getDouble(), 2.345)
+	TEST_REAL_EQUAL(m.getProperty("PROP4").getFloat(), 1.2345)
+	TEST_REAL_EQUAL(m.getProperty("PROP5").getDouble(), 2.345)
 	TEST_EQUAL(m.getProperty("PROP6").getString(), "test")
 	TEST_NOT_EQUAL(m.getProperty("PROP7").getObject(), 0)
-	TEST_EQUAL(m.countNamedProperties(), 7);
+	TEST_EQUAL(m.countNamedProperties(), 8);
 	TEST_EQUAL(m.getBitVector().getBit(0), true)
 	TEST_EQUAL(m.getBitVector().getBit(1), false)
 	TEST_EQUAL(m.getBitVector().getBit(2), true)
 	ifile.close();
 RESULT
-*/
+
 
 CHECK(PropertyManager::isValid() const )
 	TEST_EQUAL(m.isValid(), true)
