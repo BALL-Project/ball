@@ -1,4 +1,4 @@
-// $Id: composite.h,v 1.30 2001/01/14 21:57:09 amoll Exp $
+// $Id: composite.h,v 1.31 2001/02/05 01:28:35 amoll Exp $
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #define BALL_CONCEPT_COMPOSITE_H
@@ -84,7 +84,7 @@ namespace BALL
 #define BALL_KERNEL_PREDICATE_TYPE
 		/**	Composite predicate type.
 				This type declares a predicate operating on composites.
-				As it is used in as a predicate for all kernel classes,
+				As it is used as a predicate for all kernel classes,
 				it is named KernelPredicateType.
 		*/
 		typedef	UnaryPredicate<Composite>	KernelPredicateType;
@@ -241,22 +241,22 @@ namespace BALL
 		void get(Composite& composite, bool deep = true) const
 			throw();
 
-		/**	Return the degree of node.
+		/**	Return the degree of the node.
 				This method returns the number of children of a composite object.
-				@return the number of children
+				@return Size the number of children
 		*/
 		Size getDegree() const
 			throw();
 
 		/**	Count the number of nodes fulfilling a predicate in this subtree.
 				@param	predicate the predicate
-				@return he number of nodes in the subtree stisfying the predicate
+				@return Size the number of nodes in the subtree satisfying the predicate
 		*/
 		Size count(const KernelPredicateType& predicate) const
 			throw();
 
 		/**	Count the number of descendants.
-				@return he number of descendants of this node
+				@return Size the number of descendants of this node
 		*/
 		Size countDescendants() const
 			throw();
@@ -322,7 +322,7 @@ namespace BALL
 
 		/**	Find the first ancestor of type T (const method).
 				This method operates also on constant trees.
-				@return a pointer to the first composite found that is a kind of T or 0 if no
+				@return a pointer to the first composite found that is a kind of T or 0 if no 
 								matching composite was found to the root of the tree
 		*/
 		template <class T>
@@ -332,7 +332,7 @@ namespace BALL
 		/**	Find the nearest previous composite of type T.
 				This method walks backward in the tree from composite to composite and
 				checks whether the composite object is a kind of {\tt T}.
-				@return a pointer to the first composite found that is a kind of T or 0 if no
+				@return a pointer to the first composite found that is a kind of T or 0 if no 
 								matching composite was found up to the root of the tree
 		*/
 		template <typename T>
@@ -342,7 +342,7 @@ namespace BALL
 		/**	Find the nearest previous composite of type T (const method).
 				This method walks backward in the tree from composite to composite and
 				checks whether the composite object is a kind of {\tt T}.
-				@return a pointer to the first composite found that is a kind of T or 0 if no
+				@return a pointer to the first composite found that is a kind of T or 0 if no 
 								matching composite was found up to the root of the tree
 		*/
 		template <class T>
@@ -352,7 +352,7 @@ namespace BALL
 		/**	Find the next composite of type T.
 				This method walks backward in the tree from composite to composite and
 				checks whether the composite object is a kind of {\tt T}.
-				@return a pointer to the first composite found that is a kind of T or 0 if no
+				@return a pointer to the first composite found that is a kind of T or 0 if no 
 								matching composite was found up to the root of the tree
 		*/
 		template <typename T>
@@ -362,7 +362,7 @@ namespace BALL
 		/**	Find the next composite of type T (const method).
 				This method walks backward in the tree from composite to composite and
 				checks whether the composite object is a kind of {\tt T}.
-				@return a pointer to the first composite found that is a kind of T or 0 if no
+				@return a pointer to the first composite found that is a kind of T or 0 if no 
 								matching composite was found up to the root of the tree
 		*/
 		template <class T>
@@ -453,7 +453,7 @@ namespace BALL
 				Update one or both of the two time stamps with the
 				current time. The time stamp is then propagated up to the
 				root of the composite tree. Each composite contains two stamps. 
-				the \emph{modification stamp} is update each time the tree structure
+				the \emph{modification stamp} is updated each time the tree structure
 				changes, while the \emph{selection stamp} is updated each time the
 				selection status changes.
 				@param stamp the time stamp type 
@@ -501,8 +501,7 @@ namespace BALL
 				{\tt parent} and {\tt parent} is inserted in the former position of {\tt first}.
 				The method returns {\bf false}, if {\tt first} or {\tt last} have differing parents,
 				if {\tt parent} is identical with either {\tt first} or {\tt last}, or if {\tt first}
-				is already a descendant of {\tt parent}.\\
-				
+				is already a descendant of {\tt parent}.
 				This method updates the modification time stamp.
 				@see stamp
 				@param parent the new parent of the nodes from {\tt first} through {\tt last}
@@ -517,8 +516,7 @@ namespace BALL
 		/**	Insert a node before this node.
 				This method inserts {\tt composite} before {\tt this} node,
 				if {\tt this} node has a parent and is not a descendant of {\tt composite}.
-				Self-insertion is recognized and ignored (nothing is done).\\
-
+				Self-insertion is recognized and ignored (nothing is done).
 				This method updates the modification time stamp.
 				@see stamp
 				@param	composite the node to be inserted in the tree before {\tt this}
@@ -529,8 +527,7 @@ namespace BALL
 		/**	Insert a node after this node.
 				This method inserts {\tt composite} after {\tt this} node,
 				if {\tt this} node has a parent and is not a descendant of {\tt composite}.
-				Self-insertion is recognized and ignored (nothing is done).\\
-
+				Self-insertion is recognized and ignored (nothing is done).
 				This method updates the modification time stamp.
 				@see stamp
 				@param	composite the node to be inserted in the tree after of {\tt this}
@@ -540,8 +537,7 @@ namespace BALL
 
 		/**	Prepend all children of {\tt composite} to the children of this composite.
 				The method does nothing, if {\tt composite} is identical to {\tt this} or
-				is a descendent of {\tt this}.\\
-
+				is a descendent of {\tt this}.
 				This method updates the modification time stamp.
 				@see stamp
 				@param the composite to be spliced
@@ -551,8 +547,7 @@ namespace BALL
 
 		/**	Append all children of {\tt composite} to the children of this composite.
 				The method does nothing, if {\tt composite} is identical to {\tt this} or
-				is a descendent of {\tt this}.\\
-
+				is a descendent of {\tt this}.
 				This method updates the modification time stamp.
 				@see stamp
 				@param composite the composite to be spliced
@@ -564,7 +559,6 @@ namespace BALL
 				The children of {\tt composite} are inserted at the position of 
 				{\tt composite} if {\tt composite} is a child of {\tt this}.
 				Otherwise the children are inserted using \Ref{spliceBefore}.
-				\\
 				This method updates the modification time stamp.
 				@see stamp
 				@param composite the composite to be spliced
@@ -574,10 +568,9 @@ namespace BALL
 
 		/**	Remove a child from its parent.
 				{\tt child} is only removed, if it is a true child of {\tt this}.
-				\\
 				This method updates the modification time stamp of {\tt this}.
 				@see stamp
-				@param composite the composite to be spliced
+				@param child the child to remove
 				@return false if child could not be removed
 		*/
 		bool removeChild(Composite& child)
@@ -749,7 +742,7 @@ namespace BALL
 		bool isDescendantOf(const Composite& composite) const
 			throw();
 
-		/** Return true if the node has a parent of the same type as dummy.
+		/** Return true if the node has a ancestor of the same type as dummy.
 		*/
 		template <typename T>
 		bool hasAncestor(const T& dummy ) const
@@ -760,7 +753,7 @@ namespace BALL
 		bool isAncestorOf(const Composite& composite) const
 			throw();
 
-		/** Return true if the node has is ancestor or composite or
+		/** Return true if the node has composite as ancestor or
 				composite is ancestor of this node.
 		*/
 		bool isRelatedWith(const Composite& composite) const
@@ -795,16 +788,18 @@ namespace BALL
 		*/
 		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 			throw();
+
 		//@}
-
-
 		/**	@name	Application and Hosting */
 		//@{
 
-		///
+		/**	Visitor host method.
+				Composites may be visited.
+				For an example look into Composite\_test.C
+				@param	visitor	the visitor
+		*/
 		void host(Visitor<Composite>& visitor)
 			throw();
-
 
 		/** Apply a processor to all ancestors of this node.
 				@return true if the processor could be applied.
@@ -813,7 +808,7 @@ namespace BALL
 		bool applyAncestor(UnaryProcessor<T>& processor)
 			throw();
 
-		/** Apply a processor to all childs of this node.
+		/** Apply a processor to all children of this node.
 				@return true if the processor could be applied.
 		*/
 		template <typename T>
