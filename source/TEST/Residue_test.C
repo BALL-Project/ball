@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Residue_test.C,v 1.24 2003/02/20 06:31:29 oliver Exp $
+// $Id: Residue_test.C,v 1.25 2003/07/01 13:20:26 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -16,7 +16,7 @@
 #include <BALL/MATHS/common.h>
 ///////////////////////////
 
-START_TEST(Residue, "$Id: Residue_test.C,v 1.24 2003/02/20 06:31:29 oliver Exp $")
+START_TEST(Residue, "$Id: Residue_test.C,v 1.25 2003/07/01 13:20:26 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -30,16 +30,16 @@ String filename;
 NEW_TMP_FILE(filename)
 
 Residue*	r;
-CHECK(Residue())
+CHECK(Residue() throw())
 	r = new Residue;
 	TEST_NOT_EQUAL(r, 0)
 RESULT
 
-CHECK(~Residue())
+CHECK(~Residue() throw())
 	delete r;
 RESULT
 
-CHECK(Residue(Residue&, bool))
+CHECK(Residue(const Residue& residue, bool deep = true) throw())
 	Residue* r1 = new Residue;
 	r1->setName("testname");
 	PDBAtom a("a");
@@ -62,9 +62,8 @@ CHECK(Residue(Residue&, bool))
 	delete r1;
 RESULT
 
-CHECK(Residue(const String& name,
-			  			const String& id = BALL_RESIDUE_DEFAULT_ID,
-							char insertion_code = BALL_RESIDUE_DEFAULT_INSERTION_CODE))
+CHECK(Residue(const String& name, const String& id = BALL_RESIDUE_DEFAULT_ID, char insertion_code = BALL_RESIDUE_DEFAULT_INSERTION_CODE) throw())
+
 	Residue* r1 = new Residue("r1", "id", 'i');
 	TEST_NOT_EQUAL(r1, 0)
 	if (r1 != 0)
@@ -86,7 +85,7 @@ CHECK(Residue(const String& name,
 RESULT
 
 
-CHECK(Residue::clear())
+CHECK(void clear() throw())
 	Residue r("r1", "id", 'c');
 	PDBAtom a("a");
 	r.insert(a);
@@ -99,7 +98,7 @@ CHECK(Residue::clear())
 	TEST_EQUAL(c.getResidue(0), &r)
 RESULT
 
-CHECK(Residue::destroy())
+CHECK(void destroy() throw())
 	Residue r("r1", "id", 'c');
 	PDBAtom a("a");
 	r.insert(a);
@@ -112,7 +111,7 @@ CHECK(Residue::destroy())
 	TEST_EQUAL(c.getResidue(0), 0)
 RESULT
 
-CHECK(Residue::set(const Residue& residue, bool deep = true))
+CHECK(void set(const Residue& residue, bool deep = true) throw())
 	Residue r1("r1");
 	PDBAtom a("a");
 	r1.insert(a);
@@ -126,7 +125,7 @@ CHECK(Residue::set(const Residue& residue, bool deep = true))
 	TEST_EQUAL(r2.countPDBAtoms(), 1)
 RESULT
 
-CHECK(Residue::Residue& operator = (const Residue& residue))
+CHECK(Residue& operator = (const Residue& residue) throw())
 	Residue r1("r1");
 	PDBAtom a("a");
 	r1.insert(a);
@@ -136,7 +135,7 @@ CHECK(Residue::Residue& operator = (const Residue& residue))
 	TEST_EQUAL(r2.countPDBAtoms(), 1)
 RESULT
 
-CHECK(Residue::get(Residue& residue, bool deep = true) const )
+CHECK(void get(Residue& residue, bool deep = true) const throw())
 	Residue r1("r1");
 	PDBAtom a("a");
 	r1.insert(a);
@@ -150,7 +149,7 @@ CHECK(Residue::get(Residue& residue, bool deep = true) const )
 	TEST_EQUAL(r2.countPDBAtoms(), 1)
 RESULT
 
-CHECK(Residue::swap(Residue& residue))
+CHECK(void swap(Residue& residue) throw())
 	Residue r1("r1");
 	Residue r2("r2");
 	PDBAtom a1("a1");
@@ -164,7 +163,7 @@ CHECK(Residue::swap(Residue& residue))
 	TEST_EQUAL(r2.getPDBAtom(0), &a1)
 RESULT
 
-CHECK(Residue::getFullName(FullNameType type = ADD_VARIANT_EXTENSIONS) const )
+CHECK(String getFullName(FullNameType type = ADD_VARIANT_EXTENSIONS) const throw())
 	Residue r1("r1");
 	Chain c;
 	c.insert(r1);
@@ -187,7 +186,7 @@ CHECK(Residue::getFullName(FullNameType type = ADD_VARIANT_EXTENSIONS) const )
 	TEST_EQUAL(r2.getFullName(Residue::ADD_VARIANT_EXTENSIONS), "r2")	
 RESULT
 
-CHECK(Residue::hasTorsionPhi() const )
+CHECK(bool hasTorsionPhi() const throw())
 	Residue r;
 	r.setProperty(Residue::PROPERTY__AMINO_ACID);
 	TEST_EQUAL(r.hasTorsionPhi(), false)	
@@ -211,7 +210,7 @@ CHECK(Residue::hasTorsionPhi() const )
 	TEST_EQUAL(r.hasTorsionPhi(), true)
 RESULT
 
-CHECK(Residue::getTorsionPhi() const )
+CHECK(Angle getTorsionPhi() const throw())
 	HINFile infile("data/AlaGlySer.hin");
 	System s;
 	infile >> s;
@@ -225,7 +224,7 @@ CHECK(Residue::getTorsionPhi() const )
 	TEST_REAL_EQUAL(res_it->getTorsionPhi().value, -3.14111)
 RESULT
 
-CHECK(Residue::hasTorsionPsi() const )
+CHECK(bool hasTorsionPsi() const throw())
 	Residue r;
 	r.setProperty(Residue::PROPERTY__AMINO_ACID);
 	TEST_EQUAL(r.hasTorsionPsi(), false)	
@@ -246,7 +245,7 @@ CHECK(Residue::hasTorsionPsi() const )
 	TEST_EQUAL(r.hasTorsionPsi(), true)
 RESULT
 
-CHECK(Residue::getTorsionPsi() const )
+CHECK(Angle getTorsionPsi() const throw())
 	HINFile infile("data/AlaGlySer.hin");
 	System s;
 	infile >> s;
@@ -259,7 +258,7 @@ CHECK(Residue::getTorsionPsi() const )
 	TEST_EQUAL(res_it->getTorsionPsi(), 0)
 RESULT
 
-CHECK(Residue::getProtein())
+CHECK(Protein* getProtein() throw())
 	Residue r1("r1");
 	TEST_EQUAL(r1.getProtein(), 0)
 	Chain c;
@@ -270,7 +269,7 @@ CHECK(Residue::getProtein())
 	TEST_EQUAL(p.getName(), "p")
 RESULT
 
-CHECK(Residue::getProtein() const )
+CHECK(const Protein* getProtein() const throw())
 	Residue r1("r1");
 	Chain c;
 	c.insert(r1);
@@ -279,7 +278,7 @@ CHECK(Residue::getProtein() const )
 	TEST_EQUAL(r1.getProtein(), &p)
 RESULT
 
-CHECK(Residue::getChain())
+CHECK(Chain* getChain() throw())
 	Residue r1("r1");
 	TEST_EQUAL(r1.getChain(), 0)
 	Chain c;
@@ -288,14 +287,14 @@ CHECK(Residue::getChain())
 	TEST_EQUAL(c.getName(), "c")
 RESULT
 
-CHECK(Residue::getChain() const )
+CHECK(const Chain* getChain() const throw())
 	Residue r1("r1");
 	Chain c;
 	c.insert(r1);
 	TEST_EQUAL(r1.getChain(), &c)
 RESULT
 
-CHECK(Residue::getPDBAtom(Position position))
+CHECK(PDBAtom* getPDBAtom(Position position) throw())
 	Residue r1("r1");
 	TEST_EQUAL(r1.getPDBAtom(0), 0)
 	PDBAtom a1("x");
@@ -304,7 +303,7 @@ CHECK(Residue::getPDBAtom(Position position))
 	TEST_EQUAL(a1.getName(), "a1")
 RESULT
 
-CHECK(Residue::getPDBAtom(Position position) const )
+CHECK(const PDBAtom* getPDBAtom(Position position) const throw())
 	Residue r1("r1");
 	TEST_EQUAL(r1.getPDBAtom(0), 0)
 	PDBAtom a1("a1");
@@ -312,7 +311,7 @@ CHECK(Residue::getPDBAtom(Position position) const )
 	TEST_EQUAL(r1.getPDBAtom(0), &a1)
 RESULT
 
-CHECK(Residue::setID(const String& id))
+CHECK(void setID(const String& id) throw())
 	Residue r1("x");
 	TEST_EQUAL(r1.getID(), "")
 	r1.setID("");
@@ -321,7 +320,7 @@ CHECK(Residue::setID(const String& id))
 	TEST_EQUAL(r1.getID(), "r1")
 RESULT
 
-CHECK(Residue::getID() const )
+CHECK(const String& getID() const throw())
 	Residue r1("x");
 	TEST_EQUAL(r1.getID(), "")
 	r1.setID("");
@@ -330,21 +329,21 @@ CHECK(Residue::getID() const )
 	TEST_EQUAL(r1.getID(), "r1")
 RESULT
 
-CHECK(Residue::setInsertionCode(char insertion_code))
+CHECK(void setInsertionCode(char insertion_code) throw())
 	Residue r1('x');
 	TEST_EQUAL(r1.getInsertionCode(), ' ')
 	r1.setInsertionCode('r');
 	TEST_EQUAL(r1.getInsertionCode(), 'r')
 RESULT
 
-CHECK(Residue::getInsertionCode() const )
+CHECK(char getInsertionCode() const throw())
 	Residue r1('x');
 	TEST_EQUAL(r1.getInsertionCode(), ' ')
 	r1.setInsertionCode('r');
 	TEST_EQUAL(r1.getInsertionCode(), 'r')
 RESULT
 
-CHECK(Residue::countPDBAtoms() const )
+CHECK(Size countPDBAtoms() const throw())
 	Residue r1('x');
 	PDBAtom a("a");
 	TEST_EQUAL(r1.countPDBAtoms(), 0)
@@ -352,7 +351,7 @@ CHECK(Residue::countPDBAtoms() const )
 	TEST_EQUAL(r1.countPDBAtoms(), 1)
 RESULT
 
-CHECK(Residue::prepend(PDBAtom& atom))
+CHECK(void prepend(PDBAtom& atom) throw())
 	Residue r1('x');
 	PDBAtom a1("a1");
 	PDBAtom a2("a2");
@@ -362,7 +361,7 @@ CHECK(Residue::prepend(PDBAtom& atom))
 	TEST_EQUAL(r1.getPDBAtom(1), &a1)
 RESULT
 
-CHECK(Residue::append(PDBAtom& atom))
+CHECK(void append(PDBAtom& atom) throw())
 	Residue r1('x');
 	PDBAtom a1("a1");
 	PDBAtom a2("a2");
@@ -372,7 +371,7 @@ CHECK(Residue::append(PDBAtom& atom))
 	TEST_EQUAL(r1.getPDBAtom(1), &a2)
 RESULT
 
-CHECK(Residue::insert(PDBAtom& atom))
+CHECK(void insert(PDBAtom& atom) throw())
 	Residue r1('x');
 	PDBAtom a1("a1");
 	PDBAtom a2("a2");
@@ -382,7 +381,7 @@ CHECK(Residue::insert(PDBAtom& atom))
 	TEST_EQUAL(r1.getPDBAtom(1), &a2)
 RESULT
 
-CHECK(Residue::insertBefore(PDBAtom& atom, Composite& before))
+CHECK(void insertBefore(PDBAtom& atom, Composite& before) throw())
 	Residue r1('x');
 	PDBAtom a1("a1");
 	PDBAtom a2("a2");
@@ -395,7 +394,7 @@ CHECK(Residue::insertBefore(PDBAtom& atom, Composite& before))
 	TEST_EQUAL(r1.getPDBAtom(2), &a2)
 RESULT
 
-CHECK(Residue::insertAfter(PDBAtom& atom, Composite& after))
+CHECK(void insertAfter(PDBAtom& atom, Composite& after) throw())
 	Residue r1('x');
 	PDBAtom a1("a1");
 	PDBAtom a2("a2");
@@ -408,7 +407,7 @@ CHECK(Residue::insertAfter(PDBAtom& atom, Composite& after))
 	TEST_EQUAL(r1.getPDBAtom(2), &a3)
 RESULT
 
-CHECK(Residue::remove(PDBAtom& atom))
+CHECK(bool remove(PDBAtom& atom) throw())
 	Residue r1('x');
 	PDBAtom a1("a1");
 	PDBAtom a2("a2");
@@ -421,7 +420,7 @@ CHECK(Residue::remove(PDBAtom& atom))
 	TEST_EQUAL(r1.getPDBAtom(1), &a3)
 RESULT
 
-CHECK(Residue::spliceBefore(Residue& residue))
+CHECK(void spliceBefore(Residue& residue) throw())
 	Residue r1('x');
 	Residue r2('x');
 	PDBAtom a1("a1");
@@ -433,7 +432,7 @@ CHECK(Residue::spliceBefore(Residue& residue))
 	TEST_EQUAL(r1.getPDBAtom(1), &a1)
 RESULT
 
-CHECK(Residue::spliceAfter(Residue& residue))
+CHECK(void spliceAfter(Residue& residue) throw())
 	Residue r1('x');
 	Residue r2('x');
 	PDBAtom a1("a1");
@@ -445,7 +444,7 @@ CHECK(Residue::spliceAfter(Residue& residue))
 	TEST_EQUAL(r1.getPDBAtom(1), &a2)
 RESULT
 
-CHECK(Residue::splice(Residue& residue))
+CHECK(void splice(Residue& residue) throw())
 	Residue r1('x');
 	Residue r2('x');
 	PDBAtom a1("a1");
@@ -457,14 +456,14 @@ CHECK(Residue::splice(Residue& residue))
 	TEST_EQUAL(r1.getPDBAtom(1), &a1)
 RESULT
 
-CHECK(Residue::isAminoAcid() const )
+CHECK(bool isAminoAcid() const throw())
 	Residue r1('x');
 	TEST_EQUAL(r1.isAminoAcid(), false)
 	r1.setProperty(Residue::PROPERTY__AMINO_ACID);
 	TEST_EQUAL(r1.isAminoAcid(), true)
 RESULT
 
-CHECK(Residue::isTerminal() const )
+CHECK(bool isTerminal() const throw())
 	Residue r1('x');
 	r1.setProperty(Residue::PROPERTY__AMINO_ACID);
 	TEST_EQUAL(r1.isTerminal(), false)
@@ -481,7 +480,7 @@ CHECK(Residue::isTerminal() const )
 	TEST_EQUAL(r1.isTerminal(), false)
 RESULT
 
-CHECK(Residue::isNTerminal() const )
+CHECK(bool isNTerminal() const throw())
 	Residue r1('x');
 	r1.setProperty(Residue::PROPERTY__AMINO_ACID);
 	TEST_EQUAL(r1.isNTerminal(), false)
@@ -498,7 +497,7 @@ CHECK(Residue::isNTerminal() const )
 	TEST_EQUAL(r1.isNTerminal(), false)
 RESULT
 
-CHECK(Residue::isCTerminal() const )
+CHECK(bool isCTerminal() const throw())
 	Residue r1('x');
 	r1.setProperty(Residue::PROPERTY__AMINO_ACID);
 	TEST_EQUAL(r1.isCTerminal(), false)
@@ -515,14 +514,14 @@ CHECK(Residue::isCTerminal() const )
 	TEST_EQUAL(r1.isCTerminal(), false)
 RESULT
 
-CHECK(Residue::isValid() const )
+CHECK(bool isValid() const throw())
 	Residue r("r1", "id", 'i');
 	TEST_EQUAL(r.isValid(), true)
 	r.setName("");
 	TEST_EQUAL(r.isValid(), true)
 RESULT
 
-CHECK(Residue::dump(std::ostream& s = std::cout, Size depth = 0) const )
+CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw())
 	Residue r1("r1", "test", 'X');
 	PDBAtom a1("a1");
 	r1.insert(a1);
@@ -537,7 +536,7 @@ using namespace RTTI;
 pm.registerClass(getStreamName<Atom>(), Atom::createDefault);
 pm.registerClass(getStreamName<Molecule>(), Molecule::createDefault);
 NEW_TMP_FILE(filename)
-CHECK(persistentWrite(PersistenceManager&, String, bool))
+CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const throw(Exception::GeneralException))
 	std::ofstream	ofile(filename.c_str(), std::ios::out);
 	Atom* f2= new Atom();
 	f2->setName("name2");
@@ -552,7 +551,7 @@ CHECK(persistentWrite(PersistenceManager&, String, bool))
 	delete f1;
 RESULT
 
-CHECK(persistentRead(PersistenceManager&))
+CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralException))
 	std::ifstream	ifile(filename.c_str());
 	pm.setIstream(ifile);
 	PersistentObject*	ptr = pm.readObject();
@@ -573,7 +572,7 @@ CHECK(persistentRead(PersistenceManager&))
 	}
 RESULT
 
-CHECK(operator ==)
+CHECK(bool operator == (const Residue& residue) const throw())
 	Residue b1;
 	Residue b2;
 	TEST_EQUAL(b1 == b2, false)
@@ -581,6 +580,86 @@ CHECK(operator ==)
 	TEST_EQUAL(b1 == b1, true)
 RESULT
 
+CHECK(bool operator != (const Residue& residue) const throw())
+	Residue b1;
+	Residue b2;
+	TEST_EQUAL(b1 != b2, true) 
+	b1 = b2;
+	TEST_EQUAL(b1 != b1, false)
+RESULT
+
+CHECK(BALL_CREATE_DEEP(Residue))
+	Residue r1('x');
+	PDBAtom a1("a1");
+	r1.insert(a1);
+	Residue* test = (Residue*) r1.create(false, true);
+	TEST_EQUAL(test->getName(), "")
+	TEST_EQUAL(test->countPDBAtoms(), 0)
+	delete test;
+	test = (Residue*) r1.create(true, false);
+	TEST_EQUAL(test->getName(), "x")
+	TEST_EQUAL(test->countPDBAtoms(), 1)
+	delete test;
+RESULT
+
+CHECK(BALL_KERNEL_DEFINE_ITERATOR_CREATORS(AtomContainer))
+  // ???
+RESULT
+
+CHECK(BALL_KERNEL_DEFINE_ITERATOR_CREATORS(PDBAtom))
+  // ???
+RESULT
+
+// ============================================================
+// not to be tested:
+// ============================================================
+CHECK(Size countAtomContainers() const throw())
+// not to be tested
+RESULT
+
+CHECK(bool isSuperAtomContainerOf(const AtomContainer& atom_container) const throw())
+// not to be tested
+RESULT
+
+CHECK(bool remove(AtomContainer& AtomContainer) throw())
+// not to be tested
+RESULT
+
+CHECK(const AtomContainer* getAtomContainer(Position position) const throw())
+// not to be tested
+RESULT
+
+CHECK(void append(AtomContainer& atom_container) throw())
+// not to be tested
+RESULT
+
+CHECK(void insert(AtomContainer& atom_container) throw())
+// not to be tested
+RESULT
+
+CHECK(void insertAfter(AtomContainer& atom_container, Composite& composite) throw())
+// not to be tested
+RESULT
+
+CHECK(void insertBefore(AtomContainer& atom_container, Composite& composite) throw())
+// not to be tested
+RESULT
+
+CHECK(void prepend(AtomContainer& atom_container) throw())
+// not to be tested
+RESULT
+
+CHECK(void splice(AtomContainer& AtomContainer) throw())
+// not to be tested
+RESULT
+
+CHECK(void spliceAfter(AtomContainer& base_ragment) throw())
+// not to be tested
+RESULT
+
+CHECK(void spliceBefore(AtomContainer& atom_container) throw())
+// not to be tested
+RESULT
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
