@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.65 2004/06/03 14:40:53 amoll Exp $
+// $Id: scene.C,v 1.66 2004/06/03 15:13:46 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -190,6 +190,7 @@ namespace BALL
 			}
 
 			update_running_ = false;
+			updateGL();
 		}
 
 
@@ -610,6 +611,7 @@ namespace BALL
 
 			// draw the representations
 			renderView_(DIRECT_RENDERING);
+			updateGL();
 
 			int width  = BALL_ABS((int)x_window_pick_pos_second_ - (int)x_window_pick_pos_first_);
 			int height = BALL_ABS((int)y_window_pick_pos_second_ - (int)y_window_pick_pos_first_);
@@ -623,7 +625,9 @@ namespace BALL
 			// sent collected objects
 			notify_(message);
 
+			updateCamera_();
 			renderView_(REBUILD_DISPLAY_LISTS);
+			updateGL();
 		}
 
 		void Scene::changeEyeDistance_(Scene* scene)
@@ -638,7 +642,7 @@ namespace BALL
 			stage_->setEyeDistance(new_distance);
 			stage_settings_->updateFromStage();
 
-			renderView_(REBUILD_DISPLAY_LISTS);
+			paintGL();
 		}
 
 		void Scene::changeFocalDistance_(Scene* scene)
@@ -653,7 +657,7 @@ namespace BALL
 			stage_->setFocalDistance(new_distance);
 			stage_settings_->updateFromStage();
 
-			renderView_(REBUILD_DISPLAY_LISTS);
+			paintGL();
 		}
 
 		void Scene::setViewPoint_()
@@ -662,7 +666,7 @@ namespace BALL
 			SetCamera set_camera(this);
 			set_camera.exec();
 			gl_renderer_.updateCamera();
-			renderView_(REBUILD_DISPLAY_LISTS);
+			paintGL();
 		}
 
 
@@ -688,6 +692,7 @@ namespace BALL
 			Log.info() << text << std::endl;
 		}
 
+
 		void Scene::resetCamera_()
 			throw()
 		{
@@ -697,6 +702,7 @@ namespace BALL
 			updateCamera_();
 		}
 
+		
 		void Scene::updateCamera_()
 			throw()
 		{
@@ -706,7 +712,7 @@ namespace BALL
 				gl_renderer_.setLights();
 				light_settings_->updateFromStage();
 			}
-			renderView_(REBUILD_DISPLAY_LISTS);
+			updateGL();
 		}
 
 
