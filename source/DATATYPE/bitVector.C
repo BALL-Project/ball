@@ -1,4 +1,4 @@
-// $Id: bitVector.C,v 1.22 2000/11/27 16:21:18 amoll Exp $
+// $Id: bitVector.C,v 1.23 2000/12/05 11:03:23 amoll Exp $
 
 #include <BALL/DATATYPE/bitVector.h>
 #include <BALL/MATHS/common.h>
@@ -13,7 +13,7 @@ namespace BALL
 	const Size BitVector::BlockSize = BALL_BLOCK_BITS;
 
 	Bit::IllegalOperation::IllegalOperation(const char* file, int line)
-		:	GeneralException(file, line)
+		:	Exception::GeneralException(file, line)
 	{
 		message_ = "Trying to modifiy a const bitvector by a bit";
 		Exception::globalHandler.setMessage(message_);
