@@ -1,4 +1,4 @@
-// $Id: listStack.h,v 1.1 1999/08/26 07:53:13 oliver Exp $
+// $Id: listStack.h,v 1.2 2000/01/03 15:16:18 oliver Exp $
 
 #ifndef BALL_DATATYPE_LISTSTACK_H
 #define BALL_DATATYPE_LISTSTACK_H
@@ -7,7 +7,8 @@
 #	include <BALL/common.h>
 #endif
 
-namespace BALL {
+namespace BALL 
+{
 
 	// all these classes are used to implement the binary search tree
 	
