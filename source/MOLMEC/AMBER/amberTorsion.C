@@ -1,4 +1,4 @@
-// $Id: amberTorsion.C,v 1.15 2000/01/30 18:24:40 oliver Exp $
+// $Id: amberTorsion.C,v 1.16 2000/01/30 18:26:42 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberTorsion.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -478,15 +478,15 @@ namespace BALL
 
 						if (getForceField()->getUseSelection() == false)
 						{
-							it->atom1->getForce() -= dEdt % cb;
-							it->atom2->getForce() -= ca % dEdt + dEdu % dc;
-							it->atom3->getForce() -= dEdt % ba + db % dEdu;
-							it->atom4->getForce() -= dEdu % cb; 
+							it->atom1->getForce() += dEdt % cb;
+							it->atom2->getForce() += ca % dEdt + dEdu % dc;
+							it->atom3->getForce() += dEdt % ba + db % dEdu;
+							it->atom4->getForce() += dEdu % cb; 
 						} else {
-							if (it->atom1->isSelected()) it->atom1->getForce() -= dEdt % cb;
-							if (it->atom2->isSelected()) it->atom2->getForce() -= ca % dEdt + dEdu % dc;
-							if (it->atom3->isSelected()) it->atom3->getForce() -= dEdt % ba + db % dEdu;
-							if (it->atom4->isSelected()) it->atom4->getForce() -= dEdu % cb;
+							if (it->atom1->isSelected()) it->atom1->getForce() += dEdt % cb;
+							if (it->atom2->isSelected()) it->atom2->getForce() += ca % dEdt + dEdu % dc;
+							if (it->atom3->isSelected()) it->atom3->getForce() += dEdt % ba + db % dEdu;
+							if (it->atom4->isSelected()) it->atom4->getForce() += dEdu % cb;
 						}
 					}
 				}
