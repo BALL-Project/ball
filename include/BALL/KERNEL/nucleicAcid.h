@@ -1,4 +1,4 @@
-// $Id: nucleicAcid.h,v 1.3 1999/12/28 18:38:45 oliver Exp $ 
+// $Id: nucleicAcid.h,v 1.4 2000/01/10 23:05:20 oliver Exp $ 
 
 #ifndef BALL_KERNEL_NUCLEICACID_H
 #define BALL_KERNEL_NUCLEICACID_H
@@ -7,10 +7,20 @@
 #	include <BALL/common.h>
 #endif
 
+#ifndef BALL_KERNEL_MOLECULE_H
+#	include <BALL/KERNEL/molecule.h>
+#endif
+
+#ifndef BALL_KERNEL_NUCLEOTIDE_H
+#	include <BALL/KERNEL/nucleotide.h>
+#endif
+
 #define BALL_NUCLEICACID_DEFAULT_ID   ""
 
 namespace BALL 
 {
+
+	class Nucleotide;
 
 	/**
 	*/
