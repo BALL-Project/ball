@@ -1,18 +1,12 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.6 2000/06/21 08:50:04 oliver Exp $
+# $Id: Makefile,v 1.7 2000/06/22 10:23:02 oliver Exp $
 #
 
 all: libBALLc.so
 
 
-sip:
-	$(SIP) -c . BALL.sip
-	for i in `ls ./sip*cpp`; do mv $$i ./`basename $$i .cpp`.C ; done
-	mv ./BALLcmodule.cpp ./BALLcmodule.C
-			 
-	
 SIPSOURCES=\
 	BALLcmodule.C\
 	sipBALLAmberFF.C\
@@ -54,12 +48,17 @@ SIPSOURCES=\
 	sipBALLVector3.C\
 	sipBALLXYZFile.C
 
+include ../${BALL_BINFMT}/config.mak
+
 SIPFLAGS += $(PYTHON_INCLUDES) $(SIP_INCLUDES)
 CXXFLAGS += $(SIPFLAGS)
 
-include ../${BALL_BINFMT}/config.mak
 
-	
+sip:
+	$(SIP) -c . BALL.sip
+	for i in `ls ./sip*cpp`; do mv $$i ./`basename $$i .cpp`.C ; done
+	mv ./BALLcmodule.cpp ./BALLcmodule.C
+			 	
 sipBALLAtom.C:	atom.sip
 
 SIPOBJECTS=$(SIPSOURCES:.C=.o)
