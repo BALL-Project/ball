@@ -1,4 +1,4 @@
-// $Id: forwardIterator.h,v 1.5 2001/06/07 12:44:59 anker Exp $
+// $Id: forwardIterator.h,v 1.6 2001/06/20 19:58:55 amoll Exp $
 
 #ifndef BALL_CONCEPT_FORWARDITER_H
 #define BALL_CONCEPT_FORWARDITER_H
@@ -39,7 +39,6 @@ namespace BALL
 		typedef ::std::forward_iterator_tag iterator_category;
 
 		//@}
-
 		/**	@name Constructors and Destructors
 		*/
 		//@{
@@ -60,7 +59,6 @@ namespace BALL
 			throw();
 		
 		//@}
-
 		/** @name Iterator methods
 		*/
 		//@{
@@ -297,7 +295,6 @@ namespace BALL
 		typedef ::std::forward_iterator_tag iterator_category;
 
 		//@}
-
 		/**	@name Constructors and Destructors
 		*/
 		//@{
@@ -318,7 +315,6 @@ namespace BALL
 			throw();
 
 		//@}
-
 		/** @name Iterator methods
 		*/
 		//@{
@@ -535,6 +531,8 @@ namespace BALL
 		:	BaseIterator<Container, DataType, Position, Traits>(container)
 	{
 	}
+
+//@}
 
 } // namespace BALL
 
