@@ -1,4 +1,4 @@
-// $Id: colorExtension3.h,v 1.5 2001/05/13 13:47:45 hekl Exp $
+// $Id: colorExtension3.h,v 1.6 2001/07/09 17:37:47 sturm Exp $
 
 #ifndef BALL_VIEW_KERNEL_COLOREXTENSION3_H
 #define BALL_VIEW_KERNEL_COLOREXTENSION3_H
@@ -28,9 +28,9 @@ namespace BALL
 				objects that needs three colors \Ref{ColorRGBA}. It provides the derived
 				class with methods for accessing these colors.
 				@memo    ColorExtension3 class (BALL VIEW kernel framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/05/13 13:47:45 $
+				@author  $Author: sturm $
+				@version $Revision: 1.6 $
+				@date    $Date: 2001/07/09 17:37:47 $
 		*/
 		class ColorExtension3: public ColorExtension2
 		{
@@ -205,11 +205,7 @@ namespace BALL
 				throw();
 
 			/** Inspection of the third color of {\em *this} colorExtension3.
-					Access the third color of {\em *this} colorExtension3 by using
-					\Ref{ColorRGBA}.
-					@param       color the color receiving the third color of {\em *this} colorExtension3
-					@see         setColor3
-					@see         ColorRGBA
+					For further information see \Ref{getColor3}.
 			*/
 			void getColor3(ColorRGBA& color) const
 				throw();
