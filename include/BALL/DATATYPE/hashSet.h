@@ -1,4 +1,4 @@
-// $Id: hashSet.h,v 1.7 2000/03/29 17:25:17 oliver Exp $ 
+// $Id: hashSet.h,v 1.8 2000/05/22 09:58:40 anker Exp $ 
 
 #ifndef BALL_DATATYPE_HASHSET_H
 #define BALL_DATATYPE_HASHSET_H
@@ -35,7 +35,7 @@ namespace BALL
 {
 
   /** Generic Hash Set Class.
-      {\bf Definition:} \URL{BALL/DATATYPE/hashMap.h}
+      {\bf Definition:} \URL{BALL/DATATYPE/hashSet.h}
   */
  	template <class Key>
 	class HashSet
