@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.sip,v 1.2 2003/11/18 16:54:55 amoll Exp $
+// $Id: representation.sip,v 1.3 2003/11/25 02:09:47 amoll Exp $
 //
 
 class Representation
@@ -21,13 +21,13 @@ class Representation
 	// CompositesIterator begin() throw();
 	// CompositesIterator end() throw();
 	// GeometricObjectList& getGeometricObjects() throw();
-	Index getColoringType() const throw();
+//	ColoringMethod getColoringMethod() const throw();
 	Index getDrawingMode() const throw();
 	Index getDrawingPrecision() const throw();
-	Index getModelType() const throw();
+//	Index getModelType() const throw();
 	ModelProcessor* getModelProcessor() throw();
 	Representation() throw();
-	Representation(Index /model_type/, Index /drawing_precision/, Index /drawing_mode/) throw();
+//	Representation(Index /model_type/, Index /drawing_precision/, Index /drawing_mode/) throw();
 	// Representation(const CompositeSet& /composites/, ModelProcessor* /rep_processor/) throw();
 	// Representation(const GeometricObjectList& /object_list/) throw();
 	Representation(const Representation& /representation/) throw();
@@ -44,11 +44,11 @@ class Representation
 	//	void dump(std::ostream& s, Size depth) const throw();
 	void insert(GeometricObject& /object/) throw();
 	void setColorProcessor(ColorProcessor* /processor/) throw();
-	void setColoringType(Index /type/) throw();
+//	void setColoringMethod(ColoringMethod /type/) throw();
 	void setDrawingMode(Index /mode/) throw();
 	void setDrawingPrecision(Index /precision/) throw();
 	void setModelProcessor(ModelProcessor* /processor/) throw();
-	void setModelType(Index /type/) throw();
+//	void setModelType(Index /type/) throw();
 	void setSurfaceDrawingPrecision(float /precision/) throw();
 	void setTransparency(Size /value/) throw();
 	void update(bool /rebuild/) throw();
