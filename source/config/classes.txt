@@ -54,8 +54,8 @@ HashSet                             DX          /       store methods
 List                                /           /
 Options                             X           /       isValid
 Quadruple                           /           /
-RegularData1D                       /           X
-RegularData2D                       X           /				BAUSTELLE: mathematical formulars correct?
+RegularData1D                       /           /
+RegularData2D                       X           /				
 RegularData3D                       /           /
 RegularExpression                   D           /
 String                              D           X
@@ -89,7 +89,7 @@ EnumeratorIndex                     IX,         X
 Enumerator                          IX,         X
       IteratorTraits_               IX,         X
 NamedProperty                       /           /
-PropertyManager                     /           X
+PropertyManager                     /           /
 
 NotificationManager_                DI,         Z
 NotificationTarget_                 DI          Z
@@ -123,10 +123,10 @@ UnaryProcessor                      DI          Z
 BinaryProcessor                     DI          Z
 ------------------------ENERGY----------------------------------------------
 (atomicContactEnergy)               E           /
-ComposedEnergyProcessor             X           Z
+ComposedEnergyProcessor             /           /
 (COULOMB)                           E           Z
 (DistanceCoulomb)                   E           Z
-EnergyProcessor                     X           Z
+EnergyProcessor                     /           /
 ------------------------FORMAT----------------------------------------------
 Bruker1D                            DEI,        Z
 Bruker2D                            DEI,        Z
@@ -208,7 +208,7 @@ System                              /           /
  SpHybridizedPredicate              /           /           OCI nicht notwendig
  TripleBondsPredicate               /           /           OCI nicht notwendig
  TruePredicate                      /           /           OCI nicht notwendig
-------------------------MATHS-----------------------------------------------           OCI nicht notwendig
+------------------------MATHS-----------------------------------------------    
 TAngle                              /           /
 TBox3                               /           /
 TCircle3                            /           /
@@ -241,10 +241,10 @@ CharmmStretch                       DEI         Z
 CharmmTorsion                       DEIX        Z
 CharmmNonBonded                     DEI         Z
                         --------COMMON-----
-AtomVector                          DEI         Z       problem in docu with "using keyword"
+AtomVector                          DEX         /       problem in docu with "using" keyword
 	AtomConstVector										DEI					Z
 AssignTypeProcessor                 DEI         Z
-            AssignTypeNameProcessor
+  AssignTypeNameProcessor
 ChargeRuleProcessor                 DEI         Z
 ForceField                          EI          Z
 ForceFieldComponent                 EI          Z
@@ -386,14 +386,14 @@ SolventDescriptor                   IX          Z
 UhligCavFreeEnergyProcessor         I           Z
 ------------------------STRUCTURE-------------------------------------------
 analyticalSES                       EI          /
-AssignChargeProcessor               EI          Z
-AssignRadiusProcessor               EI          Z
+AssignChargeProcessor               EI          /
+AssignRadiusProcessor               EI          /
 BoundingBoxProcessor                DEI         /
 GeometricCenterProcessor            DEI         /
 FragmentDistanceCollector           DEI         /
 
-ClearChargeProcessor                EI          Z
-ClearRadiusProcessor                EI          Z
+ClearChargeProcessor                EI          /
+ClearRadiusProcessor                EI          /
 (connolly)                          DEIX        /           der code ist furchtbar!
 BoundingBoxProcessor                EI          Z
 FragmentDistanceCollector           EI          Z
