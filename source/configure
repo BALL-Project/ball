@@ -16948,17 +16948,6 @@ echo "${ECHO_T}" >&6
 
 
 	if test "${PYTHON_SUPPORT}" = true ; then
-		echo "$as_me:$LINENO: result: " >&5
-echo "${ECHO_T}" >&6
-		echo "$as_me:$LINENO: result: Python support temporarily disabled in this version!" >&5
-echo "${ECHO_T}Python support temporarily disabled in this version!" >&6
-		echo "$as_me:$LINENO: result: " >&5
-echo "${ECHO_T}" >&6
-		echo "$as_me:$LINENO: result: " >&5
-echo "${ECHO_T}" >&6
-		{ { echo "$as_me:$LINENO: error: Aborted" >&5
-echo "$as_me: error: Aborted" >&2;}
-   { (exit 1); exit 1; }; }
 										if test "${USE_BALLVIEW}" = false ; then
 			echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
@@ -17227,10 +17216,10 @@ echo $ECHO_N "checking sip executable... $ECHO_C" >&6
 		echo "$as_me:$LINENO: result: ${SIP}" >&5
 echo "${ECHO_T}${SIP}" >&6
 
-								echo "$as_me:$LINENO: checking libsip.a" >&5
-echo $ECHO_N "checking libsip.a... $ECHO_C" >&6
-		if test -r "${SIP_LIBPATH}/libsip.a" ; then
-			SIP_LIB=${SIP_LIBPATH}/libsip.a
+								echo "$as_me:$LINENO: checking libsip.so" >&5
+echo $ECHO_N "checking libsip.so... $ECHO_C" >&6
+		if test -r "${SIP_LIBPATH}/libsip.so" ; then
+			SIP_LIB=" -L${SIP_LIBPATH} -lsip"
 			echo "$as_me:$LINENO: result: ${SIP_LIB}" >&5
 echo "${ECHO_T}${SIP_LIB}" >&6
 		else
@@ -17240,8 +17229,8 @@ echo "${ECHO_T}not found in ${SIP_LIBPATH}" >&6
 echo "${ECHO_T}" >&6
 			echo "$as_me:$LINENO: result: Please specify the path to the directory that contains" >&5
 echo "${ECHO_T}Please specify the path to the directory that contains" >&6
-			echo "$as_me:$LINENO: result: libsip.a using the option --with-sip-lib=DIR." >&5
-echo "${ECHO_T}libsip.a using the option --with-sip-lib=DIR." >&6
+			echo "$as_me:$LINENO: result: libsip.so using the option --with-sip-lib=DIR." >&5
+echo "${ECHO_T}libsip.so using the option --with-sip-lib=DIR." >&6
 			echo "$as_me:$LINENO: result: If you do not have that file, you should obtain SIP" >&5
 echo "${ECHO_T}If you do not have that file, you should obtain SIP" >&6
 			echo "$as_me:$LINENO: result: from" >&5

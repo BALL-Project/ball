@@ -3039,11 +3039,6 @@ AC_DEFUN(CF_PYTHON, [
 	AC_SUBST(PYTHON_LIBS)
 
 	if test "${PYTHON_SUPPORT}" = true ; then
-		AC_MSG_RESULT()
-		AC_MSG_RESULT(Python support temporarily disabled in this version!)
-		AC_MSG_RESULT()
-		AC_MSG_RESULT()
-		AC_MSG_ERROR(Aborted)
 		dnl
 		dnl Python support won't work without BALLVIEW!
 		dnl (at least for the moment...)
@@ -3175,17 +3170,17 @@ AC_DEFUN(CF_PYTHON, [
 		AC_MSG_RESULT(${SIP})
 
 		dnl
-		dnl libsip.a 
+		dnl libsip.so 
 		dnl
-		AC_MSG_CHECKING(libsip.a)
-		if test -r "${SIP_LIBPATH}/libsip.a" ; then
-			SIP_LIB=${SIP_LIBPATH}/libsip.a
+		AC_MSG_CHECKING(libsip.so)
+		if test -r "${SIP_LIBPATH}/libsip.so" ; then
+			SIP_LIB=" -L${SIP_LIBPATH} -lsip"
 			AC_MSG_RESULT(${SIP_LIB})
 		else
 			AC_MSG_RESULT(not found in ${SIP_LIBPATH})
 			AC_MSG_RESULT()
 			AC_MSG_RESULT(Please specify the path to the directory that contains)
-			AC_MSG_RESULT(libsip.a using the option --with-sip-lib=DIR.)
+			AC_MSG_RESULT(libsip.so using the option --with-sip-lib=DIR.)
 			AC_MSG_RESULT([If you do not have that file, you should obtain SIP])
 			AC_MSG_RESULT(from)
 			AC_MSG_RESULT(  www.thekompany.com/projects/pykde)
