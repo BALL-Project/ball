@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: exception.sip,v 1.5 2003/11/12 18:20:28 oliver Exp $
+// $Id: exception.sip,v 1.6 2004/12/27 17:24:57 amoll Exp $
 //
 
 class GeneralException 
@@ -297,6 +297,32 @@ class NotImplemented
   }
 %End
 };
+
+class TooManyErrors
+	: GeneralException
+{
+%TypeHeaderCode
+	#include <BALL/COMMON/exception.h>
+	using namespace BALL;
+	using namespace BALL::Exception;
+%End
+	public:
+	TooManyErrors(const char* /file/, int /line/);
+ 	SIP_PYOBJECT __repr__();
+%MethodCode
+  if (sipCpp == 0)
+  {
+    sipRes = PyString_FromString("");
+  }
+  else
+  {
+    sipRes = PyString_FromString(String(String(sipCpp->getName())
+					+ " in line " + String(sipCpp->getLine()) + " of "
+          + String(sipCpp->getFile()) + ": " + String(sipCpp->getMessage())).c_str());
+  }
+%End
+};
+
 
 class OutOfMemory
 	: GeneralException

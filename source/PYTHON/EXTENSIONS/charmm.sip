@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmm.sip,v 1.3 2003/10/29 22:54:37 oliver Exp $
+// $Id: charmm.sip,v 1.4 2004/12/27 17:24:56 amoll Exp $
 //
 
 class CharmmFF 
@@ -9,7 +9,9 @@ class CharmmFF
 {
 %TypeHeaderCode
 	#include <BALL/MOLMEC/CHARMM/charmm.h>
+	#include <BALL/COMMON/exception.h>
 	using namespace BALL;
+	using namespace BALL::Exception;
 %End
   public:
 //struct Option
@@ -58,7 +60,7 @@ class CharmmFF
   CharmmFF(System& /system/, const Options& /options/);
   CharmmFF(const CharmmFF& /force_field/);
   ~CharmmFF();
-  virtual bool specificSetup();
+  virtual bool specificSetup() throw(TooManyErrors);
   double getStretchEnergy() const;
   double getBendEnergy() const;
   double getTorsionEnergy() const;

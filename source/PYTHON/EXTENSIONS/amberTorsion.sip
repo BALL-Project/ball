@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberTorsion.sip,v 1.4 2003/10/29 22:54:36 oliver Exp $
+// $Id: amberTorsion.sip,v 1.5 2004/12/27 17:24:56 amoll Exp $
 //
 
 class AmberTorsion 
@@ -9,7 +9,9 @@ class AmberTorsion
 {
 %TypeHeaderCode
 	#include <BALL/MOLMEC/AMBER/amberTorsion.h>
+	#include <BALL/COMMON/exception.h>
 	using namespace BALL;
+	using namespace BALL::Exception;
 %End
   public:
   // BALL_CREATE(AmberTorsion)
@@ -17,7 +19,7 @@ class AmberTorsion
   AmberTorsion(ForceField& /force_field/);
   AmberTorsion(const AmberTorsion& /amber_stretch/);
   ~AmberTorsion();
-  virtual bool setup();
+  virtual bool setup() throw(TooManyErrors);
   virtual double updateEnergy();
   virtual void updateForces();
 };

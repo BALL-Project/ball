@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmTorsion.sip,v 1.4 2003/10/29 22:54:38 oliver Exp $
+// $Id: charmmTorsion.sip,v 1.5 2004/12/27 17:24:57 amoll Exp $
 //
 
 class CharmmTorsion 
@@ -9,7 +9,9 @@ class CharmmTorsion
 {
 %TypeHeaderCode
 	#include <BALL/MOLMEC/CHARMM/charmmTorsion.h>
+	#include <BALL/COMMON/exception.h>
 	using namespace BALL;
+	using namespace BALL::Exception;
 %End
 
   public:
@@ -48,7 +50,7 @@ class CharmmTorsion
   CharmmTorsion(ForceField& /force_field/);
   CharmmTorsion(const CharmmTorsion& /charmm_stretch/);
   ~CharmmTorsion();
-  virtual bool setup();
+  virtual bool setup() throw(TooManyErrors);
   virtual double updateEnergy();
   virtual void updateForces();
 };
