@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.128 2001/04/30 17:27:56 oliver Exp $
+dnl    $Id: configure.in,v 1.129 2001/04/30 18:39:12 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -496,9 +496,8 @@ fi
 
 if test "`echo $OS | ${CUT} -d_ -f1`" = "CYGWIN" ; then
 	OS="CYGWIN"
-	BALL_HAS_XDR=
+	BALL_NO_XDR=true
 	USE_BALLVIEW=false
-	AC_MSG_RESULT([warning: support for XDR and visualization have been disabled (not supported for CYGWIN)!])
 fi
 
 if test "$OS" != Linux -a "$OS" != Solaris -a "$OS" != IRIX -a  "$OS" != OSF1 -a "$OS" != FreeBSD -a "$OS" != "CYGWIN" ; then
