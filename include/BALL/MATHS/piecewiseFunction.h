@@ -1,4 +1,4 @@
-// $Id: piecewiseFunction.h,v 1.3 2000/10/18 13:55:46 anker Exp $
+// $Id: piecewiseFunction.h,v 1.4 2000/10/19 11:10:44 anker Exp $
 
 #ifndef BALL_MATHS_PIECEWISEFUNCTION_H
 #define BALL_MATHS_PIECEWISEFUNCTION_H
@@ -95,7 +95,7 @@ namespace BALL
 		Position getIntervalIndex(double x) const throw();
 
 		/** Return the range of the definition */
-		Interval getRange() const throw();
+		const Interval& getRange() const throw();
 
 		/** Set the coefficients.
 			Note that this method does {\bf not} check the vector of coefficients
@@ -154,6 +154,15 @@ namespace BALL
 		std::vector<Coefficients> coefficients_;
 
 		bool valid_;
+
+
+		private:
+
+		/*_ The range of the defnition, needed for isInRange() and getRange() */
+		Interval range_;
+
+		/*_ Set the internal range fields */
+		void calculateRange() throw();
 
 	};
 

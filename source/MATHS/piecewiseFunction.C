@@ -1,4 +1,4 @@
-// $Id: piecewiseFunction.C,v 1.6 2000/10/18 15:28:53 anker Exp $
+// $Id: piecewiseFunction.C,v 1.7 2000/10/19 11:10:46 anker Exp $
 
 #include <BALL/MATHS/piecewiseFunction.h>
 
@@ -10,7 +10,8 @@ namespace BALL
 	PiecewiseFunction::PiecewiseFunction() throw()
 		:	intervals_(0),
 			coefficients_(0),
-			valid_(false)
+			valid_(false),
+			range_()
 	{
 	}
 
@@ -19,7 +20,8 @@ namespace BALL
 		throw() 
 		:	intervals_(function.intervals_),
 			coefficients_(function.coefficients_),
-			valid_(function.valid_)
+			valid_(function.valid_),
+			range_(function.range_)
 	{
 	}
 
@@ -29,6 +31,7 @@ namespace BALL
 		:	intervals_(intervals),
 			coefficients_(coeffs)
 	{
+		calculateRange();
 		valid_ = isValid();
 	}
 
@@ -45,6 +48,7 @@ namespace BALL
 	{
 		intervals_.clear();
 		coefficients_.clear();
+		calculateRange();
 		valid_ = false;
 	}
 
@@ -54,6 +58,7 @@ namespace BALL
 	{
 		intervals_ = intervals;
 		coefficients_ = coeffs;
+		calculateRange();
 		valid_ = isValid();
 	}
 
@@ -64,6 +69,7 @@ namespace BALL
 		intervals_ = function.intervals_;
 		coefficients_ = function.coefficients_;
 		valid_ = function.valid_;
+		range_ = function.range_;
 
 		return *this;
 	}
@@ -73,6 +79,7 @@ namespace BALL
 		throw()
 	{
 		intervals_ = intervals;
+		calculateRange();
 		valid_ = isValid();
 	}
 
@@ -143,22 +150,9 @@ namespace BALL
 	}
 
 
-	Interval PiecewiseFunction::getRange() const throw()
+	const Interval& PiecewiseFunction::getRange() const throw()
 	{
-		// as this is a local variable, the return value is not a const ref
-		Interval tmp;
-		if (intervals_.size() == 0)
-		{
-			Log.error() << "PiecewiseFunction::getRange(): "
-				<< "No intervals defined." << endl;
-			tmp = INVALID_INTERVAL;
-		}
-		else
-		{
-			tmp.first = intervals_[0].first;
-			tmp.second = intervals_[intervals_.size()-1].second;
-		}
-		return tmp;
+		return range_;
 	}
 
 
@@ -278,8 +272,7 @@ namespace BALL
 
 	bool PiecewiseFunction::isInRange(double x) const throw()
 	{
-		Interval range = getRange();
-		if ((x >= range.first) && (x < range.second))
+		if ((x >= range_.first) && (x < range_.second))
 		{
 			return true;
 		}
@@ -319,6 +312,22 @@ namespace BALL
 				stream << *c_it << " ";
 			}
 			stream << endl;
+		}
+	}
+
+
+	void PiecewiseFunction::calculateRange() throw()
+	{
+		if (intervals_.size() == 0)
+		{
+			Log.error() << "PiecewiseFunction::calculateRange(): "
+				<< "No intervals defined." << endl;
+			range_ = INVALID_INTERVAL;
+		}
+		else
+		{
+			range_.first = intervals_[0].first;
+			range_.second = intervals_[intervals_.size()-1].second;
 		}
 	}
 
