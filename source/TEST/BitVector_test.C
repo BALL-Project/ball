@@ -1,4 +1,4 @@
-// $Id: BitVector_test.C,v 1.22 2001/07/16 00:22:21 oliver Exp $
+// $Id: BitVector_test.C,v 1.23 2001/10/11 00:28:35 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(BitVector, "$Id: BitVector_test.C,v 1.22 2001/07/16 00:22:21 oliver Exp $")
+START_TEST(BitVector, "$Id: BitVector_test.C,v 1.23 2001/10/11 00:28:35 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -163,25 +163,22 @@ RESULT
 
 CHECK(BitVector::getBitSet())
 	BitVector bv(10);
-	unsigned char* bt;
-	bt = bv.getBitSet();
-	*bt = 1;
-	TEST_NOT_EQUAL(bt, 0)
+	BitVector::VectorType& bt = bv.getBitSet();
+	bt[0] = 1;
 	TEST_EQUAL(bv[0], true)
 	TEST_EQUAL(bv[1], false)
 	TEST_EQUAL(bv[2], false)
 	bv.setBit(1);
-	TEST_EQUAL((int)*bt, 3)
+	TEST_EQUAL(bt[0], 3)
 RESULT
 
 CHECK(BitVector::getBitSet() const)
 	const BitVector bv10_2(bv10);
 	TEST_EQUAL(bv10_2.getBit(0), false)
 	TEST_EQUAL(bv10_2.getBit(1), true)
-	const unsigned char* bt = bv10_2.getBitSet();
-	TEST_NOT_EQUAL(bt, 0)
-	TEST_EQUAL((int)*bt, 22)
-	TEST_EQUAL((int)*(bt + 1), 2)
+	const BitVector::VectorType& bt = bv10_2.getBitSet();
+	TEST_EQUAL(bt[0], 22)
+	TEST_EQUAL(bt[1], 2)
 RESULT
 
 CHECK(BitVector::operator [] (Index))
