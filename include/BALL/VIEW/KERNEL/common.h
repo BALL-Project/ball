@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.32.2.4 2005/01/12 16:45:25 amoll Exp $
+// $Id: common.h,v 1.32.2.5 2005/01/14 14:34:20 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -369,9 +369,16 @@ namespace BALL
 				///
 				void setImportant(bool state) { important_ = state;}
 
+				/// only show in logview, no change to status bar
+				bool showOnlyInLogView() const { return only_log_;}
+
+				///
+				void setShowOnlyInLogView(bool state) { only_log_ = state;}
+
 			protected:
 				String message_;
 				bool   important_;
+				bool   only_log_;
 		};
 
 		/// thread safe output to logview

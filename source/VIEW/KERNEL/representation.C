@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.60.2.2 2005/01/13 18:09:46 amoll Exp $
+// $Id: representation.C,v 1.60.2.3 2005/01/14 14:36:42 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/representation.h>
@@ -30,8 +30,9 @@ namespace BALL
 					model_processor_(0),
 					color_processor_(0),
 					composites_(),
-					model_build_time_(),
+					model_build_time_(PreciseTime(99999, 9)),
 					rebuild_(true),
+					changed_color_processor_(true),
 					hidden_(false),
 					geometric_objects_()
 		{
@@ -50,8 +51,9 @@ namespace BALL
 					model_processor_(0),
 					color_processor_(0),
 					composites_(rp.composites_),
-					model_build_time_(),
+					model_build_time_(PreciseTime(99999, 9)),
 					rebuild_(rp.rebuild_),
+					changed_color_processor_(true),
 					hidden_(rp.hidden_),
 					geometric_objects_()
 		{
@@ -87,8 +89,9 @@ namespace BALL
 					model_processor_(0),
 					color_processor_(0),
 					composites_(),
-					model_build_time_(),
+					model_build_time_(PreciseTime(99999, 9)),
 					rebuild_(true),
+					changed_color_processor_(true),
 					hidden_(false),
 					geometric_objects_()
 		{
@@ -106,8 +109,9 @@ namespace BALL
 				model_processor_(model_processor),
 				color_processor_(0),
 				composites_(composites),
-				model_build_time_(),
+				model_build_time_(PreciseTime(99999, 9)),
 				rebuild_(true),
+				changed_color_processor_(true),
 				hidden_(false),
 				geometric_objects_()
 		{
@@ -158,6 +162,7 @@ namespace BALL
 
 			rebuild_ = true;
 			hidden_ = representation.hidden_;
+			changed_color_processor_ = true;
 
 			return *this;
 		}
@@ -279,47 +284,87 @@ namespace BALL
 
 			needs_update_ = false;
 
+ 			const PreciseTime last_build_time = model_build_time_;
+
 #ifdef BALL_BENCHMARKING
-	Timer t_model;
-	t_model.start();
+			Timer t;
+			t.start();
 #endif
 			// if no ModelProcessor was given, there can only exist 
 			// handmade GeometricObjects, which dont need to be updated
 			if (model_processor_ != 0 && rebuild_)
 			{
-				clearGeometricObjects();
-				model_processor_->clearComposites();
-				
-				CompositeSet::Iterator it = composites_.begin();
-				for (; it!= composites_.end(); it++)
+				// just to be sure we control the composites if they changed after last model.
+				// this shouldnt happen, but maybe someone send the false message after changing the Composite tree
+				// (CompositeMessage::CHANGED_COMPOSITE instead of CHANGED_COMPOSITE_HIERARCHY)
+				if (!rebuild_)
 				{
-					(const_cast<Composite*>(*it))->apply(*model_processor_);
+					CompositeSet::Iterator it = composites_.begin();
+					for (; it!= composites_.end(); it++)
+					{
+						if ((*it)->getModificationTime() > last_build_time) 
+						{
+							rebuild_ = true;
+							break;
+						}
+					}
 				}
-				model_processor_->createGeometricObjects();
-				model_build_time_ = PreciseTime::now();
-			}
+
+				if (rebuild_)
+				{
+					clearGeometricObjects();
+					model_processor_->clearComposites();
+					
+					CompositeSet::Iterator it = composites_.begin();
+					for (; it!= composites_.end(); it++)
+					{
+						(const_cast<Composite*>(*it))->apply(*model_processor_);
+					}
+					model_processor_->createGeometricObjects();
 
 #ifdef BALL_BENCHMARKING
-	t_model.stop();
-	logString("Calculating Model time: " + String(t_model.getCPUTime()));
-	Timer t_color;
-	t_color.start();
+					t.stop();
+					logString("Calculating Model time: " + String(t.getCPUTime()));
+					t.reset();
 #endif
-			if (color_processor_ != 0) 
+				}
+			}
+
+			if (color_processor_ != 0)
 			{
-				// make sure, that the atom grid is recomputed for meshes
-				if (rebuild_) color_processor_->setComposites(&composites_);
-				color_processor_->setTransparency(transparency_);
-				color_processor_->setModelType(model_type_);
-				getGeometricObjects().apply(*color_processor_);
+				bool apply_color_processor = 
+						(changed_color_processor_ || rebuild_ || color_processor_->updateAlwaysNeeded());
+
+				// we have to apply the ColorProcessor anyhow if the selection changed since the last model build
+				if (!apply_color_processor)
+				{
+					CompositeSet::Iterator it = composites_.begin();
+					for (; it!= composites_.end(); it++)
+					{
+						if ((*it)->getSelectionTime() > last_build_time) 
+						{
+							apply_color_processor = true;
+							break;
+						}
+					}
+				}
+
+				if (apply_color_processor)
+				{
+					// make sure, that the atom grid is recomputed for meshes
+					if (rebuild_) color_processor_->setComposites(&composites_);
+					color_processor_->setTransparency(transparency_);
+					color_processor_->setModelType(model_type_);
+					getGeometricObjects().apply(*color_processor_);
+#ifdef BALL_BENCHMARKING
+					t.stop();
+					logString("Calculating Coloring time: " + String(t.getCPUTime()));
+#endif
+				}
 			}
 
-#ifdef BALL_BENCHMARKING
-	t_color.stop();
-	logString("Calculating Coloring time: " + String(t_color.getCPUTime()));
-	logString("Calculating Representation time: " + String(t_color.getCPUTime() + 
-																												 t_model.getCPUTime()));
-#endif
+			changed_color_processor_ = false;
+			model_build_time_ = PreciseTime::now();
 
 #ifndef BALL_QT_HAS_THREADS
 			// if multithreaded, the PrimitiveManager will send the Update message, otherwise do it here...
@@ -387,6 +432,8 @@ namespace BALL
 				model_processor_->setDrawingPrecision(drawing_precision_);
 				model_processor_->setSurfaceDrawingPrecision(surface_drawing_precision_);
 			}
+
+			changed_color_processor_ = true;
 		}
 
 
@@ -404,6 +451,8 @@ namespace BALL
 				color_processor_->setComposites(&composites_);
 				color_processor_->setTransparency(transparency_);
 			}
+
+			changed_color_processor_ = true;
 		}
 
 		
@@ -431,6 +480,7 @@ namespace BALL
 			}
 
 			if (needs_update_ || 
+					changed_color_processor_ ||
 					getModelBuildTime() < Atom::getAttributesModificationTime())
 			{
 				return true;

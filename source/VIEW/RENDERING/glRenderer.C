@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.57.2.9 2005/01/14 12:18:07 amoll Exp $
+// $Id: glRenderer.C,v 1.57.2.10 2005/01/14 14:37:39 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -29,7 +29,7 @@
 
 using namespace std;
 
-#define BALL_BENCHMARKING
+//   #define BALL_BENCHMARKING
 
 namespace BALL
 {

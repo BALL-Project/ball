@@ -118,7 +118,7 @@ bool modelMustBeRebuild(ModelType type)
 					type == MODEL_SA_SURFACE ||
 					type == MODEL_BACKBONE 	||
 					type == MODEL_FORCES    ||
-					type == MODEL_BALL_AND_STICK||
+ 					type == MODEL_BALL_AND_STICK||
 					type == MODEL_CARTOON);
 }
 
@@ -274,14 +274,15 @@ void logString(const String& data)
 	if (MainControl::getInstance(0) == 0) return;
 	LogEvent* su = new LogEvent;
 	su->setMessage(data);
-	su->setImportant(false);
+	su->setShowOnlyInLogView(true);
 	qApp->postEvent(MainControl::getInstance(0), su);  // Qt will delete it when done
 }
 
 
 LogEvent::LogEvent()
 	: QCustomEvent(LOG_EVENT),
-		important_(false)
+		important_(false),
+		only_log_(false)
 {
 }
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.158.2.4 2005/01/13 13:09:06 amoll Exp $
+// $Id: mainControl.C,v 1.158.2.5 2005/01/14 14:36:51 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -656,7 +656,8 @@ namespace BALL
 					case CompositeMessage::CHANGED_COMPOSITE:
 						if (cmessage->updateRepresentations())
 						{
-							updateRepresentationsOf(cmessage->getComposite()->getRoot(), true, true);
+							const bool force = cmessage->getType() == CompositeMessage::CHANGED_COMPOSITE_HIERARCHY;
+							updateRepresentationsOf(cmessage->getComposite()->getRoot(), true, force);
 						}
 						return;
 					case CompositeMessage::SELECTED_COMPOSITE:
@@ -1306,7 +1307,7 @@ namespace BALL
 			if (!changed_hierarchy) cm->setType(CompositeMessage::CHANGED_COMPOSITE);
 
 			notify_(cm);
-			updateRepresentationsOf(composite.getRoot(), true, true);
+			updateRepresentationsOf(composite.getRoot(), true, changed_hierarchy);
 
 			return true;
 		}
@@ -1521,9 +1522,10 @@ namespace BALL
 			if (e->type() == (QEvent::Type)LOG_EVENT)
 			{
 				LogEvent* so = dynamic_cast<LogEvent*>(e);
-				if (!so->isImportant())
+				if (so->showOnlyInLogView())
 				{
 					Log.info() << so->getMessage() << std::endl;
+					return;
 				}
  				setStatusbarText(so->getMessage(), so->isImportant());
 				return;
