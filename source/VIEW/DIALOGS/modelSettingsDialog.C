@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.C,v 1.27 2004/09/28 17:36:00 amoll Exp $
+// $Id: modelSettingsDialog.C,v 1.28 2004/09/28 17:36:32 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modelSettingsDialog.h>
@@ -37,7 +37,6 @@ namespace BALL
 				PreferencesEntry()
 		{
 			setINIFileSectionName("MODEL_OPTIONS");
-Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 
 			registerObject_(stick_radius_slider);
 
@@ -64,7 +63,6 @@ Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<<
 			registerObject_(force_max_length_slider);
 
 			registerObject_(hbonds_radius_slider);
-Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 
 			setDefaults(true);
 		}

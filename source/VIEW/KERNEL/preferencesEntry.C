@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferencesEntry.C,v 1.1 2004/09/28 16:44:51 amoll Exp $
+// $Id: preferencesEntry.C,v 1.2 2004/09/28 17:36:00 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/preferencesEntry.h>
@@ -20,20 +20,18 @@ namespace BALL
 	{
 
 		PreferencesEntry::PreferencesEntry()
-			throw()
 		{
 		}
 
 		PreferencesEntry::~PreferencesEntry()
-			throw()
 		{
 		}
 
-		void PreferencesEntry::writePreferences(INIFile& inifile)
+		void PreferencesEntry::writePreferenceEntries(INIFile& inifile)
 		{
-			if (!inifile.hasSection(inifile_section_name_)) return;
+			inifile.appendSection(inifile_section_name_);
 
-			List<QWidget*>::Iterator it = preferences_objects_.begin();
+			HashSet<QWidget*>::Iterator it = preferences_objects_.begin();
 			for (; it != preferences_objects_.end(); it++)
 			{
 				if ((**it).name() == "")
@@ -70,50 +68,74 @@ namespace BALL
 			}
 		}
 
-		void PreferencesEntry::readPreferences(const INIFile& inifile)
+		void PreferencesEntry::readPreferenceEntries(const INIFile& inifile)
 		{
-			List<QWidget*>::Iterator it = preferences_objects_.begin();
+			HashSet<QWidget*>::Iterator it = preferences_objects_.begin();
 			for (; it != preferences_objects_.end(); it++)
 			{
-				if ((**it).name() == "")
-				{
-					Log.error() << "Unnamed Preferences object!" << std::endl;
-					continue;
-				}
-
 
 				if (!inifile.hasEntry(inifile_section_name_, (**it).name())) continue;
 
 				String value = inifile.getValue(inifile_section_name_, (**it).name());
 
-				if (RTTI::isKindOf<QSlider>(**it))
+				try
 				{
-					((QSlider*) *it)->setValue(value.toInt());
-				}
-				else if (RTTI::isKindOf<QLabel>(**it))
-				{
-					// differ between colored and non colored labels
-					QLabel* label = (QLabel*) *it;
-					if (String((**it).name()).hasSuffix("_color"))
+					if (RTTI::isKindOf<QSlider>(**it))
 					{
-						label->setBackgroundColor(ColorRGBA(value).getQColor());
+						((QSlider*) *it)->setValue(value.toInt());
 					}
-					else
+					else if (RTTI::isKindOf<QLabel>(**it))
 					{
-						label->setText(value);
+						// differ between colored and non colored labels
+						QLabel* label = (QLabel*) *it;
+						if (String((**it).name()).hasSuffix("_color"))
+						{
+							label->setBackgroundColor(ColorRGBA(value).getQColor());
+						}
+						else
+						{
+							label->setText(value);
+						}
+					}
+					else if (RTTI::isKindOf<QCheckBox>(**it))
+					{
+						((QCheckBox*) *it)->setChecked(value == "1");
+					}
+					else if (RTTI::isKindOf<QListBox>(**it))
+					{
+						((QListBox*) *it)->setCurrentItem(value.toInt());
+					}
+					else 
+					{
+						Log.error() << "Unknown QWidget in " << __FILE__ << __LINE__ << std::endl;
+						return;
 					}
 				}
-				else if (RTTI::isKindOf<QCheckBox>(**it))
+				catch(...)
 				{
-					((QCheckBox*) *it)->setChecked(value == "1");
-				}
-				else if (RTTI::isKindOf<QListBox>(**it))
-				{
-// 					inifile.insertValue(inifile_section_name_, (**it).name(), String(((QListBox*)*it)->currentItem()));
+					Log.error() << "Invalid entry in INIFile: " << (**it).name() << " " << value << std::endl;
 				}
 			}
 		}
 
+		void PreferencesEntry::registerObject_(QWidget* widget)
+		{
+			if (widget == 0) return;
+
+			if (widget->name() == "")
+			{
+				Log.error() << "Unnamed Preferences object!" << std::endl;
+				return;
+			}
+
+			if (preferences_objects_.has(widget))
+			{
+				Log.error() << "Widget " << widget << " with name " << widget->name() << " was already added!" << std::endl;
+				return;
+			}
+
+			preferences_objects_.insert(widget);
+		}
 
 	} // namespace VIEW
 } // namespace BALL

@@ -14,6 +14,7 @@ CPP_SOURCES=\
   molecularInformation.C\
   moleculeObjectCreator.C\
   objectCreator.C\
+	preferencesEntry.C\
   primitiveManager.C\
   QTTimer.C\
   representation.C\
