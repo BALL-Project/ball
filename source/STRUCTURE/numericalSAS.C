@@ -1,4 +1,4 @@
-// $Id: numericalSAS.C,v 1.10 2000/06/02 07:15:17 oliver Exp $
+// $Id: numericalSAS.C,v 1.11 2000/06/02 11:42:36 oliver Exp $
 
 #include <BALL/STRUCTURE/numericalSAS.h>
 #include <BALL/KERNEL/atom.h>
@@ -168,7 +168,7 @@ namespace BALL
 
   float calculateNumericalSASPoints
 		(const BaseFragment& fragment, Surface& surface,
-		 float probe_radius = 1.5,  Size number_of_dots = 400)
+		 float probe_radius,  Size number_of_dots)
 	{
 		// extract all atoms: iterate over all composites and
 		// check whether they are Atoms
