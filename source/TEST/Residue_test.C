@@ -1,4 +1,4 @@
-// $Id: Residue_test.C,v 1.9 2000/05/22 20:26:48 amoll Exp $
+// $Id: Residue_test.C,v 1.10 2000/05/23 07:16:19 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -6,13 +6,14 @@
 #include <BALL/KERNEL/residue.h>
 #include <BALL/KERNEL/chain.h>
 #include <BALL/KERNEL/protein.h>
+#include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/PDBAtom.h>
 #include <BALL/CONCEPT/textPersistenceManager.h>
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/MATHS/common.h>
 ///////////////////////////
 
-START_TEST(Residue, "$Id: Residue_test.C,v 1.9 2000/05/22 20:26:48 amoll Exp $")
+START_TEST(Residue, "$Id: Residue_test.C,v 1.10 2000/05/23 07:16:19 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
