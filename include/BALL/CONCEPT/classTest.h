@@ -1,4 +1,4 @@
-// $Id: classTest.h,v 1.7 2000/01/16 22:36:14 oliver Exp $
+// $Id: classTest.h,v 1.8 2000/01/17 13:12:58 oliver Exp $
 
 #include <BALL/common.h>
 #include <BALL/SYSTEM/file.h>
@@ -228,7 +228,7 @@ int main(int argc, char **argv)\
 		TEST::newline = true;\
 		std::cout << std::endl;\
 	}\
-	if (TEST::verbose > 0)\
+	if (TEST::verbose > 1)\
 	{\
 		std::cout << "  status: " << message << std::endl;\
 	}\
