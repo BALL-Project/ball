@@ -1,4 +1,4 @@
-// $Id: PCMCavFreeEnergyProcessor.C,v 1.6 2000/10/23 10:24:51 anker Exp $
+// $Id: PCMCavFreeEnergyProcessor.C,v 1.7 2000/10/26 14:40:31 anker Exp $
 
 #include <BALL/SOLVATION/PCMCavFreeEnergyProcessor.h>
 #include <BALL/STRUCTURE/numericalSAS.h>
@@ -70,6 +70,11 @@ namespace BALL
 		double T = options.getReal(Option::ABSOLUTE_TEMPERATURE);
 		// the solvent radius [ A ]
 		double solvent_radius = options.getReal(Option::PROBE_RADIUS);
+		if (verbosity > 0)
+		{
+			Log.info() << "Using a probe radius of " << solvent_radius << " A" <<
+				endl;
+		}
 		
 		// now compute some constant terms (names as in Pierotti, Chem. Rev.
 		// 76(6):717--726, 1976)
