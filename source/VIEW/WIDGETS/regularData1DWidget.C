@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1DWidget.C,v 1.18 2004/06/11 18:04:26 amoll Exp $
+// $Id: regularData1DWidget.C,v 1.19 2004/07/05 09:20:19 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/regularData1DWidget.h>
@@ -111,7 +111,7 @@ void RegularData1DWidget::createPlot()
 	//add the x-axis
 	ql = new QCanvasLine(&canvas_);
 	int startx = 1;
-	int starty = height_+5 - (int)round(((startx-min)/dif_min)*5);
+	int starty = height_+5 - (int)/*round*/(((startx-min)/dif_min)*5);
 	int endx   = data_->size()*5;
 	ql->setPoints(startx, starty, endx, starty);
 	ql->setPen(axis_color_);
@@ -122,7 +122,7 @@ void RegularData1DWidget::createPlot()
 	ql = new QCanvasLine(&canvas_);
 	startx = 4;
 	starty = 0;
-	int endy   = height_+5 - (int)round((((*data_)[endx]-min)/dif_min)*5);
+	int endy   = height_+5 - (int)/*round*/((((*data_)[endx]-min)/dif_min)*5);
 	ql->setPoints(startx, starty, startx, endy);
 	ql->setPen(QColor(red));
 	ql->show();
