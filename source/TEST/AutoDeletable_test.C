@@ -1,4 +1,4 @@
-// $Id: AutoDeleteable_test.C,v 1.2 2000/08/23 01:02:07 amoll Exp $
+// $Id: AutoDeletable_test.C,v 1.1 2001/07/05 17:48:12 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -13,7 +13,7 @@ class A: public AutoDeletable
 {
 };
 
-START_TEST(class_name, "$Id: AutoDeleteable_test.C,v 1.2 2000/08/23 01:02:07 amoll Exp $")
+START_TEST(class_name, "$Id: AutoDeletable_test.C,v 1.1 2001/07/05 17:48:12 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
