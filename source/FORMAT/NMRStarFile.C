@@ -158,7 +158,7 @@ namespace BALL
 	}
 
 	NMRStarFile::NMRStarFile(const NMRStarFile& f)
-		throw()
+		throw ()
 		:	LineBasedFile(f),
 			number_of_shifts_		(f.number_of_shifts_),
 			atom_data_sets_			(f.atom_data_sets_),
@@ -169,7 +169,7 @@ namespace BALL
 	}
 
 	NMRStarFile::NMRStarFile(const String& file_name)
-		throw(Exception::FileNotFound)
+		throw (Exception::FileNotFound)
 		:	LineBasedFile(file_name),
 			number_of_shifts_(0)
 	{

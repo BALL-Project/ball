@@ -1,4 +1,4 @@
-// $Id: lineBasedFile.C,v 1.9 2000/10/17 20:35:52 amoll Exp $
+// $Id: lineBasedFile.C,v 1.10 2000/10/19 11:11:34 amoll Exp $
 
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/COMMON/exception.h>
@@ -18,7 +18,7 @@ namespace BALL
 		{
 			message_ += "\n last read line number = ";
 			char buf[40];
-			sprintf(buf, "%i", f->getLineNumber());
+			sprintf(buf, "%i", (int) f->getLineNumber());
 			message_ += buf;
 			message_ += "\n contents of line: \n";
 			message_ += f->getLine();
@@ -235,16 +235,16 @@ namespace BALL
 	{
 		if (quotes == "")
 		{
-			return line_.getField(pos, delimiters.c_str());
+			return line_.getField((Index) pos, delimiters.c_str());
 		}
 
-		return line_.getFieldQuoted(pos, delimiters.c_str(), quotes.c_str());
+		return line_.getFieldQuoted((Index) pos, delimiters.c_str(), quotes.c_str());
 	}
 
 	Index LineBasedFile::switchString(const vector<String>& data)
 		const throw()
 	{
-		for (Position i = 0; i < data.size(); i++)
+		for (Index i = 0; i < data.size(); i++)
 		{
 			if (line_ == data[i])
 			{
