@@ -48,13 +48,13 @@ fi
 if [ $2 = "-x"  ]
 then
 	check_test $1 $testfileWithPath -c 2>/dev/null
-	exit 1
+	exit 0
 fi
 
 if [ ! -n $2 ] && [ $2 -eq "-c"  ]
 then
 	check_test $1 $testfileWithPath $3 -c 2>/dev/null
-	exit 1
+	exit 0
 fi
 
 errorline=""
