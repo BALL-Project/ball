@@ -1,4 +1,4 @@
-// $Id: iterator.h,v 1.5 2001/01/26 01:36:52 amoll Exp $
+// $Id: iterator.h,v 1.6 2001/06/21 01:59:48 oliver Exp $
 
 #ifndef BALL_KERNEL_ITERATOR_H
 #define BALL_KERNEL_ITERATOR_H
@@ -17,57 +17,49 @@
 
 #define BALL_KERNEL_DEFINE_ITERATOR_CREATORS(Type) \
 Type##Iterator \
-begin##Type \
-  () \
+begin##Type () \
 { \
-  return Type##Iterator::begin(*this); \
+  return Type##Iterator :: begin (*this); \
 } \
  \
 Type##Iterator \
-end##Type\
-  () \
+end##Type () \
 { \
   return Type##Iterator::end(*this); \
 } \
  \
 Type##ReverseIterator \
-rbegin##Type \
-  () \
+rbegin##Type () \
 { \
   return Type##ReverseIterator::begin(*this); \
 } \
  \
 Type##ReverseIterator \
-rend##Type## \
-  () \
+rend##Type () \
 { \
   return Type##ReverseIterator::end(*this); \
 } \
  \
-##Type##ConstIterator \
-begin##Type## \
-  () const \
+Type##ConstIterator \
+begin##Type () const \
 { \
   return Type##ConstIterator::begin(*this); \
 } \
  \
-##Type##ConstIterator \
-end##Type## \
-  () const \
+Type##ConstIterator \
+end##Type () const \
 { \
   return Type##ConstIterator::end(*this); \
 } \
  \
-##Type##ConstReverseIterator \
-rbegin##Type## \
-  () const \
+Type##ConstReverseIterator \
+rbegin##Type () const \
 { \
   return Type##ConstReverseIterator::begin(*this); \
 } \
  \
-##Type##ConstReverseIterator \
-rend##Type## \
-  () const \
+Type##ConstReverseIterator \
+rend##Type () const \
 { \
   return Type##ConstReverseIterator::end(*this); \
 }
