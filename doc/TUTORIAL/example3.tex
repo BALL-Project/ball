@@ -3,11 +3,10 @@
 \index{Energy minimization}
 \index{optimizing hydrogens}
 
-Having introduced the basics of handling proteins in the last
-chapter, we now turn towards real-life examples: getting a protein
-from the PDB and performing a molecular dynamics simulation with it.
-Again, we will be using BPTI, reading to from a PDB file as in the
-previous example:
+Having introduced the basics of handling proteins in the last chapter, we now
+turn towards real-life examples: performing a molecular dynamics simulation
+with a protein structure from PDB. Again, we will be using BPTI, reading it
+from a PDB file as in the previous example:
 
 \begin{lstlisting}{}
 	PDBFile	infile("pdb4pti.ent");
@@ -36,11 +35,13 @@ can \member{apply}{} it to any given kernel data structure:
 \end{lstlisting}
 
 \noindent
-Instantiating \class{FragmentDB} usually takes a few seconds to parse the 
-fragment database and the naming conversion tables. The corresponding data is
-using the \member{add\_hydrogens}{} processor and rebuild the missing bonds
-stored in \directory{BALL/data/Fragments}. Now we will add the missing hydrogens 
-using the \member{build\_bonds}{} processor:
+Instantiating \class{FragmentDB} usually takes a few seconds to parse the
+fragment database and the naming conversion tables stored in
+\directory{BALL/dat/Fragments}. The resulting data may then be used by two
+very handy processors: \member{add\_hydrogens}{} and \member{build\_bonds}{}.
+As their names suggest, those processors add the missing hydrogen atoms and
+rebuild missing bonds. We will now complete the BPTI protein by using those
+very handy processors:
 
 \begin{lstlisting}{}
 	S.apply(db.add_hydrogens);
@@ -58,7 +59,7 @@ checks on a given kernel data structure:
 	\item check for missing atoms
 	\item check for overlapping atoms (closer than 0.5 \AA)
 	\item check for integrality of residue charges (not relevant here)
-	\item check bond lengths (should be within 15% of the template bond lengths)
+	\item check bond lengths (should be within 15\% of the template bond lengths)
 \end{itemize}
 The information on missing atoms and bond lengths is taken from an instance
 of \class{FragmentDB}:\index{fragment database}
@@ -71,7 +72,8 @@ of \class{FragmentDB}:\index{fragment database}
 	
 \noindent
 If the \class{ResidueChecker} notices a problem with the structure, it will 
-print a warning. In our case, was (hopefully) correct, so nothing will happen.
+print a warning. In our case, it was (hopefully) correct, so nothing will
+happen.
 
 Although our protein structure is correct, the positions of the added hydrogen
 atoms are only approximations of the true positions.
@@ -93,16 +95,18 @@ This constructor call creates a new \class{AmberFF}, reads the parameter
 file (the default one, \file{amber94.ini}, which corresponds to the AMBER
 file {\tt parm94.dat}), and the parameters suitable for the system.
 This particular instance of the force field is now {\em bound} to the 
-system and all its cations will apply to that system, unless a different
+system and all its actions will apply to that system, unless a different
 system is specified in a call to \method{setup}.
 
 We now want to optimize the hydrogens only. This can be achieved through the
 {\em selection} concept of the kernel classes. Whether an atom is selected or
 not has different meanings at different stages of the force field calculation.
 When calling \method{setup} (as the above constructor does implicitly),
-the force field will ignore all unselected atoms, unless the whole system is
-unselected (as in our case). All other atoms are ignored and will not be part
-of the calculation.
+the force field will ignore all unselected atoms and only selected atoms will
+be part of the computation. There is one special case: If the whole system is
+unselected, it will be treated as if it had been selected completely. This is
+just for convenience, because thus a user does not need to select a system
+prior to setting up a force field calculation.
 
 {\em After} \method{setup} has been called, the selection gets a different
 meaning. It now indicates which atoms are to be optimized (in an energy
@@ -153,7 +157,8 @@ the member \member{EnergyMinimizer}{options} (a public instance of
 \class{Options}), so the internal state of the minimizer is readily obtained by
 dumping \member{EnergyMinimizer}{options} to {\tt cout}.
 
-Finally, a call to \method{minimize} will cause the minimizer to run for
+Finally, a call to \method{minimize} with argument 100 will cause the
+minimizer to run for
 (at most) 100 iterations. The result is a structure of BPTI containing all
 the atoms at optimized positions, so now we can perform an MD simulation of
 the whole protein. Obviously, we now have to deselect the hydrogen atoms.
@@ -209,7 +214,7 @@ perform a few  MD simulation steps:
 \noindent
 As in the force field and the energy minimizer, the MD simulation object
 stores all its settings in an options object. The
-\method{MolecularDynamics}{simulate} method simulates a given number of MD
+\method{simulate} method simulates a given number of MD
 steps. 
 
 The source code for the complete example can be found as {\tt example3.C}
