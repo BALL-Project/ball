@@ -38,110 +38,6 @@
     <property name="sizeGripEnabled">
         <bool>false</bool>
     </property>
-    <widget class="QLayoutWidget">
-        <property name="name">
-            <cstring>Layout1</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>4</x>
-                <y>318</y>
-                <width>580</width>
-                <height>32</height>
-            </rect>
-        </property>
-        <hbox>
-            <property name="name">
-                <cstring>unnamed</cstring>
-            </property>
-            <property name="margin">
-                <number>0</number>
-            </property>
-            <property name="spacing">
-                <number>6</number>
-            </property>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>defaults_button</cstring>
-                </property>
-                <property name="minimumSize">
-                    <size>
-                        <width>100</width>
-                        <height>0</height>
-                    </size>
-                </property>
-                <property name="text">
-                    <string>&amp;Defaults</string>
-                </property>
-                <property name="accel">
-                    <string>Alt+D</string>
-                </property>
-                <property name="autoDefault">
-                    <bool>true</bool>
-                </property>
-            </widget>
-            <spacer>
-                <property name="name">
-                    <cstring>Horizontal Spacing2</cstring>
-                </property>
-                <property name="orientation">
-                    <enum>Horizontal</enum>
-                </property>
-                <property name="sizeType">
-                    <enum>Expanding</enum>
-                </property>
-                <property name="sizeHint">
-                    <size>
-                        <width>20</width>
-                        <height>20</height>
-                    </size>
-                </property>
-            </spacer>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>ok_button</cstring>
-                </property>
-                <property name="minimumSize">
-                    <size>
-                        <width>110</width>
-                        <height>30</height>
-                    </size>
-                </property>
-                <property name="text">
-                    <string>&amp;Apply</string>
-                </property>
-                <property name="accel">
-                    <string>Alt+A</string>
-                </property>
-                <property name="autoDefault">
-                    <bool>true</bool>
-                </property>
-                <property name="default">
-                    <bool>true</bool>
-                </property>
-            </widget>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>cancel_button</cstring>
-                </property>
-                <property name="minimumSize">
-                    <size>
-                        <width>100</width>
-                        <height>30</height>
-                    </size>
-                </property>
-                <property name="text">
-                    <string>&amp;Cancel</string>
-                </property>
-                <property name="accel">
-                    <string></string>
-                </property>
-                <property name="autoDefault">
-                    <bool>true</bool>
-                </property>
-            </widget>
-        </hbox>
-    </widget>
     <widget class="Line">
         <property name="name">
             <cstring>line1</cstring>
@@ -213,6 +109,93 @@
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
             </sizepolicy>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>ok_button</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>174</x>
+                <y>316</y>
+                <width>145</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>110</width>
+                <height>30</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>&amp;Apply</string>
+        </property>
+        <property name="accel">
+            <string>Alt+A</string>
+        </property>
+        <property name="autoDefault">
+            <bool>true</bool>
+        </property>
+        <property name="default">
+            <bool>true</bool>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>cancel_button</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>325</x>
+                <y>316</y>
+                <width>127</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>100</width>
+                <height>30</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>&amp;Cancel</string>
+        </property>
+        <property name="accel">
+            <string></string>
+        </property>
+        <property name="autoDefault">
+            <bool>true</bool>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>defaults_button</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>458</x>
+                <y>316</y>
+                <width>126</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>100</width>
+                <height>30</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>&amp;Defaults</string>
+        </property>
+        <property name="accel">
+            <string>Alt+D</string>
+        </property>
+        <property name="autoDefault">
+            <bool>true</bool>
         </property>
     </widget>
 </widget>
