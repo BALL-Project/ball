@@ -73,6 +73,12 @@ PoissonBoltzmann_test:	PoissonBoltzmann_test.o
 PropertyManager_test:	PropertyManager_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
+Skeleton_test:	Skeleton_test.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
+tmp:	tmp.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
 StructureMapper_test:	StructureMapper_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
