@@ -64,15 +64,15 @@ namespace BALL
 			throw()
 		{
 			String hint("Download a PDB file from www.rcsb.org");
-			main_control.insertMenuEntry(MainControl::FILE_OPEN, "&Download Structure", (QObject *)this,
-																	 SLOT(show()), CTRL+Key_D, -1, hint);
+			main_control.insertMenuEntry(MainControl::FILE_OPEN, "Downlo&ad Structure", (QObject *)this,
+																	 SLOT(show()), ALT+Key_A, -1, hint);
 		}
 
 		void DownloadPDBFile::finalizeWidget(MainControl& main_control)
 			throw()
 		{
-			main_control.removeMenuEntry(MainControl::FILE_OPEN, "&Download Structure", (QObject *)this, 
-																	 SLOT(show()), CTRL+Key_R);
+			main_control.removeMenuEntry(MainControl::FILE_OPEN, "Downlo&ad Structure", (QObject *)this, 
+																	 SLOT(show()), ALT+Key_A);
 		}
 
 		void DownloadPDBFile::checkMenuEntries()
