@@ -1,4 +1,4 @@
-// $Id: angle.h,v 1.14 2000/03/08 23:36:38 amoll Exp $
+// $Id: angle.h,v 1.15 2000/03/15 08:58:01 oliver Exp $
 
 #ifndef BALL_MATHS_ANGLE_H
 #define BALL_MATHS_ANGLE_H
@@ -47,7 +47,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE(TAngle<T>)
+		BALL_CREATE_NODEEP(TAngle<T>)
 
 		/**	@name	Enums
 		*/
@@ -84,7 +84,7 @@ namespace BALL
 				@param	angle the object to be copied
 				@param	deep ignored
 		*/
-		TAngle(const TAngle& angle, bool /* deep */ = true);
+		TAngle(const TAngle& angle);
 
 		/**	Detailled constructor.
 				Create a new angle object and set its value to 
@@ -381,7 +381,7 @@ namespace BALL
 	}
 
 	template <typename T>
-	TAngle<T>::TAngle(const TAngle& angle, bool /* deep */)
+	TAngle<T>::TAngle(const TAngle& angle)
 		:	value(angle.value)
 	{
 	}

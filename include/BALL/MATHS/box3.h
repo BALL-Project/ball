@@ -1,4 +1,4 @@
-// $Id: box3.h,v 1.9 2000/03/08 18:30:00 amoll Exp $
+// $Id: box3.h,v 1.10 2000/03/15 08:53:15 oliver Exp $
 
 #ifndef BALL_MATHS_BOX3_H
 #define BALL_MATHS_BOX3_H
@@ -26,7 +26,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE(TBox3<T>)
+		BALL_CREATE_NODEEP(TBox3<T>)
 
 		/**	@name	Constructors and Destructors
 		*/
@@ -41,9 +41,8 @@ namespace BALL
 		/**	Copy constructor.
 				Create a new TBox3 object from another.
 				@param vector the TBox3 object to be copied
-				@param bool ignored - just for interface consistency
 		*/	
-		TBox3(const TBox3& box, bool deep = true);
+		TBox3(const TBox3& box);
 
 		/**	Detailled constructor.
 				Create a new TBox3 object from two TVector3.
@@ -226,7 +225,7 @@ namespace BALL
 	}
 
 	template <class T>
-	TBox3<T>::TBox3(const TBox3<T>& box, bool /* deep */)
+	TBox3<T>::TBox3(const TBox3<T>& box)
 		:	a(box.a),
 			b(box.b)
 	{
