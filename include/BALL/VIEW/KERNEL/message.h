@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.37 2003/12/15 02:33:34 amoll Exp $
+// $Id: message.h,v 1.38 2003/12/15 11:53:46 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -27,6 +27,7 @@ namespace BALL
 	namespace VIEW
 	{
 		// class forward
+		class ConnectionObject;
 		class GeometricObject;
 
 /** @addtogroup ViewKernelConnectivityMessages */
@@ -82,23 +83,19 @@ class Message
 	//@{
 
 	/** Change the sender.
-			This parameter always represents
-			a void pointer to a ConnectionObject. This method will be used internally
-			by the ConnectionObject class it its <b> notify_ method.
-			\param       object the new sender of this message
+			This method will be used internally
+			by ConnectionObject::notify_.
 			\see         ConnectionObject::notify_
 	*/
-	void setSender(const void* object)
+	void setSender(const ConnectionObject* sender)
 		throw();
 
 	/** Non-mutable inspection of the sender.
-			The return type always represents
-			a void pointer to a ConnectionObject. This method will be used internally
-			by the ConnectionObject class it its <b> onNotify method.
-			\return      const void* constant pointer to the sender of this message
+			This method will be used internally
+			by ConnectionObject::onNotify.
 			\see         ConnectionObject::onNotify
 	*/
-	const void* getSender() const
+	const ConnectionObject* getSender() const
 		throw();
 
 	/** Change the deletable flag.
@@ -123,7 +120,7 @@ class Message
 
 	private:
 
-	void *connection_object_;
+	const ConnectionObject* connection_object_;
 
 	bool deletable_;
 };
