@@ -1,4 +1,4 @@
-// $Id: NMRSpectrum.C,v 1.6 2000/09/22 13:18:04 amoll Exp $
+// $Id: NMRSpectrum.C,v 1.7 2000/09/22 14:14:59 amoll Exp $
 
 #include<BALL/NMR/NMRSpectrum.h>
 #include<BALL/FORMAT/PDBFile.h>
@@ -39,7 +39,8 @@ namespace BALL
 	name_shift;
 
 	NMRSpectrum::NMRSpectrum()
-		:	density_(100),
+		:	system_(0),
+			density_(100),
 			is_sorted_(false)
 	{
 	}
@@ -96,6 +97,7 @@ namespace BALL
 			{
 				min = it->getValue();
 			}
+			it++;
 		}
 
 		return min;
@@ -116,6 +118,7 @@ namespace BALL
 			{
 				max = it->getValue();
 			}
+			it++;
 		}
 
 		return max;
@@ -223,7 +226,7 @@ namespace BALL
 		}
 	}
 
-	void makeDifference (const float& diff, const String &a, const String& b, const String& out)
+	void makeDifference(const float& diff, const String &a, const String& b, const String& out)
 	{
 		std::list<name_shift>						liste_b;
 		std::list<name_shift>::iterator iter;
@@ -272,7 +275,7 @@ namespace BALL
 		outfile << "END" << " " << 0.0 << endl;
 	}
 
-	void setDifference (NMRSpectrum* a, NMRSpectrum* b, const String& outpdb, const String& out)
+	void setDifference(NMRSpectrum* a, NMRSpectrum* b, const String& outpdb, const String& out)
 	{
 		const System& system_a = *a->getSystem();
 		const System& system_b = *b->getSystem();
@@ -322,5 +325,7 @@ namespace BALL
 		outfile << system_a;
 		outfile.close();
 	}
+
+
 
 }	// namespace Ball

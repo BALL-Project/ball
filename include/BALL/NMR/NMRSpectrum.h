@@ -1,4 +1,4 @@
-// $Id: NMRSpectrum.h,v 1.6 2000/09/22 13:21:19 amoll Exp $
+// $Id: NMRSpectrum.h,v 1.7 2000/09/22 14:14:50 amoll Exp $
 
 #ifndef BALL_NMR_NMRSPECTRUM_H
 #define BALL_NMR_NMRSPECTRUM_H
@@ -83,10 +83,6 @@ namespace BALL
 		/**	Returns a pointer to the system set to {\tt system\_}.
 		*/
 		const System* getSystem() const;
-
-		/**	Inserts a shiftmodule to {\tt processorlist\_} using {\tt names\_}.
-		*/
-		void insertShiftModule(const String& module_name);
 		
 		/**	Starts every processor in {\tt processorlist\_}
 		*/
