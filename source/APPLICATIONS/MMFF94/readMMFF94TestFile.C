@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.2 2005/03/21 16:43:01 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.3 2005/03/22 16:32:53 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -76,29 +76,89 @@ System* readTestFile(String filename)
 	return system;
 }
 
+
+vector<float> getResults(String filename)
+{
+	filename += ".results";
+
+	vector<float> results;
+	LineBasedFile infile(filename);
+	while (infile.readLine())
+	{
+		vector<String> fields;
+		infile.getLine().split(fields);
+		results.push_back(fields[0].toFloat());
+	}
+
+	return results;
+}
+
+int runtests(const vector<String>& filenames, const String& dir)
+{
+	MMFF94 mmff;
+
+	Size ok = 0;
+	for (Position pos = 0; pos < filenames.size(); pos++)
+	{
+		String full_file_name(dir +FileSystem::PATH_SEPARATOR + filenames[pos] + ".mol2");
+		System* system = readTestFile(full_file_name);
+		if (system == 0)
+		{
+			Log.error() << "Could not read mol2 file " << full_file_name << std::endl;
+			return -1;
+		}
+
+		if (!mmff.setup(*system))
+		{
+			Log.error() << "Setup failed for " << full_file_name << std::endl;
+			return -1;
+		}
+
+		mmff.updateEnergy();
+
+		vector<float> results = getResults(dir +FileSystem::PATH_SEPARATOR + filenames[pos]);
+
+		float stretch_diff = std::fabs(mmff.getEnergy() - results[1]);
+
+		if (std::fabs(results[1] / stretch_diff) > 4.0 / 1000.0)
+		{
+			Log.error() << filenames[pos] << "   " << results[1] << "  " << mmff.getEnergy() << std::endl;
+		}
+		else
+		{
+			ok++;
+		}
+
+		delete system;
+	}
+
+	Log.info() << "Tested " << filenames.size() << " files, " << ok << " files ok" << std::endl;
+
+	return 0;
+}
+
+vector<String> getTestFiles(const String& dir)
+{
+	vector<String> results;
+	LineBasedFile infile(dir + FileSystem::PATH_SEPARATOR + "filenames.txt");
+	while (infile.readLine())
+	{
+		results.push_back(infile.getLine());
+	}
+
+	return results;
+}
+
+
 int main(int argc, char** argv)
 {
 	if (argc != 2)
 	{
-		Log.error() << "Usage: readMMFF94TestFile <location of <test>.mol2>" << std::endl;
+		Log.error() << "Usage: readMMFF94TestFile <dir with extracted test files>" << std::endl;
 		return 1;
 	}
 
-	System* system = readTestFile(argv[1]);
-	if (system == 0) return -1;
+	vector<String> files = getTestFiles(argv[1]);
 
-	MMFF94 mmff;
-	if (!mmff.setup(*system))
-	{
-		Log.error() << "Setup failed for " << argv[1] << std::endl;
-		return -1;
-	}
-
-	mmff.updateEnergy();
-
-	Log.info () << "Energy for " << argv[1] << " : " << mmff.getEnergy() << std::endl;
-
-	delete system;
-
-	return 0;
+	return runtests(files, argv[1]);
 }

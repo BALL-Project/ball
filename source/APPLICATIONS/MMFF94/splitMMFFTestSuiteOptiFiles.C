@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: splitMMFFTestSuiteOptiFiles.C,v 1.1.2.1 2005/03/21 12:48:36 amoll Exp $
+// $Id: splitMMFFTestSuiteOptiFiles.C,v 1.1.2.2 2005/03/22 16:32:53 amoll Exp $
 //
 // A small program for spliting the Optimol log file from the MMFF94 test suite
 // into smaller files, which are better to handle for parsing 
@@ -52,7 +52,6 @@ int main(int argc, char** argv)
 	vector<String> atoms_file_contents;
 	String file_name;
 	String dir = argv[2];
-	bool get_filename = false;
 	vector<String> file_names;
 
 	LineBasedFile infile(argv[1]);
@@ -109,6 +108,39 @@ int main(int argc, char** argv)
 				outfile << std::endl;
 			}
 
+			outfile.close();
+		}
+
+		if (infile.getLine().hasSubstring("Total ENERGY (Kcal)"))
+		{
+			vector<String> fields;
+
+			File outfile(dir + FileSystem::PATH_SEPARATOR + file_name + ".results", std::ios::out);
+			for (Position pos = 0; pos < 16; pos ++)
+			{
+				Size nr_fields = infile.getLine().split(fields);
+				if (nr_fields < 2 ||
+						infile.getLine().hasPrefix(" Bond Torsion"))
+				{
+					infile.readLine();
+					continue;
+				}
+
+				outfile << fields[nr_fields - 1] << "              #  ";
+				for (Position i = 0; i < nr_fields - 1; i++)
+				{
+					outfile << fields[i] << " ";
+				}
+				outfile << std::endl;
+
+				infile.readLine();
+			}
+
+			String rms = infile.getLine().after("=");
+			rms = rms.before("Kcal");
+			rms.trim();
+
+			outfile << rms << "             # rms" << std::endl;
 			outfile.close();
 		}
 	}
