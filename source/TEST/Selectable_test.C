@@ -1,4 +1,4 @@
-// $Id: Selectable_test.C,v 1.2 2000/08/19 16:43:08 amoll Exp $
+// $Id: Selectable_test.C,v 1.3 2000/08/29 13:51:26 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,13 +9,13 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Selectable_test.C,v 1.2 2000/08/19 16:43:08 amoll Exp $")
+START_TEST(class_name, "$Id: Selectable_test.C,v 1.3 2000/08/29 13:51:26 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
-
+using namespace std;
 
 Selectable* s;
 CHECK(Selectable::Selectable())
@@ -41,10 +41,11 @@ CHECK(Selectable::clear())
 RESULT
 
 CHECK(Selectable::destroy())
-	Selectable* s2;	
+	Selectable* s2 = new Selectable;	
 	s2->select();
 	s2->destroy();
 	TEST_EQUAL(s2->isSelected(), false)
+	delete s2;
 RESULT
 
 CHECK(Selectable::set(const Selectable& selectable, bool deep = true))
