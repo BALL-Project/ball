@@ -1,4 +1,4 @@
-// $Id: quaternion.h,v 1.13 2000/03/27 09:36:31 oliver Exp $
+// $Id: quaternion.h,v 1.14 2000/04/03 21:21:59 amoll Exp $
 
 #ifndef BALL_MATHS_QUATERNION_H
 #define BALL_MATHS_QUATERNION_H
@@ -49,7 +49,7 @@ namespace BALL
 		TQuaternion();
 
 		/**	Copy constructor.
-				Create a new TQuaternion object from another.
+				Create a new TQuaternion object from an other.
 				@param TQuaternion the TQuaternion object to be copied
 		*/	
 		TQuaternion(const TQuaternion& q);
@@ -97,19 +97,19 @@ namespace BALL
 		*/
 		void set(const T& x, const T& y, const T& z, const T& angle);
 
-		/**	Assign from another TQuaternion.
+		/**	Assign from an other TQuaternion.
 				@param q the TQuaternion object to assign from
 		*/
 		TQuaternion& operator = (const TQuaternion& q);
 
-		/**	Assign to another TQuaternion.
-				Assigns the components to another TQuaternion.
-				@param q the TQuaternion to be asigned to
+		/**	Assign to an other TQuaternion.
+				Assigns the components to an other TQuaternion.
+				@param q the TQuaternion to be assigned to
 		*/
 		void get(TQuaternion& q) const;
 
 		/**	Assign the components to the standard values.
-				The axis-compnents are set to {\tt 0}, the angle is set to {\tt 1}.
+				The axis-components are set to {\tt 0}, the angle is set to {\tt 1}.
 		*/
 		void setIdentity();
 
@@ -128,7 +128,7 @@ namespace BALL
 		*/
 		T getAngle() const;
 
-		/**	Get the normalized direction vector of axis of rotation.
+		/**	Get the normalized direction vector of the rotation axis.
 				@return TVector3 the Axis
 		*/
 		TVector3<T> getAxis();
@@ -177,7 +177,7 @@ namespace BALL
 		bool operator == (const TQuaternion& q) const;
 
 		/**	Inequality operator.
-				@return bool, {\bf true} if the two TQuaternion differ in at least on component, {\bf false} otherwise
+				@return bool, {\bf true} if the two TQuaternion differ in at least one component, {\bf false} otherwise
 		*/
 		bool operator != (const TQuaternion& q) const;
 		//@}

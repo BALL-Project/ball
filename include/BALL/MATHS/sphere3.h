@@ -1,4 +1,4 @@
-// $Id: sphere3.h,v 1.11 2000/03/27 12:10:01 oliver Exp $
+// $Id: sphere3.h,v 1.12 2000/04/03 21:21:59 amoll Exp $
 
 #ifndef BALL_MATHS_SPHERE3_H
 #define BALL_MATHS_SPHERE3_H
@@ -51,7 +51,7 @@ namespace BALL
 		}
 
 		/**	Copy constructor.
-				Create a new Sphere3 object from another.
+				Create a new Sphere3 object from an other.
 				@param sphere3 the Sphere3 object to be copied
 		*/	
 		TSphere3(const TSphere3& sphere3)
@@ -84,7 +84,7 @@ namespace BALL
 		*/
 		//@{
 
-		/**	Swap the contents of two sphere3.
+		/**	Swap the contents of two Sphere3.
 				@param	sphere3 the sphere3 to swap contents with
 		*/
 		void swap(TSphere3& sphere3)
@@ -98,7 +98,7 @@ namespace BALL
 			sphere3.radius = temp;
 		}
 
-		/**	Assign from another Sphere3.
+		/**	Assign from an other Sphere3.
 				@param sphere3	the Sphere3 object to assign from
 		*/
 		void set(const TSphere3& sphere)
@@ -119,8 +119,8 @@ namespace BALL
 		}
 
 		/**	Assignment operator.
-				Assign the components from another Sphere.
-				@param sphere3 the spehere to assign from
+				Assign the components from an other Sphere.
+				@param sphere3 the sphere to assign from
 		**/
 		TSphere3& operator =
 			(const TSphere3& sphere3)
@@ -131,8 +131,8 @@ namespace BALL
 			return *this;
 		}
 
-		/**	Assign to another Sphere.
-				Assigns the components to another Sphere.
+		/**	Assign to an other Sphere.
+				Assigns the components to an other Sphere.
 				@param sphere	the vector to be asigned to
 		*/
 		void get(TSphere3& sphere3) const
@@ -165,7 +165,7 @@ namespace BALL
 		}
 
 		/**	Inequality operator.
-				@return bool, {\bf true} if the two sphere3 differ in at least on component, {\bf false} otherwise
+				@return bool, {\bf true} if the two Sphere3 differ in at least one component, {\bf false} otherwise
 		*/
 		bool operator != (const TSphere3& sphere3) const
 		{
@@ -175,7 +175,7 @@ namespace BALL
 		/**	Test if a given point is a member of the Sphere.
 				Optional it can be testet, if it is a member of the surface.
 				@param point the point to be tested
-				@param on_surface = true, to test the surface (default = false)
+				@param on_surface true to test the surface (default = false)
 				@return bool, {\bf true} or {\bf false}
 		*/
 		bool has(const TVector3<T>& point, bool on_surface = false) const
@@ -202,7 +202,7 @@ namespace BALL
 		//@{
 
 		/**	Test if instance is valid.
-				always retruns true
+				Always returns true
 				@return bool {\bf true}
 		*/
 		bool isValid() const
@@ -233,13 +233,11 @@ namespace BALL
 		*/
 		//@{
 
-		/**	p.
-				The midpoint of the sphere.
+		/**	The midpoint of the sphere.
 		*/
 		TVector3<T> p;
 
-		/**	Radius.
-				The radius of the sphere.
+		/** The radius of the sphere.
 		*/
 		T radius;
 		//@}

@@ -1,4 +1,4 @@
-// $Id: line3.h,v 1.16 2000/03/30 09:34:49 oliver Exp $
+// $Id: line3.h,v 1.17 2000/04/03 21:21:58 amoll Exp $
 
 #ifndef BALL_MATHS_LINE3_H
 #define BALL_MATHS_LINE3_H
@@ -72,7 +72,7 @@ namespace BALL
 		}
 
 		/**	Copy constructor.
-				Create a new TVector4 object from another.
+				Create a new TVector4 object from an other.
 				@param TLine3 the TLine3 object to be copied
 				@param bool ignored - just for interface consistency
 		*/	
@@ -127,7 +127,7 @@ namespace BALL
 			line.d = temp_vector;
 		}
 
-		/**	Assign from another TLine3.
+		/**	Assign from an other TLine3.
 				@param line	the TLine3 object to assign from
 		*/
 		void set(const TLine3& line)
@@ -137,7 +137,7 @@ namespace BALL
 		}
 
 		/**	Assign from one point and a vector
-				of from two points, dependent from form.
+				or from two points, dependent from form.
 				@param	point assigned to {\tt p}
 				@param	vector assigned to {\tt d}
 				@param	form assigns form of parameter
@@ -154,7 +154,7 @@ namespace BALL
 		}
 
 		/**	Assignment operator.
-				Assign the components from another line.
+				Assign the components from an other line.
 				@param line the vector to assign from
 		**/
 		TLine3& operator = (const TLine3& line)
@@ -165,8 +165,8 @@ namespace BALL
 			return *this;
 		}
 
-		/**	Assign to another TLine3.
-				Assigns the vector components to another vector.
+		/**	Assign to an other TLine3.
+				Assigns the vector components to an other vector.
 				@param line	the line to be asigned to
 		*/
 		void get(TLine3& line)
@@ -176,7 +176,7 @@ namespace BALL
 		}
 
 		/**	Assign to two {\tt TVector3}.
-				art of componenents depends of form:
+				Type of componenents depends of form:
 				{\tt 0} two points
 				{\tt 1} one point and the vector component
 				@param	point the first point
@@ -265,7 +265,7 @@ namespace BALL
 		//@{
 
 		/**	Test if instance is valid.
-				always returns true
+				Always returns true
 				@return bool {\bf true}
 		*/
 		bool isValid() const

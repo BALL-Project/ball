@@ -1,4 +1,4 @@
-// $Id: vector3.h,v 1.30 2000/03/26 21:57:34 oliver Exp $
+// $Id: vector3.h,v 1.31 2000/04/03 21:21:59 amoll Exp $
 
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -124,7 +124,7 @@ namespace BALL
 		}
 
 		/**	Copy constructor.
-				Create a new TVector3 object from another.
+				Create a new TVector3 object from an other.
 				@param vector the TVector3 object to be copied
 		*/	
 		TVector3(const TVector3& vector)
@@ -205,22 +205,23 @@ namespace BALL
 		*/
 		void set(const T& vx, const T& vy, const T& vz);
 
-		/**	Assign from another TVector3.
+		/**	Assign from an other TVector3.
 				@param vector	the TVector3 object to assign from
 		*/
 		void set(const TVector3& vector);
 
 		/**	Set from spherical polar coordinates.
-				The radius describes the distance of the point from the origin, {\tt phi}
-				ranges from 0 to $2 \pi$, {\tt theta} ranges from 0 (north pole, positive z-axis)
+				The radius describes the distance of the point from the origin.\\
+				{\tt phi}	ranges from 0 to $2 \pi$, {\tt theta} ranges from 0 (north pole, positive z-axis)
 				to $\pi$ (south pole, negative z-axis).\\
-				Coordinates are calculated according to the following formulas:
+				Coordinates are calculated according to the following formulas:\\
+				\TEX{
 				\begin{eqnarray*}
 					x & = & r \sin \theta \cos \phi\\
 					y & = & r \sin \theta \sin \phi\\
 					z & = & r \cos \theta
 				\end{eqnarray*}
-					
+				}
 				@param	r the radius
 				@param	phi the azimuth
 				@param	theta	the co-latitude
@@ -228,7 +229,7 @@ namespace BALL
 		void set(const T& r, const TAngle<T>& phi, const TAngle<T> &theta);
 
 		/**	Assignment operator.
-				Assign the vector components from another vector.
+				Assign the vector components from an other vector.
 				@param v the vector to assign from
 		**/
 		TVector3& operator = (const TVector3& v);
@@ -255,8 +256,8 @@ namespace BALL
 		*/
 		void get(T& x, T& y, T& z) const;
 
-		/**	Assign to another Vector3.
-				Assigns the vector components to another vector.
+		/**	Assign to an other Vector3.
+				Assigns the vector components to an other vector.
 				@param vector	the vector to be asigned to
 		*/
 		void get(TVector3& vector) const;
@@ -390,7 +391,7 @@ namespace BALL
 		TVector3 operator % (const TVector3& vector) const;
 
 		/**	Assign to the cross product.
-				Assign the vector to its cross product with another vector.
+				Assign the vector to its cross product with an other vector.
 		*/
 		TVector3& operator %= (const TVector3& vector);
 
@@ -400,11 +401,11 @@ namespace BALL
 		*/
 		//@{
 
-		/**	Return the distance to another vector.
+		/**	Return the distance to an other vector.
 		*/
 		T getDistance(const TVector3& vector3) const;
 
-		/**	Return the squared distance to another vector.
+		/**	Return the squared distance to an other vector.
 		*/
 		T getSquareDistance(const TVector3& vector) const;
 
@@ -414,7 +415,7 @@ namespace BALL
 		*/
 		TAngle<T> getAngle(const TVector3& vector) const;
 
-		/**	Return the orthogonal projection of this vector onto another.
+		/**	Return the orthogonal projection of this vector onto an other.
 				@param direction the vector to project onto
 		*/
 		TVector3 getOrthogonalProjection(const TVector3& direction) const;
@@ -430,8 +431,8 @@ namespace BALL
 
 		/**	Spat Product of three vectors.
 				@param a first vector
-				@param a second vector
-				@param a third vector
+				@param b second vector
+				@param v third vector
 				@return T the spat product
 		*/
 		static T getSpatProduct (const TVector3<T>& a, const TVector3<T>& b, const TVector3<T>& c);
@@ -448,7 +449,7 @@ namespace BALL
 		bool operator == (const TVector3& vector) const;
 	
 		/**	Inequality operator.
-				@return bool, {\bf true} if the two vectors differ in at least on component, {\bf false} otherwise
+				@return bool, {\bf true} if the two vectors differ in at least one component, {\bf false} otherwise
 		*/
 		bool operator != (const TVector3& vector) const;
 
@@ -470,7 +471,7 @@ namespace BALL
 		void dump(std::ostream& s = std::cout, Size depth = 0) const;
 
 		/**	Test if instance is valid.
-				always retruns true
+				Always returns true
 				@return bool {\bf true}
 		*/
 		bool isValid() const;

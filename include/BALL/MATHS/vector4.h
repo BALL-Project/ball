@@ -1,4 +1,4 @@
-// $Id: vector4.h,v 1.21 2000/03/26 21:57:34 oliver Exp $
+// $Id: vector4.h,v 1.22 2000/04/03 21:21:59 amoll Exp $
 
 #ifndef BALL_MATHS_VECTOR4_H
 #define BALL_MATHS_VECTOR4_H
@@ -86,7 +86,7 @@ namespace BALL
 		TVector4(const T& x, const T& y, const T& z, const T& h = (T)1);
 
 		/**	Copy constructor.
-				Create a new TVector4 object from another.
+				Create a new TVector4 object from an other.
 				@param vector the TVector4 object to be copied
 		*/	
 		TVector4(const TVector4& vector);
@@ -118,7 +118,7 @@ namespace BALL
 		*/
 		void set(const T& rx, const T& ry, const T& rz, const T& rh = (T)1);
 
-		/**	Assign from another TVector4.
+		/**	Assign from an other TVector4.
 				@param vector	the TVector4 object to assign from
 		*/
 		void set(const TVector4& vector);
@@ -131,7 +131,7 @@ namespace BALL
 		TVector4& operator = (const T* ptr);
 
 		/**	Assignment operator.
-				Assign the vector components from another vector.
+				Assign the vector components from an other vector.
 				@param vector the vector to assign from
 		**/
 		TVector4& operator = (const TVector4& vector);
@@ -152,8 +152,8 @@ namespace BALL
 		*/
 		void get(T& rx, T& ry, T& rz, T& rh) const;
 
-		/**	Assign to another Vector4.
-				Assigns the vector components to another vector.
+		/**	Assign to an other Vector4.
+				Assigns the vector components to an other vector.
 				@param vector	the vector to be asigned to
 		*/
 		void get(TVector4& vector) const;
@@ -184,7 +184,7 @@ namespace BALL
 
 		/**	Normalize the vector.
 				The vector is scaled with its length:
-				$\{x|y|z|h\} *= \sqrt{x^2 + y^2 + z^2 + h^2}$.
+				${x|y|z|h\} *= \sqrt{x^2 + y^2 + z^2 + h^2}$.
 				@return T, a reference to {\tt this} vector
 				@exception DivisionByZero if the length of the vector is 0
 		*/
@@ -198,7 +198,7 @@ namespace BALL
 		*/
 		static const TVector4& getUnit();
 
-		/** Assigns the vector components to one value.
+		/** Assign one value to the vector components.
 				@param value	the value to be asigned to, default = 1
 		*/
 		void fill(const T& value = (T)1);
@@ -228,14 +228,12 @@ namespace BALL
 		TVector4 operator - () const;
 
 		/**	Add a vector to this vector.
-				Add the components of {\tt vector} to this vector.
 				@param vector the vector to add
 				@return TVector4, {\tt *this}
 		*/
 		TVector4& operator += (const TVector4& vector);
 
 		/**	Subtract a vector from this vector.
-				Subtract {\tt vector} from this vector componentwise.
 				@param vector the vector to subtract
 				@return TVector4, {\tt *this}
 		*/
@@ -244,14 +242,14 @@ namespace BALL
 		/**	Scalar product.
 				Return {\tt TVector4(x * scalar, y * scalar, z * scalar, h * scalar)}.
 				@param scalar, the scalar to multiply with
-				@return TVector4, the scalar product of this vector and {\tt scalar}
+				@return TVector4 the scalar product of this vector and {\tt scalar}
 		*/
 		TVector4 operator * (const T& scalar);
 
 		/**	Multiply with a scalar.
 				Multiply all components of the vector with a {\tt scalar}.
 				@param scalar the scalar to multiply with
-				@return TVector4\&, {\tt *this}
+				@return TVector4& {\tt *this}
 		*/
 		TVector4& operator *= (const T& scalar);
 
@@ -271,20 +269,21 @@ namespace BALL
 		TVector4& operator /= (const T& scalar);
 
 		/** Dot product.
-				Return the dot product of this vector with {\tt vector}.
+				@param vector the vector to multiply with
+				@return T the dot product of this vector with {\tt vector}.
 		*/
 		T operator * (const TVector4& vector) const;
 
-		/**	Return the distance to another vector
+		/**	Return the distance to an other vector
 				@param vector the vector to compare to
 				@return T, the distance
 		*/
 		T getDistance(const TVector4& vector) const;
 
-		/**	Return the squared distance to another vector
+		/**	Return the squared distance to an other vector
 				This method avoids the square root needed in getDistance,
 				so this method is preferred if possible.
-				@param vector the vector to compare to
+				@param vector the vector to compare with
 				@return T, the squared distance
 		*/
 		T getSquareDistance(const TVector4& vector) const;
@@ -300,7 +299,7 @@ namespace BALL
 		bool operator == (const TVector4& vector) const;
 
 		/**	Inequality operator.
-				@return bool, {\bf true} if the two vectors differ in at least on component, {\bf false} otherwise
+				@return bool, {\bf true} if the two vectors differ in at least one component, {\bf false} otherwise
 		*/
 		bool operator != (const TVector4& vector) const;
 
@@ -313,7 +312,7 @@ namespace BALL
 		*/
 		//@{
 		/**	Test if instance is valid.
-				always retruns true
+				Always returns true
 				@return bool {\bf true}
 		*/
 		bool isValid() const;

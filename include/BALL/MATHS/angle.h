@@ -1,4 +1,4 @@
-// $Id: angle.h,v 1.19 2000/03/28 15:24:50 oliver Exp $
+// $Id: angle.h,v 1.20 2000/04/03 21:21:57 amoll Exp $
 
 #ifndef BALL_MATHS_ANGLE_H
 #define BALL_MATHS_ANGLE_H
@@ -38,7 +38,7 @@ namespace BALL
 	/**	Generic Angle Class.
 			Use this class to describe angles. The TAngle class permits the conversion
 			from degree to radians and is a return type for all functions used to calculate
-			Angles.\\
+			angles.\\
 			{\bf Definition:} \URL{BALL/MATHS/angle.h}
 			\\
 	*/
@@ -79,7 +79,7 @@ namespace BALL
 		TAngle();
 
 		/**	Copy constructor.
-				Create a copy of an TAngle object. Copies are always
+				Create a copy of a TAngle object. Copies are always
 				shallow.
 				@param	angle the object to be copied
 		*/
@@ -131,7 +131,7 @@ namespace BALL
 
 		/**	Assignment operator for floats.
 				Assign a float value to the angle.
-				the assigned value has to be in radians!
+				The assigned value has to be in radians!
 				@param	new_value the new value
 		*/
 		const TAngle& operator = (const T& new_value);
@@ -213,13 +213,13 @@ namespace BALL
 		*/
 		TAngle& operator += (const T& val);
 
-		/**	Add this angle to another and return the result.
+		/**	Add this angle to an other and return the result.
 				@param angle the angle to add
 				@return TAngle, the new angle
 		*/
 		TAngle operator +	(const TAngle& angle);
 
-		/**	Substract a angle from this angle.
+		/**	Substract an angle from this angle.
 				@param angle the angle to substract
 				@return TAngle, {\tt *this}
 		*/
@@ -294,37 +294,37 @@ namespace BALL
 
 		/**	Is less operator.
 				@param angle the angle to compare with
-				@return bool -
+				@return bool
 		*/
 		bool operator <	(const TAngle& angle) const;
 
 		/**	Is less operator.
 				@param val the value to compare with
-				@return bool -
+				@return bool
 		*/
 		bool operator <	(const T& val) const;
 
 		/**	Is less or equal operator.
 				@param angle the angle to compare with
-				@return bool -
+				@return bool
 		*/
 		bool operator <= (const TAngle& angle) const;
 
 		/**	Is greater or equal operator.
 				@param angle the angle to compare with
-				@return bool -
+				@return bool
 		*/
 		bool operator >=	(const TAngle& angle) const;
 
 		/**	Is greater operator.
 				@param angle the angle to compare with
-				@return bool -
+				@return bool
 		*/
 		bool operator > (const TAngle& angle) const;
 
 		/**	Test if an angle ist equivalent
 				@param angle the angle to compare with
-				@return bool -
+				@return bool
 		*/
 		bool isEquivalent(TAngle angle) const;
 		//@}
@@ -335,7 +335,7 @@ namespace BALL
 		//@{
 
 		/**	Test if instance is valid.
-				always retruns true
+				Always returns true
 				@return bool {\bf true}
 		*/
 		bool isValid () const;

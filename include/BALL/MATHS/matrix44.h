@@ -1,4 +1,4 @@
-// $Id: matrix44.h,v 1.23 2000/03/19 23:46:13 amoll Exp $
+// $Id: matrix44.h,v 1.24 2000/04/03 21:21:58 amoll Exp $
 
 #ifndef BALL_MATHS_MATRIX44_H
 #define BALL_MATHS_MATRIX44_H
@@ -83,7 +83,7 @@ namespace BALL
 		TMatrix4x4(const T ptr[4][4]);
 
 		/**	Copy constructor.
-				Create a new TMatrix4x4 object from another.
+				Create a new TMatrix4x4 object from an other.
 				@param TMatrix4x4 the TMatrix4x4 object to be copied
 				@param bool ignored - just for interface consistency
 		*/	
@@ -103,7 +103,7 @@ namespace BALL
 
 		/**	Detailled constructor.
 				Create a new TMatrix4x4 object from sixteen {\tt T} values.
-				@param m11 - m14 assigned to the components
+				@param m11 - {\tt m14} assigned to the components
 		*/
 		TMatrix4x4
 			(const T& m11, const T& m12, const T& m13, const T& m14, 
@@ -132,13 +132,13 @@ namespace BALL
 		void set( const T* ptr);
 
 		/**	Assign from the first sixteen elements
-				pointed to by the array assigned by{\tt ptr}.
+				pointed to by the array assigned by {\tt ptr}.
 				@param ptr the array to construct from
 				@exception NullPointer if {\tt ptr == 0}
 		*/
 		void set(const T ptr[4][4]);
 
-		/**	Assign from another TMatrix4x4.
+		/**	Assign from an other TMatrix4x4.
 				@param TMatrix4x4	the TMatrix4x4 object to assign from
 		*/
 		void set(const TMatrix4x4& m);
@@ -155,7 +155,7 @@ namespace BALL
 			 const TVector4<T>& col3, const TVector4<T>& col4);
 
 		/**	Assign from sixteen {\tt T} values.
-				@param m11 - m14 assigned to the components
+				@param m11 - {\tt m14} assigned to the components
 		*/
 		void set
 			(const T& m11, const T& m12, const T& m13, const T& m14, 
@@ -164,25 +164,25 @@ namespace BALL
 			 const T& m41, const T& m42, const T& m43, const T& m44);
 
 		/**	Assignment operator.
-				Assign the components from an array assigned by{\tt ptr}.
+				Assign the components from an array assigned by {\tt ptr}.
 				@param ptr the array to construct from
 		**/
 		TMatrix4x4& operator = ( const T* ptr);
 
 		/**	Assignment operator.
-				Assign the components from an array assigned by{\tt ptr}.
+				Assign the components from an array assigned by {\tt ptr}.
 				@param ptr the array to construct from
 		**/
 		TMatrix4x4& operator = (const T ptr[4][4]);
 
 		/**	Assignment operator.
-				Assign the components from another TMatrix4x4.
+				Assign the components from an other TMatrix4x4.
 				@param TMatrix4x4 the TMatrix4x4 to assign from
 		**/
 		TMatrix4x4& operator = (const TMatrix4x4& m);
 
 		/**	Assign to an array.
-				Assigns the components to an pointer of an array of sixteen {\tt T} values.
+				Assigns the components to a pointer of an array of sixteen {\tt T} values.
 				@exception NullPointer if {\tt ptr == 0}
 				@param ptr the pointer to assign to
 		*/
@@ -195,8 +195,8 @@ namespace BALL
 		*/
 		void get(T ptr[4][4]) const;
 
-		/**	Assign to another TMatrix4x4.
-				Assigns the components to another TMatrix4x4.
+		/**	Assign to an other TMatrix4x4.
+				Assigns the components to an other TMatrix4x4.
 				@param TMatrix4x4	the TMatrix4x4 to be asigned to
 		*/
 		void get(TMatrix4x4& m) const;
@@ -212,7 +212,7 @@ namespace BALL
 			 TVector4<T>& col3, TVector4<T>& col4) const;
 
 		/**	Assign to sixteen variables of type {\tt T}.
-				@param m11 - m44 the variables to assign to
+				@param m11 - {\tt m44} the variables to assign to
 		*/
 		void get
 			(T& m11, T& m12, T& m13, T& m14, 
@@ -241,7 +241,7 @@ namespace BALL
 
 		static const TMatrix4x4& getIdentity();
 
-		/** Set the TMatrix4x4 to a identity matrix
+		/** Set the TMatrix4x4 to an identity matrix
 				m11, m22, m33, m44 = 1;
 				the other cells have the value 0;
 		*/
@@ -252,7 +252,7 @@ namespace BALL
 		*/
 		void fill(const T& t = (T)1);
 
-		/** Mirror the Matrix at the diagonal
+		/** Mirror the Matrix at the diagonal.
 				All values are swaped by the mirrored value.
 				(m12 <=> m21 , m13 <=> m31 , ...)
 		*/
@@ -294,7 +294,7 @@ namespace BALL
 
 		/** Test if two matrices are equal,
 				@param m the matrix to compare with
-				@param max_diff the allowed maximum between two values
+				@param max_diff the allowed maximum difference between two values
 				@return bool, {\bf true} if all components are equal, {\bf false} otherwise
 		*/
 		bool isEqual(const TMatrix4x4& m, const T max_diff = (T)Constants::EPSILON) const;
@@ -331,8 +331,8 @@ namespace BALL
 		*/
 		TMatrix4x4 operator - () const;
 
-		/** Addition operator
-				Adds an other matrix to this matrix and return the result
+		/** Addition operator,
+				adds an other matrix to this matrix and return the result
 				@param m the matrix to add
 				@return TMatrix4x4 the result
 		*/
@@ -345,8 +345,8 @@ namespace BALL
 		*/
 		TMatrix4x4& operator += (const TMatrix4x4& m);
 
-		/** Subtraction operator
-				Subtract an other matrix from this matrix and return the result
+		/** Subtraction operator,
+				subtract an other matrix from this matrix and return the result
 				@param m the matrix to subtract
 				@return TMatrix4x4 the result
 		*/
@@ -391,22 +391,24 @@ namespace BALL
 		*/
 		TMatrix4x4& operator *= (const TMatrix4x4& m);
 
-		/// BAUSTELLE ???
+		/**	Multiply operator with a TVector4
+				@return TMatrix4x4&, {\tt *this}
+		*/
 		TVector4<T> operator * (const TVector4<T> &) const;
 
-		/**	Invert the matrix
+		/**	Invert the matrix.
 				Tests if the matrix can be inverted.
 				If this is possible, the result is returned in 
 				an other matrix.
 				@param inverse is assigned the inverse matrix 
-				@return bool if the inverse matrix could be calculated, otherwise false.
+				@return bool true if the inverse matrix could be calculated, otherwise false.
 		*/
 		bool invert(TMatrix4x4& inverse) const;
 
-		/**	Invert the matrix
+		/**	Invert the matrix.
 				Tests if the matrix can be inverted.
 				If this is possible, the result is stored in the matrix.
-				@return bool if the inverse matrix could be calculated, otherwise false.
+				@return bool true if the inverse matrix could be calculated, otherwise false.
 		*/
 		bool invert();
 
@@ -456,19 +458,19 @@ namespace BALL
 		*/
 		void scale(const TVector3<T>& v);
 
-		/**	Set the matrix to a translation matrix.
+		/**	Set the matrix to a scalation matrix.
 				@param x_scale the x scale factor
 				@param y_scale the y scale factor
 				@param z_scale the z scale factor
 		*/
 		void setScale(const T& x_scale, const T& y_scale, const T& z_scale);
 
-		/**	Set the matrix to a translation matrix.
+		/**	Set the matrix to a scalation matrix.
 				@param scale the scale factor
 		*/
 		void setScale(const T& scale);
 
-		/**	Set the matrix to a translation matrix.
+		/**	Set the matrix to a scalation matrix.
 				@param v the vector with the scale factor
 		*/
 		void setScale(const TVector3<T>& v);
@@ -523,7 +525,7 @@ namespace BALL
 		*/
 		void rotate(const Angle& phi, const TVector4<T>& axis);
 
-		/**	Set the matrix to a rotation matrix around a given matrix.
+		/**	Set the matrix to a rotation matrix.
 				@param phi the rotation angle
 				@param axis_x the x component of the axis
 				@param axis_y the y component of the axis
@@ -531,13 +533,13 @@ namespace BALL
 		*/
 		void setRotation(const Angle& phi, const T& axis_x, const T& axis_y, const T& axis_z); 
 
-		/**	Set the matrix to a rotation matrix around a given matrix.
+		/**	Set the matrix to a rotation matrix.
 				@param phi the rotation angle
 				@param axis the axis vector
 		*/
 		void setRotation(const Angle& phi, const TVector3<T>& axis);
 
-		/**	Set the matrix to a rotation matrix around a given matrix.
+		/**	Set the matrix to a rotation matrix.
 				@param phi the rotation angle
 				@param axis the axis vector, the fourth component of the vector is ignored
 		*/
@@ -559,7 +561,7 @@ namespace BALL
 		*/
 		bool operator != (const TMatrix4x4& m) const;
 
-		/** Test if this matrix is a identity matrix
+		/** Test if this matrix is an identity matrix
 				(m11, m22, m33, m44 = 1 and
 				the other cells have the value 0;)
 				@return bool, {\bf true} if identity matrix, {\bf false} otherwise
@@ -603,7 +605,7 @@ namespace BALL
 		//@{
 
 		/**	Test if instance is valid.
-				always retruns true
+				Always returns true
 				@return bool {\bf true}
 		*/
 		bool isValid() const;

@@ -1,4 +1,4 @@
-// $Id: box3.h,v 1.12 2000/03/28 15:24:50 oliver Exp $
+// $Id: box3.h,v 1.13 2000/04/03 21:21:58 amoll Exp $
 
 #ifndef BALL_MATHS_BOX3_H
 #define BALL_MATHS_BOX3_H
@@ -14,7 +14,7 @@
 namespace BALL 
 {
 
-	/**	Generic Three-dimensional Box.
+	/**	Generic three-dimensional Box.
 			This class describes a three-dimensional box with edges parallel
 			to the coordinate system. Hence, a box is given by the coordinates of the lower
 			left front corner and ther upper right back corner.\\
@@ -39,7 +39,7 @@ namespace BALL
 		TBox3();
 
 		/**	Copy constructor.
-				Create a new TBox3 object from another.
+				Create a new TBox3 object from an other.
 				@param vector the TBox3 object to be copied
 		*/	
 		TBox3(const TBox3& box);
@@ -77,7 +77,7 @@ namespace BALL
 		*/
 		//@{
 
-		/**	Assign from another TBox3.
+		/**	Assign from an other TBox3.
 				@param vector	the TBox3 object to assign from
 		*/
 		void set(const TBox3& box);
@@ -101,13 +101,13 @@ namespace BALL
 			 const T& bx, const T& by, const T& bz);
 
 		/**	Assignment operator.
-				Assign the box components from another TBox3.
+				Assign the box components from an other TBox3.
 				@param box the TBox3 to assign from
 		**/
 		TBox3& operator = (const TBox3& box);
 
-		/**	Assign to another TBox3.
-				Assigns the box components to another box.
+		/**	Assign to an other TBox3.
+				Assigns the box components to an other box.
 				@param box	the box to be asigned to
 		*/
 		void get(TBox3& box) const;
@@ -153,7 +153,7 @@ namespace BALL
 		*/
 		T getWidth() const;
 	
-		/**	Return the geight of the box.
+		/**	Return the height of the box.
 				@return T the height
 		*/
 		T getHeight() const;
@@ -176,7 +176,7 @@ namespace BALL
 		//@{
 
 		/**	Equality operator.
-				@return bool, {\bf true} if all two box components are equal, {\bf false} otherwise
+				@return bool, {\bf true} if all box components are equal, {\bf false} otherwise
 		*/
 		bool operator == (const TBox3& box) const;
 
@@ -191,7 +191,7 @@ namespace BALL
 		//@{
 
 		/**	Test if instance is valid.
-				always retruns true
+				Always returns true
 				@return bool {\bf true}
 		*/
 		bool isValid() const;

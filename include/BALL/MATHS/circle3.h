@@ -1,4 +1,4 @@
-// $Id: circle3.h,v 1.13 2000/03/30 09:34:49 oliver Exp $
+// $Id: circle3.h,v 1.14 2000/04/03 21:21:58 amoll Exp $
 
 #ifndef BALL_MATHS_CIRCLE3_H
 #define BALL_MATHS_CIRCLE3_H
@@ -63,7 +63,7 @@ namespace BALL
 		}
 
 		/**	Copy constructor.
-				Create a new TCircle3 object from another.
+				Create a new TCircle3 object from an other.
 				@param vector the TCircle3 object to be copied
 		*/	
 		TCircle3(const TCircle3& circle)
@@ -118,7 +118,7 @@ namespace BALL
 			circle.radius = temp;
 		}
 
-		/**	Assign from another TCircle3.
+		/**	Assign from an other TCircle3.
 				@param vector	the TCirce3 object to assign from
 		*/
 		void set(const TCircle3& circle)
@@ -131,7 +131,7 @@ namespace BALL
 		/**	Assign the circle components.
 				@param	point assigned to the point 
 				@param	normal assigned to the normal
-				@param	rad assigned tp the radius
+				@param	rad assigned to the radius
 		*/
 		void set(const TVector3<T>& point, const TVector3<T>& normal, const T& rad)
 		{
@@ -141,7 +141,7 @@ namespace BALL
 		}
 
 		/**	Assignment operator.
-				Assign the components from another circle.
+				Assign the components from an other circle.
 				@param circle the circle to assign from
 		**/
 		TCircle3& operator = (const TCircle3& circle)
@@ -153,8 +153,8 @@ namespace BALL
 			return *this;
 		}
 
-		/**	Assign to another TCircle3.
-				Assigns the components to another circle.
+		/**	Assign to an other TCircle3.
+				Assigns the components to an other circle.
 				@param circle	the circle to be asigned to
 		*/
 		void get(TCircle3& circle) const
@@ -201,7 +201,7 @@ namespace BALL
 		/**	Test if a given point is a member of the circle.
 				Optional it can be testet, if it is a member of the surface.
 				@param point the point to be tested
-				@param on_surface = true, to test the surface (default = false)
+				@param on_surface true to test the surface (default = false)
 				@return bool, {\bf true} or {\bf false}
 		*/
 		bool has(const TVector3<T>& point, bool on_surface = false) const
@@ -223,7 +223,7 @@ namespace BALL
 		//@{
 
 		/**	Test if instance is valid.
-				always retruns true
+				Always returns true
 				@return bool {\bf true}
 		*/
 		bool isValid() const
