@@ -1,4 +1,4 @@
-// $Id: snapShotManager.C,v 1.2 2001/03/11 23:16:37 amoll Exp $
+// $Id: snapShotManager.C,v 1.3 2001/03/21 18:15:34 anker Exp $
 
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/MOLMEC/COMMON/snapShotManager.h>
@@ -426,10 +426,95 @@ namespace BALL
 	}	// end of SnapShotManager::takeSnapShot() 
 
 
-	void SnapShotManager::applySnapShot(const SnapShot& snapshot)
+	bool SnapShotManager::applySnapShot(Size number)
 		throw()
 	{
-		snapshot.applySnapShot(*system_ptr_);
+		SnapShot buffer;
+
+		if (number > trajectory_file_ptr_->getNumberOfSnapShots())
+		{
+			Log.error() << "SnapShotManager::applySnapShot(): "
+				<< "requested SnapShot number " << number 
+				<< " while the file only contains " 
+				<< trajectory_file_ptr_->getNumberOfSnapShots() 
+				<< " SnapShots" << endl;
+			return false;
+		}
+
+		// We have to avoid seek() so we need to reopen and read from the
+		// beginning
+		trajectory_file_ptr_->reopen();
+		for  (Size count = 0; count < number; ++count)
+		{
+			if (!trajectory_file_ptr_->read(buffer))
+			{
+				Log.error() << "SnapShotManager::applySnapShot(): "
+					<< "error reading from the TrajectoryFile" << endl;
+				return false;
+			}
+		}
+		// now apply the last snapshot we read
+		buffer.applySnapShot(*system_ptr_);
+		return true;
+	}
+
+
+	bool SnapShotManager::applyFirstSnapShot()
+		throw()
+	{
+		SnapShot buffer;
+
+		// BAUSTELLE:
+		// We should check for file validity here
+
+		trajectory_file_ptr_->reopen();
+		return applyNextSnapShot();
+	}
+
+
+	bool SnapShotManager::applyNextSnapShot()
+		throw()
+	{
+		SnapShot buffer;
+
+		if (trajectory_file_ptr_->read(buffer))
+		{
+			buffer.applySnapShot(*system_ptr_);
+			return true;
+		}
+		else
+		{
+			Log.error() << "SnapShotManager::applyNextSnapShot() "
+				<< "error reading from the TrajectoryFile" << endl;
+			return false;
+		}
+	}
+
+
+	bool SnapShotManager::applyLastSnapShot()
+		throw()
+	{
+		Size count = 0;
+		SnapShot buffer;
+
+		while (trajectory_file_ptr_->read(buffer))
+		{
+			count++;
+		}
+
+		if (count == trajectory_file_ptr_->getNumberOfSnapShots())
+		{
+			buffer.applySnapShot(*system_ptr_);
+		}
+		else
+		{
+			Log.error() << "SnapShotManager::applyLastSnapShot(): "
+				<< "read " << count 
+				<< " SnapShots while TrajectoryFile claims to have "
+				<< trajectory_file_ptr_->getNumberOfSnapShots()
+				<< " SnapShots" << endl;
+			return false;
+		}
 	}
 
 
