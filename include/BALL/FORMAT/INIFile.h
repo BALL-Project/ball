@@ -1,4 +1,4 @@
-// $Id: INIFile.h,v 1.24 2001/08/19 09:40:33 amoll Exp $
+// $Id: INIFile.h,v 1.25 2001/08/21 01:24:17 oliver Exp $
 
 #ifndef BALL_FORMAT_INIFILE_H
 #define BALL_FORMAT_INIFILE_H
@@ -129,7 +129,7 @@ namespace BALL
 				return section_;
 			}
 		
-			const String& operator *() const
+			const String& operator * () const
 			{
 				return *position_;
 			}
