@@ -1,10 +1,14 @@
-// $Id: functor.doc,v 1.3 2001/05/13 14:55:24 hekl Exp $
+// $Id: functor.doc,v 1.4 2003/02/25 10:33:04 anhi Exp $
 
-//@Include: glAtomBondModelConnector.h
-//@Include: glBackboneModel.h
-//@Include: glBallAndStickModel.h
-//@Include: glLineModel.h
-//@Include: glSurfaceModel.h
-//@Include: glVanDerWaalsModel.h
-//@Include: moleculeGLObjectCollector.h
+/** \defgroup MolviewGuiFunctor Functor classes
+		\ingroup MolviewGui
+	  This section contains functors that make use of OpenGL implementation 
+	 	used for creating, collecting	and complementing models.
+		These functors are the extension of the functors in the
+		<tt>FUNCTOR</tt> section.
+	  See the documentation of BALL for information about the concept
+	  of processors, and visitors.
+	  @see  Processor
+	  @see  Visitor
+*/
 

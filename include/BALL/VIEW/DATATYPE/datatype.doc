@@ -1,31 +1,27 @@
-// $Id: datatype.doc,v 1.5 2003/01/07 14:38:55 amoll Exp $
+// $Id: datatype.doc,v 1.6 2003/02/25 10:33:17 anhi Exp $
 
-/**     @name Different color classes.
-							There are the two different color classes in VIEW.
-							The class ColorRGBA uses the RGBA parameter to define a
-							color. Because of the conversion class ColorUnit different
-							types of input parameter are possible.
-							The class ColorHSV uses the HSV parameter to define a
-							color. It uses the class ColorUnit for the {\em S} and {\em V} component.
-							These two components as all RGBA components are of range {\em 0 - 255}.
-							The {\em H} component however is of range {\em 0 - 360}. Therefore
-							the class ColorUnitHue is used for different types of input
-							parameter.
-*/
-//@{
-				//@Include: color.h 
-				//@Include: colorTable.h 
-				//@Include: colorRGBA.h
-				//@Include: colorHSV.h
-//@}
+/** \defgroup ViewDatatypes Datatypes for the VIEW framework
+		\ingroup View	
+		In this section the color datatypes and their help classes are defined.
+	*/
 
-/**     @name Format conversion classes used by the color classes.
-							These two classes are used by ColorRGBA and ColorHSV.
-							They allow them to use different types of input parameters 
-							like integers, floats or even strings (numbers in hex format).
-*/
-//@{
-				//@Include: colorUnit.h
-				//@Include: colorUnitHue.h
-//@}
+/**     \defgroup ViewDatatypeColors Different color classes
+				\ingroup ViewDatatypes
+				There are the two different color classes in VIEW.
+				The class ColorRGBA uses the RGBA parameter to define a
+				color. Because of the conversion class ColorUnit different
+				types of input parameter are possible.
+				The class ColorHSV uses the HSV parameter to define a
+				color. It uses the class ColorUnit for the <it>S</it> and <it>V</it> component.
+				These two components as all RGBA components are of range <it>0 - 255</it>.
+				The <it>H</it> component however is of range <it>0 - 360</it>. Therefore
+				the class ColorUnitHue is used for different types of input
+				parameter.
+ */
 
+/**     \defgroup ViewDatatypeFormat Format conversion classes used by the color classes
+				\ingroup ViewDatatypes
+				These two classes are used by ColorRGBA and ColorHSV.
+				They allow them to use different types of input parameters 
+				like integers, floats or even strings (numbers in hex format).
+ */

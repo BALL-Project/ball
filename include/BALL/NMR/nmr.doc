@@ -1,39 +1,19 @@
-// $Id: nmr.doc,v 1.8 2001/06/14 11:45:23 oliver Exp $
+// $Id: nmr.doc,v 1.9 2003/02/25 10:33:09 anhi Exp $
 
-/**@name	Nuclear Magnetic Resonance Spectroscopy
+/** \defgroup NMR	Nuclear Magnetic Resonance Spectroscopy
+		\ingroup Modeling
 		This chapter contains all relevant information on 
 		BALL classes related to the prediction of NMR shifts.
 */
-//@{
 
-	/**	@name	Shift model classes
+	/**	\defgroup ShiftModel	Shift model classes
+	* 	\ingroup NMR
 	*/
-	//@{
-		//@Include: shiftModule.h
-		//@Include:	shiftModel.h
-	//@}
 
-	/**	@name NMR spectra and related classes
+	/**	\defgroup Spectra NMR spectra and related classes
+	* 	\ingroup NMR
 	*/
-	//@{
-		//@Include: spectrum.h
-		//@Include: assignShiftProcessor.h
-		//@Include: createSpectrumProcessor.h
-		//@Include:	peak.h
-		//@Include:	peakList.h
-    //@Include: experiment.h
-	//@}
 
-	/**@name	NMR shift modules
+	/** \defgroup ShiftModulesNMR Shift modules
+	* 	\ingroup NMR
 	*/
-	//@{
-		//@Include: johnsonBoveyShiftProcessor.h
-		//@Include: clearShiftProcessor.h
-		//@Include: haighMallionShiftProcessor.h
-		//@Include: EFShiftProcessor.h
-		//@Include: anisotropyShiftProcessor.h
-		//@Include:	randomCoilShiftProcessor.h
-    //@Include: HBondShiftProcessor.h
-	//@}
-
-//@}

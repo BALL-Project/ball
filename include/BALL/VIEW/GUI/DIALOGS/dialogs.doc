@@ -1,7 +1,6 @@
-// $Id: dialogs.doc,v 1.4 2002/12/22 14:01:56 sturm Exp $
+// $Id: dialogs.doc,v 1.5 2003/02/25 10:33:21 anhi Exp $
 
-//@Include: fileDialog.h
-//@Include: preferences.h
-//@Include: colorMeshDialog.h 
-//@Include: dlgMoveOverlay.h 
-//@Include: dlgMoveOverlayData.h 
+/** \defgroup ViewGuiDialogs Dialog classes
+		\ingroup ViewGui
+		This section contains some dialogs.
+ */

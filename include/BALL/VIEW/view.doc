@@ -1,41 +1,42 @@
-// $Id: view.doc,v 1.11 2003/01/07 14:35:38 amoll Exp $
+// $Id: view.doc,v 1.12 2003/02/25 10:33:15 anhi Exp $
 
-/**@name VIEW
+/**	\defgroup View VIEW
+		\ingroup Visualization
          VIEW is a framework for the implementation of GUI based visualizations.
          The GUI toolkit used in this framework is QT because it provides a portable GUI framework
          in C++ and allows the use of the OpenGL library for 3D rendering.
-         View defines several important basic data structures:\\
-         \begin{itemize}
-           \item Geometric primitives: like sphere, tube, point, etc. and base classes for easy creation of such primitives
-           \item Classes to access the OpenGL library for building and handling the display lists required for rendering the visualization
-           \item Widgets that can be used for building an application
-         \end{itemize}
+         View defines several important basic data structures:<br>
+           - Geometric primitives: like sphere, tube, point, etc. and base classes for easy creation of such primitives
+           - Classes to access the OpenGL library for building and handling the display lists required for rendering the visualization
+           - Widgets that can be used for building an application
          There are some geometric primitives already defined but with the help of the classes
-         described in the section \Ref{Kernel classes.} there can be easily created more primitives.
+         described in the section \link Kernel Kernel \endlink classes. There can be easily created more primitives.
          The most important classes are the widgets classes for they are needed for creating an
          application.
-         First, the class \Ref{MainControl} is the most important widget for building an application.
-         The \Ref{MainControl} is the main window of the application. It provides a menu bar and 
+         First, the class \link MainControl MainControl \endlink is the most important widget for building an application.
+         The \link MainControl MainControl \endlink is the main window of the application. It provides a menu bar and 
          a status bar that can be initialized and changed by its child widgets. Those child widgets must be derived
-         from \Ref{ModularWidget} that provides interface methods to create, maintain and remove
+         from \link ModularWidget ModularWidget \endlink that provides interface methods to create, maintain and remove
          menu entries and preferences tab dialogs. Further the modular widget does all the connectivity
-         needed to insert the widget properly into the \Ref{MainControl} (like setup the menu entries, fetch the preferences
+         needed to insert the widget properly into the \link MainControl MainControl \endlink (like setup the menu entries, fetch the preferences
          and handle the signal/slot mechanism of the underlying QT-widgets).
-         To insert such a widget derived from \Ref{ModularWidget} just create it with \Ref{MainControl} as parent. 
+         To insert such a widget derived from \link ModularWidget ModularWidget \endlink just create it with \link MainControl MainControl \endlink as parent. 
          Each modular widget is a component that can be used to build an application block for block.
-         They use a \Ref{Message} communication queue which is maintained by the class \Ref{MainControl} that
+         They use a \link Message Message \endlink communication queue which is maintained by the class \link MainControl MainControl \endlink that
          relays all catched messages to all other inserted modular widgets except the one which had
          originally sent the message.
-         With these messages it is possible for the widgets to notify the \Ref{MainControl} of changes done to the
+         With these messages it is possible for the widgets to notify the \link MainControl MainControl \endlink of changes done to the
          graphical representation of certain objects or to change the contents of the status bar
          or even notify of objects no longer available.
-         The forth class we introduce is the class \Ref{Scene} that provides the three-dimensional
-         interactive visualization of the above mentioned \Ref{GeometricObject} objects.
+         The forth class we introduce is the class \link Scene Scene \endlink that provides the three-dimensional
+         interactive visualization of the above mentioned \link GeometricObject GeometricObject \endlink objects.
          With this class it is possible to rotate, translate, zoom or pick objects by mouse click.
-         Another important class is the class \Ref{Control}. With the help of this class the
-         hierarchical structure of the visualized objects can be displayed and manipulated.\\ \\ \\ \\
-         The following code is an example for building an application (the includes have been omitted):\\
-         \begin{verbatim}
+         Another important class is the class \link Control Control \endlink. With the help of this class the
+         hierarchical structure of the visualized objects can be displayed and manipulated.
+				 <br> <br> <br>
+         The following code is an example for building an application (the includes have been omitted):
+				 <br>
+         \code
          int main(int argc, char **argv)
          {
            // creating mainframe and application
@@ -58,71 +59,15 @@
            main.show();
            return app.exec();
          }
-         \end{verbatim}      
-         {\bf Note:} This application only demonstrates how to build an application.
-         It opens a main window with both the \Ref{Control} and \Ref{Scene} but as there are
+         \endcode
+         <b>Note</b> This application only demonstrates how to build an application.
+         It opens a main window with both the \link Control Control \endlink and \link Scene Scene \endlink but as there are
          no means by which any geometric object can be added no objects will be shown in either
-         the \Ref{Control} and the \Ref{Scene} widget.
-         In the section \Ref{MOLVIEW.} there is an example application that extends this example by using
-         several more widgets to allow loading of \Ref{System} objects, changing the
-         visualization of the inserted objects and manipulating those objects.\\ \\
+         the \link Control Control \endlink and the \link Scene Scene \endlink widget.
+         In the section \link MOLVIEW MOLVIEW \endlink there is an example application that extends this example by using
+         several more widgets to allow loading of \link System System \endlink objects, changing the
+         visualization of the inserted objects and manipulating those objects.
+				 <br> <br>
          For more information about QT widgets and application programming see
          the documentation of the QT-library.
 */
-//@{
-	/** @name Common data
-            Some overall used data and data structures are defined in this section.
-  */
-	//@{
-		//@Include: COMMON/common.doc
-	//@}
-
-	/** @name Used datatypes
- 	          In this section the color datatypes and their help classes are defined.
-	*/
-	//@{
-		//@Include: DATATYPE/datatype.doc
-	//@}
-
-	/** @name Functoren
- 	          In this section some usefull visitors and processors are defined.
-	*/
-	//@{
-		//@Include: FUNCTOR/functor.doc
-	//@}
-
-	/** @name Gui classes
-	          Description on the render engine and the handling of composites
-	          can be obtained here. Further predefined openGL primitives (an
-            extension of the primitives in the Kernel section) are located
-            in this directory.
-            There are some dialogs and widgets (like the scene) that are
-            an important part of the View component described in this section.
-	*/
-	//@{
-		//@Include: GUI/gui.doc
-	//@}
-
-	/** @name Kernel classes
-            This section contains classes that are responsible for
-	          building geometric primitives, handling client requests
-	          and building a connection with message queuing between
-	          widgets and dialogs.
-	*/
-	//@{
-		//@Include: KERNEL/kernel.doc
-	//@}
-
-	/** @name Predefined primitives (without graphical representation)
-            In this section some predefined primitives can be found.
-            They represent the primitives only in the sense of geometric 
-	          properties. The graphical visualization implementation is
-            moved to the GUI/PRIMITIV section. In that section the primitives
-            of this section are extended with the implementation of the
-	          graphical visualization of their geometric properties.
-	*/
-	//@{
-		//@Include: PRIMITIV/primitiv.doc
-	//@}
-
-//@}

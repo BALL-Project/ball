@@ -1,24 +1,12 @@
 // $Id
 
-/**@name	Energy evaluation (non-MM)
+/** \defgroup	Energy Energy evaluation (non-MM)
+		\ingroup Modeling
 		This chapter contains all relevant information on 
 		methods to calculate the energy of molecular systems that
 		are not strictly related to molecular mechanics.
 */
-//@{
 
-	
-	//@Include: atomicContactEnergy.h
-  //@Include: composedEnergyProcessor.h	
-  //@Include: energyProcessor.h
-
-	/**	@name	Electrostatic energy
+/**	\defgroup Electrostatic Electrostatic energy
+	* \ingroup Energy
 	*/
-	//@{
-
-		//@Include: coulomb.h
-		//@Include: distanceCoulomb.h
-
-	//@}
-
-//@}

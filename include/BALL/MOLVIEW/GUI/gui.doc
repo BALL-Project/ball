@@ -1,43 +1,11 @@
-// $Id: gui.doc,v 1.4 2002/12/12 09:48:49 oliver Exp $
+// $Id: gui.doc,v 1.5 2003/02/25 10:33:02 anhi Exp $
 
-/** @name Functor classes.
-	  This section contains functors that make use of OpenGL implementation 
-	 	used for creating, collecting	and complementing models.
-		These functors are the extension of the functors in the
-		{\tt FUNCTOR} section.
-	  See the documentation of BALL for information about the concept
-	  of processors, and visitors.
-	  @see  Processor
-	  @see  Visitor
+/** \defgroup MolviewGui Gui classes
+		\ingroup Molview
+		Description on the render engine and the handling of composites
+		can be obtained here. Further predefined openGL primitives (an
+		extension of the primitives in the above section) are located
+		in this directory.
+		There are some dialogs and widgets (like the molecularControl) that are
+		an important part of the MolView component described in this section.
 */
-//@{
-	//@Include: FUNCTOR/functor.doc
-//@}
-
-/** @name Dialog classes.
-					This section contains some useful dialogs used in the demo
-					application {\tt MOLVIEW}.
-*/
-//@{
-	//@Include: DIALOGS/dialogs.doc
-//@}
-
-/**@name	Widget classes.
-          This section contains some predefined widgets that are used
-          in the MOLVIEW application.
-*/
-//@{
-	//@Include: WIDGETS/widgets.doc
-//@}
-
-/**@name	Predefined primitives with graphical representation.
-	        These classes are the extension of the primitives in the
-          PRIMITIV section. These classes do not have any additional
-          geometric properties but only the implementation of their graphical
-					representation.
-          For information concerning the geometric properties see the definition
-          of the primitives in the PRIMITIV section.
-*/
-//@{
-	//@Include: PRIMITIV/primitiv.doc
-//@}

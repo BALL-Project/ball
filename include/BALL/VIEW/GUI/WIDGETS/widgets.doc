@@ -1,11 +1,9 @@
-// $Id: widgets.doc,v 1.5 2001/12/31 00:30:54 oliver Exp $
+// $Id: widgets.doc,v 1.6 2003/02/25 10:33:25 anhi Exp $
 
-//@Include: control.h
-//@Include: events.h
-//@Include: mainControlPreferences.h
-//@Include: modularWidget.h
-//@Include: regularData1DWidget.h
-//@Include: regularData2DWidget.h
-//@Include: scene.h
-//@Include: serverPreferences.h
-//@Include: pyWidget.h
+/** \defgroup ViewGuiWidgets	Widget classes
+		\ingroup ViewGui
+		This section contains some predefined widgets that can be used
+		in an application, some preference widgets that are used by other
+		objects and the class modularWidget that is a base class for user
+		defined widgets.
+ */

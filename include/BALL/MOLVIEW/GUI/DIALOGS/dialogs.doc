@@ -1,9 +1,7 @@
-// $Id: dialogs.doc,v 1.6 2002/12/12 09:48:49 oliver Exp $
+// $Id: dialogs.doc,v 1.7 2003/02/25 10:33:03 anhi Exp $
 
-//@Include: displayProperties.h
-//@Include: labelProperties.h
-//@Include: openBruker1DFile.h
-//@Include: openBruker2DFile.h
-//@Include: molecularFileDialog.h
-//@Include: atomProperties.h
-//@Include: contourSurfaceDialog.h
+/** \defgroup MolviewDialogs Dialog classes
+		\ingroup MolviewGui
+		This section contains some useful dialogs used in the demo
+		application <tt>MOLVIEW</tt>.
+*/

@@ -1,6 +1,6 @@
-// $Id: functor.doc,v 1.3 2002/12/22 14:01:55 sturm Exp $
+// $Id: functor.doc,v 1.4 2003/02/25 10:33:19 anhi Exp $
 
-//@Include: filter.h
-//@Include: geometricCollector.h
-//@Include: information.h
-
+/** \defgroup ViewFunctors Functors
+		\ingroup View
+		In this section some useful visitors and processors are defined.
+*/

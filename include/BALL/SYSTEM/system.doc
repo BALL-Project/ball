@@ -1,17 +1,7 @@
-// $Id: system.doc,v 1.5 2001/09/09 23:51:29 amoll Exp $
+// $Id: system.doc,v 1.6 2003/02/25 10:33:11 anhi Exp $
 
-/**@name	Operating system support
-		This chapter contains all relevant information on 
-		support for operating system services provided by BALL.
-*/
-//@{
-
-	//@Include: directory.h
-	//@Include: file.h
-	//@Include: fileSystem.h
-	//@Include: path.h
-	//@Include: socket.h
-	//@Include: timer.h
-	//@Include: TCPTransfer.h
-
-//@}
+/** \defgroup System Operating system support
+ * 	\ingroup Foundation 
+ *	 This chapter contains all relevant information on 
+ *	 support for operating system services provided by BALL.
+ */

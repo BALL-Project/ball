@@ -38,48 +38,14 @@
 
 
 /**	\defgroup Foundation Foundation Classes
-	
-	@{
 */
-
-		/// \file CONCEPT/concept.doc
-		/// \file DATATYPE/datatype.doc
-		/// \file MATHS/maths.doc
-		/// \file SYSTEM/system.doc
-/** @} */
-
-/** \defgroup Kernel Kernel Classes
-	
-	{@
-*/
-
-		/// \file KERNEL/kernel.doc
-/**	@} */
 		
 /**
 	\defgroup Modeling Molecular Modeling
-	
-	@{
 */
- 	 ///	\file ENERGY/energy.doc
-	 ///	\file FORMAT/format.doc
-	 ///	\file MOLMEC/molmec.doc
-	 ///	\file NMR/nmr.doc
-	 ///	\file SOLVATION/solvation.doc
-	 ///	\file STRUCTURE/structure.doc
-/**	@} */
 
 /**	\defgroup Visualization Visualization
-	
-	@{
 */
-		/// \file MOLVIEW/molview.doc
-		/// \file VIEW/view.doc
-/**	@} */
 
 /**	\defgroup Python Python
-	
-	@{
 */
-		///	\file PYTHON/python.doc
-/**	@} */

@@ -1,64 +1,25 @@
-// $Id: kernel.doc,v 1.15 2003/01/08 21:13:25 oliver Exp $
+// $Id: kernel.doc,v 1.16 2003/02/25 10:32:25 anhi Exp $
 
-/**@name	Kernel
+/** \defgroup Kernel Kernel Classes
+		\ingroup Foundation
 		This chapter contains all relevant information on BALL kernel datastructures. 
-		\\
+		<br>	
 		The hierarchy of the kernel classes looks like this: 
-		\\
-		\IMG{../../doc/images/KERNEL.gif}
+		<br>	
+		\image html KERNEL.png
+		\image latex KERNEL.eps "The Kernel Classes"
 */
-//@{
 
-  //@Include: atom.h
-  //@Include: bond.h
-  //@Include: chain.h
-  //@Include: fragment.h
-  //@Include: molecule.h
-	//@Include:	nucleicAcid.h
-	//@Include:	nucleotide.h
-  //@Include: PDBAtom.h
-  //@Include: protein.h
-  //@Include: residue.h
-  //@Include: secondaryStructure.h
-  //@Include: system.h
-
-	/** @name Iterator classes
+	/** \defgroup KernelIterators Iterator Classes
+			\ingroup Kernel
 			Iterators for KERNEL classes
 	*/
-	//@{
-  	//@Include: iterator.h
-		//@Include: atomIterator.h
-		//@Include: bondIterator.h
-		//@Include: chainIterator.h
-		//@Include: fragmentIterator.h
-		//@Include: moleculeIterator.h
-		//@Include: nucleicAcidIterator.h
-		//@Include: nucleotideIterator.h
-		//@Include: proteinIterator.h
-		//@Include: residueIterator.h
-		//@Include: secondaryStructureIterator.h
-	//@}
 
-	/**	@name Miscellaneous
+	/**	\defgroup Miscellaneous Miscellaneous
+			\ingroup Kernel
 			Further classes and functions related to the kernel classes
 	*/
-	//@{
-	  //@Include: atomContainer.h
-	  //@Include: atomContainerIterator.h
-		//@Include: PDBAtomIterator.h
-	  //@Include: global.h
-	  //@Include: forEach.h
-	  //@Include: PTE.h
-	//@}
 
-	/** @name Kernel Predicates
+	/** \defgroup Predicates Kernel Predicates
+	* 	\ingroup Kernel
 	*/
-	//@{
-		//@Include: expression.h
-  	//@Include: predicate.h
-		//@Include: expressionPredicate.h
-		//@Include:	selector.h
-		//@Include:	standardPredicates.h
-	//@}
-
-//@}

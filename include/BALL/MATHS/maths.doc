@@ -1,50 +1,23 @@
 // $Id
 
-/**@name	Mathematics
+/** \defgroup Mathematics Mathematics
+		\ingroup Foundation
 		This chapter contains all relevant information on 
 		mathematical classes provided by BALL.
 */
-//@{
 
-	//@Include: common.h
-	/**	@name	Primitive datatypes
+	/**	\defgroup Primitives Primitive datatypes
+	* 	\ingroup Mathematics	
 	*/
-	//@{
-		//@Include: angle.h
-		//@Include: vector2.h
-		//@Include: vector3.h
-		//@Include: vector4.h
-		//@Include: quaternion.h
-		//@Include: matrix44.h
-	//@}
-	/**	@name Geometric objects
+
+	/**	\defgroup GeometricObjects Geometric objects
+	*		\ingroup Mathematics 
 	*/
-	//@{
-		//@Include: line3.h
-		//@Include: box3.h
-		//@Include: circle3.h
-		//@Include: plane3.h
-		//@Include: sphere3.h
-		//@Include: surface.h
-	//@}
-	
-	//@Include: analyticalGeometry.h
 
-	/** @name Fast Fourier Transforms
+	/** \defgroup FFT Fast Fourier Transforms
+	 *  \ingroup Mathematics
 	 */
-	//@{
-		//@Include: FFT1D.h 
-		//@Include: FFT2D.h 
-	//@}
 
-	/** @name Function classes
+	/** \defgroup FunctionClasses Function classes
+	 * 	\ingroup Mathematics
 	 */
-	//@{
-		//@Include: function.h
-		//@Include: parsedFunction.h 
-		//@Include: numericalIntegrator.h
-		//@Include: rombergIntegrator.h
-		//@Include: piecewiseFunction.h
-		//@Include: piecewisePolynomial.h
-	//@}
-//@}

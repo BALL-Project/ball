@@ -1,49 +1,16 @@
-// $Id: structure.doc,v 1.10 2002/12/22 14:01:53 sturm Exp $
+// $Id: structure.doc,v 1.11 2003/02/25 10:33:13 anhi Exp $
 
-/**	@name	Molecular Structure
+/**	\defgroup Structure	Molecular Structure
+		\ingroup Modeling
 		This chapter contains all relevant information on 
 		BALL classes related to the exploration of molecular
 		structure and geometry.
 */
-//@{
-  //@Include: defaultProcessors.h
-  //@Include: geometricProperties.h
-  //@Include: geometricTransformations.h
-  //@Include: fragmentDB.h
-	//@Include: reconstructFragmentProcessor.h
-  //@Include: residueChecker.h
-	//@Include: smilesParser.h
-  //@Include: rotamerLibrary.h
-  //@Include: structureMapper.h
-	//@Include: molecularGraph.h
-	//@Include: peptides.h
 
-	/**	@name Radial Distribution Functions
+	/**	\defgroup RDF Radial Distribution Functions
+	* 	\ingroup Structure
 	*/
-	//@{
-		//@Include: radialDistributionFunction.h
-		//@Include: RDFIntegrator.h
-		//@Include: RDFParameter.h
-		//@Include: RDFSection.h
-	//@}
 
-	/**	@name	Molecular Surface Computation
+	/**	\defgroup Surface	Molecular Surface Computation
+	* 	\ingroup Structure
 	*/
-	//@{
-		//@Include: surfaceProcessor.h
-		//@Include: analyticalSES.h
-		//@Include: numericalSAS.h
-		//@Include: reducedSurface.h
-		//@Include: solventExcludedSurface.h
-		//@Include: solventAccessibleSurface.h 
-		//@Include: triangulatedSurface.h
-		//@Include: RSEdge.h
-		//@Include: RSFace.h
-		//@Include: RSVertex.h
-		//@Include: SESEdge.h
-		//@Include: SESFace.h
-		//@Include: SESVertex.h
-		//@Include: triangulatedSAS.h 
-		//@Include: triangulatedSES.h 
-	//@}
-//@}

@@ -1,23 +1,7 @@
-// $Id: solvation.doc,v 1.7 2002/12/22 14:01:53 sturm Exp $ */
+// $Id: solvation.doc,v 1.8 2003/02/25 10:33:12 anhi Exp $ */
 
-/**@name	Solvation methods
+/** \defgroup Solvation	Solvation methods
+		\ingroup Modeling
 		This chapter contains all relevant information on 
 		the use of BALL solvation methods.
 */
-//@{
-	//@Include: electrostaticPotentialCalculator.h 
-	//@Include: poissonBoltzmann.h
-	//@Include: molecularSurfaceGrid.h
-	//@Include: ooiEnergy.h
-	//@Include: claverieParameter.h
-	//@Include: pair6_12InteractionEnergyProcessor.h
-	//@Include: pair6_12RDFIntegrator.h
-	//@Include: pairExpInteractionEnergyProcessor.h
-	//@Include: pairExpRDFIntegrator.h
-	//@Include: PCMCavFreeEnergyProcessor.h
-	//@Include: pierottiCavFreeEnergyProcessor.h
-	//@Include: reissCavFreeEnergyProcessor.h
-	//@Include: solventDescriptor.h
-	//@Include: solventParameter.h
-	//@Include: uhligCavFreeEnergyProcessor.h
-//@}

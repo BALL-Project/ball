@@ -1,51 +1,11 @@
-// $Id: gui.doc,v 1.5 2001/05/13 13:51:05 hekl Exp $
+// $Id: gui.doc,v 1.6 2003/02/25 10:33:20 anhi Exp $
 
-/** @name Functor classes.
-					This section contains functor classes that are used by other
-	        classes.
-*/
-//@{
-  //@Include: FUNCTOR/functor.doc
-//@}
-
-/** @name Dialog classes.
-					This section contains some dialogs.
-*/
-//@{
-  //@Include: DIALOGS/dialogs.doc
-//@}
-
-/** @name Kernel classes.
-					This section contains classes that are responsible for
-	        building openGL primitives, handling server requests,
-				  building predefined openGL primitives and their creation tools
-	        and handling composites and building and maintaining their graphical
-	        representation.          
-*/
-//@{
-  //@Include: KERNEL/kernel.doc
-//@}
-
-/**@name	Widget classes.
-          This section contains some predefined widgets that can be used
-          in an application, some preference widgets that are used by other
-	        objects and the class modularWidget that is a base class for user
-	        defined widgets.
-*/
-//@{
-	//@Include: WIDGETS/widgets.doc
-//@}
-
-/**@name	Predefined primitives with graphical representation.
-	        These classes are the extension of the primitives in the
-          PRIMITIV section. These classes do not have any additional
-          geometric properties but only the implementation of their graphical
-					representation.
-          For information concerning the geometric properties see the definition
-          of the primitives in the PRIMITIV section.
-*/
-//@{
-	//@Include: PRIMITIV/primitiv.doc
-//@}
-
-
+/** \defgroup ViewGui Gui Classes
+		\ingroup View
+		Description on the render engine and the handling of composites
+		can be obtained here. Further predefined openGL primitives (an
+		extension of the primitives in the Kernel section) are located
+		in this directory.
+		There are some dialogs and widgets (like the scene) that are
+		an important part of the View component described in this section.
+ */

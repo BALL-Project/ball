@@ -1,44 +1,19 @@
-// $Id: datatype.doc,v 1.14 2003/02/21 16:15:09 anhi Exp $
+// $Id: datatype.doc,v 1.15 2003/02/25 10:32:22 anhi Exp $
 
 /** \defgroup Datatype General datastructures
 		\ingroup Foundation
 		This section contains all relevant information on 
 		general BALL datastructures.
 */
-//@{
 
 	/**	\defgroup RegularData Generic Datastructures for Regularly Spaced Data
 	* 	\ingroup Datatype
 	*/
-	//@{
-    //@Include: regularData2D.h
-		//@Include: regularData3D.h
-	//@}
 
-	/**	@name	Generic Hash Associative Containers
+	/**	\defgroup GenericHash Generic Hash Associative Containers
+	*   \ingroup Datatype
 	*/
-	//@{
-		//@Include: hashMap.h
-		//@Include: hashSet.h
-		//@Include: hashGrid.h
-		//@Include: stringHashMap.h
-		//@Include: stringHashSet.h
-		//@Include: options.h 
-	//@}
 
-	/**	@name	Miscellaneous
-	*/
-	//@{
-		//@Include: bitVector.h	
-		//@Include: forEach.h	
-		//@Include: triple.h
-		//@Include: quadruple.h
-		//@Include: regExp.h
-		//@Include: string.h
-    //@Include: list.h
-    //@Include: contour.h
-    //@Include: contourLine.h
-		//@Include: contourSurface.h
-	//@}
-
-//@}
+	/**	\defgroup Miscellaneous Miscellaneous
+	 * 	\ingroup Datatype
+	 */

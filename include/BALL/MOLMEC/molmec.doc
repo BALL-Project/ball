@@ -1,16 +1,7 @@
 // $Id 
 
-/**@name	Molecular Mechanics
+/** \defgroup Molmec Molecular Mechanics
+		\ingroup Modeling
 		This chapter contains all relevant information on 
 		classes related to molecular mechanics.
 */
-//@{
-
-	//@Include: AMBER/amber.doc
-  //@Include: CHARMM/charmm.doc
-	//@Include: COMMON/common.doc
-	//@Include: MDSIMULATION/mdsimulation.doc
-	//@Include: MINIMIZATION/minimization.doc
-	//@Include: PARAMETER/parameter.doc
-
-//@}

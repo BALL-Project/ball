@@ -1,61 +1,33 @@
-// $Id: format.doc,v 1.10 2001/12/20 01:10:49 oliver Exp $
+// $Id: format.doc,v 1.11 2003/02/25 10:32:24 anhi Exp $
 
-/**@name	File Formats
-	BALL supports a number of different file formats and offers 
-	a set of classes do read and write thos formats.
-	Some of these classes provide interfaces for the format
-	classes, e.g. \Ref{GenericMolFile}, which implements a
-	generic interface for molecular file formats. Others
-	implement specific formats. In addition, classes like
-	\Ref{LineBasedFile} provide simple interface to allow
-	the user the rapid implementation of user-defined file	
-	formats or for parsing specialized formats.
-	All file format classes are derived from \Ref{File}
-	and provide the features implemented there, e.g.
-	on-the-fly transformation and URL retrieval.
+/** \defgroup Format File Formats
+		\ingroup Modeling
+		BALL supports a number of different file formats and offers 
+		a set of classes do read and write thos formats.
+		Some of these classes provide interfaces for the format
+		classes, e.g. <link> GenericMolFile GenericMolFile <endlink>, which implements a
+		generic interface for molecular file formats. Others
+		implement specific formats. In addition, classes like
+		<link> LineBasedFile LineBasedFile <endlink> provide simple interface to allow
+		the user the rapid implementation of user-defined file	
+		formats or for parsing specialized formats.
+		All file format classes are derived from <link> File File <endlink>
+		and provide the features implemented there, e.g.
+		on-the-fly transformation and URL retrieval.
 */
-//@{
 
-	/**	@name	Molecular structure file formats
+	/**	\defgroup	StructureFormats Molecular structure file formats
+			\ingroup Format
+	 */
+
+	/** \defgroup MDFormats Molecular Dynamics Trajectory File Formats
+	*   \ingroup Format
 	*/
-	//@{
-    //@Include: genericMolFile.h
-		//@Include: genericPDBFile.h
-		//@Include: PDBFile.h
-		//@Include: HINFile.h
-		//@Include: MOLFile.h
-		//@Include: SDFile.h
-		//@Include: MOL2File.h
-		//@Include: XYZFile.h
 
-	//@}
-
-
-	/** @name Molecular Dynamics Trajectory File Formats
+	/**	\defgroup General General Purpose File Formats
+	* 	\ingroup Format
 	*/
-	//@{
-		//@Include: trajectoryFile.h
-		//@Include: DCDFile.h
-		//@Include: TRRFile.h
-	//@}
 
-	/**	@name	General Purpose File Formats
+	/**	\defgroup NMRFileFormats NMR File Formats
+	* 	\ingroup Format
 	*/
-	//@{
-		//@Include: INIFile.h
-		//@Include: parameters.h
-		//@Include: parameterSection.h
-		//@Include: resourceFile.h
-		//@Include: lineBasedFile.h
-	//@}
-
-	/**	@name	NMR File Formats
-	*/
-	//@{
-		//@Include: JCAMPFile.h
-		//@Include: bruker1DFile.h
-		//@Include: bruker2DFile.h
-    //@Include: NMRStarFile.h
-	//@}
-	
-//@}
