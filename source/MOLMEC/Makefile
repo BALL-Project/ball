@@ -1,5 +1,5 @@
 # MOLMEC/Makefile
-# $Id: Makefile,v 1.5 2000/02/10 11:55:45 oliver Exp $
+# $Id: Makefile,v 1.5.2.1 2002/02/14 17:02:50 anker Exp $
 #
 include ../config.mak
 
@@ -11,6 +11,7 @@ DIRS=\
 	AMBER\
 	CHARMM\
 	COMMON\
+	FRESNO\
 	MINIMIZATION\
 	MDSIMULATION\
 	PARAMETER

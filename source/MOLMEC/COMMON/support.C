@@ -1,4 +1,4 @@
-// $Id: support.C,v 1.30 2002/01/18 01:35:55 oliver Exp $
+// $Id: support.C,v 1.30.2.1 2002/02/14 17:02:53 anker Exp $
 
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/KERNEL/atom.h>
@@ -795,6 +795,32 @@ namespace BALL
 					distance.z -= period.z;
 				}
 			}
+		}
+
+
+		double calculateFresnoHelperFunction(double x, double lower, double upper)
+			throw()
+		{
+			// Quick and dirty. Optimize this.
+
+			double return_value;
+
+			if (x <= lower)
+			{
+				return_value = 1.0;
+			}
+			else
+			{
+				if (x <= upper)
+				{
+					return_value = 1.0 - ((x - lower)/(upper - lower));
+				}
+				else
+				{
+					return_value = 0.0;
+				}
+			}
+			return return_value;
 		}
 
 	}	// namespace MolmecSupport

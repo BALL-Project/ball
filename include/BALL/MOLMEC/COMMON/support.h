@@ -1,4 +1,4 @@
-// $Id: support.h,v 1.15 2001/12/30 13:28:40 sturm Exp $
+// $Id: support.h,v 1.15.2.1 2002/02/14 17:02:38 anker Exp $
 
 #ifndef BALL_MOLMEC_COMMON_SUPPORT_H
 #define BALL_MOLMEC_COMMON_SUPPORT_H
@@ -123,6 +123,11 @@ namespace BALL
 		void calculateMinimumImage(Vector3& distance, 
 				const Vector3& period);
 
+
+		/** Calculate a frequently used function of the Fresno force field
+		*/
+		double calculateFresnoHelperFunction(double x, double lower, double upper)
+			throw();
 		//@}
 
 	} // namespace MolmecSupport
