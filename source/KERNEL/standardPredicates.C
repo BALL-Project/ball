@@ -1,4 +1,4 @@
-// $Id: standardPredicates.C,v 1.5 2000/05/23 20:43:18 anker Exp $
+// $Id: standardPredicates.C,v 1.6 2000/05/24 09:22:44 oliver Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -567,8 +567,9 @@ namespace BALL
 		}
 	}
 
-	bool ConnectedToPredicate::find(const String& group, const Atom& atom,
-			HashSet<const Bond*>& found) const
+	bool ConnectedToPredicate::find
+		(const String& group, const Atom& atom,
+		 HashSet<const Bond*>& found) const
 	{
 		// BAUSTELLE
 
@@ -740,11 +741,9 @@ namespace BALL
 					}
 				}
 			}
-
-		} while (L.size() > 0)
+		} while (L.size() > 0);
 
 		// L was emptied and no errors occurred, so return true.
-
 		return true;
 	} 
 
