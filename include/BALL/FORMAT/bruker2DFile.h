@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bruker2DFile.h,v 1.21 2003/06/01 09:13:41 oliver Exp $
+// $Id: bruker2DFile.h,v 1.22 2003/06/01 17:07:10 oliver Exp $
 //
 
 #ifndef BALL_FORMAT_BRUKER2DFILE_H
@@ -43,30 +43,29 @@ namespace BALL
 			
     	\ingroup  NMRFileFormats
 	*/
-	// ?????
-	class Bruker2D 
+	class Bruker2DFile
 		: public File
 	{
 	 public:
 
 		/** Default constructor.
 		 */
-		Bruker2D();
+		Bruker2DFile();
 
 		/**	Constructor.
 				@param name important: name of the Bruker-*directory*
 		*/
-		Bruker2D(const String& name, OpenMode open_mode = std::ios::in | std::ios::binary)
+		Bruker2DFile(const String& name, OpenMode open_mode = std::ios::in | std::ios::binary)
 			throw(Exception::FileNotFound);
 
 		/**	Copy-Constructor.
 		*/
-		Bruker2D(const Bruker2D& file)
+		Bruker2DFile(const Bruker2DFile& file)
 			throw(Exception::FileNotFound);
 
 		/**	Destructor.
 		*/
-		~Bruker2D()
+		virtual ~Bruker2DFile()
 			throw();
 
 		/** Read a spectrum. 
@@ -80,9 +79,9 @@ namespace BALL
 		void read(const String &name);
 
 		/// Return a reference to the spectrum.
-		const RegularData2D getData() const { return spectrum_; }
+		const RegularData2D& getData() const { return spectrum_; }
 		///
-		RegularData2D getData() { return spectrum_; }
+		RegularData2D& getData() { return spectrum_; }
 
 		/**	Returns a list of peaks found in the spectrum.
 		*/
