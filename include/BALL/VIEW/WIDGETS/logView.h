@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logView.h,v 1.2 2003/08/26 16:07:14 amoll Exp $
+// $Id: logView.h,v 1.3 2003/09/04 23:14:15 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_LOGVIEW_H
@@ -41,10 +41,6 @@ namespace BALL
 {
 	namespace VIEW
 	{
-    /**  \addtogroup  ViewKernelLogView
-     *  @{
-     */
-
 		/** LogView class.
 				The class LogView records all messages sent to the  \link Log Log \endlink  object and
 				displays them as a text history. The class is derived from 
@@ -54,7 +50,7 @@ namespace BALL
 				Use the class LogView as a widget. There are no initializations necessary.
 				Just create this widget as a child widgets of your application and it will
 				record and show all messages sent to the  \link Log Log \endlink  object.
-				
+				\ingroup ViewWidgets
 		*/
 		class LogView
 			: public QTextEdit,

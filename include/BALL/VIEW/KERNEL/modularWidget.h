@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.h,v 1.1 2003/08/26 12:11:24 oliver Exp $
+// $Id: modularWidget.h,v 1.2 2003/09/04 23:14:12 amoll Exp $
 //
 
 #ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
@@ -45,7 +45,7 @@ namespace BALL
 				\see Embeddable
 				\see PyInterpreter
 				\see PyWidget
-			\ingroup ViewGuiWidgets
+			\ingroup ViewKernelConnectivity
 		*/
 		class ModularWidget
 			: public Embeddable,	

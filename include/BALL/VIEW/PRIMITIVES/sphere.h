@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sphere.h,v 1.3 2003/08/29 15:36:50 amoll Exp $
+// $Id: sphere.h,v 1.4 2003/09/04 23:14:13 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_SPHERE_H
@@ -25,6 +25,7 @@ namespace BALL
 				The class Sphere is derived from the classes GeometricObject
 				and Sphere3. See these classes for further information concerning
 				interface and additional methods. \par
+				\ingroup ViewPrimitives
 		*/
 		class Sphere
 			: public GeometricObject,

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: renderer.h,v 1.2 2003/08/26 18:35:35 amoll Exp $
+// $Id: renderer.h,v 1.3 2003/09/04 23:14:14 amoll Exp $
 
 #ifndef BALL_VIEW_RENDERING_RENDERER_H
 #define BALL_VIEW_RENDERING_RENDERER_H
@@ -36,6 +36,7 @@ namespace BALL
 				Every renderer has a pointer to a Stage object, which contains the viewpoint,
 				the LightSource, etc. The renderer also knows the width and height, of the display, it shall
 				render.
+				\ingroup ViewRendering
 		*/
 		class Renderer
 			:	public Object

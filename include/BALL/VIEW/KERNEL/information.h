@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: information.h,v 1.2 2003/08/26 15:26:41 amoll Exp $
+// $Id: information.h,v 1.3 2003/09/04 23:14:11 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_INFORMATION_H
@@ -26,6 +26,7 @@ namespace BALL
 		
 		/** This class retrieves information concerning GeometricObject objects. 
 				The result is written in the member variables name_ and type_name_.
+				\ingroup ViewKernelGeometricPrimitives
 		*/
 		class Information: public Visitor<GeometricObject>
 		{

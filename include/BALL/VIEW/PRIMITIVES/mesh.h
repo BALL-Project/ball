@@ -1,22 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mesh.h,v 1.3 2003/08/29 15:36:50 amoll Exp $
+// $Id: mesh.h,v 1.4 2003/09/04 23:14:13 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_MESH_H
 #define BALL_VIEW_PRIMITIV_MESH_H
 
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
 #ifndef BALL_MATHS_SURFACE_H
 #	include <BALL/MATHS/surface.h>
-#endif
-
-#ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
-#	include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #endif
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
@@ -25,7 +17,6 @@
 
 namespace BALL
 {
-	
 	namespace VIEW
 	{           
 		/** Mesh class.			
@@ -37,6 +28,7 @@ namespace BALL
 				and Surface. The data structures defining the mesh are implemented in
 				the class Surface. Therefore one can use this mesh in the
 				same fashion as Surface. \par
+				\ingroup ViewPrimitives
 		*/
 		class Mesh
 			: public GeometricObject,
@@ -162,8 +154,6 @@ namespace BALL
 
 		};
   
-	} // namespace VIEW
-
-} // namespace BALL
+} } // namespaces
 
 #endif // BALL_VIEW_PRIMITIV_MESH_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.h,v 1.2 2003/08/26 18:35:34 amoll Exp $
+// $Id: POVRenderer.h,v 1.3 2003/09/04 23:14:14 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_POVRENDERER_H
@@ -33,7 +33,7 @@ namespace BALL
 		 		This class walks over all the geometric primitives in a Scene
 				and exports them into a data file in the POVRay 1.5 format, which can
 				be used to render the same scene externally.
-			\ingroup ViewGuiFunctors	
+				\ingroup ViewRendering
 		*/
 		class POVRenderer : public Renderer
 		{

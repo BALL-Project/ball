@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: events.h,v 1.4 2003/08/28 16:56:27 amoll Exp $
+// $Id: events.h,v 1.5 2003/09/04 23:14:10 amoll Exp $
 //
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -930,7 +930,7 @@ namespace BALL
 				Notification mechanism of BALL.
 				The names of the methods may seems a bit too long and unreadable but they are only
 				event names and will used and created automatically for the Scene object.
-		\ingroup ViewGuiWidgets		
+				\ingroup ViewKernelOther
 		*/
 		class Events
 		{

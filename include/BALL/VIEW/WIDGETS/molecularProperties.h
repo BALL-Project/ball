@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularProperties.h,v 1.2 2003/08/26 16:07:14 amoll Exp $
+// $Id: molecularProperties.h,v 1.3 2003/09/04 23:14:15 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARPROPERTIES_H
 #define BALL_VIEW_WIDGETS_MOLECULARPROPERTIES_H
@@ -32,6 +32,7 @@ namespace BALL
 				sent by Scene to a molecular selection whose objects can be given a new
 				graphical representation by the DisplayProperties dialog.
 				See onNotify for information concerning the conversion mechanism. \par
+				\ingroup ViewWidgets
 		*/
 		class MolecularProperties
 			: public QWidget, 

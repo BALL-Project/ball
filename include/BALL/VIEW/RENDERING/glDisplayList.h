@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glDisplayList.h,v 1.2 2003/08/26 18:35:34 amoll Exp $
+// $Id: glDisplayList.h,v 1.3 2003/09/04 23:14:14 amoll Exp $
 
 #ifndef BALL_VIEW_RENDERING_GLDISPLAYLIST_H
 #define BALL_VIEW_RENDERING_GLDISPLAYLIST_H
@@ -26,6 +26,7 @@ namespace BALL
 		It defines some useful methods for easy creation of a display list and
 		handles errors that can occur when using display lists. See the OpenGL
 		defintion of display lists for further information concerning display lists.\par
+		\ingroup ViewRendering
 */
 class GLDisplayList
 {

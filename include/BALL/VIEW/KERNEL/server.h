@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: server.h,v 1.2 2003/08/26 15:26:43 amoll Exp $
+// $Id: server.h,v 1.3 2003/09/04 23:14:12 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_SERVER_H
@@ -50,7 +50,7 @@ namespace BALL
 				RemovedCompositeMessage will be sent through the ConnectionObject
 				tree and after that the the message NewCompositeMessage with the new
 				received composite will be sent.
-			\ingroup ViewGuiKernelServer	
+			\ingroup ViewKernelClient
 		*/
 		class Server
 			: public QTTimer,

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: connectionObject.h,v 1.17 2003/08/26 08:05:07 oliver Exp $
+// $Id: connectionObject.h,v 1.18 2003/09/04 23:14:10 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_CONNECTIONOBJECT_H
@@ -17,9 +17,7 @@ namespace BALL
 	{
 		class Message;
 	
-		/** ConnectionObject class.		
-				The class ConnectionObject is a base class for all widgets and dialogs that
-				handles communication between these classes through message posting.
+		/** Base class for all widgets and dialogs that handles communication through message posting.
 				There are methods that handle the registering process between the classes that
 				should be connected as well as notifying methods that are responsible for posting
 				messages. The registering process will be handled by the interface of every
@@ -38,6 +36,7 @@ namespace BALL
 				always be created with the new command and the flag deletable must be set to <b> true</b>.
 				If a message if statically created in the <b> onNotify</b> method there is the possibility
 				that the message is already destroyed when it should be processed.
+				\ingroup ViewKernelConnectivity
 		*/
 		class ConnectionObject
 		{
@@ -48,9 +47,7 @@ namespace BALL
 			//@{
 
 			/** Default Constructor.
-					Construct new connectionObject.
 					Initialize the message queue and resets all connection to zero.
-					\return  ConnectionObject new constructed connectionObject
 			*/
 			ConnectionObject()
 				throw();
@@ -61,7 +58,6 @@ namespace BALL
 			//@{
 
 			/** Destructor.
-					Default destruction of this connectionObject.
 					Calls destroy.
 					\see   destroy
 			*/
@@ -88,9 +84,8 @@ namespace BALL
 			//@{
 			
 			/** Register connectionObject.
-					Register connectionObject <b> object</b>. The connectionObject this will
-					be the new parent of <b> object</b> connectionObject. Each connectionObject can only
-					be inserted once to a parent.
+					The connectionObject this will be the new parent of <b> object</b> connectionObject. 
+					Each connectionObject can only be inserted once to a parent.
 					\param    object the connectionObject that is the new child of this connectionObject
 					\see      unregisterConnectionObject
 					\see      isConnectionObjectRegistered
@@ -99,7 +94,7 @@ namespace BALL
 				throw();
 
 			/** Unregister connectionObject.
-					Unregister connectionObject <b> object</b>. The connectionObject this deletes
+					The connectionObject this deletes
 					the <b> object</b> connectionObject from its children list and the parent of
 					<b> object</b> connectionObject will be set to 0. 
 					\param    object the connectionObject that will be removed from this connectionObject
@@ -110,8 +105,6 @@ namespace BALL
 				throw();
 
 			/** Test if connectionObject is registered.
-					Test if <b> object</b> connectionObject is a child of this connectionObject.
-
 					\param   object the connectionObject to be tested
 					\return  bool <tt> true</b> if <b> object</b> is a child of this connectionObject, <tt> false</b> otherwise
 					\see     registerConnectionObject
@@ -120,18 +113,15 @@ namespace BALL
 			bool isConnectionObjectRegistered(const ConnectionObject &object)
 				throw();
 
-			/** Inspection of parent connectionObject.
-					Access the parent connectionObject of this connectionObject.
+			/** Access the parent connectionObject of this connectionObject.
 					If this connectionObject is root <tt> 0</tt> will be returned.
 					\return  ConnectionObject* the pointer to the parent connectionObject, <tt> 0</tt> if this is root.
 			*/
 			ConnectionObject* getParent() const
 				throw();
 
-			/** Inspection of the root connectionObject.
-					Access the root of this connectionObject. Return the connectionObject that
-					parent is <tt> 0</tt>.
-					\return   ConnectionObject* the connectionObject that is the root
+			/** Access the root of this ConnectionObject. 
+			 		Returns the ConnectionObject that parent is <tt> 0</tt>.
 			*/
 			ConnectionObject* getRoot()
 				throw();
@@ -241,8 +231,5 @@ namespace BALL
 #			include <BALL/VIEW/KERNEL/connectionObject.iC>
 #		endif
   		
-	} // namespace VIEW
-
-} // namespace BALL
-
+} } // namespace
 #endif // BALL_VIEW_KERNEL_CONNECTIONOBJECT_H

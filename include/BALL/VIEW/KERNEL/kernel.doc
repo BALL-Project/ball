@@ -1,18 +1,18 @@
-// $Id: kernel.doc,v 1.10 2003/02/25 10:33:26 anhi Exp $
+// $Id: kernel.doc,v 1.11 2003/09/04 23:14:11 amoll Exp $
 
 /** \defgroup ViewKernel Kernel classes
-		\ingroup View
+		\ingroup Visualisation
 		This section contains classes that are responsible for
 		building geometric primitives, handling client requests
 		and building a connection with message queuing between
 		widgets and dialogs.
  */
 
-/** \defgroup ViewKernelClient Client request handling
+/** \defgroup ViewKernelClient Client/Server request handling
 		\ingroup ViewKernel
 		With the help of the class <it>Client</it> it is possible
 		to transfer a \link Composite Composite \endlink to a <it>VIEW</it> application with
-		a server. 
+		a Server. 
 		The class <it>QTTimer</it> is a timer class that is necessary for the
 		\link Server Server \endlink class. It queries every given interval whether new
 		data from the client is accessable and directs it to the <it>VIEW</it>
@@ -30,16 +30,15 @@
 		 some useful messages for special events.
  */
 
-/**  \defgroup ViewKernelGeometricPrimitives Geometric primitives creation (base classes)
+/**  \defgroup ViewKernelGeometricPrimitives Geometric primitives and their management
 		 \ingroup ViewKernel
-		 These classes are the base classes for primitive creation.
 		 The class \link GeometricObject GeometricObject \endlink is the most important base class
 		 for all primitives. It contains the base properties and base
 		 interface definition all primitives must have.
-		 The other classes are additional property classes to extend
-		 a primitive with extra properties.
+		 The other classes manage the GeometricObjects.
  */
 
-/** \defgroup ViewKernelLogView LogView Widget (will be moved into WIDGETS directory)
- * 	\ingroup ViewKernel
- */
+/** \defgroup ViewKernelOther Other classes
+ 		\ingroup ViewKernel
+*/
+

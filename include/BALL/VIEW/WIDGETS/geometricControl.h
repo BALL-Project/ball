@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.h,v 1.3 2003/08/31 00:24:09 amoll Exp $
+// $Id: geometricControl.h,v 1.4 2003/09/04 23:14:15 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
 #define BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
@@ -34,15 +34,14 @@ namespace BALL
 		class Representation;
 		class ColorMeshDialog;
 
-		/**	The Geometric Control class.
-				The GeometricControl class is a widget to display the list of
-				representations.
+		/**	GeometricControl is a widget to display the list of representations.
 				There are methods available to modify the representations.
 				The method buildContextMenu is a means to 
 				create a customizable context menu entries.
 				To use this widget in the application just create it with MainControl as
 				parent and all in the PrimitiveManager created Representation objects will show
 				up in the GeometricControl.
+				\ingroup ViewWidgets
 		*/
 		class GeometricControl
 			: public QListView, 

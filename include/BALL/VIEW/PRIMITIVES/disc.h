@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: disc.h,v 1.3 2003/08/29 15:36:49 amoll Exp $
+// $Id: disc.h,v 1.4 2003/09/04 23:14:12 amoll Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_DISC_H
 #define BALL_VIEW_PRIMITIV_DISC_H
@@ -23,6 +23,7 @@ namespace BALL
 				The class Disc is derived from the classes GeometricObject
 				and Disc3. See these classes for further information concerning
 				interface and additional methods. \par
+				\ingroup ViewPrimitives
 		*/
 		class Disc
 			: public GeometricObject,

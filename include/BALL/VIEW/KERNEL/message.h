@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.25 2003/09/02 10:58:27 amoll Exp $
+// $Id: message.h,v 1.26 2003/09/04 23:14:11 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -20,6 +20,9 @@ namespace BALL
 	{
 		// class forward
 		class GeometricObject;
+
+		/** @addtogroup ViewKernelConnectivity */
+		//@{
 
 		/** General Message class.
 				Message is the base class of all message classes and provides a base interface.
@@ -555,7 +558,6 @@ namespace BALL
 
 		/** Message to center camera on a specific Composite.
 		 		Send by MolecularControl to MolecularProperties.
-		 \ingroup ViewKernelConnectivity
 		 */
 		class CenterCameraMessage: public CompositeMessage
 		{
@@ -629,8 +631,6 @@ namespace BALL
 				this class is not derived from  \link NewCompositeMessage NewCompositeMessage \endlink . Otherwise every method
 				accepting  \link NewCompositeMessage NewCompositeMessage \endlink  object would also accept 
 				 \link NewMolecularMessage NewMolecularMessage \endlink  objects and that is not allowed.  \par
-				
-    		\ingroup  ViewKernel
 		*/
 		class NewMolecularMessage: public CompositeMessage
 		{
@@ -832,6 +832,8 @@ namespace BALL
 			protected:
 				TrajectoryFile* file_;
 		};
+
+		//@}
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/KERNEL/message.iC>

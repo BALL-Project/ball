@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularInformation.h,v 1.2 2003/08/26 15:26:42 amoll Exp $
+// $Id: molecularInformation.h,v 1.3 2003/09/04 23:14:12 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_MOLECULARINFORMATION_H
 #define BALL_VIEW_KERNEL_MOLECULARINFORMATION_H
@@ -17,6 +17,7 @@ namespace BALL
 		/** MolecularInformation class.
 				This class is used by the class MolecularControl to retrieve names and types
 				of the displayed Composite objects.
+				\ingroup ViewKernelOther
 		*/
 		class MolecularInformation
 			: public Visitor<Composite>

@@ -1,6 +1,6 @@
-// $Id: view.doc,v 1.13 2003/09/04 22:18:34 amoll Exp $
+// $Id: view.doc,v 1.14 2003/09/04 23:14:09 amoll Exp $
 
-/**	\ingroup Visualisation
+/**	\addtogroup Visualisation
          VIEW is a framework for the implementation of GUI based visualizations.
          The GUI toolkit used in this framework is QT because it provides a portable GUI framework
          in C++ and allows the use of the OpenGL library for 3D rendering.

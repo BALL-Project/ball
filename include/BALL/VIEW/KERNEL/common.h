@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.3 2003/09/03 13:03:51 amoll Exp $
+// $Id: common.h,v 1.4 2003/09/04 23:14:10 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -11,43 +11,28 @@
  #include <BALL/DATATYPE/string.h>
 #endif
 
-/*
-#define BALL_VIEW_PRINT_PROPERTY(property) \
-		(hasProperty(property) ? "yes" : "no")
-*/
 namespace BALL
 {
 	namespace VIEW
 	{
-		/** @name Type aliases defined by VIEW
+		/** @name General enumerations, methods and typedefs
 				These predefined types are used in VIEW for portability and
 				comprehensibility.
+				 \ingroup ViewKernelOther
 		*/
 		//@{
 		
-		/**     SceneHandle type.
-						Use this type to represent <b>scene handles</b>. Scene handles are used
-						for the non-ambiguous identification of scenes.
+		/** SceneHandle type.
+				Use this type to represent <b>scene handles</b>. Scene handles are used
+				for the non-ambiguous identification of scenes.
 		*/
 		typedef unsigned long    SceneHandle;      
-
-		/**			@name Constant definition
-		 \ingroup ViewCommon
-		*/	
-		//@{
 
 		/**	The default port for the VIEW server.
 				Default port is 20000.
 				\see  Server
 		*/
 		#define VIEW_DEFAULT_PORT 20000
-
-		//@}
-
-		/**     @name Enums defined by VIEW
-		 \ingroup ViewCommon
-		*/
-		//@{
 
 		/** Command enums.
 				These enums specify the commands the server is able
@@ -108,11 +93,10 @@ namespace BALL
 		/// MAXIMAL_DRAWING_PRECISION * MAXIMAL_DRAWING_MODE
 		#define BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE  12  
 
-		//@}
     
-		/** Predefined properties.
-				Enumeration of all properties that are used by the VIEW kernel.
-				This properties define the models available in VIEW.
+		/** This properties define the available models.
+		 		Add new model entries before MODEL_LABEL if you want them to show up 
+				in the DisplayProperties dialog!
 		*/
 		enum ModelTypes
 		{
@@ -173,6 +157,8 @@ namespace BALL
 
 		String getModelName(ModelTypes type) 
 			throw();
+
+		//@}
 
 	} // namespace VIEW
 } // namespace BALL

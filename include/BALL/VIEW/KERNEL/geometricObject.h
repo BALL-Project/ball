@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricObject.h,v 1.31 2003/08/29 15:36:49 amoll Exp $
+// $Id: geometricObject.h,v 1.32 2003/09/04 23:14:11 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
@@ -23,6 +23,7 @@ namespace BALL
 				this class.  
 				This class contains only the general information like 
 				color, name and the composite pointer.
+				\ingroup ViewKernelGeometricPrimitives
 		*/
 		class GeometricObject
 		{
@@ -203,9 +204,5 @@ namespace BALL
 			const Composite* composite_;
 		};
 
-
-	} // namespace VIEW
-
-} // namespace BALL
-
+} } // namespaces
 #endif // BALL_VIEW_KERNEL_GEOMETIRCOBJECT_H

@@ -1,7 +1,7 @@
-// $Id: primitives.doc,v 1.1 2003/09/04 19:57:36 amoll Exp $
+// $Id: primitives.doc,v 1.2 2003/09/04 23:14:13 amoll Exp $
 
-/**	\defgroup View Primitives
-		\ingroup Visualization
+/**	\defgroup ViewPrimitives Geometric Objects
+		\ingroup Visualisation
 			The representation of molecular structures consists of primitive geometric objects, e.g.:
 			- Boxes
 			- Discs

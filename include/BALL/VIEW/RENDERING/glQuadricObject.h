@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glQuadricObject.h,v 1.3 2003/08/29 15:36:51 amoll Exp $
+// $Id: glQuadricObject.h,v 1.4 2003/09/04 23:14:14 amoll Exp $
 
 #ifndef BALL_VIEW_RENDERING_GLQUADRICOBJECT_H
 #define BALL_VIEW_RENDERING_GLQUADRICOBJECT_H
@@ -25,6 +25,7 @@ namespace BALL
 				quadric objects.
 				See the documentation of the OpenGL graphical library for information
 				concerning quadric objects.\par
+				\ingroup ViewRendering
 		*/
 		class GLQuadricObject
 		{

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: compositeManager.h,v 1.2 2003/08/26 08:05:07 oliver Exp $
+// $Id: compositeManager.h,v 1.3 2003/09/04 23:14:10 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_COMPOSITEMANAGER_H
 #define BALL_VIEW_KERNEL_COMPOSITEMANAGER_H
@@ -17,6 +17,11 @@ namespace BALL
 	namespace VIEW
 	{
 		/** CompositeManager class.	
+		*/
+		/** Management of Composites.
+		 		This class is a container for all Composite objects, which are used in an application.
+				When the CompositeManager is destroyed, all inserted Composites are deleted.
+				\ingroup ViewKernelOther
 		*/
 		class CompositeManager
 		{

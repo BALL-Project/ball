@@ -1,7 +1,7 @@
-// $Id: widgets.doc,v 1.1 2003/09/04 20:28:38 amoll Exp $
+// $Id: widgets.doc,v 1.2 2003/09/04 23:14:16 amoll Exp $
 
-/**	\defgroup View Widgets
-		\ingroup Visualization
+/**	\defgroup ViewWidgets Modular Widgets
+		\ingroup Visualisation
 		To provide a high grade of encapsulation of functionality we have
 		developed a design pattern of independent widgets, called ModularWidget.
 		Some of the derived classes have to following abilities: <br>
@@ -12,5 +12,6 @@
 		- Logviews
 		- Interface to the Python interpreter
 		- Plotting of one and two dimensional data
+		<p>
 		Other derived classes are easy to implement.
 */

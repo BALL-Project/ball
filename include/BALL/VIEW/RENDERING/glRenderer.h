@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.2 2003/08/26 18:35:34 amoll Exp $
+// $Id: glRenderer.h,v 1.3 2003/09/04 23:14:14 amoll Exp $
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
 #define BALL_VIEW_RENDERING_GLRENDERER_H
@@ -30,6 +30,8 @@ namespace BALL
 		class GLDisplayList;
 
 		/** GLRenderer
+		 		Renderer which provides hardware accelerated OPENGL rendering.
+				\ingroup ViewRendering
 		*/
 		class GLRenderer: public Renderer
 		{

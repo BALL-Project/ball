@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: client.h,v 1.20 2003/08/26 13:44:04 oliver Exp $
+// $Id: client.h,v 1.21 2003/09/04 23:14:10 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_CLIENT_H
@@ -48,6 +48,7 @@ namespace BALL
 				The Client class connects to the Server class that is also a part of
 				the VIEW library. See Server for further information.
 				\see     Server
+				\ingroup ViewKernelClient
 		*/
 		class Client
 		{

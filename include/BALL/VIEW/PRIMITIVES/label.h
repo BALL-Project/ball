@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: label.h,v 1.4 2003/08/29 15:36:50 amoll Exp $
+// $Id: label.h,v 1.5 2003/09/04 23:14:13 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_LABEL_H
@@ -33,6 +33,7 @@ namespace BALL
 				The class Label is derived from the classes GeometricObject, ColorExtension
 				and Vertex. See these classes for further information concerning
 				interface and additional methods. \par
+				\ingroup ViewPrimitives
 		*/
 		class Label
 			: public GeometricObject,

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.3 2003/08/29 15:36:51 amoll Exp $
+// $Id: scene.h,v 1.4 2003/09/04 23:14:16 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -52,7 +52,7 @@ namespace BALL
 				scenes. These other scenes can have different camera angles or other properties.
 				The class Events is a container class of appropriate events that can
 				be assigned to a scene.
-			\ingroup ViewGuiWidgets		
+				\ingroup ViewWidgets
 		*/
 		class Scene
 			: public QGLWidget, public ModularWidget

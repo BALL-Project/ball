@@ -1,7 +1,7 @@
-// $Id: rendering.doc,v 1.1 2003/09/04 20:15:24 amoll Exp $
+// $Id: rendering.doc,v 1.2 2003/09/04 23:14:15 amoll Exp $
 
-/**	\defgroup View Rendering
-		\ingroup Visualization
+/**	\defgroup ViewRendering Renderer
+		\ingroup Visualisation
 		The VIEW libary currently contains two methods for rendering 
 		visualisations:<br> 
 		The obviously most import is the OPENGL renderer which provides 

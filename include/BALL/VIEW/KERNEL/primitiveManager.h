@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.h,v 1.2 2003/08/26 15:26:43 amoll Exp $
+// $Id: primitiveManager.h,v 1.3 2003/09/04 23:14:12 amoll Exp $
 
 #ifndef  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
 #define  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
@@ -19,6 +19,7 @@ namespace BALL
 		/** PrimitiveManager manages the graphical Representation objects and all GeometricObject.
 		 		All Representation objects which shall be inserted should be created using createRepresentation().
 				When the PrimitiveManager is destroyed, all inserted Representation are deleted.
+				\ingroup ViewKernelGeometricPrimitives
 		*/
 		class PrimitiveManager
 			:	public Object

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: simpleBox.h,v 1.3 2003/08/29 15:36:50 amoll Exp $
+// $Id: simpleBox.h,v 1.4 2003/09/04 23:14:13 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_SIMPLEBOX_H
@@ -27,6 +27,7 @@ namespace BALL
 				The class SimpleBox is derived from the classes GeometricObject
 				and SimpleBox3. See these classes for further information concerning
 				interface and additional methods. \par
+				\ingroup ViewPrimitives
 		*/
 		class SimpleBox
 			: public SimpleBox3,

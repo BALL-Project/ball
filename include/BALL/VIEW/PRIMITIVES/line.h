@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: line.h,v 1.4 2003/08/29 15:36:50 amoll Exp $
+// $Id: line.h,v 1.5 2003/09/04 23:14:13 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIVES_LINE_H
@@ -30,6 +30,7 @@ namespace BALL
 				The class Line is derived from the classes GeometricObject 
 				and Vertex2. See these classes for further information concerning
 				interface and additional methods. \par
+				\ingroup ViewPrimitives
 		*/
 		class Line
 			: public GeometricObject,

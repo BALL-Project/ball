@@ -1,9 +1,9 @@
-// $Id: datatype.doc,v 1.6 2003/02/25 10:33:17 anhi Exp $
+// $Id: datatype.doc,v 1.7 2003/09/04 23:14:10 amoll Exp $
 
 /** \defgroup ViewDatatypes Datatypes for the VIEW framework
-		\ingroup View	
+		\ingroup Visualisation
 		In this section the color datatypes and their help classes are defined.
-	*/
+*/
 
 /**     \defgroup ViewDatatypeColors Different color classes
 				\ingroup ViewDatatypes

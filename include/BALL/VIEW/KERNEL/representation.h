@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.1 2003/08/26 12:11:26 oliver Exp $
+// $Id: representation.h,v 1.2 2003/09/04 23:14:12 amoll Exp $
 
 #ifndef  BALL_VIEW_GUI_KERNEL_REPRESENTATION_H
 #define  BALL_VIEW_GUI_KERNEL_REPRESENTATION_H
@@ -36,6 +36,7 @@ namespace BALL
 				the model processor. So when a Representation is destroyed, so are its geometric objects
 				and processors. 
 				It stores the drawing precision.
+				\ingroup ViewKernelGeometricPrimitives
 		*/
 		class Representation
 			: public PropertyManager

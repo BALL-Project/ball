@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: control.h,v 1.3 2003/08/27 16:33:24 amoll Exp $
+// $Id: control.h,v 1.4 2003/09/04 23:14:15 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_CONTROL_H
 #define BALL_VIEW_WIDGETS_CONTROL_H
@@ -42,6 +42,7 @@ namespace BALL
 				To use this widget in the application just create it with MainControl as
 				parent and all inserted Composite objects sent with NewCompositeMessage
 				will be shown in the structure view of the Control.
+				\ingroup ViewWidgets
 		*/
 		class Control
 			: public QListView, 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.5 2003/09/03 15:23:16 amoll Exp $
+// $Id: mainControl.h,v 1.6 2003/09/04 23:14:11 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -74,7 +74,7 @@ namespace BALL
 				So don't use\par 
 				<tt> class foo : public MainControl </tt>; but \par
 				<tt> class foo : public BALL::VIEW::MainControl </tt> instead. 
-		\ingroup ViewGuiKernelComposite		
+		\ingroup ViewKernelConnectivity
 		*/
 		class MainControl
 			: public QMainWindow,

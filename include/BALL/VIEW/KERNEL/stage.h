@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stage.h,v 1.1 2003/08/26 12:11:26 oliver Exp $
+// $Id: stage.h,v 1.2 2003/09/04 23:14:12 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_STAGE_H
 #define BALL_VIEW_GUI_KERNEL_STAGE_H
@@ -34,7 +34,11 @@ namespace BALL
 {
 	namespace VIEW
 	{
-
+		/** @name Classes to setup a stage for viewing
+				 \ingroup ViewKernelOther
+		*/
+		//@{
+	
 		/** Light source
 		 */
 		class LightSource
@@ -455,6 +459,8 @@ namespace BALL
 			//_
 			bool 								show_coordinate_system_;
 		};
+
+		//@}
 
 	} // namespace VIEW
 } // namespace BALL
