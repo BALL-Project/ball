@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.160 2005/02/10 22:35:28 amoll Exp $
+// $Id: scene.C,v 1.161 2005/02/11 17:17:36 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1157,6 +1157,7 @@ namespace BALL
 
 			light_settings_->apply();
 			gl_renderer_.setLights(true);
+			updateCamera_();
 
 			bool showed_coordinate = stage_->coordinateSystemEnabled();
 			stage_settings_->apply();
