@@ -1,4 +1,4 @@
-// $Id: pPCurve.C,v 1.2 2000/07/13 11:56:43 anker Exp $
+// $Id: pPCurve.C,v 1.3 2000/07/13 13:03:44 anker Exp $
 
 #include <BALL/MATHS/pPCurve.h>
 
@@ -122,17 +122,31 @@ namespace BALL
 				return sum(x, k);
 			}
 		}
-		return sum(x, intervals_.size());
+		float val = 0.0;
+		for (Size i = 0; i < degree_; ++i)
+		{
+			val += coefficients_[coefficients_.size() - 1][i] * pow(x, i);
+		}
+		return val;
 	}
 
 	float PPCurve::sum(float x, Size index)
 	{
 		float val = 0.0;
+		float sub;
 		vector<float> coef;
 		coef = coefficients_[index];
+		if ((index == 0) || (index > intervals_.size() - 1))
+		{
+			sub = 0.0;
+		}
+		else 
+		{
+			sub = intervals_[index - 1];
+		}
 		for (Size i = 0; i < degree_; ++i)
 		{
-			val += coef[i] * pow(x, i);
+			val += coef[i] * pow((x - sub), i);
 		}
 		return val;
 	}
