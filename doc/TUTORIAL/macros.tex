@@ -11,10 +11,6 @@
 \usepackage{times}
 % use postscript fonts
 
-\newcommand{\sbseries}{\fontseries{sb}}
-% semibold: bold is TOO fat in the index
-
-
 \usepackage{psboxit}
 \newcommand{\graybox}[1]{\psboxit{box .85 setgray fill}{\fbox{#1}}}
 % display gray shaded boxes using postscript commands
@@ -200,77 +196,77 @@
 \newcommand{\Index}[1]{#1\index{#1}}
 % prints the term and creates an index entry
 
-\newcommand{\class}[1]{{\ttfamily\sbseries{#1}}\index{#1@{\ttfamily\sbseries{#1}}
-(BALL~class)}\index{BALL!classes!#1@{\ttfamily\sbseries{#1}}}}
+\newcommand{\class}[1]{{\ttfamily{#1}}\index{#1@{\ttfamily{#1}}
+(BALL~class)}\index{BALL!classes!#1@{\ttfamily{#1}}}}
 % BALL class names are typeset in typewriter bold and indexed automatically:
 %  - first with their class name
 %  - then under BALL!classes!<classname>
 
-\newcommand{\STLclass}[1]{{\ttfamily\sbseries{#1}}\index{#1@{\ttfamily\sbseries{#1}}
-(STL~class)}\index{STL!#1 class@{\ttfamily\sbseries{#1}}}}
+\newcommand{\STLclass}[1]{{\ttfamily{#1}}\index{#1@{\ttfamily{#1}}
+(STL~class)}\index{STL!#1 class@{\ttfamily{#1}}}}
 % STL class names are typeset in typewriter bold and indexed automatically:
 %  - first with their class name
 %  - then under STL!<classname> class
 
-\newcommand{\function}[1]{{\ttfamily\sbseries{#1}}\index{#1@{\ttfamily\sbseries{#1}}
-(BALL~function)}\index{BALL!functions!#1@{\ttfamily\sbseries{#1}}}}
+\newcommand{\function}[1]{{\ttfamily{#1}}\index{#1@{\ttfamily{#1}}
+(BALL~function)}\index{BALL!functions!#1@{\ttfamily{#1}}}}
 % BALL function names are typeset in typewriter bold and indexed automatically:
 %  - first with their name
 %  - then under BALL!functions!<function name>
 
-\newcommand{\method}[1]{{\ttfamily\sbseries{#1}}\index{#1@{\ttfamily\sbseries{#1}}
-(method)}\index{BALL!functions!#1@{\ttfamily\sbseries{#1}}}}
+\newcommand{\method}[1]{{\ttfamily{#1}}\index{#1@{\ttfamily{#1}}
+(method)}\index{BALL!functions!#1@{\ttfamily{#1}}}}
 % method names are typeset in typewriter bold and indexed automatically:
 %  - first with their name
 %  - then under BALL!methods!<function name>
 
-\newcommand{\attribute}[2]{{\ttfamily\sbseries{#1}}\index{#1@{\ttfamily\sbseries{#2}}
-({\ttfamily\sbseries #1} attribute)}\index{BALL!!#1!#2@{\ttfamily\sbseries{#1}}}}
+\newcommand{\attribute}[2]{{\ttfamily{#1}}\index{#1@{\ttfamily{#2}}
+({\ttfamily #1} attribute)}\index{BALL!!#1!#2@{\ttfamily{#1}}}}
 % attribute names are typeset in typewriter bold and indexed automatically:
 %  - first with their name and (<class> attribute)
 %  - then under BALL!<class>!<attribute>
 
-\newcommand{\macro}[1]{{\ttfamily\sbseries{#1}}\index{#1@{\ttfamily\sbseries{#1}}
-(BALL~macro)}\index{BALL!macros!#1@{\ttfamily\sbseries{#1}}}}
+\newcommand{\macro}[1]{{\ttfamily{#1}}\index{#1@{\ttfamily{#1}}
+(BALL~macro)}\index{BALL!macros!#1@{\ttfamily{#1}}}}
 % BALL macros names are typeset in typewriter bold and indexed automatically:
 %  - first with their name
 %  - then under BALL!macros!<macro name>
 
-\newcommand{\namespace}[1]{{\ttfamily\sbseries{#1}}\index{#1@{\ttfamily\sbseries{#1}}
-(BALL~namespace)}\index{BALL!namespaces!#1@{\ttfamily\sbseries{#1}}}}
+\newcommand{\namespace}[1]{{\ttfamily{#1}}\index{#1@{\ttfamily{#1}}
+(BALL~namespace)}\index{BALL!namespaces!#1@{\ttfamily{#1}}}}
 % BALL macros names are typeset in typewriter bold and indexed automatically:
 %  - first with their name
 %  - then under BALL!namespaces!<name>
 
-\newcommand{\type}[1]{{\ttfamily\sbseries{#1}}\index{#1@{\ttfamily\sbseries{#1}}
-(BALL~type)}\index{BALL!types!#1@{\ttfamily\sbseries{#1}}}}
+\newcommand{\type}[1]{{\ttfamily{#1}}\index{#1@{\ttfamily{#1}}
+(BALL~type)}\index{BALL!types!#1@{\ttfamily{#1}}}}
 % BALL macros names are typeset in typewriter bold and indexed automatically:
 %  - first with their name
 %  - then under BALL!types!<macro name>
 
 \newcommand{\file}[1]{
-	{\ttfamily\sbseries\mbox{#1}}
-	\index{#1@{\ttfamily\sbseries{#1}} (file)}
+	{\ttfamily\mbox{#1}}
+	\index{#1@{\ttfamily{#1}} (file)}
 }
 % BALL file names are typeset in typewriter bold and indexed automatically:
 % with their name and "(file)" appended
 
 \newcommand{\directory}[1]{
-	{\ttfamily\sbseries\mbox{#1}}
-	\index{#1@{\ttfamily\sbseries{#1}} (directory)}
+	{\ttfamily\mbox{#1}}
+	\index{#1@{\ttfamily{#1}} (directory)}
 }
 % BALL directories are typeset in typewriter bold and indexed automatically:
 % with their name and "(directory)" appended
 
 \newcommand{\option}[1]{
-	{\ttfamily\sbseries\mbox{#1}}
-	\index{configure!options!#1@{\ttfamily\sbseries\mbox{#1}}}
+	{\ttfamily\mbox{#1}}
+	\index{configure!options!#1@{\ttfamily\mbox{#1}}}
 }
 % BALL file names are typeset in typewriter bold and indexed automatically:
 % as configure/options/<name>"
 
-\newcommand{\exception}[1]{{\ttfamily\sbseries{#1}}\index{#1@{\ttfamily\sbseries{#1}}
-(BALL~class)}\index{BALL!exceptions!#1@{\ttfamily\sbseries{#1}}}}
+\newcommand{\exception}[1]{{\ttfamily{#1}}\index{#1@{\ttfamily{#1}}
+(BALL~class)}\index{BALL!exceptions!#1@{\ttfamily{#1}}}}
 % BALL exceptions names are typeset in typewriter bold and indexed automatically:
 %  - first with their name
 %  - then under BALL!exceptions!<exception name>
@@ -319,3 +315,18 @@
 	labelstep=0
 }
 \newcommand{\linelisting}{\lstinline[frame=,basicstyle=\small]}
+
+
+%%
+%%
+%%     FAQ macros
+%%
+\newcounter{FAQcounter}
+\setcounter{FAQcounter}{0}
+\newcommand{\FAQquestion}[1]{%
+	\ifthenelse{\theFAQcounter=0}{}{\vspace{0.5cm}\begin{center}\rule{0.5\textwidth}{1pt}\end{center}\vspace{0.5cm}}%
+	\stepcounter{FAQcounter}%
+	\noindent{\bf Question \theFAQcounter:} {\em #1 \par}%
+}
+\newcommand{\FAQanswer}[1]{\bigskip\noindent{\bf Answer:} #1\par}	
+\newcommand{\FAQURL}[1]{{\tt #1}}
