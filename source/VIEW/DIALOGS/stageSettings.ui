@@ -566,12 +566,6 @@
         <receiver>StageSettingsData</receiver>
         <slot>eyeDistanceChanged()</slot>
     </connection>
-    <connection>
-        <sender>focal_distance_slider</sender>
-        <signal>valueChanged(int)</signal>
-        <receiver>StageSettingsData</receiver>
-        <slot>focalWidthChanged()</slot>
-    </connection>
 </connections>
 <tabstops>
     <tabstop>color_button</tabstop>
@@ -583,7 +577,7 @@
 <slots>
     <slot>colorPressed()</slot>
     <slot>eyeDistanceChanged()</slot>
-    <slot>focalWidthChanged()</slot>
+    <slot>focalDistanceChanged()</slot>
 </slots>
 <exportmacro>BALL_EXPORT</exportmacro>
 <layoutdefaults spacing="6" margin="11"/>
