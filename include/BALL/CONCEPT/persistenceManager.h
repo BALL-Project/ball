@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: persistenceManager.h,v 1.43 2003/05/08 14:28:50 sneumann Exp $
+// $Id: persistenceManager.h,v 1.44 2003/06/25 10:19:43 anker Exp $
 //
 
 #ifndef BALL_CONCEPT_PERSISTENCEMANAGER_H
@@ -331,7 +331,7 @@ namespace BALL
 				@param object a const pointer to the object we want to write
 				@param name the name of the object pointer (the name of the member variable written)
 		*/
-		template <class T>
+		template <typename T>
 		void writeObjectPointer(const T* object, const char* name)
 			throw();
  
@@ -341,7 +341,7 @@ namespace BALL
 				@param	name the name of the object pointer (usually the name of the member variable)
 				@return	true if reading wass successful
 		*/
-		template <class T>
+		template <typename T>
 		bool readObjectPointer(T*& object, const char* name)
 			throw();
 
@@ -350,7 +350,7 @@ namespace BALL
 				@param	object a const reference to the object
 				@param	name the name of the object (usually the name of the member variable)
 		*/
-		template <class T>
+		template <typename T>
 		void writeObjectReference(const T& object, const char* name)
 			throw();
 
@@ -360,7 +360,7 @@ namespace BALL
 				@param	name the name of the object (usually the name of the member variable)
 				@return	true if reading was successful
 		*/
-		template <class T>
+		template <typename T>
 		bool readObjectReference(T& object, const char* name)
 			throw();
 
@@ -371,7 +371,7 @@ namespace BALL
 				@param	name the name (usually the name of the member variable)
 				@param	size the number of elements in the array
 		*/
-		template <class T>
+		template <typename T>
 		void writeObjectArray(const T* array, const char* name, Size size)
 			throw();
 
@@ -382,7 +382,7 @@ namespace BALL
 				@param	name the name (usually the name of the member variable)
 				@param	size the number of elements in the array
 		*/
-		template <class T>
+		template <typename T>
 		bool readObjectArray(const T* array, const char* name, Size& size)
 			throw();
 
@@ -393,7 +393,7 @@ namespace BALL
 				@param  name the name (usually the name of the member variable)
 				@param  size the number of elements in the array
 		*/
-		template <class T>
+		template <typename T>
 		void writeObjectPointerArray(T** arr, const char* name, const Size size)
 			throw();
 	
@@ -404,7 +404,7 @@ namespace BALL
 				@param	name the name (usually the name of the member variable)
 				@param	size the number of elements in the array
 		*/
-		template <class T>
+		template <typename T>
 		bool readObjectPointerArray(T** array, const char* name, Size& size)
 			throw();
 	 
@@ -877,7 +877,7 @@ namespace BALL
 	}
 
 
-	template <class T>
+	template <typename T>
 	void PersistenceManager::writeObjectPointer(const T* object, const char* name)
 		throw()
 	{
@@ -892,7 +892,7 @@ namespace BALL
 	}
 
 
-	template <class T>
+	template <typename T>
 	bool PersistenceManager::readObjectPointer(T*& object, const char* name)
 		throw()
 	{
@@ -915,7 +915,7 @@ namespace BALL
 	} 
 
 
-	template <class T>
+	template <typename T>
 	void PersistenceManager::writeObjectReference(const T& object,
 			const char* name)
 		throw()
@@ -931,7 +931,7 @@ namespace BALL
 	} 
 
 
-	template <class T>
+	template <typename T>
 	bool PersistenceManager::readObjectReference(T& object, const char* name)
 		throw()
 	{
@@ -959,7 +959,7 @@ namespace BALL
 	}
 
 
-	template <class T>
+	template <typename T>
 	void PersistenceManager::writeObjectArray(const T* array, const char* name,
 			Size size)
 		throw()
@@ -975,7 +975,7 @@ namespace BALL
 	}
 
 
-	template <class T>
+	template <typename T>
 	bool PersistenceManager::readObjectArray
 		(const T* array, const char* name, Size& size)
 		throw()
@@ -996,7 +996,7 @@ namespace BALL
 	} 
 
 
-	template <class T>
+	template <typename T>
 	void PersistenceManager::writeObjectPointerArray
 		(T** arr, const char* name, const Size size)
 		throw()
@@ -1018,7 +1018,7 @@ namespace BALL
 	}
 
 
-	template <class T>
+	template <typename T>
 	bool PersistenceManager::readObjectPointerArray(T** array, const char* name,
 			Size& size)
 		throw()
