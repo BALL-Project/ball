@@ -1,4 +1,4 @@
-// $Id: pyWidget.h,v 1.4 2001/03/02 10:51:56 anker Exp $
+// $Id: pyWidget.h,v 1.5 2001/06/26 09:04:07 anker Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_PYWIDGET_H
 #define BALL_VIEW_GUI_WIDGETS_PYWIDGET_H
@@ -18,16 +18,18 @@
 #include <qmultilineedit.h>
 
 using namespace BALL;
+using namespace BALL::VIEW;
 
-/**
+/** Python Widget class.
+		{\bf Definition:} \URL{BALL/VIEW/GUI/WIDGETS/pyWidget.h}
 */
 class PyWidget
-  : public QMultiLineEdit,
-		public ModularWidget
+	: public QMultiLineEdit,
+		public ModularWidget 
 {
 	Q_OBJECT
 
-  public:
+	public:
 	
 	BALL_EMBEDDABLE(PyWidget)
 
@@ -40,12 +42,12 @@ class PyWidget
 			@param parent the parent widget
 			@param name the widget name
 	*/
-  PyWidget(QWidget* parent = 0, const char* name = 0);
+	PyWidget(QWidget* parent = 0, const char* name = 0);
 
 	/** Copy constructor.
 			Creates a new widget and inserts it in the same place as the original widget.
 	*/
-  PyWidget(const PyWidget& widget);
+	PyWidget(const PyWidget& widget);
 
 	/// Destructor
 	virtual ~PyWidget()
@@ -97,9 +99,9 @@ class PyWidget
 	*/
 	//@{
 	///
-  virtual void cursorUp(bool mark = FALSE);
+	virtual void cursorUp(bool mark = FALSE);
 	///
-  virtual void cursorDown(bool mark = FALSE);
+	virtual void cursorDown(bool mark = FALSE);
 	///
 	virtual void newLine();
 	///
@@ -143,4 +145,5 @@ class PyWidget
 	Position				history_position_;
 	String					current_line_;
 }; 
+	
 #endif // BALL_VIEW_GUI_WIDGETS_PYWIDGET_H
