@@ -1,4 +1,4 @@
-// $Id: atomContainer.h,v 1.10 2001/07/04 00:13:14 oliver Exp $
+// $Id: atomContainer.h,v 1.11 2001/07/04 08:04:04 anker Exp $
 
 #ifndef BALL_KERNEL_ATOMCONTAINER_H
 #define BALL_KERNEL_ATOMCONTAINER_H
@@ -58,11 +58,7 @@ namespace BALL
 		*/
 		//@{
 
-<<<<<<< atomContainer.h
 		/// The number of predefined properties for AtomContainer
-=======
-		/// BAUSTELLE
->>>>>>> 1.9
 		enum Property
 		{	
 			/// BAUSTELLE
@@ -99,20 +95,11 @@ namespace BALL
 		virtual ~AtomContainer()
 			throw();
 
-<<<<<<< atomContainer.h
-		/** Clear the contents of this instance of AtomContainer.
-				This methods clears the base fragment's name, destroys all its children
-				(as in \Ref{Composite::clear}), but does not remove it from its parent composite structures.
-		*/
-		virtual void clear()
-			throw();
-	
-		/** Clear the contents of this instance of AtomContainer and removes it from parent composite structures.
-=======
-		/** Clears the contents of this instance of AtomContainer and removes it from parent composite structures.
->>>>>>> 1.9
-				This methods clears the base fragment's name, destroys all its children
-				(as in \Ref{Composite::destroy}), and removes it from its parent composite structures.
+		/** Clears the contents of this instance of AtomContainer and removes
+				it from parent composite structures.  This methods clears the base
+				fragment's name, destroys all its children (as in
+				\Ref{Composite::destroy}), and removes it from its parent composite
+				structures.
 		*/
 		virtual void destroy()
 			throw();
