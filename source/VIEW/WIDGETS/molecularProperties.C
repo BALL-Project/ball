@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularProperties.C,v 1.4 2003/09/18 12:51:44 amoll Exp $
+// $Id: molecularProperties.C,v 1.5 2003/09/18 12:59:23 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularProperties.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -101,7 +101,6 @@ namespace BALL
 					{
 						// create a molecular selection message and sent molecular objects
 						SelectionMessage *molecular_selection = new SelectionMessage;
-						molecular_selection->setDeletable(true);
 						molecular_selection->setSelection(selection);
 
 						notify_(molecular_selection);

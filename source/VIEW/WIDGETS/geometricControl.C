@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.9 2003/09/18 12:51:44 amoll Exp $
+// $Id: geometricControl.C,v 1.10 2003/09/18 12:59:23 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -240,18 +240,13 @@ void GeometricControl::deleteRepresentation_()
 {
 	if (context_representation_ == 0)  return; 
 
-	SceneMessage *scene_message = new SceneMessage;
-	scene_message->setType(SceneMessage::REDRAW);
-	scene_message->setDeletable(true);
+	SceneMessage *scene_message = new SceneMessage(SceneMessage::REDRAW);
 	if (context_representation_->hasProperty(Representation::PROPERTY__IS_COORDINATE_SYSTEM))
 	{
 		scene_message->setType(SceneMessage::REMOVE_COORDINATE_SYSTEM);
 	}
 		
-	RepresentationMessage* message = new RepresentationMessage;
-	message->setType(RepresentationMessage::REMOVE);
-	message->setRepresentation(context_representation_);
-	message->setDeletable(true);
+	RepresentationMessage* message = new RepresentationMessage(*context_representation_, RepresentationMessage::REMOVE);
 	notify_(message);
 
 	getMainControl()->getPrimitiveManager().remove(*context_representation_);
@@ -276,9 +271,7 @@ void GeometricControl::selectedRepresentation(Representation& representation, bo
 		
 	representation.toggleProperty(Representation::PROPERTY__HIDDEN);
 
-	SceneMessage *scene_message = new SceneMessage;
-	scene_message->setType(SceneMessage::REDRAW);
-	scene_message->setDeletable(true);
+	SceneMessage *scene_message = new SceneMessage(SceneMessage::REDRAW);
 	notify_(scene_message);
 }
 
@@ -311,7 +304,6 @@ void GeometricControl::modifyRepresentation_()
 {
 	if (context_representation_ == 0) return;
 	ShowDisplayPropertiesMessage* message = new ShowDisplayPropertiesMessage;
-	message->setDeletable(true);
 	notify_(message);
 }
 
@@ -342,10 +334,7 @@ void GeometricControl::updateSelection()
 
 	Representation* rep = getRepresentation(*item);
 
-	RepresentationMessage* message = new RepresentationMessage;
-	message->setType(RepresentationMessage::SELECTED);
-	message->setRepresentation(rep);
-	message->setDeletable(true);
+	RepresentationMessage* message = new RepresentationMessage(*rep, RepresentationMessage::SELECTED);
 	notify_(message);
 
 	if (rep->getComposites().size() == 0) 
