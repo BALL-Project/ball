@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.25 2003/12/09 16:40:35 amoll Exp $
+// $Id: mainControl.C,v 1.26 2003/12/09 16:41:15 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1062,6 +1062,8 @@ bool MainControl::update(Representation& rep)
 	throw()
 {
 	if (!primitive_manager_.has(rep)) return false;
+
+	rep.update(true);
 
 	RepresentationMessage* rm = new RepresentationMessage(&rep, RepresentationMessage::UPDATE);
 	notify_(rm);
