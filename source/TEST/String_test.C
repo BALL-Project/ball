@@ -1,4 +1,4 @@
-// $Id: String_test.C,v 1.11 2000/05/24 16:10:11 oliver Exp $
+// $Id: String_test.C,v 1.12 2000/06/22 10:24:10 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -7,7 +7,7 @@
 #include <string.h>
 ///////////////////////////
 
-START_TEST(String,"$Id: String_test.C,v 1.11 2000/05/24 16:10:11 oliver Exp $")
+START_TEST(String,"$Id: String_test.C,v 1.12 2000/06/22 10:24:10 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -601,6 +601,12 @@ s4.set("");
 TEST_EQUAL(s4.toUnsignedInt(), (unsigned int)0)
 s4.set("12.34");
 TEST_EQUAL(s4.toUnsignedInt(), (unsigned int)12)
+RESULT
+
+CHECK(String::operator cosnt char* ())
+s4 = "abcdef";
+const char* c_ptr((const char*)s4);
+CHECK_EQUAL(c_ptr, s4)
 RESULT
 
 CHECK(String::operator Substring())
