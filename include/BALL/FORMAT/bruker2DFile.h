@@ -4,7 +4,7 @@
 #include <BALL/SYSTEM/file.h>
 #include <BALL/DATATYPE/string.h>
 
-#include "BrukerParameter.h"
+#include <BALL/FORMAT/JCAMPFile.h>
 
 using namespace BALL;
 
@@ -27,11 +27,16 @@ class Bruker2D : public BALL::File
   ~Bruker2D();
 
   /**
-   * Einlesen eines 2D-Spektrums nach dat.
+   * Read a spectrum.
    */
   void read( vector<double>& dat );
 
- protected:
+  /**
+   * These classes give access to the parameters used in aqcuiring the
+   * spectrum.
+   */
   BrukerParameter *parsf1_, *parsf2_;
+
+ protected:
   int minx_, maxx_, miny_, maxy_;
 };

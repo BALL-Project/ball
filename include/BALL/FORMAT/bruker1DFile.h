@@ -1,41 +1,74 @@
-// $Id: bruker1DFile.h,v 1.1 2000/09/14 12:23:23 oliver Exp $
+// $Id: bruker1DFile.h,v 1.2 2000/10/05 22:26:58 oliver Exp $
 
 #include <vector>
 #include <glib.h>
 
-#include <BALL/SYSTEM/file.h>
-#include <BALL/DATATYPE/string.h>
+#ifndef BALL_FORMAT_BRUKER1DFILE_H
+#define BALL_FORMAT_BRUKER1DFILE_H
 
-#include "BrukerParameter.h"
+#ifndef BALL_SYSTEM_FILE_H
+#	include <BALL/SYSTEM/file.h>
+#endif
+
+#ifndef BALL_DATATYPE_STRING_H
+#	include <BALL/DATATYPE/string.h>
+#endif
 
 namespace BALL
 {
 
-	class Bruker1D : public BALL::File
+	class BrukerParameter;
+
+	/**	Bruker 1D spectrum format.
+			This class....
+			\\
+			{\bf Definition:}\URL{BALL/FORMAT/bruker1DFile.h}
+			\\
+	*/
+	class Bruker1D 
+		: public File
 	{
-	 public:
+		public:
+		/**	@name	Constructors and Destructors
+		*/
+		//@{
 		/**
 		 * Konstruktor. Wichtig: name ist hier der Name des Bruker-*Verzeichnisses*
 		 */
-		Bruker1D( const String& name, OpenMode open_mode = IN|BINARY );
+		Bruker1D(const String& name, OpenMode open_mode = File::IN|File::BINARY);
 
-		/**
-		 * Copy-Konstruktor.
-		 */
-		Bruker1D( const Bruker1D& file );
+		/// Copy constructor
+		Bruker1D(const Bruker1D& file);
 
-		/**
-		 * Destruktor.
-		 */
-		~Bruker1D();
+		/// Destructor
+		virtual ~Bruker1D();
+		//@}
 
+		/**	@name Accessors
+		*/
+		//@{
 		/**
 		 * Einlesen eines 1D-Spektrums nach dat.
 		 */
-		void read( vector<double>& dat );
+		void read(std::vector<double>& dat );
 
-	 protected:
-		BrukerParameter *pars_;
-		Size min_, max_;
+		/**
+		*/
+		BrukerParameter* getParameters();
+		//@}
+
+		protected:
+
+		/**
+		 * This class gives access to the parameters used in
+		 * acquiring this spectrum.
+		 */
+		BrukerParameter* pars_;
+		
+		Size min_;
+
+		Size max_;
 	};
 }
+
+#endif // BALL_FORMAT_BRUKER1DFILE_H
