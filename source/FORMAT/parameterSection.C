@@ -1,4 +1,4 @@
-// $Id: parameterSection.C,v 1.6 2000/09/19 16:02:20 oliver Exp $
+// $Id: parameterSection.C,v 1.7 2000/09/19 19:35:56 oliver Exp $
 //
 
 #include <BALL/FORMAT/parameterSection.h>
@@ -130,7 +130,7 @@ namespace BALL
 
 		// variables is an array containing the fields that represent variables
 		Index	variables[ParameterSection::MAX_FIELDS];
-		Size	number_of_variables = 0;
+		Size number_of_variables = 0;
 
 
 		// check every field definition 
@@ -233,7 +233,9 @@ namespace BALL
 								if (old_version > new_version)	
 								{
 									ignore_entry = true;
-								} else {
+								} 
+								else 
+								{
 									if (old_version == new_version)
 									{
 										Log.warn() << "ParameterSection: repeated entry with same version number in line " << number_of_lines 
@@ -261,11 +263,15 @@ namespace BALL
 							// copy all variable fields to the corresponding array
 							for (j = 0; j < (Position)number_of_variables; j++)
 							{
-								entries_[number_of_lines * number_of_variables_ + j] = f[variables[j]];
+								if (variables[j] < f.size())
+								{
+									entries_[number_of_lines * number_of_variables_ + j] = f[variables[j]];
+								}
 							}
 						} 
 					}
-				} else if (line[0] == '@') 
+				} 
+				else if (line[0] == '@') 
 				{
 					// we found an option. 
 					// options are of the form "@option=value"
