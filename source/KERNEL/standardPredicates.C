@@ -1,4 +1,4 @@
-// $Id: standardPredicates.C,v 1.16 2000/05/26 17:15:33 anker Exp $
+// $Id: standardPredicates.C,v 1.17 2000/05/26 17:57:12 anker Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -19,6 +19,7 @@ using namespace std;
 namespace BALL 
 {
 
+	/*
 	void writeit(const HashSet<const Bond*>& bla)
 	{
 		Log.info() << "#" << bla.size() << " {";
@@ -30,6 +31,7 @@ namespace BALL
 		}
 		Log.info() << "}";
 	}
+	*/
 
 	// True predicate
 
@@ -629,17 +631,17 @@ namespace BALL
 			for (Size i = 0; i < atom.countBonds(); ++i)
 			{
 				bond = atom.getBond(i);
-				Log.info() << "Bond: " << atom.getFullName() << " - " <<
-					bond->getPartner(atom)->getFullName();
+				// Log.info() << "Bond: " << atom.getFullName() << " - " <<
+				//	bond->getPartner(atom)->getFullName();
 
 				// Follow this bond only if its type matches and it isn't the bond
 				// we came from. This implies special treatment of cycles.
 				if (bond != source)
 				{
-					Log.info() << ": not source";
+					// Log.info() << ": not source";
 					if (bondOrderMatch(subgroups_it->first, bond->getOrder()))
 					{
-						Log.info() << ", order match";
+						// Log.info() << ", order match";
 						if (subgroups_it->second.size() < 1) 
 						{
 							Log.error() << "ConnectedToPredicate::find: subgroup too short: " 
@@ -653,7 +655,7 @@ namespace BALL
 							if ((bond->getPartner(atom)->getElement().getSymbol()
 										== subgroups_it->second) || (subgroups_it->second == '*'))
 							{
-								Log.info() << ", base match.";
+								// Log.info() << ", base match.";
 								deeper.insert(bond);
 							}
 						}
@@ -662,13 +664,13 @@ namespace BALL
 							if (findAndTest(subgroups_it->second, 
 										*(atom.getBond(i)->getPartner(atom)), bond))
 							{
-								Log.info() << ", recursion.";
+								// Log.info() << ", recursion.";
 								deeper.insert(bond);
 							}
 						}
 					}
 				}
-				Log.info() << endl;
+				// Log.info() << endl;
 			}
 			if (!deeper.isEmpty())
 			{
@@ -676,7 +678,7 @@ namespace BALL
 			}
 		}
 
-		Log.info() << "L: " << L.size();
+		// Log.info() << "L: " << L.size();
 		if (L.empty()  || (L.size() != subgroups.size()))
 		{
 			return false;
@@ -694,10 +696,10 @@ namespace BALL
 			list<HashSet <const Bond*> >::iterator it = L.begin();
 			list< list< HashSet<const Bond*> >:: iterator > hash_del_list;
 
-			Log.info() << "Sizes of hash sets before first block:";
+			// Log.info() << "Sizes of hash sets before first block:";
 			for (; it != L.end(); ++it)
 			{
-				writeit(*it);
+				//writeit(*it);
 				// Log.info() << " " << it->size();
 				if (it->size() == 1)
 				{
@@ -706,7 +708,7 @@ namespace BALL
 					{
 						// This match was assumed to be definite, but obviously
 						// isn't. So the pattern couldn't be applied.
-						Log.info() << "DOUBLE SINGLE." << endl;
+						// Log.info() << "DOUBLE SINGLE." << endl;
 						return false;
 					}
 					// this match is now assumed to be definite, so delete it from
@@ -721,7 +723,7 @@ namespace BALL
 					hash_del_list.push_back(it);
 				}
 			}
-			Log.info() << endl;
+			// Log.info() << endl;
 
 			// now erase the empty hashsets in L
 
@@ -736,7 +738,7 @@ namespace BALL
 
 			// delete definite items from all other hashsets
 
-			Log.info() << "Sizes of remaining sets before GREEDY:";
+			// Log.info() << "Sizes of remaining sets before GREEDY:";
 			for (it = L.begin(); it != L.end(); ++it) 
 			{
 				// Delete the contents of del_list in all Hashsets
@@ -755,16 +757,16 @@ namespace BALL
 						return false;
 					}
 				}
-				writeit(*it);
+				//writeit(*it);
 				// Log.info() << " " << it->size();
 			}
-			Log.info() << endl;
+			// Log.info() << endl;
 
 			// SECOND BLOCK: If there are ambiguous results, just grab one
 			// and make it definite by deleting a hashset containing it and
 			// all occurrences in all other hashsets. (GREEDY).
 
-			Log.info() << "Sizes of remaining sets after GREEDY:";
+			// Log.info() << "Sizes of remaining sets after GREEDY:";
 
 			if (L.size() > 0)
 			{
@@ -778,7 +780,7 @@ namespace BALL
 						it->erase(grab);
 					}
 
-					writeit(*it);
+					//writeit(*it);
 					// Log.info() << " " << it->size();
 
 					if (it->size() == 0)
@@ -787,7 +789,7 @@ namespace BALL
 					}
 				}
 			}
-			Log.info() << endl;
+			// Log.info() << endl;
 		} while (L.size() > 0);
 
 		// L was emptied and no errors occurred, so return true.
