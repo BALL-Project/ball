@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.17 2003/10/27 16:54:42 amoll Exp $
+// $Id: geometricControl.C,v 1.18 2003/11/23 16:41:25 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -21,13 +21,17 @@ namespace BALL
 	namespace VIEW
 	{
 
-GeometricControl::SelectableListViewItem::SelectableListViewItem(QListView* parent, const QString& text, const QString& type, Representation* representation, GeometricControl& control)
+GeometricControl::SelectableListViewItem::SelectableListViewItem(
+		QListView* parent, const QString& text,
+		Representation* representation, GeometricControl& control)
 	throw()
 	: QCheckListItem(parent, text, QCheckListItem::CheckBox),
 		representation_(representation),
 		control_reference_(control)
 {
-	setText(1, type);
+	setText(0, text);
+	setText(1, representation->getColoringName().c_str());
+	setText(2, representation->getProperties().c_str());
 }
 
 void GeometricControl::SelectableListViewItem::stateChange(bool)
@@ -47,10 +51,12 @@ GeometricControl::GeometricControl(QWidget* parent, const char* name)
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "new GeometricControl " << this << std::endl;
 #endif
-	listview->addColumn("[visible] Type");
+	listview->addColumn("[visible] Model");
+	listview->addColumn("Coloring");
 	listview->addColumn("Properties");
 	listview->setColumnWidth(0, 60);
 	listview->setColumnWidth(1, 60);
+	listview->setColumnWidth(2, 60);
 
 	connect(listview, SIGNAL(selectionChanged()), this, SLOT(updateSelection()));
 }
@@ -98,12 +104,9 @@ void GeometricControl::updateRepresentation(Representation& rep)
 	QListViewItem* item = representation_to_item_[&rep]; 
 	if (item == 0) return;
 	
-	QString properties = rep.getProperties().c_str();
-	if (item->text(1) == properties) return;
-
 	item->setText(0, getRepresentationName_(rep).c_str());
-	item->setText(1, properties);
-
+	item->setText(1, rep.getColoringName().c_str());
+	item->setText(2, rep.getProperties().c_str());
 	listview->triggerUpdate();
 
 	RepresentationMessage* message = new RepresentationMessage(&rep, RepresentationMessage::SELECTED);
@@ -232,7 +235,9 @@ void GeometricControl::generateListViewItem_(Representation& rep)
 	QString properties = rep.getProperties().c_str();
 	// create a new list item
 	SelectableListViewItem* new_item = 
-		new SelectableListViewItem(listview, getRepresentationName_(rep).c_str(), properties, &rep, *this);
+		new SelectableListViewItem(listview, 
+					getRepresentationName_(rep).c_str(), 
+					&rep, *this);
 
 	CHECK_PTR(new_item);
 	new_item->setOn(true);
