@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.30 2004/11/09 21:35:30 amoll Exp $
+// $Id: common.h,v 1.31 2004/11/14 16:46:38 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -22,6 +22,7 @@ namespace BALL
 	{
 
 		class GeometricObject;
+		class MainControl;
 
 		/** @name defines
 				\ingroup ViewKernelOther
@@ -315,6 +316,16 @@ namespace BALL
 
 		///
 		bool stringToVector3(const String& data, Vector3& v)
+			throw();
+
+		/** Get MainControl
+		 		This method is only to be used for code, which is not part of 
+				a ModularWidget.
+				On Windows, it uses the following cast:\\
+				MainControl* mc = dynamic_cast<MainControl*>(qApp->mainWidget());\\
+				On all other platforms, it uses MainControl::getInstance(0);
+		*/
+		MainControl* getMainControl()
 			throw();
 		
 		//@}

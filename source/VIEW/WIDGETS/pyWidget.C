@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.42 2004/11/12 15:12:45 amoll Exp $
+// $Id: pyWidget.C,v 1.43 2004/11/14 16:46:29 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -256,7 +256,7 @@ namespace BALL
 			{
 				stop_script_ = true;
 				stopInterpreter();
-				MainControl::getInstance(0)->quit();
+				getMainControl()->quit();
 				return true;
 			}
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.50 2004/11/09 21:35:24 amoll Exp $
+// $Id: representation.C,v 1.51 2004/11/14 16:46:29 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/representation.h>
@@ -274,7 +274,7 @@ namespace BALL
 			rebuild_ = rebuild;
 
 #ifdef BALL_QT_HAS_THREADS
-			MainControl* mc = MainControl::getInstance(0);
+			MainControl* mc = getMainControl();
 			if (mc != 0)
 			{
 //   				MainControl* mc = dynamic_cast<MainControl*>(qApp->mainWidget());

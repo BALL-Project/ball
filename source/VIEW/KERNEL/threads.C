@@ -65,7 +65,7 @@ namespace BALL
  			rep_->update_();
 			rep_ = 0;
 			FinishedRepresentionUpdateEvent* se = new FinishedRepresentionUpdateEvent;
-			qApp->postEvent(MainControl::getInstance(0), se);
+			qApp->postEvent(getMainControl(), se);
 		}
 
 

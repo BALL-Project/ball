@@ -1,4 +1,5 @@
 #include <BALL/VIEW/KERNEL/common.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
 
 #include <BALL/VIEW/PRIMITIVES/line.h>
 #include <BALL/VIEW/PRIMITIVES/sphere.h>
@@ -6,6 +7,10 @@
 #include <BALL/VIEW/PRIMITIVES/point.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/VIEW/PRIMITIVES/box.h>
+
+#ifdef BALL_PLATFORM_WINDOWS
+ #include <qapplication.h>
+#endif
 
 namespace BALL
 {
@@ -207,4 +212,25 @@ bool stringToVector3(const String& data, Vector3& v)
 	return false;
 }
 
+MainControl* getMainControl()
+	throw()
+{
+	MainControl* mc = 0;
+	#ifdef BALL_PLATFORM_WINDOWS
+		mc = dynamic_cast<MainControl*>(qApp->mainWidget());
+	#else
+		mc = MainControl::getInstance(0);
+	#endif
+
+	#ifdef BALL_VIEW_DEBUG
+		if (mc == 0)
+		{
+			throw (Exception::NullPointer(__FILE__, __LINE__));
+		}
+	#endif
+
+	return mc; 
+}
+
+	
 } } //namespaces
