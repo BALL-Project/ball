@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.54.2.31 2005/01/11 16:45:12 amoll Exp $
+// $Id: cartoonModel.C,v 1.54.2.32 2005/01/12 13:16:09 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -743,6 +743,11 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 	{
 		Log.error() << "Error in " << __FILE__ << " " << __LINE__ << std::endl;
 		return;
+	}
+
+	if (last_spline_point_ != -1)
+	{
+		buildGraphicalRepresentation_(last_spline_point_, start);
 	}
 
 	if (end == 0) end = spline_points_.size();
