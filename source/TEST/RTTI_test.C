@@ -1,4 +1,4 @@
-// $Id: RTTI_test.C,v 1.3 2000/01/13 22:49:09 oliver Exp $
+// $Id: RTTI_test.C,v 1.4 2000/01/13 22:58:48 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(RTTI, "$Id: RTTI_test.C,v 1.3 2000/01/13 22:49:09 oliver Exp $")
+START_TEST(RTTI, "$Id: RTTI_test.C,v 1.4 2000/01/13 22:58:48 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -99,13 +99,13 @@ RESULT
 CHECK(getName<>())
 // there is not much to check - each damned compiler 
 // tries his own demangling!
-TEST_EQUAL(getName<Protein>(), String("BALL::Protein"))
+TEST_EQUAL(String(getName<Protein>()).hasSubstring("Protein"), true)
 RESULT
 
 CHECK(getStreamName<>())
 // there is not much to check - each damned compiler 
 // tries his own demangling!
-TEST_EQUAL(getName<Protein>(), String("BALL::Protein"))
+TEST_EQUAL(getStreamName<Protein>(), String("BALL::Protein"))
 RESULT
 
 CHECK(castTo<>())
