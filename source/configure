@@ -1367,7 +1367,7 @@ fi
 	if test ! -f config.lic ; then
 		${PAGER} LICENSE
 		echo " "
-		echo "Do you accept this license terms (y/n)?"
+		echo "Do you accept these license terms (y/n)?"
 		answer=""
 		while test "$answer" != "y" -a "$answer" != "n" ; do
 			read answer
@@ -4423,16 +4423,16 @@ _ACEOF
 
 
 
-	        TEMPLATE_DIR=""
+        TEMPLATE_DIR=""
   AR="${CXX}"
   DYNAR="${CXX}"
   AROPTS="${AROPTS} -o"
-  DYNAROPTS="${DYNAROPTS} -shared -o"
+  DYNAROPTS="${DYNAROPTS} -cxxlib-gcc -shared -o"
   CXX_MAKEDEPEND="${CXX}"
   MAKEDEP_CXX_OPTS="-M"
   MAKEDEP_CXX_SUFFIX=" >.Dependencies"
 
-  CXXFLAGS="${CXXFLAGS} -KPIC"
+  CXXFLAGS="${CXXFLAGS} -cxxlib-gcc -KPIC"
 
     CXXFLAGS_O="${CXXFLAGS_O} -O1"
 

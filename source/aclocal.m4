@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.43 2004/02/18 14:56:49 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.44 2004/02/18 23:48:39 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -815,19 +815,19 @@ AC_DEFUN(CF_INTEL_OPTIONS,[
 	AC_MSG_RESULT(${VERSION_OUTPUT})
 	CF_DIGEST_CXX_VERSION
 
-	  dnl   KAI C++ stores a list of instantiated templates
+  dnl   KAI C++ stores a list of instantiated templates
   dnl   in directories called ti_files
   dnl   make clean should remove these
   TEMPLATE_DIR=""
   AR="${CXX}"
   DYNAR="${CXX}"
   AROPTS="${AROPTS} -o"
-  DYNAROPTS="${DYNAROPTS} -shared -o"
+  DYNAROPTS="${DYNAROPTS} -cxxlib-gcc -shared -o"
   CXX_MAKEDEPEND="${CXX}"
   MAKEDEP_CXX_OPTS="-M"
   MAKEDEP_CXX_SUFFIX=" >.Dependencies"
 
-  CXXFLAGS="${CXXFLAGS} -KPIC"
+  CXXFLAGS="${CXXFLAGS} -cxxlib-gcc -KPIC"
 
   dnl   optimze as on highest level: this compiler
   CXXFLAGS_O="${CXXFLAGS_O} -O1"
