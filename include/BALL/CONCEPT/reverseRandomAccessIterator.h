@@ -1,4 +1,4 @@
-// $Id: reverseRandomAccessIterator.h,v 1.4 2000/12/19 12:50:50 amoll Exp $
+// $Id: reverseRandomAccessIterator.h,v 1.5 2001/06/08 12:21:28 anker Exp $
 
 #ifndef BALL_CONCEPT_REVERSERANDOMACCESS_H
 #define BALL_CONCEPT_REVERSERANDOMACCESS_H
@@ -20,17 +20,31 @@ namespace BALL
 {
 
 	/**	@name	Generic Reverse Random Access Iterator Classes.
+			\\
 			{\bf Definition:} \URL{BALL/CONCEPT/reverseRandomAccessIterator.h}
 	*/
 	//@{
 
 	/**	Generic Reverse Random Access Iterator Class
 	*/
-	template <class Container, class DataType, class Position, class Traits>
+	template <typename Container, typename DataType, typename Position, typename Traits>
 	class ReverseRandomAccessIterator
 		: public RandomAccessIterator<Container, DataType, Position, Traits>
 	{
 		public:
+
+		BALL_CREATE(ReverseRandomAccessIterator)
+
+		/** @name Typedefs
+		 */
+		//@{
+
+		/** Tag this iterator as a random access iterator according to the STL
+				scheme.
+		 */
+		typedef ::std::random_access_iterator_tag iterator_category;
+
+		//@}
 
 		/**	@name Constructors and Destructors
 		*/
@@ -39,547 +53,880 @@ namespace BALL
 		/**
 		*/
 		ReverseRandomAccessIterator()
-			throw()
-			:	RandomAccessIterator<Container, DataType, Position, Traits>()
-		{
-		}
+			throw();
 
 		/**
 		*/
-		ReverseRandomAccessIterator(const ReverseRandomAccessIterator &iterator)
-			throw()
-			:	RandomAccessIterator<Container, DataType, Position, Traits>(iterator)
-		{
-		}
+		ReverseRandomAccessIterator(const ReverseRandomAccessIterator& iterator)
+			throw();
 
 		/**
 		*/
-		ReverseRandomAccessIterator(const BaseIterator<Container, DataType, Position, Traits> &iterator)
-			throw()
-			:	RandomAccessIterator<Container, DataType, Position, Traits>(iterator)
-		{
-		}
+		ReverseRandomAccessIterator(const BaseIterator<Container, DataType, Position, Traits>& iterator)
+			throw();
+		
+		/**
+		*/
+		~ReverseRandomAccessIterator()
+			throw();
+
 		//@}
 
 		bool operator + () const
-			throw()
-		{
-			return traits_->isValid();
-		}
+			throw();
 
 		void toBegin()
-			throw(Exception::InvalidIterator)
-		{
-			RandomAccessIterator<Container, DataType, Position, Traits>::toRBegin();
-		}
+			throw(Exception::InvalidIterator);
 
 		bool isBegin() const
-			throw(Exception::InvalidIterator)
-		{
-			return RandomAccessIterator<Container, DataType, Position, Traits>::isRBegin();
-		}
+			throw(Exception::InvalidIterator);
 
 		void toEnd()
-			throw(Exception::InvalidIterator)
-		{
-			RandomAccessIterator<Container, DataType, Position, Traits>::toREnd();
-		}
+			throw(Exception::InvalidIterator);
 
 		bool isEnd() const
-			throw(Exception::InvalidIterator)
-		{
-			return RandomAccessIterator<Container, DataType, Position, Traits>::isREnd();
-		}
+			throw(Exception::InvalidIterator);
 
 		void toRBegin()
-			throw(Exception::InvalidIterator)
-		{
-			RandomAccessIterator<Container, DataType, Position, Traits>::toBegin();
-		}
+			throw(Exception::InvalidIterator);
 
 		bool isRBegin() const
-			throw(Exception::InvalidIterator)
-		{
-			return RandomAccessIterator<Container, DataType, Position, Traits>::isBegin();
-		}
+			throw(Exception::InvalidIterator);
 
 		void toREnd()
-			throw(Exception::InvalidIterator)
-		{
-			RandomAccessIterator<Container, DataType, Position, Traits>::toEnd();
-		}
+			throw(Exception::InvalidIterator);
 
 		bool isREnd() const
-			throw(Exception::InvalidIterator)
-		{
-			return RandomAccessIterator<Container, DataType, Position, Traits>::isEnd();
-		}
+			throw(Exception::InvalidIterator);
 
-		ReverseRandomAccessIterator &operator ++ ()
-			throw(Exception::InvalidIterator)
-		{
-			RandomAccessIterator<Container, DataType, Position, Traits>::operator--();
-			return *this;
-		}
+		ReverseRandomAccessIterator& operator ++ ()
+			throw(Exception::InvalidIterator);
 
 		ReverseRandomAccessIterator operator ++ (int)
-			throw(Exception::InvalidIterator)
-		{
-			ReverseRandomAccessIterator iterator(*this);
-			RandomAccessIterator<Container, DataType, Position, Traits>::operator--();
-			return iterator;
-		}
+			throw(Exception::InvalidIterator);
 
-		ReverseRandomAccessIterator &operator -- ()
-			throw(Exception::InvalidIterator)
-		{
-			RandomAccessIterator<Container, DataType, Position, Traits>::operator++();
-			return *this;
-		}
+		ReverseRandomAccessIterator& operator -- ()
+			throw(Exception::InvalidIterator);
 
 		ReverseRandomAccessIterator operator -- (int)
-			throw(Exception::InvalidIterator)
-		{
-			ReverseRandomAccessIterator iterator(*this);
-			RandomAccessIterator<Container, DataType, Position, Traits>::operator++();
-			return iterator;
-		}
+			throw(Exception::InvalidIterator);
 
-		ReverseRandomAccessIterator &operator += (Distance distance)
-			throw(Exception::InvalidIterator)
-		{
-			RandomAccessIterator<Container, DataType, Position, Traits>::operator-=(distance);
-			return *this;
-		}
+		ReverseRandomAccessIterator& operator += (Distance distance)
+			throw(Exception::InvalidIterator);
 
-		ReverseRandomAccessIterator &operator -= (Distance distance)
-			throw(Exception::InvalidIterator)
-		{
-			RandomAccessIterator<Container, DataType, Position, Traits>::operator+=(distance);
-			return *this;
-		}
+		ReverseRandomAccessIterator& operator -= (Distance distance)
+			throw(Exception::InvalidIterator);
 
 		ReverseRandomAccessIterator operator + (Distance distance)
-			throw(Exception::InvalidIterator)
-		{
-			ReverseRandomAccessIterator iterator(*this);
-			return (iterator += distance);
-		}
+			throw(Exception::InvalidIterator);
 
 		friend ReverseRandomAccessIterator operator + (Distance distance,
-			const ReverseRandomAccessIterator &iterator)
+			const ReverseRandomAccessIterator& iterator)
 			throw(Exception::InvalidIterator)
 		{
 			ReverseRandomAccessIterator tmp_iterator(iterator);
 			return (tmp_iterator += distance);
 		}
 
-		ReverseRandomAccessIterator operator -(Distance distance)
+		ReverseRandomAccessIterator operator - (Distance distance)
+			throw(Exception::InvalidIterator);
+
+		friend Distance operator - (const ReverseRandomAccessIterator& a, const ReverseRandomAccessIterator& b)
 			throw(Exception::InvalidIterator)
 		{
-			ReverseRandomAccessIterator iterator(*this);
-			return (iterator -= distance);
+			return (((RandomAccessIterator<Container, DataType, Position, Traits>&)b) 
+							- ((RandomAccessIterator<Container, DataType, Position, Traits>&)a));
 		}
 
-		friend Distance operator - (const ReverseRandomAccessIterator &a, const ReverseRandomAccessIterator &b)
-			throw(Exception::InvalidIterator)
-		{
-			return (((RandomAccessIterator<Container, DataType, Position, Traits> &)b) 
-							- ((RandomAccessIterator<Container, DataType, Position, Traits> &)a));
-		}
+		bool operator < (const ReverseRandomAccessIterator& iterator) const
+			throw(Exception::InvalidIterator);
 
-		bool operator < (const ReverseRandomAccessIterator &iterator) const
-			throw(Exception::InvalidIterator)
-		{
-			return RandomAccessIterator<Container, DataType, Position, Traits>::operator>(iterator);
-		}
+		bool operator <= (const ReverseRandomAccessIterator& iterator) const
+			throw(Exception::InvalidIterator);
 
-		bool operator <= (const ReverseRandomAccessIterator &iterator) const
-			throw(Exception::InvalidIterator)
-		{
-			return RandomAccessIterator<Container, DataType, Position, Traits>::operator>=(iterator);
-		}
+		bool operator >= (const ReverseRandomAccessIterator& iterator) const
+			throw(Exception::InvalidIterator);
 
-		bool operator >= (const ReverseRandomAccessIterator &iterator) const
-			throw(Exception::InvalidIterator)
-		{
-			return RandomAccessIterator<Container, DataType, Position, Traits>::operator<=(iterator);
-		}
+		bool operator > (const ReverseRandomAccessIterator& iterator) const
+			throw(Exception::InvalidIterator);
 
-		bool operator > (const ReverseRandomAccessIterator &iterator) const
-			throw(Exception::InvalidIterator)
-		{
-			return RandomAccessIterator<Container, DataType, Position, Traits>::operator<(iterator);
-		}
+		DataType* findFirst(const UnaryPredicate<DataType>& predicate)
+			throw(Exception::InvalidIterator);
 
-		DataType* findFirst(const UnaryPredicate<DataType> &predicate)
-			throw(Exception::InvalidIterator)
-		{
-			return (DataType *)RandomAccessIterator<Container, DataType, Position, Traits>::findLast(predicate);
-		}
+		const DataType* findFirst(const UnaryPredicate<DataType>& predicate) const
+			throw(Exception::InvalidIterator);
 
-		const DataType* findFirst(const UnaryPredicate<DataType> &predicate) const
-			throw(Exception::InvalidIterator)
-		{
-			return (const DataType *)RandomAccessIterator<Container, DataType, Position, Traits>::findLast(predicate);
-		}
-
-		DataType* findLast(const UnaryPredicate<DataType> &predicate)
-			throw(Exception::InvalidIterator)
-		{
-			return (DataType *)RandomAccessIterator<Container, DataType, Position, Traits>::findFirst(predicate);
-		}
+		DataType* findLast(const UnaryPredicate<DataType>& predicate)
+			throw(Exception::InvalidIterator);
 	
-		const DataType* findLast(const UnaryPredicate<DataType> &predicate) const
-			throw(Exception::InvalidIterator)
-		{
-			return (const DataType *)RandomAccessIterator<Container, DataType, Position, Traits>::findFirst(predicate);
-		}
+		const DataType* findLast(const UnaryPredicate<DataType>& predicate) const
+			throw(Exception::InvalidIterator);
 
-		DataType* findPrevious(const UnaryPredicate<DataType> &predicate)
-			throw(Exception::InvalidIterator)
-		{
-			return (DataType *)RandomAccessIterator<Container, DataType, Position, Traits>::findNext(predicate);
-		}
+		DataType* findPrevious(const UnaryPredicate<DataType>& predicate)
+			throw(Exception::InvalidIterator);
 
-		const DataType* findPrevious(const UnaryPredicate<DataType> &predicate) const
-			throw(Exception::InvalidIterator)
-		{
-			return (const DataType *)RandomAccessIterator<Container, DataType, Position, Traits>::findNext(predicate);
-		}
+		const DataType* findPrevious(const UnaryPredicate<DataType>& predicate) const
+			throw(Exception::InvalidIterator);
 
-		DataType* findNext(const UnaryPredicate<DataType> &predicate)
-			throw(Exception::InvalidIterator)
-		{
-			return (DataType *)RandomAccessIterator<Container, DataType, Position, Traits>::findPrevious(predicate);
-		}
+		DataType* findNext(const UnaryPredicate<DataType>& predicate)
+			throw(Exception::InvalidIterator);
 	
-		const DataType* findNext(const UnaryPredicate<DataType> &predicate) const
-			throw(Exception::InvalidIterator)
-		{
-			return (const DataType *)RandomAccessIterator<Container, DataType, Position, Traits>::findPrevious(predicate);
-		}
+		const DataType* findNext(const UnaryPredicate<DataType>& predicate) const
+			throw(Exception::InvalidIterator);
 
-		static ReverseRandomAccessIterator begin(const Container &container)
-			throw(Exception::InvalidIterator)
-		{
-			ReverseRandomAccessIterator iterator(container);
-			iterator.toBegin();
-			return iterator;
-		}
+		static ReverseRandomAccessIterator begin(const Container& container)
+			throw(Exception::InvalidIterator);
 
-		static ReverseRandomAccessIterator end(const Container &container)
-			throw(Exception::InvalidIterator)
-		{
-			ReverseRandomAccessIterator iterator(container);
-			iterator.toEnd();
-			return iterator;
-		}
+		static ReverseRandomAccessIterator end(const Container& container)
+			throw(Exception::InvalidIterator);
 
-		static ReverseRandomAccessIterator rbegin(const Container &container)
-			throw(Exception::InvalidIterator)
-		{
-			ReverseRandomAccessIterator iterator(container);
-			iterator.toRBegin();
-			return iterator;
-		}
+		static ReverseRandomAccessIterator rbegin(const Container& container)
+			throw(Exception::InvalidIterator);
 
-		static ReverseRandomAccessIterator rend(const Container &container)
-			throw(Exception::InvalidIterator)
-		{
-			ReverseRandomAccessIterator iterator(container);
-			iterator.toREnd();
-			return iterator;
-		}
+		static ReverseRandomAccessIterator rend(const Container& container)
+			throw(Exception::InvalidIterator);
 
 		protected:
 
-		ReverseRandomAccessIterator(const Container &container)
-			throw()
-			:	RandomAccessIterator<Container, DataType, Position, Traits>(container)
-		{
-		}
+		ReverseRandomAccessIterator(const Container& container)
+			throw();
 
 	};
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ReverseRandomAccessIterator<Container, DataType, Position, Traits>::ReverseRandomAccessIterator()
+		throw()
+		:	RandomAccessIterator<Container, DataType, Position, Traits>()
+	{
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ReverseRandomAccessIterator<Container, DataType, Position, Traits>::ReverseRandomAccessIterator(const ReverseRandomAccessIterator& iterator)
+		throw()
+		:	RandomAccessIterator<Container, DataType, Position, Traits>(iterator)
+	{
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ReverseRandomAccessIterator<Container, DataType, Position, Traits>::ReverseRandomAccessIterator(const BaseIterator<Container, DataType, Position, Traits>& iterator)
+		throw()
+		:	RandomAccessIterator<Container, DataType, Position, Traits>(iterator)
+	{
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ReverseRandomAccessIterator<Container, DataType, Position, Traits>::~ReverseRandomAccessIterator()
+		throw()
+	{
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	bool ReverseRandomAccessIterator<Container, DataType, Position, Traits>::operator + () const
+		throw()
+	{
+		return traits_->isValid();
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	void ReverseRandomAccessIterator<Container, DataType, Position, Traits>::toBegin()
+		throw(Exception::InvalidIterator)
+	{
+		RandomAccessIterator<Container, DataType, Position, Traits>::toRBegin();
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	bool ReverseRandomAccessIterator<Container, DataType, Position, Traits>::isBegin() const
+		throw(Exception::InvalidIterator)
+	{
+		return RandomAccessIterator<Container, DataType, Position, Traits>::isRBegin();
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	void ReverseRandomAccessIterator<Container, DataType, Position, Traits>::toEnd()
+		throw(Exception::InvalidIterator)
+	{
+		RandomAccessIterator<Container, DataType, Position, Traits>::toREnd();
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	bool ReverseRandomAccessIterator<Container, DataType, Position, Traits>::isEnd() const
+		throw(Exception::InvalidIterator)
+	{
+		return RandomAccessIterator<Container, DataType, Position, Traits>::isREnd();
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	void ReverseRandomAccessIterator<Container, DataType, Position, Traits>::toRBegin()
+		throw(Exception::InvalidIterator)
+	{
+		RandomAccessIterator<Container, DataType, Position, Traits>::toBegin();
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	bool ReverseRandomAccessIterator<Container, DataType, Position, Traits>::isRBegin() const
+		throw(Exception::InvalidIterator)
+	{
+		return RandomAccessIterator<Container, DataType, Position, Traits>::isBegin();
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	void ReverseRandomAccessIterator<Container, DataType, Position, Traits>::toREnd()
+		throw(Exception::InvalidIterator)
+	{
+		RandomAccessIterator<Container, DataType, Position, Traits>::toEnd();
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	bool ReverseRandomAccessIterator<Container, DataType, Position, Traits>::isREnd() const
+		throw(Exception::InvalidIterator)
+	{
+		return RandomAccessIterator<Container, DataType, Position, Traits>::isEnd();
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ReverseRandomAccessIterator<Container, DataType, Position, Traits>& ReverseRandomAccessIterator<Container, DataType, Position, Traits>::operator ++ ()
+		throw(Exception::InvalidIterator)
+	{
+		RandomAccessIterator<Container, DataType, Position, Traits>::operator--();
+		return *this;
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ReverseRandomAccessIterator<Container, DataType, Position, Traits> ReverseRandomAccessIterator<Container, DataType, Position, Traits>::operator ++ (int)
+		throw(Exception::InvalidIterator)
+	{
+		ReverseRandomAccessIterator iterator(*this);
+		RandomAccessIterator<Container, DataType, Position, Traits>::operator--();
+		return iterator;
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ReverseRandomAccessIterator<Container, DataType, Position, Traits>& ReverseRandomAccessIterator<Container, DataType, Position, Traits>::operator -- ()
+		throw(Exception::InvalidIterator)
+	{
+		RandomAccessIterator<Container, DataType, Position, Traits>::operator++();
+		return *this;
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ReverseRandomAccessIterator<Container, DataType, Position, Traits> ReverseRandomAccessIterator<Container, DataType, Position, Traits>::operator -- (int)
+		throw(Exception::InvalidIterator)
+	{
+		ReverseRandomAccessIterator iterator(*this);
+		RandomAccessIterator<Container, DataType, Position, Traits>::operator++();
+		return iterator;
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ReverseRandomAccessIterator<Container, DataType, Position, Traits>& ReverseRandomAccessIterator<Container, DataType, Position, Traits>::operator += (Distance distance)
+		throw(Exception::InvalidIterator)
+	{
+		RandomAccessIterator<Container, DataType, Position, Traits>::operator-=(distance);
+		return *this;
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ReverseRandomAccessIterator<Container, DataType, Position, Traits>& ReverseRandomAccessIterator<Container, DataType, Position, Traits>::operator -= (Distance distance)
+		throw(Exception::InvalidIterator)
+	{
+		RandomAccessIterator<Container, DataType, Position, Traits>::operator+=(distance);
+		return *this;
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ReverseRandomAccessIterator<Container, DataType, Position, Traits> ReverseRandomAccessIterator<Container, DataType, Position, Traits>::operator + (Distance distance)
+		throw(Exception::InvalidIterator)
+	{
+		ReverseRandomAccessIterator iterator(*this);
+		return (iterator += distance);
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ReverseRandomAccessIterator<Container, DataType, Position, Traits> ReverseRandomAccessIterator<Container, DataType, Position, Traits>::operator -(Distance distance)
+		throw(Exception::InvalidIterator)
+	{
+		ReverseRandomAccessIterator iterator(*this);
+		return (iterator -= distance);
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	bool ReverseRandomAccessIterator<Container, DataType, Position, Traits>::operator < (const ReverseRandomAccessIterator& iterator) const
+		throw(Exception::InvalidIterator)
+	{
+		return RandomAccessIterator<Container, DataType, Position, Traits>::operator>(iterator);
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	bool ReverseRandomAccessIterator<Container, DataType, Position, Traits>::operator <= (const ReverseRandomAccessIterator& iterator) const
+		throw(Exception::InvalidIterator)
+	{
+		return RandomAccessIterator<Container, DataType, Position, Traits>::operator>=(iterator);
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	bool ReverseRandomAccessIterator<Container, DataType, Position, Traits>::operator >= (const ReverseRandomAccessIterator& iterator) const
+		throw(Exception::InvalidIterator)
+	{
+		return RandomAccessIterator<Container, DataType, Position, Traits>::operator<=(iterator);
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	bool ReverseRandomAccessIterator<Container, DataType, Position, Traits>::operator > (const ReverseRandomAccessIterator& iterator) const
+		throw(Exception::InvalidIterator)
+	{
+		return RandomAccessIterator<Container, DataType, Position, Traits>::operator<(iterator);
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	DataType* ReverseRandomAccessIterator<Container, DataType, Position, Traits>::findFirst(const UnaryPredicate<DataType>& predicate)
+		throw(Exception::InvalidIterator)
+	{
+		return (DataType *)RandomAccessIterator<Container, DataType, Position, Traits>::findLast(predicate);
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	const DataType* ReverseRandomAccessIterator<Container, DataType, Position, Traits>::findFirst(const UnaryPredicate<DataType>& predicate) const
+		throw(Exception::InvalidIterator)
+	{
+		return (const DataType *)RandomAccessIterator<Container, DataType, Position, Traits>::findLast(predicate);
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	DataType* ReverseRandomAccessIterator<Container, DataType, Position, Traits>::findLast(const UnaryPredicate<DataType>& predicate)
+		throw(Exception::InvalidIterator)
+	{
+		return (DataType *)RandomAccessIterator<Container, DataType, Position, Traits>::findFirst(predicate);
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	const DataType* ReverseRandomAccessIterator<Container, DataType, Position, Traits>::findLast(const UnaryPredicate<DataType>& predicate) const
+		throw(Exception::InvalidIterator)
+	{
+		return (const DataType *)RandomAccessIterator<Container, DataType, Position, Traits>::findFirst(predicate);
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	DataType* ReverseRandomAccessIterator<Container, DataType, Position, Traits>::findPrevious(const UnaryPredicate<DataType>& predicate)
+		throw(Exception::InvalidIterator)
+	{
+		return (DataType *)RandomAccessIterator<Container, DataType, Position, Traits>::findNext(predicate);
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	const DataType* ReverseRandomAccessIterator<Container, DataType, Position, Traits>::findPrevious(const UnaryPredicate<DataType>& predicate) const
+		throw(Exception::InvalidIterator)
+	{
+		return (const DataType *)RandomAccessIterator<Container, DataType, Position, Traits>::findNext(predicate);
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	DataType* ReverseRandomAccessIterator<Container, DataType, Position, Traits>::findNext(const UnaryPredicate<DataType>& predicate)
+		throw(Exception::InvalidIterator)
+	{
+		return (DataType *)RandomAccessIterator<Container, DataType, Position, Traits>::findPrevious(predicate);
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	const DataType* ReverseRandomAccessIterator<Container, DataType, Position, Traits>::findNext(const UnaryPredicate<DataType>& predicate) const
+		throw(Exception::InvalidIterator)
+	{
+		return (const DataType *)RandomAccessIterator<Container, DataType, Position, Traits>::findPrevious(predicate);
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ReverseRandomAccessIterator<Container, DataType, Position, Traits> ReverseRandomAccessIterator<Container, DataType, Position, Traits>::begin(const Container& container)
+		throw(Exception::InvalidIterator)
+	{
+		ReverseRandomAccessIterator iterator(container);
+		iterator.toBegin();
+		return iterator;
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ReverseRandomAccessIterator<Container, DataType, Position, Traits> ReverseRandomAccessIterator<Container, DataType, Position, Traits>::end(const Container& container)
+		throw(Exception::InvalidIterator)
+	{
+		ReverseRandomAccessIterator iterator(container);
+		iterator.toEnd();
+		return iterator;
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ReverseRandomAccessIterator<Container, DataType, Position, Traits> ReverseRandomAccessIterator<Container, DataType, Position, Traits>::rbegin(const Container& container)
+		throw(Exception::InvalidIterator)
+	{
+		ReverseRandomAccessIterator iterator(container);
+		iterator.toRBegin();
+		return iterator;
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ReverseRandomAccessIterator<Container, DataType, Position, Traits> ReverseRandomAccessIterator<Container, DataType, Position, Traits>::rend(const Container& container)
+		throw(Exception::InvalidIterator)
+	{
+		ReverseRandomAccessIterator iterator(container);
+		iterator.toREnd();
+		return iterator;
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ReverseRandomAccessIterator<Container, DataType, Position, Traits>::ReverseRandomAccessIterator(const Container& container)
+		throw()
+		:	RandomAccessIterator<Container, DataType, Position, Traits>(container)
+	{
+	}
 
 
 	/**	Generic Constant Random Access Iterator
 	*/
-	template <class Container, class DataType, class Position, class Traits>
+	template <typename Container, typename DataType, typename Position, typename Traits>
 	class ConstReverseRandomAccessIterator
 		: public ConstRandomAccessIterator<Container, DataType, Position, Traits>
 	{
 		public:
 
-			/**	@name	Constructors and Destructors
-			*/
-			//@{
+		BALL_CREATE(ConstReverseRandomAccessIterator)
 
-			/**
-			*/
-			ConstReverseRandomAccessIterator()
-				throw()
-				:	ConstRandomAccessIterator<Container, DataType, Position, Traits>()
-			{
-			}
+		/** @name Typedefs
+		 */
+		//@{
 
-			/**
-			*/
-			ConstReverseRandomAccessIterator(const ConstReverseRandomAccessIterator &iterator)
-				throw()
-				:	ConstRandomAccessIterator<Container, DataType, Position, Traits>(iterator)
-			{
-			}
+		/** Tag this iterator as a random access iterator according to the STL
+				scheme.
+		 */
+		typedef ::std::random_access_iterator_tag iterator_category;
 
-			/**
-			*/
-			ConstReverseRandomAccessIterator(const BaseIterator<Container, DataType, Position, Traits> &iterator)
-				throw()
-				:	ConstRandomAccessIterator<Container, DataType, Position, Traits>(iterator)
-			{
-			}
-			//@}
+		//@}
 
-			bool operator + () const
-				throw()
-			{
-				return traits_->isValid();
-			}
+		/**	@name	Constructors and Destructors
+		*/
+		//@{
 
-			void toBegin()
-				throw(Exception::InvalidIterator)
-			{
-				ConstRandomAccessIterator<Container, DataType, Position, Traits>::toRBegin();
-			}
+		/**
+		*/
+		ConstReverseRandomAccessIterator()
+			throw();
 
-			bool isBegin() const
-				throw(Exception::InvalidIterator)
-			{
-				return ConstRandomAccessIterator<Container, DataType, Position, Traits>::isRBegin();
-			}
+		/**
+		*/
+		ConstReverseRandomAccessIterator(const ConstReverseRandomAccessIterator& iterator)
+			throw();
 
-			void toEnd()
-				throw(Exception::InvalidIterator)
-			{
-				ConstRandomAccessIterator<Container, DataType, Position, Traits>::toREnd();
-			}
+		/**
+		*/
+		ConstReverseRandomAccessIterator(const BaseIterator<Container, DataType, Position, Traits>& iterator)
+			throw();
 
-			bool isEnd() const
-				throw(Exception::InvalidIterator)
-			{
-				return ConstRandomAccessIterator<Container, DataType, Position, Traits>::isREnd();
-			}
+		/**
+		 */
+		~ConstReverseRandomAccessIterator()
+			throw();
 
-			void toRBegin()
-				throw(Exception::InvalidIterator)
-			{
-				ConstRandomAccessIterator<Container, DataType, Position, Traits>::toBegin();
-			}
+		//@}
 
-			bool isRBegin() const
-				throw(Exception::InvalidIterator)
-			{
-				return ConstRandomAccessIterator<Container, DataType, Position, Traits>::isBegin();
-			}
+		bool operator + () const
+			throw();
 
-			void toREnd()
-				throw(Exception::InvalidIterator)
-			{
-				ConstRandomAccessIterator<Container, DataType, Position, Traits>::toEnd();
-			}
+		void toBegin()
+			throw(Exception::InvalidIterator);
 
-			bool isREnd() const
-				throw(Exception::InvalidIterator)
-			{
-				return ConstRandomAccessIterator<Container, DataType, Position, Traits>::isEnd();
-			}
+		bool isBegin() const
+			throw(Exception::InvalidIterator);
 
-			ConstReverseRandomAccessIterator &operator ++ ()
-				throw(Exception::InvalidIterator)
-			{
-				ConstRandomAccessIterator<Container, DataType, Position, Traits>::operator--();
-				return *this;
-			}
+		void toEnd()
+			throw(Exception::InvalidIterator);
 
-			ConstReverseRandomAccessIterator operator ++ (int)
-				throw(Exception::InvalidIterator)
-			{
-				ConstReverseRandomAccessIterator iterator(*this);
-				ConstRandomAccessIterator<Container, DataType, Position, Traits>::operator--();
-				return iterator;
-			}
+		bool isEnd() const
+			throw(Exception::InvalidIterator);
 
-			ConstReverseRandomAccessIterator &operator -- ()
-				throw(Exception::InvalidIterator)
-			{
-				ConstRandomAccessIterator<Container, DataType, Position, Traits>::operator++();
-				return *this;
-			}
+		void toRBegin()
+			throw(Exception::InvalidIterator);
 
-			ConstReverseRandomAccessIterator operator -- (int)
-				throw(Exception::InvalidIterator)
-			{
-				ConstReverseRandomAccessIterator iterator(*this);
-				ConstRandomAccessIterator<Container, DataType, Position, Traits>::operator++();
-				return iterator;
-			}
+		bool isRBegin() const
+			throw(Exception::InvalidIterator);
 
-			ConstReverseRandomAccessIterator& operator += (Distance distance)
-				throw(Exception::InvalidIterator)
-			{
-				ConstRandomAccessIterator<Container, DataType, Position, Traits>::operator-=(distance);
-				return *this;
-			}
+		void toREnd()
+			throw(Exception::InvalidIterator);
 
-			ConstReverseRandomAccessIterator& operator -= (Distance distance)
-				throw(Exception::InvalidIterator)
-			{
-				ConstRandomAccessIterator<Container, DataType, Position, Traits>::operator+=(distance);
-				return *this;
-			}
+		bool isREnd() const
+			throw(Exception::InvalidIterator);
 
-			ConstReverseRandomAccessIterator operator + (Distance distance)
-				throw(Exception::InvalidIterator)
-			{
-				ConstReverseRandomAccessIterator iterator(*this);
-				return (iterator += distance);
-			}
+		ConstReverseRandomAccessIterator& operator ++ ()
+			throw(Exception::InvalidIterator);
 
-			friend ConstReverseRandomAccessIterator operator + (Distance distance, const ConstReverseRandomAccessIterator &iterator)
-				throw(Exception::InvalidIterator)
-			{
-				ConstReverseRandomAccessIterator tmp_iterator(iterator);
-				return (tmp_iterator += distance);
-			}
+		ConstReverseRandomAccessIterator operator ++ (int)
+			throw(Exception::InvalidIterator);
 
-			ConstReverseRandomAccessIterator operator - (Distance distance)
-				throw(Exception::InvalidIterator)
-			{
-				ConstReverseRandomAccessIterator iterator(*this);
-				return (iterator -= distance);
-			}
+		ConstReverseRandomAccessIterator& operator -- ()
+			throw(Exception::InvalidIterator);
 
-			friend Distance operator - (const ConstReverseRandomAccessIterator &a,
-																	const ConstReverseRandomAccessIterator &b)
-				throw(Exception::InvalidIterator)
-			{
-				return (((ConstRandomAccessIterator<Container, DataType, Position, Traits> &)b) 
-								- ((ConstRandomAccessIterator<Container, DataType, Position, Traits> &)a));
-			}
+		ConstReverseRandomAccessIterator operator -- (int)
+			throw(Exception::InvalidIterator);
 
-			bool operator < (const ConstReverseRandomAccessIterator &iterator) const
-				throw(Exception::InvalidIterator)
-			{
-				return ConstRandomAccessIterator<Container, DataType, Position, Traits>::operator>(iterator);
-			}
+		ConstReverseRandomAccessIterator& operator += (Distance distance)
+			throw(Exception::InvalidIterator);
 
-			bool operator <= (const ConstReverseRandomAccessIterator &iterator) const
-				throw(Exception::InvalidIterator)
-			{
-				return ConstRandomAccessIterator<Container, DataType, Position, Traits>::operator>=(iterator);
-			}
+		ConstReverseRandomAccessIterator& operator -= (Distance distance)
+			throw(Exception::InvalidIterator);
 
-			bool operator >= (const ConstReverseRandomAccessIterator &iterator) const
-				throw(Exception::InvalidIterator)
-			{
-				return ConstRandomAccessIterator<Container, DataType, Position, Traits>::operator<=(iterator);
-			}
+		ConstReverseRandomAccessIterator operator + (Distance distance)
+			throw(Exception::InvalidIterator);
 
-			bool operator > (const ConstReverseRandomAccessIterator &iterator) const
-				throw(Exception::InvalidIterator)
-			{
-				return ConstRandomAccessIterator<Container, DataType, Position, Traits>::operator<(iterator);
-			}
+		friend ConstReverseRandomAccessIterator operator + (Distance distance, const ConstReverseRandomAccessIterator& iterator)
+			throw(Exception::InvalidIterator)
+		{
+			ConstReverseRandomAccessIterator tmp_iterator(iterator);
+			return (tmp_iterator += distance);
+		}
 
-			DataType* findFirst(const UnaryPredicate<DataType> &predicate)
-				throw(Exception::InvalidIterator)
-			{
-				return (DataType *)ConstRandomAccessIterator<Container, DataType, Position, Traits>::findLast(predicate);
-			}
+		ConstReverseRandomAccessIterator operator - (Distance distance)
+			throw(Exception::InvalidIterator);
 
-			const DataType* findFirst(const UnaryPredicate<DataType> &predicate) const
-				throw(Exception::InvalidIterator)
-			{
-				return (const DataType *)ConstRandomAccessIterator<Container, DataType, Position, Traits>::findLast(predicate);
-			}
+		friend Distance operator - (const ConstReverseRandomAccessIterator& a,
+																const ConstReverseRandomAccessIterator& b)
+			throw(Exception::InvalidIterator)
+		{
+			return (((ConstRandomAccessIterator<Container, DataType, Position, Traits>& )b) 
+							- ((ConstRandomAccessIterator<Container, DataType, Position, Traits>& )a));
+		}
 
-			DataType* findLast(const UnaryPredicate<DataType> &predicate)
-				throw(Exception::InvalidIterator)
-			{
-				return (DataType *)ConstRandomAccessIterator<Container, DataType, Position, Traits>::findFirst(predicate);
-			}
-		
-			const DataType* findLast(const UnaryPredicate<DataType> &predicate) const
-				throw(Exception::InvalidIterator)
-			{
-				return (const DataType *)ConstRandomAccessIterator<Container, DataType, Position, Traits>::findFirst(predicate);
-			}
+		bool operator < (const ConstReverseRandomAccessIterator& iterator) const
+			throw(Exception::InvalidIterator);
 
-			DataType* findPrevious(const UnaryPredicate<DataType> &predicate)
-				throw(Exception::InvalidIterator)
-			{
-				return (DataType *)ConstRandomAccessIterator<Container, DataType, Position, Traits>::findNext(predicate);
-			}
+		bool operator <= (const ConstReverseRandomAccessIterator& iterator) const
+			throw(Exception::InvalidIterator);
 
-			const DataType* findPrevious(const UnaryPredicate<DataType> &predicate) const
-				throw(Exception::InvalidIterator)
-			{
-				return (const DataType *)ConstRandomAccessIterator<Container, DataType, Position, Traits>::findNext(predicate);
-			}
+		bool operator >= (const ConstReverseRandomAccessIterator& iterator) const
+			throw(Exception::InvalidIterator);
 
-			DataType* findNext(const UnaryPredicate<DataType> &predicate)
-				throw(Exception::InvalidIterator)
-			{
-				return (DataType *)ConstRandomAccessIterator<Container, DataType, Position, Traits>::findPrevious(predicate);
-			}
-		
-			const DataType* findNext(const UnaryPredicate<DataType> &predicate) const
-				throw(Exception::InvalidIterator)
-			{
-				return (const DataType *)ConstRandomAccessIterator<Container, DataType, Position, Traits>::findPrevious(predicate);
-			}
+		bool operator > (const ConstReverseRandomAccessIterator& iterator) const
+			throw(Exception::InvalidIterator);
 
-			static ConstReverseRandomAccessIterator begin(const Container &container)
-				throw(Exception::InvalidIterator)
-			{
-				ConstReverseRandomAccessIterator iterator(container);
-				iterator.toBegin();
-				return iterator;
-			}
+		DataType* findFirst(const UnaryPredicate<DataType>& predicate)
+			throw(Exception::InvalidIterator);
 
-			static ConstReverseRandomAccessIterator end(const Container &container)
-				throw(Exception::InvalidIterator)
-			{
-				ConstReverseRandomAccessIterator iterator(container);
-				iterator.toEnd();
-				return iterator;
-			}
+		const DataType* findFirst(const UnaryPredicate<DataType>& predicate) const
+			throw(Exception::InvalidIterator);
 
-			static ConstReverseRandomAccessIterator rbegin(const Container &container)
-				throw(Exception::InvalidIterator)
-			{
-				ConstReverseRandomAccessIterator iterator(container);
-				iterator.toRBegin();
-				return iterator;
-			}
+		DataType* findLast(const UnaryPredicate<DataType>& predicate)
+			throw(Exception::InvalidIterator);
+	
+		const DataType* findLast(const UnaryPredicate<DataType>& predicate) const
+			throw(Exception::InvalidIterator);
 
-			static ConstReverseRandomAccessIterator rend(const Container &container)
-				throw(Exception::InvalidIterator)
-			{
-				ConstReverseRandomAccessIterator iterator(container);
-				iterator.toREnd();
-				return iterator;
-			}
+		DataType* findPrevious(const UnaryPredicate<DataType>& predicate)
+			throw(Exception::InvalidIterator);
 
-		protected:
+		const DataType* findPrevious(const UnaryPredicate<DataType>& predicate) const
+			throw(Exception::InvalidIterator);
 
-			ConstReverseRandomAccessIterator(const Container &container)
-				throw()
-				:	ConstRandomAccessIterator<Container, DataType, Position, Traits>(container)
-			{
-			}
+		DataType* findNext(const UnaryPredicate<DataType>& predicate)
+			throw(Exception::InvalidIterator);
+	
+		const DataType* findNext(const UnaryPredicate<DataType>& predicate) const
+			throw(Exception::InvalidIterator);
+
+		static ConstReverseRandomAccessIterator begin(const Container& container)
+			throw(Exception::InvalidIterator);
+
+		static ConstReverseRandomAccessIterator end(const Container& container)
+			throw(Exception::InvalidIterator);
+
+		static ConstReverseRandomAccessIterator rbegin(const Container& container)
+			throw(Exception::InvalidIterator);
+
+		static ConstReverseRandomAccessIterator rend(const Container& container)
+			throw(Exception::InvalidIterator);
+
+	protected:
+
+		ConstReverseRandomAccessIterator(const Container& container)
+			throw();
 
 	};
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ConstReverseRandomAccessIterator<Container, DataType, Position, Traits>::ConstReverseRandomAccessIterator()
+		throw()
+		:	ConstRandomAccessIterator<Container, DataType, Position, Traits>()
+	{
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ConstReverseRandomAccessIterator<Container, DataType, Position, Traits>::ConstReverseRandomAccessIterator(const ConstReverseRandomAccessIterator& iterator)
+		throw()
+		:	ConstRandomAccessIterator<Container, DataType, Position, Traits>(iterator)
+	{
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ConstReverseRandomAccessIterator<Container, DataType, Position, Traits>::ConstReverseRandomAccessIterator(const BaseIterator<Container, DataType, Position, Traits>& iterator)
+		throw()
+		:	ConstRandomAccessIterator<Container, DataType, Position, Traits>(iterator)
+	{
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ConstReverseRandomAccessIterator<Container, DataType, Position, Traits>::~ConstReverseRandomAccessIterator()
+		throw()
+	{
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	bool ConstReverseRandomAccessIterator<Container, DataType, Position, Traits>::operator + () const
+		throw()
+	{
+		return traits_->isValid();
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	void ConstReverseRandomAccessIterator<Container, DataType, Position, Traits>::toBegin()
+		throw(Exception::InvalidIterator)
+	{
+		ConstRandomAccessIterator<Container, DataType, Position, Traits>::toRBegin();
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	bool ConstReverseRandomAccessIterator<Container, DataType, Position, Traits>::isBegin() const
+		throw(Exception::InvalidIterator)
+	{
+		return ConstRandomAccessIterator<Container, DataType, Position, Traits>::isRBegin();
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	void ConstReverseRandomAccessIterator<Container, DataType, Position, Traits>::toEnd()
+		throw(Exception::InvalidIterator)
+	{
+		ConstRandomAccessIterator<Container, DataType, Position, Traits>::toREnd();
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	bool ConstReverseRandomAccessIterator<Container, DataType, Position, Traits>::isEnd() const
+		throw(Exception::InvalidIterator)
+	{
+		return ConstRandomAccessIterator<Container, DataType, Position, Traits>::isREnd();
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	void ConstReverseRandomAccessIterator<Container, DataType, Position, Traits>::toRBegin()
+		throw(Exception::InvalidIterator)
+	{
+		ConstRandomAccessIterator<Container, DataType, Position, Traits>::toBegin();
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	bool ConstReverseRandomAccessIterator<Container, DataType, Position, Traits>::isRBegin() const
+		throw(Exception::InvalidIterator)
+	{
+		return ConstRandomAccessIterator<Container, DataType, Position, Traits>::isBegin();
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	void ConstReverseRandomAccessIterator<Container, DataType, Position, Traits>::toREnd()
+		throw(Exception::InvalidIterator)
+	{
+		ConstRandomAccessIterator<Container, DataType, Position, Traits>::toEnd();
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	bool ConstReverseRandomAccessIterator<Container, DataType, Position, Traits>::isREnd() const
+		throw(Exception::InvalidIterator)
+	{
+		return ConstRandomAccessIterator<Container, DataType, Position, Traits>::isEnd();
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ConstReverseRandomAccessIterator<Container, DataType, Position, Traits>& ConstReverseRandomAccessIterator<Container, DataType, Position, Traits>::operator ++ ()
+		throw(Exception::InvalidIterator)
+	{
+		ConstRandomAccessIterator<Container, DataType, Position, Traits>::operator--();
+		return *this;
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ConstReverseRandomAccessIterator<Container, DataType, Position, Traits> ConstReverseRandomAccessIterator<Container, DataType, Position, Traits>::operator ++ (int)
+		throw(Exception::InvalidIterator)
+	{
+		ConstReverseRandomAccessIterator iterator(*this);
+		ConstRandomAccessIterator<Container, DataType, Position, Traits>::operator--();
+		return iterator;
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ConstReverseRandomAccessIterator<Container, DataType, Position, Traits>& ConstReverseRandomAccessIterator<Container, DataType, Position, Traits>::operator -- ()
+		throw(Exception::InvalidIterator)
+	{
+		ConstRandomAccessIterator<Container, DataType, Position, Traits>::operator++();
+		return *this;
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ConstReverseRandomAccessIterator<Container, DataType, Position, Traits> ConstReverseRandomAccessIterator<Container, DataType, Position, Traits>::operator -- (int)
+		throw(Exception::InvalidIterator)
+	{
+		ConstReverseRandomAccessIterator iterator(*this);
+		ConstRandomAccessIterator<Container, DataType, Position, Traits>::operator++();
+		return iterator;
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ConstReverseRandomAccessIterator<Container, DataType, Position, Traits>& ConstReverseRandomAccessIterator<Container, DataType, Position, Traits>::operator += (Distance distance)
+		throw(Exception::InvalidIterator)
+	{
+		ConstRandomAccessIterator<Container, DataType, Position, Traits>::operator-=(distance);
+		return *this;
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ConstReverseRandomAccessIterator<Container, DataType, Position, Traits>& ConstReverseRandomAccessIterator<Container, DataType, Position, Traits>::operator -= (Distance distance)
+		throw(Exception::InvalidIterator)
+	{
+		ConstRandomAccessIterator<Container, DataType, Position, Traits>::operator+=(distance);
+		return *this;
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ConstReverseRandomAccessIterator<Container, DataType, Position, Traits> ConstReverseRandomAccessIterator<Container, DataType, Position, Traits>::operator + (Distance distance)
+		throw(Exception::InvalidIterator)
+	{
+		ConstReverseRandomAccessIterator iterator(*this);
+		return (iterator += distance);
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ConstReverseRandomAccessIterator<Container, DataType, Position, Traits> ConstReverseRandomAccessIterator<Container, DataType, Position, Traits>::operator - (Distance distance)
+		throw(Exception::InvalidIterator)
+	{
+		ConstReverseRandomAccessIterator iterator(*this);
+		return (iterator -= distance);
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	bool ConstReverseRandomAccessIterator<Container, DataType, Position, Traits>::operator < (const ConstReverseRandomAccessIterator& iterator) const
+		throw(Exception::InvalidIterator)
+	{
+		return ConstRandomAccessIterator<Container, DataType, Position, Traits>::operator>(iterator);
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	bool ConstReverseRandomAccessIterator<Container, DataType, Position, Traits>::operator <= (const ConstReverseRandomAccessIterator& iterator) const
+		throw(Exception::InvalidIterator)
+	{
+		return ConstRandomAccessIterator<Container, DataType, Position, Traits>::operator>=(iterator);
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	bool ConstReverseRandomAccessIterator<Container, DataType, Position, Traits>::operator >= (const ConstReverseRandomAccessIterator& iterator) const
+		throw(Exception::InvalidIterator)
+	{
+		return ConstRandomAccessIterator<Container, DataType, Position, Traits>::operator<=(iterator);
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	bool ConstReverseRandomAccessIterator<Container, DataType, Position, Traits>::operator > (const ConstReverseRandomAccessIterator& iterator) const
+		throw(Exception::InvalidIterator)
+	{
+		return ConstRandomAccessIterator<Container, DataType, Position, Traits>::operator<(iterator);
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	DataType* ConstReverseRandomAccessIterator<Container, DataType, Position, Traits>::findFirst(const UnaryPredicate<DataType>& predicate)
+		throw(Exception::InvalidIterator)
+	{
+		return (DataType *)ConstRandomAccessIterator<Container, DataType, Position, Traits>::findLast(predicate);
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	const DataType* ConstReverseRandomAccessIterator<Container, DataType, Position, Traits>::findFirst(const UnaryPredicate<DataType>& predicate) const
+		throw(Exception::InvalidIterator)
+	{
+		return (const DataType *)ConstRandomAccessIterator<Container, DataType, Position, Traits>::findLast(predicate);
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	DataType* ConstReverseRandomAccessIterator<Container, DataType, Position, Traits>::findLast(const UnaryPredicate<DataType>& predicate)
+		throw(Exception::InvalidIterator)
+	{
+		return (DataType *)ConstRandomAccessIterator<Container, DataType, Position, Traits>::findFirst(predicate);
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	const DataType* ConstReverseRandomAccessIterator<Container, DataType, Position, Traits>::findLast(const UnaryPredicate<DataType>& predicate) const
+		throw(Exception::InvalidIterator)
+	{
+		return (const DataType *)ConstRandomAccessIterator<Container, DataType, Position, Traits>::findFirst(predicate);
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	DataType* ConstReverseRandomAccessIterator<Container, DataType, Position, Traits>::findPrevious(const UnaryPredicate<DataType>& predicate)
+		throw(Exception::InvalidIterator)
+	{
+		return (DataType *)ConstRandomAccessIterator<Container, DataType, Position, Traits>::findNext(predicate);
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	const DataType* ConstReverseRandomAccessIterator<Container, DataType, Position, Traits>::findPrevious(const UnaryPredicate<DataType>& predicate) const
+		throw(Exception::InvalidIterator)
+	{
+		return (const DataType *)ConstRandomAccessIterator<Container, DataType, Position, Traits>::findNext(predicate);
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	DataType* ConstReverseRandomAccessIterator<Container, DataType, Position, Traits>::findNext(const UnaryPredicate<DataType>& predicate)
+		throw(Exception::InvalidIterator)
+	{
+		return (DataType *)ConstRandomAccessIterator<Container, DataType, Position, Traits>::findPrevious(predicate);
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	const DataType* ConstReverseRandomAccessIterator<Container, DataType, Position, Traits>::findNext(const UnaryPredicate<DataType>& predicate) const
+		throw(Exception::InvalidIterator)
+	{
+		return (const DataType *)ConstRandomAccessIterator<Container, DataType, Position, Traits>::findPrevious(predicate);
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ConstReverseRandomAccessIterator<Container, DataType, Position, Traits> ConstReverseRandomAccessIterator<Container, DataType, Position, Traits>::begin(const Container& container)
+		throw(Exception::InvalidIterator)
+	{
+		ConstReverseRandomAccessIterator iterator(container);
+		iterator.toBegin();
+		return iterator;
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ConstReverseRandomAccessIterator<Container, DataType, Position, Traits> ConstReverseRandomAccessIterator<Container, DataType, Position, Traits>::end(const Container& container)
+		throw(Exception::InvalidIterator)
+	{
+		ConstReverseRandomAccessIterator iterator(container);
+		iterator.toEnd();
+		return iterator;
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ConstReverseRandomAccessIterator<Container, DataType, Position, Traits> ConstReverseRandomAccessIterator<Container, DataType, Position, Traits>::rbegin(const Container& container)
+		throw(Exception::InvalidIterator)
+	{
+		ConstReverseRandomAccessIterator iterator(container);
+		iterator.toRBegin();
+		return iterator;
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ConstReverseRandomAccessIterator<Container, DataType, Position, Traits> ConstReverseRandomAccessIterator<Container, DataType, Position, Traits>::rend(const Container& container)
+		throw(Exception::InvalidIterator)
+	{
+		ConstReverseRandomAccessIterator iterator(container);
+		iterator.toREnd();
+		return iterator;
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ConstReverseRandomAccessIterator<Container, DataType, Position, Traits>::ConstReverseRandomAccessIterator(const Container& container)
+		throw()
+		:	ConstRandomAccessIterator<Container, DataType, Position, Traits>(container)
+	{
+	}
 
 	//@}
 
