@@ -1,4 +1,4 @@
-// $Id: string.iC,v 1.36 2001/06/05 15:42:49 anker Exp $
+// $Id: string.iC,v 1.37 2001/07/14 12:59:38 amoll Exp $
 
 BALL_INLINE 
 String::String()
@@ -509,7 +509,7 @@ BALL_INLINE
 String& String::truncate(Size max_size)
 	throw()
 {
-  if (max_size < size())
+  if (max_size < (Size) size())
 	{
     resize(max_size);
 	}
