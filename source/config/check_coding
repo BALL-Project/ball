@@ -22,6 +22,15 @@ match($0, "[^A-Za-z0-9_][a-z]*[0-9a-z_]*__[A-Za-z][A-Z0-9_a-z]*[^_a-z0-9A-Z]") >
 	}
 	line_done = 1
 }
+match($0, "( *void *)") > 0\
+{
+	if (line_done == 0)
+	{
+		print FILENAME":"FNR" : use foo() instead of foo(void) for method declarations: " $0
+		errors++
+	}
+	line_done = 1
+}
 match($0, "[^A-Za-z0-9_][a-z]*[0-9a-z_]*__[A-Za-z][A-Z0-9_a-z]*$") > 0 && !/__[A-Z]+__/\
 {
 	if (line_done == 0)
@@ -102,7 +111,7 @@ match($0, "[^A-Z]TRandom[a-zA-Z]*") > 0 \
 		start = match($0,"// \\$Id")
 		if (start != 1)
 		{
-			print FILENAME":"FNR" : missing RCS Id in line 1. Please add \"// $Id: check_coding,v 1.1 1999/08/26 08:02:33 oliver Exp $\" in the first line."
+			print FILENAME":"FNR" : missing RCS Id in line 1. Please add \"// $Id: check_coding,v 1.2 1999/12/04 14:13:12 oliver Exp $\" in the first line."
 			errors++
 		}
 
