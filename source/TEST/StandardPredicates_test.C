@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: StandardPredicates_test.C,v 1.20 2002/12/12 11:34:44 oliver Exp $
+// $Id: StandardPredicates_test.C,v 1.21 2002/12/17 21:32:06 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -19,7 +19,7 @@
 
 ///////////////////////////
 
-START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.20 2002/12/12 11:34:44 oliver Exp $")
+START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.21 2002/12/17 21:32:06 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -489,8 +489,13 @@ CHECK(ConnectedToPredicate::operator () (const Atom& atom) const )
 	connectedTo.setArgument("(H)(H)(H)(C(H)(C(-O)(-O)))");
 	TEST_EQUAL(connectedTo(*it), false)
 
-	STATUS("(-H)(-H)(-H)(-C(-H)(-C(~O)(~O))(-C(-H)(-H)(-C(~C(-H)(~C)))))")
+ 	STATUS("(-H)(-H)(-H)(-C(-H)(-C(~O)(~O))(-C(-H)(-H)(-C(~C(-H)(~C)))))")
 	connectedTo.setArgument("(-H)(-H)(-H)(-C(-H)(-C(~O)(~O))(-C(-H)(-H)(-C(~C(-H))(~C))))");
+	TEST_EQUAL(connectedTo(*it), true)
+
+ 	STATUS("(-H)(-H)(-H)(-C(-H)(-C(~O)(~O))(-C(-H)(-H)(-C(~C(-H)(~C)))))")
+	connectedTo.setArgument("(-H)(-H)(-H)(-C(-H)(-C(~O)(~O))(-C(-H)(-H)(-C(~C(-H))(~C))))");
+	STATUS("predicate set")
 	TEST_EQUAL(connectedTo(*it), true)
 
 	STATUS("(-H)(-*)(-H)(-C(-H)(-C(~O)(~O))(-C(-H)(-H)(-C(~C(-H)(~C)))))")

@@ -48,27 +48,9 @@ del *.exe"
 		</Configuration>
 	</Configurations>
 	<Files>
-		<Filter
-			Name="Quelldateien"
-			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm">
-			<File
-				RelativePath="Make.lst">
-			</File>
-			<File
-				RelativePath="Makefile.win">
-			</File>
-			<File
-				RelativePath="vsvars32.bat">
-			</File>
-		</Filter>
-		<Filter
-			Name="Headerdateien"
-			Filter="h;hpp;hxx;hm;inl;inc">
-		</Filter>
-		<Filter
-			Name="Ressourcendateien"
-			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">
-		</Filter>
+		<File
+			RelativePath="Make.lst">
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

@@ -1,4 +1,4 @@
-// $Id: CompositeCreation_bench.C,v 1.1 2002/12/17 19:47:38 oliver Exp $
+// $Id: CompositeCreation_bench.C,v 1.2 2002/12/17 21:32:05 oliver Exp $
 #include <BALL/CONCEPT/benchmark.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 
 using namespace BALL;
 
-START_BENCHMARK(CompositeCreation, 1.0, "$Id: CompositeCreation_bench.C,v 1.1 2002/12/17 19:47:38 oliver Exp $")
+START_BENCHMARK(CompositeCreation, 1.0, "$Id: CompositeCreation_bench.C,v 1.2 2002/12/17 21:32:05 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -35,7 +35,6 @@ END_SECTION
 
 START_SECTION(Destruction, 0.5)
 
-	Composite* composite;
 	for (Size i = 0; i < N; i++)
 	{
 		composite = composites[i];

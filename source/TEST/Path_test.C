@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Path_test.C,v 1.7 2002/12/17 16:40:43 oliver Exp $
+// $Id: Path_test.C,v 1.8 2002/12/17 21:32:06 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -9,7 +9,7 @@
 #include <BALL/SYSTEM/path.h>
 ///////////////////////////
 
-START_TEST(Path, "$Id: Path_test.C,v 1.7 2002/12/17 16:40:43 oliver Exp $")
+START_TEST(Path, "$Id: Path_test.C,v 1.8 2002/12/17 21:32:06 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -55,8 +55,8 @@ CHECK(find(const string& name))
 	TEST_NOT_EQUAL(p1.find("fragments/Fragments.db"), "")
 	TEST_EQUAL(p1.find("Fragments.db"), "")
 	TEST_EQUAL(p1.find("Path_test.C"), "Path_test.C");
-	TEST_EQUAL(p1.find("/TEST/Path_test.C"), "Path_test.C");	
-	TEST_EQUAL(p1.find("/xxx/Path_test.C"), "Path_test.C");
+	TEST_EQUAL(p1.find("TEST/Path_test.C"), "Path_test.C");	
+	TEST_EQUAL(p1.find("xxx/Path_test.C"), "Path_test.C");
 	TEST_EQUAL(p1.find("Path_testX.C"), "");
 RESULT
 

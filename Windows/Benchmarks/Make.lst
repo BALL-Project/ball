@@ -1,7 +1,9 @@
 DIRECTORY=BENCHMARKS
 
 EXECUTABLES = \
+	CompositeCreation_bench$(e)\
 	CompositeClone_bench$(e)\
+	KernelCreation_bench$(e)\
 	KernelClone_bench$(e)\
 	KernelIteration_bench$(e)\
 	AmberFF_bench$(e)\

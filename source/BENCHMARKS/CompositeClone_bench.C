@@ -1,4 +1,4 @@
-// $Id: CompositeClone_bench.C,v 1.2 2002/12/12 10:01:43 oliver Exp $
+// $Id: CompositeClone_bench.C,v 1.3 2002/12/17 21:32:05 oliver Exp $
 #include <BALL/CONCEPT/benchmark.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 
 using namespace BALL;
 
-START_BENCHMARK(CompositeClone, 1.0, "$Id: CompositeClone_bench.C,v 1.2 2002/12/12 10:01:43 oliver Exp $")
+START_BENCHMARK(CompositeClone, 1.0, "$Id: CompositeClone_bench.C,v 1.3 2002/12/17 21:32:05 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -17,7 +17,7 @@ START_BENCHMARK(CompositeClone, 1.0, "$Id: CompositeClone_bench.C,v 1.2 2002/12/
 Composite S;
 Composite* M = new Composite;
 S.appendChild(*M);
-for (Position i = 0; i < 2000; i++)
+for (Position i = 0; i < 200; i++)
 {
 	M->appendChild(*new Composite);
 }
