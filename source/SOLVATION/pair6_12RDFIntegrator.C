@@ -1,4 +1,4 @@
-// $Id: pair6_12RDFIntegrator.C,v 1.4 2000/11/06 18:05:09 anker Exp $
+// $Id: pair6_12RDFIntegrator.C,v 1.5 2000/11/14 17:53:38 anker Exp $
 
 #include <BALL/MATHS/common.h>
 #include <BALL/SOLVATION/pair6_12RDFIntegrator.h>
@@ -433,7 +433,7 @@ namespace BALL
 		const throw()
 	{
 
-		double x0 = rdf_.getRepresentation().getInterval(index).first;
+		double x0 = unproject(rdf_.getRepresentation().getInterval(index).first);
 		double r = interval.first;
 		double R = interval.second;
 		if (BALL::Maths::isNan(r) || BALL::Maths::isNan(R))
@@ -558,6 +558,11 @@ namespace BALL
 			if (BALL::Maths::isNan(t0))
 			{
 				Log.warn() << "Return value is NaN." << endl;
+				Log.warn() << "Error occured while integrating [" << r << ","
+					<< R << ") - " << x0 << " (this is index " << index << ")" << endl
+					<< "Coefs: " << a[0] << " " << a[1] << " " << a[2] << " " 
+					<< a[3] << endl;
+				dump();
 			}
 
 			return t0;
