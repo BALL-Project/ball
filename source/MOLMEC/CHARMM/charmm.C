@@ -1,4 +1,4 @@
-// $Id: charmm.C,v 1.4 2000/02/14 22:44:06 oliver Exp $
+// $Id: charmm.C,v 1.5 2000/03/26 12:54:10 oliver Exp $
 // Molecular Mechanics: Charmm force field class
 
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -22,6 +22,9 @@ namespace BALL
 	const char* CharmmFF::Option::VDW_CUTOFF = "vdw_cutoff";
 	const char* CharmmFF::Option::VDW_CUTON = "vdw_cuton";
 	const char* CharmmFF::Option::ELECTROSTATIC_CUTOFF = "electrostatic_cutoff";
+	const char* CharmmFF::Option::ELECTROSTATIC_CUTON = "electrostatic_cuton";
+	const char* CharmmFF::Option::SOLVATION_CUTOFF = "solvation_cutoff";
+	const char* CharmmFF::Option::SOLVATION_CUTON = "solvation_cuton";
 	const char* CharmmFF::Option::SCALING_VDW_1_4 = "SCAB";
 	const char* CharmmFF::Option::SCALING_ELECTROSTATIC_1_4 = "SCEE";
 	const char* CharmmFF::Option::DISTANCE_DEPENDENT_DIELECTRIC = "DDDC"; 
@@ -34,9 +37,12 @@ namespace BALL
  
 	const char* CharmmFF::Default::FILENAME = "CHARMM/param22.ini";
 	const float CharmmFF::Default::NONBONDED_CUTOFF = 20.0;
-	const float CharmmFF::Default::VDW_CUTOFF = 15.0;
-	const float CharmmFF::Default::VDW_CUTON = 5.0;
-	const float CharmmFF::Default::ELECTROSTATIC_CUTOFF = 15.0;
+	const float CharmmFF::Default::VDW_CUTOFF = 9.0;
+	const float CharmmFF::Default::VDW_CUTON = 7.0;
+	const float CharmmFF::Default::SOLVATION_CUTOFF = 9.0;
+	const float CharmmFF::Default::SOLVATION_CUTON = 7.0;
+	const float CharmmFF::Default::ELECTROSTATIC_CUTOFF = 9.0;
+	const float CharmmFF::Default::ELECTROSTATIC_CUTON = 7.0;
 	const float CharmmFF::Default::SCALING_ELECTROSTATIC_1_4 = 2.0;
 	const float CharmmFF::Default::SCALING_VDW_1_4 = 1.0;
   const bool  CharmmFF::Default::DISTANCE_DEPENDENT_DIELECTRIC = true;
@@ -260,7 +266,7 @@ namespace BALL
 		return true;
 	}
 
-	float CharmmFF::getStretchEnergy() const
+	double CharmmFF::getStretchEnergy() const
 	{
 		ForceFieldComponent* component = getComponent("CHARMM Stretch");
 		if (component != 0)
@@ -271,7 +277,7 @@ namespace BALL
 		}
 	}
 
-	float CharmmFF::getBendEnergy() const
+	double CharmmFF::getBendEnergy() const
 	{
 		ForceFieldComponent* component = getComponent("CHARMM Bend");
 		if (component != 0)
@@ -282,7 +288,7 @@ namespace BALL
 		}
 	}
 
-	float CharmmFF::getImproperTorsionEnergy() const
+	double CharmmFF::getImproperTorsionEnergy() const
 	{
 		ForceFieldComponent* component = getComponent("CHARMM ImproperTorsion");
 		if (component != 0)
@@ -293,7 +299,7 @@ namespace BALL
 		}
 	}
 
-	float CharmmFF::getProperTorsionEnergy() const
+	double CharmmFF::getProperTorsionEnergy() const
 	{
 		ForceFieldComponent* component = getComponent("CHARMM Torsion");
 		if (component != 0)
@@ -304,9 +310,9 @@ namespace BALL
 		}
 	}
 
-	float CharmmFF::getTorsionEnergy() const
+	double CharmmFF::getTorsionEnergy() const
 	{
-		float energy = 0;
+		double energy = 0;
 		
 		// get the energy of the proper torsions
 		ForceFieldComponent* component = getComponent("CHARMM Torsion");
@@ -324,9 +330,9 @@ namespace BALL
 		return energy;
 	}
 
-	float CharmmFF::getVdWEnergy() const
+	double CharmmFF::getVdWEnergy() const
 	{
-		float energy = 0;
+		double energy = 0;
 		const ForceFieldComponent* component = getComponent("CHARMM NonBonded");
 		if (component != 0)
 		{
@@ -340,9 +346,9 @@ namespace BALL
 		return energy;
 	}
 
-	float CharmmFF::getESEnergy() const
+	double CharmmFF::getESEnergy() const
 	{
-		float energy = 0;
+		double energy = 0;
 		const ForceFieldComponent* component = getComponent("CHARMM NonBonded");
 		if (component != 0)
 		{
@@ -356,9 +362,9 @@ namespace BALL
 		return energy;
 	}
 
-	float CharmmFF::getSolvationEnergy() const
+	double CharmmFF::getSolvationEnergy() const
 	{
-		float energy = 0;
+		double energy = 0;
 		const ForceFieldComponent* component = getComponent("CHARMM NonBonded");
 		if (component != 0)
 		{
@@ -372,9 +378,9 @@ namespace BALL
 		return energy;
 	}
 
-	float CharmmFF::getNonbondedEnergy() const
+	double CharmmFF::getNonbondedEnergy() const
 	{
-		float energy = 0;
+		double energy = 0;
 		const ForceFieldComponent* component = getComponent("CHARMM NonBonded");
 		if (component != 0)
 		{

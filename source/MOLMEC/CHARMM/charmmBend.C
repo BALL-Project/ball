@@ -1,4 +1,4 @@
-// $Id: charmmBend.C,v 1.3 2000/02/14 22:44:07 oliver Exp $
+// $Id: charmmBend.C,v 1.4 2000/03/26 12:54:11 oliver Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmBend.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -127,9 +127,9 @@ namespace BALL
 	}
 
 	// calculates the current energy of this component
-	float CharmmBend::updateEnergy()
+	double CharmmBend::updateEnergy()
 	{
-		float length;
+		double length;
 		energy_ = 0;
 
 		for (Size i = 0 ; i < bend_.size() ; i++) 
@@ -148,7 +148,7 @@ namespace BALL
 					continue;
 				}
 
-				float inverse_length = 1 / length;
+				double inverse_length = 1 / length;
 				v1 *= inverse_length;
 				Vector3 v2 = bend_[i].atom3->getPosition() - bend_[i].atom2->getPosition();
 				length = v2.getLength();
@@ -161,8 +161,8 @@ namespace BALL
 				inverse_length = 1/length;
 				v2 *= inverse_length;
 
-				float costheta = v1 * v2;
-				float theta;
+				double costheta = v1 * v2;
+				double theta;
 				if (costheta > 1.0) 
 				{	
 					theta = 0.0;
@@ -189,7 +189,7 @@ namespace BALL
 	void CharmmBend::updateForces()
 	{
 
-		float length;
+		double length;
 
 		for (Size i = 0; i < bend_.size(); i++) 
 		{
@@ -204,7 +204,7 @@ namespace BALL
 				Vector3 v1 = bend_[i].atom1->getPosition() - bend_[i].atom2->getPosition();
 				length = v1.getLength();
 				if (length == 0) continue;
-				float inverse_length_v1 = 1/length;
+				double inverse_length_v1 = 1/length;
 				v1 *= inverse_length_v1 ;
 
 				// Calculate the vector between atom3 and atom2,
@@ -213,12 +213,12 @@ namespace BALL
 				Vector3 v2 = bend_[i].atom3->getPosition() - bend_[i].atom2->getPosition();
 				length = v2.getLength();
 				if (length == 0) continue;
-				float inverse_length_v2 = 1/length;
+				double inverse_length_v2 = 1/length;
 				v2 *= inverse_length_v2;
 
 				// Calculate the cos of theta and then theta
-				float costheta = v1 * v2;
-				float theta;
+				double costheta = v1 * v2;
+				double theta;
 				if (costheta > 1.0) theta = 0.0;
 				else if (costheta < -1.0) theta = Constants::PI;
 				else theta = acos(costheta);
@@ -227,7 +227,7 @@ namespace BALL
 				// kJ -> J: 1e3
 				// A -> m : 1e10
 				// J/mol -> mol: Avogadro
-				float factor = 1e13 / Constants::AVOGADRO * 2 * bend_[i].values.k * (theta - bend_[i].values.theta0);
+				double factor = 1e13 / Constants::AVOGADRO * 2 * bend_[i].values.k * (theta - bend_[i].values.theta0);
 
 				// Calculate the cross product of v1 and v2, test if it has length unequal 0,
 				// and normalize it.

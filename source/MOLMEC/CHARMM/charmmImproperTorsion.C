@@ -1,4 +1,4 @@
-// $Id: charmmImproperTorsion.C,v 1.5 2000/02/14 22:44:07 oliver Exp $
+// $Id: charmmImproperTorsion.C,v 1.6 2000/03/26 12:54:11 oliver Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmImproperTorsion.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -358,9 +358,9 @@ namespace BALL
 	}
 
 	// calculates the current energy of this component
-	float CharmmImproperTorsion::updateEnergy() 
+	double CharmmImproperTorsion::updateEnergy() 
 	{
-		float cosphi;
+		double cosphi;
 
 		Vector3	bc;
 		Vector3 ba;
@@ -385,8 +385,8 @@ namespace BALL
 				bcxba = bc % ba;
 				bcxbd = bc % bd; 
 
-				float length_bcxba = bcxba.getLength();
-				float length_bcxbd = bcxbd.getLength();
+				double length_bcxba = bcxba.getLength();
+				double length_bcxbd = bcxbd.getLength();
 
 
 				if (length_bcxba != 0 && length_bcxbd != 0) 
@@ -396,7 +396,7 @@ namespace BALL
 
 					cosphi = bcxba * bcxbd;
 
-					// avoid problems with floating point precision
+					// avoid problems with doubleing point precision
 					if (cosphi > 1.0)
 					{
 						cosphi = 1.0;
@@ -406,7 +406,7 @@ namespace BALL
 						cosphi = -1.0;
 					}
 
-					float tmp = (acos(cosphi) - it->values.phase);
+					double tmp = (acos(cosphi) - it->values.phase);
 					energy_ += it->values.k * tmp * tmp;
 				}
 			}

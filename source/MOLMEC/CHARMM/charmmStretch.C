@@ -1,4 +1,4 @@
-// $Id: charmmStretch.C,v 1.3 2000/02/14 22:44:08 oliver Exp $
+// $Id: charmmStretch.C,v 1.4 2000/03/26 12:54:11 oliver Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmStretch.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -176,7 +176,7 @@ namespace BALL
 	}
 
 	// calculates the current energy of this component
-	float CharmmStretch::updateEnergy()
+	double CharmmStretch::updateEnergy()
 	{
 
 		// initial energy is zero
@@ -189,7 +189,7 @@ namespace BALL
 			   (getForceField()->getUseSelection() == true && 
 			   (stretch_[i].atom1->isSelected() || stretch_[i].atom2->isSelected())))
 			{
-				float distance = (stretch_[i].atom1->getPosition()).getDistance(stretch_[i].atom2->getPosition());
+				double distance = (stretch_[i].atom1->getPosition()).getDistance(stretch_[i].atom2->getPosition());
 				energy_ += stretch_[i].values.k * (distance - stretch_[i].values.r0) * (distance - stretch_[i].values.r0);
 
 			}
@@ -211,7 +211,7 @@ namespace BALL
 			{
 
 				Vector3 direction(stretch_[i].atom1->getPosition() - stretch_[i].atom2->getPosition());
-				float distance = direction.getLength(); 
+				double distance = direction.getLength(); 
 
 				if (distance != 0) 
 				{

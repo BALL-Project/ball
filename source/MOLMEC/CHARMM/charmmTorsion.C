@@ -1,4 +1,4 @@
-// $Id: charmmTorsion.C,v 1.4 2000/02/16 19:19:40 oliver Exp $
+// $Id: charmmTorsion.C,v 1.5 2000/03/26 12:54:11 oliver Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmTorsion.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -131,7 +131,9 @@ namespace BALL
 							if ((*it2).getFirstAtom() == *atom_it) 
 							{
 								a1 = (*it2).getSecondAtom();
-							} else {
+							} 
+							else 
+							{
 								a1 = (*it2).getFirstAtom();
 							}
 
@@ -143,7 +145,9 @@ namespace BALL
 									if ((*it3).getFirstAtom() == a3)
 									{
 										a4 = (*it3).getSecondAtom();
-									} else {
+									} 
+									else 
+									{
 										a4 = (*it3).getFirstAtom();
 									}
 
@@ -242,7 +246,9 @@ namespace BALL
 												{
 													continue;
 												}
-											} else {
+											} 
+											else 
+											{
 												Log.warn() << "Cannot identify torsion for (UNKNOWN)" << " " << atom_name_A 
 													<< "/" << atom_name_B << "/" << atom_name_C << "/" << atom_name_D << endl;
 
@@ -282,7 +288,9 @@ namespace BALL
 												tmp.values = values.values[j];
 												torsion_.push_back(tmp);
 											}
-										} else {
+										} 
+										else 
+										{
 											Log.warn() << "CharmmTorsion::setup: cannot find torsion parameters for:"
 												<< force_field_->getParameters().getAtomTypes().getTypeName(type_a1) << "-"
 												<< force_field_->getParameters().getAtomTypes().getTypeName(type_a2) << "-"
@@ -302,9 +310,9 @@ namespace BALL
 	}
 
 	// calculates the current energy of this component
-	float CharmmTorsion::updateEnergy() 
+	double CharmmTorsion::updateEnergy() 
 	{
-		float cosphi;
+		double cosphi;
 
 		Vector3	a21;
 		Vector3 a23;
@@ -329,8 +337,8 @@ namespace BALL
 				cross2321 = a23 % a21;
 				cross2334 = a23 % a34;
 
-				float length_cross2321 = cross2321.getLength();
-				float length_cross2334 = cross2334.getLength();
+				double length_cross2321 = cross2321.getLength();
+				double length_cross2334 = cross2334.getLength();
 
 				if (length_cross2321 != 0 && length_cross2334 != 0) 
 				{
@@ -339,7 +347,7 @@ namespace BALL
 
 					cosphi = cross2321 * cross2334;
 
-					// avoid problem with floating point precision
+					// avoid problem with doubleing point precision
 					if (cosphi > 1.0)
 					{
 						cosphi = 1.0;
@@ -363,8 +371,8 @@ namespace BALL
 	// calculates and adds its forces to the current forces of the force field
 	void CharmmTorsion::updateForces()
 	{
-		float cosphi;
-		float dEdphi;
+		double cosphi;
+		double dEdphi;
 
 		Vector3	ab;		// vector from atom2 to atom1
 		Vector3 cb;		// vector from atom2 to atom3
@@ -380,29 +388,29 @@ namespace BALL
 					 || it->atom3->isSelected() || it->atom4->isSelected())))
 			{
 				ab = it->atom1->getPosition() - it->atom2->getPosition();
-				float length_ab = ab.getLength();
+				double length_ab = ab.getLength();
 				Vector3 ba = it->atom2->getPosition() - it->atom1->getPosition();
 				cb = it->atom3->getPosition() - it->atom2->getPosition();
-				float length_cb = cb.getLength();
+				double length_cb = cb.getLength();
 				dc = it->atom4->getPosition() - it->atom3->getPosition();
-				float length_dc = dc.getLength();
+				double length_dc = dc.getLength();
 
 				if (length_ab != 0 && length_cb != 0 && length_dc != 0) 
 				{
 					Vector3  t = ba % cb;   // cross product of cb and ba
 					Vector3  u = cb % dc;   // cross product of cb and dc
 
-					float length_t2 = t.getSquareLength();
-					float length_u2 = u.getSquareLength();
+					double length_t2 = t.getSquareLength();
+					double length_u2 = u.getSquareLength();
 
-					float length_t = sqrt(length_t2);
-					float length_u = sqrt(length_u2);
+					double length_t = sqrt(length_t2);
+					double length_u = sqrt(length_u2);
 
 					if (length_t != 0 && length_u != 0) 
 					{
 						cosphi = (t * u) / (length_t * length_u);
 
-						// avoid problems due to floating point precision
+						// avoid problems due to doubleing point precision
 						if (cosphi > 1.0)
 						{
 							cosphi = 1.0;
@@ -417,7 +425,7 @@ namespace BALL
 						//  AVOGADRO: J/mol -> J
 						dEdphi = (-it->V) * (1e13 / Constants::AVOGADRO) * it->f * sin(it->f * acos(cosphi) - it->phase);
 
-            float direction = (t % u) * cb;
+            double direction = (t % u) * cb;
             if (direction > 0.0)
             {
               dEdphi = -dEdphi;
@@ -425,8 +433,8 @@ namespace BALL
 
 						Vector3 ca = it->atom3->getPosition() - it->atom1->getPosition();
 						Vector3 db = it->atom4->getPosition() - it->atom2->getPosition();
-						Vector3 dEdt =   dEdphi / (length_t2 * cb.getLength()) * (t % cb);
-						Vector3 dEdu = - dEdphi / (length_u2 * cb.getLength()) * (u % cb);
+						Vector3 dEdt =   (float)(dEdphi / (length_t2 * cb.getLength())) * (t % cb);
+						Vector3 dEdu = - (float)(dEdphi / (length_u2 * cb.getLength())) * (u % cb);
 	
 
 						if (getForceField()->getUseSelection() == false)
@@ -435,7 +443,9 @@ namespace BALL
 							it->atom2->getForce() += ca % dEdt + dEdu % dc;
 							it->atom3->getForce() += dEdt % ba + db % dEdu;
 							it->atom4->getForce() += dEdu % cb; 
-						} else {
+						} 
+						else 
+						{
 							if (it->atom1->isSelected()) it->atom1->getForce() += dEdt % cb;
 							if (it->atom2->isSelected()) it->atom2->getForce() += ca % dEdt + dEdu % dc;
 							if (it->atom3->isSelected()) it->atom3->getForce() += dEdt % ba + db % dEdu;
