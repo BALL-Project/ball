@@ -1,4 +1,4 @@
-// $Id: regularData1D.h,v 1.10 2001/02/10 20:01:00 amoll Exp $
+// $Id: regularData1D.h,v 1.11 2001/03/08 11:26:44 amoll Exp $
 
 #ifndef BALL_DATATYPE_REGULARDATA1D_H
 #define BALL_DATATYPE_REGULARDATA1D_H
@@ -192,7 +192,7 @@ namespace BALL
 	{
 		// iterate over the data and reset all values to their default
 		// boundaries and vector size remain unchanged
-		T default_value;
+		T default_value = T();
 		VectorType::iterator it = data_.begin();
 		for (; it != data_.end(); ++it)
 		{

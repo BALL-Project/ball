@@ -1,4 +1,4 @@
-// $Id: regularData2D.h,v 1.8 2001/02/06 18:07:12 anhi Exp $
+// $Id: regularData2D.h,v 1.9 2001/03/08 11:26:44 amoll Exp $
 
 #ifndef BALL_DATATYPE_REGULARDATA2D_H
 #define BALL_DATATYPE_REGULARDATA2D_H
@@ -325,7 +325,7 @@ namespace BALL
 	{
 		// iterate over the data and reset all values to their default
 		// boundaries and vector size remain unchanged
-		T default_value;
+		T default_value = T();
 		VectorType::iterator it = data_.begin();
 		for (; it != data_.end(); ++it)
 		{
