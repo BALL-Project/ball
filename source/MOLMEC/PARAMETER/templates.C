@@ -1,4 +1,4 @@
-// $Id: templates.C,v 1.7 2000/02/14 22:42:47 oliver Exp $
+// $Id: templates.C,v 1.8 2000/02/16 19:20:10 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/templates.h>
@@ -148,60 +148,37 @@ namespace BALL
 
 	void Templates::assignTypeNames(System& system, bool overwrite_existing_type_names) const
 	{
-		// remember the current parent to avoid
-		// the recalculation of the parent`s name
-		Fragment* parent = 0;
-		String		parent_name(":");
-
 		// iterate over all atoms
 		AtomIterator it = system.beginAtom();
 		for (; +it; ++it)
 		{
-			// determine the parent`s name
-			if (it->getFragment() != parent)
-			{
-				parent = it->getFragment();
-				if (parent == 0)
-				{
-					parent_name = ":";
-				} else {
-					parent_name = parent->getName().trim();
-					Residue* res = dynamic_cast<Residue*>(parent);
-					// if the parent fragment is a residue, determine its properties
-					if (res != 0)
-					{
-						String suffix = "-";
-						if (res->isNTerminal())
-						{
-							suffix = "-N";
-						}
-						if (res->isCTerminal())
-						{
-							suffix = "-C";
-						}
-						if (res->hasProperty(Residue::PROPERTY__HAS_SSBOND))
-						{
-							suffix += "S";
-						}
-						
-						if (suffix != "-")
-						{
-							parent_name += suffix;
-						}
-					}
-					
-					parent_name += ":";
-				}
-			}
-
-			String name(parent_name + it->getName().trim());
 			if ((overwrite_existing_type_names || (it->getTypeName() == BALL_ATOM_DEFAULT_TYPE_NAME)))
 			{
-				if (type_names_.has(name))
-				{
-					it->setTypeName(type_names_[name]);
+				// retrieve the atom's full name
+				String name(it->getFullName());
+				if (charges_.has(name))
+				{	
+					// assign the charge
+					it->setCharge(charges_[name]);
 				} else {
-					Log.warn() << "Templates::assignTypeNames: cannot assign type name for atom " << name << endl;
+					// try the residue name without variant extension
+					name = it->getFullName(Atom::NO_VARIANT_EXTENSIONS);
+					if (charges_.has(name))
+					{	
+						// assign the charge
+						it->setCharge(charges_[name]);
+					} else {
+						// try a final wildcard match
+						name = "*:" + it->getName();
+						name.trim();
+						if (charges_.has(name))
+						{
+							// assign the charge
+							it->setCharge(charges_[name]);
+						} else {
+							Log.warn() << "Templates::assignTypeNames: cannot assign type name for atom " << it->getFullName() << endl;
+						}
+					}
 				}
 			}
 		}	
@@ -210,60 +187,37 @@ namespace BALL
 
 	void Templates::assignCharges(System& system, bool overwrite_non_zero_charges) const
 	{
-		// remember the current parent to avoid
-		// the recalculation of the parent`s name
-		Fragment* parent = 0;
-		String		parent_name(":");
-
 		// iterate over all atoms
 		AtomIterator it = system.beginAtom();
 		for (; +it; ++it)
 		{
-			// determine the parent`s name
-			if (it->getFragment() != parent)
+			if ((overwrite_non_zero_charges || (it->getTypeName() == BALL_ATOM_DEFAULT_TYPE_NAME)))
 			{
-				parent = it->getFragment();
-				if (parent == 0)
-				{
-					parent_name = ":";
-				} else {
-					parent_name = parent->getName().trim();
-					Residue* res = dynamic_cast<Residue*>(parent);
-					// if the parent fragment is a residue, determine its properties
-					if (res != 0)
-					{
-						String suffix = "-";
-						if (res->isNTerminal())
-						{
-							suffix = "-N";
-						}
-						if (res->isCTerminal())
-						{
-							suffix = "-C";
-						}
-						if (res->hasProperty(Residue::PROPERTY__HAS_SSBOND))
-						{
-							suffix += "S";
-						}
-						
-						if (suffix != "-")
-						{
-							parent_name += suffix;
-						}
-					}
-					
-					parent_name += ":";
-				}
-			}
-
-			String name(parent_name + it->getName().trim());
-			if ((overwrite_non_zero_charges || (it->getCharge() == 0.0)))
-			{
+				// retrieve the atom's full name
+				String name(it->getFullName());
 				if (charges_.has(name))
-				{
+				{	
+					// assign the type name
 					it->setCharge(charges_[name]);
 				} else {
-					Log.warn() << "Templates::assignCharges: cannot assign charge for atom " << name << endl;
+					// try the residue name without variant extension
+					name = it->getFullName(Atom::NO_VARIANT_EXTENSIONS);
+					if (charges_.has(name))
+					{	
+						// assign the type name
+						it->setCharge(charges_[name]);
+					} else {
+						// try a final wildcard match
+						name = "*:" + it->getName();
+						name.trim();
+						if (charges_.has(name))
+						{
+							// assign it
+							it->setCharge(charges_[name]);
+						} else {
+							Log.warn() << "Templates::assignCharges: cannot assign charge for atom " << it->getFullName() << endl;
+						}
+					}
 				}
 			}
 		}	
