@@ -1,4 +1,4 @@
-// $Id: standardPredicates.C,v 1.6 2000/05/24 09:22:44 oliver Exp $
+// $Id: standardPredicates.C,v 1.7 2000/05/24 10:45:18 anker Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -129,32 +129,26 @@ namespace BALL
 		// the following recursive function performs an ad-hoc dfs and returns
 		// true, if a ring was found and false otherwise.
 
-		// Log.info() << "Called with limit " << limit << endl;
-		if (limit < 0)
+		if (limit == 0) 
 		{
-			Log.info() << "limit exceeded: " << limit << endl;
-			return false;
-		}
-		else
-		{
-			if (limit == 0) 
+			if (atom == first_atom) 
 			{
-				if (atom == first_atom) 
-				{
-					Log.info() << "Found first atom at limit" << endl;
-					return true;
-				}
-				else
-				{
-					// Log.info() << "Reached limit" << endl;
-					return false;
-				}
+				// Found first atom at limit
+				return true;
+			}
+			else
+			{
+				// Reached limit without finding the first atom
+				return false;
 			}
 		}
 		Size i;
 		const Bond* bond;
 		Atom* descend;
 		HashSet<const Bond*> my_visited(visited);
+
+		// Now iterate over all Bonds an store the visited bonds.
+
 		for (i = 0; i < atom.countBonds(); ++i)
 		{
 			bond = atom.getBond(i);
@@ -168,7 +162,7 @@ namespace BALL
 				}
 			}
 		}
-		// Log.info() << "No partner matched" << endl;
+		// No partner matched
 		return false;
 	}
 
@@ -196,217 +190,172 @@ namespace BALL
 
 	bool DoubleBondsPredicate::operator () (const Atom& atom) const
 	{
+		return testPredicate_(atom, Bond::ORDER__DOUBLE);
+	}
+
+	bool DoubleBondsPredicate::testPredicate_(const Atom& atom, 
+			Bond::Order order) const
+	{
 		String s = argument_;
 		s.trim();
-		int n = ((String) s[1]).toInt();
-		int count = 0;
-		Size i;
-		for (i = 0; i < atom.countBonds(); ++i)
+
+		if (s.size() > 2)
 		{
-			if ((atom.getBond(i))->getOrder() == Bond::ORDER__DOUBLE)
+			// There can only be an operator followed by a number < 9
+			Log.error() << "DoubleBondsPredicate::operator () (): argument_ too long " << endl;
+			return false;
+		}
+		
+		Size count = 0;
+		Size i = 0;
+		for (; i < atom.countBonds(); ++i)
+		{
+			if ((atom.getBond(i))->getOrder() == order)
 			{
 				count++;
 			}
 		}
 
-		String op = s[0];
-		if (op == "<")
+		Size n;
+		if (s.size() == 2)
 		{
-			if (count < n)
+			n = ((String) s[1]).toInt();
+			switch (s[0]) 
+			{
+				case '<' :
+					if (count < n)
+					{
+						return true;
+					}
+					else
+					{
+						return false;
+					}
+
+				case '>' :
+					if (count > n)
+					{
+						return true;
+					}
+					else 
+					{
+						return false;
+					}
+
+				case '=':
+					if (count == n)
+					{
+						return true;
+					}
+					else 
+					{
+						return false;
+					}
+
+				default:
+					Log.error() << "doubleBond::operator (): Illegal operator " 
+						<< s[0] << endl;
+					return false;
+			}
+		}
+		else 
+		{
+			n = ((String) s[0]).toInt();
+			if (count == n)
 			{
 				return true;
 			}
-			else
+			else 
 			{
 				return false;
 			}
 		}
-		else
-		{
-			if (op == ">") 
-			{
-				if (count > n)
-				{
-					return true;
-				}
-				else 
-				{
-					return false;
-				}
-			}
-			else
-			{
-				if (count == n)
-				{
-					return true;
-				}
-				else 
-				{
-					return false;
-				}
-			}
-		}
-		Log.error() << "doubleBond::operator (): Illegal operator " << s[0] << endl;
-		return false;
+	}
+	
+	bool SingleBondsPredicate::operator () (const Atom& atom) const
+	{
+		return testPredicate_(atom, Bond::ORDER__SINGLE);
 	}
 	
 	bool TripleBondsPredicate::operator () (const Atom& atom) const
 	{
-		String s = argument_;
-		s.trim();
-		int n = ((String) s[1]).toInt();
-		int count = 0;
-		Size i;
-		for (i = 0; i < atom.countBonds(); ++i)
-		{
-			if ((atom.getBond(i))->getOrder() == Bond::ORDER__TRIPLE)
-			{
-				count++;
-			}
-		}
-		String op = s[0];
-		if (op == "<")
-		{
-				if (count < n)
-				{
-					return true;
-				}
-				else
-				{
-					return false;
-				}
-		}
-		else
-		{
-			if (op == ">") 
-			{
-				if (count > n)
-				{
-					return true;
-				}
-				else 
-				{
-					return false;
-				}
-			}
-			else
-			{
-				if (count == n)
-				{
-					return true;
-				}
-				else 
-				{
-					return false;
-				}
-			}
-		}
-		Log.error() << "tripleBond::operator (): Illegal operator " << s[0] << endl;
-		return false;
+		return testPredicate_(atom, Bond::ORDER__TRIPLE);
 	}
 	
 	bool AromaticBondsPredicate::operator () (const Atom& atom) const
 	{
-		String s = argument_;
-		s.trim();
-		int n = ((String) s[1]).toInt();
-		int count = 0;
-		Size i;
-		for (i = 0; i < atom.countBonds(); ++i)
-		{
-			if ((atom.getBond(i))->getOrder() == Bond::ORDER__AROMATIC)
-			{
-				count++;
-			}
-		}
-		String op = s[0];
-		if (op == "<")
-		{
-			if (count < n)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		else
-		{
-			if (op == ">") 
-			{
-				if (count > n)
-				{
-					return true;
-				}
-				else 
-				{
-					return false;
-				}
-			}
-			else
-			{
-				if (count == n)
-				{
-					return true;
-				}
-				else 
-				{
-					return false;
-				}
-			}
-		}
-		Log.error() << "aromaticBond::operator (): Illegal operator " << s[0] << endl;
-		return false;
+		return testPredicate_(atom, Bond::ORDER__AROMATIC);
 	}
-	
+
 	bool NumberOfBondsPredicate::operator () (const Atom& atom) const
 	{
 		String s = argument_;
 		s.trim();
-		int n = ((String) s[1]).toInt();
-		int count = atom.countBonds(); 
-		String op = s[0];
-		if (op == "<")
+
+		if (s.size() > 2)
 		{
-			if (count < n)
+			// There can only be an operator followed by a number < 9
+			Log.error() << "DoubleBondsPredicate::operator () (): argument_ too long " << endl;
+			return false;
+		}
+		
+		Size count = atom.countBonds();
+
+		Size n;
+		if (s.size() == 2)
+		{
+			n = ((String) s[1]).toInt();
+			switch (s[0]) 
+			{
+				case '<' :
+					if (count < n)
+					{
+						return true;
+					}
+					else
+					{
+						return false;
+					}
+
+				case '>' :
+					if (count > n)
+					{
+						return true;
+					}
+					else 
+					{
+						return false;
+					}
+
+				case '=':
+					if (count == n)
+					{
+						return true;
+					}
+					else 
+					{
+						return false;
+					}
+
+				default:
+					Log.error() << "doubleBond::operator (): Illegal operator " 
+						<< s[0] << endl;
+					return false;
+			}
+		}
+		else 
+		{
+			n = ((String) s[0]).toInt();
+			if (count == n)
 			{
 				return true;
 			}
-			else
+			else 
 			{
 				return false;
 			}
 		}
-		else
-		{
-			if (op == ">") 
-			{
-				if (count > n)
-				{
-					return true;
-				}
-				else 
-				{
-					return false;
-				}
-			}
-			else
-			{
-				if (count == n)
-				{
-					return true;
-				}
-				else 
-				{
-					return false;
-				}
-			}
-		}
-		Log.error() << "numberOfBonds::operator (): Illegal operator " << s[0] << endl;
-		return false;
 	}
-	
 	bool ConnectedToPredicate::parse(const String& group, 
 		std::list<std::pair<String,String> >& subs) const
 	{
@@ -761,17 +710,30 @@ namespace BALL
 		}
 	}
 
-	bool Sp3HybridizedPredicate::operator () (const Atom& atom) const
+	bool SpHybridizedPredicate::operator () (const Atom& atom) const
 	{
+		int dcount = 0;
+		int tcount = 0;
 		Size i;
 		for (i = 0; i < atom.countBonds(); ++i)
 		{
-			if ((atom.getBond(i))->getOrder() != Bond::ORDER__SINGLE)
+			if ((atom.getBond(i))->getOrder() == Bond::ORDER__DOUBLE)
 			{
-				return false;
+				dcount++;
+			}
+			if ((atom.getBond(i))->getOrder() == Bond::ORDER__TRIPLE)
+			{
+				tcount++;
 			}
 		}
-		return true;
+		if ((dcount == 2) || (tcount == 1))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	bool Sp2HybridizedPredicate::operator () (const Atom& atom) const
@@ -781,11 +743,11 @@ namespace BALL
 		Size i;
 		for (i = 0; i < atom.countBonds(); ++i)
 		{
-			if ((atom.getBond(i))->getOrder() != Bond::ORDER__DOUBLE)
+			if ((atom.getBond(i))->getOrder() == Bond::ORDER__DOUBLE)
 			{
 				dcount++;
 			}
-			if ((atom.getBond(i))->getOrder() != Bond::ORDER__AROMATIC)
+			if ((atom.getBond(i))->getOrder() == Bond::ORDER__AROMATIC)
 			{
 				acount++;
 			}
@@ -800,30 +762,25 @@ namespace BALL
 		}
 	}
 
-	bool SpHybridizedPredicate::operator () (const Atom& atom) const
+	bool Sp3HybridizedPredicate::operator () (const Atom& atom) const
 	{
-		int dcount = 0;
-		int tcount = 0;
 		Size i;
-		for (i = 0; i < atom.countBonds(); ++i)
-		{
-			if ((atom.getBond(i))->getOrder() != Bond::ORDER__DOUBLE)
-			{
-				dcount++;
-			}
-			if ((atom.getBond(i))->getOrder() != Bond::ORDER__TRIPLE)
-			{
-				tcount++;
-			}
-		}
-		if ((dcount == 2) || (tcount == 1))
-		{
-			return true;
-		}
-		else
+		if (atom.countBonds() != 4)
 		{
 			return false;
 		}
+		else
+		{
+			for (i = 0; i < atom.countBonds(); ++i)
+			{
+				if ((atom.getBond(i))->getOrder() != Bond::ORDER__SINGLE)
+				{
+					return false;
+				}
+			}
+			return true;
+		}
 	}
+
 
 } // namespace BALL

@@ -1,4 +1,4 @@
-// $Id: standardPredicates.h,v 1.4 2000/05/23 20:43:14 anker Exp $
+// $Id: standardPredicates.h,v 1.5 2000/05/24 10:45:14 anker Exp $
 
 #ifndef BALL_KERNEL_STANDARDPREDICATES_H
 #define BALL_KERNEL_STANDARDPREDICATES_H
@@ -251,12 +251,33 @@ namespace BALL
 					@return true, if the predicate is true, false otherwise
 					*/
 				virtual bool operator () (const Atom& atom) const;
+
+			protected:
+				bool testPredicate_(const Atom& atom, Bond::Order order) const;
+		};
+
+	/** Predicate class for atoms bearing single bonds.
+	 */
+	class SingleBondsPredicate
+		:	public DoubleBondsPredicate
+		{
+			public:
+				BALL_CREATE_NODEEP(SingleBondsPredicate)
+				/** Evaluate the predicate for the atom {\tt atom}
+					@param atom the atom to test
+					@return true, if the predicate is true, false otherwise
+					*/
+				/** Evaluate the predicate for the atom {\tt atom}
+					@param atom the atom to test
+					@return true, if the predicate is true, false otherwise
+					*/
+				virtual bool operator () (const Atom& atom) const;
 		};
 
 	/** Predicate class for atoms bearing triple bonds.
 	 */
 	class TripleBondsPredicate
-		:	public	ExpressionPredicate
+		:	public DoubleBondsPredicate
 		{
 			public:
 				BALL_CREATE_NODEEP(TripleBondsPredicate)
@@ -274,7 +295,7 @@ namespace BALL
 	/** Predicate class for atoms bearing aromatic bonds.
 	 */
 	class AromaticBondsPredicate
-		:	public	ExpressionPredicate
+		:	public DoubleBondsPredicate
 		{
 			public:
 				BALL_CREATE_NODEEP(AromaticBondsPredicate)
