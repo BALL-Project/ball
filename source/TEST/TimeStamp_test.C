@@ -1,4 +1,4 @@
-// $Id: TimeStamp_test.C,v 1.3 2000/08/30 19:59:16 oliver Exp $
+// $Id: TimeStamp_test.C,v 1.4 2000/10/17 09:26:28 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(TimeStamp, "$Id: TimeStamp_test.C,v 1.3 2000/08/30 19:59:16 oliver Exp $")
+START_TEST(TimeStamp, "$Id: TimeStamp_test.C,v 1.4 2000/10/17 09:26:28 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -27,77 +27,89 @@ RESULT
 
 
 CHECK(Time::TimeStamp::getTime() const  throw())
-  TimeStamp t1;
-	STATUS(t1)
-  TimeStamp t2;
-	STATUS(t2)
-	TEST_NOT_EQUAL(t1.getTime(), t2.getTime())
-	TEST_EQUAL((t1.getTime() < t2.getTime()), true)
-	TEST_EQUAL((t1.getTime() > t2.getTime()), false)
+  TimeStamp* t1 = new TimeStamp;	
+	STATUS(*t1)
+  TimeStamp* t2 = new TimeStamp;
+	STATUS(*t2)
+	TEST_NOT_EQUAL(t1->getTime(), t2->getTime())
+	TEST_EQUAL((t1->getTime() < t2->getTime()), true)
+	TEST_EQUAL((t1->getTime() > t2->getTime()), false)
+	delete t1;
+	delete t2;
 RESULT
 
 CHECK(Time::TimeStamp::isNewerThan(const Time& time) const  throw())
-	TimeStamp ts1;
+	TimeStamp* ts1 = new TimeStamp;
 	STATUS(ts1)
-	TimeStamp ts2;
+	TimeStamp* ts2 = new TimeStamp;
 	STATUS(ts2)
-	TEST_EQUAL(ts1.isNewerThan(ts1.getTime()), false)
-	TEST_EQUAL(ts1.isNewerThan(ts2.getTime()), false)
-	TEST_EQUAL(ts2.isNewerThan(ts1.getTime()), true)
-	TEST_EQUAL(ts2.isNewerThan(ts2.getTime()), false)
+	TEST_EQUAL(ts1->isNewerThan(ts1->getTime()), false)
+	TEST_EQUAL(ts1->isNewerThan(ts2->getTime()), false)
+	TEST_EQUAL(ts2->isNewerThan(ts1->getTime()), true)
+	TEST_EQUAL(ts2->isNewerThan(ts2->getTime()), false)
+	delete ts1;
+	delete ts2;
 RESULT
 
 
 CHECK(Time::TimeStamp::isOlderThan(const Time& time) const  throw())
-	TimeStamp ts1;
+	TimeStamp* ts1 = new TimeStamp;
 	STATUS(ts1)
-	TimeStamp ts2;
+	TimeStamp* ts2 = new TimeStamp;
 	STATUS(ts2)
-	TEST_EQUAL(ts1.isOlderThan(ts1.getTime()), false)
-	TEST_EQUAL(ts1.isOlderThan(ts2.getTime()), true)
-	TEST_EQUAL(ts2.isOlderThan(ts1.getTime()), false)
-	TEST_EQUAL(ts2.isOlderThan(ts2.getTime()), false)
+	TEST_EQUAL(ts1->isOlderThan(ts1->getTime()), false)
+	TEST_EQUAL(ts1->isOlderThan(ts2->getTime()), true)
+	TEST_EQUAL(ts2->isOlderThan(ts1->getTime()), false)
+	TEST_EQUAL(ts2->isOlderThan(ts2->getTime()), false)
+	delete ts1;
+	delete ts2;
 RESULT
 
 
 CHECK(Time::TimeStamp::isNewerThan(const TimeStamp& stamp) const  throw())
-	TimeStamp ts1;
+	TimeStamp* ts1 = new TimeStamp;
 	STATUS(ts1)
-	TimeStamp ts2;
+	TimeStamp* ts2 = new TimeStamp;
 	STATUS(ts2)
-	TEST_EQUAL(ts1.isNewerThan(ts1), false)
-	TEST_EQUAL(ts1.isNewerThan(ts2), false)
-	TEST_EQUAL(ts2.isNewerThan(ts1), true)
-	TEST_EQUAL(ts2.isNewerThan(ts2), false)
+	TEST_EQUAL(ts1->isNewerThan(*ts1), false)
+	TEST_EQUAL(ts1->isNewerThan(*ts2), false)
+	TEST_EQUAL(ts2->isNewerThan(*ts1), true)
+	TEST_EQUAL(ts2->isNewerThan(*ts2), false)
+	delete ts1;
+	delete ts2;
 RESULT
 
 
 CHECK(Time::TimeStamp::isOlderThan(const TimeStamp& stamp) const  throw())
-	TimeStamp ts1;
+	TimeStamp* ts1 = new TimeStamp;
 	STATUS(ts1)
-	TimeStamp ts2;
+	TimeStamp* ts2 = new TimeStamp;
 	STATUS(ts2)
-	TEST_EQUAL(ts1.isOlderThan(ts1), false)
-	TEST_EQUAL(ts1.isOlderThan(ts2), true)
-	TEST_EQUAL(ts2.isOlderThan(ts1), false)
-	TEST_EQUAL(ts2.isOlderThan(ts2), false)
+	TEST_EQUAL(ts1->isOlderThan(*ts1), false)
+	TEST_EQUAL(ts1->isOlderThan(*ts2), true)
+	TEST_EQUAL(ts2->isOlderThan(*ts1), false)
+	TEST_EQUAL(ts2->isOlderThan(*ts2), false)
+	delete ts1;
+	delete ts2;
 RESULT
 
 
 CHECK(Time::TimeStamp::stamp(const Time& time = Time::ZERO) throw())
-  TimeStamp ts1;
+  TimeStamp* ts1 = new TimeStamp;
 	STATUS(ts1)
-  TimeStamp ts2;
+  TimeStamp* ts2 = new TimeStamp;
 	STATUS(ts2)
-	TEST_EQUAL(ts1.isNewerThan(ts1), false)
-	TEST_EQUAL(ts1.isNewerThan(ts2), false)
-	TEST_EQUAL(ts2.isNewerThan(ts1), true)
-	TEST_EQUAL(ts2.isNewerThan(ts2), false)
-	ts1.stamp();
-	TEST_EQUAL(ts1.isNewerThan(ts1), false)
-	TEST_EQUAL(ts1.isNewerThan(ts2), true)
-	TEST_EQUAL(ts2.isNewerThan(ts1), false)
-	TEST_EQUAL(ts2.isNewerThan(ts2), false)
+	TEST_EQUAL(ts1->isNewerThan(*ts1), false)
+	TEST_EQUAL(ts1->isNewerThan(*ts2), false)
+	TEST_EQUAL(ts2->isNewerThan(*ts1), true)
+	TEST_EQUAL(ts2->isNewerThan(*ts2), false)
+	ts1->stamp();
+	TEST_EQUAL(ts1->isNewerThan(*ts1), false)
+	TEST_EQUAL(ts1->isNewerThan(*ts2), true)
+	TEST_EQUAL(ts2->isNewerThan(*ts1), false)
+	TEST_EQUAL(ts2->isNewerThan(*ts2), false)
+	delete ts1;
+	delete ts2;
 RESULT
 
 
