@@ -1,18 +1,10 @@
-// $Id: anisotropyShiftProcessor.C,v 1.3 2000/09/19 21:04:45 amoll Exp $
+// $Id: anisotropyShiftProcessor.C,v 1.4 2000/09/20 13:42:13 amoll Exp $
 
 #include<BALL/NMR/anisotropyShiftProcessor.h>
 
-#ifndef BALL_KERNEL_ATOM_H
-# include<BALL/KERNEL/atom.h>
-#endif
-
-#ifndef BALL_KERNEL_PTE_H
-# include<BALL/KERNEL/PTE.h>
-#endif
-
-#ifndef BALL_DATATYPE_STRING_H
-# include<BALL/DATATYPE/string.h>
-#endif
+#include<BALL/KERNEL/atom.h>
+#include<BALL/KERNEL/PTE.h>
+#include<BALL/DATATYPE/string.h>
 
 using namespace std;
 
@@ -86,7 +78,7 @@ namespace BALL
 					for (Position pos = 0; pos < patom->countBonds(); pos++)
 					{
 						const Bond& hbond = *c_atom->getBond(pos);
-						if ((hbond.getBoundAtom(*c_atom)->getName()) == name)
+						if (hbond.getBoundAtom(*c_atom)->getName() == name)
 						{
 							x_atom = hbond.getBoundAtom(*c_atom);
 							break;
@@ -136,51 +128,53 @@ namespace BALL
 				const Atom* n_atom = bond->getSecondAtom();
 				const Atom* o_atom = 0;
 
-				if (!(((*proton_iter)->getName() == "H") && 
-						 ((*proton_iter)->getResidue() == n_atom->getFragment())))
+				if ((*proton_iter)->getName() == "H" ||
+						(*proton_iter)->getResidue() == n_atom->getFragment())
 				{
-					for (Position pos = 0; pos < patom->countBonds(); pos++)
-					{
-						const Bond& hbond = *c_atom->getBond(pos);
-						if ((hbond.getBoundAtom(*c_atom)->getName()) == "O")
-						{
-							o_atom = hbond.getBoundAtom(*c_atom);
-						}
-					}
-					const Vector3& c_pos = c_atom->getPosition();
-					const Vector3& o_pos = o_atom->getPosition();
-					const Vector3& n_pos = n_atom->getPosition();
-
-					// baue rechtwinkliges Koordinatensystem auf
-					Vector3 vz = n_pos - c_pos;
-					const float vz_scalar = vz.getLength();
-					vz.normalize();
-					Vector3 vy = vz % (o_pos - c_pos);
-					vy.normalize();
-					Vector3 vx = vz % vy;
-					vx.normalize();
-					const Vector3 cen = c_pos + (vz * (0.85 * vz_scalar));
-					const Vector3 v1 = patom->getPosition() - cen;
-					const Vector3 v2 = v1 % vy;
-					const Vector3 v3 = v2 % vx;
-
-					const float& distance = v1.getLength();
-					const float stheta = v2.getLength() / (v1.getLength() * vy.getLength());
-					const float sgamma = v3.getLength() / (v2.getLength() * vx.getLength());
-					float calc1, calc2;
-					if ((*proton_iter)->getName() == "H")
-					{
-						calc1 = ndXN1 * ((3.0 * stheta * stheta) - 2.0);
-						calc2 = ndXN2 * (1.0 - (3.0 * stheta * stheta * sgamma * sgamma));
-					}
-					else
-					{
-						calc1 = ndX1 * ((3.0 * stheta * stheta) - 2.0);
-						calc2 = ndX2 * (1.0 - (3.0 * stheta * stheta * sgamma * sgamma));
-					}
-
-					gs += (calc1 + calc2) / (3.0 * distance * distance * distance);
+					continue;
 				}
+
+				for (Position pos = 0; pos < patom->countBonds(); pos++)
+				{
+					const Bond& hbond = *c_atom->getBond(pos);
+					if (hbond.getBoundAtom(*c_atom)->getName() == "O")
+					{
+						o_atom = hbond.getBoundAtom(*c_atom);
+					}
+				}
+				const Vector3& c_pos = c_atom->getPosition();
+				const Vector3& o_pos = o_atom->getPosition();
+				const Vector3& n_pos = n_atom->getPosition();
+
+				// baue rechtwinkliges Koordinatensystem auf
+				Vector3 vz = n_pos - c_pos;
+				const float vz_scalar = vz.getLength();
+				vz.normalize();
+				Vector3 vy = vz % (o_pos - c_pos);
+				vy.normalize();
+				Vector3 vx = vz % vy;
+				vx.normalize();
+				const Vector3 cen = c_pos + (vz * (0.85 * vz_scalar));
+				const Vector3 v1 = patom->getPosition() - cen;
+				const Vector3 v2 = v1 % vy;
+				const Vector3 v3 = v2 % vx;
+
+				const float& distance = v1.getLength();
+				const float stheta = v2.getLength() / (v1.getLength() * vy.getLength());
+				const float sgamma = v3.getLength() / (v2.getLength() * vx.getLength());
+				float calc1, calc2;
+				if ((*proton_iter)->getName() == "H")
+				{
+					calc1 = ndXN1 * ((3.0 * stheta * stheta) - 2.0);
+					calc2 = ndXN2 * (1.0 - (3.0 * stheta * stheta * sgamma * sgamma));
+				}
+				else
+				{
+					calc1 = ndX1 * ((3.0 * stheta * stheta) - 2.0);
+					calc2 = ndX2 * (1.0 - (3.0 * stheta * stheta * sgamma * sgamma));
+				}
+
+				gs += (calc1 + calc2) / (3.0 * distance * distance * distance);
 			}
 			float shift = (*proton_iter)->getProperty("chemical_shift").getFloat();
 			shift += gs;
