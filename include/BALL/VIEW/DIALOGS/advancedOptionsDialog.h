@@ -14,19 +14,20 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		// Dialog for changing options in MolecularDynamicsDialog
-		// and EnergyMinimizationDialog
-		
-		class advancedOptionsDialog
-		: public advancedOptions
+		/** Dialog for changing options in MolecularDynamicsDialog
+				 and EnergyMinimizationDialog
+				\ingroup ViewDialogs
+		*/
+		class AdvancedOptionsDialog
+		: public AdvancedOptions
 		{
 			Q_OBJECT
 			
 			public:
 			//constructor
-			advancedOptionsDialog(QWidget* parent = NULL, const char* name = NULL);
+			AdvancedOptionsDialog(QWidget* parent = NULL, const char* name = NULL);
 			//destructor
-			virtual ~advancedOptionsDialog();
+			virtual ~AdvancedOptionsDialog();
 			
 			///
 			const String& getFilename() const;
