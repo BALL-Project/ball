@@ -77,8 +77,16 @@ class MolecularDynamicsDialog
 		///
 		bool saveImages() const;
 
+		/// 
+		String getDCDFile() const;
+
+		///
+		Size getStepsBetweenRefreshs() const;
+
 		protected slots:
     virtual void browseParameterFiles();
+
+		virtual void enableDCDFileSelected();
 
 		void timeChanged();
 };

@@ -6,7 +6,7 @@
 #ifndef BALL_VIEW_DIALOGS_PEPTIDEDIALOG_H
 #define BALL_VIEW_DIALOGS_PEPTIDEDIALOG_H
 
-#include "peptideDialogData.h"
+#include <BALL/VIEW/UIC/peptideDialogData.h>
 
 #ifndef BALL_STRUCTURE_PEPTIDEBUILDER_H
 #include <BALL/STRUCTURE/peptideBuilder.h>
@@ -14,15 +14,13 @@
 
 namespace BALL
 {
-	using Peptides::PeptideBuilder;
-
 	namespace VIEW
 	{
 		/** Dialog for building peptides
 		*/
 		class PeptideDialog
 			: public PeptideDialogData,
-				protected PeptideBuilder
+				protected Peptides::PeptideBuilder
 		{ 
 			Q_OBJECT
 
