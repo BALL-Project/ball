@@ -91,8 +91,14 @@
 // Define if numeric_limits is defined in <limits>
 #undef HAVE_NUMERIC_LIMITS
 
-// Defines an integer type that has the same length as void*
+// Define an unsigned integer type that has the same length as (void*)
 #define BALL_POINTERSIZE_INT int
+
+// Define an unsigned numeric type of 64 bit length (used for
+// platform independent persistence: stores pointers)
+// this usually defaults to unsigned long on 64 bit architectures
+// and unsigned long long on 32 bit machines
+#define BALL_ULONG64_TYPE ""
 
 // Defines an unsigned type that has the same length as size_t
 #define BALL_SIZE_TYPE int

@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.39 2000/01/13 22:37:50 oliver Exp $
+dnl    $Id: configure.in,v 1.40 2000/01/16 17:31:43 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -133,8 +133,9 @@ AC_DEFUN(AC_MSG_PATH_PROG,[
 	if test $$1 = no ; then
 		AC_MSG_RESULT()
 		AC_MSG_RESULT([This script requires the unix command $2, but cannot find it.])
-		AC_MSG_RESULT([You can either add the correct path to your \$PATH variable or])
-		AC_MSG_RESULT([try to edit ./configure. In the last case: good luck!])
+		AC_MSG_RESULT([Please add the correct path to $2 to your \$PATH variable])
+		AC_MSG_RESULT([and restart configure.])
+		AC_MSG_RESULT()
 		AC_MSG_ERROR(aborted)
 		exit
 	fi
@@ -545,7 +546,9 @@ else
 		AC_MSG_RESULT(Could not find a C++ compiler. Please change the settings)
 		AC_MSG_RESULT(of your PATH environment variable (using setenv export))
 		AC_MSG_RESULT(or specify an absolute path in configure by setting the variable)
-		AC_MSG_RESULT(CXX=<pathname>.)
+		AC_MSG_RESULT(CXX=<pathname> or specify the compiler by passing the option)
+		AC_MSG_RESULT(--with-compiler=<compiler> to configure.)
+		AC_MSG_RESULT()
 		AC_MSG_ERROR(aborted)
 	fi
 fi
@@ -652,12 +655,25 @@ if test "${IS_GXX}" = "true" ; then
 	fi
 
 	if test "${IS_EGXX}" = "true" ; then	
-		if test "${CXX_VERSION_1}" -le 1 -a "${CXX_VERSION_2}" -eq 0 ; then
-			AC_MSG_RESULT()
-			AC_MSG_RESULT(Wrong version of egcs! egcs below release 1.1.x won't compile due to an internal compiler error)
-			AC_MSG_RESULT(Please upgrade to a more recent version of egcs.)
-			AC_MSG_ERROR(aborted)
-		fi
+		AC_MSG_RESULT()
+		AC_MSG_RESULT(egcs won't compile BALL due to several internal compiler errors.)
+		AC_MSG_RESULT(Please upgrade to a more recent version of GNU g++ (e.g. 2.95.2).)
+		AC_MSG_RESULT(If you have alreadyinstalled a different compiler, you may)
+		AC_MSG_RESULT(specify the path to this compiler by passing the option)
+		AC_MSG_RESULT( --with-compiler=<compiler> to configure.)
+		AC_MSG_RESULT()
+		AC_MSG_ERROR(aborted)
+	fi
+	if test "${CXX_VERSION_1}" -lt 2 \
+		-o "${CXX_VERSION_1}" = 2 -a "${CXX_VERSION_2}" -lt 95 ; then
+		AC_MSG_RESULT()
+		AC_MSG_RESULT([The version of gcc you are using is not supported by BALL.])
+		AC_MSG_RESULT([Please update to a newer version of g++ (at least 2.95.x)])
+		AC_MSG_RESULT([which can be obtained from])
+		AC_MSG_RESULT([  ftp://gcc.gnu.org/pub/gcc/releases/index.html])
+		AC_MSG_RESULT([or specify a different compiler using the option --with-compiler=])
+		AC_MSG_RESULT()
+		AC_MSG_ERROR(aborted)
 	fi
 else
 	dnl
@@ -902,8 +918,8 @@ else
 				DEF_BOOL=false
 				CPPFLAGS="$CPPFLAGS -64 -LANG:std"
 				DYNAROPTS="-64 ${DYNAROPTS}"
-				CPPFLAGS_O="${CPPFLAGS_O} -O2 -OPT:Olimit_opt=on -multigot -G 6"
-				CPPFLAGS_D="${CPPFLAGS_D} -fullwarn -multigot -G 6 -DEBUG:woff=1375,3201,1424,1110,1209"
+				CPPFLAGS_O="${CPPFLAGS_O} -O2 -OPT:Olimit_opt=on -multigot -G 5"
+				CPPFLAGS_D="${CPPFLAGS_D} -fullwarn -multigot -G 5 -DEBUG:woff=1375,3201,1424,1110,1209"
 				CPPFLAGS_DI="${CPPFLAGS_DI} -g"
 				LDFLAGS="$LDFLAGS -64 -LANG:std"
 				AC_DEFINE(IRIX64,)
@@ -913,8 +929,8 @@ else
 				DEF_BOOL=false
 				CPPFLAGS="$CPPFLAGS -n32 -LANG:std"
 				DYNAROPTS="-n32 ${DYNAROPTS}"
-				CPPFLAGS_O="${CPPFLAGS_O} -O2 -OPT:Olimit_opt=on -multigot -G 6"
-				CPPFLAGS_D="${CPPFLAGS_D} -fullwarn -multigot -G 6 -DEBUG:woff=1375,3201,1424,1110,1209"
+				CPPFLAGS_O="${CPPFLAGS_O} -O2 -OPT:Olimit_opt=on -multigot -G 5"
+				CPPFLAGS_D="${CPPFLAGS_D} -fullwarn -multigot -G 5 -DEBUG:woff=1375,3201,1424,1110,1209"
 				CPPFLAGS_DI="${CPPFLAGS_DI} -g"
 				LDFLAGS="$LDFLAGS -n32 -LANG:std"
 				AC_DEFINE(IRIX32,)
@@ -1175,7 +1191,11 @@ if test ${BALL_CFG_USING_METHOD_DIRECTIVE} = ANSI ; then
 	AC_DEFINE(BALL_CFG_USING_METHOD_DIRECTIVE)
 fi
 if test ${BALL_CFG_USING_METHOD_DIRECTIVE} = none ; then
-	AC_MSG_RESULT(Compiler does not understand ARM or ANSI style method access modification.)
+	AC_MSG_RESULT()
+	AC_MSG_RESULT([Compiler does not understand ARM or ANSI style method access modification.])
+	AC_MSG_RESULT([Please specify a different compiler (e.g. g++ 2.95.2) using the option])
+	AC_MSG_RESULT([--with-compiler=<compiler>.])
+	AC_MSG_RESULT()
 	AC_ERROR(aborted.)
 fi
 
@@ -1191,10 +1211,14 @@ dnl
 dnl		check for the size of int and pointers (may cause trouble on 64 bit architectures)
 dnl		we define the type PointerInt (in COMMON/global.h) according to the macro
 dnl		BALL_POINTERSIZE_INT (which is set here)
+dnl   We also define a 64 bit unsigned numeric type. All pointers that are read or written
+dnl   in persistence-related methods use this type to ensure compatibility between 32 and
+dnl   64bit BALL versions.
 dnl	  missing: usage of the result of AC_TYPE_SIZE_T
 dnl
 AC_CHECK_SIZEOF(int, 4)
 AC_CHECK_SIZEOF(long, 4)
+AC_CHECK_SIZEOF(long long, 8)
 AC_CHECK_SIZEOF(size_t, 4)
 AC_CHECK_SIZEOF(void*, 4)
 
@@ -1202,17 +1226,23 @@ SIZEOF_INT=$ac_cv_sizeof_int
 SIZEOF_LONG=$ac_cv_sizeof_long
 SIZEOF_SIZE_T=$ac_cv_sizeof_size_t
 SIZEOF_VOID_P=$ac_cv_sizeof_voidp
+SIZEOF_UINT=$ac_cv_sizeof_int
+SIZEOF_ULONG=$ac_cv_sizeof_long
+SIZEOF_ULONGLONG=$ac_cv_sizeof_long_long
 
 AC_DEFINE_UNQUOTED(BALL_INT_SIZE,"${SIZEOF_INT}")
 AC_DEFINE_UNQUOTED(BALL_LONG_SIZE,"${SIZEOF_LONG}")
 AC_DEFINE_UNQUOTED(BALL_SIZE_T_SIZE,"${SIZEOF_SIZE_T}")
 AC_DEFINE_UNQUOTED(BALL_POINTER_SIZE,"${SIZEOF_VOID_P}")
+AC_DEFINE_UNQUOTED(BALL_UINT_SIZE,"${SIZEOF_UINT}")
+AC_DEFINE_UNQUOTED(BALL_ULONG_SIZE,"${SIZEOF_ULONG}")
+AC_DEFINE_UNQUOTED(BALL_ULONGLONG_SIZE,"${SIZEOF_ULONGLONG}")
 
-if test "${SIZEOF_VOID_P}" = "${SIZEOF_INT}" ; then
-	BALL_POINTERSIZE_INT=int
+if test "${SIZEOF_VOID_P}" = "${SIZEOF_UINT}" ; then
+	BALL_POINTERSIZE_INT="unsigned int"
 else 
-	if test "${SIZEOF_VOID_P}" = "${SIZEOF_LONG}" ; then
-		BALL_POINTERSIZE_INT=long
+	if test "${SIZEOF_VOID_P}" = "${SIZEOF_ULONG}" ; then
+		BALL_POINTERSIZE_INT="unsigned long"
 	else
 		AC_MSG_RESULT()
 		AC_MSG_RESULT(cannot find appropriate numeric type of same size as void*)
@@ -1235,6 +1265,21 @@ else
 fi
 AC_DEFINE_UNQUOTED(BALL_SIZE_TYPE, ${BALL_SIZE_TYPE})
 AC_DEFINE_UNQUOTED(BALL_INDEX_TYPE, ${BALL_INDEX_TYPE})
+
+dnl  define 64 bit unsigned type
+if test "${SIZEOF_ULONG}" = "8" ; then
+	BALL_ULONG64_TYPE="unsigned long"
+else 
+	if test "${SIZEOF_ULONGLONG}" = "8" ; then
+		BALL_ULONG64_TYPE="unsigned long long"
+	else
+		AC_MSG_RESULT()
+		AC_MSG_RESULT(cannot find unsigned 64bit type.)
+		AC_MSG_RESULT()
+		AC_MSG_ERROR(abort)
+	fi
+fi
+AC_DEFINE_UNQUOTED(BALL_ULONG64_TYPE, ${BALL_ULONG64_TYPE})
 	
 
 dnl   
@@ -1987,9 +2032,12 @@ dnl 	the library has been built.
 dnl   Any hints concerning a special OS/compiler combination 
 dnl   might want to print some information here (as is the
 dnl   case for the IRIX LD_LBRARY_PATH/LD_LIBRARY64_PATH/LD_LIBRARYN32_PATH)
-
+dnl   If BALLVIEW is to be built, we add a hint for MolVIEW.
 if test "${ADDITIONAL_COMMENTS}" = "" ; then
 	ADDITIONAL_COMMENTS=""
+fi
+if test "${USE_BALLVIEW}" = true ; then
+	ADDITIONAL_COMMENTS="${ADDITIONAL_COMMENTS}\n\nTo build the molecule viewer MolVIEW, please type\n\n   make molview\n\nThe executable is built in the directory APPLICATIONS/MOLVIEW\n"
 fi
 AC_SUBST(ADDITIONAL_COMMENTS)
 
