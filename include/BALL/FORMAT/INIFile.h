@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: INIFile.h,v 1.35 2003/07/11 00:13:07 amoll Exp $
+// $Id: INIFile.h,v 1.36 2003/07/11 09:27:49 amoll Exp $
 
 #ifndef BALL_FORMAT_INIFILE_H
 #define BALL_FORMAT_INIFILE_H
@@ -431,11 +431,6 @@ namespace BALL
 			IteratorTraits_();
 
 			///
-			IteratorTraits_(List<Section>& list, 
-											SectionIterator section, 
-											List<String>::Iterator line);
-			
-			///
 			IteratorTraits_(const IteratorTraits_& traits);
 
 			///
@@ -503,10 +498,15 @@ namespace BALL
 
 			protected:
 
-			///
+			//_
+			IteratorTraits_(List<Section>& list, 
+											SectionIterator section, 
+											List<String>::Iterator line);
+			
+			//_
 			const List<Section>* getBound_() const;
 
-			///
+			//_
 			void setLine_(const String& line);
 
 			private:
