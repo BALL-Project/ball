@@ -1,11 +1,11 @@
-// $Id: ResourceFile_test.C,v 1.6 2000/01/10 15:51:17 oliver Exp $
+// $Id: ResourceFile_test.C,v 1.7 2000/02/06 20:03:32 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/FORMAT/resourceFile.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: ResourceFile_test.C,v 1.6 2000/01/10 15:51:17 oliver Exp $")
+START_TEST(class_name, "$Id: ResourceFile_test.C,v 1.7 2000/02/06 20:03:32 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -416,6 +416,20 @@ CHECK(ResourceFile::open(const String&))
 f.open("data/test.db");
 TEST_EQUAL(f.isValid(), true)
 TEST_EQUAL(f.is_open(), true)
+TEST_NOT_EQUAL(f.getEntry("/Node1"), 0)
+TEST_EQUAL(f.getEntry("//Node1"), 0)
+TEST_NOT_EQUAL(f.getEntry("/Node2"), 0)
+TEST_EQUAL(f.getEntry("//Node2"), 0)
+TEST_EQUAL(f.getEntry("/Node3"), 0)
+TEST_NOT_EQUAL(f.getEntry("/Node1/Node1.1"), 0)
+TEST_NOT_EQUAL(f.getEntry("/Node1/Node1.2"), 0)
+TEST_NOT_EQUAL(f.getEntry("/Node1/Node1.3"), 0)
+TEST_NOT_EQUAL(f.getEntry("/Node1/Node1.4"), 0)
+TEST_NOT_EQUAL(f.getEntry("/Node2/Node2.1"), 0)
+TEST_NOT_EQUAL(f.getEntry("/Node2/Node2.2"), 0)
+TEST_NOT_EQUAL(f.getEntry("/Node2/Node2.2/Node2.2.1"), 0)
+TEST_NOT_EQUAL(f.getEntry("/Node2/Node2.2/Node2.2.2"), 0)
+TEST_NOT_EQUAL(f.getEntry("/Node2/Node2.3"), 0)
 RESULT
 
 CHECK(operator >> (std::istream&, ResourceFile&))
@@ -429,7 +443,11 @@ TEST_EQUAL(f.is_open(), false)
 RESULT
 
 CHECK(ResourceFile::saveAs(const Entry&, const String&))
-//BAUSTELLE
+ResourceFile rf;
+rf.open("data/test.db");
+TEST_EQUAL(rf.isValid(), true)
+TEST_EQUAL(rf.is_open(), true)
+rf.saveAs("test.xml");
 RESULT
 
 CHECK(ResourceFile::save(const Entry&))
