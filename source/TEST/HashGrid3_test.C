@@ -1,4 +1,4 @@
-// $Id: HashGrid3_test.C,v 1.5 2002/01/15 16:04:22 anker Exp $
+// $Id: HashGrid3_test.C,v 1.6 2002/01/15 16:33:02 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 
 ///////////////////////////
 
-START_TEST(HashGrid, "$Id: HashGrid3_test.C,v 1.5 2002/01/15 16:04:22 anker Exp $")
+START_TEST(HashGrid, "$Id: HashGrid3_test.C,v 1.6 2002/01/15 16:33:02 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -269,14 +269,24 @@ RESULT
 
 
 CHECK(HashGridBox3::apply(UnaryProcessor< HashGridBox3<Item> >& processor) throw())
-  //?????
+	TestProcessor2 proc;
+	HashGridBox3<int> hbox;
+	hbox.insert(5);
+	hbox.apply(proc);
+	int* result = hbox.find(6);
+	TEST_NOT_EQUAL(result, 0)
+	bool test = (*result == 6);
+	TEST_EQUAL(test, true)
+	// TODO: more complex example
 RESULT
 
 
 // tests for class HashGridBox3::BoxIteratorTraits_::
 
-CHECK(HashGridBox3::BoxIteratorTraits_::(BoxIteratorTraits_)() throw())
-  //?????
+HashGridBox3<int>::BoxIteratorTraits_* it_tr_ptr;
+CHECK(HashGridBox3::BoxIteratorTraits_::BoxIteratorTraits_() throw())
+	it_tr_ptr = new HashGridBox3<int>::BoxIteratorTraits_;
+	TEST_NOT_EQUAL(it_tr_ptr, 0)
 RESULT
 
 
@@ -398,8 +408,11 @@ RESULT
 
 // tests for class HashGrid3::
 
+HashGrid3<int>* hg_ptr;
+
 CHECK(HashGrid3::HashGrid3() throw())
-  //?????
+	hg_ptr = new HashGrid3<int>;
+	TEST_NOT_EQUAL(hg_ptr, 0)
 RESULT
 
 
