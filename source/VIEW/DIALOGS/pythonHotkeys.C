@@ -21,7 +21,8 @@ PythonHotkeys::PythonHotkeys( QWidget* parent,  const char* name, WFlags fl )
   table->setNumRows(0);
 	table->setColumnWidth(2, 240);
 
-	modifier_ << "None" << "Shift" << "Ctrl" << "Alt";
+	//modifier_ << "None" << "Shift" << "Ctrl" << "Alt";
+	modifier_ << "None" << "Shift" << "Alt";
 	for (Position p = 1; p < 13; p++)
 	{
 		keys_ << String("F") + String(p).c_str();
@@ -40,24 +41,39 @@ List<Hotkey> PythonHotkeys::getContent() const
 		if (table->item(pos, 2)->text().isEmpty() ||
 				!RTTI::isKindOf<QComboTableItem>(*table->item(pos, 0))) 
 		{
+			Log.error() << "Problem reading content of PythonHotkeys" << std::endl;
 			continue;
 		}
 
 		Hotkey hotkey;
 
-		table->item(pos, 0);
-		Index p = (dynamic_cast<QComboTableItem*>( table->item(pos, 0)))->currentItem();
-		if (p == 0)
+		Index ci = ((QComboTableItem*) table->item(pos, 0))->currentItem();
+		switch(ci)
 		{
-			hotkey.button_state = Qt::NoButton;
-		}
-		else
-		{
-			hotkey.button_state = (Qt::ButtonState) (Qt::ShiftButton + p - 1);
+			case 0:
+				hotkey.button_state = Qt::NoButton;
+				break;
+
+			case 1:
+				hotkey.button_state =Qt::ShiftButton;
+				break;
+
+			/*
+			case 2:
+				hotkey.button_state = Qt::ControlButton;
+				break;
+			*/
+
+			case 2:
+				hotkey.button_state = Qt::AltButton;
+				break;
+
+			default:
+				Log.error() << "Problem reading content of PythonHotkeys" << std::endl;
 		}
 
-		p = ((QComboTableItem*) table->item(p, 1))->currentItem();
-		hotkey.key = (Qt::Key) (Qt::Key_F1 + p);
+		ci = ((QComboTableItem*) table->item(pos, 1))->currentItem();
+		hotkey.key = (Qt::Key) (Qt::Key_F1 + ci);
 
 		hotkey.action = table->item(pos, 2)->text().ascii();
 
@@ -78,21 +94,28 @@ void PythonHotkeys::setContent(const List<Hotkey>& hotkeys)
 	for (; it != hotkeys.end(); it++)
 	{
 		QComboTableItem * item = new QComboTableItem(table, modifier_, FALSE );
-		if ((*it).button_state == Qt::NoButton ||
-				(*it).button_state == 0)
+		switch ((Position)(*it).button_state)
 		{
-			item->setCurrentItem(0);
-		}
-		else
-		{
-			if ((*it).button_state < Qt::ShiftButton) 
-			{
+			case (Position)Qt::NoButton:
+				item->setCurrentItem(0);
+				break;
+
+			case (Position)Qt::ShiftButton:
+				item->setCurrentItem(1);
+				break;
+
+			/*
+			case (Position)Qt::ControlButton:
+				item->setCurrentItem(2);
+				break;
+			*/
+				
+			case (Position)Qt::AltButton:
+				item->setCurrentItem(2);
+				break;
+
+			default:
 				Log.error() << "Invalid button state for Hotkey" << std::endl;
-			}
-			else
-			{
-				item->setCurrentItem((*it).button_state - Qt::ShiftButton + 1);
-			}
 		}
     table->setItem(p, 0,  item) ;
 
@@ -107,7 +130,7 @@ void PythonHotkeys::setContent(const List<Hotkey>& hotkeys)
 }
 
 				
-void PythonHotkeys::setDefaults(bool all)
+void PythonHotkeys::setDefaults(bool /*all*/)
 	throw()
 {
 }

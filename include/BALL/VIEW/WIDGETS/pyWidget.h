@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.19 2004/07/24 15:22:10 amoll Exp $
+// $Id: pyWidget.h,v 1.20 2004/07/25 17:49:58 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -33,6 +33,7 @@ namespace BALL
 	namespace VIEW
 	{
 		class PythonSettings;
+		class PythonHotkeys;
 
 		class RunPythonThread;
 
@@ -64,6 +65,10 @@ namespace BALL
 
 			///
 			bool operator == (const QKeyEvent& e) const
+				throw();
+
+			/// 
+			const Hotkey& operator = (const Hotkey& s)
 				throw();
 
 			///
@@ -313,6 +318,7 @@ namespace BALL
 			protected:
 
 			PyWidgetData* 		text_edit_;
+			PythonHotkeys* 		python_hotkeys_;
 			List<Hotkey> 			hotkeys_;
 		};
 

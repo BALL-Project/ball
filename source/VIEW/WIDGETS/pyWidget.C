@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.36 2004/07/24 15:22:05 amoll Exp $
+// $Id: pyWidget.C,v 1.37 2004/07/25 17:49:58 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -10,6 +10,7 @@
 #include <BALL/VIEW/WIDGETS/pyWidget.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/DIALOGS/pythonSettings.h>
+#include <BALL/VIEW/DIALOGS/pythonHotkeys.h>
 #include <BALL/PYTHON/pyInterpreter.h>
 #include <BALL/VIEW/DIALOGS/preferences.h>
 #include <BALL/FORMAT/lineBasedFile.h>
@@ -37,6 +38,16 @@ namespace BALL
 			output = PyInterpreter::run(input, state);
 		}
 #endif
+
+
+		const Hotkey& Hotkey::operator = (const Hotkey& hotkey)
+			throw()
+		{
+			action 				= hotkey.action;
+			key 	 				= hotkey.key;
+			button_state 	= hotkey.button_state;
+			return *this;
+		}
 
 
 		bool Hotkey::operator == (const Hotkey& hotkey) const
@@ -615,21 +626,23 @@ namespace BALL
 		{
 			DockWidget::fetchPreferences(inifile);
 
-			if (!inifile.hasEntry("PYTHON", "StartupScript")) return;
-
-			text_edit_->startup_script_ =	inifile.getValue("PYTHON", "StartupScript");
-			text_edit_->python_settings_->setFilename(text_edit_->startup_script_);
-			if (text_edit_->startup_script_ != "") text_edit_->runFile(text_edit_->startup_script_);
-
 			for (Position p = 0; true; p++)
 			{
-				if (!inifile.hasEntry("PYTHON", "Hotkey" + String(p))) return;
+				if (!inifile.hasEntry("PYTHON", "Hotkey" + String(p))) break;
 
 				Hotkey hotkey;
 				if (!hotkey.set(inifile.getValue("PYTHON", "Hotkey" + String(p)))) continue;
 
 				insertHotkey(hotkey);
 			}
+
+			python_hotkeys_->setContent(hotkeys_);
+
+			if (!inifile.hasEntry("PYTHON", "StartupScript")) return;
+
+			text_edit_->startup_script_ =	inifile.getValue("PYTHON", "StartupScript");
+			text_edit_->python_settings_->setFilename(text_edit_->startup_script_);
+			if (text_edit_->startup_script_ != "") text_edit_->runFile(text_edit_->startup_script_);
 		}
 
 
@@ -656,9 +669,11 @@ namespace BALL
 		void PyWidget::initializePreferencesTab(Preferences &preferences)
 			throw()
 		{
-			text_edit_->python_settings_= new PythonSettings(this);
+			text_edit_->python_settings_= new PythonSettings();
 			text_edit_->python_settings_->setFilename(text_edit_->startup_script_);
 			preferences.insertPage(text_edit_->python_settings_, "Python");
+			python_hotkeys_ = new PythonHotkeys();
+			preferences.insertPage(python_hotkeys_, "Hotkeys");
 		}
 
 		void PyWidget::finalizePreferencesTab(Preferences &preferences)
@@ -671,6 +686,14 @@ namespace BALL
 				delete text_edit_->python_settings_;
 				text_edit_->python_settings_ = 0;
 			}
+
+			if (python_hotkeys_ != 0)
+			{
+				preferences.removePage(python_hotkeys_);
+
+				delete python_hotkeys_;
+				python_hotkeys_ = 0;
+			}
 		}
 
 		void PyWidget::applyPreferences()
@@ -678,6 +701,8 @@ namespace BALL
 		{
 			if (text_edit_->python_settings_ == 0) return;
 			text_edit_->startup_script_ = text_edit_->python_settings_->getFilename();
+
+			hotkeys_ = (python_hotkeys_->getContent());
 		}
 
 		void PyWidget::cancelPreferences()
@@ -688,7 +713,6 @@ namespace BALL
 				text_edit_->python_settings_->setFilename(text_edit_->startup_script_);
 			}
 		}
-
 
 		void PyWidget::startInterpreter()
 		{
