@@ -1,4 +1,4 @@
-// $Id: tutorial1.C,v 1.3 2000/03/24 11:33:58 anker Exp $
+// $Id: tutorial1.C,v 1.4 2000/03/28 15:37:05 oliver Exp $
 // tutorial example 1
 // ------------------
 // build two water molecules and write them to a file
@@ -11,7 +11,7 @@
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/system.h>
-#include <BALL/KERNEL/PSE.h>
+#include <BALL/KERNEL/PTE.h>
 
 // reading and writing of HyperChem files
 #include <BALL/FORMAT/HINFile.h>
@@ -28,15 +28,15 @@ using namespace std;
 int main()
 {
 	// we create a new atom caleld oxygen
-	// and set its element to oxygen (PSE[Element::O])
+	// and set its element to oxygen (PTE[Element::O])
 	Atom* oxygen = new Atom;
-	oxygen->setElement(PSE[Element::O]);
+	oxygen->setElement(PTE[Element::O]);
 
 	// now we create two hydrogen atoms...
 	Atom* hydrogen1 = new Atom;
 	Atom* hydrogen2 = new Atom;
-	hydrogen1->setElement(PSE[Element::H]);
-	hydrogen2->setElement(PSE[Element::H]);
+	hydrogen1->setElement(PTE[Element::H]);
+	hydrogen2->setElement(PTE[Element::H]);
 
 	// ...and move them to approximately correct positions
  	hydrogen1->setPosition(Vector3(-0.95, 0.00, 0.0));

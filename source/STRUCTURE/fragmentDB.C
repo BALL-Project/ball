@@ -1,11 +1,11 @@
-// $Id: fragmentDB.C,v 1.15 2000/02/16 19:21:35 oliver Exp $
+// $Id: fragmentDB.C,v 1.16 2000/03/28 15:35:29 oliver Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 
 #include <list>
 #include <vector>
 
-#include <BALL/KERNEL/PSE.h>
+#include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/forEach.h>
 	
@@ -272,7 +272,7 @@ namespace BALL
 		
 					// and assign its values to the atom
 					atom->setPosition(r);
-					atom->setElement(PSE.getElement(s[0]));
+					atom->setElement(PTE.getElement(s[0]));
 				}
 			}
 		}
@@ -1383,7 +1383,7 @@ namespace BALL
 
 		// creating new atom and inserting it 
 		PDBAtom& atom = *new PDBAtom;
-		atom.setElement(PSE["H"]);
+		atom.setElement(PTE["H"]);
 		atom.setPosition(xtarget);
 		atom.setName(name);
 
@@ -1499,7 +1499,7 @@ namespace BALL
 					
 					for (atom_iter=tmp->beginAtom();+atom_iter;++atom_iter)
 						{
-						if ((*atom_iter).getElement()==PSE[Element::H])
+						if ((*atom_iter).getElement()==PTE[Element::H])
 							{
 							zaehler1++;
 							}
@@ -1509,7 +1509,7 @@ namespace BALL
 					zaehler1=0;
 					for (atom_iter=tmp->beginAtom();+atom_iter;++atom_iter)
 						{
-						if ((*atom_iter).getElement()==PSE[Element::H])
+						if ((*atom_iter).getElement()==PTE[Element::H])
 							{
 							atom_name=(*atom_iter).getName();
 							atom_name.append(":");
@@ -1579,7 +1579,7 @@ namespace BALL
 								if (atom->getBond(bond_zaehler))
 									{
 									atom=atom->getBond(bond_zaehler)->getBondedAtomOf(*atom);
-									if (atom->getElement()!=PSE[Element::H])
+									if (atom->getElement()!=PTE[Element::H])
 										{
 										test_zaehler=0;
 										inserted=0;

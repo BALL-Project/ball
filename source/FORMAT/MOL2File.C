@@ -1,4 +1,4 @@
-// $Id: MOL2File.C,v 1.1 1999/08/26 08:02:36 oliver Exp $
+// $Id: MOL2File.C,v 1.2 2000/03/28 15:32:57 oliver Exp $
 
 #include <BALL/FORMAT/MOL2File.h>
 #include <BALL/DATATYPE/string.h>
@@ -7,7 +7,7 @@
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/PDBAtom.h>
 #include <BALL/KERNEL/bond.h>
-#include <BALL/KERNEL/PSE.h>
+#include <BALL/KERNEL/PTE.h>
 
 #include <stack>
 

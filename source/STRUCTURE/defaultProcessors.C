@@ -1,9 +1,9 @@
-// $Id: defaultProcessors.C,v 1.6 2000/02/16 19:21:04 oliver Exp $
+// $Id: defaultProcessors.C,v 1.7 2000/03/28 15:35:28 oliver Exp $
 
 #include <BALL/STRUCTURE/defaultProcessors.h>
 
 #include <BALL/KERNEL/atom.h>
-#include <BALL/KERNEL/PSE.h>
+#include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/fragment.h>
 #include <BALL/KERNEL/residue.h>
 #include <stdio.h>

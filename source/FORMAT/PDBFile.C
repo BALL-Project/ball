@@ -1,10 +1,10 @@
-// $Id: PDBFile.C,v 1.11 2000/02/10 15:12:01 oliver Exp $
+// $Id: PDBFile.C,v 1.12 2000/03/28 15:32:57 oliver Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 
 #include <time.h> // time, asctime
 
-#include <BALL/KERNEL/PSE.h>
+#include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/CONCEPT/composite.h>
@@ -123,7 +123,7 @@ namespace BALL
 		current_PDB_atom_->setAlternateLocationIndicator(alternate_location_indicator);
 		current_PDB_atom_->setOccupancy(occupancy);
 		current_PDB_atom_->setTemperatureFactor(temperature_factor);
-		current_PDB_atom_->setElement(PSE[GenericPDBFile::getAtomElementSymbol(atom_name, atom_name)]);
+		current_PDB_atom_->setElement(PTE[GenericPDBFile::getAtomElementSymbol(atom_name, atom_name)]);
 		//  current_PDB_atom_->setElement(Element::UNKNOWN);
 		current_PDB_atom_->setRadius(current_PDB_atom_->getElement().getVanDerWaalsRadius());
 		current_PDB_atom_->setPosition(Vector3(orthogonal_vector[0], orthogonal_vector[1], orthogonal_vector[2]));

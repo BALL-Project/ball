@@ -1,4 +1,4 @@
-// $Id: johnsonBovey.C,v 1.5 2000/03/26 12:35:11 oliver Exp $
+// $Id: johnsonBovey.C,v 1.6 2000/03/28 15:35:05 oliver Exp $
 
 
 #include <BALL/NMR/johnsonBovey.h>
@@ -21,7 +21,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include <BALL/KERNEL/atomIterator.h>
-#include <BALL/KERNEL/PSE.h>
+#include <BALL/KERNEL/PTE.h>
 
 #include <list>
 
@@ -506,7 +506,7 @@ namespace BALL
 			patom_ = RTTI::castTo < PDBAtom > (object);
 			cout << endl << "		atom name :" << patom_->getName();
 			cout << endl << "		Element :" << (patom_->getElement()).getName();
-			if (patom_->getElement() == PSE[Element::H])
+			if (patom_->getElement() == PTE[Element::H])
 			{
 				proton_list_.push_back (patom_);
 				cout << "...eingefuegt.";

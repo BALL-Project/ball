@@ -1,14 +1,14 @@
-// $Id: Atom_test.C,v 1.4 2000/03/14 19:35:45 oliver Exp $
+// $Id: Atom_test.C,v 1.5 2000/03/28 15:36:11 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/bond.h>
-#include <BALL/KERNEL/PSE.h>
+#include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/fragment.h>
 #include <BALL/CONCEPT/textPersistenceManager.h>
 
-START_TEST(Atom, "$Id: Atom_test.C,v 1.4 2000/03/14 19:35:45 oliver Exp $")
+START_TEST(Atom, "$Id: Atom_test.C,v 1.5 2000/03/28 15:36:11 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -35,8 +35,8 @@ RESULT
 			
 CHECK(setElement(Element&)/getElement())
 TEST_EQUAL(atom->getElement(), Element::UNKNOWN)
-atom->setElement(PSE.getElement(1));
-TEST_EQUAL(atom->getElement(), PSE.getElement(1))
+atom->setElement(PTE.getElement(1));
+TEST_EQUAL(atom->getElement(), PTE.getElement(1))
 RESULT
 			
 Vector3	null_vector(0, 0, 0);
@@ -95,7 +95,7 @@ delete atom2;
 RESULT
 			
 CHECK(Atom(Element&, String&, Atom:::Type, Vector3&, Vector3&, Vector3&, float, float))
-atom2 = new Atom(PSE[Element::HELIUM],
+atom2 = new Atom(PTE[Element::HELIUM],
 								 "TESTNAME",
 								 "TESTTYPE",
 								 12,
@@ -105,7 +105,7 @@ atom2 = new Atom(PSE[Element::HELIUM],
 								 1.23456,
 								 2.34567);
 TEST_NOT_EQUAL(atom2, 0)
-TEST_EQUAL(atom2->getElement(), PSE[Element::He])
+TEST_EQUAL(atom2->getElement(), PTE[Element::He])
 TEST_EQUAL(atom2->getName(), "TESTNAME")
 TEST_EQUAL(atom2->getType(), 12)
 TEST_EQUAL(atom2->getPosition(), null_vector)
@@ -228,7 +228,7 @@ RESULT
 Atom*		atom3;
 Atom*		atom4;
 CHECK(swap(Atom&))
-atom2 = new Atom(PSE[Element::LITHIUM],
+atom2 = new Atom(PTE[Element::LITHIUM],
 											"TESTNAME2",
 											"TESTTYPE2",
 											23,

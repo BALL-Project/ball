@@ -1,4 +1,4 @@
-// $Id: proteinMapper.C,v 1.4 2000/03/27 21:42:29 oliver Exp $
+// $Id: proteinMapper.C,v 1.5 2000/03/28 15:36:26 oliver Exp $
 
 //========================================================================
 // protein mapper example
@@ -7,7 +7,6 @@
 
 #include <BALL/SYSTEM/timer.h>
 #include <BALL/KERNEL/protein.h>
-#include <BALL/KERNEL/PTE.h>
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/STRUCTURE/structureMapper.h>
 #include <BALL/MATHS/matrix44.h>

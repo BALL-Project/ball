@@ -1,4 +1,4 @@
-// $Id: molecularDynamics.h,v 1.5 2000/03/26 12:49:30 oliver Exp $
+// $Id: molecularDynamics.h,v 1.6 2000/03/28 15:30:10 oliver Exp $
 // MolecularDynamics: A base class for doing molecular dynamics simulations    
 // Useful MD classes must be derived from this class 
 
@@ -11,8 +11,8 @@
 # include <BALL/common.h>
 #endif
 
-#ifndef BALL_KERNEL_PSE_H
-# include <BALL/KERNEL/PSE.h>
+#ifndef BALL_KERNEL_PTE_H
+# include <BALL/KERNEL/PTE.h>
 #endif
 
 #ifndef BALL_KERNEL_SYSTEM_H

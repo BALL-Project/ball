@@ -1,9 +1,9 @@
-// $Id: support.C,v 1.9 2000/03/27 21:22:23 oliver Exp $
+// $Id: support.C,v 1.10 2000/03/28 15:34:46 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/DATATYPE/hashGrid.h>
 #include <BALL/KERNEL/atom.h>
-#include <BALL/KERNEL/PSE.h>
+#include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/atomIterator.h>
 #include <BALL/COMMON/limits.h>

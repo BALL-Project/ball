@@ -1,4 +1,4 @@
-// $Id: snapShot.h,v 1.5 2000/03/26 12:42:14 oliver Exp $
+// $Id: snapShot.h,v 1.6 2000/03/28 15:29:25 oliver Exp $
 // This file contains the definitions of the classes 
 // SnapshotManager and Snapshot. 
 // They can be used to obtain snapshots from an MD simulation or an energy 
@@ -27,8 +27,8 @@
 #       include <BALL/MATHS/vector3.h>
 #endif
 
-#ifndef BALL_KERNEL_PSE_H
-#       include <BALL/KERNEL/PSE.h>
+#ifndef BALL_KERNEL_PTE_H
+#       include <BALL/KERNEL/PTE.h>
 #endif
 
 #ifndef BALL_DATATYPE_OPTIONS_H

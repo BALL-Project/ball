@@ -1,4 +1,4 @@
-// $Id: charmm.C,v 1.5 2000/03/26 12:54:10 oliver Exp $
+// $Id: charmm.C,v 1.6 2000/03/28 15:34:16 oliver Exp $
 // Molecular Mechanics: Charmm force field class
 
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -9,7 +9,7 @@
 #include <BALL/MOLMEC/CHARMM/charmmNonBonded.h>
 #include <BALL/MOLMEC/COMMON/assignTypes.h>
 #include <BALL/MOLMEC/PARAMETER/templates.h>
-#include <BALL/KERNEL/PSE.h>
+#include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/bond.h>
 
@@ -201,7 +201,7 @@ namespace BALL
 				AtomIterator it = getSystem()->beginAtom();
 				for (; +it; ++it)
 				{
-					if (it->getElement() != PSE[Element::H])
+					if (it->getElement() != PTE[Element::H])
 					{
 	 					if (templates.has(it->getFullName()))
 						{
@@ -215,7 +215,7 @@ namespace BALL
 								Atom::BondIterator bond_it = it->beginBond();
 								for (; +bond_it; ++bond_it)
 								{
-									if (bond_it->getPartner(*it)->getElement() == PSE[Element::H])
+									if (bond_it->getPartner(*it)->getElement() == PTE[Element::H])
 									{
 										// if the atom is a hydrogen atom, store its pointer
 										// for removal

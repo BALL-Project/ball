@@ -1,11 +1,11 @@
-// $Id: charmmNonBonded.C,v 1.8 2000/03/28 07:53:14 oliver Exp $
+// $Id: charmmNonBonded.C,v 1.9 2000/03/28 15:34:16 oliver Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmNonBonded.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
 #include <BALL/MOLMEC/COMMON/forceField.h>
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/COMMON/limits.h>
-#include <BALL/KERNEL/PSE.h>
+#include <BALL/KERNEL/PTE.h>
 
 
 // define square function
@@ -567,8 +567,8 @@ namespace BALL
 			// Calculate the solvation energy contribution
 			if (use_solvation		
 					&& (distance_2 <= cut_off_solvation_2)
-					&& it->atom1->getElement() !=  PSE[Element::H] 
-					&& it->atom2->getElement() !=  PSE[Element::H])
+					&& it->atom1->getElement() !=  PTE[Element::H] 
+					&& it->atom2->getElement() !=  PTE[Element::H])
 			{
 				CharmmEEF1::Values a1 = solvation[it->atom1->getType()];
 				CharmmEEF1::Values a2 = solvation[it->atom2->getType()];
@@ -762,8 +762,8 @@ namespace BALL
 			// ignore all hydrogen atoms (they are not considered in EEF1)
 			if (use_solvation 
 					&& (distance_2 <= cut_off_solvation_2) 
-					&& it->atom1->getElement() !=  PSE[Element::H] 
-					&& it->atom2->getElement() !=  PSE[Element::H])
+					&& it->atom1->getElement() !=  PTE[Element::H] 
+					&& it->atom2->getElement() !=  PTE[Element::H])
 			{
 				CharmmEEF1::Values a1 = solvation[it->atom1->getType()];
 				CharmmEEF1::Values a2 = solvation[it->atom2->getType()];

@@ -1,4 +1,4 @@
-// $Id: HINFile.C,v 1.12 2000/02/06 19:55:58 oliver Exp $
+// $Id: HINFile.C,v 1.13 2000/03/28 15:32:56 oliver Exp $
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/CONCEPT/composite.h>
@@ -7,7 +7,7 @@
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/PDBAtom.h>
 #include <BALL/KERNEL/bond.h>
-#include <BALL/KERNEL/PSE.h>
+#include <BALL/KERNEL/PTE.h>
 
 #include <stack>
 
@@ -455,14 +455,14 @@ namespace BALL
 						}
 
 						atom->setName(line.getField(2));
-						atom->setElement(PSE[line.getField(3)]);
+						atom->setElement(PTE[line.getField(3)]);
 						if (line.getField(4) == "**")
 						{
 							atom->setTypeName("?");
 						} else {
 							atom->setTypeName(line.getField(4));
 						}
-						atom->setElement(PSE[line.getField(3)]);
+						atom->setElement(PTE[line.getField(3)]);
 						atom->setCharge(line.getField(6).toFloat());
 						atom->setPosition(Vector3(line.getField(7).toFloat(), line.getField(8).toFloat(), line.getField(9).toFloat()));
 

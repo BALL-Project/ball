@@ -1,8 +1,8 @@
-// $Id: structureMapper.C,v 1.7 2000/03/26 12:35:42 oliver Exp $
+// $Id: structureMapper.C,v 1.8 2000/03/28 15:35:29 oliver Exp $
 
 #include <BALL/STRUCTURE/structureMapper.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
-#include <BALL/KERNEL/PSE.h>
+#include <BALL/KERNEL/PTE.h>
 #include <BALL/DATATYPE/hashGrid.h>
 #include <BALL/MATHS/quaternion.h>
 
@@ -898,7 +898,7 @@ namespace BALL
 
 		for (atom_it = P1.beginAtom (); +atom_it; ++atom_it)
 		{
-			if (((*atom_it).getElement () == PSE[Element::C]) && ((*atom_it).getName ().trim () == "CA"))
+			if (((*atom_it).getElement () == PTE[Element::C]) && ((*atom_it).getName ().trim () == "CA"))
 			{
 				grid_P1.insert ((*atom_it).getPosition (), no_ca_P1);
 				no_ca_P1++;
@@ -926,7 +926,7 @@ namespace BALL
 		Size no_ca_P2 = 0;
 
 		for (atom_it = P2.beginAtom (); +atom_it; ++atom_it)
-			if (((*atom_it).getElement () == PSE[Element::C]) && ((*atom_it).getName ().trim () == "CA"))
+			if (((*atom_it).getElement () == PTE[Element::C]) && ((*atom_it).getName ().trim () == "CA"))
 			{
 				grid_P2.insert ((*atom_it).getPosition (), no_ca_P2);
 				fine_grid_P2.insert ((*atom_it).getPosition (), no_ca_P2);
