@@ -1,11 +1,11 @@
-// $Id: Vector4_test.C,v 1.11 2000/06/07 09:34:44 oliver Exp $
+// $Id: Vector4_test.C,v 1.12 2000/06/27 23:37:49 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/MATHS/vector4.h>
 ///////////////////////////
 
-START_TEST(TVector4, "$Id: Vector4_test.C,v 1.11 2000/06/07 09:34:44 oliver Exp $")
+START_TEST(TVector4, "$Id: Vector4_test.C,v 1.12 2000/06/27 23:37:49 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -31,7 +31,7 @@ RESULT
 Vector4 v;
 Vector4 v1;
 Vector4 v2;
-float x = 0.0;
+float x;
 
 CHECK(TVector4::T& operator [] (Index index) const)
 	v = Vector4(1.0, 2.0, 3.0, 4.0);
@@ -39,8 +39,8 @@ CHECK(TVector4::T& operator [] (Index index) const)
 	TEST_EQUAL(v[1], 2.0)
 	TEST_EQUAL(v[2], 3.0)
 	TEST_EQUAL(v[3], 4.0)
-	TEST_EXCEPTION(Exception::IndexUnderflow, (x == v[-1]))
-	TEST_EXCEPTION(Exception::IndexOverflow,  (x == v[4]))
+	TEST_EXCEPTION(Exception::IndexUnderflow, x = v[-1])
+	TEST_EXCEPTION(Exception::IndexOverflow,  x = v[4])
 RESULT
 
 CHECK(TVector4(const T* ptr);)
@@ -150,11 +150,15 @@ CHECK(TVector4::getLength() const )
 	v = Vector4(4, 9, 16, 25);
 	float result = sqrt(4.0 * 4.0 + 9.0 * 9.0 + 16.0 * 16.0 + 25.0 * 25.0);
 	TEST_REAL_EQUAL(v.getLength(), result)
+	v = Vector4(0, 0, 0, 0);
+	TEST_REAL_EQUAL(v.getLength(), 0)
 RESULT
 
 CHECK(TVector4::getSquareLength() const )
 	v = Vector4(1, 2, 3, 4);
 	TEST_REAL_EQUAL(v.getSquareLength(), 30)
+	v = Vector4(0, 0, 0, 0);
+	TEST_REAL_EQUAL(v.getSquareLength(), 0)
 RESULT
 
 CHECK(TVector4::normalize())

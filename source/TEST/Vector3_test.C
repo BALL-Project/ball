@@ -1,4 +1,4 @@
-// $Id: Vector3_test.C,v 1.24 2000/05/26 19:25:05 amoll Exp $
+// $Id: Vector3_test.C,v 1.25 2000/06/27 23:37:49 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 #include <BALL/MATHS/angle.h>
 ///////////////////////////
 
-START_TEST(TVector3, "$Id: Vector3_test.C,v 1.24 2000/05/26 19:25:05 amoll Exp $")
+START_TEST(TVector3, "$Id: Vector3_test.C,v 1.25 2000/06/27 23:37:49 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -253,11 +253,15 @@ RESULT
 CHECK(TVector3::getLength() const )
 	v = Vector3(4.0, 9.0, 16.0);
 	TEST_REAL_EQUAL(v.getLength(), sqrt(4.0 * 4.0 + 9.0 * 9.0 + 16.0 * 16.0))
+	v = Vector3(0.0, 0.0, 0.0);
+	TEST_REAL_EQUAL(v.getLength(), 0.0)
 RESULT
 
 CHECK(TVector3::getSquareLength() const )
 	v = Vector3(1.0, 2.0, 3.0);
 	TEST_REAL_EQUAL(v.getSquareLength(), 14.0)
+	v = Vector3(0.0, 0.0, 0.0);
+	TEST_REAL_EQUAL(v.getSquareLength(), 0.0)
 RESULT
 
 CHECK(TVector3::normalize())
