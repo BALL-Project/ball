@@ -1,4 +1,4 @@
-// $Id: displayProperties.C,v 1.13.4.16 2002/12/09 00:49:54 amoll Exp $
+// $Id: displayProperties.C,v 1.13.4.17 2002/12/09 18:44:15 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/displayProperties.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
@@ -65,8 +65,6 @@ namespace BALL
 				remove_model_static_(),
 				remove_model_dynamic_(),
 				line_model_(),
-				selector_(),
-				deselector_(),
 				
 				static_base_model_pointer_(0),
 				dynamic_base_model_pointer_(0),
@@ -512,8 +510,6 @@ namespace BALL
 			// notify the main window
 			setStatusbarText("selecting " + String(selection.size()) + " objects...");
 
-			selector_.clear();
-
 			int value_static = getValue_(ADDRESS__STATIC_MODEL);
 			int value_dynamic = getValue_(ADDRESS__DYNAMIC_MODEL);
 
@@ -525,8 +521,6 @@ namespace BALL
 			cs_message->setDeletable(false);
 			for (; list_it != temp_selection_.end(); ++list_it)
 			{
-				(*list_it)->apply(selector_);
-
 				cs_message->composite_ = *list_it;
 				notify_(cs_message);
 			}
@@ -535,12 +529,6 @@ namespace BALL
 			setValue_(ADDRESS__STATIC_MODEL, value_static);
 			setValue_(ADDRESS__DYNAMIC_MODEL, value_dynamic);
 			
-			// update scene
-			SceneMessage *scene_message = new SceneMessage;
-			scene_message->updateOnly();
-			scene_message->setDeletable(true);
-			notify_(scene_message);
-
 			setStatusbarText("");
 		}
 
@@ -560,8 +548,6 @@ namespace BALL
 			int value_static = getValue_(ADDRESS__STATIC_MODEL);
 			int value_dynamic = getValue_(ADDRESS__DYNAMIC_MODEL);
 
-			deselector_.clear();
-
 			// copy list because the selection_ list can change after a changemessage event
 			List<Composite*> temp_selection_ = selection;
 
@@ -570,7 +556,6 @@ namespace BALL
 			cs_message->setDeletable(false);
 			for (; list_it != temp_selection_.end(); ++list_it)
 			{
-				(*list_it)->apply(deselector_);
 				// mark composite for update
 				cs_message->composite_ = *list_it;
 				notify_(cs_message);
@@ -579,12 +564,6 @@ namespace BALL
 			// restore old values
 			setValue_(ADDRESS__STATIC_MODEL, value_static);
 			setValue_(ADDRESS__DYNAMIC_MODEL, value_dynamic);
-
-			// update scene
-			SceneMessage *scene_message = new SceneMessage;
-			scene_message->updateOnly();
-			scene_message->setDeletable(true);
-			notify_(scene_message);
 
 			setStatusbarText("");
 		}
@@ -735,11 +714,19 @@ namespace BALL
 			for (; updates_it != updates.end(); updates_it++)
 			{
 				applyOn_(**updates_it);
-			
+				if (MainControl::getMainControl(this)->getSelection().has(*updates_it))
+				{
+					(*updates_it)->apply(selector_);
+				}
+					
 				// perform update of the composites
-				MainControl::getMainControl(this)->update(**updates_it);
+				//MainControl::getMainControl(this)->update(**updates_it);
+				ChangedCompositeMessage* ccm = new ChangedCompositeMessage;
+				ccm->setDeletable();
+				ccm->setComposite(*updates_it);
+				notify_(ccm);
 			}
-			
+				
 			// update scene
 			SceneMessage scene_message;
 			scene_message.updateOnly();
@@ -816,7 +803,6 @@ namespace BALL
 			{
 				return;
 			}
-
 			composite.apply(*dynamic_base_model_pointer_);
 		}
 
@@ -1029,12 +1015,6 @@ namespace BALL
 				(RTTI::castTo<AtomContainer>(composite))->apply(residue_checker);
 				return residue_checker.getStatus();
 			}
-			else if (RTTI::isKindOf<System>(composite))
-			{
-				(RTTI::castTo<System>(composite))->apply(residue_checker);
-
-				return residue_checker.getStatus();				
-			} 
 			else 
 			{
 				Log.error() << "ResidueChecker: cannot apply to a " << typeid(composite).name() << " object" << std::endl;
