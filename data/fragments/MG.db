@@ -1,0 +1,18 @@
+<node>MG
+	<node>Names
+ 		<node>Magnesium ion</node>
+ 		<node>Mg2+</node>
+	</node>
+	<node>Atoms
+		<node>MG<value>Mg 0.0 0.0 0.0</value></node>
+	</node>
+	<node>Bonds
+	</node>
+	<node>Connections
+	</node>
+	<node>Properties
+	</node>
+	<node>Variants
+		<node>Default</node>
+	</node>
+</node>
