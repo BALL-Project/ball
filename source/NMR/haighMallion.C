@@ -1,4 +1,4 @@
-// $Id: haighMallion.C,v 1.4 2000/09/16 07:44:12 oliver Exp $
+// $Id: haighMallion.C,v 1.5 2000/09/18 17:09:43 oliver Exp $
 
 #include <BALL/NMR/haighMallion.h>
 #include <BALL/KERNEL/atomIterator.h>
@@ -49,6 +49,7 @@ namespace BALL
 		
 	// default constructor
 	HaighMallionShift::HaighMallionShift()
+		throw()
 	{
 		asrings_ = new String*[4];
 		
@@ -103,12 +104,14 @@ namespace BALL
 		
 	// destructor
 	HaighMallionShift::~HaighMallionShift()
+		throw()
 	{
 	}
 
 
 	// Processor start method
 	bool HaighMallionShift::start()
+		throw()
 	{
 		return true;
 	}
@@ -117,6 +120,7 @@ namespace BALL
 	//FinishFunktion
 
 	bool HaighMallionShift::finish()
+		throw()
 	{
 		// Hier erfolgt die Berechnung des shifts fuer jedes Proton der liste _proton_list
 		
@@ -296,6 +300,7 @@ namespace BALL
 	//apply Funktion
 
 	Processor::Result HaighMallionShift::operator () (Composite& object)
+		throw()
 	{
 		// Arbeitet als Kollektor :
 		// - Alle Ringe werden in _aromat_list gespeichert

@@ -1,4 +1,4 @@
-// $Id: randomCoil.h,v 1.4 2000/09/16 07:43:16 oliver Exp $
+// $Id: randomCoil.h,v 1.5 2000/09/18 17:09:27 oliver Exp $
 
 #ifndef BALL_NMR_SHIFTMODULE_H
 #	include<BALL/NMR/shiftModule.h>
@@ -39,11 +39,11 @@ namespace BALL
 
 		/**	Default constructor.
 		*/
-		RandomCoilShift();
+		RandomCoilShift() throw();
 		
 		/**	Destructor
 		*/
-		virtual ~RandomCoilShift();
+		virtual ~RandomCoilShift() throw();
 		
 		//@}
 
@@ -59,13 +59,13 @@ namespace BALL
 			under [residue_name:atom_name].
 
 		*/
-		virtual bool start();
+		virtual bool start() throw();
 		
 		/**	Finish method.
 			nothing is done here
 			
 		*/
-		virtual bool finish();
+		virtual bool finish() throw();
 
 		/**	Application method
 			if current object is a PDBAtom of kind Hydrogen its random coil shift has to be looked up
@@ -79,7 +79,7 @@ namespace BALL
 			
 			
 		*/
-		virtual Processor::Result operator () (Composite& composite);
+		virtual Processor::Result operator () (Composite& composite) throw();
 		//@}
 		
 

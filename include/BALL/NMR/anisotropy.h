@@ -1,4 +1,4 @@
-// $Id: anisotropy.h,v 1.4 2000/09/08 07:09:27 oliver Exp $
+// $Id: anisotropy.h,v 1.5 2000/09/18 17:09:26 oliver Exp $
 
 #include<BALL/COMMON/constants.h>
 #include<BALL/KERNEL/system.h>
@@ -20,7 +20,8 @@
 #include <list>
 using std::list;
 
-namespace BALL {
+namespace BALL 
+{
 		
 /**@name	AnIso
 */
@@ -41,11 +42,11 @@ class AnIsoShift:public ShiftModule
 
 	/**	Default constructor.
 	*/
-	AnIsoShift();
+	AnIsoShift() throw();
 	
 	/**	Destructor
 	*/
-	virtual ~AnIsoShift();
+	virtual ~AnIsoShift() throw();
 	
 	//@}
 
@@ -57,7 +58,7 @@ class AnIsoShift:public ShiftModule
 	/**	Start method.
 		nothing important is done yet.
 	*/
-	virtual bool start();
+	virtual bool start() throw();
 	
 	/**	Finish method.
 		Here chemical shift calculation is done.
@@ -117,7 +118,7 @@ class AnIsoShift:public ShiftModule
 	
 		
 	*/
-	virtual bool finish();
+	virtual bool finish() throw();
 
 	/**	Application method
 		PDBAtoms are stored in three different lists , named
@@ -131,7 +132,7 @@ class AnIsoShift:public ShiftModule
 		Effectors of C=N anisotropy are all bounds between atoms named "C" and "N".
 		
 	*/
-	virtual Processor::Result operator() (Composite& composite);
+	virtual Processor::Result operator() (Composite& composite) throw();
 	//@}
 	
 
@@ -151,7 +152,7 @@ class AnIsoShift:public ShiftModule
 	
 };
 
-} // namespace Ball
+} // namespace BALL
 
 
 //@}

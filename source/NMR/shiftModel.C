@@ -1,4 +1,4 @@
-// $Id: shiftModel.C,v 1.4 2000/09/18 14:39:41 oliver Exp $
+// $Id: shiftModel.C,v 1.5 2000/09/18 17:09:43 oliver Exp $
 
 #include <BALL/NMR/shiftModel.h>
 #include <BALL/FORMAT/parameterSection.h>
@@ -20,6 +20,7 @@ namespace BALL
 			modules_(),
 			valid_(false)
 	{
+		registerStandardModules_();
 	}
 
 	ShiftModel::ShiftModel(const String& filename)
@@ -30,6 +31,7 @@ namespace BALL
 			registered_modules_(),
 			valid_(false)
 	{
+		registerStandardModules_();
 		init_();
 	}
 
@@ -57,6 +59,10 @@ namespace BALL
 			delete *it;
 		}		
 		modules_.clear();
+
+		// reset the list of registerd modules
+		registered_modules_.clear();
+		registerStandardModules_();
 
 		// clear parameters
 		parameters_.clear();
@@ -172,22 +178,24 @@ namespace BALL
 												<< type << " for module " << name << " for shift model " 
 												<< parameters_.getFilename() << ". Please use the registerModule method"
 												<< " to associate a create method for this module type!" 
-												<< endl;
+												<< std::endl;
 					}
 				}
 			}
 
-			// if we created shift modules, everything is valid
-			if (modules_.size() > 0)
-			{
-				valid_ = true;
-			}
+			valid_ = true;
 		}
 
 		// return the current state
 		return valid_;
 	}
 	
+
+	bool ShiftModel::isRegistered(const String& name) const
+		throw()
+	{
+		return registered_modules_.has(name);
+	}
 
 	void ShiftModel::registerModule(const String& name, CreateMethod create_method)
 		throw(Exception::NullPointer)
@@ -232,11 +240,10 @@ namespace BALL
 		throw()
 	{
 		using RTTI::getNew;
-		CreateMethod m = (CreateMethod)getNew<JohnsonBoveyShift>;
-		registerModule("JohnsonBovey", m);
-		registerModule("HaighMallion", m);
-		registerModule("ElectricField", m);
-		registerModule("Anisotropy", m);
+		registerModule("JohnsonBovey", getNew<JohnsonBoveyShift>);
+		registerModule("HaighMallion", getNew<HaighMallionShift>);
+		registerModule("ElectricField", getNew<LEFShiftProcessor>);
+		registerModule("Anisotropy", getNew<AnIsoShift>);
 	}
 }
 

@@ -1,4 +1,4 @@
-// $Id: LEF.h,v 1.5 2000/09/15 08:52:19 oliver Exp $
+// $Id: LEF.h,v 1.6 2000/09/18 17:09:26 oliver Exp $
 
 #ifndef BALL_NMR_LEF_H
 #define BALL_NMR_LEF_H
@@ -37,11 +37,13 @@ namespace BALL
 
 		/**	Default constructor.
 		*/
-		LEFShiftProcessor();
+		LEFShiftProcessor()
+			throw();
 	
 		/**	Destructor
 		*/
-		virtual ~LEFShiftProcessor();
+		virtual ~LEFShiftProcessor()
+			throw();
 	
 		//@}
 
@@ -74,11 +76,13 @@ namespace BALL
 				is substracted from the actual proton´s chemical shift.
 				Then iteration goes on whith next proton of {\tt proton\_list\_}
 		*/
-		virtual bool finish();
+		virtual bool finish()
+			throw();
 
 		/**	Processor start method
 		*/
-		virtual bool start();
+		virtual bool start()
+			throw();
 
 		/**	operator ().
 				PDBAtoms are assigned to two different lists, named {\tt proton\_list\_}
@@ -86,7 +90,8 @@ namespace BALL
 				the ones called "H". That special Hydrogen is stored as well as PDBAtoms named
 				"C", "N" and "O" in {\tt atom\_list\_}.
 		*/
-		virtual Processor::Result operator () (Composite& composite);
+		virtual Processor::Result operator () (Composite& composite)
+			throw();
 		//@}
 
 		/**	@name Accessors
@@ -94,11 +99,13 @@ namespace BALL
 		//@{
 		/**	
 		*/
-		const String& getFilename() const;
+		const String& getFilename() const
+			throw();
 			
 		/**	
 		*/
-		void setFilename(const String& filename);
+		void setFilename(const String& filename)
+			throw();
 		//@}
 	
 		protected:

@@ -1,4 +1,4 @@
-// $Id: johnsonBovey.h,v 1.7 2000/09/16 07:43:16 oliver Exp $
+// $Id: johnsonBovey.h,v 1.8 2000/09/18 17:09:27 oliver Exp $
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -59,11 +59,11 @@ namespace BALL
 
 		/**	Default constructor.
 		*/
-		JohnsonBoveyShift();
+		JohnsonBoveyShift() throw();
 
 		/**	Destructor
 		*/
-		virtual ~JohnsonBoveyShift();
+		virtual ~JohnsonBoveyShift() throw();
 
 		//@}
 
@@ -74,15 +74,15 @@ namespace BALL
 
 		/**	Start method.
 		*/
-		virtual bool start();
+		virtual bool start() throw();
 
 		/**	Finish method.
 		*/
-		virtual bool finish();
+		virtual bool finish() throw();
 
 		/**	Application method
 		*/
-		virtual Processor::Result operator () (Composite& composite);
+		virtual Processor::Result operator () (Composite& composite) throw();
 		//@}
 
 		/**	@name Accessors
@@ -90,11 +90,11 @@ namespace BALL
 		//@{
 		/**
 		*/
-		const String& getFilename() const;
+		const String& getFilename() const throw();
 
 		/**
 		*/
-		void setFilename(const String& filename);
+		void setFilename(const String& filename) throw();
 		//@}
 
 		protected:

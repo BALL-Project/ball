@@ -1,4 +1,4 @@
-// $Id: johnsonBovey.C,v 1.10 2000/09/16 07:44:13 oliver Exp $
+// $Id: johnsonBovey.C,v 1.11 2000/09/18 17:09:43 oliver Exp $
 
 
 #include <BALL/NMR/johnsonBovey.h>
@@ -186,6 +186,7 @@ namespace BALL
 	//Konstruktor
 
 	JohnsonBoveyShift::JohnsonBoveyShift()
+		throw()
 		{
 		ini_filename_ = "/KM/fopra/compbio/burch/BALL/source/NMR/dat/nmr.ini";
 		}
@@ -194,15 +195,18 @@ namespace BALL
 	//Destruktor
 
 	JohnsonBoveyShift::~JohnsonBoveyShift()
+		throw()
 		{
 		}
 
 	void JohnsonBoveyShift::setFilename(const String& filename)
+		throw()
 	{
 		ini_filename_ = filename;
 	}
 
 	const String& JohnsonBoveyShift::getFilename() const
+		throw()
 	{
 		return ini_filename_;
 	}
@@ -211,6 +215,7 @@ namespace BALL
 	//StartFunktion
 
 	bool JohnsonBoveyShift::start()
+		throw()
 	{
 		//cout << "JohnsonBoveyShift::start()" << endl;
 		
@@ -289,6 +294,7 @@ namespace BALL
 	//FinishFunktion
 
 	bool JohnsonBoveyShift::finish()
+		throw()
 	{
 		// cout <<"JohnsonBoveyShift::finish()" <<endl;
 		
@@ -461,6 +467,7 @@ namespace BALL
 	//apply Funktion
 
 	Processor::Result JohnsonBoveyShift::operator()(Composite&  object)
+		throw()
 	{
 		// ueberpruefe fuer jedes Residue ob es in residues_with_rings ist und fuege es in die Liste aromat_list_ ein.
 		// ueberpruefe fuer jedes Atom die Liste der Expressions und falls eine wahr ist fuege das Atom in die Liste ein.

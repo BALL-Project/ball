@@ -1,4 +1,4 @@
-// $Id: LEF.C,v 1.8 2000/09/15 08:52:22 oliver Exp $
+// $Id: LEF.C,v 1.9 2000/09/18 17:09:43 oliver Exp $
 
 #include<BALL/NMR/LEF.h>
 #include <BALL/KERNEL/bond.h>
@@ -13,6 +13,7 @@ namespace BALL
 
 	// default ctor
 	LEFShiftProcessor::LEFShiftProcessor()
+		throw()
 	{	
 		ini_filename_ = "/KM/fopra/compbio/burch/BALL/source/NMR/dat/nmr.ini";	
 	}
@@ -20,21 +21,25 @@ namespace BALL
 		
 	// destructor
 	LEFShiftProcessor::~LEFShiftProcessor()
+		throw()
 	{
 	}
 
 	void LEFShiftProcessor::setFilename(const String& filename)
+		throw()
 	{
 		ini_filename_ = filename;
 	}
 		
 	const String& LEFShiftProcessor::getFilename() const
+		throw()
 	{
 		return ini_filename_;
 	}
 		
 	// Processor start method
 	bool LEFShiftProcessor::start()
+		throw()
 	{
 		// hier werden die Ladungen aus einem File eingelesen und zugewiesen
 		// nein : wurden bereits in calculate_shifts() von NMRSPectrum zugewiesen
@@ -89,6 +94,7 @@ namespace BALL
 
 	// Processor finish method
 	bool LEFShiftProcessor::finish()
+		throw()
 	{
 		parameter_section_.extractSection(parameters_,"LEF-ShiftAtoms");
 
@@ -167,6 +173,7 @@ namespace BALL
 		
 	// Processor operator ()
 	Processor::Result LEFShiftProcessor::operator () (Composite& object)
+		throw()
 	{
 		// ist das Objekt ein Atom und noch dazu ein Wasserstoff
 		// und hängt es an einem Kohlenstoff, so wird es in der _proton_list gespeichert

@@ -1,4 +1,4 @@
-// $Id: anisotropy.C,v 1.5 2000/09/08 07:13:24 oliver Exp $
+// $Id: anisotropy.C,v 1.6 2000/09/18 17:09:43 oliver Exp $
 
 #include<BALL/NMR/anisotropy.h>
 
@@ -13,7 +13,8 @@ namespace BALL
 
 //Konstruktor
 
-	AnIsoShift::AnIsoShift ()
+	AnIsoShift::AnIsoShift()
+		throw()
 	{
 		//cout << endl << "AnIsoShift::AnIsoShift()";
 	}
@@ -22,6 +23,7 @@ namespace BALL
 //Destruktor
 
 	AnIsoShift::~AnIsoShift ()
+		throw()
 	{
 		//cout << endl << "AnIsoShift::~AnIsoShift()";
 	}
@@ -30,6 +32,7 @@ namespace BALL
 //StartFunktion
 
 	bool AnIsoShift::start ()
+		throw()
 	{
 		// hier passiert nichts
 		//cout << endl << "AnIsoShift::start()";
@@ -40,6 +43,7 @@ namespace BALL
 //FinishFunktion
 
 	bool AnIsoShift::finish ()
+		throw()
 	{
 		//cout << endl << "Aniso Modul";
 
@@ -202,6 +206,7 @@ namespace BALL
 //apply Funktion
 
 	Processor::Result AnIsoShift::operator () (Composite& composite)
+		throw()
 	{
 		// hier werden alle Effektorbindungen gesammelt( C=O ) und in eff_list_ gespeichert.
 		// hier werden alle Wasserstoffe in proton_list_ gespeichert.

@@ -1,4 +1,4 @@
-// $Id: randomCoil.C,v 1.4 2000/09/16 07:44:13 oliver Exp $
+// $Id: randomCoil.C,v 1.5 2000/09/18 17:09:43 oliver Exp $
 
 #include<BALL/NMR/randomCoil.h>
 
@@ -6,11 +6,10 @@ using namespace std;
 
 namespace BALL
 {
-	const int MAX_EXPR = 5;
-
 	//Konstruktor
 
 	RandomCoilShift::RandomCoilShift()
+		throw()
 	{
 		ini_filename_="/KM/fopra/compbio/burch/BALL/source/NMR/dat/nmr.ini";
 	}
@@ -19,6 +18,7 @@ namespace BALL
 	//Destruktor
 
 	RandomCoilShift::~RandomCoilShift()
+		throw()
 	{
 	}
 
@@ -26,6 +26,7 @@ namespace BALL
 	//StartFunktion
 
 	bool RandomCoilShift::start()
+		throw()
 	{
 		// aufbau der ParameterSection ShiftData
 		
@@ -62,11 +63,13 @@ namespace BALL
 	}
 
 	bool RandomCoilShift::finish()
+		throw()
 	{ 
 		return true;
 	}
 
 	Processor::Result RandomCoilShift::operator()(Composite&  object)
+		throw()
 	{
 		// lese aus der rc_table den entsprechenden Eintrag und addiere zum shift
 
@@ -117,5 +120,6 @@ namespace BALL
 			}
 			return Processor::CONTINUE;
 		}
+
 }//namespace BALL
 

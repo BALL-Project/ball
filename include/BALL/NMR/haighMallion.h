@@ -1,4 +1,4 @@
-// $Id: haighMallion.h,v 1.5 2000/09/16 07:43:16 oliver Exp $
+// $Id: haighMallion.h,v 1.6 2000/09/18 17:09:26 oliver Exp $
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -30,11 +30,11 @@ namespace BALL
 
 		/**	Default constructor.
 		*/
-		HaighMallionShift();
+		HaighMallionShift() throw();
 		
 		/**	Destructor
 		*/
-		virtual ~HaighMallionShift();
+		virtual ~HaighMallionShift() throw();
 		
 		//@}
 
@@ -46,7 +46,7 @@ namespace BALL
 		/**	Start method.
 			nothing important is done yet.
 		*/
-		virtual bool start();
+		virtual bool start() throw();
 		
 		/**	Finish method.
 			here the work is done :
@@ -69,14 +69,14 @@ namespace BALL
 			Triangle areas are expressed in terms of the actual ring's area.
 			
 		*/
-		virtual bool finish();
+		virtual bool finish() throw();
 
 		/**	Application method
 			works as a collector :
 			it stores the systems aromatic rings in a list called _aromat_list and
 			each proton in a list called _proton_list
 		*/
-		virtual Processor::Result operator () (Composite& atom);
+		virtual Processor::Result operator () (Composite& atom) throw();
 		//@}
 		
 		private:
