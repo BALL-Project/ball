@@ -1,4 +1,4 @@
-dnl    $Id: configure.ac,v 1.4 2003/01/24 12:10:36 oliver Exp $
+dnl    $Id: configure.ac,v 1.5 2003/03/03 13:59:18 anhi Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -317,12 +317,14 @@ dnl		  -- the numeric_limits class
 dnl     -- null template arguments (whether <> is required)
 dnl			-- inline functions as template function arguments
 dnl 		-- ANSI-compliant iostreams 
+dnl			-- sstream vs. strstream
 dnl			-- ARM vs. ANSI-style access modifications
 dnl
 CF_CHECK_NUM_LIMITS
 CF_CHECK_TPL_NULL_ARGS
 CF_CHECK_INLINE_TPL_ARGS
 CF_CHECK_ANSI_IOSTREAM
+CF_CHECK_HAS_SSTREAM
 CF_CHECK_ARM_ACCESS_MODIFICATION
 
 dnl
@@ -595,6 +597,11 @@ AC_DEFINE_UNQUOTED(BALL_NULL_TEMPLATE_ARGS, ${BALL_NULL_TEMPLATE_ARGS})
 dnl			define BALL_HAS_ANSI_IOSTREAM
 if test "$BALL_HAS_ANSI_IOSTREAM" = yes ; then
 	AC_DEFINE(BALL_HAS_ANSI_IOSTREAM)
+fi
+
+dnl			define BALL_HAS_SSTREAM
+if test "$BALL_HAS_SSTREAM" = yes ; then
+	AC_DEFINE(BALL_HAS_SSTREAM)
 fi
 
 dnl	
