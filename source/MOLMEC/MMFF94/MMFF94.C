@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.C,v 1.1.2.5 2005/03/25 21:07:38 amoll Exp $
+// $Id: MMFF94.C,v 1.1.2.6 2005/03/27 13:45:00 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field class
 //
@@ -15,6 +15,8 @@
 #include <BALL/MOLMEC/MMFF94/MMFF94NonBonded.h>
 #include <BALL/QSAR/ringPerceptionProcessor.h>
 #include <BALL/QSAR/aromaticityProcessor.h>
+
+#define BALL_DEBUG_MMFF
 
 using namespace std;
 
@@ -34,8 +36,8 @@ namespace BALL
 		setName("MMFF94");
 
 		// create the component list
-//   		insertComponent(new MMFF94Stretch(*this));
-   		insertComponent(new MMFF94Bend(*this));
+   		insertComponent(new MMFF94Stretch(*this));
+//      		insertComponent(new MMFF94Bend(*this));
 //   		insertComponent(new MMFF94Torsion(*this));
 //   		insertComponent(new MMFF94NonBonded(*this));
 	}
@@ -47,8 +49,8 @@ namespace BALL
 			parameters_initialized_(false)
   {
 		// create the component list
-//   		insertComponent(new MMFF94Stretch(*this));
-   		insertComponent(new MMFF94Bend(*this));
+   		insertComponent(new MMFF94Stretch(*this));
+//      		insertComponent(new MMFF94Bend(*this));
 //   		insertComponent(new MMFF94Torsion(*this));
 //   		insertComponent(new MMFF94NonBonded(*this));
 
@@ -71,8 +73,8 @@ namespace BALL
 			parameters_initialized_(false)
   {
 		// create the component list
-//   		insertComponent(new MMFF94Stretch(*this));
-		insertComponent(new MMFF94Bend(*this));
+   		insertComponent(new MMFF94Stretch(*this));
+//   		insertComponent(new MMFF94Bend(*this));
 //   		insertComponent(new MMFF94Torsion(*this));
 //   		insertComponent(new MMFF94NonBonded(*this));
 
@@ -156,12 +158,12 @@ namespace BALL
 		{
 			String prefix = folder + FileSystem::PATH_SEPARATOR;
 			atom_types_.readParameters(prefix + "MMFFPROP.PAR");
-			bond_parameters_.readParameters(prefix + "MMFFANG.PAR");
+			bond_parameters_.readParameters(prefix + "MMFFBOND.PAR");
 			parameters_initialized_ = true;
 		}
 
-		collectBonds_();
 		collectRings_();
+		collectBonds_();
 
 		return true;
 	}
@@ -290,15 +292,15 @@ namespace BALL
 		}
 #endif
 
-		Index is_sbmb = -1;
+		bool is_sbmb = false;
 		if (data.sbmb_exists && ! data.standard_bond_exists)
 		{
-			is_sbmb = 1;
+			is_sbmb = true;
 		}
 
 		else if (!data.sbmb_exists && data.standard_bond_exists)
 		{
-			is_sbmb = 0;
+			is_sbmb = false;
 		}
 
 		else
@@ -319,7 +321,7 @@ namespace BALL
 				!isInOneAromaticRing(bond);
 		}
 
-		if (is_sbmb == 1)
+		if (is_sbmb)
 		{
 			bond.setProperty("MMFF94SBMB");
 		}
@@ -371,13 +373,15 @@ namespace BALL
 				// Ignore hydrogen bonds!
 				if (bond.getType() == Bond::TYPE__HYDROGEN) continue;
 
-				if (!getUseSelection() ||
-						(bond.getFirstAtom()->isSelected() && 
-						 bond.getSecondAtom()->isSelected()))
+				if (getUseSelection() &&
+						(!bond.getFirstAtom()->isSelected() ||
+						 !bond.getSecondAtom()->isSelected()))
 				{
-					assignMMFF94BondType(bond);
-					bonds_.push_back(&bond);
+					continue;
 				}
+
+				assignMMFF94BondType(bond);
+				bonds_.push_back(&bond);
 			}
 		}
 	}
@@ -420,15 +424,20 @@ namespace BALL
 				}
 			}
 
-			if (ok)
+			if (!ok) continue;
+			
+			aromatic_rings_.push_back(HashSet<Atom*>());
+			for (Position j = 0; j < rings[i].size(); j++)
 			{
-				rings_.push_back(HashSet<Atom*>());
-				for (Position j = 0; j < rings[i].size(); j++)
-				{
-					rings_[rings_.size() - 1].insert(rings[i][j]);
-				}
+				aromatic_rings_[aromatic_rings_.size() - 1].insert(rings[i][j]);
 			}
 		}
+
+#ifdef BALL_DEBUG_MMFF
+	Log.info() << "MMFF94: Found " << rings_.size() << " rings." << std::endl;
+	Log.info() << "MMFF94: Found " << aromatic_rings_.size() << " aromatic rings." << std::endl;
+#endif
+
 	}
 
 } // namespace BALL
