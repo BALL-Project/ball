@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineSearch.h,v 1.15 2003/03/14 11:49:29 sturm Exp $
+// $Id: lineSearch.h,v 1.16 2003/03/17 10:20:26 anhi Exp $
 // Line Search Minimizer: A special class for the line search minimization algorithm
 
 #ifndef BALL_MOLMEC_MINIMIZATION_LINESEARCH_H
@@ -128,11 +128,12 @@ namespace BALL
 		*/
 		//@{
 
-		/**	Perform a line search.
-				Find the minimum position for all atoms along direction
+	  /** Perform a line search.
+		    Find the minimum position for all atoms along direction.
+				If keep_gradient == true, we will not calculate the gradient for lambda=1 but
+				assume that this has already been performed instead.
 		*/
-		virtual bool minimize(double& lambda, double step = 1.0);
-
+		virtual bool minimize(double& lambda, double step = 1.0, bool keep_gradient = false);
 		//@}
 
 		protected:
