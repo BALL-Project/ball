@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: global.h,v 1.21 2003/08/26 08:04:18 oliver Exp $
+// $Id: global.h,v 1.22 2004/05/17 14:03:30 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_GLOBAL_H
@@ -108,9 +108,7 @@ namespace BALL
 
 	/**	Global static variable needed for the cloning of kernel objects containing bonds.
 			<b>Namespace:</b> BALL \par
-			
 			@see	cloneBonds
-
 			\ingroup  KernelMiscellaneous
 	*/
 	extern bool clone_bonds;
