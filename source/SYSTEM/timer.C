@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: timer.C,v 1.16 2005/02/06 09:45:00 oliver Exp $
+// $Id: timer.C,v 1.17 2005/02/14 17:06:45 amoll Exp $
 
 #include <BALL/SYSTEM/timer.h>
 
@@ -37,7 +37,7 @@ namespace BALL
 	LongSize Timer::cpu_speed_ = 0L;
 
 	#ifdef BALL_COMPILER_MSVC
-		PointerSizeInt Timer::clock_speed_ = 0L;
+		PointerSizeUInt Timer::clock_speed_ = 0L;
 	#endif
 
 	Timer::Timer()
@@ -64,7 +64,7 @@ namespace BALL
 				LARGE_INTEGER ticks;
 				if (QueryPerformanceFrequency(&ticks))
 				{
-					cpu_speed_ = (PointerSizeInt) ticks.QuadPart;
+					cpu_speed_ = (PointerSizeUInt) ticks.QuadPart;
 				}
 				else 
 				{
@@ -124,7 +124,7 @@ namespace BALL
 			user_time.LowPart = ut.dwLowDateTime;
 
 			last_secs_  = tms.QuadPart / cpu_speed_;			
-			last_usecs_ = (PointerSizeInt)((double)(tms.QuadPart - (last_secs_*cpu_speed_)) / (double)(cpu_speed_) * 1000000.0);
+			last_usecs_ = (PointerSizeUInt)((double)(tms.QuadPart - (last_secs_*cpu_speed_)) / (double)(cpu_speed_) * 1000000.0);
 
 			last_user_time_ = user_time.QuadPart / 10;
 			last_system_time_ = kernel_time.QuadPart / 10;
@@ -171,9 +171,9 @@ namespace BALL
 			user_time.HighPart = ut.dwHighDateTime;
 			user_time.LowPart = ut.dwLowDateTime;
 
-			PointerSizeInt secs_to_add = tms.QuadPart/cpu_speed_;
+			PointerSizeUInt secs_to_add = tms.QuadPart/cpu_speed_;
 			current_secs_ += secs_to_add - last_secs_;
-			PointerSizeInt usecs_to_add = (PointerSizeInt)((double)(tms.QuadPart - secs_to_add*cpu_speed_) /(double)(cpu_speed_) * 1000000.0);
+			PointerSizeUInt usecs_to_add = (PointerSizeUInt)((double)(tms.QuadPart - secs_to_add*cpu_speed_) /(double)(cpu_speed_) * 1000000.0);
 			current_usecs_ += usecs_to_add - last_usecs_;
 			
 			current_user_time_ += user_time.QuadPart / 10 - last_user_time_;
@@ -239,9 +239,9 @@ namespace BALL
 				LARGE_INTEGER tms;
 				if (QueryPerformanceCounter(&tms))
 				{
-					PointerSizeInt secs_to_add = tms.QuadPart / cpu_speed_;
+					PointerSizeUInt secs_to_add = tms.QuadPart / cpu_speed_;
 					elapsed_seconds = current_secs_ + secs_to_add - last_secs_;
-					PointerSizeInt usecs_to_add = (PointerSizeInt)((double)(tms.QuadPart - secs_to_add * cpu_speed_) /(double)(cpu_speed_) * 1000000.0);
+					PointerSizeUInt usecs_to_add = (PointerSizeUInt)((double)(tms.QuadPart - secs_to_add * cpu_speed_) /(double)(cpu_speed_) * 1000000.0);
 					elapsed_useconds  = current_usecs_ + usecs_to_add - last_usecs_;
 				}
 			#else
