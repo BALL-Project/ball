@@ -1,4 +1,4 @@
-// $Id: rombergIntegrator.h,v 1.1 2001/04/04 14:11:59 anhi Exp $
+// $Id: rombergIntegrator.h,v 1.2 2001/04/06 08:51:31 anhi Exp $
 
 #ifndef BALL_MATHS_ROMBERGINTEGRATOR_H
 #define BALL_MATHS_ROMBERGINTEGRATOR_H
@@ -109,7 +109,7 @@ namespace BALL
 	RombergIntegrator<Function, DataType>::RombergIntegrator(float eps, Size nsteps)
 		throw() : NumericalIntegrator<Function, DataType>(), epsilon_(eps), maxNumSteps_(nsteps)
 	{
-		result_.resize(maxNumSteps_ / 10);
+		result_.reserve(maxNumSteps_ / 10);
 	}
 
 	template<typename Function, typename DataType>
@@ -190,11 +190,13 @@ namespace BALL
 		DataType helper = (to - from);
 		int count;
 		
-		Size nsteps = (Size) (sqrt(helper*helper)/sqrt(h*h));
-	
+		Size nsteps = (Size) (sqrt((helper*helper)/(h*h)));
+// cout << nsteps<< " " <<endl;	
 		for (count=1; count<nsteps-1; count++)
 		{
 			sum +=function_(from+(count*h));
+
+//			cout << sum << endl;
 		}
 
 		sum+=function_(from)+function_(to);
@@ -211,18 +213,19 @@ namespace BALL
 		throw()
 	{
 		float h = 1.;
-  	result_[0] = trapezoid(h, from, to); // this is the zeroth approximation
+  	result_.push_back(trapezoid(h, from, to)); // this is the zeroth approximation
+		
 		int i=1;
 		int j=0;
 		int count = 0;
 		DataType dev;
 
 		do {
-			result_[(i*(i+1))/2] = trapezoid(h/((float) i+1), from, to);
+			result_.push_back(trapezoid(h/((float) i+1), from, to));
 		
 			for (j=1; j <= i; j++) {
-				result_[(i*(i+1))/2 + j] = result_[(i*(i+1))/2 + (j-1)] + 1. / (pow(4, j) - 1) * (result_[(i*(i+1))/2 + j-1]
-			  	              - result_[((i-1)*i)/2+j-1]);
+				result_.push_back(result_[(i*(i+1))/2 + (j-1)] + 1. / (pow(4, j) - 1) * (result_[(i*(i+1))/2 + j-1]
+			  	              - result_[((i-1)*i)/2+j-1]));
 				count++;
 			};
 			i++;

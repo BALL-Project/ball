@@ -1,4 +1,4 @@
-// $Id: function.h,v 1.9 2001/03/11 18:24:39 anker Exp $
+// $Id: function.h,v 1.10 2001/04/06 08:51:40 anhi Exp $
 
 #ifndef BALL_MATHS_FUNCTION_H
 #define BALL_MATHS_FUNCTION_H
@@ -1283,7 +1283,7 @@ namespace BALL
 	BALL_INLINE
 	SquareFunction<Function, DataType>::SquareFunction()
 		throw()
-		: function_(0)
+		: function_()
 	{
 	}
 
@@ -1365,7 +1365,7 @@ namespace BALL
 	BALL_INLINE
 	Reciprocal<Function, DataType>::Reciprocal()
 		throw()
-		: function_(0)
+		: function_()
 	{
 	}
 
