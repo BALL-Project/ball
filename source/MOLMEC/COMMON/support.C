@@ -1,4 +1,4 @@
-// $Id: support.C,v 1.20 2001/02/21 18:20:13 anker Exp $
+// $Id: support.C,v 1.21 2001/02/23 10:02:34 anker Exp $
 
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/KERNEL/atom.h>
@@ -334,6 +334,9 @@ namespace BALL
 				}
 			}
 
+			// DEBUG
+			Log.info() << "calculateNonBondedAtomPairs: " << counter << endl;
+
 			return counter;
 		}
 
@@ -621,6 +624,7 @@ namespace BALL
 				}
 			}
 		}
+		return result;
 
 	}	// namespace MolmecSupport
 
