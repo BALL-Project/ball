@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.C,v 1.20.4.21 2002/12/03 10:08:49 oliver Exp $
+// $Id: amberNonBonded.C,v 1.20.4.22 2002/12/03 10:19:41 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -11,7 +11,7 @@ using namespace std;
 #define SQR(x) ((x) * (x))
 
 // ???? Relics induced by SGI/CC
-// #define TPL_ARG_INLINE inline
+// #define BALL_TPL_ARG_INLINE inline
 #define BALL_TPL_ARG_INLINE inline
 
 namespace BALL 
@@ -602,23 +602,23 @@ namespace BALL
 		float B;
 	};
 		
-	TPL_ARG_INLINE float distanceDependentCoulomb(float inverse_square_distance, float charge_product)
+	BALL_TPL_ARG_INLINE float distanceDependentCoulomb(float inverse_square_distance, float charge_product)
 	{
 		return charge_product * inverse_square_distance;
 	}
 
-	TPL_ARG_INLINE float coulomb(float inverse_square_distance, float charge_product)
+	BALL_TPL_ARG_INLINE float coulomb(float inverse_square_distance, float charge_product)
 	{
 		return charge_product * sqrt(inverse_square_distance);
 	}
 
-	TPL_ARG_INLINE float vdwSixTwelve(float inverse_square_distance, float A, float B)
+	BALL_TPL_ARG_INLINE float vdwSixTwelve(float inverse_square_distance, float A, float B)
 	{
 		register float inv_dist_6(inverse_square_distance * inverse_square_distance * inverse_square_distance);
 		return (inv_dist_6 * (inv_dist_6 * A - B)); 
 	}
 
-	TPL_ARG_INLINE float vdwTenTwelve(float inverse_square_distance, float A, float B)
+	BALL_TPL_ARG_INLINE float vdwTenTwelve(float inverse_square_distance, float A, float B)
 	{
 		register float inv_dist_10 = inverse_square_distance * inverse_square_distance;
 		inv_dist_10 *= inv_dist_10 * inverse_square_distance;
