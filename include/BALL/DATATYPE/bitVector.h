@@ -1,4 +1,4 @@
-// $Id: bitVector.h,v 1.11 2000/07/24 20:11:43 oliver Exp $
+// $Id: bitVector.h,v 1.12 2000/07/25 05:53:26 oliver Exp $
 
 #ifndef BALL_DATATYPE_BITVECTOR_H
 #define BALL_DATATYPE_BITVECTOR_H
@@ -263,7 +263,6 @@ namespace BALL
 				@return bool the value of the element
 		*/
 		bool getBit(Index index);
-		//nicht const version ist ein wenig schneller, deswegen drin lassen ???
 
 		/** Get the value of an element.
 				If the given index is greater than the size of this instance an exception is thrown.
@@ -318,15 +317,12 @@ namespace BALL
 		/// ???/
 		unsigned long getUnsignedLong() const;
 
-		// ??? kann man auch private setzen, da operator existiert
 		///
 		void bitwiseOr(const BitVector& bit_vector);
 
-		// ??? kann man auch private setzen, da operator existiert
 		///
 		void bitwiseXor(const BitVector& bit_vector);
 
-		// ??? kann man auch private setzen, da operator existiert
 		///
 		void bitwiseAnd(const BitVector& bit_vector);
 
