@@ -1,4 +1,4 @@
-// $Id: ShiftModel_test.C,v 1.2 2000/09/18 21:38:22 oliver Exp $
+// $Id: ShiftModel_test.C,v 1.3 2000/09/21 07:47:45 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(ShiftModel, "$Id: ShiftModel_test.C,v 1.2 2000/09/18 21:38:22 oliver Exp $")
+START_TEST(ShiftModel, "$Id: ShiftModel_test.C,v 1.3 2000/09/21 07:47:45 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -39,6 +39,10 @@ CHECK(ShiftModel::isRegistered(const String& name) const  throw())
 	TEST_EQUAL(sm.isRegistered(""), false)
 	TEST_EQUAL(sm.isRegistered("JohnsonBovey"), true)
 	TEST_EQUAL(sm.isRegistered("HaighMallion"), true)
+	TEST_EQUAL(sm.isRegistered("JohnsonBovey"), true)
+	TEST_EQUAL(sm.isRegistered("Anisotropy"), true)
+	TEST_EQUAL(sm.isRegistered("RandomCoil"), true)
+	TEST_EQUAL(sm.isRegistered("ElectricField"), true)
 RESULT
 
 
@@ -46,12 +50,6 @@ CHECK(ShiftModel::getParameters() throw())
   ShiftModel sm;
 	TEST_NOT_EQUAL(&sm.getParameters(), 0)
 	TEST_EQUAL(sm.getParameters().isValid(), false)
-RESULT
-
-
-CHECK(ShiftModel::getModuleList() throw())
-	ShiftModel sm;
-	TEST_EQUAL(sm.getModuleList().size(), 0)
 RESULT
 
 
@@ -74,6 +72,15 @@ CHECK(ShiftModel::getFilename() const  throw())
 	sm.setFilename("data/ShiftModel_test.ini");
 	TEST_EQUAL(sm.isValid(), true)
 	TEST_EQUAL(sm.getFilename(), "data/ShiftModel_test.ini")
+RESULT
+
+
+CHECK(ShiftModel::getModuleList() throw())
+	ShiftModel sm;
+	TEST_EQUAL(sm.getModuleList().size(), 0)
+	
+	sm.setFilename("data/ShiftModel_test.ini");
+	TEST_EQUAL(sm.getModuleList().size(), 2)
 RESULT
 
 
