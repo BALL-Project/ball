@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricProperties.C,v 1.18 2003/08/19 19:03:26 amoll Exp $
+// $Id: geometricProperties.C,v 1.19 2003/08/19 20:07:48 oliver Exp $
+//
 
 #include <BALL/STRUCTURE/geometricProperties.h>
 
@@ -9,6 +10,7 @@
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/fragment.h>
 #include <BALL/KERNEL/residue.h>
+
 #include <stdio.h>
 #include <math.h>
 

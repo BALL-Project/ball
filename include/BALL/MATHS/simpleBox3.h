@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: simpleBox3.h,v 1.2 2003/08/19 16:34:21 amoll Exp $
+// $Id: simpleBox3.h,v 1.3 2003/08/19 20:07:47 oliver Exp $
+//
 
 #ifndef BALL_MATHS_SIMPLEBOX3_H
 #define BALL_MATHS_SIMPLEBOX3_H

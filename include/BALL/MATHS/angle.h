@@ -1,13 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: angle.h,v 1.38 2003/06/09 22:40:48 oliver Exp $
+// $Id: angle.h,v 1.39 2003/08/19 20:07:47 oliver Exp $
+//
 
 #ifndef BALL_MATHS_ANGLE_H
 #define BALL_MATHS_ANGLE_H
 
 #ifndef BALL_COMMON_H
-#	include <BALL/common.h>
+# include <BALL/common.h>
 #endif
 
 #ifndef BALL_MATHS_COMMON_H
