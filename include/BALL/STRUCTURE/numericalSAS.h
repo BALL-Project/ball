@@ -1,4 +1,4 @@
-// $Id: numericalSAS.h,v 1.5 2000/06/06 13:18:58 oliver Exp $
+// $Id: numericalSAS.h,v 1.6 2000/06/15 17:12:24 oliver Exp $
 
 #ifndef BALL_STRUCTURE_NUMERICALSAS_H
 #define BALL_STRUCTURE_NUMERICALSAS_H
@@ -35,6 +35,20 @@ namespace BALL
 			@return the total SAS area in $\AA^2$
 	*/
 	float calculateSASArea
+					(const BaseFragment& fragment, float probe_radius = 1.5,
+					 Size number_of_dots = 400); 
+
+	/** Calculate the solvent accessible volume numerically.
+			This method returns the total volume enclosd by the 
+			Solvent Accessible Surface (SAS) of a BALL kernel object. 
+			Atoms with a radius of 0 are ignored
+
+			@param  fragment the kernel object containing the atoms
+			@param  probe_radius the probe radius used for the SAS
+			@param  number_of_dots the number of dots used per atom
+			@return the volume in $\AA^3$
+	*/
+	float calculateSASVolume
 					(const BaseFragment& fragment, float probe_radius = 1.5,
 					 Size number_of_dots = 400); 
 
