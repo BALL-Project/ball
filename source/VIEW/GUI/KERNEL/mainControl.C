@@ -1,4 +1,4 @@
-// $Id: mainControl.C,v 1.26 2002/12/13 14:30:12 amoll Exp $
+// $Id: mainControl.C,v 1.27 2002/12/14 23:05:23 amoll Exp $
 
 // this is required for QMenuItem
 #define INCLUDE_MENUITEM_DEF
@@ -848,11 +848,35 @@ namespace BALL
 				if (!RTTI::isKindOf<GeometricObject>(*(*it)->getParent()) &&
 						!selection_.has((*it)->getParent())) 
 				{	
-					//selection_.insert((*it)->getParent());;
 					selectCompositeRecursive((*it)->getParent(), true);	
 					nr++;
 				}				
 			}
+
+
+			// if one atom was picked, show its properties
+			if (selection_.size() == 1)
+			{
+				if (RTTI::isKindOf<Atom>(**selection_.begin()))
+				{
+					Atom& atom = *(Atom*)*selection_.begin();
+					Log.info()  << "Properties of atom " << atom.getFullName() 
+											<< ":  Position: " << atom.getPosition() << "  " << "Charge: " << atom.getCharge() 
+											<< "  Velocity: " << atom.getVelocity() << "  " << "Force: " << atom.getForce() << std::endl;
+				}
+			}
+			else if (selection_.size() == 2)
+			{
+				// if two atoms were picked, show their distance
+				Atom& atom1 = *(Atom*)*selection_.begin();
+				HashSet<Composite*>::Iterator it = selection_.begin();
+				it++;
+				Atom& atom2 = *(Atom*)*it;
+
+				Log.info()  << "Distance between atom " << atom1.getFullName() << " and " << atom2.getFullName() << ": " 
+										<< atom1.getPosition() - atom2.getPosition() << std::endl;
+			}
+
 
 			NewSelectionMessage* new_message = new NewSelectionMessage;
 			notify_(new_message);
