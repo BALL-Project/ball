@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBInfo_test.C,v 1.3 2005/02/11 15:27:14 oliver Exp $
+// $Id: PDBInfo_test.C,v 1.4 2005/02/12 23:08:28 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -14,7 +14,7 @@
 
 ///////////////////////////
 
-START_TEST(PDBInfo, "$Id: PDBInfo_test.C,v 1.3 2005/02/11 15:27:14 oliver Exp $")
+START_TEST(PDBInfo, "$Id: PDBInfo_test.C,v 1.4 2005/02/12 23:08:28 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -141,7 +141,7 @@ CHECK([Extra] reading a PDB file)
 	PDBFile f("data/PDBInfo_test.pdb");
 	System S;
 	f.read(S);
-	TEST_EQUAL(f.info.getSkippedRecords().size(), 156)
+	TEST_EQUAL(f.info.getSkippedRecords().size(), 155)
 
 	PDBRecords::ConstIterator it = f.info.getSkippedRecords().begin();
 	for (Position i = 0; it != f.info.getSkippedRecords().end(); ++it, ++i)

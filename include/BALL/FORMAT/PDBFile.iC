@@ -1,11 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.iC,v 1.9 2005/02/11 15:27:12 oliver Exp $
+// $Id: PDBFile.iC,v 1.10 2005/02/12 23:08:26 oliver Exp $
 //
 
 BALL_INLINE 
-PDBFile& PDBFile::operator >> (Protein& protein)
+PDBFile& PDBFile::operator >> (Protein& protein) throw(Exception::ParseError)
 {
   read(protein);
   
@@ -13,7 +13,15 @@ PDBFile& PDBFile::operator >> (Protein& protein)
 }
 
 BALL_INLINE 
-PDBFile& PDBFile::operator >> (System& system)
+PDBFile& PDBFile::operator >> (Molecule& molecule) throw(Exception::ParseError)
+{
+  read(molecule);
+  
+  return *this;
+}
+
+BALL_INLINE 
+PDBFile& PDBFile::operator >> (System& system) throw(Exception::ParseError)
 {
   read(system);
   
@@ -45,7 +53,7 @@ bool PDBFile::write(const Protein& protein) throw(File::CannotWrite)
 }
 
 BALL_INLINE 
-PDBFile& PDBFile::operator << (const Molecule& molecule)
+PDBFile& PDBFile::operator << (const Molecule& molecule) throw(File::CannotWrite)
 {
   write(molecule);
   
@@ -53,7 +61,7 @@ PDBFile& PDBFile::operator << (const Molecule& molecule)
 }
 
 BALL_INLINE 
-PDBFile& PDBFile::operator << (const Protein& protein)
+PDBFile& PDBFile::operator << (const Protein& protein) throw(File::CannotWrite)
 {
   write(protein);
   
@@ -61,7 +69,7 @@ PDBFile& PDBFile::operator << (const Protein& protein)
 }
 
 BALL_INLINE 
-PDBFile& PDBFile::operator << (const System& system)
+PDBFile& PDBFile::operator << (const System& system) throw(File::CannotWrite)
 {
   write(system);
   
@@ -156,19 +164,4 @@ BALL_INLINE
 Size PDBFile::countRecordFields() const
 {
   return record_fields_;
-}
-
-BALL_INLINE 
-bool PDBFile::hasFormat() const
-{
-  return ((PDBFile *)this)->hasFormat();
-}
-
-BALL_INLINE 
-bool PDBFile::hasFormat(const String& s) const
-{
-  String str(s);
-  str.toLower();
-  
-  return (str.compare("pdb") == 0 && hasFormat() == true);
 }

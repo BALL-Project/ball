@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.h,v 1.29 2005/02/11 15:27:12 oliver Exp $
+// $Id: PDBFile.h,v 1.30 2005/02/12 23:08:26 oliver Exp $
 //
 
 #ifndef BALL_FORMAT_PDBFILE_H
@@ -11,8 +11,8 @@
 #	include <BALL/CONCEPT/property.h>
 #endif
 
-#ifndef BALL_SYSTEM_FILE_H
-#	include <BALL/SYSTEM/file.h>
+#ifndef BALL_FORMAT_GENERICMOLFILE_H
+#	include <BALL/FORMAT/genericMolFile.h>
 #endif
 
 #ifndef BALL_DATATYPE_OPTIONS_H
@@ -55,7 +55,7 @@ namespace BALL
 			
 	*/
 	class PDBFile
-		: public File,
+		: public GenericMolFile,
 			public PropertyManager
 	{
 		public:
@@ -105,6 +105,13 @@ namespace BALL
 					@see		Default::IGNORE_XPLOR_PSEUDO_ATOMS
 			*/
 			static const char* IGNORE_XPLOR_PSEUDO_ATOMS;
+
+			/**	Parse partial charges in columns 76-80.
+					Some variants of PDB like to store atom partial charges in these
+					columns (according to the standard, these columns contain 
+					the element symbol and formal charges). 
+			*/
+			static const char* PARSE_PARTIAL_CHARGES;
 		};
 
 		/** Default values for PDBFile options.  
@@ -138,6 +145,11 @@ namespace BALL
 					true -- skip them.
 			*/
 			static const bool IGNORE_XPLOR_PSEUDO_ATOMS;
+
+			/**	Parse partial charges.
+					false -- stick to the standard.
+			*/
+			static const bool PARSE_PARTIAL_CHARGES;
 		};
 
 		/** @name Options
@@ -291,414 +303,286 @@ namespace BALL
 		bool skipCurrentRecord();
 
 		/// Reads an anisotropic temperature factor record.
-		virtual bool readRecordANISOU
-			(PDB::Integer serial_number,
-			 PDB::Atom atom_name,
-			 PDB::Character alternate_location_indicator,
-			 PDB::ResidueName residue_name,
-			 PDB::Character chain_ID,
-			 PDB::Integer residue_sequence_number,
-			 PDB::AChar insertion_code,
-			 PDB::Integer u11,
-			 PDB::Integer u22,
-			 PDB::Integer u33,
-			 PDB::Integer u12,
-			 PDB::Integer u13,
-			 PDB::Integer u23,
-			 PDB::LString4 segment_ID,
-			 PDB::LString2 element_symbol,
-			 PDB::LString2 charge);
+		virtual bool interpretRecord(const PDB::RecordANISOU& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordANISOU& record);
+		virtual bool parseRecordANISOU(const char* line, Size size);
 
 		/// Reads an atom record.
-		virtual bool readRecordATOM
-			(PDB::Integer serial_number,
-			 PDB::Atom atom_name,
-			 PDB::Character alternate_location_indicator,
-			 PDB::ResidueName residue_name,
-			 PDB::Character chain_ID,
-			 PDB::Integer residue_sequence_number,
-			 PDB::AChar insertion_code,
-			 PDB::Real orthogonal_vector[3],
-			 PDB::Real occupancy,
-			 PDB::Real temperature_factor,
-			 PDB::LString4 segment_ID,
-			 PDB::LString2 element_symbol,
-			 PDB::LString2 charge);
+		virtual bool interpretRecord(const PDB::RecordATOM& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordATOM& record);
+		virtual bool parseRecordATOM(const char* line, Size size);
 
 		/// Reads an author record.
-		virtual bool readRecordAUTHOR
-			(PDB::Continuation continuation,
-			 PDB::PDBList authors);
+		virtual bool interpretRecord(const PDB::RecordAUTHOR& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordAUTHOR& record);
+		virtual bool parseRecordAUTHOR(const char* line, Size size);
 
-		/// Reads a cave-at record.
-		virtual bool readRecordCAVEAT
-			(PDB::Continuation continuation,
-			 PDB::IDcode entry_code,
-			 PDB::PDBString comment);
+		/// Reads a caveat record.
+		virtual bool interpretRecord(const PDB::RecordCAVEAT& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordCAVEAT& record);
+		virtual bool parseRecordCAVEAT(const char* line, Size size);
 
 		/// Reads a record specifying peptides in cis conformation.
-		virtual bool readRecordCISPEP
-			(PDB::Integer record_serial_number,
-			 PDB::RecordCISPEP::CisPeptide cis_peptide[2],
-			 PDB::Integer specific_model_ID,
-			 PDB::Real angle_measure);
+		virtual bool interpretRecord(const PDB::RecordCISPEP& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordCISPEP& record);
+		virtual bool parseRecordCISPEP(const char* line, Size size);
 
 		/// Reads the title record containing macroscopic compoubd information.
-		virtual bool readRecordCOMPND
-			(PDB::Continuation continuation,
-			 PDB::SpecificationList component_description);
+		virtual bool interpretRecord(const PDB::RecordCOMPND& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordCOMPND& record);
+		virtual bool parseRecordCOMPND(const char* line, Size size);
 
 		/// Reads a connection record.
-		virtual bool readRecordCONECT
-			(PDB::Integer atom_serial_number,
-			 PDB::Integer bonded_atom_serial_number[4],
-			 PDB::Integer hydrogen_bonded_atom_serial_number[4],
-			 PDB::Integer salt_bridged_atom_serial_number[2]);
+		virtual bool interpretRecord(const PDB::RecordCONECT& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordCONECT& record);
+		virtual bool parseRecordCONECT(const char* line, Size size);
 
 		/** Reads the record specifying the unit cell parameters, space group,
 				and Z value for crystographically determined structures.
 		*/
-		virtual bool readRecordCRYST1
-			(PDB::RecordCRYST1::UnitCell& unit_cell);
+		virtual bool interpretRecord(const PDB::RecordCRYST1& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordCRYST1& record);
+		virtual bool parseRecordCRYST1(const char* line, Size size);
 
 		/// Reads a record containing database cross-reference links.
-		virtual bool readRecordDBREF
-			(PDB::IDcode entry_code,
-			 PDB::Character chain_ID,
-			 PDB::RecordDBREF::InitialSequence& initial_sequence,
-			 PDB::RecordDBREF::EndingSequence& ending_sequence,
-			 PDB::LString6 sequence_database_name,
-			 PDB::LString8 sequence_database_accession_code,
-			 PDB::LString12 sequence_database_ID_code,
-			 PDB::RecordDBREF::InitialDatabaseSegment& initial_database_segment,
-			 PDB::RecordDBREF::EndingDatabaseSegment& ending_database_segment);
+		virtual bool interpretRecord(const PDB::RecordDBREF& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordDBREF& record);
+		virtual bool parseRecordDBREF(const char* line, Size size);
 
 		/// Reads the record defining the end of a PDB file.
-		virtual bool readRecordEND();
+		virtual bool interpretRecord(const PDB::RecordEND& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordEND& record);
+		virtual bool parseRecordEND(const char* line, Size size);
 
 		/// Reads a model ending record.
-		virtual bool readRecordENDMDL();
+		virtual bool interpretRecord(const PDB::RecordENDMDL& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordENDMDL& record);
+		virtual bool parseRecordENDMDL(const char* line, Size size);
 
 		/// Reads a record containing data about the experiment.
-		virtual bool readRecordEXPDTA
-			(PDB::Continuation continuation,
-			 PDB::SList technique);
+		virtual bool interpretRecord(const PDB::RecordEXPDTA& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordEXPDTA& record);
+		virtual bool parseRecordEXPDTA(const char* line, Size size);
 
 		/** Reads a record containing the chemical formula of a non-standard
 				group.
 		*/
-		virtual bool readRecordFORMUL
-			(PDB::Integer component_number,
-			 PDB::LString3 het_ID,
-			 PDB::Integer continuation_number,
-			 PDB::Character is_water,
-			 PDB::PDBString chemical_formula);
+		virtual bool interpretRecord(const PDB::RecordFORMUL& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordFORMUL& record);
+		virtual bool parseRecordFORMUL(const char* line, Size size);
 
 		/// Reads a record containing a footnote.
-		virtual bool readRecordFTNOTE
-			(PDB::Integer number,
-			 PDB::PDBString text);
+		virtual bool interpretRecord(const PDB::RecordFTNOTE& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordFTNOTE& record);
+		virtual bool parseRecordFTNOTE(const char* line, Size size);
 
 		/** Reads the header recors which contains the idCode field, entry
 				classification and deposition date.
 		*/
-		virtual bool readRecordHEADER
-			(PDB::String40 classification,
-			 PDB::Date deposition_date,
-			 PDB::IDcode ID_code);
+		virtual bool interpretRecord(const PDB::RecordHEADER& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordHEADER& record);
+		virtual bool parseRecordHEADER(const char* line, Size size);
 
 		/// Reads a helix defining record.
-		virtual bool readRecordHELIX
-			(PDB::Integer serial_number,
-			 PDB::LString3 helix_ID,
-			 PDB::RecordHELIX::InitialResidue& initial_residue,
-			 PDB::RecordHELIX::TerminalResidue& terminal_residue,
-			 PDB::Integer helix_class,
-			 PDB::PDBString comment,
-			 PDB::Integer length);
+		virtual bool interpretRecord(const PDB::RecordHELIX& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordHELIX& record);
+		virtual bool parseRecordHELIX(const char* line, Size size);
 
 		/// Reads a record defining a non-standard residue.
-		virtual bool readRecordHET
-			(PDB::LString3 het_ID,
-			 PDB::Character chain_ID,
-			 PDB::Integer sequence_number,
-			 PDB::AChar insertion_code,
-			 PDB::Integer number_of_HETATM_records,
-			 PDB::PDBString text);
+		virtual bool interpretRecord(const PDB::RecordHET& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordHET& record);
+		virtual bool parseRecordHET(const char* line, Size size);
 
 		/// Reads atomic coordinates for atoms in non-standard groups.
-		virtual bool readRecordHETATM
-			(PDB::Integer serial_number,
-			 PDB::Atom atom_name,
-			 PDB::Character alternate_location_indicator,
-			 PDB::ResidueName residue_name,
-			 PDB::Character chain_ID,
-			 PDB::Integer residue_sequence_number,
-			 PDB::AChar insertion_code,
-			 PDB::Real orthogonal_vector[3],
-			 PDB::Real occupancy,
-			 PDB::Real temperature_factor,
-			 PDB::LString4 segment_ID,
-			 PDB::LString2 element_symbol,
-			 PDB::LString2 charge);
+		virtual bool interpretRecord(const PDB::RecordHETATM& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordHETATM& record);
+		virtual bool parseRecordHETATM(const char* line, Size size);
 
 		/// Reads a record defining the name of a non-standard group.
-		virtual bool readRecordHETNAM
-			(PDB::Continuation continuation,
-			 PDB::LString3 het_ID,
-			 PDB::PDBString chemical_name);
+		virtual bool interpretRecord(const PDB::RecordHETNAM& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordHETNAM& record);
+		virtual bool parseRecordHETNAM(const char* line, Size size);
 
 		/// Reads a record defining a hydrogen bond.
-		virtual bool readRecordHYDBND
-			(PDB::RecordHYDBND::HydrogenPartnerAtom hydrogen_partner_atom[2],
-			 PDB::RecordHYDBND::HydrogenAtom& hydrogen_atom,
-			 PDB::SymmetryOperator first_non_hydrogen_atom,
-			 PDB::SymmetryOperator second_non_hydrogen_atom);
+		virtual bool interpretRecord(const PDB::RecordHYDBND& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordHYDBND& record);
+		virtual bool parseRecordHYDBND(const char* line, Size size);
 
 		/// Reads a record containing a journal reference.
-		virtual bool readRecordJRNL
-			(PDB::LString text);
+		virtual bool interpretRecord(const PDB::RecordJRNL& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordJRNL& record);
+		virtual bool parseRecordJRNL(const char* line, Size size);
 
 		/// Reads a record containing keywords for this entry.
-		virtual bool readRecordKEYWDS
-			(PDB::Continuation continuation,
-			 PDB::PDBList keywords);
+		virtual bool interpretRecord(const PDB::RecordKEYWDS& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordKEYWDS& record);
+		virtual bool parseRecordKEYWDS(const char* line, Size size);
 
 		/// Reads a record containing supplemental connectivity information.
-		virtual bool readRecordLINK
-			(PDB::RecordLINK::LinkPartner link_partner[2],
-			 PDB::SymmetryOperator first_atom,
-			 PDB::SymmetryOperator second_atom);
+		virtual bool interpretRecord(const PDB::RecordLINK& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordLINK& record);
+		virtual bool parseRecordLINK(const char* line, Size size);
 
 		/** Reads the master record containing numerous counts for bookkeeping
 				purposes.
 		*/
-		virtual bool readRecordMASTER
-			(PDB::Integer number_of_REMARK_records,
-			 PDB::Integer zero,
-			 PDB::Integer number_of_HET_records,
-			 PDB::Integer number_of_HELIX_records,
-			 PDB::Integer number_of_SHEET_records,
-			 PDB::Integer number_of_TURN_records,
-			 PDB::Integer number_of_SITE_records,
-			 PDB::Integer number_of_ORIGX_SCALE_MTRIX_records,
-			 PDB::Integer number_of_ATOM_HETATM_records,
-			 PDB::Integer number_of_TER_records,
-			 PDB::Integer number_of_CONECT_records,
-			 PDB::Integer number_of_SEQRES_records);
+		virtual bool interpretRecord(const PDB::RecordMASTER& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordMASTER& record);
+		virtual bool parseRecordMASTER(const char* line, Size size);
 
 		/// Reads a record indicating the beginning of a new model.
-		virtual bool readRecordMODEL
-			(PDB::Integer model_serial_number);
+		virtual bool interpretRecord(const PDB::RecordMODEL& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordMODEL& record);
+		virtual bool parseRecordMODEL(const char* line, Size size);
 
 		/// Reads a record identifying residue modifications.
-		virtual bool readRecordMODRES
-			(PDB::IDcode entry_code,
-			 PDB::ResidueName residue_name,
-			 PDB::Character chain_ID,
-			 PDB::Integer sequence_number,
-			 PDB::AChar insertion_code,
-			 PDB::ResidueName standardresidue_name,
-			 PDB::PDBString comment);
+		virtual bool interpretRecord(const PDB::RecordMODRES& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordMODRES& record);
+		virtual bool parseRecordMODRES(const char* line, Size size);
 
 		/** Reads a record defining transformations expressing
 				non-crystallographic symmetry.
 		*/
-		virtual bool readRecordMTRIX1
-			(PDB::Integer serial_number,
-			 PDB::Real transformation_matrix[4],
-			 PDB::Integer is_given);
+		virtual bool interpretRecord(const PDB::RecordMTRIX1& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordMTRIX1& record);
+		virtual bool parseRecordMTRIX1(const char* line, Size size);
 
 		/** Reads a record defining transformations expressing
 				non-crystallographic symmetry.
 		*/
-		virtual bool readRecordMTRIX2
-			(PDB::Integer serial_number,
-			 PDB::Real transformation_matrix[4],
-			 PDB::Integer is_given);
+		virtual bool interpretRecord(const PDB::RecordMTRIX2& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordMTRIX2& record);
+		virtual bool parseRecordMTRIX2(const char* line, Size size);
 
 		/** Reads a record defining transformations expressing
 				non-crystallographic symmetry.
 		*/
-		virtual bool readRecordMTRIX3
-			(PDB::Integer serial_number,
-			 PDB::Real transformation_matrix[4],
-			 PDB::Integer is_given);
+		virtual bool interpretRecord(const PDB::RecordMTRIX3& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordMTRIX3& record);
+		virtual bool parseRecordMTRIX3(const char* line, Size size);
 
 		/** Reads a record indicating that this structura has been
 				withdrawnform the database.
 		*/
-		virtual bool readRecordOBSLTE
-			(PDB::Continuation continuation,
-			 PDB::Date entry_replaced_date,
-			 PDB::IDcode entry_code,
-			 PDB::IDcode replacing_entry_code[8]);
+		virtual bool interpretRecord(const PDB::RecordOBSLTE& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordOBSLTE& record);
+		virtual bool parseRecordOBSLTE(const char* line, Size size);
 
 		/** Reads a record defining the transformation from the orthogonal
 				coordinates contained in the entry to the submitted coordinates.
 		*/
-		virtual bool readRecordORIGX1
-			(PDB::Real transformation_matrix[4]);
+		virtual bool interpretRecord(const PDB::RecordORIGX1& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordORIGX1& record);
+		virtual bool parseRecordORIGX1(const char* line, Size size);
 
 		/** Reads a record defining the transformation from the orthogonal
 				coordinates contained in the entry to the submitted coordinates.
 		*/
-		virtual bool readRecordORIGX2
-			(PDB::Real transformation_matrix[4]);
+		virtual bool interpretRecord(const PDB::RecordORIGX2& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordORIGX2& record);
+		virtual bool parseRecordORIGX2(const char* line, Size size);
 
 		/** Reads a record defining the transformation from the orthogonal
 				coordinates contained in the entry to the submitted coordinates.
 		*/
-		virtual bool readRecordORIGX3
-			(PDB::Real transformation_matrix[4]);
+		virtual bool interpretRecord(const PDB::RecordORIGX3& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordORIGX3& record);
+		virtual bool parseRecordORIGX3(const char* line, Size size);
 
 		/// Reads a record containing remarks.
-		virtual bool readRecordREMARK
-			(PDB::Integer remark_number,
-			 PDB::LString text);
+		virtual bool interpretRecord(const PDB::RecordREMARK& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordREMARK& record);
+		virtual bool parseRecordREMARK(const char* line, Size size);
 
 		/// Reads a record containing a revision history.
-		virtual bool readRecordREVDAT
-			(PDB::Integer modification_number,
-			 PDB::Continuation continuation,
-			 PDB::Date modification_date,
-			 PDB::String5 modification_ID,
-			 PDB::Integer modification_type,
-			 PDB::LString6 name_of_modified_record[4]);
+		virtual bool interpretRecord(const PDB::RecordREVDAT& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordREVDAT& record);
+		virtual bool parseRecordREVDAT(const char* line, Size size);
 
 		/// Reads a scale transformation record.
-		virtual bool readRecordSCALE1
-			(PDB::Real transformation_matrix[4]);
+		virtual bool interpretRecord(const PDB::RecordSCALE1& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordSCALE1& record);
+		virtual bool parseRecordSCALE1(const char* line, Size size);
 
 		/// Reads a scale transformation record.
-		virtual bool readRecordSCALE2
-			(PDB::Real transformation_matrix[4]);
+		virtual bool interpretRecord(const PDB::RecordSCALE2& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordSCALE2& record);
+		virtual bool parseRecordSCALE2(const char* line, Size size);
 
 		/// Reads a scale transformation record.
-		virtual bool readRecordSCALE3
-			(PDB::Real transformation_matrix[4]);
+		virtual bool interpretRecord(const PDB::RecordSCALE3& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordSCALE3& record);
+		virtual bool parseRecordSCALE3(const char* line, Size size);
 
 		/// Reads a record containing the sequence of residues.
-		virtual bool readRecordSEQRES
-			(PDB::Integer serial_number,
-			 PDB::Character chain_ID,
-			 PDB::Integer number_of_residues_in_chain,
-			 PDB::ResidueName residue_name[13]);
+		virtual bool interpretRecord(const PDB::RecordSEQRES& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordSEQRES& record);
+		virtual bool parseRecordSEQRES(const char* line, Size size);
 
 		/// Reads a record defining a beta-sheet.
-		virtual bool readRecordSHEET
-			(PDB::Integer strand_number,
-			 PDB::LString3 sheet_ID,
-			 PDB::Integer number_of_strands,
-			 PDB::RecordSHEET::InitialResidue& initial_residue,
-			 PDB::RecordSHEET::TerminalResidue& terminal_residue,
-			 PDB::Integer sense_of_strand,
-			 PDB::Atom atom_name_in_current_strand,
-			 PDB::RecordSHEET::ResidueInCurrentStrand& residue_in_current_strand,
-			 PDB::Atom atom_name_in_previous_strand,
-			 PDB::RecordSHEET::ResidueInPreviousStrand& residue_in_previous_strand);
+		virtual bool interpretRecord(const PDB::RecordSHEET& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordSHEET& record);
+		virtual bool parseRecordSHEET(const char* line, Size size);
 
 		/// Reads a record giving the standard deviation of atomic coordinates.
-		virtual bool readRecordSIGATM
-			(PDB::Integer serial_number,
-			 PDB::Atom atom_name,
-			 PDB::Character alternate_location_indicator,
-			 PDB::ResidueName residue_name,
-			 PDB::Character chain_ID,
-			 PDB::Integer residue_sequence_number,
-			 PDB::AChar insertion_code,
-			 PDB::Real standard_vector_deviation[3],
-			 PDB::Real standard_occupancy_deviation,
-			 PDB::Real standard_temperature_deviation,
-			 PDB::LString4 segment_ID,
-			 PDB::LString2 element_symbol,
-			 PDB::LString2 charge);
+		virtual bool interpretRecord(const PDB::RecordSIGATM& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordSIGATM& record);
+		virtual bool parseRecordSIGATM(const char* line, Size size);
 
 		/** Reads a record giving the standard deviation of anisotropic
 				temperature factors.
 		*/
-		virtual bool readRecordSIGUIJ
-			(PDB::Integer serial_number,
-			 PDB::Atom atom_name,
-			 PDB::Character alternate_location_indicator,
-			 PDB::ResidueName residue_name,
-			 PDB::Character chain_ID,
-			 PDB::Integer residue_sequence_number,
-			 PDB::AChar insertion_code,
-			 PDB::Integer sig11,
-			 PDB::Integer sig22,
-			 PDB::Integer sig33,
-			 PDB::Integer sig12,
-			 PDB::Integer sig13,
-			 PDB::Integer sig23,
-			 PDB::LString4 segment_ID,
-			 PDB::LString2 element_symbol,
-			 PDB::LString2 charge);
+		virtual bool interpretRecord(const PDB::RecordSIGUIJ& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordSIGUIJ& record);
+		virtual bool parseRecordSIGUIJ(const char* line, Size size);
 
 		/// Reads a record containing groups comprising a site.
-		virtual bool readRecordSITE
-			(PDB::Integer sequence_number,
-			 PDB::LString3 name,
-			 PDB::Integer number_of_residues,
-			 PDB::RecordSITE::Residue residue[4]);
+		virtual bool interpretRecord(const PDB::RecordSITE& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordSITE& record);
+		virtual bool parseRecordSITE(const char* line, Size size);
 
 		/// Reads a record defining a salt bridge.
-		virtual bool readRecordSLTBRG
-			(PDB::RecordSLTBRG::PartnerAtom partner_atom[2],
-			 PDB::SymmetryOperator first_atom,
-			 PDB::SymmetryOperator second_atom);
+		virtual bool interpretRecord(const PDB::RecordSLTBRG& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordSLTBRG& record);
+		virtual bool parseRecordSLTBRG(const char* line, Size size);
 
 		/** Reads a record specifies the chemical/biological source of each
 				molecule in the entry.
 		*/
-		virtual bool readRecordSOURCE
-			(PDB::Continuation continuation,
-			 PDB::SpecificationList sources);
+		virtual bool interpretRecord(const PDB::RecordSOURCE& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordSOURCE& record);
+		virtual bool parseRecordSOURCE(const char* line, Size size);
 
 		/// Reads a record specifying a disulfide bond.
-		virtual bool readRecordSSBOND
-			(PDB::Integer serial_number,
-			 PDB::RecordSSBOND::PartnerResidue partner_residue[2]);
+		virtual bool interpretRecord(const PDB::RecordSSBOND& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordSSBOND& record);
+		virtual bool parseRecordSSBOND(const char* line, Size size);
 
 		/// Reads a record terminating molecule.
-		virtual bool readRecordTER
-			(PDB::Integer serial_number,
-			 PDB::ResidueName residue_name,
-			 PDB::Character chain_ID,
-			 PDB::Integer residue_sequence_number,
-			 PDB::AChar insertion_code);
+		virtual bool interpretRecord(const PDB::RecordTER& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordTER& record);
+		virtual bool parseRecordTER(const char* line, Size size);
 
 		/// Reads a record specifying the title of the experiment or anaysis.
-		virtual bool readRecordTITLE
-			(PDB::Continuation continuation,
-			 PDB::PDBString title);
+		virtual bool interpretRecord(const PDB::RecordTITLE& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordTITLE& record);
+		virtual bool parseRecordTITLE(const char* line, Size size);
 
 		/// Reads a record specifying a turn.
-		virtual bool readRecordTURN
-			(PDB::Integer sequence_number,
-			 PDB::LString3 turn_ID,
-			 PDB::RecordTURN::InitialResidue& initial_residue,
-			 PDB::RecordTURN::TerminalResidue& terminal_residue,
-			 PDB::PDBString comment);
+		virtual bool interpretRecord(const PDB::RecordTURN& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordTURN& record);
+		virtual bool parseRecordTURN(const char* line, Size size);
 
 		/** Reads a record specifying the translation vector for infinite
 				covalently connected structures.
 		*/
-		virtual bool readRecordTVECT
-			(PDB::Integer serial_number,
-			 PDB::Real translation_vector[3],
-			 PDB::PDBString comment);
+		virtual bool interpretRecord(const PDB::RecordTVECT& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordTVECT& record);
+		virtual bool parseRecordTVECT(const char* line, Size size);
 		//@}
 
-		///
+		/// Check whether the current file is in PDB format
 		virtual bool hasFormat();
-
-		///
-		bool hasFormat() const;
-
-		///
-		virtual bool hasFormat(const String& s) const;
-
 
 		typedef HashMap<PDB::Integer, PDBAtom*> PDBAtomMap;
 		typedef Quadruple<String, PDB::Character, PDB::Integer, PDB::AChar> ResidueQuadruple;
@@ -710,21 +594,23 @@ namespace BALL
 		/**	@name Reading and writing */
 		//@{
 		/// Read a protein from the file
-		PDBFile& operator >> (Protein& protein);
+		PDBFile& operator >> (Protein& protein) throw(Exception::ParseError);
 		/// Read a molecule from the file
-		PDBFile& operator >> (Molecule& molecule);
+		PDBFile& operator >> (Molecule& molecule) throw(Exception::ParseError);
 		// Read system from the file
-		PDBFile& operator >> (System& system);
+		PDBFile& operator >> (System& system) throw(Exception::ParseError);
 		/// Write a protein to the file
-		PDBFile& operator << (const Protein& protein);
+		PDBFile& operator << (const Protein& protein) throw(File::CannotWrite);
 		// Write system to the file
-		PDBFile& operator << (const System& system);
+		PDBFile& operator << (const System& system) throw(File::CannotWrite);
 		// Write molecule to the file
-		PDBFile& operator << (const Molecule& molecule);
+		PDBFile& operator << (const Molecule& molecule) throw(File::CannotWrite);
 		///
-		void read(Protein& protein);
+		bool read(Protein& protein) throw(Exception::ParseError);
 		///
-		void read(System& system);
+		bool read(Molecule& protein) throw(Exception::ParseError);
+		///
+		bool read(System& system) throw(Exception::ParseError);
 		///
 		bool write(const Protein& protein) throw(File::CannotWrite);
 		///

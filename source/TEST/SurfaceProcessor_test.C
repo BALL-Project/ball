@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SurfaceProcessor_test.C,v 1.6 2003/05/08 18:23:49 oliver Exp $
+// $Id: SurfaceProcessor_test.C,v 1.7 2005/02/12 23:08:28 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -16,15 +16,12 @@
 
 ///////////////////////////
 
-START_TEST(SurfaceProcessor, "$Id: SurfaceProcessor_test.C,v 1.6 2003/05/08 18:23:49 oliver Exp $")
+START_TEST(SurfaceProcessor, "$Id: SurfaceProcessor_test.C,v 1.7 2005/02/12 23:08:28 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
-
-///  insert tests for each member function here         
-///
 
 SurfaceProcessor* surface_processor_ptr = 0;
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.C,v 1.47 2005/02/11 15:27:13 oliver Exp $
+// $Id: PDBFile.C,v 1.48 2005/02/12 23:08:27 oliver Exp $
 //
 
 #include <BALL/FORMAT/PDBFile.h>
@@ -19,11 +19,8 @@
 #include <stdarg.h>
 #include <stdlib.h>
 
-using namespace std;
-
 namespace BALL 
 {
-
 
 	extern "C" int 
 	#ifdef BALL_COMPILER_MSVC
@@ -41,83 +38,83 @@ namespace BALL
 	const PDB::RecordTypeFormat
 	PDBFile::record_type_format_[] =
 	{
-		{ PDB::RECORD_TYPE__UNKNOWN,"      ", "%.6s" },
-		{ PDB::RECORD_TYPE__ANISOU, "ANISOU", "%.6s%5ld %-4.4s%c%3.3s %c%4ld%c %7ld%7ld%7ld%7ld%7ld%7ld  %4.4s%2.2s%2.2s" },
-		{ PDB::RECORD_TYPE__ATOM,   "ATOM  ", "%.6s%5ld %-4.4s%c%3.3s %c%4ld%c   %8.3f%8.3f%8.3f%6.2f%6.2f      %4.4s%2.2s%2.2s" },
-		{ PDB::RECORD_TYPE__AUTHOR, "AUTHOR", "%.6s  %2ld%-60.60s" },
-		{ PDB::RECORD_TYPE__CAVEAT, "CAVEAT", "%.6s  %2ld %4.4s    %51.51s" },
-		{ PDB::RECORD_TYPE__CISPEP, "CISPEP", "%.6s %3ld %3.3s %c %4ld%c   %3.3s %c %4ld%c       %3ld       %6f" },
-		{ PDB::RECORD_TYPE__COMPND, "COMPND", "%.6s  %2ld%-60.60s" },
-		{ PDB::RECORD_TYPE__CONECT, "CONECT", "%.6s%5ld%5ld%5ld%5ld%5ld%5ld%5ld%5ld%5ld%5ld%5ld" },
-		{ PDB::RECORD_TYPE__CRYST1, "CRYST1", "%.6s%9f%9f%9f%7f%7f%7f %11.11s%4ld"},
-		{ PDB::RECORD_TYPE__DBREF,  "DBREF ", "%.6s %4.4s %c %4ld%c %4ld%c %6.6s %8.8s %12.12s %5ld%c %5ld%c"},
-		{ PDB::RECORD_TYPE__END,    "END   ", "%.6s" },
-		{ PDB::RECORD_TYPE__ENDMDL, "ENDMDL", "%.6s" },
-		{ PDB::RECORD_TYPE__EXPDTA, "EXPDTA", "%.6s  %2ld%60.60s" },
-		{ PDB::RECORD_TYPE__FORMUL, "FORMUL", "%.6s  %2ld  %3.3s %2ld%c%51.51s" },
-		{ PDB::RECORD_TYPE__FTNOTE, "FTNOTE", "%.6s %3ld %59.59s" },
-		{ PDB::RECORD_TYPE__HEADER, "HEADER", "%.6s    %-40.40s%9.9s   %4.4s" },
-		{ PDB::RECORD_TYPE__HELIX,  "HELIX ", "%.6s %3ld %3.3s %3.3s %c %4ld%c %3.3s %c %4ld%c%2ld%30.30s %5ld" },
-		{ PDB::RECORD_TYPE__HET,    "HET   ", "%.6s %3.3s  %c%4ld%c  %5ld  %43.43s" },
-		{ PDB::RECORD_TYPE__HETATM, "HETATM", "%.6s%5ld %-4.4s%c%3.3s %c%4ld%c   %8.3f%8.3f%8.3f%6.2f%6.2f      %4.4s%2.2s%2.2s" },
-		{ PDB::RECORD_TYPE__HETNAM, "HETNAM", "%.6s  %2ld %3.3s %55.55s" },
-		{ PDB::RECORD_TYPE__HYDBND, "HYDBND", "%.6s      %4.4s%c%3.3s %c%5ld%c %4.4s%c %c%5ld%c %4.4s%c%3.3s %c%5ld%c%6ld %6ld" },
-		{ PDB::RECORD_TYPE__JRNL,   "JRNL  ", "%.6s      %58.58s" },
-		{ PDB::RECORD_TYPE__KEYWDS, "KEYWDS", "%.6s  %2ld%60.60s" },
-		{ PDB::RECORD_TYPE__LINK,   "LINK  ", "%.6s      %4.4s%c%3.3s %c%4ld%c               %4.4s%c%3.3s %c%4ld%c  %6ld %6ld" },
-		{ PDB::RECORD_TYPE__MASTER, "MASTER", "%.6s    %5ld%5ld%5ld%5ld%5ld%5ld%5ld%5ld%5ld%5ld%5ld%5ld" },
-		{ PDB::RECORD_TYPE__MODEL,  "MODEL ", "%.6s    %4ld" },
-		{ PDB::RECORD_TYPE__MODRES, "MODRES", "%.6s %3.3s %3.3s %c %4ld%c %3.3s  %41.41s" },
-		{ PDB::RECORD_TYPE__MTRIX1, "MTRIX1", "%.6s %3ld%10f%10f%10f     %10f    %1ld" },
-		{ PDB::RECORD_TYPE__MTRIX2, "MTRIX2", "%.6s %3ld%10f%10f%10f     %10f    %1ld" },
-		{ PDB::RECORD_TYPE__MTRIX3, "MTRIX3", "%.6s %3ld%10f%10f%10f     %10f    %1ld" },
-		{ PDB::RECORD_TYPE__OBSLTE, "OBSLTE", "%.6s  %2ld %9.9s %4.4s      %4.4s %4.4s %4.4s %4.4s %4.4s %4.4s %4.4s %4.4s" },
-		{ PDB::RECORD_TYPE__ORIGX1, "ORIGX1", "%.6s    %10f%10f%10f     %10f" },
-		{ PDB::RECORD_TYPE__ORIGX2, "ORIGX2", "%.6s    %10f%10f%10f     %10f" },
-		{ PDB::RECORD_TYPE__ORIGX3, "ORIGX3", "%.6s    %10f%10f%10f     %10f" },
-		{ PDB::RECORD_TYPE__REMARK, "REMARK", "%.6s %3ld %-59.59s" },
-		{ PDB::RECORD_TYPE__REVDAT, "REVDAT", "%.6s %3ld%2ld %9.9s %5.5s   %1ld       %6.6s %6.6s %6.6s %6.6s" },
-		{ PDB::RECORD_TYPE__SCALE1, "SCALE1", "%.6s    %10f%10f%10f     %10f" },
-		{ PDB::RECORD_TYPE__SCALE2, "SCALE2", "%.6s    %10f%10f%10f     %10f" },
-		{ PDB::RECORD_TYPE__SCALE3, "SCALE3", "%.6s    %10f%10f%10f     %10f" },
-		{ PDB::RECORD_TYPE__SEQRES, "SEQRES", "%.6s  %2ld %c %4ld  %3.3s %3.3s %3.3s %3.3s %3.3s %3.3s %3.3s %3.3s %3.3s %3.3s %3.3s %3.3s %3.3s" },
-		{ PDB::RECORD_TYPE__SHEET,  "SHEET ", "%.6s %3ld %3.3s%2ld %3.3s %c%4ld%c %3.3s %c%4ld%c%2ld %-4.4s%3.3s %c%4ld%c %-4.4s%3.3s %c%4ld%c" },
-		{ PDB::RECORD_TYPE__SIGATM, "SIGATM", "%.6s%5ld %4.4s%c%3.3s %c%4ld%c   %8f%8f%8f%6f%6f      %4.4s%2.2s%2.2s" },
-		{ PDB::RECORD_TYPE__SIGUIJ, "SIGUIJ", "%.6s%5ld %-4.4s%c%3.3s %c%4ld%c %7ld%7ld%7ld%7ld%7ld%7ld  %4.4s%2.2s%2.2s" },
-		{ PDB::RECORD_TYPE__SITE,   "SITE  ", "%.6s %3ld %3.3s %2ld %3.3s %c%4ld%c %3.3s %c%4ld%c %3.3s %c%4ld%c %3.3s %c%4ld%c" },
-		{ PDB::RECORD_TYPE__SLTBRG, "SLTBRG", "%.6s      %4.4s%c%3.3s %c%4ld%c               %4.4s%c%3.3s %c%4ld%c  %6ld%6ld" },
-		{ PDB::RECORD_TYPE__SOURCE, "SOURCE", "%.6s  %2ld%-60.60s" },
-		{ PDB::RECORD_TYPE__SSBOND, "SSBOND", "%.6s %3ld %3.3s %c %4ld%c   %3.3s %c %4ld%c                       %6ld %6ld" },
-		{ PDB::RECORD_TYPE__TER,    "TER   ", "%.6s%5ld      %3.3s %c%4ld%c" },
-		{ PDB::RECORD_TYPE__TITLE,  "TITLE ", "%.6s  %2ld%60.60s" },
-		{ PDB::RECORD_TYPE__TURN,   "TURN  ", "%.6s %3ld %3.3s %3.3s %c%4ld%c %3.3s %c%4ld%c    %-30.30s" },
-		{ PDB::RECORD_TYPE__TVECT,  "TVECT ", "%.6s %3ld%10f%10f%10f%30.30s" }
+		{ PDB::RECORD_TYPE__UNKNOWN,"      ", PDB::FORMAT_UNKNOWN },
+		{ PDB::RECORD_TYPE__ANISOU, "ANISOU", PDB::FORMAT_ANISOU },
+		{ PDB::RECORD_TYPE__ATOM,   "ATOM  ", PDB::FORMAT_ATOM   },
+		{ PDB::RECORD_TYPE__AUTHOR, "AUTHOR", PDB::FORMAT_AUTHOR },
+		{ PDB::RECORD_TYPE__CAVEAT, "CAVEAT", PDB::FORMAT_CAVEAT },
+		{ PDB::RECORD_TYPE__CISPEP, "CISPEP", PDB::FORMAT_CISPEP },
+		{ PDB::RECORD_TYPE__COMPND, "COMPND", PDB::FORMAT_COMPND },
+		{ PDB::RECORD_TYPE__CONECT, "CONECT", PDB::FORMAT_CONECT },
+		{ PDB::RECORD_TYPE__CRYST1, "CRYST1", PDB::FORMAT_CRYST1 },
+		{ PDB::RECORD_TYPE__DBREF,  "DBREF ", PDB::FORMAT_DBREF  },
+		{ PDB::RECORD_TYPE__END,    "END   ", PDB::FORMAT_END    },
+		{ PDB::RECORD_TYPE__ENDMDL, "ENDMDL", PDB::FORMAT_ENDMDL },
+		{ PDB::RECORD_TYPE__EXPDTA, "EXPDTA", PDB::FORMAT_EXPDTA },
+		{ PDB::RECORD_TYPE__FORMUL, "FORMUL", PDB::FORMAT_FORMUL },
+		{ PDB::RECORD_TYPE__FTNOTE, "FTNOTE", PDB::FORMAT_FTNOTE },
+		{ PDB::RECORD_TYPE__HEADER, "HEADER", PDB::FORMAT_HEADER },
+		{ PDB::RECORD_TYPE__HELIX,  "HELIX ", PDB::FORMAT_HELIX  },
+		{ PDB::RECORD_TYPE__HET,    "HET   ", PDB::FORMAT_HET    },
+		{ PDB::RECORD_TYPE__HETATM, "HETATM", PDB::FORMAT_HETATM },
+		{ PDB::RECORD_TYPE__HETNAM, "HETNAM", PDB::FORMAT_HETNAM },
+		{ PDB::RECORD_TYPE__HYDBND, "HYDBND", PDB::FORMAT_HYDBND },
+		{ PDB::RECORD_TYPE__JRNL,   "JRNL  ", PDB::FORMAT_JRNL   },
+		{ PDB::RECORD_TYPE__KEYWDS, "KEYWDS", PDB::FORMAT_KEYWDS },
+		{ PDB::RECORD_TYPE__LINK,   "LINK  ", PDB::FORMAT_LINK   },
+		{ PDB::RECORD_TYPE__MASTER, "MASTER", PDB::FORMAT_MASTER },
+		{ PDB::RECORD_TYPE__MODEL,  "MODEL ", PDB::FORMAT_MODEL  },
+		{ PDB::RECORD_TYPE__MODRES, "MODRES", PDB::FORMAT_MODRES },
+		{ PDB::RECORD_TYPE__MTRIX1, "MTRIX1", PDB::FORMAT_MTRIX1 },
+		{ PDB::RECORD_TYPE__MTRIX2, "MTRIX2", PDB::FORMAT_MTRIX2 },
+		{ PDB::RECORD_TYPE__MTRIX3, "MTRIX3", PDB::FORMAT_MTRIX3 },
+		{ PDB::RECORD_TYPE__OBSLTE, "OBSLTE", PDB::FORMAT_OBSLTE },
+		{ PDB::RECORD_TYPE__ORIGX1, "ORIGX1", PDB::FORMAT_ORIGX1 },
+		{ PDB::RECORD_TYPE__ORIGX2, "ORIGX2", PDB::FORMAT_ORIGX2 },
+		{ PDB::RECORD_TYPE__ORIGX3, "ORIGX3", PDB::FORMAT_ORIGX3 },
+		{ PDB::RECORD_TYPE__REMARK, "REMARK", PDB::FORMAT_REMARK },
+		{ PDB::RECORD_TYPE__REVDAT, "REVDAT", PDB::FORMAT_REVDAT },
+		{ PDB::RECORD_TYPE__SCALE1, "SCALE1", PDB::FORMAT_SCALE1 },
+		{ PDB::RECORD_TYPE__SCALE2, "SCALE2", PDB::FORMAT_SCALE2 },
+		{ PDB::RECORD_TYPE__SCALE3, "SCALE3", PDB::FORMAT_SCALE3 },
+		{ PDB::RECORD_TYPE__SEQRES, "SEQRES", PDB::FORMAT_SEQRES },
+		{ PDB::RECORD_TYPE__SHEET,  "SHEET ", PDB::FORMAT_SHEET },
+		{ PDB::RECORD_TYPE__SIGATM, "SIGATM", PDB::FORMAT_SIGATM },
+		{ PDB::RECORD_TYPE__SIGUIJ, "SIGUIJ", PDB::FORMAT_SIGUIJ },
+		{ PDB::RECORD_TYPE__SITE,   "SITE  ", PDB::FORMAT_SITE },
+		{ PDB::RECORD_TYPE__SLTBRG, "SLTBRG", PDB::FORMAT_SLTBRG },
+		{ PDB::RECORD_TYPE__SOURCE, "SOURCE", PDB::FORMAT_SOURCE },
+		{ PDB::RECORD_TYPE__SSBOND, "SSBOND", PDB::FORMAT_SSBOND },
+		{ PDB::RECORD_TYPE__TER,    "TER   ", PDB::FORMAT_TER },
+		{ PDB::RECORD_TYPE__TITLE,  "TITLE ", PDB::FORMAT_TITLE },
+		{ PDB::RECORD_TYPE__TURN,   "TURN  ", PDB::FORMAT_TURN },
+		{ PDB::RECORD_TYPE__TVECT,  "TVECT ", PDB::FORMAT_TVECT },
 	};
 
 
 	// options and defaults for the PDBFile class
-
 	const char* PDBFile::Option::VERBOSITY = "verbosity";
 	const char* PDBFile::Option::STRICT_LINE_CHECKING = "strict_line_checking";
 	const char* PDBFile::Option::CHOOSE_MODEL = "choose_model";
 	const char* PDBFile::Option::STORE_SKIPPED_RECORDS = "store_skipped_records";
 	const char* PDBFile::Option::IGNORE_XPLOR_PSEUDO_ATOMS = "ignore_xplor_pseudo_atoms";
+	const char* PDBFile::Option::PARSE_PARTIAL_CHARGES = "parse_partial_charges";
 
 	const Index PDBFile::Default::VERBOSITY = 0;
 	const bool  PDBFile::Default::STRICT_LINE_CHECKING = false;
 	const Index PDBFile::Default::CHOOSE_MODEL = 1;
 	const bool  PDBFile::Default::STORE_SKIPPED_RECORDS = true;
 	const bool  PDBFile::Default::IGNORE_XPLOR_PSEUDO_ATOMS = true;
+	const bool  PDBFile::Default::PARSE_PARTIAL_CHARGES = false;
 
 	PDBFile::PDBFile()
-		:	File(),
+		:	GenericMolFile(),
 			residue_name_(""),
 			residue_sequence_number_(-1),
 			current_model_(INVALID_INDEX),
 			current_record_(INVALID_INDEX),
 			record_fields_(0),
 			current_record_type_(PDB::RECORD_TYPE__UNKNOWN),
-
 			insertion_code_(0),
 			chain_ID_(0),
 			sequence_number_(-1),
@@ -142,7 +139,7 @@ namespace BALL
 	}
 
 	PDBFile::PDBFile(const Options& new_options)
-		:	File(),
+		:	GenericMolFile(),
 			options(new_options),
 			residue_name_(""),
 			residue_sequence_number_(-1),
@@ -177,11 +174,17 @@ namespace BALL
 	const char* PDBFile::getAtomElementSymbol
 		(const PDB::Atom atom_name, PDB::Atom element_symbol)
 	{
-		// If the element_symbol entry is valid, it has precedence
-		if (((element_symbol[0] == ' ') && (element_symbol[1] == ' '))
-				|| (element_symbol[0] == '\0') || (element_symbol[1] == '\0')
-				|| String::isDigit(element_symbol[0]) || String::isDigit(element_symbol[1])
-				|| (String::isAlpha(element_symbol[0]) && (element_symbol[1] == ' ')))
+		// if the element symbol starts with a blank,
+		// drop the blank
+		if (element_symbol[0] == ' ')
+		{
+			element_symbol[0] = element_symbol[1];
+			element_symbol[1] = '\0';
+		}
+		// If the element_symbol entry is valid, it has precedence,
+		// otherwise, we try to extract it from the atom name.
+		Element e(PTE[element_symbol]);
+		if (e == Element::UNKNOWN)
 		{
 			// Otherwise, we try to reconstruct the element
 			// from the atom name (which is dangerous if non-PDB names are
@@ -203,16 +206,6 @@ namespace BALL
 				element_symbol[0] = atom_name[0];
 				element_symbol[1] = atom_name[1];
 				element_symbol[2] = '\0';
-			}
-		}
-		else
-		{
- 			// if the element symbol starts with a blank,
-			// drop the blank
-			if (element_symbol[0] == ' ')
-			{
-				element_symbol[0] = element_symbol[1];
-				element_symbol[1] = '\0';
 			}
 		}
 
@@ -338,6 +331,7 @@ namespace BALL
 		selected_model_ = options.setDefaultInteger(Option::CHOOSE_MODEL, Default::CHOOSE_MODEL);
 		ignore_xplor_pseudo_atoms_ = options.setDefaultBool(Option::IGNORE_XPLOR_PSEUDO_ATOMS, Default::IGNORE_XPLOR_PSEUDO_ATOMS);
 		store_skipped_records_ = options.setDefaultBool(Option::STORE_SKIPPED_RECORDS, Default::STORE_SKIPPED_RECORDS);
+		parse_partial_charges_ = options.setDefaultBool(Option::PARSE_PARTIAL_CHARGES, Default::PARSE_PARTIAL_CHARGES);
 													 
 		// Clear the information in info and prepare it for the new stuff.
 		info.clear();
@@ -384,370 +378,10 @@ namespace BALL
 		return true;
 	}
 
-	bool PDBFile::readRecordANISOU
-		(PDB::Integer /* serial_number */,
-		 PDB::Atom /* atom_name */,
-		 PDB::Character /* alternate_location_indicator */,
-		 PDB::ResidueName /* residue_name */,
-		 PDB::Character /* chain_ID */,
-		 PDB::Integer /* residue_sequence_number */,
-		 PDB::AChar /* insertion_code */,
-		 PDB::Integer /* u11 */,
-		 PDB::Integer /* u22 */,
-		 PDB::Integer /* u33 */,
-		 PDB::Integer /* u12 */,
-		 PDB::Integer /* u13 */,
-		 PDB::Integer /* u23 */,
-		 PDB::LString4 /* segment_ID */,
-		 PDB::LString2 /* element_symbol */,
-		 PDB::LString2 /* charge */)
-	{
-		return skipCurrentRecord();
-	}
-
-	bool PDBFile::readRecordAUTHOR
-		(PDB::Continuation /* continuation */,
-		 PDB::PDBList /* authors */)
-	{
-		return skipCurrentRecord();
-	}
-
-	bool PDBFile::readRecordCAVEAT
-		(PDB::Continuation  /* continuation */,
-		 PDB::IDcode /* entry_code */,
-		 PDB::PDBString /* comment */)
-	{
-		return skipCurrentRecord();
-	}
-
-	bool PDBFile::readRecordCISPEP
-		(PDB::Integer /* record_serial_number */,
-		 PDB::RecordCISPEP::CisPeptide* /* cis_peptide[2] */,
-		 PDB::Integer /*  specific_model_ID */,
-		 PDB::Real /* angle_measure */)
-	{
-		return skipCurrentRecord();
-	}
-
-	bool PDBFile::readRecordCOMPND
-		(PDB::Continuation /* continuation */,
-		 PDB::SpecificationList /* component_description */)
-	{
-		return skipCurrentRecord();
-	}
-		
-	bool PDBFile::readRecordCRYST1
-		(PDB::RecordCRYST1::UnitCell& /* unit_cell */)
-	{
-		return skipCurrentRecord();
-	}
-
-	bool PDBFile::readRecordDBREF
-		(PDB::IDcode /* entry_code */,
-		 PDB::Character /* chain_ID */,
-		 PDB::RecordDBREF::InitialSequence& /* initial_sequence */,
-		 PDB::RecordDBREF::EndingSequence& /* ending_sequence */,
-		 PDB::LString6 /* sequence_database_name */,
-		 PDB::LString8 /* sequence_database_accession_code*/,
-		 PDB::LString12 /* sequence_database_ID_code */,
-		 PDB::RecordDBREF::InitialDatabaseSegment& /* initial_database_segment */,
-		 PDB::RecordDBREF::EndingDatabaseSegment& /* ending_database_segment */)
-	{
-		return skipCurrentRecord();
-	}
-
-	bool PDBFile::readRecordEND()
-	{
-		return skipCurrentRecord();
-	}
-		
-	bool PDBFile::readRecordENDMDL()
-	{
-		return skipCurrentRecord();
-	}
-		
-	bool PDBFile::readRecordEXPDTA
-		(PDB::Continuation /* continuation */,
-		 PDB::SList /* technique */)
-	{
-		return skipCurrentRecord();
-	}
-		
-	bool PDBFile::readRecordFORMUL
-		(PDB::Integer /* component_number */,
-		 PDB::LString3 /* het_ID */,
-		 PDB::Integer /* continuation_number */,
-		 PDB::Character /* is_water */,
-		 PDB::PDBString /* chemical_formula */)
-	{
-		return skipCurrentRecord();
-	}
-		
-	bool PDBFile::readRecordFTNOTE
-		(PDB::Integer /* number */,
-		 PDB::PDBString /* text */)
-	{
-		return skipCurrentRecord();
-	}
-		
-	bool PDBFile::readRecordHET
-		(PDB::LString3 /* het_ID */,
-		 PDB::Character /* chain_ID */,
-		 PDB::Integer /* sequence_number */,
-		 PDB::AChar /* insertion_code */,
-		 PDB::Integer /* number_of_HETATM_records */,
-		 PDB::PDBString /* text */)
-	{
-		return skipCurrentRecord();
-	}
-		
-	bool PDBFile::readRecordHETNAM
-		(PDB::Continuation /* continuation */,
-		 PDB::LString3 /* het_ID */,
-		 PDB::PDBString /* chemical_name */)
-	{
-		return skipCurrentRecord();
-	}
-		
-	bool PDBFile::readRecordHYDBND
-		(PDB::RecordHYDBND::HydrogenPartnerAtom /* hydrogen_partner */[2],
-		 PDB::RecordHYDBND::HydrogenAtom& /* hydrogen_atom */,
-		 PDB::SymmetryOperator /* first_non_hydrogen_atom */,
-		 PDB::SymmetryOperator /* second_non_hydrogen_atom */)
-	{
-		return skipCurrentRecord();
-	}
-		
-	bool PDBFile::readRecordJRNL
-		(PDB::LString /* text */)
-	{
-		return skipCurrentRecord();
-	}
-		
-	bool PDBFile::readRecordKEYWDS
-		(PDB::Continuation /* continuation */,
-		 PDB::PDBList /* keywords */)
-	{
-		return skipCurrentRecord();
-	}
-		
-	bool PDBFile::readRecordLINK
-		(PDB::RecordLINK::LinkPartner /* link_partner */[2],
-		 PDB::SymmetryOperator /* first_atom */,
-		 PDB::SymmetryOperator /* second_atom */)
-	{
-		return skipCurrentRecord();
-	}
-		
-	bool PDBFile::readRecordMASTER
-		(PDB::Integer /* number_of_REMARK_records */,
-		 PDB::Integer /* zero */,
-		 PDB::Integer /* number_of_HET_records */,
-		 PDB::Integer /* number_of_HELIX_records */,
-		 PDB::Integer /* number_of_SHEET_records */,
-		 PDB::Integer /* number_of_TURN_records */,
-		 PDB::Integer /* number_of_SITE_records */,
-		 PDB::Integer /* number_of_ORIGX_SCALE_MTRIX_records */,
-		 PDB::Integer /* number_of_ATOM_HETATM_records */,
-		 PDB::Integer /* number_of_TER_records */,
-		 PDB::Integer /* number_of_CONECT_records */,
-		 PDB::Integer /* number_of_SEQRES_records */)
-	{
-		return skipCurrentRecord();
-	}
-		
-	bool PDBFile::readRecordMODEL
-		(PDB::Integer /* model_serial_number */)
-	{
-		return skipCurrentRecord();
-	}
-		
-	bool PDBFile::readRecordMODRES
-		(PDB::IDcode /* entry_code */,
-		 PDB::ResidueName /* residue_name */,
-		 PDB::Character /* chain_ID */,
-		 PDB::Integer /* sequence_number */,
-		 PDB::AChar /* insertion_code */,
-		 PDB::ResidueName /* standard_residue_name */,
-		 PDB::PDBString /* comment */)
-	{
-		return skipCurrentRecord();
-	}
-		
-	bool PDBFile::readRecordMTRIX1
-		(PDB::Integer /* serial_number */,
-		 PDB::Real /* transformation_matrix */[4],
-		 PDB::Integer /* is_given */)
-	{
-		return skipCurrentRecord();
-	}
-		
-	bool PDBFile::readRecordMTRIX2
-		(PDB::Integer /* serial_number */,
-		 PDB::Real /* transformation_matrix */[4],
-		 PDB::Integer /* is_given */)
-	{
-		return skipCurrentRecord();
-	}
-		
-	bool PDBFile::readRecordMTRIX3
-		(PDB::Integer /* serial_number */,
-		 PDB::Real /* transformation_matrix */[4],
-		 PDB::Integer /* is_given */)
-	{
-		return skipCurrentRecord();
-	}
-		
-	bool PDBFile::readRecordOBSLTE
-		(PDB::Continuation /* continuation */,
-		 PDB::Date /* entry_replaced_date */,
-		 PDB::IDcode /* entry_code */,
-		 PDB::IDcode /* replacing_entry */[8])
-	{
-		return skipCurrentRecord();
-	}
-		
-	bool PDBFile::readRecordORIGX1
-		(PDB::Real /* transformation_matrix */[4])
-	{
-		return skipCurrentRecord();
-	}
-		
-	bool PDBFile::readRecordORIGX2
-		(PDB::Real /* transformation_matrix */[4])
-	{
-		return skipCurrentRecord();
-	}
-		
-	bool PDBFile::readRecordORIGX3
-		(PDB::Real /* transformation_matrix */[4])
-	{
-		return skipCurrentRecord();
-	}
-		
-	bool PDBFile::readRecordREMARK
-		(PDB::Integer /* remark_number */,
-		 PDB::LString /* text */)
-	{
-		return skipCurrentRecord();
-	}
-		
-	bool PDBFile::readRecordREVDAT
-		(PDB::Integer /* modification_number */,
-		 PDB::Continuation /* continuation */,
-		 PDB::Date /* modification_date */,
-		 PDB::String5 /* modification_ID */,
-		 PDB::Integer /* modification_type */,
-		 PDB::LString6 /* name_of_modified_record */[4])
-	{
-		return skipCurrentRecord();
-	}
-
-	bool PDBFile::readRecordSCALE1
-		(PDB::Real /* transformation_matrix */[4])
-	{
-		return skipCurrentRecord();
-	}
-
-	bool PDBFile::readRecordSCALE2
-		(PDB::Real /* transformation_matrix */[4])
-	{
-		return skipCurrentRecord();
-	}
-
-	bool PDBFile::readRecordSCALE3
-		(PDB::Real /* transformation_matrix */[4])
-	{
-		return skipCurrentRecord();
-	}
-
-	bool PDBFile::readRecordSEQRES
-		(PDB::Integer /* serial_number */,
-		 PDB::Character /* chain_ID */,
-		 PDB::Integer /* number_of_residues_in_chain */,
-		 PDB::ResidueName /* residue_name */[13])
-	{
-		return skipCurrentRecord();
-	}
-
-	bool PDBFile::readRecordSIGATM
-		(PDB::Integer /* serial_number */,
-		 PDB::Atom /* atom_name */,
-		 PDB::Character /* alternate_location_indicator */,
-		 PDB::ResidueName /* residue_name */,
-		 PDB::Character /* chain_ID */,
-		 PDB::Integer /* residue_sequence_number */,
-		 PDB::AChar /* insertion_code */,
-		 PDB::Real /* standard_vector_deviation */[3],
-		 PDB::Real /* standard_occupancy_deviation */,
-		 PDB::Real /* standard_temperature_deviation */,
-		 PDB::LString4 /* segment_ID */,
-		 PDB::LString2 /* element_symbol */,
-		 PDB::LString2 /* charge */)
-	{
-		return skipCurrentRecord();
-	}
-
-	bool PDBFile::readRecordSIGUIJ
-		(PDB::Integer /* serial_number */,
-		 PDB::Atom /* atom_name */,
-		 PDB::Character /* alternate_location_indicator */,
-		 PDB::ResidueName /* residue_name */,
-		 PDB::Character /* chain_ID */,
-		 PDB::Integer /* residue_sequence_number */,
-		 PDB::AChar /* insertion_code */,
-		 PDB::Integer /* sig11 */,
-		 PDB::Integer /* sig22 */,
-		 PDB::Integer /* sig33 */,
-		 PDB::Integer /* sig12 */,
-		 PDB::Integer /* sig13 */,
-		 PDB::Integer /* sig23 */,
-		 PDB::LString4 /* segment_ID */,
-		 PDB::LString2 /* element_symbol */,
-		 PDB::LString2 /* charge */)
-	{
-		return skipCurrentRecord();
-	}
-
-	bool PDBFile::readRecordSITE
-		(PDB::Integer /* sequence_number */,
-		 PDB::LString3 /* name */,
-		 PDB::Integer /* number_of_residues */,
-		 PDB::RecordSITE::Residue /* residue */[4])
-	{
-		return skipCurrentRecord();
-	}
-
-	bool PDBFile::readRecordSLTBRG
-		(PDB::RecordSLTBRG::PartnerAtom /* partner_atom */[2],
-		 PDB::SymmetryOperator /* first_atom */,
-		 PDB::SymmetryOperator /* second_atom */)
-	{
-		return skipCurrentRecord();
-	}
-
-	bool PDBFile::readRecordSOURCE
-		(PDB::Continuation /* continuation */,
-		 PDB::SpecificationList /*sources */)
-	{
-		return skipCurrentRecord();
-	}
-
-	bool PDBFile::readRecordTITLE
-		(PDB::Continuation /* continuation */,
-		 PDB::PDBString /* title */)
-	{
-		return skipCurrentRecord();
-	}
-
-	bool PDBFile::readRecordTVECT
-		(PDB::Integer /* serial_number */,
-		 PDB::Real /* translation_vector */[3],
-		 PDB::PDBString /*comment */)
-	{
-		return skipCurrentRecord();
-	}
-
+	/** Check whether the current file is in PDB format. 
+      We just open the file and check that it contains a valid
+      PDB record in the first line.
+	*/
 	bool PDBFile::hasFormat()
 	{
 		if (eof())
@@ -912,11 +546,10 @@ namespace BALL
 	{
 		static PDB::RecordTypeFormat* record_type_format = 0;
 
-		if (record_type_format == 0
+		if ((record_type_format == 0)
 				|| memcmp(record_type_format->string, line, 6) != 0)
 		{
 			memcpy(const_cast<char*>(compare_record_type_format_.string), line, 6);
-
 			record_type_format = (PDB::RecordTypeFormat*)::bsearch 
 				((const void*)&compare_record_type_format_, 
 				 (const void*)record_type_format_, 
@@ -940,1270 +573,156 @@ namespace BALL
 		switch(current_record_type_)
 		{
 			case PDB::RECORD_TYPE__ANISOU:
+				return parseRecordANISOU(line, size);
 
-				if ((selected_model_ != 0) && (selected_model_ != current_model_))
-				{
-					return true;
-				}
-
-				parseLine
-					(line,
-					 size,
-					 record_type_format->format_string,
-					 record_ANISOU.record_name,
-					 &record_ANISOU.serial_number,
-					 record_ANISOU.atom_name,
-					 &record_ANISOU.alternate_location_indicator,
-					 record_ANISOU.residue_name,
-					 &record_ANISOU.chain_ID,
-					 &record_ANISOU.residue_sequence_number,
-					 &record_ANISOU.insertion_code,
-					 &record_ANISOU.u11,
-					 &record_ANISOU.u22,
-					 &record_ANISOU.u33,
-					 &record_ANISOU.u12,
-					 &record_ANISOU.u13,
-					 &record_ANISOU.u23,
-					 record_ANISOU.segment_ID,
-					 record_ANISOU.element_symbol,
-					 record_ANISOU.charge);
-				
-				return readRecordANISOU
-					(record_ANISOU.serial_number,
-					 record_ANISOU.atom_name,
-					 record_ANISOU.alternate_location_indicator,
-					 record_ANISOU.residue_name,
-					 record_ANISOU.chain_ID,
-					 record_ANISOU.residue_sequence_number,
-					 record_ANISOU.insertion_code,
-					 record_ANISOU.u11,
-					 record_ANISOU.u22,
-					 record_ANISOU.u33,
-					 record_ANISOU.u12,
-					 record_ANISOU.u13,
-					 record_ANISOU.u23,
-					 record_ANISOU.segment_ID,
-					 record_ANISOU.element_symbol,
-					 record_ANISOU.charge);
-
-				
-			
 			case PDB::RECORD_TYPE__ATOM:
-				
-				if ((selected_model_ != 0) && (selected_model_ != current_model_))
-				{
-					return true;
-				}
-
-				record_ATOM.element_symbol[0] = '\0';
-				record_ATOM.occupancy = 1.0;
-				record_ATOM.temperature_factor = 0.0;
-				record_ATOM.segment_ID[0] = '\0';
-				record_ATOM.charge[0] = '\0';
-
-				parseLine
-					(line,
-					 size, 
-					 record_type_format->format_string,
-					 record_ATOM.record_name,
-					 &record_ATOM.serial_number,
-					 record_ATOM.atom_name,
-					 &record_ATOM.alternate_location_indicator,
-					 record_ATOM.residue_name,
-					 &record_ATOM.chain_ID,
-					 &record_ATOM.residue_sequence_number,
-					 &record_ATOM.insertion_code,
-					 &record_ATOM.orthogonal_vector[0],
-					 &record_ATOM.orthogonal_vector[1],
-					 &record_ATOM.orthogonal_vector[2],
-					 &record_ATOM.occupancy,
-					 &record_ATOM.temperature_factor,
-					 record_ATOM.segment_ID,
-					 record_ATOM.element_symbol,
-					 record_ATOM.charge);
-
-				if ((ignore_xplor_pseudo_atoms_ == true)
-						&& record_ATOM.orthogonal_vector[0] >= 9998.0
-						&& record_ATOM.orthogonal_vector[1] >= 9998.0
-						&& record_ATOM.orthogonal_vector[2] >= 9998.0)
-				{ // ignore XPLOR pseudo atoms (see Rasmol2.6 source 'molecule.c/ReadPDBAtom')
-					return true;
-				}
-
-				return readRecordATOM
-					(record_ATOM.serial_number,
-					 record_ATOM.atom_name,
-					 record_ATOM.alternate_location_indicator,
-					 record_ATOM.residue_name,
-					 record_ATOM.chain_ID,
-					 record_ATOM.residue_sequence_number,
-					 record_ATOM.insertion_code,
-					 record_ATOM.orthogonal_vector,
-					 record_ATOM.occupancy,
-					 record_ATOM.temperature_factor,
-					 record_ATOM.segment_ID,
-					 record_ATOM.element_symbol,
-					 record_ATOM.charge);
-				
-
+				return parseRecordATOM(line, size);
 
 			case PDB::RECORD_TYPE__AUTHOR:
+				return parseRecordAUTHOR(line, size);
 
-				parseLine
-					(line,
-					 size, 
-					 record_type_format->format_string,
-					 record_AUTHOR.record_name,
-					 &record_AUTHOR.continuation,
-					 record_AUTHOR.authors);
-				
-				return readRecordAUTHOR(record_AUTHOR.continuation, record_AUTHOR.authors);
-
-
-				
 			case PDB::RECORD_TYPE__CAVEAT:
-
-				parseLine
-					(line, size, 
-					 record_type_format->format_string,
-					 record_CAVEAT.record_name,
-					 &record_CAVEAT.continuation,
-					 record_CAVEAT.entry_code,
-					 record_CAVEAT.comment);
-
-				return readRecordCAVEAT
-					(record_CAVEAT.continuation,
-					 record_CAVEAT.entry_code,
-					 record_CAVEAT.comment);
-
+				return parseRecordCAVEAT(line, size);
 				
 			case PDB::RECORD_TYPE__CISPEP:
+				return parseRecordCISPEP(line, size);
 
-				parseLine
-					(line, size, 
-					 record_type_format->format_string,
-					 record_CISPEP.record_name,
-					 &record_CISPEP.record_serial_number,
-					 record_CISPEP.cis_peptide[0].residue_name,
-					 &record_CISPEP.cis_peptide[0].chain_ID,
-					 &record_CISPEP.cis_peptide[0].residue_sequence_number,
-					 &record_CISPEP.cis_peptide[0].insertion_code,
-					 record_CISPEP.cis_peptide[1].residue_name,
-					 &record_CISPEP.cis_peptide[1].chain_ID,
-					 &record_CISPEP.cis_peptide[1].residue_sequence_number,
-					 &record_CISPEP.cis_peptide[1].insertion_code,
-					 &record_CISPEP.specific_model_ID,
-					 &record_CISPEP.angle_measure);
-
-				return readRecordCISPEP
-					(record_CISPEP.record_serial_number,
-					 record_CISPEP.cis_peptide,
-					 record_CISPEP.specific_model_ID,
-					 record_CISPEP.angle_measure);
-
-
-				
 			case PDB::RECORD_TYPE__COMPND:
-
-				parseLine
-					(line, size, 
-					 record_type_format->format_string,
-					 record_COMPND.record_name,
-					 &record_COMPND.continuation,
-					 record_COMPND.component_description);
-
-				return readRecordCOMPND
-					(record_COMPND.continuation,
-					 record_COMPND.component_description);
-
-
+				return parseRecordCOMPND(line, size);
 				
 			case PDB::RECORD_TYPE__CONECT:
-
-
-				record_CONECT.bonded_atom_serial_number[0] = 0;
-				record_CONECT.bonded_atom_serial_number[1] = 0;
-				record_CONECT.bonded_atom_serial_number[2] = 0;
-				record_CONECT.bonded_atom_serial_number[3] = 0;
-				record_CONECT.hydrogen_bonded_atom_serial_number[0] = 0;
-				record_CONECT.hydrogen_bonded_atom_serial_number[1] = 0;
-				record_CONECT.hydrogen_bonded_atom_serial_number[2] = 0;
-				record_CONECT.hydrogen_bonded_atom_serial_number[3] = 0;
-				record_CONECT.salt_bridged_atom_serial_number[0] = 0;
-				record_CONECT.salt_bridged_atom_serial_number[1] = 0;
-
-				parseLine
-					(line, size, 
-					 record_type_format->format_string,
-					 record_CONECT.record_name,
-					 &record_CONECT.atom_serial_number,
-					 &record_CONECT.bonded_atom_serial_number[0],
-					 &record_CONECT.bonded_atom_serial_number[1],
-					 &record_CONECT.bonded_atom_serial_number[2],
-					 &record_CONECT.bonded_atom_serial_number[3],
-					 &record_CONECT.hydrogen_bonded_atom_serial_number[0],
-					 &record_CONECT.hydrogen_bonded_atom_serial_number[1],
-					 &record_CONECT.salt_bridged_atom_serial_number[0],
-					 &record_CONECT.hydrogen_bonded_atom_serial_number[2],
-					 &record_CONECT.hydrogen_bonded_atom_serial_number[3],
-					 &record_CONECT.salt_bridged_atom_serial_number[1]);
-
-				return readRecordCONECT
-					(record_CONECT.atom_serial_number,
-					 record_CONECT.bonded_atom_serial_number,
-					 record_CONECT.hydrogen_bonded_atom_serial_number,
-					 record_CONECT.salt_bridged_atom_serial_number);
-			
-
+				return parseRecordCONECT(line, size);
 
 			case PDB::RECORD_TYPE__CRYST1:
-
-				parseLine
-					(line,
-					 size, 
-					 record_type_format->format_string,
-					 record_CRYST1.record_name,
-					 &record_CRYST1.unit_cell.a,
-					 &record_CRYST1.unit_cell.b,
-					 &record_CRYST1.unit_cell.c,
-					 &record_CRYST1.unit_cell.alpha,
-					 &record_CRYST1.unit_cell.beta,
-					 &record_CRYST1.unit_cell.gamma,
-					 record_CRYST1.unit_cell.space_group,
-					 &record_CRYST1.unit_cell.z_value);
-
-				return readRecordCRYST1
-					(record_CRYST1.unit_cell);
-
-
+				return parseRecordCRYST1(line, size);
 
 			case PDB::RECORD_TYPE__DBREF:
-
-				parseLine
-					(line,
-					 size, 
-					 record_type_format->format_string,
-					 record_DBREF.record_name,
-					 record_DBREF.entry_code,
-					 &record_DBREF.chain_ID,
-					 &record_DBREF.initial_sequence.number,
-					 &record_DBREF.initial_sequence.insertion_code,
-					 &record_DBREF.ending_sequence.number,
-					 &record_DBREF.ending_sequence.insertion_code,
-					 record_DBREF.sequence_database_name,
-					 record_DBREF.sequence_database_accession_code,
-					 record_DBREF.sequence_database_ID_code,
-					 &record_DBREF.chain_ID,
-					 &record_DBREF.initial_database_segment.number,
-					 &record_DBREF.initial_database_segment.insertion_code,
-					 &record_DBREF.ending_database_segment.number,
-					 &record_DBREF.ending_database_segment.insertion_code);
-
-				return readRecordDBREF
-					(record_DBREF.entry_code,
-					 record_DBREF.chain_ID,
-					 record_DBREF.initial_sequence,
-					 record_DBREF.ending_sequence,
-					 record_DBREF.sequence_database_name,
-					 record_DBREF.sequence_database_accession_code,
-					 record_DBREF.sequence_database_ID_code,
-					 record_DBREF.initial_database_segment,
-					 record_DBREF.ending_database_segment);
-
-
+				return parseRecordDBREF(line, size);
 
 			case PDB::RECORD_TYPE__END:
-
-				parseLine
-					(line,
-					 size, 
-					 record_type_format->format_string,
-					 record_END.record_name);
-
-				return readRecordEND();
-
-
+				return parseRecordEND(line, size);
 
 			case PDB::RECORD_TYPE__ENDMDL:
-
-				parseLine
-					(line,
-					 size, 
-					 record_type_format->format_string,
-					 record_ENDMDL.record_name);
-
-				current_model_ = INVALID_INDEX;
-
-				return readRecordENDMDL();
-
-
+				return parseRecordENDMDL(line, size);
 
 			case PDB::RECORD_TYPE__EXPDTA:
-
-				parseLine
-					(line,
-					 size, 
-					 record_type_format->format_string,
-					 record_EXPDTA.record_name,
-					 &record_EXPDTA.continuation,
-					 record_EXPDTA.technique);
-
-				return readRecordEXPDTA
-					(record_EXPDTA.continuation,
-					 record_EXPDTA.technique);
-
-
+				return parseRecordEXPDTA(line, size);
 
 			case PDB::RECORD_TYPE__FORMUL:
-
-				parseLine
-					(line,
-					 size, 
-					 record_type_format->format_string,
-					 record_FORMUL.record_name,
-					 &record_FORMUL.component_number,
-					 record_FORMUL.het_ID,
-					 &record_FORMUL.continuation_number,
-					 &record_FORMUL.is_water,
-					 record_FORMUL.chemical_formula);
-
-				return readRecordFORMUL
-					(record_FORMUL.component_number,
-					 record_FORMUL.het_ID,
-					 record_FORMUL.continuation_number,
-					 record_FORMUL.is_water,
-					 record_FORMUL.chemical_formula);
-
-
+				return parseRecordFORMUL(line, size);
 
 			case PDB::RECORD_TYPE__FTNOTE:
-
-				parseLine
-					(line,
-					 size, 
-					 record_type_format->format_string,
-					 record_FTNOTE.record_name,
-					 &record_FTNOTE.number,
-					 record_FTNOTE.text);
-
-				return readRecordFTNOTE
-					(record_FTNOTE.number,
-					 record_FTNOTE.text);
-
-
+				return parseRecordFTNOTE(line, size);
 
 			case PDB::RECORD_TYPE__HEADER:
-
-				parseLine
-					(line,
-					 size, 
-					 record_type_format->format_string,
-					 record_HEADER.record_name,
-					 record_HEADER.classification,
-					 record_HEADER.deposition_date,
-					 record_HEADER.ID_code);
-
-				return readRecordHEADER
-					(record_HEADER.classification,
-					 record_HEADER.deposition_date,
-					 record_HEADER.ID_code);
-
-
+				return parseRecordHEADER(line, size);
 
 			case PDB::RECORD_TYPE__HELIX:
-
-				parseLine
-					(line,
-					 size, 
-					 record_type_format->format_string,
-					 record_HELIX.record_name,
-					 &record_HELIX.serial_number,
-					 record_HELIX.helix_ID,
-					 record_HELIX.initial_residue.residue_name,
-					 &record_HELIX.initial_residue.chain_ID,
-					 &record_HELIX.initial_residue.sequence_number,
-					 &record_HELIX.initial_residue.insertion_code,
-					 record_HELIX.terminal_residue.residue_name,
-					 &record_HELIX.terminal_residue.chain_ID,
-					 &record_HELIX.terminal_residue.sequence_number,
-					 &record_HELIX.terminal_residue.insertion_code,
-					 &record_HELIX.helix_class,
-					 record_HELIX.comment,
-					 &record_HELIX.length);
-
-				return readRecordHELIX
-					(record_HELIX.serial_number,
-					 record_HELIX.helix_ID,
-					 record_HELIX.initial_residue,
-					 record_HELIX.terminal_residue,
-					 record_HELIX.helix_class,
-					 record_HELIX.comment,
-					 record_HELIX.length);
-
-
+				return parseRecordHELIX(line, size);
 
 			case PDB::RECORD_TYPE__HET:
-
-				parseLine
-					(line,
-					 size, 
-					 record_type_format->format_string,
-					 record_HET.record_name,
-					 record_HET.het_ID,
-					 &record_HET.chain_ID,
-					 &record_HET.sequence_number,
-					 &record_HET.insertion_code,
-					 &record_HET.number_of_HETATM_records,
-					 record_HET.text);
-
-				return readRecordHET
-					(record_HET.het_ID,
-					 record_HET.chain_ID,
-					 record_HET.sequence_number,
-					 record_HET.insertion_code,
-					 record_HET.number_of_HETATM_records,
-					 record_HET.text);
-
-
+				return parseRecordHELIX(line, size);
 
 			case PDB::RECORD_TYPE__HETATM:
-
-				if ((selected_model_ != 0) && (selected_model_ != current_model_))
-				{
-					return true;
-				}
-
-				parseLine
-					(line,
-					 size, 
-					 record_type_format->format_string,
-					 record_HETATM.record_name,
-					 &record_HETATM.serial_number,
-					 record_HETATM.atom_name,
-					 &record_HETATM.alternate_location_indicator,
-					 record_HETATM.residue_name,
-					 &record_HETATM.chain_ID,
-					 &record_HETATM.residue_sequence_number,
-					 &record_HETATM.insertion_code,
-					 &record_HETATM.orthogonal_vector[0],
-					 &record_HETATM.orthogonal_vector[1],
-					 &record_HETATM.orthogonal_vector[2],
-					 &record_HETATM.occupancy,
-					 &record_HETATM.temperature_factor,
-					 record_HETATM.segment_ID,
-					 record_HETATM.element_symbol,
-					 record_HETATM.charge);
-
-				return readRecordHETATM
-					(record_HETATM.serial_number,
-					 record_HETATM.atom_name,
-					 record_HETATM.alternate_location_indicator,
-					 record_HETATM.residue_name,
-					 record_HETATM.chain_ID,
-					 record_HETATM.residue_sequence_number,
-					 record_HETATM.insertion_code,
-					 record_HETATM.orthogonal_vector,
-					 record_HETATM.occupancy,
-					 record_HETATM.temperature_factor,
-					 record_HETATM.segment_ID,
-					 record_HETATM.element_symbol,
-					 record_HETATM.charge);
-
-
+				return parseRecordHETATM(line, size);
 
 			case PDB::RECORD_TYPE__HETNAM:
-
-				parseLine
-					(line,
-					 size, 
-					 record_type_format->format_string,
-					 record_HETNAM.record_name,
-					 &record_HETNAM.continuation,
-					 record_HETNAM.het_ID,
-					 record_HETNAM.chemical_name);
-
-				return readRecordHETNAM
-					(record_HETNAM.continuation,
-					 record_HETNAM.het_ID,
-					 record_HETNAM.chemical_name);
-
-
+				return parseRecordHETNAM(line, size);
 
 			case PDB::RECORD_TYPE__HYDBND:
-
-				parseLine
-					(line,
-					 size, 
-					 record_type_format->format_string,
-					 record_HYDBND.record_name,
-					 record_HYDBND.hydrogen_partner_atom[0].atom_name,
-					 &record_HYDBND.hydrogen_partner_atom[0].alternate_location_indicator,
-					 record_HYDBND.hydrogen_partner_atom[0].residue.residue_name,
-					 &record_HYDBND.hydrogen_partner_atom[0].residue.chain_ID,
-					 &record_HYDBND.hydrogen_partner_atom[0].residue.sequence_number,
-					 &record_HYDBND.hydrogen_partner_atom[0].residue.insertion_code,
-					 record_HYDBND.hydrogen_atom.atom_name,
-					 &record_HYDBND.hydrogen_atom.alternate_location_indicator,
-					 &record_HYDBND.hydrogen_atom.residue.chain_ID,
-					 &record_HYDBND.hydrogen_atom.residue.sequence_number,
-					 &record_HYDBND.hydrogen_atom.residue.insertion_code,
-					 record_HYDBND.hydrogen_partner_atom[1].atom_name,
-					 &record_HYDBND.hydrogen_partner_atom[1].alternate_location_indicator,
-					 record_HYDBND.hydrogen_partner_atom[1].residue.residue_name,
-					 &record_HYDBND.hydrogen_partner_atom[1].residue.chain_ID,
-					 &record_HYDBND.hydrogen_partner_atom[1].residue.sequence_number,
-					 &record_HYDBND.hydrogen_partner_atom[1].residue.insertion_code,
-					 &record_HYDBND.first_non_hydrogen_atom,
-					 &record_HYDBND.second_non_hydrogen_atom);
-
-					 return readRecordHYDBND
-						 (record_HYDBND.hydrogen_partner_atom,
-							record_HYDBND.hydrogen_atom,
-							record_HYDBND.first_non_hydrogen_atom,
-							record_HYDBND.second_non_hydrogen_atom);
-
-
+				return parseRecordHYDBND(line, size);
 
 			case PDB::RECORD_TYPE__JRNL:
-
-					 parseLine
-						 (line,
-							size, 
-							record_type_format->format_string,
-							record_JRNL.record_name,
-							record_JRNL.text);
-
-					 return readRecordJRNL
-						 (record_JRNL.text);
-
-
+				return parseRecordJRNL(line, size);
 
 			case PDB::RECORD_TYPE__KEYWDS:
-
-					 parseLine
-						 (line,
-							size, 
-							record_type_format->format_string,
-							record_KEYWDS.record_name,
-							&record_KEYWDS.continuation,
-							record_KEYWDS.keywords);
-
-					 return readRecordKEYWDS
-						 (record_KEYWDS.continuation,
-							record_KEYWDS.keywords);
-
-
+				return parseRecordKEYWDS(line, size);
 
 			case PDB::RECORD_TYPE__LINK:
-
-					 parseLine
-						 (line,
-							size, 
-							record_type_format->format_string,
-							record_LINK.record_name,
-							record_LINK.link_partner[0].atom_name,
-							&record_LINK.link_partner[0].alternate_location_indicator,
-							record_LINK.link_partner[0].residue.residue_name,
-							&record_LINK.link_partner[0].residue.chain_ID,
-							&record_LINK.link_partner[0].residue.sequence_number,
-							&record_LINK.link_partner[0].residue.insertion_code,
-							record_LINK.link_partner[1].atom_name,
-							&record_LINK.link_partner[1].alternate_location_indicator,
-							record_LINK.link_partner[1].residue.residue_name,
-							&record_LINK.link_partner[1].residue.chain_ID,
-							&record_LINK.link_partner[1].residue.sequence_number,
-							&record_LINK.link_partner[1].residue.insertion_code,
-							&record_LINK.first_atom,
-							&record_LINK.second_atom);
-
-					 return readRecordLINK
-						 (record_LINK.link_partner,
-							record_LINK.first_atom,
-							record_LINK.second_atom);
-
-
+				return parseRecordLINK(line, size);
 
 			case PDB::RECORD_TYPE__MASTER:
-
-					 parseLine
-						 (line,
-							size, 
-							record_type_format->format_string,
-							record_MASTER.record_name,
-							&record_MASTER.number_of_REMARK_records,
-							&record_MASTER.zero,
-							&record_MASTER.number_of_HET_records,
-							&record_MASTER.number_of_HELIX_records,
-							&record_MASTER.number_of_SHEET_records,
-							&record_MASTER.number_of_TURN_records,
-							&record_MASTER.number_of_SITE_records,
-							&record_MASTER.number_of_ORIGX_SCALE_MTRIX_records,
-							&record_MASTER.number_of_ATOM_HETATM_records,
-							&record_MASTER.number_of_TER_records,
-							&record_MASTER.number_of_CONECT_records,
-							&record_MASTER.number_of_SEQRES_records);
-
-					 return readRecordMASTER
-						 (record_MASTER.number_of_REMARK_records,
-							record_MASTER.zero,
-							record_MASTER.number_of_HET_records,
-							record_MASTER.number_of_HELIX_records,
-							record_MASTER.number_of_SHEET_records,
-							record_MASTER.number_of_TURN_records,
-							record_MASTER.number_of_SITE_records,
-							record_MASTER.number_of_ORIGX_SCALE_MTRIX_records,
-							record_MASTER.number_of_ATOM_HETATM_records,
-							record_MASTER.number_of_TER_records,
-							record_MASTER.number_of_CONECT_records,
-							record_MASTER.number_of_SEQRES_records);
-
-
+				return parseRecordMASTER(line, size);
 
 			case PDB::RECORD_TYPE__MODEL:
-
-					 parseLine
-						 (line,
-							size, 
-							record_type_format->format_string,
-							record_MODEL.record_name,
-							&record_MODEL.model_serial_number);
-
-					 current_model_ = (Index)record_MODEL.model_serial_number;
-
-					 return readRecordMODEL
-						 (record_MODEL.model_serial_number);
-
-
+				return parseRecordMODEL(line, size);
 
 			case PDB::RECORD_TYPE__MODRES:
-
-					 parseLine
-						 (line,
-							size, 
-							record_type_format->format_string,
-							record_MODRES.record_name,
-							record_MODRES.entry_code,
-							record_MODRES.residue_name,
-							&record_MODRES.chain_ID,
-							&record_MODRES.sequence_number,
-							&record_MODRES.insertion_code,
-							record_MODRES.standard_residue_name,
-							record_MODRES.comment);
-
-					 return readRecordMODRES
-						 (record_MODRES.entry_code,
-							record_MODRES.residue_name,
-							record_MODRES.chain_ID,
-							record_MODRES.sequence_number,
-							record_MODRES.insertion_code,
-							record_MODRES.standard_residue_name,
-							record_MODRES.comment);
-
-
+				return parseRecordMODRES(line, size);
 
 			case PDB::RECORD_TYPE__MTRIX1:
-
-					 parseLine
-						 (line,
-							size, 
-							record_type_format->format_string,
-							record_MTRIX1.record_name,
-							&record_MTRIX1.serial_number,
-							&record_MTRIX1.transformation_matrix[0],
-							&record_MTRIX1.transformation_matrix[1],
-							&record_MTRIX1.transformation_matrix[2],
-							&record_MTRIX1.transformation_matrix[3],
-							&record_MTRIX1.is_given);
-
-					 return readRecordMTRIX1
-						 (record_MTRIX1.serial_number,
-							record_MTRIX1.transformation_matrix,
-							record_MTRIX1.is_given);
-
-
+				return parseRecordMTRIX1(line, size);
 
 			case PDB::RECORD_TYPE__MTRIX2:
-
-					 parseLine
-						 (line,
-							size, 
-							record_type_format->format_string,
-							record_MTRIX2.record_name,
-							&record_MTRIX2.serial_number,
-							&record_MTRIX2.transformation_matrix[0],
-							&record_MTRIX2.transformation_matrix[1],
-							&record_MTRIX2.transformation_matrix[2],
-							&record_MTRIX2.transformation_matrix[3],
-							&record_MTRIX2.is_given);
-
-					 return readRecordMTRIX2
-						 (record_MTRIX2.serial_number,
-							record_MTRIX2.transformation_matrix,
-							record_MTRIX2.is_given);
-
-
+				return parseRecordMTRIX2(line, size);
 
 			case PDB::RECORD_TYPE__MTRIX3:
-
-					 parseLine
-						 (line,
-							size, 
-							record_type_format->format_string,
-							record_MTRIX3.record_name,
-							&record_MTRIX3.serial_number,
-							&record_MTRIX3.transformation_matrix[0],
-							&record_MTRIX3.transformation_matrix[1],
-							&record_MTRIX3.transformation_matrix[2],
-							&record_MTRIX3.transformation_matrix[3],
-							&record_MTRIX3.is_given);
-
-					 return readRecordMTRIX3
-						 (record_MTRIX3.serial_number,
-							record_MTRIX3.transformation_matrix,
-							record_MTRIX3.is_given);
-
-
+				return parseRecordMTRIX3(line, size);
 
 			case PDB::RECORD_TYPE__OBSLTE:
-
-					 parseLine
-						 (line,
-							size, 
-							record_type_format->format_string,
-							record_OBSLTE.record_name,
-							&record_OBSLTE.continuation,
-							record_OBSLTE.entry_replaced_date,
-							record_OBSLTE.entry_code,
-							record_OBSLTE.replacing_entry_code[0],
-							record_OBSLTE.replacing_entry_code[1],
-							record_OBSLTE.replacing_entry_code[2],
-							record_OBSLTE.replacing_entry_code[3],
-							record_OBSLTE.replacing_entry_code[4],
-							record_OBSLTE.replacing_entry_code[5],
-							record_OBSLTE.replacing_entry_code[6],
-							record_OBSLTE.replacing_entry_code[7]);
-
-					 return readRecordOBSLTE
-						 (record_OBSLTE.continuation,
-							record_OBSLTE.entry_replaced_date,
-							record_OBSLTE.entry_code,
-							record_OBSLTE.replacing_entry_code);
-
-
+				return parseRecordOBSLTE(line, size);
 
 			case PDB::RECORD_TYPE__ORIGX1:
-
-					 parseLine
-						 (line,
-							size, 
-							record_type_format->format_string,
-							record_ORIGX1.record_name,
-							&record_ORIGX1.transformation_matrix[0],
-							&record_ORIGX1.transformation_matrix[1],
-							&record_ORIGX1.transformation_matrix[2],
-							&record_ORIGX1.transformation_matrix[3]);
-
-					 return readRecordORIGX1
-						 (record_ORIGX1.transformation_matrix);
-
-
+				return parseRecordORIGX1(line, size);
 
 			case PDB::RECORD_TYPE__ORIGX2:
-
-					 parseLine
-						 (line,
-							size, 
-							record_type_format->format_string,
-							record_ORIGX2.record_name,
-							&record_ORIGX2.transformation_matrix[0],
-							&record_ORIGX2.transformation_matrix[1],
-							&record_ORIGX2.transformation_matrix[2],
-							&record_ORIGX2.transformation_matrix[3]);
-
-					 return readRecordORIGX2
-						 (record_ORIGX2.transformation_matrix);
-
-
+				return parseRecordORIGX2(line, size);
 
 			case PDB::RECORD_TYPE__ORIGX3:
-
-					 parseLine
-						 (line,
-							size,
-							record_type_format->format_string,
-							record_ORIGX3.record_name,
-							&record_ORIGX3.transformation_matrix[0],
-							&record_ORIGX3.transformation_matrix[1],
-							&record_ORIGX3.transformation_matrix[2],
-							&record_ORIGX3.transformation_matrix[3]);
-
-					 return readRecordORIGX3
-						 (record_ORIGX3.transformation_matrix);
-
-
+				return parseRecordORIGX3(line, size);
 
 			case PDB::RECORD_TYPE__REMARK:
-
-					 parseLine
-						 (line,
-							size, 
-							record_type_format->format_string,
-							record_REMARK.record_name,
-							&record_REMARK.remark_number,
-							record_REMARK.text);
-
-					 return readRecordREMARK
-						 (record_REMARK.remark_number,
-							record_REMARK.text);
-
-
+				return parseRecordREMARK(line, size);
 
 			case PDB::RECORD_TYPE__REVDAT:
-
-					 parseLine
-						 (line,
-							size, 
-							record_type_format->format_string,
-							record_REVDAT.record_name,
-							&record_REVDAT.modification_number,
-							&record_REVDAT.continuation,
-							record_REVDAT.modification_date,
-							record_REVDAT.modification_ID,
-							&record_REVDAT.modification_type,
-							record_REVDAT.name_of_modified_record[0],
-							record_REVDAT.name_of_modified_record[1],
-							record_REVDAT.name_of_modified_record[2],
-							record_REVDAT.name_of_modified_record[3]);
-
-					 return readRecordREVDAT
-						 (record_REVDAT.modification_number,
-							record_REVDAT.continuation,
-							record_REVDAT.modification_date,
-							record_REVDAT.modification_ID,
-							record_REVDAT.modification_type,
-							record_REVDAT.name_of_modified_record);
-
-
+				return parseRecordREVDAT(line, size);
 
 			case PDB::RECORD_TYPE__SCALE1:
-
-					 parseLine
-						 (line,
-							size, 
-							record_type_format->format_string,
-							record_SCALE1.record_name,
-							&record_SCALE1.transformation_matrix[0],
-							&record_SCALE1.transformation_matrix[1],
-							&record_SCALE1.transformation_matrix[2],
-							&record_SCALE1.transformation_matrix[3]);
-
-					 return readRecordSCALE1
-						 (record_SCALE1.transformation_matrix);
-
-
+				return parseRecordSCALE1(line, size);
 
 			case PDB::RECORD_TYPE__SCALE2:
-
-					 parseLine
-						 (line,
-							size, 
-							record_type_format->format_string,
-							record_SCALE2.record_name,
-							&record_SCALE2.transformation_matrix[0],
-							&record_SCALE2.transformation_matrix[1],
-							&record_SCALE2.transformation_matrix[2],
-							&record_SCALE2.transformation_matrix[3]);
-
-					 return readRecordSCALE2
-						 (record_SCALE2.transformation_matrix);
-
-
+				return parseRecordSCALE2(line, size);
 
 			case PDB::RECORD_TYPE__SCALE3:
-
-					 parseLine
-						 (line,
-							size, 
-							record_type_format->format_string,
-							record_SCALE3.record_name,
-							&record_SCALE3.transformation_matrix[0],
-							&record_SCALE3.transformation_matrix[1],
-							&record_SCALE3.transformation_matrix[2],
-							&record_SCALE3.transformation_matrix[3]);
-
-					 return readRecordSCALE3
-						 (record_SCALE3.transformation_matrix);
-
-
+				return parseRecordSCALE3(line, size);
 
 			case PDB::RECORD_TYPE__SEQRES:
-
-					 parseLine
-						 (line,
-							size, 
-							record_type_format->format_string,
-							record_SEQRES.record_name,
-							&record_SEQRES.serial_number,
-							&record_SEQRES.chain_ID,
-							&record_SEQRES.number_of_residues_in_chain,
-							record_SEQRES.residue_name[0],
-							record_SEQRES.residue_name[1],
-							record_SEQRES.residue_name[2],
-							record_SEQRES.residue_name[3],
-							record_SEQRES.residue_name[4],
-							record_SEQRES.residue_name[5],
-							record_SEQRES.residue_name[6],
-							record_SEQRES.residue_name[7],
-							record_SEQRES.residue_name[8],
-							record_SEQRES.residue_name[9],
-							record_SEQRES.residue_name[10],
-							record_SEQRES.residue_name[11],
-							record_SEQRES.residue_name[12]);
-
-					 return readRecordSEQRES
-						 (record_SEQRES.serial_number,
-							record_SEQRES.chain_ID,
-							record_SEQRES.number_of_residues_in_chain,
-							record_SEQRES.residue_name);
-
-
+				return parseRecordSEQRES(line, size);
 
 			case PDB::RECORD_TYPE__SHEET:
-
-					 parseLine
-						 (line,
-							size, 
-							record_type_format->format_string,
-							record_SHEET.record_name,
-							&record_SHEET.strand_number,
-							record_SHEET.sheet_ID,
-							&record_SHEET.number_of_strands,
-							record_SHEET.initial_residue.residue_name,
-							&record_SHEET.initial_residue.chain_ID,
-							&record_SHEET.initial_residue.sequence_number,
-							&record_SHEET.initial_residue.insertion_code,
-							record_SHEET.terminal_residue.residue_name,
-							&record_SHEET.terminal_residue.chain_ID,
-							&record_SHEET.terminal_residue.sequence_number,
-							&record_SHEET.terminal_residue.insertion_code,
-							&record_SHEET.sense_of_strand,
-							record_SHEET.atom_name_in_current_strand,
-							record_SHEET.residue_in_current_strand.residue_name,
-							&record_SHEET.residue_in_current_strand.chain_ID,
-							&record_SHEET.residue_in_current_strand.sequence_number,
-							&record_SHEET.residue_in_current_strand.insertion_code,
-							record_SHEET.atom_name_in_previous_strand,
-							record_SHEET.residue_in_previous_strand.residue_name,
-							&record_SHEET.residue_in_previous_strand.chain_ID,
-							&record_SHEET.residue_in_previous_strand.sequence_number,
-							&record_SHEET.residue_in_previous_strand.insertion_code);
-
-							return readRecordSHEET
-								(record_SHEET.strand_number,
-								 record_SHEET.sheet_ID,
-								 record_SHEET.number_of_strands,
-								 record_SHEET.initial_residue,
-								 record_SHEET.terminal_residue,
-								 record_SHEET.sense_of_strand,
-								 record_SHEET.atom_name_in_current_strand,
-								 record_SHEET.residue_in_current_strand,
-								 record_SHEET.atom_name_in_previous_strand,
-								 record_SHEET.residue_in_previous_strand);
-
-
+				return parseRecordSHEET(line, size);
 
 			case PDB::RECORD_TYPE__SIGATM:
-
-							if ((selected_model_ != 0) && (selected_model_ != current_model_))
-							{
-								return true;
-							}
-
-							parseLine
-								(line,
-								 size, 
-								 record_type_format->format_string,
-								 record_SIGATM.record_name,
-								 &record_SIGATM.serial_number,
-								 record_SIGATM.atom_name,
-								 &record_SIGATM.alternate_location_indicator,
-								 record_SIGATM.residue_name,
-								 &record_SIGATM.chain_ID,
-								 &record_SIGATM.residue_sequence_number,
-								 &record_SIGATM.insertion_code,
-								 &record_SIGATM.standard_vector_deviation[0],
-								 &record_SIGATM.standard_vector_deviation[1],
-								 &record_SIGATM.standard_vector_deviation[2],
-								 &record_SIGATM.standard_occupancy_deviation,
-								 &record_SIGATM.standard_temperature_deviation,
-								 record_SIGATM.segment_ID,
-								 record_SIGATM.element_symbol,
-								 record_SIGATM.charge);
-
-							return readRecordSIGATM
-								(record_SIGATM.serial_number,
-								 record_SIGATM.atom_name,
-								 record_SIGATM.alternate_location_indicator,
-								 record_SIGATM.residue_name,
-								 record_SIGATM.chain_ID,
-								 record_SIGATM.residue_sequence_number,
-								 record_SIGATM.insertion_code,
-								 record_SIGATM.standard_vector_deviation,
-								 record_SIGATM.standard_occupancy_deviation,
-								 record_SIGATM.standard_temperature_deviation,
-								 record_SIGATM.segment_ID,
-								 record_SIGATM.element_symbol,
-								 record_SIGATM.charge);
-
-
+				return parseRecordSIGATM(line, size);
 
 			case PDB::RECORD_TYPE__SIGUIJ:
-
-							if ((selected_model_ != 0) && (selected_model_ != current_model_))
-							{
-								return true;
-							}
-
-							parseLine
-								(line,
-								 size,
-								 record_type_format->format_string,
-								 record_SIGUIJ.record_name,
-								 &record_SIGUIJ.serial_number,
-								 record_SIGUIJ.atom_name,
-								 &record_SIGUIJ.alternate_location_indicator,
-								 record_SIGUIJ.residue_name,
-								 &record_SIGUIJ.chain_ID,
-								 &record_SIGUIJ.residue_sequence_number,
-								 &record_SIGUIJ.insertion_code,
-								 &record_SIGUIJ.sig11,
-								 &record_SIGUIJ.sig22,
-								 &record_SIGUIJ.sig33,
-								 &record_SIGUIJ.sig12,
-								 &record_SIGUIJ.sig13,
-								 &record_SIGUIJ.sig23,
-								 record_SIGUIJ.segment_ID,
-								 record_SIGUIJ.element_symbol,
-								 record_SIGUIJ.charge);
-
-							return readRecordSIGUIJ
-								(record_SIGUIJ.serial_number,
-								 record_SIGUIJ.atom_name,
-								 record_SIGUIJ.alternate_location_indicator,
-								 record_SIGUIJ.residue_name,
-								 record_SIGUIJ.chain_ID,
-								 record_SIGUIJ.residue_sequence_number,
-								 record_SIGUIJ.insertion_code,
-								 record_SIGUIJ.sig11,
-								 record_SIGUIJ.sig22,
-								 record_SIGUIJ.sig33,
-								 record_SIGUIJ.sig12,
-								 record_SIGUIJ.sig13,
-								 record_SIGUIJ.sig23,
-								 record_SIGUIJ.segment_ID,
-								 record_SIGUIJ.element_symbol,
-								 record_SIGUIJ.charge);
-
-
+				return parseRecordSIGUIJ(line, size);
 
 			case PDB::RECORD_TYPE__SITE:
-
-							parseLine
-								(line,
-								 size, 
-								 record_type_format->format_string,
-								 record_SITE.record_name,
-								 &record_SITE.sequence_number,
-								 record_SITE.name,
-								 &record_SITE.number_of_residues,
-								 record_SITE.residue[0].residue_name,
-								 &record_SITE.residue[0].chain_ID,
-								 &record_SITE.residue[0].sequence_number,
-								 &record_SITE.residue[0].insertion_code,
-								 record_SITE.residue[1].residue_name,
-								 &record_SITE.residue[1].chain_ID,
-								 &record_SITE.residue[1].sequence_number,
-								 &record_SITE.residue[1].insertion_code,
-								 record_SITE.residue[2].residue_name,
-								 &record_SITE.residue[2].chain_ID,
-								 &record_SITE.residue[2].sequence_number,
-								 &record_SITE.residue[2].insertion_code,
-								 record_SITE.residue[3].residue_name,
-								 &record_SITE.residue[3].chain_ID,
-								 &record_SITE.residue[3].sequence_number,
-								 &record_SITE.residue[3].insertion_code);
-
-								 return readRecordSITE
-									 (record_SITE.sequence_number,
-										record_SITE.name,
-										record_SITE.number_of_residues,
-										record_SITE.residue);
-
-
+				return parseRecordSITE(line, size);
 
 			case PDB::RECORD_TYPE__SLTBRG:
-
-								 parseLine
-									 (line,
-										size, 
-										record_type_format->format_string,
-										record_SLTBRG.record_name,
-										record_SLTBRG.partner_atom[0].atom_name,
-										&record_SLTBRG.partner_atom[0].alternate_location_indicator,
-										record_SLTBRG.partner_atom[0].residue.residue_name,
-										&record_SLTBRG.partner_atom[0].residue.chain_ID,
-										&record_SLTBRG.partner_atom[0].residue.sequence_number,
-										&record_SLTBRG.partner_atom[0].residue.insertion_code,
-										record_SLTBRG.partner_atom[1].atom_name,
-										&record_SLTBRG.partner_atom[1].alternate_location_indicator,
-										record_SLTBRG.partner_atom[1].residue.residue_name,
-										&record_SLTBRG.partner_atom[1].residue.chain_ID,
-										&record_SLTBRG.partner_atom[1].residue.sequence_number,
-										&record_SLTBRG.partner_atom[1].residue.insertion_code,
-										&record_SLTBRG.first_atom,
-										&record_SLTBRG.second_atom);
-
-								 return readRecordSLTBRG
-									 (record_SLTBRG.partner_atom,
-										record_SLTBRG.first_atom,
-										record_SLTBRG.second_atom);
-
-
+				return parseRecordSLTBRG(line, size);
 
 			case PDB::RECORD_TYPE__SOURCE:
-
-								 parseLine
-									 (line,
-										size, 
-										record_type_format->format_string,
-										record_SOURCE.record_name,
-										&record_SOURCE.continuation,
-										record_SOURCE.sources);
-
-								 return readRecordSOURCE
-									 (record_SOURCE.continuation,
-										record_SOURCE.sources);
-
-
+				return parseRecordSOURCE(line, size);
 
 			case PDB::RECORD_TYPE__SSBOND:
-
-								 parseLine
-									 (line,
-										size, 
-										record_type_format->format_string,
-										record_SSBOND.record_name,
-										&record_SSBOND.serial_number,
-										record_SSBOND.partner_residue[0].residue_name,
-										&record_SSBOND.partner_residue[0].chain_ID,
-										&record_SSBOND.partner_residue[0].sequence_number,
-										&record_SSBOND.partner_residue[0].insertion_code,
-										record_SSBOND.partner_residue[1].residue_name,
-										&record_SSBOND.partner_residue[1].chain_ID,
-										&record_SSBOND.partner_residue[1].sequence_number,
-										&record_SSBOND.partner_residue[1].insertion_code,
-										&record_SSBOND.partner_residue[0].symmetry_operator,
-										&record_SSBOND.partner_residue[1].symmetry_operator);
-
-								 return readRecordSSBOND
-									 (record_SSBOND.serial_number,
-										record_SSBOND.partner_residue);
-
-
+				return parseRecordSSBOND(line, size);
 
 			case PDB::RECORD_TYPE__TER:
-
-								 if ((selected_model_ != 0) && (selected_model_ != current_model_))
-								 {
-									 return true;
-								 }
-
-								 parseLine
-									 (line,
-										size, 
-										record_type_format->format_string,
-										record_TER.record_name,
-										&record_TER.serial_number,
-										record_TER.residue_name,
-										&record_TER.chain_ID,
-										&record_TER.residue_sequence_number,
-										&record_TER.insertion_code);
-
-								 return readRecordTER
-									 (record_TER.serial_number,
-										record_TER.residue_name,
-										record_TER.chain_ID,
-										record_TER.residue_sequence_number,
-										record_TER.insertion_code);
-
-
+				return parseRecordTER(line, size);
 
 			case PDB::RECORD_TYPE__TITLE:
-
-								 parseLine
-									 (line,
-										size, 
-										record_type_format->format_string,
-										record_TITLE.record_name,
-										&record_TITLE.continuation,
-										record_TITLE.title);
-
-								 return readRecordTITLE
-									 (record_TITLE.continuation,
-										record_TITLE.title);
-
-
+				return parseRecordTITLE(line, size);
 
 			case PDB::RECORD_TYPE__TURN:
-
-								 parseLine
-									 (line,
-										size, 
-										record_type_format->format_string,
-										record_TURN.record_name,
-										&record_TURN.sequence_number,
-										record_TURN.turn_ID,
-										record_TURN.initial_residue.residue_name,
-										&record_TURN.initial_residue.chain_ID,
-										&record_TURN.initial_residue.sequence_number,
-										&record_TURN.initial_residue.insertion_code,
-										record_TURN.terminal_residue.residue_name,
-										&record_TURN.terminal_residue.chain_ID,
-										&record_TURN.terminal_residue.sequence_number,
-										&record_TURN.terminal_residue.insertion_code,
-										record_TURN.comment);
-
-								 return readRecordTURN
-									 (record_TURN.sequence_number,
-										record_TURN.turn_ID,
-										record_TURN.initial_residue,
-										record_TURN.terminal_residue,
-										record_TURN.comment);
-
-
+				return parseRecordTURN(line, size);
 
 			case PDB::RECORD_TYPE__TVECT:
+				return parseRecordTVECT(line, size);
 
-								 parseLine
-									 (line,
-										size, 
-										record_type_format->format_string,
-										record_TVECT.record_name,
-										&record_TVECT.serial_number,
-										&record_TVECT.translation_vector[0],
-										&record_TVECT.translation_vector[1],
-										&record_TVECT.translation_vector[2],
-										record_TVECT.comment);
-
-								 return readRecordTVECT
-									 (record_TVECT.serial_number,
-										record_TVECT.translation_vector,
-										record_TVECT.comment);
-
-
-
-			default:
-				
+			default:				
 				return readUnknownRecord(line);
 		}
 	}
@@ -2254,7 +773,7 @@ namespace BALL
 
 	PDBFile::PDBFile(const PDBFile& file)
 		throw(Exception::FileNotFound)
-		:	File(),
+		:	GenericMolFile(),
 			PropertyManager(file),
 			options(file.options),
 			info(file.info),
@@ -2291,7 +810,7 @@ namespace BALL
 
 	PDBFile::PDBFile(const String& filename, File::OpenMode open_mode)
 		throw(Exception::FileNotFound)
-		:	File(),
+		:	GenericMolFile(),
 			residue_name_(""),
 			residue_sequence_number_(-1),
 			current_model_(INVALID_INDEX),
@@ -2322,348 +841,14 @@ namespace BALL
 	}
 
 
-	PDBFile::~PDBFile()
-		throw()
+	PDBFile::~PDBFile() throw()
 	{
 		clear_();
 		close();
 	}
 
-	bool PDBFile::readRecordATOM
-		(PDB::Integer serial_number,
-		 PDB::Atom atom_name,
-		 PDB::Character alternate_location_indicator,
-		 PDB::ResidueName residue_name,
-		 PDB::Character chain_ID,
-		 PDB::Integer residue_sequence_number,
-		 PDB::AChar insertion_code,
-		 PDB::Real orthogonal_vector[3],
-		 PDB::Real occupancy,
-		 PDB::Real temperature_factor,
-		 PDB::LString4 /* segment_ID */,
-		 PDB::LString2 element_symbol,
-		 PDB::LString2 charge)
-	{
-		if (chain_ID != chain_ID_)
-		{
-			current_chain_ = new Chain();
-			current_protein_->insert(*current_chain_);
-			
-			residue_name_ = "";
-			chain_ID_ = chain_ID;
-			
-			current_chain_->setName(chain_ID_);
-		}
-		
-		if (residue_name_ != (const char *)residue_name
-				|| residue_sequence_number != residue_sequence_number_
-				|| insertion_code != insertion_code_)
-		{
-			ResidueQuadruple unique_residue(residue_name, chain_ID, residue_sequence_number, insertion_code);
-
-			current_residue_ = new Residue;
-			current_chain_->insert(*current_residue_);
-			residue_map_[unique_residue] = current_residue_;
-			
-			residue_name_ = residue_name;
-			residue_sequence_number_ = residue_sequence_number;
-			insertion_code_ = insertion_code;
-			
-			if (current_residue_->hasProperty(Residue::PROPERTY__NON_STANDARD) == false)
-			{
-				current_residue_->setProperty(Residue::PROPERTY__AMINO_ACID);
-			}
-			String trimmed_name = residue_name_;
-			current_residue_->setName(trimmed_name.trim());
-			current_residue_->setID(residue_sequence_number_);
-			current_residue_->setInsertionCode(insertion_code_);
-		}
-
-		// make sure we read only the first location if alternate
-		// locations are present to avoid invalid structures due
-		// to duplicate atoms
-		if ((alternate_location_indicator == ' ' )
-				|| (alternate_location_indicator == 'A'))
-		{
-			current_PDB_atom_ = new PDBAtom;
-			current_residue_->insert(*current_PDB_atom_);
-			PDB_atom_map_[serial_number] = current_PDB_atom_;
-			
-			current_PDB_atom_->setName(getAtomName(atom_name));
-			current_PDB_atom_->setRemotenessIndicator(getAtomRemotenessIndicator(atom_name));
-			current_PDB_atom_->setBranchDesignator(getAtomBranchDesignator(atom_name));
-			current_PDB_atom_->setAlternateLocationIndicator(alternate_location_indicator);
-			current_PDB_atom_->setOccupancy(occupancy);
-			current_PDB_atom_->setTemperatureFactor(temperature_factor);
-			current_PDB_atom_->setRadius(current_PDB_atom_->getElement().getVanDerWaalsRadius());
-			current_PDB_atom_->setPosition(Vector3(orthogonal_vector[0], orthogonal_vector[1], orthogonal_vector[2]));
-			// Figuring out the element is nto entirely trivial: it *should* be in columns 77-78.
-			// However, some codes abuse cols. 77-80 for partial charges. We support this format w/ the 
-			// option PARTIAL_CHARGES for reading and writing.
-			if (parse_partial_charges_)
-			{
-				// ????
-			}
-			else
-			{
-				current_PDB_atom_->setElement(PTE[PDBFile::getAtomElementSymbol(atom_name, element_symbol)]);
-				try	
-				{
-					current_PDB_atom_->setFormalCharge(String(charge).toInt());
-				}
-				catch (Exception::InvalidFormat)
-				{
-				}
-				current_PDB_atom_->setCharge(current_PDB_atom_->getFormalCharge());
-			}
-		}
-		
-		return true;
-	}
-		
-	bool PDBFile::readRecordCONECT
-		(PDB::Integer atom_serial_number,
-		 PDB::Integer bonded_atom_serial_number[4],
-		 PDB::Integer hydrogen_bonded_atom_serial_number[4],
-		 PDB::Integer salt_bridged_atom_serial_number[2])
-	{
-		PDBAtomMap::Iterator	atom_map_it = PDB_atom_map_.find(atom_serial_number);
-
-		PDBAtom*				PDB_atom = 0;
-		Bond*						bond = 0;
-		unsigned short	i = 0;
-
-		// extract a pointer to the atom, if it was found in the hash map
-		if (atom_map_it == PDB_atom_map_.end())
-		{
-			return false;  // illegal atom number, abort
-		}
-		else
-		{
-			PDB_atom = atom_map_it->second; // retrieve the pointer
-		}
-		
-		// read the entries for the bonds
-		for (i = 0; i < 4; ++i)
-		{
-			if (bonded_atom_serial_number[i] != 0)
-			{
-				atom_map_it = PDB_atom_map_.find(bonded_atom_serial_number[i]);
-				
-				// retrieve the second atom via the hash table
-				if (atom_map_it != PDB_atom_map_.end())
-				{
-					// create the new bond
-					bond = PDB_atom->createBond(*atom_map_it->second);
-		
-					if (bond != 0)
-					{
-						bond->setType(Bond::TYPE__COVALENT);
-						bond->setOrder(Bond::ORDER__SINGLE);
-					}
-				}
-			}
-		}
-				
-		for (i = 0; i < 4; ++i)
-		{
-			if (hydrogen_bonded_atom_serial_number[i] != 0)
-			{
-				atom_map_it = PDB_atom_map_.find(hydrogen_bonded_atom_serial_number[i]);
-				
-				if (atom_map_it != PDB_atom_map_.end())
-				{
-					bond = PDB_atom->createBond(*atom_map_it->second);
-		
-					if (bond != 0)
-					{
-						bond->setType(Bond::TYPE__HYDROGEN);
-						bond->setOrder(Bond::ORDER__SINGLE);
-					}
-				}
-			}
-		}
-		
-		for (i = 0; i < 2; ++i)
-		{
-			if (salt_bridged_atom_serial_number[i] != 0)
-			{
-				atom_map_it = PDB_atom_map_.find(salt_bridged_atom_serial_number[i]);
-				
-				if (atom_map_it != PDB_atom_map_.end())
-				{
-					bond = PDB_atom->createBond(*atom_map_it->second);
-		
-					if (bond != 0)
-					{
-						bond->setType(Bond::TYPE__SALT_BRIDGE);
-						bond->setOrder(Bond::ORDER__SINGLE);
-					}
-				}
-			}
-		}
-		
-		return true;
-	}
-
-	bool PDBFile::readRecordHEADER
-		(PDB::String40 classification,
-		 PDB::Date /* deposition_date */,
-		 PDB::IDcode ID_code)
-	{
-		current_protein_->setName(classification);
-		current_protein_->setID(ID_code);
-
-		return true;
-	}
-		
-	bool PDBFile::readRecordHELIX
-		(PDB::Integer /* serial_number */,
-		 PDB::LString3 helix_ID,
-		 PDB::RecordHELIX::InitialResidue& initial_residue,
-		 PDB::RecordHELIX::TerminalResidue& terminal_residue,
-		 PDB::Integer helix_class,
-		 PDB::PDBString /* comment */,
-		 PDB::Integer /* length */)
-	{
-		ResidueQuadruple partner_residue
-			(initial_residue.residue_name, initial_residue.chain_ID,
-			 initial_residue.sequence_number, initial_residue.insertion_code);
-		
-		SecondaryStructure* sec_struc = new SecondaryStructure(helix_ID);
-		
-		new_helix_secstruc_list_.push_back(sec_struc);
-		sec_struc->setType(SecondaryStructure::HELIX);
-		sec_struc->setProperty("HELIX_CLASS", (unsigned int)helix_class);
-		
-		helix_list_.push_back(partner_residue);
-		
-		partner_residue.set(terminal_residue.residue_name, terminal_residue.chain_ID,
-												terminal_residue.sequence_number, terminal_residue.insertion_code);
-		
-		helix_list_.push_back(partner_residue);
-		
-		return true;
-	}
-
-	bool PDBFile::readRecordHETATM
-		(PDB::Integer serial_number,
-		 PDB::Atom atom_name,
-		 PDB::Character alternate_location_indicator,
-		 PDB::ResidueName residue_name,
-		 PDB::Character chain_ID,
-		 PDB::Integer residue_sequence_number,
-		 PDB::AChar insertion_code,
-		 PDB::Real orthogonal_vector[3],
-		 PDB::Real occupancy,
-		 PDB::Real temperature,
-		 PDB::LString4 segment_ID,
-		 PDB::LString2 element_symbol,
-		 PDB::LString2 charge)
-	{
-		readRecordATOM(serial_number, atom_name, alternate_location_indicator, residue_name,
-									 chain_ID, residue_sequence_number, insertion_code, orthogonal_vector,
-									 occupancy, temperature, segment_ID, element_symbol, charge); 
-		
-		current_residue_->clearProperty(Residue::PROPERTY__AMINO_ACID);
-		current_residue_->setProperty(Residue::PROPERTY__NON_STANDARD);
-		
-		RegularExpression regular_expression("^OHH|HOH|HHO|H2O|2HO|OH2|SOL|TIP|TIP2|TIP3|TIP4|WAT|D2O$");
-		if (regular_expression.match(current_residue_->getName()) == true)
-		{
-			current_residue_->setProperty(Residue::PROPERTY__WATER);
-		}
-		
-		return true;
-	}
-
-	bool PDBFile::readRecordSHEET
-		(PDB::Integer /* strand_number */,
-		 PDB::LString3 sheet_ID,
-		 PDB::Integer /* number_of_strands */,
-		 PDB::RecordSHEET::InitialResidue& initial_residue,
-		 PDB::RecordSHEET::TerminalResidue& terminal_residue,
-		 PDB::Integer sense_of_strand,
-		 PDB::Atom /* atom_name_in_current_strand */,
-		 PDB::RecordSHEET::ResidueInCurrentStrand & /* residue_in_current_strand */,
-		 PDB::Atom /* atom_name_in_previous_strand */,
-		 PDB::RecordSHEET::ResidueInPreviousStrand & /* residue_in_previous_strand */)
-	{
-		ResidueQuadruple partner_residue
-			(initial_residue.residue_name, initial_residue.chain_ID,
-			 initial_residue.sequence_number, initial_residue.insertion_code);
-		
-		SecondaryStructure* sec_struc = new SecondaryStructure(sheet_ID);
-		
-		new_sheet_secstruc_list_.push_back(sec_struc);
-		sec_struc->setType(SecondaryStructure::STRAND);
-		sec_struc->setProperty("STRAND_SENSE", (sense_of_strand != 0));
-		
-		sheet_list_.push_back(partner_residue);
-		
-		partner_residue.set(terminal_residue.residue_name, terminal_residue.chain_ID,
-												terminal_residue.sequence_number, terminal_residue.insertion_code);
-		
-		sheet_list_.push_back(partner_residue);
-		
-		return true;
-	}
-
-	bool PDBFile::readRecordSSBOND
-		(PDB::Integer /* serial_number */,
-		 PDB::RecordSSBOND::PartnerResidue partner_residue[2])
-	{
-		ResidueQuadruple partner(partner_residue[0].residue_name, partner_residue[0].chain_ID,
-														 partner_residue[0].sequence_number, partner_residue[0].insertion_code);
-		
-		ssbond_list_.push_back(partner);
-		
-		partner.set(partner_residue[1].residue_name, partner_residue[1].chain_ID,
-								partner_residue[1].sequence_number,	partner_residue[1].insertion_code);
-		
-		ssbond_list_.push_back(partner);
-		
-		return true;
-	}
-
-	bool PDBFile::readRecordTER
-		(PDB::Integer /* serial_number */,
-		 PDB::ResidueName /* residue_name */,
-		 PDB::Character /* chain_ID */,
-		 PDB::Integer /* residue_sequence_number */,
-		 PDB::AChar /* insertion_code */)
-	{
-		chain_ID_ = 0;
-		
-		return true;
-	}
-
-	bool PDBFile::readRecordTURN
-		(PDB::Integer /* sequence_number */,
-		 PDB::LString3 turn_ID,
-		 PDB::RecordTURN::InitialResidue &initial_residue,
-		 PDB::RecordTURN::TerminalResidue &terminal_residue,
-		 PDB::PDBString /* comment */)
-	{
-		ResidueQuadruple partner_residue(initial_residue.residue_name, initial_residue.chain_ID,
-																		 initial_residue.sequence_number,	initial_residue.insertion_code);
-		
-		SecondaryStructure* sec_struc = new SecondaryStructure(turn_ID);
-		
-		new_turn_secstruc_list_.push_back(sec_struc);
-		sec_struc->setType(SecondaryStructure::TURN);
-		
-		turn_list_.push_back(partner_residue);
-		
-		partner_residue.set(terminal_residue.residue_name, terminal_residue.chain_ID,
-												terminal_residue.sequence_number, terminal_residue.insertion_code);
-		
-		turn_list_.push_back(partner_residue);
-		
-		return true;
-	}
-
-	void PDBFile::read(Protein& protein)
+	bool PDBFile::read(Protein& protein)
+		throw(Exception::ParseError)
 	{
 		clear_();
 		protein.destroy();
@@ -2674,13 +859,33 @@ namespace BALL
 		postprocessSheetsTurns_(sheet_list_, new_sheet_secstruc_list_);
 		postprocessSheetsTurns_(turn_list_, new_turn_secstruc_list_);
 		postprocessRandomCoils_();
+		
+		return true;
 	}
 
-	void PDBFile::read(System& system)
+	bool PDBFile::read(Molecule& molecule)
+		throw(Exception::ParseError)
 	{
-		Protein* protein = new Protein();
-		read(*protein);
-		system.insert(*protein);
+		// ????
+		
+		return true;
+	}
+
+	bool PDBFile::read(System& system)
+		throw(Exception::ParseError)
+	{
+		Protein* protein = new Protein;
+		bool result = read(*protein);
+		if (result == false)
+		{
+			delete protein;
+		}
+		else
+		{	
+			system.insert(*protein);
+		}
+
+		return result;
 	}
 
 	bool PDBFile::write(const System& system)
@@ -2694,7 +899,6 @@ namespace BALL
 		Size number_of_proteins = system.count(RTTI::getDefault<KernelPredicate<Protein> >());
 		if (number_of_proteins > 1)
 		{
-			Log.error() << "PDBFile::write(): cannot write a system with multiple proteins to a PDB file." << endl;
 			return false;
 		}
 		
@@ -2702,8 +906,6 @@ namespace BALL
 		{
 			if (system.countMolecules() != 1)
 			{
-				Log.error() << "PDBFile::write(System): "
-										<< "Cannot write empty/multiple molecules to a PDB file." << endl;
 				return false;
 			}
 			else
@@ -2727,7 +929,6 @@ namespace BALL
 			} 
 			else 
 			{
-				Log.error() << "PDBFile::write: cannot find a protein in the current system." << endl;
 				return false;
 			}
 		}
@@ -3638,11 +1839,6 @@ namespace BALL
 				first->second->setProperty(Residue::PROPERTY__HAS_SSBOND);
 				second->second->setProperty(Residue::PROPERTY__HAS_SSBOND);
 			} 
-			else 
-			{
-				Log.warn() << "PDBFile::postprocessSSBonds_: could not assign SSBOND for " 
-									 << it->first << ":" << it->third << " - " << it->second << "/" << it->fourth << endl;
-			}
 		}
 	}
 
@@ -3853,6 +2049,1435 @@ namespace BALL
 			}
 		}
 	}
+
+
+	bool PDBFile::parseRecordANISOU(const char* /* line */, Size /* size */)
+	{
+		return skipCurrentRecord();
+	}
+
+
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordANISOU& record)
+	{
+		return parseLine(line, size,PDB::FORMAT_ANISOU,
+										 record.record_name, &record.serial_number,
+										 record.atom_name, &record.alternate_location_indicator,
+										 record.residue_name, &record.chain_ID, &record.residue_sequence_number,
+										 &record.insertion_code, &record.u11, &record.u22, &record.u33,
+										 &record.u12, &record.u13, &record.u23, record.segment_ID,
+										 record.element_symbol, record.charge);
+	}
+
+	bool PDBFile::interpretRecord(const PDB::RecordANISOU& /* record */)
+	{
+		return true;
+	}
+					
+	bool PDBFile::interpretRecord(const PDB::RecordATOM& record)
+	{
+		if (record.chain_ID != chain_ID_)
+		{
+			current_chain_ = new Chain;
+			current_protein_->insert(*current_chain_);
+			
+			residue_name_ = "";
+			chain_ID_ = record.chain_ID;
+			
+			current_chain_->setName(chain_ID_);
+		}
+		
+		if (residue_name_ != (const char*)record.residue_name
+				|| (record.residue_sequence_number != residue_sequence_number_)
+				|| (record.insertion_code != insertion_code_))
+		{
+			ResidueQuadruple unique_residue(record.residue_name, record.chain_ID, 
+																			record.residue_sequence_number, record.insertion_code);
+
+			current_residue_ = new Residue;
+			current_chain_->insert(*current_residue_);
+			residue_map_[unique_residue] = current_residue_;
+			
+			residue_name_ = record.residue_name;
+			residue_sequence_number_ = record.residue_sequence_number;
+			insertion_code_ = record.insertion_code;
+			
+			if (current_residue_->hasProperty(Residue::PROPERTY__NON_STANDARD) == false)
+			{
+				current_residue_->setProperty(Residue::PROPERTY__AMINO_ACID);
+			}
+			String trimmed_name = residue_name_;
+			current_residue_->setName(trimmed_name.trim());
+			current_residue_->setID(residue_sequence_number_);
+			current_residue_->setInsertionCode(insertion_code_);
+		}
+
+		// make sure we read only the first location if alternate
+		// locations are present to avoid invalid structures due
+		// to duplicate atoms
+		if ((record.alternate_location_indicator == ' ' )
+				|| (record.alternate_location_indicator == 'A'))
+		{
+			current_PDB_atom_ = new PDBAtom;
+			current_residue_->insert(*current_PDB_atom_);
+			PDB_atom_map_[record.serial_number] = current_PDB_atom_;
+			
+			current_PDB_atom_->setName(getAtomName(record.atom_name));
+			current_PDB_atom_->setRemotenessIndicator(getAtomRemotenessIndicator(record.atom_name));
+			current_PDB_atom_->setBranchDesignator(getAtomBranchDesignator(record.atom_name));
+			current_PDB_atom_->setAlternateLocationIndicator(record.alternate_location_indicator);
+			current_PDB_atom_->setOccupancy(record.occupancy);
+			current_PDB_atom_->setTemperatureFactor(record.temperature_factor);
+			current_PDB_atom_->setRadius(current_PDB_atom_->getElement().getVanDerWaalsRadius());
+			current_PDB_atom_->setPosition(Vector3(record.orthogonal_vector[0], record.orthogonal_vector[1], record.orthogonal_vector[2]));
+			// Figuring out the element is nto entirely trivial: it *should* be in columns 77-78.
+			// However, some codes abuse cols. 77-80 for partial charges. We support this format w/ the 
+			// option PARTIAL_CHARGES for reading and writing.
+			if (parse_partial_charges_)
+			{
+				// ????
+			}
+			else
+			{
+				char element_symbol[3];
+				element_symbol[0] = record.element_symbol[0];
+				element_symbol[1] = record.element_symbol[1];
+				element_symbol[2] = '\0';
+				current_PDB_atom_->setElement(PTE[PDBFile::getAtomElementSymbol(record.atom_name, element_symbol)]);
+				try	
+				{
+					current_PDB_atom_->setFormalCharge(String(record.charge).toInt());
+				}
+				catch (Exception::InvalidFormat)
+				{
+				}
+				current_PDB_atom_->setCharge(current_PDB_atom_->getFormalCharge());
+			}
+		}
+		
+		return true;
+	}
+
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordATOM& record)
+	{
+		record.element_symbol[0] = '\0';
+		record.occupancy = 1.0;
+		record.temperature_factor = 0.0;
+		record.segment_ID[0] = '\0';
+		record.charge[0] = '\0';
+		record.partial_charge[0] = '\0';
+
+		if (parse_partial_charges_ == true)
+		{
+			return parseLine
+				(line, size, 
+				 PDB::FORMAT_ATOM_PARTIAL_CRG,
+				 record.record_name,
+				 &record.serial_number,
+				 record.atom_name,
+				 &record.alternate_location_indicator,
+				 record.residue_name,
+				 &record.chain_ID,
+				 &record.residue_sequence_number,
+				 &record.insertion_code,
+				 &record.orthogonal_vector[0],
+				 &record.orthogonal_vector[1],
+				 &record.orthogonal_vector[2],
+				 &record.occupancy,
+				 &record.temperature_factor,
+				 record.segment_ID,
+				 record.partial_charge);			
+		}
+		else	
+		{
+			return parseLine
+				(line, size, 
+				 PDB::FORMAT_ATOM,
+				 record.record_name,
+				 &record.serial_number,
+				 record.atom_name,
+				 &record.alternate_location_indicator,
+				 record.residue_name,
+				 &record.chain_ID,
+				 &record.residue_sequence_number,
+				 &record.insertion_code,
+				 &record.orthogonal_vector[0],
+				 &record.orthogonal_vector[1],
+				 &record.orthogonal_vector[2],
+				 &record.occupancy,
+				 &record.temperature_factor,
+				 record.segment_ID,
+				 record.element_symbol,
+				 record.charge,
+				 record.partial_charge);
+		}
+	}
+		
+	bool PDBFile::parseRecordATOM(const char* line, Size size)
+	{
+		// Parse only those records belonging to the correct model!
+		if ((selected_model_ != 0) && (selected_model_ != current_model_))
+		{
+			return true;
+		}
+		static PDB::RecordATOM record;
+		if (!fillRecord(line, size, record))
+		{
+			return false;
+		}
+		if ((ignore_xplor_pseudo_atoms_ == true)
+				&& record.orthogonal_vector[0] >= 9998.0
+				&& record.orthogonal_vector[1] >= 9998.0
+				&& record.orthogonal_vector[2] >= 9998.0)
+		{ // ignore XPLOR pseudo atoms (see Rasmol2.6 source 'molecule.c/ReadPDBAtom')
+			return true;
+		}
+		return interpretRecord(record);
+	}
+	
+	bool PDBFile::parseRecordAUTHOR(const char* /* line */, Size /* size */)
+	{
+		return skipCurrentRecord();
+	}
+
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordAUTHOR& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_AUTHOR,
+										 record.record_name, &record.continuation,
+										 record.authors);
+	}
+
+	bool PDBFile::interpretRecord(const PDB::RecordAUTHOR& /* record */)
+	{
+		return true;
+	}
+
+
+	bool PDBFile::parseRecordCAVEAT(const char* /* line */, Size /* size */)
+	{
+		return skipCurrentRecord();
+	}
+
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordCAVEAT& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_CAVEAT,
+										 record.record_name, &record.continuation, 
+										 record.entry_code, record.comment);
+	}
+				
+	bool PDBFile::interpretRecord(const PDB::RecordCAVEAT& /* record */)
+	{
+		return true;
+	}
+
+	bool PDBFile::parseRecordCISPEP(const char* /* line */, Size /* size */)
+	{
+		return skipCurrentRecord();
+	}
+
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordCISPEP& record)
+	{	
+		return parseLine(line, size, PDB::FORMAT_CISPEP,
+					 record.record_name, &record.record_serial_number,
+					 record.cis_peptide[0].residue_name,
+					 &record.cis_peptide[0].chain_ID,
+					 &record.cis_peptide[0].residue_sequence_number,
+					 &record.cis_peptide[0].insertion_code,
+					 record.cis_peptide[1].residue_name,
+					 &record.cis_peptide[1].chain_ID,
+					 &record.cis_peptide[1].residue_sequence_number,
+					 &record.cis_peptide[1].insertion_code,
+					 &record.specific_model_ID,
+					 &record.angle_measure);
+	}
+		
+	bool PDBFile::interpretRecord(const PDB::RecordCISPEP& /* record */)
+	{
+		return true;
+	}
+
+
+	bool PDBFile::parseRecordCOMPND(const char* /* line */, Size /* size */)
+	{
+		return skipCurrentRecord();
+	}
+		
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordCOMPND& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_COMPND,
+										 record.record_name, &record.continuation,
+										 record.component_description);
+	}
+
+	bool PDBFile::interpretRecord(const PDB::RecordCOMPND& /* record */)
+	{
+		return true;
+	}
+
+
+	bool PDBFile::parseRecordCONECT(const char* line, Size size)
+	{
+		static PDB::RecordCONECT record;
+		return (fillRecord(line, size, record) && interpretRecord(record));
+	}
+		
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordCONECT& record)
+	{
+		record.bonded_atom_serial_number[0] = 0;
+		record.bonded_atom_serial_number[1] = 0;
+		record.bonded_atom_serial_number[2] = 0;
+		record.bonded_atom_serial_number[3] = 0;
+		record.hydrogen_bonded_atom_serial_number[0] = 0;
+		record.hydrogen_bonded_atom_serial_number[1] = 0;
+		record.hydrogen_bonded_atom_serial_number[2] = 0;
+		record.hydrogen_bonded_atom_serial_number[3] = 0;
+		record.salt_bridged_atom_serial_number[0] = 0;
+		record.salt_bridged_atom_serial_number[1] = 0;
+
+		return parseLine(line, size, PDB::FORMAT_CONECT,
+					 record.record_name, &record.atom_serial_number,
+					 &record.bonded_atom_serial_number[0], &record.bonded_atom_serial_number[1],
+					 &record.bonded_atom_serial_number[2], &record.bonded_atom_serial_number[3],
+					 &record.hydrogen_bonded_atom_serial_number[0],
+					 &record.hydrogen_bonded_atom_serial_number[1],
+					 &record.salt_bridged_atom_serial_number[0],
+					 &record.hydrogen_bonded_atom_serial_number[2],
+					 &record.hydrogen_bonded_atom_serial_number[3],
+					 &record.salt_bridged_atom_serial_number[1]);
+	}
+
+	bool PDBFile::interpretRecord(const PDB::RecordCONECT& record)
+	{
+		PDBAtom* PDB_atom = 0;
+		Bond*	bond = 0;
+		unsigned short i = 0;
+
+		// extract a pointer to the atom, if it was found in the hash map
+		PDBAtomMap::Iterator atom_map_it = PDB_atom_map_.find(record.atom_serial_number);
+		if (atom_map_it == PDB_atom_map_.end())
+		{
+			return false;  // illegal atom number, abort
+		}
+		else
+		{
+			PDB_atom = atom_map_it->second; // retrieve the pointer
+		}
+		
+		// read the entries for the bonds
+		for (i = 0; i < 4; ++i)
+		{
+			if (record.bonded_atom_serial_number[i] != 0)
+			{
+				// retrieve the second atom via the hash table
+				atom_map_it = PDB_atom_map_.find(record.bonded_atom_serial_number[i]);				
+				if (atom_map_it != PDB_atom_map_.end())
+				{
+					// create the new bond
+					bond = PDB_atom->createBond(*atom_map_it->second);
+		
+					if (bond != 0)
+					{
+						bond->setType(Bond::TYPE__COVALENT);
+						bond->setOrder(Bond::ORDER__SINGLE);
+					}
+				}
+			}
+		}
+				
+		for (i = 0; i < 4; ++i)
+		{
+			if (record.hydrogen_bonded_atom_serial_number[i] != 0)
+			{
+				atom_map_it = PDB_atom_map_.find(record.hydrogen_bonded_atom_serial_number[i]);
+				if (atom_map_it != PDB_atom_map_.end())
+				{
+					bond = PDB_atom->createBond(*atom_map_it->second);
+		
+					if (bond != 0)
+					{
+						bond->setType(Bond::TYPE__HYDROGEN);
+						bond->setOrder(Bond::ORDER__SINGLE);
+					}
+				}
+			}
+		}
+		
+		for (i = 0; i < 2; ++i)
+		{
+			if (record.salt_bridged_atom_serial_number[i] != 0)
+			{
+				atom_map_it = PDB_atom_map_.find(record.salt_bridged_atom_serial_number[i]);
+				if (atom_map_it != PDB_atom_map_.end())
+				{
+					bond = PDB_atom->createBond(*atom_map_it->second);
+		
+					if (bond != 0)
+					{
+						bond->setType(Bond::TYPE__SALT_BRIDGE);
+						bond->setOrder(Bond::ORDER__SINGLE);
+					}
+				}
+			}
+		}
+		
+		return true;
+	}
+
+
+	bool PDBFile::parseRecordCRYST1(const char* /* line */, Size /* size */)
+	{
+		return skipCurrentRecord();
+	}
+
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordCRYST1& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_CRYST1,
+					 record.record_name, &record.unit_cell.a,
+					 &record.unit_cell.b, &record.unit_cell.c,
+					 &record.unit_cell.alpha, &record.unit_cell.beta,
+					 &record.unit_cell.gamma, record.unit_cell.space_group,
+					 &record.unit_cell.z_value);
+	}
+		
+	bool PDBFile::interpretRecord(const PDB::RecordCRYST1& /* record */)
+	{
+		return true;
+	}
+
+
+	bool PDBFile::parseRecordDBREF(const char* /* line */, Size /* size */)
+	{
+		return skipCurrentRecord();
+	}
+
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordDBREF& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_DBREF, 
+										 record.record_name, record.entry_code,
+										 &record.chain_ID, &record.initial_sequence.number,
+										 &record.initial_sequence.insertion_code,
+										 &record.ending_sequence.number,
+										 &record.ending_sequence.insertion_code,
+										 record.sequence_database_name,
+										 record.sequence_database_accession_code,
+										 record.sequence_database_ID_code,
+										 &record.chain_ID,
+										 &record.initial_database_segment.number,
+										 &record.initial_database_segment.insertion_code,
+										 &record.ending_database_segment.number,
+										 &record.ending_database_segment.insertion_code);
+	}
+	
+	bool PDBFile::interpretRecord(const PDB::RecordDBREF& /* record */)
+	{
+		return true;
+	}
+
+
+	bool PDBFile::parseRecordEND(const char* /* line */, Size /* size */)
+	{
+		return skipCurrentRecord();
+	}
+
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordEND& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_END, record.record_name);
+	}
+
+	bool PDBFile::interpretRecord(const PDB::RecordEND& /* record */)	
+	{
+		return true;
+	}
+
+
+	bool PDBFile::parseRecordENDMDL(const char* line, Size size)
+	{
+		static PDB::RecordENDMDL record;
+		return (fillRecord(line, size, record) && interpretRecord(record));
+	}
+
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordENDMDL& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_ENDMDL,record.record_name);
+	}
+
+	bool PDBFile::interpretRecord(const PDB::RecordENDMDL& /* record */)
+	{
+		// We are now outside a model...
+		current_model_ = INVALID_INDEX;
+		return true;
+	}
+																												
+
+	bool PDBFile::parseRecordEXPDTA(const char* /* line */, Size /* size */)
+	{
+		return skipCurrentRecord();
+	}
+		
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordEXPDTA& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_EXPDTA,
+										 record.record_name, &record.continuation,record.technique);
+
+	}
+	
+	bool PDBFile::interpretRecord(const PDB::RecordEXPDTA& /* record */)
+	{
+		return true;
+	}
+															
+	
+	bool PDBFile::parseRecordFORMUL(const char* /* line */, Size /* size */)
+	{
+		return skipCurrentRecord();
+	}
+
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordFORMUL& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_FORMUL,
+					 record.record_name, &record.component_number,
+					 record.het_ID, &record.continuation_number,
+					 &record.is_water, record.chemical_formula);
+	}
+
+	bool PDBFile::interpretRecord(const PDB::RecordFORMUL& /* record */)
+	{
+		return true;
+	}
+		
+	bool PDBFile::parseRecordFTNOTE(const char* /* line */, Size /* size */)
+	{
+		return skipCurrentRecord();
+	}
+		
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordFTNOTE& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_FTNOTE,
+										 record.record_name,&record.number, record.text);
+	}
+
+	bool PDBFile::interpretRecord(const PDB::RecordFTNOTE& /* record */)
+	{
+		return true;
+	}
+
+	bool PDBFile::parseRecordHEADER(const char* line, Size size)
+	{
+		static PDB::RecordHEADER record;
+		return (fillRecord(line, size, record) && interpretRecord(record));
+	}
+		
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordHEADER& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_HEADER,
+										 record.record_name, record.classification, record.deposition_date, record.ID_code);
+	}
+
+	bool PDBFile::interpretRecord(const PDB::RecordHEADER& record)
+	{
+		current_protein_->setName(record.classification);
+		current_protein_->setID(record.ID_code);
+
+		return true;
+	}
+
+	bool PDBFile::parseRecordHELIX(const char* line, Size size)
+	{
+		static PDB::RecordHELIX record;
+		return (fillRecord(line, size, record) && interpretRecord(record));
+	}
+	
+	bool PDBFile::interpretRecord(const PDB::RecordHELIX& record)
+	{
+		ResidueQuadruple partner_residue
+			(record.initial_residue.residue_name, record.initial_residue.chain_ID,
+			 record.initial_residue.sequence_number, record.initial_residue.insertion_code);
+		
+		SecondaryStructure* sec_struc = new SecondaryStructure(record.helix_ID);
+		
+		new_helix_secstruc_list_.push_back(sec_struc);
+		sec_struc->setType(SecondaryStructure::HELIX);
+		sec_struc->setProperty("HELIX_CLASS", (unsigned int)record.helix_class);
+		
+		helix_list_.push_back(partner_residue);
+		
+		partner_residue.set(record.terminal_residue.residue_name, record.terminal_residue.chain_ID,
+												record.terminal_residue.sequence_number, record.terminal_residue.insertion_code);
+		
+		helix_list_.push_back(partner_residue);
+		
+		return true;
+	}
+
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordHELIX& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_HELIX,
+										 record.record_name, &record.serial_number,
+										 record.helix_ID, record.initial_residue.residue_name,
+										 &record.initial_residue.chain_ID, &record.initial_residue.sequence_number,
+										 &record.initial_residue.insertion_code, record.terminal_residue.residue_name,
+										 &record.terminal_residue.chain_ID, &record.terminal_residue.sequence_number,
+										 &record.terminal_residue.insertion_code, &record.helix_class,
+										 record.comment, &record.length);
+	}
+
+	bool PDBFile::parseRecordHET(const char* /* line */, Size /* size */)
+	{
+		return skipCurrentRecord();
+	}
+		
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordHET& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_HET,
+										 record.record_name, record.het_ID,
+										 &record.chain_ID, &record.sequence_number,
+										 &record.insertion_code, &record.number_of_HETATM_records,
+										 record.text);
+	}
+
+	bool PDBFile::interpretRecord(const PDB::RecordHET& /* record */)
+	{
+		return true;
+	}
+
+	bool PDBFile::parseRecordHETATM(const char* line, Size size)
+	{
+		if ((selected_model_ != 0) && (selected_model_ != current_model_))
+		{
+			return true;
+		}
+		parseRecordATOM(line, size); 
+		
+		current_residue_->clearProperty(Residue::PROPERTY__AMINO_ACID);
+		current_residue_->setProperty(Residue::PROPERTY__NON_STANDARD);
+		
+		RegularExpression regular_expression("^OHH|HOH|HHO|H2O|2HO|OH2|SOL|TIP|TIP2|TIP3|TIP4|WAT|D2O$");
+		if (regular_expression.match(current_residue_->getName()) == true)
+		{
+			current_residue_->setProperty(Residue::PROPERTY__WATER);
+		}
+		return true;
+	}
+
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordHETATM& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_HETATM,
+										 record.record_name, &record.serial_number,
+										 record.atom_name, &record.alternate_location_indicator,
+										 record.residue_name, &record.chain_ID, &record.residue_sequence_number,
+										 &record.insertion_code, &record.orthogonal_vector[0],
+										 &record.orthogonal_vector[1], &record.orthogonal_vector[2],
+										 &record.occupancy, &record.temperature_factor,
+										 record.segment_ID, record.element_symbol, record.charge);
+	}
+
+	bool PDBFile::interpretRecord(const PDB::RecordHETATM& /* record */)
+	{
+		return true;
+	}
+
+
+	bool PDBFile::parseRecordHETNAM(const char* /* line */, Size /* size */)
+	{
+		return skipCurrentRecord();
+	}
+
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordHETNAM& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_HETNAM,
+										 record.record_name, &record.continuation,
+										 record.het_ID, record.chemical_name);
+	}
+
+	bool PDBFile::interpretRecord(const PDB::RecordHETNAM& /* record */)
+	{
+		return true;
+	}
+		
+	bool PDBFile::parseRecordHYDBND(const char* /* line */, Size /* size */)
+	{
+		return skipCurrentRecord();
+	}
+		
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordHYDBND& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_HYDBND,
+										 record.record_name, record.hydrogen_partner_atom[0].atom_name,
+										 &record.hydrogen_partner_atom[0].alternate_location_indicator,
+										 record.hydrogen_partner_atom[0].residue.residue_name,
+										 &record.hydrogen_partner_atom[0].residue.chain_ID,
+										 &record.hydrogen_partner_atom[0].residue.sequence_number,
+										 &record.hydrogen_partner_atom[0].residue.insertion_code,
+										 record.hydrogen_atom.atom_name,
+										 &record.hydrogen_atom.alternate_location_indicator,
+										 &record.hydrogen_atom.residue.chain_ID,
+										 &record.hydrogen_atom.residue.sequence_number,
+										 &record.hydrogen_atom.residue.insertion_code,
+										 record.hydrogen_partner_atom[1].atom_name,
+										 &record.hydrogen_partner_atom[1].alternate_location_indicator,
+										 record.hydrogen_partner_atom[1].residue.residue_name,
+										 &record.hydrogen_partner_atom[1].residue.chain_ID,
+										 &record.hydrogen_partner_atom[1].residue.sequence_number,
+										 &record.hydrogen_partner_atom[1].residue.insertion_code,
+										 &record.first_non_hydrogen_atom,
+										 &record.second_non_hydrogen_atom);
+	}
+
+	bool PDBFile::interpretRecord(const PDB::RecordHYDBND& /* record */)
+	{
+		return true;
+	}
+
+
+	bool PDBFile::parseRecordJRNL(const char* /* line */, Size /* size */)
+	{
+		return skipCurrentRecord();
+	}
+		
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordJRNL& record)
+	{
+		return parseLine(line,size, PDB::FORMAT_JRNL, record.record_name, record.text);
+	}
+
+	bool PDBFile::interpretRecord(const PDB::RecordJRNL& /* record */)
+	{
+		return true;
+	}
+
+	bool PDBFile::parseRecordKEYWDS(const char* /* line */, Size /* size */)
+	{
+		return skipCurrentRecord();
+	}
+		
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordKEYWDS& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_KEYWDS,
+										 record.record_name, &record.continuation, record.keywords);
+	}
+
+	bool PDBFile::interpretRecord(const PDB::RecordKEYWDS& /* record */)
+	{
+		return true;
+	}
+
+	bool PDBFile::parseRecordLINK(const char* /* line */, Size /* size */)
+	{
+		return skipCurrentRecord();
+	}
+		
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordLINK& record)
+	{
+		return parseLine(line,	size, PDB::FORMAT_LINK,
+										record.record_name,	record.link_partner[0].atom_name,
+										&record.link_partner[0].alternate_location_indicator,
+										record.link_partner[0].residue.residue_name,
+										&record.link_partner[0].residue.chain_ID,
+										&record.link_partner[0].residue.sequence_number,
+										&record.link_partner[0].residue.insertion_code,
+										record.link_partner[1].atom_name,
+										&record.link_partner[1].alternate_location_indicator,
+										record.link_partner[1].residue.residue_name,
+										&record.link_partner[1].residue.chain_ID,
+										&record.link_partner[1].residue.sequence_number,
+										&record.link_partner[1].residue.insertion_code,
+										&record.first_atom, &record.second_atom);
+	}
+
+	bool PDBFile::interpretRecord(const PDB::RecordLINK& /* record */)
+	{
+		return true;
+	}
+
+	bool PDBFile::parseRecordMASTER(const char* /* line */, Size /* size */)
+	{
+		return skipCurrentRecord();
+	}
+		
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordMASTER& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_MASTER,
+							record.record_name,
+							&record.number_of_REMARK_records,
+							&record.zero,
+							&record.number_of_HET_records,
+							&record.number_of_HELIX_records,
+							&record.number_of_SHEET_records,
+							&record.number_of_TURN_records,
+							&record.number_of_SITE_records,
+							&record.number_of_ORIGX_SCALE_MTRIX_records,
+							&record.number_of_ATOM_HETATM_records,
+							&record.number_of_TER_records,
+							&record.number_of_CONECT_records,
+							&record.number_of_SEQRES_records);
+	}
+	
+	bool PDBFile::interpretRecord(const PDB::RecordMASTER& /* record */)
+	{
+		return true;
+	}
+
+
+	bool PDBFile::parseRecordMODEL(const char* line, Size size)
+	{
+		static PDB::RecordMODEL record;
+		return (fillRecord(line, size, record) && interpretRecord(record));
+	}
+		
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordMODEL& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_MODEL,
+										 record.record_name,	&record.model_serial_number);
+	}
+	
+	bool PDBFile::interpretRecord(const PDB::RecordMODEL& record)
+	{
+		current_model_ = (Index)record.model_serial_number;
+		return true;
+	}
+
+
+	bool PDBFile::parseRecordMODRES(const char* /* line */, Size /* size */)
+	{
+		return skipCurrentRecord();
+	}
+		
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordMODRES& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_MODRES,
+										 record.record_name, record.entry_code,
+										 record.residue_name,	&record.chain_ID,
+										 &record.sequence_number,	&record.insertion_code,
+										 record.standard_residue_name,record.comment);
+	}
+	
+	bool PDBFile::interpretRecord(const PDB::RecordMODRES& /* record */)
+	{
+		return true;
+	}
+
+
+	bool PDBFile::parseRecordMTRIX1(const char* /* line */, Size /* size */)
+	{
+		return skipCurrentRecord();
+	}
+		
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordMTRIX1& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_MTRIX1,
+										 record.record_name, &record.serial_number,
+										 &record.transformation_matrix[0],
+										 &record.transformation_matrix[1],
+										 &record.transformation_matrix[2],
+										 &record.transformation_matrix[3],
+										 &record.is_given);
+	}
+	
+	bool PDBFile::interpretRecord(const PDB::RecordMTRIX1& /* record */)
+	{
+		return true;
+	}
+
+
+	bool PDBFile::parseRecordMTRIX2(const char* /* line */, Size /* size */)
+	{
+		return skipCurrentRecord();
+	}
+		
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordMTRIX2& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_MTRIX2,
+										 record.record_name, &record.serial_number,
+										 &record.transformation_matrix[0],
+										 &record.transformation_matrix[1],
+										 &record.transformation_matrix[2],
+										 &record.transformation_matrix[3],
+										 &record.is_given);
+	}
+	
+	bool PDBFile::interpretRecord(const PDB::RecordMTRIX2& /* record */)
+	{
+		return true;
+	}
+
+
+	bool PDBFile::parseRecordMTRIX3(const char* /* line */, Size /* size */)
+	{
+		return skipCurrentRecord();
+	}
+		
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordMTRIX3& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_MTRIX3,
+										 record.record_name, &record.serial_number,
+										 &record.transformation_matrix[0],
+										 &record.transformation_matrix[1],
+										 &record.transformation_matrix[2],
+										 &record.transformation_matrix[3],
+										 &record.is_given);
+	}
+	
+	bool PDBFile::interpretRecord(const PDB::RecordMTRIX3& /* record */)
+	{
+		return true;
+	}
+
+
+	bool PDBFile::parseRecordOBSLTE(const char* /* line */, Size /* size */)
+	{
+		return skipCurrentRecord();
+	}
+		
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordOBSLTE& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_OBSLTE,
+										 record.record_name, &record.continuation,
+										 record.entry_replaced_date,	record.entry_code,
+										 record.replacing_entry_code[0],
+										 record.replacing_entry_code[1],
+										 record.replacing_entry_code[2],
+										 record.replacing_entry_code[3],
+										 record.replacing_entry_code[4],
+										 record.replacing_entry_code[5],
+										 record.replacing_entry_code[6],
+										 record.replacing_entry_code[7]);
+	}
+	
+	bool PDBFile::interpretRecord(const PDB::RecordOBSLTE& /* record */)
+	{
+		return true;
+	}
+
+
+	bool PDBFile::parseRecordORIGX1(const char* /* line */, Size /* size */)
+	{
+		return skipCurrentRecord();
+	}
+		
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordORIGX1& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_ORIGX1,
+										 record.record_name, &record.transformation_matrix[0],
+										 &record.transformation_matrix[1], &record.transformation_matrix[2],
+										 &record.transformation_matrix[3]);
+	}
+	
+	bool PDBFile::interpretRecord(const PDB::RecordORIGX1& /* record */)
+	{
+		return true;
+	}
+
+
+	bool PDBFile::parseRecordORIGX2(const char* /* line */, Size /* size */)
+	{
+		return skipCurrentRecord();
+	}
+		
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordORIGX2& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_ORIGX2,
+										 record.record_name, &record.transformation_matrix[0],
+										 &record.transformation_matrix[1], &record.transformation_matrix[2],
+										 &record.transformation_matrix[3]);
+	}
+	
+	bool PDBFile::interpretRecord(const PDB::RecordORIGX2&  /* record */)
+	{
+		return true;
+	}
+
+
+	bool PDBFile::parseRecordORIGX3(const char* /* line */, Size /* size */)
+	{
+		return skipCurrentRecord();
+	}
+		
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordORIGX3& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_ORIGX2,
+										 record.record_name, &record.transformation_matrix[0],
+										 &record.transformation_matrix[1], &record.transformation_matrix[2],
+										 &record.transformation_matrix[3]);
+	}
+	
+	bool PDBFile::interpretRecord(const PDB::RecordORIGX3& /* record */)
+	{
+		return true;
+	}
+
+
+	bool PDBFile::parseRecordREMARK(const char* /* line */, Size /* size */)
+	{
+		return skipCurrentRecord();
+	}
+		
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordREMARK& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_REMARK,
+										 record.record_name, &record.remark_number,	record.text);
+	}
+	
+	bool PDBFile::interpretRecord(const PDB::RecordREMARK& /* record */) 
+	{
+		return true;
+	}
+
+
+	bool PDBFile::parseRecordREVDAT(const char* /* line */, Size /* size */)
+	{
+		return skipCurrentRecord();
+	}
+
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordREVDAT& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_REVDAT,
+										 record.record_name, &record.modification_number,
+										 &record.continuation, record.modification_date,
+										 record.modification_ID, &record.modification_type,
+										 record.name_of_modified_record[0], record.name_of_modified_record[1],
+										 record.name_of_modified_record[2],	record.name_of_modified_record[3]);
+	}
+	
+	bool PDBFile::interpretRecord(const PDB::RecordREVDAT& /* record */)
+	{
+		return true;
+	}
+
+
+	bool PDBFile::parseRecordSCALE1(const char* /* line */, Size /* size */)
+	{
+		return skipCurrentRecord();
+	}
+
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordSCALE1& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_SCALE1,
+							record.record_name,	&record.transformation_matrix[0],
+							&record.transformation_matrix[1],	&record.transformation_matrix[2],
+							&record.transformation_matrix[3]);
+	}
+	
+	bool PDBFile::interpretRecord(const PDB::RecordSCALE1& /* record */)
+	{
+		return true;
+	}
+
+
+	bool PDBFile::parseRecordSCALE2(const char* /* line */, Size /* size */)
+	{
+		return skipCurrentRecord();
+	}
+
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordSCALE2& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_SCALE2,
+							record.record_name,	&record.transformation_matrix[0],
+							&record.transformation_matrix[1],	&record.transformation_matrix[2],
+							&record.transformation_matrix[3]);
+	}
+	
+	bool PDBFile::interpretRecord(const PDB::RecordSCALE2& /* record */)
+	{
+		return true;
+	}
+
+
+	bool PDBFile::parseRecordSCALE3(const char* /* line */, Size /* size */)
+	{
+		return skipCurrentRecord();
+	}
+
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordSCALE3& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_SCALE2,
+							record.record_name,	&record.transformation_matrix[0],
+							&record.transformation_matrix[1],	&record.transformation_matrix[2],
+							&record.transformation_matrix[3]);
+	}
+	
+	bool PDBFile::interpretRecord(const PDB::RecordSCALE3& /* record */)
+	{
+		return true;
+	}
+
+
+	bool PDBFile::parseRecordSEQRES(const char* /* line */, Size /* size */)
+	{
+		return skipCurrentRecord();
+	}
+
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordSEQRES& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_SEQRES,
+							record.record_name,	&record.serial_number,
+							&record.chain_ID,	&record.number_of_residues_in_chain,
+							record.residue_name[0], record.residue_name[1],
+							record.residue_name[2],	record.residue_name[3],
+							record.residue_name[4], record.residue_name[5],
+							record.residue_name[6],	record.residue_name[7],
+							record.residue_name[8],	record.residue_name[9],
+							record.residue_name[10], record.residue_name[11],
+							record.residue_name[12]);
+	}
+	
+	bool PDBFile::interpretRecord(const PDB::RecordSEQRES& /* record */)
+	{
+		return true;
+	}
+
+	bool PDBFile::parseRecordSHEET(const char* line, Size size)
+	{
+		static PDB::RecordSHEET record;
+		return (fillRecord(line, size, record) && interpretRecord(record));
+	}
+
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordSHEET& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_SHEET,
+										 record.record_name, &record.strand_number,
+										 record.sheet_ID, &record.number_of_strands,
+										 record.initial_residue.residue_name,
+										 &record.initial_residue.chain_ID,
+										 &record.initial_residue.sequence_number,
+										 &record.initial_residue.insertion_code,
+										 record.terminal_residue.residue_name,
+										 &record.terminal_residue.chain_ID,
+										 &record.terminal_residue.sequence_number,
+										 &record.terminal_residue.insertion_code,
+										 &record.sense_of_strand,
+										 record.atom_name_in_current_strand,
+										 record.residue_in_current_strand.residue_name,
+										 &record.residue_in_current_strand.chain_ID,
+										 &record.residue_in_current_strand.sequence_number,
+										 &record.residue_in_current_strand.insertion_code,
+										 record.atom_name_in_previous_strand,
+										 record.residue_in_previous_strand.residue_name,
+										 &record.residue_in_previous_strand.chain_ID,
+										 &record.residue_in_previous_strand.sequence_number,
+										 &record.residue_in_previous_strand.insertion_code);
+	}
+
+	bool PDBFile::interpretRecord(const PDB::RecordSHEET& record)
+	{
+    ResidueQuadruple partner_residue
+      (record.initial_residue.residue_name, record.initial_residue.chain_ID,
+       record.initial_residue.sequence_number, record.initial_residue.insertion_code);
+
+    SecondaryStructure* sec_struc = new SecondaryStructure(record.sheet_ID);
+
+    new_sheet_secstruc_list_.push_back(sec_struc);
+    sec_struc->setType(SecondaryStructure::STRAND);
+    sec_struc->setProperty("STRAND_SENSE", (record.sense_of_strand != 0));
+
+    sheet_list_.push_back(partner_residue);
+
+    partner_residue.set(record.terminal_residue.residue_name, record.terminal_residue.chain_ID,
+                        record.terminal_residue.sequence_number, record.terminal_residue.insertion_code);
+
+    sheet_list_.push_back(partner_residue);
+
+    return true;
+	}
+
+	bool PDBFile::parseRecordSIGATM(const char* /* line */, Size /* size */)
+	{
+		return skipCurrentRecord();
+	}
+
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordSIGATM& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_SIGATM,
+								 record.record_name,
+								 &record.serial_number,
+								 record.atom_name,
+								 &record.alternate_location_indicator,
+								 record.residue_name,
+								 &record.chain_ID,
+								 &record.residue_sequence_number,
+								 &record.insertion_code,
+								 &record.standard_vector_deviation[0],
+								 &record.standard_vector_deviation[1],
+								 &record.standard_vector_deviation[2],
+								 &record.standard_occupancy_deviation,
+								 &record.standard_temperature_deviation,
+								 record.segment_ID,
+								 record.element_symbol,
+								 record.charge);
+	}
+	
+	bool PDBFile::interpretRecord(const PDB::RecordSIGATM& /* record */)
+	{
+		if ((selected_model_ != 0) && (selected_model_ != current_model_))
+		{
+			return true;
+		}
+		return true;
+	}
+
+
+	bool PDBFile::parseRecordSIGUIJ(const char* /* line */, Size /* size */)
+	{
+		return skipCurrentRecord();
+	}
+
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordSIGUIJ& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_SIGUIJ,
+										 record.record_name, &record.serial_number,
+								 record.atom_name,
+								 &record.alternate_location_indicator,
+								 record.residue_name,
+								 &record.chain_ID,
+								 &record.residue_sequence_number,
+								 &record.insertion_code,
+								 &record.sig11,
+								 &record.sig22,
+								 &record.sig33,
+								 &record.sig12,
+								 &record.sig13,
+								 &record.sig23,
+								 record.segment_ID,
+								 record.element_symbol,
+								 record.charge);
+	}
+	
+	bool PDBFile::interpretRecord(const PDB::RecordSIGUIJ& /* record */)
+	{
+		if ((selected_model_ != 0) && (selected_model_ != current_model_))
+		{
+			return true;
+		}
+		return true;
+	}
+
+
+	bool PDBFile::parseRecordSITE(const char* /* line */, Size /* size */)
+	{
+		return skipCurrentRecord();
+	}
+
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordSITE& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_SITE,
+										 record.record_name, &record.sequence_number,
+										 record.name, &record.number_of_residues,
+										 record.residue[0].residue_name,
+										 &record.residue[0].chain_ID,
+										 &record.residue[0].sequence_number,
+										 &record.residue[0].insertion_code,
+										 record.residue[1].residue_name,
+										 &record.residue[1].chain_ID,
+										 &record.residue[1].sequence_number,
+										 &record.residue[1].insertion_code,
+										 record.residue[2].residue_name,
+										 &record.residue[2].chain_ID,
+										 &record.residue[2].sequence_number,
+										 &record.residue[2].insertion_code,
+										 record.residue[3].residue_name,
+										 &record.residue[3].chain_ID,
+										 &record.residue[3].sequence_number,
+										 &record.residue[3].insertion_code);
+	}
+	
+	bool PDBFile::interpretRecord(const PDB::RecordSITE& /* record */)
+	{
+		return true;
+	}
+
+	bool PDBFile::parseRecordSLTBRG(const char* /* line */, Size /* size */)
+	{
+		return skipCurrentRecord();
+	}
+
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordSLTBRG& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_SLTBRG,
+										 record.record_name,
+										 record.partner_atom[0].atom_name,
+										 &record.partner_atom[0].alternate_location_indicator,
+										 record.partner_atom[0].residue.residue_name,
+										 &record.partner_atom[0].residue.chain_ID,
+										 &record.partner_atom[0].residue.sequence_number,
+										 &record.partner_atom[0].residue.insertion_code,
+										 record.partner_atom[1].atom_name,
+										 &record.partner_atom[1].alternate_location_indicator,
+										 record.partner_atom[1].residue.residue_name,
+										 &record.partner_atom[1].residue.chain_ID,
+										 &record.partner_atom[1].residue.sequence_number,
+										 &record.partner_atom[1].residue.insertion_code,
+										 &record.first_atom,
+										 &record.second_atom);
+	}
+	
+	bool PDBFile::interpretRecord(const PDB::RecordSLTBRG&  /* record */)
+	{
+		return true;
+	}
+
+
+	bool PDBFile::parseRecordSOURCE(const char* /* line */, Size /* size */)
+	{
+		return skipCurrentRecord();
+	}
+
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordSOURCE& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_SOURCE,
+										 record.record_name, &record.continuation, record.sources);
+	}
+	
+	bool PDBFile::interpretRecord(const PDB::RecordSOURCE& /* record */)
+	{
+		return true;
+	}
+
+
+	bool PDBFile::parseRecordSSBOND(const char* line, Size size)
+	{
+		static PDB::RecordSSBOND record;
+		return (fillRecord(line, size, record) && interpretRecord(record));
+	}
+
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordSSBOND& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_SSBOND,
+										 record.record_name,
+                    &record.serial_number,
+                    record.partner_residue[0].residue_name,
+                    &record.partner_residue[0].chain_ID,
+                    &record.partner_residue[0].sequence_number,
+                    &record.partner_residue[0].insertion_code,
+                    record.partner_residue[1].residue_name,
+                    &record.partner_residue[1].chain_ID,
+                    &record.partner_residue[1].sequence_number,
+                    &record.partner_residue[1].insertion_code,
+                    &record.partner_residue[0].symmetry_operator,
+                    &record.partner_residue[1].symmetry_operator);
+	}
+
+	bool PDBFile::interpretRecord(const PDB::RecordSSBOND& record)
+	{
+		ResidueQuadruple partner(record.partner_residue[0].residue_name, record.partner_residue[0].chain_ID,
+														 record.partner_residue[0].sequence_number, record.partner_residue[0].insertion_code);
+		
+		ssbond_list_.push_back(partner);
+		
+		partner.set(record.partner_residue[1].residue_name, record.partner_residue[1].chain_ID,
+								record.partner_residue[1].sequence_number,	record.partner_residue[1].insertion_code);
+		
+		ssbond_list_.push_back(partner);
+		
+		return true;
+	}
+
+
+	bool PDBFile::parseRecordTER(const char* line, Size size)
+	{
+		if ((selected_model_ != 0) && (selected_model_ != current_model_))
+		{
+			return true;
+		}
+		static PDB::RecordTER record;
+		return (fillRecord(line, size, record) && interpretRecord(record));
+	}
+
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordTER& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_TER, 
+										 record.record_name,
+										 &record.serial_number,
+										 record.residue_name,
+										 &record.chain_ID,
+										 &record.residue_sequence_number,
+										 &record.insertion_code);
+
+	}
+	
+	bool PDBFile::interpretRecord(const PDB::RecordTER& /* record */)
+	{
+		chain_ID_ = 0;
+		return true;
+	}
+
+
+	bool PDBFile::parseRecordTITLE(const char* /* line */, Size /* size */)
+	{
+		return skipCurrentRecord();
+	}
+
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordTITLE& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_TITLE,
+										record.record_name, &record.continuation, record.title);
+	}
+	
+	bool PDBFile::interpretRecord(const PDB::RecordTITLE& /* record */)
+	{
+		return true;
+	}
+
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordTURN& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_TURN,
+										 record.record_name, &record.sequence_number,
+										 record.turn_ID, record.initial_residue.residue_name,
+										 &record.initial_residue.chain_ID,
+										 &record.initial_residue.sequence_number,
+										 &record.initial_residue.insertion_code,
+										 record.terminal_residue.residue_name,
+										 &record.terminal_residue.chain_ID,
+										 &record.terminal_residue.sequence_number,
+										 &record.terminal_residue.insertion_code,
+										 record.comment);
+	}
+
+	bool PDBFile::parseRecordTURN(const char* line, Size size)
+	{
+		static PDB::RecordTURN record;
+		return (fillRecord(line, size, record) && interpretRecord(record));
+	}
+	
+	bool PDBFile::interpretRecord(const PDB::RecordTURN& record)
+	{
+		ResidueQuadruple partner_residue(record.initial_residue.residue_name, record.initial_residue.chain_ID,
+																		 record.initial_residue.sequence_number, record.initial_residue.insertion_code);
+		
+		SecondaryStructure* sec_struc = new SecondaryStructure(record.turn_ID);
+		
+		new_turn_secstruc_list_.push_back(sec_struc);
+		sec_struc->setType(SecondaryStructure::TURN);
+		
+		turn_list_.push_back(partner_residue);
+		
+		partner_residue.set(record.terminal_residue.residue_name, record.terminal_residue.chain_ID,
+												record.terminal_residue.sequence_number, record.terminal_residue.insertion_code);
+		
+		turn_list_.push_back(partner_residue);
+		
+		return true;
+	}
+
+
+	bool PDBFile::parseRecordTVECT(const char* /* line */, Size /* size */)
+	{
+		return skipCurrentRecord();
+	}
+
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordTVECT& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_TVECT,
+										 record.record_name, &record.serial_number,
+										 &record.translation_vector[0],
+										 &record.translation_vector[1],
+										 &record.translation_vector[2],
+										 record.comment);
+	}
+	
+	bool PDBFile::interpretRecord(const PDB::RecordTVECT& /* record */)
+	{
+		return true;
+	}
+
+
+		
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/FORMAT/PDBFile.iC>

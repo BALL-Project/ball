@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBdefs.h,v 1.1 2005/02/11 15:27:12 oliver Exp $
+// $Id: PDBdefs.h,v 1.2 2005/02/12 23:08:26 oliver Exp $
 //
 
 #ifndef BALL_FORMAT_PDBDEFS_H
@@ -228,6 +228,7 @@ namespace BALL
 			LString4    segment_ID;
 			LString2    element_symbol;
 			LString2    charge; 
+			LString4    partial_charge; // not standard! Read if option PARSE_PARTIAL_CHARGES is set!
 		};
 
 		/**
@@ -912,8 +913,63 @@ namespace BALL
 		};
 		//@}
 
-	} // namespace PDB
+		/**	@name PDB record format definitions */
+		//@{
 
+		extern const char* FORMAT_UNKNOWN;
+		extern const char* FORMAT_ANISOU;
+		extern const char* FORMAT_ATOM;
+		extern const char* FORMAT_ATOM_PARTIAL_CRG;
+		extern const char* FORMAT_AUTHOR;
+		extern const char* FORMAT_CAVEAT;
+		extern const char* FORMAT_CISPEP;
+		extern const char* FORMAT_COMPND;
+		extern const char* FORMAT_CONECT;
+		extern const char* FORMAT_CRYST1;
+		extern const char* FORMAT_DBREF;
+		extern const char* FORMAT_END;
+		extern const char* FORMAT_ENDMDL;
+		extern const char* FORMAT_EXPDTA;
+		extern const char* FORMAT_FORMUL;
+		extern const char* FORMAT_FTNOTE;
+		extern const char* FORMAT_HEADER;
+		extern const char* FORMAT_HELIX;
+		extern const char* FORMAT_HET;
+		extern const char* FORMAT_HETATM;
+		extern const char* FORMAT_HETNAM;
+		extern const char* FORMAT_HYDBND;
+		extern const char* FORMAT_JRNL;
+		extern const char* FORMAT_KEYWDS;
+		extern const char* FORMAT_LINK;
+		extern const char* FORMAT_MASTER;
+		extern const char* FORMAT_MODEL;
+		extern const char* FORMAT_MODRES;
+		extern const char* FORMAT_MTRIX1;
+		extern const char* FORMAT_MTRIX2;
+		extern const char* FORMAT_MTRIX3;
+		extern const char* FORMAT_OBSLTE;
+		extern const char* FORMAT_ORIGX1;
+		extern const char* FORMAT_ORIGX2;
+		extern const char* FORMAT_ORIGX3;
+		extern const char* FORMAT_REMARK;
+		extern const char* FORMAT_REVDAT;
+		extern const char* FORMAT_SCALE1;
+		extern const char* FORMAT_SCALE2;
+		extern const char* FORMAT_SCALE3;
+		extern const char* FORMAT_SEQRES;
+		extern const char* FORMAT_SHEET;
+		extern const char* FORMAT_SIGATM;
+		extern const char* FORMAT_SIGUIJ;
+		extern const char* FORMAT_SITE;
+		extern const char* FORMAT_SLTBRG;
+		extern const char* FORMAT_SOURCE;
+		extern const char* FORMAT_SSBOND;
+		extern const char* FORMAT_TER;
+		extern const char* FORMAT_TITLE;
+		extern const char* FORMAT_TURN;
+		extern const char* FORMAT_TVECT;
+
+	} // namespace PDB
 
 } // namespace BALL
 
