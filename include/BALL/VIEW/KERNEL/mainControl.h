@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.16 2003/11/16 20:38:34 amoll Exp $
+// $Id: mainControl.h,v 1.17 2003/11/17 17:37:26 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -222,7 +222,7 @@ namespace BALL
 			
 			/** Redraws all Representation objects for a Composite.
 					If the Composite is not inserted into this MainControl <tt>false</b> will be returned.
-					Update is called after receiving a CompositeChangedMessage in onNotify().
+					updateRepresentationsOf() is called after receiving a CompositeChangedMessage in onNotify().
 					It sends a RepresentationChangedMessage for every Representation, which was build for the Composite.
 					After this a SceneMessage is send to redraw the Scene.
 					Remember:
@@ -230,9 +230,9 @@ namespace BALL
 					from the CompositeChangedMessage, it sends. So you have to call this function instead of sending the message.
 					\param  composite the Composite that should be updated
 					\param  rebuild if set to true, the model is rebuilded, otherwise just the coloring is updated
-					\return bool <tt>true</tt> if <b>composite</b> was successfully marked for update, <tt>false</tt> otherwise
+					\return false if the CompositeManager doesnt contain the Composite
 			*/
-			bool update(const Composite& composite, bool rebuild = true)
+			bool updateRepresentationsOf(const Composite& composite, bool rebuild = true)
 				throw();
 
 			/** Redraws all inserted objects.
@@ -240,23 +240,46 @@ namespace BALL
 					\param rebuild_display_lists set to true lets the Scene rebuild the GLDisplayList objects.
 					\see update
 			*/
-			void updateAll(bool rebuild_display_lists = false)
+			void updateAllRepresentations(bool rebuild_display_lists = false)
+				throw();
+
+			/** Update a Composite in all ModularWidget.
+			 		A CompositeMessage with type CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL is send and
+					updateRepresentationsOf(composite) is called.
+					\return false if the CompositeManager doesnt contain the Composite
+			*/
+			bool update(Composite& composite)
+				throw();
+
+			/** Insert a Composite and notify all ModularWidget.
+			 		The Composite has to be created on the heap!!!
+			 		A CompositeMessage with type NEW_COMPOSITE is send and
+					CompositeManager::insert called.
+					\return false if the CompositeManager contains the Composite
+			*/
+			bool insert(Composite& composite)
+				throw();
+
+			/** Remove a Composite and notify all ModularWidget.
+			 		A CompositeMessage with type REMOVED_COMPOSITE is send and
+					CompositeManager::remove called.
+					\return false if the CompositeManager doesnt contain the Composite
+			*/
+			bool remove(Composite& composite)
 				throw();
 
 			/** Mutable inspection of the preferences dialog.
 					\return   Preferences* a pointer to the Preferences dialog, (<tt> 0</tt> if not present)
-					\see      Preferences
 			*/
 			Preferences* getPreferences()
 				throw();
 
-			/** Mutable inspection of the inifile.
-					\see         INIFile
+			/** Mutable inspection of the INIFile.
 			*/
 			INIFile& getINIFile()
 				throw();
 
-			/** Non-mutable inspection of the inifile.
+			/** Non-mutable inspection of the INIFile.
 			*/
 			const INIFile& getINIFile() const
 				throw();
@@ -590,7 +613,7 @@ namespace BALL
 			/*_ Remove a composite.
 					Every Representation, which was created for the Composite is deleted, by sending a 
 					RepresentationMessage with type RepresentationMessage::REMOVE.\par
-					Calls updateAll()
+					Calls updateAllRepresentations()
 					\return bool <tt>true</tt> if the CompositeManager has the Composite
 			*/
 			bool remove_(Composite& composite)
