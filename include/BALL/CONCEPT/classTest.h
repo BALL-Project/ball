@@ -1,4 +1,4 @@
-// $Id: classTest.h,v 1.22 2001/05/12 01:10:07 oliver Exp $
+// $Id: classTest.h,v 1.23 2001/07/10 10:36:48 oliver Exp $
 
 #include <BALL/common.h>
 #include <BALL/SYSTEM/file.h>
@@ -235,7 +235,7 @@ int main(int argc, char **argv)\
 			TEST::newline = true;\
 			std::cout << std::endl;\
 		}\
-		std::cout << "  status: " << message << std::endl;\
+		std::cout << "  status (line" << __LINE__ << "): " << message << std::endl;\
 	}\
 
 /**	Check subtest result.
