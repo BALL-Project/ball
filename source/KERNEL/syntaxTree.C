@@ -1,4 +1,4 @@
-// $Id: syntaxTree.C,v 1.4 2001/07/17 09:31:05 anker Exp $
+// $Id: syntaxTree.C,v 1.5 2001/07/17 10:15:25 oliver Exp $
 
 #include <BALL/KERNEL/syntaxTree.h>
 
@@ -128,14 +128,8 @@ namespace BALL
     if (!evaluated)
     {
       expandBrackets_();
-			Log.info() << endl << "before collapseANDs_()" << endl;
-			dump();
       collapseANDs_();
-			Log.info() << endl << "after collapseANDs_()" << endl;
-			dump();
       collapseORs_();
-			Log.info() << endl << "after collapseORs_()" << endl;
-			dump();
 		}
 	}
  
