@@ -1,4 +1,4 @@
-// $Id: iterator.h,v 1.8 2001/07/03 20:47:28 anker Exp $
+// $Id: iterator.h,v 1.9 2001/07/04 15:57:04 anker Exp $
 
 #ifndef BALL_KERNEL_ITERATOR_H
 #define BALL_KERNEL_ITERATOR_H
@@ -228,6 +228,7 @@ namespace BALL
 
 	};
 
+	inline
 	CompositeIteratorTraits_::CompositeIteratorTraits_()
 		throw()
 		:	bound_(0),
@@ -236,6 +237,7 @@ namespace BALL
 	{
 	}
 		
+	inline
 	CompositeIteratorTraits_::CompositeIteratorTraits_(const Composite& composite)
 		throw()
 		:	bound_((Composite *)&composite),
@@ -244,6 +246,7 @@ namespace BALL
 	{
 	}
 		
+	inline
 	CompositeIteratorTraits_::CompositeIteratorTraits_(const CompositeIteratorTraits_ &traits)
 		throw()
 		:	bound_(traits.bound_),
@@ -251,12 +254,14 @@ namespace BALL
 			predicate_(traits.predicate_)
 	{
 	}
-		
+
+	inline
 	CompositeIteratorTraits_::~CompositeIteratorTraits_()
 		throw()
 	{
 	}
 
+	inline
 	CompositeIteratorTraits_& CompositeIteratorTraits_::operator = (const CompositeIteratorTraits_& traits)
 		throw()
 	{
@@ -266,54 +271,63 @@ namespace BALL
 		return *this;
 	}
 
+	inline
 	Composite* CompositeIteratorTraits_::getContainer()
 		throw()
 	{
 		return bound_;
 	}
 
+	inline
 	const Composite* CompositeIteratorTraits_::getContainer() const
 		throw()
 	{
 		return bound_;
 	}
 
+	inline
 	bool CompositeIteratorTraits_::isSingular() const
 		throw()
 	{
 		return (bound_ == 0);
 	}
 
+	inline
 	Composite::SubcompositeIterator& CompositeIteratorTraits_::getPosition()
 		throw()
 	{
 		return subcomposite_iterator_;
 	}
 
+	inline
 	const Composite::SubcompositeIterator& CompositeIteratorTraits_::getPosition() const
 		throw()
 	{
 		return subcomposite_iterator_;
 	}
 
+	inline
 	bool CompositeIteratorTraits_::operator == (const CompositeIteratorTraits_ &traits) const
 		throw()
 	{
 		return (subcomposite_iterator_ == traits.subcomposite_iterator_);
 	}
 
+	inline
 	bool CompositeIteratorTraits_::operator !=(const CompositeIteratorTraits_ &traits) const
 		throw()
 	{
 		return (subcomposite_iterator_ != traits.subcomposite_iterator_);
 	}
 
+	inline
 	bool CompositeIteratorTraits_::isValid() const
 		throw()
 	{
 		return (bound_ != 0 && subcomposite_iterator_.isValid() == true);
 	}
 
+	inline
 	void CompositeIteratorTraits_::invalidate()
 		throw()
 	{
@@ -321,6 +335,7 @@ namespace BALL
 		subcomposite_iterator_.invalidate();
 	}
 
+	inline
 	void CompositeIteratorTraits_::toBegin()
 		throw(Exception::InvalidIterator)
 	{
@@ -336,6 +351,7 @@ namespace BALL
 		}
 	}
 
+	inline
 	bool CompositeIteratorTraits_::isBegin() const
 		throw(Exception::InvalidIterator)
 	{
@@ -353,36 +369,42 @@ namespace BALL
 		return (subcomposite_iterator_ == sub_iterator);
 	}
 
+	inline
 	void CompositeIteratorTraits_::toEnd()
 		throw()
 	{
 		subcomposite_iterator_.toEnd();
 	}
 
+	inline
 	bool CompositeIteratorTraits_::isEnd() const
 		throw()
 	{
 		return subcomposite_iterator_.isEnd();
 	}
 
+	inline
 	Composite& CompositeIteratorTraits_::getData()
 		throw()
 	{
 		return *subcomposite_iterator_;
 	}
 
+	inline
 	const Composite& CompositeIteratorTraits_::getData() const
 		throw()
 	{
 		return *subcomposite_iterator_;
 	}
 
+	inline
 	void CompositeIteratorTraits_::forward()
 		throw()
 	{
 		subcomposite_iterator_.findNext(*predicate_);
 	}
 
+	inline
 	void CompositeIteratorTraits_::toRBegin()
 		throw(Exception::InvalidIterator)
 	{
@@ -398,6 +420,7 @@ namespace BALL
 		}
 	}
 
+	inline
 	bool CompositeIteratorTraits_::isRBegin() const
 		throw(Exception::InvalidIterator)
 	{
@@ -414,31 +437,36 @@ namespace BALL
 		}
 		return (subcomposite_iterator_ == sub_iterator);
 	}
-		
+
+	inline
 	void CompositeIteratorTraits_::toREnd()
 		throw()
 	{
 		subcomposite_iterator_.toREnd();
 	}
 
+	inline
 	bool CompositeIteratorTraits_::isREnd() const
 		throw()
 	{
 		return subcomposite_iterator_.isREnd();
 	}
 
+	inline
 	void CompositeIteratorTraits_::backward()
 		throw()
 	{
 		subcomposite_iterator_.findPrevious(*predicate_);
 	}
 
+	inline
 	void CompositeIteratorTraits_::setPredicate(const UnaryPredicate<Composite>& predicate)
 		throw()
 	{
 		predicate_ = &predicate;
 	}
 
+	inline
 	const UnaryPredicate<Composite>* CompositeIteratorTraits_::getPredicate() const
 		throw()
 	{

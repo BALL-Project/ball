@@ -1,4 +1,4 @@
-// $Id: PDBAtomIterator.h,v 1.7 2001/07/03 21:00:32 anker Exp $ 
+// $Id: PDBAtomIterator.h,v 1.8 2001/07/04 15:57:03 anker Exp $ 
 
 #ifndef BALL_KERNEL_PDBATOMITERATOR_H
 #define BALL_KERNEL_PDBATOMITERATOR_H
@@ -55,26 +55,30 @@ namespace BALL
 
 	};
 
+	inline
 	PDBAtomIteratorTraits_::PDBAtomIteratorTraits_()
 		throw()
 		:	CompositeIteratorTraits_()
 	{
 		predicate_ = &RTTI::getDefault<KernelPredicate<PDBAtom> >();
 	}
-			
+
+	inline
 	PDBAtomIteratorTraits_::PDBAtomIteratorTraits_(const Composite& composite)
 		throw()
 		:	CompositeIteratorTraits_(composite)
 	{
 		predicate_ = &RTTI::getDefault<KernelPredicate<PDBAtom> >();
 	}
-		
+
+	inline
 	PDBAtomIteratorTraits_::PDBAtomIteratorTraits_(const PDBAtomIteratorTraits_& traits, bool /* deep */)
 		throw()
 		:	CompositeIteratorTraits_(traits)
 	{
 	}
-		
+
+	inline
 	PDBAtomIteratorTraits_& PDBAtomIteratorTraits_::operator = (const PDBAtomIteratorTraits_ &traits)
 		throw()
 	{
@@ -82,6 +86,7 @@ namespace BALL
 		return *this;
 	}
 
+	inline
 	void PDBAtomIteratorTraits_::resetPredicate()
 		throw()
 	{

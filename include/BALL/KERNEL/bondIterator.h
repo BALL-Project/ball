@@ -1,4 +1,4 @@
-// $Id: bondIterator.h,v 1.2 1999/12/01 13:26:44 oliver Exp $
+// $Id: bondIterator.h,v 1.3 2001/07/04 15:57:03 anker Exp $
 
 #ifndef BALL_KERNEL_BONDITERATOR_H
 #define BALL_KERNEL_BONDITERATOR_H
@@ -14,10 +14,27 @@
 namespace BALL 
 {
 
+	/** @name Typedefs for the various BondIterators
+	*/
+	//@{
+
+	/** A mutable iterator for atom bonds.
+	*/
 	typedef Atom::BondIterator 							AtomBondIterator;
+
+	/** A constant iterator for atom bonds.
+	*/
 	typedef Atom::BondConstIterator 				AtomBondConstIterator;
+
+	/** A mutable reverse iterator for atom bonds.
+	*/
 	typedef Atom::BondReverseIterator 			AtomBondReverseIterator;
+
+	/** A constant reverse iterator for atom bonds.
+	*/
 	typedef Atom::BondConstReverseIterator 	AtomBondConstReverseIterator;
+
+	//@}
 
 }
 

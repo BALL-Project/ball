@@ -1,4 +1,4 @@
-// $Id: chainIterator.h,v 1.6 2001/07/03 21:00:32 anker Exp $
+// $Id: chainIterator.h,v 1.7 2001/07/04 15:57:03 anker Exp $
 
 #ifndef BALL_KERNEL_CHAINITERATOR_H
 #define BALL_KERNEL_CHAINITERATOR_H
@@ -55,6 +55,7 @@ namespace BALL
 		
 	};
 
+	inline
 	ChainIteratorTraits_::ChainIteratorTraits_()
 		throw()
 		:	CompositeIteratorTraits_()
@@ -62,6 +63,7 @@ namespace BALL
 		predicate_ = &RTTI::getDefault<KernelPredicate<Chain> >();
 	}
 		
+	inline
 	ChainIteratorTraits_::ChainIteratorTraits_(const Composite& composite)
 		throw()
 		:	CompositeIteratorTraits_(composite)
@@ -69,12 +71,14 @@ namespace BALL
 		predicate_ = &RTTI::getDefault<KernelPredicate<Chain> >();
 	}
 		
+	inline
 	ChainIteratorTraits_::ChainIteratorTraits_(const ChainIteratorTraits_& traits, bool /* deep */)
 		throw()
 		:	CompositeIteratorTraits_(traits)
 	{
 	}
 		
+	inline
 	ChainIteratorTraits_& ChainIteratorTraits_::operator = (const ChainIteratorTraits_& traits)
 		throw()
 	{
@@ -82,6 +86,7 @@ namespace BALL
 		return *this;
 	}
 
+	inline
 	void ChainIteratorTraits_::resetPredicate()
 		throw()
 	{
