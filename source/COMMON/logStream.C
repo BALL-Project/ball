@@ -1,9 +1,11 @@
-// $Id: logStream.C,v 1.4 1999/09/17 16:39:09 oliver Exp $
+// $Id: logStream.C,v 1.5 1999/09/18 19:09:46 oliver Exp $
 
 #include <BALL/COMMON/logStream.h>
 
 #include <sys/time.h>
 #include <stdio.h>
+
+#define BUFFER_LENGTH 32768
 
 namespace BALL 
 {
@@ -12,10 +14,10 @@ namespace BALL
 		: streambuf(),
 			level_(0),
 			tmp_level_(0),
-			incomplete_line_("")
+			incomplete_line_()
 	{
-		pbuf_ = new char [1024];
-		streambuf::setp(pbuf_, pbuf_ + 1023);
+		pbuf_ = new char [BUFFER_LENGTH];
+		streambuf::setp(pbuf_, pbuf_ + BUFFER_LENGTH - 1);
 	}
 		
 	LogStreamBuf::~LogStreamBuf() 
@@ -27,11 +29,11 @@ namespace BALL
 
 	void LogStreamBuf::dump(ostream& stream) 
 	{
-		char buf[1024];
+		char buf[BUFFER_LENGTH];
 		Size line;
 		for (line = loglines_.size(); line > 0; --line) 
 		{
-			strftime(&(buf[0]), 1023, "%d.%m.%Y %T ", localtime(&(loglines_[line - 1].time)));
+			strftime(&(buf[0]), BUFFER_LENGTH - 1, "%d.%m.%Y %T ", localtime(&(loglines_[line - 1].time)));
 			stream << buf << "[" << loglines_[line - 1].level
 						 << "]:" << loglines_[line - 1].text << endl;
 		}
@@ -39,7 +41,7 @@ namespace BALL
  
 	int LogStreamBuf::sync() 
 	{
-		static char buf[1024];
+		static char buf[BUFFER_LENGTH];
 
 		// sync our streambuffer...
 
@@ -167,32 +169,32 @@ namespace BALL
 						break;
 
 					case 'T':	// time: HH:MM:SS
-						strftime(buf, 1023, "%R", localtime(&time));
+						strftime(buf, BUFFER_LENGTH - 1, "%T", localtime(&time));
 						result.append(buf);
 						break;
 
 					case 't': // time: HH:MM	
-						strftime(buf, 1023, "%T", localtime(&time));
+						strftime(buf, BUFFER_LENGTH - 1, "%R", localtime(&time));
 						result.append(buf);
 						break;
 
 					case 'D':	// date: DD.MM.YYYY
-						strftime(buf, 1023, "%d.%m.%Y", localtime(&time));
+						strftime(buf, BUFFER_LENGTH - 1, "%d.%m.%Y", localtime(&time));
 						result.append(buf);
 						break;
 
 					case 'd':	// date: DD.MM.
-						strftime(buf, 1023, "%d.%m.", localtime(&time));
+						strftime(buf, BUFFER_LENGTH - 1, "%d.%m.", localtime(&time));
 						result.append(buf);
 						break;
 
 					case 'S':	// time+date: DD.MM.YYYY, HH:MM:SS
-						strftime(buf, 1023, "%d.%m.%Y, %R", localtime(&time));
+						strftime(buf, BUFFER_LENGTH - 1, "%d.%m.%Y, %R", localtime(&time));
 						result.append(buf);
 						break;
 
 					case 's':	// time+date: DD.MM., HH:MM
-						strftime(buf, 1023, "%d.%m., %T", localtime(&time));
+						strftime(buf, BUFFER_LENGTH - 1, "%d.%m., %T", localtime(&time));
 						result.append(buf);
 						break;
 
@@ -321,7 +323,9 @@ namespace BALL
 	{
 		// return if no LogStreamBuf is defined!
 		if (rdbuf() == 0)
+		{
 			return;
+		}
 			
 		// find the stream in the LogStreamBuf's list:
 		// iterate over the list until you find the stream`s pointer
