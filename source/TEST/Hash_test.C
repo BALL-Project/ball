@@ -1,11 +1,11 @@
-// $Id: Hash_test.C,v 1.5 2000/06/16 08:45:51 oliver Exp $
+// $Id: Hash_test.C,v 1.6 2000/06/16 08:48:32 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/COMMON/hash.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Hash_test.C,v 1.5 2000/06/16 08:45:51 oliver Exp $")
+START_TEST(class_name, "$Id: Hash_test.C,v 1.6 2000/06/16 08:48:32 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -44,8 +44,6 @@ CHECK(Hash(void *const& ptr))
 	TEST_EQUAL(Hash(x), 0)
 	x = (void*)123;
 	TEST_EQUAL(Hash(x), 106040973)
-	x = (void*)123456789;
-	TEST_EQUAL(Hash(x), 2147483648U)
 RESULT
 
 CHECK(getNextPrime(HashIndex l))
