@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceModel.C,v 1.18 2002/12/17 18:19:40 oliver Exp $
+// $Id: surfaceModel.C,v 1.19 2002/12/17 18:39:18 amoll Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/surfaceModel.h>
 #include <BALL/KERNEL/system.h>
@@ -66,7 +66,11 @@ namespace BALL
 		bool AddSurfaceModel::finish()
 		{
 			// insert surface only if a composite exist
-			if (start_composite_ == 0) return false;
+			if (start_composite_ == 0 ||
+					RTTI::isKindOf<GeometricObject>(*start_composite_))
+			{
+				return false;
+			}
 			
 			Mesh* mesh = createMesh_();
 
@@ -111,7 +115,6 @@ namespace BALL
 
 
 			start_composite_->getRoot().appendChild(*mesh);
-
 			return true;
 		}
 				
