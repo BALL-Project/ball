@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.122 2000/12/23 15:38:59 oliver Exp $
+dnl    $Id: configure.in,v 1.123 2000/12/24 09:27:41 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -114,7 +114,7 @@ fi
 if test "$with_qt_libs" != "" ; then
 	QT_LIBPATH=$with_qt_libs
 fi
-if test "$with-qt-mt" != "yes" ; then
+if test "$with_qt_mt" = "yes" ; then
 	USE_THREADSAFE_QT=true
 	QT_MT_SUFFIX="-mt"
 else
@@ -1876,14 +1876,16 @@ AC_TRY_COMPILE(
 		#include <rpc/types.h>
 		#include <rpc/xdr.h>
 	],
+	[
 	  xdr_u_hyper(0, 0);
-	],
-	BALL_HAS_XDR_U_HYPER=true)	
+	],	
+	BALL_HAS_XDR_U_HYPER=true
+)	
 
 if test "${BALL_HAS_XDR_U_HYPER}" = "true" ; then
 	AC_MSG_RESULT(found)
 
-	AC_MSG_CHECKING(for 64-bit XDR type (for xdr_u_hyper))
+	AC_MSG_CHECKING([for 64-bit XDR type (for xdr_u_hyper)])
 	BALL_U_QUAD_TYPE=""
 	AC_TRY_COMPILE(
 		[
@@ -1892,9 +1894,11 @@ if test "${BALL_HAS_XDR_U_HYPER}" = "true" ; then
 		],
 		[	u_quad_t   q;
 			XDR xdrs;
-	 	 xdr_u_hyper(&xdrs, &q);
+		  xdr_u_hyper(&xdrs, &q);
 		],
-	BALL_U_QUAD_TYPE=u_quad_t)	
+		BALL_U_QUAD_TYPE=u_quad_t
+	)	
+
 	if test "${BALL_U_QUAD_TYPE}" = "" ; then
 		AC_TRY_COMPILE(
 			[
@@ -1905,7 +1909,8 @@ if test "${BALL_HAS_XDR_U_HYPER}" = "true" ; then
 				XDR xdrs;
 				xdr_u_hyper(&xdrs, &q);
 			],
-			BALL_U_QUAD_TYPE=u_longlong_t)	
+			BALL_U_QUAD_TYPE=u_longlong_t
+		)	
 	fi
 
 	if test "${BALL_U_QUAD_TYPE}" = "" ; then
@@ -1918,7 +1923,8 @@ if test "${BALL_HAS_XDR_U_HYPER}" = "true" ; then
 				XDR xdrs;
 				xdr_u_hyper(&xdrs, &q);
 			],
-			BALL_U_QUAD_TYPE="unsigned long long int")	
+			BALL_U_QUAD_TYPE="unsigned long long int"
+			)	
 	fi
 
 	if test "${BALL_U_QUAD_TYPE}" = "" ; then
@@ -1931,37 +1937,46 @@ if test "${BALL_HAS_XDR_U_HYPER}" = "true" ; then
 				XDR xdrs;
 				xdr_u_hyper(&xdrs, &q);
 			],
-			BALL_U_QUAD_TYPE=__uint64_t)	
+			BALL_U_QUAD_TYPE=__uint64_t
+		)	
 	fi
 	if test "${BALL_U_QUAD_TYPE}" = "" ; then
-		AC_MSG_RESULT(Could not identify an appropriate type for xdr_u_hyper.)
-		AC_MSG_ERROR(Aborted.)
+		AC_MSG_RESULT([Could not identify an appropriate type for xdr_u_hyper.])
+		AC_MSG_ERROR([Aborted.])
 	fi
 
 	AC_MSG_RESULT(${BALL_U_QUAD_TYPE})
 	AC_DEFINE_UNQUOTED(BALL_XDR_UINT64_TYPE, ${BALL_U_QUAD_TYPE})
 	AC_DEFINE(BALL_HAS_XDR_U_HYPER)
+
 else
+
 	dnl
 	dnl	we do not have xdr_u_hyper, so BALL has to use two 
 	dnl	calls to xdr_u_int instead. 
 	dnl	However, we have to identify whether the system supports
 	dnl	64bit unsigned types at all
 	dnl	
-		AC_TRY_COMPILE(
-			[
-			],
-			[	
-				unsigned long long int  q = 1234567890123456789LL;
-			],
-			BALL_U_QUAD_TYPE="unsigned long long int")	
-		if test "${BALL_U_QUAD_TYPE}" = "" ; then
-			AC_MSG_RESULT(Could not identify an 64 bit unsigned type (long long).)
-			AC_MSG_ERROR(aborted)
-		fi
-		AC_DEFINE_UNQUOTED(BALL_XDR_UINT64_TYPE, ${BALL_U_QUAD_TYPE})
-		AC_MSG_RESULT(unsigned long long int)
+	AC_TRY_COMPILE(
+		[
+		],
+		[	
+			unsigned long long int  q = 1234567890123456789LL;
+		],
+		BALL_U_QUAD_TYPE="unsigned long long int"
+	)	
+	if test "${BALL_U_QUAD_TYPE}" = "" ; then
+		AC_MSG_RESULT(Could not identify an 64 bit unsigned type (long long).)
+		AC_MSG_ERROR(aborted)
+	fi
+
+	AC_DEFINE_UNQUOTED(BALL_XDR_UINT64_TYPE, ${BALL_U_QUAD_TYPE})
+	AC_MSG_RESULT(unsigned long long int)
+
 fi
+
+
+
 dnl
 dnl Define appropriate symbols in config.h.
 dnl The symbols are used in CONCEPT/XDRPersistenceManager.C only.
