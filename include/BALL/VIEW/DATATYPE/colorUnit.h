@@ -1,4 +1,4 @@
-// $Id: colorUnit.h,v 1.3 1999/12/28 18:37:44 oliver Exp $
+// $Id: colorUnit.h,v 1.4 2000/01/13 22:22:11 oliver Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLORUNIT_H
 #define BALL_VIEW_DATATYPE_COLORUNIT_H
@@ -82,8 +82,6 @@ namespace BALL
 			};
 			//@}
 				
-			//@}
-			
 			/**	@name	Converters
 			*/
 			//@{
