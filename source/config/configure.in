@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.101 2000/07/16 21:50:14 oliver Exp $
+dnl    $Id: configure.in,v 1.102 2000/07/16 22:04:51 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -149,7 +149,7 @@ fi
 if test "$with_python" = "yes" -o "$enable_python" = yes ; then
 	PYTHON_SUPPORT=true
 else
-	PYTHON_SUPPORT=false
+	PYTHON_SUPPORT=
 fi
 
 # the path to the python includes (Python.h)
@@ -2277,14 +2277,12 @@ dnl  variable subsitutions for config.mak
 dnl
 AC_SUBST(SIP)
 AC_SUBST(SIP_LIB)
-AC_SUBST(PYTHON_INCLUDES)
-if test "${PYTHON_SUPPORT}" = true ; then
-	AC_SUBST(PYTHON_SUPPORT,true)
-	AC_DEFINE(BALL_PYTHON_SUPPORT)
-else
-	AC_SUBST(PYTHON_SUPPORT,)
-fi
 AC_SUBST(SIP_INCLUDES)
+AC_SUBST(PYTHON_INCLUDES)
+AC_SUBST(PYTHON_SUPPORT)
+if test "${PYTHON_SUPPORT}" = true ; then
+	AC_DEFINE(BALL_PYTHON_SUPPORT)
+fi
 
 if test "${PYTHON_SUPPORT}" = true ; then
 	AC_MSG_CHECKING(stuff required for Python extensions)
