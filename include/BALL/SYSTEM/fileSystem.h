@@ -1,4 +1,4 @@
-// $Id: fileSystem.h,v 1.1 1999/08/26 07:53:20 oliver Exp $
+// $Id: fileSystem.h,v 1.2 2000/01/06 09:46:05 oliver Exp $
 
 #ifndef BALL_SYSTEM_FILESYSTEM_H
 #define BALL_SYSTEM_FILESYSTEM_H
@@ -8,14 +8,14 @@
 #endif
 
 #include <limits.h>
-//LINUX
 #include <sys/param.h>
 
 #ifndef BALL_DATATYPE_STRING_H
 #	include <BALL/DATATYPE/string.h>
 #endif
 
-namespace BALL {
+namespace BALL 
+{
 
 	/**	File System Class
 	*/

@@ -1,4 +1,4 @@
-// $Id: socket.h,v 1.6 1999/12/19 17:19:15 oliver Exp $
+// $Id: socket.h,v 1.7 2000/01/06 09:46:06 oliver Exp $
 
 #ifndef BALL_SYSTEM_SOCKET_H
 #define BALL_SYSTEM_SOCKET_H
@@ -58,7 +58,7 @@
 
 // linux leaves these things out. We define it for compatitbility
 // not for their use.
-#ifdef LINUX
+#ifdef BALL_OS_LINUX
 #	define SO_ACCEPTCONN	0x0002
 #	define SO_USELOOPBACK	0x0040
 #	define SO_SNDLOWAT	0x1003
@@ -366,7 +366,7 @@ namespace BALL
 		int recv(void* buf, int len, int msgf = 0);
 		int recvfrom(SockAddr& sa, void* buf, int len, int msgf = 0);
 
-#	ifndef LINUX
+#	ifndef BALL_OS_LINUX
 		int recvmsg (msghdr* msg, int msgf = 0);
 		int sendmsg	(msghdr* msg, int msgf = 0);
 #	endif
