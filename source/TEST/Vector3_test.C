@@ -1,4 +1,4 @@
-// $Id: Vector3_test.C,v 1.7 2000/02/20 21:55:30 oliver Exp $ #include
+// $Id: Vector3_test.C,v 1.8 2000/02/21 08:57:57 oliver Exp $ #include
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(TVector3, "$Id: Vector3_test.C,v 1.7 2000/02/20 21:55:30 oliver Exp $")
+START_TEST(TVector3, "$Id: Vector3_test.C,v 1.8 2000/02/21 08:57:57 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -129,7 +129,7 @@ RESULT
 //line 
 CHECK(TVector3::getLength() const )
 	v = Vector3(4, 9, 16);
-	TEST_REAL_EQUAL(v.getLength(), sqrt(4 * 4 + 9 * 9 + 16 * 16))
+	TEST_REAL_EQUAL(v.getLength(), sqrt(4. * 4. + 9. * 9. + 16. * 16.))
 RESULT
 
 //line
@@ -142,7 +142,7 @@ RESULT
 CHECK(TVector3::normalize())
 	v = Vector3(4, 9, 16);
 	v.normalize();
-	float erg = sqrt (4 *4 + 9 * 9 + 16 * 16);
+	float erg = sqrt (4. * 4. + 9. * 9. + 16. * 16.);
 	TEST_REAL_EQUAL(v[0], 4/erg)
 	TEST_REAL_EQUAL(v[1], 9/erg)
 	TEST_REAL_EQUAL(v[2], 16/erg)
