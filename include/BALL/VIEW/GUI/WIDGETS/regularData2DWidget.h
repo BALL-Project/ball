@@ -1,4 +1,4 @@
-// $Id: regularData2DWidget.h,v 1.7 2000/12/14 19:56:51 anhi Exp $
+// $Id: regularData2DWidget.h,v 1.8 2000/12/15 00:38:21 anhi Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGET_REGULARDATA2DWIDGET_H
 #define BALL_VIEW_GUI_WIDGET_REGULARDATA2DWIDGET_H
@@ -200,6 +200,7 @@ class RegularData2DWidget
   void viewportMousePressEvent(QMouseEvent *e);
   void viewportMouseMoveEvent(QMouseEvent *e);
   void viewportMouseReleaseEvent(QMouseEvent *e);
+  void mouseReleaseEvent(QMouseEvent *e);
 
  protected:
   QPixmap *pm_, *legend_map_, *buffer_map_;

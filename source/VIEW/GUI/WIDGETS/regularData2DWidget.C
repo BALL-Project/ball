@@ -1,4 +1,4 @@
-// $Id: regularData2DWidget.C,v 1.13 2000/12/14 19:57:06 anhi Exp $
+// $Id: regularData2DWidget.C,v 1.14 2000/12/15 00:37:26 anhi Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/regularData2DWidget.h>
 
@@ -303,6 +303,7 @@ void RegularData2DWidget::plot()
  */
 void RegularData2DWidget::scale(Size nx, Size ny, double x1, double y1, double x2, double y2)
 {
+  cout << x1 << " " << y1 << " " << x2 << " " << y2 << endl;
   if (nx && ny && spec_)
   {
     QPainter paint;
@@ -443,13 +444,6 @@ void RegularData2DWidget::createPlot()
  
   pair<Position, Position> dummy;
 
-  spec_->getNearestPosition(7.82327, 102.606, dummy);
-  cout << spec_->getValue(7.82327, 102.606) << " " << dummy.first << " " << dummy.second  << endl;
-  spec_->getNearestPosition(8.33176, 131.437, dummy);
-  cout << spec_->getValue(8.33176, 131.437) << " " << dummy.first << " " << dummy.second  << endl;
-
-  cout << endl << (*spec_)[5528] << endl << endl;
-
   act_lower_left_x_ = 0;
   act_lower_left_y_ = 0;
   zoom_x_ = 1; 
@@ -457,8 +451,6 @@ void RegularData2DWidget::createPlot()
 
   full_length_x_ = lengthx_;
   full_length_y_ = lengthy_;
-
-  cout << full_length_x_ << " " << full_length_y_ << endl;
 
   pix_wid_ = new PixWid( viewport() );
   connect(pix_wid_, SIGNAL(mouseMoved(Position,Position)), this, SLOT(NewMousePos(Position,Position)));
@@ -496,51 +488,55 @@ void RegularData2DWidget::createPlot()
 
 void RegularData2DWidget::plotContour()
 {
-  QPainter paint;
-
-  // now draw the data.
-  ContourLine l(0);
-  pair<float, float> p, p2;
-
-  paint.begin( pm_cont_ );
-
-  paint.setViewport(0, 0, spec_length_x_, spec_length_y_);
-
-  // Transformation: (0,0) -> lower left corner
-  QWMatrix m(1, 0, 0, -1, 0, full_length_y_);
-  paint.setWorldMatrix( m );
-
-  Position i=0;
-
-  cont_->resetCounter();
-
-  // naive algorithm: tries to plot every part of the lines
-  while(cont_->getNextContourLine(l))
+  if (pm_cont_)
   {
-    l.resetCounter();
-
-    // set it's colour
-    QColor pcol = con2rgb(cont_start_ + (cont_end_ - cont_start_) / cont_num_ * i, cont_start_, max_);
-    paint.setPen( red );
-    ++i;
-
-    // draw this ContourLine.
-    while (l.getNextPoint(p))
-    {
-      if (l.getNextPoint(p2))
+    
+    QPainter paint;
+    
+    // now draw the data.
+    ContourLine l(0);
+    pair<float, float> p, p2;
+    
+    paint.begin( pm_cont_ );
+    
+    paint.setViewport(0, 0, spec_length_x_, spec_length_y_);
+    
+    // Transformation: (0,0) -> lower left corner
+    QWMatrix m(1, 0, 0, -1, 0, full_length_y_);
+    paint.setWorldMatrix( m );
+    
+    Position i=0;
+    
+    cont_->resetCounter();
+    
+    // naive algorithm: tries to plot every part of the lines
+    while(cont_->getNextContourLine(l))
       {
-	// draw a line from p to p2
-	pair<Position, Position> qp1, qp2;
-
-	if ((isVisibleAs(p.first, p.second, qp1)) && (isVisibleAs(p2.first, p2.second, qp2)))
-	{
-	  paint.drawLine(qp1.first+ind_side_, qp1.second+ind_updown_, qp2.first+ind_side_, qp2.second+ind_updown_);
-	};
+	l.resetCounter();
+	
+	// set it's colour
+	QColor pcol = con2rgb(cont_start_ + (cont_end_ - cont_start_) / cont_num_ * i, cont_start_, max_);
+	paint.setPen( red );
+	++i;
+	
+	// draw this ContourLine.
+	while (l.getNextPoint(p))
+	  {
+	    if (l.getNextPoint(p2))
+	      {
+		// draw a line from p to p2
+		pair<Position, Position> qp1, qp2;
+		
+		if ((isVisibleAs(p.first, p.second, qp1)) && (isVisibleAs(p2.first, p2.second, qp2)))
+		  {
+		    paint.drawLine(qp1.first+ind_side_, qp1.second+ind_updown_, qp2.first+ind_side_, qp2.second+ind_updown_);
+		  };
+	      };
+	  };
       };
-    };
+    
+    paint.end();
   };
-
-  paint.end();
 }
 
 void RegularData2DWidget::drawContents( QPainter *paint, int clipx, int clipy, int clipw, int cliph )
@@ -548,10 +544,7 @@ void RegularData2DWidget::drawContents( QPainter *paint, int clipx, int clipy, i
   if (pm_ && (pm_->size() != QSize( 0, 0 ))) { // do we have something to paint?
     paint->drawPixmap(clipx, clipy, *pm_, clipx, clipy, clipw, cliph);
 
-    cout << "drawContents() " << clipx << " " << clipy << " " << clipw << " " << cliph << endl;
-
-    
-    if (plot_cont_) {
+    if (plot_cont_ && pm_cont_) {
       QPoint dummy = contentsToViewport(QPoint(contentsX(), contentsY()));
       
       bitBlt(viewport(), dummy.x(), dummy.y(), pm_cont_, contentsX()+ind_side_, contentsY()+ind_updown_, viewport()->width(), viewport()->height(), OrROP);
@@ -587,13 +580,11 @@ void RegularData2DWidget::paintEvent( QPaintEvent *e )
     QPainter paint( viewport() );
     //    paint.setClipRect( contentsX(), contentsY(), contentsWidth(), contentsHeight() );
 
-    cout << "paintEvent() " << contentsX() << " " << contentsY() << " " << contentsHeight() << " " << contentsWidth() << endl;
-
     if (plot_data_) {
       paint.drawPixmap( contentsX(), contentsY(), *pm_, contentsX(), contentsY(), contentsWidth(), contentsHeight() );
     };
 
-    if (plot_cont_) {
+    if (plot_cont_ && pm_cont_) {
       QPoint dummy = contentsToViewport(QPoint(contentsX(), contentsY()));
       
       bitBlt(viewport(), dummy.x(), dummy.y(), pm_cont_, contentsX()+ind_side_, contentsY()+ind_updown_, viewport()->width(), viewport()->height(), OrROP);
@@ -650,7 +641,7 @@ void RegularData2DWidget::Selected(QPoint beg, QPoint end)
   zoom_x_ = (double) full_length_x_ / numpx_;
   zoom_y_ = (double) full_length_y_ / numpy_;
 
-  scale(visibleWidth(), visibleHeight(), dummy.first, dummy.second, dummy2.first, dummy2.second);
+  scale(width(), height(), dummy.first, dummy.second, dummy2.first, dummy2.second);
   plotContour();
 }
 
@@ -776,6 +767,11 @@ void RegularData2DWidget::viewportMousePressEvent(QMouseEvent *e)
 void RegularData2DWidget::viewportMouseMoveEvent(QMouseEvent *e)
 {
   NewMousePos((e->pos()).x(), (e->pos()).y());
+}
+
+void RegularData2DWidget::mouseReleaseEvent(QMouseEvent *e)
+{
+  viewportMouseReleaseEvent(e);
 }
 
 void RegularData2DWidget::viewportMouseReleaseEvent(QMouseEvent *e)
