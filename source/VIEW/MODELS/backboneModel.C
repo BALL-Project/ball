@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.17.2.34 2005/01/11 13:19:42 amoll Exp $
+// $Id: backboneModel.C,v 1.17.2.35 2005/01/11 14:53:33 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -117,39 +117,55 @@ namespace BALL
 			return Processor::CONTINUE;
 		}
 
-		void AddBackboneModel::collectAtoms_(AtomContainer& ac)
+		void AddBackboneModel::collectAtoms_(Residue& residue)
 			throw()
 		{
-			AtomIterator it;
-			const Residue* residue = dynamic_cast<Residue*>(&ac);
-			String full_name;
-			String name;
-			if (residue != 0)
-			{
-				full_name = residue->getFullName();
-				name      = residue->getName();
-			}
+			String full_name = residue.getFullName();
+			String 			name = residue.getName();
 
-			BALL_FOREACH_ATOM(ac, it)
+			AtomIterator it;
+
+			// we collect P atoms in nucleotides
+			if (name.size() == 1 && (name == "C" || name == "G" || name == "T" || name == "A"))
 			{
-				if (residue == 0) 
+				BALL_FOREACH_ATOM(residue, it)
 				{
-					full_name = ((Residue*)it->getParent())->getFullName();
-					     name = ((Residue*)it->getParent())->getName();
+					if (it->getName() == "P")
+					{
+						spline_vector_.push_back(SplinePoint((*it).getPosition(), &*it));
+						return;
+					}
 				}
 
-				// collect only CA-Atoms and CH3 atoms in ACE and NME
-				if (((it->getName().hasSubstring("CA")) ||
-				    (it->getName().hasSubstring("CH3") &&
-						(full_name == "ACE" 	|| full_name == "ACE-N" ||
-						 full_name == "NME" 	|| full_name == "NME-C" )
-						)) || (
-						// or we collect P atoms in nucleotides
-						name.size() == 1 && it->getName() == "P" &&
-						(name == "C" || name == "G" || name == "T" || name == "A")))
+				return;
+			}
+
+			// collect CA-Atoms and CH3 atoms in ACE(-N) and NME(-C)
+			if (full_name.hasPrefix("ACE") ||
+				  full_name.hasPrefix("NME"))
+			{
+				Size found = 0;
+				BALL_FOREACH_ATOM(residue, it)
 				{
-					SplinePoint spline_point((*it).getPosition(), &*it);
-					spline_vector_.push_back(spline_point);
+					if (it->getName().hasSubstring("CA") ||
+							it->getName().hasSubstring("CH3"))
+					{
+						found ++;
+						spline_vector_.push_back(SplinePoint((*it).getPosition(), &*it));
+						if (found == 2) return;
+					}
+				}
+
+				return;
+			}
+
+			// collect only CA-Atoms
+			BALL_FOREACH_ATOM(residue, it)
+			{
+				if (it->getName().hasSubstring("CA"))
+				{
+					spline_vector_.push_back(SplinePoint((*it).getPosition(), &*it));
+					return;
 				}
 			}
 		}
@@ -173,7 +189,7 @@ namespace BALL
 			throw()
 		{
 			// we have to sort the spline points, in case that we create a backbone for single residues
-			sort(spline_vector_.begin(), spline_vector_.end());
+ 			sort(spline_vector_.begin(), spline_vector_.end());
 
 			calculateTangentialVectors_();
 			createSplinePath_();

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.h,v 1.14.2.7 2005/01/10 13:48:28 amoll Exp $
+// $Id: backboneModel.h,v 1.14.2.8 2005/01/11 14:53:37 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_BACKBONEMODEL_H
@@ -18,7 +18,6 @@
 namespace BALL
 {
 	class Atom;
-	class AtomContainer;
 	class Composite;
 	class Residue;
 
@@ -154,7 +153,7 @@ namespace BALL
 				throw(Exception::OutOfMemory);
 
 			//_ collect the atoms, for which the spline points will be calculated
-			virtual void collectAtoms_(AtomContainer& ac)
+			virtual void collectAtoms_(Residue& residue)
 				throw();
 
 			//_

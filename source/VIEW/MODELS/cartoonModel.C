@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.54.2.26 2005/01/10 18:30:38 amoll Exp $
+// $Id: cartoonModel.C,v 1.54.2.27 2005/01/11 14:53:34 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -12,6 +12,7 @@
 #include <BALL/VIEW/PRIMITIVES/sphere.h>
 #include <BALL/VIEW/PRIMITIVES/line.h>
 #include <BALL/VIEW/PRIMITIVES/twoColoredTube.h>
+#include <BALL/VIEW/KERNEL/common.h>
 
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/chain.h>
@@ -90,7 +91,7 @@ void AddCartoonModel::clear_()
 	ss_nr_splines_.clear();
 }
 
-void AddCartoonModel::collectAtomsForChain_(Chain& chain)
+void AddCartoonModel::collectAtoms_(Chain& chain)
 	throw()
 {
 	clear_();
@@ -103,11 +104,9 @@ void AddCartoonModel::collectAtomsForChain_(Chain& chain)
 	}
 }
 
-void AddCartoonModel::collectAtoms_(AtomContainer& ac)
+void AddCartoonModel::collectAtoms_(SecondaryStructure& ss)
 	throw()
 {
-	if (!RTTI::isKindOf<SecondaryStructure>(ac)) return;
-	SecondaryStructure& ss = *dynamic_cast<SecondaryStructure*>(&ac);
 	Size old_nr_splines = spline_vector_.size();
 	ResidueIterator rit = ss.beginResidue();
 	AtomIterator ait;
@@ -127,7 +126,7 @@ void AddCartoonModel::collectAtoms_(AtomContainer& ac)
 		{
 			if (ait->getName() == "O5*")
 			{
-				spline_vector_.push_back(SplinePoint((*ait).getPosition(), &*ait));
+ 				spline_vector_.push_back(SplinePoint((*ait).getPosition(), &*ait));
 				break;
 			}
 		}
@@ -140,6 +139,7 @@ void AddCartoonModel::collectAtoms_(AtomContainer& ac)
 				if (ait->getName() == "P")
 				{
 					spline_vector_.push_back(SplinePoint((*ait).getPosition(), &*ait));
+					break;
 				}
 			}
 		}
@@ -167,6 +167,7 @@ void AddCartoonModel::collectAtoms_(AtomContainer& ac)
 			if ((*ait).getName() == "CA")
 			{
 				spline_vector_.push_back(SplinePoint((*ait).getPosition(), &*ait));
+				break;
 			}
 		}
 
@@ -191,15 +192,13 @@ void AddCartoonModel::collectAtoms_(AtomContainer& ac)
 						}
 					}
 
-					if (!C || !nextN)
-					{
-						break;
-					}
+					if (!C || !nextN) break;
 
 					// now compute the two spline points corresponding to this
 					// amino acid: we take the point between the current N (N) and the C atom (C)
 					const Vector3 sv = C->getPosition() + (nextN->getPosition() - C->getPosition()) * 0.5;
 					spline_vector_.push_back(SplinePoint(sv, nextN));	
+					break;
 				}
 			}
 		}
@@ -209,7 +208,11 @@ void AddCartoonModel::collectAtoms_(AtomContainer& ac)
 	// ok, draw this as tube!
 	else
 	{
-		AddBackboneModel::collectAtoms_(ac);
+		ResidueIterator ri;
+		BALL_FOREACH_RESIDUE(ss, ri)
+		{
+			AddBackboneModel::collectAtoms_(*ri);
+		}
 	}
 
 	if (spline_vector_.size() > old_nr_splines)
@@ -583,7 +586,7 @@ Processor::Result AddCartoonModel::operator() (Composite& composite)
 
 	if (RTTI::isKindOf<Chain>(composite))
 	{
-		collectAtomsForChain_(*dynamic_cast<Chain*>(&composite));
+		collectAtoms_(*dynamic_cast<Chain*>(&composite));
 		computeSpline_();
 		return Processor::CONTINUE;
 	}
@@ -639,7 +642,7 @@ Processor::Result AddCartoonModel::operator() (Composite& composite)
 	{
 		// is this a chain with nucleic acids?
 		const String name = ss.getResidue(0)->getName();
-		if (!ss.getResidue(0)->isAminoAcid() && (name.size() == 1) &&
+		if (name.size() == 1 &&
 				(name == "A" || name == "C" || name == "G" || name == "T" || name == "U"))
 		{
 			drawDNA_(ss);
@@ -1406,7 +1409,7 @@ void AddCartoonModel::drawDNA_(SecondaryStructure& ss)
 	throw()
 {
 	tube_radius_ = DNA_helix_radius_;
-	createBackbone_();
+	buildGraphicalRepresentation_();
 
 	if (!draw_DNA_as_ladder_)
 	{

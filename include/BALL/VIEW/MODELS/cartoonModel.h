@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.h,v 1.26.2.7 2005/01/10 13:48:23 amoll Exp $
+// $Id: cartoonModel.h,v 1.26.2.8 2005/01/11 14:53:37 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_CARTOONMODEL_H
@@ -152,11 +152,11 @@ namespace BALL
 				throw();
 
 			//_ collect the atoms, for which the spline points will be calculated
-			virtual void collectAtoms_(AtomContainer& ac)
+			virtual void collectAtoms_(SecondaryStructure& ss)
 				throw();
 
-			//_ wrapper for collectAtoms_
-			virtual void collectAtomsForChain_(Chain& chain)
+			//_ wrapper for collectAtoms_(SecondaryStructure)
+			virtual void collectAtoms_(Chain& chain)
 				throw();
 
 			void drawHelix_(SecondaryStructure& ss)
