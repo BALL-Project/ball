@@ -8,6 +8,7 @@
 //@{
 
 	//@Include: AMBER/amber.doc
+  //@Include: CHARMM/charmm.doc
 	//@Include: COMMON/common.doc
 	//@Include: MDSIMULATION/mdsimulation.doc
 	//@Include: MINIMIZATION/minimization.doc

@@ -1,4 +1,4 @@
-// $Id: gui.doc,v 1.3 2001/02/11 13:04:38 hekl Exp $
+// $Id: gui.doc,v 1.4 2001/02/18 20:56:33 amoll Exp $
 
 /** @name Kernel classes.
 					This section contains classes that are responsible for
@@ -22,3 +22,9 @@
 //@{
 	//@Include: PRIMITIV/primitiv.doc
 //@}
+
+//@Include: DIALOGS/dialogs.doc
+//@Include: FUNCTOR/functor.doc
+//@Include: KERNEL/kernel.doc
+//@Include: PRIMITIV/primitiv.doc
+//@Include: WIDGETS/widgets.doc

@@ -1,4 +1,4 @@
-// $Id: view.doc,v 1.6 2001/02/04 15:58:17 hekl Exp $
+// $Id: view.doc,v 1.7 2001/02/18 20:53:38 amoll Exp $
 
 /**@name VIEW.
 	       This chapter contains all relevant information on 
@@ -10,6 +10,7 @@
             this section.
   */
 	//@{
+    //@Include: COMMON/common.doc
 	//@}
 
 	/** @name Used datatypes.
@@ -19,6 +20,13 @@
 	//@{
 		//@Include: DATATYPE/datatype.doc
 	//@}
+
+  /** @name Functor classes.
+						BAUSTELLE
+  */
+  //@{
+    //@Include: FUNCTOR/functor.doc
+  //@}
 
 	/** @name Kernel classes.
             This section contains classes that are responsible for
