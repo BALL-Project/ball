@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reverseRandomAccessIterator.h,v 1.12 2003/03/26 13:56:15 anhi Exp $
+// $Id: reverseRandomAccessIterator.h,v 1.13 2003/05/08 08:57:06 sneumann Exp $
 
 #ifndef BALL_CONCEPT_REVERSERANDOMACCESS_H
 #define BALL_CONCEPT_REVERSERANDOMACCESS_H
@@ -204,7 +204,7 @@ namespace BALL
 	bool ReverseRandomAccessIterator<Container, DataType, Position, Traits>::operator + () const
 		throw()
 	{
-		return traits_->isValid();
+		return ReverseRandomAccessIterator<Container, DataType, Position, Traits>::traits_->isValid();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
@@ -576,7 +576,7 @@ namespace BALL
 	bool ConstReverseRandomAccessIterator<Container, DataType, Position, Traits>::operator + () const
 		throw()
 	{
-		return traits_->isValid();
+		return ConstReverseRandomAccessIterator<Container, DataType, Position, Traits>::traits_->isValid();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forwardIterator.h,v 1.17 2003/03/26 13:56:13 anhi Exp $
+// $Id: forwardIterator.h,v 1.18 2003/05/08 08:55:31 sneumann Exp $
 
 #ifndef BALL_CONCEPT_FORWARDITER_H
 #define BALL_CONCEPT_FORWARDITER_H
@@ -147,17 +147,17 @@ namespace BALL
 	bool ConstForwardIterator<Container, DataType, Position, Traits>::operator +	() const
 		throw()
 	{
-		return traits_ptr_->isValid();
+		return this->traits_ptr_->isValid();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	void ConstForwardIterator<Container, DataType, Position, Traits>::toBegin()
 		throw(Exception::InvalidIterator)
 	{
-		if (traits_ptr_->isSingular())
+		if (ConstForwardIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 
-		traits_ptr_->toBegin();
+		ConstForwardIterator<Container, DataType, Position, Traits>::traits_ptr_->toBegin();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
@@ -174,20 +174,20 @@ namespace BALL
 	bool ConstForwardIterator<Container, DataType, Position, Traits>::isBegin() const
 		throw(Exception::InvalidIterator)
 	{
-		if (traits_ptr_->isSingular())
+		if (ConstForwardIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 
-		return traits_ptr_->isBegin();
+		return ConstForwardIterator<Container, DataType, Position, Traits>::traits_ptr_->isBegin();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	void ConstForwardIterator<Container, DataType, Position, Traits>::toEnd()
 		throw(Exception::InvalidIterator)
 	{
-		if (traits_ptr_->isSingular())
+		if (ConstForwardIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 
-		traits_ptr_->toEnd();
+		ConstForwardIterator<Container, DataType, Position, Traits>::traits_ptr_->toEnd();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
@@ -204,10 +204,10 @@ namespace BALL
 	bool ConstForwardIterator<Container, DataType, Position, Traits>::isEnd() const
 		throw(Exception::InvalidIterator)
 	{
-		if (traits_ptr_->isSingular())
+		if (ConstForwardIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 
-		return traits_ptr_->isEnd();
+		return ConstForwardIterator<Container, DataType, Position, Traits>::traits_ptr_->isEnd();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
@@ -215,10 +215,10 @@ namespace BALL
 		ConstForwardIterator<Container, DataType, Position, Traits>::operator ++ ()
 		throw(Exception::InvalidIterator)
 	{
-		if (!traits_ptr_->isValid())
+		if (!ConstForwardIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid())
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 
-		traits_ptr_->forward();
+		ConstForwardIterator<Container, DataType, Position, Traits>::traits_ptr_->forward();
 		return *this;
 	}
 
@@ -375,53 +375,53 @@ namespace BALL
 	bool ForwardIterator<Container, DataType, Position, Traits>::operator + () const
 		throw()
 	{
-		return traits_ptr_->isValid();
+		return ForwardIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	void ForwardIterator<Container, DataType, Position, Traits>::toBegin()
 		throw(Exception::InvalidIterator)
 	{
-		if (traits_ptr_->isSingular())
+		if (ForwardIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
 		
-		traits_ptr_->toBegin();
+		ForwardIterator<Container, DataType, Position, Traits>::traits_ptr_->toBegin();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	bool ForwardIterator<Container, DataType, Position, Traits>::isBegin() const
 		throw(Exception::InvalidIterator)
 	{
-		if (traits_ptr_->isSingular())
+		if (ForwardIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
 
-		return traits_ptr_->isBegin();
+		return ForwardIterator<Container, DataType, Position, Traits>::traits_ptr_->isBegin();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	void ForwardIterator<Container, DataType, Position, Traits>::toEnd()
 		throw(Exception::InvalidIterator)
 	{
-		if (traits_ptr_->isSingular())
+		if (ForwardIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
-		traits_ptr_->toEnd();
+		ForwardIterator<Container, DataType, Position, Traits>::traits_ptr_->toEnd();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	bool ForwardIterator<Container, DataType, Position, Traits>::isEnd() const
 		throw(Exception::InvalidIterator)
 	{
-		if (traits_ptr_->isSingular())
+		if (ForwardIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
-		return traits_ptr_->isEnd();
+		return ForwardIterator<Container, DataType, Position, Traits>::traits_ptr_->isEnd();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
@@ -429,11 +429,11 @@ namespace BALL
 		ForwardIterator<Container, DataType, Position, Traits>::operator ++ ()
 		throw(Exception::InvalidIterator)
 	{
-		if (!traits_ptr_->isValid())
+		if (!ForwardIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
-		traits_ptr_->forward();
+		ForwardIterator<Container, DataType, Position, Traits>::traits_ptr_->forward();
 		return *this;
 	}
 

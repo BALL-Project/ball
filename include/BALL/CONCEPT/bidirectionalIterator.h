@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bidirectionalIterator.h,v 1.21 2003/03/26 13:56:11 anhi Exp $ 
+// $Id: bidirectionalIterator.h,v 1.22 2003/05/08 08:53:51 sneumann Exp $ 
 
 #ifndef BALL_CONCEPT_BIDIRECTIONALITERATOR_H
 #define BALL_CONCEPT_BIDIRECTIONALITERATOR_H
@@ -215,103 +215,103 @@ namespace BALL
 	bool BidirectionalIterator<Container, DataType, Position, Traits>::operator + () const
 		throw()
 	{
-		return traits_ptr_->isValid();
+		return BidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	void BidirectionalIterator<Container, DataType, Position, Traits>::toBegin()
 		throw(Exception::InvalidIterator)
 	{
-		if (traits_ptr_->isSingular())
+		if (BidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
 
-		traits_ptr_->toBegin();
+		BidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->toBegin();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	bool BidirectionalIterator<Container, DataType, Position, Traits>::isBegin() const
 		throw(Exception::InvalidIterator)
 	{
-		if (traits_ptr_->isSingular())
+		if (BidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
 
-		return traits_ptr_->isBegin();
+		return BidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isBegin();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	void BidirectionalIterator<Container, DataType, Position, Traits>::toEnd()
 		throw(Exception::InvalidIterator)
 	{
-		if (traits_ptr_->isSingular())
+		if (BidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
 
-		traits_ptr_->toEnd();
+		BidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->toEnd();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	bool BidirectionalIterator<Container, DataType, Position, Traits>::isEnd() const
 		throw(Exception::InvalidIterator)
 	{
-		if (traits_ptr_->isSingular())
+		if (BidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
 
-		return traits_ptr_->isEnd();
+		return BidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isEnd();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	void BidirectionalIterator<Container, DataType, Position, Traits>::toRBegin()
 		throw(Exception::InvalidIterator)
 	{
-		if (traits_ptr_->isSingular())
+		if (BidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
 
-		traits_ptr_->toRBegin();
+		BidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->toRBegin();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	bool BidirectionalIterator<Container, DataType, Position, Traits>::isRBegin() const
 		throw(Exception::InvalidIterator)
 	{
-		if (traits_ptr_->isSingular())
+		if (BidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
 
-		return traits_ptr_->isRBegin();
+		return BidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isRBegin();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	void BidirectionalIterator<Container, DataType, Position, Traits>::toREnd()
 		throw(Exception::InvalidIterator)
 	{
-		if (traits_ptr_->isSingular())
+		if (BidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
 
-		traits_ptr_->toREnd();
+		BidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->toREnd();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	bool BidirectionalIterator<Container, DataType, Position, Traits>::isREnd() const
 		throw(Exception::InvalidIterator)
 	{
-		if (traits_ptr_->isSingular())
+		if (BidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
 
-		return traits_ptr_->isREnd();
+		return BidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isREnd();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
@@ -319,12 +319,12 @@ namespace BALL
 		BidirectionalIterator<Container, DataType, Position, Traits>::operator ++ ()
 		throw(Exception::InvalidIterator)
 	{
-		if (traits_ptr_->isSingular())
+		if (BidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 		{
 		 throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
 
-		traits_ptr_->forward();
+		BidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->forward();
 		return *this;
 	}
 
@@ -343,12 +343,12 @@ namespace BALL
 		BidirectionalIterator<Container, DataType, Position, Traits>::operator -- ()
 		throw(Exception::InvalidIterator)
 	{
-		if (traits_ptr_->isSingular())
+		if (BidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 		{
 		 throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
 
-		traits_ptr_->backward();
+		BidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->backward();
 		return *this;
 	}
 
@@ -414,17 +414,18 @@ namespace BALL
 		::findPrevious(const UnaryPredicate<DataType>& predicate)
 		throw(Exception::InvalidIterator)
 	{
-		if (!traits_ptr_->isValid())
+		if (!BidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
 
-		for(traits_ptr_->backward(); traits_ptr_->isREnd() == false;
-				traits_ptr_->backward())
+		for(BidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->backward(); 
+				BidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isREnd() == false;
+				BidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->backward())
 		{
-			if (predicate((const DataType &)traits_ptr_->getData()) == true)
+			if (predicate((const DataType &)BidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->getData()) == true)
 			{
-				return (DataType *)&(traits_ptr_->getData());
+				return (DataType *)&(BidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->getData());
 			}
 		}
 
@@ -436,17 +437,18 @@ namespace BALL
 		::findNext(const UnaryPredicate<DataType>& predicate)
 		throw(Exception::InvalidIterator)
 	{
-		if (!traits_ptr_->isValid())
+		if (!BidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
 
-		for(traits_ptr_->forward(); traits_ptr_->isEnd() == false;
-				traits_ptr_->forward())
+		for(BidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->forward(); 
+				BidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isEnd() == false;
+				BidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->forward())
 		{
-			if (predicate((const DataType &)traits_ptr_->getData()) == true)
+			if (predicate((const DataType &)BidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->getData()) == true)
 			{
-				return (DataType *)&(traits_ptr_->getData());
+				return (DataType *)&(BidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->getData());
 			}
 		}
 
@@ -654,103 +656,103 @@ namespace BALL
 	bool ConstBidirectionalIterator<Container, DataType, Position, Traits>::operator + () const
 		throw(Exception::InvalidIterator)
 	{
-		return traits_ptr_->isValid();
+		return ConstBidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	void ConstBidirectionalIterator<Container, DataType, Position, Traits>::toBegin()
 		throw(Exception::InvalidIterator)
 	{
-		if (traits_ptr_->isSingular())
+		if (ConstBidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
 
-		traits_ptr_->toBegin();
+		ConstBidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->toBegin();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	bool ConstBidirectionalIterator<Container, DataType, Position, Traits>::isBegin() const
 		throw(Exception::InvalidIterator)
 	{
-		if (traits_ptr_->isSingular())
+		if (ConstBidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
 
-		return traits_ptr_->isBegin();
+		return ConstBidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isBegin();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	void ConstBidirectionalIterator<Container, DataType, Position, Traits>::toEnd()
 		throw(Exception::InvalidIterator)
 	{
-		if (traits_ptr_->isSingular())
+		if (ConstBidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
 
-		traits_ptr_->toEnd();
+		ConstBidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->toEnd();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	bool ConstBidirectionalIterator<Container, DataType, Position, Traits>::isEnd() const
 		throw(Exception::InvalidIterator)
 	{
-		if (traits_ptr_->isSingular())
+		if (ConstBidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
 
-		return traits_ptr_->isEnd();
+		return ConstBidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isEnd();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	void ConstBidirectionalIterator<Container, DataType, Position, Traits>::toRBegin()
 		throw(Exception::InvalidIterator)
 	{
-		if (traits_ptr_->isSingular())
+		if (ConstBidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
 
-		traits_ptr_->toRBegin();
+		ConstBidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->toRBegin();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	bool ConstBidirectionalIterator<Container, DataType, Position, Traits>::isRBegin() const
 		throw(Exception::InvalidIterator)
 	{
-		if (traits_ptr_->isSingular())
+		if (ConstBidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
 
-		return traits_ptr_->isRBegin();
+		return ConstBidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isRBegin();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	void ConstBidirectionalIterator<Container, DataType, Position, Traits>::toREnd()
 		throw(Exception::InvalidIterator)
 	{
-		if (traits_ptr_->isSingular())
+		if (ConstBidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
 
-		traits_ptr_->toREnd();
+		ConstBidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->toREnd();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	bool ConstBidirectionalIterator<Container, DataType, Position, Traits>::isREnd() const
 		throw(Exception::InvalidIterator)
 	{
-		if (traits_ptr_->isSingular())
+		if (ConstBidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
 
-		return traits_ptr_->isREnd();
+		return ConstBidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isREnd();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
@@ -758,12 +760,12 @@ namespace BALL
 		ConstBidirectionalIterator<Container, DataType, Position, Traits>::operator ++ ()
 		throw(Exception::InvalidIterator)
 	{
-		if (!traits_ptr_->isValid())
+		if (!ConstBidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
 
-		traits_ptr_->forward();
+		ConstBidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->forward();
 		return *this;
 	}
 
@@ -782,11 +784,11 @@ namespace BALL
 		ConstBidirectionalIterator<Container, DataType, Position, Traits>::operator -- ()
 		throw(Exception::InvalidIterator)
 	{
-		if (traits_ptr_->isSingular())
+		if (ConstBidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
-		traits_ptr_->backward();
+		ConstBidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->backward();
 		return *this;
 	}
 
@@ -853,17 +855,18 @@ namespace BALL
 	::findPrevious(const UnaryPredicate<DataType>& predicate)
 		throw(Exception::InvalidIterator)
 	{
-		if (!traits_ptr_->isValid())
+		if (!ConstBidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
 
-		for(traits_ptr_->backward(); traits_ptr_->isREnd() == false;
-				traits_ptr_->backward())
+		for(ConstBidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->backward(); 
+				ConstBidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isREnd() == false;
+				ConstBidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->backward())
 		{
-			if (predicate((const DataType &)traits_ptr_->getData()) == true)
+			if (predicate((const DataType &)ConstBidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->getData()) == true)
 			{
-				return (const DataType *)&(traits_ptr_->getData());
+				return (const DataType *)&(ConstBidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->getData());
 			}
 		}
 
@@ -875,17 +878,18 @@ namespace BALL
 	::findNext(const UnaryPredicate<DataType>& predicate)
 		throw(Exception::InvalidIterator)
 	{
-		if (!traits_ptr_->isValid())
+		if (!ConstBidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
 
-		for(traits_ptr_->forward(); traits_ptr_->isEnd() == false;
-				traits_ptr_->forward())
+		for(ConstBidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->forward(); 
+				ConstBidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isEnd() == false;
+				ConstBidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->forward())
 		{
-			if (predicate((const DataType &)traits_ptr_->getData()) == true)
+			if (predicate((const DataType &)ConstBidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->getData()) == true)
 			{
-				return (const DataType *)&(traits_ptr_->getData());
+				return (const DataType *)&(ConstBidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->getData());
 			}
 		}
 
