@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.9 2003/11/13 19:30:51 amoll Exp $
+// $Id: cartoonModel.C,v 1.10 2003/11/14 13:51:38 amoll Exp $
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
@@ -296,7 +296,7 @@ namespace BALL
 			for (Index j=-1; j<=6; j++)
 			{
 				// interpolate the depth of the box
-				float new_arrow_width = 2.5*(1-j*0.95/6.)*arrow_width_; 
+				float new_arrow_width = 2*(1-j*0.95/6.)*arrow_width_; 
 				
 				right  = spline_[i*9+j+1] - spline_[i*9+j];
 
@@ -392,27 +392,6 @@ namespace BALL
 			}
 
 			List<const Atom*>::ConstIterator lit = catoms.begin();
-
-			/*
-			BoundingBoxProcessor boxp;
-			boxp.start();
-			for(;lit != catoms.end(); lit++)
-			{
-				boxp.operator() (*(Atom*)*lit);
-			}
-			boxp.finish();
-
-			Vector3 diagonal = boxp.getUpper() - boxp.getLower();
-			HashGrid3<const Atom*> grid(boxp.getLower() - Vector3(3.0, 3.0, 3.0), 
-																	diagonal + Vector3(6.0, 6.0, 6.0),
-																	2.0); 
-		 
-			for (lit = catoms.begin(); lit != catoms.end(); lit++)
-			{
-				grid.insert((*lit)->getPosition(), *lit);
-			}
-			*/
-			lit = catoms.begin(); 
 			lit++;
 			Vector3 normal = last->getPosition() - first->getPosition();
 			Vector3 last_pos = first->getPosition();
