@@ -1,4 +1,4 @@
-// $Id: plane3.h,v 1.12 2000/03/26 20:42:26 oliver Exp $
+// $Id: plane3.h,v 1.13 2000/04/29 15:28:36 amoll Exp $
 
 #ifndef BALL_MATHS_PLANE3_H
 #define BALL_MATHS_PLANE3_H
@@ -74,7 +74,7 @@ namespace BALL
 		{
 		}
 
-		/**	Detailled constructor.
+		/**	Detailed constructor.
 				Create a new TPlane3 object from a point and the normal.
 				@param	point assigned to {\tt p}
 				@param	normal assigned to {\tt n}
@@ -85,7 +85,7 @@ namespace BALL
 		{
 		}
 
-		/**	Detailled constructor.
+		/**	Detailed constructor.
 				Create a new TPlane3 object from three points.
 				@param	a assigned to {\tt p}
 				@param	a, b, c are used to calculate the normal {\tt n}

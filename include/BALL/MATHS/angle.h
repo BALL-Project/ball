@@ -1,4 +1,4 @@
-// $Id: angle.h,v 1.23 2000/04/18 21:13:25 amoll Exp $
+// $Id: angle.h,v 1.24 2000/04/29 15:28:34 amoll Exp $
 
 #ifndef BALL_MATHS_ANGLE_H
 #define BALL_MATHS_ANGLE_H
@@ -37,7 +37,7 @@ namespace BALL
 
 	/**	Generic Angle Class.
 			Use this class to describe angles. The TAngle class permits the conversion
-			from degree to radians and is a return type for all functions used to calculate
+			from degree to radians and is the return type of all functions used to calculate
 			angles.\\
 			{\bf Definition:} \URL{BALL/MATHS/angle.h}
 			\\
@@ -53,7 +53,7 @@ namespace BALL
 		*/
 		//@{
 
-		/** form of range of the angle:
+		/** form of the angle range:
 				{\tt RANGE__UNLIMITED = 0} no limitations
 				{\tt RANGE__UNSIGNED  = 1} 0 <= angle <= 360, 0 <= angle <= PI * 2
 				{\tt RANGE__SIGNED    = 2} -180 <= angle <= 180, -PI <= angle <= PI
@@ -85,7 +85,7 @@ namespace BALL
 		*/
 		TAngle(const TAngle& angle);
 
-		/**	Detailled constructor.
+		/**	Detailed constructor.
 				Create a new angle object and set its value to 
 				{\tt new_value}. {\tt radian} determines whether {\tt new_value}
 				is in radians or in degrees.
@@ -141,10 +141,9 @@ namespace BALL
 		*/
 		void get(TAngle& angle) const;
 
-		/**	Assign the value to an {\tt T} variable.
-				Variable can get the radian or degree value
+		/**	Assign the value to a variable of type {\tt T}.
 				@param	val the variable to assign the value to
-				@param	bool radian: default true
+				@param	radian, if set to {\tt true} assigns the value in radians (default).
 		*/
 		void get(T& val, bool radian = true) const;
 
@@ -181,11 +180,11 @@ namespace BALL
 		*/
 		static T toDegree(const T& radian);
 
-		/**	Normalize the angle.
-				@param range :
-				{\tt RANGE__UNLIMITED = 0} no limitations
-				{\tt RANGE__UNSIGNED  = 1} $0 \le \mathtt{angle} \le 360, 0 \le angle \le 2 \pi$
-				{\tt RANGE__SIGNED    = 2} $-180 \le \mathtt{angle} \le 180, -\pi \le \mathtt{angle} \le \pi$
+		/**	Normalize the angle over a given range.
+				{\tt RANGE__UNLIMITED = 0} no limitations.
+				{\tt RANGE__UNSIGNED  = 1} $0 \le \mathtt{angle} \le 360, 0 \le angle \le 2 \pi$.
+				{\tt RANGE__SIGNED    = 2} $-180 \le \mathtt{angle} \le 180, -\pi \le \mathtt{angle} \le \pi$.
+				@param range the range of the angle
 		*/		
 		void normalize(Range range);
 
@@ -201,7 +200,7 @@ namespace BALL
 		*/
 		TAngle operator - () const;
 
-		/**	Add an angle to this angle.
+		/**	Addition operator.
 				@param angle the angle to add
 				@return TAngle, {\tt *this}
 		*/
@@ -213,13 +212,13 @@ namespace BALL
 		*/
 		TAngle& operator += (const T& val);
 
-		/**	Add this angle to an other and return the result.
+		/**	Addition operator.
 				@param angle the angle to add
 				@return TAngle, the new angle
 		*/
 		TAngle operator +	(const TAngle& angle);
 
-		/**	Substract an angle from this angle.
+		/**	Substraction operator.
 				@param angle the angle to substract
 				@return TAngle, {\tt *this}
 		*/
@@ -231,8 +230,7 @@ namespace BALL
 		*/
 		TAngle& operator -= (const T& val);
 
-		/**	Subtraction an angle from this 
-				angle and return the result.
+		/**	Subtraction an angle from this angle.
 				@param angle the angle to substract
 				@return TAngle, the new angle
 		*/
@@ -244,30 +242,28 @@ namespace BALL
 		*/
 		TAngle& operator *= (const TAngle& angle);
 
-		/**	Multiply a value with this 
-				angle and return the result.
+		/**	Multiply a value with this angle.
 				@param val the value to multiply with
 				@return TAngle, {\tt *this}
 		*/
 		TAngle& operator *=	(const T& val);
 
 
-		/**	Calculate the division of this angle by an other.
+		/**	Division operator.
 				@param angle the angle to divide by
 				@return TAngle, {\tt *this}
 		*/
 		TAngle& operator /= (const TAngle& angle);
 
 
-		/**	Calculate the division of this angle by an value.
+		/**	Divide this angle by a value.
 				@param val the angle to divide by
 				@return TAngle, {\tt *this}
 		*/
 		TAngle& operator /=	(const T& val);
 
 
-		/**	Calculate the division of this angle by an value
-				and return the result.
+		/**	Divide this angle by a value.
 				@param val the angle to divide by
 				@return TAngle, the new angle
 		*/
@@ -278,7 +274,9 @@ namespace BALL
 		*/
 		//@{
 
-		/**	Equality operator
+		/**	Equality operator.
+				This test uses Maths::isEqual instead of comparing the
+				values directly.
 				@param angle the angle to compare with
 				@return bool, {\bf true} if the two angles are equal
 		*/
@@ -286,6 +284,8 @@ namespace BALL
 
 
 		/**	Inequality operator
+				This test uses Maths::isNotEqual instead of comparing the
+				values directly.
 				@param angle the angle to compare with
 				@return bool, {\bf true} if the two angles are not equal
 		*/
@@ -293,36 +293,48 @@ namespace BALL
 
 
 		/**	Is less operator.
+				This test uses Maths::isLess instead of comparing the
+				values directly.
 				@param angle the angle to compare with
 				@return bool, {\bf true} if {\tt this} angle is smaller than {\tt value}
 		*/
 		bool operator <	(const TAngle& angle) const;
 
 		/**	Is less operator.
+				This test uses Maths::isLess instead of comparing the
+				values directly.
 				@param val the value to compare with
 				@return bool, {\bf true} if {\tt this} angle is smaller than {\tt value}
 		*/
 		bool operator <	(const T& val) const;
 
 		/**	Is less or equal operator.
+				This test uses Maths::isLessOrEqual instead of comparing the
+				values directly.
 				@param angle the angle to compare with
 				@return bool, {\bf true} if {\tt this} angle is smaller or equal than {\tt value}
 		*/
 		bool operator <= (const TAngle& angle) const;
 
 		/**	Is greater or equal operator.
+				This test uses Maths::isGreaterOrEqual instead of comparing the
+				values directly.
 				@param angle the angle to compare with
 				@return bool, {\bf true} if {\tt this} angle is greater or equal than {\tt value}
 		*/
 		bool operator >=	(const TAngle& angle) const;
 
 		/**	Is greater operator.
+				This test uses Maths::isGreater instead of comparing the
+				values directly.
 				@param angle the angle to compare with
 				@return bool, {\bf true} if {\tt this} angle is greater than {\tt value}
 		*/
 		bool operator > (const TAngle& angle) const;
 
-		/**	Test if an angle ist equivalent
+		/**	Test if two angles are equivalent.
+				Both angles are normalized and afterwards compared with Maths::isEqual
+				instead of comparing the values directly.
 				@param angle the angle to compare with
 				@return bool, {\bf true} if {\tt this} angle is equal to {\tt value}
 		*/
@@ -674,7 +686,7 @@ namespace BALL
 	//@{
 
 	/**	Multiplication operator.
-			Multiplies a number and an angle.
+			Multiplies a number with an angle.
 	*/
 	template <typename T>
 	BALL_INLINE
@@ -684,7 +696,7 @@ namespace BALL
 	}
 
 	/**	Plus operator.
-			Adds an number and an angle (in rad!)
+			Adds a number with an angle (in rad!)
 	*/
 	template <typename T>
 	BALL_INLINE
@@ -703,8 +715,8 @@ namespace BALL
 		return TAngle<T>(val - angle.value);
 	}
 
-	/**	Input- Operator
-			reads in one {\bf T} : val
+	/**	Input Operator.
+			Reads the value (in radians) of an angle from an instream using T::operator >>
 	*/
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TAngle<T>& angle)
@@ -714,7 +726,7 @@ namespace BALL
 		return s;
 	}
 
-	/**	Output- Operator
+	/**	Output Operator.
 			Writes the value of the angle to an output stream.
 			The stream operator {\tt operator <<} has to be defined
 			for the template parameter {\tt T}.

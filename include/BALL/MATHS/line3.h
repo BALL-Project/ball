@@ -1,4 +1,4 @@
-// $Id: line3.h,v 1.20 2000/04/18 21:13:25 amoll Exp $
+// $Id: line3.h,v 1.21 2000/04/29 15:28:35 amoll Exp $
 
 #ifndef BALL_MATHS_LINE3_H
 #define BALL_MATHS_LINE3_H
@@ -84,7 +84,7 @@ namespace BALL
 
 		// form: PARAMETER (default) or TWO_POINTS
 
-		/**	Detailled constructor.
+		/**	Detailed constructor.
 				Create a new TLine3 object from a point and a vector
 				of from two points, dependent from Form.
 				@param	point assigned to {\tt p}

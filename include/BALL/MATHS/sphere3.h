@@ -1,4 +1,4 @@
-// $Id: sphere3.h,v 1.15 2000/04/18 21:13:26 amoll Exp $
+// $Id: sphere3.h,v 1.16 2000/04/29 15:28:37 amoll Exp $
 
 #ifndef BALL_MATHS_SPHERE3_H
 #define BALL_MATHS_SPHERE3_H
@@ -60,7 +60,7 @@ namespace BALL
 		{
 		}
 
-		/**	Detailled constructor.
+		/**	Detailed constructor.
 				Create a new Sphere3 object from a point and a radius.
 				@param	point assigned to the point
 				@param	radius assigned to the radius

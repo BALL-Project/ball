@@ -1,4 +1,4 @@
-// $Id: circle3.h,v 1.15 2000/04/18 13:57:05 oliver Exp $
+// $Id: circle3.h,v 1.16 2000/04/29 15:28:35 amoll Exp $
 
 #ifndef BALL_MATHS_CIRCLE3_H
 #define BALL_MATHS_CIRCLE3_H
@@ -73,7 +73,7 @@ namespace BALL
 		{
 		}
 
-		/**	Detailled constructor.
+		/**	Detailed constructor.
 				Create a new TCircle3 object from two points and a {\tt T} value.
 				@param	point assigned to the point 
 				@param	normal assigned to the normal

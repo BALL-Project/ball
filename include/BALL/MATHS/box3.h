@@ -1,4 +1,4 @@
-// $Id: box3.h,v 1.15 2000/04/18 21:13:25 amoll Exp $
+// $Id: box3.h,v 1.16 2000/04/29 15:28:35 amoll Exp $
 
 #ifndef BALL_MATHS_BOX3_H
 #define BALL_MATHS_BOX3_H
@@ -44,14 +44,14 @@ namespace BALL
 		*/	
 		TBox3(const TBox3& box);
 
-		/**	Detailled constructor.
+		/**	Detailed constructor.
 				Create a new TBox3 object from two TVector3.
 				@param	a assigned to {\tt a}
 				@param	b assigned to {\tt b}
 		*/
 		TBox3(const TVector3<T>& a, const TVector3<T>& b);
 
-		/**	Detailled constructor.
+		/**	Detailed constructor.
 				Create a new TBox3 object from six {\tt T} variables.
 				@param	ax assigned to {\tt a.x}
 				@param	ay assigned to {\tt a.y}

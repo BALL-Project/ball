@@ -1,4 +1,4 @@
-// $Id: vector4.h,v 1.24 2000/04/18 21:13:26 amoll Exp $
+// $Id: vector4.h,v 1.25 2000/04/29 15:28:37 amoll Exp $
 
 #ifndef BALL_MATHS_VECTOR4_H
 #define BALL_MATHS_VECTOR4_H
@@ -76,7 +76,7 @@ namespace BALL
 		*/
 		TVector4(const T* ptr);
 
-		/**	Detailled constructor.
+		/**	Detailed constructor.
 				Create a new TVector4 object from three or four {\tt T} variables.
 				@param	x assigned to {\tt x}
 				@param	y assigned to {\tt y}

@@ -1,4 +1,4 @@
-// $Id: matrix44.h,v 1.24 2000/04/03 21:21:58 amoll Exp $
+// $Id: matrix44.h,v 1.25 2000/04/29 15:28:36 amoll Exp $
 
 #ifndef BALL_MATHS_MATRIX44_H
 #define BALL_MATHS_MATRIX44_H
@@ -89,7 +89,7 @@ namespace BALL
 		*/	
 		TMatrix4x4(const TMatrix4x4& m);
 
-		/**	Detailled constructor.
+		/**	Detailed constructor.
 				Create a new TMatrix4x4 object from four TVector4.
 				@param col1 assigned to the first column
 				@param col2 assigned to the second column
@@ -101,7 +101,7 @@ namespace BALL
 			(const TVector4<T>& col1, const TVector4<T>& col2,
 			 const TVector4<T>& col3, const TVector4<T>& col4);
 
-		/**	Detailled constructor.
+		/**	Detailed constructor.
 				Create a new TMatrix4x4 object from sixteen {\tt T} values.
 				@param m11 - {\tt m14} assigned to the components
 		*/

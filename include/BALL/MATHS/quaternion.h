@@ -1,4 +1,4 @@
-// $Id: quaternion.h,v 1.16 2000/04/18 21:13:26 amoll Exp $
+// $Id: quaternion.h,v 1.17 2000/04/29 15:28:36 amoll Exp $
 
 #ifndef BALL_MATHS_QUATERNION_H
 #define BALL_MATHS_QUATERNION_H
@@ -54,14 +54,14 @@ namespace BALL
 		*/	
 		TQuaternion(const TQuaternion& q);
 
-		/**	Detailled constructor.
+		/**	Detailed constructor.
 				Create a new TQuaternion object from a TVector3 and an angle.
 				@param axis assigned to the axis
 				@param angle assigned to the angle
 		*/
 		TQuaternion(const TVector3<T>& axis, const T &angle);
 
-		/**	Detailled constructor.
+		/**	Detailed constructor.
 				Create a new TQuaternion object from three {\tt T} values and an angle.
 				@param x assigned to the x-component of the axis
 				@param y assigned to the y-component of the axis

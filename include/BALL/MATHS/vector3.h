@@ -1,4 +1,4 @@
-// $Id: vector3.h,v 1.33 2000/04/18 21:13:26 amoll Exp $
+// $Id: vector3.h,v 1.34 2000/04/29 15:28:37 amoll Exp $
 
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -109,7 +109,7 @@ namespace BALL
 		{
 		}
 
-		/**	Detailled constructor.
+		/**	Detailed constructor.
 				Create a new TVector3 object from three {\tt T} variables.
 				@param	vx assigned to {\tt x}
 				@param	vy assigned to {\tt y}

@@ -1,4 +1,4 @@
-// $Id: common.h,v 1.7 2000/04/04 21:29:22 oliver Exp $
+// $Id: common.h,v 1.8 2000/04/29 15:28:35 amoll Exp $
 
 #ifndef BALL_MATHS_COMPARISON_H
 #define BALL_MATHS_COMPARISON_H
@@ -19,7 +19,7 @@ namespace BALL
 	namespace Maths 
 	{
 
-		/**	@name	Common Mathematical Functions and Comparisons.
+		/**	@name	Common Mathematical Functions.
 				{\bf Namespace:} {\tt BALL::Maths}\\
 				{\bf Definition:} \URL{BALL/MATHS/common.h}
 				\\
@@ -248,7 +248,7 @@ namespace BALL
 			return (a - b >= Constants::EPSILON);
 		}
 
-		/**	Return the floor of an number.
+		/**	Return the floor of a number.
 				@param	t the number
 				@return T the floor
 		*/
@@ -259,7 +259,7 @@ namespace BALL
 			return (long)(Maths::isGreater(t, 0) ? t: (Maths::isEqual(t, (T)(long)t) ? t : t - 1));
 		}
 
-		/**	Return the ceiling of an number.
+		/**	Return the ceiling of a number.
 				@param	t the number
 				@return T the ceiling
 		*/
