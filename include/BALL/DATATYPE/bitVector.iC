@@ -1,4 +1,35 @@
-// $Id: bitVector.iC,v 1.13 2000/11/13 01:54:10 amoll Exp $
+// $Id: bitVector.iC,v 1.14 2000/11/24 02:13:22 amoll Exp $
+
+BALL_INLINE
+Bit::Bit() 
+	throw()
+	: bitvector_(0),
+		index_(0)
+{
+}
+
+BALL_INLINE
+Bit::Bit(const BitVector& bit_vector, Index index) 
+	throw()
+	:	bitvector_((BitVector*) &bit_vector),
+		index_(index)
+{
+}
+
+BALL_INLINE
+Bit::~Bit()
+	throw()
+{
+}
+
+BALL_INLINE
+void Bit::clear() 
+	throw()
+{
+	bitvector_ = 0;
+	index_		 = 0;
+}
+
 
 BALL_INLINE
 BitVector::BlockType BitVector::mask_(Index index) const
@@ -216,24 +247,24 @@ BALL_INLINE
 bool Bit::operator == (const Bit& bit) const 
 	throw(Exception::NullPointer)
 {
-	if (bitvector_ == 0)
+	if (bitvector_ == 0 || bit.bitvector_ == 0)
 	{
 		throw Exception::NullPointer(__FILE__, __LINE__);
 	}
 
-	return bitvector_->getBit(index_) == bit.bitvector_->getBit(index_);
+	return bitvector_->getBit(index_) == bit.bitvector_->getBit(bit.index_);
 }
 
 BALL_INLINE
 bool Bit::operator != (const Bit& bit) const 
 	throw(Exception::NullPointer)
 {
-	if (bitvector_ == 0)
+	if (bitvector_ == 0 || bit.bitvector_ == 0)
 	{
 		throw Exception::NullPointer(__FILE__, __LINE__);
 	}
 
-	return bitvector_->getBit(index_) != bit.bitvector_->getBit(index_);
+	return bitvector_->getBit(index_) != bit.bitvector_->getBit(bit.index_);
 }
 
 BALL_INLINE
@@ -252,7 +283,7 @@ BALL_INLINE
 const Bit& Bit::operator = (const Bit& bit)	
 	throw(Exception::NullPointer)
 {
-	if (bitvector_ == 0)
+	if (bitvector_ == 0 || bit.bitvector_ == 0)
 	{
 		throw Exception::NullPointer(__FILE__, __LINE__);
 	}
