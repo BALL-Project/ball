@@ -1,4 +1,4 @@
-// $Id: Timer_test.C,v 1.6 2000/09/05 09:56:57 oliver Exp $
+// $Id: Timer_test.C,v 1.7 2001/05/10 23:32:08 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 #include <unistd.h>
 ///////////////////////////
@@ -6,12 +6,14 @@
 #include <BALL/SYSTEM/file.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Timer_test.C,v 1.6 2000/09/05 09:56:57 oliver Exp $")
+START_TEST(class_name, "$Id: Timer_test.C,v 1.7 2001/05/10 23:32:08 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
+
+#define BUSY_WAIT { double x = 0.0; for (int i = 0; i < 20000000; i++, x += 0.1); }
 
 CHECK(Timer::Timer())
 	Timer* t1 = new Timer();
@@ -27,7 +29,7 @@ RESULT
 CHECK(Timer::Timer(Timer& timer))
 	Timer t1;
 	t1.start();
-	for (int i = 0;i < 2000000 ; i++);
+	BUSY_WAIT
 	t1.stop();
 	Timer t2(t1);
 	TEST_EQUAL(t2.isRunning(), false)
@@ -40,7 +42,7 @@ RESULT
 CHECK(Timer::clear())
 	Timer t1;
 	t1.start();
-	for (int i = 0;i < 2000000 ; i++);
+	BUSY_WAIT
 	t1.stop();
 	t1.clear();
 	TEST_EQUAL(t1.isRunning(), false)
@@ -55,10 +57,10 @@ CHECK(Timer::start())
 	TEST_EQUAL(t1.start(), true)
 	TEST_EQUAL(t1.start(), false)
 	TEST_EQUAL(t1.isRunning(), true)
-	for (int i = 0;i < 2000000 ; i++);
-	TEST_EQUAL(t1.getClockTime() > 0, true)	
-	TEST_EQUAL(t1.getUserTime() > 0, true)	
-	TEST_EQUAL(t1.getCPUTime() > 0, true)	
+	BUSY_WAIT
+	TEST_EQUAL(t1.getClockTime() >= 0, true)	
+	TEST_EQUAL(t1.getUserTime() >= 0, true)	
+	TEST_EQUAL(t1.getCPUTime() >= 0, true)	
 RESULT
 
 CHECK(Timer::stop())
@@ -98,18 +100,18 @@ CHECK(Timer::getUserTime() const )
 	Timer t1;
 	TEST_EQUAL(t1.getUserTime(), 0)	
 	t1.start();
-	for (int i = 0; i < 2000000; i++);
+	BUSY_WAIT
 	t1.stop();
-	TEST_EQUAL(t1.getUserTime()> 0, true)	
+	TEST_EQUAL(t1.getUserTime() >= 0, true)	
 RESULT
 
 CHECK(Timer::getSystemTime() const )
 	Timer t1;
 	TEST_EQUAL(t1.getSystemTime(), 0)	
 	t1.start();
-	for (int i = 0;i < 2000000 ; i++);
+	BUSY_WAIT
 	t1.stop();
-	TEST_EQUAL(t1.getSystemTime()> 0, false)	
+	TEST_EQUAL(t1.getSystemTime() > 0, false)	
 	t1.start();
 	File f("data/Timer_test1.txt");
 	for (int i = 0; i < 10 ; i++)
@@ -129,7 +131,7 @@ CHECK(Timer::getCPUTime() const )
 	TEST_EQUAL(t1.getCPUTime() <= 1, true)	
 	t1.reset();
 	t1.start();
-	for (int i = 0; i < 20000000 ; i++);
+	BUSY_WAIT
 	t1.stop();
 	TEST_EQUAL(t1.getCPUTime() > 0, true)	
 	TEST_REAL_EQUAL(t1.getCPUTime(), t1.getSystemTime() + t1.getUserTime())	
@@ -138,7 +140,7 @@ RESULT
 CHECK(Timer::Timer& operator = (const Timer& timer))
 	Timer t1;
 	t1.start();
-	for (int i = 0;i < 2000000 ; i++);
+	BUSY_WAIT
 	t1.stop();
 	Timer t2;
 	t2 = t1;
@@ -171,7 +173,7 @@ RESULT
 CHECK(Timer::bool operator != (const Timer& timer) const )
 	Timer t1;
 	t1.start();
-	for (int i = 0;i < 2000000 ; i++);
+	BUSY_WAIT
 	t1.stop();
 	Timer t2;
 	TEST_EQUAL(t1 != t2, true);
@@ -182,7 +184,7 @@ RESULT
 CHECK(Timer::bool operator < (const Timer& timer) const )
 	Timer t1;
 	t1.start();
-	for (int i = 0;i < 2000000 ; i++);
+	BUSY_WAIT
 	t1.stop();
 	Timer t2;
 	TEST_EQUAL(t1 < t2, false);
@@ -192,33 +194,38 @@ CHECK(Timer::bool operator < (const Timer& timer) const )
 RESULT
 
 CHECK(Timer::bool operator <= (const Timer& timer) const )
-	Timer t1;
+	Timer& t1 = *new Timer;
 	t1.start();
-	for (int i = 0;i < 2000000 ; i++);
+	BUSY_WAIT
 	t1.stop();
-	Timer t2;
+	Timer& t2 = *new Timer;
 	TEST_EQUAL(t1 <= t2, false);
 	TEST_EQUAL(t2 <= t1, true);
 	t2 = t1;
 	TEST_EQUAL(t1 <= t2, true);
+	delete &t1;
+	delete &t2;
 RESULT
 
+double x = 0.0;
 CHECK(Timer::bool operator >= (const Timer& timer) const )
-	Timer t1;
+	Timer& t1 = *new Timer;
 	t1.start();
-	for (int i = 0;i < 2000000 ; i++);
+	BUSY_WAIT
 	t1.stop();
-	Timer t2;
+	Timer& t2 = *new Timer;
 	TEST_EQUAL(t1 >= t2, true);
-	TEST_EQUAL(t2 >= t1, false);
+	TEST_EQUAL(t2 > t1, false);
 	t2 = t1;
 	TEST_EQUAL(t1 >= t2, true);
+	delete &t1;
+	delete &t2;
 RESULT
 
 CHECK(Timer::bool operator > (const Timer& timer) const )
 	Timer t1;
 	t1.start();
-	for (int i = 0;i < 2000000 ; i++);
+	BUSY_WAIT
 	t1.stop();
 	Timer t2;
 	TEST_EQUAL(t1 > t2, true);
@@ -235,7 +242,7 @@ RESULT
 CHECK(Timer::dump(::std::ostream& s = ::std::cout, Size depth = 0L) const )
 	Timer t1;
 	t1.start();
-	for (int i = 0;i < 2000000 ; i++);
+	BUSY_WAIT
 	t1.stop();
   String filename;
 	NEW_TMP_FILE(filename)

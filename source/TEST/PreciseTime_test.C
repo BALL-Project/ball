@@ -1,4 +1,4 @@
-// $Id: PreciseTime_test.C,v 1.1 2000/10/18 11:59:12 oliver Exp $
+// $Id: PreciseTime_test.C,v 1.2 2001/05/10 23:32:08 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(PreciseTime, "$Id: PreciseTime_test.C,v 1.1 2000/10/18 11:59:12 oliver Exp $")
+START_TEST(PreciseTime, "$Id: PreciseTime_test.C,v 1.2 2001/05/10 23:32:08 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -142,6 +142,9 @@ CHECK(PreciseTime::now())
 	PreciseTime t1(PreciseTime::now());
 	TEST_NOT_EQUAL(t1.getSeconds(), 0)
 	TEST_NOT_EQUAL(t1.getMicroSeconds(), 0)
+	// busy waiting
+	double x = 0.0;	
+	for (int i = 0; i < 200000; i++, x += 0.1);
 	PreciseTime t2(PreciseTime::now());
 	TEST_NOT_EQUAL(t2.getSeconds(), 0)
 	TEST_NOT_EQUAL(t2.getMicroSeconds(), 0)

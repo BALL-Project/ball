@@ -1,4 +1,4 @@
-// $Id: TimeStamp_test.C,v 1.5 2000/10/18 12:36:58 oliver Exp $
+// $Id: TimeStamp_test.C,v 1.6 2001/05/10 23:32:08 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,10 +7,12 @@
 
 ///////////////////////////
 
-START_TEST(TimeStamp, "$Id: TimeStamp_test.C,v 1.5 2000/10/18 12:36:58 oliver Exp $")
+START_TEST(TimeStamp, "$Id: TimeStamp_test.C,v 1.6 2001/05/10 23:32:08 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
+
+#define BUSY_WAIT { double x = 0.0; for (int i = 0; i < 200000; i++, x += 0.1); } 
 
 using namespace BALL;
 
@@ -30,6 +32,7 @@ CHECK(TimeStamp::getTime() const  throw())
   TimeStamp* t1 = new TimeStamp;	
 	t1->stamp();
 	STATUS(*t1)
+	BUSY_WAIT
   TimeStamp* t2 = new TimeStamp;
 	t2->stamp();
 	STATUS(*t2)
@@ -44,6 +47,7 @@ CHECK(TimeStamp::isNewerThan(const Time& time) const  throw())
 	TimeStamp* ts1 = new TimeStamp;
 	ts1->stamp();
 	STATUS(*ts1)
+	BUSY_WAIT
 	TimeStamp* ts2 = new TimeStamp;
 	ts2->stamp();
 	STATUS(*ts2)
@@ -60,6 +64,7 @@ CHECK(TimeStamp::isOlderThan(const Time& time) const  throw())
 	TimeStamp* ts1 = new TimeStamp;
 	ts1->stamp();
 	STATUS(*ts1)
+	BUSY_WAIT
 	TimeStamp* ts2 = new TimeStamp;
 	ts2->stamp();
 	STATUS(*ts2)
@@ -76,6 +81,7 @@ CHECK(TimeStamp::isNewerThan(const TimeStamp& stamp) const  throw())
 	TimeStamp* ts1 = new TimeStamp;
 	ts1->stamp();
 	STATUS(*ts1)
+	BUSY_WAIT
 	TimeStamp* ts2 = new TimeStamp;
 	ts2->stamp();
 	STATUS(*ts2)
@@ -92,6 +98,7 @@ CHECK(TimeStamp::isOlderThan(const TimeStamp& stamp) const  throw())
 	TimeStamp* ts1 = new TimeStamp;
 	ts1->stamp();
 	STATUS(*ts1)
+	BUSY_WAIT
 	TimeStamp* ts2 = new TimeStamp;
 	ts2->stamp();
 	STATUS(*ts2)
@@ -108,6 +115,7 @@ CHECK(TimeStamp::stamp(const Time& time = ZERO) throw())
   TimeStamp* ts1 = new TimeStamp;
 	ts1->stamp();
 	STATUS(*ts1)
+	BUSY_WAIT
   TimeStamp* ts2 = new TimeStamp;
 	ts2->stamp();
 	STATUS(*ts2)
@@ -115,6 +123,7 @@ CHECK(TimeStamp::stamp(const Time& time = ZERO) throw())
 	TEST_EQUAL(ts1->isNewerThan(*ts2), false)
 	TEST_EQUAL(ts2->isNewerThan(*ts1), true)
 	TEST_EQUAL(ts2->isNewerThan(*ts2), false)
+	BUSY_WAIT
 	ts1->stamp();
 	TEST_EQUAL(ts1->isNewerThan(*ts1), false)
 	TEST_EQUAL(ts1->isNewerThan(*ts2), true)
