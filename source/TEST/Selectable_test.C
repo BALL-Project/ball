@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Selectable_test.C,v 1.8 2003/05/23 10:26:05 oliver Exp $
+// $Id: Selectable_test.C,v 1.9 2003/06/27 09:29:07 anker Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -13,7 +13,7 @@
 
 ///////////////////////////
 
-START_TEST(Selectable, "$Id: Selectable_test.C,v 1.8 2003/05/23 10:26:05 oliver Exp $")
+START_TEST(Selectable, "$Id: Selectable_test.C,v 1.9 2003/06/27 09:29:07 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -22,77 +22,70 @@ using namespace BALL;
 using namespace std;
 
 Selectable* s;
-CHECK(Selectable::Selectable())
+CHECK(Selectable() throw())
 	s = new Selectable();
 	TEST_NOT_EQUAL(s, 0)
 RESULT
 
-CHECK(Selectable::~Selectable())
+CHECK(~Selectable() throw())
 	delete s;
 RESULT
 
 Selectable se, se2;
 
-CHECK(Selectable::Selectable(const Selectable& selectable, bool deep = true))
+CHECK(Selectable(const Selectable& selectable, bool deep = true) throw())
 	se.select();
 	Selectable* s2 = new Selectable(se) ;
 	TEST_EQUAL(s2->isSelected(), true)
 	delete s2;
 RESULT
 
-CHECK(Selectable::clear())
+CHECK(void clear() throw())
+	se2.select();
 	se2.clear();
 	TEST_EQUAL(se2.isSelected(), false)
 RESULT
 
-CHECK(Selectable::destroy())
-	Selectable* s2 = new Selectable;	
-	s2->select();
-	s2->destroy();
-	TEST_EQUAL(s2->isSelected(), false)
-	delete s2;
-RESULT
-
-CHECK(Selectable::set(const Selectable& selectable, bool deep = true))
+CHECK(void set(const Selectable& selectable, bool deep = true) throw())
 	se2.set(se);
 	TEST_EQUAL(se2.isSelected(), true)
 	se2.clear();
 RESULT
 
-CHECK(Selectable::Selectable& operator = (const Selectable& selectable))
+CHECK(const Selectable& operator = (const Selectable& selectable) throw())
 	se2 = se;
 	TEST_EQUAL(se2.isSelected(), true)
 	se2.clear();
 RESULT
 
-CHECK(Selectable::get(Selectable& selectable, bool deep = true) const )
+CHECK(void get(Selectable& selectable, bool deep = true) const throw())
 	se.get(se2);
 	TEST_EQUAL(se2.isSelected(), true)
 	se2.clear();
 RESULT
 
-CHECK(Selectable::swap(Selectable& selectable))
+CHECK(void swap(Selectable& selectable) throw())
   se.swap(se2);
 	TEST_EQUAL(se.isSelected(), false)
 	TEST_EQUAL(se2.isSelected(), true)
   se.swap(se2);
 RESULT
 
-CHECK(Selectable::select())
+CHECK(void select() throw())
   se2.select();
 	TEST_EQUAL(se2.isSelected(), true)
   se2.select();
 	TEST_EQUAL(se2.isSelected(), true)
 RESULT
 
-CHECK(Selectable::deselect())
+CHECK(void deselect() throw())
   se2.deselect();
 	TEST_EQUAL(se2.isSelected(), false)
   se2.deselect();
 	TEST_EQUAL(se2.isSelected(), false)
 RESULT
 
-CHECK(Selectable::isSelected() const )
+CHECK(bool isSelected() const throw())
   se2.select();
 	TEST_EQUAL(se2.isSelected(), true)
   se2.deselect();
@@ -105,8 +98,8 @@ using std::ios;
 using namespace RTTI;
 TextPersistenceManager pm;
 
-CHECK(Selectable::read(PersistenceManager& pm))
-	ifstream  ifile("data/Selectable_test2.txt");
+CHECK(bool read(PersistenceManager& pm) throw())
+	ifstream ifile("data/Selectable_test2.txt");
 	pm.setIstream(ifile);
 	se2.clear();
 	TEST_EQUAL(se2.read(pm), true)
@@ -114,7 +107,7 @@ CHECK(Selectable::read(PersistenceManager& pm))
 	ifile.close();
 RESULT
 
-CHECK(Selectable::write(PersistenceManager& pm) const )
+CHECK(void write(PersistenceManager& pm) const throw())
 	NEW_TMP_FILE(filename)
 	ofstream  ofile(filename.c_str(), std::ios::out);
 	pm.setOstream(ofile);
@@ -123,7 +116,7 @@ CHECK(Selectable::write(PersistenceManager& pm) const )
 	TEST_FILE_REGEXP(filename.c_str(), "data/Selectable_test2.txt")
 RESULT
 
-CHECK(Selectable::dump(::std::ostream& s = std::cout, Size depth = 0L) const )
+CHECK(void dump(::std::ostream& s = std::cout, Size depth = 0) const throw())
   String filename;
 	NEW_TMP_FILE(filename)
 	std::ofstream outfile(filename.c_str(), std::ios::out);
@@ -131,6 +124,14 @@ CHECK(Selectable::dump(::std::ostream& s = std::cout, Size depth = 0L) const )
 	outfile.close();
 	TEST_FILE_REGEXP(filename.c_str(), "data/Selectable_test3.txt")
 RESULT	
+
+CHECK(bool operator != (const Selectable& selectable) const throw())
+	// ???
+RESULT
+
+CHECK(bool operator == (const Selectable& selectable) const throw())
+	// ???
+RESULT
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

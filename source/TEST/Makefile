@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.202 2003/06/26 14:50:27 amoll Exp $
+# $Id: Makefile,v 1.203 2003/06/27 09:29:08 anker Exp $
 #
 
 DIRECTORY=TEST
@@ -90,6 +90,7 @@ EXECUTABLES_CONCEPTS = \
 	PersistenceManager_test\
 	TextPersistenceManager_test\
 	Selectable_test\
+	NamedProperty_test\
 	PropertyManager_test\
 	Composite_test1\
 	Composite_test2\
