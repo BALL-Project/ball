@@ -1,7 +1,6 @@
-// $Id: support.C,v 1.13 2000/07/25 21:14:23 oliver Exp $
+// $Id: support.C,v 1.14 2001/01/26 15:01:36 anker Exp $
 
 #include <BALL/MOLMEC/COMMON/support.h>
-#include <BALL/DATATYPE/hashGrid.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/system.h>
@@ -288,24 +287,14 @@ namespace BALL
 			return counter;
 		}
 
-		// Add solvent molecules from "solvent" to "solute" if they lie 
-		// in the box "box" and if they do not overlap with molecules in "solute".
+
+		// Add solvent molecules from "solvent" to "system" if they lie 
+		// in the box "box" and if they do not overlap with molecules in 
+		// "solute_grid"
 		Size addNonOverlappingMolecules
-			(System& solute, const System& solvent, const Box3& box, double distance)
+			(System& system, const HashGrid3<Atom*>& solute_grid, 
+			 const System& solvent, const Box3& box, double distance)
 		{
-			// Initialize HashGrid for storing atoms of solute
-			// (we add 1% of the distance to make sure we get no points
-			// on the grid boundary)
-			Vector3	vector(distance * 1.02);
-			HashGrid3<Atom*> grid(box.a - vector, box.b - box.a + vector + vector, distance);
-
-			// Insert the atoms of the solute into the hash grid
-			AtomIterator atom_it = solute.beginAtom();
-			for ( ; +atom_it; ++atom_it) 
-			{
-				grid.insert(atom_it->getPosition(), &*atom_it);
-			}
-
 
 			Molecule* old_molecule = 0;
 			Molecule* new_molecule = 0;
@@ -316,12 +305,21 @@ namespace BALL
 			double mass = 0;
 			Vector3	center_of_gravity(0.0);
 
-			// Iterate over all atoms in solvent and test the different molecules as follows:
-			// Calculate the number of atoms of the molecule and its mass. If the number of molecules
-			// is larger 0 and the mass is larger 0, then a another test has to be carried out whether
-			// the center of gravity is in the box. If so, the molecule will be inserted in solute:
+			// Iterate over all atoms in solvent and test the different molecules
+			// as follows: 
+			// Calculate the number of atoms of the molecule and its mass. If the
+			// number of molecules is larger 0 and the mass is larger 0, then a
+			// another test has to be carried out whether the center of gravity
+			// is in the box. If so, the molecule will be inserted in solute:
+
+			// This is not the most obviuos way to iterate over different
+			// molecules. We iterate over all solvent _atoms_ and distinguish
+			// _molecules_ by their dedicated molecule (by examining getMolecule())
 	 
-			atom_it = solvent.beginAtom();
+			// DEBUG
+			Size reject_counter = 0;
+
+			AtomIterator atom_it = solvent.beginAtom();
 			if (atom_it != solvent.endAtom())
 			{
 				old_molecule = atom_it->getMolecule();
@@ -337,17 +335,34 @@ namespace BALL
 							if ((atom_counter > 0) && (mass != 0)) 
 							{
 								center_of_gravity /= mass;
-								if ((center_of_gravity.x >= box.a.x) && (center_of_gravity.x <= box.b.x)
-										&& (center_of_gravity.y >= box.a.y) && (center_of_gravity.y <= box.b.y) 
-										&& (center_of_gravity.z >= box.a.z) && (center_of_gravity.z <= box.b.z)) 
+								if ((center_of_gravity.x >= box.a.x) 
+										&& (center_of_gravity.x <= box.b.x)
+										&& (center_of_gravity.y >= box.a.y) 
+										&& (center_of_gravity.y <= box.b.y) 
+										&& (center_of_gravity.z >= box.a.z) 
+										&& (center_of_gravity.z <= box.b.z)) 
 								{
 									// copy the solvent molecule and insert it into
 									// the solute system 
 									Molecule* solvent_molecule = new Molecule(*old_molecule);
-									solute.insert(*solvent_molecule);
+									system.insert(*solvent_molecule);
 									mol_counter++;
 								}
+								// DEBUG
+								else
+								{
+									Log.info() << "Not adding molecule containing "
+										<< old_molecule->beginAtom()->getFullName()
+										<< " (center of gravity = " << center_of_gravity
+										<< ")" << endl;
+									reject_counter++;
+								}
 							}
+						}
+						// DEBUG
+						else
+						{
+							reject_counter++;
 						}
 
 						old_molecule = new_molecule;
@@ -368,17 +383,21 @@ namespace BALL
 					atom_counter++;
 					
 					// check for all collisions with any of the solute's atoms
-					HashGridBox3<Atom*>* hbox = grid.getBox(position);
+					const HashGridBox3<Atom*>* hbox = solute_grid.getBox(position);
 					if ((hbox != 0) && add)
 					{	
-						HashGridBox3<Atom*>::DataIterator data_it;
-						HashGridBox3<Atom*>::BoxIterator box_it;
+						HashGridBox3<Atom*>::ConstDataIterator data_it;
+						HashGridBox3<Atom*>::ConstBoxIterator box_it;
 						for (box_it = hbox->beginBox(); +box_it && add; ++box_it)
 						{
 							for (data_it = box_it->beginData(); +data_it && add; ++data_it)
 							{
-								if ((position.getSquareDistance((*data_it)->getPosition())) < square_distance)
+								if ((position.getSquareDistance((*data_it)->getPosition())) 
+										< square_distance)
 								{
+									// DEBUG
+									Log.info() << "Not adding molecule containing " 
+										<< (*data_it)->getFullName() << " (distance)" << endl;
 									add = false;
 								}
 							}
@@ -387,9 +406,105 @@ namespace BALL
 				}	
 			}
 
-			// return the number of solvent molecules
+			// DEBUG
+			Log.info() << "Number of rejected molecules = " << reject_counter 
+				<< endl;
+			// return the number of processed solvent molecules
 			return mol_counter;
 		}
+
+
+		// This little function adapts a waterbox from external programs that
+		// use a different definition of the periodic box.
+		void adaptWaterBox(System& system, const Box3& box)
+		{
+
+			float width = box.getWidth();
+			float height = box.getHeight();
+			float depth = box.getDepth();
+
+			Vector3	center_of_gravity(0.0);
+			float atomic_mass;
+			Size atom_counter;
+			float total_mass;
+			Vector3 translation;
+
+			// iterate over every molecule of the system and translate every
+			// molecule with center of gravity outside to the opposite wall of
+			// the box.
+			Size mol_count = 0;
+			MoleculeIterator mol_it = system.beginMolecule();
+			AtomIterator atom_it;
+			for (; +mol_it; ++mol_it)
+			{
+				atom_counter = 0;
+				center_of_gravity.clear();
+				total_mass = 0.0;
+
+				// iterate over all atoms of this molecule to calculate the center
+				// of gravity of this molecule
+				atom_it = mol_it->beginAtom();
+				for (; +atom_it; ++atom_it)
+				{
+					atom_counter++;
+					atomic_mass = atom_it->getElement().getAtomicWeight();
+					center_of_gravity += atomic_mass * atom_it->getPosition();
+					total_mass += atomic_mass;
+				}
+
+				center_of_gravity /= total_mass;
+
+				bool translate = false;
+
+				if (center_of_gravity.x < box.a.x) 
+				{
+					translation.x += width;
+					translate = true;
+				} 
+				else if (center_of_gravity.x > box.b.x) 
+				{
+					translation.x -= width;
+					translate = true;
+				}
+
+				if (center_of_gravity.y < box.a.y) 
+				{
+					translation.y += height;
+					translate = true;
+				} 
+				else if (center_of_gravity.y > box.b.y) 
+				{
+					translation.y -= height;
+					translate = true;
+				}
+
+				if (center_of_gravity.z < box.a.z) 
+				{
+					translation.z += depth;
+					translate = true;
+				} 
+				else if (center_of_gravity.z > box.b.z) 
+				{
+					translation.z -= depth;
+					translate = true;
+				}
+
+				// Translate the atoms of the molecule if it has to be translated
+				if (translate) 
+				{
+					for (atom_it = mol_it->beginAtom(); +atom_it; ++atom_it)
+					{
+						Log.info() << "MolmecSupport::adaptWaterBox(): "
+							<< "translating atom " << atom_it->getFullName()
+							<< " by " << translation << endl;
+						atom_it->setPosition(atom_it->getPosition() + translation);
+					}
+				}
+				mol_count++;
+			} // iteration over molecules
+			Log.info() << "processed " << mol_count << " molecules" << endl;
+		}
+
 
 	}	// namespace MolmecSupport
 
