@@ -1,4 +1,4 @@
-// $Id: file.h,v 1.33 2001/09/06 14:54:29 anker Exp $
+// $Id: file.h,v 1.34 2001/10/28 21:40:45 amoll Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -48,27 +48,37 @@ namespace BALL
 	class TransformationManager
 	{	
 		public:
+			
 		/**	Constructors and Destructors
 		*/
 		//@{
+		
 		/// Default constructor
 		TransformationManager();
+		
 		/// Destructor
 		~TransformationManager();
+		
 		//@}
 		/**	Accessors
 		*/
 		//@{
+		
 		///
 		void registerTransformation(const String& pattern, const String& command);
+		
 		///
 		void unregisterTransformation(const String& pattern);
+		
 		///
 		String findTransformationCommand(const String& name) const;
+		
 		//@}
 
 		protected:
+		
 		std::map<String, String>	transformation_methods_;
+	
 	};
 		
 	/**	File Class.	
