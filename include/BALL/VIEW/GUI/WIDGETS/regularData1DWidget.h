@@ -1,4 +1,4 @@
-// $Id: regularData1DWidget.h,v 1.4 2001/06/06 14:25:07 anhi Exp $
+// $Id: regularData1DWidget.h,v 1.5 2001/06/06 14:34:20 anker Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGET_REGULARDATA1DWIDGET_H
 #define BALL_VIEW_GUI_WIDGET_REGULARDATA1DWIDGET_H
@@ -92,7 +92,7 @@ class RegularData1DWidget
    */
   //@{
       /// Detailed constructor
-      RegularData1DWidget(int l, double min=0, double max=1., QWidget *parent = 0)
+      RegularData1DWidget(Size l, DoubleReal min=0, DoubleReal max=1.0, QWidget *parent = 0)
 	throw();
 
       /// Copy constructor
@@ -158,8 +158,8 @@ public slots:
  protected:
       QPixmap pm_;
       Size length_;
-      double min_;
-      double max_;
+      DoubleReal min_;
+      DoubleReal max_;
       RegularData1D *spec_;
 };
 
