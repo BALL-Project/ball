@@ -1,4 +1,4 @@
-// $Id: Residue_test.C,v 1.11 2000/05/23 10:23:47 oliver Exp $
+// $Id: Residue_test.C,v 1.12 2000/05/29 09:31:50 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -13,7 +13,7 @@
 #include <BALL/MATHS/common.h>
 ///////////////////////////
 
-START_TEST(Residue, "$Id: Residue_test.C,v 1.11 2000/05/23 10:23:47 oliver Exp $")
+START_TEST(Residue, "$Id: Residue_test.C,v 1.12 2000/05/29 09:31:50 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -205,6 +205,7 @@ CHECK(Residue::getTorsionPhi() const )
 	infile >> s;
 	TEST_EQUAL(s.countResidues(), 3)
 	ResidueIterator res_it = s.beginResidue();
+	PRECISION(0.0005)
 	TEST_EQUAL(res_it->getTorsionPhi(), 0)
 	res_it++;
 	TEST_REAL_EQUAL(res_it->getTorsionPhi().value, 3.14159)
