@@ -1,4 +1,4 @@
-// $Id: RDFParameter.C,v 1.4 2000/09/25 11:19:21 anker Exp $
+// $Id: RDFParameter.C,v 1.5 2000/10/17 17:19:50 anker Exp $
 
 #include <BALL/STRUCTURE/RDFParameter.h>
 #include <BALL/STRUCTURE/RDFSection.h>
@@ -9,14 +9,15 @@ using namespace std;
 namespace BALL
 {
 
-	RDFParameter::RDFParameter()
-		:	rdf_list_(),
+	RDFParameter::RDFParameter() throw()
+		:	ParameterSection(),
+			rdf_list_(),
 			rdf_indices_()
 	{
 	}
 
 
-	RDFParameter::RDFParameter(const RDFParameter& rdf_parameter)
+	RDFParameter::RDFParameter(const RDFParameter& rdf_parameter) throw()
 		:	ParameterSection(rdf_parameter),
 			rdf_list_(rdf_parameter.rdf_list_),
 			rdf_indices_(rdf_parameter.rdf_indices_)
@@ -24,27 +25,37 @@ namespace BALL
 	}
 
 
-	RDFParameter::~RDFParameter()
-	{
-		destroy();
-	}
-
-
-	void RDFParameter::destroy()
+	RDFParameter::~RDFParameter() throw()
 	{
 		clear();
+
+		valid_ = false;
 	}
 
 
-	void RDFParameter::clear()
+	const RDFParameter& RDFParameter::operator = (const RDFParameter& parameter) 
+		throw()
 	{
+		ParameterSection::operator = (parameter);
+		rdf_list_ = parameter.rdf_list_;
+		rdf_indices_ = parameter.rdf_indices_;
+
+		return *this;
+	}
+
+
+	void RDFParameter::clear() throw()
+	{
+		ParameterSection::clear();
 		rdf_list_.clear();
 		rdf_indices_.clear();
+		
+		valid_ = false;
 	}
 
 
 	bool RDFParameter::hasRDF(Atom::Type solvent_atom_type,
-			Atom::Type solute_atom_type) const
+			Atom::Type solute_atom_type) const throw()
 	{
 		if (rdf_indices_.has(solvent_atom_type))
 		{
@@ -65,13 +76,14 @@ namespace BALL
 
 
 	bool RDFParameter::hasParameters(Atom::Type solvent_atom_type,
-			Atom::Type solute_atom_type) const
+			Atom::Type solute_atom_type) const throw()
 	{
 		return hasRDF(solvent_atom_type, solute_atom_type);
 	}
 	
 
-	Position RDFParameter::getIndex(Atom::Type type_i, Atom::Type type_j) const
+	Position RDFParameter::getIndex(Atom::Type type_i, Atom::Type type_j)
+		const throw()
 	{
 		if (hasRDF(type_i, type_j))
 		{
@@ -84,7 +96,8 @@ namespace BALL
 	}
 
 
-	const RadialDistributionFunction& RDFParameter::getRDF(Position index) const
+	const RadialDistributionFunction& RDFParameter::getRDF(Position index)
+		const throw()
 	{
 		if (index < rdf_list_.size())
 		{
@@ -100,7 +113,7 @@ namespace BALL
 
 
 	const RadialDistributionFunction& RDFParameter::getRDF(Atom::Type type_i,
-			Atom::Type type_j) const
+			Atom::Type type_j) const throw()
 	{
 		if (hasRDF(type_i, type_j))
 		{
@@ -129,13 +142,18 @@ namespace BALL
 
 
 	bool RDFParameter::extractSection(ForceFieldParameters& parameters,
-			const String& section_name)
+			const String& section_name) throw()
 	{
 
 		if (!parameters.isValid())
 		{
 			return false;
 		}
+
+		// first clear the instance, just in case there is something left from
+		// before
+
+		clear();
 
 		ParameterSection::extractSection(parameters, section_name);
 
