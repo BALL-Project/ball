@@ -1,4 +1,4 @@
-// $Id: property.C,v 1.14 2000/08/25 20:09:24 amoll Exp $
+// $Id: property.C,v 1.15 2000/08/27 16:09:50 amoll Exp $
 
 #include <BALL/CONCEPT/property.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -27,27 +27,26 @@ namespace BALL
 	void NamedProperty::persistentWrite(PersistenceManager& pm, const char* name) const
 	{
 		pm.writeObjectHeader(this, name);
-		pm.writePrimitive((int)type_, "type_");
-		pm.writePrimitive(name_, "name_");
-		
-		switch (type_)
-		{
-			case	INT:					pm.writePrimitive(data_.i, "data_.i");		break;
-			case	FLOAT:				pm.writePrimitive(data_.f, "data_.f");		break;
-			case	UNSIGNED_INT:	pm.writePrimitive(data_.ui, "data_.ui"); break;
-			case	BOOL:					pm.writePrimitive(data_.b, "data_.b");		break;
-			case	STRING:				pm.writePrimitive(data_.s, "data_.s");		break;
-			case	OBJECT:				pm.writeObjectPointer(data_.object, "data_.object"); break;
-			case	NONE:					break;
-			default:
-				Log.error() << "cannot write unknown property type: " << (int)type_ << endl;
-		}
+			pm.writePrimitive((int)type_, "type_");
+			pm.writePrimitive(name_, "name_");
+			
+			switch (type_)
+			{
+				case	INT:					pm.writePrimitive(data_.i, "data_.i");		break;
+				case	FLOAT:				pm.writePrimitive(data_.f, "data_.f");		break;
+				case	UNSIGNED_INT:	pm.writePrimitive(data_.ui, "data_.ui"); break;
+				case	BOOL:					pm.writePrimitive(data_.b, "data_.b");		break;
+				case	STRING:				pm.writePrimitive(data_.s, "data_.s");		break;
+				case	OBJECT:				pm.writeObjectPointer(data_.object, "data_.object"); break;
+				case	NONE:					break;
+				default:
+					Log.error() << "cannot write unknown property type: " << (int)type_ << endl;
+			}
 		pm.writeObjectTrailer(name);
 	}
 	
 	void NamedProperty::persistentRead(PersistenceManager& pm)
 	{
-		//pm.checkObjectHeader(RTTI::getStreamName<NamedProperty>()); 
 		int type;
 		pm.readPrimitive(type, "type_");
 		type_ = (Type)type;
@@ -98,7 +97,8 @@ namespace BALL
 			{
 				TextPersistenceManager pm;
 				pm.setOstream(s);
-				pm.writeObjectPointer(property.data_.object, "data_.object");
+				//pm.writeObjectPointer(property.data_.object, "data_.object");
+				property.persistentWrite(pm);
 				break;
 			}
 			case NamedProperty::NONE : break;
@@ -124,7 +124,8 @@ namespace BALL
 			{
 				TextPersistenceManager pm;
 				pm.setIstream(s);
-				pm.readObjectPointer(property.data_.object, "data_.object"); 
+				//pm.readObjectPointer(property.data_.object, "data_.object"); 
+				property.persistentRead(pm);
 				break;
 			}
 			case NamedProperty::NONE: break;
@@ -171,6 +172,43 @@ namespace BALL
 
 		return s;
 	}
+/*
+  void PropertyManager::write(PersistenceManager& pm) const
+  {
+    pm.writeObjectHeader(this, "PropertyManager");
+			pm.writeStorableObject(bitvector_, "bitvector_");
+			Size size = named_properties_.size();
+			pm.writePrimitive(size, "size");
+			for (Size i = 0; i < size; i++)
+			{
+		    pm.writeObjectHeader(*named_properties_[i], "named_properties_");
+					named_properties_[i].persistentWrite(pm, "");
+		    pm.writeObjectTrailer("named_properties_");  
+			}
+    pm.writeObjectTrailer("PropertyManager");
+	}
+
+  bool PropertyManager::read(PersistenceManager& pm)
+  {
+		if (!pm.readStorableObject(bitvector_, "bitvector_"))
+		{
+			return false;
+		}
+		
+		NamedProperty property("");
+		named_properties_.clear();
+		Size size = 0;
+		pm.readPrimitive(size, "size");
+		for (Size i = 0; i < size; i++)
+		{
+			property.persistentRead(pm);
+			named_properties_.push_back(property);
+		}
+
+		return true;
+	}
+*/
+
  
   void PropertyManager::write(PersistenceManager& pm) const
   {
