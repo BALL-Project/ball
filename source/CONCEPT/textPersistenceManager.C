@@ -1,4 +1,4 @@
-// $Id: textPersistenceManager.C,v 1.13 2002/01/09 02:17:04 oliver Exp $
+// $Id: textPersistenceManager.C,v 1.14 2002/01/09 02:56:36 oliver Exp $
 
 #include <BALL/CONCEPT/textPersistenceManager.h>
 
@@ -51,7 +51,7 @@ namespace BALL
 
 	const char* TextPersistenceManager::indent() 
 	{
-		return &INDENT_STRING[MAX_INDENT - std::max(MAX_INDENT, 2 * indent_depth_)];
+		return &INDENT_STRING[MAX_INDENT - std::min(MAX_INDENT, 2 * indent_depth_)];
 	}
 			
   void TextPersistenceManager::writeHeader
