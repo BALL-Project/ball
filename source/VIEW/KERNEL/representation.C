@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.33 2004/05/14 10:23:59 amoll Exp $
+// $Id: representation.C,v 1.34 2004/05/14 13:01:27 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/representation.h>
 #include <BALL/VIEW/MODELS/modelProcessor.h>
@@ -145,10 +145,6 @@ namespace BALL
 		void Representation::clear()
 			throw()
 		{
-			while (update_running_)
-			{
-				sleep(1);
-			}
 			clearGeometricObjects();
 			composites_.clear();
 
