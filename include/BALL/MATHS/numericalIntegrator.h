@@ -1,4 +1,4 @@
-// $Id: numericalIntegrator.h,v 1.3 2001/04/04 14:11:42 anhi Exp $
+// $Id: numericalIntegrator.h,v 1.4 2001/07/13 17:33:56 anker Exp $
 
 #ifndef BALL_MATHS_NUMERICALINTEGRATOR_H
 #define BALL_MATHS_NUMERICALINTEGRATOR_H
@@ -12,7 +12,7 @@ namespace BALL
 			\\
 			{\bf Definition:} \URL{BALL/MATHS/numericalIntegrator.h}
 	*/
-	template <typename Function, typename DataType>
+	template <typename Function, typename DataType = float>
 	class NumericalIntegrator
 	{
 
@@ -32,7 +32,7 @@ namespace BALL
 			throw();
 		
 		/// Destructor
-		~NumericalIntegrator()
+		virtual ~NumericalIntegrator()
 			throw();
 
 		//@}
@@ -72,22 +72,22 @@ namespace BALL
 			throw();
 
 		/** get the function to be integrated
-				@return a const reference to the actual function
-		*/
-		const Function& getFunction() const
-			throw();
-
-		/** get the function to be integrated
 				@return a mutable reference to the actual function
 		*/
 		Function& getFunction()
+			throw();
+
+		/** Get the function to be integrated (const version).
+				@return a const reference to the actual function
+		*/
+		const Function& getFunction() const
 			throw();
 
 		/** Get the value of the function at position {\em x}
 				@param x the position at which {\tt function\_} is to be evaluated
 				@return the value of {\tt function\_} at {\em x}
 		*/
-		DataType getValue(DataType x) const
+		DataType getValue(const DataType& x) const
 			throw();
 
 		/** Integrate the function numerically
@@ -95,7 +95,7 @@ namespace BALL
 				@param to upper limit of the integration
 				@return the value of the integral
 		*/
-		DataType integrate(DataType from, DataType to)
+		DataType integrate(const DataType& from, const DataType& to) const
 			throw();
 
 		//@}
@@ -152,8 +152,10 @@ namespace BALL
 	void NumericalIntegrator<Function, DataType>::clear()
 		throw()
 	{
-		// BAUSTELLE: Je nach template gibt es clear() in function_ gar nicht.
-		// That's why I commented it out... :-) function_.clear();
+		// BAUSTELLE: 
+		// Depending on the template there doesn't exist a clear() method, so I
+		// commented it out. Any reasonable strategy?
+		// function_.clear();
 	}
 
 
@@ -172,7 +174,7 @@ namespace BALL
 	Function& NumericalIntegrator<Function, DataType>::getFunction()
 		throw()
 	{
-		return function;
+		return function_;
 	}
 
 
@@ -182,7 +184,7 @@ namespace BALL
 	const
 		throw()
 	{
-		return function;
+		return function_;
 	}
 
 
@@ -198,7 +200,7 @@ namespace BALL
 
 	template<typename Function, typename DataType>
 	BALL_INLINE
-	DataType NumericalIntegrator<Function, DataType>::getValue(DataType x) const
+	DataType NumericalIntegrator<Function, DataType>::getValue(const DataType& x) const
 		throw()
 	{
 		return function_(x);
@@ -207,10 +209,27 @@ namespace BALL
 
 	template<typename Function, typename DataType>
 	BALL_INLINE
-	DataType NumericalIntegrator<Function, DataType>::integrate
-	(DataType from, DataType to)
+	DataType NumericalIntegrator<Function, DataType>::integrate(
+			const DataType& from, const DataType& to) const
 		throw()
 	{
+		// BAUSTELLE
+		// the number of samples has to be user configurable
+		Size samples = 30;
+		Size n = samples;
+
+		DataType area = 0;
+		DataType step = (to - from) / n;
+		DataType x = from;
+
+		while (n > 0)
+		{
+			area += (function_(x) + function_(x + step)) / 2.0 * step;
+			x += step;
+			--n;
+		}
+
+		return area;
 	}
 
 }
