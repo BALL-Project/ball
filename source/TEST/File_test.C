@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: File_test.C,v 1.41 2003/01/14 21:57:48 oliver Exp $
+// $Id: File_test.C,v 1.42 2003/07/03 10:46:18 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -20,7 +20,7 @@ using namespace std;
 #	define sleep(a) _sleep(1000 * a)
 #endif
 
-START_TEST(File, "$Id: File_test.C,v 1.41 2003/01/14 21:57:48 oliver Exp $")
+START_TEST(File, "$Id: File_test.C,v 1.42 2003/07/03 10:46:18 amoll Exp $")
 
 
 /////////////////////////////////////////////////////////////
@@ -28,16 +28,16 @@ START_TEST(File, "$Id: File_test.C,v 1.41 2003/01/14 21:57:48 oliver Exp $")
 
 File* f1;
 
-CHECK(File())
+CHECK(File() throw())
 	f1 = new File();
 	TEST_NOT_EQUAL(f1, 0)
 RESULT
 
-CHECK(~File())
+CHECK(~File() throw())
 	delete f1;
 RESULT
 
-CHECK(File(const String& name, OpenMode open_mode = std::ios::in))
+CHECK(File(const String& name, OpenMode open_mode = std::ios::in) throw(Exception::FileNotFound))
 	File f("data/File_test.txt");
 	TEST_EQUAL(f.getSize(), 100)
 
@@ -46,7 +46,7 @@ CHECK(File(const String& name, OpenMode open_mode = std::ios::in))
 	TEST_EXCEPTION(Exception::FileNotFound, f2 = new File("sdffsdf"))
 RESULT
 
-CHECK(File(const File& file))
+CHECK(File(const File& file) throw(Exception::FileNotFound))
 	File  file("data/File_test.txt");
 	const File& f  = file;
 	File f1(f);
@@ -56,7 +56,7 @@ CHECK(File(const File& file))
 	TEST_EXCEPTION(Exception::FileNotFound, File f3(f2))
 RESULT
 
-CHECK(close())
+CHECK(void close() throw())
 	File  file("data/File_test.txt");
 	const File& f  = file;
 	TEST_EQUAL(file.getSize(), 100)
@@ -65,7 +65,7 @@ CHECK(close())
 	TEST_EQUAL(file.getSize(), 100)
 RESULT
 
-CHECK(open(const String& name, OpenMode open_mode = std::ios::in))
+CHECK(bool open(const String& name, File::OpenMode open_mode = std::ios::in) throw(Exception::FileNotFound))
 	File  file("data/File_test.txt");
 	const File& f  = file;
 	file.open("data/File_test.txt");
@@ -76,7 +76,7 @@ CHECK(open(const String& name, OpenMode open_mode = std::ios::in))
 	TEST_EXCEPTION(Exception::FileNotFound, f1.open(""))
 RESULT
 
-CHECK(reopen())
+CHECK(bool reopen() throw(Exception::FileNotFound))
 	File  file("data/File_test.txt");
 	const File& f  = file;
 	file.close();
@@ -84,48 +84,54 @@ CHECK(reopen())
 	file.reopen();
 	TEST_EQUAL(f.isOpen(), true)
 	TEST_EQUAL(file.getSize(), 100)
+	File x;
+	x.setName("this_file_should_not_exists");
+	TEST_EXCEPTION(Exception::FileNotFound, x.reopen())
 RESULT
 
-CHECK(getName())
+CHECK(const String& getName() const throw())
 	File  file("data/File_test.txt");
 	const File& f  = file;
 	TEST_EQUAL(f.getName(), "data/File_test.txt")
 	TEST_EQUAL(file.getSize(), 100)
 RESULT
 
-CHECK(getSize())
+CHECK(Size getSize() throw())
 	File  file("data/File_test.txt");
 	TEST_EQUAL(file.getSize(), 100)
 RESULT
 
-CHECK(static getSize(String filename))
+CHECK(static Size getSize(String name) throw(Exception::FileNotFound))
 	File  file("data/File_test.txt");
 	TEST_EQUAL(file.getSize("data/File_test.txt"), 100)
 	TEST_EXCEPTION(Exception::FileNotFound, file.getSize("XXX"))
 RESULT
 
-CHECK(int getOpenMode() const)
+CHECK(File::OpenMode getOpenMode() const throw())
 	File  file("data/File_test.txt");
 	const File& f  = file;
 	TEST_EQUAL(f.getOpenMode(), std::ios::in)
 	TEST_EQUAL(file.getSize(), 100)
 RESULT
 
-CHECK(static Type getType(String name, bool trace_link))
+CHECK(static Type getType(String name, bool trace_link) throw(Exception::FileNotFound))
 	File  file("data/File_test.txt");
 	TEST_EQUAL(file.getType("data/File_test.txt", false), 4)
 	TEST_EQUAL(file.getSize(), 100)
+	TEST_EXCEPTION(Exception::FileNotFound, File::getType("this_file_should_not_exists", true))
 RESULT
 
-CHECK(Type getType(bool trace_link) const;)
+CHECK(Type getType(bool trace_link) const throw(Exception::FileNotFound))
 	File  file("data/File_test.txt");
 	const File& f  = file;
 	TEST_EQUAL(f.getType(false), 4)
 	TEST_EQUAL(f.getType(true), 4)
 	TEST_EQUAL(file.getSize(), 100)
+	File x;
+	TEST_EXCEPTION(Exception::FileNotFound, x.getType(true))
 RESULT
 
-CHECK(copy(String source_name, String destination_name, Size buffer_size = 4096))
+CHECK(static bool copy(String source_name, String destination_name, Size buffer_size = 4096) throw(Exception::FileNotFound))
 	File  file("data/File_test.txt");
 	const File& f  = file;
 	TEST_EQUAL(f.copy("data/File_test.txt", "data/File_test.txt"), false)
@@ -143,7 +149,7 @@ CHECK(copy(String source_name, String destination_name, Size buffer_size = 4096)
 	TEST_EQUAL(f.copy("data/File_test.txt", ""), false)
 RESULT
 
-CHECK(copyTo(const String& destination_name, Size buffer_size = 4096))
+CHECK(bool copyTo(const String& destination_name, Size buffer_size = 4096) throw(Exception::FileNotFound))
 	File  file("data/File_test.txt");
 	const File& f  = file;
 	TEST_EQUAL(file.copyTo("data/File_test.txt"), false)
@@ -155,9 +161,13 @@ CHECK(copyTo(const String& destination_name, Size buffer_size = 4096))
 	f.remove("XXX");
 
 	TEST_EQUAL(file.copyTo(""), false)
+
+	File x;
+	x.setName("this_file_should_not_exists");
+	TEST_EXCEPTION(Exception::FileNotFound, x.copyTo("asdaddasdasd"))
 RESULT
 
-CHECK(move(const String& source_name, const String& destination_name))
+CHECK(static bool move(const String& source_name, const String& destination_name) throw(Exception::FileNotFound))
 	File  file("data/File_test.txt");
 	const File& f  = file;
 	TEST_EQUAL(file.copyTo("XXX"), true)
@@ -183,7 +193,7 @@ CHECK(move(const String& source_name, const String& destination_name))
 	TEST_EXCEPTION(Exception::FileNotFound, f.move("ZZZZZZZZZZ", "XXX"))
 RESULT
 
-CHECK(moveTo(const String& destination_name))
+CHECK(bool moveTo(const String& destination_name) throw(Exception::FileNotFound))
 	File  file("data/File_test.txt");
 	const File& f  = file;
 	file.copyTo("XXX");
@@ -201,7 +211,7 @@ CHECK(moveTo(const String& destination_name))
 	TEST_EXCEPTION(Exception::FileNotFound, f1.moveTo("XXX"))
 RESULT
 
-CHECK(remove(String name))
+CHECK(static bool remove(String name) throw())
 	File  file("data/File_test.txt");
 	const File& f  = file;
 	file.copyTo("XXX");
@@ -210,7 +220,7 @@ CHECK(remove(String name))
 	TEST_EQUAL(f.remove("XXX"), false)
 RESULT
 
-CHECK(remove())
+CHECK(bool remove() throw())
 	File  file("data/File_test.txt");
 	file.copyTo("XXX");
 	File f1 = File("XXX");
@@ -219,12 +229,10 @@ CHECK(remove())
 	TEST_EQUAL(f1.isAccessible(), false)
 RESULT
 
-CHECK(rename(String old_path, String new_path) - Part 1)
-	File  file("data/File_test.txt");
-	file.copyTo("XXX");
-RESULT
+CHECK(static bool rename(String old_path, String new_path) throw(Exception::FileNotFound))
+	File  filex("data/File_test.txt");
+	filex.copyTo("XXX");
 
-CHECK(rename(String old_path, String new_path) - Part 2)
 	File  file("data/File_test.txt");
 	const File& f  = file;
 	File f1("XXX");
@@ -243,12 +251,10 @@ CHECK(rename(String old_path, String new_path) - Part 2)
 	TEST_EXCEPTION(Exception::FileNotFound, f1.rename("XXX", ""))
 RESULT
 
-CHECK(renameTo(const String& new_path) - Part 1)
+CHECK(bool renameTo(const String& new_path) throw(Exception::FileNotFound))
 	File  file("data/File_test.txt");
 	file.copyTo("XXX");
-RESULT
 
-CHECK(renameTo(const String& new_path) - Part 2)
 	File f1("XXX");
 	TEST_EQUAL(f1.renameTo("XXX"), true)
 	TEST_EQUAL(f1.isAccessible("XXX"), true)
@@ -256,9 +262,12 @@ CHECK(renameTo(const String& new_path) - Part 2)
 	TEST_EQUAL(f1.isAccessible("XXX"), false)
 	TEST_EQUAL(f1.isAccessible("YYY"), true)
 	f1.remove();
+
+	File x;
+	TEST_EXCEPTION(Exception::FileNotFound, x.renameTo("dddddddd"))
 RESULT
 
-CHECK(truncate(String path, Size size = 0))
+CHECK(static bool truncate(String path, Size size = 0) throw(Exception::FileNotFound))
 	File  file("data/File_test.txt");
 	file.copyTo("XXX");
 	File f1("XXX");
@@ -271,7 +280,7 @@ CHECK(truncate(String path, Size size = 0))
 	TEST_EXCEPTION(Exception::FileNotFound, f1.truncate("", 50))
 RESULT
 
-CHECK(truncate(Size size = 0))
+CHECK(bool truncate(Size size = 0) throw(Exception::FileNotFound))
 	File  file("data/File_test.txt");
 	file.copyTo("XXX");
 	File f1("XXX");
@@ -280,9 +289,12 @@ CHECK(truncate(Size size = 0))
 	TEST_EQUAL(f1.truncate(0), true)
 	TEST_EQUAL(f1.getSize(), 0)
 	f1.remove();
+
+	File x;
+	TEST_EXCEPTION(Exception::FileNotFound, x.truncate())
 RESULT
 
-CHECK(createTemporaryFilename(String& temporary))
+CHECK(static bool createTemporaryFilename(String& temporary) throw())
 	File  file("data/File_test.txt");
 	const File& f  = file;
 	String s;
@@ -290,7 +302,7 @@ CHECK(createTemporaryFilename(String& temporary))
 	TEST_NOT_EQUAL(s, "")
 RESULT
 
-CHECK(operator == (const File& file))
+CHECK(bool operator == (const File& file) const throw())
 	File  file("data/File_test.txt");
 	const File& f  = file;
 	File f1(f);
@@ -301,7 +313,7 @@ CHECK(operator == (const File& file))
 	TEST_EQUAL(file.getSize(), 100)
 RESULT
 
-CHECK(operator != (const File& file))
+CHECK(bool operator != (const File& file) const throw())
 	File  file("data/File_test.txt");
 	const File& f  = file;
 	File f1(f);
@@ -312,7 +324,7 @@ CHECK(operator != (const File& file))
 	TEST_EQUAL(file.getSize(), 100)
 RESULT
 
-CHECK(isAccessible(String name))
+CHECK(static bool isAccessible(String name) throw(Exception::FileNotFound))
 	File  file("data/File_test.txt");
 	const File& f  = file;
 	TEST_EQUAL(f.isAccessible("data/File_test.txt"), true)
@@ -320,22 +332,18 @@ CHECK(isAccessible(String name))
 	TEST_EQUAL(f.isAccessible("XXX"), false)
 RESULT
 
-CHECK(isAccessible() - part 1)
-	
+CHECK(bool isAccessible() const throw())
 	File  file("data/File_test.txt");
 	const File& f  = file;
 	TEST_EQUAL(f.isAccessible(), true)
 	file.copyTo("XXZ");
-RESULT
 
-CHECK(isAccessible() - part 2)
 	File f1("XXZ");
-	
 	f1.remove();
 	TEST_EQUAL(f1.isAccessible(), false)
 RESULT
 
-CHECK(isCanonized())
+CHECK(bool isCanonized() const throw(Exception::FileNotFound))
 	File f0("../TEST/data/File_test.txt");
 	TEST_EQUAL(f0.isValid(), true)
 	TEST_EQUAL(f0.isCanonized(), true)
@@ -355,40 +363,56 @@ CHECK(isCanonized())
 	File f6("data/File_test.txt");
 	TEST_EQUAL(f6.isValid(), true)
 	TEST_EQUAL(f6.isCanonized(), true)
+
+	File x;
+	x.setName("this_file_should_not_exists");
+	TEST_EXCEPTION(Exception::FileNotFound, x.isCanonized())
 RESULT
 
-CHECK(isReadable(String name))
+CHECK(static bool isReadable(String name) throw(Exception::FileNotFound))
 	File  file("data/File_test.txt");
 	const File& f  = file;
 	TEST_EQUAL(f.isReadable("File_test.C"), true)	
+
+	TEST_EXCEPTION(Exception::FileNotFound, File::isReadable("this_file_should_not_exists"))
 RESULT
 
-CHECK(isReadable())
+CHECK(bool isReadable() const throw(Exception::FileNotFound))
 	File f2("File_test.C");
 	TEST_EQUAL(f2.isReadable(), true)
+
+	File x;
+	TEST_EXCEPTION(Exception::FileNotFound, x.isReadable())
 RESULT
 
-CHECK(isWritable(String name))
+CHECK(static bool isWritable(String name) throw(Exception::FileNotFound))
 	File  file("data/File_test.txt");
 	const File& f  = file;
 	TEST_EQUAL(f.isWritable("File_test.C"), true)	
+
+	TEST_EXCEPTION(Exception::FileNotFound, File::isWritable("this_file_should_not_exists"))
 RESULT
 
-CHECK(isWritable())
+CHECK(bool isWritable() const throw(Exception::FileNotFound))
 	File f2("File_test.C");
 	TEST_EQUAL(f2.isWritable(), true)	
+
+	File x;
+	TEST_EXCEPTION(Exception::FileNotFound, x.isWritable())
 RESULT
 
-CHECK(isExecutable(String name))
+CHECK(static bool isExecutable(String name) throw(Exception::FileNotFound))
 	File  file("data/File_test.txt");
 	const File& f  = file;
 #ifndef BALL_COMPILER_MSVC
 	TEST_EQUAL(f.isExecutable(BALL_PATH "/source/configure"), true)	
 #endif
 	TEST_EQUAL(f.isExecutable("File_test.C"), false)	
+
+	TEST_EXCEPTION(Exception::FileNotFound, File::isExecutable("this_file_should_not_exists"))
 RESULT
 
-CHECK(isExecutable())
+CHECK(bool isExecutable() const throw(Exception::FileNotFound))
 #ifndef BALL_COMPILER_MSVC
 	File f1(BALL_PATH "/source/configure");
 	TEST_EQUAL(f1.isExecutable(), true)	
@@ -397,7 +421,7 @@ CHECK(isExecutable())
 	TEST_EQUAL(f2.isExecutable(), false)	
 RESULT
 
-CHECK(isValid())
+CHECK(bool isValid() const throw())
 	File f;
 	TEST_EQUAL(f.isValid(), false)	
 
@@ -411,7 +435,7 @@ CHECK(isValid())
 	TEST_EQUAL(f2.isValid(), true)	
 RESULT
 
-CHECK(isOpen())
+CHECK(bool isOpen() const throw())
 	File  file("data/File_test.txt");
 	const File& f  = file;
 	TEST_EQUAL(f.isOpen(), true)	
@@ -423,7 +447,7 @@ CHECK(isOpen())
 	TEST_EQUAL(f2.isOpen(), false)	
 RESULT
 
-CHECK(isClosed())
+CHECK(bool isClosed() const throw())
 	File  file("data/File_test.txt");
 	const File& f  = file;
 	TEST_EQUAL(f.isClosed(), false)	
@@ -435,7 +459,90 @@ CHECK(isClosed())
 	TEST_EQUAL(f2.isClosed(), true)	
 RESULT
 
-CHECK(TCPTransfer/1)
+String filename;
+CHECK(std::fstream& getFileStream())
+	NEW_TMP_FILE(filename);
+	File new_file(filename, std::ios::out);
+	File  file("data/File_test.txt");
+	new_file.getFileStream() << "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789";
+	new_file.close();
+	TEST_FILE(filename.c_str(), "data/File_test.txt")
+
+	File x;
+	x.getFileStream();
+RESULT
+
+CHECK(void clear() throw())
+	File file(filename);
+	file.clear();
+	TEST_EQUAL(file.getName(), "")
+RESULT
+
+CHECK(const File& operator = (const File& file) throw())
+	File file(filename);
+	File file2;
+	file2 = file;
+	TEST_EQUAL(file2 == file, true)
+	TEST_EQUAL(file2.getName(), file.getName())
+RESULT
+
+CHECK(bool reopen(File::OpenMode open_mode) throw(Exception::FileNotFound))
+	File file(filename);
+	TEST_EQUAL(file.reopen(), true)
+	file.setName("this_file_should_not_exists");
+	TEST_EQUAL(file.getName(), "this_file_should_not_exists")
+	TEST_EXCEPTION(Exception::FileNotFound, file.reopen())
+RESULT
+
+CHECK(void setName(const String& name) throw())
+	File file;
+	file.setName(filename);
+	file.setName("this_file_should_not_exists");
+RESULT
+
+CHECK(const String& getOriginalName() const)
+	File file;
+	TEST_EQUAL(file.getOriginalName(), "")
+	File file2("file:File_test.C");
+	TEST_EQUAL(file2.getOriginalName(), "file:File_test.C")
+	TEST_EQUAL(file2.getName(), "File_test.C")
+RESULT
+
+CHECK(TransformationManager& getTransformationManager())
+	File file;
+	TEST_EQUAL(file.getTransformationManager().findTransformation("ftp://"), "")
+RESULT
+
+CHECK(const TransformationManager& getTransformationManager() const)
+	File file;
+	file.getTransformationManager().registerTransformation("xxx://", "ls");
+RESULT
+
+CHECK(static void disableTransformation(Transformation transformation))
+	File::disableTransformation(File::TRANSFORMATION__URL);
+	TEST_EQUAL(File::isTransformationEnabled(File::TRANSFORMATION__URL), false)
+RESULT
+
+CHECK(static void enableTransformation(Transformation transformation))
+	File::enableTransformation(File::TRANSFORMATION__URL);
+	TEST_EQUAL(File::isTransformationEnabled(File::TRANSFORMATION__URL), true)
+RESULT
+
+CHECK(static void registerTransformation(const String& pattern, const String& exec))
+	File::registerTransformation("yyy://", "ls");
+RESULT
+
+CHECK(static void unregisterTransformation(const String& pattern))
+	File::unregisterTransformation("yyy://");
+	File::unregisterTransformation("xxx://");
+	File::unregisterTransformation("zzz://");
+RESULT
+
+CHECK(static bool isTransformationEnabled(Transformation transformation))
+	TEST_EQUAL(File::isTransformationEnabled(File::TRANSFORMATION__URL), true)
+RESULT
+/*
+CHECK([EXTRA]TCPTransfer/1)
 	bool network = NetworkTest::test("www.mpi-sb.mpg.de", NetworkTest::HTTP);
 	STATUS("network status of www.mpi-sb.mpg.de: " << (network ? "up" : "down"))
 	ABORT_IF(!network)
@@ -446,9 +553,9 @@ CHECK(TCPTransfer/1)
 	TEST_FILE(filename.c_str(), "data/http_test.txt")
 RESULT
 
-sleep(2);
+sleep(1);
 
-CHECK(TCPTransfer/2)
+CHECK([EXTRA]TCPTransfer/2)
 	// just repeat test to make sure we didn't mess up ports or stuff...
 	bool network = NetworkTest::test("www.mpi-sb.mpg.de", NetworkTest::HTTP);
 	STATUS("network status of www.mpi-sb.mpg.de: " << (network ? "up" : "down"))
@@ -460,9 +567,9 @@ CHECK(TCPTransfer/2)
 	TEST_FILE(filename.c_str(), "data/http_test.txt")
 RESULT
 
-sleep(2);
+sleep(1);
 
-CHECK(TCPTransfer/3)
+CHECK([EXTRA]TCPTransfer/3)
 	bool network = NetworkTest::test("ftp.mpi-sb.mpg.de", NetworkTest::FTP);
 	STATUS("network status of ftp.mpi-sb.mpg.de: " << (network ? "up" : "down"))
 	ABORT_IF(!network)
@@ -473,9 +580,9 @@ CHECK(TCPTransfer/3)
 	TEST_FILE(filename.c_str(), "data/ftp_test.txt")
 RESULT	
 
-sleep(2);
+sleep(1);
 
-CHECK(TCPTransfer/4)
+CHECK([EXTRA]TCPTransfer/4)
 	// just repeat test to make sure that FTP transfers don't upset HTTP transfers
 	bool network = NetworkTest::test("ftp.mpi-sb.mpg.de", NetworkTest::FTP);
 	STATUS("network status of ftp.mpi-sb.mpg.de: " << (network ? "up" : "down"))
@@ -487,9 +594,9 @@ CHECK(TCPTransfer/4)
 	TEST_FILE(filename.c_str(), "data/ftp_test.txt")
 RESULT	
 
-sleep(2);
+sleep(1);
 
-CHECK(TCPTransfer/5)
+CHECK([EXTRA]TCPTransfer/5)
 	// ... and the other way round
 	bool network = NetworkTest::test("ftp.mpi-sb.mpg.de", NetworkTest::FTP);
 	STATUS("network status of ftp.mpi-sb.mpg.de: " << (network ? "up" : "down"))
@@ -501,9 +608,9 @@ CHECK(TCPTransfer/5)
 	TEST_FILE(filename.c_str(), "data/ftp_test.txt")
 RESULT	
 
-sleep(2);
+sleep(1);
 
-CHECK(TCPTransfer/6)
+CHECK([EXTRA]TCPTransfer/6)
 	bool network = NetworkTest::test("www.mpi-sb.mpg.de", NetworkTest::HTTP);
 	STATUS("network status of www.mpi-sb.mpg.de: " << (network ? "up" : "down"))
 	ABORT_IF(!network)
@@ -515,9 +622,9 @@ CHECK(TCPTransfer/6)
 	TEST_FILE(filename.c_str(), "data/http_test.txt")
 RESULT
 
-sleep(2);
+sleep(1);
 
-CHECK(TCPTransfer/7)
+CHECK([EXTRA]TCPTransfer/7)
 	bool network = NetworkTest::test("ftp.mpi-sb.mpg.de", NetworkTest::FTP);
 	STATUS("network status of ftp.mpi-sb.mpg.de: " << (network ? "up" : "down"))
 	ABORT_IF(!network)
@@ -529,9 +636,97 @@ CHECK(TCPTransfer/7)
 	TEST_FILE(filename.c_str(), "data/ftp_test.txt")
 RESULT
 
-CHECK(TCPTransfer/failedTransfer)
+CHECK([EXTRA]TCPTransfer/failedTransfer)
 	TEST_EXCEPTION(Exception::FileNotFound, File f("ftp://ftp.mpi-sb.mpg.de/pub/outgoing/BALL/notthere.txt"))
 RESULT
+
+*/
+// ============================================================
+// other classes
+// ============================================================
+
+// BinaryFileAdaptor
+
+CHECK(BinaryFileAdaptor() throw())
+	BinaryFileAdaptor<float> bfa;
+RESULT
+
+CHECK(BinaryFileAdaptor(const T& data) throw())
+	BinaryFileAdaptor<float> bf(1.2345);
+	TEST_REAL_EQUAL(bf.getData(), 1.2345)
+RESULT
+
+CHECK(T& getData() throw())
+	BinaryFileAdaptor<float> bfa;
+	bfa.getData() = 2.345;
+	TEST_REAL_EQUAL(bfa.getData(), 2.345)
+RESULT
+
+CHECK(const T& getData() const throw())
+	BinaryFileAdaptor<float> bfa;
+	TEST_REAL_EQUAL(bfa.getData(), 0)
+RESULT
+
+CHECK(void setData(const T& data) throw())
+	BinaryFileAdaptor<float> bfa;
+	bfa.setData(2.345);
+	TEST_REAL_EQUAL(bfa.getData(), 2.345)
+RESULT
+
+// TransformationManager
+
+TransformationManager* m_ptr = 0;
+CHECK(TransformationManager())
+  m_ptr = new TransformationManager;
+RESULT
+
+CHECK(~TransformationManager())
+  delete m_ptr;
+RESULT
+
+CHECK(String findTransformation(const String& name) const)
+	TransformationManager f;
+	TEST_EQUAL(f.findTransformation(""), "")
+	TEST_EQUAL(f.findTransformation("asddasd"), "")
+	TEST_EQUAL(f.findTransformation("ftp://"), "")
+RESULT
+
+CHECK(void registerTransformation(const String& pattern, const String& command))
+	TransformationManager f;
+	f.registerTransformation("asdddasd", "addd");
+	TEST_EQUAL(f.findTransformation("asdddasd"), "addd")
+RESULT
+
+CHECK(String transform(const String& name))
+	TransformationManager f;
+	TEST_EQUAL(f.transform(""), "")
+	TEST_EQUAL(f.transform("asdd"), "")
+	f.registerTransformation("blabla:", "asd");
+	TEST_EQUAL(f.transform("blabla"), "")
+	TEST_EQUAL(f.transform("blabla:"), "asd");
+	f.registerTransformation("my1:", "%s");
+	TEST_EQUAL(f.transform("my1:filename.ext"), "my1:filename.ext")
+	f.registerTransformation("my2:%s", "name.txt");
+	TEST_EQUAL(f.transform("my2:%s"), "name.txt")
+	f.registerTransformation("my3:", "%f");
+	TEST_EQUAL(f.transform("my3:filename.ext"), "my3:filename")
+	f.registerTransformation("my3:", "%f[bla]");
+	TEST_EQUAL(f.transform("my3:filename.ext"), "my3:filename")
+	TEST_EQUAL(f.transform("my3:filename.bla"), "my3:filename")
+	String PS = FileSystem::PATH_SEPARATOR;
+	f.registerTransformation("my4:", "%b");
+	TEST_EQUAL(f.transform("my4:"+PS+"some_path"+PS+"filename.ext"), "my3:filename")
+	f.registerTransformation("my5:", "%p");
+	TEST_EQUAL(f.transform("my5:"+PS+"some_path"+PS+"filename.ext"), "my3:filename")
+RESULT
+
+CHECK(void unregisterTransformation(const String& pattern))
+	TransformationManager f;
+	f.registerTransformation("asdddasd", "addd");
+	f.unregisterTransformation("asdddasd");
+	TEST_EQUAL(f.findTransformation("asdddasd"), "")
+RESULT
+
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
