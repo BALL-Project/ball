@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineBasedFile.C,v 1.26 2003/07/09 12:55:13 amoll Exp $
+// $Id: lineBasedFile.C,v 1.27 2003/07/11 14:03:14 amoll Exp $
 
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/COMMON/exception.h>
@@ -15,14 +15,16 @@ namespace BALL
 	LineBasedFile::LineBasedFile()
 		throw()
 		:	File(),
-			line_number_(0)
+			line_number_(0),
+			trim_whitespaces_(false)
 	{
 	}
 
 	LineBasedFile::LineBasedFile(const LineBasedFile& f)
 	 throw(Exception::FileNotFound)
 		: File(),
-			line_number_(0)
+			line_number_(0),
+			trim_whitespaces_(f.trim_whitespaces_)
 	{
 			if (f.getName() != "")
 			{
@@ -31,10 +33,11 @@ namespace BALL
 			}
 	}
 
-	LineBasedFile::LineBasedFile(const String& filename, File::OpenMode open_mode)
+	LineBasedFile::LineBasedFile(const String& filename, File::OpenMode open_mode, bool trim_whitespaces)
 		throw(Exception::FileNotFound)
 		: File(filename, open_mode),
-			line_number_(0)
+			line_number_(0),
+			trim_whitespaces_(trim_whitespaces)
 	{
 		if (!isAccessible())
 		{
@@ -47,6 +50,7 @@ namespace BALL
 	{
 		open(f.getName(), f.getOpenMode());
 		line_number_ = 0;
+		trim_whitespaces_ = f.trim_whitespaces_;
 		skipLines(f.line_number_ - 1);
 		return *this;
 	}
@@ -135,6 +139,7 @@ namespace BALL
 		static char buffer[BALL_MAX_LINE_LENGTH];
 		getFileStream().getline(buffer, BALL_MAX_LINE_LENGTH);
 		line_.assign(buffer);
+		if (trim_whitespaces_) line_.trim();
 		++line_number_;
 		return !eof();
 	}
@@ -200,6 +205,7 @@ namespace BALL
 		line_ = "";
 		line_number_ = 0;
 		File::clear();
+		trim_whitespaces_ = false;
 	}
 
 	void LineBasedFile::test(const char* file, int line, bool condition, const String& msg)
@@ -274,6 +280,18 @@ namespace BALL
 
 		// return true if exactly one entry was read
 		return (read == 1);
+	}
+
+	void LineBasedFile::enableTrimWhitespaces(bool state)
+		throw()
+	{
+		trim_whitespaces_ = state;
+	}
+
+	bool LineBasedFile::trimWhiteSpacesEnabled() const
+		throw()
+	{
+		return trim_whitespaces_;
 	}
 
 
