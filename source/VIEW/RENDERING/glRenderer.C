@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.41 2004/08/17 11:59:56 amoll Exp $
+// $Id: glRenderer.C,v 1.42 2004/09/04 11:38:11 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -512,23 +512,30 @@ namespace BALL
 			setColor4ub_(box);
 			
 			translateVector3_(box.getPoint());
-			scaleVector3_(box.getDiagonalVector());
-			Real angle = Vector3(1,0,0).getAngle(box.getRightVector()).toRadian();
-			rotateVector3Angle_(Vector3(1,0,0), angle);
+/*
+				
+ 		 	float angle = Vector3(1,0,0).getAngle(bo x.getRightVector()).toDegree();
+ 		 	rotateVector3Angle_(Vector3(1,0,0) % box.getRightVector(), angle);
 
-			angle = Vector3(0,-1,0).getAngle(box.getHeightVector()).toRadian();
-			rotateVector3Angle_(Vector3(0, -1, 0), angle);
-
-			Vector3 depth_vector = box.getRightVector() % box.getHeightVector();
-			angle = Vector3(0, 0, -1).getAngle(depth_vector).toRadian();
-			rotateVector3Angle_(depth_vector, angle);
-
+			scaleVector3_(Vector3(
+					box.getRightVector().getLength(),
+			 		box.getHeightVector().getLength(),
+ 					box.getDepth()));
+	
 			GL_boxes_list_[drawing_mode_ * BALL_VIEW_MAXIMAL_DRAWING_PRECISION 
 										 + drawing_precision_].draw();
+*/
 
+			// ?????? bullshit for testing
+			glBegin(GL_QUADS);
+			glVertex3f(0,0,0);
+			vertexVector3_(box.getRightVector());
+			vertexVector3_(box.getDiagonalVector());
+			vertexVector3_(box.getHeightVector());
+			glEnd();
+			
 			glPopMatrix();
 		}
-
 
 		void GLRenderer::renderTube_(const Tube& tube)
 			throw()
