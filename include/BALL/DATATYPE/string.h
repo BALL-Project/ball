@@ -1,4 +1,4 @@
-// $Id: string.h,v 1.3 1999/10/30 12:53:24 oliver Exp $
+// $Id: string.h,v 1.4 1999/11/30 19:46:50 oliver Exp $
 
 #ifndef BALL_DATATYPE_STRING_H
 #define BALL_DATATYPE_STRING_H
@@ -412,8 +412,12 @@ namespace BALL
 		*/
 		String(Size buffer_size, const char* format, ... );
 
-		///	Creates a new string by reading from a {\bf strstream}
-		String(::std::strstream& s);
+		/**	Create a new string from the contents of a {\bf strstream}.
+				The contents of the {\tt strstream} are not modified, i.e.
+				successive construction of multiple strings from the same {\tt strstream}
+				object leads to identical copies.
+		*/
+		String(std::strstream& s);
 
 		/** Creates a new string from len copies of c.
 		*/
@@ -456,97 +460,101 @@ namespace BALL
 		/**	@name	Assignment methods */
 		//@{
 
-		/**	Assigns a String from a range of another string
+		/**	Assign a String from a range of another string
 				@exception Exception::IndexOverflow if {\tt from < 0}
 				@exception Exception::IndexUnderflow if {\tt from >= size()}
 		*/
 		void set(const String& string, Index from = 0, Size len = npos);
 
-		/** Assigns a String from a C type string 
+		/** Assign a String from a C type string 
 				@exception Exception::IndexUnderflow if {\tt from < 0}
 				@exception Exception::IndexOverflow if {\tt from >= size()}
 		*/
 		void set(const char* char_ptr, Index from = 0, Size len = npos);
 	
-		/** Assigns a string to the result of a {\bf sprintf} call
+		/** Assign a string to the result of a {\bf sprintf} call
 				@exception Exception::IndexUnderflow, if the buffer size is zero
 				@exception Exception::NullPointer, {\tt format} is a NULL pointer
 		*/
 		void set(Size buffer_size, const char *format, ...);
 
-		/// Assigns a String from a {\bf strstream}
-		void set(::std::strstream& s);
+		/** Assign a String from a {\bf strstream}.
+				The contents of the {\tt strstream} object are not modified.
+		*/
+		void set(std::strstream& s);
 
-		/// Assigns a String from the result of repeating {\bf c} {\bf len} times
+		/// Assign a String from the result of repeating {\bf c} {\bf len} times
 		void set(char c, Size len = 1);
 
-		///	Assigns a String from an unsigned char
+		///	Assign a String from an unsigned char
 		void set(unsigned char uc);
 
-		/// Assigns a String from a short
+		/// Assign a String from a short
 		void set(short s);
 
-		/// Assigns a String from an unsigned short
+		/// Assign a String from an unsigned short
 		void set(unsigned short us);
 
-		/// Assigns a String from an int
+		/// Assign a String from an int
 		void set(int i);
 
-		/// Assigns a String from an unsigned int
+		/// Assign a String from an unsigned int
 		void set(unsigned int ui);
 
-		/// Assigns a String from a long 
+		/// Assign a String from a long 
 		void set(long l);
 
-		/// Assigns a String from an unsigned long
+		/// Assign a String from an unsigned long
 		void set(unsigned long ul);
 
-		/// Assigns a String from a float value
+		/// Assign a String from a float value
 		void set(float f);
 
-		/// Assigns a String from a float value
+		/// Assign a String from a float value
 		void set(double d);
 
-		/// Assigns a C type string
+		/// Assign a C type string
 		void get(char* char_ptr, Index from = 0, Size len = npos) const;
 
-		/// Assigns a String from another String
+		/// Assign a String from another String
 		String& operator = (const String& s);
 
-		/// Assigns a String from a C type string
+		/// Assign a String from a C type string
 		String& operator = (const char* pc);
 
-		/// Assigns a string from a {\bf strstream}
-		String& operator = (::std::strstream& s);
+		/** Assign a string from a {\bf strstream}.
+				The contents of the {\tt strstream} obejct are not modified.
+		*/
+		String& operator = (std::strstream& s);
 
-		/// Assigns a String from a single char
+		/// Assign a String from a single char
 		String& operator = (char c);
 
-		/// Assigns a String from an unsigned char
+		/// Assign a String from an unsigned char
 		String& operator = (unsigned char uc);
 
-		/// Assigns a String from a short
+		/// Assign a String from a short
 		String& operator = (short s);
 
-		/// Assigns a String from ans unsigned short
+		/// Assign a String from ans unsigned short
 		String& operator = (unsigned short us);
 
-		/// Assigns a String from an int
+		/// Assign a String from an int
 		String& operator = (int i);
 
-		/// Assigns a String from an unsigned int
+		/// Assign a String from an unsigned int
 		String& operator = (unsigned int ui);
 
-		/// Assigns a String from a long
+		/// Assign a String from a long
 		String& operator = (long l);
 
-		/// Assigns a String from an unsigned long
+		/// Assign a String from an unsigned long
 		String& operator = (unsigned long );
 
-		/// Assigns a String from a float
+		/// Assign a String from a float
 		String& operator = (float f);
 
-		/// Assigns a String from a double
+		/// Assign a String from a double
 		String& operator = (double d);
 
 		//@}
