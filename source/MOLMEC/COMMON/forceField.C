@@ -1,4 +1,4 @@
-// $Id: forceField.C,v 1.12 2000/02/02 09:52:09 len Exp $
+// $Id: forceField.C,v 1.13 2000/02/06 20:08:27 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
 
@@ -148,7 +148,47 @@ namespace BALL
 			return false;
 		}
 			
+		// collect the atoms of the system in the atoms_ vector
+		collectAtoms_(system);
+		Size old_size = atoms_.size();
 
+		// force field specific parts
+		success = specificSetup();
+		if (!success) 
+		{
+			Log.error() << "Force Field specificSetup failed!" << endl;
+			return false;
+		}
+
+		// if specificSetup cleared this array, it wants to tell us 
+		// that it had to change the system a bit (e.g. CHARMM replacing
+	  // hydrogens by united atoms). So, we have to recalculated the vector.
+		if (atoms_.size() != old_size)
+		{
+			collectAtoms_(system);
+		}
+		// call the setup method for each force field component
+		vector<ForceFieldComponent*>::iterator  it;
+		for (it = components_.begin(); (it != components_.end()) && success; ++it)
+		{
+			success = (*(*it)).setup();
+			if (!success) 
+			{
+				Log.error() << "Force Field Component setup of " 
+										<< (*it)->name_ <<  " failed!" << endl;
+			}
+		}
+
+
+		// if the setup failed, our force field becomes invalid!
+		valid_ = success;
+		return success;
+	}
+
+
+	// collect all atoms
+	void ForceField::collectAtoms_(const System& system)
+	{
 		// clear existing atoms entries
 		atoms_.clear();
 
@@ -177,7 +217,6 @@ namespace BALL
 
 
 		number_of_movable_atoms_ = atoms_.size();
-
 		// generate the vector of molecules if periodic boundary is enabled
 		if (periodic_boundary.isEnabled())
 		{
