@@ -1,4 +1,4 @@
-// $Id: composite.iC,v 1.7 2000/08/22 17:03:27 amoll Exp $
+// $Id: composite.iC,v 1.8 2000/08/24 11:58:50 amoll Exp $
 
 BALL_INLINE 
 void Composite::set(const Composite& composite, UnaryPredicate<Composite>& predicate)
@@ -170,7 +170,7 @@ void Composite::collapse()
 BALL_INLINE 
 void Composite::replace(Composite& composite)
 {
-  if (parent_ != 0)
+  if (parent_ != 0 && &composite != this)
   {
     insertBefore(composite);
 
