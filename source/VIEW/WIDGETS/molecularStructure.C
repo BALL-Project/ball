@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.78.2.3 2005/01/21 12:37:52 amoll Exp $
+// $Id: molecularStructure.C,v 1.78.2.4 2005/01/24 17:29:49 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -946,13 +946,6 @@ namespace BALL
 			{
 			}
 
-			if (!ok)
-			{
-				setStatusbarText("Force field setup failed.", true);
-				selectUnassignedForceFieldAtoms_();
-				return;
-			}
-
 			// CHARMM setup may delete atoms (converted to united atoms!),
 			// so we have to make sure the rest of the world realizes something might have changed.
 			if (!use_amber_)
@@ -961,6 +954,14 @@ namespace BALL
 					new CompositeMessage(*system, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
 				notify_(change_message);
 			}
+
+			if (!ok)
+			{
+				setStatusbarText("Force field setup failed.", true);
+				selectUnassignedForceFieldAtoms_();
+				return;
+			}
+
 
 			// Compute the single point energy and print the result to Log and the status bar.
 			ff.updateEnergy();
@@ -1022,13 +1023,6 @@ namespace BALL
 			catch(...)
 			{
 			}
-
-			if (!ok)
-			{
-				setStatusbarText("Force field setup failed.", true);
-				selectUnassignedForceFieldAtoms_();
-				return;
-			}
 			
 			// CHARMM setup may delete atoms (converted to united atoms!),
 			// so we have to make sure the rest of the world realizes something might have changed.
@@ -1039,6 +1033,14 @@ namespace BALL
 				notify_(change_message);
 			}
 
+
+			if (!ok)
+			{
+				setStatusbarText("Force field setup failed.", true);
+				selectUnassignedForceFieldAtoms_();
+				return;
+			}
+			
 			// Print some stats on the force field
 			Log.info() << "Set up the force field for " << ff.getAtoms().size() << " atoms with parameters from " 
 								 << ff.getParameters().getFilename() << "." << std::endl;
@@ -1098,17 +1100,24 @@ namespace BALL
 					thread->start();
 			#endif
 				
-		#else
+   		#else
 				// ============================= WITHOUT MULTITHREADING =================================
 				// iterate until done and refresh the screen every "steps" iterations
-				while (!minimizer->minimize(minimization_dialog_.getRefresh(), true) &&
-								minimizer->getNumberOfIterations() < minimizer->getMaxNumberOfIterations())
+				bool ok = true;
+				while (ok && minimizer->getNumberOfIterations() < minimizer->getMaxNumberOfIterations())
 				{
+					ok = minimizer->minimize(minimization_dialog_.getRefresh(), true);
 					getMainControl()->update(*system);
 
 					setStatusbarText(String("Iteration ") + String(minimizer->getNumberOfIterations())
 													 + ": E = " + String(ff.getEnergy()) + " kJ/mol, RMS grad = "
 													 + String(ff.getRMSGradient()) + " kJ/(mol A)", true);
+				}
+
+				if (!ok)
+				{
+					setStatusbarText("Aborted EnergyMinimizer because of strange energy values.", true);
+					return;
 				}
 
 				// Print the final results.
@@ -1181,6 +1190,15 @@ namespace BALL
 			catch(...)
 			{
 			}
+			
+			// CHARMM setup may delete atoms (converted to united atoms!),
+			// so we have to make sure the rest of the world realizes something might have changed.
+			if (!use_amber_)
+			{
+				CompositeMessage* change_message = 
+					new CompositeMessage(*system, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
+				notify_(change_message);
+			}
 
 			if (!ok)
 			{
@@ -1190,15 +1208,6 @@ namespace BALL
 			}
 			
 			ff.updateEnergy();
-
-			// CHARMM setup may delete atoms (converted to united atoms!),
-			// so we have to make sure the rest of the world realizes something might have changed.
-			if (!use_amber_)
-			{
-				CompositeMessage* change_message = 
-					new CompositeMessage(*system, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
-				notify_(change_message);
-			}
 
 			
 			// Create an instance of the molecular dynamics simulation.
@@ -1269,9 +1278,10 @@ namespace BALL
 				SnapShotManager manager(system, &getForceField(), dcd);
 				manager.setFlushToDiskFrequency(10);
 				
-				while (mds->getNumberOfIterations() < md_dialog_.getNumberOfSteps())
+				bool ok = true;
+				while (mds->getNumberOfIterations() < md_dialog_.getNumberOfSteps() && ok)
 				{
-					mds->simulateIterations(steps, true);
+					ok = mds->simulateIterations(steps, true);
 					getMainControl()->update(*system);
 					if (md_dialog_.saveImages()) 
 					{
@@ -1291,6 +1301,12 @@ namespace BALL
 				}
 
 				if (dcd) manager.flushToDisk();
+
+				if (!ok)
+				{
+					setStatusbarText("Aborted MDSimulation because of strange energy values.", true);
+					return;
+				}
 
 				Log.info() << std::endl << "simulation terminated." << std::endl << endl;
 				Log.info() << ff.getResults();
@@ -1455,8 +1471,9 @@ namespace BALL
 			}
 
 			HashSet<const Atom*>::ConstIterator ait = getForceField().getUnassignedAtoms().begin();
-			for (; ait != getForceField().getUnassignedAtoms().end(); ait++)
+			for (; +ait; ait++)
 			{
+Log.error() << "#~~#   6 "     << (*ait)->getFullName()        << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 				(const_cast<Atom*>(*ait))->select();
 	
 				CompositeMessage* msg = new CompositeMessage(**ait, CompositeMessage::SELECTED_COMPOSITE);
@@ -1464,6 +1481,7 @@ namespace BALL
 				msg->setShowSelectionInfos(false);
 				notify_(msg);
 			}
+Log.error() << "#~~#   4 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 
 			CompositeMessage* msg = new CompositeMessage(*getForceField().getSystem(), CompositeMessage::CHANGED_COMPOSITE);
 			notify_(msg);

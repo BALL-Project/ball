@@ -193,12 +193,14 @@ namespace BALL
 				}
 
 				ForceField& ff = *minimizer_->getForceField();
-
+				bool ok = true;
 				// iterate until done and refresh the screen every "steps" iterations
 				while (!main_control_->stopedSimulation() &&
 								minimizer_->getNumberOfIterations() < minimizer_->getMaxNumberOfIterations() &&
-							 !minimizer_->minimize(steps_between_updates_, true))
+								ok)
 				{
+					ok = minimizer_->minimize(steps_between_updates_, true);
+			
 					updateScene_();
 
 					waitForUpdateOfRepresentations_();
@@ -208,10 +210,15 @@ namespace BALL
 													minimizer_->getNumberOfIterations(), 
 													ff.getEnergy(), ff.getRMSGradient());
 					output_(message.ascii());
-
 				}
 
 				updateScene_();
+
+				if (!ok)
+				{
+					output_("Aborted EnergyMinimizer because of strange energy values.", true);
+					return;
+				}
 
 				output_(ff.getResults());
 				output_("final RMS gadient    : " + String(ff.getRMSGradient()) + " kJ/(mol A)   after " 
@@ -292,6 +299,12 @@ namespace BALL
 				}
 
 				if (dcd_file_) manager.flushToDisk();
+
+				if (!ok)
+				{
+					output_("Aborted MDSimulation because of strange energy values.", true);
+					return;
+				}
 
  				output_(ff.getResults());
 				output_("final RMS gadient    : " + String(ff.getRMSGradient()) + " kJ/(mol A)   after " 
