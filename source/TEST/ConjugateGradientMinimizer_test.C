@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ConjugateGradientMinimizer_test.C,v 1.8 2003/03/12 14:05:04 anhi Exp $
+// $Id: ConjugateGradientMinimizer_test.C,v 1.9 2003/03/12 16:11:50 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,7 +12,7 @@
 #include <BALL/KERNEL/PTE.h>
 ///////////////////////////
 
-START_TEST(ConjugateGradienMinimizer, "$Id: ConjugateGradientMinimizer_test.C,v 1.8 2003/03/12 14:05:04 anhi Exp $")
+START_TEST(ConjugateGradienMinimizer, "$Id: ConjugateGradientMinimizer_test.C,v 1.9 2003/03/12 16:11:50 oliver Exp $")
 
 using namespace BALL;
 
@@ -172,8 +172,8 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool))
 	S.insert(*m);
 	m->insert(*a1);
 	m->insert(*a2);
-	a1->setPosition(Vector3(0, 0, 0));
-	a2->setPosition(Vector3(1, 0, 0));
+	a1->setPosition(Vector3(-0.5, 0, 0));
+	a2->setPosition(Vector3(0.5, 0, 0));
 	a1->setElement(PTE[Element::C]);
 	a2->setElement(PTE[Element::C]);
 	a1->setTypeName("C");
@@ -192,7 +192,8 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool))
 	PRECISION(1e-4)
 	ConjugateGradientMinimizer cgm(FF);
 	cgm.setEnergyOutputFrequency(1);
-	cgm.setMaxGradient(0.001);
+	cgm.setMaxGradient(0.000005);
+	cgm.setEnergyDifferenceBound(0.00000001);
 	TEST_EQUAL(cgm.isValid(), true)
 	FF.updateEnergy();
 	FF.updateForces();
@@ -201,8 +202,11 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool))
 	FF.updateEnergy();
 	FF.updateForces();
 
-	TEST_REAL_EQUAL(FF.getEnergy(), -0.3598239)	
-	TEST_REAL_EQUAL(a1->getPosition().getDistance(a2->getPosition()), 3.8159)
+	TEST_REAL_EQUAL(FF.getEnergy(), -0.359813)	
+	PRECISION(1e-5)
+	TEST_REAL_EQUAL(fabs(FF.getRMSGradient() - cgm.getMaxGradient()), 0.0000)	
+	PRECISION(4e-3)
+	TEST_REAL_EQUAL(a1->getPosition().getDistance(a2->getPosition()), 3.81244)
 RESULT
 
 /////////////////////////////////////////////////////////////

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: steepestDescent.h,v 1.15 2003/03/12 12:00:14 anhi Exp $
+// $Id: steepestDescent.h,v 1.16 2003/03/12 16:11:49 oliver Exp $
 // Line Search Minimizer: A special class for the line search minimization algorithm
 
 #ifndef BALL_MOLMEC_MINIMIZATION_STEEPESTDESCENT_H
@@ -128,7 +128,7 @@ namespace BALL
 
 		/**	Minimize the energy of the system using a greedy steepest descent.
 		*/
-		virtual bool minimize(Size steps = 0, bool restart = false);
+		virtual bool minimize(Size steps = 0, bool resume = false);
 
 		/** Find the next step using a line search.
 		*/

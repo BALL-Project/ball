@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: energyMinimizer.C,v 1.21 2003/03/12 12:01:01 anhi Exp $
+// $Id: energyMinimizer.C,v 1.22 2003/03/12 16:11:50 oliver Exp $
 
 #include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
 
@@ -427,7 +427,7 @@ namespace BALL
 	//	The minimizer optimizes the energy of the system bound to the force field.
 	//	The function is virtual.
 	//
-	bool EnergyMinimizer::minimize(Size /* steps */, bool /* restart */)
+	bool EnergyMinimizer::minimize(Size /* steps */, bool /* resume */)
 	{
 		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
@@ -490,9 +490,13 @@ namespace BALL
 	
 	bool EnergyMinimizer::isConverged() const
 	{
+		/// ???
+		Log.info()  << " current_grad.rms = " << current_grad_.rms << "  max_grad = " << max_gradient_ 
+							  << " same energy: " << same_energy_counter_ << "/" << max_same_energy_ << std::endl;
+
 		bool converged = ((current_grad_.rms <= max_gradient_)
-											|| (same_energy_counter_ >= max_same_energy_)
-											|| (fabs(old_energy_ - initial_energy_) < energy_difference_bound_));
+											|| (same_energy_counter_ >= max_same_energy_));
+
 		return converged;
 	}
 

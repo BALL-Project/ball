@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.C,v 1.20 2003/03/12 12:01:01 anhi Exp $
+// $Id: conjugateGradient.C,v 1.21 2003/03/12 16:11:50 oliver Exp $
 //
 // Minimize the potential energy of a system using a nonlinear conjugate 
 // gradient method with  line search
@@ -486,11 +486,8 @@ namespace BALL
   // by using a conjugate gradient method. 
   // Return value is true when no further steps can be taken!
   bool ConjugateGradientMinimizer::minimize
-		(Size iterations, bool restart)
+		(Size iterations, bool resume)
   {
-		// TEST!!!
-		setMaximumDisplacement(4.0);
-
 		// Check for validity of minimizer and force field
 		if (!isValid() || getForceField() == 0 || !getForceField()->isValid())
 		{
@@ -504,41 +501,39 @@ namespace BALL
 			return true;
 		}
 
-		// Check the arguments.
-		if (restart)
-		{
-			// reset the number of iterations for a restart
-			setNumberOfIterations(0);
-		}
-		Size max_iterations = std::max(getNumberOfIterations() + iterations, getMaxNumberOfIterations());
-
-		#ifdef BALL_DEBUG
-			Log.info() << "CGM: minimize(" << iterations << ", " << restart << ")" << endl;
-		#endif
-			
-/// !!!...Here begins the old code...!!!
-		
 		// remember <g_i, d_i> (the scalar product of the last 
 		// search direction and the last gradient)
 		// keep them static for restarts
 		static double old_dir_grad;
 		static bool old_dir_grad_valid;
 		
-		// if we start from scratch (i.e. no restart) we have to make sure
-		// to calculate all the quantities we need before we start
-		if (!restart)
-		{
-			// invalidate old_dir_grad if this is not a restart
-			old_dir_grad_valid = false;	
-		}
-		
 		// define an alias for the atom vector
 		AtomVector& atoms(const_cast<AtomVector&>(getForceField()->getAtoms()));
 
-		// if this is not a restart or we do not have a valid
+		// If we start from scratch (i.e. no restart) we have to make sure
+		// to calculate all the quantities we need before we start
+		if (!resume)
+		{
+			// Reset the number of iterations if the job is not resumed.
+			setNumberOfIterations(0);
+			same_energy_counter_ = 0;
+
+			// Compute an initial direction (along the negative gradient).
+			old_dir_grad_valid = false;	
+			direction_.clear();
+			updateDirection();
+		}
+
+		Size max_iterations = std::max(getNumberOfIterations() + iterations, getMaxNumberOfIterations());
+
+		#ifdef BALL_DEBUG
+			Log.info() << "CGM: minimize(" << iterations << ", " << resume << ")" << endl;
+		#endif
+			
+		// If this is not a resume run or we do not have a valid
 		// gradient, recalculate the gradient, the energy, and the search 
  		// direction
-		if (!restart || !old_grad_.isValid() || old_grad_.size() == 0 || !initial_grad_.isValid())
+		if (!resume || !old_grad_.isValid() || old_grad_.size() == 0 || !initial_grad_.isValid())
 		{
 			#ifdef BALL_DEBUG
 				Log.info() << "CGM: calculating initial gradient...";
@@ -570,33 +565,28 @@ namespace BALL
 		
 		// save the current atom positions
 		atoms.savePositions();
-
 		bool converged = false;	
 		
 		// iterate: while not converged and not enough iterations
 		while (!converged && (getNumberOfIterations() < max_iterations))	
 		{
-			// invalidate the current direction: we don't want to
-			// take this direction again. If findStep() 
-			// creates a new direction, we keep it (since a new
-			// Gradient object is valid). However, if the direction remains
-			// invalid, we calculate a new direction at the end of this loop
-			direction_.invalidate();
-
-			// try to find a new solution
+			// Try to take a new step along the direction
 			double lambda = findStep();
 			
-			// ??? lambda = 0.0 seems to be problematic => infinite loops in 1kiq.pdb
+			// We were successul, if we found a lambda > 0.
 			bool result = (lambda > 0.0);
-			//bool result = (lambda >= 0.0);
 
-			// use this step as new reference step if findStep was succesful
+			// use this step as new reference step if findStep was successful
 			if (result)
 			{
-				atoms.savePositions(); // ??? Should we do this if result == false?
+				atoms.savePositions();
 			}
 			else
 			{
+				// No success.
+				// Mark the direction as bad.
+				direction_.invalidate();
+
 				// let's see if we have to recompute the forces and the energy
 				if (!current_grad_.isValid())
 				{	
@@ -626,13 +616,6 @@ namespace BALL
 			{
 				// Log.info() << "CGM: updating direction..." << endl;
 				updateDirection();
-			}
-			else 
-			{ // ??? What is this code supposed to do? We should already _have_ 
-				//     a new direction... ???
-				// we have to use the current gradient
-	//				direction_ = initial_grad_;
-	//			direction_.negate();
 			}
 
 			// non-constant step size option

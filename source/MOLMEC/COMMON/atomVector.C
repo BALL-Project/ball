@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomVector.C,v 1.10 2003/02/05 13:00:18 oliver Exp $
+// $Id: atomVector.C,v 1.11 2003/03/12 16:11:49 oliver Exp $
 //
 
 #include <BALL/MOLMEC/COMMON/atomVector.h>
@@ -10,7 +10,7 @@
 #include <BALL/CONCEPT/composite.h>
 #include <BALL/KERNEL/atom.h>
 
-// #define BALL_DEBUG
+#undef BALL_DEBUG
 
 using namespace std;
 

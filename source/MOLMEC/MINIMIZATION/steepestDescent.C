@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: steepestDescent.C,v 1.14 2003/03/12 12:01:02 anhi Exp $
+// $Id: steepestDescent.C,v 1.15 2003/03/12 16:11:50 oliver Exp $
 
 #include <BALL/MOLMEC/MINIMIZATION/steepestDescent.h>
 #include <BALL/MOLMEC/MINIMIZATION/lineSearch.h>
@@ -115,7 +115,7 @@ namespace BALL
 	/*  The minimizer optimizes the energy of the system 
 			using a modified line search algorithm.
 	*/
-	bool SteepestDescentMinimizer::minimize(Size iterations, bool restart)
+	bool SteepestDescentMinimizer::minimize(Size iterations, bool resume)
 	{
 		// Check for validity of minimizer and force field
 		if (!isValid() || getForceField() == 0 || !getForceField()->isValid())
@@ -130,11 +130,12 @@ namespace BALL
 			return true;
 		}
 
-		// Check the arguments
-		if (restart)
+		// If the run is to be continued, don't reset the iteration counter.
+		if (!resume)
 		{
 			// reset the number of iterations for a restart
 			setNumberOfIterations(0);
+			same_energy_counter_ = 0;
 		}
 		Size max_iterations = std::max(getNumberOfIterations() + iterations, getMaxNumberOfIterations());
 		

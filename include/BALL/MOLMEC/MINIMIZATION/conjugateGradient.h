@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.h,v 1.18 2003/03/12 12:00:13 anhi Exp $ 
+// $Id: conjugateGradient.h,v 1.19 2003/03/12 16:11:49 oliver Exp $ 
 
 #ifndef BALL_MOLMEC_MINIMIZATION_CONJUGATEGRADIENT_H 
 #define BALL_MOLMEC_MINIMIZATION_CONJUGATEGRADIENT_H 
@@ -211,10 +211,10 @@ namespace BALL
 				If the number of iterations is not given, the number specified in the
 				options is taken.
 				@param	iterations the maximum number of iterations
-				@param	restart <b>true</b> if the minimization is restarted
+				@param	resume <b>true</b> to resume a previous run
 				@see		EnergyMinimizer::minimize
     */
-    virtual bool minimize(Size iterations = 0, bool restart = false); 
+    virtual bool minimize(Size iterations = 0, bool resume = false); 
 
     //@}
 

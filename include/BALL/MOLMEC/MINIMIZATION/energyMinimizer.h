@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: energyMinimizer.h,v 1.35 2003/03/12 12:00:14 anhi Exp $
+// $Id: energyMinimizer.h,v 1.36 2003/03/12 16:11:49 oliver Exp $
 
 // Energy Minimizer: A class for minimizing the energy of molecular systems
 
@@ -217,7 +217,6 @@ namespace BALL
 				\begin{itemize}
 					\item {RMS gradient} is below max_rms_gradient_
 					\item  \link same_energy_counter_ same_energy_counter_ \endlink  is above  \link max_same_energy_ max_same_energy_ \endlink 
-					\item {the energy difference} between two successive steps is below  \link energy_difference_bound_ energy_difference_bound_ \endlink 
 				\end{itemize}
 				If any of these conditions hold  \link isConverged isConverged \endlink  returns <b>true</b>.
 				This method should be reimplemented in derived classes for a different
@@ -287,12 +286,12 @@ namespace BALL
 		/**	Finishing step for this iteration.
 				This method should be called at the end of the main iteration 
 				loop implemented in  \link minimize minimize \endlink . It takes over some administrative stuff:
-				\begin{itemize}
-					\item increment the iteration counter  \link number_of_iterations_ number_of_iterations_ \endlink 
-					\item call  \link takeSnapShot takeSnapShot \endlink  if necessary
-					\item call  \link printEnergy printEnergy \endlink  if necessary
-					\item call  \link ForceField::update ForceField::update \endlink  if necessary (to rebuild the pair lists!)
-				\end{itemize}
+				
+					- increment the iteration counter  \link number_of_iterations_ number_of_iterations_ \endlink 
+					- call  \link takeSnapShot takeSnapShot \endlink  if necessary
+					- call  \link printEnergy printEnergy \endlink  if necessary
+					- call  \link ForceField::update ForceField::update \endlink  if necessary (to rebuild the pair lists!)
+					- update the \link same_energy_counter_ same_energy_counter_ \endlink tested in \link isConverged isConverged \endlink
 
 				This method should be overwritten only in rare cases. Even then, the programmer
 				should make sure to call <tt>EnergyMinimizer::finishIteration</tt> or 
@@ -418,15 +417,15 @@ namespace BALL
 		/**	Minimize the energy of the system bound to the force field.	
 				If a number of steps is given, the minimization is aborted after
 				that number of steps, regardless of the number of steps given in 
-				the options (<tt>MAX_STEPS</tt>). Together with the <tt>restart</tt> option
+				the options (<tt>MAX_STEPS</tt>). Together with the <tt>resume</tt> option
 				this feature is used to extract properties or visualize the results
-				in the course of the minimization. If restart is set to <b>true</b>,
-				the minimization continues with the former step width.	
+				in the course of the minimization. If <tt>resume</tt> is set to <b>true</b>,
+				the minimization continues with the former step width and settings.	
 				@param		steps maximum number of steps to be taken
-				@param		restart <b>true</b> if the minimization is to be continued
+				@param		resume <b>true</b> if the minimization is to be resumed with the previous settings
 				@return		bool - <b>true</b> if the minimization is terminated
 		*/
-		virtual bool	minimize(Size steps = 0, bool restart = false);
+		virtual bool	minimize(Size steps = 0, bool resume = false);
 
 		//@}
 
