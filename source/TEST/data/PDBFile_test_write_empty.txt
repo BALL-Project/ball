@@ -1,5 +1,0 @@
-/HEADER                                            [ 1-3][0-9]-[JFMASOND][AEPUCO][NBRYLGPTVC]-[ 0-9][0-9]       
-MODEL        1
-ENDMDL
-MASTER        0    0    0    0    0    0    0    0    0    0    0    0
-END   
