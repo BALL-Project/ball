@@ -1,4 +1,4 @@
-// $Id: timeStamp.C,v 1.2 2000/08/28 13:27:02 oliver Exp $
+// $Id: timeStamp.C,v 1.3 2000/08/28 23:11:01 oliver Exp $
 
 #include <BALL/CONCEPT/timeStamp.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -166,8 +166,10 @@ namespace BALL
 	{
 		String usecs(time.getMicroSeconds() / 1.0e6);
 		time_t secs = time.getSeconds();
+		static char buf[128];
+		strftime(buf, 127, "%Y%m%d%H%M%S", localtime(&secs));
 		
-		return os << const_cast<const char*>(asctime(localtime(&secs))) << "." << usecs.after(".");
+		return os << buf << "." << usecs.after(".");
 	}
 
   ostream& operator << (ostream& os, const TimeStamp& stamp)
