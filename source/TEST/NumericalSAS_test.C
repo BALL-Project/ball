@@ -1,4 +1,4 @@
-// $Id: NumericalSAS_test.C,v 1.4 2000/06/06 13:19:04 oliver Exp $
+// $Id: NumericalSAS_test.C,v 1.5 2000/06/15 17:24:22 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,14 +8,14 @@
 #include <BALL/DATATYPE/hashMap.h>
 ///////////////////////////
 
-START_TEST(NumericalSAS, "$Id: NumericalSAS_test.C,v 1.4 2000/06/06 13:19:04 oliver Exp $")
+START_TEST(NumericalSAS, "$Id: NumericalSAS_test.C,v 1.5 2000/06/15 17:24:22 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
 
-CHECK(calculateSASArea(const	Composite&, float, int))
+CHECK(calculateSASArea(const BaseFragment&, float probe_radius, Size number_of_points))
 	Fragment	f;
 	Atom a1, a2;
 	a1.setRadius(1.0);
@@ -29,6 +29,22 @@ CHECK(calculateSASArea(const	Composite&, float, int))
 
 	PRECISION(0.001)
 	TEST_REAL_EQUAL(area, 157.07963)
+RESULT
+
+CHECK(calculateSASVolume(const BaseFragment&, float probe_radius, Size number_of_points))
+	Fragment	f;
+	Atom a1, a2;
+	a1.setRadius(1.0);
+	a2.setRadius(1.0);
+	a2.setPosition(Vector3(10.0, 0.0, 0.0));
+
+	f.insert(a1);
+	f.insert(a2);
+
+	float volume = calculateSASVolume(f, 1.5, 624);
+
+	PRECISION(0.001)
+	TEST_REAL_EQUAL(volume, 130.899)
 RESULT
 
 CHECK(calculateSASAtomAreas())
