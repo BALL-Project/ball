@@ -1,4 +1,4 @@
-// $Id: version.C,v 1.2 2000/06/28 20:23:41 oliver Exp $
+// $Id: version.C,v 1.3 2000/07/03 23:56:33 amoll Exp $
 
 #include <BALL/COMMON/version.h>
 #include <BALL/DATATYPE/string.h>
@@ -36,10 +36,10 @@ namespace BALL
 		switch (release_suffix)
 		{
 			case 'a': 
-				return ALPHA; break;
+				return ALPHA;
 
 			case 'b': 
-				return BETA; break;
+				return BETA;
 
 			case '0':
 			case '1':
@@ -51,7 +51,7 @@ namespace BALL
 			case '7':
 			case '8':
 			case '9':
-				return STABLE; break;
+				return STABLE;
 
 			default:
 				return UNKNOWN;
