@@ -1,4 +1,4 @@
-// $Id: string.iC,v 1.30 2000/12/13 19:45:14 amoll Exp $
+// $Id: string.iC,v 1.31 2000/12/15 13:09:03 amoll Exp $
 
 BALL_INLINE 
 String::String()
@@ -33,6 +33,30 @@ String::String(const string& s)
 	throw()
 	: string(s)
 {
+}
+
+BALL_INLINE 
+String::String(const char* char_ptr, Index from, Size len)
+	throw(Exception::NullPointer, Exception::IndexUnderflow, Exception::IndexOverflow)
+	: string()
+{
+	validateCharPtrRange_(from, len, char_ptr);
+	if (len > 0)
+	{
+		assign(char_ptr + from, len);
+	}
+}
+ 
+BALL_INLINE 
+String::String(const String& s, Index from, Size len)
+	throw(Exception::IndexUnderflow, Exception::IndexOverflow)
+	: string("")
+{
+	s.validateRange_(from, len);
+	if (len > 0)
+	{
+		assign(s.c_str() + from, len);
+	}
 }
 
 BALL_INLINE 
@@ -997,30 +1021,6 @@ bool operator == (const String& s, const Substring& substring)
 	throw(Substring::UnboundSubstring)
 {
 	return (substring == s);
-}
-
-BALL_INLINE 
-String::String(const char* char_ptr, Index from, Size len)
-	throw(Exception::NullPointer, Exception::IndexUnderflow, Exception::IndexOverflow)
-	: string()
-{
-	validateCharPtrRange_(from, len, char_ptr);
-	if (len > 0)
-	{
-		assign(char_ptr + from, len);
-	}
-}
- 
-BALL_INLINE 
-String::String(const String& s, Index from, Size len)
-	throw(Exception::IndexUnderflow, Exception::IndexOverflow)
-	: string("")
-{
-	s.validateRange_(from, len);
-	if (len > 0)
-	{
-		assign(s.c_str() + from, len);
-	}
 }
 
 BALL_INLINE 

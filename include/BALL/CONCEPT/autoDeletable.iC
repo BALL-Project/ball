@@ -1,4 +1,4 @@
-// $Id: autoDeletable.iC,v 1.3 2000/12/09 20:53:44 amoll Exp $
+// $Id: autoDeletable.iC,v 1.4 2000/12/15 13:09:39 amoll Exp $
 
 BALL_INLINE 
 AutoDeletable::AutoDeletable()
@@ -42,6 +42,13 @@ AutoDeletable::AutoDeletable(const AutoDeletable&, bool /* deep */)
 }
 
 BALL_INLINE 
+void AutoDeletable::operator delete (void* ptr) 
+	throw()
+{
+	::operator delete(ptr);
+}
+
+BALL_INLINE 
 AutoDeletable::~AutoDeletable()
 	throw()
 {
@@ -53,13 +60,6 @@ void* AutoDeletable::operator new (size_t size)
 {
 	last_ptr_ = ::operator new(size);
 	return last_ptr_;
-}
-
-BALL_INLINE 
-void AutoDeletable::operator delete (void* ptr) 
-	throw()
-{
-	::operator delete(ptr);
 }
 
 BALL_INLINE 
