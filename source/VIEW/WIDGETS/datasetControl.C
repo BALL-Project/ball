@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.12 2003/10/06 15:24:54 oliver Exp $
+// $Id: datasetControl.C,v 1.13 2003/10/15 13:26:13 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -57,10 +57,10 @@ void DatasetControl::initializeWidget(MainControl& main_control)
 {
 	open_trajectory_id_ = 
 		main_control.insertMenuEntry(MainControl::FILE_OPEN, "Trajectory", this, SLOT(addTrajectory()), 0, -1,
-		String("To open a trajectory file, one System has to be selected."));
+		String("Open a trajectory file (1 System has to be selected)"));
 	open_grid_id_ = 
 		main_control.insertMenuEntry(MainControl::FILE_OPEN, "3D Grid", this, SLOT(add3DGrid()), 0, -1,
-		String("Open a 3D data grid."));
+		String("Open a 3D data grid"));
 	GenericControl::initializeWidget(main_control);
 }
 
