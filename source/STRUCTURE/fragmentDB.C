@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentDB.C,v 1.54 2004/02/26 21:17:35 oliver Exp $
+// $Id: fragmentDB.C,v 1.55 2004/05/05 14:50:19 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/fragmentDB.h>
@@ -95,7 +95,8 @@ namespace BALL
 			String filename = path.find(value_fields[0]);
 			if (filename == "")
 			{
-				throw Exception::FileNotFound(__FILE__, __LINE__, value_fields[0]);
+				Log.error() << "Could not find the FragmentDB data file " << value_fields[0] << " ! Aborting..:" << std::endl;
+				return false;
 			}
 
 			file = new ResourceFile(filename);
@@ -125,7 +126,7 @@ namespace BALL
 	// default constructor
 	FragmentDB::FragmentDB()
 	{
-		setFilename("fragments/Fragments.db");
+		if (!setFilename("fragments/Fragments.db")) return;
 
 		init();
 
@@ -137,7 +138,7 @@ namespace BALL
 
 	FragmentDB::FragmentDB(const String& filename)
 	{
-		setFilename(filename);
+		if (!setFilename(filename)) return;
 
 		init();
 
@@ -180,7 +181,7 @@ namespace BALL
 		standards_.clear();
 	}
 
-	void FragmentDB::setFilename(const String& filename)
+	bool FragmentDB::setFilename(const String& filename)
 	{
 		// search for the standard fragment DB file
 		Path path;
@@ -188,8 +189,12 @@ namespace BALL
 		
 		if (filename_ == "")
 		{
-			throw Exception::FileNotFound(__FILE__, __LINE__, filename);
+			Log.error() << "Could not find the FragmentDB data files in " << filename_ << " ! Aborting..:" << std::endl;
+			valid_ = false;
+			return false;
 		}
+
+		return true;
 	}
 
 	const String& FragmentDB::getFilename() const 
@@ -529,7 +534,7 @@ namespace BALL
 	}
 
 		
-	void FragmentDB::init()
+	bool FragmentDB::init()
 	{
 		// we are invalid until we're sure we're not...
 		valid_ = false;
@@ -540,9 +545,9 @@ namespace BALL
 		// check for success and terminate on failure
 		if (!resource_db->isValid())
 		{
-			throw Exception::FileNotFound(__FILE__, __LINE__, filename_);
+			Log.error() << "Could not read the FragmentDB file " << filename_ << " ! Aborting..:" << std::endl;
+			return false;
 		}
-
 
 		// copy the contents of the resource file into a tree
 		tree = new ResourceEntry();			
@@ -590,7 +595,7 @@ namespace BALL
 				{
 					Log.error() << "FragmentDB: cannot find Atoms entry for " 
 											<< fragment_name << endl;
-					return;
+					return false;
 				} 
 				else	
 				{
@@ -744,7 +749,7 @@ namespace BALL
 		
 		// OK. Everything went well, so we might consider ourselves as valid.
 		valid_ = true;
-		return;
+		return true;
 	}
 
 	const String& FragmentDB::getDefaultNamingStandard() const 

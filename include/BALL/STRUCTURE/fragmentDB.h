@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentDB.h,v 1.27 2004/02/16 16:11:25 oliver Exp $
+// $Id: fragmentDB.h,v 1.28 2004/05/05 14:50:54 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_FRAGMENTDB_H
@@ -111,11 +111,12 @@ namespace BALL
 		/**	Default constructor.
 				Creates a FragmentDB object and tries to read the fragment data
 				from the file <tt>fragments/Fragments.db</tt> in the  \link BALL_DATA_PATH BALL_DATA_PATH \endlink .
-				@exception Exception::FileNotFound if <tt>fragments/Fragments.db</tt> is not found in the BALL_DATA_PATH
+				If <tt>fragments/Fragments.db</tt> can not be found or can not be parsed, isValid() will return false;
 		*/
 		FragmentDB();
 
 		/**	Creates a FragmentDB object and reads the contents of <tt>filename</tt>.
+				If the given file can not be found or can not be parsed, isValid() will return false;
 		*/
 		FragmentDB(const String& filename);
 
@@ -138,7 +139,7 @@ namespace BALL
 
 		/**	Initialization of the database. 
 		*/
-		void init();
+		bool init();
 		
 		//@}
 		/**@name	Inspectors and mutators
@@ -147,7 +148,7 @@ namespace BALL
 
 		/**	Assigns a filename.
 		*/	
-		void setFilename(const String& filename);
+		bool setFilename(const String& filename);
 		
 		/**	Get the filename.
 		*/	
@@ -224,7 +225,7 @@ namespace BALL
 		*/
 		//@{
 
-		/**	
+		/**	Returns true if the FragmentsDB file was found and successfully parsed.
 		*/
 		bool isValid() const;
 
@@ -533,4 +534,4 @@ namespace BALL
 } // namespace BALL 
 
 
-#endif // BALL_STRUCTURE_FRAGMENTDB_H_
+#endif // BALL_STRUCTURE_FRAGMENTDB_H
