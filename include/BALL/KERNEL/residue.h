@@ -1,4 +1,4 @@
-// $Id: residue.h,v 1.7 2000/02/17 00:30:42 oliver Exp $
+// $Id: residue.h,v 1.8 2000/03/23 20:04:39 oliver Exp $
 
 #ifndef BALL_KERNEL_RESIDUE_H
 #define BALL_KERNEL_RESIDUE_H
@@ -150,7 +150,23 @@ namespace BALL
 			@return String the full fragment name
 		*/
 		String getFullName(FullNameType type = ADD_VARIANT_EXTENSIONS) const;
-			
+		
+		/**	Check whether the torsion angle phi is defined.
+		*/
+		bool hasTorsionPhi() const;
+	
+		/**	Calculate the torsion angle phi.
+		*/
+		Angle getTorsionPhi() const;
+		
+		/**	Check whether the torsion angle psi is defined.
+		*/
+		bool hasTorsionPsi() const;
+	
+		/**	Calculate the torsion angle psi.
+		*/
+		Angle getTorsionPsi() const;		
+
 		///
 		Protein* getProtein();
 
