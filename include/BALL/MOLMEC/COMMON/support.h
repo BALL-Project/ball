@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: support.h,v 1.15.2.4 2003/02/05 15:31:11 anker Exp $
+// $Id: support.h,v 1.15.2.5 2003/02/10 17:10:58 anker Exp $
 
 #ifndef BALL_MOLMEC_COMMON_SUPPORT_H
 #define BALL_MOLMEC_COMMON_SUPPORT_H
@@ -125,8 +125,6 @@ namespace BALL
 		// ?????
 		void calculateMinimumImage
 			(Vector3& distance, const Vector3& period);
-
-<<<<<<< support.h
 
 		/** Calculate a frequently used function of the Fresno force field
 		*/
