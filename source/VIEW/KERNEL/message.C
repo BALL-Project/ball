@@ -1,4 +1,4 @@
-// $Id: message.C,v 1.4.4.3 2002/12/02 16:37:30 amoll Exp $
+// $Id: message.C,v 1.4.4.4 2002/12/06 16:51:19 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/COMMON/rtti.h>
@@ -96,8 +96,8 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<RemovedCompositeMessage>() << endl;
+				Log.error() << "Destructing object " << (void *)this 
+										<< " of class " << RTTI::getName<RemovedCompositeMessage>() << endl;
 			#endif 
 		}
 
@@ -105,7 +105,9 @@ namespace BALL
 			throw()
 			: CompositeMessage()
 		{
-Log.error() << "ChangedCompositeMessage::ChangedCompositeMessage" << std::endl;		
+			#ifdef BALL_VIEW_DEBUG
+				Log.error() << "new ChangedCompositeMessage" << std::endl;		
+			#endif
 		}
 
 	  ChangedCompositeMessage::ChangedCompositeMessage(const CompositeMessage& message)
@@ -130,6 +132,9 @@ Log.error() << "ChangedCompositeMessage::ChangedCompositeMessage" << std::endl;
 				camera_look_at_(),
 				camera_view_point_()
 		{
+			#ifdef BALL_VIEW_DEBUG
+				Log.error() << "new SceneMessage" << std::endl;		
+			#endif
 		}
 
 		SceneMessage::SceneMessage(const SceneMessage& message)
@@ -139,7 +144,6 @@ Log.error() << "ChangedCompositeMessage::ChangedCompositeMessage" << std::endl;
 				camera_look_at_(message.camera_look_at_),
 				camera_view_point_(message.camera_view_point_)
 		{
-Log.error() << "SceneMessage::SceneMessage" << std::endl;		
 		}
 
 		SceneMessage::~SceneMessage()
@@ -156,7 +160,9 @@ Log.error() << "SceneMessage::SceneMessage" << std::endl;
 			: Message(),
 				status_bar_()
 		{
-Log.error() << "WindowMessage::WindowMessage" << std::endl;		
+			#ifdef BALL_VIEW_DEBUG
+				Log.error() << "new WindowMessage" << std::endl;		
+			#endif
 		}
 
 		WindowMessage::WindowMessage(const WindowMessage& message)
@@ -203,9 +209,9 @@ Log.error() << "WindowMessage::WindowMessage" << std::endl;
 			throw()
 			: SelectionMessage()
 		{
-			#ifdef	BALL_DEBUG_VIEW_MESSAGES
+			#ifdef BALL_VIEW_DEBUG
 				Log.error() << "new GeometricObjectSelectionMessage" << std::endl;		
-			#endif				
+			#endif
 		}
 
 		GeometricObjectSelectionMessage::GeometricObjectSelectionMessage(const SelectionMessage& message)
@@ -223,11 +229,21 @@ Log.error() << "WindowMessage::WindowMessage" << std::endl;
 			#endif 
 		}
 
+		ControlSelectionMessage::ControlSelectionMessage()
+			throw()
+			: SelectionMessage()
+		{
+			#ifdef BALL_VIEW_DEBUG
+				Log.error() << "new ControlSelectionMessage" << std::endl;
+			#endif
+		}
+
 		NewSelectionMessage::NewSelectionMessage() 
+			throw()
 		{ 
-			#ifdef  BALL_DEBUG_VIEW_MESSAGES		
+			#ifdef BALL_VIEW_DEBUG
 			  Log.error() << "new NewSelectionMessage" << std::endl;
-			#endif				
+			#endif
 		}
 
 		CompositeSelectedMessage::CompositeSelectedMessage(Composite* composite, bool selected) 
@@ -235,9 +251,9 @@ Log.error() << "WindowMessage::WindowMessage" << std::endl;
 			:	composite_(composite),
 				selected_(selected)
 		{
-		 #ifdef  BALL_DEBUG_VIEW_MESSAGES		
+			#ifdef BALL_VIEW_DEBUG
 			  Log.error() << "CompositeSelectedMessage" << std::endl;		
-		 #endif  				
+			#endif
 		}
 
 
