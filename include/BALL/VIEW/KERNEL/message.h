@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.42 2004/02/11 16:19:11 amoll Exp $
+// $Id: message.h,v 1.43 2004/02/18 23:53:35 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -26,7 +26,6 @@ namespace BALL
 
 	namespace VIEW
 	{
-		// class forward
 		class ConnectionObject;
 		class GeometricObject;
 
@@ -46,7 +45,7 @@ namespace BALL
 		it will be deleted after all ConnectionObject objects has been informed
 		of this message. Therefore a deletable message must be created with the <b> new</b>
 		command.
-		All messages should be created with the <b> new</b> command and set to deletable
+		All messages should be created with the <b> new</b> command
 		for avoiding segmentation faults.
 		See ConnectionObject for further information concerning message handling
 		and message posting. \par
@@ -166,6 +165,7 @@ class CompositeMessage: public Message
 	CompositeMessage()
 		throw();
 
+	///
 	CompositeMessage(const Composite& composite, CompositeMessageType type, bool update_representations = true)
 		throw();
 
@@ -632,7 +632,7 @@ class CreateRepresentationMessage
 };
 	
 
-///
+/// Message to notify about a new Trajectory
 class NewTrajectoryMessage
 	:public CompositeMessage
 {
@@ -653,7 +653,7 @@ class NewTrajectoryMessage
 		TrajectoryFile* file_;
 };
 
-///
+/// Message concerning RegularData3D
 class RegularData3DMessage
 	:public CompositeMessage
 {

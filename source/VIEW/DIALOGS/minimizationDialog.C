@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: minimizationDialog.C,v 1.2 2004/02/18 17:37:01 amoll Exp $
+// $Id: minimizationDialog.C,v 1.3 2004/02/18 23:55:37 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/minimizationDialog.h>
@@ -165,20 +165,6 @@ namespace BALL
 		void MinimizationDialog::setCharmmDialog(CharmmConfigurationDialog* dialog)
 		{
 			charmm_dialog_ = dialog;
-		}
-
-		void MinimizationDialog::setForceField(bool amber)
-		{	
-			if (amber)
-			{
-				useAmberRadioButton->setChecked(true);
-				useCharmmRadioButton->setChecked(false);
-			}
-			else
-			{
-				useCharmmRadioButton->setChecked(true);
-				useAmberRadioButton->setChecked(false);
-			}
 		}
 
 		void MinimizationDialog::useAmberFF()

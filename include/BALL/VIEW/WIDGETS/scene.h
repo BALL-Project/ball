@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.18 2004/02/18 18:19:08 anhi Exp $
+// $Id: scene.h,v 1.19 2004/02/18 23:57:08 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -81,9 +81,8 @@ namespace BALL
 			friend class Events;
 
 			//@} 
-			
-
-			/** @name Enums */ 
+			/** @name Enums 
+			*/ 
 			//@{
 			
 			/** There a three different kind of rendering for a Scene:

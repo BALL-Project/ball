@@ -27,28 +27,28 @@ class MinimizationDialog
 
 		public:
 
-		///
+		/// Constructor
     MinimizationDialog(QWidget* parent = NULL, const char* name = NULL );
 
-		///
+		/// Destructor
     virtual ~MinimizationDialog();
 
-		///
+		/// 
 		void writePreferences(INIFile& inifile) const;
 
 		///
 		void readPreferences(const INIFile& inifile);
 		
-		///
+		/// Get the maximum number of iterations of the minimizer.
 		Size getMaxIterations() const;
 
-		///
+		/// Set the maximum number of iterations for the minimizer.
 		void setMaxIterations(Size n);
 	
-		///
+		/// Get the number of steps between the Scene refresh.
 		Size getRefresh() const;
 		
-		///
+		/// Set the number of steps between the Scene refreshs.
 		void setRefresh(Size n);
 	
 		///
@@ -69,25 +69,26 @@ class MinimizationDialog
 		///
 		void setUseConjugateGradient(bool use_CG);
 		
-		///
+		/// Show an dialog for setting the options of the currently selected force field.
 		void advancedOptions();
 		
-		///
+ 		/** Set the dialog for the AMBER Configuration.
+				Called by MolecularStructure.
+		*/
 		void setAmberDialog(AmberConfigurationDialog* amber_dialog);
 		
-		///
+ 		/** Set the dialog for the CHARMM Configuration.
+				Called by MolecularStructure.
+		*/
 		void setCharmmDialog(CharmmConfigurationDialog* charmm_dialog);
 		
-		///
-		void setForceField(bool amber);
-		
-		///
+		/// Use the AMBER force field
 		void useAmberFF();
 		
-		///
+		/// Use the CHARMM force field
 		void useCharmmFF();
 		
-		///
+		/// Are we using the AMBER force field?
 		bool getUseAmber();
 		
 		private:

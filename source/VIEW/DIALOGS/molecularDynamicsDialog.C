@@ -188,20 +188,6 @@ void MolecularDynamicsDialog::setCharmmDialog(CharmmConfigurationDialog* dialog)
 	charmm_dialog_ = dialog;
 }
 
-void MolecularDynamicsDialog::setForceField(bool amber)
-{	
-	if(amber == true)
-	{
-		useAmberRadioButton->setChecked(true);
-		useCharmmRadioButton->setChecked(false);
-	}
-	else
-	{
-		useCharmmRadioButton->setChecked(true);
-		useAmberRadioButton->setChecked(false);
-	}
-}
-
 void MolecularDynamicsDialog::useAmberFF()
 {
 	useAmberRadioButton->setChecked(true);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.18 2004/02/18 18:45:46 oliver Exp $
+// $Id: molecularStructure.C,v 1.19 2004/02/18 23:55:37 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -1229,9 +1229,7 @@ namespace BALL
 		amber_dialog_.raise();
 		if(amber_dialog_.exec() == QDialog::Accepted)
 		{
-			use_amber_ = true;
-			md_dialog_.setForceField(true);
-			minimization_dialog_.setForceField(true);
+			chooseAmberFF();
 		}
 	}
 	
@@ -1240,9 +1238,7 @@ namespace BALL
 		charmm_dialog_.raise();
 		if(charmm_dialog_.exec() == QDialog::Accepted)
 		{
-			use_amber_ = false;
-			md_dialog_.setForceField(false);
-			minimization_dialog_.setForceField(false);
+			chooseCharmmFF();
 		}
 	}
 
@@ -1251,8 +1247,8 @@ namespace BALL
 		use_amber_ = true;
 		menuBar()->setItemChecked(charmm_ff_id_, false);
 		menuBar()->setItemChecked(amber_ff_id_, true);
-		md_dialog_.setForceField(true);
-		minimization_dialog_.setForceField(true);
+		md_dialog_.useAmberFF();
+		minimization_dialog_.useAmberFF();
 	}
 	
 	void MolecularStructure::chooseCharmmFF()
@@ -1260,8 +1256,8 @@ namespace BALL
 		use_amber_ = false;
 		menuBar()->setItemChecked(amber_ff_id_, false);
 		menuBar()->setItemChecked(charmm_ff_id_, true);
-		md_dialog_.setForceField(false);
-		minimization_dialog_.setForceField(false);
+		md_dialog_.useCharmmFF();
+		minimization_dialog_.useCharmmFF();
 	}
 
 	void MolecularStructure::setupForceField()
