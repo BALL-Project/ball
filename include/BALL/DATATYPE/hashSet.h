@@ -1,4 +1,4 @@
-// $Id: hashSet.h,v 1.30 2002/01/15 02:00:49 oliver Exp $ 
+// $Id: hashSet.h,v 1.30.4.1 2002/05/18 02:07:25 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_HASHSET_H
 #define BALL_DATATYPE_HASHSET_H
@@ -60,6 +60,7 @@ namespace BALL
 		};
 
 		//@}
+
 		/**	@name	Exceptions
 		*/
 		//@{
@@ -79,6 +80,7 @@ namespace BALL
 		};
 
 		//@}
+
 		/**	@name	Type definitions
 		*/
 		//@{
@@ -108,6 +110,7 @@ namespace BALL
 			ConstIterator;
 
 		//@}
+
 		/**	@name Constructors and Destructors 
 		*/
 		//@{
@@ -119,7 +122,7 @@ namespace BALL
 			
 		/**	Copy Constructor.
 		*/
-		HashSet(const HashSet& hash_set)	throw();
+		HashSet(const HashSet& hash_set) throw();
 
 		/**	Destructor.
 		*/
@@ -133,16 +136,17 @@ namespace BALL
 				Remove all nodes from all buckets.
 				The capacity and the number of buckets remain unchanged.
 		*/
-		virtual void clear()	throw();
+		virtual void clear() throw();
 	
 		/**	Clear the hash set.
 				Remove all nodes from all buckets.
 				The capacity and the number of buckets remain unchanged.
 				Simply calls clear;
 		*/
-		void destroy()	throw();
+		void destroy() throw();
 
 		//@}
+
 		/**	@name Assignment 
 		*/
 		//@{
@@ -153,10 +157,22 @@ namespace BALL
 		void set(const HashSet& hash_set)	throw();
 
 		/** Assign this HashSet with the contents of another HashSet
-				@param hash_set the HashSet to assign from
+				@param rhs the HashSet to assign from
 		*/
-		const HashSet& operator = (const HashSet& hash_set)	throw();
+		const HashSet& operator = (const HashSet& rhs)	throw();
 
+		/**	Intersection operator.
+				Replace the contents of the current hash set by
+				its intersection with {\tt rhs}.
+		*/
+		const HashSet& operator &= (const HashSet& rhs) throw();
+		
+		/**	Union operator.
+				Replace the contents of the current hash set by
+				its union with {\tt rhs}.
+		*/
+		const HashSet& operator |= (const HashSet& rhs) throw();
+		
 		/** Assign another HashSet with the contents of this HashSet
 				@param hash_set the HashSet to assign to
 		*/
@@ -167,6 +183,7 @@ namespace BALL
 		void swap(HashSet& hash_set)	throw();
 
 		//@}
+
 		/**	@name	Accessors
 		*/
 		//@{
@@ -215,6 +232,7 @@ namespace BALL
 		void erase(Iterator f, Iterator l) throw(Exception::IncompatibleIterators);
 
 		//@}
+
 		/**	@name Miscellaneous
 		*/
 		//@{
@@ -223,8 +241,8 @@ namespace BALL
 		*/
 		virtual void host(Visitor<HashSet<Key> >& visitor)	
 			throw();
-
 		//@}
+
 		/**	@name	Predicates
 		*/
 		//@{
@@ -244,8 +262,8 @@ namespace BALL
 		/**	Compare two hash sets.
 		*/
 		bool operator != (const HashSet& hash_set) const	throw();
-
 		//@}
+
 		/**	@name	Debugging and Diagnostics
 		*/
 		//@{
@@ -472,7 +490,7 @@ namespace BALL
 
 		/**
 		*/
-		Iterator end()	throw()
+		Iterator end() throw()
 		{
 			return Iterator::end(*this);
 		}
@@ -559,7 +577,6 @@ namespace BALL
 				bucket_[bucket]	= newNode_(item->value, bucket_[bucket]);
 			}
 		}
-
 	}
 
 	template <class Key>
@@ -650,6 +667,47 @@ namespace BALL
 
 	template <class Key>
 	BALL_INLINE 
+	const HashSet<Key>& HashSet<Key>::operator &= (const HashSet& rhs)
+		throw()
+	{
+		// Store all elements that are not part of the intersection
+		// in a list for subsequent deletion.
+		std::list<Key> erase_list;
+		for (Iterator it = begin(); it != end(); ++it)
+		{
+			if (!rhs.has(*it))
+			{
+				erase_list.push_back(*it);
+			}
+		}
+
+		// erase all elements not part of the intersection
+		typename list<Key>::iterator list_it = erase_list.begin();
+		for (; list_it != erase_list.end(); ++list_it)
+		{
+			erase(*list_it);
+		}
+
+		return *this;
+	}
+
+	template <class Key>
+	BALL_INLINE 
+	const HashSet<Key>& HashSet<Key>::operator |= (const HashSet<Key>& rhs)
+		throw()
+	{
+		// Compute the union of both sets by inserting every element of the
+		// rhs set.
+		for (ConstIterator it = rhs.begin(); it != rhs.end(); ++it)
+		{
+			insert(*it);
+		}
+
+		return *this;
+	}
+
+	template <class Key>
+	BALL_INLINE 
 	Size HashSet<Key>::getBucketSize() const
 		throw()
 	{
@@ -733,7 +791,8 @@ namespace BALL
 	}
 
 	template <class Key>
-	Size HashSet<Key>::erase(const KeyType& key)		throw()
+	Size HashSet<Key>::erase(const KeyType& key)		
+		throw()
 	{
 		Position	bucket = hashBucket_(key);
 		Node*			previous = 0;
