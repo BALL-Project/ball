@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.156.2.4 2005/01/14 12:53:42 amoll Exp $
+// $Id: scene.C,v 1.156.2.5 2005/01/14 17:33:12 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -34,7 +34,7 @@
 #include <qdragobject.h>
 #include <qdir.h>
 
-//   #define BALL_BENCHMARKING
+#define BALL_BENCHMARKING
 
 using std::endl;
 using std::istream;
@@ -343,8 +343,16 @@ namespace BALL
 
 		void Scene::paintGL()
 		{
+#ifdef BALL_BENCHMARKING
+	Timer t;
+	t.start();
+#endif
 			// cannot call update here, because it calls updateGL
 			renderView_(DISPLAY_LISTS_RENDERING);
+#ifdef BALL_BENCHMARKING
+	t.stop();
+	logString("Scene painting time: " + String(t.getClockTime()));
+#endif
 		}
 
 		void Scene::resizeGL(int width, int height)
@@ -628,7 +636,7 @@ namespace BALL
 			}
 #ifdef BALL_BENCHMARKING
 	t.stop();
-	logString("Scene rendering time: " + String(t.getCPUTime()));
+	logString("Scene rendering time: " + String(t.getClockTime()));
 #endif
 		}
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.60.2.4 2005/01/14 15:28:31 amoll Exp $
+// $Id: representation.C,v 1.60.2.5 2005/01/14 17:33:45 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/representation.h>
@@ -324,7 +324,7 @@ namespace BALL
 
 #ifdef BALL_BENCHMARKING
 					t.stop();
-					logString("Calculating Model time: " + String(t.getCPUTime()));
+					logString("Calculating Model time: " + String(t.getClockTime()));
 					t.reset();
 					t.start();
 #endif
@@ -359,7 +359,7 @@ namespace BALL
 					getGeometricObjects().apply(*color_processor_);
 #ifdef BALL_BENCHMARKING
 					t.stop();
-					logString("Calculating Coloring time: " + String(t.getCPUTime()));
+					logString("Calculating Coloring time: " + String(t.getClockTime()));
 #endif
 				}
 			}
