@@ -1,35 +1,14 @@
-// $Id: molecularFilter.h,v 1.6.4.1 2002/10/18 14:48:12 amoll Exp $
+// $Id: molecularFilter.h,v 1.6.4.2 2002/10/23 13:07:46 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_MOLECULARFILTER_H
 #define BALL_MOLVIEW_FUNCTOR_MOLECULARFILTER_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
-#ifndef BALL_KERNEL_ATOMCONTAINER_H
-#	include <BALL/KERNEL/atomContainer.h>
-#endif
-
-#ifndef BALL_KERNEL_ATOM_H
-#	include <BALL/KERNEL/atom.h>
-#endif
 
 #ifndef BALL_VIEW_FUNCTOR_FILTER_H
 #	include <BALL/VIEW/FUNCTOR/filter.h>
 #endif
 
-#ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
-#	include <BALL/VIEW/KERNEL/geometricObject.h>
-#endif
-
-
-using namespace BALL::VIEW;
-
-  
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 		
@@ -42,7 +21,7 @@ namespace BALL
 				\Ref{Composite} objects that are of the kind specified above. \\
 				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/molecularFilter.h} 
 		*/
-		class MolecularFilter: public Filter
+		class MolecularFilter: public VIEW::Filter
 		{
 			public:
 

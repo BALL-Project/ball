@@ -1,23 +1,7 @@
-// $Id: moleculeGLObjectCollector.h,v 1.5.4.2 2002/10/19 14:20:34 amoll Exp $
+// $Id: moleculeGLObjectCollector.h,v 1.5.4.3 2002/10/23 13:07:46 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_MOLECULEGLOBJECTCOLLECTOR_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_MOLECULEGLOBJECTCOLLECTOR_H
-
-#ifndef BALL_KERNEL_ATOM_H
-#	include <BALL/KERNEL/atom.h>
-#endif
-
-#ifndef BALL_KERNEL_BOND_H
-#	include <BALL/KERNEL/bond.h>
-#endif
-
-#ifndef BALL_KERNEL_FOREACH_H
-#	include <BALL/KERNEL/forEach.h>
-#endif
-
-#ifndef BALL_KERNEL_MOLECULE_H
-#	include <BALL/KERNEL/molecule.h>
-#endif
 
 #ifndef BALL_VIEW_GUI_FUNCTOR_GLOBJECTCOLLECTOR_H
 #	include <BALL/VIEW/GUI/FUNCTOR/glObjectCollector.h>
@@ -38,8 +22,7 @@ namespace BALL
 				The \Ref{GLObject} objects
 				are separated into different visualization groups (=lists) that are necessary
 				for proper rendering.
-				See \Ref{GLObjectCollector} for further information about collecting \Ref{GLObject}
-				objects. \\
+				See \Ref{GLObjectCollector} for further information about collecting \Ref{GLObject} objects.\\
 				{\bf Defintion:} \URL{BALL/MOLVIEW/GUI/FUNCTOR/moleculeGLObjectCollector.h}
 		*/
 		class MoleculeGLObjectCollector: public GLObjectCollector

@@ -1,4 +1,4 @@
-// $Id: displayProperties.h,v 1.11.4.1 2002/10/19 14:49:03 amoll Exp $
+// $Id: displayProperties.h,v 1.11.4.2 2002/10/23 13:07:46 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
 #define BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
@@ -19,36 +19,8 @@
 # include <BALL/STRUCTURE/residueChecker.h>
 #endif
 
-#ifndef BALL_MOLVIEW_FUNCTOR_OBJECTSELECTOR_H
-# include <BALL/MOLVIEW/FUNCTOR/objectSelector.h>
-#endif
-
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLATOMBONDMODELCONNECTOR_H
 # include <BALL/MOLVIEW/GUI/FUNCTOR/glAtomBondModelConnector.h>
-#endif
-
-#ifndef BALL_MOLVIEW_FUNCTOR_REMOVEMODEL_H
-# include <BALL/MOLVIEW/FUNCTOR/removeModel.h>
-#endif
-
-#ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLBACKBONEMODEL_H
-# include <BALL/MOLVIEW/GUI/FUNCTOR/glBackboneModel.h>
-#endif
-
-#ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLBALLANDSTICKMODEL_H
-# include <BALL/MOLVIEW/GUI/FUNCTOR/glBallAndStickModel.h>
-#endif
-
-#ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLLINEMODEL_H
-# include <BALL/MOLVIEW/GUI/FUNCTOR/glLineModel.h>
-#endif
-
-#ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLSURFACEMODEL_H
-# include <BALL/MOLVIEW/GUI/FUNCTOR/glSurfaceModel.h>
-#endif
-
-#ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLVANDERWAALSMODEL_H
-# include <BALL/MOLVIEW/GUI/FUNCTOR/glVanDerWaalsModel.h>
 #endif
 
 #ifndef BALL_MOLVIEW_FUNCTOR_STANDARDCOLORCALCULATOR_H
@@ -106,7 +78,7 @@ namespace BALL
 				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/DIALOGS/displayProperties.h}
 		*/
 		class DisplayProperties 
-			: public BALL::MOLVIEW::DisplayPropertiesData,
+			: public DisplayPropertiesData,
 			  public ModularWidget
 		{
 			Q_OBJECT
@@ -538,8 +510,6 @@ namespace BALL
 			QString   precision_string_;
 			QString   coloring_method_string_;
 			ColorRGBA custom_color_;
-			
-			// MoleculeObjectProcessor object_processor_;
 			
 			bool distance_coloring_;
 			
