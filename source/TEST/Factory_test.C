@@ -1,4 +1,4 @@
-// $Id: Factory_test.C,v 1.1.2.1 2002/11/30 16:27:21 oliver Exp $
+// $Id: Factory_test.C,v 1.1.2.2 2002/12/02 06:20:01 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(Factory, "$Id: Factory_test.C,v 1.1.2.1 2002/11/30 16:27:21 oliver Exp $")
+START_TEST(Factory, "$Id: Factory_test.C,v 1.1.2.2 2002/12/02 06:20:01 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -15,12 +15,11 @@ START_TEST(Factory, "$Id: Factory_test.C,v 1.1.2.1 2002/11/30 16:27:21 oliver Ex
 using namespace BALL;
 
 CHECK(Factory::getDefault())
-	const Size& c_def = Factory<int>::getDefault();
-	Size& def = const_cast<Size&>(c_def);
+	Size& def(const_cast<Size&>(Factory<Size>::getDefault()));
 	def = 1234;
-	TEST_EQUAL(1234, Factory<int>::getDefault());
+	TEST_EQUAL(Factory<Size>::getDefault(), def);
 	def = 3456;
-	TEST_EQUAL(3456, Factory<int>::getDefault());
+	TEST_EQUAL(Factory<Size>::getDefault(), def);
 RESULT											
 
 CHECK(Factory::create())
