@@ -1,4 +1,4 @@
-// $Id: genericMolFile.h,v 1.3 2001/02/27 01:58:47 amoll Exp $
+// $Id: genericMolFile.h,v 1.4 2001/06/21 21:26:28 amoll Exp $
 
 #ifndef BALL_FORMAT_GENERICMOLFILE_H
 #define BALL_FORMAT_GENERICMOLFILE_H
@@ -16,8 +16,8 @@ namespace BALL
 	class Atom;
 	class System;
 
-	/**	Base class for all molecule file format classes. \\
-			{\bf Definition:} \URL{BALL/FORMAT/genericMolFile.h} \\
+	/**	Base class for all molecule file format classes. 
+			{\bf Definition:} \URL{BALL/FORMAT/genericMolFile.h} 
 	*/
 	class GenericMolFile
 		: public File

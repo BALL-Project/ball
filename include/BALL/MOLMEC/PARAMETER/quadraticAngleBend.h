@@ -1,6 +1,4 @@
-// $Id: quadraticAngleBend.h,v 1.9 2001/03/02 22:10:27 amoll Exp $
-// Molecular Mechanics Parameter: class describing the parameters required to
-// implement a harmonic potential describing angles
+// $Id: quadraticAngleBend.h,v 1.10 2001/06/21 21:29:41 amoll Exp $
  
 #ifndef BALL_MOLMEC_PARAMETER_QUADRATICANGLEBEND_H
 #define BALL_MOLMEC_PARAMETER_QUADRATICANGLEBEND_H
@@ -16,8 +14,10 @@
 namespace BALL 
 {
 		
-	/** QuadraticAngleBend.\\
-			{\bf Definition:}\URL{BALL/MOLMEC/PARAMETER/quadraticAngleBend.h}	
+	/** QuadraticAngleBend.
+			{\bf Definition:}\URL{BALL/MOLMEC/PARAMETER/quadraticAngleBend.h}	\\
+			Molecular Mechanics Parameter: class describing the parameters required to
+			implement a harmonic potential describing angles.
 	*/
 	class QuadraticAngleBend 
 		:	public ParameterSection

@@ -1,4 +1,4 @@
-// $Id: quaternion.h,v 1.27 2001/03/07 10:40:37 amoll Exp $
+// $Id: quaternion.h,v 1.28 2001/06/21 21:27:52 amoll Exp $
 
 #ifndef BALL_MATHS_QUATERNION_H
 #define BALL_MATHS_QUATERNION_H
@@ -20,13 +20,9 @@
 namespace BALL 
 {
 
-	/**	@name Quaternion
-			@memo representing a rotation in three dimensional space: class \Ref{TQuaternion} and class \Ref{Quaternion}
-	*/
-	//@{	
-
-	/**	Generic Quaternion Class. \\
-      {\bf Definition:} \URL{BALL/MATHS/quaternion.h} 
+	/**	Generic Quaternion Class. 
+      {\bf Definition:} \URL{BALL/MATHS/quaternion.h} \\
+			Representing a rotation in three dimensional space.
 	*/
 	template <typename T>
 	class TQuaternion
@@ -579,7 +575,6 @@ namespace BALL
 			{\tt (0.32 0.45 0.12 1.0)}
 			@param s	the output stream
 			@param q  the quaternion to write 
-
 	*/	
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TQuaternion<T>& q)
@@ -620,7 +615,6 @@ namespace BALL
 	*/
 	typedef TQuaternion<float> Quaternion;
 
-	//@}
 
 } // namespace BALL
 
