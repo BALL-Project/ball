@@ -1,4 +1,4 @@
-// $Id: vector4.h,v 1.37 2001/07/15 21:21:02 amoll Exp $
+// $Id: vector4.h,v 1.38 2001/07/16 02:19:58 oliver Exp $
 
 #ifndef BALL_MATHS_VECTOR4_H
 #define BALL_MATHS_VECTOR4_H
@@ -85,6 +85,14 @@ namespace BALL
 		*/
 		TVector4(const T* ptr)
 			throw(Exception::NullPointer);
+
+   /** Scalar constructor.
+        Create a new vector with all components set
+        to the same {\tt value}.
+        @param  value the value of all components
+    */
+    explicit TVector4(const T& value)
+      throw();                                                                                                                                                                     
 
 		/**	Detailed constructor.
 				Create a new TVector4 object from three or four values of type {\tt T}.
@@ -440,6 +448,17 @@ namespace BALL
 		z = *ptr++;
 		h = *ptr;
 	}
+
+
+  template <typename T>
+  TVector4<T>::TVector4(const T& value)
+    throw()
+    : x(value),
+      y(value),
+      z(value),
+			h(value)
+  {
+	}                                                                                                                                                                                
 
 	template <typename T>
 	TVector4<T>::TVector4(const T& x, const T& y, const T& z, const T& h)
