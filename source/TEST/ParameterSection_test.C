@@ -1,4 +1,4 @@
-// $Id: ParameterSection_test.C,v 1.7 2001/03/10 20:39:10 amoll Exp $
+// $Id: ParameterSection_test.C,v 1.8 2001/04/09 23:02:52 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(Parameters, "$Id: ParameterSection_test.C,v 1.7 2001/03/10 20:39:10 amoll Exp $")
+START_TEST(Parameters, "$Id: ParameterSection_test.C,v 1.8 2001/04/09 23:02:52 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -51,21 +51,27 @@ CHECK(ParameterSection::extractSection(Parameters& parameters, const String& sec
 	bool result = ps.extractSection(param, "Section1");
 	TEST_EQUAL(result, false)
 	TEST_EQUAL(ps.getSectionName(), "Section1")
+
 	result = ps.extractSection(param, "Section2");
 	TEST_EQUAL(result, true)
 	TEST_EQUAL(ps.getSectionName(), "Section2")
+
 	result = ps.extractSection(param, "Section3");
 	TEST_EQUAL(result, true)
 	TEST_EQUAL(ps.getSectionName(), "Section3")
+
 	result = ps.extractSection(param, "Section4");
 	TEST_EQUAL(result, false)
 	TEST_EQUAL(ps.getSectionName(), "Section4")
+
 	result = ps.extractSection(param, "Section5");
 	TEST_EQUAL(result, false)
 	TEST_EQUAL(ps.getSectionName(), "Section5")
+
 	result = ps.extractSection(param, "Section6");
 	TEST_EQUAL(result, false)
 	TEST_EQUAL(ps.getSectionName(), "Section6")
+
 	result = ps.extractSection(param, "");
 	TEST_EQUAL(result, false)
 	TEST_EQUAL(ps.getSectionName(), "")
