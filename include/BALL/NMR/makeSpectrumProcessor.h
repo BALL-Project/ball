@@ -1,4 +1,4 @@
-// $Id: makeSpectrumProcessor.h,v 1.4 2000/09/21 22:10:42 amoll Exp $
+// $Id: makeSpectrumProcessor.h,v 1.5 2000/09/22 17:18:29 oliver Exp $
 
 #ifndef BALL_NMR_MAKESPECTRUMPROCESSOR_H
 #define BALL_NMR_MAKESPECTRUMPROCESSOR_H
@@ -59,7 +59,7 @@ class MakeSpectrumProcessor
 			if object is kind of system 
 			the {\tt system\_} variable of NMRSpectrum {\tt spectrum\_} is set to this system
 	*/
-	virtual Processor::Result operator () (const Atom& atom);
+	virtual Processor::Result operator () (Atom& atom);
 	
 	//@}
 	protected:

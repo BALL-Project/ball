@@ -1,4 +1,4 @@
-// $Id: makeSpectrumProcessor.C,v 1.5 2000/09/21 22:10:24 amoll Exp $
+// $Id: makeSpectrumProcessor.C,v 1.6 2000/09/22 17:18:13 oliver Exp $
 
 #include<BALL/NMR/makeSpectrumProcessor.h>
 
@@ -19,10 +19,10 @@ namespace BALL
 		return true;
 	}
 
-	Processor::Result MakeSpectrumProcessor::operator () (const Atom& atom)
+	Processor::Result MakeSpectrumProcessor::operator () (Atom& atom)
 	{
 		// identify the system 
-		const Composite& root = atom.getRoot();
+		Composite& root = atom.getRoot();
 		if (RTTI::isKindOf<System>(root))
 		{
 			System* system = RTTI::castTo<System>(root);
