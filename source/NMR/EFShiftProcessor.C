@@ -1,9 +1,11 @@
-// $Id: EFShiftProcessor.C,v 1.8 2000/09/21 22:46:24 amoll Exp $
+// $Id: EFShiftProcessor.C,v 1.9 2000/09/22 11:59:48 oliver Exp $
 
 #include<BALL/NMR/EFShiftProcessor.h>
 #include <BALL/COMMON/limits.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/FORMAT/parameterSection.h>
+
+using namespace std;
 
 namespace BALL 
 {
