@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBAtom_test.C,v 1.11 2003/05/25 21:38:11 oliver Exp $
+// $Id: PDBAtom_test.C,v 1.12 2003/07/01 11:53:48 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -33,7 +33,7 @@ bool testEqual(const PDBAtom& a, const PDBAtom& b)
 				 a.getTemperatureFactor() == b.getTemperatureFactor();
 }
 
-START_TEST(PDBAtom, "$Id: PDBAtom_test.C,v 1.11 2003/05/25 21:38:11 oliver Exp $")
+START_TEST(PDBAtom, "$Id: PDBAtom_test.C,v 1.12 2003/07/01 11:53:48 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -43,14 +43,14 @@ START_TEST(PDBAtom, "$Id: PDBAtom_test.C,v 1.11 2003/05/25 21:38:11 oliver Exp $
 
 PDBAtom* pa = 0;
 
-CHECK(PDBAtom)
+CHECK(PDBAtom() throw())
 	pa = new PDBAtom;
 	TEST_NOT_EQUAL(pa, 0)
 	TEST_EQUAL(pa->isValid(), true)
 RESULT
 
 
-CHECK(~PDBAtom)
+CHECK(~PDBAtom() throw())
 	delete pa;	
 RESULT
 
@@ -58,7 +58,6 @@ RESULT
 Vector3 position(0.1, 1.1, 2.1);
 Vector3 velocity(3.1, 4.1, 5.1);
 Vector3 force(6.1, 7.1, 8.1);
-PDBAtom pdba;
 String filename;
 TextPersistenceManager  pm;
 using std::ofstream;
@@ -66,16 +65,16 @@ using std::ifstream;
 using std::ios;
 using namespace RTTI;
 
-CHECK(detailled cstr)
+CHECK(PDBAtom(Element& element, const String& name, const String& type_name = BALL_ATOM_DEFAULT_TYPE_NAME, Atom::Type atom_type = BALL_ATOM_DEFAULT_TYPE, const Vector3& position = Vector3(BALL_ATOM_DEFAULT_POSITION), const Vector3& velocity = Vector3(BALL_ATOM_DEFAULT_VELOCITY), const Vector3& force = Vector3(BALL_ATOM_DEFAULT_FORCE), float charge = BALL_ATOM_DEFAULT_CHARGE, float radius = BALL_ATOM_DEFAULT_RADIUS, char branch_designator =BALL_PDBATOM_DEFAULT_BRANCH_DESIGNATOR, char remoteness_indicator =BALL_PDBATOM_DEFAULT_REMOTENESS_INDICATOR, char alternate_location_indicator = BALL_PDBATOM_DEFAULT_ALTERNATE_LOCATION_INDICATOR, float occupancy = BALL_PDBATOM_DEFAULT_OCCUPANCY, float temperature_factor = BALL_PDBATOM_DEFAULT_TEMPERATURE_FACTOR) throw())
 	pa = new PDBAtom(PTE.getElement(1), "name", "type_name" , 0, position, velocity, force, 9.1, 10.1, 'a', 'b', 'c', 11.1, 12.1);
 	TEST_NOT_EQUAL(pa, 0)
 	TEST_EQUAL(pa->isValid(), true)
 	delete pa;
-	pdba = PDBAtom(PTE.getElement(1), "name", "type_name" , 0, position, velocity, force, 9.1, 10.1, 'a', 'b', 'c', 11.1, 12.1);
 RESULT
 
+PDBAtom pdba(PTE.getElement(1), "name", "type_name" , 0, position, velocity, force, 9.1, 10.1, 'a', 'b', 'c', 11.1, 12.1);
 
-CHECK(cpy cstr)
+CHECK(PDBAtom(const PDBAtom& pdb_atom, bool deep = true) throw())
 	PDBAtom* p2 = new PDBAtom(pdba);
 	TEST_NOT_EQUAL(p2, 0)
 	TEST_EQUAL(testEqual(pdba, *p2), true)
@@ -83,21 +82,21 @@ CHECK(cpy cstr)
 RESULT
 
 
-CHECK(PDBAtom::bool operator == (const PDBAtom& pdb_atom) const  throw())
+CHECK(bool operator == (const PDBAtom& pdb_atom) const throw())
   PDBAtom p2;
 	TEST_EQUAL(pdba == p2, false)
 	TEST_EQUAL(p2 == p2, true)
 RESULT
 
 
-CHECK(PDBAtom::bool operator != (const PDBAtom& pdb_atom) const  throw())
+CHECK(bool operator != (const PDBAtom& pdb_atom) const throw())
   PDBAtom p2;
 	TEST_EQUAL(pdba != p2, true)
 	TEST_EQUAL(p2 != p2, false)
 RESULT
 
 
-CHECK(PDBAtom::persistentWrite(PersistenceManager& pm, const char* name = 0) const  throw())
+CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const throw(Exception::GeneralException))
 	NEW_TMP_FILE(filename)
 	ofstream  ofile(filename.c_str(), std::ios::out);
 	pm.setOstream(ofile);
@@ -106,7 +105,7 @@ CHECK(PDBAtom::persistentWrite(PersistenceManager& pm, const char* name = 0) con
 RESULT
 
 
-CHECK(PDBAtom::persistentRead(PersistenceManager& pm) throw())
+CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralException))
 	ifstream  ifile(filename.c_str());
 	pm.setIstream(ifile);
 	PersistentObject* ptr;
@@ -125,28 +124,28 @@ CHECK(PDBAtom::persistentRead(PersistenceManager& pm) throw())
 RESULT
 
 
-CHECK(PDBAtom::set(const PDBAtom& pdb_atom, bool deep = true) throw())
+CHECK(void set(const PDBAtom& pdb_atom, bool deep = true) throw())
   PDBAtom p2;
 	p2.set(pdba);
 	TEST_EQUAL(testEqual(pdba, p2), true)
 RESULT
 
 
-CHECK(PDBAtom::get(PDBAtom& pdb_atom, bool deep = true) const  throw())
+CHECK(void get(PDBAtom& pdb_atom, bool deep = true) const throw())
   PDBAtom p2;
 	pdba.get(p2);
 	TEST_EQUAL(testEqual(pdba, p2), true)
 RESULT
 
 
-CHECK(PDBAtom::PDBAtom& operator = (const PDBAtom& pdb_atom) throw())
+CHECK(PDBAtom& operator = (const PDBAtom& pdb_atom) throw())
   PDBAtom p2;
 	p2 = pdba;
 	TEST_EQUAL(testEqual(pdba, p2), true)
 RESULT
 
 
-CHECK(PDBAtom::swap(PDBAtom& pdb_atom) throw())
+CHECK(void swap(PDBAtom& pdb_atom) throw())
   PDBAtom p2(pdba);
 	p2.setTemperatureFactor((float)99.9);
 	pdba.swap(p2);
@@ -161,7 +160,7 @@ Protein p;
 Chain c;
 Residue r;
 
-CHECK(PDBAtom::getProtein() throw())
+CHECK(Protein* getProtein() throw())
   TEST_EQUAL(pdba.getProtein(), 0)
 	p.insert(pdba);
 	pdba.getProtein()->setName("protein");
@@ -171,7 +170,7 @@ CHECK(PDBAtom::getProtein() throw())
 RESULT
 
 
-CHECK(PDBAtom::getProtein() const  throw())
+CHECK(const Protein* getProtein() const throw())
 	const PDBAtom& p2(pdba);
   TEST_EQUAL(p2.getProtein(), 0)
 	p.insert(pdba);
@@ -182,7 +181,7 @@ RESULT
 
 c.insert(r);
 
-CHECK(PDBAtom::getChain() throw())
+CHECK(Chain* getChain() throw())
   TEST_EQUAL(pdba.getChain(), 0)
 	r.insert(pdba);
 	pdba.getChain()->setName("protein");
@@ -192,7 +191,7 @@ CHECK(PDBAtom::getChain() throw())
 RESULT
 
 
-CHECK(PDBAtom::getChain() const  throw())
+CHECK(const Chain* getChain() const throw())
 	const PDBAtom& p2(pdba);
   TEST_EQUAL(p2.getChain(), 0)
 	r.insert(pdba);
@@ -201,7 +200,7 @@ CHECK(PDBAtom::getChain() const  throw())
 	r.remove(pdba);
 RESULT
 
-CHECK(PDBAtom::getResidue() throw())
+CHECK(Residue* getResidue() throw())
   TEST_EQUAL(pdba.getResidue(), 0)
 	r.insert(pdba);
 	pdba.getResidue()->setName("protein");
@@ -211,7 +210,7 @@ CHECK(PDBAtom::getResidue() throw())
 RESULT
 
 
-CHECK(PDBAtom::getResidue() const  throw())
+CHECK(const Residue* getResidue() const throw())
 	const PDBAtom& p2(pdba);
   TEST_EQUAL(p2.getResidue(), 0)
 	r.insert(pdba);
@@ -221,47 +220,101 @@ CHECK(PDBAtom::getResidue() const  throw())
 RESULT
 
 
-CHECK(setBranchDesignator/getBranchDesignator)
+CHECK(void setBranchDesignator(char branch_designator) throw())
 	PDBAtom p2;
 	p2.setBranchDesignator('A');
 	TEST_EQUAL(p2.getBranchDesignator(), 'A')
 RESULT
 
+CHECK(char getBranchDesignator() const throw())
+	PDBAtom p;
+	TEST_EQUAL(p.getBranchDesignator(), ' ')
+RESULT
 
-CHECK(setRemotenessIndicator/getRemotenessIndicator)
+CHECK(void setRemotenessIndicator(char remoteness_indicator) throw())
 	PDBAtom p2;
 	p2.setRemotenessIndicator('B');
 	TEST_EQUAL(p2.getRemotenessIndicator(), 'B')
 RESULT
 
+CHECK(char getRemotenessIndicator() const throw())
+	PDBAtom p;
+	TEST_EQUAL(p.getRemotenessIndicator(), ' ')
+RESULT
 
-CHECK(setAlternateLocationIndicator/getAlternateLocationIndicator)
+CHECK(void setAlternateLocationIndicator(char alternate_location_indicator) throw())
 	PDBAtom p2;
 	p2.setAlternateLocationIndicator('B');
 	TEST_EQUAL(p2.getAlternateLocationIndicator(), 'B')
 RESULT
 
+CHECK(char getAlternateLocationIndicator() const throw())
+	PDBAtom p;
+	TEST_EQUAL(p.getAlternateLocationIndicator(), ' ')
+RESULT
 
-CHECK(setOccupancy/getOccupancy)
+CHECK(void setOccupancy(float occupancy) throw())
 	PDBAtom p2;
 	p2.setOccupancy(12.23);
 	TEST_REAL_EQUAL(p2.getOccupancy(), (float) 12.23)
 RESULT
 
+CHECK(float getOccupancy() const throw())
+	PDBAtom p;
+	TEST_REAL_EQUAL(p.getOccupancy(), 1)
+RESULT
 
-CHECK(setTemperatureFactor/getTemperatureFactor)
+CHECK(void setTemperatureFactor(float temperature_factor) throw())
 	PDBAtom p2;
 	p2.setTemperatureFactor(23.34);
 	TEST_REAL_EQUAL(p2.getTemperatureFactor(), (float) 23.34)
 RESULT
 
+CHECK(float getTemperatureFactor() const throw())
+	PDBAtom p;
+	TEST_REAL_EQUAL(p.getTemperatureFactor(), 0)
+RESULT
 
-CHECK(PDBAtom::dump(std::ostream& s = std::cout, Size depth = 0) const  throw())
+CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw())
 	NEW_TMP_FILE(filename)
 	std::ofstream outfile(filename.c_str(), std::ios::out);
 	pdba.dump(outfile);
 	outfile.close();
 	TEST_FILE_REGEXP(filename.c_str(), "data/PDBAtom_test_dump.txt")
+RESULT
+
+CHECK(BALL_CREATE_DEEP(PDBAtom))
+	PDBAtom empty;
+	PDBAtom p(PTE.getElement(1), "name", "type_name" , 0, position, velocity, force, 9.1, 10.1, 'a', 'b', 'c', 11.1, 12.1);
+	PDBAtom* test;
+	test = (PDBAtom*) p.create(false, true);
+	TEST_EQUAL(testEqual(*test, empty), true)
+	delete test;
+	test = (PDBAtom*) p.create(true, false);
+	TEST_EQUAL(testEqual(*test, p), true)
+	delete test;
+RESULT
+
+CHECK(PDBAtom(const String& name) throw())
+	PDBAtom p("pdbatom1");
+	TEST_EQUAL(p.getName(), "pdbatom1")
+	p.setName("");
+	PDBAtom empty;
+	TEST_EQUAL(testEqual(empty, p), true)
+RESULT
+
+CHECK(void clear() throw())
+	PDBAtom empty;
+	PDBAtom p(PTE.getElement(1), "name", "type_name" , 0, position, velocity, force, 9.1, 10.1, 'a', 'b', 'c', 11.1, 12.1);
+	p.clear();
+	TEST_EQUAL(testEqual(empty, p), true)
+RESULT
+
+CHECK(void destroy() throw())
+	PDBAtom empty;
+	PDBAtom p(PTE.getElement(1), "name", "type_name" , 0, position, velocity, force, 9.1, 10.1, 'a', 'b', 'c', 11.1, 12.1);
+	p.destroy();
+	TEST_EQUAL(testEqual(empty, p), true)
 RESULT
 
 /////////////////////////////////////////////////////////////
