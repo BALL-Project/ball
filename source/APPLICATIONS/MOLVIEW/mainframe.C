@@ -76,6 +76,9 @@ Mainframe::Mainframe(QWidget* parent, const char* name)
 	hor_splitter_ = new QSplitter(vert_splitter_, "HorSplitter");
 	CHECK_PTR(hor_splitter_);
 
+	FDPB_dialog_ = new FDPBDialog(this);
+	CHECK_PTR(FDPB_dialog_);
+
 	control_ = new MolecularControl(hor_splitter_);
 	CHECK_PTR(control_);
 
@@ -105,9 +108,6 @@ Mainframe::Mainframe(QWidget* parent, const char* name)
 
 	logview_ = new LogView(vert_splitter_);
 	CHECK_PTR(logview_);
-
-	FDPB_dialog_ = new FDPBDialog(this);
-	CHECK_PTR(FDPB_dialog_);
 
 	#ifdef BALL_PYTHON_SUPPORT
 		PyWidget* py_widget = new PyWidget(vert_splitter_);
