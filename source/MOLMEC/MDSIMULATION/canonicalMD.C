@@ -1,4 +1,4 @@
-// $Id: canonicalMD.C,v 1.10 2001/01/29 18:36:49 anker Exp $
+// $Id: canonicalMD.C,v 1.11 2001/02/01 16:43:40 anker Exp $
 
 // BALL includes 
 #include <BALL/MOLMEC/MDSIMULATION/canonicalMD.h>
@@ -156,7 +156,7 @@ namespace BALL
 		Atom* atom_ptr;
 		Size index = 0;
 		mass_factor_.resize(atom_vector_.size());
-		for (it = atom_vector_.begin(); +it; ++it, ++index)
+		for (it = atom_vector_.begin(); it != atom_vector_.end(); ++it, ++index)
 		{
 			// Factor1 = time_step_ * time_step_ / (2 * mass)
 			// Factor2 = time_step_ / (2 * mass)
@@ -303,7 +303,7 @@ namespace BALL
 		}
 
 		// Calculate the forces at the beginning of the simulation
-		force_field_ptr_->updateForces ();
+		force_field_ptr_->updateForces();
 
 		// This is the main loop of the MD simulation. The Velocity-Verlet method
 		// is used for the propagation of atomic positions and velocities.
