@@ -1,4 +1,4 @@
-// $Id: enumerator.h,v 1.12 2001/06/26 08:57:22 anker Exp $
+// $Id: enumerator.h,v 1.13 2001/07/09 19:17:30 anker Exp $
 
 #ifndef BALL_CONCEPT_ENUMERATOR_H
 #define BALL_CONCEPT_ENUMERATOR_H
@@ -29,6 +29,7 @@ namespace BALL
 			The Enumerator class provides means for enumerating all possible
 			permutations of the variants given in a list (@see BAUSTELLE). 
 			Each permutation thus can be denoted by an integer.
+			\\
 			{\bf Definition:} \URL{BALL/CONCEPT/enumerator.h}
 	*/
 	class EnumeratorIndex
@@ -46,9 +47,12 @@ namespace BALL
 		class IncompatibleIndex
 			: public Exception::GeneralException
 		{
+
 			public:
-				IncompatibleIndex(const char* file, int line)
-					throw();
+
+			IncompatibleIndex(const char* file, int line)
+				throw();
+
 		};
 
 		//@}
@@ -61,6 +65,8 @@ namespace BALL
 		EnumeratorIndex()
 			throw();
 
+		// BAUSTELLE:
+		// this implementation should vanish (see below)
 		/** Detailed Constructor
 			  @param variant_list the list of variants to be applied
 		 */
@@ -85,6 +91,7 @@ namespace BALL
 			}
 		}
 
+
 		/** Destructor
 		 */
 		~EnumeratorIndex()
@@ -100,8 +107,9 @@ namespace BALL
 		const std::vector<Size>& getModulus() const
 			throw();
 
-		/** increment an instance of EnumeratorIndex. Increment the least
-			  significant component and apply any overflow to more signficant components.
+		/** increment an instance of EnumeratorIndex. 
+				Increment the least significant component and apply any overflow to
+				more signficant components.
 		 */
 		EnumeratorIndex& operator ++ ()
 			throw(Exception::IndexOverflow);
@@ -146,6 +154,33 @@ namespace BALL
 		std::vector<Size>		 modulus_;
 		std::vector<Size>		 base_multipliers_;
 	};
+
+
+	/*	BAUSTELLE:
+			This should be the place where this method shoulf be implemented, but
+			I still get nasty error messages...
+
+	template <typename Variant, typename VariantIterator>
+	EnumeratorIndex<Variant, VariantIterator>::EnumeratorIndex(const ::std::list< ::std::pair< VariantIterator, ::std::vector<Variant> > >& variant_list)
+		throw()
+		: ::std::vector<Position>(variant_list.size()),
+			modulus_(variant_list.size()),
+			base_multipliers_(variant_list.size())
+	{ 
+		// compute the base multipliers for later usage 
+		Index i;
+		Size multiplier = 1;
+		typename std::list<std::pair<VariantIterator, std::vector<Variant> > >::const_iterator list_it = variant_list.begin();
+		for (i = size() - 1; i >= 0; i--, list_it++)
+		{
+			operator[](i) = 0;
+			modulus_[i] = list_it->second.size();
+
+			base_multipliers_[i] = multiplier;
+			multiplier *= modulus_[i];
+		}
+	}
+	*/
 
 	/** @name Predicates for EnumeratorIndex class
 	 */
