@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.196 2003/06/19 10:45:52 oliver Exp $
+# $Id: Makefile,v 1.197 2003/06/19 17:05:33 oliver Exp $
 #
 
 DIRECTORY=TEST
@@ -155,7 +155,8 @@ EXECUTABLES_NMR = \
 	ShiftModel_test\
 	ShiftModule_test\
 	Spectrum_test\
-	Peak_test
+	Peak_test\
+	PeakList_test
 
 EXECUTABLES_FORMATS =\
 	LineBasedFile_test\
