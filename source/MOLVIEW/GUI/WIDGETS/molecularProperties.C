@@ -1,7 +1,8 @@
-// $Id: molecularProperties.C,v 1.7.4.2 2002/10/19 12:07:26 amoll Exp $
+// $Id: molecularProperties.C,v 1.7.4.3 2002/11/29 00:39:00 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/WIDGETS/molecularProperties.h>
 #include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
+#include <BALL/MOLVIEW/FUNCTOR/objectSelector.h>
 
 
 using namespace std;
@@ -33,8 +34,7 @@ namespace BALL
     {
 			if (RTTI::isKindOf<NewCompositeMessage>(*message))
 			{
-				NewCompositeMessage *composite_message 
-					= RTTI::castTo<NewCompositeMessage>(*message);
+				NewCompositeMessage *composite_message = RTTI::castTo<NewCompositeMessage>(*message);
 				
 				// properties will be used only for atom containers
 				if (!RTTI::isKindOf<AtomContainer>(*(composite_message->getComposite())))
@@ -139,7 +139,33 @@ namespace BALL
 					}
 				}
 			}
+			else if(RTTI::isKindOf<CompositeSelectedMessage>(*message))
+			{
+				// Information from Control: 1 Composite selected or deselected.
+				CompositeSelectedMessage * selection_message = RTTI::castTo<CompositeSelectedMessage>(*message);
+				if (selection_message->selected_) 
+				{
+					// select the geometric objects of the composite
+					ObjectSelector selector;
+					selection_message->composite_->apply(selector);
+				}
+				else
+				{
+					// deselect the geometric objects of the composite
+					ObjectDeselector deselector;
+					selection_message->composite_->apply(deselector);
+				}
+				// Inform the Scene of the changes
+				ChangedCompositeMessage* cc_message = new ChangedCompositeMessage;
+				cc_message->setComposite(selection_message->composite_);
+				notify_(cc_message);
+
+				SceneMessage* scene_message = new SceneMessage;
+				scene_message->updateOnly();
+				notify_(scene_message);
+			}
     }
+
 
 	} // namespace MOLVIEW
 
