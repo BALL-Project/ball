@@ -1,9 +1,6 @@
-// $Id: atomicContactEnergy.C,v 1.1 2000/09/05 14:29:15 oliver Exp $
+// $Id: atomicContactEnergy.C,v 1.1.4.1 2002/05/23 23:53:38 oliver Exp $
 
 #include <BALL/ENERGY/atomicContactEnergy.h>
-
-#include <strstream>
-#include <stdio.h>
 
 #include <BALL/common.h>
 #include <BALL/SYSTEM/path.h>
