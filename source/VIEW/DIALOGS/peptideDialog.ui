@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>PeptideDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -7,7 +7,7 @@
     <property name="geometry">
         <rect>
             <x>0</x>
-            <y>0</y>
+            <y>1</y>
             <width>385</width>
             <height>240</height>
         </rect>
@@ -1030,6 +1030,35 @@
         <slot>insert_seq()</slot>
     </connection>
 </connections>
+<tabstops>
+    <tabstop>sequence</tabstop>
+    <tabstop>back_button</tabstop>
+    <tabstop>close_button</tabstop>
+    <tabstop>alpha</tabstop>
+    <tabstop>phi</tabstop>
+    <tabstop>psi</tabstop>
+    <tabstop>omega</tabstop>
+    <tabstop>ala</tabstop>
+    <tabstop>arg</tabstop>
+    <tabstop>asn</tabstop>
+    <tabstop>asp</tabstop>
+    <tabstop>cys</tabstop>
+    <tabstop>gln</tabstop>
+    <tabstop>glu</tabstop>
+    <tabstop>gly</tabstop>
+    <tabstop>his</tabstop>
+    <tabstop>ile</tabstop>
+    <tabstop>leu</tabstop>
+    <tabstop>lys</tabstop>
+    <tabstop>met</tabstop>
+    <tabstop>phe</tabstop>
+    <tabstop>pro</tabstop>
+    <tabstop>ser</tabstop>
+    <tabstop>thr</tabstop>
+    <tabstop>trp</tabstop>
+    <tabstop>tyr</tabstop>
+    <tabstop>val</tabstop>
+</tabstops>
 <slots>
     <slot>insert_seq()</slot>
     <slot>arg_pressed()</slot>

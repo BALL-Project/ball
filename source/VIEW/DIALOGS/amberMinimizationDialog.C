@@ -3,6 +3,7 @@
 //
 
 #include <BALL/VIEW/DIALOGS/amberMinimizationDialog.h>
+#include <BALL/VIEW/DIALOGS/advancedOptionsDialog.h>
 #include <qfiledialog.h>
 #include <qlineedit.h>
 #include <qradiobutton.h>
@@ -15,6 +16,8 @@ namespace BALL
 AmberMinimizationDialog::AmberMinimizationDialog(QWidget* parent, const char* name)
 	:	AmberMinimizationDialogData( parent, name )
 {
+	use_dddc = false;
+	ini = "Amber/amber96.ini";
 }
 
 AmberMinimizationDialog::~AmberMinimizationDialog()
@@ -174,18 +177,17 @@ String AmberMinimizationDialog::getFilename() const
 
 void AmberMinimizationDialog::setFilename(const String& filename)
 {
-	parameter_file_edit->setText(filename.c_str());
-	parameter_file_edit->update();
+	ini = filename;
 }
 
 bool AmberMinimizationDialog::getUseDistanceDependentDC() const
 {
-	return distance_button->isChecked();
+	return use_dddc;
 }
 
-void AmberMinimizationDialog::setUseDistanceDependentDC(bool use_dddc)
+void AmberMinimizationDialog::setUseDistanceDependentDC(bool usedddc)
 {
-	distance_button->setChecked(use_dddc);
+	use_dddc=usedddc;
 }
 
 bool AmberMinimizationDialog::getUseConjugateGradient() const
@@ -196,6 +198,22 @@ bool AmberMinimizationDialog::getUseConjugateGradient() const
 void AmberMinimizationDialog::setUseConjugateGradient(bool use_CG)
 {
 	conjugate_button->setChecked(use_CG);
+}
+
+void AmberMinimizationDialog::advancedOptions()
+{
+	advancedOptionsDialog* dialog = new advancedOptionsDialog();
+	if(dialog->exec() == QDialog::Accepted )
+	{
+		// set inifile to chosen file
+		String filename = (dialog->parameter_file_edit)->text().ascii();
+		ini = filename;
+		// show chosen amber-ini-file in line edit
+		parameter_file_edit->setText(filename);
+		// set use_dddc
+		use_dddc = dialog->getUseDistanceDependentDC();
+	}
+	delete dialog;
 }
 
 }} //namespaces

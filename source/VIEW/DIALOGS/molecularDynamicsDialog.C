@@ -3,6 +3,8 @@
 //
 
 #include <BALL/VIEW/DIALOGS/molecularDynamicsDialog.h>
+#include <BALL/VIEW/DIALOGS/advancedOptionsDialog.h>
+
 #include <qfiledialog.h>
 #include <qlineedit.h>
 #include <qradiobutton.h>
@@ -16,6 +18,8 @@ namespace BALL
 MolecularDynamicsDialog::MolecularDynamicsDialog(QWidget* parent, const char* name)
 	:	MolecularDynamicsDialogData( parent, name )
 {
+	usedddc = false;
+	ini = "Amber/amber96.ini";
 }
 
 MolecularDynamicsDialog::~MolecularDynamicsDialog()
@@ -79,7 +83,7 @@ void MolecularDynamicsDialog::readPreferences(const INIFile& inifile)
 	{
 		 setTemperature(inifile.getValue("MDSIMULATION", "Temperature").toFloat());
 	}
-	
+
 	// the AMBER options
 	if (inifile.hasEntry("AMBER", "Filename"))
 	{
@@ -88,7 +92,7 @@ void MolecularDynamicsDialog::readPreferences(const INIFile& inifile)
 }
 
 
-float MolecularDynamicsDialog::getSimulationTime() const	
+float MolecularDynamicsDialog::getSimulationTime() const
 {
 	try
 	{
@@ -137,24 +141,23 @@ void MolecularDynamicsDialog::setNumberOfSteps(Size steps)
 const String& MolecularDynamicsDialog::getFilename() const
 {
 	static String filename;
-	filename = parameter_file_edit->text().ascii();
+	filename = ini;
 	return filename;
 }
 
 void MolecularDynamicsDialog::setFilename(const String& filename)
 {
-	parameter_file_edit->setText(filename.c_str());
-	parameter_file_edit->update();
+	ini = filename;
 }
 
 bool MolecularDynamicsDialog::getUseDistanceDependentDC() const
 {
-	return distance_button->isChecked();
+	return usedddc;
 }
 
 void MolecularDynamicsDialog::setUseDistanceDependentDC(bool use_dddc)
 {
-	distance_button->setChecked(use_dddc);
+	usedddc=use_dddc;
 }
 
 bool MolecularDynamicsDialog::useMicroCanonical() const
@@ -196,8 +199,8 @@ void MolecularDynamicsDialog::setTemperature(float temperature)
 	temperature_lineedit->setText(String(temperature).c_str());
 }
 
-bool MolecularDynamicsDialog::saveImages() const 
-{ 
+bool MolecularDynamicsDialog::saveImages() const
+{
 	return export_images->isChecked();
 }
 
@@ -212,9 +215,25 @@ String MolecularDynamicsDialog::getDCDFile() const
 	return String(dcd_file_edit->text().ascii());
 }
 
-Size MolecularDynamicsDialog::getStepsBetweenRefreshs() const 
-{ 
+Size MolecularDynamicsDialog::getStepsBetweenRefreshs() const
+{
 	return String(refresh_lineedit->text().ascii()).toUnsignedInt();
+}
+
+void MolecularDynamicsDialog::advancedOptions()
+{
+	advancedOptionsDialog* dialog = new advancedOptionsDialog();
+	if( dialog->exec() == QDialog::Accepted )
+	{
+		// set inifile to chosen file
+		String filename = (dialog->parameter_file_edit)->text().ascii();
+		ini = filename;
+		// show chosen amber-ini-file in line edit
+		parameter_file_edit->setText(filename);
+		// set use_dddc
+		usedddc = dialog->getUseDistanceDependentDC();
+	}
+	delete dialog;
 }
 
 }} //namespaces

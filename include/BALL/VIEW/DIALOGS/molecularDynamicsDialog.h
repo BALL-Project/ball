@@ -23,6 +23,8 @@ class MolecularDynamicsDialog
 {
     Q_OBJECT
 
+		bool usedddc;
+		String ini;
 		public:
 
 		///
@@ -84,9 +86,11 @@ class MolecularDynamicsDialog
 
 		///
 		Size getStepsBetweenRefreshs() const;
+		
+		void advancedOptions();
 
 		protected slots:
-    virtual void browseParameterFiles();
+		virtual void browseParameterFiles();
 
 		virtual void enableDCDFileSelected();
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.93 2003/11/12 09:38:50 bender Exp $
+// $Id: mainframe.C,v 1.94 2003/11/26 09:05:18 bender Exp $
 //
 
 #include "mainframe.h"
@@ -432,7 +432,7 @@ void Mainframe::amberMinimization()
 	amber->options[AmberFF::Option::OVERWRITE_TYPENAMES] = "true";
 	amber->options[AmberFF::Option::DISTANCE_DEPENDENT_DIELECTRIC] = String(minimization_dialog_->getUseDistanceDependentDC());
 	amber->options[AmberFF::Option::FILENAME] = filename;
-
+	
 	if (!amber->setup(*system))
 	{
 		Log.error() << "Setup of AMBER force field failed." << endl;

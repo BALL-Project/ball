@@ -22,7 +22,9 @@ class AmberMinimizationDialog
 	: public AmberMinimizationDialogData
 {
     Q_OBJECT
-
+		bool use_dddc;
+		String ini;
+		
 		public:
 
 		///
@@ -79,6 +81,8 @@ class AmberMinimizationDialog
 		///
 		void setUseConjugateGradient(bool use_CG);
 	
+		///
+		void advancedOptions();
 		protected slots:
     virtual void browseParameterFiles();
 };
