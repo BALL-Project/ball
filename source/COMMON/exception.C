@@ -1,4 +1,4 @@
-// $Id: exception.C,v 1.18 2000/10/08 23:28:55 amoll Exp $
+// $Id: exception.C,v 1.19 2000/10/23 10:21:53 anker Exp $
 
 #include <BALL/COMMON/exception.h>
 #include <BALL/COMMON/logStream.h>
@@ -176,6 +176,8 @@ namespace BALL
 			DEF_EXCEPTION(DivisionByZero, "a division by zero was requested")
 
 			DEF_EXCEPTION(InvalidRange, "the range of the operation was invalid")
+
+			DEF_EXCEPTION(OutOfRange, "the argument was not in range")
 
 			DEF_EXCEPTION(NullPointer, "a null pointer was specified")
 

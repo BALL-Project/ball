@@ -1,4 +1,4 @@
-// $Id: exception.h,v 1.18 2000/10/08 23:28:51 amoll Exp $
+// $Id: exception.h,v 1.19 2000/10/23 10:19:27 anker Exp $
    
 #ifndef BALL_COMMON_EXCEPTION_H
 #define BALL_COMMON_EXCEPTION_H
@@ -166,6 +166,18 @@ namespace BALL
 		{
 			public:
 			InvalidRange(const char* file, int line);
+		};
+
+
+		/**	Out of range.
+				Use this exception to indicate that a given value is out of a
+				defined range, i. e. not within the domain of a function.
+		*/
+		class OutOfRange 
+			: public GeneralException
+		{
+			public:
+			OutOfRange(const char* file, int line);
 		};
 
 		/**	Invalid format.
