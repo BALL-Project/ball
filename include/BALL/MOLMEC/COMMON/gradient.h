@@ -1,4 +1,4 @@
-// $Id: gradient.h,v 1.6 2001/03/02 00:34:15 amoll Exp $ 
+// $Id: gradient.h,v 1.7 2001/06/21 02:23:13 oliver Exp $ 
 // A conjugate gradient minimizer for geometry optimisation
 
 #ifndef BALL_MOLMEC_COMMON_GRADIENT_H 
@@ -117,7 +117,9 @@ namespace BALL
 
     /* Return the component for an atom.
     */
-    using std::vector<Vector3>::operator [];
+		//BAUSTELLE: GCC3 using std::vector<Vector3>::operator [];
+		const Vector3& operator [] (int i) const { return std::vector<Vector3>::operator [] (i); }
+		Vector3& operator [] (int i) { return std::vector<Vector3>::operator [] (i); }
 
 		/**	Invalidate the gradient.
 		*/	
@@ -134,11 +136,15 @@ namespace BALL
 			
 		/**	Return an iterator to the begining of the vector
 		*/
-		using std::vector<Vector3>::begin;
+		//BAUSTELLE: GCC3 using std::vector<Vector3>::begin;
+		Iterator begin() { return vector<Vector3>::begin(); }
+		ConstIterator begin() const { return vector<Vector3>::begin(); }
 
 		/**	Return a past-the-end vector.
 		*/
-		using std::vector<Vector3>::end;
+		//BAUSTELLE: GCC3 using std::vector<Vector3>::end;
+		Iterator end() { return vector<Vector3>::end(); }
+		ConstIterator end() const { return vector<Vector3>::end(); }
 
 		//@}
     /**	@name	Public Attributes
