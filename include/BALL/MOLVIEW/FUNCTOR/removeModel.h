@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: removeModel.h,v 1.11 2002/12/12 09:48:48 oliver Exp $
+// $Id: removeModel.h,v 1.12 2003/02/19 13:16:03 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_REMOVEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_REMOVEMODEL_H
@@ -23,7 +23,9 @@ namespace BALL
 				documentation. \\
 				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/removeModel.h}
 		*/
-		class RemoveModel: public AtomBondModelBaseProcessor
+		class RemoveModel: 
+			public AtomBondModelBaseProcessor,
+			public UnaryProcessor<Composite*>
 		{
 			public:
 
@@ -133,6 +135,10 @@ namespace BALL
 					@see    Atom
 			*/
 			virtual Processor::Result operator() (Composite& composite);
+
+			///
+			virtual Processor::Result operator() (Composite*& composite)
+			{ return operator() (*composite);}
 
 			//@}
 			/**	@name	debuggers and diagnostics

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceModel.h,v 1.8 2002/12/18 03:13:01 amoll Exp $
+// $Id: surfaceModel.h,v 1.9 2003/02/19 13:16:03 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_SURFACEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_SURFACEMODEL_H
@@ -36,7 +36,9 @@ namespace BALL
 				@see     Mesh
 				@see     SurfaceProcessor
 		*/
-		class AddSurfaceModel: public BaseModelProcessor
+		class AddSurfaceModel
+			: public BaseModelProcessor,
+				public UnaryProcessor<Composite*>
 		{
 			public:
 
@@ -130,6 +132,10 @@ namespace BALL
 			*/
 			virtual Processor::Result operator() (Composite& composite);
 
+			///
+			virtual Processor::Result operator() (Composite*& composite)
+			{ return operator() (*composite);}
+
 			//@}
 			/**	@name	debuggers and diagnostics
 			*/
@@ -174,9 +180,11 @@ namespace BALL
 
 		  private:
 
-			bool 				get_composite_;
+			bool 							get_composite_;
 
-			Composite* 	start_composite_;
+			Composite* 				start_composite_;
+
+			List<Composite*> 	composites_;
 		};
 
 	} // namespace MOLVIEW
