@@ -1,4 +1,4 @@
-// $Id: molecularDynamics.sip,v 1.1 2001/09/03 16:53:09 oliver Exp $
+// $Id: molecularDynamics.sip,v 1.2 2003/03/25 17:08:58 anhi Exp $
 
 class MolecularDynamics
 {
@@ -51,7 +51,7 @@ class MolecularDynamics
   void setEnergyOutputFrequency (Size /number/);
   void setSnapShotFrequency (Size /number/);
   Size getEnergyOutputFrequency () const;
-  Size getNumberOfIteration () const;
+  Size getNumberOfIterations () const;
   Size getMaximalNumberOfIterations () const;
   double getMaximalSimulationTime () const;
   double getTimeStep () const; 

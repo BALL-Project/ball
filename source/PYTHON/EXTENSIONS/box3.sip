@@ -1,4 +1,4 @@
-// $Id: box3.sip,v 1.3 2001/12/27 11:47:18 oliver Exp $
+// $Id: box3.sip,v 1.4 2003/03/25 17:08:56 anhi Exp $
 
 class Box3
 {
@@ -36,12 +36,12 @@ class Box3
   // void dump(std::ostream& s = std::cout, Size depth = 0) const;
   Vector3 a;
   Vector3 b;
-	PyMethod __str__
+	char *__str__() /NoLazy/;
 %MemberCode
   	Box3* ptr;
-	  if ((ptr = (Box3*)sipGetCppPtr((sipThisType*)a0,sipClass_Box3)) == NULL)
-	    return NULL;
 
+	 if (sipParseArgs(&sipArgsParsed,sipArgs,"n",sipClass_Box3,&ptr))
+	 {
    static String tmp;
    tmp = "Box3 { (";
    tmp += String(ptr->a.x) + " ";
@@ -51,5 +51,10 @@ class Box3
    tmp += String(ptr->b.y) + " ";
    tmp += String(ptr->b.z) + ") }";
    return PyString_FromString(tmp.c_str());
+	 }
+	 else
+	 {
+		 return NULL;
+	 }
 %End
 };

@@ -1,4 +1,4 @@
-// $Id: conjugateGradient.sip,v 1.1 2001/09/03 16:53:06 oliver Exp $
+// $Id: conjugateGradient.sip,v 1.2 2003/03/25 17:08:57 anhi Exp $
 
 class ConjugateGradientMinimizer 
   : EnergyMinimizer
@@ -29,13 +29,12 @@ class ConjugateGradientMinimizer
   ConjugateGradientMinimizer
    (ForceField& /force_field/, SnapShotManager* /ssm/, const Options& /options/);
   ConjugateGradientMinimizer(ForceField& /force_field/, const Options& /options/);
-  ConjugateGradientMinimizer(const ConjugateGradientMinimizer& /rhs/, bool /deep/ = true);
   ~ConjugateGradientMinimizer();
   // ConjugateGradientMinimizer& operator = (const ConjugateGradientMinimizer& /rhs/);
   virtual bool specificSetup();
   void setStepLength(double /value/);
   double getStepLength() const; 
-  virtual bool findStep();
+  virtual double findStep();
   virtual void updateDirection();
   virtual bool minimize(Size /iterations/ = 0, bool /restart/ = false); 
   Options options;

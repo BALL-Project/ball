@@ -1,4 +1,4 @@
-// $Id: PDBFile.sip,v 1.1 2001/09/03 16:53:03 oliver Exp $
+// $Id: PDBFile.sip,v 1.2 2003/03/25 17:08:54 anhi Exp $
 
 class PDBFile
 	:	GenericPDBFile
@@ -10,7 +10,7 @@ class PDBFile
   public:
   PDBFile();
 	// default open mode: READ
-  PDBFile(const String&, File::OpenMode /openmode/ = File::IN)
+  PDBFile(const String&, File::OpenMode /openmode/ = std::ios::in)
 		throw(FileNotFound);
 	~PDBFile() 
 		throw();

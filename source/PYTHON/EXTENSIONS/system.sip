@@ -1,4 +1,4 @@
-// $Id: system.sip,v 1.2 2001/12/22 16:39:16 oliver Exp $
+// $Id: system.sip,v 1.3 2003/03/25 17:09:01 anhi Exp $
 
 class System
   : AtomContainer,
@@ -44,15 +44,20 @@ class System
 	//  template <typename T>
 	//  bool apply(UnaryProcessor<T>& processor)
 
-	PyMethod __str__
+	char *__str__() /NoLazy/;
 %MemberCode
   System* ptr;
-  if ((ptr = (System*)sipGetCppPtr((sipThisType*)a0,sipClass_System)) == NULL)
-    return NULL;
 
+	if (sipParseArgs(&sipArgsParsed,sipArgs,"n",sipClass_System,&ptr))
+	{
   return PyString_FromString(String(String("System ") + ptr->getName() 
 					+ " { " + String(ptr->countMolecules()) + " molecules,  " 
 					+ String(ptr->countAtoms()) + " atoms }").c_str());
+	}
+	else
+	{
+		return NULL;
+	}
 %End
 
 };

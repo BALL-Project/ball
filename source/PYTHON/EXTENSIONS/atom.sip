@@ -1,4 +1,4 @@
-// $Id: atom.sip,v 1.3 2001/12/28 02:25:52 oliver Exp $
+// $Id: atom.sip,v 1.4 2003/03/25 17:08:55 anhi Exp $
 
 class Atom
   : Composite,
@@ -95,28 +95,38 @@ class Atom
    // bool applyBonds(UnaryProcessor<Bond>& processor);
 	
 	// convert the atom to a string representation
-	PyMethod __str__
+	char *__str__() /NoLazy/;
 %MemberCode
   Atom* ptr;
-  if ((ptr = (Atom*)sipGetCppPtr((sipThisType*)a0 ,sipClass_Atom)) == NULL)
-    return NULL;
+	if (sipParseArgs(&sipArgsParsed,sipArgs,"n",sipClass_Atom,&ptr))
+	{
 
   return PyString_FromString(String(String("Atom ") + ptr->getName() 
 				+ " { " + ptr->getElement().getSymbol() + " @ (" 
 				+ String(ptr->getPosition().x) + " " + String(ptr->getPosition().y) + " " 
 				+ String(ptr->getPosition().z) + " }").c_str());
+	}
+	else
+	{
+		return NULL;
+	}
 %End
 
-	PyMethod __repr__
+	char *__repr__() /NoLazy/;
 %MemberCode
   Atom* ptr;
-  if ((ptr = (Atom*)sipGetCppPtr((sipThisType*)a0 ,sipClass_Atom)) == NULL)
-    return NULL;
 
+	if (sipParseArgs(&sipArgsParsed,sipArgs,"n",sipClass_Atom,&ptr))
+	{
   return PyString_FromString(String(String("Atom ") + ptr->getName() 
 				+ " { " + ptr->getElement().getSymbol() + " @ (" 
 				+ String(ptr->getPosition().x) + " " + String(ptr->getPosition().y) + " " 
 				+ String(ptr->getPosition().z) + " }").c_str());
+	}
+	else
+	{
+		return NULL;
+	}
 %End
 
 };
@@ -142,22 +152,31 @@ class AtomType
 	return 0;
 %End
 
-	PyMethod __str__
+	char *__str__() /NoLazy/;
 %MemberCode
 	AtomType* ptr;
-  if ((ptr = (AtomType*)sipGetCppPtr((sipThisType*)a0,sipClass_AtomType)) == NULL)
-    return NULL;
-
+	if (sipParseArgs(&sipArgsParsed,sipArgs,"n",sipClass_AtomType,&ptr))
+	{
   return PyString_FromString(String(*ptr).c_str());
+	}
+	else
+	{
+		return NULL;
+	}
 %End
 
-	PyMethod __repr__
+	char *__repr__() /NoLazy/;
 %MemberCode
 	AtomType* ptr;
-  if ((ptr = (AtomType*)sipGetCppPtr((sipThisType*)a0,sipClass_AtomType)) == NULL)
-    return NULL;
 
+	if (sipParseArgs(&sipArgsParsed,sipArgs,"n",sipClass_AtomType,&ptr))
+	{
   return PyString_FromString(String(*ptr).c_str());
+	}
+	else
+	{
+		return NULL;
+	}
 %End
 };
 

@@ -1,4 +1,4 @@
-// $Id: BALL.sip,v 1.8 2002/12/12 11:00:18 oliver Exp $
+// $Id: BALL.sip,v 1.9 2003/03/25 17:08:52 anhi Exp $
 /////////////////////////
 // BALL PYTHON SUPPORT
 /////////////////////////
@@ -181,7 +181,7 @@
 %Include snapShotManager.sip
 // support.h
 %Include typeRuleProcessor.sip
-%Include typenameRuleProcessor.sip
+%Include typeNameRuleProcessor.sip
 
 // MOLMEC/MDSIMULATION
 %Include canonicalMD.sip
@@ -259,7 +259,7 @@
 // %Include rotamerLibrary.sip
 // %Include rules.sip
 // %Include structureMapper.sip
-%Include smilesParser.sip
+//%Include smilesParser.sip
 
 // SYSTEM
 // %Include directory.sip

@@ -1,4 +1,4 @@
-// $Id: vector3.sip,v 1.3 2001/12/27 11:47:19 oliver Exp $
+// $Id: vector3.sip,v 1.4 2003/03/25 17:09:02 anhi Exp $
 
 class Vector3
  : PersistentObject
@@ -65,18 +65,23 @@ class Vector3
   float x;
   float y;
   float z;
-	PyMethod __str__
+	char *__str__() /NoLazy/;
 %MemberCode
   Vector3* ptr;
-  if ((ptr = (Vector3*)sipGetCppPtr((sipThisType*)a0,sipClass_Vector3)) == NULL)
-    return NULL;
 
+	if (sipParseArgs(&sipArgsParsed,sipArgs,"n",sipClass_Vector3,&ptr))
+	{
   static String tmp;
   tmp = "(";
   tmp += String(ptr->x) + " ";
   tmp += String(ptr->y) + " ";
   tmp += String(ptr->z) + ")";
   return PyString_FromString(tmp.c_str());
+	}
+	else
+	{
+		return NULL;
+	}
 %End
 
 };

@@ -1,4 +1,4 @@
-// $Id: regularData3D.sip,v 1.2 2001/12/27 11:47:18 oliver Exp $
+// $Id: regularData3D.sip,v 1.3 2003/03/25 17:09:00 anhi Exp $
 class RegularData3D 
 {
 %HeaderCode
@@ -46,7 +46,7 @@ class RegularData3D
 		throw(OutOfMemory);
 	~RegularData3D() throw();
 	virtual void clear() throw();
-	void set(const RegularData3D& /grid/) throw(OutOfMemory);
+//	void set(const RegularData3D& /grid/) throw(OutOfMemory);
 	// const RegularData3D& operator = (const RegularData3D& /grid/) throw(OutOfMemory);
 	// virtual void dump(std::ostream& /stream/) const throw(); 
 	bool isValid() const throw();

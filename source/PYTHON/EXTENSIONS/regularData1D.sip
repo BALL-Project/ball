@@ -9,7 +9,7 @@ class RegularData1D
 	RegularData1D(const RegularData1D& /data/) throw();
 	~RegularData1D() throw();
 	virtual void clear() throw();
-	virtual void destroy() throw();
+//	virtual void destroy() throw();
 	// const RegularData1D& operator = (const RegularData1D& data) throw();
 	// const RegularData1D& operator = (const VectorType& data) throw();
 	bool operator == (const RegularData1D& /data/) const throw();

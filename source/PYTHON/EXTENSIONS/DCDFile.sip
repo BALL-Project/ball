@@ -1,34 +1,4 @@
-// $Id: DCDFile.sip,v 1.1 2001/09/03 16:53:02 oliver Exp $
-
-// workaround for nested classes: pull it out
-class DCDHeader
-{
-%HeaderCode
-	#include <BALL/FORMAT/DCDFile.h>
-	using namespace BALL;
-	using namespace BALL::Exception;
-	typedef DCDFile::DCDHeader DCDHeader;
-%End
-				public:
-				Size start_info_block;
-				//char CORD[4];
-				Size number_of_coordinate_sets;
-				Size step_number_of_starting_time;
-				Size steps_between_saves;
-				Size BALL_flag;
-				//Size unused_1[5];
-				DoubleReal time_step_length;
-				//Size unused_2[9];
-				Size end_info_block;
-				Size start_title_block;
-				Size number_of_comments;
-				//char title[160];
-				Size end_title_block;
-				Size start_atomnumber_block;
-				Size number_of_atoms;
-				Size end_atomnumber_block;
-				DCDHeader() throw();
-};
+// $Id: DCDFile.sip,v 1.2 2003/03/25 17:08:52 anhi Exp $
 
 class DCDFile
 	: TrajectoryFile
@@ -45,7 +15,7 @@ class DCDFile
 								throw();
 				DCDFile(const DCDFile& /file/)
 								throw(FileNotFound);
-				DCDFile(const String& /name/, File::OpenMode /open_mode/ = File::IN)
+				DCDFile(const String& /name/, File::OpenMode /open_mode/ = std::ios::in)
 								throw();
 				~DCDFile()
 								throw();
@@ -72,10 +42,6 @@ class DCDFile
 								throw();
 				//virtual bool flushToDisk(const vector<SnapShot> buffer)
 				//				throw();
-				const DCDHeader& getHeader() const
-								throw();
-				void setHeader(const DCDHeader& /header/)
-								throw();
 				void enableVelocityStorage()
 								throw();
 				void disableVelocityStorage()

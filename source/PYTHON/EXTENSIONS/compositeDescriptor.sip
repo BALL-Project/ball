@@ -1,4 +1,4 @@
-// $Id: compositeDescriptor.sip,v 1.3 2001/12/23 22:03:59 oliver Exp $
+// $Id: compositeDescriptor.sip,v 1.4 2003/03/25 17:08:56 anhi Exp $
 
 class CompositeDescriptor
 {
@@ -20,7 +20,7 @@ class CompositeDescriptor
     (CompositeDescriptor& /composite_descriptor/, bool /deep/ = true);
   // CompositeDescriptor& operator = (CompositeDescriptor& composite_descriptor);
   // void get(CompositeDescriptor& /composite_descriptor/, bool /deep/ = true);
-  void swap(CompositeDescriptor& /composite_descriptor/);
+//  void swap(CompositeDescriptor& /composite_descriptor/);
   void setName(const String& /name/);
   String& getName();
   const String& getName() const;
@@ -61,13 +61,18 @@ class CompositeDescriptor
   // virtual void write(std::ostream& s) const;
 
 	// __repr__ code:
-	PyMethod __str__
+	char *__str__() /NoLazy/;
 %MemberCode
   CompositeDescriptor* ptr;
-  if ((ptr = (CompositeDescriptor*)sipGetCppPtr((sipThisType*)a0,sipClass_CompositeDescriptor)) == NULL)
-    return NULL;
 
+	if (sipParseArgs(&sipArgsParsed,sipArgs,"n",sipClass_CompositeDescriptor,&ptr))
+	{
 	String tmp = String("CompositeDescriptor { ") + ptr->getName() + " }";
   return PyString_FromString(tmp.c_str());
+	}
+	else
+	{
+		return NULL;
+	}
 %End
 };

@@ -1,4 +1,4 @@
-// $Id: HINFile.sip,v 1.5 2001/12/22 14:14:04 oliver Exp $
+// $Id: HINFile.sip,v 1.6 2003/03/25 17:08:53 anhi Exp $
 
 class HINFile
 	: GenericMolFile
@@ -10,7 +10,7 @@ class HINFile
   public:
   HINFile();
 	// default open mode is "IN"
-  HINFile(String&, File::OpenMode /openmode/ = File::IN)
+  HINFile(String&, File::OpenMode /openmode/ = std::ios::in)
 		throw(FileNotFound);
 	~HINFile()
 		throw();

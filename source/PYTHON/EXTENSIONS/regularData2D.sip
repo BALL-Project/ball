@@ -1,4 +1,4 @@
-// $Id: regularData2D.sip,v 1.2 2001/12/27 11:47:18 oliver Exp $
+// $Id: regularData2D.sip,v 1.3 2003/03/25 17:09:00 anhi Exp $
 
 
 typedef float GridDataType;
@@ -49,8 +49,8 @@ class RegularData2D
 	~RegularData2D() throw();
 	virtual void clear() throw();
 
-	void set(const RegularData2D& /grid/) 
-		throw(OutOfMemory);
+	//void set(const RegularData2D& /grid/) 
+	//	throw(OutOfMemory);
 	//const RegularData2D& operator = (const RegularData2D& /grid/) 
 	//	throw(OutOfMemory);
 

@@ -1,4 +1,4 @@
-// $Id: bond.sip,v 1.2 2001/12/22 16:39:14 oliver Exp $
+// $Id: bond.sip,v 1.3 2003/03/25 17:08:56 anhi Exp $
 
 class Bond
 	: Composite,
@@ -82,12 +82,12 @@ class Bond
   virtual bool isValid() const throw();
   // virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
   // convert the atom to a string representation
-	PyMethod __str__
+	char *__str__() /NoLazy/;
 %MemberCode
   Bond* ptr;
-  if ((ptr = (Bond*)sipGetCppPtr((sipThisType*)a0,sipClass_Bond)) == NULL)
-    return NULL;
 
+	if (sipParseArgs(&sipArgsParsed,sipArgs,"n",sipClass_Bond,&ptr))
+	{
 	const Atom* a1 = ptr->getFirstAtom();
 	const Atom* a2 = ptr->getSecondAtom();
 	String tmp("Bond {");
@@ -119,5 +119,10 @@ class Bond
 		tmp += " }";
 	}
   return PyString_FromString(tmp.c_str());
+	}
+	else
+	{
+		return NULL;
+	}
 %End
 };

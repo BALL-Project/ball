@@ -1,4 +1,4 @@
-// $Id: fragment.sip,v 1.2 2001/12/22 16:39:15 oliver Exp $
+// $Id: fragment.sip,v 1.3 2003/03/25 17:08:57 anhi Exp $
 
 class Fragment
   : AtomContainer
@@ -23,13 +23,18 @@ class Fragment
   // virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
   // virtual void read(std::istream& s);
   // virtual void write(std::ostream& s) const;
-	PyMethod __str__
+	char *__str__() /NoLazy/;
 %MemberCode
   Fragment* ptr;
-  if ((ptr = (Fragment*)sipGetCppPtr((sipThisType*)a0,sipClass_Fragment)) == NULL)
-    return NULL;
 
+	if (sipParseArgs(&sipArgsParsed,sipArgs,"n",sipClass_Fragment,&ptr))
+	{
   return PyString_FromString(String(String("Fragment ") + ptr->getName()
         + " { " + String(ptr->countAtoms()) + " atoms }").c_str());
+	}
+	else
+	{
+		return NULL;
+	}
 %End
 };

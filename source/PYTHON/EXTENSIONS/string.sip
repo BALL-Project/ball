@@ -1,4 +1,4 @@
-// $Id: string.sip,v 1.5 2001/12/28 02:25:52 oliver Exp $
+// $Id: string.sip,v 1.6 2003/03/25 17:09:01 anhi Exp $
 
 class Substring
 {
@@ -237,14 +237,13 @@ class String
   // friend ::std::istream& getline(::std::istream& s,  String& string,  char delimiter = '\n');
 	int size() const;
 
-	PyMethod __str__
+	char *__str__() /NoLazy/;
 %MemberCode
   const char *s;
   String *ptr;
 
-  if ((ptr = (String *)sipGetCppPtr((sipThisType*)a0,sipClass_String)) == NULL)
-    return NULL;
-
+	if (sipParseArgs(&sipArgsParsed,sipArgs,"n",sipClass_String,&ptr))
+	{
   if ((s = ptr->c_str()) == NULL)
   {
     Py_INCREF(Py_None);
@@ -252,17 +251,21 @@ class String
   }
 
   return PyString_FromString(s);
+	}
+	else
+	{
+		return NULL;
+	}
 %End
 
  
-	PyMethod __repr__
+	char *__repr__() /NoLazy/;
 %MemberCode
   const char *s;
   String *ptr;
 
-  if ((ptr = (String *)sipGetCppPtr((sipThisType*)a0,sipClass_String)) == NULL)
-    return NULL;
-
+	if (sipParseArgs(&sipArgsParsed,sipArgs,"n",sipClass_String,&ptr))
+	{
 	*ptr = String("'") + *ptr + "'";
 
   if ((s = ptr->c_str()) == NULL)
@@ -272,6 +275,11 @@ class String
   }
 
   return PyString_FromString(s);
+	}
+	else
+	{
+		return NULL;
+	}
 %End
 
  

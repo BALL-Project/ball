@@ -1,4 +1,4 @@
-// $Id: MOLFile.sip,v 1.1 2001/12/23 22:03:59 oliver Exp $
+// $Id: MOLFile.sip,v 1.2 2003/03/25 17:08:53 anhi Exp $
 
 class MOLFile
 	: GenericMolFile
@@ -10,7 +10,7 @@ class MOLFile
   public:
   MOLFile();
 	// default open mode is "IN"
-  MOLFile(String&, File::OpenMode /openmode/ = File::IN)
+  MOLFile(String&, File::OpenMode /openmode/ = std::ios::in)
 		throw(FileNotFound);
 	~MOLFile()
 		throw();

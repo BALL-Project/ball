@@ -1,7 +1,7 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.17 2003/01/10 13:51:00 oliver Exp $
+# $Id: Makefile,v 1.18 2003/03/25 17:08:53 anhi Exp $
 #
 
 DIRECTORY=PYTHON/EXTENSIONS
@@ -47,9 +47,6 @@ CPP_SOURCES = $(SIP_SOURCES:.h=.C) $(PYBALL_SOURCES)
 CPP_OBJECTS = $(SIP_OBJECTS) $(PYBALL_OBJECTS)
 
 BALL.py:	sip
-sipBALLVersion.h:	sip_helper 
-sip_helper.C:	Makefile.inc
-pyBALLSipHelper.C: sipBALLVersion.h
 
 sip:
 	@if test ! -d SIP ; then mkdir SIP 2>/dev/null ; fi
@@ -62,7 +59,7 @@ sip:
 	@for i in SIP/*; do if cmp -s $$i `basename $$i`; then true ; else echo " - $$i"; cp $$i . ; fi ; done
 
 
-libBALLc.so:  sipBALLVersion.h $(CPP_OBJECTS)
+libBALLc.so:  $(CPP_OBJECTS)
 	$(DYNAR) $(DYNAROPTS) libBALLc.so $(SIP_OBJECTS) $(PYBALL_OBJECTS) $(SIP_LIB) -L$(BALL_PATH)/lib/$(BINFMT) $(BALL_LIBS)
 
 install:	libBALLc.so
@@ -71,9 +68,6 @@ install:	libBALLc.so
 CLEAN_FILES = \
 	BALL.pyc \
 	BALL.py \
-	sipBALLVersion.h \
-	sip_helper.C \
-	sip_helper \
 	$(CPP_OBJECTS) \
 	$(SIP_SOURCES) \
 	$(SIP_HEADERS) \
@@ -84,6 +78,6 @@ clean:
 	@-$(RM) $(CLEAN_FILES) 2>/dev/null
 	@-$(RM) -fr SIP
 
-depend: sip sipBALLVersion.h Makefile.inc .Dependencies
+depend: sip  Makefile.inc .Dependencies
 
 include .Dependencies

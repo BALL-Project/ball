@@ -1,4 +1,4 @@
-// $Id: residue.sip,v 1.2 2001/12/22 16:39:16 oliver Exp $
+// $Id: residue.sip,v 1.3 2003/03/25 17:09:00 anhi Exp $
 
 class Residue
   : Fragment
@@ -71,13 +71,18 @@ class Residue
   // virtual void read(std::istream& s);
   // virtual void write(std::ostream& s) const;
   // BALL_KERNEL_DEFINE_ITERATOR_CREATORS(PDBAtom)
-	PyMethod __str__
+	char *__str__() /NoLazy/;
 %MemberCode
   Residue* ptr;
-  if ((ptr = (Residue*)sipGetCppPtr((sipThisType*)a0,sipClass_Residue)) == NULL)
-    return NULL;
 
+	if (sipParseArgs(&sipArgsParsed,sipArgs,"n",sipClass_Residue,&ptr))
+	{
   return PyString_FromString(String(String("Residue ") + ptr->getName() + ptr->getID()
         + " { " + String(ptr->countAtoms()) + " atoms }").c_str());
+	}
+	else
+	{
+		return NULL;
+	}
 %End
 };

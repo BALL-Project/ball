@@ -1,4 +1,4 @@
-// $Id: mainControl.sip,v 1.1 2001/09/03 16:53:09 oliver Exp $
+// $Id: mainControl.sip,v 1.2 2003/03/25 17:08:58 anhi Exp $
 
 class MainControl
 //   :  QMainWindow,
@@ -27,7 +27,7 @@ class MainControl
 	MainControl(const MainControl&) throw();
 	~MainControl() throw();
 	virtual void clear() throw();
-	virtual void destroy() throw();
+	//virtual void destroy() throw();
 	// class OptionsFileError
 	//	: public Exception::GeneralException
 	// {

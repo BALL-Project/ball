@@ -1,4 +1,4 @@
-// $Id: file.sip,v 1.5 2001/12/27 11:47:18 oliver Exp $
+// $Id: file.sip,v 1.6 2003/03/25 17:08:57 anhi Exp $
 
 class std__openmode
 {
@@ -18,25 +18,25 @@ class File
 %End
   public:
 	typedef std__openmode OpenMode;
-	static const OpenMode IN;
+	/*static const OpenMode IN;
 	static const OpenMode OUT;
-	static const OpenMode APP;
+	static const OpenMode app;
 	static const OpenMode BINARY;
 	static const OpenMode ATE;
 	static const OpenMode TRUNC;
-
+*/
   File();
 	// default open mode: IN
-  File(const String&, File::OpenMode /openmode/ = File::IN);
+  File(const String&, File::OpenMode /openmode/ = std::ios::in);
   File(const File&);
   ~File();
 	// default open mode: IN
-  bool open(const String&, File::OpenMode /openmode/ = File::IN);
+  bool open(const String&, File::OpenMode /openmode/ = std::ios::in);
 %MemberCode
 
     const String* a0;
 		int a0IsTemp = 0;
-    File::OpenMode a1 = File::IN;
+    File::OpenMode a1 = std::ios::in;
 
     File* ptr = 0;
     if (sipParseArgs(&sipArgsParsed,sipArgs,"mM1i",sipThisObj, sipClass_File,&ptr,
@@ -94,25 +94,29 @@ class OpenMode
 	typedef File::OpenMode OpenMode;
 %End
   public:
-	PyMethod __str__
+	char *__str__() /NoLazy/;
 %MemberCode
   OpenMode* ptr;
-  if ((ptr = (OpenMode*)sipGetCppPtr((sipThisType*)a0,sipClass_OpenMode)) == NULL)
-    return NULL;
-	
+  if (sipParseArgs(&sipArgsParsed,sipArgs,"n",sipClass_CompositeDescriptor,&ptr))
+	{	
 	String mode_string;
 	switch ((int)*ptr)
 	{
-		case (int)File::APP: 		mode_string = "File::APP"; break;
-		case (int)File::BINARY:	mode_string = "File::BINARY"; break;
-		case (int)File::ATE: 		mode_string = "File::ATE"; break;
-		case (int)File::TRUNC: 	mode_string = "File::TRUNC"; break;
-		case (int)File::OUT: 		mode_string = "File::OUT"; break;
-		case (int)File::IN: 			mode_string = "File::IN"; break;
+		case (int)std::ios::app: 		mode_string = "std::ios::app"; break;
+		case (int)std::ios::binary:	mode_string = "std::ios::binary"; break;
+		case (int)std::ios::ate: 		mode_string = "std::ios::ate"; break;
+		case (int)std::ios::trunc: 	mode_string = "std::ios::trunc"; break;
+		case (int)std::ios::out: 		mode_string = "std::ios::out"; break;
+		case (int)std::ios::in: 			mode_string = "std::ios::in"; break; 
 		default:						mode_string = *ptr;
 	}
 
   return PyString_FromString(mode_string.c_str());
+	}
+	else
+	{
+		return NULL;
+	}
 %End
 %ConvertToTypeCode
   if (PyInt_Check(sipPy))
@@ -121,14 +125,14 @@ class OpenMode
 		File::OpenMode result;
 		switch (mode)
 		{
-			case File::OUT:		result = File::OUT; break;
-			case File::BINARY:	result = File::BINARY; break;
-			case File::ATE:		result = File::ATE; break;
-			case File::TRUNC:	result = File::TRUNC; break;
-			case File::APP:		result = File::APP; break;
+			case std::ios::out:		result = std::ios::out; break;
+			case std::ios::binary:	result = std::ios::binary; break;
+			case std::ios::ate:		result = std::ios::ate; break;
+			case std::ios::trunc:	result = std::ios::trunc; break;
+			case std::ios::app:		result = std::ios::app; break;
 
-			case File::IN:
-			default: result = File::IN;
+			case std::ios::in:
+			default: result = std::ios::in;
 		};
     *sipCppPtr = new OpenMode(result);
 

@@ -1,9 +1,10 @@
-// $Id: smilesParser.sip,v 1.3 2002/12/12 11:00:20 oliver Exp $
+// $Id: smilesParser.sip,v 1.4 2003/03/25 17:09:01 anhi Exp $
 
 class SmilesParser
 {
 %HeaderCode
 	#include <BALL/STRUCTURE/smilesParser.h>
+	#include <BALL/KERNEL/atom.h>
 	using namespace BALL;
 %End
 
