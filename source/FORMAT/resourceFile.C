@@ -1,4 +1,4 @@
-// $Id: resourceFile.C,v 1.9 2000/06/30 06:00:59 oliver Exp $
+// $Id: resourceFile.C,v 1.10 2000/07/12 19:38:26 oliver Exp $
 
 #include <BALL/FORMAT/resourceFile.h>
 
@@ -641,7 +641,7 @@ namespace BALL
 
 	bool ResourceFile::open(const String& name)
 	{
-		if (File::open(name.c_str(), ios::in) && good())
+		if (File::open(name.c_str(), File::IN) && good())
 		{
 			*this >> *this;
 			
@@ -661,7 +661,7 @@ namespace BALL
 
 	void ResourceFile::saveAs(const Entry& entry, const String& name)
 	{
-		File file(name.c_str(), ios::out | ios::trunc);
+		File file(name.c_str(), File::OpenMode(File::OUT | File::TRUNC));
 		
 		Size depth = 0;
 		
