@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelProcessor.h,v 1.8 2003/12/15 01:24:29 amoll Exp $
+// $Id: modelProcessor.h,v 1.9 2004/01/27 16:26:07 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_MODELPROCESSOR_H
@@ -53,6 +53,10 @@ namespace BALL
 				///
 				virtual bool isValid() const
 					throw() {return true;};
+
+				///
+				virtual void clearComposites()
+					throw() {}
 
 				///
 				virtual void dump(std::ostream& /*s = std::cout*/, Size /*depth = 0*/) const

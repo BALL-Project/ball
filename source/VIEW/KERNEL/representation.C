@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.23 2004/01/13 14:37:30 amoll Exp $
+// $Id: representation.C,v 1.24 2004/01/27 16:25:53 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/representation.h>
 #include <BALL/VIEW/MODELS/modelProcessor.h>
@@ -306,6 +306,7 @@ namespace BALL
 			{
 				clearGeometricObjects();
 				model_processor_->getGeometricObjects().clear();
+				model_processor_->clearComposites();
 				
 				CompositeSet::Iterator it = composites_.begin();
 				for (; it!= composites_.end(); it++)

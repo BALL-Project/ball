@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBondModelBaseProcessor.h,v 1.8 2003/12/15 15:11:05 amoll Exp $
+// $Id: atomBondModelBaseProcessor.h,v 1.9 2004/01/27 16:26:07 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_ATOMBONDMODELBASEPROCESSOR_H
@@ -128,6 +128,10 @@ namespace BALL
 					\param   depth the dumping depth
 			*/
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
+				throw();
+
+			///
+			virtual void clearComposites()
 				throw();
 							
 			protected:
