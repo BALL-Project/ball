@@ -1,7 +1,7 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.8 2000/06/27 07:27:00 oliver Exp $
+# $Id: Makefile,v 1.9 2000/06/27 13:10:17 oliver Exp $
 #
 
 all: libBALLc.so
@@ -35,6 +35,8 @@ SIP_SOURCES=\
 	sipBALLPDBAtom.C\
 	sipBALLPDBFile.C\
 	sipBALLProtein.C\
+	sipBALLNucleotide.C\
+	sipBALLNucleicAcid.C\
 	sipBALLPTE_.C\
 	sipBALLPersistentObject.C\
 	sipBALLPeriodicBoundary.C\
@@ -47,11 +49,29 @@ SIP_SOURCES=\
 	sipBALLSystem.C\
 	sipBALLVector3.C\
 	sipBALLXYZFile.C\
-	sipBALLPyAtomList.C
+	sipBALLPyAtomList.C\
+	sipBALLPyFragmentList.C\
+	sipBALLPyMoleculeList.C\
+	sipBALLPyPDBAtomList.C\
+	sipBALLPyResidueList.C\
+	sipBALLPySecondaryStructureList.C\
+	sipBALLPyChainList.C\
+	sipBALLPyProteinList.C\
+	sipBALLPyNucleotideList.C\
+	sipBALLPyNucleicAcidList.C
 
 PYBALL_SOURCES=\
 	extractors.C\
-	pyAtomList.C
+	pyAtomList.C\
+	pyFragmentList.C\
+	pyMoleculeList.C\
+	pyPDBAtomList.C\
+	pyResidueList.C\
+	pyProteinList.C\
+	pyChainList.C\
+	pySecondaryStructureList.C\
+	pyNucleotideList.C\
+	pyNucleicAcidList.C
 
 include ../${BALL_BINFMT}/config.mak
 

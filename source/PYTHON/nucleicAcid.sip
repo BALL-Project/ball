@@ -1,52 +1,36 @@
-# 1 "nucleicAcid.h"
-namespace BALL 
+class NucleicAcid
+ : Molecule
 {
- class NucleicAcid
-  : public Molecule
- {
+%HeaderCode
+#include <BALL/KERNEL/molecule.h>
+using namespace BALL;
+%End
   public:
-  BALL_CREATE(NucleicAcid)
-  enum Property
-  {
-   NUMBER_OF_PROPERTIES = Molecule::NUMBER_OF_PROPERTIES
-  };
   NucleicAcid();
-  NucleicAcid(const NucleicAcid& nucleic_acid, bool deep = true);
-  NucleicAcid(const String& name, const String& id = "" );
-  virtual ~NucleicAcid();
+  NucleicAcid(const NucleicAcid& /nucleic_acid/, bool /deep/ = true);
+  NucleicAcid(const String& /name/, const String& /id/ = "" );
+  // virtual ~NucleicAcid();
+
   virtual void clear();
   virtual void destroy();
-  void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
-  void persistentRead(PersistenceManager& pm);
-  void set(const NucleicAcid& nucleic_acid, bool deep = true);
-  NucleicAcid& operator = (const NucleicAcid& nucleic_acid);
-  void get(NucleicAcid& nucleic_acid, bool deep = true) const;
-  void swap(NucleicAcid& nucleic_acid);
+
+  // void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
+  // void persistentRead(PersistenceManager& pm);
+  void set(const NucleicAcid& /nucleic_acid/, bool /deep/ = true);
+	//  NucleicAcid& operator = (const NucleicAcid& nucleic_acid);
+  void get(NucleicAcid& /nucleic_acid/, bool /deep/ = true) const;
+  void swap(NucleicAcid& /nucleic_acid/);
+  Nucleotide* getNucleotide(int /position/);
+  const Nucleotide* getNucleotide(int /position/) const;
   Nucleotide* get3Prime();
   const Nucleotide* get3Prime() const;
   Nucleotide* get5Prime();
   const Nucleotide* get5Prime() const;
-  void setID(const String& id);
-  String& getID();
+  void setID(const String& /id/);
   const String& getID() const;
-  Size countNucleotides() const;
-# 132 "nucleicAcid.h"
-  Molecule::prepend;
-  Molecule::append;
-  Molecule::insert;
-  Molecule::insertBefore;
-  Molecule::insertAfter;
-  Molecule::remove;
-  Molecule::splice;
-  Molecule::spliceBefore;
-  Molecule::spliceAfter;
+  int countNucleotides() const;
   virtual bool isValid() const;
-  virtual void dump(ostream& s = cout, unsigned long depth = 0) const;
-  virtual void read(istream& s);
-  virtual void write(ostream& s) const;
-  BALL_KERNEL_DEFINE_ITERATOR_CREATORS(Nucleotide)
-  private:
-  void clear_();
-  String id_;
- };
-}  
+  // virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
+  // virtual void read(std::istream& s);
+  // virtual void write(std::ostream& s) const;
+};

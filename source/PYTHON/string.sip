@@ -24,7 +24,7 @@ using namespace BALL;
 	const char* c_str() const;
 	int size() const;
 
-	operator const char* () const;
+	// operator const char* () const;
 %CanConvertToClassCode
 	// automatic conversion of Py-Strings to Strings
 	return (PyString_Check(sipPy) || sipIsSubClassInstance(sipPy,sipClass_String));
@@ -40,9 +40,5 @@ using namespace BALL;
   *sipCppPtr = (String*)sipConvertToCpp(sipPy,sipClass_String,sipIsErr);
 
   return 0;
-%End
-%PythonCode
-		def __cmp__(self, other):
-			return cmp(str(self), str(other))
 %End
 };

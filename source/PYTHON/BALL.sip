@@ -21,6 +21,8 @@
 %Include chain.sip
 %Include secondaryStructure.sip
 %Include residue.sip
+%Include nucleotide.sip
+%Include nucleicAcid.sip
 %Include file.sip
 %Include PDBAtom.sip
 %Include PDBFile.sip
@@ -37,3 +39,12 @@
 %Include conjugateGradient.sip
 %Include periodicBoundary.sip
 %Include pyAtomList.sip
+%Include pyFragmentList.sip
+%Include pyMoleculeList.sip
+%Include pyPDBAtomList.sip
+%Include pyResidueList.sip
+%Include pySecondaryStructureList.sip
+%Include pyChainList.sip
+%Include pyProteinList.sip
+%Include pyNucleotideList.sip
+%Include pyNucleicAcidList.sip

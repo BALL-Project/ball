@@ -2,5 +2,14 @@
 #include <BALL/PYTHON/extractors.h>
 using namespace BALL;
 %End
-PyAtomList* atoms(const BaseFragment& /fragment/, bool /selected_only/ = false);
+PyAtomList* 								atoms(const BaseFragment& /fragment/, bool /selected_only/ = false);
+PyFragmentList* 						fragments(const BaseFragment& /fragment/, bool /selected_only/ = false);
+PyMoleculeList* 						molecules(const BaseFragment& /fragment/, bool /selected_only/ = false);
+PyPDBAtomList* 							PDBAtoms(const BaseFragment& /fragment/, bool /selected_only/ = false);
+PyResidueList* 							residues(const BaseFragment& /fragment/, bool /selected_only/ = false);
+PySecondaryStructureList* 	secondaryStructures(const BaseFragment& /fragment/, bool /selected_only/ = false);
+PyChainList* 								chains(const BaseFragment& /fragment/, bool /selected_only/ = false);
+PyProteinList* 							proteins(const BaseFragment& /fragment/, bool /selected_only/ = false);
+PyNucleotideList* 					nucleotides(const BaseFragment& /fragment/, bool /selected_only/ = false);
+PyNucleicAcidList* 					nucleicAcids(const BaseFragment& /fragment/, bool /selected_only/ = false);
 
