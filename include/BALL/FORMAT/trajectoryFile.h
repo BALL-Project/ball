@@ -1,4 +1,4 @@
-// $Id: trajectoryFile.h,v 1.1 2000/12/15 17:18:35 anker Exp $
+// $Id: trajectoryFile.h,v 1.2 2000/12/19 13:20:40 anker Exp $
 
 #ifndef BALL_FORMAT_TRAJECTORYFILE_H
 #define BALL_FORMAT_TRAJECTORYFILE_H
@@ -121,18 +121,11 @@ namespace BALL
 		virtual bool write(const SnapShotManager& manager)
 			throw();
 
-		/** append the data of a SnapShotManager to an existing file
-				@param manager the SnapShotManager we want to save
-				@return true, if writing was successful
-		*/
-		virtual bool append(const SnapShotManager& manager)
-			throw();
-
 		/** append a list of SnapShots to an existing file
 				@param buffer the list os SnapShots we want to save
 				@return true, if writing was successful
 		*/
-		virtual bool append(const std::vector<SnapShot>& buffer)
+		virtual bool append(const SnapShot& snapshot)
 			throw();
 
 		//@}
