@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.35 2003/12/12 17:48:31 amoll Exp $
+// $Id: mainControl.C,v 1.36 2003/12/12 21:06:27 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -365,6 +365,12 @@ bool MainControl::remove_(Composite& composite)
 	{
 		RepresentationMessage* rr_message = new RepresentationMessage(**reps_it, RepresentationMessage::REMOVE);
 		notify_(rr_message);
+	}
+
+	if (removed_representations.size() > 0)
+	{
+		SceneMessage *scene_message = new SceneMessage(SceneMessage::REDRAW);
+		notify_(scene_message);
 	}
 
 	if (root != 0) updateRepresentationsOf(*root, true, true);
