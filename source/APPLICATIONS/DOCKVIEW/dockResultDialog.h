@@ -17,6 +17,7 @@
 # include <BALL/STRUCTURE/DOCKING/conformationSet.h>
 #endif
 
+#include "dockResult.h"
 #include "dockResultDialogData.h"
 
 namespace BALL
@@ -48,25 +49,11 @@ namespace BALL
 					*/
 					const DockResultDialog& operator =(const DockResultDialog& res_dialog);
 						
-					void setConformationSet(ConformationSet& conformations)
-						throw() {conformation_set_ = conformations;}
-						
-					ConformationSet getConformationSet()
-						throw() {return conformation_set_;}
-						
-					void setScoringName(QString name)
-						throw() {scoring_name_ = name;}
-					
-					// add score of a scoring function to score vector scores_
-					void addScore(vector<float> new_score)
-						throw() {scores_.push_back(new_score);}
+					void setDockResult(DockResult* dock_res)
+						throw() {dock_res_ = dock_res;}
 						
 					// add scoring function to ComboBox and its options dialog to HashMap
 					void addScoringFunction(QString name, int score_func, QDialog* dialog=0)
-						throw();
-						
-					// add docked system to BALLView structures 
-					void displayDockedSystem()
 						throw();
 					
 				public slots:
@@ -127,12 +114,13 @@ namespace BALL
 					
 				private:
 				
-					ConformationSet conformation_set_;
-					System* docked_system_;
-					QString scoring_name_;
+					DockResult* dock_res_;
+					
+					//QString scoring_name_;
+					
 					
 					// vector contains scores of different scoring functions
-					vector<vector<float> > scores_;
+					//vector<vector<float> > scores_;
 					
 					// key: ScoringFunction(enum), value: advanced options dialog
 					HashMap<int, QDialog*> scoring_dialogs_;

@@ -55,6 +55,7 @@
 
 #include "dockResultDialog.h"
 #include "dockDialogData.h"
+#include "dockResults.h"
 
 namespace BALL
 {
@@ -211,9 +212,6 @@ namespace BALL
 				
 				// key: ScoringFunction(enum), value: advanced options dialog
 				HashMap<int, QDialog*> scoring_dialogs_;
-				
-				//
-				DockResultDialog* result_dialog_;
 			
 				//pointer to docking partners
 				System* docking_partner1_;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.14 2005/03/31 08:41:30 haid Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.15 2005/04/01 14:29:12 haid Exp $
 //
 
 #include "dockDialog.h"
@@ -386,33 +386,37 @@ namespace BALL
 			// score the results of the docking algorithm
 			std::vector<ConformationSet::Conformation> ranked_conformations = (*scoring)(conformation_set);
 			conformation_set.setScoring(ranked_conformations);
-			
-			Log.info() << "before if" << std::endl;
-			if(result_dialog_ != 0)
+
+			QString docking_alg = algorithms->currentText();
+			vector<DockResults::Scoring_> scoring_vec;
+			vector<float> scores;
+			for(unsigned int i = 0; i < ranked_conformations.size(); i++)
 			{
-				result_dialog_->hide();
-				delete result_dialog_;
-				result_dialog_ = 0;
+				scores.push_back(ranked_conformations[i].second);
 			}
-			Log.info() << "after if " << std::endl;
-			result_dialog_ = new DockResultDialog(this);
-			
-			// setup result_dialog 
-			result_dialog_->setConformationSet(conformation_set);
-	
-			vector<float> score;
-			for (unsigned int i = 0; i < ranked_conformations.size(); i++)
-			{
-				score.push_back(ranked_conformations[i].second);
-			}
-			result_dialog_->addScore(score);
-	
-			result_dialog_->setScoringName(scoring_functions->currentText());
+			DockResults::Scoring_ scoring_obj = DockResults::Scoring_(scoring_functions->currentText(), options_, scores); /// falsche Options!!!
+			scoring_vec.push_back(scoring_obj);
+
+			DockResults* dock_res = new DockResults(docking_alg,
+																							conformation_set,
+																							options_,
+																							scoring_vec,
+																							"");
+
+			NewDockResultMessage* dock_res_m = new NewDockResultMessage();
+			dock_res_m->setDockResults(*dock_res);
+			dock_res_m->setComposite(conformation_set.getSystem());
+			notify_(dock_res_m);
+
 			
 			// add docked system to BALLView structures 
-			result_dialog_->displayDockedSystem();
-			result_dialog_->show();
-
+			SnapShot best_result = conformation_set[0];
+			
+			System* docked_system = new System(conformation_set.getSystem());
+			best_result.applySnapShot(*docked_system);
+			
+			getMainControl()->insert(*docked_system);
+			
 			delete dock_alg;
 			delete scoring;
 			

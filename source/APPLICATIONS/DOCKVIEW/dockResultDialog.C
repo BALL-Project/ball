@@ -1,4 +1,4 @@
-// $Id: dockResultDialog.C,v 1.1.2.9 2005/03/31 08:41:32 haid Exp $
+// $Id: dockResultDialog.C,v 1.1.2.10 2005/04/01 14:29:13 haid Exp $
 //
 
 #include <qtable.h>
@@ -55,10 +55,7 @@ namespace BALL
 		{
 			if (&res_dialog != this)
 			{
-				conformation_set_ = res_dialog.conformation_set_;
-				docked_system_ = res_dialog.docked_system_;
-				scoring_name_ = res_dialog.scoring_name_;
-				scores_ = res_dialog.scores_;
+				dock_res_ = res_dialog.dock_res_;
 				scoring_dialogs_ = res_dialog.scoring_dialogs_;
 			}
 			return *this;
@@ -75,19 +72,6 @@ namespace BALL
 			}
 			// add to ComboBox
 			scoring_functions->insertItem(name, score_func);
-		}
-		
-		// add docked system to BALLView structures 
-		void DockResultDialog::displayDockedSystem()
-			throw()
-		{
-			SnapShot best_result = conformation_set_[0];
-			
-			docked_system_ = new System(conformation_set_.getSystem());
-			best_result.applySnapShot(*docked_system_);
-			
-			getMainControl()->insert(*docked_system_);
-			Log.info() << "ResultDialog after insert" << std::endl;
 		}
 		
 		// --------------------------------- SLOTS ------------------------------------------------
@@ -137,8 +121,9 @@ namespace BALL
 			int snapshot = (result_table->text(selected_row,0)).toInt();
 			// apply snapshot
 			SnapShot selected_conformation = conformation_set_[snapshot];
-			selected_conformation.applySnapShot(*docked_system_);
-			getMainControl()->update(*docked_system_, true);
+			System& s = conformation_set_.getSystem();
+			selected_conformation.applySnapShot(s);
+			getMainControl()->update(s, true);
 		}
 		
 		// selects and shows the entry above the current selected entry
