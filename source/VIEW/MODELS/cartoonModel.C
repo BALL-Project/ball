@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.7 2003/10/18 11:08:26 amoll Exp $
+// $Id: cartoonModel.C,v 1.8 2003/11/09 22:38:04 amoll Exp $
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
@@ -14,6 +14,11 @@
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/bond.h>
+
+/*
+#include <BALL/DATATYPE/hashGrid.h>
+#include <BALL/STRUCTURE/geometricProperties.h>
+*/
 
 using namespace std;
 
@@ -365,6 +370,7 @@ namespace BALL
 		{
 			Atom* first = 0;
 			Atom* last = 0;
+			List<const Atom*> catoms;
 			AtomIterator it;
 			BALL_FOREACH_ATOM(ss, it)
 			{
@@ -372,34 +378,70 @@ namespace BALL
 				{
 					if (!first) first = &*it;	
 					last = &*it;
+					catoms.push_back(&*it);
 				}
 			}
 
-			// build tube connection to the last point
-			Tube* tube = new Tube;
-			if (!tube) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Tube));
+			if (catoms.size() == 0)
+			{
+				return;
+			}
 
-			tube->setRadius(2.4);
-			tube->setVertex1(first->getPosition());
-			tube->setVertex2(last->getPosition());
-			tube->setComposite(&ss);
-			geometric_objects_.push_back(tube);
+			List<const Atom*>::ConstIterator lit = catoms.begin();
 
+			/*
+			BoundingBoxProcessor boxp;
+			boxp.start();
+			for(;lit != catoms.end(); lit++)
+			{
+				boxp.operator() (*(Atom*)*lit);
+			}
+			boxp.finish();
+
+			Vector3 diagonal = boxp.getUpper() - boxp.getLower();
+			HashGrid3<const Atom*> grid(boxp.getLower() - Vector3(3.0, 3.0, 3.0), 
+																	diagonal + Vector3(6.0, 6.0, 6.0),
+																	2.0); 
+		 
+			for (lit = catoms.begin(); lit != catoms.end(); lit++)
+			{
+				grid.insert((*lit)->getPosition(), *lit);
+			}
+			*/
+			lit = catoms.begin(); 
+			lit++;
+			Vector3 normal = last->getPosition() - first->getPosition();
+			Vector3 last_pos = first->getPosition();
+			Tube* tube = 0;
+			for (Position p = 1; lit != catoms.end(); p++)
+			{
+				tube = new Tube;
+				tube->setRadius(2.4);
+				tube->setVertex1(last_pos);
+				last_pos += (normal / (catoms.size() -1));
+				tube->setVertex2(last_pos);
+				tube->setComposite(*lit);
+				geometric_objects_.push_back(tube);
+				lit++;
+			}
+				
 			Disc* disc = new Disc( Circle3(first->getPosition(), Vector3(first->getPosition() - last->getPosition()), 2.4));
 			if (!disc) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Disc));
-			disc->setComposite(&ss);
+			disc->setComposite(first);
 			geometric_objects_.push_back(disc);
 
 			disc = new Disc(Circle3(last->getPosition(), Vector3(last->getPosition() - first->getPosition() ), 2.4));
 			if (!disc) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Disc));
-			disc->setComposite(&ss);
+			disc->setComposite(last);
 			geometric_objects_.push_back(disc);
 
 			Position p1=0, p2=0;
 			for (Position i=0; i<spline_vector_.size(); i++)
 			{
 				if (spline_vector_[i].getVector() == first->getPosition())
+				{
 					p1 = i;
+				}
 
 				if (spline_vector_[i].getVector() == last->getPosition())
 				{
