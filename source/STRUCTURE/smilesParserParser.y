@@ -70,7 +70,7 @@ smiles:	expression
 	;
 
 expression:
-		node { $$ = $1 }
+		node { $$ = $1; }
 	| node bond expression { new SmilesParser::SPBond($1, $3, $2); $$ = $1; }
 	| node expression { new SmilesParser::SPBond($1, $2); $$ = $1; }
 	;
@@ -195,7 +195,7 @@ connection_list:
 
 opt_isotope: 
 		{ $$ = 0; }
-	|	isotope { $$ = $1 }
+	|	isotope { $$ = $1; }
 	;
 
 
