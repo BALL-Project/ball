@@ -1,18 +1,18 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reducedSurface.h,v 1.32 2002/02/27 12:19:45 sturm Exp $
+// $Id: reducedSurface.h,v 1.33 2002/04/18 18:17:03 strobel Exp $
 
 #ifndef BALL_STRUCTURE_REDUCEDSURFACE_H
 #define BALL_STRUCTURE_REDUCEDSURFACE_H
 
 #ifdef DEBUG
-	#define print_rs_debug_info
-	#define debug_surface_processor
-	#ifdef debug_surface_processor
-		#define debug_surface_processor_verbose
-		#define debug_surface_processor_print
-	#endif
+//#	define print_rs_debug_info
+//#	define debug_surface_processor
+#	ifdef debug_surface_processor
+#		define debug_surface_processor_verbose
+#		define debug_surface_processor_print
+#	endif
 #endif
 
 #ifndef BALL_STRUCTURE_RSVERTEX_H
@@ -380,6 +380,9 @@ namespace BALL
 				@param	face2	a pointer to the second face
 		*/
 		void deleteSimilarFaces(TRSFace<T>* face1, TRSFace<T>* face2)
+			throw();
+
+		bool getAngle(TRSFace<T>* face1, TRSFace<T>* face2, TAngle<T>& angle)
 			throw();
 
 		/** Compute the reduced surface
@@ -827,6 +830,12 @@ namespace BALL
     /*_ maximal radius of all atoms
     */
     T r_max_;
+		T x_min_;
+		T y_min_;
+		T z_min_;
+		T x_max_;
+		T y_max_;
+		T z_max_;
     /*_ the number of vertices of the reduced surface
     */
     Size number_of_vertices_;
@@ -1061,7 +1070,7 @@ namespace BALL
 		 (const ::std::vector< TSphere3<T> >& spheres,
 			const T& probe_radius)
 		throw()
-		:	number_of_atoms_((Size)spheres.size()),
+		:	number_of_atoms_(spheres.size()),
 			atom_(spheres),
 			probe_radius_(probe_radius),
 			neighbours_(number_of_atoms_),
@@ -1542,14 +1551,22 @@ namespace BALL
 			{
 				if (rsedge1[i] == rsedge2[i])
 				{
-					rsedge1[i]->vertex_[0]->edges_.erase(rsedge1[i]);
-					rsedge1[i]->vertex_[1]->edges_.erase(rsedge1[i]);
-					edges_[rsedge1[i]->index_] = NULL;
-					delete rsedge1[i];
+					if (rsedge1[i]->singular_)
+					{
+						rsedge1[i]->vertex_[0]->edges_.erase(rsedge1[i]);
+						rsedge1[i]->vertex_[1]->edges_.erase(rsedge1[i]);
+						edges_[rsedge1[i]->index_] = NULL;
+						delete rsedge1[i];
+					}
+					else
+					{
+						rsedge1[i]->face_[0] = NULL;
+						rsedge1[i]->face_[1] = NULL;
+						rsedge1[i]->phi_.value = 2*Constants::PI;
+					}
 				}
 				else
 				{
-					// ACHTUNG: evtl. hier exception
 					TRSFace<T>* neighbour2 = rsedge2[i]->otherFace(face2);
 					if (rsedge1[i]->face_[0] == face1)
 					{
@@ -1570,8 +1587,28 @@ namespace BALL
 					rsedge2[i]->vertex_[1]->edges_.erase(rsedge2[i]);
 					edges_[rsedge2[i]->index_] = NULL;
 					delete rsedge2[i];
-					// ACHTUNG
-					// Winkel von rsedge1[i] muss neu berechnet werden
+					// recomputation of rsedge1[i]->phi_
+					TRSFace<T>* neighbour1 = rsedge1[i]->face_[0];
+					neighbour2 = rsedge1[i]->face_[1];
+					TSphere3<T> sphere1(atom_[rsedge1[i]->vertex_[0]->atom_]);
+					TSphere3<T> sphere2(atom_[rsedge1[i]->vertex_[1]->atom_]);
+					sphere1.radius += probe_radius_;
+					sphere2.radius += probe_radius_;
+					TCircle3<T> circle;
+					GetIntersection(sphere1,sphere2,circle);
+					TVector3<T> atom1(sphere1.p);
+					TVector3<T> atom2(sphere2.p);
+					TRSVertex<T>* third_vertex(neighbour1->thirdVertex(rsedge1[i]->vertex_[0],rsedge1[i]->vertex_[1]));
+					TVector3<T> atom3(atom_[third_vertex->atom_].p);
+					TVector3<T> axis(atom1-atom2);
+					TVector3<T> test(axis%neighbour1->normal_);
+					if (Maths::isLess(test*(atom1-atom3),(T)0))
+					{
+						axis.negate();
+					}
+					TVector3<T> v1 = neighbour1->center_-circle.p;
+					TVector3<T> v2 = neighbour2->center_-circle.p;
+					rsedge1[i]->phi_ = getOrientedAngle(v1,v2,axis);
 				}
 			}
 			faces_[face1->index_] = NULL;
@@ -1627,7 +1664,22 @@ namespace BALL
 		}
 		clean();
 		Constants::EPSILON = epsilon;
-				//std::cout << "fertig ... " << RStimer.getUserTime() << "\n";
+		#ifdef debug_surface_processor_print
+		for (Position i = 0; i < faces_.size(); i++)
+		{
+			Atom atom;
+			atom.setPosition(faces_[i]->center_);
+			atom.setRadius(probe_radius_);
+			atom.setElement(PTE[Element::O]);
+			Molecule molecule;
+			molecule.insert(atom);
+			System system;
+			system.insert(molecule);
+			HINFile hinfile("DATA/PROBES/probe"+IndexToString(i,0)+".hin",ios::out);
+			hinfile << system;
+			hinfile.close();
+		}
+		#endif
 	}
 
 
@@ -2045,6 +2097,9 @@ namespace BALL
 		edge->center_of_torus_ = circle1.p;
 		edge->radius_of_torus_ = circle1.radius;
 		edge->phi_ = phi;
+//cout << "correct:  " << phi << "\n";
+//getAngle(start_face,new_face,phi);
+//cout << "computed: " << phi << "\n";
 		edge->circle0_ = circle2;
 		edge->circle1_ = circle3;
 		edge->intersection_point0_ = ip1;
@@ -2506,13 +2561,13 @@ namespace BALL
 		{
 			norm_.negate();
 				#ifdef print_rs_debug_info
-				std::cout << "  Dreahachse: " << atom1 << " --> " << atom2 << "\n";
+				std::cout << "  Drehachse: " << atom1 << " --> " << atom2 << "\n";
 				#endif
 		}
 				#ifdef print_rs_debug_info
 				else
 				{
-					std::cout << "  Dreahachse: " << atom2 << " --> " << atom1 << "\n";
+					std::cout << "  Drehachse: " << atom2 << " --> " << atom1 << "\n";
 				}
 				#endif
 		TVector3<double> norm((double)norm_.x,(double)norm_.y,(double)norm_.z);
@@ -2666,6 +2721,12 @@ namespace BALL
 			vertices[vertex2->atom_].push_back(vertex2);
 			atom_status_[vertex1->atom_] = STATUS_ON_SURFACE;
 			atom_status_[vertex2->atom_] = STATUS_ON_SURFACE;
+					#ifdef print_rs_debug_info
+					std::cout << "starting edge found:\n";
+					std::cout << *edge << "\n";
+					std::cout << *vertex1 << "\n";
+					std::cout << *vertex2 << "\n";
+					#endif
 			return 2;
 		}
 		vertex = findFirstVertex();
@@ -2817,20 +2878,21 @@ namespace BALL
 		}
 		TRSVertex<T>* vertex1 = new TRSVertex<T>(a1);
 		TRSVertex<T>* vertex2 = new TRSVertex<T>(a2);
-		//neighboursOfTwoAtoms(a1,a2);
-		//TRSEdge<T>* edge = createFreeEdge(vertex1,vertex2,neighbours_of_two_[a1][a2]);
-		TCircle3<T> circle1;
-		TCircle3<T> circle2;
-		TCircle3<T> circle3;
-		if (getCircles(a1,a2,circle1,circle2,circle3) &&
-				Maths::isGreater(circle1.radius,probe_radius_)		 )
+		neighboursOfTwoAtoms(a1,a2);
+		TRSEdge<T>* edge = createFreeEdge(vertex1,vertex2,neighbours_of_two_[a1][a2]);
+		//TCircle3<T> circle1;
+		//TCircle3<T> circle2;
+		//TCircle3<T> circle3;
+		//if (getCircles(a1,a2,circle1,circle2,circle3) &&
+		//		Maths::isGreater(circle1.radius,probe_radius_)		 )
+		if (edge != NULL)
 		{
-			TVector3<T> vector(0,0,0);
-			TRSEdge<T>* edge = new TRSEdge<T>(vertex1,vertex2,NULL,NULL,
-					 															circle1.p,circle1.radius,
-																				TAngle<T>(2*Constants::PI,true),
-																				circle2,circle3,
-																				vector,vector,false,number_of_edges_);
+			//TVector3<T> vector(0,0,0);
+			//TRSEdge<T>* edge = new TRSEdge<T>(vertex1,vertex2,NULL,NULL,
+			//		 															circle1.p,circle1.radius,
+			//																	TAngle<T>(2*Constants::PI,true),
+			//																	circle2,circle3,
+			//																	vector,vector,false,number_of_edges_);
 			edges_.push_back(edge);
 			number_of_edges_++;
 			vertex1->edges_.insert(edge);
@@ -3316,6 +3378,10 @@ namespace BALL
 				Maths::isGreater(circle1.radius,probe_radius_)											 )
 		{
 			TPlane3<T> plane(circle1.p,circle1.n);
+					#ifdef print_rs_debug_info
+					std::cout << "Schnittkreis von " << atom_[vertex1->atom_] << " und "
+										<< atom_[vertex2->atom_] << ":\n    " << circle1 << "\n    in Ebene " << plane << "\n";
+					#endif
 			::std::list<Index>::const_iterator i;
 			TCircle3<T> test_circle;
 			TSphere3<T> sphere;
@@ -3323,26 +3389,37 @@ namespace BALL
 			for (i = neighbours.begin(); i != neighbours.end(); i++)
 			{
 				sphere.set(atom_[*i].p,atom_[*i].radius+probe_radius_);
+						#ifdef print_rs_debug_info
+						std::cout << "teste mit " << sphere << " von Atom " << *i << "\n";
+						#endif
 				if (GetIntersection(sphere,plane,test_circle))
 				{
+							#ifdef print_rs_debug_info
+							std::cout << "Schnittkreis: " << test_circle << "\n";
+							#endif
 					dist = test_circle.radius-circle1.radius;
-					if (Maths::isGreaterOrEqual(dist*dist,
-												test_circle.p.getSquareDistance(circle1.p)) )
+							#ifdef print_rs_debug_info
+							std::cout << "Differenz der Radien: " << dist << "\n";
+							std::cout << "Abstand:              " << test_circle.p.getDistance(circle1.p) << "\n";
+							#endif
+					if (Maths::isLessOrEqual(dist*dist,test_circle.p.getSquareDistance(circle1.p)) )
 					{
-						#ifdef print_rs_debug_info
-						std::cout << "    Atom " << *i << " zu nahe, keine freie Edge\n";
-						#endif
+								#ifdef print_rs_debug_info
+								std::cout << "    Atom " << *i << " zu nahe, keine freie Edge\n";
+								#endif
 						return NULL;
 					}
 				}
+						#ifdef print_rs_debug_info
+						std::cout << "    Atom " << *i << " ok\n";
+						#endif
 			}
 			TVector3<T> vector(0,0,0);
-			TRSEdge<T>* edge
-					 = new TRSEdge<T>(vertex1,vertex2,NULL,NULL,
-					 									circle1.p,circle1.radius,
-														TAngle<T>(2*Constants::PI,true),
-														circle2,circle3,
-														vector,vector,false,-1);
+			TRSEdge<T>* edge = new TRSEdge<T>(vertex1,vertex2,NULL,NULL,
+											 									circle1.p,circle1.radius,
+																				TAngle<T>(2*Constants::PI,true),
+																				circle2,circle3,
+																				vector,vector,false,-1);
 			return edge;
 		}
 		return NULL;
@@ -3364,12 +3441,12 @@ namespace BALL
 		sphere2.radius += probe_radius_;
 		if (GetIntersection(sphere1,sphere2,circle1))
 		{
-			T ratio1(atom_[atom1].radius/sphere1.radius);
-			circle2.radius = circle1.radius*ratio1;
-			circle2.p = sphere1.p+(circle1.p-sphere1.p)*(ratio1);
-			T ratio2(atom_[atom2].radius/sphere2.radius);
-			circle3.radius = circle1.radius*ratio2;
-			circle3.p = sphere2.p+(circle1.p-sphere2.p)*(ratio2);
+			T ratio = atom_[atom1].radius/sphere1.radius;
+			circle2.radius = circle1.radius*ratio;
+			circle2.p = sphere1.p+(circle1.p-sphere1.p)*(ratio);
+			ratio = atom_[atom2].radius/sphere2.radius;
+			circle3.radius = circle1.radius*ratio;
+			circle3.p = sphere2.p+(circle1.p-sphere2.p)*(ratio);
 			return true;
 		}
 				#ifdef print_rs_debug_info
@@ -3746,26 +3823,26 @@ namespace BALL
 	void TReducedSurface<T>::preProcessing()
 		throw()
 	{
-		T x_min = atom_[0].p.x;
-		T y_min = atom_[0].p.y;
-		T z_min = atom_[0].p.z;
-		T x_max = atom_[0].p.x;
-		T y_max = atom_[0].p.y;
-		T z_max = atom_[0].p.z;
+		x_min_ = atom_[0].p.x;
+		y_min_ = atom_[0].p.y;
+		z_min_ = atom_[0].p.z;
+		x_max_ = atom_[0].p.x;
+		y_max_ = atom_[0].p.y;
+		z_max_ = atom_[0].p.z;
 		for (Position i = 1; i < number_of_atoms_; i++)
 		{
-			x_min = ((x_min > atom_[i].p.x) ? atom_[i].p.x : x_min);
-			y_min = ((y_min > atom_[i].p.y) ? atom_[i].p.y : y_min);
-			z_min = ((z_min > atom_[i].p.z) ? atom_[i].p.z : z_min);
-			x_max = ((x_max < atom_[i].p.x) ? atom_[i].p.x : x_max);
-			y_max = ((y_max < atom_[i].p.y) ? atom_[i].p.y : y_max);
-			z_max = ((z_max < atom_[i].p.z) ? atom_[i].p.z : z_max);
+			x_min_ = ((x_min_ > atom_[i].p.x) ? atom_[i].p.x : x_min_);
+			y_min_ = ((y_min_ > atom_[i].p.y) ? atom_[i].p.y : y_min_);
+			z_min_ = ((z_min_ > atom_[i].p.z) ? atom_[i].p.z : z_min_);
+			x_max_ = ((x_max_ < atom_[i].p.x) ? atom_[i].p.x : x_max_);
+			y_max_ = ((y_max_ < atom_[i].p.y) ? atom_[i].p.y : y_max_);
+			z_max_ = ((z_max_ < atom_[i].p.z) ? atom_[i].p.z : z_max_);
 		}
 		T dist = 2*(r_max_+probe_radius_);
-		Position nx = (Position)((x_max-x_min)/dist+5);
-		Position ny = (Position)((y_max-y_min)/dist+5);
-		Position nz = (Position)((z_max-z_min)/dist+5);
-		TVector3<T> origin(x_min-2*dist,y_min-2*dist,z_min-2*dist);
+		Position nx = (Position)((x_max_-x_min_)/dist+5);
+		Position ny = (Position)((y_max_-y_min_)/dist+5);
+		Position nz = (Position)((z_max_-z_min_)/dist+5);
+		TVector3<T> origin(x_min_-2*dist,y_min_-2*dist,z_min_-2*dist);
 		HashGrid3<Position> grid(origin,nx,ny,nz,dist);
 		for (Position i = 0; i < number_of_atoms_; i++)
 		{
@@ -3800,6 +3877,58 @@ namespace BALL
 			}
 			neighbours_[i].sort();
 		}
+	}
+
+
+	template <typename T>
+	bool TReducedSurface<T>::getAngle(TRSFace<T>* face1, TRSFace<T>* face2, TAngle<T>& angle)
+		throw()
+	{
+		TRSVertex<T>* vertex1;
+		TRSVertex<T>* vertex2;
+		Position found = 0;
+		for (Position i = 0; i < 3; i++)
+		{
+			for (Position j = 0; j < 3; j++)
+			{
+				if (face1->vertex_[i]->atom_ == face2->vertex_[j]->atom_)
+				{
+					if (found == 0)
+					{
+						vertex1 = face1->vertex_[i];
+					}
+					else
+					{
+						vertex2 = face1->vertex_[i];
+					}
+					found++;
+				}
+			}
+		}
+		if (found < 2)
+		{
+			return false;
+		}
+		TSphere3<T> sphere1(atom_[vertex1->atom_]);
+		TSphere3<T> sphere2(atom_[vertex2->atom_]);
+		sphere1.radius += probe_radius_;
+		sphere2.radius += probe_radius_;
+		TCircle3<T> circle;
+		GetIntersection(sphere1,sphere2,circle);
+		TVector3<T> atom1(sphere1.p);
+		TVector3<T> atom2(sphere2.p);
+		TRSVertex<T>* third_vertex(face1->thirdVertex(vertex1,vertex2));
+		TVector3<T> atom3(atom_[third_vertex->atom_].p);
+		TVector3<T> axis(atom1-atom2);
+		TVector3<T> test(axis%face1->normal_);
+		if (Maths::isLess(test*(atom1-atom3),(T)0))
+		{
+			axis.negate();
+		}
+		TVector3<T> v1 = face1->center_-circle.p;
+		TVector3<T> v2 = face2->center_-circle.p;
+		angle = getOrientedAngle(v1,v2,axis);
+		return true;
 	}
 
 
