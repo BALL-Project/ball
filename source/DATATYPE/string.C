@@ -1,4 +1,4 @@
-// $Id: string.C,v 1.11 2000/01/10 15:51:10 oliver Exp $
+// $Id: string.C,v 1.12 2000/01/19 17:55:37 oliver Exp $
 
 #include <BALL/DATATYPE/string.h>
 
@@ -188,7 +188,7 @@ namespace BALL
 
 		va_list var_arg_list;
 		va_start(var_arg_list, format);
-		vsprintf(buffer, format, var_arg_list);
+		vsnprintf(buffer, buffer_size, format, var_arg_list);
 		va_end(var_arg_list);
 
 		assign(buffer);
@@ -269,7 +269,7 @@ namespace BALL
 
 		va_list var_arg_list;
 		va_start(var_arg_list, format);
-		vsprintf(buffer, format, var_arg_list);
+		vsnprintf(buffer, buffer_size, format, var_arg_list);
 		va_end(var_arg_list);
 
 		assign(buffer);

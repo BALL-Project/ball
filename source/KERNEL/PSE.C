@@ -1,4 +1,4 @@
-// $Id: PSE.C,v 1.6 2000/01/17 13:10:51 oliver Exp $
+// $Id: PSE.C,v 1.7 2000/01/19 17:55:41 oliver Exp $
 
 #include <BALL/KERNEL/PSE.h>
 
@@ -14,10 +14,10 @@ namespace BALL
 {
 
 	extern "C" int PSEcompare_
-		(const PSE_::SymbolToElement* a,
-		 const PSE_::SymbolToElement* b)
+		(const void* a_ptr, const void* b_ptr)
 	{
-		return strcmp(a->symbol, b->symbol);
+		return strcmp(((PSE_::SymbolToElement*)a_ptr)->symbol,
+									((PSE_::SymbolToElement*)b_ptr)->symbol);
 	}
 
 
@@ -493,11 +493,11 @@ namespace BALL
 		};
 
 		SymbolToElement* result = (SymbolToElement*)::bsearch 
-			((const void *)&compare, 
-			 (const void *)symbol_to_element_, 
+			((const void*)&compare, 
+			 (const void*)symbol_to_element_, 
 			 Element::NUMBER_OF_ELEMENTS, 
 			 sizeof(SymbolToElement), 
-			 (ComparatorType)PSEcompare_);
+			 PSEcompare_);
 		
 		if (result == 0)
 		{

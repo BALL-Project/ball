@@ -1,4 +1,4 @@
-// $Id: bitVector.C,v 1.6 1999/12/28 18:24:34 oliver Exp $
+// $Id: bitVector.C,v 1.7 2000/01/19 17:55:36 oliver Exp $
 
 #include <BALL/DATATYPE/bitVector.h>
 
@@ -17,12 +17,26 @@ namespace BALL
 
 	const Size BitVector::BlockSize = BALL_BLOCK_BITS;
 
+	BitVector::BitVector()
+		:	size_(BlockSize),
+			block_size_(BALL_BLOCK_SIZE(BlockSize)),
+			resizable_(true)
+	{
+		bitset_ = new BlockType[block_size_];
+
+		memset
+			(bitset_, 
+			 BALL_BLOCK_ALL_BITS_CLEARED, 
+			 block_size_ << (sizeof(BlockType) - 1));
+	}
+
 	BitVector::BitVector(BALL::Size size)
 		:	size_(size),
 			block_size_(BALL_BLOCK_SIZE(size)),
 			resizable_(true)
 	{
-		if (size <= 0) {
+		if (size <= 0) 
+		{
 			size = 1;
 			throw Exception::InvalidRange(__FILE__, __LINE__);
 		}
@@ -60,6 +74,7 @@ namespace BALL
 	BitVector::~BitVector()
 	{
 		delete [] bitset_;
+		bitset_ = 0;
 	}
 
 
@@ -211,7 +226,8 @@ namespace BALL
 	{
 		validateRange_(first, last);
 
-		for (register Index i = first; i <= last; i++) {
+		for (register Index i = first; i <= last; i++) 
+		{
 			setBit(i, bit);
 		}
 	}
