@@ -1,4 +1,4 @@
-// $Id: ruleProcessor.C,v 1.3 2000/05/24 18:33:52 oliver Exp $
+// $Id: ruleProcessor.C,v 1.4 2000/05/24 18:46:08 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/ruleProcessor.h>
 #include <BALL/FORMAT/INIFile.h>
@@ -44,10 +44,10 @@ namespace BALL
 		return evaluator_.initialize(file, prefix);
 	}
 	
-	const RuleProcessor& RuleProcessor::operator = (const RuleProcessor&
-		rule_processor)
+	const RuleProcessor& RuleProcessor::operator = (const RuleProcessor& rule_processor)
 	{
-		// BAUSTELLE
+		set(rule_processor);
+		return *this;
 	}
 
   void RuleProcessor::set(const RuleProcessor& rule_processor)
@@ -82,6 +82,6 @@ namespace BALL
 
 	void RuleProcessor::dump(std::ostream& s) const
 	{
-		// BAUSTELLE
+		//BAUSTELLE
 	}
 }
