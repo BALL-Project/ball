@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData3D.h,v 1.9 2002/02/27 12:18:34 sturm Exp $ 
+// $Id: regularData3D.h,v 1.10 2002/09/05 11:39:13 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_REGULARDATA3D_H
 #define BALL_DATATYPE_REGULARDATA3D_H
@@ -9,6 +9,8 @@
 #ifndef BALL_MATHS_VECTOR3_H
 #	include <BALL/MATHS/vector3.h>
 #endif
+
+#include <iostream>
 
 namespace BALL 
 {
@@ -121,6 +123,7 @@ namespace BALL
 		virtual void clear() throw();
 
 		//@}
+
 		/**	@name Assignment
 		*/
 		//@{
@@ -266,7 +269,8 @@ namespace BALL
 				@param		position Position, the grid position
 				@see			getData
 		*/
-		GridDataType& operator[](Position position) throw(Exception::OutOfGrid);
+		GridDataType& operator [] (Position position) 
+			throw(Exception::OutOfGrid);
 
 		/**	Subscript operator.
 				Returns the data of the grid point nearest to the given
@@ -276,7 +280,8 @@ namespace BALL
 				@param		vector Vector3, a position in the grid
 				@see			getData
 		*/
-		GridDataType& operator[](const Vector3& vector) throw(Exception::OutOfGrid);
+		GridDataType& operator [] (const Vector3& vector) 
+			throw(Exception::OutOfGrid);
 
 		/**	Returns the exact coordinates of a grid point.	
 				@return		Vector3
@@ -298,13 +303,15 @@ namespace BALL
 				@exception OutOfGrid if the point is outside the grid
 				@param		r Vector3
 		*/
-		Vector3 getGridCoordinates(const Vector3& r) const throw(Exception::OutOfGrid);
+		Vector3 getGridCoordinates(const Vector3& r) const 
+			throw(Exception::OutOfGrid);
 
 		/**	Returns the exact coordinates of a grid point.	
 				@return		Vector3
 				@param		Position
 		*/
-		Vector3 getGridCoordinates(Position position) const throw(Exception::OutOfGrid);
+		Vector3 getGridCoordinates(Position position) const 
+			throw(Exception::OutOfGrid);
 
 		/**	Return the indices of the grid points of the enclosing box.
 				This method calculates the grid box that contains the given vector
@@ -432,7 +439,7 @@ namespace BALL
 		bool operator != (const TRegularData3D<GridDataType>& grid) const throw();
 
 		//@}
-
+		
 		/**	The grid data
 		*/
 		GridDataType* data;
@@ -470,6 +477,43 @@ namespace BALL
 		*/
 		bool valid_;
 	};
+
+	template <typename T>
+	std::ostream& operator << (std::ostream& os, const TRegularData3D<T>& data) 
+		throw()
+	{
+		os << data.getMinX() << " " << data.getMinY() << " " << data.getMinZ() << std::endl;
+		os << data.getMaxX() << " " << data.getMaxY() << " " << data.getMaxZ() << std::endl;
+		os << data.getMaxXIndex() << " " << data.getMaxYIndex() << " " << data.getMaxZIndex() << std::endl;
+		for (Position i = 0; i < data.getSize(); i++)	
+		{
+			os << data.data[i] << std::endl;
+		}
+		return os;
+	}
+
+	template <typename T>
+	std::istream& operator >> (std::istream& is, TRegularData3D<T>& data) 
+		throw()
+	{
+		Vector3 lower;
+		Vector3 upper;
+		TVector3<Size> size;
+
+		is >> lower.x >> lower.y >> lower.z;
+		is >> upper.x >> upper.y >> upper.z;
+		is >> size.x >> size.y >> size.z;
+
+		data.set(TRegularData3D<T>(lower, upper, size.x + 1, size.y + 1, size.z + 1));
+
+		for (Position i = 0; i < data.getSize(); i++)
+		{
+			is >> data[i];
+		}
+		
+		return is;
+	}
+	
 
 	/**	Default type
 	*/
@@ -712,7 +756,7 @@ namespace BALL
 	BALL_INLINE 
 	float TRegularData3D<GridDataType>::getMaxZ() const throw()
 	{
-		return upper_.x;
+		return upper_.z;
 	}
 
 	// getMax[x,y,z] returns the maximum possible coordinates for
@@ -770,7 +814,7 @@ namespace BALL
 	}
 
 	template <class GridDataType>
-	TRegularData3D<GridDataType>::GridIndex TRegularData3D<GridDataType>::getIndex(const Vector3& r) const 
+	typename TRegularData3D<GridDataType>::GridIndex TRegularData3D<GridDataType>::getIndex(const Vector3& r) const 
 		throw(Exception::OutOfGrid)
 	{
 		return getIndex(r.x, r.y, r.z);
@@ -868,7 +912,7 @@ namespace BALL
 
 	template <class GridDataType>
 	BALL_INLINE 
-	TRegularData3D<GridDataType>::GridIndex TRegularData3D<GridDataType>::getIndex
+	typename TRegularData3D<GridDataType>::GridIndex TRegularData3D<GridDataType>::getIndex
 		(float x, float y, float z) const 
 		throw(Exception::OutOfGrid)
 	{
