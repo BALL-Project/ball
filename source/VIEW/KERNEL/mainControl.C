@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.98 2004/07/23 14:15:59 amoll Exp $
+// $Id: mainControl.C,v 1.99 2004/07/27 12:44:11 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -21,6 +21,8 @@
 #include <BALL/KERNEL/bond.h>
 #include <BALL/MATHS/analyticalGeometry.h>
 #include <BALL/MATHS/common.h>
+
+#include <BALL/SYSTEM/directory.h>
 
 #ifdef BALL_QT_HAS_THREADS
 #	include <BALL/VIEW/KERNEL/threads.h>
@@ -93,7 +95,17 @@ namespace BALL
 		#ifdef BALL_VIEW_DEBUG
 			Log.error() << "new MainControl " << this << std::endl;
 		#endif
-			preferences_.setFilename(inifile);
+
+			// store and load the INIFile from the Users homedir
+			// default for UNIX/LINUX
+			char* home_dir = getenv("HOME");
+			if (home_dir == 0) 
+			{
+				// windows
+				home_dir = getenv("HOMEPATH");
+			}
+
+			preferences_.setFilename(String(home_dir) + String(FileSystem::PATH_SEPARATOR) + inifile);
 			setup_();
 		}
 
@@ -834,7 +846,7 @@ namespace BALL
 			inifile.insertValue("WINDOWS", "Main::y", String(y()));
 			inifile.insertValue("WINDOWS", "Main::width", String(width()));
 	 		inifile.insertValue("WINDOWS", "Main::height", String(height()));
-			inifile.insertValue("WINDOWS", "File::working_dir", getWorkingDir());
+			inifile.insertValue("WINDOWS", "File::working_dir", working_dir_);
 
 			if (logging_to_file_) 
 			{
@@ -1597,10 +1609,20 @@ namespace BALL
 			label_ = label;
 		}
 
+		void MainControl::setWorkingDir(const String& dir)
+			throw() 
+		{ 
+			Directory directory(dir);
+			if (directory.setCurrent())
+			{
+				working_dir_ = dir;
+			}
+		}
+
+
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/KERNEL/mainControl.iC>
 #	endif
 
 		} // namespace VIEW
-
 } // namespace BALL
