@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.100 2000/07/16 21:46:15 oliver Exp $
+dnl    $Id: configure.in,v 1.101 2000/07/16 21:50:14 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -2279,7 +2279,7 @@ AC_SUBST(SIP)
 AC_SUBST(SIP_LIB)
 AC_SUBST(PYTHON_INCLUDES)
 if test "${PYTHON_SUPPORT}" = true ; then
-	AC_SUBST(PYTHON_SUPPORT,"")
+	AC_SUBST(PYTHON_SUPPORT,true)
 	AC_DEFINE(BALL_PYTHON_SUPPORT)
 else
 	AC_SUBST(PYTHON_SUPPORT,)
