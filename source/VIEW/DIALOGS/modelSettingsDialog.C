@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.C,v 1.10 2003/11/20 18:51:34 amoll Exp $
+// $Id: modelSettingsDialog.C,v 1.11 2003/11/20 21:45:12 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modelSettingsDialog.h>
@@ -89,13 +89,12 @@ namespace BALL
 			writePreference_(file, "cartoon_arrow_height", *cartoon_arrow_height_slider);
 			writePreference_(file, "cartoon_arrow_width", *cartoon_arrow_width_slider);
 			writePreference_(file, "cartoon_arrow_width", *cartoon_arrow_width_slider);
-			writePreference_(file, "hbonds_radius_", *hbonds_radius_slider);
+			writePreference_(file, "hbonds_radius", *hbonds_radius_slider);
 		}
 
 		void ModelSettingsDialog::fetchPreferences(const INIFile& file)
 			throw()
 		{
-Log.error() << "#~~#   1 " << std::endl;
 			fetchPreference_(file, "stick_radius", *stick_radius_slider);
 			fetchPreference_(file, "ball_stick_cylinder_radius", *ball_stick_cylinder_radius_slider);
 			fetchPreference_(file, "ball_stick_sphere_radius", *ball_stick_sphere_radius_slider);
@@ -106,7 +105,7 @@ Log.error() << "#~~#   1 " << std::endl;
 			fetchPreference_(file, "cartoon_helix_radius", *cartoon_helix_radius_slider);
 			fetchPreference_(file, "cartoon_arrow_height", *cartoon_arrow_height_slider);
 			fetchPreference_(file, "cartoon_arrow_width", *cartoon_arrow_width_slider);
-			fetchPreference_(file, "hbonds_radius_slider", *hbonds_radius_slider);
+			fetchPreference_(file, "hbonds_radius", *hbonds_radius_slider);
 		}
 	
 	} // namespace VIEW
