@@ -1,4 +1,4 @@
-// $Id: regularData3D.h,v 1.6 2001/06/24 14:16:46 oliver Exp $ 
+// $Id: regularData3D.h,v 1.7 2001/07/25 11:27:48 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_REGULARDATA3D_H
 #define BALL_DATATYPE_REGULARDATA3D_H
@@ -23,35 +23,18 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE_DEEP(RegularData3D<GridDataType>)
+		BALL_CREATE(RegularData3D<GridDataType>)
 
 		/**	@name	Type Definitions
 		*/
 		//@{
 
-		/**	PositionStruct
-				RegularData3D position type.
-				This struct is used to represent the indices of a
-				grid point.
-				@see		RegularData3D
-				@see		RegularData3D::getPosition
-		*/
-		struct PositionStruct 
-		{
-			///
-			Position x;
-			///
-			Position y;
-			///
-			Position z;
-		};
-
 		/**	@name	Position
 				@memo Grid position type
 		*/
-		typedef struct PositionStruct GridIndex;
-
+		typedef TVector3<Position> GridIndex;
 		//@}
+
 		/**	@name	Constructors and Destructors
 		*/
 		//@{
@@ -67,7 +50,7 @@ namespace BALL
 				@param grid the grid to be copied
 				@param bool ignored
 		*/
-		RegularData3D(const RegularData3D<GridDataType>& grid, bool deep = true)
+		RegularData3D(const RegularData3D<GridDataType>& grid)
 			throw(Exception::OutOfMemory);	
 
 		/**	Constructor for RegularData3D.
@@ -505,7 +488,7 @@ namespace BALL
 	// copy constructor
 	template <class GridDataType>
 	RegularData3D<GridDataType>::RegularData3D
-		(const RegularData3D<GridDataType>& grid, bool /* deep */)
+		(const RegularData3D<GridDataType>& grid)
 		throw(Exception::OutOfMemory)
 		: data(0),
 			origin_(0,0,0),
