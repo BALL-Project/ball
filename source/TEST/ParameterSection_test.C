@@ -1,4 +1,4 @@
-// $Id: ParameterSection_test.C,v 1.6 2001/03/09 20:50:16 amoll Exp $
+// $Id: ParameterSection_test.C,v 1.7 2001/03/10 20:39:10 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(Parameters, "$Id: ParameterSection_test.C,v 1.6 2001/03/09 20:50:16 amoll Exp $")
+START_TEST(Parameters, "$Id: ParameterSection_test.C,v 1.7 2001/03/10 20:39:10 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -18,6 +18,7 @@ using namespace BALL;
 Parameters param("data/ParameterSection_test.ini");
 param.init();
 
+{
 ParameterSection* ps = 0;
 CHECK(ParameterSection::ParameterSection())
 	ps = new ParameterSection;
@@ -28,10 +29,9 @@ RESULT
 CHECK(ParameterSection::~ParameterSection())
 	delete ps;
 RESULT
-
+}
 
 CHECK(ParameterSection::clear())
-  //BAUSTELLE
 	ParameterSection ps;
 	ps.extractSection(param, "Section2");
 	ps.clear();
@@ -71,54 +71,80 @@ CHECK(ParameterSection::extractSection(Parameters& parameters, const String& sec
 	TEST_EQUAL(ps.getSectionName(), "")
 RESULT
 
+ParameterSection ps;
+ps.extractSection(param, "Section2");
+
 
 CHECK(ParameterSection::getValue(const String& key, const String& variable) const )
-  //BAUSTELLE
+
+	TEST_EQUAL(ps.getValue("A", "val"), "B")
+	TEST_EQUAL(ps.getValue("C", "val"), "C")
+	TEST_EQUAL(ps.getValue("D", "val"), "E")
+	TEST_EQUAL(ps.getValue("F", "val"), "G")
+	TEST_EQUAL(ps.getValue("J", "val"), " K")
+	TEST_EQUAL(ps.getValue(" L", "val"), " M")
+	TEST_EQUAL(ps.getValue("N", "val"), "O")
+	TEST_EQUAL(ps.getValue("X", "val"), ParameterSection::UNDEFINED)
 RESULT
 
 
 CHECK(ParameterSection::has(const String& key, const String& variable) const )
-  //BAUSTELLE
+	ParameterSection ps;
+	ps.extractSection(param, "Section2");
+
+	TEST_EQUAL(ps.has("A", "val"), true)
+	TEST_EQUAL(ps.has(" L", "val"), true)
+	TEST_EQUAL(ps.has("N", "val"), true)
+	TEST_EQUAL(ps.has("X", "val"), false)
+	TEST_EQUAL(ps.has("N", "X"), false)
 RESULT
 
 
 CHECK(ParameterSection::has(const String& key) const )
-  //BAUSTELLE
+	TEST_EQUAL(ps.has("A"), true)
+	TEST_EQUAL(ps.has(" L"), true)
+	TEST_EQUAL(ps.has("X"), false)
+
 RESULT
 
 
 CHECK(ParameterSection::hasVariable(const String& variable) const )
-  //BAUSTELLE
+	TEST_EQUAL(ps.hasVariable("val"), true)
+	TEST_EQUAL(ps.hasVariable("x"), false)
 RESULT
 
 
 CHECK(ParameterSection::getColumnIndex(const String& variable) const )
-  //BAUSTELLE
+	TEST_EQUAL(ps.getColumnIndex("val"), 0)
+	TEST_EQUAL(ps.getColumnIndex("X"), INVALID_POSITION)
 RESULT
 
 
 CHECK(ParameterSection::getNumberOfVariables() const )
-  //BAUSTELLE
+	TEST_EQUAL(ps.getNumberOfVariables(), 1)
 RESULT
 
 
 CHECK(ParameterSection::getNumberOfKeys() const )
-  //BAUSTELLE
+	TEST_EQUAL(ps.getNumberOfKeys(), 7)
 RESULT
 
 
 CHECK(ParameterSection::getValue(Position key_index, Position variable_index) const )
-  //BAUSTELLE
+	TEST_EQUAL(ps.getValue(2, 0), "E")
+	TEST_EQUAL(ps.getValue(2, 1), ParameterSection::UNDEFINED)
+	TEST_EQUAL(ps.getValue(20, 1), ParameterSection::UNDEFINED)
+	TEST_EQUAL(ps.getValue(20, -1), ParameterSection::UNDEFINED)
 RESULT
 
 
 CHECK(ParameterSection::getKey(Position key_index) const )
-  //BAUSTELLE
+	TEST_EQUAL(ps.getKey(2), "D")
 RESULT
 
 
 CHECK(ParameterSection::isValid() const )
-  //BAUSTELLE
+	TEST_EQUAL(ps.isValid(), true)
 RESULT
 
 
