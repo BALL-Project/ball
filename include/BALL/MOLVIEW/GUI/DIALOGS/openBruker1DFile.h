@@ -1,4 +1,4 @@
-// $Id: openBruker1DFile.h,v 1.2 2001/05/13 16:32:29 hekl Exp $
+// $Id: openBruker1DFile.h,v 1.3 2001/06/06 14:51:15 anhi Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_OPENBRUKER1DFILE_H
 #define BALL_MOLVIEW_GUI_DIALOGS_OPENBRUKER1DFILE_H
@@ -13,6 +13,10 @@
 
 #ifndef BALL_VIEW_GUI_DIALOGS_FILEDIALOG_H
 #       include <BALL/VIEW/GUI/DIALOGS/fileDialog.h>
+#endif
+
+#ifndef BALL_FORMAT_BRUKER1DFILE_H
+#       include <BALL/FORMAT/bruker1DFile.h>
 #endif
 
 using namespace std;
