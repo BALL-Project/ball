@@ -1,4 +1,4 @@
-// $Id: randomAccessIterator.h,v 1.11 2001/07/04 18:25:50 amoll Exp $ 
+// $Id: randomAccessIterator.h,v 1.12 2001/07/15 20:08:11 oliver Exp $ 
 
 #ifndef BALL_CONCEPT_RANDOMACCESSITERATOR_H
 #define BALL_CONCEPT_RANDOMACCESSITERATOR_H
@@ -172,22 +172,6 @@ namespace BALL
 		Distance operator -	(const RandomAccessIterator& iterator) const
 			throw(Exception::InvalidIterator, Exception::IncompatibleIterators);
 		
-		/** Return a new iterator.
-		 *  It points to the element with the given distance from the element 
-		 *  of the given iterator.
-		 */
-		// BAUSTELLE
-		//friend RandomAccessIterator operator + (Distance distance, const RandomAccessIterator& iterator)
-		 	//throw(Exception::InvalidIterator);
-
-		/** Return a new iterator.
-		 *  It points to the element with the given distance in reverse direction from the element
-		 *  of the given iterator.
-		 */
-		 // BAUSTELLE
-		 //friend Distance operator - (const RandomAccessIterator& a, const RandomAccessIterator& b)
-			// throw(Exception::InvalidIterator, Exception::IncompatibleIterators);
-		 
 		/** Lesser operator.
 		 * 	Returns true if both iterators have the same container
 		 * 	and the element of this iterator resides before the element of the given iterator.
