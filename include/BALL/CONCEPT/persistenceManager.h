@@ -1,4 +1,4 @@
-// $Id: persistenceManager.h,v 1.31 2001/07/15 16:14:05 oliver Exp $
+// $Id: persistenceManager.h,v 1.32 2001/07/15 16:36:46 oliver Exp $
 
 #ifndef BALL_CONCEPT_PERSISTENCEMANAGER_H
 #define BALL_CONCEPT_PERSISTENCEMANAGER_H
@@ -49,7 +49,11 @@ namespace BALL
 					interface}.  These are the methods needed to register classes,
 					set the associated streams, and to store or retrieve objects.
 			\end{itemize}
-			BAUSTELLE: One or two words about persistent object pointers
+			\\
+			When writing a pointer to a persistent object, the serialization of
+			the referenced object is automatically initiated after the objects
+			holding the pointer has been written. Hence, pointers between persistent 
+			objects remain valid after deserializing the objects again.
 			\\
 			{\bf Note:} This class is mainly an interface definition and contains
 			abstract methods. Do not try to instantiate a PersistenceManager,
@@ -321,14 +325,10 @@ namespace BALL
 		bool readStorableObject(T& t, const char* name)
 			throw();
 
-		// BAUSTELLE:
-		// Regarding the next few methods: is it the name of the object or its
-		// pointer/reference?
-
 		/**	Write a pointer to a PersistentObject. 
 				This method also writes the necessary header and trailer.
 				@param object a const pointer to the object we want to write
-				@param name the name of the object pointer 
+				@param name the name of the object pointer (the name of the member variable written)
 		*/
 		template <class T>
 		void writeObjectPointer(const T* object, const char* name)
@@ -337,7 +337,7 @@ namespace BALL
 		/**	Read a pointer to a PersistentObject.
 				This method also checks header and trailer.
 				@param	object a mutable pointer reference wa want to read.
-				@param	name the name of the object pointer
+				@param	name the name of the object pointer (usually the name of the member variable)
 				@return	true if reading wass successful
 		*/
 		template <class T>
@@ -347,7 +347,7 @@ namespace BALL
 		/** Write a reference to a PersistentObject. 
 				This method also writes the necessary header and trailer.
 				@param	object a const reference to the object
-				@param	name the name of the object
+				@param	name the name of the object (usually the name of the member variable)
 		*/
 		template <class T>
 		void writeObjectReference(const T& object, const char* name)
@@ -356,7 +356,7 @@ namespace BALL
 		/**	Read a reference to a PersistentObject.
 				This method also checks header and trailer of the object reference.
 				@param	object a mutable reference
-				@param	name the name of the object
+				@param	name the name of the object (usually the name of the member variable)
 				@return	true if reading was successful
 		*/
 		template <class T>
@@ -367,7 +367,7 @@ namespace BALL
 				This method writes {\tt size} persistent objects to the persistent
 				stream. It also writes the necessary header and trailer.
 				@param	array the array of persistent objects
-				@param	name the name
+				@param	name the name (usually the name of the member variable)
 				@param	size the number of elements in the array
 		*/
 		template <class T>
@@ -378,7 +378,7 @@ namespace BALL
 				This method reads {\tt size} persistent objects from the persistent
 				stream. It also checks header and trailer of the array.
 				@param	array the array of persistent objects
-				@param	name the name
+				@param	name the name (usually the name of the member variable)
 				@param	size the number of elements in the array
 		*/
 		template <class T>
@@ -389,7 +389,7 @@ namespace BALL
 				Thhis method writes {\tt size} persistent objects to the persistent
 				stream. It also writes the necessary header and trailer.
 				@param  array the array of persistent object pointers
-				@param  name the name
+				@param  name the name (usually the name of the member variable)
 				@param  size the number of elements in the array
 		*/
 		template <class T>
@@ -400,7 +400,7 @@ namespace BALL
 				This method reads {\tt size} persistent object pointers from the
 				persistent stream. It also checks header and trailer of the array.
 				@param	array the array of persistent object pointers
-				@param	name the name
+				@param	name the name (usually the name of the member variable)
 				@param	size the number of elements in the array
 		*/
 		template <class T>

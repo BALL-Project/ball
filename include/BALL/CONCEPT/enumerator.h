@@ -1,4 +1,4 @@
-// $Id: enumerator.h,v 1.13 2001/07/09 19:17:30 anker Exp $
+// $Id: enumerator.h,v 1.14 2001/07/15 16:36:45 oliver Exp $
 
 #ifndef BALL_CONCEPT_ENUMERATOR_H
 #define BALL_CONCEPT_ENUMERATOR_H
@@ -27,7 +27,8 @@ namespace BALL
 
 	/** Enumerator Class.
 			The Enumerator class provides means for enumerating all possible
-			permutations of the variants given in a list (@see BAUSTELLE). 
+			permutations of an ordered sequence of objects, where the possible variants for
+			each position of the seqeunce are given in a separate list.
 			Each permutation thus can be denoted by an integer.
 			\\
 			{\bf Definition:} \URL{BALL/CONCEPT/enumerator.h}
