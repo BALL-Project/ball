@@ -1,4 +1,4 @@
-// $Id: surfaceModel.C,v 1.13.4.6 2002/12/08 22:32:21 amoll Exp $
+// $Id: surfaceModel.C,v 1.13.4.7 2002/12/11 13:39:45 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/surfaceModel.h>
 #include <BALL/STRUCTURE/surfaceProcessor.h>
@@ -90,9 +90,13 @@ namespace BALL
 					{
 						Log.error() << "SurfaceModel: caught exception while calculating molecular surface: " << e << endl;
 					}
+					catch (std::exception e)
+					{
+						Log.error() << "SurfaceModel: caught exception while calculating molecular surface: " << e.what() << endl;
+					}
 					catch (...)
 					{
-						Log.error() << "SurfaceModel: caught exception while calculating molecular surface" << endl;
+						Log.error() << "SurfaceModel: caught unknown exception while calculating molecular surface" << endl;
 					}
 					Log.info() << "assigning surface (" << sp.getSurface().vertex.size() << " vertices, " 
 										 << sp.getSurface().triangle.size() << " triangles)" << endl;

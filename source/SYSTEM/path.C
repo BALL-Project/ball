@@ -1,4 +1,4 @@
-// $Id: path.C,v 1.2.4.3 2002/12/11 13:05:18 oliver Exp $
+// $Id: path.C,v 1.2.4.4 2002/12/11 13:39:45 oliver Exp $
 
 #include <BALL/COMMON/global.h>
 #include <BALL/SYSTEM/path.h>
@@ -59,12 +59,10 @@ namespace BALL
 			char*	ball_data_path = getenv("BALL_DATA_PATH");
 			if (ball_data_path != 0)
 			{	
-				Log.error() << "BALL_DATA_PATH = " << ball_data_path << std::endl;
 				string bdp(ball_data_path);
 				bdp.append("\n");
 				bdp.append(path_);
 				setDataPath(bdp);
-				Log.error() << "SEARCH_PATH = " << ball_data_path << std::endl;
 			}
 			
 			// don`t try this again
@@ -116,7 +114,6 @@ namespace BALL
 			tmp.erase(0, tmp.rfind(FileSystem::PATH_SEPARATOR) + 1);
 			if (tmp != name)
 			{
-				Log.info() << "searching now for " << tmp << " only!" << std::endl;
 				result = findStrict(tmp);
 			}
 		}
@@ -130,7 +127,6 @@ namespace BALL
 		// first, try the path itself
 		if (File::isAccessible(name))
 		{
-			Log.error() << " checking for " << name << std::endl;
 			return name;
 		}
 
@@ -147,8 +143,7 @@ namespace BALL
 
 			// if the file could be opened, we return its name
 			if (File::isAccessible(filename))
-			{
-				Log.error() << " checking for " << filename << std::endl;
+			{				
 				return filename;
 			}
 		}
