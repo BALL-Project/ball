@@ -1,6 +1,8 @@
-// $Id: solventParameter.C,v 1.1 2000/08/31 17:33:32 anker Exp $
+// $Id: solventParameter.C,v 1.2 2000/09/02 14:39:14 oliver Exp $
 
 #include <BALL/SOLVATION/solventParameter.h>
+
+using namespace std;
 
 namespace BALL
 {

@@ -1,6 +1,8 @@
-// $Id: pairExpRDFIntegrator.C,v 1.2 2000/09/01 15:14:09 anker Exp $
+// $Id: pairExpRDFIntegrator.C,v 1.3 2000/09/02 14:34:40 oliver Exp $
 
 #include <BALL/SOLVATION/pairExpRDFIntegrator.h>
+
+using namespace std;
 
 namespace BALL
 {

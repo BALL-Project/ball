@@ -1,6 +1,8 @@
-// $Id: claverieParameter.C,v 1.1 2000/08/31 17:56:15 anker Exp $
+// $Id: claverieParameter.C,v 1.2 2000/09/02 14:34:12 oliver Exp $
 
 #include <BALL/SOLVATION/claverieParameter.h>
+
+using namespace std;
 
 namespace BALL
 {

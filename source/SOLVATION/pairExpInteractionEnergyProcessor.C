@@ -1,4 +1,4 @@
-// $Id: pairExpInteractionEnergyProcessor.C,v 1.2 2000/09/01 15:14:09 anker Exp $
+// $Id: pairExpInteractionEnergyProcessor.C,v 1.3 2000/09/02 14:34:12 oliver Exp $
 
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/MATHS/surface.h>
@@ -6,11 +6,11 @@
 #include <BALL/MOLMEC/PARAMETER/lennardJones.h>
 #include <BALL/STRUCTURE/numericalSAS.h>
 
-// BAUSTELLE: Pfad?
 #include <BALL/SOLVATION/pairExpInteractionEnergyProcessor.h>
 #include <BALL/SOLVATION/solventParameter.h>
 #include <BALL/SOLVATION/claverieParameter.h>
 
+using namespace std;
 
 namespace BALL
 {

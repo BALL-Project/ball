@@ -1,7 +1,9 @@
-// $Id: pierottiCavFreeEnergyProcessor.C,v 1.1 2000/08/31 18:48:35 anker Exp $
+// $Id: pierottiCavFreeEnergyProcessor.C,v 1.2 2000/09/02 14:34:12 oliver Exp $
 
 #include <BALL/SOLVATION/pierottiCavFreeEnergyProcessor.h>
 #include <BALL/STRUCTURE/numericalSAS.h>
+
+using namespace std;
 
 namespace BALL
 {

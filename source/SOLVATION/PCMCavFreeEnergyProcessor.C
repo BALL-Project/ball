@@ -1,8 +1,10 @@
-// $Id: PCMCavFreeEnergyProcessor.C,v 1.1 2000/08/31 18:48:35 anker Exp $
+// $Id: PCMCavFreeEnergyProcessor.C,v 1.2 2000/09/02 14:34:11 oliver Exp $
 
 #include <BALL/SOLVATION/PCMCavFreeEnergyProcessor.h>
 #include <BALL/STRUCTURE/numericalSAS.h>
 #include <BALL/STRUCTURE/analyticalSES.h>
+
+using namespace std;
 
 namespace BALL
 {

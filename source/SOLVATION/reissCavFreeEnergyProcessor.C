@@ -1,7 +1,9 @@
-// $Id: reissCavFreeEnergyProcessor.C,v 1.1 2000/08/31 18:48:35 anker Exp $
+// $Id: reissCavFreeEnergyProcessor.C,v 1.2 2000/09/02 14:35:44 oliver Exp $
 
 #include <BALL/SOLVATION/reissCavFreeEnergyProcessor.h>
 #include <BALL/STRUCTURE/numericalSAS.h>
+
+using namespace std;
 
 namespace BALL
 {
