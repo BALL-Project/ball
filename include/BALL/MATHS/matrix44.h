@@ -1,4 +1,4 @@
-// $Id: matrix44.h,v 1.28 2000/05/04 13:53:46 oliver Exp $
+// $Id: matrix44.h,v 1.29 2000/05/04 16:07:39 oliver Exp $
 
 #ifndef BALL_MATHS_MATRIX44_H
 #define BALL_MATHS_MATRIX44_H
@@ -295,12 +295,13 @@ namespace BALL
 		void setColumn(Index col, const TVector4<T> col_value);
 
 
-		/** Test if two matrices are equal,
+		/** Test if two matrices are equal.
+				Two matrices are considered equal, if \Ref{Maths::isEqual} returns {\bf true} 
+				for each pair of corresponding elements.
 				@param m the matrix to compare with
-				@param max_diff the allowed maximum difference between two values
 				@return bool, {\bf true} if all components are equal, {\bf false} otherwise
 		*/
-		bool isEqual(const TMatrix4x4& m, const T max_diff = (T)Constants::EPSILON) const;
+		bool isEqual(const TMatrix4x4& m) const;
 
 
 		/** Get the diagonal of the matrix
@@ -1232,18 +1233,16 @@ namespace BALL
 	}
 
 	template <typename T>
-	bool TMatrix4x4<T>::isEqual(const TMatrix4x4<T>& m, const T max_diff) const
+	bool TMatrix4x4<T>::isEqual(const TMatrix4x4<T>& m) const
 	{
-		for (int i=0; i<4; i++ )
+		for (Position i = 0; i < 16; i++)
 		{
-			for (int j=0; j<4; j++  )
+			if (Maths::isEqual((*this)[i], m[i]) == false)
 			{
-				if (Maths::isNear((*this)(i, j), m(i, j), max_diff) == false)
-				{
-					return false;
-				} 
-			}
+				return false;
+			} 
 		}
+
 		return true;
 	}
 
