@@ -40,6 +40,15 @@
 /**	\defgroup Foundation Foundation Classes
 */
 		
+/** \defgroup Kernel Kernel Classes
+    This chapter contains all relevant information on BALL kernel datastructures.
+    <br>
+    The hierarchy of the kernel classes looks like this:
+    <br>
+    \image html KERNEL.png
+    \image latex KERNEL.eps "The Kernel Classes"
+*/
+
 /**
 	\defgroup Modeling Molecular Modeling
 */

@@ -1,14 +1,4 @@
-// $Id: kernel.doc,v 1.19 2003/03/26 16:11:55 anhi Exp $
-
-/** \defgroup Kernel Kernel Classes
-		\ingroup Foundation
-		This chapter contains all relevant information on BALL kernel datastructures. 
-		<br>	
-		The hierarchy of the kernel classes looks like this: 
-		<br>	
-		\image html KERNEL.png
-		\image latex KERNEL.eps "The Kernel Classes"
-*/
+// $Id: kernel.doc,v 1.20 2003/03/28 18:12:27 oliver Exp $
 
 	/** \defgroup KernelIterators Iterator Classes
 			\ingroup Kernel

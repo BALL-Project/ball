@@ -1,7 +1,7 @@
-// $Id: qsar.doc,v 1.2 2003/02/25 13:59:41 anhi Exp $
+// $Id: qsar.doc,v 1.3 2003/03/28 18:12:29 oliver Exp $
 
 /** \defgroup QSAR QSAR -- Quantitative Structure Activity Relationship.
-		\ingroup Foundation
+		\ingroup Modeling
 		This chapter contains all relevant information on 
 		BALL classes related to QSAR methods.
 */

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reconstructFragmentProcessor.h,v 1.7 2003/03/26 15:59:27 anhi Exp $
+// $Id: reconstructFragmentProcessor.h,v 1.8 2003/03/28 18:12:33 oliver Exp $
 
 #ifndef BALL_STRUCTURE_RECONSTRUCFRAGMENTPROCESSOR_H
 #define BALL_STRUCTURE_RECONSTRUCFRAGMENTPROCESSOR_H
@@ -102,6 +102,8 @@ namespace BALL
 		/**@name	Static methods.
 		*/
 		//@{
+		// ???? This should be replaced by the corresponding method in StructureMapper
+		// We don't need two implementations with the same code.
 		/**	Map three vectors onto each other.
 				This method computes the transformation which 
 				move the three points given in <tt>v1</tt>, <tt>v2</tt>, and <tt>v3</tt> 
@@ -111,7 +113,7 @@ namespace BALL
         by the three reference points. Furthermore, <tt>v2</tt> is mapped such that
 				the vector connecting <tt>v1</tt> and <tt>v2</tt> is parallel to the vector 
 				connecting <tt>w1</tt> and <tt>w2</tt> after the transformation.
-				Well-deinfed, but less meaningful transformations are obtained if
+				Well-defined, but less meaningful transformations are obtained if
 				any of the two point sets is co-linear.
 		*/
 		static Matrix4x4 mapThreeVectors
