@@ -1,4 +1,4 @@
-// $Id: classTest.h,v 1.2 1999/10/30 12:53:20 oliver Exp $
+// $Id: classTest.h,v 1.3 1999/11/26 16:45:39 oliver Exp $
 
 #include <BALL/common.h>
 #include <BALL/SYSTEM/file.h>
@@ -79,6 +79,9 @@ namespace TEST {\
 	char*					version_string = version;\
 	bool					newline = false;\
 	list<string>	tmp_file_list;\
+	ifstream			infile;\
+	ifstream			templatefile;\
+	bool					equal_files;\
 }\
 \
 \
@@ -418,5 +421,94 @@ int main(int argc, char **argv)\
 		else \
 			std::cout << " - " << std::endl;\
 	}\
+
+/**	File comparison macro.
+		This macro is used to test file operations. It compares the file with name {\tt filename} 
+		against a template file {\tt templatename}. If {\tt use\_regexps} is {\bf true}, 
+		each line of the template file starting with {\tt ``/''} is considered to contain a regular
+		expression. 
+*/
+#define TEST_FILE(filename, templatename, use_regexps) \
+	TEST::equal_files = true;\
+	TEST::infile.open(filename);\
+	TEST::templatefile.open(templatename);\
+	\
+	if (TEST::infile.good() && TEST::templatefile.good())\
+	{\
+		String template_line;\
+		String line;\
+		\
+		while (TEST::infile.good() && TEST::templatefile.good())\
+		{\
+			template_line.getline(TEST::templatefile);\
+			line.getline(TEST::infile);\
+			\
+			if ((use_regexps) && (template_line[0] == '/') && (template_line[1] != '/'))\
+			{\
+				RegularExpression expression(template_line(1));\
+				bool match = expression.match(line);\
+				TEST::equal_files &= match;\
+			} else {\
+				TEST::equal_files &= (template_line == line);\
+			}\
+		}\
+	} else {\
+		TEST::equal_files = false;\
+		\
+		if (TEST::verbose > 0)\
+		{\
+			if (!TEST::newline)\
+			{\
+				TEST::newline = true;\
+				std::cout << std::endl;\
+			}\
+			\
+			std::cout << "    (line " << __LINE__ << ": TEST_FILE(" << #filename << ", " << #templatename << ", ";\
+			if (use_regexps)\
+			{\
+				std::cout << "true";\
+			} else {\
+				std::cout << "false";\
+			}\
+			std::cout << ") : " << " cannot open file: ";\
+			if (TEST::infile.bad())\
+			{\
+				std::cout << #filename << " ";\
+			}\
+			if (TEST::templatefile.bad())\
+			{\
+				std::cout << #templatename << " ";\
+			}\
+			std::cout << std::endl;\
+			\
+		}\
+	}\
+	TEST::infile.close();\
+	TEST::templatefile.close();\
+	\
+	TEST::this_test = TEST::equal_files;\
+	TEST::test = TEST::test && TEST::this_test;\
+	if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))\
+	{\
+		if (!TEST::newline)\
+		{\
+			TEST::newline = true;\
+			std::cout << std::endl;\
+		}\
+ 		std::cout << "    (line " << __LINE__ << ": TEST_FILE("<< #filename << ", " << #templatename << "): ";\
+		if (TEST::this_test)\
+		{\
+			std::cout << "true";\
+		} else {\
+			std::cout << "false";\
+		}\
+		\
+		if (TEST::this_test)\
+		{\
+			std::cout << " + " << std::endl;\
+		} else {\
+			std::cout << " - " << std::endl;\
+		}\
+	}
 
 //@}
