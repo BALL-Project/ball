@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.18.2.12 2005/01/28 18:15:45 amoll Exp $
+// $Id: POVRenderer.C,v 1.18.2.13 2005/01/28 18:24:35 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -155,12 +155,15 @@ namespace BALL
 
 		String POVRenderer::trimFloatValue_(float value)
 		{
-			String output = String(value).trimRight("0");
+			String output = String(value);
 			for (Position p = 0; p < output.size(); p++)
 			{
 				if (output[p] == '.')
 				{
-					return output.left(p + 3);
+					output = output.left(p + 3);
+					output.trimRight("0");
+					if (output == "-0.") output = "0.";
+					return output;
 				}
 			}
 
