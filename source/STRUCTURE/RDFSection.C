@@ -1,4 +1,4 @@
-// $Id: RDFSection.C,v 1.3 2000/09/21 13:29:52 anker Exp $
+// $Id: RDFSection.C,v 1.4 2000/09/22 16:30:17 anker Exp $
 
 #include <BALL/STRUCTURE/RDFSection.h>
 #include <BALL/FORMAT/parameters.h>
@@ -69,10 +69,7 @@ namespace BALL
 		int type;
 
 		// extract the basis information
-		Log.info() << "section_name = " << section_name << endl;
 		ParameterSection::extractSection(parameters, section_name);
-
-		options.dump();
 
 		if (options.has("type"))
 		{

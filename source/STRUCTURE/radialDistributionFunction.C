@@ -1,4 +1,4 @@
-// $Id: radialDistributionFunction.C,v 1.2 2000/09/02 16:18:02 anker Exp $
+// $Id: radialDistributionFunction.C,v 1.3 2000/09/22 16:30:18 anker Exp $
 
 #include <BALL/STRUCTURE/radialDistributionFunction.h>
 
@@ -95,6 +95,12 @@ namespace BALL
 	{
 		// BAUSTELLE
 		return representation_.isValid();
+	}
+
+	
+	void RadialDistributionFunction::dump(ostream& stream, Size /* depth */) const
+	{
+		representation_.dump();
 	}
 
 } // namespace BALL
