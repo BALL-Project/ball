@@ -1,4 +1,4 @@
-// $Id: File_test.C,v 1.20 2001/07/15 17:32:39 amoll Exp $
+// $Id: File_test.C,v 1.21 2001/07/25 11:37:47 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 #include <sys/stat.h>
 ///////////////////////////
 
-START_TEST(File, "$Id: File_test.C,v 1.20 2001/07/15 17:32:39 amoll Exp $")
+START_TEST(File, "$Id: File_test.C,v 1.21 2001/07/25 11:37:47 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -299,7 +299,8 @@ CHECK(isCanonized())
 	TEST_EQUAL(f6.isValid(), true)
 	TEST_EQUAL(f6.isCanonized(), true)
 
-	// BAUSTELLE
+	// BAUSTELLE: obviously, we need something more clever
+	// than the code below...
 	/* This is a test for an absolute path.
 		 Because the location of the file is unsure, 
 		 I had to comment it out.
