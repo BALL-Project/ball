@@ -1,4 +1,4 @@
-// $Id: string.C,v 1.16 2000/02/06 19:53:29 oliver Exp $
+// $Id: string.C,v 1.17 2000/06/27 07:46:23 oliver Exp $
 
 #include <BALL/DATATYPE/string.h>
 
@@ -574,7 +574,9 @@ namespace BALL
 		{
 			// erase the whitespace characters on the left
 			erase(0, index);
-		} else {
+		} 
+		else 
+		{
 			// if nothing was found, the string might contain only whitespaces!
 			String trimmed(trimmed_chars);
 			if (trimmed.has((*this)[0]))

@@ -1,4 +1,4 @@
-// $Id: atom.C,v 1.23 2000/04/29 12:53:21 oliver Exp $
+// $Id: atom.C,v 1.24 2000/06/27 07:47:18 oliver Exp $
 
 #include <BALL/KERNEL/atom.h>
 
@@ -243,14 +243,16 @@ namespace BALL
 				parent_name.trim();
 				parent_name += ":";
 			}
-			// we don't hav a fragment either, look for molecule
+			// we don't have a fragment either, look for molecule
 			else if (getMolecule() != 0)
 			{
 				parent_name = getMolecule()->getName();
 				parent_name.trim();
 				parent_name += ":";
 			}
-		} else {
+		} 
+		else 
+		{
 			// retrieve the fragment name
 			parent_name = parent->getFullName((Residue::FullNameType)type) + ":";
 		}
