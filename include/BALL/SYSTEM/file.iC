@@ -1,4 +1,4 @@
-// $Id: file.iC,v 1.13 2001/01/26 01:36:59 amoll Exp $
+// $Id: file.iC,v 1.14 2001/04/03 14:06:33 amoll Exp $
 
 BALL_INLINE 
 void File::clear()
@@ -181,7 +181,8 @@ BALL_INLINE
 bool File::isValid() 
 	const	throw()
 {
-  return ((File *)this)->::std::fstream::good();
+  return ( getName() != "" && 
+					 ((File *)this)->::std::fstream::good() );
 }
 
 BALL_INLINE 

@@ -1,4 +1,4 @@
-// $Id: file.h,v 1.25 2001/03/29 08:19:41 anker Exp $
+// $Id: file.h,v 1.26 2001/04/03 14:06:33 amoll Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -461,6 +461,7 @@ namespace BALL
 		//@{
 
 		/**	Test if the file is valid.
+				If the filename was not set, false is returned.
 				This function uses std::fstream::good().
 				@return bool true if the file is valid
 		*/
