@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.26 2004/07/26 13:45:29 amoll Exp $
+// $Id: mainframe.C,v 1.27 2004/08/14 11:49:13 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -12,6 +12,7 @@
 #include <BALL/VIEW/KERNEL/moleculeObjectCreator.h>
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
 #include <BALL/VIEW/RENDERING/VRMLRenderer.h>
+#include <BALL/VIEW/DIALOGS/animationDialog.h>
 #include <BALL/COMMON/version.h>
 
 #include <BALL/DATATYPE/contourSurface.h>
@@ -123,6 +124,9 @@ namespace BALL
 		FDPB_dialog_ = new FDPBDialog(this);
 		CHECK_PTR(FDPB_dialog_);
 
+		AnimationDialog* anim_dialog = new AnimationDialog(this);
+		CHECK_PTR(anim_dialog);
+
 		#ifdef BALL_PYTHON_SUPPORT
 			PyWidget* pywidget = new PyWidget(this, "Python Interpreter");
 			CHECK_PTR(pywidget);
@@ -146,6 +150,8 @@ namespace BALL
 		// Display Menu
 		insertMenuEntry(MainControl::DISPLAY, "Toggle Fullscreen", this, SLOT(toggleFullScreen()),
 										ALT+Key_X);
+
+		insertMenuEntry(MainControl::DISPLAY, "Animation", anim_dialog, SLOT(show()));
 
 		// Tools Menu -------------------------------------------------------------------
 		hint = "Calculate the Electrostatics with FDPB, if one System selected.";
@@ -598,5 +604,5 @@ namespace BALL
 			e->accept();
 		#endif
 	}
-	
+
 }
