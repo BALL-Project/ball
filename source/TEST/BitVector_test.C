@@ -1,4 +1,4 @@
-// $Id: BitVector_test.C,v 1.10 2000/07/23 20:53:51 oliver Exp $
+// $Id: BitVector_test.C,v 1.11 2000/07/25 12:32:12 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,13 +8,12 @@
 
 ///////////////////////////
 
-START_TEST(BitVector, "$Id: BitVector_test.C,v 1.10 2000/07/23 20:53:51 oliver Exp $")
+START_TEST(BitVector, "$Id: BitVector_test.C,v 1.11 2000/07/25 12:32:12 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
-using namespace std;
 
 BitVector* bv_ptr;
 	CHECK(BitVector::BitVector())
@@ -156,12 +155,6 @@ CHECK(BitVector::countValue(bool) const)
 	TEST_EQUAL(bv10.countValue(true), 4)
 	TEST_EQUAL(bv10.countValue(false), 6)
 RESULT
-/*
-CHECK(BitVector::getMaxIndex() const)
-	TEST_EQUAL(bv10.getMaxIndex(), 9)
-	BitVector b;
-	TEST_EQUAL(b.getMaxIndex(), 0)
-RESULT*/
 
 CHECK(BitVector::getBitSet())
 	BitVector bv(10);
@@ -198,7 +191,7 @@ CHECK(BitVector::operator [] (Index) const)
 	TEST_EQUAL(bv10_2[0], false)
 	TEST_EQUAL(bv10_2[1], true)
 	TEST_EQUAL(bv10_2[1111], false)
-	TEST_EQUAL(bv10_2.getSize(), 1112)
+	TEST_EQUAL(bv10_2.getSize(), 10)
 RESULT
 
 CHECK(BitVector::setBit/getBit(Index, bool))
@@ -210,6 +203,10 @@ CHECK(BitVector::setBit/getBit(Index, bool))
 	TEST_EQUAL(bv9.getBit(0), false)
 	TEST_EQUAL(bv9.getBit(99), false)
 	TEST_EQUAL(bv9.getSize(), 100)
+
+	const BitVector const_bv(8);
+	const_bv.getBit(11);
+	TEST_EQUAL(const_bv.getSize(), 8)
 RESULT
 
 CHECK(BitVector::toggleBit(Index))
