@@ -1,4 +1,4 @@
-// $Id: RSEdge.h,v 1.2 2000/10/19 14:24:51 strobel Exp $
+// $Id: RSEdge.h,v 1.3 2000/12/07 14:56:36 strobel Exp $
 
 #ifndef BALL_STRUCTURE_RSEDGE_H
 #define BALL_STRUCTURE_RSEDGE_H
@@ -49,7 +49,7 @@ namespace BALL
 				initialized to {\tt (T)0} or {\tt NULL}, respectivly.
 		*/
 		TRSEdge()
-			: vertex0_(-1), vertex1_(-1), face0_(NULL), face1_(NULL),
+			: vertex0_(NULL), vertex1_(NULL), face0_(NULL), face1_(NULL),
 				center_of_torus_(), radius_of_torus_((T)0), phi_(),
 				circle0_(), circle1_(), intersection_point0_(), intersection_point1_(),
 				singular_(false), index_(-1)
@@ -91,7 +91,7 @@ namespace BALL
 				@param	singular
 				@param	index assigned to the index
 		*/
-		TRSEdge(const Index vertex1, const Index vertex2, TRSFace<T>* face1, TRSFace<T>* face2,
+		TRSEdge(TRSVertex<T>* vertex1, TRSVertex<T>* vertex2, TRSFace<T>* face1, TRSFace<T>* face2,
 						const TVector3<T>& center_of_torus, const T& radius_of_torus, const TAngle<T>& phi,
 						const TCircle3<T>& circle1, const TCircle3<T>& circle2,
 						const TVector3<T>& intersection_point1, const TVector3<T>& intersection_point2,
@@ -154,7 +154,7 @@ namespace BALL
 				@param	singular
 				@param	index assigned to the index
 		*/
-		void set(const Index vertex0, const Index vertex1, TRSFace<T>* face0, TRSFace<T>* face1,
+		void set(TRSVertex<T>* vertex0, TRSVertex<T>* vertex1, TRSFace<T>* face0, TRSFace<T>* face1,
 						 const TVector3<T>& center_of_torus, const T& radius_of_torus, const TAngle<T>& phi,
 						 const TCircle3<T>& circle0, const TCircle3<T>& circle1,
 						 const TVector3<T>& intersection_point0, const TVector3<T>& intersection_point1,
@@ -176,7 +176,7 @@ namespace BALL
 				@param i the first vertex is changed if i = 0, the second otherwise
 				@param vertex the new index
 		*/
-		void  setVertices(const Position i, const Index vertex)
+		void setVertices(const Position i, TRSVertex<T>* vertex)
 		{
 			if (i == 0)
 			{
@@ -189,9 +189,10 @@ namespace BALL
 		}
 
 		/** Return the index of one of the two rsvertices of the rsedge.
-				@return Index the index of the first rsvertex if i = 0, the index of the second rsvertex otherwise
+				@return RSVertex the index of the first rsvertex if i = 0,
+												 the index of the second rsvertex otherwise
 		*/
-		Index getVertex(const Position i)
+		TRSVertex<T>* getVertex(const Position i)
 		{
 			if (i == 0)
 			{
@@ -207,7 +208,7 @@ namespace BALL
 				@param i the first face is changed if i = 0, the second otherwise
 				@param face a pointer to the the new face
 		*/
-		void  setFaces(const Position i, const TRSFace<T>* face)
+		void  setFaces(const Position i, TRSFace<T>* face)
 		{
 			if (i == 0)
 			{
@@ -397,6 +398,27 @@ namespace BALL
 				}
 			}
 		}
+
+
+		/** Substitute a rsvertex by an other one.
+				@param old_vertex the vertex that has to be substituted
+				@param new_vertex the new vertex
+				@return bool, {\texbf true}, if the vertex can be substituted, {\textbf false} otherwise
+		*/
+		bool substituteVertex(TRSVertex<T>* old_vertex, TRSVertex<T>* new_vertex)
+		{
+			if (vertex0_ == old_vertex)
+			{
+				vertex0_ = new_vertex;
+				return true;
+			}
+			if (vertex1_ == old_vertex)
+			{
+				vertex1_ = new_vertex;
+				return true;
+			}
+			return false;
+		}
 		//@}
 
 
@@ -410,11 +432,13 @@ namespace BALL
 		*/
 		bool operator == (const TRSEdge& rsedge) const
 		{
-			if ((vertex0_ != rsedge.getVertex(0)) && (vertex0_ != rsedge.getVertex(1)))
+			if ((vertex0_->similar(*rsedge.getVertex(0)) == false) &&
+					(vertex0_->similar(*rsedge.getVertex(1)) == false)    )
 				{
 					return false;
 				}
-			if ((vertex1_ != rsedge.getVertex(0)) && (vertex1_ != rsedge.getVertex(1)))
+			if ((vertex1_->similar(*rsedge.getVertex(0)) == false) &&
+					(vertex1_->similar(*rsedge.getVertex(1)) == false)    )
 				{
 					return false;
 				}
@@ -434,11 +458,13 @@ namespace BALL
 		*/
 		bool similar(TRSEdge& rsedge) const
 		{
-			if ((vertex0_ != rsedge.getVertex(0)) && (vertex0_ != rsedge.getVertex(1)))
+			if ((vertex0_->similar(*rsedge.getVertex(0)) == false) &&
+					(vertex0_->similar(*rsedge.getVertex(1)) == false)    )
 				{
 					return false;
 				}
-			if ((vertex1_ != rsedge.getVertex(0)) && (vertex1_ != rsedge.getVertex(1)))
+			if ((vertex1_->similar(*rsedge.getVertex(0)) == false) &&
+					(vertex1_->similar(*rsedge.getVertex(1)) == false)    )
 				{
 					return false;
 				}
@@ -474,8 +500,8 @@ namespace BALL
 
 		protected:
 
-		Index vertex0_;
-		Index vertex1_;
+		TRSVertex<T>* vertex0_;
+		TRSVertex<T>* vertex1_;
 		TRSFace<T>* face0_;
 		TRSFace<T>* face1_;
 		TVector3<T> center_of_torus_;
@@ -510,12 +536,12 @@ namespace BALL
 		std::ostream& operator << (std::ostream& s, TRSEdge<T>& rsedge)
 		{
 			s << "RSEDGE" << rsedge.getIndex()
-				<< "([" << rsedge.getVertex(0) << ' ' << rsedge.getVertex(1) << "] ["
-				<< (rsedge.getFace(0) == NULL ? -1 : rsedge.getFace(0)->getIndex()) << ' '
-				<< (rsedge.getFace(1) == NULL ? -1 : rsedge.getFace(1)->getIndex()) << "] "
+				<< "([" << (rsedge.getVertex(0) == NULL ? -2 : rsedge.getVertex(0)->getIndex()) << ' '
+				<<				 (rsedge.getVertex(1) == NULL ? -2 : rsedge.getVertex(1)->getIndex()) << "] "
+				<< "[" << (rsedge.getFace(0) == NULL ? -2 : rsedge.getFace(0)->getIndex()) << ' '
+				<<				(rsedge.getFace(1) == NULL ? -2 : rsedge.getFace(1)->getIndex()) << "] "
 				<< rsedge.getCenterOfTorus() << ' '
-				<< rsedge.getMajorRadiusOfTorus() << ' '
-				<< rsedge.getPhi() << ' '
+				<< rsedge.getMajorRadiusOfTorus() << ' ' << rsedge.getPhi() << ' '
 				<< rsedge.getContactCircle(0) << ' '
 				<< rsedge.getContactCircle(1) << ' ';
 			bool singular(rsedge.isSingular());
