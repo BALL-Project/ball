@@ -1,4 +1,4 @@
-// $Id: energyMinimizer.h,v 1.1 1999/08/26 07:53:21 oliver Exp $
+// $Id: energyMinimizer.h,v 1.2 1999/09/14 17:45:03 oliver Exp $
 // Energy Minimizer: A class for minimizing the energy of molecular systems
 
 #ifndef BALL_MOLMEC_MINIMIZATION_ENERGYMINIMIZER_H
@@ -65,6 +65,10 @@ namespace BALL {
 
 		//@}
 
+		/**	@name	Option definitions
+		*/
+		//@{
+
 		/**     Option names
 		*/
 		struct Option
@@ -97,30 +101,30 @@ namespace BALL {
 
 		struct Default
 		{
-				/**     Maximal number of iterations
-				*/
-				static Size MAXIMAL_NUMBER_OF_ITERATIONS;
+			/**     Maximal number of iterations
+			*/
+			static Size MAXIMAL_NUMBER_OF_ITERATIONS;
 
-				/**     Energy output frequency
-				*/
-				static Size ENERGY_OUTPUT_FREQUENCY;
+			/**     Energy output frequency
+			*/
+			static Size ENERGY_OUTPUT_FREQUENCY;
 
-				/**    Snapshot ouput frequency 
-				*/
-				static Size SNAPSHOT_OUTPUT_FREQUENCY;
+			/**    Snapshot ouput frequency 
+			*/
+			static Size SNAPSHOT_OUTPUT_FREQUENCY;
 
-				/**    Number of iteration 
-				*/
-				static Size NUMBER_OF_ITERATION;
+			/**    Number of iteration 
+			*/
+			static Size NUMBER_OF_ITERATION;
 
-				/**	Energy difference bound
-				*/
-				static float ENERGY_DIFFERENCE_BOUND;
+			/**	Energy difference bound
+			*/
+			static float ENERGY_DIFFERENCE_BOUND;
 
-				/**	Maximal shift
-				*/
-				static float MAXIMAL_SHIFT;
-			};
+			/**	Maximal shift
+			*/
+			static float MAXIMAL_SHIFT;
+		};
 
 		//@}
 

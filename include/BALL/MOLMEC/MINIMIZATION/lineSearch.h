@@ -1,4 +1,4 @@
-// $Id: lineSearch.h,v 1.1 1999/08/26 07:53:21 oliver Exp $
+// $Id: lineSearch.h,v 1.2 1999/09/14 17:45:03 oliver Exp $
 // Line Search Minimizer: A special class for the line search minimization algorithm
 
 #ifndef BALL_MOLMEC_MINIMIZATION_LINESEARCH_H
@@ -67,6 +67,10 @@ namespace BALL {
 		};
 
 		//@}
+
+		/**	@name	Options definitions
+		*/
+		//@{
 
 		/**     Options names
 		*/
