@@ -1,11 +1,11 @@
-// $Id: SolventParameter_test.C,v 1.7 2001/08/19 18:15:11 sturm Exp $
+// $Id: SolventParameter_test.C,v 1.8 2001/08/19 18:34:46 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/SOLVATION/solventParameter.h>
 ///////////////////////////
 
-START_TEST(SolventParameter, "$Id: SolventParameter_test.C,v 1.7 2001/08/19 18:15:11 sturm Exp $")
+START_TEST(SolventParameter, "$Id: SolventParameter_test.C,v 1.8 2001/08/19 18:34:46 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -104,7 +104,16 @@ RESULT
 
 
 CHECK(getSolventDescriptor() const )
-  //BAUSTELLE
+	SolventParameter s_ptr;
+	ForceFieldParameters param("data/SolventParameter_test.ini");
+	param.init();
+	s_ptr.extractSection(param,"SolventDescription");
+	const SolventDescriptor sd = s_ptr.getSolventDescriptor();
+	TEST_EQUAL(sd.getName().getSubstring(0,3),"PCM")
+RESULT
+
+
+CHECK(getSolventDescriptor() )
 	SolventParameter s_ptr;
 	ForceFieldParameters param("data/SolventParameter_test.ini");
 	param.init();
@@ -114,13 +123,8 @@ CHECK(getSolventDescriptor() const )
 RESULT
 
 
-CHECK(getSolventDescriptor() )
-  //BAUSTELLE
-RESULT
-
-
 CHECK(operator == (const SolventParameter& param) const)
-	//BAUSTELLE
+	//BAUSTELLE , da Baustelle in Quellcode
 RESULT
 
 
