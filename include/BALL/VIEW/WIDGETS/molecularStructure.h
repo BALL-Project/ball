@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.h,v 1.22 2004/11/27 22:14:06 amoll Exp $
+// $Id: molecularStructure.h,v 1.23 2004/12/19 12:30:40 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARSTRUCTURE_H
@@ -267,6 +267,8 @@ namespace BALL
 
 			virtual void addComposite_(Composite& composite, const String& name)
 				throw();
+
+			void selectUnassignedForceFieldAtoms_();
 
 			Index center_camera_id_;
 			Index build_bonds_id_;
