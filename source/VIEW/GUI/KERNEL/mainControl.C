@@ -1,4 +1,4 @@
-// $Id: mainControl.C,v 1.6 2000/11/05 14:31:38 hekl Exp $
+// $Id: mainControl.C,v 1.7 2000/11/12 15:20:17 hekl Exp $
 
 // this is required for QMenuItem
 #define INCLUDE_MENUITEM_DEF
@@ -12,6 +12,7 @@
 #include <qwidget.h>
 #include <qmenubar.h>
 #include <qpopupmenu.h>
+#include <qstatusbar.h>
 
 using std::istream;
 using std::ostream;
@@ -24,35 +25,29 @@ namespace BALL
 	namespace VIEW
 	{
 
-	  MainControl::OptionsFileError::OptionsFileError(const char* file, int line, const string& data)
-			: Exception::GeneralException(file, line, string("OptionsFileError"), data)
+	  MainControl::PreferencesError::PreferencesError(const char* file, int line, const string& data)
+			: Exception::GeneralException(file, line, string("PreferencesError"), data)
 		{
     }
   
 		MainControl::MainControl
-			(QWidget* parent, const char* name, String /* option_filename */)
+			(QWidget* parent, const char* name, String inifile)
 			:	QMainWindow(parent, name),
 				composite_map_(),
 				descriptor_map_(),
 				descriptors_(),
-				options_()
+				main_control_preferences_(0),
+				preferences_dialog_(0),
+				preferences_id_(-1)
 		{
-			//			if (!options_.readOptionFile(option_filename))
-			//			{
-			//					throw ::BALL::VIEW::MainControl::OptionsFileError(__FILE__, __LINE__, "file error.");			
-			//			}
-		}
-		
-		MainControl::MainControl(const MainControl& main_control)
-			:	QMainWindow(main_control.parentWidget(), main_control.name()),
-				ConnectionObject(main_control),
-				Embeddable(main_control),
-				composite_map_(main_control.composite_map_),
-				descriptor_map_(main_control.descriptor_map_),
-				descriptors_(main_control.descriptors_),
-				options_(main_control.options_),
-				modular_widgets_(main_control.modular_widgets_)
-		{	
+			// read the preferences
+			preferences_.setFilename(inifile);
+			preferences_.read();
+
+			connect(qApp,
+							SIGNAL(aboutToQuit()),
+							this,
+							SLOT(aboutToExit()));
 		}
 		
 		MainControl::~MainControl()
@@ -151,33 +146,124 @@ namespace BALL
 		{
 			cerr << "MainControl::show()  list.size() = " << modular_widgets_.size() << endl;
 
+			// create own preferences dialog
+			preferences_dialog_ = new Preferences(this);
+
+			if (preferences_dialog_ == 0)
+			{
+				throw PreferencesError(__FILE__, __LINE__, "memory allocation failed for preferences dialog.");
+			}
+
+			// establish connection 
+			connect(preferences_dialog_,
+							SIGNAL(applyButtonPressed()),
+							this,
+							SLOT(applyPreferencesTab()));
+
+			// initialize own preferences tab
+			initializePreferencesTab(*preferences_dialog_);
+
 			// initialize all modular widgets 
 			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
 			for (; it != modular_widgets_.end(); ++it)
 			{
 				registerConnectionObject(**it);
 				(*it)->initializeWidget(*this);
+				(*it)->initializePreferencesTab(*preferences_dialog_);
 			}
+
+			// check own preferences 
+			preferences_dialog_->fetchPreferences(preferences_);
+
+			// fetch own preferences tab
+			fetchPreferences(preferences_);
+
+			// apply on own preferences tab
+			applyPreferences(*preferences_dialog_);
+
+			// check menu entries, fetch and apply preferences
 			for (it = modular_widgets_.begin(); it != modular_widgets_.end(); ++it)
 			{
 				(*it)->checkMenu(*this);
+				(*it)->fetchPreferences(preferences_);
+				(*it)->applyPreferences(*preferences_dialog_);
 			}
-			
+
 			// own menu entries
 			insertPopupMenuSeparator(MainControl::FILE);
 			insertMenuEntry(MainControl::FILE, "E&xit", qApp, SLOT(quit()), CTRL+Key_X);	
+			
+			// if the preferences dialog has any tabs then show it
+			if (preferences_dialog_->hasTabs())
+			{
+				initPopupMenu(MainControl::DISPLAY)->setCheckable(true);
+				
+				preferences_id_ = insertMenuEntry(MainControl::DISPLAY, 
+																					"&Preferences", 
+																					preferences_dialog_, 
+																					SLOT(openDialog()), CTRL+Key_P);
+			}
 
 			QMainWindow::show();
 		}
 
 		void MainControl::checkMenus()
 		{
+			// preferences dialog not empty
+			if (preferences_dialog_->hasTabs())
+			{
+				menuBar()->setItemChecked(preferences_id_, preferences_dialog_->isVisible());			
+			}
+
 			// checks all modular widgets 
 			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
 			for (it = modular_widgets_.begin(); it != modular_widgets_.end(); ++it)
 			{
 				(*it)->checkMenu(*this);
 			}
+		}
+
+		void MainControl::applyPreferencesTab()
+		{
+			// apply on own preferences tab
+			applyPreferences(*preferences_dialog_);
+
+			// checks all modular widgets 
+			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
+			for (it = modular_widgets_.begin(); it != modular_widgets_.end(); ++it)
+			{
+				(*it)->applyPreferences(*preferences_dialog_);
+			}
+		}
+
+		void MainControl::aboutToExit()
+		{
+			// finalizes all modular widgets
+			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
+			for (it = modular_widgets_.begin(); it != modular_widgets_.end(); ++it)
+			{
+				(*it)->writePreferences(preferences_);
+				(*it)->finalizePreferencesTab(*preferences_dialog_);
+				(*it)->finalizeWidget(*this);
+			}
+
+			modular_widgets_.clear();
+
+			//
+			// write the preferences
+			//
+			preferences_dialog_->writePreferences(preferences_);
+
+			// write default preferences 
+			writePreferences(preferences_);
+
+			// finalize own preferences tab
+			finalizePreferencesTab(*preferences_dialog_);
+
+			delete preferences_dialog_;
+			preferences_dialog_ = 0;
+
+			preferences_.write();
 		}
 
 		bool MainControl::remove(const Composite& composite, bool sent_message)
@@ -364,11 +450,6 @@ namespace BALL
 			notify_(scene_message); 
 		}
 
-	  Options *MainControl::getOptions()
-    {
-			return &options_;
-    }
-
 		void MainControl::insert
 		  (Composite* composite, const String& name,
 			 const Vector3& center)
@@ -397,7 +478,14 @@ namespace BALL
 
 		void MainControl::onNotify(Message *message)
     {
-			if (RTTI::isKindOf<NewCompositeMessage>(*message))
+			if (RTTI::isKindOf<WindowMessage>(*message))
+			{
+				WindowMessage *window_message = RTTI::castTo<WindowMessage>(*message);
+				statusBar()->message(window_message->getStatusBar().c_str());
+				
+				QWidget::update();
+			}
+			else if (RTTI::isKindOf<NewCompositeMessage>(*message))
 			{
 				NewCompositeMessage* new_message 
 				  = RTTI::castTo<NewCompositeMessage>(*message);
@@ -530,12 +618,12 @@ namespace BALL
 		}
 
 		// VIEW automatic module registration
-		MainControl* MainControl::getMainControl(const QWidget* widget)
+		MainControl* MainControl::getMainControl(const QObject* object)
 		{
-			QWidget* parent = widget->parentWidget();
-			while ((parent != 0) && (parent->parentWidget() != 0))
+			QObject* parent = object->parent();
+			while ((parent != 0) && (parent->parent() != 0))
 			{
-				parent = parent->parentWidget();
+				parent = parent->parent();
 			}
 
 			MainControl* mc = 0;
@@ -548,7 +636,7 @@ namespace BALL
 			else 
 			{
 				// try whether the widget itself is the main control
-				mc = dynamic_cast<MainControl*>(const_cast<QWidget*>(widget));
+				mc = dynamic_cast<MainControl*>(const_cast<QObject*>(object));
 			}
 
 			// BAUSTELLE
@@ -623,6 +711,89 @@ namespace BALL
 			// BAUSTELLE
 		}
 
+		void MainControl::initializePreferencesTab(Preferences &preferences)
+		{
+			main_control_preferences_ = new MainControlPreferences();
+			CHECK_PTR(main_control_preferences_);
+
+			preferences.insertTab(main_control_preferences_, "General");
+ 		}
+
+		void MainControl::finalizePreferencesTab(Preferences &preferences)
+		{
+			if (main_control_preferences_ != 0)
+			{
+				preferences.removeTab(main_control_preferences_);
+		
+				delete main_control_preferences_;
+				main_control_preferences_ = 0;
+			}
+		}
+
+		void MainControl::applyPreferences(Preferences & /* preferences */)
+		{
+			if (main_control_preferences_ != 0)
+			{
+				QApplication::setStyle(main_control_preferences_->getStyle());
+				QWidget::update();
+			}
+		}
+
+		void MainControl::fetchPreferences(INIFile &inifile)
+		{
+			// 
+			// the geometry of the main window
+			//
+			int x_pos = x();
+			int y_pos = y();
+			int w = 640;
+			int h = 480;
+			if (inifile.hasEntry("WINDOWS", "Main::x"))
+			{
+				x_pos = inifile.getValue("WINDOWS", "Main::x").toInt();
+			}
+			if (inifile.hasEntry("WINDOWS", "Main::y"))
+			{
+				y_pos = inifile.getValue("WINDOWS", "Main::y").toInt();
+			}
+			if (inifile.hasEntry("WINDOWS", "Main::height"))
+			{
+				h = inifile.getValue("WINDOWS", "Main::height").toInt();
+			}
+			if (inifile.hasEntry("WINDOWS", "Main::width"))
+			{
+				w = inifile.getValue("WINDOWS", "Main::width").toInt();
+			}
+			setGeometry(x_pos, y_pos, w, h);
+			
+			// the default preferences tab (if existent)
+			if (main_control_preferences_ != 0)
+			{
+				main_control_preferences_->fetchPreferences(inifile);
+			}
+		}
+
+		void MainControl::writePreferences(INIFile &inifile)
+		{
+			//	
+			// the main window position
+			//
+			inifile.setValue
+				("WINDOWS", "Main::x", String(x()));
+			inifile.setValue
+				("WINDOWS", "Main::y", String(y()));
+			inifile.setValue
+				("WINDOWS", "Main::width", String(width()));
+			inifile.setValue
+				("WINDOWS", "Main::height", String(height()));
+
+			// the default preferences tab (if existent)
+			if (main_control_preferences_ != 0)
+			{
+				main_control_preferences_->writePreferences(inifile);
+			}
+		}
+
 		void MainControl::addModularWidget(ModularWidget* widget)
 		{
 			cerr << "MainControl::addModularWidget(" << widget << ")" << endl;
@@ -631,7 +802,7 @@ namespace BALL
 
 		void MainControl::removeModularWidget(ModularWidget* widget)
 		{
-			cerr << "MainControl::addModularWidget(" << widget << ")" << endl;
+			cerr << "MainControl::removeModularWidget(" << widget << ")" << endl;
 			modular_widgets_.remove(widget);
 		}
  
