@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.17.2.12 2004/12/22 15:07:05 amoll Exp $
+// $Id: backboneModel.C,v 1.17.2.13 2004/12/22 15:12:59 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -261,15 +261,16 @@ namespace BALL
 			if (!have_start_point_)
 			{
 				last_point_ = spline_points_[start];
+				
+				// create sphere for the point
 				start++;
 			}
 
-			// create sphere for the point
 			Sphere* sphere = new Sphere;
 			if (!sphere) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Sphere));
 			sphere->setRadius(tube_radius_);
 			sphere->setPosition(last_point_);
- 			sphere->setComposite(atoms_of_spline_points_[start]);
+			sphere->setComposite(atoms_of_spline_points_[start]);
 			geometric_objects_.push_back(sphere);
 
 			// calculate the number of slides for the circle and the angle in between them
