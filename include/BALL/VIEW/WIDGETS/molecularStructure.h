@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.h,v 1.23 2004/12/19 12:30:40 amoll Exp $
+// $Id: molecularStructure.h,v 1.24 2005/02/28 17:24:11 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARSTRUCTURE_H
@@ -179,6 +179,16 @@ namespace BALL
 			*/
 			virtual void writePreferences(INIFile &inifile)
 				throw();
+
+			///
+			MolecularDynamicsDialog& getMDSimulationDialog() { return md_dialog_;}
+
+			///
+			MinimizationDialog& getMinimizationDialog() { return minimization_dialog_;}
+
+			///
+			FDPBDialog* getFPDBDialog() { return fdpb_dialog_;}
+
 					
 			public slots:
 
@@ -241,7 +251,7 @@ namespace BALL
 			void runMinimization();
 
 			/// Perfomr a molecular dynamics simulation with the currently selected force field
-			void MDSimulation();
+			void MDSimulation(bool show_dialog_ = true);
 
 			/// Show the dialog to setup the AMBER force field
 			void showAmberForceFieldOptions();

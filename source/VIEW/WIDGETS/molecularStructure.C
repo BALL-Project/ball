@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.84 2005/02/18 13:49:07 amoll Exp $
+// $Id: molecularStructure.C,v 1.85 2005/02/28 17:24:05 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -1145,7 +1145,7 @@ namespace BALL
 			delete minimizer;
 		}
 
-		void MolecularStructure::MDSimulation()
+		void MolecularStructure::MDSimulation(bool show_dialog)
 		{
 			// Make sure we run just one instance at a time.
 			if (getMainControl()->compositesAreLocked())
@@ -1159,12 +1159,14 @@ namespace BALL
 
 			// Execute the MD simulation dialog
 			// and abort if cancel is clicked or nonsense arguments given
-			if ((system == 0) ||	!md_dialog_.exec() 
-					|| (md_dialog_.getSimulationTime() == 0.0)
-					|| (md_dialog_.getTemperature() == 0.0))
+			if (system == 0 
+					|| md_dialog_.getSimulationTime() == 0.0
+					|| md_dialog_.getTemperature() == 0.0)
 			{
 				return;
 			}
+
+			if (show_dialog && !md_dialog_.exec()) return;
 
 			// Get the force field.
 			if (md_dialog_.getUseAmber())
