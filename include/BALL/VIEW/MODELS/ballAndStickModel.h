@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.h,v 1.11 2004/07/12 16:56:58 amoll Exp $
+// $Id: ballAndStickModel.h,v 1.12 2004/07/12 21:19:16 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_BALLANDSTICKMODEL_H
@@ -9,6 +9,10 @@
 
 #ifndef BALL_VIEW_MODELS_ATOMBONDMODELBASEPROCESSOR_H
 #	include <BALL/VIEW/MODELS/atomBondModelBaseProcessor.h>
+#endif
+
+#ifndef BALL_KERNEL_ATOM_H
+ #include <BALL/KERNEL/atom.h>
 #endif
 
 namespace BALL
@@ -205,6 +209,10 @@ namespace BALL
 				throw();
 
 			virtual void visualiseRings_()
+				throw();
+
+			void renderDashedBond_(const Atom& a1, const Atom& a2, 
+														 Vector3 n1, Vector3 n2)
 				throw();
 
 			private:

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBondModelBaseProcessor.C,v 1.11 2004/07/12 19:51:37 amoll Exp $
+// $Id: atomBondModelBaseProcessor.C,v 1.12 2004/07/12 21:19:27 amoll Exp $
 
 #include <BALL/VIEW/MODELS/atomBondModelBaseProcessor.h>
 #include <BALL/KERNEL/forEach.h>
@@ -141,6 +141,22 @@ namespace BALL
 		bool AtomBondModelBaseProcessor::createGeometricObjects()
 			throw()
 		{
+			ring_atoms_.clear();
+
+			vector<vector<Atom*> >::iterator it = rings_.begin();
+			for(; it != rings_.end(); it++)
+			{
+				vector<Atom*>& ring = *it;
+				if (ring.size() != 5 && ring.size() != 6) continue;
+
+				vector<Atom*>::iterator ait = ring.begin();
+
+				for (; ait != ring.end(); ait++)
+				{
+					ring_atoms_.insert(*ait);
+				}
+			}
+
 			buildBondModels_();
 			visualiseRings_();
 			rings_.clear();

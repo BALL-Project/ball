@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBondModelBaseProcessor.h,v 1.12 2004/07/12 16:56:58 amoll Exp $
+// $Id: atomBondModelBaseProcessor.h,v 1.13 2004/07/12 21:19:36 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_ATOMBONDMODELBASEPROCESSOR_H
@@ -189,12 +189,12 @@ namespace BALL
 				throw(){};
 
 			vector<vector<Atom*> > rings_;
+			HashSet<const Atom*> ring_atoms_;
 
 			private:
 
 			List<const Atom*> used_atoms_;
 			HashSet<const Atom*> atom_set_;
-// 			HashSet< std::vector<const Atom*> > ring_atoms_;
 		};
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS

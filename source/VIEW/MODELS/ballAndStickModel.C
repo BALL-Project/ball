@@ -1,11 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.C,v 1.13 2004/07/12 16:56:54 amoll Exp $
+// $Id: ballAndStickModel.C,v 1.14 2004/07/12 21:19:09 amoll Exp $
 
 #include <BALL/VIEW/MODELS/ballAndStickModel.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/bond.h>
+#include <BALL/KERNEL/forEach.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
 #include <BALL/VIEW/PRIMITIVES/sphere.h>
 #include <BALL/VIEW/PRIMITIVES/disc.h>
@@ -182,9 +183,30 @@ void AddBallAndStickModel::visualiseBond_(const Bond& bond)
 {
 	// no visualisation for hydrogen bonds
 	if (bond.getType() == Bond::TYPE__HYDROGEN) return;
+
+	if (ring_atoms_.has(bond.getFirstAtom()) &&
+			ring_atoms_.has(bond.getSecondAtom()))
+	{
+		// Bonds in aromatic rings will be drawn later
+		return;
+	}
+
+	Vector3 dir = bond.getSecondAtom()->getPosition() - bond.getFirstAtom()->getPosition();
+	Vector3 normal;
+	normal = dir % Vector3(1,0,0);
+	if (normal.getSquareLength() == .0)
+	{
+		normal = dir % Vector3(0,1,0);
+	}
+	normal.normalize();
+
+	if (bond.getOrder() == Bond::ORDER__AROMATIC)
+	{
+		renderDashedBond_(*bond.getFirstAtom(), *bond.getSecondAtom(), normal, normal);
+		return;
+	}
 	
-	if (bond.getOrder() == Bond::ORDER__DOUBLE ||
-	    bond.getOrder() == Bond::ORDER__AROMATIC)
+	if (bond.getOrder() == Bond::ORDER__DOUBLE)
 	{
 		Vector3 dir = bond.getSecondAtom()->getPosition() - bond.getFirstAtom()->getPosition();
 		Vector3 normal;
@@ -197,8 +219,6 @@ void AddBallAndStickModel::visualiseBond_(const Bond& bond)
 		normal *= stick_radius_ / 1.5;
 		
 		TwoColoredTube *tube = new TwoColoredTube;
-		if (tube == 0) throw Exception::OutOfMemory(__FILE__, __LINE__, sizeof(TwoColoredTube));
-							
 		tube->setRadius(stick_radius_ / 2.4);
 		tube->setVertex1(bond.getFirstAtom()->getPosition() - normal);
 		tube->setVertex2(bond.getSecondAtom()->getPosition() - normal);
@@ -206,8 +226,6 @@ void AddBallAndStickModel::visualiseBond_(const Bond& bond)
 		geometric_objects_.push_back(tube);
 		
 		TwoColoredTube *tube2 = new TwoColoredTube;
-		if (tube2 == 0) throw Exception::OutOfMemory(__FILE__, __LINE__, sizeof(TwoColoredTube));
-							
 		tube2->setRadius(stick_radius_ / 2.4);
 		tube2->setVertex1(bond.getFirstAtom()->getPosition() + normal);
 		tube2->setVertex2(bond.getSecondAtom()->getPosition() + normal);
@@ -245,37 +263,62 @@ void AddBallAndStickModel::visualiseRings_()
 		}
 		center /= ring.size();
 
-		float min_distance = 9999999999.0;
 		for (ait = ring.begin(); ait != ring.end(); ait++)
 		{
-			float distance = Vector3(center - (**ait).getPosition()).getLength();
-			if (distance < min_distance) min_distance = distance;
+			AtomBondIterator bi;
+			BALL_FOREACH_ATOM_BOND(**ait, bi)
+			{
+				Atom* partner = bi->getPartner(**ait);
+				if (partner < *ait) continue;
+				
+				Vector3 n1(center - (**ait).getPosition());
+				Vector3 n2(center - partner->getPosition());
+
+				renderDashedBond_(**ait, *partner, n1, n2);
+			}
 		}
+	}
+}
 
-		min_distance -= 0.6;
-		if (min_distance < 0) continue;
+void AddBallAndStickModel::renderDashedBond_(const Atom& a1, const Atom& a2, 
+																						 Vector3 n1, Vector3 n2)
+	throw()
+{
+	n1.normalize();
+	n2.normalize();
+	n1 *= stick_radius_ / 1.5;
+	n2 *= stick_radius_ / 1.5;
 
-		Disc* sphere_ptr = new Disc();
-		if (sphere_ptr == 0) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Sphere));
+	const Bond& bond = *a1.getBond(a2);
 
-		sphere_ptr->setComposite((**ring.begin()).getParent());
+	TwoColoredTube *tube = new TwoColoredTube;
+	tube->setRadius(stick_radius_ / 2.4);
+	tube->setVertex1(a1.getPosition() - n1);
+	tube->setVertex2(a2.getPosition() - n2);
+	tube->setComposite(&bond);
+	geometric_objects_.push_back(tube);
 
-		ait = ring.begin();
-		Vector3 positions[3];
-		for (Position i = 0; i < 3; i++)
-		{
-		 	positions[i] = (**ait).getPosition();
-			ait++;
-		}
+	// generate tubes
+	Vector3 v = a2.getPosition() + n2 - (a1.getPosition() + n1);
+	Vector3 last = a1.getPosition() + n1 + v / 4.5;
+	for (Position p = 0; p < 3; p++)
+	{
+		TwoColoredTube *tube = new TwoColoredTube;
+		tube->setRadius(stick_radius_ / 2.4);
+		tube->setComposite(&bond);
+		tube->setVertex1(last);
+		tube->setVertex2(last + (v / 8));
+		geometric_objects_.push_back(tube);
 
-		Plane3 plane(positions[0], positions[1], positions[2]);
-		Circle3 c;
-		c.p = center;
-		c.radius = min_distance;
-		c.n = plane.n;
-		sphere_ptr->setCircle(c);
-		// append sphere in Atom
-		geometric_objects_.push_back(sphere_ptr);
+		Disc* disc = new Disc(Circle3(last, v, stick_radius_ / 2.4));
+		disc->setComposite(&a1);
+		geometric_objects_.push_back(disc);
+
+		disc = new Disc(Circle3(last + (v / 8), v, stick_radius_ / 2.4));
+		disc->setComposite(&a2);
+		geometric_objects_.push_back(disc);
+
+		last += (v /4);
 	}
 }
 
