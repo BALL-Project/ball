@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineSearch.C,v 1.10 2003/03/12 12:01:02 anhi Exp $
+// $Id: lineSearch.C,v 1.11 2003/03/17 10:28:12 anhi Exp $
 
 #include <BALL/MOLMEC/MINIMIZATION/lineSearch.h>
 #include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
@@ -111,7 +111,7 @@ namespace BALL
 	/*	The minimizer optimizes the energy of the system 
 			using a modified line search algorithm.
 	*/
-	bool LineSearch::minimize(double& lambda, double step)
+	bool LineSearch::minimize(double& lambda, double step, bool keep_gradient)
 	{
 		#ifdef BALL_DEBUG
 			Log.info() << "LS:minimize(" << lambda << ", " << step << ")" << std::endl;
@@ -156,10 +156,12 @@ namespace BALL
 		double best_lambda = 0.0;
 		double best_energy = initial_energy_;
 
-		// if we do not have a valid current gradient for the first step,
-		// calculate it
-		if (!gradient.isValid())
+		// if we do not have a valid current gradient for the first step, or if we are
+		// told to force an update (i.e. keep_gradient == false), calculate it
+		if (!keep_gradient || !gradient.isValid())
 		{
+			gradient.invalidate();
+
 			#ifdef BALL_DEBUG
 				Log << "  LineSearch: recalculate Energy/grad @ l = 1.0" << std::endl;
 			#endif
