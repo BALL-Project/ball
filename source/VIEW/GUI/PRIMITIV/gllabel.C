@@ -1,4 +1,4 @@
-// $Id: gllabel.C,v 1.6 2001/07/01 19:41:27 oliver Exp $
+// $Id: gllabel.C,v 1.6.4.1 2002/09/25 15:02:21 anhi Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/gllabel.h>
 #include <GL/gl.h>
@@ -170,7 +170,10 @@ namespace BALL
 
 			// build bitmap
 			generateBitmap_();
-
+for (int i=0; i<height_*(width_+7)/8; i++)
+{
+//	text_array_[i] = 5;
+}
 			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
 			glRasterPos3f((GLfloat)getVertex().x, 
@@ -214,10 +217,9 @@ namespace BALL
 				  p.setPen(c2);
 				  p.drawText(-r.x() + border, -r.y() + border, getText().c_str());
 				p.end();
-						
+
 				// convert to image (acces to single pixel is allowed here)
 				QImage image = pm.convertToImage();
-				
 				width_ = image.width();
 				int width = (width_ + 7) / 8;
 				height_ = image.height();
@@ -243,18 +245,17 @@ namespace BALL
 				
 				// copy image to char array
 				int offset = (height_-1)*width;
-				
+
 				for (int i = 0; i < height_; ++i, offset -= width)
 				{
 					for (int j = 0; j < width_; ++j)
 					{
-						if (image.pixel(j,i) != 0)
-						{
-							*(text_array_ + (j>>3) + offset) |= (128 >> (j&7));
+							if (qGray(image.pixel(j,i)) != 0)
+							{
+								*(text_array_ + (j>>3) + offset) |= (128 >> (j&7)); 
+							}
 						}
-					}
 				}
-
 				// save old values 
 				old_font_ = actual_font_;
 				old_text_ = getText();
