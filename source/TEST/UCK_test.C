@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: UCK_test.C,v 1.2 2004/06/15 12:59:44 bender Exp $
+// $Id: UCK_test.C,v 1.3 2004/06/24 16:03:26 bender Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -21,10 +21,12 @@
 ///////////////////////////
 
 using namespace BALL;
-UCK *u;
 
+UCK *u1;
+UCK *u2;
+UCK *u3;
 
-START_TEST(UCK, "$Id: UCK_test.C,v 1.2 2004/06/15 12:59:44 bender Exp $")
+START_TEST(UCK, "$Id: UCK_test.C,v 1.3 2004/06/24 16:03:26 bender Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -32,17 +34,32 @@ START_TEST(UCK, "$Id: UCK_test.C,v 1.2 2004/06/15 12:59:44 bender Exp $")
 SDFile f("benzoic_acid.sdf");
 Molecule *m = f.read();
 f.close();
+UCK *u1 = new UCK(*m, 2);
+UCK *u2 = new UCK(*m);
+UCK *u3 = new UCK(*u1);
 
-CHECK(bencoic_acid)
-	u = new UCK(m, "benzoic_acid.sdf", 2, 1);
-	TEST_EQUAL(u->getUck().trim(), "39bf9b334b172e4e71e76b93c830b47e")
-	ABORT_IF(u->getUck().trim() != "39bf9b334b172e4e71e76b93c830b47e")
+CHECK(bencoic_acid_custom_depth)
+	TEST_EQUAL(u1->getUCK().trim(), "39bf9b334b172e4e71e76b93c830b47e")
+	ABORT_IF(u1->getUCK().trim() != "39bf9b334b172e4e71e76b93c830b47e")
 RESULT											
 
+CHECK(bencoic_acid_default_depth)
+	TEST_EQUAL(u2->getUCK().trim(), "09bdbf9a8c581a33e5cbd70697eadbdd")
+	ABORT_IF(u2->getUCK().trim() != "09bdbf9a8c581a33e5cbd70697eadbdd")
+RESULT											
+
+CHECK(cpconstructor)
+	TEST_EQUAL(u3->getUCK().trim(), "39bf9b334b172e4e71e76b93c830b47e")
+	ABORT_IF(u3->getUCK().trim() != "39bf9b334b172e4e71e76b93c830b47e")
+RESULT
+
 CHECK(output functions)
-	TEST_EQUAL(u->getId().trim(), "benzoic_acid.sdf:1:NSC88938 benzoic acid")
-	TEST_EQUAL(u->getFormula().trim(), "C7H6O2")
-	TEST_EQUAL(String(u->getWeight()), "122.123642")
+	TEST_EQUAL(u1->getDepth(), 2);
+	TEST_EQUAL(u2->getDepth(), 3);
+	TEST_EQUAL(u3->getDepth(), 2);
+	TEST_EQUAL(u1->getId().trim(), "NSC88938 benzoic acid")
+	TEST_EQUAL(u1->getFormula().trim(), "C7H6O2")
+	TEST_EQUAL(String(u1->getWeight()), "122.123642")
 RESULT
 
 /////////////////////////////////////////////////////////////

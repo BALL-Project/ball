@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: UCK.h,v 1.1 2004/06/15 09:13:08 bender Exp $
+// $Id: UCK.h,v 1.2 2004/06/24 16:03:26 bender Exp $
 //
 
 #include <BALL/FORMAT/SDFile.h>
@@ -19,23 +19,25 @@ namespace BALL
 		
 		/* constructor
 		*/
-		UCK(Molecule* mol, String file, Size d, Size molnumber);
+		UCK(const Molecule& mol, Size d=3);
+		
+		/* copy constructor
+		*/
+		UCK(UCK& uck);
 		
 		/* destructor
 		*/
 		~UCK();
 		
-		/* print Uck to outfile
-		*/
-		void printUck(std::ofstream& outfile);
-		
 		/* print Uck to std::out
 		*/
-		void printUck(std::ostream& outstr);
+		void printUCK(std::ostream& outstr);
 
-		String getUck();
+		Size getDepth();
 
 		String getFormula();
+
+		String getUCK();
 
 		String getId();
 
@@ -47,36 +49,36 @@ namespace BALL
 		* delete one occurance of the current label from the lambda string
 		* this reduces the length of the constructed string
 		*/
-		String eraseDoubleLabels(Size d, String x, String label);
+		String eraseDoubleLabels(const Size d, String x, String label);
 		
 		/* computes the uck
 		*/
-		void makeUck(Molecule* m);
+		void makeUCK(const Molecule& m);
 		
 		/* construct graph-representation of the molecule read
 		*/
-		void getGraph(vector<String>& v, vector<std::pair<Size,Size> >& e, Molecule* mol);
+		void getGraph(vector<String>& v, vector<std::pair<Size,Size> >& e, const Molecule& mol);
 		
 		/* Floyd's Algorithm
 		*  find shortest paths between all pairs of nodes
 		*/
-		void makePathMatrix(vector<std::pair<Size,Size> >& e, vector<vector<int> >& sp, Size e_size);
+		void makePathMatrix(const vector<std::pair<Size,Size> >& e, vector<vector<Size> >& sp, const Size e_size);
 		
-		/* compute mu-map, i.e. concatenatet string [lambda(a)nlambda(b)]
+		/* compute concatenated strings [lambda(a)nlambda(b)] for every pair of nodes
 		*/
-		void makePairs(vector<String>& lambda_map, vector<String>& pairs, vector<vector<int> >& sp);
+		void makePairs(const vector<String>& lambda_map, vector<String>& pairs, const vector<vector<Size> >& sp);
 		
 		/* compute lambda-map
 		*/
-		String lambda(String tmp, vector<std::pair<Size,Size> >& e, vector<String>& v, Size pos, Size d);
+		String lambda(String lambda_d, const vector<std::pair<Size,Size> >& e, const vector<String>& v, Size pos, Size d);
 		
 		/* construct final UCK as follows:
 		*  chemical_formula-lexicographically ordered collection of strings pair(a,b)
 		*/
-		String createFinalString(vector<String>& pairs);
+		void createFinalString(const vector<String>& pairs);
 
-		Size depth_, mol_number_;
-		String filename_, formula_, uck_str_, id_;
+		Size depth_;
+		String formula_, uck_str_, id_;
 		float weight_;
 	};
 }//namespace

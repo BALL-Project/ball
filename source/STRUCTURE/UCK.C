@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: UCK.C,v 1.1 2004/06/15 09:13:09 bender Exp $
+// $Id: UCK.C,v 1.2 2004/06/24 16:03:26 bender Exp $
 //
 
 #include <BALL/STRUCTURE/UCK.h>
@@ -11,6 +11,7 @@
 #include <fstream>
 #include <vector>
 #include <map>
+#include <BALL/COMMON/limits.h>
 #include <BALL/FORMAT/SDFile.h>
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/fragment.h>
@@ -20,32 +21,47 @@ using namespace std;
 
 namespace BALL
 {
+
+	typedef vector<pair<Size,Size> > pair_vec;
+	typedef vector<vector<Size> > vec_size;
+
 	//default constructor
 	UCK::UCK()
 	{
 	}
 	
 	//constructor
-	UCK::UCK(Molecule* mol, String file, Size d, Size molnumber)
+	UCK::UCK(const Molecule& mol, Size d)
 	{
-		mol_number_ = molnumber;
-		filename_ = file;
+		id_ = mol.getName();
+		id_.trim();
 		depth_ = d;
-		makeUck(mol);
+		makeUCK(mol);
+	}
+	
+	// copy constructor
+	UCK::UCK(UCK::UCK& uck)
+	{
+		depth_		= uck.getDepth();
+		formula_	= uck.getFormula();
+		uck_str_	= uck.getUCK();
+		id_				= uck.getId();
+		weight_		= uck.getWeight();
 	}
 	
 	UCK::~UCK()
 	{
 	}
 	
-	void UCK::makePathMatrix(vector<pair<Size,Size> >& e, vector<vector<int> >& sp, Size e_size)
+	void UCK::makePathMatrix(const pair_vec& e, vec_size& sp, const Size e_size)
 	{
-		vector<int>* line;
+		vector<Size>* line;
 		// create bond-matrix, because Floyd's Algorithm requires a reachability matrix
-		vector<vector<int> >* bond_matrix;
-		line = new vector<int>;
-		bond_matrix = new vector<vector<int> >;
+		vec_size* bond_matrix;
+		line = new vector<Size>;
+		bond_matrix = new vec_size;
 		
+		// initialize bond-matrix with 0 at every position
 		for(Size i = 0; i != e_size; ++i)
 		{
 			line->clear();
@@ -53,20 +69,22 @@ namespace BALL
 				line->push_back(0);
 			bond_matrix->push_back(*line);
 		}
+		// proceed all edges and set corresponding position in bond_matrix to 1
 		for(Size i = 0; i != e.size(); ++i)
 			(*bond_matrix)[e[i].first][e[i].second] = 1;
-			
+		
+		// initialize sp-matrix
 		for(Size i = 0; i != bond_matrix->size(); ++i)
 		{
 			line->clear();
 			for(Size j = 0; j != bond_matrix->size(); ++j)
 			{
-				if (i == j) 
+				if (i == j) // distance from a node to itself = 0
 					line->push_back(0);
-				else if((*bond_matrix)[i][j] == 1)
-					line->push_back(1);
+				else if((*bond_matrix)[i][j] == 1)	// if an edge exists between node i and j,
+					line->push_back(1);								// the distance between them is 1
 				else
-					line->push_back(9999999); // infinity???
+						line->push_back(Limits<Index>::max()); // otherwise the distance is set to infinity
 			}
 			sp.push_back(*line);
 		}
@@ -83,27 +101,28 @@ namespace BALL
 		return;
 	}
 
-	void UCK::getGraph(vector<String>& v, vector<pair<Size,Size> >& e, Molecule* mol)
+	void UCK::getGraph(vector<String>& v, pair_vec& e, const Molecule& mol)
 	{
 		weight_ = 0.0;
 		Size count = 0;
-		vector<pair<String, int> >* mol_name;
-		mol_name = new vector<pair<String, int> >;
+		vector<pair<String, Size> >* mol_name;
+		mol_name = new vector<pair<String, Size> >;
 		bool found_atom = false;
 
-		for(AtomIterator atit1 = mol->beginAtom(); atit1 != mol->endAtom(); ++atit1)
+		for(AtomConstIterator atit1 = mol.beginAtom(); atit1 != mol.endAtom(); ++atit1)
 		{
 			// find chemical formula
 			for(Size i = 0; i != mol_name->size(); ++i)
 			{
-				if((*mol_name)[i].first == atit1->getName())
+				if((*mol_name)[i].first == atit1->getName())	// increase number of already existing molecules
 				{
 					(*mol_name)[i].second++;
 					found_atom = true;
 					break;
 				}
 			}
-			if(!found_atom)
+			
+			if(!found_atom)	// add current atom to formula, if it doesn't exist
 			{
 				mol_name->push_back(make_pair(atit1->getName(),1));
 				found_atom = false;
@@ -111,9 +130,10 @@ namespace BALL
 			found_atom = false;
 			
 			weight_ += atit1->getElement().getAtomicWeight();
-			v.push_back(atit1->getName());
+			v.push_back(atit1->getName());	// add atom-name to label-list
 			Size dest = 0;
-			for(AtomIterator atit2 = mol->beginAtom(); atit2 != mol->endAtom(); ++atit2)
+			// find bonds from current atom to all other atoms and store them in e
+			for(AtomConstIterator atit2 = mol.beginAtom(); atit2 != mol.endAtom(); ++atit2)
 			{
 				if(atit1->getBond(*atit2)!=0)
 					e.push_back(make_pair(count, dest));
@@ -121,8 +141,8 @@ namespace BALL
 			}
 			++count;
 		}
-		sort(mol_name->begin(), mol_name->end());
-		for(Size i = 0; i != mol_name->size(); ++i)
+		sort(mol_name->begin(), mol_name->end());		// sort vector mol_name in order to get the lexicographically ordered
+		for(Size i = 0; i != mol_name->size(); ++i)	// chemical formula
 			formula_ += ((*mol_name)[i].first)+(String)(*mol_name)[i].second;
 			
 		delete mol_name;
@@ -138,35 +158,38 @@ namespace BALL
 		return x;
 	}
 	
-	String UCK::lambda(String tmp, vector<pair<Size,Size> >& e, vector<String>& v, Size i, Size d)
+	String UCK::lambda(String lambda_d, const pair_vec& e, const vector<String>& v, Size i, Size d)
 	{
-		tmp = v[i]; // fix label
+		lambda_d = v[i]; // fix label
 		vector<String>* lam;
 		lam = new vector<String>;
 		
-		if(d==0)
+		if(d==0) // depth 0 is reached, return the label written in new_label
 		{
 			delete lam;
-			return tmp;
+			return lambda_d;
 		}
 		
-		else
+		else	// d!=0
 		{
-			for(vector<pair<Size,Size> >::iterator it = e.begin(); it != e.end(); ++it)
-				if(it->first!=i)
+			// compute lambda_d-1_labels for all children
+			for(pair_vec::const_iterator it = e.begin(); it != e.end(); ++it)
+				if(it->first!=i)	// if source node in e is not equal to the current position i, then skip this edge
 					continue;
-				else
+				else	// an edge to another node is found, so compute lambda_d-1 of the child and store the resulting string
+							// in vector lam
 					lam->push_back(eraseDoubleLabels(d, v[i], lambda("", e, v, it->second, d-1)));
-			sort(lam->begin(), lam->end());
+			sort(lam->begin(), lam->end()); // lexicographically order the lambda_d-1 -labels
 		}
+		// concatenate lambda_d-1 -labels and produce lambda_d -label
 		for(vector<String>::iterator it = lam->begin(); it != lam->end(); ++it)
-			tmp += *it;
+			lambda_d += *it;
 
 		delete lam;
-		return tmp;
+		return lambda_d;
 	}
 	
-	void UCK::makePairs(vector<String>& lambda_map, vector<String>& pairs, vector<vector<int> >& sp)
+	void UCK::makePairs(const vector<String>& lambda_map, vector<String>& pairs, const vec_size& sp)
 	{
 		for(Size i = 0; i != lambda_map.size(); ++i)
 			for(Size j = 0; j != lambda_map.size(); ++j)
@@ -176,27 +199,32 @@ namespace BALL
 		return;
 	}
 	
-	String UCK::createFinalString(vector<String>& pairs)
+	void UCK::createFinalString(const vector<String>& pairs)
 	{
 		String uckstr = "";
-		uckstr = formula_;
-		uckstr += "-";
+		uck_str_ = formula_;
+		uck_str_ += "-";
 		for(Size i = 0; i != pairs.size(); ++i)
-			uckstr += pairs[i];
+			uck_str_ += pairs[i];
 			
-		uckstr += "\n";
-		uckstr = MD5String((char*) uckstr.c_str()); // RSA Data Security, Inc. MD5 Message-Digest Algorithm
-		return uckstr;
+		uck_str_ += "\n";
+		uck_str_ = MD5String((char*) uck_str_.c_str()); // RSA Data Security, Inc. MD5 Message-Digest Algorithm
+		return;
 	}
 	
-	String UCK::getUck()
+	Size UCK::getDepth()
 	{
-		return uck_str_;
+		return depth_;
 	}
 
 	String UCK::getFormula()
 	{
 		return formula_;
+	}
+
+	String UCK::getUCK()
+	{
+		return uck_str_;
 	}
 
 	String UCK::getId()
@@ -208,52 +236,27 @@ namespace BALL
 	{
 		return weight_;
 	}
-	void UCK::printUck(ofstream& outfile)
-	{
-		outfile<<id_<<formula_<<"	"<<uck_str_<<endl;
-		return;
-	}
 
-	void UCK::printUck(ostream& outstr)	
+	void UCK::printUCK(ostream& outstr)	
 	{
 		outstr<<id_<<formula_<<"	"<<uck_str_<<endl;
 		return;
 	}
 
-	void UCK::makeUck(Molecule* m)
+	void UCK::makeUCK(const Molecule& m)
 	{
-		vector<String> *v, *pairs, *lambda_map;
-		vector<pair<Size,Size> > *e; // edge set
-		vector<vector<int> > *sp;
-		v = new vector<String>;
-		pairs = new vector<String>;
-		lambda_map = new vector<String>;
-		e = new vector<pair<Size,Size> >;
-		sp = new vector<vector<int> >;
+		vector<String> v, pairs, lambda_map;
+		pair_vec e; // edge set
+		vec_size sp;
 		
-		getGraph(*v, *e, m);
-		for(Size i=0; i!=v->size(); ++i)
-			lambda_map->push_back(lambda("", *e, *v, i, depth_));
-		makePathMatrix(*e, *sp, v->size());
-		makePairs(*lambda_map, *pairs, *sp);
-		uck_str_ = createFinalString(*pairs);
+		getGraph(v, e, m);
 		
-		// make sure that tabs are placed correctly when m->getName() is empty
-		String m_name(m->getName());
-		m_name.trim();
-		if(m_name.size() == 0)
-			id_ = filename_+":"+(String) mol_number_+":			";
-		else
-			id_ = filename_+":"+(String) mol_number_+":"+m_name+"		";
-
+		for(Size i=0; i!=v.size(); ++i)
+			lambda_map.push_back(lambda("", e, v, i, depth_));
 		
-		++mol_number_;
-		delete v;
-		delete pairs;
-		delete lambda_map;
-		delete e;
-		delete sp;
+		makePathMatrix(e, sp, v.size());
+		makePairs(lambda_map, pairs, sp);
+		createFinalString(pairs);
 		return;
 	}
-	
 } // namespace BALL
