@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.113 2004/07/21 13:08:42 amoll Exp $
+// $Id: scene.C,v 1.114 2004/07/25 21:51:15 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -47,7 +47,7 @@ namespace BALL
 		float Scene::mouse_sensitivity_ = 5;
 		float Scene::mouse_wheel_sensitivity_ = 5;
 		bool  Scene::show_light_sources_ = false;
-		#define  ZOOM_FACTOR 			17
+		#define  ZOOM_FACTOR 			135
 		#define  ROTATE_FACTOR    22
 		#define  TRANSLATE_FACTOR 10
 
