@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorUnitHue.iC,v 1.5 2002/02/27 12:19:56 sturm Exp $
+// $Id: colorUnitHue.iC,v 1.6 2003/04/17 14:48:01 oliver Exp $
 
 BALL_INLINE
 ColorUnitHue::operator String () const
@@ -68,13 +68,6 @@ ColorUnitHue::operator double () const
 	throw()
 {
   return (double)value_;
-}
-
-BALL_INLINE
-ColorUnitHue::operator long double () const
-	throw()
-{
-  return (long double)value_;
 }
 
 BALL_INLINE

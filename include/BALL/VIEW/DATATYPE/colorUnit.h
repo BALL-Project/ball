@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorUnit.h,v 1.19 2003/04/17 09:49:54 amoll Exp $
+// $Id: colorUnit.h,v 1.20 2003/04/17 14:48:01 oliver Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLORUNIT_H
 #define BALL_VIEW_DATATYPE_COLORUNIT_H
@@ -296,14 +296,6 @@ namespace BALL
 			*/
 			operator double () const
 				throw();
-			
-			/** Conversion to long double.
-					This operator casts an instance of colorUnit to the long double type.
-					@return      long double with a value of range <tt>0 - 1.0</tt>
-			*/
-			operator long double () const
-				throw();
-
 			//@}
 
 			/**	@name	Assignment methods
@@ -676,35 +668,6 @@ namespace BALL
 			void get(double& value) const
 				throw();
 
-			/** Changes the value of the colorUnit.
-					Changes the value of {\em *this} colorUnit to the value represented by 
-					a long double {\em value}.
-					@param       value a long double of range 0-1.0
-					@exception   InvalidRange if <tt>value < 0.0 || value > 1.0</tt>
-					@see         get
-			*/
-			void set(const long double value)
-				throw(Exception::InvalidRange);
-
-			/** Assignment operator with long double.
-					Assigns the contents of {\em value} to {\em *this} colorUnit.
-					Calls  \link set set \endlink .
-					@param       value a long double containing a value of range 0-1.0
-					@exception   InvalidRange if <tt>value < 0.0 || value > 1.0</tt>
-					@return      ColorUnit& constant reference of {\em *this} colorUnit
-					@see         set
-			*/
-			const ColorUnit& operator = (const long double value)
-				throw(Exception::InvalidRange);
-
-			/** Inspection of the colorUnit's value.
-					Accesses the value of {\em *this} colorUnit by using a long double.
-					@param   value a long double receiving the value of {\em *this} colorUnit (range: 0-1.0)
-					@see     set
-			*/
-			void get(long double& value) const
-				throw();
-			
 			//@}
 
 			/**	@name	Predicates

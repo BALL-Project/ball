@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorUnitHue.h,v 1.16 2003/03/26 13:08:47 sturm Exp $
+// $Id: colorUnitHue.h,v 1.17 2003/04/17 14:48:01 oliver Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLORUNITHUE_H
 #define BALL_VIEW_DATATYPE_COLORUNITHUE_H
@@ -162,16 +162,6 @@ namespace BALL
 			ColorUnitHue(const double value)
 				throw(Exception::InvalidRange);
 
-			/** Constructor with Parameter long double.
-					Constructs new colorUnitHue by initialising its value with the given 
-					long double representing a value of range (<tt>0 - 1.0</tt>).
-					@param       value a long double value (<tt>0 - 1.0</tt>)
-					@exception   InvalidRange if <tt>value < 0.0 || value > 1.0</tt>
-					@return      ColorUnitHue new constructed colorUnitHue
-			*/
-			ColorUnitHue(const long double value)
-				throw(Exception::InvalidRange);
-
 			//@}
 
 			/** @name Destructors */
@@ -269,13 +259,6 @@ namespace BALL
 			operator double () const
 				throw();
 			
-			/** Conversion to long double.
-					This operator casts an instance of colorUnitHue to the long double type.
-					@return      long double with a value of range <tt>0 - 1.0</tt>
-			*/
-			operator long double () const
-				throw();
-
 			//@}
 			
 			/**	@name	Assignment methods
@@ -615,35 +598,6 @@ namespace BALL
 			void get(double& value) const
 				throw();
 
-			/** Changes the value of the colorUnitHue.
-					Changes the value of {\em *this} colorUnitHue to the value represented by 
-					a long double {\em value}.
-					@param       value a long double of range 0-1.0
-					@exception   InvalidRange if <tt>value < 0.0 || value > 1.0</tt>
-					@see         get
-			*/
-			void set(const long double value)
-				throw(Exception::InvalidRange);
-
-			/** Assignment operator with long double.
-					Assigns the contents of {\em value} to {\em *this} colorUnitHue.
-					Calls  \link set set \endlink .
-					@param       value a long double containing a value of range 0-1.0
-					@exception   InvalidRange if <tt>value < 0.0 || value > 1.0</tt>
-					@return      ColorUnitHue& constant reference of {\em *this} colorUnitHue
-					@see         set
-			*/
-			const ColorUnitHue& operator = (const long double value)
-				throw(Exception::InvalidRange);
-
-			/** Inspection of the colorUnitHue's value.
-					Accesses the value of {\em *this} colorUnitHue by using a long double.
-					@param   value a long double receiving the value of {\em *this} colorUnitHue (range: 0-1.0)
-					@see     set
-			*/
-			void get(long double& value) const
-				throw();
-			
 			//@}
 
 			/**	@name	Predicates
