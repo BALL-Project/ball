@@ -1,4 +1,4 @@
-// $Id: common.h,v 1.1 1999/08/26 07:53:17 oliver Exp $
+// $Id: common.h,v 1.2 1999/09/01 12:59:29 hekl Exp $
 
 #ifndef BALL_MOLVIEW_COMMON_COMMON_H
 #define BALL_MOLVIEW_COMMON_COMMON_H
@@ -22,6 +22,35 @@ namespace BALL
 	
 	namespace MOLVIEW
 	{
+		enum Address
+		{
+			ADDRESS__UNKOWN                    = 0,
+			ADDRESS__STATIC_MODEL              = 1,
+			ADDRESS__DYNAMIC_MODEL             = 2,
+			ADDRESS__TRANSPARENT_MODEL         = 3,
+			ADDRESS__STATIC_DRAWING_PRECISION  = 4,
+			ADDRESS__STATIC_DRAWING_MODE       = 5,
+			ADDRESS__DYNAMIC_DRAWING_PRECISION = 6,
+			ADDRESS__DYNAMIC_DRAWING_MODE      = 7
+		};		
+
+		enum Value
+		{
+			VALUE__MODEL_UNKOWN         = 0,
+			VALUE__MODEL_LINES          = 1,
+			VALUE__MODEL_STICK          = 2,
+			VALUE__MODEL_BALL_AND_STICK = 3,
+			VALUE__MODEL_VAN_DER_WAALS  = 4,
+
+			VALUE__DRAWING_PRECISION_LOW    = 0,
+			VALUE__DRAWING_PRECISION_MEDIUM = 1,
+			VALUE__DRAWING_PRECISION_HIGH   = 2,
+			VALUE__DRAWING_PRECISION_ULTRA  = 3,
+
+			VALUE__DRAWING_MODE_DOTS      = 0,
+			VALUE__DRAWING_MODE_WIREFRAME = 1,
+			VALUE__DRAWING_MODE_SOLID     = 2
+		};
 
 		struct GeometricObject
 		{
