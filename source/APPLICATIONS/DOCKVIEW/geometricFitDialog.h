@@ -28,14 +28,14 @@ namespace BALL
 	namespace VIEW
 	{
 		class BALL_EXPORT GeometricFitDialog : 
-				public GeometricFitDialogData,
-				public ModularWidget,
-				public PreferencesEntry
+			public GeometricFitDialogData,
+			public ModularWidget,
+			public PreferencesEntry
 		{ 
-				Q_OBJECT
-				BALL_EMBEDDABLE(GeometricFitDialog,ModularWidget)
-				
-				public:
+			Q_OBJECT
+			BALL_EMBEDDABLE(GeometricFitDialog,ModularWidget)
+			
+			public:
 				
 				/// Constructor
 				GeometricFitDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0)
@@ -57,24 +57,22 @@ namespace BALL
 				void reset()
 					throw();
 				
-				/// Set options
+				/// Set options of GeometricFit
 				void setOptions(Options& options)
 					throw();
 
-				public slots:
+			public slots:
 				
 				//
 				virtual void resetPressed();
-					
+				
 				//
 				virtual void cancelPressed();
 				
-				protected:
-					
-					
-				private:
-					
-
+			protected:
+				
+			private:
+				
 		};
 		
 } } // Namespaces

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.13 2005/03/23 15:38:35 leonhardt Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.14 2005/03/31 08:41:30 haid Exp $
 //
 
 #include "dockDialog.h"
@@ -96,6 +96,26 @@ namespace BALL
 			#endif 
 		}
 		
+		/** Assignment operator
+		*/
+		const DockDialog& DockDialog::operator =(const DockDialog& dock_dialog)
+		{
+			if (&dock_dialog != this)
+			{
+				algorithm_dialogs_ = dock_dialog.algorithm_dialogs_;
+				scoring_dialogs_ = dock_dialog.scoring_dialogs_;
+				result_dialog_ = dock_dialog.result_dialog_;
+				docking_partner1_ = dock_dialog.docking_partner1_;
+				docking_partner2_ = dock_dialog.docking_partner2_;
+				options_ = dock_dialog.options_;
+				id_ = dock_dialog.id_;
+				radius_rule_processor_ = dock_dialog.radius_rule_processor_;
+				charge_rule_processor_ = dock_dialog.charge_rule_processor_;
+				radius_processor_ = dock_dialog.radius_processor_;
+				charge_processor_ = dock_dialog.charge_processor_;
+			}
+			return *this;
+		}
 		
 		// ------------------------- helper functions -------------------------------------
 		// --------------------------------------------------------------------------------
@@ -119,6 +139,7 @@ namespace BALL
 			scoring_functions->insertItem(name, score_func);
 		}
 		
+		//
 		void DockDialog::initializeWidget(MainControl& main_control)
 			throw()
 		{
@@ -128,7 +149,7 @@ namespace BALL
 			id_ = main_control.insertMenuEntry(MainControl::MOLECULARMECHANICS, "&Docking", this,
 																				 SLOT(show()), CTRL+Key_D, -1, hint);
 		}
-																				 																		 
+		
 		void DockDialog::finalizeWidget(MainControl& main_control)
 			throw()
 		{
@@ -291,22 +312,6 @@ namespace BALL
 			}
 		}
 		
-		/// show chosen file in the dialog
-		void DockDialog::selectFile_(QLineEdit& lineedit)
-			throw()
-		{
-			QString s = QFileDialog::getOpenFileName(
-										getWorkingDir().c_str(),
-										"",
-										getMainControl(),
-										"",
-										"Choose a file" );
-
-			if (s == QString::null) return;
-			setWorkingDirFromFilename_(s.ascii());
-			lineedit.setText(s);
-		}
-		
 		/// Calculate...
 		bool DockDialog::calculate()
 			throw()
@@ -316,7 +321,6 @@ namespace BALL
 			
 			// before docking, apply processors, e.g. add hydrogens
 			applyProcessors_();
-			
 			
 			//check which algorithm is chosen
 			DockingAlgorithm* dock_alg = 0;
@@ -416,7 +420,7 @@ namespace BALL
 			return true;
 		}
 		
-		//set options_ with values user has chosen 
+		// set options_ with values user has chosen 
 		void DockDialog::applyValues_()
 			throw()
 		{
@@ -444,7 +448,7 @@ namespace BALL
 			}
 		}
 		
-		/// apply the processors to the systems
+		// apply the processors to the systems
 		bool DockDialog::applyProcessors_()
 			throw()
 		{
@@ -529,12 +533,24 @@ namespace BALL
 			return true;
 		}
 		
-		// ------------------------- SLOTS ------------------------------------------------
-		// --------------------------------------------------------------------------------
+		// show chosen file in the dialog
+		void DockDialog::selectFile_(QLineEdit& lineedit)
+			throw()
+		{
+			QString s = QFileDialog::getOpenFileName(getWorkingDir().c_str(), "", getMainControl(), "", "Choose a file");
 
-		///
+			if (s == QString::null) return;
+			setWorkingDirFromFilename_(s.ascii());
+			lineedit.setText(s);
+		}
+		
+		// -------------------------------- SLOTS ------------------------------------------------
+		// ---------------------------------------------------------------------------------------
+
+		// advanced button for algorithm options pressed
 		void DockDialog::algAdvancedPressed()
 		{
+			// show corresponding options dialog
 			int index = algorithms->currentItem();
 			if(index)
 			{
@@ -542,9 +558,10 @@ namespace BALL
 			}
 		}
 			
-		//
+		// advanced button for scoring function options pressed
 		void DockDialog::scoringAdvancedPressed()
 		{
+			// show corresponding options dialog
 			int index = scoring_functions->currentItem();
 			if(index)
 			{
@@ -552,39 +569,43 @@ namespace BALL
 			}
 		}
 		
+		//
 		void DockDialog::browseChargesData()
 		{
 			selectFile_(*charges_data_lineedit);
 		}
 
+		//
 		void DockDialog::browseChargesRules()
 		{
 			selectFile_(*charges_rules_lineedit);
 		}
 
+		//
 		void DockDialog::browseRadiiData()
 		{
 			selectFile_(*radii_data_lineedit);
 		}
 
+		//
 		void DockDialog::browseRadiiRules()
 		{
 			selectFile_(*radii_rules_lineedit);
 		}
 		
-		///
+		//
 		void DockDialog::cancelPressed()
 		{
 			hide();
 		}
 		
-		///
+		//
 		void DockDialog::resetPressed()
 		{
 			reset();
 		}
 		
-		///
+		//
 		void DockDialog::okPressed()
 		{
 			//if less than 2/ more than 2 equal systems are chosen => Error message!
@@ -619,13 +640,13 @@ namespace BALL
 			}
 		}
 		
-		///
+		//
 		void DockDialog::partner1Chosen()
 		{
 			docking_partner1_ = partnerChosen_(systems1->currentText());
 		}
 		
-		///
+		//
 		void DockDialog::partner2Chosen()
 		{
 			docking_partner2_ = partnerChosen_(systems2->currentText());
@@ -640,6 +661,7 @@ namespace BALL
 		//
 		void DockDialog::scoringFuncChosen()
 		{
+			// if chosen scoring function has advanced options, enable advanced_button
 			int index = scoring_functions->currentItem();
 			if(scoring_dialogs_.has(index))
 			{
@@ -651,7 +673,7 @@ namespace BALL
 			}
 		}
 		
-		// find the system user has chosen in the dialog as docking partner
+		// get system which the user has chosen in the dialog as docking partner
 		System* DockDialog::partnerChosen_(QString qstr)
 			throw()
 		{
@@ -666,10 +688,8 @@ namespace BALL
 					return system;
 				}
 			}
-
 			return 0;
 		}
-		
 		
 	} // namespace VIEW
 } // namespace BALL

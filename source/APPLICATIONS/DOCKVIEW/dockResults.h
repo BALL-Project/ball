@@ -19,7 +19,7 @@ namespace BALL
 		class DockResults
 		{
 			public:
-				
+			
 				/**
 				nested class Scoring_ 
 				This class contains information about the scoring: name of the scoring function, options of the function and scores
@@ -27,48 +27,41 @@ namespace BALL
       	class Scoring_
 				{
 					public:
-						Scoring_() throw()
-						{}
+					
+						//Default Constructor
+						Scoring_() throw();
 						
-						Scoring_(String& name, Options& options, vector<float>& scores) throw()
-						{
-							name_ = name;
-							options_ = options;
-							scores_ = scores;
-						}
+						//Constructor
+						Scoring_(String& name, Options& options, vector<float>& scores) throw();
 						
-						~Scoring_() throw()
-						{}
+						//Destructor
+						~Scoring_() throw();
 						
 						/**  Assignment operator
 						*/
-						const Scoring_& operator =(const Scoring_& scoring)
-						{
-							if (&scoring != this)
-							{
-								name_ = scoring.name_;
-								options_ = scoring.options_;
-								scores_ = scoring.scores_;
-							}
-							return *this;
-						}
+						const Scoring_& operator =(const Scoring_& scoring);
 						
 						String name_;
 						Options options_;
 						vector<float> scores_;
 				};
 			
-				//Constructor
+				// Default Constructor
 				DockResults()
 					throw();
-				
+					
+				// Constructor
 				DockResults(String& docking_algorithm, ConformationSet& conformation_set,
 										Options& docking_options, vector<Scoring_>& scorings, String DCD_file)
 					throw();
 				
-				/// Destructor
+				// Destructor
 				virtual ~DockResults()
 					throw();
+					
+				/** Assignment operator
+				*/
+				const DockResults& operator =(const DockResults& dock_res);
 					
 				const String& getDockingAlgorithm() const
 					throw();
@@ -96,9 +89,9 @@ namespace BALL
 				ConformationSet conformation_set_;
 				// options of the docking algorithm
 				Options docking_options_;
-				//
+				// vector contains name, options and scores of each scoring function
 				vector<Scoring_> scorings_;
-				// name of DCDFile
+				// name of DCDFile where trajectories are stored
 				String DCD_file_;
 		};
 		

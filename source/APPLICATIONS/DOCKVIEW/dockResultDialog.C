@@ -1,4 +1,4 @@
-// $Id: dockResultDialog.C,v 1.1.2.8 2005/03/29 11:53:00 haid Exp $
+// $Id: dockResultDialog.C,v 1.1.2.9 2005/03/31 08:41:32 haid Exp $
 //
 
 #include <qtable.h>
@@ -20,7 +20,7 @@ namespace BALL
 	namespace VIEW
 	{
 		
-		//Constructor
+		// Constructor
 		DockResultDialog::DockResultDialog(QWidget* parent,  const char* name, bool modal, WFlags fl)
 			throw()
 			: DockResultDialogData(parent, name, modal, fl),
@@ -40,7 +40,7 @@ namespace BALL
 			hide();
 		}
 		
-		//Destructor	
+		// Destructor
 		DockResultDialog::~DockResultDialog()
 			throw()
 		{
@@ -49,14 +49,31 @@ namespace BALL
 			#endif 
 		}
 		
-		// add scoring function to HashMap and ComboBox
+		/** Assignment operator
+		*/
+		const DockResultDialog& DockResultDialog::operator =(const DockResultDialog& res_dialog)
+		{
+			if (&res_dialog != this)
+			{
+				conformation_set_ = res_dialog.conformation_set_;
+				docked_system_ = res_dialog.docked_system_;
+				scoring_name_ = res_dialog.scoring_name_;
+				scores_ = res_dialog.scores_;
+				scoring_dialogs_ = res_dialog.scoring_dialogs_;
+			}
+			return *this;
+		}
+		
+		// add scoring function to ComboBox and its options dialog to HashMap
 		void DockResultDialog::addScoringFunction(QString name, int score_func, QDialog* dialog)
 			throw()
 		{
 			if(dialog)
 			{
+				// add dialog to HashMap
 				scoring_dialogs_[score_func] = dialog;
 			}
+			// add to ComboBox
 			scoring_functions->insertItem(name, score_func);
 		}
 		
@@ -72,12 +89,11 @@ namespace BALL
 			getMainControl()->insert(*docked_system_);
 			Log.info() << "ResultDialog after insert" << std::endl;
 		}
+		
+		// --------------------------------- SLOTS ------------------------------------------------
+		// ----------------------------------------------------------------------------------------
 
-				
-		// ------------------------- SLOTS ------------------------------------------------
-		// --------------------------------------------------------------------------------
-
-		/// Show and raise
+		// Show and raise result dialog
 		void DockResultDialog::show()
 		{
 			// get the conformations (= pair<Index, float> = Snapshot number & energy value) for the result dialog
@@ -88,46 +104,44 @@ namespace BALL
 			
 			for(unsigned int i = 0; i < conformations.size() ; i++)
 			{
-				//1.column = snapshot number; 2.column = energy value 
+				// 1.column = snapshot number; 2.column = energy value 
 				QString s;
 				result_table->setText(i,0,s.setNum(conformations[i].first));
 				result_table->setText(i,1,s.setNum(conformations[i].second));
 			}
-			// set the scoring function name as lable of the column
+			// set the scoring function name as label of the column
 			result_table->horizontalHeader()->setLabel(1, scoring_name_);
 			
-			//adjust column width
+			// adjust column width
 			for(int j = 0; j < result_table->numCols() ; j++)
 			{
 				result_table->adjustColumn(j);
 			}
-			
-			//sort by score column
+			// sort by score column
 			sortTable(1);
 			
-			//adjust table/dialog size
+			// adjust table/dialog size
 			result_table->adjustSize();
 			adjustSize();
 			
-			
-			//show dialog to user
+			// show dialog to user
 			DockResultDialogData::show();
 		}
 		
-		///
+		// shows snapshot of selected row
 		void DockResultDialog::showSnapshot()
 		{
+			// get index of current row
 			int selected_row = result_table->currentRow();
-		
+			// get snapshot number
 			int snapshot = (result_table->text(selected_row,0)).toInt();
-					
+			// apply snapshot
 			SnapShot selected_conformation = conformation_set_[snapshot];
-			
 			selected_conformation.applySnapShot(*docked_system_);
 			getMainControl()->update(*docked_system_, true);
 		}
 		
-		//selects and shows the entry above the current selected entry
+		// selects and shows the entry above the current selected entry
 		void DockResultDialog::upwardClicked()
 		{
 			int selected_row = result_table->currentRow();
@@ -137,8 +151,8 @@ namespace BALL
 				showSnapshot();
 			}
 		}
-				
-		//selects and shows the entry below the current selected entry
+		
+		// selects and shows the entry below the current selected entry
 		void DockResultDialog::downwardClicked()
 		{
 			int selected_row = result_table->currentRow();
@@ -149,7 +163,7 @@ namespace BALL
 			}
 		}
 		
-		//
+		// shows options dialog of selected scoring function
 		void DockResultDialog::advancedClicked()
 		{
 			int index = scoring_functions->currentItem();
@@ -159,12 +173,12 @@ namespace BALL
 			}
 		}
 		
-		//adds a column which contains the sorted scores after reranking
+		// adds a column which contains the sorted scores after reranking
 		void DockResultDialog::scoringClicked()
 		{
 			// create scoring function object
 			EnergeticEvaluation* scoring = 0;
-			//check which scoring function is chosen
+			// check which scoring function is chosen
 			int index = scoring_functions->currentItem();
 			switch(index)
 			{
@@ -180,7 +194,7 @@ namespace BALL
 			std::vector<ConformationSet::Conformation> ranked_conformations = (*scoring)(conformation_set_);
 			conformation_set_.setScoring(ranked_conformations);
 			
-			// add new score column to score vector
+			// add new score column to score vector scores_
 			vector<float> score;
 			for (unsigned int i = 0; i < ranked_conformations.size(); i++)
 			{
@@ -188,7 +202,7 @@ namespace BALL
 			}
 			addScore(score);
 			
-			//before filling the table clear it
+			// before filling the table clear it
 			result_table->setSelectionMode(QTable::Multi);
 			result_table->selectCells(0,0,result_table->numRows()-1, result_table->numCols()-1);
 			result_table->clearSelection();
@@ -210,19 +224,19 @@ namespace BALL
 				}
 			}
 			
-			//sort by new column
+			// sort by new column
 			sortTable(num_column);
 			
 			result_table->adjustColumn(num_column);
 			
-			//adjust the table/dialog size
+			// adjust the table/dialog size
 			//QSize recommended_size = result_table->sizeHint();
 			//result_table->resize(recommended_size);
 			result_table->adjustSize();
 			adjustSize();
 		}
 		
-		//
+		// sets the advanced button enabled if the selected scoring function has options
 		void DockResultDialog::scoringFuncChosen()
 		{
 			int index = scoring_functions->currentItem();
@@ -236,9 +250,10 @@ namespace BALL
 			}
 		}
 		
-		void DockResultDialog::sortTable(int section)
+		// sorts the result table by clicked column
+		void DockResultDialog::sortTable(int column)
 		{
-			//create vector which contains the rows of the table
+			// create vector which contains the rows of the table
 			vector<vector<float> > rows;
 			for(int row_it = 0; row_it < result_table->numRows(); row_it++)
 			{
@@ -251,11 +266,11 @@ namespace BALL
 				rows.push_back(row);
 			}
 			
-			//sort vector by column section which the user clicked
-			Compare_ compare_func = Compare_(section);
+			// sort row-vector by the column which the user clicked
+			Compare_ compare_func = Compare_(column);
 			sort(rows.begin(), rows.end(), compare_func);
 			 
-			//fill table
+			// fill result table
 			for(int row_it = 0; row_it < result_table->numRows(); row_it++)
 			{
 				QString s;
@@ -267,5 +282,6 @@ namespace BALL
 				}
 			}
 		}
+		
 	}
 }

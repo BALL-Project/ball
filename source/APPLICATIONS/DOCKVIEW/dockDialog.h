@@ -53,9 +53,7 @@
 # include <BALL/STRUCTURE/DOCKING/geometricFit.h>
 #endif
 
-
 #include "dockResultDialog.h"
-
 #include "dockDialogData.h"
 
 namespace BALL
@@ -63,18 +61,19 @@ namespace BALL
 	namespace VIEW
 	{
 		class BALL_EXPORT DockDialog : 
-				public DockDialogData,
-				public ModularWidget,
-				public PreferencesEntry
+			public DockDialogData,
+			public ModularWidget,
+			public PreferencesEntry
 		{ 
-				Q_OBJECT
-				BALL_EMBEDDABLE(DockDialog,ModularWidget)
+			Q_OBJECT
+			BALL_EMBEDDABLE(DockDialog,ModularWidget)
+			
+			public:
 				
-				public:
+				////// ToDo: enum Algorithm und ScoringFunction in DockingAlgorithm bzw. EnergeticEvaluation ///////
 				
-				// ToDo: enum Algorithm und ScoringFunction in DockingAlgorithm bzw. EnergeticEvaluation
 				/** if you want to add a new docking algorithm extend enum 
-						0 entspricht <select> item in ComboBox  
+						(0 corresponds to <select> item in ComboBox)
 				*/
 				enum Algorithm {GEOMETRIC_FIT = 1};
 				
@@ -82,55 +81,60 @@ namespace BALL
 				*/
 				enum ScoringFunction {DEFAULT = 0, RANDOM = 1};
 				
-				/// Constructor
+				// Constructor
 				DockDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0)
 					throw();
 
-				/// Destructor
+				// Destructor
 				virtual ~DockDialog()
 					throw();
 				
-				/**	Initializes the popup menu <b>  Display </b> with its checkable submenu <b>  Docking </b>; 
+				/**  Assignment operator
+				*/
+				const DockDialog& operator =(const DockDialog& dock_dialog);
+					
+				/**	Initializes the popup menu <b>  Molecular Mechanics </b> with its checkable submenu <b>  Docking </b>; 
 						This method is called automatically	immediately before the main application is started. 
 						@param main_control the  MainControl object to be initialized 
 				*/
 				virtual void initializeWidget(MainControl& main_control)
 					throw();
 
-				/**	Removes the checkable submenu <b>  Docking </b> from the popup menu <b>  Display </b>.
+				/**	Removes the checkable submenu <b>  Docking </b> from the popup menu <b>  Molecular Mechanics </b>.
 						This method will be called by  MainControl::aboutToExit.
 						@param main_control the  MainControl to be finalized 
 				*/
 				virtual void finalizeWidget(MainControl& main_control)
 					throw();	
 				
-				/// update the state of menu entry Docking
+				// update the state of menu entry Docking
 				virtual void checkMenu (MainControl& main_control)
 					throw();
 				
-				
-				/// Read the preferences from a INIFile
+				// Read the preferences from a INIFile
 				void fetchPreferences(INIFile& file)
 					throw();
 				
-				/// Write the preferences to a INIFile
+				// Write the preferences to a INIFile
 				void writePreferences(INIFile& file)
 					throw();
 				
-				/// Reset the dialog to the standard values
+				// Reset the dialog to the standard values
 				void reset()
 					throw();
 
-				/// dock the two systems
+				// dock the two systems
 				bool calculate()
 					throw();
 				
-				/// Set the systems for docking
+				// Set the systems for docking
 				void setSystem(System* system1, System* system2)
 					throw() 
-				{	docking_partner1_ = system1;
-					docking_partner2_ = system2; }
-						
+				{
+					docking_partner1_ = system1;
+					docking_partner2_ = system2;
+				}
+				
 				// add docking algorithm to HashMap and ComboBox
 				void addAlgorithm(QString name, int algorithm, QDialog* dialog)
 					throw();
@@ -140,89 +144,93 @@ namespace BALL
 					throw();
 					
 					
-				public slots:
+			public slots:
 	
-					/// Show and raise
-					void show();
-					
-					//
-					virtual void algAdvancedPressed();
-					
-					//
-					virtual void scoringAdvancedPressed();
-					
-					//
-					virtual void cancelPressed();
-	
-					//
-					virtual void okPressed();
-	
-					//
-					virtual void resetPressed();
-					
-					//
-					virtual void partner1Chosen();
-					
-					//
-					virtual void partner2Chosen();
-					
-					//
-					virtual void algorithmChosen();
-					
-					//
-					virtual void scoringFuncChosen();
-					
-					///
-					virtual void browseChargesData();
-
-					///
-					virtual void browseChargesRules();
-
-					///
-					virtual void browseRadiiData();
-
-					///
-					virtual void browseRadiiRules();
+				/// Show and raise dock dialog
+				void show();
 				
-				protected:
-					
-					bool applyProcessors_() throw();
-					
-					//set options_ with values user has chosen  
-					void applyValues_() throw();
-					
-					void selectFile_(QLineEdit& lineedit) throw();
-					
-					//find chosen system
-					System* partnerChosen_(QString qstr) throw();
-					
-					
-				private:
-					
-					// key: Algorithm(enum), value: advanced options dialog
-					HashMap<int, QDialog*> algorithm_dialogs_;
-					
-					// key: ScoringFunction(enum), value: advanced options dialog
-					HashMap<int, QDialog*> scoring_dialogs_;
-					
-					DockResultDialog* result_dialog_;
+				// advanced button for algorithm options pressed
+				virtual void algAdvancedPressed();
 				
-					//pointer to docking partners
-					System* docking_partner1_;
-					System* docking_partner2_;
+				// advanced button for scoring function options pressed
+				virtual void scoringAdvancedPressed();
 				
-					//options for the docking algorithm
-					Options options_;
-					
-					//menu entry id
-					int id_;
-					
-					//processors
-					RadiusRuleProcessor 			radius_rule_processor_;
-					ChargeRuleProcessor 			charge_rule_processor_;
-					AssignRadiusProcessor 		radius_processor_;
-					AssignChargeProcessor 		charge_processor_;
+				//
+				virtual void cancelPressed();
+				
+				//
+				virtual void okPressed();
+				
+				//
+				virtual void resetPressed();
+				
+				//
+				virtual void partner1Chosen();
+				
+				//
+				virtual void partner2Chosen();
+				
+				//
+				virtual void algorithmChosen();
+				
+				//
+				virtual void scoringFuncChosen();
+				
+				///
+				virtual void browseChargesData();
+				
+				///
+				virtual void browseChargesRules();
+				
+				///
+				virtual void browseRadiiData();
+				
+				///
+				virtual void browseRadiiRules();
+				
+				
+			protected:
+				
+				//set options_ with values user has chosen  
+				void applyValues_() throw();
+				
+				// apply the processors to the systems
+				bool applyProcessors_() throw();
+				
+				// show chosen file in the dialog
+				void selectFile_(QLineEdit& lineedit) throw();
+				
+				// get system which the user has chosen in the dialog as docking partner
+				System* partnerChosen_(QString qstr) throw();
+				
+				
+			private:
+				
+				// key: Algorithm(enum), value: advanced options dialog
+				HashMap<int, QDialog*> algorithm_dialogs_;
+				
+				// key: ScoringFunction(enum), value: advanced options dialog
+				HashMap<int, QDialog*> scoring_dialogs_;
+				
+				//
+				DockResultDialog* result_dialog_;
+			
+				//pointer to docking partners
+				System* docking_partner1_;
+				System* docking_partner2_;
+			
+				//options for the docking algorithm
+				Options options_;
+				
+				//menu entry id
+				int id_;
+				
+				//processors
+				RadiusRuleProcessor 		radius_rule_processor_;
+				ChargeRuleProcessor 		charge_rule_processor_;
+				AssignRadiusProcessor 	radius_processor_;
+				AssignChargeProcessor 	charge_processor_;
 		};
-		
+			
 } } // Namespaces
 #endif

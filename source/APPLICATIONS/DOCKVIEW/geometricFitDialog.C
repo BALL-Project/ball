@@ -7,7 +7,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		/// Constructor
+		// Constructor
 		GeometricFitDialog::GeometricFitDialog(QWidget* parent, const char* name, bool modal, WFlags fl)
 			throw()
 			: GeometricFitDialogData(parent, name, modal, fl),
@@ -48,21 +48,21 @@ namespace BALL
 		// ------------------------- helper functions -------------------------------------
 		// --------------------------------------------------------------------------------
 		
-		/// Read the preferences from a INIFile
+		// Read the preferences from a INIFile
 		void GeometricFitDialog::fetchPreferences(INIFile& file)
 					throw()
 		{
 			PreferencesEntry::readPreferenceEntries(file);
 		}
 				
-		/// Write the preferences to a INIFile
+		// Write the preferences to a INIFile
 		void GeometricFitDialog::writePreferences(INIFile& file)
 					throw()
 		{
 			PreferencesEntry::writePreferenceEntries(file);
 		}
 
-		/// Reset the dialog to the standard values
+		// Reset the dialog to the standard values
 		void GeometricFitDialog::reset()
 					throw()
 		{
@@ -76,7 +76,7 @@ namespace BALL
 			surface_type->setCurrentText("Connolly");
 		}
 		
-		/// Set options
+		/// Set options of GeometricFit
 		void GeometricFitDialog::setOptions(Options& options)
 					throw()
 		{
@@ -98,7 +98,7 @@ namespace BALL
 	// ------------------------- SLOTS ------------------------------------------------
 	// --------------------------------------------------------------------------------
 	
-		///
+		//
 		void GeometricFitDialog::resetPressed()
 		{
 			reset();

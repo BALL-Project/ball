@@ -20,29 +20,28 @@ namespace BALL
 	namespace VIEW
 	{
 		class BALL_EXPORT DockProgressDialog : 
-				public DockProgressDialogData,
-				public ModularWidget,
-				public PreferencesEntry
+			public DockProgressDialogData,
+			public ModularWidget,
+			public PreferencesEntry
 		{ 
-				Q_OBJECT
-				BALL_EMBEDDABLE(DockProgressDialog,ModularWidget)
+			Q_OBJECT
+			BALL_EMBEDDABLE(DockProgressDialog,ModularWidget)
 				
-				public:
-				
-					//Constructor
-					DockProgressDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0)
-						throw();
-						
-					//Destructor	
-					~DockProgressDialog()
-						throw();
-				
-				public slots:
-				
-				protected:
-				
-				private:
-				
+			public:
+			
+				// Constructor
+				DockProgressDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0)
+					throw();
+					
+				// Destructor	
+				~DockProgressDialog()
+					throw();
+			
+			public slots:
+			
+			protected:
+			
+			private:
 		};
 		
 } } // Namespaces
