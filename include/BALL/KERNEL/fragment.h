@@ -1,4 +1,4 @@
-// $Id: fragment.h,v 1.2 1999/12/28 18:38:44 oliver Exp $
+// $Id: fragment.h,v 1.3 2000/03/30 10:16:06 oliver Exp $
 
 #ifndef BALL_KERNEL_FRAGMENT_H
 #define BALL_KERNEL_FRAGMENT_H
@@ -20,7 +20,8 @@ namespace BALL
 
 	/**	Fragment class.
 			Fragments are used to represent parts of molecules (for example functional
-			groups, monomers in larger polymers).
+			groups, monomers in larger polymers).\\
+			{\bf Definition:}\URL{BALL/KERNEL/fragment.h}
 	*/
 	class Fragment
 		: public BaseFragment

@@ -1,4 +1,4 @@
-// $Id: molecule.h,v 1.2 1999/12/28 18:38:45 oliver Exp $
+// $Id: molecule.h,v 1.3 2000/03/30 10:16:07 oliver Exp $
 
 #ifndef BALL_KERNEL_MOLECULE_H
 #define BALL_KERNEL_MOLECULE_H
@@ -20,7 +20,9 @@ namespace BALL
 
 	class System;
 
-	/**	
+	/**	Kernel Molecule Class.
+			Used to represent general molecules without specific properties.\\
+			{\bf Definition:}\URL{BALL/KERNEL/molecule.h}
 	*/
 	class Molecule
 		: public BaseFragment

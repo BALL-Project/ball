@@ -1,4 +1,4 @@
-// $Id: PTE.h,v 1.1 2000/03/27 21:33:34 oliver Exp $
+// $Id: PTE.h,v 1.2 2000/03/30 10:16:05 oliver Exp $
 
 #ifndef BALL_KERNEL_PTE_H
 #define BALL_KERNEL_PTE_H
@@ -22,10 +22,6 @@
 #	include <BALL/CONCEPT/processor.h>
 #endif
 
-/**@name	Periodic Table of Elements
-*/
-//@{
-
 #define BALL_ELEMENT_NAME_DEFAULT                "Unknown"
 #define BALL_ELEMENT_SYMBOL_DEFAULT              "?"
 #define BALL_ELEMENT_GROUP_DEFAULT               0
@@ -41,6 +37,17 @@
 namespace BALL 
 {
 
+	/**	@name	Periodic Table of Elements
+			These classes represent elements and the periodic table of elements.
+			The \Ref{Element} class is used to describe common properties of atoms
+			(e.g., mass, nuclear charge, element symbol). Elements can be retrieved
+			from the \Ref{PTE} object ({\bf P}eriodic {\bf T}able of {\bf E}lements)
+			which is a global instance of \Ref{PTE_}.\\
+			{\bf Definition:}\URL{BALL/KERNEL/PTE.h}
+			@see Atom::setElement
+			@see Atom::getElement
+	*/
+	//@{
 
 	/**	Element class
 	*/

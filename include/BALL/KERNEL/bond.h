@@ -1,4 +1,4 @@
-// $Id: bond.h,v 1.5 2000/02/17 00:30:41 oliver Exp $
+// $Id: bond.h,v 1.6 2000/03/30 10:16:05 oliver Exp $
 
 #ifndef BALL_KERNEL_BOND_H
 #define BALL_KERNEL_BOND_H
@@ -38,7 +38,7 @@ namespace BALL
 	/** The bond class of the kernel framework.
 		
 			{\bf Framework:} BALL/KERNEL\\
-			{\bf Definition:} "\URL{BALL/KERNEL/bond.h}
+			{\bf Definition:} \URL{BALL/KERNEL/bond.h}
 			\\
 			{\bf Concept:} association\\
 			
@@ -62,8 +62,8 @@ namespace BALL
 			
 			@memo    Bond class (BALL kernel framework)
 			@author  $Author: oliver $
-			@version $Revision: 1.5 $
-			@date    $Date: 2000/02/17 00:30:41 $
+			@version $Revision: 1.6 $
+			@date    $Date: 2000/03/30 10:16:05 $
 	*/
 	class Bond
 		: public Composite,

@@ -1,4 +1,4 @@
-// $Id: residue.h,v 1.8 2000/03/23 20:04:39 oliver Exp $
+// $Id: residue.h,v 1.9 2000/03/30 10:16:07 oliver Exp $
 
 #ifndef BALL_KERNEL_RESIDUE_H
 #define BALL_KERNEL_RESIDUE_H
@@ -33,7 +33,9 @@ namespace BALL
 	class Chain;
 	class Protein;
 
-	/**
+	/** Kernel Residue Class.
+			This class is used to represent residues in proteins.\\
+			{\bf Definition:}\URL{BALL/KERNEL/residue.h}
 	*/
 	class Residue
 		: public Fragment

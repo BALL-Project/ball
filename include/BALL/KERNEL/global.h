@@ -1,4 +1,4 @@
-// $Id: global.h,v 1.3 2000/02/17 00:30:42 oliver Exp $
+// $Id: global.h,v 1.4 2000/03/30 10:16:06 oliver Exp $
 
 #ifndef BALL_KERNEL_GLOBAL_H
 #define BALL_KERNEL_GLOBAL_H
@@ -40,10 +40,10 @@ namespace BALL
 			resets \Ref{clone_bonds} to {\bf true}.\\
 			This method assumes that the second argument (the composite without bonds) is a deep
 			copy of the first argument (the composite containing the atoms). If the tree structures of both
-			composites are not isomorphous, bonds are created in an unpredictable way.
+			composites are not isomorphous, bonds are created in an unpredictable way.\\
+			{\bf Namespace:} BALL\\
 			{\bf Definition:} \URL{BALL/KERNEL/global.h}
 			\\
-			{\bf Namespace:} BALL\\
 			@param atom_container	the atom_container containing the bonds
 			@param cloned a deep copy of {\bf atom_container}
 	*/
@@ -103,6 +103,8 @@ namespace BALL
 
 	/**	Global static variable needed for the cloning of kernel objects containing bonds.
 			@see	cloneBonds
+			{\bf Namespace:} BALL\\
+			{\bf Definition:} \URL{BALL/KERNEL/global.h}			
 	*/
 	extern bool clone_bonds;
 

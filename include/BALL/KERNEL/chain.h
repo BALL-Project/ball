@@ -1,4 +1,4 @@
-// $Id: chain.h,v 1.4 2000/01/10 15:51:01 oliver Exp $
+// $Id: chain.h,v 1.5 2000/03/30 10:16:06 oliver Exp $
 
 #ifndef BALL_KERNEL_CHAIN_H
 #define BALL_KERNEL_CHAIN_H
@@ -27,7 +27,8 @@ namespace BALL
 	
 	class Protein;
 
-	/**
+	/** Protein Chain Class.
+			{\bf Definition:}\URL{BALL/KERNEL/chain.h}
 	*/
 	class Chain
 		: public BaseFragment

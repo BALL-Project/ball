@@ -1,4 +1,4 @@
-// $Id: protein.h,v 1.3 1999/12/28 18:38:45 oliver Exp $ 
+// $Id: protein.h,v 1.4 2000/03/30 10:16:07 oliver Exp $ 
 
 #ifndef BALL_KERNEL_PROTEIN_H
 #define BALL_KERNEL_PROTEIN_H
@@ -37,7 +37,11 @@
 namespace BALL 
 {
 
-	/**
+	/**	Kernel Protein Class.
+			This class is used to represent Proteins.
+			A protein may contain several \Ref{Chains}, \Ref{SecondaryStructure}s,
+			and \Ref{Residues}.\\
+			{\bf Definition:}\URL{BALL/KERNEL/protein.h}
 	*/
 	class Protein
 		: public Molecule

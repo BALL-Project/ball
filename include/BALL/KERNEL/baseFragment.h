@@ -1,4 +1,4 @@
-// $Id: baseFragment.h,v 1.5 2000/02/17 00:30:41 oliver Exp $
+// $Id: baseFragment.h,v 1.6 2000/03/30 10:16:05 oliver Exp $
 
 #ifndef BALL_KERNEL_BASEFRAGMENT_H
 #define BALL_KERNEL_BASEFRAGMENT_H
@@ -40,7 +40,10 @@ namespace BALL
 	class Atom;
 	class Molecule;
 
-	/**	
+	/**	Atom Container Base Class.
+			The {\tt BaseFragment} class is the base class
+			of all kernel classes containing atoms.\\
+			{\bf Definition:}\URL{BALL/KERNEL/baseFragment.h}
 	*/
 	class BaseFragment
 		: public Composite,

@@ -1,4 +1,4 @@
-// $Id: selector.h,v 1.8 2000/03/14 19:38:06 oliver Exp $
+// $Id: selector.h,v 1.9 2000/03/30 10:16:08 oliver Exp $
 
 #ifndef BALL_KERNEL_SELECTOR_H
 #define BALL_KERNEL_SELECTOR_H
@@ -18,7 +18,9 @@
 namespace BALL 
 {
 
-	/**@name	Kernel Object Selection
+	/**	@name	Kernel Object Selection.
+			These classes allow the convenient selection of kernel objects.\\
+			{\bf Definition:}\URL{BALL/KERNEL/selector.h}
 	*/
 	//@{
 

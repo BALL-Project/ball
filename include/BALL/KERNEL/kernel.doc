@@ -1,4 +1,4 @@
-// $Id: kernel.doc,v 1.4 2000/03/27 21:34:19 oliver Exp $
+// $Id: kernel.doc,v 1.5 2000/03/30 10:16:06 oliver Exp $
 
 /**@name	Kernel
 		This chapter contains all relevant information on 
@@ -7,18 +7,13 @@
 //@{
 
   //@Include: atom.h
-  //@Include: baseFragment.h
   //@Include: bond.h
   //@Include: chain.h
-  //@Include: forEach.h
   //@Include: fragment.h
-  //@Include: global.h
-  //@Include: iterator.h
   //@Include: molecule.h
 	//@Inlcude:	nucleicAcid.h
 	//@Inlcude:	nucleotide.h
   //@Include: PDBAtom.h
-  //@Include: predicate.h
   //@Include: protein.h
   //@Include: PTE.h
   //@Include: residue.h
@@ -26,5 +21,16 @@
 	//@Include:	selector.h
   //@Include: system.h
   //@Include: universe.h
+	
+	/**	@name Miscellaneous
+			Further classes and functions related to the kernel classes
+	*/
+	//@{
+	  //@Include: baseFragment.h
+  	//@Include: predicate.h
+	  //@Include: global.h
+  	//@Include: iterator.h
+	  //@Include: forEach.h
+	//@}
 
 //@}

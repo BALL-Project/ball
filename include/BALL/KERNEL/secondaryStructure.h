@@ -1,4 +1,4 @@
-// $Id: secondaryStructure.h,v 1.3 1999/12/28 18:38:46 oliver Exp $
+// $Id: secondaryStructure.h,v 1.4 2000/03/30 10:16:08 oliver Exp $
 
 #ifndef BALL_KERNEL_SECONDARYSTRUCTURE_H
 #define BALL_KERNEL_SECONDARYSTRUCTURE_H
@@ -24,7 +24,10 @@ namespace BALL
 	 
 	class Protein;
 
-	/**
+	/**	Kernel Secondary Structure Class.
+			This class is used to represent secondary structure elements
+			of protein chains.\\
+			{\bf Definition:}\URL{BALL/KERNEL/secondaryStructure.h}
 	*/
 	class SecondaryStructure
 		: public BaseFragment

@@ -1,4 +1,4 @@
-// $Id: system.h,v 1.6 2000/02/23 07:54:40 oliver Exp $
+// $Id: system.h,v 1.7 2000/03/30 10:16:08 oliver Exp $
 
 #ifndef BALL_KERNEL_SYSTEM_H
 #define BALL_KERNEL_SYSTEM_H
@@ -34,7 +34,10 @@ namespace BALL
 
 	class Molecule;
 
-	/**
+	/** Kernel System Class.
+			This class is used to represent a system, i.e., a collection
+			of molecules.\\
+			{\bf Definition:}\URL{BALL/KERNEL/system.h}
 	*/
 	class System
 		: public BaseFragment
