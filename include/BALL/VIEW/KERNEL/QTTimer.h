@@ -1,4 +1,4 @@
-// $Id: QTTimer.h,v 1.3 1999/12/28 18:37:45 oliver Exp $
+// $Id: QTTimer.h,v 1.4 2000/11/12 15:33:23 hekl Exp $
 
 #ifndef BALL_VIEW_KERNEL_QTTIMER_H
 #define BALL_VIEW_KERNEL_QTTIMER_H
@@ -20,7 +20,7 @@ namespace BALL
 		/**
 		*/
 		class QTTimer
-			: protected QObject
+			: public QObject
 		{
 			public:
 
@@ -28,9 +28,7 @@ namespace BALL
 			*/
 			//@{
 
-			QTTimer();
-
-			QTTimer(const QTTimer& timer, bool deep = true);
+			QTTimer(QObject* parent=0, const char* name=0);
 
 			virtual ~QTTimer();
 
