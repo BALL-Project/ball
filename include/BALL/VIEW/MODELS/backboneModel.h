@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.h,v 1.14.2.1 2004/12/20 21:23:17 amoll Exp $
+// $Id: backboneModel.h,v 1.14.2.2 2004/12/21 13:22:56 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_BACKBONEMODEL_H
@@ -158,19 +158,22 @@ namespace BALL
 			void createBackbone_()
 				throw();
 
+			virtual void clear_()
+				throw();
+
 			//_
 			vector<SplinePoint> spline_vector_;
+			//_
 			vector<Vector3> 		spline_points_;
+			//_
 			vector<const Atom*> atoms_of_spline_points_;
-			
-
 			//_
 			bool have_start_point_;
 			//_
 			Vector3 last_point_;
 			//_ Pointer to the parent of the last processed composite
 			Composite* last_parent_;
-
+			//_
 			float tube_radius_;
 		};
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.17.2.3 2004/12/21 00:38:28 amoll Exp $
+// $Id: backboneModel.C,v 1.17.2.4 2004/12/21 13:22:50 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -61,10 +61,7 @@ namespace BALL
 			throw()
 		{
 			ModelProcessor::clear();
-			spline_vector_.clear();
-			spline_points_.clear();
-			last_parent_ = 0;
-			have_start_point_ = false;
+			clear_();
 		}
 
 		Processor::Result AddBackboneModel::operator () (Composite& composite)
@@ -81,9 +78,7 @@ namespace BALL
 					spline_vector_.size() > 0) 
 			{
 				createBackbone_();
-				spline_vector_.clear();
-				spline_points_.clear();
-				atoms_of_spline_points_.clear();
+				clear_();
 			}
 			
 			last_parent_ = residue.getParent()->getParent();
@@ -285,17 +280,23 @@ namespace BALL
 
 		bool AddBackboneModel::finish()
 		{
-			if (spline_vector_.size() == 0) 
-			{
-				return true;
-			}
+			if (spline_vector_.size() == 0) return true;
 
 			createBackbone_();
-			spline_points_.clear();
-			spline_vector_.clear();
-			atoms_of_spline_points_.clear();
+			clear_();
 			return true;
 		}
 		
+		void AddBackboneModel::clear_()
+			throw()
+		{
+			spline_vector_.clear();
+			last_parent_ = 0;
+			have_start_point_ = false;
+
+			spline_points_.clear();
+			atoms_of_spline_points_.clear();
+		}
+
 	} // namespace VIEW
 } // namespace BALL

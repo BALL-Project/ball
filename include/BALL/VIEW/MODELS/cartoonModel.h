@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.h,v 1.26.2.1 2004/12/20 21:23:17 amoll Exp $
+// $Id: cartoonModel.h,v 1.26.2.2 2004/12/21 13:22:47 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_CARTOONMODEL_H
@@ -190,8 +190,6 @@ namespace BALL
 				throw();
 
 			Composite* last_chain_;
-
-			SplinePoint last_spline_point_;
 
 			// used to speed up drawTube_
 			Index spline_vector_position_;

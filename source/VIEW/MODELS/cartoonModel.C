@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.54.2.6 2004/12/21 00:38:34 amoll Exp $
+// $Id: cartoonModel.C,v 1.54.2.7 2004/12/21 13:22:44 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -68,8 +68,7 @@ AddCartoonModel::~AddCartoonModel()
 	throw()
 {
 	#ifdef BALL_VIEW_DEBUG
-		Log.error() << "Destructing object " << (void *)this 
-								<< " of class " << RTTI::getName<AddCartoonModel>() << endl;
+		Log.error() << "Destructing object of class AddCartoonModel" << endl;
 	#endif 
 }
 
@@ -82,14 +81,9 @@ bool AddCartoonModel::finish()
 void AddCartoonModel::clear_()
 	throw()
 {
-	spline_vector_.clear();
-	last_parent_ = 0;
-	have_start_point_ = false;
-
-	spline_points_.clear();
+	AddBackboneModel::clear_();
 	last_chain_ = 0;
 	spline_vector_position_ = -1;
-	atoms_of_spline_points_.clear();
 }
 
 
@@ -218,7 +212,7 @@ void AddCartoonModel::drawStrand_(SecondaryStructure& ss)
 			first_residue = false;
 		}
 
-		Vector3 sv = C->getPosition() + (nextN->getPosition() - C->getPosition())*1./2.;
+		Vector3 sv = C->getPosition() + (nextN->getPosition() - C->getPosition()) * 0.5;
 		spline_vector_.push_back(SplinePoint(sv, N));	
 
 		if (last_residue)
@@ -243,7 +237,7 @@ void AddCartoonModel::drawStrand_(SecondaryStructure& ss)
 	for (Position i = 0; i < peptide_normals.size() - 1; i++)
 	{
 		Angle current(fabs(acos(peptide_normals[i]*peptide_normals[i+1])));
-		if ((current <= (float)Constants::PI*3./2.) && (current >= (float)Constants::PI/2.))
+		if ((current <= (float)Constants::PI * 1.5) && (current >= (float)Constants::PI / 2.0))
 		{
 			Vector3 rotaxis = (peptide_normals[i] % peptide_normals[i + 1]).normalize();
 			Matrix4x4 rotmat;
@@ -264,7 +258,7 @@ void AddCartoonModel::drawStrand_(SecondaryStructure& ss)
 		if (rotaxis.getSquareLength() > 1e-2)
 		{
 			Angle current(fabs(acos(peptide_normals[i]*peptide_normals[i+1])));
-			Angle new_angle = Angle(2./3.*current);
+			Angle new_angle = Angle(2.0 / 3.0 * current);
 
 			Angle diff_angle = new_angle - current;
 			Matrix4x4 rotmat;
@@ -391,7 +385,6 @@ void AddCartoonModel::drawStrand_(SecondaryStructure& ss)
 		drawStrand_(spline_points_[res * 9 + j], normal, right, new_arrow_width, last_vertices, *mesh);
 	}
 
-	last_spline_point_ 	= spline_vector_[spline_vector_.size() - 1];
 	last_point_ 				= spline_points_[spline_points_.size() - 1];
 	have_start_point_ 	= true;
 
@@ -486,8 +479,7 @@ void AddCartoonModel::drawHelix_(SecondaryStructure& ss)
 	calculateTangentialVectors_();
 	createSplineSegment_(spline_vector_[p2 - 1], spline_vector_[p2]);
 
-	last_spline_point_ = spline_vector_[p2];
-	last_point_ = last_spline_point_.getVector();
+	last_point_ = spline_vector_[p2].getVector();
 	have_start_point_ = true;
 }
 
