@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.26 2004/06/10 19:37:19 amoll Exp $
+// $Id: datasetControl.C,v 1.27 2004/06/10 21:02:40 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -332,12 +332,16 @@ void DatasetControl::visualiseGrid_()
 		RegularData1D* grid = item_to_grid1_[context_item_];
 		DockableRegularData1DWidget* widget = new DockableRegularData1DWidget(grid, getMainControl());
 		widget->show();
+		widget->zoomToFit();
+		widget->undock();
 	}
 	else if (item_to_grid2_.has(context_item_))
 	{
 		RegularData2D* grid = item_to_grid2_[context_item_];
 		DockableRegularData2DWidget* widget = new DockableRegularData2DWidget(grid, getMainControl());
 		widget->show();
+		widget->zoomToFit();
+		widget->undock();
 	}
 }
 

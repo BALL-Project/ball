@@ -1,12 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1DWidget.C,v 1.15 2004/06/10 19:37:19 amoll Exp $
+// $Id: regularData1DWidget.C,v 1.16 2004/06/10 21:02:40 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/regularData1DWidget.h>
 #include <BALL/VIEW/KERNEL/message.h>
-#include <BALL/COMMON/limits.h>
 
 #include <qpopupmenu.h>
 #include <qapplication.h>
@@ -45,8 +44,8 @@ void RegularData1DWidget::createPlot()
 	}
 
 	// find the data min and max
-	float min = Limits<float>::max();
-	float max = Limits<float>::min();
+	float min = (*data_)[0];
+	float max = (*data_)[0];
 	float dif_min = min;
 	float old = min; //last point
 
