@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.h,v 1.24 2004/07/10 09:54:14 amoll Exp $
+// $Id: standardColorProcessor.h,v 1.25 2004/08/25 13:04:07 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
@@ -333,6 +333,10 @@ namespace BALL
 			*/
 			const ColorRGBA& getMaxDistanceColor() const
 				throw();
+
+			/// Set wheter the selected molecular entities are also shown
+			void setShowSelected(bool state) 
+				throw() {show_selected_ = state;}
 			
 			/** Calculate the distances.
 					If this method is called the distances of all previously inserted Atom objects 
@@ -377,6 +381,8 @@ namespace BALL
 			GeometricObjectList list_;
 
 			float 			distance_;
+
+			bool 				show_selected_;
 
 			ColorRGBA		null_distance_color_;
 			ColorRGBA		full_distance_color_;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.121 2004/08/17 10:26:03 amoll Exp $
+// $Id: scene.C,v 1.122 2004/08/25 13:04:01 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -464,7 +464,7 @@ namespace BALL
 				glScalef(200, 200, 200);
 				glColor3f(0., 0., 1.0);
 				glBegin(GL_QUADS);
-				glNormal3f(n.x, n.y, n.z);
+				glNormal3f(n.x, -n.y, n.z);
 				glVertex3f(0,0,0);
 				glVertex3f(e[0].x, e[0].y, e[0].z);
 				glVertex3f(e[0].x + e[1].x, e[0].y + e[1].y, e[0].z + e[1].z);

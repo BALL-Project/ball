@@ -1,16 +1,18 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.32 2004/08/25 10:25:15 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.33 2004/08/25 13:04:01 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
+#include <BALL/VIEW/DATATYPE/colorExtension2.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/residue.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/chain.h>
 #include <BALL/KERNEL/protein.h>
+#include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/secondaryStructure.h>
 
@@ -435,6 +437,7 @@ namespace BALL
 			: ColorProcessor(),
 				atom_2_distance_(),
 				distance_((float)10),
+				show_selected_(false),
 				null_distance_color_("FFFF00FF"),
 				full_distance_color_("0000FFFF")
 		{
@@ -445,6 +448,7 @@ namespace BALL
 			:	ColorProcessor(color_processor),
 				atom_2_distance_(),
 				distance_(color_processor.distance_),
+				show_selected_(color_processor.show_selected_),
 				null_distance_color_(color_processor.null_distance_color_),
 				full_distance_color_(color_processor.full_distance_color_)
 		{
@@ -497,6 +501,12 @@ namespace BALL
 		{
 			if (composite == 0) return default_color_;
 
+			// hide selected items?
+			if (show_selected_ && composite->isSelected())
+			{
+				return BALL_SELECTED_COLOR;
+			}
+
 			if (!RTTI::isKindOf<Atom>(*composite))
 			{
 				return default_color_;
@@ -528,7 +538,7 @@ namespace BALL
 			return ColorRGBA(red1 + (distance * (red2 - red1)) 			/ distance_,
 											 green1 + (distance * (green2 - green1)) 	/ distance_,
 											 blue1 + (distance * (blue2 - blue1)) 		/ distance_,
-											 255 - transparency_);
+											 transparency_);
 		}
 
 		bool AtomDistanceColorProcessor::finish()
@@ -538,8 +548,25 @@ namespace BALL
 			GeometricObjectList::Iterator it = list_.begin();
 			for(; it != list_.end(); it++)
 			{
-				ColorProcessor::operator () (*it);
+				if (!RTTI::isKindOf<ColorExtension2>(**it))
+				{
+					ColorProcessor::operator () (*it);
+					continue;
+				}
+
+				// ok, we have a two colored object
+				ColorExtension2* two_colored = dynamic_cast<ColorExtension2*>(*it);
+				if (RTTI::isKindOf<Bond>(*(*it)->getComposite()))
+				{
+					Bond* bond = (Bond*) (*it)->getComposite();
+					(*it)->setColor(getColor(bond->getFirstAtom()));
+					two_colored->setColor2(getColor(bond->getSecondAtom()));
+				}
 			}
+
+			atom_2_distance_.clear();
+			list_.clear();
+			
 			return true;
 		}
 
@@ -577,13 +604,24 @@ namespace BALL
 			}
 
 			if (object->getComposite() == 0 ||
-					!RTTI::isKindOf<Atom>(*object->getComposite()))
+					(!RTTI::isKindOf<Atom>(*object->getComposite()) &&
+					 !RTTI::isKindOf<Bond>(*object->getComposite())))
 			{
 				return ColorProcessor::operator () (object);
 			}
 
 			list_.push_back(object);
-			addAtom(*dynamic_cast<const Atom*>(object->getComposite()));
+
+			if (RTTI::isKindOf<Bond>(*object->getComposite()))
+			{
+				addAtom(*dynamic_cast<const Bond*>(object->getComposite())->getFirstAtom());
+				addAtom(*dynamic_cast<const Bond*>(object->getComposite())->getSecondAtom());
+			}
+			else
+			{
+				addAtom(*dynamic_cast<const Atom*>(object->getComposite()));
+			}
+			
 			return Processor::CONTINUE;
 		}
 			

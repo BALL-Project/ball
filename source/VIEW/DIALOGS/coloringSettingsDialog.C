@@ -11,6 +11,7 @@
 #include <qlabel.h>
 #include <qlistbox.h>
 #include <qwidgetstack.h>
+#include <qcheckbox.h>
 
 #include <qpoint.h>
 namespace BALL
@@ -291,6 +292,7 @@ void ColoringSettingsDialog::setDefaults(bool all)
 		null_distance_color_.set(255,0,0);
 		max_distance_color_.set(0,0,255);
 		max_distance_slider->setValue(10 * 10);
+		distance_show_selected->setChecked(true);
 	}
 	// =============================================================
 	// setting temperature factor colors
@@ -410,6 +412,7 @@ void ColoringSettingsDialog::applySettingsTo(ColorProcessor& cp) const
 		dp.setNullDistanceColor(null_distance_color_);
 		dp.setMaxDistanceColor(max_distance_color_);
 		dp.setDistance(((float)max_distance_slider->value()) / 10.0);
+		dp.setShowSelected(distance_show_selected->isChecked());
 		return;
 	}
 
@@ -505,7 +508,7 @@ void ColoringSettingsDialog::maxDistanceColorPressed()
 {
 	setNewColor_(max_distance_label, max_distance_color_);
 }
-	
+
 void ColoringSettingsDialog::minimumTFColorPressed()
 {
 	setNewColor_(minimum_tf_label, minimum_tf_color_);
