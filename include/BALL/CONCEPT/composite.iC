@@ -1,88 +1,4 @@
-// $Id: composite.iC,v 1.1 1999/08/26 07:53:16 oliver Exp $
-
-BALL_INLINE 
-Handle AggregateCompositeItem::getHandle(void) const
-{
-  return handle_;
-}
-
-BALL_INLINE 
-Aggregate& AggregateCompositeItem::getAggregate(void)
-{
-  return *aggregate_;
-}
-
-BALL_INLINE 
-const Aggregate& AggregateCompositeItem::getAggregate(void) const
-{
-  return *aggregate_;
-}
-
-BALL_INLINE 
-Composite& AggregateCompositeItem::getComposite(void)
-{
-  return *composite_;
-}
-
-BALL_INLINE 
-const Composite& AggregateCompositeItem::getComposite(void) const
-{
-  return *composite_;
-}
-
-BALL_INLINE 
-AggregateCompositeItem* AggregateCompositeItem::getNextAggregate(void)
-{
-  return aggregate_next_;
-}
-
-BALL_INLINE 
-const AggregateCompositeItem* AggregateCompositeItem::getNextAggregate(void) const
-{
-  return aggregate_next_;
-}
-
-BALL_INLINE 
-AggregateCompositeItem* AggregateCompositeItem::getPreviousAggregate(void)
-{
-  return composite_next_;
-}
-
-BALL_INLINE 
-const AggregateCompositeItem* AggregateCompositeItem::getPreviousAggregate(void) const
-{
-  return composite_next_;
-}
-
-BALL_INLINE 
-AggregateCompositeItem* AggregateCompositeItem::getNextComposite(void)
-{
-  return aggregate_previous_;
-}
-
-BALL_INLINE 
-const AggregateCompositeItem* AggregateCompositeItem::getNextComposite(void) const
-{
-  return aggregate_previous_;
-}
-
-BALL_INLINE 
-AggregateCompositeItem* AggregateCompositeItem::getPreviousComposite(void)
-{
-  return composite_previous_;
-}
-
-BALL_INLINE 
-const AggregateCompositeItem* AggregateCompositeItem::getPreviousComposite(void) const
-{
-  return composite_previous_;
-}
-
-BALL_INLINE 
-void AggregateCompositeItem::clear(void)
-{
-}
-
+// $Id: composite.iC,v 1.2 1999/09/06 22:20:43 oliver Exp $
 
 BALL_INLINE 
 void Composite::set(const Composite& composite, UnaryPredicate<Composite>& predicate)
@@ -95,10 +11,18 @@ void Composite::set(const Composite& composite, bool deep)
 {
 	if (deep == true)
 	{
+		// predicative cloning
 		composite.clone(*this, Composite::DEFAULT_UNARY_PREDICATE);
+
 	} else {
+
+		// clear old contents
 		destroy();
+		
+		// copy all remaining attributes
 		properties_ = composite.properties_;
+		selected_ = composite.selected_;
+		contains_selection_ = selected_;
 	}
 }
 
@@ -124,18 +48,6 @@ void Composite::get(Composite& composite, bool deep) const
 
 BALL_INLINE 
 Size Composite::getDegree(void) const
-{
-  return number_of_children_;
-}
-
-BALL_INLINE 
-Size Composite::getSize(void) const
-{
-  return number_of_children_;
-}
-
-BALL_INLINE 
-Size Composite::countChildren(void) const
 {
   return number_of_children_;
 }
@@ -167,43 +79,15 @@ Size Composite::getHeight(void) const
 }
 
 BALL_INLINE 
-Size Composite::getLevel(void) const
-{
-  return getLevel(*this);
-}
-
-BALL_INLINE 
-Composite& Composite::getRoot(void)
-{
-  return getRoot(*this);
-}
-
-BALL_INLINE 
 const Composite& Composite::getRoot(void) const
 {
-  return getRoot((Composite &)*this);
+  return (const_cast<Composite*>(this)->getRoot());
 }
 
 BALL_INLINE 
 const Composite* Composite::getLowestCommonAncestor(const Composite &composite) const
 {
   return ((Composite *)this)->getLowestCommonAncestor((Composite &)composite);
-}
-
-BALL_INLINE 
-void Composite::setParent(Composite &composite)
-{
-  if (&composite == this || isAncestorOf(composite) == true)
-  {
-    return;
-  }
-      
-  if (&composite == parent_)
-  {
-    return;
-  }
-  
-  composite.prependChild(*this);
 }
 
 BALL_INLINE 
@@ -219,12 +103,6 @@ const Composite* Composite::getParent(void) const
 }
 
 BALL_INLINE 
-void Composite::setChild(Composite &composite)
-{
-  composite.setParent(*this);
-}
-
-BALL_INLINE 
 Composite* Composite::getChild(Index index)
 {
   if (first_child_ != 0)
@@ -233,7 +111,7 @@ Composite* Composite::getChild(Index index)
     {
       return first_child_;
     } else {
-      return first_child_->getNextSibling(index);
+      return first_child_->getSibling(index);
     }
   } else {
     return 0;
@@ -247,47 +125,9 @@ const Composite* Composite::getChild(Index index) const
 }
 
 BALL_INLINE 
-void Composite::setPreviousSibling(Composite &composite)
-{
-  insertBefore(composite);
-}
-
-BALL_INLINE 
-const Composite* Composite::getPreviousSibling(Index index) const
-{
-  return ((Composite *)this)->getPreviousSibling(index);
-}
-
-BALL_INLINE 
-void Composite::setNextSibling(Composite &composite)
-{
-  insertAfter(composite);
-}
-
-BALL_INLINE 
-const Composite* Composite::getNextSibling(Index index) const
-{
-  return ((Composite *)this)->getNextSibling(index);
-}
-
-BALL_INLINE 
-Composite* Composite::getSibling(Index index)
-{
-  return (index < 0)
-         ? getPreviousSibling(-index)
-         : getNextSibling(index);
-}
-
-BALL_INLINE 
 const Composite* Composite::getSibling(Index index) const
 {
   return ((Composite *)this)->getSibling(index);
-}
-
-BALL_INLINE 
-void Composite::setFirstChild(Composite &composite)
-{
-  prependChild(composite);
 }
 
 BALL_INLINE 
@@ -300,12 +140,6 @@ BALL_INLINE
 const Composite* Composite::getFirstChild(void) const
 {
   return first_child_;
-}
-
-BALL_INLINE 
-void Composite::setLastChild(Composite &composite)
-{
-  appendChild(composite);
 }
 
 BALL_INLINE 
@@ -333,22 +167,13 @@ void Composite::collapse(void)
 }
 
 BALL_INLINE 
-void Composite::replace(Composite &composite)
+void Composite::replace(Composite& composite)
 {
   if (parent_ != 0)
   {
     insertBefore(composite);
 
     parent_->removeChild(*this);
-  }
-}
-
-BALL_INLINE 
-void Composite::sortSiblings(const Comparator<Composite *> &comparator)
-{
-  if (parent_ != 0)
-  {
-    parent_->sortChildren(comparator);
   }
 }
 
@@ -383,7 +208,7 @@ bool Composite::isRoot(void) const
 }
   
 BALL_INLINE 
-bool Composite::isRootOf(const Composite &composite) const
+bool Composite::isRootOf(const Composite& composite) const
 {
   return (bool)(parent_ == 0 && isAncestorOf(composite) == true);
 }
@@ -431,18 +256,6 @@ bool Composite::isChildOf(const Composite &composite) const
 }
 
 BALL_INLINE 
-bool Composite::isChildOf(const Aggregate &aggregate) const
-{
-  return (bool)(find_(aggregate) != 0);
-}
-
-BALL_INLINE 
-bool Composite::hasFirstChild(void) const
-{
-  return (bool)(first_child_ != 0);
-}
-
-BALL_INLINE 
 bool Composite::isFirstChild(void) const
 {
   return (bool)(parent_ != 0 && parent_->first_child_ == this);
@@ -452,12 +265,6 @@ BALL_INLINE
 bool Composite::isFirstChildOf(const Composite &composite) const
 {
   return (bool)(composite.first_child_ == this);
-}
-
-BALL_INLINE 
-bool Composite::hasLastChild(void) const
-{
-  return (bool)(last_child_ != 0);
 }
 
 BALL_INLINE 
@@ -600,6 +407,12 @@ bool Composite::isRelatedWith(const Composite &composite) const
 								|| this->isAncestorOf(composite));
 }
   
+BALL_INLINE
+bool Composite::containsSelection() const
+{
+	return (contains_selection_);
+}
+
 BALL_INLINE 
 void Composite::host(Visitor<Composite>& visitor)
 {
@@ -610,11 +423,16 @@ BALL_INLINE
 bool Composite::applyPreorderNostart_(UnaryProcessor<Composite>& processor)
 {
   Processor::Result result = processor(*this);
+	bool return_value;
 
   if (result <= Processor::BREAK)
-    return (result == Processor::BREAK) ? true : false;
-
-  return applyDescendantPreorderNostart_(processor);
+	{
+		return_value = (result == Processor::BREAK) ? true : false;
+	} else {
+		return_value =  applyDescendantPreorderNostart_(processor);
+	}
+	
+	return return_value;
 }
 
 BALL_INLINE 
@@ -632,170 +450,21 @@ bool Composite::applyPreorder(UnaryProcessor<Composite>& processor)
 BALL_INLINE 
 bool Composite::applyPostorder(UnaryProcessor<Composite>& processor)
 {
-	if (processor.start() == false)
-		return false;
-
-  if (applyDescendantPostorderNostart_(processor) == true
-      && processor(*this) < Processor::BREAK)
-  {
-    return processor.finish();
-  } else {
-    return false;
-  }
+	bool return_value = false;
+	if (processor.start() != false)
+	{
+		if (applyDescendantPostorderNostart_(processor) == true
+				&& processor(*this) < Processor::BREAK)
+		{
+			return_value = processor.finish();
+		} 
+	}
+	
+	return return_value;
 }
-
- 
 
 BALL_INLINE 
 bool Composite::apply(UnaryProcessor<Composite>& processor)
 {
   return processor.start() && applyPreorderNostart_(processor) && processor.finish();
-}
-
-BALL_INLINE 
-Aggregate& Aggregate::operator = (const Aggregate& aggregate)
-{
-	set(aggregate);
-
-  return *this;
-}
-
-BALL_INLINE 
-void Aggregate::get(Aggregate& aggregate, bool deep) const
-{
-  aggregate.set(*this, deep);
-}
-
-BALL_INLINE 
-Size Aggregate::getSize(void) const
-{
-  return size_;
-}
-
-BALL_INLINE 
-void Aggregate::destroy(bool deep)
-{
-  clear(deep);
-}
-
-BALL_INLINE 
-bool Aggregate::remove(const Composite &composite)
-{
-  AggregateCompositeItem* aggregate_composite = composite.find_(*this);
-  
-  if (aggregate_composite != 0)
-  {
-    delete aggregate_composite;
-
-    return true;
-  } else {
-    return false;
-  }
-}
-
-BALL_INLINE 
-void Aggregate::clear(void)
-{
-  clear(false);
-}
-
-BALL_INLINE 
-void Aggregate::destroy(void)
-{
-  destroy(false);
-}
-
-BALL_INLINE 
-Aggregate Aggregate::operator | (Aggregate &aggregate) const
-{
-  Aggregate result;
-
-  return Aggregate::join((Aggregate &)*this, aggregate, result);
-}
-
-BALL_INLINE 
-Aggregate Aggregate::operator & (Aggregate &aggregate) const
-{
-  Aggregate result;
-
-  return Aggregate::intersect((Aggregate &)*this, aggregate, result);
-}
-
-BALL_INLINE 
-Aggregate Aggregate::operator - (Aggregate &aggregate) const
-{
-  Aggregate result;
-
-  return Aggregate::subtract((Aggregate &)*this, aggregate, result);
-}
-
-BALL_INLINE 
-Aggregate Aggregate::operator ^ (Aggregate &aggregate) const
-{
-  Aggregate result;
-
-  return Aggregate::symsubtract((Aggregate &)*this, aggregate,result);
-}
-
-BALL_INLINE 
-Aggregate& Aggregate::operator |= (const Aggregate &aggregate)
-{
-  return join(aggregate);
-}
-
-BALL_INLINE 
-Aggregate& Aggregate::operator &= (const Aggregate &aggregate)
-{
-  return intersect(aggregate);
-}
-
-BALL_INLINE 
-Aggregate& Aggregate::operator -= (const Aggregate &aggregate)
-{
-  return subtract(aggregate);
-}
-
-BALL_INLINE 
-Aggregate& Aggregate::operator ^= (const Aggregate &aggregate)
-{
-  return symsubtract(aggregate);
-}
-
-BALL_INLINE 
-bool Aggregate::isEmpty(void) const
-{
-  return (bool)(first_ != 0);
-}
-
-BALL_INLINE 
-bool Aggregate::isParent(void) const
-{
-  return (bool)(first_ != 0);
-}
-
-BALL_INLINE 
-bool Aggregate::isParentOf(const Composite &composite) const
-{
-  return (bool)(composite.find_(*this) != 0);
-}
-
-BALL_INLINE 
-bool Aggregate::hasChildren(void) const
-{
-  return (bool)(first_ != 0);
-}
-
-BALL_INLINE 
-void Aggregate::host(Visitor<Aggregate> &visitor)
-{
-  visitor.visit(*this);
-}
-
-BALL_INLINE 
-AggregateCompositeItem* Aggregate::newItem
-	(Aggregate &aggregate, Composite &composite,
-   AggregateCompositeItem* aggregate_next,
-   AggregateCompositeItem* composite_next) const
-{
-  return new AggregateCompositeItem(aggregate, composite, aggregate_next, composite_next);
 }

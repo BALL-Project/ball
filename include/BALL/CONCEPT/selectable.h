@@ -1,4 +1,4 @@
-// $Id: selectable.h,v 1.1 1999/08/26 07:53:17 oliver Exp $
+// $Id: selectable.h,v 1.2 1999/09/06 22:20:43 oliver Exp $
 
 #ifndef BALL_CONCEPT_SELECTABLE_H
 #define BALL_CONCEPT_SELECTABLE_H
@@ -13,7 +13,8 @@
 
 #define BALL_SELECTABLE_DEFAULT_SELECTION   false
 
-namespace BALL {
+namespace BALL 
+{
 
 	/** Selectable Concept.
 			Selectable implements the ability of objects to be selected.
@@ -96,12 +97,12 @@ namespace BALL {
 		/**	Select the object.
 				The internal flag is set to {\bf true}.
 		*/
-		void select();
+		virtual void select();
 
 		/**	Deselect the object.
 				The internal flag is set to {\bf false}.
 		*/
-		void deselect();
+		virtual void deselect();
 		//@}
 
 		/**	@name Predicates 
@@ -158,7 +159,7 @@ namespace BALL {
 		virtual void dump(ostream& s = cout, unsigned long depth = 0L) const;
 		//@}
 	
-		private:
+		protected:
 
 		bool selected_;
 	};
