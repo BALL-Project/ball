@@ -21,8 +21,8 @@ void Directory::get(Directory& directory) const
 BALL_INLINE 
 void Directory::clear()
 {
-  dir_ = 
-  dirent_ = 
+  dir_ = 0;
+  dirent_ = 0;
   directory_depth_ = 0;
   directory_path_ = "";
 }
@@ -30,8 +30,8 @@ void Directory::clear()
 BALL_INLINE 
 void Directory::set(const String& directory_path, bool set_current)
 {
-  dir_ = 
-  dirent_ = 
+  dir_ = 0;
+  dirent_ = 0;
   directory_depth_ = 0;
   directory_path_ = directory_path;
   if (set_current) ::chdir(directory_path_.data());
@@ -40,8 +40,8 @@ void Directory::set(const String& directory_path, bool set_current)
 BALL_INLINE 
 void Directory::set(const Directory& directory)
 {
-  dir_ =
-  dirent_ = 
+  dir_ = 0;
+  dirent_ = 0;
   directory_depth_ = 0;
   directory_path_ = directory.directory_path_;
 }
