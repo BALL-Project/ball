@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.13 2003/11/12 12:31:49 amoll Exp $
+// $Id: pyWidget.C,v 1.14 2003/11/13 15:01:57 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -77,7 +77,7 @@ namespace BALL
 				history_position_ = history_.size();
 				removeParagraph(row);
 				insertParagraph(getPrompt_(), row);
-				setCursorPosition(row, col); 
+				setCursorPosition(paragraphs()-1, col);
 				QScrollBar* sb = verticalScrollBar();
 				if (sb != 0)
 				{
@@ -107,14 +107,14 @@ namespace BALL
 
 		void PyWidgetData::contentsMousePressEvent(QMouseEvent* /* m */)
 		{
-			setCursorPosition(lines() - 1, 4);
+			setCursorPosition(paragraphs() - 1, 4);
 			// we ignore the mouse events! 
 			// they might place the cursor anywhere!
 		}
 	
 		void PyWidgetData::mousePressEvent(QMouseEvent* /* m */) 
 		{
-			setCursorPosition(lines() - 1, 4);
+			setCursorPosition(paragraphs() - 1, 4);
 			// we ignore the mouse events! 
 			// they might place the cursor anywhere!
 		}
@@ -236,8 +236,7 @@ namespace BALL
 		void PyWidgetData::newPrompt_()
 		{
 			append(getPrompt_());
-			//scrollToBottom();
-			setCursorPosition(lines() - 1, 4);
+			setCursorPosition(paragraphs() - 1, 4);
 		}
 
 
@@ -252,7 +251,7 @@ namespace BALL
 			}
 			else if (e->key() == Key_Right)
 			{
-				setCursorPosition(row, col+1);
+				setCursorPosition(paragraphs()-1, col+1);
 				return;
 			}
 			else if (e->key() == Key_Up)
@@ -274,8 +273,11 @@ namespace BALL
 			{
 				if (!returnPressed()) return;
 			}
-			else if (e->key() == Key_PageUp || 
-							 e->key() == Key_PageDown)
+			else if (e->key() == Key_PageUp)
+			{
+				return;
+			}
+			else if (e->key() == Key_PageDown)
 			{
 				return;
 			}
@@ -410,7 +412,19 @@ namespace BALL
 			file.close();
 		}
 
+		void PyWidgetData::cut()
+		{
+			QTextEdit::cut();
+			newPrompt_();
+		}
 
+		void PyWidgetData::clear()
+		{
+			QTextEdit::clear();
+			newPrompt_();
+		}
+		
+// ######################################################################################################
 
 		PyWidget::PyWidget(QWidget *parent, const char *name)
 			throw()
