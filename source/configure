@@ -847,7 +847,7 @@ if test -n "$ac_init_help"; then
 Optional Features:
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
-  --enable-optimization   optimize the library for speed. Omits debug info!
+  --disable-optimization  Do not optimize the library for speed. Might be required for debugging.
   --enable-debuginfo      add -g to the compiler flags (to create debug information)
   --disable-VIEW          disable the compilation of the visualization component
   --enable-64             create 64 bit binaries (if allowed by the compiler)
@@ -1566,10 +1566,10 @@ if test "${enable_double_cpx+set}" = set; then
 
 fi;
 
-if test "$enable_optimization" = "yes" ; then
-	DEBUG=false
-else
+if test "$enable_optimization" = "no" ; then
 	DEBUG=true
+else
+	DEBUG=false
 fi
 
 if test "$enable_debuginfo" = "yes" ; then
@@ -4436,7 +4436,7 @@ _ACEOF
 
     CXXFLAGS_O="${CXXFLAGS_O} -O1"
 
-      CXXFLAGS_D="${CXXFLAGS_D} -O0 -g -w1"
+      CXXFLAGS_D="${CXXFLAGS_D} -O0 -w1"
   CXXFLAGS_DI="${CXXFLAGS_DI}"
  ;;
 	Compaq )

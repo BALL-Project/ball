@@ -4,12 +4,19 @@ Compiler:
   BALL requires a more or less ANSI compliant C++ compiler.
   It has been successfully built and tested on the following platforms:
 
-    - Linux/x86 2.x using g++ 3.2.1
-    - Linux/x86 2.x using g++ 2.95.3
+    - Linux/x86 2.x using g++ 3.2.x/3.3.x
+    - Linux/x86 2.x using Intel C++ 8.0
     - Solaris/SPARC 8 using g++ 3.2.1
-    - Solaris/SPARC 8 using g++ 2.95.3
     - IRIX 6.5 using CC 7.3.1.1m (32 and 64 bit)
+
+  We have also successful reports (although with slight problems) for:
 		- Microsoft Windows XP using Microsoft Visual Studio .NET (MSVC 7.0)
+		- MacOS X (Darwin 7.2) using g++ 3.3
+    - Microsoft Windows/cygwin
+
+  (Please refer to Section 2.6 at the bottom of this file for specific hints
+  for these platforms)
+   
 
 External software and libraries:
   BALL needs flex and bison for automatically generating parsers for
@@ -22,17 +29,15 @@ External software and libraries:
   easy to install.
 
   The compilation of the visualization component BALLVIEW also requires
-  the QT library (version 3.x) which is available from
+  the QT library (version 3.2.x or above) which is available from
 
-    http://www.troll.no/qt
+    http://www.trolltech.com/products/qt
 
   If QT was not installed in one of the standard library paths or the
   QT header files were not installed in one of the compiler's default
   include directories, use "--with-qt-libs=DIR" and "--with-qt-incl=DIR" as
   options to configure (see below, "Building BALL") to specify the paths
   QT was installed to.
-  Please remember to compile also libqgl.a, which is one of the QT extensions
-  (to build libqgl.a, cd to $QTDIR/extensions/opengl/src and type make).
 
   QT also requires OpenGL. On platforms that do not provide OpenGL, MESA can
   be used (e.g. Linux). Mesa is a 3-D graphics library with an API which is 
@@ -73,7 +78,7 @@ options.  An overview of these options can also be obtained by executing
 
   --x-libraries=DIR       X library files are in DIR
 
-  --enable-optimization   optimize the library for speed. Remove debug info.
+  --disable-optimization  Do not optimize the library for speed. Might be required for debugging.
 
   --disable-debuginfo     remove -g from the compiler flags (omit debug information)
 
@@ -202,5 +207,30 @@ LD_LIBRARY_PATH. molview needs the BALL libraries (libBALL.so and libVIEW.so),
 the qt libraries (libqt.so, libqgl.so), and the OpenGL/Mesa libraries 
 (libGL.so, libGLU.so).
 
+2.6) Platform-specific Hints
+---------------------------
+
+MacOS X: 
+  - Make sure you run MacOS X Panther and have g++ 3.3 installed
+  - install QT 3.2.3
+  - Build static libraries instead of dynamic ones: 
+     "make staticlibs"
+  - "ranlib" the libraries
+     "ranlib libBALL.a libVIEW.a" 
+  - install the library:
+     "make install.static"
+  - Not all tests will succeed -- currently TransformationManager_test fails for 
+    some yet unknown reason
+
+Windows/cygwin:
+  - should work out of the box without visualization:
+    "./configure --without-VIEW"
+  - We have no experience with cygwin/QT -- if you manage to get this combination
+    to run, please let us know.
+
+Windows/DOT NET:
+  - There is an additional file provided with more detailed installation instructions
+    on our website
+
 --------------------------------------------------------------------
-document revision: $Id: INSTALLATION,v 1.13 2003/08/26 13:14:36 oliver Exp $
+document revision: $Id: INSTALLATION,v 1.14 2004/02/19 14:09:31 oliver Exp $

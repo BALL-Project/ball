@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.44 2004/02/18 23:48:39 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.45 2004/02/19 14:12:03 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -829,12 +829,12 @@ AC_DEFUN(CF_INTEL_OPTIONS,[
 
   CXXFLAGS="${CXXFLAGS} -cxxlib-gcc -KPIC"
 
-  dnl   optimze as on highest level: this compiler
+  dnl   Turn on optimization
   CXXFLAGS_O="${CXXFLAGS_O} -O1"
 
   dnl   avoid high level optimization to
   dnl   get debuggable code...
-  CXXFLAGS_D="${CXXFLAGS_D} -O0 -g -w1"
+  CXXFLAGS_D="${CXXFLAGS_D} -O0 -w1"
   CXXFLAGS_DI="${CXXFLAGS_DI}"
 ])
 

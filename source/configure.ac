@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl $Id: configure.ac,v 1.13 2004/02/16 21:05:58 oliver Exp $
+dnl $Id: configure.ac,v 1.14 2004/02/19 14:12:08 oliver Exp $
 dnl
 dnl
 
@@ -33,7 +33,7 @@ dnl
 dnl    define command line arguments for QT, Mesa, and OpenGL
 dnl    includes and libraries
 dnl
-AC_ARG_ENABLE(optimization,    [  --enable-optimization   optimize the library for speed. Omits debug info!])
+AC_ARG_ENABLE(optimization,    [  --disable-optimization  Do not optimize the library for speed. Might be required for debugging.])
 AC_ARG_ENABLE(debuginfo,       [  --enable-debuginfo      add -g to the compiler flags (to create debug information)])
 AC_ARG_ENABLE(VIEW,            [  --disable-VIEW          disable the compilation of the visualization component])
 AC_ARG_ENABLE(64,              [  --enable-64             create 64 bit binaries (if allowed by the compiler)])
@@ -69,10 +69,10 @@ AC_ARG_ENABLE(double-cpx,      [  --enable-double-cplx    use double precision f
 dnl
 dnl    interpret switches...
 dnl
-if test "$enable_optimization" = "yes" ; then
-	DEBUG=false
-else
+if test "$enable_optimization" = "no" ; then
 	DEBUG=true
+else
+	DEBUG=false
 fi
 
 if test "$enable_debuginfo" = "yes" ; then
