@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricObject.C,v 1.17 2002/12/17 16:11:08 amoll Exp $
+// $Id: geometricObject.C,v 1.18 2002/12/18 17:11:22 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/geometricObject.h>
 
@@ -122,6 +122,12 @@ namespace BALL
 				clearProperty(GeometricObject::PROPERTY__DRAWING_MODE_DOTS);
 				clearProperty(GeometricObject::PROPERTY__DRAWING_MODE_WIREFRAME);
 				clearProperty(GeometricObject::PROPERTY__DRAWING_MODE_SOLID);
+			}
+			else if (property == GeometricObject::PROPERTY__OBJECT_STATIC || 
+							 property == GeometricObject::PROPERTY__OBJECT_DYNAMIC)
+			{
+				clearProperty(GeometricObject::PROPERTY__OBJECT_STATIC);
+				clearProperty(GeometricObject::PROPERTY__OBJECT_DYNAMIC);
 			}
 
 			PropertyManager::setProperty(property);
