@@ -1,0 +1,22 @@
+// $Id:  
+
+BALL_INLINE
+ConnectionObject *
+ConnectionObject::getParent() const
+{
+	return parent_;
+}
+
+BALL_INLINE
+void 
+ConnectionObject::setParent_(ConnectionObject &object)
+{
+	parent_ = &object;
+}
+
+BALL_INLINE
+void 
+ConnectionObject::clearParent_()
+{
+	parent_ = 0;
+}

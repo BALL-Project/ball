@@ -1,0 +1,133 @@
+// $Id: message.iC,v 1.1 2000/03/21 16:23:27 hekl Exp $
+
+BALL_INLINE
+void Message::setSender(const void* object)
+{
+  connection_object_ = const_cast<void*>(object);
+}
+
+BALL_INLINE
+const void* Message::getSender() const
+{
+	return connection_object_;
+}
+
+BALL_INLINE
+void Message::setDeletable(bool flag)
+{
+	deletable_ = flag;
+}
+
+BALL_INLINE
+bool Message::isDeletable() const
+{
+	return deletable_;
+}
+
+BALL_INLINE
+void CompositeMessage::setComposite(const Composite& composite)
+{
+  composite_ = const_cast<Composite*>(&composite);
+}
+
+BALL_INLINE
+void CompositeMessage::setComposite(const Composite* composite)
+{
+  composite_ = const_cast<Composite*>(composite);
+}
+
+BALL_INLINE
+Composite* CompositeMessage::getComposite() const
+{
+	return composite_;
+}
+
+BALL_INLINE
+void CompositeMessage::setCompositeName(string name)
+{
+	composite_name_ = name;
+}
+
+BALL_INLINE
+string CompositeMessage::getCompositeName() const
+{
+	return composite_name_;
+}
+	
+BALL_INLINE
+void SceneMessage::updateOnly(bool value)
+{
+	update_only_ = value;
+}
+
+BALL_INLINE
+bool SceneMessage::isUpdateOnly()
+{
+	return update_only_;
+}
+
+BALL_INLINE
+void SceneMessage::setCameraLookAt(Vector3 vector3)
+{
+	camera_look_at_ = vector3;
+}
+
+BALL_INLINE
+Vector3& SceneMessage::getCameraLookAt()
+{
+	return camera_look_at_;
+}
+
+BALL_INLINE
+const Vector3& SceneMessage::getCameraLookAt() const
+{
+	return camera_look_at_;
+}
+
+BALL_INLINE
+void SceneMessage::setCameraViewPoint(Vector3 vector3)
+{
+	camera_view_point_ = vector3;
+}
+
+BALL_INLINE
+const Vector3& SceneMessage::getCameraViewPoint() const
+{
+	return camera_view_point_;
+}
+
+BALL_INLINE
+Vector3& SceneMessage::getCameraViewPoint()
+{
+	return camera_view_point_;
+}
+
+BALL_INLINE
+void WindowMessage::setStatusBar(const string &message)
+{
+	status_bar_ = message;
+}
+
+BALL_INLINE
+string WindowMessage::getStatusBar() const
+{
+	return status_bar_;
+}
+
+BALL_INLINE
+void SelectionMessage::setSelection(const List<Composite*> &selection)
+{
+	selection_ = const_cast<List<Composite*>*>(&selection);
+}
+
+BALL_INLINE
+void SelectionMessage::setSelection(const List<Composite*> *selection)
+{
+	selection_ = const_cast<List<Composite*>*>(selection);
+}
+
+BALL_INLINE
+const List<Composite*>* SelectionMessage::getSelection() const
+{
+	return selection_;
+}
