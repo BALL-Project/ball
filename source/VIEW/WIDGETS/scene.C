@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.112 2004/07/20 23:56:59 amoll Exp $
+// $Id: scene.C,v 1.113 2004/07/21 13:08:42 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -501,6 +501,7 @@ namespace BALL
 			// show light sources
 			if (show_light_sources_)
 			{
+				gl_renderer_.initSolid();
 				List<LightSource>::ConstIterator lit = stage_->getLightSources().begin();
 				for (; lit != stage_->getLightSources().end(); lit++)
 				{
