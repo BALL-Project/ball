@@ -1,4 +1,4 @@
-// $Id: analyticalGeometry.h,v 1.15 2000/03/26 12:12:20 oliver Exp $
+// $Id: analyticalGeometry.h,v 1.16 2000/03/26 16:24:06 amoll Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -112,6 +112,7 @@ namespace BALL
 	BALL_INLINE 
 	T GetDeterminant2(const T* m)
 	{
+		Size dim = 2;
 		return (BALL_CELL(0,0) * BALL_CELL(1,1) - BALL_CELL(0,1) * BALL_CELL(1,0));
 	}
 	/**	Get the determinant of an 2x2 matrix.
@@ -134,6 +135,7 @@ namespace BALL
 	BALL_INLINE 
 	T GetDeterminant3(const T *m)
 	{
+		Size dim = 3;
 		return (  BALL_CELL(0,0) * BALL_CELL(1,1) * BALL_CELL(2,2) 
 						+ BALL_CELL(0,1) * BALL_CELL(1,2) * BALL_CELL(2,0) 
 						+ BALL_CELL(0,2) * BALL_CELL(1,0) * BALL_CELL(2,1) 
