@@ -1,6 +1,10 @@
-// Do nothing, if no thread support
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
 
 #include <BALL/VIEW/KERNEL/threads.h>
+
+// Do nothing, if no thread support
 #ifdef BALL_QT_HAS_THREADS
 
 #include <BALL/VIEW/MODELS/modelProcessor.h>
