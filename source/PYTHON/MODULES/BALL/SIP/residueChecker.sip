@@ -1,11 +1,11 @@
-// $Id: residueChecker.sip,v 1.1 2000/08/07 17:46:20 oliver Exp $
+// $Id: residueChecker.sip,v 1.2 2000/08/28 15:47:26 oliver Exp $
 
 class ResidueChecker
 //  : public UnaryProcessor<Residue>
 	: ResidueProcessor
 {
 %HeaderCode
-	#include <BALL/source/STRUCTURE/residueChecker.h>
+	#include <BALL/STRUCTURE/residueChecker.h>
 	using namespace BALL;
 %End
   public:
