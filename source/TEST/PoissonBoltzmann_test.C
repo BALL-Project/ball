@@ -1,4 +1,4 @@
-// $Id: PoissonBoltzmann_test.C,v 1.4 2000/05/04 19:57:47 oliver Exp $
+// $Id: PoissonBoltzmann_test.C,v 1.5 2000/05/05 18:01:08 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 #include <BALL/SOLVATION/poissonBoltzmann.h>
@@ -6,7 +6,7 @@
 #undef PRECISION
 #define PRECISION 0.005
 
-START_TEST(FDPB, "$Id: PoissonBoltzmann_test.C,v 1.4 2000/05/04 19:57:47 oliver Exp $")
+START_TEST(FDPB, "$Id: PoissonBoltzmann_test.C,v 1.5 2000/05/05 18:01:08 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -76,7 +76,7 @@ CHECK(energy - reaction field energy - and numerical accuracy)
 	float E_RF_vacuum = fdpb->getReactionFieldEnergy();
 
 #undef PRECISION
-#define PRECISION 0.5
+#define PRECISION 1.0
 	TEST_REAL_EQUAL(E_water - E_vacuum, -357.68)
 #undef PRECISION
 #define PRECISION 0.005
