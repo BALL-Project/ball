@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BALL.sip,v 1.13 2003/10/31 23:15:48 oliver Exp $
+// $Id: BALL.sip,v 1.14 2003/11/15 10:59:04 oliver Exp $
 //
 //
 //
@@ -216,9 +216,6 @@
 // %Include templates.sip
 
 
-// MOLVIEW ??
-%Include client.sip
-
 // NMR
 // %Include johnsonBovey.sip // ??
 
@@ -234,6 +231,8 @@
 %Include pyResidueProcessor.sip
 %Include pyCompositeProcessor.sip
 %Include pyBondList.sip
+%Include pyCompositeList.sip
+%Include pyRepresentationList.sip
 %Include pyAtomContainerList.sip
 %Include pyFragmentList.sip
 %Include pyMoleculeList.sip
@@ -276,10 +275,26 @@
 // %Include socket.sip
 // %Include timer.sip
 
-// VIEW/GUI/KERNEL
+// VIEW/KERNEL
 %Include mainControl.sip
+%Include compositeManager.sip
+%Include primitiveManager.sip
+%Include client.sip
+%Include representation.sip
+%Include geometricObject.sip
 
-// VIEW/GUI/WIDGETS
+// VIEW/DATATYPE
+%Include colorUnit.sip
+%Include colorRGBA.sip
+
+// VIEW/MODELS
+%Include colorProcessor.sip
+%Include modelProcessor.sip
+
+// VIEW/DIALOGS
+%Include preferences.sip
+
+// VIEW/WIDGETS
 %Include modularWidget.sip
 %Include pyWidget.sip
 

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: extractors.C,v 1.2 2002/02/27 12:23:56 sturm Exp $
+// $Id: extractors.C,v 1.3 2003/11/15 10:59:05 oliver Exp $
+//
 
 #include <BALL/PYTHON/pyAtomList.h>
 #include <BALL/PYTHON/pyPDBAtomList.h>
@@ -31,6 +32,11 @@ namespace BALL
 	}
 
 	PyAtomList* atoms(const AtomContainer& fragment)
+	{
+		return new PyAtomList(fragment);
+	}
+
+	PyAtomList* atoms(const PyAtomList& fragment, const String& expression)
 	{
 		return new PyAtomList(fragment);
 	}

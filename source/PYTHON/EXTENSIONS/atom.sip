@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.sip,v 1.8 2003/11/01 09:27:36 oliver Exp $
+// $Id: atom.sip,v 1.9 2003/11/15 10:59:05 oliver Exp $
 //
 
 class Atom
@@ -107,6 +107,14 @@ class Atom
 						+ String(sipCpp->getPosition().z) + " }").c_str());
 %End
 
+	SIP_PYOBJECT __repr__();
+%MethodCode
+	sipRes = PyString_FromString(String(String("Atom ") + sipCpp->getName() 
+						+ " { " + sipCpp->getElement().getSymbol() + " @ (" 
+						+ String(sipCpp->getPosition().x) + " " + String(sipCpp->getPosition().y) + " " 
+						+ String(sipCpp->getPosition().z) + " }").c_str());
+%End
+
 
 };
  
@@ -132,6 +140,11 @@ class AtomType
 %End
 
 	SIP_PYOBJECT __str__();
+%MethodCode
+	sipRes = PyString_FromString(String(*sipCpp).c_str());
+%End
+
+	SIP_PYOBJECT __repr__();
 %MethodCode
 	sipRes = PyString_FromString(String(*sipCpp).c_str());
 %End
