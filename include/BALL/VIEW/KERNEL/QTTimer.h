@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: QTTimer.h,v 1.19 2003/08/29 15:36:49 amoll Exp $
+// $Id: QTTimer.h,v 1.20 2003/10/15 14:21:15 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_QTTIMER_H
@@ -17,7 +17,6 @@
 
 namespace BALL
 {
-	
 	namespace VIEW
 	{
 		/** QTTimer class.		
@@ -61,22 +60,16 @@ namespace BALL
 			//@{
 
 			/** Default Constructor.
-					Constructs new QTTimer.
-					The state of this qtTimer is:
+					The state is:
 					  - interval is set to 100
 						- timer is halted
 					\par
 					See documentation of the QT-library for information about QObjects.
-					\return      QTTimer new constructed qtTimer
 			*/
 			QTTimer(QObject* parent=0, const char* name=0)
 				throw();
 
 			/** Copy constructor.
-					Constructs new QTTimer by copying the qtTimer <b> qt_timer</b>.
-					The state of this qtTimer is initialized to the state of the qtTimer <b> qt_timer</b>.\par
-					\param       qt_timer the qtTimer to be copied
-					\return      QTTimer new constructed qtTimer copied from <b> qt_timer</b>
 			*/
 			QTTimer(const QTTimer &qt_timer, QObject* parent=0, const char* name=0)
 				throw();
@@ -93,7 +86,7 @@ namespace BALL
 
 			/** Explicit default initialization.
 					Sets the state of this qtTimer to the default values.
-					The state of this qtTimer is:
+					The state is:
 					  - interval is set to 100
 						- timer is halted
 					\par
@@ -107,31 +100,20 @@ namespace BALL
 			//@{
 
 			/** Assignment with cloning facility.
-					Assigns the qtTimer <b> qt_timer</b> to this qtTimer.
-					The state of this qtTimer is initialized to the state of 
-					the qtTimer <b> qt_timer</b>.
 					The timer is halted.\par
-					\param       qt_timer the qtTimer to be copied
+					\param       qt_timer the QTTimer to be copied
 			*/
 			void set(const QTTimer& qt_timer)
 				throw();
 
 			/** Assignment operator.
-					Assigns the qtTimer <b> qt_timer</b> to this qtTimer.
 					Calls set.
-					The state of this qtTimer is initialized to the state 
-					of the qtTimer <b> qt_timer</b>.\par
-					\param       qt_timer the qtTimer to be copied
-					\return      QTTimer& this qtTimer
-					\see         set
 			*/
 			const QTTimer& operator = (const QTTimer& qt_timer)
 				throw();
 
-			/** Swapping of qtTimer's.
-					Swaps the states of this qtTimer with the qtTimer
-					<b> qt_timer</b>. The timer is halted.
-					\param       qt_timer the qtTimer being swapped with this qtTimer 
+			/** Swapping of QTTimer's.
+					The timer is halted.
 			*/
 			void swap(QTTimer& qt_timer)
 				throw();
@@ -141,9 +123,8 @@ namespace BALL
 			*/
 			//@{
 
-			/** Changes the interval of this qtTimer.
-					Changes the interval of this qtTimer to the value
-					represented by the parameter <b> interval</b>. this qtTimer will
+			/** Changes the interval of this qtTimer to the value
+					represented by the parameter <b> interval</b>. This QTTimer will
 					call the method <b> timer</b> every <b> interval</b> msec.
 					\param       interval the new interval of this qtTimer
 					\exception   NoValidInterval thrown if the value of <b> interval</b> is lower or equal <tt> 0</b>
@@ -154,8 +135,7 @@ namespace BALL
 			void setInterval(int interval)
 				throw(NoValidInterval);
 
-			/** Inspection of the interval.
-					Accesses the interval of this qtTimer.
+			/** Accesses the interval of this qtTimer.
 					\return      int the value of the interval of this qtTimer
 					\see         setInterval
 			*/
@@ -163,7 +143,6 @@ namespace BALL
 				throw();
 
 			/** Starts the timer.
-					Starts the timer of this qtTimer.
 					After this method is called the method <b> timer</b> will be called
 					every <b> interval</b> msec.
 					\see     stopTimer
@@ -173,7 +152,6 @@ namespace BALL
 				throw();
 			
 			/** Stops the timer.
-					Stops the timer of this qtTimer.
 					After this method is called the execution of the <b> timer</b> method
 					will be stopped.
 					\see     startTimer
@@ -188,7 +166,6 @@ namespace BALL
 			//@{
 
 			/** Tests if this qtTimer is running.
-					\return  bool -	<tt> true</tt> if this qtTimer is running, <tt> false</tt> otherwise
 					\see     startTimer
 					\see     stopTimer
 			*/
@@ -196,7 +173,6 @@ namespace BALL
 				throw();
 
 			/** Tests if this qtTimer is stopped.
-					\return  bool -	<tt> true</tt> if this qtTimer is stopped, <tt> false</tt> otherwise
 					\see     startTimer
 					\see     stopTimer
 			*/
@@ -209,7 +185,7 @@ namespace BALL
 			//@{
 
 			/** Internal value dump.
-					Dumps the current state of this qtTimer to 
+					Dumps the current state of this QTTimer to 
 					the output ostream <b> s</b> with dumping depth <b> depth</b>.
 					\param   s output stream where to output the state of this qtTimer
 					\param   depth the dumping depth
@@ -233,7 +209,7 @@ namespace BALL
 					The method is not responsible for maintaining, saving and restoring
 					the values of the code used in this method. Therefore it is necessary
 					to store and restore any necessary values needed by the code.
-					If the execution time of the code in this method is to long the main 
+					If the execution time of the code in this method is too long the main 
 					application	will hang. Any loops in the code that need a lot of time must
 					be rewritten so every timer call will advance the "loop" a step further.
 					Try to avoid loops.
@@ -254,14 +230,10 @@ namespace BALL
 			bool timer_running_;
 		};
 
-
-
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/KERNEL/QTTimer.iC>
-#		endif
+#	ifndef BALL_NO_INLINE_FUNCTIONS
+#		include <BALL/VIEW/KERNEL/QTTimer.iC>
+#	endif
   
-	} // namespace VIEW
-
-} // namespace BALL
+} } // namespaces
 
 #endif // BALL_VIEW_KERNEL_QTTIMER_H
