@@ -227,6 +227,9 @@ namespace BALL
 
 				system->setProperty("FROM_FILE", filename);
 				getMainControl()->insert(*system, pdbId->text().latin1());
+				CompositeMessage* message = new CompositeMessage(*system, CompositeMessage::CENTER_CAMERA);
+				notify_(message);
+				close();
 			}
 			catch(...)
 			{
