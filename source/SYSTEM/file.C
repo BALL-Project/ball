@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.C,v 1.39 2003/04/22 12:45:13 oliver Exp $
+// $Id: file.C,v 1.40 2003/07/03 10:05:38 amoll Exp $
 
 #include <BALL/SYSTEM/file.h>
 
@@ -403,6 +403,10 @@ namespace BALL
 		// Canonize the path
 		FileSystem::canonizePath(name);
 		
+		if (!File::isAccessible(name))
+		{
+			throw Exception::FileNotFound(__FILE__, __LINE__, name);
+		}
 		#ifdef BALL_COMPILER_MSVC
 			struct _stat stats;
 			if (_stat(name.c_str(), &stats) < 0)
