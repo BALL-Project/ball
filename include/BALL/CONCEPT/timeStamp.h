@@ -1,4 +1,4 @@
-// $Id: timeStamp.h,v 1.5 2000/10/05 22:27:45 oliver Exp $
+// $Id: timeStamp.h,v 1.6 2000/10/16 19:16:44 oliver Exp $
 
 #ifndef BALL_CONCEPT_TIMESTAMP_H
 #define BALL_CONCEPT_TIMESTAMP_H
@@ -66,15 +66,23 @@ namespace BALL
 		//@{
 		/** 
 		*/
-		void set(long secs, long usecs) throw();
+		void set(long secs, long usecs) 
+			throw();
 
 		/**
 		*/
-		void set(const Time& time) throw();
+		void set(const Time& time) 
+			throw();
 
 		/**	Assignment operator
 		*/
-		const Time& operator = (const Time& time) throw();
+		const Time& operator = (const Time& time) 
+			throw();
+
+		/**	Clear method
+		*/
+		virtual void clear() 
+			throw();
 		//@}
 
 		/**	@name Predicates
@@ -82,15 +90,18 @@ namespace BALL
 		//@{
 		/**	Greater than operator.
 		*/
-		bool operator < (const Time& time) const throw();
+		bool operator < (const Time& time) const 
+			throw();
 
 		/**	Lesser than operator.
 		*/
-		bool operator > (const Time& time) const throw();
+		bool operator > (const Time& time) const 
+			throw();
 
 		/**	Equality operator.
 		*/
-		bool operator == (const Time& time) const throw();
+		bool operator == (const Time& time) const 
+			throw();
 		//@}
 		
 		/**	@name Accessors 
@@ -99,16 +110,19 @@ namespace BALL
 
 		/**	Return the seconds since Jan. 1, 1970.
 		*/
-		long getSeconds() const throw();
+		long getSeconds() const 
+			throw();
 
 		/**	Return the microseconds.
 		*/
-		long getMicroSeconds() const throw();
+		long getMicroSeconds() const 
+			throw();
 
 		/**	Return the current time.
 				@return Time the current time in seconds since Jan. 1, 1970
 		*/
-		static const Time& now() throw();
+		static const Time& now() 
+			throw();
 		//@}
     /** @name Storable interface.
     */
@@ -169,19 +183,23 @@ namespace BALL
 
 		/**	Check the time stamp.
 		*/
-		bool isNewerThan(const Time& time) const throw ();
+		bool isNewerThan(const Time& time) const 
+			throw();
 		
 		/**	Check the time stamp.
 		*/
-		bool isOlderThan(const Time& time) const throw ();
+		bool isOlderThan(const Time& time) const 
+			throw();
 
 		/**	Check the time stamp.
 		*/
-		bool isNewerThan(const TimeStamp& stamp) const throw ();
+		bool isNewerThan(const TimeStamp& stamp) const 
+			throw();
 		
 		/**	Check the time stamp.
 		*/
-		bool isOlderThan(const TimeStamp& stamp) const throw ();
+		bool isOlderThan(const TimeStamp& stamp) const 
+			throw();
 		//@}
 
 		/**	@name Accessors
@@ -193,12 +211,30 @@ namespace BALL
 				\Ref{Time::now}).
 				@param time the new time stamp (default = \Ref{Time::now})														
 		*/
-		virtual void stamp(const Time& time = Time::ZERO) throw ();
+		virtual void stamp(const Time& time = Time::ZERO) 
+			throw();
 
 		/**	Return the time of last modification
 				@return Time the time stamp
 		*/
-		const Time& getTime() const throw ();
+		const Time& getTime() const 
+			throw();
+		//@}
+
+		/**	@name	Assignment
+		*/
+		//@{
+
+		/**	Assignment operator
+		*/
+		const Time& operator = (const Time& time) 
+			throw();
+
+		/**	Clear method
+		*/
+		virtual void clear() 
+			throw();
+
 		//@}
 
     /** @name Storable interface.
