@@ -1,4 +1,4 @@
-// $Id: triple.h,v 1.1 2001/07/20 07:59:45 oliver Exp $
+// $Id: triple.h,v 1.2 2001/07/29 18:56:35 oliver Exp $
 
 #ifndef BALL_DATATYPE_TRIPLE_H
 #define BALL_DATATYPE_TRIPLE_H
@@ -241,7 +241,8 @@ namespace BALL
 	{
 		return ((first < triple.first) 
 						|| ((first == triple.first)	&& (second < triple.second))
-						|| ((first == triple.first)	&& (second == triple.second) && (third < triple.third)));
+						|| ((first == triple.first)	&& (second == triple.second) && (third < triple.third))
+						|| ((first == triple.first) && (second == triple.second) && (third == triple.third)));
 	}
 
 	template <typename T1, typename T2, typename T3>
@@ -251,7 +252,8 @@ namespace BALL
 	{
 		return ((first > triple.first)
 						|| ((first == triple.first)	&& (second > triple.second)) 
-						|| ((first == triple.first)	&& (second == triple.second) && (third > triple.third)));
+						|| ((first == triple.first)	&& (second == triple.second) && (third > triple.third))
+						|| ((first == triple.first) && (second == triple.second) && (third == triple.third)));
 	}
 
 	template <typename T1, typename T2, typename T3>
