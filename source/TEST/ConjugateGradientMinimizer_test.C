@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ConjugateGradientMinimizer_test.C,v 1.3 2003/02/03 21:38:19 oliver Exp $
+// $Id: ConjugateGradientMinimizer_test.C,v 1.4 2003/02/03 22:30:55 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +11,7 @@
 #include <BALL/KERNEL/PTE.h>
 ///////////////////////////
 
-START_TEST(ConjugateGradienMinimizer, "$Id: ConjugateGradientMinimizer_test.C,v 1.3 2003/02/03 21:38:19 oliver Exp $")
+START_TEST(ConjugateGradienMinimizer, "$Id: ConjugateGradientMinimizer_test.C,v 1.4 2003/02/03 22:30:55 oliver Exp $")
 
 using namespace BALL;
 
@@ -177,43 +177,28 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool))
 	a2->setElement(PTE[Element::C]);
 	a1->setTypeName("C");
 	a2->setTypeName("C");
-	a1->setCharge(0.5);
-	a2->setCharge(0.5);
+	a1->setCharge(0.0);
+	a2->setCharge(0.0);
 	FF.options[AmberFF::Option::ASSIGN_CHARGES] = "false";
 	FF.setup(S);
+
 	TEST_REAL_EQUAL(FF.isValid(), true)
-	PRECISION(1e-4)
 	FF.updateEnergy();
 	FF.updateForces();
-	Log << a1->getForce() << std::endl;
-	Log << a2->getForce() << std::endl;
-	TEST_REAL_EQUAL(FF.getEnergy(), -1.99725)
-	Log << "Ttl: " << FF.getEnergy() << std::endl;
-	Log << "vdW: " << FF.getVdWEnergy() << std::endl;
-	Log << "ES:  " << FF.getESEnergy() << std::endl;
-	Log << a1->getPosition() << "/" << a2->getPosition() << std::endl;
-	Log << a1->getPosition().getDistance(a2->getPosition()) << std::endl;
+	PRECISION(10)
+	TEST_REAL_EQUAL(FF.getEnergy(), 3.42854e6)
+
+	PRECISION(1e-4)
 	ConjugateGradientMinimizer cgm(FF);
 	cgm.setEnergyOutputFrequency(1);
 	cgm.setMaxGradient(0.01);
-	Log << "grad: " << FF.getRMSGradient() << std::endl;
 	TEST_EQUAL(cgm.isValid(), true)
 	TEST_EQUAL(cgm.minimize(20), true)
-	TEST_REAL_EQUAL(FF.getEnergy(), -0.4)
-	Log << a1->getPosition() << "/" << a2->getPosition() << std::endl;
-	Log << a1->getPosition().getDistance(a2->getPosition()) << std::endl;
-	Log << a1->getCharge() << "/" << a2->getCharge() << std::endl;
-	
 	FF.updateEnergy();
 	FF.updateForces();
-	Log << "grad: " << FF.getRMSGradient() << std::endl;
-	Log << a1->getForce() << std::endl;
-	Log << a2->getForce() << std::endl;
-	Log << "Ttl: " << FF.getEnergy() << std::endl;
-	Log << "vdW: " << FF.getVdWEnergy() << std::endl;
-	Log << "ES:  " << FF.getESEnergy() << std::endl;
-	Log << a1->getPosition() << "/" << a2->getPosition() << std::endl;
-	Log << a1->getPosition().getDistance(a2->getPosition()) << std::endl;
+
+	TEST_REAL_EQUAL(FF.getEnergy(), -0.359813)	
+	TEST_REAL_EQUAL(a1->getPosition().getDistance(a2->getPosition()), 3.81244)
 RESULT
 
 /////////////////////////////////////////////////////////////
