@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Bend.h,v 1.1.2.5 2005/03/28 00:44:32 amoll Exp $
+// $Id: MMFF94StretchBend.h,v 1.1.2.1 2005/03/28 00:44:22 amoll Exp $
 //
 
 // Molecular Mechanics: MMFF94 force field, bond stretch component
 
-#ifndef BALL_MOLMEC_MMFF94_MMFF94BEND_H
-#define BALL_MOLMEC_MMFF94_MMFF94BEND_H
+#ifndef BALL_MOLMEC_MMFF94_MMFF94STRETCHBEND_H
+#define BALL_MOLMEC_MMFF94_MMFF94STRETCHBEND_H
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -15,10 +15,6 @@
 
 #ifndef BALL_MOLMEC_COMMON_FORCEFIELDCOMPONENT_H
 #	include <BALL/MOLMEC/COMMON/forceFieldComponent.h>
-#endif
-
-#ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
-#	include <BALL/MOLMEC/COMMON/forceField.h>
 #endif
 
 #ifndef BALL_MOLMEC_MMFF94_MMFF94PARAMETERS_H
@@ -30,26 +26,25 @@ namespace BALL
 	/**	MMFF94 bond stretch component
     	\ingroup  MMFF94
 	*/
-	class MMFF94Bend 
+	class MMFF94StretchBend 
 		: public ForceFieldComponent
 	{
 		public:
 
-		/// see MMFFANG.PAR
-		struct Bend
+		struct StretchBend
 		{
-			float theta0;
-			float delta_theta;
-			float ka;
+			float kba_ijk;
+			float kba_kji;
 			Atom::StaticAtomAttributes*	atom1;
 			Atom::StaticAtomAttributes*	atom2;
 			Atom::StaticAtomAttributes*	atom3;
-			bool is_linear;
-			Position ATIJK;
+			const float* delta_r_ij;
+			const float* delta_r_kj;
+			const float* delta_theta;
 			float energy;  // debug
 		};
 
-		BALL_CREATE(MMFF94Bend)
+		BALL_CREATE(MMFF94StretchBend)
 
 		/** @name	Constructors and Destructors	
 		*/
@@ -57,19 +52,19 @@ namespace BALL
 
 		/**	Default constructor.
 		*/
-		MMFF94Bend();
+		MMFF94StretchBend();
 
 		/**	Constructor.
 		*/
-		MMFF94Bend(ForceField& force_field);
+		MMFF94StretchBend(ForceField& force_field);
 
 		/**	Copy constructor
 		*/
-		MMFF94Bend(const MMFF94Bend& to_copy);
+		MMFF94StretchBend(const MMFF94StretchBend& to_copy);
 
 		/**	Destructor.
 		*/
-		virtual ~MMFF94Bend();
+		virtual ~MMFF94StretchBend();
 
 		//@}
 		/**	@name	Setup Methods	
@@ -95,19 +90,22 @@ namespace BALL
 		virtual void updateForces();
 
 		///
-		Position getBendType(const Bond& bond1, const Bond& bond2,
-										 		 Atom& atom1, Atom& atom2, Atom& atom3) const;
-		
-		///
-		const vector<Bend>& getBends() const { return bends_;}
+		const vector<StretchBend>& getStretchBends() const { return stretch_bends_;}
 		//@}
 
+		///
+		Index calculateSBTIJK(Position angle_type, 
+													bool bond_type1,
+													bool bond_type2);
 		private:
 
-		vector<Bend> bends_;
-		MMFF94BendParameters parameters_;
+		void errorOccured_(const String& string, 
+											 const Atom& a1, const Atom& a2, const Atom& a3);
+
+		vector<StretchBend> stretch_bends_;
+ 		MMFF94StretchBendParameters parameters_;
 	 
 	};
 } // namespace BALL
 
-#endif // BALL_MOLMEC_MMFF94_MMFF94BEND_H
+#endif // BALL_MOLMEC_MMFF94_MMFF94STRETCHBEND_H

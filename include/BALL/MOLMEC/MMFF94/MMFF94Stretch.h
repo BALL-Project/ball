@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Stretch.h,v 1.1.2.10 2005/03/25 21:07:49 amoll Exp $ 
+// $Id: MMFF94Stretch.h,v 1.1.2.11 2005/03/28 00:44:33 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field, bond stretch component
@@ -42,7 +42,8 @@ namespace BALL
 			Atom* atom2;
 			float kb;
 			float r0;
-			bool  sbmb; // debuging
+			float delta_r;
+			bool  sbmb; 
 		};
 
 		BALL_CREATE(MMFF94Stretch)
@@ -91,7 +92,7 @@ namespace BALL
 		virtual void update()
 			throw(Exception::TooManyErrors);
 
-		const vector<Stretch>& getStretches() { return stretch_;}
+		const vector<Stretch>& getStretches() const { return stretch_;}
 
 		//@} 
 

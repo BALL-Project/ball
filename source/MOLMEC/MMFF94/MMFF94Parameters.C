@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.C,v 1.1.2.9 2005/03/27 14:12:35 amoll Exp $
+// $Id: MMFF94Parameters.C,v 1.1.2.10 2005/03/28 00:43:56 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field parameters 
 //
@@ -342,6 +342,122 @@ namespace BALL
 								 atom_type1 * MMFF94_number_atom_types +
 								 atom_type3) +
 					 bend_type;
+	}
+
+
+	///////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////
+
+	MMFF94StretchBendParameters::MMFF94StretchBendParameters()
+		: is_initialized_(false)
+	{
+	}
+
+	MMFF94StretchBendParameters::~MMFF94StretchBendParameters()
+	{
+		clear();
+	}
+	
+	void MMFF94StretchBendParameters::clear()
+		throw()
+	{
+		parameters_.clear();
+	}
+	
+	const MMFF94StretchBendParameters& MMFF94StretchBendParameters::operator 
+		= (const MMFF94StretchBendParameters& param)
+		throw()
+	{
+		parameters_ = param.parameters_;
+		return *this;
+	}
+
+	bool MMFF94StretchBendParameters::getParameters(Position bend_type,
+			Position atom_type1, Position atom_type2, Position atom_type3, 
+			float& kb_ijk, float& kb_kji) const
+	{
+		// take the standard value
+		StretchBendMap::ConstIterator it = parameters_.find(
+				getIndex_(bend_type, atom_type1, atom_type2, atom_type3));
+
+		if (it == parameters_.end()) return false;
+
+		kb_ijk = it->second.first;
+		kb_kji = it->second.second;
+
+		return true;
+	}
+
+	bool MMFF94StretchBendParameters::readParameters(const String& filename)
+		throw(Exception::FileNotFound)
+	{
+		parameters_.clear();
+
+		LineBasedFile infile(filename);
+		vector<String> fields;
+
+		try
+		{
+			while (infile.readLine())
+			{
+				// comments
+				if (infile.getLine().hasPrefix("*") || infile.getLine().hasPrefix("$")) 
+				{
+					continue;
+				}
+				
+				if (infile.getLine().split(fields) < 6)
+				{
+					Log.error() << "Error in " << __FILE__ << " " << __LINE__ << " : " 
+										  << filename << " Not 6 fields in one line " 
+											<< infile.getLine() << std::endl;
+					return false;
+				}
+
+				const Position sb = fields[0].toUnsignedInt();
+				const Position atom_type1 = fields[1].toUnsignedInt();
+				const Position atom_type2 = fields[2].toUnsignedInt();
+				const Position atom_type3 = fields[3].toUnsignedInt();
+				const Position index = getIndex_(sb, atom_type1, atom_type2, atom_type3);
+
+				parameters_[index] = pair<float, float>();
+				parameters_[index].first  = fields[4].toFloat(); // kba_ijk
+				parameters_[index].second = fields[5].toFloat(); // kba_kji
+			}
+		}
+		catch(...)
+		{
+			Log.error() << "Error while parsing line " << infile.readLine() << std::endl;
+			Log.error() << " in File " << filename << std::endl;
+			infile.close();
+			return false;
+		}
+
+		infile.close();
+
+		is_initialized_ = true;
+		return true;
+	}
+
+	Position MMFF94StretchBendParameters::getIndex_(Position stretch_bend_type,
+						Position atom_type1, Position atom_type2, Position atom_type3) const
+	{ 
+		// Atom type I is always less than or equal to K
+		if (atom_type1 > atom_type3)
+		{
+			Position temp(atom_type1);
+			atom_type1 = atom_type3;
+			atom_type3 = temp;
+		}
+
+		// The canonical-order index, CXBA
+		// CXBA = MC*(J*MA**2 + I*MA + K) + ATIJK
+		// where MA is again the maximum permissible atom type +1, and MC is at least 
+		// one greater than the maximum permissible -type index.
+		return 13 * (atom_type2 * MMFF94_number_atom_types * MMFF94_number_atom_types +
+								 atom_type1 * MMFF94_number_atom_types +
+								 atom_type3) +
+					 stretch_bend_type;
 	}
 
 

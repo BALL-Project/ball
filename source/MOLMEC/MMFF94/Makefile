@@ -7,6 +7,7 @@ CPP_SOURCES=\
 	MMFF94Bend.C\
 	MMFF94NonBonded.C\
 	MMFF94Stretch.C\
+	MMFF94StretchBend.C\
 	MMFF94Torsion.C\
 	MMFF94Parameters.C
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.h,v 1.1.2.5 2005/03/25 21:07:49 amoll Exp $ 
+// $Id: MMFF94Parameters.h,v 1.1.2.6 2005/03/28 00:44:33 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field class
@@ -241,6 +241,74 @@ namespace BALL
 
 		bool is_initialized_;
 	};
+
+	/**	MMFF94 parameters for stretch-bend interactions
+      \ingroup  MMFF94
+	*/
+	class MMFF94StretchBendParameters
+	{
+		public:
+
+		/// Map with the force constant and reference angle
+		typedef HashMap<Position, pair<float, float> > StretchBendMap;
+
+		/**	@name Constant Definitions
+		*/
+		//@{
+
+		BALL_CREATE(MMFF94StretchBendParameters)
+
+		/**	Default constructor.
+		*/
+		MMFF94StretchBendParameters();
+
+		/**	Destructor.
+		*/
+		virtual ~MMFF94StretchBendParameters();
+
+		//@}
+		/**	@name Assignment
+		*/
+		//@{
+
+		/**	Assignment operator
+		*/
+		const MMFF94StretchBendParameters& operator = (const MMFF94StretchBendParameters& param)
+			throw();
+
+		/**	Clear method
+		*/
+		virtual void clear()
+			throw();
+
+		///
+		bool isInitialized() { return is_initialized_;}
+
+		///
+		bool getParameters(Position stretch_bend_type,
+											 Position atom_type1, 
+											 Position atom_type2, 
+											 Position atom_type3, float& kba_ijk, float& kba_kji) const;
+
+		///
+		bool readParameters(const String& filename)
+			throw(Exception::FileNotFound);
+		
+		//@}
+
+		protected:
+
+		Position getIndex_(Position stretch_bend_type,
+											 Position atom_type1, 
+											 Position atom_type2, 
+											 Position atom_type3) const;
+
+		/// parameters 
+		StretchBendMap parameters_;
+
+		bool is_initialized_;
+	};
+
 
 } // namespace BALL
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Bend.C,v 1.1.2.8 2005/03/27 16:06:12 amoll Exp $
+// $Id: MMFF94Bend.C,v 1.1.2.9 2005/03/28 00:43:55 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Bend.h>
@@ -19,6 +19,9 @@ using namespace std;
 
 namespace BALL 
 {
+
+	/// 0.043844 / 2
+	#define K0 0.021922
 
 	// default constructor
 	MMFF94Bend::MMFF94Bend()
@@ -214,12 +217,17 @@ Log.info() << "Bend " << bend_it->atom1->ptr->getName() << " "
 			if (bend_it->is_linear)
 			{ 
 				energy = 143.9325 * ka * (1.0 + cos(theta * degree_to_radian));
+
+				// we needed the absolute angle, now calculate the delta
+				theta -= theta0;
 			}
 			else
 			{
 				theta -= theta0;
 				energy = K0 * ka * theta * theta * (1.0 + k1 * theta);
 			}
+
+			bend_it->delta_theta = theta;
 
 #ifdef BALL_DEBUG_MMFF
 	Log.info() << "  E: "<< energy << std::endl;

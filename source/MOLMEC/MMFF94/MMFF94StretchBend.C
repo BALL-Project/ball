@@ -1,0 +1,236 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: MMFF94StretchBend.C,v 1.1.2.1 2005/03/28 00:43:38 amoll Exp $
+//
+
+#include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
+#include <BALL/MOLMEC/MMFF94/MMFF94Stretch.h>
+#include <BALL/MOLMEC/MMFF94/MMFF94Bend.h>
+#include <BALL/MOLMEC/MMFF94/MMFF94.h>
+#include <BALL/KERNEL/bond.h>
+#include <BALL/KERNEL/forEach.h>
+#include <BALL/KERNEL/atom.h>
+#include <BALL/SYSTEM/path.h>
+
+#define BALL_DEBUG_MMFF
+
+using namespace std;
+
+namespace BALL 
+{
+
+	// Constant 
+	#define K0 2.5121
+
+
+	// default constructor
+	MMFF94StretchBend::MMFF94StretchBend()
+		:	ForceFieldComponent()
+	{	
+		// set component name
+		setName("MMFF94 StretchBend");
+	}
+
+
+	// constructor
+	MMFF94StretchBend::MMFF94StretchBend(ForceField& force_field)
+		: ForceFieldComponent(force_field)
+	{
+		// set component name
+		setName("MMFF94 StretchBend");
+	}
+
+
+	// copy constructor
+	MMFF94StretchBend::MMFF94StretchBend(const MMFF94StretchBend&	component)
+		:	ForceFieldComponent(component)
+	{
+	}
+
+	// destructor
+	MMFF94StretchBend::~MMFF94StretchBend()
+	{
+	}
+
+
+	// setup the internal datastructures for the component
+	bool MMFF94StretchBend::setup()
+		throw(Exception::TooManyErrors)
+	{
+		if (getForceField() == 0) 
+		{
+			Log.error() << "MMFF94StretchBend::setup(): component not bound to force field" << endl;
+			return false;
+		}
+
+		stretch_bends_.clear();
+		
+		MMFF94& mmff = *(MMFF94*)getForceField();
+		const MMFF94Stretch& stretch = *(MMFF94Stretch*)mmff.getComponent("MMFF94 Stretch");
+		const MMFF94Bend& bend = 			 *(MMFF94Bend*)   mmff.getComponent("MMFF94 Bend");
+
+		const vector<MMFF94Stretch::Stretch>& stretches = stretch.getStretches();
+		const vector<MMFF94Bend::Bend>& 			bends 		= bend.getBends();
+
+		/*
+		const MMFF94BondStretchBendParameters& stretch_bend_data = mmff.getStretchBendParameters();
+		MMFF94BondStretchBendParameters::StretchBendMap::ConstIterator StretchBend_it;
+*/
+		
+		HashMap<long, Position> stretch_map;
+		for (Position stretch_pos = 0; stretch_pos < stretches.size(); stretch_pos++)
+		{
+			long index = ((long) stretches[stretch_pos].atom1) * 
+									 ((long) stretches[stretch_pos].atom2);
+			stretch_map[index] = stretch_pos;
+		}
+
+		// a working instance to put the current values in and push it back
+		StretchBend sb;
+
+		HashMap<long, Position>::Iterator stretch_it1, stretch_it2;
+		for (Position bend_pos = 0; bend_pos < bends.size(); bend_pos++)
+		{
+			sb.delta_theta = &bends[bend_pos].delta_theta;
+			sb.atom1 = 			  bends[bend_pos].atom1;
+			sb.atom2 = 			  bends[bend_pos].atom2;
+			sb.atom3 = 			  bends[bend_pos].atom3;
+			
+			// store delta_r for i->j
+			stretch_it1 = stretch_map.find(((long) sb.atom1->ptr) *
+																	   ((long) sb.atom2->ptr));
+			
+			// store delta_r for j->k
+			stretch_it2 = stretch_map.find(((long) sb.atom2->ptr) *
+																	   ((long) sb.atom3->ptr));
+
+			if (!+stretch_it1 || !+stretch_it2)
+			{
+				errorOccured_("stretch", *sb.atom1->ptr, *sb.atom2->ptr, *sb.atom3->ptr);
+				continue;
+			}
+
+			Position pos1 = stretch_it1->second;
+			sb.delta_r_ij = &stretches[pos1].delta_r;
+			
+			Position pos2 = stretch_it2->second;
+			sb.delta_r_kj = &stretches[pos2].delta_r;
+
+			// calculate SBTIJK
+			Index sbtijk = calculateSBTIJK(bends[bend_pos].ATIJK, 
+																		 stretches[pos1].sbmb,
+																		 stretches[pos2].sbmb);
+
+			// store kba_ijk and kba_kji
+			if (sbtijk == -1 ||
+					!parameters_.getParameters(sbtijk, 
+																		 sb.atom1->type, sb.atom2->type, sb.atom3->type,
+																		 sb.kba_ijk, sb.kba_kji))
+			{
+				errorOccured_("stretch-bend", *sb.atom1->ptr, *sb.atom2->ptr, *sb.atom3->ptr);
+				continue;
+			}
+
+			stretch_bends_.push_back(sb);
+		}
+
+		return true;
+	}
+
+	void MMFF94StretchBend::errorOccured_(const String& string, 
+																				const Atom& a1, const Atom& a2, const Atom& a3)
+	{
+		getForceField()->error() << "MMFF94 StretchBend: Could not find " << string << " data! "
+														 << a1.getName() << " "
+														 << a2.getName() << " "
+														 << a3.getName() << std::endl;
+
+		getForceField()->getUnassignedAtoms().insert(&a1);
+		getForceField()->getUnassignedAtoms().insert(&a2);
+		getForceField()->getUnassignedAtoms().insert(&a3);
+	}
+
+
+	// calculates the current energy of this component
+	double MMFF94StretchBend::updateEnergy()
+	{
+		// initial energy is zero
+		energy_ = 0;
+
+		for (Size i = 0; i < stretch_bends_.size(); i++)
+		{
+			StretchBend& sb = stretch_bends_[0];
+			float energy = K0 * (sb.kba_ijk * (*sb.delta_r_ij) +
+													 sb.kba_kji * (*sb.delta_r_kj)) 
+										 	  * (*sb.delta_theta);
+
+			energy_ += energy;
+		}
+
+
+		return energy_;
+	}
+
+	// calculates and adds its forces to the current forces of the force field
+	void MMFF94StretchBend::updateForces()
+	{
+		if (getForceField() == 0)
+		{
+			return;
+		}
+	}
+
+
+	/* Stretch-Bend       Angle           ---- Bond Type ----
+					 Type         Type            I-J             J-K
+	 -----------------------------------------------------------
+						0             0               0               0
+						1             1               1               0
+						2             2               0               1
+						3             2               1               1
+						4             4               0               0
+						5             3               0               0
+						6             5               1               0
+						7             5               0               1
+						8             6               1               1
+						9             7               1               0
+					 10             7               0               1
+					 11             7               1               1
+	*/
+	Index MMFF94StretchBend::calculateSBTIJK(Position angle_type, 
+																					 bool bond_type1, bool bond_type2)
+	{
+		if (angle_type  < 2 || angle_type == 4) return angle_type;
+
+		if (angle_type == 2)
+		{
+			if (bond_type1 && bond_type2) return 3;
+			if (bond_type2) return 2;
+		}
+
+		if (angle_type == 3) return 5;
+
+		if (angle_type == 5)
+		{
+			if (bond_type1) return 6;
+			else 						return 7;
+		}
+
+		if (angle_type == 6) return 8;
+
+		if (angle_type == 7)
+		{
+			if (bond_type1 && bond_type2) return 11;
+
+			if (bond_type1) return 9;
+			else 						return 10;
+		}
+
+		Log.error() << "Could not calculate sbtijk " << angle_type << " " 
+								<< bond_type1 << " " << bond_type2 << std::endl;
+
+		return -1;
+	}
+
+} // namespace BALL

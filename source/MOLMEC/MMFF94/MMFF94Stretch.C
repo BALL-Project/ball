@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Stretch.C,v 1.1.2.14 2005/03/25 21:07:39 amoll Exp $
+// $Id: MMFF94Stretch.C,v 1.1.2.15 2005/03/28 00:43:56 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Stretch.h>
@@ -146,6 +146,7 @@ namespace BALL
 			const Vector3 direction(stretch_[i].atom1->getPosition() - stretch_[i].atom2->getPosition());
 			double distance = direction.getLength(); 
 			const double delta(distance - (double) stretch_[i].r0);
+			stretch_[i].delta_r = delta;
 			const double delta_2(delta * delta);
 
 			double eb_ij = (double) K0 * (double) stretch_[i].kb * delta_2 *
