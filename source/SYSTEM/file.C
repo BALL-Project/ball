@@ -1,4 +1,4 @@
-// $Id: file.C,v 1.14 2000/10/20 18:09:05 amoll Exp $
+// $Id: file.C,v 1.15 2000/10/30 00:20:06 amoll Exp $
 
 #include <BALL/SYSTEM/file.h>
 #include <math.h>
@@ -69,10 +69,8 @@ namespace BALL
 	bool File::open(const String& name, File::OpenMode open_mode)
 		throw (Exception::FileNotFound)
 	{
-		close();
-		
+		close();	
 		name_ = name;
-		
 		FileSystem::canonizePath(name_);
 
 		if (open_mode == IN && !isAccessible(name_))
@@ -81,7 +79,6 @@ namespace BALL
 		}
 
 		fstream::open(name_.c_str(), open_mode);
-
 		open_mode_ = open_mode;
 		is_open_ = is_open();
 
@@ -92,7 +89,6 @@ namespace BALL
 		throw (Exception::FileNotFound)
 	{
 		close();
-
 		return open(name_, open_mode_);
 	}
 
@@ -154,7 +150,6 @@ namespace BALL
 			if (is_temporary_ == true)
 			{
 				remove(name_);
-
 				is_temporary_ = false;
 			}
 
@@ -184,7 +179,6 @@ namespace BALL
 		throw (Exception::FileNotFound)
 	{
 		struct stat stats;
-		
 		FileSystem::canonizePath(name);
 		
 		if ((trace_link == true) 
@@ -193,42 +187,45 @@ namespace BALL
 		{ /* unknown file type */
 			return File::TYPE__UNKNOWN;
 		}
-		else if (S_ISREG(stats.st_mode))
+
+		if (S_ISREG(stats.st_mode))
 		{ /* regular file */
 			return File::TYPE__REGULAR_FILE;
 		}
-		else if (S_ISDIR(stats.st_mode))
+
+		if (S_ISDIR(stats.st_mode))
 		{ /* directory */
 			return File::TYPE__DIRECTORY;
 		}  
-		else if (S_ISCHR(stats.st_mode))
+
+		if (S_ISCHR(stats.st_mode))
 		{ /* char oriented device */
 			return File::TYPE__CHAR_SPECIAL_FILE;
 		}
-		else if (S_ISBLK(stats.st_mode))
+
+		if (S_ISBLK(stats.st_mode))
 		{ /* block oriented device */
 			return File::TYPE__BLOCK_SPECIAL_FILE;
 		}
-		else if (S_ISFIFO(stats.st_mode))
+
+		if (S_ISFIFO(stats.st_mode))
 		{ /* fifo device */
 			return File::TYPE__FIFO_SPECIAL_FILE;
 		}
 #ifdef S_ISLNK
-		else if (S_ISLNK(stats.st_mode))
+		if (S_ISLNK(stats.st_mode))
 		{ /* symbolic link */
 			return File::TYPE__SYMBOLIC_LINK;
 		}
 #endif
 #ifdef S_ISSOCK
-		else if (S_ISSOCK(stats.st_mode)) 
+		if (S_ISSOCK(stats.st_mode)) 
 		{ /* socket */
 			return File::TYPE__SOCKET;
 		}
 #endif
-		else
-		{ /* unknown file type */
-			return File::TYPE__UNKNOWN;
-		}
+		/* unknown file type */
+		return File::TYPE__UNKNOWN;
 	}
 
 	bool File::createTemporaryFilename(String& temporary)

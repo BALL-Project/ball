@@ -1,4 +1,4 @@
-// $Id: timer.C,v 1.5 2000/08/28 07:08:05 oliver Exp $
+// $Id: timer.C,v 1.6 2000/10/30 00:20:06 amoll Exp $
 
 #include <BALL/SYSTEM/timer.h>
 
@@ -173,7 +173,6 @@ namespace BALL
 		{
 			/* timer is on, add current running time to accumulated time */
 			times(&tms_buffer);
-
 			temp_value = (float)(current_user_time_ + tms_buffer.tms_utime - last_user_time_);
 		}
 
@@ -205,7 +204,6 @@ namespace BALL
 		{ 
 			/* timer is on, return accumulated plus current */
 			times(&tms_buffer);
-
 			temp_value = (float)(current_system_time_ + tms_buffer.tms_stime - last_system_time_);
 		}
 

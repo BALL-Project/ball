@@ -1,4 +1,4 @@
-// $Id: socket.C,v 1.18 2000/10/20 14:54:50 oliver Exp $
+// $Id: socket.C,v 1.19 2000/10/30 00:20:06 amoll Exp $
 
 // ORIGINAL COPYRIGHT DISCLAIMER
 // /////////////////////////////
@@ -197,7 +197,9 @@ namespace BALL
 			if (unbuffered()) 
 			{
 				setp(pbase(), pbase());
-			} else {
+			}
+			else 
+			{
 				setp(pbase(), pbase() + BUFSIZ);
 			}
 
@@ -252,8 +254,13 @@ namespace BALL
 		{
 			xsetflags(_S_EOF_SEEN);
 			return EOF;
-		} else if (rval == 0) {
-			return EOF;
+		}
+		else 
+		{
+			if (rval == 0) 
+			{
+				return EOF;
+			}
 		}
 		setg(eback(), pbase(), pbase() + rval);
 
@@ -311,8 +318,13 @@ namespace BALL
 				{
 					return i;
 				}
-			} else if (sputc (*p) == EOF) {
-				return i;
+			} 
+			else 
+			{
+				if (sputc (*p) == EOF) 
+				{
+					return i;
+				}
 			}
 		}
 
@@ -757,9 +769,14 @@ namespace BALL
 		{
 			socklinger nw (1, opt);
 			setopt(so_linger, &nw, sizeof(nw));
-		} else if (opt == 0) {
-			socklinger nw (0, old.l_linger);
-			setopt(so_linger, &nw, sizeof(nw));
+		}
+		else 
+		{
+			if (opt == 0) 
+			{
+				socklinger nw (0, old.l_linger);
+				setopt(so_linger, &nw, sizeof(nw));
+			}
 		}
 
 		return old.l_onoff ? old.l_linger: -1;
@@ -821,7 +838,9 @@ namespace BALL
 		if (addr == 0)
 		{
 			sin_addr.s_addr = htonl(INADDR_ANY);
-		} else {
+		}
+		else 
+		{
 			sin_addr.s_addr = (unsigned int)htonl(addr);
 		}
 		sin_family = SockInetBuf::af_inet;
@@ -905,7 +924,9 @@ namespace BALL
 			{
 				errnoError_("SockInetAddr::getHostname");
 				hostname = "";
-			} else {
+			}
+			else 
+			{
 				hostname = buf;
 			}
 
@@ -917,9 +938,12 @@ namespace BALL
 		{
 			errnoError_("SockInetAddr::getHostname()");
 		} 
-		else if (hp->h_name) 
+		else 
 		{
-			hostname = hp->h_name;
+			if (hp->h_name) 
+			{
+				hostname = hp->h_name;
+			}
 		}
 
 		return hostname;
