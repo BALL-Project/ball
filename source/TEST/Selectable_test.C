@@ -1,4 +1,4 @@
-// $Id: Selectable_test.C,v 1.1 2000/08/19 13:58:52 amoll Exp $
+// $Id: Selectable_test.C,v 1.2 2000/08/19 16:43:08 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Selectable_test.C,v 1.1 2000/08/19 13:58:52 amoll Exp $")
+START_TEST(class_name, "$Id: Selectable_test.C,v 1.2 2000/08/19 16:43:08 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -118,26 +118,16 @@ RESULT
 CHECK(Selectable::read(PersistenceManager& pm))
 	ifstream  ifile("data/Selectable_test2.txt");
 	pm.setIstream(ifile);
-	PersistentObject* ptr;
-	ptr = pm.readObject();
+	se2.clear();
+	TEST_EQUAL(se2.read(pm), true)
+	TEST_EQUAL(se2.isSelected(), true)
 	ifile.close();
-	TEST_NOT_EQUAL(ptr, 0)
-	if (ptr != 0)
-	{
-		TEST_EQUAL(isKindOf<Selectable>(*ptr), true)
-		if (isKindOf<Selectable>(*ptr))
-		{
-			Selectable* v_ptr = castTo<Selectable>(*ptr);
-			TEST_EQUAL(v_ptr->isSelected(), true)
-		}
-	}
 RESULT
 
 CHECK(Selectable::write(PersistenceManager& pm) const )
 	NEW_TMP_FILE(filename)
 	ofstream  ofile(filename.c_str(), File::OUT);
 	pm.setOstream(ofile);
-	//pm.registerClass(getStreamName<Selectable>(), Selectable::createDefault);
 	se.write(pm);
 	ofile.close();	
 	TEST_FILE(filename.c_str(), "data/Selectable_test2.txt", true)
