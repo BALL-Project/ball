@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: socket.h,v 1.34 2003/04/17 06:07:21 oliver Exp $
+// $Id: socket.h,v 1.35 2003/08/26 08:04:56 oliver Exp $
+//
 
 #ifndef BALL_SYSTEM_SOCKET_H
 #define BALL_SYSTEM_SOCKET_H

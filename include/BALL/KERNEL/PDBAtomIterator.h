@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBAtomIterator.h,v 1.23 2003/06/19 13:09:53 oliver Exp $ 
+// $Id: PDBAtomIterator.h,v 1.24 2003/08/26 08:04:15 oliver Exp $ 
 //
 
 #ifndef BALL_KERNEL_PDBATOMITERATOR_H
@@ -93,7 +93,6 @@ namespace BALL
 	/// A constant reverse bidirectional iterator for the PDBAtom class.
 	typedef std::reverse_iterator<PDBAtomConstIterator> PDBAtomConstReverseIterator;
 	//@}
-
 } // namespace BALL
 
 #endif // BALL_KERNEL_PDBATOMITERATOR_H

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logStream.h,v 1.25 2003/05/23 10:25:58 oliver Exp $
+// $Id: logStream.h,v 1.26 2003/08/26 08:04:05 oliver Exp $
+//
 
 #ifndef BALL_COMMON_LOGSTREAM_H
 #define BALL_COMMON_LOGSTREAM_H

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rtti.h,v 1.23 2003/05/08 09:30:54 sneumann Exp $
+// $Id: rtti.h,v 1.24 2003/08/26 08:04:05 oliver Exp $
+//
 
 #ifndef BALL_COMMON_RTTI_H
 #define BALL_COMMON_RTTI_H

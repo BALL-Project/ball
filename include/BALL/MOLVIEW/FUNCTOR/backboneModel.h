@@ -1,13 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.h,v 1.13 2003/06/06 10:41:10 amoll Exp $
+// $Id: backboneModel.h,v 1.14 2003/08/26 08:04:33 oliver Exp $
+//
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BACKBONEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_BACKBONEMODEL_H
 
-#ifndef BALL_MOLVIEW_FUNCTOR_BASEMODEL_H
-#	include <BALL/MOLVIEW/FUNCTOR/baseModel.h>
+#ifndef BALL_MOLVIEW_FUNCTOR_MOLECULARMODEL_H
+#	include <BALL/MOLVIEW/FUNCTOR/molecularModel.h>
 #endif
 
 #ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
@@ -24,7 +25,7 @@ namespace BALL
 	class Composite;
 
 	using VIEW::ColorRGBA;
-
+	
 	namespace MOLVIEW
 	{
 		class Backbone;
@@ -36,14 +37,17 @@ namespace BALL
 				documentation.
 				\ingroup  MolviewFunctorsModels
 		*/
-		class AddBackboneModel: public BaseModelProcessor
+		class AddBackboneModel: public MolecularModelProcessor
 		{
 			//_
+			protected:
+
 			class SplinePoint
 			{
 			  public:
 
 				SplinePoint() {}
+				SplinePoint(const Vector3& point, const ColorRGBA& color);
 				~SplinePoint() {}
 
 				void setVector(const Vector3& point) {point_ = point;}
@@ -154,19 +158,13 @@ namespace BALL
 			//_ computes the actual spline path through the given support points
 			//_ in the splinepoint array
 			void createSplinePath_();
-
 			//_ create a spline segment between two spline points a and b
 			void createSplineSegment_(const SplinePoint &a, const SplinePoint &b);
-
 			//_ builds a graphical representation to this point with color
 			void buildGraphicalRepresentation_(const Vector3 &point, const ColorRGBA &color);
 
 			//_
-			virtual Backbone* createBackbone_()
-				throw();
-
-			//_
-			void buildBackbone_()
+			void createBackbone_()
 				throw();
 
 			//_
@@ -174,17 +172,14 @@ namespace BALL
 
 			//_
 			bool have_start_point_;
-
 			//_
 			Vector3 last_point_;
-
+			//_ Pointer to the parent of the last processed composite
 			Composite* last_parent_;
-			Composite* root_;
-
-			Backbone* backbone_;
 		};
 
 	} // namespace MOLVIEW
+
 } // namespace BALL
 
 #endif // BALL_MOLVIEW_FUNCTOR_BACKBONEMODEL_H

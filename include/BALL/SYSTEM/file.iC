@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.iC,v 1.19 2003/07/03 10:06:35 amoll Exp $
+// $Id: file.iC,v 1.20 2003/08/26 08:04:55 oliver Exp $
+//
 
 BALL_INLINE 
 void File::clear()

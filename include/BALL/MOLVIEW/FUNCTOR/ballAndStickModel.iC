@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.iC,v 1.7 2002/12/12 09:48:48 oliver Exp $
+// $Id: ballAndStickModel.iC,v 1.8 2003/08/26 08:04:33 oliver Exp $
 
 BALL_INLINE
 Real AddBallAndStickModel::getBallRadius() const
@@ -11,24 +11,10 @@ Real AddBallAndStickModel::getBallRadius() const
 }
 
 BALL_INLINE
-void AddBallAndStickModel::getBallRadius(Real& radius)
-  throw()
-{
-  radius = ball_radius_;
-}
-
-BALL_INLINE
 Real AddBallAndStickModel::getStickRadius() const
   throw()
 {
   return stick_radius_;
-}
-
-BALL_INLINE
-void AddBallAndStickModel::getStickRadius(Real &radius)
-  throw()
-{
-  radius = stick_radius_;
 }
 
 BALL_INLINE
@@ -57,23 +43,5 @@ bool AddBallAndStickModel::isStickModel() const
   throw()
 {
   return (!ball_and_stick_);
-}
-
-BALL_INLINE
-Sphere* AddBallAndStickModel::createSphere_()
-{
-	return (Sphere *)(new Sphere());
-}
-
-BALL_INLINE
-Tube* AddBallAndStickModel::createTube_()
-{
-	return (Tube *)(new Tube());
-}
-
-BALL_INLINE
-TwoColoredTube*AddBallAndStickModel::createTwoColoredTube_()
-{
-	return (TwoColoredTube *)(new TwoColoredTube());
 }
 

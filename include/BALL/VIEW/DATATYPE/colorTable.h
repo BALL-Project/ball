@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorTable.h,v 1.9 2003/03/26 13:08:47 sturm Exp $
+// $Id: colorTable.h,v 1.10 2003/08/26 08:04:57 oliver Exp $
+//
 
 #ifndef BALL_VIEW_DATATYPE_COLORTABLE_H
 #define BALL_VIEW_DATATYPE_COLORTABLE_H
@@ -14,8 +15,8 @@
 #	include <BALL/DATATYPE/string.h>
 #endif
 
-#ifndef BALL_VIEW_DATATYPE_COLOR_H
-#	include <BALL/VIEW/DATATYPE/color.h>
+#ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
+#	include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #endif
 
 #include <iostream>
@@ -47,22 +48,22 @@ namespace BALL
 
 			/** Alternative constructor.
 			 *  Create an instance of ColorTable.
-			 *  @param color_number The number of colors the table will contain.
+			 *  \param color_number The number of colors the table will contain.
 			 */
 			ColorTable(Size color_number)
 				throw();
 			
 			/**	Copy constructor.
 					Create a copy of a ColorTable object.
-					@param	color_table the color table to be copied
+					\param	color_table the color table to be copied
 			*/
 			ColorTable(const ColorTable& color_table)
 				throw();
 
 			/** Detailed constructor.
-			 * 	@param size the number of elements in the color table
-			 * 	@param color an array of colors, used to initialize the table
-			 * 	@param alpha_blending decides whether the alpha channel should be interpolated between colors
+			 * 	\param size the number of elements in the color table
+			 * 	\param color an array of colors, used to initialize the table
+			 * 	\param alpha_blending decides whether the alpha channel should be interpolated between colors
 			*/
 			ColorTable(Size size, const ColorRGBA& color, bool alpha_blending=false)
 				throw();
@@ -87,6 +88,10 @@ namespace BALL
 			 */
 			//@{
 			
+			/// Set the base colors for the interpolation
+			void setBaseColors(const ColorRGBA* color_array, Size array_size)
+				throw();
+
 			/// Set the number of colors this table should contain after interpolation.
 			void setNumberOfColors(const Size color_number)
 				throw();

@@ -1,14 +1,22 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: angle.h,v 1.39 2003/08/19 20:07:47 oliver Exp $
+// $Id: angle.h,v 1.40 2003/08/26 08:04:20 oliver Exp $
 //
 
 #ifndef BALL_MATHS_ANGLE_H
 #define BALL_MATHS_ANGLE_H
 
-#ifndef BALL_COMMON_H
-# include <BALL/common.h>
+#ifndef BALL_COMMON_EXCEPTION_H
+# include <BALL/COMMON/exception.h>
+#endif
+
+#ifndef BALL_COMMON_DEBUG_H
+# include <BALL/COMMON/debug.h>
+#endif
+
+#ifndef BALL_COMMON_CREATE_H
+# include <BALL/COMMON/create.h>
 #endif
 
 #ifndef BALL_MATHS_COMMON_H
@@ -17,14 +25,14 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  Primitives
-     *  @{
-     */
+  /**  \addtogroup  Primitives
+    *  @{
+  */
 	template <typename T>
 	class TAngle;
 
 	/**	@name Angle
-			representation of angles: class  \link TAngle TAngle \endlink  and class  \link Angle Angle \endlink 
+			Representation of angles: class  \link TAngle TAngle \endlink  and class  \link Angle Angle \endlink 
 	*/
 	//@{
 	

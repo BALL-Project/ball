@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hashMap.h,v 1.37 2003/06/11 08:08:52 oliver Exp $ 
+// $Id: hashMap.h,v 1.38 2003/08/26 08:04:10 oliver Exp $ 
+//
 
 #ifndef BALL_DATATYPE_HASHMAP_H
 #define BALL_DATATYPE_HASHMAP_H

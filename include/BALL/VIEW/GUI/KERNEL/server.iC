@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: server.iC,v 1.7 2002/02/27 12:20:04 sturm Exp $
+// $Id: server.iC,v 1.8 2003/08/26 08:05:03 oliver Exp $
+
 
 BALL_INLINE
 void Server::registerObjectCreator(const ObjectCreator& s)

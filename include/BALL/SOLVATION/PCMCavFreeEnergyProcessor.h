@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PCMCavFreeEnergyProcessor.h,v 1.16 2003/03/26 13:08:25 sturm Exp $
+// $Id: PCMCavFreeEnergyProcessor.h,v 1.17 2003/08/26 08:04:48 oliver Exp $
+//
 
 #ifndef BALL_SOLVATION_PCMCAVFREEENERGYPROCESSOR_H
 #define BALL_SOLVATION_PCMCAVFREEENERGYPROCESSOR_H

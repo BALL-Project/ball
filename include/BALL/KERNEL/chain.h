@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: chain.h,v 1.34 2003/07/01 16:45:27 amoll Exp $
+// $Id: chain.h,v 1.35 2003/08/26 08:04:17 oliver Exp $
+//
 
 #ifndef BALL_KERNEL_CHAIN_H
 #define BALL_KERNEL_CHAIN_H

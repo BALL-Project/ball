@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: johnsonBoveyShiftProcessor.h,v 1.14 2003/03/26 13:08:17 sturm Exp $
+// $Id: johnsonBoveyShiftProcessor.h,v 1.15 2003/08/26 08:04:45 oliver Exp $
+//
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>

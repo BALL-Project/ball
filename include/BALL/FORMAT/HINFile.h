@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HINFile.h,v 1.28 2003/08/19 15:56:59 amoll Exp $
+// $Id: HINFile.h,v 1.29 2003/08/26 08:04:13 oliver Exp $
+//
 
 #ifndef BALL_FORMAT_HINFILE_H
 #define BALL_FORMAT_HINFILE_H
@@ -10,7 +11,7 @@
 #	include <BALL/FORMAT/genericMolFile.h>
 #endif
 
-#ifndef BALL_MATHS_SIMPLEBOX_H
+#ifndef BALL_MATHS_SIMPLEBOX3_H
 # include <BALL/MATHS/simpleBox3.h>
 #endif
 
@@ -71,11 +72,11 @@ namespace BALL
 				Note that this changes the properties of atoms in the system.
 		*/
 		virtual bool write(const Molecule& molecule)
-			throw(File::CanNotWrite);
-			
+			throw(File::CannotWrite);
+
 		///
 		virtual bool write(const System& system)
-			throw(File::CanNotWrite);
+			throw(File::CannotWrite);
 		
 		/**	Read a system from the HIN file
 		*/

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nucleotide.h,v 1.31 2003/06/30 23:00:08 amoll Exp $
+// $Id: nucleotide.h,v 1.32 2003/08/26 08:04:18 oliver Exp $
+//
 
 #ifndef BALL_KERNEL_NUCLEOTIDE_H
 #define BALL_KERNEL_NUCLEOTIDE_H

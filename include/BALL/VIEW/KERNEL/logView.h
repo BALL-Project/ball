@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: 
+// $Id: logView.h,v 1.16 2003/08/26 08:05:07 oliver Exp $
+//
 
 #ifndef BALL_VIEW_KERNEL_LOGVIEW_H
 #define BALL_VIEW_KERNEL_LOGVIEW_H
@@ -32,27 +33,36 @@
 # include <BALL/CONCEPT/notification.h>
 #endif
 
+#ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
+#	include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
+#endif
 
 namespace BALL
 {
-	
 	namespace VIEW
 	{
+    /**  \addtogroup  ViewKernelLogView
+     *  @{
+     */
+
 		/** LogView class.
 				The class LogView records all messages sent to the  \link Log Log \endlink  object and
 				displays them as a text history. The class is derived from 
-				{\em NotificationTarget<LogStreamNotifier>} that provides the connection
+				<b> NotificationTarget<LogStreamNotifier></b> that provides the connection
 				to the  \link Log Log \endlink  object. The class  \link QTextEdit QTextEdit \endlink  from the 
 				qt - library is responsible for the visualization of the text history.
 				Use the class LogView as a widget. There are no initializations necessary.
 				Just create this widget as a child widgets of your application and it will
 				record and show all messages sent to the  \link Log Log \endlink  object.
-		\ingroup ViewKernelLogView		
+				
 		*/
 		class LogView
-			: public NotificationTarget<LogStreamNotifier>,
-			  public QTextEdit
+			: public QTextEdit,
+			  public NotificationTarget<LogStreamNotifier>,
+				public ModularWidget
 		{
+			Q_OBJECT
+
 			public:
 
 			/**	@name	Constructors
@@ -61,74 +71,90 @@ namespace BALL
 
 			/** Default Constructor.
 					Construct new logView.
-					The text of {\em *this} logView is empty. The contructor connects the own
-					{\em stringstream} with the  \link Log Log \endlink  object. If a string is written into
-					 \link Log Log \endlink  {\em *this} will be notified and the string will be displayed
-					by {\em *this} logView. 
-					@return      LogView new constructed logView
-					@see         Log
+					The text of this logView is empty. The contructor connects the own
+					<b> stringstream</b> with the  \link Log Log \endlink  object. If a string is written into
+					 \link Log Log \endlink  this will be notified and the string will be displayed
+					by this logView. 
+					\return      LogView new constructed logView
+					\see         Log
 			*/
 			LogView(QWidget *parent = 0, const char *name = 0)
 				throw();
 
 			/** Copy constructor.
-					Construct new logView by copying the logView {\em view}.
-					The text of {\em view} will be copied into {\em *this} logView.
-					@param       view the logView to be copied
-					@return      LogView new constructed logView copied from {\em view}
-					@see         LogView
+					Construct new logView by copying the logView <b> view</b>.
+					The text of <b> view</b> will be copied into this logView.
+					\param       view the logView to be copied
+					\return      LogView new constructed logView copied from <b> view</b>
+					\see         LogView
 			*/
 			LogView(const LogView& view)
 				throw();
 
 			//@}
-
 			/** @name Destructors */
 			//@{
 
 			/** Destructor.
-					Default destruction of {\em *this} logView.
-					Remove the connection between the  \link Log Log \endlink  object and {\em *this} logView.
+					Remove the connection between the  \link Log Log \endlink  object and this logView.
 					Calls  \link clear clear \endlink .
 			*/
 			virtual ~LogView()
 				throw();
 
-			/** Explicit default initialization.
-					Empty for further purpose.
-			*/
-			virtual void clear()
-				throw();
-
 			//@}
-
 			/**	@name	Storers
 			*/	
+			//@{
+
+			/**	Setup the menu entries.
+					PyWidget creates an entry in Tools|Restart Python and connects
+					the entry to startInterpreter().
+			*/
+			virtual void initializeWidget(MainControl& main_control);
+
+			/**	Remove menu entries.
+			*/
+			virtual void finalizeWidget(MainControl& main_control);
+				
+			///
+			virtual void fetchPreferences(INIFile& inifile)
+				throw();
+			
+			///
+			virtual void writePreferences(INIFile& inifile)
+				throw();
+
+		
+			public slots:
+
+			///	Show or hide widget (Called by menu entry in "WINDOWS")
+			void switchShowWidget()
+				throw();
 
 			protected:
 
 			/** Overridden notify call.
 					Will be called by  \link Log Log \endlink  whenever a string is written to it.
-					That string will be added to the history string of {\em *this} logView
+					That string will be added to the history string of this logView
 					and then displayed.
-					@param   source the notification source
-					@return  bool returns always <tt>true</tt>
+					\param   source the notification source
+					\return  bool returns always <tt>true</tt>
 			*/
 			virtual bool onNotify(LogStreamNotifier &source)
 				throw();
 
-
 			private:
 
-			/** private storage variables.
-			*/
 			QString history_string_;
 
 			std::stringstream strstream_;
+
+			bool output_running_;
 		};
   	
-	}// namespace VIEW
-		
-}// namespace BALL
+	} // namespace VIEW
+
+} // namespace BALL
 
 #endif // BALL_VIEW_KERNEL_LOGVIEW_H

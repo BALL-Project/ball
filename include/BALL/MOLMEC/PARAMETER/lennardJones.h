@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lennardJones.h,v 1.25 2003/03/26 13:56:44 anhi Exp $
+// $Id: lennardJones.h,v 1.26 2003/08/26 08:04:27 oliver Exp $
+//
 
 // Molecular Mechanics Parameter: class describing the atom type section of a parameter file
  

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricProperties.h,v 1.22 2003/08/19 20:07:47 oliver Exp $
+// $Id: geometricProperties.h,v 1.23 2003/08/26 08:04:51 oliver Exp $
 //
 
 #ifndef BALL_STRUCTURE_GEOMETRICPROPERTIES_H
@@ -36,8 +36,6 @@
 #endif
 
 #include <vector>
-
-using std::vector;
 
 namespace BALL 
 {
@@ -291,14 +289,14 @@ namespace BALL
 		
 		/**	The array containing all molecular fragments collected
 		*/
-		vector<Fragment*>	fragments;
+		std::vector<Fragment*>	fragments;
 
 
 		protected:
 
-			vector<Fragment*>	all_fragments_;
-			const Composite*	reference_composite_;
-			float							squared_distance_;
+		std::vector<Fragment*>	all_fragments_;
+		const Composite*	reference_composite_;
+		float							squared_distance_;
 	};
 
 

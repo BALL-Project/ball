@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: complex.h,v 1.18 2003/03/26 15:59:24 anhi Exp $
+// $Id: complex.h,v 1.19 2003/08/26 08:04:21 oliver Exp $
 
 #ifndef BALL_MATHS_COMPLEX_H
 #define BALL_MATHS_COMPLEX_H
 
 #ifndef BALL_COMMON_H
-#	include <BALL/common.h>
+# include <BALL/common.h>
 #endif
 
 #ifdef BALL_HAS_FFTW_H

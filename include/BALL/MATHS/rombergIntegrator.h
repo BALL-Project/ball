@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rombergIntegrator.h,v 1.11 2003/03/26 09:31:58 sturm Exp $
+// $Id: rombergIntegrator.h,v 1.12 2003/08/26 08:04:22 oliver Exp $
+//
 
 #ifndef BALL_MATHS_ROMBERGINTEGRATOR_H
 #define BALL_MATHS_ROMBERGINTEGRATOR_H

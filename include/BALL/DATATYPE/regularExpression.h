@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularExpression.h,v 1.1 2003/06/16 12:01:53 anker Exp $
+// $Id: regularExpression.h,v 1.2 2003/08/26 08:04:11 oliver Exp $
 //
 
 #ifndef BALL_DATATYPE_REGULAREXPRESSION_H

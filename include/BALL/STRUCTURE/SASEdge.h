@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SASEdge.h,v 1.6 2003/03/26 13:08:31 sturm Exp $
+// $Id: SASEdge.h,v 1.7 2003/08/26 08:04:50 oliver Exp $
+//
 
 #ifndef BALL_STRUCTURE_SASEDGE_H
 #define BALL_STRUCTURE_SASEDGE_H

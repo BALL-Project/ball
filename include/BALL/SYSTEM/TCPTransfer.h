@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer.h,v 1.17 2003/05/25 21:38:07 oliver Exp $
+// $Id: TCPTransfer.h,v 1.18 2003/08/26 08:04:55 oliver Exp $
+//
 
 #ifndef BALL_SYSTEM_TCPTRANSFER
 #define BALL_SYSTEM_TCPTRANSFER

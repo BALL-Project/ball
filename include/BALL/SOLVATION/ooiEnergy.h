@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ooiEnergy.h,v 1.11 2003/03/31 16:59:19 oliver Exp $
+// $Id: ooiEnergy.h,v 1.12 2003/08/26 08:04:48 oliver Exp $
+//
 
 #ifndef BALL_SOLVATION_OOIENERGY_H
 #define BALL_SOLVATION_OOIENERGY_H

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residueChecker.h,v 1.18 2003/04/17 14:19:48 oliver Exp $
+// $Id: residueChecker.h,v 1.19 2003/08/26 08:04:53 oliver Exp $
+//
 
 #ifndef BALL_STRUCTURE_RESIDUECHECKER_H
 #define BALL_STRUCTURE_RESIDUECHECKER_H

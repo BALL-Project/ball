@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: resourceFile.h,v 1.22 2003/07/03 11:36:40 amoll Exp $
+// $Id: resourceFile.h,v 1.23 2003/08/26 08:04:15 oliver Exp $
+//
 
 #ifndef BALL_FORMAT_RESOURCEFILE_H
 #define BALL_FORMAT_RESOURCEFILE_H

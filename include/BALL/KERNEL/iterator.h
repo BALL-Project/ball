@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: iterator.h,v 1.24 2003/07/01 16:45:28 amoll Exp $
+// $Id: iterator.h,v 1.25 2003/08/26 08:04:18 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_ITERATOR_H
@@ -385,7 +385,6 @@ namespace BALL
 			--composite_iterator_;
 		}
 	}
-
 } // namespace BALL
 
 #endif // BALL_KERNEL_ITERATOR_H

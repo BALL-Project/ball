@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: objectCreator.h,v 1.13 2003/03/26 13:08:54 sturm Exp $
+// $Id: objectCreator.h,v 1.14 2003/08/26 08:05:02 oliver Exp $
+//
 
 #ifndef BALL_VIEW_GUI_KERNEL_OBJECTCREATOR_H
 #define BALL_VIEW_GUI_KERNEL_OBJECTCREATOR_H
@@ -33,12 +34,11 @@ namespace BALL
 	namespace VIEW
 	{
 		/** ObjectCreator class.
-				The class ObjectCreator is a base class for converting  \link PersistentObject PersistentObject \endlink 
-				objects into  \link Composite Composite \endlink  objects. It defines methods for initialization
+				The class ObjectCreator is a base class for converting PersistentObject
+				objects into Composite objects. It defines methods for initialization
 				and conversion that must be overriden by the derived class. 
-				This class is used by the class  \link Server Server \endlink  to convert incoming
-				 \link PersistentObject PersistentObject \endlink  objects to  \link Composite Composite \endlink  objects.
-		\ingroup ViewGuiKernelServer
+				This class is used by the class Server to convert incoming
+				PersistentObject objects to Composite objects.
 		*/
 		class ObjectCreator
 		{
@@ -50,10 +50,10 @@ namespace BALL
 
 			/** Default Constructor.
 					Construct new objectCreator.
-					The state of {\em *this} server is:  \link TextPersistenceManager TextPersistenceManager \endlink 
+					The state of this server is: TextPersistenceManager
 					not initialized.
-					@return      ObjectCreator new constructed objectCreator
-					@see         TextPersistenceManager
+					\return      ObjectCreator new constructed objectCreator
+					\see         TextPersistenceManager
 			*/
 			ObjectCreator()
 				throw();
@@ -64,9 +64,6 @@ namespace BALL
 			//@{
 
 			/** Destructor.
-					Default destruction of {\em *this} objectCreator.
-					Calls  \link destroy destroy \endlink .
-					@see         destroy
 			*/
 			virtual ~ObjectCreator()
 				throw();
@@ -77,35 +74,29 @@ namespace BALL
 			virtual void clear()
 				throw();
 
-			/** Explicit destructor.
-					Empty for further purpose.
-			*/
-			virtual void destroy()
-				throw();
-							
 			//@}
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{		
 
 			/** Initialize the persistence manager.
-					Initialize the  \link TextPersistenceManager TextPersistenceManager \endlink  of {\em *this} objectCreator.
+					Initialize the TextPersistenceManager of this objectCreator.
 					Override this method to initialize the persistence manager for specified
-					objects. See  \link TextPersistenceManager TextPersistenceManager \endlink  for information on how and why
-					to register  \link PersistentObject PersistentObject \endlink  classes.
-					@param  pm the  \link TextPersistenceManager TextPersistenceManager \endlink  to be initialized
-					@see    TextPersistenceManager
+					objects. See TextPersistenceManager for information on how and why
+					to register PersistentObject classes.
+					\param  pm the TextPersistenceManager to be initialized
+					\see    TextPersistenceManager
 			*/
 			virtual void initPersistenceManager(TextPersistenceManager &pm)
 				throw();
 
 			/** Convert persistent objects.
-					Override this method to convert  \link PersistentObject PersistentObject \endlink  objects to
-					 \link Composite Composite \endlink  objects. See  \link TextPersistenceManager TextPersistenceManager \endlink  for information
-					on how to convert  \link PersistentObject PersistentObject \endlink  objects into other objects.				
-					@param  po a reference to a  \link PersistentObject PersistentObject \endlink  to be converted
-					@return Composite* a converted  \link Composite Composite \endlink  object if {\em po} could successfully be converted 
-										into a  \link Composite Composite \endlink  object
+					Override this method to convert PersistentObject objects to
+					Composite objects. See TextPersistenceManager for information
+					on how to convert PersistentObject objects into other objects.				
+					\param  po a reference to a PersistentObject to be converted
+					\return Composite* a converted Composite object if <b> po could successfully be converted 
+										into a Composite object
 			*/
 			virtual Composite *convertObject(PersistentObject &po)
 				throw();
@@ -116,16 +107,16 @@ namespace BALL
 			//@{
 
 			/** Read from a socket stream.
-					This method will be called by the  \link Server Server \endlink  to convert objects
-					that are available at the  \link IOSocketStream IOSocketStream \endlink  using the 
-					 \link convertObject convertObject \endlink  method.
-					It initializes the  \link TextPersistenceManager TextPersistenceManager \endlink  by calling the method
-					 \link initPersistenceManager initPersistenceManager \endlink  if it is not already
+					This method will be called by the Server to convert objects
+					that are available at the IOSocketStream using the 
+					convertObject method.
+					It initializes the TextPersistenceManager by calling the method
+					initPersistenceManager if it is not already
 					initialized.
-					Calls  \link initPersistenceManager initPersistenceManager \endlink .
-					Calls  \link convertObject convertObject \endlink .
-					@param iostream_socket a reference to a  \link IOSocketStream IOSocketStream \endlink  object
-					@return Composite* a pointer to a received  \link Composite Composite \endlink  object (<tt>0</tt> if no composite object was received)
+					Calls initPersistenceManager.
+					Calls convertObject.
+					\param iostream_socket a reference to a IOSocketStream object
+					\return Composite* a pointer to a received Composite object (<tt> 0 if no composite object was received)
 			*/
 			Composite *operator() (IOStreamSocket &iostream_socket)
 				throw();

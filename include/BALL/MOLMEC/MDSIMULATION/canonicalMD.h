@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: canonicalMD.h,v 1.22 2003/03/26 13:56:41 anhi Exp $
+// $Id: canonicalMD.h,v 1.23 2003/08/26 08:04:26 oliver Exp $
+//
 
 #ifndef BALL_MOLMEC_MDSIMULATION_CANONICALMD_H   
 #define BALL_MOLMEC_MDSIMULATION_CANONICALMD_H   

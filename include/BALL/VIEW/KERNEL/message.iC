@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.iC,v 1.5 2002/02/27 12:20:16 sturm Exp $
+// $Id: message.iC,v 1.6 2003/08/26 08:05:08 oliver Exp $
 
 BALL_INLINE
 void Message::setSender(const void* object)
@@ -53,89 +53,19 @@ Composite* CompositeMessage::getComposite() const
 }
 
 BALL_INLINE
-void CompositeMessage::setCompositeName(string name)
+void CompositeMessage::setCompositeName(const String& name)
 	throw()
 {
 	composite_name_ = name;
 }
 
 BALL_INLINE
-string CompositeMessage::getCompositeName() const
+const String& CompositeMessage::getCompositeName() const
 	throw()
 {
 	return composite_name_;
 }
 	
-BALL_INLINE
-void SceneMessage::updateOnly(bool value)
-	throw()
-{
-	update_only_ = value;
-}
-
-BALL_INLINE
-bool SceneMessage::isUpdateOnly()
-	throw()
-{
-	return update_only_;
-}
-
-BALL_INLINE
-void SceneMessage::setCameraLookAt(Vector3 vector3)
-	throw()
-{
-	camera_look_at_ = vector3;
-}
-
-BALL_INLINE
-Vector3& SceneMessage::getCameraLookAt()
-	throw()
-{
-	return camera_look_at_;
-}
-
-BALL_INLINE
-const Vector3& SceneMessage::getCameraLookAt() const
-	throw()
-{
-	return camera_look_at_;
-}
-
-BALL_INLINE
-void SceneMessage::setCameraViewPoint(Vector3 vector3)
-	throw()
-{
-	camera_view_point_ = vector3;
-}
-
-BALL_INLINE
-const Vector3& SceneMessage::getCameraViewPoint() const
-	throw()
-{
-	return camera_view_point_;
-}
-
-BALL_INLINE
-Vector3& SceneMessage::getCameraViewPoint()
-	throw()
-{
-	return camera_view_point_;
-}
-
-BALL_INLINE
-void WindowMessage::setStatusBar(const string &message)
-	throw()
-{
-	status_bar_ = message;
-}
-
-BALL_INLINE
-string WindowMessage::getStatusBar() const
-	throw()
-{
-	return status_bar_;
-}
-
 BALL_INLINE
 void SelectionMessage::setSelection(const List<Composite*> &selection)
 	throw()

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: QTTimer.iC,v 1.6 2002/02/27 12:20:11 sturm Exp $
+// $Id: QTTimer.iC,v 1.7 2003/08/26 08:05:05 oliver Exp $
+//
 
 BALL_INLINE
 int QTTimer::getInterval() const

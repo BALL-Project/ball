@@ -1,7 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmStretch.h,v 1.14 2003/04/29 16:07:16 oliver Exp $ 
+// $Id: charmmStretch.h,v 1.15 2003/08/26 08:04:24 oliver Exp $ 
+//
+
 // Molecular Mechanics: Charmm force field, bond stretch component
 
 #ifndef BALL_MOLMEC_CHARMM_CHARMMSTRETCH_H

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: gradient.h,v 1.17 2003/03/26 13:56:39 anhi Exp $ 
+// $Id: gradient.h,v 1.18 2003/08/26 08:04:25 oliver Exp $ 
+//
 
 // A conjugate gradient minimizer for geometry optimisation
 

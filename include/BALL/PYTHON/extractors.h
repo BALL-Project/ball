@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: extractors.h,v 1.14 2003/03/26 13:08:20 sturm Exp $
+// $Id: extractors.h,v 1.15 2003/08/26 08:04:45 oliver Exp $
+//
 
 #ifndef BALL_PYTHON_EXTRACTORS_H
 #define BALL_PYTHON_EXTRACTORS_H

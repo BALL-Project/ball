@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceProcessor.h,v 1.36 2003/05/08 12:05:04 oliver Exp $
+// $Id: surfaceProcessor.h,v 1.37 2003/08/26 08:04:54 oliver Exp $
+//
 
 #include <BALL/STRUCTURE/reducedSurface.h>
 #include <BALL/STRUCTURE/solventExcludedSurface.h>
@@ -60,7 +61,6 @@ namespace BALL
 		///
  		virtual Processor::Result operator () (Atom&  atom);
 		//@}
-
 		/** @name Accessors.
 		*/
 		//@{
@@ -95,8 +95,13 @@ namespace BALL
 		SurfaceType getType() const  { return surface_type_; }
 		//@}
 
-
 		protected:
+
+		///
+		double													radius_offset_;
+
+		///
+		double													vdw_factor_;
 
 		///
 		double													radius_offset_;

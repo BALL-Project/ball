@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOLFile.h,v 1.12 2003/07/25 12:46:17 amoll Exp $
+// $Id: MOLFile.h,v 1.13 2003/08/26 08:04:13 oliver Exp $
+//
 
 #ifndef BALL_FORMAT_MOLFILE_H
 #define BALL_FORMAT_MOLFILE_H
@@ -154,13 +155,13 @@ namespace BALL
 		/**	Write a molecule to the file
 		*/
 		virtual bool write(const Molecule& molecule)
-			throw(File::CanNotWrite);
+			throw(File::CannotWrite);
 
 		/**	Write a system to the MOL file.
 				Note that this changes the properties of atoms in the system.
 		*/
 		virtual bool write(const System& system)
-			throw(File::CanNotWrite);
+			throw(File::CannotWrite);
 		
 		/**	Read a system from the MOL file
 		*/

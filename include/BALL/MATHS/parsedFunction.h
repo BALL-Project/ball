@@ -1,14 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: parsedFunction.h,v 1.7 2003/03/03 14:17:53 anhi Exp $
+// $Id: parsedFunction.h,v 1.8 2003/08/26 08:04:21 oliver Exp $
+//
 
 #ifndef BALL_MATHS_PARSEDFUNCTION_H
 #define BALL_MATHS_PARSEDFUNCTION_H
-
-#ifndef BALL_COMMON_H
-# include <BALL/common.h>
-#endif
 
 #ifndef BALL_DATATYPE_HASHMAP_H
 # include <BALL/DATATYPE/hashMap.h>

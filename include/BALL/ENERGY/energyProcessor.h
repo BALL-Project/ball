@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: energyProcessor.h,v 1.15 2003/08/20 12:18:28 anker Exp $
+// $Id: energyProcessor.h,v 1.16 2003/08/26 08:04:13 oliver Exp $
+//
 
 #ifndef BALL_ENERGY_ENERGYPROCESSOR_H
 #define BALL_ENERGY_ENERGYPROCESSOR_H

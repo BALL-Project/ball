@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: experiment.h,v 1.9 2003/03/26 13:08:16 sturm Exp $
+// $Id: experiment.h,v 1.10 2003/08/26 08:04:44 oliver Exp $
+//
 
 #ifndef BALL_NMR_EXPERIMENT_H
 #define BALL_NMR_EXPERIMENT_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: parameters.h,v 1.16 2003/08/19 20:07:46 oliver Exp $
+// $Id: parameters.h,v 1.17 2003/08/26 08:04:15 oliver Exp $
 // general parameter file class
 //
 

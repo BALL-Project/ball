@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: limits.h,v 1.16 2003/03/26 13:08:12 sturm Exp $
+// $Id: limits.h,v 1.17 2003/08/26 08:04:05 oliver Exp $
+//
 
 #ifndef BALL_COMMON_LIMITS_H
 #define BALL_COMMON_LIMITS_H

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: energyMinimizer.h,v 1.38 2003/03/26 13:56:42 anhi Exp $
+// $Id: energyMinimizer.h,v 1.39 2003/08/26 08:04:27 oliver Exp $
+//
 
 // Energy Minimizer: A class for minimizing the energy of molecular systems
 

@@ -1,4 +1,9 @@
-// $Id: primitiv.doc,v 1.5 2003/02/25 10:33:27 anhi Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: primitiv.doc,v 1.6 2003/08/26 08:05:10 oliver Exp $
+//
+
 
 /** \defgroup ViewPrimitives Predefined primitives (without graphical representation)
 		\ingroup View

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile.h,v 1.26 2003/07/11 15:27:03 amoll Exp $
+// $Id: DCDFile.h,v 1.27 2003/08/26 08:04:13 oliver Exp $
+//
 
 #ifndef BALL_FORMAT_DCDFILE_H
 #define BALL_FORMAT_DCDFILE_H
@@ -142,9 +143,10 @@ namespace BALL
 		/**
 		*/
 		virtual bool flushToDisk(const std::vector<SnapShot>& buffer)
-			throw(File::CanNotWrite);
+			throw(File::CannotWrite);
 		//@}
-		/// @name Accessors 
+
+		/** @name Accessors */
 		//@{
 
 		/// 

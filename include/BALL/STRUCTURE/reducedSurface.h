@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reducedSurface.h,v 1.45 2003/08/19 16:01:55 amoll Exp $
+// $Id: reducedSurface.h,v 1.46 2003/08/26 08:04:53 oliver Exp $
+//
 
 #ifndef BALL_STRUCTURE_REDUCEDSURFACE_H
 #define BALL_STRUCTURE_REDUCEDSURFACE_H
@@ -359,7 +360,7 @@ namespace BALL
     /*_ maximal radius of all atoms
     */
     double r_max_;
-    /*_ bounding box of the atom centers of the molecule
+    /*_ bounding SimpleBox of the atom centers of the molecule
     */
 		TSimpleBox3<double> bounding_box_;
 

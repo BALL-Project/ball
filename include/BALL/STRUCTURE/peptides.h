@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: peptides.h,v 1.8 2003/03/26 15:59:27 anhi Exp $
+// $Id: peptides.h,v 1.9 2003/08/26 08:04:52 oliver Exp $
+//
 
 #ifndef BALL_STRUCTURE_PEPTIDES_H
 #define BALL_STRUCTURE_PEPTIDES_H

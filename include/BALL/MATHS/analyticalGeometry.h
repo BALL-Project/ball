@@ -1,13 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: analyticalGeometry.h,v 1.59 2003/03/26 15:59:24 anhi Exp $
+// $Id: analyticalGeometry.h,v 1.60 2003/08/26 08:04:20 oliver Exp $
+//
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
 
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
+#ifndef BALL_COMMON_EXCEPTION_H
+# include <BALL/COMMON/exception.h>
 #endif
 
 #ifndef BALL_MATHS_ANGLE_H

@@ -1,0 +1,29 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: molecularModel.iC,v 1.2 2003/08/26 08:04:36 oliver Exp $
+
+BALL_INLINE
+void MolecularModelProcessor::registerModelConnector
+  (const BaseModelConnector& model_connector)
+  throw()
+{
+  model_connector_  = const_cast<BaseModelConnector*>(&model_connector);
+	model_connector_->setColorProcessor(color_processor_);
+}
+  
+BALL_INLINE
+void MolecularModelProcessor::unregisterModelConnector()
+  throw()
+{
+	model_connector_ = const_cast<BaseModelConnector*>((BaseModelConnector*)&RTTI::getDefault<BaseModelConnector>());
+	model_connector_->setColorProcessor(color_processor_);
+}
+
+BALL_INLINE
+BaseModelConnector* MolecularModelProcessor::getModelConnector()
+  throw()
+{
+  return model_connector_;
+}
+

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: box3.h,v 1.39 2003/08/19 16:43:09 amoll Exp $
+// $Id: box3.h,v 1.40 2003/08/26 08:04:20 oliver Exp $
+//
 
 #ifndef BALL_MATHS_BOX3_H
 #define BALL_MATHS_BOX3_H
@@ -160,7 +161,7 @@ namespace BALL
 		/// Set the height vector
 		void setHeightVector(const TVector3<T>& v)
 			throw();
-		
+
 		/**	Calculate the surface area.
 				@return T the surface
 		*/

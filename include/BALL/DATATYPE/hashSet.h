@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hashSet.h,v 1.41 2003/06/19 13:09:08 oliver Exp $ 
+// $Id: hashSet.h,v 1.42 2003/08/26 08:04:10 oliver Exp $ 
 //
 
 #ifndef BALL_DATATYPE_HASHSET_H

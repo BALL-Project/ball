@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomTypes.h,v 1.15 2003/03/26 13:56:43 anhi Exp $
+// $Id: atomTypes.h,v 1.16 2003/08/26 08:04:27 oliver Exp $
+//
 
 #ifndef BALL_MOLMEC_PARAMETER_ATOMTYPES_H
 #define BALL_MOLMEC_PARAMETER_ATOMTYPES_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: secondaryStructureIterator.h,v 1.11 2003/06/19 13:09:55 oliver Exp $
+// $Id: secondaryStructureIterator.h,v 1.12 2003/08/26 08:04:19 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_SECONDARYSTRUCTUREITERATOR_H

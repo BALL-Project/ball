@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: triangle.h,v 1.8 2003/03/26 15:59:29 anhi Exp $
+// $Id: triangle.h,v 1.9 2003/08/26 08:04:54 oliver Exp $
+//
 
 #ifndef BALL_STRUCTURE_TRIANGLE_H
 #define BALL_STRUCTURE_TRIANGLE_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorExtension4.iC,v 1.4 2002/02/27 12:20:14 sturm Exp $
+// $Id: colorExtension4.iC,v 1.5 2003/08/26 08:05:06 oliver Exp $
 
 BALL_INLINE
 void ColorExtension4::setColor4(const ColorRGBA& color)
@@ -57,31 +57,5 @@ void ColorExtension4::getColor4
 	throw()
 {
   color4_.get(red, green, blue);
-}
-
-BALL_INLINE
-void ColorExtension4::setColors
-  (const ColorRGBA& a,
-   const ColorRGBA& b,
-   const ColorRGBA& c,
-   const ColorRGBA& d)
-	throw()
-{
-  ColorExtension3::setColors(a, b, c);
-
-  color4_ = d;
-}
-      
-BALL_INLINE
-void ColorExtension4::getColors
-  (ColorRGBA& a,
-   ColorRGBA& b,
-   ColorRGBA& c,
-   ColorRGBA& d) const
-	throw()
-{
-  ColorExtension3::getColors(a, b, c);
-
-  d = color4_;
 }
 

@@ -1,22 +1,19 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: circle3.h,v 1.36 2003/06/09 22:40:48 oliver Exp $
+// $Id: circle3.h,v 1.37 2003/08/26 08:04:21 oliver Exp $
 //
 
 #ifndef BALL_MATHS_CIRCLE3_H
 #define BALL_MATHS_CIRCLE3_H
 
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
+#ifndef BALL_COMMON_EXCEPTION_H
+# include <BALL/COMMON/exception.h>
 #endif
 
 #ifdef BALL_HAS_IEEEFP_H
 #	include <ieeefp.h>
 #endif 
-
-#include <math.h>
-#include <iostream>
 
 #ifndef BALL_MATHS_VECTOR3_H
 #	include <BALL/MATHS/vector3.h>

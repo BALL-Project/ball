@@ -1,4 +1,8 @@
-// $Id: datatype.doc,v 1.16 2003/03/26 13:56:17 anhi Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: datatype.doc,v 1.17 2003/08/26 08:04:10 oliver Exp $
+//
 
 /** \defgroup Datatype General datastructures
 		\ingroup Foundation

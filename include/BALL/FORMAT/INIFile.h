@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: INIFile.h,v 1.36 2003/07/11 09:27:49 amoll Exp $
+// $Id: INIFile.h,v 1.37 2003/08/26 08:04:13 oliver Exp $
+//
 
 #ifndef BALL_FORMAT_INIFILE_H
 #define BALL_FORMAT_INIFILE_H
@@ -227,7 +228,6 @@ namespace BALL
 				@return bool
 					- <b>true</b>  if the section exists (is hashed!)
 					- <b>false</b> if the section could not be found
-										
 		*/	
 		bool hasSection(const String& section_name) const;
 
@@ -516,7 +516,6 @@ namespace BALL
 			List<String>::Iterator	position_;
 		};
 	};
-
 } // namespace BALL
 
 #endif // BALL_FORMAT_INIFILE_H

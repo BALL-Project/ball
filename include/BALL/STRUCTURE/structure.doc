@@ -1,5 +1,8 @@
-// $Id: structure.doc,v 1.13 2003/04/01 21:18:04 oliver Exp $
-
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: structure.doc,v 1.14 2003/08/26 08:04:54 oliver Exp $
+//
 /**	\defgroup Structure	Molecular Structure
 		\ingroup Modeling
 		This chapter contains all relevant information on 

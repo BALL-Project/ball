@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: function.h,v 1.23 2003/06/09 22:40:48 oliver Exp $
+// $Id: function.h,v 1.24 2003/08/26 08:04:21 oliver Exp $
 //
 
 #ifndef BALL_MATHS_FUNCTION_H

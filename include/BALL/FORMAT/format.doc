@@ -1,4 +1,8 @@
-// $Id: format.doc,v 1.11 2003/02/25 10:32:24 anhi Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: format.doc,v 1.12 2003/08/26 08:04:14 oliver Exp $
+//
 
 /** \defgroup Format File Formats
 		\ingroup Modeling

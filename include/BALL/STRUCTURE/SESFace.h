@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SESFace.h,v 1.25 2003/03/26 13:08:33 sturm Exp $
+// $Id: SESFace.h,v 1.26 2003/08/26 08:04:51 oliver Exp $
+//
 
 #ifndef BALL_STRUCTURE_SESFACE_H
 #define BALL_STRUCTURE_SESFACE_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bidirectionalIterator.h,v 1.29 2003/06/19 13:07:34 oliver Exp $ 
+// $Id: bidirectionalIterator.h,v 1.30 2003/08/26 08:04:06 oliver Exp $ 
 //
 
 #ifndef BALL_CONCEPT_BIDIRECTIONALITERATOR_H
@@ -424,6 +424,7 @@ namespace BALL
 
 	/** @} */
 
+	/** @} */
 } // namespace BALL 
 
 #endif // BALL_CONCEPT_BIDIRECTIONALITERATOR_H

@@ -1,8 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: steepestDescent.h,v 1.17 2003/03/26 13:56:43 anhi Exp $
-// Line Search Minimizer: A special class for the line search minimization algorithm
+// $Id: steepestDescent.h,v 1.18 2003/08/26 08:04:27 oliver Exp $
+//
 
 #ifndef BALL_MOLMEC_MINIMIZATION_STEEPESTDESCENT_H
 #define BALL_MOLMEC_MINIMIZATION_STEEPESTDESCENT_H

@@ -1,7 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: support.h,v 1.23 2003/08/19 15:53:10 amoll Exp $
+// $Id: support.h,v 1.24 2003/08/26 08:04:26 oliver Exp $
+//
+
 
 #ifndef BALL_MOLMEC_COMMON_SUPPORT_H
 #define BALL_MOLMEC_COMMON_SUPPORT_H

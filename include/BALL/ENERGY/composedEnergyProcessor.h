@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: composedEnergyProcessor.h,v 1.11 2003/03/26 16:11:54 anhi Exp $
+// $Id: composedEnergyProcessor.h,v 1.12 2003/08/26 08:04:12 oliver Exp $
+//
 
 #ifndef BALL_ENERGY_COMPOSEDENERGYPROCESSOR
 #define BALL_ENERGY_COMPOSEDENERGYPROCESSOR

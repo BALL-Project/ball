@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: path.h,v 1.9 2003/03/26 13:08:44 sturm Exp $
+// $Id: path.h,v 1.10 2003/08/26 08:04:56 oliver Exp $
+//
 
 #ifndef BALL_COMMON_PATH_H
 #define BALL_COMMON_PATH_H

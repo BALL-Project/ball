@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: clientScene.h,v 1.12 2003/03/26 13:09:01 sturm Exp $
+// $Id: clientScene.h,v 1.13 2003/08/26 08:05:05 oliver Exp $
+//
 
 #ifndef BALL_VIEW_KERNEL_CLIENTSCENE_H
 #define BALL_VIEW_KERNEL_CLIENTSCENE_H
@@ -49,17 +50,17 @@ namespace BALL
 			/** Default constructor.
 					Construct a new clientscene.
 
-					@return   ClientScene - new constructed clientscene
+					\return   ClientScene - new constructed clientscene
 			*/
 			ClientScene();
 
 			ClientScene(const String& host, int port, SceneHandle scenehandle);
 
 			/** Copy constructor.
-					Construct new clientscene by copying the clientscene {\em atom}.
+					Construct new clientscene by copying the clientscene <b> atom</b>.
 					The copy is either deep or shallow (default).
 
-					@return    ClientScene - new constructed clientscene
+					\return    ClientScene - new constructed clientscene
 			*/
 			ClientScene(const ClientScene& clientScene, bool deep = true);
 
@@ -67,7 +68,6 @@ namespace BALL
 
 			virtual void clear();
 
-			virtual void destroy();
 			//@}
 		
 			/**	@name	Exceptions

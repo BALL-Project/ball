@@ -1,7 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineSearch.h,v 1.17 2003/03/26 13:56:42 anhi Exp $
+// $Id: lineSearch.h,v 1.18 2003/08/26 08:04:27 oliver Exp $
+//
+
 // Line Search Minimizer: A special class for the line search minimization algorithm
 
 #ifndef BALL_MOLMEC_MINIMIZATION_LINESEARCH_H

@@ -1,23 +1,19 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: global.h,v 1.14 2003/03/26 13:08:45 sturm Exp $
+// $Id: global.h,v 1.15 2003/08/26 08:04:56 oliver Exp $
+//
 
 #ifndef BALL_VIEW_COMMON_GLOBAL_H
 #define BALL_VIEW_COMMON_GLOBAL_H
 
-#ifndef BALL_CONFIG_CONFIG_H
-# include <BALL/CONFIG/config.h>
-#endif
- 
 namespace BALL
 {
 	namespace VIEW
 	{
-		/**     @name Type aliases defined by VIEW
-						These predefined types are used in VIEW for portability and
-						comprehensibility.
-		 \ingroup ViewCommon				
+		/** @name Type aliases defined by VIEW
+				These predefined types are used in VIEW for portability and
+				comprehensibility.
 		*/
 		//@{
 		
@@ -26,7 +22,6 @@ namespace BALL
 						for the non-ambiguous identification of scenes.
 		*/
 		typedef unsigned long    SceneHandle;      
-		//@}
 
 		/**			@name Constant definition
 		 \ingroup ViewCommon
@@ -35,7 +30,7 @@ namespace BALL
 
 		/**	The default port for the VIEW server.
 				Default port is 20000.
-				@see  Server
+				\see  Server
 		*/
 		#define VIEW_DEFAULT_PORT 20000
 
@@ -46,12 +41,11 @@ namespace BALL
 		*/
 		//@{
 
-		/**     Command enums.
-						These enums are used in the client and server classes.
-						These enums specify the commands the server is able
-						to understand (at the moment).
-						@see  Server
-						@see  Client
+		/** Command enums.
+				These enums specify the commands the server is able
+				to understand (at the moment).
+				\see  Server
+				\see  Client
 		*/
 		enum Command
 		{
@@ -64,24 +58,50 @@ namespace BALL
 			/// next free command.
 			NUMBER_OF_COMMANDS
 		};	
-		//@}
 
 
-		/** MainControlMissing exception class.
-				This exception is thrown if {\em *this} scene is not inserted into a
-				 \link MainControl MainControl \endlink  object.
-				@see GeneralException
-		 \ingroup ViewCommon
-		*/
- 		class MainControlMissing: public Exception::GeneralException
+		/// Drawing Modes
+		enum DrawingMode
 		{
- 			public:
-   			MainControlMissing(const char* file, int line, const string data = "")
-					throw()
-					: Exception::GeneralException(file, line, string("MainControlMissing"), data)
-				{
-    		}
-		};   
+			///
+			DRAWING_MODE_DOTS = 0,
+
+			///
+			DRAWING_MODE_WIREFRAME,
+
+			///
+			DRAWING_MODE_SOLID
+		};
+
+		// Number of drawing modes
+		#define BALL_VIEW_MAXIMAL_DRAWING_MODE 3
+
+		
+		/// Drawing Precisions
+		enum DrawingPrecision
+		{
+			///
+			DRAWING_PRECISION_LOW = 0,
+
+			///
+			DRAWING_PRECISION_MEDIUM,
+
+			///
+			DRAWING_PRECISION_HIGH,
+
+			///
+			DRAWING_PRECISION_ULTRA
+		};
+
+		/// Number of drawing precisions
+		#define BALL_VIEW_MAXIMAL_DRAWING_PRECISION 4
+
+		
+		/// MAXIMAL_DRAWING_PRECISION * MAXIMAL_DRAWING_MODE
+		#define BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE  12  
+
+		//@}
+    
 	} // namespace VIEW
 
 } // namespace BALL

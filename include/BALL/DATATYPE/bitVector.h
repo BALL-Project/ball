@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bitVector.h,v 1.41 2003/06/19 13:08:18 oliver Exp $
+// $Id: bitVector.h,v 1.42 2003/08/26 08:04:09 oliver Exp $
 //
 
 #ifndef BALL_DATATYPE_BITVECTOR_H
@@ -576,7 +576,6 @@ namespace BALL
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/DATATYPE/bitVector.iC>
 #	endif
-
 } //namespace BALL
 
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: JCAMPFile.h,v 1.18 2003/07/11 15:27:03 amoll Exp $
+// $Id: JCAMPFile.h,v 1.19 2003/08/26 08:04:13 oliver Exp $
 //
 
 #ifndef BALL_FORMAT_JCAMPFILE_H
@@ -99,7 +99,7 @@ namespace BALL
 
 		/// Write the file.
 		bool write()
-			throw(File::CanNotWrite);
+			throw(File::CannotWrite);
 
 		///
 		HeaderMap& getHeader() throw() { return header_; }

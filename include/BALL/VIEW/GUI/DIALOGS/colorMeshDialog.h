@@ -1,12 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
+// $Id: colorMeshDialog.h,v 1.14 2003/08/26 08:04:58 oliver Exp $
+//
+
 #ifndef BALL_VIEW_GUI_COLORMESHDIALOG_H
 #define BALL_VIEW_GUI_COLORMESHDIALOG_H
 
-#ifndef BALL_VIEW_GUI_DIALOGS_COLORMESHDIALOGDATA_H
-# include <BALL/VIEW/GUI/DIALOGS/colorMeshDialogData.h>
-#endif
+#include <BALL/VIEW/UIC/colorMeshDialogData.h>
 
 #ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
 # include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
@@ -18,6 +19,10 @@
 
 #ifndef BALL_VIEW_PRIMITIV_MESH_H
 # include <BALL/VIEW/PRIMITIV/mesh.h>
+#endif
+
+#ifndef BALL_VIEW_GUI_KERNEL_REPRESENTATION_H
+# include <BALL/VIEW/GUI/KERNEL/representation.h>
 #endif
 
 #ifndef BALL_DATATYPE_REGULARDATA3D
@@ -58,20 +63,19 @@ namespace BALL
 					GRID_FROM_FDPD
 				};
 
-				ColorMeshDialog( QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 )
-					throw();
-				
-				~ColorMeshDialog()
-					throw();
+				ColorMeshDialog( QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+				~ColorMeshDialog();
 						
-				void setMesh(Mesh& mesh)
+				void setRepresentation(Representation& rep)
 					throw();
+
+				Representation* getRepresentation()
+					throw() { return rep_;}
+				void setMesh(Mesh& mesh)
+					throw() {mesh_ = &mesh;}
 
 				Mesh* getMesh()
 					throw() { return mesh_;}
-
-				void setComposite(Composite& composite)
-					throw() { composite_ = &composite;}
 				
 		public slots:
 				void applyPressed();
@@ -113,10 +117,13 @@ namespace BALL
 
 				ColorRGBA	 	selected_color, min_min_color, min_color, mid_color, max_color, max_max_color;	
 
-				HashMap<Mesh*, ColoringConfig> configs_;
+				HashMap<Representation*, ColoringConfig> configs_;
 				Mesh* mesh_;		
-				Composite* composite_;
+				Representation* rep_;
 		};
 
-} } // Namespaces
+  } // namespace VIEW
+
+} // namespace BALL
+
 #endif

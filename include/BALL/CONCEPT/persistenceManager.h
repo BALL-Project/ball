@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: persistenceManager.h,v 1.44 2003/06/25 10:19:43 anker Exp $
+// $Id: persistenceManager.h,v 1.45 2003/08/26 08:04:08 oliver Exp $
 //
 
 #ifndef BALL_CONCEPT_PERSISTENCEMANAGER_H
@@ -29,8 +29,6 @@
 
 #include <fstream>
 #include <iomanip>
-
-using ::std::pair;
 
 namespace BALL 
 {
@@ -768,7 +766,7 @@ namespace BALL
 		
 		/*_
 		*/
-		typedef	list<const PersistentObject*>					ObjectList;
+		typedef	std::list<const PersistentObject*>		ObjectList;
 		
 		/*_
 		*/
@@ -776,7 +774,7 @@ namespace BALL
 		
 		/*_
 		*/
-		typedef	list<pair<void**, PointerSizeUInt> >		PointerList;
+		typedef	std::list<std::pair<void**, PointerSizeUInt> >		PointerList;
 
 		/*_
 		*/
@@ -906,7 +904,7 @@ namespace BALL
 
 		if (ptr != 0)
 		{
-			pointer_list_.push_back(pair<void**, PointerSizeUInt>((void**)&object, ptr));
+			pointer_list_.push_back(std::pair<void**, PointerSizeUInt>((void**)&object, ptr));
 		}
 
 		object = (T*)(BALL_POINTERSIZEINT_TYPE)ptr;
@@ -952,7 +950,7 @@ namespace BALL
 
 		if (ptr != 0);
 		{
-			pointer_list_.push_back(pair<void**, PointerSizeUInt>((void**)&object, ptr));
+			pointer_list_.push_back(std::pair<void**, PointerSizeUInt>((void**)&object, ptr));
 		}
 
 		return checkPrimitiveTrailer();
@@ -1035,7 +1033,7 @@ namespace BALL
 
 			if (ptr != 0)
 			{
-				pointer_list_.push_back(pair<void**, PointerSizeUInt>((void**)&(array[i]), ptr));
+				pointer_list_.push_back(std::pair<void**, PointerSizeUInt>((void**)&(array[i]), ptr));
 			}
 
 			array[i] = (T*)((BALL_POINTERSIZEINT_TYPE)ptr);
@@ -1045,7 +1043,7 @@ namespace BALL
 	}
 
 #ifndef BALL_NO_INLINE_FUNCTIONS
-#include <BALL/CONCEPT/persistenceManager.iC>
+#	include <BALL/CONCEPT/persistenceManager.iC>
 #endif
 
 } // namespace BALL

@@ -1,0 +1,242 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: representation.h,v 1.2 2003/08/26 08:05:02 oliver Exp $
+
+#ifndef  BALL_VIEW_GUI_KERNEL_REPRESENTATION_H
+#define  BALL_VIEW_GUI_KERNEL_REPRESENTATION_H
+
+#ifndef BALL_CONCEPT_PROPERTY_H
+#	include <BALL/CONCEPT/property.h>
+#endif
+
+#ifndef BALL_DATATYPE_LIST_H
+#	include <BALL/DATATYPE/list.h>
+#endif
+
+#ifndef BALL_DATATYPE_HASHSET_H
+#	include <BALL/DATATYPE/hashSet.h>
+#endif
+
+#ifndef BALL_CONCEPT_COMPOSITE_H
+#	include <BALL/CONCEPT/composite.h>
+#endif
+
+namespace BALL
+{
+	namespace VIEW
+	{
+		class ModelProcessor;
+		class GeometricObject;
+
+		/** Representation
+		 		A Representation is a collection of geometric objects for a group of 
+				composites and a given model, for example a surface.
+				An instance of Representation manages the memory for the geometric objects,
+				the model processor. So when a Representation is destroyed, so are its geometric objects
+				and processors. 
+				It stores the drawing precision.
+		*/
+		class Representation
+			: public PropertyManager
+		{
+			public:
+
+			BALL_CREATE(Representation)
+
+			/** @name Enums
+			 */
+			//@{
+			
+			/// Properties
+			enum Properties
+			{
+				PROPERTY__HIDDEN = 0,
+				PROPERTY__TRANSPARENT_FULL,
+				PROPERTY__TRANSPARENT_BLENDING,
+				PROPERTY__ALWAYS_FRONT,
+				PROPERTY__IS_COORDINATE_SYSTEM
+			};
+				
+			/** @name Type definitions
+			 */
+			//@{
+			/// 
+			typedef List<GeometricObject*> 		 GeometricObjectList;
+
+			///
+			typedef HashSet<const Composite*>  CompositeSet;
+
+			///
+			typedef CompositeSet::Iterator CompositesIterator;
+
+			///
+			typedef CompositeSet::ConstIterator CompositesConstIterator;
+
+			//@}
+			/**	@name	Constructors and Destuctor
+			*/	
+			//@{
+
+			/** Default Constructor
+			*/
+			Representation()
+				throw();
+
+			///
+			Representation(Index model_type,
+										 Index drawing_precision_,
+										 Index drawing_mode_)
+				throw();
+
+			///
+			Representation(const CompositeSet& composites, 
+										 ModelProcessor* rep_processor)
+				throw();
+
+			///
+			Representation(const GeometricObjectList& object_list)
+				throw();
+
+			/** Copy constructor
+			*/
+			Representation(const Representation& representation)
+				throw();
+
+			/** Destructor
+			*/
+			virtual ~Representation()
+				throw();
+
+			//@}
+			/**	@name	Predicats and Accessors
+			*/	
+			//@{
+			
+			///
+			const Representation& operator = (const Representation& representation)
+				throw();
+			
+			///
+			void clear()
+				throw();
+
+			///
+			void setDrawingPrecision(Index precision)
+				throw();
+
+			///
+			Index getDrawingPrecision() const
+				throw() { return drawing_precision_;}
+
+			///
+			void setDrawingMode(Index mode)
+				throw() { drawing_mode_ = mode;}
+
+			///
+			Index getDrawingMode() const
+				throw() { return drawing_mode_;}
+			
+			///
+			const GeometricObjectList& getGeometricObjects() const
+				throw() { return geometric_objects_; }
+
+			///
+			GeometricObjectList& getGeometricObjects()
+				throw() { return geometric_objects_; }
+
+			///
+			void insert(GeometricObject& object) 
+				throw() { geometric_objects_.push_back(&object); }
+
+			///
+			const CompositeSet& getComposites() const
+				throw() { return composites_; }
+
+			///
+			CompositeSet& getComposites()
+				throw() { return composites_; }
+
+			///
+			const ModelProcessor* getModelProcessor() const
+				throw() { return model_processor_;}
+
+			///
+			ModelProcessor* getModelProcessor()
+				throw() { return model_processor_;}
+
+			///
+			void setModelProcessor(ModelProcessor* processor)
+				throw();
+
+			///
+			String getModelName() const
+				throw();
+
+			///
+			void setModelType(Index type)
+				throw() { model_type_ = type;}
+
+			///
+			String getProperties() const
+				throw();
+			
+			///
+			bool isValid() const
+				throw();
+
+			///
+			void update()
+				throw();
+
+			///
+			void dump(std::ostream& s, Size depth) const
+				throw();
+
+			///
+			CompositesIterator begin() 
+				throw() { return composites_.begin();}
+
+			///
+			CompositesConstIterator begin() const
+				throw() { return composites_.begin();}
+			
+			///
+			CompositesIterator end() 
+				throw() { return composites_.end();}
+
+			///
+			CompositesConstIterator end() const
+				throw() { return composites_.end();}
+			
+			//@}
+
+			protected:
+
+			void clearGeometricObjects_()
+				throw();
+
+			//_
+			Index 							drawing_mode_;
+
+			//_
+			Index 							drawing_precision_;
+
+			//_
+			Index 							model_type_;
+
+			//_
+			ModelProcessor* 		model_processor_;
+
+			//_
+			GeometricObjectList geometric_objects_;
+
+			//_
+			CompositeSet 				composites_;
+
+		};
+
+	} // namespace VIEW
+} // namespace BALL
+
+#endif // BALL_VIEW_GUI_KERNEL_REPRESENTATION_H

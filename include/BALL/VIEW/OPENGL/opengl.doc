@@ -1,0 +1,26 @@
+// $Id: opengl.doc,v 1.2 2003/08/26 08:05:09 oliver Exp $
+
+/**     @name OpenGL primitive creation.
+*/
+//@{
+			 //@Include: glObject.h
+//@}
+
+/**     @name OpenGL predefined primitives and creation tools.
+*/
+//@{
+				/** @name Predefined primitives.
+									This section contains some internally used primitive
+									classes and the class glPrimitiveManager that handles these
+									classes.
+				*/
+				//@{
+						//@Include: glPrimitiveManager.h
+						//@Include: glEntityDescriptor.h
+			 			//@Include: PRIMITIVE/primitive.doc
+				//@}
+
+				//@Include: glQuadricObject.h
+				//@Include: glRenderer.h
+//@}
+

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expressionPredicate.h,v 1.10 2003/06/19 13:16:54 oliver Exp $
+// $Id: expressionPredicate.h,v 1.11 2003/08/26 08:04:17 oliver Exp $
+//
 
 #ifndef BALL_KERNEL_EXPRESSIONPREDICATE_H
 #define BALL_KERNEL_EXPRESSIONPREDICATE_H

@@ -1,22 +1,18 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: piecewiseFunction.h,v 1.19 2003/06/09 22:40:49 oliver Exp $
+// $Id: piecewiseFunction.h,v 1.20 2003/08/26 08:04:22 oliver Exp $
 //
 
 #ifndef BALL_MATHS_PIECEWISEFUNCTION_H
 #define BALL_MATHS_PIECEWISEFUNCTION_H
 
-#ifndef BALL_COMMON_H
-# include <BALL/common.h>
-#endif
-
 #ifndef BALL_COMMON_LIMITS_H
 # include <BALL/COMMON/limits.h>
 #endif
 
-#ifndef BALL_COMMON_EXCEPTION_H
-# include <BALL/COMMON/exception.h>
+#ifndef BALL_COMMON_H
+# include <BALL/common.h>
 #endif
 
 namespace BALL

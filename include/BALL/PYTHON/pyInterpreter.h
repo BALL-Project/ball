@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyInterpreter.h,v 1.9 2003/03/31 15:19:05 amoll Exp $ 
+// $Id: pyInterpreter.h,v 1.10 2003/08/26 08:04:46 oliver Exp $ 
+//
 
 #ifndef BALL_PYTHON_PYINTERPRETER_H
 #define BALL_PYTHON_PYINTERPRETER_H

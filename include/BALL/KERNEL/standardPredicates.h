@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.h,v 1.38 2003/07/07 11:17:50 anker Exp $
+// $Id: standardPredicates.h,v 1.39 2003/08/26 08:04:20 oliver Exp $
+//
 
 #ifndef BALL_KERNEL_STANDARDPREDICATES_H
 #define BALL_KERNEL_STANDARDPREDICATES_H

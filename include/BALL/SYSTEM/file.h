@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.h,v 1.59 2003/08/25 08:09:56 oliver Exp $
+// $Id: file.h,v 1.60 2003/08/26 08:04:55 oliver Exp $
 //
 
 #ifndef BALL_SYSTEM_FILE_H
@@ -121,7 +121,6 @@ namespace BALL
 					- <tt>%t</tt> a temporary file name (all occurences of <tt>%t</tt> are replace 
 							with the same file name for the same invocation of  \link transform transform \endlink,
 							but different file names on subsequent invocations)
-				
 		*/
 		String transform(const String& name);
 		//@}
@@ -140,17 +139,17 @@ namespace BALL
 	{
 		public:
 
-		/**	Exception CanNotWrite
+		/**	Exception CannotWrite
 				A given file could not be written, either because its not open or it has a wrong open mode.
 		*/
-		class CanNotWrite
+		class CannotWrite
 			: public Exception::GeneralException
 		{
 			public:
-			CanNotWrite(const char* file, int line, const String& filename)
+			CannotWrite(const char* file, int line, const String& filename)
 				throw();
 
-			~CanNotWrite()
+			~CannotWrite()
 				throw();
 			String getFilename() const
 				throw();

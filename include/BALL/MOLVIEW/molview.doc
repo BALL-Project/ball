@@ -1,31 +1,34 @@
-// $Id: molview.doc,v 1.10 2003/02/25 10:32:30 anhi Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: molview.doc,v 1.11 2003/08/26 08:04:29 oliver Exp $
+//
 
-/** \defgroup Molview MOLVIEW.
-		\ingroup Visualization
-		Contrary to the VIEW framework that is designed to visualize various geometric objects
-		the MOLVIEW framework implements the visualization of molecular data structures.
-		To achieve this goal a number of processors are introduced that are responsible
-		for creating different graphical representation of given molecular structures.
-		Similar processors are used to color the created graphical models. See \link ColorCalculator ColorCalculator \endlink.
-		<br />
-		The following processors for creating models are now available:
-		 - \link AddGLBallAndStickModel AddGLBallAndStickModel \endlink: creates a ball and stick model from a given molecular structure
-		 - \link AddGLLineModel AddGLLineModel \endlink: creates a line model model from a given molecular structure
-		 - \link AddGLVanDerWaalsModel AddGLVanDerWaalsModel \endlink: creates a Van Der Waals model from a given molecular structure
-		 - \link AddGLBackboneModel AddGLBackboneModel \endlink: creates a backbone model through the <it>CA</it>-atoms of a given molecular structure
-		 - \link AddGLSurfaceModel AddGLSurfaceModel \endlink: creates a surface model from a given molecular structure
-		All these processors are used in the class \link DisplayProperties DisplayProperties \endlink to change the graphical
-		representation of molecular data structures.
-		This framework uses also specialized versions of serveral VIEW widgets to display and manipulate
-		molecular data structures (e.g. \link MolecularControl MolecularControl \endlink). 
-		Also there are some new modular widgets that are used for
-		loading molecular structures (e.g. \link OpenPDBFile OpenPDBFile \endlink or \link OpenHINFile OpenHINFile \endlink) and for changing
-		the graphical representation (\link DisplayProperties DisplayProperties\endlink).
-		<br /> <br />
-		The following code is an example for a simple PDB viewer (the includes have been omitted).<br /> <br />
-		\code
-		int main(int argc, char **argv)
-		{
+/**@name MOLVIEW.
+	 Contrary to the VIEW framework that is designed to visualize various geometric objects
+	 the MOLVIEW framework implements the visualization of molecular data structures.
+	 To achieve this goal a number of processors are introduced that are responsible
+	 for creating different graphical representation of given molecular structures.
+	 Similar processors are used to color the created graphical models. See \Ref{ColorCalculator}.\\
+	 The following processors for creating models are now available:\\
+	 \begin{itemize}
+		 \item \Ref{AddBallAndStickModel}: creates a ball and stick model from a given molecular structure
+		 \item \Ref{AddLineModel}: creates a line model model from a given molecular structure
+		 \item \Ref{AddVanDerWaalsModel}: creates a Van Der Waals model from a given molecular structure
+		 \item \Ref{AddBackboneModel}: creates a backbone model through the {\em CA}-atoms of a given molecular structure
+		 \item \Ref{AddSurfaceModel}: creates a surface model from a given molecular structure
+	 \end{itemize}
+	 All these processors are used in the class \Ref{DisplayProperties} to change the graphical
+	 representation of molecular data structures.
+	 This framework uses also specialized versions of serveral VIEW widgets to display and manipulate
+	 molecular data structures (e.g. \Ref{MolecularControl}). 
+	 Also there are some new modular widgets that are used for
+	 loading molecular structures (e.g. \Ref{OpenPDBFile} or \Ref{OpenHINFile}) and for changing
+	 the graphical representation (\Ref{DisplayProperties}).\\ \\
+	 The following code is an example for a simple PDB viewer (the includes have been omitted).\\ \\
+	 \begin{verbatim}
+	 int main(int argc, char **argv)
+	 {
 		 // creating mainframe and application
 		 QApplication app(argc, argv);
 		 MainControl main;
@@ -72,3 +75,46 @@
 	 For more information about QT widgets and application programming see
 	 the documentation of the QT-library.
 */
+//@{
+	
+	/** @name Common data.
+      Some overall used data is defined in this section.
+  */
+	//@{
+		//@Include: COMMON/common.doc
+	//@}
+
+	/** @name Functors.
+ 	    In this section some usefull visitors and processors are defined.
+	*/
+	//@{
+	  //@Include: FUNCTOR/functor.doc
+	//@}
+
+
+	/** @name Dialog classes.
+						This section contains some useful dialogs used in the demo
+						application {\tt MOLVIEW}.
+	*/
+	//@{
+		//@Include: DIALOGS/dialogs.doc
+	//@}
+
+	/**@name	Widget classes.
+						This section contains some predefined widgets that are used
+						in the MOLVIEW application.
+	*/
+	//@{
+		//@Include: WIDGETS/widgets.doc
+	//@}
+
+/**@name	Predefined primitives with graphical representation.
+	/** @name Kernel classes.
+      The class {\em MolecularMessage} and the various derived classes define
+      some useful messages for special events.
+	*/
+	//@{
+		//@Include: KERNEL/kernel.doc
+	//@}
+
+//@}

@@ -1,30 +1,40 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.h,v 1.8 2003/03/26 13:08:50 sturm Exp $
+// $Id: POVRenderer.h,v 1.9 2003/08/26 08:04:59 oliver Exp $
+//
 
 #ifndef BALL_VIEW_GUI_FUNCTOR_POVRENDERER_H
 #define BALL_VIEW_GUI_FUNCTOR_POVRENDERER_H
 
-#ifndef BALL_VIEW_GUI_FUNCTOR_EXTERNALRENDERER_H
-# include <BALL/VIEW/GUI/FUNCTOR/externalRenderer.h>
+#ifndef BALL_VIEW_GUI_KERNEL_RENDERER_H
+# include <BALL/VIEW/GUI/KERNEL/renderer.h>
 #endif
 
 #ifndef BALL_SYSTEM_FILE_H
 # include <BALL/SYSTEM/file.h>
 #endif
 
+#ifndef BALL_MATHS_VECTOR3_H
+# include <BALL/MATHS/vector3.h>
+#endif
+
+#ifndef BALL_MATHS_MATRIX44_H
+# include <BALL/MATHS/matrix44.h>
+#endif
+
 namespace BALL
 {
 	namespace VIEW
 	{
+		class ColorRGBA;
+
 		/** POVRenderer class.
-		 		This class walks over all the geometric primitives in a  \link Scene Scene \endlink 
+		 		This class walks over all the geometric primitives in a Scene
 				and exports them into a data file in the POVRay 1.5 format, which can
 				be used to render the same scene externally.
 			\ingroup ViewGuiFunctors	
-			*/
-		class POVRenderer : public ExternalRenderer
+		class POVRenderer : public Renderer
 		{
 			public:
 
@@ -37,7 +47,7 @@ namespace BALL
 				throw();
 
 			/** Detailed constructor.
-			 		@param name The name of the file we will create
+			 		\param name The name of the file we will create
 			 */
 			POVRenderer(const String& name)
 				throw(Exception::FileNotFound);
@@ -50,30 +60,30 @@ namespace BALL
 			virtual void clear()
 				throw();
 
-			/// Destroy method.
-			virtual void destroy()
-				throw();
-	
 			//@}
-
 			/** @name Accessors
 			 */
 			//@{
 
 			/** Sets the name of the file we will create.
-			 		@param name The file name
+			 		\param name The file name
 			 */
 			void setFileName(const String& name)
 				throw(Exception::FileNotFound);
 
-			/** Converts a  \link ColorRGBA ColorRGBA \endlink  into a  \link String String \endlink  in POVRay format.
+			/** Converts a ColorRGBA into a String in POVRay format.
 			 */
 			String POVColorRGBA(const ColorRGBA& input)
 				throw();
 
-			/** Converts a  \link Vector3 Vector3 \endlink  into a  \link String String \endlink  in POVRay format.
+			/** Returns the corresponding BALLFinish declaration
 			 */
-			String POVVector3(const Vector3& input)
+			String POVFinish(const String& object, const ColorRGBA& input)
+				throw();
+
+			/** Converts a Vector3 into a String in POVRay format.
+			 */
+			String POVVector3(Vector3 input)
 				throw();
 
 			//@}
@@ -84,7 +94,7 @@ namespace BALL
 			/** Start method. 
 			    This method creates the file and writes the header.
 			 */
-			virtual bool start()
+			virtual bool init(const Stage& stage)
 				throw();
 
 			/** Finish method.
@@ -93,26 +103,33 @@ namespace BALL
 			virtual bool finish()
 				throw();
 
-			/** Operator ().
-			 		Traverses the  \link Composite Composite \endlink  tree with the start  \link Composite Composite \endlink  {\em composite}
-					and searches for  \link GeometricObject GeometricObject \endlink  objects that are also of kind  \link GLObject GLObject \endlink .
-					The data contained in the  \link GeometricObject GeometricObject \endlink  is then written into the output file
-					according to its type.
-					@param composite the  \link Composite Composite \endlink  to be searched for  \link GLObject GLObject \endlink  objects
-					@return Processor::Result the result of {\em *this} ExternalRenderer
-			 */
-			virtual Processor::Result operator() (Composite& composite)
+			void renderSphere_(const Sphere& sphere)
+				throw();
+			
+			void renderDisc_(const Disc& disc)
+				throw();
+
+			void renderTube_(const Tube& tube)
+				throw();
+
+			void renderTwoColoredTube_(const TwoColoredTube& tube)
+				throw();
+
+			void renderMesh_(const Mesh& mesh)
 				throw();
 			//@}
 
+				Size width, height;
 			protected:
 				
 				File outfile_;
+
+				Vector3   origin_;
+				Matrix4x4 rotation_;
 
 		};
   
 	} // namespace BALL
 } // namespace VIEW
-
 
 #endif // BALL_VIEW_GUI_FUNCTOR_POVRENDERER_H

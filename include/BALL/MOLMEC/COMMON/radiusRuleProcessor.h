@@ -1,7 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: radiusRuleProcessor.h,v 1.11 2003/03/26 13:56:39 anhi Exp $
+// $Id: radiusRuleProcessor.h,v 1.12 2003/08/26 08:04:25 oliver Exp $
+//
+
 // Molecular Mechanics: rule-based assignment of radii
 
 #ifndef BALL_MOLMEC_COMMON_RADIUSRULEPROCESSOR_H

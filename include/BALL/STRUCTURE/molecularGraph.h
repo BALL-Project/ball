@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularGraph.h,v 1.10 2003/07/01 18:15:02 oliver Exp $
+// $Id: molecularGraph.h,v 1.11 2003/08/26 08:04:52 oliver Exp $
+//
 
 #ifndef BALL_STRUCTURE_MOLECULARGRAPH_H
 #define BALL_STRUCTURE_MOLECULARGRAPH_H

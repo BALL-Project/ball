@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData3D.h,v 1.28 2003/06/30 20:15:45 oliver Exp $ 
+// $Id: regularData3D.h,v 1.29 2003/08/26 08:04:11 oliver Exp $ 
 //
 
 #ifndef BALL_DATATYPE_REGULARDATA3D_H

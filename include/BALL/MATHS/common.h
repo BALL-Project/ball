@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.25 2003/08/17 20:13:29 oliver Exp $
+// $Id: common.h,v 1.26 2003/08/26 08:04:21 oliver Exp $
 //
 
 #ifndef BALL_MATHS_COMMON_H

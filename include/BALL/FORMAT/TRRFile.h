@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TRRFile.h,v 1.11 2003/07/11 15:27:03 amoll Exp $
+// $Id: TRRFile.h,v 1.12 2003/08/26 08:04:14 oliver Exp $
+//
 
 #ifndef BALL_FORMAT_TRRFILE_H
 #define BALL_FORMAT_TRRFILE_H
@@ -250,9 +251,11 @@ namespace BALL
 		/**
 		*/
 		virtual bool flushToDisk(const std::vector<SnapShot>& buffer)
-			throw(File::CanNotWrite);
+			throw(File::CannotWrite);
 		//@}
-		/// @name Accessors 
+
+
+		/** @name Accessors */
 		//@{
 
 		///

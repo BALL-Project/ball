@@ -1,7 +1,8 @@
-
+// -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PTE.h,v 1.25 2003/07/01 16:44:12 amoll Exp $
+// $Id: PTE.h,v 1.26 2003/08/26 08:04:16 oliver Exp $
+//
 
 #ifndef BALL_KERNEL_PTE_H
 #define BALL_KERNEL_PTE_H

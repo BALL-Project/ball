@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomicContactEnergy.h,v 1.13 2003/05/08 11:29:24 oliver Exp $
+// $Id: atomicContactEnergy.h,v 1.14 2003/08/26 08:04:12 oliver Exp $
+//
 
 #ifndef BALL_ENERGY_ATOMICCONTACTENERGY_H
 #define BALL_ENERGY_ATOMICCONTACTENERGY_H

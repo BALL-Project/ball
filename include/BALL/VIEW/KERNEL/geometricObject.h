@@ -1,48 +1,30 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricObject.h,v 1.28 2003/03/26 13:09:03 sturm Exp $
+// $Id: geometricObject.h,v 1.29 2003/08/26 08:05:07 oliver Exp $
+//
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
 #define BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
 
-#ifndef BALL_CONCEPT_COMPOSITE_H
-#	include <BALL/CONCEPT/composite.h>
+#ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
+#	include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #endif
-
-#ifndef BALL_CONCEPT_PROPERTY_H
-#	include <BALL/CONCEPT/property.h>
-#endif
-
-#ifndef BALL_VIEW_DATATYPE_COLOR_H
-#	include <BALL/VIEW/DATATYPE/color.h>
-#endif
-
-#define BALL_VIEW_PRINT_PROPERTY(property) \
-	(hasProperty(property) ? "yes" : "no")
 
 namespace BALL
 {
+	class Composite;
+
 	namespace VIEW
 	{
 		/** GeometricObject class.
 				The class GeometricObject is the most important base class for a
 				geometric primitive.  All geometric primitives must be derived from
-				this class.  GeometricObject is derived from  \link Composite Composite \endlink .
-				Therefore all geometric primitive can be appended to other
-				composites. With the help of this class the graphical
-				representation can be easily added to the information (stored as
-				composites) which should be visualized. This class contains only
-				the general information like selection color and properties a
-				geometric object can have. All other methods concerning drawing are
-				in the base class  \link GLObject GLObject \endlink .  The class geometricObject
-				handles the different properties (see predefined properties), the
-				selected color, the name and the typename of a geometric object.
-        \ingroup ViewKernelGeometricPrimitives								
+				this class.  
+				This class contains only the general information like 
+				color, name and the composite pointer.
 		*/
 		class GeometricObject
-			: public Composite,
-				public PropertyManager
 		{
 			public:
 
@@ -50,353 +32,173 @@ namespace BALL
 			*/
 			//@{
 			BALL_CREATE_DEEP(GeometricObject)
-			//@}
 
-			/** @name Enumerations.
-			*/
-			//@{
-
-			/** Anonymous enumeration.
-					Unnamed enumeration of all non-categorized constants.
-					Up to now there are 32 predefined properties.
-					There are the following properties available:
-			*/
-			enum
-			{
-				/// number of the maximal used properties
-				MAX_NUMBER_OF_PROPERTIES = 32,
-
-				/// number of the minimal used property
-				PROPERTY_MIN             = -MAX_NUMBER_OF_PROPERTIES + 1,
-
-				/// number of the maximal used property
-				PROPERTY_MAX             = MAX_NUMBER_OF_PROPERTIES - 1
-			};
-
-			/** Predefined properties.
-					Enumeration of all properties that are used by the VIEW kernel.
-					This properties define the look of a geometric object. There are three
-					sub groups of the properties.
-					Not all properties are necessary for geometric objects. Important properties
-					are marked with a (*). These properties are a must that the geometric object
-					is properly rendered.
-			*/
-			enum Property
-			{
-				// general properties
-				/// the object is visible only in the static render mode (Default). 
-				/// This property turns off the dynamic property. (*)
-				PROPERTY__OBJECT_STATIC                    = 0,     // Default
-
-				/// the object is visible only in the dynamic render mode. This property turns off the static property. (*)
-				PROPERTY__OBJECT_DYNAMIC,                   
-
-				/// the object is always before any other objects
-				PROPERTY__OBJECT_ALWAYS_FRONT,               
-
-				/// the object is transparent. This property turns off the opaque property. (*)
-				PROPERTY__OBJECT_TRANSPARENT,               
-
-				/// the object is opaque. This property turns off the transparent property. (*)
-				PROPERTY__OBJECT_OPAQUE,                    
-
-				/// the object is visible. This property turns off the hidden property. (*)
-				PROPERTY__OBJECT_VISIBLE,                   
-
-				/// the object is hidden. This property turns off the visible property. (*)
-				PROPERTY__OBJECT_HIDDEN,                    
-
-				/// the object has not a closed surface (eg. a tube without caps is open). 
-				/// This property turns off the close property.
-				PROPERTY__OBJECT_OPENED,                    
-
-				/// the object has a closed surface (eg. a tube with caps is closed). This property turns off the opened property.
-				PROPERTY__OBJECT_CLOSED,                    
-				
-				// DrawingMode Properties
-				/// the object is drawn as a dots model. This property turns off the other drawing properties. (*)
-				PROPERTY__DRAWING_MODE_DOTS                = 20,
-
-				/// the object is drawn as a wireframe model. This property turns off the other drawing properties. (*)
-				PROPERTY__DRAWING_MODE_WIREFRAME,
-
-				/// the object is drawn as a solid model (Default). This property turns off the other drawing properties. (*)
-				PROPERTY__DRAWING_MODE_SOLID,    // Default
-				
-				// DrawingPrecision Properties
-				/// the object is drawn with low resolution. This property turns off the other resolution properties. (*)
-				PROPERTY__DRAWING_PRECISION_LOW            = 30,
-
-				/// the object is drawn with medium resolution. This property turns off the other resolution properties. (*)
-				PROPERTY__DRAWING_PRECISION_MEDIUM,
-
-				/// the object is drawn with high resolution (Default). This property turns off the other resolution properties. (*)
-				PROPERTY__DRAWING_PRECISION_HIGH,  // Default
-
-				NUMBER_OF_PROPERTIES
-			};
-		
-			//@}
-			/**	@name	Constructors
-			*/	
-			//@{
+			//@} /**	@name	Constructors and Destructors*/	//@{
 
 			/** Default Constructor.
-					Construct new geometricObject.
-					The state of {\em *this} geometricObject is:
-
+					The state of this geometricObject is:
 					  - selected color is set to yellow (1.0, 1.0, 0.0, 1.0)
 						- name is set to "unknown"
 						- typename is set to "GeometricObject"
-						- properties are set to:
-
-						  - PROPERTY__OBJECT_STATIC
-						  - PROPERTY__OBJECT_OPAQUE
-						  - PROPERTY__OBJECT_VISIBLE
-						  - PROPERTY__OBJECT_CLOSED
-						  - PROPERTY__DRAWING_MODE_SOLID
-						  - PROPERTY__DRAWING_PRECISION_HIGH
-						
-					
-					@return      GeometricObject new constructed geometricObject
-					@see         ColorRGBA
-					@see         Composite
-					@see         PropertyManager
+					\par
+					\return      GeometricObject new constructed geometricObject
+					\see         ColorRGBA
 			*/
 			GeometricObject()
 				throw();
 				
 			/** Copy constructor.
-					Construct new geometricObject by copying the geometricObject {\em object}.
 					The copy is either deep (default) or shallow.
-					The state of {\em *this} geometricObject is initialized to the state of the geometricObject {\em object}.
-					@param       object the geometricObject to be copied (cloned)
-					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of {\em object}
-					@return      GeometricObject new constructed geometricObject cloned from {\em object}
-					@see         ColorRGBA
-					@see         Composite
-					@see         PropertyManager
+					\param       object the geometricObject to be copied (cloned)
+					\param       deep make a deep (=<tt> true</b>) or shallow (=<tt> false</b>) copy of <b> object</b>
+					\return      GeometricObject new constructed geometricObject cloned from <b> object</b>
 			*/
 			GeometricObject(const GeometricObject& object, bool deep = true)
 				throw();
 
-			//@}
-			/** @name Destructors */
-			//@{
-
 			/** Destructor.
-					Default destruction of {\em *this} geometricObject.
-					Calls  \link destroy destroy \endlink .
-					@see         destroy
 			*/
 			virtual ~GeometricObject()
 				throw();
 
 			/** Explicit default initialization.
-					Set the state of {\em *this} geometricObject to the default values.
-					The state of {\em *this} geometricObject is:
-
+					Set the state of this geometricObject to the default values.
+					The state of this geometricObject is:
 					  - selected color is set to yellow (1.0, 1.0, 0.0, 1.0)
 						- name is set to "unknown"
-						- properties are set to:
-
-						  - PROPERTY__OBJECT_STATIC
-						  - PROPERTY__OBJECT_OPAQUE
-						  - PROPERTY__OBJECT_VISIBLE
-						  - PROPERTY__OBJECT_CLOSED
-						  - PROPERTY__DRAWING_MODE_SOLID
-						  - PROPERTY__DRAWING_PRECISION_HIGH
-						
-					
-					Calls  \link Composite::clear Composite::clear \endlink .
-					Calls  \link PropertyManager::clear PropertyManager::clear \endlink .
+					\par
 			*/
 			virtual void clear()
 				throw();
 
-			/** Explicit destructor.
-					Destroy {\em *this} geometricObject.
-					Calls  \link Composite::destroy Composite::destroy \endlink .
-					Calls  \link PropertyManager::destroy PropertyManager::destroy \endlink .
-					@see         Composite::destroy
-					@see         PropertyManager::destroy
-			*/
-			virtual void destroy()
-				throw();
-							
-			//@}
-			/**	@name	Assignment methods
-			*/
+			//@} 
+
+			/**	@name	Assignment methods */ 
 			//@{
 
 			/** Assignment with cloning facility.
-					Assign the geometricObject {\em object} to {\em *this} geometricObject.
 					The assignment is either deep (default) or shallow.
-					The state of {\em *this} geometricObject is initialized to the state of 
-					the geometricObject {\em object}. \par
-					@param       object the geometricObject to be copied (cloned)
-					@param       deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of {\em object}
-					@see         GeometricObject
+					\param       deep make a deep (=<tt> true</b>) or shallow (=<tt> false</b>) copy of <b> object</b>
 			*/
 			void set(const GeometricObject& object, bool deep = true)
 				throw();
 
 			/** Assignment operator.
-					Assign the geometricObject {\em object} to {\em *this} geometricObject.
-					The assignment is deep.
-					Calls  \link set set \endlink .
-					The state of {\em *this} geometricObject is initialized to the state 
-					of the geometricObject {\em object}. \par
-					@param       object the geometricObject to be copied (cloned)
-					@return      GeometricObject& {\em *this} geometricObject
-					@see         set
+					Calls set.
 			*/
 			GeometricObject& operator = (const GeometricObject& object)
 				throw();
 
 			/** Copying with cloning facility.
-					Copy {\em *this} geometricObject to the geometricObject {\em object}.
-					The assignment is either deep (default) or shallow.
-					Calls  \link set set \endlink .
-					The state of the geometricObject {\em object} is initialized to the
-					state of {\em *this} geometricObject. \par
-					@param       object the geometricObject to be assigned to
-					@see         set
+					Calls set.
+					The state of the geometricObject <b> object</b> is initialized to the
+					state of this geometricObject.\par
+					\param       object the geometricObject to be assigned to
+					\see         set
 			*/
 			void get(GeometricObject& object, bool deep = true) const
 				throw();
 
 			/** Swapping of geometricObjects.
-					Swap the states of {\em *this} geometricObject with the geometricObject
-					{\em object}.
-					@param       object the geometricObject being swapped with {\em *this} geometricObject 
-					@see         GeometricObject
+					\param       object the geometricObject being swapped with this geometricObject 
 			*/
 			void swap(GeometricObject& object)
 				throw();
 							
-			//@}
-			/**	@name	Accessors: inspectors and mutators 
-			*/
-			//@{
+			//@} /**	@name	Accessors: inspectors and mutators */ //@{
 
-			/** Change the property of {\em *this} geometricObject to the property
-					represented by the parameter {\em property}. 
-					See predefined properties for allowed	properties.
-					This method overrides the method {\em setProperty} from the class
-					 \link PropertyManager PropertyManager \endlink . There are certain properties that cannot be
-					set together (e.g. the model properties, the precision properties, etc.).
-					If such a property is set all previously set properties of the same
-					group are cleared (e.g. if the property DRAWING_PRECISION_LOW was set
-					and the the property DRAWING_PRECISION_HIGH is set the former property
-					will be cleared).
-					@param       property the new property of {\em *this} geometricObject
-			*/
-			void setProperty(Property property)
-				throw();
+			///
+			void setComposite(const Composite* composite)
+				throw() { composite_ = composite;}
 
-			/** Change the name of {\em *this} geometricObject.
-					Change the name of {\em *this} geometricObject to the name
-					represented by the parameter {\em name}.
-					@param       name the new name of {\em *this} geometricObject
-					@see         getName
-					@see         hasName
+			///
+			const Composite* getComposite() const
+				throw() { return composite_;}
+			
+			/** Change the name of this geometricObject.
+					\param       name the new name of this geometricObject
+					\see         getName
+					\see         hasName
 			*/
 			void setName(const String& name)
-				throw();
+				throw() {name_ = name;}
 
-			/** Mutable inspection of the name of {\em *this} geometricObject.
-					Access the mutual reference of the name of {\em *this} geometricObject.
-					@return      String& mutable reference to the name of {\em *this} geometricObject
-					@see         setName
-					@see         hasName
+			/** Mutable inspection of the name of this geometricObject.
+					\return      String& mutable reference to the name of this geometricObject
+					\see         setName
+					\see         hasName
 			*/
 			String& getName()
-				throw();
+				throw() { return name_;}
 
-			/** Non-mutable inspection of the name of {\em *this} geometricObject.
-					For further information see  \link getName getName \endlink .
+			/** Non-mutable inspection of the name of this geometricObject.
 			*/
 			const String& getName() const
-				throw();
+				throw() { return name_;}
 
-			/** Test if {\em *this} geometricObject has a name.
-					Test if the name of {\em *this} is not empty.
-					@return  bool -	<tt>true</tt> if the name of {\em *this} is not empty, <tt>false</tt> otherwise
-					@see     setName
-					@see     getName
+			/** Test if this geometricObject has a name.
+					\return  bool -	<tt> true</tt> if the name of this is not empty, <tt> false</tt> otherwise
+					\see     setName
+					\see     getName
 			*/
 			bool hasName() const
-				throw();
+				throw() {return !name_.isEmpty();}
 
-			/** Return the type name of {\em *this} geometricObject.
-					Virtually overrideable method for specifying the type name of {\em *this} geometricObject.
-					This method is used by the  \link Control Control \endlink  class to identify the geometricObjects.
+			/** Return the type name of this geometricObject.
+					Virtually overrideable method for specifying the type name of this geometricObject.
+					This method is used by the Control class to identify the geometricObjects.
 					If the derived primitive geometric object should have a type name displayed by the
 					control class, this method should be overridden.
-					@return  String the type name of {\em *this} geometricObject
-					@see     Control
+					\return  String the type name of this geometricObject
+					\see     Control
 			*/
 			virtual String getTypeName() const
-				throw();
+				throw() {return "GeometricObject";}
 							
-			//@}
-			/**	@name	debuggers and diagnostics
-			*/
-			//@{
+			//@} /**	@name	debuggers and diagnostics */ //@{
 
 			/** Internal state and consistency self-validation.
 					Initiate self-validation of the internal state and data structure consistencies
-					of {\em *this} geometricObject.
-					If the internal state of {\em *this} geometricObject is correct (self-validated) and 
-					consistent <tt>true</tt> is returned, <tt>false</tt> otherwise. 
-					Calls {Composite::isValid}.
-					Calls {PropertyManager::isValid}.
-					@return			bool <tt>true</tt> if the internal state of {\em *this} geometricObject is correct
-					@see        Composite::isValid
-					@see        PropertyManager::isValid
+					of this geometricObject.
+					If the internal state of this geometricObject is correct (self-validated) and 
+					consistent <tt> true</tt> is returned, <tt> false</tt> otherwise. 
+					\return			bool <tt> true</tt> if the internal state of this geometricObject is correct
 			*/
 			virtual bool isValid() const
-				throw();
+				throw() {return true;}
 
 			/** Internal value dump.
-					Dump the current state of {\em *this} geometricObject to 
-					the output ostream {\em s} with dumping depth {\em depth}.
-					@param   s output stream where to output the state of {\em *this} geometricObject
-					@param   depth the dumping depth
-					@see     ColorRGBA::dump
-					@see     Composite::dump
-					@see     PropertyManager::dump
+					Dump the current state of this geometricObject to 
+					the output ostream <b> s</b> with dumping depth <b> depth</b>.
+					\param   s output stream where to output the state of this geometricObject
+					\param   depth the dumping depth
+					\see     ColorRGBA::dump
 			*/
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
 
-			//@}
+			/**
+			 */
+			void setColor(const ColorRGBA& color)
+				throw() { color_ = color; }
 
-			protected:
+			/**
+			 */
+			void setColor(const ColorUnit& red, const ColorUnit& green,
+									  const ColorUnit& blue, const ColorUnit& alpha = (float)1)
+				throw() { color_.set(red, green, blue, alpha);}
 
-			/*_ @name Internal protected members.
+			/**
 			*/
-			//@{
-			
-			/*_ Export method.
-					This method handles the export of {\em *this} geometricObject into another format (eg. POVRAY, VRML).\\
-				  {\bf Note:} Not yet implemented.
-					@return    bool {\tt true} if successful,	{\tt false} otherwise
-			*/
-			virtual bool extract()
-				throw();
+			const ColorRGBA& getColor() const
+				throw() { return color_; }
 
-			/*_ Inspection of the drawing mode and drawing precision.
-					Access the drawing mode and the drawing precision as integers. The properties
-					will be converted into integers. See predefined properties for further
-					information converning allowed properties and integer range.
-					This method is provided for convience.
-					@return   mode the drawing mode. Converted from property to int.
-					@return   precision the drawing precision. Converted from property to int.
+			/**
 			*/
-			void getDrawingModeAndPrecision(unsigned int& mode, unsigned int& precision) const
-				throw();
+			void getColor(ColorUnit& red,  ColorUnit& green,
+										ColorUnit& blue, ColorUnit& alpha) const
+				throw() { color_.get(red, green, blue, alpha); }
+
 			//@}
 
 			private:
@@ -404,15 +206,18 @@ namespace BALL
 			void clear_()
 				throw();
 		
-			/* name of the geometric object */
+			// name of the geometric object
 			String name_;
+
+			ColorRGBA color_;
+
+			// the composite, which is represented by this geometric object
+			const Composite* composite_;
 		};
 
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/KERNEL/geometricObject.iC>
-#		endif
-  
+
 	} // namespace VIEW
+
 } // namespace BALL
 
 #endif // BALL_VIEW_KERNEL_GEOMETIRCOBJECT_H

@@ -1,10 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmNonBonded.h,v 1.18 2003/04/30 08:12:07 oliver Exp $
+// $Id: charmmNonBonded.h,v 1.19 2003/08/26 08:04:24 oliver Exp $
 //
 // Molecular Mechanics: Charmm force field, non-bonded component
 // (van der Waals, electrostatics, EEF1 solvation)
+//
 
 #ifndef BALL_MOLMEC_CHARMM_NONBONDED_H
 #define BALL_MOLMEC_CHARMM_NONBONDED_H
@@ -153,7 +154,7 @@ namespace BALL
 		/**	Build a vector of non-bonded atom pairs with the vdw parameters
 		*/
 		virtual void buildVectorOfNonBondedAtomPairs
-			(const vector< pair<Atom*, Atom*> >& atom_vector)
+			(const std::vector<std::pair<Atom*, Atom*> >& atom_vector)
 			throw();
 
 		//@}

@@ -1,7 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: typenameRuleProcessor.h,v 1.10 2003/03/26 13:56:41 anhi Exp $
+// $Id: typenameRuleProcessor.h,v 1.11 2003/08/26 08:04:26 oliver Exp $
+//
+
 // Molecular Mechanics: rule-based assignment of typenames 
 
 #ifndef BALL_MOLMEC_COMMON_TYPENAMERULEPROCESSOR_H

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: client.h,v 1.18 2003/03/26 13:09:01 sturm Exp $
+// $Id: client.h,v 1.19 2003/08/26 08:05:05 oliver Exp $
+//
 
 #ifndef BALL_VIEW_KERNEL_CLIENT_H
 #define BALL_VIEW_KERNEL_CLIENT_H
@@ -35,20 +36,18 @@ namespace BALL
 	namespace VIEW
 	{
 		/** Client class.	
-				The class Client introduces a rudimentary interface for sending  \link Composite Composite \endlink 
+				The class Client introduces a rudimentary interface for sending Composite
 				objects to the visualization.
-				In this version only the one way direction from {\em *this} client to the
+				In this version only the one way direction from this client to the
 				visualization is possible. In the future there is also a bidirectional
-				data exchange intended. If a  \link Composite Composite \endlink  is sent two times than the 
+				data exchange intended. If a Composite is sent two times than the 
 				graphical representation of the first one will be replaced through the
 				new graphical representation of the second one. For example if the structure
-				of the  \link Composite Composite \endlink  is continually changed by a program so the visualization
-				of this  \link Composite Composite \endlink  changes as well.
-				The Client class connects to the  \link Server Server \endlink  class that is also a part of
-				the VIEW library. See  \link Server Server \endlink  for further information.
-				
-				@see     Server
-		\ingroup ViewKernelClient				 
+				of the Composite is continually changed by a program so the visualization
+				of this Composite changes as well.
+				The Client class connects to the Server class that is also a part of
+				the VIEW library. See Server for further information.
+				\see     Server
 		*/
 		class Client
 		{
@@ -61,7 +60,7 @@ namespace BALL
 			/** InvalidClient exception class.
 					This exception will be thrown whenever a client action will be executed without
 					an open working connection.
-					@see         Exception::GeneralException			
+					\see         Exception::GeneralException			
 			*/
 			class InvalidClient: public Exception::GeneralException
 			{
@@ -73,9 +72,9 @@ namespace BALL
 
 			/** NoPersistentObject exception class.
 					This exception will be thrown whenever an object that is not a 
-					 \link PersistentObject PersistentObject \endlink  will be tried to sent through the client.
-					Only  \link PersistentObject PersistentObject \endlink 's can be sent through {\em *this} client.
-					@see         Exception::GeneralException			
+					PersistentObject will be tried to sent through the client.
+					Only PersistentObject's can be sent through this client.
+					\see         Exception::GeneralException			
 			*/
 			class NoPersistentObject:	public Exception::GeneralException
 			{
@@ -93,23 +92,22 @@ namespace BALL
 			/** Default Constructor.
 					Constructs new client.
 					The client will have no working connection yet.
-					@return      Client new constructed client
-					@see         connect
+					\return      Client new constructed client
+					\see         connect
 			*/
 			Client()
 				throw();
 
 			/** Detailed state initializing constructor.
 					Constructs new client.
-					The state of {\em *this} client is:
-
-						- host is {\em host}
-						- port is {\em port} (Default = VIEW_DEFAULT_PORT)
-							
-     			@param       host the host to connect to
-					@param       port the port of the host to connect to
-					@return      Client new constructed client
-					@see         connect
+					The state of this client is:
+						- host is <b> host</b>
+						- port is <b> port</b> (Default = VIEW_DEFAULT_PORT)
+					\par		
+     			\param       host the host to connect to
+					\param       port the port of the host to connect to
+					\return      Client new constructed client
+					\see         connect
 			*/
 			Client(const String& host, int port = VIEW_DEFAULT_PORT)
 				throw();
@@ -119,9 +117,6 @@ namespace BALL
 			//@{
 
 			/** Destructor.
-					Default destruction of {\em *this} client.
-					Calls  \link destroy destroy \endlink .
-					@see         destroy
 			*/
 			virtual ~Client()
 				throw();
@@ -132,39 +127,33 @@ namespace BALL
 			virtual void clear()
 				throw();
 
-			/** Explicit destructor.
-					Empty for further purpose.
-			*/
-			virtual void destroy()
-				throw();
-
 			//@}
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
 
 			/** Connects to a specified host and port.
-					This method connects {\em *this} client to a specified host and port.
+					This method connects this client to a specified host and port.
 					Must be called before any other methodes!
-					@param   host the host (a string) to connect to
-					@param   port the port number of the host
+					\param   host the host (a string) to connect to
+					\param   port the port number of the host
 			*/
 			void connect(const String& host, int port = VIEW_DEFAULT_PORT)
 				throw();
 
 			/** Adds a new composite.
-					Inserts a new  \link Composite Composite \endlink  to {\em *this} client. 
-					With this method  \link Composite Composite \endlink 's can be added to the visualization.
-					If the same  \link Composite Composite \endlink  was already added before it will be replaced 
-					by the new representation of {\em composite}.
-					The  \link Composite Composite \endlink  will be put into the  \link TextPersistenceManager TextPersistenceManager \endlink  that
+					Inserts a new Composite to this client. 
+					With this method Composite's can be added to the visualization.
+					If the same Composite was already added before it will be replaced 
+					by the new representation of <b> composite</b>.
+					The Composite will be put into the TextPersistenceManager that
 					has a connection to a socket stream connected to the given host and port.
-					The  \link TextPersistenceManager TextPersistenceManager \endlink  will then use that socket stream to write
-					the  \link Composite Composite \endlink  into.
-					@param   composite the  \link Composite Composite \endlink  to be added to the client (visualization)
-					@see     TextPersistenceManager::TextPersistenceManager
-					@exception  InvalidClient if the client has no connection to a server
-					@exception  NoPersistentObject if the composite is not a  \link PersistentObject PersistentObject \endlink 
+					The TextPersistenceManager will then use that socket stream to write
+					the Composite into.
+					\param   composite the Composite to be added to the client (visualization)
+					\see     TextPersistenceManager::TextPersistenceManager
+					\exception  InvalidClient if the client has no connection to a server
+					\exception  NoPersistentObject if the composite is not a PersistentObject
 			*/
 			void insert(Composite &composite)
 				throw(InvalidClient, NoPersistentObject);
@@ -174,21 +163,21 @@ namespace BALL
 			//@{
 
 			/** Internal state and consistency self-validation.
-					Initiates self-validation of the internal state of {\em *this} client. 
-					If the {\em *this} client has a connection to a server than <tt>true</tt>
-					is returned, <tt>false</tt> otherwise. 
-					@return			bool -
-											<tt>true</tt> if {\em *this} client has a connection to a server,
-					 						<tt>false</tt> otherwise
+					Initiates self-validation of the internal state of this client. 
+					If the this client has a connection to a server than <tt> true</tt>
+					is returned, <tt> false</tt> otherwise. 
+					\return			bool -
+											<tt> true</tt> if this client has a connection to a server,
+					 						<tt> false</tt> otherwise
 			*/
 			virtual bool isValid() const
 				throw();
 
 			/** Internal value dump.
-					Dumps the current host and port of {\em *this} client to 
-					the output ostream {\em s} with dumping depth {\em depth}.
-					@param   s output stream where to output the host and port of {\em *this} client
-					@param   depth the dumping depth
+					Dumps the current host and port of this client to 
+					the output ostream <b> s</b> with dumping depth <b> depth</b>.
+					\param   s output stream where to output the host and port of this client
+					\param   depth the dumping depth
 			*/
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();

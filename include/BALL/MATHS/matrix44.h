@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: matrix44.h,v 1.45 2003/06/09 22:40:48 oliver Exp $
+// $Id: matrix44.h,v 1.46 2003/08/26 08:04:21 oliver Exp $
 //
 
 #ifndef BALL_MATHS_MATRIX44_H
 #define BALL_MATHS_MATRIX44_H
 
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
+#ifndef BALL_COMMON_EXCEPTION_H
+# include <BALL/COMMON/exception.h>
 #endif
 
 #include <math.h>

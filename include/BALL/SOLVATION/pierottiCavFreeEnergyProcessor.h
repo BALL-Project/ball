@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pierottiCavFreeEnergyProcessor.h,v 1.15 2003/03/26 13:08:28 sturm Exp $
+// $Id: pierottiCavFreeEnergyProcessor.h,v 1.16 2003/08/26 08:04:49 oliver Exp $
+//
 
 #ifndef BALL_SOLVATION_PIEROTTICAVFREEENERGYPROCESSOR_H
 #define BALL_SOLVATION_PIEROTTICAVFREEENERGYPROCESSOR_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hashGrid.h,v 1.34 2003/06/22 10:22:34 oliver Exp $
+// $Id: hashGrid.h,v 1.35 2003/08/26 08:04:10 oliver Exp $
 //
 
 #ifndef BALL_DATATYPE_HASHGRID_H

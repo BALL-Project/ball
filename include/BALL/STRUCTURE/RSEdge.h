@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RSEdge.h,v 1.30 2003/03/26 15:59:25 anhi Exp $
+// $Id: RSEdge.h,v 1.31 2003/08/26 08:04:50 oliver Exp $
+//
 
 #ifndef BALL_STRUCTURE_RSEDGE_H
 #define BALL_STRUCTURE_RSEDGE_H

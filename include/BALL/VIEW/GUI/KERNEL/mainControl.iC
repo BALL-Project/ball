@@ -1,98 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.iC,v 1.12 2002/12/12 09:35:13 oliver Exp $
+// $Id: mainControl.iC,v 1.13 2003/08/26 08:05:02 oliver Exp $
 
 BALL_INLINE 
 int MainControl::getNextID_()
 	throw()
 {
 	return current_id_++;
-}
-
-BALL_INLINE 
-CompositeDescriptor* MainControl::insert(const Composite& composite, const String& name, const Vector3& center)
-	throw()
-{
-	NewCompositeMessage message;
-	message.setComposite(composite);
-	notify_(message);
-  return insert_(composite, name, center);
-}
-
-BALL_INLINE 
-CompositeDescriptor* MainControl::insert(CompositeDescriptor& composite_descriptor, bool deep)
-	throw()
-{
-  return insert_(composite_descriptor, deep);
-}
-
-BALL_INLINE 
-CompositeDescriptor* MainControl::getDescriptor(const Composite& composite)
-	throw()
-{
-	ListIteratorHashMap::ConstIterator it = composite_map_.find((void*)&composite);
-  if (it != composite_map_.end())
-	{
-		return *it->second;
-	}	
-
-	return 0;
-}
-    
-BALL_INLINE 
-const CompositeDescriptor* MainControl::getDescriptor(const Composite& composite) const
-	throw()
-{
-	ListIteratorHashMap::ConstIterator it = composite_map_.find((void*)&composite);
-  if (it != composite_map_.end())
-	{
-		return *it->second;
-	}	
-
-	return 0;
-}
-    
-BALL_INLINE 
-List<CompositeDescriptor*>& MainControl::getDescriptorList()
-	throw()
-{
-  return descriptors_;
-}
-
-BALL_INLINE 
-const List<CompositeDescriptor*>& MainControl::getDescriptorList() const
-	throw()
-{
-  return descriptors_;
-}
-  
-BALL_INLINE 
-const String* MainControl::getName(const Composite& composite) const
-	throw()
-{
-  return ((MainControl*)this)->getName(composite);
-}
-
-BALL_INLINE 
-const CompositeDescriptor* MainControl::getDescriptor(const String& name) const
-	throw()
-{
-  return (CompositeDescriptor*)this->getDescriptor(name);
-}
-
-BALL_INLINE 
-const Vector3* MainControl::getCenter(const Composite& composite) const
-	throw()
-{
-  return ((MainControl*)this)->getCenter(composite);
-}
-
-BALL_INLINE 
-const CompositeDescriptor* MainControl::getDescriptor(const Vector3& center) const
-	throw()
-{
-  return (CompositeDescriptor *)this->getDescriptor(center);
 }
 
 BALL_INLINE 

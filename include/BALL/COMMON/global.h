@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: global.h,v 1.18 2003/03/26 13:08:11 sturm Exp $
+// $Id: global.h,v 1.19 2003/08/26 08:04:05 oliver Exp $
+//
 
 #ifndef BALL_COMMON_GLOBAL_H
 #define BALL_COMMON_GLOBAL_H

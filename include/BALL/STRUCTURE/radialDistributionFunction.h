@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: radialDistributionFunction.h,v 1.18 2003/03/26 13:08:36 sturm Exp $
+// $Id: radialDistributionFunction.h,v 1.19 2003/08/26 08:04:52 oliver Exp $
+//
 
 #ifndef BALL_STRUCTURE_RADIALDISTRIBUTIONFUNCTION_H
 #define BALL_STRUCTURE_RADIALDISTRIBUTIONFUNCTION_H

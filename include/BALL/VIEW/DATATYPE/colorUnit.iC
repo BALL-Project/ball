@@ -1,16 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorUnit.iC,v 1.6 2003/04/17 14:48:01 oliver Exp $
+// $Id: colorUnit.iC,v 1.7 2003/08/26 08:04:57 oliver Exp $
+//
 
 BALL_INLINE
 ColorUnit::operator String () const
 	throw()
 {
   char temp[4];
-  
   sprintf(&temp[0], "%x", (unsigned char)(value_ * 255.0));
-  
   return String(&temp[0]);
 }
 

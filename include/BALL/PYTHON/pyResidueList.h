@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyResidueList.h,v 1.9 2003/03/26 13:08:24 sturm Exp $
+// $Id: pyResidueList.h,v 1.10 2003/08/26 08:04:47 oliver Exp $
+//
 
 #ifndef BALL_PYTHON_PYRESIDUELIST_H
 #define BALL_PYTHON_PYRESIDUELIST_H

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: randomCoilShiftProcessor.h,v 1.14 2003/03/26 13:08:18 sturm Exp $
+// $Id: randomCoilShiftProcessor.h,v 1.15 2003/08/26 08:04:45 oliver Exp $
+//
 
 #ifndef BALL_NMR_SHIFTMODULE_H
 #	include<BALL/NMR/shiftModule.h>

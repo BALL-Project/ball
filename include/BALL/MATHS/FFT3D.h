@@ -1,13 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FFT3D.h,v 1.8 2003/05/27 18:46:58 oliver Exp $
+// $Id: FFT3D.h,v 1.9 2003/08/26 08:04:20 oliver Exp $
+//
 
 #ifndef BALL_MATHS_FFT3D_H
 #define BALL_MATHS_FFT3D_H
 
-#ifndef BALL_COMMON_H
-# include <BALL/common.h>
+#ifndef BALL_COMMON_EXCEPTION_H
+# include <BALL/COMMON/exception.h>
 #endif
 
 #ifndef BALL_MATHS_COMPLEX_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nucleotideIterator.h,v 1.11 2003/07/01 16:45:28 amoll Exp $
+// $Id: nucleotideIterator.h,v 1.12 2003/08/26 08:04:19 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_NUCLEOTIDEITERATOR_H

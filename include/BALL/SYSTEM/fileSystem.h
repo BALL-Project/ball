@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fileSystem.h,v 1.11 2003/03/26 13:08:44 sturm Exp $
+// $Id: fileSystem.h,v 1.12 2003/08/26 08:04:55 oliver Exp $
+//
 
 #ifndef BALL_SYSTEM_FILESYSTEM_H
 #define BALL_SYSTEM_FILESYSTEM_H

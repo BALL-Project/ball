@@ -1,96 +1,65 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.19 2003/03/26 13:09:03 sturm Exp $
+// $Id: message.h,v 1.20 2003/08/26 08:05:07 oliver Exp $
+//
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
 #define BALL_VIEW_KERNEL_MESSAGE_H
 
-#ifndef BALL_COMMON_H
-# include <BALL/common.h>
+#ifndef BALL_VIEW_GUI_KERNEL_STAGE_H
+#	include <BALL/VIEW/GUI/KERNEL/stage.h>
 #endif
-
-#ifndef BALL_CONCEPT_AUTODELETABLE_H
-#	include <BALL/CONCEPT/autoDeletable.h>
-#endif
-
-#ifndef BALL_CONCEPT_COMPOSITE_H
-#	include <BALL/CONCEPT/composite.h>
-#endif
-
-#ifndef BALL_DATATYPE_LIST_H
-#	include <BALL/DATATYPE/list.h>
-#endif
-
-#ifndef BALL_MATHS_VECTOR3_H
-#	include <BALL/MATHS/vector3.h>
-#endif
-
 
 namespace BALL
 {
+	class Composite;
 
 	namespace VIEW
 	{
 		// class forward
-		class ConnectionObject;
+		class GeometricObject;
 
 		/** General Message class.
-				The class Message is the base class of all message classes. It provides all
-				derived classes with the base interface each message class must have.
-				Message classes will be sent through the  \link ConnectionObject ConnectionObject \endlink  tree for
+				Message is the base class of all message classes and provides a base interface.
+				Message classes will be sent through the ConnectionObject tree for
 				the purpose of communication between several connectionObject classes.
-				Each  \link ConnectionObject ConnectionObject \endlink  handels in its {\em onNotify} method messages
-				that are relevant for that class by means of  \link RTTI RTTI \endlink . 
+				Each ConnectionObject handels in its <b>onNotify() method messages
+				that are relevant for that class by means of RTTI. 
 				This class can be given a sender object that is a pointer to the 
-				 \link ConnectionObject ConnectionObject \endlink  that has initially sent the message. This methods
+				ConnectionObject that has initially sent the message. This methods
 				concerning the sender object are internally used and no user interaction
 				is necessary. A message can be deletable or not. If a message is deletable
-				it will be deleted after all  \link ConnectionObject ConnectionObject \endlink  objects has been informed
-				of this message. Therefore a deletable message must be created with the {\em new}
+				it will be deleted after all ConnectionObject objects has been informed
+				of this message. Therefore a deletable message must be created with the <b> new</b>
 				command.
-				All messages should be created with the {\em new} command and set to deletable
+				All messages should be created with the <b> new</b> command and set to deletable
 				for avoiding segmentation faults.
-				See  \link ConnectionObject ConnectionObject \endlink  for further information concerning message handling
-				and message posting.  \par
-			\ingroup ViewKernelConnectivity	
+				See ConnectionObject for further information concerning message handling
+				and message posting. \par
 		*/
 		class Message
 		{
 			public:
 
-			/**	@name	Constructors
+			/**	@name	Constructors and Destructor
 			*/	
 			//@{
 
 			/** Default Constructor.
-					Construct new message.
-					The state of {\em *this} message is:
-
+					The state of this message is:
 					  -  sender    - set to 0
-						-  deletable - set to <tt>false</tt> 
-					
-					@return      Message new constructed message
+						-  deletable - set to <tt> false</tt> 
 			*/
 			Message()
 				throw();
 
 			/** Copy constructor.
-					Construct new message by copying the message {\em message}.
-					The state of {\em *this} message is set to the set of {\em message} message.
-					@param       message the message to be copied
-					@return      Message new constructed message copied from {\em message}
 			*/
 			Message(const Message& message)
 				throw();
 
-			//@}
-			/** @name Destructors 
-			*/
-			//@{
-
 			/** Destructor.
-					Default destruction of {\em *this} message.
 			*/
 			virtual ~Message()
 				throw();
@@ -99,52 +68,43 @@ namespace BALL
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
+
 			/** Change the sender.
-					Change the sender of {\em *this} message to the value
-					represented by the void parameter {\em object}. This parameter always represents
-					a void pointer to a  \link ConnectionObject ConnectionObject \endlink . This method will be used internally
-					by the  \link ConnectionObject ConnectionObject \endlink  class it its {\em notify_} method.
-					@param       object the new sender of {\em *this} message
-					@see         getSender
-					@see         ConnectionObject
-					@see         ConnectionObject::notify_
+					Change the sender of this message to the value
+					represented by the void parameter <b> object</b>. This parameter always represents
+					a void pointer to a ConnectionObject. This method will be used internally
+					by the ConnectionObject class it its <b> notify_ method.
+					\param       object the new sender of this message
+					\see         ConnectionObject::notify_
 			*/
 			void setSender(const void* object)
 				throw();
 
 			/** Non-mutable inspection of the sender.
-					Access the constant pointer of the sender of {\em *this} message.
-					This return type always represents
-					a void pointer to a  \link ConnectionObject ConnectionObject \endlink . This method will be used internally
-					by the  \link ConnectionObject ConnectionObject \endlink  class it its {\em onNotify} method.
-					@return      const void* constant pointer to the sender of {\em *this} message
-					@see         setSender
-					@see         ConnectionObject
-					@see         ConnectionObject::onNotify
+					The return type always represents
+					a void pointer to a ConnectionObject. This method will be used internally
+					by the ConnectionObject class it its <b> onNotify method.
+					\return      const void* constant pointer to the sender of this message
+					\see         ConnectionObject::onNotify
 			*/
 			const void* getSender() const
 				throw();
 
 			/** Change the deletable flag.
-					Change the deletable flag of {\em *this} message to the value
-					represented by the parameter {\em flag}.  \par
-					If the parameter {\em flag} is set to <tt>true</tt> the message is set to deletable
-					and will be automatically deleted after all  \link ConnectionObject ConnectionObject \endlink  objects
-					are notified of {\em *this} message. It is important that {\em *this} message
-					is created by the {\em new} command to avoid segmentation faults. \par
-					If the parameter {\em flag} is set to <tt>false</tt> the message will not be 
-					automatically deleted. \par
+					If the parameter <b> flag</b> is set to <tt> true</tt> the message is set to deletable
+					and will be automatically deleted after all ConnectionObject objects
+					are notified of this message. It is important that the message
+					is created by the <b> new</b> command to avoid segmentation faults.\par
+					If the parameter <b> flag</b> is set to <tt> false</tt> the message will not be 
+					automatically deleted.\par
 					Avoid creating non-deletable messages because it can result in
 					segmentation faults.
-					@param       flag the new deletable state of {\em *this} message
-					@see         isDeletable
+					\param       flag the new deletable state of this message
 			*/
 			void setDeletable(bool flag = true)
 				throw();
 
-			/** Test if {\em *this} message is deletable.
-					@return  bool -	<tt>true</tt> if {\em *this} message is deletable, <tt>false</tt> otherwise
-					@see     setDeletable
+			/** Test if this message is deletable.
 			*/
 		  bool isDeletable() const
 				throw();
@@ -157,316 +117,234 @@ namespace BALL
 			bool deletable_;
 		};
 
-
 		
-		/** CompositeMessage class.
-				The class CompositeMessage is the base class of all composite message classes.
-				It provides all	derived classes with the base interface each composite message
-				class must have.
-				The CompositeMessage class is a base class for messages that are relevant for
-				 \link ConnectionObject ConnectionObject \endlink  objects that must react to  \link Composite Composite \endlink  changes.
-				 \par
-      \ingroup ViewKernelConnectivity
+		/** CompositeMessage is the base class of all messages concerning the change of one Composite.
+				With it ConnectionObject can notify and react to Composite changes.
 		*/
 		class CompositeMessage: public Message
 		{
 			public:
 
-			/**	@name	Constructors
+			/**	@name	Constructors and Destructors
 			*/	
 			//@{
 
 			/** Default Constructor.
-					Construct new compositeMessage.
-					The state of {\em *this} compositeMessage is:
-
+					The state is set to:
 					  -  composite       - set to 0
 						-  composite name  - set to "" 
-					
-					@return      CompositeMessage new constructed compositeMessage
-					@see         Message
 			*/
 			CompositeMessage()
 				throw();
 
-			/** Copy constructor.
-					Construct new compositeMessage by copying the compositeMessage {\em message}.
-					The state of {\em *this} compositeMessage is set to the set of {\em message} 
-					compositeMessage.
-					@param       message the compositeMessage to be copied
-					@return      CompositeMessage new constructed compositeMessage copied from {\em message}
-					@see         CompositeMessage
-			*/
+			/// Copy constructor.
 			CompositeMessage(const CompositeMessage& message)
 				throw();
 
-			//@}
-			/** @name Destructors 
-			*/
-			//@{
-
-			/** Destructor.
-					Default destruction of {\em *this} compositeMessage.
-			*/
+			/// Destructor.
 			virtual ~CompositeMessage()
 				throw();
+
 			//@}
-		
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
+			
 			/** Change the composite.
-					Change the composite of {\em *this} compositeMessage to the value
-					represented by the parameter {\em composite}.
-					@param       composite a reference to the new composite of {\em *this} compositeMessage
-					@see         getComposite
 			*/
 			void setComposite(const Composite& composite)
 				throw();
 
 			/** Change the composite.
-					Change the composite of {\em *this} compositeMessage to the value
-					represented by the parameter {\em composite}.
-					@param       composite a pointer to the new composite of {\em *this} compositeMessage
-					@see         getComposite
 			*/
 			void setComposite(const Composite* composite)
 				throw();
 
 			/** Inspection of the composite.
-					Access the pointer of the composite of {\em *this} compositeMessage.
-					@return      Composite* pointer to the composite of {\em *this} compositeMessage
-					@see         setComposite
 			*/
 			Composite* getComposite() const
 				throw();
 
 			/** Change the name of the composite.
-					Change the name of the composite of {\em *this} compositeMessage to the value
-					represented by the parameter {\em name}.
-					@param       name the new name of the composite of {\em *this} compositeMessage
-					@see         getCompositeName
+					\param       name the new name of the composite of this compositeMessage
 			*/
-			void setCompositeName(string name)
+			void setCompositeName(const String& name)
 				throw();
 
 			/** Inspection of the name of the composite.
-					Access the name of the composite of {\em *this} compositeMessage.
-					@return      string the name of the composite of {\em *this} compositeMessage
-					@see         setCompositeName
 			*/
-			string getCompositeName() const
+			const String& getCompositeName() const
 				throw();
 			//@}
 
-			private:
+			protected:
 
-			Composite *composite_;
-
-			string composite_name_;
+			Composite* 	composite_;
+			String 			composite_name_;
 		};
 
 
 		/** NewCompositeMessage class.
-				The class NewCompositeMessage is the message class that is responsible for
-				making known a new  \link Composite Composite \endlink  object inside the  \link ConnectionObject ConnectionObject \endlink  tree.
-				It will be sent by existing  \link ConnectionObject ConnectionObject \endlink  objects that create new
-				 \link Composites Composites \endlink  objects. One can use the  \link RTTI RTTI \endlink  mechanism to identify
-				such messages in the {\em onNotify} method of user constructed  \link ConnectionObject ConnectionObject \endlink 
-				objects.
-				  \par
-      \ingroup ViewKernelConnectivity
+				NewCompositeMessage is responsible for
+				making known a new Composite object inside the ConnectionObject tree.\par
+				Sent by: MolecularFileDialog, Server.\par
+				Catched by: MolecularProperties, Control, MainControl.
 		*/
 		class NewCompositeMessage: public CompositeMessage
 		{
 			public:
 
-			/**	@name	Constructors
+			/**	@name	Constructors and Destructor
 			*/	
 			//@{
 
 			/** Default Constructor.
-					Construct new newCompositeMessage.
-					@return      NewCompositeMessage new constructed newCompositeMessage
-					@see         CompositeMessage
 			*/
 			NewCompositeMessage()
 				throw();
 
 			/** Copy constructor.
-					Construct new newCompositeMessage by copying the newCompositeMessage {\em message}.
-					The state of {\em *this} newCompositeMessage is set to the set of {\em message} 
-					newCompositeMessage.
-					@param       message the newCompositeMessage to be copied
-					@return      NewCompositeMessage new constructed newCompositeMessage copied from {\em message}
-					@see         NewCompositeMessage
 			*/
 			NewCompositeMessage(const CompositeMessage& message)
 				throw();
 
-			//@}
-			/** @name Destructors 
-			*/
-			//@{
-
 			/** Destructor.
-					Default destruction of {\em *this} newCompositeMessage.
 			*/
 			virtual ~NewCompositeMessage()
 				throw();
 			//@}
-		
-			private:
 		};
 
 
 		/** RemovedCompositeMessage class.
-				The class RemovedCompositeMessage is the message class that is responsible for
-				marking a  \link Composite Composite \endlink  object as removed inside the  \link ConnectionObject ConnectionObject \endlink  tree.
-				It will be sent by existing  \link ConnectionObject ConnectionObject \endlink  objects that remove (or would like to
-				remove)  \link Composites Composites \endlink  objects. One can use the  \link RTTI RTTI \endlink  mechanism to identify
-				such messages in the {\em onNotify} method of user constructed  \link ConnectionObject ConnectionObject \endlink 
-				objects.
-				 \par
-    \ingroup ViewKernelConnectivity
+		 		Send by Server, Control.\par
+				Received by Control, MainControl.
 		*/
 		class RemovedCompositeMessage: public CompositeMessage
 		{
 			public:
 
-			/**	@name	Constructors
+			/**	@name	Constructors and Destructors
 			*/	
 			//@{
 
 			/** Default Constructor.
-					Construct new removedCompositeMessage.
-					@return      RemovedCompositeMessage new constructed removedCompositeMessage
-					@see         CompositeMessage
 			*/
 			RemovedCompositeMessage()
 				throw();
 
 			/** Copy constructor.
-					Construct new removedCompositeMessage by copying the removedCompositeMessage {\em message}.
-					The state of {\em *this} removedCompositeMessage is set to the set of {\em message} 
-					removedCompositeMessage.
-					@param       message the CompositeMessage to be copied
-					@return      RemovedCompositeMessage new constructed removedCompositeMessage copied from {\em message}
-					@see         RemovedCompositeMessage
 			*/
 			RemovedCompositeMessage(const CompositeMessage& message)
 				throw();
 
-			//@}
-			/** @name Destructors 
-			*/
-			//@{
-
 			/** Destructor.
-					Default destruction of {\em *this} removedCompositeMessage.
 			*/
 			virtual ~RemovedCompositeMessage()
 				throw();
 			//@}
-		
-			private:
 		};
 
 
 		/** ChangedCompositeMessage class.
-				The class ChangedCompositeMessage is the message class that is responsible for
-				marking a  \link Composite Composite \endlink  object as changed inside the  \link ConnectionObject ConnectionObject \endlink  tree.
-				It will be sent by existing  \link ConnectionObject ConnectionObject \endlink  objects that change (or would like to
-				change)  \link Composites Composites \endlink  objects. One can use the  \link RTTI RTTI \endlink  mechanism to identify
-				such messages in the {\em onNotify} method of user constructed  \link ConnectionObject ConnectionObject \endlink 
-				objects.
-				 \par
-    \ingroup ViewKernelConnectivity
+				ChangedCompositeMessage is responsible for
+				marking a Composite object as changed inside the ConnectionObject tree.
+				It will be sent by existing ConnectionObject objects that change 
+				Composites objects. 
 		*/
 		class ChangedCompositeMessage: public CompositeMessage
 		{
 			public:
 
-			/**	@name	Constructors
+			/**	@name	Constructors and Destructors
 			*/	
 			//@{
 
 			/** Default Constructor.
-					Construct new changedCompositeMessage.
-					@return      RemovedCompositeMessage new constructed changedCompositeMessage
-					@see         CompositeMessage
 			*/
 			ChangedCompositeMessage()
 				throw();
 
 			/** Copy constructor.
-					Construct new changedCompositeMessage by copying the changedCompositeMessage {\em message}.
-					The state of {\em *this} changedCompositeMessage is set to the set of {\em message} 
-					changedCompositeMessage.
-					@param       message the changedCompositeMessage to be copied
-					@return      ChangedCompositeMessage new constructed changedCompositeMessage copied from {\em message}
-					@see         ChangedCompositeMessage
 			*/
-			ChangedCompositeMessage(const CompositeMessage& message)
+			ChangedCompositeMessage(const ChangedCompositeMessage& message)
 				throw();
 
-			//@}
-			/** @name Destructors 
-			*/
-			//@{
-
 			/** Destructor.
-					Default destruction of {\em *this} changedCompositeMessage.
 			*/
 			virtual ~ChangedCompositeMessage()
 				throw();
+
 			//@}
-		
-			private:
+			/**	@name	Accessors
+			*/	
+			//@{
+
+			/// Update the listview in the Control 
+			bool isUpdateControl() const
+				throw() { return update_control_;}
+
+			/// Update the listview in the Control 
+			void setUpdateControl(bool state)
+				throw() { update_control_ = state;}
+			
+			protected:
+			
+			bool update_control_;
 		};
 
 
-		/** SceneMessage class.
-				The class SceneMessage is the message class that is responsible for
-				changing the visual properties of the  \link Scene Scene \endlink .
-				 \link ConnectionObject ConnectionObject \endlink  objects that would like to have the  \link Scene Scene \endlink  focus on another
-				 \link Composite Composite \endlink  or would like to update the contents of the  \link Scene Scene \endlink 
+		/** SceneMessage is the message class that is responsible for
+				changing the content of the Scene.
+				ConnectionObject objects that would like to have the Scene focus on another
+				Composite or would like to update the contents of the Scene
 				(because of some changes in the composite structure) will sent this message.
-				This message will only be catched by the {\em onNotify} method of the  \link Scene Scene \endlink .
-				There are methods available that will tell the  \link Scene Scene \endlink  to update its contents
-				or change the camera positions.
-				 \par
-     \ingroup ViewKernelConnectivity
+				There are methods available that will tell the Scene to update its contents
+				or change the camera positions.\par
+				Received by Scene
 		*/
 		class SceneMessage: public Message
 		{
 			public:
 
+			/**	@name	Enumeration
+			*/	
+			//@{
+			
+			/// Types for SceneMessages
+			enum Type
+			{
+				///
+				UNDEFINED = 0,
+
+				/// Rebuild the GLDisplayList objects in the GLRenderer
+				REBUILD_DISPLAY_LISTS,
+				
+				/// Redraw from the GLDisplayList objects
+				REDRAW,
+
+				/// Move the Camera in the Scene to the value in this message
+				UPDATE_CAMERA,
+				
+				/// Remove the coordinate system in the Scene.
+				REMOVE_COORDINATE_SYSTEM
+			};
+
+			//@}
 			/**	@name	Constructors
 			*/	
 			//@{
 
 			/** Default Constructor.
-					Construct new sceneMessage.
-					The state of {\em *this} sceneMessage is set to:
-
-					  -  update flag     - set to <tt>false</tt>
-						-  camera look at  - set to <tt>(0,0,0)</tt> 
-						-  camera position - set to <tt>(0,0,0)</tt> 
-					
-					@return      SceneMessage new constructed sceneMessage
-					@see         Message
+					The state of this sceneMessage is set to:
+					  -  type - UNDEFINED
+						-  camera - set to defaults
+					\par
 			*/
 			SceneMessage()
 				throw();
 
 			/** Copy constructor.
-					Construct new sceneMessage by copying the sceneMessage {\em message}.
-					The state of {\em *this} sceneMessage is set to the set of {\em message} 
-					sceneMessage.
-					@param       message the sceneMessage to be copied
-					@return      SceneMessage new constructed sceneMessage copied from {\em message}
-					@see         SceneMessage
 			*/
 			SceneMessage(const SceneMessage& message)
 				throw();
@@ -477,226 +355,77 @@ namespace BALL
 			//@{
 
 			/** Destructor.
-					Default destruction of {\em *this} sceneMessage.
 			*/
 			virtual ~SceneMessage()
 				throw();
-			//@}
-		
-			/**	@name	Accessors: inspectors and mutators 
-			*/
-			//@{
-			/** Change the update flag of {\em *this} sceneMessage.
-					Change the update flag of {\em *this} sceneMessage to the value
-					represented by the parameter {\em value}.  \par
-					If the parameter {\em value} is set to <tt>true</tt> the sceneMessage will evoke an update
-					of the  \link Scene Scene \endlink  contents (the visualization will be drawn anew).
-					Changes of the camera position will be ignored. \par
-					If the parameter {\em value} is set to <tt>false</tt> the sceneMessage will not evoke an update
-					of the  \link Scene Scene \endlink  contents. Changes of the camera position will be used.
-					@param       value the new update state of {\em *this} sceneMessage
-					@see         isUpdateOnly
-			*/
-			void updateOnly(bool value = true)
-				throw();
 
-			/** Test if {\em *this} sceneMessage evokes only a  \link Scene Scene \endlink  update.
-					@return  bool -	<tt>true</tt> if {\em *this} sceneMessage evokes only a  \link Scene Scene \endlink  update, <tt>false</tt> otherwise (camera position changeable)
-					@see     updateOnly
-			*/
-			bool isUpdateOnly()
-				throw();
-
-			/** Change the {\em look at} component of the camera position.
-					Change the {\em look at} component of the camera position of {\em *this} sceneMessage
-					to the value represented by the parameter {\em vector3}.
-					@param       vector3 the new {\em look at} vector of the camera position of {\em *this} sceneMessage
-					@see         getCameraLookAt
-					@see         Vector3
-			*/
-			void setCameraLookAt(Vector3 vector3)
-				throw();
-
-			/** Mutable inspection of the {\em look at} component of the camera position.
-					Access the mutual reference of the {\em look at} component of the
-					camera position of {\em *this} sceneMessage.
-					@return      Vector3& mutable reference to the {\em look at} component of the camera position of {\em *this} sceneMessage
-					@see         setCameraLookAt
-					@see         Vector3
-			*/
-			Vector3& getCameraLookAt()
-				throw();
-
-			/** Non-mutable inspection of the {\em look at} component of the camera position.
-				  For further information see  \link getCameraLookAt getCameraLookAt \endlink 
-			*/
-			const Vector3& getCameraLookAt() const
-				throw();
-
-			/** Change the {\em view point} component of the camera position.
-					Change the {\em view point} component of the camera position of {\em *this} sceneMessage
-					to the value represented by the parameter {\em vector3}.
-					@param       vector3 the new {\em view point} vector of the camera position of {\em *this} sceneMessage
-					@see         getCameraViewPoint
-					@see         Vector3
-			*/
-			void setCameraViewPoint(Vector3 vector3)
-				throw();
-
-			/** Mutable inspection of the {\em view point} component of the camera position.
-					Access the mutual reference of the {\em view point} component of the
-					camera position of {\em *this} sceneMessage.
-					@return      Vector3& mutable reference to the {\em view point} component of the camera position of {\em *this} sceneMessage
-					@see         setCameraViewPoint
-					@see         Vector3
-			*/
-			Vector3& getCameraViewPoint()
-				throw();
-
-			/** Non-mutable inspection of the {\em view point} component of the camera position.
-					For further information see  \link getCameraViewPoint getCameraViewPoint \endlink .					
-			*/
-			const Vector3& getCameraViewPoint() const
-				throw();
-			//@}
-
-			private:
-
-			bool update_only_;
-
-			Vector3 camera_look_at_;
-			Vector3 camera_view_point_;
-		};
-
-
-		/** WindowMessage class.
-				The class WindowMessage is the message class that is responsible for
-				changing the status bar of the main Application. The main Application
-				can in its {\em onNotify} method, by means of the  \link RTTI RTTI \endlink  mechanism, filter
-				this message and extract the new contents of status bar that any other
-				 \link ConnectionObject ConnectionObject \endlink  object has sent through the  \link ConnectionObject ConnectionObject \endlink  tree.
-				 \par
-     \ingroup ViewKernelConnectivity
-		*/
-		class WindowMessage: public Message
-		{
-			public:
-
-			/**	@name	Constructors
-			*/	
-			//@{
-
-			/** Default Constructor.
-					Construct new windowMessage.
-					The state of {\em *this} windowMessage is set to:
-
-					  -  status bar - set to ""
-					
-					@return      WindowMessage new constructed windowMessage
-					@see         Message
-			*/
-			WindowMessage()
-				throw();
-
-			/** Copy constructor.
-					Construct new windowMessage by copying the windowMessage {\em message}.
-					The state of {\em *this} windowMessage is set to the set of {\em message} 
-					windowMessage.
-					@param       message the windowMessage to be copied
-					@return      WindowMessage new constructed windowMessage copied from {\em message}
-					@see         WindowMessage
-			*/
-			WindowMessage(const WindowMessage& message)
-				throw();
-
-			//@}
-			/** @name Destructors 
-      */
-			//@{
-
-			/** Destructor.
-					Default destruction of {\em *this} windowMessage.
-			*/
-			virtual ~WindowMessage()
-				throw();
-			
 			//@}
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
-			/** Change the contents of the status bar string.
-					Change the contents of the status bar string of {\em *this} windowMessage to the value
-					represented by the parameter {\em message}.
-					@param       message the new status bar message of {\em *this} windowMessage
-					@see         getStatusBar
-			*/
-			void setStatusBar(const string &message)
-				throw();
 			
-			/** Inspection of the contents of the status bar string.
-					Access the the contents of the status bar string of {\em *this} windowMessage.
-					@return      string the contents of the status bar string of {\em *this} windowMessage
-					@see         setStatusBar
-			*/
-			string getStatusBar() const
+			/// Set the type of the Message
+			void setType(Type type)
 				throw();
+
+			/// Get the type of the message
+			Type getType() const
+				throw() { return type_;}
+
+			/** Set the Camera in this message.
+			 		Only usefull with type UPDATE_CAMERA.
+			*/
+			void setCamera(const Camera& camera) 
+				throw() { camera_ = camera; }
+
+			/** Get the Camera in this message.
+			 		Only usefull with type UPDATE_CAMERA.
+			*/
+			Camera& getCamera()
+				throw() { return camera_;}
+
+			/** Get the Camera in this message.
+			 		Only usefull with type UPDATE_CAMERA.
+			*/
+			const Camera& getCamera() const
+				throw() { return camera_;}
+
 			//@}
 
 			private:
 
-			string status_bar_;
+			Type   type_;
+			Camera camera_;
 		};
-		
+
 
 		/** SelectionMessage class.
-				The class SelectionMessage is the message class that is a container for
-				 \link Composite Composite \endlink  objects that are somehow selected.
-				It will be sent by existing  \link ConnectionObject ConnectionObject \endlink  objects that collect
-				 \link Composites Composites \endlink  objects for a certain purpose.
-				One can use the  \link RTTI RTTI \endlink  mechanism to identify
-				such messages in the {\em onNotify} method of user constructed  \link ConnectionObject ConnectionObject \endlink 
-				objects.
-				 \par
-     \ingroup ViewKernelConnectivity
+				SelectionMessage is a container for Composite objects that are somehow selected.
+				It will be sent by existing ConnectionObject objects that collect
+				Composites objects for a certain purpose.
+
 		*/
 		class SelectionMessage: public Message
 		{
 			public:
 
-			/**	@name	Constructors
+			/**	@name	Constructors and Destructors
 			*/	
 			//@{
 
 			/** Default Constructor.
-					Construct new selectionMessage.
-					The state of {\em *this} selectionMessage is set to:
-
+					The state of this selectionMessage is set to:
 					  -  composite list - empty
-					
-					@return      SelectionMessage new constructed selectionMessage
-					@see         Message
 			*/
 			SelectionMessage()
 				throw();
 
 			/** Copy constructor.
-					Construct new selectionMessage by copying the selectionMessage {\em message}.
-					The state of {\em *this} selectionMessage is set to the set of {\em message} 
-					selectionMessage.
-					@param       message the selectionMessage to be copied
-					@return      SelectionMessage new constructed selectionMessage copied from {\em message}
-					@see         SelectionMessage
 			*/
 			SelectionMessage(const SelectionMessage& message)
 				throw();
 
-			//@}
-			/** @name Destructors 
-			*/
-			//@{
-
 			/** Destructor.
-					Default destruction of {\em *this} selectionMessage.
 			*/
 			virtual ~SelectionMessage()
 				throw();
@@ -705,26 +434,18 @@ namespace BALL
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
-			/** Change the selection of  \link Composite Composite \endlink  objects.
-					Change the selection of  \link Composite Composite \endlink  objects of {\em *this} selectionMessage
-					to the value represented by the parameter {\em selection}. The selection list will
-					be copied from the given list.
-					@param       selection the new selection of  \link Composite Composite \endlink  objects of {\em *this} selectionMessage
-					@see         getSelection
+
+			/** Change the selection of Composite objects.
+					The selection list will be copied from the given list.
 			*/
 			void setSelection(const List<Composite*> &selection)
 				throw();
 
-			/** Non-mutable inspection of the selection of  \link Composite Composite \endlink  objects.
-					Access the constant reference of the selection of  \link Composite Composite \endlink  objects
-					of {\em *this} selectionMessage.
-					@return      const List<Composite*>& constant reference to the selection of  \link Composite Composite \endlink  objects	of {\em *this} selectionMessage
-					@see         setSelection
-					@see         List
-					@see         Composite
+			/** Non-mutable inspection of the selection of Composite objects.
 			*/
 			const List<Composite*>& getSelection() const
 				throw();
+
 			//@}
 
 			private:
@@ -733,8 +454,9 @@ namespace BALL
 		};
 
 
-		/** Used to inform MainControl of selection in Control (not the one of the checkboxes!)
-		\ingroup ViewKernelConnectivity
+		/** Used to inform MainControl of selection in Control (not the one of the checkboxes!) \par
+		 		Send by Control.\par
+				Caught by MainControl.
 		 */
 		class ControlSelectionMessage: public SelectionMessage
 		{
@@ -744,22 +466,29 @@ namespace BALL
 		};
 
 		/** Used to inform MainControl and MolecularProperties of the selection of one composite in Control.
-		 		MolecularProperties sends as answer a CompositeChanged message to inform the Scene.
-		\ingroup ViewKernelConnectivity
+		 		MolecularProperties sends as answer a SceneMessage to inform the Scene.
 		 */
-		class CompositeSelectedMessage: public Message
+		class CompositeSelectedMessage: public CompositeMessage
 		{
 			public:
 
 			CompositeSelectedMessage(Composite* composite, bool selected) 
 				throw();
 
-			Composite* composite_;
+			/// Query if the composite is to be selected or deselected
+			bool isSelected() const
+				throw() { return selected_;}
+			
+			/// Set if the composite is to be selected or deselected
+			void setSelected(bool state)
+				throw() { selected_ = state;}
+
+			protected:
+
 			bool selected_;
 		};
 
-		/** Send by MainControl to Controls to sync selection
-		 \ingroup ViewKernelConnectivity
+		/** Send by MainControl to Control objects to sync selection
 		 */
 		class NewSelectionMessage: public Message
 		{
@@ -769,73 +498,61 @@ namespace BALL
 		};
 
 		/** GeometricObjectSelectionMessage class.
-				The class GeometricObjectSelectionMessage is the message class that is a container for
-				 \link GeometricObject GeometricObject \endlink  objects that are somehow selected.
-				It will be sent by existing  \link ConnectionObject ConnectionObject \endlink  objects that collect
-				 \link GeometricObject GeometricObject \endlink  objects for a certain purpose.
-				One can use the  \link RTTI RTTI \endlink  mechanism to identify
-				such messages in the {\em onNotify} method of user constructed  \link ConnectionObject ConnectionObject \endlink 
-				objects.
-				 \par
-         \ingroup ViewKernelConnectivity
+		 		Send by Scene after picking GeometricObject.
 		*/
-		class GeometricObjectSelectionMessage: public SelectionMessage
+		class GeometricObjectSelectionMessage: public Message
 		{
 			public:
 
-			/**	@name	Constructors
+			/**	@name	Constructors and Destructors
 			*/	
 			//@{
 
 			/** Default Constructor.
-					Construct new geometricObjectSelectionMessage.
-					@return      GeometricObjectSelectionMessage new constructed geometricObjectSelectionMessage
-					@see         SelectionMessage
 			*/
 			GeometricObjectSelectionMessage()
 				throw();
 
-			/** Copy constructor.
-					Construct new geometricObjectSelectionMessage by copying the
-					geometricObjectSelectionMessage {\em message}.
-					The state of {\em *this} geometricObjectSelectionMessage is set to the set of {\em message} 
-					geometricObjectSelectionMessage.
-					@param       message the geometricObjectSelectionMessage to be copied
-					@return      GeometricObjectSelectionMessage new constructed geometricObjectSelectionMessage copied from {\em message}
-					@see         GeometricObjectSelectionMessage
-			*/
-			GeometricObjectSelectionMessage(const SelectionMessage& message)
-				throw();
-
-			//@}
-			/** @name Destructors 
-			*/
-			//@{
-
 			/** Destructor.
-					Default destruction of {\em *this} geometricObjectSelectionMessage.
 			*/
 			virtual ~GeometricObjectSelectionMessage()
 				throw();
+
 			//@}
-		
+			/**	@name	Accessors: inspectors and mutators 
+			*/
+			//@{
+			
+			/** Change the selection of Composite objects.
+					The selection list will be copied from the given list.
+			*/
+			void setSelection(const List<GeometricObject*> &selection)
+				throw() { selection_ = selection;}
+
+			/** Non-mutable inspection of the selection of Composite objects.
+			*/
+			const List<GeometricObject*>& getSelection() const
+				throw() { return selection_;}
+
+			/// Set the GeometricObject's to be selected or deselected
+			void setSelected(bool state)
+				throw() { state_ = state;}
+
+			/// Query if the GeometricObject are selected or deselected
+			bool isSelected() const
+				throw() { return state_;}
+
+			//@}
+
 			private:
+
+			List<GeometricObject*> selection_;
+
+			bool state_;
 		};
 
-		/** Message to build bonds.
-		 		Send by MolecularControl to MolecularProperties.
-		 \ingroup ViewKernelConnectivity
-		 */
-		class BuildBondsMessage: public Message
-		{
-			public:
 
-			BuildBondsMessage()
-				throw()
-			{};
-		};
-
-		/** Message to center camera.
+		/** Message to center camera on a specific Composite.
 		 		Send by MolecularControl to MolecularProperties.
 		 \ingroup ViewKernelConnectivity
 		 */
@@ -843,61 +560,66 @@ namespace BALL
 		{
 			public:
 
+			///
 			CenterCameraMessage()
-				throw()
-				: CompositeMessage()
-			{};
+				throw();
 		};
 
-		/** Message to check residues.
-		 		Send by MolecularControl to MolecularProperties.
-		 \ingroup ViewKernelConnectivity
-		 */
-		class CheckResidueMessage: public Message
+		class Representation;
+
+		/// Base class for all messages concerning a Representation
+		class RepresentationMessage: public Message
 		{
 			public:
 
-			CheckResidueMessage()
-				throw()
-			{};
+			/// Types of RepresentationMessages
+			enum Type
+			{
+				/// Default Value
+				UNKNOWN = -1,
+
+				/// Add a Representation
+				ADD = 0,
+
+				/// Remove a Representation
+				REMOVE,
+
+				/// Update the Representation
+				UPDATE
+			};
+
+			///
+			RepresentationMessage()
+				throw();
+
+			///
+			void setRepresentation(Representation* rep)
+				throw() {representation_ = rep;}
+
+			///
+			Representation* getRepresentation() 
+				throw() {return representation_;}
+
+			///
+			void setType(Type type)
+				throw();
+
+			///
+			Type getType() const
+				throw() { return type_;}
+			
+			private:
+
+			Representation* representation_;
+			Type 						type_;
 		};
-
-		/** Message to (re)draw a composite.
-		 		Send by MolecularProperties to DisplayProperties.
-		\ingroup ViewKernelConnectivity
-		 */
-		class DrawMessage: public CompositeMessage
-		{
-			public:
-
-			DrawMessage()
-				throw()
-				: CompositeMessage()
-			{};
-		};
-
-		/** Message to select or deselect composites.
-		 		Send by MolecularControl to MolecularProperties.
-		 \ingroup ViewKernelConnectivity
-		 */
-		class SelectMessage: public Message
-		{
-			public:
-
-			SelectMessage()
-				throw()
-				: select_(false)
-			{};
-
-			bool select_;
-		};
+			
 		
 #		ifndef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/KERNEL/message.iC>
 #		endif
   			
 	} // namespace VIEW
-
 } // namespace BALL
 
 #endif // BALL_VIEW_KERNEL_MESSAGE_H

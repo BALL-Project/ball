@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: contourSurface.h,v 1.14 2003/05/26 14:22:46 oliver Exp $
+// $Id: contourSurface.h,v 1.15 2003/08/26 08:04:10 oliver Exp $
 //
 
 #ifndef BALL_DATATYPE_CONTOURSURFACE_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: chainIterator.h,v 1.19 2003/07/01 16:45:27 amoll Exp $
+// $Id: chainIterator.h,v 1.20 2003/08/26 08:04:17 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_CHAINITERATOR_H
@@ -90,7 +90,6 @@ namespace BALL
 	/// A constant reverse bidirectional iterator for the Chain class.
 	typedef std::reverse_iterator<ChainConstIterator> ChainConstReverseIterator;	
 	//@}
-
 } // namespace BALL 
 
 #endif // BALL_KERNEL_CHAINITERATOR_H

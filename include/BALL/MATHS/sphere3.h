@@ -1,21 +1,16 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sphere3.h,v 1.34 2003/08/19 19:56:12 amoll Exp $
+// $Id: sphere3.h,v 1.35 2003/08/26 08:04:22 oliver Exp $
 //
 
 #ifndef BALL_MATHS_SPHERE3_H
 #define BALL_MATHS_SPHERE3_H
 
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
 #ifdef BALL_HAS_IEEEFP_H
 #	include <ieeefp.h>
 #endif
 
-#include <math.h>
 #include <iostream>
 
 #ifndef BALL_MATHS_PLANE3_H
@@ -34,7 +29,7 @@ namespace BALL
 	//@{
 
 	/** Generic Sphere Class.
-      ere3.h
+      \S Sphere3.h
 	*/
 	template <typename T>
 	class TSphere3
@@ -89,15 +84,16 @@ namespace BALL
 		{
 		}
 
-		///
+		/** Default initialisation
+		 */
 		virtual void clear()
 			throw()
 		{
 			p.clear();
-			radius = 0;
+			radius = (T) 0;
 		}
-
 		//@}
+
 		/**	@name	Assignment	
 		*/
 		//@{

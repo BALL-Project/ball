@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecule.h,v 1.30 2003/07/01 16:45:28 amoll Exp $
+// $Id: molecule.h,v 1.31 2003/08/26 08:04:18 oliver Exp $
+//
 
 #ifndef BALL_KERNEL_MOLECULE_H
 #define BALL_KERNEL_MOLECULE_H

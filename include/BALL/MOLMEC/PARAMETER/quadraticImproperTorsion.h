@@ -1,7 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: quadraticImproperTorsion.h,v 1.13 2003/03/14 11:49:31 sturm Exp $
+// $Id: quadraticImproperTorsion.h,v 1.14 2003/08/26 08:04:28 oliver Exp $
+//
+
 // Molecular Mechanics Parameter: class describing the parameters required to
 // describe a harmonic improper torsion (out-of-plane) potential
  

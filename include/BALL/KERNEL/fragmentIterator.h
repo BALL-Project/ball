@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentIterator.h,v 1.16 2003/07/01 16:45:28 amoll Exp $
+// $Id: fragmentIterator.h,v 1.17 2003/08/26 08:04:18 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_FRAGMENTITERATOR_H
@@ -80,5 +80,4 @@ namespace BALL
 	typedef std::reverse_iterator<FragmentConstIterator> FragmentConstReverseIterator;
 
 } // namespace BALL 
-
 #endif // BALL_KERNEL_FRAGMENTITERATOR_H

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: selector.h,v 1.25 2003/07/01 16:45:29 amoll Exp $
+// $Id: selector.h,v 1.26 2003/08/26 08:04:19 oliver Exp $
+//
 
 #ifndef BALL_KERNEL_SELECTOR_H
 #define BALL_KERNEL_SELECTOR_H

@@ -1,7 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: poissonBoltzmann.h,v 1.25 2003/03/26 13:08:28 sturm Exp $ 
+// $Id: poissonBoltzmann.h,v 1.26 2003/08/26 08:04:49 oliver Exp $ 
+//
+
 // Finite Difference Poisson Boltzmann Solver
 
 #ifndef BALL_SOLVATION_POISSONBOLTZMANN_H

@@ -1,20 +1,18 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector2.h,v 1.16 2003/07/02 11:16:09 amoll Exp $
+// $Id: vector2.h,v 1.17 2003/08/26 08:04:22 oliver Exp $
 //
 
 #ifndef BALL_MATHS_VECTOR2_H
 #define BALL_MATHS_VECTOR2_H
 
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
-#include <math.h>
-
 #ifndef BALL_CONCEPT_PERSISTENCEMANAGER_H
 #	include <BALL/CONCEPT/persistenceManager.h>
+#endif
+
+#ifndef BALL_COMMON_EXCEPTION_H
+#	include <BALL/COMMON/exception.h>
 #endif
 
 #ifndef BALL_MATHS_COMMON_H

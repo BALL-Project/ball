@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: server.h,v 1.18 2003/03/26 13:08:54 sturm Exp $
+// $Id: server.h,v 1.19 2003/08/26 08:05:03 oliver Exp $
+//
 
 #ifndef BALL_VIEW_GUI_KERNEL_SERVER_H
 #define BALL_VIEW_GUI_KERNEL_SERVER_H
@@ -10,59 +11,46 @@
 #	include <BALL/common.h>
 #endif
 
-#ifndef BALL_CONCEPT_COMPOSITE_H
-#	include <BALL/CONCEPT/composite.h>
-#endif
-
 #ifndef BALL_DATATYPE_HASHMAP_H
 #	include <BALL/DATATYPE/hashMap.h>
-#endif
-
-#ifndef BALL_FORMAT_INIFILE_H
-# include <BALL/FORMAT/INIFile.h>
-#endif
-
-#ifndef BALL_SYSTEM_SOCKET_H
-#	include <BALL/SYSTEM/socket.h>
 #endif
 
 #ifndef BALL_VIEW_KERNEL_QTTIMER_H
 #	include <BALL/VIEW/KERNEL/QTTimer.h>
 #endif
 
-#ifndef BALL_VIEW_GUI_KERNEL_OBJECTCREATOR_H
-#	include <BALL/VIEW/GUI/KERNEL/objectCreator.h>
-#endif
-
-#ifndef BALL_VIEW_GUI_DIALOGS_PREFERENCES_H
-# include <BALL/VIEW/GUI/DIALOGS/preferences.h>
-#endif
-
 #ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
 #	include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
 #endif
 
-#ifndef BALL_VIEW_GUI_WIDGETS_SERVERPREFERENCES_H
-# include <BALL/VIEW/GUI/WIDGETS/serverPreferences.h>
+#ifndef BALL_VIEW_GUI_KERNEL_OBJECTCREATOR_H
+# include <BALL/VIEW/GUI/KERNEL/objectCreator.h>
 #endif
 
-#include <qlabel.h>
+class QLabel;
 
 namespace BALL
 {
+	class Composite;
+	class IOStreamSocket;
+	class SockInetBuf;
+
 	namespace VIEW
 	{
+		class ServerPreferences;
+		class Preferences;
+
 		/** Server class.
-				The class Server handles all incoming  \link PersistentObject PersistentObject \endlink  objects,
-				converts them into  \link Composite Composite \endlink  objects (if possible) and sents
-				them through the  \link ConnectionObject ConnectionObject \endlink  tree with the message
-				 \link NewCompositeMessage NewCompositeMessage \endlink . Also it stores all received  \link Composite Composite \endlink  objects
-				and replaces them if the same  \link Composite Composite \endlink  object is received again.
-				If a  \link Composite Composite \endlink  object is replaced the message 
-				 \link RemovedCompositeMessage RemovedCompositeMessage \endlink  will be sent through the  \link ConnectionObject ConnectionObject \endlink 
-				tree and after that the the message  \link NewCompositeMessage NewCompositeMessage \endlink  with the new
+				The class Server handles all incoming PersistentObject objects,
+				converts them into Composite objects (if possible) and sents
+				them through the ConnectionObject tree with the message
+				NewCompositeMessage. Also it stores all received Composite objects
+				and replaces them if the same Composite object is received again.
+				If a Composite object is replaced the message 
+				RemovedCompositeMessage will be sent through the ConnectionObject
+				tree and after that the the message NewCompositeMessage with the new
 				received composite will be sent.
-		\ingroup ViewGuiKernelServer	
+			\ingroup ViewGuiKernelServer	
 		*/
 		class Server
 			: public QTTimer,
@@ -77,15 +65,12 @@ namespace BALL
 			//@{
 
 			/** Default Constructor.
-					Construct new server.
-					The state of {\em *this} server is:
-
+					The state of this server is:
 					  - no object creator registered
-						- server listening on <tt>VIEW_DEFAULT_PORT</tt> if activated
-					
-					@return      Server new constructed server
-					@see         QTTimer
-					@see         ModularWidget
+						- server listening on <tt> VIEW_DEFAULT_PORT</tt> if activated
+					\par
+					\see         QTTimer
+					\see         ModularWidget
 			*/
 			Server(QWidget* parent = 0, const char* name = 0)
 				throw();
@@ -96,42 +81,28 @@ namespace BALL
 			//@{
 
 			/** Destructor.
-					Default destruction of {\em *this} server.
-					Calls  \link destroy destroy \endlink .
-					@see         destroy
 			*/
 			virtual ~Server()
 				throw();
 
 			/** Explicit default initialization.
-					Set the state of {\em *this} server to the default values.
-					Calls  \link QTTimer::clear QTTimer::clear \endlink .
-					Calls  \link ConnectionObject::clear ConnectionObject::clear \endlink .
-					@see QTTimer::clear
-					@see ConnectionObject::clear
+					Calls QTTimer::clear.
+					Calls ConnectionObject::clear.
+					\see QTTimer::clear
+					\see ConnectionObject::clear
 			*/
 			virtual void clear()
 				throw();
-
-			/** Explicit destructor.
-					Destroy {\em *this} server.
-					Calls  \link QTTimer::destroy QTTimer::destroy \endlink .
-					Calls  \link ConnectionObject::destroy ConnectionObject::destroy \endlink .
-					@see         QTTimer::destroy
-					@see         ConnectionObject::destroy
-			*/
-			virtual void destroy()
-				throw();
-							
 			//@}
+
 			/**	@name	Exceptions
 			*/
 			//@{
 			
 			/** NotCompositeObject Exception class.
-					This exeption will be thrown if a  \link PersistentObject PersistentObject \endlink  was received
-					that was not a  \link Composite Composite \endlink  object.
-					@see         GeneralException			
+					This exeption will be thrown if a PersistentObject was received
+					that was not a Composite object.
+					\see         GeneralException			
 			*/
 			class NotCompositeObject:	public Exception::GeneralException
 			{
@@ -150,160 +121,160 @@ namespace BALL
 					Creates a new socket stream with the given port and enables the timer
 					that will check
 					every second whether an object will be available at the stream.
-					After this method the {\em timer} method will be called every second.
+					After this method the <b> timer</b> method will be called every second.
 					Must be called before other methods!
-					Calls  \link QTTimer::startTimer QTTimer::startTimer \endlink 
-					@see QTTimer::startTimer
-					@see timer
+					Calls QTTimer::startTimer
+					\see QTTimer::startTimer
+					\see timer
 			*/
 			void activate()
 				throw();
 
 			/** Deactivates the server.
-					If {\em *this} server is already running this method stops the server
+					If this server is already running this method stops the server
 					and closes the socket stream.
-					Calls  \link QTTimer::stopTimer QTTimer::stopTimer \endlink 
-					@see QTTimer::stopTimer
+					Calls QTTimer::stopTimer
+					\see QTTimer::stopTimer
 			*/
 			void deactivate()
 				throw();
 
 			/**	Set the server port.
-					Set port of {\em *this} server. Must be called before  \link activate activate \endlink 
+					Set port of this server. Must be called before activate
 					to have any effect.
-					@param  port the new port
+					\param  port the new port
 			*/
 			void setPort(const int port)
 				throw();
 
 			/**	Return the server port.
-					Return the port of {\em *this} server.
-					@return int the port of {\em *this} server
+					Return the port of this server.
+					\return int the port of this server
 			*/
 			int getPort() const
 				throw();
 
 			/** Register a ObjectCreator.
-					Register a  \link ObjectCreator ObjectCreator \endlink  that is used for converting 
-					 \link PersistentObject PersistentObject \endlink  objects into  \link Composite Composite \endlink  objects.
-					@see ObjectCreator
+					Register a ObjectCreator that is used for converting 
+					PersistentObject objects into Composite objects.
+					\see ObjectCreator
 			*/
 			void registerObjectCreator(const ObjectCreator& s)
 				throw();
 
 			/** Reset the ObjectCreator.
-					After calling this method  \link PersistentObject PersistentObject \endlink  objects will be converted
-					using the default  \link ObjectCreator ObjectCreator \endlink .
-					@see ObjectCreator
+					After calling this method PersistentObject objects will be converted
+					using the default ObjectCreator.
+					\see ObjectCreator
 			*/
 			void unregisterObjectCreator()
 				throw();
 
 			/**	Initialize the server widget.
-					This method initializes the icon of {\em *this} server and adds it
-					to  \link MainControl MainControl \endlink . This method will be called by  \link show show \endlink  of 
-					the class  \link MainControl MainControl \endlink .
-				  @see  ModularWidget
-					@see  show
+					This method initializes the icon of this server and adds it
+					to MainControl. This method will be called by show of 
+					the class MainControl.
+				  \see  ModularWidget
+					\see  show
 			*/
 			virtual void initializeWidget(MainControl& main_control)
 				throw();
 			
 			/**	Remove the server widget.
-					This method deletes the icon of {\em *this} server and removes it
-					from  \link MainControl MainControl \endlink .
-					This method will be called by  \link aboutToExit aboutToExit \endlink  of 
-					the class  \link MainControl MainControl \endlink .
-				  @see  ModularWidget
-					@see  aboutToExit
+					This method deletes the icon of this server and removes it
+					from MainControl.
+					This method will be called by aboutToExit of 
+					the class MainControl.
+				  \see  ModularWidget
+					\see  aboutToExit
 			*/
 			virtual void finalizeWidget(MainControl& main_control)
 				throw();
 			
 			/** Menu checking method.
 					This method checks, enables or disables all inserted menu entries of 
-					{\em *this} server. It will be called by  \link checkMenus checkMenus \endlink  of 
-					the class  \link MainControl MainControl \endlink .	
-					See  \link ModularWidget ModularWidget \endlink  for further information concerning menu structure
-					creation of  \link ModularWidget ModularWidget \endlink  objects. \par
-					<b>Note:</b> Because {\em *this} server has no menu entries this method
+					this server. It will be called by checkMenus of 
+					the class MainControl.	
+					See ModularWidget for further information concerning menu structure
+					creation of ModularWidget objects.\par
+					{\bf Note:} Because this server has no menu entries this method
 					is empty.
-				  @see        ModularWidget
-					@see        checkMenus
+				  \see        ModularWidget
+					\see        checkMenus
 			*/
 			virtual void checkMenu(MainControl& main_control)
 				throw();
 			
 			/** Initialize a preferences tab for the server.
-					This method creates the preferences tab  \link ServerPreferences ServerPreferences \endlink  for
-					{\em *this} server and inserts it into the  \link Preferences Preferences \endlink  dialog
-					of the  \link MainControl MainControl \endlink .
-					This method is called automatically by the method  \link show show \endlink  of 
-					the class  \link MainControl MainControl \endlink  at the start of the application.
-					See  \link ModularWidget ModularWidget \endlink 	for more information concerning preferences tabs. \par
-					@param  preferences the  \link Preferences Preferences \endlink  dialog of the  \link MainControl MainControl \endlink 
-					@see    show
-					@see    ServerPreferences
-					@see    Preferences
+					This method creates the preferences tab ServerPreferences for
+					this server and inserts it into the Preferences dialog
+					of the MainControl.
+					This method is called automatically by the method show of 
+					the class MainControl at the start of the application.
+					See ModularWidget	for more information concerning preferences tabs.\par
+					\param  preferences the Preferences dialog of the MainControl
+					\see    show
+					\see    ServerPreferences
+					\see    Preferences
 			*/
 			virtual void initializePreferencesTab(Preferences &preferences)
 				throw();
 			
 			/**	Remove the preferences tab.
-					This method removes the  \link ServerPreferences ServerPreferences \endlink  tab of {\em *this} server
-					from the  \link Preferences Preferences \endlink  dialog of the  \link MainControl MainControl \endlink .
-					This method is called automatically by the method  \link aboutToExit aboutToExit \endlink 
-					method  of the class  \link MainControl MainControl \endlink  at the end of the application.
-					See  \link ModularWidget ModularWidget \endlink 
-					for more information concerning preferences tabs. \par
-					@param  preferences the  \link Preferences Preferences \endlink  dialog of the  \link MainControl MainControl \endlink 
-					@see    aboutToExit
-					@see    ServerPreferences
-					@see    Preferences
+					This method removes the ServerPreferences tab of this server
+					from the Preferences dialog of the MainControl.
+					This method is called automatically by the method aboutToExit
+					method  of the class MainControl at the end of the application.
+					See ModularWidget
+					for more information concerning preferences tabs.\par
+					\param  preferences the Preferences dialog of the MainControl
+					\see    aboutToExit
+					\see    ServerPreferences
+					\see    Preferences
 			*/
 			virtual void finalizePreferencesTab(Preferences &preferences)
 				throw();
 			
 			/** Apply the preferences of the specific tab.
-					This method applies the preferences of the own tab  \link ServerPreferences ServerPreferences \endlink 
-					to {\em *this} server.
-					This method is called automatically by the method  \link applyPreferencesTab applyPreferencesTab \endlink  of 
-					the class  \link MainControl MainControl \endlink .
-					See  \link ModularWidget ModularWidget \endlink 	for more information concerning preferences tabs. \par
-					@param  preferences the  \link Preferences Preferences \endlink  dialog of the  \link MainControl MainControl \endlink 
-					@see    applyPreferencesTab
-					@see    ServerPreferences
-					@see    Preferences
+					This method applies the preferences of the own tab ServerPreferences
+					to this server.
+					This method is called automatically by the method applyPreferencesTab of 
+					the class MainControl.
+					See ModularWidget	for more information concerning preferences tabs.\par
+					\param  preferences the Preferences dialog of the MainControl
+					\see    applyPreferencesTab
+					\see    ServerPreferences
+					\see    Preferences
 			*/
 			virtual void applyPreferences(Preferences &preferences)
 				throw();
 			
 			/** Fetch the widgets preferences from the inifile.
-					This method fetches the preferences of {\em *this} server 
-					from the {\em inifile}. \par
-					This method is called automatically by the method  \link show show \endlink  from the  \link MainControl MainControl \endlink 
+					This method fetches the preferences of this server 
+					from the <b> inifile</b>.\par
+					This method is called automatically by the method show from the MainControl
 					object.
-					See  \link ModularWidget ModularWidget \endlink 	for more information concerning preferences tabs. \par
-					@param  inifile the  \link INIFile INIFile \endlink  that contains the needed values
-					@see    MainControl
-					@see    show
-					@see    INIFile
-					@see    ServerPreferences
+					See ModularWidget	for more information concerning preferences tabs.\par
+					\param  inifile the INIFile that contains the needed values
+					\see    MainControl
+					\see    show
+					\see    INIFile
+					\see    ServerPreferences
 			*/
 			virtual void fetchPreferences(INIFile &inifile)
 				throw();
 			
 			/** Writes the widgets preferences to the inifile.
-					This method writes the preferences of {\em *this} server to the
-					{\em inifile}. \par
-					This method is called automatically by the method  \link aboutToExit aboutToExit \endlink  from the
-					 \link MainControl MainControl \endlink 
+					This method writes the preferences of this server to the
+					<b> inifile</b>.\par
+					This method is called automatically by the method aboutToExit from the
+					MainControl
 					object.
-					@param  inifile the  \link INIFile INIFile \endlink  that contains the needed values
-					@see    MainControl
-					@see    aboutToExit
-					@see    INIFile
-					@see    ServerPreferences
+					\param  inifile the INIFile that contains the needed values
+					\see    MainControl
+					\see    aboutToExit
+					\see    INIFile
+					\see    ServerPreferences
 			*/
 			virtual void writePreferences(INIFile &inifile)
 				throw();
@@ -315,23 +286,23 @@ namespace BALL
 
 			/** Internal state and consistency self-validation.
 					Initiate self-validation of the internal state and data structure consistencies
-					of {\em *this} server.
-					If the internal state of {\em *this} server is correct (self-validated) and 
-					consistent <tt>true</tt> is returned, <tt>false</tt> otherwise. 
+					of this server.
+					If the internal state of this server is correct (self-validated) and 
+					consistent <tt> true</tt> is returned, <tt> false</tt> otherwise. 
 					Calls {ConnectionObject::isValid}.
-					@return			bool <tt>true</tt> if the internal state of {\em *this} server is correct
-					@see        ConnectionObject::isValid
+					\return			bool <tt> true</tt> if the internal state of this server is correct
+					\see        ConnectionObject::isValid
 			*/
 			virtual bool isValid() const
 				throw();
 
 			/** Internal value dump.
-					Dump the current state of {\em *this} server to 
-					the output ostream {\em s} with dumping depth {\em depth}.
-					@param   s output stream where to output the state of {\em *this} server
-					@param   depth the dumping depth
-					@see     ConnectionObject::dump
-					@see     QTTimer::dump
+					Dump the current state of this server to 
+					the output ostream <b> s</b> with dumping depth <b> depth</b>.
+					\param   s output stream where to output the state of this server
+					\param   depth the dumping depth
+					\see     ConnectionObject::dump
+					\see     QTTimer::dump
 			*/
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
@@ -348,11 +319,11 @@ namespace BALL
 					This method handles the socket stream. Every second it checks whether
 					a new object is available at the stream. If this is the case the stream
 					will be accepted and the incoming object will be reveiced.
-					At the moment only  \link Composite Composite \endlink  objects will be accepted. If
-					another object is received the exception  \link NotCompositeObject NotCompositeObject \endlink 
+					At the moment only Composite objects will be accepted. If
+					another object is received the exception NotCompositeObject
 					will be thrown.				
-					@see    QTTimer::timer
-					@exception NotCompositeObject thrown if another object than  \link Composite Composite \endlink  object is received
+					\see    QTTimer::timer
+					\exception NotCompositeObject thrown if another object than Composite object is received
 			*/
 			virtual void timer();
 						
@@ -398,7 +369,6 @@ namespace BALL
 #		endif
   
 	}// namespace VIEW
-		
 }// namespace BALL
 
 #endif // BALL_VIEW_GUI_KERNEL_SERVER_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: debug.h,v 1.7 2003/06/12 14:03:37 anker Exp $
+// $Id: debug.h,v 1.8 2003/08/26 08:04:05 oliver Exp $
 //
 
 #ifndef BALL_COMMON_DEBUG_H

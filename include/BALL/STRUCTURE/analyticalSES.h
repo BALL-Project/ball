@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: analyticalSES.h,v 1.13 2003/03/26 13:56:57 anhi Exp $
+// $Id: analyticalSES.h,v 1.14 2003/08/26 08:04:51 oliver Exp $
+//
 
 #ifndef BALL_STRUCTURE_ANALYTICALSES_H
 #define BALL_STRUCTURE_ANALYTICALSES_H

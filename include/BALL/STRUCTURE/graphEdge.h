@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: graphEdge.h,v 1.10 2003/03/26 15:59:26 anhi Exp $
+// $Id: graphEdge.h,v 1.11 2003/08/26 08:04:51 oliver Exp $
+//
 
 #ifndef BALL_STRUCTURE_GRAPHEDGE_H
 #define BALL_STRUCTURE_GRAPHEDGE_H

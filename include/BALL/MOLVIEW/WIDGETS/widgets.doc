@@ -1,0 +1,5 @@
+// $Id: widgets.doc,v 1.2 2003/08/26 08:04:43 oliver Exp $
+
+//@Include: molecularControl.h
+//@Include: molecularProperties.h
+

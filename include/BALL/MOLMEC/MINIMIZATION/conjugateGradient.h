@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.h,v 1.26 2003/04/24 20:49:53 oliver Exp $ 
+// $Id: conjugateGradient.h,v 1.27 2003/08/26 08:04:26 oliver Exp $ 
+//
 
 #ifndef BALL_MOLMEC_MINIMIZATION_CONJUGATEGRADIENT_H 
 #define BALL_MOLMEC_MINIMIZATION_CONJUGATEGRADIENT_H 

@@ -1,33 +1,21 @@
-// $Id: kernel.doc,v 1.4 2003/02/25 10:33:23 anhi Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: kernel.doc,v 1.5 2003/08/26 08:05:01 oliver Exp $
+//
 
-/** \defgroup ViewGuiKernel Kernel classes
-		\ingroup ViewGui
-		This section contains classes that are responsible for
-		building openGL primitives, handling server requests,
-		building predefined openGL primitives and their creation tools
-		and handling composites and building and maintaining their graphical
-		representation.          
- */
 
-/** \defgroup ViewGuiKernelComposite Composite handling and render engine
- * 	\ingroup ViewGuiKernel
- */
-
-/** \defgroup ViewGuiKernelOpenGL OpenGL primitive creation
- * 	\ingroup ViewGuiKernel
- */
-
-/** \defgroup ViewGuiKernelOpenGLPrimitives OpenGL predefined primitives and creation tools
- * 	\ingroup ViewGuiKernel
- */
-
-/** \defgroup ViewGuiKernelOpenGLPredefined Predefined primitives
-		\ingroup ViewGuiKernelOpenGLPrimitives
-		This section contains some internally used primitive
-		classes and the class glPrimitiveManager that handles these
-		classes.
- */
-
-/** \defgroup ViewGuiKernelServer Server request handling and persistent object rebuilding
- * 	\ingroup ViewGuiKernel
- */
+/**   @name Composite handling and render engine.
+*/
+//@{
+			//@Include: compositeDescriptor.h
+			//@Include: glDisplayList.h
+			//@Include: glEntityDescriptor.h
+			//@Include: mainControl.h
+//@}
+/**   @name Server request handling and persistent object rebuilding.
+*/
+//@{
+		  //@Include: objectCreator.h
+			//@Include: server.h
+//@}

@@ -1,4 +1,12 @@
-// $Id: kernel.doc,v 1.20 2003/03/28 18:12:27 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: kernel.doc,v 1.21 2003/08/26 08:04:18 oliver Exp $
+//
+
+	/** \defgroup KernelContainers Molecular Datastructures
+	 		\ingroup Kernel
+	*/
 
 	/** \defgroup KernelIterators Iterator Classes
 			\ingroup Kernel
@@ -12,8 +20,4 @@
 
 	/** \defgroup Predicates Kernel Predicates
 	* 	\ingroup Kernel
-	*/
-
-	/** \defgroup KernelContainers Molecular Datastructures
-	 		\ingroup Kernel
 	*/

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RSVertex.h,v 1.31 2003/03/26 13:08:31 sturm Exp $
+// $Id: RSVertex.h,v 1.32 2003/08/26 08:04:50 oliver Exp $
+//
 
 #ifndef BALL_STRUCTURE_RSVERTEX_H
 #define BALL_STRUCTURE_RSVERTEX_H

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: selectable.h,v 1.18 2003/06/27 09:28:53 anker Exp $
+// $Id: selectable.h,v 1.19 2003/08/26 08:04:09 oliver Exp $
+//
 
 #ifndef BALL_CONCEPT_SELECTABLE_H
 #define BALL_CONCEPT_SELECTABLE_H
@@ -116,8 +117,13 @@ namespace BALL
 		*/
 		virtual void deselect()
 			throw();
-		//@}
 
+		/** For faster access 
+		 */
+		virtual void setSelected(bool selected)
+			throw() { selected_ = selected; }
+
+		//@}
 		/**	@name Predicates 
 		*/
 		//@{

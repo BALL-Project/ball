@@ -1,7 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: snapShot.h,v 1.26 2003/08/21 20:36:42 amoll Exp $
+// $Id: snapShot.h,v 1.27 2003/08/26 08:04:25 oliver Exp $
+//
+
+// This file contains the definitions of the classes 
+// SnapshotManager and Snapshot. 
+// They can be used to obtain snapshots from an MD simulation or an energy 
+// minimisation.
+// A snapshot contains atom positions, velocities, forces and potential energy. 
+
 
 #ifndef BALL_MOLMEC_COMMON_SNAPSHOT_H
 #define BALL_MOLMEC_COMMON_SNAPSHOT_H

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularMessage.h,v 1.14 2003/03/26 13:56:55 anhi Exp $
+// $Id: molecularMessage.h,v 1.15 2003/08/26 08:04:42 oliver Exp $
+//
 
 #ifndef BALL_MOLVIEW_KERNEL_MOLECULARMESSAGE_H
 #define BALL_MOLVIEW_KERNEL_MOLECULARMESSAGE_H
@@ -10,19 +11,16 @@
 #	include <BALL/VIEW/KERNEL/message.h>
 #endif
 
+using BALL::VIEW::Message;
 using BALL::VIEW::CompositeMessage;
-using BALL::VIEW::RemovedCompositeMessage;
-using BALL::VIEW::ChangedCompositeMessage;
-using BALL::VIEW::SelectionMessage;
 
 namespace BALL
 {
 	namespace MOLVIEW
 	{
 		/** NewMolecularMessage class.
-				The class NewMolecularMessage is responsible for making known a new molecular
-				structure in the  \link ConnectionObject ConnectionObject \endlink  tree. This message will be converted
-				from the message  \link NewCompositeMessage NewCompositeMessage \endlink  if the  \link Composite Composite \endlink  object contains
+				This message will be converted
+				from the message NewCompositeMessage if the Composite object contains
 				a molecular structure. The conversion will be done by the widget class
 				 \link MolecularProperties MolecularProperties \endlink .
 				There are widgets that will be react only to the class newMolecularMessage but
@@ -38,99 +36,64 @@ namespace BALL
 		{
 			public:
 
-			/**	@name	Constructors
+			/**	@name	Constructors and Destructor
 			*/	
 			//@{
 
 			/** Default Constructor.
-					Construct new newMolecularMessage.
-					@return      NewMolecularMessage new constructed newMolecularMessage
-					@see         CompositeMessage
 			*/
 			NewMolecularMessage()
 				throw();
 
 			/** Copy constructor.
-					Construct new newMolecularMessage by copying the newMolecularMessage {\em message}.
-					The state of {\em *this} newMolecularMessage is set to the set of {\em message} 
-					newMolecularMessage.
-					@param       message the newMolecularMessage to be copied
-					@return      NewMolecularMessage new constructed newMolecularMessage copied from {\em message}
-					@see         CompositeMessage
 			*/
 			NewMolecularMessage(const CompositeMessage& message)
 				throw();
 
-			//@}
-
-			/** @name Destructors 
-			*/
-			//@{
-
 			/** Destructor.
-					Default destruction of {\em *this} newMolecularMessage.
 			*/
 			virtual ~NewMolecularMessage()
 				throw();
 			//@}
-		
-			private:
 		};
 
 
-		/** RemovedMolecularMessage class.
-				The class RemovedCompositeMessage is the message class that is responsible for
-				marking a  \link Composite Composite \endlink  object as removed inside the  \link ConnectionObject ConnectionObject \endlink  tree.
-				It will be sent by existing  \link ConnectionObject ConnectionObject \endlink  objects that remove (or would like to
-				remove)  \link Composites Composites \endlink  objects. One can use the  \link RTTI RTTI \endlink  mechanism to identify
-				such messages in the {\em onNotify} method of user constructed  \link ConnectionObject ConnectionObject \endlink 
-				objects.
-				This class is only provided for convinience. So in MOLVIEW applications one can
-				use this class in the same way as the class  \link RemovedCompositeMessage RemovedCompositeMessage \endlink .  \par
-				
-		*/
-		class RemovedMolecularMessage: public RemovedCompositeMessage
+		/** Message to perform specific tasks for molecular items.
+		 		Send by MolecularControl to MolecularProperties.
+		 */
+		class MolecularTaskMessage
+			: public Message
 		{
 			public:
 
-			/**	@name	Constructors
-			*/	
-			//@{
+			/// Enum for the different molecular tasks
+			enum Type
+			{
+				///
+				UNKNOWN = 0,
+				///
+				BUILD_BONDS,
+				///
+				CHECK_RESIDUE,
+				///
+				ADD_HYDROGENS
+			};
 
-			/** Default Constructor.
-					Construct new removedMolecularMessage.
-					@return      RemovedMolecularMessage new constructed removedMolecularMessage
-					@see         RemovedCompositeMessage
-			*/
-			RemovedMolecularMessage()
+			///
+			MolecularTaskMessage()
 				throw();
 
-			/** Copy constructor.
-					Construct new removedMolecularMessage by copying the removedMolecularMessage {\em message}.
-					The state of {\em *this} removedMolecularMessage is set to the set of {\em message} 
-					removedMolecularMessage.
-					@param       message the removedMolecularMessage to be copied
-					@return      RemovedMolecularMessage new constructed removedMolecularMessage copied from {\em message}
-					@see         CompositeMessage
-					@see         RemovedCompositeMessage
-			*/
-			RemovedMolecularMessage(const CompositeMessage& message)
+			///
+			void setType(Type type)
 				throw();
 
-			//@}
+			///
+			Index getType() const
+				throw() {return type_;}
 
-			/** @name Destructors 
-			*/
-			//@{
-
-			/** Destructor.
-					Default destruction of {\em *this} removedMolecularMessage.
-			*/
-			virtual ~RemovedMolecularMessage()
-				throw();
-			//@}
-		
-			private:
+			protected:
+			
+			Index type_;
 		};
 
 
@@ -248,7 +211,6 @@ namespace BALL
 		};
 
 	} // namespace MOLVIEW
-
 } // namespace BALL
 
 #endif // BALL_MOLVIEW_KERNEL_MOLECULARMESSAGE_H

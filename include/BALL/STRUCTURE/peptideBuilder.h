@@ -1,5 +1,11 @@
-// $Id: peptideBuilder.h,v 1.2 2003/05/05 20:32:17 anhi Exp $
-// ???? Editor header
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: peptideBuilder.h,v 1.3 2003/08/26 08:04:52 oliver Exp $
+//
+
+#ifndef BALL_STRUCTURE_PEPTIDEBUILDER_H
+#define BALL_STRUCTURE_PEPTIDEBUILDER_H
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -159,5 +165,8 @@ namespace BALL
 	   PDBAtom* getAtomByName_(Residue& res, const String& name);
 	 };
        
-     } // namespace Peptides
+  } // namespace Peptides
+
 } // namespace BALL
+
+#endif // BALL_STRUCTURE_PEPTIDEBUILDER_H

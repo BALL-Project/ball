@@ -1,6 +1,10 @@
-// $Id: common.doc,v 1.4 2003/02/25 10:33:00 anhi Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: common.doc,v 1.5 2003/08/26 08:04:29 oliver Exp $
+//
 
-	/** \defgroup MolviewCommon Common data.
-			\ingroup Molview
-      Some overall used data is defined in this section.
-  */
+/** \defgroup MolviewCommon Common data.
+		\ingroup Molview
+     Some overall used data is defined in this section.
+*/

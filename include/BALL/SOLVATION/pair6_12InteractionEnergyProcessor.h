@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pair6_12InteractionEnergyProcessor.h,v 1.19 2003/03/26 13:08:26 sturm Exp $
+// $Id: pair6_12InteractionEnergyProcessor.h,v 1.20 2003/08/26 08:04:48 oliver Exp $
+//
 
 #ifndef BALL_SOLVATION_PAIR6_12INTERACTIONENERGYPROCESSOR_H
 #define BALL_SOLVATION_PAIR6_12INTERACTIONENERGYPROCESSOR_H
@@ -294,7 +295,7 @@ namespace BALL
 
 		private:
 
-		void getExternalSurface_(vector< pair<Vector3, Surface> >& surface_map, 
+		void getExternalSurface_(std::vector<std::pair<Vector3, Surface> >& surface_map, 
 				const char* surface_file) throw();
 	};
    

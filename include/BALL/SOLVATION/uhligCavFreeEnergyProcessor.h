@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: uhligCavFreeEnergyProcessor.h,v 1.16 2003/03/26 13:08:29 sturm Exp $
+// $Id: uhligCavFreeEnergyProcessor.h,v 1.17 2003/08/26 08:04:49 oliver Exp $
+//
 
 #ifndef BALL_SOLVATION_UHLIGCAVFREEENERGYPROCESSOR_H
 #define BALL_SOLVATION_UHLIGCAVFREEENERGYPROCESSOR_H

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: snapShotManager.h,v 1.14 2003/07/24 10:41:50 amoll Exp $
+// $Id: snapShotManager.h,v 1.15 2003/08/26 08:04:25 oliver Exp $
+//
 
 #ifndef BALL_MOLMEC_COMMON_SNAPSHOTMANAGER_H
 #define BALL_MOLMEC_COMMON_SNAPSHOTMANAGER_H

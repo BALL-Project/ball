@@ -1,15 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: quaternion.h,v 1.37 2003/06/10 23:16:01 amoll Exp $
+// $Id: quaternion.h,v 1.38 2003/08/26 08:04:22 oliver Exp $
 //
 
 #ifndef BALL_MATHS_QUATERNION_H
 #define BALL_MATHS_QUATERNION_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_MATHS_MATRIX44_H
 #	include <BALL/MATHS/matrix44.h>

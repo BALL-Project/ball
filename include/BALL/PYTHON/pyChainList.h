@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyChainList.h,v 1.8 2003/03/26 13:08:22 sturm Exp $
+// $Id: pyChainList.h,v 1.9 2003/08/26 08:04:46 oliver Exp $
+//
 
 #ifndef BALL_PYTHON_PYCHAINLIST_H
 #define BALL_PYTHON_PYCHAINLIST_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forwardIterator.h,v 1.25 2003/06/19 13:07:35 oliver Exp $
+// $Id: forwardIterator.h,v 1.26 2003/08/26 08:04:08 oliver Exp $
 //
 
 #ifndef BALL_CONCEPT_FORWARDITERATOR_H

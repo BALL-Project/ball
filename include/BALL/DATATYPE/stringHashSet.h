@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stringHashSet.h,v 1.10 2003/03/26 13:56:20 anhi Exp $
+// $Id: stringHashSet.h,v 1.11 2003/08/26 08:04:12 oliver Exp $
+//
 
 #ifndef BALL_DATATYPE_STRINGHASHSET_H
 #define BALL_DATATYPE_STRINGHASHSET_H

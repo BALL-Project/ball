@@ -1,0 +1,9 @@
+// $Id: dialogs.doc,v 1.2 2003/08/26 08:04:30 oliver Exp $
+
+//@Include: displayProperties.h
+//@Include: labelProperties.h
+//@Include: openBruker1DFile.h
+//@Include: openBruker2DFile.h
+//@Include: molecularFileDialog.h
+//@Include: atomProperties.h
+//@Include: contourSurfaceDialog.h

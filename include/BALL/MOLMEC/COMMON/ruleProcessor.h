@@ -1,7 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ruleProcessor.h,v 1.15 2003/03/26 13:56:40 anhi Exp $
+// $Id: ruleProcessor.h,v 1.16 2003/08/26 08:04:25 oliver Exp $
+//
+
 // Molecular Mechanics: rule-based assignment of properties (typenames, charges, radii, etc.)
 
 #ifndef BALL_MOLMEC_COMMON_RULEPROCESSOR_H

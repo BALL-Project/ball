@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: events.h,v 1.14 2003/03/26 13:08:57 sturm Exp $
+// $Id: events.h,v 1.15 2003/08/26 08:05:04 oliver Exp $
+//
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -904,7 +905,7 @@ bool Events::EventName##Event_::onNotify_(Scene* scene) \
 		(scene_->*method_)(scene); \
 	}\
 \
-  Notify(*this); \
+  Notify(this); \
 \
   transmitter_scene_ = scene_; \
 \
@@ -931,14 +932,14 @@ namespace BALL
 		/**	The Events class.
 				The class Events declares some event classes, the appropriate receiver classes
 				and event combination operators to handle, process and combine events.
-				Macros are used to declare these classes.  The  \link Notification Notification \endlink  concept of
-				BALL is used for the receivers classes. The class  \link Scene Scene \endlink  binds its own
-				methods to the receivers classes of {\em *this} events. Further the  \link Scene Scene \endlink 
+				Macros are used to declare these classes.  The Notification concept of
+				BALL is used for the receivers classes. The class Scene binds its own
+				methods to the receivers classes of this events. Further the Scene
 				object uses the combination operators to combine different events together and
 				sent them to other receiving event classes prio registered with the 
-				 \link Notification Notification \endlink  mechanism of BALL.
+				Notification mechanism of BALL.
 				The names of the methods may seems a bit too long and unreadable but they are only
-				event names and will used and created automatically for the  \link Scene Scene \endlink  object.
+				event names and will used and created automatically for the Scene object.
 		\ingroup ViewGuiWidgets		
 		*/
 		class Events
@@ -949,10 +950,10 @@ namespace BALL
 			*/
 			//@{
 			/** EventCombinationNotAllowed exception class.
-					This exception is thrown if events of different  \link Scene Scene \endlink  objects are
+					This exception is thrown if events of different Scene objects are
 					combined.
-					@see GeneralException
-					@see Scene
+					\see GeneralException
+					\see Scene
 			*/
  			class EventCombinationNotAllowed
 				:	public Exception::GeneralException
@@ -972,9 +973,9 @@ namespace BALL
 			/** Default Constructor.
 					Construct new events.
 					Initialize all own event classes.
-					@param      scene the pointer to a  \link Scene Scene \endlink  object to bind onto {\em *this} events
-					@return     Events new constructed events
-					@see        Scene
+					\param      scene the pointer to a Scene object to bind onto this events
+					\return     Events new constructed events
+					\see        Scene
 			*/
 			Events(Scene* scene)
 				throw();
@@ -986,9 +987,6 @@ namespace BALL
 			//@{
 
 			/** Destructor.
-					Default destruction of {\em *this} events.
-					Calls  \link destroy destroy \endlink .
-					@see         destroy
 			*/
 			virtual ~Events()
 				throw();
@@ -999,21 +997,14 @@ namespace BALL
 			virtual void clear()
 				throw();
 		
-			/** Explicit destructor.
-					Empty for further purpose.
-			*/
-			virtual void destroy()
-				throw();
 			//@}
-		
-
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
 
 			/** Inspection of the scene.
-					Access a pointer to the  \link Scene Scene \endlink  object of {\em *this} events.
-					@return Scene* a pointer to the  \link Scene Scene \endlink  object
+					Access a pointer to the Scene object of this events.
+					\return Scene* a pointer to the Scene object
  			*/
 			Scene *getScene();
 			//@}
@@ -1023,15 +1014,15 @@ namespace BALL
 			*/
 			//@{
 			/** Declare event class ShiftKeyPressed.
-					Declare the event class {\em ShiftKeyPressed}. This event will be sent by
-					the  \link Scene Scene \endlink  object whenever the shift key on the keyboard is pressed.
+					Declare the event class <b> ShiftKeyPressed</b>. This event will be sent by
+					the Scene object whenever the shift key on the keyboard is pressed.
 			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
 				(ShiftKeyPressed); 
 
 			/** Declare event class ShiftKeyPressedMouseMoved.
 					This event will be
-					sent by the  \link Scene Scene \endlink  object whenever the shift key on the keyboard is pressed
+					sent by the Scene object whenever the shift key on the keyboard is pressed
 					and at the same moment the mouse is moved.
 			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
@@ -1039,14 +1030,14 @@ namespace BALL
 			
 			/** Declare event class ControlKeyPressed.
 					This event will be sent by
-					the  \link Scene Scene \endlink  object whenever the control key on the keyboard is pressed.
+					the Scene object whenever the control key on the keyboard is pressed.
 			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
 				(ControlKeyPressed);
 			
 			/** Declare event class ControlKeyPressedMouseMoved.
 					This event will be
-					sent by the  \link Scene Scene \endlink  object whenever the control key on the keyboard is pressed
+					sent by the Scene object whenever the control key on the keyboard is pressed
 					and at the same moment the mouse is moved.
 			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
@@ -1054,14 +1045,14 @@ namespace BALL
 			
 			/** Declare event class ShiftKeyPressedControlKeyPressed.
 					This event will be
-					sent by the  \link Scene Scene \endlink  object whenever the shift key on the keyboard is pressed
+					sent by the Scene object whenever the shift key on the keyboard is pressed
 					and at the same moment the control key is pressed.
 			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
 				(ShiftKeyPressedControlKeyPressed);
 			
 			/** Declare event class ShiftKeyPressedControlKeyPressedMouseMoved.
-					This event will be sent by the  \link Scene Scene \endlink  object whenever the shift key and
+					This event will be sent by the Scene object whenever the shift key and
 					the control key on the keyboard are pressed and at the same moment the 
 					mouse is  moved.
 			*/
@@ -1070,13 +1061,13 @@ namespace BALL
 			
 			/** Declare event class MouseLeftButtonPressed.
 					This event will be sent by
-					the  \link Scene Scene \endlink  object whenever the left button of the mouse is pressed.
+					the Scene object whenever the left button of the mouse is pressed.
 			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
 				(MouseLeftButtonPressed);
 			
 			/** Declare event class MouseLeftButtonPressedShiftKeyPressed.
-					This event will be sent by the  \link Scene Scene \endlink  object whenever 
+					This event will be sent by the Scene object whenever 
 					the left button of the mouse is pressed
 					and at the same moment the 
 					shift key on the keyboard is pressed.
@@ -1085,7 +1076,7 @@ namespace BALL
 				(MouseLeftButtonPressedShiftKeyPressed);
 			
 			/** Declare event class MouseLeftButtonPressedControlKeyPressed.
-					This event will be sent by the  \link Scene Scene \endlink  object whenever 
+					This event will be sent by the Scene object whenever 
 					the left button of the mouse is pressed
 					and at the same moment the 
 					control key on the keyboard is pressed.
@@ -1094,7 +1085,7 @@ namespace BALL
 				(MouseLeftButtonPressedControlKeyPressed);
 			
 			/** Declare event class MouseLeftButtonPressedShiftKeyPressedControlKeyPressed.
-					This event will be sent by the  \link Scene Scene \endlink  object whenever 
+					This event will be sent by the Scene object whenever 
 					the left button of the mouse is pressed
 					and at the same moment the 
 					shift key and the control key on the keyboard are pressed.
@@ -1103,7 +1094,7 @@ namespace BALL
 				(MouseLeftButtonPressedShiftKeyPressedControlKeyPressed);
 			
 			/** Declare event class MouseLeftButtonPressedMouseMoved.
-					This event will be sent by the  \link Scene Scene \endlink  object whenever 
+					This event will be sent by the Scene object whenever 
 					the left button of the mouse is pressed
 					and at the same moment the 
 					the mouse is moved.
@@ -1112,7 +1103,7 @@ namespace BALL
 				(MouseLeftButtonPressedMouseMoved);
 			
 			/** Declare event class MouseLeftButtonPressedShiftKeyPressedMouseMoved.
-					This event will be sent by the  \link Scene Scene \endlink  object whenever 
+					This event will be sent by the Scene object whenever 
 					the left button of the mouse is pressed
 					and at the same moment the 
 					the shift key on the keyboard is pressed and the mouse is moved.
@@ -1121,7 +1112,7 @@ namespace BALL
 				(MouseLeftButtonPressedShiftKeyPressedMouseMoved);
 			
 			/** Declare event class MouseLeftButtonPressedControlKeyPressedMouseMoved.
-					This event will be sent by the  \link Scene Scene \endlink  object whenever 
+					This event will be sent by the Scene object whenever 
 					the left button of the mouse is pressed
 					and at the same moment the 
 					the control key on the keyboard is pressed and the mouse is moved.
@@ -1130,7 +1121,7 @@ namespace BALL
 				(MouseLeftButtonPressedControlKeyPressedMouseMoved);
 			
 			/** Declare event class MouseLeftButtonPressedControlKeyPressedMouseMoved.
-					This event will be sent by the  \link Scene Scene \endlink  object whenever 
+					This event will be sent by the Scene object whenever 
 					the left button of the mouse is pressed
 					and at the same moment the 
 					the shift key and the control key on the keyboard are pressed and the mouse is moved.
@@ -1140,14 +1131,14 @@ namespace BALL
 			
 			/** Declare event class MouseLeftButtonReleased.
 					This event will be sent by
-					the  \link Scene Scene \endlink  object whenever 
+					the Scene object whenever 
 					the left button of the mouse is released.
 			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
 				(MouseLeftButtonReleased);
 			
 			/** Declare event class MouseLeftButtonReleasedShiftKeyPressed.
-					This event will be sent by the  \link Scene Scene \endlink  object whenever 
+					This event will be sent by the Scene object whenever 
 					the left button of the mouse is released
 					and at the same moment the 
 					shift key on the keyboard is pressed.
@@ -1156,7 +1147,7 @@ namespace BALL
 				(MouseLeftButtonReleasedShiftKeyPressed);
 			
 			/** Declare event class MouseLeftButtonReleasedControlKeyPressed.
-					This event will be sent by the  \link Scene Scene \endlink  object whenever 
+					This event will be sent by the Scene object whenever 
 					the left button of the mouse is released
 					and at the same moment the 
 					control key on the keyboard is pressed.
@@ -1165,7 +1156,7 @@ namespace BALL
 				(MouseLeftButtonReleasedControlKeyPressed);
 			
 			/** Declare event class MouseLeftButtonReleasedShiftKeyPressedControlKeyPressed.
-					This event will be sent by the  \link Scene Scene \endlink  object whenever 
+					This event will be sent by the Scene object whenever 
 					the left button of the mouse is released
 					and at the same moment the 
 					shift key and the control key on the keyboard are pressed.
@@ -1174,14 +1165,14 @@ namespace BALL
 				(MouseLeftButtonReleasedShiftKeyPressedControlKeyPressed);
 			
 			/** Declare event class MouseMiddleButtonPressed.
-					This event will be sent by the  \link Scene Scene \endlink  object whenever 
+					This event will be sent by the Scene object whenever 
 					the middle button of the mouse is pressed.
 			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
 				(MouseMiddleButtonPressed);
 			
 			/** Declare event class MouseMiddleButtonPressedShiftKeyPressed.
-					This event will be sent by the  \link Scene Scene \endlink  object whenever 
+					This event will be sent by the Scene object whenever 
 					the middle button of the mouse is pressed
 					and at the same moment the 
 					shift key on the keyboard is pressed.
@@ -1190,7 +1181,7 @@ namespace BALL
 				(MouseMiddleButtonPressedShiftKeyPressed);
 			
 			/** Declare event class MouseMiddleButtonPressedControlKeyPressed.
-					This event will be sent by the  \link Scene Scene \endlink  object whenever 
+					This event will be sent by the Scene object whenever 
 					the middle button of the mouse is pressed
 					and at the same moment the 
 					control key on the keyboard is pressed.
@@ -1199,7 +1190,7 @@ namespace BALL
 				(MouseMiddleButtonPressedControlKeyPressed);
 			
 			/** Declare event class MouseMiddleButtonPressedShiftKeyPressedControlKeyPressed.
-					This event will be sent by the  \link Scene Scene \endlink  object whenever 
+					This event will be sent by the Scene object whenever 
 					the middle button of the mouse is pressed
 					and at the same moment the 
 					shift key and the control key on the keyboard are pressed.
@@ -1208,7 +1199,7 @@ namespace BALL
 				(MouseMiddleButtonPressedShiftKeyPressedControlKeyPressed);
 			
 			/** Declare event class MouseMiddleButtonPressedMouseMoved.
-					This event will be sent by the  \link Scene Scene \endlink  object whenever 
+					This event will be sent by the Scene object whenever 
 					the middle button of the mouse is pressed
 					and at the same moment the 
 					mouse is moved.
@@ -1217,7 +1208,7 @@ namespace BALL
 				(MouseMiddleButtonPressedMouseMoved);
 			
 			/** Declare event class MouseMiddleButtonPressedShiftKeyPressedMouseMoved.
-					This event will be sent by the  \link Scene Scene \endlink  object whenever 
+					This event will be sent by the Scene object whenever 
 					the middle button of the mouse is pressed
 					and at the same moment the 
 					shift key on the keyboard is pressed and the
@@ -1227,7 +1218,7 @@ namespace BALL
 				(MouseMiddleButtonPressedShiftKeyPressedMouseMoved);
 			
 			/** Declare event class MouseMiddleButtonPressedControlKeyPressedMouseMoved.
-					This event will be sent by the  \link Scene Scene \endlink  object whenever 
+					This event will be sent by the Scene object whenever 
 					the middle button of the mouse is pressed
 					and at the same moment the 
 					control key on the keyboard is pressed and the
@@ -1237,7 +1228,7 @@ namespace BALL
 				(MouseMiddleButtonPressedControlKeyPressedMouseMoved);
 			
 			/** Declare event class MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedMouseMoved.
-					This event will be sent by the  \link Scene Scene \endlink  object whenever 
+					This event will be sent by the Scene object whenever 
 					the middle button of the mouse is pressed
 					and at the same moment the 
 					shift key and the control key on the keyboard are pressed and the
@@ -1247,14 +1238,14 @@ namespace BALL
 				(MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedMouseMoved);
 			
 			/** Declare event class MouseMiddleButtonReleased.
-					This event will be sent by the  \link Scene Scene \endlink  object whenever 
+					This event will be sent by the Scene object whenever 
 					the middle button of the mouse is released.
 			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
 				(MouseMiddleButtonReleased);
 			
 			/** Declare event class MouseMiddleButtonReleasedShiftKeyPressed.
-					This event will be sent by the  \link Scene Scene \endlink  object whenever 
+					This event will be sent by the Scene object whenever 
 					the middle button of the mouse is released
 					and at the same moment the 
 					shift key on the keyboard is pressed.
@@ -1263,7 +1254,7 @@ namespace BALL
 				(MouseMiddleButtonReleasedShiftKeyPressed);
 			
 			/** Declare event class MouseMiddleButtonReleasedControlKeyPressed.
-					This event will be sent by the  \link Scene Scene \endlink  object whenever 
+					This event will be sent by the Scene object whenever 
 					the middle button of the mouse is released
 					and at the same moment the 
 					control key on the keyboard is pressed.
@@ -1272,7 +1263,7 @@ namespace BALL
 				(MouseMiddleButtonReleasedControlKeyPressed);
 			
 			/** Declare event class MouseMiddleButtonReleasedShiftKeyPressedControlKeyPressed.
-					This event will be sent by the  \link Scene Scene \endlink  object whenever 
+					This event will be sent by the Scene object whenever 
 					the middle button of the mouse is released
 					and at the same moment the 
 					shift key and the control key on the keyboard are pressed.
@@ -1281,14 +1272,14 @@ namespace BALL
 				(MouseMiddleButtonReleasedShiftKeyPressedControlKeyPressed);
 			
 			/** Declare event class MouseRightButtonPressed.
-					This event will be sent by the  \link Scene Scene \endlink  object whenever 
+					This event will be sent by the Scene object whenever 
 					the right button of the mouse is pressed.
 			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
 				(MouseRightButtonPressed);
 			
 			/** Declare event class MouseRightButtonPressedShiftKeyPressed.
-					This event will be sent by the  \link Scene Scene \endlink  object whenever 
+					This event will be sent by the Scene object whenever 
 					the right button of the mouse is pressed
 					and at the same moment the 
 					shift key on the keyboard is pressed.
@@ -1297,7 +1288,7 @@ namespace BALL
 				(MouseRightButtonPressedShiftKeyPressed);
 			
 			/** Declare event class MouseRightButtonPressedControlKeyPressed.
-					This event will be sent by the  \link Scene Scene \endlink  object whenever 
+					This event will be sent by the Scene object whenever 
 					the right button of the mouse is pressed
 					and at the same moment the 
 					control key on the keyboard is pressed.
@@ -1306,7 +1297,7 @@ namespace BALL
 				(MouseRightButtonPressedControlKeyPressed);
 			
 			/** Declare event class MouseRightButtonPressedShiftKeyPressedControlKeyPressed.
-					This event will be sent by the  \link Scene Scene \endlink  object whenever 
+					This event will be sent by the Scene object whenever 
 					the right button of the mouse is pressed
 					and at the same moment the 
 					shift key and the control key on the keyboard are pressed.
@@ -1315,7 +1306,7 @@ namespace BALL
 				(MouseRightButtonPressedShiftKeyPressedControlKeyPressed);
 			
 			/** Declare event class MouseRightButtonPressedMouseMoved.
-					This event will be sent by the  \link Scene Scene \endlink  object whenever 
+					This event will be sent by the Scene object whenever 
 					the right button of the mouse is pressed
 					and at the same moment the 
 					mouse is moved.
@@ -1324,7 +1315,7 @@ namespace BALL
 				(MouseRightButtonPressedMouseMoved);
 			
 			/** Declare event class MouseRightButtonPressedShiftKeyPressedMouseMoved.
-					This event will be sent by the  \link Scene Scene \endlink  object whenever 
+					This event will be sent by the Scene object whenever 
 					the right button of the mouse is pressed
 					and at the same moment the 
 					shift key on the keyboard is pressed and the
@@ -1334,7 +1325,7 @@ namespace BALL
 				(MouseRightButtonPressedShiftKeyPressedMouseMoved);
 			
 			/** Declare event class MouseRightButtonPressedControlKeyPressedMouseMoved.
-					This event will be sent by the  \link Scene Scene \endlink  object whenever 
+					This event will be sent by the Scene object whenever 
 					the right button of the mouse is pressed
 					and at the same moment the 
 					control key on the keyboard is pressed and the
@@ -1344,7 +1335,7 @@ namespace BALL
 				(MouseRightButtonPressedControlKeyPressedMouseMoved);
 			
 			/** Declare event class MouseRightButtonPressedShiftKeyPressedControlKeyPressedMouseMoved.
-					This event will be sent by the  \link Scene Scene \endlink  object whenever 
+					This event will be sent by the Scene object whenever 
 					the right button of the mouse is pressed
 					and at the same moment the 
 					shift key and the control key on the keyboard are pressed and the
@@ -1354,14 +1345,14 @@ namespace BALL
 				(MouseRightButtonPressedShiftKeyPressedControlKeyPressedMouseMoved);
 			
 			/** Declare event class MouseRightButtonReleased.
-					This event will be sent by the  \link Scene Scene \endlink  object whenever 
+					This event will be sent by the Scene object whenever 
 					the right button of the mouse is released.
 			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
 				(MouseRightButtonReleased);
 			
 			/** Declare event class MouseRightButtonReleasedShiftKeyPressed.
-					This event will be sent by the  \link Scene Scene \endlink  object whenever 
+					This event will be sent by the Scene object whenever 
 					the right button of the mouse is released
 					and at the same moment the 
 					shift key on the keyboard is pressed.
@@ -1370,7 +1361,7 @@ namespace BALL
 				(MouseRightButtonReleasedShiftKeyPressed);
 			
 			/** Declare event class MouseRightButtonReleasedControlKeyPressed.
-					This event will be sent by the  \link Scene Scene \endlink  object whenever 
+					This event will be sent by the Scene object whenever 
 					the right button of the mouse is released
 					and at the same moment the 
 					control key on the keyboard is pressed.
@@ -1379,7 +1370,7 @@ namespace BALL
 				(MouseRightButtonReleasedControlKeyPressed);
 			
 			/** Declare event class MouseRightButtonReleasedShiftKeyPressedControlKeyPressed.
-					This event will be sent by the  \link Scene Scene \endlink  object whenever 
+					This event will be sent by the Scene object whenever 
 					the right button of the mouse is released
 					and at the same moment the 
 					shift key and the control key on the keyboard are pressed.
@@ -1388,7 +1379,7 @@ namespace BALL
 				(MouseRightButtonReleasedShiftKeyPressedControlKeyPressed);
 			
 			/** Declare event class MouseMoved.
-					This event will be sent by the  \link Scene Scene \endlink  object whenever 
+					This event will be sent by the Scene object whenever 
 					the mouse is moved.
 			*/
 			BALL_VIEW_DECLARE_EVENT_CLASS
@@ -1400,100 +1391,100 @@ namespace BALL
 			//@{
 			/** Declare event receiver class RotateSystem.
 					This event receiver class catches all pressed and moved events and relates
-					them to the method registered with {\em registerRotateSystem} available in this
-					class. The method registered with {\em registerRotateSystem} must have as
-					parameter a pointer to the  \link Scene Scene \endlink  object. So you have access in this
-					method to the	 \link Scene Scene \endlink  object that has sent the event.
-					The method {\em registerRotateSystem} takes as parameter as pointer to
-					a method available in the  \link Scene Scene \endlink  object.
+					them to the method registered with <b> registerRotateSystem</b> available in this
+					class. The method registered with <b> registerRotateSystem</b> must have as
+					parameter a pointer to the Scene object. So you have access in this
+					method to the	Scene object that has sent the event.
+					The method <b> registerRotateSystem</b> takes as parameter as pointer to
+					a method available in the Scene object.
 			*/
 			BALL_VIEW_DECLARE_PRESSED_MOVED_EVENT_CLASS(RotateSystem);
 
 			/** Declare event receiver class ZoomSystem.
 					This event receiver class catches all pressed and moved events and relates
-					them to the method registered with {\em registerZoomSystem} available in this
-					class. The method registered with {\em registerZoomSystem} must have as
-					parameter a pointer to the  \link Scene Scene \endlink  object. So you have access in this
-					method to the	 \link Scene Scene \endlink  object that has sent the event.
-					The method {\em registerZoomSystem} takes as parameter as pointer to
-					a method available in the  \link Scene Scene \endlink  object.
+					them to the method registered with <b> registerZoomSystem</b> available in this
+					class. The method registered with <b> registerZoomSystem</b> must have as
+					parameter a pointer to the Scene object. So you have access in this
+					method to the	Scene object that has sent the event.
+					The method <b> registerZoomSystem</b> takes as parameter as pointer to
+					a method available in the Scene object.
 			*/
 			BALL_VIEW_DECLARE_PRESSED_MOVED_EVENT_CLASS(ZoomSystem);
 
 			/** Declare event receiver class TranslateSystem.
 					This event receiver class catches all pressed and moved events and relates
-					them to the method registered with {\em registerTranslateSystem} available in this
-					class. The method registered with {\em registerTranslateSystem} must have as
-					parameter a pointer to the  \link Scene Scene \endlink  object. So you have access in this
-					method to the	 \link Scene Scene \endlink  object that has sent the event.
-					The method {\em registerTranslateSystem} takes as parameter as pointer to
-					a method available in the  \link Scene Scene \endlink  object.
+					them to the method registered with <b> registerTranslateSystem</b> available in this
+					class. The method registered with <b> registerTranslateSystem</b> must have as
+					parameter a pointer to the Scene object. So you have access in this
+					method to the	Scene object that has sent the event.
+					The method <b> registerTranslateSystem</b> takes as parameter as pointer to
+					a method available in the Scene object.
 			*/
 			BALL_VIEW_DECLARE_PRESSED_MOVED_EVENT_CLASS(TranslateSystem);
 
 			/** Declare event receiver class SelectionPressedMoved.
 					This event receiver class catches all pressed and moved events and relates
-					them to the method registered with {\em registerSelectionPressedMoved} available in this
-					class. The method registered with {\em registerSelectionPressedMoved} must have as
-					parameter a pointer to the  \link Scene Scene \endlink  object. So you have access in this
-					method to the	 \link Scene Scene \endlink  object that has sent the event.
-					The method {\em registerSelectionPressedMoved} takes as parameter as pointer to
-					a method available in the  \link Scene Scene \endlink  object.
+					them to the method registered with <b> registerSelectionPressedMoved</b> available in this
+					class. The method registered with <b> registerSelectionPressedMoved</b> must have as
+					parameter a pointer to the Scene object. So you have access in this
+					method to the	Scene object that has sent the event.
+					The method <b> registerSelectionPressedMoved</b> takes as parameter as pointer to
+					a method available in the Scene object.
 			*/
 			BALL_VIEW_DECLARE_PRESSED_MOVED_EVENT_CLASS(SelectionPressedMoved);
 
 			/** Declare event receiver class SelectionPressed.
 					This event receiver class catches all pressed events and relates
-					them to the method registered with {\em registerSelectionPressed} available in this
-					class. The method registered with {\em registerSelectionPressed} must have as
-					parameter a pointer to the  \link Scene Scene \endlink  object. So you have access in this
-					method to the	 \link Scene Scene \endlink  object that has sent the event.
-					The method {\em registerSelectionPressed} takes as parameter as pointer to
-					a method available in the  \link Scene Scene \endlink  object.
+					them to the method registered with <b> registerSelectionPressed</b> available in this
+					class. The method registered with <b> registerSelectionPressed</b> must have as
+					parameter a pointer to the Scene object. So you have access in this
+					method to the	Scene object that has sent the event.
+					The method <b> registerSelectionPressed</b> takes as parameter as pointer to
+					a method available in the Scene object.
 			*/
 			BALL_VIEW_DECLARE_PRESSED_EVENT_CLASS(SelectionPressed);
 
 			/** Declare event receiver class SelectionReleased.
 					This event receiver class catches all released events and relates
-					them to the method registered with {\em registerSelectionReleased} available in this
-					class. The method registered with {\em registerSelectionReleased} must have as
-					parameter a pointer to the  \link Scene Scene \endlink  object. So you have access in this
-					method to the	 \link Scene Scene \endlink  object that has sent the event.
-					The method {\em registerSelectionReleased} takes as parameter as pointer to
-					a method available in the  \link Scene Scene \endlink  object.
+					them to the method registered with <b> registerSelectionReleased</b> available in this
+					class. The method registered with <b> registerSelectionReleased</b> must have as
+					parameter a pointer to the Scene object. So you have access in this
+					method to the	Scene object that has sent the event.
+					The method <b> registerSelectionReleased</b> takes as parameter as pointer to
+					a method available in the Scene object.
 			*/
 			BALL_VIEW_DECLARE_RELEASED_EVENT_CLASS(SelectionReleased);
 
 			/** Declare event receiver class DeselectionPressedMoved.
 					This event receiver class catches all pressed and moved events and relates
-					them to the method registered with {\em registerDeselectionPressedMoved} available in this
-					class. The method registered with {\em registerDeselectionPressedMoved} must have as
-					parameter a pointer to the  \link Scene Scene \endlink  object. So you have access in this
-					method to the	 \link Scene Scene \endlink  object that has sent the event.
-					The method {\em registerDeselectionPressedMoved} takes as parameter as pointer to
-					a method available in the  \link Scene Scene \endlink  object.
+					them to the method registered with <b> registerDeselectionPressedMoved</b> available in this
+					class. The method registered with <b> registerDeselectionPressedMoved</b> must have as
+					parameter a pointer to the Scene object. So you have access in this
+					method to the	Scene object that has sent the event.
+					The method <b> registerDeselectionPressedMoved</b> takes as parameter as pointer to
+					a method available in the Scene object.
 			*/
 			BALL_VIEW_DECLARE_PRESSED_MOVED_EVENT_CLASS(DeselectionPressedMoved);
 
 			/** Declare event receiver class DeselectionPressed.
 					This event receiver class catches all pressed events and relates
-					them to the method registered with {\em registerDeselectionPressed} available in this
-					class. The method registered with {\em registerDeselectionPressed} must have as
-					parameter a pointer to the  \link Scene Scene \endlink  object. So you have access in this
-					method to the	 \link Scene Scene \endlink  object that has sent the event.
-					The method {\em registerDeselectionPressed} takes as parameter as pointer to
-					a method available in the  \link Scene Scene \endlink  object.
+					them to the method registered with <b> registerDeselectionPressed</b> available in this
+					class. The method registered with <b> registerDeselectionPressed</b> must have as
+					parameter a pointer to the Scene object. So you have access in this
+					method to the	Scene object that has sent the event.
+					The method <b> registerDeselectionPressed</b> takes as parameter as pointer to
+					a method available in the Scene object.
 			*/
 			BALL_VIEW_DECLARE_PRESSED_EVENT_CLASS(DeselectionPressed);
 
 			/** Declare event receiver class DeselectionReleased.
 					This event receiver class catches all released events and relates
-					them to the method registered with {\em registerDeselectionReleased} available in this
-					class. The method registered with {\em registerDeselectionReleased} must have as
-					parameter a pointer to the  \link Scene Scene \endlink  object. So you have access in this
-					method to the	 \link Scene Scene \endlink  object that has sent the event.
-					The method {\em registerDeselectionReleased} takes as parameter as pointer to
-					a method available in the  \link Scene Scene \endlink  object.
+					them to the method registered with <b> registerDeselectionReleased</b> available in this
+					class. The method registered with <b> registerDeselectionReleased</b> must have as
+					parameter a pointer to the Scene object. So you have access in this
+					method to the	Scene object that has sent the event.
+					The method <b> registerDeselectionReleased</b> takes as parameter as pointer to
+					a method available in the Scene object.
 			*/
 			BALL_VIEW_DECLARE_RELEASED_EVENT_CLASS(DeselectionReleased);
 			//@}
@@ -1504,18 +1495,18 @@ namespace BALL
 
 			/** Declare combine operator for events ShiftKeyPressed and ControlKeyPressed.
 					Declare operator & for the two events 
-					{\em ShiftKeyPressed} and {\em ControlKeyPressed}.
+					<b> ShiftKeyPressed</b> and <b> ControlKeyPressed</b>.
 					The return type of this operator is
-					{\em ShiftKeyPressedControlKeyPressed}.
+					<b> ShiftKeyPressedControlKeyPressed</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(ShiftKeyPressed, ControlKeyPressed);
 			
 			/** Declare combine operator for events ShiftKeyPressed and MouseMoved.
 					Declare operator & for the two events 
-					{\em ShiftKeyPressed} and {\em MouseMoved}.
+					<b> ShiftKeyPressed</b> and <b> MouseMoved</b>.
 					The return type of this operator is
-					{\em ShiftKeyPressedMouseMoved}.
+					<b> ShiftKeyPressedMouseMoved</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(ShiftKeyPressed,
@@ -1523,9 +1514,9 @@ namespace BALL
 			
 			/** Declare combine operator for events ControlKeyPressed and MouseMoved.
 					Declare operator & for the two events 
-					{\em ControlKeyPressed} and {\em MouseMoved}.
+					<b> ControlKeyPressed</b> and <b> MouseMoved</b>.
 					The return type of this operator is
-					{\em ControlKeyPressedMouseMoved}.
+					<b> ControlKeyPressedMouseMoved</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(ControlKeyPressed,
@@ -1533,9 +1524,9 @@ namespace BALL
 			
 			/** Declare combine operator for events ShiftKeyPressed and ControlKeyPressedMouseMoved.
 					Declare operator & for the two events 
-					{\em ShiftKeyPressed} and {\em ControlKeyPressedMouseMoved}.
+					<b> ShiftKeyPressed</b> and <b> ControlKeyPressedMouseMoved</b>.
 					The return type of this operator is
-					{\em ShiftKeyPressedControlKeyPressedMouseMoved}.
+					<b> ShiftKeyPressedControlKeyPressedMouseMoved</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(ShiftKeyPressed,
@@ -1543,10 +1534,10 @@ namespace BALL
 			
 			/** Declare combine operator for events ControlKeyPressed and ShiftKeyPressedMouseMoved.
 					Declare operator & for the two events 
-					{\em ControlKeyPressed} and {\em ShiftKeyPressedMouseMoved}.
+					<b> ControlKeyPressed</b> and <b> ShiftKeyPressedMouseMoved</b>.
 					This operator changes the order in the return type.
 					The return type of this operator is
-					{\em ShiftKeyPressedControlKeyPressedMouseMoved}.
+					<b> ShiftKeyPressedControlKeyPressedMouseMoved</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR_WITH_RETURN_TYPE
 				(ControlKeyPressed,
@@ -1555,9 +1546,9 @@ namespace BALL
 			
 			/** Declare combine operator for events ShiftKeyPressedControlKeyPressed and MouseMoved.
 					Declare operator & for the two events 
-					{\em ShiftKeyPressedControlKeyPressed} and {\em MouseMoved}.
+					<b> ShiftKeyPressedControlKeyPressed</b> and <b> MouseMoved</b>.
 					The return type of this operator is
-					{\em ShiftKeyPressedControlKeyPressedMouseMoved}.
+					<b> ShiftKeyPressedControlKeyPressedMouseMoved</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(ShiftKeyPressedControlKeyPressed,
@@ -1565,9 +1556,9 @@ namespace BALL
 			
 			/** Declare combine operator for events MouseLeftButtonPressed and ShiftKeyPressed.
 					Declare operator & for the two events 
-					{\em MouseLeftButtonPressed} and {\em ShiftKeyPressed}.
+					<b> MouseLeftButtonPressed</b> and <b> ShiftKeyPressed</b>.
 					The return type of this operator is
-					{\em MouseLeftButtonPressedShiftKeyPressed}.
+					<b> MouseLeftButtonPressedShiftKeyPressed</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseLeftButtonPressed,
@@ -1575,9 +1566,9 @@ namespace BALL
 
 			/** Declare combine operator for events MouseLeftButtonPressed and ControlKeyPressed.
 					Declare operator & for the two events 
-					{\em MouseLeftButtonPressed} and {\em ControlKeyPressed}.
+					<b> MouseLeftButtonPressed</b> and <b> ControlKeyPressed</b>.
 					The return type of this operator is
-					{\em MouseLeftButtonPressedControlKeyPressed}.
+					<b> MouseLeftButtonPressedControlKeyPressed</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseLeftButtonPressed,
@@ -1585,9 +1576,9 @@ namespace BALL
 			
 			/** Declare combine operator for events MouseLeftButtonPressed and ShiftKeyPressedControlKeyPressed.
 					Declare operator & for the two events 
-					{\em MouseLeftButtonPressed} and {\em ShiftKeyPressedControlKeyPressed}.
+					<b> MouseLeftButtonPressed</b> and <b> ShiftKeyPressedControlKeyPressed</b>.
 					The return type of this operator is
-					{\em MouseLeftButtonPressedShiftKeyPressedControlKeyPressed}.
+					<b> MouseLeftButtonPressedShiftKeyPressedControlKeyPressed</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseLeftButtonPressed,
@@ -1595,9 +1586,9 @@ namespace BALL
 			
 			/** Declare combine operator for events MouseLeftButtonPressedShiftKeyPressed and ControlKeyPressed.
 					Declare operator & for the two events 
-					{\em MouseLeftButtonPressedShiftKeyPressed} and {\em ControlKeyPressed}.
+					<b> MouseLeftButtonPressedShiftKeyPressed</b> and <b> ControlKeyPressed</b>.
 					The return type of this operator is
-					{\em MouseLeftButtonPressedShiftKeyPressedControlKeyPressed}.
+					<b> MouseLeftButtonPressedShiftKeyPressedControlKeyPressed</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseLeftButtonPressedShiftKeyPressed,
@@ -1605,10 +1596,10 @@ namespace BALL
 			
 			/** Declare combine operator for events MouseLeftButtonPressedControlKeyPressed and ShiftKeyPressed.
 					Declare operator & for the two events 
-					{\em MouseLeftButtonPressedControlKeyPressed} and {\em ShiftKeyPressed}.
+					<b> MouseLeftButtonPressedControlKeyPressed</b> and <b> ShiftKeyPressed</b>.
 					This operator changes the order in the return type.
 					The return type of this operator is
-					{\em MouseLeftButtonPressedShiftKeyPressedControlKeyPressed}.
+					<b> MouseLeftButtonPressedShiftKeyPressedControlKeyPressed</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR_WITH_RETURN_TYPE
 				(MouseLeftButtonPressedControlKeyPressed,
@@ -1617,9 +1608,9 @@ namespace BALL
 			
 			/** Declare combine operator for events MouseLeftButtonPressed and MouseMoved.
 					Declare operator & for the two events 
-					{\em MouseLeftButtonPressed} and {\em MouseMoved}.
+					<b> MouseLeftButtonPressed</b> and <b> MouseMoved</b>.
 					The return type of this operator is
-					{\em MouseLeftButtonPressedMouseMoved}.
+					<b> MouseLeftButtonPressedMouseMoved</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseLeftButtonPressed,
@@ -1627,9 +1618,9 @@ namespace BALL
 			
 			/** Declare combine operator for events MouseLeftButtonPressedShiftKeyPressed and MouseMoved.
 					Declare operator & for the two events 
-					{\em MouseLeftButtonPressedShiftKeyPressed} and {\em MouseMoved}.
+					<b> MouseLeftButtonPressedShiftKeyPressed</b> and <b> MouseMoved</b>.
 					The return type of this operator is
-					{\em MouseLeftButtonPressedShiftKeyPressedMouseMoved}.
+					<b> MouseLeftButtonPressedShiftKeyPressedMouseMoved</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseLeftButtonPressedShiftKeyPressed,
@@ -1637,9 +1628,9 @@ namespace BALL
 			
 			/** Declare combine operator for events MouseLeftButtonPressedControlKeyPressed and MouseMoved.
 					Declare operator & for the two events 
-					{\em MouseLeftButtonPressedControlKeyPressed} and {\em MouseMoved}.
+					<b> MouseLeftButtonPressedControlKeyPressed</b> and <b> MouseMoved</b>.
 					The return type of this operator is
-					{\em MouseLeftButtonPressedControlKeyPressedMouseMoved}.
+					<b> MouseLeftButtonPressedControlKeyPressedMouseMoved</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseLeftButtonPressedControlKeyPressed,
@@ -1647,9 +1638,9 @@ namespace BALL
 			
 			/** Declare combine operator for events MouseLeftButtonPressedShiftKeyPressed and ControlKeyPressedMouseMoved.
 					Declare operator & for the two events 
-					{\em MouseLeftButtonPressedShiftKeyPressed} and {\em ControlKeyPressedMouseMoved}.
+					<b> MouseLeftButtonPressedShiftKeyPressed</b> and <b> ControlKeyPressedMouseMoved</b>.
 					The return type of this operator is
-					{\em MouseLeftButtonPressedShiftKeyPressedControlKeyPressedMouseMoved}.
+					<b> MouseLeftButtonPressedShiftKeyPressedControlKeyPressedMouseMoved</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseLeftButtonPressedShiftKeyPressed,
@@ -1657,10 +1648,10 @@ namespace BALL
 			
 			/** Declare combine operator for events MouseLeftButtonPressedControlKeyPressed and ShiftKeyPressedMouseMoved.
 					Declare operator & for the two events 
-					{\em MouseLeftButtonPressedControlKeyPressed} and {\em ShiftKeyPressedMouseMoved}.
+					<b> MouseLeftButtonPressedControlKeyPressed</b> and <b> ShiftKeyPressedMouseMoved</b>.
 					This operator changes the order in the return type.
 					The return type of this operator is
-					{\em MouseLeftButtonPressedShiftKeyPressedControlKeyPressed}.
+					<b> MouseLeftButtonPressedShiftKeyPressedControlKeyPressed</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR_WITH_RETURN_TYPE
 				(MouseLeftButtonPressedControlKeyPressed,
@@ -1669,9 +1660,9 @@ namespace BALL
 			
 			/** Declare combine operator for events MouseLeftButtonPressedShiftKeyPressedControlKeyPressed and MouseMoved.
 					Declare operator & for the two events 
-					{\em MouseLeftButtonPressedShiftKeyPressedControlKeyPressed} and {\em MouseMoved}.
+					<b> MouseLeftButtonPressedShiftKeyPressedControlKeyPressed</b> and <b> MouseMoved</b>.
 					The return type of this operator is
-					{\em MouseLeftButtonPressedShiftKeyPressedControlKeyPressedMouseMoved}.
+					<b> MouseLeftButtonPressedShiftKeyPressedControlKeyPressedMouseMoved</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseLeftButtonPressedShiftKeyPressedControlKeyPressed,
@@ -1679,9 +1670,9 @@ namespace BALL
 			
 			/** Declare combine operator for events MouseLeftButtonReleased and ShiftKeyPressed.
 					Declare operator & for the two events 
-					{\em MouseLeftButtonReleased} and {\em ShiftKeyPressed}.
+					<b> MouseLeftButtonReleased</b> and <b> ShiftKeyPressed</b>.
 					The return type of this operator is
-					{\em MouseLeftButtonReleasedShiftKeyPressed}.
+					<b> MouseLeftButtonReleasedShiftKeyPressed</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseLeftButtonReleased,
@@ -1689,9 +1680,9 @@ namespace BALL
 			
 			/** Declare combine operator for events MouseLeftButtonReleased and ControlKeyPressed.
 					Declare operator & for the two events 
-					{\em MouseLeftButtonReleased} and {\em ControlKeyPressed}.
+					<b> MouseLeftButtonReleased</b> and <b> ControlKeyPressed</b>.
 					The return type of this operator is
-					{\em MouseLeftButtonReleasedControlKeyPressed}.
+					<b> MouseLeftButtonReleasedControlKeyPressed</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseLeftButtonReleased,
@@ -1699,9 +1690,9 @@ namespace BALL
 			
 			/** Declare combine operator for events MouseLeftButtonReleasedShiftKeyPressed and ControlKeyPressed.
 					Declare operator & for the two events 
-					{\em MouseLeftButtonReleasedShiftKeyPressed} and {\em ControlKeyPressed}.
+					<b> MouseLeftButtonReleasedShiftKeyPressed</b> and <b> ControlKeyPressed</b>.
 					The return type of this operator is
-					{\em MouseLeftButtonReleasedShiftKeyPressedControlKeyPressed}.
+					<b> MouseLeftButtonReleasedShiftKeyPressedControlKeyPressed</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseLeftButtonReleasedShiftKeyPressed,
@@ -1709,10 +1700,10 @@ namespace BALL
 			
 			/** Declare combine operator for events MouseLeftButtonReleasedControlKeyPressed and ShiftKeyPressed.
 					Declare operator & for the two events 
-					{\em MouseLeftButtonReleasedControlKeyPressed} and {\em ShiftKeyPressed}.
+					<b> MouseLeftButtonReleasedControlKeyPressed</b> and <b> ShiftKeyPressed</b>.
 					This operator changes the order in the return type.
 					The return type of this operator is
-					{\em MouseLeftButtonReleasedShiftKeyPressedControlKeyPressed}.
+					<b> MouseLeftButtonReleasedShiftKeyPressedControlKeyPressed</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR_WITH_RETURN_TYPE
 				(MouseLeftButtonReleasedControlKeyPressed,
@@ -1721,9 +1712,9 @@ namespace BALL
 			
 			/** Declare combine operator for events MouseMiddleButtonPressed and ShiftKeyPressed.
 					Declare operator & for the two events 
-					{\em MouseMiddleButtonPressed} and {\em ShiftKeyPressed}.
+					<b> MouseMiddleButtonPressed</b> and <b> ShiftKeyPressed</b>.
 					The return type of this operator is
-					{\em MouseMiddleButtonPressedShiftKeyPressed}.
+					<b> MouseMiddleButtonPressedShiftKeyPressed</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseMiddleButtonPressed,
@@ -1731,9 +1722,9 @@ namespace BALL
 			
 			/** Declare combine operator for events MouseMiddleButtonPressed and ControlKeyPressed.
 					Declare operator & for the two events 
-					{\em MouseMiddleButtonPressed} and {\em ControlKeyPressed}.
+					<b> MouseMiddleButtonPressed</b> and <b> ControlKeyPressed</b>.
 					The return type of this operator is
-					{\em MouseMiddleButtonPressedControlKeyPressed}.
+					<b> MouseMiddleButtonPressedControlKeyPressed</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseMiddleButtonPressed,
@@ -1741,9 +1732,9 @@ namespace BALL
 			
 			/** Declare combine operator for events MouseMiddleButtonPressed and ShiftKeyPressedControlKeyPressed.
 					Declare operator & for the two events 
-					{\em MouseMiddleButtonPressed} and {\em ShiftKeyPressedControlKeyPressed}.
+					<b> MouseMiddleButtonPressed</b> and <b> ShiftKeyPressedControlKeyPressed</b>.
 					The return type of this operator is
-					{\em MouseMiddleButtonPressedShiftKeyPressedControlKeyPressed}.
+					<b> MouseMiddleButtonPressedShiftKeyPressedControlKeyPressed</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseMiddleButtonPressed,
@@ -1751,9 +1742,9 @@ namespace BALL
 			
 			/** Declare combine operator for events MouseMiddleButtonPressedShiftKeyPressed and ControlKeyPressed.
 					Declare operator & for the two events 
-					{\em MouseMiddleButtonPressedShiftKeyPressed} and {\em ControlKeyPressed}.
+					<b> MouseMiddleButtonPressedShiftKeyPressed</b> and <b> ControlKeyPressed</b>.
 					The return type of this operator is
-					{\em MouseMiddleButtonPressedShiftKeyPressedControlKeyPressed}.
+					<b> MouseMiddleButtonPressedShiftKeyPressedControlKeyPressed</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseMiddleButtonPressedShiftKeyPressed,
@@ -1761,10 +1752,10 @@ namespace BALL
 			
 			/** Declare combine operator for events MouseMiddleButtonPressedControlKeyPressed and ShiftKeyPressed.
 					Declare operator & for the two events 
-					{\em MouseMiddleButtonPressedControlKeyPressed} and {\em ShiftKeyPressed}.
+					<b> MouseMiddleButtonPressedControlKeyPressed</b> and <b> ShiftKeyPressed</b>.
 					This operator changes the order in the return type.
 					The return type of this operator is
-					{\em MouseMiddleButtonPressedShiftKeyPressedControlKeyPressed}.
+					<b> MouseMiddleButtonPressedShiftKeyPressedControlKeyPressed</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR_WITH_RETURN_TYPE
 				(MouseMiddleButtonPressedControlKeyPressed,
@@ -1773,9 +1764,9 @@ namespace BALL
 			
 			/** Declare combine operator for events MouseMiddleButtonPressed and MouseMoved.
 					Declare operator & for the two events 
-					{\em MouseMiddleButtonPressed} and {\em MouseMoved}.
+					<b> MouseMiddleButtonPressed</b> and <b> MouseMoved</b>.
 					The return type of this operator is
-					{\em MouseMiddleButtonPressedMouseMoved}.
+					<b> MouseMiddleButtonPressedMouseMoved</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseMiddleButtonPressed,
@@ -1783,9 +1774,9 @@ namespace BALL
 			
 			/** Declare combine operator for events MouseMiddleButtonPressedShiftKeyPressed and MouseMoved.
 					Declare operator & for the two events 
-					{\em MouseMiddleButtonPressedShiftKeyPressed} and {\em MouseMoved}.
+					<b> MouseMiddleButtonPressedShiftKeyPressed</b> and <b> MouseMoved</b>.
 					The return type of this operator is
-					{\em MouseMiddleButtonPressedShiftKeyPressedMouseMoved}.
+					<b> MouseMiddleButtonPressedShiftKeyPressedMouseMoved</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseMiddleButtonPressedShiftKeyPressed,
@@ -1793,9 +1784,9 @@ namespace BALL
 			
 			/** Declare combine operator for events MouseMiddleButtonPressedControlKeyPressed and MouseMoved.
 					Declare operator & for the two events 
-					{\em MouseMiddleButtonPressedControlKeyPressed} and {\em MouseMoved}.
+					<b> MouseMiddleButtonPressedControlKeyPressed</b> and <b> MouseMoved</b>.
 					The return type of this operator is
-					{\em MouseMiddleButtonPressedControlKeyPressedMouseMoved}.
+					<b> MouseMiddleButtonPressedControlKeyPressedMouseMoved</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseMiddleButtonPressedControlKeyPressed,
@@ -1803,9 +1794,9 @@ namespace BALL
 			
 			/** Declare combine operator for events MouseMiddleButtonPressedShiftKeyPressed and ControlKeyPressedMouseMoved.
 					Declare operator & for the two events 
-					{\em MouseMiddleButtonPressedShiftKeyPressed} and {\em ControlKeyPressedMouseMoved}.
+					<b> MouseMiddleButtonPressedShiftKeyPressed</b> and <b> ControlKeyPressedMouseMoved</b>.
 					The return type of this operator is
-					{\em MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedMouseMoved}.
+					<b> MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedMouseMoved</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseMiddleButtonPressedShiftKeyPressed,
@@ -1813,10 +1804,10 @@ namespace BALL
 			
 			/** Declare combine operator for events MouseMiddleButtonPressedControlKeyPressed and ShiftKeyPressedMouseMoved.
 					Declare operator & for the two events 
-					{\em MouseMiddleButtonPressedControlKeyPressed} and {\em ShiftKeyPressedMouseMoved}.
+					<b> MouseMiddleButtonPressedControlKeyPressed</b> and <b> ShiftKeyPressedMouseMoved</b>.
 					This operator changes the order in the return type.
 					The return type of this operator is
-					{\em MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedMouseMoved}.
+					<b> MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedMouseMoved</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR_WITH_RETURN_TYPE
 				(MouseMiddleButtonPressedControlKeyPressed,
@@ -1825,9 +1816,9 @@ namespace BALL
 			
 			/** Declare combine operator for events MouseMiddleButtonPressedShiftKeyPressedControlKeyPressed and MouseMoved.
 					Declare operator & for the two events 
-					{\em MouseMiddleButtonPressedShiftKeyPressedControlKeyPressed} and {\em MouseMoved}.
+					<b> MouseMiddleButtonPressedShiftKeyPressedControlKeyPressed</b> and <b> MouseMoved</b>.
 					The return type of this operator is
-					{\em MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedMouseMoved}.
+					<b> MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedMouseMoved</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseMiddleButtonPressedShiftKeyPressedControlKeyPressed,
@@ -1835,9 +1826,9 @@ namespace BALL
 			
 			/** Declare combine operator for events MouseMiddleButtonReleased and ShiftKeyPressed.
 					Declare operator & for the two events 
-					{\em MouseMiddleButtonReleased} and {\em ShiftKeyPressed}.
+					<b> MouseMiddleButtonReleased</b> and <b> ShiftKeyPressed</b>.
 					The return type of this operator is
-					{\em MouseMiddleButtonReleasedShiftKeyPressed}.
+					<b> MouseMiddleButtonReleasedShiftKeyPressed</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseMiddleButtonReleased,
@@ -1845,9 +1836,9 @@ namespace BALL
 			
 			/** Declare combine operator for events MouseMiddleButtonReleased and ControlKeyPressed.
 					Declare operator & for the two events 
-					{\em MouseMiddleButtonReleased} and {\em ControlKeyPressed}.
+					<b> MouseMiddleButtonReleased</b> and <b> ControlKeyPressed</b>.
 					The return type of this operator is
-					{\em MouseMiddleButtonReleasedControlKeyPressed}.
+					<b> MouseMiddleButtonReleasedControlKeyPressed</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseMiddleButtonReleased,
@@ -1855,9 +1846,9 @@ namespace BALL
 			
 			/** Declare combine operator for events MouseMiddleButtonReleasedShiftKeyPressed and ControlKeyPressed.
 					Declare operator & for the two events 
-					{\em MouseMiddleButtonReleasedShiftKeyPressed} and {\em ControlKeyPressed}.
+					<b> MouseMiddleButtonReleasedShiftKeyPressed</b> and <b> ControlKeyPressed</b>.
 					The return type of this operator is
-					{\em MouseMiddleButtonReleasedShiftKeyPressedControlKeyPressed}.
+					<b> MouseMiddleButtonReleasedShiftKeyPressedControlKeyPressed</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseMiddleButtonReleasedShiftKeyPressed,
@@ -1865,10 +1856,10 @@ namespace BALL
 			
 			/** Declare combine operator for events MouseMiddleButtonReleasedControlKeyPressed and ShiftKeyPressed.
 					Declare operator & for the two events 
-					{\em MouseMiddleButtonReleasedControlKeyPressed} and {\em ShiftKeyPressed}.
+					<b> MouseMiddleButtonReleasedControlKeyPressed</b> and <b> ShiftKeyPressed</b>.
 					This operator changes the order in the return type.
 					The return type of this operator is
-					{\em MouseMiddleButtonReleasedShiftKeyPressedControlKeyPressed}.
+					<b> MouseMiddleButtonReleasedShiftKeyPressedControlKeyPressed</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR_WITH_RETURN_TYPE
 				(MouseMiddleButtonReleasedControlKeyPressed,
@@ -1877,9 +1868,9 @@ namespace BALL
 			
 			/** Declare combine operator for events MouseRightButtonPressed and ShiftKeyPressed.
 					Declare operator & for the two events 
-					{\em MouseRightButtonPressed} and {\em ShiftKeyPressed}.
+					<b> MouseRightButtonPressed</b> and <b> ShiftKeyPressed</b>.
 					The return type of this operator is
-					{\em MouseRightButtonPressedShiftKeyPressed}.
+					<b> MouseRightButtonPressedShiftKeyPressed</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseRightButtonPressed,
@@ -1887,9 +1878,9 @@ namespace BALL
 			
 			/** Declare combine operator for events MouseRightButtonPressed and ControlKeyPressed.
 					Declare operator & for the two events 
-					{\em MouseRightButtonPressed} and {\em ControlKeyPressed}.
+					<b> MouseRightButtonPressed</b> and <b> ControlKeyPressed</b>.
 					The return type of this operator is
-					{\em MouseRightButtonPressedControlKeyPressed}.
+					<b> MouseRightButtonPressedControlKeyPressed</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseRightButtonPressed,
@@ -1897,9 +1888,9 @@ namespace BALL
 			
 			/** Declare combine operator for events MouseRightButtonPressed and ShiftKeyPressedControlKeyPressed.
 					Declare operator & for the two events 
-					{\em MouseRightButtonPressed} and {\em ShiftKeyPressedControlKeyPressed}.
+					<b> MouseRightButtonPressed</b> and <b> ShiftKeyPressedControlKeyPressed</b>.
 					The return type of this operator is
-					{\em MouseRightButtonPressedShiftKeyPressedControlKeyPressed}.
+					<b> MouseRightButtonPressedShiftKeyPressedControlKeyPressed</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseRightButtonPressed,
@@ -1907,9 +1898,9 @@ namespace BALL
 			
 			/** Declare combine operator for events MouseRightButtonPressedShiftKeyPressed and ControlKeyPressed.
 					Declare operator & for the two events 
-					{\em MouseRightButtonPressedShiftKeyPressed} and {\em ControlKeyPressed}.
+					<b> MouseRightButtonPressedShiftKeyPressed</b> and <b> ControlKeyPressed</b>.
 					The return type of this operator is
-					{\em MouseRightButtonPressedShiftKeyPressedControlKeyPressed}.
+					<b> MouseRightButtonPressedShiftKeyPressedControlKeyPressed</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseRightButtonPressedShiftKeyPressed,
@@ -1917,10 +1908,10 @@ namespace BALL
 			
 			/** Declare combine operator for events MouseRightButtonPressedControlKeyPressed and ShiftKeyPressed.
 					Declare operator & for the two events 
-					{\em MouseRightButtonPressedControlKeyPressed} and {\em ShiftKeyPressed}.
+					<b> MouseRightButtonPressedControlKeyPressed</b> and <b> ShiftKeyPressed</b>.
 					This operator changes the order in the return type.
 					The return type of this operator is
-					{\em MouseRightButtonPressedShiftKeyPressedControlKeyPressed}.
+					<b> MouseRightButtonPressedShiftKeyPressedControlKeyPressed</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR_WITH_RETURN_TYPE
 				(MouseRightButtonPressedControlKeyPressed,
@@ -1929,9 +1920,9 @@ namespace BALL
 			
 			/** Declare combine operator for events MouseRightButtonPressed and MouseMoved.
 					Declare operator & for the two events 
-					{\em MouseRightButtonPressed} and {\em MouseMoved}.
+					<b> MouseRightButtonPressed</b> and <b> MouseMoved</b>.
 					The return type of this operator is
-					{\em MouseRightButtonPressedMouseMoved}.
+					<b> MouseRightButtonPressedMouseMoved</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseRightButtonPressed,
@@ -1939,9 +1930,9 @@ namespace BALL
 			
 			/** Declare combine operator for events MouseRightButtonPressedShiftKeyPressed and MouseMoved.
 					Declare operator & for the two events 
-					{\em MouseRightButtonPressedShiftKeyPressed} and {\em MouseMoved}.
+					<b> MouseRightButtonPressedShiftKeyPressed</b> and <b> MouseMoved</b>.
 					The return type of this operator is
-					{\em MouseRightButtonPressedShiftKeyPressedMouseMoved}.
+					<b> MouseRightButtonPressedShiftKeyPressedMouseMoved</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseRightButtonPressedShiftKeyPressed,
@@ -1949,9 +1940,9 @@ namespace BALL
 			
 			/** Declare combine operator for events MouseRightButtonPressedControlKeyPressed and MouseMoved.
 					Declare operator & for the two events 
-					{\em MouseRightButtonPressedControlKeyPressed} and {\em MouseMoved}.
+					<b> MouseRightButtonPressedControlKeyPressed</b> and <b> MouseMoved</b>.
 					The return type of this operator is
-					{\em MouseRightButtonPressedControlKeyPressedMouseMoved}.
+					<b> MouseRightButtonPressedControlKeyPressedMouseMoved</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseRightButtonPressedControlKeyPressed,
@@ -1959,9 +1950,9 @@ namespace BALL
 			
 			/** Declare combine operator for events MouseRightButtonPressedShiftKeyPressed and ControlKeyPressedMouseMoved.
 					Declare operator & for the two events 
-					{\em MouseRightButtonPressedShiftKeyPressed} and {\em ControlKeyPressedMouseMoved}.
+					<b> MouseRightButtonPressedShiftKeyPressed</b> and <b> ControlKeyPressedMouseMoved</b>.
 					The return type of this operator is
-					{\em MouseRightButtonPressedShiftKeyPressedControlKeyPressedMouseMoved}.
+					<b> MouseRightButtonPressedShiftKeyPressedControlKeyPressedMouseMoved</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseRightButtonPressedShiftKeyPressed,
@@ -1969,10 +1960,10 @@ namespace BALL
 			
 			/** Declare combine operator for events MouseRightButtonPressedControlKeyPressed and ShiftKeyPressedMouseMoved.
 					Declare operator & for the two events 
-					{\em MouseRightButtonPressedControlKeyPressed} and {\em ShiftKeyPressedMouseMoved}.
+					<b> MouseRightButtonPressedControlKeyPressed</b> and <b> ShiftKeyPressedMouseMoved</b>.
 					This operator changes the order in the return type.
 					The return type of this operator is
-					{\em MouseRightButtonPressedShiftKeyPressedControlKeyPressedMouseMoved}.
+					<b> MouseRightButtonPressedShiftKeyPressedControlKeyPressedMouseMoved</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR_WITH_RETURN_TYPE
 				(MouseRightButtonPressedControlKeyPressed,
@@ -1981,9 +1972,9 @@ namespace BALL
 			
 			/** Declare combine operator for events MouseRightButtonPressedShiftKeyPressedControlKeyPressed and MouseMoved.
 					Declare operator & for the two events 
-					{\em MouseRightButtonPressedShiftKeyPressedControlKeyPressed} and {\em MouseMoved}.
+					<b> MouseRightButtonPressedShiftKeyPressedControlKeyPressed</b> and <b> MouseMoved</b>.
 					The return type of this operator is
-					{\em MouseRightButtonPressedShiftKeyPressedControlKeyPressedMouseMoved}.
+					<b> MouseRightButtonPressedShiftKeyPressedControlKeyPressedMouseMoved</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseRightButtonPressedShiftKeyPressedControlKeyPressed,
@@ -1991,9 +1982,9 @@ namespace BALL
 			
 			/** Declare combine operator for events MouseRightButtonReleased and ShiftKeyPressed.
 					Declare operator & for the two events 
-					{\em MouseRightButtonReleased} and {\em ShiftKeyPressed}.
+					<b> MouseRightButtonReleased</b> and <b> ShiftKeyPressed</b>.
 					The return type of this operator is
-					{\em MouseRightButtonReleasedShiftKeyPressed}.
+					<b> MouseRightButtonReleasedShiftKeyPressed</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseRightButtonReleased,
@@ -2001,9 +1992,9 @@ namespace BALL
 			
 			/** Declare combine operator for events MouseRightButtonReleased and ControlKeyPressed.
 					Declare operator & for the two events 
-					{\em MouseRightButtonReleased} and {\em ControlKeyPressed}.
+					<b> MouseRightButtonReleased</b> and <b> ControlKeyPressed</b>.
 					The return type of this operator is
-					{\em MouseRightButtonReleasedControlKeyPressed}.
+					<b> MouseRightButtonReleasedControlKeyPressed</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseRightButtonReleased,
@@ -2011,9 +2002,9 @@ namespace BALL
 			
 			/** Declare combine operator for events MouseRightButtonReleasedShiftKeyPressed and ControlKeyPressed.
 					Declare operator & for the two events 
-					{\em MouseRightButtonReleasedShiftKeyPressed} and {\em ControlKeyPressed}.
+					<b> MouseRightButtonReleasedShiftKeyPressed</b> and <b> ControlKeyPressed</b>.
 					The return type of this operator is
-					{\em MouseRightButtonReleasedShiftKeyPressedControlKeyPressed}.
+					<b> MouseRightButtonReleasedShiftKeyPressedControlKeyPressed</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR
 				(MouseRightButtonReleasedShiftKeyPressed,
@@ -2021,10 +2012,10 @@ namespace BALL
 			
 			/** Declare combine operator for events MouseRightButtonReleasedControlKeyPressed and ShiftKeyPressed.
 					Declare operator & for the two events 
-					{\em MouseRightButtonReleasedControlKeyPressed} and {\em ShiftKeyPressed}.
+					<b> MouseRightButtonReleasedControlKeyPressed</b> and <b> ShiftKeyPressed</b>.
 					This operator changes the order in the return type.
 					The return type of this operator is
-					{\em MouseRightButtonReleasedShiftKeyPressedControlKeyPressed}.
+					<b> MouseRightButtonReleasedShiftKeyPressedControlKeyPressed</b>.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR_WITH_RETURN_TYPE
 				(MouseRightButtonReleasedControlKeyPressed,

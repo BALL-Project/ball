@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: constants.h,v 1.13 2003/03/26 13:56:09 anhi Exp $
+// $Id: constants.h,v 1.14 2003/08/26 08:04:04 oliver Exp $
+//
 
 #ifndef BALL_COMMON_CONSTANTS_H
 #define BALL_COMMON_CONSTANTS_H

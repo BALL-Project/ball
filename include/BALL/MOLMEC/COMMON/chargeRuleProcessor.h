@@ -1,7 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: chargeRuleProcessor.h,v 1.12 2003/03/26 13:56:38 anhi Exp $
+// $Id: chargeRuleProcessor.h,v 1.13 2003/08/26 08:04:24 oliver Exp $
+//
+
 // Molecular Mechanics: rule-based assignment of charges 
 
 #ifndef BALL_MOLMEC_COMMON_CHARGERULEPROCESSOR_H

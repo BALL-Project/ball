@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PTE.iC,v 1.9 2003/07/01 16:44:13 amoll Exp $
+// $Id: PTE.iC,v 1.10 2003/08/26 08:04:16 oliver Exp $
+//
 
 BALL_INLINE 
 void Element::clear()

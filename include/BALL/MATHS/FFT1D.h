@@ -1,13 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FFT1D.h,v 1.8 2003/05/03 17:29:25 oliver Exp $
+// $Id: FFT1D.h,v 1.9 2003/08/26 08:04:20 oliver Exp $
+//
 
 #ifndef BALL_MATHS_FFT1D_H
 #define BALL_MATHS_FFT1D_H
 
-#ifndef BALL_COMMON_H
-# include <BALL/common.h>
+#ifndef BALL_COMMON_EXCEPTION_H
+# include <BALL/COMMON/exception.h>
 #endif
 
 #ifndef BALL_MATHS_COMPLEX_H
@@ -35,7 +36,6 @@ namespace BALL
 			 \par
 			S/FFT1D.h
 	 */
-
 	class FFT1D 
 		: public TRegularData1D<FFTW_COMPLEX>
 	{
@@ -218,7 +218,6 @@ namespace BALL
 		fftw_plan plan_forward_;
 		fftw_plan plan_backward_;
 	};
-
   //@}
 }
 #endif // BALL_MATHS_FFT1D_H

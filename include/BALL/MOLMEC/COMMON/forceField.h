@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceField.h,v 1.26 2003/05/26 14:22:50 oliver Exp $
+// $Id: forceField.h,v 1.27 2003/08/26 08:04:25 oliver Exp $
+//
 
 #ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
 #define BALL_MOLMEC_COMMON_FORCEFIELD_H
@@ -95,7 +96,7 @@ namespace BALL
 				This type is used to represent "pair lists". In fact, it is
 				a <tt>vector</tt> of <tt>pair</tt>s of atom pointers.
 		*/
-		typedef vector<pair<Atom*, Atom*> >	PairVector;
+		typedef std::vector<std::pair<Atom*, Atom*> >	PairVector;
 
 		//@}
 		/**	@name	Constructors and Destructors	

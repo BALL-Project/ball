@@ -1,14 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector4.h,v 1.45 2003/06/09 22:40:49 oliver Exp $
+// $Id: vector4.h,v 1.46 2003/08/26 08:04:23 oliver Exp $
+//
 
 #ifndef BALL_MATHS_VECTOR4_H
 #define BALL_MATHS_VECTOR4_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_COMMON_EXCEPTION_H
 #	include <BALL/COMMON/exception.h>
@@ -17,13 +14,6 @@
 #ifdef BALL_HAS_IEEEFP_H
 #	include <ieeefp.h>
 #endif 
-
-#include <math.h>
-#include <iostream>
-
-#ifndef BALL_CONCEPT_PROCESSOR_H
-#	include <BALL/CONCEPT/processor.h>
-#endif
 
 #ifndef BALL_MATHS_ANGLE_H
 #	include <BALL/MATHS/angle.h>
@@ -380,7 +370,7 @@ namespace BALL
 
 		/**	Orthogonality predicate.
 		*/
-		bool isOrthogonalTo(TVector4& vector) const
+		bool isOrthogonalTo(const TVector4& vector) const
       throw();
 
 		//@}
@@ -876,7 +866,7 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE 
-	bool TVector4<T>::isOrthogonalTo(TVector4<T>& v) const
+	bool TVector4<T>::isOrthogonalTo(const TVector4<T>& v) const
 		throw()
 	{
 		return Maths::isZero(*this * v);
