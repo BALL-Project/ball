@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.44 2004/11/28 22:19:47 amoll Exp $
+// $Id: mainframe.C,v 1.45 2004/11/29 12:16:13 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -207,11 +207,15 @@ namespace BALL
 			// correctly if the widget already considers itself to be fullscreen.
 			showNormal();	
 			showFullScreen();
+			last_size_ = qApp->mainWidget()->rect();
 			setGeometry(qApp->desktop()->screenGeometry());
 		}
 		else
 		{
 			showNormal();
+ 			#ifdef BALL_PLATFORM_WINDOWS
+				setGeometry(rect());
+ 			#endif
 		}
 		fullscreen_ = !fullscreen_;
 	}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.10 2004/11/28 22:19:22 amoll Exp $
+// $Id: mainframe.h,v 1.11 2004/11/29 12:17:00 amoll Exp $
 //
 
 #ifndef BALL_APPLICATIONS_BALLVIEW_MAINFRAME_H
@@ -87,6 +87,7 @@ namespace BALL
 		DisplayProperties*    		display_properties_;
 		MolecularFileDialog*  		file_dialog_;
 		bool 											fullscreen_;
+		QRect 										last_size_;
 	};
 
 } // namespace BALL
