@@ -10,7 +10,9 @@
 #	include <BALL/common.h>
 #endif
 
-#include <BALL/DATATYPE/hashSet.h>
+#ifndef BALL_DATATYPE_HASHSET_H
+#	include <BALL/DATATYPE/hashSet.h>
+#endif
 
 namespace BALL
 {
@@ -398,10 +400,8 @@ namespace BALL
 	bool GraphVertex<Edge,Face>::join(const GraphVertex<Edge,Face>& vertex)
 		throw()
 	{
-cout << "join. rufe *= von ";
 		if (*this *= vertex)
 		{
-cout << " auf\n";
 			typename HashSet<Edge*>::ConstIterator e;
 			for (e = vertex.edges_.begin(); e != vertex.edges_.end(); e++)
 			{
@@ -416,7 +416,6 @@ cout << " auf\n";
 		}
 		else
 		{
-cout << " auf\n";
 			return false;
 		}
 	}*/
@@ -474,7 +473,6 @@ cout << " auf\n";
 	bool GraphVertex<Edge,Face>::operator *= (const GraphVertex<Edge,Face>&) const
 		throw()
 	{
-//cout << "GraphVertex";
 		return false;
 	}
 
