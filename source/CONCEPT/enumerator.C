@@ -1,4 +1,4 @@
-// $Id: enumerator.C,v 1.3 2000/06/16 08:33:25 oliver Exp $
+// $Id: enumerator.C,v 1.4 2000/06/22 18:19:16 oliver Exp $
 
 #include <BALL/COMMON/global.h>
 #include <BALL/CONCEPT/enumerator.h>
@@ -6,6 +6,17 @@
 
 namespace BALL 
 {
+
+	EnumeratorIndex::EnumeratorIndex()
+		: vector<Position>(),
+			modulus_(),
+			base_multipliers_()
+ 	{
+	}
+
+	EnumeratorIndex::~EnumeratorIndex()
+	{
+	}
 
 	EnumeratorIndex::IncompatibleIndex::IncompatibleIndex(const char* file, int line)
 	{
