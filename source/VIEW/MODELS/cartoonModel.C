@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.30 2004/09/04 11:54:48 amoll Exp $
+// $Id: cartoonModel.C,v 1.31 2004/09/07 15:06:42 amoll Exp $
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
@@ -143,7 +143,7 @@ namespace BALL
 
 				Box* box = new Box(
 							atom2->getPosition(),
-							base_atom->getPosition() - atom2->getPosition(),
+						  base_atom->getPosition() - atom2->getPosition() ,
 							atom3->getPosition() - atom2->getPosition(),
 							0.3);
 				box->setComposite(r);
