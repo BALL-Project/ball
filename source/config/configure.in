@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.7 1999/09/08 18:08:11 oliver Exp $
+dnl    $Id: configure.in,v 1.8 1999/09/14 17:45:55 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -756,7 +756,7 @@ else
 				PRELINK="/usr/lib/DCC/edg_prelink"
 				CPPFLAGS="$CPPFLAGS -32 +w"
 				CPPFLAGS_D="${CPPFLAGS_D} -g -fullwarn"
-				CPPFLAGS_O="${CPPFLAGS_O} -O2 -Olimit 8000"
+				CPPFLAGS_O="${CPPFLAGS_O} -O2 -Olimit 16000"
 				LDFLAGS="$LDFLAGS -32"
 				AC_DEFINE(IRIX32,)
 			else	
@@ -792,7 +792,7 @@ else
 					DEF_BOOL=false
 					CPPFLAGS="$CPPFLAGS -64"
 					DYNAROPTS="-64 ${DYNAROPTS}"
-					CPPFLAGS_O="${CPPFLAGS_O} -O2 -OPT:Olimit=9000 -multigot -G 6"
+					CPPFLAGS_O="${CPPFLAGS_O} -O2 -OPT:Olimit=16000 -multigot -G 6"
 					CPPFLAGS_D="${CPPFLAGS_D} -g -fullwarn"
 					LDFLAGS="$LDFLAGS -64"
 					AC_DEFINE(IRIX64,)
@@ -802,7 +802,7 @@ else
 					DEF_BOOL=false
 					CPPFLAGS="$CPPFLAGS -n32"
 					DYNAROPTS="-n32 ${DYNAROPTS}"
-					CPPFLAGS_O="${CPPFLAGS_O} -O2 -OPT:Olimit=9000 -multigot -G 6"
+					CPPFLAGS_O="${CPPFLAGS_O} -O2 -OPT:Olimit=16000 -multigot -G 6"
 					CPPFLAGS_D="${CPPFLAGS_D} -g -fullwarn"
 					LDFLAGS="$LDFLAGS -n32"
 					AC_DEFINE(IRIX32,)
