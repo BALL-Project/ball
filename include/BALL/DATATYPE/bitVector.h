@@ -1,4 +1,4 @@
-// $Id: bitVector.h,v 1.14 2000/07/25 14:06:19 amoll Exp $
+// $Id: bitVector.h,v 1.15 2000/08/24 12:05:13 amoll Exp $
 
 #ifndef BALL_DATATYPE_BITVECTOR_H
 #define BALL_DATATYPE_BITVECTOR_H
@@ -158,14 +158,16 @@ namespace BALL
 		*/
 		BitVector(const BitVector& bit_vector, bool deep = true);
 
-		///
+		/** Detailled constructor from an array of char.
+		*/
 		BitVector(const char* bit_string);
 
 		/**	Destructor
 		*/
 		virtual ~BitVector();
 
-		/**	Clear method
+		/**	Clear method.
+				This method will set the size of this instance to a size of 0.
 		*/
 		void clear();
 		//@}
