@@ -1,4 +1,4 @@
-// $Id: exception.h,v 1.30 2002/01/09 15:47:04 amoll Exp $
+// $Id: exception.h,v 1.31 2002/01/28 09:54:45 anker Exp $
    
 #ifndef BALL_COMMON_EXCEPTION_H
 #define BALL_COMMON_EXCEPTION_H
@@ -186,6 +186,25 @@ namespace BALL
 			public:
 			InvalidRange(const char* file, int line)
 				throw();
+		};
+
+
+		/**	Invalid Size
+				Throw this exception to indicate that a size was unexpected.
+				The constructor has an additional argument: the value of of the
+				requested size. 
+				@param	size the size causing the problem
+		*/
+		class InvalidSize 
+			: public GeneralException
+		{
+			public:
+
+			InvalidSize(const char* file, int line, Size size = 0)
+				throw();
+
+			protected:
+			Size size_;
 		};
 
 

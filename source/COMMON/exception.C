@@ -1,4 +1,4 @@
-// $Id: exception.C,v 1.30 2002/01/15 00:40:38 oliver Exp $
+// $Id: exception.C,v 1.31 2002/01/28 09:54:45 anker Exp $
 
 #include <BALL/COMMON/exception.h>
 #include <BALL/COMMON/logStream.h>
@@ -167,6 +167,19 @@ namespace BALL
 					size_(size)
 			{
 				message_ = "the given size was too small: ";
+				char buf[40];
+				sprintf(buf, "%ld", (long)size);
+				
+				message_ += buf;
+				globalHandler.setMessage(message_);
+			}
+
+			InvalidSize::InvalidSize(const char* file, int line, Size size)
+				throw()
+				:	GeneralException(file, line, "InvalidSize", ""),
+					size_(size)
+			{
+				message_ = "the given size was not expected: ";
 				char buf[40];
 				sprintf(buf, "%ld", (long)size);
 				
