@@ -1,4 +1,4 @@
-// $Id: MOL2File.C,v 1.15 2002/01/05 19:01:48 oliver Exp $
+// $Id: MOL2File.C,v 1.15.4.1 2002/05/18 02:14:06 oliver Exp $
 
 #include <BALL/FORMAT/MOL2File.h>
 #include <BALL/DATATYPE/string.h>
@@ -658,7 +658,8 @@ namespace BALL
 				{
 					bond->setOrder(Bond::ORDER__AROMATIC);
 				}
-				else if (bonds_[i].type == "1")
+				// translate amide bond (am) to a single bond
+				else if ((bonds_[i].type == "1") || (bonds_[i].type == "am"))
 				{
 					bond->setOrder(Bond::ORDER__SINGLE);
 				}
@@ -666,7 +667,7 @@ namespace BALL
 				{
 					bond->setOrder(Bond::ORDER__DOUBLE);
 				}
-				else if (bonds_[i].type == "1")
+				else if (bonds_[i].type == "3")
 				{
 					bond->setOrder(Bond::ORDER__TRIPLE);
 				}
