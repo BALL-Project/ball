@@ -1,4 +1,4 @@
-// $Id: analyticalGeometry.h,v 1.32 2000/06/20 11:38:24 oliver Exp $
+// $Id: analyticalGeometry.h,v 1.33 2000/08/28 16:02:37 oliver Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -1230,6 +1230,51 @@ namespace BALL
 	bool isParallel(const TPlane3<T>& a, const TPlane3<T>& b)
 	{
 		return isCollinear(a.n, b.n);
+	}
+
+	/**	Return the oriented angle of two vectors.
+	*/
+	template <typename T>
+	TAngle<T> getOrientedAngle
+		(const T& ax, const T& ay, const T& az,
+		 const T& bx, const T& by, const T& bz,
+		 const T& nx, const T& ny, const T& nz)
+	{
+    // Calculate the length of the two normals
+    T bl = (T) sqrt((double)ax * ax + ay * ay + az * az);
+    T el = (T) sqrt((double)bx * bx + by * by + bz * bz);
+    T bel = (T) (ax * bx + ay * by + az * bz);
+
+    // if one or both planes are degenerated
+    if (bl * el == 0)
+    {
+      throw Exception::DivisionByZero(__FILE__, __LINE__);
+		}
+    bel /= (bl * el);
+    if (bel > 1.0)
+    {
+      bel = 1;
+		}
+    else if (bel < -1.0)
+    {
+      bel = -1;
+		}
+
+    T acosbel = (T) acos(bel);
+
+    if ((nx * (az * by - ay * bz)
+         + ny * (ax * bz - az * bx)
+         + nz * (ay * bx - ax * by))
+        < 0)
+    {
+      acosbel = -acosbel;
+		}
+
+    acosbel = (acosbel > 0.0)
+      ? Constants::PI - acosbel
+      : -(Constants::PI + acosbel);
+		
+		return TAngle<T>(acosbel);
 	}
 
 	/**	Return the torsion angle of four points to eachother.
