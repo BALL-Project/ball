@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.11 2004/07/05 10:12:53 amoll Exp $
+// $Id: main.C,v 1.12 2004/07/25 20:44:50 amoll Exp $
 //
 
 // order of includes is important: first qapplication, than BALL includes
@@ -15,6 +15,21 @@
 #include <iostream>
 
 
+void myMessageOutput( QtMsgType type, const char *msg )
+{
+	switch ( type ) {
+		case QtDebugMsg:
+				fprintf( stderr, "Debug: %s\n", msg );
+				break;
+		case QtWarningMsg:
+				fprintf( stderr, "Warning: %s\n", msg );
+				break;
+		case QtFatalMsg:
+				fprintf( stderr, "Fatal: %s\n", msg );
+				abort();                    // deliberately core dump
+	}
+}
+
 #ifndef BALL_PLATFORM_WINDOWS
 int main(int argc, char **argv)
 {
@@ -25,6 +40,7 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, PSTR cmd_line, int )
 	char** argv = __argv;
 #endif
 
+	qInstallMsgHandler( myMessageOutput );
 
 	QApplication application(argc, argv);
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.sip,v 1.4 2004/07/10 16:38:19 amoll Exp $
+// $Id: displayProperties.sip,v 1.5 2004/07/25 20:49:40 amoll Exp $
 //
 
 class DisplayProperties
@@ -22,7 +22,7 @@ static DisplayProperties* getInstance(Position /index/);
 //  DisplayProperties(QWidget *parent, const char*);
   void selectModel(int);
 //  void show();
-  void applyButtonClicked();
+  void apply();
 //  void applyPreferences(Preferences&) throw();
 //  void checkMenu(MainControl&) throw();
   void coloringOptionsPressed();

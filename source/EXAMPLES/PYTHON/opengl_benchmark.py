@@ -21,7 +21,7 @@ def runTest(name, model):
 	global result
 	run = 0
 	dp.selectModel(model)
-	dp.applyButtonClicked()
+	dp.apply()
 	v = Vector3(13, 84, 41)
 	l = Vector3(13, 84, -7)
 	u = Vector3(0, -1, 0)

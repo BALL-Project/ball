@@ -2465,7 +2465,7 @@
         <sender>apply_button</sender>
         <signal>clicked()</signal>
         <receiver>DisplayPropertiesData</receiver>
-        <slot>applyButtonClicked()</slot>
+        <slot>apply()</slot>
     </connection>
     <connection>
         <sender>close_button</sender>
@@ -2526,7 +2526,7 @@
     <tabstop>close_button</tabstop>
 </tabstops>
 <slots>
-    <slot>applyButtonClicked()</slot>
+    <slot>apply()</slot>
     <slot>editColor()</slot>
     <slot>editSelectionColor()</slot>
     <slot>selectModel(int)</slot>

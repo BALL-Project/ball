@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.34 2004/07/22 15:09:35 amoll Exp $
+// $Id: displayProperties.h,v 1.35 2004/07/25 20:44:44 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
@@ -232,7 +232,7 @@ namespace BALL
 					A SceneMessage will be sent to inform the Scene.
 					A RepresentationMessage notifies the GeometricControl.
 			*/
-			virtual void applyButtonClicked();
+			virtual void apply();
 			
 			/** Opens the dialog for editing the custom color.
 					Opens a QColorDialog from the QT-library.
@@ -271,7 +271,7 @@ namespace BALL
 				throw();
 
 			/*_ Create the new representation for the selection in the MolecularControl or for a given List of Composites.
-					Called by onNotify() after receiving CompositeMessage::NEW_MOLECULE and by applyButtonClicked().
+					Called by onNotify() after receiving CompositeMessage::NEW_MOLECULE and by apply().
 					To insert a new type of model, this is the only method in DisplayProperties you have to
 					change (See also VIEW/KERNEL/common.h).
 			*/

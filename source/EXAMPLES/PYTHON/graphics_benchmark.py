@@ -24,7 +24,7 @@ def runTest(name, model):
 	t = time.clock()
 	while run < nr_runs and not py.toAbortScript():
 		dp.selectModel(model)
-		dp.applyButtonClicked()
+		dp.apply()
 		run += 1
 		clearRepresentations()
 	model_result = time.clock() - t

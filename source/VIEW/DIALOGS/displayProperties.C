@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.75 2004/07/22 15:09:33 amoll Exp $
+// $Id: displayProperties.C,v 1.76 2004/07/25 20:44:38 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -401,7 +401,7 @@ void DisplayProperties::onNotify(Message *message)
 }
 
 
-void DisplayProperties::applyButtonClicked()
+void DisplayProperties::apply()
 {
 	// no molecular or representation selection present 
 	if (getMainControl()->getMolecularControlSelection().size() == 0 && rep_ == 0)

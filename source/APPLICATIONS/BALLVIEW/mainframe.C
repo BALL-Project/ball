@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.23 2004/07/24 15:22:28 amoll Exp $
+// $Id: mainframe.C,v 1.24 2004/07/25 20:44:50 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -517,7 +517,7 @@ namespace BALL
 				NewSelectionMessage* msg = new NewSelectionMessage();
 				notify_(msg);
 			
-				display_properties_->applyButtonClicked();
+				display_properties_->apply();
 
 				if (string_vector2.size() == 3 && string_vector2[2].has('H'))
 				{
