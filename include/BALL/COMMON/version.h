@@ -1,4 +1,4 @@
-// $Id: version.h,v 1.6 2000/11/13 01:49:31 amoll Exp $
+// $Id: version.h,v 1.7 2000/11/13 19:30:54 amoll Exp $
 
 #ifndef BALL_COMMON_VERSION_H
 #define BALL_COMMON_VERSION_H
@@ -18,8 +18,10 @@ namespace BALL
 	/**	@name Version information class.
 			The BALL release, release data and related version
 			can be retrieved by these methods.\\
-			BALL releases ending on "a" are alpha releases and
-			release strings ending on "b" are beta releases.
+			BALL releases ending on:
+			"a" are alpha releases,
+			"b" are beta releases,
+			"n" are nonpublic releases.
 			Stable releases are not suffixed by a letter.
 			The VersionInfo class contains only static methods
 			that can be used to retrieve the desired information.

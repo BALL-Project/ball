@@ -1,4 +1,4 @@
-// $Id: version.C,v 1.7 2000/11/13 01:49:50 amoll Exp $
+// $Id: version.C,v 1.8 2000/11/13 19:31:01 amoll Exp $
 
 #include <BALL/COMMON/version.h>
 #include <BALL/DATATYPE/string.h>
@@ -43,6 +43,9 @@ namespace BALL
 
 			case 'b': 
 				return BETA;
+
+			case 'n': 
+				return NONPUBLIC;
 
 			case '0':
 			case '1':
