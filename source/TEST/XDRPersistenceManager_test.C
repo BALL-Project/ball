@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XDRPersistenceManager_test.C,v 1.13 2004/07/07 19:29:04 amoll Exp $
+// $Id: XDRPersistenceManager_test.C,v 1.14 2004/07/07 22:33:41 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -11,10 +11,12 @@
 #include <BALL/CONCEPT/XDRPersistenceManager.h>
 #include <BALL/CONCEPT/composite.h>
 #include <BALL/FORMAT/PDBFile.h>
+#include <BALL/FORMAT/HINFile.h>
+#include <BALL/KERNEL/bond.h>
 
 ///////////////////////////
 
-START_TEST(XDRPersistenceManager, "$Id: XDRPersistenceManager_test.C,v 1.13 2004/07/07 19:29:04 amoll Exp $")
+START_TEST(XDRPersistenceManager, "$Id: XDRPersistenceManager_test.C,v 1.14 2004/07/07 22:33:41 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -420,13 +422,48 @@ CHECK(void initializeOutputStream() throw())
 	// ???
 RESULT
 
-CHECK([Extra] full_test)
-	PDBFile pdb("data/OoiEnergy_test.pdb");
-	System s;
-	pdb >> s;
+CHECK([Extra] full_test1)
+	String filename;
+
+	System s1;
+	Protein p1;
+	Chain c1;
+	SecondaryStructure ss1;
+	Residue r1;
+	PDBAtom a1;
+	PDBAtom a2;
+	s1.insert(p1);
+	p1.insert(c1);
+	c1.insert(ss1);
+	ss1.insert(r1);
+	r1.insert(a1);
+	r1.insert(a2);
+	Bond b1;
+	TEST_NOT_EQUAL(b1.createBond(b1, a2, a1), 0)
 
 	NEW_TMP_FILE(filename);
-	ofstream os(filename.c_str(), std::ios::out);
+	ofstream os(filename.c_str(), std::ios::out | std::ios::binary);
+	XDRPersistenceManager pm(os);
+	s1 >> pm;
+	os.close();
+
+	ifstream is(filename.c_str(), std::ios::in);
+	XDRPersistenceManager pm2(is);
+	PersistentObject* po =  pm2.readObject();
+	System* s2 = (System*) po;
+	is.close();
+
+	TEST_EQUAL(s1.countAtoms(), s2->countAtoms())
+RESULT
+	
+CHECK([Extra] full_test2)
+	String filename;
+	HINFile hin("data/AlaGlySer.hin");
+	System s;
+	hin >> s;
+
+	NEW_TMP_FILE(filename);
+	ofstream os(filename.c_str(), std::ios::out | std::ios::binary);
 	XDRPersistenceManager pm(os);
 	s >> pm;
 	os.close();
@@ -438,8 +475,6 @@ CHECK([Extra] full_test)
 
 	TEST_EQUAL(s.countAtoms(), s2->countAtoms())
 RESULT
-
-
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
