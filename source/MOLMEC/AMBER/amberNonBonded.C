@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.C,v 1.6 2001/02/21 18:20:17 anker Exp $
+// $Id: amberNonBonded.C,v 1.7 2001/02/23 17:38:59 amoll Exp $
 
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -413,8 +413,7 @@ namespace BALL
 	void AMBERcalculateMinimumImage
     (Vector3& difference, const Vector3& period)
 	{
-		Vector3 tmp(MolmecSupport::calculateMinimumImage(difference, period));
-		difference = tmp;
+		MolmecSupport::calculateMinimumImage(difference, period);
 	}
 
 
