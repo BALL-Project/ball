@@ -1,4 +1,4 @@
-// $Id: amberBend.C,v 1.14 2001/06/26 02:43:51 oliver Exp $
+// $Id: amberBend.C,v 1.15 2002/02/26 11:51:33 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberBend.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -94,14 +94,23 @@ namespace BALL
 						// check for parameters
 						if (!bend_parameters.assignParameters(this_bend.values, atom_type_a1, atom_type_a2, atom_type_a3))
 						{
-							// complain if nothing was found
-							Log.error() << "AmberBend::setup: cannot find bend parameters for atom types:"
-								<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a1) << "-"
-								<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a2) << "-"
-								<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a3) 
-								<< " (atoms are: " << this_bend.atom1->getFullName() << "/" 
-								<< this_bend.atom2->getFullName() << "/" 
-								<< this_bend.atom3->getFullName() << ")" << endl;
+							// handle wildcards: if the atom type is not known, try to match *-A2-* 
+							if (!bend_parameters.assignParameters(this_bend.values, Atom::ANY_TYPE, atom_type_a2, Atom::ANY_TYPE))
+							{
+								// complain if nothing was found
+								Log.error() << "AmberBend::setup: cannot find bend parameters for atom types:"
+									<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a1) << "-"
+									<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a2) << "-"
+									<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a3) 
+									<< " (atoms are: " << this_bend.atom1->getFullName() << "/" 
+									<< this_bend.atom2->getFullName() << "/" 
+									<< this_bend.atom3->getFullName() << ")" << endl;
+							}
+							else
+							{
+								// store the bend parameters otherwise
+								bend_.push_back(this_bend);
+							}
 						} 
 						else 
 						{
