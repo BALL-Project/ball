@@ -30,7 +30,7 @@ fixed:
 - AtomDistanceColorProcessor
 - PeptideDialog: deletion of sequence
 - problem with normals in Cartoon model
-- doubled performance of SnapShot visualisation, especially for large numbers of SnapShots
+- increased performance of SnapShot visualisation, especially for large numbers of SnapShots
 - SnapShotVisualisation Dialog could cause core dump
 - DatasetControl could cause core dump, after deleting trajectory when 
 	SnapShotVisualisation Dialog was still open
