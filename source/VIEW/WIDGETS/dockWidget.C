@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockWidget.C,v 1.22 2004/07/26 11:27:21 amoll Exp $
+// $Id: dockWidget.C,v 1.23 2004/07/26 11:29:11 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/dockWidget.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -90,17 +90,15 @@ namespace BALL
 		}
 
 
-		void DockWidget::writePreferences(INIFile& inifile)
+		void DockWidget::writePreferences(INIFile& /* inifile */)
 			throw()
 		{
-			ModularWidget::writePreferences(inifile);
+			// prevent call of ModularWidget::writePreferences()
 		}
 
 		void DockWidget::fetchPreferences(INIFile & inifile)
 			throw()
 		{
-			ModularWidget::fetchPreferences(inifile);
-
 			// if the INIFile does not have the information to restore the state of the dockwidgets,
 			// make only the default widgets visible
 			if (!inifile.hasEntry("WINDOWS", "Main::dockwidgets") &&
