@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.h,v 1.26.2.5 2005/01/04 22:41:59 amoll Exp $
+// $Id: cartoonModel.h,v 1.26.2.6 2005/01/09 17:45:44 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_CARTOONMODEL_H
@@ -16,6 +16,7 @@ namespace BALL
 	class SecondaryStructure;
 	class AtomContainer;
 	class Residue;
+	class Chain;
 
 	namespace VIEW
 	{
@@ -150,6 +151,14 @@ namespace BALL
 			virtual void clear_()
 				throw();
 
+			//_ collect the atoms, for which the spline points will be calculated
+			virtual void collectAtoms_(AtomContainer& ac)
+				throw();
+
+			//_ wrapper for collectAtoms_
+			virtual void collectAtomsForChain_(Chain& chain)
+				throw();
+
 			void drawHelix_(SecondaryStructure& ss)
 				throw();
 
@@ -168,7 +177,7 @@ namespace BALL
 			void drawRibbon_(Size start, Size end)
 				throw();
 
-			void computeSpline_(AtomContainer& ac);
+			void computeSpline_();
 
 			void insertTriangle_(Position v1, Position v2, Position v3, Mesh& mesh);
 			void drawStrand_(const Vector3& start,
@@ -187,13 +196,7 @@ namespace BALL
 			bool assignNucleotideAtoms_(Residue& r, Size nr_atoms, String atom_names[10], Atom* atoms[10])
 				throw();
 
-			Size getStartPosition_(const SecondaryStructure& ss)
-				throw();
-
 			Composite* last_chain_;
-
-			// used to speed up drawTube_
-			Index spline_vector_position_;
 
 			float helix_radius_;
 			float arrow_width_;
@@ -208,6 +211,10 @@ namespace BALL
 			bool  draw_ribbon_;
 
 			HashMap<Residue*, Residue*> complementary_bases_;
+			HashMap<SecondaryStructure*, Position> ss_to_spline_start_;
+			HashMap<SecondaryStructure*, Position> ss_nr_splines_;
+
+			bool was_strand_;
 	};
 
 	} // namespace VIEW

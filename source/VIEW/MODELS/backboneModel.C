@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.17.2.31 2005/01/08 18:53:27 amoll Exp $
+// $Id: backboneModel.C,v 1.17.2.32 2005/01/09 17:45:35 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -162,7 +162,6 @@ namespace BALL
 		void AddBackboneModel::createBackbone_()
 			throw()
 		{
-			have_start_point_ = false;
 //   			sort(spline_vector_.begin(), spline_vector_.end());
 
 			calculateTangentialVectors_();
@@ -255,26 +254,31 @@ namespace BALL
 			throw(Exception::OutOfMemory)
 		{
 			if (spline_points_.size() == 0) return;
-			if (spline_points_.size() != atoms_of_spline_points_.size() ||
-														end >= atoms_of_spline_points_.size() ||
-													start >= atoms_of_spline_points_.size() )
+			if (spline_points_.size() != atoms_of_spline_points_.size())
 			{
-				Log.error() << "Error in " << __FILE__ << __LINE__ << std::endl;
+				Log.error() << "Error in " << __FILE__ << " " << __LINE__ << std::endl;
 				return;
 			}
 
-			if (end == 0) end = spline_points_.size();
-
-			if (!have_start_point_)
+			/// ????????? this should not happen
+			if (end >= atoms_of_spline_points_.size())
 			{
-				last_point_ = spline_points_[start];
-				start++;
+				end = atoms_of_spline_points_.size() - 1;
 			}
+
+			if (start >= atoms_of_spline_points_.size())
+			{
+				return;
+			}
+
+			if (end == 0) end = spline_points_.size() - 1;
+
+ 			if (start != 0) start--;
 
 			// create sphere for the point
 			Sphere* sphere = new Sphere;
 			sphere->setRadius(tube_radius_);
-			sphere->setPosition(last_point_);
+			sphere->setPosition(spline_points_[start]);
 			sphere->setComposite(atoms_of_spline_points_[start]);
 			geometric_objects_.push_back(sphere);
 
@@ -283,23 +287,7 @@ namespace BALL
 			Angle slides_angle = Angle(360.0 / slides, false);
 
 			// direction vector of the two current spline points
-			Vector3 dir;
-
-			// prevent problems if last point is the same as the start point
-			while (true)
-			{
-				dir = spline_points_[start] - last_point_;
-				if (Maths::isZero(dir.getSquareLength()))
-				{
-					start++;
-				}
-				else
-				{
-					break;
-				}
-			}
-
-			if (start >= atoms_of_spline_points_.size()) return;
+			Vector3 dir = spline_points_[start + 1] - spline_points_[start];
 					
 			////////////////////////////////////////////////////////////
 			// calculate normal vector r to direction vector dir, with length of radius
@@ -351,7 +339,7 @@ namespace BALL
 
 			for (Position p = 0; p < slides; p++)
 			{
-				mesh->vertex.push_back(last_point_ + new_points[p]);
+				mesh->vertex.push_back(spline_points_[start] + new_points[p]);
 				mesh->normal.push_back(new_points[p]);
 			}
 			
@@ -365,13 +353,13 @@ namespace BALL
 			//------------------------------------------------------>
 			// iterate over all spline_points_
 			//------------------------------------------------------>
-			for (Position p = start; p < end - 1; p++)
+			for (Position p = start; p <= end; p++)
 			{
 				// faster access to the current spline point
-				const Vector3 point = spline_points_[p];
+				const Vector3& point = spline_points_[p];
 				
 				// new direction vector: new point - last point
-				const Vector3 dir_new = point - last_point_;
+				const Vector3 dir_new = spline_points_[p + 1] - point;
 
 				// new normal vector
 				Vector3 r_new = r - (
@@ -436,33 +424,30 @@ namespace BALL
 					mesh->vertex.push_back(point + new_points[point_pos]);
 					mesh->normal.push_back(new_points[point_pos]);
 
-						t.v1 = s_old;			// last lower
-						t.v2 = s_old + 1;	// last upper
-						t.v3 = s_new;			// new upper
-						mesh->triangle.push_back(t);
+					t.v1 = s_old;			// last lower
+					t.v2 = s_old + 1;	// last upper
+					t.v3 = s_new;			// new upper
+					mesh->triangle.push_back(t);
 
 						
-						t.v1 = s_new;			// new upper
-						t.v2 = s_new - 1;	// new lower
-						t.v3 = s_old; 		// last lower
-						mesh->triangle.push_back(t);
+					t.v1 = s_new;			// new upper
+					t.v2 = s_new - 1;	// new lower
+					t.v3 = s_old; 		// last lower
+					mesh->triangle.push_back(t);
 
 					s_old++;
 					s_new++;
 				}
 
 				r = r_new;
-				last_point_ = point;
 			}
 
-			have_start_point_ = true;
-			
 			// create a sphere as an end cap for the point
 			sphere = new Sphere;
 			sphere->setRadius(tube_radius_);
-			sphere->setPosition(last_point_);
- 			sphere->setComposite(atoms_of_spline_points_[end - 1]);
-			geometric_objects_.push_back(sphere);
+			sphere->setPosition(spline_points_[end]);
+ 			sphere->setComposite(atoms_of_spline_points_[end]);
+ 			geometric_objects_.push_back(sphere);
 		}
 
 
@@ -470,11 +455,9 @@ namespace BALL
 			throw()
 		{
 			spline_vector_.clear();
-			last_parent_ = 0;
-			have_start_point_ = false;
-
 			spline_points_.clear();
 			atoms_of_spline_points_.clear();
+			last_parent_ = 0;
 		}
 
 		bool AddBackboneModel::createGeometricObjects()
