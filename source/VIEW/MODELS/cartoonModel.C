@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.49 2004/09/27 21:43:46 amoll Exp $
+// $Id: cartoonModel.C,v 1.50 2004/09/27 22:05:57 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -170,7 +170,7 @@ namespace BALL
 						atom_name = "C6";
 					}
 					else if (r->getName() == "C") atom_name = "C4";
-					else if (r->getName() == "T") atom_name = "N3";
+					else if (r->getName() == "T" || r->getName() == "U") atom_name = "N3";
 						
 					Atom* end_atom = 0;
 					BALL_FOREACH_ATOM(*r, ait)
@@ -959,7 +959,8 @@ namespace BALL
 						((*rit).getName() != "A" &&
 						 (*rit).getName() != "C" &&
 						 (*rit).getName() != "G" &&
-						 (*rit).getName() != "T"))
+						 (*rit).getName() != "T" &&
+						 (*rit).getName() != "U"))
 				{
 					continue;
 				}
@@ -991,7 +992,7 @@ namespace BALL
 				for (; rit2 != chain2_residues.end(); rit2++)
 				{
 					if (((*rit1).getName() == "A" && 
-								((**rit2).getName() != "T" || (**rit2).getName() != "U")) ||
+								((**rit2).getName() != "T" && (**rit2).getName() != "U")) ||
 							((*rit1).getName() == "C" && (**rit2).getName() != "G") ||
 							((*rit1).getName() == "G" && (**rit2).getName() != "C") ||
 							((*rit1).getName() == "T" && (**rit2).getName() != "A") ||
