@@ -45,7 +45,6 @@ namespace BALL
       
 			///
       CanvasWidget (QWidget *parent  = 0, 
-										int x=0, int y=0,  
 										const char* name = 0, 
 										WFlags f         = 0);
                 
@@ -61,37 +60,6 @@ namespace BALL
       void showObjects()	 
 				throw();
       
-      /*
-      void enlarge()
-        throw();
-      void shrink()
-        throw();
-      void rotateClockwise()
-        throw();
-      void rotateCounterClockwise()
-        throw(); 
-      */
-
-      
-      /*
-      void mirror()
-        throw();
-      void moveL()
-        throw();
-      void moveR()
-        throw();
-      void moveU()
-        throw();
-      void moveD()
-      throw();
-	 
-      void print()
-        throw();
-	 
-      void toggleDoubleBuffer()
-        throw();
-      */
-
     public slots:
 
       virtual void zoomIn()
@@ -114,8 +82,6 @@ namespace BALL
 
       QCanvas canvas_;
       std::vector<QCanvasItem*> objects_; //e.g PixItem, Polygonzuege
-      int x_; //width
-      int y_; //heights
       
     };//end of class CanvasWidget
 

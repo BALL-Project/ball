@@ -5,7 +5,6 @@
 //
 
 #include <BALL/VIEW/WIDGETS/canvasWidget.h>
-#include <BALL/VIEW/KERNEL/mainControl.h>
 
 namespace BALL
 {
@@ -42,12 +41,9 @@ namespace BALL
 
     //-----------------------class CanvasWidget
     
-    CanvasWidget::CanvasWidget(QWidget *parent, int x, int y, 
-															 const char* name, WFlags f)
+    CanvasWidget::CanvasWidget(QWidget *parent, const char* name, WFlags f)
       : QCanvasView(parent, name, f),
-				canvas_(0,0),  //Constructs a QCanvas that is w pixels wide and h pixels high
-				x_(x),
-				y_(y)
+				canvas_(0,0)   //Constructs a QCanvas that is w pixels wide and h pixels high
     {
 			//Sets the QCanvas upon which the canvas item is to be drawn to c. 
       setCanvas(&canvas_);  
