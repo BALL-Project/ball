@@ -1,4 +1,4 @@
-// $Id: piecewiseFunction.C,v 1.7 2000/10/19 11:10:46 anker Exp $
+// $Id: piecewiseFunction.C,v 1.8 2000/10/23 10:21:28 anker Exp $
 
 #include <BALL/MATHS/piecewiseFunction.h>
 
@@ -94,46 +94,31 @@ namespace BALL
 	const Interval& PiecewiseFunction::getInterval(double x) const throw()
 	{
 		Position index = getIntervalIndex(x);
-		if (index == INVALID_POSITION)
-		{
-			return INVALID_INTERVAL;
-		}
-		else
-		{
-			return getInterval(index);
-		}
+		// No error checking here, is handled by getIntervalIndex()
+		return getInterval(index);
 	}
 
 
 	const Interval& PiecewiseFunction::getInterval(Position index) const
-		throw()
+		throw(Exception::IndexOverflow)
 	{
-		if (intervals_.size() == 0)
-		{
-			Log.warn() << "PiecewiseFunction::getInterval(): "
-				<< "No intervals defined." << endl;
-			return INVALID_INTERVAL;
-		}
 		if (index < intervals_.size())
 		{
 			return intervals_[index];
 		}
 		else
 		{
-			Log.error() << "PiecewiseFunction::getInterval(Position): "
-				<< "index is too large." << endl;
-			return INVALID_INTERVAL;
+			throw Exception::IndexOverflow(__FILE__, __LINE__);
 		}
 	}
 
 
-	Position PiecewiseFunction::getIntervalIndex(double x) const throw()
+	Position PiecewiseFunction::getIntervalIndex(double x) const
+		throw(Exception::OutOfRange)
 	{
 		if (!isInRange(x))
 		{
-			Log.error() << "PiecewiseFunction::getIntervalIndex(): "
-				<< "x is out of range" << endl;
-			return INVALID_POSITION;
+			throw Exception::OutOfRange(__FILE__, __LINE__);
 		}
 
 		for (Size i = 0; i < intervals_.size(); i++)
@@ -143,10 +128,11 @@ namespace BALL
 				return i;
 			}
 		}
-		// control should not reach this point
+		// control should not reach this point if x is in range, i. e. no
+		// exception wa thrown
 		Log.error() << "PiecewiseFunction::getIntervalIndex(): "
 			<< "x cannot be associated" << endl;
-		return false;
+		return 0;
 	}
 
 
@@ -179,42 +165,22 @@ namespace BALL
 	const Coefficients& PiecewiseFunction::getCoefficients(double x) const
 		throw()
 	{
-		if (coefficients_.size() == 0)
-		{
-			Log.warn() << "PiecewiseFunction::getCoefficients(): "
-				<< "No coefficients defined." << endl;
-			return INVALID_COEFFICIENTS;
-		}
 		Position index = getIntervalIndex(x);
-		if (index != INVALID_POSITION)
-		{
-			return coefficients_[index];
-		}
-		else
-		{
-			return INVALID_COEFFICIENTS;
-		}
+		// No error checking here, is handled by getIntervalIndex()
+		return coefficients_[index];
 	}
 
 
 	const Coefficients& PiecewiseFunction::getCoefficients(Position index)
-		const throw()
+		const throw(Exception::IndexOverflow)
 	{
-		if (coefficients_.size() == 0)
-		{
-			Log.warn() << "PiecewiseFunction::getCoefficients(): "
-				<< "No coefficients defined." << endl;
-			return INVALID_COEFFICIENTS;
-		}
 		if (index < coefficients_.size())
 		{
 			return coefficients_[index];
 		}
 		else
 		{
-			Log.error() << "PiecewiseFunction::getCoefficients(): index too large" 
-				<< endl;
-			return INVALID_COEFFICIENTS;
+			throw Exception::IndexOverflow(__FILE__, __LINE__);
 		}
 	}
 
@@ -320,9 +286,7 @@ namespace BALL
 	{
 		if (intervals_.size() == 0)
 		{
-			Log.error() << "PiecewiseFunction::calculateRange(): "
-				<< "No intervals defined." << endl;
-			range_ = INVALID_INTERVAL;
+			range_.first = range_.second = 0.0;
 		}
 		else
 		{
