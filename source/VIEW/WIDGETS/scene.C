@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.156 2004/12/16 13:18:41 amoll Exp $
+// $Id: scene.C,v 1.156.2.1 2005/01/13 12:27:33 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1732,6 +1732,14 @@ namespace BALL
 
 				updateGL();
 			}
+		}
+
+		void Scene::setMode(ModeType mode)
+			throw()
+		{
+			if 			(mode == ROTATE__MODE) 	rotateMode_();
+			else if (mode == PICKING__MODE) pickingMode_();
+			else if (mode == MOVE__MODE) 		moveMode_();
 		}
 
 		void Scene::rotateMode_()

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.58 2004/10/15 10:53:32 amoll Exp $
+// $Id: scene.h,v 1.58.2.1 2005/01/13 12:27:36 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -542,6 +542,14 @@ namespace BALL
 
 			///
 			void switchToLastMode()
+				throw();
+
+			///
+			ModeType getMode() const
+				throw() { return current_mode_;}
+
+			///
+			virtual void setMode(ModeType mode)
 				throw();
 
 			protected slots:
