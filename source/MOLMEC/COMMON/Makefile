@@ -15,7 +15,8 @@ CPP_SOURCES=\
 	ruleProcessor.C\
 	snapShot.C\
 	support.C\
-	typenameRuleProcessor.C
+	typenameRuleProcessor.C\
+	typeRuleProcessor.C
 
 include ../../common.mak
 include .Dependencies
