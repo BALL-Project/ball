@@ -1,4 +1,4 @@
-// $Id: lineBasedFile.C,v 1.14 2000/10/25 19:28:23 oliver Exp $
+// $Id: lineBasedFile.C,v 1.15 2000/10/26 14:24:29 amoll Exp $
 
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/COMMON/exception.h>
@@ -10,7 +10,7 @@ namespace BALL
 {
 
 	LineBasedFile::LineBasedFileError::LineBasedFileError
-		(const char* file, int line, const LineBasedFile* f, const string& message)
+		  (const char* file, int line, const LineBasedFile* f, const string& message)
 		: Exception::GeneralException(file, line, "LineBasedFileError", "")
 	{
 		message_ = message;
@@ -65,12 +65,23 @@ namespace BALL
 		return *this;
 	}
 
+	bool LineBasedFile::operator == (const LineBasedFile& f)  throw()
+	{
+		return File::operator == (f);
+	}
+
+	bool LineBasedFile::operator != (const LineBasedFile& f)  throw()
+	{
+		return !(File::operator == (f));
+	}
+
+
 	bool LineBasedFile::search(const String& text, bool return_to_point)
 		throw(LineBasedFile::LineBasedFileError)
 	{
 		if (!isOpen() || getOpenMode() != IN)
 		{
-			throw LineBasedFileError(__FILE__, __LINE__, this, 
+			throw LineBasedFile::LineBasedFileError(__FILE__, __LINE__, this, 
 							"File " + getName() +" is not opend for read access or at all.");
 		}
 
@@ -95,7 +106,7 @@ namespace BALL
 	{
 		if (!isOpen() || getOpenMode() != IN)
 		{
-			throw LineBasedFileError(__FILE__, __LINE__, this, 
+			throw LineBasedFile::LineBasedFileError(__FILE__, __LINE__, this, 
 							"File " + getName() +" is not opend for read access or at all.");
 		}
 
@@ -132,7 +143,7 @@ namespace BALL
 	{
 		if (!isOpen() || getOpenMode() != IN)
 		{
-			throw LineBasedFileError(__FILE__, __LINE__, this, 
+			throw LineBasedFile::LineBasedFileError(__FILE__, __LINE__, this, 
 							"File " + getName() +" is not opend for read access or at all.");
 		}
 
@@ -167,7 +178,7 @@ namespace BALL
 	{
 		if (!isOpen())
 		{
-			throw LineBasedFileError(__FILE__, __LINE__, this, 
+			throw LineBasedFile::LineBasedFileError(__FILE__, __LINE__, this, 
 							"File " + getName() +" is not opend.");
 		}
 		File::reopen();
@@ -180,7 +191,7 @@ namespace BALL
 	{
 		if (!isOpen())
 		{
-			throw LineBasedFileError(__FILE__, __LINE__, this, 
+			throw LineBasedFile::LineBasedFileError(__FILE__, __LINE__, this, 
 							"File " + getName() +" is not opend.");
 		}
 
@@ -202,7 +213,6 @@ namespace BALL
 
 		return skipLines(line_number - line_number_ - 1);
 	}
-
 
 	void LineBasedFile::clear()
 		throw()
@@ -229,7 +239,7 @@ namespace BALL
 	{
 		if (!condition)
 		{
-			throw LineBasedFileError(file, line, this, msg);
+			throw LineBasedFile::LineBasedFileError(file, line, this, msg);
 		}
 	}
 

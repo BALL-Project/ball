@@ -180,7 +180,7 @@ namespace BALL
 		readShifts_();
 	}
 
-	NMRStarFile& NMRStarFile::operator = (const NMRStarFile& f)
+	const NMRStarFile& NMRStarFile::operator = (const NMRStarFile& f)
 		throw ()
 	{
 		LineBasedFile::operator = (f);
@@ -653,6 +653,46 @@ namespace BALL
 						atom_data_sets_.size() == number_of_shifts_,
 						"wrong number of shift sets found");
 		}
+	}
+
+	bool NMRStarFile::operator == (const NMRStarFile& f)  throw()
+	{
+		return File::operator == (f);
+	}
+
+	bool NMRStarFile::operator != (const NMRStarFile& f)  throw()
+	{
+		return !(File::operator == (f));
+	}
+
+	void NMRStarFile::clear() throw()
+	{
+		LineBasedFile::clear();
+		number_of_shifts_ = 0;
+		system_name_ = "";
+		reference_options_.clear();
+
+		vector<NMRAtomDataSet*>::iterator data_it = atom_data_sets_.begin();
+		for (; data_it != atom_data_sets_.end(); ++data_it)
+		{
+			delete *data_it;
+		}
+		atom_data_sets_.clear();
+
+		vector<SampleCondition*>::iterator sample_it = sample_conditions_.begin();
+		for (; sample_it != sample_conditions_.end(); ++sample_it)
+		{
+			delete *sample_it;
+		}
+		sample_conditions_.clear();
+
+		vector<ShiftReferenceSet*>::iterator references_it = shift_references_.begin();
+		for (; references_it != shift_references_.end(); ++references_it)
+		{
+			delete *references_it;
+		}
+		shift_references_.clear();
+
 	}
 
 } //namespace
