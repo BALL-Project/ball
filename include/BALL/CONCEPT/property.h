@@ -1,4 +1,4 @@
-// $Id: property.h,v 1.7 2000/03/14 19:37:57 oliver Exp $
+// $Id: property.h,v 1.8 2000/03/16 12:07:53 oliver Exp $
 
 #ifndef BALL_CONCEPT_PROPERTY_H
 #define BALL_CONCEPT_PROPERTY_H
@@ -42,17 +42,21 @@ namespace BALL
 			*/
 			BOOL,
 
-			/** @doc Float-type properties contain a variable of type {\bf float}
+			/** @doc Int-type properties contain a variable of type {\bf int}
 			*/
 			INT,
 
-			/** @doc Float-type properties contain a variable of type {\bf float}
+			/** @doc Unsigned-int-type properties contain a variable of type {\bf unsigned int}
 			*/
 			UNSIGNED_INT,
 
-			/**	@doc Float-type properties contain a variable of type {\bf float}
+			/**	@doc Float-type properties contain a variable of type {\bf double}
 			*/
 			FLOAT,
+
+			/**	@doc Double-type properties contain a variable of type {\bf double}
+			*/
+			DOUBLE,
 
 			/** @doc String-type properties contain a pointer to a string.
 					When destructing the property, the string is destructed, too.
@@ -117,6 +121,14 @@ namespace BALL
 				@param	value the float value stored in the property
 		*/
 		NamedProperty(const string& name, float value);
+
+		/** Constructor for double-type properties.
+				Creates a NamedProperty object containing a float value.
+				The {\tt Type} is set to \Ref{DOUBLE}.
+				@param	name the property's name
+				@param	value the double value stored in the property
+		*/
+		NamedProperty(const string& name, double value);
 
 		/** Constructor for string-type properties.
 				Objects of type STRING contain a pointer to a string
@@ -189,6 +201,12 @@ namespace BALL
 		*/
 		float getFloat() const;
 			
+		/** Return the data of the property object as double.
+				If the property object is not of DOUBLE type, {\bf 0.0}
+				is returned.
+		*/
+		double getDouble() const;
+			
 		/** Return the data of the property object as unsigned int.
 				If the property object is not of UNSIGNED_INT type, {\bf 0}
 				is returned.
@@ -232,6 +250,7 @@ namespace BALL
 			int								i;
 			unsigned int			ui;
 			float							f;
+			double						d;
 			string*						s;
 			PersistentObject*	object;
 		} data_;
@@ -444,6 +463,15 @@ namespace BALL
 				@param	value the data 
 		*/
 		void setProperty(const string& name, float value);
+
+		/**	Set a named property containing a double-precision floating point number.
+				This method creates a new named property containing a
+				floating point number ({\tt NamedProperty::Type == DOUBLE}).
+				Already existing data using the same {\tt name} is overwritten.
+				@param	name the name to be used for the new property
+				@param	value the data 
+		*/
+		void setProperty(const string& name, double value);
 
 		/**	Set a named property containing a string.
 				This method creates a new named property containing a
