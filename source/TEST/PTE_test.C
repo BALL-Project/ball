@@ -1,4 +1,4 @@
-// $Id: PTE_test.C,v 1.6 2001/01/21 21:26:49 amoll Exp $
+// $Id: PTE_test.C,v 1.7 2001/01/22 21:05:40 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -7,7 +7,7 @@
 #include "ItemCollector.h"
 ///////////////////////////
 
-START_TEST(Element, "$Id: PTE_test.C,v 1.6 2001/01/21 21:26:49 amoll Exp $")
+START_TEST(Element, "$Id: PTE_test.C,v 1.7 2001/01/22 21:05:40 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -270,6 +270,21 @@ CHECK(apply(UnaryProcessor<PTE_>& processor))
 	TEST_EQUAL(myproc.getSize(), 112)
 
 	TEST_EQUAL(myproc.getPointer()->getName(), "Actinium")
+RESULT
+
+CHECK(PTE_::operator =)
+	PTE_ p1, p2;
+	p1 = p2;
+RESULT
+
+CHECK(PTE_::operator ==)
+	PTE_ p1, p2;
+	TEST_EQUAL(p1 == p2, true)
+RESULT
+
+CHECK(PTE_::clear())
+	PTE_ p1;
+	p1.clear();
 RESULT
 
 /////////////////////////////////////////////////////////////
