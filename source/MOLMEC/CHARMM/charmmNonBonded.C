@@ -1,4 +1,4 @@
-// $Id: charmmNonBonded.C,v 1.15.4.1 2002/02/27 00:32:51 oliver Exp $
+// $Id: charmmNonBonded.C,v 1.15.4.2 2002/02/27 01:24:54 oliver Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmNonBonded.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -540,8 +540,8 @@ namespace BALL
 				atom2 = pair_it->second;
 				type_atom1 = atom1->getType();
 				type_atom2 = atom2->getType();
-				tmp.atom1 = atom1->getIndex();
-				tmp.atom2 = atom2->getIndex();
+				tmp.atom1 = &(Atom::getAttributes()[atom1->getIndex()]);
+				tmp.atom2 = &(Atom::getAttributes()[atom2->getIndex()]);
 
 				if (!van_der_waals_parameters_14_.assignParameters(tmp.values, type_atom1, type_atom2))
 				{
@@ -594,8 +594,8 @@ namespace BALL
 
 				type_atom1 = atom1->getType();
 				type_atom2 = atom2->getType();
-				tmp.atom1 = atom1->getIndex();
-				tmp.atom2 = atom2->getIndex();
+				tmp.atom1 = &(Atom::getAttributes()[atom1->getIndex()]);
+				tmp.atom2 = &(Atom::getAttributes()[atom2->getIndex()]);
 
 				if (!van_der_waals_parameters_.assignParameters(tmp.values, type_atom1, type_atom2)) 
 				{
@@ -671,8 +671,7 @@ namespace BALL
 		 double& solvation_energy)
 		throw()
 	{
-		Atom::AtomAttributeVector& atoms(Atom::getAttributes());
-		Vector3 difference(atoms[it->atom1].position - atoms[it->atom2].position);
+		Vector3 difference(it->atom1->position - it->atom2->position);
 
 		if (use_periodic_boundary == true)
 		{
@@ -689,7 +688,7 @@ namespace BALL
 			if (distance_2 <= cut_off_electrostatic_2) 
 			{
 				// differentiate between constant dielectric and distance dependent
-				double tmp_energy = atoms[it->atom1].charge * atoms[it->atom2].charge;
+				double tmp_energy = it->atom1->charge * it->atom2->charge;
 				if (use_dist_depend)
 				{
 					// use distance dependent  dielectric 
@@ -732,11 +731,11 @@ namespace BALL
 			// Calculate the solvation energy contribution
 			if (use_solvation		
 					&& (distance_2 <= cut_off_solvation_2)
-					&& atoms[it->atom1].ptr->getElement() !=  PTE[Element::H] 
-					&& atoms[it->atom2].ptr->getElement() !=  PTE[Element::H])
+					&& it->atom1->ptr->getElement() !=  PTE[Element::H] 
+					&& it->atom2->ptr->getElement() !=  PTE[Element::H])
 			{
-				CharmmEEF1::Values a1 = solvation[atoms[it->atom1].type];
-				CharmmEEF1::Values a2 = solvation[atoms[it->atom2].type];
+				CharmmEEF1::Values a1 = solvation[it->atom1->type];
+				CharmmEEF1::Values a2 = solvation[it->atom2->type];
 
 				double factor = PI * sqrt(PI) * distance_2;
 				double distance = sqrt(distance_2);
@@ -787,8 +786,7 @@ namespace BALL
 		throw()
 	{
 		// calculate the difference vector between the two atoms
-		Atom::AtomAttributeVector& atoms(Atom::getAttributes());
-		Vector3 direction(atoms[it->atom1].position - atoms[it->atom2].position);
+		Vector3 direction(it->atom1->position - it->atom2->position);
 
 		// choose the nearest image if period boundary is enabled 
 		if (use_periodic_boundary == true)
@@ -830,7 +828,7 @@ namespace BALL
 				factor = dist_depend_factor * inverse_distance * 2.0 + (1.0 - dist_depend_factor);
 
 				// now we multiply with the right constants and we are done.
-				factor *=  atoms[it->atom1].charge * atoms[it->atom2].charge * inverse_distance * inverse_distance_2 * e_scaling_factor;
+				factor *= it->atom1->charge * it->atom2->charge * inverse_distance * inverse_distance_2 * e_scaling_factor;
 				
 				// we have to use the switching function (cuton <= distance <= cutoff)
 				if (distance_2 > cut_on_electrostatic_2)
@@ -870,7 +868,7 @@ namespace BALL
 					dist_depend_factor = inverse_distance * dist_depend_factor + (1.0 - dist_depend_factor);
 					double electrostatic_energy = - e_scaling_factor
 																				* dist_depend_factor
-																				* inverse_distance * atoms[it->atom1].charge * atoms[it->atom2].charge;
+																				* inverse_distance * it->atom1->charge * it->atom2->charge;
 					factor += derivative_of_switch * electrostatic_energy;
 				}
 			}
@@ -929,11 +927,11 @@ namespace BALL
 			// ignore all hydrogen atoms (they are not considered in EEF1)
 			if (use_solvation 
 					&& (distance_2 <= cut_off_solvation_2) 
-					&& atoms[it->atom1].ptr->getElement() !=  PTE[Element::H] 
-					&& atoms[it->atom2].ptr->getElement() !=  PTE[Element::H])
+					&& it->atom1->ptr->getElement() !=  PTE[Element::H] 
+					&& it->atom2->ptr->getElement() !=  PTE[Element::H])
 			{
-				CharmmEEF1::Values a1 = solvation[atoms[it->atom1].type];
-				CharmmEEF1::Values a2 = solvation[atoms[it->atom2].type];
+				CharmmEEF1::Values a1 = solvation[it->atom1->type];
+				CharmmEEF1::Values a2 = solvation[it->atom2->type];
 
 				// contribution of atom1
 				float factor_exp = (distance - a1.r_min) / a1.sig_w; 
@@ -1006,18 +1004,18 @@ namespace BALL
 			
 			if (!use_selection)
 			{
-				atoms[it->atom1].force += force;
-				atoms[it->atom2].force -= force;
+				it->atom1->force += force;
+				it->atom2->force -= force;
 			} 
 			else 
 			{
-				if (atoms[it->atom1].ptr->isSelected()) 
+				if (it->atom1->ptr->isSelected()) 
 				{
-					atoms[it->atom1].force += force;
+					it->atom1->force += force;
 				}
-				if (atoms[it->atom2].ptr->isSelected()) 
+				if (it->atom2->ptr->isSelected()) 
 				{
-					atoms[it->atom2].force -= force;
+					it->atom2->force -= force;
 				}
 			}
 		}
@@ -1099,8 +1097,7 @@ namespace BALL
 			// first evaluate 1-4 non-bonded pairs 
 			for (i = 0, it = non_bonded_.begin(); i < number_of_1_4_; ++it, i++)  
 			{                                                                                            
-				if (use_selection == false || (use_selection == true && (Atom::getAttributes()[it->atom1].ptr->isSelected() 
-																																 || Atom::getAttributes()[it->atom2].ptr->isSelected()))) 
+				if (use_selection == false || (use_selection == true && (it->atom1->ptr->isSelected() || it->atom2->ptr->isSelected()))) 
 				{                                                                                          
 					CHARMMcalculateVdWAndElectrostaticEnergy
 						(it, ENERGY_PARAMETERS, true, true, 
@@ -1111,8 +1108,7 @@ namespace BALL
 			// evaluate remaining non-bonded pairs (also in the same vector) 
 			for (i = 0; it != non_bonded_.end(); ++it, i++)  
 			{                                                                                            
-				if (use_selection == false || ((use_selection == true) && (Atom::getAttributes()[it->atom1].ptr->isSelected() 
-																																	 || Atom::getAttributes()[it->atom2].ptr->isSelected()))) 
+				if (use_selection == false || ((use_selection == true) && (it->atom1->ptr->isSelected() || it->atom2->ptr->isSelected()))) 
 				{                                                                                          
 					CHARMMcalculateVdWAndElectrostaticEnergy
 						(it, ENERGY_PARAMETERS, true, true, 
@@ -1131,8 +1127,7 @@ namespace BALL
 			// first evaluate 1-4 non-bonded pairs 
 			for (i = 0, it = non_bonded_.begin(); i < number_of_1_4_; ++it, i++)  
 			{                                                                                            
-				if (use_selection == false || ((use_selection == true)  && (Atom::getAttributes()[it->atom1].ptr->isSelected() 
-																																		|| Atom::getAttributes()[it->atom2].ptr->isSelected()))) 
+				if (use_selection == false || ((use_selection == true) && (it->atom1->ptr->isSelected() || it->atom2->ptr->isSelected()))) 
 				{                                                                                          
 					CHARMMcalculateVdWAndElectrostaticEnergy
 						(it, ENERGY_PARAMETERS, true, false, 
@@ -1143,8 +1138,8 @@ namespace BALL
 			// evaluate remaining non-bonded pairs (also in the same vector) 
 			for (i = 0; it != non_bonded_.end(); ++it, i++)  
 			{                                                                                    
-				if (use_selection == false || ((use_selection == true) && (Atom::getAttributes()[it->atom1].ptr->isSelected() 
-																																	 || Atom::getAttributes()[it->atom2].ptr->isSelected()))) 
+				if (use_selection == false || ((use_selection == true) && (it->atom1->ptr->isSelected() 
+																																	 || it->atom2->ptr->isSelected()))) 
 				{                                                                                 
 					CHARMMcalculateVdWAndElectrostaticEnergy
 						(it, ENERGY_PARAMETERS, true, false, 
@@ -1158,8 +1153,8 @@ namespace BALL
 			// first evaluate 1-4 non-bonded pairs 
 			for (i = 0, it = non_bonded_.begin(); i < number_of_1_4_; ++it, i++)  
 			{                                                                                            
-				if (use_selection == false || ((use_selection == true)  && (Atom::getAttributes()[it->atom1].ptr->isSelected() 
-																																		|| Atom::getAttributes()[it->atom2].ptr->isSelected())))
+				if (use_selection == false || ((use_selection == true)  && (it->atom1->ptr->isSelected() 
+																																		|| it->atom2->ptr->isSelected())))
 				{                                                                                          
 					CHARMMcalculateVdWAndElectrostaticEnergy
 						(it, ENERGY_PARAMETERS, false, true, 
@@ -1171,8 +1166,8 @@ namespace BALL
 			for (i = 0; it != non_bonded_.end(); ++it, i++)  
 			{                                                                                            
 				if (use_selection == false 
-						|| ((use_selection == true) && (Atom::getAttributes()[it->atom1].ptr->isSelected() 
-																						|| Atom::getAttributes()[it->atom2].ptr->isSelected()))) 
+						|| ((use_selection == true) && (it->atom1->ptr->isSelected() 
+																						|| it->atom2->ptr->isSelected()))) 
 				{                                                                                          
 					CHARMMcalculateVdWAndElectrostaticEnergy
 						(it, ENERGY_PARAMETERS, false, true, 
@@ -1187,8 +1182,8 @@ namespace BALL
 			// first evaluate 1-4 non-bonded pairs 
 			for (i = 0, it = non_bonded_.begin(); i < number_of_1_4_; ++it, i++)  
 			{                                                                                            
-				if (use_selection == false || ((use_selection == true) && (Atom::getAttributes()[it->atom1].ptr->isSelected() 
-																																	 || Atom::getAttributes()[it->atom2].ptr->isSelected()))) 
+				if (use_selection == false || ((use_selection == true) && (it->atom1->ptr->isSelected() 
+																																	 || it->atom2->ptr->isSelected()))) 
 				{                                                                                          
 					CHARMMcalculateVdWAndElectrostaticEnergy
 						(it, ENERGY_PARAMETERS, false, false, 
@@ -1200,8 +1195,8 @@ namespace BALL
 			for (i = 0; it != non_bonded_.end(); ++it, i++)  
 			{                                                                                            
 				if (use_selection == false 
-						|| ((use_selection == true) && (Atom::getAttributes()[it->atom1].ptr->isSelected() 
-																						|| Atom::getAttributes()[it->atom2].ptr->isSelected()))) 
+						|| ((use_selection == true) && (it->atom1->ptr->isSelected() 
+																						|| it->atom2->ptr->isSelected()))) 
 				{                                                                                          
 					CHARMMcalculateVdWAndElectrostaticEnergy
 						(it, ENERGY_PARAMETERS, false, false, 
@@ -1301,8 +1296,8 @@ namespace BALL
 			for (i = 0, it = non_bonded_.begin(); i < number_of_1_4_; i++, ++it) 
 			{
 				if (use_selection == false 
-						|| ((use_selection == true) && (Atom::getAttributes()[it->atom1].ptr->isSelected() 
-																						|| Atom::getAttributes()[it->atom2].ptr->isSelected())))
+						|| ((use_selection == true) && (it->atom1->ptr->isSelected() 
+																						|| it->atom2->ptr->isSelected())))
 				{
 					CHARMMcalculateVdWAndElectrostaticForce
 						(it, e_scaling_factor_1_4, vdw_scaling_factor_1_4,
@@ -1314,8 +1309,8 @@ namespace BALL
 			for (i = 0; it != non_bonded_.end(); i++, ++it) 
 			{
 				if (use_selection == false 
-						|| ((use_selection == true) && (Atom::getAttributes()[it->atom1].ptr->isSelected() 
-																						|| Atom::getAttributes()[it->atom2].ptr->isSelected())))
+						|| ((use_selection == true) && (it->atom1->ptr->isSelected() 
+																						|| it->atom2->ptr->isSelected())))
 				{
 					CHARMMcalculateVdWAndElectrostaticForce
 						(it, e_scaling_factor, vdw_scaling_factor,
@@ -1334,8 +1329,8 @@ namespace BALL
 			// first deal with 1-4 non-bonded pairs
 			for (i = 0, it = non_bonded_.begin(); i < number_of_1_4_; i++, ++it) 
 			{
-				if (use_selection == false || ((use_selection == true) && (Atom::getAttributes()[it->atom1].ptr->isSelected() 
-																																	 || Atom::getAttributes()[it->atom2].ptr->isSelected())))
+				if (use_selection == false || ((use_selection == true) && (it->atom1->ptr->isSelected() 
+																																	 || it->atom2->ptr->isSelected())))
 				{
 					CHARMMcalculateVdWAndElectrostaticForce
 						(it, e_scaling_factor_1_4, vdw_scaling_factor_1_4,
@@ -1346,8 +1341,8 @@ namespace BALL
 			// now deal with 'real' non-bonded pairs (in the same vector non_bonded_) 
 			for (i = 0; it != non_bonded_.end(); i++, ++it) 
 			{
-				if (use_selection == false || ((use_selection == true) && (Atom::getAttributes()[it->atom1].ptr->isSelected() || 
-																																	 Atom::getAttributes()[it->atom2].ptr->isSelected())))
+				if (use_selection == false || ((use_selection == true) && (it->atom1->ptr->isSelected() || 
+																																	 it->atom2->ptr->isSelected())))
 				{
 					CHARMMcalculateVdWAndElectrostaticForce
 						(it, e_scaling_factor, vdw_scaling_factor,
@@ -1362,8 +1357,8 @@ namespace BALL
 			// first deal with 1-4 non-bonded pairs
 			for (i = 0, it = non_bonded_.begin(); i < number_of_1_4_; i++, ++it) 
 			{
-				if (use_selection == false || ((use_selection == true) && (Atom::getAttributes()[it->atom1].ptr->isSelected() 
-																																	 || Atom::getAttributes()[it->atom2].ptr->isSelected())))
+				if (use_selection == false || ((use_selection == true) && (it->atom1->ptr->isSelected() 
+																																	 || it->atom2->ptr->isSelected())))
 				{
 					CHARMMcalculateVdWAndElectrostaticForce
 						(it, e_scaling_factor_1_4, vdw_scaling_factor_1_4,
@@ -1374,8 +1369,8 @@ namespace BALL
 			// now deal with 'real' non-bonded pairs (in the same vector non_bonded_)
 			for (i = 0; it != non_bonded_.end(); i++, ++it) 
 			{
-				if (use_selection == false || ((use_selection == true) && (Atom::getAttributes()[it->atom1].ptr->isSelected() 
-																																	 || Atom::getAttributes()[it->atom2].ptr->isSelected())))
+				if (use_selection == false || ((use_selection == true) && (it->atom1->ptr->isSelected() 
+																																	 || it->atom2->ptr->isSelected())))
 				{
 					CHARMMcalculateVdWAndElectrostaticForce
 						(it, e_scaling_factor, vdw_scaling_factor,
@@ -1390,8 +1385,8 @@ namespace BALL
 			// first deal with 1-4 non-bonded pairs
 			for (i = 0, it = non_bonded_.begin(); i < number_of_1_4_; i++, it++) 
 			{
-				if (use_selection == false || ((use_selection == true) && (Atom::getAttributes()[it->atom1].ptr->isSelected() 
-																																	 || Atom::getAttributes()[it->atom2].ptr->isSelected())))
+				if (use_selection == false || ((use_selection == true) && (it->atom1->ptr->isSelected() 
+																																	 || it->atom2->ptr->isSelected())))
 				{
 					CHARMMcalculateVdWAndElectrostaticForce
 						(it, e_scaling_factor_1_4, vdw_scaling_factor_1_4,
@@ -1402,8 +1397,8 @@ namespace BALL
 			// now deal with 'real' non-bonded pairs (in the same vector non_bonded_)
 			for (i = 0; it != non_bonded_.end(); i++, ++it) 
 			{
-				if (use_selection == false || ((use_selection == true) && (Atom::getAttributes()[it->atom1].ptr->isSelected() 
-																																	 || Atom::getAttributes()[it->atom2].ptr->isSelected())))
+				if (use_selection == false || ((use_selection == true) && (it->atom1->ptr->isSelected() 
+																																	 || it->atom2->ptr->isSelected())))
 				{
 					CHARMMcalculateVdWAndElectrostaticForce
 						(it, e_scaling_factor, vdw_scaling_factor,

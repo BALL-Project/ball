@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.C,v 1.20.4.1 2002/02/27 00:32:51 oliver Exp $
+// $Id: amberNonBonded.C,v 1.20.4.2 2002/02/27 01:24:54 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -445,8 +445,8 @@ namespace BALL
 				atom2 = pair_it->second;
 				type_atom1 = atom1->getType();
 				type_atom2 = atom2->getType();
-				tmp.atom1 = atom1->getIndex();
-				tmp.atom2 = atom2->getIndex();
+				tmp.atom1 = &(Atom::getAttributes()[atom1->getIndex()]);
+				tmp.atom2 = &(Atom::getAttributes()[atom2->getIndex()]);
 
 				if (!lennard_jones.assignParameters(tmp.values, type_atom1, type_atom2)) 
 				{
@@ -483,8 +483,8 @@ namespace BALL
 
 				type_atom1 = atom1->getType();
 				type_atom2 = atom2->getType();
-				tmp.atom1 = atom1->getIndex();
-				tmp.atom2 = atom2->getIndex();
+				tmp.atom1 = &(Atom::getAttributes()[atom1->getIndex()]);
+				tmp.atom2 = &(Atom::getAttributes()[atom2->getIndex()]);
 
 				if (lennard_jones.hasParameters(type_atom1, type_atom2)) 
 				{
@@ -499,8 +499,8 @@ namespace BALL
 						<< getForceField()->getParameters().getAtomTypes().getTypeName(type_atom2) 
 						<< " (" << atom1->getFullName() << "-" << atom2->getFullName() << ")"
 						<< endl;
-					tmp.atom1 = atom1->getIndex();
-					tmp.atom2 = atom2->getIndex();
+					tmp.atom1 = &(Atom::getAttributes()[atom1->getIndex()]);
+					tmp.atom2 = &(Atom::getAttributes()[atom2->getIndex()]);
 					tmp.values.A = 0;
 					tmp.values.B = 0;
 				}
@@ -515,8 +515,8 @@ namespace BALL
 		Potential1210::Values values;
 		for (Size i = number_of_1_4_; i < non_bonded_.size(); i++)
 		{
-			type_atom1 = Atom::getAttributes()[non_bonded_[i].atom1].type;
-			type_atom2 = Atom::getAttributes()[non_bonded_[i].atom2].type;
+			type_atom1 = non_bonded_[i].atom1->type;
+			type_atom2 = non_bonded_[i].atom2->type;
 			is_hydrogen_bond_.push_back(hydrogen_bond.hasParameters(type_atom1,	type_atom2));
 			if (is_hydrogen_bond_.back() == true)
 			{
@@ -593,7 +593,6 @@ namespace BALL
 		 bool use_dist_depend)
   {
 		// useful aliases
-		Atom::AtomAttributeVector& atoms(Atom::getAttributes());
 		Atom::StaticAtomAttributes& atom1(*LJ_data.atom1);
 		Atom::StaticAtomAttributes& atom2(*LJ_data.atom2);
 
@@ -697,9 +696,8 @@ namespace BALL
 	{
     // calculate the difference vector between the two atoms
 		// useful aliases
-		Atom::AtomAttributeVector& atoms(Atom::getAttributes());
-		Atom::StaticAtomAttributes& atom1(atoms[LJ_data.atom1]);
-		Atom::StaticAtomAttributes& atom2(atoms[LJ_data.atom2]);
+		Atom::StaticAtomAttributes& atom1(*LJ_data.atom1);
+		Atom::StaticAtomAttributes& atom2(*LJ_data.atom2);
 
     Vector3 direction(atom1.position - atom2.position);
 
