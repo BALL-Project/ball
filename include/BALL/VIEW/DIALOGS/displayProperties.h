@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.6 2003/09/01 10:28:53 amoll Exp $
+// $Id: displayProperties.h,v 1.7 2003/09/04 19:03:55 amoll Exp $
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
 #define BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
@@ -307,6 +307,8 @@ class DisplayProperties
 	/*_ Create the new representation, either for one composite, (if one is given) or for
 	 		all in the Control selected composites.
 			Called by onNotify() after receiving NewMolecularMessage and by applyButtonClicked().
+			To insert a new type of model, this is the only method in DisplayProperties you have to
+			change.
 	*/
 	virtual void createRepresentation_(const Composite* composite = 0)
 		throw(InvalidOption);
