@@ -1,4 +1,4 @@
-// $Id: message.h,v 1.4 2001/05/13 13:47:47 hekl Exp $
+// $Id: message.h,v 1.5 2001/06/28 18:40:34 sturm Exp $
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
 #define BALL_VIEW_KERNEL_MESSAGE_H
@@ -54,9 +54,9 @@ namespace BALL
 				See \Ref{ConnectionObject} for further information concerning message handling
 				and message posting.
 				@memo    Message class (BALL VIEW kernel framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/05/13 13:47:47 $
+				@author  $Author: sturm $
+				@version $Revision: 1.5 $
+				@date    $Date: 2001/06/28 18:40:34 $
 		*/
 		class Message
 		{
@@ -173,9 +173,9 @@ namespace BALL
 				The CompositeMessage class is a base class for messages that are relevant for
 				\Ref{ConnectionObject} objects that must react to \Ref{Composite} changes.
 				@memo    CompositeMessage class (BALL VIEW kernel framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/05/13 13:47:47 $
+				@author  $Author: sturm $
+				@version $Revision: 1.5 $
+				@date    $Date: 2001/06/28 18:40:34 $
 		*/
 		class CompositeMessage: public Message
 		{
@@ -287,9 +287,9 @@ namespace BALL
 				such messages in the {\em onNotify} method of user constructed \Ref{ConnectionObject}
 				objects.
 				@memo    NewCompositeMessage class (BALL VIEW kernel framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/05/13 13:47:47 $
+				@author  $Author: sturm $
+				@version $Revision: 1.5 $
+				@date    $Date: 2001/06/28 18:40:34 $
 		*/
 		class NewCompositeMessage: public CompositeMessage
 		{
@@ -345,9 +345,9 @@ namespace BALL
 				such messages in the {\em onNotify} method of user constructed \Ref{ConnectionObject}
 				objects.
 				@memo    RemovedCompositeMessage class (BALL VIEW kernel framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/05/13 13:47:47 $
+				@author  $Author: sturm $
+				@version $Revision: 1.5 $
+				@date    $Date: 2001/06/28 18:40:34 $
 		*/
 		class RemovedCompositeMessage: public CompositeMessage
 		{
@@ -369,7 +369,7 @@ namespace BALL
 					Construct new removedCompositeMessage by copying the removedCompositeMessage {\em message}.
 					The state of {\em *this} removedCompositeMessage is set to the set of {\em message} 
 					removedCompositeMessage.
-					@param       message the removedCompositeMessage to be copied
+					@param       message the CompositeMessage to be copied
 					@return      RemovedCompositeMessage new constructed removedCompositeMessage copied from {\em message}
 					@see         RemovedCompositeMessage
 			*/
@@ -403,9 +403,9 @@ namespace BALL
 				such messages in the {\em onNotify} method of user constructed \Ref{ConnectionObject}
 				objects.
 				@memo    ChangedCompositeMessage class (BALL VIEW kernel framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/05/13 13:47:47 $
+				@author  $Author: sturm $
+				@version $Revision: 1.5 $
+				@date    $Date: 2001/06/28 18:40:34 $
 		*/
 		class ChangedCompositeMessage: public CompositeMessage
 		{
@@ -483,9 +483,9 @@ namespace BALL
 				There are methods available that will tell the \Ref{Scene} to update its contents
 				or change the camera positions.
 				@memo    SceneMessage class (BALL VIEW kernel framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/05/13 13:47:47 $
+				@author  $Author: sturm $
+				@version $Revision: 1.5 $
+				@date    $Date: 2001/06/28 18:40:34 $
 		*/
 		class SceneMessage: public Message
 		{
@@ -636,9 +636,9 @@ namespace BALL
 				this message and extract the new contents of status bar that any other
 				\Ref{ConnectionObject} object has sent through the \Ref{ConnectionObject} tree.
 				@memo    WindowMessage class (BALL VIEW kernel framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/05/13 13:47:47 $
+				@author  $Author: sturm $
+				@version $Revision: 1.5 $
+				@date    $Date: 2001/06/28 18:40:34 $
 		*/
 		class WindowMessage: public Message
 		{
@@ -723,9 +723,9 @@ namespace BALL
 				such messages in the {\em onNotify} method of user constructed \Ref{ConnectionObject}
 				objects.
 				@memo    SelectionMessage class (BALL VIEW kernel framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/05/13 13:47:47 $
+				@author  $Author: sturm $
+				@version $Revision: 1.5 $
+				@date    $Date: 2001/06/28 18:40:34 $
 		*/
 		class SelectionMessage: public Message
 		{
@@ -814,9 +814,9 @@ namespace BALL
 				such messages in the {\em onNotify} method of user constructed \Ref{ConnectionObject}
 				objects.
 				@memo    GeometricObjectSelectionMessage class (BALL VIEW kernel framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/05/13 13:47:47 $
+				@author  $Author: sturm $
+				@version $Revision: 1.5 $
+				@date    $Date: 2001/06/28 18:40:34 $
 		*/
 		class GeometricObjectSelectionMessage: public SelectionMessage
 		{
