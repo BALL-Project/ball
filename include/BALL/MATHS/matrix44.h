@@ -1,4 +1,4 @@
-// $Id: matrix44.h,v 1.18 2000/03/14 20:01:40 oliver Exp $
+// $Id: matrix44.h,v 1.19 2000/03/14 20:11:34 oliver Exp $
 
 #ifndef BALL_MATHS_MATRIX44_H
 #define BALL_MATHS_MATRIX44_H
@@ -1135,7 +1135,7 @@ namespace BALL
 
 
 	template <class T>
-	void TMatrix4x4<T>::setRow(Index row, TVector4<T> row_value)
+	void TMatrix4x4<T>::setRow(Index row, const TVector4<T> row_value)
 	{
 		if (row < 0)
 			throw Exception::IndexUnderflow(__FILE__, __LINE__, row, 0);
@@ -1152,7 +1152,7 @@ namespace BALL
 	}
 
 	template <class T>
-	void TMatrix4x4<T>::setColumn(Index col, TVector4<T> col_value)
+	void TMatrix4x4<T>::setColumn(Index col, const TVector4<T> col_value)
 	{
 		if (col < 0)
 			throw Exception::IndexUnderflow(__FILE__, __LINE__, col, 0);
