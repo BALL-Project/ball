@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.in,v 1.29 2003/05/26 17:05:27 amoll Exp $
+# $Id: Makefile.in,v 1.30 2003/05/27 14:05:05 oliver Exp $
 #
 
 include config.mak
@@ -40,7 +40,7 @@ amber:
 
 clean:
 	@$(ECHO) "Cleaning up object files, cores,  and (uninstalled) library files..."
-	@$(MAKE) subdirs SUBDIRS="$(DIRS) TEST BENCHMARKS APPLICATIONS/MOLVIEW APPLICATIONS/PB APPLICATIONS/AMBER APPLICATIONS/NMRVIEW APPLICATIONS/UTILITIES" TARGET=default_clean
+	@$(MAKE) subdirs SUBDIRS="$(DIRS) TEST BENCHMARKS APPLICATIONS" TARGET=default_clean
 	@-$(RM) -f  $(STATIC_LIBS) $(SHARED_LIBS)
 	@-$(RM) -rf .Dependencies */.Dependencies *.objects *~ @TEMPLATE_DIR@
 
@@ -130,7 +130,7 @@ delete.shared:
 depend:
 	@$(ECHO) "creating dependencies..."
 	@$(ECHO) "" >.Dependencies
-	@for i in $(DIRS) TEST BENCHMARKS APPLICATIONS/MOLVIEW APPLICATIONS/PB APPLICATIONS/AMBER APPLICATIONS/NMRVIEW APPLICATIONS/UTILITIES; do ( cd $$i; echo "" >.Dependencies; cd .. ) ; done
+	@for i in $(DIRS) TEST BENCHMARKS APPLICATIONS ; do ( cd $$i; echo "" >.Dependencies; cd .. ) ; done
 	@set -e; for i in $(DIRS) TEST BENCHMARKS ; do ( cd $$i; $(MAKE) depend; cd .. ) ; done
 
 
