@@ -1,4 +1,4 @@
-// $Id: moleculeObjectProcessor.C,v 1.2 2000/12/12 16:19:34 oliver Exp $
+// $Id: moleculeObjectProcessor.C,v 1.3 2001/01/07 15:42:31 hekl Exp $
 
 #include <BALL/MOLVIEW/GUI/FUNCTOR/moleculeObjectProcessor.h>
 
@@ -46,6 +46,7 @@ namespace BALL
 // ------------------------------------------------------------------------------
 
 			AddGLBallAndStickModel ball_and_stick_model;
+			AddGLBackboneModel backbone_model;
 			AddGLLineModel line_model;
 			AddGLSurfaceModel surface_model;
 			AddGLVanDerWaalsModel van_der_waals_model;
@@ -86,6 +87,13 @@ namespace BALL
 						AddGLBallAndStickModel *model_pointer = &ball_and_stick_model;
 						static_base_model_pointer = (BaseModelProcessor *)model_pointer;
 						model_pointer->enableBallAndStickModel();
+					}
+					break;
+				
+			  case VALUE__MODEL_BACKBONE:
+					{
+						AddGLBackboneModel *model_pointer = &backbone_model;
+						static_base_model_pointer = (BaseModelProcessor *)model_pointer;
 					}
 					break;
 				
@@ -348,23 +356,27 @@ namespace BALL
 // applies the processors to the composite --------------------------------------
 // ------------------------------------------------------------------------------
 
-			//				object_pointer->apply(*static_base_model_pointer);
-			//			object_pointer->apply(*dynamic_base_model_pointer);
-			remove_model.setProperty(VIEW::GeometricObject::PROPERTY__OBJECT_DYNAMIC);
-
-			if (ObjectProcessor::getValue(ADDRESS__DYNAMIC_MODEL) == VALUE__MODEL_REMOVE)
+			if (ObjectProcessor::getValue(ADDRESS__STATIC_MODEL)
+					!= VALUE__MODEL_BACKBONE)
 			{
-				applyOnComposite_(composite, &remove_model);
-			}
-			else
-			{
-				//				if (ObjectProcessor::getValue(ADDRESS__DYNAMIC_MODEL) != VALUE__SELECT
-				//						&& ObjectProcessor::getValue(ADDRESS__DYNAMIC_MODEL) != VALUE__DESELECT)
-				//				{
-				//					applyOnComposite_(composite, &remove_model);
-				//				}
-
-				applyOnComposite_(composite, dynamic_base_model_pointer);
+				//				object_pointer->apply(*static_base_model_pointer);
+				//			object_pointer->apply(*dynamic_base_model_pointer);
+				remove_model.setProperty(VIEW::GeometricObject::PROPERTY__OBJECT_DYNAMIC);
+				
+				if (ObjectProcessor::getValue(ADDRESS__DYNAMIC_MODEL) == VALUE__MODEL_REMOVE)
+				{
+					applyOnComposite_(composite, &remove_model);
+				}
+				else
+				{
+					//				if (ObjectProcessor::getValue(ADDRESS__DYNAMIC_MODEL) != VALUE__SELECT
+					//						&& ObjectProcessor::getValue(ADDRESS__DYNAMIC_MODEL) != VALUE__DESELECT)
+					//				{
+					//					applyOnComposite_(composite, &remove_model);
+					//				}
+					
+					applyOnComposite_(composite, dynamic_base_model_pointer);
+				}
 			}
 				 
 // ------------------------------------------------------------------------------
