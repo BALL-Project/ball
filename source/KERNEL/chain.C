@@ -1,4 +1,4 @@
-// $Id: chain.C,v 1.12 2001/06/05 15:51:12 anker Exp $
+// $Id: chain.C,v 1.13 2001/06/26 19:35:40 amoll Exp $
 
 #include <BALL/KERNEL/chain.h>
 #include <BALL/KERNEL/global.h>
@@ -319,20 +319,6 @@ namespace BALL
 		if (dump_indent_depth_ == 0) ;
 	 
 		BALL_DUMP_STREAM_SUFFIX(s);
-	}
-
-	void Chain::read(istream& /* s */)
-		throw()
-	{
-		// BAUSTELLE
-		throw Exception::NotImplemented(__FILE__, __LINE__);
-	}
-
-	void Chain::write(ostream& /* s */) const
-		throw()
-	{
-		// BAUSTELLE
-		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 
 	bool Chain::operator == (const Chain& chain) const

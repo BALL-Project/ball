@@ -1,4 +1,4 @@
-// $Id: nucleicAcid.C,v 1.11 2001/06/05 15:51:12 anker Exp $
+// $Id: nucleicAcid.C,v 1.12 2001/06/26 19:35:40 amoll Exp $
 
 #include <BALL/KERNEL/nucleicAcid.h>
 #include <BALL/KERNEL/global.h>
@@ -181,20 +181,6 @@ namespace BALL
 		s << "  id: " << id_ << endl;
 
 		BALL_DUMP_STREAM_SUFFIX(s);
-	}
-
-	void NucleicAcid::read(istream& /* s */)
-		throw()
-	{
-		// BAUSTELLE
-		throw Exception::NotImplemented(__FILE__, __LINE__);
-	}
-
-	void NucleicAcid::write(ostream&  /* s */) const
-		throw()
-	{
-		// BAUSTELLE
-		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 
 	bool NucleicAcid::operator == (const NucleicAcid& nucleic_acid) const

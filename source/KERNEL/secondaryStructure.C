@@ -1,4 +1,4 @@
-// $Id: secondaryStructure.C,v 1.11 2001/06/05 15:51:13 anker Exp $
+// $Id: secondaryStructure.C,v 1.12 2001/06/26 19:35:41 amoll Exp $
 
 #include <BALL/KERNEL/secondaryStructure.h>
 
@@ -291,18 +291,6 @@ namespace BALL
 		if (dump_indent_depth_ == 0) ;
 		
 		BALL_DUMP_STREAM_SUFFIX(s);
-	}
-
-	void SecondaryStructure::read(istream&  /* s */)
-		throw()
-	{
-		throw Exception::NotImplemented(__FILE__, __LINE__);
-	}
-
-	void SecondaryStructure::write(ostream&  /* s */) const
-		throw()
-	{
-		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 
 	bool SecondaryStructure::operator == (const SecondaryStructure& secondary_structure) const

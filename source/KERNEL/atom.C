@@ -1,4 +1,4 @@
-// $Id: atom.C,v 1.33 2001/06/14 00:30:12 oliver Exp $
+// $Id: atom.C,v 1.34 2001/06/26 19:35:40 amoll Exp $
 
 #include <BALL/KERNEL/atom.h>
 
@@ -606,18 +606,6 @@ namespace BALL
 		s << endl;
 
 		BALL_DUMP_STREAM_SUFFIX(s);
-	}
-
-	void Atom::read(istream & /* s */)
-		throw()
-	{
-		throw Exception::NotImplemented(__FILE__, __LINE__);
-	}
-
-	void Atom::write(ostream & /* s */) const
-		throw()
-	{
-		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 
 	bool Atom::applyBonds(UnaryProcessor<Bond>& processor)

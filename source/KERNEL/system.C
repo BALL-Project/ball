@@ -1,4 +1,4 @@
-// $Id: system.C,v 1.20 2001/06/05 15:51:13 anker Exp $
+// $Id: system.C,v 1.21 2001/06/26 19:35:41 amoll Exp $
 
 #include <BALL/KERNEL/system.h>
 
@@ -261,18 +261,6 @@ namespace BALL
 		throw()
 	{
 		Composite::splice(system);
-	}
-
-	void System::read(istream& /* s */)
-		throw()
-	{
-		throw Exception::NotImplemented(__FILE__, __LINE__);
-	}
-
-	void System::write(ostream& /* s */) const
-		throw()
-	{
-		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 
 	bool System::operator == (const System& system) const

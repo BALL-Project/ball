@@ -1,4 +1,4 @@
-// $Id: atom.h,v 1.36 2001/05/24 15:26:58 anker Exp $
+// $Id: atom.h,v 1.37 2001/06/26 19:35:28 amoll Exp $
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -717,31 +717,6 @@ namespace BALL
 					@param   depth - the dumping depth
 			*/
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-				throw();
-
-			//@}
-			/** @name Storers 
-			*/
-			//@{ 
-
-			/* Persistent stream input and state restorage.
-				 Read persistent bond data from the input stream {\em s} and restore the state of this instance.
-				 Virtually called by \Ref{Object::operator >>}.\\
-				 {\bf Note:} Not yet implemented.
-				 @param  s input stream from where to restore the internal state
-				 @see    Object::operator >>
-			*/
-			virtual void read(std::istream& s)
-				throw();
-
-			/* Persistent stream output and state storage.
-  			 Write persistent bond data to the output stream {\em s} and store the state of this instance.
-				 Virtually called by \Ref{Object::operator <<}.\\
-				 {\bf Note:} Not yet implemented.
-				 @param  s input stream from where to restore the internal state
-				 @see    Object::operator <<
-			*/
-			virtual void write(std::ostream& s) const
 				throw();
 
 			//@}  

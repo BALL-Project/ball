@@ -1,4 +1,4 @@
-// $Id: system.h,v 1.21 2001/02/26 00:21:49 amoll Exp $
+// $Id: system.h,v 1.22 2001/06/26 19:35:29 amoll Exp $
 
 #ifndef BALL_KERNEL_SYSTEM_H
 #define BALL_KERNEL_SYSTEM_H
@@ -267,27 +267,6 @@ namespace BALL
 				The children are inserted using \Ref{spliceBefore}.
 		*/
 		void splice(System& system)
-			throw();
-
-		//@}
-		/**	@name	Storers 
-		*/
-		//@{
-
-		/* Persistent stream input and state restorage.
-			 Read persistent data from the input stream {\em s} and restore the state of this instance.	\\
-			 {\bf Note:} Not yet implemented.
-			 @param  s input stream from where to restore the internal state of this instance
-		*/
-		virtual void read(std::istream& s)
-			throw();
-
-		/* Persistent stream output and state storage.
-			 Write persistent data to the output stream {\em s} and store the state of this instance.	\\
-			 {\bf Note:} Not yet implemented.	
-			 @param  s input stream from where to restore the internal state of this instance
-		*/
-		virtual void write(std::ostream& s) const
 			throw();
 
 		//@}

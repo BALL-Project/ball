@@ -1,4 +1,4 @@
-// $Id: protein.C,v 1.11 2001/06/05 15:51:12 anker Exp $
+// $Id: protein.C,v 1.12 2001/06/26 19:35:41 amoll Exp $
 
 #include <BALL/KERNEL/protein.h>
 #include <BALL/KERNEL/global.h>
@@ -282,18 +282,6 @@ namespace BALL
 		s << "  id: " << id_ << endl;
 
 		BALL_DUMP_STREAM_SUFFIX(s);
-	}
-
-	void Protein::read(istream& /* s */)
-		throw()
-	{
-		throw Exception::NotImplemented(__FILE__, __LINE__);
-	}
-
-	void Protein::write(ostream&  /* s */) const
-		throw()
-	{
-		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 
 	bool Protein::operator == (const Protein& protein) const

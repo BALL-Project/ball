@@ -1,4 +1,4 @@
-// $Id: PDBAtom.C,v 1.10 2001/01/20 00:27:04 amoll Exp $
+// $Id: PDBAtom.C,v 1.11 2001/06/26 19:35:40 amoll Exp $
 
 #include <BALL/KERNEL/PDBAtom.h>
 
@@ -309,18 +309,6 @@ namespace BALL
 		if (dump_indent_depth_ == 0) ;
 	 
 		BALL_DUMP_STREAM_SUFFIX(s);
-	}
-
-	void PDBAtom::read(istream & /* s */)
-		throw()
-	{
-		throw Exception::NotImplemented(__FILE__, __LINE__);
-	}
-
-	void PDBAtom::write(ostream& /* s */) const
-		throw()
-	{
-		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 
 	void PDBAtom::clear_()

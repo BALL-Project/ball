@@ -1,4 +1,4 @@
-// $Id: nucleotide.C,v 1.9 2001/01/21 21:07:02 amoll Exp $
+// $Id: nucleotide.C,v 1.10 2001/06/26 19:35:40 amoll Exp $
 
 #include <BALL/KERNEL/nucleotide.h>
 
@@ -272,18 +272,6 @@ namespace BALL
 		s << "  insertion code: " << insertion_code_ << endl;
 
 		BALL_DUMP_STREAM_SUFFIX(s);
-	}
-
-	void Nucleotide::read(istream&  /* s */)
-		throw()
-	{
-		throw Exception::NotImplemented(__FILE__, __LINE__);
-	}
-
-	void Nucleotide::write(ostream&  /*s */) const
-		throw()
-	{
-		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 
 	bool Nucleotide::operator == (const Nucleotide& nucleotide) const

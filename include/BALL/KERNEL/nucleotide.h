@@ -1,4 +1,4 @@
-// $Id: nucleotide.h,v 1.17 2001/02/24 22:52:33 amoll Exp $
+// $Id: nucleotide.h,v 1.18 2001/06/26 19:35:29 amoll Exp $
 
 #ifndef BALL_KERNEL_NUCLEOTIDE_H
 #define BALL_KERNEL_NUCLEOTIDE_H
@@ -293,29 +293,6 @@ namespace BALL
 				@param  depth the dumping depth
 		*/
 		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-			throw();
-
-		//@}
-		/**	@name	Storers
-		*/
-		//@{
-
-		/* Persistent stream input and state restorage.
-			 Read persistent data from the input stream {\em s} and restore 
-			 the state of this instance. \\
-			 {\bf Note:} Not yet implemented.
-			 @param  s input stream from where to restore the internal state of this instance nucleotide
-		*/
-		virtual void read(std::istream& s)
-			throw();
-
-		/* Persistent stream output and state storage.
-			 Write persistent data to the output stream {\em s} and store 
-			 the state of this instance. \\
-			 {\bf Note:} Not yet implemented.	
-			 @param  s input stream from where to restore the internal state of this instance nucleotide
-		*/
-		virtual void write(std::ostream& s) const
 			throw();
 
 		//@}

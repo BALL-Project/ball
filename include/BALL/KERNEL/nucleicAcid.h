@@ -1,4 +1,4 @@
-// $Id: nucleicAcid.h,v 1.19 2001/05/28 09:23:28 anker Exp $ 
+// $Id: nucleicAcid.h,v 1.20 2001/06/26 19:35:29 amoll Exp $ 
 
 #ifndef BALL_KERNEL_NUCLEICACID_H
 #define BALL_KERNEL_NUCLEICACID_H
@@ -253,31 +253,6 @@ namespace BALL
 					@param	depth - the dumping depth
 			*/
 		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-			throw();
-
-		//@}
-		/**	@name	Storers
-		*/
-		//@{
-
-		/* Persistent stream input and state restorage.
-			 Read persistent data from the input stream {\em s} and restore 
-			 the state of this instance.	\\
-			 {\bf Note:} Not yet implemented.
-			 @param		s input stream from where to restore the internal state of
-			 					this instance
-		*/
-		virtual void read(std::istream& s)
-			throw();
-
-		/* Persistent stream input and state restorage.
-			 Read persistent data from the input stream {\em s} and restore 
-			 the state of this instance.	\\
-			 {\bf Note:} Not yet implemented.
-			 @param		s input stream from where to restore the internal state of
-			 					this instance
-		*/
-		virtual void write(std::ostream& s) const
 			throw();
 
 		//@}

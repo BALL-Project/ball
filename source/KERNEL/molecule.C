@@ -1,4 +1,4 @@
-// $Id: molecule.C,v 1.10 2001/01/21 21:06:25 amoll Exp $
+// $Id: molecule.C,v 1.11 2001/06/26 19:35:40 amoll Exp $
 
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/system.h>
@@ -195,18 +195,6 @@ namespace BALL
 		if (dump_indent_depth_ == 0) ;
 	 
 		BALL_DUMP_STREAM_SUFFIX(s);
-	}
-
-	void Molecule::read(istream&  /* s */)
-		throw()
-	{
-		throw Exception::NotImplemented(__FILE__, __LINE__);
-	}
-
-	void Molecule::write(ostream& /* s */) const
-		throw()
-	{
-		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 
 	bool Molecule::operator == (const Molecule& molecule) const

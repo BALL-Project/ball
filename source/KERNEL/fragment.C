@@ -1,4 +1,4 @@
-// $Id: fragment.C,v 1.9 2001/01/14 21:57:16 amoll Exp $
+// $Id: fragment.C,v 1.10 2001/06/26 19:35:40 amoll Exp $
 
 #include <BALL/KERNEL/fragment.h>
 
@@ -77,18 +77,6 @@ namespace BALL
 		if (dump_indent_depth_ == 0) ;
 		
 		BALL_DUMP_STREAM_SUFFIX(s);
-	}
-
-	void Fragment::read(istream&  /* s */)
-		throw()
-	{
-		throw Exception::NotImplemented(__FILE__, __LINE__);
-	}
-
-	void Fragment::write(ostream& /* s */) const
-		throw()
-	{
-		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 
 } // namespace BALL

@@ -1,4 +1,4 @@
-// $Id: molecule.h,v 1.18 2001/02/26 00:21:49 amoll Exp $
+// $Id: molecule.h,v 1.19 2001/06/26 19:35:29 amoll Exp $
 
 #ifndef BALL_KERNEL_MOLECULE_H
 #define BALL_KERNEL_MOLECULE_H
@@ -258,24 +258,6 @@ namespace BALL
 		bool operator != (const Molecule& molecule) const
 			throw();
 
-		/**	@name	Storers */
-		//@{
-
-		/**	Read the components of a molecule from an instream.
-				{\bf Note:} Not yet implemented.	
-				@param s the instream
-		*/
-		virtual void read(std::istream& s)
-			throw();
-
-		/**	Write the components of a molecule to an outstream.
-				{\bf Note:} Not yet implemented.	
-				@param s the outstream
-		*/
-		virtual void write(std::ostream& s) const
-			throw();
-		
-		//@}
 
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(Fragment)
 

@@ -1,4 +1,4 @@
-// $Id: residue.C,v 1.19 2001/06/05 15:51:13 anker Exp $
+// $Id: residue.C,v 1.20 2001/06/26 19:35:41 amoll Exp $
 
 #include <BALL/KERNEL/residue.h>
 
@@ -468,18 +468,6 @@ namespace BALL
 		s << "  insertion code: " << insertion_code_ << endl;
 
 		BALL_DUMP_STREAM_SUFFIX(s);
-	}
-
-	void Residue::read(istream&  /* s */)
-		throw()
-	{
-		throw Exception::NotImplemented(__FILE__, __LINE__);
-	}
-
-	void Residue::write(ostream&  /* s */) const
-		throw()
-	{
-		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 
 	String Residue::getFullName(Residue::FullNameType type) const

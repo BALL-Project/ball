@@ -1,4 +1,4 @@
-// $Id: chain.h,v 1.22 2001/02/26 00:21:48 amoll Exp $
+// $Id: chain.h,v 1.23 2001/06/26 19:35:29 amoll Exp $
 
 #ifndef BALL_KERNEL_CHAIN_H
 #define BALL_KERNEL_CHAIN_H
@@ -362,27 +362,6 @@ namespace BALL
 				@param   depth - the dumping depth
 		*/
 		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-			throw();
-
-		//@}
-		/**	@name	Storers
-		*/
-		//@{
-
-		/* Persistent stream input and state restorage.
-			 Read persistent chain data from the input stream {\em s} and restore the state. \\
-			 {\bf Note:} Not yet implemented.
-			 @param  s input stream from where to restore the internal state.
-		*/
-		virtual void read(std::istream& s)
-			throw();
-
-		/* Persistent stream output and state storage.
-			 Write persistent chain data to the output stream {\em s} and store the state. \\
-			 {\bf Note:} Not yet implemented.	
-			 @param  s input stream from where to restore the internal state.
-		*/
-		virtual void write(std::ostream& s) const
 			throw();
 
 		//@}

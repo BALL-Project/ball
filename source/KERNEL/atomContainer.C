@@ -1,4 +1,4 @@
-// $Id: atomContainer.C,v 1.7 2001/06/14 00:30:42 oliver Exp $
+// $Id: atomContainer.C,v 1.8 2001/06/26 19:35:40 amoll Exp $
 
 #include <BALL/KERNEL/atomContainer.h>
 
@@ -449,19 +449,6 @@ namespace BALL
 		
 		BALL_DUMP_STREAM_SUFFIX(s);
 	}
-
-	void AtomContainer::read(istream&  /* s */)
-		throw()
-	{
-		throw Exception::NotImplemented(__FILE__, __LINE__);
-	}
-
-	void AtomContainer::write(ostream&  /* s */) const
-		throw()
-	{
-		throw Exception::NotImplemented(__FILE__, __LINE__);
-	}
-
 
 	bool AtomContainer::applyInterBond(UnaryProcessor<Bond>& processor)
 		throw()
