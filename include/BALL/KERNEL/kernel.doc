@@ -1,4 +1,4 @@
-// $Id: kernel.doc,v 1.6 2000/08/30 19:58:09 oliver Exp $
+// $Id: kernel.doc,v 1.7 2001/05/23 15:28:58 anker Exp $
 
 /**@name	Kernel
 		This chapter contains all relevant information on 
@@ -19,15 +19,34 @@
   //@Include: secondaryStructure.h
   //@Include: system.h
   //@Include: universe.h
-	
+
+	/** @name Iterator classes.
+			Iterators for KERNEL classes
+	*/
+	//@{
+  	//@Include: iterator.h
+		//@Include: atomIterator.h
+		//@Include: bondIterator.h
+		//@Include: chainIterator.h
+		//@Include: fragmentIterator.h
+		//@Include: moleculeIterator.h
+		//@Include: nucleicAcidIterator.h
+		//@Include: nucleotideIterator.h
+		//@Include: proteinIterator.h
+		//@Include: residueIterator.h
+		//@Include: secondaryStructureIterator.h
+	//@}
+
 	/**	@name Miscellaneous
 			Further classes and functions related to the kernel classes
 	*/
 	//@{
 	  //@Include: atomContainer.h
+	  //@Include: atomContainerIterator.h
+		//@Include: PDBAtomIterator.h
+		//@Include: expression.h
   	//@Include: predicate.h
 	  //@Include: global.h
-  	//@Include: iterator.h
 	  //@Include: forEach.h
 	  //@Include: PTE.h
 		//@Include:	selector.h
