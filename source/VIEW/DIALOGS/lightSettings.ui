@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>482</width>
-            <height>283</height>
+            <height>346</height>
         </rect>
     </property>
     <property name="maximumSize">
@@ -39,72 +39,6 @@
         <property name="alignment">
             <set>AlignCenter</set>
         </property>
-    </widget>
-    <widget class="QButtonGroup">
-        <property name="name">
-            <cstring>relative_to_camera</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>155</x>
-                <y>108</y>
-                <width>282</width>
-                <height>47</height>
-            </rect>
-        </property>
-        <property name="title">
-            <string>Position of light source</string>
-        </property>
-        <property name="alignment">
-            <set>AlignHCenter</set>
-        </property>
-        <property name="exclusive">
-            <bool>true</bool>
-        </property>
-        <widget class="QRadioButton">
-            <property name="name">
-                <cstring>not_relative</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>195</x>
-                    <y>22</y>
-                    <width>83</width>
-                    <height>16</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>static</string>
-            </property>
-            <property name="buttonGroupId">
-                <number>0</number>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>keep lightsource static</string>
-            </property>
-        </widget>
-        <widget class="QRadioButton">
-            <property name="name">
-                <cstring>relative</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>22</y>
-                    <width>180</width>
-                    <height>16</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>relative to camera</string>
-            </property>
-            <property name="buttonGroupId">
-                <number>1</number>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>keep lightsource relative to camera</string>
-            </property>
-        </widget>
     </widget>
     <widget class="QLabel">
         <property name="name">
@@ -478,6 +412,128 @@
             </property>
         </widget>
     </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>add_lights_button</cstring>
+        </property>
+        <property name="enabled">
+            <bool>true</bool>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>150</x>
+                <y>249</y>
+                <width>159</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>0</width>
+                <height>30</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>Add Light</string>
+        </property>
+        <property name="toolTip" stdset="0">
+            <string>create a new light</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>remove_lights_button</cstring>
+        </property>
+        <property name="enabled">
+            <bool>false</bool>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>315</x>
+                <y>249</y>
+                <width>160</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>0</width>
+                <height>30</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>Remove</string>
+        </property>
+        <property name="toolTip" stdset="0">
+            <string>remove a light</string>
+        </property>
+    </widget>
+    <widget class="QButtonGroup">
+        <property name="name">
+            <cstring>relative_to_camera</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>155</x>
+                <y>108</y>
+                <width>282</width>
+                <height>47</height>
+            </rect>
+        </property>
+        <property name="title">
+            <string>Position of light source</string>
+        </property>
+        <property name="alignment">
+            <set>AlignHCenter</set>
+        </property>
+        <property name="exclusive">
+            <bool>true</bool>
+        </property>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>relative</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>22</y>
+                    <width>180</width>
+                    <height>16</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>relative to camera</string>
+            </property>
+            <property name="buttonGroupId">
+                <number>1</number>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>keep lightsource relative to camera</string>
+            </property>
+        </widget>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>not_relative</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>195</x>
+                    <y>22</y>
+                    <width>83</width>
+                    <height>16</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>static</string>
+            </property>
+            <property name="buttonGroupId">
+                <number>0</number>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>keep lightsource static</string>
+            </property>
+        </widget>
+    </widget>
     <widget class="QGroupBox">
         <property name="name">
             <cstring>GroupBox4_2</cstring>
@@ -551,62 +607,6 @@
             </property>
         </widget>
     </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>add_lights_button</cstring>
-        </property>
-        <property name="enabled">
-            <bool>true</bool>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>150</x>
-                <y>249</y>
-                <width>159</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>0</width>
-                <height>30</height>
-            </size>
-        </property>
-        <property name="text">
-            <string>Add Light</string>
-        </property>
-        <property name="toolTip" stdset="0">
-            <string>create a new light</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>remove_lights_button</cstring>
-        </property>
-        <property name="enabled">
-            <bool>false</bool>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>315</x>
-                <y>249</y>
-                <width>160</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>0</width>
-                <height>30</height>
-            </size>
-        </property>
-        <property name="text">
-            <string>Remove</string>
-        </property>
-        <property name="toolTip" stdset="0">
-            <string>remove a light</string>
-        </property>
-    </widget>
 </widget>
 <connections>
     <connection>
@@ -657,6 +657,12 @@
         <receiver>LightSettingsData</receiver>
         <slot>removeLightPressed()</slot>
     </connection>
+    <connection>
+        <sender>not_relative</sender>
+        <signal>stateChanged(int)</signal>
+        <receiver>LightSettingsData</receiver>
+        <slot>positionTypeChanged()</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>lights_list</tabstop>
@@ -687,6 +693,7 @@
     <slot>typeSelected()</slot>
     <slot>lightSelected()</slot>
     <slot>intensityChanged()</slot>
+    <slot>positionTypeChanged()</slot>
 </slots>
 <exportmacro>BALL_EXPORT</exportmacro>
 <layoutdefaults spacing="6" margin="11"/>

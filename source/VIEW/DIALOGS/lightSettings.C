@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lightSettings.C,v 1.14 2005/02/10 23:21:54 amoll Exp $
+// $Id: lightSettings.C,v 1.15 2005/02/11 17:06:51 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/lightSettings.h>
@@ -21,15 +21,26 @@ namespace BALL
 	namespace VIEW
 	{
 
-LightSettings::LightSettings(QWidget* parent,  const char* name, WFlags fl)
+LightSettings::LightSettings(QWidget* parent, const char* name, WFlags fl)
   : LightSettingsData(parent, name, fl),
-		PreferencesEntry()
+		PreferencesEntry(),
+		ignore_(false),
+		current_light_(-1)
 {
-	stage_ = ((Scene*) parent)->getStage();
-	if (stage_ == 0) return;
-	scene_ = (Scene*) parent;
-	current_light_ = -1;
+	if (parent == 0 || !RTTI::isKindOf<Scene>(*parent)) 
+	{
+		Log.error() << "LightSettings dialog must be created with a Scene as parent!" << std::endl;
+		return;
+	}
+
+	stage_ = (dynamic_cast<Scene*>(parent))->getStage();
+	if (stage_ == 0) 
+	{
+		Log.error() << "LightSettings dialog was created with a Scene as parent, which has no Stage!" << std::endl;
+		return;
+	}
 	
+	relative_to_camera->setChecked(true);
 	updateFromStage();
 	insertEntry(this, "Lighting");
 }
@@ -42,68 +53,57 @@ void LightSettings::updateFromStage()
 	List<LightSource>::ConstIterator it = stage_->getLightSources().begin();
 	for (; it != stage_->getLightSources().end(); it++)
 	{
-		lights_.push_back(LightSource(*it));
+		lights_.push_back(*it);
 	}
 
-	clearFields_();
 	update();
-	lights_list->setCurrentItem(lights_.size() -1 );
 }
 
 
 void LightSettings::update()
 	throw()
 {
-	current_light_ = lights_list->currentItem();
-	clearFields_();
-	if (lights_.size() == 0)
+	if (!lights_.size()) 
 	{
-		current_light_ = -1;
+		clearFields_();
 		return;
-	} 
-
-	if (current_light_ >= (Index)lights_.size()) 
-	{
-		current_light_ = -1;
 	}
 
-	for (Index light_nr = 0; light_nr < (Index)lights_.size(); light_nr++)
+	if (lights_.size() != lights_list->count())
 	{
-		lights_list->insertItem(QString((String("Light ") + String(light_nr + 1)).c_str()));
+		clearFields_();
+	
+		for (Position light_nr = 0; light_nr < lights_.size(); light_nr++)
+		{
+			lights_list->insertItem((String("Light ") + String(light_nr + 1)).c_str());
+		}
+	}
+
+	if (getCurrentLightNumber_() == -1)
+	{
+		ignore_ = true;
+		lights_list->setSelected(lights_.size() - 1, true);
+		ignore_ = false;
+		return;
 	}
 	
 	getValues_();
+	ignore_ = false;
 }
 
 
 void LightSettings::addLightPressed()
 {
+	if (lights_.size() >= 8) return;
+
 	saveSettingsToLight_();
+
 	LightSource light;
-	lights_.push_back(light);
-	lights_list->insertItem(QString((String("Light ") + String(lights_.size()+ 1)).c_str()));
-	current_light_ = lights_.size()-1;
-	lights_list->setCurrentItem(current_light_);
-	update();
-}
-
-
-void LightSettings::colorPressed()
-{
-	color_sample->setBackgroundColor(QColorDialog::getColor(color_sample->backgroundColor()));
-	QWidget::update();
-}
-
-
-void LightSettings::defaultsPressed()
-{
-	clearFields_();
-	lights_.clear();
-	const Camera& camera = stage_->getCamera();
-	LightSource light;
+	light.setIntensity(0.8);
 	light.setType(LightSource::POSITIONAL);
 
 	// position light 20 space units behind camera position
+	const Camera& camera = stage_->getCamera();
 	Vector3 pos = camera.getViewVector();
 	pos.normalize();
 	pos *= -20;
@@ -119,8 +119,21 @@ void LightSettings::defaultsPressed()
 	light.setDirection(camera.getLookAtPosition());
 
 	lights_.push_back(light);
-	current_light_ = -1;
 	update();
+}
+
+
+void LightSettings::colorPressed()
+{
+	color_sample->setBackgroundColor(QColorDialog::getColor(color_sample->backgroundColor()));
+}
+
+
+void LightSettings::defaultsPressed()
+{
+	lights_.clear();
+	lights_list->clear();
+	addLightPressed();
 }
 
 
@@ -128,55 +141,45 @@ void LightSettings::defaultsPressed()
 void LightSettings::saveSettingsToLight_()
 	throw()
 {
-	if (current_light_ == -1)
-	{
-		return;
-	}
+	if (current_light_ == -1) return;
 
 	LightSource& light = lights_[current_light_];
 	light.setColor(color_sample->backgroundColor());
 
-	if (relative->isChecked())
-	{
-		light.setRelativeToCamera(true);
-	}
-	else
-	{
-		light.setRelativeToCamera(false);
-	}
-
 	try
 	{
-		// ---------------- ALL ------------------------
-		light.setIntensity((float)(intensity->value()) / 100);
+		Vector3 pos = getPosition_();
+		Vector3 dir = getDirection_();
+		bool relative = !not_relative->isChecked();
+		light.setRelativeToCamera(relative);
 
-		if (light_type->selected() != (QButton*) ambient)
+		// position and direction
+		if (relative)
 		{
-			// ------- POINT && DIRECTIONAL --------------
-			Vector3 v3;
-			v3.set(String(direction_x->text().ascii()).toFloat(),
-						 String(direction_y->text().ascii()).toFloat(),
-						 String(direction_z->text().ascii()).toFloat());
-			light.setDirection(v3);
-
-			v3.set(String(position_x->text().ascii()).toFloat(),
-						 String(position_y->text().ascii()).toFloat(),
-						 String(position_z->text().ascii()).toFloat());
-			light.setPosition(v3);
-
-			if (light_type->selected() == (QButton*) point)
-			{
-				light.setType(LightSource::POSITIONAL);
-			}
-			else
-			{
-				light.setType(LightSource::DIRECTIONAL);
-			}
+			pos = stage_->calculateAbsoluteCoordinates(pos);
+			dir = stage_->calculateAbsoluteCoordinates(dir) + pos;
 		}
-		else
+		light.setPosition(pos);
+		light.setDirection(dir);
+
+		light.setIntensity((float)(intensity->value()) / 100.0);
+
+		/////////////////////////////////////////////////////
+		// type of light
+		if (light_type->selected() == ambient)
 		{
 			light.setType(LightSource::AMBIENT);
+			return;
 		}
+
+		if (light_type->selected() == point)
+		{
+			light.setType(LightSource::POSITIONAL);
+			return;
+		}
+
+		light.setType(LightSource::DIRECTIONAL);
+
 	}
 	catch (Exception::GeneralException e)
 	{
@@ -188,116 +191,71 @@ void LightSettings::saveSettingsToLight_()
 
 void LightSettings::lightSelected()
 {
-	if (lights_list->currentItem() == -1) return;	
-	saveSettingsToLight_();
-	current_light_ = lights_list->currentItem();
+	if (!ignore_) saveSettingsToLight_();
+	current_light_ = getCurrentLightNumber_();
 	getValues_();
 }
 
 
 void LightSettings::removeLightPressed()
 {
-	current_light_ = lights_list->currentItem();
-	if (current_light_ > (Index)lights_.size())
-	{
-		Log.error() << "Trying to delete a not existing light" << std::endl;
-		return;
-	}
-	
+	Index current = getCurrentLightNumber_();
+	if (current == -1) return;
+
 	vector<LightSource>::iterator it = lights_.begin();
-	for (Index i=0; it != lights_.end() && i < current_light_; it++)
+	for (Index i = 0; it != lights_.end() && i < current; it++)
 	{
 		i++;
-	};
+	}
 	lights_.erase(it);
-
-	current_light_ = -1;
-	clearFields_();
 	update();
 }
 
 
 void LightSettings::typeSelected()
 {
-	if (light_type->selected() == (QButton*) ambient)
-	{
-		position_x->setEnabled(false);
-		position_y->setEnabled(false);
-		position_z->setEnabled(false);
-		direction_x->setEnabled(false);
-		direction_y->setEnabled(false);
-		direction_z->setEnabled(false);
-		relative_to_camera->setEnabled(false);
-	}
-	else 
-	{
-		position_x->setEnabled(true);
-		position_y->setEnabled(true);
-		position_z->setEnabled(true);
-		direction_x->setEnabled(true);
-		direction_y->setEnabled(true);
-		direction_z->setEnabled(true);
+	bool is_ambient = (light_type->selected() == ambient);
 
-		if (light_type->selected() != (QButton*) ambient)
-		{
-			relative_to_camera->setEnabled(true);
-		}	
-		else
-		{
-			relative_to_camera->setEnabled(false);
-		}
-	}
+	relative_to_camera->setEnabled(!is_ambient);
+	      not_relative->setEnabled(!is_ambient);
+
+	position_x->setEnabled(!is_ambient);
+	position_y->setEnabled(!is_ambient);
+	position_z->setEnabled(!is_ambient);
+
+	direction_x->setEnabled(!is_ambient);
+	direction_y->setEnabled(!is_ambient);
+	direction_z->setEnabled(!is_ambient);
 }
 
 
 void LightSettings::getValues_()
 	throw()
 {
-	if (current_light_ == -1) return;
+	Index current = getCurrentLightNumber_();
+	if (current == -1) return;
 
-	if ((Position)current_light_ >= lights_.size()) 
-	{
-		Log.error() << "Wrong light in " << __FILE__ << "  " << __LINE__ << " : " 
-								<< current_light_ << std::endl;
-		return;
-	}
+	setControlsEnabled_(true);
 
-	LightSource* light_source = &lights_[current_light_];
+	LightSource& light = lights_[current];
 
-	lights_list->setCurrentItem(current_light_);
-	lights_list->setSelected(current_light_, true);
+	color_sample->setBackgroundColor(light.getColor().getQColor());
 
-	color_sample->setBackgroundColor(light_source->getColor().getQColor());
+	setPosition_(light.getPosition());
+	setDirection_(light.getDirection());
 
-	position_x->setText(String(light_source->getPosition().x).c_str());
-	position_y->setText(String(light_source->getPosition().y).c_str());
-	position_z->setText(String(light_source->getPosition().z).c_str());
-	direction_x->setText(String(light_source->getDirection().x).c_str());
-	direction_y->setText(String(light_source->getDirection().y).c_str());
-	direction_z->setText(String(light_source->getDirection().z).c_str());
-
-	if (light_source->getType() == LightSource::AMBIENT)
-	{
-		position_x->setEnabled(false);
-		position_y->setEnabled(false);
-		position_z->setEnabled(false);
-		direction_x->setEnabled(false);
-		direction_y->setEnabled(false);
-		direction_z->setEnabled(false);
-		relative_to_camera->setEnabled(false);
-	}
-	else
-	{
-		position_x->setEnabled(true);
-		position_y->setEnabled(true);
-		position_z->setEnabled(true);
-		direction_x->setEnabled(true);
-		direction_y->setEnabled(true);
-		direction_z->setEnabled(true);
-		relative_to_camera->setEnabled(true);
-	}
+	bool is_ambient = (light.getType() == LightSource::AMBIENT);
 	
-	if (light_source->isRelativeToCamera())
+	position_x->setEnabled(!is_ambient);
+	position_y->setEnabled(!is_ambient);
+	position_z->setEnabled(!is_ambient);
+	direction_x->setEnabled(!is_ambient);
+	direction_y->setEnabled(!is_ambient);
+	direction_z->setEnabled(!is_ambient);
+	relative_to_camera->setEnabled(!is_ambient);
+	not_relative->setEnabled(!is_ambient);
+	
+	if (light.isRelativeToCamera())
 	{
 		relative->setChecked(true);
 	}
@@ -306,10 +264,8 @@ void LightSettings::getValues_()
 		not_relative->setChecked(true);
 	}
 
-	light_type->setButton(light_source->getType());
-	intensity->setValue((unsigned int)(light_source->getIntensity() * 100));
-	intensity->setEnabled(true);
-	remove_lights_button->setEnabled(true);
+	light_type->setButton(light.getType());
+	intensity->setValue((Index)(light.getIntensity() * 100.0));
 }
 
 
@@ -323,19 +279,27 @@ void LightSettings::clearFields_()
 	direction_x->clear();
 	direction_y->clear();
 	direction_z->clear();
-	remove_lights_button->setEnabled(false);
-	position_x->setEnabled(false);
-	position_y->setEnabled(false);
-	position_z->setEnabled(false);
-	direction_x->setEnabled(false);
-	direction_y->setEnabled(false);
-	direction_z->setEnabled(false);
-	intensity->setEnabled(false);
-	intensity->setValue(0);
-	remove_lights_button->setEnabled(false);
-	relative_to_camera->setButton(-1);
+	setControlsEnabled_(false);
 }
 
+
+void LightSettings::setControlsEnabled_(bool state)
+{
+	remove_lights_button->setEnabled(state);
+	position_x->setEnabled(state);
+	position_y->setEnabled(state);
+	position_z->setEnabled(state);
+	direction_x->setEnabled(state);
+	direction_y->setEnabled(state);
+	direction_z->setEnabled(state);
+	intensity->setEnabled(state);
+	intensity->setValue(0);
+	remove_lights_button->setEnabled(state);
+	relative_to_camera->setEnabled(state);
+	not_relative->setEnabled(state);
+	color_button->setEnabled(state);
+	light_type->setEnabled(state);
+}
 
 void LightSettings::apply()
 	throw()
@@ -363,5 +327,72 @@ void LightSettings::setDefaultValues(bool /*all*/)
 	lights_list->setCurrentItem(0);
 }
 
-// NAMESPACE
-} }
+void LightSettings::positionTypeChanged()
+{
+	if (getCurrentLightNumber_() == -1 || ignore_) 
+	{
+		return;
+	}
+
+	try
+	{
+		Vector3 pos = getPosition_();
+		Vector3 dir = getDirection_();
+
+		if (relative->isChecked())
+		{
+			Vector3 diff = dir - pos;
+			pos = stage_->calculateRelativeCoordinates(pos);
+			dir = stage_->calculateRelativeCoordinates(diff);
+		}
+		else
+		{
+			pos = stage_->calculateAbsoluteCoordinates(pos);
+			dir = pos +
+						stage_->calculateAbsoluteCoordinates(dir);
+		}
+
+		setPosition_(pos);
+		setDirection_(dir);
+	}
+	catch(...)
+	{
+	}
+}
+
+void LightSettings::setPosition_(const Vector3& v)
+{
+	position_x->setText(String(v.x).c_str());
+	position_y->setText(String(v.y).c_str());
+	position_z->setText(String(v.z).c_str());
+}
+
+void LightSettings::setDirection_(const Vector3& v)
+{
+	direction_x->setText(String(v.x).c_str());
+	direction_y->setText(String(v.y).c_str());
+	direction_z->setText(String(v.z).c_str());
+}
+
+Vector3 LightSettings::getPosition_() 
+	throw(Exception::InvalidFormat)
+{
+	return Vector3(String(position_x->text().ascii()).toFloat(),
+				 			   String(position_y->text().ascii()).toFloat(),
+			  				 String(position_z->text().ascii()).toFloat());
+}
+
+Vector3 LightSettings::getDirection_() 
+	throw(Exception::InvalidFormat)
+{
+	return Vector3(String(direction_x->text().ascii()).toFloat(),
+				 			   String(direction_y->text().ascii()).toFloat(),
+			  				 String(direction_z->text().ascii()).toFloat());
+}
+
+Index LightSettings::getCurrentLightNumber_() const
+{
+	return lights_list->currentItem();
+}
+
+} } // NAMESPACE

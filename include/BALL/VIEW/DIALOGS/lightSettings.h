@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lightSettings.h,v 1.9 2004/10/08 14:49:20 amoll Exp $
+// $Id: lightSettings.h,v 1.10 2005/02/11 17:06:55 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_LIGHTSETTINGS_H
@@ -83,7 +83,17 @@ namespace BALL
 			/// Slot for changes of the intensity slider
 			virtual void intensityChanged();
 
-			private:
+			///
+			virtual void positionTypeChanged();
+
+			protected:
+
+			void setPosition_(const Vector3& v);
+			void setDirection_(const Vector3& v);
+			Vector3 getDirection_() throw(Exception::InvalidFormat);
+			Vector3 getPosition_() throw(Exception::InvalidFormat);
+			void setControlsEnabled_(bool state);
+			Index getCurrentLightNumber_() const;
 
 			//_ apply values to a light
 			void saveSettingsToLight_()
@@ -97,10 +107,6 @@ namespace BALL
 			void clearFields_()
 				throw();
 
-			Index current_light_;
-			
-			Scene* scene_;
-
 			Stage* stage_;
 
 			//__ temporary copy of all lights
@@ -108,6 +114,9 @@ namespace BALL
 
 			//__ default lights
 			vector<LightSource> default_lights_;
+			
+			bool ignore_;
+			Index current_light_;
 		};
 
 	}
