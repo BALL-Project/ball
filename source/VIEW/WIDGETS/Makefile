@@ -17,8 +17,6 @@ CPP_SOURCES=\
 	molecularControl.C\
 	molecularProperties.C\
 	canvasWidget.C\
-	dockableRegularData1DWidget.C\
-	dockableRegularData2DWidget.C\
 	scene.C\
 	regularData2DWidget.C\
 	regularData1DWidget.C
@@ -38,8 +36,6 @@ MOC_SOURCES=\
 	molecularControl_moc.C\
 	molecularProperties_moc.C\
 	scene_moc.C\
-	dockableRegularData1DWidget_moc.C\
-	dockableRegularData2DWidget_moc.C\
 	canvasWidget_moc.C\
 	regularData1DWidget_moc.C\
 	regularData2DWidget_moc.C
@@ -80,14 +76,8 @@ scene_moc.C:	$(HEADER_DIR)/scene.h
 pyWidget_moc.C:	$(HEADER_DIR)/pyWidget.h
 	$(MOC) $(HEADER_DIR)/pyWidget.h -o $@
 
-dockableRegularData1DWidget_moc.C:	$(HEADER_DIR)/dockableRegularData1DWidget.h
-	$(MOC) $(HEADER_DIR)/dockableRegularData1DWidget.h -o $@
-
 regularData1DWidget_moc.C:	$(HEADER_DIR)/regularData1DWidget.h
 	$(MOC) $(HEADER_DIR)/regularData1DWidget.h -o $@
-
-dockableRegularData2DWidget_moc.C:	$(HEADER_DIR)/dockableRegularData2DWidget.h
-	$(MOC) $(HEADER_DIR)/dockableRegularData2DWidget.h -o $@
 
 regularData2DWidget_moc.C:	$(HEADER_DIR)/regularData2DWidget.h
 	$(MOC) $(HEADER_DIR)/regularData2DWidget.h -o $@
