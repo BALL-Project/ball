@@ -4,6 +4,7 @@ THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
 	extendedProperty.C\
+	molecularMessage.C\
 	windowEventTimer.C
 
 include ../../common.mak
