@@ -1,4 +1,8 @@
-include ../Make.rules.in
+#
+# BALL Python support Makefile
+#
+# $Id: Makefile,v 1.17 2003/01/10 13:51:00 oliver Exp $
+#
 
 DIRECTORY=PYTHON/EXTENSIONS
 
@@ -9,6 +13,7 @@ DIRECTORY=PYTHON/EXTENSIONS
 all:	libBALLc.so
 
 #
+include ../../common.mak
 include Makefile.inc
 
 SIP_OPTS=-c SIP -o -e -s ".C" -m "Makefile.inc"
@@ -69,7 +74,6 @@ CLEAN_FILES = \
 	sipBALLVersion.h \
 	sip_helper.C \
 	sip_helper \
-	libBALLc.so \
 	$(CPP_OBJECTS) \
 	$(SIP_SOURCES) \
 	$(SIP_HEADERS) \
@@ -81,3 +85,5 @@ clean:
 	@-$(RM) -fr SIP
 
 depend: sip sipBALLVersion.h Makefile.inc .Dependencies
+
+include .Dependencies
