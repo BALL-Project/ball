@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: NMRStarFile.h,v 1.25 2003/03/26 13:56:23 anhi Exp $
+// $Id: NMRStarFile.h,v 1.26 2003/05/26 15:19:05 amoll Exp $
 
 #ifndef BALL_NMR_READ_STAR_H
 #define BALL_NMR_READ_STAR_H
@@ -32,6 +32,8 @@ namespace BALL
 	*/
 	struct NMRAtomData
 	{
+		NMRAtomData() throw();
+
 		Position	atom_ID;
 		Position	residue_seq_code;
 		String		residue_label;
@@ -84,8 +86,9 @@ namespace BALL
 	*/
 	struct ShiftReferenceSet
 	{
+		ShiftReferenceSet() throw();
 		String name;
-		std::vector<ShiftReferenceElement*> elements;
+		std::vector<ShiftReferenceElement> elements;
 	};
 
 	struct NMRAtomDataSet
@@ -93,9 +96,9 @@ namespace BALL
 		NMRAtomDataSet() throw();
 
 		String										name;
-		std::vector<NMRAtomData*> atom_data;
-		SampleCondition*					condition;
-		ShiftReferenceSet*				reference;
+		std::vector<NMRAtomData> atom_data;
+		SampleCondition					condition;
+		ShiftReferenceSet				reference;
 	};
 
 	std::ostream& operator << (std::ostream& s, const NMRAtomData&						ad)	throw();
@@ -172,7 +175,7 @@ namespace BALL
 
 			/** Get the extracted data for the atoms.
 			*/
-			const std::vector<NMRAtomDataSet*>& getData()
+			const std::vector<NMRAtomDataSet>& getData()
 				const throw();
 
 			//@}
@@ -220,7 +223,7 @@ namespace BALL
 			//_@{
 
 			/// function to extract the data from a chemical shift line
-			NMRAtomData* processShiftLine_()
+			NMRAtomData processShiftLine_()
 				throw(Exception::ParseError);
 
 			/// reads the number of chemical shifts
@@ -256,13 +259,13 @@ namespace BALL
 			Size number_of_shifts_;
 
 			/// the data for the atoms is stored here
-			std::vector<NMRAtomDataSet*> atom_data_sets_;
+			std::vector<NMRAtomDataSet> atom_data_sets_;
 
 			/// the data for different sample sets
-			std::vector<SampleCondition*> sample_conditions_;
+			std::vector<SampleCondition> sample_conditions_;
 
 			/// the data for shift references
-			std::vector<ShiftReferenceSet*> shift_references_;
+			std::vector<ShiftReferenceSet> shift_references_;
 
 			/// name of the molecular system
 			String system_name_;
