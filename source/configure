@@ -1,6 +1,6 @@
 #! /bin/sh
 
-#  $Id: configure,v 1.124 2000/11/02 19:47:55 oliver Exp $
+#  $Id: configure,v 1.125 2000/11/03 04:26:56 oliver Exp $
 
 
 ##################################################
@@ -4568,7 +4568,7 @@ cat > conftest.$ac_ext <<EOF
 
 			#include <rpc/types.h>
 			#include <rpc/xdr.h>
-			extern "C" int dummy(void*, void*, unsigned int) {}
+			extern "C" int dummy(void*, void*, unsigned int) {return 0;}
 			void foo(){ 
 				XDR xdrs;
 				xdrrec_create(&xdrs, 0, 0, 0, dummy, dummy);
@@ -4597,7 +4597,7 @@ if test "${BALL_XDRREC_VOID_VOID_UINT}" = false ; then
 
 				#include <rpc/types.h>
 				#include <rpc/xdr.h>
-				extern "C" int dummy(void*, char*, int) {}
+				extern "C" int dummy(void*, char*, int) {return 0;}
 				void foo(){ 
 					XDR xdrs;
 					xdrrec_create(&xdrs, 0, 0, 0, dummy, dummy);
@@ -4628,7 +4628,7 @@ rm -f conftest*
 
 					#include <rpc/types.h>
 					#include <rpc/xdr.h>
-					extern "C" int dummy(char*, char*, int) {}
+					extern "C" int dummy(char*, char*, int) {return 0;}
 					void foo(){ 
 						XDR xdrs;
 						xdrrec_create(&xdrs, 0, 0, 0, dummy, dummy);
