@@ -1,11 +1,10 @@
-// $Id: reducedSurface.h,v 1.25 2001/09/19 22:21:55 amoll Exp $
+// $Id: reducedSurface.h,v 1.26 2001/11/08 16:44:45 strobel Exp $
 
 #ifndef BALL_STRUCTURE_REDUCEDSURFACE_H
 #define BALL_STRUCTURE_REDUCEDSURFACE_H
 
-//#define debug_rs
 //#define print_rs_debug_info
-#define debug_surface_processor
+//#define debug_surface_processor
 #ifdef debug_surface_processor
 #	define debug_surface_processor_verbose
 //#	define debug_surface_processor_print
@@ -73,6 +72,7 @@
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/FORMAT/HINFile.h>
+#include <BALL/SYSTEM/timer.h>
 
 
 namespace BALL
@@ -109,7 +109,16 @@ namespace BALL
 				}
 				return number;
 			}
+			//Timer RStimer;
+			//Position PROBE_COUNTER1;
+			//Position PROBE_COUNTER2;
+			//Position PROBE_COUNTER3;
+			//Position PROBE_COUNTER4;
+			//Position COUNTER;
 
+
+	template <typename T>
+	class TSolventExcludedSurface;
 
 	/** Generic ReducedSurface Class.
 			{\bf Definition:} \URL{BALL/STRUCTURE/reducedSurface.h}
@@ -119,12 +128,104 @@ namespace BALL
 	{
 		public:
 
+		/** @name Class friends
+				\begin{itemize}
+					\item class TSolventExcludedSurface<T>
+				\end{itemize}
+		*/
+		friend class TSolventExcludedSurface<T>;
+
 		BALL_CREATE(TReducedSurface)
+
+		/**	@name	Enums
+		*/
+		//@{
+
+		/** status of the probe positions of three atoms:
+				{\tt 0} ok
+				{\tt 1} not ok
+				{\tt 2} not tested
+				{\tt 2} just treated
+		*/
+		enum ProbeStatus
+		{
+			STATUS_OK  = 0,
+			STATUS_NOT_OK = 1,
+			STATUS_NOT_TESTED = 2,
+			STATUS_JUST_TREATED = 3,
+			STATUS_NOT_EXISTING = 4
+		};
+
+		/** status of an atom
+				{\tt 0} on surface
+				{\tt 1} inside
+				{\tt 2} outside
+		*/
+		enum AtomStatus
+		{
+			STATUS_ON_SURFACE  = 0,
+			STATUS_INSIDE = 1,
+			STATUS_UNKNOWN = 2
+		};
+		//@}
+
+		struct ProbePosition
+		{
+			std::vector< ProbeStatus > status;
+			std::vector< TVector3<T> > point;
+		};
 
 		/**	@name	Constructors and Destructors
 		*/
 		//@{
 
+		void checkAndPrintStatus()
+		{
+			for (Position i = 0; i < number_of_atoms_; i++)
+			{
+				bool found = false;
+				for (Position k = 0; k < number_of_vertices_; k++)
+				{
+					if (vertices_[k] != NULL)
+					{
+						if (vertices_[k]->atom_ == (Index)i)
+						{
+							found = true;
+						}
+					}
+				}
+				if (found)
+				{
+					switch (atom_status_[i])
+					{
+						case STATUS_ON_SURFACE	 :	//std::cout << i << "\t" << atom_[i] << "\t"
+																				//					<< "on surface\tok\n";
+																				break;
+						case STATUS_INSIDE			 :	std::cout << i << "\t" << atom_[i] << "\t"
+																									<< "inside molecule\tnot ok\n";
+																				break;
+						case STATUS_UNKNOWN			 :	std::cout << i << "\t" << atom_[i] << "\t"
+																									<< "unknown\tnot ok\n";
+																				break;
+					}
+				}
+				else
+				{
+					switch (atom_status_[i])
+					{
+						case STATUS_ON_SURFACE	 :	std::cout << i << "\t" << atom_[i] << "\t"
+																									<< "on surface\tnot ok\n";
+																				break;
+						case STATUS_INSIDE			 :	//std::cout << i << "\t" << atom_[i] << "\t"
+																				//					<< "inside molecule\tok\n";
+																				break;
+						case STATUS_UNKNOWN			 :	//std::cout << i << "\t" << atom_[i] << "\t"
+																				//					<< "unknown\tok\n";
+																				break;
+					}
+				}
+			}
+		}
 		/**	Default constructor.
 				All components are initialized to {\tt (T)0} or {\tt NULL}, respectivly.
 		*/
@@ -285,63 +386,54 @@ namespace BALL
 		*/
 		//@{
 
+		/*_
+		*/
+		void preProcessing()
+			throw();
+
 		/*_ Compute the RSComponent of a given face
 			@param	face					the starting face
-			@param	indices				a HashSet of the indices of all atoms which are not	
-														yet part of the reduced surface
 			@param	new_vertices	a HashSet of all new created RSVertices
 			@param	vertices			a list of RSVertices for each atom
 		*/
 		void getRSComponent
-			 (TRSFace<T>*																	 /*face*/,
-				HashSet<Index>&															 indices,
-				HashSet<TRSVertex<T>*>&											 new_vertices,
+			 (HashSet<TRSVertex<T>*>&											 new_vertices,
 				::std::vector< ::std::list<TRSVertex<T>*> >& vertices)
 			throw(Exception::GeneralException,Exception::DivisionByZero);
 
 		/*_ treat all edges of a face
 			@param	face					the RSFace to be treated
-			@param	indices				a HashSet of the indices of all atoms which are not	
-														yet part of the reduced surface
 			@param	new_vertices	a HashSet of all new created RSVertices
 			@param	vertices			a list of RSVertices for each atom
 		*/
 		void treatFace
 			 (TRSFace<T>*																	 face,
-				HashSet<Index>&															 indices,
 				HashSet<TRSVertex<T>*>&											 new_vertices,
 				::std::vector< ::std::list<TRSVertex<T>*> >& vertices)
 			throw(Exception::GeneralException,Exception::DivisionByZero);
 
 		/*_ roll over an edge that belongs to onlyone face and find the other one
 			@param	edge					the RSEdge to be treated
-			@param	indices				a HashSet of the indices of all atoms which are not	
-														yet part of the reduced surface
 			@param	new_vertices	a HashSet of all new created RSVertices
 			@param	vertices			a list of RSVertices for each atom
 		*/
 		void treatEdge
 			 (TRSEdge<T>*																	 edge,
-				HashSet<Index>&															 indices,
 				HashSet<TRSVertex<T>*>&											 new_vertices,
 				::std::vector< ::std::list<TRSVertex<T>*> >& vertices)
 			throw(Exception::GeneralException,Exception::DivisionByZero);
 
 		void correct(Index atom,
-				HashSet<Index>&															 indices,
 				HashSet<TRSVertex<T>*>&											 new_vertices,
 				::std::vector< ::std::list<TRSVertex<T>*> >& vertices)
 	  	throw();
 
 		/*_ Check all new created vertices for extensions
-			@param	indices				a HashSet of the indices of all atoms which are not	
-														yet part of the reduced surface
 			@param	new_vertices	a HashSet of all new created RSVertices
 			@param	vertices			a list of RSVertices for each atom
 		*/
 		void extendComponent
-			 (HashSet<Index>&															 indices,
-				HashSet<TRSVertex<T>*>&											 new_vertices,
+			 (HashSet<TRSVertex<T>*>&											 new_vertices,
 				::std::vector< ::std::list<TRSVertex<T>*> >& vertices)
 			throw(Exception::GeneralException,Exception::DivisionByZero);
 
@@ -366,7 +458,6 @@ namespace BALL
 				TRSFace<T>*																	 face,
 				TSphere3<T>&																 probe,
 				TAngle<T>&																	 phi,
-				HashSet<Index>&															 indices,
 				HashSet<TRSVertex<T>*>&											 new_vertices,
 				::std::vector< ::std::list<TRSVertex<T>*> >& vertices)
 			throw(Exception::GeneralException,Exception::DivisionByZero);
@@ -377,8 +468,6 @@ namespace BALL
 		//@{
 
 		/*_ Find a start position
-			@param	indices				a HashSet of the indices of all atoms which are not	
-														yet part of the reduced surface
 			@param	new_vertices	a HashSet of all new created RSVertices
 			@param	vertex				a pointer to the found vertex, if only a vertex
 														can be found
@@ -392,8 +481,7 @@ namespace BALL
 														3, if a face is found
 		*/
 		Byte getStartPosition
-			 (HashSet<Index>&														 indices,
-				HashSet<TRSVertex<T>*>&										 new_vertices,
+			 (HashSet<TRSVertex<T>*>&										 new_vertices,
 				TRSVertex<T>*&														 vertex,
 				TRSEdge<T>*&															 edge,
 				TRSFace<T>*&															 face,
@@ -406,17 +494,13 @@ namespace BALL
 		//@{
 
 		/*_ Try to find a starting face
-			@param	indices			a HashSet of the indices of all atoms that are not
-													yet part of the reduced surface
 			@return	TRSFace<T>*	a pointer to the found face, if a face can be found,
 													NULL otherwise
 		*/
-		TRSFace<T>* findFirstFace(HashSet<Index>& indices)
+		TRSFace<T>* findFirstFace()
 			throw(Exception::DivisionByZero);
 
 		/*_ Try to find a starting face in a given direction
-			@param	indices			a HashSet of the indices of all atoms which are not	
-													yet part of the reduced surface
 			@param	direction		search in x-direction, if direction is 0,
 													search in y-direction, if direction is 1,
 													search in z-direction, if direction is 2
@@ -425,10 +509,7 @@ namespace BALL
 			@return	TRSFace<T>*	a pointer to the found face, if a face can be found,
 													NULL otherwise
 		*/
-		TRSFace<T>* findFace
-			 (HashSet<Index>& indices,
-				Byte						direction,
-				Byte						extrem)
+		TRSFace<T>* findFace(Byte direction, Byte extrem)
 			throw(Exception::DivisionByZero);
 
 		//@}
@@ -437,17 +518,13 @@ namespace BALL
 		//@{
 
 		/*_ Try to find a starting edge
-			@param	indices			a HashSet of the indices of all atoms that are not
-													yet part of the reduced surface
 			@return	TRSEdge<T>*	a pointer to the found edge, if a face can be found,
 													NULL otherwise
 		*/
-		TRSEdge<T>* findFirstEdge(HashSet<Index>& indices)
+		TRSEdge<T>* findFirstEdge()
 			throw();
 
 		/*_ Try to find a starting edge in a given direction
-			@param	indices			a HashSet of the indices of all atoms that are not
-													yet part of the reduced surface
 			@param	direction		search in x-direction, if direction is 0,
 													search in y-direction, if direction is 1,
 													search in z-direction, if direction is 2
@@ -456,7 +533,7 @@ namespace BALL
 			@return	TRSEdge<T>*	a pointer to the found edge, if a face can be found,
 													NULL otherwise
 		*/
-		TRSEdge<T>* findEdge(HashSet<Index>& indices, Byte direction, Byte extrem)
+		TRSEdge<T>* findEdge(Byte direction, Byte extrem)
 			throw();
 
 		//@}
@@ -465,17 +542,13 @@ namespace BALL
 		//@{
 
 		/*_ Try to find a single atom
-			@param	indices				a HashSet of the indices of all atoms that are not
-														yet part of the reduced surface
 			@return	TRSVertex<T>*	a pointer to the found vertex, if a vertex can be
 														found, NULL otherwise
 		*/
-		TRSVertex<T>* findFirstVertex(HashSet<Index>& indices)
+		TRSVertex<T>* findFirstVertex()
 			throw();
 
 		/*_ Find a single atom in a given direction
-			@param	indices		a HashSet of the indices of all atoms that are not
-												yet part of the reduced surface
 			@param	direction	search in x-direction, if direction is 0,
 												search in y-direction, if direction is 1,
 												search in z-direction, if direction is 2
@@ -483,12 +556,11 @@ namespace BALL
 												search in max direction, if extrem is 1
 			@return	Index			the index of the found atom
 		*/
-		Index findFirstAtom(const HashSet<Index>& indices, Byte direction, Byte extrem)
+		Index findFirstAtom(Byte direction, Byte extrem)
 			throw();
 
 		/*_ Find a second atom close enougth to the first atom in a given direction
 			@param	atom1			the index of the first atom
-			@param	atom_list	a HashSet of the indices of all candidate atoms
 			@param	direction	search in x-direction, if direction is 0,
 												search in y-direction, if direction is 1,
 												search in z-direction, if direction is 2
@@ -518,15 +590,6 @@ namespace BALL
 		*/
 		//@{
 
-		/*_ Find all atoms close enougth to a given atom.
-			The indices of all atoms which can be touched by the probe sphere when	
-			it touches the given atom are pushed to neighbours_[atom]. Then this	
-			list is sorted.
-			@param	atom	the index of the given atom
-		*/
-		void neighboursOfOneAtom(Index atom)
-			throw();
-
 		/*_ Find all atoms close enougth to two given atoms.
 			The indices of all atoms which can be touched by the probe sphere when	
 			it touches the given atoms are computed.
@@ -534,10 +597,7 @@ namespace BALL
 			@param	atom2				the index of the second given atom
 			@param	output_list	list of all atoms close enougth to the given atoms
 		*/
-		void neighboursOfTwoAtoms
-			 (Index								atom1,
-				Index							 	atom2,
-				::std::list<Index>& output_list)
+		void neighboursOfTwoAtoms(Index atom1, Index atom2)
 			throw();
 
 		/*_ Find all atoms close enougth to three given atoms.
@@ -698,29 +758,53 @@ namespace BALL
 			@return	bool	true, if the probe sphere is not intersecting any atom
 										false, otherwise
 		*/
-		//bool checkProbe(const TSphere3<T>& probe)
 		bool checkProbe(const TSphere3<T>& probe,
 				Index atom1,
 				Index atom2,
 				Index atom3)
 			throw();
 
+		/*_
+		*/
+		void correctProbePosition(Position atom)
+			throw();
+
+		/*_
+		*/
+		void correctProbePosition(Position a1, Position a2, Position a3)
+			throw();
+
 		//@}
 
 		protected:
 
+    /*_ the number of atoms of the reduced surface
+    */
+    Size number_of_atoms_;
     /*_ the atoms of the molecule
     */
     std::vector< TSphere3<T> > atom_;
     /*_	probe radius
     */
     T probe_radius_;
-    /*_ HasGrid of the atoms
-    */
-		HashGrid3<Position> grid_;
 		/*_ for each atom a list of its neighbours
 		*/
 		std::vector< std::list<Index> > neighbours_;
+		/*_ for each atom a status
+		*/
+		std::vector< AtomStatus > atom_status_;
+		/*_ for each pair of atoms a list of its neighbours
+		*/
+		HashMap< Position,HashMap< Position,std::list<Index> > > neighbours_of_two_;
+		/*_ for each triple of atoms its probe positions
+		*/
+		HashMap< Position,
+						 HashMap< Position,
+											HashMap< Position,
+															 ProbePosition*
+														 >
+										>
+					 > probe_positions_;
     /*_ the vertices of the reduced surface
     */
     std::vector< TRSVertex<T>* > vertices_;
@@ -742,10 +826,6 @@ namespace BALL
     /*_ the number of faces of the reduced surface
     */
     Size number_of_faces_;
-				#ifdef debug_rs
-  	  	std::ofstream print;
-	  	  string pre;
-				#endif
 				#ifdef print_rs_debug_info
 				int HALT;
 				#endif
@@ -830,10 +910,13 @@ namespace BALL
 	template <typename T>
 	TReducedSurface<T>::TReducedSurface()
 		throw()
-		:	atom_(),
+		:	number_of_atoms_(0),
+			atom_(),
 			probe_radius_((T)0),
-			grid_(),
 			neighbours_(),
+			atom_status_(),
+			neighbours_of_two_(),
+			probe_positions_(),
 			vertices_(),
 			edges_(),
 			faces_(),
@@ -848,10 +931,13 @@ namespace BALL
 	template <typename T>
 	TReducedSurface<T>::TReducedSurface(const TReducedSurface<T>& reduced_surface)
 		throw(Exception::GeneralException)
-		: atom_(reduced_surface.atom_),
+		:	number_of_atoms_(reduced_surface.number_of_atoms_),
+			atom_(reduced_surface.atom_),
 			probe_radius_(reduced_surface.probe_radius_),
-			grid_(reduced_surface.grid_),
 			neighbours_(reduced_surface.neighbours_),
+			atom_status_(reduced_surface.atom_status_),
+			neighbours_of_two_(reduced_surface.neighbours_of_two_),
+			probe_positions_(reduced_surface.probe_positions_),
 			vertices_(reduced_surface.number_of_vertices_),
 			edges_(reduced_surface.number_of_edges_),
 			faces_(reduced_surface.number_of_faces_),
@@ -859,7 +945,7 @@ namespace BALL
 			number_of_vertices_(reduced_surface.number_of_vertices_),
 			number_of_edges_(reduced_surface.number_of_edges_),
 			number_of_faces_(reduced_surface.number_of_faces_)
-	{
+	{			// BAUSTELLE !!! probe_positions_ !!!
 		for (Position i = 0; i < number_of_vertices_; i++)
 		{
 			if (reduced_surface.vertices_[i] != NULL)
@@ -965,10 +1051,13 @@ namespace BALL
 		 (const ::std::vector< TSphere3<T> >& spheres,
 			const T& probe_radius)
 		throw()
-		:	atom_(),
+		:	number_of_atoms_(spheres.size()),
+			atom_(spheres),
 			probe_radius_(probe_radius),
-			grid_(),
-			neighbours_(spheres.size()),
+			neighbours_(number_of_atoms_),
+			atom_status_(number_of_atoms_,STATUS_UNKNOWN),
+			neighbours_of_two_(),
+			probe_positions_(),
 			vertices_(),
 			edges_(),
 			faces_(),
@@ -977,75 +1066,18 @@ namespace BALL
 			number_of_edges_(0),
 			number_of_faces_(0)
 	{
-				#ifdef debug_rs
-				print.open("ReducedSurfaceDebugInfo.log");
-				pre = "  ";
-				print << "START\n";
-				print << pre << "ReducedSurface(" << spheres.size() << ")\n";
-				pre += "  ";
-				#endif
-		T x_min = spheres[0].p.x;
-		T y_min = spheres[0].p.y;
-		T z_min = spheres[0].p.z;
-		T x_max = spheres[0].p.x;
-		T y_max = spheres[0].p.y;
-		T z_max = spheres[0].p.z;
-		for (Position i = 0; i < spheres.size(); i++)
+		for (Position i = 0; i < number_of_atoms_; i++)
 		{
-			atom_.push_back(spheres[i]);
-			r_max_ = ((r_max_ < spheres[i].radius) ? spheres[i].radius : r_max_);
-			x_min = ((x_min > spheres[i].p.x) ? spheres[i].p.x : x_min);
-			y_min = ((y_min > spheres[i].p.y) ? spheres[i].p.y : y_min);
-			z_min = ((z_min > spheres[i].p.z) ? spheres[i].p.z : z_min);
-			x_max = ((x_max < spheres[i].p.x) ? spheres[i].p.x : x_max);
-			y_max = ((y_max < spheres[i].p.y) ? spheres[i].p.y : y_max);
-			z_max = ((z_max < spheres[i].p.z) ? spheres[i].p.z : z_max);
-		}
-		T dist = 2*(r_max_+probe_radius_);
-		Position nx = (Position)((x_max-x_min)/dist+5);
-		Position ny = (Position)((y_max-y_min)/dist+5);
-		Position nz = (Position)((z_max-z_min)/dist+5);
-		TVector3<T> origin(x_min-2*dist,y_min-2*dist,z_min-2*dist);
-		grid_ = HashGrid3<Position>(origin,nx,ny,nz,dist);
-				#ifdef print_rs_debug_info
-				std::cout << "HashGrid3( " << origin << " , " << nx << " , "
-									<< ny << " , " << nz << " , " << dist << ") erzeugt\n";
-				#endif
-		for (Position i = 0; i < atom_.size(); i++)
-		{
-			grid_.insert(atom_[i].p,i);
-					#ifdef print_rs_debug_info
-					std::cout << "Index " << i << " in Grid eingefügt an Position " << atom_[i].p;
-					if (HALT == 0) std::cin >> HALT; else {HALT--; std::cout << "\n";}
-					#endif
+			r_max_ = ((r_max_ < atom_[i].radius) ? atom_[i].radius : r_max_);
 		}
 				#ifdef print_rs_debug_info
 				HALT = 0;
 				#endif
-				#ifdef debug_rs
-				for (Position i = 0; i < atom_.size(); i++)
-				{
-					print << pre << "Atom " << atom_[i] << " eingefügt (" << i << ")\n";
-				}
-				pre.replace(0,2,"");
-				print << pre << "end\n";
-				#endif
-				#ifdef print_rs_debug_info
-				HashGrid3<Position>::BoxIterator b;
-				HashGridBox3<Position>::DataIterator d;
-				for (b = grid_.beginBox(); b != grid_.endBox(); b++)
-				{
-					Position x, y, z;
-					grid_.getIndices(*b,x,y,z);
-					std::cout << "Box(" << x << "," << y << "," << z << ") enthält:\n  ";
-					for (d = b->beginData(); d != b->endData(); d++)
-					{
-						std::cout << *d << "  ";
-					}
-					std::cout << "\n";
-				}
-				if (HALT == 0) std::cin >> HALT; else {HALT--; std::cout << "\n";}
-				#endif
+				//PROBE_COUNTER1 = 0;
+				//PROBE_COUNTER2 = 0;
+				//PROBE_COUNTER3 = 0;
+				//PROBE_COUNTER4 = 0;
+				//COUNTER = 0;
 	}
 
 
@@ -1053,15 +1085,12 @@ namespace BALL
 	TReducedSurface<T>::~TReducedSurface()
 		throw()
 	{
-				#ifdef debug_rs
-				print << *this;
-				#endif
+				//std::cout << "destructor ... " << RStimer.getUserTime() << "\n";
 		clear();
-				#ifdef debug_rs
-				print << pre << "~ReducedSurface()\n";
-				print << pre << "end\n";
-				print << "ENDE\n";
-				#endif
+				//std::cout << "/destructor ... " << RStimer.getUserTime() << "\n";
+				//std::cout << PROBE_COUNTER1 << "\n" << PROBE_COUNTER2 << "\n"
+				//					<< PROBE_COUNTER3 << "\n" << PROBE_COUNTER4 << "\n";
+				//std::cout << COUNTER << "\n";
 	}
 
 
@@ -1076,7 +1105,11 @@ namespace BALL
 	template <typename T>
 	void TReducedSurface<T>::operator=(const TReducedSurface<T>& reduced_surface)
 		throw(Exception::GeneralException)
-	{
+	{		//	BAUSTELLE !!!  probe_positions_ !!!
+		number_of_atoms_ = reduced_surface.number_of_atoms_;
+		atom_status_ = reduced_surface.atom_status_;
+		neighbours_of_two_ = reduced_surface.neighbours_of_two_;
+		//probe_positions_ = reduced_surface.probe_positions_;
 		atom_ = reduced_surface.atom_;
 		probe_radius_ = reduced_surface.probe_radius_;
 		grid_ = reduced_surface.grid_;
@@ -1216,6 +1249,20 @@ namespace BALL
 		number_of_vertices_ = 0;
 		number_of_edges_ = 0;
 		number_of_faces_ = 0;
+		typename HashMap< Position,HashMap< Position,HashMap< Position,ProbePosition* > > >::Iterator pp;
+		typename HashMap< Position,HashMap< Position,ProbePosition* > >::Iterator pp1;
+		typename HashMap< Position,ProbePosition* >::Iterator pp2;
+		for (pp = probe_positions_.begin(); pp != probe_positions_.end(); pp++)
+		{
+			for (pp1 = pp->second.begin(); pp1 != pp->second.end(); pp1++)
+			{
+				for (pp2 = pp1->second.begin(); pp2 != pp1->second.end(); pp2++)
+				{
+					delete pp2->second;
+				}
+			}
+		}
+		probe_positions_.clear();
 	}
 
 
@@ -1299,7 +1346,7 @@ namespace BALL
 	Size TReducedSurface<T>::numberOfAtoms()
 		throw()
 	{
-		return atom_.size();
+		return number_of_atoms_;
 	}
 
 
@@ -1347,13 +1394,13 @@ namespace BALL
 	TSphere3<T> TReducedSurface<T>::getSphere(Position i)
 		throw(Exception::IndexOverflow)
 	{
-		if (i < atom_.size())
+		if (i < number_of_atoms_)
 		{
 			return atom_[i];
 		}
 		else
 		{
-			throw Exception::IndexOverflow(__FILE__, __LINE__,i,atom_.size()-1);
+			throw Exception::IndexOverflow(__FILE__, __LINE__,i,number_of_atoms_-1);
 		}
 	}
 
@@ -1529,39 +1576,29 @@ namespace BALL
 	void TReducedSurface<T>::compute()
 		throw(Exception::GeneralException,Exception::DivisionByZero)
 	{
-				#ifdef debug_rs
-				print << pre << "computing ...\n";
-				pre += "  ";
-				#endif
 				#ifdef print_rs_debug_info
 				std::cout << "computing ...\n";
 				HALT = 0;
 				#endif
-		// indices of the atoms that do not belong to reduced surface
-		HashSet<Index> indices;
-		// all atom indices
-		HashSet<Index> all_indices;
-		for (Position i = 0; i < atom_.size(); i++)
-		{
-			indices.insert(i);
-			all_indices.insert(i);
-		}
+				//RStimer.start();
+				//std::cout << "starte ... " << RStimer.getUserTime() << "\n";
+		// find the neighbours of the atoms
+		preProcessing();
 		// all new created vertices which are not yet checked for extensions
 		HashSet<TRSVertex<T>*> new_vertices;
+		// start position
 		TRSVertex<T>* start_vertex(NULL);
 		TRSEdge<T>* start_edge(NULL);
 		TRSFace<T>* start_face(NULL);
 		// for each atom a list of the rsvertices of the atom
-		std::vector< std::list<TRSVertex<T>*> > vertices(atom_.size());
+		std::vector< std::list<TRSVertex<T>*> > vertices(number_of_atoms_);
 		Byte start = 1;
-		//while (start != 0)
-		//{
-			start = getStartPosition(indices,new_vertices,
-															 start_vertex,start_edge,start_face,
-															 vertices);
+		while (start != 0)
+		{
+			start = getStartPosition(new_vertices,start_vertex,start_edge,start_face,vertices);
 			switch (start)
 			{
-				case 2 :	extendComponent(indices,new_vertices,vertices);
+				case 2 :	extendComponent(new_vertices,vertices);
 									break;
 				case 3 :
 									#ifdef print_rs_debug_info
@@ -1571,61 +1608,43 @@ namespace BALL
 									std::cout << *(start_face->vertex2_) << "\n";
 									if (HALT == 0) std::cin >> HALT; else {HALT--; std::cout << "\n";}
 									#endif
-									getRSComponent(start_face,indices,new_vertices,vertices);
+									getRSComponent(new_vertices,vertices);
 									break;
 				default :	break;
 			}
-		//}
+		}
 		clean();
-				#ifdef debug_rs
-				pre.replace(0,2,"");
-				print << pre << "end        // computing\n";
-				#endif
+				//std::cout << "fertig ... " << RStimer.getUserTime() << "\n";
 	}
 
 
 	template <typename T>
 	void TReducedSurface<T>::getRSComponent
-		 (TRSFace<T>*																	 /*face*/,
-			HashSet<Index>&															 indices,
-			HashSet<TRSVertex<T>*>&											 new_vertices,
+		 (HashSet<TRSVertex<T>*>&											 new_vertices,
 			::std::vector< ::std::list<TRSVertex<T>*> >& vertices)
 		throw(Exception::GeneralException,Exception::DivisionByZero)
 	{
-				#ifdef debug_rs
-				print << pre << "getRSComponent(face, " << indices.size() << ", "
-							<< new_vertices.size() << ", vertices)\n";
-				pre += "  ";
-				#endif
+				//std::cout << "getRSComponent ... " << RStimer.getUserTime() << "\n";
 		for (Position i = 0; i < number_of_faces_; i++)
 		{
 			if (faces_[i] != NULL)
 			{
-				treatFace(faces_[i],indices,new_vertices,vertices);
+				treatFace(faces_[i],new_vertices,vertices);
 			}
 		}
-		extendComponent(indices,new_vertices,vertices);
-				#ifdef debug_rs
-				pre.replace(0,2,"");
-				print << pre << "end        // getRSComponent(face, " << indices.size() << ", "
-							<< new_vertices.size() << ", vertices)\n";
-				#endif
+		//checkAndPrintStatus();
+		extendComponent(new_vertices,vertices);
+				//std::cout << "/getRSComponent ... " << RStimer.getUserTime() << "\n";
 	}
 
 
 	template <typename T>
 	void TReducedSurface<T>::treatFace
 		 (TRSFace<T>*																	 face,
-			HashSet<Index>&															 indices,
 			HashSet<TRSVertex<T>*>&											 new_vertices,
 			::std::vector< ::std::list<TRSVertex<T>*> >& vertices)
 	  throw(Exception::GeneralException,Exception::DivisionByZero)
 	{
-				#ifdef debug_rs
-				print << pre << "treatFace(" << *face << "," << indices.size() << ","
-							<< new_vertices.size() << ")\n";
-				pre += "  ";
-				#endif
 				#ifdef print_rs_debug_info
 				std::cout << "behandle " << *face;
 				if (HALT == 0) std::cin >> HALT; else {HALT--; std::cout << "\n";}
@@ -1636,17 +1655,12 @@ namespace BALL
 			edge = face->getEdge(i);
 			if (edge->face1_ == NULL)
 			{
-				treatEdge(edge,indices,new_vertices,vertices);
+				treatEdge(edge,new_vertices,vertices);
 			}
 		}
 				#ifdef print_rs_debug_info
 				std::cout << "end        // behandle " << *face;
 				if (HALT == 0) std::cin >> HALT; else {HALT--; std::cout << "\n";}
-				#endif
-				#ifdef debug_rs
-				pre.replace(0,2,"");
-				print << pre << "end        // treatFace(" << *face << "," << indices.size() << ","
-							<< new_vertices.size() << ")\n";
 				#endif
 	}
 
@@ -1654,7 +1668,6 @@ namespace BALL
 	template <typename T>
 	void TReducedSurface<T>::treatEdge
 		 (TRSEdge<T>*																	 edge,
-			HashSet<Index>&															 indices,
 			HashSet<TRSVertex<T>*>&											 new_vertices,
 			::std::vector< ::std::list<TRSVertex<T>*> >& vertices)
 		throw(Exception::GeneralException,Exception::DivisionByZero)
@@ -1670,10 +1683,6 @@ namespace BALL
 		// In both cases the treated edge will be updated. It has not to be	
 		// considerd again.
 
-				#ifdef debug_rs
-				print << pre << "treat " << *edge << "\n";
-				pre += "  ";
-				#endif
 				#ifdef print_rs_debug_info
 				std::cout << "behandle " << *edge;
 				if (HALT == 0) std::cin >> HALT; else {HALT--; std::cout << "\n";}
@@ -1685,9 +1694,6 @@ namespace BALL
 				#ifdef print_rs_debug_info
 				std::cout << "starting face: " << *start_face;
 				if (HALT == 0) std::cin >> HALT; else {HALT--; std::cout << "\n";}
-				#endif
-				#ifdef debug_rs
-				print << pre << "starting face: " << *start_face << "\n";
 				#endif
 		TRSVertex<T>* vertex1(edge->vertex0_);		// starting face and their
 		TRSVertex<T>* vertex2(edge->vertex1_);		// two vertices
@@ -1702,8 +1708,7 @@ namespace BALL
 		Index atom3;
 		try
 		{
-			atom3 = thirdAtom(vertex1,vertex2,start_face,probe,phi,
-												indices,new_vertices,vertices);
+			atom3 = thirdAtom(vertex1,vertex2,start_face,probe,phi,new_vertices,vertices);
 		}
 		catch (Exception::GeneralException e)
 		{
@@ -1711,7 +1716,7 @@ namespace BALL
 			String test_message = "PROBE SPHERE TOUCHES FOUR ATOMS";
 			if (message == test_message)
 			{
-				treatEdge(edge,indices,new_vertices,vertices);
+				treatEdge(edge,new_vertices,vertices);
 				return;
 			}
 			else
@@ -1732,9 +1737,6 @@ namespace BALL
 																				"CanNotTreatEdge",
 																				"no third atom found");
 		}
-				#ifdef debug_rs
-				print << pre << "new face: " << atom1 << "  " << atom2 << "  " << atom3 << "\n";
-				#endif
 		TSphere3<T> sphere1(atom_[atom1]);
 		TSphere3<T> sphere2(atom_[atom2]);
 		TSphere3<T> sphere3(atom_[atom3]);
@@ -1752,9 +1754,6 @@ namespace BALL
 				= new TRSFace<T>(vertex1,vertex2,vertex3,NULL,NULL,NULL,
 												 probe.p,getFaceNormal(sphere1,sphere2,sphere3,probe),
 												 false,-1);
-				#ifdef debug_rs
-				print << pre << "face " << *new_face << " gebaut\n";
-				#endif
 				#ifdef print_rs_debug_info
 				std::cout << "neuer Vertex: " << *vertex3 << "\n";
 				std::cout << "neue Face: " << *new_face << "\n";
@@ -1779,7 +1778,6 @@ namespace BALL
 			vertex3->index_ = number_of_vertices_;
 			vertices_.push_back(vertex3);
 			number_of_vertices_++;
-			indices.erase(atom3);
 			new_vertices.insert(vertex3);
 					#ifdef print_rs_debug_info
 					std::cout << "Vertex3 in vertices_ gepusht";
@@ -1833,18 +1831,9 @@ namespace BALL
 					std::cout << *vertex3;
 					if (HALT == 0) std::cin >> HALT; else {HALT--; std::cout << "\n";}
 					#endif
-					#ifdef debug_rs
-					print << pre << "... geupdatet " << *new_face << "\n";
-					print << pre << "... in vertices_[" << vertex1->index_ << "], vertices_["
-								<< vertex2->index_ << "], " << "vertices_[" << vertex3->index_ << "] gepusht\n";
-					print << pre << "neue edges:\n" << pre << *edge1 << "\n" << pre << *edge2 << "\n";
-					#endif
 		}
 		else
 		{
-					#ifdef debug_rs
-					print << pre << "... existiert schon: " << *test << "\n";
-					#endif
 					#ifdef print_rs_debug_info
 					std::cout << "Face existiert schon: " << *test;
 					if (HALT == 0) std::cin >> HALT; else {HALT--; std::cout << "\n";}
@@ -2000,9 +1989,6 @@ namespace BALL
 					#endif
 			// The face should have only one of the two corresponding edges, too.
 			test->setEdge(i,edge);
-					#ifdef debug_rs
-					print << pre << i << ". edge ersetzt: " << *test << "\n";
-					#endif
 					#ifdef print_rs_debug_info
 					std::cout << *test; if (HALT == 0) std::cin >> HALT; else {HALT--; std::cout << "\n";}
 					#endif
@@ -2022,15 +2008,9 @@ namespace BALL
 					std::cout << "erzeugter vertex gelöscht";
 					if (HALT == 0) std::cin >> HALT; else {HALT--; std::cout << "\n";}
 					#endif
-					#ifdef debug_rs
-					print << pre << "konstruierte face gelöscht\n";
-					#endif
 			new_face = test;
 		}			// face exitsts test
 		// update edge
-				#ifdef debug_rs
-				print << pre << "updating " << *edge << ":\n";
-				#endif
 				#ifdef print_rs_debug_info
 				std::cout << "update " << *edge;
 				if (HALT == 0) std::cin >> HALT; else {HALT--; std::cout << "\n";}
@@ -2062,19 +2042,12 @@ namespace BALL
 				std::cout << "erfolgreich";
 				if (HALT == 0) std::cin >> HALT; else {HALT--; std::cout << "\n";}
 				#endif
-				#ifdef debug_rs
-				print << pre << "... " << *edge << "\n";
-				#endif
 		if (edge->index_ == -1)
 		{
 			edge->index_ = number_of_edges_;
 			edges_.push_back(edge);
 			number_of_edges_++;
 		}
-				#ifdef debug_rs
-				pre.replace(0,2,"");
-				print << pre << "end        // treat " << *edge << "\n";
-				#endif
 				#ifdef print_rs_debug_info
 				std::cout << "Edge in edges_ gepusht";
 				if (HALT == 0) std::cin >> HALT; else {HALT--; std::cout << "\n";}
@@ -2092,13 +2065,11 @@ namespace BALL
 						 << *new_face->thirdVertex(vertex1,vertex2) << "\n";
 				if (HALT == 0) std::cin >> HALT; else {HALT--; std::cout << "\n";}
 				#endif
-		//treatFace(edge->face2_,indices,new_vertices,vertices);
 	}
 
 
 	template <typename T>
 	void TReducedSurface<T>::correct(Index atom,
-			HashSet<Index>&															 indices,
 			HashSet<TRSVertex<T>*>&											 new_vertices,
 			::std::vector< ::std::list<TRSVertex<T>*> >& vertices)
 	  throw()
@@ -2116,8 +2087,6 @@ namespace BALL
 		HashSet<TRSFace<T>*> faces;
 		HashSet<TRSFace<T>*> treat_faces;
 		typename HashSet<TRSFace<T>*>::Iterator f;
-		//HashSet<TRSEdge<T>*> edges;
-		//HashSet<TRSEdge<T>*> delete_edges;
 		HashSet<TRSVertex<T>*> test_vertices;
 		TRSEdge<T>* edge;
 		v = vertices[atom].begin();
@@ -2260,8 +2229,15 @@ namespace BALL
 			new_vertices.erase(vertex);
 			delete vertex;
 		}
-		indices.insert(atom);
-		//atom_[atom].radius -= 10*Constants::EPSILON;
+							#ifdef print_rs_debug_info
+							std::cout << "verkleinere Atom " << atom << "\n";
+							#endif
+		atom_[atom].radius -= 10*Constants::EPSILON;
+		atom_status_[atom] = STATUS_UNKNOWN;
+				#ifdef print_rs_debug_info
+				std::cout << "status of atom" << atom << " set to STATUS_UNKNOWN\n";
+				#endif
+		correctProbePosition(atom);
 				#ifdef print_rs_debug_info
 				HALT = 0;
 				std::cout << "Atom " << atom << " bearbeitet\n";
@@ -2275,24 +2251,19 @@ namespace BALL
 
 	template <typename T>
 	void TReducedSurface<T>::extendComponent
-		 (HashSet<Index>&															 indices,
-			HashSet<TRSVertex<T>*>&											 new_vertices,
+		 (HashSet<TRSVertex<T>*>&											 new_vertices,
 			::std::vector< ::std::list<TRSVertex<T>*> >& vertices)
 	  throw(Exception::GeneralException,Exception::DivisionByZero)
 	{
-				#ifdef debug_rs
-				print << pre << "extendComponent(" << indices.size() << ","
-							<< new_vertices.size() << ")\n";
-				pre += "  ";
-				#endif
 				#ifdef print_rs_debug_info
 				std::cout << "extendComponent";
 				HALT = 0;
 				if (HALT == 0) std::cin >> HALT; else {HALT--; std::cout << "\n";}
 				#endif
-		while (new_vertices.size() > 0)
+				//std::cout << "extend ... " << RStimer.getUserTime() << "\n";
+		while (new_vertices.size() != 0)
 		{
-//std::cout << new_vertices.size() << "\n";
+					//std::cout << new_vertices.size() << "\n";
 					#ifdef print_rs_debug_info
 					std::cout << new_vertices.size() << " vertices in new_vertices";
 					if (HALT == 0) std::cin >> HALT; else {HALT--; std::cout << "\n";}
@@ -2305,218 +2276,173 @@ namespace BALL
 					std::cout << "suche Erweiterung an Vertex " << *vertex1 << " auf Atom " << atom1;
 					if (HALT == 0) std::cin >> HALT; else {HALT--; std::cout << "\n";}
 					#endif
- 			::std::list<Index> atom_list1;
- 			::std::list<Index> atom_list2;
-			if (neighbours_[atom1].size() == 0)
-			{
-				neighboursOfOneAtom(atom1);
-			}
-			atom_list1 = neighbours_[atom1];
-			::std::list<Index>::iterator i;
-					#ifdef debug_rs
-					print << pre << "Atom1: " << atom1 << ", Nachbarn: "
-								<< atom_list1.size() << "\n";
-					#endif
+			typename ::std::list<Index>::const_iterator i;
 					#ifdef print_rs_debug_info
-					std::cout << atom_list1.size() << " Nachbarn gefunden\n";
-					for (i = atom_list1.begin(); i != atom_list1.end(); i++)
+					std::cout << neighbours_[atom1].size() << " Nachbarn gefunden\n";
+					for (i = neighbours_[atom1].begin(); i != neighbours_[atom1].end(); i++)
 					{
 						std::cout << *i << "  ";
 					}
 					if (HALT == 0) std::cin >> HALT; else {HALT--; std::cout << "\n";}
 					#endif
 					//std::cout << atom_list1.size() << " Nachbarn (1) gefunden\n";
-			i = atom_list1.begin();
-			::std::list<Index>::iterator i_;
-			while (i != atom_list1.end())
+			i = neighbours_[atom1].begin();
+			while (i != neighbours_[atom1].end())
 			{
-				i_ = i;
-				i_++;
-				if (indices.has(*i) == false)
+				if (atom_status_[*i] == STATUS_UNKNOWN)
 				{
-					atom_list1.erase(i);
-				}
-				i = i_;
-			}
-			i = atom_list1.begin();
-			while (i != atom_list1.end())
-			{
-				Index atom2 = *i;
-						#ifdef print_rs_debug_info
-						std::cout << "suche drittes Atom zu " << atom1 << " und " << atom2 << "\n";
-						#endif
-				atom_list2.clear();
-				neighboursOfTwoAtoms(atom1,atom2,atom_list2);
-						//std::cout << atom_list2.size() << " Nachbarn (2) gefunden\n";
-						#ifdef print_rs_debug_info
-						std::cout << atom_list2.size() << " Kandidaten: ";
-						::std::list<Index>::iterator al2;
-						for (al2 = atom_list2.begin(); al2 != atom_list2.end(); al2++)
-						{
-							std::cout << *al2 << "  ";
-						}
-						if (HALT == 0) std::cin >> HALT; else {HALT--; std::cout << "\n";}
-						#endif
-						//std::cout << atom_list2.size() << " Kandidaten:\n";
-				std::list< std::pair< Index,TSphere3<T> > > candidates;
-				findThirdAtom(atom1,atom2,atom_list2,candidates);
-						//std::cout << candidates.size() << " Nachbarn (3) gefunden\n";
-						#ifdef debug_rs
-						print << pre << "Atom2: " << atom2 << ", Nachbarn: "
-									<< candidates.size() << "\n";
-						#endif
-						#ifdef print_rs_debug_info
-						std::cout << candidates.size() << " mögliche probe-Positionen: ";
-						std::list< std::pair< Index,TSphere3<T> > >::iterator cit;
-						for (cit = candidates.begin(); cit != candidates.end(); cit++)
-						{
-							std::cout << cit->first << "  ";
-						}
-						if (HALT == 0) std::cin >> HALT; else {HALT--; std::cout << "\n";}
-						#endif
-				if (candidates.size() == 0)
-				{
-					TRSVertex<T>* vertex2 = new TRSVertex<T>(atom2);
-					TRSEdge<T>* edge = createFreeEdge(vertex1,vertex2,atom_list2);
-					if (edge != NULL)
+					Index atom2 = *i;
+							#ifdef print_rs_debug_info
+							std::cout << "suche drittes Atom zu " << atom1 << " und " << atom2 << "\n";
+							#endif
+					neighboursOfTwoAtoms(atom1,atom2);
+					std::list< std::pair< Index,TSphere3<T> > > candidates;
+					findThirdAtom(atom1,atom2,neighbours_of_two_[atom1][atom2],candidates);
+							#ifdef print_rs_debug_info
+							std::cout << candidates.size() << " mögliche probe-Positionen: ";
+							typename std::list< std::pair< Index,TSphere3<T> > >::iterator cit;
+							for (cit = candidates.begin(); cit != candidates.end(); cit++)
+							{
+								std::cout << cit->first << "  ";
+							}
+							if (HALT == 0) std::cin >> HALT; else {HALT--; std::cout << "\n";}
+							#endif
+					if (candidates.size() == 0)
 					{
-						edge->index_ = number_of_edges_;
-						edges_.push_back(edge);
-						number_of_edges_++;
-						vertex1->edges_.insert(edge);
-						vertex2->edges_.insert(edge);
-						vertex2->index_ = number_of_vertices_;
-						vertices_.push_back(vertex2);
-						number_of_vertices_++;
-						indices.erase(atom2);
-						vertices[atom2].push_back(vertex2);
-						new_vertices.insert(vertex1);
-						new_vertices.insert(vertex2);
-								#ifdef debug_rs
-								print << pre << "freie edge erzeugt: " << *edge << "\n";
-								#endif
-								#ifdef print_rs_debug_info
-								std::cout << "freie edge erzeugt: " << *edge;
-								HALT = 0;
-								if (HALT == 0) std::cin >> HALT; else {HALT--; std::cout << "\n";}
-								#endif
-						i = atom_list1.end();
+						TRSVertex<T>* vertex2 = new TRSVertex<T>(atom2);
+						TRSEdge<T>* edge = createFreeEdge(vertex1,vertex2,neighbours_of_two_[atom1][atom2]);
+						if (edge != NULL)
+						{
+							edge->index_ = number_of_edges_;
+							edges_.push_back(edge);
+							number_of_edges_++;
+							vertex1->edges_.insert(edge);
+							vertex2->edges_.insert(edge);
+							vertex2->index_ = number_of_vertices_;
+							vertices_.push_back(vertex2);
+							number_of_vertices_++;
+							vertices[atom2].push_back(vertex2);
+							new_vertices.insert(vertex1);
+							new_vertices.insert(vertex2);
+							atom_status_[atom2] = STATUS_ON_SURFACE;
+									#ifdef print_rs_debug_info
+									std::cout << "freie edge erzeugt: " << *edge;
+									HALT = 0;
+									if (HALT == 0) std::cin >> HALT; else {HALT--; std::cout << "\n";}
+									#endif
+							i = neighbours_[atom1].end();
+						}
+						else
+						{
+									#ifdef print_rs_debug_info
+									std::cout << "bilden keine freie edge";
+									if (HALT == 0) std::cin >> HALT; else {HALT--; std::cout << "\n";}
+									#endif
+							delete vertex2;
+							i++;
+						}
 					}
 					else
 					{
-								#ifdef debug_rs
-								print << pre << "bilden keine freie edge\n";
-								#endif
+						bool found = false;
+						typename std::list< std::pair< Index,TSphere3<T> > >::iterator j;
 								#ifdef print_rs_debug_info
-								std::cout << "bilden keine freie edge";
+								for (j = candidates.begin(); j != candidates.end(); j++)
+								{
+									std::cout << j->first << "  ";
+								}
 								if (HALT == 0) std::cin >> HALT; else {HALT--; std::cout << "\n";}
 								#endif
-						delete vertex2;
-						i++;
+						j = candidates.begin();
+						while (j != candidates.end())
+						{
+							if (atom_status_[j->first] == STATUS_UNKNOWN)
+							{
+								Index atom3 = j->first;
+								TSphere3<T> probe = j->second;
+										#ifdef print_rs_debug_info
+										std::cout << "3. Atom: " << atom3 << ", probe: " << probe << "...\n";
+										#endif
+								if (checkProbe(probe,atom1,atom2,atom3) == true)
+								{
+											#ifdef print_rs_debug_info
+											std::cout << "... passt, bilde face\n";
+											#endif
+									face = new TRSFace<T>;
+									TRSEdge<T>* edge1 = new TRSEdge<T>;
+									TRSEdge<T>* edge2 = new TRSEdge<T>;
+									TRSEdge<T>* edge3 = new TRSEdge<T>;
+									TRSVertex<T>* vertex2 = new TRSVertex<T>(atom2);
+									TRSVertex<T>* vertex3 = new TRSVertex<T>(atom3);
+									vertices[atom2].push_back(vertex2);
+									vertices[atom3].push_back(vertex3);
+									updateFaceAndEdges(vertex1,vertex2,vertex3,
+																		 edge1,edge2,edge3,
+																		 face,probe);
+									face->index_ = number_of_faces_;
+									faces_.push_back(face);
+									number_of_faces_++;
+									vertex2->index_ = number_of_vertices_;
+									vertices_.push_back(vertex2);
+									number_of_vertices_++;
+									vertex3->index_ = number_of_vertices_;
+									vertices_.push_back(vertex3);
+									number_of_vertices_++;
+									vertex1->faces_.insert(face);
+									vertex2->faces_.insert(face);
+									vertex3->faces_.insert(face);
+									vertex1->edges_.insert(edge1);
+									vertex2->edges_.insert(edge1);
+									vertex2->edges_.insert(edge2);
+									vertex3->edges_.insert(edge2);
+									vertex3->edges_.insert(edge3);
+									vertex1->edges_.insert(edge3);
+									new_vertices.insert(vertex1);
+									new_vertices.insert(vertex2);
+									new_vertices.insert(vertex3);
+									atom_status_[atom2] = STATUS_ON_SURFACE;
+									atom_status_[atom3] = STATUS_ON_SURFACE;
+									i = neighbours_[atom1].end();
+									j = candidates.end();
+									found = true;
+											#ifdef print_rs_debug_info
+											std::cout << *face << "\n  " << *vertex1 << "\n  " << *vertex2 << "\n  " << *vertex3
+																<< "\n  " << *edge1 << "\n  " << *edge2 << "\n  " << *edge3;
+											HALT = 0;
+											if (HALT == 0) std::cin >> HALT; else {HALT--; std::cout << "\n";}
+											#endif
+								}
+								else
+								{
+											#ifdef print_rs_debug_info
+											std::cout << "... passt nicht";
+											if (HALT == 0) std::cin >> HALT; else {HALT--; std::cout << "\n";}
+											#endif
+									j++;
+								}
+							}
+							else
+							{
+								j++;
+							}
+						} // while j
+						if (found == false)
+						{
+							i++;
+						}
 					}
 				}
 				else
 				{
-					bool found = false;
-					typename std::list< std::pair< Index,TSphere3<T> > >::iterator j;
-					#ifdef print_rs_debug_info
-					for (j = candidates.begin(); j != candidates.end(); j++)
-					{
-						std::cout << j->first << "  ";
-					}
-					if (HALT == 0) std::cin >> HALT; else {HALT--; std::cout << "\n";}
-					#endif
-					j = candidates.begin();
-					while (j != candidates.end())
-					{
-						Index atom3 = j->first;
-						TSphere3<T> probe = j->second;
-								#ifdef debug_rs
-								print << pre << "Atom3: " << atom3
-											<< ", probe: " << probe << " ...\n";
-								#endif
-								#ifdef print_rs_debug_info
-								std::cout << "3. Atom: " << atom3 << ", probe: " << probe << "...\n";
-								#endif
-						if (checkProbe(probe,atom1,atom2,atom3) == true)
-						{
-									#ifdef debug_rs
-									print << pre << "... passt\n";
-									#endif
-									#ifdef print_rs_debug_info
-									std::cout << "... passt, bilde face\n";
-									#endif
-							face = new TRSFace<T>;
-							TRSEdge<T>* edge1 = new TRSEdge<T>;
-							TRSEdge<T>* edge2 = new TRSEdge<T>;
-							TRSEdge<T>* edge3 = new TRSEdge<T>;
-							TRSVertex<T>* vertex2 = new TRSVertex<T>(atom2);
-							TRSVertex<T>* vertex3 = new TRSVertex<T>(atom3);
-							vertices[atom2].push_back(vertex2);
-							vertices[atom3].push_back(vertex3);
-							updateFaceAndEdges(vertex1,vertex2,vertex3,
-																 edge1,edge2,edge3,
-																 face,probe);
-							face->index_ = number_of_faces_;
-							faces_.push_back(face);
-							number_of_faces_++;
-							vertex2->index_ = number_of_vertices_;
-							vertices_.push_back(vertex2);
-							number_of_vertices_++;
-							indices.erase(atom2);
-							vertex3->index_ = number_of_vertices_;
-							vertices_.push_back(vertex3);
-							number_of_vertices_++;
-							indices.erase(atom3);
-							vertex1->faces_.insert(face);
-							vertex2->faces_.insert(face);
-							vertex3->faces_.insert(face);
-							vertex1->edges_.insert(edge1);
-							vertex2->edges_.insert(edge1);
-							vertex2->edges_.insert(edge2);
-							vertex3->edges_.insert(edge2);
-							vertex3->edges_.insert(edge3);
-							vertex1->edges_.insert(edge3);
-							new_vertices.insert(vertex1);
-							new_vertices.insert(vertex2);
-							new_vertices.insert(vertex3);
-							i = atom_list1.end();
-							j = candidates.end();
-							found = true;
-							#ifdef print_rs_debug_info
-							std::cout << *face << "\n  " << *vertex1 << "\n  " << *vertex2 << "\n  " << *vertex3
-												<< "\n  " << *edge1 << "\n  " << *edge2 << "\n  " << *edge3;
-							HALT = 0;
-							if (HALT == 0) std::cin >> HALT; else {HALT--; std::cout << "\n";}
-							#endif
-						}
-						else
-						{
-									#ifdef debug_rs
-									print << pre << "... passt nicht\n";
-									#endif
-									#ifdef print_rs_debug_info
-									std::cout << "... passt nicht";
-									if (HALT == 0) std::cin >> HALT; else {HALT--; std::cout << "\n";}
-									#endif
-							j++;
-						}
-					} // while j
-					if (found == false)
-					{
-						i++;
-					}
+					i++;
 				}
 			} // while i
 			if (face != NULL)
 			{
-				getRSComponent(face,indices,new_vertices,vertices);
+				getRSComponent(new_vertices,vertices);
 			}
-					#ifdef debug_rs
-					pre.replace(0,2,"");
-					print << pre << "end\n";
-					#endif
 		}
+				//std::cout << "/extend ... " << RStimer.getUserTime() << "\n";
 	}
 
 
@@ -2527,7 +2453,6 @@ namespace BALL
 			TRSFace<T>*																	 face,
 			TSphere3<T>&																 probe,
 			TAngle<T>&																	 phi,
-			HashSet<Index>&															 indices,
 			HashSet<TRSVertex<T>*>&											 new_vertices,
 			::std::vector< ::std::list<TRSVertex<T>*> >& vertices)
 		throw(Exception::GeneralException,Exception::DivisionByZero)
@@ -2538,33 +2463,22 @@ namespace BALL
 		// If the rotation angle equals zero, the probe sphere can touch four
 		// atoms an an exception is thrown.
 		// If no atom can be found an exception is thrown.
-				#ifdef debug_rs
-				pre += "  ";
-				#endif
 		Index atom1(vertex1->atom_);
 		Index atom2(vertex2->atom_);
-		::std::list<Index> atom_list;
-		neighboursOfTwoAtoms(atom1,atom2,atom_list);
-		if (atom_list.size() == 0)
+		//::std::list<Index> atom_list;
+		neighboursOfTwoAtoms(atom1,atom2);
+		//if (atom_list.size() == 0)
+		if (neighbours_of_two_[atom1][atom2].size() == 0)
 		{
-					#ifdef debug_rs
-					print << "\n\n" << *this << "\n\n";
-					print << *vertex1 << "\n";
-					print << *vertex2 << "\n";
-					#endif
 			throw Exception::GeneralException
 							(__FILE__,__LINE__,
 							 "CanNotFindThirdAtom","no atom close enougth");
 		}
 		list< pair< Index,TSphere3<T> > > candidates;
-		findThirdAtom(atom1,atom2,atom_list,candidates);
+		//findThirdAtom(atom1,atom2,atom_list,candidates);
+		findThirdAtom(atom1,atom2,neighbours_of_two_[atom1][atom2],candidates);
 		typename std::list< std::pair< Index,TSphere3<T> > >::iterator k;
 		Index back(-1);
-				#ifdef debug_rs
-				print << pre << atom1 << "  " << atom2 << "\n";
-				print << pre << *face << "\n";
-				print << pre << "Kandidaten: (" << candidates.size() << ")\n";
-				#endif
 				#ifdef print_rs_debug_info
 				std::cout << atom1 << "  " << atom2 << "  "
 									<< face->thirdVertex(vertex1,vertex2)->atom_ << "\n";
@@ -2582,22 +2496,16 @@ namespace BALL
 					 test_vector*atom_[atom1].p)      )
 		{
 			norm_.negate();
-				#ifdef debug_rs
-				print << pre << "  Dreahachse: " << atom1 << " --> " << atom2 << "\n";
-				#endif
 				#ifdef print_rs_debug_info
 				std::cout << "  Dreahachse: " << atom1 << " --> " << atom2 << "\n";
 				#endif
 		}
-		else
-		{
-				#ifdef debug_rs
-				print << pre << "  Dreahachse: " << atom2 << " --> " << atom1 << "\n";
-				#endif
 				#ifdef print_rs_debug_info
-				std::cout << "  Dreahachse: " << atom2 << " --> " << atom1 << "\n";
+				else
+				{
+					std::cout << "  Dreahachse: " << atom2 << " --> " << atom1 << "\n";
+				}
 				#endif
-		}
 		TVector3<double> norm((double)norm_.x,(double)norm_.y,(double)norm_.z);
 		TSphere3<T> sphere1(atom_[atom1]);
 		TSphere3<T> sphere2(atom_[atom2]);
@@ -2610,7 +2518,7 @@ namespace BALL
 		TVector3<double> v1((double)v1_.x,(double)v1_.y,(double)v1_.z);
 		TVector3<T> face_normal = face->normal_;
 		T test_value = face_normal*sphere1.p;
-		std::list< pair< Index,TSphere3<T> > > third;
+		std::list< std::pair< Index,TSphere3<T> > > third;
 		for (k = candidates.begin(); k != candidates.end(); k++)
 		{
 			if ((k->first != third_face_atom) ||
@@ -2628,10 +2536,6 @@ namespace BALL
 				//	new_angle += pi;
 				//	new_angle += pi;
 				//}
-						#ifdef debug_rs
-						print << pre << "{" << k->first << "," << k->second << "} ... getOrientedAngle("
-									<< v1 << "," << v2 << "," << norm << ")+pi ... " << new_angle << "\n";
-						#endif
 						#ifdef print_rs_debug_info
 						//std::cout << "{" << k->first << "," << k->second << "} ... getOrientedAngle("
 						//					<< v1 << "," << v2 << "," << norm << ")+pi ... " << new_angle << "\n";
@@ -2642,17 +2546,9 @@ namespace BALL
 							#ifdef debug_surface_processor_verbose
 							std::cerr << "    ProbeSphere berührt vier Atome, korrigiere ...\n";
 							#endif
-					correct(k->first,indices,new_vertices,vertices);
-							#ifdef print_rs_debug_info
-							std::cout << "verkleinere Atom " << k->first << "\n";
-							#endif
-					atom_[k->first].radius -= 10*Constants::EPSILON;
+					correct(k->first,new_vertices,vertices);
 							#ifdef debug_surface_processor_verbose
 							std::cerr << "    ... ok\n";
-							#endif
-							#ifdef debug_rs
-							pre.replace(0,2,"");
-							print << pre << "end ... exception\n";
 							#endif
 					throw Exception::GeneralException
 							(__FILE__,__LINE__,"CAN'T COMPUTE RS","PROBE SPHERE TOUCHES FOUR ATOMS");
@@ -2660,6 +2556,17 @@ namespace BALL
 				if (new_angle < old_angle)
 				{
 					old_angle = new_angle;
+					typename std::list< std::pair< Index,TSphere3<T> > >::iterator t;
+					for (t = third.begin(); t != third.end(); t++)
+					{
+						if (atom_status_[t->first] == STATUS_UNKNOWN)
+						{
+							atom_status_[t->first] = STATUS_INSIDE;
+									#ifdef print_rs_debug_info
+									std::cout << "status of atom" << t->first << " set to STATUS_INSIDE\n";
+									#endif
+						}
+					}
 					third.clear();
 					third.push_back(*k);
 					//back = k->first;
@@ -2678,6 +2585,16 @@ namespace BALL
 								std::cout << "... erneuetes Minimum\n";
 								#endif
 					}
+					else
+					{
+						if (atom_status_[k->first] == STATUS_UNKNOWN)
+						{
+							atom_status_[k->first] = STATUS_INSIDE;
+									#ifdef print_rs_debug_info
+									std::cout << "status of atom" << k->first << " set to STATUS_INSIDE\n";
+									#endif
+						}
+					}
 				}
 			}
 		}
@@ -2690,19 +2607,11 @@ namespace BALL
 			k++;
 			while (k != third.end())
 			{
-				correct(k->first,indices,new_vertices,vertices);
-						#ifdef print_rs_debug_info
-						std::cout << "verkleinere Atom " << k->first << "\n";
-						#endif
-				atom_[k->first].radius -= 10*Constants::EPSILON;
+				correct(k->first,new_vertices,vertices);
 				k++;
 			}
 					#ifdef debug_surface_processor_verbose
 					std::cerr << "    ... ok\n";
-					#endif
-					#ifdef debug_rs
-					pre.replace(0,2,"");
-					print << pre << "end ... exception\n";
 					#endif
 			throw Exception::GeneralException
 					(__FILE__,__LINE__,"CAN'T COMPUTE RS","PROBE SPHERE TOUCHES FOUR ATOMS");
@@ -2710,8 +2619,9 @@ namespace BALL
 		back = third.front().first;
 		probe = third.front().second;
 		phi.set((T)old_angle.value,true);
-				#ifdef debug_rs
-				pre.replace(0,2,"");
+		atom_status_[back] = STATUS_ON_SURFACE;
+				#ifdef print_rs_debug_info
+				std::cout << "status of atom" << back << " set to STATUS_ON_SURFACE\n";
 				#endif
 		return back;
 	}
@@ -2719,17 +2629,14 @@ namespace BALL
 
 	template <typename T>
 	Byte TReducedSurface<T>::getStartPosition
-		 (HashSet<Index>&														 indices,
-			HashSet<TRSVertex<T>*>&										 new_vertices,
+		 (HashSet<TRSVertex<T>*>&										 new_vertices,
 			TRSVertex<T>*&														 vertex,
 			TRSEdge<T>*&															 edge,
 			TRSFace<T>*&															 face,
 			std::vector< std::list< TRSVertex<T>* > >& vertices)
 		throw(Exception::DivisionByZero)
 	{
-//std::cout << "#2\n";
-		face = findFirstFace(indices);
-//std::cout << "#3\n";
+		face = findFirstFace();
 		if (face != NULL)
 		{
 			TRSVertex<T>* vertex1 = face->vertex0_;
@@ -2741,14 +2648,12 @@ namespace BALL
 			vertices[vertex1->atom_].push_back(vertex1);
 			vertices[vertex2->atom_].push_back(vertex2);
 			vertices[vertex3->atom_].push_back(vertex3);
-					#ifdef debug_rs
-					print << pre << "starting face: " << vertex1->atom_ << " "
-								<< vertex2->atom_ << " "
-								<< vertex3->atom_ << "\n";
-					#endif
+			atom_status_[vertex1->atom_] = STATUS_ON_SURFACE;
+			atom_status_[vertex2->atom_] = STATUS_ON_SURFACE;
+			atom_status_[vertex3->atom_] = STATUS_ON_SURFACE;
 			return 3;
 		}
-		edge = findFirstEdge(indices);
+		edge = findFirstEdge();
 		if (edge != NULL)
 		{
 			TRSVertex<T>* vertex1 = edge->vertex0_;
@@ -2757,13 +2662,16 @@ namespace BALL
 			new_vertices.insert(vertex2);
 			vertices[vertex1->atom_].push_back(vertex1);
 			vertices[vertex2->atom_].push_back(vertex2);
+			atom_status_[vertex1->atom_] = STATUS_ON_SURFACE;
+			atom_status_[vertex2->atom_] = STATUS_ON_SURFACE;
 			return 2;
 		}
-		vertex = findFirstVertex(indices);
+		vertex = findFirstVertex();
 		if (vertex != NULL)
 		{
 			new_vertices.insert(vertex);
 			vertices[vertex->atom_].push_back(vertex);
+			atom_status_[vertex->atom_] = STATUS_ON_SURFACE;
 			return 1;
 		}
 		return 0;
@@ -2771,122 +2679,116 @@ namespace BALL
 
 
 	template <typename T>
-	TRSFace<T>* TReducedSurface<T>::findFirstFace(HashSet<Index>& indices)
+	TRSFace<T>* TReducedSurface<T>::findFirstFace()
 		throw(Exception::DivisionByZero)
 	{
-//std::cout << "  $1\n";
 		for (Byte direction = 0; direction < 3; direction++)
 		{
 			for (Byte extrem = 0; extrem < 1; extrem++)
 			{
-//std::cout << "  $2\n";
-				TRSFace<T>* face = findFace(indices,direction,extrem);
+				TRSFace<T>* face = findFace(direction,extrem);
 				if (face != NULL)
 				{
-//std::cout << "  $3\n";
 					return face;
 				}
 			}
 		}
-//std::cout << "  $4\n";
 		return NULL;
 	}
 
 
 	template <class T>
 	TRSFace<T>* TReducedSurface<T>::findFace
-		 (HashSet<Index>& indices,
-			Byte						direction,
+		 (Byte						direction,
 			Byte						extrem)
 		throw(Exception::DivisionByZero)
 	{
-//std::cout << "    §1\n";
-		if (indices.size() == 0)
+		Index a1 = findFirstAtom(direction,extrem);
+		if (a1 == -1)
 		{
 			return NULL;
 		}
-//std::cout << "    §2\n";
-		Index a1 = findFirstAtom(indices,direction,extrem);
-//std::cout << "    §3\n";
 		Index a2 = findSecondAtom(a1,direction,extrem);
-//std::cout << "    §4\n";
 		if (a2 == -1)
 		{
 			return NULL;
 		}
-//std::cout << "    §5\n";
-		::std::list<Index> atom_list;
-		neighboursOfTwoAtoms(a1,a2,atom_list);
-//std::cout << "    §6\n";
+		neighboursOfTwoAtoms(a1,a2);
 		list< pair< Index,TSphere3<T> > > candidates;
-		findThirdAtom(a1,a2,atom_list,candidates);
-//std::cout << "    §7\n";
+		findThirdAtom(a1,a2,neighbours_of_two_[a1][a2],candidates);
 		if (candidates.size() == 0)
 		{
 			return NULL;
 		}
-//std::cout << "    §8\n";
 		typename std::list< pair< Index,TSphere3<T> > >::iterator i = candidates.begin();
-		Index a3 = candidates.begin()->first;
-		TSphere3<T> probe = candidates.begin()->second;
-//std::cout << "    §9\n";
-		while (checkProbe(probe,a1,a2,a3) == false)
+		Index a3;
+		TSphere3<T> probe;
+		bool found = false;
+		while ((found == false) && (i != candidates.end()))
 		{
-			i++;
-			if (i == candidates.end())
-			{
-				return NULL;
-			}
 			a3 = i->first;
 			probe = i->second;
+			if (atom_status_[a3] == STATUS_UNKNOWN)
+			{
+				if (checkProbe(probe,a1,a2,a3))
+				{
+					found = true;
+				}
+			}
+			i++;
 		}
-//std::cout << "    §10\n";
-		TRSVertex<T>* vertex1 = new TRSVertex<T>(a1);
-		TRSVertex<T>* vertex2 = new TRSVertex<T>(a2);
-		TRSVertex<T>* vertex3 = new TRSVertex<T>(a3);
-		TRSEdge<T>* e1 = new TRSEdge<T>;
-		TRSEdge<T>* e2 = new TRSEdge<T>;
-		TRSEdge<T>* e3 = new TRSEdge<T>;
-		TRSFace<T>* face = new TRSFace<T>;
-		updateFaceAndEdges(vertex1,vertex2,vertex3,e1,e2,e3,face,probe);
-		face->index_ = number_of_faces_;
-		faces_.push_back(face);
-		number_of_faces_++;
-		vertex1->faces_.insert(face);
-		vertex2->faces_.insert(face);
-		vertex3->faces_.insert(face);
-		vertex1->edges_.insert(e1);
-		vertex2->edges_.insert(e1);
-		vertex2->edges_.insert(e2);
-		vertex3->edges_.insert(e2);
-		vertex3->edges_.insert(e3);
-		vertex1->edges_.insert(e3);
-		indices.erase(a1);
-		indices.erase(a2);
-		indices.erase(a3);
-		vertex1->index_ = number_of_vertices_;
-		vertices_.push_back(vertex1);
-		number_of_vertices_++;
-		vertex2->index_ = number_of_vertices_;
-		vertices_.push_back(vertex2);
-		number_of_vertices_++;
-		vertex3->index_ = number_of_vertices_;
-		vertices_.push_back(vertex3);
-		number_of_vertices_++;
-//std::cout << "    §11\n";
-		return face;
+		if (found)
+		{
+			TRSVertex<T>* vertex1 = new TRSVertex<T>(a1);
+			TRSVertex<T>* vertex2 = new TRSVertex<T>(a2);
+			TRSVertex<T>* vertex3 = new TRSVertex<T>(a3);
+			TRSEdge<T>* e1 = new TRSEdge<T>;
+			TRSEdge<T>* e2 = new TRSEdge<T>;
+			TRSEdge<T>* e3 = new TRSEdge<T>;
+			TRSFace<T>* face = new TRSFace<T>;
+			updateFaceAndEdges(vertex1,vertex2,vertex3,e1,e2,e3,face,probe);
+			face->index_ = number_of_faces_;
+			faces_.push_back(face);
+			number_of_faces_++;
+			vertex1->faces_.insert(face);
+			vertex2->faces_.insert(face);
+			vertex3->faces_.insert(face);
+			vertex1->edges_.insert(e1);
+			vertex2->edges_.insert(e1);
+			vertex2->edges_.insert(e2);
+			vertex3->edges_.insert(e2);
+			vertex3->edges_.insert(e3);
+			vertex1->edges_.insert(e3);
+			vertex1->index_ = number_of_vertices_;
+			vertices_.push_back(vertex1);
+			number_of_vertices_++;
+			vertex2->index_ = number_of_vertices_;
+			vertices_.push_back(vertex2);
+			number_of_vertices_++;
+			vertex3->index_ = number_of_vertices_;
+			vertices_.push_back(vertex3);
+			number_of_vertices_++;
+			return face;
+		}
+		else
+		{
+			atom_status_[a1] = STATUS_INSIDE;
+			atom_status_[a2] = STATUS_INSIDE;
+			return NULL;
+			//throw Exception::GeneralException(__FILE__,__LINE__,"XXX","xxx");
+		}
 	}
 
 
 	template <typename T>
-	TRSEdge<T>* TReducedSurface<T>::findFirstEdge(HashSet<Index>& indices)
+	TRSEdge<T>* TReducedSurface<T>::findFirstEdge()
 		throw()
 	{
 		for (Byte direction = 0; direction < 3; direction++)
 		{
 			for (Byte extrem = 0; extrem < 1; extrem++)
 			{
-				TRSEdge<T>* edge = findEdge(indices,direction,extrem);
+				TRSEdge<T>* edge = findEdge(direction,extrem);
 				if (edge != NULL)
 				{
 					return edge;
@@ -2898,17 +2800,14 @@ namespace BALL
 
 
 	template <typename T>
-	TRSEdge<T>* TReducedSurface<T>::findEdge
-		 (HashSet<Index>& indices,
-			Byte						direction,
-			Byte						extrem)
+	TRSEdge<T>* TReducedSurface<T>::findEdge(Byte direction, Byte extrem)
 		throw()
 	{
-		if (indices.size() == 0)
+		Index a1 = findFirstAtom(direction,extrem);
+		if (a1 == -1)
 		{
 			return NULL;
 		}
-		Index a1 = findFirstAtom(indices,direction,extrem);
 		Index a2 = findSecondAtom(a1,direction,extrem);
 		if (a2 == -1)
 		{
@@ -2916,54 +2815,57 @@ namespace BALL
 		}
 		TRSVertex<T>* vertex1 = new TRSVertex<T>(a1);
 		TRSVertex<T>* vertex2 = new TRSVertex<T>(a2);
-		::std::list<Index> atoms;
-		neighboursOfTwoAtoms(a1,a2,atoms);
-		TRSEdge<T>* edge = createFreeEdge(vertex1,vertex2,atoms);
-		if (edge != NULL)
+		//neighboursOfTwoAtoms(a1,a2);
+		//TRSEdge<T>* edge = createFreeEdge(vertex1,vertex2,neighbours_of_two_[a1][a2]);
+		TCircle3<T> circle1;
+		TCircle3<T> circle2;
+		TCircle3<T> circle3;
+		if (getCircles(a1,a2,circle1,circle2,circle3) &&
+				Maths::isGreater(circle1.radius,probe_radius_)		 )
 		{
-			edge->index_ = number_of_edges_;
+			TVector3<T> vector(0,0,0);
+			TRSEdge<T>* edge = new TRSEdge<T>(vertex1,vertex2,NULL,NULL,
+					 															circle1.p,circle1.radius,
+																				TAngle<T>(2*Constants::PI,true),
+																				circle2,circle3,
+																				vector,vector,false,number_of_edges_);
 			edges_.push_back(edge);
 			number_of_edges_++;
 			vertex1->edges_.insert(edge);
 			vertex1->index_ = number_of_vertices_;
 			vertices_.push_back(vertex1);
 			number_of_vertices_++;
-			indices.erase(a1);
 			vertex2->edges_.insert(edge);
 			vertex2->index_ = number_of_vertices_;
 			vertices_.push_back(vertex2);
 			number_of_vertices_++;
-			indices.erase(a2);
+			return edge;
 		}
 		else
 		{
 			delete vertex1;
 			delete vertex2;
+			neighbours_[a1].remove(a2);
+			neighbours_[a2].remove(a1);
+			return NULL;
 		}
-		return edge;
 	}
 
 
 	template <typename T>
-	TRSVertex<T>* TReducedSurface<T>::findFirstVertex(HashSet<Index>& indices)
+	TRSVertex<T>* TReducedSurface<T>::findFirstVertex()
 		throw()
 	{
-		if (indices.size() == 0)
+		for (Position i = 0; i < number_of_atoms_; i++)
 		{
-			return NULL;
-		}
-		for (Byte direction = 0; direction < 3; direction++)
-		{
-			for (Byte extrem = 0; extrem < 1; extrem++)
+			if (atom_status_[i] == STATUS_UNKNOWN)
 			{
-				Index v = findFirstAtom(indices,direction,extrem);
-				if (v != -1)
+				if (neighbours_[i].size() == 0)
 				{
-					TRSVertex<T>* vertex = new TRSVertex<T>(v);
+					TRSVertex<T>* vertex = new TRSVertex<T>(i);
 					vertex->index_ = number_of_vertices_;
 					vertices_.push_back(vertex);
 					number_of_vertices_++;
-					indices.erase(v);
 					return vertex;
 				}
 			}
@@ -2973,30 +2875,48 @@ namespace BALL
 
 
 	template <typename T>
-	Index TReducedSurface<T>::findFirstAtom
-		 (const HashSet<Index>& indices,
-			Byte									direction,
-			Byte									extrem)
+	Index TReducedSurface<T>::findFirstAtom(Byte direction, Byte extrem)
 		throw()
 	{
-		TSphere3<T> next_atom(atom_[*indices.begin()]);
-		T dir_ex = ((extrem == 0) ? next_atom.p[direction]-next_atom.radius
-															: next_atom.p[direction]+next_atom.radius);
-		Index a_ex = *indices.begin();
-		typename HashSet<Index>::ConstIterator i;
-		for (i = indices.begin(); i != indices.end(); i++)
+		Index extrem_atom = -1;
+		Index i = 0;
+		bool found = false;
+		while ((found == false) && (i < (Index)number_of_atoms_))
 		{
-			next_atom = atom_[*i];
-			T extremum = ((extrem == 0) ? next_atom.p[direction]-next_atom.radius
-																	: next_atom.p[direction]+next_atom.radius);
-			if (((extrem == 0) && Maths::isLess(extremum,dir_ex)) ||
-					((extrem != 0) && Maths::isGreater(extremum,dir_ex)))
+			if (atom_status_[i] == STATUS_UNKNOWN)
 			{
-				dir_ex = extremum;
-				a_ex = *i;
+				found = true;
+			}
+			else
+			{
+				i++;
 			}
 		}
-		return a_ex;
+		if (found)
+		{
+			extrem_atom = i;
+			TSphere3<T>* next_atom = &atom_[i];
+			T extrem_value = ((extrem == 0) ? next_atom->p[direction]-next_atom->radius
+																			: next_atom->p[direction]+next_atom->radius);
+			i++;
+			while (i < (Index)number_of_atoms_)
+			{
+				if (atom_status_[i] == STATUS_UNKNOWN)
+				{
+					next_atom = &atom_[i];
+					T extremum = ((extrem == 0) ? next_atom->p[direction]-next_atom->radius
+																			: next_atom->p[direction]+next_atom->radius);
+					if (((extrem == 0) && Maths::isLess(extremum,extrem_value)) ||
+							((extrem != 0) && Maths::isGreater(extremum,extrem_value)))
+					{
+						extrem_value = extremum;
+						extrem_atom = i;
+					}
+				}
+				i++;
+			}
+		}
+		return extrem_atom;
 	}
 
 
@@ -3007,38 +2927,78 @@ namespace BALL
 			 Byte	 extrem)
 		throw()
 	{
-		if (neighbours_[atom].size() == 0)
+		Index second_atom = -1;
+		typename std::list<Index>::const_iterator i = neighbours_[atom].begin();
+		bool found = false;
+		while ((found == false) && (i != neighbours_[atom].end()))
 		{
-			neighboursOfOneAtom(atom);
-			if (neighbours_[atom].size() == 0)
+			if (atom_status_[*i] == STATUS_UNKNOWN)
 			{
-				return -1;
+				found = true;
+			}
+			else
+			{
+				i++;
 			}
 		}
-		TSphere3<T> first_atom(atom_[atom]);
-		first_atom.radius += probe_radius_;
-		TCircle3<T> intersection_circle;
-		T x_min = ((extrem == 0) ? first_atom.p[direction]+first_atom.radius
-														 : first_atom.p[direction]-first_atom.radius);
-		Index a_min = -1;
-		TSphere3<T> next_atom;
-		std::list<Index>::iterator i;
-		for (i = neighbours_[atom].begin(); i != neighbours_[atom].end(); i++)
+		if (found)
 		{
-			next_atom = atom_[*i];
-			next_atom.radius += probe_radius_;
-			if (GetIntersection(first_atom,next_atom,intersection_circle))
+			second_atom = *i;
+			TSphere3<T> first_atom = atom_[atom];
+			first_atom.radius += probe_radius_;
+			TCircle3<T> intersection_circle;
+			T extrem_value = ((extrem == 0) ? first_atom.p[direction]+first_atom.radius
+																			: first_atom.p[direction]-first_atom.radius);
+			TSphere3<T> next_atom;
+			i++;
+			while (i != neighbours_[atom].end())
 			{
-				T next_min = getCircleExtremum(intersection_circle,direction,extrem);
-				if (((extrem == 0) && Maths::isLess(next_min,x_min)) ||
-						((extrem != 0) && Maths::isGreater(next_min,x_min)))
+				if (atom_status_[*i] == STATUS_UNKNOWN)
 				{
-					x_min = next_min;
-					a_min = *i;
+					next_atom = atom_[*i];
+					next_atom.radius += probe_radius_;
+					if (GetIntersection(first_atom,next_atom,intersection_circle))
+					{
+						T next_extrem = getCircleExtremum(intersection_circle,direction,extrem);
+						if (((extrem == 0) && Maths::isLess(next_extrem,extrem_value)) ||
+								((extrem != 0) && Maths::isGreater(next_extrem,extrem_value)))
+						{
+							extrem_value = next_extrem;
+							second_atom = *i;
+						}
+					}
 				}
+				i++;
 			}
 		}
-		return a_min;
+		return second_atom;
+		//if (neighbours_[atom].size() == 0)
+		//{
+		//	return -1;
+		//}
+		//TSphere3<T> first_atom(atom_[atom]);
+		//first_atom.radius += probe_radius_;
+		//TCircle3<T> intersection_circle;
+		//T x_min = ((extrem == 0) ? first_atom.p[direction]+first_atom.radius
+		//												 : first_atom.p[direction]-first_atom.radius);
+		//Index a_min = -1;
+		//TSphere3<T> next_atom;
+		//for (i = neighbours_[atom].begin(); i != neighbours_[atom].end(); i++)
+		//{
+		//	next_atom = atom_[*i];
+		//	next_atom.radius += probe_radius_;
+		//	if (GetIntersection(first_atom,next_atom,intersection_circle))
+		//	{
+		//		T next_min = getCircleExtremum(intersection_circle,direction,extrem);
+		//		if (((extrem == 0) && Maths::isLess(next_min,x_min)) ||
+		//				((extrem != 0) && Maths::isGreater(next_min,x_min)))
+		//		{
+		//			x_min = next_min;
+		//			a_min = *i;
+		//		}
+		//	}
+		//}
+		//return a_min;
 	}
 
 
@@ -3053,10 +3013,6 @@ namespace BALL
 		// This function computes a list of all atoms (with its probe positions)	
 		// which can be touched by the probe sphere when it touches the two given	
 		// atoms
-				#ifdef debug_rs
-				pre += "    ";
-				print << pre << atom1 << ", " << atom2 << ", ...\n";
-				#endif
 				#ifdef print_rs_debug_info
 				std::cout << "  probe positions an " << atom1 << ", " << atom2 << ", ...\n";
 				#endif
@@ -3066,9 +3022,6 @@ namespace BALL
 		TSphere3<T> probe;
 		while (i != third.end())
 		{
-					#ifdef debug_rs
-					print << pre << "  ... " << *i << ": ";
-					#endif
 					#ifdef print_rs_debug_info
 					std::cout << "    ... " << *i << ": ";
 					#endif
@@ -3081,9 +3034,6 @@ namespace BALL
 					probe.set(center1,probe_radius_);
 					candidate.first = *i;
 					candidate.second = probe;
-							#ifdef debug_rs
-							print << probe.p << " / ";
-							#endif
 							#ifdef print_rs_debug_info
 							std::cout << probe.p << " / ";
 							#endif
@@ -3096,9 +3046,6 @@ namespace BALL
 					probe.p = center2;
 					candidate.first = *i;
 					candidate.second = probe;
-							#ifdef debug_rs
-							print << probe.p;
-							#endif
 							#ifdef print_rs_debug_info
 							std::cout << probe.p << "\n";
 							#endif
@@ -3111,97 +3058,52 @@ namespace BALL
 						std::cout << " -- / --\n";
 					}
 					#endif
-					#ifdef debug_rs
-					print << "\n";
-					#endif
 			i++;
 		}
-				#ifdef debug_rs
-				pre.replace(0,4,"");
-				#endif
 	}
 
 
 	template <typename T>
-	void TReducedSurface<T>::neighboursOfOneAtom(Index atom)
+	void TReducedSurface<T>::neighboursOfTwoAtoms(Index atom1, Index atom2)
 		throw()
 	{
-				#ifdef print_rs_debug_info
-				std::cout << "  suche Nachbarn von " << atom << "\n";
-				#endif
-		TSphere3<T> first_atom(atom_[atom]);
-		TSphere3<T> next_atom;
-		T offset = first_atom.radius+2*probe_radius_;
-		HashGridBox3<Position>* box = grid_.getBox(first_atom.p);
-		HashGridBox3<Position>::BoxIterator b;
-		HashGridBox3<Position>::DataIterator d;
-		for (b = box->beginBox(); b != box->endBox(); b++)
+		bool found = false;
+		typename HashMap< Position,HashMap< Position,std::list<Index> > >::Iterator n1
+			 = neighbours_of_two_.find(atom1);
+		if (n1 != neighbours_of_two_.end())
 		{
-			for (d = b->beginData(); d != b->endData(); d++)
+			typename HashMap< Position,std::list<Index> >::Iterator n2 = n1->second.find(atom2);
+			if (n2 != n1->second.end())
 			{
-				if ((Index)*d != atom)
-				{
-					next_atom = atom_[*d];
-					T dist = next_atom.p.getSquareDistance(first_atom.p);
-					T max_dist = next_atom.radius+offset;
-					max_dist *= max_dist;
-							#ifdef print_rs_debug_info
-							std::cout << "  " << *d << " ... ";
-							#endif
-					if (Maths::isLessOrEqual(dist,max_dist))
-					{
-						neighbours_[atom].push_back(*d);
-								#ifdef print_rs_debug_info
-								std::cout << "ja\n";
-								#endif
-					}
-							#ifdef print_rs_debug_info
-							else
-							{
-								std::cout << "nein\n";
-							}
-							#endif
-				}
+				found = true;
 			}
 		}
-		neighbours_[atom].sort();
-	}
-
-
-	template <typename T>
-	void TReducedSurface<T>::neighboursOfTwoAtoms
-		 (Index								atom1,
-			Index								atom2,
-			::std::list<Index>& output_list)
-		throw()
-	{
-		if (neighbours_[atom1].size() == 0)
+		if (found == false)
 		{
-			neighboursOfOneAtom(atom1);
-		}
-		if (neighbours_[atom2].size() == 0)
-		{
-			neighboursOfOneAtom(atom2);
-		}
-		std::list<Index>::iterator i1 = neighbours_[atom1].begin();
-		std::list<Index>::iterator i2 = neighbours_[atom2].begin();
-		while ((i1 != neighbours_[atom1].end()) && (i2 != neighbours_[atom2].end()))
-		{
-			if (*i1 == *i2)
+			std::list<Index> empty;
+			neighbours_of_two_[atom1][atom2] = empty;
+			neighbours_of_two_[atom2][atom1] = empty;
+			std::list<Index>::iterator i1 = neighbours_[atom1].begin();
+			std::list<Index>::iterator i2 = neighbours_[atom2].begin();
+			while ((i1 != neighbours_[atom1].end()) && (i2 != neighbours_[atom2].end()))
 			{
-				output_list.push_back(*i1);
-				i1++;
-				i2++;
-			}
-			else
-			{
-				if (*i1 < *i2)
+				if (*i1 == *i2)
 				{
+					neighbours_of_two_[atom1][atom2].push_back(*i1);
+					neighbours_of_two_[atom2][atom1].push_back(*i1);
 					i1++;
+					i2++;
 				}
 				else
 				{
-					i2++;
+					if (*i1 < *i2)
+					{
+						i1++;
+					}
+					else
+					{
+						i2++;
+					}
 				}
 			}
 		}
@@ -3216,22 +3118,40 @@ namespace BALL
 			::std::list<Index>& output_list)
 		throw()
 	{
-		if (neighbours_[atom1].size() == 0)
+		//std::list<Index>::iterator i1 = neighbours_[atom1].begin();
+		//std::list<Index>::iterator i2 = neighbours_[atom2].begin();
+		//std::list<Index>::iterator i3 = neighbours_[atom3].begin();
+		neighboursOfTwoAtoms(atom1,atom2);
+		neighboursOfTwoAtoms(atom1,atom3);
+		typename HashMap< Position,HashMap< Position,std::list<Index> > >::Iterator n1;
+		typename HashMap< Position,std::list<Index> >::Iterator n2;
+		typename HashMap< Position,std::list<Index> >::Iterator n3;
+		n1 = neighbours_of_two_.find(atom1);
+		n2 = n1->second.find(atom2);
+		n3 = n1->second.find(atom3);
+		std::list<Index>::iterator i2 = n2->second.begin();
+		std::list<Index>::iterator i3 = n2->second.begin();
+		while ((i2 != n2->second.end()) && (i3 != n3->second.end()))
 		{
-			neighboursOfOneAtom(atom1);
+			if (*i2 == *i3)
+			{
+				output_list.push_back(*i2);
+				i2++;
+				i3++;
+			}
+			else
+			{
+				if (*i2 < *i3)
+				{
+					i2++;
+				}
+				else
+				{
+					i3++;
+				}
+			}
 		}
-		if (neighbours_[atom2].size() == 0)
-		{
-			neighboursOfOneAtom(atom2);
-		}
-		if (neighbours_[atom3].size() == 0)
-		{
-			neighboursOfOneAtom(atom3);
-		}
-		std::list<Index>::iterator i1 = neighbours_[atom1].begin();
-		std::list<Index>::iterator i2 = neighbours_[atom2].begin();
-		std::list<Index>::iterator i3 = neighbours_[atom3].begin();
-		while ((i1 != neighbours_[atom1].end()) &&
+		/*while ((i1 != neighbours_[atom1].end()) &&
 					 (i2 != neighbours_[atom2].end()) &&
 					 (i3 != neighbours_[atom3].end()))
 		{
@@ -3260,7 +3180,7 @@ namespace BALL
 					}
 				}
 			}
-		}
+		}*/
 	}
 
 
@@ -3566,9 +3486,216 @@ namespace BALL
 			a2 = a3;
 			a3 = tmp;
 		}
-		//TSphere3<T> s1(atom_[a1].p,atom_[a1].radius+probe_radius_);
-		//TSphere3<T> s2(atom_[a2].p,atom_[a2].radius+probe_radius_);
-		//TSphere3<T> s3(atom_[a3].p,atom_[a3].radius+probe_radius_);
+		//PROBE_COUNTER1++;
+		typename HashMap< Position,HashMap< Position,HashMap< Position,ProbePosition* > > >::Iterator pp1;
+		typename HashMap< Position,HashMap< Position,ProbePosition* > >::Iterator pp2;
+		typename HashMap< Position,ProbePosition* >::Iterator pp3;
+		bool back;
+		bool found = false;
+		pp1 = probe_positions_.find(a1);
+		if (pp1 != probe_positions_.end())
+		{
+			pp2 = pp1->second.find(a2);
+			if (pp2 != pp1->second.end())
+			{
+				pp3 = pp2->second.find(a3);
+				if (pp3 != pp2->second.end())
+				{
+					found = true;
+					if (pp3->second == NULL)
+					{
+						back = false;
+					}
+					else
+					{
+						c1 = pp3->second->point[0];
+						c2 = pp3->second->point[1];
+						back = true;
+					}
+				}
+			}
+		}
+		if (found == false)
+		{
+			//PROBE_COUNTER2++;
+			TSphere3<double> s1(TVector3<double>((double)atom_[a1].p.x,
+																					 (double)atom_[a1].p.y,
+																					 (double)atom_[a1].p.z ),
+													(double)atom_[a1].radius+(double)probe_radius_);
+			TSphere3<double> s2(TVector3<double>((double)atom_[a2].p.x,
+																					 (double)atom_[a2].p.y,
+																					 (double)atom_[a2].p.z ),
+													(double)atom_[a2].radius+(double)probe_radius_);
+			TSphere3<double> s3(TVector3<double>((double)atom_[a3].p.x,
+																					 (double)atom_[a3].p.y,
+																					 (double)atom_[a3].p.z ),
+													(double)atom_[a3].radius+(double)probe_radius_);
+			TVector3<double> p1;
+			TVector3<double> p2;
+			if (GetIntersection(s1,s2,s3,p1,p2))
+			{
+				c1.set((T)p1.x,(T)p1.y,(T)p1.z);
+				c2.set((T)p2.x,(T)p2.y,(T)p2.z);
+				ProbePosition* position = new ProbePosition;
+				position->status.push_back(STATUS_NOT_TESTED);
+				position->status.push_back(STATUS_NOT_TESTED);
+				position->point.push_back(c1);
+				position->point.push_back(c2);
+				probe_positions_[a1][a2][a3] = position;
+				back = true;
+			}
+			else
+			{
+				probe_positions_[a1][a2][a3] = NULL;
+				back = false;
+			}
+		}
+		return back;
+	}
+
+
+	template <typename T>
+	bool TReducedSurface<T>::checkProbe(const TSphere3<T>& probe,
+			Index atom1,
+			Index atom2,
+			Index atom3)
+		throw()
+	{
+				#ifdef print_rs_debug_info
+				std::cout << "check probe sphere " << probe << " with atom ...\n";
+				#endif
+		Index tmp;
+		if (atom1 > atom2)
+		{
+			tmp = atom1;
+			atom1 = atom2;
+			atom2 = tmp;
+		}
+		if (atom1 > atom3)
+		{
+			tmp = atom1;
+			atom1 = atom3;
+			atom3 = tmp;
+		}
+		if (atom2 > atom3)
+		{
+			tmp = atom2;
+			atom2 = atom3;
+			atom3 = tmp;
+		}
+		//PROBE_COUNTER3++;
+		Position index;
+		ProbePosition* position = probe_positions_[atom1][atom2][atom3];
+		if (probe.p == position->point[0])
+		{
+			index = 0;
+		}
+		else
+		{
+			index = 1;
+		}
+		if (position->status[index] == STATUS_NOT_TESTED)
+		{
+			///PROBE_COUNTER4++;
+			bool back = true;
+			std::list<Index> atom_list;
+			neighboursOfThreeAtoms(atom1,atom2,atom3,atom_list);
+			T dist;
+			std::list<Index>::iterator i = atom_list.begin();
+			while (back && (i != atom_list.end()))
+			{
+						#ifdef print_rs_debug_info
+						std::cout << "... " << *i;
+						#endif
+				dist = probe.radius+atom_[*i].radius;
+				if (Maths::isLess(probe.p.getSquareDistance(atom_[*i].p),dist*dist))
+				{
+							#ifdef print_rs_debug_info
+							std::cout << " ... not ok ... " << probe.p.getDistance(atom_[*i].p) << " < "
+												<< probe.radius+atom_[*i].radius << " ";
+							if (HALT == 0) std::cin >> HALT; else {HALT--; std::cout << "\n";}
+							#endif
+					position->status[index] = STATUS_NOT_OK;
+					back = false;
+				}
+						#ifdef print_rs_debug_info
+						else
+						{
+							std::cout << " ... ok ... " << probe.p.getDistance(atom_[*i].p) << " >= "
+												<< probe.radius+atom_[*i].radius << " ";
+							if (HALT == 0) std::cin >> HALT; else {HALT--; std::cout << "\n";}
+						}
+						#endif
+				i++;
+			}
+			if (back)
+			{
+				position->status[index] = STATUS_OK;
+			}
+		}
+		switch (position->status[index])
+		{
+			case STATUS_OK			:	return true;
+			case STATUS_NOT_OK	:	return false;
+			default							: throw Exception::GeneralException(__FILE__,__LINE__,"checkProbe","no status");
+														// should never happen
+		}
+	}
+
+
+	template <typename T>
+	void TReducedSurface<T>::correctProbePosition(Position atom)
+		throw()
+	{
+		typename HashMap< Position,HashMap< Position,HashMap< Position,ProbePosition* > > >::Iterator pp1;
+		typename HashMap< Position,HashMap< Position,ProbePosition* > >::Iterator pp2;
+		typename HashMap< Position,ProbePosition* >::Iterator pp3;
+		for (pp1 = probe_positions_.begin(); pp1 != probe_positions_.end(); pp1++)
+		{
+			if (pp1->first < atom)
+			{
+				for (pp2 = pp1->second.begin(); pp2 != pp1->second.end(); pp2++)
+				{
+					if (pp2->first < atom)
+					{
+						if (pp2->second.has(atom))
+						{
+							correctProbePosition(pp1->first,pp2->first,atom);
+						}
+					}
+					else
+					{
+						if (pp2->first == atom)
+						{
+							for (pp3 = pp2->second.begin(); pp3 != pp2->second.end(); pp3++)
+							{
+								correctProbePosition(pp1->first,atom,pp3->first);
+							}
+						}
+					}
+				}
+			}
+			else
+			{
+				if (pp1->first == atom)
+				{
+					for (pp2 = pp1->second.begin(); pp2 != pp1->second.end(); pp2++)
+					{
+						for (pp3 = pp2->second.begin(); pp3 != pp2->second.end(); pp3++)
+						{
+							correctProbePosition(atom,pp2->first,pp3->first);
+						}
+					}
+				}
+			}
+		}
+	}
+
+
+	template <typename T>
+	void TReducedSurface<T>::correctProbePosition(Position a1, Position a2, Position a3)
+		throw()
+	{
 		TSphere3<double> s1(TVector3<double>((double)atom_[a1].p.x,
 																				 (double)atom_[a1].p.y,
 																				 (double)atom_[a1].p.z ),
@@ -3585,64 +3712,83 @@ namespace BALL
 		TVector3<double> p2;
 		if (GetIntersection(s1,s2,s3,p1,p2))
 		{
-			c1 = TVector3<T>((T)p1.x,(T)p1.y,(T)p1.z);
-			c2 = TVector3<T>((T)p2.x,(T)p2.y,(T)p2.z);
-			return true;
+			TVector3<T> c1((T)p1.x,(T)p1.y,(T)p1.z);
+			TVector3<T> c2((T)p2.x,(T)p2.y,(T)p2.z);
+			ProbePosition* position = probe_positions_[a1][a2][a3];
+			position->status[0] = STATUS_NOT_TESTED;
+			position->status[1] = STATUS_NOT_TESTED;
+			position->point[0] = c1;
+			position->point[1] = c2;
 		}
 		else
 		{
-			return false;
+			delete probe_positions_[a1][a2][a3];
+			probe_positions_[a1][a2][a3] = NULL;
 		}
 	}
 
 
-	template <typename T>
-	bool TReducedSurface<T>::checkProbe(const TSphere3<T>& probe,
-			Index atom1,
-			Index atom2,
-			Index atom3)
+	template <class T>
+	void TReducedSurface<T>::preProcessing()
 		throw()
 	{
-				#ifdef print_rs_debug_info
-				std::cout << "check probe sphere " << probe << " with atom ...\n";
-				#endif
-		std::list<Index> atom_list;
-		neighboursOfThreeAtoms(atom1,atom2,atom3,atom_list);
-		T dist;
-		std::list<Index>::iterator i;
-		for (i = atom_list.begin(); i != atom_list.end(); i++)
+		T x_min = atom_[0].p.x;
+		T y_min = atom_[0].p.y;
+		T z_min = atom_[0].p.z;
+		T x_max = atom_[0].p.x;
+		T y_max = atom_[0].p.y;
+		T z_max = atom_[0].p.z;
+		for (Position i = 1; i < number_of_atoms_; i++)
 		{
-					#ifdef print_rs_debug_info
-					std::cout << "... " << *i;
-					#endif
-			dist = probe.radius+atom_[*i].radius;
-			if (Maths::isLess(probe.p.getSquareDistance(atom_[*i].p),dist*dist))
-			{
-						#ifdef debug_rs
-						print << pre << " ... Konflikt mit Atom " << *i << " ... "
-									<< probe.p.getDistance(atom_[*i].p) << " < "
-									<< probe.radius+atom_[*i].radius << "\n";
-						#endif
-						#ifdef print_rs_debug_info
-						std::cout << " ... not ok ... " << probe.p.getDistance(atom_[*i].p) << " < "
-											<< probe.radius+atom_[*i].radius << "\n";
-						if (HALT == 0) std::cin >> HALT; else {HALT--; std::cout << "\n";}
-						#endif
-				return false;
-			}
-					#ifdef print_rs_debug_info
-					else
-					{
-						std::cout << " ... ok ... " << probe.p.getDistance(atom_[*i].p) << " >= "
-											<< probe.radius+atom_[*i].radius << "\n";
-					}
-					#endif
+			x_min = ((x_min > atom_[i].p.x) ? atom_[i].p.x : x_min);
+			y_min = ((y_min > atom_[i].p.y) ? atom_[i].p.y : y_min);
+			z_min = ((z_min > atom_[i].p.z) ? atom_[i].p.z : z_min);
+			x_max = ((x_max < atom_[i].p.x) ? atom_[i].p.x : x_max);
+			y_max = ((y_max < atom_[i].p.y) ? atom_[i].p.y : y_max);
+			z_max = ((z_max < atom_[i].p.z) ? atom_[i].p.z : z_max);
 		}
-		#ifdef print_rs_debug_info
-		if (HALT == 0) std::cin >> HALT; else {HALT--; std::cout << "\n";}
-		#endif
-		return true;
+		T dist = 2*(r_max_+probe_radius_);
+		Position nx = (Position)((x_max-x_min)/dist+5);
+		Position ny = (Position)((y_max-y_min)/dist+5);
+		Position nz = (Position)((z_max-z_min)/dist+5);
+		TVector3<T> origin(x_min-2*dist,y_min-2*dist,z_min-2*dist);
+		HashGrid3<Position> grid(origin,nx,ny,nz,dist);
+		for (Position i = 0; i < number_of_atoms_; i++)
+		{
+			grid.insert(atom_[i].p,i);
+		}
+		TSphere3<T> next_atom;
+		T offset;
+		HashGridBox3<Position>* box;
+		HashGridBox3<Position>::ConstBoxIterator b;
+		HashGridBox3<Position>::ConstDataIterator d;
+		for (Position i = 0; i < number_of_atoms_-1; i++)
+		{
+			offset = atom_[i].radius+2*probe_radius_;
+			box = grid.getBox(atom_[i].p);
+			for (b = box->beginBox(); b != box->endBox(); b++)
+			{
+				for (d = b->beginData(); d != b->endData(); d++)
+				{
+					if (*d > i)
+					{
+						next_atom = atom_[*d];
+						T dist = next_atom.p.getSquareDistance(atom_[i].p);
+						T max_dist = next_atom.radius+offset;
+						max_dist *= max_dist;
+						if (Maths::isLess(dist,max_dist))
+						{
+							neighbours_[i].push_back(*d);
+							neighbours_[*d].push_back(i);
+						}
+					}
+				}
+			}
+			neighbours_[i].sort();
+		}
 	}
+
+
 
 
 } // namespace BALL
