@@ -1,4 +1,4 @@
-// $Id: forceField.h,v 1.1 1999/08/26 07:53:21 oliver Exp $
+// $Id: forceField.h,v 1.2 1999/09/03 08:11:11 len Exp $
 // Molecular Mechanics: general force field class
 
 #ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
@@ -190,6 +190,10 @@ namespace BALL
 		*/
 		System*  getSystem();
 
+		/**	Return the status of the selection mechanism
+		*/
+		bool	getUseSelection();
+
 		/**	Returns a pointer to the parameter file
 		*/
 		ForceFieldParameters&  getParameters();
@@ -235,6 +239,10 @@ namespace BALL
 		/**	Calculate the forces caused by each component and updates the current forces.
 		*/
 		void 	updateForces();
+
+		/**	Calculates the RMS of the current gradient
+		*/
+		float	getRMSGradient() const;
 
 		/**	Return the update frequency for pair lists etc.
 				This method is used by minimzers or the MD simulation to determine the number
@@ -304,6 +312,10 @@ namespace BALL
 		/*_	The number of movable atoms in the force field
 		*/
 		Size	number_of_movable_atoms_;
+
+		/*_	Are atoms in the system selected?
+		*/
+		bool	use_selection_;
 		//_@}
 	};
 

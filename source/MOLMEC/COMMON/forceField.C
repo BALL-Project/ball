@@ -1,4 +1,4 @@
-// $Id: forceField.C,v 1.1 1999/08/26 08:02:45 oliver Exp $
+// $Id: forceField.C,v 1.2 1999/09/03 08:09:00 len Exp $
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
 
@@ -16,7 +16,8 @@ namespace BALL
 			system_( 0 ),
 			valid_(true),
 			name_("Force Field"),
-			number_of_movable_atoms_(0)
+			number_of_movable_atoms_(0),
+			use_selection_(false)
 	{
 	}
 
@@ -33,7 +34,9 @@ namespace BALL
 		number_of_movable_atoms_ = force_field.number_of_movable_atoms_;
 		parameters_ = force_field.parameters_;
 		periodic_boundary = force_field.periodic_boundary;
+		use_selection_ = force_field.use_selection_;
 		valid_ = force_field.valid_;
+
 		
 		// Copy the component vector
 		for (Size i = 0; i < force_field.components_.size(); i++) 
@@ -59,6 +62,7 @@ namespace BALL
 			system_ = force_field.system_;
 			parameters_ = force_field.parameters_;
 			periodic_boundary = force_field.periodic_boundary;
+			use_selection_ = force_field.use_selection_;
 			valid_ = force_field.valid_;
 
 			Size i;
@@ -149,42 +153,26 @@ namespace BALL
 		// check for selected atoms
 		// if any of the atoms is selected, the atoms_ array holds
 		// the selected atoms first (0 < i < number_of_movable_atoms_) 
+		use_selection_ = false;
 		number_of_movable_atoms_ = 0;
 		AtomIterator atom_it = system.beginAtom();
 		for (; +atom_it; ++atom_it)
 		{
-			if (atom_it->isSelected())
+			if (atom_it->isSelected() == false && use_selection_ == false)
+			{
+				atoms_.push_back(&(*atom_it));
+			} else if (atom_it->isSelected() == true && use_selection_ == false)
+			{
+				atoms_.clear();
+				atoms_.push_back(&(*atom_it));
+				use_selection_ = true;
+			} else if (atom_it->isSelected() == true && use_selection_ == true)
 			{
 				atoms_.push_back(&(*atom_it));
 			}
 		}
 		number_of_movable_atoms_ = atoms_.size();
 
-		// extract atoms from the specified system and store them in atoms_
-		if (number_of_movable_atoms_ == 0)
-		{
-			atom_it = system.beginAtom();
-			for (; +atom_it; ++atom_it)
-			{
-				atoms_.push_back(&(*atom_it));
-			}
-			
-			// all atoms are movable since none were selected
-			number_of_movable_atoms_ = atoms_.size();
-
-		} else {
-		
-			// add the deselected atoms to the end of the atoms_ array
-			atom_it = system.beginAtom();
-			for (; +atom_it; ++atom_it)
-			{
-				if (!atom_it->isSelected())
-				{
-					atoms_.push_back(&(*atom_it));
-				}
-			}
-		}
-			
 		// force field specific parts
 		success = specificSetup();
 		if (!success) 
@@ -253,6 +241,12 @@ namespace BALL
 		return system_;
 	}
 
+	// Return the parameter use_selection_
+	bool ForceField::getUseSelection(void)
+	{
+		return use_selection_;
+	}
+
 	// Return a pointer to the parameter file
 	ForceFieldParameters& ForceField::getParameters()
 	{
@@ -279,6 +273,20 @@ namespace BALL
 		{
 			(*component_it)->updateForces();
 		}
+	}
+
+	// Calculate the RMS of the gradient
+	float	ForceField::getRMSGradient() const
+	{
+		float sum = 0;
+		vector<Atom*>::const_iterator it = atoms_.begin();
+		for (; it != atoms_.end(); ++it)
+		{
+			sum += (*it)->getForce().getSquareLength();
+		}
+		sum = sqrt(sum/(3 * atoms_.size()));
+		sum *= Constants::AVOGADRO / 1e13;
+		return(sum);
 	}
 
 	float ForceField::getEnergy() const 
