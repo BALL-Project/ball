@@ -1,4 +1,4 @@
-// $Id: vector3.h,v 1.23 2000/03/02 22:53:36 oliver Exp $
+// $Id: vector3.h,v 1.24 2000/03/03 02:32:05 amoll Exp $
 
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -1002,7 +1002,7 @@ namespace BALL
   		@return TVector3 - the new vector
 	*/
 	template <typename T>
-	inline 
+	BALL_INLINE 
 	TVector3<T> operator + (const TVector3<T>& a, const TVector3<T>& b)
 	{
 		return TVector3<T>(a.x + b.x, a.y + b.y, a.z + b.z);
@@ -1044,12 +1044,11 @@ namespace BALL
 	std::istream& operator >> (std::istream& s, TVector3<T>& v)
 	{
 		char c;
-		s >> c;
-		if (c == '(') 
+		for (int i=0; i<8 ; i++)
 		{
-			s >> v.x >> v.y >> v.z;
 			s >> c;
 		}
+		s >> v.x >> v.y >> v.z >> c;
 
 		return s;
 	}
@@ -1060,7 +1059,7 @@ namespace BALL
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TVector3<T>& v)
 	{
-		s << '(' << v.x << ' ' << v.y << ' ' << v.z << ')';
+		s << "VECTOR3(" << v.x << ' ' << v.y << ' ' << v.z << ')';
 
 		return s;
 	}

@@ -1,4 +1,4 @@
-// $Id: vector4.h,v 1.18 2000/03/02 23:08:18 oliver Exp $
+// $Id: vector4.h,v 1.19 2000/03/03 02:32:16 amoll Exp $
 
 #ifndef BALL_MATHS_VECTOR4_H
 #define BALL_MATHS_VECTOR4_H
@@ -818,13 +818,11 @@ namespace BALL
 	std::istream& operator >> (std::istream& s, TVector4<T>& v)
 	{
 		char c;
-		s >> c;
-		if (c == '(') 
-		{
-			s >> v.x >> v.y >> v.z >> v.h;
-			s >> c;
-		}
-
+    for (int i=0; i<8 ; i++)
+    {
+    	s >> c;
+    }
+    s >> v.x >> v.y >> v.z >> v.h >>c;  
 		return s;
 	}
 
@@ -834,7 +832,7 @@ namespace BALL
 	template <class T>
 	std::ostream& operator << (std::ostream& s, const TVector4<T>& v)
 	{
-		s << '(' <<v.x << ' ' << v.y << ' ' << v.z << ' ' << v.h << ')';
+		s << "VECTOR4(" <<v.x << ' ' << v.y << ' ' << v.z << ' ' << v.h << ')';
 		
 		return s;
 	}
