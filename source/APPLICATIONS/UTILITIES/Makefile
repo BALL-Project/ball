@@ -1,4 +1,4 @@
-# $Id: Makefile,v 1.3 2003/02/18 15:54:10 anker Exp $
+# $Id: Makefile,v 1.4 2003/03/04 14:43:11 anker Exp $
 # Makefile for BALL utilities
 
 DIRECTORY=APPLICATIONS/UTILITIES
@@ -7,7 +7,8 @@ EXECUTABLES = \
 	add_hydrogens\
 	dcd2dcd\
 	export_fragment\
-	pdb2amber_naming
+	pdb2amber_naming\
+	reconstruct_fragment
 
 # default target
 all:	$(EXECUTABLES)
