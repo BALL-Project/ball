@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.78 2003/09/17 23:40:45 amoll Exp $
+// $Id: mainframe.C,v 1.79 2003/09/18 06:19:20 oliver Exp $
 //
 
 #include "mainframe.h"
@@ -696,9 +696,7 @@ namespace BALL
 			simulation_thread_ = 0;
 		}
 
-		Log.insert(std::cout);
-		Log.insert(std::cerr);
-		setStatusbarText("Simulation finished.");
+		setStatusbarText("Simulation terminated.");
 		stop_simulation_ = false;
 		checkMenuEntries();
 	#endif
