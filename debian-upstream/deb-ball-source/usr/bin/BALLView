@@ -1,0 +1,4 @@
+#!/bin/sh
+export LD_LIBRARY=/opt/BALL/lib:$LD_LIBRARY_PATH
+export BALL_DATA_PATH=/opt/BALL/data
+/opt/BALL/bin/BALLView $@
