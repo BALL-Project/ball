@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.17 2003/04/01 00:50:26 amoll Exp $
+// $Id: pyWidget.h,v 1.18 2003/04/01 16:27:53 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_PYWIDGET_H
 #define BALL_VIEW_GUI_WIDGETS_PYWIDGET_H
@@ -29,7 +29,7 @@ namespace BALL
 		class PythonSettings;
 
 /** Python Widget class.
-	\ingroup ViewGuiWidgets	
+		\ingroup ViewGuiWidgets	
 */
 class PyWidget
 	: public QTextEdit,
@@ -90,6 +90,9 @@ class PyWidget
 			@param filename the name of the program file
 	*/
 	virtual void runFile(const String& filename);
+
+	///
+	virtual void exportHistory();
 			
 	//@}
 	/**	@name	ModularWidget related methods
@@ -188,8 +191,10 @@ class PyWidget
 	String getCurrentLine_();
 
 	bool						multi_line_mode_;
+	Size 						multi_lines_;
 	String					multi_line_text_;
 	vector<String>	history_;
+	vector<bool> 		results_;
 	Position				history_position_;
 	String					current_line_;
 	String 					startup_script_;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.16 2003/04/01 00:50:27 amoll Exp $
+// $Id: pyWidget.C,v 1.17 2003/04/01 16:26:38 amoll Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/pyWidget.h>
 #include <BALL/VIEW/GUI/KERNEL/mainControl.h>
@@ -42,15 +42,17 @@ PyWidget::~PyWidget()
 
 void PyWidget::initializeWidget(MainControl& main_control)
 {
-	main_control.insertMenuEntry(MainControl::TOOLS, "&Restart Python", this, SLOT(startInterpreter()));
-	main_control.insertMenuEntry(MainControl::TOOLS, "&Run Python Script", this, SLOT(scriptDialog()));
+	main_control.insertMenuEntry(MainControl::TOOLS, "Restart Python", this, SLOT(startInterpreter()));
+	main_control.insertMenuEntry(MainControl::TOOLS, "Run Python Script", this, SLOT(scriptDialog()));
+	main_control.insertMenuEntry(MainControl::TOOLS, "Export History", this, SLOT(exportHistory()));
 }
 
 
 void PyWidget::finalizeWidget(MainControl& main_control)
 {
-	main_control.removeMenuEntry(MainControl::TOOLS, "&Restart Python", this, SLOT(startInterpreter()));
-	main_control.removeMenuEntry(MainControl::TOOLS, "&Run Python Script", this, SLOT(scriptDialog()));
+	main_control.removeMenuEntry(MainControl::TOOLS, "Restart Python", this, SLOT(startInterpreter()));
+	main_control.removeMenuEntry(MainControl::TOOLS, "Run Python Script", this, SLOT(scriptDialog()));
+	main_control.removeMenuEntry(MainControl::TOOLS, "Export History", this, SLOT(exportHistory()));
 }
 
 
@@ -185,18 +187,21 @@ void PyWidget::parseLine_()
 				multi_line_mode_ = true;
 				multi_line_text_ = line;
 				multi_line_text_.append("\n");
+				multi_lines_ = 1;
 				appendToHistory_(line);
 				newPrompt_();
 				return;
 		}
 
+		multi_lines_ = 0;
 		appendToHistory_(line);
 	}
 	else // Multiline mode
 	{
+		multi_lines_ += 1;
+		appendToHistory_(line);
 		if (!line.isEmpty())
 		{
-			appendToHistory_(line);
 			multi_line_text_ += line + "\n";
 			newPrompt_();
 			return;
@@ -207,9 +212,19 @@ void PyWidget::parseLine_()
 
 	bool state;
 	String result = PyInterpreter::run(line, state);
-	multi_line_mode_ = false;
-
 	if (result != "") append(result.c_str());
+
+		
+	if (!multi_line_mode_)
+	{
+		results_.push_back(state);
+	}
+	else
+	{
+		for (Position p = 0; p <= multi_lines_ -1; p++) results_.push_back(state);
+	}
+	
+	multi_line_mode_ = false;
 
 	newPrompt_();
 }
@@ -372,7 +387,7 @@ void PyWidget::fetchPreferences(INIFile& inifile)
 
 	startup_script_ =	inifile.getValue("PYTHON", "StartupScript");
 	python_settings_->setFilename(startup_script_);
-	runFile(startup_script_);
+	if (startup_script_ != "") runFile(startup_script_);
 }
 
 
@@ -423,6 +438,38 @@ void PyWidget::cancelPreferences(Preferences&)
 	{
 		python_settings_->setFilename(startup_script_);
 	}
+}
+
+void PyWidget::exportHistory()
+{
+	QFileDialog *fd = new QFileDialog(this, "Export History", true);
+	fd->setMode(QFileDialog::AnyFile);
+	fd->addFilter("Python Scripts(*.py)");
+	fd->setSelectedFilter(1);
+
+	fd->setCaption("Export History");
+	fd->setViewMode(QFileDialog::Detail);
+	fd->setGeometry(300, 150, 400, 400);
+
+	int result_dialog = fd->exec();
+	if (!result_dialog == QDialog::Accepted) return;
+
+	String filename(fd->selectedFile().ascii());
+
+	File file(filename, std::ios::out);
+	if (!file.isOpen()) 
+	{
+		append(String("> Could not export history to file " + filename + "\n").c_str());
+		newPrompt_();
+		return;
+	}
+			
+	for (Position p = 0; p < history_.size(); p++)
+	{
+		if (results_[p]) file << history_[p] << std::endl;
+	}
+
+	file.close();
 }
 
 

@@ -31,22 +31,6 @@
             <string>Startup script:</string>
         </property>
     </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>choose_button</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>360</x>
-                <y>20</y>
-                <width>70</width>
-                <height>21</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Choose</string>
-        </property>
-    </widget>
     <widget class="QLineEdit">
         <property name="name">
             <cstring>script_edit</cstring>
@@ -55,7 +39,7 @@
             <rect>
                 <x>10</x>
                 <y>20</y>
-                <width>340</width>
+                <width>420</width>
                 <height>23</height>
             </rect>
         </property>
@@ -66,6 +50,38 @@
             <bool>true</bool>
         </property>
     </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>choose_button</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>50</y>
+                <width>70</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Choose</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>clear_button</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>90</x>
+                <y>50</y>
+                <width>70</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Clear</string>
+        </property>
+    </widget>
 </widget>
 <connections>
     <connection>
@@ -74,9 +90,16 @@
         <receiver>Form1</receiver>
         <slot>fileSelected()</slot>
     </connection>
+    <connection>
+        <sender>clear_button</sender>
+        <signal>pressed()</signal>
+        <receiver>Form1</receiver>
+        <slot>clearSelected()</slot>
+    </connection>
 </connections>
 <slots>
     <slot>fileSelected()</slot>
+    <slot>clearSelected()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>
