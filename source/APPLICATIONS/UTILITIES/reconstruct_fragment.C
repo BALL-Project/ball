@@ -1,4 +1,4 @@
-// $Id: reconstruct_fragment.C,v 1.1 2003/03/04 14:43:11 anker Exp $
+// $Id: reconstruct_fragment.C,v 1.2 2003/03/04 18:24:30 anker Exp $
 //
 // A little helper program that tries to reconstruct broken fragments in a
 // molecule. This program assumes that there is only *one* chain in the
@@ -21,18 +21,37 @@ using namespace std;
 int main(int argc, char** argv)
 {
 
-	if (argc != 5)
+	if ((argc != 5) && (argc != 3))
 	{
 		Log.info() << "Usage:" << endl;
+		Log.info() << argv[0] << " infile.pdb outfile.pdb"
+			<< "\n" << endl;
+		Log.info() << " or\n" << endl;
 		Log.info() << argv[0] << " fragment-name residue-id infile.pdb outfile.pdb"
-			<< endl;
 		return(1);
 	}
 
-	String reference_fragment_name(argv[1]);
-	String res_id(argv[2]);
-	String infile_name(argv[3]);
-	String outfile_name(argv[4]);
+	bool automatic = true;
+
+	String reference_fragment_name;
+	String res_id;
+	String infile_name;
+	String outfile_name;
+
+	if (argc == 5)
+	{
+		automatic = false;
+
+		reference_fragment_name = argv[1];
+		res_id = argv[2];
+		infile_name = argv[3];
+		outfile_name = argv[4];
+	}
+	else
+	{
+		infile_name = argv[1];
+		outfile_name = argv[2];
+	}
 
 	System system;
 	PDBFile infile(infile_name);
@@ -41,29 +60,38 @@ int main(int argc, char** argv)
 
 	FragmentDB db;
 	system.apply(db.normalize_names);
-	system.apply(db.build_bonds);
 
-	ResidueIterator res_it = system.beginResidue();
-	while (res_it->getID() != res_id) 
+	if (automatic == true)
 	{
-		++res_it;
+		ReconstructFragmentProcessor proc(db);
+		system.apply(proc);
+		system.apply(db.build_bonds);
 	}
-
-	if (!res_it.isValid())
+	else
 	{
-		std::cerr << "Didn't find res_id " << res_id << " in system" << std::endl;
-	}
 
-	const Fragment& ref = *db.getFragment(reference_fragment_name);
-	Size atoms = ReconstructFragmentProcessor::reconstructFragment(*res_it, ref);
-	Log.info() << " added " << atoms << " atoms" << std::endl;
-	Size bonds = db.build_bonds.buildFragmentBonds(*res_it, ref);
-	Log.info() << " added " << bonds << " bonds" << std::endl;
+		ResidueIterator res_it = system.beginResidue();
+		while (res_it->getID() != res_id) 
+		{
+			++res_it;
+		}
+
+		if (!res_it.isValid())
+		{
+			cerr << "Didn't find res_id " << res_id << " in system" << endl;
+		}
+
+		const Fragment& ref = *db.getFragment(reference_fragment_name);
+		Size atoms = ReconstructFragmentProcessor::reconstructFragment(*res_it, ref);
+		Log.info() << " added " << atoms << " atoms" << std::endl;
+		Size bonds = db.build_bonds.buildFragmentBonds(*res_it, ref);
+		Log.info() << " added " << bonds << " bonds" << std::endl;
+	}
 
 	ResidueChecker check(db);
 	system.apply(check);
 
-	PDBFile outfile(outfile_name, std::ios::out);
+	PDBFile outfile(outfile_name, ios::out);
 	outfile << system;
 	outfile.close();
 }
