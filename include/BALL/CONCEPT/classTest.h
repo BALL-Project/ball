@@ -1,4 +1,4 @@
-// $Id: classTest.h,v 1.13 2000/05/23 10:35:08 oliver Exp $
+// $Id: classTest.h,v 1.14 2000/07/04 16:43:48 oliver Exp $
 
 #include <BALL/common.h>
 #include <BALL/SYSTEM/file.h>
@@ -485,7 +485,7 @@ int main(int argc, char **argv)\
 							std::cout << std::endl;\
 						}\
 						\
-						std::cout << "   TEST_FILE: regexp mismatch: " << TEST_FILE__line << " did not match " << TEST_FILE__template_line << "." << std::endl;\
+						std::cout << "   TEST_FILE: regexp mismatch: " << TEST_FILE__line << " did not match " << TEST_FILE__template_line(1) << "." << std::endl;\
 					}\
 				}\
 			} else {\
