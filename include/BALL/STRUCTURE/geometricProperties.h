@@ -1,4 +1,4 @@
-// $Id: geometricProperties.h,v 1.6 2000/07/04 22:55:53 oliver Exp $
+// $Id: geometricProperties.h,v 1.7 2000/07/04 23:00:11 oliver Exp $
 
 #ifndef BALL_STRUCTURE_GEOMETRICPROPERTIES_H
 #define BALL_STRUCTURE_GEOMETRICPROPERTIES_H
@@ -92,7 +92,7 @@ namespace BALL
 
 		/**
 		*/
-		virtual Processor::Result operator () (Atom& /atom/);
+		virtual Processor::Result operator () (Atom& atom);
 		//@}
 
 		/**	@name Accessors
@@ -147,7 +147,7 @@ namespace BALL
 
 		/**
 		*/
-		virtual Processor::Result operator()(Atom& /atom/);
+		virtual Processor::Result operator()(Atom& atom);
 		//@}
 
 		/**@name	Accessors
@@ -222,7 +222,7 @@ namespace BALL
 
 		/**
 		*/
-		virtual Processor::Result operator()(Composite& /composite/);
+		virtual Processor::Result operator()(Composite& composite);
 		//@}
 		
 		/**	@name Accessors
