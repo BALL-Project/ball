@@ -55,7 +55,7 @@
               auto-deletable: 0
 /            Object: [0-9a-fx]+ is instance of class: .*BALL.*Composite
               selected: 0
-/              parent: 91
+/              parent: [0-9]+
 /              first: [0-9]+
 /              last: [0-9]+
 /              previous: [0-9]+
