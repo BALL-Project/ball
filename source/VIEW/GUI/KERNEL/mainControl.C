@@ -1,4 +1,4 @@
-// $Id: mainControl.C,v 1.29 2002/12/16 15:52:11 oliver Exp $
+// $Id: mainControl.C,v 1.30 2002/12/16 16:08:28 amoll Exp $
 
 // this is required for QMenuItem
 #define INCLUDE_MENUITEM_DEF
@@ -8,6 +8,7 @@
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/bond.h>
+#include <BALL/MATHS/analyticalGeometry.h>
 
 #include <qapplication.h>
 #include <qwidget.h>
@@ -822,45 +823,97 @@ namespace BALL
 			selection_.clear();		
 			// wird GeometricObject list
 			List<Composite*>& objects = const_cast<List<Composite*>&>(message.getSelection());
-			List<Composite*>::Iterator it = objects.begin();
+			List<Composite*>::Iterator it_objects = objects.begin();
 
 			Size nr = 0;
-			for (; it != objects.end(); it++)
+			for (; it_objects != objects.end(); it_objects++)
 			{
-				if (!RTTI::isKindOf<GeometricObject>(*(*it)->getParent()) &&
-						!selection_.has((*it)->getParent())) 
+				if (!RTTI::isKindOf<GeometricObject>(*(*it_objects)->getParent()) &&
+						!selection_.has((*it_objects)->getParent())) 
 				{	
-					selectCompositeRecursive((*it)->getParent(), true);	
+					selectCompositeRecursive((*it_objects)->getParent(), true);	
 					nr++;
 				}				
 			}
 
-
-			// if one atom was picked, show its properties
-			if (selection_.size() == 1)
+			if (selection_.size() > 4)
 			{
-				if (RTTI::isKindOf<Atom>(**selection_.begin()))
-				{
-					Atom& atom = *(Atom*)*selection_.begin();
-					Log.info()  << "Properties of atom " << atom.getFullName() 
-											<< ":  Position: " << atom.getPosition() << "  " << "Charge: " << atom.getCharge() 
-											<< "  Velocity: " << atom.getVelocity() << "  " << "Force: " << atom.getForce() << std::endl;
-				}
+				NewSelectionMessage* new_message = new NewSelectionMessage;
+				new_message->setDeletable(true);
+				notify_(new_message);
+				#ifdef BALL_DEBUG_VIEW
+					Log.info() << "Selected " + String(nr) + " items."<< std::endl;
+				#endif
+				return;
 			}
-			else if (selection_.size() == 2)
+			Atom* atoms[4];
+			Size nr_of_atoms = 0;
+			HashSet<Composite*>::Iterator it = selection_.begin();
+			while (it != selection_.end() && 
+						 RTTI::isKindOf<Atom>(**it) && 
+						 nr_of_atoms < 5)
+			{
+				atoms[nr_of_atoms] = (Atom*) *it;
+				nr_of_atoms++;
+				it++;
+			}
+
+			if (nr_of_atoms == 1)
+			{
+				// if one atom was picked, show its properties
+				Atom& atom = *atoms[0];
+				setStatusbarText("Properties of atom " + atom.getFullName() + "  Type: " + 
+												 String(atom.getType()) + "  Typename: " + 
+												 String(atom.getTypeName()) + ":  Position: (" + 
+												 String(atom.getPosition().x) + "|" +
+												 String(atom.getPosition().y) + "|" +
+												 String(atom.getPosition().z) + ")" + "  Charge: " + 
+												 String(atom.getCharge()));
+			Log.error() << "KKKKKKKKKKKKK" << std::endl;
+			}
+			else if (nr_of_atoms == 2)
 			{
 				// if two atoms were picked, show their distance
-				Atom& atom1 = *(Atom*)*selection_.begin();
-				HashSet<Composite*>::Iterator it = selection_.begin();
-				it++;
-				Atom& atom2 = *(Atom*)*it;
+				setStatusbarText("Distance between atom " + 
+													atoms[0]->getFullName() + " and " + 
+													atoms[1]->getFullName() + ": " + 
+													String(GetDistance(atoms[0]->getPosition(), atoms[1]->getPosition())));
+			}
+			else if (nr_of_atoms == 3)
+			{
+				// if tree atoms were picked, show their angle
+				Vector3 vector1(atoms[0]->getPosition() - atoms[1]->getPosition());
+				Vector3 vector2(atoms[0]->getPosition() - atoms[2]->getPosition());
+				Angle result;
+				GetAngle(vector1, vector2, result);
+				setStatusbarText("Angle between atoms " + 
+													atoms[0]->getFullName() + ", " + 
+													atoms[1]->getFullName() + ", " +
+													atoms[2]->getFullName() + ": " +
+													String(result) + ")"); 
+			}
+			else if (nr_of_atoms == 4)
+			{
+				// if tree atoms were picked, show their angle
+				Angle result = getTorsionAngle(atoms[0]->getPosition().x, atoms[0]->getPosition().y, atoms[0]->getPosition().z,
+																			 atoms[1]->getPosition().x, atoms[1]->getPosition().y, atoms[1]->getPosition().z,
+																			 atoms[2]->getPosition().x, atoms[2]->getPosition().y, atoms[2]->getPosition().z,
+																			 atoms[3]->getPosition().x, atoms[3]->getPosition().y, atoms[3]->getPosition().z);
 
-				Log.info()  << "Distance between atom " << atom1.getFullName() << " and " << atom2.getFullName() << ": " 
-										<< atom1.getPosition() - atom2.getPosition() << std::endl;
+				setStatusbarText("Angle between atoms " + 
+													atoms[0]->getFullName() + ", " + 
+													atoms[1]->getFullName() + ", " +
+													atoms[2]->getFullName() + ": " +
+													atoms[3]->getFullName() + ": " +
+													String(result));
+			}
+			else
+			{
+				setStatusbarText("Selected " + String(nr) + " atoms.");
 			}
 
-
 			NewSelectionMessage* new_message = new NewSelectionMessage;
+			new_message->setDeletable(true);
 			notify_(new_message);
 			#ifdef BALL_DEBUG_VIEW
 				Log.info() << "Selected " + String(nr) + " items."<< std::endl;
@@ -998,6 +1051,13 @@ namespace BALL
 				deselectRecursive_(composite->getChild(i));			
 			}
 		}		
+
+		void MainControl::setStatusbarText(const String& text)
+			throw()
+		{
+			statusBar()->message(text.c_str());
+			QWidget::update();
+		}
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/GUI/KERNEL/mainControl.iC>
