@@ -57,7 +57,7 @@ for i in $* ; do
 		# subtest failed
 		echo "Failure in test $i. Rerunning test in verbose mode:"
 		echo "--------------------------------------"
-		./$i -v
+		./$i -V
 		echo "--------------------------------------"
 		echo " "
 	fi
