@@ -1,4 +1,4 @@
-// $Id: geometricProperties.h,v 1.7 2000/07/04 23:00:11 oliver Exp $
+// $Id: geometricProperties.h,v 1.8 2000/07/04 23:08:36 oliver Exp $
 
 #ifndef BALL_STRUCTURE_GEOMETRICPROPERTIES_H
 #define BALL_STRUCTURE_GEOMETRICPROPERTIES_H
@@ -100,15 +100,15 @@ namespace BALL
 		//@{
 		/** Return the bounding box
 		*/
-		Box3& getBox();
+		Box3 getBox() const;
 
 		/**	Returns the lower corner of the bounding box
 		*/
-		Vector3& getLower();
+		const Vector3& getLower() const;
 
 		/**	Returns the upper corner of the bounding box
 		*/
-		Vector3& getUpper();
+		const Vector3& getUpper() const;
 		//@}
 			
 		private:
