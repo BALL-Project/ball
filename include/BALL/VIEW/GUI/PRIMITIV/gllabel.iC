@@ -1,0 +1,35 @@
+// $Id: gllabel.iC,v 1.1 2000/09/23 12:50:10 hekl Exp $
+
+BALL_INLINE
+void GLLabel::setText(const String text)
+{
+	old_text_ = getText();
+
+	Label::setText(text);
+}
+
+BALL_INLINE
+const QFont& GLLabel::getFont() const
+{
+	return actual_font_;
+}
+
+BALL_INLINE
+void GLLabel::setFont(const QFont& font)
+{
+	old_font_ = actual_font_;
+
+	actual_font_ = font;
+}
+
+BALL_INLINE
+String GLLabel::getOldText_() const
+{
+	return old_text_;
+}
+
+BALL_INLINE
+const QFont& GLLabel::getOldFont_() const
+{
+	return old_font_;
+}
