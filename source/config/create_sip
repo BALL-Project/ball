@@ -41,11 +41,10 @@ cat $BALL_PATH/source/PYTHON/EXTENSIONS/skeleton.sip |\
 cat $FILE2 >> $FILE
 echo "};" >> $FILE
 
-cat $FILE
-
 if [ -e $BALL_PATH/source/PYTHON/EXTENSIONS/$FILENAME.sip ]
 then
  echo File $BALL_PATH/source/PYTHON/EXTENSIONS/$FILENAME.sip exists
  exit
 fi
-#cp $FILE $BALL_PATH/source/PYTHON/EXTENSIONS/$FILENAME.sip
+
+cp $FILE $BALL_PATH/source/PYTHON/EXTENSIONS/$FILENAME.sip
