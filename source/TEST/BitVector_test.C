@@ -1,4 +1,4 @@
-// $Id: BitVector_test.C,v 1.12 2000/07/25 13:34:34 amoll Exp $
+// $Id: BitVector_test.C,v 1.13 2000/07/26 09:14:50 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,12 +8,13 @@
 
 ///////////////////////////
 
-START_TEST(BitVector, "$Id: BitVector_test.C,v 1.12 2000/07/25 13:34:34 amoll Exp $")
+START_TEST(BitVector, "$Id: BitVector_test.C,v 1.13 2000/07/26 09:14:50 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
+using namespace std;
 
 BitVector* bv_ptr;
 	CHECK(BitVector::BitVector())
