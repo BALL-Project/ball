@@ -1,4 +1,4 @@
-// $Id: regExp.C,v 1.11 2000/10/28 21:55:18 amoll Exp $ 
+// $Id: regExp.C,v 1.12 2000/12/02 19:39:10 amoll Exp $ 
 
 #include <BALL/DATATYPE/regExp.h>
 
@@ -24,22 +24,22 @@ namespace BALL
 	const String RegularExpression::WHITESPACE("^[ \n\t\r\f\v]+$");
 
 
-	RegularExpression::RegularExpression()
+	RegularExpression::RegularExpression() throw()
 		:	pattern_(BALL_REGULAR_EXPRESSION_DEFAULT_PATTERN),
 			valid_pattern_(false)
 	{
 		compilePattern_();
 	}
 
-	RegularExpression::RegularExpression
-		(const RegularExpression& regular_expression, bool /* deep */)
+	RegularExpression::RegularExpression 
+		(const RegularExpression& regular_expression, bool /* deep */)throw()
 		:	pattern_(regular_expression.pattern_),
 			valid_pattern_(false)
 	{
 		compilePattern_();
 	}
 
-	RegularExpression::RegularExpression(const String& pattern, bool wildcard_pattern)
+	RegularExpression::RegularExpression(const String& pattern, bool wildcard_pattern) throw()
 		:	pattern_(pattern),
 			valid_pattern_(false)
 	{
@@ -51,14 +51,14 @@ namespace BALL
 		compilePattern_();
 	}
 
-	RegularExpression::~RegularExpression()
+	RegularExpression::~RegularExpression() throw()
 	{
 		regfree(&regex_);
 	}
 
-	bool RegularExpression::match
-		(const char* text, const char* pattern,
-		 int compile_flags, int execute_flags)
+	bool RegularExpression::match(const char* text, const char* pattern,
+															  int compile_flags, int execute_flags)
+		 throw(Exception::NullPointer)
 	{
 		if ((text == 0) || (pattern == 0))
 		{
@@ -74,10 +74,11 @@ namespace BALL
 
 		int status = regexec(&regex, text, (size_t)0, 0, execute_flags);
 		regfree(&regex);
-		return (bool)(status == 0);
+		return (status == 0);
 	}
 
 	bool RegularExpression::match(const String& text, Index from, int execute_flags) const
+		 throw(Exception::NullPointer, Exception::IndexUnderflow, Exception::IndexOverflow)
 	{
 		if (valid_pattern_ == false)
 		{
@@ -94,12 +95,11 @@ namespace BALL
 			throw Exception::IndexOverflow(__FILE__, __LINE__, from, text.size());
 		}
 
-		return (bool)(regexec(&regex_, text.c_str() + from, (size_t)0, 0, execute_flags) == 0);
+		return (regexec(&regex_, text.c_str() + from, (size_t)0, 0, execute_flags) == 0);
 	}
 
-	bool RegularExpression::match
-		(const Substring& text,
-		 Index from, int execute_flags) const
+	bool RegularExpression::match(const Substring& text, Index from, int execute_flags) const 
+		throw(Substring::InvalidSubstring, Exception::IndexUnderflow, Exception::IndexOverflow)
 	{
 		if (valid_pattern_ == false)
 		{
@@ -127,10 +127,11 @@ namespace BALL
 		int status = regexec(&regex_, text.c_str() + from, (size_t)0, 0, execute_flags);
 		*end_of_substring = c;
 
-		return (bool)(status == 0);
+		return (status == 0);
 	}
 
 	bool RegularExpression::match(const char* text, int execute_flags) const
+		throw(Exception::NullPointer)
 	{
 		if (valid_pattern_ == false)
 		{
@@ -142,12 +143,12 @@ namespace BALL
 			throw Exception::NullPointer(__FILE__, __LINE__);
 		}
 
-		return (bool)(regexec(&regex_, text, (size_t)0, 0, execute_flags) == 0);
+		return (regexec(&regex_, text, (size_t)0, 0, execute_flags) == 0);
 	}
 
-	bool RegularExpression::find
-		(const String& text, Substring& found,
-		 Index from, int execute_flags) const
+	bool RegularExpression::find(const String& text, Substring& found,
+															 Index from, int execute_flags) 
+			const throw(Exception::IndexUnderflow, Exception::IndexOverflow)
 	{
 		if (valid_pattern_ == false)
 		{
@@ -176,9 +177,9 @@ namespace BALL
 		return false;
 	}
 
-	bool RegularExpression::find
-		(const String& text, vector<Substring>& subexpressions,
-		 Index from, int execute_flags) const
+	bool RegularExpression::find(const String& text, vector<Substring>& subexpressions,
+															 Index from, int execute_flags) const
+				throw(Exception::IndexUnderflow, Exception::IndexOverflow)
 	{
 		if (valid_pattern_ == false)
 		{
@@ -198,7 +199,8 @@ namespace BALL
 
 		regmatch_t* regmatch_ptr = new regmatch_t[number_of_subexpressions];
 
-		if (regexec(&regex_, text.c_str() + from, (size_t)number_of_subexpressions, regmatch_ptr, execute_flags) == 0)
+		if (regexec(&regex_, text.c_str() + from, 
+								(size_t)number_of_subexpressions, regmatch_ptr, execute_flags) == 0)
 		{
 			for (Index index = 0; index < (Index)number_of_subexpressions; ++index)
 			{
@@ -214,8 +216,7 @@ namespace BALL
 		return false;
 	}
 
-	void RegularExpression::dump
-		(ostream& s, Size depth) const
+	void RegularExpression::dump(ostream& s, Size depth) const throw()
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 
@@ -233,13 +234,13 @@ namespace BALL
 		BALL_DUMP_STREAM_SUFFIX(s);
 	}
 
-	ostream& operator << (ostream& s, const RegularExpression& regular_expression)
+	ostream& operator << (ostream& s, const RegularExpression& regular_expression) throw()
 	{
 		s << regular_expression.pattern_ << ' ';
 		return s;
 	}
 
-	istream& operator >> (istream& s, RegularExpression& regular_expression)
+	istream& operator >> (istream& s, RegularExpression& regular_expression) throw()
 	{
 		String pattern;
 		s >> pattern;
@@ -247,12 +248,12 @@ namespace BALL
 		return s;
 	}
 
-	void RegularExpression::compilePattern_()
+	void RegularExpression::compilePattern_() throw()
 	{
-		valid_pattern_ = (bool)!::regcomp(&regex_, pattern_.c_str(), REG_EXTENDED);
+		valid_pattern_ = !::regcomp(&regex_, pattern_.c_str(), REG_EXTENDED);
 	}
 
-	void RegularExpression::toExtendedRegularExpression_()
+	void RegularExpression::toExtendedRegularExpression_() throw()
 	{
 		const char* pattern = pattern_.c_str();
 		String regexp;
