@@ -1,4 +1,4 @@
-// $Id: path.h,v 1.3 1999/12/04 18:34:06 oliver Exp $
+// $Id: path.h,v 1.4 2000/05/06 14:10:48 oliver Exp $
 
 #ifndef BALL_COMMON_PATH_H
 #define BALL_COMMON_PATH_H
@@ -16,18 +16,25 @@ using std::vector;
 namespace BALL 
 {
 
-	/**	@name Path management
-	*/
-	//@{
-
-
 	/**	Data path management class.
 			This class is intended to provide a unique interface to 
 			directories where the data files needed by BALL reside.
+			\\
+			{\bf Definition:}\URL{BALL/COMMON/path.h}
+			\\
 	*/
 	class Path 
 	{
 		public:
+		/**	@name Constructors and Destructors
+		*/	
+		//@{
+		
+		/**	Default constructor
+		*/
+		Path();
+		//@}
+
 		/** Returns the path to the current BALL data directory.
 				This directory is set to a default value at compile time
 				of the library (see configure to change this setting).
@@ -40,24 +47,24 @@ namespace BALL
 				The path contains a colon separated list of paths that are searched 
 				in the order of occurence.\\
 		*/		
-		static string getDataPath();
+		string getDataPath();
 
 		/**	Modify the data path.
 				This method accepts a colon separated list of paths to
 				specify data paths.
 		*/
-		static void setDataPath(const string& path);
+		void setDataPath(const string& path);
 
 		/**	Add a single path to the list of paths.
 				@param	path the path to be added to the path list
 		*/
-		static void addDataPath(const string& path);
+		void addDataPath(const string& path);
 
 		/**	Returns the default data path compiled into the library.
 				This method ignores possible contents of the environment
 				variable "BALL\_DATA".
 		*/
-		static string getDefaultDataPath();
+		string getDefaultDataPath();
 
 		/**	Returns the full path to a file residing in one of the data directories.
 				If a file that matches the name is not found, an empty string is returned.
@@ -71,28 +78,22 @@ namespace BALL
 				for a file named {\bf test.dat} in each of the directories.\\
 				If this behaviour is not desired, try \Ref{findStrict} instead.\\
 		*/
-		static string	find(const string& name);
+		string find(const string& name);
 
 		/**	Returns the full path to a file residing in one of the data directories.
 				@see find
 		*/
-		static string findStrict(const string& name);
+		string findStrict(const string& name);
 
 		
 		protected:
 				
-		static void buildPathArray_();
-
-		static string path_;
-
-		static bool path_array_valid_;
-
-		static bool environment_checked_;
-
-		static std::vector<std::string>	path_array_;
+		void buildPathArray_();
+		string path_;
+		bool path_array_valid_;
+		bool environment_checked_;
+		std::vector<std::string>	path_array_;
 	};
-
-	//@}
 
 } // namespace BALL
 
