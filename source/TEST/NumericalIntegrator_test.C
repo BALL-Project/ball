@@ -1,25 +1,18 @@
-// $Id: NumericalIntegrator_test.C,v 1.5 2001/12/30 13:28:58 sturm Exp $
+// $Id: NumericalIntegrator_test.C,v 1.6 2002/01/05 02:59:05 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 
-// insert includes here
 #include <BALL/MATHS/numericalIntegrator.h>
 
 ///////////////////////////
 
-START_TEST(NumericalIntegrator, "$Id: NumericalIntegrator_test.C,v 1.5 2001/12/30 13:28:58 sturm Exp $")
+START_TEST(NumericalIntegrator, "$Id: NumericalIntegrator_test.C,v 1.6 2002/01/05 02:59:05 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
-
-///  insert tests for each member function here         
-///
-
-// tests for class NumericalIntegrator::
-
 
 NumericalIntegrator<MutableConstant<>, float>* ni_ptr = 0;
 
@@ -149,8 +142,6 @@ CHECK(NumericalIntegrator::integrate(from, to))
 	TEST_REAL_EQUAL(result, test_constant)
 	result = ni.integrate(0.0, 2.0);
 	TEST_REAL_EQUAL(result, 2.0 * test_constant)
-	// ?????:
-	// a more complicated function
 RESULT
 
 /////////////////////////////////////////////////////////////
