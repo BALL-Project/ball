@@ -1,7 +1,5 @@
 #!/bin/sh
 
-
-
 CP=cp
 LN=ln
 MKDIR=mkdir
@@ -35,7 +33,7 @@ done
 
 echo "creating links for source files..."
 for i in ${DIRS} ; do
-	FILES=`cd ${SOURCE_PATH}/$i;find . -name \*[.i][hC] | sed "s/^\.\///g"` 
+	FILES=`cd ${SOURCE_PATH}/$i;find . -name \*[.i][hCyl] | sed "s/^\.\///g"` 
 	FILES="${FILES} "`cd ${SOURCE_PATH}/$i;find . -name \*xpm | sed "s/^\.\///g"` 
 	FILES="${FILES} "`cd ${SOURCE_PATH}/$i;find . -name \*.sip | sed "s/^\.\///g"` 
 	FILES="${FILES} "`cd ${SOURCE_PATH}/$i;find . -name \*.pdb | sed "s/^\.\///g"` 
