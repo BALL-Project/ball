@@ -1,4 +1,4 @@
-// $Id: surfaceModel.C,v 1.8 2001/07/15 18:50:29 oliver Exp $
+// $Id: surfaceModel.C,v 1.9 2001/07/15 21:01:00 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/surfaceModel.h>
 #include <BALL/STRUCTURE/surfaceProcessor.h>
@@ -88,8 +88,20 @@ namespace BALL
 					cerr << "number of atoms in system:" << system->countAtoms() << endl;
 					SurfaceProcessor sp;
 					cerr << "applying SurfaceProcessor..." << endl;
-					system->apply(sp);
-					cerr << "assigning surface..." << endl;
+					try 
+					{
+						system->apply(sp);
+					}
+					catch (Exception::GeneralException e)
+					{
+						Log.error() << "SurfaceModel: caught exception while calculating molecular surface: " << e << endl;
+					}
+					catch (...)
+					{
+						Log.error() << "SurfaceModel: caught exception while calculating molecular surface" << endl;
+					}
+					Log.info() << "assigning surface (" << sp.getSurface().vertex.size() << " vertices, " 
+										 << sp.getSurface().triangle.size() << " triangles)" << endl;
 					sp.getSurface(*mesh);
 					cerr << "setting mesh name..." << endl;
 
