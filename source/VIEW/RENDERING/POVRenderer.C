@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.18.2.9 2005/01/04 15:30:08 amoll Exp $
+// $Id: POVRenderer.C,v 1.18.2.10 2005/01/04 18:12:55 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -512,7 +512,6 @@ namespace BALL
 		void POVRenderer::renderMesh_(const Mesh& mesh)
 			throw()
 		{
-			 //	 All meshes have their own color lists up to now ????????
 			if (mesh.vertex.size() == 0 ||
 			    mesh.normal.size() == 0 ||
 					mesh.triangle.size() == 0)
@@ -571,11 +570,11 @@ namespace BALL
 			for (Position p = 0; p < color_vector.size(); p++)
 			{
    			temp_color.set((*color_vector[p]));
-				out << "texture { pigment { " << POVColorRGBA(temp_color) << " }"
+				out << "texture { pigment { " << getColorIndex_(temp_color) << " }"
 						<< " finish { BALLFinishMesh } }," << endl;
 			}
 
-			out << "texture { pigment { " << POVColorRGBA(temp_color) << " }"
+			out << "texture { pigment { " << getColorIndex_(temp_color) << " }"
 					<< " finish { BALLFinishMesh } }" << endl;
 			out << "\t\t}" << endl;
 			
@@ -666,6 +665,20 @@ namespace BALL
 				if (!RTTI::isKindOf<Mesh>(**it))
 				{
 					storeColor_(**it);
+				}
+				else
+				{
+					Mesh& mesh = *dynamic_cast<Mesh*>(*it);
+					String color_string;
+					for (Position i = 0; i < mesh.colorList.size(); i++)
+					{
+						mesh.colorList[i].get(color_string);
+						if (!color_map_.has(color_string))
+						{
+							color_map_.insert(ColorMap::ValueType(color_string, color_map_.size()));
+							color_vector_.push_back(&mesh.colorList[i]);
+						}
+					}
 				}
 			}
 
