@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.38 2000/01/11 11:58:54 oliver Exp $
+dnl    $Id: configure.in,v 1.39 2000/01/13 22:37:50 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -865,9 +865,9 @@ else
 			dnl 
 			dnl			a version above 7.2 is required
 			dnl
-			if test "${CXX_VERSION_1}" -lt 7  
-							-o "${CXX_VERSION_1}" -eq 7 -a "${CXX_VERSION_2}" = 10
-							-o "${CXX_VERSION_1}" -eq 7 -a "${CXX_VERSION_2}" = 20
+			if test "${CXX_VERSION_1}" -lt 7\
+							-o "${CXX_VERSION_1}" -eq 7 -a "${CXX_VERSION_2}" = 10\
+							-o "${CXX_VERSION_1}" -eq 7 -a "${CXX_VERSION_2}" = 20\
 							-o "${CXX_VERSION_1}" -eq 7 -a "${CXX_VERSION_2}" -lt 2; then
 				AC_MSG_RESULT()
 				AC_MSG_RESULT(MipsPro CC version 7.30 or above is required. Please update your compiler.)
@@ -1706,7 +1706,7 @@ if test "${USE_BALLVIEW}" = true ; then
 	LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
 	AC_TRY_LINK([const char* qGLVersion();], [qGLVersion();], QT_LINKING_OK=1)
 	LIBS=${SAVE_LIBS}
-	if test "${QT_LINKING_OK+set}" != set; then
+	if test "${QT_LINKING_OK+set}" != set ; then
 		AC_MSG_RESULT(no)
 		AC_MSG_RESULT()
 		AC_MSG_RESULT(Cannot link agains libqgl/qt - disabling support for visualization!)
@@ -1716,6 +1716,90 @@ if test "${USE_BALLVIEW}" = true ; then
 		USE_BALLVIEW=false
 	else
 		AC_MSG_RESULT(yes)
+		
+		dnl  
+		dnl  identify the version of the library
+		dnl
+		AC_MSG_CHECKING(QT library version)
+		SAVE_LIBS=${LIBS}
+		LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
+		LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${X11_LIBPATH}:${OPENGL_LIBPATH}:${QT_LIBPATH}
+		export LD_LIBRARY_PATH
+		echo "LD_LIBRARY_PATH = ${LD_LIBRARY_PATH}" 1>&5
+		AC_TRY_RUN(
+			[
+				#include <stdio.h> 
+				const char* qVersion();
+				int main()
+				{
+					FILE* f = fopen("qt.version", "w");
+					fprintf(f, "%s\n", qVersion());
+					fclose(f);
+					exit(0);
+				}
+			], 
+			QT_VERSION_OK=1,
+			DUMMY=0,
+			DUMMY=0
+		)
+		LIBS=${SAVE_LIBS}
+		
+		dnl
+		dnl	if the program compiled and ran successfully,
+		dnl extract the QT version number
+		dnl
+		if test "${QT_VERSION_OK+set}" != set; then
+			AC_MSG_RESULT(no)
+			AC_MSG_RESULT()
+			AC_MSG_RESULT(The execution of a program linked against the QT)
+			AC_MSG_RESULT(library failed. Please have a look at config.log)
+			AC_MSG_RESULT((the last few lines) to find out what happened.)
+			AC_MSG_RESULT(Perhaps you specified the wrong library or the)
+			AC_MSG_RESULT(X11 libraries are in conflict with any other library.)
+			AC_MSG_RESULT(You might also want to check your LD_LIBRARY_PATH.)
+			AC_MSG_RESULT(Support for visualization is disabled.)
+			AC_MSG_RESULT()
+			USE_BALLVIEW=false
+		else
+			QT_VERSION_STRING=`cat qt.version`
+			AC_MSG_RESULT(${QT_VERSION_STRING})
+
+			dnl
+			dnl  test whether this version is the right one
+			dnl  (2.x.y and at lease 2.0.2
+			dnl
+			rm qt.version 2>/dev/null
+			QT_MAJOR=`echo ${QT_VERSION_STRING} | ${CUT} -d. -f1`
+			if test "${QT_MAJOR}" != 2 ; then
+				AC_MSG_RESULT()
+				AC_MSG_RESULT(QT version 2.x is required.)
+				AC_MSG_RESULT(Please install version QT Version 2 (at least 2.0.2))
+				AC_MSG_RESULT(which can be obtained from)
+				AC_MSG_RESULT()
+				AC_MSG_RESULT(  www.troll.no/qt)
+				AC_MSG_RESULT()
+				AC_MSG_RESULT(Support for visualization is disabled.)
+				AC_MSG_RESULT()
+				USE_BALLVIEW=false
+			else
+				dnl
+				dnl  give a hint if somebody is using 2.00 which
+				dnl  has a serious bug in QListView: multiple selection
+        dnl  does not work as expected!
+				dnl
+				if test "${QT_VERSION_STRING}" = "2.00" ; then
+					AC_MSG_RESULT()
+					AC_MSG_RESULT(QT verison 2.00 is known to contain a bug)
+					AC_MSG_RESULT(that affects some features of MOLVIEW.)
+					AC_MSG_RESULT(Please install at least version 2.0.2)
+					AC_MSG_RESULT(which can be obtained from)
+					AC_MSG_RESULT()
+					AC_MSG_RESULT(  www.troll.no/qt)
+					AC_MSG_RESULT()
+					AC_MSG_RESULT()
+				fi
+			fi
+		fi
 	fi
 fi
 
