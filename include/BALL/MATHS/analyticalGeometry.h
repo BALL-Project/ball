@@ -1,4 +1,4 @@
-// $Id: analyticalGeometry.h,v 1.21 2000/04/03 18:12:36 amoll Exp $
+// $Id: analyticalGeometry.h,v 1.22 2000/04/03 18:15:35 amoll Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -164,7 +164,7 @@ namespace BALL
 	}
 
 	/**	Solve a system of equations of a given size in the form
-		  $a_1 x_1 + b_1 x_2 + .. + N_x x_n = c_1$.
+		  $a_1 x_1 + b_1 x_2 + .. + N_1 x_n = c_1$.
 			@param	m pointer to the factors in the equations
 			@param	x pointer in which the results are stored
 			@param  dim the size of the equation system (number of variables)
