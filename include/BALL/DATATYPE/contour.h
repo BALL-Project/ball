@@ -1,4 +1,4 @@
-// $Id: contour.h,v 1.1 2000/12/01 17:19:35 anhi Exp $
+// $Id: contour.h,v 1.2 2000/12/01 18:46:03 anhi Exp $
 
 #ifndef BALL_DATATYPE_CONTOUR_H
 #define BALL_DATATYPE_CONTOUR_H
@@ -145,16 +145,16 @@ void TContour<T>::apply(const TRegularData2D<T>& data)
 }
 
 template <typename T>
-bool getNextContourLine(TContourLine<T>& cont)
+bool TContour<T>::getNextContourLine(TContourLine<T>& cont)
 {
   if (it_ != 0)
   {
     ++it_;
-    if (it_ == lines_.last())
+    if (it_ == lines_.end())
     {
       return false;
     } else {
-      cont = it_;
+      cont = *it_;
       return true;
     };
   };
