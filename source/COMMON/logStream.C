@@ -1,4 +1,4 @@
-// $Id: logStream.C,v 1.16 2000/05/30 18:27:08 oliver Exp $
+// $Id: logStream.C,v 1.17 2000/10/17 10:14:33 oliver Exp $
 
 #include <BALL/COMMON/logStream.h>
 #include <BALL/CONCEPT/notification.h>
@@ -573,12 +573,12 @@ namespace BALL
 				{
 					if (log->loglines_[pos].text.find(s, 0) != string::npos )
 					{
-						list_indices.push_back(pos);
+						list_indices.push_back((int)pos);
 					}
 				}
 				else
 				{
-					list_indices.push_back(pos);
+					list_indices.push_back((int)pos);
 				}
 			}
 			pos++;
