@@ -1,4 +1,4 @@
-// $Id: LEF.h,v 1.3 2000/09/07 19:37:04 oliver Exp $
+// $Id: LEF.h,v 1.4 2000/09/08 07:09:24 oliver Exp $
 
 #ifndef BALL_NMR_LEF_H
 #define BALL_NMR_LEF_H
@@ -70,7 +70,7 @@ namespace BALL
 				the ones called "H". That special Hydrogen is stored as well as PDBAtoms named
 				"C", "N" and "O" in {\tt atom\_list\_}.
 		*/
-		virtual Processor::Result operator () (Atom& atom);
+		virtual Processor::Result operator () (Composite& composite);
 		//@}
 	
 

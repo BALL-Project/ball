@@ -1,4 +1,4 @@
-// $Id: johnsonBovey.h,v 1.5 2000/07/03 21:08:50 oliver Exp $
+// $Id: johnsonBovey.h,v 1.6 2000/09/08 07:09:41 oliver Exp $
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -73,7 +73,7 @@ namespace BALL {
 
 			/**	Application method
 			*/
-			virtual Processor::Result operator()(Object&);
+			virtual Processor::Result operator () (Composite& composite);
 			//@}
 
 

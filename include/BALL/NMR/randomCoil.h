@@ -1,4 +1,4 @@
-// $Id: randomCoil.h,v 1.2 2000/07/03 21:08:51 oliver Exp $
+// $Id: randomCoil.h,v 1.3 2000/09/08 07:09:49 oliver Exp $
 
 #include<BALL/SOLVATION/poissonBoltzmann.h>
 #include<BALL/COMMON/constants.h>
@@ -83,7 +83,7 @@ class RandomCoilShift:public ShiftModule
 		
 		
 	*/
-	virtual Processor::Result operator()(Object&);
+	virtual Processor::Result operator () (Composite& composite);
 	//@}
 	
 

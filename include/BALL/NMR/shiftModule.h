@@ -1,4 +1,4 @@
-// $Id: shiftModule.h,v 1.3 2000/09/07 19:37:04 oliver Exp $
+// $Id: shiftModule.h,v 1.4 2000/09/08 07:09:54 oliver Exp $
 
 #ifndef BALL_NMR_SHIFTMODULE_H
 #define BALL_NMR_SHIFTMODULE_H
@@ -21,7 +21,7 @@ namespace BALL
 	*/
 
 	class ShiftModule 
-		: public UnaryProcessor <Atom>
+		: public UnaryProcessor<Composite>
 	{
 		public:	
 		/**@name	Constructors and Destructors
