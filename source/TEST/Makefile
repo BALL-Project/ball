@@ -110,6 +110,7 @@ EXECUTABLES = \
 	Vector3_test\
 	Vector4_test\
 	VersionInfo_test\
+	XDRPersistenceManager_test\
 	XYZFile_test
 
 # default target
@@ -143,8 +144,8 @@ AnisotropyShiftProcessor_test:	AnisotropyShiftProcessor_test.o ../NMR/anisotropy
 HaighMallionShiftProcessor_test:	HaighMallionShiftProcessor_test.o ../NMR/haighMallionShiftProcessor.o
 	$(CXX) $(CXXFLAGS) HaighMallionShiftProcessor_test.o ../NMR/haighMallionShiftProcessor.o $(LDFLAGS) -o HaighMallionShiftProcessor_test $(LIBS)
 
-NMRSpectrum_test:	NMRSpectrum_test.o ../NMR/NMRSpectrum.o
-	$(CXX) $(CXXFLAGS) NMRSpectrum_test.o ../NMR/NMRSpectrum.o $(LDFLAGS) -o NMRSpectrum_test $(LIBS)
+XDRPersistenceManager_test:	XDRPersistenceManager_test.o ../CONCEPT/XDRPersistenceManager.o ../CONCEPT/persistenceManager.o
+	$(CXX) $(CXXFLAGS) XDRPersistenceManager_test.o ../CONCEPT/XDRPersistenceManager.o ../CONCEPT/persistenceManager.o $(LDFLAGS) -o XDRPersistenceManager_test $(LIBS) -lnsl 
 
 test:	$(EXECUTABLES)
 	@./runtests $(EXECUTABLES)
