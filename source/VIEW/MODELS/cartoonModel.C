@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.24 2004/06/07 13:16:23 amoll Exp $
+// $Id: cartoonModel.C,v 1.25 2004/06/08 11:21:15 amoll Exp $
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
@@ -624,7 +624,8 @@ namespace BALL
 				}
 			}
 
-			Position index = 0; // start of spline points in the vector for the residues of this SS
+			// start of spline points in the vector for the residues of this SS
+			Position index = 0; 
 
 			// speed up search for current position in spline vector
 			if (spline_vector_position_ != -1)
@@ -642,23 +643,11 @@ namespace BALL
 			}
 
 			Position nr_of_residues = ss.countResidues();
-			for (Position res = 0; res < nr_of_residues; res++)
-			{
-				// dont draw the last residue or we get a line to (0,0,0)
-				if (last_chain_ == 0) 
-				{
-					if (ss.getCTerminal() == ss.getResidue(res)) 
-					{
-					 	continue;
-					}
-				}
-				else if (((Chain*)ss.getParent())->getCTerminal() == ss.getResidue(res)) 
-				{
- 					continue;
-				}
-				
+			Position max = index + nr_of_residues;
+			if (max > spline_vector_.size() -1 ) max = spline_vector_.size() -1;
 
-				Position pos = res + index;
+			for (Position pos = index; pos < max ; pos++)
+			{
 				for (Position j = 0; j < 9; j++)
 				{
 					buildGraphicalRepresentation_(
