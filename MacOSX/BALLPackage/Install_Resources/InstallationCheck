@@ -1,0 +1,24 @@
+#!/bin/bash
+
+if test -d /Library/Receipts/X11User.pkg;
+	then
+		echo "X11 found"
+	else
+		exit 112;
+fi
+
+if test "/Library/Receipts/Fink*" != "/Library/Receipts/Fink\*";
+        then
+                echo "Fink found"
+        else
+                exit 113;
+fi
+
+if test -f /sw/lib/libqt-mt.dylib;
+	then
+		echo "QT found"
+	else
+		exit 114;
+fi
+
+exit 0;
