@@ -1,4 +1,4 @@
-// $Id: DCDFile.h,v 1.2 2000/12/17 15:56:01 oliver Exp $
+// $Id: DCDFile.h,v 1.3 2000/12/19 13:19:36 anker Exp $
 
 #ifndef BALL_FORMAT_DCDFILE_H
 #define BALL_FORMAT_DCDFILE_H
@@ -40,30 +40,73 @@ namespace BALL
 		*/
 		class DCDHeader
 		{
+
 			public:
 
+			///
+			Size				start_info_block;
+			///
+			char				CORD[4];
+
 			/// The number of coordinate sets in this file
-			Size 			number_of_coordinate_sets;
+			Size 				number_of_coordinate_sets;
+
 			/// The number of the starting time step
-			Size 			step_number_of_starting_time;
-			/// The number of steps between saves
-			Size			steps_between_saves;
+			Size 				step_number_of_starting_time;
+
+			///
+			Size				steps_between_saves;
+
+			/// 
+			Size 				unused_1[6];
+
 			/// The length of one time step (in units of ???)
-			DoubleReal		time_step_length;
+			DoubleReal	time_step_length;
+
+			///
+			Size				unused_2[9];
+
+			///
+			Size				end_info_block;
+
+			///
+			Size				start_title_block;
 
 			/// the number of 80 byte comments in this record
 			Size				number_of_80_byte_records;
 
+			///
+			char				title[80];
+
+			///
+			Size				end_title_block;
+
+			///
+			Size				start_atomnumber_block;
+
 			/// the number of atoms covered by every timestep
 			Size				number_of_atoms;
 
+			///
+			Size				end_atomnumber_block;
+
 			DCDHeader()
 				throw()
-				:	number_of_coordinate_sets(0),
+				:	start_info_block(84),
+					// CORD("CORD"),
+					number_of_coordinate_sets(0),
+					step_number_of_starting_time(0),
 					steps_between_saves(0),
-					time_step_length(0),
-					number_of_80_byte_records(2),
-					number_of_atoms(0)
+					// unused_1(),
+					time_step_length(0.0),
+					// unused_2()
+					end_info_block(84),
+					start_title_block(84),
+					number_of_80_byte_records(1),
+					end_title_block(84),
+					start_atomnumber_block(4),
+					number_of_atoms(0),
+					end_atomnumber_block(4)
 			{
 			}
 
@@ -170,20 +213,13 @@ namespace BALL
 				@return true if the manager was written successfully
 		*/
 		virtual bool write(const SnapShotManager& manager)
-			throw();
+			throw(Exception::NotImplemented);
 
-		/** append the data of a SnapShotManager to an existing file
-				@param manager the SnapShotManager we want to save
-				@return true, if writing was successful
-		*/
-		virtual bool append(const SnapShotManager& manager)
-			throw();
-
-		/** append a list of SnapShots to an existing file
+		/** append a SnapShot to an existing file
 				@param buffer the list os SnapShots we want to save
 				@return true, if writing was successful
 		*/
-		virtual bool append(const std::vector<SnapShot>& buffer)
+		virtual bool append(const SnapShot& snapshot)
 			throw();
 
 		//@}
