@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rotamerLibrary.C,v 1.22 2003/04/04 11:55:19 oliver Exp $
+// $Id: rotamerLibrary.C,v 1.23 2003/04/12 10:04:18 oliver Exp $
 
 #include <BALL/STRUCTURE/rotamerLibrary.h>
 
@@ -284,7 +284,6 @@ namespace BALL
 
 			if (movable_atoms_chi1_.size() > 3)
 			{
-				copy(movable_atoms_chi1_.begin(), movable_atoms_chi1_.end(), inserter(assigned_atoms, assigned_atoms.begin()));
 				addMovable_(movable_atoms_chi1_, *(atom_name_map_[movable_atoms_chi1_[2]]), assigned_atoms); 
 				addMovable_(movable_atoms_chi1_, *(atom_name_map_[movable_atoms_chi1_[3]]), assigned_atoms);
 			}
@@ -317,7 +316,6 @@ namespace BALL
 
 			if (movable_atoms_chi2_.size() > 3)
 			{
-				copy(movable_atoms_chi1_.begin(), movable_atoms_chi1_.end(), inserter(assigned_atoms, assigned_atoms.begin()));
 				addMovable_(movable_atoms_chi2_, *(atom_name_map_[movable_atoms_chi2_[2]]), assigned_atoms); 
 				addMovable_(movable_atoms_chi2_, *(atom_name_map_[movable_atoms_chi2_[3]]), assigned_atoms); 
 			}
@@ -345,7 +343,6 @@ namespace BALL
 
 			if (movable_atoms_chi3_.size() > 3)
 			{
-				copy(movable_atoms_chi1_.begin(), movable_atoms_chi1_.end(), inserter(assigned_atoms, assigned_atoms.begin()));
 				addMovable_(movable_atoms_chi3_, *(atom_name_map_[movable_atoms_chi3_[2]]), assigned_atoms); 
 				addMovable_(movable_atoms_chi3_, *(atom_name_map_[movable_atoms_chi3_[3]]), assigned_atoms); 
 			}
@@ -369,7 +366,6 @@ namespace BALL
 
 			if (movable_atoms_chi4_.size() > 3)
 			{
-				copy(movable_atoms_chi1_.begin(), movable_atoms_chi1_.end(), inserter(assigned_atoms, assigned_atoms.begin()));
 				addMovable_(movable_atoms_chi4_, *(atom_name_map_[movable_atoms_chi4_[2]]), assigned_atoms); 
 				addMovable_(movable_atoms_chi4_, *(atom_name_map_[movable_atoms_chi4_[3]]), assigned_atoms); 
 			}
