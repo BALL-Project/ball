@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amber.C,v 1.29 2004/12/27 17:06:07 amoll Exp $
+// $Id: amber.C,v 1.30 2005/01/18 21:46:49 amoll Exp $
 //
 // Molecular Mechanics: Amber force field class
 //
@@ -84,7 +84,7 @@ namespace BALL
 
     if (!result)
     {
-      Log.level(LogStream::ERROR) << " Force Field setup failed! " << endl;
+      Log.error() << " Force Field setup failed! " << endl;
       valid_ = false;
 		}
 	}
@@ -109,7 +109,7 @@ namespace BALL
 
     if (!result)
     {
-      Log.level(LogStream::ERROR) << " Force Field setup failed! " << endl;
+      Log.error() << " Force Field setup failed! " << endl;
       valid_ = false;
 		}
 	}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.C,v 1.51 2004/05/04 18:45:48 oliver Exp $
+// $Id: atom.C,v 1.52 2005/01/18 21:46:49 amoll Exp $
 //
 
 #include <BALL/KERNEL/atom.h>
@@ -242,7 +242,7 @@ namespace BALL
 		pm.readObjectPointerArray(bond_, "bond_", n);
 		if (n != (Size)number_of_bonds_)
 		{
-			Log.level(LogStream::ERROR) << "Atom::persistentRead: size of bond array: read " << n
+			Log.error() << "Atom::persistentRead: size of bond array: read " << n
 				<< " instead of " << number_of_bonds_ << endl;
 		}
 	}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: persistenceManager.C,v 1.21 2004/11/07 08:25:36 oliver Exp $
+// $Id: persistenceManager.C,v 1.22 2005/01/18 21:46:49 amoll Exp $
 //
 
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -284,8 +284,7 @@ namespace BALL
 			if (!create_methods_.has(type_name)) 
 			{
 				// something bad happend - abort everything and clean up!
-				Log.level(LogStream::ERROR) << "Cannot create object of unregistered class " 
-																		<< type_name << "!" << endl;
+				Log.error() << "Cannot create object of unregistered class " << type_name << "!" << endl;
 				error = true;
 				break;
 			} 
@@ -298,8 +297,7 @@ namespace BALL
 			// check whether the creation was successful
 			if (obj == 0)
 			{
-				Log.level(LogStream::ERROR) << "Could not create object of type " 
-																		<< type_name << "!" << endl;
+				Log.error() << "Could not create object of type " << type_name << "!" << endl;
 				error = true;
 				break;
 			}
@@ -310,7 +308,7 @@ namespace BALL
 			// check 
 			if (ptr == 0)
 			{
-				Log.level(LogStream::ERROR) << "Read invalid object pointer!" << endl;
+				Log.error() << "Read invalid object pointer!" << endl;
 				error = true;
 				break;
 			}

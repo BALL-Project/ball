@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmm.C,v 1.24 2004/12/27 17:06:11 amoll Exp $
+// $Id: charmm.C,v 1.25 2005/01/18 21:46:50 amoll Exp $
 //
 
 // Molecular Mechanics: Charmm force field class
@@ -94,7 +94,7 @@ namespace BALL
 
     if (!result)
     {
-      Log.level(LogStream::ERROR) << " Force Field setup failed! " << endl;
+      Log.error() << " Force Field setup failed! " << endl;
       valid_ = false;
 		}
 	}
@@ -119,7 +119,7 @@ namespace BALL
 
     if (!result)
     {
-      Log.level(LogStream::ERROR) << " Force Field setup failed! " << endl;
+      Log.error() << " Force Field setup failed! " << endl;
       valid_ = false;
 		}
 	}
