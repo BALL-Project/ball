@@ -1,4 +1,4 @@
-// $Id: atomContainer.C,v 1.8 2001/06/26 19:35:40 amoll Exp $
+// $Id: atomContainer.C,v 1.9 2001/07/04 00:13:55 oliver Exp $
 
 #include <BALL/KERNEL/atomContainer.h>
 
@@ -133,18 +133,13 @@ namespace BALL
 		name_ = name;
 	}
 
-	String& AtomContainer::getName()
-		throw()
-  {
-	  return name_;
-	}
-
 	const String& AtomContainer::getName() const
 		throw()
 	{
 		return name_;
 	}
 
+/*  BAUSTELLE - remove?
 	Molecule* AtomContainer::getMolecule()
 		throw()
 	{
@@ -165,7 +160,7 @@ namespace BALL
 	{
 		return ((AtomContainer *)this)->getMolecule();
 	}
-
+*/
 	AtomContainer* AtomContainer::getSuperAtomContainer()
 		throw()
 	{
