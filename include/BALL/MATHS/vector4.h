@@ -1,4 +1,4 @@
-// $Id: vector4.h,v 1.27 2000/05/04 11:06:35 amoll Exp $
+// $Id: vector4.h,v 1.28 2000/05/04 19:13:05 oliver Exp $
 
 #ifndef BALL_MATHS_VECTOR4_H
 #define BALL_MATHS_VECTOR4_H
@@ -184,7 +184,7 @@ namespace BALL
 
 		/**	Normalize the vector.
 				The vector is scaled with its length:
-				${x|y|z|h\} *= \sqrt{x^2 + y^2 + z^2 + h^2}$.
+				$\{x|y|z|h\} *= \sqrt{x^2 + y^2 + z^2 + h^2}$.
 				@return T, a reference to {\em *this} vector
 				@exception DivisionByZero if the length of the vector is 0
 		*/
