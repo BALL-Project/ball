@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.17.2.21 2004/12/28 14:09:44 amoll Exp $
+// $Id: backboneModel.C,v 1.17.2.22 2004/12/28 14:13:48 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -341,7 +341,7 @@ namespace BALL
 			//------------------------------------------------------>
 			// iterate over all spline_points_
 			//------------------------------------------------------>
-			for (Position p = start; p < end -1; p++)
+			for (Position p = start; p < end - 1; p++)
 			{
 				// faster access to the current spline point
 				const Vector3 point = spline_points_[p];
@@ -370,7 +370,7 @@ namespace BALL
 					new_points[i] = x;
 				}
 
-				// second part of points can be calculated by negating first points
+				// second half of points can be calculated by negating first half
 				for (Position i = middle; i < slides; i++)
 				{
 					new_points[i] = - new_points[i - middle];
@@ -391,7 +391,7 @@ namespace BALL
 
 					s_old = 0;
 
-					// insert the vertices and normals of last points again into the new mesh
+					// insert the vertices and normals of the last points again into the new mesh
 					for (Position point_pos = old_mesh->vertex.size() - 1 - slides;
 							 					point_pos < old_mesh->vertex.size() - 1; point_pos++)
 					{
@@ -430,12 +430,6 @@ namespace BALL
 
 				r = r_new;
 				last_point_ = point;
-			}
-
-			// add mesh if not already done ???????????
-			if (*geometric_objects_.rbegin() != mesh)
-			{
-				geometric_objects_.push_back(mesh);
 			}
 
 			have_start_point_ = true;
