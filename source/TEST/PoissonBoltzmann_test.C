@@ -1,9 +1,9 @@
-// $Id: PoissonBoltzmann_test.C,v 1.7 2000/05/23 12:24:26 oliver Exp $
+// $Id: PoissonBoltzmann_test.C,v 1.8 2000/11/20 17:34:06 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 #include <BALL/SOLVATION/poissonBoltzmann.h>
 
-START_TEST(FDPB, "$Id: PoissonBoltzmann_test.C,v 1.7 2000/05/23 12:24:26 oliver Exp $")
+START_TEST(FDPB, "$Id: PoissonBoltzmann_test.C,v 1.8 2000/11/20 17:34:06 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -50,7 +50,7 @@ CHECK(constructor/3)
 	options.setReal(FDPB::Option::SOLVENT_DC, 78.0);
 	options.setReal(FDPB::Option::SOLUTE_DC, 1.0);
 	options.setReal(FDPB::Option::SPACING, 0.4);
-	options.setReal(FDPB::Option::BORDER, 10.0);
+	options.setReal(FDPB::Option::BORDER, 10.001);
 	options.set(FDPB::Option::CHARGE_DISTRIBUTION, FDPB::ChargeDistribution::UNIFORM);
 	options.set(FDPB::Option::DIELECTRIC_SMOOTHING, FDPB::DielectricSmoothing::NONE);
 	options[FDPB::Option::IONIC_STRENGTH] = 0.0;
