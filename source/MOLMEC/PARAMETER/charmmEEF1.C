@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmEEF1.C,v 1.10 2003/04/30 08:12:08 oliver Exp $
+// $Id: charmmEEF1.C,v 1.11 2003/05/26 09:16:22 anhi Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/charmmEEF1.h>
@@ -142,7 +142,24 @@ namespace BALL
 		// determine the number of atom types
 		const AtomTypes&	atom_types = parameters.getAtomTypes();
 		number_of_atom_types_ = atom_types.getNumberOfTypes();
-		
+
+		if (V_)
+			delete [] V_;
+		if (dG_ref_)
+			delete [] dG_ref_;
+		if (dG_free_)	 
+			delete [] dG_free_; 
+		if (dH_ref_)
+			delete []	dH_ref_;
+		if (Cp_ref_)
+			delete [] Cp_ref_;
+		if (sig_w_)
+			delete [] sig_w_;
+		if (R_min_)
+			delete [] R_min_;
+		if (is_defined_)
+			delete [] is_defined_;
+
 		// allocate two onedimensional fields for the two parameters
 		V_					= new float[number_of_atom_types_];
 		dG_ref_			= new float[number_of_atom_types_];
