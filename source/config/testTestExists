@@ -22,6 +22,12 @@ then
 	exit 2
 fi
 
+nr_of_methods=`check_test $1 -a 2>/dev/null | wc -l`
+if [ $nr_of_methods = 1 ]
+then
+	exit 0
+fi
+
 prefix=`echo $1 | sed "s/.*\///g"`
 size=$[ `echo $prefix  | wc -c` ]
 prefix=`echo $prefix | head -c $[ $size-3 ]`
@@ -49,7 +55,7 @@ errorline=""
 nr_of_problems=`grep "???" $testfileWithPath -c`
 if [ $nr_of_problems != 0 ]
 then
-	errorline="$errorline $nr_of_problems E "
+	errorline="$errorline $nr_of_problems m "
 	exit 3
 fi
 
