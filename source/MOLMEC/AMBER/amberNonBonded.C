@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.C,v 1.8 2001/03/17 17:40:07 anker Exp $
+// $Id: amberNonBonded.C,v 1.9 2001/04/04 18:43:47 anker Exp $
 
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -286,6 +286,7 @@ namespace BALL
 	{
 		// throw away the old rubbish
 		non_bonded_.clear();
+		is_hydrogen_bond_.clear();
 
 		// resize non_bonded_ if necessary
 		if (non_bonded_.capacity() < atom_vector.size())
