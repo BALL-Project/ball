@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: control.C,v 1.8 2002/02/27 12:25:18 sturm Exp $
+// $Id: control.C,v 1.9 2002/10/30 10:55:41 anhi Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/control.h>
 #include <qpopupmenu.h>
@@ -193,6 +193,21 @@ void Control::buildContextMenu(Composite* composite, QListViewItem* item)
 	{
 		String entry = String("erase ") + getTypeName_(item).ascii();
 		insertContextMenuEntry(entry, this, SLOT(eraseGeometricObject()));
+	}
+
+	// This is used to provide the coloring for meshes...
+	if (RTTI::isKindOf<Mesh>(*composite))
+	{	
+		if (colorMeshDlg_)
+		{
+			delete colorMeshDlg_;
+			colorMeshDlg_ = 0;
+		}
+		colorMeshDlg_ = new ColorMeshDialog();
+		
+		colorMeshDlg_->comp = composite;
+		colorMeshDlg_->mesh = (Mesh*)RTTI::castTo<Mesh>(*composite);
+		insertContextMenuEntry("Color mesh", colorMeshDlg_, SLOT(show()));	
 	}
 }
 
