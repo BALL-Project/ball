@@ -1,4 +1,4 @@
-// $Id: fragmentDB.h,v 1.4 2000/01/10 15:51:07 oliver Exp $
+// $Id: fragmentDB.h,v 1.5 2000/01/14 20:41:56 oliver Exp $
 
 #ifndef BALL_STRUCTURE_FRAGMENTDB_H
 #define BALL_STRUCTURE_FRAGMENTDB_H
@@ -542,20 +542,39 @@ namespace BALL
 
 			/**	
 			*/
+			virtual bool start();
+
+			/**	
+			*/
 			virtual Processor::Result operator () (Fragment& fragment);
 			//@}
 
 
+			/**	@name	Accessors
+			*/
+			//@{
+			
+			/**	Return the number of bonds built during the last application.
+			*/
+			Size getNumberOfBondsBuilt();
+			//@}
+			
 			/**	@name	Bond building methods */
 			//@{
 
-			/**
+			/**	Build all bonds in a fragment.
+					This method builds all bonds that are contained
+					in the template.
+					@return the number of bonds built
 			*/
-			void buildFragmentBonds(Fragment& fragment) const;
+			Size buildFragmentBonds(Fragment& fragment) const;
 
-			/**
+			/**	Build all possible bonds between two fragments.
+					This method builds all bonds that are allowed by
+					the {\bf Connections} entries in a resource database.
+					@return the number of bonds built
 			*/
-			void buildInterFragmentBonds(Fragment& first, Fragment& second) const;
+			Size buildInterFragmentBonds(Fragment& first, Fragment& second) const;
 			//@}
 
 			private:
@@ -569,6 +588,13 @@ namespace BALL
 					and is used by finish() to create the inter-fragment bonds
 			*/
 			list<Fragment*>	fragment_list_;
+
+			/*_	The number of bonds built.
+					This value is reset in the start method, so each application of 
+					the processor, so {\tt getNumberOfBuiltBonds} always returns
+					the number of bonds built in the last application.
+			*/
+			Size	bonds_built_;
 		};
 
 		//@}
