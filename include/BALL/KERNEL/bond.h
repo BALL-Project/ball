@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bond.h,v 1.39 2003/07/01 16:45:27 amoll Exp $
+// $Id: bond.h,v 1.40 2003/07/07 09:38:01 anker Exp $
 
 #ifndef BALL_KERNEL_BOND_H
 #define BALL_KERNEL_BOND_H
@@ -110,19 +110,21 @@ namespace BALL
 		*/
 		enum BondOrder
 		{
-			/// Default value
+			/// Default value.
 			ORDER__UNKNOWN        = 0,
-			///
+			/// Single bond.
 			ORDER__SINGLE         = 1,
-			///
+			/// Double bond.
 			ORDER__DOUBLE         = 2,
-			///
+			/// Triple Bond.
 			ORDER__TRIPLE         = 3,
-			///
+			/// Quadruple bond.
 			ORDER__QUADRUPLE      = 4,
-			///
+			/// Aromatic bonds.
 			ORDER__AROMATIC       = 5,
-			///
+			/// Any bond orders (useful for predicates).
+			ORDER__ANY            = 6,
+			/// The number of bond orders.
 			NUMBER_OF_BOND_ORDERS
 		};
 			

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.h,v 1.36 2003/07/01 16:45:29 amoll Exp $
+// $Id: standardPredicates.h,v 1.37 2003/07/07 09:38:01 anker Exp $
 
 #ifndef BALL_KERNEL_STANDARDPREDICATES_H
 #define BALL_KERNEL_STANDARDPREDICATES_H
@@ -351,27 +351,34 @@ namespace BALL
 
 	};
 
-
-	/** Predicate for atoms bearing double bonds. 
+	/** Predicate class for atoms bearing a certain number of bonds.
 			Arguments of this class are	\emph{required} to consist 
 			of an relational operator and a number between 1 and 8.
+			The default is ">0" which means that the atom under siege has to bear
+			at least one bond to make this predicate's operator () () return
+			true.
 	 */
-	class DoubleBondsPredicate
+	class NumberOfBondsPredicate
 		:	public	ExpressionPredicate
 	{
 		public:
-			BALL_CREATE(DoubleBondsPredicate)
+
+			/// Default constructor.
+			NumberOfBondsPredicate()
+				throw();
+
+			BALL_CREATE(NumberOfBondsPredicate)
 
 			/** Evaluate the predicate for the atom <tt>atom</tt>.
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 			*/
 			virtual bool operator () (const Atom& atom) const
-				throw();
+				throw(Exception::InvalidFormat);
 
 		protected:
 			bool testPredicate_(const Atom& atom, Bond::Order order) const
-				throw();
+				throw(Exception::InvalidFormat);
 	};
 
 
@@ -380,7 +387,7 @@ namespace BALL
 			of an relational operator and a number between 1 and 8.
 	 */
 	class SingleBondsPredicate
-		:	public DoubleBondsPredicate
+		:	public NumberOfBondsPredicate
 	{
 		public:
 			BALL_CREATE(SingleBondsPredicate)
@@ -390,7 +397,27 @@ namespace BALL
 					@return true, if the predicate is true, false otherwise
 			*/
 			virtual bool operator () (const Atom& atom) const
-				throw();
+				throw(Exception::InvalidFormat);
+	};
+
+
+	/** Predicate for atoms bearing double bonds. 
+			Arguments of this class are	\emph{required} to consist 
+			of an relational operator and a number between 1 and 8.
+	 */
+	class DoubleBondsPredicate
+		:	public NumberOfBondsPredicate
+	{
+		public:
+			BALL_CREATE(DoubleBondsPredicate)
+
+			/** Evaluate the predicate for the atom <tt>atom</tt>.
+					@param atom the atom to test
+					@return true, if the predicate is true, false otherwise
+			*/
+			virtual bool operator () (const Atom& atom) const
+				throw(Exception::InvalidFormat);
+
 	};
 
 
@@ -409,7 +436,7 @@ namespace BALL
 					@return true, if the predicate is true, false otherwise
 				*/
 			virtual bool operator () (const Atom& atom) const
-				throw();
+				throw(Exception::InvalidFormat);
 	};
 
 
@@ -418,7 +445,7 @@ namespace BALL
 			of an relational operator and a number between 1 and 8.
 	 */
 	class AromaticBondsPredicate
-		:	public DoubleBondsPredicate
+		:	public NumberOfBondsPredicate
 	{
 		public:
 			BALL_CREATE(AromaticBondsPredicate)
@@ -428,26 +455,7 @@ namespace BALL
 					@return true, if the predicate is true, false otherwise
 			*/
 			virtual bool operator () (const Atom& atom) const
-				throw();
-	};
-
-
-	/** Predicate class for atoms bearing a certain number of bonds.
-			Arguments of this class are	\emph{required} to consist 
-			of an relational operator and a number between 1 and 8.
-	 */
-	class NumberOfBondsPredicate
-		:	public	ExpressionPredicate
-	{
-		public:
-			BALL_CREATE(NumberOfBondsPredicate)
-
-			/** Evaluate the predicate for the atom <tt>atom</tt>.
-					@param atom the atom to test
-					@return true, if the predicate is true, false otherwise
-			*/
-			virtual bool operator () (const Atom& atom) const
-				throw();
+				throw(Exception::InvalidFormat);
 	};
 
 

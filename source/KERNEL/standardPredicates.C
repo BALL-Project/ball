@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.C,v 1.51 2003/07/01 18:20:03 amoll Exp $
+// $Id: standardPredicates.C,v 1.52 2003/07/07 09:38:01 anker Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -273,16 +273,15 @@ namespace BALL
 
 	}
 
-	bool DoubleBondsPredicate::operator () (const Atom& atom) const
+	NumberOfBondsPredicate::NumberOfBondsPredicate()
 		throw()
 	{
-		return testPredicate_(atom, Bond::ORDER__DOUBLE);
+		argument_ = ">0";
 	}
 
-
-	bool DoubleBondsPredicate::testPredicate_(const Atom& atom, 
+	bool NumberOfBondsPredicate::testPredicate_(const Atom& atom, 
 			Bond::Order order) const
-		throw()
+		throw(Exception::InvalidFormat)
 	{
 		String s = argument_;
 		s.trim();
@@ -299,9 +298,13 @@ namespace BALL
 		Size i = 0;
 		for (; i < atom.countBonds(); ++i)
 		{
-			if ((atom.getBond(i))->getOrder() == order)
+			if (order == Bond::ORDER__ANY) count++;
+			else
 			{
-				count++;
+				if ((atom.getBond(i))->getOrder() == order)
+				{
+					count++;
+				}
 			}
 		}
 
@@ -360,98 +363,36 @@ namespace BALL
 			}
 		}
 	}
-	
+
+	bool NumberOfBondsPredicate::operator () (const Atom& atom) const
+		throw(Exception::InvalidFormat)
+	{
+		return testPredicate_(atom, Bond::ORDER__ANY);
+	}
 
 	bool SingleBondsPredicate::operator () (const Atom& atom) const
-		throw()
+		throw(Exception::InvalidFormat)
 	{
 		return testPredicate_(atom, Bond::ORDER__SINGLE);
 	}
 
-	
+	bool DoubleBondsPredicate::operator () (const Atom& atom) const
+		throw(Exception::InvalidFormat)
+	{
+		return testPredicate_(atom, Bond::ORDER__DOUBLE);
+	}
+
 	bool TripleBondsPredicate::operator () (const Atom& atom) const
-		throw()
+		throw(Exception::InvalidFormat)
 	{
 		return testPredicate_(atom, Bond::ORDER__TRIPLE);
 	}
-	
+
 	bool AromaticBondsPredicate::operator () (const Atom& atom) const
-		throw()
+		throw(Exception::InvalidFormat)
 	{
 		return testPredicate_(atom, Bond::ORDER__AROMATIC);
 	}
-
-	bool NumberOfBondsPredicate::operator () (const Atom& atom) const
-		throw()
-	{
-		String s = argument_;
-		s.trim();
-
-		if (s.size() > 2)
-		{
-			// There can only be an operator followed by a number < 9
-			Log.error() << "DoubleBondsPredicate::operator () (): argument_ too long " << std::endl;
-			return false;
-		}
-		
-		Size count = atom.countBonds();
-
-		Size n;
-		if (s.size() == 2)
-		{
-			n = ((String) s[1]).toInt();
-			switch (s[0]) 
-			{
-				case '<' :
-					if (count < n)
-					{
-						return true;
-					}
-					else
-					{
-						return false;
-					}
-
-				case '>' :
-					if (count > n)
-					{
-						return true;
-					}
-					else 
-					{
-						return false;
-					}
-
-				case '=':
-					if (count == n)
-					{
-						return true;
-					}
-					else 
-					{
-						return false;
-					}
-
-				default:
-					Log.error() << "doubleBond::operator (): Illegal operator " 
-						<< s[0] << std::endl;
-					return false;
-			}
-		}
-		else 
-		{
-			n = ((String) s[0]).toInt();
-			if (count == n)
-			{
-				return true;
-			}
-			else 
-			{
-				return false;
-			}
-		}
-	}
-
 
 	ConnectedToPredicate::CTPNode::CTPNode()
 		throw()
