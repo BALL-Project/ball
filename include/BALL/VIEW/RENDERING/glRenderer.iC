@@ -144,4 +144,9 @@ void GLRenderer::scale_(float f)
 
 BALL_INLINE
 void GLRenderer::setColorRGBA_(const ColorRGBA& color)
-	throw() { glColor4ub(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());}
+	throw() 
+{ 
+	if (color == *last_color_) return;
+	glColor4ub(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+	last_color_  = &color;
+}

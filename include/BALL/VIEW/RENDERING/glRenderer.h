@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.27.2.3 2005/01/14 12:18:09 amoll Exp $
+// $Id: glRenderer.h,v 1.27.2.4 2005/01/14 17:51:36 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -383,6 +383,8 @@ namespace BALL
 			Name 										all_names_;
 			GLuint 									object_buffer_[BALL_GLRENDERER_PICKING_NUMBER_OF_MAX_OBJECTS];
 			Vector3 								normal_vector_;
+			ColorRGBA 							dummy_color_;
+			const ColorRGBA* 				last_color_;
 
 			StereoMode stereo_;
 			RenderMode render_mode_;

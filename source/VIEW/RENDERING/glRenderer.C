@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.57.2.10 2005/01/14 14:37:39 amoll Exp $
+// $Id: glRenderer.C,v 1.57.2.11 2005/01/14 17:51:58 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -47,6 +47,7 @@ namespace BALL
 				name_to_object_(),
 				object_to_name_(),
 				all_names_(0),
+				last_color_(&dummy_color_),
 				stereo_(NO_STEREO),
 				render_mode_(RENDER_MODE_UNDEFINED)
 		{
@@ -75,12 +76,16 @@ namespace BALL
 				delete it->second;
 			}
 			display_lists_.clear();
+			last_color_ = &dummy_color_;
 		}
 
 		bool GLRenderer::init(const Stage& stage, float width, float height)
 			throw()
 		{
 			Renderer::init(stage, width, height);
+			glColor4ub(dummy_color_.getRed(), dummy_color_.getGreen(), 
+								 dummy_color_.getBlue(), dummy_color_.getAlpha());
+			last_color_ = &dummy_color_;
 
  			glFrontFace(GL_CCW);     // selects counterclockwise polygons as front-facing
  			glCullFace(GL_BACK);		 // specify whether front- or back-facing facets can be culled
