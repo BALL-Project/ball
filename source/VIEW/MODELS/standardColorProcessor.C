@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.31 2004/08/25 10:24:52 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.32 2004/08/25 10:25:15 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -469,13 +469,7 @@ namespace BALL
 				for(; it2 != atom_2_distance_.end(); ++it2)
 				{
 					Atom* atom2 = (Atom*)(it2->first);
-					/*
-					Composite* ancestor = atom1->getLowestCommonAncestor(*atom2);
 
-					if (ancestor == 0 ||
-							RTTI::isKindOf<System>(*ancestor) ||
-							RTTI::isKindOf<Molecule>(*ancestor))
-					{*/
 					if (atom1->isSelected() != atom2->isSelected())
 					{
 						float distance = (atom2->getPosition() - atom1->getPosition()).getLength();
