@@ -1,4 +1,4 @@
-// $Id: secondaryStructure.h,v 1.9 2000/04/26 13:05:42 amoll Exp $
+// $Id: secondaryStructure.h,v 1.10 2000/04/27 15:09:48 amoll Exp $
 
 #ifndef BALL_KERNEL_SECONDARYSTRUCTURE_H
 #define BALL_KERNEL_SECONDARYSTRUCTURE_H
@@ -158,21 +158,19 @@ namespace BALL
 
 		/** Get a pointer to a child Residue at a given position.
 				The reference is 0 if {\em *this} does not have a Residue at the given position.
-				@param   index the position of the child Residue
-				@exception IndexUnderflow if {\tt index < 0}
+				@param   position the position of the child Residue
 				@return  Residue* -
-								 mutable reference to the child Residue at positon {\em index} of {\em *this} residue,
+								 mutable reference to the child Residue at {\em position} of {\em *this} residue,
 		*/
-		Residue* getResidue(Index index);
+		Residue* getResidue(Position position);
 	
 		/** Get a pointer to a child Residue at a given position.
 				The reference is 0 if {\em *this} does not have a Residue at the given position.
-				@param   index the position of the child Residue
-				@exception IndexUnderflow if {\tt index < 0}
+				@param   position the position of the child Residue
 				@return  Residue* -
-								 constant reference to the child Residue at positon {\em index} of {\em *this} residue,
+								 constant reference to the child Residue at {\em position} of {\em *this} residue,
 		*/
-		const Residue* getResidue(Index index) const;
+		const Residue* getResidue(Position position) const;
 
 		/** Get a pointer to the N-terminal Residue.
 				The reference is 0 if {\em *this} does not have a Residue at the given position.
@@ -208,21 +206,19 @@ namespace BALL
 
 		/** Get a pointer to a child PDBAtom at a given position.
 				The reference is 0 if {\em *this} residue does not have a PDBAtom at the given position.
-				@param   index the position of the child PDBAtom
-				@exception IndexUnderflow if {\tt index < 0}
+				@param   position the position of the child PDBAtom
 				@return  PDBAtom* -
-								 constant reference to the child PDBAtom at positon {\em index} of {\em *this},
+								 constant reference to the child PDBAtom at {\em position} of {\em *this},
 		*/
-		PDBAtom* getPDBAtom(Index index);
+		PDBAtom* getPDBAtom(Position position);
 	
 		/** Get a pointer to a child PDBAtom at a given position.
 				The reference is 0 if {\em *this} residue does not have a PDBAtom at the given position.
-				@param   index the position of the child PDBAtom
-				@exception IndexUnderflow if {\tt index < 0}
+				@param   position the position of the child PDBAtom
 				@return  PDBAtom* -
-								 mutable reference to the child PDBAtom at positon {\em index} of {\em *this},
+								 mutable reference to the child PDBAtom at {\em position} of {\em *this},
 		*/
-		const PDBAtom* getPDBAtom(Index index) const;
+		const PDBAtom* getPDBAtom(Position position) const;
 	
 		/** Count the Residues
 				@return  Size the number of residues
@@ -332,13 +328,13 @@ namespace BALL
 
 	private:
 
-		Fragment* getFragment(Index index);
+		Fragment* getFragment(Position position);
 	
-		const Fragment* getFragment(Index index) const;
+		const Fragment* getFragment(Position position) const;
 	
-		Atom* getAtom(Index index);
+		Atom* getAtom(Position position);
 	
-		const Atom* getAtom(Index index) const;
+		const Atom* getAtom(Position position) const;
 
 		void prepend(Atom &atom);
 

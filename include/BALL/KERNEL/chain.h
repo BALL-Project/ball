@@ -1,4 +1,4 @@
-// $Id: chain.h,v 1.11 2000/04/25 16:52:25 amoll Exp $
+// $Id: chain.h,v 1.12 2000/04/27 15:09:46 amoll Exp $
 
 #ifndef BALL_KERNEL_CHAIN_H
 #define BALL_KERNEL_CHAIN_H
@@ -81,7 +81,7 @@ namespace BALL
 		//@{
 
 		/** Assignment with cloning facility.
-				Assign the chain {\em chain} to {\em *this} chain.
+				Assign the chain {\em chain} to {\em *this}.
 				The assignment is either deep or shallow (default).
 				@param  chain the chain to be copied (cloned)
 				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em chain}
@@ -89,16 +89,16 @@ namespace BALL
 		void set(const Chain& chain, bool deep = true);
 
 		/** Assignment operator.
-				Assign the chain {\em chain} to {\em *this} chain.
+				Assign the chain {\em chain} to {\em *this}.
 				The assignment is either deep or shallow (default).
 				@param   chain the chain to be copied (cloned)
-				@return  chain& - {\em *this} chain
+				@return  chain& - {\em *this}
 				@see     chain::set
 		*/
 		Chain& operator = (const Chain& chain);
 
 		/** Copying with cloning facility.
-				Copy {\em *this} chain to the chain {\em chain}.
+				Copy {\em *this} to the chain {\em chain}.
 				The assignment is either deep or shallow (default).
 				@param  chain the chain to be assigned to
 				@see    chain::set
@@ -106,8 +106,8 @@ namespace BALL
 		void get(Chain& chain, bool deep = true) const;
 
 		/** Swapping of chain.
-				Swap the states of {\em *this} chain with the chain {\em chain}.
-				@param  chain the chain {\em *this} chain is being swapped with
+				Swap the states of {\em *this} with the chain {\em chain}.
+				@param  chain the chain {\em *this} is being swapped with
 		*/
 		void swap(Chain& chain);
 
@@ -117,57 +117,53 @@ namespace BALL
 		//@{
 
 		/** Get a pointer to the parent protein.
-				The reference is 0 if {\em *this} chain does not have a parent protein.
+				The reference is 0 if {\em *this} does not have a parent protein.
 				@return  Protein* -
-								 mutable reference to the parent protein of {\em *this} chain,
+								 mutable reference to the parent protein of {\em *this},
 		*/
 		Protein* getProtein();
 
 		/** Get a constant pointer to the parent protein.
-				The reference is 0 if {\em *this} chain does not have a parent protein.
+				The reference is 0 if {\em *this} does not have a parent protein.
 				@return  Protein* -
-								 constant reference to the parent protein of {\em *this} chain,
+								 constant reference to the parent protein of {\em *this},
 		*/
 		const Protein* getProtein() const;
 
 		/** Get a pointer to a subaltern SecondaryStructure at a given position.
-				The reference is 0 if {\em *this} chain does not have a SecondaryStructure at this position.
-				@param   index the position of the subaltern SecondaryStructure
-				@exception IndexUnderflow if {\tt index < 0}
+				The reference is 0 if {\em *this} does not have a SecondaryStructure at this position.
+				@param   position the position of the subaltern SecondaryStructure
 				@return  SecondaryStructure* -
-								 mutable reference to the subaltern SecondaryStructure at positon {\em index} of {\em *this} chain,
+								 mutable reference to the subaltern SecondaryStructure at {\em position} of {\em *this},
 		*/
-		SecondaryStructure* getSecondaryStructure(Index index);
+		SecondaryStructure* getSecondaryStructure(Position position);
 	
 		/** Get a constant pointer to a subaltern SecondaryStructure at a given position.
-				The reference is 0 if {\em *this} chain does not have a SecondaryStructure at this position.
-				@param   index the position of the subaltern SecondaryStructure
-				@exception IndexUnderflow if {\tt index < 0}
+				The reference is 0 if {\em *this} does not have a SecondaryStructure at this position.
+				@param   position the position of the subaltern SecondaryStructure
 				@return  SecondaryStructure* -
-								 constant reference to the subaltern SecondaryStructure at positon {\em index} of {\em *this} chain,
+								 constant reference to the subaltern SecondaryStructure at {\em position} of {\em *this},
 		*/
-		const SecondaryStructure* getSecondaryStructure(Index index) const;
+		const SecondaryStructure* getSecondaryStructure(Position position) const;
 	
 		/** Get a pointer to a subaltern Residue at a given position.
-				The reference is 0 if {\em *this} chain does not have a Residue at this position.
-				@param   index the position of the subaltern Residue
-				@exception IndexUnderflow if {\tt index < 0}
+				The reference is 0 if {\em *this} does not have a Residue at this position.
+				@param   position the position of the subaltern Residue
 				@return  Residue* -
-								 mutable reference to the subaltern Residue at positon {\em index} of {\em *this} chain,
+								 mutable reference to the subaltern Residue at {\em position} of {\em *this},
 		*/
-		Residue* getResidue(Index index);
+		Residue* getResidue(Position position);
 	
 		/** Get a pointer to a subaltern Residue at a given position.
-				The reference is 0 if {\em *this} chain does not have a Residue at this position.
-				@param   index the position of the subaltern Residue
-				@exception IndexUnderflow if {\tt index < 0}
+				The reference is 0 if {\em *this} does not have a Residue at this position.
+				@param   position the position of the subaltern Residue
 				@return  Residue* -
-								 constant reference to the subaltern Residue at positon {\em index} of {\em *this} chain,
+								 constant reference to the subaltern Residue at {\em position} of {\em *this},
 		*/
-		const Residue* getResidue(Index index) const;
+		const Residue* getResidue(Position position) const;
 	
 		/** Get a pointer to the N-terminal Residue.
-				The reference is 0 if {\em *this} chain does not have a Residue at this position.
+				The reference is 0 if {\em *this} does not have a Residue at this position.
 
 				@return  Residue* -
 								 mutable reference to the N-terminal Residue
@@ -175,7 +171,7 @@ namespace BALL
 		Residue* getNTerminal();
 	
 		/** Get a constant pointer to the N-terminal Residue.
-				The reference is 0 if {\em *this} chain does not have a Residue at this position.
+				The reference is 0 if {\em *this} does not have a Residue at this position.
 
 				@return  Residue* -
 								 constant reference to the N-terminal Residue
@@ -183,7 +179,7 @@ namespace BALL
 		const Residue* getNTerminal() const;
 
 		/** Get a pointer to the C-terminal Residue.
-				The reference is 0 if {\em *this} chain does not have a Residue at this position.
+				The reference is 0 if {\em *this} does not have a Residue at this position.
 
 				@return  Residue* -
 								 mutable reference to the C-terminal Residue
@@ -191,7 +187,7 @@ namespace BALL
 		Residue* getCTerminal();
 	
 		/** Get a constant pointer to the C-terminal Residue.
-				The reference is 0 if {\em *this} chain does not have a Residue at this position.
+				The reference is 0 if {\em *this} does not have a Residue at this position.
 
 				@return  Residue* -
 								 constant reference to the C-terminal Residue
@@ -199,22 +195,20 @@ namespace BALL
 		const Residue* getCTerminal() const;
 
 		/** Get a pointer to a subaltern PDBAtom at a given position.
-				The reference is 0 if {\em *this} chain does not have a PDBAtom at this position.
-				@param   index the position of the subaltern PDBAtom
-				@exception IndexUnderflow if {\tt index < 0}
+				The reference is 0 if {\em *this} does not have a PDBAtom at this position.
+				@param   position the position of the subaltern PDBAtom
 				@return  PDBAtom* -
-								 mutable reference to the subaltern PDBAtom at positon {\em index} of {\em *this} chain,
+								 mutable reference to the subaltern PDBAtom at {\em position} of {\em *this},
 		*/
-		PDBAtom* getPDBAtom(Index index);
+		PDBAtom* getPDBAtom(Position position);
 	
 		/** Get a pointer to a subaltern PDBAtom at a given position.
-				The reference is 0 if {\em *this} chain does not have a PDBAtom at this position.
-				@param   index the position of the subaltern PDBAtom
-				@exception IndexUnderflow if {\tt index < 0}
+				The reference is 0 if {\em *this} does not have a PDBAtom at this position.
+				@param   position the position of the subaltern PDBAtom
 				@return  PDBAtom* -
-								 constant reference to the subaltern PDBAtom at positon {\em index} of {\em *this} chain,
+								 constant reference to the subaltern PDBAtom at {\em position} of {\em *this},
 		*/
-		const PDBAtom* getPDBAtom(Index index) const;
+		const PDBAtom* getPDBAtom(Position position) const;
 	
 		/** Count the SecondaryStructures
 				@return  Size the number of secondary structures
@@ -318,9 +312,9 @@ namespace BALL
 		//@{
 		
 		/** Internal state dump.
-				Dump the current internal state of {\em *this} chain to the output ostream {\em s} with dumping depth {\em depth}.
+				Dump the current internal state of {\em *this} to the output ostream {\em s} with dumping depth {\em depth}.
 	
-				@param   s - output stream where to output the internal state of {\em *this} chain
+				@param   s - output stream where to output the internal state of {\em *this}
 				@param   depth - the dumping depth
 		*/
 		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
@@ -330,18 +324,18 @@ namespace BALL
 		// --- STORERS
 
 		/* Persistent stream input and state restorage.
-				Read persistent chain data from the input stream {\em s} and restore the state of {\em *this} chain.
+				Read persistent chain data from the input stream {\em s} and restore the state of {\em *this}.
 				\\
 				{\bf Note:} Not yet implemented.
-				@param  s input stream from where to restore the internal state of {\em *this} chain
+				@param  s input stream from where to restore the internal state of {\em *this}
 		*/
 		virtual void read(std::istream& s);
 
 		/* Persistent stream output and state storage.
-				Write persistent chain data to the output stream {\em s} and store the state of {\em *this} chain.
+				Write persistent chain data to the output stream {\em s} and store the state of {\em *this}.
 				\\
 				{\bf Note:} Not yet implemented.	
-				@param  s input stream from where to restore the internal state of {\em *this} chain
+				@param  s input stream from where to restore the internal state of {\em *this}
 		*/
 		virtual void write(std::ostream& s) const;
 
@@ -355,13 +349,13 @@ namespace BALL
 
 	private:
 
-		BaseFragment* getBaseFragment(Index index);
+		BaseFragment* getBaseFragment(Position position);
 	
-		const BaseFragment* getBaseFragment(Index index) const;
+		const BaseFragment* getBaseFragment(Position position) const;
 	
-		Atom* getAtom(Index index);
+		Atom* getAtom(Position position);
 	
-		const Atom* getAtom(Index index) const;
+		const Atom* getAtom(Position position) const;
 
 		void prepend(Atom& atom);
 

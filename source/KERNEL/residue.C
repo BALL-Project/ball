@@ -1,4 +1,4 @@
-// $Id: residue.C,v 1.9 2000/04/17 14:03:09 amoll Exp $
+// $Id: residue.C,v 1.10 2000/04/27 15:09:34 amoll Exp $
 
 #include <BALL/KERNEL/residue.h>
 
@@ -245,15 +245,12 @@ namespace BALL
 		return ((Residue *)this)->getChain();
 	}
 
-	PDBAtom *Residue::getPDBAtom(Index index)
+	PDBAtom *Residue::getPDBAtom(Position position)
 	{
-		if (index < 0)
-			throw Exception::IndexUnderflow(__FILE__, __LINE__, index);
-
 		for (PDBAtomIterator protein_atom_iterator = beginPDBAtom();
 				 !protein_atom_iterator.isEnd(); ++protein_atom_iterator)
 		{
-			if (index-- == 0)
+			if (position-- == 0)
 			{
 				return &(*protein_atom_iterator);
 			}
@@ -262,9 +259,9 @@ namespace BALL
 		return 0;
 	}
 
-	const PDBAtom* Residue::getPDBAtom(Index index) const
+	const PDBAtom* Residue::getPDBAtom(Position position) const
 	{
-		return ((Residue *)this)->getPDBAtom(index);
+		return ((Residue *)this)->getPDBAtom(position);
 	}
 
 	void Residue::setID(const String &id)

@@ -1,4 +1,4 @@
-// $Id: protein.h,v 1.6 2000/04/26 13:05:42 amoll Exp $ 
+// $Id: protein.h,v 1.7 2000/04/27 15:09:47 amoll Exp $ 
 
 #ifndef BALL_KERNEL_PROTEIN_H
 #define BALL_KERNEL_PROTEIN_H
@@ -142,57 +142,51 @@ namespace BALL
 
 		/** Get a pointer to a child chain at a given position.
 				The reference is 0 if {\em *this} does not have a chain at the given position.
-				@param   index the position of the child chain
-				@exception IndexUnderflow if {\tt index < 0}
+				@param   position the position of the child chain
 				@return  Chain* -
-								 mutable reference to the child chain at positon {\em index} of {\em *this},
+								 mutable reference to the child chain at {\em position} of {\em *this},
 		*/
-		Chain* getChain(Index index);
+		Chain* getChain(Position position);
 
 		/** Get a pointer to a child chain at a given position.
 				The reference is 0 if {\em *this} does not have a chain at the given position.
-				@param   index the position of the child chain
-				@exception IndexUnderflow if {\tt index < 0}
+				@param   position the position of the child chain
 				@return  Chain* -
-								 constant reference to the child chain at positon {\em index} of {\em *this},
+								 constant reference to the child chain at {\em position} of {\em *this},
 		*/
-		const Chain* getChain(Index index) const;
+		const Chain* getChain(Position position) const;
 
 		/** Get a pointer to a child SecondaryStructure at a given position.
 				The reference is 0 if {\em *this} does not have a SecondaryStructure at the given position.
-				@param   index the position of the child SecondaryStructure
-				@exception IndexUnderflow if {\tt index < 0}
+				@param   position the position of the child SecondaryStructure
 				@return  SecondaryStructure* - mutable reference to the child SecondaryStructure
-																			 at positon {\em index} of {\em *this},
+																			 at {\em position} of {\em *this},
 		*/
-		SecondaryStructure* getSecondaryStructure(Index index);
+		SecondaryStructure* getSecondaryStructure(Position position);
 
 		/** Get a pointer to a child SecondaryStructure at a given position.
 				The reference is 0 if {\em *this} does not have a SecondaryStructure at the given position.
-				@param   index the position of the child SecondaryStructure
-				@exception IndexUnderflow if {\tt index < 0}
+				@param   position the position of the child SecondaryStructure
 				@return  SecondaryStructure* - constant reference to the child SecondaryStructure
-																			 at positon {\em index} of {\em *this},
+																			 at {\em position} of {\em *this},
 		*/
-		const SecondaryStructure* getSecondaryStructure(Index index) const;
+		const SecondaryStructure* getSecondaryStructure(Position position) const;
 
 		/** Get a pointer to a child Residue at a given position.
 				The reference is 0 if {\em *this} does not have a Residue at the given position.
-				@param   index the position of the child Residue
-				@exception IndexUnderflow if {\tt index < 0}
+				@param   position the position of the child Residue
 				@return  Residue* - mutable reference to the child 
-														Residue at positon {\em index} of {\em *this},
+														Residue at {\em position} of {\em *this},
 		*/
-		Residue* getResidue(Index index);
+		Residue* getResidue(Position position);
 
 		/** Get a pointer to a child Residue at a given position.
 				The reference is 0 if {\em *this} does not have a Residue at the given position.
-				@param   index the position of the child Residue
-				@exception IndexUnderflow if {\tt index < 0}
+				@param   position the position of the child Residue
 				@return  Residue* - constant reference to the child 
-														Residue at positon {\em index} of {\em *this},
+														Residue at {\em position} of {\em *this},
 		*/
-		const Residue* getResidue(Index index) const;
+		const Residue* getResidue(Position position) const;
 
 		/** Get a pointer to a the N-terminal Residue.
 				The reference is 0 if {\em *this} does not have a N-terminal Residue.
@@ -220,21 +214,19 @@ namespace BALL
 
 		/** Get a pointer to a child PDB-Atom at a given position.
 				The reference is 0 if {\em *this} does not have a PDB-Atom at the given position.
-				@param   index the position of the child PDB-Atom
-				@exception IndexUnderflow if {\tt index < 0}
+				@param   position the position of the child PDB-Atom
 				@return  Residue* - mutable reference to the child 
-														PDB-Atom at positon {\em index} of {\em *this},
+														PDB-Atom at {\em position} of {\em *this},
 		*/
-		PDBAtom* getPDBAtom(Index index);
+		PDBAtom* getPDBAtom(Position position);
 
 		/** Get a pointer to a child PDB-Atom at a given position.
 				The reference is 0 if {\em *this} does not have a PDB-Atom at the given position.
-				@param   index the position of the child PDB-Atom
-				@exception IndexUnderflow if {\tt index < 0}
+				@param   position the position of the child PDB-Atom
 				@return  Residue* - constant reference to the child 
-														PDB-Atom at positon {\em index} of {\em *this},
+														PDB-Atom at {\em position} of {\em *this},
 		*/
-		const PDBAtom* getPDBAtom(Index index) const;
+		const PDBAtom* getPDBAtom(Position position) const;
 
 		/**	Set the ID of the NucleicAcid.
 				@param id the new ID

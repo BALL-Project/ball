@@ -1,4 +1,4 @@
-// $Id: PTE.h,v 1.3 2000/04/17 14:38:59 amoll Exp $
+// $Id: PTE.h,v 1.4 2000/04/27 15:09:45 amoll Exp $
 
 #ifndef BALL_KERNEL_PTE_H
 #define BALL_KERNEL_PTE_H
@@ -579,7 +579,7 @@ namespace BALL
 
 			/**
 			*/
-			static Element& getElement(Index index);
+			static Element& getElement(Position position);
 		
 			/**
 			*/
@@ -617,11 +617,11 @@ namespace BALL
 
 			/**
 			*/
-			Element &operator [](Index index);
+			Element &operator [](Position position);
 
 			/**
 			*/
-			const Element &operator [](Index index) const;
+			const Element &operator [](Position position) const;
 
 			//@}
 

@@ -1,4 +1,4 @@
-// $Id: baseFragment.C,v 1.7 2000/04/17 15:22:13 amoll Exp $
+// $Id: baseFragment.C,v 1.8 2000/04/27 15:09:33 amoll Exp $
 
 #include <BALL/KERNEL/baseFragment.h>
 
@@ -168,15 +168,12 @@ namespace BALL
 		return ((BaseFragment *)this)->getSuperBaseFragment();
 	}
 
-	BaseFragment* BaseFragment::getBaseFragment(Index index)
+	BaseFragment* BaseFragment::getBaseFragment(Position position)
 	{
-		if (index < 0 )
-			throw Exception::IndexUnderflow(__FILE__, __LINE__, index);
-
 		for (BaseFragmentIterator base_fragment_it = ++beginBaseFragment();
 				 !base_fragment_it.isEnd(); ++base_fragment_it)
 		{
-			if (index-- == 0)
+			if (position-- == 0)
 			{
 				return &(*base_fragment_it);
 			}
@@ -185,19 +182,16 @@ namespace BALL
 		return 0;
 	}
 
-	const BaseFragment*  BaseFragment::getBaseFragment(Index index) const
+	const BaseFragment*  BaseFragment::getBaseFragment(Position position) const
 	{
-		return ((BaseFragment *)this)->getBaseFragment(index);
+		return ((BaseFragment *)this)->getBaseFragment(position);
 	}
 
-	Atom* BaseFragment::getAtom(Index index)
+	Atom* BaseFragment::getAtom(Position position)
 	{
-		if (index < 0 )
-			throw Exception::IndexUnderflow(__FILE__, __LINE__, index);
-
 		for (AtomIterator atom_it = beginAtom(); !atom_it.isEnd(); ++atom_it)
 		{
-			if (index-- == 0)
+			if (position-- == 0)
 			{
 				return &(*atom_it);
 			}
@@ -206,9 +200,9 @@ namespace BALL
 		return 0;
 	}
 
-	const Atom* BaseFragment::getAtom(Index index) const
+	const Atom* BaseFragment::getAtom(Position position) const
 	{
-		return ((BaseFragment *)this)->getAtom(index);
+		return ((BaseFragment *)this)->getAtom(position);
 	}
 
 	Atom* BaseFragment::getAtom(const String& name)

@@ -1,4 +1,4 @@
-// $Id: protein.C,v 1.5 2000/04/17 14:02:34 amoll Exp $
+// $Id: protein.C,v 1.6 2000/04/27 15:09:34 amoll Exp $
 
 #include <BALL/KERNEL/protein.h>
 #include <BALL/KERNEL/global.h>
@@ -88,14 +88,11 @@ namespace BALL
 		id_.swap(protein.id_);
 	}
 		
-	Chain *Protein::getChain(Index index)
+	Chain *Protein::getChain(Position position)
 	{
-		if (index < 0)
-			throw Exception::IndexUnderflow(__FILE__, __LINE__, index);
-
 		for (ChainIterator chain_it = beginChain(); !chain_it.isEnd(); ++chain_it)
 		{
-			if (index-- == 0)
+			if (position-- == 0)
 			{
 				return &(*chain_it);
 			}
@@ -105,20 +102,17 @@ namespace BALL
 	}
 
 	const Chain *
-	Protein::getChain(Index index) const
+	Protein::getChain(Position position) const
 	{
-		return ((Protein *)this)->getChain(index);
+		return ((Protein *)this)->getChain(position);
 	}
 
-	SecondaryStructure* Protein::getSecondaryStructure(Index index)
+	SecondaryStructure* Protein::getSecondaryStructure(Position position)
 	{
-    if (index < 0)
-      throw Exception::IndexUnderflow(__FILE__, __LINE__, index);
- 
 		for (SecondaryStructureIterator secondary_structure_it = beginSecondaryStructure();
 				 !secondary_structure_it.isEnd(); ++secondary_structure_it)
 		{
-			if (index-- == 0)
+			if (position-- == 0)
 			{
 				return &(*secondary_structure_it);
 			}
@@ -127,19 +121,16 @@ namespace BALL
 		return 0;
 	}
 
-	const SecondaryStructure* Protein::getSecondaryStructure(Index index) const
+	const SecondaryStructure* Protein::getSecondaryStructure(Position position) const
 	{
-		return ((Protein *)this)->getSecondaryStructure(index);
+		return ((Protein *)this)->getSecondaryStructure(position);
 	}
 
-	Residue* Protein::getResidue(Index index)
+	Residue* Protein::getResidue(Position position)
 	{
-    if (index < 0)
-      throw Exception::IndexUnderflow(__FILE__, __LINE__, index);
- 
 		for (ResidueIterator res_it = beginResidue(); !res_it.isEnd(); ++res_it)
 		{
-			if (index-- == 0)
+			if (position-- == 0)
 			{
 				return &(*res_it);
 			}
@@ -148,9 +139,9 @@ namespace BALL
 		return 0;
 	}
 
-	const Residue* Protein::getResidue(Index index) const
+	const Residue* Protein::getResidue(Position position) const
 	{
-		return ((Protein *)this)->getResidue(index);
+		return ((Protein *)this)->getResidue(position);
 	}
 
 	Residue* Protein::getNTerminal()
@@ -173,15 +164,12 @@ namespace BALL
 		return ::BALL::getCTerminal(*this);
 	}
 
-	PDBAtom* Protein::getPDBAtom(Index index)
+	PDBAtom* Protein::getPDBAtom(Position position)
 	{
-		if (index < 0)
-			throw Exception::IndexUnderflow(__FILE__, __LINE__, index);
-
 		for (PDBAtomIterator protein_atom_it = beginPDBAtom();
 				 !protein_atom_it.isEnd(); ++protein_atom_it)
 		{
-			if (index-- == 0)
+			if (position-- == 0)
 			{
 				return &(*protein_atom_it);
 			}
@@ -190,9 +178,9 @@ namespace BALL
 		return 0;
 	}
 
-	const PDBAtom* Protein::getPDBAtom(Index index) const
+	const PDBAtom* Protein::getPDBAtom(Position position) const
 	{
-		return ((Protein *)this)->getPDBAtom(index);
+		return ((Protein *)this)->getPDBAtom(position);
 	}
 
 	void Protein::setID(const String& id)

@@ -1,4 +1,4 @@
-// $Id: secondaryStructure.C,v 1.4 1999/12/30 18:05:34 oliver Exp $
+// $Id: secondaryStructure.C,v 1.5 2000/04/27 15:09:35 amoll Exp $
 
 #include <BALL/KERNEL/secondaryStructure.h>
 
@@ -113,16 +113,13 @@ namespace BALL
 		return const_cast<SecondaryStructure*>(this)->getChain();
 	}
 
-	Residue* SecondaryStructure::getResidue(Index index)
+	Residue* SecondaryStructure::getResidue(Position position)
 	{
-		if (index < 0)
-			throw Exception::IndexUnderflow(__FILE__, __LINE__, index);
-
 		for (ResidueIterator res_it = beginResidue();
 				 !res_it.isEnd();
 				 ++res_it)
 		{
-			if (index-- == 0)
+			if (position-- == 0)
 			{
 				return &(*res_it);
 			}
@@ -131,9 +128,9 @@ namespace BALL
 		return 0;
 	}
 
-	const Residue* SecondaryStructure::getResidue(Index index) const
+	const Residue* SecondaryStructure::getResidue(Position position) const
 	{
-		return const_cast<SecondaryStructure*>(this)->getResidue(index);
+		return const_cast<SecondaryStructure*>(this)->getResidue(position);
 	}
 
 	Residue* SecondaryStructure::getNTerminal()
@@ -156,14 +153,11 @@ namespace BALL
 		return ::BALL::getCTerminal(*this);
 	}
 
-	PDBAtom* SecondaryStructure::getPDBAtom(Index index)
+	PDBAtom* SecondaryStructure::getPDBAtom(Position position)
 	{
-		if (index < 0)
-			throw Exception::IndexUnderflow(__FILE__, __LINE__, index);
-
 		for (PDBAtomIterator protein_atom_it = beginPDBAtom(); !protein_atom_it.isEnd(); ++protein_atom_it)
 		{
-			if (index-- == 0)
+			if (position-- == 0)
 			{
 				return &(*protein_atom_it);
 			}
@@ -172,9 +166,9 @@ namespace BALL
 		return 0;
 	}
 
-	const PDBAtom *SecondaryStructure::getPDBAtom(Index index) const
+	const PDBAtom *SecondaryStructure::getPDBAtom(Position position) const
 	{
-		return ((SecondaryStructure *)this)->getPDBAtom(index);
+		return ((SecondaryStructure *)this)->getPDBAtom(position);
 	}
 
 	Size SecondaryStructure::countResidues() const

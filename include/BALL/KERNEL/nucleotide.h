@@ -1,4 +1,4 @@
-// $Id: nucleotide.h,v 1.6 2000/04/17 14:01:50 amoll Exp $
+// $Id: nucleotide.h,v 1.7 2000/04/27 15:09:46 amoll Exp $
 
 #ifndef BALL_KERNEL_NUCLEOTIDE_H
 #define BALL_KERNEL_NUCLEOTIDE_H
@@ -283,9 +283,9 @@ namespace BALL
 
 		private:
 
-		BaseFragment* getBaseFragment(Index index);
+		BaseFragment* getBaseFragment(Position position);
 	
-		const BaseFragment* getBaseFragment(Index index) const;
+		const BaseFragment* getBaseFragment(Position position) const;
 	
 		Size countBaseFragments() const;
 

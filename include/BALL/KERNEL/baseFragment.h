@@ -1,4 +1,4 @@
-// $Id: baseFragment.h,v 1.16 2000/04/26 13:05:41 amoll Exp $
+// $Id: baseFragment.h,v 1.17 2000/04/27 15:09:46 amoll Exp $
 
 #ifndef BALL_KERNEL_BASEFRAGMENT_H
 #define BALL_KERNEL_BASEFRAGMENT_H
@@ -207,45 +207,41 @@ namespace BALL
 
 		/** Get a pointer to a subaltern BaseFragment at a given position.
 				The reference is 0 if {\em *this} BaseFragment does not have a BaseFragment at the given position.
-				@param   index the position of the subaltern BaseFragment
-				@exception IndexUnderflow if {\tt index < 0}
+				@param   position of the subaltern BaseFragment
 				@return  BaseFragment* -
-								 mutable reference to the subaltern BaseFragment at positon {\em index} of {\em *this} BaseFragment,
+								 mutable reference to the subaltern BaseFragment  at {\em positon}  of {\em *this},
 		*/
-		BaseFragment* getBaseFragment(Index index);
+		BaseFragment* getBaseFragment(Position position);
 	
 		/** Get a constant pointer to a subaltern BaseFragment at a given position.
 				The reference is 0 if {\em *this} BaseFragment does not have a BaseFragment at the given position.
-				@param   index the position of the subaltern BaseFragment
-				@exception IndexUnderflow if {\tt index < 0}
+				@param   position of the subaltern BaseFragment
 				@return  BaseFragment* -
-								 constant reference to the subaltern BaseFragment at positon {\em index} of {\em *this} BaseFragment,
+								 constant reference to the subaltern BaseFragment at {\em positon} of {\em *this},
 		*/
-		const BaseFragment* getBaseFragment(Index index) const;
+		const BaseFragment* getBaseFragment(Position position) const;
 	
 		/** Get a pointer to a subaltern atom at a given position.
 				The reference is 0 if {\em *this} BaseFragment does not have an atom at the given position.
-				@param   index the position of the subaltern atom
-				@exception IndexUnderflow if {\tt index < 0}
+				@param   position the position of the subaltern atom
 				@return  Atom* -
-								 mutable reference to the subaltern atom at positon {\em index} of {\em *this} BaseFragment,
+								 mutable reference to the subaltern atom at {\em positon} of {\em *this},
 		*/
-		Atom* getAtom(Index index);
+		Atom* getAtom(Position position);
 	
 		/** Get a pointer to a subaltern atom at a given position.
 				The reference is 0 if {\em *this} BaseFragment does not have an atom at the given position.
-				@param   index the position of the subaltern atom
-				@exception IndexUnderflow if {\tt index < 0}
+				@param   position the position of the subaltern atom
 				@return  Atom* -
-								 constant reference to the subaltern atom at positon {\em index} of {\em *this} BaseFragment,
+								 constant reference to the subaltern atom at {\em position} of {\em *this},
 		*/
-		const Atom* getAtom(Index index) const;
+		const Atom* getAtom(Position position) const;
 	
 		/** Get a pointer to a subaltern atom with the name {\em name}.
 				The reference is 0 if {\em *this} BaseFragment does not have an atom with this name.
 				@param   name the name of the subaltern atom
 				@return  Atom* -
-								 mutable reference to the subaltern atom with the name {\em name} of {\em *this} BaseFragment,
+								 mutable reference to the subaltern atom with the name {\em name} of {\em *this},
 		*/
 		Atom* getAtom(const String& name);
 	
@@ -253,7 +249,7 @@ namespace BALL
 				The reference is 0 if {\em *this} BaseFragment does not have an atom with this name.
 				@param   name the name of the subaltern atom
 				@return  Atom* -
-								 constant reference to the subaltern atom with the name {\em name} of {\em *this} BaseFragment,
+								 constant reference to the subaltern atom with the name {\em name} of {\em *this},
 		*/
 		const Atom* getAtom(const String& name) const;
 	

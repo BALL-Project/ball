@@ -1,4 +1,4 @@
-// $Id: PTE.C,v 1.1 2000/03/27 21:37:05 oliver Exp $
+// $Id: PTE.C,v 1.2 2000/04/27 15:09:33 amoll Exp $
 
 #include <BALL/KERNEL/PTE.h>
 
@@ -464,10 +464,10 @@ namespace BALL
 	{
 	}
 
-	Element& PTE_::getElement(Index index)
+	Element& PTE_::getElement(Position position)
 	{
-		return ((index >= 0 && index < Element::NUMBER_OF_ELEMENTS)
-						 ? element_[index]
+		return ((position >= 0 && position < Element::NUMBER_OF_ELEMENTS)
+						 ? element_[position]
 						 : Element::UNKNOWN);
 	}
  
@@ -514,9 +514,9 @@ namespace BALL
 
 		Processor::Result result;
 
-		for (register Index index = 0; index < Element::NUMBER_OF_ELEMENTS; ++index)
+		for (register Position position = 0; position < Element::NUMBER_OF_ELEMENTS; ++position)
 		{
-			result = processor(element_[index]);
+			result = processor(element_[position]);
 
 			if (result <= Processor::BREAK)
 				return (result == Processor::BREAK) ? true : false;

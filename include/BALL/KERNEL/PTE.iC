@@ -1,4 +1,4 @@
-// $Id: PTE.iC,v 1.2 2000/04/17 14:39:19 amoll Exp $
+// $Id: PTE.iC,v 1.3 2000/04/27 15:09:45 amoll Exp $
 
 BALL_INLINE 
 void Element::setName(const String& name)
@@ -201,15 +201,15 @@ const Element& PTE_::operator [](Element::Symbol symbol) const
 }
 
 BALL_INLINE 
-Element& PTE_::operator [] (Index index)
+Element& PTE_::operator [] (Position position)
 {
-  return ((index >= 1 && index <= Element::NUMBER_OF_ELEMENTS)
-	  ? *atomic_number_to_element_[index - 1]
+  return ((position >= 1 && position <= Element::NUMBER_OF_ELEMENTS)
+	  ? *atomic_number_to_element_[position - 1]
 	  : Element::UNKNOWN);
 }
 
 BALL_INLINE 
-const Element& PTE_::operator [] (Index index) const
+const Element& PTE_::operator [] (Position position) const
 {
-  return ((PTE_ *)this)->operator[](index);
+  return ((PTE_ *)this)->operator[](position);
 }

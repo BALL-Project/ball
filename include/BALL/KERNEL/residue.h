@@ -1,4 +1,4 @@
-// $Id: residue.h,v 1.11 2000/04/25 16:52:26 amoll Exp $
+// $Id: residue.h,v 1.12 2000/04/27 15:09:48 amoll Exp $
 
 #ifndef BALL_KERNEL_RESIDUE_H
 #define BALL_KERNEL_RESIDUE_H
@@ -202,21 +202,19 @@ namespace BALL
 
 		/** Get a pointer to a subaltern PDBAtom at a given position.
 				The reference is 0 if {\em *this} residue does not have a PDBAtom at this position.
-				@param   index the position of the subaltern PDBAtom
-				@exception IndexUnderflow if {\tt index < 0}
+				@param   position the position of the subaltern PDBAtom
 				@return  PDBAtom* -
-								 mutable reference to the subaltern PDBAtom at positon {\em index} of {\em *this},
+								 mutable reference to the subaltern PDBAtom at {\em position} of {\em *this},
 		*/
-		PDBAtom* getPDBAtom(Index index);
+		PDBAtom* getPDBAtom(Position position);
 	
 		/** Get a pointer to a subaltern PDBAtom at a given position.
 				The reference is 0 if {\em *this} residue does not have a PDBAtom at this position.
-				@param   index the position of the subaltern PDBAtom
-				@exception IndexUnderflow if {\tt index < 0}
+				@param   position the position of the subaltern PDBAtom
 				@return  PDBAtom* -
-								 constant reference to the subaltern PDBAtom at positon {\em index} of {\em *this},
+								 constant reference to the subaltern PDBAtom at {\em position} of {\em *this},
 		*/
-		const PDBAtom* getPDBAtom(Index index) const;
+		const PDBAtom* getPDBAtom(Position position) const;
 	
 		/**	Set the ID of the residue.
 				@param id the new ID
@@ -356,9 +354,9 @@ namespace BALL
 
 		private:
 
-		BaseFragment* getBaseFragment(Index index);
+		BaseFragment* getBaseFragment(Position position);
 	
-		const BaseFragment* getBaseFragment(Index index) const;
+		const BaseFragment* getBaseFragment(Position position) const;
 	
 		Size countBaseFragments() const;
 

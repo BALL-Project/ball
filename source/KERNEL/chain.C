@@ -1,4 +1,4 @@
-// $Id: chain.C,v 1.5 2000/04/17 13:50:57 amoll Exp $
+// $Id: chain.C,v 1.6 2000/04/27 15:09:34 amoll Exp $
 
 #include <BALL/KERNEL/chain.h>
 #include <BALL/KERNEL/global.h>
@@ -84,39 +84,33 @@ namespace BALL
 		return ((Chain *)this)->getProtein();
 	}
 
-	SecondaryStructure *Chain::getSecondaryStructure(Index index)
+	SecondaryStructure *Chain::getSecondaryStructure(Position position)
 	{
-		if (index < 0)
-			throw Exception::IndexUnderflow(__FILE__, __LINE__, index);
-
 		for (SecondaryStructureIterator secondary_structure_it = beginSecondaryStructure();
 				 !secondary_structure_it.isEnd(); ++secondary_structure_it)
-			if (index-- == 0)
+			if (position-- == 0)
 				return &(*secondary_structure_it);
 
 		return 0;
 	}
 
-	const SecondaryStructure *Chain::getSecondaryStructure(Index index) const
+	const SecondaryStructure *Chain::getSecondaryStructure(Position position) const
 	{
-		return ((Chain *)this)->getSecondaryStructure(index);
+		return ((Chain *)this)->getSecondaryStructure(position);
 	}
 
-	Residue *Chain::getResidue(Index index)
+	Residue *Chain::getResidue(Position position)
 	{
-		if (index < 0)
-			throw Exception::IndexUnderflow(__FILE__, __LINE__, index);
-
 		for (ResidueIterator res_it = beginResidue(); !res_it.isEnd(); ++res_it)
-			if (index-- == 0)
+			if (position-- == 0)
 				return &(*res_it);
 
 		return 0;
 	}
 
-	const Residue *Chain::getResidue(Index index) const
+	const Residue *Chain::getResidue(Position position) const
 	{
-		return ((Chain *)this)->getResidue(index);
+		return ((Chain *)this)->getResidue(position);
 	}
 
 	Residue *Chain::getNTerminal()
@@ -139,24 +133,21 @@ namespace BALL
 		return ::BALL::getCTerminal(*this);
 	}
 
-	PDBAtom *Chain::getPDBAtom(Index index)
+	PDBAtom *Chain::getPDBAtom(Position position)
 	{
-		if (index < 0)
-			throw Exception::IndexUnderflow(__FILE__, __LINE__, index);
-
 		for (PDBAtomIterator protein_atom_it = beginPDBAtom();
 				 !protein_atom_it.isEnd(); ++protein_atom_it)
 		{
-			if (index-- == 0)
+			if (position-- == 0)
 				return &(*protein_atom_it);
 		}
 
 		return 0;
 	}
 
-	const PDBAtom *Chain::getPDBAtom(Index index) const
+	const PDBAtom *Chain::getPDBAtom(Position position) const
 	{
-		return ((Chain *)this)->getPDBAtom(index);
+		return ((Chain *)this)->getPDBAtom(position);
 	}
 
 	Size Chain::countSecondaryStructures() const
