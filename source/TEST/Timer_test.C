@@ -1,4 +1,4 @@
-// $Id: Timer_test.C,v 1.8 2001/05/11 18:17:58 oliver Exp $
+// $Id: Timer_test.C,v 1.9 2001/05/18 02:30:05 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 #include <unistd.h>
 ///////////////////////////
@@ -6,14 +6,16 @@
 #include <BALL/SYSTEM/file.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Timer_test.C,v 1.8 2001/05/11 18:17:58 oliver Exp $")
+START_TEST(class_name, "$Id: Timer_test.C,v 1.9 2001/05/18 02:30:05 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
 
-#define BUSY_WAIT { double x = 0.0; for (int i = 0; i < 20000000; i++, x += 0.1); }
+#define BUSY_WAIT \
+	STATUS("WAITING")\
+	{ double x = 0.0; for (int i = 0; i < 500000; i++, x += rand()); }
 
 CHECK(Timer::Timer())
 	Timer* t1 = new Timer();
@@ -147,8 +149,8 @@ CHECK(Timer::Timer& operator = (const Timer& timer))
 	TEST_EQUAL(t2.isRunning(), false)
 	TEST_EQUAL(t1.getClockTime(), t2.getClockTime())	
 	TEST_REAL_EQUAL(t1.getUserTime(), t2.getUserTime())	
-	TEST_EQUAL(t1.getSystemTime(), t2.getSystemTime())	
-	TEST_EQUAL(t1.getCPUTime(), t2.getCPUTime())	
+	TEST_REAL_EQUAL(t1.getSystemTime(), t2.getSystemTime())	
+	TEST_REAL_EQUAL(t1.getCPUTime(), t2.getCPUTime())	
 RESULT
 
 CHECK(Timer::isRunning() const )
