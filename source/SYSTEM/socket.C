@@ -1,4 +1,4 @@
-// $Id: socket.C,v 1.8 1999/12/19 17:15:08 oliver Exp $
+// $Id: socket.C,v 1.9 2000/01/06 09:45:53 oliver Exp $
 
 // ORIGINAL COPYRIGHT DISCLAIMER
 // /////////////////////////////
@@ -486,7 +486,7 @@ namespace BALL
 		return wlen;
 	}
 
-#	ifndef LINUX
+#	ifndef BALL_OS_LINUX
 	// linux does not have sendmsg or recvmsg
 
 	int SocketBuf::recvmsg(msghdr* msg, int msgf)
@@ -1125,7 +1125,7 @@ namespace BALL
 
 } // namespace BALL
 
-#	ifndef LINUX
+#	ifndef BALL_OS_LINUX
 
 	extern "C" int h_errno;
 	static	char* errmsg[] = 
