@@ -1,4 +1,4 @@
-// $Id: persistenceManager.h,v 1.22 2000/12/19 12:50:49 amoll Exp $
+// $Id: persistenceManager.h,v 1.23 2001/02/06 01:55:40 amoll Exp $
 
 #ifndef BALL_CONCEPT_PERSISTENCE_H
 #define BALL_CONCEPT_PERSISTENCE_H
@@ -34,7 +34,7 @@ namespace BALL
 	/**	Persistence manager class.
 			This class serializes and deserializes persistent objects and
 			provides support for the implementation of the object-specific 
-			serialization methods (\Ref{persistentRead} and \Ref{persistentWrite}).
+			serialization methods \Ref{persistentRead} and \Ref{persistentWrite}.
 			It defines three different layers:
 			\begin{itemize}
 				\item {\bf Layer 0} contains the basic I/O routines for primitive
@@ -178,10 +178,10 @@ namespace BALL
 
 		/**	Terminate the output to a persistent stream.
 				This method finishes the writing of a persistent object to a stream.
-				In fact, it does most of th work. It checks for the list of "missing"
+				In fact, it does most of the work. It checks for the list of "missing"
 				objects, i.e. objects that have been referenced via a pointer or a reference by 
 				the objects written before and calls their persistent write methods.
-				It then writes and end marker to the file (via writeStreamTrailer)
+				It then writes an end marker to the file (via writeStreamTrailer)
 				and clears the pending output list.\\
 				It need not be called usually, as it is called by {\tt operator >>}.
 		*/
@@ -199,7 +199,7 @@ namespace BALL
 		PersistentObject*	readObject()
       throw();
 
-		/**	Write a persistent object to the stream
+		/**	Write a persistent object to the stream.
 				This method writes a persistent object to a stream.
 		*/
 		PersistenceManager& operator << (const PersistentObject& object)
@@ -210,13 +210,11 @@ namespace BALL
 		*/
 		PersistenceManager& operator >> (PersistentObject*& object_ptr)
       throw();
-		//@}
-			
 
+		//@}
 		/**	@name	Layer 1 methods
 		*/
 		//@{
-
 
 		/**
 		*/
