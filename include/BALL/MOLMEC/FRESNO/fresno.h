@@ -1,4 +1,4 @@
-// $Id: fresno.h,v 1.1.2.6 2002/04/07 17:37:26 anker Exp $
+// $Id: fresno.h,v 1.1.2.7 2002/04/24 09:18:47 anker Exp $
 
 #ifndef BALL_MOLMEC_FRESNO_FRESNO_H
 #define BALL_MOLMEC_FRESNO_FRESNO_H
@@ -66,6 +66,10 @@ namespace BALL
 
 			/**
 			*/
+			static const char* METAL;
+
+			/**
+			*/
 			static const char* HB_IDEAL_LENGTH;
 
 			/**
@@ -116,6 +120,14 @@ namespace BALL
 			*/
 			static const char* ROT_ALGORITHM;
 
+			/**
+			*/
+			static const char* METAL_R1;
+
+			/**
+			*/
+			static const char* METAL_R2;
+
 
 		};
 
@@ -146,6 +158,10 @@ namespace BALL
 			/**
 			*/
 			static const float DESOLV;
+
+			/**
+			*/
+			static const float METAL;
 
 			/**
 			*/
@@ -198,6 +214,14 @@ namespace BALL
 			/**
 			*/
 			static const Size ROT_ALGORITHM;
+
+			/**
+			*/
+			static const float METAL_R1;
+
+			/**
+			*/
+			static const float METAL_R2;
 
 		};
 
