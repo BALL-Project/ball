@@ -1,9 +1,10 @@
-// $Id: pair6_12InteractionEnergyProcessor.C,v 1.16.2.1 2002/11/19 01:32:19 anker Exp $
+// $Id: pair6_12InteractionEnergyProcessor.C,v 1.16.2.2 2002/11/21 12:51:47 anker Exp $
 
 #include <BALL/SYSTEM/path.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/residue.h>
 #include <BALL/MATHS/surface.h>
+#include <BALL/MOLMEC/COMMON/assignTypes.h>
 #include <BALL/MOLMEC/PARAMETER/forceFieldParameters.h>
 #include <BALL/MOLMEC/PARAMETER/lennardJones.h>
 #include <BALL/STRUCTURE/numericalSAS.h>
@@ -175,9 +176,11 @@ namespace BALL
 	{
 
 		// how loud will we cry?
-		Index verbosity = (Index)options.getInteger(Option::VERBOSITY);
+		Size verbosity = (Index)options.getInteger(Option::VERBOSITY);
+
 		// this is the flag stating whether the rdf information should be used
 		bool use_rdf = options.getBool(Option::USE_RDF);
+
 		// the file containing the rdf descriptions
 		Path path;
 		String rdf_filename = path.find(options.get(Option::RDF_FILENAME));
@@ -185,17 +188,26 @@ namespace BALL
 		{
 			rdf_filename = options.get(Option::RDF_FILENAME);
 		}
-		// the file contacining the solvent description
+
+		// the file containing the solvent description
 		String solvent_filename = path.find(options.get(Option::SOLVENT_FILENAME));
 		if (solvent_filename == "")
 		{
 			solvent_filename = options.get(Option::SOLVENT_FILENAME);
 		}
+
+		// the file containing the Lennard-Jones Parameters and atom types.
+		// Usually this is a force-field parameter file.
 		String lj_filename = path.find(options.get(Option::LJ_FILENAME));
 		if (lj_filename == "")
 		{
 			lj_filename = options.get(Option::LJ_FILENAME);
 		}
+		// DEBUG
+		Log.info() << "LJ file: " << lj_filename << endl;
+		// /DEBUG
+
+		// surface related variables
 		Size surface_type = (Size)options.getInteger(Option::SURFACE_TYPE);
 		String surface_filename = options.get(Option::SURFACE_FILENAME);
 
@@ -209,8 +221,10 @@ namespace BALL
 				<< "Cannot read solvent description." << endl;
 			return 0.0;
 		}
+
 		SolventDescriptor solvent_descriptor 
 			= solvent_parameter_section.getSolventDescriptor();
+
 		// rho is the number density of the solvent (i. e. water) [1/m^3]
 		double rho = solvent_descriptor.getNumberDensity();
 		if (verbosity > 0)
@@ -252,7 +266,13 @@ namespace BALL
 			}
 		}
 
+		// Define the lennard-Jones parameter set.
 		ForceFieldParameters ljparam(lj_filename);
+		ljparam.init();
+		// DEBUG
+		AtomTypes& lj_atom_types = ljparam.getAtomTypes();         
+		// /DEBUG
+
 		LennardJones lennard_jones;
 		if (lennard_jones.extractSection(ljparam, "LennardJones") == false)
 		{
@@ -260,6 +280,10 @@ namespace BALL
 				<< "Cannot read Lennard-Jones parameters." << endl;
 			return 0.0;
 		}
+
+		// set the atom types of the molecule and the solvent according to the
+		// Lennard-Jones parameter file
+
 
 		// iterate over all different atom types in the solvent
 
@@ -369,7 +393,6 @@ namespace BALL
 			E_ij_D = 0.0;
 			E_ij_R = 0.0;
 
-
 			// iterate over all atoms of the solute
 
 			AtomConstIterator solute_iterator;
@@ -377,9 +400,7 @@ namespace BALL
 					++solute_iterator)
 			{
 
-				// ?????: This should work -- but it doesn't!
-				// type_j = solute_iterator->getType();
-				type_j = ffparam.getAtomTypes().getType(solute_iterator->getTypeName());
+				type_j = solute_iterator->getType();
 				atom_center = solute_iterator->getPosition();
 				R_m = solute_iterator->getRadius();
 				if (verbosity > 2)
@@ -406,7 +427,11 @@ namespace BALL
 					// DEBUG
 					Log.error() << "TYPENAME = " << solute_iterator->getTypeName() << endl;
 					Log.error() << "FULLNAME = " << solute_iterator->getFullName() << endl;
-					Log.error() << "RESIDUE ID = " << solute_iterator->getResidue()->getID() << endl;
+					if (solute_iterator->getResidue() != 0)
+					{
+						Log.error() << "RESIDUE ID = " 
+							<< solute_iterator->getResidue()->getID() << endl;
+					}
 					// /DEBUG
 					return false;
 				}

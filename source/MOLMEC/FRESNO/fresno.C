@@ -1,4 +1,4 @@
-// $Id: fresno.C,v 1.1.2.14 2002/11/19 01:36:13 anker Exp $
+// $Id: fresno.C,v 1.1.2.15 2002/11/21 12:52:30 anker Exp $
 // Molecular Mechanics: Fresno force field class
 
 #include <BALL/SYSTEM/path.h>
@@ -59,6 +59,10 @@ namespace BALL
 	const char* FresnoFF::Option::VERBOSITY = "verbosity";
 	const char* FresnoFF::Option::SOLVENT_DESCRIPTOR_FILE 
 		= "solvent_descriptor_file";
+	const char* FresnoFF::Option::LJ_PARAM_FILE 
+		= "lj_param_file";
+	const char* FresnoFF::Option::ATOM_TYPE_FILE 
+		= "atom_types_file";
 
 
 	const float FresnoFF::Default::CONST = -33.614;
@@ -95,6 +99,10 @@ namespace BALL
 	const Size FresnoFF::Default::VERBOSITY = 9;
 	const String FresnoFF::Default::SOLVENT_DESCRIPTOR_FILE 
 		= "solvents/PCM-water.ini";
+	const String FresnoFF::Default::LJ_PARAM_FILE 
+		= "Amber/amber94.ini";
+	const String FresnoFF::Default::ATOM_TYPE_FILE 
+		= "Amber/amber94.types";
 
 	void FresnoFF::registerComponents_()
 		throw()

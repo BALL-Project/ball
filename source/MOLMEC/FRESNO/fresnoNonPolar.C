@@ -1,4 +1,4 @@
-// $Id: fresnoNonPolar.C,v 1.1.2.3 2002/11/19 01:36:14 anker Exp $
+// $Id: fresnoNonPolar.C,v 1.1.2.4 2002/11/21 12:52:30 anker Exp $
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
 
@@ -147,6 +147,14 @@ namespace BALL
 			= options.setDefault(FresnoFF::Option::SOLVENT_DESCRIPTOR_FILE,
 					FresnoFF::Default::SOLVENT_DESCRIPTOR_FILE);
 
+		String lj_param_file
+			= options.setDefault(FresnoFF::Option::LJ_PARAM_FILE,
+					FresnoFF::Default::LJ_PARAM_FILE);
+
+		String atom_type_file
+			= options.setDefault(FresnoFF::Option::ATOM_TYPE_FILE,
+					FresnoFF::Default::ATOM_TYPE_FILE);
+
 		if (verbosity_ > 0)
 		{
 			switch(calculation_method_)
@@ -225,6 +233,7 @@ namespace BALL
 					if (solvent_descriptor_file != "")
 					{
 						vdw_solvent_.options.set(Pair6_12InteractionEnergyProcessor::Option::SOLVENT_FILENAME, solvent_descriptor_file);
+						vdw_solvent_.options.set(Pair6_12InteractionEnergyProcessor::Option::LJ_FILENAME, solvent_descriptor_file);
 					}
 					processor = &vdw_solvent_;
 				}
