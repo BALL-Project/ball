@@ -1,4 +1,4 @@
-// $Id: randomAccessIterator.h,v 1.8 2001/06/23 10:29:17 amoll Exp $ 
+// $Id: randomAccessIterator.h,v 1.9 2001/06/29 14:11:59 anker Exp $ 
 
 #ifndef BALL_CONCEPT_RANDOMACCESSITERATOR_H
 #define BALL_CONCEPT_RANDOMACCESSITERATOR_H
@@ -163,7 +163,8 @@ namespace BALL
 		/** Return an iterator.
 		 *  It points to the element with the given distance from the element 
 		 *  of the given iterator.
-		 *///BAUSTELLE
+		 */
+		//BAUSTELLE
 		//friend RandomAccessIterator operator + 
 		//	(Distance distance, const RandomAccessIterator& iterator) 
 		//	throw(Exception::InvalidIterator);
@@ -178,8 +179,9 @@ namespace BALL
 		/** Return an iterator.
 		 *  It points to the element with the given distance in reverse direction 
 		 *  of the given iterator.
-		 *///BAUSTELLE
-		 //friend Distance operator -
+		 */
+		//BAUSTELLE
+		//friend Distance operator -
 		//	(const RandomAccessIterator& a, const RandomAccessIterator& b)
 		//	throw(Exception::InvalidIterator, Exception::IncompatibleIterators);
 
@@ -222,26 +224,6 @@ namespace BALL
 		bool operator > (const RandomAccessIterator& iterator) const
 			throw(Exception::InvalidIterator, Exception::IncompatibleIterators);
 
-		/** Find the first item matching a predicate.
-		 */
-		DataType* findFirst(const UnaryPredicate<DataType>& predicate)
-			throw(Exception::InvalidIterator);
-	
-		/** Find the last item matching a predicate.
-		 */
-		DataType* findLast(const UnaryPredicate<DataType>& predicate)
-			throw(Exception::InvalidIterator);
-	
-		/** Find the next item matching a predicate.
-		 */
-		DataType* findNext(const UnaryPredicate<DataType>& predicate)
-			throw(Exception::InvalidIterator);
-	
-		/** Find the previous item matching a predicate.
-		 */
-		DataType* findPrevious(const UnaryPredicate<DataType>& predicate)
-			throw(Exception::InvalidIterator);
-		
 		/** Random access operator.
 		 */
 		DataType& operator [] (Index index)
@@ -536,6 +518,7 @@ namespace BALL
 	}
 	
 	// static functions -->
+	/*
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	Distance operator -
 		(const RandomAccessIterator<Container, DataType, Position, Traits>& a,
@@ -565,6 +548,7 @@ namespace BALL
 			RandomAccessIterator<Container, DataType, Position, Traits> tmp_iterator(iterator);
 			return (tmp_iterator += distance);
 		}
+		*/
 	
 	// static functions <-- 
 	
@@ -651,88 +635,6 @@ namespace BALL
 		}
 
 		return (*iterator.traits_ptr_ < *traits_ptr_);
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	DataType* RandomAccessIterator<Container, DataType, Position, Traits>::findFirst
-		(const UnaryPredicate<DataType>& predicate)
-		throw(Exception::InvalidIterator)
-	{
-		if (!traits_ptr_->isValid())
-		{
-			throw Exception::InvalidIterator(__FILE__, __LINE__);
-		}
-
-		for(traits_ptr_->toBegin(); traits_ptr_->isEnd() == false; traits_ptr_->forward())
-		{
-			if (predicate((const DataType&)traits_ptr_->getData()) == true)
-			{
-				return (DataType *)&(traits_ptr_->getData());
-			}
-		}
-
-		return 0;
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	DataType* RandomAccessIterator<Container, DataType, Position, Traits>::findLast
-		(const UnaryPredicate<DataType>& predicate)
-		throw(Exception::InvalidIterator)
-	{
-		if (!traits_ptr_->isValid())
-		{
-			throw Exception::InvalidIterator(__FILE__, __LINE__);
-		}
-
-		for(traits_ptr_->toRBegin(); traits_ptr_->isREnd() == false; traits_ptr_->backward())
-		{
-			if (predicate((const DataType&)traits_ptr_->getData()) == true)
-			{
-				return (DataType *)&(traits_ptr_->getData());
-			}
-		}
-
-		return 0;
-	}
-	
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	DataType* RandomAccessIterator<Container, DataType, Position, Traits>::findNext
-		(const UnaryPredicate<DataType>& predicate)
-		throw(Exception::InvalidIterator)
-	{
-		if (!traits_ptr_->isValid())
-		{
-			throw Exception::InvalidIterator(__FILE__, __LINE__);
-		}
-		for(traits_ptr_->forward(); traits_ptr_->isEnd() == false; traits_ptr_->forward())
-		{
-			if (predicate((const DataType&)traits_ptr_->getData()) == true)
-			{
-				return (DataType *)&(traits_ptr_->getData());
-			}
-		}
-
-		return 0;
-	}
-	
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	DataType* RandomAccessIterator<Container, DataType, Position, Traits>::findPrevious
-		(const UnaryPredicate<DataType>& predicate)
-		throw(Exception::InvalidIterator)
-	{
-		if (!traits_ptr_->isValid())
-		{
-			throw Exception::InvalidIterator(__FILE__, __LINE__);
-		}
-
-		for(traits_ptr_->backward(); traits_ptr_->isREnd() == false; traits_ptr_->backward())
-		{
-			if (predicate((const DataType&)traits_ptr_->getData()) == true)
-			{
-				return (DataType *)&(traits_ptr_->getData());
-			}
-		}
-		return 0;
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
@@ -975,30 +877,6 @@ namespace BALL
 		 */
 		bool operator > (const ConstRandomAccessIterator& iterator) const
 			throw(Exception::InvalidIterator, Exception::IncompatibleIterators);
-
-		/** Find the first item matching a predicate.
-		 * 	@return const pointer to the element
-		 */
-		const DataType* findFirst(const UnaryPredicate<DataType>& predicate)
-			throw(Exception::InvalidIterator);
-
-		/** Find the last item matching a predicate.
-		 *  @return const pointer to the element
-		 */
-		const DataType* findLast(const UnaryPredicate<DataType>& predicate) 
-			throw(Exception::InvalidIterator);
-
-		/** Find the next item matching a predicate.
-		 *  @return const pointer to the element
-		 */
-		const DataType* findNext(const UnaryPredicate<DataType>& predicate) 
-			throw(Exception::InvalidIterator);
-
-		/** Find the previous item matching a predicate.
-		 *  @return const pointer to the element
-		 */
-		const DataType* findPrevious(const UnaryPredicate<DataType>& predicate) 
-			throw(Exception::InvalidIterator);
 
 		/** Random access operator.
 		 */
@@ -1398,83 +1276,6 @@ namespace BALL
 	}
 
 	
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	const DataType* ConstRandomAccessIterator<Container, DataType, Position, Traits>::findFirst
-		(const UnaryPredicate<DataType>& predicate) 
-		throw(Exception::InvalidIterator)
-	{
-		if (!traits_ptr_->isValid())
-		{
-			throw Exception::InvalidIterator(__FILE__, __LINE__);
-		}
-		for(traits_ptr_->toBegin(); traits_ptr_->isEnd() == false; traits_ptr_->forward())
-		{
-			if (predicate((const DataType&)traits_ptr_->getData()) == true)
-			{
-				return (const DataType*) &(traits_ptr_->getData());
-			}
-		}
-		return 0;
-	}
-
-	
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	const DataType* ConstRandomAccessIterator<Container, DataType, Position, Traits>::findLast
-		(const UnaryPredicate<DataType>& predicate) 
-		throw(Exception::InvalidIterator)
-	{
-		if (!traits_ptr_->isValid())
-		{
-			throw Exception::InvalidIterator(__FILE__, __LINE__);
-		}
-		for(traits_ptr_->toRBegin(); traits_ptr_->isREnd() == false; traits_ptr_->backward())
-		{
-			if (predicate((const DataType&)traits_ptr_->getData()) == true)
-			{
-				return (const DataType*) &(traits_ptr_->getData());
-			}
-		}
-		return 0;
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	const DataType* ConstRandomAccessIterator<Container, DataType, Position, Traits>::findNext
-		(const UnaryPredicate<DataType>& predicate) 
-		throw(Exception::InvalidIterator)
-	{
-		if (!traits_ptr_->isValid())
-		{
-			throw Exception::InvalidIterator(__FILE__, __LINE__);
-		}
-		for(traits_ptr_->forward(); traits_ptr_->isEnd() == false; traits_ptr_->forward())
-		{
-			if (predicate((const DataType&)traits_ptr_->getData()) == true)
-			{
-				return (const DataType*) &(traits_ptr_->getData());
-			}
-		}
-		return 0;
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	const DataType* ConstRandomAccessIterator<Container, DataType, Position, Traits>::findPrevious
-		(const UnaryPredicate<DataType>& predicate)
-		throw(Exception::InvalidIterator)
-	{
-		if (!traits_ptr_->isValid())
-		{
-			throw Exception::InvalidIterator(__FILE__, __LINE__);
-		}
-		for(traits_ptr_->backward(); traits_ptr_->isREnd() == false; traits_ptr_->backward())
-		{
-			if (predicate((const DataType&)traits_ptr_->getData()) == true)
-			{
-				return (const DataType*) &(traits_ptr_->getData());
-			}
-		}
-		return 0;
-	}
-
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	const DataType& ConstRandomAccessIterator<Container, DataType, Position, Traits>::operator [] (Index index) const
 		throw(Exception::InvalidIterator, Exception::IndexOverflow, Exception::IndexUnderflow)
