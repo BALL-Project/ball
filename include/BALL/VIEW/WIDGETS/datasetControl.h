@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.h,v 1.11 2004/11/27 20:48:45 amoll Exp $
+// $Id: datasetControl.h,v 1.11.4.1 2005/04/04 16:16:02 haid Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_DATASETCONTROL_H
@@ -35,10 +35,13 @@
 # include <BALL/DATATYPE/list.h>
 #endif 
 
+#include <../source/APPLICATIONS/DOCKVIEW/dockResultDialog.h>
+
 namespace BALL
 {
 	class TrajectoryFile;
 	class Composite;
+	class DockResult;
 
 	namespace VIEW
 	{
@@ -119,6 +122,9 @@ namespace BALL
 			void addTrajectory()
 				throw();
 
+			void addDockResult()
+				throw();
+				
 			///
 			void add1DGrid() throw();
 
@@ -160,6 +166,7 @@ namespace BALL
 			void visualiseTrajectory_();
 			void bufferTrajectory_();
 			void saveTrajectory_();
+			void showDockResult_();
 			void visualiseGrid_();
 			void save1DGrid_() throw();
 			void save2DGrid_() throw();
@@ -174,6 +181,9 @@ namespace BALL
 		  protected:
 
 			void insertTrajectory_(TrajectoryFile* file, System& system)
+				throw();
+			
+			void insertDockResult_(DockResult* file, System& system)
 				throw();
 
 			void insertGrid_(RegularData1D* file, System* system, const String& name)
@@ -193,11 +203,14 @@ namespace BALL
 
 			SnapshotVisualisationDialog* 	dialog_;
 			Index 												open_trajectory_id_;
+			
+			DockResultDialog* result_dialog_;
 
 			HashMap<QListViewItem*	, SnapShotManager*> 					item_to_trajectory_;
 			HashMap<QListViewItem*	, RegularData1D*>   					item_to_grid1_;
 			HashMap<QListViewItem*	, RegularData2D*>   					item_to_grid2_;
 			HashMap<QListViewItem*	, RegularData3D*>   					item_to_grid3_;
+			HashMap<QListViewItem*	, DockResult*>								item_to_dock_result_;
 			HashMap<Composite*      , HashSet<QListViewItem*> > 	composite_to_items_;
 			HashMap<QListViewItem*  , Composite*>  								item_to_composite_;
 			ContourSurfaceDialog* 		surface_dialog_;
