@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.90 2004/06/26 10:58:42 amoll Exp $
+// $Id: scene.C,v 1.91 2004/06/28 15:00:24 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -420,93 +420,83 @@ namespace BALL
 		}
 
 
+		void Scene::renderClippingPlane_(const Representation& rep)
+			throw()
+		{
+			Vector3 n(rep.getProperty("AX").getDouble(),
+								rep.getProperty("BY").getDouble(),
+								rep.getProperty("CZ").getDouble());
+			n.normalize();
+			float d = rep.getProperty("D").getDouble();
+			glPushMatrix();
+
+			if (rep.hasProperty(Representation::PROPERTY__HIDDEN))
+			{
+				Vector3 x(1,0,0);
+				Vector3 y(0,1,0);
+				Vector3 z(0,0,1);
+
+				Vector3 v[3];
+				v[0] = x - n.x * n;
+				v[1] = y - n.y * n;
+				v[2] = z - n.z * n;
+
+				Vector3 e[2];
+				Position i = 0;
+
+				for (Position j = 0; j < 3 && i < 2; j++)
+				{
+					if (v[j].getSquareLength() != 0) 
+					{
+						e[i] = v[j];
+						e[i].normalize();
+						i++;
+					}
+				}
+
+				
+				glTranslatef(-n.x * d, -n.y * d, -n.z * d);
+				glScalef(200, 200, 200);
+				glColor3f(0., 0., 1.0);
+				glBegin(GL_QUADS);
+				glNormal3f(n.x, n.y, n.z);
+				glVertex3f(0,0,0);
+				glVertex3f(e[0].x, e[0].y, e[0].z);
+				glVertex3f(e[0].x + e[1].x, e[0].y + e[1].y, e[0].z + e[1].z);
+				glVertex3f(e[1].x, e[1].y, e[1].z);
+				glEnd();
+				glPopMatrix();
+
+				return;
+			}
+
+			GLdouble plane[] ={n.x, n.y, n.z, d};
+
+			glEnable(current_clipping_plane_);
+			glClipPlane(current_clipping_plane_, plane);
+			glPopMatrix();
+
+			current_clipping_plane_++;
+		}
+
 		void Scene::renderRepresentations_(RenderMode mode)
 			throw()
 		{
 			PrimitiveManager::RepresentationList::ConstIterator it;
 			// ============== render Clipping planes ==============================
 			it = getMainControl()->getPrimitiveManager().getRepresentations().begin();
-			
-			GLint current_clipping_plane = GL_CLIP_PLANE0;
+
+			current_clipping_plane_ = GL_CLIP_PLANE0;
+
 			for(; it != getMainControl()->getPrimitiveManager().end(); it++)
 			{
 				if ((**it).getModelType() != MODEL_CLIPPING_PLANE) continue;
-
-				if ((**it).hasProperty(Representation::PROPERTY__HIDDEN))
-				{
-					glDisable(current_clipping_plane);
-					current_clipping_plane ++;
-
-					Vector3 n((**it).getProperty("AX").getDouble(),
-										(**it).getProperty("BY").getDouble(),
-										(**it).getProperty("CZ").getDouble());
-					n.normalize();
-					float d = (**it).getProperty("D").getDouble();
-					glPushMatrix();
-
-					Vector3 x(1,0,0);
-					Vector3 y(0,1,0);
-					Vector3 z(0,0,1);
-
-					Vector3 v[3];
-					v[0] = x - n.x * n;
-					v[1] = y - n.y * n;
-					v[2] = z - n.z * n;
-
-					Vector3 e[2];
-					Position i = 0;
-
-					for (Position j = 0; j < 3 && i < 2; j++)
-					{
-						if (v[j].getSquareLength() != 0) 
-						{
-							e[i] = v[j];
-							e[i].normalize();
-							i++;
-						}
-					}
-
-Log.error() << "#~~#   1 " << n << " "   << __FILE__ << "  " << __LINE__<< std::endl;
-					
-					glTranslatef(n.x * d, n.y * d, n.z * d);
-					glScalef(200, 200, 200);
-					glColor3f(0., 0., 1.0);
-					glBegin(GL_QUADS);
-					glNormal3f(n.x, n.y, n.z);
-					glVertex3f(0,0,0);
-					glVertex3f(e[0].x, e[0].y, e[0].z);
-					glVertex3f(e[0].x + e[1].x, e[0].y + e[1].y, e[0].z + e[1].z);
-					glVertex3f(e[1].x, e[1].y, e[1].z);
-					/*
-					glVertex3f((GLfloat)0, (GLfloat)0, (GLfloat)0);
-					glVertex3f((GLfloat)0, (GLfloat)1, (GLfloat)0);
-					glVertex3f((GLfloat)1, (GLfloat)1, (GLfloat)0);
-					glVertex3f((GLfloat)1, (GLfloat)0, (GLfloat)0);
-					*/
-					glEnd();
-					glPopMatrix();
-
-					continue;
-				}
-
-				glPushMatrix();
-				
-				GLdouble plane[] ={
-					(**it).getProperty("AX").getDouble(),
-					(**it).getProperty("BX").getDouble(),
-					(**it).getProperty("CX").getDouble(),
-					(**it).getProperty("D").getDouble()};
-
-				glEnable(current_clipping_plane);
-				glClipPlane(current_clipping_plane, plane);
-				glPopMatrix();
-
-				current_clipping_plane++;
+				renderClippingPlane_(**it);
 			}
-
+		
 			GLint nr_planes;
 			glGetIntegerv(GL_MAX_CLIP_PLANES, &nr_planes);
-			for (GLint i = current_clipping_plane; i < GL_CLIP_PLANE0+ nr_planes; i++)
+			for (GLint i = current_clipping_plane_; i < GL_CLIP_PLANE0 + nr_planes; i++)
 			{
 				glDisable(i);
 			}
@@ -1672,10 +1662,10 @@ Log.error() << "#~~#   1 " << n << " "   << __FILE__ << "  " << __LINE__<< std::
 		{
 			Representation* rep = new Representation();
 			rep->setModelType(MODEL_CLIPPING_PLANE);
-			rep->setProperty("AX", 0);
+			rep->setProperty("AX", 1);
 			rep->setProperty("BY", 0);
-			rep->setProperty("CZ", 1);
-			rep->setProperty("D", 0);
+			rep->setProperty("CZ", 0);
+			rep->setProperty("D", 10);
 			getMainControl()->insert(*rep);
 		}
 		

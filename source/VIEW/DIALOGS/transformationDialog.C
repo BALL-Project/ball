@@ -63,7 +63,6 @@ bool TransformationDialog::rotateX(float angle, bool radian)
 							rep_->getProperty("CZ").getDouble());
 		n.normalize();
 
-		float d = rep_->getProperty("D").getDouble();
 		matrix_.setIdentity();
 		angle_.set(angle, radian);
 		matrix_.setRotationX(angle_);
@@ -105,7 +104,6 @@ bool TransformationDialog::rotateY(float angle, bool radian)
 							rep_->getProperty("CZ").getDouble());
 		n.normalize();
 
-		float d = rep_->getProperty("D").getDouble();
 		matrix_.setIdentity();
 		angle_.set(angle, radian);
 		matrix_.setRotationY(angle_);
@@ -147,7 +145,6 @@ bool TransformationDialog::rotateZ(float angle, bool radian)
 							rep_->getProperty("CZ").getDouble());
 		n.normalize();
 
-		float d = rep_->getProperty("D").getDouble();
 		matrix_.setIdentity();
 		angle_.set(angle, radian);
 		matrix_.setRotationZ(angle_);
