@@ -1,8 +1,10 @@
-// $Id: RDFParameter.C,v 1.1 2000/08/31 13:43:07 anker Exp $
+// $Id: RDFParameter.C,v 1.2 2000/09/01 06:10:35 oliver Exp $
 
 #include <BALL/STRUCTURE/RDFParameter.h>
 #include <BALL/STRUCTURE/RDFSection.h>
 #include <BALL/MOLMEC/PARAMETER/forceFieldParameters.h>
+
+using namespace std;
 
 namespace BALL
 {

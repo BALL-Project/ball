@@ -1,7 +1,9 @@
-// $Id: RDFSection.C,v 1.1 2000/08/31 13:34:00 anker Exp $
+// $Id: RDFSection.C,v 1.2 2000/09/01 06:11:33 oliver Exp $
 
 #include <BALL/STRUCTURE/RDFSection.h>
 #include <BALL/FORMAT/parameters.h>
+
+using namespace std;
 
 namespace BALL
 {
