@@ -1,127 +1,127 @@
-// $Id: molview.doc,v 1.7 2001/05/27 10:29:27 hekl Exp $
+// $Id: molview.doc,v 1.8 2001/06/23 10:42:57 amoll Exp $
 
 /**@name MOLVIEW.
-         Contrary to the VIEW framework that is designed to visualize various geometric objects
-         the MOLVIEW framework implements the visualization of molecular data structures.
-         To achieve this goal a number of processors are introduced that are responsible
-         for creating different graphical representation of given molecular structures.
-         Similar processors are used to color the created graphical models. See \Ref{ColorCalculator}.\\
-         The following processors for creating models are now available:\\
-         \begin{itemize}
-           \item \Ref{AddGLBallAndStickModel}: creates a ball and stick model from a given molecular structure
-           \item \Ref{AddGLLineModel}: creates a line model model from a given molecular structure
-           \item \Ref{AddGLVanDerWaalsModel}: creates a Van Der Waals model from a given molecular structure
-           \item \Ref{AddGLBackboneModel}: creates a backbone model through the {\em CA}-atoms of a given molecular structure
-           \item \Ref{AddGLSurfaceModel}: creates a surface model from a given molecular structure
-         \end{itemize}
-         All these processors are used in the class \Ref{DisplayProperties} to change the graphical
-         representation of molecular data structures.
-         This framework uses also specialized versions of serveral VIEW widgets to display and manipulate
-         molecular data structures (e.g. \Ref{MolecularControl}). 
-         Also there are some new modular widgets that are used for
-         loading molecular structures (e.g. \Ref{OpenPDBFile} or \Ref{OpenHINFile}) and for changing
-         the graphical representation (\Ref{DisplayProperties}).\\ \\
-         The following code is an example for a simple PDB viewer (the includes have been omitted).\\ \\
-				 \begin{verbatim}
-         int main(int argc, char **argv)
-         {
-           // creating mainframe and application
-           QApplication app(argc, argv);
-           MainControl main;
-           app.setMainWidget(&main);
+	 Contrary to the VIEW framework that is designed to visualize various geometric objects
+	 the MOLVIEW framework implements the visualization of molecular data structures.
+	 To achieve this goal a number of processors are introduced that are responsible
+	 for creating different graphical representation of given molecular structures.
+	 Similar processors are used to color the created graphical models. See \Ref{ColorCalculator}.\\
+	 The following processors for creating models are now available:\\
+	 \begin{itemize}
+		 \item \Ref{AddGLBallAndStickModel}: creates a ball and stick model from a given molecular structure
+		 \item \Ref{AddGLLineModel}: creates a line model model from a given molecular structure
+		 \item \Ref{AddGLVanDerWaalsModel}: creates a Van Der Waals model from a given molecular structure
+		 \item \Ref{AddGLBackboneModel}: creates a backbone model through the {\em CA}-atoms of a given molecular structure
+		 \item \Ref{AddGLSurfaceModel}: creates a surface model from a given molecular structure
+	 \end{itemize}
+	 All these processors are used in the class \Ref{DisplayProperties} to change the graphical
+	 representation of molecular data structures.
+	 This framework uses also specialized versions of serveral VIEW widgets to display and manipulate
+	 molecular data structures (e.g. \Ref{MolecularControl}). 
+	 Also there are some new modular widgets that are used for
+	 loading molecular structures (e.g. \Ref{OpenPDBFile} or \Ref{OpenHINFile}) and for changing
+	 the graphical representation (\Ref{DisplayProperties}).\\ \\
+	 The following code is an example for a simple PDB viewer (the includes have been omitted).\\ \\
+	 \begin{verbatim}
+	 int main(int argc, char **argv)
+	 {
+		 // creating mainframe and application
+		 QApplication app(argc, argv);
+		 MainControl main;
+		 app.setMainWidget(&main);
 
-           // create a QSplitter for dividing the main window into two
-           // sub windows used for displaying both the control and the scene
-           QSplitter *splitter = new QSplitter(&main);
-           main.setCentralWidget(splitter);
+		 // create a QSplitter for dividing the main window into two
+		 // sub windows used for displaying both the control and the scene
+		 QSplitter *splitter = new QSplitter(&main);
+		 main.setCentralWidget(splitter);
 
-           // create the MolecularControl and insert it into the splitter
-           new MolecularControl(splitter);
+		 // create the MolecularControl and insert it into the splitter
+		 new MolecularControl(splitter);
 
-           // create the scene and insert it into the splitter
-           new Scene(splitter);
+		 // create the scene and insert it into the splitter
+		 new Scene(splitter);
 
-           // create the dialog needed for loading PDB files
-           new OpenPDBFile(&main);
+		 // create the dialog needed for loading PDB files
+		 new OpenPDBFile(&main);
 
-           // create the dialog needed for changing the graphical representation
-           // of molecular structures
-           new DisplayProperties(&main);
+		 // create the dialog needed for changing the graphical representation
+		 // of molecular structures
+		 new DisplayProperties(&main);
 
-           // create the widget needed for applying molecular properties 
-           // to loaded molecular structures
-           new MolecularProperties(&main);
+		 // create the widget needed for applying molecular properties 
+		 // to loaded molecular structures
+		 new MolecularProperties(&main);
 
-           // start the application
-           main.show();
-           return app.exec();
-         }
-				 \end{verbatim}
+		 // start the application
+		 main.show();
+		 return app.exec();
+	 }
+	 \end{verbatim}
 
-         This example program opens a main window with both the \Ref{MolecularControl}
-         and the \Ref{Scene} as its only widgets. Because all created objects are
-         derived from \Ref{ModularWidget} the menu structure and the conncectivity
-         between the inserted widgets is already build. The menu entry
-         {\tt File-Import-PDB} opens the file dialog for loading pdb files.
-         If such a file is loaded the widget \Ref{MolecularProperties} applies
-         certain molecular properties to it (such as build bonds, normalize name, etc.)
-         after that has occured the \Ref{DisplayProperties} dialog will generate
-         a graphical representation for the molecular structure and then it
-         will be displayed in both the \Ref{MolecularControl} and the \Ref{Scene}.\\ \\
-         For more information about QT widgets and application programming see
-         the documentation of the QT-library.
+	 This example program opens a main window with both the \Ref{MolecularControl}
+	 and the \Ref{Scene} as its only widgets. Because all created objects are
+	 derived from \Ref{ModularWidget} the menu structure and the conncectivity
+	 between the inserted widgets is already build. The menu entry
+	 {\tt File-Import-PDB} opens the file dialog for loading pdb files.
+	 If such a file is loaded the widget \Ref{MolecularProperties} applies
+	 certain molecular properties to it (such as build bonds, normalize name, etc.)
+	 after that has occured the \Ref{DisplayProperties} dialog will generate
+	 a graphical representation for the molecular structure and then it
+	 will be displayed in both the \Ref{MolecularControl} and the \Ref{Scene}.\\ \\
+	 For more information about QT widgets and application programming see
+	 the documentation of the QT-library.
 */
 //@{
+	
 	/** @name Common data.
-            Some overall used data is defined in
-            this section.
+      Some overall used data is defined in this section.
   */
 	//@{
 		//@Include: COMMON/common.doc
 	//@}
 
 	/** @name Functors.
- 	          In this section some usefull visitors and processors are
-	          defined.
+ 	    In this section some usefull visitors and processors are defined.
 	*/
 	//@{
 	  //@Include: FUNCTOR/functor.doc
 	//@}
 
 	/** @name Gui classes.
-	          Description on the render engine and the handling of composites
-	          can be obtained here. Further predefined openGL primitives (an
-            extension of the primitives in the above section) are located
-            in this directory.
-            There are some dialogs and widgets (like the molecularControl) that are
-            an important part of the MolView component described in this 
-	          section.
+			Description on the render engine and the handling of composites
+			can be obtained here. Further predefined openGL primitives (an
+			extension of the primitives in the above section) are located
+			in this directory.
+			There are some dialogs and widgets (like the molecularControl) that are
+			an important part of the MolView component described in this section.
 	*/
 	//@{
 		//@Include: GUI/gui.doc
 	//@}
 
 	/** @name Kernel classes.
-            The class {\em MolecularMessage} and the various derived classes define
-            some useful messages for special events.
-						The class {\em ExtendedPropertyManager} handles the combination possibilities
-						of the defined properties.
+      The class {\em MolecularMessage} and the various derived classes define
+      some useful messages for special events.
+			The class {\em ExtendedPropertyManager} handles the combination possibilities
+			of the defined properties.
 	*/
 	//@{
 		//@Include: KERNEL/kernel.doc
 	//@}
 
 	/** @name Predefined primitives (without graphical representation).
-            In this section some predefined primitives can be found.
-            They represent the primitives only in the sense of geometric 
-	          properties. The graphical visualization implementation is
-            moved to the GUI/PRIMITIV section. In that section the primitives
-            of this section are extended with the implementation of the
-	          graphical visualization of their geometric properties.
+      In this section some predefined primitives can be found.
+      They represent the primitives only in the sense of geometric 
+	    properties. The graphical visualization implementation is
+      moved to the GUI/PRIMITIV section. In that section the primitives
+      of this section are extended with the implementation of the
+	    graphical visualization of their geometric properties.
 	*/
 	//@{
 		//@Include: PRIMITIV/primitiv.doc
 	//@}
 
 	//@Include: tutorial.doc
+	
 //@}
+
