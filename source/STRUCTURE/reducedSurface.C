@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reducedSurface.C,v 1.4 2002/12/17 17:37:15 oliver Exp $
+// $Id: reducedSurface.C,v 1.5 2002/12/18 06:10:07 oliver Exp $
 
 #include <BALL/STRUCTURE/reducedSurface.h>
 #include <BALL/STRUCTURE/RSEdge.h>
@@ -1733,13 +1733,13 @@ namespace BALL
 			 RSVertex* vertex2)
 		throw()
 	{
-		double atom1 = vertex1->atom_;
-		double atom2 = vertex2->atom_;
+		Index atom1 = vertex1->atom_;
+		Index atom2 = vertex2->atom_;
 		TCircle3<double> circle1;
 		TCircle3<double> circle2;
 		TCircle3<double> circle3;
-		if (getCircles(atom1,atom2,circle1,circle2,circle3) &&
-				Maths::isGreater(circle1.radius,rs_->probe_radius_)	)
+		if (getCircles(atom1, atom2, circle1, circle2, circle3) &&
+				Maths::isGreater(circle1.radius,rs_->probe_radius_))
 		{
 			TPlane3<double> plane(circle1.p,circle1.n);
 			::std::list<Index>::const_iterator i;

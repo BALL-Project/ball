@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBAtom.C,v 1.13 2002/02/27 12:21:21 sturm Exp $
+// $Id: PDBAtom.C,v 1.14 2002/12/18 06:10:07 oliver Exp $
 
 #include <BALL/KERNEL/PDBAtom.h>
 
@@ -304,14 +304,14 @@ namespace BALL
 	void PDBAtom::dump(ostream& s, Size depth) const
 		throw()
 	{
-		BALL_DUMP_STREAM_PREFIX(s);
+		BALL_DUMP_STREAM_PREFIX(s)
 		
 		Atom::dump(s, depth);
 		// just to avoid these damned compiler warnings
 		// (dump_indent_depth_ was declared but never referenced)
 		if (dump_indent_depth_ == 0) ;
 	 
-		BALL_DUMP_STREAM_SUFFIX(s);
+		BALL_DUMP_STREAM_SUFFIX(s)
 	}
 
 	void PDBAtom::clear_()
