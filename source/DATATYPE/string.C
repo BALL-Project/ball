@@ -1,4 +1,4 @@
-// $Id: string.C,v 1.40.4.1 2002/04/26 13:04:53 anhi Exp $
+// $Id: string.C,v 1.40.4.2 2002/05/24 10:48:17 oliver Exp $
 
 #include <BALL/DATATYPE/string.h>
 #include <BALL/COMMON/limits.h>
@@ -9,7 +9,7 @@
 
 using std::ostream;
 using std::istream;
-using std::strstream;
+using std::stringstream;
 using std::endl;
 using std::ends;
 using std::vector;
@@ -196,13 +196,12 @@ namespace BALL
 		delete [] buffer;
 	}
 
-	String::String(strstream& s)
+	String::String(stringstream& s)
 		throw()
 		: string("")
 	{
 		s << ends;
-		char* str = s.str();
-		assign(str);
+		assign(s.str());
 	}
 
 #	define BALL_STRING_DEFINE_CONSTRUCTOR_METHOD(type, format_string) \

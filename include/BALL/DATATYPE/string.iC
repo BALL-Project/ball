@@ -1,4 +1,4 @@
-// $Id: string.iC,v 1.38 2002/02/23 11:57:11 oliver Exp $
+// $Id: string.iC,v 1.38.2.1 2002/05/24 10:48:15 oliver Exp $
 
 BALL_INLINE 
 String::String()
@@ -48,12 +48,11 @@ String::String(const String& s, Index from, Size len)
 }
 
 BALL_INLINE 
-void String::set(std::strstream& s)
+void String::set(std::stringstream& s)
 	throw()
 {
 	s << std::ends;
-	char* char_ptr = s.str();
-	assign(char_ptr);
+	assign(s.str());
 }
 
 BALL_INLINE 
@@ -418,7 +417,7 @@ const String& String::operator = (const char* char_ptr)
 }
 
 BALL_INLINE 
-const String& String::operator = (std::strstream& s)
+const String& String::operator = (std::stringstream& s)
 	throw()
 {
   set(s);
