@@ -91,50 +91,6 @@
             <bool>true</bool>
         </property>
     </widget>
-    <widget class="QLineEdit">
-        <property name="name">
-            <cstring>parameter_file_edit</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>98</x>
-                <y>14</y>
-                <width>345</width>
-                <height>23</height>
-            </rect>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>150</width>
-                <height>0</height>
-            </size>
-        </property>
-        <property name="backgroundMode">
-            <enum>PaletteBase</enum>
-        </property>
-        <property name="font">
-            <font>
-            </font>
-        </property>
-        <property name="focusPolicy">
-            <enum>StrongFocus</enum>
-        </property>
-        <property name="text">
-            <string>Charmm/EEF1/param19_eef1.ini</string>
-        </property>
-        <property name="maxLength">
-            <number>32767</number>
-        </property>
-        <property name="frame">
-            <bool>true</bool>
-        </property>
-        <property name="echoMode">
-            <enum>Normal</enum>
-        </property>
-        <property name="alignment">
-            <set>AlignRight</set>
-        </property>
-    </widget>
     <widget class="QButtonGroup">
         <property name="name">
             <cstring>dielectric_group</cstring>
@@ -1187,6 +1143,50 @@
                 <bool>true</bool>
             </property>
         </widget>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>parameter_file_edit</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>98</x>
+                <y>14</y>
+                <width>345</width>
+                <height>23</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>150</width>
+                <height>0</height>
+            </size>
+        </property>
+        <property name="backgroundMode">
+            <enum>PaletteBase</enum>
+        </property>
+        <property name="font">
+            <font>
+            </font>
+        </property>
+        <property name="focusPolicy">
+            <enum>StrongFocus</enum>
+        </property>
+        <property name="text">
+            <string>CHARMM/EEF1/param19_eef1.ini</string>
+        </property>
+        <property name="maxLength">
+            <number>32767</number>
+        </property>
+        <property name="frame">
+            <bool>true</bool>
+        </property>
+        <property name="echoMode">
+            <enum>Normal</enum>
+        </property>
+        <property name="alignment">
+            <set>AlignRight</set>
+        </property>
     </widget>
 </widget>
 <connections>
