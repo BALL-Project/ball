@@ -1,4 +1,4 @@
-// $Id: support.C,v 1.17 2001/02/01 15:01:45 anker Exp $
+// $Id: support.C,v 1.18 2001/02/19 12:53:17 anker Exp $
 
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/KERNEL/atom.h>
@@ -98,7 +98,8 @@ namespace BALL
 			{
 				// we know nothing about the box, so we have to calculate it on our
 				// own by looking at the position of every atom in atom_vector
-				for (atom_it = atom_vector.begin(); +atom_it; ++atom_it)	
+				for (atom_it = atom_vector.begin(); atom_it != atom_vector.end();
+						++atom_it)	
 				{
 					position = (*atom_it)->getPosition();
 					if (position.x < lower.x) lower.x = position.x;
@@ -290,7 +291,8 @@ namespace BALL
 					// Use a hash grid with box length "distance" to determine all
 					// neigboured atom pairs
 
-					for (atom_it = atom_vector.begin(); +atom_it; ++atom_it) 
+					for (atom_it = atom_vector.begin(); atom_it != atom_vector.end();
+							++atom_it) 
 					{
 						position = (*atom_it)->getPosition();
 
