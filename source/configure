@@ -1,6 +1,6 @@
 #! /bin/sh
 
-#  $Id: configure,v 1.41 2000/01/08 13:14:20 oliver Exp $
+#  $Id: configure,v 1.42 2000/01/08 20:54:06 oliver Exp $
 
 
 ##################################################
@@ -117,7 +117,7 @@ ac_help="$ac_help
 ac_help="$ac_help
   --disable-debuginfo     remove -g from the compiler flags (omit debug information)"
 ac_help="$ac_help
-  --disable-BALLVIEW      disable the compilation of BALL, the visualization component"
+  --disable-BALLVIEW      disable the compilation of BALLVIEW, the visualization component"
 ac_help="$ac_help
   --enable-64             create 64 bit binaries (if allowed by the compiler)"
 ac_help="$ac_help
