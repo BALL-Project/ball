@@ -81,9 +81,10 @@ QWidget* QColorTable::beginEdit(int row, int col, bool)
 	QColor color = QColorDialog::getColor(old);
 	if (!color.isValid()) return 0;
 
-	((QColorTableItem*)item(row,col))->setColor(
-		ColorRGBA((Size)color.red(),(Size) color.green(),(Size) color.blue(),(Size) 255));
+	ColorRGBA new_color((Size)color.red(),(Size) color.green(),(Size) color.blue(),(Size) 255);
+	((QColorTableItem*)item(row,col))->setColor(new_color);
 	updateCell(row, col);
+	colors_[row] = new_color;
 	return 0;
 }
 				
