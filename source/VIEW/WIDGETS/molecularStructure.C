@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.1 2004/02/02 17:06:47 amoll Exp $
+// $Id: molecularStructure.C,v 1.2 2004/02/02 17:12:59 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -96,11 +96,11 @@ namespace BALL
 		hint = "Deselect a molecular object.";
 		deselect_id_ = insertMenuEntry(MainControl::EDIT, "&Deselect", this, SLOT(deselect()), ALT+Key_D, -1, hint);
 		// Tools Menu -------------------------------------------------------------------
+ 		getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS);
 		hint = "Calculate the energy of a System with the AMBER force field.";
 		insertMenuEntry(MainControl::TOOLS, "Single Point Energy", this, SLOT(calculateAmberEnergy()), 
 										CTRL+Key_A, amber_energy_id_, hint);
 			
- 		getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS);
 		hint = "To perform an Energy Minimization, first select the molecular structures.";
 		amber_minimization_id_ = insertMenuEntry(MainControl::SIMULATIONS, "&Energy Minimization", this, 
 															SLOT(amberMinimization()), CTRL+Key_E, MainControl::SIMULATIONS + 10, hint);
@@ -1079,12 +1079,6 @@ namespace BALL
 		System* system = new System;
 		system->insert(*protein);
 		getMainControl()->insert(*system, dialog->getSequence());
-		/*
-		composite_manager_.insert(*system);
-		CompositeMessage* new_message = new CompositeMessage(*system, CompositeMessage::NEW_COMPOSITE);
-		new_message->setCompositeName(dialog->getSequence());
-		notify_(new_message);
-		*/
 	}
 
 } } // namespaces

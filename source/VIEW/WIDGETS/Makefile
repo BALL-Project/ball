@@ -15,14 +15,11 @@ CPP_SOURCES=\
 	geometricControl.C\
 	datasetControl.C\
 	molecularControl.C\
-	molecularProperties.C\
+	molecularStructure.C\
 	canvasWidget.C\
 	scene.C\
 	regularData2DWidget.C\
 	regularData1DWidget.C
-
-
-
 
 PYTHON_CPP_SOURCES=\
 	pyWidget.C
@@ -34,19 +31,22 @@ MOC_SOURCES=\
 	datasetControl_moc.C\
 	geometricControl_moc.C\
 	molecularControl_moc.C\
-	molecularProperties_moc.C\
+	molecularStructure_moc.C\
 	scene_moc.C\
 	canvasWidget_moc.C\
 	regularData1DWidget_moc.C\
 	regularData2DWidget_moc.C
-
-
 
 PYTHON_MOC_SOURCES=\
 	pyWidget_moc.C
 
 include ../../common.mak
 include .Dependencies
+
+# replace library-specific flags by application-
+# specific compiler flags
+LIB_CXXFLAGS=$(NONLIB_CXXFLAGS) -DQT_THREAD_SUPPORT
+
 
 BALL_INCLUDES=$(VIEW_INCLUDES) $(PYTHON_INCLUDES)
 
@@ -67,8 +67,8 @@ logView_moc.C:	$(HEADER_DIR)/logView.h
 molecularControl_moc.C:	$(HEADER_DIR)/molecularControl.h
 	$(MOC) $(HEADER_DIR)/molecularControl.h -o $@
 
-molecularProperties_moc.C:	$(HEADER_DIR)/molecularProperties.h
-	$(MOC) $(HEADER_DIR)/molecularProperties.h -o $@
+molecularStructure_moc.C:	$(HEADER_DIR)/molecularStructure.h
+	$(MOC) $(HEADER_DIR)/molecularStructure.h -o $@
 
 scene_moc.C:	$(HEADER_DIR)/scene.h
 	$(MOC) $(HEADER_DIR)/scene.h -o $@
