@@ -9,7 +9,8 @@ CPP_SOURCES=\
 	fresnoLipophilic.C\
 	fresnoBuriedPolar.C\
 	fresnoRotation.C\
-	fresnoDesolvation.C
+	fresnoDesolvation.C\
+	chemScoreMetal.C
 
 include ../../common.mak
 include .Dependencies
