@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData3D.h,v 1.19 2003/05/04 20:15:21 oliver Exp $ 
+// $Id: regularData3D.h,v 1.20 2003/05/05 08:58:42 oliver Exp $ 
 //
 
 #ifndef BALL_DATATYPE_REGULARDATA3D_H
@@ -225,7 +225,7 @@ namespace BALL
         @precondition getOrigin() <= x <= getOrigin() + getDimension()
     */
     ValueType operator () (const CoordinateType& x) const throw();
-
+		
     /** Return the linearly interpolated value of the surrounding two grid points.
         This method first performs a range check for the argument <tt>x</tt>
         and then calls <tt>operator () (x)</tt> to determine an interpolated
@@ -825,7 +825,15 @@ namespace BALL
 		{
 			throw Exception::OutOfGrid(__FILE__, __LINE__);
 		}		
+		return operator () (r);
+	}
 
+	template <typename ValueType>
+	BALL_INLINE
+	ValueType TRegularData3D<ValueType>::operator ()
+		(const typename TRegularData3D<ValueType>::CoordinateType& r) const
+		throw()
+	{
 		Vector3 h(r - origin_);
 		Position x = (int)(h.x / spacing_.x);
 		Position y = (int)(h.y / spacing_.y);

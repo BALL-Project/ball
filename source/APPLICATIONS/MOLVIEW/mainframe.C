@@ -293,7 +293,8 @@ void Mainframe::computeSurface()
   Log.info()<<surface_dialog_->threshold_->text().toFloat()<<endl;
 	ContourSurface cs(surface_dialog_->threshold_->text().toFloat());
   Log.info()<<surface_dialog_->threshold_->text().toFloat()<<endl;
-	cs.createContourSurface(rd); 
+	// Compute contour surface.
+	cs << rd; 
 	GLMesh *mesh = new GLMesh();
 	*static_cast<Surface*>(mesh) = (Surface) cs;
 	//mesh->PropertyManager::set(*this);

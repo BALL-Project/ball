@@ -73,9 +73,9 @@ void ColorMeshDialog::apply_clicked()
 
 		try 
 		{
-			for (Position i=0; i<mesh->colorList.size(); i++)
+			for (Position i = 0; i < mesh->colorList.size(); i++)
 			{
-				mesh->colorList[i] = table.map(dat[mesh->vertex[i]]);
+				mesh->colorList[i] = table.map(dat(mesh->vertex[i]));
 			}
 		}	
 		catch (Exception::OutOfGrid)
