@@ -1,4 +1,4 @@
-// $Id: global.h,v 1.1 1999/08/26 07:53:13 oliver Exp $
+// $Id: global.h,v 1.2 2000/01/16 17:25:39 oliver Exp $
 
 #ifndef BALL_COMMON_GLOBAL_H
 #define BALL_COMMON_GLOBAL_H
@@ -98,6 +98,12 @@ namespace BALL
 			use this type to convert pointers to printable numbers.
 	*/
 	typedef BALL_POINTERSIZE_INT PointerInt;
+
+	/**	64 bit unsigned integer type.
+			This type is used to read and write pointers to persistent
+			objects to ensure compatibility between 64 and 43 bit architectures.
+	*/
+	typedef BALL_ULONG64_TYPE LongPointerType;
 	//@}
 
 	enum ASCII
