@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.4 2003/09/07 17:24:01 oliver Exp $
+// $Id: mainControl.C,v 1.5 2003/09/14 17:16:55 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -41,860 +41,890 @@ namespace BALL
 	namespace VIEW
 	{
 
-		MainControl::MainControl(QWidget* parent, const char* name, String inifile)
-			throw()
-			:	QMainWindow(parent, name),
-				ConnectionObject(),
-				Embeddable("BALL::VIEW::MainControl"),
-				selection_(),
-				message_label_(new QLabel("" , statusBar())),
-				main_control_preferences_(0),
-				preferences_dialog_(0),
-				preferences_id_(-1),
-				composites_muteable_(true)
+
+MainControl::MainControl(QWidget* parent, const char* name, String inifile)
+	throw()
+	:	QMainWindow(parent, name),
+		ConnectionObject(),
+		Embeddable("BALL::VIEW::MainControl"),
+		selection_(),
+		message_label_(new QLabel("" , statusBar())),
+		main_control_preferences_(0),
+		preferences_dialog_(0),
+		preferences_id_(-1),
+		composites_muteable_(true)
+{
+	// read the preferences
+	preferences_.setFilename(inifile);
+	preferences_.read();
+
+	statusBar()->addWidget(message_label_, 20);
+
+	connect(qApp,	SIGNAL(aboutToQuit()), this, SLOT(aboutToExit()));
+}
+
+MainControl::MainControl(const MainControl& main_control)
+	throw()
+	:	QMainWindow(0, ""),
+		ConnectionObject(main_control),
+		Embeddable(main_control),
+		selection_(),
+		main_control_preferences_(0),
+		preferences_dialog_(0),
+		preferences_id_(-1),
+		composites_muteable_(main_control.composites_muteable_)
+{
+}
+
+MainControl::~MainControl()
+	throw()
+{
+	#ifdef BALL_VIEW_DEBUG
+		Log.info() << "Destructing object " << (void *)this << " of class " << RTTI::getName<MainControl>() << endl;
+	#endif 
+
+	clear();
+}
+
+QPopupMenu* MainControl::initPopupMenu(int ID)
+	throw()
+{
+	QPopupMenu* menu = 0;
+	QMenuItem* item = menuBar()->findItem(ID);
+	if ((item == 0) || (item->popup() == 0))
+	{
+		menu = new QPopupMenu(this);
+		CHECK_PTR(menu);
+
+		connect(menu, SIGNAL(aboutToShow()), this, SLOT(checkMenus()));
+
+		#ifdef BALL_VIEW_DEBUG
+			Log.info() << "new menu entry: " << ID << endl;	
+		#endif
+		int max_id = menuBar()->count();
+		switch (ID)
 		{
-			// read the preferences
-			preferences_.setFilename(inifile);
-			preferences_.read();
+			case FILE:
+				menuBar()->insertItem("&File", menu, FILE, 0);
+				break;
+			case FILE_IMPORT:
+				initPopupMenu(MainControl::FILE)->insertItem("&Import File", menu, FILE_IMPORT);
+				break;
+			case EDIT:
+				menuBar()->insertItem("&Edit", menu, EDIT, (1 <= max_id) ? 1 : -1);
+				break;
+			case BUILD:
+				menuBar()->insertItem("&Build", menu, BUILD, (2 <= max_id) ? 2 : -1);
+				break;
+			case DISPLAY:
+				menuBar()->insertItem("&Display", menu, DISPLAY, (3 <= max_id) ? 3 : -1);
+				break;
+			case TOOLS:
+				menuBar()->insertItem("&Tools", menu, TOOLS, (4 <= max_id) ? 4 : -1);
+				break;
+			case WINDOWS:
+				menuBar()->insertItem("&Windows", menu, WINDOWS, (5 <= max_id) ? 5 : -1);
+				break;
+			case USER:
+				menuBar()->insertItem("&User", menu, USER, (6 <= max_id) ? 6 : -1);
+				break;
 
-			statusBar()->addWidget(message_label_, 20);
-
-			connect(qApp,	SIGNAL(aboutToQuit()), this, SLOT(aboutToExit()));
+			case HELP:
+				menuBar()->insertSeparator();
+				menuBar()->insertItem("&Help", menu, HELP, -1);
+				break;
+			default:
+				delete menu;
+				menu = 0;
 		}
+	}
+	else 
+	{
+		// return the existing popup menu
+		menu = item->popup();
+	}
+
+	return menu;
+}
+
+void MainControl::clear()
+	throw()
+{
+	selection_.clear();
+	primitive_manager_.clear();
+	composite_manager_.clear();
+}
+	
+void MainControl::show()
+{
+	#ifdef BALL_VIEW_DEBUG
+		Log.info() << "MainControl::show()  list.size() = " << modular_widgets_.size() << endl;
+	#endif
+
+	// prevent multiple inserting of menu entries, by calls of showFullScreen(), ...
+	if (preferences_id_ != -1) 
+	{
+		QMainWindow::show();
+		return;
+	}
+
+	// create own preferences dialog
+	preferences_dialog_ = new Preferences(this, "Molview Preferences", 455, 352);
+
+	if (preferences_dialog_ == 0)
+	{
+		throw Exception::GeneralException(__FILE__, __LINE__, 
+				"memory allocation failed for preferences dialog.", "");
+	}
+
+	// establish connection 
+	connect(preferences_dialog_, SIGNAL(applyButtonPressed()), this, SLOT(applyPreferencesTab()));
+	connect(preferences_dialog_, SIGNAL(cancelButtonPressed()), this, SLOT(cancelPreferencesTab()));
+
+	// initialize own preferences tab
+	initializePreferencesTab(*preferences_dialog_);
+
+	// initialize all modular widgets 
+	List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
+	for (; it != modular_widgets_.end(); ++it)
+	{
+		registerConnectionObject(**it);
+		(*it)->initializeWidget(*this);
+		(*it)->initializePreferencesTab(*preferences_dialog_);
+	}
+
+	// check own preferences 
+	preferences_dialog_->fetchPreferences(preferences_);
+
+	// fetch own preferences tab
+	fetchPreferences(preferences_);
+
+	// apply on own preferences tab
+	applyPreferences(*preferences_dialog_);
+
+	// check menu entries, fetch and apply preferences
+	for (it = modular_widgets_.begin(); it != modular_widgets_.end(); ++it)
+	{
+		(*it)->checkMenu(*this);
+		(*it)->fetchPreferences(preferences_);
+		(*it)->applyPreferences(*preferences_dialog_);
+	}
+
+	// own menu entries
+	insertPopupMenuSeparator(MainControl::FILE);
+	insertMenuEntry(MainControl::FILE, "&Quit", qApp, SLOT(quit()), CTRL+Key_Q);	
+	
+	// if the preferences dialog has any tabs then show it
+	if (preferences_dialog_->hasTabs())
+	{
+		initPopupMenu(MainControl::DISPLAY)->setCheckable(true);
 		
-		MainControl::MainControl(const MainControl& main_control)
-			throw()
-			:	QMainWindow(0, ""),
-				ConnectionObject(main_control),
-				Embeddable(main_control),
-				selection_(),
-				main_control_preferences_(0),
-				preferences_dialog_(0),
-				preferences_id_(-1),
-				composites_muteable_(main_control.composites_muteable_)
+		preferences_id_ = insertMenuEntry(MainControl::DISPLAY, 
+																			"Preferences", 
+																			preferences_dialog_, 
+																			SLOT(openDialog()), CTRL+Key_Z);
+	}
+
+	restoreWindows();
+	QMainWindow::show();
+}
+
+void MainControl::checkMenus()
+{
+	// preferences dialog not empty
+	if (preferences_dialog_->hasTabs())
+	{
+		menuBar()->setItemChecked(preferences_id_, preferences_dialog_->isVisible());			
+	}
+
+	// checks all modular widgets 
+	List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
+	for (it = modular_widgets_.begin(); it != modular_widgets_.end(); ++it)
+	{
+		(*it)->checkMenu(*this);
+	}
+}
+
+void MainControl::applyPreferencesTab()
+{
+	// apply on own preferences tab
+	applyPreferences(*preferences_dialog_);
+
+	// checks all modular widgets 
+	List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
+	for (it = modular_widgets_.begin(); it != modular_widgets_.end(); ++it)
+	{
+		(*it)->applyPreferences(*preferences_dialog_);
+	}
+}
+
+
+void MainControl::cancelPreferencesTab()
+	throw()
+{
+	// checks all modular widgets 
+	List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
+	for (it = modular_widgets_.begin(); it != modular_widgets_.end(); ++it)
+	{
+		(*it)->cancelPreferences(*preferences_dialog_);
+	}
+}
+
+
+void MainControl::aboutToExit()
+{
+	preferences_.clear();
+	preferences_.appendSection("WINDOWS");
+
+	// finalizes all modular widgets
+	List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
+	for (it = modular_widgets_.begin(); it != modular_widgets_.end(); ++it)
+	{
+		(*it)->writePreferences(preferences_);
+		(*it)->finalizePreferencesTab(*preferences_dialog_);
+		(*it)->finalizeWidget(*this);
+	}
+
+	modular_widgets_.clear();
+
+	//
+	// write the preferences
+	//
+	preferences_dialog_->writePreferences(preferences_);
+
+	// write default preferences 
+	writePreferences(preferences_);
+
+	// finalize own preferences tab
+	finalizePreferencesTab(*preferences_dialog_);
+
+	delete preferences_dialog_;
+	preferences_dialog_ = 0;
+}
+
+bool MainControl::remove_(Composite& composite)
+	throw()
+{
+	if (!composite_manager_.has(composite)) return false;
+	
+	composite_manager_.remove(composite);
+
+	// delete all representations containing the composite
+	List<Representation*> removed_representations;
+	removed_representations = primitive_manager_.removedComposite(composite);
+	RepresentationMessage* rr_message = 0;
+	List<Representation*>::Iterator reps_it = removed_representations.begin();
+	// notify GeometricControl of removed representations
+	for (; reps_it != removed_representations.end(); reps_it++)
+	{
+		rr_message = new RepresentationMessage;
+		rr_message->setType(RepresentationMessage::REMOVE);
+		rr_message->setRepresentation(*reps_it);
+		rr_message->setDeletable(true);
+		notify_(rr_message);
+	}
+
+	if (removed_representations.size() > 0) updateAll();
+
+	return true;
+}
+
+bool MainControl::update(const Composite& composite)
+	throw()
+{
+	if (!composite_manager_.has(composite)) return false;
+	
+	// delete all representations containing the composite
+	List<Representation*> changed_representations;
+	changed_representations = primitive_manager_.changedComposite(composite);
+	RepresentationMessage* ur_message = 0;
+	List<Representation*>::Iterator reps_it = changed_representations.begin();
+	// notify GeometricControl of changed representations
+	for (; reps_it != changed_representations.end(); reps_it++)
+	{
+		ur_message = new RepresentationMessage;
+		ur_message->setRepresentation(*reps_it);
+		ur_message->setType(RepresentationMessage::UPDATE);
+		ur_message->setDeletable(true);
+		notify_(ur_message);
+	}
+
+	SceneMessage *scene_message = new SceneMessage;
+	scene_message->setType(SceneMessage::REDRAW);
+	scene_message->setDeletable(true);
+	notify_(scene_message);
+
+	return true;
+}
+
+
+void MainControl::updateAll(bool rebuild_display_lists)
+	throw()
+{
+	// update scene
+	SceneMessage *scene_message = new SceneMessage;
+	if (rebuild_display_lists)
+	{
+		scene_message->setType(SceneMessage::REBUILD_DISPLAY_LISTS);
+	}
+	else
+	{
+		scene_message->setType(SceneMessage::REDRAW);
+	}
+
+	scene_message->setDeletable(true);
+	notify_(scene_message); 
+}
+
+
+void MainControl::onNotify(Message *message)
+	throw()
+{
+	if (RTTI::isKindOf<NewCompositeMessage>(*message))
+	{
+		NewCompositeMessage* new_message = RTTI::castTo<NewCompositeMessage>(*message);
+		composite_manager_.insert(*new_message->getComposite());
+	}
+	else if (RTTI::isKindOf<RemovedCompositeMessage>(*message))
+	{
+		RemovedCompositeMessage *composite_message = RTTI::castTo<RemovedCompositeMessage>(*message);
+		remove_(*composite_message->getComposite());
+	}
+	else if (RTTI::isKindOf<ChangedCompositeMessage>(*message))
+	{
+		ChangedCompositeMessage *composite_message = RTTI::castTo<ChangedCompositeMessage>(*message);
+		update(composite_message->getComposite()->getRoot());
+	}
+	else if (RTTI::isKindOf<ControlSelectionMessage> (*message))
+	{
+		ControlSelectionMessage* selection_message = RTTI::castTo<ControlSelectionMessage>(*message);
+		control_selection_ = selection_message->getSelection();
+	}
+	else if (RTTI::isKindOf<GeometricObjectSelectionMessage>(*message))
+	{
+		GeometricObjectSelectionMessage* selection_message = 
+			RTTI::castTo<GeometricObjectSelectionMessage>(*message);
+		selectComposites_(*selection_message);
+	}
+	else if(RTTI::isKindOf<CompositeSelectedMessage>(*message))
+	{
+		// Selection came from selecting checkbox in Control or "select" menu in displayProperties
+		CompositeSelectedMessage * selection_message = RTTI::castTo<CompositeSelectedMessage>(*message);
+		if (selection_message->isSelected() == selection_.has(selection_message->getComposite())) return;
+		if (selection_message->isSelected())
 		{
+			selectCompositeRecursive(selection_message->getComposite(), true);
 		}
+		else
+		{
+			deselectCompositeRecursive(selection_message->getComposite(), true);
+		}
+		NewSelectionMessage* nws_message = new NewSelectionMessage;					
+		notify_(nws_message);
+
+		// sending of scene message and geometric object selector is done in 
+		// MolecularProperties
+	}
+}
+
+
+bool MainControl::isValid() const
+	throw()
+{
+	return true;
+}
+
+void MainControl::dump(ostream& s, Size depth) const
+	throw()
+{
+	BALL_DUMP_STREAM_PREFIX(s);
+
+	BALL_DUMP_DEPTH(s, depth);
+	BALL_DUMP_HEADER(s, this, this);
+
+	BALL_DUMP_STREAM_SUFFIX(s);     
+}
+
+// VIEW automatic module registration
+MainControl* MainControl::getMainControl(const QObject* object)
+	throw()
+{
+	QObject* parent = object->parent();
+	while ((parent != 0) && (parent->parent() != 0))
+	{
+		parent = parent->parent();
+	}
+
+	MainControl* mc = 0;
+	if (parent != 0)
+	{
+		// check whether the top-level widget
+		// is a MainControl
+		mc = dynamic_cast<MainControl*>(parent);
+	}
+	else 
+	{
+		// try whether the widget itself is the main control
+		mc = dynamic_cast<MainControl*>(const_cast<QObject*>(object));
+	}
+
+	#ifdef BALL_DEBUG_VIEW
+		Log.info() << "Top level widget : mc = " << mc << endl;
+	#endif
+
+	return mc;
+}
+
+int MainControl::current_id_ = 15000;
+
+int MainControl::insertMenuEntry(int ID, const String& name, const QObject* receiver, const char* slot, 
+																 int accel, int entry_ID)
+	throw()
+{
+	QMenuBar* menu_bar = menuBar();
+	if (menu_bar == 0) return -1;
+	
+	// enable the corresponding popup menu
+	menu_bar->setItemEnabled(ID, true);
+	QPopupMenu* popup = initPopupMenu(ID);
+	if (popup == 0)
+	{
+		Log.error() << "MainControl::insertMenuEntry: cannot find popup menu for ID " << ID << endl;
+		return -1;
+	}
 		
-		MainControl::~MainControl()
-			throw()
-		{
-			#ifdef BALL_VIEW_DEBUG
-				Log.info() << "Destructing object " << (void *)this << " of class " << RTTI::getName<MainControl>() << endl;
-			#endif 
+	// insert the menu entry
+	if (entry_ID == -1)
+	{
+		entry_ID = getNextID_();
+	}
 
-			clear();
+	popup->insertItem(name.c_str(), receiver, slot, accel, entry_ID);
+	return entry_ID;
+
+	return -1;
+}
+
+
+void MainControl::removeMenuEntry
+	(int /* ID */, const String& /* name */, 
+	 const QObject* /* receiver */, const char* /* slot */, 
+	 int /* accel */, int /* entry_ID */)
+	throw()
+{
+	// ?????
+}
+
+
+void MainControl::insertPopupMenuSeparator(int ID)
+	throw()
+{
+	QMenuBar* menu_bar = menuBar();
+	if (menu_bar != 0)
+	{
+		// enable the corresponding popup menu
+		menu_bar->setItemEnabled(ID, true);
+		//
+		QPopupMenu* popup = initPopupMenu(ID);
+		if (popup == 0)
+		{
+			Log.error() << "MainControl::insertMenuEntry: cannot find popup menu for ID " << ID << endl;
 		}
-
-		QPopupMenu* MainControl::initPopupMenu(int ID)
-			throw()
+		else
 		{
-			QPopupMenu* menu = 0;
-			QMenuItem* item = menuBar()->findItem(ID);
-			if ((item == 0) || (item->popup() == 0))
-			{
-				menu = new QPopupMenu(this);
-				CHECK_PTR(menu);
-
-				connect(menu, SIGNAL(aboutToShow()), this, SLOT(checkMenus()));
-
-				#ifdef BALL_VIEW_DEBUG
-					Log.info() << "new menu entry: " << ID << endl;	
-				#endif
-				int max_id = menuBar()->count();
-				switch (ID)
-				{
-					case FILE:
-						menuBar()->insertItem("&File", menu, FILE, 0);
-						break;
-   				case FILE_IMPORT:
-						initPopupMenu(MainControl::FILE)->insertItem("&Import File", menu, FILE_IMPORT);
-						break;
-					case EDIT:
-						menuBar()->insertItem("&Edit", menu, EDIT, (1 <= max_id) ? 1 : -1);
-						break;
-					case BUILD:
-						menuBar()->insertItem("&Build", menu, BUILD, (2 <= max_id) ? 2 : -1);
-						break;
-					case DISPLAY:
-						menuBar()->insertItem("&Display", menu, DISPLAY, (3 <= max_id) ? 3 : -1);
-						break;
-					case TOOLS:
-						menuBar()->insertItem("&Tools", menu, TOOLS, (4 <= max_id) ? 4 : -1);
-						break;
-					case WINDOWS:
-						menuBar()->insertItem("&Windows", menu, WINDOWS, (5 <= max_id) ? 5 : -1);
-						break;
-					case USER:
-						menuBar()->insertItem("&User", menu, USER, (6 <= max_id) ? 6 : -1);
-						break;
-
-					case HELP:
-						menuBar()->insertSeparator();
-						menuBar()->insertItem("&Help", menu, HELP, -1);
-						break;
-					default:
-						delete menu;
-						menu = 0;
-				}
-			}
-			else 
-			{
-				// return the existing popup menu
-				menu = item->popup();
-			}
-
-			return menu;
+			popup->insertSeparator();
 		}
+	}
+}
 
-		void MainControl::clear()
-			throw()
+
+void MainControl::initializePreferencesTab(Preferences &preferences)
+	throw()
+{
+	main_control_preferences_ = new MainControlPreferences();
+	CHECK_PTR(main_control_preferences_);
+
+	preferences.insertTab(main_control_preferences_, "General");
+}
+
+void MainControl::finalizePreferencesTab(Preferences &preferences)
+	throw()
+{
+	if (main_control_preferences_ != 0)
+	{
+		preferences.removeTab(main_control_preferences_);
+
+		delete main_control_preferences_;
+		main_control_preferences_ = 0;
+	}
+}
+
+void MainControl::applyPreferences(Preferences & /* preferences */)
+	throw()
+{
+	if (main_control_preferences_ != 0)
+	{
+		QApplication::setStyle(main_control_preferences_->getStyle());
+		QWidget::update();
+	}
+}
+
+void MainControl::fetchPreferences(INIFile &inifile)
+	throw()
+{
+	// 
+	// the geometry of the main window
+	//
+	int x_pos = x();
+	int y_pos = y();
+	int w = 640;
+	int h = 480;
+	if (inifile.hasEntry("WINDOWS", "Main::x"))
+	{
+		x_pos = inifile.getValue("WINDOWS", "Main::x").toInt();
+	}
+	if (inifile.hasEntry("WINDOWS", "Main::y"))
+	{
+		y_pos = inifile.getValue("WINDOWS", "Main::y").toInt();
+	}
+	if (inifile.hasEntry("WINDOWS", "Main::height"))
+	{
+		h = inifile.getValue("WINDOWS", "Main::height").toInt();
+	}
+	if (inifile.hasEntry("WINDOWS", "Main::width"))
+	{
+		w = inifile.getValue("WINDOWS", "Main::width").toInt();
+	}
+	setGeometry(x_pos, y_pos, w, h);
+	
+	// the default preferences tab (if existent)
+	if (main_control_preferences_ != 0)
+	{
+		main_control_preferences_->fetchPreferences(inifile);
+	}
+}
+
+void MainControl::writePreferences(INIFile &inifile)
+	throw()
+{
+	// the main window position
+	inifile.insertValue("WINDOWS", "Main::x", String(x()));
+	inifile.insertValue("WINDOWS", "Main::y", String(y()));
+	inifile.insertValue("WINDOWS", "Main::width", String(width()));
+	inifile.insertValue("WINDOWS", "Main::height", String(height()));
+
+	QString s;
+	QTextStream stream( &s, IO_ReadWrite);
+	stream.setEncoding(QTextStream::Latin1);
+	stream << *this;
+	String mys(s.data());
+	for (Position p = 0; p < mys.size(); p++)
+	{
+		if (mys[p] == '\n') 
 		{
-			selection_.clear();
-			primitive_manager_.clear();
-			composite_manager_.clear();
+			mys[p] = '*';
 		}
-			
-		void MainControl::show()
-		{
-			#ifdef BALL_VIEW_DEBUG
-        Log.info() << "MainControl::show()  list.size() = " << modular_widgets_.size() << endl;
-			#endif
+	}
+	inifile.insertValue("WINDOWS", "Main::dockwidgets", mys);
 
-			// prevent multiple inserting of menu entries, by calls of showFullScreen(), ...
-			if (preferences_id_ != -1) 
+	// the default preferences tab (if existent)
+	if (main_control_preferences_ != 0)
+	{
+		main_control_preferences_->writePreferences(inifile);
+	}
+	
+	inifile.write();
+}
+
+void MainControl::addModularWidget(ModularWidget* widget)
+	throw()
+{
+	#ifdef BALL_DEBUG_VIEW
+		Log.info() << "MainControl::addModularWidget(" << widget << ")" << endl;
+	#endif
+	modular_widgets_.push_back(widget);
+	widget->registerThis();
+}
+
+void MainControl::removeModularWidget(ModularWidget* widget)
+	throw()
+{
+	#ifdef BALL_DEBUG_VIEW
+		Log.info() << "MainControl::removeModularWidget(" << widget << ")" << endl;
+	#endif
+	modular_widgets_.remove(widget);
+}
+
+
+void MainControl::selectComposites_(GeometricObjectSelectionMessage& message)
+	throw()
+{
+	List<GeometricObject*>& objects = const_cast<List<GeometricObject*>&>(message.getSelection());
+	List<GeometricObject*>::Iterator it_objects = objects.begin();
+
+	Size nr = 0;
+	for (; it_objects != objects.end(); it_objects++)
+	{
+		if ((*it_objects)->getComposite() != 0  &&
+				selection_.has((Composite*)(*it_objects)->getComposite()) != message.isSelected())
+		{	
+			if (message.isSelected())
 			{
-				QMainWindow::show();
-				return;
-			}
-
-			// create own preferences dialog
-			preferences_dialog_ = new Preferences(this, "Molview Preferences", 455, 352);
-
-			if (preferences_dialog_ == 0)
-			{
-				throw Exception::GeneralException(__FILE__, __LINE__, 
-						"memory allocation failed for preferences dialog.", "");
-			}
-
-			// establish connection 
-			connect(preferences_dialog_, SIGNAL(applyButtonPressed()), this, SLOT(applyPreferencesTab()));
-			connect(preferences_dialog_, SIGNAL(cancelButtonPressed()), this, SLOT(cancelPreferencesTab()));
-
-			// initialize own preferences tab
-			initializePreferencesTab(*preferences_dialog_);
-
-			// initialize all modular widgets 
-			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
-			for (; it != modular_widgets_.end(); ++it)
-			{
-
-				registerConnectionObject(**it);
-				(*it)->initializeWidget(*this);
-				(*it)->initializePreferencesTab(*preferences_dialog_);
-			}
-
-			// check own preferences 
-			preferences_dialog_->fetchPreferences(preferences_);
-
-			// fetch own preferences tab
-			fetchPreferences(preferences_);
-
-			// apply on own preferences tab
-			applyPreferences(*preferences_dialog_);
-
-			// check menu entries, fetch and apply preferences
-			for (it = modular_widgets_.begin(); it != modular_widgets_.end(); ++it)
-			{
-				(*it)->checkMenu(*this);
-				(*it)->fetchPreferences(preferences_);
-				(*it)->applyPreferences(*preferences_dialog_);
-			}
-
-			// own menu entries
-			insertPopupMenuSeparator(MainControl::FILE);
-			insertMenuEntry(MainControl::FILE, "&Quit", qApp, SLOT(quit()), CTRL+Key_Q);	
-			
-			// if the preferences dialog has any tabs then show it
-			if (preferences_dialog_->hasTabs())
-			{
-				initPopupMenu(MainControl::DISPLAY)->setCheckable(true);
-				
-				preferences_id_ = insertMenuEntry(MainControl::DISPLAY, 
-																					"Preferences", 
-																					preferences_dialog_, 
-																					SLOT(openDialog()), CTRL+Key_Z);
-			}
-
-			QMainWindow::show();
-		}
-
-		void MainControl::checkMenus()
-		{
-			// preferences dialog not empty
-			if (preferences_dialog_->hasTabs())
-			{
-				menuBar()->setItemChecked(preferences_id_, preferences_dialog_->isVisible());			
-			}
-
-			// checks all modular widgets 
-			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
-			for (it = modular_widgets_.begin(); it != modular_widgets_.end(); ++it)
-			{
-				(*it)->checkMenu(*this);
-			}
-		}
-
-		void MainControl::applyPreferencesTab()
-		{
-			// apply on own preferences tab
-			applyPreferences(*preferences_dialog_);
-
-			// checks all modular widgets 
-			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
-			for (it = modular_widgets_.begin(); it != modular_widgets_.end(); ++it)
-			{
-				(*it)->applyPreferences(*preferences_dialog_);
-			}
-		}
-
-		
-		void MainControl::cancelPreferencesTab()
-			throw()
-		{
-			// checks all modular widgets 
-			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
-			for (it = modular_widgets_.begin(); it != modular_widgets_.end(); ++it)
-			{
-				(*it)->cancelPreferences(*preferences_dialog_);
-			}
-		}
-
-		
-		void MainControl::aboutToExit()
-		{
-			preferences_.clear();
-			preferences_.appendSection("WINDOWS");
-
-			// finalizes all modular widgets
-			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
-			for (it = modular_widgets_.begin(); it != modular_widgets_.end(); ++it)
-			{
-				(*it)->writePreferences(preferences_);
-				(*it)->finalizePreferencesTab(*preferences_dialog_);
-				(*it)->finalizeWidget(*this);
-			}
-
-			modular_widgets_.clear();
-
-			//
-			// write the preferences
-			//
-			preferences_dialog_->writePreferences(preferences_);
-
-			// write default preferences 
-			writePreferences(preferences_);
-
-			// finalize own preferences tab
-			finalizePreferencesTab(*preferences_dialog_);
-
-			delete preferences_dialog_;
-			preferences_dialog_ = 0;
-		}
-
-		bool MainControl::remove_(Composite& composite)
-			throw()
-		{
-			if (!composite_manager_.has(composite)) return false;
-			
-			composite_manager_.remove(composite);
-
-			// delete all representations containing the composite
-			List<Representation*> removed_representations;
-			removed_representations = primitive_manager_.removedComposite(composite);
-			RepresentationMessage* rr_message = 0;
-			List<Representation*>::Iterator reps_it = removed_representations.begin();
-			// notify GeometricControl of removed representations
-			for (; reps_it != removed_representations.end(); reps_it++)
-			{
-				rr_message = new RepresentationMessage;
-				rr_message->setType(RepresentationMessage::REMOVE);
-				rr_message->setRepresentation(*reps_it);
-				rr_message->setDeletable(true);
-				notify_(rr_message);
-			}
-
-			if (removed_representations.size() > 0) updateAll();
-
-			return true;
-		}
-
-		bool MainControl::update(const Composite& composite)
-			throw()
-		{
-			if (!composite_manager_.has(composite)) return false;
-			
-			// delete all representations containing the composite
-			List<Representation*> changed_representations;
-			changed_representations = primitive_manager_.changedComposite(composite);
-			RepresentationMessage* ur_message = 0;
-			List<Representation*>::Iterator reps_it = changed_representations.begin();
-			// notify GeometricControl of changed representations
-			for (; reps_it != changed_representations.end(); reps_it++)
-			{
-				ur_message = new RepresentationMessage;
-				ur_message->setRepresentation(*reps_it);
-				ur_message->setType(RepresentationMessage::UPDATE);
-				ur_message->setDeletable(true);
-				notify_(ur_message);
-			}
-
-			SceneMessage *scene_message = new SceneMessage;
-			scene_message->setType(SceneMessage::REDRAW);
-			scene_message->setDeletable(true);
-			notify_(scene_message);
-
-			return true;
-		}
-
-
-		void MainControl::updateAll(bool rebuild_display_lists)
-			throw()
-		{
-			// update scene
-			SceneMessage *scene_message = new SceneMessage;
-			if (rebuild_display_lists)
-			{
-				scene_message->setType(SceneMessage::REBUILD_DISPLAY_LISTS);
+				selectCompositeRecursive((Composite*)(*it_objects)->getComposite(), true);
 			}
 			else
 			{
-				scene_message->setType(SceneMessage::REDRAW);
+				deselectCompositeRecursive((Composite*)(*it_objects)->getComposite(), true);
 			}
+			nr++;
+		}				
+	}
 
-			scene_message->setDeletable(true);
-			notify_(scene_message); 
+	printSelectionInfos();
+
+	#ifdef BALL_DEBUG_VIEW
+		Log.info() << "Selected " + String(nr) + " items."<< std::endl;
+	#endif
+
+	NewSelectionMessage* new_message = new NewSelectionMessage;
+	new_message->setDeletable(true);
+	notify_(new_message);
+}
+
+
+void MainControl::printSelectionInfos()
+	throw()
+{
+	if (selection_.size() > 4)
+	{
+		setStatusbarText(String(selection_.size()) + " objects selected.");
+		return;
+	}
+
+	vector<PreciseTime> times;
+	Atom* atoms[4];
+	Size nr_of_atoms = 0;
+	HashSet<Composite*>::Iterator it = selection_.begin();
+	while (it != selection_.end() && 
+				 RTTI::isKindOf<Atom>(**it) && 
+				 nr_of_atoms < 5)
+	{
+		atoms[nr_of_atoms] = (Atom*) *it;
+		times.push_back(((Atom*) *it)->getSelectionTime());
+		nr_of_atoms++;
+		it++;
+	}
+
+	sort(times.begin(), times.end());
+	vector<Atom*> ordered_atoms;
+
+	for (Position o = 0; o < nr_of_atoms; o++)
+	{
+		for (Position p = 0; p < nr_of_atoms; p++)
+		{
+			if (atoms[p]->getSelectionTime() == times[o])
+			{
+				ordered_atoms.push_back(atoms[p]);
+				break;
+			}
 		}
+	}
+	
+	switch(nr_of_atoms)
+	{
+		case 1:
+		{
+			// if one atom was picked, show its properties
+			Atom& atom = *atoms[0];
+			setStatusbarText("Properties of atom " + atom.getFullName() + "  Type: " + 
+											 String(atom.getType()) + "  Typename: " + 
+											 String(atom.getTypeName()) + ":  Position: (" + 
+											 String(atom.getPosition().x) + "|" +
+											 String(atom.getPosition().y) + "|" +
+											 String(atom.getPosition().z) + ")" + "  Charge: " + 
+											 String(atom.getCharge()));
+			break;
+		}
+		case 2:
+		{
+			// if two atoms were picked, show their distance
+			setStatusbarText("Distance between atom " + 
+												atoms[0]->getFullName() + " and " + 
+												atoms[1]->getFullName() + ": " + 
+												String(GetDistance(atoms[0]->getPosition(), atoms[1]->getPosition())));
+			break;
+		}
+		case 3:
+		{
+			Vector3 vector1(ordered_atoms[1]->getPosition() - ordered_atoms[2]->getPosition());
+			Vector3 vector2(ordered_atoms[1]->getPosition() - ordered_atoms[0]->getPosition());
+			Angle result;
+			GetAngle(vector1, vector2, result);
+			setStatusbarText("Angle between atoms " + 
+												atoms[0]->getFullName() + ", " + 
+												atoms[1]->getFullName() + ", " +
+												atoms[2]->getFullName() + ": " +
+												String(result.toDegree())); 
+			break;
+		}
+		case 4:
+		{
+			// if tree atoms were picked, show their torsion angle
+			Angle result = getTorsionAngle(
+					ordered_atoms[0]->getPosition().x, ordered_atoms[0]->getPosition().y, ordered_atoms[0]->getPosition().z,
+					ordered_atoms[1]->getPosition().x, ordered_atoms[1]->getPosition().y, ordered_atoms[1]->getPosition().z,
+					ordered_atoms[2]->getPosition().x, ordered_atoms[2]->getPosition().y, ordered_atoms[2]->getPosition().z,
+					ordered_atoms[3]->getPosition().x, ordered_atoms[3]->getPosition().y, ordered_atoms[3]->getPosition().z);
+
+			setStatusbarText("Torsion angle between atoms " + 
+												ordered_atoms[0]->getFullName() + ", " + 
+												ordered_atoms[1]->getFullName() + ", " +
+												ordered_atoms[2]->getFullName() + ", " +
+												ordered_atoms[3]->getFullName() + ": " +
+												String(result.toDegree()));
+			break;
+		}
+	}
+}
 
 
-		void MainControl::onNotify(Message *message)
-			throw()
-    {
-			if (RTTI::isKindOf<NewCompositeMessage>(*message))
+const HashSet<Composite*>& MainControl::getSelection() const
+	throw()
+{
+	return selection_;
+}
+
+
+System* MainControl::getSelectedSystem()
+	throw()
+{
+	if (control_selection_.size() != 1 || 
+			!RTTI::isKindOf<System>(**control_selection_.begin()))
+	{
+		return 0;
+	}
+	
+	return (System*) *control_selection_.begin();
+}
+
+
+void MainControl::selectCompositeRecursive(Composite* composite, bool first_call)
+	throw()
+{
+	if (selection_.has(composite))
+	{
+		return;
+	}
+
+	composite->select();
+	selection_.insert(composite);
+
+	if (RTTI::isKindOf<Atom> (*composite))
+	{
+		Atom *atom = (Atom*) composite;
+		AtomBondIterator bi;		
+		BALL_FOREACH_ATOM_BOND(*atom, bi)
+		{
+			if (selection_.has(bi->getPartner(*atom)))
 			{
-				NewCompositeMessage* new_message = RTTI::castTo<NewCompositeMessage>(*message);
-				composite_manager_.insert(*new_message->getComposite());
- 			}
-			else if (RTTI::isKindOf<RemovedCompositeMessage>(*message))
+				bi->select();			
+			}				
+		}				
+	}		
+	else if (RTTI::isKindOf<AtomContainer> (*composite))
+	{
+		for (Size i=0; i< composite->getDegree();i++)
+		{
+			selectCompositeRecursive(composite->getChild(i), false);
+		}
+	}		
+
+	if (first_call)
+	{
+		Composite* parent = composite->getParent();
+		while (parent != 0 && !selection_.has(parent))
+		{
+			for (Size i=0; i < parent->getDegree();i++)
 			{
-				RemovedCompositeMessage *composite_message = RTTI::castTo<RemovedCompositeMessage>(*message);
-				remove_(*composite_message->getComposite());
-			}
-			else if (RTTI::isKindOf<ChangedCompositeMessage>(*message))
-			{
-				ChangedCompositeMessage *composite_message = RTTI::castTo<ChangedCompositeMessage>(*message);
-				update(composite_message->getComposite()->getRoot());
-			}
-			else if (RTTI::isKindOf<ControlSelectionMessage> (*message))
-			{
-				ControlSelectionMessage* selection_message = RTTI::castTo<ControlSelectionMessage>(*message);
-				control_selection_ = selection_message->getSelection();
-			}
-			else if (RTTI::isKindOf<GeometricObjectSelectionMessage>(*message))
-			{
-				GeometricObjectSelectionMessage* selection_message = 
-					RTTI::castTo<GeometricObjectSelectionMessage>(*message);
-				selectComposites_(*selection_message);
-			}
-			else if(RTTI::isKindOf<CompositeSelectedMessage>(*message))
-			{
-				// Selection came from selecting checkbox in Control or "select" menu in displayProperties
-				CompositeSelectedMessage * selection_message = RTTI::castTo<CompositeSelectedMessage>(*message);
-				if (selection_message->isSelected() == selection_.has(selection_message->getComposite())) return;
-				if (selection_message->isSelected())
+				if (!selection_.has(parent->getChild(i)))
 				{
-					selectCompositeRecursive(selection_message->getComposite(), true);
-				}
-				else
-				{
-					deselectCompositeRecursive(selection_message->getComposite(), true);
-				}
-				NewSelectionMessage* nws_message = new NewSelectionMessage;					
-				notify_(nws_message);
-
-				// sending of scene message and geometric object selector is done in 
-				// MolecularProperties
-			}
-    }
-
-
-		bool MainControl::isValid() const
-			throw()
-		{
-			return true;
-		}
-
-		void MainControl::dump(ostream& s, Size depth) const
-			throw()
-		{
-			BALL_DUMP_STREAM_PREFIX(s);
-
-			BALL_DUMP_DEPTH(s, depth);
-			BALL_DUMP_HEADER(s, this, this);
-
-			BALL_DUMP_STREAM_SUFFIX(s);     
-		}
-
-		// VIEW automatic module registration
-		MainControl* MainControl::getMainControl(const QObject* object)
-			throw()
-		{
-			QObject* parent = object->parent();
-			while ((parent != 0) && (parent->parent() != 0))
-			{
-				parent = parent->parent();
-			}
-
-			MainControl* mc = 0;
-			if (parent != 0)
-			{
-				// check whether the top-level widget
-				// is a MainControl
-				mc = dynamic_cast<MainControl*>(parent);
-			}
-			else 
-			{
-				// try whether the widget itself is the main control
-				mc = dynamic_cast<MainControl*>(const_cast<QObject*>(object));
-			}
-
-			#ifdef BALL_DEBUG_VIEW
-				Log.info() << "Top level widget : mc = " << mc << endl;
-			#endif
-
-			return mc;
-		}
-		
-		int MainControl::current_id_ = 15000;
-
-    int MainControl::insertMenuEntry(int ID, const String& name, const QObject* receiver, const char* slot, 
-																		 int accel, int entry_ID)
-			throw()
-		{
-			QMenuBar* menu_bar = menuBar();
-			if (menu_bar == 0) return -1;
-			
-			// enable the corresponding popup menu
-			menu_bar->setItemEnabled(ID, true);
-			QPopupMenu* popup = initPopupMenu(ID);
-			if (popup == 0)
-			{
-				Log.error() << "MainControl::insertMenuEntry: cannot find popup menu for ID " << ID << endl;
-				return -1;
-			}
-				
-			// insert the menu entry
-			if (entry_ID == -1)
-			{
-				entry_ID = getNextID_();
-			}
-
-			popup->insertItem(name.c_str(), receiver, slot, accel, entry_ID);
-			return entry_ID;
-
-			return -1;
-		}
-		
-
-		void MainControl::removeMenuEntry
-			(int /* ID */, const String& /* name */, 
-			 const QObject* /* receiver */, const char* /* slot */, 
-			 int /* accel */, int /* entry_ID */)
-			throw()
-		{
-			// ?????
-		}
-
-
-		void MainControl::insertPopupMenuSeparator(int ID)
-			throw()
-		{
-			QMenuBar* menu_bar = menuBar();
-			if (menu_bar != 0)
-			{
-				// enable the corresponding popup menu
-				menu_bar->setItemEnabled(ID, true);
-				//
-				QPopupMenu* popup = initPopupMenu(ID);
-				if (popup == 0)
-				{
-					Log.error() << "MainControl::insertMenuEntry: cannot find popup menu for ID " << ID << endl;
-				}
-				else
-				{
-					popup->insertSeparator();
-				}
-			}
-		}
-
-
-		void MainControl::initializePreferencesTab(Preferences &preferences)
-			throw()
-		{
-			main_control_preferences_ = new MainControlPreferences();
-			CHECK_PTR(main_control_preferences_);
-
-			preferences.insertTab(main_control_preferences_, "General");
- 		}
-
-		void MainControl::finalizePreferencesTab(Preferences &preferences)
-			throw()
-		{
-			if (main_control_preferences_ != 0)
-			{
-				preferences.removeTab(main_control_preferences_);
-		
-				delete main_control_preferences_;
-				main_control_preferences_ = 0;
-			}
-		}
-
-		void MainControl::applyPreferences(Preferences & /* preferences */)
-			throw()
-		{
-			if (main_control_preferences_ != 0)
-			{
-				QApplication::setStyle(main_control_preferences_->getStyle());
-				QWidget::update();
-			}
-		}
-
-		void MainControl::fetchPreferences(INIFile &inifile)
-			throw()
-		{
-			// 
-			// the geometry of the main window
-			//
-			int x_pos = x();
-			int y_pos = y();
-			int w = 640;
-			int h = 480;
-			if (inifile.hasEntry("WINDOWS", "Main::x"))
-			{
-				x_pos = inifile.getValue("WINDOWS", "Main::x").toInt();
-			}
-			if (inifile.hasEntry("WINDOWS", "Main::y"))
-			{
-				y_pos = inifile.getValue("WINDOWS", "Main::y").toInt();
-			}
-			if (inifile.hasEntry("WINDOWS", "Main::height"))
-			{
-				h = inifile.getValue("WINDOWS", "Main::height").toInt();
-			}
-			if (inifile.hasEntry("WINDOWS", "Main::width"))
-			{
-				w = inifile.getValue("WINDOWS", "Main::width").toInt();
-			}
-			setGeometry(x_pos, y_pos, w, h);
-			
-			// the default preferences tab (if existent)
-			if (main_control_preferences_ != 0)
-			{
-				main_control_preferences_->fetchPreferences(inifile);
-			}
-		}
-
-		void MainControl::writePreferences(INIFile &inifile)
-			throw()
-		{
-			// the main window position
-			inifile.insertValue("WINDOWS", "Main::x", String(x()));
-			inifile.insertValue("WINDOWS", "Main::y", String(y()));
-			inifile.insertValue("WINDOWS", "Main::width", String(width()));
-			inifile.insertValue("WINDOWS", "Main::height", String(height()));
-
-			// the default preferences tab (if existent)
-			if (main_control_preferences_ != 0)
-			{
-				main_control_preferences_->writePreferences(inifile);
-			}
-			
-			inifile.write();
-		}
-
-		void MainControl::addModularWidget(ModularWidget* widget)
-			throw()
-		{
-			#ifdef BALL_DEBUG_VIEW
-				Log.info() << "MainControl::addModularWidget(" << widget << ")" << endl;
-			#endif
-			modular_widgets_.push_back(widget);
-			widget->registerThis();
-		}
-
-		void MainControl::removeModularWidget(ModularWidget* widget)
-			throw()
-		{
-			#ifdef BALL_DEBUG_VIEW
-				Log.info() << "MainControl::removeModularWidget(" << widget << ")" << endl;
-			#endif
-			modular_widgets_.remove(widget);
-		}
-
-
-		void MainControl::selectComposites_(GeometricObjectSelectionMessage& message)
-			throw()
-		{
-			List<GeometricObject*>& objects = const_cast<List<GeometricObject*>&>(message.getSelection());
-			List<GeometricObject*>::Iterator it_objects = objects.begin();
-
-			Size nr = 0;
-			for (; it_objects != objects.end(); it_objects++)
-			{
-				if ((*it_objects)->getComposite() != 0  &&
-						selection_.has((Composite*)(*it_objects)->getComposite()) != message.isSelected())
-				{	
-					if (message.isSelected())
-					{
-						selectCompositeRecursive((Composite*)(*it_objects)->getComposite(), true);
-					}
-					else
-					{
-						deselectCompositeRecursive((Composite*)(*it_objects)->getComposite(), true);
-					}
-					nr++;
-				}				
-			}
-		
-			printSelectionInfos();
-
-			#ifdef BALL_DEBUG_VIEW
-				Log.info() << "Selected " + String(nr) + " items."<< std::endl;
-			#endif
-
-			NewSelectionMessage* new_message = new NewSelectionMessage;
-			new_message->setDeletable(true);
-			notify_(new_message);
-		}
-
-		
-		void MainControl::printSelectionInfos()
-			throw()
-		{
-			if (selection_.size() > 4)
-			{
-				setStatusbarText(String(selection_.size()) + " objects selected.");
-				return;
-			}
-
-			vector<PreciseTime> times;
-			Atom* atoms[4];
-			Size nr_of_atoms = 0;
-			HashSet<Composite*>::Iterator it = selection_.begin();
-			while (it != selection_.end() && 
-						 RTTI::isKindOf<Atom>(**it) && 
-						 nr_of_atoms < 5)
-			{
-				atoms[nr_of_atoms] = (Atom*) *it;
-				times.push_back(((Atom*) *it)->getSelectionTime());
-				nr_of_atoms++;
-				it++;
-			}
-
-			sort(times.begin(), times.end());
-			vector<Atom*> ordered_atoms;
-
-			for (Position o = 0; o < nr_of_atoms; o++)
-			{
-				for (Position p = 0; p < nr_of_atoms; p++)
-				{
-					if (atoms[p]->getSelectionTime() == times[o])
-					{
-						ordered_atoms.push_back(atoms[p]);
-					 	break;
-					}
+					return;
 				}
 			}
 			
-			switch(nr_of_atoms)
-			{
-				case 1:
-				{
-					// if one atom was picked, show its properties
-					Atom& atom = *atoms[0];
-					setStatusbarText("Properties of atom " + atom.getFullName() + "  Type: " + 
-													 String(atom.getType()) + "  Typename: " + 
-													 String(atom.getTypeName()) + ":  Position: (" + 
-													 String(atom.getPosition().x) + "|" +
-													 String(atom.getPosition().y) + "|" +
-													 String(atom.getPosition().z) + ")" + "  Charge: " + 
-													 String(atom.getCharge()));
-					break;
-				}
-				case 2:
-				{
-					// if two atoms were picked, show their distance
-					setStatusbarText("Distance between atom " + 
-														atoms[0]->getFullName() + " and " + 
-														atoms[1]->getFullName() + ": " + 
-														String(GetDistance(atoms[0]->getPosition(), atoms[1]->getPosition())));
-					break;
-				}
-				case 3:
-				{
-					Vector3 vector1(ordered_atoms[1]->getPosition() - ordered_atoms[2]->getPosition());
-					Vector3 vector2(ordered_atoms[1]->getPosition() - ordered_atoms[0]->getPosition());
-					Angle result;
-					GetAngle(vector1, vector2, result);
-					setStatusbarText("Angle between atoms " + 
-														atoms[0]->getFullName() + ", " + 
-														atoms[1]->getFullName() + ", " +
-														atoms[2]->getFullName() + ": " +
-														String(result.toDegree())); 
-					break;
-				}
-				case 4:
-				{
-					// if tree atoms were picked, show their torsion angle
-					Angle result = getTorsionAngle(
-							ordered_atoms[0]->getPosition().x, ordered_atoms[0]->getPosition().y, ordered_atoms[0]->getPosition().z,
-							ordered_atoms[1]->getPosition().x, ordered_atoms[1]->getPosition().y, ordered_atoms[1]->getPosition().z,
-							ordered_atoms[2]->getPosition().x, ordered_atoms[2]->getPosition().y, ordered_atoms[2]->getPosition().z,
-							ordered_atoms[3]->getPosition().x, ordered_atoms[3]->getPosition().y, ordered_atoms[3]->getPosition().z);
-
-					setStatusbarText("Torsion angle between atoms " + 
-														ordered_atoms[0]->getFullName() + ", " + 
-														ordered_atoms[1]->getFullName() + ", " +
-														ordered_atoms[2]->getFullName() + ", " +
-														ordered_atoms[3]->getFullName() + ": " +
-														String(result.toDegree()));
-					break;
-				}
-			}
+			selection_.insert(parent);
+			parent->select();
+			parent = parent->getParent();
 		}
- 
+	}
+}
 
-		const HashSet<Composite*>& MainControl::getSelection() const
-			throw()
+
+void MainControl::deselectCompositeRecursive(Composite* composite, bool first_call)
+	throw()
+{
+	if (!selection_.has(composite))
+	{
+		return;
+	}
+
+	composite->deselect();
+	selection_.erase(composite);
+
+	if (RTTI::isKindOf<Atom> (*composite))
+	{
+		Atom *atom = (Atom*) composite;
+		AtomBondIterator bi;		
+		BALL_FOREACH_ATOM_BOND(*atom, bi)
 		{
-			return selection_;
-		}
-  
-		
-		System* MainControl::getSelectedSystem()
-			throw()
+			bi->deselect();			
+		}				
+	}		
+	else if (RTTI::isKindOf<AtomContainer> (*composite))
+	{
+		for (Size i=0; i< composite->getDegree();i++)
 		{
-			if (control_selection_.size() != 1 || 
-					!RTTI::isKindOf<System>(**control_selection_.begin()))
-			{
-				return 0;
-			}
-			
-			return (System*) *control_selection_.begin();
+			deselectCompositeRecursive(composite->getChild(i), false);
 		}
+	}		
 
-
-		void MainControl::selectCompositeRecursive(Composite* composite, bool first_call)
-			throw()
+	if (first_call)
+	{
+		Composite* parent = composite->getParent();
+		while (parent != 0)
 		{
-			if (selection_.has(composite))
-			{
-				return;
-			}
-
-			composite->select();
-			selection_.insert(composite);
-
-			if (RTTI::isKindOf<Atom> (*composite))
-			{
-				Atom *atom = (Atom*) composite;
-				AtomBondIterator bi;		
-				BALL_FOREACH_ATOM_BOND(*atom, bi)
-				{
-					if (selection_.has(bi->getPartner(*atom)))
-					{
-						bi->select();			
-					}				
-				}				
-			}		
-			else if (RTTI::isKindOf<AtomContainer> (*composite))
-			{
-				for (Size i=0; i< composite->getDegree();i++)
-				{
-					selectCompositeRecursive(composite->getChild(i), false);
-				}
-			}		
-
-			if (first_call)
-			{
-				Composite* parent = composite->getParent();
-				while (parent != 0 && !selection_.has(parent))
-				{
-					for (Size i=0; i < parent->getDegree();i++)
-					{
-						if (!selection_.has(parent->getChild(i)))
-						{
-							return;
-						}
-					}
-					
-					selection_.insert(parent);
-					parent->select();
-					parent = parent->getParent();
-				}
-			}
+			selection_.erase(parent);
+			parent = parent->getParent();
 		}
+	}
+}
 
 
-		void MainControl::deselectCompositeRecursive(Composite* composite, bool first_call)
-			throw()
-		{
-			if (!selection_.has(composite))
-			{
-				return;
-			}
+void MainControl::setStatusbarText(const String& text)
+	throw()
+{
+	message_label_->setText(text.c_str());
+	QWidget::update();
+}
 
-			composite->deselect();
-			selection_.erase(composite);
+void MainControl::restoreWindows()
+	throw()
+{
+	if (!getINIFile().hasEntry("WINDOWS", "Main::dockwidgets")) return;
 
-			if (RTTI::isKindOf<Atom> (*composite))
-			{
-				Atom *atom = (Atom*) composite;
-				AtomBondIterator bi;		
-				BALL_FOREACH_ATOM_BOND(*atom, bi)
-				{
-					bi->deselect();			
-				}				
-			}		
-			else if (RTTI::isKindOf<AtomContainer> (*composite))
-			{
-				for (Size i=0; i< composite->getDegree();i++)
-				{
-					deselectCompositeRecursive(composite->getChild(i), false);
-				}
-			}		
+	String mys(getINIFile().getValue("WINDOWS", "Main::dockwidgets"));
+	for (Position p = 0; p < mys.size(); p++)
+	{
+		if (mys[p] == '*') mys[p] = '\n';
+	}
+	QString s = mys.c_str();
+	QTextStream stream( &s, IO_ReadWrite);
+	stream >> *this;
+}
 
-			if (first_call)
-			{
-				Composite* parent = composite->getParent();
-				while (parent != 0)
-				{
-					selection_.erase(parent);
-					parent = parent->getParent();
-				}
-			}
-		}
-
-
-		void MainControl::setStatusbarText(const String& text)
-			throw()
-		{
-			message_label_->setText(text.c_str());
-			QWidget::update();
-		}
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/KERNEL/mainControl.iC>
 #	endif
 
-	} // namespace VIEW
-} // namespace BALL
+} } // namespaces
