@@ -1,4 +1,4 @@
-// $Id: pdb2amber_naming.C,v 1.2 2003/01/29 10:21:48 anker Exp $
+// $Id: pdb2amber_naming.C,v 1.3 2004/05/10 11:52:10 amoll Exp $
 //
 // A little helper program that takes standard PDB files and converts them
 // to PDB files which use the AMBER naming scheme.
@@ -27,7 +27,7 @@ int main(int argc, char** argv)
 	f >> system;
 	f.close();
 
-	FragmentDB db;
+	FragmentDB db("");
 
 	// ResidueChecker check(db);
 	// system.apply(check);

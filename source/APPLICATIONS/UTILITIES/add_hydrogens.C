@@ -1,4 +1,4 @@
-// $Id: add_hydrogens.C,v 1.5 2003/12/11 14:03:22 anker Exp $
+// $Id: add_hydrogens.C,v 1.6 2004/05/10 11:52:10 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -39,7 +39,7 @@ int main(int argc, char** argv)
 	cout << "done." << endl;
 
 	cout << "Initializing FragmentDB..." << endl;
-	FragmentDB db;
+	FragmentDB db("");
 	cout << "done." << endl;
 	cout << "Adding hydrogens..." << endl;
 	system.apply(db.add_hydrogens);
