@@ -239,10 +239,12 @@ void Mainframe::checkMenuEntries()
 void Mainframe::exportPOVRay()
 {
 	FileDialog pov("Export POVRay File", QFileDialog::AnyFile, this);
-	pov.exec();
-	
-	POVRenderer pr(pov.getFileName());
-	scene_->exportScene(pr);
+	if (pov.exec())
+	{
+		POVRenderer pr(pov.getFileName());
+		scene_->exportScene(pr);
+	}
+	removeModularWidget(&pov);	
 }
 	
 
