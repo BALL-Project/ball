@@ -1,4 +1,4 @@
-// $Id: assignment.C,v 1.3 2000/05/25 11:02:40 oliver Exp $
+// $Id: assignment.C,v 1.4 2000/05/30 13:07:30 oliver Exp $
 
 #include "global.h"
 #include "assignment.h"
@@ -25,6 +25,17 @@ void assignCharges(System& system)
 		{
 			system.apply(charges);
 		}
+	}
+
+	if (verbose)
+	{
+		AtomIterator atom_it = system.beginAtom();
+		float charge = 0.0;
+		for (; +atom_it; ++atom_it)
+		{
+			charge += atom_it->getCharge();
+		}
+		Log.info() << "assigned a total charge of " << charge << " e0" << endl;
 	}
 }
 
