@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ConjugateGradientMinimizer_test.C,v 1.15 2003/04/12 10:09:19 oliver Exp $
+// $Id: ConjugateGradientMinimizer_test.C,v 1.16 2003/04/24 20:49:55 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -16,7 +16,7 @@
 #include <BALL/STRUCTURE/residueChecker.h>
 ///////////////////////////
 
-START_TEST(ConjugateGradienMinimizer, "$Id: ConjugateGradientMinimizer_test.C,v 1.15 2003/04/12 10:09:19 oliver Exp $")
+START_TEST(ConjugateGradienMinimizer, "$Id: ConjugateGradientMinimizer_test.C,v 1.16 2003/04/24 20:49:55 oliver Exp $")
 
 using namespace BALL;
 
@@ -212,76 +212,6 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool))
 	TEST_REAL_EQUAL(a1->getPosition().getDistance(a2->getPosition()), 3.81244)
 RESULT
 
-CHECK(ConjugateGradientMinimizer::minimize(Size, bool, SHANNO) ethan)
-	System S;
-	HINFile f("data/ethan.hin");
-	f >> S;
-	FF.options[AmberFF::Option::ASSIGN_CHARGES] = "false";
-	FF.setup(S);
-
-	TEST_EQUAL(FF.isValid(), true)
-	FF.updateEnergy();
-	FF.updateForces();
-	PRECISION(1E-4)
-	TEST_REAL_EQUAL(FF.getEnergy(), 18.5605)
-
-	ConjugateGradientMinimizer cgm(FF);
-
-	cgm.setEnergyOutputFrequency(5);
-	cgm.setMaxGradient(0.418);
-	cgm.setEnergyDifferenceBound(0.00000001);
-	cgm.setUpdateMethod(ConjugateGradientMinimizer::SHANNO);
-	ConjugateGradientMinimizer::UpdateMethod um;
-	um = cgm.getUpdateMethod();
-	TEST_EQUAL(um, ConjugateGradientMinimizer::SHANNO);
-	
-	TEST_EQUAL(cgm.isValid(), true)
-	FF.updateEnergy();
-	FF.updateForces();
-	bool result = cgm.minimize(55);
-
-	TEST_EQUAL(result, true)
-	float energy = FF.updateEnergy();
-	FF.updateForces();
-	
-	PRECISION(1E-3)
-	TEST_REAL_EQUAL(energy, 5.906)
-
-	AtomIterator atit;
-	Vector3 pos[8];
-	int i=0;
-
-	for (atit = S.beginAtom(); +atit; ++atit)
-	{
-		pos[i] = atit->getPosition();
-		++i;
-	}
-
-	PRECISION(1E-3)
-	Angle torsion;
-	torsion = getTorsionAngle(pos[2].x, pos[2].y, pos[2].z, pos[0].x, pos[0].y, pos[0].z, pos[1].x, pos[1].y, pos[1].z, pos[6].x, pos[6].y, pos[6].z);
-	TEST_REAL_EQUAL(torsion.toRadian(), 1.047)
-	torsion = getTorsionAngle(pos[3].x, pos[3].y, pos[3].z, pos[0].x, pos[0].y, pos[0].z, pos[1].x, pos[1].y, pos[1].z, pos[5].x, pos[5].y, pos[5].z);
-	TEST_REAL_EQUAL(torsion.toRadian(), 1.047)
-	torsion = getTorsionAngle(pos[4].x, pos[4].y, pos[4].z, pos[0].x, pos[0].y, pos[0].z, pos[1].x, pos[1].y, pos[1].z, pos[7].x, pos[7].y, pos[7].z);
-	TEST_REAL_EQUAL(torsion.toRadian(), 1.047)
-	
-	PRECISION(1E-2)
-	Angle tet;
-	tet = (pos[2] - pos[0]).getAngle(pos[3] - pos[0]);
-	TEST_REAL_EQUAL(tet.toRadian(), 1.902)
-	tet = (pos[2] - pos[0]).getAngle(pos[4] - pos[0]);
-	TEST_REAL_EQUAL(tet.toRadian(), 1.902)
-	tet = (pos[4] - pos[0]).getAngle(pos[3] - pos[0]);
-	TEST_REAL_EQUAL(tet.toRadian(), 1.902)
-	tet = (pos[5] - pos[1]).getAngle(pos[6] - pos[1]);
-	TEST_REAL_EQUAL(tet.toRadian(), 1.902)
-	tet = (pos[5] - pos[1]).getAngle(pos[7] - pos[1]);
-	TEST_REAL_EQUAL(tet.toRadian(), 1.902)
-	tet = (pos[7] - pos[1]).getAngle(pos[6] - pos[1]);
-	TEST_REAL_EQUAL(tet.toRadian(), 1.902)
-RESULT
-
 CHECK(ConjugateGradientMinimizer::minimize(Size, bool, FLETCHER_REEVES) AlaAla)
 	System S;
 	HINFile f("data/AA.hin");
@@ -321,6 +251,9 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, FLETCHER_REEVES) AlaAla)
 	FF.updateForces();
 	cgm.setMaxNumberOfIterations(10000);
 	bool result = cgm.minimize(5000);
+
+	STATUS("FR/AlaAla -- " << (result ? "" : "not ") << "converged after " 
+				 << cgm.getNumberOfIterations() << " steps")
 
 	TEST_EQUAL(result, true)
 	float energy = FF.updateEnergy();
@@ -368,9 +301,12 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, POLAK_RIBIERE) AlaAla)
 	TEST_EQUAL(cgm.isValid(), true)
 	FF.updateEnergy();
 	FF.updateForces();
-	bool result = cgm.minimize(500);
+	bool result = cgm.minimize(600);
 
 	TEST_EQUAL(result, true)
+	STATUS("PR/AlaAla -- " << (result ? "" : "not ") << "converged after " 
+				 << cgm.getNumberOfIterations() << " steps")
+
 	float energy = FF.updateEnergy();
 	FF.updateForces();
 	
@@ -417,6 +353,9 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, SHANNO) AlaAla)
 	FF.updateForces();
 	bool result = cgm.minimize(500);
 
+	STATUS("SH/AlaAla -- " << (result ? "" : "not ") << "converged after " 
+				 << cgm.getNumberOfIterations() << " steps")
+
 	TEST_EQUAL(result, true)
 	float energy = FF.updateEnergy();
 	FF.updateForces();
@@ -455,11 +394,14 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, FLETCHER_REEVES))
 	FF.updateForces();
 	bool result = cgm.minimize(500);
 
+	STATUS("FR/C2H6 -- " << (result ? "" : "not ") << "converged after " 
+				 << cgm.getNumberOfIterations() << " steps")
+
 	TEST_EQUAL(result, true)
 	float energy = FF.updateEnergy();
 	FF.updateForces();
 	
-	PRECISION(1E-3)
+	PRECISION(3E-3)
 	TEST_REAL_EQUAL(energy, 5.906)
 
 	AtomIterator atit;
@@ -472,7 +414,7 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, FLETCHER_REEVES))
 		++i;
 	}
 
-	PRECISION(1E-3)
+	PRECISION(2E-2)
 	Angle torsion;
 	torsion = getTorsionAngle(pos[2].x, pos[2].y, pos[2].z, pos[0].x, pos[0].y, pos[0].z, pos[1].x, pos[1].y, pos[1].z, pos[6].x, pos[6].y, pos[6].z);
 	TEST_REAL_EQUAL(torsion.toRadian(), 1.047)
@@ -527,11 +469,14 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, POLAK_RIBIERE))
 	FF.updateForces();
 	bool result = cgm.minimize(100);
 
+	STATUS("PR/C2H6 -- " << (result ? "" : "not ") << "converged after " 
+				 << cgm.getNumberOfIterations() << " steps")
+
 	TEST_EQUAL(result, true)
 	float energy = FF.updateEnergy();
 	FF.updateForces();
 	
-	PRECISION(1E-3)
+	PRECISION(2E-3)
 	TEST_REAL_EQUAL(energy, 5.906)
 
 	AtomIterator atit;
@@ -568,6 +513,81 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, POLAK_RIBIERE))
 	tet = (pos[7] - pos[1]).getAngle(pos[6] - pos[1]);
 	TEST_REAL_EQUAL(tet.toRadian(), 1.902)
 
+RESULT
+
+CHECK(ConjugateGradientMinimizer::minimize(Size, bool, SHANNO) ethan)
+	System S;
+	HINFile f("data/ethan.hin");
+	f >> S;
+	FF.options[AmberFF::Option::ASSIGN_CHARGES] = "false";
+	FF.setup(S);
+
+	TEST_EQUAL(FF.isValid(), true)
+	FF.updateEnergy();
+	FF.updateForces();
+	PRECISION(1E-4)
+	TEST_REAL_EQUAL(FF.getEnergy(), 18.5605)
+
+	ConjugateGradientMinimizer cgm(FF);
+
+	cgm.setEnergyOutputFrequency(5);
+	cgm.setMaxGradient(0.418);
+	cgm.setEnergyDifferenceBound(0.00000001);
+	cgm.setUpdateMethod(ConjugateGradientMinimizer::SHANNO);
+	ConjugateGradientMinimizer::UpdateMethod um;
+	um = cgm.getUpdateMethod();
+	TEST_EQUAL(um, ConjugateGradientMinimizer::SHANNO);
+	
+	TEST_EQUAL(cgm.isValid(), true)
+	FF.updateEnergy();
+	FF.updateForces();
+	bool result = cgm.minimize(55);
+
+	STATUS("SH/C2H6 -- " << (result ? "" : "not ") << "converged after " 
+				 << cgm.getNumberOfIterations() << " steps")
+
+
+
+	TEST_EQUAL(result, true)
+	float energy = FF.updateEnergy();
+	FF.updateForces();
+	
+	PRECISION(2E-3)
+	TEST_REAL_EQUAL(energy, 5.906)
+
+	AtomIterator atit;
+	Vector3 pos[8];
+	int i=0;
+
+	for (atit = S.beginAtom(); +atit; ++atit)
+	{
+		pos[i] = atit->getPosition();
+		++i;
+	}
+
+	PRECISION(1E-3)
+	Angle torsion;
+	torsion = getTorsionAngle(pos[2].x, pos[2].y, pos[2].z, pos[0].x, pos[0].y, pos[0].z, pos[1].x, pos[1].y, pos[1].z, pos[6].x, pos[6].y, pos[6].z);
+	TEST_REAL_EQUAL(torsion.toRadian(), 1.047)
+	torsion = getTorsionAngle(pos[3].x, pos[3].y, pos[3].z, pos[0].x, pos[0].y, pos[0].z, pos[1].x, pos[1].y, pos[1].z, pos[5].x, pos[5].y, pos[5].z);
+	TEST_REAL_EQUAL(torsion.toRadian(), 1.047)
+	torsion = getTorsionAngle(pos[4].x, pos[4].y, pos[4].z, pos[0].x, pos[0].y, pos[0].z, pos[1].x, pos[1].y, pos[1].z, pos[7].x, pos[7].y, pos[7].z);
+	TEST_REAL_EQUAL(torsion.toRadian(), 1.047)
+	
+	PRECISION(1E-2)
+	Angle tet;
+	tet = (pos[2] - pos[0]).getAngle(pos[3] - pos[0]);
+	TEST_REAL_EQUAL(tet.toRadian(), 1.902)
+	tet = (pos[2] - pos[0]).getAngle(pos[4] - pos[0]);
+	TEST_REAL_EQUAL(tet.toRadian(), 1.902)
+	tet = (pos[4] - pos[0]).getAngle(pos[3] - pos[0]);
+	TEST_REAL_EQUAL(tet.toRadian(), 1.902)
+	tet = (pos[5] - pos[1]).getAngle(pos[6] - pos[1]);
+	TEST_REAL_EQUAL(tet.toRadian(), 1.902)
+	tet = (pos[5] - pos[1]).getAngle(pos[7] - pos[1]);
+	TEST_REAL_EQUAL(tet.toRadian(), 1.902)
+	tet = (pos[7] - pos[1]).getAngle(pos[6] - pos[1]);
+	TEST_REAL_EQUAL(tet.toRadian(), 1.902)
 RESULT
 
 /////////////////////////////////////////////////////////////

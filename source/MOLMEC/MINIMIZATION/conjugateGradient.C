@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.C,v 1.29 2003/04/22 21:16:11 oliver Exp $
+// $Id: conjugateGradient.C,v 1.30 2003/04/24 20:49:54 oliver Exp $
 //
 // Minimize the potential energy of a system using a nonlinear conjugate 
 // gradient method with  line search
@@ -227,7 +227,6 @@ namespace BALL
   //               Journal of Computational Chemistry, Vol. 9, No. 6, pp. 650-661 (1988)
 	void ConjugateGradientMinimizer::updateDirection()
 	{
-		Log.info() << "+CG: " << current_grad_.norm << "  IG: " << initial_grad_.norm << "  OG: " << old_grad_.norm << "  DI: " << direction_.norm << std::endl;
 		// if the current or the last gradient are undefined or the 
 		// direction is not yet set, we set it to the negative gradient
 		if ((direction_.size() == 0) || !old_grad_.isValid() || !initial_grad_.isValid())
@@ -302,8 +301,6 @@ namespace BALL
 				direction_.norm = sqrt(direction_.norm);
 				direction_.rms = direction_.rms / (3.0 * (double)number_of_atoms_);
 				direction_.inv_norm = 1.0 / direction_.norm;
-				Log.info() << "-CG: " << current_grad_.norm << "  IG: " << initial_grad_.norm << "  OG: " << old_grad_.norm << "  DI: " << direction_.norm << "  B: " << beta << std::endl;
-
 				break;
 			
 			case POLAK_RIBIERE:
@@ -607,8 +604,6 @@ namespace BALL
 		// iterate: while not converged and not enough iterations
 		while (!converged && (getNumberOfIterations() < max_iterations))	
 		{
-			Log.info() << " CG: " << current_grad_.norm << "  IG: " << initial_grad_.norm << "  OG: " << old_grad_.norm << "  DI: " << direction_.norm << std::endl;
-
 			// Try to take a new step along the direction
 			double lambda = findStep();
 			
@@ -770,7 +765,7 @@ namespace BALL
 			current_grad_.invalidate();
 
 			// ...and try another line search
-			result = line_search.minimize(lambda_, step_ );//* direction_.inv_norm);
+			result = line_search.minimize(lambda_, step_ );
 			#ifdef BALL_DEBUG
 				Log.info() << "LineSearch: lambda = " << lambda_ << " result = " << result << endl;
 			#endif
@@ -779,9 +774,9 @@ namespace BALL
 		if (!result)
 		{
 			#ifdef BALL_DEBUG
-				Log.info() << "resetting step length" << endl;
+				Log.info() << "CG: resetting step length" << endl;
 			#endif
-			// step_ = 0.01;
+			step_ = 0.01;
 			
 			// invalidate the current gradient (LineSearch::minimize())
 			// recalculate it for lambda = 1.0;
@@ -794,7 +789,18 @@ namespace BALL
 			#endif
 		}			
 
-		updateStepSize(result);
+		// Update the step size.
+		if (result)
+		{
+			updateStepSize(lambda_);
+		}
+		else
+		{
+			// Reset step size.
+			// Ensure a minimum step size.
+			step_ = std::max(0.01, step_);
+		}
+
 		#ifdef BALL_DEBUG
 			Log.info() << "CG fS end: step, lambda " << step_ << " " << lambda_ << std::endl;
 		#endif
@@ -809,36 +815,30 @@ namespace BALL
 		}
 	} // end of method 'findStep'
 
-	void ConjugateGradientMinimizer::updateStepSize(bool result)
+	void ConjugateGradientMinimizer::updateStepSize(double /* lambda */)
 	{
 		#ifdef BALL_DEBUG
-			Log.info() << "updateStepSize: result = " << result << " lambda_ = " << lambda_;
+			Log.info() << "updateStepSize: result = " << result << " lambda = " << lambda_;
 		#endif
 
-		if (result)
+		if (lambda_ < 0.1)
 		{
-			if (lambda_ < 0.1)
+			if (lambda_ < 1e-2)
 			{
-				if (lambda_ < 1e-2)
-				{
-					step_ *= 1e-2;
-					lambda_ *= 1e2;
-				}
-				else 
-				{
-					step_ *= 0.5;
-					lambda_ *= 2.0;
-				}
+				step_ *= 1e-2;
+				lambda_ *= 1e2;
 			}
-			else if (lambda_ > 0.9)
+			else 
 			{
-				step_ *= 2.0;
-				lambda_ *= 0.5;
+				step_ *= 0.5;
+				lambda_ *= 2.0;
 			}
 		}
-		
-		// Ensure a minimum step size.
-		step_ = std::max(0.01, step_);
+		else if (lambda_ > 0.9)
+		{
+			step_ *= 2.0;
+			lambda_ *= 0.5;
+		}
 	}
 
 } // end of namespace BALL
