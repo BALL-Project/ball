@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.115 2000/11/02 18:27:02 oliver Exp $
+dnl    $Id: configure.in,v 1.116 2000/11/02 19:47:52 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -1819,18 +1819,41 @@ if test "${BALL_XDRREC_VOID_VOID_UINT}" = false ; then
 	if test "${BALL_XDRREC_VOID_CHAR_INT}" = true ; then
 		AC_MSG_RESULT((void*, char*, int))
 	else
-		AC_MSG_RESULT(not found!)
-		AC_MSG_ERROR(Aborted)
+		AC_TRY_COMPILE(
+				[
+					#include <rpc/types.h>
+					#include <rpc/xdr.h>
+					extern "C" int dummy(char*, char*, int) {}
+					void foo(){ 
+						XDR xdrs;
+						xdrrec_create(&xdrs, 0, 0, 0, dummy, dummy);
+					}
+				],
+				[	
+				],
+				BALL_XDRREC_CHAR_CHAR_INT=true,
+				BALL_XDRREC_CHAR_CHAR_INT=false
+		)
+		if test "${BALL_XDRREC_CHAR_CHAR_INT}" = true ; then
+			AC_MSG_RESULT((char*, char*, int))
+		else
+			AC_MSG_RESULT(not found!)
+			AC_MSG_ERROR(Aborted)
+		fi
 	fi
 else
 	AC_MSG_RESULT((void*, void*, unsigned int))
 fi
 
 dnl
-dnl define an appropriate symbol in config.h
+dnl Define appropriate symbols in config.h.
+dnl The symbols are used in CONCEPT/XDRPersistenceManager.C only.
 dnl
-if test "${BALL_XDRREC_VOID_CHAR_INT}" ; then
+if test "${BALL_XDRREC_VOID_CHAR_INT}" = true ; then
 	AC_DEFINE(BALL_XDRREC_CREATE_VOID_CHAR_INT)
+fi
+if test "${BALL_XDRREC_CHAR_CHAR_INT}" = true ; then
+	AC_DEFINE(BALL_XDRREC_CREATE_CHAR_CHAR_INT)
 fi
 
 dnl

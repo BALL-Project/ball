@@ -100,6 +100,7 @@
 // from platform to platform, so we define a symbol whenever the functions
 // take arguments of type (void*, char*, int)
 #undef BALL_XDRREC_CREATE_VOID_CHAR_INT
+#undef BALL_XDRREC_CREATE_CHAR_CHAR_INT
 
 // on some systems, we do not have regex.h, so we have to use regexp.h
 #undef BALL_USE_REGEXP_H
