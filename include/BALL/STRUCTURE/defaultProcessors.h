@@ -1,4 +1,4 @@
-// $Id: defaultProcessors.h,v 1.1 1999/09/17 11:16:37 oliver Exp $
+// $Id: defaultProcessors.h,v 1.2 1999/09/22 17:46:38 oliver Exp $
 
 #ifndef BALL_STRUCTURE_DEFAULTPROCESSORS_H
 #define BALL_STRUCTURE_DEFAULTPROCESSORS_H
@@ -27,7 +27,8 @@
 #	include <BALL/DATATYPE/stringHashMap.h>
 #endif
 
-namespace BALL {
+namespace BALL 
+{
 
 	/**@name	Standard processors
 	*/
@@ -36,7 +37,7 @@ namespace BALL {
 	/**	Clears the charge on all atoms
 	*/
 	class ClearChargeProcessor
-		:public UnaryProcessor<Atom> 
+		:	public UnaryProcessor<Atom> 
 	{
 		public:
 

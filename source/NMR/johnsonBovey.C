@@ -1,4 +1,4 @@
-// $Id: johnsonBovey.C,v 1.1 1999/08/26 08:02:44 oliver Exp $
+// $Id: johnsonBovey.C,v 1.2 1999/09/22 17:43:01 oliver Exp $
 
 
 #include <BALL/NMR/johnsonBovey.h>
@@ -26,7 +26,8 @@
 #include <list>
 using std::list;
 
-namespace BALL {
+namespace BALL 
+{
 
 	//// diverse leider notwendige Funktionen
 
@@ -45,13 +46,13 @@ namespace BALL {
 	// diverse Funktionen
 
 	Vector3 kreuz(const Vector3 &v1,const Vector3 &v2)
-		{
+	{
 		Vector3* erg=new Vector3;
 		erg->x=v1.y*v2.z-v1.z*v2.y;
 		erg->y=v1.z*v2.x-v1.x*v2.z;
 		erg->z=v1.x*v2.y-v1.y*v2.x;
 		return *erg;
-		}
+	}
 
 	float betrag(const Vector3 &v)	// berechnet Betrag eines Vektors
 					{
@@ -64,7 +65,7 @@ namespace BALL {
 	// die Integral Funktionen
 
 	float JohnsonBoveyShift::rf(float x,float y,float z)
-		{
+	{
 		// Lokale Konstanten Definitionen :
 		
 		const float ERRTOL=0.08;
@@ -85,17 +86,15 @@ namespace BALL {
 		float alamb,ave,delx,dely,delz,e2,e3,sqrtx,sqrty,sqrtz,xt,yt,zt;
 		
 		if(BALL_MIN3(x, y, z)  < 0.0 || BALL_MIN3(x + y, x + z ,y + z) < TINY || BALL_MAX3(x, y, z) > BIG)
-			{
+		{
 			Log.level(LogStream::ERROR) << endl << "Funktion rf : Fehler bei den Argumenten";
 			return 0;
-			}
-			else 	
-				{
+		}	else 	{
 				xt=x;
 				yt=y;
 				zt=z;
 				do
-					{
+				{
 					sqrtx=sqrt(xt);
 					sqrty=sqrt(yt);
 					sqrtz=sqrt(zt);
@@ -107,16 +106,19 @@ namespace BALL {
 					delx=(ave-xt)/ave;
 					dely=(ave-yt)/ave;
 					delz=(ave-zt)/ave;
-					}
+				}
+
 				while (BALL_MAX3(fabs(delx), fabs(dely), fabs(delz)) > ERRTOL);
+
 				e2=delx*dely-delz*delz;
 				e3=delx*dely*delz;
+
 				return (1.0 + (C1*e2-C2-C3*e3)*e2 + C4*e3)/sqrt(ave);
-				}
-		}
+			}
+	}
 		
 	float JohnsonBoveyShift::rd(float x,float y,float z)
-		{
+	{
 		//Lokale Konstanten Definitionen :
 		
 		const float ERRTOL=0.05;
@@ -138,45 +140,46 @@ namespace BALL {
 		float alamb,ave,delx,dely,delz,ea,eb,ec,ed,ee,fac,sqrtx,sqrty,sqrtz,sum,xt,yt,zt;
 		
 		if(BALL_MIN(x, y) < 0.0 || BALL_MIN(x  +  y, z) < TINY || BALL_MAX3(x, y, z) > BIG)
-			{
+		{
 			Log.level(LogStream::ERROR) << endl << "Funktion rd : Fehler bei den Argumenten";
 			return 0;
+		} else {
+			xt=x;
+			yt=y;
+			zt=z;
+			sum=0.0;
+			fac=1.0;
+			do
+			{
+				sqrtx=sqrt(xt);
+				sqrty=sqrt(yt);
+				sqrtz=sqrt(zt);
+				alamb=sqrtx*(sqrty + sqrtz) + sqrty*sqrtz;
+				sum +=fac/(sqrtz*(zt + alamb));
+				fac=0.25*fac;
+				xt=0.25*(xt + alamb);
+				yt=0.25*(yt + alamb);
+				zt=0.25*(zt + alamb);
+				ave=0.2*(xt + yt + 3.0*zt);
+				delx=(ave-xt)/ave;
+				dely=(ave-yt)/ave;
+				delz=(ave-zt)/ave;
 			}
-			else
-				{
-				xt=x;
-				yt=y;
-				zt=z;
-				sum=0.0;
-				fac=1.0;
-				do
-					{
-					sqrtx=sqrt(xt);
-					sqrty=sqrt(yt);
-					sqrtz=sqrt(zt);
-					alamb=sqrtx*(sqrty + sqrtz) + sqrty*sqrtz;
-					sum +=fac/(sqrtz*(zt + alamb));
-					fac=0.25*fac;
-					xt=0.25*(xt + alamb);
-					yt=0.25*(yt + alamb);
-					zt=0.25*(zt + alamb);
-					ave=0.2*(xt + yt + 3.0*zt);
-					delx=(ave-xt)/ave;
-					dely=(ave-yt)/ave;
-					delz=(ave-zt)/ave;
-					}
-				while (BALL_MAX3(fabs(delx), fabs(dely), fabs(delz)) > ERRTOL);
-				ea=delx*dely;
-				eb=delz*delz;
-				ec=ea-eb;
-				ed=ea-6.0*eb;
-				ee=ed + ec + ec;
-				return 3.0*sum + fac*(1.0 + ed*(-C1 + C5*ed-C6*delz*ee) + delz*(C2*ee + delz*(-C3*ec + delz*C4*ea)))/(ave*sqrt(ave));
-				}
+
+			while (BALL_MAX3(fabs(delx), fabs(dely), fabs(delz)) > ERRTOL);
+
+			ea=delx*dely;
+			eb=delz*delz;
+			ec=ea-eb;
+			ed=ea-6.0*eb;
+			ee=ed + ec + ec;
+
+			return 3.0*sum + fac*(1.0 + ed*(-C1 + C5*ed-C6*delz*ee) + delz*(C2*ee + delz*(-C3*ec + delz*C4*ea)))/(ave*sqrt(ave));
 		}
+	}
 		
 	float JohnsonBoveyShift::ellf(float phi,float ak)
-		{
+	{
 		/*
 		Legendre elliptic integral of the 1st kind f(phi,k) , evaluated using Carlson's function rf.
 		The argument ranges are 0 <=phi <=PI/2 , 0 <=k*sin(phi) <=1.
@@ -186,10 +189,10 @@ namespace BALL {
 		
 		s=sin(phi);
 		return s*rf(SQR(cos(phi)),(1.0-s*ak)*(1.0 + s*ak),1.0);
-		}
+	}
 		
 	float JohnsonBoveyShift::elle(float phi,float ak)
-		{
+	{
 		/*
 		Legendre elliptic integral of the 2nd kind E(phi,k). evaluated usin Carlson's functions Rd and Rf.
 		The argument ranges are 0 <=phi <=PI/2, o <=ksin(phi) <=1.
@@ -200,8 +203,9 @@ namespace BALL {
 		s=sin(phi);
 		cc=SQR(cos(phi));
 		q=(1.0-s*ak)*(1.0 + s*ak);
+
 		return s*(rf(cc,q,1.0)-(SQR(s*ak))*rd(cc,q,1.0)/3.0);
-		}
+	}
 		
 					 
 			
@@ -209,7 +213,7 @@ namespace BALL {
 	//Konstruktor
 
 	JohnsonBoveyShift::JohnsonBoveyShift()
-		{
+	{
 		asrings_=new String*[4];
 		
 		asrings_[0]=new String[13];
@@ -258,14 +262,14 @@ namespace BALL {
 		asrings_[3][5]="ND1";
 		asrings_[3][6]="NULL";
 		
-		}
+	}
 
 		
 	//Destruktor
 
 	JohnsonBoveyShift::~JohnsonBoveyShift()
-		{
-		}
+	{
+	}
 
 
 	//StartFunktion
@@ -280,7 +284,7 @@ namespace BALL {
 	//FinishFunktion
 
 	bool JohnsonBoveyShift::finish()
-		{
+	{
 		//Definition der lokalen Variablen:
 		
 		list < Residue*>::iterator			arom_iter;
@@ -298,38 +302,45 @@ namespace BALL {
 		// fuer jedes Proton iteriere ueber alle Ringe und berechne
 		// chemical_shift
 		
-		vector_field_=new Vector3[6];
+		vector_field_ = new Vector3[6];
 		
 		for (proton_iter = proton_list_.begin(); proton_iter != proton_list_.end(); ++proton_iter)  //Protonen Iterator
-			{
+		{
 			shift_=0;
 			for(arom_iter = aromat_list_.begin(); arom_iter != aromat_list_.end(); ++arom_iter)
-				{
+			{
 				if (residue_->getName()=="TRP"){zaehler=0;anzahl=2;n_=n1;radius_=radius1;}
 				if (residue_->getName()=="PHE"){zaehler=1;anzahl=1;n_=n1;radius_=radius1;}
 				if (residue_->getName()=="TYR"){zaehler=2;anzahl=1;n_=n1;radius_=radius1;}
 				if (residue_->getName()=="HIS"){zaehler=3;anzahl=1;n_=n2;radius_=radius2;}
+	
 				vzaehler=0;
 				hilf=0;
 				
 				do
-					{
+				{
 					//Aufbau von vector_field_
 					for(zaehler2=hilf;zaehler2 < hilf + 6;zaehler2++ )
+					{
+						if (asrings_[zaehler][1 + zaehler2]=="NULL") 
 						{
-						if (asrings_[zaehler][1 + zaehler2]=="NULL") break;
+							break;
+						}
 						found=0;
 						for(atom_iter=residue_->beginAtom(); + atom_iter;++ atom_iter)
-							{
+						{
 							if(asrings_[zaehler][1 + zaehler2]==(*atom_iter).getName())
-								{
+							{
 								vector_field_[vzaehler]=(*atom_iter).getPosition();
 								vzaehler++ ;
 								found=1;
-								}	
-							if (found) break;
+							}	
+							if (found)
+							{
+								break;
 							}
 						}
+					}
 					// vector_field_ ist bestimmt und vzaehler zeigt hinter letzten gueltigen vector
 					
 					// bestimme den Mittelpunkt
@@ -337,15 +348,17 @@ namespace BALL {
 					mittelpunkt_.set(0.0,0.0,0.0);
 						
 					for (zaehler2=0;zaehler2 < vzaehler;zaehler2++ )
+					{
 						mittelpunkt_ +=vector_field_[zaehler2];
-					mittelpunkt_/=vzaehler;
+					}
+					mittelpunkt_ /= vzaehler;
 					
 					// bestimme den NormalenVektor der Ringebene
 					
 					normal_.set(0.0,0.0,0.0);
 						
 					for (zaehler2=0;zaehler2 < vzaehler;zaehler2++ )
-						{
+					{
 						index=(zaehler2 + 0)%(vzaehler);
 						links=vector_field_[index];
 						index=(zaehler2 + 1)%(vzaehler);
@@ -353,27 +366,27 @@ namespace BALL {
 						index=(zaehler2 + 2)%(vzaehler);
 						rechts=vector_field_[index];
 						normal_ +=kreuz((mitte-links),(mitte-rechts));  // kreuz bezeichnet das Kreuzprodukt
-						}
+					}
 					
-					normal_/=vzaehler; // Normalenvektor wurde gemittelt
-					normal_/=betrag(normal_); //Normalenvektor ist jetzt NormalenEinheitsvektor
+					normal_ /= vzaehler; // Normalenvektor wurde gemittelt
+					normal_ /= betrag(normal_); //Normalenvektor ist jetzt NormalenEinheitsvektor
 					
 					// bestimme den chemicalshift des Protons durch diesen Ring
-					v=(*proton_iter)->getPosition();
+					v = (*proton_iter)->getPosition();
 					
 					// berechne p und z;
 					
-					z= normal_ * v  -  normal_ * mittelpunkt_;
+					z = normal_ * v  -  normal_ * mittelpunkt_;
 					
-					lambda= normal_*(v-mittelpunkt_)/(normal_*normal_);
+					lambda = normal_*(v-mittelpunkt_)/(normal_*normal_);
 					
-					p= betrag ( (mittelpunkt_   +   lambda * normal_)  -  v);
+					p = betrag((mittelpunkt_   +   lambda * normal_)  -  v);
 					
-					p*=1e-10;
-					z*=1e-10;
+					p *= 1e-10;
+					z *= 1e-10;
 					
-					p/=radius_;
-					z/=radius_;
+					p /= radius_;
+					z /= radius_;
 					
 					// p und z sind berechnet, berechne nun die Integrale
 					//
@@ -382,8 +395,8 @@ namespace BALL {
 					using namespace Constants;
 
 					wert=sqrt(4*p/(SQR(1 + p)  +  SQR(z)));
-					k=ellf(PI / 2,wert);
-					e=elle(PI / 2,wert);
+					k = ellf(PI / 2,wert);
+					e = elle(PI / 2,wert);
 					
 					//
 					//cout  <<  endl  << "p    :" << p;
@@ -400,9 +413,9 @@ namespace BALL {
 										ELEMENTARY_CHARGE * ELEMENTARY_CHARGE)
 									/(4 * PI * 6 * PI * ELECTRON_MASS * radius_));
 					
-					hshift*= (1/sqrt( ((1 + p)*(1 + p)) + (z*z)) );
+					hshift *= (1/sqrt( ((1 + p)*(1 + p)) + (z*z)) );
 					
-					hshift*= (k + ( (1-p*p-z*z)/( (1-p)*(1-p) + z*z ) ) *e );
+					hshift *= (k + ( (1-p*p-z*z)/( (1-p)*(1-p) + z*z ) ) *e );
 					
 					shift_ +=hshift;
 					
@@ -411,24 +424,24 @@ namespace BALL {
 					vzaehler=0;
 					anzahl--;
 					hilf=6; // fuer den naechsten schleifendurchlauf
-					}
-				while(anzahl);
 
-				}
+				} while(anzahl);
+
+			}
 			
 			(*proton_iter)->setProperty("chemical_shift", shift_);
 			Log.level(LogStream::INFORMATION)  << "chemical_shift :" << shift_ << endl;
 			
-			}
+		}
 				
 		return 1;
-		}
+	}
 		
 		
 	//apply Funktion
 
 	Processor::Result JohnsonBoveyShift::operator()(Object&  object)
-		{
+	{
 		// Definition von lokalen Variablen
 		
 		int zaehler;
@@ -439,33 +452,36 @@ namespace BALL {
 		// wenn es ein Hydrogen ist, fuege es in proton_list_ ein
 		
 		if (RTTI<Residue>::isKindOf(object))  // erganze aromat_list_ um aromatische Residues
-			{
+		{
 			residue_ = RTTI<Residue>::castTo(object);
 			for(zaehler=0;zaehler < 4;zaehler++ )
-				{
+			{
 				found =0;
 				if (asrings_[zaehler][0]==residue_->getName())
-					{
+				{
 					aromat_list_.push_back(residue_);
 					cout  << "...eingefuegt.";
 					found=1; // gefunden und schleife hinterher beenden
-					}
-				if (found) break;
-				}		
-			} // Ende is kind of Residue : die Liste wurde um die entsprechenden Residues erweitert
+				}
+				if (found) 
+				{
+					break;
+				}
+			}		
+		} // Ende is kind of Residue : die Liste wurde um die entsprechenden Residues erweitert
 		
 		if (RTTI<PDBAtom>::isKindOf(object))
-			{
+		{
 			cout  << endl << "Object is PDBAtom";
 			patom_ = RTTI<PDBAtom>::castTo(object);
 			cout  << endl << "		atom name :" << patom_->getName();
 			cout  << endl << "		Element :" << (patom_->getElement()).getName();
 			if (patom_->getElement()==PSE[Element::H])
-				{
+			{
 				proton_list_.push_back(patom_);
 				cout  << "...eingefuegt.";
-				}
-			} // Ende is kind of PDBAtom : die Liste wurde um protonen erweitert
+			}
+		} // Ende is kind of PDBAtom : die Liste wurde um protonen erweitert
 		
 		return Processor::CONTINUE;
 	}
