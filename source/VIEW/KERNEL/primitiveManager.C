@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.9 2004/11/09 21:48:10 amoll Exp $
+// $Id: primitiveManager.C,v 1.10 2004/11/09 21:51:43 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -308,7 +308,7 @@ bool PrimitiveManager::willBeUpdated(const Representation& rep) const
 bool PrimitiveManager::updateRunning() const
 	throw()
 {
-	return (thread_.getRepresentation() != 0);
+	return (!thread_.running());
 }
 
 
