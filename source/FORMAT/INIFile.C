@@ -1,4 +1,4 @@
-// $Id: INIFile.C,v 1.27 2001/08/19 09:41:09 amoll Exp $
+// $Id: INIFile.C,v 1.27.4.1 2002/10/29 17:30:27 amoll Exp $
 
 #include <BALL/FORMAT/INIFile.h>
 #include <fstream>
@@ -429,6 +429,19 @@ namespace BALL
 
 		// check the hash map for the key
 		return section_index_[section_name]->key_map_.has(key);
+	}
+
+	bool INIFile::insertValue(const String& section_name, const String& key, const String& value)
+	{
+		// does section exists?
+		if (!section_index_.has(section_name) ||
+				hasEntry(section_name, key)) 
+			return false;
+
+		String new_line(key + "=" + value);
+		appendLine(section_name, new_line);
+
+		return true;
 	}
 
 	bool INIFile::setValue(const String& section_name, const String& key, const String& new_value)

@@ -1,4 +1,4 @@
-// $Id: INIFile.h,v 1.25 2001/08/21 01:24:17 oliver Exp $
+// $Id: INIFile.h,v 1.25.4.1 2002/10/29 17:30:22 amoll Exp $
 
 #ifndef BALL_FORMAT_INIFILE_H
 #define BALL_FORMAT_INIFILE_H
@@ -598,6 +598,18 @@ namespace BALL
 								\end{itemize}
 		*/	
 		bool setValue(const String& section, const String& key, const String& value);
+
+		/** Insert a new value in a given section
+		 		If the key exists allready or the sections doesnt exist, nothing happens.
+				@param	section	the section to insert the key
+				@param	key	the key to insert
+				@param	value the new value
+				@return	bool - \begin{itemize}
+									\item {\bf true} if the value was inserted
+									\item {\bf false} if key or section do not exist
+								\end{itemize}
+		*/
+		bool insertValue(const String& section, const String& key, const String& value);
 
 		//@}
 		/** @name Predicates
