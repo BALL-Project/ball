@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.54.2.27 2005/01/11 14:53:34 amoll Exp $
+// $Id: cartoonModel.C,v 1.54.2.28 2005/01/11 15:28:45 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -39,7 +39,7 @@ AddCartoonModel::AddCartoonModel()
 		last_chain_(0),
 		helix_radius_(2.4),
 		arrow_width_(2),
-		arrow_height_(0.4),
+		arrow_height_(0.3),
 		DNA_helix_radius_(0.5),
 		DNA_ladder_radius_(0.8),
 		DNA_base_radius_(0.2),
@@ -380,10 +380,10 @@ void AddCartoonModel::drawStrand_(SecondaryStructure& ss)
 		// original angle.
 		Vector3 rotaxis = (peptide_normals[i] % peptide_normals[i+1]);
 
-		if (rotaxis.getSquareLength() > 1e-2)
+		if (rotaxis.getSquareLength() > 1e-3)
 		{
-			Angle current(fabs(acos(peptide_normals[i]*peptide_normals[i+1])));
-			Angle new_angle = Angle(2.0 / 3.0 * current);
+			const Angle current(fabs(acos(peptide_normals[i]*peptide_normals[i+1])));
+			Angle new_angle = Angle(1.0 / 3.0 * current);
 
 			Angle diff_angle = new_angle - current;
 			Matrix4x4 rotmat;
@@ -392,7 +392,29 @@ void AddCartoonModel::drawStrand_(SecondaryStructure& ss)
 			peptide_normals[i + 1] = rotmat * peptide_normals[i + 1];
 		}
 	}
-	
+		
+	// an additional smoothing run...
+	for (Position i = peptide_normals.size() - 1; i > 0; i--)
+	{
+		// To smooth the strand representation a bit, we iterate over all normal
+		// vectors and compute the angle in between them.
+		// Then we reduce the angle by an appropriate rotation to a third of the
+		// original angle.
+		Vector3 rotaxis = (peptide_normals[i] % peptide_normals[i-1]);
+
+		if (rotaxis.getSquareLength() > 1e-3)
+		{
+			const Angle current(fabs(acos(peptide_normals[i]*peptide_normals[i-1])));
+			Angle new_angle = Angle(1.0 / 3.0 * current);
+
+			Angle diff_angle = new_angle - current;
+			Matrix4x4 rotmat;
+			rotmat.rotate(diff_angle, rotaxis);
+
+			peptide_normals[i - 1] = rotmat * peptide_normals[i - 1];
+		}
+	}
+
 	// start of spline_points_ of this SS
 	const Position start = ss_to_spline_start_[&ss] * interpolation_steps_;
 	 
