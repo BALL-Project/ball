@@ -16,6 +16,7 @@
 #endif
 
 #include <qthread.h>
+#include <qmutex.h>
 
 namespace BALL
 {
@@ -53,19 +54,21 @@ namespace BALL
 			virtual void run();
 
 			///
-			void setNumberOfStepsBetweenUpdates(Size steps) 
+			void setNumberOfStepsBetweenUpdates(Size steps) throw()
 				{ steps_between_updates_ = steps;}
 
 			///
-			void setMainframe(Mainframe* mf) {main_frame_ = mf;}
+			void setMainframe(Mainframe* mf) throw() {main_frame_ = mf;}
 
-			void setDCDFile(DCDFile* file) {dcd_file_ = file;}
+			void setDCDFile(DCDFile* file) throw() {dcd_file_ = file;}
 
-			DCDFile* getDCDFile() { return dcd_file_;}
+			DCDFile* getDCDFile() throw() { return dcd_file_;}
 
-			void setComposite(Composite* composite) {composite_ = composite;}
+			void setComposite(Composite* composite) throw() {composite_ = composite;}
 
-			Composite* getComposite() { return composite_;}
+			Composite* getComposite() throw() { return composite_;}
+
+			QMutex& getMutex() throw() { return mutex_;}
 
 		protected:
 
@@ -80,6 +83,8 @@ namespace BALL
 
 			/// Notifies the main thread to delete the simulating thread
 			void finish_();
+
+			QMutex mutex_;
 
 			Size steps_between_updates_;
 			Mainframe* main_frame_;
