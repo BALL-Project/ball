@@ -1,4 +1,4 @@
-// $Id: view.doc,v 1.8 2001/05/13 14:06:35 hekl Exp $
+// $Id: view.doc,v 1.9 2001/05/27 10:26:36 hekl Exp $
 
 /**@name VIEW.
          VIEW is a framework for the implementation of GUI based visualizations.
@@ -6,12 +6,12 @@
          in C++ and allows the use of the OpenGL library for 3D rendering.
          View defines several important basic data structures:\\
          \begin{itemize}
-           \item Geometric primitives: like sphere, tube, point, etc. and base classes for easy creating of such primitives
+           \item Geometric primitives: like sphere, tube, point, etc. and base classes for easy creation of such primitives
            \item Classes to access the OpenGL library for building and handling the display lists required for rendering the visualization
            \item Widgets that can be used for building an application
          \end{itemize}
          There are some geometric primitives already defined but with the help of the classes
-         described in this section \Ref{Kernel classes.} there can be easily created more primitives.
+         described in the section \Ref{Kernel classes.} there can be easily created more primitives.
          The most important classes are the widgets classes for they are needed for creating an
          application.
          First, the class \Ref{MainControl} is the most important widget for building an application.
@@ -34,30 +34,36 @@
          With this class it is possible to rotate, translate, zoom or pick objects by mouse click.
          Another important class is the class \Ref{Control}. With the help of this class the
          hierarchical structure of the visualized objects can be displayed and manipulated.\\ \\ \\ \\
-         The following code is an example for building an application (the includes have been omitted):\\ \\
-         {\tt {\bf int} main({\bf int} argc, {\bf char} **argv)}\\
-         \{\\
-           // creating mainframe and application\\
-           {\tt QApplication app(argc, argv);}\\
-           {\tt MainControl main;}\\
-           {\tt app.setMainWidget(&main);}\\ \\
-           // create a QSplitter for dividing the main window into two\\
-           // sub windows used for displaying both the control and the scene\\
-           {\tt QSplitter *splitter = {\bf new} QSplitter(&main);}\\
-           {\tt main.setCentralWidget(splitter);}\\ \\
-           // create the control and insert it into the splitter\\
-           {\tt {\bf new} Control(splitter);}\\ \\
-           // create the scene and insert it into the splitter\\
-           {\tt {\bf new} Scene(splitter);}\\ \\
-           // start the application\\
-           {\tt main.show();}\\
-           {\tt {\bf return} app.exec();}\\
-         \}\\ \\
+         The following code is an example for building an application (the includes have been omitted):\\
+         \begin{verbatim}
+         int main(int argc, char **argv)
+         {
+           // creating mainframe and application
+           QApplication app(argc, argv);
+           MainControl main;
+           app.setMainWidget(&main);
+
+           // create a QSplitter for dividing the main window into two
+           // sub windows used for displaying both the control and the scene
+           QSplitter *splitter = new QSplitter(&main);
+           main.setCentralWidget(splitter);
+
+           // create the control and insert it into the splitter
+           new Control(splitter);
+
+           // create the scene and insert it into the splitter
+           new Scene(splitter);
+
+           // start the application
+           main.show();
+           return app.exec();
+         }
+         \end{verbatim}      
          {\bf Note:} This application only demonstrates how to build an application.
          It opens a main window with both the \Ref{Control} and \Ref{Scene} but as there are
          no means by which any geometric object can be added no objects will be shown in either
          the \Ref{Control} and the \Ref{Scene} widget.
-         In the section MolVIEW there is an example application that extends this example by using
+         In the section \Ref{MOLVIEW.} there is an example application that extends this example by using
          several more widgets to allow loading of \Ref{System} objects, changing the
          visualization of the inserted objects and manipulating those objects.\\ \\
          For more information about QT widgets and application programming see
@@ -88,6 +94,19 @@
 		//@Include: FUNCTOR/functor.doc
 	//@}
 
+	/** @name Gui classes.
+	          Description on the render engine and the handling of composites
+	          can be obtained here. Further predefined openGL primitives (an
+            extension of the primitives in the Kernel section) are located
+            in this directory.
+            There are some dialogs and widgets (like the scene) that are
+            an important part of the View component described in this 
+	          section.
+	*/
+	//@{
+		//@Include: GUI/gui.doc
+	//@}
+
 	/** @name Kernel classes.
             This section contains classes that are responsible for
 	          building geometric primitives, handling client requests
@@ -110,17 +129,5 @@
 		//@Include: PRIMITIV/primitiv.doc
 	//@}
 
-	/** @name Gui classes.
-	          Description on the render engine and the handling of composites
-	          can be obtained here. Further predefined openGL primitives (an
-            extension of the primitives in the Kernel section) are located
-            in this directory.
-            There are some dialogs and widgets (like the scene) that are
-            an important part of the View component described in this 
-	          section.
-	*/
-	//@{
-		//@Include: GUI/gui.doc
-	//@}
-
+  //@Include: tutorial.doc
 //@}

@@ -1,4 +1,4 @@
-// $Id: glsphere.h,v 1.7 2001/05/13 13:59:14 hekl Exp $
+// $Id: glsphere.h,v 1.8 2001/05/27 10:26:37 hekl Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLSPHERE_H
 #define BALL_VIEW_GUI_PRIMITIV_GLSPHERE_H
@@ -35,8 +35,8 @@ namespace BALL
 				See these classes for further information.
 				@memo    GLSphere class (BALL VIEW gui primitiv framework)
 				@author  $Author: hekl $
-				@version $Revision: 1.7 $
-				@date    $Date: 2001/05/13 13:59:14 $
+				@version $Revision: 1.8 $
+				@date    $Date: 2001/05/27 10:26:37 $
 		*/
 		class GLSphere
 			: public Sphere,
@@ -203,6 +203,7 @@ namespace BALL
 			*/
 			virtual bool extract()
 				throw();
+			//@}
 		};
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS

@@ -1,4 +1,4 @@
-// $Id: glEntityDescriptor.h,v 1.5 2001/05/13 13:57:01 hekl Exp $
+// $Id: glEntityDescriptor.h,v 1.6 2001/05/27 10:26:36 hekl Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLENTITYDESCRIPTOR_H
 #define BALL_VIEW_GUI_KERNEL_GLENTITYDESCRIPTOR_H
@@ -48,8 +48,8 @@ namespace BALL
 				This class is used internally by the \Ref{CompositeDescriptor} class.
 				@memo    GLEntityDescriptor class (BALL VIEW gui kernel framework)
 				@author  $Author: hekl $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/05/13 13:57:01 $
+				@version $Revision: 1.6 $
+				@date    $Date: 2001/05/27 10:26:36 $
 		*/
 		class GLEntityDescriptor
 		{
@@ -316,8 +316,7 @@ namespace BALL
 					{\em *this} glEntityDescriptor is valid if all internal display lists
 					are valid.
 					Calls \Ref{GLDisplayList::isValid}
-					@return			bool {\tt true} if the internal state of {\em *this} glEntityDescriptor is correct (self-validated) and consistent,
-					 						{\tt false} otherwise
+					@return			bool {\tt true} if the internal state of {\em *this} glEntityDescriptor is correct (self-validated) and consistent, {\tt false} otherwise
 			*/
 			virtual bool isValid() const
 				throw();

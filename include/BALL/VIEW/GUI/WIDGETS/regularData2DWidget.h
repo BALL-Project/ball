@@ -1,4 +1,4 @@
-// $Id: regularData2DWidget.h,v 1.13 2001/05/13 16:31:20 hekl Exp $
+// $Id: regularData2DWidget.h,v 1.14 2001/05/27 10:26:37 hekl Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGET_REGULARDATA2DWIDGET_H
 #define BALL_VIEW_GUI_WIDGET_REGULARDATA2DWIDGET_H
@@ -131,21 +131,6 @@ class RegularData2DWidget
   void onNotify(Message *message)
 	throw();
 
-public slots:
-  bool reactToMessages_(Message* message);
-
-  void paintEvent( QPaintEvent * );
-  void drawContents( QPainter *paint, int clipx, int clipy, int clipw, int cliph );
-  void resizeEvent( QResizeEvent * );
-  void NewMousePos( Position x, Position y );
-  void Selected(QPoint beg, QPoint end);
-  void slotZoomOut();
- 
-  void enterEvent( QEvent * );
-  void leaveEvent( QEvent * );
-
-  void mousePressEvent( QMouseEvent *e );
-  
   /**	@name	ModularWidget related methods
    */
   //@{
@@ -161,6 +146,23 @@ public slots:
   virtual void finalizeWidget(MainControl& main_control)
 	throw();
   //@}
+
+  bool reactToMessages_(Message* message);
+
+public slots:
+
+  void paintEvent( QPaintEvent * );
+  void drawContents( QPainter *paint, int clipx, int clipy, int clipw, int cliph );
+  void resizeEvent( QResizeEvent * );
+  void NewMousePos( Position x, Position y );
+  void Selected(QPoint beg, QPoint end);
+  void slotZoomOut();
+ 
+  void enterEvent( QEvent * );
+  void leaveEvent( QEvent * );
+
+  void mousePressEvent( QMouseEvent *e );
+  
 
   void createPlot();
 

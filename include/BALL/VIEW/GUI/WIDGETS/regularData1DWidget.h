@@ -1,4 +1,4 @@
-// $Id: regularData1DWidget.h,v 1.2 2001/05/13 16:31:20 hekl Exp $
+// $Id: regularData1DWidget.h,v 1.3 2001/05/27 10:26:37 hekl Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGET_REGULARDATA1DWIDGET_H
 #define BALL_VIEW_GUI_WIDGET_REGULARDATA1DWIDGET_H
@@ -126,10 +126,10 @@ class RegularData1DWidget
 
   //@}
 
- public slots:
 
-  void onNotify(Message *message)
-	throw();
+		void onNotify(Message *message)
+			throw();
+
   bool reactToMessages_(Message *message);
   
   /**    @name    ModularWidget related methods
@@ -147,6 +147,8 @@ class RegularData1DWidget
   virtual void finalizeWidget(MainControl& main_control)
 	throw();
   //@}
+
+ public slots:
 
   void createPlot();
 

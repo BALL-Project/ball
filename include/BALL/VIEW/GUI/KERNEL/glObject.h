@@ -1,4 +1,4 @@
-// $Id: glObject.h,v 1.6 2001/05/13 13:57:01 hekl Exp $
+// $Id: glObject.h,v 1.7 2001/05/27 10:26:36 hekl Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLOBJECT_H
 #define BALL_VIEW_GUI_KERNEL_GLOBJECT_H
@@ -37,8 +37,8 @@ namespace BALL
 				information concerning available primitives.
 				@memo    GLObject class (BALL VIEW gui kernel framework)
 				@author  $Author: hekl $
-				@version $Revision: 1.6 $
-				@date    $Date: 2001/05/13 13:57:01 $
+				@version $Revision: 1.7 $
+				@date    $Date: 2001/05/27 10:26:36 $
 		*/
 		class GLObject
 		{
@@ -90,6 +90,7 @@ namespace BALL
 				throw();
 
 			/** Explicit default initialization.
+					Empty for further purpose.
 			*/
 			virtual void clear()
 				throw();
@@ -154,8 +155,7 @@ namespace BALL
 					If the internal state of {\em *this} glObject is correct (self-validated) and 
 					consistent {\tt true} is returned, {\tt false} otherwise. 
 					Calls {GLPrimitiveManager::isValid}.
-					@return			bool {\tt true} if the internal state of {\em *this} glObject is correct (self-validated) and consistent,
-					 						{\tt false} otherwise
+					@return			bool {\tt true} if the internal state of {\em *this} glObject is correct (self-validated) and consistent, {\tt false} otherwise
 					@see        GLPrimitiveManager::isValid
 			*/
 			virtual bool isValid() const

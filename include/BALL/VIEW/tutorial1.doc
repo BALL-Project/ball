@@ -1,0 +1,112 @@
+/** @name How to create a geometric primitive.
+
+		In this section we want to create a new geometric primitive called 'cross'.
+		A cross is a shape that consists of three lines that merge in one point.
+		The lines are each axis aligned and meet each other in the middle.
+		To accomplish this we need three additional properties for the geometric object:
+		first the class \Ref{Radius} that describes the half length of each line,
+		second the class \Ref{Vertex} for the middle point of the geometric primitive
+		and third the class \Ref{ColorExtension} which contains methods for changing
+		the color of the cross.
+		In addition to these classes we need the main base classes for creating a geometric
+		primitive. These are: \Ref{GeometricObject} which implements the interface each
+		geometric shape must have and \Ref{GLObject} which is needed because of the drawing
+		methods that must be overridden.\\ \\
+		The implementation of the class GLCross follows (includes are omitted):
+
+		\begin{verbatim}
+    class GLCross: 
+      public GeometricObject,
+      public ColorExtension,
+      public Radius,
+      public Vertex,
+      public GLObject
+    {
+    public:
+
+      GLCross() {}
+      virtual ~GLCross() {}
+
+    protected:
+
+      virtual bool draw(bool with_names = false);
+    };
+		\end{verbatim}
+
+		The copy constructor and the copy assignment methods have been omitted because
+		they are not crucial to the implementation of a primitive. 
+		We have a closer look to the implementation of the drawing method.
+		We use OpenGL code in this method to create the cross.
+
+		\begin{verbatim}
+    bool GLCross::draw(bool with_names)
+    {
+      if (hasProperty(GeometricObject::PROPERTY__OBJECT_HIDDEN) == true)
+        return true;
+		\end{verbatim}
+
+		If the property of the primitive is set to {\em PROPERTY__OBJECT_HIDDEN} than
+		do not draw it. 
+
+		\begin{verbatim}
+      if (isSelected() == false)
+        glColor4ub((unsigned char)getColor().getRed(),
+                   (unsigned char)getColor().getGreen(),
+                   (unsigned char)getColor().getBlue(),
+                   (unsigned char)getColor().getAlpha());
+      else
+        glColor4ub((unsigned char)getSelectedColor().getRed(),
+                   (unsigned char)getSelectedColor().getGreen(),
+                   (unsigned char)getSelectedColor().getBlue(),
+                   (unsigned char)getSelectedColor().getAlpha());
+		\end{verbatim}
+
+		If the primitive is selected than use the selected color. Otherwise
+		we use the color set with the method {\em setColor}.
+
+		\begin{verbatim}
+      if (with_names)
+        glLoadName(getGLPrimitiveManager()->getName(*this));
+		\end{verbatim}
+
+		If we want to allow our primitive to be picked than we have to add this code
+		to the draw method. The method {\em glLoadName} is a method from the OpenGL
+		library. This method sets the name of the primitive so that it can be identified
+		later. To assure that the names are unique we use the name generating facility the class
+		\Ref{GLPrimitiveManager} provides.
+
+		\begin{verbatim}
+      glBegin(GL_LINES);
+      glVertex3f((GLfloat)(getVertex().x - getRadius()),
+                 (GLfloat)(getVertex().y),
+                 (GLfloat)(getVertex().z));
+      glVertex3f((GLfloat)(getVertex().x + getRadius()),
+                 (GLfloat)(getVertex().y),
+                 (GLfloat)(getVertex().z));
+
+      glVertex3f((GLfloat)(getVertex().x),
+                 (GLfloat)(getVertex().y - getRadius()),
+                 (GLfloat)(getVertex().z));
+      glVertex3f((GLfloat)(getVertex().x),
+                 (GLfloat)(getVertex().y + getRadius()),
+                 (GLfloat)(getVertex().z));
+
+      glVertex3f((GLfloat)(getVertex().x),
+                 (GLfloat)(getVertex().y),
+                 (GLfloat)(getVertex().z - getRadius()));
+      glVertex3f((GLfloat)(getVertex().x),
+                 (GLfloat)(getVertex().y),
+                 (GLfloat)(getVertex().z + getRadius()));
+      glEnd();
+
+      return true;
+    }
+		\end{verbatim}
+
+		The last part of the method contains the OpenGL code for rendering the cross.
+		We use three lines to create the cross. All have the vertex as the middle point
+		and extend half the radius in each axis direction.
+
+		Now we are finished and can use the new shape by appending it to a \Ref{Composite}
+		object. It will be properly rendered.
+*/

@@ -1,4 +1,4 @@
-// $Id: scene.h,v 1.6 2001/05/13 14:03:44 hekl Exp $
+// $Id: scene.h,v 1.7 2001/05/27 10:26:37 hekl Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_SCENE_H
 #define BALL_VIEW_GUI_WIDGETS_SCENE_H
@@ -79,8 +79,8 @@ namespace BALL
 				be assigned to a scene.
 				@memo    Scene class (BALL VIEW gui widgets framework)
 				@author  $Author: hekl $
-				@version $Revision: 1.6 $
-				@date    $Date: 2001/05/13 14:03:44 $
+				@version $Revision: 1.7 $
+				@date    $Date: 2001/05/27 10:26:37 $
 		*/
 		class Scene: public QGLWidget, public ModularWidget
 		{
@@ -710,6 +710,16 @@ namespace BALL
 			/** @name Protected QT overridden virtual methods
 			*/
 			//@{
+			/** Initialize the OpenGL context.
+					Overriden qt method for initializing the OpenGL context of {\em *this} scene.
+					This method will be called automatically before any call to \Ref{paintGL} or \Ref{resizeGL}.
+					See QT-library for information concerning the qglwidget.
+					events.
+					@see  paintGL
+					@see  resizeGL
+			*/
+			virtual void initializeGL();
+
 			/** Render the visualization.
 					Overriden qt method for rendering the visualization of {\em *this} scene.
 					This method will be called automatically every time an update is necessary.
@@ -881,8 +891,6 @@ namespace BALL
 			void deselectionReleased_(Scene* scene);
 			void deselectionPressedMoved_(Scene* scene);
 
-			void initializeOpenGL_();
-
 			Vector3 translateObjectXY_(const Real distance);
 
 			Vector3 translateObjectZ_(const Real distance);
@@ -935,9 +943,6 @@ namespace BALL
 
 			GLfloat x_scale_;
 			GLfloat y_scale_;
-
-			bool open_gl_initialized_;
-
 
 			// Camera section -----
 

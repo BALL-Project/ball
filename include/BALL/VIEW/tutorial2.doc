@@ -1,0 +1,401 @@
+/** @name Construction of a dialog.
+
+		In this tutorial we discuss the creation of a dialog. The construction of a widget
+		is equally easy. Just swap the base class QDialog with the base class QWidget.
+		That should do the trick.
+		The construction of a dialog/widget is somewhat complicated because of the many
+		actions it can perform.
+		A dialog can have menu entries in the main application (derived from the \Ref{MainControl}),
+		uses preferences tab widgets inserted into the \Ref{Preferences} dialog and can react to
+		messages sent from other dialogs/widgets (see \Ref{Message} and \Ref{ModularWidget}).
+		We want to create a dialog which have all of the above properties.\\
+		The menu entry our dialog should have will toggle the visibility of the dialog. Further
+		if the dialog is visible the menu entry will be checked, otherwise it will not be checked.
+		The preference tab widget has only a color control whose contents can be changed. This contents
+		will be written to and read from the \Ref{INIFile} the main application keeps.
+		The \Ref{Message} that should trigger some effect will be the message \Ref{SelectionMessage}
+		that is sent by the class \Ref{Control} whenever the selection changes.
+		To accomlish all these things we have to override certain methods and create a preferences tab
+		widget.\\ \\
+		First we have a look to the header file of our dialog (includes are omitted):
+
+		\begin{verbatim}
+    class TestDialog: public QDialog, public ModularWidget
+    {
+      Q_OBJECT
+
+    public:
+
+      TestDialog(QWidget* parent = 0, const char* name = 0);
+      virtual ~TestDialog() {}
+
+      virtual void initializeWidget(MainControl& main_control);
+      virtual void checkMenu(MainControl& main_control);
+      virtual void finalizeWidget(MainControl& main_control);
+      virtual void initializePreferencesTab(Preferences &preferences);
+      virtual void finalizePreferencesTab(Preferences &preferences);
+      virtual void applyPreferences(Preferences &preferences);
+      virtual void fetchPreferences(INIFile &inifile);
+      virtual void writePreferences(INIFile &inifile);
+      virtual void onNotify(Message *message);
+
+    protected slots:
+					
+      void applyButtonClicked() {};
+      void openDialog();
+ 
+    private:
+
+      TestPreferences *test_preferences_;
+      QPushButton *apply_button_;
+      int id_;
+      List<Composite*> selection_;
+      ColorRGBA color_;
+    };
+		\end{verbatim}
+
+		See \Ref{ModularWidget} for information about the various methods that must be
+		overridden.
+		Now we discuss the implementation of these methods:\\ \\
+
+		Before we handle the initialization, update and the removal of the menu entries lets
+		have a look to the implementation of the constructor.
+
+		\begin{verbatim}
+    TestDialog::TestDialog(QWidget* parent, const char* name)
+      : QDialog(parent, name, FALSE, 2768)
+    {
+      setCaption("TestDialog");
+      ModularWidget::registerWidget(this);
+
+      apply_button_ = new QPushButton(this, "apply_button");
+      apply_button_->setGeometry(10, 25, 110, 30);
+      apply_button_->setText( tr( "&Apply" ) );
+      connect(apply_button_, SIGNAL(clicked()), SLOT(applyButtonClicked()));
+
+      color_.set("FF0000FF");
+    }
+  	\end{verbatim}
+
+		First we set the caption of this dialog than we register this dialog as a modular
+		widget. This action is very important because it creates the internal mechanism
+		that connects all widgets with each other. If you create own dialogs/widgets always
+		make sure this method is called.
+		The next thing we do is to create an apply button and connect it to our created slot
+		{\em applyButtonClicked}. For information about signal/slot mechanism see the QT-
+		library documentation.\\ \\
+
+		In this method we create the menu entry for our dialog and connect it to a slot
+		that will open our dialog.
+
+		\begin{verbatim}
+    void TestDialog::initializeWidget(MainControl& main_control)
+    {
+      (main_control.initPopupMenu(MainControl::DISPLAY))->setCheckable(true);
+		\end{verbatim}
+
+		First we create the menu {\em DISPLAY} if it is not already created and set
+		the flag {\em checkable} to assure that all entries can have a check flag.
+
+		\begin{verbatim}
+      id_ = main_control.insertMenuEntry
+               (MainControl::DISPLAY, "&Test Dialog", this,
+                SLOT(openDialog()), CTRL+Key_T);   
+    }
+		\end{verbatim}
+
+		Then we create the menu entry {\em Test Dialog} in the menu {\em DISPLAY}
+		and connect it with the slot {\em openDialog}. The id we get from this method is
+		stored in the variable {\em id_}. We need this id to check the menu entry if
+		this dialog is open.
+
+		\begin{verbatim}
+    void TestDialog::checkMenu(MainControl& main_control)
+    {
+      (main_control.menuBar())->setItemChecked(id_, isVisible());
+    }
+		\end{verbatim}
+
+		The method checkMenu is used to check or uncheck the menu entry according to the
+		visibility of our dialog.
+
+		\begin{verbatim}
+    void TestDialog::finalizeWidget(MainControl& main_control)
+    {
+      main_control.removeMenuEntry
+        (MainControl::DISPLAY, "&Test Dialog", this,
+         SLOT(openDialog()), CTRL+Key_T);   
+    }
+		\end{verbatim}
+
+		And last if the dialog is to be destroyed the menu entry will be removed from
+		the main application (derived from \Ref{MainControl}).\\
+
+		In these methods it as also possible to do other initialization or menu handling stuff.
+		It is even possible to add, update and remove more menu entries (for each menu entry
+		there must be a slot to be connected to).
+		For information about signal/slot mechanism see the QT-library documentation.\\ \\
+
+		After the widget stuff we have a close look to the insertion of the preferences tab widget.
+		First we need a preferences tab widget.
+
+		\begin{verbatim}
+    class TestPreferences : public QWidget
+    {
+      Q_OBJECT
+				
+    public:
+
+      TestPreferences(QWidget *parent = NULL, const char *name = NULL );
+      virtual ~TestPreferences() {}
+			
+      void fetchPreferences(INIFile& inifile);
+      void writePreferences(INIFile& inifile);
+
+      ColorRGBA getColor() const { return custom_color_; }
+
+    public slots:
+
+      virtual void editColor();
+
+    private:
+
+      QLabel *color_sample_;
+      ColorRGBA custom_color_;
+    };
+		\end{verbatim}
+
+		In this tab widget only the contents of the color label can be changed.
+		This contents will be written to and read from the inifile of the main application.
+		This widget creates a label and an edit button. The label has no text but is
+		actually only a rectangle with a background color. The edit button opens a dialog
+		in which the color can be changed. This dialog is predefined in QT.
+		In the constructor we create these widgets.
+
+		\begin{verbatim}
+    TestPreferences::TestPreferences(QWidget* parent, const char* name)
+      : QWidget(parent, name, 0)
+    {
+      QPushButton *edit_button = new QPushButton(this, "edit_button");
+      edit_button->setGeometry(110, 30, 80, 30);
+      edit_button->setText( tr( "&Edit" ) );
+      connect(edit_button, SIGNAL(clicked()), SLOT(editColor()));
+		\end{verbatim}
+
+		This creates the edit button and connects it to the slot {\em editColor}.
+			
+		\begin{verbatim}
+      color_sample_ = new QLabel(this, "color_sample__label");
+      color_sample_->setGeometry(20, 30, 70, 30);
+      color_sample_->setFrameStyle( 50 );
+			
+      resize(380,210);
+    }
+		\end{verbatim}
+
+		The last initialization we perform in the constructor is the creation of the
+		label. Then we resize the widget to the needed size. This size is related to the
+		size of the \Ref{Preferences} dialog.
+		The next methods we will discuss are the methods responsible for reading and
+		writing the contents of this widget into the inifile.\\ \\
+
+		This method reads the preferences from the inifile.
+
+		\begin{verbatim}
+    void TestPreferences::fetchPreferences(INIFile& inifile)
+    {
+      if (inifile.hasEntry("WINDOWS", "Test::color"))
+      {
+        custom_color_.set(inifile.getValue("WINDOWS", "Test::color"));
+        color_sample_->setBackgroundColor(QColor(custom_color_.getRed(), 
+                                                 custom_color_.getGreen(), 
+                                                 custom_color_.getBlue()));
+      }
+    }
+		\end{verbatim}
+
+		If the inifile has the section {\tt WINDOWS} and the key {\tt Test::color} then
+		we read the contents of this key and convert it to a color which we store in the
+		{\em custom_color_} (see \Ref{ColorRGBA}). Additionally we set the color in the label to be displayed
+		in the widget.\\ \\
+
+		To write the preferences to the inifile we override this method.
+
+		\begin{verbatim}
+    void TestPreferences::writePreferences(INIFile& inifile)
+    {
+      inifile.setValue("WINDOWS", "Test::color", custom_color_);
+    }
+		\end{verbatim}
+
+		{\em Note:} It is important that the section {\tt WINDOWS} and the key {\tt Test::color} are
+		already inserted into the inifile else the inifile will not insert the color
+		into it. See \Ref{INIFile} for further information.\\ \\
+
+		The last method of the preferences tab widget is the method {\em editColor} that
+		is called if the edit button is pressed.
+
+		\begin{verbatim}
+    void BoundingBoxPreferences::editColor()
+    {
+      color_sample_
+        ->setBackgroundColor(QColorDialog::getColor(color_sample_->backgroundColor()));
+		\end{verbatim}
+
+		Here we call the dialog {\em QColorDialog} where we can change the color. If this
+		dialog was exited by pressing the ok button we transfer the color into the color label.
+
+		\begin{verbatim}
+      ColorRGBA color;
+      QColor qcolor = color_sample_->backgroundColor();
+      color.set((float)qcolor.red() / 255.0,
+                (float)qcolor.green() / 255.0,
+                (float)qcolor.blue() / 255.0);
+			
+      custom_color_ = color;
+    }
+		\end{verbatim}
+
+		Now we convert the {\em QColor} into a \Ref{ColorRGBA} which we store in the
+		variable {\em custom_color_} so that we can access this color with the method
+		{\em getColor}.\\
+
+		Now that we have created the preferences tab widget we can implement the methods that 
+		are needed in our dialog to install this preferences tab widget.\\ 
+
+		In this method the preferences tab widget will be initialized and inserted into the
+		\Ref{MainControl}
+
+		\begin{verbatim}
+    void TestDialog::initializePreferencesTab(Preferences &preferences)
+    {
+      test_preferences_ = new TestPreferences();
+      preferences.insertTab(test_preferences_, "TestPreferences");
+    }
+		\end{verbatim}
+
+		We create a new {\em TestPreferences} and insert as a tab widget it into the 
+		\Ref{Preferences} dialog with name {\tt TestPreferences}.
+
+		\begin{verbatim}
+    void TestDialog::applyPreferences(Preferences &)
+    {
+      if test_preferences_ != 0)
+        color_ = test_preferences_->getColor();
+    }
+		\end{verbatim}
+
+		This method is called from \Ref{MainControl} if the apply button in the \Ref{Preferences} dialog
+		is pressed.
+		In this method we transfer the color from the preferences tab widget into the private
+		variable {\em color_} for later usage.\\ \\
+		
+		Removal of the preferences tab widget from the \Ref{MainControl} and freeing of used
+		memory.
+
+		\begin{verbatim}
+    void TestDialog::finalizePreferencesTab(Preferences &preferences)
+    {
+      if (test_preferences_ != 0)
+      {
+        preferences.removeTab(test_preferences_);
+        delete test_preferences_;
+      }
+    }
+		\end{verbatim}
+
+		This method will be called by the \Ref{MainControl} if the application is closed. We
+		remove our preferences tab widget from the preferences dialog and delete it afterwards.\\ \\
+
+		To relay fetch and write actions to the preferences tab widget we must override
+		the same methods in the dialog.\\
+		This method reads the preferences of our dialog from the inifile and calls
+		the same method of the preferences tab widget.
+
+		\begin{verbatim}
+    void TestDialog::fetchPreferences(INIFile& inifile)
+    {
+      int x_pos = x();
+      int y_pos = y();
+
+      if (inifile.hasEntry("WINDOWS", "Test::x"))
+        x_pos = inifile.getValue("WINDOWS", "Test::x").toInt();
+
+      if (inifile.hasEntry("WINDOWS", "Test::y"))
+        y_pos = inifile.getValue("WINDOWS", "Test::y").toInt();
+
+      move(x_pos, y_pos);
+		\end{verbatim}
+
+		Here we read the position of our dialog from the inifile and convert it into
+		integer. If the needed keys do not exist in the inifile we use the position
+		of our dialog (see QT-library documentation for further informations). If
+		we have a valid position we move our dialog to this position.
+
+		\begin{verbatim}
+      if (test_preferences_ != 0)
+      {
+        test_preferences_->fetchPreferences(inifile);
+        color_ = test_preferences_->getColor();
+      }
+    }
+		\end{verbatim}
+
+		If a preferences tab widget exists we fetch its preferences from the inifile and
+		retrieve the color from it.\\ \\
+
+		To write the preferences to the inifile we override this method. In this method we
+		write all preferences this dialog has to the inifile and call the same method
+		for our preferences tab widget.
+
+		\begin{verbatim}
+    void TestDialog::writePreferences(INIFile& inifile)
+    {
+      inifile.setValue("WINDOWS", "Test::x", String(x()));
+      inifile.setValue("WINDOWS", "Test::y", String(y()));
+		\end{verbatim}
+
+		With the method {\em setValue} we set the position of our dialog into the inifile.\\
+		{\em Note:} this method only works if the section {\tt WINDOWS} and the keys
+		{\tt Test::x} and {\tt Test::y} are already inserted into the inifile.
+
+		\begin{verbatim}
+      if (test_preferences_ != 0)
+        test_preferences_->writePreferences(inifile);
+    }
+		\end{verbatim}
+
+		If our preferences tab widget exists we write its preferences into the inifile as well.\\ \\
+
+		The only thing that must be implemented yet is the mechanism that handles any
+		messages received from our dialog.
+		This is done in the method {\em onNotify}. 
+
+		\begin{verbatim}
+    void TestDialog::onNotify(Message *message)
+    {
+      selection_.clear();
+
+      if (RTTI::isKindOf<SelectionMessage>(*message))
+        selection_ = (RTTI::castTo<SelectionMessage>(*message))->getSelection();
+		\end{verbatim}
+
+		First we clear our previously stored selection then we perform a runtime type identification
+		of the received message and react only if the message is of kind \Ref{SelectionMessage}.
+			
+		\begin{verbatim}
+      if (selection_.empty())
+        apply_button_->setEnabled(false);
+      else
+        apply_button_->setEnabled(true);
+    }
+		\end{verbatim}
+
+		We enable the apply button in our dialog if the selection list contains any elements.
+		Otherwise we disable it.\\ \\
+
+		Now we are finished with the construction of this dialog. It can be added to the main application
+		by creating it with a pointer to the application (\Ref{MainControl}) as
+		parent.
+*/
+

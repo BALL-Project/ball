@@ -1,0 +1,18 @@
+/** @name Tutorial.
+
+		This tutorial will show you how to implement geometric primitives and dialogs/widgets.
+		In VIEW there are a number of predefined geometric primitives already available,
+		e.g. \Ref{GLSphere}, \Ref{GLTube} etc. More often there is the case that a needed
+		primitive is not available and therefore must be programmed anew. The first part
+		of this tutorial will show how this is achieved. A new primitive, the cross, will
+		be introduced.\\
+		Another crucial step in implementing an application is the programming of
+		dialogs or widgets, their interaction with the other widgets and the integration into
+		the main application. In the second part we will discuss the creation of a dialog 
+		that will have all the above properties.
+*/
+//@{
+	//@Include: tutorial1.doc
+	//@Include: tutorial2.doc
+//@}
+
