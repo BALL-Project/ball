@@ -1,4 +1,4 @@
-// $Id: property.h,v 1.17 2001/01/14 21:57:09 amoll Exp $
+// $Id: property.h,v 1.18 2001/01/15 10:38:54 amoll Exp $
 
 #ifndef BALL_CONCEPT_PROPERTY_H
 #define BALL_CONCEPT_PROPERTY_H
@@ -268,6 +268,10 @@ namespace BALL
 
 		bool operator == (const NamedProperty& np) const 
 			throw();
+
+		bool operator != (const NamedProperty& np) const 
+			throw();
+
 
 		//@}
 

@@ -1,4 +1,4 @@
-// $Id: property.iC,v 1.12 2001/01/14 21:57:09 amoll Exp $
+// $Id: property.iC,v 1.13 2001/01/15 10:38:54 amoll Exp $
 
 BALL_INLINE 
 NamedProperty::NamedProperty(const string& name)
@@ -88,7 +88,43 @@ NamedProperty::~NamedProperty()
 		delete data_.s;
 	}
 }
+
+BALL_INLINE 
+bool NamedProperty::operator == (const NamedProperty& np) const
+	throw()
+{
+	if (type_	!= np.type_)
+	{
+		return false;
+	}
+
+	switch (type_)
+	{
+		case	INT:					return(data_.i			== np.data_.i);				break;
+		case	FLOAT:				return(data_.f			== np.data_.f);				break;
+		case	DOUBLE:				return(data_.d			== np.data_.d);				break;
+		case	UNSIGNED_INT:	return(data_.ui			== np.data_.ui);			break;
+		case	BOOL:					return(data_.b			== np.data_.b);				break;
+		case	OBJECT:				return(data_.object == np.data_.object);	break;
+		case	NONE:					return(true);	break;
+		case	STRING:				return(*data_.s == *np.data_.s);					break;
+		default:
+		{
+			Log.error() << "cannot write unknown property type: " << (int)type_ << endl;
+		}
+	}
+
+	return true;
+}
+
+BALL_INLINE 
+bool NamedProperty::operator != (const NamedProperty& np) const
+	throw()
+{
+	return !(*this == np);
+}
 	
+
 BALL_INLINE 
 int NamedProperty::getInt() const
 	throw()
