@@ -1,4 +1,4 @@
-// $Id: singularities.h,v 1.12 2001/07/15 17:03:25 oliver Exp $
+// $Id: singularities.h,v 1.13 2001/07/15 18:58:21 amoll Exp $
 
 #ifndef BALL_STRUCTURE_SINGULARITIES_H
 #define BALL_STRUCTURE_SINGULARITIES_H
@@ -49,6 +49,7 @@
 # include <BALL/KERNEL/molecule.h>
 #endif
 
+/*
 #ifndef BALL_KERNEL_SYSTEM_H
 # include <BALL/KERNEL/system.h>
 #endif
@@ -57,13 +58,14 @@
 # include <BALL/KERNEL/PTE.h>
 #endif
 
+
 #ifndef BALL_FORMAT_HINFILE_H
 # include <BALL/FORMAT/HINFile.h>
 #endif
+*/
 
 #include <vector>
 #include <list>
-#include <set>
 #include <fstream>
 
 namespace BALL
