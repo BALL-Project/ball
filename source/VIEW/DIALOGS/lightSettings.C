@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lightSettings.C,v 1.18 2005/02/15 12:35:51 amoll Exp $
+// $Id: lightSettings.C,v 1.19 2005/02/15 13:34:52 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/lightSettings.h>
@@ -130,8 +130,8 @@ void LightSettings::colorPressed()
 
 void LightSettings::defaultsPressed()
 {
-	lights_.clear();
 	lights_list->clear();
+	lights_.clear();
 	addLightPressed();
 }
 
@@ -140,7 +140,8 @@ void LightSettings::defaultsPressed()
 void LightSettings::saveSettingsToLight_()
 	throw()
 {
-	if (current_light_ == -1) return;
+	if (current_light_ == -1 ||
+			current_light_ >= lights_.size()) return;
 
 	LightSource& light = lights_[current_light_];
 	light.setColor(color_sample->backgroundColor());
