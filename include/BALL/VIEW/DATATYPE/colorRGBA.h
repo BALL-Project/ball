@@ -1,4 +1,4 @@
-// $Id: colorRGBA.h,v 1.2 2001/05/13 13:28:50 hekl Exp $
+// $Id: colorRGBA.h,v 1.3 2001/07/06 15:30:48 aubertin Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
 #define BALL_VIEW_DATATYPE_COLORRGBA_H
@@ -34,9 +34,9 @@ namespace BALL
 				allows many types of input parameters. See description of this class for further
 				informations.
 				@memo    ColorRGBA class (BALL VIEW datatype framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.2 $
-				@date    $Date: 2001/05/13 13:28:50 $
+				@author  $Author: aubertin $
+				@version $Revision: 1.3 $
+				@date    $Date: 2001/07/06 15:30:48 $
 		*/
 		class ColorRGBA
 		{
@@ -56,14 +56,14 @@ namespace BALL
 			//@{
 
 			/** Default Constructor.
-					Construct new colorRGBA. Initialized with color black (red=0, green=0, blue=0, alpha=1).
+					Constructs new colorRGBA. Initialized with color black (red=0, green=0, blue=0, alpha=1).
 					@return      ColorRGBA new constructed colorRGBA
 			*/
 			ColorRGBA()
 				throw();
 
 			/** Copy constructor.
-					Construct new colorRGBA by copying the colorRGBA {\em color}.
+					Constructs new colorRGBA by copying the colorRGBA {\em color}.
 					@param       color the colorRGBA to be copied
 					@return      ColorRGBA new constructed colorRGBA copied from {\em color}
 			*/
@@ -71,7 +71,7 @@ namespace BALL
 				throw();
 
 			/** Constructor with ColorHSV.
-					Construct new colorRGBA by converting the colorHSV {\em color}.
+					Constructs new colorRGBA by converting the colorHSV {\em color}.
 					@param       color the colorHSV to be converted. See \Ref{ColorHSV}
 					@return      ColorRGBA new constructed colorRGBA converted from {\em color}
 					@see         ColorHSV
@@ -80,7 +80,7 @@ namespace BALL
 				throw();
 
 			/** Constructor with Parameter char*.
-					Construct new colorRGBA by initialising its value with the given pointer to
+					Constructs new colorRGBA by initialising its value with the given pointer to
 					a string representing a color value in hex format. The length of the string can
 					either be 6 or 8 characters depending whether the alpha component should 
 					be considered. If the string is only 6 characters long the alpha component will
@@ -104,7 +104,7 @@ namespace BALL
 				throw(Exception::InvalidRange, ColorUnit::NotInHexFormat);
 
 			/** Detailed component initializing constructor.
-					Construct new colorRGBA using the given component parameters.
+					Constructs new colorRGBA using the given component parameters.
 					@param       red_value the red component. See \Ref{ColorUnit}
 					@param       green_value the green component. See \Ref{ColorUnit}
 					@param       blue_value the blue component. See \Ref{ColorUnit}
@@ -132,7 +132,7 @@ namespace BALL
 				throw();
 
 			/** Explicit default initialization.
-					Set the color of {\em *this} colorRGBA to the default color (black).
+					Sets the color of {\em *this} colorRGBA to the default color (black).
 					The value of {\em *this} colorRGBA is:
 					\begin{itemize}
 						\item red component is zero (0)
@@ -169,7 +169,7 @@ namespace BALL
 			//@{
 
 			/** Assignment.
-					Assign the colorRGBA {\em color} to {\em *this} colorRGBA.
+					Assigns the colorRGBA {\em color} to {\em *this} colorRGBA.
 					The color of {\em *this} is initialized to the color of the colorRGBA {\em color}.\\
 					@param       color the colorRGBA to be copied 
 			*/
@@ -177,7 +177,7 @@ namespace BALL
 				throw();
 
 			/** Assignment operator.
-					Assign the colorRGBA {\em color} to {\em *this} colorRGBA.
+					Assigns the colorRGBA {\em color} to {\em *this} colorRGBA.
 					Calls \Ref{set}.
 					The color of {\em *this} is initialized to the color of the colorRGBA {\em color}.\\
 					@param       color the colorRGBA to be copied
@@ -188,7 +188,7 @@ namespace BALL
 				throw();
 
 			/** Copying.
-					Copy {\em *this} colorRGBA to the colorRGBA {\em color}.
+					Copies {\em *this} colorRGBA to the colorRGBA {\em color}.
 					Calls \Ref{set}.
 					The color of the colorRGBA {\em color} is initialized to the color of {\em *this} colorRGBA.\\
 					@param       color the colorRGBA to be assigned to
@@ -198,7 +198,7 @@ namespace BALL
 				throw();
 
 			/** Assignment with ColorHSV.
-					Assign the colorHSV {\em color} to {\em *this} colorRGBA.
+					Assigns the colorHSV {\em color} to {\em *this} colorRGBA.
 					The color of {\em *this} is initialized to the color of the colorHSV {\em color}.\\
 					@param       color the colorHSV to be copied 
 			*/
@@ -206,7 +206,7 @@ namespace BALL
 				throw();
 
 			/** Assignment operator with ColorHSV.
-					Assign the colorHSV {\em color} to {\em *this} colorRGBA.
+					Assigns the colorHSV {\em color} to {\em *this} colorRGBA.
 					Calls \Ref{set}.
 					The color of {\em *this} is initialized to the color of the colorHSV {\em color}.\\
 					@param       color the colorHSV to be copied
@@ -218,7 +218,7 @@ namespace BALL
 				throw();
 
 			/** Copying to ColorHSV.
-					Copy {\em *this} colorRGBA to the colorHSV {\em color}.
+					Copies {\em *this} colorRGBA to the colorHSV {\em color}.
 					Calls \Ref{set}.
 					The color of the colorHSV {\em color} is initialized to the color of {\em *this} colorRGBA.\\
 					@param       color the colorHSV to be assigned to
@@ -229,7 +229,7 @@ namespace BALL
 				throw();
 
 			/** Assignment with char*.
-					Assign the color represented by the string {\em value} to {\em *this} colorRGBA.
+					Assigns the color represented by the string {\em value} to {\em *this} colorRGBA.
 					The color of {\em *this} is initialized to the color represented by the string {\em value}.
 					See constructor for format description.
 					@param       value the color represented by a string 
@@ -240,7 +240,7 @@ namespace BALL
 				throw(Exception::InvalidRange, ColorUnit::NotInHexFormat);
 
 			/** Assignment operator with char*.
-					Assign the color represented by the string {\em value} to {\em *this} colorRGBA.
+					Assigns the color represented by the string {\em value} to {\em *this} colorRGBA.
 					Calls \Ref{set}.
 					The color of {\em *this} is initialized to the color represented by the string {\em value}.
 					See constructor for format description.
@@ -254,7 +254,7 @@ namespace BALL
 				throw(Exception::InvalidRange, ColorUnit::NotInHexFormat);
 
 			/** Copying to char*.
-					Copy the color of {\em *this} colorRGBA to the string represented by the pointer {\em value}.
+					Copies the color of {\em *this} colorRGBA to the string represented by the pointer {\em value}.
 					Calls \Ref{set}.
 					The string {\em value} is initialized to the color of {\em *this} colorRGBA.
 					At least 9 bytes must be allocated for the string. The format of the string is
@@ -266,7 +266,7 @@ namespace BALL
 				throw();
 
 			/** Assignment with string.
-					Assign the color represented by the string {\em value} to {\em *this} colorRGBA.
+					Assigns the color represented by the string {\em value} to {\em *this} colorRGBA.
 					The color of {\em *this} is initialized to the color represented by the string {\em value}.
 					See constructor for format description.
 					@param       value the color represented by a string 
@@ -277,7 +277,7 @@ namespace BALL
 				throw(Exception::InvalidRange, ColorUnit::NotInHexFormat);
 
 			/** Assignment operator with string.
-					Assign the color represented by the string {\em value} to {\em *this} colorRGBA.
+					Assigns the color represented by the string {\em value} to {\em *this} colorRGBA.
 					Calls \Ref{set}.
 					The color of {\em *this} is initialized to the color represented by the string {\em value}.
 					See constructor for format description.
@@ -291,7 +291,7 @@ namespace BALL
 				throw(Exception::InvalidRange, ColorUnit::NotInHexFormat);
 
 			/** Copying to string.
-					Copy the color of {\em *this} colorRGBA to the string {\em value}.
+					Copies the color of {\em *this} colorRGBA to the string {\em value}.
 					Calls \Ref{set}.
 					The string {\em value} is initialized to the color of {\em *this} colorRGBA.
 					The format of the string is	the same as the one given to the constructor.
@@ -303,7 +303,7 @@ namespace BALL
 				throw();
 
 			/** Swapping of colorRGBAs.
-					Swap the color of {\em *this} colorRGBA with the colorRGBA {\em color}.
+					Swaps the color of {\em *this} colorRGBA with the colorRGBA {\em color}.
 					@param       color the colorRGBA being swapped with {\em *this} colorRGBA 
 			*/
 			void swap(ColorRGBA& color)
@@ -314,8 +314,8 @@ namespace BALL
 			*/
 			//@{
 
-			/** Change the value of the red component.
-					Change the value of of the red component of {\em *this} colorRGBA to the value
+			/** Changes the value of the red component.
+					Changes the value of of the red component of {\em *this} colorRGBA to the value
 					represented by the parameter {\em red_value}. See \Ref{ColorUnit} for further information.
 					@param       red_value the new red component of {\em *this} colorRGBA
 					@see         getRed
@@ -325,7 +325,7 @@ namespace BALL
 				throw();
 
 			/** Mutable inspection of the red component.
-					Access the mutual reference of the red component of {\em *this} colorRGBA.
+					Accesses the mutual reference of the red component of {\em *this} colorRGBA.
 					See \Ref{ColorUnit} for further information concerning type conversion.
 					@return      ColorUnit& mutable reference to the red component of {\em *this} colorRGBA
 					@see         setRed
@@ -335,7 +335,7 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the red component.
-					Access the constant reference of the red component of {\em *this} colorRGBA.
+					Accesses the constant reference of the red component of {\em *this} colorRGBA.
 					See \Ref{ColorUnit} for further information concerning type conversion.
 					@return      ColorUnit& constant reference to the red component of {\em *this} colorRGBA
 					@see         setRed
@@ -344,8 +344,8 @@ namespace BALL
 			const ColorUnit& getRed() const
 				throw();
 
-			/** Change the value of the green component.
-					Change the value of of the green component of {\em *this} colorRGBA to the value
+			/** Changes the value of the green component.
+					Changes the value of of the green component of {\em *this} colorRGBA to the value
 					represented by the parameter {\em green_value}. See \Ref{ColorUnit} for further information.
 					@param       green_value the new green component of {\em *this} colorRGBA
 					@see         getGreen
@@ -355,7 +355,7 @@ namespace BALL
 				throw();
 
 			/** Mutable inspection of the green component.
-					Access the mutual reference of the green component of {\em *this} colorRGBA.
+					Accesses the mutual reference of the green component of {\em *this} colorRGBA.
 					See \Ref{ColorUnit} for further information concerning type conversion.
 					@return      ColorUnit& mutable reference to the green component of {\em *this} colorRGBA
 					@see         setGreen
@@ -365,7 +365,7 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the green component.
-					Access the constant reference of the green component of {\em *this} colorRGBA.
+					Accesses the constant reference of the green component of {\em *this} colorRGBA.
 					See \Ref{ColorUnit} for further information concerning type conversion.
 					@return      ColorUnit& constant reference to the green component of {\em *this} colorRGBA
 					@see         setGreen
@@ -374,8 +374,8 @@ namespace BALL
 			const ColorUnit& getGreen() const
 				throw();
 
-			/** Change the value of the blue component.
-					Change the value of of the blue component of {\em *this} colorRGBA to the value
+			/** Changes the value of the blue component.
+					Changes the value of of the blue component of {\em *this} colorRGBA to the value
 					represented by the parameter {\em blue_value}. See \Ref{ColorUnit} for further information.
 					@param       blue_value the new blue component of {\em *this} colorRGBA
 					@see         getBlue
@@ -385,7 +385,7 @@ namespace BALL
 				throw();
 
 			/** Mutable inspection of the blue component.
-					Access the mutual reference of the blue component of {\em *this} colorRGBA.
+					Accesses the mutual reference of the blue component of {\em *this} colorRGBA.
 					See \Ref{ColorUnit} for further information concerning type conversion.
 					@return      ColorUnit& mutable reference to the blue component of {\em *this} colorRGBA
 					@see         setBlue
@@ -395,7 +395,7 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the blue component.
-					Access the constant reference of the blue component of {\em *this} colorRGBA.
+					Accesses the constant reference of the blue component of {\em *this} colorRGBA.
 					See \Ref{ColorUnit} for further information concerning type conversion.
 					@return      ColorUnit& constant reference to the blue component of {\em *this} colorRGBA
 					@see         setBlue
@@ -404,8 +404,8 @@ namespace BALL
 			const ColorUnit& getBlue() const
 				throw();
 
-			/** Change the value of the alpha component.
-					Change the value of of the alpha component of {\em *this} colorRGBA to the value
+			/** Changes the value of the alpha component.
+					Changes the value of of the alpha component of {\em *this} colorRGBA to the value
 					represented by the parameter {\em alpha_value}. See \Ref{ColorUnit} for further information.
 					@param       alpha_value the new alpha component of {\em *this} colorRGBA
 					@see         getAlpha
@@ -415,7 +415,7 @@ namespace BALL
 				throw();
 
 			/** Mutable inspection of the alpha component.
-					Access the mutual reference of the alpha component of {\em *this} colorRGBA.
+					Accesses the mutual reference of the alpha component of {\em *this} colorRGBA.
 					See \Ref{ColorUnit} for further information concerning type conversion.
 					@return      ColorUnit& mutable reference to the alpha component of {\em *this} colorRGBA
 					@see         setAlpha
@@ -425,7 +425,7 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the alpha component.
-					Access the constant reference of the alpha component of {\em *this} colorRGBA.
+					Accesses the constant reference of the alpha component of {\em *this} colorRGBA.
 					See \Ref{ColorUnit} for further information concerning type conversion.
 					@return      ColorUnit& constant reference to the alpha component of {\em *this} colorRGBA
 					@see         setAlpha
@@ -434,8 +434,8 @@ namespace BALL
 			const ColorUnit& getAlpha() const
 				throw();
 
-			/** Change the values of the red, green, blue and alpha component.
-					Change the values of of the red, green, blue and alpha component of {\em *this}
+			/** Changes the values of the red, green, blue and alpha component.
+					Changes the values of of the red, green, blue and alpha component of {\em *this}
 					colorRGBA to the values represented by the parameters. See \Ref{ColorUnit} for
 					further information concerning type conversions.
 					@param       red_value the new red component of {\em *this} colorRGBA
@@ -451,7 +451,7 @@ namespace BALL
 				throw();
 
 			/** Inspection of the colorRGBA's components.
-					Access all the components of {\em *this} colorRGBA by using \Ref{ColorUnit}'s.
+					Accesses all the components of {\em *this} colorRGBA by using \Ref{ColorUnit}'s.
 					@param      red_value the colorUnit receiving the red component of {\em *this} colorRGBA
 					@param      green_value the colorUnit receiving the green component of {\em *this} colorRGBA
 					@param      blue_value the colorUnit receiving the blue component of {\em *this} colorRGBA
@@ -465,7 +465,7 @@ namespace BALL
 				throw();
 
 			/** Inspection of the colorRGBA's components.
-					Access only the red, green and blue components of {\em *this} colorRGBA by using \Ref{ColorUnit}'s.
+					Accesses only the red, green and blue components of {\em *this} colorRGBA by using \Ref{ColorUnit}'s.
 					@param      red_value the colorUnit receiving the red component of {\em *this} colorRGBA
 					@param      green_value the colorUnit receiving the green component of {\em *this} colorRGBA
 					@param      blue_value the colorUnit receiving the blue component of {\em *this} colorRGBA
@@ -485,7 +485,7 @@ namespace BALL
 			//@{
 
 			/** Equality test.
-					Test if {\em color} is equal to {\em *this} colorRGBA.
+					Tests if {\em color} is equal to {\em *this} colorRGBA.
 					Equality means that all components are equal. See \Ref{ColorUnit} for further
 					information concerning equality tests.
 					@param   color the colorRGBA to be compared with
@@ -496,7 +496,7 @@ namespace BALL
 				throw();
 
 			/** Unequality test.
-					Test if {\em color} is not equal to {\em *this} colorRGBA.
+					Tests if {\em color} is not equal to {\em *this} colorRGBA.
 					Unequality means that all components are unequal. See \Ref{ColorUnit} for further
 					information concerning unequality tests.
 					@param   color the colorRGBA to be compared with
@@ -507,7 +507,7 @@ namespace BALL
 				throw();
 
 			/** Smaller test.
-					Test if {\em *this} is smaller than {\em color} colorRGBA.
+					Tests if {\em *this} is smaller than {\em color} colorRGBA.
 					Smaller means that all components of {\em *this} are smaller than all the
 					components of {\em color} colorRGBA. See \Ref{ColorUnit} for further
 					information concerning smaller tests.
@@ -519,7 +519,7 @@ namespace BALL
 				throw();
 
 			/** Smaller or equal test.
-					Test if {\em *this} is smaller or equal than {\em color} colorRGBA.
+					Tests if {\em *this} is smaller or equal than {\em color} colorRGBA.
 					Smaller or equal means that all components of {\em *this} are smaller or equal than all the
 					components of {\em color} colorRGBA. See \Ref{ColorUnit} for further
 					information concerning smaller or equal tests.
@@ -531,7 +531,7 @@ namespace BALL
 				throw();
 
 			/** Greater test.
-					Test if {\em *this} is greater than {\em color} colorRGBA.
+					Tests if {\em *this} is greater than {\em color} colorRGBA.
 					Greater means that all components of {\em *this} are greater than all the
 					components of {\em color} colorRGBA. See \Ref{ColorUnit} for further
 					information concerning greater tests.
@@ -543,7 +543,7 @@ namespace BALL
 				throw();
 
 			/** Greater or equal test.
-					Test if {\em *this} is greater or equal than {\em color} colorRGBA.
+					Tests if {\em *this} is greater or equal than {\em color} colorRGBA.
 					Greater or equal means that all components of {\em *this} are greater or equal than all the
 					components of {\em color} colorRGBA. See \Ref{ColorUnit} for further
 					information concerning greater or equal tests.
@@ -560,7 +560,7 @@ namespace BALL
 			//@{
 
 			/** Internal value dump.
-					Dump the current color of {\em *this} colorRGBA to 
+					Dumps the current color of {\em *this} colorRGBA to 
 					the output ostream {\em s} with dumping depth {\em depth}.
 					@param   s output stream where to output the color of {\em *this} colorRGBA
 					@param   depth the dumping depth
@@ -576,7 +576,7 @@ namespace BALL
 			//@{
 
 			/** Persistent stream input and color restorage.
-					Read persistent colorRGBA data from the input stream {\em s} and restore the color of {\em *this}.\\
+					Reads persistent colorRGBA data from the input stream {\em s} and restores the color of {\em *this}.\\
 					{\bf Note:} Not yet implemented.
 					@param  s input stream from where to restore the color of {\em *this} colorRGBA
 			*/
@@ -584,7 +584,7 @@ namespace BALL
 				throw();
 
 			/** Persistent stream output and color storage.
-					Write persistent colorRGBA data to the output stream {\em s} and store the color of {\em *this}.\\
+					Writes persistent colorRGBA data to the output stream {\em s} and stores the color of {\em *this}.\\
 					{\bf Note:} Not yet implemented.
 					@param  s output stream to where the color of {\em *this} colorRGBA will be stored
 			*/
@@ -592,7 +592,7 @@ namespace BALL
 				throw();
 
 			/** Friendly stream input.
-					Read colorRGBA data from the input stream {\em s} and restore the color of {\em *this}.
+					Reads colorRGBA data from the input stream {\em s} and restore the color of {\em *this}.
 					The red, green, blue and alpha component are read as integers from the input stream.
 					THe method expects an vector as written as the one by the output stream operator.
 					This method is provided for convienience.
@@ -602,7 +602,7 @@ namespace BALL
 			friend std::istream& operator >> (std::istream& s, ColorRGBA& color);
 
 			/** Friendly stream output.
-					Write colorRGBA data to the output stream {\em s} and store the color of {\em *this}.
+					Writes colorRGBA data to the output stream {\em s} and store the color of {\em *this}.
 					The color will be stored as an vector in integer format. The output will look
 					like '(0-255, 0-255, 0-255, 0-255)'.
 					This method is provided for convienience.
