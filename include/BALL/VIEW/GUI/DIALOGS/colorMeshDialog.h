@@ -69,6 +69,9 @@ namespace BALL
 
 				Mesh* getMesh()
 					throw() { return mesh_;}
+
+				void setComposite(Composite& composite)
+					throw() { composite_ = &composite;}
 				
 		public slots:
 				void applyPressed();
