@@ -1,7 +1,11 @@
-// $Id: snapShot.C,v 1.10 2000/03/26 20:38:15 oliver Exp $
+// $Id: snapShot.C,v 1.11 2000/05/10 08:37:33 pmueller Exp $
 
+// BALL includes 
 #include <BALL/MOLMEC/COMMON/snapShot.h>
 #include <BALL/CONCEPT/XDRPersistenceManager.h>
+
+
+// STL includes 
 #include <algorithm>
 
 using namespace std;
@@ -9,9 +13,9 @@ using namespace std;
 namespace BALL
 {
 	// Definition of class-specific options and default values
-	const char *SnapShotManager::Option::FLUSH_TO_DISK_FREQUENCY = "Flush_to_disk_frequency";
+	const char *SnapShotManager::Option::FLUSH_TO_DISK_FREQUENCY = "flush_to_disk_frequency";
 
-	const unsigned int SnapShotManager::Default::FLUSH_TO_DISK_FREQUENCY = 100;
+	const unsigned int SnapShotManager::Default::FLUSH_TO_DISK_FREQUENCY = 3;
 
 	// The default constructor of the SnapShot class. 
   SnapShot::SnapShot()
@@ -84,32 +88,36 @@ namespace BALL
 	}
 
 	// The constructor of the SnapshotManager.
-	// It expects a valid system, a force field, and a filename  of a snapshot file.
+	// It expects a valid system, a force field, and a filename  of a snapshot file along
+  // with a boolean that indicates if an existing file shall be overwritten.
 	// If the file does not exist yet, it will be created and a header consisting
 	// of the system and some internal information will be written to it.
-	// It the file is already existent, the header will read in and compared
-	// with the given system. They must match. Subsequent snapshots will
+	// It the file is already existent and overwrite is set to false, the header will read in and compared
+	// with the given system. They must match. Subsequent snapshots will then 
 	// be appended to the file.
-	SnapShotManager::SnapShotManager (System & my_system, ForceField & my_forcefield, char *my_snapshot_file)
+	SnapShotManager::SnapShotManager (System & my_system, ForceField & my_forcefield, 
+                     String my_snapshot_file,bool overwrite)
 	{
 		// call the setup method
-		valid_ = setup (my_system, my_forcefield, my_snapshot_file, options);
+		valid_ = setup (my_system, my_forcefield, my_snapshot_file, overwrite, options);
 	}
 
 
 	// The constructor of the SnapshotManager.
-	// It expects a valid system and force field, a filename  of a snapshot file. 
-	// and options. 
+	// It expects a valid system and force field, a filename  of a snapshot file along 
+  // with a boolean that indicates if an existing file shall be overwritten,
+	// and the options. 
 	// If the file does not exist yet, it will be created and a header consisting
 	// of the system and some internal information will be written to it.
-	// It the file is already existent, the header will read in and compared
+	// It the file is already existent and overwrite is set to false, the header will read in and compared
 	// with the given system. They must match. Subsequent snapshots will 
 	// be appended to the file. 
-	SnapShotManager::SnapShotManager (System & my_system,
-																		ForceField & my_forcefield, char *my_snapshot_file, Options & myoptions)
+	SnapShotManager::SnapShotManager (System & my_system, 
+											ForceField & my_forcefield, String my_snapshot_file, bool overwrite,
+                                    Options & myoptions)
 	{
 		// simply call the setup method
-		valid_ = setup (my_system, my_forcefield, my_snapshot_file, myoptions);
+		valid_ = setup (my_system, my_forcefield, my_snapshot_file, overwrite, myoptions);
 	}
 
 	// A simple constructor for SnapShotManager, which does basically nothing 
@@ -134,7 +142,7 @@ namespace BALL
 
 		options = rhs.options;
 		valid_ = rhs.valid_;
-		flush_to_disk_freq_ = rhs.flush_to_disk_freq_;
+		flush_to_disk_frequency_ = rhs.flush_to_disk_frequency_;
 		system_ptr_ = rhs.system_ptr_;
 		force_field_ptr_ = rhs.force_field_ptr_;
 		sprintf (snapshot_filename_, rhs.snapshot_filename_);
@@ -178,7 +186,7 @@ namespace BALL
 
 		options = rhs.options;
 		valid_ = rhs.valid_;
-		flush_to_disk_freq_ = rhs.flush_to_disk_freq_;
+		flush_to_disk_frequency_ = rhs.flush_to_disk_frequency_;
 		system_ptr_ = rhs.system_ptr_;
 		force_field_ptr_ = rhs.force_field_ptr_;
 		sprintf (snapshot_filename_, rhs.snapshot_filename_);
@@ -217,9 +225,34 @@ namespace BALL
 	}
 
 
+  // This method sets the frequency of saving snapshots to hard disk 
+  void SnapShotManager::setFlushToDiskFrequency(Size number)
+   {
+
+	 if(number > 0)
+	   {
+	   flush_to_disk_frequency_ = number; 
+           options[SnapShotManager::Option::FLUSH_TO_DISK_FREQUENCY] = number;
+     }
+	 else
+	   {
+		 Log.level(LogStream::WARNING) << 
+         "A flush-to-disk-frequency of zero is not allowed! Using old value" << endl;
+		 }
+   }
+
+	
+	// Get the current frequency for saving to hard disk
+	Size SnapShotManager::getFlushToDiskFrequency() const
+	  {
+		return flush_to_disk_frequency_; 
+		}
+
+
 	// The setup method does the actual preparations
 	bool SnapShotManager::setup (System & my_system,
-															 ForceField & my_forcefield, char *my_snapshot_file, Options & myoptions)
+															 ForceField & my_forcefield, String my_snapshot_file, 
+                               bool overwrite, Options & myoptions)
 	{
 		// local variables
 		bool result;
@@ -273,10 +306,10 @@ namespace BALL
 		// Set class--specific options to their default  values if necessary
 		options.setDefaultInteger (SnapShotManager::Option::FLUSH_TO_DISK_FREQUENCY,
 															 SnapShotManager::Default::FLUSH_TO_DISK_FREQUENCY);
-		flush_to_disk_freq_ = options.getInteger (SnapShotManager::Option::FLUSH_TO_DISK_FREQUENCY);
+		flush_to_disk_frequency_ = options.getInteger (SnapShotManager::Option::FLUSH_TO_DISK_FREQUENCY);
 
 		// The name of the output file
-		sprintf (snapshot_filename_, my_snapshot_file);
+		sprintf (snapshot_filename_, my_snapshot_file.c_str());
 
 		// we start out with zero snapshots 
 		snapshot_counter_ = 0;
@@ -286,15 +319,21 @@ namespace BALL
 		// try to open the file in read-mode
 		input_file.open (snapshot_filename_, ios::in | ios::binary);
 
-		if (!input_file)
+		if (!input_file || overwrite == true)
 		{
-			// the file does not exist. Create a new snapshot file 
+			// The file does not exist or we want to create a new one at any rate.
 			result = writeHeader (header_, snapshot_filename_);
+
+		  Log.level (LogStream::INFORMATION) << " SnapShot file " << snapshot_filename_ 
+         << " is opened in overwrite mode. " << endl;
 		}
 		else
 		{
-			//  the file exists. Try to read the header in it 
+			//  The file exists and append-mode is chosen. Read in the header 
 			result = readHeader (header_, snapshot_filename_);
+
+		  Log.level (LogStream::INFORMATION) << " SnapShot file " << snapshot_filename_ 
+         << " is opened in append mode. " << endl;
 		}
 
 		snapshot_counter_ = header_.no_of_snapshots;
@@ -355,8 +394,8 @@ namespace BALL
 		input_file.read ((char *) &header.reserved5, sizeof (header.reserved5));
 
 		// Report some information about the snapshot file 
-		Log.level (LogStream::INFORMATION) << " SnapShot file " << filename
-			<< " contains " << header.no_of_snapshots << " snapshots. " << endl << endl;
+		// Log.level (LogStream::INFORMATION) << " SnapShot file " << filename
+                // << " contains " << header.no_of_snapshots << " snapshots. " << endl << endl;
 
 
 		// BAUSTELLE: Ich verstehe den XDRPersistenceManager nicht
@@ -649,11 +688,12 @@ namespace BALL
 		// First store the index of this snapshot. SnapShots are counted starting with 1. 
 		snapshot_ptr->index = snapshot_counter_ + 1;
 
+
 		// One more snapshot. Add it to the current list of snapshots
 		snapshot_list_.push_back (snapshot_ptr);
 		snapshot_counter_++;
 
-		if (snapshot_list_.size() >= flush_to_disk_freq_)
+		if (snapshot_list_.size() >= flush_to_disk_frequency_)
 		{
 			// write all snapshots to disk in order to prevent memory overflow
 			flushToDisk();
@@ -773,98 +813,125 @@ namespace BALL
 
 
 
-	// This method searches the given snaphot (by index) and returns a copy
-	// of it.  
-	// If it does not find the item, an invalid snapshot object is returned 
-	SnapShot SnapShotManager::getSnapShot (Size index)
-	{
-		SnapShot tmp;
+    // This method searches the given snaphot (by index) and returns a copy
+    // of it.  
+    // If it does not find the item, an invalid snapshot object is returned 
+    // Random access is slow (sequential search from the beginning). 
+    SnapShot SnapShotManager::getSnapShot(Size index)
+      {
+      static Size last_disk_index = 0;        // save index and position of the last getSnapShot
+      static Size last_disk_position = 0;     // that required hard disk access  
+  
+      SnapShot tmp;                 
 
-		// first look in main memory
-		Size pos = index - snapshot_counter_ + snapshot_list_.size() - 1;
-
-		if (pos < snapshot_list_.size())
-		{
-			// one of the recent snapshots is wanted -> it should be in
-			// main memory 
-			if (snapshot_list_[pos]->index == index)
-			{
-				return *snapshot_list_[pos];
-			}
-			else
-			{
-				// something must be wrong with the data structure
-				Log.level (LogStream::ERROR) << "Error in SnapShotManager::getSnapShot. "
-					<< "Internal data structure must be corrupted! " << endl;
-				return tmp;
-			}
-		}
-
-		if (pos > snapshot_list_.size())
-		{
-			// the list in memory always contains the highest index. If the calculated 
-			// position is beyond the current size, this means that no such snapshot
-			// exists, neither in memory nor on disk 
-			return tmp;
-		}
+      // first look in main memory
+      int pos = index - snapshot_counter_ + snapshot_list_.size() - 1; 
 
 
-		// The item is not in main memory. 
-		// we have to go the hard way and search the file on disk
-		Size counter = 0;
-		Size position;
+      if(pos >= 0 && pos < (int) snapshot_list_.size())
+        {
+        // one of the recent snapshots is wanted -> it should be in
+        // main memory 
+        if(snapshot_list_[pos]->index == index)
+          {
+          return *snapshot_list_[pos]; 
+          }
+        else
+          {
+          // something must be wrong with the data structure
+          Log.level(LogStream::ERROR) << "Error in SnapShotManager::getSnapShot. " 
+                                      << "Internal data structure must be corrupted! " << endl;
+          return tmp; 
+          }
+        }
 
-		fstream input_file (snapshot_filename_, ios::in | ios::binary);
+      if(pos >=  static_cast<int>(snapshot_list_.size()))
+        {
+        // the list in memory always contains the highest index. If the calculated 
+        // position is beyond the current size, this means that no such snapshot
+        // exists, neither in memory nor on disk 
+        return tmp; 
+        }
+                
 
-		if (!input_file)
-		{
-			// the file cannot be opened
-			Log.level (LogStream::ERROR) << "Cannot open snapshot file " << snapshot_filename_ << endl;
+      // The item is not in main memory. 
+      // we have to go the hard way and search the file on disk
+      Size counter;
+      Size position; 
 
-			tmp.valid = false;
-			return tmp;
-		}
+      // if a previous disk access was done, we might use this information if the new
+      // search index is bigger than the old one
+      if( (index >= last_disk_index) && (last_disk_position != 0) )
+        {
+	      counter = last_disk_index - 1;  
+	      position = last_disk_position; 
+	      }
+      else
+        {
+	      // start searchin from the beginning of the snapshot file 
+      	counter = 0;
+	      position = header_.start_position; 
+	      }
 
 
-		// set the file pointer to the first entry
-		input_file.seekp ((Index) header_.start_position);
+      fstream input_file(snapshot_filename_,ios::in|ios::binary);
+
+      if(!input_file)
+        {
+        // the file cannot be opened
+        Log.level(LogStream::ERROR) 
+                << "Cannot open snapshot file " << snapshot_filename_ << endl;
+
+        tmp.valid = false; 
+        return tmp; 
+        }
 
 
-		while (counter < header_.no_of_snapshots)
-		{
-			// read the index of the snapshot object and check if it is
-			// the right one
-			position = input_file.tellp();
+      // set the file pointer to the first entry or the last disk position 
+      input_file.seekp(position);
 
-			input_file.read ((char *) &tmp.valid, sizeof (tmp.valid));
-			input_file.read ((char *) &tmp.index, sizeof (tmp.index));
-			input_file.read ((char *) &tmp.total_length, sizeof (tmp.total_length));
 
-			if (tmp.valid == true && tmp.index == index)
-			{
-				// the search has been successful 
-				input_file.seekp ((Index) position);
-				input_file >> tmp;
+      while(counter < header_.no_of_snapshots)
+        {
+        // read the index of the snapshot object and check if it is
+        // the right one
+        position = input_file.tellp(); 
 
-				input_file.close();
-				return tmp;
-			}
-			else
-			{
-				// skip this  entry 
-				input_file.seekp ((Index) position + (Index) tmp.total_length);
-				counter++;
-			}
-		}
+        input_file.read((char *) &tmp.valid, sizeof(tmp.valid)); 
+        input_file.read((char *) &tmp.index, sizeof(tmp.index)); 
+        input_file.read((char *) &tmp.total_length, sizeof(tmp.total_length)); 
 
-		input_file.close();
+        if(tmp.valid == true && tmp.index == index)
+          {
+          // the search has been successful 
+          input_file.seekp(position); 
+          input_file >> tmp; 
 
-		// unsuccessful search
-		tmp.valid = false;
-		tmp.index = 0;
-		return tmp;
+          input_file.close(); 
 
-	}	// end of SnapShotManager::getSnapShot
+	  // save the current position of the file pointer
+	  last_disk_position = position;
+	  last_disk_index = index;
+
+          return tmp; 
+          }
+        else
+         {
+         // skip this  entry 
+         input_file.seekp(position + tmp.total_length); 
+         counter++; 
+         }
+        }
+      
+      input_file.close(); 
+
+      // unsuccessful search
+      tmp.valid = false;
+      tmp.index = 0; 
+      return tmp; 
+
+      } // end of SnapShotManager::getSnapShot
+
 
 
 
