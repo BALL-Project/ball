@@ -147,10 +147,10 @@ namespace BALL
 									if (energy < -0.5)
 									{
 										HBondBool_[vec_[i].number + vec_.size()*(data_it->number)] = true;
-										PDBAtomIterator ai;
-										Atom *pacceptor;
-										Atom donor; 
-										for(ai=(vec_[i].pres)->beginPDBAtom(); +ai; ++ai)
+										AtomIterator ai;
+										Atom *pacceptor = 0;
+										Atom* donor = 0; 
+										for(ai=(vec_[i].pres)->beginAtom(); +ai; ++ai)
 										{
 											if(ai->getName() == "O")
 											{
@@ -158,14 +158,15 @@ namespace BALL
 											}
 										}	
 										
-										for(ai=(data_it->pres)->beginPDBAtom(); +ai; ++ai)
+										for(ai=(data_it->pres)->beginAtom(); +ai; ++ai)
 										{
 											if(ai->getName() == "N")
 											{
-												donor=*ai;
+												donor=&*ai;
 											}
 										}		
-										donor.setProperty(NamedProperty("HBOND_DONOR",pacceptor));
+										if (!donor || !pacceptor) continue;
+										donor->setProperty("HBOND_DONOR", *pacceptor);
 									}
 									else
 									{
