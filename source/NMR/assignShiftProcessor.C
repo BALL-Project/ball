@@ -1,4 +1,4 @@
-// $Id: assignShiftProcessor.C,v 1.12 2000/09/25 13:30:55 oliver Exp $
+// $Id: assignShiftProcessor.C,v 1.13 2000/09/25 21:24:21 amoll Exp $
 
 #include<BALL/NMR/assignShiftProcessor.h>
 #include<BALL/KERNEL/PDBAtom.h>
@@ -32,9 +32,9 @@ namespace BALL
 		// BAUSTELLE: this could be done in a more general manner
 		FragmentDB frag_db;
 		StringHashMap<String>* map = 0;
-		if (frag_db.getNamingStandards().has("Amber-PDB"))
+		if (frag_db.getNamingStandards().has("Amber"))
 		{
-			map = frag_db.getNamingStandards()["Amber-PDB"];
+			map = frag_db.getNamingStandards()["Amber"];
 		}
 
 		StringHashMap<String> transformTable;
@@ -61,15 +61,7 @@ cout << endl << endl;
 			String atom_name    = atom_data_[atompos]->atomName;
 			if (map != 0)
 			{
-				if (!frag_db.normalize_names.matchName(residue_name, atom_name, map))
-				{
-					Log.warn() << "AssignShiftProcessor::start: could not convert atom name " 
-										 << residue_name << ":" << atom_name << endl;
-				}
-			}
-			else 
-			{
-				Log.warn() << "AssignShiftProcessor::start:  no appropriate map found for name conversion" << endl;
+				frag_db.normalize_names.matchName(residue_name, atom_name, map);
 			}
 			const String entry(residue_name + ":" + atom_name);
 
@@ -101,8 +93,10 @@ cout << fullName << " " << atom_data_[atompos]->shiftValue << endl;
 			Size size = transformTable[entry].split(tokens, "/");
 			for (Position wordpos = 0; wordpos < size ; wordpos++ )
 			{
-				shift_table_[tokens[wordpos]] = atom_data_[atompos]->shiftValue;
-cout << tokens[wordpos] << " " << atom_data_[atompos]->shiftValue << endl;
+				String fullName(atom_data_[atompos]->residueSeqCode);
+				fullName += tokens[wordpos];
+				shift_table_[fullName] = atom_data_[atompos]->shiftValue;
+cout << fullName << " " << atom_data_[atompos]->shiftValue << endl;
 			}
 		}
 
