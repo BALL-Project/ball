@@ -1,4 +1,4 @@
-# $Id: Makefile,v 1.11 2000/03/25 22:45:06 oliver Exp $
+# $Id: Makefile,v 1.12 2000/03/27 20:00:12 oliver Exp $
 #========================
 # BALL/EXAMPLES Makefile
 #========================
@@ -9,6 +9,9 @@ EXECUTABLES=proteinMapper PDB2discover amberEnergy bindingEnergy ramachandran PD
 all:	$(EXECUTABLES)
 
 include ../common.mak
+
+# remove the library specific flags
+BALL_CXXFLAGS=
 
 clean:	default_clean
 	@$(RM) $(EXECUTABLES)

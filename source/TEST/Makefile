@@ -5,6 +5,9 @@ DIRECTORY=TEST
 include ../common.mak
 include .Dependencies
 
+# remove the library specific flags
+BALL_CXXFLAGS=
+
 # do not optimize tests (reduces compile time drastically)
 CPP_MODE_FLAGS=$(CPP_MODE_FLAGS_NO_OPTIMIZATION)
 
