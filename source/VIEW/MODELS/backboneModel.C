@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.13 2004/09/04 00:10:02 amoll Exp $
+// $Id: backboneModel.C,v 1.14 2004/09/04 01:50:37 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -61,6 +61,7 @@ namespace BALL
 		{
 			ModelProcessor::clear();
 			spline_vector_.clear();
+			spline_.clear();
 			last_parent_ = 0;
 			have_start_point_ = false;
 		}
@@ -206,6 +207,8 @@ namespace BALL
 											 (h3 * a.getTangentialVector().z) + 
 											 (h4 * b.getTangentialVector().z);
 
+				spline_.push_back(new_vector);
+
 				// build the objects
 				buildGraphicalRepresentation_
 					(new_vector, ((index <= max_step/2) ? a.getAtom() : b.getAtom()));
@@ -250,6 +253,7 @@ namespace BALL
 			if (spline_vector_.size() == 0) return true;
 
 			createBackbone_();
+			spline_.clear();
 			return true;
 		}
 		

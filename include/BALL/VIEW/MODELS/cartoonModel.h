@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.h,v 1.16 2004/07/03 10:47:38 amoll Exp $
+// $Id: cartoonModel.h,v 1.17 2004/09/04 01:50:47 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_CARTOONMODEL_H
@@ -131,6 +131,9 @@ namespace BALL
 			void drawTube_(SecondaryStructure& ss)
 				throw();
 
+			void drawDNA_(SecondaryStructure& ss)
+				throw();
+
 			//_ create a spline segment between two spline points a and b
 			void createSplineSegment2_(const SplinePoint &a, const SplinePoint &b);
 
@@ -143,8 +146,6 @@ namespace BALL
 											 float arrow_width,
 											 Position& last_vertices,
 											 Mesh& mesh);
-
-			std::vector<Vector3> spline_;
 
 			Composite* last_chain_;
 

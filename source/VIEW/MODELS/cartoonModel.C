@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.28 2004/07/20 21:58:39 amoll Exp $
+// $Id: cartoonModel.C,v 1.29 2004/09/04 01:50:37 amoll Exp $
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
@@ -73,6 +73,110 @@ namespace BALL
 		}
 
 		// -----------------------------------------------------------------
+		void AddCartoonModel::drawDNA_(SecondaryStructure& ss)
+			throw()
+		{
+			AtomIterator it;
+			BALL_FOREACH_ATOM(ss, it)
+			{
+				if (it->getName() == "P")
+				{
+					SplinePoint spline_point((*it).getPosition(), &*it);
+					spline_vector_.push_back(spline_point);
+				}
+			}
+
+			createBackbone_();
+
+			/*
+			A: N6
+			C: N4
+		 	G: N1
+			T: O4
+			*/
+
+			Position nr_of_residues = ss.countResidues();
+			for (Position pos = 0; pos < nr_of_residues; pos++)
+			{
+				Atom* atom = 0;
+				Residue* r = ss.getResidue(pos);
+				if (r->getName() == "A")
+				{
+					BALL_FOREACH_ATOM(*r, it)
+					{
+						if (it->getName() == "N6") 
+						{
+							atom = &*it;
+							break;
+						}
+					}
+				}
+				else if (r->getName() == "C")
+				{
+					BALL_FOREACH_ATOM(*r, it)
+					{
+						if (it->getName() == "N4") 
+						{
+							atom = &*it;
+							break;
+						}
+					}
+				}
+				else if (r->getName() == "G")
+				{
+					BALL_FOREACH_ATOM(*r, it)
+					{
+						if (it->getName() == "N1") 
+						{
+							atom = &*it;
+							break;
+						}
+					}
+				}
+				else if (r->getName() == "T")
+				{
+					BALL_FOREACH_ATOM(*r, it)
+					{
+						if (it->getName() == "O4") 
+						{
+							atom = &*it;
+							break;
+						}
+					}
+				}
+
+				// did we find an atom to create the connection?
+				if (atom== 0) continue;
+
+
+				float distance = 999;
+				Vector3 nearest_position;
+				for (Position j = 0; j < 9; j++)
+				{
+					Vector3 splinep = spline_[pos*9 + j];
+					float d = (splinep - atom->getPosition()).getSquareLength();
+					if (d < distance)
+					{
+						nearest_position = splinep;
+						distance = d;
+					}
+				}
+
+				// draw the connection
+				Tube* tube = new Tube;
+				if (!tube) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Tube));
+				
+				tube->setRadius(tube_radius_);
+				tube->setVertex1(atom->getPosition());
+				tube->setVertex2(nearest_position);
+				tube->setComposite(atom);
+				geometric_objects_.push_back(tube);
+			}
+
+			have_start_point_ = false;
+
+		}
+		
 		void AddCartoonModel::drawStrand_(SecondaryStructure& ss)
 			throw()
 		{
@@ -507,6 +611,19 @@ namespace BALL
 			}
 			else
 			{
+				if (ss.countResidues() == 0) return Processor::CONTINUE;
+
+				Residue* r = ss.getResidue(0);
+				if ((r->getName().size() == 1) &&
+						(r->getName() == "A" ||
+						 r->getName() == "C" ||
+						 r->getName() == "G" ||
+						 r->getName() == "T"))
+				{
+					drawDNA_(ss);
+					return Processor::CONTINUE;
+				}
+
 				drawTube_(ss) ;
 			}
 

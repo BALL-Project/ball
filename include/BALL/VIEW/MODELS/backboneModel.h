@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.h,v 1.12 2004/06/07 13:16:14 amoll Exp $
+// $Id: backboneModel.h,v 1.13 2004/09/04 01:50:47 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_BACKBONEMODEL_H
@@ -155,6 +155,7 @@ namespace BALL
 
 			//_
 			vector<SplinePoint> spline_vector_;
+			std::vector<Vector3> spline_;
 
 			//_
 			bool have_start_point_;
