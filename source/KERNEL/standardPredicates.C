@@ -1,4 +1,4 @@
-// $Id: standardPredicates.C,v 1.11 2000/05/25 10:57:03 oliver Exp $
+// $Id: standardPredicates.C,v 1.12 2000/05/26 08:53:49 oliver Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -6,6 +6,9 @@
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/residue.h>
+#include <BALL/KERNEL/protein.h>
+#include <BALL/KERNEL/chain.h>
+#include <BALL/KERNEL/secondaryStructure.h>
 #include <BALL/KERNEL/nucleotide.h>
 #include <BALL/KERNEL/bond.h>
 
@@ -73,25 +76,40 @@ namespace BALL
 	
 	// protein predicate
 
-	bool ProteinPredicate::operator () (const Atom& /* atom */) const
+	bool ProteinPredicate::operator () (const Atom& atom) const
 	{
-		//BAUSTELLE
+		const Protein* protein = atom.getAncestor(RTTI::getDefault<Protein>());
+		if (protein != 0)
+		{
+			return (protein->getName() == argument_);
+		}
+
 		return false;
 	}
 	
 	// chain predicate
 
-	bool ChainPredicate::operator () (const Atom& /* atom */) const
+	bool ChainPredicate::operator () (const Atom& atom) const
 	{
-		//BAUSTELLE
+ 		const Chain* chain = atom.getAncestor(RTTI::getDefault<Chain>());
+		if (chain != 0)
+		{
+			return (chain->getName() == argument_);
+		}
+
 		return false;
 	}
 	
 	// secondary structure predicate
 
-	bool SecondaryStructurePredicate::operator () (const Atom& /* atom */) const
+	bool SecondaryStructurePredicate::operator () (const Atom& atom) const
 	{
-		//BAUSTELLE
+ 		const SecondaryStructure* sec_struct = atom.getAncestor(RTTI::getDefault<SecondaryStructure>());
+		if (sec_struct != 0)
+		{
+			return (sec_struct->getName() == argument_);
+		}
+
 		return false;
 	}
 	
@@ -363,8 +381,10 @@ namespace BALL
 			}
 		}
 	}
-	bool ConnectedToPredicate::parse(const String& group, 
-		std::list<std::pair<String,String> >& subs) const
+
+
+	bool ConnectedToPredicate::parse
+		(const String& group, std::list<std::pair<String,String> >& subs) const
 	{
 		// BAUSTELLE
 		// EIGENTLICH müssen hier Symbolfolgen erzeugt werden, keine Strings.
@@ -510,59 +530,33 @@ namespace BALL
 		return true;
 	}
 
-	bool ConnectedToPredicate::bondOrderMatch(const String& bond_description,
-			const Bond::Order order) const
+	bool ConnectedToPredicate::bondOrderMatch
+		(const String& bond_description, const Bond::Order order) const
 	{
-		switch (bond_description[0]) 
+		Bond::Order required_order;
+		bool result = false;
+		if (bond_description[0] != '.')
 		{
-			case '.' :
-				return true;
-
-			case '-' :
-				if (order == Bond::ORDER__SINGLE)
-				{
-					return true;
-				}
-				else
-				{
-					return false;
-				}
-				
-			case '=' :
-				if (order == Bond::ORDER__DOUBLE)
-				{
-					return true;
-				}
-				else
-				{
-					return false;
-				}
-				
-			case '#' :
-				if (order == Bond::ORDER__TRIPLE)
-				{
-					return true;
-				}
-				else
-				{
-					return false;
-				}
-				
-			case '~' :
-				if (order == Bond::ORDER__AROMATIC)
-				{
-					return true;
-				}
-				else
-				{
-					return false;
-				}
+			switch (bond_description[0]) 
+			{
+				case '-' : required_order = Bond::ORDER__SINGLE; break;
+				case '=' : required_order = Bond::ORDER__DOUBLE; break;
+				case '#' : required_order = Bond::ORDER__TRIPLE; break;
+				case '~' : required_order = Bond::ORDER__AROMATIC; break;
+			}
+			result = (required_order == order);
 		}
-		return false;
+		else
+		{
+			result = true;
+		}
+
+		return result;
 	}
 
-	bool ConnectedToPredicate::findAndTest(const String& group, const Atom&
-			atom, HashSet<const Bond*>& found) const
+	bool ConnectedToPredicate::findAndTest
+		(const String& group, const Atom& atom, 
+		 HashSet<const Bond*>& found) const
 	{
 		if ((group[0] == atom.getElement().getSymbol()) || (group[0] == '*'))
 		{
@@ -608,7 +602,7 @@ namespace BALL
 		// with matching bond.
 
 		for (subgroups_it = subgroups.begin(); subgroups_it !=
-				subgroups.end(); ++subgroups_it) 
+				 subgroups.end(); ++subgroups_it) 
 		{
 			HashSet<const Bond*> deeper;
 			for (Size i = 0; i < atom.countBonds(); ++i)
@@ -617,9 +611,8 @@ namespace BALL
 				{
 					if (subgroups_it->second.size() < 1) 
 					{
-						Log.error() << "subgroup too short: " <<
-							subgroups_it->second.size() << " " << subgroups_it->second <<
-							endl;
+						Log.error() << "ConnectedToPredicate::find: subgroup too short: " 
+												<< subgroups_it->second.size() << " " << subgroups_it->second << endl;
 						return false;
 					}
 
@@ -631,17 +624,16 @@ namespace BALL
 							deeper.insert(atom.getBond(i));
 						}
 						else 
-						{
+						{//BAUSTELLE
 						}
 					}
 					else
 					{
-						if (findAndTest(subgroups_it->second,
-									*(atom.getBond(i)->getPartner(atom)), deeper))
-						{
+						if (findAndTest(subgroups_it->second, *(atom.getBond(i)->getPartner(atom)), deeper))
+						{//BAUSTELLE
 						}
 						else
-						{
+						{//BAUSTELLE
 						}
 					}
 				}
@@ -652,12 +644,7 @@ namespace BALL
 			}
 		}
 
-		if (L.empty()) 
-		{
-			return false;
-		}
-
-		if (L.size() != subgroups.size())
+		if (L.empty()  || (L.size() != subgroups.size()))
 		{
 			return false;
 		}
