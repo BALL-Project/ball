@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>546</width>
-            <height>374</height>
+            <height>398</height>
         </rect>
     </property>
     <property name="caption">
@@ -24,7 +24,7 @@
                 <x>0</x>
                 <y>-1</y>
                 <width>547</width>
-                <height>378</height>
+                <height>400</height>
             </rect>
         </property>
         <widget class="QWidget">

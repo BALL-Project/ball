@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: coloringSettingsDialog.C,v 1.33 2004/10/23 18:15:30 amoll Exp $
+// $Id: coloringSettingsDialog.C,v 1.34 2004/12/11 00:43:07 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/coloringSettingsDialog.h>
@@ -41,8 +41,8 @@ namespace BALL
 		{
 			setNumCols(2);
 			horizontalHeader()->setLabel(1, "Color");
-			setGeometry(5,5, 365, 345);
-			setColumnWidth(1, 200);
+			setGeometry(5,5, 400, 388);
+			setColumnWidth(1, 230);
 			setSelectionMode(NoSelection);
 		}
 
@@ -727,5 +727,4 @@ namespace BALL
 		}
 
   } // namespace VIEW
-
 } // namespace BALL
