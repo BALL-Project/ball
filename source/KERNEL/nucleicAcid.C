@@ -1,4 +1,4 @@
-// $Id: nucleicAcid.C,v 1.2 2000/01/11 20:17:33 oliver Exp $
+// $Id: nucleicAcid.C,v 1.3 2000/05/10 19:03:57 amoll Exp $
 
 #include <BALL/KERNEL/nucleicAcid.h>
 #include <BALL/KERNEL/global.h>
@@ -87,7 +87,26 @@ namespace BALL
 
 		id_.swap(nucleic_acid.id_);
 	}
+
+	Nucleotide* NucleicAcid::getNucleotide(Position position)
+	{
+		for (NucleotideIterator Nucleotide_it = beginNucleotide(); !Nucleotide_it.isEnd(); ++Nucleotide_it)
+		{
+			if (position-- == 0)
+			{
+				return &(*Nucleotide_it);
+			}
+		}
+
+		return 0;
+	}
+
+	const Nucleotide* NucleicAcid::getNucleotide(Position position) const
+	{
+		return ((NucleicAcid *)this)->getNucleotide(position);
+	}
 		
+
 	Nucleotide* NucleicAcid::get3Prime()
 	{
 		//BAUSTELLE
