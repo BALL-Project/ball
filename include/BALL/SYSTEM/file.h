@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.h,v 1.48 2003/04/18 11:55:57 oliver Exp $
+// $Id: file.h,v 1.49 2003/04/22 17:54:33 oliver Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -33,10 +33,7 @@
 
 #include <iostream>
 #include <fstream>
-#include <stdlib.h>			// 'getenv'
 #include <sys/types.h>
-#include <sys/stat.h>		// 'stat', 'lstat'
-#include <stdio.h>			// 'rename'
 #include <map>
 
 
@@ -260,7 +257,7 @@ namespace BALL
 				@return File - new constructed File object cloned from {\em file}
 		*/
 		File(const File& file)
-			throw (Exception::FileNotFound);
+			throw(Exception::FileNotFound);
 
 		/** Destructor.
 				The file is closed.
