@@ -1,4 +1,4 @@
-// $Id: socket.h,v 1.9 2000/01/13 22:20:20 oliver Exp $
+// $Id: socket.h,v 1.10 2000/01/14 20:42:41 oliver Exp $
 
 #ifndef BALL_SYSTEM_SOCKET_H
 #define BALL_SYSTEM_SOCKET_H
@@ -18,6 +18,9 @@
  
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
+#endif
+#ifndef BALL_DATATYPE_STRING_H
+#	include <BALL/DATATYPE/string.h>
 #endif
 
 #include <iostream>
@@ -443,7 +446,7 @@ namespace BALL
 
 		SocketBuf* rdbuf() 
 		{ 
-			return (SocketBuf*)BALL_IOS::rdbuf(); 
+			return (SocketBuf*)BALL_ISTREAM::rdbuf(); 
 		}
 
 		SocketBuf* operator -> () 
@@ -493,7 +496,7 @@ namespace BALL
 		///
 		SocketBuf* rdbuf() 
 		{ 
-			return(SocketBuf*)BALL_IOS::rdbuf(); 
+			return(SocketBuf*)BALL_OSTREAM::rdbuf(); 
 		}
 
 		///
@@ -515,9 +518,9 @@ namespace BALL
 	{
 		protected:
 
-		void setport (const char* sn, const char* pn = "tcp");
+		void setport (const String& service_name, const String& protocol_name= "tcp");
 
-		void setaddr (const char* hn);
+		void setaddr (const String& hostname);
 
 
 		public:
@@ -532,13 +535,13 @@ namespace BALL
 		SockInetAddr(unsigned long addr, int port_no = 0);
 
 		/// Creates a SockInetAddr object from a given hostname and port number
-		SockInetAddr(const char* host_name, int port_no = 0);
+		SockInetAddr(const String& host_name, int port_no = 0);
 
 		/// 
-		SockInetAddr(unsigned long addr, const char* service_name, const char* protocol_name = "tcp");
+		SockInetAddr(unsigned long addr, const String& service_name, const String& protocol_name = "tcp");
 
 		///
-		SockInetAddr(const char* host_name, const char* service_name, const char* protocol_name = "tcp");
+		SockInetAddr(const String& host_name, const String& service_name, const String& protocol_name = "tcp");
 
 		///
 		SockInetAddr(const SockInetAddr& sina);    
@@ -584,7 +587,7 @@ namespace BALL
 		int	getPort() const;
 
 		///
-		const char*	getHostname() const;
+		const String&	getHostname() const;
 
 		//@}
 	};
@@ -641,7 +644,7 @@ namespace BALL
 		int localport() const;
 
 		///
-		const char* localhost() const;
+		const String& localhost() const;
 		
 		///
 		SockInetAddr peeraddr() const;
@@ -650,7 +653,7 @@ namespace BALL
 		int	peerport() const;
 
 		///
-		const char*	peerhost() const;
+		const String&	peerhost() const;
 
 
 		/**	@name	Binding */
@@ -669,13 +672,13 @@ namespace BALL
 		int	bind(unsigned long addr, int port_no = 0);
 
 		///
-		int	bind(const char* host_name, int port_no = 0);
+		int	bind(const String& host_name, int port_no = 0);
 
 		///
-		int	bind(unsigned long addr, const char* service_name, const char* protocol_name = "tcp");
+		int	bind(unsigned long addr, const String& service_name, const String& protocol_name = "tcp");
 
 		///
-		int	bind(const char* host_name, const char* service_name, const char* protocol_name = "tcp");
+		int	bind(const String& host_name, const String& service_name, const String& protocol_name = "tcp");
 
 		//@}
 
@@ -690,13 +693,13 @@ namespace BALL
 		int connect(unsigned long addr, int port_no = 0);
 
 		///
-		int connect(const char* host_name, int port_no = 0);
+		int connect(const String& host_name, int port_no = 0);
 
 		///
-		int connect(unsigned long addr, const char* service_name,  const char* protocol_name = "tcp");
+		int connect(unsigned long addr, const String& service_name,  const String& protocol_name = "tcp");
 
 		///
-		int connect (const char* host_name, const char* service_name, const char* protocol_name = "tcp");
+		int connect (const String& host_name, const String& service_name, const String& protocol_name = "tcp");
 		//@}
 	};
 
@@ -708,8 +711,7 @@ namespace BALL
 		protected:
 
 		IOSockStream()
-			: BALL_IOS(0),
-				BALL_IOSTREAM(0)
+			: BALL_IOSTREAM(0)
 		{
 		}
 
@@ -720,9 +722,9 @@ namespace BALL
 
 		/// Constructor
 		IOSockStream(SocketBuf* sb)
-			: BALL_IOS(sb),
-				BALL_IOSTREAM(sb)
+			: std::iostream(sb)
 		{
+			BALL_IOS::rdbuf(sb);
 			if (rdbuf() == 0)
 			{
 				throw Exception::NullPointer(__FILE__, __LINE__);
@@ -739,7 +741,7 @@ namespace BALL
 		///
 		SocketBuf* rdbuf() 
 		{ 
-			return (SocketBuf*)BALL_IOS::rdbuf(); 
+			return (SocketBuf*)BALL_IOSTREAM::rdbuf(); 
 		}
 		
 		///
@@ -778,7 +780,7 @@ namespace BALL
 		///
 		SockInetBuf* rdbuf() 
 		{ 
-			return (SockInetBuf*)BALL_IOS::rdbuf(); 
+			return (SockInetBuf*)IOSockStream::rdbuf(); 
 		}
 
 		///
