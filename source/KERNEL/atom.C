@@ -1,4 +1,4 @@
-// $Id: atom.C,v 1.11 2000/02/12 19:28:21 oliver Exp $
+// $Id: atom.C,v 1.12 2000/02/15 18:16:08 oliver Exp $
 
 #include <BALL/KERNEL/atom.h>
 
@@ -281,17 +281,19 @@ namespace BALL
 
 	String Atom::getFullName(Atom::FullNameType type) const
 	{
-		String parent_name;
 		// determine the parent`s name
+		String parent_name;
 		const Residue* parent = getAncestor(RTTI::getDefault<Residue>());
 		if (parent == 0)
 		{
+			// we don't have a residue, look for a fragment
 			if (getFragment() != 0)
 			{
 				parent_name = getFragment()->getName();
 				parent_name.trim();
 				parent_name += ":";
 			}
+			// we don't hav a fragment either, look for molecule
 			else if (getMolecule() != 0)
 			{
 				parent_name = getMolecule()->getName();
@@ -299,13 +301,21 @@ namespace BALL
 				parent_name += ":";
 			}
 		} else {
+			// retrieve the fragment name
 			parent_name = parent->getFullName((Residue::FullNameType)type) + ":";
 		}
 
-		// assemble the complete name
+		// retrieve the atom name
 		String name = name_;
 		name.trim();
-		return (parent_name + name);
+
+		// add the parnet name only if non-empty
+		if (parent_name != ":")
+		{
+			name = parent_name + name;
+		}
+
+		return name;
 	}
 
 
