@@ -55,6 +55,7 @@ bool TransformationDialog::rotateX(float angle, bool radian)
 {
  	if (rep_ != 0)
 	{
+Log.error() << "#~~#   x " << rep_->getProperty("VX").getDouble() << " " << rep_->getProperty("VY").getDouble() << " " << rep_->getProperty("VZ").getDouble() << " " << __FILE__ << "  " << __LINE__<< std::endl;
 		rep_->setProperty("VX", rep_->getProperty("VX").getDouble() + angle); 
 		return true;
 	}
@@ -83,6 +84,7 @@ bool TransformationDialog::rotateY(float angle, bool radian)
 {
  	if (rep_ != 0)
 	{
+Log.error() << "#~~#   x " << rep_->getProperty("VX").getDouble() << " " << rep_->getProperty("VY").getDouble() << " " << rep_->getProperty("VZ").getDouble() << " " << __FILE__ << "  " << __LINE__<< std::endl;
 		rep_->setProperty("VY", rep_->getProperty("VY").getDouble() + angle); 
 		return true;
 	}
@@ -111,6 +113,7 @@ bool TransformationDialog::rotateZ(float angle, bool radian)
 {
  	if (rep_ != 0)
 	{
+Log.error() << "#~~#   x " << rep_->getProperty("VX").getDouble() << " " << rep_->getProperty("VY").getDouble() << " " << rep_->getProperty("VZ").getDouble() << " " << __FILE__ << "  " << __LINE__<< std::endl;
 		rep_->setProperty("VZ", rep_->getProperty("VZ").getDouble() + angle); 
 		return true;
 	}

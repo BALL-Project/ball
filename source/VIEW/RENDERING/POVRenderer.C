@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.13 2004/06/13 15:29:48 oliver Exp $
+// $Id: POVRenderer.C,v 1.14 2004/06/25 15:51:12 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -234,9 +234,26 @@ namespace BALL
 		bool POVRenderer::finish()
 			throw()
 		{
+			vector<POVRendererClippingPlane>::iterator it = clipping_planes_.begin();
+			for (;it != clipping_planes_.end(); it++)
+			{
+				outfile_ << "  clipped_by{" << endl
+								 << "   plane{<1, 1, 1>, 0" << endl
+								 << "  translate<"
+								 << (*it).translation.x << ", " 
+								 << (*it).translation.y << ", " 
+								 << (*it).translation.z << ">" << endl
+								 << "  rotate<"
+					       << (*it).normal.x << ", " 
+					       << (*it).normal.y << ", " 
+					       << (*it).normal.z << "> " << endl
+								 <<   "  }" << endl
+								 <<   "  }" << endl;
+			}
 			outfile_ << "}" << endl;
 			outfile_.close();
 
+			clipping_planes_.clear();
 			return true;
 		}
 
@@ -473,6 +490,20 @@ namespace BALL
 			// now close the mesh
 			outfile_ << "\t\t finish { BALLFinishMesh }" << std::endl;
 			outfile_ << "\t}" << std::endl << std::endl;
+		}
+
+		void POVRenderer::renderClippingPlane_(const Representation& rep)
+			throw()
+		{
+			POVRendererClippingPlane plane;
+			plane.normal = Vector3(rep.getProperty("VX").getDouble(),
+														 rep.getProperty("VY").getDouble(),
+														 rep.getProperty("VZ").getDouble());
+			plane.translation = Vector3(rep.getProperty("TX").getDouble(),
+																  rep.getProperty("TY").getDouble(),
+														 			rep.getProperty("TZ").getDouble());
+
+			clipping_planes_.push_back(plane);
 		}
 	}
 }
