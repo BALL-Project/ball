@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: connectionObject.h,v 1.19 2003/10/15 14:22:00 amoll Exp $
+// $Id: connectionObject.h,v 1.20 2003/12/10 15:26:42 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_CONNECTIONOBJECT_H
@@ -208,6 +208,11 @@ namespace BALL
 
 			//@}
 
+			protected:
+
+			void onNotify_(Message* message)
+				throw();
+
 			private:
 
 			void setParent_(ConnectionObject &object)
@@ -216,10 +221,7 @@ namespace BALL
 			void clearParent_()
 				throw();
 
-			void onNotify_(Message* message)
-				throw();
-
-
+	
 			bool processing_message_queue_;
 			List<Message *> message_queue_;
 
