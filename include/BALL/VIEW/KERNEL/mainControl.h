@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.15 2003/11/03 16:50:23 amoll Exp $
+// $Id: mainControl.h,v 1.16 2003/11/16 20:38:34 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -70,7 +70,7 @@ namespace BALL
 				StatusbarTimer(QObject* parent=0)
 					throw();
 				
-				///
+				/// Set the label of the statusbar (e.g. of the MainControl) which is cleared by the timer.
 				void setLabel(QLabel* label)
 					throw();
 
@@ -509,27 +509,23 @@ namespace BALL
 			*/
 			//@{
 			
-			/** Get the HashSet with the selected (e.g. picked) Composite objects
-			 */
+			/// Get the HashSet with the selected (e.g. picked) Composite objects
 			const HashSet<Composite*>& getSelection() const
 				throw();
 
-			/** Get the selection of the Control (not the selection with checkboxes).
-			 */
+			/// Get the selection of the MolecularControl (not the selection with checkboxes).
 			List<Composite*>& getControlSelection()
 				throw();
 
-			/** If exactly one System is selected in the Control, return a pointer to this system, otherwise 0.
-			 */
+			/// If exactly one System is selected in the Control, return a pointer to this system, otherwise 0.
 			System* getSelectedSystem()
 				throw();
 
-			/**	Select a Composite recursive and add all Atom and Atomcontainer objects to the selection.
-			 */
+			///	Select a Composite recursive and add all Atom and Atomcontainer objects to the selection.
 			void selectCompositeRecursive(Composite* composite, bool first_call=false)
 				throw();
 
-			///
+			/// Select a Composite recursive and add all Atom and Atomcontainer objects to the selection.
 			void deselectCompositeRecursive(Composite* composite, bool first_call=false)
 				throw();
 
@@ -562,10 +558,15 @@ namespace BALL
 			const FragmentDB& getFragmentDB() const
 				throw() { return fragment_db_;}
 
-			///
+			/** Set a properties, which defines, if the stored composites can be changed at the moment.
+			 		This is used e.g. to prevent changes in the composite hierarchy while a simulation is running.
+					@see compositesAreMuteable
+			*/
 			void setCompositesMuteable(bool state) {composites_muteable_ = state;}
 
-			///
+			/** Check wheter the stored composites can be modified at the moment.
+					This method returns false e.g. while a MD simulation is running.
+			*/
 			bool compositesAreMuteable() {return composites_muteable_;}
 					
 			//@}
@@ -660,7 +661,6 @@ namespace BALL
 #		endif 
     
 		}	// namespace VIEW
-	
 	} // namespace BALL
 
 #endif // BALL_VIEW_KERNEL_MAINCONTROL_H
