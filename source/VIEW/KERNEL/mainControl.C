@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.64 2004/02/11 13:25:18 amoll Exp $
+// $Id: mainControl.C,v 1.65 2004/02/11 13:42:17 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -98,8 +98,13 @@ void MainControl::setup_()
 {
 	preferences_.read();
 
-	statusBar()->resize(200, 30);
+	statusBar()->setMinimumSize(2, 25);
 	statusBar()->addWidget(message_label_, 20);
+
+  QFont font(message_label_->font());
+  font.setBold(true);
+  message_label_->setFont(font); 
+  message_label_->setFrameShape(QLabel::NoFrame);
 
 	timer_->setInterval(1000);
 	timer_->setLabel(message_label_);
@@ -118,6 +123,7 @@ void MainControl::setup_()
 
 	simulation_icon_->setPixmap(icon);
 	simulation_icon_->hide();
+  simulation_icon_->setFrameShape(QLabel::NoFrame);
 }
 
 

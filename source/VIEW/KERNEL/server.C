@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: server.C,v 1.9 2004/01/18 12:45:29 amoll Exp $
+// $Id: server.C,v 1.10 2004/02/11 13:42:18 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/server.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -156,7 +156,9 @@ namespace BALL
 			QToolTip::add(server_icon_, "VIEW server status");
 			QPixmap icon(mini_ray_xpm_);
 
+  		server_icon_->setFrameShape(QLabel::NoFrame);
 			server_icon_->setPixmap(icon);
+			server_icon_->setMaximumSize(14,16);
 			server_icon_->show();
  		}
 
