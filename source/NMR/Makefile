@@ -10,6 +10,7 @@ CPP_SOURCES=\
 	haighMallion.C\
 	makeSpectrumProcessor.C\
 	peak.C\
+	shiftModel.C\
 	shiftModule.C\
 	NMRSpectrum.C\
 	createSpectrumProcessor.C\
