@@ -1,4 +1,4 @@
-// $Id: fresnoHydrogenBond.C,v 1.1.2.1 2002/02/14 17:02:55 anker Exp $
+// $Id: fresnoHydrogenBond.C,v 1.1.2.2 2002/02/14 19:05:19 anker Exp $
 // Molecular Mechanics: Fresno force field, hydrogen bond component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -99,51 +99,68 @@ namespace BALL
 
 		const HashMap<const Atom*, short>& fresno_types = fff->getFresnoTypes();
 
-		// quadratic run time. not nice.
+		// two times quadratic run time. not nice.
 
 		Molecule* A = system->getMolecule(0);
 		Molecule* B = system->getMolecule(1);
 
 		AtomConstIterator A_it = A->beginAtom();
 		AtomConstIterator B_it;
-		
-		Size type_A;
-		Size type_B;
 
 		for (; +A_it; ++A_it)
 		{
 			if (fresno_types.has(&*A_it))
 			{
-				type_A = fresno_types[&*A_it];
-				if ((type_A == FresnoFF::HBOND_ACCEPTOR)
-						|| (type_A == FresnoFF::HBOND_DONOR)
-						|| (type_A == FresnoFF::HBOND_ACCEPTOR_DONOR))
+				if (fresno_types[&*A_it] == FresnoFF::HBOND_HYDROGEN)
 				{
 					for (B_it = B->beginAtom(); +B_it; ++B_it)
 					{
-						// Do we really need to store *all* possible hydrogen bonds?
-						type_B = fresno_types[&*B_it];
-						if (((type_B == FresnoFF::HBOND_ACCEPTOR)
-									&& ((type_A == FresnoFF::HBOND_DONOR)
-										|| (type_A == FresnoFF::HBOND_ACCEPTOR_DONOR)))
-								|| ((type_B == FresnoFF::HBOND_DONOR)
-									&& ((type_A == FresnoFF::HBOND_ACCEPTOR)
-										|| (type_A == FresnoFF::HBOND_ACCEPTOR_DONOR)))
-								|| ((type_B == FresnoFF::HBOND_ACCEPTOR_DONOR)
-									&& ((type_A == FresnoFF::HBOND_ACCEPTOR)
-										|| (type_A == FresnoFF::HBOND_DONOR))
-										|| (type_A == FresnoFF::HBOND_ACCEPTOR_DONOR)))
+						if (fresno_types.has(&*B_it))
 						{
-							possible_hydrogen_bonds_.push_back(pair<const Atom*, const Atom*>(&*A_it, &*B_it));
-							// DEBUG
-							cout << "found possible HB: " 
-								<< A_it->getFullName() << ":" << B_it->getFullName()
-								<< " (length: " 
-								<< (A_it->getPosition() - B_it->getPosition()).getLength() 
-								<< " A) " 
-								<< &*A_it << ":" << &*B_it
-								<< endl;
-							// /DEBUG
+							if ((fresno_types[&*B_it] == FresnoFF::HBOND_ACCEPTOR_DONOR)
+									|| (fresno_types[&*B_it] == FresnoFF::HBOND_ACCEPTOR))
+							{
+								possible_hydrogen_bonds_.push_back(pair<const Atom*, const Atom*>(&*A_it, &*B_it));
+								// DEBUG
+								cout << "found possible HB: " 
+									<< A_it->getBond(0)->getPartner(*A_it)->getFullName() << "---"
+									<< A_it->getFullName() << "..." << B_it->getFullName()
+									<< " (length: " 
+									<< (A_it->getPosition() - B_it->getPosition()).getLength() 
+									<< " A) " 
+									<< endl;
+								// /DEBUG
+							}
+						}
+					}
+				}
+			}
+		}
+
+		for (; +B_it; ++B_it)
+		{
+			if (fresno_types.has(&*B_it))
+			{
+				if (fresno_types[&*B_it] == FresnoFF::HBOND_HYDROGEN)
+				{
+					for (A_it = B->beginAtom(); +A_it; ++A_it)
+					{
+						if (fresno_types.has(&*A_it))
+						{
+							if ((fresno_types[&*A_it] == FresnoFF::HBOND_ACCEPTOR_DONOR)
+									|| (fresno_types[&*A_it] == FresnoFF::HBOND_ACCEPTOR))
+							{
+								possible_hydrogen_bonds_.push_back(pair<const Atom*, const Atom*>(&*B_it, &*A_it));
+								// DEBUG
+								cout << "found possible HB: " 
+									<< B_it->getBond(0)->getPartner(*B_it)->getFullName() << "-"
+									<< B_it->getFullName() << "..." << A_it->getFullName()
+									<< " (length: " 
+									<< (B_it->getPosition() - A_it->getPosition()).getLength() 
+									<< " A) " 
+									<< endl;
+								// /DEBUG
+							}
 						}
 					}
 				}
@@ -170,8 +187,8 @@ namespace BALL
 		double tmp;
 		double distance;
 		double angle;
-		const Atom* atom1;
-		const Atom* atom2;
+		const Atom* hydrogen;
+		const Atom* acceptor;
 		Vector3 h_bond;
 		Vector3 h_connection;
 
@@ -181,12 +198,12 @@ namespace BALL
 			it != possible_hydrogen_bonds_.end();
 			++it)
 		{
-			atom1 = it->first;
-			atom2 = it->second;
+			hydrogen = it->first;
+			acceptor = it->second;
 
 			// h_bond is the vector of the hbond
 
-			h_bond = atom2->getPosition() - atom1->getPosition();
+			h_bond = acceptor->getPosition() - hydrogen->getPosition();
 			distance = ideal_hbond_length_ - h_bond.getLength();
 
 			// DEBUG
@@ -208,27 +225,21 @@ namespace BALL
 				// calculate the vector of the connection (in contrast to h bond)
 				// of the hydrogen to the molecule it is attached to
 
-				if (atom1->getElement().getSymbol() == "H")
+				if (hydrogen->getElement().getSymbol() == "H")
 				{
-					h_connection = atom1->getBond(0)->getPartner(*atom1)->getPosition()
-						- atom1->getPosition();
+					h_connection = hydrogen->getBond(0)->getPartner(*hydrogen)->getPosition()
+						- hydrogen->getPosition();
 				}
+				// PARANOIA
 				else
 				{
-					// PARANOIA
-					if (atom2->getElement().getSymbol() != "H")
-					{
-						Log.error() << "FresnoHydrogenBond::updateEnergy(): "
-						// cerr << "FresnoHydrogenBond::updateEnergy(): "
-							<< "black magic: hydrogen bond without hydrogens:" << endl
-							<< atom1->getFullName() << ":" << atom2->getFullName()
-							<< endl;
-						continue;
-					}
-					// /PARANOIA
-					h_connection = atom2->getPosition()
-						- atom2->getBond(0)->getPartner(*atom1)->getPosition();
+					cerr << "FresnoHydrogenBond::updateEnergy(): "
+						<< "black magic: hydrogen bond without hydrogens:" << endl
+						<< hydrogen->getFullName() << ":" << acceptor->getFullName()
+						<< endl;
+					continue;
 				}
+				// /PARANOIA
 
 				// angle is the angle of the h bond
 				angle = ideal_hbond_angle_ - h_bond.getAngle(h_connection);
