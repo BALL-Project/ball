@@ -98,6 +98,7 @@ bool modelMustBeRebuild(ModelType type)
 					type == MODEL_SA_SURFACE ||
 					type == MODEL_BACKBONE 	||
 					type == MODEL_FORCES    ||
+					type == MODEL_BALL_AND_STICK||
 					type == MODEL_CARTOON);
 }
 
