@@ -1,4 +1,4 @@
-// $Id: molecularControl.C,v 1.6.4.10 2002/12/03 10:53:47 oliver Exp $
+// $Id: molecularControl.C,v 1.6.4.11 2002/12/03 15:58:36 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/WIDGETS/molecularControl.h>
 #include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
@@ -43,22 +43,8 @@ void MolecularControl::checkMenu(MainControl& main_control)
 	// check for clearClipboard-slot: enable only if copy_list_ not empty
 	(main_control.menuBar())->setItemEnabled(clipboard_id_, copy_list_filled);
 
-	// check for cut/copy-slot: enable only if all selected composites
-	// are systems
-	bool list_filled = (getSelection().size() > 0);
-
-	if (list_filled)
-	{
-		List<Composite*>::ConstIterator list_it = getSelection().begin();	
-		for (; list_it != getSelection().end(); ++list_it)
-		{
-			if (!RTTI::isKindOf<System>(**list_it))
-			{
-				list_filled = false;
-				break;
-			}
-		}
-	}
+	// check for cut/copy-slot: enable only if one system selected
+	bool list_filled = (MainControl::getMainControl(this)->getSelectedSystem() != 0);
 
 	// cut, copy, and paste will are only available for 
 	// top level selections
