@@ -1,0 +1,82 @@
+#!/bin/sh
+#
+#  $Id: makedistribution,v 1.1 1999/08/26 08:02:33 oliver Exp $
+#
+
+if test "$1" = "-int" ; then
+	echo "compiling internal  distribution (including everything)..."
+else
+	echo "compiling distribution..."
+fi
+
+
+# remove objects and stuff
+make clean lib_clean
+
+# create documentation
+if test "$1" != "-intnodoc" ; then
+	make doc
+fi
+
+# cleanup documentation
+cd ../doc/tex
+mv BALL.ps ..
+cd ..
+rm -fr tex
+
+cd ..
+dir=`basename \`pwd\`` 
+echo "BASEDIR: $dir"
+FILE=$dir-`date +%y%m%d`.tar
+cd ..
+
+
+# clean up files in source and prepare for distribution
+( cd $dir/source 
+		rm configure 
+		make configure 
+		rm config.h config.log config.mak config.status \
+				common.mak .Dependencies */.Dependencies 
+		find . -name ii_files -exec rm -fr {} \; 2>/dev/null
+		find . -name Template.DB -exec rm {} \; 2>/dev/null
+)
+
+cp $dir/source/config/Makefile.dummy $dir/source/Makefile
+
+# creating internal distribution (non-public)
+if test "$1" = "-int" ; then
+	echo "tarring relevant directories..."
+	tar cf $FILE \
+		$dir/include\
+		$dir/doc\
+		$dir/source
+else
+	if test "$1" = "-intnodoc" ; then
+		echo "tarring relevant directories..."
+		tar cf $FILE \
+			$dir/include\
+			$dir/source
+	else 
+		
+		echo "collecting source files..."
+		SOURCEFILES=`find $dir/source -name \*.C -print; find $dir/source -name \*.c -print; find $dir/source -name .dummy.c -print`
+
+
+		echo "creating archive $FILE..."
+		tar cf $FILE \
+			$dir/source/README\
+			$dir/source/COPYING\
+			$dir/source/configure\
+			$dir/source/Makefile\
+			$dir/source/*/Makefile\
+			$dir/source/config/*.in\
+			$dir/source/config/Makefile.dummy\
+			$dir/source/config/makedistribution\
+			$dir/include\
+			$dir/data\
+			$dir/source/*/Makefile\
+			$SOURCEFILES
+	fi
+fi
+echo "compressing archive $FILE..."
+gzip -9 $FILE

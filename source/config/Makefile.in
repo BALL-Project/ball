@@ -1,0 +1,172 @@
+#
+# $Id: Makefile.in,v 1.1 1999/08/26 08:02:33 oliver Exp $
+#
+
+include config.mak
+
+#	options for library generation
+AROPTS	= @AROPTS@
+
+# options for shared library generation
+DYNAROPTS = @DYNAROPTS@
+
+# suffix of shared library filenames
+SHARED_LIB_SUFFIX = @SHARED_LIB_SUFFIX@
+
+# 	library version number
+LIB_VERSION	= 0
+
+#	default library name
+LIBNAME		= libBALL
+
+# 	names of the static libraries
+STATIC_LIBS	= libBALL.a @LIBBALLVIEW@
+
+#	names of the shared libraries
+SHARED_LIBS	= $(STATIC_LIBS:.a=.@SHARED_LIB_SUFFIX@)
+
+# names of the library object file lists
+OBJECT_LISTS = $(STATIC_LIBS:.a=.objects)
+
+.SUFFIXES:	.objects .a	.@SHARED_LIB_SUFFIX@
+
+default:	lib
+
+
+install:	install.static install.shared
+
+clean:
+	@echo "Cleaning up object files, cores,  and (uninstalled) library files..."
+	@$(MAKE) subdirs SUBDIRS="$(DIRS)" TARGET=default_clean
+	@-$(RM) -f  $(STATIC_LIBS) $(SHARED_LIBS)
+	@-$(RM) -rf .Dependencies; */.Dependencies *.objects *~ @TEMPLATE_DIR@
+	@cd TEST ; $(MAKE) clean
+
+lib_clean:
+	@echo "Removing all installed libraries..."
+	@-$(RM) -rf ../lib
+
+
+libBALL.objects:
+	@echo "Collecting object files for libraries..."
+	@-rm -f *.objects
+	@$(MAKE) subdirs SUBDIRS="$(DIRS)" TARGET=collectlib LIBNAME=$(LIBNAME)
+	
+libMOLVIEW.objects:	
+	@echo "Collecting object files for libraries..."
+	@-rm -f *.objects
+	@$(MAKE) subdirs SUBDIRS="$(DIRS)" TARGET=collectlib LIBNAME=$(LIBNAME)
+	
+libVIEW.objects:
+	@echo "Collecting object files for libraries..."
+	@-rm -f *.objects
+	@$(MAKE) subdirs SUBDIRS="$(DIRS)" TARGET=collectlib LIBNAME=$(LIBNAME)
+	
+
+collect:	$(OBJECT_LISTS)
+	
+prelink:	collect 
+	@echo "Prelinking object files..."
+	@__PRELINK__@	
+
+
+libBALL.@SHARED_LIB_SUFFIX@:	collect
+	$(DYNAR) $(DYNAROPTS) libBALL.@SHARED_LIB_SUFFIX@ `cat libBALL.objects` -lm
+
+libVIEW.@SHARED_LIB_SUFFIX@:	libBALL.so
+	$(DYNAR) $(DYNAROPTS) libVIEW.@SHARED_LIB_SUFFIX@ `cat libVIEW.objects` -L. -lBALL -lm
+
+libMOLVIEW.@SHARED_LIB_SUFFIX@:	libVIEW.so
+	$(DYNAR) $(DYNAROPTS) libMOLVIEW.@SHARED_LIB_SUFFIX@ `cat libMOLVIEW.objects` -L. -lVIEW -lBALL -lm
+
+.objects.a:	
+	@echo "Creating library $@ ..."
+	$(AR) $(AROPTS) $*.a `cat $*.objects`
+
+lib:	.Dependencies dirs collect prelink $(SHARED_LIBS)
+	@echo "Creating static libraries $(STATIC_LIBS) ... DONE"
+	@echo " "
+	@echo " "
+	@echo "You may now install the libraries with the command"
+	@echo " "
+	@echo "   make install"
+	@echo " "
+	@echo "If you do not trust this Makefile, try"
+	@echo " "
+	@echo "   make -n install"
+	@echo " "
+	@echo "first to check where the libraries would be installed."
+	@echo " "
+	@echo "After you ran make install, please verify the validity"
+	@echo "of the installed library by executing"
+	@echo "   make test"
+	@echo " "
+	@echo "This will compile and run an extensive test suite."
+	@echo " "
+	@echo "If you use the shared libraries, don't forget to add"
+	@echo "the path "
+	@echo " $(BALL_PATH)/lib/$(BINFMT)"
+	@echo "to your LD_LIBRARY_PATH. "
+	@echo "@ADDITIONAL_COMMENTS@"
+
+install.static:	
+	@echo Installing static libraries under $(BALL_PATH)/lib/$(BINFMT)...
+	@-mkdir $(BALL_PATH)/lib 2>/dev/null
+	@-mkdir $(BALL_PATH)/lib/$(BINFMT) 2>/dev/null
+	@$(CP) $(STATIC_LIBS) $(BALL_PATH)/lib/$(BINFMT)
+
+install.shared:	
+	@echo Installing shared libraries under $(BALL_PATH)/lib/$(BINFMT)...
+	@-mkdir $(BALL_PATH)/lib 2>/dev/null
+	@-mkdir $(BALL_PATH)/lib/$(BINFMT) 2>/dev/null
+	@$(CP) $(SHARED_LIBS) $(BALL_PATH)/lib/$(BINFMT)
+
+.Dependencies:
+	@$(MAKE) depend
+
+depend:
+	@echo "creating dependencies..."
+	@echo "" >.Dependencies
+	@set -e; for i in $(DIRS); do ( cd $$i; $(MAKE) depend; cd .. ) ; done
+
+dirs:		dummy
+	@$(MAKE) subdirs SUBDIRS="$(DIRS)" TARGET=default
+
+subdirs:	dummy
+	@set -e; for i in $(SUBDIRS); do cd $$i; if $(MAKE) $(TARGET); then cd .. ; else cd .. ; exit 1 ; fi ; done
+
+
+test:	dummy
+	@cd TEST ; $(MAKE) test
+
+
+#
+#    special targets - internal use only! 
+#
+
+# creates the documentation
+doc:	htmldoc texdoc
+
+# creates the documentation in LaTeX format
+texdoc:	
+	@config/maketexdoc
+
+# creates the documentation in HTML format
+htmldoc:
+	@config/makehtmldoc
+
+# creates a distributable .tgz file
+dist:
+	@config/makedistribution
+
+# creates distribution for internal use - everything included
+intdist:
+	@config/makedistribution -int
+
+# creates distribution for internal use - without documentation
+intdistnodoc:
+	@config/makedistribution -intnodoc
+
+dummy:
+
+

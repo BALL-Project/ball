@@ -1,0 +1,131 @@
+// $Id: twoColoredLine.C,v 1.1 1999/08/26 08:02:48 oliver Exp $
+
+#include <BALL/MOLVIEW/PRIMITIV/twoColoredLine.h>
+
+namespace BALL
+{
+
+	namespace MOLVIEW
+	{
+		
+		TwoColoredLine::TwoColoredLine()
+			:	VIEW::GeometricObject(),
+				ColorExtension2(),
+				Vertex2()
+		{
+		}
+
+		TwoColoredLine::TwoColoredLine
+			(const TwoColoredLine& two_colored_line, bool deep)
+			:	VIEW::GeometricObject(two_colored_line, deep),
+				ColorExtension2(two_colored_line, deep),
+				Vertex2(two_colored_line, deep)
+		{
+		}
+
+		TwoColoredLine::TwoColoredLine
+			(const VIEW::GeometricObject& geometric_object)
+			:	VIEW::GeometricObject(geometric_object),
+				ColorExtension2(),
+				Vertex2()
+		{
+		}
+
+		TwoColoredLine::~TwoColoredLine()
+		{
+			#ifdef BALL_VIEW_DEBUG
+				cout << "Destructing object " << (void *)this 
+					<< " of class " << RTTI<TwoColoredLine>::getName() << endl;
+			#endif 
+
+			destroy();
+		}
+
+		void TwoColoredLine::clear()
+		{
+			VIEW::GeometricObject::clear();
+			ColorExtension2::clear();
+			Vertex2::clear();
+		}
+
+		void TwoColoredLine::destroy()
+		{
+			VIEW::GeometricObject::destroy();
+			ColorExtension2::destroy();
+			Vertex2::destroy();
+		}
+
+		void TwoColoredLine::set
+			(const TwoColoredLine& two_colored_line, bool deep)
+		{
+			VIEW::GeometricObject::set(two_colored_line, deep);
+			ColorExtension2::set(two_colored_line, deep);
+			Vertex2::set(two_colored_line, deep);
+		}
+
+		TwoColoredLine& TwoColoredLine::operator =
+			(const TwoColoredLine &two_colored_line)
+		{
+			set(two_colored_line);
+
+			return *this;
+		}
+
+		void TwoColoredLine::get
+			(TwoColoredLine& two_colored_line, bool deep) const
+		{
+			two_colored_line.set(*this, deep);
+		}
+
+		void TwoColoredLine::swap
+			(TwoColoredLine& two_colored_line)
+		{
+			VIEW::GeometricObject::swap(two_colored_line);
+			ColorExtension2::swap(two_colored_line);
+			Vertex2::swap(two_colored_line);
+		}
+
+		bool TwoColoredLine::isValid() const
+		{
+			return (bool)(VIEW::GeometricObject::isValid() == true
+										&& ColorExtension2::isValid() == true
+										&& Vertex2::isValid() == true);
+		}
+
+		void TwoColoredLine::dump
+			(ostream& s, unsigned long depth) const
+		{
+			BALL_DUMP_STREAM_PREFIX(s);
+			
+			BALL_DUMP_DEPTH(s, depth);
+			BALL_DUMP_HEADER(s, this, this);
+
+			VIEW::GeometricObject::dump(s, depth + 1);
+			ColorExtension2::dump(s, depth + 1);
+			Vertex2::dump(s, depth + 1);
+
+			BALL_DUMP_STREAM_SUFFIX(s);
+		}
+
+		void TwoColoredLine::read(istream & /* s */)
+		{
+			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
+		}
+
+		void TwoColoredLine::write(ostream & /* s */) const
+		{
+			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
+		}
+
+		bool TwoColoredLine::export()
+		{
+			return true;  
+		}
+
+#		ifdef BALL_NO_INLINE_FUNCTIONS
+#			include <BALL/MOLVIEW/PRIMITIV/twoColoredLine.iC>
+#		endif
+
+	} // namespace MOLVIEW
+
+} // namespace BALL

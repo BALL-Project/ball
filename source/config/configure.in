@@ -1,0 +1,1613 @@
+dnl    $Id: configure.in,v 1.1 1999/08/26 08:02:33 oliver Exp $
+dnl    Process this file with autoconf to produce a configure script.
+dnl   
+
+dnl
+dnl    disable caching - just to be sure
+dnl  
+define([AC_CACHE_LOAD], )dnl
+define([AC_CACHE_SAVE], )dnl
+
+dnl 
+dnl    some initialization stuff...
+dnl 
+AC_INIT(KERNEL/atom.C)
+AC_CONFIG_HEADER([
+	config.h:config/config.h.in
+])
+AC_LANG_CPLUSPLUS
+
+dnl
+dnl 	global definitions
+dnl
+
+dnl		the file containing the list of supported (configure`d) 
+dnl   binary formats. configure will add a line with ${BINFMT} to this file
+BINFORMAT_FILE=config/binary_formats
+
+
+dnl		define a macro to remove the directory name
+dnl		from a fully specified path
+dnl
+AC_DEFUN(AC_BASENAME,[
+	TMP__DIR="$1/"
+  while test "${TMP__DIR}" != "" ; do
+    TMP__NAME=`echo ${TMP__DIR}|cut -d/ -f1`
+    TMP__DIR=`echo ${TMP__DIR}|cut -d/ -f2-`
+    if test "${TMP__DIR}" = "${TMP__NAME}" ; then
+      TMP__DIR=""
+    fi
+  done
+])
+	
+
+dnl    define a macro to inform the user about failed tests for programs
+dnl    it checks for the unix command given as second parameter and
+dnl    sets the shell variable given as second parameter to its absolute path
+dnl 
+AC_DEFUN(AC_MSG_PATH_PROG,[
+	AC_PATH_PROG($1,$2,no)
+	if test $$1 = no ; then
+		AC_MSG_RESULT()
+		AC_MSG_RESULT([This script requires the unix command $2, but cannot find it.])
+		AC_MSG_RESULT([You can either add the correct path to your \$PATH variable or])
+		AC_MSG_RESULT([try to edit ./configure. In the last case: good luck!])
+		AC_MSG_ERROR(aborted)
+		exit
+	fi
+])
+
+dnl
+dnl    define macro to search for header files that may be somewhere in the filesystem
+dnl    if ${FIND}!=- (i.e. it has been set BEFORE py AC_PATH_PROG!) find will be used
+dnl    too if everything fails - this may take some time...
+dnl
+dnl    syntax: AC_FIND_HEADER(<PATH_VAR>,<header.h>,<additional dirnames>)
+dnl    
+dnl        PATH_VAR will be set to the include path or to empty string (if not found)
+dnl        header.h is the header file name (e.g. wait.h, GL/gl.h)
+dnl        additional dirnames are included in searches these should be absolute names!
+dnl 
+
+AC_DEFUN(AC_FIND_HEADER,[
+	_INCLUDES=
+
+	dnl    immediate return on predefined directory (read from file?)
+	if test "${$1}" != "" ; then
+		_INCLUDES=${$1}
+	fi
+
+	if test "${_INCLUDES}" = "" ; then
+		for i in /usr/include /opt/include $3 ; do
+			if test -f "$i/$2" && test "${_INCLUDES}" = ""; then
+				_INCLUDES="$i"
+			fi
+		done
+	fi
+
+	if test "${_INCLUDES}" = "" ; then
+		for i in /usr/*/include /opt/*/include ; do
+			if test -f "$i/$2" && test "${_INCLUDES}" = ""; then
+				_INCLUDES="$i"
+			fi
+		done
+	fi
+	
+	if test "${_INCLUDES}" = "" ; then
+		for i in /opt/*/*/include /usr/*/*/include /usr/local/*/*/include ; do
+			if test -f "$i/$2" && test "${_INCLUDES}" = ""; then
+				_INCLUDES="$i"
+			fi
+		done
+	fi
+
+	if test "${_INCLUDES}" = "" && test "${FIND}" != "-" ; then
+		if test "${FIND_KNOWS_PATH}" = false ; then
+			FIND_OPT="-name"
+			_TMP_FIND_NAME="$2"
+			while test _`egrep / $_TMP_FIND_NAME`_ != __ ; do
+				_TMP_FIND_NAME=`echo ${_TMP_FIND_NAME}|${CUT} -d/ -f2-`
+			done
+			
+			FIND_ARG="\*${_TMP_FIND_NAME}\*"
+		else
+			FIND_OPT="-path"
+			FIND_ARG="\*$2\*"
+		fi
+
+		_TMP=`${FIND} /usr ${FIND_OPT} ${FIND_ARG} -print 2>/dev/null`
+		for j in ${_TMP} ; do
+			if test "${_INCLUDES}" = "" ; then
+				_INCLUDES=`echo $j|${SED} "s/include\/.\*\$/include/"`
+			fi
+		done
+			_
+		
+		if test "${_INCLUDES}" = "" ; then
+			_TMP=`${FIND} /opt ${FIND_OPT} ${FIND_ARG} -print 2>/dev/null`
+			for j in ${_TMP} ; do
+				if test "${_INCLUDES}" = "" ; then
+					_INCLUDES=`echo $j|${SED} "s/include\/.\*\$/include/"`
+				fi
+			done
+		fi
+
+		if test "${_INCLUDES}" = "" && test "$3" != ""; then
+			for i in $3 /dev/null ; do
+				_TMP=`${FIND} $i ${FIND_OPT} ${FIND_ARG} -print 2>/dev/null`
+				for j in ${_TMP} ; do
+					if test "${_INCLUDES}" = "" ; then
+						_INCLUDES=`echo $j|${SED} "s/include\/.\*\$/include/"`
+					fi
+				done
+			done
+		fi
+	fi
+
+	$1="${_INCLUDES}"
+])
+
+
+dnl
+dnl    define macro to search for libraries that may be somewhere in the filesystem
+dnl    if ${FIND}!=- (i.e. it has been set BEFORE py AC_PATH_PROG!) find will be used
+dnl    too if everything fails - this may take some time...
+dnl
+dnl    syntax: AC_FIND_LIB(<PATH_VAR>,<libXXX>,<additional dirnames>)
+dnl    
+dnl        PATH_VAR will be set to the library path or to empty string (if not found)
+dnl        libXXX is the header file name (e.g. libGLUT, libGL) .a, .so etc. should be omitted
+dnl        additional dirnames ar included in searches these should be absolute names!
+dnl 
+
+AC_DEFUN(AC_FIND_LIB,[
+	_LIBS=
+
+	dnl   immediate "return" on preset directory (read from file?)
+	if test "${$1}" != "" ; then
+		_LIBS=${$1}
+	fi
+
+	if test "${_LIBS}" = "" ; then
+		for i in /usr/lib /opt/lib $3 ; do
+			for j in $i/$2.* ; do
+				if test -f "$j" && test "${_LIBS}" = ""; then
+					_LIBS="$i"
+				fi
+			done
+		done
+	fi
+
+	if test "${_LIBS}" = "" ; then
+		for i in /usr/*/lib /opt/*/lib ; do
+			for j in $i/$2.* ; do
+				if test -f "$j" && test "${_LIBS}" = ""; then
+					_LIBS="$i"
+				fi
+			done
+		done
+	fi
+	
+	if test "${_LIBS}" = "" ; then
+		for i in /opt/*/*/lib /usr/*/*/lib /usr/local/*/*/lib ; do
+			for j in $i/$2.* ; do
+				if test -f "$j" && test "${_LIBS}" = ""; then
+					_LIBS="$i"
+				fi
+			done
+		done
+	fi
+
+	if test "${_LIBS}" = "" && test "${FIND}" != "-" ; then
+		if test "${_LIBS}" = "" && test "$3" != ""; then
+			for i in $3 /dev/null; do
+				if test "${_LIBS}" = "" ; then
+					_TMP=`${FIND} $i -name "$2*" -print 2>/dev/null`
+					for j in ${_TMP} ; do
+						if test "${_LIBS}" = "" ; then
+							_LIBS=`echo $j|${SED} "s/\/$2.*/\//"`
+						fi
+					done
+				fi
+			done
+		fi
+		
+		if test "${_LIBS}" = "" ; then
+			_TMP=`${FIND} /opt -name "$2*" -print 2>/dev/null`
+			for j in ${_TMP} ; do
+				if test "${_LIBS}" = "" ; then
+					_LIBS=`echo $j|${SED} "s/\/$2.*/\//"`
+				fi
+			done
+		fi
+
+		if test "${_LIBS}" = "" ; then
+			_TMP=`${FIND} /usr -name "$2*" -print 2>/dev/null`
+			for j in ${_TMP} ; do
+				if test "${_LIBS}" = "" ; then
+					_LIBS=`echo $j|${SED} "s/\/$2.*/\//"`
+				fi
+			done
+		fi
+		
+	fi
+
+	$1="${_LIBS}"
+])
+	
+
+
+dnl
+dnl    just trying to find myself
+dnl
+
+BALL_PATH=`cd ..; pwd`
+
+
+dnl
+dnl   check for programs used to determine architecture
+dnl
+
+AC_MSG_PATH_PROG(UNAME,uname)
+AC_MSG_PATH_PROG(CUT,cut)
+AC_MSG_PATH_PROG(TR,tr)
+AC_MSG_PATH_PROG(AR,ar)
+
+dnl
+dnl    determine OS and architecture and all this stuff
+dnl
+
+AC_SUBST(OSMAJOR)
+AC_SUBST(OS)
+AC_SUBST(OSREV)
+AC_SUBST(BINFMT)
+AC_SUBST(ARCHITECTURE)
+
+AC_MSG_CHECKING(your OS)
+OS=`${UNAME} -s`
+OSREV=`${UNAME} -r`
+OSMAJOR=`echo $OSREV|${CUT} -d"." -f1`
+
+dnl		default...
+BINFMT="${OS}"
+
+if test "$OS" = SunOS ; then
+	if test "$OSMAJOR" = 5 ; then
+		OS=Solaris
+		ARCHITECTURE=`${UNAME} -p`
+		BINFMT="${OS}-${ARCHITECTURE}"
+	else
+		OS=SunOS
+	fi
+fi
+
+if test "$OS" = Linux ; then
+	PROCESSOR=`${UNAME} -m`
+	ARCHITECTURE=unknown
+	if test "${PROCESSOR}" = sparc -o "${PROCESSOR}" = SPARC ; then
+		ARCHITECTURE=sparc
+		BINFMT=Linux-sparc
+	fi
+	if test `echo $PROCESSOR|${CUT} -c1` = i ; then
+		ARCHITECTURE=i386
+		BINFMT=Linux-i386
+	fi
+	if test `echo $PROCESSOR` = alpha ; then
+		ARCHITECTURE=alpha
+		BINFMT=Linux-alpha
+	fi
+
+	if test "${ARCHITECTURE}" = "unknown" ; then
+		AC_MSG_RESULT(OS: ${OS} / hardware: ${PROCESSOR})
+		AC_MSG_RESULT(Sorry - this architecture is currently not supported...)
+		AC_MSG_ERROR(aborted)
+	fi
+fi
+
+if test ${OS} = IRIX64 ; then
+	OS=IRIX
+fi
+
+if test $OS = IRIX ; then
+	if test "$OSMAJOR" = 5 ; then
+		BINFMT=IRIX5
+	fi
+	if test "$OSMAJOR" = 6 ; then
+		BINFMT=IRIX6
+	fi
+fi
+
+if test "$OS" != Linux && test "$OS" != Solaris && test "$OS" != IRIX ; then
+	AC_MSG_RESULT(Sorry - your OS is currently not supported...)
+	AC_MSG_ERROR(aborted)
+fi
+
+dnl
+dnl 	create OS defines in config.h:
+dnl
+if test "$OS" = Linux ; then
+	AC_DEFINE(LINUX,LINUX)
+fi
+if test "$OS" = Solaris ; then
+	AC_DEFINE(SOLARIS,SOLARIS)
+fi
+if test "$OS" = IRIX ; then
+	AC_DEFINE(IRIX,IRIX)
+fi
+
+dnl
+dnl		create ARCHITECTURE defines
+dnl
+if test "$ARCHITECTURE" = sparc ; then
+	AC_DEFINE(SPARC,SPARC)
+fi
+if test "$ARCHITECTURE" = i386 ; then
+	AC_DEFINE(I386,I386)
+fi
+if test "$ARCHITECTURE" = mips ; then
+	AC_DEFINE(MIPS,MIPS)
+fi
+if test "$ARCHITECTURE" = alpha ; then
+	AC_DEFINE(ALPHA,ALPHA)
+fi
+
+AC_MSG_RESULT($OS $OSREV (BINFMT=$BINFMT))
+
+dnl
+dnl	some definitions the depend solely on the OS
+dnl
+SHARED_LIB_SUFFIX=so
+if test "${OS}" = HP-UX ; then
+	SHARED_LIB_SUFFIX=sl
+fi
+AC_SUBST(SHARED_LIB_SUFFIX)
+
+dnl
+dnl    check for programs needed for build
+dnl 
+
+AC_PROG_LN_S
+AC_MSG_PATH_PROG(CP,cp,no)
+AC_MSG_PATH_PROG(RM,rm,no)
+AC_MSG_PATH_PROG(MV,mv,no)
+AC_MSG_PATH_PROG(SED,sed,no)
+AC_MSG_PATH_PROG(FIND,find,no)
+AC_MSG_PATH_PROG(DIFF,diff,no)
+AC_MSG_PATH_PROG(TAIL,tail,no)
+AC_MSG_PATH_PROG(GREP,grep,no)
+AC_MSG_PATH_PROG(CAT,cat,no)
+
+dnl   
+dnl   check whether find can be called with the parameter -path
+dnl   (needed to find headers in a certain path like GL/libgl.h
+dnl
+if test "${FIND}" != "no" ; then
+	RESULT=`${FIND} KERNEL -path . -print 2>&1`
+	if test "${RESULT}" != "" ; then     dnl    did get an error message ... bad.
+		FIND_KNOWS_PATH=false
+	else
+		FIND_KNOWS_PATH=true
+	fi
+fi
+		
+
+dnl		
+dnl		Declare compiler search order
+dnl			1) look for compiler defined in configure
+dnl			2) look for vendor supplied compilers (CC)
+dnl			3) check for g++, egcs, eg++, gcc
+dnl		Except for Solaris, where the vendor supplied compiler
+dnl		CC (at least releases 5.0 and below) is not usable.
+if test "${OS}" = "Solaris" ; then
+	CXX_SEARCH_ORDER="egcs g++ eg++ CC "
+else 
+	CXX_SEARCH_ORDER="CC egcs g++ eg++ "
+fi
+CXX_NAME=""
+
+
+
+dnl		
+dnl		If we are running IRIX, search for the older compilers, too
+dnl
+if test "${OS}" = "IRIX" ; then
+	CXX_SEARCH_ORDER="${CXX_SEARCH_ORDER} NCC DCC OCC"
+	CC_SEARCH_ORDER="${CC_SEARCH_ORDER} ncc dcc occ"
+fi
+
+
+dnl
+dnl		Search for the C++ compiler
+dnl
+
+AC_MSG_RESULT(searching for a C++ compiler:)
+if test "${CXX}" != "" ; then
+  if test -f "${CXX}" ; then
+    AC_MSG_RESULT(predefined in configure: ${CXX})
+  else
+    AC_PATH_PROG(CXXPATH,${CXX},no)
+    if test "${CXXPATH}" = no ; then
+      AC_MSG_RESULT()
+      AC_MSG_RESULT(Cannot find ${CXX}. Please add it to your PATH)
+      AC_MSG_RESULT(or specify an absolute path in configure.)
+      AC_MSG_ERROR(aborted)
+    else
+      CXX=${CXXPATH}
+    fi
+  fi
+else
+	CXXPATH=""
+	while test "${CXXPATH}" = "" ; do
+		CXX=`echo ${CXX_SEARCH_ORDER}|${CUT} -d\  -f1`
+		if test _`echo ${CXX} | ${TR} -d " "`_ = __ ; then
+			CXXPATH="END"
+		fi
+		if test "${CXXPATH}" != "END" ; then
+	  	AC_PATH_PROG(CXXPATH,${CXX},no)
+	    if test "${CXXPATH}" = no ; then
+	  		CXXPATH=""
+				unset ac_cv_path_CXXPATH
+	    else
+  		  CXX=${CXXPATH}
+		  fi
+		fi
+			
+		CXX_SEARCH_ORDER=`echo "${CXX_SEARCH_ORDER} " |${CUT} -d\  -f2-`
+	done
+
+  if test "${CXXPATH}" = "end" ; then
+    AC_MSG_RESULT()
+    AC_MSG_RESULT(Could not find a C++ compiler. Please change the settings)
+    AC_MSG_RESULT(of your PATH environment variable (using setenv export))
+		AC_MSG_RESULT(or specify an absolute path in configure by setting the variable)
+		AC_MSG_RESULT(CXX=<pathname>.)
+    AC_MSG_ERROR(aborted)
+	fi
+fi
+
+dnl
+dnl		extract the executable name of the compiler 
+dnl 	as default compiler name (CXX_NAME is needed
+dnl		to name the default directory the libraries 
+dnl		reside in)
+dnl
+
+if test "${CXX_PATH}" = "" ; then
+	if test "${CXX}" = "" ; then
+		CXX_NAME=unknown
+	else
+		CXX_NAME="${CXX}"
+	fi
+else
+	CXX_NAME="${CXX_PATH}"
+fi
+	
+while test "`echo ${CXX_NAME}|grep /`" != "" ; do
+	CXX_NAME=`echo ${CXX_NAME} | cut -d/ -f2-`
+done
+
+
+dnl
+dnl		Check whether the C++ compiler is a GNU compiler
+dnl
+
+AC_MSG_CHECKING(for GNU compiler)
+cat > /tmp/$$.conftest.c << EOF
+#ifdef __GNUC__
+GXX:true
+#else
+GXX:false
+#endif
+EOF
+
+IS_GXX=`${CXX} -E /tmp/$$.conftest.c |egrep GXX|${CUT} -d: -f2|${TR} -d " "`
+if test "${IS_GXX}" = "true" ; then
+	AC_MSG_RESULT(yes)
+	HAS_GPLUSPLUS=true
+	CXX_NAME="g++"
+else
+	AC_MSG_RESULT(no)
+	HAS_GPLUSPLUS=false
+fi
+rm /tmp/$$.conftest.c
+
+dnl
+dnl		Check for KAI C++ (if no GNU compiler found!)
+dnl		At least under linux the damned frontend won't tell 
+dnl		its version number, so we try to extract the word kai 
+dnl		from its drivers options when called in verbose mode.
+dnl		Nasty - but seems to work. Anybody with a better solution 
+dnl 	should feel free to inform me!
+dnl
+if test "${IS_GXX}" = "false" ; then
+	AC_MSG_CHECKING(for KAI C++ compiler)
+	KAI=`${CXX} -v --version 2>&1 | sed "s/.*KAI.*/__KAI__/g" |sed "s/.*kai.*/__KAI__/g" | egrep "^__KAI__$" | sed -n 1p`
+	if test "${KAI}" = "__KAI__" ; then
+		IS_KCC=true
+		AC_MSG_RESULT(yes)
+		CXX_NAME="KCC"
+	else
+		IS_KCC=false
+		AC_MSG_RESULT(no)
+	fi
+fi
+
+
+dnl
+dnl 	Try to find out the exact compiler release on different
+dnl		operating systems and differntiate between gcc/egcs
+dnl
+if test "${IS_GXX}" = "true" ; then
+	AC_MSG_CHECKING(compiler version)
+	CXX_VERSION=`${CXX} --version`
+	if test `echo ${CXX_VERSION}|${CUT} -c1-4` = "egcs" ; then
+		IS_EGXX=true
+		CXX_NAME="egcs"
+		CXX_VERSION=`${CXX} -v 2>&1 | grep release | cut -d\( -f2 | cut -d\) -f1 | sed "s/egcs-//" | cut -d" " -f1`
+		VERSION_OUTPUT="egcs ${CXX_VERSION}"
+		CXX_COMPILER_NAME="egcs"
+	else
+		IS_EGXX=false
+		VERSION_OUTPUT="g++ ${CXX_VERSION}"
+		CXX_COMPILER_NAME="g++"
+	fi
+	
+	AC_MSG_RESULT(${VERSION_OUTPUT})
+
+	CXX_VERSION_1=`echo ${CXX_VERSION} | ${CUT} -d. -f1`
+	CXX_VERSION_2=`echo ${CXX_VERSION} | ${CUT} -d. -f2`
+	CXX_VERSION_3=`echo ${CXX_VERSION} | ${CUT} -d. -f3`
+
+	if test "${IS_EGXX}" = "true" ; then	
+		if test "${CXX_VERSION_1}" -le 1 -a "${CXX_VERSION_2}" -eq 0 ; then
+			AC_MSG_RESULT()
+			AC_MSG_RESULT(Wrong version of egcs! egcs below release 1.1.x won't compile due to an internal compiler error)
+	 		AC_MSG_RESULT(Please upgrade to a more recent version of egcs.)
+			AC_MSG_ERROR(aborted)
+		fi
+	fi
+else
+	dnl
+	dnl		Now we got a problem: we have to identify the compiler
+	dnl		This is nearly impossible, but we give our best...
+	dnl
+	if test "${OS}" = "IRIX" ; then
+		AC_MSG_CHECKING(compiler version)
+		CXX_VERSION_STRING=`${CXX} -n32 -version 2>&1 | egrep ersion`
+		if test "${CXX_VERSION_STRING}" = "" ; then
+			AC_BASENAME(${CXX})
+			CXX_VERSION="${TMP__NAME}"
+			CXX_VERSION_OUTPUT="${CXX_VERSION} (unknown version)"
+		else
+			CXX_VERSION=`echo ${CXX_VERSION_STRING} | ${SED} "s/^.*ersion //g"`
+			CXX_COMPILER_NAME=`echo ${CXX_VERSION_STRING} | ${CUT} -d\  -f1`
+			CXX_VERSION_OUTPUT="${CXX_VERSION} (${CXX_COMPILER_NAME})"
+		fi
+
+		CXX_VERSION_1=`echo ${CXX_VERSION} | ${CUT} -d. -f1`
+		CXX_VERSION_2=`echo ${CXX_VERSION} | ${CUT} -d. -f2`
+		CXX_VERSION_3=`echo ${CXX_VERSION} | ${CUT} -d. -f3`
+
+		AC_MSG_RESULT(${CXX_VERSION_OUTPUT})
+	fi
+
+	if test "${OS}" = "Solaris" ; then
+		AC_MSG_CHECKING(compiler version)
+
+		CXX_VERSION_STRING=`${CXX} -V 2>&1 | egrep CC:`
+
+		CXX_VERSION=`echo ${CXX_VERSION_STRING} | ${TR} -d "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ:" | ${TR} -s " " | ${CUT} -d\  -f2`
+		changequote(<<,>>)
+		CXX_VERSION_TEST=`echo ${CXX_VERSION} | ${SED} s/\^\\[0-9\\.\\]*[a-zA-Z\\.]*//g`
+		changequote([,])
+		if test "${CXX_VERSION_TEST}" != "" ; then
+			AC_BASENAME(${CXX})
+			CXX_VERSION="${TMP__NAME}"
+			CXX_VERSION_OUTPUT="${CXX_VERSION} (unknown version)"
+		else
+			CXX_VERSION_1=`echo ${CXX_VERSION} | ${CUT} -d. -f1`
+			CXX_VERSION_2=`echo ${CXX_VERSION} | ${CUT} -d. -f2`
+			CXX_VERSION_3=`echo ${CXX_VERSION} | ${CUT} -d. -f3`
+			CXX_VERSION_OUTPUT="${CXX_VERSION}"
+		fi
+		AC_MSG_RESULT(${CXX_VERSION_OUTPUT})
+		
+	fi
+fi
+
+dnl
+dnl		Assemble the complete compiler name by adding
+dnl		the release numbers (if known) of the compiler
+dnl
+
+AC_MSG_CHECKING(standardized compiler name)
+if test "${CXX_VERSION_1}" != "" ; then
+	CXX_NAME="${CXX_NAME}_${CXX_VERSION_1}"
+	if test "${CXX_VERSION_2}" != "" ; then
+		CXX_NAME="${CXX_NAME}.${CXX_VERSION_2}"
+		if test "${CXX_VERSION_3}" != "" ; then
+			CXX_NAME="${CXX_NAME}.${CXX_VERSION_3}"
+		fi
+	fi
+fi
+
+AC_MSG_RESULT(${CXX_NAME})
+
+
+dnl
+dnl		default makedepend name
+dnl
+CXX_MAKEDEPEND="makedepend"
+
+dnl
+dnl   run C++ dependencies first to file .Dependencies....
+dnl
+MAKEDEP_CXX_OPTS="-f.Dependencies -D__cplusplus --"
+
+dnl normally makedepend doesn't need a redirection.
+dnl if the C++-compiler creates the dependencies, the
+dnl redirection to .Dependencies should be given in 
+dnl MAKEDEP_CXX
+MAKEDEP_CXX_SUFFIX=
+
+dnl
+dnl	 TEMPLATE_DIR contains the name of the template
+dnl  database dir. This is required for a "make clean"
+dnl
+TEMPLATE_DIR=
+
+dnl
+dnl  Here go the g++-specific flags
+dnl 
+if test "${HAS_GPLUSPLUS}" = "true" ; then
+	CXX_MAKEDEPEND="${CXX}"
+	MAKEDEP_CXX_OPTS="-M"
+	CPPFLAGS_D="${CPPFLAGS_D} -g -Wall"
+	CPPFLAGS_O="${CPPFLAGS_O} -O2"
+	MAKEDEP_CXX_SUFFIX=" >.Dependencies"
+	CPPFLAGS="${CPPFLAGS} -fPIC"
+
+	DYNAR="${CXX}"
+	if test "${OS}" != "Solaris" ; then
+		DYNAROPTS="-shared -fPIC -o"		
+	else 
+		DYNAROPTS="-G -fPIC -o"
+	fi
+
+	if test "${IS_EGXX}" = true; then
+		BALL_TYPENAME=typename
+	else
+  	if test "${CXX_VERSION_1}" -gt 2 -o "${CXX_VERSION_1}" -eq 2 -a "${CXX_VERSION_2}" -ge 8 ; then
+			BALL_TYPENAME=typename
+  	fi
+	fi
+else
+	dnl
+	dnl		KAI C++ specific options
+	dnl
+	if test "${IS_KCC}" = true ; then
+		dnl		KAI C++ stores a list of instantiated templates
+		dnl		in directories called ti_files
+		dnl		make clean should remove these
+		TEMPLATE_DIR="ti_files"
+		AR="${CXX}"
+		DYNAR="${CXX}"
+		AROPTS="-o"
+		DYNAROPTS="-o"
+		CXX_MAKEDEPEND="${CXX}"
+		MAKEDEP_CXX_OPTS="-M"
+		MAKEDEP_CXX_SUFFIX=" >.Dependencies"
+
+		dnl	
+		dnl		Someone at KAI seems to have the need
+		dnl		to torture developpers by introducing 
+		dnl		a new flag for position independent code 
+		dnl		on EVERY platform...
+		dnl		
+		if test "${OS}" = Linux ; then
+			CPPFLAGS="${CPPFLAGS} -fPIC"
+		fi
+		if test "${OS}" = Solaris ; then
+			CPPFLAGS="${CPPFLAGS} -KPIC"
+		fi
+		if test "${OS}" = IRIX ; then
+			CPPFLAGS="${CPPFLAGS} --pic"
+		fi
+		
+		dnl		optimze as on highest level: this compiler 
+		dnl		does a good job optimizing!
+		CPPFLAGS_O="${CPPFLAGS_O} -O3 +K3"
+		
+		dnl		avoid high level optimization to
+		dnl		get debuggable code...
+		CPPFLAGS_D="${CPPFLAGS_D} -g +K0"
+	else
+		if test "${OS}" = IRIX ; then
+			dnl  set the name for the template repository
+			dnl
+			TEMPLATE_DIR="ii_files"
+
+			dnl	 set the default binary format (if none selected)
+			dnl
+			if test "${IRIX_BINFMT}" = "" ; then
+				IRIX_BINFMT=N32
+			fi
+			
+			dnl	handle wrong (hand-made!) entries in configure
+			dnl  
+			if test "${IRIX_BINFMT}" != "64" && test "${IRIX_BINFMT}" != "N32" && test "${IRIX_BINFMT}" != "32" ; then
+				AC_MSG_RESULT(A${IRIX_BINFMT}A)
+				AC_MSG_RESULT(Wrong IRIX_BINFMT! Please choose one from 32, N32, or 64.)
+				AC_MSG_RESULT(You may also decide to leave the entry open. This defaults to 64 on 64 bit machines)
+				AC_MSG_RESULT(and 32 otherwise.)
+				AC_ERROR(aborted)
+			fi
+
+			dnl  SGI has two _different_ compiler hidden behind CC
+			dnl  
+			if test "${IRIX_BINFMT}" = 32 ; then
+				DEF_BOOL=true
+				BALL_TYPENAME=""
+				PRELINK="/usr/lib/DCC/edg_prelink"
+				CPPFLAGS="$CPPFLAGS -32 +w"
+				CPPFLAGS_D="${CPPFLAGS_D} -g -fullwarn"
+				CPPFLAGS_O="${CPPFLAGS_O} -O2 -Olimit 8000"
+				LDFLAGS="$LDFLAGS -32"
+				AC_DEFINE(IRIX32,)
+			else	
+				BALL_TYPENAME=typename
+				dnl			CC 7.20 doesn't have the external prelinker
+				dnl			anymore (at least for 64 bit) so we use
+				dnl			no prelinker and CC -ar instead of ar
+				dnl			Otherwise: use edg_prelink
+				dnl
+
+				AR=${CXX}
+				AROPTS="-ar -o"
+				DYNAR=${CXX}
+				DYNAROPTS="-shared -quickstart_info -no_unresolved -o"
+
+				if test "${CXX_VERSION_1}" -gt 7  -o "${CXX_VERSION_1}" -eq 7 \
+								-a "${CXX_VERSION_2}" != 10 -a "${CXX_VERSION_2}" != 1; then
+					CC_DOES_PRELINK=true
+				else
+					CC_DOES_PRELINK=false
+					if test "${IRIX_BINFMT}" = 64 ; then
+						PRELINK="/usr/lib32/cmplrs/edg_prelink"
+					else
+						PRELINK="/usr/lib32/cmplrs/edg_prelink"
+					fi
+				fi
+
+				CXX_MAKEDEPEND="${CXX}"
+				MAKEDEP_CXX_OPTS="-M"
+				MAKEDEP_CXX_SUFFIX=" >.Dependencies 2>/dev/null"
+
+				if test "${IRIX_BINFMT}" = 64 ; then
+					DEF_BOOL=false
+					CPPFLAGS="$CPPFLAGS -64"
+					DYNAROPTS="-64 ${DYNAROPTS}"
+					CPPFLAGS_O="${CPPFLAGS_O} -O2 -OPT:Olimit=9000 -multigot -G 6"
+					CPPFLAGS_D="${CPPFLAGS_D} -g -fullwarn"
+					LDFLAGS="$LDFLAGS -64"
+					AC_DEFINE(IRIX64,)
+					ADDITIONAL_COMMENTS="Please remember to use LD_LIBRARY64_PATH instead of\n LD_LIBRARY_PATH - you are using 64 bit objects!"
+				fi
+				if test "${IRIX_BINFMT}" = N32 ; then
+					DEF_BOOL=false
+					CPPFLAGS="$CPPFLAGS -n32"
+					DYNAROPTS="-n32 ${DYNAROPTS}"
+					CPPFLAGS_O="${CPPFLAGS_O} -O2 -OPT:Olimit=9000 -multigot -G 6"
+					CPPFLAGS_D="${CPPFLAGS_D} -g -fullwarn"
+					LDFLAGS="$LDFLAGS -n32"
+					AC_DEFINE(IRIX32,)
+					ADDITIONAL_COMMENTS="Please remember to use LD_LIBRARYN32_PATH instead of\n LD_LIBRARY_PATH - you are using new style 32 bit objects."
+				fi
+			fi
+
+			AC_DEFINE(MIPS,)	
+			AC_DEFINE(IRIX,)
+		fi
+
+		dnl
+		dnl  old SunOS 4.x - only for completeness
+		dnl
+		if test $OS = SunOS ; then
+			CPPFLAGS_D="$CPPFLAGS_D} -g"
+			CPPFLAGS_O="${CPPFLAGS_O} -O2"
+			AC_DEFINE(SPARC,)
+			AC_DEFINE(SUNOS,)
+			AC_ERROR(SunOS not supported - please use Solaris)
+		fi
+
+		dnl
+		dnl  SUN Solaris (2.x)
+		dnl
+		if test $OS = Solaris ; then
+			dnl
+			dnl		Make sure we use at least Workshop 5.0
+			dnl		(SUNPro 4.x is a mess - hasn't even heard of ANSI C++!)
+			dnl
+			if test "${CXX_VERSION_1}" -lt 5 ; then
+				AC_MSG_RESULT()
+				AC_MSG_RESULT(BALL requires an ANSI C++ compliant compiler)
+				AC_MSG_RESULT(SUNPro compilers are ANSI compliant for version 5.0 and above)
+				AC_MSG_RESULT(Please upgrade your compiler!)
+				AC_MSG_RESULT()
+				AC_ERROR(Abort)
+			fi
+
+			AC_DEFINE(SOLARIS,)
+
+			TEMPLATE_DIR="Templates.DB"
+			DEF_BOOL=true
+			NO_ARROW_OPERATOR="true"
+			AR="${CXX}"
+			DYNAR="${CXX}"
+			AROPTS="-xar -o"
+			DYNAROPTS="-G -PIC -o"
+			CXX_MAKEDEPEND="${CXX}"
+			MAKEDEP_CXX_OPTS="-xM1"
+			MAKEDEP_CXX_SUFFIX=" >.Dependencies"
+
+			dnl 
+			dnl suppress all warnings for this f*** compiler
+			dnl and disable all inlining (it will crash in 
+			dnl optimizing mode otherwise)
+			dnl
+			AC_DEFINE(BALL_NO_INLINE_FUNCTIONS,)
+			CPPFLAGS="${CPPFLAGS} -pto -w -PIC"
+			CPPFLAGS_O="${CPPFLAGS_O} -xO3 -xtarget=native"
+			CPPFLAGS_D="${CPPFLAGS_D} -g"
+		fi
+	fi
+fi
+
+dnl
+dnl		checks for header files
+dnl
+
+dnl
+dnl		some platforms need to include ieeefp.h
+dnl		for the definition of finite
+dnl
+if test "$OS" = IRIX -o "$OS" = Solaris ; then
+	INCLUDE_IEEEFP=true
+	AC_DEFINE(BALL_INCLUDE_IEEEFP,)
+fi
+
+dnl 	check for standard C headers
+dnl 	and how to run the preprocessor
+AC_HEADER_STDC
+
+
+
+dnl		check for limits header (class numeric limits, to be precise)
+dnl
+dnl
+AC_MSG_CHECKING(for numeric_limits class)
+cat > /tmp/$$.conftest.c << EOF
+#include <limits>
+int main()
+{
+	float f = std::numeric_limits<float>::min();
+	return 0;
+}
+EOF
+if ${CXX} /tmp/$$.conftest.c 2>/dev/null >/dev/null; then
+	AC_MSG_RESULT(available)
+	AC_DEFINE(HAVE_NUMERIC_LIMITS)
+else
+	AC_MSG_RESULT(not available)
+fi
+rm /tmp/$$.conftest.c a.out 2>/dev/null
+
+dnl
+dnl		Checks for typedefs, structures, and compiler characteristics.
+dnl
+
+AC_TYPE_SIZE_T
+AC_HEADER_TIME
+
+dnl
+dnl		check for the size of int and pointers (may cause trouble on 64 bit architectures)
+dnl		we define the type PointerInt (in COMMON/global.h) according to the macro
+dnl		BALL_POINTERSIZE_INT (which is set here)
+dnl	  missing: usage of the result of AC_TYPE_SIZE_T
+dnl
+AC_MSG_CHECKING(for size of types)
+cat > /tmp/$$.conftest.c << EOF
+#include <iostream.h>
+#include <sys/types.h>
+int main()
+{
+	cout << 8 * sizeof(int) << ":" << 8 * sizeof(long) << ":" 
+       << 8 * sizeof(size_t) << ":" << 8 * sizeof(void*) << endl;
+}
+EOF
+${CXX} ${CPPFLAGS} /tmp/$$.conftest.c -o /tmp/$$.conftest.exe 2>/dev/null >/dev/null
+INT_SIZE=`/tmp/$$.conftest.exe|cut -d: -f1`
+LONG_SIZE=`/tmp/$$.conftest.exe|cut -d: -f2`
+SIZE_T_SIZE=`/tmp/$$.conftest.exe|cut -d: -f3`
+POINTER_SIZE=`/tmp/$$.conftest.exe|cut -d: -f4`
+rm /tmp/$$.conftest.c /tmp/$$.conftest.exe
+AC_MSG_RESULT("int=${INT_SIZE}bit long=${LONG_SIZE}bit size_t=${SIZE_T_SIZE}bit pointer=${POINTER_SIZE}bit")
+
+if test "${POINTER_SIZE}" = "${INT_SIZE}" ; then
+	BALL_POINTERSIZE_INT=int
+else 
+	if test "${POINTER_SIZE}" = "${LONG_SIZE}" ; then
+		BALL_POINTERSIZE_INT=long
+	else
+		AC_MSG_RESULT()
+		AC_MSG_RESULT(cannot find appropriate numeric type of same size as void*)
+		AC_MSG_ERROR(abort)
+	fi
+fi
+AC_DEFINE_UNQUOTED(BALL_POINTERSIZE_INT, ${BALL_POINTERSIZE_INT})
+if test "${SIZE_T_SIZE}" = "${INT_SIZE}" ; then
+	BALL_INDEX_TYPE="int"
+	BALL_SIZE_TYPE="unsigned int"
+else 
+	if test "${SIZE_T_SIZE}" = "${LONG_SIZE}" ; then
+		BALL_INDEX_TYPE="long"
+		BALL_SIZE_TYPE="unsigned long"
+	else
+		AC_MSG_RESULT()
+		AC_MSG_RESULT(cannot find appropriate numeric type of same size as size_t)
+		AC_MSG_ERROR(abort)
+	fi
+fi
+AC_DEFINE_UNQUOTED(BALL_SIZE_TYPE, ${BALL_SIZE_TYPE})
+AC_DEFINE_UNQUOTED(BALL_INDEX_TYPE, ${BALL_INDEX_TYPE})
+	
+
+dnl
+dnl 	check whether strerror is known - define it otherwise
+dnl 	in defines.h
+dnl
+
+AC_CHECK_FUNCS(strerror,HAVE_STRERROR=1)
+if test "${HAVE_STRERROR}" != 1 ; then
+	AC_DEFINE(BALL_DEFINE_STRERROR)
+fi
+
+dnl   
+dnl   check for some network stuff needed for socket class
+dnl   this test tries to identify the neccessary libraries
+dnl		solaris needs xnet or socket/nsl to link the tcp stuff
+dnl  	
+
+dnl
+dnl 	first check if everythings already defined in libc
+dnl 
+AC_CHECK_FUNCS(inet_addr, HAVE_INET_ADDR=1)
+AC_CHECK_FUNCS(gethostbyname, HAVE_GETHOSTBYNAME=1)
+if test "${HAVE_INET_ADDR+set}" = set ; then
+	AC_CHECK_FUNC(inet_aton, HAVE_INET_ATON=1)
+fi 
+
+dnl   if gethostbyname was not defined in libc, try libxnet (Solaris only?)
+if test "${HAVE_GETHOSTBYNAME+set}" != set ; then
+	AC_CHECK_LIB(xnet, gethostbyname)
+	unset ac_cv_func_gethostbyname
+	AC_CHECK_FUNCS(gethostbyname,HAVE_GETHOSTBYNAME=1)
+fi
+if test "${HAVE_INET_ADDR+set}" != set ; then
+	unset ac_cv_func_inet_addr
+	AC_CHECK_FUNCS(inet_addr,HAVE_INET_ADDR=1)
+	if test "${HAVE_INET_ADDR+set}" != set ; then
+		AC_CHECK_LIB(xnet, inet_addr)
+		unset ac_cv_func_inet_addr
+		AC_CHECK_FUNCS(inet_addr,HAVE_INET_ADDR=1)
+	fi
+fi
+
+if test "${HAVE_GETHOSTBYNAME+set}" != set ; then 
+	AC_CHECK_LIB(nsl, gethostbyname)
+	unset ac_cv_func_gethostbyname
+	AC_CHECK_FUNCS(gethostbyname,HAVE_GETHOSTBYNAME=1)
+fi
+
+if test "${HAVE_INET_ADDR+set}" != set ; then
+	AC_CHECK_LIB(socket, inet_addr)
+	unset ac_cv_func_inet_addr
+	AC_CHECK_FUNCS(inet_addr,HAVE_INET_ADDR=1)
+fi
+
+
+dnl check again whether inet_aton exists (perhaps it was hidden in one
+dnl of the other libraries..
+if test "${HAVE_INET_ATON+set}" != set ; then
+	unset ac_cv_func_inet_aton
+	AC_CHECK_FUNC(inet_aton,HAVE_INET_ATON=1)
+fi
+
+if test "${HAVE_INET_ATON+set}" = set ; then
+	AC_DEFINE(HAVE_INET_ATON,)
+fi
+
+dnl
+dnl		Now for somthing related: check whether size arguments
+dnl 	in function calls like getsockname getpeername or accept
+dnl		require a specialized typename or int
+dnl		We simply compile a short example with all known types
+dnl		and take one that didn't cause a warning (or an error)
+dnl
+AC_MSG_CHECKING(for socketlen type)
+AC_TRY_COMPILE(
+	[
+#include <sys/socket.h>	
+#include <netinet/in.h>
+	],
+	[	sockaddr_in   addr;
+	  socklen_t     len = 0;
+	  getsockname(0, (struct sockaddr*)&addr, &len);
+	],
+	BALL_SOCKLEN_TYPE=socklen_t)	
+if test "${BALL_SOCKLEN_TYPE}" = "" ; then
+	AC_TRY_COMPILE(
+		[
+#include <sys/socket.h>	
+#include <netinet/in.h>
+		],
+		[	sockaddr_in   addr;
+		  size_t    len = 0;
+		  getsockname(0, (struct sockaddr*)&addr, &len);
+		],
+		BALL_SOCKLEN_TYPE=size_t)	
+fi
+if test "${BALL_SOCKLEN_TYPE}" = "" ; then
+	AC_TRY_COMPILE(
+		[
+#include <sys/socket.h>	
+#include <netinet/in.h>
+		],
+		[	sockaddr_in   addr;
+		  unsigned int  len = 0;
+		  getsockname(0, (struct sockaddr*)&addr, &len);
+		],
+		BALL_SOCKLEN_TYPE="unsigned int")	
+fi
+if test "${BALL_SOCKLEN_TYPE}" = "" ; then
+	AC_TRY_COMPILE(
+		[
+#include <sys/socket.h>	
+#include <netinet/in.h>
+		],
+		[	sockaddr_in   addr;
+		  int 					len = 0;
+		  getsockname(0, (struct sockaddr*)&addr, &len);
+		],
+		BALL_SOCKLEN_TYPE="int")	
+fi
+if test "${BALL_SOCKLEN_TYPE}" = "" ; then
+	AC_MSG_RESULT(FAILED)
+	AC_MSG_RESULT(-------------WARNING!---------------)
+	AC_MSG_RESULT(could not find a matching type for socket length argument)
+	AC_MSG_RESULT(in call to getsockname)
+	AC_MSG_RESULT(please check the setting for BALL_SOCKLEN_TYPE in config.mak)
+	AC_MSG_RESULT(and set it to the type needed for the third arguemnt of  getsockname)
+	AC_MSG_RESULT()
+else
+	AC_MSG_RESULT($BALL_SOCKLEN_TYPE)
+fi
+
+AC_DEFINE_UNQUOTED(BALL_SOCKLEN_TYPE, ${BALL_SOCKLEN_TYPE})
+
+
+
+
+AC_HEADER_SYS_WAIT
+AC_CHECK_HEADERS(assert.h ctype.h dirent.h errno.h fstream.h)
+if test "$INCLUDE_IEEEFP" = true ; then
+	AC_CHECK_HEADERS(ieeefp.h)
+	AC_DEFINE(INCLUDE_IEEEFP,)
+fi
+AC_CHECK_HEADERS(limits.h math.h values.h new.h pwd.h regex.h signal.h)
+AC_CHECK_HEADERS(stdarg.h stdio.h stdlib.h string.h strstream.h)
+AC_CHECK_HEADERS(sys/stat.h sys/time.h sys/times.h sys/types.h)
+AC_CHECK_HEADERS(time.h unistd.h)
+
+
+dnl
+dnl		Checks for library functions
+dnl
+
+AC_FUNC_MEMCMP
+AC_CHECK_FUNCS(gettimeofday strdup strstr)
+
+dnl
+dnl		BallVIEW
+dnl
+if test "${USE_BALLVIEW}" = "" ; then
+	USE_BALLVIEW=true
+fi
+if test "${USE_BALLVIEW}" = "true" ; then
+	LIBBALLVIEW="libVIEW.a libMOLVIEW.a"
+fi
+
+dnl
+dnl    if BALLView is to be built, ask user which platform he intends to use (Mesa or OpenGL)
+dnl
+if test "${USE_BALLVIEW}" = true ; then
+  if test "${BALLVIEW_PLATFORM}" = "" ; then
+		dnl 	all SGI machines come with OpenGL, don't they?
+		if test "${OS}" == IRIX ; then
+			BALLVIEW_PLATFORM="OpenGL"
+		else 
+			dnl		let's ask the user....
+			ANSWER=
+			while test "${ANSWER}" != "Mesa" && test "${ANSWER}" != "OpenGL" ; do
+				AC_MSG_RESULT(Please enter BALLView platform - Mesa or OpenGL:)
+				read ANSWER
+			done
+			BALLVIEW_PLATFORM=${ANSWER}
+		fi
+  fi
+fi
+
+dnl
+dnl    search for X-libs and includes and BALLView (OpenGL/MESA) stuff
+dnl 
+
+if test ${USE_BALLVIEW} = true ; then
+	AC_PATH_X
+
+	AC_MSG_CHECKING(for BALLView libraries)
+	if test "${no_x}" = "yes" ; then
+		USE_BALLVIEW=false
+		AC_MSG_RESULT(Can't find X libraries and includes. BALLVIEW cannot be built.)
+	else
+		AC_MSG_RESULT(X libraries available)
+	fi
+
+	if test ${USE_BALLVIEW} = true ; then
+		AC_MSG_CHECKING(BALLVIEW platform)
+		AC_MSG_RESULT($BALLVIEW_PLATFORM)
+
+		if test ${BALLVIEW_PLATFORM} = Mesa ; then
+			AC_MSG_CHECKING(for Mesa includes)
+			AC_FIND_HEADER(MESA_INCLUDES,GL/gl.h)
+			if test "${MESA_INCLUDES}" = "" ; then
+				AC_MSG_RESULT((not found!))
+				AC_MSG_RESULT()
+				AC_MSG_RESULT(no Mesa headers found! Please modify the top section)
+				AC_MSG_RESULT(of configure and specify the correct path to these headers)
+				AC_MSG_RESULT(or install the Mesa package. Mesa can be found in BALL/contrib/Mesa.)
+				AC_MSG_ERROR(aborted)
+			else
+				AC_MSG_RESULT((${MESA_INCLUDES}))
+			fi
+
+			AC_MSG_CHECKING(for Mesa library)
+			AC_FIND_LIB(MESA_LIBS,libMesaGL)
+			if test "${MESA_LIBS}" = "" ; then
+				AC_MSG_RESULT((not found!))
+				AC_MSG_RESULT()
+				AC_MSG_RESULT(no Mesa lib found! Please modify the top section)
+				AC_MSG_RESULT(of configure and specify the correct path to these libraries)
+				AC_MSG_RESULT(or compile Mesa to create these libraries.)
+				AC_MSG_ERROR(aborted)
+			else
+				AC_MSG_RESULT((${MESA_LIBS}))
+			fi
+			
+			dnl   prevent the use of -L/usr/lib - this may lead to problems with different
+			dnl   binary formats (e.g. SGI O32/N32 format)
+			if test "${MESA_LIBS}" != "/usr/lib" ; then
+				BALLVIEW_LIBS="${BALLVIEW_LIBS} -L${MESA_LIBS}"
+			fi
+			if test "${MESA_INCLUDES}" != /usr/include && test "${MESA_INCLUDES}" != "" ; then
+				BALLVIEW_INCLUDES="${BALLVIEW_INCLUDES} -I${MESA_INCLUDES}"
+			fi
+		fi
+
+		if test ${BALLVIEW_PLATFORM} = OpenGL ; then
+			AC_MSG_CHECKING(for OpenGL includes)
+			AC_FIND_HEADER(OPENGL_INCLUDES,GL/gl.h)
+			if test "${OPENGL_INCLUDES}" = "" ; then
+				AC_MSG_RESULT((not found!))
+				AC_MSG_RESULT()
+				AC_MSG_RESULT(no OpenGL headers found! Please modify the top section)
+				AC_MSG_RESULT(of configure and specify the correct path to these headers.)
+				AC_MSG_ERROR(aborted)
+			else
+				AC_MSG_RESULT((${OPENGL_INCLUDES}))
+			fi
+
+			AC_MSG_CHECKING(for OpenGL library)
+			AC_FIND_LIB(OPENGL_LIBS,libGL)
+			if test "${OPENGL_LIBS}" = "" ; then
+				AC_MSG_RESULT((not found!))
+				AC_MSG_RESULT()
+				AC_MSG_RESULT(no OpenGL lib found! Please modify the top section)
+				AC_MSG_RESULT(of configure and specify the correct path to these libraries.)
+				AC_MSG_ERROR(aborted)
+			else
+				AC_MSG_RESULT((${OPENGL_LIBS}))
+			fi
+			
+			if test "${OPENGL_LINS}" != "/usr/lib"; then
+				BALLVIEW_LIBS="${BALLVIEW_LIBS} -L${OPENGL_LIBS}"
+			fi
+			if test "${OPENGL_INCLUDES}" != /usr/include && test "${OPENGL_INCLUDES}" != "" ; then
+				BALLVIEW_INCLUDES="${BALLVIEW_INCLUDES} -I${OPENGL_INCLUDES}"
+			fi
+		fi
+
+		AC_MSG_CHECKING(for QT headers)
+		if test "${QTDIR}" != "" ; then
+			AC_FIND_HEADER(QT_INCLUDES,qgl.h,${QTDIR}/include ${BALL_PATH}/contrib/qt/include)
+		else
+			AC_FIND_HEADER(QT_INCLUDES,qgl.h,${BALL_PATH}/contrib/qt/include)
+		fi
+
+		if test "${QT_INCLUDES}" = "" ; then
+			AC_MSG_RESULT((not found!))
+			AC_MSG_RESULT()
+			AC_MSG_RESULT(no QT header files found! Please modify the top section)
+			AC_MSG_RESULT(of configure and specify the correct path to these headers)
+			AC_MSG_RESULT(or install QT. The QT package can be found in BALL/contrib/qt.)
+			AC_MSG_RESULT(You may also set yout environment variable QTDIR to the correct)
+			AC_MSG_RESULT(path - configure will recognize this, too.)
+			AC_MSG_ERROR(aborted)
+		else
+			AC_MSG_RESULT((${QT_INCLUDES}))	
+		fi
+
+		AC_MSG_CHECKING(for QT library)
+		if test "${QTDIR}" != "" ; then
+			AC_FIND_LIB(QT_LIBS,libqt,${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include)
+		else
+			AC_FIND_LIB(QT_LIBS,libqt,${BALL_PATH}/contrib/qt/lib ${BALL_PATH}/contrib/qt/lib/${BINFMT})
+		fi
+
+		if test "${QT_LIBS}" = "" ; then
+			AC_MSG_RESULT((not found!))
+			AC_MSG_RESULT()
+			AC_MSG_RESULT(no QT library file found! Please modify the top section)
+			AC_MSG_RESULT(of configure and specify the correct path to these headers)
+			AC_MSG_RESULT(or compile QT and rerun this script again)
+			AC_MSG_ERROR(aborted)
+		else
+			AC_MSG_RESULT((${QT_LIBS}))	
+		fi
+
+		if test "${QT_INCLUDES}" != /usr/include && test "${QT_INCLUDES}" != "" ; then
+			BALLVIEW_INCLUDES="${BALLVIEW_INCLUDES} -I${QT_INCLUDES}"
+		fi
+	
+		BALLVIEW="VIEW MOLVIEW"
+	else
+		BALLVIEW=
+	fi
+fi
+
+
+dnl
+dnl   create includes and libs for BALLView
+dnl
+dnl
+
+if test "${USE_BALLVIEW}" = true ; then
+	if test "${QT_LIBS} != "/usr/lib" ; then
+		BALLVIEW_LIBS="${BALLVIEW_LIBS} -L${QT_LIBS} -lqgl -lqt"
+	else 
+		BALLVIEW_LIBS="${BALLVIEW_LIBS} -lqgl -lqt"
+	fi	
+	if test "${BALLVIEW_PLATFORM}" = Mesa ; then
+		if test "${MESA_LIBS} != "/usr/lib" ; then
+			BALLVIEW_LIBS="${BALLVIEW_LIBS} -L${MESA_LIBS} -lMesaGLU -lMesaGL"
+		else
+			BALLVIEW_LIBS="${BALLVIEW_LIBS} -lMesaGLU -lMesaGL"
+		fi
+	fi
+	if test "${BALLVIEW_PLATFORM}" = OpenGL ; then
+		if test "${OPENGL_LIBS} != "/usr/lib" ; then
+			BALLVIEW_LIBS="${BALLVIEW_LIBS} -L${OPENGL_LIBS} -lGLU -lGL"
+		else
+			BALLVIEW_LIBS="${BALLVIEW_LIBS} -lGLU -lGL"
+		fi
+	fi
+	
+	if test "${x_libraries} != "/usr/lib" ; then
+		BALLVIEW_LIBS="${BALLVIEW_LIBS} -L${x_libraries} -lXmu -lXt -lX11"
+	else
+		BALLVIEW_LIBS="${BALLVIEW_LIBS} -lXmu -lXt -lX11"
+	fi
+fi
+
+
+BALL_INCLUDES="-I$BALL_PATH/include"
+
+dnl
+dnl		expand BINFMT to include the compiler name
+dnl
+BINFMT="${BINFMT}-${CXX_NAME}"
+
+dnl
+dnl 	add the binary format to the list of supported binary formats
+dnl 	held in config/binary_formats. Avoid double entries
+dnl
+touch ${BINFORMAT_FILE}
+if test "`${GREP} ${BINFMT} ${BINFORMAT_FILE}`" = "" ; then
+	echo ${BINFMT} >> ${BINFORMAT_FILE}
+fi
+dnl
+dnl   create the global config.h (the one including the platform specific
+dnl   config.h.${BINFMT})
+dnl
+${CAT} config/config.h.header | ${SED} 1,2d > config.h
+LINES=`cat config/binary_formats | wc -l`
+i=1
+while test $i -le $LINES ; do
+	BFMT=`cat ${BINFORMAT_FILE} | ${SED} -n ${i}p`
+	echo "#if ( BFMT == $i )" >> config.h
+	echo "#	include <BALL/CONFIG/config.h.${BFMT}>" >> config.h
+	echo "#endif" >> config.h
+	echo " " >> config.h
+	i=`expr $i + 1`
+done
+${CAT} config/config.h.footer | ${SED} 1,2d >> config.h
+if test "`${DIFF} ${BALL_PATH}/include/BALL/CONFIG/config.h config.h`" != "" ; then
+	${RM} ${BALL_PATH}/include/BALL/CONFIG/config.h
+	${MV} config.h  ${BALL_PATH}/include/BALL/CONFIG/config.h
+else
+	${RM} config.h
+fi
+
+BINFMT_INDEX=`${GREP} -n ${BINFMT} ${BINFORMAT_FILE} | ${CUT} -d: -f1 | ${TAIL} -1`
+
+LIBS="${LIBS} -lm"
+BALLVIEW_LIBS="${BALLVIEW_LIBS} -lm"
+
+AC_MSG_RESULT(Use the following additional libraries for linking: ${LIBS})
+
+
+BALL_LIBS="${BALL_LIBS} -L${BALL_PATH}/lib/${BINFMT} -lBALL"
+if test "${USE_BALLVIEW}" = true ; then
+	BALLVIEW_INCLUDES="${BALL_INCLUDES} ${BALLVIEW_INCLUDES}"
+	BALLVIEW_LIBS="-L${BALL_PATH}/lib/${BINFMT} -lMOLVIEW -lVIEW -lBALL ${BALLVIEW_LIBS}"
+fi
+
+LDFLAGS="$LDFLAGS"
+LIBS="$BALL_LIBS $LIBS"
+
+dnl
+dnl   checking for DEBUG-Flag
+dnl
+
+AC_MSG_CHECKING(for DEBUG flag)
+if test "$DEBUG" != "" ; then
+	dnl   define a debug flag and prevent the compilation of
+	dnl   inline functions by defining BALL_NO_INLINE_FUNCTIONS
+	dnl   (see COMMON/debug.h)
+	AC_DEFINE(BALL_DEBUG,)
+	AC_DEFINE(BALL_NO_INLINE_FUNCTIONS,)
+	AC_MSG_RESULT(enabled)
+	CPP_MODE_FLAGS="${CPPFLAGS_D}"
+	CPP_MODE_FLAGS_NO_OPTIMIZATION="${CPPFLAGS_D}"
+else
+	AC_MSG_RESULT(disabled)
+	CPP_MODE_FLAGS="${CPPFLAGS_O}"
+	CPP_MODE_FLAGS_NO_OPTIMIZATION=""
+fi
+
+dnl
+dnl   joining all flags
+dnl
+
+CPPFLAGS="$CPPFLAGS $DEFINES"
+
+
+	
+dnl
+dnl    try to find C++ standard include paths
+dnl    this is needed for make depend. If it doesn't work
+dnl    (quite probable the case) - it doesn't matter
+dnl    Don't try to find out how this bad hack works...
+dnl
+
+AC_PATH_PROG(DIRNAME,dirname,no)
+AC_MSG_CHECKING(for ${CXX} header files...)
+echo "#include <iostream.h>" >/tmp/$$.test.C
+LINES=`${CXX} -E /tmp/$$.test.C | egrep /iostream.h\"`
+${RM} /tmp/$$.test.C
+TEST=""
+for i in $LINES ; do
+	T=`echo $i | egrep /iostream.h\"`
+	if test "$T" != "" && test "$TEST" = "" ; then
+		TEST=$i
+	fi
+done
+
+TEST=`echo $TEST|${CUT} -d\" -f2`
+STD_CPP_INCLUDES=
+if test "${DIRNAME}" = no ; then
+	while test _`egrep / $TEST`_ != __ ; do
+		STD_CPP_INCLUDES=${STD_CPP_INCLUDES}/`echo $TEST|${CUT} -d/ -f2`
+		TEST=/`echo $TEST|${CUT} -d/ -f3-`
+	done
+else
+	STD_CPP_INCLUDES=`dirname $TEST`
+fi
+AC_MSG_RESULT((${STD_CPP_INCLUDES}))
+STD_CPP_INCLUDES="-I${STD_CPP_INCLUDES} -I/usr/include"
+
+
+
+
+
+AC_MSG_CHECKING(for prelinker)
+if test "${PRELINK}" = "" ; then
+	AC_MSG_RESULT(not needed)
+	__PRELINK__="@echo no external prelinker needed..."
+else
+	AC_MSG_RESULT(using ${PRELINK})
+	__PRELINK__="@\$(PRELINK) \$(PREOPTS) \`cat *.objects\`"
+fi
+
+
+
+
+dnl  
+dnl   neccessary variable substitutions in *.mak
+dnl
+
+
+dnl         PATHS
+
+AC_SUBST(BALL_PATH)         dnl path to top level directory
+AC_SUBST(BALL_INCLUDES)     dnl includes 
+
+
+dnl					DEPENDENCIES
+
+MAKEDEP_CXX_OPTS="${MAKEDEP_CXX_OPTS} ${CPPFLAGS}"
+if test ${CXX_MAKEDEPEND} = "makedepend" ; then
+	MAKEDEP_CXX_OPTS="${MAKEDEP_CXX_OPTS} -- "
+fi
+	
+AC_SUBST(CXX_MAKEDEPEND)		dnl path to C++ makedepend
+AC_SUBST(MAKEDEP_CXX_OPTS)	dnl options to C++ makedepend
+AC_SUBST(MAKEDEP_CXX_SUFFIX)dnl optional suffix (for redirection) for C++ makedepend
+
+
+
+dnl         COMPILER
+
+AC_SUBST(CXX)               dnl C++ compiler (absolute path)
+AC_SUBST(CPPFLAGS)          dnl C++ compiler flags
+AC_SUBST(ADD_CPPFLAGS)      dnl additional C++ compiler falgs (not passed on to makedepend)
+AC_SUBST(BALL_CPPFLAGS)			dnl C++ compiler flags used during compilation of the library only
+AC_SUBST(HAS_GPLUSPLUS)     dnl true, if C++ compiler is g++
+AC_SUBST(STD_CPP_INCLUDES)  dnl standard include paths of C++ compiler
+AC_SUBST(MAKEDEP_OPTS)      dnl options for makedep (needed for Linux)
+AC_SUBST(BALL_TYPENAME)			dnl if the compiler requires the use of typename
+                            dnl this variable is set to "typename". "" otherwise.
+AC_SUBST(BINFMT_INDEX)      dnl BFMT: binformat index of the current BINFMT - passed to the compiler
+                            dnl   as -DBFMT=${BINFMT_INDEX} to decide which config.h to use
+
+dnl         LINKER
+
+AC_SUBST(BALLVIEW_LIBS)     dnl BallVIEW libs
+AC_SUBST(BALL_LIBS)         dnl libraries
+AC_SUBST(LDFLAGS)           dnl linker flags
+AC_SUBST(LIBS)              dnl linker libraries
+AC_SUBST(DEFINES)           dnl defines (part of LDFLAGS)
+AC_SUBST(CPPFLAGS_D)        dnl debug flags for compiler 
+AC_SUBST(CPPFLAGS_O)        dnl optimization flags for compiler 
+AC_SUBST(CPP_MODE_FLAGS)    dnl set to CPPFLAGS_D|CPPFLAGS_O, depending on BALL_DEBUG
+AC_SUBST(CPP_MODE_FLAGS_NO_OPTIMIZATION)    
+														dnl set to CPPFLAGS_D|"", depending on BALL_DEBUG
+AC_SUBST(PRELINK)           dnl name of prelinker
+AC_SUBST(__PRELINK__)       dnl prelinker call in common.mak
+AC_SUBST(PREOPTS)           dnl prelinker options
+
+
+
+
+
+dnl					ARCHIVER
+
+dnl if nothing has been defined for AR/AROPTS,
+dnl use default
+
+if test "${AR}" = "no" ; then
+	AR="ar"
+fi
+if test "${AROPTS}" = "" ; then
+	AROPTS="cru"
+fi
+
+AC_SUBST(AR)
+AC_SUBST(AROPTS)
+AC_SUBST(DYNAR)
+AC_SUBST(DYNAROPTS)
+
+
+dnl				  MISC
+
+dnl   ADDTIONAL_COMMENTS is substituted at the end of the
+dnl   information text in Makefile and will be printed after
+dnl 	the library has been built.
+dnl   Any hints concerning a special OS/compiler combination 
+dnl   might want to print some information here (as is the
+dnl   case for the IRIX LD_LBRARY_PATH/LD_LIBRARY64_PATH/LD_LIBRARYN32_PATH)
+
+if test "${ADDITIONAL_COMMENTS}" = "" ; then
+	ADDITIONAL_COMMENTS=""
+fi
+AC_SUBST(ADDITIONAL_COMMENTS)
+
+dnl	    BALLVIEW
+
+AC_SUBST(USE_BALLVIEW)				dnl bool: use ballview (default=true)
+AC_SUBST(BALLVIEW)						dnl if USE_BALLVIEW=true, BALLVIEW. "" otherwise. Used in config.mak
+AC_SUBST(BALLVIEW_PLATFORM)		dnl Mesa or OpenGL
+AC_SUBST(BALLVIEW_INCLUDES)		dnl BallVIEW includes
+AC_SUBST(LIBBALLVIEW)					dnl static library name
+
+
+dnl    	define the standard installation path
+AC_DEFINE_UNQUOTED(BALL_PATH, "${BALL_PATH}")
+
+
+
+dnl			Some compilers (SUN CC/4.2) don't like
+dnl			the way we use the arrow operator (->)
+dnl  		
+if test "${NO_ARROW_OPERATOR}" = "" ; then
+	AC_DEFINE(BALL_SUPPORT_ARROW_OPERATOR,)
+fi
+
+
+	
+dnl	
+dnl		 make target "clean" should also remove 
+dnl    template repositories. The name of this directory 
+dnl    depends on the compiler and ist set in TEMPLATE_DIR
+dnl
+AC_SUBST(TEMPLATE_DIR)
+
+dnl
+dnl    create files
+dnl
+
+SUBDIRS="COMMON CONCEPT DATATYPE ENERGY FORMAT KERNEL MATHS MOLMEC NMR SOLVATION STRUCTURE SYSTEM ${BALLVIEW}"
+AC_MSG_RESULT(creating shadow directories...)
+config/shadowsource.sh `pwd`"/${BINFMT}" `pwd` "${SUBDIRS} TEST"
+AC_SUBST(SUBDIRS)
+
+AC_OUTPUT([
+	${BINFMT}/Makefile:config/Makefile.in
+	${BINFMT}/config.mak:config/config.mak.in 
+	${BINFMT}/common.mak:config/common.mak.in 
+])
+
+dnl
+dnl    copy config.h to the includes directory
+dnl    remove obsolete dependency file
+dnl
+
+${MV} -f config.h $BALL_PATH/include/BALL/CONFIG/config.h.${BINFMT}
+
+dnl
+dnl		make sure the dependencies are (re)built
+dnl
+rm  ${BINFMT}/.Dependencies 2>/dev/null
+
+dnl
+dnl Just give another helpful message and exit
+dnl
+
+AC_MSG_RESULT()
+AC_MSG_RESULT()
+AC_MSG_RESULT(Your Makfiles have been created. If everything went OK: just type)
+AC_MSG_RESULT()
+AC_MSG_RESULT(		make)
+AC_MSG_RESULT()
+AC_MSG_RESULT(to build BALL.)
+AC_MSG_RESULT()
+

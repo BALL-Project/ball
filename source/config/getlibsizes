@@ -1,0 +1,13 @@
+nm -C libBALL.a |grep -v UNDEF |\
+	awk '
+		BEGIN{where=""}
+		/Symbols from/{
+			if (where != ""){
+				print where,sum;sum=0
+			}	
+			where=$3
+		}
+		/\|/{
+			split($0,a,"|")
+			sum=sum+a[3]
+		}' > sizes.list

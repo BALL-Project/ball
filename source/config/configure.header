@@ -1,0 +1,159 @@
+###############
+###  $Id: configure.header,v 1.1 1999/08/26 08:02:33 oliver Exp $
+###############
+###############
+###
+###   change these settings to define special paths to libraries, headers od compilers
+###   remember not to insert blanks before or after the '='!
+
+#    change this variable to use a certain C++ compiler
+CXX=
+
+#    and this flag to add compiler specific flags
+CXXFLAGS=
+
+
+
+#   all variables *_INCLUDES should be set to the path of
+#   include directory. E.g. your OpenGL include file GL/gl.h
+#   resides in /usr/include/GL/gl.h you need to specifiy 
+#   /usr/include
+#   TAKE CARE!! Do not enter a blank or tab in front of
+#   your paths. sh won't accept this!
+#   The declaration 
+#       OPENGL_LIBS=/usr/lib 
+#   is correct, whereas 
+#       OPENGL_LIBS= /usr/lib
+#   will not work and causes an error message.
+
+#    headers and libs for OpenGL
+OPENGL_INCLUDES=
+OPENGL_LIBS=
+
+#    ...same for MESA
+MESA_INCLUDES=
+MESA_LIBS=
+
+#    ...and for QT (see also BALL/contrib/qt!)
+QT_INCLUDES=
+QT_LIBS=
+
+#   if you do not want to include BALLView,
+#   set USE_BALLVIEW to false
+USE_BALLVIEW=false
+
+
+#   if you do not want to be asked by configure
+#   which BALLView platform to use, put it here
+#   Possible values are Mesa or OpenGL
+BALLVIEW_PLATFORM=
+
+
+#   This applies to 64 bit SGI machines only.
+#   You may select on from the following formats:
+#      32 : old 32 bit format
+#      N32: new 32 bit format
+#      64 : 64 bit format (default)
+IRIX_BINFMT=
+
+
+#   Use this flag to enable debug mode:
+DEBUG=true
+
+##################################################
+##  PLEASE DO NOT CHANGE ANYTHING BELOW IF YOU  ##
+##  ARE NOT COMPLETELY SURE WHAT YOU ARE DOING  ##
+##################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
