@@ -19,6 +19,10 @@ OBJECTS=\
 	DlgDisplayProperties_moc.o\
 	DlgDisplayPropertiesData.o\
 	DlgDisplayPropertiesData_moc.o\
+	DlgSelector.o\
+	DlgSelector_moc.o\
+	DlgSelectorData.o\
+	DlgSelectorData_moc.o\
 	main.o\
 	mainframe.o\
 	mainframe_moc.o
@@ -29,11 +33,17 @@ molview:	$(OBJECTS) ../../VIEW/KERNEL/timerTextView.o
 DlgAbout_moc.C:	DlgAbout.h
 	moc DlgAbout.h -o $@
 
-DlgDisplayProperties_moc.C:	DlgDisplayProperties.h
-	moc DlgDisplayProperties.h -o $@
-
 DlgAboutData_moc.C:	DlgAboutData.h
 	moc DlgAboutData.h -o $@
+
+DlgSelector_moc.C:	DlgSelector.h
+	moc DlgSelector.h -o $@
+
+DlgSelectorData_moc.C:	DlgSelectorData.h
+	moc DlgSelectorData.h -o $@
+
+DlgDisplayProperties_moc.C:	DlgDisplayProperties.h
+	moc DlgDisplayProperties.h -o $@
 
 DlgDisplayPropertiesData_moc.C:	DlgDisplayPropertiesData.h
 	moc DlgDisplayPropertiesData.h -o $@
