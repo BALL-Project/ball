@@ -19,16 +19,13 @@ SetCamera::SetCamera( QWidget* parent,  const char* name, bool modal, WFlags fl 
 {
 	const Camera& camera = ((Scene*) parent)->getStage()->getCamera();
 
-	String text(String(camera.getViewPoint().x) + "|" +
-							String(camera.getViewPoint().y) + "|" +
-							String(camera.getViewPoint().z));
-	view_edit->setText(text.c_str());
+	view_x->setText(String((Index)camera.getViewPoint().x).c_str());
+	view_y->setText(String((Index)camera.getViewPoint().y).c_str());
+	view_z->setText(String((Index)camera.getViewPoint().z).c_str());
 
-	text = String(camera.getLookAtPosition().x) + "|" +
-				 String(camera.getLookAtPosition().y) + "|" +
-				 String(camera.getLookAtPosition().z);
-
-	look_edit->setText(text.c_str());
+	look_x->setText(String((Index)camera.getLookAtPosition().x).c_str());
+	look_y->setText(String((Index)camera.getLookAtPosition().y).c_str());
+	look_z->setText(String((Index)camera.getLookAtPosition().z).c_str());
 }
 
 SetCamera::~SetCamera()
@@ -39,31 +36,28 @@ SetCamera::~SetCamera()
 void SetCamera::okPressed()
 {
 	MainControl *main_control = MainControl::getMainControl(parentWidget());
-
 	hide();
-	vector<String> strings1, strings2;
-	String(view_edit->text().ascii()).split(strings1, "|");
-	String(look_edit->text().ascii()).split(strings2, "|");
-	
-	if (strings1.size() != 3 ||
-			strings2.size() != 3) 
+
+	float vx, vy, vz, lx, ly, lz;
+
+	try
+	{
+		vx = String(view_x->text().ascii()).toFloat();
+		vy = String(view_y->text().ascii()).toFloat();
+		vz = String(view_z->text().ascii()).toFloat();
+		lx = String(look_x->text().ascii()).toFloat();
+		ly = String(look_y->text().ascii()).toFloat();
+		lz = String(look_z->text().ascii()).toFloat();
+	}
+	catch(...)
 	{
 		main_control->setStatusbarText("Invalid Values!");
 		return;
 	}
 
-	for (Index i = 0; i<3; i++)
-	{
-		if (!strings1[i].isFloat() ||
-				!strings2[i].isFloat())
-		{
-			main_control->setStatusbarText("Invalid Values!");
-			return;
-		}
-	}
+	Vector3 vp(vx,vy,vz);
+	Vector3 lp(lx,ly,lz);
 
-	Vector3 vp(strings1[0].toFloat(), strings1[1].toFloat(), strings1[2].toFloat());
-	Vector3 lp(strings2[0].toFloat(), strings2[1].toFloat(), strings2[2].toFloat());
 	if (vp == lp) 
 	{
 		Log.error() << "Invalid values for setCamera: viewpoint = look at" << std::endl;
@@ -72,7 +66,7 @@ void SetCamera::okPressed()
 
 	Camera& camera = ((Scene*) parentWidget())->getStage()->getCamera();
 	camera.setViewPoint(vp);
-	camera.setLookAtPosition(lp);
+	camera.setLookAtPosition(lp); 
 }
 
 // NAMESPACE
