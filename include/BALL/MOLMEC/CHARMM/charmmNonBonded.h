@@ -1,4 +1,4 @@
-// $Id: charmmNonBonded.h,v 1.3 2000/03/26 12:48:10 oliver Exp $
+// $Id: charmmNonBonded.h,v 1.4 2000/06/30 05:53:21 oliver Exp $
 // Molecular Mechanics: Charmm force field, bond stretch component
 
 #ifndef BALL_MOLMEC_CHARMM_NONBONDED_H
@@ -50,7 +50,7 @@ namespace BALL
 
 		/**	Constructor.
 		*/
-		CharmmNonBonded(ForceField* force_field);
+		CharmmNonBonded(ForceField& force_field);
 
 		/**	Copy constructor
 		*/

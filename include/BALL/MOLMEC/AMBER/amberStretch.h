@@ -1,4 +1,4 @@
-// $Id: amberStretch.h,v 1.7 2000/03/26 12:45:41 oliver Exp $ 
+// $Id: amberStretch.h,v 1.8 2000/06/30 05:53:17 oliver Exp $ 
 // Molecular Mechanics: Amber force field, bond stretch component
 
 #ifndef BALL_MOLMEC_AMBER_AMBERSTRETCH_H
@@ -41,7 +41,7 @@ namespace BALL
 
 		/**	constructor.
 		*/
-		AmberStretch(ForceField* force_field);
+		AmberStretch(ForceField& force_field);
 
 		/**	Copy constructor
 		*/

@@ -1,4 +1,4 @@
-// $Id: forceFieldComponent.h,v 1.4 2000/03/26 12:44:20 oliver Exp $
+// $Id: forceFieldComponent.h,v 1.5 2000/06/30 05:53:21 oliver Exp $
 // Molecular Mechanics: general force field component class
 
 #ifndef BALL_MOLMEC_FORCEFIELDCOMPONENT_H
@@ -46,7 +46,7 @@ namespace BALL
 
 		/**	Constructor.
 		*/
-		ForceFieldComponent(ForceField*	force_field);
+		ForceFieldComponent(ForceField&	force_field);
 
 		/**	Copy constructor.
 			Creates a new instance of the given ForceFieldComponent.
@@ -82,7 +82,7 @@ namespace BALL
 
 		/**	Sets the force field.
 		*/
-		void	setForceField(ForceField* force_field);
+		void	setForceField(ForceField& force_field);
 
 		/**	Sets the component's name.
 		*/
