@@ -1,4 +1,4 @@
-// $Id: regularData1D.h,v 1.22 2001/08/20 14:46:57 amoll Exp $
+// $Id: regularData1D.h,v 1.23 2001/09/04 01:14:20 oliver Exp $
 
 #ifndef BALL_DATATYPE_REGULARDATA1D_H
 #define BALL_DATATYPE_REGULARDATA1D_H
@@ -35,11 +35,11 @@ namespace BALL
 		/**	The vector type.
 				This type is used to store the data.
 		*/
-		typedef ::std::vector<T>	VectorType;
+		typedef std::vector<T>	VectorType;
 		/// A mutable iterator
-		typedef typename ::std::vector<T>::iterator Iterator;
+		typedef typename std::vector<T>::iterator Iterator;
 		/// A constant iterator
-		typedef typename ::std::vector<T>::const_iterator ConstIterator;
+		typedef typename std::vector<T>::const_iterator ConstIterator;
 
 		//@}
 		/** @name Constructors and Destructors.
