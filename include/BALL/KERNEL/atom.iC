@@ -1,15 +1,9 @@
-// $Id: atom.iC,v 1.1 2000/03/17 11:25:52 oliver Exp $
+// $Id: atom.iC,v 1.2 2000/04/17 14:31:36 amoll Exp $
 
 	BALL_INLINE
   void Atom::setElement(Element &element)
   {
     element_ = &element;
-	}
-
-	BALL_INLINE
-  Element& Atom::getElement()
-  {
-    return *element_;
 	}
 
 	BALL_INLINE
@@ -31,12 +25,6 @@
 	}
 
 	BALL_INLINE
-  String & Atom::getName()
-  {
-    return name_;
-	}
-
-	BALL_INLINE
   const String& Atom::getName() const
   {
     return name_;
@@ -46,12 +34,6 @@
   void Atom::setPosition(const Vector3 &position)
   {
     position_.set(position);
-	}
-
-	BALL_INLINE
-  Vector3 &Atom::getPosition()
-  {
-    return position_;
 	}
 
 	BALL_INLINE
@@ -103,12 +85,6 @@
 	}
 
 	BALL_INLINE
-  Vector3& Atom::getVelocity()
-  {
-    return velocity_;
-	}
-
-	BALL_INLINE
   const Vector3& Atom::getVelocity() const
   {
     return velocity_;
@@ -118,12 +94,6 @@
   void Atom::setForce(const Vector3& force)
   {
     force_.set(force);
-	}
-
-	BALL_INLINE
-  Vector3& Atom::getForce()
-  {
-    return force_;
 	}
 
 	BALL_INLINE

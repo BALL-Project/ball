@@ -1,4 +1,4 @@
-// $Id: atom.h,v 1.14 2000/04/14 00:40:21 amoll Exp $
+// $Id: atom.h,v 1.15 2000/04/17 14:31:24 amoll Exp $
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -83,8 +83,8 @@ namespace BALL
 			
 			@memo    Atom class (BALL kernel framework)
 			@author  $Author: amoll $
-			@version $Revision: 1.14 $
-			@date    $Date: 2000/04/14 00:40:21 $
+			@version $Revision: 1.15 $
+			@date    $Date: 2000/04/17 14:31:24 $
 	*/
 	class Atom
 		: public Composite,
@@ -355,15 +355,6 @@ namespace BALL
 			*/
 			void setElement(Element& element);
 				
-		
-			/** Mutable inspection of the atom element type.
-					Access a mutable reference to the element type of {\em *this} atom.
-
-					@return      String& - mutable reference to the element type of {\em *this} atom
-					@see         Atom::setElement
-			*/
-			Element& getElement();
-
 			/** Constant inspection of the atom element type.
 					Access a constant reference to the element type of {\em *this} atom.
 
@@ -452,14 +443,6 @@ namespace BALL
 			*/
 			void setName(const String& name);
 
-			/** Mutable inspection of the atom's name.
-					Access a mutable reference to the name of {\em *this} atom.
-
-					@return      String& - mutable reference to the name of {\em *this} atom
-					@see         Atom::setName
-			*/
-			String& getName();
-
 			/** Constant inspection of the atom's name.
 					Access a constant reference to the name of {\em *this} atom.
 
@@ -501,14 +484,6 @@ namespace BALL
 					@see         Atom::getPosition
 			*/
 			void setPosition(const Vector3& position);
-
-			/** Mutable inspection of the atom's position vector.
-					Access a mutable reference to the position vector of {\em *this} atom.
-
-					@return      Vector3& - mutable reference to the position vector of {\em *this} atom
-					@see         Atom::setPosition
-			*/
-			Vector3& getPosition();
 
 			/** Constant inspection of the atom's position vector.
 					Access a constant reference to the position vector of {\em *this} atom.
@@ -569,14 +544,6 @@ namespace BALL
 			*/
 			void setVelocity(const Vector3& velocity);
 
-			/** Mutable inspection of the atom's velocity vector.
-					Access a mutable reference to the velocity vector of {\em *this} atom.
-					BALL uses units of \TeX{\AA}/ps for the velocity.
-					@return      Vector3& - mutable reference to the velocity vector of {\em *this} atom
-					@see         Atom::setVelocity
-			*/
-			Vector3& getVelocity();
-
 			/** Constant inspection of the atom's velocity vector.
 					Access a constant reference to the velocity vector of {\em *this} atom.
 					BALL uses units of \TeX{\AA}/ps for the velocity.
@@ -594,15 +561,6 @@ namespace BALL
 					@see         Atom::getForce
 			*/
 			void setForce(const Vector3& force);
-
-			/** Mutable inspection of the atom's force vector.
-					Access a mutable reference to the force vector of {\em *this} atom.
-					BALL uses units of {\em Newton} (1 N = 1 J/m) as the unit of force.
-
-					@return      Vector3& - mutable reference to the force vector of {\em *this} atom
-					@see         Atom::setForce
-			*/
-			Vector3& getForce();
 
 			/** Constant inspection of the atom's force vector.
 					Access a constant reference to the force vector of {\em *this} atom.
