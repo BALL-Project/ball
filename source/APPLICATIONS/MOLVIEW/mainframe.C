@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.97 2003/12/10 15:38:49 amoll Exp $
+// $Id: mainframe.C,v 1.98 2003/12/11 10:50:45 bender Exp $
 //
 
 #include "mainframe.h"
@@ -425,14 +425,24 @@ void Mainframe::amberMinimization()
 	setStatusbarText("setting up force field...");
 
 	AmberFF* amber = new AmberFF;
-	amber->options[AmberFF::Option::ASSIGN_TYPES] = "true";
-	amber->options[AmberFF::Option::ASSIGN_CHARGES] = "true";
-	amber->options[AmberFF::Option::ASSIGN_TYPENAMES] = "true";
-	amber->options[AmberFF::Option::OVERWRITE_CHARGES] = "false";
-	amber->options[AmberFF::Option::OVERWRITE_TYPENAMES] = "true";
-	amber->options[AmberFF::Option::DISTANCE_DEPENDENT_DIELECTRIC] = String(minimization_dialog_->getUseDistanceDependentDC());
+	amber->options[AmberFF::Option::ASSIGN_TYPES] = minimization_dialog_->getAssignTypes();
+	amber->options[AmberFF::Option::ASSIGN_CHARGES] = minimization_dialog_->getAssignCharges();
+	amber->options[AmberFF::Option::ASSIGN_TYPENAMES] = minimization_dialog_->getAssignTypenames();
+	amber->options[AmberFF::Option::OVERWRITE_CHARGES] = minimization_dialog_->getOverwriteCharges();
+	amber->options[AmberFF::Option::OVERWRITE_TYPENAMES] = minimization_dialog_->getOverwriteTypenames();
+	amber->options[AmberFF::Option::DISTANCE_DEPENDENT_DIELECTRIC] = minimization_dialog_->getUseDistanceDependentDC();
+
+	amber->options[AmberFF::Option::NONBONDED_CUTOFF] = minimization_dialog_->getNonbondedCutoff();
+	amber->options[AmberFF::Option::VDW_CUTOFF] = minimization_dialog_->getVdwCutoff();
+	amber->options[AmberFF::Option::VDW_CUTON] = minimization_dialog_->getVdwCuton();
+	amber->options[AmberFF::Option::ELECTROSTATIC_CUTOFF] = minimization_dialog_->getElectrostaticCutoff();
+	amber->options[AmberFF::Option::ELECTROSTATIC_CUTON] = minimization_dialog_->getElectrostaticCuton();
+	amber->options[AmberFF::Option::SCALING_ELECTROSTATIC_1_4] = minimization_dialog_->getScalingElectrostatic_1_4();
+	amber->options[AmberFF::Option::SCALING_VDW_1_4] = minimization_dialog_->getScalingVdw_1_4();
+
 	amber->options[AmberFF::Option::FILENAME] = filename;
-	
+
+	//amber->options.dump();
 	if (!amber->setup(*system))
 	{
 		Log.error() << "Setup of AMBER force field failed." << endl;
@@ -447,7 +457,7 @@ void Mainframe::amberMinimization()
 	EnergyMinimizer* minimizer;
 	if (minimization_dialog_->getUseConjugateGradient())	 minimizer = new ConjugateGradientMinimizer;
 	else 																									 minimizer = new SteepestDescentMinimizer;
-	
+
 	// set the minimizer options
 	minimizer->options[EnergyMinimizer::Option::MAXIMAL_NUMBER_OF_ITERATIONS] = minimization_dialog_->getMaxIterations();
 	minimizer->options[EnergyMinimizer::Option::MAX_GRADIENT] = minimization_dialog_->getMaxGradient();
@@ -484,17 +494,17 @@ void Mainframe::amberMinimization()
 		MainControl::update(*system);
 
 		QString message;
-		message.sprintf("Iteration %d: energy = %f kJ/mol, RMS gradient = %f kJ/mol A", 
+		message.sprintf("Iteration %d: energy = %f kJ/mol, RMS gradient = %f kJ/mol A",
 										minimizer->getNumberOfIterations(), amber->getEnergy(), amber->getRMSGradient());
 		setStatusbarText(String(message.ascii()));
 	}
 
 	Log.info() << endl << "minimization terminated." << endl << endl;
 	printAmberResults(*amber);
-	Log.info() << "final RMS gadient    : " << amber->getRMSGradient() << " kJ/(mol A)   after " 
+	Log.info() << "final RMS gadient    : " << amber->getRMSGradient() << " kJ/(mol A)   after "
 						 << minimizer->getNumberOfIterations() << " iterations" << endl << endl;
 	setStatusbarText("Total AMBER energy: " + String(amber->getEnergy()) + " kJ/mol.");
-	
+
 	// clean up
 	delete minimizer;
 	delete amber;
@@ -513,7 +523,7 @@ void Mainframe::amberMDSimulation()
 
 	// execute the MD simulation dialog
 	// and abort if cancel is clicked or nonsense arguments given
-	if (system == 0|| 
+	if (system == 0||
 			!md_dialog_->exec() ||
 			!md_dialog_->getSimulationTime() ||
 			!md_dialog_->getTemperature())
@@ -534,13 +544,24 @@ void Mainframe::amberMDSimulation()
 	setStatusbarText("setting up force field...");
 
 	AmberFF* amber = new AmberFF;
-	amber->options[AmberFF::Option::ASSIGN_TYPES] = "true";
-	amber->options[AmberFF::Option::ASSIGN_CHARGES] = "true";
-	amber->options[AmberFF::Option::ASSIGN_TYPENAMES] = "true";
-	amber->options[AmberFF::Option::OVERWRITE_CHARGES] = "false";
-	amber->options[AmberFF::Option::OVERWRITE_TYPENAMES] = "true";
-	amber->options[AmberFF::Option::DISTANCE_DEPENDENT_DIELECTRIC] = String(md_dialog_->getUseDistanceDependentDC());
+	amber->options[AmberFF::Option::ASSIGN_TYPES] = md_dialog_->getAssignTypes();
+	amber->options[AmberFF::Option::ASSIGN_CHARGES] = md_dialog_->getAssignCharges();
+	amber->options[AmberFF::Option::ASSIGN_TYPENAMES] = md_dialog_->getAssignTypenames();
+	amber->options[AmberFF::Option::OVERWRITE_CHARGES] = md_dialog_->getOverwriteCharges();
+	amber->options[AmberFF::Option::OVERWRITE_TYPENAMES] = md_dialog_->getOverwriteTypenames();
+	amber->options[AmberFF::Option::DISTANCE_DEPENDENT_DIELECTRIC] = md_dialog_->getUseDistanceDependentDC();
+
+	amber->options[AmberFF::Option::NONBONDED_CUTOFF] = md_dialog_->getNonbondedCutoff();
+	amber->options[AmberFF::Option::VDW_CUTOFF] = md_dialog_->getVdwCutoff();
+	amber->options[AmberFF::Option::VDW_CUTON] = md_dialog_->getVdwCuton();
+	amber->options[AmberFF::Option::ELECTROSTATIC_CUTOFF] = md_dialog_->getElectrostaticCutoff();
+	amber->options[AmberFF::Option::ELECTROSTATIC_CUTON] = md_dialog_->getElectrostaticCuton();
+	amber->options[AmberFF::Option::SCALING_ELECTROSTATIC_1_4] = md_dialog_->getScalingElectrostatic_1_4();
+	amber->options[AmberFF::Option::SCALING_VDW_1_4] = md_dialog_->getScalingVdw_1_4();
+
 	amber->options[AmberFF::Option::FILENAME] = filename;
+
+//	amber->options.dump();
 
 	if (!amber->setup(*system))
 	{
