@@ -173,6 +173,7 @@ EXECUTABLES_STRUCTURE = \
 	RDFParameter_test\
 	RDFSection_test\
 	ReconstructFragmentProcessor_test\
+	RotamerLibrary_test\
 	SmilesParser_test\
 	StructureMapper_test\
 	TransformationApplicator_test\
