@@ -1,6 +1,7 @@
 #
-# $Id: Makefile,v 1.187 2003/05/23 15:39:22 oliver Exp $
+# $Id: Makefile,v 1.188 2003/05/28 16:51:10 oliver Exp $
 #
+
 DIRECTORY=TEST
 
 XDR_DEPENDENT_EXECUTABLES=\
@@ -70,7 +71,8 @@ EXECUTABLES_DATATYPES = \
 	RegularData3D_test\
 	ContourSurface_test
 
-EXECUTABLES_CONCEPTS = $(BALL_HAS_XDR:true=$(XDR_DEPENDENT_EXECUTABLES))\
+EXECUTABLES_CONCEPTS = \
+	$(BALL_HAS_XDR:true=$(XDR_DEPENDENT_EXECUTABLES))\
 	LogStream_test\
 	AutoDeletable_test\
 	Factory_test\
@@ -83,7 +85,10 @@ EXECUTABLES_CONCEPTS = $(BALL_HAS_XDR:true=$(XDR_DEPENDENT_EXECUTABLES))\
 	Composite_test1\
 	Composite_test2\
 	Embeddable_test\
-	RandomAccessIterator_test
+	RandomAccessIterator_test\
+	ConstRandomAccessIterator_test\
+	ReverseRandomAccessIterator_test\
+	ConstReverseRandomAccessIterator_test
 
 EXECUTABLES_KERNEL = \
 	PTE_test\
