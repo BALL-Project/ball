@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.10 2002/12/20 21:01:16 anhi Exp $
+// $Id: scene.C,v 1.11 2003/01/14 17:46:13 oliver Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/scene.h>
 #include <BALL/VIEW/GUI/FUNCTOR/externalRenderer.h>
@@ -247,7 +247,7 @@ namespace BALL
 
 				if (!scene_message->isUpdateOnly())
 				{
-					setCamera(scene_message->getCameraLookAt(), scene_message->getCameraViewPoint());
+					setCamera(scene_message->getCameraLookAt(), scene_message->getCameraViewPoint(), true);
 				}
 
 				update(false);
@@ -360,7 +360,11 @@ namespace BALL
 		 
 			GLfloat diff[] = {1.0, 1.0, 1.0, 1.0};
 			GLfloat shin[] = {50.0};
-			GLfloat pos[]  = {0.0,0.0,100.0,0.0};
+			GLfloat pos[]  = {0.0, 0.0, 100.0, 0.0};
+
+			pos[0] = getViewPointPosition().x + getLookUpVector_().x;
+			pos[1] = getViewPointPosition().y + getLookUpVector_().y;
+			pos[2] = getViewPointPosition().z + getLookUpVector_().z;
 
 			glMaterialfv(GL_FRONT, GL_SPECULAR, diff);
 			glMaterialfv(GL_FRONT, GL_SHININESS, shin);
@@ -1345,6 +1349,19 @@ namespace BALL
 									(GLfloat)(getLookUpVector_().z));
 
 				glMatrixMode(GL_MODELVIEW);
+
+				GLfloat diff[] = {1.0, 1.0, 1.0, 1.0};
+				GLfloat shin[] = {50.0};
+				GLfloat pos[]  = {0.0, 0.0, 100.0, 0.0};
+
+				pos[0] = getViewPointPosition().x + getLookUpVector_().x;
+				pos[1] = getViewPointPosition().y + getLookUpVector_().y;
+				pos[2] = getViewPointPosition().z + getLookUpVector_().z;
+
+				glMaterialfv(GL_FRONT, GL_SPECULAR, diff);
+				glMaterialfv(GL_FRONT, GL_SHININESS, shin);
+				glMaterialfv(GL_FRONT, GL_DIFFUSE, diff);
+				glLightfv(GL_LIGHT0, GL_POSITION, pos);
 			}
 		}
 
