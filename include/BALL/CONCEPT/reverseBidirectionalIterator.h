@@ -1,4 +1,4 @@
-// $Id: reverseBidirectionalIterator.h,v 1.3 2000/01/03 15:15:35 oliver Exp $
+// $Id: reverseBidirectionalIterator.h,v 1.4 2000/03/23 10:44:13 oliver Exp $
 
 #ifndef BALL_CONCEPT_REVERSEBIDIRECTIONALITERATOR_H
 #define BALL_CONCEPT_REVERSEBIDIRECTIONALITERATOR_H
@@ -59,12 +59,12 @@ namespace BALL
 
 		bool operator + () const
 		{
-			return traits_->isValid();
+			return traits_ptr_->isValid();
 		}
 
 		bool operator - () const
 		{
-			return (bool)(traits_->isValid() == false);
+			return (bool)(traits_ptr_->isValid() == false);
 		}
 
 		void toBegin()
@@ -247,12 +247,12 @@ namespace BALL
 
 		bool operator + () const
 		{
-			return traits_->isValid();
+			return traits_ptr_->isValid();
 		}
 
 		bool operator - () const
 		{
-			return (bool)(traits_->isValid() == false);
+			return (bool)(traits_ptr_->isValid() == false);
 		}
 
 		void toBegin()
