@@ -1,4 +1,4 @@
-// $Id: embeddable.C,v 1.1 2000/07/16 16:14:44 oliver Exp $
+// $Id: embeddable.C,v 1.2 2000/07/16 19:33:45 oliver Exp $
 
 #include <BALL/CONCEPT/embeddable.h>
 
@@ -10,6 +10,10 @@ namespace BALL
 	{
 		// make sure destructed instances are in certainly unregistered
 		unregisterInstance_(this);
+	}
+
+	void Embeddable::registerThis() throw()
+	{
 	}
 
 	void Embeddable::unregisterThis() throw()

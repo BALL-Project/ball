@@ -6,6 +6,7 @@ CPP_SOURCES=\
 	autoDeletable.C\
 	callback.C\
 	composite.C\
+	embeddable.C\
 	enumerator.C\
 	notification.C\
 	object.C\
