@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.6 2003/09/11 16:41:04 amoll Exp $
+// $Id: scene.C,v 1.7 2003/09/11 22:37:05 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1038,7 +1038,7 @@ namespace BALL
 				MainControl::FILE, "Export PNG", this, SLOT(exportPNG()), ALT+Key_P);
 
 			window_menu_entry_id_ = 
-				main_control.insertMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(callSwitchShowWidget()));
+				main_control.insertMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
 			getMainControl()->menuBar()->setItemChecked(window_menu_entry_id_, true);
 
 			setCursor(QCursor(Qt::SizeAllCursor));
@@ -1054,7 +1054,7 @@ namespace BALL
 			main_control.removeMenuEntry(MainControl::DISPLAY, "Set Viewpoi&nt", this, SLOT(setViewPoint()_), CTRL+Key_N);		
 			main_control.removeMenuEntry(MainControl::DISPLAY, "Rese&t Camera", this, SLOT(resetCamera()_), CTRL+Key_T);		
 			main_control.removeMenuEntry(MainControl::FILE, "Export PNG", this, SLOT(exportPNG()), ALT+Key_P);		
-			main_control.removeMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(callSwitchShowWidget()));
+			main_control.removeMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
 		}
 
 		void Scene::checkMenu(MainControl& main_control)
@@ -1462,6 +1462,30 @@ namespace BALL
 		{
 			if ( e->type() == 65432 ) {  // It must be a SceneUpdateEvent
 				update(true);
+			}
+		}
+
+		void Scene::switchShowWidget()
+			throw()
+		{
+			if (window_menu_entry_id_ == -1) return;
+
+			if (!getMainControl()) 
+			{
+				Log.error() << "Problem in " << __FILE__ << __LINE__ << std::endl;
+				return;
+			}
+
+			QMenuBar* menu = getMainControl()->menuBar();
+			if (menu->isItemChecked(window_menu_entry_id_))
+			{
+				hide();
+				menu->setItemChecked(window_menu_entry_id_, false);
+			}
+			else
+			{
+				show();
+				menu->setItemChecked(window_menu_entry_id_, true);
 			}
 		}
 

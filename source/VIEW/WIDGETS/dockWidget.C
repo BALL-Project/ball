@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockWidget.C,v 1.7 2003/09/11 16:41:04 amoll Exp $
+// $Id: dockWidget.C,v 1.8 2003/09/11 22:37:05 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/dockWidget.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -66,7 +66,7 @@ void DockWidget::initializeWidget(MainControl& main_control)
 	throw()
 {
 	window_menu_entry_id_ = 
-		main_control.insertMenuEntry(MainControl::WINDOWS, getIdentifier(), this, SLOT(callSwitchShowWidget()));
+		main_control.insertMenuEntry(MainControl::WINDOWS, getIdentifier(), this, SLOT(switchShowWidget()));
 	getMainControl()->menuBar()->setItemChecked(window_menu_entry_id_, true);
 }
 
@@ -74,15 +74,9 @@ void DockWidget::initializeWidget(MainControl& main_control)
 void DockWidget::finalizeWidget(MainControl& main_control)
 	throw()
 {
-	main_control.removeMenuEntry(MainControl::WINDOWS, getIdentifier(), this, SLOT(callSwitchShowWidget()));
+	main_control.removeMenuEntry(MainControl::WINDOWS, getIdentifier(), this, SLOT(switchShowWidget()));
 }
 
-
-void DockWidget::callSwitchShowWidget()
-	throw()
-{
-	switchShowWidget();
-}
 
 void DockWidget::writePreferences(INIFile& inifile)
 	throw()
@@ -103,6 +97,30 @@ void DockWidget::fetchPreferences(INIFile & inifile)
 	}
 
 	ModularWidget::fetchPreferences(inifile);
+}
+
+void DockWidget::switchShowWidget()
+	throw()
+{
+	if (window_menu_entry_id_ == -1) return;
+
+	if (!getMainControl()) 
+	{
+		Log.error() << "Problem in " << __FILE__ << __LINE__ << std::endl;
+		return;
+	}
+
+	QMenuBar* menu = getMainControl()->menuBar();
+	if (menu->isItemChecked(window_menu_entry_id_))
+	{
+		hide();
+		menu->setItemChecked(window_menu_entry_id_, false);
+	}
+	else
+	{
+		show();
+		menu->setItemChecked(window_menu_entry_id_, true);
+	}
 }
 
 } } // namespaces

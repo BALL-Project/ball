@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.5 2003/09/11 16:41:14 amoll Exp $
+// $Id: scene.h,v 1.6 2003/09/11 22:36:29 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -437,9 +437,11 @@ namespace BALL
 			///
 			void exportPNG();
 
-			/// Show or hide widget (Called by menu entry in "WINDOWS")
-			void callSwitchShowWidget()
-				throw() { switchShowWidget();}
+			/** Show or hide widget (Called by menu entry in "WINDOWS")
+					If the ModularWidget is not also a QWidget, this method does nothing
+			*/
+			virtual void switchShowWidget()
+				throw();
 
 			protected slots:
 

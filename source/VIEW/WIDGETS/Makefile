@@ -82,8 +82,3 @@ regularData2DWidget_moc.C:	$(HEADER_DIR)/regularData2DWidget.h
 trajectoryControl_moc.C:	$(HEADER_DIR)/trajectoryControl.h
 	$(MOC) $(HEADER_DIR)/trajectoryControl.h -o $@
 
-default_clean: clean_uic
-
-clean_uic:
-	@echo "Cleaning UIC files in $(UIC_DIR)..."
-	@$(RM) -f $(UIC_DIR)/*.h

@@ -59,8 +59,10 @@ class DockWidget
 	//@{
 	public slots:
 
-	/// Show or hide widget (Called by menu entry in "WINDOWS")
-	void callSwitchShowWidget()
+	/** Show or hide widget (Called by menu entry in "WINDOWS")
+			If the ModularWidget is not also a QWidget, this method does nothing
+	*/
+	virtual void switchShowWidget()
 		throw();
 
 	//@} 

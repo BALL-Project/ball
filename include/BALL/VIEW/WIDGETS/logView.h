@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logView.h,v 1.5 2003/09/11 16:41:13 amoll Exp $
+// $Id: logView.h,v 1.6 2003/09/11 22:36:28 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_LOGVIEW_H
@@ -114,13 +114,15 @@ namespace BALL
 			/**	Remove menu entries.
 			*/
 			virtual void finalizeWidget(MainControl& main_control);
-				
+
 			public slots:
 
-			///	Show or hide widget (Called by menu entry in "WINDOWS")
-			void callSwitchShowWidget()
-				throw() { switchShowWidget();}
-
+			/** Show or hide widget (Called by menu entry in "WINDOWS")
+					If the ModularWidget is not also a QWidget, this method does nothing
+			*/
+			virtual void switchShowWidget()
+				throw();
+				
 			protected:
 
 			/** Overridden notify call.

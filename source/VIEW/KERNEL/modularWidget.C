@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.C,v 1.4 2003/09/11 16:51:06 amoll Exp $
+// $Id: modularWidget.C,v 1.5 2003/09/11 22:37:05 amoll Exp $
 //
 
 #define BALL_VIEW_DEBUG // ????
@@ -90,8 +90,7 @@ namespace BALL
 			}
 		}
 
-		void ModularWidget::initializeWidget(MainControl& /* main_control */)
-		//	throw()
+		void ModularWidget::initializeWidget(MainControl& /*main_control*/)
 		{
 		}
 		
@@ -125,18 +124,6 @@ namespace BALL
 		{
 			QWidget* widget= dynamic_cast<QWidget*>(this);
 			if (!widget) return;
-
-			if (inifile.hasEntry("WINDOWS", getIdentifier() + "::on"))
-			{
-				if (inifile.getValue("WINDOWS", getIdentifier() + "::on").toUnsignedInt() == 0)
-				{
-					switchShowWidget();
-				}
-			}
-			else
-			{
-				if (default_visible_) switchShowWidget();
-			}
 
 			if (inifile.hasEntry("WINDOWS", getIdentifier() + "::x"))
 			{
@@ -181,41 +168,6 @@ namespace BALL
 			throw()
 		{
 			return *((FragmentDB*)&getMainControl()->getFragmentDB());
-		}
-
-		void ModularWidget::switchShowWidget()
-			throw()
-		{
-			QWidget* widget= dynamic_cast<QWidget*>(this);
-			if (!widget || 
-					window_menu_entry_id_ == -1) 
-			{
-				return;
-			}
-
-			if (!getMainControl()) 
-			{
-				Log.error() << "Problem in " << __FILE__ << __LINE__ << std::endl;
-				return;
-			}
-			QMenuBar* menu = getMainControl()->menuBar();
-			if (!menu) 
-			{
-				Log.error() << "Problem in " << __FILE__ << __LINE__ << std::endl;
-				return;
-			}
-			if (menu->isItemChecked(window_menu_entry_id_))
-			{
-				if (!widget->isVisible()) return;
-
-				widget->hide();
-				menu->setItemChecked(window_menu_entry_id_, false);
-			}
-			else
-			{
-				widget->show();
-				menu->setItemChecked(window_menu_entry_id_, true);
-			}
 		}
 
 } } // namespaces

@@ -88,7 +88,7 @@ namespace BALL
 			setTextFormat(PlainText);
 
 			window_menu_entry_id_ = 
-				main_control.insertMenuEntry(MainControl::WINDOWS, "LogView", this, SLOT(callSwitchShowWidget()));
+				main_control.insertMenuEntry(MainControl::WINDOWS, "LogView", this, SLOT(switchShowWidget()));
 			main_control.insertMenuEntry(MainControl::TOOLS, "Clear Logs", this, SLOT(clear()));
 			getMainControl()->menuBar()->setItemChecked(window_menu_entry_id_, true);
 		}
@@ -96,9 +96,33 @@ namespace BALL
 
 		void LogView::finalizeWidget(MainControl& main_control)
 		{
-			main_control.removeMenuEntry(MainControl::WINDOWS, "LogView", this, SLOT(callSwitchShowWidget()));
+			main_control.removeMenuEntry(MainControl::WINDOWS, "LogView", this, SLOT(switchShowWidget()));
 			main_control.removeMenuEntry(MainControl::TOOLS, "Clear Logs", this, SLOT(clear()));
 			Log.remove(strstream_);
+		}
+
+		void LogView::switchShowWidget()
+			throw()
+		{
+			if (window_menu_entry_id_ == -1) return;
+
+			if (!getMainControl()) 
+			{
+				Log.error() << "Problem in " << __FILE__ << __LINE__ << std::endl;
+				return;
+			}
+
+			QMenuBar* menu = getMainControl()->menuBar();
+			if (menu->isItemChecked(window_menu_entry_id_))
+			{
+				hide();
+				menu->setItemChecked(window_menu_entry_id_, false);
+			}
+			else
+			{
+				show();
+				menu->setItemChecked(window_menu_entry_id_, true);
+			}
 		}
 
 } } // namespaces

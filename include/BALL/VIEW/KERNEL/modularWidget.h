@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.h,v 1.3 2003/09/11 16:51:14 amoll Exp $
+// $Id: modularWidget.h,v 1.4 2003/09/11 22:36:28 amoll Exp $
 //
 
 #ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
@@ -211,12 +211,6 @@ namespace BALL
 			FragmentDB& getFragmentDB() const
 				throw();
 	
-			/** Show or hide widget (Called by menu entry in "WINDOWS")
-			 		If the ModularWidget is not also a QWidget, this method does nothing
-			*/
-			virtual void switchShowWidget()
-				throw();
-
 			protected:
 			
 			//_ id in the menubar entry "WINDOWS" for every widget
