@@ -1,9 +1,14 @@
 #!/usr/local/bin/bash
+# $Id: makehtmldoc,v 1.2 2000/01/11 20:18:56 oliver Exp $
 
-RELEASE="Release 0.2"
+# highly non-portable code - but doesn't matter as it is intended for
+# the developers only! - OK
 
-
-
+# extract teh date for replacing in all html pages
+USERNAME=`finger ${USER} |grep Login|grep ": ${USER}" | head -1|sed "s/^.*life: //"|sed "s/&/${USER}/"`
+DATE=`date +"%a %b %e %Y"`
+RELEASE="`grep BALL_RELEASE_STRING ../include/BALL/COMMON/version.h | awk '{print $3}'|tr -d \\"`"
+YEAR=`date +%Y`
 
 mkdir ../doc 2>/dev/null
 mkdir ../doc/html 2>/dev/null
@@ -11,15 +16,6 @@ mkdir ../doc/html/BALL 2>/dev/null
 
 
 cd ../doc/html
-
-# highly non-portable code - but doesn't matter as it is intended for
-# the developers only
-
-# extract the realname of the user
-USERNAME=`finger ${USER} |grep Login|grep ": ${USER}" | head -1|sed "s/^.*life: //"|sed "s/&/${USER}/"`
-DATE=`date +"%a %b %e %Y, %T"`
-
-
 
 if test "$1" != "-f" ; then
 	echo "collecting header files..."
@@ -39,16 +35,18 @@ if test "$1" != "-f" ; then
 		cat ../../include/$i | gawk -f tools/remove_doc_comments.awk  > $i
 	done
 
-	echo "creating start page..."
+fi
+cp tools/*.gif  .
 
-	cp tools/*.inc tools/*.gif tools/*.html .
+echo "creating start page and html include files..."
 
-	cat tools/INTRO.html |\
+for i in tools/*.inc tools/*.html ; do
+	cat $i |\
 		sed "s/@USER@/${USERNAME}/" |\
 		sed "s/@RELEASE@/${RELEASE}/" |\
-		sed "s/@DATE@/${DATE}/" > INTRO.html
-
-fi
+		sed "s/@YEAR@/${YEAR}/" |\
+		sed "s/@DATE@/${DATE}/" > `basename $i`
+done
 
 /KM/comp-bio/BALL-contrib/docxx/bin/SunOS/doc++ $OPTS  -B banner.inc -eo 12pt -d . ../../include/BALL/BALL.doc
 
