@@ -1,4 +1,4 @@
-// $Id: HashGrid3_test.C,v 1.9 2002/01/16 11:54:05 anker Exp $
+// $Id: HashGrid3_test.C,v 1.10 2002/01/17 12:01:37 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(HashGrid, "$Id: HashGrid3_test.C,v 1.9 2002/01/16 11:54:05 anker Exp $")
+START_TEST(HashGrid, "$Id: HashGrid3_test.C,v 1.10 2002/01/17 12:01:37 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -441,9 +441,9 @@ CHECK(HashGrid3::HashGrid3(const Vector3& origin, const Vector3& size, float spa
 	float spacing = 3.14;
 	HashGrid3<int> hg(origin, size, spacing);
 	TEST_EQUAL(hg.getOrigin(), origin)
-	TEST_EQUAL(hg.getSizeX(), size.x)
-	TEST_EQUAL(hg.getSizeY(), size.y)
-	TEST_EQUAL(hg.getSizeZ(), size.z)
+	TEST_EQUAL(hg.getSizeX(), 2)
+	TEST_EQUAL(hg.getSizeY(), 2)
+	TEST_EQUAL(hg.getSizeZ(), 2)
 RESULT
 
 
