@@ -71,20 +71,22 @@ namespace BALL
 			 */
 			//@{
 			
-			/** set the preferences.
-					This dialog stores its preferences in an unique inifile, which must be already open
-					when given to this function.
-					@param inifile - the inifile
+			/** Fetch the widgets preferences from the inifile.
+					This method extracts the default values from the given
+					inifile.
+					This method is called automatically
+					immediately before the main application 
+					is started. It gets the widget's initial values from the inifile. 
 			*/
-			void setPreferences(INIFile& inifile) const;
+			virtual void fetchPreferences(INIFile &inifile);
 			
-			/** get the preferences.
-					Reads the preferences from the given inifile. As in the function above this inifile
-					must be open when given to this function.
-					@param inifile - the inifile
+			/** Writes the widgets preferences to the inifile.
+					This method is called by the widget's destructor.
+					It writes all needed values to the given inifile (as read from
+					the inifile in the fetchPreferences method).
 			*/
-			void getPreferences(const INIFile& inifile);
-			
+			virtual void writePreferences(INIFile &inifile);
+				
 			/** receive and process messages sent to this dialog.
 					Receives the selected objects to which a label would be attached.
 					@param message - a pointer to a given message
