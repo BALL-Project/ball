@@ -1,4 +1,4 @@
-// $Id: matrix44.h,v 1.36 2001/01/21 21:10:14 amoll Exp $
+// $Id: matrix44.h,v 1.37 2001/02/13 01:49:06 amoll Exp $
 
 #ifndef BALL_MATHS_MATRIX44_H
 #define BALL_MATHS_MATRIX44_H
@@ -26,8 +26,8 @@
 namespace BALL 
 {
 
-	/**		@name	4x4 Matrix
-				@memo matrix representing transformations: class \Ref{TMatrix4x4} and class \Ref{Matrix4x4}
+	/**	@name	4x4 Matrix
+			@memo matrix representing transformations: class \Ref{TMatrix4x4} and class \Ref{Matrix4x4}
 	*/
 	//@{
 	template <typename T>
@@ -52,8 +52,7 @@ namespace BALL
 		throw();
 	
 	/**	Generic 4x4 Matrix Class.
-      {\bf Definition:} \URL{BALL/MATHS/matrix44.h}
-      \\
+      {\bf Definition:} \URL{BALL/MATHS/matrix44.h} \\
  	*/
 	template <typename T>
 	class TMatrix4x4
@@ -114,7 +113,7 @@ namespace BALL
 
 		/**	Detailed constructor.
 				Create a new TMatrix4x4 object from sixteen {\tt T} values.
-				@param m11 - {\tt m14} assigned to the components
+				@param m11 - m44 assigned to the components
 		*/
 		TMatrix4x4
 			(const T& m11, const T& m12, const T& m13, const T& m14, 
@@ -139,13 +138,12 @@ namespace BALL
 			throw();
 
 		//@}
-
 		/**	@name	Assignment
 		*/
 		//@{
 
-		/**	Assign from the first.
-				sixteen elements pointed to by {\tt ptr}.
+		/**	Assign from array-ptr.
+				Assign from the first	sixteen elements pointed to by {\tt ptr}.
 				@param ptr the array to construct from
 				@exception NullPointer if {\tt ptr == 0}
 		*/
@@ -160,7 +158,7 @@ namespace BALL
 		void set(const T ptr[4][4])
 			throw(Exception::NullPointer);
 
-		/**	Assign from another TMatrix4x4.
+		/**	Assign from another instance.
 				@param TMatrix4x4	the TMatrix4x4 object to assign from
 		*/
 		void set(const TMatrix4x4& m)
@@ -177,8 +175,8 @@ namespace BALL
 			 const TVector4<T>& col3, const TVector4<T>& col4)
 			throw();
 
-		/**	Assign from sixteen values of type {\tt T}.
-				@param m11 - {\tt m44} assigned to the components
+		/**	Assign from sixteen values of type T.
+				@param m11 - m44 assigned to the components
 		*/
 		void set
 			(const T& m11, const T& m12, const T& m13, const T& m14, 
@@ -224,7 +222,7 @@ namespace BALL
 		void get(T ptr[4][4]) const
 			throw(Exception::NullPointer);
 
-		/**	Assign to another instance of TMatrix4x4.
+		/**	Assign to another instance.
 				Assigns the components to another TMatrix4x4.
 				@param TMatrix4x4	the TMatrix4x4 to be assigned to
 		*/
@@ -243,7 +241,7 @@ namespace BALL
 			throw();
 
 		/**	Assign to sixteen variables of type {\tt T}.
-				@param m11 {\tt - m44} the variables to assign to
+				@param m11 - m44 the variables to assign to
 		*/
 		void get
 			(T& m11, T& m12, T& m13, T& m14, 
@@ -259,7 +257,6 @@ namespace BALL
 			throw();
 
 		//@}
-
 		/**	@name	Accessors
 		*/
 		//@{
@@ -277,22 +274,22 @@ namespace BALL
 		static const TMatrix4x4& getZero()
 			throw();
 
-		/** Create a identity matrix.
+		/** Create an identity matrix.
 				A new matrix object is created and all elements but the diagonal are 
 				set to zero. The diagonal elements are set to 1.
 		*/
 		static const TMatrix4x4& getIdentity()
 			throw();
 
-		/** Set the TMatrix4x4 to an identity matrix.
+		/** Set to an identity matrix.
 				m11, m22, m33, m44 = 1;
 				the other cells have the value 0;
 		*/
 		void setIdentity()
 			throw();
 
-		/** Set the diagonal elements of this instance of Matrix4x4 to the 
-				given value (default: 1) and all other elements to 0.
+		/** Set the diagonal elements to the given value.
+				All other elements are set to 0.
 				@param T the value to fill with (default: 1)
 		*/
 		void set(const T& t = (T)1)
@@ -320,7 +317,6 @@ namespace BALL
 		*/
 		TVector4<T> getColumn(Position col) const
 			throw(Exception::IndexOverflow);
-
 
 		/** Set a row of the matrix.
 				@param row the number of the row (0-3)
@@ -650,7 +646,6 @@ namespace BALL
 			throw();
 
 		//@}
-
 		/**	@name	Predicates
 		*/
 		//@{
@@ -672,7 +667,7 @@ namespace BALL
 			throw();
 
 		/** Test whether this matrix is an identity matrix.
-				(I.e. m11, m22, m33, m44 = 1 and the other cells have the value 0;)
+				(I.e. m11, m22, m33, m44 = 1 and the other cells have the value 0)
 				@return bool, {\bf true} if identity matrix, {\bf false} otherwise
 		*/
 		bool isIdentity() const
@@ -714,8 +709,8 @@ namespace BALL
 		*/
 		bool isDiagonal() const
 			throw();
-		//@}
 
+		//@}
 		/**	@name	Debugging and Diagnostics
 		*/
 		//@{
@@ -735,9 +730,8 @@ namespace BALL
 		*/
 		void dump(std::ostream& s = std::cout, Size depth = 0) const
 			throw();
+
 		//@}
-
-
 		/**	@name	Attributes
 		*/
 		//@{
@@ -2447,10 +2441,12 @@ namespace BALL
 		BALL_DUMP_STREAM_SUFFIX(s);
 	}
 
+	///
 	template <typename T>
 	TMatrix4x4<T> operator * (const T& scalar, const TMatrix4x4<T>& m)
 		throw();
-	
+
+	///
 	template <typename T>
 	TVector3<T> operator * (const TMatrix4x4<T>& matrix, const TVector3<T>& vector)
 		throw();
@@ -2459,6 +2455,7 @@ namespace BALL
 			This default is predefined for convenience for those cases where single precision is sufficient.
 	*/
 	typedef TMatrix4x4<float> Matrix4x4;
+
 	//@}
 
 } // namespace BALL

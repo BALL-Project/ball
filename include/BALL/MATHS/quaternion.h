@@ -1,4 +1,4 @@
-// $Id: quaternion.h,v 1.25 2001/01/22 13:22:03 oliver Exp $
+// $Id: quaternion.h,v 1.26 2001/02/13 01:49:06 amoll Exp $
 
 #ifndef BALL_MATHS_QUATERNION_H
 #define BALL_MATHS_QUATERNION_H
@@ -6,8 +6,6 @@
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
 #endif
-
-#include <iostream>
 
 #ifndef BALL_MATHS_MATRIX44_H
 #	include <BALL/MATHS/matrix44.h>
@@ -17,18 +15,18 @@
 #	include <BALL/MATHS/vector3.h>
 #endif
 
+#include <iostream>
+
 namespace BALL 
 {
 
 	/**	@name Quaternion
 			@memo representing a rotation in three dimensional space: class \Ref{TQuaternion} and class \Ref{Quaternion}
 	*/
-	//@{
-			
+	//@{	
 
 	/**	Generic Quaternion Class.
-      {\bf Definition:} \URL{BALL/MATHS/quaternion.h}
-      \\
+      {\bf Definition:} \URL{BALL/MATHS/quaternion.h} \\
 	*/
 	template <typename T>
 	class TQuaternion
@@ -37,7 +35,6 @@ namespace BALL
 
 		BALL_CREATE(TQuaternion<T>)
 		
-
 		/**	@name	Constructors and Destructors
 		*/
 		//@{
@@ -82,16 +79,16 @@ namespace BALL
 			throw();
 
 		/**	Clear method.
-				The value are set to 0.
+				The values are set to 0.
 		*/
 		virtual void clear() 
 			throw();
 
 		//@}
-
 		/**	@name	Assignment
 		*/
 		//@{
+
 		///
 		void set(const TQuaternion& q)
 			throw();
@@ -136,12 +133,12 @@ namespace BALL
 		*/
 		void swap(TQuaternion& q)
 			throw();
+
 		//@}
-
-
 		/**	@name	Accessors
 		*/
 		//@{
+
 		/**	Get the positive angle rotation.
 				@return T the angle value
 		*/
@@ -149,7 +146,7 @@ namespace BALL
 			throw();
 
 		/**	Get the normalized direction vector of the rotation axis.
-				@return TVector3 the Axis
+				@return TVector3 the axis
 		*/
 		TVector3<T> getAxis()
 			throw(Exception::DivisionByZero);
@@ -194,11 +191,10 @@ namespace BALL
 			throw();
 
 		//@}
-
-
 		/**	@name	Predicates
 		*/
 		//@{
+
 		/**	Equality operator.
 				@return bool, {\bf true} if all components are equal, {\bf false} otherwise
 		*/
@@ -210,12 +206,12 @@ namespace BALL
 		*/
 		bool operator != (const TQuaternion& q) const
 			throw();
+
 		//@}
-
-
 		/**	@name	Debugging and Diagnostics
 		*/
 		//@{
+
 		/** Internal state dump.
 				Dump the current internal state of {\em *this} to 
 				the output ostream {\em s} with dumping depth {\em depth}.
@@ -224,12 +220,12 @@ namespace BALL
 		*/
 		void dump(std::ostream& s = std::cout, Size depth = 0) const
 			throw();
+
 		//@}
-
-
 		/**	@name	Attributes
 		*/
 		//@{
+
 		/**	x component of the axis. */
 		T i;
 
@@ -241,6 +237,7 @@ namespace BALL
 
 		/**	Angle component. */
 		T angle;
+
 		//@}
 
 	};
@@ -493,7 +490,6 @@ namespace BALL
 		return (*this += -q);
 	}
 
-
 	/** Addition operator for two Quaternions
 			@return TQuaternion - the new Quaternion
 	*/
@@ -561,7 +557,6 @@ namespace BALL
 			Read the values of the quaternion from an input stream.
 			@param s	the input stream
 			@param q  the quaternion to read 
-
 	*/	
 	template <typename T>
 	std::istream& operator >>(std::istream& s, TQuaternion<T>& q)
