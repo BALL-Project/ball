@@ -36,6 +36,8 @@ You need to build the following additional packages:
 Now you can open the BALL project folder in BALL/Windows
 and (hopefully) compile BALL. 
 
+Please choose the configuration "Python Multihreaded" in the Configuration
+Manager, as this is the only configuration, that is currently working...
 
 If you want to compile the visualization component of BALL as well,
 you will need a QT license (QT 3.0.6, commercial or academic license).
