@@ -1,4 +1,4 @@
-// $Id: regularData1DWidget.C,v 1.5 2001/06/06 14:14:46 anhi Exp $
+// $Id: regularData1DWidget.C,v 1.6 2001/06/06 15:05:37 anker Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/regularData1DWidget.h>
 
@@ -24,7 +24,7 @@ NewRegularData1DMessage::~NewRegularData1DMessage()
   #endif
 }
 
-RegularData1DWidget::RegularData1DWidget(int l, double min, double max, QWidget *parent) 
+RegularData1DWidget::RegularData1DWidget(Size l, DoubleReal min, DoubleReal max, QWidget *parent) 
   throw()
   : QScrollView(parent), 
     ModularWidget("RegularData1DWidget"), 
