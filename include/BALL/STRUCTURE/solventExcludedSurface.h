@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: solventExcludedSurface.h,v 1.21.4.2 2002/08/22 17:17:55 oliver Exp $
+// $Id: solventExcludedSurface.h,v 1.21.4.3 2002/10/15 11:57:50 amoll Exp $
 
 #ifndef BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
 #define BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
@@ -1663,7 +1663,7 @@ else
 				partitionSingularEdge(new_edge4,10,molecule);
 				System* system = new System;
 				system->insert(*molecule);
-				HINFile hinfile("DATA/SES/singularEdge"+IndexToString(new_edge4->index_,0)+".hin",ios::out);
+				HINFile hinfile("DATA/SES/singularEdge"+IndexToString(new_edge4->index_,0)+".hin",std::ios::out);
 				hinfile << *system;
 				hinfile.close();
 				delete system;
@@ -4045,7 +4045,7 @@ else
 				System *system = new System;
 				Molecule molecule(*edge[i]);
 				system->insert(molecule);
-				HINFile hinfile("DATA/SES/edge"+IndexToString(i,0)+".hin",ios::out);
+				HINFile hinfile("DATA/SES/edge"+IndexToString(i,0)+".hin",std::ios::out);
 				hinfile << *system;
 				hinfile.close();
 				delete system;
@@ -4069,10 +4069,10 @@ else
 						face1.insert(*molecule);
 					}
 				}
-				HINFile hinfile("DATA/SES/faceWithOut"+IndexToString(i,0)+".hin",ios::out);
+				HINFile hinfile("DATA/SES/faceWithOut"+IndexToString(i,0)+".hin",std::ios::out);
 				hinfile << face1;
 				hinfile.close();
-				hinfile.open("DATA/SES/faceWith"+IndexToString(i,0)+".hin",ios::out);
+				hinfile.open("DATA/SES/faceWith"+IndexToString(i,0)+".hin",std::ios::out);
 				hinfile << face2;
 				hinfile.close();
 				for (e = spheric_faces_[i]->edge_.begin(); e != spheric_faces_[i]->edge_.end(); e++)
