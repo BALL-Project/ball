@@ -1,4 +1,4 @@
-// $Id: periodicBoundary.C,v 1.19 2001/09/03 15:45:09 anker Exp $
+// $Id: periodicBoundary.C,v 1.20 2001/12/17 11:29:17 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/periodicBoundary.h>
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -381,7 +381,7 @@ namespace BALL
 	{
 		// try to find and read the file
 		Path p;
-		HINFile hin(p.find(filename));
+		HINFile hin(String(p.find(filename)));
 		if (!hin.isValid())
 		{
 			throw Exception::FileNotFound(__FILE__, __LINE__, filename);
