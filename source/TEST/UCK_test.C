@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: uck_test.C,v 1.1 2004/06/09 12:57:22 bender Exp $
+// $Id: UCK_test.C,v 1.1 2004/06/15 09:13:10 bender Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 
-#include <BALL/STRUCTURE/uck.h>
+#include <BALL/STRUCTURE/UCK.h>
 #include <BALL/FORMAT/SDFile.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/molecule.h>
@@ -21,10 +21,10 @@
 ///////////////////////////
 
 using namespace BALL;
-uck *u;
+UCK *u;
 
 
-START_TEST(uck, "$Id: uck_test.C,v 1.1 2004/06/09 12:57:22 bender Exp $")
+START_TEST(UCK, "$Id: UCK_test.C,v 1.1 2004/06/15 09:13:10 bender Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -34,7 +34,7 @@ Molecule *m = f.read();
 f.close();
 
 CHECK(bencoic_acid)
-	u = new uck(m, "bencoic_acid.sdf", 2, 1);
+	u = new UCK(m, "benzoic_acid.sdf", 2, 1);
 	TEST_EQUAL(u->getUck().trim(), "39bf9b334b172e4e71e76b93c830b47e")
 	ABORT_IF(u->getUck().trim() != "39bf9b334b172e4e71e76b93c830b47e")
 RESULT											

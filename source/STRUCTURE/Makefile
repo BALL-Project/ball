@@ -52,7 +52,7 @@ CPP_SOURCES= \
 	triangulatedSES.C\
 	triangulatedSurface.C\
 	HBondProcessor.C\
-	uck.C\
+	UCK.C\
 	md5.C
 
 PARSER_PREFIX=SmilesParser
@@ -76,6 +76,3 @@ smilesParserLexer.o: smilesParserLexer.C smilesParserParser.C
 smilesParserParser.o: smilesParserParser.C
 	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(LIB_CXXFLAGS) $(BALL_INCLUDES) $(ADD_INCLUDES) -c $*.C -o $@
 
-#uck.o: uck.C
-#	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(BALL_INCLUDES) -c $*.C -o $@
-# 

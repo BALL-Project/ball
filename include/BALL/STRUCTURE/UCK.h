@@ -1,26 +1,29 @@
-/** header file for uck-algorithm class
-*/
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: UCK.h,v 1.1 2004/06/15 09:13:08 bender Exp $
+//
 
 #include <BALL/FORMAT/SDFile.h>
 #include <BALL/KERNEL/molecule.h>
 #include <fstream>
 namespace BALL
 {
-	class uck
+	class UCK
 	{
 		public:
 		
 		/* default constructor
 		*/
-		uck();
+		UCK();
 		
 		/* constructor
 		*/
-		uck(Molecule* mol, String file, Size d, Size molnumber);
+		UCK(Molecule* mol, String file, Size d, Size molnumber);
 		
 		/* destructor
 		*/
-		~uck();
+		~UCK();
 		
 		/* print Uck to outfile
 		*/
@@ -72,8 +75,8 @@ namespace BALL
 		*/
 		String createFinalString(vector<String>& pairs);
 
-		Size depth, mol_number;
-		String filename, formula, uck_str, id;
-		float weight;
+		Size depth_, mol_number_;
+		String filename_, formula_, uck_str_, id_;
+		float weight_;
 	};
 }//namespace

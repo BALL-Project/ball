@@ -1,6 +1,10 @@
-/**uck-algorithm
-*/
-#include <BALL/STRUCTURE/uck.h>
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: UCK.C,v 1.1 2004/06/15 09:13:09 bender Exp $
+//
+
+#include <BALL/STRUCTURE/UCK.h>
 #include <BALL/STRUCTURE/md5.h>
 
 #include <iostream>
@@ -17,24 +21,24 @@ using namespace std;
 namespace BALL
 {
 	//default constructor
-	uck::uck()
+	UCK::UCK()
 	{
 	}
 	
 	//constructor
-	uck::uck(Molecule* mol, String file, Size d, Size molnumber)
+	UCK::UCK(Molecule* mol, String file, Size d, Size molnumber)
 	{
-		mol_number = molnumber;
-		filename = file;
-		depth = d;
+		mol_number_ = molnumber;
+		filename_ = file;
+		depth_ = d;
 		makeUck(mol);
 	}
 	
-	uck::~uck()
+	UCK::~UCK()
 	{
 	}
 	
-	void uck::makePathMatrix(vector<pair<Size,Size> >& e, vector<vector<int> >& sp, Size e_size)
+	void UCK::makePathMatrix(vector<pair<Size,Size> >& e, vector<vector<int> >& sp, Size e_size)
 	{
 		vector<int>* line;
 		// create bond-matrix, because Floyd's Algorithm requires a reachability matrix
@@ -79,9 +83,9 @@ namespace BALL
 		return;
 	}
 
-	void uck::getGraph(vector<String>& v, vector<pair<Size,Size> >& e, Molecule* mol)
+	void UCK::getGraph(vector<String>& v, vector<pair<Size,Size> >& e, Molecule* mol)
 	{
-		weight = 0.0;
+		weight_ = 0.0;
 		Size count = 0;
 		vector<pair<String, int> >* mol_name;
 		mol_name = new vector<pair<String, int> >;
@@ -106,7 +110,7 @@ namespace BALL
 			}
 			found_atom = false;
 			
-			weight += atit1->getElement().getAtomicWeight();
+			weight_ += atit1->getElement().getAtomicWeight();
 			v.push_back(atit1->getName());
 			Size dest = 0;
 			for(AtomIterator atit2 = mol->beginAtom(); atit2 != mol->endAtom(); ++atit2)
@@ -119,13 +123,13 @@ namespace BALL
 		}
 		sort(mol_name->begin(), mol_name->end());
 		for(Size i = 0; i != mol_name->size(); ++i)
-			formula += ((*mol_name)[i].first)+(String)(*mol_name)[i].second;
+			formula_ += ((*mol_name)[i].first)+(String)(*mol_name)[i].second;
 			
 		delete mol_name;
 		return;
 	}
 	
-	String uck::eraseDoubleLabels(Size d, String label, String x)
+	String UCK::eraseDoubleLabels(Size d, String label, String x)
 	{
 		if(d>=2)
 			if(x.find(label)!=string::npos)
@@ -134,7 +138,7 @@ namespace BALL
 		return x;
 	}
 	
-	String uck::lambda(String tmp, vector<pair<Size,Size> >& e, vector<String>& v, Size i, Size d)
+	String UCK::lambda(String tmp, vector<pair<Size,Size> >& e, vector<String>& v, Size i, Size d)
 	{
 		tmp = v[i]; // fix label
 		vector<String>* lam;
@@ -162,7 +166,7 @@ namespace BALL
 		return tmp;
 	}
 	
-	void uck::makePairs(vector<String>& lambda_map, vector<String>& pairs, vector<vector<int> >& sp)
+	void UCK::makePairs(vector<String>& lambda_map, vector<String>& pairs, vector<vector<int> >& sp)
 	{
 		for(Size i = 0; i != lambda_map.size(); ++i)
 			for(Size j = 0; j != lambda_map.size(); ++j)
@@ -172,10 +176,10 @@ namespace BALL
 		return;
 	}
 	
-	String uck::createFinalString(vector<String>& pairs)
+	String UCK::createFinalString(vector<String>& pairs)
 	{
 		String uckstr = "";
-		uckstr = formula;
+		uckstr = formula_;
 		uckstr += "-";
 		for(Size i = 0; i != pairs.size(); ++i)
 			uckstr += pairs[i];
@@ -185,38 +189,38 @@ namespace BALL
 		return uckstr;
 	}
 	
-	String uck::getUck()
+	String UCK::getUck()
 	{
-		return uck_str;
+		return uck_str_;
 	}
 
-	String uck::getFormula()
+	String UCK::getFormula()
 	{
-		return formula;
+		return formula_;
 	}
 
-	String uck::getId()
+	String UCK::getId()
 	{
-		return id;
+		return id_;
 	}
 
-	float uck::getWeight()
+	float UCK::getWeight()
 	{
-		return weight;
+		return weight_;
 	}
-	void uck::printUck(ofstream& outfile)
+	void UCK::printUck(ofstream& outfile)
 	{
-		outfile<<id<<formula<<"	"<<uck_str<<endl;
+		outfile<<id_<<formula_<<"	"<<uck_str_<<endl;
 		return;
 	}
 
-	void uck::printUck(ostream& outstr)	
+	void UCK::printUck(ostream& outstr)	
 	{
-		outstr<<id<<formula<<"	"<<uck_str<<endl;
+		outstr<<id_<<formula_<<"	"<<uck_str_<<endl;
 		return;
 	}
 
-	void uck::makeUck(Molecule* m)
+	void UCK::makeUck(Molecule* m)
 	{
 		vector<String> *v, *pairs, *lambda_map;
 		vector<pair<Size,Size> > *e; // edge set
@@ -229,21 +233,21 @@ namespace BALL
 		
 		getGraph(*v, *e, m);
 		for(Size i=0; i!=v->size(); ++i)
-			lambda_map->push_back(lambda("", *e, *v, i, depth));
+			lambda_map->push_back(lambda("", *e, *v, i, depth_));
 		makePathMatrix(*e, *sp, v->size());
 		makePairs(*lambda_map, *pairs, *sp);
-		uck_str = createFinalString(*pairs);
+		uck_str_ = createFinalString(*pairs);
 		
 		// make sure that tabs are placed correctly when m->getName() is empty
 		String m_name(m->getName());
 		m_name.trim();
 		if(m_name.size() == 0)
-			id = filename+":"+(String) mol_number+":			";
+			id_ = filename_+":"+(String) mol_number_+":			";
 		else
-			id = filename+":"+(String) mol_number+":"+m_name+"		";
+			id_ = filename_+":"+(String) mol_number_+":"+m_name+"		";
 
 		
-		++mol_number;
+		++mol_number_;
 		delete v;
 		delete pairs;
 		delete lambda_map;
