@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.68 2000/03/14 22:44:58 oliver Exp $
+dnl    $Id: configure.in,v 1.69 2000/03/15 09:34:59 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -996,7 +996,7 @@ if test "${COMPILER_DONE}" != true -a "${IS_DIGITALCXX}" = true ; then
 	MAKEDEP_CXX_OPTS="-M -noimplicit_include -std strict_ansi"
 	MAKEDEP_CXX_SUFFIX=" >.Dependencies"
 
-	CXXFLAGS="${CXXFLAGS} -tlocal -std strict_ansi"
+	CXXFLAGS="${CXXFLAGS} -tlocal -ieee -std strict_ansi"
 	CXXFLAGS_O="${CXXFLAGS_O} -O5"
 	
 	CXXFLAGS_D="${CXXFLAGS_D}"
