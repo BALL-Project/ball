@@ -1,4 +1,4 @@
-// $Id: reducedSurface.h,v 1.2 2000/10/11 09:39:07 oliver Exp $
+// $Id: reducedSurface.h,v 1.3 2000/10/14 13:01:07 oliver Exp $
 
 #ifndef BALL_STRUCTURE_REDUCEDSURFACE_H
 #define BALL_STRUCTURE_REDUCEDSURFACE_H
@@ -1098,7 +1098,7 @@ print << pre << "  norm:       " << norm << "\n";
       switch (direction)
       {
         case 0 :  
-					if (Maths::isEqual(circle.n.y, 0) && Maths::isEqual(circle.n.z,0))
+					if (Maths::isZero(circle.n.y) && Maths::isZero(circle.n.z))
 					{
 						min = max = circle.p.x;
 					}
@@ -1112,7 +1112,7 @@ print << pre << "  norm:       " << norm << "\n";
 					}
 					break;
         case 1 :  
-					if (Maths::isEqual(circle.n.x, 0) && Maths::isEqual(circle.n.z, 0))
+					if (Maths::isZero(circle.n.x) && Maths::isZero(circle.n.z))
 					{
 						min = max = circle.p.y;
 					}
@@ -1126,7 +1126,7 @@ print << pre << "  norm:       " << norm << "\n";
 					}
 					break;
         case 2 :  
-					if (Maths::isEqual(circle.n.x, 0) && Maths::isEqual(circle.n.y, 0))
+					if (Maths::isZero(circle.n.x) && Maths::isZero(circle.n.y))
 					{
 						min = max = circle.p.z;
 					}
@@ -1140,7 +1140,7 @@ print << pre << "  norm:       " << norm << "\n";
 					}
 					break;
 			}
-      if (Maths::isEqual(extrem, 0))
+      if (extrem == 0)
       {
         return Maths::min(min, max);
 			}
