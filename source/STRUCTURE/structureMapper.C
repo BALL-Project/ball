@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: structureMapper.C,v 1.23 2003/05/25 21:38:09 oliver Exp $
+// $Id: structureMapper.C,v 1.24 2003/06/19 13:25:41 oliver Exp $
 
 #include <BALL/STRUCTURE/structureMapper.h>
 
@@ -515,10 +515,10 @@ namespace BALL
 		// determine the molecular fragments in composite 
 		// and store them in an array
 
-		Composite::SubcompositeIterator composite_it;
+		Composite::CompositeIterator composite_it;
 		vector < Fragment * >composite_fragments;
 
-		for(composite_it = composite.beginSubcomposite(); composite_it != composite.endSubcomposite(); ++composite_it)
+		for(composite_it = composite.beginComposite(); composite_it != composite.endComposite(); ++composite_it)
 		{
 			if (RTTI::isKindOf < Fragment >(*composite_it))
 			{
