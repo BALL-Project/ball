@@ -1,4 +1,4 @@
-// $Id: NMRStarFile_test.C,v 1.9 2000/10/26 14:22:36 amoll Exp $
+// $Id: NMRStarFile_test.C,v 1.10 2001/07/17 00:46:30 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 using namespace BALL;
 
-START_TEST(String,"$Id: NMRStarFile_test.C,v 1.9 2000/10/26 14:22:36 amoll Exp $")
+START_TEST(String,"$Id: NMRStarFile_test.C,v 1.10 2001/07/17 00:46:30 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -38,7 +38,7 @@ NMRStarFile rs;
 
 CHECK(NMRStarFile::NMRStarFile(filename))
 	PRECISION(1e-3)
-	rs = NMRStarFile("data/bmr4318.str");
+	rs = NMRStarFile("data/AssignShiftProcessor_test2.str");
 	TEST_EQUAL(rs.getData().size(), 1)
 	TEST_EQUAL(rs.getNumberOfAtoms(), 1914)
 	if (rs.getData().size() == 1 && rs.getNumberOfAtoms() == 1914)
@@ -83,7 +83,7 @@ NMRStarFile f2;
 CHECK(NMRStarFile::operator == (const NMRStarFile& f))
 	NMRStarFile f1;
 	TEST_EQUAL(f1 == f2, true)
-	f2 = NMRStarFile("data/bmr4318.str");
+	f2 = NMRStarFile("data/AssignShiftProcessor_test2.str");
 	TEST_EQUAL(f1 == f2, false)
 RESULT
 
