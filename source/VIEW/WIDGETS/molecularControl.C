@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.91.2.4 2005/01/14 14:27:38 amoll Exp $
+// $Id: molecularControl.C,v 1.91.2.5 2005/01/17 13:02:42 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -305,7 +305,7 @@ bool MolecularControl::reactToMessages_(Message* message)
 					to_find = composite_to_item_.find(*lit);
 					if (to_find == composite_to_item_.end()) continue;
 
-					composite_to_item_[to_find->first]->setOpen(true);
+					to_find->second->setOpen(true);
 				}
 
 				return true;
