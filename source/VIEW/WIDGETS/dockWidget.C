@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockWidget.C,v 1.17 2004/04/07 12:31:07 anker Exp $
+// $Id: dockWidget.C,v 1.18 2004/04/07 13:00:26 anker Exp $
 
 #include <BALL/VIEW/WIDGETS/dockWidget.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -45,9 +45,7 @@ namespace BALL
 			caption_label_->setFrameShape(QLabel::NoFrame);
 			caption_label_->setAlignment(QLabel::AlignCenter);
 			layout_->addWidget(caption_label_);
-			// Log.remove(std::cerr);
 			boxLayout()->addLayout(layout_);
-			// Log.insert(std::cerr);
 
 			setOrientation(Qt::Vertical);
 
