@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.51 2004/04/14 15:23:52 amoll Exp $
+// $Id: scene.C,v 1.52 2004/04/15 13:03:08 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1358,12 +1358,14 @@ namespace BALL
 			}
 			else
 			{
+				last_pos_ = pos();
+				hide();
 				showNormal();
 				reparent(NULL, Qt::WType_TopLevel, QPoint(0, 0));
 				showFullScreen();
 				setGeometry(qApp->desktop()->screenGeometry());
 				stereo = true;
-				last_pos_ = pos();
+				show();
 			}
 
 			menu->setItemChecked(stereo_id_, stereo);
