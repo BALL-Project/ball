@@ -1,4 +1,4 @@
-// $Id: periodicBoundary.h,v 1.7 2000/08/30 19:58:18 oliver Exp $
+// $Id: periodicBoundary.h,v 1.8 2000/10/16 19:19:12 oliver Exp $
 // Molecular Mechanics: class representing periodic boundary conditions
 
 #ifndef BALL_MOLMEC_COMMON_PERIODICBOUNDARY_H
@@ -30,6 +30,8 @@ namespace BALL
 	{
 		public:
 
+		BALL_CREATE(PeriodicBoundary)
+
 		/**	@name	Type definitions 
 		*/
 		//@{
@@ -45,8 +47,9 @@ namespace BALL
 		*/
 		//@{
 
-		struct Option {
-
+		///
+		struct Option 
+		{
 			///	Vector containing the lower corner of the box
 			static const char* PERIODIC_BOX_LOWER;
 
@@ -77,8 +80,10 @@ namespace BALL
 			static const char* PERIODIC_WATER_FILE;
 
 			};
-			
-		struct Default {
+		
+		/// Default values
+		struct Default 
+		{
 			///	Default vector for the lower corner of the box
 			static const Vector3 PERIODIC_BOX_LOWER; 
 
@@ -105,16 +110,13 @@ namespace BALL
 
 			///	Default file for default solvent.
 			static const char* PERIODIC_WATER_FILE;
-
-			};
+		};
 
 		//@}
 
 		/**	@name	Constructors and Destructors	
 		*/
 		//@{
-
-		BALL_CREATE_DEEP(PeriodicBoundary)
 
 		/**	Default constructor.
 		*/
@@ -126,7 +128,7 @@ namespace BALL
 
 		/**	Copy constructor
 		*/
-		PeriodicBoundary(const PeriodicBoundary& periodic_boundary, bool clone_deep = true);
+		PeriodicBoundary(const PeriodicBoundary& periodic_boundary);
 
 		/**	Destructor.
 		*/
@@ -142,6 +144,10 @@ namespace BALL
 		*/
 		PeriodicBoundary& operator = (const PeriodicBoundary& periodic_boundary);
 
+		/**	Clear method
+		*/
+		virtual void clear() 
+			throw();
 		//@}
 		
 
