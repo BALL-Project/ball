@@ -1,4 +1,4 @@
-// $Id: processor.h,v 1.8 2001/07/15 18:53:38 oliver Exp $
+// $Id: processor.h,v 1.9 2001/10/11 00:46:21 oliver Exp $
 
 #ifndef BALL_CONCEPT_PROCESSOR_H
 #define BALL_CONCEPT_PROCESSOR_H
@@ -7,7 +7,7 @@
 #	include <BALL/common.h>
 #endif
 
-#ifndef BALL_CONCEPT_BASECONCEPT_H
+#ifndef BALL_CONCEPT_BASEFUNCTOR_H
 #	include <BALL/CONCEPT/baseFunctor.h>
 #endif
 
@@ -21,26 +21,26 @@ namespace BALL
 
 	/**	Global Types and Enums for Processors
 	*/
-  class Processor
-  {
+	class Processor
+	{
 		public:
 		/**	Result type
 		*/
-    typedef int Result;
+		typedef int Result;
 
 		/**	Result codes
 		*/
-    enum
-    {
+		enum
+		{
 			/**	Abort 
 			*/
-      ABORT    = 0,
+			ABORT    = 0,
 			/**	Break 
 			*/
-      BREAK    = 1,
+			BREAK    = 1,
 			/**	Continue 
 			*/
-      CONTINUE = 2
+			CONTINUE = 2
 		};
 	};
  
