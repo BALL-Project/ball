@@ -55,7 +55,7 @@ bool ContourSurfaceDialog::exec()
 	List<std::pair<RegularData3D*, String> >::Iterator it;
 	if (control_ != 0) 
 	{
-		grid_pair_list = control_->getGrids();
+		grid_pair_list = control_->get3DGrids();
 		it = grid_pair_list.begin(); 
 		for (; it != grid_pair_list.end(); it++)
 		{
