@@ -1,4 +1,4 @@
-// $Id: pPCurve.h,v 1.1 2000/07/13 11:48:41 anker Exp $
+// $Id: pPCurve.h,v 1.2 2000/07/13 11:56:54 anker Exp $
 
 #ifndef BALL_MATHS_PPCURVE_H
 #define BALL_MATHS_PPCURVE_H
@@ -15,7 +15,8 @@ namespace BALL {
 		future. The PPCurves are of the form 
 		$\sum_{i=0}^{d} a_i^{(k)} (x - x_0^{(k)})^i$, where $k$ is the index of
 		the interval and $d$ is the overall degree of the PPCurve. Note that
-		there is no checking of <differnzierbarkeit, stetigkeit>.
+		there is no warranty that the defined curve ist continuously
+		differentiable or even continuous.
 		{\bf Definition:} |URL{BALL/MATHS/pPCurve.h}
 	 */
 
