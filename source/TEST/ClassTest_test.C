@@ -1,9 +1,9 @@
-// $Id: ClassTest_test.C,v 1.5 2000/05/23 10:23:46 oliver Exp $
+// $Id: ClassTest_test.C,v 1.6 2001/05/07 00:10:38 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 using namespace BALL;
 
-START_TEST(ClassTest, "$Id: ClassTest_test.C,v 1.5 2000/05/23 10:23:46 oliver Exp $")
+START_TEST(ClassTest, "$Id: ClassTest_test.C,v 1.6 2001/05/07 00:10:38 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -55,6 +55,22 @@ RESULT
 CHECK("TEST_FILE(filename, templatename, use_regexps)")
 	TEST_FILE("data/class_test_infile.txt", "data/class_test_template.txt", false)
 	TEST_FILE("data/class_test_infile.txt", "data/class_test_regexp_template.txt", true)
+RESULT
+
+CHECK("CAPTURE_OUTPUT(level)/COMPARE_OUTPUT(text)")
+	CAPTURE_OUTPUT(123)
+		Log.level(123) << "TEST123" << std::endl;
+		Log.level(124) << "TEST124" << std::endl;
+		Log.level(122) << "TEST122" << std::endl;
+	COMPARE_OUTPUT("TEST123\n")
+
+	CAPTURE_OUTPUT(123);
+		Log.level(124) << "TEST124" << std::endl;
+	COMPARE_OUTPUT("")
+
+	CAPTURE_OUTPUT(124)
+		Log.level(124) << "TEST124" << std::endl;
+	COMPARE_OUTPUT("TEST124\n")
 RESULT
 
 /////////////////////////////////////////////////////////////
