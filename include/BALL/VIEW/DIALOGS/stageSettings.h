@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stageSettings.h,v 1.13.2.1 2005/01/23 23:26:14 amoll Exp $
+// $Id: stageSettings.h,v 1.13.2.2 2005/01/24 14:13:56 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_STAGESETTINGS_H
@@ -80,7 +80,7 @@ namespace BALL
 
 			Scene* scene_;
 
-			Stage* stage_;
+			VIEW::Stage* stage_;
 		};
 
 } }
