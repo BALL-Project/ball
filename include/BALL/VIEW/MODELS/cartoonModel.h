@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.h,v 1.23 2004/09/16 13:35:18 amoll Exp $
+// $Id: cartoonModel.h,v 1.24 2004/09/16 13:38:08 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_CARTOONMODEL_H
@@ -114,6 +114,30 @@ namespace BALL
 			///
 			float getArrowHeight() const
 				throw() { return arrow_height_;}
+
+			///
+			void setDNABaseRadius(float r)
+				throw() { DNA_base_radius_ = r;}
+
+			///
+			float getDNABaseRadius() const
+				throw() { return DNA_base_radius_;}
+
+			///
+			void setDNAHelixRadius(float r)
+				throw() { DNA_helix_radius_ = r;}
+
+			///
+			float getDNAHelixRadius() const
+				throw() { return DNA_helix_radius_;}
+
+			///
+			void setDNALadderRadius(float r)
+				throw() { DNA_ladder_radius_ = r;}
+
+			///
+			float getDNALadderRadius() const
+				throw() { return DNA_ladder_radius_;}
 
 			///
 			void setDrawDNAAsLadderModel(bool state)
