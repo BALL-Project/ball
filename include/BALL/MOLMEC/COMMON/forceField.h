@@ -1,4 +1,4 @@
-// $Id: forceField.h,v 1.11 2000/12/15 21:24:44 amoll Exp $
+// $Id: forceField.h,v 1.12 2000/12/18 12:29:23 anker Exp $
 // Molecular Mechanics: general force field class
 
 #ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
@@ -202,7 +202,7 @@ namespace BALL
 		*/
 		System* getSystem();
 
-    /** Returns a pointer to the system
+    /** Returns a const pointer to the system
     */
     const System* getSystem() const;
 
