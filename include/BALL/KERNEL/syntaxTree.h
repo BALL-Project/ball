@@ -1,4 +1,4 @@
-// $Id: syntaxTree.h,v 1.1 2001/07/16 19:38:42 anker Exp $
+// $Id: syntaxTree.h,v 1.2 2001/07/17 09:31:03 anker Exp $
 
 #ifndef BALL_KERNEL_SYNTAXTREE_H
 #define BALL_KERNEL_SYNTAXTREE_H
@@ -150,6 +150,11 @@ namespace BALL
 		void expandBrackets_()
 			throw(Exception::ParseError);
 		
+		/*_ The backend for collapseANDs_() and collapseORs_()
+		*/
+		void collapse_(ExpressionTree::Type type, const String& string)
+			throw(Exception::ParseError);
+
 		/*_ BAUSTELLE
 		*/
 		void collapseANDs_()

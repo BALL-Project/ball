@@ -1,4 +1,4 @@
-// $Id: syntaxTree.C,v 1.3 2001/07/17 00:50:37 oliver Exp $
+// $Id: syntaxTree.C,v 1.4 2001/07/17 09:31:05 anker Exp $
 
 #include <BALL/KERNEL/syntaxTree.h>
 
@@ -128,8 +128,14 @@ namespace BALL
     if (!evaluated)
     {
       expandBrackets_();
+			Log.info() << endl << "before collapseANDs_()" << endl;
+			dump();
       collapseANDs_();
+			Log.info() << endl << "after collapseANDs_()" << endl;
+			dump();
       collapseORs_();
+			Log.info() << endl << "after collapseORs_()" << endl;
+			dump();
 		}
 	}
  
@@ -333,23 +339,20 @@ namespace BALL
 		}
 	}
  
-	void SyntaxTree::collapseANDs_()
+	void SyntaxTree::collapse_(ExpressionTree::Type type, const String& string)
 		throw(Exception::ParseError)
 	{
 
 		// if we have less than 3 children, we cannot collapse anything.
     if (children.size() < 3)
     {
-			// BAUSTELLE
-			// Maybe we should check here whether this node is a conjunction or not.
-			// If it is, throw() a ParseError.
       return;
 		}
 
     Iterator  it = begin();
     while (it != end())
     {
-      for (; it != end() && (*it)->expression != "AND"; ++it);
+      for (; it != end() && (*it)->expression != string; ++it);
 
       if (it == end())
       {
@@ -361,21 +364,21 @@ namespace BALL
       start--;
 
       for (; it != end() 
-					&& ((*it)->expression == "AND" || (*it)->evaluated == true); ++it);
+					&& ((*it)->expression == string || (*it)->evaluated == true); ++it);
 
       // remember the last node for the AND expression
       Iterator  end = it;
 
-      SyntaxTree* t = new SyntaxTree("AND");
+      SyntaxTree* t = new SyntaxTree(string);
       it = start;
       children.insert(start, t);
-      t->type = ExpressionTree::AND;
+      t->type = type;
       t->evaluated = true;
-      t->collapseANDs_();
+      t->collapse_(type, string);
 
       for (it = start; it != end; ++it)
       {
-        if ((*it)->expression != "AND")
+        if ((*it)->expression != string)
         {
           t->children.push_back(*it);
 				}
@@ -387,7 +390,7 @@ namespace BALL
 
     for (it = begin(); it != end(); ++it)
     {
-      (*it)->collapseANDs_();
+      (*it)->collapse_(type, string);
 		}
 
 		// mark as successfully updated
@@ -395,57 +398,19 @@ namespace BALL
 	}
  
 
+  void SyntaxTree::collapseANDs_()
+		throw(Exception::ParseError)
+	{
+		collapse_(ExpressionTree::AND, "AND");
+	}
+
+
   void SyntaxTree::collapseORs_()
 		throw(Exception::ParseError)
-  {
-    Iterator  it = begin();
-
-    while (it != end())
-    {
-      for (; it != end() && (*it)->expression != "OR"; ++it);
-
-      if (it == end())
-      {
-        break;
-			}
-
-      // remember the first node in the OR expression
-      Iterator  start = it;
-      start--;
-
-      for (; it != end() 
-					&& ((*it)->expression == "OR" || ((*it)->evaluated == true)); ++it);
-
-      // remember the last node for the OR expression
-      Iterator  end = it;
-
-      SyntaxTree* t = new SyntaxTree("OR");
-      it = start;
-      children.insert(start, t);
-      t->type = ExpressionTree::OR;
-      t->evaluated = true;
-      t->collapseORs_();
-
-      for (it = start; it != end; ++it)
-      {
-        if ((*it)->expression != "OR")
-        {
-          t->children.push_back(*it);
-				}
-			}
-      children.erase(start, end);
-
-      it = end;
-		}
-
-    for (it = begin(); it != end(); ++it)
-    {
-      (*it)->collapseORs_();
-		}
-
-		// mark as successfully updated
-		evaluated = true;
+	{
+		collapse_(ExpressionTree::OR, "OR");
 	}
+
 
 	void SyntaxTree::dump(std::ostream& os, Size depth) const
 		throw()
