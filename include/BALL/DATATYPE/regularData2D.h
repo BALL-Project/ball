@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2D.h,v 1.28 2003/05/04 20:15:20 oliver Exp $
+// $Id: regularData2D.h,v 1.29 2003/05/04 21:26:54 oliver Exp $
 //
 
 #ifndef BALL_DATATYPE_TREGULARDATA2D_H
@@ -556,7 +556,7 @@ namespace BALL
 			// Correct the grid dimension. Origin and spacing remain constant.
 			size_ = size;
 		}
-		catch (std::bad_alloc& e)
+		catch (std::bad_alloc&)
 		{
 			throw Exception::OutOfMemory(__FILE__, __LINE__, new_size * (Size)sizeof(ValueType));
 		}
@@ -613,7 +613,7 @@ namespace BALL
 			dimension_.y *= (double)size.y / (double)size_.y;
 			size_ = size;
 		}
-		catch (std::bad_alloc& e)
+		catch (std::bad_alloc&)
 		{
 			throw Exception::OutOfMemory(__FILE__, __LINE__, new_size * (Size)sizeof(ValueType));
 		}
