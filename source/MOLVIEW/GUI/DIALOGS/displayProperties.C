@@ -1,4 +1,4 @@
-// $Id: displayProperties.C,v 1.13 2002/01/13 18:23:40 oliver Exp $
+// $Id: displayProperties.C,v 1.13.4.1 2002/05/12 14:06:24 oliver Exp $
 
 
 #include <BALL/KERNEL/molecule.h>
@@ -513,7 +513,7 @@ namespace BALL
 			for (; list_it != temp_selection_.end(); ++list_it)
 			{	
 				(*list_it)->apply(fragmentdb_.add_hydrogens);
-				number_of_hydrogens += fragmentdb_.add_hydrogens.getNumberOfInsertedHydrogens();
+				number_of_hydrogens += fragmentdb_.add_hydrogens.getNumberOfInsertedAtoms();
 				(*list_it)->apply(fragmentdb_.build_bonds);
 				applyOn_(**list_it);	
 
