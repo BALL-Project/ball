@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.153 2004/11/13 10:30:53 amoll Exp $
+// $Id: scene.C,v 1.154 2004/11/26 22:14:45 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1977,6 +1977,10 @@ namespace BALL
 		void Scene::startAnimation()
 			throw()
 		{
+			if (!lockComposites()) return;
+			menuBar()->setItemChecked(record_animation_id_, false);
+			menuBar()->setItemEnabled(record_animation_id_, false);
+
 			menuBar()->setItemEnabled(start_animation_id_, false);
 			menuBar()->setItemEnabled(cancel_animation_id_, true);
 
@@ -2010,10 +2014,6 @@ namespace BALL
 		void Scene::animate_()
 			throw()
 		{
-			if (!lockComposites()) return;
-			menuBar()->setItemChecked(record_animation_id_, false);
-			menuBar()->setItemEnabled(record_animation_id_, false);
-
 			bool export_PNG = menuBar()->isItemChecked(animation_export_PNG_id_);
 			bool export_POV = menuBar()->isItemChecked(animation_export_POV_id_);
 			bool repeat     = menuBar()->isItemChecked(animation_repeat_id_);
@@ -2077,7 +2077,7 @@ namespace BALL
 					if (stop_animation_) break;
 				}
 			}
-			while((!stop_animation_) && repeat);
+			while(!stop_animation_ && repeat);
 
 			stop_animation_ = false;
 			menuBar()->setItemEnabled(start_animation_id_, true);
