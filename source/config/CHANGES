@@ -1,20 +1,20 @@
-changes since 1.0:
+changes since 1.0 (02.06.04):
 
 added:
-- Ramachandran Plot
-- Clipping Planes
 - Stereo Modi: Side-by-Side and for shutter googles 
-- Preferences for material parameters in OpenGL
-- Fog in Scene and its settings to Preferences
-- managment of 1D and 2D grids in DatasetControl
-- ability of DatasetControl to start visualisation of 1D and 2D grids
-- 1D and 2D RegularDataWidgets update their contents automaticaly
-- Visualisation of forces
-- Writing and loading of project files
-- Benchmark Scripts for BALLView
-- Visualisation for double-, triple- and aromatic bonds in BallAndStick Model
+- Clipping Planes
+- Writing and loading of BALLView project files
 - Hotkey support for starting any (BALL-)Python command from BALLView
 - new application: DCD2PNG to create series of PNG-images from a DCD trajectory file
+- managment of 1D and 2D grids in DatasetControl
+  ability of DatasetControl to start visualisation of 1D and 2D grids
+  1D and 2D RegularDataWidgets update their contents automaticaly
+- Ramachandran Plot
+- Fog in Scene and its settings to Preferences
+- Visualisation of forces
+- Benchmark Scripts for BALLView
+- Visualisation for double-, triple- and aromatic bonds in BallAndStick Model
+- Preferences for material parameters in OpenGL
 
 fixed:
 - selection in MolecularControl with CRTG and SHIFT modifier
@@ -34,4 +34,4 @@ changed:
 - GeometricObjects no longe have names
 - removed Information Processor for GeometricObjects
 - interface for the methods ModularWidget::applyPreferences, defaultPreferences, cancelPreferences
-- interface for the hidden property of Representation's
+- interface for the property "hidden" of Representation's
