@@ -1,4 +1,4 @@
-// $Id: syntaxTree.C,v 1.1 2001/07/16 19:38:38 anker Exp $
+// $Id: syntaxTree.C,v 1.2 2001/07/16 20:37:21 amoll Exp $
 
 #include <BALL/KERNEL/syntaxTree.h>
 
@@ -452,7 +452,7 @@ namespace BALL
 			<< "  evaluated = " << evaluated 
 			<< "  negate = " << negate 
 			<< "  type = " << type
-			<< "]" << endl;
+			<< "]" << ::std::endl;
 		list<SyntaxTree*>::const_iterator it = children.begin();
 		for (; it != children.end(); ++it)
 		{

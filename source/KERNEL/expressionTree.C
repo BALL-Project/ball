@@ -1,6 +1,8 @@
-// $Id: expressionTree.C,v 1.1 2001/07/16 19:38:38 anker Exp $
+// $Id: expressionTree.C,v 1.2 2001/07/16 20:37:21 amoll Exp $
 
 #include <BALL/KERNEL/expressionTree.h>
+
+using namespace ::std;
 
 namespace BALL
 {
@@ -15,7 +17,7 @@ namespace BALL
 	}
 
 
-	void ExpressionTree::dump(std::ostream& os, Size depth) const
+	void ExpressionTree::dump(::std::ostream& os, Size depth) const
 		throw()
 	{
 		BALL_DUMP_STREAM_PREFIX(os);
