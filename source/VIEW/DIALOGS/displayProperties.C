@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.46 2003/11/23 16:42:48 amoll Exp $
+// $Id: displayProperties.C,v 1.47 2003/11/23 23:15:58 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -360,6 +360,17 @@ void DisplayProperties::onNotify(Message *message)
 		createRepresentationMode();
 		// disable apply button if selection is empty
 		apply_button->setEnabled(getMainControl()->getControlSelection().size());
+		return;
+	}
+
+	if (RTTI::isKindOf<CreateRepresentationMessage>(*message))
+	{
+		CreateRepresentationMessage* crm = (CreateRepresentationMessage*) message;
+		if (crm->getComposites().size() == 0) return;
+		model_type_combobox->setCurrentItem(crm->getModelType());
+		coloring_method_combobox->setCurrentItem(crm->getColoringMethod());
+		createRepresentationMode();
+		createRepresentation_(*crm->getComposites().begin());
 	}
 }
 
