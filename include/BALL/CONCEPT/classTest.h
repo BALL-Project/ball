@@ -1,4 +1,4 @@
-// $Id: classTest.h,v 1.12 2000/05/23 10:21:37 oliver Exp $
+// $Id: classTest.h,v 1.13 2000/05/23 10:35:08 oliver Exp $
 
 #include <BALL/common.h>
 #include <BALL/SYSTEM/file.h>
@@ -227,13 +227,13 @@ int main(int argc, char **argv)\
 		\end{verbatim}
 */
 #define STATUS(message)\
-	if (!TEST::newline) \
-	{\
-		TEST::newline = true;\
-		std::cout << std::endl;\
-	}\
 	if (TEST::verbose > 1)\
 	{\
+		if (!TEST::newline) \
+		{\
+			TEST::newline = true;\
+			std::cout << std::endl;\
+		}\
 		std::cout << "  status: " << message << std::endl;\
 	}\
 
