@@ -1,4 +1,4 @@
-# $Id: Makefile,v 1.16 2001/06/24 16:37:57 oliver Exp $
+# $Id: Makefile,v 1.17 2003/09/06 10:22:12 oliver Exp $
 #========================
 # BALL/EXAMPLES Makefile
 #========================
@@ -29,7 +29,7 @@ bindingEnergy:	bindingEnergy.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 MOLVIEWClient:	MOLVIEWClient.o 
-	$(CXX)	$(LDFLAGS) -o $@ $@.o $(BALLVIEW_LIBS)
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(VIEW_LIBS)
 
 ramachandran:	ramachandran.o 
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
