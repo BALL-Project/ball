@@ -1,4 +1,4 @@
-// $Id: regExp.C,v 1.8 2000/07/18 08:29:53 oliver Exp $ 
+// $Id: regExp.C,v 1.9 2000/07/29 18:03:38 amoll Exp $ 
 
 #include <BALL/DATATYPE/regExp.h>
 
@@ -22,7 +22,6 @@ namespace BALL
 	const String RegularExpression::NON_WHITESPACE("^[^ \n\t\r\f\v]+$");
 	const String RegularExpression::UPPERCASE("^[:upper:]$"); // "[A-Z]+"
 	const String RegularExpression::WHITESPACE("^[ \n\t\r\f\v]+$");
-
 
 
 	RegularExpression::RegularExpression()
@@ -54,7 +53,7 @@ namespace BALL
 
 	RegularExpression::~RegularExpression()
 	{
-		freeCompiledPattern_();
+		regfree(&regex_);
 	}
 
 	bool RegularExpression::match
@@ -66,7 +65,6 @@ namespace BALL
 			throw Exception::NullPointer(__FILE__, __LINE__);
 		}
 			
-
 		regex_t regex;
 
 		if (regcomp(&regex, pattern, compile_flags) != 0)
@@ -75,9 +73,7 @@ namespace BALL
 		}
 
 		int status = regexec(&regex, text, (size_t)0, 0, execute_flags);
-
 		regfree(&regex);
-
 		return (bool)(status == 0);
 	}
 
@@ -190,11 +186,10 @@ namespace BALL
 			regfree(&regex);
 
 			return true;
-		} else {
-			regfree(&regex);
-
-			return false;
 		}
+
+		regfree(&regex);
+		return false;
 	}
 
 	bool RegularExpression::find
@@ -224,12 +219,9 @@ namespace BALL
 
 			return true;
 		}
-		else
-		{
-			found.unbind();
 
-			return false;
-		}
+		found.unbind();
+		return false;
 	}
 
 	bool RegularExpression::find
@@ -252,7 +244,6 @@ namespace BALL
 			throw Exception::IndexOverflow(__FILE__, __LINE__, from, text.size());
 		}
 
-
 		for (Index index = 0; index < (Index)number_of_subexpresions; ++index)
 		{
 			found_subexpression[index].unbind();
@@ -271,16 +262,12 @@ namespace BALL
 					 (Index)(regmatch_ptr[index].rm_eo - (Index)regmatch_ptr[index].rm_so));
 			}
 
-			delete [] regmatch_ptr;
-			
+			delete [] regmatch_ptr;			
 			return true;
 		}
-		else
-		{
-			delete [] regmatch_ptr;
 
-			return false;
-		}
+		delete [] regmatch_ptr;
+		return false;
 	}
 
 	bool RegularExpression::find
@@ -318,17 +305,12 @@ namespace BALL
 				 (Index)regmatch[0].rm_eo - (Index)regmatch[0].rm_so);
 
 			*end_of_substring = c;
-
 			return true;
 		}
-		else
-		{
-			found.unbind();
 
-			*end_of_substring = c;
-
-			return false;
-		}
+		found.unbind();
+		*end_of_substring = c;
+		return false;
 	}
 
 	bool RegularExpression::find
@@ -370,7 +352,6 @@ namespace BALL
 		if (regexec(&regex_, text.c_str() + from, (size_t)number_of_subexpresions, regmatch_ptr, execute_flags) == 0)
 		{
 			for (Index index = 0; index < (Index)number_of_subexpresions;++index)
-		 
 			{
 				found_subexpression[index].bind
 					(text,  from	+ (Index)regmatch_ptr[index].rm_so,
@@ -379,16 +360,12 @@ namespace BALL
 
 			*end_of_substring = c;
 			delete [] regmatch_ptr;
-
 			return true;
 		}
-		else
-		{
-			*end_of_substring = c;
-			delete [] regmatch_ptr;
-			
-			return false;
-		}
+
+		*end_of_substring = c;
+		delete [] regmatch_ptr;
+		return false;
 	}
 
 	bool RegularExpression::find
@@ -422,10 +399,8 @@ namespace BALL
 
 			return true;
 		}
-		else
-		{
-			return false;
-		}
+
+		return false;
 	}
 
 	void RegularExpression::dump
@@ -450,44 +425,20 @@ namespace BALL
 	ostream& operator << (ostream& s, const RegularExpression& regular_expression)
 	{
 		s << regular_expression.pattern_ << ' ';
-
 		return s;
 	}
 
 	istream& operator >> (istream& s, RegularExpression& regular_expression)
 	{
 		String pattern;
-		
 		s >> pattern;
-
 		regular_expression.set(pattern);
-
 		return s;
 	}
 
 	void RegularExpression::compilePattern_()
 	{
 		valid_pattern_ = (bool)!::regcomp(&regex_, pattern_.c_str(), REG_EXTENDED);
-	}
-
-	const char* RegularExpression::getSystemErrorMessage_(int error_code, regex_t& regex)
-	{
-		size_t buffer_size = regerror(error_code, &regex, (char *)0, (size_t)0);
-
-		if (buffer_size == 0)
-		{
-			return "Unknown error.";
-		} else {
-			static char* buffer = new char[buffer_size];
-			regerror(error_code, &regex, buffer, buffer_size);
-
-			return buffer;
-		}
-	}
-
-	void RegularExpression::freeCompiledPattern_()
-	{
-		::regfree(&regex_);
 	}
 
 	void RegularExpression::toExtendedRegularExpression_()

@@ -1,4 +1,4 @@
-// $Id: regExp.h,v 1.5 2000/02/06 19:40:43 oliver Exp $
+// $Id: regExp.h,v 1.6 2000/07/29 18:02:57 amoll Exp $
 
 #ifndef BALL_DATATYPE_REGEXP_H
 #define BALL_DATATYPE_REGEXP_H
@@ -248,16 +248,10 @@ namespace BALL
 		*/
 		friend ::std::istream& operator >> (::std::istream& s, RegularExpression& regular_expression);
 		//@}
-
-
 		
 		private:
 
-		static const char* getSystemErrorMessage_(int error_code, regex_t& regex);
-
 		void compilePattern_();
-
-		void freeCompiledPattern_();
 
 		void toExtendedRegularExpression_();
 

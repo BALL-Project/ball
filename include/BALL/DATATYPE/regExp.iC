@@ -1,11 +1,10 @@
-// $Id: regExp.iC,v 1.2 2000/06/27 15:07:54 oliver Exp $
+// $Id: regExp.iC,v 1.3 2000/07/29 18:02:57 amoll Exp $
 
 BALL_INLINE 
 void RegularExpression::set(const RegularExpression& regular_expression, bool /* deep */)
 {
   pattern_.set(regular_expression.pattern_);
-
-  freeCompiledPattern_();
+	regfree(&regex_);
   compilePattern_();
 }
 
@@ -15,10 +14,11 @@ void RegularExpression::set(const String& pattern, bool wildcard_pattern)
   pattern_.set(pattern);
 
   if (wildcard_pattern == true)
+	{
     toExtendedRegularExpression_();
-
-  freeCompiledPattern_();
-  compilePattern_();
+	}
+	regfree(&regex_);
+	compilePattern_();
 }
 
 BALL_INLINE 
@@ -39,9 +39,9 @@ Size RegularExpression::countSubexpressions() const
   if (valid_pattern_ == true)
   {
     return (Size)regex_.re_nsub;
-  } else {
-    return 0;
   }
+
+  return 0;
 }
 
 BALL_INLINE 
