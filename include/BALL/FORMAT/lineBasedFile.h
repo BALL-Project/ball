@@ -117,7 +117,7 @@ namespace BALL
 
 		/** Like search above, but stop search when coming to a line staring with stop
 		*/
-		bool search(const String& text, const String& stop, bool return_to_point)
+		bool search(const String& text, const String& stop, bool return_to_point = false)
 			throw(LineBasedFileError);
 
 		/** Go to a given line.
