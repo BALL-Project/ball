@@ -1,4 +1,4 @@
-// $Id: hashGrid.h,v 1.24 2002/01/15 16:03:37 anker Exp $
+// $Id: hashGrid.h,v 1.25 2002/01/15 16:32:26 anker Exp $
 
 #ifndef BALL_DATATYPE_HASHGRID_H
 #define BALL_DATATYPE_HASHGRID_H
@@ -1014,7 +1014,7 @@ namespace BALL
 			}
 		}
 
-		return processor->finish(); 
+		return processor.finish(); 
 	}
 
 	template<typename Item>  
