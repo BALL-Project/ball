@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.20 2004/04/18 17:44:10 amoll Exp $
+// $Id: molecularFileDialog.C,v 1.21 2004/04/18 17:50:30 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -211,8 +211,7 @@ namespace BALL
 			}
 			else
 			{
-				setStatusbarText("Unknown file format, please set the file " +
-											   "extension accordingly to type, aborting...");
+				setStatusbarText("Unknown file format, please set the file extension accordingly to type, aborting...");
 				return false;
 			}
 
