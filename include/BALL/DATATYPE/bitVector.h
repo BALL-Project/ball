@@ -1,4 +1,4 @@
-// $Id: bitVector.h,v 1.17 2000/11/13 01:54:10 amoll Exp $
+// $Id: bitVector.h,v 1.18 2000/11/13 15:27:14 anker Exp $
 
 #ifndef BALL_DATATYPE_BITVECTOR_H
 #define BALL_DATATYPE_BITVECTOR_H
@@ -48,7 +48,10 @@ namespace BALL
 
 	class BitVector;
 
-	/**	Bit Class
+	/**	Bit Class. This class represents a bit within a BitVector (@see
+	 BitVector). 
+	 \\
+	{\bf Definition:} \URL{BALL/DATATYPE/bitVector.h}
 	*/
 	class Bit
 	{
@@ -60,6 +63,10 @@ namespace BALL
 
 		BALL_CREATE(Bit);
 
+		/** Default constructor 
+		*/
+		Bit() throw();
+
 		/**	Copy constructor
 		*/
 		Bit(const BitVector& bitvector, Index index = 0) throw();
@@ -69,6 +76,7 @@ namespace BALL
 		virtual ~Bit() throw();
 
 		//@}
+
 
 		/**	@name	Converters
 		*/
@@ -92,6 +100,9 @@ namespace BALL
 				Assign a bool value to this instance
 		*/
 		const Bit& operator = (bool bit) throw(Exception::NullPointer);
+
+		/** Clear method */
+		virtual void clear() throw();
 
 		//@}
 
@@ -121,10 +132,6 @@ namespace BALL
 		//@}
 
 		private:
-
-		Bit() throw();
-
-		virtual void clear() throw();
 
 		// --- ATTRIBUTES
 
