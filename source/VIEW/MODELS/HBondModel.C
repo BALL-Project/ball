@@ -1,11 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HBondModel.C,v 1.3 2003/10/17 16:17:36 amoll Exp $
+// $Id: HBondModel.C,v 1.4 2003/11/10 15:55:09 amoll Exp $
 
 #include <BALL/VIEW/MODELS/HBondModel.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
+#include <BALL/VIEW/PRIMITIVES/disc.h>
 
 using namespace std;
 
@@ -16,13 +17,15 @@ namespace BALL
 
 HBondModelProcessor::HBondModelProcessor()
 	throw()
-	: AtomBondModelBaseProcessor()
+	: AtomBondModelBaseProcessor(),
+		radius_(0.3)
 {
 }
 
 HBondModelProcessor::HBondModelProcessor(const HBondModelProcessor& model)
 	throw()
-	: AtomBondModelBaseProcessor(model)
+	: AtomBondModelBaseProcessor(model),
+		radius_(model.radius_)
 {
 }
 
@@ -39,6 +42,7 @@ void HBondModelProcessor::clear()
 	throw()
 {
 	AtomBondModelBaseProcessor::clear();
+	radius_ = 0.3;
 }
 
 void HBondModelProcessor::set(const HBondModelProcessor& model)
@@ -76,19 +80,35 @@ Processor::Result HBondModelProcessor::operator() (Composite& composite)
 
 	Atom *atom = RTTI::castTo<Atom>(composite);
 	Atom* partner = (Atom*) atom->getProperty("HBOND_DONOR").getObject();
-
 	if (!partner) return Processor::CONTINUE;
-	// generate single colored tube
-	Tube *tube = new Tube;
-	if (tube == 0) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Tube));
-						
-	tube->setRadius(0.3);
-	tube->setComposite(atom);
-	tube->setVertex1Address(atom->getPosition());
-	tube->setVertex2Address(partner->getPosition());
-	tube->setColor(ColorRGBA(0.0,0,0.5));
-	geometric_objects_.push_back(tube);
-	
+
+	// generate tubes
+	Vector3 v = partner->getPosition() - atom->getPosition();
+	Vector3 last = atom->getPosition() + v / 4.5;
+	for (Position p = 0; p < 3; p++)
+	{
+		Tube *tube = new Tube;
+		if (tube == 0) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Tube));
+							
+		tube->setRadius(radius_);
+		tube->setComposite(atom);
+		tube->setVertex1(last);
+		tube->setVertex2(last + (v / 8));
+		geometric_objects_.push_back(tube);
+
+		Disc* disc = new Disc(Circle3(last, v, radius_));
+		if (!disc) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Disc));
+		disc->setComposite(atom);
+		geometric_objects_.push_back(disc);
+
+		disc = new Disc(Circle3(last + (v / 8), v, radius_));
+		if (!disc) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Disc));
+		disc->setComposite(atom);
+		geometric_objects_.push_back(disc);
+
+		last += (v /4);
+	}
+
 	return Processor::CONTINUE;
 }
 
