@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FFT2D.h,v 1.9 2003/08/26 08:04:20 oliver Exp $
+// $Id: FFT2D.h,v 1.10 2004/05/18 11:21:46 amoll Exp $
 //
 
 #ifndef BALL_MATHS_FFT2D_H
@@ -123,7 +123,7 @@ namespace BALL
 			/** Translate the origin in physical space about {\em trans_origin},
 					i.e. the new origin will be located at the former position {\em trans_origin}.
 					If the result is out of bounds, the function does nothing and
-					returns {\em false}.
+					returns <b>  false </b>.
 			 */
 			bool translate(const Vector2& trans_origin)
 				throw();
@@ -131,7 +131,7 @@ namespace BALL
 			/** Set the step width in physical space to {\em new_width_x, new_width_y}.
 				The step width in fourier space is automatically adjusted
 				accordingly. {\em new_width_x and new_width_y} must be positive, otherwise
-				the function does nothing and retuns {\em false}.
+				the function does nothing and retuns <b>  false </b>.
 			 */
 			bool setPhysStepWidth(double new_width_x, double new_width_y)
 				throw();
@@ -196,7 +196,7 @@ namespace BALL
 			double getFourierSpaceMaxY() const
 				throw();
 
-			/** Returns the data at the grid position closest to {\em pos},
+			/** Returns the data at the grid position closest to <b>  pos </b>,
 				and automatically includes
 				the correct phase factor and (symmetric) normalization.
 			 */
@@ -211,21 +211,21 @@ namespace BALL
 			Complex getInterpolatedValue(const Vector2& pos) const
 				throw(Exception::OutOfGrid);
 
-			/** Sets the data point at the grid position closest to {\em pos}
-				to the value {\em val}, and -- if called in fourier space --
+			/** Sets the data point at the grid position closest to <b>  pos </b>
+				to the value <b>  val </b>, and -- if called in fourier space --
 				automatically includes the correct phase factor and 
 				(symmetric) normalization.
 			 */
 			void setData(const Vector2& pos, Complex val)
 				throw(Exception::OutOfGrid);
 
-			/** Access the data at the grid position closest to {\em pos}.
+			/** Access the data at the grid position closest to <b>  pos </b>.
 				This function returns the "raw" data at that position.
 			 */
 			FFTW_COMPLEX& operator[](const Vector2& pos)
 				throw(Exception::OutOfGrid);
 
-			/** Access the data at the grid position closest to {\em pos}.
+			/** Access the data at the grid position closest to <b>  pos </b>.
 			 		This function returns the "raw" data at that position.
 				*/
 			const FFTW_COMPLEX& operator[](const Vector2& pos) const

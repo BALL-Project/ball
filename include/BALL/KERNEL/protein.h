@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: protein.h,v 1.29 2003/08/26 08:04:19 oliver Exp $ 
+// $Id: protein.h,v 1.30 2004/05/18 11:21:45 amoll Exp $ 
 //
 
 #ifndef BALL_KERNEL_PROTEIN_H
@@ -112,7 +112,7 @@ namespace BALL
 		Protein& operator = (const Protein& protein)
 			throw();
 
-		/** Copy this instance to {\em protein}.
+		/** Copy this instance to <b>  protein </b>.
 				The assignment is either deep or shallow (default).
 				@param  protein the Protein to be assigned to
 		*/
@@ -313,7 +313,7 @@ namespace BALL
 
 		/** Internal state dump.
 				Dump the current internal state  to the output 
-				ostream {\em s} with dumping depth {\em depth}.
+				ostream <b>  s </b> with dumping depth <b>  depth </b>.
 				@param	s output stream where to output the internal state 
 				@param  depth the dumping depth
 		*/

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.h,v 1.66 2004/05/17 14:36:08 amoll Exp $
+// $Id: atom.h,v 1.67 2004/05/18 11:21:43 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_ATOM_H
@@ -177,8 +177,8 @@ namespace BALL
 					 \par
 					<b>Note:</b> Deep copying of atoms does not include bond cloning.
 					@param   atom the atom to be copied (cloned)
-					@param   deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of {\em atom}
-					@return  Atom - new constructed atom cloned from {\em atom}
+					@param   deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy of <b>  atom </b>
+					@return  Atom - new constructed atom cloned from <b>  atom </b>
 					@see     Composite::Composite
 					@see     PropertyManager::PropertyManager
 			*/
@@ -517,33 +517,33 @@ namespace BALL
 				throw();
 
 			/** Set the atom velocity
-					BALL uses units of {\AA}/ps for the velocity.
+					BALL uses units of \f$ {\AA}/ps \f$ for the velocity.
 			*/
 			void setVelocity(const Vector3& velocity)
 				throw();
 
 			/** 
-					BALL uses units of {\AA}/ps for the velocity.
+					BALL uses units of \f$ {\AA}/ps \f$ for the velocity.
 					@return  Vector3& - constant reference to the velocity vector
 			*/
 			const Vector3& getVelocity() const
 				throw();
 
 			/** Change the atom's force vector.
-					BALL uses units of {\em Newton} (1 N = 1 J/m) as the unit of force.
+					BALL uses units of <b>Newton</b> (1 N = 1 J/m) as the unit of force.
 			*/
 			void setForce(const Vector3& force)
 				throw();
 
 			/** Mutable inspection of the atom's force vector.
-					BALL uses units of {\em Newton} (1 N = 1 J/m) as the unit of force.
+					BALL uses units of <b>Newton</b> (1 N = 1 J/m) as the unit of force.
 					@return  Vector3& - mutable reference to the force vector
 			*/
 			Vector3& getForce()
 				throw();
 
 			/** Constant inspection of the atom's force vector.
-					BALL uses units of {\em Newton} (1 N = 1 J/m) as the unit of force.
+					BALL uses units of <b>Newton</b> (1 N = 1 J/m) as the unit of force.
 					@return  Vector3& - constant reference to the force vector
 			*/
 			const Vector3& getForce() const
@@ -556,7 +556,7 @@ namespace BALL
 				throw();
 
 			/** Mutable inspection of an atom's indexed bond.
-					The reference is 0 if this instance does not have a bond with index {\em index}. \par
+					The reference is 0 if this instance does not have a bond with index <b>  index </b>. \par
 					<b>Note:</b> No corresponding mutator Atom::setBond exists to
 					consider design of contract - an atom may not insert a bond in its bond table at a given index.
 					The atom's bond table is an implementation detail that is not relevant to and should not be relied
@@ -564,14 +564,14 @@ namespace BALL
 					 \link Atom::createBond Atom::createBond \endlink .
 					@param   index the index of the bond to be accessed to
 					@return  Bond* - mutable pointer to the bond that is indexed in this instance's bond table,
-									 0 if this instance does not have a bond with index {\em index}
+									 0 if this instance does not have a bond with index <b>  index </b>
 					@exception   IndexOverflow if <tt>index > MAX_NUMBER_OF_BONDS</tt>
 			*/
 			Bond* getBond(Position index)
 				throw(Exception::IndexOverflow);
 
 			/** Constant inspection of an atom's indexed bond.
-					The reference is 0 if this instance does not have a bond with index {\em index}. \par
+					The reference is 0 if this instance does not have a bond with index <b>  index </b>. \par
 					<b>Note:</b> No corresponding mutator Atom::setBond exists to
 					consider design of contract - an atom may not insert a bond in its bond table at a given index.
 					The atom's bond table is an implementation detail that is not relevant to and should not be relied
@@ -579,27 +579,27 @@ namespace BALL
 					 \link Atom::createBond Atom::createBond \endlink .
 					@param   index the index of the bond to be accessed to
 					@return  Bond* - constant pointer to the bond that is indexed in this instance's bond table,
-									 0 if this instance does not have a bond with index {\em index}
+									 0 if this instance does not have a bond with index <b>  index </b>
 					@exception   IndexOverflow if <tt>index > MAX_NUMBER_OF_BONDS</tt>
 			*/
 			const Bond* getBond(Position index) const
 				throw(Exception::IndexOverflow);
 
 			/** Mutable inspection of an atom's bond with another atom.
-					The reference is 0 if this instance does not have a bond with {\em atom}.
+					The reference is 0 if this instance does not have a bond with <b>  atom </b>.
 					@param   atom the atom that is considered to have a bond with this instance
 					@return  Bond* - mutable pointer to the bond that connects <tt>atom</tt>  with this instance,
-									 0 if this instance does not have a bond with {\em atom}
+									 0 if this instance does not have a bond with <b>  atom </b>
 					@see     Atom::createBond	     
 			*/
 			Bond* getBond(const Atom& atom)
 				throw();
 
 			/** Constant inspection of an atom's bond with another atom.
-					The reference is 0 if this instance does not have a bond with {\em atom}.
+					The reference is 0 if this instance does not have a bond with <b>  atom </b>.
 					@param   atom the atom that is considered to have a bond with this instance
-					@return  Bond* - constant pointer to the bond that connects {\em atom} with 
-									 this instance, 0 if this instance does not have a bond with {\em atom}
+					@return  Bond* - constant pointer to the bond that connects <b>  atom </b> with 
+									 this instance, 0 if this instance does not have a bond with <b>  atom </b>
 					@see     Atom::createBond	     
 			*/
 			const Bond* getBond(const Atom& atom) const
@@ -611,22 +611,22 @@ namespace BALL
 			//@{ 
 
 			/** Bond creation.
-					Create a new instance of  \link Bond Bond \endlink  connecting this instance to {\em atom}.
+					Create a new instance of  \link Bond Bond \endlink  connecting this instance to <b>  atom </b>.
 					Calls  \link Bond::createBond Bond::createBond \endlink .
 					The state of the bond is initialized to the default values.
-					@return  Bond* - default initialized Bond instance that connects this instance to {\em atom}
+					@return  Bond* - default initialized Bond instance that connects this instance to <b>  atom </b>
 					@see     Bond::createBond
 			*/
 			Bond* createBond(Atom& atom)
 				throw();
 
 			/** Extended bond creation.
-					Initialize the bond {\em bond} to connect this instance to {\em atom}.
+					Initialize the bond <b>  bond </b> to connect this instance to <b>  atom </b>.
 					Calls  \link Bond::createBond Bond::createBond \endlink .
 					The state of the bond is initialzed to the default values. \par
 					<b>Note:</b> This method is recommended for use if a subclass of the  \link Bond Bond \endlink 
 									 is to be used as the new bond. This permits extensibility of bonds to the framework client.
-					@return  Bond* - default initialized bond {\em bond} that connects this instance to {\em atom}
+					@return  Bond* - default initialized bond <b>  bond </b> that connects this instance to <b>  atom </b>
 					@see     Bond::createBond
 			*/
 			Bond* createBond(Bond& bond, Atom& atom)
@@ -638,7 +638,7 @@ namespace BALL
 				throw();
 
 			/** Explicit bond destruction.
-					Destroy the bond connecting {\em *this atom} and {\em atom} explicitly.
+					Destroy the bond connecting {\em *this atom} and <b>  atom </b> explicitly.
 					If the bond is auto-deletable the default destructor is called 
 					otherwise  \link Bond::destroy Bond::destroy \endlink . \par
 					<b>Note:</b> This method is recommended to destroy a bond of an atom explicitly
@@ -672,7 +672,7 @@ namespace BALL
 
 			/** Determine whether the atom takes part in a certain bond.
 					@param   bond the bond in question
-					@return  bool <tt>true</tt> if the bond {\em bond} connects this instance with another atom,
+					@return  bool <tt>true</tt> if the bond <b>  bond </b> connects this instance with another atom,
 										    <tt>false</tt> otherwise
 					@see     Atom::hasBond
 			*/
@@ -682,7 +682,7 @@ namespace BALL
 			/** Determine whether the atom is bound to another.
 					Calls  \link Atom::getBond Atom::getBond \endlink .
 					@param   atom the atom in question
-					@return  bool - <tt>true</tt> if bond connects {\em atom} with {\em *this atom},
+					@return  bool - <tt>true</tt> if bond connects <b>  atom </b> with {\em *this atom},
 													<tt>false</tt> otherwise
 					@see     Atom::getBond
 			*/
@@ -728,7 +728,7 @@ namespace BALL
 
 			/** Internal state dump.
 					Dump the current internal state of this instance to 
-					the output ostream {\em s} with dumping depth {\em depth}.
+					the output ostream <b>  s </b> with dumping depth <b>  depth </b>.
 					@param   s - output stream where to output the internal state
 					@param   depth - the dumping depth
 			*/

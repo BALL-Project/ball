@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: EFShiftProcessor.h,v 1.20 2003/08/26 08:04:44 oliver Exp $
+// $Id: EFShiftProcessor.h,v 1.21 2004/05/18 11:21:48 amoll Exp $
 //
 
 #ifndef BALL_NMR_EFSHIFTPROCESSOR_H
@@ -168,7 +168,7 @@ namespace BALL
 		/*_	A cut off value for the electric field effect.
 				Any effector that is further away than this cut off is ignored.
 				The distance is read from the option {\tt cut_off} in the 
-				section {\tt ElectricFieldEffect} from the parameter file.
+				section <TT>  ElectricFieldEffect </TT> from the parameter file.
 				This member contains the squared value(!) of the distance.
 		*/
 		float										cut_off2_;

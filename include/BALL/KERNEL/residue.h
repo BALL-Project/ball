@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residue.h,v 1.42 2004/05/17 14:36:09 amoll Exp $
+// $Id: residue.h,v 1.43 2004/05/18 11:21:45 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_RESIDUE_H
@@ -411,7 +411,7 @@ namespace BALL
 
 		/** Internal state dump.
 				Dump the current internal state to the output
-				ostream {\em s} with dumping depth {\em depth}.
+				ostream <b>  s </b> with dumping depth <b>  depth </b>.
 				@param	s output stream where to output the internal state
 				@param  depth the dumping depth
 		*/

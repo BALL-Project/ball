@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: quaternion.h,v 1.40 2004/02/23 17:26:02 anhi Exp $
+// $Id: quaternion.h,v 1.41 2004/05/18 11:21:47 amoll Exp $
 //
 
 #ifndef BALL_MATHS_QUATERNION_H
@@ -55,7 +55,7 @@ namespace BALL
 			throw();
 
 		/**	Detailed constructor.
-				Create a new TQuaternion object from a variable of type {\em TVector3} and an angle.
+				Create a new TQuaternion object from a variable of type <b>  TVector3 </b> and an angle.
 				@param axis assigned to the axis
 				@param new_angle assigned to the angle
 		*/
@@ -215,7 +215,7 @@ namespace BALL
 
 		/** Internal state dump.
 				Dump the current internal state of {\em *this} to 
-				the output ostream {\em s} with dumping depth {\em depth}.
+				the output ostream <b>  s </b> with dumping depth <b>  depth </b>.
 				@param   s - output stream where to output the internal state of {\em *this}
 				@param   depth - the dumping depth
 		*/

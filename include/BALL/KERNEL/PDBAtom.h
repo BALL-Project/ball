@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBAtom.h,v 1.32 2003/08/26 08:04:15 oliver Exp $
+// $Id: PDBAtom.h,v 1.33 2004/05/18 11:21:43 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_PDBATOM_H
@@ -312,7 +312,7 @@ namespace BALL
 
 		/** Internal state dump.
 				Dump the current internal state of {\em *this} to the 
-				output ostream {\em s} with dumping depth {\em depth}.
+				output ostream <b>  s </b> with dumping depth <b>  depth </b>.
 				@param	s output stream where to output the internal state of the instance
 				@param  depth the dumping depth
 		*/

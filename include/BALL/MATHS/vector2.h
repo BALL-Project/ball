@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector2.h,v 1.20 2004/02/23 15:20:01 anhi Exp $
+// $Id: vector2.h,v 1.21 2004/05/18 11:21:47 amoll Exp $
 //
 
 #ifndef BALL_MATHS_VECTOR2_H
@@ -390,7 +390,7 @@ namespace BALL
 
 		/** Internal state dump.
 				Dump the current internal state of {\em *this} to 
-				the output ostream {\em s} with dumping depth {\em depth}.
+				the output ostream <b>  s </b> with dumping depth <b>  depth </b>.
 				@param   s - output stream where to output the internal state of {\em *this}
 				@param   depth - the dumping depth
 		*/

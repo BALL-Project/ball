@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomContainer.h,v 1.29 2004/05/04 18:45:48 oliver Exp $
+// $Id: atomContainer.h,v 1.30 2004/05/18 11:21:44 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_ATOMCONTAINER_H
@@ -227,7 +227,7 @@ namespace BALL
 		const Atom* getAtom(Position position) const
 			throw();
 	
-		/** Get a pointer to a child atom with the name {\em name}.
+		/** Get a pointer to a child atom with the name <b>  name </b>.
 				The pointer is 0 if this instance does not have an atom with this
 				name.
 				@param   name the name of the child atom
@@ -236,7 +236,7 @@ namespace BALL
 		Atom* getAtom(const String& name)
 			throw();
 	
-		/** Get a pointer to a child atom with the name {\em name}.
+		/** Get a pointer to a child atom with the name <b>  name </b>.
 				The pointer is 0 if this instance AtomContainer does not have an
 				atom with this name.
 				@param   name the name of the child atom
@@ -416,7 +416,7 @@ namespace BALL
 
 		/** Internal state dump.
 				Dump the current internal state of this instance to the 
-				output ostream {\em s} with dumping depth {\em depth}.
+				output ostream <b>  s </b> with dumping depth <b>  depth </b>.
 				@param   s - output stream where to output the internal state of this instance
 				@param   depth - the dumping depth
 		*/

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: secondaryStructure.h,v 1.39 2004/05/17 14:36:09 amoll Exp $
+// $Id: secondaryStructure.h,v 1.40 2004/05/18 11:21:45 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_SECONDARYSTRUCTURE_H
@@ -303,8 +303,8 @@ namespace BALL
 		virtual bool isValid() const throw();
 
 		/** Internal state dump.
-				Dump the current internal state of this instance to the output ostream {\em s} 
-				with dumping depth {\em depth}.
+				Dump the current internal state of this instance to the output ostream <b>  s </b> 
+				with dumping depth <b>  depth </b>.
 				@param	s output stream where to output the internal state of this instance
 				@param  depth the dumping depth
 		*/

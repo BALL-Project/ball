@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pairExpRDFIntegrator.h,v 1.21 2003/08/26 08:04:49 oliver Exp $
+// $Id: pairExpRDFIntegrator.h,v 1.22 2004/05/18 11:21:48 amoll Exp $
 //
 
 #ifndef BALL_SOLVATION_PAIREXPRDFINTEGRATOR_H
@@ -279,13 +279,13 @@ namespace BALL
 		/*_ Project a number from the integration beam to the projection beam
 				of an atom center for the rdf thingy. 
 				@param x the value to be projected
-				@return the projection of {\em x}
+				@return the projection of <b>  x </b>
 		*/
 		double project(double x) const throw();
 
 		/*_ Do the reverse of project(). 
 				@param x the valut to be reversly projected
-				@return the projection of {\em x}
+				@return the projection of <b>  x </b>
 		*/
 		double unproject(double x) const throw();
 

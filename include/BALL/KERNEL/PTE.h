@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PTE.h,v 1.27 2004/05/17 14:36:08 amoll Exp $
+// $Id: PTE.h,v 1.28 2004/05/18 11:21:43 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_PTE_H
@@ -511,7 +511,7 @@ namespace BALL
 
 			/** Less operator.
 					Tests if the atomic number of this instance is less
-					compared with {\em element}.
+					compared with <b>  element </b>.
 					@param element the Element to compare with
 					@return bool
 			*/
@@ -520,7 +520,7 @@ namespace BALL
 
 			/** Less or equal operator.
 					Tests if the atomic number of this instance is less
-					or equal compared with {\em element}.
+					or equal compared with <b>  element </b>.
 					@param element the Element to compare with
 					@return bool
 			*/
@@ -529,7 +529,7 @@ namespace BALL
 
 			/** Greater or equal operator.
 					Tests if the atomic number of this instance is greater
-					or equal compared with {\em element}.
+					or equal compared with <b>  element </b>.
 					@param element the Element to compare with
 					@return bool
 			*/
@@ -538,7 +538,7 @@ namespace BALL
 
 			/** Greater operator.
 					Tests if the atomic number of this instance is greater
-					than {\em element}.
+					than <b>  element </b>.
 					@param element the Element to compare with
 					@return bool
 			*/
@@ -546,7 +546,7 @@ namespace BALL
 				throw();
 
 			/**	Output operator
-					Prints {\em this} instance of Element.
+					Prints <b>  this </b> instance of Element.
 			*/
 			friend std::ostream& operator << (std::ostream& s, const Element& element)
 				throw();
@@ -715,13 +715,13 @@ namespace BALL
 
 			/** Return the element at a given position in the PTE.
 					The position is equal to the atomic number.
-					@return Element the static Element at the position {\em position}
+					@return Element the static Element at the position <b>  position </b>
 			*/
 			static Element& getElement(Position position)
 				throw();
 		
 			/** Return the element with a given symbol.
-					@return Element the static Element with the symbol {\em symbol}
+					@return Element the static Element with the symbol <b>  symbol </b>
 			*/
 			static Element& getElement(const String& symbol)
 				throw();
@@ -739,49 +739,49 @@ namespace BALL
 				throw();
 
 			/** Access operator with a given symbol.
-					@return Element the Element with the symbol {\em symbol}
+					@return Element the Element with the symbol <b>  symbol </b>
 			*/
 			Element& operator [] (const String& symbol)
 				throw();
 
 			/** Access operator with a given symbol.
-					@return Element the const Element with the symbol {\em symbol}
+					@return Element the const Element with the symbol <b>  symbol </b>
 			*/
 			const Element& operator [] (const String& symbol) const
 				throw();
 
 			/** Access operator with a given name.
-					@return Element the Element with the name {\em name}
+					@return Element the Element with the name <b>  name </b>
 			*/
 			Element& operator [] (Element::Name name)
 				throw();
 
 			/** Access operator with a given name.
-					@return Element the const Element with the name {\em name}
+					@return Element the const Element with the name <b>  name </b>
 			*/
 			const Element& operator [] (Element::Name name) const
 				throw();
 
 			/** Access operator with a given Element::Symbol.
-					@return Element the Element with the symbol {\em symbol}
+					@return Element the Element with the symbol <b>  symbol </b>
 			*/
 			Element& operator [] (Element::Symbol symbol)
 				throw();
 
 			/** Access operator with a given Element::Symbol.
-					@return Element the const Element with the symbol {\em symbol}
+					@return Element the const Element with the symbol <b>  symbol </b>
 			*/
 			const Element& operator [] (Element::Symbol symbol) const
 				throw();
 
 			/** Access operator with a given position.
-					@return Element the Element with the position {\em position}
+					@return Element the Element with the position <b>  position </b>
 			*/
 			Element& operator [] (Position position)
 				throw();
 
 			/** Access operator with a given position.
-					@return Element the const Element with the position {\em position}
+					@return Element the const Element with the position <b>  position </b>
 			*/
 			const Element& operator [] (Position position) const
 				throw();

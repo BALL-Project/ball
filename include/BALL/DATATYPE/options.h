@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: options.h,v 1.22 2004/05/17 14:36:44 amoll Exp $
+// $Id: options.h,v 1.23 2004/05/18 11:21:43 amoll Exp $
 //
 
 #ifndef BALL_DATATYPE_OPTIONS_H
@@ -97,7 +97,7 @@ namespace BALL
 		/**		Returns true, if the value associated with the 
 					given key is an integer
 					@param	key String
-					@return	true, if {\em key} is an integer
+					@return	true, if <b>  key </b> is an integer
 		*/
 		bool isInteger(const String& key) const throw();
 
@@ -106,14 +106,14 @@ namespace BALL
 					A boolean entry has either the value <tt>true</tt>
 					or <tt>false</tt>. 
 					@param	key String
-					@return	true, if {\em key} is a boolean value
+					@return	true, if <b>  key </b> is a boolean value
 		*/
 		bool isBool(const String& key) const throw();
 
 		/**		Returns true, if the value associated with the 
 					given key is a real number
 					@param	key String
-					@return	true, if {\em key} is a real number
+					@return	true, if <b>  key </b> is a real number
 		*/
 		bool isReal(const String& key) const throw();
 
@@ -123,7 +123,7 @@ namespace BALL
 					#(<float> <float> <float>)# where #<float>#
 					represents an arbitrary floating point number.
 					@param					key String
-					@return					true, if {\em} key represents a 3D vector of reals
+					@return					true, if <b>  </b> key represents a 3D vector of reals
 		*/
 		bool isVector(const String& key) const throw();
 

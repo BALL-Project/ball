@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: property.h,v 1.36 2004/02/23 15:19:57 anhi Exp $
+// $Id: property.h,v 1.37 2004/05/18 11:21:42 amoll Exp $
 //
 
 #ifndef BALL_CONCEPT_PROPERTY_H
@@ -316,7 +316,7 @@ namespace BALL
 			class' attributes without changing its interface.
 			There are different types of properties defined depending 
 			on the kind of data stored. The simplest kind of property 
-			is just stored as a boolean information: Either an object {\em has}
+			is just stored as a boolean information: Either an object <b>  has </b>
 			a certain property, or it does not. These properties are obviously coded 
 			as a BitVector. However the meaning of the different bits has to be
 			defined and the uniqueness of this meaning has to be guaranteed. In
@@ -467,7 +467,7 @@ namespace BALL
 
 		/** Count all properties.
 				This method returns the sum of unnamed and named properties.
-				It counts the number of {\em ones} in the bit vector
+				It counts the number of <b>  ones </b> in the bit vector
 				and the number of properties stored in the named property vector.
 		*/
 		Size countProperties() const
@@ -477,7 +477,7 @@ namespace BALL
 
 		/**	@name	Handling named properties 
 				PropertyManager contains an vector of  \link NamedProperty NamedProperty \endlink  objects.
-				Each of the NamedProeprty objects has to have a {\em unique} name.
+				Each of the NamedProeprty objects has to have a <b>  unique </b> name.
 				The setProperty methods ensure the uniqueness of this name.
 				If a setProperty method is called for an existing name, the
 				existing object is destructed prior to the insertion of the new object.
@@ -661,7 +661,7 @@ namespace BALL
 	
 		/** Internal state dump.
 				Dump the current internal state of {\em *this} to 
-				the output ostream {\em s} with dumping depth {\em depth}.
+				the output ostream <b>  s </b> with dumping depth <b>  depth </b>.
 				@param   s - output stream where to output the internal state of {\em *this}
 				@param   depth - the dumping depth
 		*/

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.h,v 1.62 2004/03/20 13:22:25 oliver Exp $
+// $Id: file.h,v 1.63 2004/05/18 11:21:49 amoll Exp $
 //
 
 #ifndef BALL_SYSTEM_FILE_H
@@ -116,7 +116,7 @@ namespace BALL
 						without any file type suffix (i.e. anything after the last dot in the filename is removed)
 					- <tt>%f[suffix]</tt> is replaced by the previous content of <tt>name</tt> without the <tt>suffix</tt>
 					- <tt>%b</tt> and <tt>%b[suffix]</tt> like <tt>%f</tt> and {\tt %f[suffix]}, except that the
-								path is removed as well, so it is only the {\em base name} of the file
+								path is removed as well, so it is only the <b>  base name </b> of the file
 					- <tt>%p</tt> the path to the file
 					- <tt>%t</tt> a temporary file name (all occurences of <tt>%t</tt> are replace 
 							with the same file name for the same invocation of  \link transform transform \endlink,
@@ -253,7 +253,7 @@ namespace BALL
 		File()
 			throw();
 
-		/** Construct new File object from the file {\em name} and open the file.
+		/** Construct new File object from the file <b>  name </b> and open the file.
 				@param  name the name of the file to be opend
 				@param  open_mode the openmode to be used
 				@see    open
@@ -286,7 +286,7 @@ namespace BALL
 		//@{
 
 		/** Assignment operator.
-				Assign the filename from {\em file}.
+				Assign the filename from <b>  file </b>.
 				The file is not opend.
 		*/
 		const File& operator = (const File& file)

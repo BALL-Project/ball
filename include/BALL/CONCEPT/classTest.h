@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: classTest.h,v 1.53 2004/03/07 20:17:01 oliver Exp $
+// $Id: classTest.h,v 1.54 2004/05/18 11:21:42 amoll Exp $
 //
 
 #ifndef BALL_SYSTEM_H
@@ -190,7 +190,7 @@ int main(int argc, char **argv)\
 		in your test program. If the test program is called in verbose mode,
 		this leads to the name of the subtest being printed on execution. \par
 		This macro also opens a <tt>try</tt> block to catch any unexpected exceptions thrown
-		in the course of a subtest. To catch {\em wanted} exceptions (i.e. to check for exceptions that are
+		in the course of a subtest. To catch <b>  wanted </b> exceptions (i.e. to check for exceptions that are
 		the expected result of some command) use the  \link #TEST_EXCEPTION TEST_EXCEPTION \endlink  macro.
 		The <tt>try</tt> block opened by CHECK is closed in  \link #RESULT RESULT \endlink , so these two macros
 		have to be balanced.

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: iterator.h,v 1.25 2003/08/26 08:04:18 oliver Exp $
+// $Id: iterator.h,v 1.26 2004/05/18 11:21:44 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_ITERATOR_H
@@ -151,7 +151,7 @@ namespace BALL
 		inline bool isBegin() const throw();
 
 		/** Return true if the iterator is beyond the last element of the container.
-				@exception InvalidIterator if the iterator is {\em singular}
+				@exception InvalidIterator if the iterator is <b>  singular </b>
 				@see isSingular
 		*/
 		inline bool isEnd() const throw() 
@@ -160,13 +160,13 @@ namespace BALL
 		}
 
 		/** Return true if the iterator is at the last element of the container.
-				@exception InvalidIterator if the iterator is {\em singular}
+				@exception InvalidIterator if the iterator is <b>  singular </b>
 				@see isSingular
 		*/
 		inline bool isRBegin() const throw();
 			
 		/** Return true if the iterator is beyond the first element of the container.
-				@exception InvalidIterator if the iterator is {\em singular}
+				@exception InvalidIterator if the iterator is <b>  singular </b>
 				@see isSingular
 		*/
 		inline bool isREnd() const	throw();
@@ -185,13 +185,13 @@ namespace BALL
 		inline void invalidate() throw();
 
 		/**	Reposition the iterator to the first element of the container.
-				@exception InvalidIterator if the iterator is {\em singular}.
+				@exception InvalidIterator if the iterator is <b>  singular </b>.
 				@see isSingular
 		*/
 		inline void toBegin() throw(Exception::Precondition);
 
 		/**	Reposition the iterator after the last element of the container.
-				@exception InvalidIterator if the iterator is {\em singular}.
+				@exception InvalidIterator if the iterator is <b>  singular </b>.
 				@see isSingular
 		*/
 		inline void toEnd() throw(Exception::Precondition);

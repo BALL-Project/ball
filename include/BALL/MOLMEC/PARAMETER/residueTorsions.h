@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residueTorsions.h,v 1.17 2003/08/26 08:04:28 oliver Exp $
+// $Id: residueTorsions.h,v 1.18 2004/05/18 11:23:08 amoll Exp $
 //
 
 // Molecular Mechanics Parameter: class describing the ResidueTorsions section of a parameter file
@@ -105,7 +105,7 @@ namespace BALL
 		*/
 		Size getNumberOfResidueTorsions(const String& residue_name) const;
 
-		/**	Assign the {\it i}th torsion for a residue.
+		/**	Assign the <i>  i </i>th torsion for a residue.
 				@param	name the residue name (including modifiers like -S or -N);
 				@param  i the index. 0 $<$ <tt>i</tt> $<$  \link getNumberOfResidueTorsions getNumberOfResidueTorsions \endlink 
 				@param	ResidueTorsion the torsion to be assigned to

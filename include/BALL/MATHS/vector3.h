@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector3.h,v 1.70 2004/02/23 15:20:01 anhi Exp $
+// $Id: vector3.h,v 1.71 2004/05/18 11:21:47 amoll Exp $
 //
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -48,7 +48,7 @@ namespace BALL
 		throw();
 
 	/**	Input operator.
-			Reads the values of <tt>three</tt> vector components of type {\em T}
+			Reads the values of <tt>three</tt> vector components of type <b>  T </b>
 			from an istream. The components are read in the order of x, y, z.
 	*/
 	template <typename T>
@@ -56,7 +56,7 @@ namespace BALL
 		throw();
 
 	/**	Output operator.
-			Writes the values of <tt>three</tt> vector components of type {\em T}
+			Writes the values of <tt>three</tt> vector components of type <b>  T </b>
 			to an ostream. The components are writen in the order of x, y, z.
 	*/
 	template <typename T>
@@ -512,7 +512,7 @@ namespace BALL
 
 		/** Internal state dump.
 				Dump the current internal state of {\em *this} to 
-				the output ostream {\em s} with dumping depth {\em depth}.
+				the output ostream <b>  s </b> with dumping depth <b>  depth </b>.
 				@param   s - output stream where to output the internal state of {\em *this}
 				@param   depth - the dumping depth
 		*/

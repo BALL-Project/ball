@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentDB.h,v 1.31 2004/05/10 12:12:35 amoll Exp $
+// $Id: fragmentDB.h,v 1.32 2004/05/18 11:21:49 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_FRAGMENTDB_H
@@ -431,7 +431,7 @@ namespace BALL
 
 			/*_	The number of bonds built.
 					This value is reset in the start method, so each application of 
-					the processor, so {\tt getNumberOfBuiltBonds} always returns
+					the processor, so <TT>  getNumberOfBuiltBonds </TT> always returns
 					the number of bonds built in the last application.
 			*/
 			Size	bonds_built_;
@@ -485,7 +485,7 @@ namespace BALL
 				fragment. All properties of fragment and residue are recognized, if they
 				are written exactly as in the header file (case insensitive) and set.
 				Unknown properties are set as name/value pairs as bool properties and set to 
-				{\bf true}.
+				<b>  true </b>.
 		*/
 		void parseProperties_(ResourceEntry& entry, PropertyManager& property_man);
 
@@ -507,7 +507,7 @@ namespace BALL
 		void expandTree_(ResourceEntry& root_entry);
 	 
 		/*_	Expands the first occuring include directive.
-				If no include directive is found, {\bf false} is returned, otherwise {\bf true}.
+				If no include directive is found, <b>  false </b> is returned, otherwise <b>  true </b>.
 		*/
 		bool expandFirst_(ResourceEntry& root_entry)
 			throw(Exception::FileNotFound);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragment.h,v 1.26 2003/08/26 08:04:17 oliver Exp $
+// $Id: fragment.h,v 1.27 2004/05/18 11:21:44 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_FRAGMENT_H
@@ -112,7 +112,7 @@ namespace BALL
 
 		/** Internal state dump.
 				Dump the current internal state to the output ostream 
-				{\em s} with dumping depth {\em depth}.
+				<b>  s </b> with dumping depth <b>  depth </b>.
 				@param   s - output stream where to output the internal state
 				@param   depth - the dumping depth
 		*/

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: numericalSAS.h,v 1.25 2004/02/18 23:24:05 oliver Exp $
+// $Id: numericalSAS.h,v 1.26 2004/05/18 11:21:49 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_NUMERICALSAS_H
@@ -31,7 +31,7 @@ namespace BALL
 			and Scharf ("The Double Cubic Lattice Method: Efficient Approaches to 
 			numerical Integration of Surface Area and Volume and to Dot
 			Surface Contouring of Molecular Assemblies", J. Comput. Chem. (1995),
-			{\em 15}, 273-284).
+			<b>  15 </b>, 273-284).
 	
 			\ingroup Surface
 			@{

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RDFParameter.h,v 1.17 2004/02/23 17:26:04 anhi Exp $
+// $Id: RDFParameter.h,v 1.18 2004/05/18 11:21:49 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_RDFPARAMETER_H
@@ -64,7 +64,7 @@ namespace BALL
 
 		/** Assignment operator 
 				@param rdf_parameter the parameter to assign from
-				@return a const reference to {\em this}
+				@return a const reference to <b>  this </b>
 		*/
 		const RDFParameter& operator = (const RDFParameter& rdf_parameter)
 			throw();

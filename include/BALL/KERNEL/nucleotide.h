@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nucleotide.h,v 1.34 2004/05/17 14:36:09 amoll Exp $
+// $Id: nucleotide.h,v 1.35 2004/05/18 11:21:45 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_NUCLEOTIDE_H
@@ -130,7 +130,7 @@ namespace BALL
 		Nucleotide& operator = (const Nucleotide& nucleotide)
 			throw();
 
-		/** Copy this instance to {\em nucleotide}.
+		/** Copy this instance to <b>  nucleotide </b>.
 				The assignment is either deep or shallow (default).
 				@param  nucleotide the nucleotide to be assigned to
 				@see    nucleotide::set
@@ -297,7 +297,7 @@ namespace BALL
 
 		/** Internal state dump.
 				Dump the current internal state of this instance 
-				to the output ostream {\em s} with dumping depth {\em depth}.
+				to the output ostream <b>  s </b> with dumping depth <b>  depth </b>.
 				@param	s output stream where to output the internal state of this instance nucleotide
 				@param  depth the dumping depth
 		*/

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RDFIntegrator.h,v 1.17 2003/08/26 08:04:49 oliver Exp $
+// $Id: RDFIntegrator.h,v 1.18 2004/05/18 11:21:49 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_RDFINTEGRATOR_H
@@ -40,7 +40,7 @@ namespace BALL
 			throw();
 
 		/** Detailed constructor.
-				@param rdf the radial distribution function to initialize {\em this} with
+				@param rdf the radial distribution function to initialize <b>  this </b> with
 		*/
 		RDFIntegrator(const RadialDistributionFunction& rdf)
 			throw();
@@ -57,7 +57,7 @@ namespace BALL
 
 		/** Assignment operator.
 				@param integrator the integrator to assign from
-				@return a constant reference to {\em this}
+				@return a constant reference to <b>  this </b>
 		*/
 		const RDFIntegrator& operator = (const RDFIntegrator& integrator)
 			throw();

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: chain.h,v 1.36 2004/05/17 14:36:08 amoll Exp $
+// $Id: chain.h,v 1.37 2004/05/18 11:21:44 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_CHAIN_H
@@ -159,7 +159,7 @@ namespace BALL
 				The pointer is 0 if this instance does not have a SecondaryStructure at this position.
 				@param   position the position of the child SecondaryStructure
 				@return  SecondaryStructure* -
-								 mutable pointer to the child SecondaryStructure at {\em position}
+								 mutable pointer to the child SecondaryStructure at <b>  position </b>
 		*/
 		SecondaryStructure* getSecondaryStructure(Position position)
 			throw();
@@ -168,7 +168,7 @@ namespace BALL
 				The pointer is 0 if this instance does not have a SecondaryStructure at this position.
 				@param   position the position of the child SecondaryStructure
 				@return  SecondaryStructure* -
-								 constant pointer to the child SecondaryStructure at {\em position}
+								 constant pointer to the child SecondaryStructure at <b>  position </b>
 		*/
 		const SecondaryStructure* getSecondaryStructure(Position position) const
 			throw();
@@ -176,7 +176,7 @@ namespace BALL
 		/** Get a pointer to a child Residue at a given position.
 				The pointer is 0 if this instance does not have a Residue at this position.
 				@param   position the position of the child Residue
-				@return  Residue* - mutable pointer to the child Residue at {\em position}
+				@return  Residue* - mutable pointer to the child Residue at <b>  position </b>
 		*/
 		Residue* getResidue(Position position)
 			throw();
@@ -184,7 +184,7 @@ namespace BALL
 		/** Get a pointer to a child Residue at a given position.
 				The pointer is 0 if this instance does not have a Residue at this position.
 				@param   position the position of the child Residue
-				@return  Residue* - constant pointer to the child Residue at {\em position}
+				@return  Residue* - constant pointer to the child Residue at <b>  position </b>
 		*/
 		const Residue* getResidue(Position position) const
 			throw();
@@ -224,7 +224,7 @@ namespace BALL
 		/** Get a pointer to a child PDBAtom at a given position.
 				The pointer is 0 if this instance does not have a PDBAtom at this position.
 				@param   position the position of the child PDBAtom
-				@return  PDBAtom* - mutable pointer to the child PDBAtom at {\em position}
+				@return  PDBAtom* - mutable pointer to the child PDBAtom at <b>  position </b>
 		*/
 		PDBAtom* getPDBAtom(Position position)
 			throw();
@@ -232,7 +232,7 @@ namespace BALL
 		/** Get a pointer to a child PDBAtom at a given position.
 				The pointer is 0 if this instance does not have a PDBAtom at this position.
 				@param   position the position of the child PDBAtom
-				@return  PDBAtom* - constant pointer to the child PDBAtom at {\em position}
+				@return  PDBAtom* - constant pointer to the child PDBAtom at <b>  position </b>
 		*/
 		const PDBAtom* getPDBAtom(Position position) const
 			throw();
@@ -356,7 +356,7 @@ namespace BALL
 		
 		/** Internal state dump.
 				Dump the current internal state to the output 
-				ostream {\em s} with dumping depth {\em depth}.
+				ostream <b>  s </b> with dumping depth <b>  depth </b>.
 				@param   s - output stream where to output the internal state.
 				@param   depth - the dumping depth
 		*/
