@@ -1,4 +1,4 @@
-// $Id: vector3.h,v 1.20 2000/02/25 19:37:04 amoll Exp $
+// $Id: vector3.h,v 1.21 2000/02/28 01:27:54 oliver Exp $
 
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -1000,12 +1000,12 @@ namespace BALL
 	{
 		return TVector3<T>(a.x + b.x, a.y + b.y, a.z + b.z);
 	}
-
+	
 	/** Subtraction operator of two vectors
   		@return TVector3 the new vector
 	*/
 	template <typename T>
-	BALL_inline
+	BALL_INLINE
 	TVector3<T> operator - (const TVector3<T>& a, const TVector3<T>& b)
 	{
 		return TVector3<T>(a.x - b.x, a.y - b.y, a.z - b.z);
@@ -1061,6 +1061,6 @@ namespace BALL
 	//@}
 	//@}
 		
-} // namespace BALL
+}// namespace BALL
 
 #endif // BALL_MATHS_VECTOR3_H
