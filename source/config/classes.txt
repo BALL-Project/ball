@@ -1,0 +1,530 @@
+D documentation deficiencies
+E exception qualifier
+I interface deficiencies
+/ ok
+X general deficiencies
+Z lacks
+
+name                                class,     test,              notes
+------------------------COMMON----------------------------------------------
+(exceptions)                        EI,         Z
+GeneralException
+IndexUnderflow
+SizeUnderflow
+IndexOverflow
+InvalidRange
+OutOfRange
+InvalidFormat
+IllegalSelfOperation
+NullPointer
+InvalidIterator
+IncompatibleIterators
+NotImplemented
+IllegalTreeOperation
+OutOfMemory
+BufferOverflow
+DivisionByZero
+OutOfGrid
+FileNotFound
+GlobalExceptionHandler
+
+HashFunction                        EI          /
+Limits                              EI          /
+LogStreamNotifier                   EI,         X
+LogStreamBuf                        EI,         X
+LogStream                           EI,         X
+VersionInfo                         /           /
+------------------------DATATYPE--------------------------------------------
+Bit                                 /           /
+BitVector                           /           /
+HashGridBox3                        DEIX        Z
+      DataItem_
+      NeighbourBoxItem_
+      BoxIteratorTraits_
+      DataIteratorTraits_
+HashGrid3                           DEI         Z
+      BoxIteratorTraits_
+HashMap                             DEI         /
+      IllegalKey
+      IteratorTraits_
+HashSet                             DEI         /
+      IllegalKey
+      Node
+      IteratorTraits_
+List                                EI          /
+Options                             EI          /
+PointGrid                           EI          /
+Quadruple                           EI          /
+OrderedQuadruple                    EI          /
+RegularExpression                   DEI         /
+String                              DEI         /
+Substring                           DEI         /
+      UnboundSubstring
+      InvalidSubstring
+StringHashMap                       EI          Z
+StackListItem                       DEI         /
+StackList                           DEI         /
+TStackListItem                      DEI         /
+TSStack                             DEI         /
+TRegularData1D                      E           X
+------------------------CONCEPT---------------------------------------------
+AutoDeletable                       EI,         X
+BaseIterator                        EI,         Z     clear fehlt, BALL_CREATE_DEEP
+ConstBaseIterator                   EI,         Z
+BidirectionalIterator               EI          Z
+ConstBidirectionalIterator          EI          Z
+Callback                            DEI,        Z
+Classtest                           /           /
+Comparator                          DEI         Z
+Composite                           DEI,        /     operator = nicht const referenz
+      AncestorIteratorTraits_       DEI         Z
+      ChildCompositeIteratorTraits_ DEI         Z
+      CompositeIteratorPosition_    DEI         Z
+      CompositeIteratorTraits_      DEI         Z
+      SubcompositeIteratorTraits_   DEI         Z
+Embeddable                          EI,         X
+EnumeratorIndex                     EIX,        X
+      IncompatibleIndex             EI,         X
+Enumerator                          EIX,        X
+      IteratorTraits_               EIX,        X
+ForwardIterator                     DEIX,       /
+ConstForwardIterator                DEIX,       /
+NamedProperty                       EI          /
+PropertyManager                     EI          X
+NotificationManager_                DEI,        Z
+NotificationTarget_                 DEI         Z
+NotificationSource_                 DEI         Z
+NotificationSlot_                   DEI         Z
+NotificationTarget                  DEI         Z
+NotificationTarget1                 DEI         Z
+NotificationTarget2                 DEI         Z
+Object                              DEI,        Z
+ObjectManager                       DEI         Z
+      IteratorTraits_               DEI         Z
+PersistenceManager                  EI          Z
+PersistentObject                    EI          Z
+RandomAccessIterator                DEI         Z
+ConstRandomAccessIterator           DEI         Z
+ReverseRandomAccessIterator         DEI         Z
+ConstReverseRandomAccessIterator    DEI         Z
+ReverseBidirectionalIterator        DEI         Z
+ConstReverseBidirectionalIterator   DEI         Z
+Selectable                          EI          /
+Singleton                           DEI         Z
+TextPersistenceManager              EI          Z
+Time                                EI          X
+TimeStamp                           EI          X
+UnaryFunctor                        D,          /
+BinaryFunctor                       D,          /
+UnaryPredicate                      DEI         Z
+BinaryPredicate                     DEI         Z
+UnaryProcessor                      DEI         Z
+BinaryProcessor                     DEI         Z
+Visitor                             DEI         Z
+XDRPersistenceManager               EI          Z
+------------------------ENERGY----------------------------------------------
+(atomicContactEnergy)               E           /
+ComposedEnergyProcessor             /           Z
+(COULOMB)                           E           Z
+(DistanceCoulomb)                   E           Z
+EnergyProcessor                     /           Z
+------------------------FORMAT----------------------------------------------
+Bruker1D                            DEI,        Z
+Bruker2D                            DEI,        Z
+BrukerParameter                     DEIX,       Z       warum in JCAMPFILE?, parameter->getParameter
+resourcefile                        E,          X
+resourceEntry                       E,          X
+GenericMolFile                      I,          /
+GenericPDBFile                      DEI,        Z
+HinFile                             EIX,        X
+INIFile                             EI,         X
+LineBasedFile                       /           /
+      LineBasedFileError            I           Z
+MOL2File                            DEI,        X
+NMRStarFile                         /           /
+Parameters                          E           X
+ParameterSection                    I,          X
+PDBFile                             DEI,        X
+XYZFile                             DEI,        /
+------------------------KERNEL----------------------------------------------
+Atom                                EIX         /           read, write fehlt
+            BondIteratorTraits_     DEI         Z
+AtomContainer                       EIX         /           read, write fehlt
+AtomContainerIteratorTraits_        EI          Z
+AtomIteratorTraits_                 EI          Z
+Bond                                EI          /
+            TooManyBonds            EI          Z
+Chain                               EIX         /           read, write fehlt
+ChainIteratorTraits_                EI
+CompositeIteratorTraits_            EI          Z
+Expression                          EIX
+ExpressionPredicate                 EIX
+ExpressionTree                      EIX         
+SyntaxTree                          EI
+Fragment                            EIX         /           read, write fehlt
+FragmentIteratorTraits_             EI          Z
+Element                             EI          /
+PTE_                                EI          /
+KernelPredicate                     EI          /
+Molecule                            EIX         /           read, write fehlt
+MoleculeIteratorTraits_             EI          Z
+NucleicAcid                         EIX         /           read, write fehlt
+NucleicAcidIteratorTraits_          EI          Z
+Nucleotide                          EIX         /           read, write fehlt
+NucleotideIteratorTraits_           EI          Z
+PDBAtom                             EI          Z
+PDBAtomIteratorTraits_              EI          Z
+Protein                             EIX         /           read, write fehlt
+ProteinIteratorTraits_              EI          Z
+Residue                             EIX         /           read, write fehlt
+ResidueIteratorTraits_              EI          Z
+SecondaryStructure                  EIX         /           read, write fehlt
+SecondaryStructureIteratorTraits_   EI          Z
+Selector                            EI
+System                              EIX         /
+
+ AromaticBondsPredicate             EI          /
+ AtomNamePredicate                  EI          /
+ AtomTypePredicate                  EI          /           
+ BackBonePredicate                  EI          /
+ ChainPredicate                     EI          /
+ ConnectedToPredicate               EIX         /
+ DoubleBondsPredicate               EI          /
+ ElementPredicate                   EI          /
+ InRingPredicate                    EI          Z
+ MoleculePredicate                  EI          Z
+ NucleicAcidPredicate               EI          Z
+ NucleotidePredicate                EI          Z
+ NumberOfBondsPredicate             EI          /
+ ProteinPredicate                   EI          /
+ ResidueIDPredicate                 EI          /
+ ResiduePredicate                   EI          /
+ SecondaryStructurePredicate        EI          /
+ SelectedPredicate                  EI          /
+ SingleBondsPredicate               EI          /
+ SolventPredicate                   EI          Z
+ Sp2HybridizedPredicate             EI          /
+ Sp3HybridizedPredicate             EI          /
+ SpHybridizedPredicate              EI          /
+ TripleBondsPredicate               EI          /
+ TruePredicate                      EI          /
+------------------------MATHS-----------------------------------------------
+TAngle                              EI          /
+TBox3                               EI          /
+TCircle3                            EI          /
+TLine3                              EI          /
+TMatrix4x4                          EI          /
+PiecewiseFunction                   I           X
+PiecewisePolynomial                 I           X
+TPlane3                             EI          /
+TQuaternion                         EI          /
+TSphere3                            EI          /
+TSurface                            DEIX        Z    
+TVector3                            EI          /
+TVector4                            EI          /
+------------------------MOLMEC----------------------------------------------
+                        ---------AMBER-----
+amberBend                           DEI         Z
+AmberFF                             DEI         /
+AmberNonBonded                      EI          Z
+AmberTorsion                        DEI         Z
+AmberStretch                        DEI         Z
+                        --------CHARM------
+CharmmBend                          DEI         Z
+CharmmImproperTorsion               DEI         Z
+CharmmFF                            EI          /
+CharmmStretch                       DEI         Z
+CharmmTorsion                       DEI         Z
+CharmmNonBonded                     DEI         Z
+                        --------COMMON-----
+AtomVector                          EI          Z
+AssignTypeProcessor                 DEI         Z
+            AssignTypeNameProcessor
+ChargeRuleProcessor                 DEI         Z
+ForceField                          EI          Z
+ForceFieldComponent                 EI          Z
+Gradient                            EI          X
+PeriodicBoundary                    EI          Z
+RadiusRuleProcessor                 DEI         Z
+RuleEvaluator                       /           X
+RuleProcessor                       DEI         Z
+SnapShot                            EI          Z
+            SnapShotManager         EIX         Z
+TypeRuleProcessor                   DEI         Z
+TypenameRuleProcessor               DEI         Z
+(support)                           EI          Z
+                        -----MDSIMULATION--
+CanonicalMD                         EI          Z
+MicroCanonicalMD                    EI          Z
+MolecularDynamics                   EI          Z
+                        -----MINIMIZATION--
+ConjugateGradientMinimizer          EI          Z
+EnergyMinimizer                     EI          X
+LineSearch                          EI          X
+SteepestDescentMinimizer            DEI         Z
+                        -----PARAMETER-----
+AtomTypes                           I           Z
+CharmmEEF1                          D           Z
+CosineTorsion                       /           Z
+            SingleValues            DEI         Z
+            Values                  DEI         Z
+ForceFieldParameters                I           Z
+ResidueTorsions                     I           Z
+Templates                           EI          Z
+QuadraticAngleBend                  EI          Z
+QuadraticBondStretch                EI          Z
+QuadraticImproperTorsion            /           Z
+LennardJones                        D           Z
+Potential1210                       I           Z
+------------------------MOLVIEW---------------------------------------------
+                        -----COLORS-------
+ElementColor                        DEIX        Z
+                        -----FUNCTOR------
+AddVanDerWaalsModel                 DEI         Z
+AtomBondModelBaseProcessor          DEI         Z
+AtomBondModelConnector              DEI         Z  
+            MissingProperty
+            MemoryAllocationFailed
+AddBallAndStickModel                DEI         Z
+AddLineModel                        DEI         Z
+BaseModelConnector                  DEI         Z
+BaseModelProcessor                  DEI         Z
+ColorCalculator                     DEI         Z
+ElementColorCalculator              DEI         Z
+  ResidueNameColorCalculator
+  AtomChargeColorCalculator
+  AtomDistanceColorCalculator
+FindGeometricObjects                DEI         Z
+GeometricObjectSelector             DEI         Z
+MolecularFilter                     DEI         Z
+MolecularInformation                DEI         Z
+RemoveModel                         DEI         Z
+                        -------GUI-------
+LabelProperties                     EI          Z
+DisplayProperties                   EI          Z
+DisplayPropertiesData               DEI         Z
+LabelPropertiesData                 DEI         Z
+OpenHINFile                         EI          Z
+OpenPDBFile                         EI          Z
+AddGLSurfaceModel                   DEI         Z
+AddGLBallAndStickModel              DEI         Z
+AddGLLineModel                      DEI         Z
+AddGLVanDerWaalsModel               DEI         Z
+GLAtomBondModelConnector            DEI         Z
+MoleculeGLObjectCollector           DEI         Z
+MoleculeObjectProcessor             DEI         Z
+            AllocationFailure       
+MoleculeObjectCreator               DEI         Z
+GLTwoColoredLine                    DEI         Z
+GLTwoColoredTube                    DEI         Z
+Control                             DEI         Z
+MolecularControl                    DEI         Z
+MolecularProperties                 DEI         Z
+                        -----KERNEL------
+ExtendedPropertyManager             DEI         Z
+GeometricConvertor                  DEI         Z
+WindowEventTimer                    DEI         Z
+NewMolecularMessage                 DEI         Z
+  RemovedMolecularMessage
+  ChangedMolecularMessage
+  MolecularSelectionMessage
+                        -----PRIMITV-----
+TwoColoredLine                      DEI         Z
+TwoColoredTube                      DEI         Z
+------------------------NMR-------------------------------------------------
+AnisotropyShiftProcessor            I           X
+AssignShiftProcessor                DI          /
+ClearShiftProcessor                 I           X
+CreateSpectrumProcessor             DI          Z
+EFShiftProcessor                    I           X
+HaighMallionShiftProcessor          I           X
+JohnsonBoveyShiftProcessor          I           X
+MakeSpectrumProcessor               EI          X
+NMRSpectrum                         EI          X
+Peak1D                              EI          X
+RandomCoilShiftProcessor            EI          X
+ShiftModel                          I           /
+ShiftModule                         I           /
+------------------------PYTHON----------------------------------------------
+(extractors)                        /           Z
+PyAtomContainerList                 DEI         Z
+PyAtomList                          DEI         Z
+PyBondList                          DEI         Z
+PyChainList                         DEI         Z
+PyFragmentList                      DEI         Z
+PyInterpreter                       DEI         Z
+PyNucleotideList                    DEI         Z
+PyNucleicAcidList                   DEI         Z
+PyMoleculeList                      DEI         Z
+PyPDBAtomList                       DEI         Z
+PyProteinList                       DEI         Z
+PySecondaryStructureList            DEI         Z
+------------------------SOLVATION-------------------------------------------
+ClaverieParameter                   D           Z
+FDPB                                DI          X
+(molecularSurfaceGrid)              D           Z
+Pair6_12InteractionEnergyProcessor  DI          X
+Pair6_12RDFIntegrator               DI          X
+PairExpRDFIntegrator                DI          X
+PairExpInteractionEnergyProcessor   DI          X
+PCMCavFreeEnergyProcessor           I           Z
+PierottiCavFreeEnergyProcessor      DI          Z
+ReissCavFreeEnergyProcessor         I           Z
+SolventParameter                    DI          Z
+SolventDescriptor                   I           Z
+UhligCavFreeEnergyProcessor         I           Z
+------------------------STRUCTURE-------------------------------------------
+analyticalSES                       EI          /
+AssignChargeProcessor               EI          Z
+AssignRadiusProcessor               EI          Z
+BoundingBoxProcessor                DEI         /
+GeometricCenterProcessor            DEI         /
+FragmentDistanceCollector           DEI         /
+
+ClearChargeProcessor                EI          Z
+ClearRadiusProcessor                EI          Z
+(connolly)                          DEIX        /           der code ist furchtbar!
+BoundingBoxProcessor                EI          Z
+FragmentDistanceCollector           EI          Z
+GeometricCenterProcessor            EI          Z
+
+FragmentDB                          EI          X               
+            NoFragmentNode          EI          Z
+            NormalizeNamesProcessor EI          Z
+            AddHydrogensProcessor   EI          Z
+            BuildBondsProcessor     EI          Z
+
+(numericalSAS)                      EI          /           der code ist furchtbar!
+RadialDistributionFunction          /           /
+ResidueChecker                      DEI         Z
+RDFIntegrator                       D           X
+RDFParameter                        D           X
+RDFSection                          D           X
+Rotamer                             DEI         Z
+ResidueRotamerSet                   DEI         Z
+RotamerLibrary                      DEI         Z
+RuleProcessor                       DEI         Z
+(sungularities                      DEIX        Z
+SurfaceProcessor                    DEI         Z
+StructureMapper                     DEIX        X
+TranslationProcessor                EI          X
+TransformationProcessor             EI          X
+TReducedSurface                     EIX         Z
+TBSDTree                            DEIX        Z
+TRSEdge                             DEIX        Z
+TRSFace                             DEIX        Z
+TRSVertex                           DEIX        Z
+TSESVertex                          DEIX        Z
+TSESFace                            DEIX        Z
+TSESEdge                            DEIX        Z
+TSESEdge                            DEIX        Z
+TSESEdge                            DEIX        Z
+TSESEdge                            DEIX        Z
+TSolventExcludedSurface             DEIX        Z
+(triangulation)                     DEIX        Z
+TTriangulatedSurface                DEIX        Z          
+  Triangle
+  Edge
+  Point
+------------------------SYSTEM----------------------------------------------
+Directory                           EI          /
+File                                /           /
+FileSystem                          DEI         /
+Path                                EI          /
+ISockStream                         DEI         Z
+IOSockStream                        DEI         Z
+IOStreamSocket                      DEI         Z
+OSockStream                         DEI         Z
+SockAddr                            DEI         Z
+SocketBuf                           DEI         Z
+SockInetAddr                        DEI         Z
+SockInetBuf                         DEI         Z
+Timer                               EI          /
+-------------------------VIEW-----------------------------------------------
+                        -------DATATYPE----
+ColorUnitHue                        DEI         Z
+ColorRGBA                           DEI         Z
+  ColorHSV                          DEI         Z
+ColorUnit                           DEI         Z
+ColorTable                          DEI         Z
+                        -------FUNCTOR-----
+Filter                              DEI         Z
+GeometricCollector                  DEI         Z
+Information                         DEI         Z
+                        ---------GUI-------
+GLLabel                             DEI         Z
+GLPoint                             DEI         Z
+GLSimpleBox                         DEI         Z
+GLMesh                              DEI         Z
+GLLine                              DEI         Z
+GLSphere                            DEI         Z
+GLTube                              DEI         Z
+
+FileDialog                          EI          Z
+
+ObjectProcessor                     DEI         Z
+GLObjectCollector                   DEI         Z
+GLDisplayList                       DEI         Z
+CompositeDescriptor                 EI          Z
+GLQuadricObject                     DEI         Z
+GLDisplayListObject_                DEI         Z
+  GLSphereDisplayLists_
+  GLTubeDisplayLists_
+  GLSimpleBoxDisplayLists_
+  GLPrimitiveManager
+GLObject                            DEI         Z
+Server                              DEI         Z
+GLEntityDescriptor                  DEI         Z
+MainControl                         EI          Z
+ObjectCreator                       DEI         Z
+
+Sphere                              DEI         Z
+  Box
+  Cone
+  Tube
+GLPoint                             DEI         Z
+GLTube                              DEI         Z
+GLLine                              DEI         Z
+GLSphere                            DEI         Z
+GLSimpleBox                         DEI         Z
+GLMesh                              DEI         Z
+GLLabel                             DEI         Z
+Events                              DEI         Z
+PyWidget                            DEI         Z
+Control                             EI          Z
+nmr                                 DEIX        Z
+ModularWidget                       EI          Z
+Scene                               DEIX        Z
+                        --------KERNEL-------
+Client                              DEI         Z
+ClientScene                         DEI         Z
+ColorExtension                      DEI         Z
+ColorExtension2                     DEI         Z
+ColorExtension3                     DEI         Z
+ColorExtension4                     DEI         Z
+ColorExtension5                     DEI         Z
+ConnectionObject                    DEI         Z
+GeometricObject                     DEI         Z
+LogView                             DEI         Z
+Message                             DEI         Z
+  CompositeMessage
+  NewCompositeMessage
+  RemovedCompositeMessage
+  ChangedCompositeMessage
+  DisplayMessage
+  SceneMessage
+  WindowMessage
+  SelectionMessage
+  GeometricObjectSelectionMessage
+NormalVector                        DEI         Z
+QTTimer                             DEI         Z
+Vertex2                             DEI         Z
+                        --------PRIMITIV-------
+BaseTube                            DEI         Z
+Label                               DEI         Z
+Line                                DEI         Z
+Point                               DEI         Z
+Mesh                                DEI         Z
+SimpleBox                           DEI         Z
+Sphere                              DEI         Z
+Tube                                DEI         Z
