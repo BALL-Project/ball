@@ -1,4 +1,4 @@
-// $Id: HINFile.C,v 1.33 2001/06/05 15:43:53 anker Exp $
+// $Id: HINFile.C,v 1.34 2001/07/15 22:41:13 oliver Exp $
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/CONCEPT/composite.h>
@@ -380,7 +380,7 @@ namespace BALL
 		// reset some private members
 		box_.a.set(0.0);
 		box_.b.set(0.0);
-		temperature_ = 0;
+		temperature_ = 0.0;
 
 		// define a macro to print an error message for the file (only once!)
 #		define ERROR_HEADER\
@@ -851,12 +851,11 @@ namespace BALL
 				// set the system's temperature
 				try
 				{
-					temperature_ = line.getField(2).toFloat();
+					temperature_ = line.getField(1).toFloat();
 				}
 				catch (Exception::InvalidFormat)
 				{
-					ERROR_HEADER << "illegal temperature " << line.getField(2) << endl;
-					continue;
+					ERROR_HEADER << "illegal temperature " << line.getField(1) << endl;
 				}
 
 				continue;
