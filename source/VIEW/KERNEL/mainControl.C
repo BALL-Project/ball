@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.77 2004/04/17 22:04:19 amoll Exp $
+// $Id: mainControl.C,v 1.78 2004/04/21 11:14:36 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -166,76 +166,70 @@ namespace BALL
 		{
 			QPopupMenu* menu = 0;
 			QMenuItem* item = menuBar()->findItem(ID);
-			if ((item == 0) || (item->popup() == 0))
+			if ((item != 0) && (item->popup() != 0))
 			{
-				menu = new QPopupMenu(this);
-				CHECK_PTR(menu);
-
-				connect(menu, SIGNAL(aboutToShow()), this, SLOT(checkMenus()));
-
-				#ifdef BALL_VIEW_DEBUG
-					Log.info() << "new menu entry: " << ID << endl;	
-				#endif
-				switch (ID)
-				{
-					case FILE:
-						menuBar()->insertItem("&File", menu, FILE, -1);
-						break;
-					case FILE_OPEN:
-						initPopupMenu(MainControl::FILE)->insertItem("&Open", menu, FILE_OPEN);
-						break;
-					case FILE_IMPORT:
-						initPopupMenu(MainControl::FILE)->insertItem("&Import", menu, FILE_IMPORT);
-						break;
-					case FILE_EXPORT:
-						initPopupMenu(MainControl::FILE)->insertItem("&Export", menu, FILE_EXPORT);
-						break;
-					case EDIT:
-						menuBar()->insertItem("&Edit", menu, EDIT, -1);
-						break;
-					case BUILD:
-						menuBar()->insertItem("&Build", menu, BUILD, -1);
-						break;
-					case DISPLAY:
-						menuBar()->insertItem("&Display", menu, DISPLAY, -1);
-						break;
-					case DISPLAY_VIEWPOINT:
-						initPopupMenu(MainControl::DISPLAY)->insertItem("&Viewpoint", menu, DISPLAY_VIEWPOINT);
-						break;
-					case MOLECULARMECHANICS:
-						menuBar()->insertItem("&Molecular Mechanics", menu, MOLECULARMECHANICS, -1);
-						break;
-					case CHOOSE_FF:
-						initPopupMenu(MainControl::MOLECULARMECHANICS)->insertItem("Force Field", menu, CHOOSE_FF);
-						break;
-					case TOOLS:
-						menuBar()->insertItem("&Tools", menu, TOOLS, -1);
-						break;
-		// 			case TOOLS_CREATE_GRID:
-		// 				initPopupMenu(MainControl::TOOLS)->insertItem("&Create Grid", menu, TOOLS_CREATE_GRID);
-		// 				break;
-					case TOOLS_PYTHON:
-						initPopupMenu(MainControl::TOOLS)->insertItem("&Python", menu, TOOLS_PYTHON);
-						break;
-					case WINDOWS:
-						menuBar()->insertItem("&Windows", menu, WINDOWS, -1);
-						break;
-					case USER:
-						menuBar()->insertItem("&User", menu, USER, -1);
-						break;
-					case HELP:
-						menuBar()->insertSeparator();
-						menuBar()->insertItem("&Help", menu, HELP, -1);
-						break;
-					default:
-						delete menu;
-						menu = 0;
-				}
+				return item->popup();
 			}
-			else 
+
+			menu = new QPopupMenu(this);
+			CHECK_PTR(menu);
+
+			connect(menu, SIGNAL(aboutToShow()), this, SLOT(checkMenus()));
+
+			#ifdef BALL_VIEW_DEBUG
+				Log.info() << "new menu entry: " << ID << endl;	
+			#endif
+			switch (ID)
 			{
-				// return the existing popup menu
-				menu = item->popup();
+				case FILE:
+					menuBar()->insertItem("&File", menu, FILE, FILE);
+					break;
+				case FILE_OPEN:
+					initPopupMenu(MainControl::FILE)->insertItem("&Open", menu, FILE_OPEN);
+					break;
+				case FILE_IMPORT:
+					initPopupMenu(MainControl::FILE)->insertItem("&Import", menu, FILE_IMPORT);
+					break;
+				case FILE_EXPORT:
+					initPopupMenu(MainControl::FILE)->insertItem("&Export", menu, FILE_EXPORT);
+					break;
+				case EDIT:
+					menuBar()->insertItem("&Edit", menu, EDIT, EDIT);
+					break;
+				case BUILD:
+					menuBar()->insertItem("&Build", menu, BUILD, BUILD);
+					break;
+				case DISPLAY:
+					menuBar()->insertItem("&Display", menu, DISPLAY, DISPLAY);
+					break;
+				case DISPLAY_VIEWPOINT:
+					initPopupMenu(MainControl::DISPLAY)->insertItem("&Viewpoint", menu, DISPLAY_VIEWPOINT);
+					break;
+				case MOLECULARMECHANICS:
+					menuBar()->insertItem("&Molecular Mechanics", menu, MOLECULARMECHANICS, -1);
+					break;
+				case CHOOSE_FF:
+					initPopupMenu(MainControl::MOLECULARMECHANICS)->insertItem("Force Field", menu, CHOOSE_FF);
+					break;
+				case TOOLS:
+					menuBar()->insertItem("&Tools", menu, TOOLS, TOOLS);
+					break;
+				case TOOLS_PYTHON:
+					initPopupMenu(MainControl::TOOLS)->insertItem("&Python", menu, TOOLS_PYTHON);
+					break;
+				case WINDOWS:
+					menuBar()->insertItem("&Windows", menu, WINDOWS, WINDOWS);
+					break;
+				case USER:
+					menuBar()->insertItem("&User", menu, USER, USER);
+					break;
+				case HELP:
+					menuBar()->insertSeparator();
+					menuBar()->insertItem("&Help", menu, HELP, HELP);
+					break;
+				default:
+					delete menu;
+					menu = 0;
 			}
 
 			return menu;
@@ -262,10 +256,6 @@ namespace BALL
 				return;
 			}
 
-			connect(initPopupMenu(MainControl::EDIT), SIGNAL(aboutToShow()), this, SLOT(checkMenus()));
-			connect(initPopupMenu(MainControl::BUILD), SIGNAL(aboutToShow()), this, SLOT(checkMenus()));
-			connect(initPopupMenu(MainControl::TOOLS), SIGNAL(aboutToShow()), this, SLOT(checkMenus()));
-			connect(initPopupMenu(MainControl::MOLECULARMECHANICS), SIGNAL(aboutToShow()), this, SLOT(checkMenus()));
 
 			#ifdef BALL_QT_HAS_THREADS
 				String hint = "Abort a running simulation thread";
@@ -316,7 +306,7 @@ namespace BALL
 			// own menu entries
 			insertPopupMenuSeparator(MainControl::FILE);
 			insertMenuEntry(MainControl::FILE, "&Quit", qApp, SLOT(quit()), CTRL+Key_Q);	
-			insertMenuEntry(MainControl::HELP, "Whats this?", this, SLOT(whatsThis()));	
+			//insertMenuEntry(MainControl::HELP, "Whats this?", this, SLOT(whatsThis()));	
 
 			// if the preferences dialog has any tabs then show it
 			if (preferences_dialog_->hasPages())
