@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.h,v 1.8 2004/11/10 23:10:24 amoll Exp $
+// $Id: primitiveManager.h,v 1.9 2004/11/11 23:57:54 amoll Exp $
 
 #ifndef  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
 #define  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
@@ -166,6 +166,14 @@ namespace BALL
 			///
 			static UpdateRepresentationThread& getUpdateThread() { return thread_;}
 			#endif
+
+			/// used by SimulationThread to know when UpdateThread will be finished
+			void willUpdateSoon()
+				throw();
+
+			///
+			bool updateStillToBeStarted() const
+				throw();
 			
 			protected:
 
@@ -191,6 +199,7 @@ namespace BALL
 			#endif
 
 			MainControl* 	main_control_;
+			bool 					update_still_to_be_started_;
 		};
 
 	} // namespace VIEW

@@ -73,7 +73,8 @@ namespace BALL
 			: QThread(),
 				main_control_(0),
 				dcd_file_(0),
-				composite_(0)
+				composite_(0),
+				representations_to_be_updated_(false)
 		{
 		}
 
@@ -85,12 +86,13 @@ namespace BALL
 		void SimulationThread::updateScene_()
 		{
 			// notify MainControl to update all Representations for the Composite
+			main_control_->getPrimitiveManager().willUpdateSoon();
 			UpdateCompositeEvent* se = new UpdateCompositeEvent;
 			se->setComposite(composite_);
 			qApp->postEvent(main_control_, se);
 		}
 
-		void SimulationThread::exportSceneToPNG()
+		void SimulationThread::exportSceneToPNG_()
 		{
 			if (main_control_->stopedSimulation()) 
 			{
@@ -120,6 +122,17 @@ namespace BALL
 			qApp->postEvent(main_control_, su);  // Qt will delete it when done
 		}
 
+		void SimulationThread::waitForUpdateOfRepresentations_()
+		{
+			if (!representations_to_be_updated_) return;
+
+			while (main_control_->getPrimitiveManager().updateStillToBeStarted())
+			{
+				msleep(10);
+			}
+			main_control_->getPrimitiveManager().getUpdateThread().wait();
+		}
+
 		// =====================================================================
 		void EnergyMinimizerThread::run()
 		{
@@ -135,6 +148,10 @@ namespace BALL
 
 				ForceField& ff = *minimizer_->getForceField();
 
+				representations_to_be_updated_ = 
+					main_control_->getPrimitiveManager().
+						getRepresentationsOf(*minimizer_->getForceField()->getSystem()).size() > 0;
+
 				// iterate until done and refresh the screen every "steps" iterations
 				while (!main_control_->stopedSimulation() &&
 								minimizer_->getNumberOfIterations() < minimizer_->getMaxNumberOfIterations() &&
@@ -148,8 +165,7 @@ namespace BALL
 													ff.getEnergy(), ff.getRMSGradient());
 					output_(message.ascii());
 
-					// prevent continuation of simulation, before update of visualisation has finished
-					main_control_->getPrimitiveManager().getUpdateThread().wait();
+					waitForUpdateOfRepresentations_();
 				}
 
 				updateScene_();
@@ -209,8 +225,12 @@ namespace BALL
 
 				SnapShotManager manager(ff.getSystem(), &ff, dcd_file_);
 				manager.setFlushToDiskFrequency(10);
+
+				representations_to_be_updated_ = 
+					main_control_->getPrimitiveManager().
+						getRepresentationsOf(*md_->getForceField()->getSystem()).size() > 0;
+
 				// iterate until done and refresh the screen every "steps" iterations
-				
 				while (md_->getNumberOfIterations() < steps_ &&
 							 !main_control_->stopedSimulation())
 				{
@@ -223,10 +243,9 @@ namespace BALL
 													ff.getRMSGradient());
 					output_(message.ascii());
 					
-					// prevent continuation of simulation, before update of visualisation has finished
-					main_control_->getPrimitiveManager().getUpdateThread().wait();
+					waitForUpdateOfRepresentations_();
 
-					if (save_images_) exportSceneToPNG();
+					if (save_images_) exportSceneToPNG_();
 					if (dcd_file_) 		manager.takeSnapShot();
 				}
 

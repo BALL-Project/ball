@@ -127,10 +127,13 @@ namespace VIEW
 			///
 			Composite* getComposite() throw() { return composite_;}
 
-			///
-			void exportSceneToPNG();
-
 			protected:
+
+			///
+			void waitForUpdateOfRepresentations_();
+			
+			///
+			void exportSceneToPNG_();
 
 			/// Provokes an update of the Scene with rebuild of the display-lists
 			void updateScene_();
@@ -146,6 +149,7 @@ namespace VIEW
 			MainControl* 	main_control_;
 			DCDFile*   		dcd_file_;
 			Composite* 		composite_;
+			bool 					representations_to_be_updated_;
 		};
 
 

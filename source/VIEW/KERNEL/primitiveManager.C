@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.17 2004/11/11 22:19:07 amoll Exp $
+// $Id: primitiveManager.C,v 1.18 2004/11/11 23:57:46 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -23,7 +23,8 @@ namespace BALL
 PrimitiveManager::PrimitiveManager(MainControl* mc)
 	throw()
 	: Object(),
-		main_control_(mc)
+		main_control_(mc),
+		update_still_to_be_started_(false)
 {
 }
 
@@ -231,6 +232,8 @@ void PrimitiveManager::update_(Representation& rep)
 void PrimitiveManager::startUpdateThread_(Representation& rep)
 	throw()
 {
+	update_still_to_be_started_ = false;
+
 	if (updateRunning())
 	{
 		Log.error() << "Problem while updateing Representations in " 
@@ -321,5 +324,18 @@ bool PrimitiveManager::willBeUpdated(const Representation& rep) const
 
 	return false;
 }
+
+bool PrimitiveManager::updateStillToBeStarted() const
+	throw()
+{
+	return update_still_to_be_started_;
+}
+
+void PrimitiveManager::willUpdateSoon()
+	throw()
+{
+	update_still_to_be_started_ = true;
+}
+
 
 } } // namespaces
