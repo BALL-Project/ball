@@ -1,4 +1,4 @@
-// $Id: Timer_test.C,v 1.12.4.5 2002/12/09 21:57:43 oliver Exp $
+// $Id: Timer_test.C,v 1.12.4.6 2002/12/09 22:00:54 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 #include <unistd.h>
 ///////////////////////////
@@ -13,7 +13,7 @@
 
 
 
-START_TEST(Timer, "$Id: Timer_test.C,v 1.12.4.5 2002/12/09 21:57:43 oliver Exp $")
+START_TEST(Timer, "$Id: Timer_test.C,v 1.12.4.6 2002/12/09 22:00:54 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -84,11 +84,16 @@ RESULT
 CHECK(Timer::reset())
 	Timer t1;
 	t1.start();
-	// busy waiting
+	// some waiting
 	t1.reset();
 	// this is somewhat dangerous, but the best we could come up
 	// with
 	TEST_EQUAL(t1.isRunning(), true)
+	t1.stop();
+	STATUS(t1.getClockTime())
+	STATUS(t1.getUserTime())
+	STATUS(t1.getSystemTime())
+	STATUS(t1.getCPUTime())
 	TEST_EQUAL(t1.getClockTime() < 0.1, true)	
 	TEST_EQUAL(t1.getUserTime() < 0.1, true)	
 	TEST_EQUAL(t1.getSystemTime() < 0.1, true)	
