@@ -1,4 +1,4 @@
-// $Id: molecularFileDialog.h,v 1.1.2.2 2002/12/10 23:08:44 amoll Exp $
+// $Id: molecularFileDialog.h,v 1.1.2.3 2002/12/11 14:04:28 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_MOLECULARFILEDIALOG_H
 #define BALL_MOLVIEW_GUI_DIALOGS_MOLECULARFILEDIALOG_H
@@ -28,7 +28,8 @@ namespace BALL
 				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/DIALOGS/molecularFileDialog.h}
 		 */
 		class MolecularFileDialog
-			: public QWidget, VIEW::ModularWidget
+			: public QWidget,
+				public VIEW::ModularWidget
 		{
 			Q_OBJECT
 			public:

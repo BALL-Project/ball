@@ -1,4 +1,4 @@
-// $Id: molecularFileDialog.C,v 1.1.2.3 2002/12/11 11:17:45 oliver Exp $
+// $Id: molecularFileDialog.C,v 1.1.2.4 2002/12/11 14:04:19 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/molecularFileDialog.h>
 
@@ -21,7 +21,7 @@ namespace BALL
 				ModularWidget()
 		{
 			// register the widget with the MainControl
-			ModularWidget::registerWidget(this);
+			registerWidget(this);
 		}
 
 		MolecularFileDialog::~MolecularFileDialog()
@@ -43,9 +43,9 @@ namespace BALL
 		void MolecularFileDialog::initializeWidget(MainControl& main_control)
 			throw()
 		{
-			main_control.insertMenuEntry(MainControl::FILE_IMPORT, "&Read System", (QObject *)this, 
+			main_control.insertMenuEntry(MainControl::FILE, "&Read ...", (QObject *)this, 
 																	 SLOT(readFile()), QFileDialog::CTRL+QFileDialog::Key_R);
-			main_control.insertMenuEntry(MainControl::FILE, "&Write System", (QObject *)this, 
+			main_control.insertMenuEntry(MainControl::FILE, "&Write ...", (QObject *)this, 
 																	 SLOT(writeFile()), QFileDialog::CTRL+QFileDialog::Key_W);
 		}
 		
@@ -97,7 +97,7 @@ namespace BALL
 			{
 				readHINFile(filename, String(qfilename));
 			}
-			if (filter.hasSubstring("MOL2"))
+			else if (filter.hasSubstring("MOL2"))
 			{
 				readMOL2File(filename, String(qfilename));
 			}
@@ -136,7 +136,7 @@ namespace BALL
 
 			try
 			{
-				PDBFile pdb_file(filename);
+				PDBFile pdb_file(filename, std::ios::out);
 				pdb_file << system;
 				pdb_file.close();
 			}
