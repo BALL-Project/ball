@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.C,v 1.20 2004/10/22 21:01:24 amoll Exp $
+// $Id: ballAndStickModel.C,v 1.21 2004/12/07 14:31:09 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/ballAndStickModel.h>
@@ -344,6 +344,7 @@ namespace BALL
 
 			const Bond& bond = *a1.getBond(a2);
 
+			// render one tube with full length			
 			TwoColoredTube *tube = new TwoColoredTube;
 			tube->setRadius(stick_radius_ / (float) 2.4);
 			tube->setVertex1(a1.getPosition() - n1);
@@ -351,17 +352,49 @@ namespace BALL
 			tube->setComposite(&bond);
 			geometric_objects_.push_back(tube);
 
-			// generate tubes
+			// render dashed tubes
 			Vector3 v = a2.getPosition() + n2 - (a1.getPosition() + n1);
 			Vector3 last = a1.getPosition() + n1 + v / (float) 4.5;
 			for (Position p = 0; p < 3; p++)
 			{
-				TwoColoredTube *tube = new TwoColoredTube;
+				if (p == 1)
+				{
+					Vector3 middle((a1.getPosition() - a2.getPosition()) / 2 + a2.getPosition());
+					TwoColoredTube *tube = new TwoColoredTube;
+					tube->setRadius(stick_radius_ / (float) 2.4);
+					tube->setComposite(&bond);
+					tube->setVertex1(middle - (v / 8) + n1);
+					tube->setVertex2(middle + (v / 8) + n2);
+					geometric_objects_.push_back(tube);
+
+					Disc* disc = new Disc(Circle3(middle - (v / 8) + n1, v, stick_radius_ / (float) 2.4));
+					disc->setComposite(&a1);
+					geometric_objects_.push_back(disc);
+
+					disc = new Disc(Circle3(middle + (v / 8) + n2, v, stick_radius_ / (float) 2.4));
+					disc->setComposite(&a2);
+					geometric_objects_.push_back(disc);
+
+					last += (v /4);
+
+					continue;
+				}
+
+				/*
+				Tube *tube = new Tube;
 				tube->setRadius(stick_radius_ / (float) 2.4);
-				tube->setComposite(&bond);
 				tube->setVertex1(last);
 				tube->setVertex2(last + (v / 8));
 				geometric_objects_.push_back(tube);
+
+				if (p == 0)
+				{
+					tube->setComposite(&a1);
+				}
+				else
+				{
+					tube->setComposite(&a2);
+				}
 
 				Disc* disc = new Disc(Circle3(last, v, stick_radius_ / (float) 2.4));
 				disc->setComposite(&a1);
@@ -370,7 +403,7 @@ namespace BALL
 				disc = new Disc(Circle3(last + (v / 8), v, stick_radius_ / (float) 2.4));
 				disc->setComposite(&a2);
 				geometric_objects_.push_back(disc);
-
+*/
 				last += (v /4);
 			}
 		}
@@ -380,5 +413,4 @@ namespace BALL
 #		endif
 
 	} // namespace VIEW
-
 } // namespace BALL
