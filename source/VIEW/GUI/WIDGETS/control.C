@@ -1,6 +1,9 @@
-// $Id: control.C,v 1.7.4.8 2002/11/29 00:47:57 amoll Exp $
+// $Id: control.C,v 1.7.4.9 2002/12/02 20:52:39 amoll Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/control.h>
+#include <BALL/KERNEL/atom.h>
+#include <BALL/KERNEL/bond.h>
+#include <BALL/KERNEL/forEach.h>
 #include <qpopupmenu.h>
 #include <qmenubar.h>
 
@@ -11,7 +14,7 @@ namespace BALL
 	namespace VIEW
 	{
 
-Control::MyListViewItem::MyListViewItem(QListViewItem* parent, const QString& text, const QString& type, Composite* composite, VIEW::Control& control)
+Control::SelectableListViewItem::SelectableListViewItem(QListViewItem* parent, const QString& text, const QString& type, Composite* composite, VIEW::Control& control)
 	throw()
 	: QCheckListItem(parent, text, QCheckListItem::CheckBox),
 		composite_(composite),
@@ -20,7 +23,7 @@ Control::MyListViewItem::MyListViewItem(QListViewItem* parent, const QString& te
 	setText(1, type);
 }
 
-Control::MyListViewItem::MyListViewItem(QListView* parent, const QString& text, const QString& type, Composite* composite, VIEW::Control& control)
+Control::SelectableListViewItem::SelectableListViewItem(QListView* parent, const QString& text, const QString& type, Composite* composite, VIEW::Control& control)
 	throw()
 	: QCheckListItem(parent, text, QCheckListItem::CheckBox),
 		composite_(composite),
@@ -29,10 +32,11 @@ Control::MyListViewItem::MyListViewItem(QListView* parent, const QString& text, 
 	setText(1, type);
 }
 
-void Control::MyListViewItem::stateChange(bool)
+void Control::SelectableListViewItem::stateChange(bool)
 	throw()
 {
 	QCheckListItem::stateChange(true);
+	if (RTTI::isKindOf<GeometricObject> (*composite_)) return;
 	control_reference_.selectedComposite(composite_, isOn());
 }
 
@@ -153,6 +157,7 @@ bool Control::removeComposite(Composite* composite)
 	if (item != 0)
 	{
 		delete item;
+		composite_to_item_.erase(composite);		
 		updateContents();
 		return true;
 	}
@@ -232,17 +237,19 @@ void Control::invalidateSelection()
 void Control::setSelection_()
 	throw(MainControlMissing)
 {	
+//Log.error() << "Control::setSelection_" << std::endl;
 	MainControl* main_control = MainControl::getMainControl(this);	
 	if (main_control == 0) 
 	{
 		throw(MainControlMissing(__FILE__, __LINE__, ""));
 	}
 
-	const HashSet<Composite*>& hash_set = main_control->getSelection();
+	const HashSet<Composite*>& selection = main_control->getSelection();
 	QListViewItemIterator it(this);
+	
 	for (; it.current(); ++it)
 	{
-		if (hash_set.has(getCompositeAddress_(it.current())))
+		if (selection.has(getCompositeAddress_(it.current())))
 		{
 			((QCheckListItem*) it.current())->setOn(true);
 			it.current()->setSelected(true);
@@ -338,6 +345,7 @@ void Control::filterSelection_(Filter& filter)
 bool Control::reactToMessages_(Message* message)
 	throw()
 {
+//Log.error() << "Control::reactToMessages_ " << std::endl;
 	bool update = false;
 	if (RTTI::isKindOf<NewCompositeMessage>(*message))
 	{
@@ -417,7 +425,7 @@ Composite* Control::getCompositeAddress_(QListViewItem* item)
 		return 0;
 	}
 
-	return ((MyListViewItem*) item)->getComposite();
+	return ((SelectableListViewItem*) item)->getComposite();
 }
 
 void Control::generateListViewItem_(QListViewItem* item, Composite* composite, QString* default_name)
@@ -458,14 +466,16 @@ void Control::generateListViewItem_(QListViewItem* item, Composite* composite, Q
 	// is this the first item?
 	if (item == 0)
 	{
-		new_item = new MyListViewItem(this, name, type, composite, *this);
+		new_item = new SelectableListViewItem(this, name, type, composite, *this);
 	} 
 	else 
 	{
 		// no, insert into the current item
-		new_item = new MyListViewItem(item, name, type, composite, *this);
+		new_item = new SelectableListViewItem(item, name, type, composite, *this);
 	}
 	CHECK_PTR(new_item);
+
+	composite_to_item_[composite] = new_item;
 
 	recurseGeneration_(new_item, composite);
 }
@@ -505,7 +515,7 @@ QListViewItem* Control::findListViewItem_(Composite* composite)
 	for (; it.current(); ++it)
 	{
 		// find the address of the composite
-		if (((MyListViewItem*) it.current())->getComposite() == composite)
+		if (((SelectableListViewItem*) it.current())->getComposite() == composite)
 		{
 			return it.current();
 		}
@@ -760,26 +770,95 @@ void Control::eraseGeometricObject()
 void Control::selectedComposite(Composite* composite, bool state)
 	throw()
 {
-	if (composite == 0) 
-	{
-		Log.error() << "NULLPOINTER in Control::selectedComposite" << endl;
-		return;
-	}
-
-	MainControl* main_control = MainControl::getMainControl(this);	
-	if (main_control == 0) 
-	{
-		throw(MainControlMissing(__FILE__, __LINE__, ""));
-	}
-	
-	if (MainControl::getMainControl(this)->getSelection().has(composite) == state)
+//Log.error() << "Control::selectedComposite " << composite << "  " << state << std::endl;
+	const HashSet<Composite*>& selection =	MainControl::getMainControl(this)->getSelection();
+	if (selection.has(composite) == state)
 	{
 		return;
 	}
 
 	CompositeSelectedMessage* message = new CompositeSelectedMessage(composite, state);
+	message->setDeletable(false);
+
+	if (RTTI::isKindOf<Atom> (*composite))
+	{
+		Atom *atom = (Atom*) composite;
+		AtomBondIterator bi;		
+		BALL_FOREACH_ATOM_BOND(*atom, bi)
+		{
+			if (selection.has(bi->getPartner(*atom)) == state)
+			{
+				if (state)
+				{
+					bi->select();			
+				}
+				else				
+				{				
+					bi->deselect();
+				}					
+
+				MainControl::getMainControl(this)->selectComposite(&(*bi), state);
+			}				
+		}				
+				
+		message->composite_ = composite;
+		notify_(message);
+		return;		
+	}		
+
+	if (state)	selectRecursive_(composite);
+	else			  deselectRecursive_(composite);
+
+		
+	if (RTTI::isKindOf<AtomContainer> (*composite))
+	{
+		AtomIterator ai;
+		AtomBondIterator bi;		
+		BALL_FOREACH_INTERBOND((*(AtomContainer*) composite), ai, bi)
+		{
+			if (selection.has(bi->getPartner(*ai)) == state)
+			{			
+			  if (state)
+				{
+					bi->select();			
+				}
+				else				
+				{				
+					bi->deselect();
+				}					
+								
+				MainControl::getMainControl(this)->selectComposite(&(*bi));
+			}				
+		}						
+	}		
+		
+	message->composite_ = composite;
 	notify_(message);
 }
+
+void Control::selectRecursive_(Composite* composite)
+	throw()
+{
+	if (!composite_to_item_.has(composite)) return;		
+	MainControl::getMainControl(this)->selectComposite(composite);
+	((QCheckListItem*) composite_to_item_[composite])->setOn(true);		
+	for (Size i=0; i< composite->getDegree();i++)
+	{
+		selectRecursive_(composite->getChild(i));			
+	}
+}		
+
+void Control::deselectRecursive_(Composite* composite)
+	throw()
+{
+	if (!composite_to_item_.has(composite)) return;		
+	MainControl::getMainControl(this)->selectComposite(composite, false);
+	((QCheckListItem*) composite_to_item_[composite])->setOn(false);
+	for (Size i=0; i< composite->getDegree();i++)
+	{
+		deselectRecursive_(composite->getChild(i));			
+	}
+}		
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/GUI/WIDGETS/control.iC>
