@@ -1,4 +1,4 @@
-// $Id: persistenceManager.h,v 1.24 2001/05/29 14:51:16 anker Exp $
+// $Id: persistenceManager.h,v 1.25 2001/05/29 16:33:36 anker Exp $
 
 #ifndef BALL_CONCEPT_PERSISTENCE_H
 #define BALL_CONCEPT_PERSISTENCE_H
@@ -49,7 +49,7 @@ namespace BALL
 					interface}.  These are the methods needed to register classes,
 					set the associated streams, and to store or retrieve objects.
 			\end{itemize}
-			BAUSTELLE: One or two words to persistent object pointers
+			BAUSTELLE: One or two words about persistent object pointers
 			@see	PersistentObject
 			@see	XDRPersistenceManager
 			@see	TextPersistenceManager
@@ -114,7 +114,8 @@ namespace BALL
 
 		//@}
 
-		///	@name Layer 2 commands
+		/**	@name Layer 2 commands
+		*/
 		//@{
 
 		/**	Register a create method for a class.
@@ -228,7 +229,8 @@ namespace BALL
 
 		//@}
 
-		///	@name	Layer 1 methods
+		/**	@name	Layer 1 methods
+		*/
 		//@{
 
 		/** Check an object header by determining its stream name by using @see
@@ -558,7 +560,8 @@ namespace BALL
 	 
 		//@}
 
-		///	@name	Layer 0 methods
+		/**	@name	Layer 0 methods
+		*/
 		//@{
 			
 		/**	Write the header for an object.
