@@ -1,4 +1,4 @@
-// $Id: surface.C,v 1.3 1999/12/28 18:15:29 oliver Exp $
+// $Id: surface.C,v 1.4 2000/03/27 09:08:24 oliver Exp $
 
 #include <BALL/MATHS/surface.h>
 
@@ -12,7 +12,7 @@ namespace BALL
 	{
 	}
 
-	Surface::Surface(const Surface& /* surface */, bool /* deep */)
+	Surface::Surface(const Surface& /* surface */)
 	{
 		// BAUSTELLE
 	}
