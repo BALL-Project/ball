@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.79 2000/03/28 19:21:16 oliver Exp $
+dnl    $Id: configure.in,v 1.80 2000/03/29 11:47:59 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -639,7 +639,7 @@ GXX:false
 #endif
 EOF
 
-IS_GXX=`${CXX} -E /tmp/$$.conftest.c |egrep GXX|${CUT} -d: -f2|${TR} -d " "`
+IS_GXX=`${CXX} -E /tmp/$$.conftest.c 2>/dev/null |egrep GXX|${CUT} -d: -f2|${TR} -d " "`
 if test "${IS_GXX}" = "true" ; then
 	AC_MSG_RESULT(yes)
 	HAS_GPLUSPLUS=true
