@@ -1,4 +1,4 @@
-// $Id: parameters.C,v 1.4 2000/09/18 14:38:07 oliver Exp $
+// $Id: parameters.C,v 1.5 2000/09/19 11:00:58 oliver Exp $
 //
 
 #include <BALL/FORMAT/parameters.h>
@@ -15,14 +15,12 @@ namespace BALL
 		:	valid_(parameters.valid_),
 			INI_file_(parameters.INI_file_)
 	{
-		init();
 	}
 
 	Parameters::Parameters(const String& filename)
 	{
 		// try to read the parameter file
 		INI_file_.setFilename(filename);
-		init();
 	}
 
 	Parameters::~Parameters()
@@ -42,7 +40,6 @@ namespace BALL
 	{
 		INI_file_ = parameters.INI_file_;
 		valid_ = parameters.valid_;
-		init();
 		
 		return *this;
 	}
@@ -55,7 +52,6 @@ namespace BALL
 	void Parameters::setFilename(const String& filename) 
 	{
 		INI_file_.setFilename(filename);
-		init();
 	}
 
 	INIFile& Parameters::getParameterFile() 
