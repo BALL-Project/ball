@@ -1,13 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.h,v 1.5 2003/09/03 12:34:51 amoll Exp $
+// $Id: cartoonModel.h,v 1.6 2003/10/16 06:27:41 oliver Exp $
+//
 
 #ifndef BALL_VIEW_MODELS_CARTOONMODEL_H
 #define BALL_VIEW_MODELS_CARTOONMODEL_H
 
 #ifndef BALL_VIEW_MODELS_BACKBONEMODEL_H
- #include <BALL/VIEW/MODELS/backboneModel.h>
+#	include <BALL/VIEW/MODELS/backboneModel.h>
 #endif
 
 namespace BALL
@@ -26,7 +27,8 @@ namespace BALL
 				documentation.
 				\ingroup  ViewModels
 		*/
-		class AddCartoonModel: public AddBackboneModel
+		class AddCartoonModel
+			: public AddBackboneModel
 		{
 			public:
 
@@ -56,6 +58,7 @@ namespace BALL
 				throw();
 
 			//@} 
+
 			/**	@name Processor specific methods 
 			*/ 
 			//@{
@@ -93,6 +96,7 @@ namespace BALL
 			virtual Processor::Result operator() (Composite& composite);
 
 			//@} 
+
 			/**	@name	debuggers and diagnostics 
 			*/ 
 			//@{
@@ -106,8 +110,8 @@ namespace BALL
 			*/
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
-
 			//@}
+
 			protected:
 
 			void drawHelix_(SecondaryStructure& ss);
@@ -121,10 +125,11 @@ namespace BALL
 
 			void insertTriangle_(Position v1, Position v2, Position v3, Mesh& mesh);
 
-			vector<Vector3> spline_;
+			std::vector<Vector3> spline_;
 	};
 
 	} // namespace VIEW
+
 } // namespace BALL
 
 #endif // BALL_VIEW_MODELS_CARTOONMODEL_H
