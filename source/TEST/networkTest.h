@@ -1,16 +1,14 @@
-// $Id: networkTest.h,v 1.3 2002/01/15 16:55:32 oliver Exp $
+// $Id: networkTest.h,v 1.4 2002/01/16 03:47:44 oliver Exp $
+
+// workaround for Solaris -- this should be caught by configure -- OK
+#define BSD_COMP 
 
 #include <sys/socket.h>	  // socket
 #include <netdb.h>	  // gethostbyname
 #include <netinet/in.h>	  // sockaddr_in
 #include <unistd.h>	  // close
+#include <sys/ioctl.h>
 #include <iostream>	  // cout, endl
-
-#if defined(__hpux__) || defined(__linux__) || defined(__osf__)
-# include <sys/ioctl.h>	  //ioctl, FIONBIO
-#else
-# include <sys/filio.h>   //ioctl, FIONBIO
-#endif
 
 class NetworkTest
 {

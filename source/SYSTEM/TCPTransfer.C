@@ -1,4 +1,7 @@
-// $Id: TCPTransfer.C,v 1.14 2002/01/15 16:14:53 oliver Exp $
+// $Id: TCPTransfer.C,v 1.15 2002/01/16 03:47:44 oliver Exp $
+
+// workaround for Solaris -- this should be caught by configure -- OK / 15.01.2002
+#define BSD_COMP
 
 #include <BALL/SYSTEM/TCPTransfer.h>
 #include <BALL/SYSTEM/timer.h>
@@ -6,15 +9,11 @@
 #include <sys/socket.h>		// socket
 #include <netdb.h>				// gethostbyname
 #include <netinet/in.h> 	// sockaddr_in
-#include <unistd.h>  			// close
+#include <unistd.h>  			// close, ioctl
+#include <sys/ioctl.h>		// FIONBIO
+
 #include <fstream>				// ofstream
 #include <iostream>				// cout, endl
-
-#if defined(__hpux__) || defined(__linux__) || defined(__osf__)
-# include <sys/ioctl.h>		//ioctl, FIONBIO
-#else
-# include <sys/filio.h>		//ioctl, FIONBIO
-#endif
 
 namespace BALL
 {
