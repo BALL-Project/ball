@@ -1,4 +1,4 @@
-// $Id: reducedSurface.h,v 1.1 2000/10/10 14:24:56 oliver Exp $
+// $Id: reducedSurface.h,v 1.2 2000/10/11 09:39:07 oliver Exp $
 
 #ifndef BALL_STRUCTURE_REDUCEDSURFACE_H
 #define BALL_STRUCTURE_REDUCEDSURFACE_H
@@ -902,7 +902,7 @@ print << pre << "  norm:       " << norm << "\n";
 				next_atom.radius += probe_radius_;
 				if (GetIntersection(first_atom,next_atom,intersection_circle))
 				{
-					T next_min = intersection_circle.getExtremum(direction,extrem);
+					T next_min = getCircleExtremum(intersection_circle, direction, extrem);
 					if (((extrem == 0) && Maths::isLess(next_min,x_min)) ||
 							((extrem != 0) && Maths::isGreater(next_min,x_min)))
 					{
@@ -1090,6 +1090,66 @@ print << pre << "  norm:       " << norm << "\n";
 		}
 
 
+    T getCircleExtremum(const TCircle3<T> circle, Position direction, Position extrem)
+    {
+      T min, max;
+      TVector3<T> norm2 = TVector3<T>(circle.n.x * circle.n.x, circle.n.y * circle.n.y,
+																			circle.n.z * circle.n.z);
+      switch (direction)
+      {
+        case 0 :  
+					if (Maths::isEqual(circle.n.y, 0) && Maths::isEqual(circle.n.z,0))
+					{
+						min = max = circle.p.x;
+					}
+					else
+					{
+						T x_norm = norm2.y + norm2.z;
+						x_norm /= norm2.x+x_norm;
+						x_norm = circle.radius * sqrt(x_norm);
+						min = (circle.p.x) - x_norm;
+						max = (circle.p.x) + x_norm;
+					}
+					break;
+        case 1 :  
+					if (Maths::isEqual(circle.n.x, 0) && Maths::isEqual(circle.n.z, 0))
+					{
+						min = max = circle.p.y;
+					}
+					else
+					{
+						T y_norm = norm2.x + norm2.z;
+						y_norm /= norm2.y + y_norm;
+						y_norm = circle.radius * sqrt(y_norm);
+						min = (circle.p.y)-y_norm;
+						max = (circle.p.y)+y_norm;
+					}
+					break;
+        case 2 :  
+					if (Maths::isEqual(circle.n.x, 0) && Maths::isEqual(circle.n.y, 0))
+					{
+						min = max = circle.p.z;
+					}
+					else
+					{
+						T z_norm = norm2.x + norm2.y;
+						z_norm /= norm2.z + z_norm;
+						z_norm = circle.radius * sqrt(z_norm);
+						min = circle.p.z - z_norm;
+						max = circle.p.z + z_norm;
+					}
+					break;
+			}
+      if (Maths::isEqual(extrem, 0))
+      {
+        return Maths::min(min, max);
+			}
+      else
+      {
+        return Maths::max(min, max);
+			}
+		}
+ 
 		bool checkProbe(const TSphere3<T>& probe)
 		{
 			list<Index> atom_list;
