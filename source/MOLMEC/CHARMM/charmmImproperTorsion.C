@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmImproperTorsion.C,v 1.14 2004/12/27 17:06:11 amoll Exp $
+// $Id: charmmImproperTorsion.C,v 1.15 2005/02/08 19:41:21 oliver Exp $
 //
 
 #include <BALL/MOLMEC/CHARMM/charmmImproperTorsion.h>
@@ -222,6 +222,7 @@ namespace BALL
 							Atom::BondIterator bond_it = atom_it->beginBond();
 							for (; +bond_it; ++bond_it)
 							{
+								if (bond_it->getType() == Bond::TYPE__HYDROGEN) continue; // Skip H-bonds!
 								if (bond_it->getPartner(*atom_it)->getName() == "SG")
 								{
 									cys_res = bond_it->getPartner(*atom_it)->getAncestor(RTTI::getDefault<Residue>());

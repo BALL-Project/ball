@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmBend.C,v 1.13 2005/01/24 23:45:04 amoll Exp $
+// $Id: charmmBend.C,v 1.14 2005/02/08 19:41:21 oliver Exp $
 //
 
 #include <BALL/MOLMEC/CHARMM/charmmBend.h>
@@ -81,9 +81,10 @@ namespace BALL
 		{
 			for (it2 = (*atom_it)->beginBond(); +it2 ; ++it2) 
 			{
+				if (it2->getType() == Bond::TYPE__HYDROGEN) continue; // Skip H-bonds!
 				for (it1 = it2, ++it1; +it1 ; ++it1 ) 
 				{
-				
+					if (it1->getType() == Bond::TYPE__HYDROGEN) continue; // Skip H-bonds!				
 					this_bend.atom1 = &Atom::getAttributes()[(*it2).getPartner(**atom_it)->getIndex()];
 					this_bend.atom2 = &Atom::getAttributes()[(*atom_it)->getIndex()];
 					this_bend.atom3 = &Atom::getAttributes()[(*it1).getPartner(**atom_it)->getIndex()];

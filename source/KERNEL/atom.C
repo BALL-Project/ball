@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.C,v 1.52 2005/01/18 21:46:49 amoll Exp $
+// $Id: atom.C,v 1.53 2005/02/08 19:41:20 oliver Exp $
 //
 
 #include <BALL/KERNEL/atom.h>
@@ -540,10 +540,16 @@ namespace BALL
 		return false;
 	}
 
-	bool 	Atom::isBoundTo(const Atom& atom) const
+	bool Atom::isBoundTo(const Atom& atom) const
 		throw()
 	{
-		return (getBond(atom) != 0);
+		const Bond* bond = getBond(atom);
+		if (bond != 0)
+		{
+			// Ignore H-bonds
+			return (bond->getType() != Bond::TYPE__HYDROGEN);
+		}
+		return false;
 	}
 
 	bool Atom::isBound() const
@@ -586,7 +592,10 @@ namespace BALL
 	bool Atom::isVicinal(const Atom& atom) const
 		throw()
 	{ 
-		if (atom == *this) return false;
+		if (atom == *this)
+		{
+			return false;
+		}
 
 		// an atom is vicinal to another, if it 
 		// is not directly bonded to it

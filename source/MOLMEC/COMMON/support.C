@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: support.C,v 1.46 2005/01/31 14:45:32 amoll Exp $
+// $Id: support.C,v 1.47 2005/02/08 19:41:21 oliver Exp $
 //
 
 #include <BALL/MOLMEC/COMMON/support.h>
@@ -30,7 +30,7 @@ namespace BALL
 	{
 
 #ifdef BALL_COMPILER_MSVC
-		double rint(double x)
+		inline double rint(double x)
 		{
 			if (x < 0.0)
 				return (double)(int)(x - 0.5);
@@ -178,6 +178,7 @@ namespace BALL
 						difference.y = difference.y - period_y * rint(difference.y * inverse_period_y);
 						difference.z = difference.z - period_z * rint(difference.z * inverse_period_z);
 
+						// Remove 1-2 and 1-3 pairs!
 						if ((difference.getSquareLength() < squared_distance) 
 								&& !atom_vector[i]->isBoundTo(*atom_vector[j])
 								&& !atom_vector[i]->isGeminal(*atom_vector[j]))
@@ -211,6 +212,7 @@ namespace BALL
 						position = atom_vector[i]->getPosition();
 						for (Position j = i + 1; j < atom_vector.size(); j++) 
 						{
+							// Remove 1-2 and 1-3 pairs!
 							if (((position.getSquareDistance(atom_vector[j]->getPosition())) < squared_distance) 
 									&& !atom_vector[i]->isBoundTo(*atom_vector[j])
 									&& !atom_vector[i]->isGeminal(*atom_vector[j]))
@@ -255,6 +257,7 @@ namespace BALL
  							tit++;
 							for (; +tit; tit++)
 							{
+								// Remove 1-2 and 1-3 pairs!
 								if (bit_pos.getSquareDistance((*tit)->getPosition()) < squared_distance 
 										&& !(*tit)->isBoundTo(**bit)
 										&& !(*tit)->isGeminal(**bit))
@@ -291,6 +294,7 @@ namespace BALL
 										HashGridBox3<Atom*>::ConstDataIterator bit = bbox->beginData(); 
 										for (; +bit; bit++)
 										{
+											// Remove 1-2 and 1-3 pairs!
 											if (((*bit)->getPosition().getSquareDistance(atom_pos) < squared_distance) 
 													&& !(*tit)->isBoundTo(**bit)
 													&& !(*tit)->isGeminal(**bit))
@@ -326,6 +330,7 @@ namespace BALL
 							{
 								for (data_it = (*box_it).beginData(); +data_it; ++data_it) 
 								{
+									// remove 1-2 and 1-3 pairs!
 									if (((position.getSquareDistance((*data_it)->getPosition())) < squared_distance) 
 											&& !(*data_it)->isBoundTo(**atom_it)
 											&& !(*data_it)->isGeminal(**atom_it))
@@ -768,4 +773,5 @@ Log.error() << "calculateNonBondedAtomPairs time: " << String(t.getClockTime()) 
 		}
 
 	}	// namespace MolmecSupport
+
 } // namespace BALL

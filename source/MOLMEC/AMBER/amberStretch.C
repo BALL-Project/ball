@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberStretch.C,v 1.25 2005/01/24 23:40:43 amoll Exp $
+// $Id: amberStretch.C,v 1.26 2005/02/08 19:41:21 oliver Exp $
 //
 
 #include <BALL/MOLMEC/AMBER/amberStretch.h>
@@ -86,6 +86,11 @@ namespace BALL
 				if (*atom_it == it->getFirstAtom()) 
 				{
 					Bond&	bond = const_cast<Bond&>(*it);
+					if (bond.getType() == Bond::TYPE__HYDROGEN)
+					{	
+						// Ignore hydrogen bonds!
+						continue;
+					}
 
 					if (!use_selection ||
 							(use_selection && bond.getFirstAtom()->isSelected() && 

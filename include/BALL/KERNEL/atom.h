@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.h,v 1.68 2004/05/27 19:49:38 oliver Exp $
+// $Id: atom.h,v 1.69 2005/02/08 19:41:20 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_ATOM_H
@@ -681,6 +681,7 @@ namespace BALL
 
 			/** Determine whether the atom is bound to another.
 					Calls  \link Atom::getBond Atom::getBond \endlink .
+					Hydrogen bonds (type = Bond::TYPE__HYDROGEN) are ignored.
 					@param   atom the atom in question
 					@return  bool - <tt>true</tt> if bond connects <b>  atom </b> with {\em *this atom},
 													<tt>false</tt> otherwise
@@ -700,6 +701,7 @@ namespace BALL
 			/**	True if the two atoms are geminal.
 					Two atoms are geminal if they do not share a common bond but both have a
 					bond to a third atom. For example the two hydrogen atoms in water are geminal. 
+					Hydrogen bonds (type = Bond::TYPE__HYDROGEN) are ignored.
 					@param	atom the second atom
 					@return bool - <b>true</b> if <tt>atom</tt> is geminal to this instance
 			*/
@@ -708,6 +710,7 @@ namespace BALL
 
 			/**	True if the two atoms are vicinal.
 					Two atoms are vicinal if they are separated by three bonds (1-4 position).
+					Hydrogen bonds (type = Bond::TYPE__HYDROGEN) are ignored.
 					@param	atom the second atom
 					@return bool - <b>true</b> if <tt>atom</tt> is vicinal to this instance
 			*/

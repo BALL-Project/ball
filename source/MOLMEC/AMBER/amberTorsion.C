@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberTorsion.C,v 1.33 2004/12/27 17:06:08 amoll Exp $
+// $Id: amberTorsion.C,v 1.34 2005/02/08 19:41:21 oliver Exp $
 //
 
 #include <BALL/MOLMEC/AMBER/amberTorsion.h>
@@ -103,6 +103,7 @@ namespace BALL
 		{
 			for (it1 = (*atom_it)->beginBond(); +it1 ; ++ it1) 
 			{
+				if (it1->getType() == Bond::TYPE__HYDROGEN) continue; // ignore H -bonds
 				if (*atom_it == it1->getFirstAtom()) 
 				{
 					// central atoms
@@ -111,6 +112,7 @@ namespace BALL
 
 					for (it2 = (*atom_it)->beginBond(); +it2 ; ++it2) 
 					{
+						if (it2->getType() == Bond::TYPE__HYDROGEN) continue; // ignore H -bonds
 						if (it2->getSecondAtom() != it1->getSecondAtom()) 
 						{
 							// determine the first atom
@@ -125,6 +127,7 @@ namespace BALL
  
 							for (it3 = const_cast<Atom*>(it1->getSecondAtom())->beginBond(); +it3 ; ++it3) 
 							{
+								if (it3->getType() == Bond::TYPE__HYDROGEN) continue; // ignore H -bonds
 								if (it3->getFirstAtom() != a2 ) 
 								{
 									// determine the fourth atom a4

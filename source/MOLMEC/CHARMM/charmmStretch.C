@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmStretch.C,v 1.13 2004/12/27 17:06:12 amoll Exp $
+// $Id: charmmStretch.C,v 1.14 2005/02/08 19:41:21 oliver Exp $
 //
 
 #include <BALL/MOLMEC/CHARMM/charmmStretch.h>
@@ -81,7 +81,8 @@ namespace BALL
 		{
 			for (bond_iterator = (*atom_it)->beginBond(); +bond_iterator; ++bond_iterator)
 			{
-				if ( getForceField()->getUseSelection() == false ||
+				if (bond_iterator->getType() == Bond::TYPE__HYDROGEN) continue; // Skip H-bonds!
+				if (getForceField()->getUseSelection() == false ||
 				    (getForceField()->getUseSelection() == true &&
 				    ((*bond_iterator).getFirstAtom()->isSelected() && (*bond_iterator).getSecondAtom()->isSelected())))
 				{
@@ -95,7 +96,7 @@ namespace BALL
 
 
 		// are there bonds ?
-		if ( number_of_stretches_  == 0) 
+		if (number_of_stretches_  == 0) 
 		{
 			return true;
 		}
@@ -128,7 +129,7 @@ namespace BALL
 				{
 					
 					Bond&	bond = const_cast<Bond&>(*it);
-
+					if (bond.getType() == Bond::TYPE__HYDROGEN) continue; // Skip H-bonds!
 					if (getForceField()->getUseSelection() == false ||
 					   (getForceField()->getUseSelection() == true && 
 					   (bond.getFirstAtom()->isSelected() && bond.getSecondAtom()->isSelected())))
@@ -183,7 +184,6 @@ namespace BALL
 	// calculates the current energy of this component
 	double CharmmStretch::updateEnergy()
 	{
-
 		// initial energy is zero
 		energy_ = 0;
 
@@ -198,8 +198,7 @@ namespace BALL
 				energy_ += stretch_[i].values.k * (distance - stretch_[i].values.r0) * (distance - stretch_[i].values.r0);
 
 			}
-		}
-		
+		}	
 		return energy_;
 	}
 
