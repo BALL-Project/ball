@@ -11,6 +11,7 @@ EXECUTABLES = \
 	BaseFragment_test\
 	ClassTest_test\
 	Composite_test\
+	EnergyMinimizer_test\
 	Fragment_test\
 	FragmentDB_test\
 	Limits_test\
@@ -53,6 +54,9 @@ ClassTest_test:	ClassTest_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 Composite_test:	Composite_test.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
+EnergyMinimizer_test:	EnergyMinimizer_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 Fragment_test:	Fragment_test.o
