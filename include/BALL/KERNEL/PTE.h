@@ -1,4 +1,4 @@
-// $Id: PTE.h,v 1.6 2000/05/19 12:48:04 oliver Exp $
+// $Id: PTE.h,v 1.7 2000/06/16 10:41:50 anker Exp $
 
 #ifndef BALL_KERNEL_PTE_H
 #define BALL_KERNEL_PTE_H
@@ -49,7 +49,8 @@ namespace BALL
 	*/
 	//@{
 
-	/**	Element class
+	/**	Element class.
+			{\bf Definition:}\URL{BALL/KERNEL/PTE.h}
 	*/
 	class Element
 		: public PropertyManager
