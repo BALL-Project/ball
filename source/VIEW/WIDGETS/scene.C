@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.165 2005/02/17 15:30:48 amoll Exp $
+// $Id: scene.C,v 1.166 2005/02/17 16:20:02 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -120,7 +120,8 @@ namespace BALL
 				stage_settings_(0),
 				animation_thread_(0),
 				stop_animation_(false),
-				content_changed_(true)
+				content_changed_(true),
+				want_to_use_vertex_buffer_(false)
 		{
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << "new Scene (2) " << this << std::endl;
@@ -347,7 +348,8 @@ namespace BALL
 			gl_renderer_.initSolid();
 			if (stage_->getLightSources().size() == 0) setDefaultLighting(false);
 			gl_renderer_.updateCamera();
-			stage_settings_->getGLSettings();
+			gl_renderer_.enableVertexBuffers(want_to_use_vertex_buffer_);
+ 			stage_settings_->getGLSettings();
 		}
 
 		void Scene::paintGL()
@@ -1053,7 +1055,7 @@ namespace BALL
 			writeLights_(inifile);
 
 			inifile.appendSection("OPENGL");
-			inifile.insertValue("OPENGL", "UseVertexBuffers", String(gl_renderer_.vertexBuffersEnabled()));
+			inifile.insertValue("OPENGL", "UseVertexBuffers", String(want_to_use_vertex_buffer_));
 		}
 
 
@@ -1124,16 +1126,15 @@ namespace BALL
 				switchShowWidget();
 			}
 
+			if (inifile.hasEntry("OPENGL", "UseVertexBuffers"))
+			{
+				want_to_use_vertex_buffer_ = inifile.getValue("OPENGL", "UseVertexBuffers").toBool();
+			}
+
 			readLights_(inifile);
 			light_settings_->updateFromStage();
 			stage_settings_->updateFromStage();
-
-			if (inifile.hasEntry("OPENGL", "UseVertexBuffers"))
-			{
-				gl_renderer_.enableVertexBuffers((inifile.getValue("OPENGL", "UseVertexBuffers")).toBool());
-			}
-
-			applyPreferences();
+ 			applyPreferences();
 		}
 
 

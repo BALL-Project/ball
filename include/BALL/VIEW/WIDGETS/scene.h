@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.59 2005/02/06 20:57:07 oliver Exp $
+// $Id: scene.h,v 1.60 2005/02/17 16:20:07 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -720,6 +720,7 @@ namespace BALL
 			AnimationThread* animation_thread_;
 			bool stop_animation_;
 			bool content_changed_;
+			bool want_to_use_vertex_buffer_;
 		};
 
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.64 2005/02/17 15:30:48 amoll Exp $
+// $Id: glRenderer.C,v 1.65 2005/02/17 16:20:02 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -52,7 +52,7 @@ namespace BALL
 			last_color_(&dummy_color_),
 			stereo_(NO_STEREO),
 			render_mode_(RENDER_MODE_UNDEFINED),
-			use_vertex_buffer_(true),
+			use_vertex_buffer_(false),
 			picking_mode_(false),
 			model_type_(MODEL_LINES)
 	{
@@ -158,18 +158,6 @@ namespace BALL
 		createSpheres_();
 		createTubes_();
 		createBoxes_();
-
-		// if vertex buffers were not disabled manualy, check if we can use them
-		if (!vertexBuffersSupported())
-		{
-			use_vertex_buffer_ = false;
-		}
-
-		if (use_vertex_buffer_)
-		{
-			Log.error() << "Using Vertex Buffer Object Extension" << std::endl;
-			MeshBuffer::initGL();
-		}
 
 		return true;
 	}
@@ -727,7 +715,6 @@ logString("OpenGL rendering time: " + String(t.getCPUTime()));
 	void GLRenderer::renderMesh_(const Mesh& mesh)
 		throw()
 	{
-//   		if (use_vertex_buffer_ && drawing_mode_ != DRAWING_MODE_WIREFRAME) return;
 		initDrawingMeshes_();
 
 		// If we have only one color for the whole mesh, this can
@@ -1500,8 +1487,11 @@ logString("OpenGL rendering time: " + String(t.getCPUTime()));
 			return false;
 		}
 
-		if (state) Log.info() << "Enabling Vertex Buffer" << std::endl;
-		else       Log.info() << "Disabling Vertex Buffer" << std::endl;
+		if (state != use_vertex_buffer_)
+		{
+			if (state) Log.info() << "Enabling Vertex Buffer" << std::endl;
+			else       Log.info() << "Disabling Vertex Buffer" << std::endl;
+		}
 
 		use_vertex_buffer_ = state;
 
