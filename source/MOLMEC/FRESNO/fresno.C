@@ -1,4 +1,4 @@
-// $Id: fresno.C,v 1.1.2.20 2003/05/07 16:10:40 anker Exp $
+// $Id: fresno.C,v 1.1.2.21 2003/06/04 15:33:00 anker Exp $
 // Molecular Mechanics: Fresno force field class
 
 #include <BALL/SYSTEM/path.h>
@@ -46,6 +46,7 @@ namespace BALL
 	const char* FresnoFF::Option::ROT_BIND_OFFSET = "rot_bind_offset";
 	const char* FresnoFF::Option::ROT_GRID_SPACING = "rot_grid_spacing";
 	const char* FresnoFF::Option::ROT_ALGORITHM = "rot_algorithm";
+	const char* FresnoFF::Option::ROT_METHOD = "rot_method";
 	const char* FresnoFF::Option::METAL_R1 = "metal_r1";
 	const char* FresnoFF::Option::METAL_R2 = "metal_r2";
 	const char* FresnoFF::Option::DESOLV_METHOD = "desolvation_method";
@@ -97,6 +98,8 @@ namespace BALL
 	const float FresnoFF::Default::ROT_GRID_SPACING = 5.0;
 	const Size FresnoFF::Default::ROT_ALGORITHM =
 		FresnoRotation::ALGORITHM__GUESS;
+	const Size FresnoFF::Default::ROT_METHOD =
+		FresnoRotation::CALCULATION__ORIGINAL;
 	const float FresnoFF::Default::METAL_R1 = 2.2;
 	const float FresnoFF::Default::METAL_R2 = 2.6;
 	const Size FresnoFF::Default::DESOLV_METHOD = 0;

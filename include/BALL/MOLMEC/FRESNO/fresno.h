@@ -1,4 +1,4 @@
-// $Id: fresno.h,v 1.1.2.16 2003/02/10 17:13:01 anker Exp $
+// $Id: fresno.h,v 1.1.2.17 2003/06/04 15:32:59 anker Exp $
 
 #ifndef BALL_MOLMEC_FRESNO_FRESNO_H
 #define BALL_MOLMEC_FRESNO_FRESNO_H
@@ -123,6 +123,10 @@ namespace BALL
 			/**
 			*/
 			static const char* ROT_ALGORITHM;
+
+			/**
+			*/
+			static const char* ROT_METHOD;
 
 			/**
 			*/
@@ -270,6 +274,10 @@ namespace BALL
 			/**
 			*/
 			static const Size ROT_ALGORITHM;
+
+			/**
+			*/
+			static const Size ROT_METHOD;
 
 			/**
 			*/

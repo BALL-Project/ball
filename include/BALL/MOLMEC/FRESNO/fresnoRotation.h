@@ -1,4 +1,4 @@
-// $Id: fresnoRotation.h,v 1.1.2.8 2003/05/07 16:10:40 anker Exp $
+// $Id: fresnoRotation.h,v 1.1.2.9 2003/06/04 15:32:59 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
 #ifndef BALL_MOLMEC_FRESNO_FRESNOROTATION_H
@@ -30,6 +30,22 @@ namespace BALL
 			ALGORITHM__DATABASE = 1
 		};
 
+		enum CalculationMethod
+		{
+			/// The original Chemscore term.
+			CALCULATION__ORIGINAL = 0,
+
+			/// The term developed by Böhm (N_rot)
+			CALCULATION__BOEHM = 1,
+
+			/// The number of glycosidic bonds
+			CALCULATION__GLYCOSIDIC_BONDS = 2,
+
+			/// The number of frozen glycosidic bonds
+			CALCULATION__FROZEN_GLYCOSIDIC_BONDS = 3
+		};
+
+			/// 
 		/** @name	Constructors and Destructors	
 		*/
 		//@{ 
@@ -110,6 +126,10 @@ namespace BALL
 		*/
 		::vector<const Bond*> rotatable_bonds_;
 
+		/*_ All glycosidic bonds.
+		*/
+		HashSet<const Bond*> glycosidic_bonds_;
+
 		/*_ The number of rotatable bonds (i. e. rotatable_bonds_.size()).
 		*/
 		Size N_rot_;
@@ -149,6 +169,10 @@ namespace BALL
 		/*_
 		 */
 		float bind_distance_offset_;
+
+		/*_
+		*/
+		Size calculation_method_;
 
 		/*_ The fresno atom types that are stored in the fresno force field
 		*/

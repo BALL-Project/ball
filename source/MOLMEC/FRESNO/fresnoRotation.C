@@ -1,4 +1,4 @@
-// $Id: fresnoRotation.C,v 1.1.2.16 2003/05/07 16:10:41 anker Exp $
+// $Id: fresnoRotation.C,v 1.1.2.17 2003/06/04 15:33:00 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
 #include <BALL/KERNEL/standardPredicates.h>
@@ -26,12 +26,17 @@ namespace BALL
 		throw()
 		:	ForceFieldComponent(),
 			rotatable_bonds_(),
+			glycosidic_bonds_(),
 			N_rot_(0),
 			is_frozen_(),
 			algorithm_type_(0),
 			heavy_atom_fractions_(),
 			grid_(0),
 			grid_spacing_(0.0),
+			receptor_(0),
+			factor_(0.0f),
+			bind_distance_offset_(0.0f),
+			calculation_method_(0),
 			fresno_types_(0)
 	{
 		// set component name
@@ -43,12 +48,17 @@ namespace BALL
 		throw()
 		:	ForceFieldComponent(force_field),
 			rotatable_bonds_(),
+			glycosidic_bonds_(),
 			N_rot_(0),
 			is_frozen_(),
 			algorithm_type_(0),
 			heavy_atom_fractions_(),
 			grid_(0),
 			grid_spacing_(0.0),
+			receptor_(0),
+			factor_(0.0f),
+			bind_distance_offset_(0.0f),
+			calculation_method_(0),
 			fresno_types_(0)
 	{
 		// set component name
@@ -60,12 +70,17 @@ namespace BALL
 		throw()
 		:	ForceFieldComponent(fr),
 			rotatable_bonds_(fr.rotatable_bonds_),
+			glycosidic_bonds_(fr.glycosidic_bonds_),
 			N_rot_(fr.N_rot_),
 			is_frozen_(fr.is_frozen_),
 			algorithm_type_(fr.algorithm_type_),
 			heavy_atom_fractions_(fr.heavy_atom_fractions_),
 			grid_(fr.grid_),
 			grid_spacing_(fr.grid_spacing_),
+			receptor_(fr.receptor_),
+			factor_(fr.factor_),
+			bind_distance_offset_(fr.bind_distance_offset_),
+			calculation_method_(fr.calculation_method_),
 			fresno_types_(fr.fresno_types_)
 	{
 	}
@@ -82,13 +97,29 @@ namespace BALL
 		throw()
 	{
 		rotatable_bonds_.clear();
+		glycosidic_bonds_.clear();
 		N_rot_ = 0;
 		is_frozen_.clear();
+		// ???? Set to default.
 		algorithm_type_ = 0;
 		heavy_atom_fractions_.clear();
-		if (grid_ != 0) grid_->clear();
+		if (grid_ != 0)
+		{
+			grid_->clear();
+			delete grid_;
+		}
 		grid_ = 0;
-		grid_spacing_ = 0.0;
+		grid_spacing_ = 0.0f;
+		// We don't delete the receptor molecule here. It belongs to the
+		// system.
+		receptor_ = 0;
+		// ????? Set to default.
+		factor_ = 0.0f;
+		// ????? Set to default.
+		bind_distance_offset_ = 0.0f;
+		// ????? Set to default.
+		calculation_method_ = 0;
+		// We cannot delete the fresno types from the force field.
 		fresno_types_ = 0;
 		// ?????
 		// ForceFieldComponent does not comply with the OCI
@@ -112,6 +143,9 @@ namespace BALL
 
 		// clear the vector of lipophilic interactions
 		rotatable_bonds_.clear();
+
+		// clear the hash set containing glycosidic bonds
+		glycosidic_bonds_.clear();
 
 		// clear the grid that contains the receptor
 		if (grid_ != 0)
@@ -139,18 +173,30 @@ namespace BALL
 		factor_
 			= options.setDefaultReal(FresnoFF::Option::ROT,
 					FresnoFF::Default::ROT);
+
 		grid_spacing_ 
 			= options.setDefaultReal(FresnoFF::Option::ROT_GRID_SPACING,
 					FresnoFF::Default::ROT_GRID_SPACING);
+
 		bind_distance_offset_
 			= options.setDefaultReal(FresnoFF::Option::ROT_BIND_OFFSET,
 					FresnoFF::Default::ROT_BIND_OFFSET);
+
 		algorithm_type_
 			= options.setDefaultInteger(FresnoFF::Option::ROT_ALGORITHM,
 					FresnoFF::Default::ROT_ALGORITHM);
+
 		Size verbosity
 			= options.setDefaultInteger(FresnoFF::Option::VERBOSITY,
 					FresnoFF::Default::VERBOSITY);
+
+		algorithm_type_
+			= options.setDefaultInteger(FresnoFF::Option::ROT_ALGORITHM,
+					FresnoFF::Default::ROT_ALGORITHM);
+
+		calculation_method_ 
+			= options.setDefaultInteger(FresnoFF::Option::NONPOLAR_METHOD,
+					FresnoFF::Default::ROT_METHOD);
 
 		// create a grid for the receptor and insert all its atoms
 		// this grid is needed to find out whether an atom of the ligand is
@@ -160,7 +206,6 @@ namespace BALL
 			 bb_proc.getUpper() - bb_proc.getLower() + Vector3(1.0),
 			 grid_spacing_);
 
-		// HashGridBox3<const Atom*>* box;
 		AtomConstIterator atom_it = system->beginAtom();
 		for (; +atom_it; ++atom_it)
 		{
@@ -172,22 +217,25 @@ namespace BALL
 
 		StringHashMap< pair<float, float> > bondlengths;
 
-		// ?????
-		// This is not nice and should be done using an INIFile
-		pair<float, float> tmp;
+		if (algorithm_type_ = ALGORITHM__GUESS)
+		{
+			// ?????
+			// This is not nice and should be done using an INIFile
+			pair<float, float> tmp;
 
-		// we need shorter bondlenghts for C-C and C-N
-		// tmp = pair<float, float>(1.54, 1.55);
-		tmp = pair<float, float>(1.52, 1.55);
-		bondlengths["C"] = tmp;
-		// tmp = pair<float, float>(1.47, 1.48);
-		tmp = pair<float, float>(1.44, 1.48);
-		bondlengths["N"] = tmp;
-		tmp = pair<float, float>(1.43, 1.47);
-		bondlengths["O"] = tmp;
-		// S is not taken into account by the original paper.
-		// tmp = pair<float, float>(1.80, 1.84);
-		// bondlengths["S"] = tmp;
+			// we need shorter bondlenghts for C-C and C-N
+			// tmp = pair<float, float>(1.54, 1.55);
+			tmp = pair<float, float>(1.52, 1.55);
+			bondlengths["C"] = tmp;
+			// tmp = pair<float, float>(1.47, 1.48);
+			tmp = pair<float, float>(1.44, 1.48);
+			bondlengths["N"] = tmp;
+			tmp = pair<float, float>(1.43, 1.47);
+			bondlengths["O"] = tmp;
+			// S is not taken into account by the original paper.
+			// tmp = pair<float, float>(1.80, 1.84);
+			// bondlengths["S"] = tmp;
+		}
 
 		Size guessed_bonds = 0;
 
@@ -242,8 +290,6 @@ namespace BALL
 		bool B_CO;
 
 		bool found_rotatable_bond = false;
-
-		// HashSet<const Atom*> tmp;
 
 		// a rotatable bond is *any* bond between sp2-sp3 or sp3-sp3 hybridized
 		// atoms that are not in rings and not bonds to terminal NH3 or CH3
@@ -401,10 +447,33 @@ namespace BALL
 					}
 				}
 			}
+
+			// Save rotatable bonds
 			if (found_rotatable_bond == true)
 			{
 				found_rotatable_bond = false;
 				rotatable_bonds_.push_back(*tree_it);
+
+				// If this bond is a glycosidic bond, save it in the respective
+				// hash set.
+
+				ExpressionPredicate is_glycosidic("!inRing() AND ( ( element(O) AND connectedTo(R) AND ( connectedTo(R) OR connectedTo(CR) ) ) OR ( element(C) AND connectedTo(R) AND connectedTo(OR) ) )");
+
+				const Bond* tmp = *tree_it;
+
+				if (is_glycosidic(*(tmp->getFirstAtom())) ||
+					is_glycosidic(*(tmp->getSecondAtom())))
+				{
+					glycosidic_bonds_.insert(*tree_it);
+					// DEBUG
+					Log.info() << "Found part of a glycosidic bond: " 
+						<< tmp->getFirstAtom()->getFullName()
+						<< "-"
+						<< tmp->getSecondAtom()->getFullName()
+						<< endl;
+					// /DEBUG
+				}
+
 				visited.clear();
 				heavy_atom_count = 0;
 				nonlip_heavy_atom_count = 0;
@@ -445,6 +514,8 @@ namespace BALL
 			Log.info() << "FresnoRotation setup statistics:" << endl;
 			Log.info() << "Found " << rotatable_bonds_.size() 
 				<< " rotatable bonds" << endl << endl;
+			Log.info() << "Found " << glycosidic_bonds_.size() 
+				<< " glycosidic bonds" << endl << endl;
 		}
 
 		return true;
@@ -456,9 +527,15 @@ namespace BALL
 		throw()
 	{
 
+		// how loud  will we cry?
 		Size verbosity
 			= getForceField()->options.setDefaultInteger(FresnoFF::Option::VERBOSITY,
 					FresnoFF::Default::VERBOSITY);
+
+		// 
+		double glycosidic_contribution = 0.0;
+		//
+		double non_glycosidic_contribution = 0.0;
 
 		if (N_rot_ == 0)
 		{
@@ -484,6 +561,15 @@ namespace BALL
 						Log.info() << "ROT: adding score of " << val << endl;
 					}
 					energy_ += val;
+
+					if (glycosidic_bonds_.has(rotatable_bonds_[i]))
+					{
+						glycosidic_contribution += val;
+					}
+					else
+					{
+						non_glycosidic_contribution += val;
+					}
 				}
 			}
 
@@ -494,6 +580,14 @@ namespace BALL
 			if (verbosity > 0)
 			{
 				Log.info() << "ROT: energy is " << energy_ << endl;
+				Log.info() << "glycosidic contribution (without prefactor) " 
+					<< glycosidic_contribution << endl;
+				Log.info() << "non-glycosidic contribution (without prefactor) " 
+					<< non_glycosidic_contribution << endl;
+				Log.info() << "glycosidic contribution (with prefactor) " 
+					<< glycosidic_contribution * (1 - 1/N_rot_) + 1.0 << endl;
+				Log.info() << "non-glycosidic contribution (with prefactor) " 
+					<< non_glycosidic_contribution * (1 - 1/N_rot_) + 1.0 << endl;
 			}
 
 			return energy_;
