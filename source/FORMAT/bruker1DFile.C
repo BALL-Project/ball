@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bruker1DFile.C,v 1.17 2003/06/01 17:05:57 oliver Exp $
+// $Id: bruker1DFile.C,v 1.18 2003/06/02 14:34:28 oliver Exp $
 //
 
 #include <BALL/FORMAT/bruker1DFile.h>
@@ -9,7 +9,7 @@
 namespace BALL 
 {
 
-  Bruker1D::Bruker1D()
+  Bruker1DFile::Bruker1DFile()
     : File(),
 			min_(0),
 			max_(1),
@@ -17,7 +17,7 @@ namespace BALL
   {
   }
 
-	Bruker1D::Bruker1D(const String& name, OpenMode open_mode) 
+	Bruker1DFile::Bruker1DFile(const String& name, OpenMode open_mode) 
 		throw(Exception::FileNotFound)
 		: File(name + FileSystem::PATH_SEPARATOR + "1r", open_mode),
 			min_(0),
@@ -31,7 +31,7 @@ namespace BALL
 		pars_.close();
 	}
 
-	Bruker1D::Bruker1D(const Bruker1D& file) 
+	Bruker1DFile::Bruker1DFile(const Bruker1DFile& file) 
 		throw(Exception::FileNotFound)
 		: File(file),
 			min_(file.min_),
@@ -40,12 +40,12 @@ namespace BALL
 	{
 	}
 
-	Bruker1D::~Bruker1D()
+	Bruker1DFile::~Bruker1DFile()
 		throw()
 	{
 	}
 
-	void Bruker1D::read(const String &name)
+	void Bruker1DFile::read(const String &name)
 	{
 	  pars_.open(name + FileSystem::PATH_SEPARATOR + "procs");
 	  pars_.read();
@@ -58,7 +58,7 @@ namespace BALL
 	  read();
 	}
 
-  void Bruker1D::read()
+  void Bruker1DFile::read()
 	{
 	  char c[4];
 	  signed long int &numdum = *(signed long int*) (&c[0]);

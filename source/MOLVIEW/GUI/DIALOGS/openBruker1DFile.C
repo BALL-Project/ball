@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: openBruker1DFile.C,v 1.8 2003/06/01 17:06:01 oliver Exp $
+// $Id: openBruker1DFile.C,v 1.9 2003/06/02 14:34:28 oliver Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/openBruker1DFile.h>
 #include <BALL/FORMAT/bruker1DFile.h>
@@ -13,10 +13,10 @@ namespace BALL
   namespace MOLVIEW
   {
     OpenBruker1DFile::OpenBruker1DFile(QWidget* parent, const char* name)
-      : FileDialog("Import Bruker1D File", QFileDialog::ExistingFile, parent, name)
+      : FileDialog("Import Bruker1DFile File", QFileDialog::ExistingFile, parent, name)
     {
       QStringList string_list;
-      string_list = "Bruker1D-files (1r)";
+      string_list = "Bruker1DFile-files (1r)";
 
       setFilters(string_list);
     }
@@ -44,10 +44,10 @@ namespace BALL
 	  void OpenBruker1DFile::openFile_()
 		  throw()
     {
-      setStatusbarText("reading Bruker1D file...");
+      setStatusbarText("reading Bruker1DFile file...");
 
       // reading the file
-      Bruker1D *myfile = new Bruker1D();
+      Bruker1DFile *myfile = new Bruker1DFile();
       
       String mydir = dirPath().latin1();
 
@@ -57,7 +57,7 @@ namespace BALL
       }
       catch(...)
       {
-				Log.info() << "> read Bruker1D file failed." << std::endl;
+				Log.info() << "> read Bruker1DFile file failed." << std::endl;
 			  delete myfile;
 			  return;
       }
