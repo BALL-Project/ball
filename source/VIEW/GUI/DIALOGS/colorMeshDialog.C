@@ -1,6 +1,5 @@
 #include <BALL/VIEW/GUI/DIALOGS/colorMeshDialog.h>
 #include <BALL/SYSTEM/path.h>
-#include <BALL/VIEW/GUI/DIALOGS/colorMeshDialog.h>
 #include <BALL/DATATYPE/regularData3D.h>
 #include <BALL/SYSTEM/file.h>
 #include <BALL/VIEW/DATATYPE/colorTable.h>
