@@ -1,4 +1,4 @@
-// $Id: NMRStarFile_test.C,v 1.2 2000/09/18 16:46:57 amoll Exp $
+// $Id: NMRStarFile_test.C,v 1.3 2000/09/18 16:49:34 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 using namespace BALL;
 
-START_TEST(String,"$Id: NMRStarFile_test.C,v 1.2 2000/09/18 16:46:57 amoll Exp $")
+START_TEST(String,"$Id: NMRStarFile_test.C,v 1.3 2000/09/18 16:49:34 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
