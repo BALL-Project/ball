@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.36 2004/04/17 20:05:05 amoll Exp $
+// $Id: geometricControl.C,v 1.37 2004/04/18 17:13:50 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -343,9 +343,13 @@ void GeometricControl::selectedRepresentation(Representation& representation, bo
 		
 	representation.toggleProperty(Representation::PROPERTY__HIDDEN);
 
- 	SceneMessage *scene_message = new SceneMessage(SceneMessage::REDRAW);
-// 	SceneMessage *scene_message = new SceneMessage(SceneMessage::REBUILD_DISPLAY_LISTS);
-	notify_(scene_message);
+	if (representation.needsUpdate()) 
+	{
+		representation.update(true);
+		RepresentationMessage* msg = 
+			new RepresentationMessage(representation, RepresentationMessage::UPDATE);
+		notify_(msg);
+	}
 }
 
 

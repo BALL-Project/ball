@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.30 2004/04/17 21:45:58 amoll Exp $
+// $Id: representation.C,v 1.31 2004/04/18 17:15:47 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/representation.h>
 #include <BALL/VIEW/MODELS/modelProcessor.h>
@@ -11,6 +11,8 @@
 #include <BALL/VIEW/KERNEL/threads.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
+
+#include <BALL/KERNEL/atom.h>
 
 #include <qapplication.h>
 
@@ -230,6 +232,16 @@ namespace BALL
 		void Representation::update(bool rebuild) 
 			throw()
 		{
+			// no need to update hidden representations
+			if (hasProperty(PROPERTY__HIDDEN)) 
+			{
+				needs_update_ = true;
+				return;
+			}
+			else
+			{
+				needs_update_ = false;
+			}
 #ifndef BALL_QT_HAS_THREADS
 			update_(rebuild);
 #else
@@ -411,6 +423,24 @@ namespace BALL
 			{
 				color_processor_->setTransparency(transparency_);
 			}
+		}
+
+		bool Representation::needsUpdate() const
+			throw()
+		{
+			if (needs_update_ || 
+					getModelBuildTime() < Atom::getAttributesModificationTime())
+			{
+				return true;
+			}
+
+			CompositeSet::ConstIterator it = composites_.begin();
+			for (;it != composites_.end(); it++)
+			{
+				if (getModelBuildTime() < (*it)->getModificationTime()) return true;
+			}
+
+			return false;
 		}
 
 	} // namespace VIEW

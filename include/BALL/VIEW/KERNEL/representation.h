@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.18 2004/02/26 08:41:39 anhi Exp $
+// $Id: representation.h,v 1.19 2004/04/18 17:15:25 amoll Exp $
 //
 
 #ifndef  BALL_VIEW_KERNEL_REPRESENTATION_H
@@ -253,6 +253,13 @@ namespace BALL
 			const PreciseTime& getModelBuildTime() const
 				throw() { return model_build_time_;}
 
+			/** Returns true, if Representation needs to be updated.
+			 		Called by GeometricControl.
+					Uses needs_update_.
+			*/
+			bool needsUpdate() const
+				throw();
+
 			///
 			void dump(std::ostream& s, Size depth) const
 				throw();
@@ -311,7 +318,11 @@ namespace BALL
 			//_
 			CompositeSet 				composites_;
 
+			//_
 			PreciseTime 				model_build_time_;
+
+			//_ set to true, if update is called, while representation is hidden
+			bool 								needs_update_;
 
 			static UpdateRepresentationThread* thread_;
 		};
