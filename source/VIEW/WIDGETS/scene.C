@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.154 2004/11/26 22:14:45 amoll Exp $
+// $Id: scene.C,v 1.155 2004/11/26 23:12:45 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -2046,10 +2046,7 @@ namespace BALL
 					for (Size i = 0; i < steps && !stop_animation_; i++)
 					{
 						#ifdef BALL_QT_HAS_THREADS
-							while (qApp->hasPendingEvents())
-							{
-								animation_thread_->mySleep(50);
-							}
+							animation_thread_->mySleep(50);
 						#endif
 
 						camera.setViewPoint(camera.getViewPoint() - diff_viewpoint);
