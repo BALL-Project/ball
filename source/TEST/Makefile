@@ -54,6 +54,7 @@ EXECUTABLES = \
 	Sphere3_test\
 	String_test\
 	StructureMapper_test\
+	StructureMapper_test\
 	TransformationApplicator_test\
 	TranslationApplicator_test\
 	Vector3_test\
@@ -199,6 +200,9 @@ StructureMapper_test:	StructureMapper_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 String_test:	String_test.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
+System_test:	System_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 TranslationApplicator_test:	TranslationApplicator_test.o
