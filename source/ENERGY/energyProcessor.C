@@ -1,39 +1,36 @@
-// $Id: energyProcessor.C,v 1.1 2000/09/05 14:29:17 oliver Exp $
+// $Id: energyProcessor.C,v 1.2 2000/10/05 17:20:28 anker Exp $
 
 #include <BALL/ENERGY/energyProcessor.h>
 
 namespace BALL
 {
 
-	EnergyProcessor::EnergyProcessor()
+	EnergyProcessor::EnergyProcessor() throw()
 		: UnaryProcessor<AtomContainer>(),
 			fragment_(0),
-			energy_(0)
+			energy_(0),
+			valid_(false)
 	{
 	}
 
 
-	EnergyProcessor::EnergyProcessor(const EnergyProcessor& proc)
+	EnergyProcessor::EnergyProcessor(const EnergyProcessor& proc) throw()
 		: UnaryProcessor<AtomContainer>(),
 			fragment_(proc.fragment_),
-			energy_(proc.energy_)
+			energy_(proc.energy_),
+			valid_(proc.valid_)
 	{
 	}
 
 
-	EnergyProcessor::~EnergyProcessor()
-	{
-		destroy();
-	}
-
-
-	void EnergyProcessor::destroy()
+	EnergyProcessor::~EnergyProcessor() throw()
 	{
 		clear();
+		valid_ = false;
 	}
 
 
-	void EnergyProcessor::clear()
+	void EnergyProcessor::clear() throw()
 	{
 		// BAUSTELLE
 		//UnaryProcessor<AtomContainer>::clear();
@@ -41,7 +38,7 @@ namespace BALL
 		energy_ = 0;
 	}
 
-	bool EnergyProcessor::start()
+	bool EnergyProcessor::start() throw()
 	{
 		fragment_ = 0;
 		energy_ = 0;
@@ -49,35 +46,43 @@ namespace BALL
 	}
 
 
-	void EnergyProcessor::set(const EnergyProcessor& proc)
+	const EnergyProcessor& EnergyProcessor::operator =
+		(const EnergyProcessor& proc) throw()
 	{
 		fragment_ = proc.fragment_;
 		energy_ = proc.energy_;
-	}
 
-
-	const EnergyProcessor& EnergyProcessor::operator =
-		(const EnergyProcessor& proc)
-	{
-		set(proc);
 		return *this;
 	}
 
 
-	Processor::Result EnergyProcessor::operator () (AtomContainer& fragment)
+	Processor::Result EnergyProcessor::operator () (AtomContainer& fragment) throw()
 	{
 		if (fragment_ == 0)
 		{
 			fragment_ = (const AtomContainer*) &fragment;
 		}
-		// BAUSTELLE: Sollte hier ein CONTINUE hin?
 		return Processor::BREAK;
 	}
 
 
-	double EnergyProcessor::getEnergy() const
+	double EnergyProcessor::getEnergy() const throw()
 	{
 		return energy_;
 	}
+
+	
+	bool EnergyProcessor::isValid() const throw()
+	{
+		return valid_;
+	}
+
+
+	bool EnergyProcessor::operator == (const EnergyProcessor& proc) const throw()
+	{
+		return ((fragment_ == proc.fragment_) && (energy_ == proc.energy_)
+			&& (valid_ == proc.valid_));
+	}
+
 
 } // namespace BALL

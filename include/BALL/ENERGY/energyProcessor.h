@@ -1,4 +1,4 @@
-// $Id: energyProcessor.h,v 1.3 2000/08/31 21:14:40 oliver Exp $
+// $Id: energyProcessor.h,v 1.4 2000/10/05 17:20:25 anker Exp $
 
 #ifndef BALL_ENERGY_ENERGYPROCESSOR_H
 #define BALL_ENERGY_ENERGYPROCESSOR_H
@@ -29,25 +29,21 @@ namespace BALL
 
 		public:
 
-		// BALL_CREATE_NODEEP(EnergyProcessor)
+		BALL_CREATE(EnergyProcessor)
+
 
 		/** @name Constructors and Destructors */
 		//@{
 
 		/** Default constructor */
-		EnergyProcessor();
+		EnergyProcessor() throw();
 
-		/** */
-		EnergyProcessor(const EnergyProcessor& proc);
+		/** Copy constructor */
+		EnergyProcessor(const EnergyProcessor& proc) throw();
 
 		/** Destructor */
-		virtual ~EnergyProcessor();
+		virtual ~EnergyProcessor() throw();
 
-		/** */
-		virtual void destroy();
-
-		/** */
-		virtual void clear();
 		//@}
 
 
@@ -55,10 +51,10 @@ namespace BALL
 		//@{
 
 		/** */
-		void set(const EnergyProcessor& proc);
+		const EnergyProcessor& operator = (const EnergyProcessor& proc) throw();
 
 		/** */
-		const EnergyProcessor& operator = (const EnergyProcessor& proc);
+		virtual void clear() throw();
 
 		//@}
 
@@ -67,10 +63,10 @@ namespace BALL
 		//@{
 
 		/** Start-function. */
-		virtual bool start();
+		virtual bool start() throw();
 
 		/** Operator-function. This function only stores the AtomContainer. */
-		virtual Processor::Result operator () (AtomContainer& fragment);
+		virtual Processor::Result operator () (AtomContainer& fragment) throw();
 		
 		//@}
 
@@ -79,14 +75,30 @@ namespace BALL
 		//@{
 
 		/** return the computed energy */
-		double getEnergy() const;
+		double getEnergy() const throw();
 
 		//@}
+
+		
+		/** @name Predicates */
+		//@{
+
+		/** Validity */
+		bool isValid() const throw();
+
+		/** Equality operator */
+		bool operator == (const EnergyProcessor& proc) const throw();
+
+		//@}
+
 
 		protected:
 
 		const AtomContainer* fragment_;
 		double energy_;
+
+		bool valid_;
+
 	};
 }
 

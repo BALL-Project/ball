@@ -1,6 +1,5 @@
-// $Id: composedEnergyProcessor.h,v 1.1 2000/08/31 18:45:30 anker Exp $
+// $Id: composedEnergyProcessor.h,v 1.2 2000/10/05 17:20:25 anker Exp $
 
-// BAUSTELLE: Pfad?
 #ifndef BALL_ENERGY_COMPOSEDENERGYPROCESSOR
 #define BALL_ENERGY_COMPOSEDENERGYPROCESSOR
 
@@ -27,33 +26,27 @@ namespace BALL
 		given list of energy contributions (@see EnergyProcessor).
 	 */
 	class ComposedEnergyProcessor
-		:	public EnergyProcessor
+		: public EnergyProcessor
 	{
 
 		public:
 
-		// BALL_CREATE(ComposedEnergyProcessor)
+		BALL_CREATE(ComposedEnergyProcessor)
 
 		/** @name Constructors and destructors */
 		//@{
 
 		/** Default constructor */
-		ComposedEnergyProcessor();
+		ComposedEnergyProcessor() throw();
 
 		/** Copy constructor */
-		ComposedEnergyProcessor(const ComposedEnergyProcessor& composed_energy_proc);
+		ComposedEnergyProcessor(const ComposedEnergyProcessor& composed_energy_proc) throw();
 
 		/** Detailed constructor */
-		ComposedEnergyProcessor(EnergyProcessorList proc_list);
+		ComposedEnergyProcessor(EnergyProcessorList proc_list) throw();
 
 		/** Destructor */
-		virtual ~ComposedEnergyProcessor();
-
-		/** */
-		virtual void destroy();
-
-		/** */
-		virtual void clear();
+		virtual ~ComposedEnergyProcessor() throw();
 
 		//@}
 
@@ -61,12 +54,12 @@ namespace BALL
 		/** @name Assignment */
 		//@{
 
-		/** */
-		void set(const ComposedEnergyProcessor& proc);
-
-		/** */
+		/** Assignment operator */
 		const ComposedEnergyProcessor& operator = 
-			(const ComposedEnergyProcessor& proc);
+			(const ComposedEnergyProcessor& proc) throw();
+
+		/** Clear method */
+		virtual void clear() throw();
 
 		//@}
 
@@ -75,7 +68,7 @@ namespace BALL
 		//@{
 		
 		/** Do all calculations and sum up the different energy contributions */
-		virtual bool finish();
+		virtual bool finish() throw();
 
 		//@}
 
@@ -84,19 +77,40 @@ namespace BALL
 		//@{
 
 		/** Add a component to the list of EnergyProcessors */
-		void addComponent(EnergyProcessor* proc);
+		void addComponent(EnergyProcessor* proc) throw();
 
 		/** remove a component from the list */
-		void removeComponent(EnergyProcessor* proc);
+		void removeComponent(EnergyProcessor* proc) throw();
 
 		/** return the energy value */
-		// double getEnergy();
+		// double getEnergy() throw();
 
 		//@}
+
+
+		/** @name Predicates */
+		//@{
+
+		/** Validity */
+		bool isValid() const throw();
+
+		/** Equality operator */
+		bool operator == (const ComposedEnergyProcessor& proc) const throw();
+
+		//@}
+
 
 		protected:
 
 		EnergyProcessorList components_;
+
+
+		private:
+
+		/*_ check the validity of this instance. If one of the processors in
+		 * the list is invalid, then this instance of ComposedEnergyProcessor
+		 * is invalid */
+		void checkValidity() throw();
 
 	};
 

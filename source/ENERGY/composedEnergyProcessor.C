@@ -1,11 +1,11 @@
-// $Id: composedEnergyProcessor.C,v 1.1 2000/09/05 14:29:16 oliver Exp $
+// $Id: composedEnergyProcessor.C,v 1.2 2000/10/05 17:20:28 anker Exp $
 
 #include <BALL/ENERGY/composedEnergyProcessor.h>
 
 namespace BALL
 {
 
-	ComposedEnergyProcessor::ComposedEnergyProcessor()
+	ComposedEnergyProcessor::ComposedEnergyProcessor() throw()
 		:	EnergyProcessor(),
 			components_()
 	{
@@ -13,7 +13,7 @@ namespace BALL
 
 
 	ComposedEnergyProcessor::ComposedEnergyProcessor
-		(const ComposedEnergyProcessor& proc)
+		(const ComposedEnergyProcessor& proc) throw()
 		:	EnergyProcessor(proc),
 			components_(proc.components_)
 	{
@@ -21,47 +21,41 @@ namespace BALL
 
 
 	ComposedEnergyProcessor::ComposedEnergyProcessor(
-			EnergyProcessorList proc_list)
-		: components_(proc_list)
+			EnergyProcessorList proc_list) throw()
+		: EnergyProcessor(),
+			components_(proc_list)
 	{
+		checkValidity();
 	}
 
 
-	ComposedEnergyProcessor::~ComposedEnergyProcessor()
-	{
-		destroy();
-	}
-
-	
-	void ComposedEnergyProcessor::destroy()
+	ComposedEnergyProcessor::~ComposedEnergyProcessor() throw()
 	{
 		clear();
+
+		valid_ = false;
 	}
 
 
-	void ComposedEnergyProcessor::clear()
+	void ComposedEnergyProcessor::clear() throw()
 	{
 		EnergyProcessor::clear();
 		components_.clear();
 	}
 
 
-	void ComposedEnergyProcessor::set(const ComposedEnergyProcessor& proc)
-	{
-		EnergyProcessor::set(proc);
-		components_ = proc.components_;
-	}
-
-
 	const ComposedEnergyProcessor& ComposedEnergyProcessor::operator =
-		(const ComposedEnergyProcessor& proc)
+		(const ComposedEnergyProcessor& proc) throw()
 	{
-		set(proc);
+		EnergyProcessor::operator = (proc);
+		components_ = proc.components_;
+		valid_ = proc.valid_;
+
 		return *this;
 	}
 
 
-	bool ComposedEnergyProcessor::finish()
+	bool ComposedEnergyProcessor::finish() throw()
 	{
 		EnergyProcessorList::Iterator list_it = components_.begin();
 		for (; list_it != components_.end(); ++list_it)
@@ -72,14 +66,45 @@ namespace BALL
 		return 1;
 	}
 
-	void ComposedEnergyProcessor::addComponent(EnergyProcessor* proc)
+
+	void ComposedEnergyProcessor::addComponent(EnergyProcessor* proc) throw()
 	{
+		// if there was no processor in the list before, assume that the
+		// instance will be valid after insertion.
+
+		if (components_.size() == 0)
+		{
+			valid_ = true;
+		}
+
 		components_.push_back(proc);
+
+		// if the processor is invalid, invalidate the whole instance
+		if (!proc->isValid())
+		{
+			valid_ = false;
+		}
 	}
 
-	void ComposedEnergyProcessor::removeComponent(EnergyProcessor* proc)
+
+	void ComposedEnergyProcessor::removeComponent(EnergyProcessor* proc) throw()
 	{
 		components_.remove(proc);
+		checkValidity();
+	}
+
+
+	void ComposedEnergyProcessor::checkValidity() throw()
+	{
+		valid_ = true;
+		EnergyProcessorList::Iterator it = components_.begin();
+		for (; it != components_.end(); ++it)
+		{
+			if (!(*it)->isValid())
+			{
+				valid_ =false;
+			}
+		}
 	}
 
 } // namespace BALL
