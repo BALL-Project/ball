@@ -1,4 +1,4 @@
-// $Id: HINFile.C,v 1.25 2000/10/23 23:31:08 amoll Exp $
+// $Id: HINFile.C,v 1.26 2000/12/14 06:36:59 oliver Exp $
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/CONCEPT/composite.h>
@@ -9,7 +9,6 @@
 #include <BALL/KERNEL/PDBAtom.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/PTE.h>
-#include <BALL/STRUCTURE/geometricProperties.h>
 
 #include <stack>
 
@@ -830,9 +829,15 @@ namespace BALL
 				if (tag == "box")
 				{
 					// retrieve the periodic boundary
-					box_.b.x = line.getField(1).toFloat();
-					box_.b.y = line.getField(2).toFloat();
-					box_.b.z = line.getField(3).toFloat();
+					// we assume that the box is centered about the origin
+					// of the coordinate system
+					box_.a.x = - line.getField(1).toFloat();
+					box_.a.y = - line.getField(2).toFloat();
+					box_.a.z = - line.getField(3).toFloat();
+					
+					box_.b.x = - box_.a.x;
+					box_.b.y = - box_.a.y;
+					box_.b.z = - box_.a.z;
 					
 					continue;
 				}
@@ -928,17 +933,6 @@ namespace BALL
 					(*list_it)->destroy();
 				}
 			}
-		}
-
-		// if a bounding box was in the file...
-		if (box_.a != box_.b)
-		{
-			// ...calculate the bounding box of the system
-			// but read the bounding box size from the file
-			BoundingBoxProcessor	box_proc;
-			system.apply(box_proc);
-			box_.a += box_proc.getLower();
-			box_.b += box_proc.getLower();
 		}
 	}
 
