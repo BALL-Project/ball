@@ -46,6 +46,7 @@ EXECUTABLES = \
 	KernelPredicate_test\
 	Limits_test\
 	Line3_test\
+	LineBasedFile_test\
 	List_test\
 	LogStream_test\
 	MakeSpectrumProcessor_test\
