@@ -1,4 +1,4 @@
-// $Id: numericalSAS.C,v 1.16 2000/08/30 19:59:13 oliver Exp $
+// $Id: numericalSAS.C,v 1.17 2000/08/31 16:14:33 anker Exp $
 
 #include <BALL/STRUCTURE/numericalSAS.h>
 #include <BALL/KERNEL/atom.h>
@@ -336,9 +336,9 @@ namespace BALL
 		return area;
 	}
 	
-  float calculateSASAtomPoints
-		(const AtomContainer& fragment, HashMap<Atom*,Surface>& atom_surfaces,
-		 float probe_radius,  Size number_of_dots)
+  float calculateSASAtomPoints(const BaseFragment& fragment, 
+			std::vector< std::pair<Vector3, Surface> >& atom_surfaces,
+			float probe_radius,  Size number_of_dots)
 	{
 		// extract all atoms: iterate over all composites and
 		// check whether they are Atoms
@@ -422,7 +422,8 @@ namespace BALL
 				surface.normal[i] *= length;
 				point++;
 			}
-			atom_surfaces.insert(pair<Atom*, Surface>(atoms[j], surface));
+			// atom_surfaces.insert(pair<Atom*, Surface>(atoms[j], surface));
+			atom_surfaces.push_back(pair<Vector3, Surface>(atoms[j]->getPosition(), surface));
 		}
 
 		// free arrays (if created)

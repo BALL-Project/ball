@@ -10,6 +10,10 @@ CPP_SOURCES=\
 	geometricProperties.C\
 	geometricTransformations.C\
 	numericalSAS.C\
+	radialDistributionFunction.C\
+	RDFIntegrator.C\
+	RDFParameter.C\
+	RDFSection.C\
 	residueChecker.C\
 	rotamerLibrary.C\
 	structureMapper.C
