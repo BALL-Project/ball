@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.34 2004/01/29 12:11:19 amoll Exp $
+// $Id: scene.C,v 1.35 2004/02/05 14:45:21 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1071,8 +1071,8 @@ void Scene::initializeWidget(MainControl& main_control)
 
 	window_menu_entry_id_ = 
 		main_control.insertMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
-	getMainControl()->menuBar()->setItemChecked(window_menu_entry_id_, true);
-	getMainControl()->menuBar()->setItemChecked(stereo_id_, false);
+	menuBar()->setItemChecked(window_menu_entry_id_, true);
+	menuBar()->setItemChecked(stereo_id_, false);
 
 	setCursor(QCursor(Qt::SizeAllCursor));
 }
@@ -1095,11 +1095,11 @@ void Scene::finalizeWidget(MainControl& main_control)
 	main_control.removeMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
 }
 
-void Scene::checkMenu(MainControl& main_control)
+void Scene::checkMenu(MainControl& /*main_control*/)
 	throw()
 {
-	(main_control.menuBar())->setItemChecked(rotate_id_, (rotate_mode_));
-	(main_control.menuBar())->setItemChecked(picking_id_, (!rotate_mode_));		
+	menuBar()->setItemChecked(rotate_id_, 	rotate_mode_);
+	menuBar()->setItemChecked(picking_id_, !rotate_mode_);		
 }
 
 //##########################EVENTS#################################

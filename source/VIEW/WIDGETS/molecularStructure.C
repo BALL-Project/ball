@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.6 2004/02/05 11:56:13 amoll Exp $
+// $Id: molecularStructure.C,v 1.7 2004/02/05 14:45:20 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -109,17 +109,14 @@ namespace BALL
 															SLOT(amberMDSimulation()), CTRL+Key_D, MainControl::SIMULATIONS + 11, hint);
 
 		hint = "Create a grid with the distance to the geometric center of a structure.";
-		create_distance_grid_id_ = main_control.insertMenuEntry(MainControl::TOOLS_CREATE_GRID, 
-																				"&Distance Grid", this, SLOT(createGridFromDistance()), 
-																				0, -1, hint);   
+		create_distance_grid_id_ = insertMenuEntry(MainControl::TOOLS_CREATE_GRID, 
+																				"&Distance Grid", this, SLOT(createGridFromDistance()), 0, -1, hint);   
 
 		hint = "Map two proteins.";
-		map_proteins_id_ = main_control.insertMenuEntry(MainControl::TOOLS,
-																				"&Map two Proteins", this, SLOT(mapProteins()), 0, -1, hint);
+		map_proteins_id_ = insertMenuEntry(MainControl::TOOLS, "&Map two Proteins", this, SLOT(mapProteins()), 0, -1, hint);
 
 		hint = "Calculate RMSD for two Molecules or Fragments of Molecules.";
-		calculate_RMSD_id_ = main_control.insertMenuEntry(MainControl::TOOLS,
-																				"&Calculate RMSD", this, SLOT(calculateRMSD()), 0, -1, hint);
+		calculate_RMSD_id_ = insertMenuEntry(MainControl::TOOLS, "&Calculate RMSD", this, SLOT(calculateRMSD()), 0, -1, hint);
 
 		minimization_dialog_.setAmberDialog(&amber_dialog_);
 		md_dialog_.setAmberDialog(&amber_dialog_);
@@ -347,11 +344,11 @@ namespace BALL
 	void MolecularStructure::checkMenu(MainControl& main_control)
 		throw()
 	{
-		List<Composite*>& selection = getMainControl()->getMolecularControlSelection();
+		List<Composite*>& selection = main_control.getMolecularControlSelection();
 		Size number_of_selected_objects = selection.size(); 
 
 		bool one_item = (number_of_selected_objects == 1);
-		bool composites_muteable = getMainControl()->compositesAreMuteable();
+		bool composites_muteable = main_control.compositesAreMuteable();
 
 		menuBar()->setItemEnabled(assign_charges_id_, one_item && composites_muteable);
 
@@ -364,46 +361,23 @@ namespace BALL
 
 
 		bool selected = (number_of_selected_objects != 0);
-		selected = selected && getMainControl()->compositesAreMuteable();
+		selected = selected && main_control.compositesAreMuteable();
 
-		(main_control.menuBar())->setItemEnabled(add_hydrogens_id_, selected);
-		(main_control.menuBar())->setItemEnabled(build_bonds_id_, selected);
-		(main_control.menuBar())->setItemEnabled(check_structure_id_, selected);
+		menuBar()->setItemEnabled(add_hydrogens_id_, selected);
+		menuBar()->setItemEnabled(build_bonds_id_, selected);
+		menuBar()->setItemEnabled(check_structure_id_, selected);
 
-		(main_control.menuBar())->setItemEnabled(calculate_ss_id_, getMainControl()->getSelectedSystem() && 
-																													     composites_muteable);
+		menuBar()->setItemEnabled(calculate_ss_id_, main_control.getSelectedSystem() && composites_muteable);
 
 		// these menu point for single items only
-		(main_control.menuBar()) ->setItemEnabled(center_camera_id_, number_of_selected_objects == 1);
+		menuBar() ->setItemEnabled(center_camera_id_, one_item);
+		menuBar()->setItemEnabled(create_distance_grid_id_, one_item);
 
-		(main_control.menuBar()) ->setItemEnabled(map_proteins_id_, number_of_selected_objects == 2);
-		(main_control.menuBar()) ->setItemEnabled(calculate_RMSD_id_, number_of_selected_objects == 2);
+		menuBar()->setItemEnabled(map_proteins_id_, number_of_selected_objects == 2);
+		menuBar()->setItemEnabled(calculate_RMSD_id_, number_of_selected_objects == 2);
 
-		if (!selected)
-		{
-			(main_control.menuBar())->setItemEnabled(select_id_, false);
-			(main_control.menuBar())->setItemEnabled(deselect_id_, false);
-			return;
-		}
-
-		bool allow_select = true;
-		bool allow_deselect = true;
-		List<Composite*>::Iterator it = selection.begin();
-		for (; it != selection.end(); it++)
-		{
-			if (!(**it).isSelected())
-			{
-				allow_deselect = false;
-			}
-			else
-			{
-				allow_select = false;
-			}
-		}
-		
-		main_control.menuBar()->setItemEnabled(select_id_, allow_select);
-		main_control.menuBar()->setItemEnabled(deselect_id_, allow_deselect);
-		main_control.menuBar()->setItemEnabled(create_distance_grid_id_, main_control.getSelectedSystem());
+		menuBar()->setItemEnabled(select_id_, selected);
+		menuBar()->setItemEnabled(deselect_id_, selected);
 	}
 
 

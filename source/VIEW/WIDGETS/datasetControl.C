@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.18 2004/01/13 00:44:46 amoll Exp $
+// $Id: datasetControl.C,v 1.19 2004/02/05 14:45:19 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -77,7 +77,7 @@ void DatasetControl::finalizeWidget(MainControl& main_control)
 void DatasetControl::checkMenu(MainControl& main_control)
 	throw()
 {
-	getMainControl()->menuBar()->setItemEnabled(open_trajectory_id_, main_control.getSelectedSystem());
+	menuBar()->setItemEnabled(open_trajectory_id_, main_control.getSelectedSystem());
 }
 
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.32 2004/01/28 14:12:37 amoll Exp $
+// $Id: molecularControl.C,v 1.33 2004/02/05 14:45:20 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -127,29 +127,29 @@ void MolecularControl::checkMenu(MainControl& main_control)
 	copy_list_filled = copy_list_filled && main_control.compositesAreMuteable();
 
 	// check for paste-slot: enable only if copy_list_ not empty
-	(main_control.menuBar())->setItemEnabled(paste_id_, copy_list_filled);	
+	menuBar()->setItemEnabled(paste_id_, copy_list_filled);	
 
 	// check for clearClipboard-slot: enable only if copy_list_ not empty
-	(main_control.menuBar())->setItemEnabled(clipboard_id_, copy_list_filled);
+	menuBar()->setItemEnabled(clipboard_id_, copy_list_filled);
 
 	// check for cut-slot 
-	bool list_filled = (selected_.size() != 0);
-	list_filled = list_filled && main_control.compositesAreMuteable();
-	(main_control.menuBar())->setItemEnabled(cut_id_, list_filled);
+	bool list_filled = (selected_.size() != 0 && main_control.compositesAreMuteable());
+	menuBar()->setItemEnabled(cut_id_, list_filled);
 
 
+	// check for copy-slot 
+	menuBar()->setItemEnabled(copy_id_, false);	
 	List<Composite*>::Iterator it = selected_.begin();	
 	for (; it != selected_.end(); it++)
 	{
 		if (!RTTI::isKindOf<System>(**it)) 
 		{
-			(main_control.menuBar())->setItemEnabled(copy_id_, true);	
 			return;
 		}
 	}
 
 	// copy is only available for top level selections
-	(main_control.menuBar())->setItemEnabled(copy_id_, true);	
+	menuBar()->setItemEnabled(copy_id_, list_filled);	
 }
 
 

@@ -110,7 +110,7 @@ void LabelDialog::onNotify(Message *message)
 
 	// disabled apply button, if selection is empty
 	apply_button_->setEnabled(!selection_.empty());
-	getMainControl()->menuBar()->setItemEnabled(id_, !selection_.empty());
+	menuBar()->setItemEnabled(id_, !selection_.empty());
 }
 
 void LabelDialog::initializeWidget(MainControl& main_control)
