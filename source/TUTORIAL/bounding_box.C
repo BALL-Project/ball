@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bounding_box.C,v 1.10 2004/05/27 19:50:01 oliver Exp $
+// $Id: bounding_box.C,v 1.11 2004/10/26 11:48:46 amoll Exp $
 //
 // BALLView tutorial example
 // ------------------------
@@ -13,6 +13,7 @@
 #include <BALL/KERNEL/system.h>
 #include <BALL/VIEW/KERNEL/representation.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -82,7 +83,9 @@ int main(int argc, char **argv)
 	Camera camera;
 	camera.setViewPoint(Vector3(0,0,0));	
 	camera.setLookAtPosition(Vector3(-3,2,-2));
-	msg->setCamera(camera);
+	Stage stage;
+	stage.setCamera(camera);
+	msg->setStage(stage);
 	mainframe.sendMessage(*msg);
 
 	return application.exec();

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glBoundingBoxModel.C,v 1.5 2004/04/16 11:49:30 amoll Exp $
+// $Id: glBoundingBoxModel.C,v 1.6 2004/10/26 11:51:31 amoll Exp $
 // BALLView tutorial example
 // ------------------------
 // create a processor that computes the bounding box of a molecular structure
@@ -9,6 +9,8 @@
 #include "glBoundingBoxModel.h"
 #include <BALL/KERNEL/system.h>
 #include <BALL/VIEW/KERNEL/molecularInformation.h>
+
+using namespace std;
 
 namespace BALL
 {
@@ -68,12 +70,6 @@ namespace BALL
 			SimpleBox* pbox = new SimpleBox();
 			pbox->a = bbox_.a ;
  			pbox->b = bbox_.b;
-			pbox->setColor(color_);
-			pbox->setName(String("BoundingBox of ")
-										+ molecular_information.getTypeName()
-										+ String(" (")
-										+ molecular_information.getName()
-										+ String(")"));
 			pbox->setColor(color_);
 
 			geometric_objects_.push_back(pbox);
