@@ -51,13 +51,13 @@ namespace BALL
 				The class LabelProperties is a dialog for appending to a selection of 
 				molecular objects a label which text and color can be changed.
 				The class \Ref{MolecularControl} is responsible for creating such a selection.
-				If this dialog should be used create it with \Ref{MainControl} as parent.
+				If this dialog is used, it should be created with \Ref{MainControl} as parent.
 				The class LabelPropertiesData contains the definition of the layout of
 				this dialog and is therefore not necessary for understanding.
 				@memo    LabelProperties class (BALL MOLVIEW gui dialogs framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/05/13 14:55:23 $
+				@author  $Author: aubertin $
+				@version $Revision: 1.6 $
+				@date    $Date: 2001/07/06 13:48:22 $
 		*/
 		class LabelProperties : 
 			public BALL::MOLVIEW::LabelPropertiesData,
@@ -118,8 +118,8 @@ namespace BALL
 			*/
 			//@{
 			
-			/** Fetch the preferences.
-					Fetch the preferences (the position and the selected color of {\em *this}
+			/** Fetches the preferences.
+					Fetches the preferences (the position and the selected color of {\em *this}
 					labelProperties) from the	\Ref{INIFile} {\em inifile}.
 					This method will be called inside the method \Ref{show} from the class
 					\Ref{MainControl}.
@@ -129,8 +129,8 @@ namespace BALL
 			virtual void fetchPreferences(INIFile &inifile)
 				throw();
 			
-			/** Write the preferences.
-					Write the preferences (the position and the selected color of {\em *this}
+			/** Writes the preferences.
+					Writes the preferences (the position and the selected color of {\em *this}
 					labelProperties) to the	\Ref{INIFile} {\em inifile}.
 					This method will be called inside the method \Ref{aboutToExit} from the class
 					\Ref{MainControl}.
@@ -140,9 +140,9 @@ namespace BALL
 			virtual void writePreferences(INIFile &inifile)
 				throw();
 				
-			/**	Initialize the widget.
-					Initialize the popup menu {\em Display} with its checkable submenu 
-					{\em Label Properties} and connect it to the method \Ref{openDialog}.
+			/**	Initializes the widget.
+					Initializes the popup menu {\em Display} with its checkable submenu 
+					{\em Label Properties} and connects it to the method \Ref{openDialog}.
 					This method is called automatically	immediately before the main application 
 					is started. 
 					This method will be called by \Ref{show} from the \Ref{MainControl} object.
@@ -156,9 +156,9 @@ namespace BALL
 			virtual void initializeWidget(MainControl& main_control)
 				throw();
 			
-			/**	Remove the widget.
-					Remove the checkable submenu {\em Label Properties} from the popup menu
-					{\em Display}	and cut the connection to the method \Ref{openDialog}.
+			/**	Removes the widget.
+					Removes the checkable submenu {\em Label Properties} from the popup menu
+					{\em Display}	and cuts the connection to the method \Ref{openDialog}.
 					This method will be called by \Ref{aboutToExit} from the \Ref{MainControl}
 					object.
 					@param main_control the \Ref{MainControl} object to be finalized with {\em *this} labelProperties
@@ -192,8 +192,8 @@ namespace BALL
 	  	*/
 			//@{
 				
-			/** Start the labelProperties dialog.
-					Open {\em *this} labelProperties dialog.
+			/** Starts the labelProperties dialog.
+					Opens {\em *this} labelProperties dialog.
 					Calls \Ref{show} and \Ref{raise} from \Ref{QDialog} class.
 					See documentation of QT-library for information concerning QDialog widgets.
 			*/
@@ -207,9 +207,9 @@ namespace BALL
 			//@{
 				
 			/** Indicates the apply button was pressed.
-					Append to the geometric center of the objects in the selection a \Ref{GLLabel}
-					with the specified text and color. 
-					Sent the message \Ref{ChangedCompositeMessage}, \Ref{SceneMessage}
+					Appends a \Ref{GLLabel} with the specified text and color
+					to the geometric center of the objects in the selection. 
+					Sents the message \Ref{ChangedCompositeMessage}, \Ref{SceneMessage}
 					and \Ref{WindowMessage} to inform other \Ref{ConnectionObject} about the change
 					in the \Ref{Composite} objects in the selection.
 					@see  onNotify
@@ -222,10 +222,10 @@ namespace BALL
 			*/
 			virtual void applyButtonClicked();
 			
-			/** Open the edit color dialog.
-					Open the dialog for editing the color in which the text of the label
+			/** Opens the edit color dialog.
+					Opens the dialog for editing the color in which the text of the label
 					should be drawn.
-					Open a \Ref{QColorDialog} from the QT-library.
+					Opens a \Ref{QColorDialog} from the QT-library.
 					See documentation of QT-library for information concerning QColorDialog widgets.
 			 */ 
 			virtual void editColor();
