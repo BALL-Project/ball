@@ -1,4 +1,4 @@
-// $Id: PCMCavFreeEnergyProcessor.C,v 1.10 2001/12/30 13:28:53 sturm Exp $
+// $Id: PCMCavFreeEnergyProcessor.C,v 1.10.2.1 2002/11/12 16:50:18 anker Exp $
 
 #include <BALL/SOLVATION/PCMCavFreeEnergyProcessor.h>
 #include <BALL/STRUCTURE/numericalSAS.h>
@@ -58,17 +58,17 @@ namespace BALL
 		valid_ = true;
 	}
 
-        const PCMCavFreeEnergyProcessor& PCMCavFreeEnergyProcessor::operator = (const PCMCavFreeEnergyProcessor& proc) throw()     
-        {
-	         valid_=proc.valid_;
-                 energy_=proc.energy_;
-                 fragment_=proc.fragment_;  
-                 return *this;
-        }
+	const PCMCavFreeEnergyProcessor& PCMCavFreeEnergyProcessor::operator = (const PCMCavFreeEnergyProcessor& proc) throw()     
+	{
+		valid_=proc.valid_;
+		energy_=proc.energy_;
+		fragment_=proc.fragment_;  
+		return *this;
+	}
 
-        bool PCMCavFreeEnergyProcessor::operator == (const PCMCavFreeEnergyProcessor& proc) const throw()
-        {
-          bool result;
+	bool PCMCavFreeEnergyProcessor::operator == (const PCMCavFreeEnergyProcessor& proc) const throw()
+	{
+	  bool result;
 		if ((fragment_ == 0) && (proc.fragment_ == 0))
 		{
 			result = ((energy_ == proc.energy_) && (valid_ == proc.valid_));
@@ -158,6 +158,15 @@ namespace BALL
 
 		// return energy in junits of kJ/mol
 		energy_ = deltaGcav/1000;
+
+		// ?????
+		if (verbosity >= 0)
+		{
+			Log.info() << "PCM: probe radius = " << solvent_radius << endl;
+			Log.info() << "PCM: solvent number density = " << rho << endl;
+			Log.info() << "PCM: absolute temperature = " << T << endl;
+			Log.info() << "PCM: energy = " << energy_ << endl;
+		}
 		return 1;
 	}
 } // namespace BALL
