@@ -1,4 +1,4 @@
-// $Id: RDFIntegrator.h,v 1.3 2000/09/01 05:56:28 oliver Exp $
+// $Id: RDFIntegrator.h,v 1.4 2000/09/02 16:14:28 anker Exp $
 
 #ifndef BALL_STRUCTURE_RDFINTEGRATOR_H
 #define BALL_STRUCTURE_RDFINTEGRATOR_H
@@ -17,7 +17,6 @@ namespace BALL
 	 */
 
 	class RDFIntegrator
-		:	public RadialDistributionFunction
 	{
 
 		public:
@@ -33,6 +32,9 @@ namespace BALL
 
 		/** */
 		RDFIntegrator(const RDFIntegrator& integrator);
+
+		/** */
+		RDFIntegrator(const RadialDistributionFunction& rdf);
 
 		/** Destructor */
 		virtual ~RDFIntegrator();
@@ -57,9 +59,26 @@ namespace BALL
 
 		//@}
 
+		/** */
+		void setRDF(const RadialDistributionFunction& rdf);
+
+		/** */
+		RadialDistributionFunction& getRDF();
+
+		/** */
+		// const RadialDistributionFunction& getRDF() const;
+
 
 		/** compute the value of the integral at a given x */
 		virtual double operator () (double x) const;
+
+
+		protected:
+
+
+		RadialDistributionFunction rdf_;
+
+
 
 	};
 }
