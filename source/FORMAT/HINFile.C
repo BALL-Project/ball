@@ -1,4 +1,4 @@
-// $Id: HINFile.C,v 1.2 1999/08/31 22:01:16 oliver Exp $
+// $Id: HINFile.C,v 1.3 1999/09/06 22:22:05 oliver Exp $
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/KERNEL/residue.h>
@@ -89,7 +89,7 @@ namespace BALL {
 		// write the bonds
 		*(File*)this << number_of_bonds << bond_string << endl;
 
-		// BAUSTELLE: check units for velocity
+		// HyperChem uses A/ps, as does BALL. So, no conversion is needed.
 		*(File*)this << "vel " << number + 1 - atom_offset << " " << atom.getVelocity().x << " " 
 			<< atom.getVelocity().y << " "
 			<< atom.getVelocity().z << endl;
@@ -507,7 +507,23 @@ namespace BALL {
 
 				if (tag == "vel")
 				{
-					// BAUSTELLE: need to read velocities, too
+					// read the velocity of an atom
+					// since HyperChem uses the same units for velocities 
+					// (resp. A/ps) we don't need a conversion
+					Vector3 velocity;
+					velocity.x = line.getField(2).toFloat();
+					velocity.y = line.getField(3).toFloat();
+					velocity.z = line.getField(4).toFloat();
+						
+					// check whether the atom exists
+					Size atom_number = (Size)line.getField(1).toInt();
+					if (atom_number >= atom_vector.size())
+					{
+						ERROR_HEADER << "cannot assign velocity for atom " << atom_number << ": atom not defined!" << endl;
+					} else {
+						atom_vector[atom_number - 1]->setVelocity(velocity);
+					}
+						
 					continue;
 				}
 
