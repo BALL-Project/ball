@@ -1,6 +1,10 @@
-// $Id: persistenceManager.C,v 1.3 2000/01/16 17:26:51 oliver Exp $
+// $Id: persistenceManager.C,v 1.4 2000/03/12 22:19:59 oliver Exp $
 
 #include <BALL/CONCEPT/persistenceManager.h>
+#include <BALL/KERNEL/system.h>
+#include <BALL/KERNEL/protein.h>
+#include <BALL/KERNEL/nucleicAcid.h>
+#include <BALL/KERNEL/bond.h>
 
 // #define DEBUG_PERSISTENCE
 
@@ -11,10 +15,60 @@ namespace BALL
 
 	PersistenceManager::PersistenceManager()
 	{
+		// register all kernel classes	
+		registerKernelClasses_();
+	}
+
+	PersistenceManager::PersistenceManager(istream& is)
+	{
+		// register all kernel classes	
+		registerKernelClasses_();
+		setIstream(is);
+	}
+
+	PersistenceManager::PersistenceManager(ostream& os)
+	{
+		// register all kernel classes	
+		registerKernelClasses_();
+		setOstream(os);
+	}
+
+	PersistenceManager::PersistenceManager(istream& is, ostream& os)
+	{
+		// register all kernel classes	
+		registerKernelClasses_();
+		setIstream(is);
+		setOstream(os);
 	}
 
 	PersistenceManager::~PersistenceManager()
 	{
+	}
+
+	void PersistenceManager::registerKernelClasses_()
+	{
+		// register all kernel classes, their base classes, 
+		// and the classes used in kernel classes
+		//
+		using namespace RTTI;
+		#define REGISTER_CLASS(T) {CreateMethod m(getNew<T>); registerClass(getStreamName<T>(), m);}
+		REGISTER_CLASS(BaseFragment)
+		REGISTER_CLASS(NamedProperty)
+		REGISTER_CLASS(Vector3)
+		REGISTER_CLASS(Composite)
+		REGISTER_CLASS(Atom)
+		REGISTER_CLASS(Bond)
+		REGISTER_CLASS(Fragment)
+		REGISTER_CLASS(System)
+		REGISTER_CLASS(Molecule)
+		REGISTER_CLASS(PDBAtom)
+		REGISTER_CLASS(Residue)
+		REGISTER_CLASS(Chain)
+		REGISTER_CLASS(Protein)
+		REGISTER_CLASS(SecondaryStructure)
+		REGISTER_CLASS(NucleicAcid)
+		REGISTER_CLASS(Nucleotide)
+		#undef REGISTER_CLASS
 	}
 
 	PersistenceManager& PersistentObject::operator >> (PersistenceManager& pm) const
@@ -90,6 +144,19 @@ namespace BALL
 		addNeededObjects_();
 		writeStreamTrailer();
 	}
+
+	PersistenceManager& PersistenceManager::operator << (const PersistentObject& object)
+	{
+		object >> *this;
+		return *this;
+	}
+
+	PersistenceManager& PersistenceManager::operator >> (PersistentObject*& object_ptr)
+	{
+		object_ptr = readObject();
+		return *this;
+	}
+	
 
 	PersistentObject*	PersistenceManager::readObject()
 	{

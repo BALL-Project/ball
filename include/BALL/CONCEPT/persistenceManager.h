@@ -1,4 +1,4 @@
-// $Id: persistenceManager.h,v 1.8 2000/01/16 22:36:15 oliver Exp $
+// $Id: persistenceManager.h,v 1.9 2000/03/12 22:24:50 oliver Exp $
 
 #ifndef BALL_CONCEPT_PERSISTENCE_H
 #define BALL_CONCEPT_PERSISTENCE_H
@@ -75,7 +75,22 @@ namespace BALL
 		/**	Default constructor
 		*/
 		PersistenceManager();
-		
+
+		/**	Detailed constructor with an input stream.
+				Creates a persistence manager object and assigns an input stream.
+		*/
+		PersistenceManager(std::istream& is);
+			
+		/**	Detailed constructor with an output stream.
+				Creates a persistence manager object and assigns an output stream.
+		*/
+		PersistenceManager(std::ostream& os);
+			
+		/**	Detailed constructor with an input stream and an output stream.
+				Creates a persistence manager object and assigns an input stream and an output stream.
+		*/
+		PersistenceManager(std::istream& is, std::ostream& os);
+			
 		/**	Destructor.
 				Destruct the persistence manager and and clear up all data structures.
 				The associated streams or sockets (\Ref{setIStream}/\Ref{setOStream}) are
@@ -167,6 +182,15 @@ namespace BALL
 		*/	
 		PersistentObject*	readObject();
 
+		/**	Write a persistent object from the stream
+				This method writes a persistent object to a stream.
+		*/
+		PersistenceManager& operator << (const PersistentObject& object);
+
+		/**	Read a persistent object from a stream.
+				This method calls \Ref{readObject}.
+		*/
+		PersistenceManager& operator >> (PersistentObject*& object_ptr);
 		//@}
 			
 
@@ -704,6 +728,11 @@ namespace BALL
 
 		protected:
 
+		/**	Register all BALL kernel classes.
+				This method is automatically called in the constructor.
+		*/
+		void registerKernelClasses_();
+		
 		void addPointerPair_(LongPointerType old_ptr, void* new_ptr);
 				
 		void addNeededObjects_();
