@@ -1,4 +1,4 @@
-// $Id: iterator.h,v 1.6 2001/06/21 01:59:48 oliver Exp $
+// $Id: iterator.h,v 1.7 2001/06/29 14:13:27 anker Exp $
 
 #ifndef BALL_KERNEL_ITERATOR_H
 #define BALL_KERNEL_ITERATOR_H
@@ -156,8 +156,7 @@ namespace BALL
 			subcomposite_iterator_.invalidate();
 		}
 
-		void toBegin
-			()
+		void toBegin()
 		{
 			if (isSingular())
 			{
