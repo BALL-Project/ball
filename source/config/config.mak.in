@@ -2,7 +2,7 @@
 # Please do ONLY change config.mak.in, as config.mak is automagically 
 # created by configure from config.mak.in
 #
-# RCS ID: $Id: config.mak.in,v 1.8 2000/01/31 16:24:49 oliver Exp $
+# RCS ID: $Id: config.mak.in,v 1.9 2000/03/04 10:49:20 oliver Exp $
 #
 # author:    $author$
 # date:      $date$
@@ -108,6 +108,10 @@ STD_CPP_INCLUDES	= @STD_CPP_INCLUDES@
 #  otherwise by an empty string
 #
 DIRS	= @SUBDIRS@
+
+#	C++ sources use suffix .C
+#
+.SUFFIXES: .C
 
 # Rule to create .o files from .C files
 #
