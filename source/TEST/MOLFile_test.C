@@ -1,4 +1,4 @@
-// $Id: MOLFile_test.C,v 1.4 2002/01/16 00:24:51 oliver Exp $
+// $Id: MOLFile_test.C,v 1.5 2002/01/16 02:16:56 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -14,7 +14,7 @@
 
 ///////////////////////////
 
-START_TEST(MOLFile, "$Id: MOLFile_test.C,v 1.4 2002/01/16 00:24:51 oliver Exp $")
+START_TEST(MOLFile, "$Id: MOLFile_test.C,v 1.5 2002/01/16 02:16:56 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -107,13 +107,22 @@ CHECK(MOLFile::MOLFile& operator >> (System& system))
 	f2 >> S;
 	TEST_EQUAL(S.countAtoms(), 49)
 	TEST_EQUAL(S.countBonds(), 52)
-	TEST_EQUAL(s.countMolecules(), 1)
+	TEST_EQUAL(S.countMolecules(), 1)
 	ABORT_IF(S.countAtoms() == 0)
 	Atom& atom = *S.beginAtom();
 	TEST_EQUAL(atom.getElement(), PTE[Element::C])
 	TEST_REAL_EQUAL(atom.getPosition().x, -2.6970)
 	TEST_REAL_EQUAL(atom.getPosition().y, -1.2710)
 	TEST_REAL_EQUAL(atom.getPosition().z,  1.4370)
+
+	// check whether we handle file with only 
+	// 48 columns in the atom lines correctly
+	MOLFile f3("data/MOLFile_test4.mol");
+	S.destroy();
+	f3 >> S;
+	TEST_EQUAL(S.countAtoms(), 23)
+	TEST_EQUAL(S.countBonds(), 26)
+	TEST_EQUAL(S.countMolecules(), 1)
 RESULT
 
 CHECK(MOLFile::MOLFile& operator << (const System& system))

@@ -1,4 +1,4 @@
-// $Id: HashGrid3_test.C,v 1.6 2002/01/15 16:33:02 anker Exp $
+// $Id: HashGrid3_test.C,v 1.7 2002/01/16 02:16:56 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 
 ///////////////////////////
 
-START_TEST(HashGrid, "$Id: HashGrid3_test.C,v 1.6 2002/01/15 16:33:02 anker Exp $")
+START_TEST(HashGrid, "$Id: HashGrid3_test.C,v 1.7 2002/01/16 02:16:56 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -275,6 +275,7 @@ CHECK(HashGridBox3::apply(UnaryProcessor< HashGridBox3<Item> >& processor) throw
 	hbox.apply(proc);
 	int* result = hbox.find(6);
 	TEST_NOT_EQUAL(result, 0)
+	ABORT_IF(result == 0)
 	bool test = (*result == 6);
 	TEST_EQUAL(test, true)
 	// TODO: more complex example
