@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceProcessor.h,v 1.28 2003/02/19 13:16:09 amoll Exp $
+// $Id: surfaceProcessor.h,v 1.29 2003/02/19 16:16:02 amoll Exp $
 
 #include <BALL/STRUCTURE/reducedSurface.h>
 #include <BALL/STRUCTURE/solventExcludedSurface.h>
@@ -22,8 +22,8 @@ namespace BALL
 			{\bf Definition:} \URL{BALL/STRUCTURE/surfaceProcessor.h}
 	*/
 	class SurfaceProcessor
-		:	public UnaryProcessor<Composite>,
-			public UnaryProcessor<Composite*>
+		:	public UnaryProcessor<Atom>,
+			public UnaryProcessor<Atom*>
 	{
 		public:
 
@@ -46,11 +46,11 @@ namespace BALL
 		virtual bool finish();
 
 		///
- 		virtual Processor::Result operator () (Composite&  composite);
+ 		virtual Processor::Result operator () (Atom&  atom);
 
 		///
- 		virtual Processor::Result operator () (Composite*& composite)
-		{ return operator() (*composite);}
+ 		virtual Processor::Result operator () (Atom*& atom)
+		{ return operator() (*atom);}
 
 		//@}
 		/** @name Accessors.
