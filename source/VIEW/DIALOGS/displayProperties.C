@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.5 2003/08/31 00:23:26 amoll Exp $
+// $Id: displayProperties.C,v 1.6 2003/08/31 18:11:38 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -245,13 +245,24 @@ namespace BALL
 
 			if (RTTI::isKindOf<RepresentationMessage>(*message))
 			{
-				if (((RepresentationMessage*) message)->getType() == RepresentationMessage::SELECTED)
+				switch (((RepresentationMessage*) message)->getType())
 				{
-					rep_ = ((RepresentationMessage*) message)->getRepresentation();
-					modifyRepresentationMode();
-				}
+					case RepresentationMessage::SELECTED:
+					{
+						rep_ = ((RepresentationMessage*) message)->getRepresentation();
+						modifyRepresentationMode();
+						return;
+					}
+					case RepresentationMessage::REMOVE:
+					{
+						rep_ = 0;
+						createRepresentationMode();
+						return;
+					}
 
-				return;
+					default:
+						return;
+				}
 			}
 
 			if (RTTI::isKindOf<ControlSelectionMessage>(*message))

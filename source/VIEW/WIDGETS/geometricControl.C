@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.4 2003/08/31 00:24:35 amoll Exp $
+// $Id: geometricControl.C,v 1.5 2003/08/31 18:12:30 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -60,7 +60,6 @@ GeometricControl::GeometricControl(QWidget* parent, const char* name)
 
 	connect(this, SIGNAL(selectionChanged()), this, SLOT(updateSelection()));
 
-	// register ModularWidget
 	registerWidget(this);
 }
 
@@ -68,7 +67,8 @@ GeometricControl::~GeometricControl()
 	throw()
 {
   #ifdef BALL_VIEW_DEBUG
-	  Log.error() << "Destructing object " << (void *)this << " of class " << RTTI::getName<GeometricControl>() << endl;
+	  Log.error() << "Destructing object " << (void *)this << " of class " 
+								<< RTTI::getName<GeometricControl>() << endl;
   #endif 
 
 	if (colorMeshDlg_) delete colorMeshDlg_;
@@ -255,6 +255,12 @@ void GeometricControl::deleteRepresentation_()
 		scene_message->setType(SceneMessage::REMOVE_COORDINATE_SYSTEM);
 	}
 		
+	RepresentationMessage* message = new RepresentationMessage;
+	message->setType(RepresentationMessage::REMOVE);
+	message->setRepresentation(context_representation_);
+	message->setDeletable(true);
+	notify_(message);
+
 	getMainControl()->getPrimitiveManager().remove(*context_representation_);
 	removeRepresentation(*context_representation_);
 
@@ -394,7 +400,8 @@ void GeometricControl::updateSelection()
 void GeometricControl::initializeWidget(MainControl& main_control)
 {
 	window_menu_entry_id_ = 
-		main_control.insertMenuEntry(MainControl::WINDOWS, "GeometricControl", this, SLOT(switchShowWidget()));
+		main_control.insertMenuEntry(MainControl::WINDOWS, 
+				"GeometricControl", this, SLOT(switchShowWidget()));
 	getMainControl()->menuBar()->setItemChecked(window_menu_entry_id_, true);
 }
 
@@ -431,8 +438,8 @@ void GeometricControl::writePreferences(INIFile& inifile)
 void GeometricControl::fetchPreferences(INIFile & inifile)
 	throw()
 {
-	if (!inifile.hasEntry("WINDOWS", "GeometricControl::on")) return;
-	if (inifile.getValue("WINDOWS", "GeometricControl::on").toUnsignedInt() == 0) 
+	if (inifile.hasEntry("WINDOWS", "GeometricControl::on") &&
+			inifile.getValue("WINDOWS", "GeometricControl::on").toUnsignedInt() == 0) 
 	{
 		switchShowWidget();
 	}
