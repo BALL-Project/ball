@@ -1,11 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyCompositeList.C,v 1.1 2003/11/15 10:59:07 oliver Exp $
+// $Id: pyCompositeList.C,v 1.2 2003/11/15 12:53:57 oliver Exp $
 //
 
 #include <BALL/PYTHON/pyCompositeList.h>
-#include <BALL/KERNEL/composite.h>
+#include <BALL/CONCEPT/composite.h>
 
 namespace BALL
 {
@@ -15,9 +15,20 @@ namespace BALL
 	{
 	}
 
-	PyCompositeList::PyCompositeList(const PyCompositeList& new_list)
-		: List<Composite*>(new_list)
+	PyCompositeList::PyCompositeList(const PyCompositeList& composite_list)
+		: List<Composite*>(composite_list)
   {
+	}
+
+	PyCompositeList::PyCompositeList(const List<Composite*>& composite_list)
+		: List<Composite*>(composite_list)
+  {
+	}
+
+	PyCompositeList::PyCompositeList(const HashSet<Composite*>& composite_set)
+		: List<Composite*>()
+  {
+		std::copy(composite_set.begin(), composite_set.end(), std::back_inserter<List<Composite*> >(*this));
 	}
 
 	PyCompositeList::~PyCompositeList()
@@ -25,27 +36,4 @@ namespace BALL
 	{
 	}
 
-	PyCompositeList::PyCompositeList(const Composite& fragment, bool selected_only )
-	{
-		set(fragment, selected_only);
-	}
-
-	void PyCompositeList::set(const Composite& fragment, bool selected_only)
-	{
-		// clear the old contents of the list
-		clear();
-
-		// iterate over all composites
-		CompositeConstIterator it = fragment.beginComposite();
-
-    for (; +it; ++it)
-    {
-      const Composite* composite = dynamic_cast<const Composite*>(&*it);
-      if ((composite != 0) && (it->isSelected() || !selected_only))
-      {
-        // store the composite pointer in the list
-        push_back(const_cast<Composite*>(composite));
-			}
-		}
-	}
 }

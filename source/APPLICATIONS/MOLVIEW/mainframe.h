@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.55 2003/11/03 16:49:33 amoll Exp $
+// $Id: mainframe.h,v 1.56 2003/11/15 12:53:57 oliver Exp $
 //
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -81,13 +81,13 @@ namespace BALL
 		Q_OBJECT
 
 		public:
-		BALL_EMBEDDABLE(Mainframe)
 
 		/** This class is only intended for usage with multithreading.
 				It notifies the Mainframe, that the thread for simulations has finished and can be deleted.
 				This should only be used internaly.
 		*/
-		class SimulationThreadFinished: public QCustomEvent
+		class SimulationThreadFinished
+			: public QCustomEvent
 		{
 			public:
 				SimulationThreadFinished()
@@ -95,7 +95,8 @@ namespace BALL
 		};
 
 		///
-		class SimulationOutput: public QCustomEvent
+		class SimulationOutput
+			: public QCustomEvent
 		{
 			public:
 				///
@@ -113,7 +114,8 @@ namespace BALL
 		};
 
 		///
-		class UpdateCompositeEvent: public QCustomEvent
+		class UpdateCompositeEvent
+			: public QCustomEvent
 		{
 			public:
 				///

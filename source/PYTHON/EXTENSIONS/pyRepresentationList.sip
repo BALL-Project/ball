@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyRepresentationList.sip,v 1.1 2003/11/15 10:59:07 oliver Exp $
+// $Id: pyRepresentationList.sip,v 1.2 2003/11/15 12:53:58 oliver Exp $
 //
 
 %MappedType PyRepresentationList
@@ -24,10 +24,9 @@
 
 	for (PyRepresentationList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
 	{
-		Representation& obj = **it;
-		PyObject *inst;
+		Representation* obj = *it;
 
-		if ((inst = pyMapBALLObjectToSip(obj)) == NULL || PyList_Append(pl,inst) < 0)
+		if (PyList_Append(pl, sipMapCppToSelf(obj, sipClass_Representation)) < 0)
 		{
 			Py_DECREF(pl);
 			return NULL;

@@ -1,7 +1,7 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.25 2003/11/02 15:05:41 amoll Exp $
+# $Id: Makefile,v 1.26 2003/11/15 12:53:57 oliver Exp $
 #
 
 DIRECTORY=PYTHON/EXTENSIONS
@@ -27,6 +27,8 @@ ADD_INCLUDES=$(PYTHON_INCLUDES) $(SIP_INCLUDES)
 PYBALL_SOURCES = \
 	extractors.C \
 	pyBALLSipHelper.C\
+	pyCompositeList.C\
+	pyRepresentationList.C\
 	pyAtomList.C \
 	pyBondList.C \
 	pyConstant.C \

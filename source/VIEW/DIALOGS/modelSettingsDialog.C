@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.C,v 1.7 2003/11/15 01:40:12 amoll Exp $
+// $Id: modelSettingsDialog.C,v 1.8 2003/11/15 12:53:58 oliver Exp $
+//
 
 #include <BALL/VIEW/DIALOGS/modelSettingsDialog.h>
 #include <BALL/DATATYPE/string.h>
@@ -92,7 +93,7 @@ namespace BALL
 			writePreference_(file, "surface_probe_radius", *surface_probe_radius);
 			writePreference_(file, "tube_radius", *tube_radius);
 			writePreference_(file, "cartoon_tube_radius", *cartoon_tube_radius);
-			writePreference_(file, "cartoon_helere_radius", *cartoon_helix_radius);
+			writePreference_(file, "cartoon_helix_radius", *cartoon_helix_radius);
 			writePreference_(file, "cartoon_arrow_height", *cartoon_arrow_height);
 			writePreference_(file, "cartoon_arrow_width", *cartoon_arrow_width);
 		}
@@ -107,7 +108,7 @@ namespace BALL
 			fetchPreference_(file, "surface_probe_radius", *surface_probe_radius);
 			fetchPreference_(file, "tube_radius", *tube_radius);
 			fetchPreference_(file, "cartoon_tube_radius", *cartoon_tube_radius);
-			fetchPreference_(file, "cartoon_helere_radius", *cartoon_helix_radius);
+			fetchPreference_(file, "cartoon_helix_radius", *cartoon_helix_radius);
 			fetchPreference_(file, "cartoon_arrow_height", *cartoon_arrow_height);
 			fetchPreference_(file, "cartoon_arrow_width", *cartoon_arrow_width);
 		}

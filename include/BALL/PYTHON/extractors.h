@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: extractors.h,v 1.15 2003/08/26 08:04:45 oliver Exp $
+// $Id: extractors.h,v 1.16 2003/11/15 12:53:56 oliver Exp $
 //
 
 #ifndef BALL_PYTHON_EXTRACTORS_H
@@ -67,6 +67,14 @@ namespace BALL
 	*/
 	PyAtomList* atoms(const AtomContainer& fragment);
 
+	/**	Extract atoms matching an expression.
+			This method extracts all atoms from an atom list  
+      that match the \link Expression Expression \endlink  <tt>expression</tt>.
+			@param fragment the AtomContainer containing the atoms
+			@param expression the expression that selects the atoms
+	*/
+	PyAtomList* atoms(const PyAtomList& atoms, const String& expression);
+			
 	/**	Extract PDB atoms matching an expression.
 			This method extracts all PDB atoms of a kernel data structure into
 			a list that match the  \link Expression Expression \endlink  <tt>expression</tt>.

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.sip,v 1.1 2003/11/15 10:59:05 oliver Exp $
+// $Id: colorProcessor.sip,v 1.2 2003/11/15 12:53:57 oliver Exp $
 //
 
 class ColorProcessor
@@ -16,10 +16,10 @@ class ColorProcessor
   ColorProcessor() throw();
   ColorProcessor(const ColorProcessor& /color_calculator/) throw();
   ColorRGBA getColor(const Composite* /composite/);
-  Processor::Result operator() (GeometricObject*& /object/);
-%MethodCode
-	sipRes = sipCpp->operator () (*a0);
-%End
+  //Processor::Result operator() (GeometricObject& /object/);
+//%MethodCode
+//	sipRes = sipCpp->operator () (*a0);
+//%End
 
   Size getTransparency() const throw();
   // const ColorProcessor& operator = (const ColorProcessor& /color_calculator/) throw();

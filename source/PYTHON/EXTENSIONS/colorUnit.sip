@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorUnit.sip,v 1.1 2003/11/15 10:59:05 oliver Exp $
+// $Id: colorUnit.sip,v 1.2 2003/11/15 12:53:57 oliver Exp $
 //
 
 class NotInHexFormat
@@ -10,6 +10,7 @@ class NotInHexFormat
 	#include <BALL/VIEW/DATATYPE/colorUnit.h>
 	using namespace BALL;
 	using namespace BALL::VIEW;
+	typedef ColorUnit::NotInHexFormat NotInHexFormat;
 %End
 	public:
 	NotInHexFormat(const char* /file/, int /line/, const String& /data/) throw();
@@ -21,6 +22,7 @@ class ColorUnit
 	#include <BALL/VIEW/DATATYPE/colorUnit.h>
 	using namespace BALL;
 	using namespace BALL::VIEW;
+	typedef ColorUnit::NotInHexFormat NotInHexFormat;
 %End
   public:
   ColorUnit() throw();
