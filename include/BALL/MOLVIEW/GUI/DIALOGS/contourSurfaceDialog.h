@@ -6,19 +6,15 @@
 **
 ** WARNING! All changes made in this file will be lost!
 ****************************************************************************/
-#ifndef CONTOURSURFACEDIALOG_H
-#define CONTOURSURFACEDIALOG_H
-
-#include <qvariant.h>
-#include <qdialog.h>
+#ifndef BALL_MOLVIEW_GUI_DIALOGS_CONTOURSURFACEDIALOG_H
+#define BALL_MOLVIEW_GUI_DIALOGS_CONTOURSURFACEDIALOG_H
 
 #ifndef BALL_DATATYPE_STRING_H
 # include <BALL/DATATYPE/string.h>
 #endif
 
-class QVBoxLayout; 
-class QHBoxLayout; 
-class QGridLayout; 
+#include <qdialog.h>
+
 class QFrame;
 class QLabel;
 class QLineEdit;
@@ -66,4 +62,4 @@ public slots:
 }
 }
 
-#endif // CONTOURSURFACEDIALOG_H
+#endif // BALL_MOLVIEW_GUI_DIALOGS_CONTOURSURFACEDIALOG_H
