@@ -1,4 +1,4 @@
-// $Id: EnergyProcessor_test.C,v 1.5 2001/07/16 00:35:20 amoll Exp $
+// $Id: EnergyProcessor_test.C,v 1.6 2001/07/16 12:54:13 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 #include <BALL/ENERGY/energyProcessor.h>
 ///////////////////////////
 
-START_TEST(EnergyProcessor, "$Id: EnergyProcessor_test.C,v 1.5 2001/07/16 00:35:20 amoll Exp $")
+START_TEST(EnergyProcessor, "$Id: EnergyProcessor_test.C,v 1.6 2001/07/16 12:54:13 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -52,7 +52,7 @@ f >> S;
 CHECK(EnergyProcessor::EnergyProcessor())
 	EnergyProcessor* ep = new EnergyProcessor;
 	TEST_NOT_EQUAL(ep, 0)
-	TEST_EQUAL(ep->isValid(), false)
+	TEST_EQUAL(ep->isValid(), true)
 	TEST_REAL_EQUAL(ep->getEnergy(), 0)
 RESULT
 
