@@ -1,4 +1,4 @@
-// $Id: exception.C,v 1.26 2001/07/15 13:45:32 oliver Exp $
+// $Id: exception.C,v 1.27 2001/07/25 11:33:19 oliver Exp $
 
 #include <BALL/COMMON/exception.h>
 #include <BALL/COMMON/logStream.h>
@@ -60,6 +60,7 @@ namespace BALL
 			}
 
 			GeneralException::~GeneralException()
+				throw()
 			{
 			}
 		

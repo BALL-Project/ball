@@ -1,4 +1,4 @@
-// $Id: fragmentDB.C,v 1.35 2001/07/20 08:02:58 oliver Exp $
+// $Id: fragmentDB.C,v 1.36 2001/07/25 11:36:12 oliver Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 
@@ -29,6 +29,7 @@ namespace BALL
 
 	FragmentDB::NoFragmentNode::NoFragmentNode
 		(const char* file, int line, const string& filename)
+		throw()
 		: Exception::GeneralException(file, line, "NoFragmentNode", 
 											 "the resource database does not contain a valid Fragment entry"),
 			filename_(filename)
