@@ -116,6 +116,9 @@ demonstration.
                                     <string>&lt;blockquote&gt;
 This is a Line model, it is the fastest model available and suited best for 
 huge molecules or slow computers.
+It is colored by element. &lt;br&gt;
+(red = oxygen, blue = nitrogen, grey = carbon, yellow = sulfor)
+&lt;br&gt;&lt;br&gt;
 Press OK to continue.
 
 &lt;/blockquote&gt;</string>
@@ -402,6 +405,158 @@ Cartoon
                                     <string>&lt;blockquote&gt;
 Stick Model + HBonds
 
+&lt;/blockquote&gt;</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>WordBreak|AlignJustify|AlignTop</set>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="QWidget">
+                        <property name="name">
+                            <cstring>WStackPage</cstring>
+                        </property>
+                        <attribute name="id">
+                            <number>10</number>
+                        </attribute>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel" row="0" column="0">
+                                <property name="name">
+                                    <cstring>textLabel3_2_2_4_5_2</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>7</hsizetype>
+                                        <vsizetype>7</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="text">
+                                    <string>&lt;blockquote&gt;
+Every model can be combined with the 12 different coloring methods.
+&lt;br&gt;
+&lt;br&gt;
+Here we see a VDW model with coloring by temperature factor.
+This means the atoms are colored, by how flexible they become with increasing 
+temperature. 
+The colors are interpolated between blue (rigid) to yellow (very flexible).
+White means, that no value could be assigned. This data is derived from 
+crystallographic measurements.
+
+&lt;/blockquote&gt;</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>WordBreak|AlignJustify|AlignTop</set>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="QWidget">
+                        <property name="name">
+                            <cstring>WStackPage</cstring>
+                        </property>
+                        <attribute name="id">
+                            <number>11</number>
+                        </attribute>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel" row="0" column="0">
+                                <property name="name">
+                                    <cstring>textLabel3_2_2_4_5_2_2</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>7</hsizetype>
+                                        <vsizetype>7</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="text">
+                                    <string>&lt;blockquote&gt;
+This is again a Cartoon Model, but now it is also colored by the secondary structure.
+(Blue = Helices, Red = Strands, Green = Coils)
+
+&lt;/blockquote&gt;</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>WordBreak|AlignJustify|AlignTop</set>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="QWidget">
+                        <property name="name">
+                            <cstring>WStackPage</cstring>
+                        </property>
+                        <attribute name="id">
+                            <number>12</number>
+                        </attribute>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel" row="0" column="0">
+                                <property name="name">
+                                    <cstring>textLabel3_2_2_4_5_2_2_2</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>7</hsizetype>
+                                        <vsizetype>7</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="text">
+                                    <string>&lt;blockquote&gt;
+A Cartoon Model, now colored by the residue index. Since Proteins are linear 
+molecules, we have a nice color interpolation from red at the beginning of the molecule to blue at its end.
+&lt;/blockquote&gt;</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>WordBreak|AlignJustify|AlignTop</set>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="QWidget">
+                        <property name="name">
+                            <cstring>WStackPage</cstring>
+                        </property>
+                        <attribute name="id">
+                            <number>13</number>
+                        </attribute>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel" row="0" column="0">
+                                <property name="name">
+                                    <cstring>textLabel3_2_2_4_5_2_2_2_2</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>7</hsizetype>
+                                        <vsizetype>7</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="text">
+                                    <string>&lt;blockquote&gt;
+A Stick model colored by the different aminoacids.
+
+BALLView has many more coloring methods, but lets do something else now.
+When you press OK, a molecular dynamics simulation will start. You can watch 
+the movements of the molecule, just like it would in the real world.
 &lt;/blockquote&gt;</string>
                                 </property>
                                 <property name="alignment">

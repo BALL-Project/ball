@@ -8,6 +8,7 @@
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
+#include <BALL/VIEW/WIDGETS/molecularStructure.h>
 #include <BALL/FORMAT/PDBFile.h>
 
 #include <qlabel.h>
@@ -96,8 +97,9 @@ void BALLViewDemo::nextStep_()
 void BALLViewDemo::accept()
 {
 	Index id = widget_stack->id(widget_stack->visibleWidget());
+	MolecularStructure* ms = MolecularStructure::getInstance(0);
 
-	if (id <= MODEL_HBONDS)
+//   	if (id < MODEL_HBONDS + 1)
 	{
 		// remove representations
 		PrimitiveManager& pm = getMainControl()->getPrimitiveManager();
@@ -108,10 +110,55 @@ void BALLViewDemo::accept()
 			getMainControl()->remove(**reps.begin());
 			reps.pop_front();
 		}
+	}
 
+	if (id < MODEL_HBONDS)
+	{
 		CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, (ModelType) id, COLORING_ELEMENT);
 		notify_(crmsg);
 	}
+	else if (id == MODEL_HBONDS)
+	{
+		ControlSelectionMessage* csmsg = new ControlSelectionMessage();
+		csmsg->getSelection() = composites_;
+		notify_(csmsg);
+
+		ms->addHydrogens();
+
+		CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_ELEMENT);
+		notify_(crmsg);
+		crmsg = new CreateRepresentationMessage(composites_, MODEL_HBONDS, COLORING_ELEMENT);
+		notify_(crmsg);
+	}
+	else if (id == MODEL_HBONDS + 1)
+	{
+		CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_VDW, COLORING_TEMPERATURE_FACTOR);
+		notify_(crmsg);
+	}
+	else if (id == MODEL_HBONDS + 2)
+	{
+		CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_CARTOON, COLORING_SECONDARY_STRUCTURE);
+		notify_(crmsg);
+	}
+	else if (id == MODEL_HBONDS + 3)
+	{
+		CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_CARTOON, COLORING_RESIDUE_INDEX);
+		notify_(crmsg);
+	}
+	else if (id == MODEL_HBONDS + 4)
+	{
+		CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_RESIDUE_NAME);
+		notify_(crmsg);
+	}
+	else if (id == MODEL_HBONDS + 5)
+	{
+		CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_ELEMENT);
+		notify_(crmsg);
+
+		ms->chooseAmberFF();
+		ms->MDSimulation();
+	}
+				
 
 	buttonOk->setEnabled(false);
 }
