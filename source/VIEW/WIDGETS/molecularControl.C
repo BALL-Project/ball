@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.41 2004/02/11 12:52:38 amoll Exp $
+// $Id: molecularControl.C,v 1.42 2004/02/11 16:18:48 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -171,22 +171,9 @@ void MolecularControl::checkMenu(MainControl& main_control)
 	// check for cut and delete slot 
 	bool list_filled = (selected_.size() != 0 && main_control.compositesAreMuteable());
 	menuBar()->setItemEnabled(cut_id_, list_filled);
+	menuBar()->setItemEnabled(copy_id_, list_filled);	
 
 	if (list_filled) getMainControl()->enableDeleteEntry();
-
-	// check for copy-slot 
-	menuBar()->setItemEnabled(copy_id_, false);	
-	List<Composite*>::Iterator it = selected_.begin();	
-	for (; it != selected_.end(); it++)
-	{
-		if (!RTTI::isKindOf<System>(**it)) 
-		{
-			return;
-		}
-	}
-
-	// copy is only available for top level selections
-	menuBar()->setItemEnabled(copy_id_, list_filled);	
 }
 
 
@@ -207,12 +194,14 @@ bool MolecularControl::reactToMessages_(Message* message)
 				removeComposite(*(Composite *)composite_message->getComposite());
 				return false;
 			
-			case CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL:
 			case CompositeMessage::CHANGED_COMPOSITE:
-					removeComposite(composite_message->getComposite()->getRoot());
-					addComposite(composite_message->getComposite()->getRoot());
-				
-				return (composite_message->getType() == CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL);
+				return false;
+
+			case CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL:
+//					removeComposite(composite_message->getCo mposite()->getRoot());
+// 					addComposite(composite_message->getComposite()->getRoot());
+				updateListViewItem_(0, *composite_message->getComposite());
+				return true;
 				
 			case CompositeMessage::SELECTED_COMPOSITE:
 			case CompositeMessage::DESELECTED_COMPOSITE:
@@ -261,6 +250,7 @@ void MolecularControl::buildContextMenu(Composite& composite)
 	context_menu_.insertItem("Copy", this, SLOT(copy()), 0, OBJECT__COPY);
 	context_menu_.insertItem("Paste", this, SLOT(paste()), 0, OBJECT__PASTE);
 	context_menu_.insertItem("Delete", this, SLOT(deleteCurrentItems()), 0, OBJECT__DELETE);
+	context_menu_.insertSeparator();
 
 	context_menu_.insertItem("Rename", this, SLOT(rename()), 0, RENAME);
 	context_menu_.setItemEnabled(RENAME, composites_muteable && composites_muteable && one_item);
@@ -289,12 +279,14 @@ void MolecularControl::buildContextMenu(Composite& composite)
 	context_menu_.setItemEnabled(RESIDUE__CHECK, atom_container_selected);
 
 	bool system_selected = true;
+	/*
 	List<Composite*>::Iterator it = selected_.begin();	
 	for (; it != selected_.end(); it++)
 	{
 		if (!RTTI::isKindOf<System>(**it)) system_selected = false;
 		break;
 	}
+	*/
 
 	context_menu_.setItemEnabled(OBJECT__COPY, system_selected);
 
@@ -701,7 +693,7 @@ void MolecularControl::cut()
 	{
 		getMainControl()->deselectCompositeRecursive(*it, false);
 
-		if (RTTI::isKindOf<System>(**it) && !was_delete_) 
+		if (!was_delete_) 
 		{
 			// insert deep clone of the composite into the cut list
 			copy_list_.push_back((System*)(*it)->create());
@@ -709,8 +701,12 @@ void MolecularControl::cut()
 		}
 		else
 		{
-			roots.insert(&(*it)->getRoot());
 			to_delete.insert(*it);
+		}
+
+		if (!RTTI::isKindOf<System>(**it))
+		{
+			roots.insert(&(*it)->getRoot());
 		}
 	}
 
@@ -741,7 +737,7 @@ void MolecularControl::cut()
 	{
 		// remove composite representation from tree
 		nr_of_items += removeRecursiveComposite(**delete_it);
-		CompositeMessage* remove_message = new CompositeMessage(**delete_it, CompositeMessage::REMOVED_COMPOSITE);
+		CompositeMessage* remove_message = new CompositeMessage(**delete_it, CompositeMessage::REMOVED_COMPOSITE, false);
 		notify_(remove_message);
 	}
 
@@ -751,7 +747,6 @@ void MolecularControl::cut()
 	ControlSelectionMessage* message = new ControlSelectionMessage;
 	notify_(message);
 
-	if (!roots.size()) return;
 	HashSet<Composite*>::Iterator roots_it = roots.begin();
 	for (roots_it = roots.begin(); roots_it != roots.end(); roots_it++)
 	{
@@ -784,10 +779,7 @@ void MolecularControl::copy()
 	List<Composite*>::Iterator it = selected_.begin();	
 	for (; it != selected_.end(); it++)
 	{
-		if (RTTI::isKindOf<System>(**it)) 
-		{
-			copy_list_.push_back((Composite*)(*it)->create());
-		}
+		copy_list_.push_back((Composite*)(*it)->create());
 	}
 }
 
@@ -798,19 +790,45 @@ void MolecularControl::paste()
 
 	setStatusbarText("pasted " + String(copy_list_.size()) + " objects...");
 
+	HashSet<Composite*> changed_roots;
 	// copying composites
 	List<Composite*>::ConstIterator list_it = copy_list_.begin();	
 	for (; list_it != copy_list_.end(); ++list_it)
 	{
-		// create a new copy of the composite
-		Composite *new_composite = (Composite*)(*list_it)->create();
+		if (RTTI::isKindOf<System>(**list_it))
+		{
+			// create a new copy of the composite
+			Composite *new_composite = (Composite*)(*list_it)->create();
 
-		// insert Composite in mainControl
-		new_composite->host(getInformationVisitor_());
-		CompositeMessage *new_message = new CompositeMessage(*new_composite, CompositeMessage::NEW_COMPOSITE);
-		new_message->setCompositeName(getInformationVisitor_().getName());
-		notify_(new_message);
+			// insert Composite in mainControl
+			new_composite->host(getInformationVisitor_());
+			CompositeMessage *new_message = new CompositeMessage(*new_composite, CompositeMessage::NEW_COMPOSITE);
+			new_message->setCompositeName(getInformationVisitor_().getName());
+			notify_(new_message);
+			continue;
+		}
+
+		if (selected_.size() != 1)
+		{
+			setStatusbarText("Could not paste, no or more than 1 item selected!");
+			continue;
+		}
+
+		Composite* parent = *selected_.begin();
+		Composite *new_child = (Composite*)(*list_it)->create();
+
+		parent->appendChild(*new_child);
+		changed_roots.insert(&parent->getRoot());
 	}
+
+	HashSet<Composite*>::Iterator it = changed_roots.begin();
+	for (; it != changed_roots.end(); it++)
+	{
+		CompositeMessage *new_message = new CompositeMessage(**it, CompositeMessage::CHANGED_COMPOSITE);
+		notify_(*new_message);
+		updateListViewItem_(0, **it);
+	}
+
 }
 
 
@@ -931,6 +949,14 @@ void MolecularControl::updateListViewItem_(SelectableListViewItem* parent, Compo
 	{
 		generateListViewItem_(parent, composite);
 		return;
+	}
+
+	for (Position p = 0; p < composite.getDegree(); p++)
+	{
+		if (!composite_to_item_.has(composite.getChild(p)))
+		{
+			generateListViewItem_(composite_to_item_[&composite], *composite.getChild(p));
+		}
 	}
 
 	// find the ListViewItem belonging to the composite

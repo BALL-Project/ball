@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.35 2004/02/11 13:25:27 amoll Exp $
+// $Id: mainControl.h,v 1.36 2004/02/11 16:19:11 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -714,10 +714,10 @@ namespace BALL
 			/*_ Remove a composite.
 					Every Representation, which was created for the Composite is deleted, by sending a 
 					RepresentationMessage with type RepresentationMessage::REMOVE.\par
-					Calls updateAllRepresentations()
+					Redraws representations of the parent of the Composite, if wished.
 					\return bool <tt>true</tt> if the CompositeManager has the Composite
 			*/
-			bool remove_(Composite& composite)
+			bool remove_(Composite& composite, bool update_representations_of_parent = true)
 				throw();
 
 			/*_	Create a unique item ID for a menuentry by adding 1 to current_id_

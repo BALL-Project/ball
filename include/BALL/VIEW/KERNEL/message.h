@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.41 2004/01/13 00:46:16 amoll Exp $
+// $Id: message.h,v 1.42 2004/02/11 16:19:11 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -166,7 +166,7 @@ class CompositeMessage: public Message
 	CompositeMessage()
 		throw();
 
-	CompositeMessage(const Composite& composite, CompositeMessageType type)
+	CompositeMessage(const Composite& composite, CompositeMessageType type, bool update_representations = true)
 		throw();
 
 	/// Copy constructor.
@@ -210,6 +210,15 @@ class CompositeMessage: public Message
 	///
 	CompositeMessageType getType() const
 		throw() { return type_;}
+
+	///
+	void setUpdateRepresentations(bool state)
+		throw() { update_representations_ = state;}
+
+	///
+	bool updateRepresentations() const
+		throw() { return update_representations_;}
+
 	//@}
 
 	protected:
@@ -217,6 +226,7 @@ class CompositeMessage: public Message
 	CompositeMessageType 	type_;
 	Composite* 						composite_;
 	String 								composite_name_;
+	bool 									update_representations_;
 };
 
 

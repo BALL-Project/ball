@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.C,v 1.18 2003/12/23 13:09:40 amoll Exp $
+// $Id: message.C,v 1.19 2004/02/11 16:19:00 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/COMMON/rtti.h>
@@ -37,19 +37,21 @@ CompositeMessage::CompositeMessage()
 	: Message(),
 		type_(UNDEFINED),
 		composite_(0),
-		composite_name_()
+		composite_name_(),
+		update_representations_(true)
 {
 	#ifdef BALL_VIEW_DEBUG
 		Log.error() << "new CompositeMessage " << type_ << std::endl;		
 	#endif
 }
 
-CompositeMessage::CompositeMessage(const Composite& composite, CompositeMessageType type)
+CompositeMessage::CompositeMessage(const Composite& composite, CompositeMessageType type, bool update_representations)
 	throw()
 	: Message(),
 		type_(type),
 		composite_((Composite*)&composite),
-		composite_name_()
+		composite_name_(),
+		update_representations_(update_representations)
 {
 	#ifdef BALL_VIEW_DEBUG
 		Log.error() << "new CompositeMessage " << type_ << std::endl;		
@@ -61,7 +63,8 @@ CompositeMessage::CompositeMessage(const CompositeMessage& message)
 	: Message(message),
 		type_(message.type_),
 		composite_(message.composite_),
-		composite_name_(message.composite_name_)
+		composite_name_(message.composite_name_),
+		update_representations_(message.update_representations_)
 {
 	#ifdef BALL_VIEW_DEBUG
 		Log.error() << "new CompositeMessage " << type_ << std::endl;		
