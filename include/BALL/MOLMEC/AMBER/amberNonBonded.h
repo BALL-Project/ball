@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.h,v 1.17.4.1 2002/02/28 01:24:49 oliver Exp $
+// $Id: amberNonBonded.h,v 1.17.4.2 2002/05/22 22:54:14 oliver Exp $
 // Molecular Mechanics: Amber force field, non-bonded component
 
 #ifndef BALL_MOLMEC_AMBER_NONBONDED_H
@@ -184,6 +184,10 @@ namespace BALL
 		/*_	Number of 1-4 interactions in the vector non_bonded
 		*/
 		Size	number_of_1_4_;	
+
+		/*_	Number of hydrogen bond interactions in the vector non_bonded
+		*/
+		Size	number_of_h_bonds_;	
 
 		/*_	Cutoff distance for non-bonded interactions
 		*/
