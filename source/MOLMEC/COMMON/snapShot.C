@@ -1,4 +1,4 @@
-// $Id: snapShot.C,v 1.1 1999/12/17 18:31:40 pmueller Exp $
+// $Id: snapShot.C,v 1.2 1999/12/27 15:10:50 pmueller Exp $
 
 #include <BALL/MOLMEC/COMMON/snapShot.h>
 #include <BALL/CONCEPT/XDRPersistenceManager.h> 
@@ -86,7 +86,7 @@ namespace BALL
     }
 
   // The constructor of the SnapshotManager.
-  // It expects a valid system and force field, a filename  of a snapshot file.
+  // It expects a valid system, a force field, and a filename  of a snapshot file.
   // If the file does not exist yet, it will be created and a header consisting
   // of the system and some internal information will be written to it.
   // It the file is already existent, the header will read in and compared
@@ -238,10 +238,6 @@ namespace BALL
 
     vector<SnapShot *>::iterator it; 
 
-    cout << "SnapShotManager::Setup wird aufgerufen" << endl;
-    cout.flush();
-
-
     // delete the vector of pointers to SnapShot objects
     for(it = snapshot_list_.begin(); it != snapshot_list_.end(); ++it)
       {
@@ -318,8 +314,6 @@ namespace BALL
 
     snapshot_counter_ = header_.no_of_snapshots; 
 
-      cout << "Anzahl snapshots nach setup ist " << snapshot_counter_ << endl; 
-
     if(result == false)
       {
       // The file does not contain a valid header or is not writable
@@ -376,21 +370,16 @@ namespace BALL
       input_file.read((char *) &header.reserved4,sizeof(header.reserved4));
       input_file.read((char *) &header.reserved5,sizeof(header.reserved5));
 
+      // Report some information about the snapshot file 
+      Log.level(LogStream::INFORMATION) << " SnapShot file " << filename 
+                << " contains " <<  header.no_of_snapshots  << " snapshots. " 
+                << endl << endl; 
 
-      cout << "gelesener Header ist " << endl << "Title " << header.Title << endl <<
-                                                 "valid : " << header.valid << endl << 
-                                                 "no. of snapshots " <<
-                                                 header.no_of_snapshots << endl << 
-                                                 "start pos : " << 
-                                                 header.start_position << endl << 
-                                                 header.reserved1 << endl << 
-                                                 header.reserved2 << endl << 
-                                                 header.reserved3 << endl << 
-                                                 header.reserved4 << endl << 
-                                                 header.reserved5 << endl <<  endl; 
 
+      // BAUSTELLE: Ich verstehe den XDRPersistenceManager nicht
+      // Das System wird nicht in den Header aufgenommen. 
+      /*
       // now read in the system from this file
-      System  disk_system;
       XDRPersistenceManager pm;
       PersistentObject *po_ptr;
       System *sys_ptr; 
@@ -411,7 +400,7 @@ namespace BALL
         return false; 
         }
 
-      disk_system =  *sys_ptr; 
+      System disk_system(*sys_ptr); 
 
 
       // do a superficial check to see if the two systems are equivalent 
@@ -433,6 +422,7 @@ namespace BALL
 
         return false; 
         }
+      */
 
       return header.valid; 
       }
@@ -476,25 +466,19 @@ namespace BALL
 
 
       // now write the system to the file 
+      /* BAUSTELLE: System wird z.Z. nicht in den Header geschrieben, da es
+                    Probleme mit XDRPersistenceManager gibt 
+      
       XDRPersistenceManager pm;
       pm.setOstream(output_file);
       *system_ptr_ >> pm; 
+      */
 
 
       // remember where the first snapshot entry will be written 
       header.start_position = output_file.tellp();                    
       output_file.seekp(position);
       output_file.write((char *) &header.start_position,sizeof(header.start_position));
-
-      cout << "geschriebener Header ist " << endl << header.Title << endl <<
-                                                 header.valid << endl << 
-                                                 header.no_of_snapshots  << endl << 
-                                                 header.start_position << endl << 
-                                                 header.reserved1 << endl << 
-                                                 header.reserved2 << endl << 
-                                                 header.reserved3 << endl << 
-                                                 header.reserved4 << endl << 
-                                                 header.reserved5 << endl ;    
 
       output_file.close();             
       return true; 
@@ -591,9 +575,8 @@ namespace BALL
         sum += molecule_mass * sq_velocity;
         no_of_molecules++;
 
-        // BAUSTELLE EINHEITEN? 
-cout << "BAUSTELLE Einheiten in Zeile " << __LINE__ << "File " << __FILE__ << endl; 
-        result = 0.5 * sum; 
+        // 0.01 scales Da*A^2/ps^2 to kJ/mol 
+        result = 0.5 * sum * 0.01; 
 
         }
       else
@@ -610,9 +593,9 @@ cout << "BAUSTELLE Einheiten in Zeile " << __LINE__ << "File " << __FILE__ << en
           sq_velocity = (*atom_it)->getVelocity() * (*atom_it)->getVelocity();  
           sum += (*atom_it)->getElement().getAtomicWeight() * sq_velocity;
           }
-// BAUSTELLE Einheiten??  
-cout << "BAUSTELLE Einheiten in Zeile " << __LINE__ << "File " << __FILE__ << endl; 
-        result = 0.5 * sum; 
+
+        // 0.01 scales Da*A^2/ps^2 to kJ/mol 
+        result = 0.5 * sum * 0.01; 
         }
 
       return result;  
@@ -631,7 +614,13 @@ cout << "BAUSTELLE Einheiten in Zeile " << __LINE__ << "File " << __FILE__ << en
     AtomIterator atom_it; 
 
     if(valid_ == false)
+      {
+      Log.level(LogStream::ERROR)
+           << " No valid SnapShotManager available -> no snapshot taken!" 
+           << endl;
+
       return; 
+      }
 
     // create a new Snapshot-Object
     SnapShot *snapshot_ptr;
@@ -670,13 +659,14 @@ cout << "BAUSTELLE Einheiten in Zeile " << __LINE__ << "File " << __FILE__ << en
     // store the potential energies      
     snapshot_ptr->potential_energy = force_field_ptr_->getEnergy(); 
 
+
     // store the kinetic energy of all selected atoms in the system 
     // the current value must be calculated as it is not provided by
     // the force field 
     snapshot_ptr->kinetic_energy = calculateKineticEnergy(); 
 
     // These items are the admininistrative  data 
-    // First store the index of this snapshot
+    // First store the index of this snapshot. SnapShots are counted starting with 1. 
     snapshot_ptr->index = snapshot_counter_ + 1; 
       
     // One more snapshot. Add it to the current list of snapshots
@@ -698,7 +688,6 @@ cout << "BAUSTELLE Einheiten in Zeile " << __LINE__ << "File " << __FILE__ << en
       bool result; 
       fstream output_file;
       vector<SnapShot *>::iterator it;
-
 
       // if no snapshots are in main memory, then there is nothing to do
       if(snapshot_list_.size() == 0 || valid_ == false)
@@ -765,7 +754,7 @@ cout << "BAUSTELLE Einheiten in Zeile " << __LINE__ << "File " << __FILE__ << en
 
     // This method searches for a snapshot entry and transforms it into
     // a system object. This is useful for displaying, etc. 
-    System SnapShotManager::getAsSystem(Size index)
+    System SnapShotManager::getSnapShotAsSystem(Size index)
       {
       SnapShot tmp;
       System cmp; 
@@ -804,7 +793,7 @@ cout << "BAUSTELLE Einheiten in Zeile " << __LINE__ << "File " << __FILE__ << en
       // so this item will be ignored here 
 
       return cmp; 
-      } // end of SnapShotManager::getSystem()
+      } // end of SnapShotManager::getSnapShotAsSystem()
 
 
 
@@ -877,16 +866,9 @@ cout << "BAUSTELLE Einheiten in Zeile " << __LINE__ << "File " << __FILE__ << en
         input_file.read((char *) &tmp.index, sizeof(tmp.index)); 
         input_file.read((char *) &tmp.total_length, sizeof(tmp.total_length)); 
 
-        // DEBUG
-        cout << "lese von Disk Snapshot Nr.   " << tmp.index << endl; 
-        cout << "                       valid " << tmp.valid << endl; 
-
         if(tmp.valid == true && tmp.index == index)
           {
           // the search has been successful 
-
-          cout << "gefunden: lese Snapshot Nr. " << tmp.index << endl; 
-
           input_file.seekp(position); 
           input_file >> tmp; 
 
@@ -895,7 +877,7 @@ cout << "BAUSTELLE Einheiten in Zeile " << __LINE__ << "File " << __FILE__ << en
           }
         else
          {
-         // skipt this  entry 
+         // skip this  entry 
          input_file.seekp(position + tmp.total_length); 
          counter++; 
          }
