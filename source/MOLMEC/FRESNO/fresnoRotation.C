@@ -1,4 +1,4 @@
-// $Id: fresnoRotation.C,v 1.1.2.8 2002/04/08 16:39:28 anker Exp $
+// $Id: fresnoRotation.C,v 1.1.2.9 2002/04/09 12:01:09 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
 #include <BALL/KERNEL/standardPredicates.h>
@@ -161,32 +161,6 @@ namespace BALL
 		{
 			grid_->insert(atom_it->getPosition(), &*atom_it);
 		}
-
-		atom_it = ligand->beginAtom();
-		Size n_heavy_atoms = 0;
-		for (; +atom_it; ++atom_it)
-		{
-			if (atom_it->getElement().getSymbol() != "H")
-			{
-				n_heavy_atoms++;
-			}
-		}
-		// DEBUG
-		cout << "fount " << n_heavy_atoms << " heavy_atoms" << endl;
-		atom_it = ligand->beginAtom();
-		Size tmp_count = 0;
-		for (; +atom_it; ++atom_it)
-		{
-			if ((atom_it->getElement().getSymbol() != "H")
-				&& ((*fresno_types_)[&*atom_it] != FresnoFF::LIPOPHILIC)
-				 )
-			{
-				tmp_count++;
-			}
-		}
-		cout << "fount " << tmp_count << " nonlipophilic heavy_atoms" << endl;
-		// /DEBUG
-
 
 		StringHashMap< pair<float, float> > bondlengths;
 
@@ -409,6 +383,10 @@ namespace BALL
 						heavy_atom_count, nonlip_heavy_atom_count);
 				double first_fraction = (double) nonlip_heavy_atom_count / (double) heavy_atom_count;
 
+				cout << heavy_atom_count << " "
+					<< first_fraction << " "
+					<< atom1->getFullName() << ":" << atom2->getFullName() << " " ;
+
 				visited.clear();
 				heavy_atom_count = 0;
 				nonlip_heavy_atom_count = 0;
@@ -419,10 +397,7 @@ namespace BALL
 				heavy_atom_fractions_.push_back
 					(pair<double, double>(first_fraction, second_fraction));
 
-				cout << heavy_atom_count << " "
-					<< first_fraction << " "
-					<< atom1->getFullName() << ":" << atom2->getFullName() << " " 
-					<< n_heavy_atoms - heavy_atom_count 
+				cout << heavy_atom_count 
 					<< " " << second_fraction << endl;
 			}
 		}
@@ -659,8 +634,6 @@ namespace BALL
 	{
 		HashSet<const Atom*> visited;
 
-		N_rot_ = 0;
-
 		for (Size i = 0; i < rotatable_bonds_.size(); ++i)
 		{
 			const Bond* bond = rotatable_bonds_[i];
@@ -669,7 +642,6 @@ namespace BALL
 			if (result == true)
 			{
 				is_frozen_[i] = true;
-				N_rot_++;
 			}
 			else
 			{
