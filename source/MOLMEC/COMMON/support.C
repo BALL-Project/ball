@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: support.C,v 1.33 2002/12/12 10:41:54 oliver Exp $
+// $Id: support.C,v 1.34 2002/12/17 14:48:34 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/KERNEL/atom.h>
@@ -47,7 +47,7 @@ namespace BALL
 			double period_x = 0.0;
 			double period_y = 0.0;
 			double period_z = 0.0;
-			Vector3 period;
+			Vector3 period(box.getWidth(), box.getHeight(), box.getDepth());
 
 			// Are there atoms stored in atom_vector at all?
 			if (atom_vector.size() == 0)
@@ -61,11 +61,9 @@ namespace BALL
 			if (periodic_boundary_enabled) 
 			{
 				// Just take the box that was given as argument...
-				period_x = box.getWidth();
-				period_y = box.getHeight();
-				period_z = box.getDepth(); 
-				// ?????
-				// period = Vector3(period_x, period_y, period_z);
+				period_x = period.x;
+				period_y = period.y;
+				period_z = period.z; 
 			
 				// ... and add at least distance to each coordinate to gain a box
 				// that contains enough neighbouring boxes.
@@ -132,12 +130,12 @@ namespace BALL
 			Size	counter = 0;
 
 			// Squared distance
-			double  squared_distance = distance * distance;
+			double squared_distance = distance * distance;
 
 			// initialize the hash grid
 			// we enlarge the box by some constant to be sure not to run into
 			// numerical problems
-			HashGrid3<Atom*> grid(lower - Vector3(0.1),
+			HashGrid3<Atom*> grid(lower - Vector3(0.1F),
 					upper - lower + Vector3(0.2F), distance);
 
 			// Iterators and hash box pointer for the grid search
@@ -147,11 +145,6 @@ namespace BALL
 	
 			if (periodic_boundary_enabled) 
 			{
-				// Calculate the half periods for determining the minimal image
-				double half_period_x = period_x * 0.5;
-				double half_period_y = period_y * 0.5;
-				double half_period_z = period_z * 0.5;
-
 				// Check what kind of algorithm should be used for determining the
 				// neighbours
 
@@ -160,60 +153,25 @@ namespace BALL
 					// Brute force algorithm: for every atom calculate the minimum
 					// image of every other atom and check whether this atomis within
 					// the cutoff radius
-
+					Vector3 position_j;
+					Vector3 position_i;
 					for (atom_it = atom_vector.begin(); atom_it != atom_vector.end();
 							++atom_it) 
 					{
-						position = (*atom_it)->getPosition();
+						position_i = (*atom_it)->getPosition();
 						for (atom_it2 = atom_it, atom_it2++; 
 								atom_it2 != atom_vector.end(); ++atom_it2) 
 						{
-							new_position = position;
-							difference = position - (*atom_it2)->getPosition();
-							// ?????
-							// calculateMinimumImage(difference, period);
+							position_j = (*atom_it2)->getPosition();
+							float r_x = position_i.x - position_j.x;
+							float r_y = position_i.y - position_j.y;
+							float r_z = position_i.z - position_j.z;
+							r_x = r_x - period_x * (int)(r_x / period_x);
+							r_y = r_y - period_y * (int)(r_y / period_y);
+							r_z = r_z - period_z * (int)(r_z / period_z);
 
-							// ?????: should it be < or <= ? We have to define what
-							// should happen if an atom sits right on the border
-							// (numerically quite improbable, of course)
-							if (difference.x < -half_period_x) 
-							{
-								new_position.x += period_x;
-							}
-							else 
-							{
-								if (difference.x > half_period_x)
-								{
-									new_position.x -= period_x;
-								}
-							}
-
-							if (difference.y < -half_period_y) 
-							{
-								new_position.y += period_y;
-							}
-							else 
-							{
-								if (difference.y > half_period_y)
-								{
-									new_position.y -= period_y;
-								}
-							}
-
-							if (difference.z < -half_period_z) 
-							{
-								new_position.z += period_z;
-							}
-							else 
-							{
-								if (difference.z > half_period_z)
-								{
-									new_position.z -= period_z;
-								}
-							}
-
-							if ((new_position.getSquareDistance((*atom_it2)->getPosition())) 
-									<= squared_distance) 
+							
+							if ((r_x * r_x + r_y * r_y + r_z * r_z) <= squared_distance) 
 							{
 								pair_vector.push_back(pair<Atom*, Atom*>(*atom_it, *atom_it2));
 								counter++;
@@ -228,26 +186,27 @@ namespace BALL
 					// Use a hash grid with box length "distance" to determine all
 					// neigboured atom pairs
 
+					Vector3 position_i;
+					Vector3 position_j;
 					for (atom_it = atom_vector.begin(); atom_it != atom_vector.end();
 							++atom_it) 
 					{
-						position = (*atom_it)->getPosition();
+						position_i = (*atom_it)->getPosition();
 
 						// Search all neighbour atoms of "atom_it" that are stored in
 						// the hash grid
 
 						// Calculate the 27 images of the atom and determine their
 						// neighbours
-
 						for (short x = -1; x < 2 ; x++) 
 						{
-							new_position.x = position.x + x * period_x;
+							new_position.x = position_i.x + x * period_x;
 							for (short y = -1; y < 2 ; y++) 
 							{
-								new_position.y = position.y + y * period_y;
+								new_position.y = position_i.y + y * period_y;
 								for (short z = -1; z < 2 ; z++) 
 								{
-									new_position.z = position.z + z * period_z;
+									new_position.z = position_i.z + z * period_z;
 									hbox = grid.getBox(new_position);
 
 									if (hbox != 0)
@@ -261,14 +220,15 @@ namespace BALL
 												// difference is the vector pointing from the
 												// current atom to the one that we got from the
 												// gridbox
-												difference = new_position - (*data_it)->getPosition();
-												if ((difference.x > -half_period_x) 
-													&& (difference.x <= half_period_x) 
-													&& (difference.y > -half_period_y) 
-													&& (difference.y <= half_period_y)
-													&& (difference.z > -half_period_z) 
-													&& (difference.z <= half_period_z) 
-													&& (difference.getSquareLength() <= squared_distance))
+												position_j = (*data_it)->getPosition();
+												float r_x = position_i.x - position_j.x;
+												float r_y = position_i.y - position_j.y;
+												float r_z = position_i.z - position_j.z;
+												r_x = r_x - period_x * (int)(r_x / period_x);
+												r_y = r_y - period_y * (int)(r_y / period_y);
+												r_z = r_z - period_z * (int)(r_z / period_z);
+												
+												if ((r_x * r_x + r_y * r_y + r_z * r_z) <= squared_distance) 
 												{
 													pair_vector.push_back(pair<Atom*, Atom*>(*data_it, *atom_it));
 													counter++;
