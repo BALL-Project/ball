@@ -1,4 +1,4 @@
-// $Id: forceField.C,v 1.3 1999/09/03 14:05:02 oliver Exp $
+// $Id: forceField.C,v 1.4 1999/09/03 14:09:57 len Exp $
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
 
@@ -245,6 +245,12 @@ namespace BALL
 	bool ForceField::getUseSelection(void)
 	{
 		return use_selection_;
+	}
+
+	// Return the parameter use_selection_
+	void ForceField::setUseSelection(bool use_selection)
+	{
+		use_selection_ = use_selection;
 	}
 
 	// Return a pointer to the parameter file
