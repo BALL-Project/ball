@@ -1,3 +1,24 @@
+%  docxx.sty
+%
+%  Copyright (c) 1996 Roland Wunderling, Malte Zoeckler
+%  Copyright (c) 1999-2000 Dragos Acostachioaie
+%
+%  This file is part of DOC++.
+%
+%  DOC++ is free software; you can redistribute it and/or
+%  modify it under the terms of the GNU General Public
+%  License as published by the Free Software Foundation; either
+%  version 2 of the license, or (at your option) any later version.
+%
+%  This program is distributed in the hope that it will be useful,
+%  but WITHOUT ANY WARRANTY; without even the implied warranty of
+%  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+%  General Public License for more details.
+%
+%  You should have received a copy of the GNU General Public
+%  License along with this program; if not, write to the Free
+%  Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+%
 %
 % Switch off special characters except {}\ for the rest of the text.
 %
@@ -15,16 +36,26 @@
 \def\cxxExceptionsStr{}
 \def\cxxParameterStr{}
 \def\cxxReturnStr{}
+\def\cxxInvariantsStr{}
+\def\cxxPreconditionsStr{}
+\def\cxxPostconditionsStr{}
 \def\cxxSeeStr{}
 \def\cxxAuthorStr{}
 \def\cxxVersionStr{}
+\def\cxxDeprecatedStr{}
+\def\cxxSinceStr{}
 \def\cxxFileStr{}
 \def\cxxExceptions#1{\def\cxxExceptionsStr{#1}}
 \def\cxxParameter#1{\def\cxxParameterStr{#1}}
 \def\cxxReturn#1{\def\cxxReturnStr{#1}}
+\def\cxxInvariants#1{\def\cxxInvariantsStr{#1}}
+\def\cxxPreconditions#1{\def\cxxPreconditionsStr{#1}}
+\def\cxxPostconditions#1{\def\cxxPostconditionsStr{#1}}
 \def\cxxSee#1{\def\cxxSeeStr{#1}}
 \def\cxxAuthor#1{\def\cxxAuthorStr{#1}}
 \def\cxxVersion#1{\def\cxxVersionStr{#1}}
+\def\cxxDeprecated#1{\def\cxxDeprecatedStr{#1}}
+\def\cxxSince#1{\def\cxxSinceStr{#1}}
 \def\cxxFile#1{\def\cxxFileStr{#1}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -385,15 +416,11 @@
 \providecommand{\cxxCopyright}{%
     \vtop{%
 	\hbox to \textwidth{{
-	    \tiny\sf This page has been automatically generated with DOC++
+	    \tiny\sf This page was generated with the help of DOC++
 	\hss}}%
 	\vskip -20pt
 	\hbox to \textwidth{
-	    \hbox{{\tiny\sf DOC++ is \copyright 1995 by }}
-	    \vtop{{\hbox{ \tiny\sf Roland Wunderling}%
-		  \vskip -25pt
-		  \hbox{ \tiny\sf Malte Z\"ockler}%
-	    }}\hss
+	    \hbox{{\tiny\sf http://www.linuxsupportline.com/{\cxxtilde}doc++ }}
 	\hss}%
     }%
 }
@@ -403,7 +430,7 @@
 	\vskip -20pt%
 	\cxxCopyright%
     }%
-    \hss\vtop{\vskip 10pt\hbox{\textrm{\thepage} }}
+    \hss\vtop{\vskip 10pt\hbox{\today\hspace*{3cm}\textrm{\thepage} }}
 }}
 \pagestyle{docxx}
 
@@ -561,7 +588,7 @@
 	\vss}%
     \hss}}
     \newcommand{\cxxLinkUp}{\hbox to 0pt{\hss\hskip 0.5\cxxClassGraphShift%
-	\raise0.7\cxxClassGraphHeight\hbox to 0pt{\hss\textbf{\^}\hss}}}%
+	\raise0.7\cxxClassGraphHeight\hbox to 0pt{\hss\textbf{\symbol{94}}\hss}}}%
     \newcommand{\cxxLinkDown}{\hbox to 0pt{\hss\hskip 0.5\cxxClassGraphShift%
 	\raise-0.6\cxxClassGraphHeight\vbox to 0pt{%
 	    \hbox to 0pt{\hss\textbf{$\lor$}\hss}\vss}}}%
@@ -655,6 +682,16 @@
 	    ##4%
 	    \hskip\cxxClassGraphShift\dotfill%
 	    \hbox to \cxxClassGraphShift{\hss\pageref{cxx.##2}}%
+	}\vskip-1pt
+    }
+    \newcommand{\cxxClassGraphEntryUnknownPackage}[3]{
+	\hbox to \hsize{\hss%
+	    \vrule width0pt height \cxxClassGraphHeight depth \cxxClassGraphDepth%
+	    ##1%
+	    \def\tmp{##3}%
+	    \rBox[1pt]{}{##2}{0.24\hsize}%
+	    ##3%
+	    \hskip\cxxClassGraphShift\hfill%
 	}\vskip-1pt
     }
     \clearpage
@@ -785,16 +822,26 @@
 \def\cxxExceptionsStr{}
 \def\cxxParameterStr{}
 \def\cxxReturnStr{}
+\def\cxxInvariantsStr{}
+\def\cxxPreconditionsStr{}
+\def\cxxPostconditionsStr{}
 \def\cxxSeeStr{}
 \def\cxxAuthorStr{}
 \def\cxxVersionStr{}
+\def\cxxDeprecatedStr{}
+\def\cxxSinceStr{}
 \def\cxxFileStr{}
 \def\cxxExceptions##1{\def\cxxExceptionsStr{##1}}
 \def\cxxParameter##1{\def\cxxParameterStr{##1}}
 \def\cxxReturn##1{\def\cxxReturnStr{##1}}
+\def\cxxInvariants##1{\def\cxxInvariantsStr{##1}}
+\def\cxxPreconditions##1{\def\cxxPreconditionsStr{##1}}
+\def\cxxPostconditions##1{\def\cxxPostconditionsStr{##1}}
 \def\cxxSee##1{\def\cxxSeeStr{##1}}
 \def\cxxAuthor##1{\def\cxxAuthorStr{##1}}
 \def\cxxVersion##1{\def\cxxVersionStr{##1}}
+\def\cxxDeprecated##1{\def\cxxDeprecatedStr{##1}}
+\def\cxxSince##1{\def\cxxSinceStr{##1}}
 \def\cxxFile##1{\def\cxxFileStr{##1}}
 }{
 \endgroup
@@ -894,6 +941,19 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
+% environment for namespace manual entries
+% arguments are:
+%	#1	type
+%	#2	name
+%	#3	args
+%	#4	memo
+%	#5	number
+%
+\newenvironment{cxxnamespace}[5]{
+\begin{cxxgeneric}{#1}{#2}{#3}{#4}{#5}}{\end{cxxgeneric}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
 % environment for interface manual entries
 % arguments are:
 %	#1	type
@@ -959,6 +1019,18 @@
     \noindent\hbox to 0.3\textwidth{{\bf Exceptions:}\hss}%
     \parbox[t]{0.7\textwidth}{\cxxExceptionsStr}\\
 \fi
+\ifx\cxxInvariantsStr\empty\else
+    \noindent\hbox to 0.3\textwidth{{\bf Invariants:}\hss}%
+    \parbox[t]{0.7\textwidth}{\cxxInvariantsStr}\\
+\fi
+\ifx\cxxPreconditionsStr\empty\else
+    \noindent\hbox to 0.3\textwidth{{\bf Preconditions:}\hss}%
+    \parbox[t]{0.7\textwidth}{\cxxPreconditionsStr}\\
+\fi
+\ifx\cxxPostconditionsStr\empty\else
+    \noindent\hbox to 0.3\textwidth{{\bf Postconditions:}\hss}%
+    \parbox[t]{0.7\textwidth}{\cxxPostconditionsStr}\\
+\fi
 \ifx\cxxSeeStr\empty\else
     \noindent\hbox to 0.3\textwidth{{\bf See Also:}\hss}%
     \parbox[t]{0.7\textwidth}{\cxxSeeStr}\\
@@ -970,6 +1042,14 @@
 \ifx\cxxVersionStr\empty\else
     \noindent\hbox to 0.3\textwidth{{\bf Version:}\hss}%
     \parbox[t]{0.7\textwidth}{\cxxVersionStr}\\
+\fi
+\ifx\cxxDeprecatedStr\empty\else
+    \noindent\hbox to 0.3\textwidth{{\bf\it Deprecated:}\hss}%
+    \parbox[t]{0.7\textwidth}{\cxxDeprecatedStr}\\
+\fi
+\ifx\cxxSinceStr\empty\else
+    \noindent\hbox to 0.3\textwidth{{\bf Since:}\hss}%
+    \parbox[t]{0.7\textwidth}{\cxxSinceStr}\\
 \fi
 \ifx\cxxFileStr\empty\else
     \noindent\hbox to 0.3\textwidth{{\bf File:}\hss}%
@@ -1000,4 +1080,4 @@
 \ccverbatim \parskip=0pt \cxxCodeFinish}
 {\catcode`\=0 catcode`\=12
 gdefcxxCodeFinish#1{hbox{#1}endgroup}}
-
+
