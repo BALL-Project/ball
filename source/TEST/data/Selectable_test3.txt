@@ -1,2 +1,2 @@
-/Object: [0-9a-z]+ is instance of class: Q24BALL10Selectable
+/Object: [0-9a-z]+ is instance of class: .*BALL.*Selectable
   selected: 1
