@@ -1,4 +1,4 @@
-// $Id: stringHashMap.h,v 1.13 2001/06/22 10:51:31 oliver Exp $
+// $Id: stringHashMap.h,v 1.14 2001/06/26 09:02:04 anker Exp $
 
 #ifndef BALL_DATATYPE_STRINGHASHMAP_H
 #define BALL_DATATYPE_STRINGHASHMAP_H
@@ -28,7 +28,7 @@
 namespace BALL 
 {
 
-	template <class Value>
+	template <typename Value>
 	class StringHashMap
 		:	public HashMap<String, Value>
 	{
@@ -155,7 +155,7 @@ namespace BALL
 				@param	value the value to be inserted
 				@param	key the value`s key
 		*/
-		std::pair<Iterator, bool> insert(const String& key, const Value& value)
+		::std::pair<Iterator, bool> insert(const String& key, const Value& value)
 			throw()
 		{
 			return HashMap<String, Value>::insert(typename HashMap<String, Value>::ValueType(key, value));
