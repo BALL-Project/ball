@@ -1,10 +1,11 @@
-// $Id: surfaceProcessor.h,v 1.19 2001/09/19 17:55:33 strobel Exp $
+// $Id: surfaceProcessor.h,v 1.20 2001/12/08 17:09:03 strobel Exp $
 
 #include <BALL/STRUCTURE/reducedSurface.h>
 #include <BALL/STRUCTURE/solventExcludedSurface.h>
-#include <BALL/STRUCTURE/singularities.h>
+//#include <BALL/STRUCTURE/singularities.h>
 #include <BALL/STRUCTURE/triangulatedSurface.h>
-#include <BALL/STRUCTURE/triangulation.h>
+#include <BALL/STRUCTURE/triangulatedSES.h>
+//#include <BALL/STRUCTURE/triangulation.h>
 #include <BALL/MATHS/surface.h>
 #include <BALL/CONCEPT/processor.h>
 #include <BALL/KERNEL/atom.h>
@@ -113,7 +114,9 @@ namespace BALL
 				std::ofstream rsfile("ReducedSurface.log");
 				rsfile << *rs;
 				rsfile.close();
-				::std::cerr << "... " << rs->numberOfAtoms() << " atoms, "
+				#endif
+				#ifdef debug_surface_processor
+				::std::cerr << rs->numberOfAtoms() << " atoms, "
 										<< rs->numberOfVertices() << " vertices, "
 										<< rs->numberOfEdges() << " edges, "
 										<< rs->numberOfFaces() << " faces ... ok\n"
@@ -125,7 +128,7 @@ namespace BALL
 				#endif
 		try
 		{
-			ses->get(rs);
+			ses->compute();
 		}
 		catch (Exception::GeneralException e)
 		{
@@ -136,36 +139,20 @@ namespace BALL
 			return false;
 		}
 				#ifdef debug_surface_processor_print
-				std::ofstream sesfile("SolventExcludedSurface.log");
-				sesfile << *ses;
-				sesfile.close();
-				::std::cerr << "... ok\ntreat singularities ...\n";
-				#endif
-		try
-		{
-			TreatSingularities(ses,rs,probe_radius_);
-		}
-		catch (Exception::GeneralException e)
-		{
-			delete ses;
-			delete rs;
-			::std::cerr << "can not treat singularities: exception " << e.getName() << " (" << e.getMessage()
-									<< ") in line " << e.getLine() << " of file " << e.getFile() << "\n";
-			return false;
-		}
-				#ifdef debug_surface_processor_print
 				rsfile.open("ReducedSurface.clean.log");
 				rsfile << *rs;
 				rsfile.close();
-				sesfile.open("SolventExcludedSurface.clean.log");
+				std::ofstream sesfile("SolventExcludedSurface.clean.log");
 				sesfile << *ses;
 				sesfile.close();
+				#endif
+				#ifdef debug_surface_processor
 				::std::cerr << "... ok\ntriangulate surface ...\n";
 				#endif
-		TriangulatedSurface* surface;
+		TriangulatedSES* surface = new TriangulatedSES(ses,density_);
 		try
 		{
-			surface = Triangulate(ses,rs,density_);
+			surface->compute();
 		}
 		catch (Exception::GeneralException e)
 		{
@@ -176,9 +163,13 @@ namespace BALL
 			return false;
 		}
 				#ifdef debug_surface_processor
-				std::cerr << "... " << surface->points.size() << " Punkte, "
-									<< surface->triangles.size() << " Dreiecke ... ok\n";
-				::std::cerr << "export surface ...\n";
+				::std::list<TrianglePoint*> points;
+				::std::list<Triangle*> triangles;
+				surface->getPoints(points);
+				surface->getTriangles(triangles);
+				::std::cerr << "... " << points.size() << " Punkte, "
+										<< triangles.size() << " Dreiecke ... ok\n"
+										<< "export surface ...\n";
 				#endif
 		surface->exportSurface(surface_);
 				#ifdef debug_surface_processor
