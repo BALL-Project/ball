@@ -15,6 +15,8 @@
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/STRUCTURE/HBondProcessor.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
+#include <BALL/VIEW/DATATYPE/colorTable.h>
+#include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
 
 #include <qlabel.h>
 #include <qpushbutton.h>
@@ -48,6 +50,7 @@ BALLViewDemo::~BALLViewDemo()
 
 void BALLViewDemo::show()
 {
+	widget_stack->raiseWidget(0);
 	DisplayProperties* dp = DisplayProperties::getInstance(0);
 	dp->setDrawingPrecision(DRAWING_PRECISION_HIGH);
 	dp->enableCreationForNewMolecules(false);
@@ -56,14 +59,31 @@ void BALLViewDemo::show()
 	PDBFile file;
 	try
 	{
-   		file.open("bpti.pdb");
+		Path path;
+		String file_name(path.getDataPath());
+		file_name + FileSystem::PATH_SEPARATOR;
+		file_name += "structures";
+		file_name += FileSystem::PATH_SEPARATOR;
+		file_name += "bpti.pdb";
+ 		file.open(file_name);
 //   		file.open("AlaAla.pdb");
 		file >> *system_;
+		system_->apply(getFragmentDB().add_hydrogens);
+		system_->apply(getFragmentDB().build_bonds);
+		HBondProcessor proc;
+		system_->apply(proc);
+
+		CompositeMessage *change_message = 
+			new CompositeMessage(*system_, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
+		notify_(change_message);
+
+
 		getMainControl()->insert(*system_, "demo");
 	}
 	catch(...)
 	{
 		Log.error() << "Could not open bpti.pdb" << std::endl;
+		return;
 	}
 
 	composites_.clear();
@@ -151,15 +171,6 @@ CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_
 	}
 	else if (id == MODEL_HBONDS)
 	{
-		system_->apply(getFragmentDB().add_hydrogens);
-		system_->apply(getFragmentDB().build_bonds);
-		HBondProcessor proc;
-		system_->apply(proc);
-
-		CompositeMessage *change_message = 
-			new CompositeMessage(*system_, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
-		notify_(change_message);
-
 		CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_ELEMENT);
 		notify_(crmsg);
 		crmsg = new CreateRepresentationMessage(composites_, MODEL_HBONDS, COLORING_ELEMENT);
@@ -202,8 +213,27 @@ CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_
 		ms->getFDPBDialog()->okPressed();
 		disable_button = false;
 	}
-	else if (id == MODEL_HBONDS + 7) // ContourSurface
+	else if (id == MODEL_HBONDS + 7) // SES colored 
 	{
+		getMainControl()->getPrimitiveManager().setMultithreadingMode(false);
+		CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_SE_SURFACE, COLORING_ELEMENT);
+		notify_(crmsg);
+
+		Representation* rep = *getMainControl()->getPrimitiveManager().begin();
+		Mesh* mesh = dynamic_cast<Mesh*> (*rep->getGeometricObjects().begin());
+
+		ColorMeshDialog* cdialog = ColorMeshDialog::getInstance(0);
+		cdialog->setMesh(mesh, rep);
+		cdialog->setGrid(grid_);
+		cdialog->applyPressed();
+
+		rep->setColorProcessor(0);
+		getMainControl()->getPrimitiveManager().setMultithreadingMode(false);
+
+ 		SceneMessage* smsg = new SceneMessage(SceneMessage::REBUILD_DISPLAY_LISTS);
+ 		notify_(smsg);
+
+		/*
 		ContourSurface cs(*grid_, 0.01);
 		Mesh* mesh = new Mesh;
 		mesh->Surface::operator = (static_cast<Surface&>(cs));
@@ -242,7 +272,6 @@ CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_
 		SceneMessage* smsg = new SceneMessage(SceneMessage::UPDATE_CAMERA);
 		smsg->setStage(stage);
 		notify_(smsg);
-
 		// Create a new representation containing the contour surface.
 		Representation* rep = getMainControl()->getPrimitiveManager().createRepresentation();
 		rep->insert(*mesh);
@@ -252,7 +281,9 @@ CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_
 		RepresentationMessage* message = new RepresentationMessage(*rep, RepresentationMessage::ADD);
 		notify_(message);
 
+*/
  		disable_button = false;
+		
 	}
 
 	buttonOk->setEnabled(!disable_button);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.C,v 1.46 2005/02/15 12:35:50 amoll Exp $
+// $Id: colorMeshDialog.C,v 1.47 2005/02/28 20:25:43 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -222,7 +222,21 @@ void ColorMeshDialog::gridSelected()
 	}
 	
 	grid_ = *it;
+	calculateValues_();
+}
 
+void ColorMeshDialog::setGrid(RegularData3D* grid)
+	throw()
+{
+	grid_ = grid;
+	if (grid_ != 0 && mesh_ != 0 && rep_ != 0)
+	{
+		calculateValues_();
+	}
+}
+
+void ColorMeshDialog::calculateValues_()
+{
 	if (grid_ == 0) return;
 
 	min_value_  = Limits<float>::max();

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.h,v 1.15 2005/02/15 12:36:08 amoll Exp $
+// $Id: colorMeshDialog.h,v 1.16 2005/02/28 20:25:49 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_COLORMESHDIALOG_H
@@ -75,6 +75,9 @@ namespace BALL
 			/// 
 			void setMesh(Mesh* mesh, Representation* rep)
 				throw();
+
+			void setGrid(RegularData3D* grid)
+				throw();
 				
 			public slots:
 			
@@ -108,6 +111,7 @@ namespace BALL
 			void loadSettings_();
 			void invalidateGrid_() throw();
 			void invalidateMesh_() throw();
+			void calculateValues_();
 
 			RegularData3D* grid_;
 			float min_value_;
