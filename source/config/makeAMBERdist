@@ -1,0 +1,38 @@
+#!/usr/local/bin/bash
+
+
+if test ! -f $1 ; then
+	echo "cannot open $1!"
+	exit
+fi
+
+DIR=/tmp/$$.bindist.tmp
+echo "extracting data files from cvs..."
+mkdir $DIR
+(
+	cd $DIR
+	mkdir amber
+	cd amber
+	cvs co BALL/data 2>/dev/null >/dev/null
+	find . -name CVS -exec rm -fr {} \; 2>/dev/null >/dev/null
+	mv BALL/data .
+	rmdir BALL
+)
+echo "copying application..."
+cp $1 $DIR/amber/amber.exe
+cp /KM/usr/oliver/BALL/source/APPLICATIONS/MOLVIEW/bpti.pdb $DIR/amber
+cp /KM/usr/oliver/BALL/source/config/README.AMBER.bindist $DIR/amber/README
+echo "#!/bin/sh" > $DIR/amber/molview
+echo "BALL_DATA_PATH=\"\`echo \$0|sed s/amber\$/data/\`\"" >> $DIR/amber/amber
+echo "export BALL_DATA_PATH" >> $DIR/amber/amber
+echo "\$0.exe \$*" >> $DIR/amber/amber
+chmod 755 $DIR/amber/amber
+echo "creating archive..."
+(
+	cd $DIR
+	tar cf - amber
+)| gzip -9 -c > $1.tar.gz
+echo "cleaning up..."
+rm -fr $DIR
+
+echo "done."
