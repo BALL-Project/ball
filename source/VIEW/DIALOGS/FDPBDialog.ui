@@ -8,23 +8,9 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>550</width>
-            <height>750</height>
+            <width>551</width>
+            <height>664</height>
         </rect>
-    </property>
-    <property name="sizePolicy">
-        <sizepolicy>
-            <hsizetype>0</hsizetype>
-            <vsizetype>0</vsizetype>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-        </sizepolicy>
-    </property>
-    <property name="minimumSize">
-        <size>
-            <width>550</width>
-            <height>750</height>
-        </size>
     </property>
     <property name="caption">
         <string>FDPB options</string>
@@ -35,148 +21,264 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>4</x>
-                <y>0</y>
+                <x>5</x>
+                <y>-1</y>
                 <width>540</width>
-                <height>116</height>
+                <height>100</height>
             </rect>
-        </property>
-        <property name="sizePolicy">
-            <sizepolicy>
-                <hsizetype>0</hsizetype>
-                <vsizetype>3</vsizetype>
-                <horstretch>1</horstretch>
-                <verstretch>0</verstretch>
-            </sizepolicy>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>540</width>
-                <height>105</height>
-            </size>
         </property>
         <property name="title">
             <string>Radii Config File</string>
         </property>
-        <widget class="QLayoutWidget">
+        <widget class="QRadioButton">
             <property name="name">
-                <cstring>layout12</cstring>
+                <cstring>radii_rules_button</cstring>
             </property>
             <property name="geometry">
                 <rect>
                     <x>9</x>
-                    <y>23</y>
-                    <width>520</width>
-                    <height>32</height>
+                    <y>63</y>
+                    <width>110</width>
+                    <height>26</height>
                 </rect>
             </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>radii_data_button</cstring>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>110</width>
-                            <height>0</height>
-                        </size>
-                    </property>
-                    <property name="maximumSize">
-                        <size>
-                            <width>110</width>
-                            <height>32767</height>
-                        </size>
-                    </property>
-                    <property name="text">
-                        <string>from table</string>
-                    </property>
-                    <property name="checked">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-                <widget class="QLineEdit">
-                    <property name="name">
-                        <cstring>radii_data_lineedit</cstring>
-                    </property>
-                    <property name="text">
-                        <string>radii/PARSE.siz</string>
-                    </property>
-                </widget>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>radii_data_browse</cstring>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>82</width>
-                            <height>33</height>
-                        </size>
-                    </property>
-                    <property name="text">
-                        <string>Browse</string>
-                    </property>
-                </widget>
-            </hbox>
+            <property name="minimumSize">
+                <size>
+                    <width>110</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>by rules</string>
+            </property>
         </widget>
-        <widget class="QLayoutWidget">
+        <widget class="QLineEdit">
             <property name="name">
-                <cstring>layout13</cstring>
+                <cstring>radii_rules_lineedit</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>125</x>
+                    <y>62</y>
+                    <width>321</width>
+                    <height>28</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>solvation/PARSE.rul</string>
+            </property>
+            <property name="readOnly">
+                <bool>false</bool>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>radii_rules_browse</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>452</x>
+                    <y>60</y>
+                    <width>82</width>
+                    <height>33</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Browse</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>radii_data_lineedit</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>125</x>
+                    <y>25</y>
+                    <width>321</width>
+                    <height>28</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>radii/PARSE.siz</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>radii_data_browse</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>452</x>
+                    <y>23</y>
+                    <width>82</width>
+                    <height>33</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Browse</string>
+            </property>
+        </widget>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>radii_data_button</cstring>
             </property>
             <property name="geometry">
                 <rect>
                     <x>9</x>
-                    <y>60</y>
-                    <width>520</width>
-                    <height>32</height>
+                    <y>26</y>
+                    <width>110</width>
+                    <height>26</height>
                 </rect>
             </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>radii_rules_button</cstring>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>110</width>
-                            <height>0</height>
-                        </size>
-                    </property>
-                    <property name="text">
-                        <string>by rules</string>
-                    </property>
-                </widget>
-                <widget class="QLineEdit">
-                    <property name="name">
-                        <cstring>radii_rules_lineedit</cstring>
-                    </property>
-                    <property name="text">
-                        <string>solvation/PARSE.rul</string>
-                    </property>
-                    <property name="readOnly">
-                        <bool>false</bool>
-                    </property>
-                </widget>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>radii_rules_browse</cstring>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>82</width>
-                            <height>33</height>
-                        </size>
-                    </property>
-                    <property name="text">
-                        <string>Browse</string>
-                    </property>
-                </widget>
-            </hbox>
+            <property name="minimumSize">
+                <size>
+                    <width>110</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>110</width>
+                    <height>32767</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>from table</string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+        </widget>
+    </widget>
+    <widget class="QButtonGroup">
+        <property name="name">
+            <cstring>charges_group</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>4</x>
+                <y>104</y>
+                <width>540</width>
+                <height>100</height>
+            </rect>
+        </property>
+        <property name="title">
+            <string>Charges Config File</string>
+        </property>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>charges_data_button</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>6</x>
+                    <y>26</y>
+                    <width>110</width>
+                    <height>26</height>
+                </rect>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>110</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>from table</string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>charges_data_lineedit</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>122</x>
+                    <y>25</y>
+                    <width>323</width>
+                    <height>28</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>charges/PARSE.crg</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>charges_data_browse</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>451</x>
+                    <y>23</y>
+                    <width>82</width>
+                    <height>33</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Browse</string>
+            </property>
+        </widget>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>charges_rules_button</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>6</x>
+                    <y>64</y>
+                    <width>110</width>
+                    <height>26</height>
+                </rect>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>110</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>by rules</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>charges_rules_lineedit</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>122</x>
+                    <y>63</y>
+                    <width>323</width>
+                    <height>28</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>solvation/PARSE.rul</string>
+            </property>
+            <property name="readOnly">
+                <bool>false</bool>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>charges_rules_browse</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>451</x>
+                    <y>61</y>
+                    <width>82</width>
+                    <height>33</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Browse</string>
+            </property>
         </widget>
     </widget>
     <widget class="QGroupBox">
@@ -186,24 +288,10 @@
         <property name="geometry">
             <rect>
                 <x>4</x>
-                <y>240</y>
+                <y>209</y>
                 <width>540</width>
-                <height>350</height>
+                <height>346</height>
             </rect>
-        </property>
-        <property name="sizePolicy">
-            <sizepolicy>
-                <hsizetype>0</hsizetype>
-                <vsizetype>3</vsizetype>
-                <horstretch>1</horstretch>
-                <verstretch>0</verstretch>
-            </sizepolicy>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>540</width>
-                <height>350</height>
-            </size>
         </property>
         <property name="title">
             <string>Parameters for FDPB</string>
@@ -235,155 +323,6 @@
         </spacer>
         <widget class="QButtonGroup">
             <property name="name">
-                <cstring>smoothing_group</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>344</x>
-                    <y>167</y>
-                    <width>190</width>
-                    <height>102</height>
-                </rect>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>0</hsizetype>
-                    <vsizetype>3</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>190</width>
-                    <height>102</height>
-                </size>
-            </property>
-            <property name="title">
-                <string>Smoothing</string>
-            </property>
-            <widget class="QRadioButton">
-                <property name="name">
-                    <cstring>smoothing_harmonic</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>13</x>
-                        <y>75</y>
-                        <width>147</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>harmonic</string>
-                </property>
-            </widget>
-            <widget class="QRadioButton">
-                <property name="name">
-                    <cstring>smoothing_none</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>14</x>
-                        <y>20</y>
-                        <width>134</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>none</string>
-                </property>
-                <property name="checked">
-                    <bool>true</bool>
-                </property>
-            </widget>
-            <widget class="QRadioButton">
-                <property name="name">
-                    <cstring>smoothing_uniform</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>14</x>
-                        <y>47</y>
-                        <width>140</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>uniform</string>
-                </property>
-            </widget>
-        </widget>
-        <widget class="QButtonGroup">
-            <property name="name">
-                <cstring>charge_distribution_group</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>345</x>
-                    <y>271</y>
-                    <width>190</width>
-                    <height>71</height>
-                </rect>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>0</hsizetype>
-                    <vsizetype>3</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>190</width>
-                    <height>71</height>
-                </size>
-            </property>
-            <property name="title">
-                <string>Charge Distribution</string>
-            </property>
-            <widget class="QRadioButton">
-                <property name="name">
-                    <cstring>charge_uniform</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>13</x>
-                        <y>21</y>
-                        <width>115</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>uniform</string>
-                </property>
-                <property name="checked">
-                    <bool>false</bool>
-                </property>
-            </widget>
-            <widget class="QRadioButton">
-                <property name="name">
-                    <cstring>charge_trilinear</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>13</x>
-                        <y>48</y>
-                        <width>121</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>trilinear</string>
-                </property>
-                <property name="checked">
-                    <bool>true</bool>
-                </property>
-            </widget>
-        </widget>
-        <widget class="QButtonGroup">
-            <property name="name">
                 <cstring>boundary_group</cstring>
             </property>
             <property name="geometry">
@@ -393,20 +332,6 @@
                     <width>190</width>
                     <height>151</height>
                 </rect>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>0</hsizetype>
-                    <vsizetype>3</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>190</width>
-                    <height>151</height>
-                </size>
             </property>
             <property name="title">
                 <string>Boundary Condition</string>
@@ -495,6 +420,127 @@
                 </property>
                 <property name="checked">
                     <bool>false</bool>
+                </property>
+            </widget>
+        </widget>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>smoothing_group</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>344</x>
+                    <y>167</y>
+                    <width>190</width>
+                    <height>102</height>
+                </rect>
+            </property>
+            <property name="title">
+                <string>Smoothing</string>
+            </property>
+            <widget class="QRadioButton">
+                <property name="name">
+                    <cstring>smoothing_harmonic</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>13</x>
+                        <y>75</y>
+                        <width>147</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>harmonic</string>
+                </property>
+            </widget>
+            <widget class="QRadioButton">
+                <property name="name">
+                    <cstring>smoothing_none</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>14</x>
+                        <y>20</y>
+                        <width>134</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>none</string>
+                </property>
+                <property name="checked">
+                    <bool>true</bool>
+                </property>
+            </widget>
+            <widget class="QRadioButton">
+                <property name="name">
+                    <cstring>smoothing_uniform</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>14</x>
+                        <y>47</y>
+                        <width>140</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>uniform</string>
+                </property>
+            </widget>
+        </widget>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>charge_distribution_group</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>345</x>
+                    <y>271</y>
+                    <width>190</width>
+                    <height>71</height>
+                </rect>
+            </property>
+            <property name="title">
+                <string>Charge Distribution</string>
+            </property>
+            <widget class="QRadioButton">
+                <property name="name">
+                    <cstring>charge_uniform</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>13</x>
+                        <y>21</y>
+                        <width>115</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>uniform</string>
+                </property>
+                <property name="checked">
+                    <bool>false</bool>
+                </property>
+            </widget>
+            <widget class="QRadioButton">
+                <property name="name">
+                    <cstring>charge_trilinear</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>13</x>
+                        <y>48</y>
+                        <width>121</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>trilinear</string>
+                </property>
+                <property name="checked">
+                    <bool>true</bool>
                 </property>
             </widget>
         </widget>
@@ -910,137 +956,27 @@
             </vbox>
         </widget>
     </widget>
-    <widget class="QButtonGroup">
-        <property name="name">
-            <cstring>buttonGroup3</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>4</x>
-                <y>590</y>
-                <width>540</width>
-                <height>116</height>
-            </rect>
-        </property>
-        <property name="sizePolicy">
-            <sizepolicy>
-                <hsizetype>5</hsizetype>
-                <vsizetype>5</vsizetype>
-                <horstretch>1</horstretch>
-                <verstretch>0</verstretch>
-            </sizepolicy>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>540</width>
-                <height>75</height>
-            </size>
-        </property>
-        <property name="title">
-            <string>Processors</string>
-        </property>
-        <widget class="QCheckBox">
-            <property name="name">
-                <cstring>build_bonds</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>197</x>
-                    <y>20</y>
-                    <width>154</width>
-                    <height>26</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>build Bonds</string>
-            </property>
-        </widget>
-        <widget class="QCheckBox">
-            <property name="name">
-                <cstring>assign_charges</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>12</x>
-                    <y>47</y>
-                    <width>169</width>
-                    <height>26</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>assign charges</string>
-            </property>
-            <property name="checked">
-                <bool>true</bool>
-            </property>
-        </widget>
-        <widget class="QCheckBox">
-            <property name="name">
-                <cstring>assign_radii</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>197</x>
-                    <y>47</y>
-                    <width>154</width>
-                    <height>26</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>assign radii</string>
-            </property>
-            <property name="checked">
-                <bool>true</bool>
-            </property>
-        </widget>
-        <widget class="QCheckBox">
-            <property name="name">
-                <cstring>add_hydrogens</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>360</x>
-                    <y>20</y>
-                    <width>171</width>
-                    <height>26</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>addHydrogens</string>
-            </property>
-        </widget>
-        <widget class="QCheckBox">
-            <property name="name">
-                <cstring>normalize_names</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>12</x>
-                    <y>20</y>
-                    <width>169</width>
-                    <height>26</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>normalize names</string>
-            </property>
-        </widget>
-    </widget>
     <widget class="QLayoutWidget">
         <property name="name">
             <cstring>Layout33</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>10</x>
-                <y>710</y>
-                <width>530</width>
+                <x>7</x>
+                <y>634</y>
+                <width>537</width>
                 <height>30</height>
             </rect>
         </property>
         <hbox>
             <property name="name">
                 <cstring>unnamed</cstring>
+            </property>
+            <property name="margin">
+                <number>0</number>
+            </property>
+            <property name="spacing">
+                <number>6</number>
             </property>
             <widget class="QPushButton">
                 <property name="name">
@@ -1057,13 +993,7 @@
                 <property name="minimumSize">
                     <size>
                         <width>90</width>
-                        <height>28</height>
-                    </size>
-                </property>
-                <property name="maximumSize">
-                    <size>
-                        <width>140</width>
-                        <height>28</height>
+                        <height>0</height>
                     </size>
                 </property>
                 <property name="text">
@@ -1088,13 +1018,7 @@
                 <property name="minimumSize">
                     <size>
                         <width>90</width>
-                        <height>28</height>
-                    </size>
-                </property>
-                <property name="maximumSize">
-                    <size>
-                        <width>140</width>
-                        <height>28</height>
+                        <height>0</height>
                     </size>
                 </property>
                 <property name="text">
@@ -1116,13 +1040,7 @@
                 <property name="minimumSize">
                     <size>
                         <width>90</width>
-                        <height>28</height>
-                    </size>
-                </property>
-                <property name="maximumSize">
-                    <size>
-                        <width>140</width>
-                        <height>28</height>
+                        <height>0</height>
                     </size>
                 </property>
                 <property name="text">
@@ -1133,152 +1051,185 @@
     </widget>
     <widget class="QButtonGroup">
         <property name="name">
-            <cstring>charges_group</cstring>
+            <cstring>buttonGroup3</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>4</x>
-                <y>120</y>
-                <width>540</width>
-                <height>116</height>
+                <x>1</x>
+                <y>556</y>
+                <width>543</width>
+                <height>77</height>
             </rect>
         </property>
-        <property name="sizePolicy">
-            <sizepolicy>
-                <hsizetype>7</hsizetype>
-                <vsizetype>7</vsizetype>
-                <horstretch>1</horstretch>
-                <verstretch>0</verstretch>
-            </sizepolicy>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>540</width>
-                <height>105</height>
-            </size>
-        </property>
         <property name="title">
-            <string>Charges Config File</string>
+            <string>Processors</string>
         </property>
-        <widget class="QLayoutWidget">
+        <widget class="QCheckBox">
             <property name="name">
-                <cstring>layout14</cstring>
+                <cstring>add_hydrogens</cstring>
             </property>
             <property name="geometry">
                 <rect>
-                    <x>6</x>
-                    <y>23</y>
-                    <width>520</width>
-                    <height>32</height>
+                    <x>369</x>
+                    <y>19</y>
+                    <width>171</width>
+                    <height>26</height>
                 </rect>
             </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>charges_data_button</cstring>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>110</width>
-                            <height>0</height>
-                        </size>
-                    </property>
-                    <property name="text">
-                        <string>from table</string>
-                    </property>
-                    <property name="checked">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-                <widget class="QLineEdit">
-                    <property name="name">
-                        <cstring>charges_data_lineedit</cstring>
-                    </property>
-                    <property name="text">
-                        <string>charges/PARSE.crg</string>
-                    </property>
-                </widget>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>charges_data_browse</cstring>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>82</width>
-                            <height>33</height>
-                        </size>
-                    </property>
-                    <property name="text">
-                        <string>Browse</string>
-                    </property>
-                </widget>
-            </hbox>
+            <property name="text">
+                <string>addHydrogens</string>
+            </property>
         </widget>
-        <widget class="QLayoutWidget">
+        <widget class="QCheckBox">
             <property name="name">
-                <cstring>layout15</cstring>
+                <cstring>build_bonds</cstring>
             </property>
             <property name="geometry">
                 <rect>
-                    <x>6</x>
-                    <y>61</y>
-                    <width>520</width>
-                    <height>32</height>
+                    <x>197</x>
+                    <y>20</y>
+                    <width>154</width>
+                    <height>26</height>
                 </rect>
             </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>charges_rules_button</cstring>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>110</width>
-                            <height>0</height>
-                        </size>
-                    </property>
-                    <property name="text">
-                        <string>by rules</string>
-                    </property>
-                </widget>
-                <widget class="QLineEdit">
-                    <property name="name">
-                        <cstring>charges_rules_lineedit</cstring>
-                    </property>
-                    <property name="text">
-                        <string>solvation/PARSE.rul</string>
-                    </property>
-                    <property name="readOnly">
-                        <bool>false</bool>
-                    </property>
-                </widget>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>charges_rules_browse</cstring>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>82</width>
-                            <height>33</height>
-                        </size>
-                    </property>
-                    <property name="text">
-                        <string>Browse</string>
-                    </property>
-                </widget>
-            </hbox>
+            <property name="text">
+                <string>build Bonds</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>assign_radii</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>197</x>
+                    <y>47</y>
+                    <width>154</width>
+                    <height>26</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>assign radii</string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>normalize_names</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>12</x>
+                    <y>20</y>
+                    <width>169</width>
+                    <height>26</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>normalize names</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>assign_charges</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>12</x>
+                    <y>47</y>
+                    <width>169</width>
+                    <height>26</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>assign charges</string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
         </widget>
     </widget>
 </widget>
+<connections>
+    <connection>
+        <sender>radii_data_browse</sender>
+        <signal>clicked()</signal>
+        <receiver>FDPBDialog</receiver>
+        <slot>browseRadiiData()</slot>
+    </connection>
+    <connection>
+        <sender>radii_rules_browse</sender>
+        <signal>clicked()</signal>
+        <receiver>FDPBDialog</receiver>
+        <slot>browseRadiiRules()</slot>
+    </connection>
+    <connection>
+        <sender>ok_button</sender>
+        <signal>clicked()</signal>
+        <receiver>FDPBDialog</receiver>
+        <slot>okPressed()</slot>
+    </connection>
+    <connection>
+        <sender>cancel_button</sender>
+        <signal>clicked()</signal>
+        <receiver>FDPBDialog</receiver>
+        <slot>cancelPressed()</slot>
+    </connection>
+    <connection>
+        <sender>reset_button</sender>
+        <signal>clicked()</signal>
+        <receiver>FDPBDialog</receiver>
+        <slot>resetPressed()</slot>
+    </connection>
+    <connection>
+        <sender>charges_rules_browse</sender>
+        <signal>pressed()</signal>
+        <receiver>FDPBDialog</receiver>
+        <slot>browseChargesRules()</slot>
+    </connection>
+    <connection>
+        <sender>charges_data_browse</sender>
+        <signal>clicked()</signal>
+        <receiver>FDPBDialog</receiver>
+        <slot>browseChargesData()</slot>
+    </connection>
+</connections>
+<tabstops>
+    <tabstop>radii_data_button</tabstop>
+    <tabstop>radii_data_lineedit</tabstop>
+    <tabstop>radii_data_browse</tabstop>
+    <tabstop>radii_rules_lineedit</tabstop>
+    <tabstop>radii_rules_browse</tabstop>
+    <tabstop>charges_data_button</tabstop>
+    <tabstop>charges_data_lineedit</tabstop>
+    <tabstop>charges_data_browse</tabstop>
+    <tabstop>charges_rules_lineedit</tabstop>
+    <tabstop>charges_rules_browse</tabstop>
+    <tabstop>dc_solvent</tabstop>
+    <tabstop>dc_interior</tabstop>
+    <tabstop>probe_radius</tabstop>
+    <tabstop>ionic_strenght</tabstop>
+    <tabstop>ion_radius</tabstop>
+    <tabstop>spacing</tabstop>
+    <tabstop>border</tabstop>
+    <tabstop>temperature</tabstop>
+    <tabstop>max_iterations</tabstop>
+    <tabstop>boundary_zero</tabstop>
+    <tabstop>smoothing_none</tabstop>
+    <tabstop>charge_trilinear</tabstop>
+    <tabstop>normalize_names</tabstop>
+    <tabstop>build_bonds</tabstop>
+    <tabstop>add_hydrogens</tabstop>
+    <tabstop>assign_charges</tabstop>
+    <tabstop>assign_radii</tabstop>
+    <tabstop>ok_button</tabstop>
+    <tabstop>cancel_button</tabstop>
+    <tabstop>reset_button</tabstop>
+</tabstops>
 <includes>
     <include location="global" impldecl="in declaration">BALL/COMMON/global.h</include>
-    <include location="local" impldecl="in implementation">FDPBDialog.ui.h</include>
 </includes>
 <slots>
     <slot>browseChargesData()</slot>
