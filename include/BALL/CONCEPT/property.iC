@@ -1,4 +1,4 @@
-// $Id: property.iC,v 1.21 2001/07/14 18:46:06 oliver Exp $
+// $Id: property.iC,v 1.22 2001/07/16 09:38:48 oliver Exp $
 
 using namespace std;
 
@@ -353,7 +353,7 @@ BALL_INLINE
 bool PropertyManager::hasProperty(Property property) const
 	throw()
 {
-	if (bitvector_.getSize() <= property)
+	if (bitvector_.getSize() <= (Size)property)
 	{
 		return false;
 	}
