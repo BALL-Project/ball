@@ -161,37 +161,46 @@ void TransformationDialog::zTranslationClicked()
 
 float TransformationDialog::getMaxTrans() const
 {
-	float max_translation_value_ = 
-		String(defaultTranslationValue->text().ascii()).toFloat();
-	
-	if ((max_translation_value_ > 0.0) &&
-			(max_translation_value_ < 1000.0))  
+	try
 	{
-		return max_translation_value_;
+		float translation_value = 
+			String(defaultTranslationValue->text().ascii()).toFloat();
+		
+		if ((translation_value > 0.0) &&
+				(translation_value < 1000.0))  
+		{
+			return translation_value;
+		}
 	}
-	else
+	catch(...)
 	{					
-		Log.error() << "Invalid Translation Value -> set default value" << std::endl;
-		return 1.0;
 	}
+
+	Log.error() << "Invalid Translation Value -> set default value" << std::endl;
+	defaultTranslationValue->setText("1.0");
+	return 1.0;
 }
 	
 
 float TransformationDialog::getMaxRotation() const
 {	
-	float max_rotation_value_ = 
-		String(defaultRotationValue->text().ascii()).toFloat();
-		
-	if ((max_rotation_value_ <= 360.0) &&
-			(max_rotation_value_ > 0.0))
+	try
 	{
-		return max_rotation_value_;
+		float rotation_value = 
+			String(defaultRotationValue->text().ascii()).toFloat();
+			
+		if ((rotation_value <= 360.0) &&
+				(rotation_value > 0.0))
+		{
+			return rotation_value;
+		}
 	}
-	else
+	catch(...)
 	{
-		Log.error() << "Invalid Rotation Value -> set default value" << std::endl;
-		return 10.0;
 	}
+	Log.error() << "Invalid Rotation Value -> set default value" << std::endl;
+	defaultRotationValue->setText("10");
+	return 10.0;
 }
 
 void TransformationDialog::update_()
