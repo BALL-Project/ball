@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ExpressionParser_test.C,v 1.8 2003/06/30 14:21:58 amoll Exp $
+// $Id: ExpressionParser_test.C,v 1.9 2004/02/23 20:40:44 anker Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -22,7 +22,7 @@ using namespace BALL;
 
 ///////////////////////////
 
-START_TEST(ExpressionParser, "$Id: ExpressionParser_test.C,v 1.8 2003/06/30 14:21:58 amoll Exp $")
+START_TEST(ExpressionParser, "$Id: ExpressionParser_test.C,v 1.9 2004/02/23 20:40:44 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -180,7 +180,7 @@ CHECK(ExpressionParser(const ExpressionParser& parser))
 	ExpressionParser ep2(ep);
 RESULT
 
-CHECK(const SyntaxTree& getSyntaxTree() const)
+CHECK(const SyntaxTree& getSyntaxTree() const throw(Exception::NullPointer))
 	ExpressionParser empty;
 	TEST_EXCEPTION(Exception::NullPointer, empty.getSyntaxTree())
 RESULT
