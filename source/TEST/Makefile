@@ -18,6 +18,7 @@ EXECUTABLES = \
 	Composite_test\
 	Directory_test\
 	DefaultProcessors_test\
+	Embeddable_test\
 	EnergyMinimizer_test\
 	Enumerator_test\
 	Expression_test\
