@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.C,v 1.47 2003/12/01 07:35:11 oliver Exp $
+// $Id: atom.C,v 1.48 2003/12/15 16:00:29 amoll Exp $
 //
 
 #include <BALL/KERNEL/atom.h>
@@ -138,7 +138,7 @@ namespace BALL
 		{
 			// double the size of the array
 			size_t i = static_attributes_.size();
-			static_attributes_.resize(std::max((size_t)200, 2 * i));
+			static_attributes_.resize(std::max((size_t)10000, 2 * i));
 
 			// add the free indices to the free list
 			for (; i < static_attributes_.size(); free_list_.push_back((Position)i++));
