@@ -1,4 +1,4 @@
-// $Id: shiftModel.C,v 1.10 2000/09/20 11:14:28 oliver Exp $
+// $Id: shiftModel.C,v 1.11 2000/09/25 19:12:09 oliver Exp $
 
 #include <BALL/NMR/shiftModel.h>
 #include <BALL/FORMAT/parameterSection.h>
@@ -8,10 +8,10 @@
 #include <BALL/NMR/anisotropyShiftProcessor.h>
 #include <BALL/NMR/randomCoilShiftProcessor.h>
 
-namespace BALL
-{
+using namespace std;
 
-	
+namespace BALL
+{	
 	const char* ShiftModel::MODULE_LIST_SECTION = "ShiftModules";
 
 	ShiftModel::ShiftModel()
@@ -250,6 +250,67 @@ namespace BALL
 		registerModule("Anisotropy", getNew<AnisotropyShiftProcessor>);
 		registerModule("RandomCoil", getNew<RandomCoilShiftProcessor>);
 	}
+
+	Processor::Result ShiftModel::operator () (Composite& composite)
+		throw()
+	{
+		// call every module
+		Processor::Result result;
+
+		ModuleList::iterator it = modules_.begin();
+		for (; it != modules_.end(); ++it)
+		{
+			result = (*it)->operator () (composite);
+			if (result == Processor::BREAK)
+			{
+				break;
+			}
+		}				
+		
+		return result;
+	}
+
+
+	bool ShiftModel::start()
+		throw()
+	{
+		// call every module
+		bool result;
+
+		ModuleList::iterator it = modules_.begin();
+		for (; it != modules_.end(); ++it)
+		{
+			result = (*it)->start();
+			if (result == false)
+			{
+				break;
+			}
+		}				
+		
+		return result;
+	}
+
+
+	bool ShiftModel::finish()
+		throw()
+	{
+		// call every module
+		bool result;
+
+		ModuleList::iterator it = modules_.begin();
+		for (; it != modules_.end(); ++it)
+		{
+			result = (*it)->finish();
+			if (result == false)
+			{
+				break;
+			}
+		}				
+		
+		return result;
+	}
+
+
 }
 
 

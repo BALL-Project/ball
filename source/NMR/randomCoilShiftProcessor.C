@@ -1,4 +1,4 @@
-// $Id: randomCoilShiftProcessor.C,v 1.4 2000/09/21 22:31:14 amoll Exp $
+// $Id: randomCoilShiftProcessor.C,v 1.5 2000/09/25 19:12:09 oliver Exp $
 
 #include<BALL/NMR/randomCoilShiftProcessor.h>
 #include<BALL/FORMAT/parameterSection.h>
@@ -6,7 +6,7 @@
 namespace BALL
 {
 
-	const char* RandomCoilShiftProcessor::PROPERTY__RANDOMCOIL_SHIFT = "RandomCoilShift";
+	const char* RandomCoilShiftProcessor::PROPERTY__RANDOM_COIL_SHIFT = "RandomCoilShift";
 
 	RandomCoilShiftProcessor::RandomCoilShiftProcessor()
 		throw()
@@ -67,7 +67,6 @@ namespace BALL
 		Atom* atom_ptr = dynamic_cast<Atom*>(&composite);
 		if (atom_ptr == 0)
 		{
-			Log.error() << "NULL-Pointer in RandomCoilShiftProcessor::operator ()";
 			return Processor::CONTINUE;
 		}
 
@@ -98,7 +97,7 @@ namespace BALL
 			atom_ptr->setProperty(ShiftModule::PROPERTY__SHIFT, delta);
 			
 			// store the random coil shift in the random coil shift property
-			atom_ptr->setProperty(RandomCoilShiftProcessor::PROPERTY__RANDOMCOIL_SHIFT, delta_RC);
+			atom_ptr->setProperty(RandomCoilShiftProcessor::PROPERTY__RANDOM_COIL_SHIFT, delta_RC);
 		}
 		
 		return Processor::CONTINUE;
