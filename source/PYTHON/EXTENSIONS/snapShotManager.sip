@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: snapShotManager.sip,v 1.3 2003/10/29 22:54:47 oliver Exp $
+// $Id: snapShotManager.sip,v 1.4 2004/08/29 11:30:52 amoll Exp $
 //
 
 class SnapShotManager
@@ -28,12 +28,12 @@ class SnapShotManager
 
     SnapShotManager
 			(System*, const ForceField*,
-			 TrajectoryFile*, bool /overwrite/ = true)
+			 TrajectoryFile*)
 			throw();
 
     SnapShotManager
 			(System* /my_system/, const ForceField* /my_force_field/,
-			 const Options& /my_options/, TrajectoryFile* /file/, bool /overwrite/ = true)
+			 const Options& /my_options/, TrajectoryFile* /file/)
 			throw();
 
     SnapShotManager(const SnapShotManager& /manager/)
