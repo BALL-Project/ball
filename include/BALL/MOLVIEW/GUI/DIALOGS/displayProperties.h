@@ -1,4 +1,4 @@
-// $Id: displayProperties.h,v 1.11.4.7 2002/11/29 00:58:57 amoll Exp $
+// $Id: displayProperties.h,v 1.11.4.8 2002/12/08 23:26:02 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
 #define BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
@@ -528,9 +528,6 @@ namespace BALL
 				throw();
 
 			virtual void setupDynamicProcessor_()
-				throw();
-
-			void setStatusbarText_(String text)
 				throw();
 
 			// --------------------------------------------------------------------------------
