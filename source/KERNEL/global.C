@@ -1,7 +1,7 @@
-// $Id: global.C,v 1.2 1999/12/30 18:05:33 oliver Exp $
+// $Id: global.C,v 1.3 2000/01/08 12:24:09 oliver Exp $
 
 #include <BALL/KERNEL/global.h>
-
+#include <BALL/MATHS/vector3.h>
 namespace BALL 
 {
 
