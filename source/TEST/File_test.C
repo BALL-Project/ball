@@ -1,4 +1,4 @@
-// $Id: File_test.C,v 1.22 2001/08/18 14:42:57 oliver Exp $
+// $Id: File_test.C,v 1.23 2001/08/23 10:31:38 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 #include <sys/stat.h>
 ///////////////////////////
 
-START_TEST(File, "$Id: File_test.C,v 1.22 2001/08/18 14:42:57 oliver Exp $")
+START_TEST(File, "$Id: File_test.C,v 1.23 2001/08/23 10:31:38 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -282,10 +282,6 @@ CHECK(isCanonized())
 	File f0("../TEST/data/File_test.txt");
 	TEST_EQUAL(f0.isValid(), true)
 	TEST_EQUAL(f0.isCanonized(), true)
-
-	File f1("../../configure");
-	TEST_EQUAL(f1.isValid(), true)
-	TEST_EQUAL(f1.isCanonized(), true)
 
 	File f2("data//File_test.txt");
 	TEST_EQUAL(f2.isValid(), true)
