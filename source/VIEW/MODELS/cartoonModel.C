@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.11 2003/11/22 17:42:27 amoll Exp $
+// $Id: cartoonModel.C,v 1.12 2003/11/23 15:06:46 amoll Exp $
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
@@ -469,14 +469,18 @@ Log.error() << "#~~#   12 " << ss.countAtoms()<< std::endl;
 				createSplineSegment_(spline_vector_[p1-1], spline_vector_[p1]);
 			}
 
-			if (p2 < spline_vector_.size()-1 )
-			{
-				spline_vector_[p2].setTangentialVector(normal);
-  	 		createSplineSegment_(spline_vector_[p2], spline_vector_[p2+1]);
-			}	
-//			last_point_ = spline_vector_[p2+1].getVector(); // ???
- 			last_point_ = spline_vector_[p2].getVector();
-			have_start_point_ = false;
+			spline_vector_[p2].setTangentialVector(normal);
+			
+  		//createSplineSegment_(spline_vector_[p2], spline_vector_[p2+1]);
+ 			last_point_ = spline_vector_[p2].getVector(); 
+ 			have_start_point_ = true;
+			
+			
+			/*
+  		createSplineSegment_(spline_vector_[p2], spline_vector_[p2+1]);
+ 			last_point_ = spline_vector_[p2+1].getVector(); 
+ 			have_start_point_ = true; 
+			*/
 		}
 
 				
@@ -499,6 +503,7 @@ Log.error() << "#~~#   12 " << ss.countAtoms()<< std::endl;
 					computeSpline_(*RTTI::castTo<SecondaryStructure>(composite));
 				}
 
+Log.error() << "#~~#  x1 " << std::endl;
 				last_chain_ = composite.getParent();
 				computeSpline_(*RTTI::castTo<AtomContainer>(composite));
 			}
@@ -532,14 +537,14 @@ Log.error() << "#~~#   12 " << ss.countAtoms()<< std::endl;
 					if (spline_vector_[index].getVector() == position) break;
 				}
 
-				for (Position i = 0; i < ss.countResidues() - 1; i++)
+				for (Position res = 0; res < ss.countResidues() - 1; res++)
 				{
 					for (Position j = 0; j < 9; j++)
 					{
 						buildGraphicalRepresentation_(
-								spline_[(i+index)*9 + j], (j < 5) ? 
-								spline_vector_[i+index].getAtom() : 
-								spline_vector_[i+index+1].getAtom());
+								spline_[(res+index)*9 + j], (j < 5) ? 
+								spline_vector_[res+index].getAtom() : 
+								spline_vector_[res+index+1].getAtom());
 					}
 				}
 			}
