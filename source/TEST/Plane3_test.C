@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Plane3_test.C,v 1.15 2003/06/09 22:40:53 oliver Exp $
+// $Id: Plane3_test.C,v 1.16 2003/06/10 14:28:51 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -12,7 +12,7 @@
 #include <BALL/MATHS/line3.h>
 ///////////////////////////
 
-START_TEST(Plane3, "$Id: Plane3_test.C,v 1.15 2003/06/09 22:40:53 oliver Exp $")
+START_TEST(Plane3, "$Id: Plane3_test.C,v 1.16 2003/06/10 14:28:51 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -233,27 +233,50 @@ CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw())
 RESULT
 
 CHECK(TPlane3(const T& a, const T& b, const T& c, const T& d) throw(Exception::DivisionByZero))
-  // ???
+	Plane3 p(0, 1, 2, 3);
+	TEST_EQUAL(p.n, Vector3(0,1,2))
+	TEST_EQUAL(p.p, Vector3(0,-3,0))
+	TEST_EXCEPTION(Exception::DivisionByZero, Plane3(0,0,0,0))
 RESULT
 
 CHECK(TPlane3(const TPlane3& plane) throw())
-  // ???
+	v1 = Vector3(1.0, 2.0, 3.0);
+	v2 = Vector3(4.0, 5.0, 6.0);
+	p = Plane3(v1, v2);
+	Plane3 p2(p);
+	TEST_EQUAL(p2, p)
 RESULT
 
 CHECK(TPlane3(const TVector3<T>& a, const TVector3<T>& b, const TVector3<T>& c) throw())
-  // ???
+	v1 = Vector3(0, 0, 0);
+	v2 = Vector3(1, 0, 0);
+	Vector3 v3 = Vector3(0, 1, 0);
+	p = Plane3(v1, v2, v3);
+	TEST_EQUAL(p.n, Vector3(0,0,1))
+	TEST_EQUAL(p.p, v1)
 RESULT
 
 CHECK(TPlane3(const TVector3<T>& point, const TVector3<T>& normal) throw())
-  // ???
+	Plane3 p2(Vector3(0,0,0), Vector3(0,0,1));
+	TEST_EQUAL(p2, p)
 RESULT
 
 CHECK(void clear() throw())
-  // ???
+	v1 = Vector3(1.0, 2.0, 3.0);
+	v2 = Vector3(4.0, 5.0, 6.0);
+	p = Plane3(v1, v2);
+	p.clear();
+	Plane3 p2;
+	TEST_EQUAL(p, p2)
 RESULT
 
 CHECK(void set(const TVector3<T>& a, const TVector3<T>& b, const TVector3<T>& c) throw())
-  // ???
+	v1 = Vector3(0, 0, 0);
+	v2 = Vector3(1, 0, 0);
+	Vector3 v3 = Vector3(0, 1, 0);
+	p.set(v1, v2, v3);
+	TEST_EQUAL(p.n, Vector3(0,0,1))
+	TEST_EQUAL(p.p, v1)
 RESULT
 
 /////////////////////////////////////////////////////////////
