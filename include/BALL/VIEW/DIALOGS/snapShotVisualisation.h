@@ -71,7 +71,7 @@ class SnapshotVisualisationDialog
 	
 	///Function to select the analogous Snapshot
 	virtual void animateClicked();
-
+;
 	///
 	virtual void close();
 	
@@ -86,9 +86,20 @@ class SnapshotVisualisationDialog
 	
 	///
 	virtual void sliderMovedToPos();
-
+	
+	///
+	virtual void animationSpeedChanged();
+	
+	///
+	virtual void checkNoLoop();
+	
+	///
+	virtual void checkLoop();
+	
+	///
+	virtual void checkRock();
+	
 	protected:
-  
 	void update_();
 	void forward(Size nr);
   void backward(Size nr);

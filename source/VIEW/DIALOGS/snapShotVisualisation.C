@@ -6,6 +6,10 @@
 #include <qlineedit.h>
 #include <qcheckbox.h>
 #include <qslider.h>
+#include <qpushbutton.h>
+#include <qradiobutton.h>
+
+#include <qprogressdialog.h>
 
 namespace BALL
 {
@@ -89,9 +93,26 @@ void SnapshotVisualisationDialog::lastSnapshotClicked()
 void SnapshotVisualisationDialog::animateClicked()
 {
 	Size tempo = getEndSnapshot();
-	for( Size i=getStartSnapshot(); i <= tempo; i ++)
+	Size speed = animationSpeedSlider->value();
+	bool forward = true;
+	QProgressDialog progress( "SnapShot Visualisation", "Abort Animation", tempo, this, "progress", TRUE );
+	
+	for(Size i = getStartSnapshot(); i < tempo;)
 	{
-  	tmp_.setNum(i, 10);
+		progress.setProgress( i );
+		if ( progress.wasCancelled() )
+			break;
+			
+		setCaption((String("CurrentSnapshot: ") + String(i)).c_str());
+		snapShotSlider->setValue(i);
+		update_();
+		if (export_PNG->isChecked())
+		{
+			SceneMessage* message = new SceneMessage(SceneMessage::EXPORT_PNG);
+			notify_(message);
+		}
+
+		tmp_.setNum(i, 10);
 		// speed things up after first snapshot is read
 		if (i == getStartSnapshot())
 		{
@@ -102,15 +123,45 @@ void SnapshotVisualisationDialog::animateClicked()
 			if (!snap_shot_manager_->applyNextSnapShot()) return;
 		}
 
-		setCaption((String("CurrentSnapshot: ") + String(i)).c_str());
-		snapShotSlider->setValue(i);
-		update_();
-		if (export_PNG->isChecked())
+		if (forward)
 		{
-			SceneMessage* message = new SceneMessage(SceneMessage::EXPORT_PNG);
-			notify_(message);
+			if (speed>=(tempo-i))
+			{
+				i = tempo;
+				setCaption((String("CurrentSnapshot: ") + String(i)).c_str());
+				snapShotSlider->setValue(i);
+				update_();
+				if (export_PNG->isChecked())
+				{
+					SceneMessage* message = new SceneMessage(SceneMessage::EXPORT_PNG);
+					notify_(message);
+				}
+				if (forwardLoopButton->isChecked())
+				{
+					i = 1;
+					forward = true;
+				}
+				if (rockLoopButton->isChecked())
+				{
+					i = tempo-1;
+					forward = false;
+				}
+			}
+			else
+				i += speed;
 		}
+		
+		else
+			if (speed<=i)
+				i -= speed;
+			else
+			{
+				i = 1;
+				forward = true;
+			}
 	}
+	
+	progress.setProgress( tempo );
 	setCaption("Snapshot Visualisation");
 }
 
@@ -216,7 +267,7 @@ void SnapshotVisualisationDialog::sliderMovedToPos()
 void SnapshotVisualisationDialog::update_()
 {
   currentSnapshot->setText(tmp_);
-	update();	
+	update();
 	SceneMessage* new_message = new SceneMessage;
 	new_message->setType(SceneMessage::REBUILD_DISPLAY_LISTS);
 	notify_(new_message);
@@ -229,6 +280,7 @@ void SnapshotVisualisationDialog::setSnapShotManager(SnapShotManager* snapshot_m
 	numberOfSnapshots->setText(tmp_);
 	endSnapshot->setText(tmp_);
 	snapShotSlider->setRange(1,snap_shot_manager_->getTrajectoryFile()->getNumberOfSnapShots());
+	animationSpeedLineEdit->setText(String(1).c_str() + String("x"));
 	tmp_.setNum(1);
   currentSnapshot->setText(tmp_);
 	startSnapshot->setText(tmp_);
@@ -283,6 +335,36 @@ void SnapshotVisualisationDialog::snapShotInputTest()
 	{
 		endSnapshot->setText(num_of_shots.c_str()); 
 	}
+	if (num_startsnap == 0)
+		startSnapshot->setText(String(1).c_str());
+}
+
+void SnapshotVisualisationDialog::animationSpeedChanged()
+{
+	String animationSpeed = String(animationSpeedSlider->value()) + String("x");
+	animationSpeedLineEdit->setText(animationSpeed.c_str());
+}
+
+void SnapshotVisualisationDialog::checkNoLoop()
+{
+		if(!noLoopButton->isChecked())
+			noLoopButton->setChecked(true);
+		forwardLoopButton->setChecked(false);
+		rockLoopButton->setChecked(false);
+}
+void SnapshotVisualisationDialog::checkLoop()
+{
+		if(!forwardLoopButton->isChecked())
+			forwardLoopButton->setChecked(true);
+		noLoopButton->setChecked(false);
+		rockLoopButton->setChecked(false);
+}
+void SnapshotVisualisationDialog::checkRock()
+{
+		if(!rockLoopButton->isChecked())
+			rockLoopButton->setChecked(true);
+		noLoopButton->setChecked(false);
+		forwardLoopButton->setChecked(false);
 }
 
 } } // namespace
