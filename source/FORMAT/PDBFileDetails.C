@@ -1,0 +1,1692 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: PDBFileDetails.C,v 1.1 2005/02/13 22:49:31 oliver Exp $
+//
+
+// This file contains the more or less implementation specific portion of PDBFile.
+// It covers the methods doing the specific parsing of all parsed records.
+// More general methods are contained in PDBFileGeneral.C
+
+#include <BALL/FORMAT/PDBFile.h>
+
+#include <BALL/KERNEL/PTE.h>
+#include <BALL/KERNEL/bond.h>
+#include <BALL/KERNEL/forEach.h>
+#include <BALL/COMMON/logStream.h>
+#include <BALL/DATATYPE/regularExpression.h>
+
+#include <time.h> // time, asctime
+#include <ctype.h>
+#include <stdarg.h>
+#include <stdlib.h>
+
+namespace BALL 
+{
+
+	const char* PDBFile::getAtomElementSymbol
+		(const PDB::Atom atom_name, PDB::Atom element_symbol)
+	{
+		// if the element symbol starts with a blank,
+		// drop the blank
+		if (element_symbol[0] == ' ')
+		{
+			element_symbol[0] = element_symbol[1];
+			element_symbol[1] = '\0';
+		}
+		// If the element_symbol entry is valid, it has precedence,
+		// otherwise, we try to extract it from the atom name.
+		Element e(PTE[element_symbol]);
+		if (e == Element::UNKNOWN)
+		{
+			// Otherwise, we try to reconstruct the element
+			// from the atom name (which is dangerous if non-PDB names are
+		  // present, e.g. names like HE12 which is read as He!)
+			if (atom_name[0] == ' ' || isdigit(atom_name[0]))
+			{
+				if (atom_name[1] == ' ')
+				{
+					element_symbol[0] = '\0';
+				}
+				else
+				{
+					element_symbol[0] = atom_name[1];
+					element_symbol[1] = '\0';
+				}
+			}
+			else
+			{
+				element_symbol[0] = atom_name[0];
+				element_symbol[1] = atom_name[1];
+				element_symbol[2] = '\0';
+			}
+		}
+
+		return (const char*)element_symbol;
+	}
+
+	void PDBFile::postprocessSSBonds_()
+	{
+		ResidueMap::Iterator first;
+		ResidueMap::Iterator second;
+		
+		QuadrupleList::iterator it;
+		for (it = ssbond_list_.begin(); it != ssbond_list_.end(); ++it)
+		{
+			first = residue_map_.find(*it);
+			++it;
+			second = residue_map_.find(*it);
+			
+			if (first != residue_map_.end() && second != residue_map_.end())
+			{
+				first->second->setProperty(Residue::PROPERTY__HAS_SSBOND);
+				second->second->setProperty(Residue::PROPERTY__HAS_SSBOND);
+			} 
+		}
+	}
+
+	void  PDBFile::postprocessHelices_()
+	{
+		QuadrupleList::iterator res_it = helix_list_.begin();
+		SecStructList::iterator helix_it = new_helix_secstruc_list_.begin();
+		
+		for (; (res_it != helix_list_.end()) && (helix_it != new_helix_secstruc_list_.end()); 
+				 ++res_it, ++helix_it)
+		{
+			// Check whether the two residues exist in the structure
+			// (i.e. a residue has been constructed).
+			if (!residue_map_.has(*res_it))
+			{
+				delete *helix_it;
+				++res_it;
+				continue;
+			}
+			Residue* initial(residue_map_[*res_it]);
+				
+			++res_it;
+
+			// Find the last residue. Caveat: under strange circumstances,
+			// res_it mitght be invalid, so test for it first.
+			if ((res_it == helix_list_.end()) || !residue_map_.has(*res_it))
+			{
+				delete *helix_it;
+				continue;
+			}
+			Residue* terminal(residue_map_[*res_it]);
+
+			// Delete the constructed helix object if
+			// it was not valid and could not be inserted correctly.
+			// Otherwise, responsability for the memory is taken over by
+			// the System/Chain/Protein it is contained in.
+			bool delete_helix = true;
+			if ((initial->getParent() == terminal->getParent())
+					&& (initial->getParent() != 0))
+			{
+				const Residue* ptr = initial;
+				while (ptr != 0 && ptr != terminal) 
+				{
+					ptr = dynamic_cast<const Residue*>(ptr->getNext(RTTI::getDefault<Residue>()));
+				}
+				if (ptr == 0)
+				{
+					std::swap(initial, terminal);
+				}
+				ptr = initial;
+				while (ptr != 0 && ptr != terminal)
+				{
+					ptr = dynamic_cast<const Residue*>(ptr->getNext(RTTI::getDefault<Residue>()));
+				}
+				if (ptr == 0)
+				{
+					continue;
+				}
+				
+				delete_helix = !Composite::insertParent(**helix_it, *initial, *terminal, false);
+			}
+			if (delete_helix == true)
+			{
+				delete (*helix_it);
+			}			
+		}
+	}
+
+	void  PDBFile::postprocessSheetsTurns_
+		(PDBFile::QuadrupleList& secstruc_list,
+		 PDBFile::SecStructList& new_secstruc_list)
+	{
+		ResidueIterator protein_res_it;
+		ResidueMap::Iterator initial;
+		ResidueMap::Iterator terminal;
+		QuadrupleList::iterator res_it = secstruc_list.begin();
+		SecStructList::iterator secstruc_it = new_secstruc_list.begin();
+		
+		for (; res_it != secstruc_list.end(); ++res_it, ++secstruc_it)
+		{
+			initial = residue_map_.find(*res_it);
+			++res_it;
+			terminal = residue_map_.find(*res_it);
+			
+			if (initial != residue_map_.end() && terminal != residue_map_.end())
+			{
+				Residue* initial_residue = initial->second;
+				Residue* terminal_residue = terminal->second;
+			
+				for (protein_res_it = current_protein_->beginResidue(); !protein_res_it.isEnd();	++protein_res_it)
+				{
+					if (*protein_res_it == *terminal_residue)
+					{
+						Residue *temp_residue = terminal_residue;
+						terminal_residue = initial_residue;
+						initial_residue = temp_residue;
+					}
+		
+					if (*protein_res_it == *initial_residue)
+					{
+						for (; !protein_res_it.isEnd() && (*protein_res_it).hasAncestor(RTTI::getDefault<SecondaryStructure>());
+								 ++protein_res_it)
+						{	
+							if (*protein_res_it == *terminal_residue)
+							{
+								initial_residue = terminal_residue = 0;
+					
+								break;
+							}
+						}
+
+						if (initial_residue == 0 || protein_res_it.isEnd())
+						{
+							break;
+						}
+
+						if (!protein_res_it.isEnd())
+						{
+							initial_residue = &(*protein_res_it);
+
+							for (; !protein_res_it.isEnd(); ++protein_res_it)
+							{
+								if ((*protein_res_it).hasAncestor(RTTI::getDefault<SecondaryStructure>()))
+								{
+									--protein_res_it;
+
+									break;
+								}
+
+								if (*protein_res_it == *terminal_residue)
+								{
+									break;
+								}
+							}
+
+							if (protein_res_it.isValid())
+							{
+								terminal_residue = &(*protein_res_it);
+							}
+							else
+							{
+								initial_residue = terminal_residue = 0;
+							}
+						}
+						else
+						{
+							initial_residue = terminal_residue = 0;
+						}
+			
+						break;
+					}
+				}
+
+				if (initial_residue == 0 || terminal_residue == 0
+						|| Composite::insertParent(*(*secstruc_it), *initial_residue, *terminal_residue, false) == false)
+				{
+					delete (*secstruc_it);
+				}
+			}
+			else
+			{
+				delete (*secstruc_it);
+			}
+		}
+	}
+
+	void PDBFile::postprocessRandomCoils_()
+	{
+		if (current_protein_ == 0)
+		{
+			return;
+		}
+
+		ResidueIterator protein_res_it;
+		Residue* initial_residue = 0;
+		Residue* terminal_residue = 0;
+		SecondaryStructure* sec_struc = 0;
+		
+		for (ChainIterator chain_it = current_protein_->beginChain();
+				 +chain_it; ++chain_it)
+		{
+			for (protein_res_it = chain_it->beginResidue();
+					 +protein_res_it; ++protein_res_it)
+			{
+				if ((*protein_res_it).hasProperty(Residue::PROPERTY__AMINO_ACID) == true
+						&& (*protein_res_it).Composite::hasAncestor(RTTI::getDefault<SecondaryStructure>()) == false)
+				{
+					terminal_residue = initial_residue = &(*protein_res_it);
+		
+					for (; !protein_res_it.isEnd()
+							 && (*protein_res_it).hasProperty(Residue::PROPERTY__AMINO_ACID) == true
+							 && (*protein_res_it).hasAncestor(RTTI::getDefault<SecondaryStructure>()) == false;
+							 ++protein_res_it)
+					{
+						terminal_residue = &(*protein_res_it);
+					}
+		
+					sec_struc = new SecondaryStructure;
+					sec_struc->setType(SecondaryStructure::COIL);
+		
+					Composite::insertParent(*sec_struc, *initial_residue, *terminal_residue, false);
+		
+					if (protein_res_it.isEnd() == true)
+					{
+						break;
+					}
+				}
+			}
+		}
+	}
+
+
+	bool PDBFile::interpretRecord(const PDB::RecordATOM& record)
+	{
+		if (record.residue.chain_ID != chain_ID_)
+		{
+			current_chain_ = new Chain;
+			current_protein_->insert(*current_chain_);
+			
+			residue_name_ = "";
+			chain_ID_ = record.residue.chain_ID;
+			
+			current_chain_->setName(chain_ID_);
+		}
+		
+		if (residue_name_ != (const char*)record.residue.name
+				|| (record.residue.sequence_number != residue_sequence_number_)
+				|| (record.residue.insertion_code != insertion_code_))
+		{
+			ResidueQuadruple unique_residue(record.residue.name, record.residue.chain_ID, 
+																			record.residue.sequence_number, record.residue.insertion_code);
+
+			current_residue_ = new Residue;
+			current_chain_->insert(*current_residue_);
+			residue_map_[unique_residue] = current_residue_;
+			
+			residue_name_ = record.residue.name;
+			residue_sequence_number_ = record.residue.sequence_number;
+			insertion_code_ = record.residue.insertion_code;
+			
+			if (current_residue_->hasProperty(Residue::PROPERTY__NON_STANDARD) == false)
+			{
+				current_residue_->setProperty(Residue::PROPERTY__AMINO_ACID);
+			}
+			String trimmed_name = residue_name_;
+			current_residue_->setName(trimmed_name.trim());
+			current_residue_->setID(residue_sequence_number_);
+			current_residue_->setInsertionCode(insertion_code_);
+		}
+
+		// make sure we read only the first location if alternate
+		// locations are present to avoid invalid structures due
+		// to duplicate atoms
+		if ((record.alternate_location_indicator == ' ' )
+				|| (record.alternate_location_indicator == 'A'))
+		{
+			current_PDB_atom_ = new PDBAtom;
+			current_residue_->insert(*current_PDB_atom_);
+			PDB_atom_map_[record.serial_number] = current_PDB_atom_;
+			
+			current_PDB_atom_->setName(getAtomName(record.atom_name));
+			current_PDB_atom_->setRemotenessIndicator(getAtomRemotenessIndicator(record.atom_name));
+			current_PDB_atom_->setBranchDesignator(getAtomBranchDesignator(record.atom_name));
+			current_PDB_atom_->setAlternateLocationIndicator(record.alternate_location_indicator);
+			current_PDB_atom_->setOccupancy(record.occupancy);
+			current_PDB_atom_->setTemperatureFactor(record.temperature_factor);
+			current_PDB_atom_->setRadius(current_PDB_atom_->getElement().getVanDerWaalsRadius());
+			current_PDB_atom_->setPosition(Vector3(record.orthogonal_vector[0], record.orthogonal_vector[1], record.orthogonal_vector[2]));
+			// Figuring out the element is nto entirely trivial: it *should* be in columns 77-78.
+			// However, some codes abuse cols. 77-80 for partial charges. We support this format w/ the 
+			// option PARTIAL_CHARGES for reading and writing.
+			if (parse_partial_charges_)
+			{
+				// ????
+			}
+			else
+			{
+				char element_symbol[3];
+				element_symbol[0] = record.element_symbol[0];
+				element_symbol[1] = record.element_symbol[1];
+				element_symbol[2] = '\0';
+				current_PDB_atom_->setElement(PTE[PDBFile::getAtomElementSymbol(record.atom_name, element_symbol)]);
+				try	
+				{
+					current_PDB_atom_->setFormalCharge(String(record.charge).toInt());
+				}
+				catch (Exception::InvalidFormat)
+				{
+				}
+				current_PDB_atom_->setCharge(current_PDB_atom_->getFormalCharge());
+			}
+		}
+		
+		return true;
+	}
+
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordATOM& record)
+	{
+		record.element_symbol[0] = '\0';
+		record.occupancy = 1.0;
+		record.temperature_factor = 0.0;
+		record.segment_ID[0] = '\0';
+		record.charge[0] = '\0';
+		record.partial_charge[0] = '\0';
+
+		if (parse_partial_charges_ == true)
+		{
+			return parseLine
+				(line, size, 
+				 PDB::FORMAT_ATOM_PARTIAL_CRG,
+				 record.record_name,
+				 &record.serial_number,
+				 record.atom_name,
+				 &record.alternate_location_indicator,
+				 record.residue.name,
+				 &record.residue.chain_ID,
+				 &record.residue.sequence_number,
+				 &record.residue.insertion_code,
+				 &record.orthogonal_vector[0],
+				 &record.orthogonal_vector[1],
+				 &record.orthogonal_vector[2],
+				 &record.occupancy,
+				 &record.temperature_factor,
+				 record.segment_ID,
+				 record.partial_charge);			
+		}
+		else	
+		{
+			return parseLine
+				(line, size, 
+				 PDB::FORMAT_ATOM,
+				 record.record_name,
+				 &record.serial_number,
+				 record.atom_name,
+				 &record.alternate_location_indicator,
+				 record.residue.name,
+				 &record.residue.chain_ID,
+				 &record.residue.sequence_number,
+				 &record.residue.insertion_code,
+				 &record.orthogonal_vector[0],
+				 &record.orthogonal_vector[1],
+				 &record.orthogonal_vector[2],
+				 &record.occupancy,
+				 &record.temperature_factor,
+				 record.segment_ID,
+				 record.element_symbol,
+				 record.charge,
+				 record.partial_charge);
+		}
+	}
+		
+	bool PDBFile::parseRecordATOM(const char* line, Size size)
+	{
+		// Parse only those records belonging to the correct model!
+		if ((selected_model_ != 0) && (selected_model_ != current_model_))
+		{
+			return true;
+		}
+		static PDB::RecordATOM record;
+		if (!fillRecord(line, size, record))
+		{
+			return false;
+		}
+		if ((ignore_xplor_pseudo_atoms_ == true)
+				&& record.orthogonal_vector[0] >= 9998.0
+				&& record.orthogonal_vector[1] >= 9998.0
+				&& record.orthogonal_vector[2] >= 9998.0)
+		{ // ignore XPLOR pseudo atoms (see Rasmol2.6 source 'molecule.c/ReadPDBAtom')
+			return true;
+		}
+		return interpretRecord(record);
+	}
+	
+	bool PDBFile::parseRecordCONECT(const char* line, Size size)
+	{
+		static PDB::RecordCONECT record;
+		return (fillRecord(line, size, record) && interpretRecord(record));
+	}
+		
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordCONECT& record)
+	{
+		record.bonded_atom_serial_number[0] = 0;
+		record.bonded_atom_serial_number[1] = 0;
+		record.bonded_atom_serial_number[2] = 0;
+		record.bonded_atom_serial_number[3] = 0;
+		record.hydrogen_bonded_atom_serial_number[0] = 0;
+		record.hydrogen_bonded_atom_serial_number[1] = 0;
+		record.hydrogen_bonded_atom_serial_number[2] = 0;
+		record.hydrogen_bonded_atom_serial_number[3] = 0;
+		record.salt_bridged_atom_serial_number[0] = 0;
+		record.salt_bridged_atom_serial_number[1] = 0;
+
+		return parseLine(line, size, PDB::FORMAT_CONECT,
+					 record.record_name, &record.atom_serial_number,
+					 &record.bonded_atom_serial_number[0], &record.bonded_atom_serial_number[1],
+					 &record.bonded_atom_serial_number[2], &record.bonded_atom_serial_number[3],
+					 &record.hydrogen_bonded_atom_serial_number[0],
+					 &record.hydrogen_bonded_atom_serial_number[1],
+					 &record.salt_bridged_atom_serial_number[0],
+					 &record.hydrogen_bonded_atom_serial_number[2],
+					 &record.hydrogen_bonded_atom_serial_number[3],
+					 &record.salt_bridged_atom_serial_number[1]);
+	}
+
+	bool PDBFile::interpretRecord(const PDB::RecordCONECT& record)
+	{
+		PDBAtom* PDB_atom = 0;
+		Bond*	bond = 0;
+		unsigned short i = 0;
+
+		// extract a pointer to the atom, if it was found in the hash map
+		PDBAtomMap::Iterator atom_map_it = PDB_atom_map_.find(record.atom_serial_number);
+		if (atom_map_it == PDB_atom_map_.end())
+		{
+			return false;  // illegal atom number, abort
+		}
+		else
+		{
+			PDB_atom = atom_map_it->second; // retrieve the pointer
+		}
+		
+		// read the entries for the bonds
+		for (i = 0; i < 4; ++i)
+		{
+			if (record.bonded_atom_serial_number[i] != 0)
+			{
+				// retrieve the second atom via the hash table
+				atom_map_it = PDB_atom_map_.find(record.bonded_atom_serial_number[i]);				
+				if (atom_map_it != PDB_atom_map_.end())
+				{
+					// create the new bond
+					bond = PDB_atom->createBond(*atom_map_it->second);
+		
+					if (bond != 0)
+					{
+						bond->setType(Bond::TYPE__COVALENT);
+						bond->setOrder(Bond::ORDER__SINGLE);
+					}
+				}
+			}
+		}
+				
+		for (i = 0; i < 4; ++i)
+		{
+			if (record.hydrogen_bonded_atom_serial_number[i] != 0)
+			{
+				atom_map_it = PDB_atom_map_.find(record.hydrogen_bonded_atom_serial_number[i]);
+				if (atom_map_it != PDB_atom_map_.end())
+				{
+					bond = PDB_atom->createBond(*atom_map_it->second);
+		
+					if (bond != 0)
+					{
+						bond->setType(Bond::TYPE__HYDROGEN);
+						bond->setOrder(Bond::ORDER__SINGLE);
+					}
+				}
+			}
+		}
+		
+		for (i = 0; i < 2; ++i)
+		{
+			if (record.salt_bridged_atom_serial_number[i] != 0)
+			{
+				atom_map_it = PDB_atom_map_.find(record.salt_bridged_atom_serial_number[i]);
+				if (atom_map_it != PDB_atom_map_.end())
+				{
+					bond = PDB_atom->createBond(*atom_map_it->second);
+		
+					if (bond != 0)
+					{
+						bond->setType(Bond::TYPE__SALT_BRIDGE);
+						bond->setOrder(Bond::ORDER__SINGLE);
+					}
+				}
+			}
+		}
+		
+		return true;
+	}
+
+
+	bool PDBFile::parseRecordENDMDL(const char* line, Size size)
+	{
+		static PDB::RecordENDMDL record;
+		return (fillRecord(line, size, record) && interpretRecord(record));
+	}
+
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordENDMDL& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_ENDMDL,record.record_name);
+	}
+
+	bool PDBFile::interpretRecord(const PDB::RecordENDMDL& /* record */)
+	{
+		// We are now outside a model...
+		current_model_ = INVALID_INDEX;
+		return true;
+	}
+																												
+
+	bool PDBFile::parseRecordHEADER(const char* line, Size size)
+	{
+		static PDB::RecordHEADER record;
+		return (fillRecord(line, size, record) && interpretRecord(record));
+	}
+		
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordHEADER& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_HEADER,
+										 record.record_name, record.classification, record.deposition_date, record.ID_code);
+	}
+
+	bool PDBFile::interpretRecord(const PDB::RecordHEADER& record)
+	{
+		current_protein_->setName(record.classification);	
+		current_protein_->setID(record.ID_code);
+		info.setName(record.classification);
+		info.setID(record.ID_code);
+
+		return true;
+	}
+
+	bool PDBFile::parseRecordHELIX(const char* line, Size size)
+	{
+		static PDB::RecordHELIX record;
+		return (fillRecord(line, size, record) && interpretRecord(record));
+	}
+	
+	bool PDBFile::interpretRecord(const PDB::RecordHELIX& record)
+	{
+		ResidueQuadruple partner_residue
+			(record.initial_residue.name, record.initial_residue.chain_ID,
+			 record.initial_residue.sequence_number, record.initial_residue.insertion_code);
+		
+		SecondaryStructure* sec_struc = new SecondaryStructure(record.helix_ID);
+		
+		new_helix_secstruc_list_.push_back(sec_struc);
+		sec_struc->setType(SecondaryStructure::HELIX);
+		sec_struc->setProperty("HELIX_CLASS", (Index)record.helix_class);
+		
+		helix_list_.push_back(partner_residue);
+		
+		partner_residue.set(record.terminal_residue.name, record.terminal_residue.chain_ID,
+												record.terminal_residue.sequence_number, record.terminal_residue.insertion_code);
+		
+		helix_list_.push_back(partner_residue);
+		
+		return true;
+	}
+
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordHELIX& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_HELIX,
+										 record.record_name, &record.serial_number,
+										 record.helix_ID, record.initial_residue.name,
+										 &record.initial_residue.chain_ID, &record.initial_residue.sequence_number,
+										 &record.initial_residue.insertion_code, record.terminal_residue.name,
+										 &record.terminal_residue.chain_ID, &record.terminal_residue.sequence_number,
+										 &record.terminal_residue.insertion_code, &record.helix_class,
+										 record.comment, &record.length);
+	}
+
+	bool PDBFile::parseRecordHETATM(const char* line, Size size)
+	{
+		if ((selected_model_ != 0) && (selected_model_ != current_model_))
+		{
+			return true;
+		}
+		parseRecordATOM(line, size); 
+		
+		current_residue_->clearProperty(Residue::PROPERTY__AMINO_ACID);
+		current_residue_->setProperty(Residue::PROPERTY__NON_STANDARD);
+		
+		RegularExpression regular_expression("^OHH|HOH|HHO|H2O|2HO|OH2|SOL|TIP|TIP2|TIP3|TIP4|WAT|D2O$");
+		if (regular_expression.match(current_residue_->getName()) == true)
+		{
+			current_residue_->setProperty(Residue::PROPERTY__WATER);
+		}
+		return true;
+	}
+
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordHETATM& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_HETATM,
+										 record.record_name, &record.serial_number,
+										 record.atom_name, &record.alternate_location_indicator,
+										 record.residue.name, &record.residue.chain_ID, &record.residue.sequence_number,
+										 &record.residue.insertion_code, &record.orthogonal_vector[0],
+										 &record.orthogonal_vector[1], &record.orthogonal_vector[2],
+										 &record.occupancy, &record.temperature_factor,
+										 record.segment_ID, record.element_symbol, record.charge);
+	}
+
+	bool PDBFile::interpretRecord(const PDB::RecordHETATM& /* record */)
+	{
+		return true;
+	}
+
+
+	bool PDBFile::parseRecordHYDBND(const char* /* line */, Size /* size */)
+	{
+		return skipCurrentRecord();
+	}
+		
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordHYDBND& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_HYDBND,
+										 record.record_name, record.hydrogen_partner_atom[0].atom_name,
+										 &record.hydrogen_partner_atom[0].alternate_location_indicator,
+										 record.hydrogen_partner_atom[0].residue.name,
+										 &record.hydrogen_partner_atom[0].residue.chain_ID,
+										 &record.hydrogen_partner_atom[0].residue.sequence_number,
+										 &record.hydrogen_partner_atom[0].residue.insertion_code,
+										 record.hydrogen_atom.atom_name,
+										 &record.hydrogen_atom.alternate_location_indicator,
+										 &record.hydrogen_atom.residue.chain_ID,
+										 &record.hydrogen_atom.residue.sequence_number,
+										 &record.hydrogen_atom.residue.insertion_code,
+										 record.hydrogen_partner_atom[1].atom_name,
+										 &record.hydrogen_partner_atom[1].alternate_location_indicator,
+										 record.hydrogen_partner_atom[1].residue.name,
+										 &record.hydrogen_partner_atom[1].residue.chain_ID,
+										 &record.hydrogen_partner_atom[1].residue.sequence_number,
+										 &record.hydrogen_partner_atom[1].residue.insertion_code,
+										 &record.first_non_hydrogen_atom,
+										 &record.second_non_hydrogen_atom);
+	}
+
+	bool PDBFile::interpretRecord(const PDB::RecordHYDBND& /* record */)
+	{
+		return true;
+	}
+
+
+	bool PDBFile::parseRecordMODEL(const char* line, Size size)
+	{
+		static PDB::RecordMODEL record;
+		return (fillRecord(line, size, record) && interpretRecord(record));
+	}
+		
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordMODEL& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_MODEL,
+										 record.record_name,	&record.model_serial_number);
+	}
+	
+	bool PDBFile::interpretRecord(const PDB::RecordMODEL& record)
+	{
+		current_model_ = (Index)record.model_serial_number;
+		return true;
+	}
+
+
+	bool PDBFile::parseRecordSHEET(const char* line, Size size)
+	{
+		static PDB::RecordSHEET record;
+		return (fillRecord(line, size, record) && interpretRecord(record));
+	}
+
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordSHEET& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_SHEET,
+										 record.record_name, &record.strand_number,
+										 record.sheet_ID, &record.number_of_strands,
+										 record.initial_residue.name,
+										 &record.initial_residue.chain_ID,
+										 &record.initial_residue.sequence_number,
+										 &record.initial_residue.insertion_code,
+										 record.terminal_residue.name,
+										 &record.terminal_residue.chain_ID,
+										 &record.terminal_residue.sequence_number,
+										 &record.terminal_residue.insertion_code,
+										 &record.sense_of_strand,
+										 record.atom_name_in_current_strand,
+										 record.residue_in_current_strand.name,
+										 &record.residue_in_current_strand.chain_ID,
+										 &record.residue_in_current_strand.sequence_number,
+										 &record.residue_in_current_strand.insertion_code,
+										 record.atom_name_in_previous_strand,
+										 record.residue_in_previous_strand.name,
+										 &record.residue_in_previous_strand.chain_ID,
+										 &record.residue_in_previous_strand.sequence_number,
+										 &record.residue_in_previous_strand.insertion_code);
+	}
+
+	bool PDBFile::interpretRecord(const PDB::RecordSHEET& record)
+	{
+    ResidueQuadruple partner_residue
+      (record.initial_residue.name, record.initial_residue.chain_ID,
+       record.initial_residue.sequence_number, record.initial_residue.insertion_code);
+
+		// Store the sheet id + ":" + strand_id as name. Example: "BS1:5".
+    SecondaryStructure* sec_struc = new SecondaryStructure(String(record.sheet_ID) + ":" + String(record.strand_number));
+
+    new_sheet_secstruc_list_.push_back(sec_struc);
+    sec_struc->setType(SecondaryStructure::STRAND);
+    sec_struc->setProperty("STRAND_SENSE", (record.sense_of_strand != 0));
+
+    sheet_list_.push_back(partner_residue);
+
+    partner_residue.set(record.terminal_residue.name, record.terminal_residue.chain_ID,
+                        record.terminal_residue.sequence_number, record.terminal_residue.insertion_code);
+
+    sheet_list_.push_back(partner_residue);
+
+    return true;
+	}
+
+	bool PDBFile::parseRecordSLTBRG(const char* /* line */, Size /* size */)
+	{
+		return skipCurrentRecord();
+	}
+
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordSLTBRG& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_SLTBRG,
+										 record.record_name,
+										 record.partner_atom[0].atom_name,
+										 &record.partner_atom[0].alternate_location_indicator,
+										 record.partner_atom[0].residue.name,
+										 &record.partner_atom[0].residue.chain_ID,
+										 &record.partner_atom[0].residue.sequence_number,
+										 &record.partner_atom[0].residue.insertion_code,
+										 record.partner_atom[1].atom_name,
+										 &record.partner_atom[1].alternate_location_indicator,
+										 record.partner_atom[1].residue.name,
+										 &record.partner_atom[1].residue.chain_ID,
+										 &record.partner_atom[1].residue.sequence_number,
+										 &record.partner_atom[1].residue.insertion_code,
+										 &record.first_atom,
+										 &record.second_atom);
+	}
+	
+	bool PDBFile::interpretRecord(const PDB::RecordSLTBRG&  /* record */)
+	{
+		return true;
+	}
+
+
+	bool PDBFile::parseRecordSSBOND(const char* line, Size size)
+	{
+		static PDB::RecordSSBOND record;
+		return (fillRecord(line, size, record) && interpretRecord(record));
+	}
+
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordSSBOND& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_SSBOND,
+										 record.record_name,
+                    &record.serial_number,
+                    record.partner_residue[0].name,
+                    &record.partner_residue[0].chain_ID,
+                    &record.partner_residue[0].sequence_number,
+                    &record.partner_residue[0].insertion_code,
+                    record.partner_residue[1].name,
+                    &record.partner_residue[1].chain_ID,
+                    &record.partner_residue[1].sequence_number,
+                    &record.partner_residue[1].insertion_code,
+                    &record.symmetry_operator[0],
+                    &record.symmetry_operator[1]);
+	}
+
+	bool PDBFile::interpretRecord(const PDB::RecordSSBOND& record)
+	{
+		ResidueQuadruple partner(record.partner_residue[0].name, record.partner_residue[0].chain_ID,
+														 record.partner_residue[0].sequence_number, record.partner_residue[0].insertion_code);
+		
+		ssbond_list_.push_back(partner);
+		
+		partner.set(record.partner_residue[1].name, record.partner_residue[1].chain_ID,
+								record.partner_residue[1].sequence_number, record.partner_residue[1].insertion_code);
+		
+		ssbond_list_.push_back(partner);
+		
+		return true;
+	}
+
+
+	bool PDBFile::parseRecordTER(const char* line, Size size)
+	{
+		if ((selected_model_ != 0) && (selected_model_ != current_model_))
+		{
+			return true;
+		}
+		static PDB::RecordTER record;
+		return (fillRecord(line, size, record) && interpretRecord(record));
+	}
+
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordTER& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_TER, 
+										 record.record_name,
+										 &record.serial_number,
+										 record.residue.name,
+										 &record.residue.chain_ID,
+										 &record.residue.sequence_number,
+										 &record.residue.insertion_code);
+
+	}
+	
+	bool PDBFile::interpretRecord(const PDB::RecordTER& /* record */)
+	{
+		chain_ID_ = 0;
+		return true;
+	}
+
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordTURN& record)
+	{
+    return parseLine(line, size, PDB::FORMAT_TURN,
+                     record.record_name, &record.sequence_number,
+                     record.turn_ID, record.initial_residue.name,
+                     &record.initial_residue.chain_ID,
+                     &record.initial_residue.sequence_number,
+                     &record.initial_residue.insertion_code,
+                     record.terminal_residue.name,
+                     &record.terminal_residue.chain_ID,
+                     &record.terminal_residue.sequence_number,
+                     &record.terminal_residue.insertion_code,
+                     record.comment);
+	}
+
+	bool PDBFile::parseRecordTURN(const char* line, Size size)
+	{
+		static PDB::RecordTURN record;
+		return (fillRecord(line, size, record) && interpretRecord(record));
+	}
+	
+	
+	bool PDBFile::interpretRecord(const PDB::RecordTURN& record)
+	{
+		ResidueQuadruple partner_residue(record.initial_residue.name, record.initial_residue.chain_ID,
+																		 record.initial_residue.sequence_number, record.initial_residue.insertion_code);
+		
+		SecondaryStructure* sec_struc = new SecondaryStructure(record.turn_ID);
+		
+		new_turn_secstruc_list_.push_back(sec_struc);
+		sec_struc->setType(SecondaryStructure::TURN);
+		
+		turn_list_.push_back(partner_residue);
+		
+		partner_residue.set(record.terminal_residue.name, record.terminal_residue.chain_ID,
+												record.terminal_residue.sequence_number, record.terminal_residue.insertion_code);
+		
+		turn_list_.push_back(partner_residue);
+		
+		return true;
+	}
+
+
+	bool PDBFile::read(Protein& protein)
+		throw(Exception::ParseError)
+	{
+		clear_();
+		protein.destroy();
+		current_protein_ = &protein;
+		readRecords();
+		postprocessSSBonds_();
+		postprocessHelices_();
+		postprocessSheetsTurns_(sheet_list_, new_sheet_secstruc_list_);
+		postprocessSheetsTurns_(turn_list_, new_turn_secstruc_list_);
+		postprocessRandomCoils_();
+		
+		return true;
+	}
+
+	bool PDBFile::read(Molecule& /* molecule */)
+		throw(Exception::ParseError)
+	{
+		// ????
+		
+		return true;
+	}
+
+	bool PDBFile::read(System& system)
+		throw(Exception::ParseError)
+	{
+		Protein* protein = new Protein;
+		bool result = read(*protein);
+		if (result == false)
+		{
+			delete protein;
+		}
+		else
+		{	
+			system.insert(*protein);
+		}
+
+		return result;
+	}
+
+	bool PDBFile::write(const System& system)
+		throw(File::CannotWrite)
+	{
+		if (!isOpen() || getOpenMode() != std::ios::out)
+		{
+			throw (File::CannotWrite(__FILE__, __LINE__, name_));
+		}
+		write_(system);
+		
+		return true;
+	}
+
+	bool PDBFile::isHeteroAtom_(const Atom& atom)
+	{
+		const Residue* res(atom.getResidue());
+		if (res == 0)
+		{
+			// If the atom is not inside a residue, it cannot be
+			// a standard amino acid/nucleotide acid atom
+			return true;
+		}
+		return (!res->hasProperty(Residue::PROPERTY__AMINO_ACID));
+	}
+	
+	void PDBFile::extractStructure_(const AtomContainer& ac, PDB::Structure& structure)
+	{
+		// Paranoia: remove old crap from structure.
+		structure.clear();
+		
+		// Make sure we hav at least one atom:
+		if (ac.beginAtom() == ac.endAtom())
+		{
+			return;
+		}
+
+		// Walk over all atoms and collect all chains, bonds, etc.
+		Position index = 0; // index of the current atom in the atoms vector
+		for (AtomConstIterator it(ac.beginAtom()); +it; ++it, ++index)
+		{
+			// Store all atom ptrs in a vector and use indices to refer to them.
+			structure.atoms.push_back(PDB::Structure::AtomEntry(*it));
+
+			// Store all bonds
+			for (Atom::BondConstIterator bi(it->beginBond()); +bi; ++bi)
+			{
+				// Make sure we consider each bond just once!
+				if ((bi->getFirstAtom() == &*it) && (bi->getFirstAtom() != 0) && (bi->getSecondAtom() != 0))
+				{
+					switch (bi->getType())
+					{
+						case Bond::TYPE__COVALENT:
+						case Bond::TYPE__UNKNOWN:
+						case Bond::TYPE__PEPTIDE:
+						case Bond::TYPE__DISULPHIDE_BRIDGE:
+							if (isHeteroAtom_(*bi->getFirstAtom()) || isHeteroAtom_(*bi->getSecondAtom()))
+							{
+								structure.covalent_hetero_bonds.push_back(&*bi);
+							}
+							else
+							{
+								structure.covalent_atom_bonds.push_back(&*bi);
+							}
+							if ((bi->getFirstAtom()->getElement() == PTE[Element::S])
+									&& (bi->getSecondAtom()->getElement() == PTE[Element::S])
+									&& (bi->getFirstAtom()->getResidue() != 0) 
+									&& (bi->getSecondAtom()->getResidue() != 0)
+									&& (bi->getFirstAtom()->getResidue() != bi->getSecondAtom()->getResidue()))
+							{
+								structure.ssbonds.push_back(&*bi);
+							}
+							break;
+
+						case Bond::TYPE__HYDROGEN:
+							structure.hydrogen_bonds.push_back(&*bi);
+							break;
+
+						case Bond::TYPE__SALT_BRIDGE:
+							structure.saltbridges.push_back(&*bi);
+							break;
+
+						default:
+							break;
+					}
+				}
+			}
+		}
+
+		structure.chain_residue_names.clear();
+		structure.sec_structs.clear();
+		const Residue* res = 0;
+		const SecondaryStructure* ss = 0;
+		for (Position i = 0; i < structure.atoms.size(); ++i)
+		{
+			// If the residue pointer changes, we have reached the end of a residue
+			// and the (potential) start of a new one. We remember the residue and its
+			// chain ID in a vector to extract its sequence afterwards (SEQRES).
+			if (structure.atoms[i].residue != res)
+			{
+				res = structure.atoms[i].residue;
+				if ((res != 0) && (res->getName() != ""))
+				{
+					char chain_name(structure.atoms[i].chain == 0 ? ' ' : structure.atoms[i].chain->getName()[0]);
+					structure.chain_residue_names.push_back(make_pair(chain_name, res->getName()));
+				}
+			}
+
+			// To a similar thing for secondary structures: whenever a secondary structure
+			// ends/starts, remember its indices and push it into an appropriate vector.
+			if (structure.atoms[i].sec_struct != ss)
+			{
+				ss = structure.atoms[i].sec_struct;
+				// Is this a new secondary structure?
+				if (ss != 0) 
+				{
+					structure.sec_structs.push_back(ss);
+				}
+			}
+		}
+	}
+
+	void PDBFile::write_(const AtomContainer& ac, const PDBInfo& info)
+	{
+		// Decompose the atom container into chains,
+		// hetero groups and AA/NA residues.
+		PDB::Structure structure;
+		extractStructure_(ac, structure);
+
+		// Reset the bookkeeping entries (counting the number of
+		// specific records written for the MASTER record).
+		book_keeping_.clear();
+
+		// Write the individual sections of the PDB file one by one.
+		writeTitleSection_(structure, info);
+		writePrimaryStructureSection_(structure, info);
+		writeHeterogenSection_(structure, info);
+		writeSecondaryStructureSection_(structure, info);
+		writeConnectivityAnnotationSection_(structure, info);
+		writeMiscellaneousFeaturesSection_(structure, info);
+		writeCrystallographicSection_(structure, info);
+		writeCoordinateSection_(structure, info);
+		writeConnectivitySection_(structure, info);
+		writeBookKeepingSection_(structure, info);
+	}
+	
+	void PDBFile::updateAdditionalAtomInfo_(const PDB::Structure::AtomEntry& atom, PDB::AdditionalAtomInfo& aai)
+	{
+		if (atom.chain != aai.current_chain)
+		{
+			// Remember we have entered a new chain, so we don't have to 
+			// do this every time we write an atom.
+			aai.current_chain = atom.chain;
+
+			// If there is a chain, extract its ID, use a default otherwise.
+			if (atom.chain != 0)
+			{
+				aai.chain_id = atom.chain->getName().c_str()[0];
+				if (aai.chain_id == '\0')
+				{
+					aai.chain_id = BALL_CHAIN_DEFAULT_NAME;
+				}
+			}
+		}
+		// Now do the same trick for the residue.
+		if (atom.residue != aai.current_residue)
+		{
+			aai.current_residue = atom.residue;
+			if (atom.residue != 0)
+			{
+				strncpy(aai.residue_name, atom.residue->getName().c_str(), 4);
+			}
+			else
+			{
+				strncpy(aai.residue_name, "UNK", 4);
+			}
+			if (atom.residue->getID().toInt() == 0)
+			{
+				aai.residue_id++;
+			}
+			else
+			{
+				aai.residue_id = atom.residue->getID().toInt();
+			}
+			aai.residue_insertion_code = atom.residue->getInsertionCode();
+		}
+	}
+
+	void PDBFile::writeAtom_(const PDB::Structure::AtomEntry& atom, PDB::AdditionalAtomInfo& aai, bool hetatm)
+	{					
+		// get the element symbol
+		char element_symbol[3];
+		strcpy(element_symbol, atom.atom->getElement().getSymbol().c_str());
+
+		// normalize the atom name:
+		//  if the atom name starts with the element name and the element
+		//	name is a single character (e.g. C, N, O, H and the name is not
+		//  prefixed by a number) then the name should pe prefixed by
+		//  a blank to distinguish CA (carbon alpha) from CA (calcium)
+		String name(atom.atom->getName());
+		name.trim();
+		Index offset;
+		char PDB_atom_name[5];
+		if ((name.size() < 4) && name.hasPrefix(element_symbol) && (strlen(element_symbol) == 1))
+		{
+			offset = 1;
+			PDB_atom_name[0] = ' ';
+		} 
+		else 
+		{
+			offset = 0;
+		}
+		name.get(&(PDB_atom_name[offset]), 0, 4 - offset);
+		
+		// Update the chain name.
+		updateAdditionalAtomInfo_(atom, aai);
+
+		// Define a few defaults for the case that
+		// we don't have a PDBAtom, but only an Atom
+		char alternate_location = ' ';
+		float occupancy = 1.0;
+		float temperature_factor = 20.0;
+
+		// Check whether the atom is a PDB atom. If so, retrieve the 
+		// additional content.
+		const PDBAtom* pdb_atom = dynamic_cast<const PDBAtom*>(atom.atom);
+		if (pdb_atom != 0)
+		{
+			alternate_location = pdb_atom->getAlternateLocationIndicator();
+			occupancy = pdb_atom->getOccupancy();
+			temperature_factor = pdb_atom->getTemperatureFactor();
+		}
+	
+		// Formal charge ????
+		char formal_charge[3] = "  ";
+							
+		// Write the record
+		writeRecord_((hetatm ? PDB::RECORD_TYPE__HETATM : PDB::RECORD_TYPE__ATOM),
+								 aai.number++, PDB_atom_name,
+								 alternate_location, aai.residue_name,
+								 aai.chain_id, aai.residue_id, aai.residue_insertion_code,
+								 atom.atom->getPosition().x,
+								 atom.atom->getPosition().y,
+								 atom.atom->getPosition().z,
+								 occupancy,	temperature_factor,
+								 aai.pdb_id, element_symbol, formal_charge); 
+	}
+	
+	void PDBFile::writeCoordinateSection_
+		(const PDB::Structure& structure, const PDBInfo& /* info */)
+	{
+		// --- MODEL ---
+		writeRecord_(PDB::RECORD_TYPE__MODEL, 1L);
+
+		// --- ATOM/HETATM/TER ---
+		PDB::AdditionalAtomInfo atom_info;
+		atom_map_.clear(); // here, we store the indices of the atoms. This is required to
+												// resolve connectivities later on.
+		for (Position index = 0; index < structure.atoms.size(); ++index)
+		{
+			// --- ATOM/HETATM ---
+			writeAtom_(structure.atoms[index], atom_info, isHeteroAtom_(*structure.atoms[index].atom));
+			atom_map_.insert(make_pair(structure.atoms[index].atom, atom_info.number));
+	
+			// --- TER ---
+			// Is this the last atom of the structure or the last atom of a chain?
+			if ((index == structure.atoms.size() - 1) || (structure.atoms[index + 1].chain != structure.atoms[index].chain))
+			{
+				writeRecord_(PDB::RECORD_TYPE__TER,
+										 atom_info.number++, atom_info.residue_name,
+										 atom_info.chain_id, atom_info.residue_id,
+										 atom_info.residue_insertion_code);
+			}
+		}
+
+		// --- ENDMDL ---
+		writeRecord_(PDB::RECORD_TYPE__ENDMDL);	
+  }
+
+	void PDBFile::writeConnectivitySection_
+		(const PDB::Structure& /* structure */, const PDBInfo& /* info */)
+	{
+		// --- CONECT ---
+		// ????
+	}
+	
+
+	void PDBFile::writeTitleSection_
+		(const PDB::Structure& /* structure */, const PDBInfo& info)
+	{
+		// --- HEADER ---
+		// Retrieve the current date...
+		time_t current_time = time(NULL);
+		char* date = asctime(localtime(&current_time));
+		char PDB_date_format[10];
+		
+		sprintf(PDB_date_format, "%2.2s-%c%c%c-%2.2s",
+						date + 8, toupper(date[4]), toupper(date[5]),
+						toupper(date[6]), date + 22);
+		writeRecord_(PDB::RECORD_TYPE__HEADER, info.getName().c_str(),
+								 PDB_date_format,info.getID().c_str());
+		// --- OBSLTE ---
+		addAllRecords_(info, PDB::RECORD_TYPE__OBSLTE);
+		// --- TITLE  ---
+		addAllRecords_(info, PDB::RECORD_TYPE__TITLE);
+		// --- CAVEAT ---
+		addAllRecords_(info, PDB::RECORD_TYPE__CAVEAT);
+		// --- COMPND ---
+		addAllRecords_(info, PDB::RECORD_TYPE__COMPND);
+		// --- SOURCE ---
+		addAllRecords_(info, PDB::RECORD_TYPE__SOURCE);
+		// --- KEYWDS ---
+		addAllRecords_(info, PDB::RECORD_TYPE__KEYWDS);
+		// --- EXPDTA ---
+		addAllRecords_(info, PDB::RECORD_TYPE__EXPDTA);
+		// --- AUTHOR ---
+		addAllRecords_(info, PDB::RECORD_TYPE__AUTHOR);
+		// --- REVDAT ---
+		addAllRecords_(info, PDB::RECORD_TYPE__REVDAT);
+		// --- SPRSDE ---
+		// ???? addAllRecords_(info, PDB::RECORD_TYPE__SPRSDE);	
+		// --- JRNL   ---
+		addAllRecords_(info, PDB::RECORD_TYPE__JRNL);
+		// --- REMARK ---
+		addAllRecords_(info, PDB::RECORD_TYPE__REMARK);
+	}
+
+	void PDBFile::writeSEQRESSection_(const std::vector<std::pair<char, String> >& chain_residues)
+	{
+		// Iterate over all residues and count the residues per chain.
+		std::vector<Size> chain_size;
+		char current_chain = '\1';
+		for (Position i = 0; i < chain_residues.size(); ++i)
+		{
+			if (chain_residues[i].first != current_chain)
+			{
+				chain_size.push_back(1);
+			}
+			else
+			{
+				if (chain_size.size() > 0)
+				{
+					chain_size.back()++;
+				}
+			}
+			current_chain = chain_residues[i].first;
+		}
+
+		// Iterate over all residues and assemble them to SEQRES records (13 per line).
+		Position ser_num = 0;			 // The line counter. Reset to 1 for each new chain.
+		current_chain = '\0'; // The zeroth chain gets an invalid id.
+		PDB::RecordSEQRES sr;
+		Index chain_counter = -1;
+		Position res_counter = 0;  // number of residues in sr;
+		if (chain_size.size() > 0)
+		{
+			sr.number_of_residues_in_chain = chain_size[0];
+		}
+		else
+		{
+			sr.number_of_residues_in_chain = 0;
+		}
+		for (Position i = 0; i < chain_residues.size(); ++i)
+		{
+			// Just some shorthands...
+			const char& chain_id = chain_residues[i].first;
+			const String& res_name = chain_residues[i].second;
+			
+			// Is this a new chain or is the line full?
+			if ((chain_id != current_chain) || (res_counter == 13))
+			{
+				// Write the old stuff if this is not the first record to be written.
+				if (ser_num > 0)
+				{
+					writeRecord_(sr);
+				}
+				sr.clear();
+
+				if (res_counter == 13)
+				{
+					// Line full.
+					sr.serial_number = ++ser_num;
+				}
+				else
+				{	
+					// New chain.
+					chain_counter++;
+					sr.serial_number = 1;
+					ser_num = 1;
+				}
+				res_counter = 0;
+				if (chain_size.size() > static_cast<Size>(chain_counter))
+				{
+					sr.number_of_residues_in_chain = chain_size[chain_counter];
+				}
+				else
+				{
+					sr.number_of_residues_in_chain = 0;
+				}
+				sr.chain_ID = chain_id;
+			}
+			current_chain = chain_id;
+			
+			// Replace the residue names for nucleotides:
+			PDB::ResidueName seq;
+			seq[0] = '\0';
+			const char* original_name[] = {"DA", "DC", "DG", "DT", "DU", "DI"};
+			const char* seqres_name[]   = { "A",  "C",  "G",  "T",  "U",  "I"};
+			for (Position i = 0; i < 6; ++i)
+			{
+				if (res_name == original_name[i])
+				{
+					strncpy(seq, seqres_name[i], 3);
+					break;
+				}
+			}
+			if (seq[0] == '\0')
+			{
+				strncpy(seq, res_name.c_str(), 3);
+			}
+			strncpy(sr.residue_name[res_counter++], seq, 3);
+		}
+		if (res_counter > 0)
+		{
+			writeRecord_(sr);
+		}
+	}
+
+	void PDBFile::writeHELIXSection_(const PDB::Structure& structure)
+	{
+		PDB::RecordHELIX hr;
+		for (Position i = 0; i < structure.sec_structs.size(); ++i)
+		{
+			if (structure.sec_structs[i]->getType() == SecondaryStructure::HELIX)
+			{
+				const SecondaryStructure& helix(*structure.sec_structs[i]);
+				hr.serial_number++;
+				strncpy(hr.helix_ID, helix.getName().c_str(), 3);
+				hr.initial_residue.set(*helix.beginResidue());
+				hr.terminal_residue.set(*helix.rbeginResidue());
+				hr.comment[0] = '\0';
+				hr.length = hr.terminal_residue.sequence_number - hr.initial_residue.sequence_number + 1;
+				hr.helix_class = 1; // default: \alpha-helix
+				if (helix.hasProperty("HELIX_CLASS"))
+				{
+					hr.helix_class = helix.getProperty("HELIX_CLASS").getInt();
+				}
+
+				writeRecord_(hr);
+			}
+		}
+	}
+  void PDBFile::writeSHEETSection_(const PDB::Structure& structure)
+	{
+		// First, count the number of strands. Not exactly what 
+		// we need, but it'll do for now. We would have to count
+		// the strands per sheet for every distinct sheet ID and
+		// account for barrels (closed sheets: last strand = first strand)
+		// as well. / OK ????
+		PDB::RecordSHEET sr;
+		for (Position i = 0; i < structure.sec_structs.size(); ++i)
+		{
+			if (structure.sec_structs[i]->getType() == SecondaryStructure::STRAND)
+			{
+				sr.number_of_strands++;
+			}
+		}
+
+		for (Position i = 0; i < structure.sec_structs.size(); ++i)
+		{
+			if (structure.sec_structs[i]->getType() == SecondaryStructure::STRAND)
+			{
+				const SecondaryStructure& strand(*structure.sec_structs[i]);
+				const String& name = strand.getName();
+				if (name.has(':'))
+				{
+					String sheet_id = name.before(":");
+					strncpy(sr.sheet_ID, sheet_id.c_str(), 3);
+					sr.strand_number = name.after(":").toString().toInt();
+				}
+				else	
+				{
+					strncpy(sr.sheet_ID, name.c_str(), 3);
+					sr.strand_number = 1;
+				}
+				sr.initial_residue.set(*strand.beginResidue());
+				sr.terminal_residue.set(*strand.rbeginResidue());
+
+				writeRecord_(sr);
+			}
+		}
+	}
+	void PDBFile::writeTURNSection_(const PDB::Structure& structure)
+	{
+		PDB::RecordTURN tr;
+		for (Position i = 0; i < structure.sec_structs.size(); ++i)
+		{
+			if (structure.sec_structs[i]->getType() == SecondaryStructure::TURN)
+			{
+				const SecondaryStructure& turn(*structure.sec_structs[i]);
+				tr.sequence_number++;
+				strncpy(tr.turn_ID, turn.getName().c_str(), 3);
+				tr.initial_residue.set(*turn.beginResidue());
+				tr.terminal_residue.set(*turn.rbeginResidue());
+				tr.comment[0] = '\0';
+
+				writeRecord_(tr);
+			}
+		}
+	}
+  void PDBFile::writeSSBONDSection_(const PDB::Structure& structure)
+	{
+		PDB::RecordSSBOND sr;
+		for (Position i = 0; i < structure.ssbonds.size(); ++i)
+		{
+			const Bond* bond = structure.ssbonds[i];
+			sr.serial_number = i + 1;
+			if (bond->getFirstAtom()->getResidue()->getID().toInt() > bond->getSecondAtom()->getResidue()->getID().toInt())
+			{
+				sr.partner_residue[1].set(*bond->getFirstAtom()->getResidue());
+				sr.partner_residue[0].set(*bond->getSecondAtom()->getResidue());	
+			}
+			else	
+			{
+				sr.partner_residue[0].set(*bond->getFirstAtom()->getResidue());
+				sr.partner_residue[1].set(*bond->getSecondAtom()->getResidue());	
+			}
+
+			writeRecord_(sr);
+		}
+	}
+  void PDBFile::writeHYDBNDSection_(const PDB::Structure& structure)
+	{
+		// ????
+	}
+  void PDBFile::writeSLTBRGSection_(const PDB::Structure& structure)
+	{
+		// ????
+	}
+
+
+
+	void PDBFile::writeConnectivityAnnotationSection_
+		(const PDB::Structure& structure, const BALL::PDBInfo& info)
+	{
+		// --- SSBOND ---
+		writeSSBONDSection_(structure);
+			
+		// --- LINK   ---
+		// ????
+
+		// --- HYDBND ---
+		writeHYDBNDSection_(structure);
+
+		// --- SLTBRG ---
+		writeSLTBRGSection_(structure);
+		
+		// --- CISPEP ---
+		// ????
+	}
+
+	void PDBFile::writeSecondaryStructureSection_
+		(const PDB::Structure& structure, const BALL::PDBInfo& /* info */)
+	{
+
+		// --- HELIX ---
+		writeHELIXSection_(structure);
+		// --- SHEET ---
+		writeSHEETSection_(structure);
+		// --- TURN ---
+		writeTURNSection_(structure);
+	}
+
+	void BALL::PDBFile::writeCrystallographicSection_
+		(const PDB::Structure& structure, const BALL::PDBInfo& info)
+	{
+		// --- CRYST1 ---
+		// ????
+		// --- ORIGX1 ---
+		// ????
+		// --- ORIGX2 ---
+		// ????
+		// --- ORIGX3 ---
+		// ????
+		// --- SCALE1 ---
+		// ????
+		// --- SCALE2 ---
+		// ????
+		// --- SCALE3 ---
+		// ????
+		// --- MTRIX1 ---
+		// ????
+		// --- MTRIX2 ---
+		// ????
+		// --- MTRIX3 ---
+		// ????
+		// --- TVECT ---
+		// ????
+	}
+
+	void BALL::PDBFile::writePrimaryStructureSection_
+		(const PDB::Structure& structure, const BALL::PDBInfo& info)
+	{
+		// --- DBREF  ---
+		// ????
+		// --- SEQADV ---
+		// ????
+		// --- SEQRES ---
+		writeSEQRESSection_(structure.chain_residue_names);
+		// --- MODRES ---		
+		// ????
+	}
+	void PDBFile::writeMiscellaneousFeaturesSection_
+		(const PDB::Structure& structure, const BALL::PDBInfo& info)
+	{
+		// --- SITE ---
+		// ????
+	}
+
+	void PDBFile::writeHeterogenSection_
+		(const PDB::Structure& structure, const BALL::PDBInfo& info)
+	{
+		// --- HET    ---
+		// --- HETNAM ---
+		// --- HETSYN ---
+		// --- FORMUL ---
+		// ????
+	}
+
+	void PDBFile::writeBookKeepingSection_
+		(const PDB::Structure& /* structure */, const PDBInfo& /* info */)
+	{
+		// ---- MASTER ----
+		// Write bookkeeping information about the number of records of each type.
+		writeRecord_(PDB::RECORD_TYPE__MASTER,
+								 book_keeping_.remark_records,	0L,
+								 book_keeping_.het_records, book_keeping_.helix_records,
+								 book_keeping_.sheet_records, book_keeping_.turn_records,
+								 book_keeping_.site_records,	book_keeping_.coordinate_transformation_records,
+								 book_keeping_.atomic_coordinate_records, book_keeping_.ter_records,
+								 book_keeping_.conect_records,	book_keeping_.seqres_records);
+
+		// ---- END ----
+		writeRecord_(PDB::RECORD_TYPE__END);
+	}
+	
+
+	void PDBFile::writeRecord_(const PDB::RecordSEQRES& seqres)
+	{
+		writeRecord_(PDB::RECORD_TYPE__SEQRES, 
+								 seqres.serial_number, seqres.chain_ID,
+								 seqres.number_of_residues_in_chain,
+								 seqres.residue_name[0], seqres.residue_name[1], seqres.residue_name[2],
+								 seqres.residue_name[3], seqres.residue_name[4], seqres.residue_name[5],
+								 seqres.residue_name[6], seqres.residue_name[7], seqres.residue_name[8],
+								 seqres.residue_name[9], seqres.residue_name[10], seqres.residue_name[11],
+								 seqres.residue_name[12]);
+	}
+
+	void PDBFile::writeRecord_(const PDB::RecordHELIX& helix)
+	{
+		writeRecord_(PDB::RECORD_TYPE__HELIX, 
+								 helix.serial_number, helix.helix_ID,
+								 helix.initial_residue.name, helix.initial_residue.chain_ID,
+								 helix.initial_residue.sequence_number, helix.initial_residue.insertion_code,
+								 helix.terminal_residue.name, helix.terminal_residue.chain_ID,
+								 helix.terminal_residue.sequence_number, helix.terminal_residue.insertion_code,
+								 helix.helix_class, helix.comment, helix.length);
+	}
+
+	void PDBFile::writeRecord_(const PDB::RecordSHEET& sheet)
+	{
+		writeRecord_(PDB::RECORD_TYPE__SHEET, 
+								 sheet.strand_number, sheet.sheet_ID, sheet.number_of_strands,
+								 sheet.initial_residue.name, sheet.initial_residue.chain_ID,
+								 sheet.initial_residue.sequence_number, sheet.initial_residue.insertion_code,
+								 sheet.terminal_residue.name, sheet.terminal_residue.chain_ID,
+								 sheet.terminal_residue.sequence_number, sheet.terminal_residue.insertion_code,
+								 sheet.sense_of_strand, 
+								 sheet.atom_name_in_current_strand, 
+								 sheet.residue_in_current_strand.name, sheet.residue_in_current_strand.chain_ID,
+								 sheet.residue_in_current_strand.sequence_number, sheet.residue_in_current_strand.insertion_code,
+								 sheet.atom_name_in_previous_strand, 
+								 sheet.residue_in_previous_strand.name, sheet.residue_in_previous_strand.chain_ID,
+								 sheet.residue_in_previous_strand.sequence_number, sheet.residue_in_previous_strand.insertion_code);
+	}
+
+	void PDBFile::writeRecord_(const PDB::RecordTURN& turn)
+	{
+		writeRecord_(PDB::RECORD_TYPE__HELIX, 
+								 turn.sequence_number, turn.turn_ID,
+								 turn.initial_residue.name, turn.initial_residue.chain_ID,
+								 turn.initial_residue.sequence_number, turn.initial_residue.insertion_code,
+								 turn.terminal_residue.name, turn.terminal_residue.chain_ID,
+								 turn.terminal_residue.sequence_number, turn.terminal_residue.insertion_code,
+								 turn.comment);
+	}
+
+
+	void PDBFile::writeRecord_(const PDB::RecordSSBOND& ssb)
+	{
+		writeRecord_(PDB::RECORD_TYPE__SSBOND, 
+								 ssb.serial_number, 
+								 ssb.partner_residue[0].name, ssb.partner_residue[0].chain_ID,
+								 ssb.partner_residue[0].sequence_number, ssb.partner_residue[0].insertion_code,
+								 ssb.partner_residue[1].name, ssb.partner_residue[1].chain_ID,
+								 ssb.partner_residue[1].sequence_number, ssb.partner_residue[1].insertion_code,
+								 ssb.symmetry_operator[0], ssb.symmetry_operator[1]);
+	}
+
+	void PDBFile::writeRecord_(const PDB::RecordCONECT& cr)
+	{
+	}
+
+#	ifdef BALL_NO_INLINE_FUNCTIONS
+#		include <BALL/FORMAT/PDBFile.iC>
+#	endif
+
+} // namespace BALL
