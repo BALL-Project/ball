@@ -1,13 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: canonicalMD.h,v 1.23 2003/08/26 08:04:26 oliver Exp $
+// $Id: canonicalMD.h,v 1.24 2004/04/17 14:14:52 oliver Exp $
 //
 
 #ifndef BALL_MOLMEC_MDSIMULATION_CANONICALMD_H   
 #define BALL_MOLMEC_MDSIMULATION_CANONICALMD_H   
 
-// Include all necessary BALL headers 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
 #endif
@@ -61,7 +60,9 @@ namespace BALL
 			Berendsen et al., J. Chem. Physics, 81:3684, 1984.
 			Note that this approach does  not give all properties of a
 			true canonical system. In particular, the heat capacity 
-			cannot be calculated!	 \par
+			cannot be calculated!	
+			\par
+			The temperature is set through the \link MDSimulation::setReferenceTemperature \endlink method.
 			
     	\ingroup  MDSimulation
 	*/
@@ -70,32 +71,21 @@ namespace BALL
 	{
     public: 
 
+    BALL_CREATE(CanonicalMD)
 
-    /** A local auxiliary class
-    */
-    struct Aux_Factors
-    {
-      double factor1, factor2; 
-    }; 
-    
-
-    /** @name Constructors and Destructors
+    /** @name Constructors and Destructor
     */
     //@{
 
-    BALL_CREATE(CanonicalMD)
 
-    /** The default constructor with no arguments.
-    */
-    CanonicalMD()
-			throw();
+    ///
+    CanonicalMD()	throw();
 
     /** This constructor expects a force field .
         The force field's options are used and no saving of snapshots is done.
 				@param myforcefield the forcefield we need for the simulation
     */
-    CanonicalMD(ForceField& myforcefield)
-			throw();
+    CanonicalMD(ForceField& myforcefield)	throw();
 
     /** This constructor expects a force field and a snapshot manager.
         The force field's options are used. 
@@ -103,8 +93,7 @@ namespace BALL
 				@param ssm  a pointer to the SnapShotManager which will be used to 
 				create trajectory files
     */
-    CanonicalMD(ForceField& myforcefield, SnapShotManager* ssm)
-			throw();
+    CanonicalMD(ForceField& force_field, SnapShotManager* ssm) throw();
 
     /** This constructor wants a force field, a snapshot manager and new options.
 				@param myforcefield the forcefield which is to be used in the	simulation
@@ -113,72 +102,67 @@ namespace BALL
 				@param myoptions arbitrary options that are to be used by this 
 								instance instead of those defined therein
     */
-    CanonicalMD(ForceField& myforcefield, SnapShotManager* ssm, 
-								const Options& myoptions)
-			throw();
+    CanonicalMD(ForceField& myforcefield, SnapShotManager* ssm,	
+								const Options& options) throw();
 
-    /** The standard copy constructor.
-    */
-    CanonicalMD(const CanonicalMD &rhs, bool deep = true)
-			throw();
+    /// Copy constructor
+    CanonicalMD(const CanonicalMD& rhs) throw();
 
-    /** The destructor.
-    */
-    virtual ~CanonicalMD()
-			throw();
-
+    /// Destructor
+    virtual ~CanonicalMD() throw();
     //@}
-    /** @name Assignments
-    */
+
+    /** @name Assignment  */
     //@{
 
-    /// Assignment operator.
-    CanonicalMD &operator = (const CanonicalMD& rhs)
-			throw();
-
+    /// Assignment operator
+    CanonicalMD &operator = (const CanonicalMD& rhs) throw();
     //@}
+
     /** @name Setup methods
     */
     //@{
 
-    /** This method does general setup things.
+    /** This method does general setup things
+				@param ssm if no snapshots during the simulations are required, leave this at the default (NULL pointer)
+				@param force_field the forcefield, which has to be bound to a system
     */
-    virtual bool setup(ForceField &myforcefield, SnapShotManager* ssm)
+    virtual bool setup(ForceField& force_field, SnapShotManager* ssm = 0)
 			throw();
 
     /** This method does general setup things. 
+				This method also allows the assignment of options for the setup.
     */
-    virtual bool setup(ForceField &myforcefield, SnapShotManager* ssm,
-				const Options &myoptions)
+    virtual bool setup(ForceField& force_field, SnapShotManager* ssm,
+											const Options& options)
 			throw();
 
     /** This method is meant for additional preparations apart from those done in setup.
 				@return bool, <b>true</b> if specificSetup() was successful
     */
-    virtual bool specificSetup()
-			throw();
-
+    virtual bool specificSetup() throw();
     //@} 
+
     /** @name Accessors
 		*/
 		//@{
 
     /** This method sets a new relaxation time for the coupling to an external heat bath.
-				@param time the time in [unit] 
+				The readjustment to the external bath is not done after every step in order
+				to save compute time. Instead, it is coupled periodically after the
+				time specified here has elapsed.
+				@param time the time in <em>ps</em>
     */
-    void setBathRelaxationTime(double time)
-			throw();
+    void setBathRelaxationTime(double time)	throw();
 
     /** This method gets the current value for heat bath coupling.
-				@return the time in [unit]
+				@return the bath relaxation time in <em>ps</em>
     */
-    double getBathRelaxationTime() const
-			throw();
+    double getBathRelaxationTime() const throw();
 
     /** Set a new time step for the numerical integration.
     */
-    virtual void setTimeStep(double time)
-			throw();
+    virtual void setTimeStep(double time) throw();
 
     /**  This method does the actual simulation stuff. 
          It runs for the indicated number of iterations. 
@@ -187,34 +171,39 @@ namespace BALL
 				 @param number the number of iterations that have to be simulated 
 				 @param restart flag for restarting the simulation
     */
-    virtual void simulateIterations(Size number, bool restart = false)
-			throw();
+    virtual void simulateIterations(Size number, bool restart = false) throw();
 
     //@}
 
     protected:
+		
+		/// Helper class containing auxiliary factors.
+    struct AuxFactors
+    {
+      double factor1;
+			double factor2; 
+    }; 
+    
+    /** @name Protected methods */
+    //@{
 
-    //_ @name Protected methods
-    //_@{
-
-    /*_ A protected method for calculating some factors that are needed all the time.
+    /** A protected method for calculating some factors that are needed all the time.
     */
-    void calculateFactors_()
-			throw();
+    void calculateFactors_() throw();
+    //@}
 
-    //_@}
-    //_  @name Protected Attributes
-    //_@{
+    /**  @name Protected Attributes */
+    //@{
 
-    //_  The coupling parameter to the heat bath
+    ///  The coupling parameter to the heat bath
     double bath_relaxation_time_; 
 
-    //_  This vector contains special precomputed factors 
-    vector<Aux_Factors> mass_factor_; 
-
+    /// This vector contains special precomputed factors 
+		std::vector<AuxFactors> mass_factor_; 
     //_@} 
 
-    };  // end of class CanonicalMD  
-  } // end of namespace BALL 
+	};  //class CanonicalMD  
+
+} // namespace BALL 
 
 #endif // BALL_MOLMEC_MDSIMULATION_CANONICALMD_H

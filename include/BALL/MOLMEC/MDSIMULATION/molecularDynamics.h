@@ -1,11 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularDynamics.h,v 1.27 2003/08/26 08:04:26 oliver Exp $
+// $Id: molecularDynamics.h,v 1.28 2004/04/17 14:14:52 oliver Exp $
 //
 
-// MolecularDynamics: A base class for doing molecular dynamics simulations    
-// Useful MD classes must be derived from this class 
+// MolecularDynamics: A base class for molecular dynamics simulations    
+// Useful MD classes must be derived from this class.
 
 #ifndef BALL_MOLMEC_MDSIMULATION_MOLECULARDYNAMICS_H
 #define BALL_MOLMEC_MDSIMULATION_MOLECULARDYNAMICS_H
@@ -14,59 +14,30 @@
 # include <BALL/common.h>
 #endif
 
-#ifndef BALL_KERNEL_PTE_H
-# include <BALL/KERNEL/PTE.h>
-#endif
-
-#ifndef BALL_KERNEL_SYSTEM_H
-# include <BALL/KERNEL/system.h>
-#endif
-
-#ifndef BALL_KERNEL_ATOM_H
-# include <BALL/KERNEL/atom.h>
-#endif
-
-#ifndef BALL_MATHS_VECTOR3_H
-# include <BALL/MATHS/vector3.h>
-#endif
-
 #ifndef BALL_DATATYPE_OPTIONS_H
 # include <BALL/DATATYPE/options.h>
 #endif
 
-#ifndef BALL_MOLMEC_PARAMETER_FORCEFIELDPARAMETER_H
-# include <BALL/MOLMEC/PARAMETER/forceFieldParameters.h>
-#endif
-
-#ifndef BALL_MOLMEC_PARAMETER_ATOMTYPES_H
-# include <BALL/MOLMEC/PARAMETER/atomTypes.h>
-#endif
-
-#ifndef BALL_MOLMEC_COMMON_PERIODIC_BOUNDARY_H
-# include <BALL/MOLMEC/COMMON/periodicBoundary.h>
-#endif
-
-#ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
-# include <BALL/MOLMEC/COMMON/forceField.h>
-#endif
-
-#ifndef BALL_MOLMEC_COMMON_SNAPSHOT_H
-# include <BALL/MOLMEC/COMMON/snapShot.h>
-#endif
-
-#ifndef BALL_MOLMEC_COMMON_SNAPSHOTMANAGER_H
-# include <BALL/MOLMEC/COMMON/snapShotManager.h>
+#ifndef BALL_MOLMEC_COMMON_ATOMVECTOR_H
+# include <BALL/MOLMEC/COMMON/atomVector.h>
 #endif
 
 #include <vector>
 
 namespace BALL
 {
-   	/**	Molecular Dynamics base class.
-			This class is the base class for classical molecular dynamics
-			simulations. Actual MD classes must be derived from this class.
-			
-    	\ingroup  MDSimulation
+	// Some forward decls
+	class SnapShotManager;
+	class ForceField;
+	class System;
+
+	/**	Molecular Dynamics base class.
+		This class is the base class for classical molecular dynamics
+		simulations. Actual MD classes are derived from this class and
+		then implement the actual simulation classes for the different 
+		ensembles or methods.
+		
+		\ingroup  MDSimulation
 	*/
 	class MolecularDynamics
 	{
@@ -122,7 +93,7 @@ namespace BALL
 
 			/** The maximal number of iterations to be simulated. 
 			 */
-			static const int MAXIMAL_NUMBER_OF_ITERATIONS;
+			static const Size MAXIMAL_NUMBER_OF_ITERATIONS;
 
       /** The maximal simulation time in ps(equivalent to 
           MAXIMAL_NUMBER_OF_ITERATIONS )
@@ -131,16 +102,16 @@ namespace BALL
 
 			/** The current number of iteration 
 			 */
-			static const int NUMBER_OF_ITERATION;
+			static const Size NUMBER_OF_ITERATION;
 
 			/** After how many iterations shall the current energy/temperature 
 			 *  be calculated/saved.
 			 */
-			static const int ENERGY_OUTPUT_FREQUENCY;
+			static const Size ENERGY_OUTPUT_FREQUENCY;
 
 			/** After how many iterations shall the current positions/velocities be saved.
 			 */
-			static const int SNAPSHOT_FREQUENCY;
+			static const Size SNAPSHOT_FREQUENCY;
 
 			/** The size of the time step in picoseconds. Default 0.0005 ps
 			 */
@@ -172,11 +143,11 @@ namespace BALL
 
 		/**  Constructor. It expects the forcefield
 		*/
-		MolecularDynamics(ForceField & myforcefield);
+		MolecularDynamics(ForceField& force_field);
 
 		/**  Copy constructor
 		*/
-		MolecularDynamics(const MolecularDynamics & rhs, bool deep = true);
+		MolecularDynamics(const MolecularDynamics& rhs);
 
 		/**  Destructor.
 		*/
@@ -211,11 +182,11 @@ namespace BALL
 
 		/**  Set up the molecular dynamics 
 		*/
-		virtual bool setup(ForceField& myforcefield, SnapShotManager* snapshot_man);
+		virtual bool setup(ForceField& force_field, SnapShotManager* snapshot_man);
 
 		/**  Set up the molecular dynamics    
 		*/
-		virtual bool setup(ForceField& myforcefield, SnapShotManager* snapshot_man, const Options& myoptions);
+		virtual bool setup(ForceField& forcefield, SnapShotManager* snapshot_man, const Options& myoptions);
 
 		/**  Specific setup; derived class can use this method for
  				 additional preparations if necessary 
@@ -248,7 +219,9 @@ namespace BALL
 		*/
 		virtual void setTimeStep(double step);
 
-		/**  Set the reference temperature for the system 
+		/** Set the reference temperature for the system.
+				In isothermal ensembles, this is the simulation temperature
+				set set by the thermostat.
 		*/
 		void setReferenceTemperature(double temperature);
 
@@ -256,7 +229,9 @@ namespace BALL
 		*/
 		void setCurrentTime(double time);
 
-		/**  Set the energy output frequency
+		/** Set the energy output frequency.
+				The current energies during the simulation will
+				be printed every <b>number</b> steps.
 		*/
 		void setEnergyOutputFrequency(Size number);
 
@@ -310,7 +285,7 @@ namespace BALL
 
 		/**  Get the force field the MD simulation is bound to 
 		*/
-		ForceField *getForceField() const;
+		ForceField* getForceField() const;
 
 		/** Start the molecular dynamics simulation.
 				This method calls  \link simulateIterations simulateIterations \endlink  with the maximum 
@@ -420,7 +395,7 @@ namespace BALL
 
 		/*_  The Snapshot Manager that is used for taking snapshots
 		*/
-		SnapShotManager *snapshot_manager_ptr_;
+		SnapShotManager* snapshot_manager_ptr_;
 
 		//_@}
 		

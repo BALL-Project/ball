@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: microCanonicalMD.h,v 1.21 2003/08/26 08:04:26 oliver Exp $
+// $Id: microCanonicalMD.h,v 1.22 2004/04/17 14:14:52 oliver Exp $
 //
 
 #ifndef BALL_MOLMEC_MDSIMULATION_MICROCANONICALMD_H   
@@ -75,7 +75,7 @@ namespace BALL
     */
     //@{
 
-    BALL_CREATE_DEEP(MicroCanonicalMD)
+    BALL_CREATE(MicroCanonicalMD)
 
     /** The default constructor with no arguments.
     */
@@ -97,24 +97,20 @@ namespace BALL
 		MicroCanonicalMD(ForceField &myforcefield, SnapShotManager *ssm, 
 				const Options &myoptions);
 
-    /** The standard copy constructor.
-    */
-    MicroCanonicalMD(const MicroCanonicalMD &rhs, bool deep = true); 
+    /// Copy constructor
+    MicroCanonicalMD(const MicroCanonicalMD& rhs); 
 
-    /** The destructor.
-    */
+    /// The destructor
     virtual ~MicroCanonicalMD(); 
-
     //@}
-    /** @name Assignments.
-    */
+
+    /** @name Assignment  */
     //@{
 
-    /** Assignment operator.
-    */
+    /// Assignment operator
     MicroCanonicalMD &operator=(const MicroCanonicalMD &rhs); 
-
     //@}
+
     /** @name Setup methods.
     */
     //@{
