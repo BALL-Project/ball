@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineSearch.h,v 1.18 2003/08/26 08:04:27 oliver Exp $
+// $Id: lineSearch.h,v 1.19 2004/04/20 11:40:31 amoll Exp $
 //
 
 // Line Search Minimizer: A special class for the line search minimization algorithm
@@ -21,7 +21,6 @@ namespace BALL
 			Without being a true energy minimizer, this method minimizes
 			the energy of a system along a given direction using	
 			cubic interpolation.  \par
-			
     	\ingroup  MolmecEnergyMinimizer
 	*/
 	class LineSearch
@@ -50,8 +49,8 @@ namespace BALL
 		*/
 		virtual ~LineSearch() 
 			throw();
-		//@}
 
+		//@}
 		/**	@name	Assignments 
 		*/
 		//@{
@@ -61,7 +60,6 @@ namespace BALL
 		const LineSearch& operator = (const LineSearch& LineSearch);
 
 		//@}
-
 		/**	@name	Accessors
 		*/
 		//@{
@@ -122,8 +120,8 @@ namespace BALL
 			(double lambda_0, double lambda_1, 
 			 double energy_,  double energy_1, 
 			 double grad_0,   double grad_1) const;		
-		//@}
 
+		//@}
 		/**	@name	Minimization
 		*/
 		//@{
@@ -158,6 +156,7 @@ namespace BALL
 		double initial_energy_;
 		double step_;
 	};
+
 } // namespace BALL
 
 #endif // BALL_MOLMEC_MINIMIZATION/LINESEARCH_H

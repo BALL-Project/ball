@@ -1,13 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: energyMinimizer.C,v 1.25 2003/12/01 07:35:12 oliver Exp $
+// $Id: energyMinimizer.C,v 1.26 2004/04/20 11:40:45 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
 
 #include <BALL/COMMON/limits.h>
-#include <BALL/MOLMEC/COMMON/forceFieldComponent.h>
+#include <BALL/MOLMEC/COMMON/forceField.h>
+#include <BALL/MOLMEC/COMMON/snapShotManager.h>
 
 using namespace std;
 

@@ -1,63 +1,20 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.h,v 1.27 2003/08/26 08:04:26 oliver Exp $ 
+// $Id: conjugateGradient.h,v 1.28 2004/04/20 11:40:31 amoll Exp $ 
 //
 
 #ifndef BALL_MOLMEC_MINIMIZATION_CONJUGATEGRADIENT_H 
 #define BALL_MOLMEC_MINIMIZATION_CONJUGATEGRADIENT_H 
 
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
-#ifdef BALL_HAS_IEEEFP_H
-#	include <ieeefp.h> 
-#endif
-
-#ifndef BALL_KERNEL_SYSTEM_H
-#	include <BALL/KERNEL/system.h>
-#endif
-
-#ifndef BALL_DATATYPE_OPTIONS_H
-#	include <BALL/DATATYPE/options.h>
-#endif
-
-#ifndef BALL_MOLMEC_PARAMETER_FORCEFIELDPARAMETERS_H
-#	include <BALL/MOLMEC/PARAMETER/forceFieldParameters.h>
-#endif
-
-#ifndef BALL_MOLMEC_PARAMETER_ATOMTYPES_H
-#	include <BALL/MOLMEC/PARAMETER/atomTypes.h>
-#endif
-
-#ifndef BALL_MOLMEC_COMMON_PERIODIC_BOUNDARY_H
-#	include <BALL/MOLMEC/COMMON/periodicBoundary.h>
-#endif
-
-#ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
-#	include <BALL/MOLMEC/COMMON/forceField.h>
-#endif
-
 #ifndef	BALL_MOLMEC_MINIMIZATION_ENERGYMINIMIZER_H
 #	include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
 #endif
 
-#ifndef BALL_MOLMEC_COMMON_SNAPSHOT_H
-# include <BALL/MOLMEC/COMMON/snapShot.h>
-#endif
-
-#ifndef BALL_MOLMEC_COMMON_GRADIENT_H
-# include <BALL/MOLMEC/COMMON/gradient.h>
-#endif
-
-
 namespace BALL 
 { 
 	/**	Conjugate gradient (CG) minimizer. 
-			
 			A conjugate gradient minimizer for geometry optimisation.
-    	
 			\ingroup  MolmecEnergyMinimizer
 	*/
   class ConjugateGradientMinimizer 
@@ -110,13 +67,13 @@ namespace BALL
       static double STEP_LENGTH; 
     };
 
+
     //@}
-
-    BALL_CREATE(ConjugateGradientMinimizer)
-
     /**	@name	Constructors and Destructors	
     */
     //@{
+
+    BALL_CREATE(ConjugateGradientMinimizer)
 
     /**	Default constructor.
     */
@@ -157,7 +114,6 @@ namespace BALL
     const ConjugateGradientMinimizer& operator = (const ConjugateGradientMinimizer& rhs);
 
     //@}
-
     /**	@name	Setup methods. They do all necessary preparations. 
     */
     //@{
@@ -167,7 +123,6 @@ namespace BALL
     virtual bool specificSetup();
 
     //@}
-
     /**	@name	Accessors 
     */
     //@{
@@ -226,10 +181,10 @@ namespace BALL
     */
     virtual bool minimize(Size iterations = 0, bool resume = false); 
 
-    //@}
 
     protected:
 
+    //@}
     /**	@name	Protected Attributes 
 		*/
     //@{
@@ -250,7 +205,6 @@ namespace BALL
 		*/
 		UpdateMethod method_;
 
-		
 		// Some variables that are needed for the Shanno criterion
 		bool first_call_;
 		std::vector<Vector3> a_i_, b_i_, p_t_, y_t_, p_i_, y_i_;

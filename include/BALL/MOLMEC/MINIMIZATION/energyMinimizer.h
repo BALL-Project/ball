@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: energyMinimizer.h,v 1.39 2003/08/26 08:04:27 oliver Exp $
+// $Id: energyMinimizer.h,v 1.40 2004/04/20 11:40:31 amoll Exp $
 //
 
 // Energy Minimizer: A class for minimizing the energy of molecular systems
@@ -9,20 +9,8 @@
 #ifndef BALL_MOLMEC_MINIMIZATION_ENERGYMINIMIZER_H
 #define BALL_MOLMEC_MINIMIZATION_ENERGYMINIMIZER_H
 
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
 #ifndef BALL_DATATYPE_OPTIONS_H
 #	include <BALL/DATATYPE/options.h>
-#endif
-
-#ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
-#	include <BALL/MOLMEC/COMMON/forceField.h>
-#endif
-
-#ifndef BALL_MOLMEC_COMMON_SNAPSHOTMANAGER_H
-#	include <BALL/MOLMEC/COMMON/snapShotManager.h>
 #endif
 
 #ifndef BALL_MOLMEC_COMMON_GRADIENT_H
@@ -32,6 +20,7 @@
 namespace BALL 
 {
 	class ForceField;
+	class SnapShotManager;
 
 	/** EnergyMinizer
 	 

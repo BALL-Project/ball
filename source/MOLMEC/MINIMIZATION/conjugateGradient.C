@@ -1,15 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.C,v 1.32 2003/12/01 07:35:12 oliver Exp $
+// $Id: conjugateGradient.C,v 1.33 2004/04/20 11:40:44 amoll Exp $
 //
 // Minimize the potential energy of a system using a nonlinear conjugate 
 // gradient method with  line search
 
 #include <BALL/MOLMEC/MINIMIZATION/conjugateGradient.h>
 #include <BALL/MOLMEC/MINIMIZATION/lineSearch.h>
-#include <BALL/MOLMEC/COMMON/gradient.h>
 #include <BALL/COMMON/limits.h>
+#include <BALL/MOLMEC/COMMON/forceField.h>
 
 //#define BALL_DEBUG
 #undef BALL_DEBUG
