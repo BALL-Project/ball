@@ -1,4 +1,4 @@
-// $Id: residue.h,v 1.3 1999/12/28 18:38:45 oliver Exp $
+// $Id: residue.h,v 1.4 2000/02/06 19:43:44 oliver Exp $
 
 #ifndef BALL_KERNEL_RESIDUE_H
 #define BALL_KERNEL_RESIDUE_H
@@ -277,8 +277,12 @@ namespace BALL
   {
 		ResidueConstIterator res_it;
     for ( res_it = residue_container.beginResidue(); !res_it.isEnd(); ++res_it)
+		{
       if ((*res_it).isAminoAcid() == true)
+			{
         return &(*res_it);
+			}
+		}
 
     return 0;
   }
@@ -287,8 +291,12 @@ namespace BALL
   const Residue* getCTerminal(const ResidueContainerType& residue_container)
   {
     for (ResidueConstIterator res_it = residue_container.rbeginResidue(); !res_it.isREnd(); ++res_it)
+		{
       if ((*res_it).isAminoAcid() == true)
+			{
         return &(*res_it);
+			}
+		}
 
     return 0;
   }

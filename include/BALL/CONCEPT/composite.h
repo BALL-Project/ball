@@ -1,4 +1,4 @@
-// $Id: composite.h,v 1.11 2000/01/15 18:53:03 oliver Exp $
+// $Id: composite.h,v 1.12 2000/02/06 19:40:08 oliver Exp $
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #define BALL_CONCEPT_COMPOSITE_H
@@ -639,12 +639,12 @@ namespace BALL
 				return *this;
 			}
 
-			Composite *getContainer()
+			Composite* getContainer()
 			{
 				return bound_;
 			}
 
-			const Composite *getContainer() const
+			const Composite* getContainer() const
 			{
 				return bound_;
 			}
@@ -654,12 +654,12 @@ namespace BALL
 				return (bool)(bound_ == 0);
 			}
 
-			Composite *&getPosition()
+			Composite*& getPosition()
 			{
 				return ancestor_;
 			}
 
-			Composite *const& getPosition() const
+			Composite* const& getPosition() const
 			{
 				return ancestor_;
 			}
@@ -987,12 +987,12 @@ namespace BALL
 				{
 				}
 
-				Composite *getCurrent()
+				Composite* getCurrent()
 				{
 					return current_;
 				}
 			
-				const Composite *getCurrent() const
+				const Composite* getCurrent() const
 				{
 					return current_;
 				}
@@ -1076,12 +1076,12 @@ namespace BALL
 					return *this;
 				}
 
-				Composite *getContainer()
+				Composite* getContainer()
 				{
 					return bound_;
 				}
 
-				const Composite *getContainer() const
+				const Composite* getContainer() const
 				{
 					return bound_;
 				}
