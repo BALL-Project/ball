@@ -1,4 +1,4 @@
-// $Id: structureMapper.C,v 1.13 2001/06/05 15:53:31 anker Exp $
+// $Id: structureMapper.C,v 1.14 2001/09/03 20:13:40 oliver Exp $
 
 #include <BALL/STRUCTURE/structureMapper.h>
 
@@ -47,14 +47,17 @@ namespace BALL
 	double StructureMapper::calculateRMSD()
 	{
 		// calculate bijection, if it is not already defined
-		if(bijection_.size() == 0)
+		if (bijection_.size() == 0)
 		{
 			calculateDefaultBijection();
 		}
 
 		// check whether we have to transform each coordinate first
-		//(only in case of calculation of the RMSD of a mapping)
-		bool transform =(transformation_ != Matrix4x4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1));
+		// (only in case of calculation of the RMSD of a mapping)
+		bool transform = (transformation_ != Matrix4x4(1.0, 0.0, 0.0, 0.0, 
+																									 0.0, 1.0, 0.0, 0.0, 
+																									 0.0, 0.0, 1.0, 0.0, 
+																									 0.0, 0.0, 0.0, 1.0));
 
 		// for each pair in the bijection array, calculate square deviation for each 
 		// coordinate set
@@ -62,7 +65,7 @@ namespace BALL
 		double square_deviation = 0;
 		Vector3 r;
 
-		if(transform)
+		if (transform)
 		{
 			for(Size i = 0; i < bijection_.size(); i++)
 			{
@@ -91,13 +94,13 @@ namespace BALL
 	bool StructureMapper::calculateTransformation()
 	{
 		// check whether both composites are defined
-		if((A_ == 0) ||(B_ == 0))
+		if ((A_ == 0) ||(B_ == 0))
 		{
 			return false;
 		}
 
 		// check for same number of molecular fragments(or residues)
-		if(countFragments_(*A_) != countFragments_(*B_))
+		if (countFragments_(*A_) != countFragments_(*B_))
 		{
 			return false;
 		}
@@ -128,7 +131,7 @@ namespace BALL
 			{
 				for(AtomIterator atom_iterator2 = fragment_B->beginAtom(); +atom_iterator2; ++atom_iterator2)
 				{
-					if((*atom_iterator1).getName() ==(*atom_iterator2).getName())
+					if ((*atom_iterator1).getName() ==(*atom_iterator2).getName())
 					{
 						pair.first = &(*atom_iterator1);
 						pair.second = &(*atom_iterator2);
@@ -151,7 +154,7 @@ namespace BALL
 		Size size = (Size)fragment_bijection.size();
 
 		// if no bijection could be found, return false
-		if(size == 0)
+		if (size == 0)
 		{
 		  return false;
 		}
@@ -172,7 +175,7 @@ namespace BALL
 			{
 				square_distance =
 					fragment_bijection[k].first->getPosition().getSquareDistance(fragment_bijection[j].first->getPosition());
-				if((j != k) &&(square_distance >(lower_bound * lower_bound))
+				if ((j != k) &&(square_distance >(lower_bound * lower_bound))
 						&&(square_distance <(upper_bound * upper_bound)))
 				{
 					for(i = 0; i < size; i++)
@@ -180,7 +183,7 @@ namespace BALL
 						square_distance =
 							fragment_bijection[k].first->getPosition().getSquareDistance(fragment_bijection[i].first->
 																																						 getPosition());
-						if((i != k) &&(i != j) &&(square_distance >(lower_bound * lower_bound))
+						if ((i != k) &&(i != j) &&(square_distance >(lower_bound * lower_bound))
 								&&(square_distance <(upper_bound * upper_bound)))
 						{
 							transformation_ = matchPoints_(fragment_bijection[k].first->getPosition(),
@@ -190,7 +193,7 @@ namespace BALL
 																							fragment_bijection[j].second->getPosition(),
 																							fragment_bijection[i].second->getPosition());
 							rmsd = calculateRMSD();
-							if(rmsd < min_rmsd)
+							if (rmsd < min_rmsd)
 							{
 								*transformation = transformation_;
 								min_rmsd = rmsd;
@@ -220,7 +223,7 @@ namespace BALL
 
 		for(it = composite.beginComposite(); +it; ++it)
 		{
-			if(RTTI::isKindOf < Fragment >(*it));
+			if (RTTI::isKindOf < Fragment >(*it));
 			number_of_mol_fragments++;
 		}
 
@@ -263,15 +266,12 @@ namespace BALL
 		Matrix4x4 rotation;
 
 		// check (v2 != v1) 
-		if(dist_v2_v1 < EPSILON2)
+		if (dist_v2_v1 < EPSILON2)
 		{
-			// v1 = v2
-
-			if(dist_v3_v1 < EPSILON2)
+			// v1 == v2
+			if (dist_v3_v1 < EPSILON2)
 			{
-				// v1 = v2 = v3
-
-
+				// v1 == v2 == v3
 			}
 			else
 			{
@@ -281,15 +281,12 @@ namespace BALL
 		}
 
 		// check (w2 != w1) 
-		if(dist_w2_w1 < EPSILON2)
+		if (dist_w2_w1 < EPSILON2)
 		{
-			// w1 = w2
-
-			if(dist_w3_w1 < EPSILON2)
+			// w1 == w2
+			if (dist_w3_w1 < EPSILON2)
 			{
-				// w1 = w2 = w3
-
-
+				// w1 == w2 == w3
 			}
 			else
 			{
@@ -298,7 +295,7 @@ namespace BALL
 			}
 		}
 
-		if((tv2.getSquareLength() > EPSILON2) &&(tw2.getSquareLength() > EPSILON2))
+		if ((tv2.getSquareLength() > EPSILON2) && (tw2.getSquareLength() > EPSILON2))
 		{
 			// calculate the rotation axis: orthogonal to tv2 and tw2
 			tw2.normalize();
@@ -306,7 +303,7 @@ namespace BALL
 
 			rotation_axis = tw2 + tv2;
 
-			if(rotation_axis.getSquareLength() < EPSILON)
+			if (rotation_axis.getSquareLength() < EPSILON)
 			{
 				// the two axes seem to be antiparallel -
 				// invert the second vector
@@ -329,7 +326,7 @@ namespace BALL
 
 			transformation = rotation * transformation;
 
-			if((tw3.getSquareLength() > EPSILON2) &&(tv3.getSquareLength() > EPSILON2))
+			if ((tw3.getSquareLength() > EPSILON2) &&(tv3.getSquareLength() > EPSILON2))
 			{
 
 				tw3.normalize();
@@ -338,17 +335,17 @@ namespace BALL
 				Vector3 axis_w = tv2 % tw3;
 				Vector3 axis_v = tv2 % tv3;
 
-				if((axis_v.getSquareLength() > EPSILON2) &&(axis_w.getSquareLength() > EPSILON2))
+				if ((axis_v.getSquareLength() > EPSILON2) &&(axis_w.getSquareLength() > EPSILON2))
 				{
 					axis_v.normalize();
 					axis_w.normalize();
 
 					rotation_axis = axis_w % axis_v;
 
-					if(rotation_axis.getSquareLength() < EPSILON2)
+					if (rotation_axis.getSquareLength() < EPSILON2)
 					{
 						double scalar_prod = axis_w * axis_v;
-						if(scalar_prod < 0.0)
+						if (scalar_prod < 0.0)
 						{
 							rotation_quat.set(tv2.x, tv2.y, tv2.z, Constants::PI);
 							rotation_quat.getRotationMatrix(rotation);
@@ -408,11 +405,11 @@ namespace BALL
 		Matrix4x4 rotation;
 
 		// check (v2 != v1) 
-		if(dist_v2_v1 < EPSILON2)
+		if (dist_v2_v1 < EPSILON2)
 		{
 			// v1 = v2
 
-			if(dist_v3_v1 < EPSILON2)
+			if (dist_v3_v1 < EPSILON2)
 			{
 				// v1 = v2 = v3
 
@@ -427,11 +424,11 @@ namespace BALL
 		}
 
 		// check (w2 != w1) 
-		if(dist_w2_w1 < EPSILON2)
+		if (dist_w2_w1 < EPSILON2)
 		{
 			// w1 = w2
 
-			if(dist_w3_w1 < EPSILON2)
+			if (dist_w3_w1 < EPSILON2)
 			{
 				// w1 = w2 = w3
 
@@ -444,7 +441,7 @@ namespace BALL
 			}
 		}
 
-		if((tv2.getSquareLength() > EPSILON2) &&(tw2.getSquareLength() > EPSILON2))
+		if ((tv2.getSquareLength() > EPSILON2) &&(tw2.getSquareLength() > EPSILON2))
 		{
 			// calculate the rotation axis: orthogonal to tv2 and tw2
 			tw2.normalize();
@@ -452,7 +449,7 @@ namespace BALL
 
 			rotation_axis = tw2 + tv2;
 
-			if(rotation_axis.getSquareLength() < EPSILON)
+			if (rotation_axis.getSquareLength() < EPSILON)
 			{
 				// the two axes seem to be antiparallel -
 				// invert the second vector
@@ -475,7 +472,7 @@ namespace BALL
 
 			transformation = rotation * transformation;
 
-			if((tw3.getSquareLength() > EPSILON2) &&(tv3.getSquareLength() > EPSILON2))
+			if ((tw3.getSquareLength() > EPSILON2) &&(tv3.getSquareLength() > EPSILON2))
 			{
 
 				tw3.normalize();
@@ -484,16 +481,16 @@ namespace BALL
 				Vector3 axis_w = tv2 % tw3;
 				Vector3 axis_v = tv2 % tv3;
 
-				if((axis_v.getSquareLength() > EPSILON2) &&(axis_w.getSquareLength() > EPSILON2))
+				if ((axis_v.getSquareLength() > EPSILON2) &&(axis_w.getSquareLength() > EPSILON2))
 				{
 					axis_v.normalize();
 					axis_w.normalize();
 					rotation_axis = axis_w % axis_v;
 
-					if(rotation_axis.getSquareLength() < EPSILON2)
+					if (rotation_axis.getSquareLength() < EPSILON2)
 					{
 						double scalar_prod = axis_w * axis_v;
-						if(scalar_prod < 0.0)
+						if (scalar_prod < 0.0)
 						{
 							rotation_quat.set(tv2.x, tv2.y, tv2.z, Constants::PI);
 							rotation_quat.getRotationMatrix(rotation);
@@ -540,7 +537,7 @@ namespace BALL
 
 					// now solve a system of linear equations to perform
 					// the basis transformations for C/R
-					if(!(BALL_REAL_EQUAL(u1.x, 0.0, EPSILON) 
+					if (!(BALL_REAL_EQUAL(u1.x, 0.0, EPSILON) 
 								|| BALL_REAL_EQUAL((u2.y -(u2.x * u1.y) / u1.x), 0.0, EPSILON)))
 					{
 						C.y =(v3.y - v1.y -((v3.x - v1.x) * u1.y) / u1.x) /(u2.y -(u2.x * u1.y) / u1.x);
@@ -553,7 +550,7 @@ namespace BALL
 					}
 					else
 					{
-						if(!(BALL_REAL_EQUAL(u2.x, 0.0, EPSILON) 
+						if (!(BALL_REAL_EQUAL(u2.x, 0.0, EPSILON) 
 									|| BALL_REAL_EQUAL((u1.y -(u1.x * u2.y) / u2.x), 0.0, EPSILON)))
 						{
 							C.x =(v3.y - v1.y -((v3.x - v1.x) * u2.y) / u2.x) /(u1.y -(u1.x * u2.y) / u2.x);
@@ -615,7 +612,7 @@ namespace BALL
 											 + v.y * cos_phi * C.x - v.y * sin_phi * C.y - R.y * cos_phi * C.x + R.y * sin_phi * C.y);
 
 						// calculate the new scaling constant(according to Polak-Ribiere)
-						if(iterations == 0)
+						if (iterations == 0)
 						{
 							gam = G * G;
 						}
@@ -640,7 +637,7 @@ namespace BALL
 						iterations++;
 					}
 
-					if(converged)
+					if (converged)
 					{
 						// transform P,Q,R accodring to the new transformation
 						// in two dimensional space
@@ -694,19 +691,19 @@ namespace BALL
 		// searching the backbone atoms of residue r1
 		for(atom_it = r1->beginAtom(); atom_it != r1->endAtom(); ++atom_it)
 		{
-			if(got_p1_r1 == false &&(*atom_it).getName() == "CA")
+			if (got_p1_r1 == false &&(*atom_it).getName() == "CA")
 			{
 				p1_r1 =(*atom_it).getPosition();
 				got_p1_r1 = true;
 				counter++;
 			}
-			if(got_p2_r1 == false &&(*atom_it).getName() == "N")
+			if (got_p2_r1 == false &&(*atom_it).getName() == "N")
 			{
 				p2_r1 =(*atom_it).getPosition();
 				got_p2_r1 = true;
 				counter++;
 			}
-			if(got_p3_r1 == false &&(*atom_it).getName() == "C")
+			if (got_p3_r1 == false &&(*atom_it).getName() == "C")
 			{
 				p3_r1 =(*atom_it).getPosition();
 				got_p3_r1 = true;
@@ -717,19 +714,19 @@ namespace BALL
 		// searching the backbone atoms of residue r2
 		for(atom_it = r2->beginAtom(); atom_it != r2->endAtom(); ++atom_it)
 		{
-			if(got_p1_r2 == false &&(*atom_it).getName() == "CA")
+			if (got_p1_r2 == false &&(*atom_it).getName() == "CA")
 			{
 				p1_r2 =(*atom_it).getPosition();
 				got_p1_r2 = true;
 				counter++;
 			}
-			if(got_p2_r2 == false &&(*atom_it).getName() == "N")
+			if (got_p2_r2 == false &&(*atom_it).getName() == "N")
 			{
 				p2_r2 =(*atom_it).getPosition();
 				got_p2_r2 = true;
 				counter++;
 			}
-			if(got_p3_r2 == false &&(*atom_it).getName() == "C")
+			if (got_p3_r2 == false &&(*atom_it).getName() == "C")
 			{
 				p3_r2 =(*atom_it).getPosition();
 				got_p3_r2 = true;
@@ -738,7 +735,7 @@ namespace BALL
 		} 
 
 		// Backbone atoms are missing
-		if(counter != 6)
+		if (counter != 6)
 		{
 			// Error: Send error message	
 			Log.error() << "matchBackboneAtoms: missing backbone atoms" << endl;
@@ -766,7 +763,7 @@ namespace BALL
 		for( ; list_it_l1 != l1.end() && list_it_l2 != l2.end(); ++list_it_l1,++list_it_l2)
 		{
 			T.setTransformation(matchBackboneAtoms((*list_it_l1),(*list_it_l2)));
-			if(!(T.getTransformation().isEqual(M)))
+			if (!(T.getTransformation().isEqual(M)))
 			{
 				(*list_it_l1)->apply(T);
 				counter++;
@@ -818,7 +815,7 @@ namespace BALL
 
 		for(composite_it = composite.beginSubcomposite(); composite_it != composite.endSubcomposite(); ++composite_it)
 		{
-			if(RTTI::isKindOf < Fragment >(*composite_it))
+			if (RTTI::isKindOf < Fragment >(*composite_it))
 			{
 				composite_fragments.push_back(RTTI::castTo < Fragment >(*composite_it));
 			}
@@ -865,13 +862,13 @@ namespace BALL
 		{
 			for(j = 0, counter = 0; j < no_of_comp_frag; ++j)
 			{
-				if(composite_fragments[j]->getName() == pattern[i]->getName())
+				if (composite_fragments[j]->getName() == pattern[i]->getName())
 				{
 					counter++;
 					indices_CF[i].push_back(j);
 				}
 			}
-			if(counter == 0)
+			if (counter == 0)
 			{
 				ready = true;
 			}
@@ -898,24 +895,24 @@ namespace BALL
 			{
 				distance = pattern_distances[i * no_of_frag + k] -
 				comp_frag_dist[indices_of_pot_pattern[i] * no_of_comp_frag + indices_of_pot_pattern[k]];
-				if(distance < -max_center_tolerance || distance > max_center_tolerance)
+				if (distance < -max_center_tolerance || distance > max_center_tolerance)
 				{
 					distances_fit = false;
 				}
 			}
 
-			if(distances_fit == true)
+			if (distances_fit == true)
 			{
 				index_stack.push(j);
 				i++;
-				if(i == no_of_frag)
+				if (i == no_of_frag)
 				{
 					for(k = 0; k < no_of_frag; k++)
 					{
 						potential_pattern.push_back(composite_fragments[indices_of_pot_pattern[k]]);
 
 						mapFragments(potential_pattern, pattern, &T, upper_bound, lower_bound);
-						if(rmsd_ <= max_rmsd)
+						if (rmsd_ <= max_rmsd)
 						{
 							result->push_back(potential_pattern);
 							potential_pattern.clear();
@@ -929,7 +926,7 @@ namespace BALL
 				else
 				{
 					j++;
-					if(j == indices_CF[i].size())
+					if (j == indices_CF[i].size())
 					{
 						i--;
 						// BAUSTELLE: change top + pop to pop
@@ -938,7 +935,7 @@ namespace BALL
 					}
 				}
 
-				if((i == 0) &&(j == indices_CF[0].size()))
+				if ((i == 0) &&(j == indices_CF[0].size()))
 				{
 					ready = true;
 				}
@@ -974,7 +971,7 @@ namespace BALL
 
 		for(atom_it = P1.beginAtom(); +atom_it; ++atom_it)
 		{
-			if(((*atom_it).getElement() == PTE[Element::C]) &&((*atom_it).getName().trim() == "CA"))
+			if (((*atom_it).getElement() == PTE[Element::C]) &&((*atom_it).getName().trim() == "CA"))
 			{
 				grid_P1.insert((*atom_it).getPosition(), no_ca_P1);
 				no_ca_P1++;
@@ -1001,7 +998,7 @@ namespace BALL
 
 		for(atom_it = P2.beginAtom(); +atom_it; ++atom_it)
 		{
-			if(((*atom_it).getElement() == PTE[Element::C]) &&((*atom_it).getName().trim() == "CA"))
+			if (((*atom_it).getElement() == PTE[Element::C]) &&((*atom_it).getName().trim() == "CA"))
 			{
 				grid_P2.insert((*atom_it).getPosition(), no_ca_P2);
 				fine_grid_P2.insert((*atom_it).getPosition(), no_ca_P2);
@@ -1037,22 +1034,22 @@ namespace BALL
 				{
 					for(d_it2 =(*b_it2).beginData(); +d_it2; ++d_it2)
 					{
-						if((*d_it2) !=(*d_it1))
+						if ((*d_it2) !=(*d_it1))
 						{
 							distance1 = ca_atoms_P2[(*d_it1)].getSquareDistance(ca_atoms_P2[(*d_it2)]);
-							if(distance1 < square_upper && distance1 > square_lower)
+							if (distance1 < square_upper && distance1 > square_lower)
 							{
 								for(b_it3 =(*b_it1).beginBox(); +b_it3; ++b_it3)
 								{
 									for(d_it3 =(*b_it3).beginData(); +d_it3; ++d_it3)
 									{
-										if((*d_it3) !=(*d_it1) &&(*d_it3) !=(*d_it2))
+										if ((*d_it3) !=(*d_it1) &&(*d_it3) !=(*d_it2))
 										{
 											distance2 = ca_atoms_P2[(*d_it1)].getSquareDistance(ca_atoms_P2[(*d_it3)]);
-											if(distance2 < square_upper && distance2 > square_lower)
+											if (distance2 < square_upper && distance2 > square_lower)
 											{
 												distance3 = ca_atoms_P2[(*d_it2)].getSquareDistance(ca_atoms_P2[(*d_it3)]);
-												if(distance3 < square_upper && distance3 > square_lower)
+												if (distance3 < square_upper && distance3 > square_lower)
 												{
 													distance1 = sqrt(distance1);
 													distance2 = sqrt(distance2);
@@ -1099,24 +1096,24 @@ namespace BALL
 				{
 					for(d_it2 =(*b_it2).beginData(); +d_it2; ++d_it2)
 					{
-						if((*d_it2) !=(*d_it1))
+						if ((*d_it2) !=(*d_it1))
 						{
 							distance1 = ca_atoms_P1[(*d_it1)].getSquareDistance(ca_atoms_P1[(*d_it2)]);
-							if(distance1 < square_upper && distance1 > square_lower)
+							if (distance1 < square_upper && distance1 > square_lower)
 							{
 								distance1 = sqrt(distance1);
 								for(b_it3 =(*b_it1).beginBox(); +b_it3; ++b_it3)
 								{
 									for(d_it3 =(*b_it3).beginData(); +d_it3; ++d_it3)
 									{
-										if((*d_it3) !=(*d_it1) &&(*d_it3) !=(*d_it2))
+										if ((*d_it3) !=(*d_it1) &&(*d_it3) !=(*d_it2))
 										{
 											distance2 = ca_atoms_P1[*d_it1].getSquareDistance(ca_atoms_P1[*d_it3]);
-											if(distance2 < square_upper && distance2 > square_lower)
+											if (distance2 < square_upper && distance2 > square_lower)
 											{
 												distance2 = sqrt(distance2);
 												distance3 = ca_atoms_P1[*d_it2].getSquareDistance(ca_atoms_P1[*d_it3]);
-												if(distance3 < square_upper && distance3 > square_lower)
+												if (distance3 < square_upper && distance3 > square_lower)
 												{
 													distance3 = sqrt(distance3);
 													distance_vector.set(distance1, distance2, distance3);
@@ -1127,7 +1124,7 @@ namespace BALL
 													{
 														for(d_it4 =(*b_it4).beginData(); +d_it4; ++d_it4)
 														{
-															if(index_ca_P1[(*d_it1)] == index_ca_P2[(*d_it4).x] &&
+															if (index_ca_P1[(*d_it1)] == index_ca_P2[(*d_it4).x] &&
 																	index_ca_P1[(*d_it2)] == index_ca_P2[(*d_it4).y] &&
 																	index_ca_P1[(*d_it3)] == index_ca_P2[(*d_it4).z])
 															{
@@ -1144,7 +1141,7 @@ namespace BALL
 																	v = T * ca_atoms_P1[i];
 																	ibox = fine_grid_P2.getBox(v);
 
-																	if(ibox != 0)
+																	if (ibox != 0)
 																	{
 																		matched = false;
 
@@ -1153,7 +1150,7 @@ namespace BALL
 																			for(id_it =(*ibox_it).beginData(); +id_it && !matched; ++id_it)
 																			{
 																				squared_atom_dist = v.getSquareDistance(ca_atoms_P2[(*id_it)]);
-																				if(squared_atom_dist <= square_tolerance)
+																				if (squared_atom_dist <= square_tolerance)
 																				{
 																					matched_ca++;
 																					matched = true;
@@ -1164,12 +1161,12 @@ namespace BALL
 																	}
 																}
 
-																if(matched_ca >= no_matched_ca)
+																if (matched_ca >= no_matched_ca)
 																{
 																	current_rmsd = sqrt(current_rmsd / matched_ca);
-																	if(matched_ca == no_matched_ca)
+																	if (matched_ca == no_matched_ca)
 																	{
-																		if(current_rmsd < rmsd)
+																		if (current_rmsd < rmsd)
 																		{
 																			T_best = T;
 																			rmsd = current_rmsd;
