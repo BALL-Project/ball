@@ -1,4 +1,4 @@
-// $Id: surface.h,v 1.11 2001/12/28 02:33:38 oliver Exp $
+// $Id: surface.h,v 1.12 2002/01/05 02:53:40 oliver Exp $
 
 #ifndef BALL_MATHS_SURFACE_H
 #define BALL_MATHS_SURFACE_H
@@ -45,6 +45,12 @@ namespace BALL
 
 			bool operator == (const Triangle& triangle) const throw();
 		};
+			
+		/// A vertex
+		typedef TVector3<T> Vertex;
+
+		/// A normal
+		typedef TVector3<T> Normal;
 		//@}
 
 		/**	@name	Constructors and Destructors
@@ -134,11 +140,11 @@ namespace BALL
 			throw();
 
 		/// Return the position of a vertex
-		Vector3& getVertex(Position index)
+		Vertex& getVertex(Position index)
 			throw();
 
 		/// Return the position of a vertex
-		const Vector3& getVertex(Position index) const
+		const Vertex& getVertex(Position index) const
 			throw();
 
 		/// Clear all vertices
@@ -148,15 +154,15 @@ namespace BALL
 		void resizeVertices(Size size);
 
 		/// Add a vertex
-		void pushBackVertex(const Vector3& position)
+		void pushBackVertex(const Vertex& vertex)
 			throw();
 
 		/// Return the position of a normal
-		Vector3& getNormal(Position index)
+		Normal& getNormal(Position index)
 			throw();
 
 		/// Return the position of a normal
-		const Vector3& getNormal(Position index) const
+		const Normal& getNormal(Position index) const
 			throw();
 
 		/// Clear all normals
@@ -166,7 +172,7 @@ namespace BALL
 		void resizeNormals(Size size);
 
 		/// Add a normal
-		void pushBackNormal(const Vector3& position)
+		void pushBackNormal(const Normal& position)
 			throw();
 
 		//@}
@@ -189,13 +195,13 @@ namespace BALL
 		//@{
 
 		/// the vertices
-		vector<TVector3<T> >		vertex;
+		vector<Vertex>		vertex;
 
 		/// the normals for each vertex
-		vector<TVector3<T> >		normal;
+		vector<Normal>		normal;
 
 		/// the triangles
-		vector<Triangle>				triangle;
+		vector<Triangle>	triangle;
 		//@}
 	};
 
@@ -285,8 +291,8 @@ namespace BALL
 		{
 			// read the vertex coordinates and the normal vector 
 			line.split(s, 6);
-			vertex.push_back(Vector3(s[0].toFloat(), s[1].toFloat(), s[2].toFloat()));
-			normal.push_back(Vector3(s[3].toFloat(), s[4].toFloat(), s[5].toFloat()));
+			vertex.push_back(Vertex(s[0].toFloat(), s[1].toFloat(), s[2].toFloat()));
+			normal.push_back(Normal(s[3].toFloat(), s[4].toFloat(), s[5].toFloat()));
 			
 			// read the next line
 			line.getline(file);
@@ -341,10 +347,12 @@ namespace BALL
 		double area = 0;
 		for (Size i = 0; i < triangle.size(); i++)
 		{
-			area += (vertex[triangle[i].v2] - vertex[triangle[i].v1]) * (vertex[triangle[i].v3] - vertex[triangle[i].v1]);
+			// add the length of the vector products of two sides of each triangle
+			// this is equivalent to the surface area of the parallelogram, and thus to twice the triangle area
+			area += ((vertex[triangle[i].v2] - vertex[triangle[i].v1]) % (vertex[triangle[i].v3] - vertex[triangle[i].v1])).getLength();
 		}
 		
-		// A = 1/2 \sum <r1, r2>
+		// A = 1/2 \sum |r1 x r2|
 		return area * 0.5;
 	}
 
@@ -424,7 +432,7 @@ namespace BALL
 	
 	template <typename T>
 	BALL_INLINE
-	Vector3& TSurface<T>::getVertex(Position index)
+	TSurface<T>::Vertex& TSurface<T>::getVertex(Position index)
 		throw()
 	{
 		return vertex[index];
@@ -432,7 +440,7 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE
-	const Vector3& TSurface<T>::getVertex(Position index) const
+	const TSurface<T>::Vertex& TSurface<T>::getVertex(Position index) const
 		throw()
 	{
 		return vertex[index];
@@ -455,7 +463,7 @@ namespace BALL
 	
 	template <typename T>
 	BALL_INLINE
-	void TSurface<T>::pushBackVertex(const Vector3& position)
+	void TSurface<T>::pushBackVertex(const TSurface<T>::Vertex& position)
 		throw()
 	{
 		vertex.push_back(position);
@@ -463,7 +471,7 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE
-	Vector3& TSurface<T>::getNormal(Position index)
+	TSurface<T>::Normal& TSurface<T>::getNormal(Position index)
 		throw()
 	{
 		return normal[index];
@@ -471,7 +479,7 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE
-	const Vector3& TSurface<T>::getNormal(Position index) const
+	const TSurface<T>::Normal& TSurface<T>::getNormal(Position index) const
 		throw()
 	{
 		return normal[index];
@@ -493,7 +501,7 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE
-	void TSurface<T>::pushBackNormal(const Vector3& n)
+	void TSurface<T>::pushBackNormal(const TSurface<T>::Normal& n)
 		throw()
 	{
 		normal.push_back(n);
