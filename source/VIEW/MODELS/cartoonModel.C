@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.42 2004/09/13 16:53:29 amoll Exp $
+// $Id: cartoonModel.C,v 1.43 2004/09/14 13:03:20 amoll Exp $
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
 
@@ -88,13 +88,42 @@ namespace BALL
 		void AddCartoonModel::drawDNA_(SecondaryStructure& ss)
 			throw()
 		{
-			AtomIterator it;
-			BALL_FOREACH_ATOM(ss, it)
+			ResidueIterator rit = ss.beginResidue();
+			AtomIterator ait;
+			HashMap<Residue*, Atom*> base_atoms;
+
+			// add O5* atom for 1. Residue
+			BALL_FOREACH_ATOM(*rit, ait)
 			{
-				if (it->getName() == "P")
+				if (ait->getName() == "O5*")
 				{
-					SplinePoint spline_point((*it).getPosition(), 0);
-					spline_vector_.push_back(spline_point);
+					spline_vector_.push_back(SplinePoint((*ait).getPosition(), 0));
+					base_atoms[&*rit] = &*ait;
+					break;
+				}
+			}
+
+			// collect the P atoms for the backbone spline
+			for(; +rit; ++rit)
+			{
+				BALL_FOREACH_ATOM(*rit, ait)
+				{
+					if (ait->getName() == "P")
+					{
+						spline_vector_.push_back(SplinePoint((*ait).getPosition(), 0));
+						base_atoms[&*rit] = &*ait;
+						break;
+					}
+				}
+			}
+			
+			// add O3* atom for last Residue
+			BALL_FOREACH_ATOM(*ss.getCTerminal(), ait)
+			{
+				if (ait->getName() == "O3*")
+				{
+					spline_vector_.push_back(SplinePoint((*ait).getPosition(), 0));
+					break;
 				}
 			}
 
@@ -106,10 +135,9 @@ namespace BALL
 				return;
 			}
 
-			Position nr_of_residues = ss.countResidues();
-			for (Position pos = 0; pos < nr_of_residues; pos++)
+			for (rit = ss.beginResidue(); +rit; ++rit)
 			{
-				Residue* r = ss.getResidue(pos);
+				Residue* r = &*rit;
 
 				// prevent double drawing for complementary bases
 				if (complementary_bases_.has(r) &&
@@ -118,36 +146,82 @@ namespace BALL
 					continue;
 				}
 
-				Atom* base_atom = 0;
-				BALL_FOREACH_ATOM(*r, it)
+				Atom* base_atom = base_atoms[r];
+				if (base_atom == 0) 
 				{
-					if (it->getName() == "P")
+Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+					continue;
+				}
+
+				// ================ draw unpaired bases ===============
+				if (!complementary_bases_.has(r))
+				{
+					String atom_name;
+					if (r->getName() == "A" ||
+							r->getName() == "G")
 					{
-						base_atom = &*it;
+						atom_name = "C6";
+					}
+					else if (r->getName() == "C") atom_name = "C4";
+					else if (r->getName() == "T") atom_name = "N3";
+						
+					Atom* end_atom = 0;
+					BALL_FOREACH_ATOM(*r, ait)
+					{
+						if (ait->getName() == atom_name)
+						{
+							end_atom = &*ait;
+							break;
+						}
+					}
+
+					if (end_atom == 0) continue;
+
+					Tube* tube = new Tube;
+					tube->setVertex1(base_atom->getPosition());
+					tube->setVertex2(end_atom->getPosition());
+					tube->setComposite(r);
+					tube->setRadius(tube_radius_);
+					geometric_objects_.push_back(tube);
+
+					Sphere* sphere1 = new Sphere;
+					sphere1->setPosition(end_atom->getPosition());
+					sphere1->setRadius(tube_radius_);
+					sphere1->setComposite(r);
+					geometric_objects_.push_back(sphere1);
+
+					continue;
+				}
+
+				// ================ draw paired bases ===============
+				Residue* partner = complementary_bases_[r];
+				Atom* partner_base = 0;
+				BALL_FOREACH_ATOM(*partner, ait)
+				{
+					if (ait->getName() == "P") 
+					{	
+						partner_base = &*ait;
 						break;
 					}
 				}
 
-				// did we find the atom?
-				if (base_atom == 0)
+				if (partner_base == 0)
 				{
-					continue;
-				}
+					BALL_FOREACH_ATOM(*partner, ait)
+					{
+						if (ait->getName() == "O5*") 
+						{
+							partner_base = &*ait;
+							break;
+						}
+					}
 
-				// ?????? what to do here?
-				if (!complementary_bases_.has(r))
-				{
-					continue;
+					if (partner_base == 0) 
+					{
+Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+						continue;
+					}
 				}
-
-				Residue* partner = complementary_bases_[r];
-				Atom* partner_base = 0;
-				BALL_FOREACH_ATOM(*partner, it)
-				{
-					if (it->getName() == "P") partner_base = &*it;
-				}
-
-				if (partner_base == 0) continue;
 
 				Vector3 v = base_atom->getPosition() - partner_base->getPosition();
 				v /= 2.5;
@@ -180,9 +254,9 @@ namespace BALL
 			}
 
 			have_start_point_ = false;
-
 		}
 		
+
 		void AddCartoonModel::drawStrand_(SecondaryStructure& ss)
 			throw()
 		{
