@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.C,v 1.42 2004/12/14 16:12:47 amoll Exp $
+// $Id: colorMeshDialog.C,v 1.43 2004/12/14 16:17:19 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -51,7 +51,7 @@ void ColorMeshDialog::applyPressed()
 {
 	if (surface_tab->currentPage() == by_grid)
 	{
-		colorByGrid_();
+		if (!colorByGrid_()) return;
 	}
 	else if (surface_tab->currentPage() == by_color)
 	{
@@ -296,7 +296,7 @@ void ColorMeshDialog::colorByCustomColor_()
 }
 
 
-void ColorMeshDialog::colorByGrid_()
+bool ColorMeshDialog::colorByGrid_()
 {
 	if (grid_ == 0 ||
 			mesh_ == 0 ||
@@ -304,8 +304,8 @@ void ColorMeshDialog::colorByGrid_()
 			rep_ == 0 ||
 			getMainControl()->updateOfRepresentationRunning())
 	{
-		setStatusbarText("Could not color surface, maybe because an other thread is still running?");
-		return;
+		setStatusbarText("Could not color surface, maybe because an other thread is still running?", true);
+		return false;
 	}
 
 	try
@@ -316,8 +316,8 @@ void ColorMeshDialog::colorByGrid_()
 	}
 	catch(...)
 	{
-		setStatusbarText("Invalid value for min, mid or max value!");
-		return;
+		setStatusbarText("Invalid value for min, mid or max value!", true);
+		return false;
 	}
 
 	setColor_(min_min_color, min_min_label, min_min_alpha, alpha_button_grid);
@@ -367,10 +367,8 @@ void ColorMeshDialog::colorByGrid_()
 	}	
 	catch (Exception::OutOfGrid)
 	{
-		Log.error() << "Error! There is a point contained in the surface that is not "
-								<< "inside the grid! Aborting the coloring..." << std::endl;
-		setStatusbarText("Aborted calculation because a point of the surface is out of the grid!");
-		return;
+		setStatusbarText("Error! There is a point contained in the surface that is not inside the grid!", true);
+		return false;
 	}
 
 	if (transparency_group_grid->selected() == none_button_grid)
@@ -381,6 +379,8 @@ void ColorMeshDialog::colorByGrid_()
 	{
 		rep_->setTransparency(255 - (int) min_min_color.getAlpha());
 	}
+
+	return true;
 }
 
 

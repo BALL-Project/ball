@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.h,v 1.13 2004/12/10 16:14:31 amoll Exp $
+// $Id: colorMeshDialog.h,v 1.14 2004/12/14 16:17:22 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_COLORMESHDIALOG_H
@@ -100,7 +100,7 @@ namespace BALL
 			protected:
 			QColor setColor(QLabel* label);
 			void colorByCustomColor_();
-			void colorByGrid_();
+			bool colorByGrid_();
 			bool insertGrid_(RegularData3D& grid, const String& name);
 			void removeGrid_(RegularData3D& grid);
 			void setColor_(ColorRGBA& color, const QLabel* label, const QSpinBox* box, const QRadioButton* rbutton);

@@ -219,7 +219,6 @@ void DownloadPDBFile::slotDownload()
 #ifndef BALL_QT_HAS_THREADS
 		PDBFile pdb_file(url);
 #else   // =============================
-		downloadStarted_();
 		String temp_filename = VIEW::createTemporaryFilename();
 		thread_->setFilename(temp_filename);
 		bool ok = threadedDownload_(url);
