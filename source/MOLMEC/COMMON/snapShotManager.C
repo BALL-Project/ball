@@ -1,10 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: snapShotManager.C,v 1.10 2002/02/27 12:21:35 sturm Exp $
+// $Id: snapShotManager.C,v 1.11 2003/07/03 15:52:10 amoll Exp $
 
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/MOLMEC/COMMON/snapShotManager.h>
+#include <BALL/MOLMEC/COMMON/forceField.h>
+#include <BALL/FORMAT/trajectoryFile.h>
 
 #include <iostream>
 
