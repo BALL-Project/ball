@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: CompositeIteratorTraits_test.C,v 1.1 2003/06/19 10:45:51 oliver Exp $
+// $Id: CompositeIteratorTraits_test.C,v 1.2 2004/02/24 18:37:39 anker Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -11,6 +11,7 @@
 #include <BALL/CONCEPT/composite.h>
 #include <BALL/KERNEL/iterator.h>
 #include <BALL/CONCEPT/predicate.h>
+#include <BALL/KERNEL/standardPredicates.h>
 
 ///////////////////////////
 
@@ -40,7 +41,7 @@ class True
 	virtual bool operator () (const Composite&) const throw() { return true; }
 };
 
-START_TEST(CompositeIteratorTraits, "$Id: CompositeIteratorTraits_test.C,v 1.1 2003/06/19 10:45:51 oliver Exp $")
+START_TEST(CompositeIteratorTraits, "$Id: CompositeIteratorTraits_test.C,v 1.2 2004/02/24 18:37:39 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -71,8 +72,6 @@ a.appendChild(c);
 a.appendChild(d);
 c.appendChild(e);
 c.appendChild(f);
-
-
 
 CHECK(CompositeIteratorTraits(const Composite& composite) throw())
 	CompositeIteratorTraits t(a);
@@ -105,27 +104,44 @@ CHECK(CompositeIteratorTraits(const Composite& composite) throw())
 RESULT
 
 CHECK(Composite& getData() throw())
-  // ???
+	CompositeIteratorTraits cit(a);
+	Composite* composite = &cit.getData();
+	TEST_EQUAL((composite == &a), true)
 RESULT
 
-CHECK(Composite::SubcompositeIterator& getPosition() throw())
-  // ???
+CHECK(Composite::CompositeIterator& getPosition() throw())
+	CompositeIteratorTraits cit(a);
+	Composite* composite = &cit.getData();
+	TEST_EQUAL((composite == &a), true)
 RESULT
 
 CHECK(CompositeIteratorTraits& operator = (const CompositeIteratorTraits& traits) throw())
-  // ???
+	CompositeIteratorTraits cit1(a);
+	CompositeIteratorTraits cit2;
+	cit2 = cit1;
+	TEST_EQUAL((cit1 == cit2), true)
 RESULT
 
 CHECK(CompositeIteratorTraits(const CompositeIteratorTraits& traits) throw())
-  // ???
+	CompositeIteratorTraits cit1(a);
+	CompositeIteratorTraits cit2(cit1);
+	TEST_EQUAL((cit1 == cit2), true)
 RESULT
 
 CHECK(void toBegin() throw(Exception::Precondition))
-  // ???
+	CompositeIteratorTraits cit(a);
+	MyPred p(c);
+	cit.setPredicate(p);
+	cit.forward();
+	TEST_EQUAL((&cit.getData() == &c), true)
+	cit.toBegin();
+	TEST_EQUAL((&cit.getData() == &c), true)
 RESULT
 
 CHECK(void toEnd() throw(Exception::Precondition))
-  // ???
+	CompositeIteratorTraits cit(a);
+	cit.toEnd();
+	// TEST_EQUAL((BLUBB == &f), true)
 RESULT
 
 CHECK(bool isBegin() const throw())
@@ -177,67 +193,145 @@ CHECK(bool isEnd() const throw())
 RESULT
 
 CHECK(bool isRBegin() const throw())
-  // ???
+	CompositeIteratorTraits cit(a);
+	MyPred p(c);
+	cit.setPredicate(p);
+	TEST_EQUAL(cit.isRBegin(), false)
+	cit.toRBegin();
+	TEST_EQUAL(cit.isRBegin(), true)
 RESULT
 
 CHECK(bool isREnd() const throw())
-  // ???
+	CompositeIteratorTraits cit(a);
+	True tp;
+	cit.setPredicate(tp);
+	cit.forward();
+	TEST_EQUAL(cit.isREnd(), false)
+	cit.toREnd();
+	TEST_EQUAL(cit.isREnd(), true)
 RESULT
 
 CHECK(bool isSingular() const throw())
-  // ???
+	CompositeIteratorTraits cit1;
+	TEST_EQUAL(cit1.isSingular(), true)
+	CompositeIteratorTraits cit2(a);
+	TEST_EQUAL(cit2.isSingular(), false)
 RESULT
 
 CHECK(bool isValid() const throw())
-  // ???
+	CompositeIteratorTraits cit1;
+	TEST_EQUAL(cit1.isValid(), false)
+	CompositeIteratorTraits cit2(a);
+	TEST_EQUAL(cit2.isValid(), true)
 RESULT
 
 CHECK(bool operator != (const CompositeIteratorTraits& traits) const throw())
-  // ???
+	CompositeIteratorTraits cit1(a);
+	True tp;
+	cit1.setPredicate(tp);
+	CompositeIteratorTraits cit2;
+	cit2.setPredicate(tp);
+	TEST_EQUAL((cit1 != cit2), true)
+	CompositeIteratorTraits cit3(a);
+	cit3.setPredicate(tp);
+	TEST_EQUAL((cit1 != cit3), false)
 RESULT
 
 CHECK(bool operator == (const CompositeIteratorTraits& traits) const throw())
-  // ???
+	CompositeIteratorTraits cit1(a);
+	True tp;
+	cit1.setPredicate(tp);
+	CompositeIteratorTraits cit2;
+	cit2.setPredicate(tp);
+	TEST_EQUAL((cit1 == cit2), false)
+	CompositeIteratorTraits cit3(a);
+	cit3.setPredicate(tp);
+	TEST_EQUAL((cit1 == cit3), true)
 RESULT
 
 CHECK(const Composite& getData() const throw())
-  // ???
+	CompositeIteratorTraits cit(a);
+	const Composite& composite = cit.getData();
+	TEST_EQUAL((&composite == &a), true)
 RESULT
 
 CHECK(const Composite* getContainer() const throw())
-  // ???
+	CompositeIteratorTraits t;
+	const Composite* composite_const_ptr = t.getContainer();
+	TEST_EQUAL(composite_const_ptr, 0)
 RESULT
 
-CHECK(const Composite::SubcompositeIterator& getPosition() const throw())
-  // ???
+CHECK(const Composite::CompositeIterator& getPosition() const throw())
+	CompositeIteratorTraits cit(a);
+	const Composite* composite_const_ptr = &cit.getData();
+	TEST_EQUAL((composite_const_ptr == &a), true)
 RESULT
 
 CHECK(const UnaryPredicate<Composite>* getPredicate() const throw())
-  // ???
+	CompositeIteratorTraits cit(a);
+	True tp;
+	cit.setPredicate(tp);
+	const UnaryPredicate<Composite>* predicate_const_ptr = cit.getPredicate();
+	TEST_EQUAL(predicate_const_ptr, &tp)
 RESULT
 
 CHECK(void backward() throw())
-  // ???
+	CompositeIteratorTraits cit(a);
+	True tp;
+	cit.setPredicate(tp);
+	TEST_EQUAL((&cit.getData() == &a), true)
+	cit.toRBegin();
+	cit.backward();
+	TEST_EQUAL((&cit.getData() == &f), true)
 RESULT
 
 CHECK(void forward() throw())
-  // ???
+	CompositeIteratorTraits cit(a);
+	True tp;
+	cit.setPredicate(tp);
+	TEST_EQUAL((&cit.getData() == &a), true)
+	cit.forward();
+	TEST_EQUAL((&cit.getData() == &b), true)
+	MyPred f_predicate(f);
+	cit.setPredicate(f_predicate);
+	cit.forward();
+	TEST_EQUAL((&cit.getData() == &f), true)
 RESULT
 
 CHECK(void invalidate() throw())
-  // ???
+	CompositeIteratorTraits cit(a);
+	True tp;
+	cit.setPredicate(tp);
+	TEST_EQUAL(cit.isValid(), true)
+	cit.invalidate();
+	TEST_EQUAL(cit.isValid(), false)
 RESULT
 
 CHECK(void setPredicate(const UnaryPredicate<Composite>& predicate) throw())
-  // ???
+	CompositeIteratorTraits cit(a);
+	MyPred c_predicate(c);
+	cit.setPredicate(c_predicate);
+	TEST_EQUAL(cit.getPredicate(), &c_predicate)
 RESULT
 
 CHECK(void toRBegin() throw(Exception::Precondition))
-  // ???
+  CompositeIteratorTraits cit(a);
+	True tp;
+	cit.setPredicate(tp);
+	TEST_EQUAL(cit.isRBegin(), false)
+	cit.toRBegin();
+	TEST_EQUAL(cit.isRBegin(), true)
 RESULT
 
 CHECK(void toREnd() throw(Exception::Precondition))
-  // ???
+  CompositeIteratorTraits cit(a);
+	True tp;
+	cit.setPredicate(tp);
+	TEST_EQUAL(cit.isREnd(), true)
+	cit.forward();
+	TEST_EQUAL(cit.isREnd(), false)
+	cit.toREnd();
+	TEST_EQUAL(cit.isREnd(), true)
 RESULT
 
 
