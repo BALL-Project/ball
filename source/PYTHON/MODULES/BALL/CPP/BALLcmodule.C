@@ -14,6 +14,8 @@
 #include "sipBALLNamedProperty.h"
 #include "sipBALLPropertyManager.h"
 #include "sipBALLSelectable.h"
+#include "sipBALLTime.h"
+#include "sipBALLTimeStamp.h"
 #include "sipBALLBit.h"
 #include "sipBALLBitVector.h"
 #include "sipBALLOptions.h"
@@ -280,7 +282,6 @@ char sipName_BALL_ConjugateGradientMinimizer[] = "ConjugateGradientMinimizer";
 char sipName_BALL_getKineticEnergy[] = "getKineticEnergy";
 char sipName_BALL_getPotentialEnergy[] = "getPotentialEnergy";
 char sipName_BALL_getTotalEnergy[] = "getTotalEnergy";
-char sipName_BALL_getTime[] = "getTime";
 char sipName_BALL_getSnapShotFrequency[] = "getSnapShotFrequency";
 char sipName_BALL_getTimeStep[] = "getTimeStep";
 char sipName_BALL_getMaximalSimulationTime[] = "getMaximalSimulationTime";
@@ -442,11 +443,7 @@ char sipName_BALL_setTranslation[] = "setTranslation";
 char sipName_BALL_translate[] = "translate";
 char sipName_BALL_getDeterminant[] = "getDeterminant";
 char sipName_BALL_invert[] = "invert";
-char sipName_BALL_Operator__div__[] = "Operator__div__";
 char sipName_BALL_Operator__mul__[] = "Operator__mul__";
-char sipName_BALL_Operator__sub__[] = "Operator__sub__";
-char sipName_BALL_Operator__neg__[] = "Operator__neg__";
-char sipName_BALL_Operator__pos__[] = "Operator__pos__";
 char sipName_BALL_getDiagonal[] = "getDiagonal";
 char sipName_BALL_isEqual[] = "isEqual";
 char sipName_BALL_setColumn[] = "setColumn";
@@ -461,7 +458,6 @@ char sipName_BALL_getTrace[] = "getTrace";
 char sipName_BALL_Matrix4x4[] = "Matrix4x4";
 char sipName_BALL_d[] = "d";
 char sipName_BALL_p[] = "p";
-char sipName_BALL_normalize[] = "normalize";
 char sipName_BALL_Line3[] = "Line3";
 char sipName_BALL_Circle3[] = "Circle3";
 char sipName_BALL_b[] = "b";
@@ -472,7 +468,13 @@ char sipName_BALL_getVolume[] = "getVolume";
 char sipName_BALL_getSurface[] = "getSurface";
 char sipName_BALL_Box3[] = "Box3";
 char sipName_BALL_isEquivalent[] = "isEquivalent";
+char sipName_BALL_Operator__cmp__[] = "Operator__cmp__";
+char sipName_BALL_Operator__div__[] = "Operator__div__";
+char sipName_BALL_Operator__sub__[] = "Operator__sub__";
+char sipName_BALL_Operator__neg__[] = "Operator__neg__";
+char sipName_BALL_Operator__pos__[] = "Operator__pos__";
 char sipName_BALL_negate[] = "negate";
+char sipName_BALL_normalize[] = "normalize";
 char sipName_BALL_toDegree[] = "toDegree";
 char sipName_BALL_toRadian[] = "toRadian";
 char sipName_BALL_Angle[] = "Angle";
@@ -496,6 +498,10 @@ char sipName_BALL_SecondaryStructure[] = "SecondaryStructure";
 char sipName_BALL_isCTerminal[] = "isCTerminal";
 char sipName_BALL_isNTerminal[] = "isNTerminal";
 char sipName_BALL_isAminoAcid[] = "isAminoAcid";
+char sipName_BALL_getTorsionPsi[] = "getTorsionPsi";
+char sipName_BALL_hasTorsionPsi[] = "hasTorsionPsi";
+char sipName_BALL_getTorsionPhi[] = "getTorsionPhi";
+char sipName_BALL_hasTorsionPhi[] = "hasTorsionPhi";
 char sipName_BALL_Residue[] = "Residue";
 char sipName_BALL_countChains[] = "countChains";
 char sipName_BALL_Protein[] = "Protein";
@@ -803,6 +809,16 @@ char sipName_BALL_setSize[] = "setSize";
 char sipName_BALL_BlockSize[] = "BlockSize";
 char sipName_BALL_BitVector[] = "BitVector";
 char sipName_BALL_Bit[] = "Bit";
+char sipName_BALL_getTime[] = "getTime";
+char sipName_BALL_stamp[] = "stamp";
+char sipName_BALL_isOlderThan[] = "isOlderThan";
+char sipName_BALL_isNewerThan[] = "isNewerThan";
+char sipName_BALL_TimeStamp[] = "TimeStamp";
+char sipName_BALL_now[] = "now";
+char sipName_BALL_getMicroSeconds[] = "getMicroSeconds";
+char sipName_BALL_getSeconds[] = "getSeconds";
+char sipName_BALL_ZERO[] = "ZERO";
+char sipName_BALL_Time[] = "Time";
 char sipName_BALL_isSelected[] = "isSelected";
 char sipName_BALL_hasProperty[] = "hasProperty";
 char sipName_BALL_countNamedProperties[] = "countNamedProperties";
@@ -836,11 +852,7 @@ char sipName_BALL_containsSelection[] = "containsSelection";
 char sipName_BALL_isHomomorph[] = "isHomomorph";
 char sipName_BALL_isRelatedWith[] = "isRelatedWith";
 char sipName_BALL_isAncestorOf[] = "isAncestorOf";
-char sipName_BALL_isAncestor[] = "isAncestor";
-char sipName_BALL_hasAnyAncestor[] = "hasAnyAncestor";
 char sipName_BALL_isDescendantOf[] = "isDescendantOf";
-char sipName_BALL_isDescendant[] = "isDescendant";
-char sipName_BALL_hasDescendant[] = "hasDescendant";
 char sipName_BALL_isNextSiblingOf[] = "isNextSiblingOf";
 char sipName_BALL_hasNextSibling[] = "hasNextSibling";
 char sipName_BALL_isPreviousSiblingOf[] = "isPreviousSiblingOf";
@@ -848,14 +860,12 @@ char sipName_BALL_hasPreviousSibling[] = "hasPreviousSibling";
 char sipName_BALL_isSiblingOf[] = "isSiblingOf";
 char sipName_BALL_hasSibling[] = "hasSibling";
 char sipName_BALL_isParentOf[] = "isParentOf";
-char sipName_BALL_isParent[] = "isParent";
 char sipName_BALL_hasParent[] = "hasParent";
 char sipName_BALL_isLastChildOf[] = "isLastChildOf";
 char sipName_BALL_isLastChild[] = "isLastChild";
 char sipName_BALL_isFirstChildOf[] = "isFirstChildOf";
 char sipName_BALL_isFirstChild[] = "isFirstChild";
 char sipName_BALL_isChildOf[] = "isChildOf";
-char sipName_BALL_isChild[] = "isChild";
 char sipName_BALL_hasChild[] = "hasChild";
 char sipName_BALL_isInterior[] = "isInterior";
 char sipName_BALL_isRootOf[] = "isRootOf";
@@ -878,6 +888,8 @@ char sipName_BALL_appendChild[] = "appendChild";
 char sipName_BALL_prependChild[] = "prependChild";
 char sipName_BALL_collapse[] = "collapse";
 char sipName_BALL_expand[] = "expand";
+char sipName_BALL_getSelectionTime[] = "getSelectionTime";
+char sipName_BALL_getModificationTime[] = "getModificationTime";
 char sipName_BALL_getLastChild[] = "getLastChild";
 char sipName_BALL_getFirstChild[] = "getFirstChild";
 char sipName_BALL_getSibling[] = "getSibling";
@@ -966,7 +978,7 @@ static PyObject *sipDo_calculateSASPoints(PyObject *,PyObject *sipArgs)
 
 		return sipMapCppToSelf(res,sipClass_Surface);
 	}
-#line 974 "../CPP/BALLcmodule.cpp"
+#line 986 "../CPP/BALLcmodule.cpp"
 	}
 
 	// Report an error if the arguments couldn't be parsed.
@@ -1005,7 +1017,7 @@ static PyObject *sipDo_calculateSASAtomAreas(PyObject *,PyObject *sipArgs)
 
 		return resobj;
 	}
-#line 1013 "../CPP/BALLcmodule.cpp"
+#line 1025 "../CPP/BALLcmodule.cpp"
 	}
 
 	// Report an error if the arguments couldn't be parsed.
@@ -3125,6 +3137,8 @@ static sipClassDef classesTable[] = {
 	{sipName_BALL_Options, sipNew_Options, &sipClass_Options, sipClassAttrTab_Options, NULL},
 	{sipName_BALL_BitVector, sipNew_BitVector, &sipClass_BitVector, sipClassAttrTab_BitVector, NULL},
 	{sipName_BALL_Bit, sipNew_Bit, &sipClass_Bit, sipClassAttrTab_Bit, NULL},
+	{sipName_BALL_TimeStamp, sipNew_TimeStamp, &sipClass_TimeStamp, sipClassAttrTab_TimeStamp, NULL},
+	{sipName_BALL_Time, sipNew_Time, &sipClass_Time, sipClassAttrTab_Time, NULL},
 	{sipName_BALL_PropertyManager, sipNew_PropertyManager, &sipClass_PropertyManager, sipClassAttrTab_PropertyManager, NULL},
 	{sipName_BALL_NamedProperty, sipNew_NamedProperty, &sipClass_NamedProperty, sipClassAttrTab_NamedProperty, NULL},
 	{sipName_BALL_Processor, sipNew_Processor, &sipClass_Processor, sipClassAttrTab_Processor, NULL},
@@ -3143,7 +3157,7 @@ static sipClassDef classesTable[] = {
 
 static sipModuleDef sipModule = {
 	sipName_BALL_BALL,
-	119,
+	121,
 	classesTable
 };
 
@@ -3292,6 +3306,16 @@ static PyObject *registerClasses(PyObject *,PyObject *)
 	};
 
 	if (sipAddLongInstances(((PyClassObject *)sipClass_BitVector) -> cl_dict,BitVectorlongInstances) < 0)
+		return NULL;
+
+	// Add the class instances to the dictionary.
+
+	static sipClassInstanceDef TimeclassInstances[] = {
+		{sipName_BALL_ZERO, &Time::ZERO, sipClass_Time, SIP_SIMPLE},
+		NULL
+	};
+
+	if (sipAddClassInstances(((PyClassObject *)sipClass_Time) -> cl_dict,TimeclassInstances) < 0)
 		return NULL;
 
 	// Add the doubles to the dictionary.

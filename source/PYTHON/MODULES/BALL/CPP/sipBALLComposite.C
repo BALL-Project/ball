@@ -250,7 +250,7 @@ static PyObject *sipDo_Composite_getDegree(PyObject *sipThisObj,PyObject *sipArg
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			unsigned long res;
+			int res;
 			Composite *ptr;
 
 			if ((ptr = (Composite *)sipGetCppPtr(sipThis,sipClass_Composite)) == NULL)
@@ -279,7 +279,7 @@ static PyObject *sipDo_Composite_countDescendants(PyObject *sipThisObj,PyObject 
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			unsigned long res;
+			int res;
 			Composite *ptr;
 
 			if ((ptr = (Composite *)sipGetCppPtr(sipThis,sipClass_Composite)) == NULL)
@@ -309,7 +309,7 @@ static PyObject *sipDo_Composite_getPathLength(PyObject *,PyObject *sipArgs)
 
 		if (sipParseArgs(sipArgs,"-II",sipCanConvertTo_Composite,&a0obj,sipCanConvertTo_Composite,&a1obj))
 		{
-			unsigned long res;
+			int res;
 
 			int iserr = 0;
 
@@ -342,7 +342,7 @@ static PyObject *sipDo_Composite_getDepth(PyObject *sipThisObj,PyObject *sipArgs
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			unsigned long res;
+			int res;
 			Composite *ptr;
 
 			if ((ptr = (Composite *)sipGetCppPtr(sipThis,sipClass_Composite)) == NULL)
@@ -371,7 +371,7 @@ static PyObject *sipDo_Composite_getHeight(PyObject *sipThisObj,PyObject *sipArg
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			unsigned long res;
+			int res;
 			Composite *ptr;
 
 			if ((ptr = (Composite *)sipGetCppPtr(sipThis,sipClass_Composite)) == NULL)
@@ -550,9 +550,10 @@ static PyObject *sipDo_Composite_getChild(PyObject *sipThisObj,PyObject *sipArgs
 		return NULL;
 
 	{
-		int a0;
+		Index *a0;
+		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"i",&a0))
+		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Index,&a0obj))
 		{
 			Composite *res;
 			Composite *ptr;
@@ -560,16 +561,27 @@ static PyObject *sipDo_Composite_getChild(PyObject *sipThisObj,PyObject *sipArgs
 			if ((ptr = (Composite *)sipGetCppPtr(sipThis,sipClass_Composite)) == NULL)
 				return NULL;
 
-			res = ptr -> Composite::getChild( a0);
+			int iserr = 0;
+
+			int istemp0 = sipConvertTo_Index(a0obj,&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			res = ptr -> Composite::getChild(* a0);
+
+			if (istemp0)
+				delete a0;
 
 			return sipMapCppToSelf(res,sipClass_Composite);
 		}
 	}
 
 	{
-		int a0;
+		Index *a0;
+		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"i",&a0))
+		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Index,&a0obj))
 		{
 			const Composite *res;
 			Composite *ptr;
@@ -577,7 +589,17 @@ static PyObject *sipDo_Composite_getChild(PyObject *sipThisObj,PyObject *sipArgs
 			if ((ptr = (Composite *)sipGetCppPtr(sipThis,sipClass_Composite)) == NULL)
 				return NULL;
 
-			res = ptr -> Composite::getChild( a0);
+			int iserr = 0;
+
+			int istemp0 = sipConvertTo_Index(a0obj,&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			res = ptr -> Composite::getChild(* a0);
+
+			if (istemp0)
+				delete a0;
 
 			return sipMapCppToSelf(res,sipClass_Composite);
 		}
@@ -598,9 +620,10 @@ static PyObject *sipDo_Composite_getSibling(PyObject *sipThisObj,PyObject *sipAr
 		return NULL;
 
 	{
-		int a0;
+		Index *a0;
+		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"i",&a0))
+		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Index,&a0obj))
 		{
 			Composite *res;
 			Composite *ptr;
@@ -608,16 +631,27 @@ static PyObject *sipDo_Composite_getSibling(PyObject *sipThisObj,PyObject *sipAr
 			if ((ptr = (Composite *)sipGetCppPtr(sipThis,sipClass_Composite)) == NULL)
 				return NULL;
 
-			res = ptr -> Composite::getSibling( a0);
+			int iserr = 0;
+
+			int istemp0 = sipConvertTo_Index(a0obj,&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			res = ptr -> Composite::getSibling(* a0);
+
+			if (istemp0)
+				delete a0;
 
 			return sipMapCppToSelf(res,sipClass_Composite);
 		}
 	}
 
 	{
-		int a0;
+		Index *a0;
+		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"i",&a0))
+		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Index,&a0obj))
 		{
 			const Composite *res;
 			Composite *ptr;
@@ -625,7 +659,17 @@ static PyObject *sipDo_Composite_getSibling(PyObject *sipThisObj,PyObject *sipAr
 			if ((ptr = (Composite *)sipGetCppPtr(sipThis,sipClass_Composite)) == NULL)
 				return NULL;
 
-			res = ptr -> Composite::getSibling( a0);
+			int iserr = 0;
+
+			int istemp0 = sipConvertTo_Index(a0obj,&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			res = ptr -> Composite::getSibling(* a0);
+
+			if (istemp0)
+				delete a0;
 
 			return sipMapCppToSelf(res,sipClass_Composite);
 		}
@@ -722,6 +766,64 @@ static PyObject *sipDo_Composite_getLastChild(PyObject *sipThisObj,PyObject *sip
 	// Report an error if the arguments couldn't be parsed.
 
 	sipNoMethod(sipName_BALL_Composite,sipName_BALL_getLastChild);
+
+	return NULL;
+}
+
+static PyObject *sipDo_Composite_getModificationTime(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Composite)) == NULL)
+		return NULL;
+
+	{
+		if (sipParseArgs(sipArgs,""))
+		{
+			const Time *res;
+			Composite *ptr;
+
+			if ((ptr = (Composite *)sipGetCppPtr(sipThis,sipClass_Composite)) == NULL)
+				return NULL;
+
+			res = &ptr -> Composite::getModificationTime();
+
+			return sipMapCppToSelf(res,sipClass_Time);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_Composite,sipName_BALL_getModificationTime);
+
+	return NULL;
+}
+
+static PyObject *sipDo_Composite_getSelectionTime(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Composite)) == NULL)
+		return NULL;
+
+	{
+		if (sipParseArgs(sipArgs,""))
+		{
+			const Time *res;
+			Composite *ptr;
+
+			if ((ptr = (Composite *)sipGetCppPtr(sipThis,sipClass_Composite)) == NULL)
+				return NULL;
+
+			res = &ptr -> Composite::getSelectionTime();
+
+			return sipMapCppToSelf(res,sipClass_Time);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_Composite,sipName_BALL_getSelectionTime);
 
 	return NULL;
 }
@@ -1483,35 +1585,6 @@ static PyObject *sipDo_Composite_hasChild(PyObject *sipThisObj,PyObject *sipArgs
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_isChild(PyObject *sipThisObj,PyObject *sipArgs)
-{
-	sipThisType *sipThis;
-
-	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Composite)) == NULL)
-		return NULL;
-
-	{
-		if (sipParseArgs(sipArgs,""))
-		{
-			bool res;
-			Composite *ptr;
-
-			if ((ptr = (Composite *)sipGetCppPtr(sipThis,sipClass_Composite)) == NULL)
-				return NULL;
-
-			res = ptr -> Composite::isChild();
-
-			return sipConvertFromBool((int)res);
-		}
-	}
-
-	// Report an error if the arguments couldn't be parsed.
-
-	sipNoMethod(sipName_BALL_Composite,sipName_BALL_isChild);
-
-	return NULL;
-}
-
 static PyObject *sipDo_Composite_isChildOf(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
@@ -1712,35 +1785,6 @@ static PyObject *sipDo_Composite_hasParent(PyObject *sipThisObj,PyObject *sipArg
 	// Report an error if the arguments couldn't be parsed.
 
 	sipNoMethod(sipName_BALL_Composite,sipName_BALL_hasParent);
-
-	return NULL;
-}
-
-static PyObject *sipDo_Composite_isParent(PyObject *sipThisObj,PyObject *sipArgs)
-{
-	sipThisType *sipThis;
-
-	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Composite)) == NULL)
-		return NULL;
-
-	{
-		if (sipParseArgs(sipArgs,""))
-		{
-			bool res;
-			Composite *ptr;
-
-			if ((ptr = (Composite *)sipGetCppPtr(sipThis,sipClass_Composite)) == NULL)
-				return NULL;
-
-			res = ptr -> Composite::isParent();
-
-			return sipConvertFromBool((int)res);
-		}
-	}
-
-	// Report an error if the arguments couldn't be parsed.
-
-	sipNoMethod(sipName_BALL_Composite,sipName_BALL_isParent);
 
 	return NULL;
 }
@@ -1988,64 +2032,6 @@ static PyObject *sipDo_Composite_isNextSiblingOf(PyObject *sipThisObj,PyObject *
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_hasDescendant(PyObject *sipThisObj,PyObject *sipArgs)
-{
-	sipThisType *sipThis;
-
-	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Composite)) == NULL)
-		return NULL;
-
-	{
-		if (sipParseArgs(sipArgs,""))
-		{
-			bool res;
-			Composite *ptr;
-
-			if ((ptr = (Composite *)sipGetCppPtr(sipThis,sipClass_Composite)) == NULL)
-				return NULL;
-
-			res = ptr -> Composite::hasDescendant();
-
-			return sipConvertFromBool((int)res);
-		}
-	}
-
-	// Report an error if the arguments couldn't be parsed.
-
-	sipNoMethod(sipName_BALL_Composite,sipName_BALL_hasDescendant);
-
-	return NULL;
-}
-
-static PyObject *sipDo_Composite_isDescendant(PyObject *sipThisObj,PyObject *sipArgs)
-{
-	sipThisType *sipThis;
-
-	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Composite)) == NULL)
-		return NULL;
-
-	{
-		if (sipParseArgs(sipArgs,""))
-		{
-			bool res;
-			Composite *ptr;
-
-			if ((ptr = (Composite *)sipGetCppPtr(sipThis,sipClass_Composite)) == NULL)
-				return NULL;
-
-			res = ptr -> Composite::isDescendant();
-
-			return sipConvertFromBool((int)res);
-		}
-	}
-
-	// Report an error if the arguments couldn't be parsed.
-
-	sipNoMethod(sipName_BALL_Composite,sipName_BALL_isDescendant);
-
-	return NULL;
-}
-
 static PyObject *sipDo_Composite_isDescendantOf(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
@@ -2081,64 +2067,6 @@ static PyObject *sipDo_Composite_isDescendantOf(PyObject *sipThisObj,PyObject *s
 	// Report an error if the arguments couldn't be parsed.
 
 	sipNoMethod(sipName_BALL_Composite,sipName_BALL_isDescendantOf);
-
-	return NULL;
-}
-
-static PyObject *sipDo_Composite_hasAnyAncestor(PyObject *sipThisObj,PyObject *sipArgs)
-{
-	sipThisType *sipThis;
-
-	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Composite)) == NULL)
-		return NULL;
-
-	{
-		if (sipParseArgs(sipArgs,""))
-		{
-			bool res;
-			Composite *ptr;
-
-			if ((ptr = (Composite *)sipGetCppPtr(sipThis,sipClass_Composite)) == NULL)
-				return NULL;
-
-			res = ptr -> Composite::hasAnyAncestor();
-
-			return sipConvertFromBool((int)res);
-		}
-	}
-
-	// Report an error if the arguments couldn't be parsed.
-
-	sipNoMethod(sipName_BALL_Composite,sipName_BALL_hasAnyAncestor);
-
-	return NULL;
-}
-
-static PyObject *sipDo_Composite_isAncestor(PyObject *sipThisObj,PyObject *sipArgs)
-{
-	sipThisType *sipThis;
-
-	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Composite)) == NULL)
-		return NULL;
-
-	{
-		if (sipParseArgs(sipArgs,""))
-		{
-			bool res;
-			Composite *ptr;
-
-			if ((ptr = (Composite *)sipGetCppPtr(sipThis,sipClass_Composite)) == NULL)
-				return NULL;
-
-			res = ptr -> Composite::isAncestor();
-
-			return sipConvertFromBool((int)res);
-		}
-	}
-
-	// Report an error if the arguments couldn't be parsed.
-
-	sipNoMethod(sipName_BALL_Composite,sipName_BALL_isAncestor);
 
 	return NULL;
 }
@@ -2458,6 +2386,8 @@ PyMethodDef sipClassAttrTab_Composite[] = {
 	{sipName_BALL_getSibling, sipDo_Composite_getSibling, METH_VARARGS, NULL},
 	{sipName_BALL_getFirstChild, sipDo_Composite_getFirstChild, METH_VARARGS, NULL},
 	{sipName_BALL_getLastChild, sipDo_Composite_getLastChild, METH_VARARGS, NULL},
+	{sipName_BALL_getModificationTime, sipDo_Composite_getModificationTime, METH_VARARGS, NULL},
+	{sipName_BALL_getSelectionTime, sipDo_Composite_getSelectionTime, METH_VARARGS, NULL},
 	{sipName_BALL_expand, sipDo_Composite_expand, METH_VARARGS, NULL},
 	{sipName_BALL_collapse, sipDo_Composite_collapse, METH_VARARGS, NULL},
 	{sipName_BALL_prependChild, sipDo_Composite_prependChild, METH_VARARGS, NULL},
@@ -2480,14 +2410,12 @@ PyMethodDef sipClassAttrTab_Composite[] = {
 	{sipName_BALL_isRootOf, sipDo_Composite_isRootOf, METH_VARARGS, NULL},
 	{sipName_BALL_isInterior, sipDo_Composite_isInterior, METH_VARARGS, NULL},
 	{sipName_BALL_hasChild, sipDo_Composite_hasChild, METH_VARARGS, NULL},
-	{sipName_BALL_isChild, sipDo_Composite_isChild, METH_VARARGS, NULL},
 	{sipName_BALL_isChildOf, sipDo_Composite_isChildOf, METH_VARARGS, NULL},
 	{sipName_BALL_isFirstChild, sipDo_Composite_isFirstChild, METH_VARARGS, NULL},
 	{sipName_BALL_isFirstChildOf, sipDo_Composite_isFirstChildOf, METH_VARARGS, NULL},
 	{sipName_BALL_isLastChild, sipDo_Composite_isLastChild, METH_VARARGS, NULL},
 	{sipName_BALL_isLastChildOf, sipDo_Composite_isLastChildOf, METH_VARARGS, NULL},
 	{sipName_BALL_hasParent, sipDo_Composite_hasParent, METH_VARARGS, NULL},
-	{sipName_BALL_isParent, sipDo_Composite_isParent, METH_VARARGS, NULL},
 	{sipName_BALL_isParentOf, sipDo_Composite_isParentOf, METH_VARARGS, NULL},
 	{sipName_BALL_hasSibling, sipDo_Composite_hasSibling, METH_VARARGS, NULL},
 	{sipName_BALL_isSiblingOf, sipDo_Composite_isSiblingOf, METH_VARARGS, NULL},
@@ -2495,11 +2423,7 @@ PyMethodDef sipClassAttrTab_Composite[] = {
 	{sipName_BALL_isPreviousSiblingOf, sipDo_Composite_isPreviousSiblingOf, METH_VARARGS, NULL},
 	{sipName_BALL_hasNextSibling, sipDo_Composite_hasNextSibling, METH_VARARGS, NULL},
 	{sipName_BALL_isNextSiblingOf, sipDo_Composite_isNextSiblingOf, METH_VARARGS, NULL},
-	{sipName_BALL_hasDescendant, sipDo_Composite_hasDescendant, METH_VARARGS, NULL},
-	{sipName_BALL_isDescendant, sipDo_Composite_isDescendant, METH_VARARGS, NULL},
 	{sipName_BALL_isDescendantOf, sipDo_Composite_isDescendantOf, METH_VARARGS, NULL},
-	{sipName_BALL_hasAnyAncestor, sipDo_Composite_hasAnyAncestor, METH_VARARGS, NULL},
-	{sipName_BALL_isAncestor, sipDo_Composite_isAncestor, METH_VARARGS, NULL},
 	{sipName_BALL_isAncestorOf, sipDo_Composite_isAncestorOf, METH_VARARGS, NULL},
 	{sipName_BALL_isRelatedWith, sipDo_Composite_isRelatedWith, METH_VARARGS, NULL},
 	{sipName_BALL_isHomomorph, sipDo_Composite_isHomomorph, METH_VARARGS, NULL},

@@ -268,6 +268,153 @@ static PyObject *sipDo_Residue_swap(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
+static PyObject *sipDo_Residue_getFullName(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Residue)) == NULL)
+		return NULL;
+
+	{
+		long a0 = Residue::ADD_VARIANT_EXTENSIONS;
+
+		if (sipParseArgs(sipArgs,"|l",&a0))
+		{
+			String *res;
+			Residue *ptr;
+
+			if ((ptr = (Residue *)sipGetCppPtr(sipThis,sipClass_Residue)) == NULL)
+				return NULL;
+
+			res = new String(ptr -> Residue::getFullName( (Residue::FullNameType)a0));
+
+			return sipNewCppToSelf(res,sipClass_String,SIP_SIMPLE | SIP_PY_OWNED);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_Residue,sipName_BALL_getFullName);
+
+	return NULL;
+}
+
+static PyObject *sipDo_Residue_hasTorsionPhi(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Residue)) == NULL)
+		return NULL;
+
+	{
+		if (sipParseArgs(sipArgs,""))
+		{
+			bool res;
+			Residue *ptr;
+
+			if ((ptr = (Residue *)sipGetCppPtr(sipThis,sipClass_Residue)) == NULL)
+				return NULL;
+
+			res = ptr -> Residue::hasTorsionPhi();
+
+			return sipConvertFromBool((int)res);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_Residue,sipName_BALL_hasTorsionPhi);
+
+	return NULL;
+}
+
+static PyObject *sipDo_Residue_getTorsionPhi(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Residue)) == NULL)
+		return NULL;
+
+	{
+		if (sipParseArgs(sipArgs,""))
+		{
+			Angle *res;
+			Residue *ptr;
+
+			if ((ptr = (Residue *)sipGetCppPtr(sipThis,sipClass_Residue)) == NULL)
+				return NULL;
+
+			res = new Angle(ptr -> Residue::getTorsionPhi());
+
+			return sipNewCppToSelf(res,sipClass_Angle,SIP_SIMPLE | SIP_PY_OWNED);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_Residue,sipName_BALL_getTorsionPhi);
+
+	return NULL;
+}
+
+static PyObject *sipDo_Residue_hasTorsionPsi(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Residue)) == NULL)
+		return NULL;
+
+	{
+		if (sipParseArgs(sipArgs,""))
+		{
+			bool res;
+			Residue *ptr;
+
+			if ((ptr = (Residue *)sipGetCppPtr(sipThis,sipClass_Residue)) == NULL)
+				return NULL;
+
+			res = ptr -> Residue::hasTorsionPsi();
+
+			return sipConvertFromBool((int)res);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_Residue,sipName_BALL_hasTorsionPsi);
+
+	return NULL;
+}
+
+static PyObject *sipDo_Residue_getTorsionPsi(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Residue)) == NULL)
+		return NULL;
+
+	{
+		if (sipParseArgs(sipArgs,""))
+		{
+			Angle *res;
+			Residue *ptr;
+
+			if ((ptr = (Residue *)sipGetCppPtr(sipThis,sipClass_Residue)) == NULL)
+				return NULL;
+
+			res = new Angle(ptr -> Residue::getTorsionPsi());
+
+			return sipNewCppToSelf(res,sipClass_Angle,SIP_SIMPLE | SIP_PY_OWNED);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_Residue,sipName_BALL_getTorsionPsi);
+
+	return NULL;
+}
+
 static PyObject *sipDo_Residue_getProtein(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
@@ -364,9 +511,10 @@ static PyObject *sipDo_Residue_getPDBAtom(PyObject *sipThisObj,PyObject *sipArgs
 		return NULL;
 
 	{
-		int a0;
+		Position *a0;
+		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"i",&a0))
+		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Position,&a0obj))
 		{
 			PDBAtom *res;
 			Residue *ptr;
@@ -374,16 +522,27 @@ static PyObject *sipDo_Residue_getPDBAtom(PyObject *sipThisObj,PyObject *sipArgs
 			if ((ptr = (Residue *)sipGetCppPtr(sipThis,sipClass_Residue)) == NULL)
 				return NULL;
 
-			res = ptr -> Residue::getPDBAtom( a0);
+			int iserr = 0;
+
+			int istemp0 = sipConvertTo_Position(a0obj,&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			res = ptr -> Residue::getPDBAtom(* a0);
+
+			if (istemp0)
+				delete a0;
 
 			return sipMapCppToSelf(res,sipClass_PDBAtom);
 		}
 	}
 
 	{
-		int a0;
+		Position *a0;
+		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"i",&a0))
+		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Position,&a0obj))
 		{
 			const PDBAtom *res;
 			Residue *ptr;
@@ -391,7 +550,17 @@ static PyObject *sipDo_Residue_getPDBAtom(PyObject *sipThisObj,PyObject *sipArgs
 			if ((ptr = (Residue *)sipGetCppPtr(sipThis,sipClass_Residue)) == NULL)
 				return NULL;
 
-			res = ptr -> Residue::getPDBAtom( a0);
+			int iserr = 0;
+
+			int istemp0 = sipConvertTo_Position(a0obj,&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			res = ptr -> Residue::getPDBAtom(* a0);
+
+			if (istemp0)
+				delete a0;
 
 			return sipMapCppToSelf(res,sipClass_PDBAtom);
 		}
@@ -1100,14 +1269,14 @@ static void sipDealloc_Residue(sipThisType *sipThis)
 
 static PyObject *sipPyInternalRepr_Residue(sipThisType *sipThis)
 {
-#line 53 "residue.sip"
+#line 76 "residue.sip"
   Residue* ptr;
   if ((ptr = (Residue*)sipGetCppPtr(sipThis,sipClass_Residue)) == NULL)
     return NULL;
 
   return PyString_FromString(String(String("Residue ") + ptr->getName() + ptr->getID()
-				+ " { " + String(ptr->countAtoms()) + " atoms }").c_str());
-#line 1115 "../CPP/sipBALLResidue.cpp"
+        + " { " + String(ptr->countAtoms()) + " atoms }").c_str());
+#line 1284 "../CPP/sipBALLResidue.cpp"
 }
 
 PyObject *sipNew_Residue(PyObject *sipSelf,PyObject *sipArgs)
@@ -1155,11 +1324,11 @@ PyObject *sipNew_Residue(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		const String *a0;
 		PyObject *a0obj;
-		const String *a1;
-		PyObject *a1obj;
-		char a2;
+		const String *a1 = NULL;
+		PyObject *a1obj = NULL;
+		char a2 = ' ';
 
-		if (sipParseArgs(sipArgs,"-IIc",sipCanConvertTo_String,&a0obj,sipCanConvertTo_String,&a1obj,&a2))
+		if (sipParseArgs(sipArgs,"-I|Ic",sipCanConvertTo_String,&a0obj,sipCanConvertTo_String,&a1obj,&a2))
 		{
 			int iserr = 0;
 
@@ -1229,6 +1398,11 @@ PyMethodDef sipClassAttrTab_Residue[] = {
 	{sipName_BALL_set, sipDo_Residue_set, METH_VARARGS, NULL},
 	{sipName_BALL_get, sipDo_Residue_get, METH_VARARGS, NULL},
 	{sipName_BALL_swap, sipDo_Residue_swap, METH_VARARGS, NULL},
+	{sipName_BALL_getFullName, sipDo_Residue_getFullName, METH_VARARGS, NULL},
+	{sipName_BALL_hasTorsionPhi, sipDo_Residue_hasTorsionPhi, METH_VARARGS, NULL},
+	{sipName_BALL_getTorsionPhi, sipDo_Residue_getTorsionPhi, METH_VARARGS, NULL},
+	{sipName_BALL_hasTorsionPsi, sipDo_Residue_hasTorsionPsi, METH_VARARGS, NULL},
+	{sipName_BALL_getTorsionPsi, sipDo_Residue_getTorsionPsi, METH_VARARGS, NULL},
 	{sipName_BALL_getProtein, sipDo_Residue_getProtein, METH_VARARGS, NULL},
 	{sipName_BALL_getChain, sipDo_Residue_getChain, METH_VARARGS, NULL},
 	{sipName_BALL_getPDBAtom, sipDo_Residue_getPDBAtom, METH_VARARGS, NULL},

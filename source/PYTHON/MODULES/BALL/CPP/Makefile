@@ -1,7 +1,7 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.3 2000/07/20 19:34:11 oliver Exp $
+# $Id: Makefile,v 1.4 2000/08/28 15:48:50 oliver Exp $
 #
 
 all: libBALLc.so
@@ -13,6 +13,8 @@ SIP_SOURCES_COMMON=\
 
 SIP_SOURCES_CONCEPT=\
 	sipBALLAtomProcessor.C\
+	sipBALLFragmentProcessor.C\
+	sipBALLResidueProcessor.C\
 	sipBALLCompositeProcessor.C\
 	sipBALLComposite.C\
 	sipBALLEmbeddable.C\
@@ -22,6 +24,8 @@ SIP_SOURCES_CONCEPT=\
 	sipBALLProcessor.C\
 	sipBALLPropertyManager.C\
 	sipBALLSelectable.C\
+	sipBALLTime.C\
+	sipBALLTimeStamp.C\
 	sipBALLUnaryAtomPredicate.C\
 	sipBALLUnaryCompositePredicate.C
 
@@ -138,15 +142,20 @@ SIP_SOURCES_PYTHON=\
 SIP_SOURCES_SOLVATION=
 
 SIP_SOURCES_STRUCTURE=\
-	sipBALLClearChargeProcessor.C\
-	sipBALLClearRadiusProcessor.C\
+	sipBALLAddHydrogensProcessor.C\
 	sipBALLAssignRadiusProcessor.C\
 	sipBALLAssignChargeProcessor.C\
-	sipBALLTranslationProcessor.C\
-	sipBALLTransformationProcessor.C\
 	sipBALLBoundingBoxProcessor.C\
+	sipBALLBuildBondsProcessor.C\
+	sipBALLClearChargeProcessor.C\
+	sipBALLClearRadiusProcessor.C\
 	sipBALLGeometricCenterProcessor.C\
-	sipBALLFragmentDistanceCollector.C
+	sipBALLFragmentDB.C\
+	sipBALLFragmentDistanceCollector.C\
+	sipBALLNormalizeNamesProcessor.C\
+	sipBALLResidueChecker.C\
+	sipBALLTranslationProcessor.C\
+	sipBALLTransformationProcessor.C
 
 SIP_SOURCES_VIEW_OPENGL_KERNEL=\
 	sipBALLCompositeDescriptor.C\
