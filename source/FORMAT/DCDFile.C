@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile.C,v 1.31 2004/03/25 10:38:29 amoll Exp $
+// $Id: DCDFile.C,v 1.32 2004/03/25 11:01:26 amoll Exp $
 //
 
 #include <BALL/FORMAT/DCDFile.h>
@@ -490,8 +490,7 @@ namespace BALL
 		}
 
 
-		seekAndWriteHeader();
-		return true;
+		return seekAndWriteHeader();
 	}
 
 
