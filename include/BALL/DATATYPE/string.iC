@@ -1,4 +1,4 @@
-// $Id: string.iC,v 1.13 2000/07/10 21:03:13 amoll Exp $
+// $Id: string.iC,v 1.14 2000/07/10 23:27:13 amoll Exp $
 
 BALL_INLINE 
 bool String::operator == (const char *char_ptr) const
@@ -23,17 +23,6 @@ bool Substring::operator == (const String& s) const
   return (s.compare(bound_->c_str() + from_, 0, to_ - from_ + 1) == 0);
 }
 
-BALL_INLINE
-Size Substring::size() const
-{
-	if (bound_ == 0)
-	{
-		return 0;
-	}
-
-	return (to_ - from_ + 1);
-}
-
 BALL_INLINE 
 bool Substring::operator != (const String& s) const
 {
@@ -42,7 +31,7 @@ bool Substring::operator != (const String& s) const
     throw UnboundSubstring(__FILE__, __LINE__);
 	}
 
-  return (s.compare(bound_->c_str() + from_, (Index)size()) != 0);
+  return (s.compare(bound_->c_str() + from_, 0, to_ - from_ + 1) != 0);
 }
 
 BALL_INLINE 
@@ -52,7 +41,11 @@ bool Substring::operator == (const char* char_ptr) const
 	{
 		throw UnboundSubstring(__FILE__, __LINE__);
 	}
-
+	// to prevent compiler warning:
+	if ((signed)strlen(char_ptr) != (to_ - from_ +1))
+	{
+		return false;
+	}
   return (bound_->compare(char_ptr, from_, to_ - from_ + 1) == 0);
 }
 
@@ -63,8 +56,23 @@ bool Substring::operator != (const char *char_ptr) const
 	{
 		throw UnboundSubstring(__FILE__, __LINE__);
 	}
+	// to prevent compiler warning:
+	if ((signed)strlen(char_ptr) != (to_ - from_ +1))
+	{
+		return true;
+	}
+  return (bound_->compare(char_ptr, from_, to_ - from_ + 1) != 0);
+}
 
-  return (bound_->compare(char_ptr, from_) != 0);
+BALL_INLINE
+Size Substring::size() const
+{
+	if (bound_ == 0)
+	{
+		return 0;
+	}
+
+	return (to_ - from_ + 1);
 }
 
 BALL_INLINE 
@@ -306,7 +314,6 @@ BALL_INLINE
 int String::compare(char c, Index from) const
 {
 	validateIndex_(from);
-		
 	return (c_str()[from] - c);
 }
 
@@ -317,7 +324,11 @@ bool Substring::operator == (const Substring& s) const
   {
     throw UnboundSubstring(__FILE__, __LINE__);
 	}
-  return (bound_->compare(s.bound_->c_str() + s.from_, from_, to_ - from_ + 1) == 0);
+	if ((s.to_ - s.from_) != (to_ - from_))
+	{
+		return false;
+	}
+  return (bound_->compare(s.c_str() + from_, from_, to_ - from_ + 1) == 0);
 }
 
 BALL_INLINE 
@@ -327,8 +338,11 @@ bool Substring::operator != (const Substring& s) const
   {
     throw UnboundSubstring(__FILE__, __LINE__);
 	} 
-  return (bound_->compare(s.bound_->c_str() + s.from_, from_, to_ - from_ + 1) != 0);
-
+	if ((s.to_ - s.from_) != (to_ - from_))
+	{
+		return true;
+	}
+  return (bound_->compare(s.c_str() + from_, from_, to_ - from_ + 1) != 0);
 }
 
 BALL_INLINE 
@@ -338,8 +352,7 @@ bool Substring::operator == (char c) const
   {
     throw UnboundSubstring(__FILE__, __LINE__);
 	}
- 
-  return (bound_->compare(c, from_) == 0);
+  return (bound_->compare(c, from_, to_ - from_ + 1) == 0);
 }
 
 BALL_INLINE 
@@ -349,8 +362,8 @@ bool Substring::operator != (char c) const
   {
     throw UnboundSubstring(__FILE__, __LINE__);
 	}
- 
-  return (bound_->compare(bound_->c_str() + from_, c) != 0);
+
+  return (bound_->compare(c, from_, to_ - from_ + 1) != 0);
 }
 
 BALL_INLINE 
