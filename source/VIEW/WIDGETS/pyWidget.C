@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.33 2004/06/08 16:24:50 amoll Exp $
+// $Id: pyWidget.C,v 1.34 2004/06/18 14:28:16 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -23,8 +23,6 @@ namespace BALL
 	namespace VIEW
 	{
 
-// currently doesnt work right
-#undef BALL_QT_HAS_THREADS
 
 #ifdef BALL_QT_HAS_THREADS
 		RunPythonThread::RunPythonThread()

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.16 2004/04/19 22:12:42 amoll Exp $
+// $Id: pyWidget.h,v 1.17 2004/06/18 14:28:13 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -21,6 +21,9 @@
 
 #include <qtextedit.h>
 
+// currently doesnt work right
+#undef BALL_QT_HAS_THREADS
+
 #ifdef BALL_QT_HAS_THREADS
 # include <qthread.h>
 #endif
@@ -31,6 +34,9 @@ namespace BALL
 	{
 		class PythonSettings;
 
+		class RunPythonThread;
+
+#ifdef BALL_QT_HAS_THREADS
 		class RunPythonThread
 			: public QThread
 		{
@@ -45,6 +51,7 @@ namespace BALL
 				String input;
 				String output;
 		};
+#endif
 
 
 		/** Python Widget base class.
