@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.h,v 1.27.2.1 2005/01/12 16:44:56 amoll Exp $
+// $Id: colorProcessor.h,v 1.27.2.2 2005/01/12 20:50:24 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_COLORPROCESSOR_H
@@ -35,267 +35,273 @@ namespace BALL
 	{
 		class Mesh;
 				
-		/** Calculating colors for given GeometricObject instances. 
-				This class defines the interface and basic algorithms to colorize geometric objects, e.g. 
-				Sphere, Tube, TwoColoredTube, etc.
-				Derived classes implement special ways to colorize, e.g. by charge or element.
-				They have to overload the method getColor(Composite). 
-				<br>
-				If no color can be calculated for a GeometricObject, e.g. if it has no Composite, the default
-				color is set.
-				<br>
-				A bit tricky is the coloring of meshes. The goal was to give every triangle of a mesh a color
-				according to its nearest Atom. To do so, a threedimensional HashGrid3 is used. It is
-				computed, when the ColorProcessor first encounters a Mesh in the operator ().
-				For this a pointer to the HashSet with the used Composite instances exists, which is set by the 
-				Representation.
-				\ingroup  ViewModels
-		*/
-		class BALL_EXPORT ColorProcessor
-			: public UnaryProcessor<GeometricObject*>
-		{
-			public:
-			
-			/**	@name	Type definitions
-			*/
-			//@{
-				
-			/// A HashSet with the used Composites, see also Representation
-			typedef HashSet<const Composite*>  CompositeSet;
-
-			/// a threedimensioal grid with the pointers to the atoms
-			typedef HashGrid3<const Atom*>  AtomGrid;
-
-			/// a single box in the threedimensional grid
-			typedef HashGridBox3<const Atom*> AtomBox;
-
-			//@} 
-			/**	@name	Constructors 
-			*/	
-			//@{
-
-			/** Default Constructor.
-			*/
-			ColorProcessor()
-				throw();
-
-			/** Copy constructor.
-			*/
-			ColorProcessor(const ColorProcessor& color_calculator)
-				throw();
-
-			//@} 
-			/** @name Destructors 
-			*/ 
-			//@{
-
-			/** Destructor.
-			*/
-			virtual ~ColorProcessor();
-
-			/** Explicit default initialization.
-					Reset the state of the
-					 <b> default_color_</b> to red (<tt> "FF0000FF"</tt>).
-					The grid is cleared and the pointer to the CompositeSet is set to NULL.
-			*/
-			virtual void clear()
-				throw();
-
-			//@} 
-			/**	@name	Asignment */ 
-			//@{
-
-			/** Assignment
-			*/
-			void set(const ColorProcessor& color_calculator)
-				throw();
-
-			/** Assignment operator.
-					Calls set.
-			*/
-			const ColorProcessor&  operator = (const ColorProcessor& color_calculator)
-				throw();
-
-			//@} 
-
-			/**	@name	Accessors */ 
-			//@{
-
-			/** Change the default color.
-			*/
-			void setDefaultColor(const ColorRGBA& color)
-				throw();
-
-			/** Non-mutable inspection of the default color.
-			*/
-			const ColorRGBA& getDefaultColor() const
-				throw() {return default_color_;}
-
-			/** Calculate a color for a GeometricObject.
-			*/
-			virtual Processor::Result operator() (GeometricObject*& object);
-
-			/** Calculate a color for a Composite.
-			 		The given ColorRGBA instance is set to the calculated color.
-			 		This method is called by the operator() method.
-					Here it just sets the default color.
-					You have to overload this operator in derived classes.
-			*/
-			virtual void getColor(const Composite& composite, ColorRGBA& color_to_be_set);
-
-			///
-			Size getTransparency() const
-				throw() { return transparency_;}
-
-			///
-			virtual void setTransparency(Size value)
-				throw();
-
-			/** Set the pointer to the CompositeSet.
-			 		This method is called by Representation::setColorProcessor and Representation::update.
-			*/
-			void setComposites(const CompositeSet* composites)
-				throw();
-
-			/// Return a pointer to the CompositeSet.
-			const CompositeSet* getComposites()
-				throw() { return composites_;}
-
-			///
-			void clearAtomGrid()
-				throw();
-
-			//@} 
-			/**	@name	debuggers and diagnostics 
-			*/ 
-			//@{
-
-			/** Internal value dump.
-					Dump the current state of this ColorProcessor to 
-					the output ostream <b> s</b> with dumping depth <b> depth</b>.
-					\param   s output stream where to output the state of this ColorProcessor
-					\param   depth the dumping depth
-			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-				throw();
-
-			///
-			void setModelType(ModelType type) {model_type_ = type;}
-
-			protected:
-			
-			//_ Create the threedimensional grid from the CompositeSet, or a given Composite 
-			virtual void createAtomGrid_(const Composite* from_mesh = 0)
-				throw();
-
-			//_ Colorize the mesh with the computed grid.
-			virtual void colorMeshFromGrid_(Mesh& mesh)
-				throw();
-
-			//@} 
-			/** @name Protected member variables 
-			*/ 
-			//@{
-
-			protected:
-
-			const Atom* getClosestItem_(const Vector3& v) const
-				throw();
-
-			//_ a color that will be used if no other color can be calculated.
-			ColorRGBA		default_color_;
-			//_ for speedup, we dont have to set transparency each time we color a geometric object
-			ColorRGBA		selection_color_;
-			Size 				transparency_;
-
-			const 			CompositeSet* composites_;
-
-			AtomGrid 		atom_grid_;
-			bool 				atom_grid_created_;
-			ModelType   model_type_;
-			//@}
-		};
-
+/** Calculating colors for given GeometricObject instances. 
+		This class defines the interface and basic algorithms to colorize geometric objects, e.g. 
+		Sphere, Tube, TwoColoredTube, etc.
+		Derived classes implement special ways to colorize, e.g. by charge or element.
+		They have to overload the method getColor(Composite, ColorRGBA). 
+		<br>
+		If no color can be calculated for a GeometricObject, e.g. if it has no Composite, the default
+		color is set.
+		<br>
+		A bit tricky is the coloring of meshes. The goal was to give every triangle of a mesh a color
+		according to its nearest Atom. To do so, a threedimensional HashGrid3 is used. It is
+		computed, when the ColorProcessor first encounters a Mesh in the operator ().
+		For this a pointer to the HashSet with the used Composite instances exists, which is set by the 
+		Representation.
+		\ingroup  ViewModels
+*/
+class BALL_EXPORT ColorProcessor
+	: public UnaryProcessor<GeometricObject*>
+{
+	public:
+	
+	/**	@name	Type definitions
+	*/
+	//@{
 		
-		/** Base class for ColorProcessors, that interpolate between two values
-				\ingroup  ViewModels
-		*/
-		class InterpolateColorProcessor
-			: public ColorProcessor
-		{
-			public: 
+	/// A HashSet with the used Composites, see also Representation
+	typedef HashSet<const Composite*>  CompositeSet;
 
-			///
-			InterpolateColorProcessor();
+	/// a threedimensioal grid with the pointers to the atoms
+	typedef HashGrid3<const Atom*>  AtomGrid;
 
-			///
-			virtual bool start();
+	/// a single box in the threedimensional grid
+	typedef HashGridBox3<const Atom*> AtomBox;
 
-			///
-			void setMinColor(const ColorRGBA& color)
-				throw();
+	//@} 
+	/**	@name	Constructors 
+	*/	
+	//@{
 
-			///
-			void setMaxColor(const ColorRGBA& color)
-				throw();
+	/** Default Constructor.
+	*/
+	ColorProcessor()
+		throw();
 
-			///
-			const ColorRGBA& getMinColor() const
-				throw();
-			
-			///
-			const ColorRGBA& getMaxColor() const
-				throw();
-			
-			///
-			void setMinMinColor(const ColorRGBA& color)
-				throw();
+	/** Copy constructor.
+	*/
+	ColorProcessor(const ColorProcessor& color_calculator)
+		throw();
 
-			///
-			void setMaxMaxColor(const ColorRGBA& color)
-				throw();
+	//@} 
+	/** @name Destructors 
+	*/ 
+	//@{
 
-			///
-			const ColorRGBA& getMinMinColor() const
-				throw();
-			
-			///
-			const ColorRGBA& getMaxMaxColor() const
-				throw();
+	/** Destructor.
+	*/
+	virtual ~ColorProcessor();
+
+	/** Explicit default initialization.
+			Reset the state of the
+			 <b> default_color_</b> to red (<tt> "FF0000FF"</tt>).
+			The grid is cleared and the pointer to the CompositeSet is set to NULL.
+	*/
+	virtual void clear()
+		throw();
+
+	//@} 
+	/**	@name	Asignment */ 
+	//@{
+
+	/** Assignment
+	*/
+	void set(const ColorProcessor& color_calculator)
+		throw();
+
+	/** Assignment operator.
+			Calls set.
+	*/
+	const ColorProcessor&  operator = (const ColorProcessor& color_calculator)
+		throw();
+
+	//@} 
+
+	/**	@name	Accessors */ 
+	//@{
+
+	/** Change the default color.
+	*/
+	void setDefaultColor(const ColorRGBA& color)
+		throw();
+
+	/** Non-mutable inspection of the default color.
+	*/
+	const ColorRGBA& getDefaultColor() const
+		throw() {return default_color_;}
+
+	/** Calculate a color for a GeometricObject.
+	*/
+	virtual Processor::Result operator() (GeometricObject*& object);
+
+	/** Calculate a color for a Composite.
+			The given ColorRGBA instance is set to the calculated color.
+			This method is called by the operator() method.
+			Here it just sets the default color.
+			You have to overload this operator in derived classes.
+	*/
+	virtual void getColor(const Composite& composite, ColorRGBA& color_to_be_set);
+
+	///
+	Size getTransparency() const
+		throw() { return transparency_;}
+
+	/** Set the transparency.
+			To be overloaded in derived classes
+	*/
+	virtual void setTransparency(Size value)
+		throw();
+
+	/** Set the pointer to the CompositeSet.
+			This method is called by Representation::setColorProcessor and Representation::update.
+	*/
+	void setComposites(const CompositeSet* composites)
+		throw();
+
+	/// Return a pointer to the CompositeSet.
+	const CompositeSet* getComposites()
+		throw() { return composites_;}
+
+	///
+	void clearAtomGrid()
+		throw();
+
+	//@} 
+	/**	@name	debuggers and diagnostics 
+	*/ 
+	//@{
+
+	/** Internal value dump.
+			Dump the current state of this ColorProcessor to 
+			the output ostream <b> s</b> with dumping depth <b> depth</b>.
+			\param   s output stream where to output the state of this ColorProcessor
+			\param   depth the dumping depth
+	*/
+	virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
+		throw();
+
+	///
+	void setModelType(ModelType type) {model_type_ = type;}
+
+	protected:
+	
+	//_ Create the threedimensional grid from the CompositeSet, or a given Composite 
+	virtual void createAtomGrid_(const Composite* from_mesh = 0)
+		throw();
+
+	//_ Colorize the mesh with the computed grid.
+	virtual void colorMeshFromGrid_(Mesh& mesh)
+		throw();
+
+	//@} 
+	/** @name Protected member variables 
+	*/ 
+	//@{
+
+	protected:
+
+	const Atom* getClosestItem_(const Vector3& v) const
+		throw();
+
+	//_ a color that will be used if no other color can be calculated.
+	ColorRGBA		default_color_;
+	//_ for speedup, we dont have to set transparency each time we color a geometric object
+	ColorRGBA		selection_color_;
+	Size 				transparency_;
+
+	const 			CompositeSet* composites_;
+
+	AtomGrid 		atom_grid_;
+	bool 				atom_grid_created_;
+	ModelType   model_type_;
+	//@}
+};
 
 
-			///
-			void setMaxValue(float value)
-				throw();
+/** Base class for ColorProcessors, that interpolate between two values
+		\ingroup  ViewModels
+*/
+class InterpolateColorProcessor
+	: public ColorProcessor
+{
+	public: 
 
-			///
-			float getMaxValue() const
-				throw();
-		
+	///
+	InterpolateColorProcessor();
 
-			///
-			void setMinValue(float value)
-				throw();
+	///
+	virtual bool start();
 
-			///
-			float getMinValue() const
-				throw();
-		
-			///
-			virtual ColorRGBA interpolateColor(float value);
+	///
+	void setMinColor(const ColorRGBA& color)
+		throw();
 
-			protected:
+	///
+	void setMaxColor(const ColorRGBA& color)
+		throw();
 
-			ColorRGBA min_color_,
-								max_color_,
-								min_min_color_,
-								max_max_color_;
-			float 		max_value_;
-			float 		min_value_;
-		};
+	///
+	const ColorRGBA& getMinColor() const
+		throw();
+	
+	///
+	const ColorRGBA& getMaxColor() const
+		throw();
+	
+	///
+	void setMinMinColor(const ColorRGBA& color)
+		throw();
 
+	///
+	void setMaxMaxColor(const ColorRGBA& color)
+		throw();
 
-		
+	///
+	const ColorRGBA& getMinMinColor() const
+		throw();
+	
+	///
+	const ColorRGBA& getMaxMaxColor() const
+		throw();
+
+	///
+	void setMaxValue(float value)
+		throw();
+
+	///
+	float getMaxValue() const
+		throw();
+
+	///
+	void setMinValue(float value)
+		throw();
+
+	///
+	float getMinValue() const
+		throw();
+
+	/** Interpolate a color between the given colors.
+			To be overloaded in derived classes.
+	*/
+	virtual void interpolateColor(float value, ColorRGBA& color_to_be_set)
+		throw();
+
+	/** Set the transparency.
+	*/
+	virtual void setTransparency(Size value)
+		throw();
+
+	protected:
+
+	ColorRGBA min_color_,
+						max_color_,
+						min_min_color_,
+						max_max_color_;
+	float 		max_value_;
+	float 		min_value_;
+};
+
 } } // namespaces
 
 #endif // BALL_VIEW_MODELS_COLORPROCESSOR_H

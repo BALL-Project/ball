@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.31.2.2 2005/01/12 16:44:51 amoll Exp $
+// $Id: colorProcessor.C,v 1.31.2.3 2005/01/12 20:49:47 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -393,10 +393,30 @@ namespace BALL
 			default_color_ = ColorRGBA(1.0,1.0,1.0);
 		}
 
-		ColorRGBA InterpolateColorProcessor::interpolateColor(float value)
+		void InterpolateColorProcessor::setTransparency(Size value)
+			throw() 
+		{ 
+			ColorProcessor::setTransparency(value);
+			min_color_.setAlpha(255 - value);
+			max_color_.setAlpha(255 - value);
+			min_min_color_.setAlpha(255 - value);
+			max_max_color_.setAlpha(255 - value);
+		}
+
+		void InterpolateColorProcessor::interpolateColor(float value, ColorRGBA& color_to_be_set)
+			throw()
 		{
-			if (value < min_value_) return min_min_color_;
-			if (value > max_value_) return max_max_color_;
+			if (value < min_value_)
+			{
+				color_to_be_set.set(min_min_color_);
+				return;
+			}
+			
+			if (value > max_value_) 
+			{
+				max_max_color_.set(max_max_color_);
+				return;
+			}
 
 			float red1   = min_color_.getRed();
 			float green1 = min_color_.getGreen();
@@ -408,10 +428,10 @@ namespace BALL
 
 			value -= min_value_;
 
-			return ColorRGBA(red1 + (value * (red2 - red1)) 			/ max_value_,
-											 green1 + (value * (green2 - green1))	/ max_value_,
-											 blue1 + (value * (blue2 - blue1)) 		/ max_value_,
-											 255 - transparency_);
+			color_to_be_set.set(red1 + (value * (red2 - red1)) 			/ max_value_,
+													 green1 + (value * (green2 - green1))	/ max_value_,
+													 blue1 + (value * (blue2 - blue1)) 		/ max_value_,
+													 255 - transparency_);
 		}
 
 		void InterpolateColorProcessor::setMinColor(const ColorRGBA& color)

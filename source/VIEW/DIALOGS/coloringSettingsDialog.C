@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: coloringSettingsDialog.C,v 1.34 2004/12/11 00:43:07 amoll Exp $
+// $Id: coloringSettingsDialog.C,v 1.34.2.1 2005/01/12 20:52:36 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/coloringSettingsDialog.h>
@@ -368,7 +368,7 @@ namespace BALL
 				dp.setNullDistanceColor(getLabelColor_(null_distance_label));
 				dp.setMaxDistanceColor(getLabelColor_(max_distance_label));
 				dp.setDistance(((float)max_distance_slider->value()) / 10.0);
-				dp.setShowSelected(distance_show_selected->isChecked());
+//   				dp.setShowSelected(distance_show_selected->isChecked());
 				return;
 			}
 
@@ -646,7 +646,7 @@ namespace BALL
 				setLabelColor_(null_distance_label, dp.getNullDistanceColor());
 				setLabelColor_(max_distance_label, dp.getMaxDistanceColor());
 				max_distance_slider->setValue((Size)(dp.getDistance() * 10.0));
-				distance_show_selected->setChecked(dp.showSelected());
+//   				distance_show_selected->setChecked(dp.showSelected());
 			} else
 
 			if (RTTI::isKindOf<OccupancyColorProcessor>(cp))

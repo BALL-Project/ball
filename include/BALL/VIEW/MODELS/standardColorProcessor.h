@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.h,v 1.27.2.1 2005/01/12 16:44:56 amoll Exp $
+// $Id: standardColorProcessor.h,v 1.27.2.2 2005/01/12 20:50:25 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
@@ -54,6 +54,10 @@ namespace BALL
 					element numbers as names.
 			*/
 			ElementColorProcessor()
+				throw();
+
+			///
+			void setTransparency(Size value)
 				throw();
 
 			///
@@ -146,6 +150,10 @@ namespace BALL
 			/**	@name	Accessors: inspectors and mutators 
 			*/ 
 			//@{
+
+			///
+			void setTransparency(Size value)
+				throw();
 
 			///
 			virtual void getColor(const Composite& composite, ColorRGBA& color_to_be_set);

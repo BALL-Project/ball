@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.50.2.3 2005/01/12 16:44:51 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.50.2.4 2005/01/12 20:49:47 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -20,6 +20,8 @@ namespace BALL
 {
 	namespace VIEW
 	{
+
+#define BALL_VIEW_NUMBER_ELEMENTS 111
 
 		ElementColorProcessor::ElementColorProcessor()
 			throw()
@@ -151,7 +153,7 @@ namespace BALL
 				//110
 			};                                       
 			
-			for (Size i = 0; i < 111; i++)
+			for (Size i = 0; i < BALL_VIEW_NUMBER_ELEMENTS; i++)
 			{
 				color_map_.insert
 					(HashMap<Position, ColorRGBA>::ValueType(i, 
@@ -159,21 +161,34 @@ namespace BALL
 			}
 		}
 
+		void ElementColorProcessor::setTransparency(Size value)
+			throw()
+		{
+			ColorProcessor::setTransparency(value);
+			HashMap<Position, ColorRGBA>::Iterator it = color_map_.begin();
+			for (;it != color_map_.end(); it++)
+			{
+				it->second.setAlpha(255 - value);
+			}
+		}
 
 		void ElementColorProcessor::getColor(const Composite& composite, ColorRGBA& color_to_be_set)
 		{
 			const Atom* atom = dynamic_cast<const Atom*>(&composite);
 			if (atom != 0)
 			{
-				const Position pos = atom->getElement().getAtomicNumber();
-				if (color_map_.has(pos))
+				HashMap<Position, ColorRGBA>::Iterator it(
+						color_map_.find(
+							atom->getElement().getAtomicNumber()));
+
+				if (it != color_map_.end())
 				{
-					color_to_be_set = color_map_[pos];
+					color_to_be_set.set(it->second);
 					return;
 				}
 			}
 			
-			color_to_be_set = default_color_;
+			color_to_be_set.set(default_color_);
 		}
 
 		////////////////////////////////////////////////////////////////////
@@ -232,6 +247,17 @@ namespace BALL
 			}
 		}
 
+		void ResidueNameColorProcessor::setTransparency(Size value)
+			throw()
+		{
+			ColorProcessor::setTransparency(value);
+			StringHashMap<ColorRGBA>::Iterator it = color_map_.begin();
+			for (;it != color_map_.end(); it++)
+			{
+				it->second.setAlpha(255 - value);
+			}
+		}
+
 		void ResidueNameColorProcessor::getColor(const Composite& composite, ColorRGBA& color_to_be_set)
 		{
 			const Residue* residue = dynamic_cast<const Residue*>(&composite);
@@ -240,19 +266,19 @@ namespace BALL
 				residue = composite.getAncestor(dummy_residue);
 				if (residue == 0)
 				{
-					color_to_be_set = default_color_;
+					color_to_be_set.set(default_color_);
 					return;
 				}
 			}
 			
-			const String name = residue->getName();
-			if (color_map_.has(name))
+			StringHashMap<ColorRGBA>::Iterator it(color_map_.find(residue->getName()));
+			if (it != color_map_.end())
 			{
-				color_to_be_set = color_map_[name];
+				color_to_be_set.set(it->second);
 				return;
 			}
 
-			color_to_be_set = default_color_;
+			color_to_be_set.set(default_color_);
 		}
 
 		// ========================================================================
@@ -274,23 +300,22 @@ namespace BALL
 				residue = composite.getAncestor(dummy_residue_);
 				if (residue == 0)
 				{
-					color_to_be_set = default_color_;
+					color_to_be_set.set(default_color_);
 					return;
 				}
 			}
 				
 			try
 			{
-				color_to_be_set = table_.map((float)residue->getID().toUnsignedShort());
+				color_to_be_set.set(table_.map(residue->getID().toUnsignedShort()));
 				return;
 			}
 			catch(...)
 			{
 			}
 
-			color_to_be_set = default_color_;
+			color_to_be_set.set(default_color_);
 		}
-
 
 		bool ResidueNumberColorProcessor::start()
 			throw()
@@ -305,7 +330,6 @@ namespace BALL
 			base_colors[1] = middle_color_;
 			base_colors[2] = last_color_;
 			table_.setBaseColors(base_colors, 3);
-
 
 			CompositeSet::ConstIterator it = composites_->begin();
 			ResidueIterator res_it;
@@ -348,6 +372,12 @@ namespace BALL
 			max_++;
 			table_.setRange((float)min_, (float)max_);
 			table_.createTable();
+
+			for (Position p = 0; p < table_.size(); p++)
+			{
+				table_[p].setAlpha(255 - transparency_);
+			}
+
 			return true;
 		}
 
@@ -375,17 +405,17 @@ namespace BALL
 			const Atom* atom = dynamic_cast<const Atom*>(&composite);
 			if (atom == 0)
 			{
-				color_to_be_set = default_color_;
+				color_to_be_set.set(default_color_);
 				return;
 			}
 
 			float charge = atom->getCharge();
-			float red1, green1, blue1;
-			float red2, green2, blue2;
 
 			// clip the charges to +/- 1.0
 			if 			(charge > 1.0) charge =  1.0;
 			else if (charge < -1.0) charge = -1.0;
+
+			float red1, green1, blue1;
 
 			// interpolate the color
 			if (charge >= 0)
@@ -403,9 +433,9 @@ namespace BALL
 				charge *= -1.0;
 			}
 
-			red2   = neutral_color_.getRed();
-			green2 = neutral_color_.getGreen();
-			blue2  = neutral_color_.getBlue();
+			const float red2   = neutral_color_.getRed();
+			const float green2 = neutral_color_.getGreen();
+			const float blue2  = neutral_color_.getBlue();
 
 			const float f = 1.0 - charge;
 
@@ -485,12 +515,11 @@ namespace BALL
 			const Atom* const atom = dynamic_cast<const Atom*>(&composite);
 			if (atom == 0)
 			{
-				color_to_be_set = default_color_;
+				color_to_be_set.set(default_color_);
 				return;
 			}
 
 			const AtomDistanceHashMap::Iterator it = atom_2_distance_.find(atom);
-
 			float distance = distance_;
 
 			// atom in hashmap ?
@@ -604,11 +633,11 @@ namespace BALL
 			const PDBAtom* const atom = dynamic_cast<const PDBAtom*>(&composite);
 			if (atom == 0)
 			{
-				color_to_be_set = default_color_;
+				color_to_be_set.set(default_color_);
 				return;
 			}
 
-			color_to_be_set = interpolateColor(atom->getTemperatureFactor());
+			interpolateColor(atom->getTemperatureFactor(), color_to_be_set);
 		}
 
 		////////////////////////////////////////////////////////////////////
@@ -627,11 +656,11 @@ namespace BALL
 			const PDBAtom* atom = dynamic_cast<const PDBAtom*>(&composite);
 			if (atom == 0)			
 			{
-				color_to_be_set = default_color_;
+				color_to_be_set.set(default_color_);
 			}
 			else
 			{
-				color_to_be_set = interpolateColor(atom->getOccupancy());
+				interpolateColor(atom->getOccupancy(), color_to_be_set);
 			}
 		}
 		
@@ -651,20 +680,20 @@ namespace BALL
 			const Atom* atom = dynamic_cast<const Atom*>(&composite);
 			if (atom == 0)			
 			{
-				color_to_be_set = default_color_;
+				color_to_be_set.set(default_color_);
 				return;
 			}
 
 			Vector3 force = atom->getForce();
 			if (force.getSquareLength() == 0) 
 			{
-				color_to_be_set = min_color_;
+				color_to_be_set.set(min_color_);
 				return;
 			}
 
 			force *= pow((float)10.0, (float)12.0);
 
-			color_to_be_set = interpolateColor(log(force.getLength()));
+			interpolateColor(log(force.getLength()), color_to_be_set);
 		}
 
 		////////////////////////////////////////////////////////////////////
@@ -686,7 +715,7 @@ namespace BALL
 				ss = dynamic_cast<const SecondaryStructure*>(composite.getAncestor(dummy_ss_));
 				if (ss == 0)
 				{
-					color_to_be_set = default_color_;
+					color_to_be_set.set(default_color_);
 					return;
 				}
 			}
@@ -694,58 +723,58 @@ namespace BALL
 			const SecondaryStructure::Type type = ss->getType();
 			if (type == SecondaryStructure::HELIX)
 			{
-				color_to_be_set = helix_color_;
+				color_to_be_set.set(helix_color_);
 			}
 			else if (type == SecondaryStructure::COIL)
 			{
-				color_to_be_set = coil_color_;
+				color_to_be_set.set(coil_color_);
 			}
 			else if (type == SecondaryStructure::STRAND)
 			{
-				color_to_be_set = strand_color_;
+				color_to_be_set.set(strand_color_);
 			}
 			else if (type == SecondaryStructure::TURN)
 			{
-				color_to_be_set = turn_color_;
+				color_to_be_set.set(turn_color_);
 			}
 		}
 
 		void SecondaryStructureColorProcessor::setTransparency(Size t)
 			throw()
 		{
-			transparency_ = t;
-			helix_color_.setAlpha(255-transparency_);
-			coil_color_.setAlpha(255-transparency_);
-			strand_color_.setAlpha(255-transparency_);
-			turn_color_.setAlpha(255-transparency_);
+			ColorProcessor::setTransparency(t);
+			helix_color_.setAlpha(255 - t);
+			coil_color_.setAlpha(255 - t);
+			strand_color_.setAlpha(255 - t);
+			turn_color_.setAlpha(255 - t);
 		}
 
 		void SecondaryStructureColorProcessor::setHelixColor(const ColorRGBA& color)
 			throw()
 		{
 			helix_color_ = color;
-			helix_color_.setAlpha(255-transparency_);
+			helix_color_.setAlpha(255 - transparency_);
 		}
 
 		void SecondaryStructureColorProcessor::setCoilColor(const ColorRGBA& color)
 			throw()
 		{
 			coil_color_ = color;
-			coil_color_.setAlpha(255-transparency_);
+			coil_color_.setAlpha(255 - transparency_);
 		}
 
 		void SecondaryStructureColorProcessor::setStrandColor(const ColorRGBA& color)
 			throw()
 		{
 			strand_color_ = color;
-			strand_color_.setAlpha(255-transparency_);
+			strand_color_.setAlpha(255 - transparency_);
 		}
 
 		void SecondaryStructureColorProcessor::setTurnColor(const ColorRGBA& color)
 			throw()
 		{
 			turn_color_ = color;
-			turn_color_.setAlpha(255-transparency_);
+			turn_color_.setAlpha(255 - transparency_);
 		}
 
 		const ColorRGBA& SecondaryStructureColorProcessor::getHelixColor() const
@@ -793,7 +822,7 @@ namespace BALL
 				residue = dynamic_cast<const Residue*>(composite.getAncestor(dummy_residue_));
 				if (residue == 0)
 				{
-					color_to_be_set = default_color_;
+					color_to_be_set.set(default_color_);
 					return;
 				}
 			}
@@ -803,7 +832,7 @@ namespace BALL
 					name == "ARG" || 
 					name == "HIS") 
 			{
-				color_to_be_set = basic_color_;
+				color_to_be_set.set(basic_color_);
 				return;
 			}
 			
@@ -811,7 +840,7 @@ namespace BALL
 					name == "TYR" || 
 					name == "TRP") 
 			{
-				color_to_be_set = aromatic_color_;
+				color_to_be_set.set(aromatic_color_);
 				return;
 			}
 			
@@ -820,7 +849,7 @@ namespace BALL
 					name == "MET" || 
 					name == "ILE")
 			{
-				color_to_be_set = hydrophobic_color_;
+				color_to_be_set.set(hydrophobic_color_);
 				return;
 			}
 			
@@ -829,7 +858,7 @@ namespace BALL
 					name == "GLN" || 
 					name == "ASN")
 			{
-				color_to_be_set = acidic_color_;
+				color_to_be_set.set(acidic_color_);
 				return;
 			}
 
@@ -839,11 +868,11 @@ namespace BALL
 					name == "THR" || 
 					name == "PRO")
 			{
-				color_to_be_set = polar_color_;
+				color_to_be_set.set(polar_color_);
 				return;
 			}
 
-			color_to_be_set = other_color_;
+			color_to_be_set.set(other_color_);
 		}
 
 		void ResidueTypeColorProcessor::setBasicColor(const ColorRGBA& color)
@@ -918,7 +947,6 @@ namespace BALL
 			return aromatic_color_;
 		}
 
-
 		const ColorRGBA& ResidueTypeColorProcessor::getOtherColor() const
 			throw()
 		{
@@ -928,12 +956,12 @@ namespace BALL
 		void ResidueTypeColorProcessor::setTransparency(Size t)
 			throw()
 		{
-			basic_color_.setAlpha(255-t);
-			acidic_color_.setAlpha(255-t);
-			polar_color_.setAlpha(255-t);
-			hydrophobic_color_.setAlpha(255-t);
-			aromatic_color_.setAlpha(255-t);
-			other_color_.setAlpha(255-t);
+			basic_color_.setAlpha(255 - t);
+			acidic_color_.setAlpha(255 - t);
+			polar_color_.setAlpha(255 - t);
+			hydrophobic_color_.setAlpha(255 - t);
+			aromatic_color_.setAlpha(255 - t);
+			other_color_.setAlpha(255 - t);
 		}
 			
 #	ifdef BALL_NO_INLINE_FUNCTIONS
