@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stringHashMap.h,v 1.20 2003/03/26 13:56:20 anhi Exp $
+// $Id: stringHashMap.h,v 1.21 2003/04/18 11:56:47 oliver Exp $
 
 #ifndef BALL_DATATYPE_STRINGHASHMAP_H
 #define BALL_DATATYPE_STRINGHASHMAP_H
@@ -175,7 +175,7 @@ namespace BALL
 			throw()
 		{
 			// search the key
-			Iterator it = find(key);
+			Iterator it = HashMap<String, Value>::find(key);
 			if (it == end())
 			{
 				// we didn't find it..
@@ -231,7 +231,7 @@ namespace BALL
 		bool has(const String& key) const
 			throw()
 		{
-			return !(find(key) == end());
+			return !(HashMap<String, Value>::find(key) == end());
 		}
 
 		/** Return true if the hash map is empty.
