@@ -1,4 +1,4 @@
-// $Id: structureMapper.C,v 1.8 2000/03/28 15:35:29 oliver Exp $
+// $Id: structureMapper.C,v 1.9 2000/06/29 11:06:27 len Exp $
 
 #include <BALL/STRUCTURE/structureMapper.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
@@ -696,6 +696,116 @@ namespace BALL
 
 		return transformation;
 	}
+
+	Matrix4x4 StructureMapper::matchBackboneAtoms
+		(const Residue* r1,
+		 const Residue* r2)
+	{
+		int counter = 0;
+		bool	got_p1_r1 = false;
+		bool  got_p2_r1 = false;
+		bool	got_p3_r1 = false;
+		bool  got_p1_r2 = false;
+		bool  got_p2_r2 = false;
+		bool  got_p3_r2 = false;
+
+		Matrix4x4 T(0,0,0,0,
+								0,0,0,0,
+								0,0,0,0,
+								0,0,0,0);
+ 
+		Vector3 p1_r1;  // Position of C_alpha atom of residue r1
+		Vector3 p2_r1;  // Position of backbone N atom of residue r1
+		Vector3 p3_r1;  // Position of backbone C atom of residue r1 
+		Vector3 p1_r2;  // Position of C_alpha atom of residue r2
+		Vector3 p2_r2;  // Position of backbone N atom of residue r2
+		Vector3 p3_r2;  // Position of backbone C atom of residue r2 
+
+		AtomIterator atom_it;
+
+		// searching the backbone atoms of residue r1
+		for (atom_it = r1->beginAtom(); atom_it != r1->endAtom(); ++atom_it)
+			{
+				if (got_p1_r1 == false && (*atom_it).getName() == "CA")
+					{
+						p1_r1 = (*atom_it).getPosition();
+						got_p1_r1 = true;
+						counter++;
+					}
+				if (got_p2_r1 == false && (*atom_it).getName() == "N")
+					{
+						p2_r1 = (*atom_it).getPosition();
+						got_p2_r1 = true;
+						counter++;
+					}
+				if (got_p3_r1 == false && (*atom_it).getName() == "C")
+					{
+						p3_r1 = (*atom_it).getPosition();
+						got_p3_r1 = true;
+						counter++;
+					}
+			} 
+
+		// searching the backbone atoms of residue r2
+		for (atom_it = r2->beginAtom(); atom_it != r2->endAtom(); ++atom_it)
+			{
+				if (got_p1_r2 == false && (*atom_it).getName() == "CA")
+					{
+						p1_r2 = (*atom_it).getPosition();
+						got_p1_r2 = true;
+						counter++;
+					}
+				if (got_p2_r2 == false && (*atom_it).getName() == "N")
+					{
+						p2_r2 = (*atom_it).getPosition();
+						got_p2_r2 = true;
+						counter++;
+					}
+				if (got_p3_r2 == false && (*atom_it).getName() == "C")
+					{
+						p3_r2 = (*atom_it).getPosition();
+						got_p3_r2 = true;
+						counter++;
+					}
+			} 
+
+		// Backbone atoms are missing
+		if (counter != 6)
+			{
+			  // Error: Send error message	
+				Log.error() << "matchBackboneAtoms: missing backbone atoms" << endl;
+			}
+		else
+			{
+				T = matchPoints_(p1_r1,p2_r1,p3_r1,p1_r2,p2_r2,p3_r2);
+			}
+
+		return T;
+	}
+
+	// map the i-th residue in the list l1 
+  // on the i-th residue of the list l2 (the backbone atoms are matched) 
+	int StructureMapper::mapResidues(const list<Residue*>& l1, const list<Residue*>& l2)
+		{
+			int counter = 0; // number of matched residues
+			Matrix4x4 M;
+
+			list<Residue*>::const_iterator list_it_l1 = l1.begin();
+			list<Residue*>::const_iterator list_it_l2 = l2.begin();
+
+			TransformationProcessor T;
+
+			for ( ; list_it_l1 != l1.end() && list_it_l2 != l2.end(); ++list_it_l1,++list_it_l2)
+				{
+					T.setTransformation(matchBackboneAtoms((*list_it_l1),(*list_it_l2)));
+					if (!(T.getTransformation().isEqual(M)))
+						{
+							(*list_it_l1)->apply(T);
+							counter++;
+						}   
+				}
+			return(counter);
+		}
 
 	vector<vector<Fragment*> >&StructureMapper::searchPattern_
 		(vector<Fragment*>& pattern,
