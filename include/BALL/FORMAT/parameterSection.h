@@ -1,4 +1,4 @@
-// $Id: parameterSection.h,v 1.7 2000/10/09 10:58:23 anker Exp $
+// $Id: parameterSection.h,v 1.8 2000/10/17 17:13:55 anker Exp $
 // Format: general  parameter section class
 
 #ifndef BALL_FORMAT_PARAMETERSECTION_H
@@ -43,11 +43,14 @@ namespace BALL
 
 		/**	Default constructor.
 		*/
-		ParameterSection();
+		ParameterSection() throw();
+
+		/** Copy constructor */
+		ParameterSection(const ParameterSection& parameter_section) throw();
 
 		/**	Destructor.
 		*/
-		virtual ~ParameterSection();
+		virtual ~ParameterSection() throw();
 
 		//@}
 		
@@ -63,7 +66,8 @@ namespace BALL
 				@param	section_name the name of the section to be read (without the squared brackets)
 				@return bool - {\bf true} if the section could be read, {\bf false} otherwise
 		*/
-		bool extractSection(Parameters& parameters, const String& section_name);
+		bool extractSection(Parameters& parameters, const String& section_name)
+			throw();
 
 		/**	Return the name of the section read.
 				The section name is empty befor \Ref{extractSection} was called.
@@ -76,7 +80,8 @@ namespace BALL
 				given variable.
 				If the requested variable is not defined in the format line, an empty string is returned.
 		*/
-		const String& getValue(const String& key, const String& variable) const;
+		const String& getValue(const String& key, const String& variable) const
+			throw();
 		
 		/**	Query for a pair of key and variable.
 				False is returned if 
@@ -86,39 +91,40 @@ namespace BALL
 								in the format line
 				\end{itemize}
 		*/
-		bool has(const String& key, const String& variable) const;
+		bool has(const String& key, const String& variable) const throw();
 		
 		/**	Query for a key.
 				False is returned if the key could not be found.
 				@param key the key to serch in the hash table
 		*/
-		bool has(const String& key) const;
+		bool has(const String& key) const throw();
 		
 		/**	Query whether a specified variable was defined in the format line.
 		*/
-		bool hasVariable(const String& variable) const;
+		bool hasVariable(const String& variable) const throw();
 
 		/**	Return the column index of a variable.
 		*/
-		Position getColumnIndex(const String& variable) const;
+		Position getColumnIndex(const String& variable) const throw();
 
 		/**	Returns the number of defined variables.
 		*/
-		Size getNumberOfVariables() const;
+		Size getNumberOfVariables() const throw();
 
 		/**	Returns the number of different keys defined.
 		*/
-		Size getNumberOfKeys() const;
+		Size getNumberOfKeys() const throw();
 
 
 		/**	Fast access to the value array 
 		*/
-		const String& getValue(Position key_index, Position variable_index) const;
+		const String& getValue(Position key_index, Position variable_index)
+			const throw();
 
 		/**	Fast access to the key array.
 				The first key has the index 0.
 		*/
-		const String& getKey(Position key_index) const;
+		const String& getKey(Position key_index) const throw();
 
 		//@}
 
@@ -127,10 +133,11 @@ namespace BALL
 		//@{
 
 		/**	Clear method.  */
-		virtual void clear();
+		virtual void clear() throw();
 
 		/** Assignment operator */
-		const ParameterSection& operator = (const ParameterSection& section);
+		const ParameterSection& operator = (const ParameterSection& section)
+			throw();
 
 		//@}
 
@@ -141,10 +148,12 @@ namespace BALL
 			
 		/**	Validity predicate
 		*/
-		virtual bool isValid() const;
+		virtual bool isValid() const throw();
 
 		/** Equality operator */
-		bool operator == (const ParameterSection& parameter_section) const;
+		bool operator == (const ParameterSection& parameter_section) const
+			throw();
+
 		//@}
 
 		/**	@name	Public Members
@@ -156,6 +165,7 @@ namespace BALL
 				and must be of the form "@name=value".
 		*/
 		Options	options;
+
 		//@}
 
 
@@ -182,7 +192,7 @@ namespace BALL
 				The index of a specific value is calculated as
 				section_entries_[key] * number_of_variables_ * variable_names_[name]
 		*/
-		String*					entries_;
+		std::vector<String>					entries_;
 
 		/*_	One-dimensional array of the keys read from the section.
 		*/
@@ -195,7 +205,7 @@ namespace BALL
 
 		/*_	The version numbers of each key.
 		*/
-		float*	version_;
+		std::vector<float>	version_;
 
 		/*_	The valid flag.
 		*/
