@@ -1,4 +1,4 @@
-// $Id: forceField.C,v 1.13 2000/02/06 20:08:27 oliver Exp $
+// $Id: forceField.C,v 1.14 2000/02/06 20:22:05 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
 
@@ -152,6 +152,12 @@ namespace BALL
 		collectAtoms_(system);
 		Size old_size = atoms_.size();
 
+		// generate the vector of molecules if periodic boundary is enabled
+		if (periodic_boundary.isEnabled())
+		{
+			periodic_boundary.generateMoleculesVector();
+		}
+
 		// force field specific parts
 		success = specificSetup();
 		if (!success) 
@@ -217,33 +223,6 @@ namespace BALL
 
 
 		number_of_movable_atoms_ = atoms_.size();
-		// generate the vector of molecules if periodic boundary is enabled
-		if (periodic_boundary.isEnabled())
-		{
-			periodic_boundary.generateMoleculesVector();
-		}
-
-		// force field specific parts
-		success = specificSetup();
-		if (!success) 
-		{
-			Log.error() << "Force Field specificSetup failed!" << endl;
-			return false;
-		}
-
-		// call the setup method for each force field component
-		vector<ForceFieldComponent*>::iterator  it;
-		for (it = components_.begin(); (it != components_.end()) && success; ++it)
-		{
-			success = (*(*it)).setup();
-			if (!success) 
-			{
-				Log.error() << "Force Field Component setup of " 
-					<< (*it)->name_ <<  " failed!" << endl;
-			}
-		}
-
-		return success;
 	}
 
 	// Setup with a system and a set of options
