@@ -1,4 +1,4 @@
-// $Id: socket.h,v 1.12 2000/01/16 22:36:18 oliver Exp $
+// $Id: socket.h,v 1.13 2000/01/24 20:30:35 oliver Exp $
 
 #ifndef BALL_SYSTEM_SOCKET_H
 #define BALL_SYSTEM_SOCKET_H
@@ -87,10 +87,10 @@
 #endif // LINUX
 
 
-extern void sock_error (const char* classname, const char* error_message);
-
 namespace BALL 
 {
+	
+	void errnoError_(const char* method_name);
 
 	/**	@name	Network socket support */
 	//@{
@@ -138,8 +138,6 @@ namespace BALL
 		///
 		virtual sockaddr* getAddr() const = 0;
 		//@}
-
-		void error (const char* errmsg) const;
 	};
 
 	/**	
@@ -412,8 +410,6 @@ namespace BALL
 		int linger(int tim = -1) const;
 		int sendbufsz(int sz = -1)   const;
 		int recvbufsz(int sz = -1)   const;
-		
-		void error (const char* errmsg) const;
 	};
 
 #ifdef BALL_HAS_ANSI_IOSTREAM
@@ -465,8 +461,6 @@ namespace BALL
 		{ 
 			return rdbuf(); 
 		}
-
-		void error(const char* errmsg) const;
 	};
 
 	/**	
@@ -518,8 +512,6 @@ namespace BALL
 		}
 
 		//@}
-
-		void error (const char* errmsg) const;
 	};
 
 	/**	
@@ -765,7 +757,6 @@ namespace BALL
 		}
 
 		//@}
-		void error (const char* errmsg) const;
 	};
 
 	/**	

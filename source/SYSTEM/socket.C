@@ -1,4 +1,4 @@
-// $Id: socket.C,v 1.13 2000/01/15 19:01:01 oliver Exp $
+// $Id: socket.C,v 1.14 2000/01/24 20:30:38 oliver Exp $
 
 // ORIGINAL COPYRIGHT DISCLAIMER
 // /////////////////////////////
@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <errno.h>
+#include <stdio.h>
 #include <netdb.h>
 #include <arpa/inet.h>
 
@@ -31,26 +32,26 @@
 #endif
 #define FD_ZERO(p) (memset ((p), 0, sizeof *(p)))
 
-using std::cerr;
 using std::endl;
 
 namespace BALL 
 {
 
-	void sock_error(const char* classname, const char* msg)
+	void errnoError_(const char* method_name)
 	{
-		if (errno)
+		// retrieve the error message
+		const char* error_message = const_cast<const char*>(strerror(errno));
+
+		if (error_message == 0)
 		{
-			perror (msg);
+			error_message = "unknown error";
 		}
 
-		cerr << classname << ' ' << msg << endl;
-		errno = 0;
-	}
+		// print the mesage
+		Log.error() << "Error in " << method_name << ": " << error_message << endl;
 
-	void SockAddr::error(const char* msg) const
-	{
-		sock_error("class sockAddr ", msg);
+		// reset the error flag
+		errno = 0;
 	}
 
 	SocketBuf::SocketBuf(int soc)
@@ -76,7 +77,7 @@ namespace BALL
 #	endif
 		if (rep->sock == -1)
 		{
-			perror ("SocketBuf::SocketBuf");
+			errnoError_("SocketBuf::SocketBuf");
 		}
 
 		xsetflags (_S_LINE_BUF);
@@ -311,19 +312,20 @@ namespace BALL
 
 	int SocketBuf::connect(SockAddr& sa)
 	{
+		int result = 0;
 		if (::connect(rep->sock, sa.getAddr(), sa.getSize()) == -1) 
 		{
-			Log.error() << "SocketBuf::connect: cannot connect. " << endl;
-			return errno;
+			result = errno;
+			errnoError_("SocketBuf::connect");
 		}
-		return 0;
+		return result;
 	}
 
 	void SocketBuf::listen(int num)
 	{
 		if (::listen(rep->sock, num) == -1)
 		{
-			error("SocketBuf::listen");
+			errnoError_("SocketBuf::listen");
 		}
 	}
 
@@ -339,7 +341,7 @@ namespace BALL
 
 		if (soc == -1)
 		{
-			error ("SocketBuf::accept");
+			errnoError_("SocketBuf::accept(SockAddr&)");
 		}
 
 		return soc;
@@ -355,7 +357,7 @@ namespace BALL
 
 		if (soc == -1)
 		{
-			error ("SocketBuf::accept");
+			errnoError_("SocketBuf::accept()");
 		}
 
 		return soc;
@@ -371,7 +373,7 @@ namespace BALL
 		int	rval;
 		if ((rval = (int)::read(rep->sock, (char*) buf, len)) == -1)
 		{
-			error("SocketBuf::read");
+			errnoError_("SocketBuf::read()");
 		}
 
 		return (rval==0) ? EOF: rval;
@@ -388,7 +390,7 @@ namespace BALL
 
 		if ((rval = ::recv (rep->sock, (char*) buf, len, msgf)) == -1)
 		{
-			error ("SocketBuf::recv");
+			errnoError_("SocketBuf::recv()");
 		}
 
 		return (rval==0) ? EOF: rval;
@@ -406,7 +408,7 @@ namespace BALL
 		
 		if ((rval = ::recvfrom (rep->sock, (char*) buf, len, msgf, sa.getAddr(), &sock_addr_len)) == -1)
 		{
-			error ("SocketBuf::recvfrom");
+			errnoError_("SocketBuf::recvfrom()");
 		}
 
 		return (rval==0) ? EOF: rval;
@@ -425,7 +427,7 @@ namespace BALL
 			int	wval;
 			if ((wval = (int)::write (rep->sock, (char*) buf, len)) == -1) 
 			{
-				error ("SocketBuf::write");
+				errnoError_("SocketBuf::write()");
 				return wval;
 			}
 
@@ -449,7 +451,7 @@ namespace BALL
 			int	wval;
 			if ((wval = ::send (rep->sock, (char*) buf, len, msgf)) == -1) 
 			{
-				error ("SocketBuf::send");
+				errnoError_("SocketBuf::send");
 				return wval;
 			}
 
@@ -473,7 +475,7 @@ namespace BALL
 			int	wval;
 			if ((wval = ::sendto (rep->sock, (char*) buf, len, msgf, sa.getAddr(), sa.getSize())) == -1) 
 			{
-				error ("SocketBuf::sendto");
+				errnoError_("SocketBuf::sendto");
 				return wval;
 			}
 
@@ -497,7 +499,7 @@ namespace BALL
 		int	rval;
 		if ((rval = ::recvmsg(rep->sock, msg, msgf)) == -1)
 		{
-			error ("SocketBuf::recvmsg");
+			errnoError_("SocketBuf::recvmsg");
 		}
 
 		return (rval==0)? EOF: rval;
@@ -513,7 +515,7 @@ namespace BALL
 		int	wval;
 		if ((wval = ::sendmsg (rep->sock, msg, msgf)) == -1)
 		{
-			error("SocketBuf::sendmsg");
+			errnoError_("SocketBuf::sendmsg");
 		}
 
 		return wval;
@@ -547,7 +549,7 @@ namespace BALL
 		int ret = select(rep->sock + 1, &fds, 0, 0, (wp_sec == -1) ? 0: &tv);
 		if (ret == -1) 
 		{
-			error ("SocketBuf::readready");
+			errnoError_("SocketBuf::readready");
 			return 0;
 		}
 
@@ -567,7 +569,7 @@ namespace BALL
 		int ret = select (rep->sock+1, 0, &fds, 0, (wp_sec == -1) ? 0: &tv);
 		if (ret == -1) 
 		{
-			error ("Select::operator()");
+			errnoError_("Select::operator()");
 			return 0;
 		}
 
@@ -587,7 +589,7 @@ namespace BALL
 		int ret = select (rep->sock+1, 0, 0, &fds, (wp_sec == -1) ? 0: &tv);
 		if (ret == -1) 
 		{
-			error ("Select::operator()");
+			errnoError_("Select::operator()");
 			return 0;
 		}
 
@@ -611,7 +613,7 @@ namespace BALL
 
 		if (::shutdown(rep->sock, sh) == -1)
 		{
-			error("SocketBuf::shutdown");
+			errnoError_("SocketBuf::shutdown");
 		}
 	}
 
@@ -620,7 +622,7 @@ namespace BALL
 		BALL_SOCKLEN_TYPE	rlen = len;
 		if (::getsockopt (rep->sock, l, op, (char*) buf, &rlen) == -1)
 		{
-			perror ("SocketBuf::getopt");
+			errnoError_("SocketBuf::getopt");
 		}
 
 		return rlen;
@@ -630,7 +632,7 @@ namespace BALL
 	{
 		if (::setsockopt (rep->sock, l, op, (char*) buf, len) == -1)
 		{
-			perror ("SocketBuf::setopt");
+			errnoError_("SocketBuf::setopt");
 		}
 	}
 
@@ -769,20 +771,10 @@ namespace BALL
 		return old;
 	}
 
-	void SocketBuf::error(const char* msg) const
-	{
-		sock_error("class SocketBuf: ", msg);
-	}
-
 	ISockStream::~ISockStream()
 	{
 		delete rdbuf();
 		init(0);
-	}
-
-	void ISockStream::error(const char* msg) const
-	{
-		sock_error("class ISockStream: ", msg);
 	}
 
 	OSockStream::~OSockStream()
@@ -791,24 +783,11 @@ namespace BALL
 		init(0);
 	}
 
-	void OSockStream::error(const char* msg) const
-	{
-		sock_error("class OSockStream: ", msg);
-	}
-
 	IOSockStream::~IOSockStream()
 	{
 		delete rdbuf();
 		init(0);
 	}
-
-	void IOSockStream::error(const char* msg) const
-	{
-		sock_error("class IOSockStream: ", msg);
-	}
-
-
-	void error(const char*);
 
 	SockInetAddr::SockInetAddr() 
 	{
@@ -864,9 +843,8 @@ namespace BALL
 		servent* sp = getservbyname(service_name.c_str(), protocol_name.c_str());
 		if (sp == 0) 
 		{
-			perror(service_name.c_str());
-			error ("SockInetAddr: invalid service name");
-			exit(1);
+			errnoError_(service_name.c_str());
+			return;
 		}
 
 		sin_port = sp->s_port;
@@ -884,8 +862,9 @@ namespace BALL
 			hostent* hp = gethostbyname(host_name.c_str());
 			if (hp == 0) 
 			{
-				Log.error() << "SockInetAddr::setaddr(" << host_name << "): cannot find host!" << endl;
-				exit(1);
+				String message = "SockInetAddr::setaddr(" + String(host_name) + ")";
+				errnoError_(message.c_str());
+				return;
 			}
 			memcpy(&sin_addr, hp->h_addr, hp->h_length);
 			sin_family = hp->h_addrtype;
@@ -904,7 +883,7 @@ namespace BALL
 		{
 			if (::gethostname(buf, 255) == -1) 
 			{
-				perror("in SockInetAddr::getHostname");
+				errnoError_("SockInetAddr::getHostname");
 				hostname = "";
 			} else {
 				hostname = buf;
@@ -916,12 +895,9 @@ namespace BALL
 		hostent* hp = gethostbyaddr((const char*) &sin_addr, sizeof(sin_addr), getFamily());
 		if (hp == 0) 
 		{
-			herror("SockInetAddr::getHostname");
-			
-			return hostname;
-		}
-
-		if (hp->h_name) 
+			errnoError_("SockInetAddr::getHostname()");
+		} 
+		else if (hp->h_name) 
 		{
 			hostname = hp->h_name;
 		}
@@ -959,7 +935,7 @@ namespace BALL
 		BALL_SOCKLEN_TYPE len = sin.getSize();
 		if (::getsockname(rep->sock, sin.getAddr(), &len) == -1)
 		{
-			perror("SockInetBuf::localaddr()");
+			errnoError_("SockInetBuf::localaddr()");
 		}
 
 		return sin;
@@ -995,7 +971,7 @@ namespace BALL
 		BALL_SOCKLEN_TYPE len = sin.getSize();
 		if (::getpeername(rep->sock, sin.getAddr(), &len) == -1)
 		{
-			perror("SockInetBuf::peeraddr()");
+			errnoError_("SockInetBuf::peeraddr()");
 		}
 
 		return sin;
@@ -1145,28 +1121,3 @@ namespace BALL
 	}
 
 } // namespace BALL
-
-#	ifndef BALL_OS_LINUX
-
-	extern "C" int h_errno;
-	static const char* errmsg[] = 
-	{
-		": No error\n",
-		": Host not found\n",
-		": Try again\n",
-		": No recovery\n",		
-		": No address\n"
-		": Unknown error\n"
-	};
-
-	void herror(const char* em)
-	{
-		if (h_errno > 5) 
-		{
-			h_errno = 5;
-		}
-
-		cerr << em << errmsg[h_errno];
-	}
-
-#	endif // !LINUX
