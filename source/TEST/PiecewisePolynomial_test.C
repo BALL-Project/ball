@@ -1,14 +1,14 @@
-// $Id: PiecewisePolynomial_test.C,v 1.1 2000/08/31 12:28:11 anker Exp $
+// $Id: PiecewisePolynomial_test.C,v 1.2 2000/08/31 12:33:26 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 
 // insert includes here
-#include "piecewisePolynomial.h"
+#include <BALL/MATHS/piecewisePolynomial.h>
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: PiecewisePolynomial_test.C,v 1.1 2000/08/31 12:28:11 anker Exp $")
+START_TEST(class_name, "$Id: PiecewisePolynomial_test.C,v 1.2 2000/08/31 12:33:26 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

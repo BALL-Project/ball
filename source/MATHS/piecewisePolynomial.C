@@ -1,4 +1,4 @@
-#include "piecewisePolynomial.h"
+#include <BALL/MATHS/piecewisePolynomial.h>
 
 namespace BALL
 {
