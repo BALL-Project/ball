@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.5 2003/10/19 14:10:23 amoll Exp $
+// $Id: representation.C,v 1.6 2003/10/20 17:03:35 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/representation.h>
 #include <BALL/VIEW/MODELS/modelProcessor.h>
@@ -129,7 +129,7 @@ namespace BALL
 			composites_.clear();
 
 			if (model_processor_  != 0) delete model_processor_;
-			//if (color_processor_  != 0) delete model_processor_;
+			if (color_processor_  != 0) delete model_processor_;
 			model_processor_ 	= 0;
 			color_processor_ 	= 0;
 
@@ -257,7 +257,7 @@ namespace BALL
 		{ 
 			if (color_processor_ != 0)
 			{
-				//delete color_processor_;
+				delete color_processor_;
 			}
 			color_processor_ = processor;
 			
