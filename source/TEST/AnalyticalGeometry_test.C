@@ -1,4 +1,4 @@
-// $Id: AnalyticalGeometry_test.C,v 1.16 2000/04/16 20:11:24 amoll Exp $
+// $Id: AnalyticalGeometry_test.C,v 1.17 2000/05/26 19:25:00 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 #include <BALL/MATHS/analyticalGeometry.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: AnalyticalGeometry_test.C,v 1.16 2000/04/16 20:11:24 amoll Exp $")
+START_TEST(class_name, "$Id: AnalyticalGeometry_test.C,v 1.17 2000/05/26 19:25:00 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -26,7 +26,6 @@ Line3 l1, l2, l3, l4;
 Angle a1, a2, a3, a4;
 Plane3 p1, p2, p3, p4;
 
-//line54: method GetDeterminant_(const T* m, Size dim)
 CHECK(GetDeterminant_(const T* m, Size dim))
 	float m[16];
 	float x, x1;
@@ -56,7 +55,6 @@ CHECK(GetDeterminant_(const T* m, Size dim))
 	TEST_REAL_EQUAL(x * 2, x1)
 RESULT
 
-//line90
 CHECK(GetDeterminant(const T* m, Size dim))
 	float m[16];
 	float x, x1;
@@ -86,7 +84,6 @@ CHECK(GetDeterminant(const T* m, Size dim))
 	TEST_REAL_EQUAL(x * 2, x1)
 RESULT
 
-//line114: method GetDeterminant2(const T* m)
 CHECK(GetDeterminant2(const T* m))
 	float m[16], x, x1;
 	m[0] = 0;
@@ -108,7 +105,6 @@ CHECK(GetDeterminant2(const T* m))
 	TEST_REAL_EQUAL(x * 4, x1)
 RESULT
 
-//line125
 CHECK(GetDeterminant2(const T& m00, const T& m01, const T& m10, const T& m11))
 	float x, x1;
 	x = GetDeterminant2(0, 1, 2, 3);
@@ -116,7 +112,6 @@ CHECK(GetDeterminant2(const T& m00, const T& m01, const T& m10, const T& m11))
 	TEST_REAL_EQUAL(-x, x1)
 RESULT
 
-//line136: method GetDeterminant3(const T *m)
 CHECK(GetDeterminant3(const T *m))
 	float m[9], x, x1;
 	for (int i = 0; i < 9 ; i++ )
@@ -140,7 +135,6 @@ CHECK(GetDeterminant3(const T *m))
 	TEST_REAL_EQUAL(x * 2, x1)
 RESULT
 
-//line154
 CHECK(GetDeterminant3(const T& m00, const T& m01, const T& m02,
 								  		const T& m10, const T& m11, const T& m12,
 											const T& m20, const T& m21, const T& m22))
@@ -149,7 +143,6 @@ CHECK(GetDeterminant3(const T& m00, const T& m01, const T& m02,
 	TEST_REAL_EQUAL(x, -x1)
 RESULT
 
-//line166: method SolveSystem(const T* m, T* x, const Size dim)
 CHECK(SolveSystem(const T* m, T* x, const Size dim))
 	float m[6], x[2];
 	m[0] = 1.0;
@@ -171,7 +164,6 @@ CHECK(SolveSystem(const T* m, T* x, const Size dim))
 	TEST_REAL_EQUAL(x[1], 2.0)
 RESULT
 
-//line249
 CHECK(SolveSystem2(const T& a1, const T& b1, const T& c1,
 									const T& a2, const T& b2, const T& c2,
 									T& x1, T& x2))
@@ -183,7 +175,6 @@ CHECK(SolveSystem2(const T& a1, const T& b1, const T& c1,
 	TEST_REAL_EQUAL(x2, 2.0)
 RESULT
 
-//line275: method SolveSquaredEquality(const T& a, const T& b, const T &c, T &x1, T &x2)
 CHECK(SolveSquaredEquality(const T& a, const T& b, const T &c, T &x1, T &x2))
 	float x1, x2;
 	// 0 + 0 = 0
@@ -210,7 +201,6 @@ CHECK(SolveSquaredEquality(const T& a, const T& b, const T &c, T &x1, T &x2))
 	TEST_REAL_EQUAL(x2, 1.0)
 RESULT
 
-//line301
 CHECK(GetPartition(const TVector3<T>& a, const TVector3<T>& b))
 	v1.set(0.0, 0.0, 0.0);
 	v2.set(10.0, 0.0, 0.0);
@@ -218,7 +208,6 @@ CHECK(GetPartition(const TVector3<T>& a, const TVector3<T>& b))
 	TEST_EQUAL(GetPartition(v1, v2), v3)
 RESULT
 
-//line319: method GetPartition(const TVector3<T>& a, const TVector3<T>& b, const T& r, const T& s)
 CHECK(GetPartition(const TVector3<T>& a, const TVector3<T>& b, const T& r, const T& s))
 	v1.set(0.0, 10.0, 10.0);
 	v2.set(20.0, 0.0, 0.0);
@@ -227,7 +216,6 @@ CHECK(GetPartition(const TVector3<T>& a, const TVector3<T>& b, const T& r, const
 	TEST_EXCEPTION(Exception::DivisionByZero, GetPartition(v1, v2, (float)0.0, (float)0.0))
 RESULT
 
-//line337
 CHECK(GetDistance(const TVector3<T>& a, const TVector3<T>& b))
 	v1.set(0.0, 0.0, 0.0);
 	v2.set(10.0, 0.0, 0.0);
@@ -236,7 +224,6 @@ CHECK(GetDistance(const TVector3<T>& a, const TVector3<T>& b))
 	TEST_REAL_EQUAL(GetDistance(v1, v2), 0.0)
 RESULT
 
-//line354: method GetDistance(const TLine3<T>& line, const TVector3<T>& point)
 CHECK(GetDistance(const TLine3<T>& line, const TVector3<T>& point))
 	v1.set(0.0, 0.0, 0.0);
 	v2.set(10.0, 0.0, 0.0);
@@ -249,7 +236,6 @@ CHECK(GetDistance(const TLine3<T>& line, const TVector3<T>& point))
 	TEST_EXCEPTION(Exception::DivisionByZero, GetDistance(l1, v1))
 RESULT
 
-//line365
 CHECK(GetDistance(const TVector3<T>& point, const TLine3<T>& line))
 	v1.set(0.0, 0.0, 0.0);
 	v2.set(10.0, 0.0, 0.0);
@@ -260,8 +246,6 @@ CHECK(GetDistance(const TVector3<T>& point, const TLine3<T>& line))
 	TEST_REAL_EQUAL(GetDistance(v1, l1), 0.0)
 RESULT
 
-
-//line377: method GetDistance(const TLine3<T>& a, const TLine3<T>& b)
 CHECK(GetDistance(const TLine3<T>& a, const TLine3<T>& b))
 	v1.set(0.0, 0.0, 0.0);
 	v2.set(10.0, 0.0, 0.0);
@@ -283,7 +267,6 @@ CHECK(GetDistance(const TLine3<T>& a, const TLine3<T>& b))
 	TEST_EXCEPTION(Exception::DivisionByZero, GetDistance(l1, l2))
 RESULT
 
-//line405
 CHECK(GetDistance(const TVector3<T>& point, const TPlane3<T>& plane))
 	v1.set(0.0, 0.0, 0.0);
 	v2.set(10.0, 0.0, 0.0);
@@ -298,7 +281,6 @@ CHECK(GetDistance(const TVector3<T>& point, const TPlane3<T>& plane))
 	TEST_EXCEPTION(Exception::DivisionByZero, GetDistance(v1, p1))
 RESULT
 
-//line422: method GetDistance(const TPlane3<T>& plane, const TVector3<T>& point)
 CHECK(GetDistance(const TPlane3<T>& plane, const TVector3<T>& point))
 	v1.set(0.0, 0.0, 0.0);
 	v2.set(10.0, 0.0, 0.0);
@@ -310,7 +292,6 @@ CHECK(GetDistance(const TPlane3<T>& plane, const TVector3<T>& point))
 	TEST_REAL_EQUAL(GetDistance(p1, v1), 0.0)
 RESULT
 
-//line435
 CHECK(GetDistance(const TLine3<T>& line, const TPlane3<T>& plane))
 	v1.set(0.0, 0.0, 0.0);
 	v2.set(10.0, 0.0, 0.0);
@@ -328,7 +309,6 @@ CHECK(GetDistance(const TLine3<T>& line, const TPlane3<T>& plane))
 	TEST_EXCEPTION(Exception::DivisionByZero, GetDistance(l1, p1))
 RESULT
 
-//line451: method GetDistance(const TPlane3<T>& plane, const TLine3<T>& line)
 CHECK(GetDistance(const TPlane3<T>& plane, const TLine3<T>& line))
 	v1.set(0.0, 0.0, 0.0);
 	v2.set(10.0, 0.0, 0.0);
@@ -344,7 +324,6 @@ CHECK(GetDistance(const TPlane3<T>& plane, const TLine3<T>& line))
 	TEST_REAL_EQUAL(GetDistance(p1, l1), 0.0)
 RESULT
 
-//line465
 CHECK(GetDistance(const TPlane3<T>& a, const TPlane3<T>& b))
 	v1.set(0.0, 0.0, 5.0);
 	v2.set(-10.0, 0.0, 5.0);
@@ -370,7 +349,6 @@ CHECK(GetDistance(const TPlane3<T>& a, const TPlane3<T>& b))
 	TEST_EXCEPTION(Exception::DivisionByZero, GetDistance(p1, p2))
 RESULT
 
-//line481: method GetAngle(const TVector3<T>& a, const TVector3<T>& b, TAngle<T> &intersection_angle)
 CHECK(GetAngle(const TVector3<T>& a, const TVector3<T>& b, TAngle<T> &intersection_angle))
 	v2.set(10.0, 0.0, 0.0);
 	v3.set(0.0, 10.0, 0.0);  
@@ -379,7 +357,6 @@ CHECK(GetAngle(const TVector3<T>& a, const TVector3<T>& b, TAngle<T> &intersecti
 	TEST_EQUAL(GetAngle(v2, v3, a1), false)
 RESULT
 
-//line503
 CHECK(GetAngle(const TLine3<T>& a, const TLine3<T>& b, TAngle<T>& intersection_angle))
 	v1.set(0.0, 0.0, 0.0);
 	v2.set(10.0, 0.0, 0.0);
@@ -394,7 +371,6 @@ CHECK(GetAngle(const TLine3<T>& a, const TLine3<T>& b, TAngle<T>& intersection_a
 	TEST_EQUAL(GetAngle(l1, l2, a1), false)
 RESULT
 
-//line524: method GetAngle(const TPlane3<T>& plane, const TVector3<T> &Vector3, TAngle<T> &intersection_angle)
 CHECK(GetAngle(const TPlane3<T>& plane, const TVector3<T> &Vector3, TAngle<T> &intersection_angle))
 	v1.set(0.0, 0.0, 0.0);
 	v2.set(10.0, 0.0, 0.0);
@@ -407,7 +383,6 @@ CHECK(GetAngle(const TPlane3<T>& plane, const TVector3<T> &Vector3, TAngle<T> &i
 	TEST_EQUAL(GetAngle(p1, v2, a1), false)
 RESULT
 
-//line548
 CHECK(GetAngle(const TVector3<T> &Vector3,const TPlane3<T>& plane, TAngle<T> &intersection_angle))
 	v1.set(0.0, 0.0, 0.0);
 	v2.set(10.0, 0.0, 0.0);
@@ -420,7 +395,6 @@ CHECK(GetAngle(const TVector3<T> &Vector3,const TPlane3<T>& plane, TAngle<T> &in
 	TEST_EQUAL(GetAngle(v2, p1, a1), false)
 RESULT
 
-//line563: method GetAngle(const TPlane3<T>& plane, const TLine3<T>& line, TAngle<T>& intersection_angle)
 CHECK(GetAngle(const TPlane3<T>& plane, const TLine3<T>& line, TAngle<T>& intersection_angle))
 	v1.set(0.0, 0.0, 0.0);
 	v2.set(10.0, 0.0, 0.0);
@@ -436,7 +410,6 @@ CHECK(GetAngle(const TPlane3<T>& plane, const TLine3<T>& line, TAngle<T>& inters
 	TEST_EQUAL(GetAngle(p1, l1, a1), false)
 RESULT
 
-//line587
 CHECK(GetAngle(const TLine3<T>& line, const TPlane3<T>&, plane TAngle<T>& intersection_angle))
 	v1.set(0.0, 0.0, 0.0);
 	v2.set(10.0, 0.0, 0.0);
@@ -452,7 +425,6 @@ CHECK(GetAngle(const TLine3<T>& line, const TPlane3<T>&, plane TAngle<T>& inters
 	TEST_EQUAL(GetAngle(l1, p1, a1), false)
 RESULT
 
-//line603: method GetAngle(const TPlane3<T>& a, const TPlane3<T>& b, TAngle<T>& intersection_angle)
 CHECK(GetAngle(const TPlane3<T>& a, const TPlane3<T>& b, TAngle<T>& intersection_angle))
 	v1.set(0.0, 0.0, 0.0);
 	v2.set(10.0, 0.0, 0.0);
@@ -471,7 +443,6 @@ CHECK(GetAngle(const TPlane3<T>& a, const TPlane3<T>& b, TAngle<T>& intersection
 	TEST_EQUAL(GetAngle(p1, p2, a1), false)
 RESULT
 
-//line624
 CHECK(GetIntersection(const TLine3<T>& a, const TLine3<T>& b, TVector3<T>& point))
 	v1.set(0.0, 0.0, 0.0);
 	v2.set(10.0, 0.0, 0.0);
@@ -488,7 +459,6 @@ CHECK(GetIntersection(const TLine3<T>& a, const TLine3<T>& b, TVector3<T>& point
 	TEST_EQUAL(GetIntersection(l1, l2, v1), false)
 RESULT
 
-//line658: method GetIntersection(const TPlane3<T>& plane, const TLine3<T>& line, TVector3<T>& intersection_point)
 CHECK(GetIntersection(const TPlane3<T>& plane, const TLine3<T>& line, TVector3<T>& intersection_point))
 	v1.set(0.0, 0.0, 0.0);
 	v2.set(10.0, 0.0, 0.0);
@@ -512,7 +482,6 @@ CHECK(GetIntersection(const TPlane3<T>& plane, const TLine3<T>& line, TVector3<T
 	TEST_REAL_EQUAL(v1.getDistance(v2), 0.0)
 RESULT
 
-//line682
 CHECK(GetIntersection(const TLine3<T>& line, const TPlane3<T>& plane, TVector3<T>& intersection_point))
 	v1.set(0.0, 0.0, 0.0);
 	v2.set(10.0, 0.0, 0.0);
@@ -530,7 +499,6 @@ CHECK(GetIntersection(const TLine3<T>& line, const TPlane3<T>& plane, TVector3<T
 	TEST_EQUAL(GetIntersection(l1, p1, v2), false)
 RESULT
 
-//line694: method GetIntersection(const TPlane3<T>& a, const TPlane3<T>& b, TLine3<T>& line)
 CHECK(GetIntersection(const TPlane3<T>& a, const TPlane3<T>& b, TLine3<T>& line))
 	v1.set(0.0, 0.0, 0.0);
 	v2.set(10.0, 0.0, 0.0);
@@ -553,7 +521,6 @@ CHECK(GetIntersection(const TPlane3<T>& a, const TPlane3<T>& b, TLine3<T>& line)
 	TEST_EQUAL(GetIntersection(p1, p1, l1), false)
 RESULT
 
-//line772: method GetIntersection(const TSphere3<T> &sphere, const TLine3<T>& line, TVector3<T> &intersection_point1, TVector3<T> &intersection_point2)
 CHECK(GetIntersection(const TSphere3<T> &sphere, const TLine3<T>& line, TVector3<T> &intersection_point1, TVector3<T> &intersection_point2))
 	v1.set(0.0, 0.0, 0.0);
 	s1 = Sphere3(v1, sqrt(3.0));
@@ -570,7 +537,6 @@ CHECK(GetIntersection(const TSphere3<T> &sphere, const TLine3<T>& line, TVector3
 	TEST_EQUAL(GetIntersection(s1, l1, v3, v4), false);
 RESULT
 
-//line804
 CHECK(GetIntersection(const TLine3<T>& line, const TSphere3<T> &sphere TVector3<T> &intersection_point1, TVector3<T> &intersection_point2))
 	v1.set(5.0, 0.0, 0.0);
 	s1 = Sphere3(v1, 2);
@@ -587,7 +553,6 @@ CHECK(GetIntersection(const TLine3<T>& line, const TSphere3<T> &sphere TVector3<
 	TEST_EQUAL(GetIntersection(l1, s1, v3, v4), false);
 RESULT
 
-//line818: method GetIntersection(const TSphere3<T>& sphere, const TPlane3<T>& plane, TCircle3<T>& intersectionCircle)
 CHECK(GetIntersection(const TSphere3<T>& sphere, const TPlane3<T>& plane, TCircle3<T>& intersectionCircle))
 	v1.set(5.0, 0.0, 0.0);
 	s1 = Sphere3(v1, 2);
@@ -613,7 +578,6 @@ CHECK(GetIntersection(const TSphere3<T>& sphere, const TPlane3<T>& plane, TCircl
 	TEST_EQUAL(GetIntersection(s1, p1, c1), false)
 RESULT
 
-//line859
 CHECK(GetIntersection(const TPlane3<T>& plane, const TSphere3<T>& sphere TCircle3<T>& intersectionCircle))
 	v1.set(5.0, 0.0, 0.0);
 	s1 = Sphere3(v1, 2);
@@ -631,7 +595,6 @@ CHECK(GetIntersection(const TPlane3<T>& plane, const TSphere3<T>& sphere TCircle
 	TEST_EQUAL(GetIntersection(p1, s1, c1), false)
 RESULT
 
-//line870: method GetIntersection(const TSphere3<T>& a, const TSphere3<T>& b, TCircle3<T>& intersection_circle)
 CHECK(GetIntersection(const TSphere3<T>& a, const TSphere3<T>& b, TCircle3<T>& intersection_circle))
 	v1.set(0.0, 0.0, 0.0);
 	s1 = Sphere3(v1, 5);
@@ -647,7 +610,6 @@ CHECK(GetIntersection(const TSphere3<T>& a, const TSphere3<T>& b, TCircle3<T>& i
 	TEST_REAL_EQUAL(c1.radius, radius)
 RESULT
 
-//line903
 CHECK(isCollinear(const TVector3<T>& a, const TVector3<T>& b))
 	v1.set(1.0, 2.0, 3.0);
 	v2.set(2.0, 4.0, 6.0);
@@ -656,7 +618,6 @@ CHECK(isCollinear(const TVector3<T>& a, const TVector3<T>& b))
 	TEST_EQUAL(isCollinear(v1, v2), false)
 RESULT
 
-//line916: method isComplanar(const TVector3<T>& a, const TVector3<T>& b, const TVector3<T>& c)
 CHECK(isComplanar(const TVector3<T>& a, const TVector3<T>& b, const TVector3<T>& c))
 	v1.set(1.0, 2.0, 3.0);
 	v2.set(2.0, 4.0, 6.0);
@@ -667,7 +628,6 @@ CHECK(isComplanar(const TVector3<T>& a, const TVector3<T>& b, const TVector3<T>&
 	TEST_EQUAL(isComplanar(v1, v2, v3), false)
 RESULT
 
-//line930
 CHECK(isComplanar(const TVector3<T>& a, const TVector3<T>& b, const TVector3<T>& c, const TVector3<T>& d))
 	v1.set(1.0, 2.0, 3.0);
 	v2.set(2.0, 4.0, 6.0);
@@ -680,7 +640,6 @@ CHECK(isComplanar(const TVector3<T>& a, const TVector3<T>& b, const TVector3<T>&
 	TEST_EQUAL(isComplanar(v1, v2, v3, v4), false)
 RESULT
 
-//line942: method isOrthogonal(const TVector3<T>& a, const TVector3<T>& b)
 CHECK(isOrthogonal(const TVector3<T>& a, const TVector3<T>& b))
 	v2.set(0.0, 5.0, 0.0);
 	v3.set(0.0, 0.0, 5.0);
@@ -688,7 +647,6 @@ CHECK(isOrthogonal(const TVector3<T>& a, const TVector3<T>& b))
 	TEST_EQUAL(isOrthogonal(v2, v2), false)
 RESULT
 
-//line954
 CHECK(isOrthogonal(const TVector3<T>& vector, const TLine3<T>& line))
 	v1.set(1.0, 2.0, 3.0);
 	v2.set(0.0, 5.0, 0.0);
@@ -698,7 +656,6 @@ CHECK(isOrthogonal(const TVector3<T>& vector, const TLine3<T>& line))
 	TEST_EQUAL(isOrthogonal(v1, l1), false)
 RESULT
 
-//line966: method isOrthogonal(const TLine3<T>& line, const TVector3<T>& vector)
 CHECK(isOrthogonal(const TLine3<T>& line, const TVector3<T>& vector))
 	v1.set(1.0, 2.0, 3.0);
 	v2.set(0.0, 5.0, 0.0);
@@ -708,7 +665,6 @@ CHECK(isOrthogonal(const TLine3<T>& line, const TVector3<T>& vector))
 	TEST_EQUAL(isOrthogonal(l1, v1), false)
 RESULT
 
-//line978
 CHECK(isOrthogonal(const TLine3<T>& a, const TLine3<T>& b))
 	v1.set(0.0, 0.0, 0.0);
 	v2.set(0.0, 5.0, 0.0);
@@ -721,7 +677,6 @@ CHECK(isOrthogonal(const TLine3<T>& a, const TLine3<T>& b))
 	TEST_EQUAL(isOrthogonal(l1, l2), false)
 RESULT
 
-//line990: method isOrthogonal(const TVector3<T>& vector, const TPlane3<T>& plane)
 CHECK(isOrthogonal(const TVector3<T>& vector, const TPlane3<T>& plane))
 	v1.set(0.0, 0.0, 0.0);
 	v2.set(0.0, 5.0, 0.0);
@@ -733,7 +688,6 @@ CHECK(isOrthogonal(const TVector3<T>& vector, const TPlane3<T>& plane))
 	TEST_EQUAL(isOrthogonal(v1, p1), false)
 RESULT
 
-//line1002
 CHECK(isOrthogonal(const TPlane3<T>& plane, const TVector3<T>& vector))
 	v1.set(0.0, 0.0, 0.0);
 	v2.set(0.0, 5.0, 0.0);
@@ -745,7 +699,6 @@ CHECK(isOrthogonal(const TPlane3<T>& plane, const TVector3<T>& vector))
 	TEST_EQUAL(isOrthogonal(p1, v1), false)
 RESULT
 
-//line1014: method isOrthogonal(const TPlane3<T>& a, const TPlane3<T>& b)
 CHECK(isOrthogonal(const TPlane3<T>& a, const TPlane3<T>& b))
 	v1.set(0.0, 0.0, 0.0);
 	v2.set(10.0, 0.0, 0.0);
@@ -759,7 +712,6 @@ CHECK(isOrthogonal(const TPlane3<T>& a, const TPlane3<T>& b))
 	TEST_EQUAL(isOrthogonal(p1, p1), false)
 RESULT
 
-//line1026
 CHECK(isIntersecting(const TVector3<T>& point, const TLine3<T>& line))
 	v1.set(1.0, 2.0, 3.0);
 	v2.set(0.0, 5.0, 0.0);
@@ -770,7 +722,6 @@ CHECK(isIntersecting(const TVector3<T>& point, const TLine3<T>& line))
 	TEST_EQUAL(isIntersecting(v3, l1), false)
 RESULT
 
-//line1038: method isIntersecting(const TLine3<T>& line, const TVector3<T>& point)
 CHECK(isIntersecting(const TLine3<T>& line, const TVector3<T>& point))
 	v1.set(1.0, 2.0, 3.0);
 	v2.set(0.0, 5.0, 0.0);
@@ -781,7 +732,6 @@ CHECK(isIntersecting(const TLine3<T>& line, const TVector3<T>& point))
 	TEST_EQUAL(isIntersecting(l1, v3), false)
 RESULT
 
-//line1050
 CHECK(isIntersecting(const TLine3<T>& a, const TLine3<T>& b))
 	v1.set(1.0, 2.0, 3.0);
 	v2.set(0.0, 5.0, 0.0);
@@ -794,8 +744,6 @@ CHECK(isIntersecting(const TLine3<T>& a, const TLine3<T>& b))
 	TEST_EQUAL(isIntersecting(l1, l2), false)
 RESULT
 
-
-//line1062: method isIntersecting(const TVector3<T>& point, const TPlane3<T>& plane)
 CHECK(isIntersecting(const TVector3<T>& point, const TPlane3<T>& plane))
 	v1.set(1.0, 2.0, 3.0);
 	v2.set(0.0, 5.0, 0.0);
@@ -807,7 +755,6 @@ CHECK(isIntersecting(const TVector3<T>& point, const TPlane3<T>& plane))
 	TEST_EQUAL(isIntersecting(v1, p1), true)
 RESULT
 
-//line1074
 CHECK(isIntersecting(const TPlane3<T>& plane, const TVector3<T>& point))
 	v1.set(1.0, 2.0, 3.0);
 	v2.set(0.0, 5.0, 0.0);
@@ -819,7 +766,6 @@ CHECK(isIntersecting(const TPlane3<T>& plane, const TVector3<T>& point))
 	TEST_EQUAL(isIntersecting(p1, v1), true)
 RESULT
 
-//line1086: method isIntersecting(const TLine3<T>& line, const TPlane3<T>& plane)
 CHECK(isIntersecting(const TLine3<T>& line, const TPlane3<T>& plane))
 	v1.set(1.0, 2.0, 3.0);
 	v2.set(0.0, 0.0, 3.0);
@@ -835,8 +781,6 @@ CHECK(isIntersecting(const TLine3<T>& line, const TPlane3<T>& plane))
 	TEST_EQUAL(isIntersecting(l1, p1), false)
 RESULT
 
-
-//line1110: method isIntersecting(const TPlane3<T>& a, const TPlane3<T>& b)
 CHECK(isIntersecting(const TPlane3<T>& a, const TPlane3<T>& b))
 	v1.set(1.0, 2.0, 3.0);
 	v2.set(0.0, 0.0, 3.0);
@@ -852,7 +796,6 @@ CHECK(isIntersecting(const TPlane3<T>& a, const TPlane3<T>& b))
 	TEST_EQUAL(isIntersecting(p1, p2), false)
 RESULT
 
-//line1121
 CHECK(isParallel(const TLine3<T>& line, const TPlane3<T>& plane))
 	v1.set(0.0, 0.0, 0.0);
 	v2.set(10.0, 0.0, 0.0);
@@ -867,7 +810,6 @@ CHECK(isParallel(const TLine3<T>& line, const TPlane3<T>& plane))
 	TEST_EQUAL(isParallel(l1, p1), false)	
 RESULT
 
-//line1134: method isParallel(const TPlane3<T>& plane, const TLine3<T>& line)
 CHECK(isParallel(const TPlane3<T>& plane, const TLine3<T>& line))
 	v1.set(0.0, 0.0, 0.0);
 	v2.set(10.0, 0.0, 0.0);
@@ -882,7 +824,6 @@ CHECK(isParallel(const TPlane3<T>& plane, const TLine3<T>& line))
 	TEST_EQUAL(isParallel(p1, l1), false)	
 RESULT
 
-//plane1146
 CHECK(isParallel(const TPlane3<T>& a, const TPlane3<T>& b))
 	v1.set(0.0, 0.0, 0.0);
 	v2.set(10.0, 0.0, 0.0);
@@ -898,7 +839,6 @@ CHECK(isParallel(const TPlane3<T>& a, const TPlane3<T>& b))
 	TEST_EQUAL(isParallel(p1, p2), false)
 RESULT
 
-//line1171
 CHECK(TAngle<T> getTorsionAngle
 		(const T& ax, const T& ay, const T& az,
 		 const T& bx, const T& by, const T& bz,

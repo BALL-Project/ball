@@ -1,13 +1,14 @@
-// $Id: Circle3_test.C,v 1.1 2000/03/03 10:09:00 amoll Exp $
+// $Id: Circle3_test.C,v 1.2 2000/05/26 19:25:01 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 
 #	include <BALL/MATHS/circle3.h>
 #	include <BALL/MATHS/vector3.h>
+
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Circle3_test.C,v 1.1 2000/03/03 10:09:00 amoll Exp $")
+START_TEST(class_name, "$Id: Circle3_test.C,v 1.2 2000/05/26 19:25:01 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -18,7 +19,6 @@ String filename;
 using std::ofstream;
 using std::ios;
 
-//line 39: method TCircle3::BALL_CREATE(TCircle3<T>)
 CHECK(TCircle3::BALL_CREATE(TCircle3<T>))
 	Vector3 v1(1.0, 2.0, 3.0), v2(1.0, 2.0, 3.0);
 	Vector3 v0;
@@ -31,17 +31,15 @@ CHECK(TCircle3::BALL_CREATE(TCircle3<T>))
 	TEST_REAL_EQUAL(c_ptr->p == v1, true)
 	TEST_REAL_EQUAL(c_ptr->n == v2, true)
 	TEST_REAL_EQUAL(c_ptr->radius == 5.0, true)
-	delete c_ptr;RESULT
+	delete c_ptr;
+RESULT
 
-
-//line 
 CHECK(TCircle3::TCircle3())
   Circle3* c;
 	c = new Circle3();
 	TEST_NOT_EQUAL(c, 0)
 RESULT
 
-//line
 CHECK(~TCircle();)
   Circle3* c;
 	c = new Circle3();
@@ -55,7 +53,6 @@ Vector3 p = Vector3(1.0, 2.0, 3.0),
 				
 float radian = 7.0;
 
-//line
 //also test for TCircle3::get(TVector3<T>& point, TVector3<T>& normal, T& radius) const
 CHECK(TCircle3::TCircle3(const TVector3<T>& point, const TVector3<T>& normal, const T& radius))
 	c = Circle3(p, n, radian);
@@ -66,24 +63,18 @@ CHECK(TCircle3::TCircle3(const TVector3<T>& point, const TVector3<T>& normal, co
 	TEST_REAL_EQUAL(radian, radian2)
 RESULT
 
-
-//line 178: method TCircle3::bool operator == (const TCircle3& circle) const 
 CHECK(TCircle3::bool operator == (const TCircle3& circle) const )
 	c = Circle3(p, n, radian);
 	c2 = Circle3(p, n, radian);
 	TEST_EQUAL(c == c2, true)
 RESULT
 
-
-//line 
 CHECK(TCircle3::TCircle3(const TCircle3& circle, bool /* deep */ = true))
 	c = Circle3(p, n, radian);
 	c2 = Circle3(c);
 	TEST_EQUAL(c == c2, true)
 RESULT
 
-
-//line 
 CHECK(TCircle3::void swap(TCircle3& circle))
 	c = Circle3(p, n, radian);
 	v1 = Vector3(3.0, 4.0, 5.0);
@@ -95,8 +86,6 @@ CHECK(TCircle3::void swap(TCircle3& circle))
 	TEST_EQUAL(c2 == cc, true)
 RESULT
 
-
-//line 
 CHECK(TCircle3::void set(const TCircle3& circle, bool /* deep */ = true))
 	c = Circle3(p, n, radian);
 	v1 = Vector3(3.0, 4.0, 5.0);
@@ -106,8 +95,6 @@ CHECK(TCircle3::void set(const TCircle3& circle, bool /* deep */ = true))
 	TEST_EQUAL(c == c2, true)
 RESULT
 
-
-//line 
 CHECK(TCircle3::void set(const TVector3<T>& point, const TVector3<T>& normal, const T& radius))
 	c = Circle3(p, n, radian);
 	v1 = Vector3(3.0, 4.0, 5.0);
@@ -117,8 +104,6 @@ CHECK(TCircle3::void set(const TVector3<T>& point, const TVector3<T>& normal, co
 	TEST_EQUAL(c == c2, true)
 RESULT
 
-
-//line 
 CHECK(TCircle3::void get(TCircle3& circle, bool /* deep */ = true) const)
 	c = Circle3(p, n, radian);
 	v1 = Vector3(3.0, 4.0, 5.0);
@@ -128,15 +113,11 @@ CHECK(TCircle3::void get(TCircle3& circle, bool /* deep */ = true) const)
 	TEST_EQUAL(c == c2, true)
 RESULT
 
-
-//line method isValid() const 
 CHECK(TCircle3::isValid() const )
 	c = Circle3(v1, v2, 123.0);
 	TEST_EQUAL(c.isValid(), true)
 RESULT
 
-
-//line 186: method bool operator != (const TCircle3& circle) const 
 CHECK(bool operator != (const TCircle3& circle) const )
 	c = Circle3(p, n, radian);
 	c2 = Circle3(22.2, n, radian);
@@ -145,8 +126,6 @@ CHECK(bool operator != (const TCircle3& circle) const )
 	TEST_EQUAL(c != c2, false)
 RESULT
 
-
-//line 198: method has(const TVector3<T>& point, bool on_surface = false) const 
 CHECK(has(const TVector3<T>& point, bool on_surface = false) const )
 	c = Circle3(p, n, radian);
 	TEST_EQUAL(c.has(p), true)
@@ -162,8 +141,6 @@ CHECK(has(const TVector3<T>& point, bool on_surface = false) const )
 	TEST_EQUAL(c.has(v1, true), false)
 RESULT
 
-
-//line
 CHECK(TCircle3::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	c = Circle3(p, v1, radian);
   String filename;
@@ -174,8 +151,6 @@ CHECK(TCircle3::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	TEST_FILE(filename.c_str(), "data/Circle3_test.txt", true)
 RESULT
 
-
-//line 254: method std::istream& operator >> (std::istream& s, TCircle3& circle)
 CHECK(std::istream& operator >> (std::istream& s, TCircle3& circle))
 	std::ifstream instr("data/Circle3_test2.txt");
 	v1 = Vector3(3.0, 4.0, 5.0);
@@ -190,7 +165,6 @@ RESULT
 
 
 NEW_TMP_FILE(filename)
-//line 263: method std::ostream& operator << (std::ostream& s, const TCircle3& circle)
 CHECK(std::ostream& operator << (std::ostream& s, const TCircle3& circle))
 	v1 = Vector3(3.0, 4.0, 5.0);
 	v2 = Vector3(6.0, 7.0, 8.0);

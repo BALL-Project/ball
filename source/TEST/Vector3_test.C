@@ -1,4 +1,4 @@
-// $Id: Vector3_test.C,v 1.23 2000/05/03 08:06:02 oliver Exp $
+// $Id: Vector3_test.C,v 1.24 2000/05/26 19:25:05 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,14 +9,13 @@
 #include <BALL/MATHS/angle.h>
 ///////////////////////////
 
-START_TEST(TVector3, "$Id: Vector3_test.C,v 1.23 2000/05/03 08:06:02 oliver Exp $")
+START_TEST(TVector3, "$Id: Vector3_test.C,v 1.24 2000/05/26 19:25:05 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
 
-//line 64
 CHECK(TVector3::BALL_CREATE(TVector3<T>))
 	Vector3 v(1.0, 2.0, 3.0);
 	Vector3* v_ptr = (Vector3*)v.create(false, true);
@@ -31,14 +30,12 @@ CHECK(TVector3::BALL_CREATE(TVector3<T>))
 	delete v_ptr;
 RESULT
 
-//line 74
 CHECK(TVector3();)
   Vector3* v;
 	v = new Vector3();
 	TEST_NOT_EQUAL(v, 0)
 RESULT								
 
-//line 160
 CHECK(~TVector3();)
   Vector3* v;
 	v = new Vector3();
@@ -49,7 +46,6 @@ Vector3 v;
 Vector3 v1;
 Vector3 v2;
 
-//line 321
 CHECK(TVector3::T& operator [] (Index index) const)
 	v = Vector3(1.0, 2.0, 3.0);
 	TEST_REAL_EQUAL(v[0], 1.0)
@@ -59,8 +55,6 @@ CHECK(TVector3::T& operator [] (Index index) const)
 	TEST_EXCEPTION(Exception::IndexOverflow,  v[3])
 RESULT
 
-
-//line 88
 CHECK(TVector3(const T* ptr);)
 	float arr[3];
 	arr[0] = 1.0;
@@ -73,7 +67,6 @@ CHECK(TVector3(const T* ptr);)
 	TEST_EXCEPTION(Exception::NullPointer, v = Vector3((float*)0))
 RESULT
 
-//line 104
 CHECK(TVector3(const T& value);)
 	v = Vector3(1.0);
 	TEST_REAL_EQUAL(v[0], 1.0)
@@ -81,7 +74,6 @@ CHECK(TVector3(const T& value);)
 	TEST_REAL_EQUAL(v[2], 1.0)
 RESULT
 
-//line 118
 CHECK(TVector3(const T& x, const T& y, const T& z);)
 	v = Vector3(1.0, 2.0, 3.0);
 	TEST_REAL_EQUAL(v[0], 1.0)
@@ -89,7 +81,6 @@ CHECK(TVector3(const T& x, const T& y, const T& z);)
 	TEST_REAL_EQUAL(v[2], 3.0)
 RESULT
 
-//line 131
 CHECK(TVector3(const TVector3& vector);)
 	v2 = Vector3(1.0, 2.0, 3.0);
 	v  = Vector3(v2);
@@ -98,7 +89,6 @@ CHECK(TVector3(const TVector3& vector);)
 	TEST_REAL_EQUAL(v[2], 3.0)
 RESULT
 
-//line 148
 CHECK(TVector3(const T& r, const TAngle<T>& phi, const TAngle<T>& theta);)
 	float r = 0.5;
 	Angle phi, theta;
@@ -110,9 +100,6 @@ CHECK(TVector3(const T& r, const TAngle<T>& phi, const TAngle<T>& theta);)
 	TEST_REAL_EQUAL(v[2], r * cos(theta))
 RESULT
 
-//line 160 s.o.
-
-//line 174
 String filename;
 using std::ofstream;
 using std::ios;
@@ -128,7 +115,6 @@ CHECK(virtual void persistentWrite(PersistenceManager& pm, const char* name = 0)
 	ofile.close();	
 RESULT
 
-//line 180
 using std::ifstream;
 using std::cout;
 CHECK(virtual void persistentRead(PersistenceManager& pm);)
@@ -151,7 +137,6 @@ CHECK(virtual void persistentRead(PersistenceManager& pm);)
 	}
 RESULT
 
-//line 194
 CHECK(TVector3<T>::set(const T* ptr))
 	float arr[3];
 	arr[0] = 1.0;
@@ -165,7 +150,6 @@ CHECK(TVector3<T>::set(const T* ptr))
 	TEST_EXCEPTION(Exception::NullPointer, v.set((float*)0))
 RESULT
 
-//line 200
 CHECK(TVector3<T>::set(const T& value))
 	v.set(1.0);
 	TEST_REAL_EQUAL(v[0], 1.0)
@@ -173,21 +157,18 @@ CHECK(TVector3<T>::set(const T& value))
 	TEST_REAL_EQUAL(v[2], 1.0)
 RESULT
 
-//line 207
 CHECK(TVector3::set(const T& x, const T& y, const T& z))
 	v.set(1.0, 2.0, 3.0);
 	v2 = Vector3(1.0, 2.0, 3.0);
 	TEST_EQUAL(v2, v)
 RESULT
 
-//line 213
 CHECK(TVector3::set(const TVector3& vector);)
 	v = Vector3(1.0, 2.0, 3.0);
 	v2.set(v);
 	TEST_EQUAL(v2, v)
 RESULT
 
-//line 230
 CHECK(TVector3::set(const T& r, const TAngle<T>& phi, const TAngle<T> &theta))
 	float r = 0.5;
 	Angle phi, theta;
@@ -200,7 +181,6 @@ CHECK(TVector3::set(const T& r, const TAngle<T>& phi, const TAngle<T> &theta))
 	TEST_REAL_EQUAL(v[2], v2[2])
 RESULT
 
-//line 236
 CHECK(TVector3::operator = (const T* ptr))
 	float arr[3];
 	arr[0] = 1;
@@ -213,7 +193,6 @@ CHECK(TVector3::operator = (const T* ptr))
 	TEST_EXCEPTION(Exception::NullPointer, v = ((float*)0))
 RESULT
 
-// line 243
 CHECK(TVector3<T>& TVector3<T>::operator = (const TVector3<T>& v))
 	v2 = Vector3(1.0, 2.0, 3.0);
 	v  = Vector3();
@@ -221,8 +200,6 @@ CHECK(TVector3<T>& TVector3<T>::operator = (const TVector3<T>& v))
 	TEST_EQUAL(v2, v)
 RESULT
 
-
-//line 251
 CHECK(TVector3::get(T* ptr) const )
 	float arr[3];
 	v = Vector3(1.0, 2.0, 3.0);
@@ -233,7 +210,6 @@ CHECK(TVector3::get(T* ptr) const )
 	TEST_EXCEPTION(Exception::NullPointer, v.get((float*)0))
 RESULT
 
-//line 258
 CHECK(TVector3::get(T& rx, T& ry, T& rz) const)
 	float a, b, c;
 	v = Vector3(1.0, 2.0, 3.0);
@@ -243,7 +219,6 @@ CHECK(TVector3::get(T& rx, T& ry, T& rz) const)
 	TEST_REAL_EQUAL(c, 3.0)
 RESULT
 
-//line 265
 CHECK(TVector3::get(TVector3<T>& v) const )
 	v2 = Vector3(1.0, 2.0, 3.0);
 	v  = Vector3();
@@ -251,7 +226,6 @@ CHECK(TVector3::get(TVector3<T>& v) const )
 	TEST_EQUAL(v2, v)
 RESULT
 
-//line 274
 CHECK(get(T& r, TAngle<T>& phi, TAngle<T>& theta) const)
 	float r = 0.5, r2;
 	Angle phi, theta, phi2, theta2;
@@ -264,7 +238,6 @@ CHECK(get(T& r, TAngle<T>& phi, TAngle<T>& theta) const)
 	TEST_REAL_EQUAL(theta, theta2)
 RESULT
 
-//line 279
 CHECK(TVector3<T>::swap(TVector3<T>& v))
 	v  = Vector3(1.0, 2.0, 3.0);
 	Vector3 u2 = v;
@@ -277,19 +250,16 @@ CHECK(TVector3<T>::swap(TVector3<T>& v))
 	TEST_EQUAL(u, u2)
 RESULT
 
-//line 286
 CHECK(TVector3::getLength() const )
 	v = Vector3(4.0, 9.0, 16.0);
 	TEST_REAL_EQUAL(v.getLength(), sqrt(4.0 * 4.0 + 9.0 * 9.0 + 16.0 * 16.0))
 RESULT
 
-//line 293
 CHECK(TVector3::getSquareLength() const )
 	v = Vector3(1.0, 2.0, 3.0);
 	TEST_REAL_EQUAL(v.getSquareLength(), 14.0)
 RESULT
 
-//line 301
 CHECK(TVector3::normalize())
 	v = Vector3(4.0, 9.0, 16.0);
 	v.normalize();
@@ -301,22 +271,18 @@ CHECK(TVector3::normalize())
 	TEST_EXCEPTION(Exception::DivisionByZero, v.normalize())
 RESULT
 
-
-//line 305
 CHECK(TVector3::getZero())
 	TEST_REAL_EQUAL(Vector3::getZero().x, 0.0)
 	TEST_REAL_EQUAL(Vector3::getZero().y, 0.0)
 	TEST_REAL_EQUAL(Vector3::getZero().z, 0.0)
 RESULT
 
-//line 309
 CHECK(TVector3::getUnit())
 	TEST_REAL_EQUAL(Vector3::getUnit().x, 1.0)
 	TEST_REAL_EQUAL(Vector3::getUnit().y, 1.0)
 	TEST_REAL_EQUAL(Vector3::getUnit().z, 1.0)
 RESULT
 
-//line 315
 CHECK(TVector3::T& operator [] (Index index) )
 	v = Vector3(1.0, 2.0, 3.0);
 	v[0]=5.0;	v[1]=6.0;	v[2]=7.0;
@@ -327,9 +293,6 @@ CHECK(TVector3::T& operator [] (Index index) )
 	TEST_EXCEPTION(Exception::IndexOverflow, v[3] = 5.0)
 RESULT
 
-//line 321 s.o.
-
-//line 330
 CHECK(TVector3::TVector3 operator + () const )
 	v2 = Vector3(1.0, 2.0, 3.0);
 	v = + v2;
@@ -338,7 +301,6 @@ CHECK(TVector3::TVector3 operator + () const )
 	TEST_REAL_EQUAL(v[2], 3.0)
 RESULT
 
-//line 334
 CHECK(TVector3::TVector3 operator - () const )
 	v2 = Vector3(1.0, 2.0, 3.0);
 	v = - v2;
@@ -347,7 +309,6 @@ CHECK(TVector3::TVector3 operator - () const )
 	TEST_REAL_EQUAL(v[2], -3.0)
 RESULT
 
-//line 341
 CHECK(TVector3::TVector3& operator += (const TVector3& vector))
 	v2 = Vector3(1.0, 2.0 ,3.0);
 	v  = Vector3(1.0, 2.0, 3.0);
@@ -357,7 +318,6 @@ CHECK(TVector3::TVector3& operator += (const TVector3& vector))
 	TEST_REAL_EQUAL(v[2], 6.0)
 RESULT
 
-//line 348
 CHECK(TVector3::TVector3& operator -= (const TVector3& vector))
 	v2 = Vector3(1.0, 2.0, 3.0);
 	v  = Vector3(4.0, 3.0, 2.0);
@@ -367,7 +327,6 @@ CHECK(TVector3::TVector3& operator -= (const TVector3& vector))
 	TEST_REAL_EQUAL(v[2], -1.0)
 RESULT
 
-//line 355
 CHECK(TVector3::TVector3 operator * (const T& scalar))
 	v  = Vector3(1.0, 2.0, 3.0);
 	v = v * 2.0;
@@ -376,7 +335,6 @@ CHECK(TVector3::TVector3 operator * (const T& scalar))
 	TEST_REAL_EQUAL(v[2], 6.0)
 RESULT
 
-//line 362
 CHECK(TVector3::TVector3& operator *= (const T& scalar))
 	v  = Vector3(1.0, 2.0, 3.0);
 	v *= 2.0;
@@ -385,7 +343,6 @@ CHECK(TVector3::TVector3& operator *= (const T& scalar))
 	TEST_REAL_EQUAL(v[2], 6.0)
 RESULT
 
-//line 370
 CHECK(TVector3::TVector3 operator / (const T& scalar))
 	v  = Vector3(1.0, 2.0, 3.0);
 	v = v / 0.5;
@@ -395,7 +352,6 @@ CHECK(TVector3::TVector3 operator / (const T& scalar))
 	TEST_EXCEPTION(Exception::DivisionByZero, v = v / 0)
 RESULT
 
-//line 377
 CHECK(TVector3::TVector3& operator /= (const T& scalar))
 	v  = Vector3(1.0, 2.0, 3.0);
 	v /= 0.5;
@@ -405,14 +361,12 @@ CHECK(TVector3::TVector3& operator /= (const T& scalar))
 	TEST_EXCEPTION(Exception::DivisionByZero, v /= 0)
 RESULT
 
-//line 382
 CHECK(TVector3::T operator * (const TVector3& vector) const )
 	v2 = Vector3(1.0, 2.0, 3.0);
 	v  = Vector3(1.0, 2.0, 3.0);
 	TEST_REAL_EQUAL(v * v2 , 14.0)
 RESULT
 
-//line 387
 CHECK(TVector3 operator % (const TVector3& vector) const)
  	v1 = Vector3(1.0, 2.0, 3.0);
 	v2 = Vector3(4.0, 5.0, 6.0);
@@ -422,7 +376,6 @@ CHECK(TVector3 operator % (const TVector3& vector) const)
 	TEST_REAL_EQUAL(v[2], -3.0)
 RESULT
 
-//line 392
 CHECK(TVector3 operator %= (const TVector3& vector))
  	v  = Vector3(1.0, 2.0, 3.0);
 	v2 = Vector3(4.0, 5.0, 6.0);
@@ -432,22 +385,18 @@ CHECK(TVector3 operator %= (const TVector3& vector))
 	TEST_REAL_EQUAL(v[2], -3.0)
 RESULT
 
-
-//line 402
 CHECK(TVector3::getDistance(const TVector3& vector) const )
 	v2 = Vector3(1.0, 2.0, 4.0);
 	v  = Vector3(0, 1.0, 2.0);
 	TEST_REAL_EQUAL(v.getDistance(v2) , sqrt(6.0))
 RESULT
 
-//line 406
 CHECK(TVector3::getSquareDistance(const TVector3& vector) const )
 	v2 = Vector3(1.0, 2.0, 4.0);
 	v  = Vector3(0, 1.0, 2.0);
 	TEST_REAL_EQUAL(v.getSquareDistance(v2) , 6.0)
 RESULT
 
-//line 412
 CHECK(TAngle<T> getAngle(const TVector3& vector) const)
 	float r, e;
 	v2 = Vector3(1.0, 2.0, 4.0);
@@ -457,7 +406,6 @@ CHECK(TAngle<T> getAngle(const TVector3& vector) const)
 	TEST_REAL_EQUAL(v.getAngle(v2) , e)
 RESULT
 
-//line 417
 CHECK(TVector3<T> TVector3<T>::getOrthogonalProjection(const TVector3<T>& direction) const)
 	v  = Vector3(0, 1.0, 2.0);
 	v1 = Vector3(1.0, 2.0, 4.0);
@@ -465,7 +413,6 @@ CHECK(TVector3<T> TVector3<T>::getOrthogonalProjection(const TVector3<T>& direct
 	TEST_EQUAL(v2 == (v1 * v / (v1 * v1) * v1), true)
 RESULT
 
-//line 449
 CHECK(TVector3::bool operator == (const TVector3& vector) const )
 	v2 = Vector3(1.0, 2.0, 3.0);
 	v  = Vector3(1.0, 2.0, 2.0);
@@ -474,7 +421,6 @@ CHECK(TVector3::bool operator == (const TVector3& vector) const )
 	TEST_EQUAL(v == v2 , true)
 RESULT
 
-//line 454
 CHECK(TVector3::bool operator != (const TVector3& vector) const )
 	v2 = Vector3(1.0, 2.0, 3.0);
 	v  = Vector3(1.0, 2.0, 2.0);
@@ -483,7 +429,6 @@ CHECK(TVector3::bool operator != (const TVector3& vector) const )
 	TEST_EQUAL(v != v2 , false)
 RESULT
 
-//line 458
 CHECK(TVector3::isZero() const )
 	v = Vector3(1.0, 0, 0);
 	TEST_EQUAL(v.isZero() , false)
@@ -495,7 +440,6 @@ CHECK(TVector3::isZero() const )
 	TEST_EQUAL(v.isZero() , true)
 RESULT
 
-//line 462
 CHECK(TVector3::isOrthogonalTo(TVector3& vector) const )
 	v2 = Vector3(1.0, 0, 3.0);
 	v  = Vector3(0, 2.0, 0);
@@ -504,7 +448,6 @@ CHECK(TVector3::isOrthogonalTo(TVector3& vector) const )
 	TEST_EQUAL(v.isOrthogonalTo(v2), false)
 RESULT
 
-//line 471
 CHECK(TVector3::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	Vector3 v(1.2, 2.3, 3.4);
   String filename;
@@ -515,13 +458,11 @@ CHECK(TVector3::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	TEST_FILE(filename.c_str(), "data/Vector3_test.txt", true)
 RESULT
 
-//line 477
 CHECK(TVector3::isValid() const )
 	v  = Vector3(0, 2.0, 0);
 	TEST_EQUAL(v.isValid(), true)
 RESULT
 
-//line 42
 CHECK(TVector3 operator + (const TVector3<T>& a, const TVector3<T>& b))
  	v1 = Vector3(1.0, 2.0, 3.0);
 	v2 = Vector3(1.0, 2.0, 3.0);
@@ -531,7 +472,6 @@ CHECK(TVector3 operator + (const TVector3<T>& a, const TVector3<T>& b))
 	TEST_REAL_EQUAL(v[2], 6.0)
 RESULT
 
-//line 46
 CHECK(TVector3 operator - (const TVector3<T>& a, const TVector3<T>& b))
  	v1 = Vector3(2.0, 3.0, 4.0);
 	v2 = Vector3(1.0, 2.0, 3.0);
@@ -541,7 +481,6 @@ CHECK(TVector3 operator - (const TVector3<T>& a, const TVector3<T>& b))
 	TEST_REAL_EQUAL(v[2], 1.0)
 RESULT
 
-//line 1020
 CHECK(TVector3 operator * (const T& scalar, const TVector3<T>& vector))
  	v = Vector3(1.0, 2.0, 3.0);
 	v = (float) 2.0 * v;
@@ -550,7 +489,6 @@ CHECK(TVector3 operator * (const T& scalar, const TVector3<T>& vector))
 	TEST_REAL_EQUAL(v[2], 6.0)
 RESULT
 
-//line 1028
 CHECK(TVector3 operator * (const TVector3<T>& vector, const T& scalar))
  	v = Vector3(1.0, 2.0, 3.0);
 	v = v * 2.0;
@@ -566,8 +504,6 @@ CHECK(T getTripleProduct (const TVector3<T>& a, const TVector3<T>& b, const TVec
 	TEST_REAL_EQUAL(v.getTripleProduct(v, v1, v2), 0)
 RESULT
 
-
-//line 
 CHECK(std::istream& operator >> (std::istream& s, TVector3<T>& vector))
 	std::ifstream instr("data/Vector3_test2.txt");
 	Vector3 v(1, 2, 3);
@@ -578,8 +514,6 @@ CHECK(std::istream& operator >> (std::istream& s, TVector3<T>& vector))
 	TEST_REAL_EQUAL(v.z, 3.4)
 RESULT
 
-
-//line 
 NEW_TMP_FILE(filename)
 CHECK(std::ostream& operator << (std::ostream& s, const TVector3<T>& vector))
 	Vector3 v(1.2, 2.3, 3.4);
@@ -588,7 +522,6 @@ CHECK(std::ostream& operator << (std::ostream& s, const TVector3<T>& vector))
 	outstr.close();
 	TEST_FILE(filename.c_str(), "data/Vector3_test2.txt", false)
 RESULT
-
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

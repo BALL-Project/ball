@@ -1,4 +1,4 @@
-// $Id: Plane3_test.C,v 1.5 2000/03/09 07:48:23 oliver Exp $
+// $Id: Plane3_test.C,v 1.6 2000/05/26 19:25:04 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 #include <BALL/MATHS/line3.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Plane3_test.C,v 1.5 2000/03/09 07:48:23 oliver Exp $")
+START_TEST(class_name, "$Id: Plane3_test.C,v 1.6 2000/05/26 19:25:04 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -21,7 +21,6 @@ String filename;
 using std::ofstream;
 using std::ios;
 
-//line 45: method TPlane3::BALL_CREATE(TPlane3<T>)
 CHECK(TPlane3::BALL_CREATE(TPlane3<T>))
 	v0 = Vector3();
 	v1 = Vector3(1, 2, 3);
@@ -37,22 +36,18 @@ CHECK(TPlane3::BALL_CREATE(TPlane3<T>))
 	delete p_ptr;
 RESULT
 
-//line
 CHECK(TPlane3();)
   Plane3* p;
 	p = new Plane3();
 	TEST_NOT_EQUAL(0, p)
 RESULT		
 
-//line 160
 CHECK(~TPlane3();)
   Plane3* p;
 	p = new Plane3();
 	delete p;
 RESULT		
 
-
-//line 449
 CHECK(TPlane3::bool operator == (const TPlane3& plane) const )
 	v1 = Vector3(1.0, 2.0, 3.0);
 	v2 = Vector3(4.0, 5.0, 6.0);
@@ -66,7 +61,6 @@ CHECK(TPlane3::bool operator == (const TPlane3& plane) const )
 	TEST_EQUAL(p == p2 , true)
 RESULT
 
-//line 454
 CHECK(TPlane3::::bool operator != (const TPlane3& plane) const )
 	v1 = Vector3(1.0, 2.0, 3.0);
 	v2 = Vector3(4.0, 5.0, 6.0);
@@ -123,7 +117,6 @@ CHECK(TPlane3::TPlane3& operator = (const TPlane3 &plane))
 	TEST_EQUAL(p, p2)
 RESULT
 
-
 CHECK(TPlane3::void get(TVector3<T>& point, TVector3<T>& normal) const)
 	v1 = Vector3(1.0, 2.0, 3.0);
 	v2 = Vector3(4.0, 5.0, 6.0);
@@ -135,7 +128,6 @@ CHECK(TPlane3::void get(TVector3<T>& point, TVector3<T>& normal) const)
 	TEST_EQUAL(v2, v4)
 RESULT
 
-
 CHECK(TPlane3::bool has(const TVector3<T>& point) const)
 	v1 = Vector3(1.0, 2.0, 3.0);
 	v2 = Vector3(4.0, 5.0, 6.0);
@@ -145,7 +137,6 @@ CHECK(TPlane3::bool has(const TVector3<T>& point) const)
 	TEST_EQUAL(p.has(v3), true)
 	TEST_EQUAL(p.has(v4), false)
 RESULT
-
 
 CHECK(TPlane3::bool has(const TLine3<T>& line) const)
 	v1 = Vector3(1.0, 2.0, 3.0);
@@ -161,7 +152,6 @@ CHECK(TPlane3::bool has(const TLine3<T>& line) const)
 	TEST_EQUAL(p.has(l), false)
 RESULT
 
-
 CHECK(TPlane3<T>::swap(TPlane3<T>& plane))
 	v1 = Vector3(1.0, 2.0, 3.0);
 	v2 = Vector3(4.0, 5.0, 6.0);
@@ -176,8 +166,6 @@ CHECK(TPlane3<T>::swap(TPlane3<T>& plane))
 	TEST_EQUAL(p2.n, v2)
 RESULT
 
-
-//line 179: method TPlane3::normalize()
 CHECK(TPlane3::normalize())
 	v1 = Vector3(1.0, 2.0, 3.0);
 	v2 = Vector3(4.0, 9.0, 16.0);
@@ -192,8 +180,6 @@ CHECK(TPlane3::normalize())
 	TEST_EXCEPTION(Exception::DivisionByZero, p.normalize())
 RESULT
 
-
-//line 197: method hessify()
 CHECK(hessify())
 	v1 = Vector3(1.0, 2.0, 3.0);
 	v2 = Vector3(4.0, 9.0, 16.0);
@@ -206,14 +192,10 @@ CHECK(hessify())
 	TEST_EQUAL(p.p, v1)
 RESULT
 
-
-//line 255: method isValid() const 
 CHECK(isValid() const )
 	TEST_EQUAL(p.isValid(), true)
 RESULT
 
-
-//line 282: method std::istream& operator >> (std::istream& s, TPlane3& plane)
 CHECK(std::istream& operator >> (std::istream& s, TPlane3& plane))
 	std::ifstream instr("data/Plane3_test2.txt");
 	v1 = Vector3(1.0, 2.0, 3.0);
@@ -225,8 +207,6 @@ CHECK(std::istream& operator >> (std::istream& s, TPlane3& plane))
 	TEST_EQUAL(p.n, v2)
 RESULT
 
-
-//line 
 NEW_TMP_FILE(filename)
 CHECK(std::ostream& operator << (std::ostream& s, const TPlane3<T>& plane))
 	v1 = Vector3(1.0, 2.0, 3.0);
@@ -237,7 +217,6 @@ CHECK(std::ostream& operator << (std::ostream& s, const TPlane3<T>& plane))
 	outstr.close();
 	TEST_FILE(filename.c_str(), "data/Plane3_test2.txt", false)
 RESULT
-
 
 CHECK(TPlane3::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	v1 = Vector3(1.0, 2.0, 3.0);

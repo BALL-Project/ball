@@ -1,4 +1,4 @@
-// $Id: BaseFragment_test.C,v 1.15 2000/05/15 10:52:43 oliver Exp $
+// $Id: BaseFragment_test.C,v 1.16 2000/05/26 19:25:00 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -8,8 +8,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-
-START_TEST(BaseFragment, "$Id: BaseFragment_test.C,v 1.15 2000/05/15 10:52:43 oliver Exp $")
+START_TEST(BaseFragment, "$Id: BaseFragment_test.C,v 1.16 2000/05/26 19:25:00 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,13 +1,15 @@
-// $Id: System_test.C,v 1.4 2000/05/24 09:17:01 oliver Exp $
+// $Id: System_test.C,v 1.5 2000/05/26 19:25:05 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
+///////////////////////////
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/fragment.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/CONCEPT/textPersistenceManager.h>
+///////////////////////////
 
-START_TEST(System, "$Id: System_test.C,v 1.4 2000/05/24 09:17:01 oliver Exp $")
+START_TEST(System, "$Id: System_test.C,v 1.5 2000/05/26 19:25:05 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -485,8 +487,6 @@ CHECK(persistentRead(PersistenceManager&))
 		throw Exception::NullPointer(__FILE__, __LINE__);
 	}
 RESULT
-
-
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

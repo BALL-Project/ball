@@ -1,14 +1,12 @@
-// $Id: Line3_test.C,v 1.4 2000/04/18 21:12:33 amoll Exp $
+// $Id: Line3_test.C,v 1.5 2000/05/26 19:25:02 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
-
 #	include <BALL/MATHS/vector3.h>
 #	include <BALL/MATHS/line3.h>
-
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Line3_test.C,v 1.4 2000/04/18 21:12:33 amoll Exp $")
+START_TEST(class_name, "$Id: Line3_test.C,v 1.5 2000/05/26 19:25:02 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -21,7 +19,6 @@ String filename;
 using std::ofstream;
 using std::ios;
 
-//line37: method TLine3::BALL_CREATE(TLine3<T>)
 CHECK(TLine3::BALL_CREATE(TLine3<T>))
 	v1 = Vector3(0, 1, 2);
 	v2 = Vector3(3, 4, 5);
@@ -36,14 +33,12 @@ CHECK(TLine3::BALL_CREATE(TLine3<T>))
 	delete v_ptr;
 RESULT
 
-//line57
 CHECK(TLine3::TLine3())
   Line3* line;
 	line = new Line3();
 	TEST_NOT_EQUAL(line, 0)
 RESULT
 
-//line97
 CHECK(TLine3::~TLine3())
   Line3* line;
 	line = new Line3();
@@ -52,7 +47,6 @@ RESULT
 
 Line3 line, line1, line2, line3;
 
-//line57 also test for Line3.get(TVector3<T>& point, const TVector3<T>& vector)
 CHECK(TLine3(const TVector3<T>& point, const TVector3<T>& vector, 
 					 Form form = FORM__PARAMETER))
 	v1 = Vector3(0, 1, 2);
@@ -68,7 +62,6 @@ CHECK(TLine3(const TVector3<T>& point, const TVector3<T>& vector,
 	TEST_EQUAL(v2, v4)
 RESULT
 
-//line215: method bool operator ==(const TLine3& line) const 
 CHECK(bool operator ==(const TLine3& line) const )
 	v1 = Vector3(0, 1, 2);
 	v2 = Vector3(0, 4, 2);
@@ -80,7 +73,6 @@ CHECK(bool operator ==(const TLine3& line) const )
 	TEST_EQUAL(line == line2, false)
 RESULT
 
-//line110: method TLine3::swap(TLine3& line)
 CHECK(TLine3::swap(TLine3& line))
 	v1 = Vector3(0, 1, 2);
 	v2 = Vector3(3, 4, 5);
@@ -97,8 +89,6 @@ CHECK(TLine3::swap(TLine3& line))
 	TEST_EQUAL(line, line3)
 RESULT
 
-
-//line137: method TLine3::set(const TVector3<T>& point, const TVector3<T>& vector, Form form = FORM__PARAMETER)
 CHECK(TLine3::set(const TVector3<T>& point, const TVector3<T>& vector, Form form = FORM__PARAMETER))
 	v1 = Vector3(0, 1, 2);
 	v2 = Vector3(3, 4, 5);
@@ -110,8 +100,6 @@ CHECK(TLine3::set(const TVector3<T>& point, const TVector3<T>& vector, Form form
 	TEST_EQUAL(line, line2)
 RESULT
 
-
-//line165: method TLine3::get(TLine3& line, bool /* deep */ = true) const 
 CHECK(TLine3::get(TLine3& line, bool /* deep */ = true) const )
 	v1 = Vector3(0, 1, 2);
 	v2 = Vector3(3, 4, 5);
@@ -120,10 +108,6 @@ CHECK(TLine3::get(TLine3& line, bool /* deep */ = true) const )
 	TEST_EQUAL(line, line2)
 RESULT
 
-
-//line180: s.o.
-
-//line201
 CHECK(normalize())
 	v1 = Vector3(0, 0, 0);
 	v2 = Vector3(4, 9, 16);
@@ -134,9 +118,6 @@ CHECK(normalize())
 	TEST_EQUAL(v2, v4)
 RESULT
 
-//line215: s.o.
-
-//line223: method bool operator != (const TLine3& line) const 
 CHECK(bool operator != (const TLine3& line) const )
 	v1 = Vector3(0, 1, 2);
 	v2 = Vector3(0, 3, 2);
@@ -148,7 +129,6 @@ CHECK(bool operator != (const TLine3& line) const )
 	TEST_EQUAL(line != line2, true)
 RESULT
 
-//line231: method has(const TVector3<T>& point) const 
 CHECK(has(const TVector3<T>& point) const )
 	v1 = Vector3(0, 0, 0);
 	v2 = Vector3(4, 4, 4);
@@ -159,13 +139,10 @@ CHECK(has(const TVector3<T>& point) const )
 	TEST_EQUAL(line.has(v1), false)
 RESULT
 
-//line263: method isValid
 CHECK(isValid() const)
 	TEST_EQUAL(line.isValid(), true)
 RESULT
 
-
-//line294: method std::istream& operator >> (std::istream &s, TLine3& line)
 CHECK(std::istream& operator >> (std::istream& s, TLine3<T>& line))
 	std::ifstream instr("data/Line_test2.txt");
 	line = Line3();
@@ -177,8 +154,6 @@ CHECK(std::istream& operator >> (std::istream& s, TLine3<T>& line))
 	TEST_EQUAL(line, line2)
 RESULT
 
-
-//line302: method std::ostream& operator << (std::ostream& s, const TLine3& line)
 NEW_TMP_FILE(filename)
 CHECK(std::ostream& operator << (std::ostream& s, const TLine3<T>& line))
 	v1 = Vector3(0, 1, 2);
@@ -189,7 +164,6 @@ CHECK(std::ostream& operator << (std::ostream& s, const TLine3<T>& line))
 	outstr.close();
 	TEST_FILE(filename.c_str(), "data/Line_test2.txt", false)
 RESULT
-
 
 CHECK(TAngle::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	v1 = Vector3(0, 1, 2);

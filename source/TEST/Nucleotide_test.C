@@ -1,4 +1,4 @@
-// $Id: Nucleotide_test.C,v 1.3 2000/05/15 10:52:44 oliver Exp $
+// $Id: Nucleotide_test.C,v 1.4 2000/05/26 19:25:04 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -10,8 +10,7 @@
 #include <BALL/KERNEL/PTE.h>
 ///////////////////////////
 
-
-START_TEST(Nucleotide, "$Id: Nucleotide_test.C,v 1.3 2000/05/15 10:52:44 oliver Exp $")
+START_TEST(Nucleotide, "$Id: Nucleotide_test.C,v 1.4 2000/05/26 19:25:04 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,10 +1,12 @@
-// $Id: Fragment_test.C,v 1.6 2000/05/15 10:52:44 oliver Exp $
+// $Id: Fragment_test.C,v 1.7 2000/05/26 19:25:02 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
+///////////////////////////
 #include <BALL/KERNEL/fragment.h>
 #include <BALL/KERNEL/molecule.h>
+///////////////////////////
 
-START_TEST(Fragment, "$Id: Fragment_test.C,v 1.6 2000/05/15 10:52:44 oliver Exp $")
+START_TEST(Fragment, "$Id: Fragment_test.C,v 1.7 2000/05/26 19:25:02 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -127,7 +129,6 @@ CHECK(persistentRead(PersistenceManager&))
 	}
 RESULT
 */
-
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
