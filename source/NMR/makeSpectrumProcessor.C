@@ -1,8 +1,6 @@
-// $Id: makeSpectrumProcessor.C,v 1.4 2000/09/19 12:07:24 oliver Exp $
+// $Id: makeSpectrumProcessor.C,v 1.5 2000/09/21 22:10:24 amoll Exp $
 
 #include<BALL/NMR/makeSpectrumProcessor.h>
-
-using namespace std;
 
 namespace BALL
 {
@@ -17,21 +15,18 @@ namespace BALL
 
 	bool MakeSpectrumProcessor::finish()
 	{
-		// starte die Berechnungen
-
 		spectrum_.calculateShifts();
-
 		return true;
 	}
 
-	Processor::Result MakeSpectrumProcessor::operator () (Atom& atom)
+	Processor::Result MakeSpectrumProcessor::operator () (const Atom& atom)
 	{
 		// identify the system 
-		Composite& root = atom.getRoot();
+		const Composite& root = atom.getRoot();
 		if (RTTI::isKindOf<System>(root))
 		{
-			system_ = RTTI::castTo<System>(root);
-			spectrum_.setSystem(system_);
+			System* system = RTTI::castTo<System>(root);
+			spectrum_.setSystem(system);
 			
 			return Processor::BREAK;
 		}

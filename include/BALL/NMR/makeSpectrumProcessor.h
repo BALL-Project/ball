@@ -1,10 +1,7 @@
-// $Id: makeSpectrumProcessor.h,v 1.3 2000/09/07 19:37:04 oliver Exp $
+// $Id: makeSpectrumProcessor.h,v 1.4 2000/09/21 22:10:42 amoll Exp $
 
 #ifndef BALL_NMR_MAKESPECTRUMPROCESSOR_H
 #define BALL_NMR_MAKESPECTRUMPROCESSOR_H
-
-#include<BALL/KERNEL/system.h>
-#include<BALL/KERNEL/PTE.h>
 
 #ifndef BALL_CONCEPT_PROCESSOR_H
 #	include <BALL/CONCEPT/processor.h>
@@ -13,6 +10,8 @@
 #ifndef NMR_SPECTRUM
 #	include<BALL/NMR/NMRSpectrum.h>
 #endif
+
+class System;
 
 namespace BALL
 {
@@ -35,8 +34,8 @@ class MakeSpectrumProcessor
 	//@{
 	
 	/**	Default Constructor
-		a new NMRSpectrum is allocated for {\tt spectrum\_}
-		and some standard shift modules are inserted : JB , HM , ANISO and RC
+			A new NMRSpectrum is allocated for {\tt spectrum\_}
+			and some standard shift modules are inserted : JB , HM , ANISO and RC
 	*/
 	MakeSpectrumProcessor();
 	
@@ -60,12 +59,11 @@ class MakeSpectrumProcessor
 			if object is kind of system 
 			the {\tt system\_} variable of NMRSpectrum {\tt spectrum\_} is set to this system
 	*/
-	virtual Processor::Result operator () (Atom& atom);
+	virtual Processor::Result operator () (const Atom& atom);
 	
 	//@}
 	protected:
-	System*			system_;
-	NMRSpectrum spectrum_;
+		NMRSpectrum spectrum_;
 };
 
 //@}
