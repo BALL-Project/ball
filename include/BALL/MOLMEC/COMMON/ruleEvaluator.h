@@ -1,8 +1,8 @@
-// $Id: ruleEvaluator.h,v 1.1 2000/05/24 12:15:16 oliver Exp $
+// $Id: ruleEvaluator.h,v 1.2 2000/05/24 12:46:30 anker Exp $
 // Molecular Mechanics: rule-based assignment of properties (typenames, charges, radii, etc.)
 
-#ifndef BALL_MOLMEC_COMMON_RULES_H
-#define BALL_MOLMEC_COMMON_RULES_H
+#ifndef BALL_MOLMEC_COMMON_RULEEVALUATOR_H
+#define BALL_MOLMEC_COMMON_RULEEVALUATOR_H
 
 #ifndef BALL_DATATYPE_STRINGHASHMAP_H
 #	include <BALL/DATATYPE/stringHashMap.h>
@@ -143,4 +143,4 @@ namespace BALL
 } // namespace BALL
 
 
-#endif // BALL_MOLMEC_COMMON_RULES_H
+#endif // BALL_MOLMEC_COMMON_RULEEVALUATOR_H

@@ -1,11 +1,11 @@
-// $Id: ruleProcessor.h,v 1.2 2000/05/24 12:13:43 anker Exp $
+// $Id: ruleProcessor.h,v 1.3 2000/05/24 12:46:31 anker Exp $
 // Molecular Mechanics: rule-based assignment of properties (typenames, charges, radii, etc.)
 
 #ifndef BALL_MOLMEC_COMMON_RULEPROCESSOR_H
 #define BALL_MOLMEC_COMMON_RULEPROCESSOR_H
 
-#ifndef BALL_MOLMEC_COMMON_RULES_H
-#	include <BALL/MOLMEC/COMMON/rules.h>
+#ifndef BALL_MOLMEC_COMMON_RULEEVALUATOR_H
+#	include <BALL/MOLMEC/COMMON/ruleEvaluator.h>
 #endif
 
 #ifndef BALL_CONCEPT_PROCESSOR_H
