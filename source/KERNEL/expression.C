@@ -1,4 +1,4 @@
-// $Id: expression.C,v 1.24 2001/07/13 17:38:33 anker Exp $
+// $Id: expression.C,v 1.25 2001/07/15 17:04:44 oliver Exp $
 
 #include <BALL/KERNEL/expression.h>
 #include <BALL/KERNEL/standardPredicates.h>
@@ -692,7 +692,6 @@ namespace BALL
 			// we didn't find an opening bracket
 			throw Exception::ParseError(__FILE__, __LINE__, s.c_str(),
 					"can't find opening '('");
-      return;
 		}
 
 		// the subexpression y has to start one position after the bracket.
@@ -718,7 +717,6 @@ namespace BALL
 			// we found too many opening brackets
 			throw Exception::ParseError(__FILE__, __LINE__, s.c_str(),
 					"didn't find closing ')'");
-			return;
 		}
 
 		if (bracket_count < 0)
@@ -726,7 +724,6 @@ namespace BALL
 			// we found too many closing brackets.
 			throw Exception::ParseError(__FILE__, __LINE__, s.c_str(),
 					"found too many closing ')'");
-			return;
 		}
 
 		// the subexpression y ends at position i which points to the last
