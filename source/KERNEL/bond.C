@@ -1,4 +1,4 @@
-// $Id: bond.C,v 1.10 2000/12/11 21:14:48 oliver Exp $
+// $Id: bond.C,v 1.11 2000/12/12 16:21:12 oliver Exp $
 
 #include <BALL/KERNEL/bond.h>
 
@@ -139,8 +139,8 @@ namespace BALL
 			pm.writeObjectPointer(first_, "first_");
 			pm.writeObjectPointer(second_, "second_");
 			pm.writePrimitive(name_, "name_");
-			pm.writePrimitive(bond_order_, "bond_order_");
-			pm.writePrimitive(bond_type_, "bond_type_");
+			pm.writePrimitive((Index)bond_order_, "bond_order_");
+			pm.writePrimitive((Index)bond_type_, "bond_type_");
 		pm.writeObjectTrailer(name);
 	}
 
@@ -155,8 +155,11 @@ namespace BALL
 		pm.readObjectPointer(first_, "first_");
 		pm.readObjectPointer(second_, "second_");
 		pm.readPrimitive(name_, "name_");
-		pm.readPrimitive(bond_order_, "bond_order_");
-		pm.readPrimitive(bond_type_, "bond_type_");
+		Index tmp;
+		pm.readPrimitive(tmp, "bond_order_");
+		bond_order_ = (BondType)tmp;
+		pm.readPrimitive(tmp, "bond_type_");
+		bond_type_ = (Bond::Order)tmp;
 	}
  
 	void Bond::finalize()

@@ -1,4 +1,4 @@
-// $Id: atom.C,v 1.28 2000/12/11 21:14:48 oliver Exp $
+// $Id: atom.C,v 1.29 2000/12/12 16:21:12 oliver Exp $
 
 #include <BALL/KERNEL/atom.h>
 
@@ -101,7 +101,7 @@ namespace BALL
 			pm.writePrimitive(radius_, "radius_");
 			pm.writePrimitive(name_, "name_");
 			pm.writePrimitive(type_name_, "type_name_");
-			pm.writePrimitive(type_, "type_");
+			pm.writePrimitive((Index)type_, "type_");
 
 			position_.persistentWrite(pm, "position_");
 			velocity_.persistentWrite(pm, "velocity_");
@@ -127,7 +127,9 @@ namespace BALL
 		pm.readPrimitive(radius_, "radius_");
 		pm.readPrimitive(name_, "name_");
 		pm.readPrimitive(type_name_, "type_name_");
-		pm.readPrimitive(type_, "type_");
+		Index tmp_type;
+		pm.readPrimitive(tmp_type, "type_");
+		type_ = (Atom::Type)tmp_type;
 
 		pm.checkObjectHeader(position_, "position_");
 			position_.persistentRead(pm);
