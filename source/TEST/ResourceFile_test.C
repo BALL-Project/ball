@@ -1,11 +1,11 @@
-// $Id: ResourceFile_test.C,v 1.7 2000/02/06 20:03:32 oliver Exp $
+// $Id: ResourceFile_test.C,v 1.8 2000/04/14 16:33:15 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/FORMAT/resourceFile.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: ResourceFile_test.C,v 1.7 2000/02/06 20:03:32 oliver Exp $")
+START_TEST(class_name, "$Id: ResourceFile_test.C,v 1.8 2000/04/14 16:33:15 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -415,7 +415,7 @@ ResourceFile f;
 CHECK(ResourceFile::open(const String&))
 f.open("data/test.db");
 TEST_EQUAL(f.isValid(), true)
-TEST_EQUAL(f.is_open(), true)
+TEST_EQUAL(f.isOpen(), true)
 TEST_NOT_EQUAL(f.getEntry("/Node1"), 0)
 TEST_EQUAL(f.getEntry("//Node1"), 0)
 TEST_NOT_EQUAL(f.getEntry("/Node2"), 0)
@@ -439,14 +439,14 @@ RESULT
 CHECK(ResourceFile::close())
 f.close();
 TEST_EQUAL(f.isValid(), true)
-TEST_EQUAL(f.is_open(), false)
+TEST_EQUAL(f.isOpen(), false)
 RESULT
 
 CHECK(ResourceFile::saveAs(const Entry&, const String&))
 ResourceFile rf;
 rf.open("data/test.db");
 TEST_EQUAL(rf.isValid(), true)
-TEST_EQUAL(rf.is_open(), true)
+TEST_EQUAL(rf.isOpen(), true)
 rf.saveAs("test.xml");
 RESULT
 
