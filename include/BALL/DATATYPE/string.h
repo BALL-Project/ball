@@ -1,4 +1,4 @@
-// $Id: string.h,v 1.14 2000/06/27 07:34:10 oliver Exp $
+// $Id: string.h,v 1.15 2000/06/27 22:08:54 oliver Exp $
 
 #ifndef BALL_DATATYPE_STRING_H
 #define BALL_DATATYPE_STRING_H
@@ -73,6 +73,19 @@ namespace BALL
 			public:
 			UnboundSubstring(const char* file, int line); 
 		};
+
+		/**	Exception thrown if an invalid substring is accessed.
+				This exception is thrown if an invalid substring
+				is to be used.
+				@see isValid
+		*/
+		class InvalidSubstring
+			:	public Exception::GeneralException
+		{
+			public:
+			InvalidSubstring(const char* file, int line); 
+		};
+
 		//@}
 
 		/**	@name	Constructors and Destructors
