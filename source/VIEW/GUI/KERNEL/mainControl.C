@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.36 2002/12/18 23:18:32 amoll Exp $
+// $Id: mainControl.C,v 1.37 2002/12/18 23:44:09 amoll Exp $
 
 // this is required for QMenuItem
 //#define iNCLUDE_MENUITEM_DEy
@@ -842,7 +842,6 @@ namespace BALL
 				}				
 			}
 
-			setStatusbarText("Selected " + String(nr) + " items.");
 			printSelectionInfos();
 
 			#ifdef BALL_DEBUG_VIEW
@@ -860,6 +859,7 @@ namespace BALL
 		{
 			if (selection_.size() > 4)
 			{
+				setStatusbarText(String(selection_.size()) + " objects selected.");
 				return;
 			}
 
