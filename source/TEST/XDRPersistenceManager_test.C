@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XDRPersistenceManager_test.C,v 1.15 2004/07/07 23:04:02 amoll Exp $
+// $Id: XDRPersistenceManager_test.C,v 1.16 2004/11/02 14:00:08 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -16,7 +16,7 @@
 
 ///////////////////////////
 
-START_TEST(XDRPersistenceManager, "$Id: XDRPersistenceManager_test.C,v 1.15 2004/07/07 23:04:02 amoll Exp $")
+START_TEST(XDRPersistenceManager, "$Id: XDRPersistenceManager_test.C,v 1.16 2004/11/02 14:00:08 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -436,6 +436,8 @@ CHECK([Extra] full_test0)
 	XDRPersistenceManager pm2(is);
 	PersistentObject* po =  pm2.readObject();
 	is.close();
+	TEST_EQUAL(RTTI::isKindOf<Bond>(*po), true)
+	delete po;
 RESULT
 	
 
@@ -471,6 +473,7 @@ CHECK([Extra] full_test1)
 	is.close();
 
 	TEST_EQUAL(s1.countAtoms(), s2->countAtoms())
+	delete s2;
 RESULT
 	
 CHECK([Extra] full_test2)
@@ -492,6 +495,28 @@ CHECK([Extra] full_test2)
 
 	TEST_EQUAL(s.countAtoms(), s2->countAtoms())
 RESULT
+
+CHECK([Extra] full_test3)
+	String filename;
+	PDBFile in("data/bpti.pdb");
+	System s;
+	in >> s;
+
+	NEW_TMP_FILE(filename);
+	ofstream os(filename.c_str(), std::ios::out | std::ios::binary);
+	XDRPersistenceManager pm(os);
+	s >> pm;
+	os.close();
+
+	ifstream is(filename.c_str(), std::ios::in);
+	XDRPersistenceManager pm2(is);
+	System* s2 = (System*) pm2.readObject();
+	is.close();
+
+	TEST_EQUAL(s.countAtoms(), s2->countAtoms())
+	delete s2;
+RESULT
+
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
