@@ -1,33 +1,24 @@
-// $Id: Socket_test.C,v 1.1 1999/08/26 08:02:36 oliver Exp $
+// $Id: Socket_test.C,v 1.2 1999/11/23 13:10:48 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
-// insert includes here
+#include <BALL/SYSTEM/socket.h>
 ///////////////////////////
 
-START_TEST(Socket, "$Id: Socket_test.C,v 1.1 1999/08/26 08:02:36 oliver Exp $")
+START_TEST(Socket, "$Id: Socket_test.C,v 1.2 1999/11/23 13:10:48 oliver Exp $")
+using namespace BALL;
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
-///  insert tests for each member function here         
-///
-	
-CHECK("testname")			// a string describing the tested function
+	IOSockStream* s;
+	CHECK(IOSockStream::IOSockStream())
+  s =  new IOSockStream;
+	TEST_NOT_EQUAL(s, 0)
+	RESULT
 
-TEST_EQUAL(0,0)				// each test should be one of the macros (see above): 
-											//   TEST_EQUAL(expression1, expression2)
-											//   TEST_REAL_EQUAL(expression1, expression2)
-											//   TEST_NOT_EQUAL(expression1, expression2)
-                      //   TEST_EXCEPTION(exception_class, expression)
-
-RESULT								// prints the result for the test
-											// and updates the global variable
-											// OK. If any test fails, OK is set
-											// to false and the whole test suite
-											// will terminate with FAILURE and exit
-											// code 1. Otherwise it terminates
-											// with OK and 0.
-											
+	CHECK(IOSockStream::~IOSOckStream())
+	delete s;
+	RESULT
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

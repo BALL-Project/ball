@@ -1,11 +1,16 @@
-// $Id: resourceFile.iC,v 1.2 1999/10/30 12:53:25 oliver Exp $
+// $Id: resourceFile.iC,v 1.3 1999/11/23 13:10:46 oliver Exp $
 
 BALL_INLINE 
 void ResourceEntry::set(const ResourceEntry& entry, bool deep)
 {
+	// remove old contents (including children!)
+	clear();
+	
+	// set the new values
   key_ = entry.key_;
   value_ = entry.value_;
 
+	// in the case of deep copying, clone the children, too
   if (deep == true)
   {
     ResourceEntry* cloned = (ResourceEntry *)entry.create();

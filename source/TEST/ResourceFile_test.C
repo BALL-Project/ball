@@ -1,11 +1,11 @@
-// $Id: ResourceFile_test.C,v 1.2 1999/11/01 15:35:07 oliver Exp $
+// $Id: ResourceFile_test.C,v 1.3 1999/11/23 13:10:48 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/FORMAT/resourceFile.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: ResourceFile_test.C,v 1.2 1999/11/01 15:35:07 oliver Exp $")
+START_TEST(class_name, "$Id: ResourceFile_test.C,v 1.3 1999/11/23 13:10:48 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -135,33 +135,150 @@ TEST_EQUAL(child, 0)
 RESULT
 
 CHECK(ResourceEntry::set(const ResourceEntry&, bool))
+ResourceEntry R("TEST1", "test1");
+ResourceEntry S;
+ResourceEntry& T = *new ResourceEntry("TEST2", "test2");
+R.insertChild(T);
+S.set(R);
+TEST_EQUAL(S.getKey(), "TEST1")
+TEST_EQUAL(S.getValue(), "test1")
+TEST_EQUAL(S.countChildren(), 1)
+S.set(R, false);
+TEST_EQUAL(S.getKey(), "TEST1")
+TEST_EQUAL(S.getValue(), "test1")
+TEST_EQUAL(S.countChildren(), 0)
 RESULT
 
 CHECK(ResourceEntry::get(ResourceEntry&, bool))
+ResourceEntry R("TEST1", "test1");
+ResourceEntry S;
+ResourceEntry& T = *new ResourceEntry("TEST2", "test2");
+R.insertChild(T);
+R.get(S);
+TEST_EQUAL(S.getKey(), "TEST1")
+TEST_EQUAL(S.getValue(), "test1")
+TEST_EQUAL(S.countChildren(), 1)
+R.get(S, false);
+TEST_EQUAL(S.getKey(), "TEST1")
+TEST_EQUAL(S.getValue(), "test1")
+TEST_EQUAL(S.countChildren(), 0)
 RESULT
 
 CHECK(ResourceEntry::operator = (const ResourceEntry&))
+ResourceEntry R("TEST1", "test1");
+ResourceEntry S;
+ResourceEntry& T = *new ResourceEntry("TEST2", "test2");
+R.insertChild(T);
+S = R;
+TEST_EQUAL(S.getKey(), "TEST1")
+TEST_EQUAL(S.getValue(), "test1")
+TEST_EQUAL(S.countChildren(), 1)
 RESULT
 
 CHECK(ResourceEntry::getRoot())
+ResourceEntry R("TEST1", "test1");
+ResourceEntry& S = *new ResourceEntry("TEST2", "test2");
+ResourceEntry& T = *new ResourceEntry("TEST3", "test3");
+ResourceEntry& U = *new ResourceEntry("TEST4", "test4");
+ResourceEntry& V = *new ResourceEntry("TEST5", "test5");
+R.insertChild(S);
+R.insertChild(T);
+R.insertChild(U);
+U.insertChild(V);
+TEST_EQUAL(&V.getRoot(), &R)
+TEST_EQUAL(&U.getRoot(), &R)
+TEST_EQUAL(&T.getRoot(), &R)
+TEST_EQUAL(&S.getRoot(), &R)
+TEST_EQUAL(&R.getRoot(), &R)
 RESULT
 
 CHECK(ResourceEntry::getRoot() const)
+ResourceEntry R("TEST1", "test1");
+ResourceEntry& S = *new ResourceEntry("TEST2", "test2");
+ResourceEntry& T = *new ResourceEntry("TEST3", "test3");
+ResourceEntry& U = *new ResourceEntry("TEST4", "test4");
+ResourceEntry& V = *new ResourceEntry("TEST5", "test5");
+R.insertChild(S);
+R.insertChild(T);
+R.insertChild(U);
+U.insertChild(V);
+const ResourceEntry& c_R = R;
+const ResourceEntry& c_S = S;
+const ResourceEntry& c_T = T;
+const ResourceEntry& c_U = U;
+const ResourceEntry& c_V = V;
+TEST_EQUAL(&c_V.getRoot(), &R)
+TEST_EQUAL(&c_U.getRoot(), &R)
+TEST_EQUAL(&c_T.getRoot(), &R)
+TEST_EQUAL(&c_S.getRoot(), &R)
+TEST_EQUAL(&c_R.getRoot(), &R)
 RESULT
 
 CHECK(ResourceEntry::getParent())
+ResourceEntry R("TEST1", "test1");
+ResourceEntry& S = *new ResourceEntry("TEST2", "test2");
+ResourceEntry& T = *new ResourceEntry("TEST3", "test3");
+ResourceEntry& U = *new ResourceEntry("TEST4", "test4");
+ResourceEntry& V = *new ResourceEntry("TEST5", "test5");
+R.insertChild(S);
+R.insertChild(T);
+R.insertChild(U);
+U.insertChild(V);
+TEST_EQUAL(V.getParent(), &U)
+TEST_EQUAL(U.getParent(), &R)
+TEST_EQUAL(T.getParent(), &R)
+TEST_EQUAL(S.getParent(), &R)
+TEST_EQUAL(R.getParent(), 0)
 RESULT
 
 CHECK(ResourceEntry::getParent() const)
+ResourceEntry R("TEST1", "test1");
+ResourceEntry& S = *new ResourceEntry("TEST2", "test2");
+ResourceEntry& T = *new ResourceEntry("TEST3", "test3");
+ResourceEntry& U = *new ResourceEntry("TEST4", "test4");
+ResourceEntry& V = *new ResourceEntry("TEST5", "test5");
+R.insertChild(S);
+R.insertChild(T);
+R.insertChild(U);
+U.insertChild(V);
+const ResourceEntry& c_R = R;
+const ResourceEntry& c_S = S;
+const ResourceEntry& c_T = T;
+const ResourceEntry& c_U = U;
+const ResourceEntry& c_V = V;
+TEST_EQUAL(c_V.getParent(), &U)
+TEST_EQUAL(c_U.getParent(), &R)
+TEST_EQUAL(c_T.getParent(), &R)
+TEST_EQUAL(c_S.getParent(), &R)
+TEST_EQUAL(c_R.getParent(), 0)
+RESULT
+
+CHECK(ResourceEntry::getPath() const)
+ResourceEntry R("TEST1", "test1");
+ResourceEntry& S = *new ResourceEntry("TEST2", "test2");
+ResourceEntry& T = *new ResourceEntry("TEST3", "test3");
+ResourceEntry& U = *new ResourceEntry("TEST4", "test4");
+ResourceEntry& V = *new ResourceEntry("TEST5", "test5");
+R.insertChild(S);
+R.insertChild(T);
+R.insertChild(U);
+U.insertChild(V);
+TEST_EQUAL(V.getPath(), "/TEST1/TEST4/TEST5")
+TEST_EQUAL(U.getPath(), "/TEST1/TEST4")
+TEST_EQUAL(T.getPath(), "/TEST1/TEST3")
+TEST_EQUAL(S.getPath(), "/TEST1/TEST2")
+TEST_EQUAL(R.getPath(), "/TEST1")
+V.getName();
+U.getName();
+T.getName();
+S.getName();
+R.getName();
 RESULT
 
 CHECK(ResourceEntry::getEntry(const String&))
 RESULT
 
 CHECK(ResourceEntry::getEntry(const String&) const)
-RESULT
-
-CHECK(ResourceEntry::getPath() const)
 RESULT
 
 CHECK(ResourceEntry::countDescendants() const)

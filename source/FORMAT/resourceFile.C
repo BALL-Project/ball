@@ -1,4 +1,4 @@
-// $Id: resourceFile.C,v 1.3 1999/10/30 12:53:35 oliver Exp $
+// $Id: resourceFile.C,v 1.4 1999/11/23 13:10:48 oliver Exp $
 
 #include <BALL/FORMAT/resourceFile.h>
 
@@ -127,13 +127,12 @@ namespace BALL
 		String path(key_);
 
 		for (register const ResourceEntry* parent = parent_;
-				 parent != 0 && parent->parent_ != 0; parent = parent->parent_)
+				 parent != 0; parent = parent->parent_)
 		{
-			path.insert(0, ResourceFile::SEPARATOR);
-			path.insert(0, parent->getKey());
+			path = parent->getKey() + ResourceFile::SEPARATOR + path;
 		}
 		
-		path.insert(0, ResourceFile::SEPARATOR);
+		path = ResourceFile::SEPARATOR + path;
 
 		return path;
 	}
