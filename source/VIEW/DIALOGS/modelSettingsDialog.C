@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.C,v 1.13 2003/11/22 14:21:20 amoll Exp $
+// $Id: modelSettingsDialog.C,v 1.14 2004/01/20 16:47:56 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modelSettingsDialog.h>
@@ -10,7 +10,8 @@
 
 #include <qslider.h>
 #include <qlabel.h>
-#include <qtabwidget.h>
+#include <qlistbox.h>
+#include <qwidgetstack.h>
 
 namespace BALL
 {
@@ -26,33 +27,33 @@ namespace BALL
 		void ModelSettingsDialog::setDefaults(bool all)
 			throw()
 		{
-			if (all || tabwidget->currentPageIndex() == 0)
+			if (all || list_box->currentItem() == 0)
 			{
 				stick_radius_slider->setValue(2);
 			}
 			
-			if (all || tabwidget->currentPageIndex() == 1)
+			if (all || list_box->currentItem() == 1)
 			{
 				ball_stick_cylinder_radius_slider->setValue(2);
 				ball_stick_sphere_radius_slider->setValue(4);
 			}
 			
-			if (all || tabwidget->currentPageIndex() == 2)
+			if (all || list_box->currentItem() == 2)
 			{
 				vdw_radius_factor_slider->setValue(10);
 			}
 			
-			if (all || tabwidget->currentPageIndex() == 3)
+			if (all || list_box->currentItem() == 3)
 			{
 				surface_probe_radius_slider->setValue(15);
 			}
 			
-			if (all || tabwidget->currentPageIndex() == 4)
+			if (all || list_box->currentItem() == 4)
 			{
 				tube_radius_slider->setValue(4);
 			}
 			
-			if (all || tabwidget->currentPageIndex() == 5)
+			if (all || list_box->currentItem() == 5)
 			{
 				cartoon_tube_radius_slider->setValue(4);
 				cartoon_helix_radius_slider->setValue(20);
@@ -60,7 +61,7 @@ namespace BALL
 				cartoon_arrow_height_slider->setValue(8);
 			}
 			
-			if (all || tabwidget->currentPageIndex() == 6)
+			if (all || list_box->currentItem() == 6)
 			{
 				hbonds_radius_slider->setValue(3);
 			}
@@ -135,11 +136,25 @@ namespace BALL
 			fetchPreference_(file, "hbonds_radius", *hbonds_radius_slider);
 		}
 
-	void ModelSettingsDialog::setDefaultValues()
-		throw()
-	{
-		setDefaults(false);
-	}
+		void ModelSettingsDialog::setDefaultValues()
+			throw()
+		{
+			setDefaults(false);
+		}
+
+		void ModelSettingsDialog::showPage(int nr)
+		{
+			if (widget_stack->widget(nr) == 0)
+			{
+				return;
+			}
+
+			if (list_box->currentItem() != nr)
+			{
+				list_box->setCurrentItem(nr);
+			}
+			widget_stack->raiseWidget(nr);
+		}
 
 
 	} // namespace VIEW

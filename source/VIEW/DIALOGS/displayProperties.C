@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.62 2004/01/19 12:44:34 amoll Exp $
+// $Id: displayProperties.C,v 1.63 2004/01/20 16:47:56 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -735,32 +735,32 @@ void DisplayProperties::modelOptionsPressed()
 			break;
 			
 		case MODEL_STICK:
-			model_settings_->tabwidget->setCurrentPage(0);
+			model_settings_->showPage(0);
 			break;
 			
 		case MODEL_BALL_AND_STICK:
-			model_settings_->tabwidget->setCurrentPage(1);
+			model_settings_->showPage(1);
 			break;
 			
 		case MODEL_SE_SURFACE:
 		case MODEL_SA_SURFACE:
-			model_settings_->tabwidget->setCurrentPage(3);
+			model_settings_->showPage(3);
 			break;
 			
 		case MODEL_VDW:
-			model_settings_->tabwidget->setCurrentPage(2);
+			model_settings_->showPage(2);
 			break;
 
 		case MODEL_BACKBONE:
-			model_settings_->tabwidget->setCurrentPage(4);
+			model_settings_->showPage(4);
 			break;
 
 		case MODEL_CARTOON:
-			model_settings_->tabwidget->setCurrentPage(5);
+			model_settings_->showPage(5);
 			break;
 			
 		case MODEL_HBONDS:
-			model_settings_->tabwidget->setCurrentPage(6);
+			model_settings_->showPage(6);
 			break;
 	}
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.h,v 1.9 2003/11/21 01:22:22 amoll Exp $
+// $Id: modelSettingsDialog.h,v 1.10 2004/01/20 16:48:03 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MODELSETTINGSDIALOG_H
@@ -138,6 +138,11 @@ namespace BALL
 			///
 			void setHBondRadius(float value) 
 				throw() { setValue_(hbonds_radius_slider,value);}
+
+			public slots:
+			
+			///
+			void showPage(int nr);
 
 			protected slots:
 			void stickRadiusChanged() {setLabelText_(stick_radius_label, stick_radius_slider);}
