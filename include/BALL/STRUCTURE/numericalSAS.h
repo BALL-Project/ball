@@ -1,4 +1,4 @@
-// $Id: numericalSAS.h,v 1.7 2000/07/04 08:13:40 oliver Exp $
+// $Id: numericalSAS.h,v 1.8 2000/08/03 09:00:42 anker Exp $
 
 #ifndef BALL_STRUCTURE_NUMERICALSAS_H
 #define BALL_STRUCTURE_NUMERICALSAS_H
@@ -86,6 +86,20 @@ namespace BALL
 	float calculateSASPoints
 					(const BaseFragment& fragment, Surface& surface_points,
 					 float probe_radius = 1.5,  Size number_of_dots = 400);
+
+	/** Calculate a point set on the Solvent Accessible Surface for each
+	 * atom. This method returns the point sets on the SAS used to calculate
+	 * the surface area for each atom. @see calculateSASAtomAreas.
+			@param	fragment the kernel object containing the atoms
+			@param  atom_surfaces a hashmap of atoms and Surface objects containing the point sets for eacht atom (returned)
+			@param	probe_radius the probe radius used for the SAS
+			@param	number_of_dots the number of dots used per atom
+			@return the total SAS area in $\AA^2$
+	*/
+	float calculateSASAtomPoints
+					(const BaseFragment& fragment, 
+					HashMap<Atom*, Surface>& atom_surfaces,
+					float probe_radius = 1.5,  Size number_of_dots = 400);
 
 } // namespace BALL
 
