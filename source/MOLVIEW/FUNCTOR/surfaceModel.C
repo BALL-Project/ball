@@ -1,4 +1,4 @@
-// $Id: surfaceModel.C,v 1.13.4.5 2002/10/23 14:25:20 amoll Exp $
+// $Id: surfaceModel.C,v 1.13.4.6 2002/12/08 22:32:21 amoll Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/surfaceModel.h>
 #include <BALL/STRUCTURE/surfaceProcessor.h>
@@ -19,9 +19,7 @@ namespace BALL
 		{
 		}
 
-		AddSurfaceModel::AddSurfaceModel
-			(const AddSurfaceModel& add_surface,
-			 bool deep)
+		AddSurfaceModel::AddSurfaceModel(const AddSurfaceModel& add_surface, bool deep)
 			throw()
 			:	BaseModelProcessor(add_surface, deep),
 				get_composite_(true),
@@ -33,8 +31,8 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-						 << " of class " << RTTI::getName<AddSurfaceModel>() << endl;
+				Log.error() << "Destructing object " << (void *)this 
+										<< " of class " << RTTI::getName<AddSurfaceModel>() << endl;
 			#endif 
 
 			destroy();
@@ -69,8 +67,7 @@ namespace BALL
 
 				if (mesh == 0)
 				{
-					throw Exception::OutOfMemory
-						(__FILE__, __LINE__, sizeof(Mesh));
+					throw Exception::OutOfMemory(__FILE__, __LINE__, sizeof(Mesh));
 				}
 				// create mesh
 				// ...
@@ -99,8 +96,8 @@ namespace BALL
 					}
 					Log.info() << "assigning surface (" << sp.getSurface().vertex.size() << " vertices, " 
 										 << sp.getSurface().triangle.size() << " triangles)" << endl;
+					
 					*static_cast<Surface*>(mesh) = sp.getSurface();
-
 				
 					mesh->setName(String("Surface of ")
 												+ molecular_information.getTypeName() 
@@ -117,8 +114,7 @@ namespace BALL
 			return true;
 		}
 				
-		Processor::Result 
-		AddSurfaceModel::operator () (Composite& composite)
+		Processor::Result AddSurfaceModel::operator () (Composite& composite)
 		{
 			// take first composite, surface will be inserted to it later
 			if (get_composite_)
