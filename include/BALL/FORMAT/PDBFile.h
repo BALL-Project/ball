@@ -1,4 +1,4 @@
-// $Id: PDBFile.h,v 1.14 2001/06/05 15:44:52 anker Exp $
+// $Id: PDBFile.h,v 1.15 2001/07/31 00:29:37 oliver Exp $
 
 #ifndef BALL_FORMAT_PDBFILE_H
 #define BALL_FORMAT_PDBFILE_H
@@ -85,10 +85,14 @@ namespace BALL
 
 		//@}
 
+		/**	@name Overridden read methods 
+		*/
+		//@{
+		///
 		virtual bool readUnknownRecord(const char* line);
-
+		///
 		virtual bool readInvalidRecord(const char* line);
-
+		///
 		virtual bool readRecordATOM
 			(PDB::Integer serial_number,
 			 PDB::Atom atom_name,
@@ -103,17 +107,17 @@ namespace BALL
 			 PDB::LString4 segment_ID,
 			 PDB::LString2 element_symbol,
 			 PDB::LString2 charge);
-	
+		///	
 		virtual bool readRecordCONECT
 			(PDB::Integer atom_serial_number,
 			 PDB::Integer bonded_atom_serial_number[4],
 			 PDB::Integer hydrogen_bonded_atom_serial_number[4],
 			 PDB::Integer salt_bridged_atom_serial_number[2]);
-
+		///
 		virtual bool readRecordEND();
-	
+		///	
 		virtual bool readRecordENDMDL();
-	
+		///	
 		virtual bool readRecordHELIX
 			(PDB::Integer serial_number,
 			 PDB::LString3 helix_ID,
@@ -122,12 +126,12 @@ namespace BALL
 			 PDB::Integer helix_class,
 			 PDB::PDBString comment,
 			 PDB::Integer length);
-	
+		///	
 		virtual bool readRecordHEADER
 			(PDB::String40 classification,
 			 PDB::Date deposition_date,
 			 PDB::IDcode ID_code);
-	
+		///	
 		virtual bool readRecordHETATM
 			(PDB::Integer serial_number,
 			 PDB::Atom atom_name,
@@ -142,10 +146,10 @@ namespace BALL
 			 PDB::LString4 segment_ID,
 			 PDB::LString2 element_symbol,
 			 PDB::LString2 charge);
-	
+		///	
 		virtual bool readRecordMODEL
 			(PDB::Integer model_serial_number);
-
+		///
 		virtual bool readRecordSHEET
 			(PDB::Integer strand_number,
 			 PDB::LString3 sheet_ID,
@@ -157,24 +161,25 @@ namespace BALL
 			 PDB::RecordSHEET::ResidueInCurrentStrand& residue_in_current_strand,
 			 PDB::Atom atom_name_in_previous_strand,
 			 PDB::RecordSHEET::ResidueInPreviousStrand& residue_in_previous_strand);
-
+		///
 		virtual bool readRecordSSBOND
 			(PDB::Integer serial_number,
 			 PDB::RecordSSBOND::PartnerResidue partner_residue[2]);
-	
+		///	
 		virtual bool readRecordTER
 			(PDB::Integer serial_number,
 			 PDB::ResidueName residue_name,
 			 PDB::Character chain_ID,
 			 PDB::Integer residue_sequence_number,
 			 PDB::AChar insertion_code);
-
+		///
 		virtual bool readRecordTURN
 			(PDB::Integer sequence_number,
 			 PDB::LString3 turn_ID,
 			 PDB::RecordTURN::InitialResidue& initial_residue,
 			 PDB::RecordTURN::TerminalResidue& terminal_residue,
 			 PDB::PDBString comment);
+		//@}
 
 		/**	@name	Reading and Writing Files 
 		*/
