@@ -1,11 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.h,v 1.6 2003/11/21 01:22:22 amoll Exp $
+// $Id: modularWidget.h,v 1.7 2003/12/09 14:46:54 amoll Exp $
 //
 
-#ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
-#define BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
+#ifndef BALL_VIEW_WIDGETS_MODULARWIDGET_H
+#define BALL_VIEW_WIDGETS_MODULARWIDGET_H
 
 #ifndef BALL_CONCEPT_EMBEDDABLE_H
 #	include <BALL/CONCEPT/embeddable.h>
@@ -25,8 +25,7 @@ namespace BALL
 		class Preferences;
 		class MainControl;
 
-		/**	The ModularWidget class.
-				The base class for all modular widgets.
+		/**	ModularWidget is a base class.
 				BALLVIEW provides a simple mechanism for Rapid Application Prototyping based 
 				on <b>modular widgets</b>.	Using the modular widgets and the MainControl class
 				(or more precisely, classes derived from MainControl) applications can be developed
@@ -61,16 +60,13 @@ namespace BALL
 			//@{
 
 			/** Default Constructor.
-					Set the name of this modularWidget to <b>name</b>.
+					Set the name of this ModularWidget to <b>name</b>.
 					\param      name the name of this modularWidget
-					\return     ModularWidget new constructed modularWidget
 			*/
 			ModularWidget(const char* name = "<ModularWidget>")
 				throw();
 				
 			/**	Copy constructor.
-					\param       widget the modularWidget to be copied
-					\return      ModularWidget new constructed modularWidget copied from <b> widget</b>
 			*/
 			ModularWidget(const ModularWidget& widget)
 				throw();
@@ -100,9 +96,9 @@ namespace BALL
 			*/
 			//@{
 			
-			/**	Register the widget <b>mwidget</b> to the MainControl. Modular widgets
+			/**	Register the widget <b>mwidget</b> to the MainControl. ModularWidget
 					objects must always be created with MainControl as parent and must have
-					this method in their constructors. This method connects <b> mwidget</b> to the
+					this method in their constructors. This method connects them to the
 					MainControl object.
 					\param  mwidget the ModularWidget to be registered to the MainControl
 			*/
@@ -112,20 +108,18 @@ namespace BALL
 			/**	Initialize the widget.
 					This method is called automatically	immediately before the main application 
 					is started. It should add the widget's menu entries and connections (if required).
-					This method will be called by show from the MainControl object.
-					\param main_control the MainControl object to be initialized with this modularWidget
+					This method will be called by MainControl::show.
+					\param main_control the MainControl object to be initialized with this ModularWidget
 					\see   finalizeWidget()
-					\see   show()
 			*/
 			virtual void initializeWidget(MainControl& main_control);
 			
 			/**	Remove the widget.
 					This method should reverse all actions performed in initializeWidget
-					(remove menu entries and connections of this modularWidget).
+					(remove menu entries and connections of this ModularWidget).
 					This method will be called by MainControl::aboutToExit().
-					\param main_control the MainControl object to be finalized with this modularWidget
+					\param main_control the MainControl object to be finalized with this ModularWidget
 					\see   initializeWidget
-					\see   aboutToExit
 			*/
 			virtual void finalizeWidget(MainControl& main_control);
 			
@@ -140,7 +134,7 @@ namespace BALL
 			/** Initialize a preferences tab for the widget (if needed).
 					This method can be used to create preferences widgets that can be inserted
 					into the Preferences dialog with the method insertTab.
-					This method is called automatically MainControl::show at the start of the application.
+					This method is called automatically by MainControl::show at the start of the application.
 					\param preferences the Preferences dialog of the MainControl
 			*/
 			virtual void initializePreferencesTab(Preferences& preferences)
@@ -173,44 +167,44 @@ namespace BALL
 			virtual void cancelPreferences(Preferences& /*preferences*/)
 				throw() {};
 
-			/// Set default values for the current page in Preferences
+			/** Set default values for the current page in Preferences
+					Automatically called by the default button in thre Preferences dialog.)
+			*/
 			virtual void defaultPreferences(Preferences& /*preferences*/)
 				throw() {};
 			
-			/** Fetch the widgets preferences from the inifile.
-					This method extracts the default values from the given INIFile
-					(as written to the inifile in writePreferences()).
+			/** Fetch the widgets preferences from the INIFile.
 					This method is called automatically by MainControl::show() at the start of the application.
 					\param  inifile the INIFile that contains the needed values
 					\see    writePreferences
-					\see    INIFile
 			*/
 			virtual void fetchPreferences(INIFile& inifile)
 				throw();
 			
-			/** Writes the widgets preferences to the inifile.
-					This method should write all needed values to the given inifile (as read from
-					the inifile in the fetchPreferences method).
+			/** Writes the widgets preferences to the INIFile.
 					This method is called automatically by MainControl::aboutToExit at the end of the application.
-					\param  inifile the INIFile that contains the needed values
+					\param  inifile the INIFile to contain the values
 					\see    fetchPreferences
-					\see    INIFile
 			*/
 			virtual void writePreferences(INIFile& inifile)
 				throw();
 
 			/** Set the text of the statusbar of the main application.
 			 		<b>Note:</b> The ModularWidget must be registered to a MainControl.
+					Implemented for convenience.
 			 */
 			virtual void setStatusbarText(String text)
 				throw();
 
-			/// Return the MainControl of this ModularWidget
+			/** Return the MainControl of this ModularWidget
+					Implemented for convenience.
+			*/
 			MainControl* getMainControl() const
 				throw();
 
 			/** Return the FragmentDB.
 			 		<b>Note:</b> The ModularWidget must be registered to a MainControl.
+					Implemented for convenience.
 			*/
 			FragmentDB& getFragmentDB() const
 				throw();
@@ -223,6 +217,7 @@ namespace BALL
 			/** Internal state dump.
 					Dump the current internal state of this mainControl to 
 					the output ostream <b>s</b> with dumping depth <b>depth</b>.
+					Calls ConnectionObject::dump.
 					\param   s output stream where to output the internal state 
 					\param   depth the dumping depth
 			*/
@@ -239,7 +234,7 @@ namespace BALL
 			//_ should there be an entry to switch the window on and off?
 			bool show_window_enty_;
 
-			//_ should the widget be visible, if no config file exists?
+			//_ should the widget be visible, if no config file entry exists?
 			bool default_visible_;
 			//@}			
 		}; 
@@ -247,4 +242,4 @@ namespace BALL
 	} // namespace VIEW
 } // namespace BALL
 
-#endif // BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
+#endif // BALL_VIEW_WIDGETS_MODULARWIDGET_H
