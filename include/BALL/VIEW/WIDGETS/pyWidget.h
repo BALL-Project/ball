@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.5 2003/09/11 22:36:29 amoll Exp $
+// $Id: pyWidget.h,v 1.6 2003/09/13 14:31:48 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -15,8 +15,8 @@
 #	include <BALL/DATATYPE/string.h>
 #endif
 
-#ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
-#	include <BALL/VIEW/KERNEL/modularWidget.h>
+#ifndef BALL_VIEW_WIDGETS_DOCKWIDGET_H
+#	include <BALL/VIEW/WIDGETS/dockWidget.h>
 #endif
 
 #include <qtextedit.h>
@@ -32,15 +32,16 @@ namespace BALL
 		/** Python Widget class.
 				\ingroup ViewWidgets
 		*/
-		class PyWidget
-			: public QTextEdit,
-				public ModularWidget 
+		class PyWidgetData
+			: public QTextEdit
 		{
+			friend class PyWidget;
+
 			Q_OBJECT
 
 			public:
 			
-			BALL_EMBEDDABLE(PyWidget)
+			//BALL_EMBEDDABLE(PyWidgetData)
 
 			/**	@name	Constructors and Destructors
 			*/
@@ -52,15 +53,15 @@ namespace BALL
 					\param parent the parent widget
 					\param name the widget name
 			*/
-			PyWidget(QWidget* parent = 0, const char* name = 0);
+			PyWidgetData(QWidget* parent = 0, const char* name = 0);
 
 			/** Copy constructor.
 					Creates a new widget and inserts it in the same place as the original widget.
 			*/
-			PyWidget(const PyWidget& widget);
+			PyWidgetData(const PyWidgetData& widget);
 
 			/// Destructor
-			virtual ~PyWidget()
+			virtual ~PyWidgetData()
 				throw();
 
 			public slots:
@@ -95,51 +96,6 @@ namespace BALL
 			///
 			virtual void exportHistory();			
 			//@}
-
-			/**	@name	ModularWidget related methods
-			*/
-			//@{
-
-			/**	Setup the menu entries.
-					PyWidget creates an entry in Tools|Restart Python and connects
-					the entry to startInterpreter().
-			*/
-			virtual void initializeWidget(MainControl& main_control);
-
-			/**	Remove menu entries.
-			*/
-			virtual void finalizeWidget(MainControl& main_control);
-			
-			///
-			virtual void fetchPreferences(INIFile& inifile)
-				throw();
-			
-			///
-			virtual void writePreferences(INIFile& inifile)
-				throw();
-
-			///
-			void initializePreferencesTab(Preferences &preferences)
-				throw();
-			
-			///
-			void finalizePreferencesTab(Preferences &preferences)
-				throw();
-
-			///
-			void applyPreferences(Preferences & /* preferences */)
-				throw();
-
-			///
-			void cancelPreferences(Preferences&)
-				throw();
-
-			/** Show or hide widget (Called by menu entry in "WINDOWS")
-			 		If the ModularWidget is not also a QWidget, this method does nothing
-			*/
-			virtual void switchShowWidget()
-				throw();
-
 			public:
 
 			//@}
@@ -206,8 +162,80 @@ namespace BALL
 			String 					startup_script_;
 			PythonSettings* python_settings_;
 		}; 
+
+
+		///
+		class PyWidget
+			: public DockWidget
+		{
+			Q_OBJECT
+
+			public:
 			
-	} // namespace VIEW
-} // namespace BALL
+			//BALL_EMBEDDABLE(PyWidget)
+
+			/**	@name	Constructors and Destructors
+			*/
+			//@{
+
+			/** Standard constructor.
+					If the widget is part of a BALL \ref{MainControl} widget, 
+					it inserts a menu entry <tt>Tools|Restart Python</tt> into the menu bar.
+					\param parent the parent widget
+					\param name the widget name
+			*/
+			PyWidget(QWidget* parent = 0, const char* name = 0)
+				throw();
+
+
+			/**	@name	ModularWidget related methods
+			*/
+			//@{
+
+			/**	Setup the menu entries.
+					PyWidget creates an entry in Tools|Restart Python and connects
+					the entry to startInterpreter().
+			*/
+			virtual void initializeWidget(MainControl& main_control)
+				throw();
+
+			/**	Remove menu entries.
+			*/
+			virtual void finalizeWidget(MainControl& main_control)
+				throw();
+			
+			///
+			virtual void fetchPreferences(INIFile& inifile)
+				throw();
+			
+			///
+			virtual void writePreferences(INIFile& inifile)
+				throw();
+
+			///
+			void initializePreferencesTab(Preferences &preferences)
+				throw();
+			
+			///
+			void finalizePreferencesTab(Preferences &preferences)
+				throw();
+
+			///
+			void applyPreferences(Preferences & /* preferences */)
+				throw();
+
+			///
+			void cancelPreferences(Preferences&)
+				throw();
+
+			virtual void startInterpreter();
+
+			protected:
+
+			PyWidgetData* text_edit_;
+		};
+
+		
+}	} // namespaces
 	
 #endif // BALL_VIEW_WIDGETS_PYWIDGET_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.7 2003/09/11 22:37:05 amoll Exp $
+// $Id: scene.C,v 1.8 2003/09/13 14:31:20 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -778,9 +778,6 @@ namespace BALL
 			inifile.insertValue("STAGE", "BackgroundColor", String(data));
 			inifile.insertValue("STAGE", "ShowCoordinateSystem", String(stage_->coordinateSystemEnabled()));
 			writeLights_(inifile);
-
-			inifile.insertValue("WINDOWS", "Scene::on", 
-				String(getMainControl()->menuBar()->isItemChecked(window_menu_entry_id_)));
 		}
 
 
@@ -803,6 +800,12 @@ namespace BALL
 												strings[2].toUnsignedInt(),
 												strings[3].toUnsignedInt());
 				stage_->setBackgroundColor(color);
+			}
+
+			if (inifile.hasEntry("WINDOWS", getIdentifier() + "::on") &&
+					!inifile.getValue("WINDOWS", getIdentifier() + "::on").toUnsignedInt())
+			{
+				switchShowWidget();
 			}
 
 			readLights_(inifile);

@@ -20,26 +20,26 @@ namespace BALL
   
 		LogView::LogView(QWidget *parent, const char *name)
 			throw()
-			: QTextEdit(parent, name),
-			 	NotificationTarget<LogStreamNotifier>(),
-				ModularWidget(name),
+			: DockWidget(parent, name),
+				NotificationTarget<LogStreamNotifier>(),
+				text_edit_(new QTextEdit()),
 				history_string_(),
 				strstream_(),
 				output_running_(false)
 		{
-			registerWidget(this);
+			setGuest(*text_edit_);
 		}
 
 		LogView::LogView(const LogView& view)
 			throw()
-			: QTextEdit(),
+			: DockWidget((QWidget*)view.getParent()),
 			 	NotificationTarget<LogStreamNotifier>(),
-				ModularWidget(),
+				text_edit_(new QTextEdit()),
 				history_string_(view.history_string_),
 				strstream_(),
 				output_running_(false)
 		{
-			registerWidget(this);
+			setGuest(*text_edit_);
 		}
 
 		LogView::~LogView()
@@ -72,8 +72,8 @@ namespace BALL
 
 			if (line.size() > 0)
 			{
-				append(line.c_str());
-				scrollToBottom();
+				text_edit_->append(line.c_str());
+				text_edit_->scrollToBottom();
 			}
 
 			output_running_ = false;
@@ -81,48 +81,25 @@ namespace BALL
 		}
 
 		void LogView::initializeWidget(MainControl& main_control)
+			throw()
 		{
 			Log.insert(strstream_);
 			Log.insertNotification(strstream_, *this);
-			setReadOnly(TRUE);
-			setTextFormat(PlainText);
+			text_edit_->setReadOnly(TRUE);
+			text_edit_->setTextFormat(PlainText);
 
-			window_menu_entry_id_ = 
-				main_control.insertMenuEntry(MainControl::WINDOWS, "LogView", this, SLOT(switchShowWidget()));
-			main_control.insertMenuEntry(MainControl::TOOLS, "Clear Logs", this, SLOT(clear()));
+			DockWidget::initializeWidget(main_control);
+			main_control.insertMenuEntry(MainControl::TOOLS, "Clear Logs", text_edit_, SLOT(clear()));
 			getMainControl()->menuBar()->setItemChecked(window_menu_entry_id_, true);
 		}
 
 
 		void LogView::finalizeWidget(MainControl& main_control)
-		{
-			main_control.removeMenuEntry(MainControl::WINDOWS, "LogView", this, SLOT(switchShowWidget()));
-			main_control.removeMenuEntry(MainControl::TOOLS, "Clear Logs", this, SLOT(clear()));
-			Log.remove(strstream_);
-		}
-
-		void LogView::switchShowWidget()
 			throw()
 		{
-			if (window_menu_entry_id_ == -1) return;
-
-			if (!getMainControl()) 
-			{
-				Log.error() << "Problem in " << __FILE__ << __LINE__ << std::endl;
-				return;
-			}
-
-			QMenuBar* menu = getMainControl()->menuBar();
-			if (menu->isItemChecked(window_menu_entry_id_))
-			{
-				hide();
-				menu->setItemChecked(window_menu_entry_id_, false);
-			}
-			else
-			{
-				show();
-				menu->setItemChecked(window_menu_entry_id_, true);
-			}
+			DockWidget::finalizeWidget(main_control);
+			main_control.removeMenuEntry(MainControl::TOOLS, "Clear Logs", text_edit_, SLOT(clear()));
+			Log.remove(strstream_);
 		}
 
 } } // namespaces

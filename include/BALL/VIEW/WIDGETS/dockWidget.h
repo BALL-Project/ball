@@ -65,6 +65,8 @@ class DockWidget
 	virtual void switchShowWidget()
 		throw();
 
+	void mytest(bool asd);
+
 	//@} 
 
 	virtual ~DockWidget() throw() {}

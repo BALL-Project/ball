@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockWidget.C,v 1.9 2003/09/12 14:33:54 amoll Exp $
+// $Id: dockWidget.C,v 1.10 2003/09/13 14:31:20 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/dockWidget.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -68,6 +68,8 @@ void DockWidget::initializeWidget(MainControl& main_control)
 	window_menu_entry_id_ = 
 		main_control.insertMenuEntry(MainControl::WINDOWS, getIdentifier(), this, SLOT(switchShowWidget()));
 	getMainControl()->menuBar()->setItemChecked(window_menu_entry_id_, true);
+	connect(this, SIGNAL(visibilityChanged(bool)), this, SLOT(mytest(bool)));
+											 
 }
 
 
@@ -100,33 +102,36 @@ void DockWidget::writePreferences(INIFile& inifile)
 void DockWidget::fetchPreferences(INIFile & inifile)
 	throw()
 {
-	if (!inifile.hasEntry("WINDOWS", getIdentifier() + "::docked"))
+	if (inifile.hasEntry("WINDOWS", getIdentifier() + "::docked"))
 	{
-		ModularWidget::fetchPreferences(inifile);
-		return;
-	}
-
-	if (inifile.getValue("WINDOWS", getIdentifier() + "::docked").toUnsignedInt() == 0)
-	{
-		undock();
-		show();
-	}
-	else
-	{
-		if (inifile.hasEntry("WINDOWS", getIdentifier() + "::dockarea")  &&
-				inifile.hasEntry("WINDOWS", getIdentifier() + "::dockindex") &&
-				inifile.hasEntry("WINDOWS", getIdentifier() + "::dockoffset")    &&
-				inifile.hasEntry("WINDOWS", getIdentifier() + "::docknewline"))
+		if (!inifile.getValue("WINDOWS", getIdentifier() + "::docked").toUnsignedInt())
 		{
-			Dock dock = (Dock) inifile.getValue("WINDOWS", getIdentifier() + "::dockarea").toUnsignedInt();
-			Index index = inifile.getValue("WINDOWS", getIdentifier() + "::dockindex").toUnsignedInt();
-			Index offset = inifile.getValue("WINDOWS", getIdentifier() + "::dockoffset").toUnsignedInt();
-			bool newline = inifile.getValue("WINDOWS", getIdentifier() + "::docknewline").toUnsignedInt();
-			getMainControl()->moveDockWindow(this, dock, newline, index, offset);
+			undock();
+			show();
+		}
+		else
+		{
+			if (inifile.hasEntry("WINDOWS", getIdentifier() + "::dockarea")  &&
+					inifile.hasEntry("WINDOWS", getIdentifier() + "::dockindex") &&
+					inifile.hasEntry("WINDOWS", getIdentifier() + "::dockoffset")    &&
+					inifile.hasEntry("WINDOWS", getIdentifier() + "::docknewline"))
+			{
+				Dock dock = (Dock) inifile.getValue("WINDOWS", getIdentifier() + "::dockarea").toUnsignedInt();
+				Index index = inifile.getValue("WINDOWS", getIdentifier() + "::dockindex").toUnsignedInt();
+				Index offset = inifile.getValue("WINDOWS", getIdentifier() + "::dockoffset").toUnsignedInt();
+				bool newline = inifile.getValue("WINDOWS", getIdentifier() + "::docknewline").toUnsignedInt();
+				getMainControl()->moveDockWindow(this, dock, newline, index, offset);
+			}
 		}
 	}
 
 	ModularWidget::fetchPreferences(inifile);
+
+	if (inifile.hasEntry("WINDOWS", getIdentifier() + "::on") &&
+			!inifile.getValue("WINDOWS", getIdentifier() + "::on").toUnsignedInt())
+	{
+		switchShowWidget();
+	}
 }
 
 void DockWidget::switchShowWidget()
@@ -152,5 +157,15 @@ void DockWidget::switchShowWidget()
 		menu->setItemChecked(window_menu_entry_id_, true);
 	}
 }
+
+void DockWidget::mytest(bool state) 
+{
+	QMenuBar* menu = getMainControl()->menuBar();
+	if (menu->isItemChecked(window_menu_entry_id_) != isVisible())
+	{
+		menu->setItemChecked(window_menu_entry_id_, state);
+	}
+}
+
 
 } } // namespaces
