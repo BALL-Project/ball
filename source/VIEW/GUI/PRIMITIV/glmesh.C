@@ -1,4 +1,4 @@
-// $Id: glmesh.C,v 1.5.4.4 2002/11/05 15:37:08 amoll Exp $
+// $Id: glmesh.C,v 1.5.4.5 2002/11/07 19:34:58 amoll Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/glmesh.h>
 
@@ -32,8 +32,7 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<GLMesh>() << endl;
+				Log.info() << "Destructing object " << (void *)this << " of class " << RTTI::getName<GLMesh>() << endl;
 			#endif 
 
 			destroy();

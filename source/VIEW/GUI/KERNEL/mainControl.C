@@ -1,4 +1,4 @@
-// $Id: mainControl.C,v 1.22.4.3 2002/11/04 14:42:03 amoll Exp $
+// $Id: mainControl.C,v 1.22.4.4 2002/11/07 19:31:20 amoll Exp $
 
 // this is required for QMenuItem
 #define INCLUDE_MENUITEM_DEF
@@ -434,13 +434,11 @@ namespace BALL
 		bool MainControl::update(const Composite& composite)
 			throw()
 		{
-			ListIteratorHashMap::Iterator map_iterator =
-				composite_map_.find((void*)&composite);
+			ListIteratorHashMap::Iterator map_iterator = composite_map_.find((void*)&composite);
 
 			if (map_iterator != composite_map_.end())
 			{
 				(*map_iterator->second)->update();
-
 				return true;
 			}
 
@@ -466,9 +464,7 @@ namespace BALL
 			notify_(scene_message); 
 		}
 
-		void MainControl::insert
-		  (Composite* composite, const String& name,
-			 const Vector3& center)
+		void MainControl::insert(Composite* composite, const String& name, const Vector3& center)
 			throw()
 		{
 			if (composite == 0)
@@ -609,9 +605,7 @@ namespace BALL
 
 			List<CompositeDescriptor*>::Iterator list_iterator = descriptors_.end();
 
-			CompositeDescriptor* composite_descriptor =
-				new CompositeDescriptor();
-
+			CompositeDescriptor* composite_descriptor = new CompositeDescriptor();
 			composite_descriptor->setComposite(&composite);
 			composite_descriptor->setName(s);
 			composite_descriptor->setCenter(v);

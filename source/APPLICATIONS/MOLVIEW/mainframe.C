@@ -153,10 +153,7 @@ Mainframe::Mainframe
 	// Connectivity --------
 	// ---------------------
 
-	connect(initPopupMenu(MainControl::BUILD),
-					SIGNAL(aboutToShow()),
-					this,
-					SLOT(checkMenuEntries()));
+	connect(initPopupMenu(MainControl::BUILD), SIGNAL(aboutToShow()), this, SLOT(checkMenuEntries()));
 
 	// check the active menu entries
 	checkMenuEntries();
