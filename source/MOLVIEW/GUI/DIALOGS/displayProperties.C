@@ -1,4 +1,4 @@
-// $Id: displayProperties.C,v 1.13.4.9 2002/11/09 20:55:35 amoll Exp $
+// $Id: displayProperties.C,v 1.13.4.10 2002/11/12 14:43:32 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/displayProperties.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
@@ -562,8 +562,6 @@ namespace BALL
 			ChangedCompositeMessage *change_message = new ChangedCompositeMessage;
 			change_message->setDeletable(false);
 			
-			setupStaticProcessor_();
-			setupDynamicProcessor_();
 			Size number_of_bonds = 0;
 			for (; list_it != temp_selection_.end(); ++list_it)
 			{	
@@ -609,9 +607,6 @@ namespace BALL
 
 			ChangedCompositeMessage *change_message = new ChangedCompositeMessage;
 			change_message->setDeletable(false);
-
-			setupStaticProcessor_();
-			setupDynamicProcessor_();
 
 			Size number_of_hydrogens = 0;
 
