@@ -353,7 +353,7 @@ namespace BALL
 		}
     sy = ex;
     sy++;
-    Size bracket_count = 1;
+    Index bracket_count = 1;
     Size i;
 		bool are_there_brackets = false;
     for (i = sy; i < s.size() && bracket_count > 0; ++i)
@@ -362,7 +362,6 @@ namespace BALL
       {
         case '(': bracket_count++; are_there_brackets = true; break;
         case ')': bracket_count--; are_there_brackets = true; break;
-				
 			}
 		}
 
@@ -608,6 +607,11 @@ namespace BALL
 
 	ExpressionPredicate::~ExpressionPredicate()
 	{
+	}
+
+	bool ExpressionPredicate::operator () (BALL::Atom const &) const
+	{
+		return true;
 	}
 
 	void ExpressionPredicate::setArgument(const String& args)
