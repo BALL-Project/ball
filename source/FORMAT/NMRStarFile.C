@@ -169,15 +169,26 @@ namespace BALL
 	}
 
 	NMRStarFile::NMRStarFile(const String& file_name)
-		throw (Exception::FileNotFound)
+		throw (Exception::FileNotFound, Exception::ParseError)
 		:	LineBasedFile(file_name),
 			number_of_shifts_(0)
 	{
-		readEntryInformation_();
-		readMolSystem_();
-		readSampleConditions_();
-		readShiftReferences_();
-		readShifts_();
+		try 
+		{
+			readEntryInformation_();
+			readMolSystem_();
+			readSampleConditions_();
+			readShiftReferences_();
+			readShifts_();
+		}
+		catch (Exception::GeneralException e)
+		{
+			throw Exception::ParseError(e.getFile().c_str(), e.getLine(), string("NMRStarFile: " + e.getMessage()).c_str(), "");
+		}
+		catch (...)
+		{
+			throw Exception::ParseError(__FILE__, __LINE__, "NMRStarFile: caught unexpected exception while reading file.", "");
+		}
 	}
 
 	const NMRStarFile& NMRStarFile::operator = (const NMRStarFile& f)
@@ -522,7 +533,7 @@ namespace BALL
 		}
 		catch (Exception::GeneralException e)
 		{
-			Log.warn() << "Shift References could not be read." << e.getMessage() << endl;
+			Log.warn() << "NMRStarFile: unable to read shift references." << e.getMessage() << endl;
 		}
 	}
 
