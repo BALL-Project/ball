@@ -1,4 +1,4 @@
-// $Id: INIFile.h,v 1.11 2001/03/09 20:54:03 amoll Exp $
+// $Id: INIFile.h,v 1.12 2001/03/14 00:50:07 amoll Exp $
 
 #ifndef BALL_FORMAT_INIFILE_H
 #define BALL_FORMAT_INIFILE_H
@@ -19,7 +19,7 @@ namespace BALL
 	/**	INIFile.
 			This class provides support to read and evaluate
 			the contents of Windows-style INI files.\\
-			{\bf Definition:}	\URL{BALL/FORMAT/INIFile.h}	\\
+			{\bf Definition:}	\URL{BALL/FORMAT/INIFile.h}
 	*/
 	class INIFile
 	{
@@ -34,6 +34,12 @@ namespace BALL
 			MAX_LINE_LENGTH = 1024
 		};
 
+		
+		/** Return type: undefined:
+				"[UNDEFINED!]"
+		*/
+		static const String UNDEFINED;
+		
 		/** @name	Constructors and Destructors
 		*/
 		//@{
@@ -136,11 +142,14 @@ namespace BALL
 				@param	line_number, first line starts with 0
 				@return	a pointer to the specified line (as a \Ref{String}) or 0
 		*/	
-		String* getLine(Size line_number);
+		const String* getLine(Size line_number) const;
 
 		/**	Change the contents of a line.
-				Replaces the line given by {\bf line_number} by the text in {\bf line}.\\
-				Not yet implemented!
+				Replaces the line given by {\bf line_number} by the text in {\bf line}.
+				Section lines cannot be changed with this method.
+				If the line contains a key, the old one is deleted and the new one
+				(if any) is set.
+				If line starts with "[" the method aborts.
 				@param	line_number number of the line to change, first line is 0
 				@param	line new content of the line
 				@return	bool \begin{itemize}
@@ -150,10 +159,41 @@ namespace BALL
 		*/	
 		bool setLine(Size line_number, const String& line);
 		
-		/**	Returns the number of lines in the buffer.
-				@return 	Size total number of lines in the buffer
+		/** Delete a line.
+				If the line does not exists, false is returned.
+				(This is also the case if the line was already deleted.)
+				Section headers can not be removed with this method.
+				If the line contains a key, it will be removed.
+				@param line_number the line to delete
+		*/
+		bool deleteLine(Position line_number);
+		
+		/** Add a line.
+				To add a line to the prefix use {\bf [PREFIX]} as section_name.
+				If the given section does not exists, false is returned.
+				Lines starting with "[" cannot be added (to prevent problems with
+				section headers).
+				If the line contains a key and the section contains already this key
+				the method aborts and returns false, use setValue() instead.
+				@param section_name the section to add the line
+				@param line the line to be added
+				@return true, if line could be added
+		*/
+		bool insertLine(const String& section_name, const String& line);
+		
+		/**	Return the original number of lines.
+				This are the lines read from an INIFile.
+				Changes after reading the file dont matter here.
+				@return 	Size number of lines in the INIFile
 		*/	
-		Size getNumberOfLines() const;
+		Size getOriginalNumberOfLines() const;
+				
+		/**	Return the absolute number of lines.
+				This are the lines read from a file plus all added lines
+				and minus all deleted lines.
+				@return 	Size number of lines in buffer
+		*/	
+		Size getNumberOfLines() const;		
 
 		/**	Queries for a certain section.
 				@param	section_name	the name of the section (without square brackets)
@@ -174,12 +214,14 @@ namespace BALL
 	  String* getSectionName(Position pos);
 
 		/**	Count all sections.
+				The prefix is not counted!
 		*/	
 		Size getNumberOfSections() const;
 
 		/**	Returns the index of the first line of a section.
 				The first line of a section is the line immediately following the 
 				section name (in square brackets).
+ 				Remember: Lines that are inserted after a INIFile was read are not counted here.
 				@return	Size \begin{itemize}
 											\item the index of the first line, or 
 											\item INVALID_SIZE if the section could not be found or has no lines
@@ -192,9 +234,12 @@ namespace BALL
 				The last line of a section is either the last line 
 				before a new section definition (starting with square brackets) 
 				or the last line of a file.
+				Remember: Lines that are inserted after a INIFile was read are not counted here.
+				If the section does not have read lines, INVALID_SIZE is returned.
 				@return	Size \begin{itemize}
 											\item the index of the last line, or 
-											\item INVALID_SIZE if the section could not be found or has no lines										 \end{itemize}
+											\item INVALID_SIZE if the section could not be found or has no lines
+											\end{itemize}
 				@param	section_name	the name of the section to be found
 		*/	
 		Size getSectionLastLine(const String& section_name) const;	
@@ -202,6 +247,9 @@ namespace BALL
 		/**	Returns the number of line in a section.
 				The header line is not counted. The last section is terminated 
 				by the last line of the file.
+				Deleted lines are not counted.
+				Inserted lines are counted, so \\
+				getSectionLastLine - getSectionFirstLine != getSectionLength \\
 				@return	Size \begin{itemize}
 											\item the number of lines, or 
 											\item INVALID_SIZE if the section could not be found
@@ -232,13 +280,14 @@ namespace BALL
 				@param	key a key in the {\bf section}
 				@return	String \begin{itemize} 
 												\item the value corresponding to the {\bf key} in {\bf section}
-												\item or an empty string
+												\item or \Ref{UNDEFINED}
 											 \end{itemize}
 		*/	
 		String getValue(const String& section, const String& key) const;
 
 		/**	Change the value corresponding to a given key.
 				Replaces the value of an existing key in an existing section.
+				If the key or the new value is a empty string nothing is changed.
 				@param	section	the section to look in for the key
 				@param	key	the key to look for
 				@param	value the new value
@@ -260,18 +309,20 @@ namespace BALL
 
 		//@}
 
-		protected:	
+		//protected:	
 
 		bool									valid_;
 		String								filename_;	
 
 		// names of all sections
+		// 0. section is "[PREFIX]"
 		std::vector<String>		section_names_;
 
 		// all lines
 		std::vector<String>		lines_;
 
 		// in which sector is the line
+		// -1 means the line was deleted
 		std::vector<Index>		line_section_index_;
 
 		// starts of the sections
