@@ -1,4 +1,4 @@
-// $Id: expression.C,v 1.21 2001/07/12 11:54:23 anker Exp $
+// $Id: expression.C,v 1.22 2001/07/12 20:00:20 anker Exp $
 
 #include <BALL/KERNEL/expression.h>
 #include <BALL/KERNEL/standardPredicates.h>
@@ -66,7 +66,7 @@ namespace BALL
 
 		delete expression_tree_;
 		expression_tree_ = 0;
-		expression_string_.clear();
+		expression_string_ = "<not initialized>";
 	}
 
 
@@ -91,28 +91,34 @@ namespace BALL
 	bool Expression::operator == (const Expression& expression) const 
 		throw()
 	{
-		if (((int)expression_tree_ & (int)expression.expression_tree_) == 0)
+		if ((expression_tree_ == 0) && (expression.expression_tree_ == 0))
 		{
-			// at least one of the pointers is a null pointer, so check if both
-			// are.
-			if (((int)expression_tree_ | (int)expression.expression_tree_) == 0)
-			{
-				// both pointers are null pointers. Expressions should have null
-				// pointers only if they are default constructed, so a consistency
-				// check might be useful (the string should be empty; maybe later)
-				return ((create_methods_ == expression.create_methods_)
-						&& (expression_string_ == expression.expression_string_));
-			}
-			else
-			{
-				return false;
-			}
+			// both pointers are null pointers. Expressions should have null
+			// pointers only if they are default constructed, so a consistency
+			// check might be useful (the string should be empty; maybe later)
+
+			return ((create_methods_ == expression.create_methods_)
+					&& (expression_string_ == expression.expression_string_));
 		}
 		else
 		{
+			if ((expression_tree_ == 0) || (expression.expression_tree_ == 0))
+			{
+
+				// one of the pointers is NULL. The instances cannot be equal.
+
+				return false;
+
+			}
+			else
+			{
+
+			// compare everything.
+
 			return ((create_methods_ == expression.create_methods_)
 					&& (*expression_tree_ == *expression.expression_tree_)
 					&& (expression_string_ == expression.expression_string_));
+			}
 		}
 	}
 
@@ -213,7 +219,9 @@ namespace BALL
 			}
 			else
 			{
-        Log.error() << "Expression::setExpression: could not find predicate for expression " << t.expression << "(" << t.argument << ")" << endl;
+        Log.error() << "Expression::constructExpressionTree_: "
+					<< "could not find predicate for expression " << t.expression 
+					<< "(" << t.argument << ")" << endl;
         root->setType(ExpressionTree::INVALID);
 			}
 
@@ -342,6 +350,19 @@ namespace BALL
 	bool ExpressionTree::operator () (const Atom& atom) const 
 		throw()
 	{
+		// BAUSTELLE:
+		// enabling the code below breaks the code. I don't know why. I would
+		// expect that the INVALID nodes aren't AND nodes...
+		/*
+		if (type_ == INVALID)
+		{
+			Log.warn() << "ExpressionTree::operator (): "
+				<< "encountered INVALID node, returning false."
+				<< endl;
+			return false;
+		}
+		*/
+
     bool result;
     if (type_ == LEAF)
     {
@@ -365,7 +386,7 @@ namespace BALL
         return (!negate_);
 			}
 
-			// evaluated all children
+			// evaluate all children
       list<const ExpressionTree*>::const_iterator list_it = children_.begin();
       bool abort = false;
       for (; !abort && list_it != children_.end(); ++list_it)
@@ -379,11 +400,11 @@ namespace BALL
           {
             abort = true;
 					}
-				// AND expressions may be aborted, if the first subexpression
-				// yields false
 				}
 				else
 				{
+					// AND expressions may be aborted, if the first subexpression
+					// yields false
           if (result == false)
           {
             abort = true;
@@ -399,30 +420,29 @@ namespace BALL
 	bool ExpressionTree::operator == (const ExpressionTree& tree) const
 		throw(Exception::NullPointer)
 	{
-		if (((int)predicate_ & (int)tree.predicate_) == 0)
+		if ((predicate_ == 0) && (tree.predicate_ == 0))
 		{
-			// at least one of the pointers is a null pointer, so check if both
-			// are.
-			if (((int)predicate_ | (int)tree.predicate_) == 0)
-			{
-				// both pointers are null pointers. Expressions should have null
-				// pointers only if they are default constructed, so a consistency
-				// check might be useful 
-				return ((type_ == tree.type_)
-						&& (negate_ == tree.negate_)
-						&& (children_ == tree.children_));
-			}
-			else
-			{
-				return false;
-			}
+			// both pointers are null pointers. Expressions should have null
+			// pointers only if they are default constructed, so a consistency
+			// check might be useful 
+			return ((type_ == tree.type_)
+					&& (negate_ == tree.negate_)
+					&& (children_ == tree.children_));
 		}
 		else
 		{
-			return ((type_ == tree.type_)
-					&& (negate_ == tree.negate_)
-					&& (*predicate_ == *tree.predicate_)
-					&& (children_ == tree.children_));
+			if ((predicate_ == 0) || (tree.predicate_ == 0))
+			{
+				// one of the pointers is NULL, so hte instances cannot be equal.
+				return false;
+			}
+			else
+			{
+				return ((type_ == tree.type_)
+						&& (negate_ == tree.negate_)
+						&& (*predicate_ == *tree.predicate_)
+						&& (children_ == tree.children_));
+			}
 		}
 	}
 
