@@ -1,4 +1,4 @@
-// $Id: global.h,v 1.3 2000/01/28 16:38:28 oliver Exp $
+// $Id: global.h,v 1.4 2000/06/27 23:10:56 oliver Exp $
 
 #ifndef BALL_COMMON_GLOBAL_H
 #define BALL_COMMON_GLOBAL_H
@@ -8,10 +8,6 @@
 #endif
 
 #include <limits.h>
-
-#ifndef BALL_COMMON_VERSION_H
-#	include <BALL/COMMON/version.h>
-#endif
 
 #if defined(BALL_LOG_MEMORY) && !defined(BALL_COMMON_MEMORY_H)
 #	include <BALL/COMMON/memory.h>
@@ -97,7 +93,7 @@ namespace BALL
 
 	/**	64 bit unsigned integer type.
 			This type is used to read and write pointers to persistent
-			objects to ensure compatibility between 64 and 43 bit architectures.
+			objects to ensure compatibility between 64 and 32 bit architectures.
 	*/
 	typedef BALL_ULONG64_TYPE LongPointerType;
 	//@}
@@ -122,21 +118,6 @@ namespace BALL
 		ASCII__SEMICOLON        = ';'
 	};
 
-	struct Version
-	{
-		public:
-		
-			static const char* RELEASE;       				// version  
-			static const short MAJOR_RELEASE; 				// patchlevel
-			static const short MINOR_RELEASE; 				// sublevel
-			static const char* RELEASE_DATE_AND_TIME;
-
-		private:
-
-			static const char* release_what_string_;
-	};
-
-
 	static const Distance INVALID_DISTANCE = INT_MIN;
 	static const Distance DISTANCE_MIN = (INT_MIN + 1);
 	static const Distance DISTANCE_MAX = INT_MAX;
@@ -158,8 +139,6 @@ namespace BALL
 	static const Size SIZE_MIN = 0;
 	static const Size SIZE_MAX = INT_MAX - 1;
 
-	extern const char* kernel_compilation_date_and_time_;
-		
 }
 
 #endif // BALL_COMMON_GLOBAL_H
