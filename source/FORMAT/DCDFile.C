@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile.C,v 1.21 2003/01/29 11:34:48 anker Exp $
+// $Id: DCDFile.C,v 1.22 2003/01/29 11:49:49 anker Exp $
 
 #include <BALL/FORMAT/DCDFile.h>
 #include <BALL/MOLMEC/COMMON/snapShot.h>
@@ -490,7 +490,7 @@ namespace BALL
 		// write the atom number block
 		*this << BinaryFileAdaptor<Size>(4);
 		// DEBUG
-		Log.info() << "wH: number_of_atoms_ " << number_of_atoms_ << endl;
+		// Log.info() << "wH: number_of_atoms_ " << number_of_atoms_ << endl;
 		// /DEBUG
 		*this << BinaryFileAdaptor<Size>(number_of_atoms_);
 		*this << BinaryFileAdaptor<Size>(4);
@@ -503,7 +503,7 @@ namespace BALL
 		throw()
 	{
 		// DEBUG
-		Log.info() << good() << " " << bad() << endl;
+		// Log.info() << good() << " " << bad() << endl;
 		// /DEBUG
 
 		// ?????
@@ -511,7 +511,7 @@ namespace BALL
 		// i. e. whether earlier snapshots had the same number.
 		number_of_atoms_ = snapshot.getNumberOfAtoms();
 		// DEBUG
-		Log.info() << "append: number_of_atoms_ " << number_of_atoms_ << endl;
+		// Log.info() << "append: number_of_atoms_ " << number_of_atoms_ << endl;
 		// /DEBUG
 		// increase the snapshot counter for a correct header
 		number_of_snapshots_++;
