@@ -12,6 +12,7 @@ EXECUTABLES = \
 	AtomicContactEnergy_test\
 	AtomVector_test\
 	AutoDeleteable_test\
+	BinaryFileAdaptor_test\
 	BitVector_test\
 	Bond_test\
 	Box3_test\
@@ -24,6 +25,7 @@ EXECUTABLES = \
 	ComposedEnergyProcessor_test\
 	Composite_test\
 	CreateSpectrumProcessor_test\
+	DCDFile_test\
 	Directory_test\
 	DefaultProcessors_test\
 	EFShiftProcessor_test\
@@ -33,9 +35,10 @@ EXECUTABLES = \
 	Enumerator_test\
 	Expression_test\
 	File_test\
-	GlobalTypes_test\
 	Fragment_test\
 	FragmentDB_test\
+	Function_test\
+	GlobalTypes_test\
 	Gradient_test\
 	HaighMallionShiftProcessor_test\
 	Hash_test\
@@ -96,6 +99,8 @@ EXECUTABLES = \
 	Selectable_test\
 	ShiftModel_test\
 	ShiftModule_test\
+	SnapShot_test\
+	SnapShotManager_test\
 	Socket_test\
 	SolventDescriptor_test\
 	SolventParameter_test\
@@ -108,6 +113,7 @@ EXECUTABLES = \
 	PreciseTime_test\
 	Timer_test\
 	TimeStamp_test\
+	TrajectoryFile_test\
 	TransformationApplicator_test\
 	TranslationApplicator_test\
 	Vector3_test\
