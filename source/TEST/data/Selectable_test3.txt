@@ -1,0 +1,2 @@
+/Object: [0-9a-z]+ is instance of class: Q24BALL10Selectable
+  selected: 1
