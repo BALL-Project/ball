@@ -1,4 +1,4 @@
-# $Id: Makefile,v 1.2 2000/05/05 07:24:29 oliver Exp $
+# $Id: Makefile,v 1.3 2000/05/05 12:33:36 oliver Exp $
 # Makefile for Finite Difference Poisson-Boltzmann Application
 #
 
@@ -10,15 +10,18 @@ all:	$(EXECUTABLE)
 
 clean:	default_clean
 
-include ../../common.mak
+include ../../Solaris-5.7-sparc-g++_2.95.2/common.mak
 include .Dependencies
 
 SOURCES=\
-	PB.C
+	main.C\
+	global.C\
+	reading.C\
+	assignment.C
 
 CPP_SOURCES=$(SOURCES)
 
 SPECIAL_OBJECTS=
 
 PB:	$(OBJECTS) $(SPECIAL_OBJECTS)
-	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(BALLVIEW_LIBS)
+	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(BALL_LIBS)
