@@ -1,4 +1,4 @@
-// $Id: support.h,v 1.2 2000/01/10 15:51:04 oliver Exp $
+// $Id: support.h,v 1.3 2000/02/10 15:04:38 oliver Exp $
 
 #ifndef BALL_MOLMEC_COMMON_SUPPORT_H
 #define BALL_MOLMEC_COMMON_SUPPORT_H
@@ -32,10 +32,26 @@ namespace BALL
 		*/
 		//@{
 
+		/**	@name	Enums
+		*/
+		//@{
+		/**	The type of algorithm used to calculate the pair list.
+		*/
+		enum PairListAlgorithmType
+		{
+			/**	use a hash grid 
+			*/
+			HASH_GRID,
+			/**	brute force all agains all
+			*/
+			BRUTE_FORCE
+		};
+		//@}
+			
 		/**	Create a pair vector for non-bonded interactions.
 				Calculates a vector of atom pairs whose distance is smaller than distance.
-				The {\tt type} determines if a brute force algorithm ({\tt type == 0})
-				or a more sophisticated grid method ({\tt type == 1}) is used.
+				The {\tt type} determines if a brute force algorithm ({\tt type == BRUTE\_FORCE})
+				or a more sophisticated grid method ({\tt type == HASH\_GRID}) is used.
 				@param	pair_vector the vector containing pairs of interacting atoms
 				@param	atom_vector the atoms to be considered for pairs
 				@param	box	the periodic boundary used (if {\tt periodic\_boundary\_enabled == true})
@@ -47,7 +63,8 @@ namespace BALL
 		BALL::Size calculateNonBondedAtomPairs
 			(ForceField::PairVector& pair_vector, 
 			 const vector<Atom*>& atom_vector, const TBox3<Real>& box, 
-			 float distance,	bool periodic_boundary_enabled, int type);
+			 float distance,	bool periodic_boundary_enabled, 
+			 PairListAlgorithmType type);
 
 		/**	Merge the non-overlapping molecules of a system into another system.
 				Fills {\tt system\_A} with copies of the solvent molecules stored in {\tt system\_B}.
