@@ -1,4 +1,4 @@
-// $Id: property.iC,v 1.22 2001/07/16 09:38:48 oliver Exp $
+// $Id: property.iC,v 1.23 2001/08/16 00:34:46 oliver Exp $
 
 using namespace std;
 
@@ -148,14 +148,18 @@ BALL_INLINE
 float NamedProperty::getFloat() const
 	throw()
 {
-	return (type_ == FLOAT ? data_.f : 0.0);
+	return (type_ == FLOAT ? data_.f : 
+						(type_ == DOUBLE ? (float)data_.d : 
+							(type_ == INT ? (float)data_.i : 0.0)));
 }
 
 BALL_INLINE 
 double NamedProperty::getDouble() const
 	throw()
 {
-	return (type_ == DOUBLE ? data_.d : 0.0);
+	return (type_ == DOUBLE ? data_.d : 
+						(type_ == FLOAT ? (double)data_.f : 
+							(type_ == INT ? (double)data_.i : 0.0)));
 }
 
 BALL_INLINE 
