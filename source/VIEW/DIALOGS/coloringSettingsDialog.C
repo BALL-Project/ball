@@ -671,5 +671,142 @@ void ColoringSettingsDialog::showPage(int nr)
 	widget_stack->raiseWidget(nr);
 }
 
+ColorProcessor* ColoringSettingsDialog::createColorProcessor(ColoringMethod method) const
+	throw(Exception::InvalidOption)
+{
+	ColorProcessor* color_processor = 0;
+
+	switch(method)
+	{
+		case COLORING_ELEMENT:
+			color_processor = new ElementColorProcessor;
+			break;
+
+		case COLORING_RESIDUE_NAME:
+			color_processor = new ResidueNameColorProcessor;
+			break;
+
+		case COLORING_RESIDUE_INDEX:
+			color_processor = new ResidueNumberColorProcessor;
+			break;
+
+		case COLORING_SECONDARY_STRUCTURE:
+			color_processor = new SecondaryStructureColorProcessor;
+			break;
+
+		case COLORING_ATOM_CHARGE:
+			color_processor = new AtomChargeColorProcessor;
+			break;
+
+		case COLORING_CUSTOM:
+			color_processor = new CustomColorProcessor;
+			break;
+
+		case COLORING_DISTANCE:
+			color_processor = new AtomDistanceColorProcessor;
+			break;
+
+		case COLORING_TEMPERATURE_FACTOR:
+			color_processor = new TemperatureFactorColorProcessor;
+			break;
+
+		case COLORING_OCCUPANCY:
+			color_processor = new OccupancyColorProcessor;
+			break;
+
+		case COLORING_FORCES:
+			color_processor = new ForceColorProcessor;
+			break;
+
+
+		default:
+			throw(Exception::InvalidOption(__FILE__, __LINE__, method));
+	}
+
+	applySettingsTo(*color_processor);
+
+	return color_processor;
+}
+
+void ColoringSettingsDialog::getSettings(const ColorProcessor& cp)
+	throw()
+{
+
+	if (RTTI::isKindOf<CustomColorProcessor>(cp))
+	{
+	} else
+
+	if (RTTI::isKindOf<ElementColorProcessor>(cp))
+	{
+	} else
+	
+	if (RTTI::isKindOf<ResidueNameColorProcessor>(cp))
+	{
+	} else
+
+	if (RTTI::isKindOf<ResidueNumberColorProcessor>(cp))
+	{
+		ResidueNumberColorProcessor& dp = (*(ResidueNumberColorProcessor*)&cp);
+		first_residue_color_ = dp.getFirstColor();
+		middle_residue_color_ = dp.getMiddleColor();
+		last_residue_color_ = dp.getLastColor();
+	} else
+
+	if (RTTI::isKindOf<AtomChargeColorProcessor>(cp))
+	{
+		AtomChargeColorProcessor& dp = (*(AtomChargeColorProcessor*)&cp);
+		positive_charge_color_ = dp.getPositiveColor();
+		negative_charge_color_ = dp.getNegativeColor();
+		neutral_charge_color_ =  dp.getNeutralColor();
+	} else
+
+	if (RTTI::isKindOf<AtomDistanceColorProcessor>(cp))
+	{
+		AtomDistanceColorProcessor& dp = (*(AtomDistanceColorProcessor*)&cp);
+		null_distance_color_ = dp.getNullDistanceColor();
+		max_distance_color_ = dp.getMaxDistanceColor();
+		max_distance_slider->setValue((Size)(dp.getDistance() * 10.0));
+		distance_show_selected->setChecked(dp.showSelected());
+	} else
+
+	if (RTTI::isKindOf<OccupancyColorProcessor>(cp))
+	{
+		OccupancyColorProcessor& dp = (*(OccupancyColorProcessor*)&cp);
+		minimum_occupancy_color_ = dp.getMinColor();
+		maximum_occupancy_color_ = dp.getMaxColor();
+	} else
+
+	if (RTTI::isKindOf<SecondaryStructureColorProcessor>(cp))
+	{
+		SecondaryStructureColorProcessor& dp = (*(SecondaryStructureColorProcessor*)&cp);
+
+		helix_color_ = dp.getHelixColor();
+		coil_color_  = dp.getCoilColor();
+		strand_color_ = dp.getStrandColor();
+		turn_color_ =   dp.getTurnColor();
+	} else
+
+	if (RTTI::isKindOf<TemperatureFactorColorProcessor>(cp))
+	{
+		TemperatureFactorColorProcessor& dp = (*(TemperatureFactorColorProcessor*)&cp);
+
+		unassigned_tf_color_ = dp.getMinMinColor();
+		minimum_tf_color_ = dp.getMinColor();
+		maximum_tf_color_ = dp.getMaxColor();
+		max_tf_slider->setValue((Size)(dp.getMaxValue() * 10.0));
+	} else
+
+	if (RTTI::isKindOf<ForceColorProcessor>(cp))
+	{
+		ForceColorProcessor& dp = (*(ForceColorProcessor*)&cp);
+
+		force_min_color_ = dp.getMinColor();
+		force_max_color_ = dp.getMaxColor();
+		force_max_value_slider->setValue((Size)(dp.getMaxValue() * 10.0));
+	}
+
+	setLabelColorsFromValues_();
+}
+	
 
 } } // NAMESPACE

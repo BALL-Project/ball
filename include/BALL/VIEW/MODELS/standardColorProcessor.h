@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.h,v 1.25 2004/08/25 13:04:07 amoll Exp $
+// $Id: standardColorProcessor.h,v 1.26 2004/09/01 14:14:11 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
@@ -337,6 +337,10 @@ namespace BALL
 			/// Set wheter the selected molecular entities are also shown
 			void setShowSelected(bool state) 
 				throw() {show_selected_ = state;}
+
+			///
+			bool showSelected() const
+				throw() { return show_selected_;}
 			
 			/** Calculate the distances.
 					If this method is called the distances of all previously inserted Atom objects 

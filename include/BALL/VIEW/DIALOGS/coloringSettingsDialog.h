@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: coloringSettingsDialog.h,v 1.12 2004/07/09 23:11:01 amoll Exp $
+// $Id: coloringSettingsDialog.h,v 1.13 2004/09/01 14:14:10 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_COLORINGSETTINGSDIALOG_H
@@ -15,6 +15,10 @@
 
 #ifndef BALL_VIEW_DATATYPE_COLORGBA_H
  #include <BALL/VIEW/DATATYPE/colorRGBA.h>
+#endif
+
+#ifndef BALL_VIEW_KERNEL_COMMON_H
+# include <BALL/VIEW/KERNEL/common.h>
 #endif
 
 #include <qtable.h>
@@ -114,6 +118,14 @@ namespace BALL
 
 			///
 			void applySettingsTo(ColorProcessor& cp) const
+				throw();
+
+			///
+			ColorProcessor* createColorProcessor(ColoringMethod method) const
+				throw(Exception::InvalidOption);
+
+			///
+			void getSettings(const ColorProcessor& cp)
 				throw();
 
 			///

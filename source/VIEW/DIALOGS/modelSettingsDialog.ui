@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>ModelSettingsDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -51,6 +51,11 @@
                 <string>H-Bonds</string>
             </property>
         </item>
+        <item>
+            <property name="text">
+                <string>Forces</string>
+            </property>
+        </item>
         <property name="name">
             <cstring>list_box</cstring>
         </property>
@@ -59,7 +64,7 @@
                 <x>13</x>
                 <y>8</y>
                 <width>100</width>
-                <height>148</height>
+                <height>169</height>
             </rect>
         </property>
         <property name="maximumSize">
@@ -83,7 +88,7 @@
         </property>
         <widget class="QWidget">
             <property name="name">
-                <cstring>WStackPage</cstring>
+                <cstring>stick</cstring>
             </property>
             <attribute name="id">
                 <number>0</number>
@@ -106,42 +111,6 @@
                 <property name="frameShadow">
                     <enum>Raised</enum>
                 </property>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>textLabel1_2_2_2</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>12</x>
-                            <y>14</y>
-                            <width>120</width>
-                            <height>16</height>
-                        </rect>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>0</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>120</width>
-                            <height>0</height>
-                        </size>
-                    </property>
-                    <property name="maximumSize">
-                        <size>
-                            <width>120</width>
-                            <height>32767</height>
-                        </size>
-                    </property>
-                    <property name="text">
-                        <string>cylinder radius</string>
-                    </property>
-                </widget>
                 <widget class="QLabel">
                     <property name="name">
                         <cstring>stick_radius_label</cstring>
@@ -224,11 +193,47 @@
                         <number>7</number>
                     </property>
                 </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel1_2_2_2</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>12</x>
+                            <y>14</y>
+                            <width>120</width>
+                            <height>16</height>
+                        </rect>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>120</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>120</width>
+                            <height>32767</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>cylinder radius</string>
+                    </property>
+                </widget>
             </widget>
         </widget>
         <widget class="QWidget">
             <property name="name">
-                <cstring>WStackPage</cstring>
+                <cstring>bs</cstring>
             </property>
             <attribute name="id">
                 <number>1</number>
@@ -529,7 +534,7 @@
         </widget>
         <widget class="QWidget">
             <property name="name">
-                <cstring>WStackPage</cstring>
+                <cstring>vdw</cstring>
             </property>
             <attribute name="id">
                 <number>2</number>
@@ -671,7 +676,7 @@
         </widget>
         <widget class="QWidget">
             <property name="name">
-                <cstring>WStackPage</cstring>
+                <cstring>surface</cstring>
             </property>
             <attribute name="id">
                 <number>3</number>
@@ -816,7 +821,7 @@
         </widget>
         <widget class="QWidget">
             <property name="name">
-                <cstring>WStackPage</cstring>
+                <cstring>tube</cstring>
             </property>
             <attribute name="id">
                 <number>4</number>
@@ -961,7 +966,7 @@
         </widget>
         <widget class="QWidget">
             <property name="name">
-                <cstring>WStackPage</cstring>
+                <cstring>cartoon</cstring>
             </property>
             <attribute name="id">
                 <number>5</number>
@@ -1514,7 +1519,7 @@
         </widget>
         <widget class="QWidget">
             <property name="name">
-                <cstring>WStackPage</cstring>
+                <cstring>hbonds</cstring>
             </property>
             <attribute name="id">
                 <number>6</number>
@@ -1657,6 +1662,294 @@
                 </widget>
             </widget>
         </widget>
+        <widget class="QWidget">
+            <property name="name">
+                <cstring>forces</cstring>
+            </property>
+            <attribute name="id">
+                <number>7</number>
+            </attribute>
+            <widget class="QFrame">
+                <property name="name">
+                    <cstring>frame3_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>3</x>
+                        <y>3</y>
+                        <width>277</width>
+                        <height>38</height>
+                    </rect>
+                </property>
+                <property name="frameShape">
+                    <enum>NoFrame</enum>
+                </property>
+                <property name="frameShadow">
+                    <enum>Raised</enum>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel1_2_2_2_3</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>12</x>
+                            <y>14</y>
+                            <width>120</width>
+                            <height>16</height>
+                        </rect>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>120</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>120</width>
+                            <height>32767</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>scaling (10^X)</string>
+                    </property>
+                </widget>
+                <widget class="QSlider">
+                    <property name="name">
+                        <cstring>force_scaling_slider</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>138</x>
+                            <y>11</y>
+                            <width>84</width>
+                            <height>21</height>
+                        </rect>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>84</width>
+                            <height>21</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>84</width>
+                            <height>21</height>
+                        </size>
+                    </property>
+                    <property name="minValue">
+                        <number>5</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>20</number>
+                    </property>
+                    <property name="value">
+                        <number>11</number>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="tickmarks">
+                        <enum>Above</enum>
+                    </property>
+                    <property name="tickInterval">
+                        <number>7</number>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>force_scaling_label</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>228</x>
+                            <y>9</y>
+                            <width>50</width>
+                            <height>25</height>
+                        </rect>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>50</width>
+                            <height>25</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>35</width>
+                            <height>25</height>
+                        </size>
+                    </property>
+                    <property name="frameShape">
+                        <enum>TabWidgetPanel</enum>
+                    </property>
+                    <property name="text">
+                        <string>99.9</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignCenter</set>
+                    </property>
+                </widget>
+            </widget>
+            <widget class="QFrame">
+                <property name="name">
+                    <cstring>frame3_2_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>3</x>
+                        <y>58</y>
+                        <width>277</width>
+                        <height>38</height>
+                    </rect>
+                </property>
+                <property name="frameShape">
+                    <enum>NoFrame</enum>
+                </property>
+                <property name="frameShadow">
+                    <enum>Raised</enum>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel1_2_2_2_3_4</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>12</x>
+                            <y>14</y>
+                            <width>120</width>
+                            <height>16</height>
+                        </rect>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>120</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>120</width>
+                            <height>32767</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>max length</string>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>force_max_length_label</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>228</x>
+                            <y>9</y>
+                            <width>50</width>
+                            <height>25</height>
+                        </rect>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>50</width>
+                            <height>25</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>35</width>
+                            <height>25</height>
+                        </size>
+                    </property>
+                    <property name="frameShape">
+                        <enum>TabWidgetPanel</enum>
+                    </property>
+                    <property name="text">
+                        <string>99.9</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignCenter</set>
+                    </property>
+                </widget>
+                <widget class="QSlider">
+                    <property name="name">
+                        <cstring>force_max_length_slider</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>138</x>
+                            <y>11</y>
+                            <width>84</width>
+                            <height>21</height>
+                        </rect>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>84</width>
+                            <height>21</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>84</width>
+                            <height>21</height>
+                        </size>
+                    </property>
+                    <property name="minValue">
+                        <number>1</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>30</number>
+                    </property>
+                    <property name="value">
+                        <number>10</number>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="tickmarks">
+                        <enum>Above</enum>
+                    </property>
+                    <property name="tickInterval">
+                        <number>7</number>
+                    </property>
+                </widget>
+            </widget>
+        </widget>
     </widget>
 </widget>
 <connections>
@@ -1732,6 +2025,18 @@
         <receiver>ModelSettingsDialog</receiver>
         <slot>showPage(int)</slot>
     </connection>
+    <connection>
+        <sender>force_max_length_slider</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>ModelSettingsDialog</receiver>
+        <slot>forceMaxLengthChanged()</slot>
+    </connection>
+    <connection>
+        <sender>force_scaling_slider</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>ModelSettingsDialog</receiver>
+        <slot>forceScalingChanged()</slot>
+    </connection>
 </connections>
 <includes>
     <include location="global" impldecl="in declaration">BALL/COMMON/global.h</include>
@@ -1749,6 +2054,8 @@
     <slot>cartoonArrowHeightChanged()</slot>
     <slot>hbondsRadiusChanged()</slot>
     <slot>showPage(int)</slot>
+    <slot>forceMaxLengthChanged()</slot>
+    <slot>forceScalingChanged()</slot>
 </slots>
 <exportmacro>BALL_EXPORT</exportmacro>
 <layoutdefaults spacing="6" margin="11"/>

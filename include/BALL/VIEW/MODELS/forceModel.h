@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceModel.h,v 1.1 2004/07/08 16:49:36 amoll Exp $
+// $Id: forceModel.h,v 1.2 2004/09/01 14:14:11 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_FORCEMODEL_H
@@ -45,6 +45,22 @@ namespace BALL
 			virtual ~ForceModel()
 				throw();
 
+			///
+			void setScaling(float value)
+				throw() { scaling_ = value;}
+
+			///
+			void setMaxLength(float value)
+				throw() { max_length_ = value;}
+
+			///
+			float getScaling() const
+				throw() { return scaling_;}
+
+			///
+			float getMaxLength() const
+				throw() { return max_length_;}
+
 			//@} 
 			/**	@name Processor specific methods 
 			*/ 
@@ -68,6 +84,9 @@ namespace BALL
 			//@}
 
 			protected:
+
+			float scaling_;
+			float max_length_;
 		};
 
 	} // namespace VIEW

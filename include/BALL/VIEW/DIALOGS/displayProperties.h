@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.35 2004/07/25 20:44:44 amoll Exp $
+// $Id: displayProperties.h,v 1.36 2004/09/01 14:14:10 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
@@ -51,16 +51,6 @@ namespace BALL
 			public:
 			
 			BALL_EMBEDDABLE(DisplayProperties,ModularWidget)
-
-			/// Exception to be thrown if an invalid option is given for a modelprocessor
-			class InvalidOption: public Exception::GeneralException
-			{
-				public:
-
-					///
-					InvalidOption(const char* file, int line, int option)
-						throw();
-			};
 
 			/**	@name	Constructors and Destructors
 			*/	
@@ -276,7 +266,7 @@ namespace BALL
 					change (See also VIEW/KERNEL/common.h).
 			*/
 			virtual Representation* createRepresentation_(const List<Composite*>& composites)
-				throw(InvalidOption);
+				throw(Exception::InvalidOption);
 
 			//_ Read a inifile entry and set the accoring attribut and ComboBox.
 			virtual void getEntry_(INIFile& inifile, const String& key, QComboBox& box);

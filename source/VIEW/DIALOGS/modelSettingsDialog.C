@@ -1,10 +1,22 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.C,v 1.16 2004/07/15 12:05:46 amoll Exp $
+// $Id: modelSettingsDialog.C,v 1.17 2004/09/01 14:14:04 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modelSettingsDialog.h>
+
+
+#include <BALL/VIEW/MODELS/backboneModel.h>
+#include <BALL/VIEW/MODELS/cartoonModel.h>
+#include <BALL/VIEW/MODELS/ballAndStickModel.h>
+#include <BALL/VIEW/MODELS/lineModel.h>
+#include <BALL/VIEW/MODELS/surfaceModel.h>
+#include <BALL/VIEW/MODELS/vanDerWaalsModel.h>
+#include <BALL/VIEW/MODELS/HBondModel.h>
+#include <BALL/VIEW/MODELS/forceModel.h>
+#include <BALL/VIEW/MODELS/standardColorProcessor.h>
+
 #include <BALL/DATATYPE/string.h>
 #include <BALL/FORMAT/INIFile.h>
 
@@ -66,6 +78,12 @@ namespace BALL
 			{
 				hbonds_radius_slider->setValue(3);
 			}
+
+			if (all || list_box->currentItem() == 7)
+			{
+				force_max_length_slider->setValue(10);
+				force_scaling_slider->setValue(11);
+			}
 		}
 
 		float ModelSettingsDialog::getFloatValue_(const QSlider* const& slider) const
@@ -122,7 +140,10 @@ namespace BALL
 			writePreference_(file, "cartoon_helix_radius", *cartoon_helix_radius_slider);
 			writePreference_(file, "cartoon_arrow_height", *cartoon_arrow_height_slider);
 			writePreference_(file, "cartoon_arrow_width", *cartoon_arrow_width_slider);
-			writePreference_(file, "cartoon_arrow_width", *cartoon_arrow_width_slider);
+			
+			writePreference_(file, "force_scaling", *force_scaling_slider);
+			writePreference_(file, "force_max_length", *force_max_length_slider);
+		
 			writePreference_(file, "hbonds_radius", *hbonds_radius_slider);
 		}
 
@@ -143,6 +164,10 @@ namespace BALL
 			fetchPreference_(file, "cartoon_helix_radius", *cartoon_helix_radius_slider);
 			fetchPreference_(file, "cartoon_arrow_height", *cartoon_arrow_height_slider);
 			fetchPreference_(file, "cartoon_arrow_width", *cartoon_arrow_width_slider);
+
+			fetchPreference_(file, "force_max_length", *force_max_length_slider);
+			fetchPreference_(file, "force_scaling", *force_scaling_slider);
+
 			fetchPreference_(file, "hbonds_radius", *hbonds_radius_slider);
 		}
 
@@ -166,6 +191,186 @@ namespace BALL
 			widget_stack->raiseWidget(nr);
 		}
 
+
+		void ModelSettingsDialog::applySettingsTo(ModelProcessor& mp) const
+			throw()
+		{
+			if (RTTI::isKindOf<AddLineModel>(mp))
+			{
+				return;
+			}
+					
+			if (RTTI::isKindOf<AddBallAndStickModel>(mp))
+			{
+				((AddBallAndStickModel*)&mp)->setStickRadius(getBallAndStickStickRadius());
+				((AddBallAndStickModel*)&mp)->setBallRadius(getBallRadius());
+				((AddBallAndStickModel*)&mp)->enableDashedBonds(ballAndStickDashedBondsEnabled());
+				return;
+			}
+					
+			if (RTTI::isKindOf<AddSurfaceModel>(mp))
+			{
+				((AddSurfaceModel*)&mp)->setProbeRadius(getSurfaceProbeRadius());
+				return;
+			}
+					
+			if (RTTI::isKindOf<AddVanDerWaalsModel>(mp))
+			{
+				((AddVanDerWaalsModel*) &mp)->setVDWRadiusFactor(getVDWRadiusFactor());
+				return;
+			}
+
+			if (RTTI::isKindOf<AddVanDerWaalsModel>(mp))
+			{
+				((AddBackboneModel*) &mp)->setTubeRadius(getTubeRadius());
+				return;
+			}
+					
+			if (RTTI::isKindOf<AddCartoonModel>(mp))
+			{
+				((AddCartoonModel*) &mp)->setTubeRadius(getCartoonTubeRadius());
+				((AddCartoonModel*) &mp)->setHelixRadius(getCartoonHelixRadius());
+				((AddCartoonModel*) &mp)->setArrowWidth(getCartoonArrowWidth());
+				((AddCartoonModel*) &mp)->setArrowHeight(getCartoonArrowHeight());
+				return;
+			}
+					
+			if (RTTI::isKindOf<HBondModelProcessor>(mp))
+			{
+				((HBondModelProcessor*) &mp)->setRadius(getHBondsRadius());
+				return;
+			}
+					
+			if (RTTI::isKindOf<ForceModel>(mp))
+			{
+				((ForceModel*) &mp)->setMaxLength(getForceMaxLength());
+				((ForceModel*) &mp)->setScaling(getForceScaling());
+				return;
+			}
+		}
+
+
+		ModelProcessor* ModelSettingsDialog::createModelProcessor(ModelType type) const
+			throw(Exception::InvalidOption)
+		{
+			ModelProcessor* model_processor = 0;
+
+			switch (type)
+			{
+				case MODEL_LINES:
+					model_processor = new AddLineModel;
+					break;
+					
+				case MODEL_STICK:
+					model_processor = new AddBallAndStickModel;
+					((AddBallAndStickModel*)model_processor)->enableStickModel();
+					break;
+					
+				case MODEL_BALL_AND_STICK:
+					model_processor = new AddBallAndStickModel;
+					((AddBallAndStickModel*)model_processor)->enableBallAndStickModel();
+					break;
+					
+				case MODEL_SE_SURFACE:
+					model_processor = new AddSurfaceModel;
+					((AddSurfaceModel*)model_processor)->setType(SurfaceProcessor::SOLVENT_EXCLUDED_SURFACE);	
+					break;
+					
+				case MODEL_SA_SURFACE:
+					model_processor = new AddSurfaceModel;
+					((AddSurfaceModel*)model_processor)->setType(SurfaceProcessor::SOLVENT_ACCESSIBLE_SURFACE);	
+					break;
+					
+				case MODEL_VDW:
+					model_processor = new AddVanDerWaalsModel;
+					((AddVanDerWaalsModel*) model_processor)->setVDWRadiusFactor(getVDWRadiusFactor());
+					break;
+
+				case MODEL_BACKBONE:
+					model_processor = new AddBackboneModel;
+					((AddBackboneModel*) model_processor)->setTubeRadius(getTubeRadius());
+					break;
+
+				case MODEL_CARTOON:
+					model_processor = new AddCartoonModel;
+					break;
+					
+				case MODEL_HBONDS:
+					model_processor = new HBondModelProcessor;
+					break;
+
+				case MODEL_FORCES:
+					model_processor = new ForceModel;
+					break;
+					
+				default:
+					throw(Exception::InvalidOption(__FILE__, __LINE__, type));
+			}
+
+			applySettingsTo(*model_processor);
+
+			return model_processor;
+		}
+
+
+		void ModelSettingsDialog::getSettings(const ModelProcessor& mp)
+			throw()
+		{
+			if (RTTI::isKindOf<AddBallAndStickModel>(mp))
+			{
+				if (((AddBallAndStickModel*) &mp)->isStickModel())
+				{
+					setStickStickRadius(((AddBallAndStickModel*)&mp)->getStickRadius());
+				}
+				else
+				{
+					setBallAndStickStickRadius(((AddBallAndStickModel*)&mp)->getStickRadius());
+					setBallRadius(((AddBallAndStickModel*)&mp)->getBallRadius());
+				}
+				return;
+			}
+					
+			if (RTTI::isKindOf<AddSurfaceModel>(mp))
+			{
+				setSurfaceProbeRadius(((AddSurfaceModel*)&mp)->getProbeRadius());
+				return;
+			}
+					
+			if (RTTI::isKindOf<AddVanDerWaalsModel>(mp))
+			{
+				setVDWRadiusFactor(((AddVanDerWaalsModel*) &mp)->getVDWRadiusFactor());
+				return;
+			}
+					
+			if (RTTI::isKindOf<AddBackboneModel>(mp))
+			{
+				setTubeRadius(((AddBackboneModel*) &mp)->getTubeRadius());
+				return;
+			}
+					
+			if (RTTI::isKindOf<AddCartoonModel>(mp))
+			{
+				setCartoonTubeRadius(((AddCartoonModel*) &mp)->getTubeRadius());
+				setCartoonHelixRadius(((AddCartoonModel*) &mp)->getHelixRadius());
+				setCartoonArrowWidth(((AddCartoonModel*) &mp)->getArrowWidth());
+				setCartoonArrowHeight(((AddCartoonModel*) &mp)->getArrowHeight());
+				return;
+			}
+					
+			if (RTTI::isKindOf<HBondModelProcessor>(mp))
+			{
+				setHBondRadius(((HBondModelProcessor*) &mp)->getRadius());
+				return;
+			}
+					
+			if (RTTI::isKindOf<ForceModel>(mp))
+			{
+				setForceScaling(((ForceModel*) &mp)->getScaling());
+				setForceMaxLenght(((ForceModel*) &mp)->getMaxLength());
+				return;
+			}
+
+		}
 
 	} // namespace VIEW
 } // namespace BALL

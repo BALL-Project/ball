@@ -1,15 +1,20 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.h,v 1.13 2004/07/15 12:05:49 amoll Exp $
+// $Id: modelSettingsDialog.h,v 1.14 2004/09/01 14:14:10 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MODELSETTINGSDIALOG_H
 #define BALL_VIEW_DIALOGS_MODELSETTINGSDIALOG_H
 
-#ifndef BALL_COMMON_GLOBAL_H
-# include <BALL/COMMON/global.h>
+#ifndef BALL_VIEW_MODELS_MODELPROCESSOR_H
+# include <BALL/VIEW/MODELS/modelProcessor.h>
 #endif
+
+#ifndef BALL_VIEW_KERNEL_COMMON_H
+# include <BALL/VIEW/KERNEL/common.h>
+#endif
+
 
 #include <BALL/VIEW/UIC/modelSettingsDialogData.h>
 
@@ -56,6 +61,19 @@ namespace BALL
 			/// Called when defaults is pressed in Preferences, calls setDefaults
 			virtual void setDefaultValues()
 				throw();
+
+			///
+			void applySettingsTo(ModelProcessor& cp) const
+				throw();
+				
+			///
+			ModelProcessor* createModelProcessor(ModelType type) const
+				throw(Exception::InvalidOption);
+
+			///
+			void getSettings(const ModelProcessor& mp)
+				throw();
+
 
 			///
 			float getStickStickRadius() const
@@ -106,6 +124,14 @@ namespace BALL
 				throw() {return getFloatValue_(hbonds_radius_slider);}
 
 			///
+			float getForceMaxLength() const
+				throw() {return getFloatValue_(force_max_length_slider);}
+
+			///
+			float getForceScaling() const
+				throw() {return getFloatValue_(force_scaling_slider);}
+
+			///
 			void setStickStickRadius(float value) 
 				throw() { setValue_(stick_radius_slider,value);}
 
@@ -152,6 +178,14 @@ namespace BALL
 			void setHBondRadius(float value) 
 				throw() { setValue_(hbonds_radius_slider,value);}
 
+			///
+			void setForceMaxLenght(float value) 
+				throw() { setValue_(force_max_length_slider,value);}
+
+			///
+			void setForceScaling(float value) 
+				throw() { setValue_(force_scaling_slider,value);}
+
 			public slots:
 			
 			///
@@ -169,6 +203,8 @@ namespace BALL
 			void cartoonArrowWidthChanged(){setLabelText_(cartoon_arrow_width_label, cartoon_arrow_width_slider);}
 			void cartoonArrowHeightChanged(){setLabelText_(cartoon_arrow_height_label, cartoon_arrow_height_slider);}
 			void hbondsRadiusChanged(){setLabelText_(hbonds_radius_label, hbonds_radius_slider);}
+			void forceScalingChanged(){setLabelText_(force_scaling_label, force_scaling_slider);}
+			void forceMaxLengthChanged(){setLabelText_(force_max_length_label, force_max_length_slider);}
 
 			protected:
 			

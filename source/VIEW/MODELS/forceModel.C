@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceModel.C,v 1.5 2004/08/07 19:51:26 oliver Exp $
+// $Id: forceModel.C,v 1.6 2004/09/01 14:14:04 amoll Exp $
 
 #include <BALL/VIEW/MODELS/forceModel.h>
 #include <BALL/KERNEL/atom.h>
@@ -17,13 +17,17 @@ namespace BALL
 
 		ForceModel::ForceModel()
 			throw()
-			: ModelProcessor()
+			: ModelProcessor(),
+				scaling_(11),
+				max_length_(10)
 		{
 		}
 
 		ForceModel::ForceModel(const ForceModel& model)
 			throw()
-			: ModelProcessor(model)
+			: ModelProcessor(model),
+				scaling_(model.scaling_),
+				max_length_(model.max_length_)
 		{
 		}
 
@@ -46,12 +50,12 @@ namespace BALL
 
 			Vector3 force = atom->getForce();
 			if (force.getSquareLength() == 0) return Processor::CONTINUE;
-			float forcev = log(force.getLength() * 10000000000.0); 
+			float forcev = log(force.getLength() * pow((float)10.0, scaling_)); 
 
 			if (forcev < 0) return Processor::CONTINUE;
-			if (forcev > 10)
+			if (forcev > max_length_)
 			{
-				forcev = 10;
+				forcev = max_length_;
 			}	
 
 			// prevent problems in normalize

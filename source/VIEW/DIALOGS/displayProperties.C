@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.78 2004/08/24 15:08:49 amoll Exp $
+// $Id: displayProperties.C,v 1.79 2004/09/01 14:14:03 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -36,12 +36,6 @@ namespace BALL
 {
 	namespace VIEW
 	{
-
-DisplayProperties::InvalidOption::InvalidOption(const char* file, int line, int option)
-	throw()
-	: Exception::GeneralException(file, line, "Invalid option: ", option)
-{
-}
 
 DisplayProperties::DisplayProperties(QWidget* parent, const char* name)
 	throw()
@@ -284,7 +278,7 @@ void DisplayProperties::selectModel(int index)
 {
 	if (index >= MODEL_LABEL)
 	{
-		throw(InvalidOption(__FILE__, __LINE__, index));
+		throw(Exception::InvalidOption(__FILE__, __LINE__, index));
 	}
 
 	// enable usage from python
@@ -301,7 +295,7 @@ void DisplayProperties::selectMode(int index)
 {
 	if (index > VIEW::DRAWING_MODE_SOLID)
 	{
-		throw(InvalidOption(__FILE__, __LINE__, index));
+		throw(Exception::InvalidOption(__FILE__, __LINE__, index));
 	}
 
 	// enable usage from python
@@ -316,7 +310,7 @@ void DisplayProperties::selectColoringMethod(int index)
 {
 	if (index > COLORING_CUSTOM)
 	{
-		throw(InvalidOption(__FILE__, __LINE__, index));
+		throw(Exception::InvalidOption(__FILE__, __LINE__, index));
 	}
 
 	// enable usage from python
@@ -432,135 +426,13 @@ void DisplayProperties::editSelectionColor()
 // ------------------------------------------------------------------------
 
 Representation* DisplayProperties::createRepresentation_(const List<Composite*>& composites)
-	throw(InvalidOption)
+	throw(Exception::InvalidOption)
 {
-	ModelProcessor* model_processor = 0;
+	ModelProcessor* model_processor = 
+		model_settings_->createModelProcessor((ModelType) model_type_combobox->currentItem());
 
-	switch (model_type_combobox->currentItem())
-	{
-		case MODEL_LINES:
-			model_processor = new AddLineModel;
-			break;
-			
-		case MODEL_STICK:
-			model_processor = new AddBallAndStickModel;
-			((AddBallAndStickModel*)model_processor)->enableStickModel();
-			((AddBallAndStickModel*)model_processor)->setStickRadius(model_settings_->getStickStickRadius());
-			break;
-			
-		case MODEL_BALL_AND_STICK:
-			model_processor = new AddBallAndStickModel;
-			((AddBallAndStickModel*)model_processor)->enableBallAndStickModel();
-			((AddBallAndStickModel*)model_processor)->setStickRadius(model_settings_->getBallAndStickStickRadius());
-			((AddBallAndStickModel*)model_processor)->setBallRadius(model_settings_->getBallRadius());
-			((AddBallAndStickModel*)model_processor)->enableDashedBonds(model_settings_->ballAndStickDashedBondsEnabled());
-			break;
-			
-		case MODEL_SE_SURFACE:
-			{
-				AddSurfaceModel* surface_model = new AddSurfaceModel;
-				surface_model->setType(SurfaceProcessor::SOLVENT_EXCLUDED_SURFACE);	
-				surface_model->setProbeRadius(model_settings_->getSurfaceProbeRadius());
-				model_processor = surface_model;
-			}
-			break;
-			
-		case MODEL_SA_SURFACE:
-			{
-				AddSurfaceModel* surface_model = new AddSurfaceModel;
-				surface_model->setType(SurfaceProcessor::SOLVENT_ACCESSIBLE_SURFACE);
-				surface_model->setProbeRadius(model_settings_->getSurfaceProbeRadius());
-				model_processor = surface_model;
-			}
-			break;
-			
-		case MODEL_VDW:
-			model_processor = new AddVanDerWaalsModel;
-			((AddVanDerWaalsModel*) model_processor)->setVDWRadiusFactor(model_settings_->getVDWRadiusFactor());
-			break;
-
-		case MODEL_BACKBONE:
-			model_processor = new AddBackboneModel;
-			((AddBackboneModel*) model_processor)->setTubeRadius(model_settings_->getTubeRadius());
-			break;
-
-		case MODEL_CARTOON:
-			model_processor = new AddCartoonModel;
-			((AddCartoonModel*) model_processor)->setTubeRadius(model_settings_->getCartoonTubeRadius());
-			((AddCartoonModel*) model_processor)->setHelixRadius(model_settings_->getCartoonHelixRadius());
-			((AddCartoonModel*) model_processor)->setArrowWidth(model_settings_->getCartoonArrowWidth());
-			((AddCartoonModel*) model_processor)->setArrowHeight(model_settings_->getCartoonArrowHeight());
-			break;
-			
-		case MODEL_HBONDS:
-			model_processor = new HBondModelProcessor;
-    	((HBondModelProcessor*) model_processor)->setRadius(model_settings_->getHBondsRadius());
-			break;
-
-		case MODEL_FORCES:
-			model_processor = new ForceModel;
-			break;
-			
-		default:
-			throw(InvalidOption(__FILE__, __LINE__, model_type_combobox->currentItem()));
-	}
-
-	ColorProcessor* color_processor = 0;
-
-	switch(coloring_method_combobox->currentItem())
-	{
-		case COLORING_ELEMENT:
-			color_processor = new ElementColorProcessor;
-			break;
-
-		case COLORING_RESIDUE_NAME:
-			color_processor = new ResidueNameColorProcessor;
-			break;
-
-		case COLORING_RESIDUE_INDEX:
-			color_processor = new ResidueNumberColorProcessor;
-			break;
-
-		case COLORING_SECONDARY_STRUCTURE:
-			color_processor = new SecondaryStructureColorProcessor;
-			break;
-
-		case COLORING_ATOM_CHARGE:
-			color_processor = new AtomChargeColorProcessor;
-			break;
-
-		case COLORING_CUSTOM:
-		{
-			color_processor = new CustomColorProcessor;
-			break;
-		}
-
-		case COLORING_DISTANCE:
-			color_processor = new AtomDistanceColorProcessor;
-			break;
-
-		case COLORING_TEMPERATURE_FACTOR:
-			color_processor = new TemperatureFactorColorProcessor;
-			break;
-
-		case COLORING_OCCUPANCY:
-			color_processor = new OccupancyColorProcessor;
-			break;
-
-		case COLORING_FORCES:
-			color_processor = new ForceColorProcessor;
-			break;
-
-
-		default:
-			throw(InvalidOption(__FILE__, __LINE__, coloring_method_combobox->currentItem()));
-	}
-
-	if (color_processor != 0)
-	{
-		coloring_settings_->applySettingsTo(*color_processor);
-	}
-			
+	ColorProcessor* color_processor = 
+		coloring_settings_->createColorProcessor((ColoringMethod) coloring_method_combobox->currentItem());
 
 	QColor qcolor = color_sample->backgroundColor();
 	custom_color_.set(qcolor);
@@ -569,6 +441,7 @@ Representation* DisplayProperties::createRepresentation_(const List<Composite*>&
 
 	bool rebuild_representation = false;
 	Representation* rep = 0;
+
 	if (rep_ == 0)
 	{
 		// create a new Representation
@@ -794,7 +667,7 @@ void DisplayProperties::precisionBoxChanged(int index)
 
 	if (index > DRAWING_PRECISION_HIGH)
 	{
-		throw(InvalidOption(__FILE__, __LINE__, index));
+		throw(Exception::InvalidOption(__FILE__, __LINE__, index));
 	}
 
 	switch (index)
@@ -850,75 +723,26 @@ void DisplayProperties::checkDrawingPrecision_()
 void DisplayProperties::getAdvancedColoringOptions_()
 	throw()
 {
-	if (rep_ == 0) return;
-
-	ColorProcessor* cp = rep_->getColorProcessor();
-	if (cp == 0 ||
-		  coloring_method_combobox->currentItem() == COLORING_CUSTOM)
+	if (rep_ == 0 ||
+			rep_->getColorProcessor() == 0 ||
+			coloring_method_combobox->currentItem() == COLORING_CUSTOM) 
 	{
 		return;
 	}
 
-	coloring_settings_->applySettingsTo(*cp);
+	coloring_settings_->getSettings(*rep_->getColorProcessor());
 }
 
 void DisplayProperties::getAdvancedModelOptions_()
 	throw()
 {
-	if (rep_ == 0) return;
-	
-	ModelProcessor* mp = rep_->getModelProcessor();
-
-	if (mp == 0) return;
-	
-	switch (model_type_combobox->currentItem())
+	if (rep_ == 0 ||
+			rep_->getModelProcessor() == 0) 
 	{
-		case MODEL_LINES:
-			break;
-			
-		case MODEL_STICK:
-			model_settings_->setStickStickRadius(((AddBallAndStickModel*)mp)->getStickRadius());
-			break;
-			
-		case MODEL_BALL_AND_STICK:
-			model_settings_->setBallAndStickStickRadius(((AddBallAndStickModel*)mp)->getStickRadius());
-			model_settings_->setBallRadius(((AddBallAndStickModel*)mp)->getBallRadius());
-			break;
-			
-		case MODEL_SE_SURFACE:
-			{
-				model_settings_->setSurfaceProbeRadius(((AddSurfaceModel*)mp)->getProbeRadius());
-			}
-			break;
-			
-		case MODEL_SA_SURFACE:
-			{
-				model_settings_->setSurfaceProbeRadius(((AddSurfaceModel*)mp)->getProbeRadius());
-			}
-			break;
-			
-		case MODEL_VDW:
-			model_settings_->setVDWRadiusFactor(((AddVanDerWaalsModel*) mp)->getVDWRadiusFactor());
-			break;
-
-		case MODEL_BACKBONE:
-			model_settings_->setTubeRadius(((AddBackboneModel*) mp)->getTubeRadius());
-			break;
-
-		case MODEL_CARTOON:
-			model_settings_->setCartoonTubeRadius(((AddCartoonModel*) mp)->getTubeRadius());
-			model_settings_->setCartoonHelixRadius(((AddCartoonModel*) mp)->getHelixRadius());
-			model_settings_->setCartoonArrowWidth(((AddCartoonModel*) mp)->getArrowWidth());
-			model_settings_->setCartoonArrowHeight(((AddCartoonModel*) mp)->getArrowHeight());
-			break;
-			
-		case MODEL_HBONDS:
-    	model_settings_->setHBondRadius(((HBondModelProcessor*) mp)->getRadius());
-			break;
-
-		case MODEL_FORCES:
-			break;
+		return;
 	}
+	
+	model_settings_->getSettings(*rep_->getModelProcessor());
 }
 			
 void DisplayProperties::applyPreferences()
@@ -930,7 +754,7 @@ void DisplayProperties::applyPreferences()
 void DisplayProperties::defaultPreferences()
 	throw()
 {
-	if (model_settings_ != 0) model_settings_->setDefaultValues();
+	if (model_settings_    != 0)    model_settings_->setDefaultValues();
 	if (coloring_settings_ != 0) coloring_settings_->setDefaultValues();
 }
 

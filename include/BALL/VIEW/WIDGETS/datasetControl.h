@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.h,v 1.9 2004/06/10 19:37:08 amoll Exp $
+// $Id: datasetControl.h,v 1.10 2004/09/01 14:14:11 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_DATASETCONTROL_H
@@ -154,6 +154,7 @@ namespace BALL
 			void deleteItem_(QListViewItem& item);
 			void deleteItems_();
 			void visualiseTrajectory_();
+			void bufferTrajectory_();
 			void saveTrajectory_();
 			void visualiseGrid_();
 			void save1DGrid_() throw();
