@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.88 2003/10/15 14:05:02 amoll Exp $
+// $Id: mainframe.C,v 1.89 2003/10/15 14:32:40 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -21,6 +21,8 @@
 #include <BALL/VIEW/KERNEL/moleculeObjectCreator.h>
 #include <BALL/VIEW/DIALOGS/peptideDialog.h>
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
+#include <BALL/VIEW/RENDERING/POVRenderer.h>
+#include <BALL/VIEW/RENDERING/VRMLRenderer.h>
 #include <BALL/DATATYPE/regularData3D.h>
 #include <BALL/DATATYPE/contourSurface.h>
 #include <BALL/STRUCTURE/residueChecker.h>
@@ -152,6 +154,8 @@ Log.error() << "new Mainframe " << this << std::endl;
 	insertMenuEntry(MainControl::FILE_EXPORT, "POVRa&y scene", this, SLOT(exportPOVRay()), 
 									CTRL+Key_Y, MENU_EXPORT_POVRAYFILE);
 
+	insertMenuEntry(MainControl::FILE_EXPORT, "VRML", this, SLOT(exportVRML()), 
+									CTRL+Key_Y, MENU_EXPORT_VRMLFILE);
 	// Display Menu
 	insertMenuEntry(MainControl::DISPLAY, "Toggle Fullscreen", this, SLOT(toggleFullScreen()),
 									ALT+Key_X, MENU_FULLSCREEN);
@@ -283,7 +287,27 @@ void Mainframe::exportPOVRay()
 	scene_->exportScene(pr);
 	pr.finish();
 }
-	
+
+void Mainframe::exportVRML()
+{
+	QFileDialog *fd = new QFileDialog(this, "", true);
+	fd->setMode(QFileDialog::AnyFile);
+	fd->setCaption("Export POVRay File");
+	fd->setViewMode(QFileDialog::Detail);
+
+	if (!fd->exec()== QDialog::Accepted) return;
+
+	String filename(fd->selectedFile().ascii());
+	delete fd;
+
+	VRMLRenderer pr(filename);
+	pr.width  = scene_->width();
+	pr.height = scene_->height(); 
+	pr.init(*(scene_->getStage()));
+	scene_->exportScene(pr);
+	pr.finish();
+}
+
 
 void Mainframe::assignCharges()
 {

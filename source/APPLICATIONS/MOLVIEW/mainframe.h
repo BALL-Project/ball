@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.53 2003/10/05 21:08:04 amoll Exp $
+// $Id: mainframe.h,v 1.54 2003/10/15 14:32:40 amoll Exp $
 //
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -45,10 +45,6 @@
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARPROPERTIES_H
 # include <BALL/VIEW/WIDGETS/molecularProperties.h>
-#endif
-
-#ifndef BALL_VIEW_RENDERING_POVRENDERER_H
-# include <BALL/VIEW/RENDERING/POVRenderer.h>
 #endif
 
 #ifndef BALL_VIEW_DIALOGS_FDPBDIALOG_H
@@ -116,6 +112,7 @@ namespace BALL
 		enum MenuKey
 		{
 			MENU_EXPORT_POVRAYFILE = 20000,
+			MENU_EXPORT_VRMLFILE,
 			
 			MENU_ASSIGN_CHARGES,
 			MENU_AMBER_ENERGY,
@@ -158,6 +155,8 @@ namespace BALL
 		void checkMenuEntries();
 
 		void exportPOVRay();
+
+		void exportVRML();
 
 		// Build menu
 		void assignCharges();
