@@ -203,17 +203,15 @@ void ConnectionObject::dump(ostream& s, Size depth) const
 void ConnectionObject::notify_(Message *message)
 	throw()
 {
-	ConnectionObject *object = getRoot();
-	message->setSender((void *)this);
-	object->onNotify_(message);
+	message->setSender(this);
+	getRoot()->onNotify_(message);
 }
 
 void ConnectionObject::notify_(Message &message)
 	throw()
 {
-	ConnectionObject *object = getRoot();
-	message.setSender((void *)this);
-	object->onNotify_(&message);
+	message.setSender(this);
+	getRoot()->onNotify_(&message);
 }
 
 void ConnectionObject::onNotify_(Message* message)

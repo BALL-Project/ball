@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vanDerWaalsModel.sip,v 1.1 2003/12/11 16:05:40 amoll Exp $
+// $Id: vanDerWaalsModel.sip,v 1.2 2003/12/15 12:00:13 amoll Exp $
 //
 
 class AddVanDerWaalsModel 
@@ -18,9 +18,7 @@ class AddVanDerWaalsModel
   AddVanDerWaalsModel(const AddVanDerWaalsModel&) throw();
   //Processor::Result operator() (Composite&);
   bool finish();
-  bool start();
   float getVDWRadiusFactor() const throw();
-  void clear() throw();
   void setVDWRadiusFactor(float) throw();
   ~AddVanDerWaalsModel() throw();
 };
