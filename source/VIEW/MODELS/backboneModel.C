@@ -1,12 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.17.2.8 2004/12/21 19:31:39 amoll Exp $
+// $Id: backboneModel.C,v 1.17.2.9 2004/12/21 21:05:00 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
 #include <BALL/VIEW/PRIMITIVES/sphere.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
+#include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/residue.h>
 #include <BALL/KERNEL/forEach.h>
@@ -14,6 +15,7 @@
 #include <BALL/VIEW/PRIMITIVES/line.h>
 #include <BALL/MATHS/analyticalGeometry.h>
 #include <BALL/MATHS/matrix44.h>
+#include <BALL/VIEW/KERNEL/common.h>
 
 #include <algorithm>
 
@@ -301,46 +303,83 @@ have_start_point_ = false;
  				geometric_objects_.push_back(line);
 			}
 
+			Mesh* mesh = new Mesh();
+			Mesh::Triangle t;
 				
 			// iterate over all spline_points_
 			for (Position p = start + 1; p < end; p++)
 			{
 				Vector3 point 	= spline_points_[p];
-				Vector3 dir_new = spline_points_[p + 1] - point;
+				Vector3 dir_new = (spline_points_[p + 1] - point + dir) / 2.0;
 
-				n = Vector3(1,0,0);
-				Vector3 r_new = dir_new % n;
-				if (Maths::isZero(r_new.getSquareLength())) 
-				{ 
-					n = Vector3(0,1,0);
-					r_new = dir % n;
-					if (Maths::isZero(r_new.getSquareLength())) 
-					{
-						n = Vector3(0,0,1);
-						r_new = dir_new % n;
-					}
-				}
-				r_new.normalize();
-				r_new *= tube_radius_;
+				Vector3 r_new = VIEW::getNormal(dir_new) * tube_radius_;
 
+				
 				Angle angle;
 				GetAngle(r, r_new, angle);
 				Matrix4x4 m;
+				m.setRotation(angle, dir_new % r_new); 
+				/*
+				Angle angle;
+				GetAngle(dir, dir_new, angle);
+				Matrix4x4 m;
 				m.setRotation(angle, dir_new % r_new);
+				Vector3 z = m * r_new;
+
+				GetAngle(r, z, angle);
+				Matrix4x4 m2;
+				m2.setRotation(angle, dir_new);
+				m *= m2;
+				*/
+
+				vector<Vector3> new_points;
+				for (Position point_pos = 0; point_pos < points.size() - 1; point_pos++)
+				{
+					new_points.push_back(m * points[point_pos]);
+				}
 
 				for (Position point_pos = 0; point_pos < points.size() - 2; point_pos++)
 				{
+					/*
 					Line* line = new Line();
 					line->setVertex1(last_point_ + points[point_pos]);
 					points[point_pos] = m * points[point_pos];
 					line->setVertex2(point + points[point_pos]);
  					geometric_objects_.push_back(line);
+					*/
+
+					Vector3 o = 	last_point_ + 		points[point_pos];
+					Vector3 n = 			 point  + new_points[point_pos];
+					Vector3 on = 	last_point_ + 		points[point_pos + 1];
+					Vector3 nn =  	   point  + new_points[point_pos + 1];
+
+					mesh->vertex.push_back(o);
+					mesh->vertex.push_back(n);
+					mesh->vertex.push_back(on);
+					mesh->vertex.push_back(nn);
+
+					mesh->normal.push_back(points[point_pos]);
+					mesh->normal.push_back(new_points[point_pos]);
+					mesh->normal.push_back(points[point_pos + 1]);
+					mesh->normal.push_back(new_points[point_pos + 1]);
+
+					Size s = mesh->vertex.size() -1;
+					t.v1 = s - 3;
+					t.v2 = s - 1;
+					t.v3 = s;
+					mesh->triangle.push_back(t);
+
+					t.v1 = s;
+					t.v2 = s - 2;
+					t.v3 = s - 3;
+					mesh->triangle.push_back(t);
 				}
 
 				r = r_new;
 				last_point_ = point;
 			}
 
+			geometric_objects_.push_back(mesh);
 			have_start_point_ = true;
 		}
 
