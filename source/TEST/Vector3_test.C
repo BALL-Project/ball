@@ -1,4 +1,4 @@
-// $Id: Vector3_test.C,v 1.29 2001/01/21 21:25:47 amoll Exp $
+// $Id: Vector3_test.C,v 1.30 2001/01/22 13:18:57 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 #include <BALL/MATHS/angle.h>
 ///////////////////////////
 
-START_TEST(TVector3, "$Id: Vector3_test.C,v 1.29 2001/01/21 21:25:47 amoll Exp $")
+START_TEST(TVector3, "$Id: Vector3_test.C,v 1.30 2001/01/22 13:18:57 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -48,8 +48,8 @@ Vector3 v1;
 Vector3 v2;
 
 CHECK(clear())
-	TVector3 v1(1, 2, 3);
-	TVector3 v2;
+	Vector3 v1(1, 2, 3);
+	Vector3 v2;
 	v2.set(0, 0, 0);
 	v1.clear();
 	TEST_EQUAL(v1, v2)
