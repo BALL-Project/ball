@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stage.h,v 1.14.2.1 2004/12/30 13:59:45 amoll Exp $
+// $Id: stage.h,v 1.14.2.2 2005/01/22 00:24:19 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_STAGE_H
 #define BALL_VIEW_KERNEL_STAGE_H
@@ -193,6 +193,12 @@ namespace BALL
 			//_ Direction of the light cone
 			Vector3 		direction_;
 
+			//_
+			Vector3     r_position_;
+
+			//_
+			Vector3  		r_direction_;
+
 			//_ Angle of the light cone
 			Angle 			angle_;
 
@@ -378,20 +384,20 @@ namespace BALL
 			*/
 			//@{
 			
-			/// Get the light sources
-			virtual List<LightSource>& getLightSources()
-				throw() { return light_sources_;}
-
 			/// Get the light sources (const)
 			virtual const List<LightSource>& getLightSources() const
 				throw() { return light_sources_;}
 
 			/// Add a light source
 			virtual void addLightSource(const LightSource& light_source)
-				throw() { light_sources_.push_back(light_source);}
+				throw();
 
 			/// Remove a light source
 			virtual void removeLightSource(const LightSource& light_source) 
+				throw();
+
+			///
+			void clearLightSources()
 				throw();
 			
 			/// Get the camera
@@ -428,7 +434,7 @@ namespace BALL
 				throw();
 
 			/// Rotate camera and lightsources
-			virtual void rotate(const Quaternion& q)
+			virtual void rotate(const Quaternion& q, const Vector3& origin)
 				throw();
 
 			/// Move camera and lightsources, if these are set relative to camera
@@ -520,7 +526,7 @@ namespace BALL
 				throw();
 
 			protected:
-			
+
 			//_
 			ColorRGBA 					background_color_;
 
@@ -550,7 +556,6 @@ namespace BALL
 			float 							ambient_;
 			float 							shininess_;
 		};
-
 
 	} // namespace VIEW
 } // namespace BALL

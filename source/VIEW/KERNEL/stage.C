@@ -11,7 +11,7 @@ LightSource::LightSource()
 	:	position_(),
 		direction_(0, 0, -1),
 		angle_(180),
-		intensity_(1),
+		intensity_(0.8),
 		color_(255, 255, 255, 255),
 		type_(0),
 		relative_(true)	
@@ -245,19 +245,6 @@ void Stage::clear()
 	shininess_ = 128.0;
 }
 
-void Stage::removeLightSource(const LightSource& light_source)
-	throw()
-{
-	List<LightSource>::Iterator it = light_sources_.begin();
-	for (; it != light_sources_.end(); it++)
-	{
-		if (&*it == &light_source) 
-		{
-			light_sources_.erase(it);
-			return;
-		}
-	}
-}
 
 bool Stage::operator == (const Stage& stage) const
 	throw()
@@ -319,26 +306,41 @@ void Stage::dump(std::ostream& s, Size depth) const
 	BALL_DUMP_STREAM_SUFFIX(s);
 }
 
-void Stage::rotate(const Quaternion& q)
+void Stage::rotate(const Quaternion& q, const Vector3& origin)
 	throw()
 {
+	camera_.translate(-origin);
 	camera_.rotate(q);
+	camera_.translate(origin);
+
+	Matrix4x4  m;
+	q.getRotationMatrix(m);
 
 	List<LightSource>::Iterator it = light_sources_.begin();
 	for (; it != light_sources_.end(); it++)
 	{
 		if (it->isRelativeToCamera()) 
 		{
-			it->rotate(q);
+			Vector3 v = it->getPosition();
+			v -= origin;
+			v = m * v;
+			v += origin;
+			it->setPosition(v);
+
+			v = it->getDirection();
+			v -= origin;
+			v = m * v;
+			v += origin;
+
+			it->setDirection(v);
 		}
-	}	
+	}
 }
 
 void Stage::translate(const Vector3& v3)
 	throw()
 {
 	camera_.translate(v3);
-
 	List<LightSource>::Iterator it = light_sources_.begin();
 	for (; it != light_sources_.end(); it++)
 	{
@@ -352,17 +354,70 @@ void Stage::translate(const Vector3& v3)
 void Stage::moveCameraTo(const Camera& camera)
 	throw()
 {
-	setCamera(camera);
+	camera_ = camera;
+	clearLightSources();
 
+	LightSource light;
+	light.setType(LightSource::POSITIONAL);
+	light.setPosition((getCamera().getViewPoint() - 
+										getCamera().getViewVector() * 4) +
+										getCamera().getLookUpVector() * 20);
+	light.setDirection(getCamera().getLookAtPosition());
+	addLightSource(light);
+	/* ????????
+	vector<Vector3> p_diff, l_diff;
 	List<LightSource>::Iterator it = light_sources_.begin();
+	for (; it != light_sources_.end(); it++)
+	{
+		p_diff.push_back(it->getPosition() - camera_.getViewPoint());
+		l_diff.push_back(it->getDirection() - camera_.getLookAtPosition());
+	}
+
+	camera_ = camera;
+
+	vector<Vector3>::iterator pit = p_diff.begin();
+	vector<Vector3>::iterator lit = l_diff.begin();
+
+	it = light_sources_.begin();
 	for (; it != light_sources_.end(); it++)
 	{
 		if (it->isRelativeToCamera())
 		{
-			it->setPosition(camera_.getViewPoint() - (camera_.getViewVector() * 100));
-			it->setDirection(camera_.getLookAtPosition());
+			it->setPosition(camera_.getViewPoint() + *pit);
+			it->setDirection(camera_.getLookAtPosition() + *lit);
+		}
+
+		pit++;
+		lit++;
+	}
+	*/
+}
+
+
+void Stage::addLightSource(const LightSource& light_source)
+	throw()
+{
+	light_sources_.push_back(light_source);
+}
+
+void Stage::removeLightSource(const LightSource& light_source)
+	throw()
+{
+	List<LightSource>::Iterator it = light_sources_.begin();
+	for (; it != light_sources_.end(); it++)
+	{
+		if (&*it == &light_source) 
+		{
+			light_sources_.erase(it);
+			return;
 		}
 	}
+}
+
+void Stage::clearLightSources()
+	throw()
+{
+	light_sources_.clear();
 }
 
 } } // namespaces
