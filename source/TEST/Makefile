@@ -39,6 +39,7 @@ EXECUTABLES = \
 	Limits_test\
 	Line3_test\
 	List_test\
+	LogStream_test\
 	MathsCommon_test\
 	Matrix44_test\
 	MOL2File_test\
@@ -159,6 +160,9 @@ Line3_test:	Line3_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 List_test:	List_test.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
+LogStream_test:	LogStream_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 MathsCommon_test:	MathsCommon_test.o
