@@ -84,7 +84,7 @@ class MolecularDynamicsDialog
 		void setCharmmDialog(CharmmConfigurationDialog* charmm_dialog);
 		
 		///
-		void setForceField(bool sel);
+		void setForceField(bool amber);
 		
 		///
 		void useAmberFF();
