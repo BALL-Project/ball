@@ -52,11 +52,11 @@ namespace BALL
 		return options_;
 	}
 
-	std::vector<ConformationSet::Conformation> ForceFieldEvaluation::operator () (const ConformationSet& conformations)
+	std::vector<ConformationSet::Conformation> ForceFieldEvaluation::operator () (ConformationSet& conformations)
 		throw()
 	{
 		std::vector<ConformationSet::Conformation> result;
-
+		Log.info() << "in ForceFieldEvaluation::operator() " << std::endl;
 		if (!ff_)
 			return result;
 
@@ -64,12 +64,18 @@ namespace BALL
 
 		ff_->setup(S);
 
+		Log.info() << "in ForceField:: Option of Amber FF:" << std::endl;
+		Options::Iterator it = ff_->options.begin();
+		for(; +it; ++it)
+		{
+			Log.info() << it->first << " : " << it->second << std::endl;
+		}
+		
 		for (int i=0; i<(int)conformations.size(); i++)
 		{
 			conformations[i].applySnapShot(S);
 			ff_->updateEnergy();	
 			float energy = ff_->getEnergy();
-			
 			ConformationSet::Conformation current_conf(i, energy);
 			result.push_back(current_conf);
 		}

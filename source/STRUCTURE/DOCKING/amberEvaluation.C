@@ -21,6 +21,7 @@ namespace BALL
 	{
 		ff_ = &ff;
 		options_ = options;
+		//ff_->setOptions(options_);
 		delete_force_field_ = false;
 	}
 
