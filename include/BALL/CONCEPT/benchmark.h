@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: benchmark.h,v 1.5 2002/02/27 12:18:23 sturm Exp $
+// $Id: benchmark.h,v 1.6 2002/12/17 16:32:39 oliver Exp $
 
 #ifndef BALL_COMMON_H
 # include <BALL/common.h>
@@ -41,6 +41,16 @@
 			<< " (weight = " << BENCHMARK::section_weight << ")" << std::endl;\
 	}\
 	BENCHMARK::total_time += BENCHMARK::section_time * BENCHMARK::section_weight;\
+
+
+/**	Status output.
+		Print debugging information if called with -v.
+*/
+#define STATUS(a) \
+	if (BENCHMARK::verbose > 0)\
+	{\
+		std::cout << "  status: " << a << std::endl;\
+	}
 
 
 /**	Start the timer.
