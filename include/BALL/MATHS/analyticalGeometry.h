@@ -1,4 +1,4 @@
-// $Id: analyticalGeometry.h,v 1.4 2000/02/16 17:25:30 oliver Exp $
+// $Id: analyticalGeometry.h,v 1.5 2000/02/16 17:28:12 oliver Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -289,14 +289,14 @@ namespace BALL
 
 	template <class T>
 	BALL_INLINE 
-	T GetDistance(const TLine3<T>& line, const TPoint3<T>& point)
+	T GetDistance(const TLine3<T>& line, const TVector3<T>& point)
 	{
 		return ((line.d % (point - line.p)).getLength() / line.d.getLength());
 	}
 
 	template <class T>
 	BALL_INLINE 
-	T GetDistance(const TPoint3<T>& point, const TLine3<T>& line)
+	T GetDistance(const TVector3<T>& point, const TLine3<T>& line)
 	{
 		return GetDistance(line, point);
 	}
@@ -326,7 +326,7 @@ namespace BALL
 
 	template <class T>
 	BALL_INLINE 
-	T GetDistance(const TPoint3<T>& point, const TPlane3<T>& plane)
+	T GetDistance(const TVector3<T>& point, const TPlane3<T>& plane)
 	{
 		T length = plane.n.getLength();
 
@@ -337,7 +337,7 @@ namespace BALL
 
 	template <class T>
 	BALL_INLINE 
-	T GetDistance(const TPlane3<T>& plane, const TPoint3<T>& point)
+	T GetDistance(const TPlane3<T>& plane, const TVector3<T>& point)
 	{
 		return GetDistance(point, plane);
 	}
@@ -467,7 +467,7 @@ namespace BALL
 	template <class T>
 	bool GetIntersection
 		(const TLine3<T>& a, const TLine3<T>& b,
-		 TPoint3<T>& point)
+		 TVector3<T>& point)
 	{
 		T c1, c2;
 
@@ -495,7 +495,7 @@ namespace BALL
 	BALL_INLINE 
 	bool GetIntersection
 		(const TPlane3<T>& plane, const TLine3<T>& line,
-		 TPoint3<T>& intersection_point)
+		 TVector3<T>& intersection_point)
 	{
 		T dot_product = plane.n * line.d;
 
@@ -513,7 +513,7 @@ namespace BALL
 	BALL_INLINE 
 	bool GetIntersection
 		(const TLine3<T>& line, const TPlane3<T>& plane,
-		 TPoint3<T> &intersection_point)
+		 TVector3<T> &intersection_point)
 	{
 		return GetIntersection(plane, line, intersection_point);
 	}
@@ -521,7 +521,7 @@ namespace BALL
 	template <class T>
 	bool GetIntersection(const TPlane3<T>& a, const TPlane3<T>& b, TLine3<T>& line)
 	{
-		TPoint3<T> p;
+		TVector3<T> p;
 		T aa, ab, ac, ad;
 		T ba, bb, bc, bd;
 		T x1, x2;
@@ -554,7 +554,7 @@ namespace BALL
 	template <class T>
 	bool GetIntersection
 		(const TPlane3<T>& a, const TPlane3<T>& b,
- 		 const TPlane3<T>& c, TPoint3<T>& point)
+ 		 const TPlane3<T>& c, TVector3<T>& point)
 	{
 		T aa, ab, ac, ad;
 		T ba, bb, bc, bd;
@@ -583,7 +583,7 @@ namespace BALL
 	template <class T>
 	bool GetIntersection
 		(const TSphere3<T> &Sphere3, const TLine3<T>& line,
-		 TPoint3<T> &intersection_point1, TPoint3<T> &intersection_point2)
+		 TVector3<T> &intersection_point1, TVector3<T> &intersection_point2)
 	{
 		T x1, x2;
 		short number_of_solutions 
@@ -606,7 +606,7 @@ namespace BALL
 	BALL_INLINE 
 	bool GetIntersection
 		(const TLine3<T>& line, const TSphere3<T>& Sphere3,
-		 TPoint3<T>& intersection_point1, TPoint3<T>& intersection_point2)
+		 TVector3<T>& intersection_point1, TVector3<T>& intersection_point2)
 	{
 		return GetIntersection(Sphere3, line, intersection_point1, intersection_point2);
 	}
@@ -697,7 +697,7 @@ namespace BALL
 
 	template <class T>
 	BALL_INLINE 
-	bool isComplanar(const TPoint3<T>& a, const TPoint3<T>& b, const TPoint3<T>& c, const TPoint3<T>& d)
+	bool isComplanar(const TVector3<T>& a, const TVector3<T>& b, const TVector3<T>& c, const TVector3<T>& d)
 	{
 		return Maths::isComplanar(a - b, a - c, a - d);
 	}
@@ -753,14 +753,14 @@ namespace BALL
 
 	template <class T>
 	BALL_INLINE 
-	bool isIntersecting(const TPoint3<T>& Point3, const TLine3<T>& line)
+	bool isIntersecting(const TVector3<T>& Point3, const TLine3<T>& line)
 	{
 		return isZero(GetDistance(Point3, line));
 	}
 
 	template <class T>
 	BALL_INLINE 
-	bool isIntersecting(const TLine3<T>& line, const TPoint3<T>& point)
+	bool isIntersecting(const TLine3<T>& line, const TVector3<T>& point)
 	{
 		return isIntersecting(Point3, point);
 	}
@@ -774,14 +774,14 @@ namespace BALL
 
 	template <class T>
 	BALL_INLINE 
-	bool isIntersecting(const TPoint3<T>& point, const TPlane3<T>& plane)
+	bool isIntersecting(const TVector3<T>& point, const TPlane3<T>& plane)
 	{
 		return isZero(GetDistance(point, plane));
 	}
 
 	template <class T>
 	BALL_INLINE 
-	bool isIntersecting(const TPlane3<T>& plane, const TPoint3<T>& point)
+	bool isIntersecting(const TPlane3<T>& plane, const TVector3<T>& point)
 	{
 		return isIntersecting(point, plane);
 	}
