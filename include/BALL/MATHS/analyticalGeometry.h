@@ -1,4 +1,4 @@
-// $Id: analyticalGeometry.h,v 1.34 2000/09/05 09:41:14 oliver Exp $
+// $Id: analyticalGeometry.h,v 1.35 2000/09/05 19:10:28 amoll Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -49,7 +49,6 @@ namespace BALL
 			@param	dim dimension of the matrix
 	*/
 	template <typename T>
-	BALL_INLINE
 	T GetDeterminant_(const T* m, Size dim)
 	{
 		T determinant = 0;
@@ -498,7 +497,6 @@ namespace BALL
 		return GetDistance(point, plane);
 	}
 
-
 	/**	Get the distance between a line and a plane.
 			@param	line the line
 			@param	plane the plane
@@ -558,10 +556,10 @@ namespace BALL
 	{
 		T length_product = a.getSquareLength() *  b.getSquareLength();
 		if(Maths::isZero(length_product))
+		{
 			return false;
-
+		}
 		intersection_angle = a.getAngle(b);
-
 		return true;
 	}
 
@@ -578,10 +576,10 @@ namespace BALL
 		T length_product = a.d.getSquareLength() *  b.d.getSquareLength();
 
 		if(Maths::isZero(length_product))
+		{
 			return false;
-		
+		}
 		intersection_angle = acos(Maths::abs(a.d * b.d) / sqrt(length_product));
-
 		return true;
 	}
 
@@ -605,7 +603,6 @@ namespace BALL
 		else 
 		{
 			intersection_angle = asin(Maths::abs(plane.n * Vector3) / sqrt(length_product));
-			
 			return true;
 		}
 	}
@@ -643,12 +640,9 @@ namespace BALL
 		{
 			return false;
 		} 
-		else	
-		{
-			intersection_angle = asin(Maths::abs(plane.n * line.d) / sqrt(length_product));
-			
-			return true;
-		}
+
+		intersection_angle = asin(Maths::abs(plane.n * line.d) / sqrt(length_product));
+		return true;
 	}
 
 	/**	Get the angle between a line and a plane.
@@ -676,16 +670,16 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	bool GetAngle
-		(const TPlane3<T>& a, const TPlane3<T>& b,
-		 TAngle<T>& intersection_angle)
+		(const TPlane3<T>& a, const TPlane3<T>& b, TAngle<T>& intersection_angle)
 	{
 		T length_product = a.n.getSquareLength() * b.n.getSquareLength();
 
 		if(Maths::isZero(length_product))
+		{
 			return false;
-		
-		intersection_angle = acos(Maths::abs(a.n * b.n) / sqrt(length_product));
+		}
 
+		intersection_angle = acos(Maths::abs(a.n * b.n) / sqrt(length_product));
 		return true;
 	}
 
@@ -696,9 +690,7 @@ namespace BALL
 			@return bool, true if an intersection can be calculated, otherwise false
 	*/
 	template <typename T>
-	bool GetIntersection
-		(const TLine3<T>& a, const TLine3<T>& b,
-		 TVector3<T>& point)
+	bool GetIntersection(const TLine3<T>& a, const TLine3<T>& b, TVector3<T>& point)
 	{
 		T c1, c2;
 
@@ -718,10 +710,8 @@ namespace BALL
 			
 			return true;
 		} 
-		else 
-		{
-			return false;
-		}
+
+		return false;
 	}
 
 	/**	Get the intersection point between a plane and a line.
@@ -742,12 +732,9 @@ namespace BALL
 		{
 			return false;
 		} 
-		else 
-		{
-			intersection_point.set(line.p + (plane.n * (plane.p - line.p)) * line.d / dot_product);
 
-			return true;
-		}
+		intersection_point.set(line.p + (plane.n * (plane.p - line.p)) * line.d / dot_product);
+		return true;
 	}
 
 	/**	Get the intersection point between a line and a plane.
@@ -814,9 +801,9 @@ namespace BALL
 		}
 
 		line.set(p, a.n % b.n);
-
 		return true;
 	}
+
 	/**	Get the intersection point between a sphere and a line.
 			@param	sphere the sphere
 			@param	line the line
@@ -881,29 +868,22 @@ namespace BALL
 		{
 			return false;
 		}
-		else if (Maths::isEqual(distance, sphere.radius))
+
+		TVector3<T> Vector3(plane.n);
+		Vector3.normalize();
+
+		if (Maths::isEqual(distance, sphere.radius))
 		{
-			TVector3<T> Vector3(plane.n);
-
-			Vector3.normalize();
-
 			intersection_circle.set(sphere.p + sphere.radius * Vector3, plane.n, 0);
-
-			return true;
 		} 
 		else 
 		{
-			TVector3<T> Vector3(plane.n);
-
-			Vector3.normalize();
-
 			intersection_circle.set
-				(sphere.p + distance * Vector3,
-				 plane.n,
+				(sphere.p + distance * Vector3, plane.n,
 				 sqrt(sphere.radius * sphere.radius - distance * distance));
-
-			return true;
 		}
+
+		return true;
 	}
 
 	/**	Get the intersection circle between a plane and a sphere.
@@ -1232,7 +1212,7 @@ namespace BALL
 		return isCollinear(a.n, b.n);
 	}
 
-	/**	Return the oriented angle of two vectors.
+	/**	Return the oriented angle of two vectors with a normal vector.
 	*/
 	template <typename T>
 	TAngle<T> getOrientedAngle
@@ -1262,10 +1242,9 @@ namespace BALL
 
     T acosbel = (T) acos(bel);
 
-    if ((nx * (az * by - ay * bz)
+    if ( ( nx * (az * by - ay * bz)
          + ny * (ax * bz - az * bx)
-         + nz * (ay * bx - ax * by))
-        < 0)
+         + nz * (ay * bx - ax * by)) < 0)
     {
       acosbel = -acosbel;
 		}
@@ -1277,17 +1256,16 @@ namespace BALL
 		return TAngle<T>(acosbel);
 	}
 
-							
-	/**	Return the oriented angle of two vectors wrt a normal vector.
+	/**	Return the oriented angle of two vectors with a normal vector.
 	*/
-  template < typename T >
+  template <typename T>
+	BALL_INLINE 
   TAngle<T>getOrientedAngle
 		(const TVector3<T>& a, const TVector3<T>& b, const TVector3<T>& normal)
   {
     return getOrientedAngle(a.x, a.y, a.z, b.x, b.y, b.z, normal.x, normal.y, normal.z);
 	}
  
-
 	/**	Return the torsion angle of four points to eachother.
 			@param TVector3& ax 1. vector x component
 			@param TVector3& ay 1. vector y component
