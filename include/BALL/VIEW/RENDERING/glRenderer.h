@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.31 2005/02/16 17:10:04 amoll Exp $
+// $Id: glRenderer.h,v 1.32 2005/02/17 15:30:52 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -157,16 +157,14 @@ namespace BALL
 			/** Pick geometric objects
 			 		\param x1, y1, x2, y2 the rectangle of the selection
 			*/
-			void pickObjects1(float x1, float y1, float x2, float y2)
+			void pickObjects1(Position x1, Position y1, Position x2, Position y2)
 				throw();
 
 			/** Pick geometric objects method2.
 			 		Call this method after pickObjects1 and rendering the representations.
 					\param objects returns the picked objects
-					\param width the width
-					\param height the height
 			*/
-			void pickObjects2(List<GeometricObject*>& objects, int width, int height)
+			void pickObjects2(List<GeometricObject*>& objects)
 				throw();
 
 			///
@@ -278,11 +276,6 @@ namespace BALL
 
 			///
 			DrawingMode getDrawingMode() const;
-
-			/** Check if Renderer is currently rendering.
-			 		Added for usage with multithreading.
-			*/
-			bool isBusy() const;
 
 			//@}
 			protected:
@@ -454,7 +447,7 @@ namespace BALL
 			bool 										picking_mode_;
 			ModelType 							model_type_;
 			Position 								display_lists_index_;
-			bool 										busy_;
+			bool 										single_pick_;
 		};
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS
@@ -462,7 +455,6 @@ namespace BALL
 #	endif
 
 	} // namespace VIEW
-
 } // namespace BALL
 
 #endif // BALL_VIEW_RENDERING_GLRENDERER_H

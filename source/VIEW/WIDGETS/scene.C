@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.164 2005/02/16 17:10:00 amoll Exp $
+// $Id: scene.C,v 1.165 2005/02/17 15:30:48 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -643,10 +643,13 @@ namespace BALL
 			HashSet<Representation*>& reps_drawn = pm.getRepresentationsBeeingDrawn();
 			Representation* rep = (Representation*)& repr;
 
+			/*
+			 * ?????????? locks up
 			while (pm.getRepresentationsBeeingUpdated().has(rep))
 			{
 				pm.getUpdateWaitCondition().wait(100);
 			}
+			*/
 
 			reps_drawn.insert(rep);
 #endif
@@ -828,26 +831,21 @@ namespace BALL
 		void Scene::selectObjects_(bool select)
 		{
 			List<GeometricObject*> objects;
-			gl_renderer_.pickObjects1(x_window_pick_pos_first_,
-					y_window_pick_pos_first_,
-					x_window_pick_pos_second_,
-					y_window_pick_pos_second_);
+			gl_renderer_.pickObjects1(
+					(Position)x_window_pick_pos_first_,
+					(Position)y_window_pick_pos_first_,
+					(Position)x_window_pick_pos_second_,
+					(Position)y_window_pick_pos_second_);
 
 			// draw the representations
 			renderView_(DIRECT_RENDERING);
-			updateGL();
 
-			int width  = BALL_ABS((int)x_window_pick_pos_second_ - (int)x_window_pick_pos_first_);
-			int height = BALL_ABS((int)y_window_pick_pos_second_ - (int)y_window_pick_pos_first_);
-			if (width == 0)	width = 1;
-			if (height == 0) height = 1;
- 			gl_renderer_.pickObjects2(objects, width, height);
-			glFlush();
+ 			gl_renderer_.pickObjects2(objects);
 
+			// sent collected objects
 			GeometricObjectSelectionMessage* message = new GeometricObjectSelectionMessage;
 			message->setSelection(objects);
 			message->setSelected(select);
-			// sent collected objects
 			notify_(message);
 		}
 

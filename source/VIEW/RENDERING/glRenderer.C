@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.63 2005/02/16 17:10:00 amoll Exp $
+// $Id: glRenderer.C,v 1.64 2005/02/17 15:30:48 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -54,8 +54,7 @@ namespace BALL
 			render_mode_(RENDER_MODE_UNDEFINED),
 			use_vertex_buffer_(true),
 			picking_mode_(false),
-			model_type_(MODEL_LINES),
-			busy_(false)
+			model_type_(MODEL_LINES)
 	{
 	}
 
@@ -172,8 +171,6 @@ namespace BALL
 			MeshBuffer::initGL();
 		}
 
-		busy_ = false;
-
 		return true;
 	}
 
@@ -287,8 +284,6 @@ namespace BALL
 	void GLRenderer::removeRepresentation(const Representation& rep)
 		throw()
 	{
-		busy_ = true;
-
 		if (rep.getGeometricObjects().size() == 0) return;
 
 		if (vertexBuffersEnabled())
@@ -299,12 +294,10 @@ namespace BALL
 		DisplayListHashMap::Iterator hit = display_lists_.find(&rep);
 		if (hit == display_lists_.end()) 
 		{
-			busy_ = false;
 			return;
 		}
 		delete hit->second;
 		display_lists_.erase(hit);
-		busy_ = false;
 	}
 
 	void GLRenderer::bufferRepresentation(const Representation& rep)
@@ -314,8 +307,6 @@ namespace BALL
 Timer t;
 t.start();
 #endif
-		busy_ = true;
-
 		GLDisplayList* display_list;
 		if (display_lists_.has(&rep))
 		{
@@ -329,17 +320,16 @@ t.start();
 		}
 
 		display_list->useCompileMode();
-
 		display_list->startDefinition();
 		
 		render(rep, true);
 		
 		display_list->endDefinition();
 
+		clearVertexBuffersFor(*(Representation*)&rep);
+
 		if (use_vertex_buffer_ && drawing_mode_ != DRAWING_MODE_WIREFRAME)
 		{
-			clearVertexBuffersFor(*(Representation*)&rep);
-			
 			// prevent copying the pointers of the buffers later...
 			rep_to_buffers_[&rep] = vector<MeshBuffer*>();
 			
@@ -360,8 +350,6 @@ t.start();
 			}
 		}
 
-		busy_ = false;
-
 #ifdef BALL_BENCHMARKING
 t.stop();
 logString("OpenGL rendering time: " + String(t.getCPUTime()));
@@ -376,15 +364,6 @@ logString("OpenGL rendering time: " + String(t.getCPUTime()));
 		glColor4ub(dummy_color_.getRed(), dummy_color_.getGreen(), dummy_color_.getBlue(), dummy_color_.getAlpha());
 
 		if (representation.isHidden()) return true;
-
-		if (!representation.isValid())
-		{
-			Log.error() << "Representation " << &representation 
-									<< "not valid, so aborting." << std::endl;
-			return false;
-		}
-
-		busy_ = true;
 
 		drawing_precision_  = representation.getDrawingPrecision();
 		drawing_mode_ 		  = representation.getDrawingMode();
@@ -412,8 +391,7 @@ logString("OpenGL rendering time: " + String(t.getCPUTime()));
 				// draw everything except of meshes, these are put into vertex buffer objects in bufferRepresentation()
 				for (; it != geometric_objects.end(); it++)
 				{
-					const Mesh* const mesh = dynamic_cast<Mesh*>(*it);
-					if (mesh == 0) render_(*it);
+					if (dynamic_cast<Mesh*>(*it) == 0) render_(*it);
 				}
 			}
 			else
@@ -427,47 +405,15 @@ logString("OpenGL rendering time: " + String(t.getCPUTime()));
 		}
 		else // drawing for picking directly
 		{
-			if (!use_vertex_buffer_ || drawing_mode_ == DRAWING_MODE_WIREFRAME)
+			for (; it != geometric_objects.end(); it++)
 			{
 				// render everything with names from glLoadName
-				for (; it != geometric_objects.end(); it++)
-				{
-					glLoadName(getName(**it));
-					render_(*it);
-				}
-			}
-			else // render directly with buffers
-			{
-				for (; it != geometric_objects.end(); it++)
-				{
-					glLoadName(getName(**it));
-					if (dynamic_cast<Mesh*>(*it) == 0)
-					{
-						render_(*it);
-					}
-				}
-			
-				MeshBufferHashMap::Iterator vit = rep_to_buffers_.find(&representation);
-				if (vit != rep_to_buffers_.end())
-				{
-					initDrawingMeshes_();
-					MeshBuffer::setGLRenderer(this);
-					vector<MeshBuffer*>& buffers = vit->second;
-
-					vector<MeshBuffer*>::iterator bit = buffers.begin();
-					for (; bit != buffers.end(); bit++)
-					{
-						glLoadName(getName(*(*bit)->getMesh()));
-						(*bit)->draw();
-					}
-
-					finishDrawingMeshes_();
-				}
+				glLoadName(getName(**it));
+				render_(*it);
 			}
 		}
 
 		glFlush();
-		busy_ = false;
 		return true;
 	}
 
@@ -781,7 +727,7 @@ logString("OpenGL rendering time: " + String(t.getCPUTime()));
 	void GLRenderer::renderMesh_(const Mesh& mesh)
 		throw()
 	{
-		if (use_vertex_buffer_ && drawing_mode_ != DRAWING_MODE_WIREFRAME) return;
+//   		if (use_vertex_buffer_ && drawing_mode_ != DRAWING_MODE_WIREFRAME) return;
 		initDrawingMeshes_();
 
 		// If we have only one color for the whole mesh, this can
@@ -1325,7 +1271,7 @@ logString("OpenGL rendering time: " + String(t.getCPUTime()));
 
 
 	// ############################ PICKING ###################################		
-	void GLRenderer::pickObjects1(float x1, float y1, float x2, float y2)
+	void GLRenderer::pickObjects1(Position x1, Position y1, Position x2, Position y2)
 		throw()
 	{
 		glFlush();
@@ -1343,23 +1289,20 @@ logString("OpenGL rendering time: " + String(t.getCPUTime()));
 		glLoadIdentity();
 		
 		// calculate picking rectangle
-		int width  = BALL_ABS((int)x2 - (int)x1);
-		int height = BALL_ABS((int)y2 - (int)y1);
+		Size width  = BALL_ABS((Index)x2 - (Index)x1);
+		Size height = BALL_ABS((Index)y2 - (Index)y1);
 		
-		int center_x = BALL_MIN((int)x2, (int)x1) + width / 2;
-		int center_y = BALL_MIN((int)y2, (int)y1) + height / 2;
+		Position center_x = BALL_MIN(x2, x1) + width / 2;
+		Position center_y = BALL_MIN(y2, y1) + height / 2;
 		
 		if (width == 0)	width = 1;
 		if (height == 0) height = 1;
 		
+		single_pick_ = (width <= 3 && height <= 3);
 		clearNames_();
 		
 		// calculate picking matrix
-		gluPickMatrix((double)center_x, 
-									(double)(viewport[3] - center_y),
-									(double)width,
-									(double)height,
-									viewport);
+		gluPickMatrix(center_x, viewport[3] - center_y, width, height, viewport);
 
 		// prepare camera
 		glFrustum(-2.0 * x_scale_, 2.0 * x_scale_, -2.0 * y_scale_, 2.0 * y_scale_, 1.5, 300);
@@ -1369,7 +1312,7 @@ logString("OpenGL rendering time: " + String(t.getCPUTime()));
 	}			
 
 
-	void GLRenderer::pickObjects2(List<GeometricObject*>& objects, int width, int height)
+	void GLRenderer::pickObjects2(List<GeometricObject*>& objects)
 		throw()
 	{
 		glFlush();
@@ -1395,7 +1338,7 @@ logString("OpenGL rendering time: " + String(t.getCPUTime()));
 		GeometricObject* go = 0;
 
 		// collect only the nearest Object
-		if (width <= 3 && height <= 3) 
+		if (single_pick_)
 		{
 			Position z_coord;
 			

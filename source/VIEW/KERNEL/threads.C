@@ -148,7 +148,6 @@ namespace BALL
 			PrimitiveManager& pm = getMainControl()->getPrimitiveManager();
 			while (pm.getRepresentationsBeeingDrawn().has(rep_))
 			{
-logString(String("#~~#   2 ") + String( )                        + "             " + __FILE__ + "  " + String(__LINE__));
 				pm.getUpdateWaitCondition().wait(100);
 			}
 
@@ -157,6 +156,7 @@ logString(String("#~~#   2 ") + String( )                        + "            
  			rep_->update_();
 			rep_ = 0;
 			pm.getRepresentationsBeeingUpdated().erase(rep_);
+			pm.getUpdateWaitCondition().wakeAll();
 
 			FinishedRepresentionUpdateEvent* se = new FinishedRepresentionUpdateEvent;
 			qApp->postEvent(getMainControl(), se);
