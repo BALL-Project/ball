@@ -1,4 +1,4 @@
-dnl    $Id: configure.ac,v 1.1.2.12 2002/12/04 19:59:01 anhi Exp $
+dnl    $Id: configure.ac,v 1.1.2.13 2002/12/04 20:12:14 anhi Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -615,11 +615,11 @@ else
 	BINFMT_PATH=""
 fi
 
-dnl AC_OUTPUT([
-dnl 	Makefile.tmp:config/Makefile.in
-dnl 	config.mak.tmp:config/config.mak.in 
-dnl	common.mak.tmp:config/common.mak.in 
-dnl ])
+dnl keep that for now for compatibility
+AC_OUTPUT([
+ 	config.mak.tmp:config/config.mak.in 
+	common.mak.tmp:config/common.mak.in 
+])
 
 dnl if test "${MULTI_BUILD}" = "true" ; then
 dnl 	${MV} Makefile.tmp ${BINFMT}/Makefile
@@ -631,14 +631,14 @@ dnl 	${MV} common.mak.tmp common.mak
 dnl 	${MV} config.mak.tmp config.mak
 dnl fi
 
-AC_OUTPUT([Makefile COMMON/Makefile CONCEPT/Makefile DATATYPE/Makefile ENERGY/Makefile FORMAT/Makefile KERNEL/Makefile MATHS/Makefile \
+AC_OUTPUT([Makefile Make.rules COMMON/Makefile CONCEPT/Makefile DATATYPE/Makefile ENERGY/Makefile FORMAT/Makefile KERNEL/Makefile MATHS/Makefile \
 						MOLMEC/Makefile MOLMEC/AMBER/Makefile MOLMEC/CHARMM/Makefile MOLMEC/COMMON/Makefile MOLMEC/MDSIMULATION/Makefile \
 						MOLMEC/MINIMIZATION/Makefile MOLMEC/PARAMETER/Makefile NMR/Makefile QSAR/Makefile SOLVATION/Makefile STRUCTURE/Makefile \
 						SYSTEM/Makefile VIEW/Makefile VIEW/DATATYPE/Makefile VIEW/FUNCTOR/Makefile VIEW/GUI/Makefile VIEW/GUI/DIALOGS/Makefile \
 						VIEW/GUI/FUNCTOR/Makefile VIEW/GUI/KERNEL/Makefile VIEW/GUI/PRIMITIV/Makefile VIEW/GUI/WIDGETS/Makefile VIEW/KERNEL/Makefile \
 						VIEW/PRIMITIV/Makefile MOLVIEW/Makefile MOLVIEW/COMMON/Makefile MOLVIEW/FUNCTOR/Makefile MOLVIEW/GUI/Makefile \
 						MOLVIEW/GUI/DIALOGS/Makefile MOLVIEW/GUI/FUNCTOR/Makefile MOLVIEW/GUI/KERNEL/Makefile MOLVIEW/GUI/PRIMITIV/Makefile \
-						MOLVIEW/GUI/WIDGETS/Makefile MOLVIEW/KERNEL/Makefile MOLVIEW/PRIMITIV/Makefile TEST/Makefile TUTORIAL/Makefile EXAMPLES/Makefile])
+						MOLVIEW/GUI/WIDGETS/Makefile MOLVIEW/KERNEL/Makefile MOLVIEW/PRIMITIV/Makefile TUTORIAL/Makefile EXAMPLES/Makefile])
  
 
 dnl
