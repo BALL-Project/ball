@@ -1,4 +1,5 @@
 #!/usr/local/bin/bash
+# $Id: maketexdoc,v 1.5 2000/01/11 20:19:14 oliver Exp $
 
 mkdir ../doc 2>/dev/null
 mkdir ../doc/tex 2>/dev/null
