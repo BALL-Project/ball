@@ -1,4 +1,4 @@
-// $Id: regularData2D.h,v 1.16.4.4 2002/12/11 14:37:11 anker Exp $
+// $Id: regularData2D.h,v 1.16.4.5 2002/12/11 14:44:52 anker Exp $
 
 #ifndef BALL_DATATYPE_TRegularData2D_H
 #define BALL_DATATYPE_TRegularData2D_H
@@ -819,14 +819,18 @@ namespace BALL
 	void TRegularData2D<GridDataType>::setOrigin(const Vector2& origin)
 		throw()
 	{
+		Vector2 diff = upper_ - origin_;
 		origin_ = origin;
+		upper_ = origin_ + diff;
 	}
 
 	template <class GridDataType>
 	void TRegularData2D<GridDataType>::setOrigin(float x, float y) 
 	 	throw()
 	{
+		Vector2 diff = upper_ - origin_;
 		origin_ = Vector2(x, y);
+		upper_ = origin_ + diff;
 	}
 
 	template <class GridDataType> 
