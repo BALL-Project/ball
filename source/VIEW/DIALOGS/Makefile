@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.42 2004/09/14 16:15:06 amoll Exp $
+# $Id: Makefile,v 1.43 2004/09/28 17:35:59 amoll Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -21,6 +21,7 @@ CPP_SOURCES=\
 	bondPropertiesData.C\
 	charmmConfigurationDialog.C\
 	charmmConfigurationDialogData.C\
+	colorChooser.C\
 	colorMeshDialog.C\
 	colorMeshDialogData.C\
 	coloringSettingsDialog.C\
@@ -77,6 +78,7 @@ MOC_SOURCES=\
 	bondPropertiesData_moc.C\
 	charmmConfigurationDialog_moc.C\
 	charmmConfigurationDialogData_moc.C\
+	colorChooser_moc.C\
 	coloringSettingsDialog_moc.C\
 	coloringSettingsDialogData_moc.C\
 	colorMeshDialog_moc.C\
@@ -162,6 +164,9 @@ serverPreferences_moc.C: $(HEADER_DIR)/serverPreferences.h
 
 openBruker1DFile_moc.C: $(HEADER_DIR)/openBruker1DFile.h
 	$(MOC) $(HEADER_DIR)/openBruker1DFile.h -o $@
+
+colorChooser_moc.C: $(HEADER_DIR)/colorChooser.h
+	$(MOC) $(HEADER_DIR)/colorChooser.h -o $@
 
 depend: $(UIC_SOURCES) $(MOC_SOURCES)
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.C,v 1.26 2004/09/27 22:50:56 amoll Exp $
+// $Id: modelSettingsDialog.C,v 1.27 2004/09/28 17:36:00 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modelSettingsDialog.h>
@@ -33,8 +33,39 @@ namespace BALL
 	{
 
 		ModelSettingsDialog::ModelSettingsDialog( QWidget* parent,  const char* name, WFlags fl )
-				: ModelSettingsDialogData( parent, name, fl )
+			: ModelSettingsDialogData( parent, name, fl ),
+				PreferencesEntry()
 		{
+			setINIFileSectionName("MODEL_OPTIONS");
+Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+
+			registerObject_(stick_radius_slider);
+
+			registerObject_(ball_stick_cylinder_radius_slider);
+			registerObject_(ball_stick_sphere_radius_slider);
+			registerObject_(ball_stick_dashed_bonds);
+			
+			registerObject_(vdw_radius_factor_slider);
+			
+			registerObject_(surface_probe_radius_slider);
+			
+			registerObject_(tube_radius_slider);
+			
+			registerObject_(cartoon_tube_radius_slider);
+			registerObject_(cartoon_helix_radius_slider);
+			registerObject_(cartoon_arrow_height_slider);
+			registerObject_(cartoon_arrow_width_slider);
+			registerObject_(cartoon_dna_helix_radius_slider);
+			registerObject_(cartoon_dna_ladder_radius_slider);
+			registerObject_(cartoon_dna_base_radius_slider);
+			registerObject_(cartoon_dna_wac);
+			
+			registerObject_(force_scaling_slider);
+			registerObject_(force_max_length_slider);
+
+			registerObject_(hbonds_radius_slider);
+Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+
 			setDefaults(true);
 		}
 
@@ -110,82 +141,6 @@ namespace BALL
 			s.trimRight("0");
 			if (s.hasSuffix(".")) s+= "0";
 			label->setText(s.c_str());
-		}
-
-		void ModelSettingsDialog::fetchPreference_(const INIFile& inifile, const String& entry, QSlider& slider)
-			throw()
-		{
-			if (!inifile.hasEntry("MODEL_OPTIONS", entry)) return;
-			setValue_(&slider, inifile.getValue("MODEL_OPTIONS", entry).toFloat());
-		}
-
-		void ModelSettingsDialog::writePreference_(INIFile& inifile, const String& entry, const QSlider& slider) const
-			throw()
-		{
-			inifile.insertValue("MODEL_OPTIONS", entry, getFloatValue_(&slider));
-		}
-
-
-		void ModelSettingsDialog::writePreferences(INIFile& file)
-			throw()
-		{
-			file.appendSection("MODEL_OPTIONS");
-			writePreference_(file, "stick_radius", *stick_radius_slider);
-			writePreference_(file, "ball_stick_cylinder_radius", *ball_stick_cylinder_radius_slider);
-			writePreference_(file, "ball_stick_sphere_radius", *ball_stick_sphere_radius_slider);
-			if (ball_stick_dashed_bonds->isChecked())
-			{
-				file.insertValue("MODEL_OPTIONS", "ball_stick_dashed_bonds", true);
-			}
-
-			writePreference_(file, "vdw_radius_factor", *vdw_radius_factor_slider);
-			writePreference_(file, "surface_probe_radius", *surface_probe_radius_slider);
-			writePreference_(file, "tube_radius", *tube_radius_slider);
-			writePreference_(file, "cartoon_tube_radius", *cartoon_tube_radius_slider);
-			writePreference_(file, "cartoon_helix_radius", *cartoon_helix_radius_slider);
-			writePreference_(file, "cartoon_arrow_height", *cartoon_arrow_height_slider);
-			writePreference_(file, "cartoon_arrow_width", *cartoon_arrow_width_slider);
-			writePreference_(file, "cartoon_dna_helix_radius", *cartoon_dna_helix_radius_slider);
-			writePreference_(file, "cartoon_dna_ladder_radius", *cartoon_dna_ladder_radius_slider);
-			writePreference_(file, "cartoon_dna_base_radius", *cartoon_dna_base_radius_slider);
-			if (cartoon_dna_wac->isChecked())
-			{
-				file.insertValue("MODEL_OPTIONS", "cartoon_dna_wac", true);
-			}
-			
-			writePreference_(file, "force_scaling", *force_scaling_slider);
-			writePreference_(file, "force_max_length", *force_max_length_slider);
-		
-			writePreference_(file, "hbonds_radius", *hbonds_radius_slider);
-		}
-
-		void ModelSettingsDialog::fetchPreferences(const INIFile& file)
-			throw()
-		{
-			fetchPreference_(file, "stick_radius", *stick_radius_slider);
-			
-			fetchPreference_(file, "ball_stick_cylinder_radius", *ball_stick_cylinder_radius_slider);
-			fetchPreference_(file, "ball_stick_sphere_radius", *ball_stick_sphere_radius_slider);
-			ball_stick_dashed_bonds->setChecked(
-				(file.hasEntry("MODEL_OPTIONS", "ball_stick_dashed_bonds")));
-			
-			fetchPreference_(file, "vdw_radius_factor", *vdw_radius_factor_slider);
-			fetchPreference_(file, "surface_probe_radius", *surface_probe_radius_slider);
-			fetchPreference_(file, "tube_radius", *tube_radius_slider);
-			fetchPreference_(file, "cartoon_tube_radius", *cartoon_tube_radius_slider);
-			fetchPreference_(file, "cartoon_helix_radius", *cartoon_helix_radius_slider);
-			fetchPreference_(file, "cartoon_arrow_height", *cartoon_arrow_height_slider);
-			fetchPreference_(file, "cartoon_arrow_width", *cartoon_arrow_width_slider);
-			fetchPreference_(file, "cartoon_dna_helix_radius", *cartoon_dna_helix_radius_slider);
-			fetchPreference_(file, "cartoon_dna_ladder_radius", *cartoon_dna_ladder_radius_slider);
-			fetchPreference_(file, "cartoon_dna_base_radius", *cartoon_dna_base_radius_slider);
-			cartoon_dna_wac->setChecked(
-				(file.hasEntry("MODEL_OPTIONS", "cartoon_dna_wac")));
-
-			fetchPreference_(file, "force_max_length", *force_max_length_slider);
-			fetchPreference_(file, "force_scaling", *force_scaling_slider);
-
-			fetchPreference_(file, "hbonds_radius", *hbonds_radius_slider);
 		}
 
 		void ModelSettingsDialog::setDefaultValues()

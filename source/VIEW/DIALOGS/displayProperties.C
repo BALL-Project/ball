@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.83 2004/09/10 15:28:49 amoll Exp $
+// $Id: displayProperties.C,v 1.84 2004/09/28 17:35:59 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -123,7 +123,7 @@ void DisplayProperties::fetchPreferences(INIFile& inifile)
 
 	if (model_settings_ != 0)
 	{
-		model_settings_->fetchPreferences(inifile);
+		model_settings_->readPreferenceEntries(inifile);
 	}
 
 	if (coloring_settings_ != 0)
@@ -164,7 +164,7 @@ void DisplayProperties::writePreferences(INIFile& inifile)
 
 	if (model_settings_ != 0)
 	{
-		model_settings_->writePreferences(inifile);
+		model_settings_->writePreferenceEntries(inifile);
 	}
 
 	if (coloring_settings_ != 0)

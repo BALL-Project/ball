@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.h,v 1.19 2004/09/27 22:50:32 amoll Exp $
+// $Id: modelSettingsDialog.h,v 1.20 2004/09/28 17:35:52 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MODELSETTINGSDIALOG_H
@@ -15,6 +15,9 @@
 # include <BALL/VIEW/KERNEL/common.h>
 #endif
 
+#ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY
+# include <BALL/VIEW/KERNEL/preferencesEntry.h>
+#endif
 
 #include <BALL/VIEW/UIC/modelSettingsDialogData.h>
 
@@ -34,7 +37,8 @@ namespace BALL
 				\ingroup ViewDialogs
 		*/
 		class BALL_EXPORT ModelSettingsDialog 
-			: public ModelSettingsDialogData
+			: public ModelSettingsDialogData,
+				public PreferencesEntry
 		{ 
 			Q_OBJECT
 
@@ -45,14 +49,6 @@ namespace BALL
 
 			/// Destructor
 			~ModelSettingsDialog() {}
-
-			///
-			void writePreferences(INIFile& file)
-				throw();
-
-			///
-			void fetchPreferences(const INIFile& file)
-				throw();
 
 			///
 			void setDefaults(bool all = true)
