@@ -1,4 +1,4 @@
-// $Id: system.h,v 1.2 1999/09/06 22:21:19 oliver Exp $
+// $Id: system.h,v 1.3 1999/12/04 18:34:19 oliver Exp $
 
 #ifndef BALL_KERNEL_SYSTEM_H
 #define BALL_KERNEL_SYSTEM_H
@@ -60,7 +60,7 @@ namespace BALL
 		//@{
 
 		/// Default constructor
-		System(void);
+		System();
 	
 		/// Copy constructor
 		System(const System& system, bool deep = true);
@@ -69,13 +69,13 @@ namespace BALL
 		System(const String& name);
 
 		///	Destructor
-		virtual ~System(void);
+		virtual ~System();
 
 		/// Clears the contents of the system
-		virtual void clear(void);
+		virtual void clear();
 	
 		/// Clears the contents of the system and removes all its composite structures
-		virtual void destroy(void);
+		virtual void destroy();
 		//@}
 	
 		/** @name Persistence */
@@ -115,19 +115,19 @@ namespace BALL
 		void setName(const String& name);
 
 		///
-		String& getName(void);
+		String& getName();
 
 		///
-		const String& getName(void) const;
+		const String& getName() const;
 
 		///
-		Size countMolecules(void) const;
+		Size countMolecules() const;
 
 		///
-		Size countFragments(void) const;
+		Size countFragments() const;
 
 		///
-		Size countAtoms(void) const;
+		Size countAtoms() const;
 
 		///
 		void prepend(Molecule& molecule);
@@ -161,7 +161,7 @@ namespace BALL
 		//@{
 
 		/// Removes all bonds contained in the system	
-		void destroyBonds(void);
+		void destroyBonds();
 
 		//@}
 
@@ -169,7 +169,7 @@ namespace BALL
 		//@{
 	
 		/// 
-		virtual bool isValid(void) const;
+		virtual bool isValid() const;
 
 		/// 
 		virtual void dump(ostream& s = cout, unsigned long depth = 0) const;
@@ -225,7 +225,7 @@ namespace BALL
 
 		private:
 
-		void clear_(void);
+		void clear_();
 
 		// --- ATTRIBUTES
 

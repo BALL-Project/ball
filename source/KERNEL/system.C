@@ -1,4 +1,4 @@
-// $Id: system.C,v 1.2 1999/09/06 22:22:18 oliver Exp $
+// $Id: system.C,v 1.3 1999/12/04 18:34:31 oliver Exp $
 
 #include <BALL/KERNEL/system.h>
 
@@ -10,7 +10,7 @@
 namespace BALL 
 {
 
-	System::System(void)
+	System::System()
 		:	Composite(),
 			PropertyManager(),
 			name_(BALL_SYSTEM_DEFAULT_NAME)
@@ -52,12 +52,12 @@ namespace BALL
 	}
  
 
-	System::~System(void)
+	System::~System()
 	{
 		destroy();
 	}
 
-	void System::clear(void)
+	void System::clear()
 	{
 		Composite::clear();
 		PropertyManager::clear();
@@ -65,7 +65,7 @@ namespace BALL
 		clear_();
 	}
 		
-	void System::destroy(void)
+	void System::destroy()
 	{
 		Composite::destroy();
 		PropertyManager::destroy();
@@ -115,17 +115,17 @@ namespace BALL
 		name_ = name;
 	}
 
-	String& System::getName(void)
+	String& System::getName()
 	{
 		return name_;
 	}
 
-	const String& System::getName(void) const
+	const String& System::getName() const
 	{
 		return name_;
 	}
 
-	Size System::countMolecules(void) const
+	Size System::countMolecules() const
 	{
 		Size size = 0;
 
@@ -135,7 +135,7 @@ namespace BALL
 		return size;
 	}
 
-	Size  System::countFragments(void) const
+	Size  System::countFragments() const
 	{
 		Size size = 0;
 
@@ -145,7 +145,7 @@ namespace BALL
 		return size;
 	}
 
-	Size System::countAtoms(void) const
+	Size System::countAtoms() const
 	{
 		Size size = 0;
 
@@ -200,7 +200,7 @@ namespace BALL
 		Composite::splice(system);
 	}
 
-	void System::destroyBonds(void)
+	void System::destroyBonds()
 	{
 		for (AtomIterator atom_it = beginAtom(); !atom_it.isEnd(); ++atom_it)
 		{
@@ -208,7 +208,7 @@ namespace BALL
 		}
 	}
 
-	bool System::isValid(void) const
+	bool System::isValid() const
 	{ 
 		if (Composite::isValid() == false
 				|| PropertyManager::isValid() == false
@@ -242,7 +242,7 @@ namespace BALL
 		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 
-	void System::clear_(void)	
+	void System::clear_()	
 	{
 		name_ = BALL_SYSTEM_DEFAULT_NAME;
 	}

@@ -1,4 +1,4 @@
-// $Id: options.C,v 1.3 1999/10/30 12:53:32 oliver Exp $ 
+// $Id: options.C,v 1.4 1999/12/04 18:34:27 oliver Exp $ 
 
 #include <BALL/DATATYPE/options.h>
 
@@ -28,7 +28,7 @@ namespace BALL
 	}
 
 
-	Options::~Options(void)
+	Options::~Options()
 	{
 	}
 
@@ -253,7 +253,7 @@ namespace BALL
 		name_ = name;
 	}
 
-	const String& Options::getName(void) const
+	const String& Options::getName() const
 	{
 		return name_;
 	}

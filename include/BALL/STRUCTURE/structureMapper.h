@@ -1,4 +1,4 @@
-// $Id: structureMapper.h,v 1.1 1999/08/26 07:53:20 oliver Exp $
+// $Id: structureMapper.h,v 1.2 1999/12/04 18:34:25 oliver Exp $
 
 #ifndef BALL_STRUCTURE_STRUCTUREMAPPER_H
 #define BALL_STRUCTURE_STRUCTUREMAPPER_H
@@ -72,7 +72,7 @@ namespace BALL {
 		
 		/**	Default constructor
 		*/
-		StructureMapper(void);
+		StructureMapper();
 
 		/**	Constructor
 		*/
@@ -80,7 +80,7 @@ namespace BALL {
 
 		/**	Destructor
 		*/
-		~StructureMapper(void);
+		~StructureMapper();
 
 		//@}
 
@@ -90,16 +90,16 @@ namespace BALL {
 		
 		/**	Calculate the root mean squared deviation
 		*/
-		float calculateRMSD(void);
+		float calculateRMSD();
 		
 		/**	Calculate the transformation to map the first of two isomorphous 
 				Composite objects onto the second
 		*/
-		bool calculateTransformation(void);
+		bool calculateTransformation();
 
 		/**	Calculate a reasonable bijection for the mapping of A and B
 		*/
-		void calculateDefaultBijection(void);
+		void calculateDefaultBijection();
 
 
 		/**	Calculates a bijection to map two arrays of fragments onto each other.

@@ -1,4 +1,4 @@
-// $Id: options.h,v 1.1 1999/08/26 07:53:13 oliver Exp $
+// $Id: options.h,v 1.2 1999/12/04 18:34:13 oliver Exp $
 
 #ifndef BALL_DATATYPE_OPTIONS_H
 #define BALL_DATATYPE_OPTIONS_H
@@ -72,7 +72,7 @@ namespace BALL {
 					@see	clear
 					@memo
 		*/
-		virtual ~Options(void);
+		virtual ~Options();
 
 		//@}
 
@@ -140,7 +140,7 @@ namespace BALL {
 		/**		Returns the option table's name.
 					@memo
 		*/
-		const String& getName(void) const;
+		const String& getName() const;
 
 		
 		/**		Returns the value associated with the key.

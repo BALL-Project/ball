@@ -1,4 +1,4 @@
-// $Id: processor.h,v 1.1 1999/08/26 07:53:17 oliver Exp $
+// $Id: processor.h,v 1.2 1999/12/04 18:34:11 oliver Exp $
 
 #ifndef BALL_CONCEPT_PROCESSOR_H
 #define BALL_CONCEPT_PROCESSOR_H
@@ -57,7 +57,7 @@ namespace BALL {
 		
 		/**	
 		*/
-		UnaryProcessor(void)
+		UnaryProcessor()
 		{
 		}
 
@@ -69,17 +69,17 @@ namespace BALL {
 
 		/**	
 		*/
-		virtual ~UnaryProcessor(void)
+		virtual ~UnaryProcessor()
 		{
 		}
 		//@}
 
-		virtual bool start(void)
+		virtual bool start()
 		{
 			return true;
 		}
 
-		virtual bool finish(void)
+		virtual bool finish()
 		{ 
 			return true;
 		}
@@ -110,7 +110,7 @@ namespace BALL {
 
 		/**
 		*/
-		BinaryProcessor(void)
+		BinaryProcessor()
 		{
 		}
 
@@ -122,19 +122,19 @@ namespace BALL {
 
 		/**
 		*/
-		virtual ~BinaryProcessor(void)
+		virtual ~BinaryProcessor()
 		{
 		}
 		//@}
 
 		virtual Processor::Result operator ()(T1&, T2&);
 
-		virtual bool start(void)
+		virtual bool start()
 		{
 			return true;
 		}
 
-		virtual bool finish(void)
+		virtual bool finish()
 		{ 
 			return true;
 		}

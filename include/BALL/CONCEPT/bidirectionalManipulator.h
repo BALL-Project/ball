@@ -1,4 +1,4 @@
-// $Id: bidirectionalManipulator.h,v 1.2 1999/10/30 12:53:20 oliver Exp $
+// $Id: bidirectionalManipulator.h,v 1.3 1999/12/04 18:34:10 oliver Exp $
 
 #ifndef BALL_CONCEPT_BIDIRECTIONALMANIPULATOR_H
 #define BALL_CONCEPT_BIDIRECTIONALMANIPULATOR_H
@@ -23,7 +23,7 @@ namespace BALL {
 
 		/**
 		*/
-		BidirectionalManipulator_(void)
+		BidirectionalManipulator_()
 			: BaseIterator<Container, DataType, Position, Traits>()
 		{
 		}
@@ -45,14 +45,14 @@ namespace BALL {
 
 		/**
 		*/
-		bool operator + (void) const
+		bool operator + () const
 		{
 			return traits_->isValid();
 		}
 
 		/**
 		*/
-		bool operator - (void) const
+		bool operator - () const
 		{
 			return (bool)(traits_->isValid() == false);
 		}

@@ -1,4 +1,4 @@
-// $Id: amberStretch.h,v 1.2 1999/09/21 11:06:54 oliver Exp $ 
+// $Id: amberStretch.h,v 1.3 1999/12/04 18:34:22 oliver Exp $ 
 // Molecular Mechanics: Amber force field, bond stretch component
 
 #ifndef BALL_MOLMEC_AMBER_AMBERSTRETCH_H
@@ -51,7 +51,7 @@ namespace BALL {
 
 		/**	Default constructor.
 		*/
-		AmberStretch(void);
+		AmberStretch();
 
 		/**	constructor.
 		*/
@@ -63,7 +63,7 @@ namespace BALL {
 
 		/**	Destructor.
 		*/
-		virtual ~AmberStretch(void);
+		virtual ~AmberStretch();
 
 		//@}
 
@@ -73,7 +73,7 @@ namespace BALL {
 
 		/**	Setup method.
 		*/
-		virtual bool setup(void);
+		virtual bool setup();
 
 		//@}
 
@@ -82,11 +82,11 @@ namespace BALL {
 
 		/**	Calculates and returns the component's energy.
 		*/
-		virtual float updateEnergy(void);
+		virtual float updateEnergy();
 
 		/**	Calculates and returns the component's forces.
 		*/
-		virtual void updateForces(void);
+		virtual void updateForces();
 
 		//@} 
 

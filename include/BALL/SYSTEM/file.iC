@@ -1,4 +1,4 @@
-// $Id: file.iC,v 1.3 1999/10/30 12:53:28 oliver Exp $
+// $Id: file.iC,v 1.4 1999/12/04 18:34:25 oliver Exp $
 
 BALL_INLINE 
 void File::enableProtocol(File::Protocol protocol)
@@ -13,19 +13,19 @@ void File::disableProtocol(File::Protocol protocol)
 }
 
 BALL_INLINE 
-const String& File::getName(void) const
+const String& File::getName() const
 {
   return name_;
 }
 
 BALL_INLINE 
-const String& File::getOriginalName(void) const
+const String& File::getOriginalName() const
 {
   return original_name_;
 }
 
 BALL_INLINE 
-int File::getOpenMode(void) const
+int File::getOpenMode() const
 {
   return open_mode_;
 }
@@ -37,7 +37,7 @@ File::Type File::getType(bool trace_link) const
 }
 
 BALL_INLINE 
-::std::fstream& File::getFileStream(void)
+::std::fstream& File::getFileStream()
 {
   return *this;
 }
@@ -58,7 +58,7 @@ bool File::remove(String name)
 }
 
 BALL_INLINE 
-bool File::remove(void) const
+bool File::remove() const
 {
   return File::remove(name_);
 }
@@ -136,19 +136,19 @@ bool File::isProtocolEnabled(File::Protocol protocol)
 }
 
 BALL_INLINE 
-bool File::isValid(void) const
+bool File::isValid() const
 {
   return (bool)((File *)this)->::std::fstream::good();
 }
 
 BALL_INLINE 
-bool File::isOpen(void) const
+bool File::isOpen() const
 {
   return is_open_;
 }
 
 BALL_INLINE 
-bool File::isClosed(void) const
+bool File::isClosed() const
 {
   return (bool)!is_open_;
 }
@@ -162,13 +162,13 @@ bool File::isAccessible(String name)
 }
 
 BALL_INLINE 
-bool File::isAccessible(void) const
+bool File::isAccessible() const
 {
   return File::isAccessible(name_);
 }
 
 BALL_INLINE 
-bool File::isCanonized(void) const
+bool File::isCanonized() const
 {
   String canonized_name(original_name_);
 
@@ -186,7 +186,7 @@ bool File::isReadable(String name)
 }
 
 BALL_INLINE 
-bool File::isReadable(void) const
+bool File::isReadable() const
 {
   return File::isReadable(name_);
 }
@@ -200,7 +200,7 @@ bool File::isWritable(String name)
 }
 
 BALL_INLINE 
-bool File::isWritable(void) const
+bool File::isWritable() const
 {
   return File::isWritable(name_);
 }
@@ -214,19 +214,19 @@ bool File::isExecutable(String name)
 }
 
 BALL_INLINE 
-bool File::isExecutable(void) const
+bool File::isExecutable() const
 {
   return File::isExecutable(name_);
 }
 
 BALL_INLINE 
-bool File::hasFormat(void)
+bool File::hasFormat()
 {
   return true;
 }
 
 BALL_INLINE 
-bool File::hasFormat(void) const
+bool File::hasFormat() const
 {
   return ((File *)this)->hasFormat();
 }

@@ -1,4 +1,4 @@
-// $Id: redBlackTree.h,v 1.1 1999/08/26 07:53:13 oliver Exp $
+// $Id: redBlackTree.h,v 1.2 1999/12/04 18:34:14 oliver Exp $
 
 #ifndef BALL_DATATYPE_REDBLACKTREE_H
 #define BALL_DATATYPE_REDBLACKTREE_H
@@ -28,13 +28,13 @@ namespace BALL {
 		
 			// --- CONSTRUCTORS
 
-			TRBTree(void);
+			TRBTree();
 
 			TRBTree(const TRBTree& tree, bool deep = true);
 
 			// --- DESTRUCTORS
 
-			virtual ~TRBTree(void);
+			virtual ~TRBTree();
 
 			// --- ASSIGNMENT METHODS
 
@@ -54,17 +54,17 @@ namespace BALL {
 
 			TBSTreeItem<DataType> *detach(const DataType& data);
 
-			TBSTreeItem<DataType> *detachMinimum(void);
+			TBSTreeItem<DataType> *detachMinimum();
 
-			TBSTreeItem<DataType> *detachMaximum(void);
+			TBSTreeItem<DataType> *detachMaximum();
 
 			bool remove(const DataType& data);
 
 			bool removeAll(const DataType &data);
 
-			bool removeMinimum(void);
+			bool removeMinimum();
 
-			bool removeMaximum(void);
+			bool removeMaximum();
 
 			// --- MISCELLANEOUS
 
@@ -73,7 +73,7 @@ namespace BALL {
 	};
 
 	template<class DataType>
-	TRBTree<DataType>::TRBTree(void)
+	TRBTree<DataType>::TRBTree()
 		:	TBSTree<DataType>()
 	{
 	}
@@ -85,7 +85,7 @@ namespace BALL {
 	}
 
 	template<class DataType>
-	TRBTree<DataType>::~TRBTree(void)
+	TRBTree<DataType>::~TRBTree()
 	{
 		clear();
 	}
@@ -258,14 +258,14 @@ namespace BALL {
 
 	template<class DataType>
 	BALL_INLINE TBSTreeItem<DataType> *
-	TRBTree<DataType>::detachMinimum(void)
+	TRBTree<DataType>::detachMinimum()
 	{
 		return (TBSTreeItem<DataType> *)BSTreeItem::detachMinimum((BSTreeItem *&)root_);
 	}
 
 	template<class DataType>
 	BALL_INLINE 
-	TBSTreeItem<DataType>* TRBTree<DataType>::detachMaximum(void)
+	TBSTreeItem<DataType>* TRBTree<DataType>::detachMaximum()
 	{
 		return (TBSTreeItem<DataType> *)BSTreeItem::detachMaximum((BSTreeItem *&)root_);
 	}
@@ -308,7 +308,7 @@ namespace BALL {
 
 	template<class DataType>
 	BALL_INLINE 
-	bool TRBTree<DataType>::removeMinimum(void)
+	bool TRBTree<DataType>::removeMinimum()
 	{
 		TBSTreeItem<DataType> *tree_item = detachMinimum();
 		if (tree_item != 0) 
@@ -322,7 +322,7 @@ namespace BALL {
 
 	template<class DataType>
 	BALL_INLINE 
-	bool TRBTree<DataType>::removeMaximum(void)
+	bool TRBTree<DataType>::removeMaximum()
 	{
 		TBSTreeItem<DataType> *tree_item = detachMaximum();
 		if (tree_item != 0) 

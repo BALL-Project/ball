@@ -1,4 +1,4 @@
-// $Id: reverseRandomAccessIterator.h,v 1.1 1999/08/26 07:53:17 oliver Exp $
+// $Id: reverseRandomAccessIterator.h,v 1.2 1999/12/04 18:34:12 oliver Exp $
 
 #ifndef BALL_CONCEPT_REVERSERANDOMACCESS_H
 #define BALL_CONCEPT_REVERSERANDOMACCESS_H
@@ -37,7 +37,7 @@ namespace BALL {
 
 		/**	
 		*/
-		ReverseRandomAccessManipulator(void)
+		ReverseRandomAccessManipulator()
 			: RandomAccessManipulator<Container, DataType, Position, Traits>()
 		{
 		}
@@ -57,52 +57,52 @@ namespace BALL {
 		}
 		//@}
 
-		bool operator + (void) const
+		bool operator + () const
 		{
 			return traits_->isValid();
 		}
 
-		void toBegin(void)
+		void toBegin()
 		{
 			RandomAccessManipulator<Container, DataType, Position, Traits>::toRBegin();
 		}
 
-		bool isBegin(void) const
+		bool isBegin() const
 		{
 			return RandomAccessManipulator<Container, DataType, Position, Traits>::isRBegin();
 		}
 
-		void toEnd(void)
+		void toEnd()
 		{
 			RandomAccessManipulator<Container, DataType, Position, Traits>::toREnd();
 		}
 
-		bool isEnd(void) const
+		bool isEnd() const
 		{
 			return RandomAccessManipulator<Container, DataType, Position, Traits>::isREnd();
 		}
 
-		void toRBegin(void)
+		void toRBegin()
 		{
 			RandomAccessManipulator<Container, DataType, Position, Traits>::toBegin();
 		}
 
-		bool isRBegin(void) const
+		bool isRBegin() const
 		{
 			return RandomAccessManipulator<Container, DataType, Position, Traits>::isBegin();
 		}
 
-		void toREnd(void)
+		void toREnd()
 		{
 			RandomAccessManipulator<Container, DataType, Position, Traits>::toEnd();
 		}
 
-		bool isREnd(void) const
+		bool isREnd() const
 		{
 			return RandomAccessManipulator<Container, DataType, Position, Traits>::isEnd();
 		}
 
-		ReverseRandomAccessManipulator &operator ++ (void)
+		ReverseRandomAccessManipulator &operator ++ ()
 		{
 			RandomAccessManipulator<Container, DataType, Position, Traits>::operator--();
 			return *this;
@@ -115,7 +115,7 @@ namespace BALL {
 			return manipulator;
 		}
 
-		ReverseRandomAccessManipulator &operator -- (void)
+		ReverseRandomAccessManipulator &operator -- ()
 		{
 			RandomAccessManipulator<Container, DataType, Position, Traits>::operator++();
 			return *this;
@@ -276,7 +276,7 @@ namespace BALL {
 			
 		/**
 		*/
-		ReverseRandomAccessIterator(void)
+		ReverseRandomAccessIterator()
 			:	RandomAccessIterator<Container, DataType, Position, Traits>()
 		{
 		}
@@ -296,52 +296,52 @@ namespace BALL {
 		}
 		//@}
 
-		bool operator + (void) const
+		bool operator + () const
 		{
 			return traits_->isValid();
 		}
 
-		void toBegin(void)
+		void toBegin()
 		{
 			RandomAccessIterator<Container, DataType, Position, Traits>::toRBegin();
 		}
 
-		bool isBegin(void) const
+		bool isBegin() const
 		{
 			return RandomAccessIterator<Container, DataType, Position, Traits>::isRBegin();
 		}
 
-		void toEnd(void)
+		void toEnd()
 		{
 			RandomAccessIterator<Container, DataType, Position, Traits>::toREnd();
 		}
 
-		bool isEnd(void) const
+		bool isEnd() const
 		{
 			return RandomAccessIterator<Container, DataType, Position, Traits>::isREnd();
 		}
 
-		void toRBegin(void)
+		void toRBegin()
 		{
 			RandomAccessIterator<Container, DataType, Position, Traits>::toBegin();
 		}
 
-		bool isRBegin(void) const
+		bool isRBegin() const
 		{
 			return RandomAccessIterator<Container, DataType, Position, Traits>::isBegin();
 		}
 
-		void toREnd(void)
+		void toREnd()
 		{
 			RandomAccessIterator<Container, DataType, Position, Traits>::toEnd();
 		}
 
-		bool isREnd(void) const
+		bool isREnd() const
 		{
 			return RandomAccessIterator<Container, DataType, Position, Traits>::isEnd();
 		}
 
-		ReverseRandomAccessIterator &operator ++ (void)
+		ReverseRandomAccessIterator &operator ++ ()
 		{
 			RandomAccessIterator<Container, DataType, Position, Traits>::operator--();
 			return *this;
@@ -354,7 +354,7 @@ namespace BALL {
 			return iterator;
 		}
 
-		ReverseRandomAccessIterator &operator -- (void)
+		ReverseRandomAccessIterator &operator -- ()
 		{
 			RandomAccessIterator<Container, DataType, Position, Traits>::operator++();
 			return *this;
@@ -516,7 +516,7 @@ namespace BALL {
 
 			/**
 			*/
-			ConstReverseRandomAccessIterator(void)
+			ConstReverseRandomAccessIterator()
 				:	ConstRandomAccessIterator<Container, DataType, Position, Traits>()
 			{
 			}
@@ -536,52 +536,52 @@ namespace BALL {
 			}
 			//@}
 
-			bool operator + (void) const
+			bool operator + () const
 			{
 				return traits_->isValid();
 			}
 
-			void toBegin(void)
+			void toBegin()
 			{
 				ConstRandomAccessIterator<Container, DataType, Position, Traits>::toRBegin();
 			}
 
-			bool isBegin(void) const
+			bool isBegin() const
 			{
 				return ConstRandomAccessIterator<Container, DataType, Position, Traits>::isRBegin();
 			}
 
-			void toEnd(void)
+			void toEnd()
 			{
 				ConstRandomAccessIterator<Container, DataType, Position, Traits>::toREnd();
 			}
 
-			bool isEnd(void) const
+			bool isEnd() const
 			{
 				return ConstRandomAccessIterator<Container, DataType, Position, Traits>::isREnd();
 			}
 
-			void toRBegin(void)
+			void toRBegin()
 			{
 				ConstRandomAccessIterator<Container, DataType, Position, Traits>::toBegin();
 			}
 
-			bool isRBegin(void) const
+			bool isRBegin() const
 			{
 				return ConstRandomAccessIterator<Container, DataType, Position, Traits>::isBegin();
 			}
 
-			void toREnd(void)
+			void toREnd()
 			{
 				ConstRandomAccessIterator<Container, DataType, Position, Traits>::toEnd();
 			}
 
-			bool isREnd(void) const
+			bool isREnd() const
 			{
 				return ConstRandomAccessIterator<Container, DataType, Position, Traits>::isEnd();
 			}
 
-			ConstReverseRandomAccessIterator &operator ++ (void)
+			ConstReverseRandomAccessIterator &operator ++ ()
 			{
 				ConstRandomAccessIterator<Container, DataType, Position, Traits>::operator--();
 				return *this;
@@ -594,7 +594,7 @@ namespace BALL {
 				return iterator;
 			}
 
-			ConstReverseRandomAccessIterator &operator -- (void)
+			ConstReverseRandomAccessIterator &operator -- ()
 			{
 				ConstRandomAccessIterator<Container, DataType, Position, Traits>::operator++();
 				return *this;

@@ -1,11 +1,11 @@
-// $Id: fragment.C,v 1.1 1999/08/26 08:02:34 oliver Exp $
+// $Id: fragment.C,v 1.2 1999/12/04 18:34:30 oliver Exp $
 
 #include <BALL/KERNEL/fragment.h>
 
 namespace BALL 
 {
 
-	Fragment::Fragment(void)
+	Fragment::Fragment()
 		:	BaseFragment()
 	{
 	}
@@ -20,17 +20,17 @@ namespace BALL
 	{
 	}
 
-	Fragment::~Fragment(void)
+	Fragment::~Fragment()
 	{
 		destroy();
 	}
 
-	void Fragment::clear(void)
+	void Fragment::clear()
 	{
 		BaseFragment::clear();
 	}
 		
-	void Fragment::destroy(void)
+	void Fragment::destroy()
 	{
 		BaseFragment::destroy();
 	}
@@ -56,7 +56,7 @@ namespace BALL
 		return *this;
 	}
 			
-	bool Fragment::isValid(void) const
+	bool Fragment::isValid() const
 	{ 
 		return BaseFragment::isValid();
 	}

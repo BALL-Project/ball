@@ -1,11 +1,11 @@
-// $Id: forceFieldParameters.C,v 1.1 1999/08/26 08:02:45 oliver Exp $
+// $Id: forceFieldParameters.C,v 1.2 1999/12/04 18:34:32 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/forceFieldParameters.h>
 
 namespace BALL {
 
-	ForceFieldParameters::ForceFieldParameters(void)
+	ForceFieldParameters::ForceFieldParameters()
 	{
 		valid_ = false;
 	}
@@ -17,7 +17,7 @@ namespace BALL {
 		init();
 	}
 
-	ForceFieldParameters::~ForceFieldParameters(void)
+	ForceFieldParameters::~ForceFieldParameters()
 	{
 		// clean up everything
 		INI_file_.destroy();
@@ -25,7 +25,7 @@ namespace BALL {
 	}
 
 
-	const String& ForceFieldParameters::getFilename(void) const 
+	const String& ForceFieldParameters::getFilename() const 
 	{
 		return INI_file_.getFilename();
 	}

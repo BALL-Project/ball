@@ -1,4 +1,4 @@
-// $Id: logStream.h,v 1.3 1999/11/03 12:11:26 oliver Exp $
+// $Id: logStream.h,v 1.4 1999/12/04 18:34:05 oliver Exp $
 
 #ifndef BALL_COMMON_LOGSTREAM_H
 #define BALL_COMMON_LOGSTREAM_H
@@ -273,7 +273,7 @@ namespace BALL
 		/** Destructor.
 				Clears all message buffers.
 		*/
-		virtual ~LogStream(void);
+		virtual ~LogStream();
 	
 		//@}		
 

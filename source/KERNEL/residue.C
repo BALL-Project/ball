@@ -1,4 +1,4 @@
-// $Id: residue.C,v 1.2 1999/09/07 19:36:01 oliver Exp $
+// $Id: residue.C,v 1.3 1999/12/04 18:34:30 oliver Exp $
 
 #include <BALL/KERNEL/residue.h>
 
@@ -8,7 +8,7 @@
 namespace BALL 
 {
 
-	Residue::Residue(void)
+	Residue::Residue()
 		:	Fragment(),
 			id_(BALL_RESIDUE_DEFAULT_ID),
 			insertion_code_(BALL_RESIDUE_DEFAULT_INSERTION_CODE)
@@ -29,19 +29,19 @@ namespace BALL
 	{
 	}
 
-	Residue::~Residue(void)
+	Residue::~Residue()
 	{
 		destroy();
 	}
 
-	void Residue::clear(void)
+	void Residue::clear()
 	{
 		Fragment::clear();
 
 		clear_();
 	}
 		
-	void Residue::destroy(void)
+	void Residue::destroy()
 	{
 		Fragment::destroy();
 
@@ -98,7 +98,7 @@ namespace BALL
 		residue.insertion_code_ = temp_insertion_code;
 	}
 
-	Protein* Residue::getProtein(void)
+	Protein* Residue::getProtein()
 	{
 		for (Composite::AncestorIterator ancestor_it = beginAncestor(); !ancestor_it.isEnd(); ++ancestor_it)
 		{
@@ -111,12 +111,12 @@ namespace BALL
 		return 0;
 	}
 
-	const Protein *Residue::getProtein(void) const
+	const Protein *Residue::getProtein() const
 	{
 		return ((Residue *)this)->getProtein();
 	}
 
-	Chain* Residue::getChain(void)
+	Chain* Residue::getChain()
 	{
 		for (Composite::AncestorIterator ancestor_it = beginAncestor(); !ancestor_it.isEnd(); ++ancestor_it)
 		{
@@ -129,7 +129,7 @@ namespace BALL
 		return 0;
 	}
 
-	const Chain *Residue::getChain(void) const
+	const Chain *Residue::getChain() const
 	{
 		return ((Residue *)this)->getChain();
 	}
@@ -161,12 +161,12 @@ namespace BALL
 		id_ = id;
 	}
 
-	String & Residue::getID(void)
+	String & Residue::getID()
 	{
 		return id_;
 	}
 
-	const String &Residue::getID(void) const
+	const String &Residue::getID() const
 	{
 		return id_;
 	}
@@ -176,12 +176,12 @@ namespace BALL
 		insertion_code_ = insertion_code;
 	}
 
-	char Residue::getInsertionCode(void) const
+	char Residue::getInsertionCode() const
 	{
 		return insertion_code_;
 	}
 
-	Size Residue::countPDBAtoms(void) const
+	Size Residue::countPDBAtoms() const
 	{
 		register Size size = 0;
 
@@ -240,17 +240,17 @@ namespace BALL
 		Fragment::splice(residue);
 	}
 
-	bool Residue::isAminoAcid(void) const
+	bool Residue::isAminoAcid() const
 	{
 		return hasProperty(PROPERTY__AMINO_ACID);
 	}
 
-	bool Residue::isTerminal(void) const
+	bool Residue::isTerminal() const
 	{
 		return (isNTerminal() || isCTerminal());
 	}
 
-	bool Residue::isNTerminal(void) const
+	bool Residue::isNTerminal() const
 	{
 		if (isAminoAcid() == true)
 		{
@@ -268,7 +268,7 @@ namespace BALL
 		return false;
 	}
 		
-	bool Residue::isCTerminal(void) const
+	bool Residue::isCTerminal() const
 	{
 		if (isAminoAcid() == true)
 		{
@@ -286,7 +286,7 @@ namespace BALL
 		return false;
 	}
 		
-	bool Residue::isValid(void) const
+	bool Residue::isValid() const
 	{ 
 		if (Fragment::isValid() == false
 				|| id_.isValid() == false)
@@ -322,7 +322,7 @@ namespace BALL
 		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 
-	void Residue::clear_(void)
+	void Residue::clear_()
 	{
 		id_ = BALL_RESIDUE_DEFAULT_ID;
 		insertion_code_ = BALL_RESIDUE_DEFAULT_INSERTION_CODE;

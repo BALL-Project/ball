@@ -1,4 +1,4 @@
-// $Id: stringMap.h,v 1.1 1999/08/26 07:53:13 oliver Exp $
+// $Id: stringMap.h,v 1.2 1999/12/04 18:34:14 oliver Exp $
 
 #ifndef BALL_DATATYPE_STRINGMAP_H
 #define BALL_DATATYPE_STRINGMAP_H
@@ -19,7 +19,7 @@ namespace BALL {
 
 			// --- CONSTRUCTORS
 
-			TStringMap(void);
+			TStringMap();
 
 			TStringMap(const TStringMap& map, bool deep = true);
 
@@ -35,7 +35,7 @@ namespace BALL {
 
 			// --- DESTRUCTORS
 
-			virtual ~TStringMap(void);
+			virtual ~TStringMap();
 
 		protected:
 

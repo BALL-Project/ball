@@ -1,4 +1,4 @@
-// $Id: INIFile.h,v 1.1 1999/08/26 07:53:19 oliver Exp $
+// $Id: INIFile.h,v 1.2 1999/12/04 18:34:15 oliver Exp $
 
 #ifndef BALL_FORMAT_INIFILE_H
 #define BALL_FORMAT_INIFILE_H
@@ -42,7 +42,7 @@ namespace BALL {
 
 		/**	Default constructor.
 		*/
-		INIFile(void);
+		INIFile();
 
 		/**	Constructor
 		*/
@@ -50,11 +50,11 @@ namespace BALL {
 
 		/**	Destructor.
 		*/
-		virtual ~INIFile(void);
+		virtual ~INIFile();
 
 		/**	Clears all allocated memory.
 		*/
-		void destroy(void);
+		void destroy();
 
 		//@}
 		
@@ -79,7 +79,7 @@ namespace BALL {
 												\item {\bf false} otherwise
 											\end{itemize}
 		*/	
-		bool read(void);
+		bool read();
 
 		/**	Writes the buffer contents to a file.
 				Not yet implemented!
@@ -89,12 +89,12 @@ namespace BALL {
 												\item {\bf false} otherwise
 											\end{itemize}
 		*/	
-		bool write(void);
+		bool write();
 
 		/**	Returns the current filename.
 				@return 	String\& the filename
 		*/	
-		const String& getFilename(void) const;
+		const String& getFilename() const;
 
 		/**	Sets a new filename.
 				@param	filename String - the new filename
@@ -111,7 +111,7 @@ namespace BALL {
 
 		/**	Returns the current state of the instance of INIFile.
 		*/	
-		bool isValid(void) const;
+		bool isValid() const;
 
 		//@}
 

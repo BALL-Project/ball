@@ -1,4 +1,4 @@
-// $Id: directory.C,v 1.2 1999/10/30 12:53:37 oliver Exp $
+// $Id: directory.C,v 1.3 1999/12/04 18:34:34 oliver Exp $
 
 #include <assert.h>
 #include <dirent.h>
@@ -15,7 +15,7 @@
 namespace BALL 
 {
 
-	Directory::Directory(void)
+	Directory::Directory()
 		:	dir_(0),
 			dirent_(0),
 			directory_depth_(0),
@@ -46,7 +46,7 @@ namespace BALL
 	{
 	}
 
-	Directory::~Directory(void)
+	Directory::~Directory()
 	{
 		if (dir_ != 0)
 		{
@@ -54,7 +54,7 @@ namespace BALL
 		}
 	}
 
-	void Directory::clear(void)
+	void Directory::clear()
 	{
 		::getcwd(directory_path_, sizeof(directory_path_));
 
@@ -64,7 +64,7 @@ namespace BALL
 		directory_path_.clear();
 	}
 
-	void Directory::destroy(void)
+	void Directory::destroy()
 	{
 		clear();
 	}
@@ -120,7 +120,7 @@ namespace BALL
 		directory_path_.swap(directory.directory_path_);
 	}
 
-	const String& Directory::getPath(void) const
+	const String& Directory::getPath() const
 	{
 		return directory_path_;
 	}
@@ -152,7 +152,7 @@ namespace BALL
 		return (bool)(::chdir(directory_path.getData()) == 0);
 	}
 
-	bool setCurrent(void)
+	bool setCurrent()
 	{
 		return setCurrent(directory_path_);
 	}
@@ -233,7 +233,7 @@ namespace BALL
 
 	Size
 	Directory::getSize
-		(void) const
+		() const
 	{
 		register Size size = 0;
 
@@ -256,7 +256,7 @@ namespace BALL
 		return (size - 2); // ignore current (.) and parent directory entry (..)
 	}
 
-	Size Directory::countFiles(void) const
+	Size Directory::countFiles() const
 	{
 		struct stat stats;
 		register Size size = 0;
@@ -291,7 +291,7 @@ namespace BALL
 
 	Size
 	DIrectory::countDirectories
-		(void) const
+		() const
 	{
 		struct stat stats;
 		register Size size = 0;
@@ -443,7 +443,7 @@ namespace BALL
 
 	bool
 	Directory::isCurrent
-		(void) const
+		() const
 	{
 		char buffer[PATH_MAX];
 
@@ -456,7 +456,7 @@ namespace BALL
 
 	bool
 	Directory::isEmpty
-		(void) const
+		() const
 	{
 		return (bool)(getSize() == 0);
 	}

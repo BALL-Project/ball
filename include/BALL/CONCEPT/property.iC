@@ -1,7 +1,7 @@
-// $Id: property.iC,v 1.1 1999/08/26 07:53:17 oliver Exp $
+// $Id: property.iC,v 1.2 1999/12/04 18:34:11 oliver Exp $
 
 BALL_INLINE 
-void PropertyManager::destroy(void)
+void PropertyManager::destroy()
 {
 	// same as clear
   clear();
@@ -22,19 +22,19 @@ void PropertyManager::get(PropertyManager& property_manager, bool deep) const
 }
 
 BALL_INLINE 
-BitVector& PropertyManager::getBitVector(void)
+BitVector& PropertyManager::getBitVector()
 {
   return bitvector_;
 }
 
 BALL_INLINE 
-const BitVector& PropertyManager::getBitVector(void) const
+const BitVector& PropertyManager::getBitVector() const
 {
   return bitvector_;
 }
 
 BALL_INLINE
-PropertyManager::operator BitVector & (void)
+PropertyManager::operator BitVector & ()
 {
   return bitvector_;
 }
@@ -77,13 +77,13 @@ bool PropertyManager::isValid() const
 }
 
 BALL_INLINE 
-Size PropertyManager::countProperties(void) const
+Size PropertyManager::countProperties() const
 {
   return (bitvector_.getSize() + named_properties_.size());
 }
 
 BALL_INLINE 
-Size PropertyManager::countNamedProperties(void) const
+Size PropertyManager::countNamedProperties() const
 {
   return named_properties_.size();
 }

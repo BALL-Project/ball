@@ -1,4 +1,4 @@
-// $Id: atom.C,v 1.4 1999/09/06 22:22:18 oliver Exp $
+// $Id: atom.C,v 1.5 1999/12/04 18:34:29 oliver Exp $
 
 #include <BALL/KERNEL/atom.h>
 
@@ -11,7 +11,7 @@
 namespace BALL 
 {
 
-	Atom::Atom(void)
+	Atom::Atom()
 		:	Composite(),
 			PropertyManager(),
 			element_(BALL_ATOM_DEFAULT_ELEMENT),
@@ -62,12 +62,12 @@ namespace BALL
 	{
 	}
 		
-	Atom::~Atom(void)
+	Atom::~Atom()
 	{
 		destroy();
 	}
 
-	void Atom::clear(void)
+	void Atom::clear()
 	{
 		Composite::clear();
 		PropertyManager::clear();
@@ -75,7 +75,7 @@ namespace BALL
 		clear_();
 	}
 		
-	void Atom::destroy(void)
+	void Atom::destroy()
 	{
 		Composite::destroy();
 		PropertyManager::destroy();
@@ -222,12 +222,12 @@ namespace BALL
 		element_ = &element;
 	}
 
-	Element & Atom::getElement(void)
+	Element & Atom::getElement()
 	{
 		return *element_;
 	}
 
-	const Element &Atom::getElement(void) const
+	const Element &Atom::getElement() const
 	{
 		return *element_;
 	}
@@ -237,12 +237,12 @@ namespace BALL
 		charge_ = charge;
 	}
 
-	float Atom::getCharge(void) const
+	float Atom::getCharge() const
 	{
 		return charge_;
 	}
 
-	Molecule *Atom::getMolecule(void)
+	Molecule *Atom::getMolecule()
 	{
 		for (Composite::AncestorIterator ancestor_it = beginAncestor();
 				 !ancestor_it.isEnd();
@@ -259,14 +259,14 @@ namespace BALL
 
 	const Molecule *
 	Atom::getMolecule
-		(void) const
+		() const
 	{
 		return ((Atom *)this)->getMolecule();
 	}
 
 	Fragment *
 	Atom::getFragment
-		(void)
+		()
 	{
 		for (Composite::AncestorIterator ancestor_it = beginAncestor();
 				 !ancestor_it.isEnd(); ++ancestor_it)
@@ -280,7 +280,7 @@ namespace BALL
 		return 0;
 	}
 
-	const Fragment *Atom::getFragment(void) const
+	const Fragment *Atom::getFragment() const
 	{
 		return ((Atom *)this)->getFragment();
 	}
@@ -290,12 +290,12 @@ namespace BALL
 		name_ = name;
 	}
 
-	String & Atom::getName(void)
+	String & Atom::getName()
 	{
 		return name_;
 	}
 
-	const String &Atom::getName(void) const
+	const String &Atom::getName() const
 	{
 		return name_;
 	}
@@ -305,12 +305,12 @@ namespace BALL
 		position_.set(position);
 	}
 
-	Vector3 &Atom::getPosition(void)
+	Vector3 &Atom::getPosition()
 	{
 		return position_;
 	}
 
-	const Vector3 &Atom::getPosition(void) const
+	const Vector3 &Atom::getPosition() const
 	{
 		return position_;
 	}
@@ -320,7 +320,7 @@ namespace BALL
 		radius_ = radius;
 	}
 
-	float Atom::getRadius(void) const
+	float Atom::getRadius() const
 	{
 		return radius_;
 	}
@@ -330,7 +330,7 @@ namespace BALL
 		type_ = atom_type;
 	}
 		
-	Atom::Type Atom::getType(void) const
+	Atom::Type Atom::getType() const
 	{
 		return type_;
 	}
@@ -350,12 +350,12 @@ namespace BALL
 		velocity_.set(velocity);
 	}
 
-	Vector3& Atom::getVelocity(void)
+	Vector3& Atom::getVelocity()
 	{
 		return velocity_;
 	}
 
-	const Vector3& Atom::getVelocity(void) const
+	const Vector3& Atom::getVelocity() const
 	{
 		return velocity_;
 	}
@@ -365,17 +365,17 @@ namespace BALL
 		force_.set(force);
 	}
 
-	Vector3& Atom::getForce(void)
+	Vector3& Atom::getForce()
 	{
 		return force_;
 	}
 
-	const Vector3& Atom::getForce(void) const
+	const Vector3& Atom::getForce() const
 	{
 		return force_;
 	}
 
-	Size Atom::countBonds(void) const
+	Size Atom::countBonds() const
 	{
 		return number_of_bonds_;
 	}
@@ -468,7 +468,7 @@ namespace BALL
 		return true;
 	}
 
-	void Atom::destroyBonds(void)
+	void Atom::destroyBonds()
 	{
 		for (register int i = char(number_of_bonds_) - 1; i >= 0; --i)
 		{
@@ -497,7 +497,7 @@ namespace BALL
 		return (bool)(getBond(atom) != 0);
 	}
 
-	bool Atom::isBonded(void) const
+	bool Atom::isBonded() const
 	{
 		return (bool)(number_of_bonds_ > 0);
 	}
@@ -563,7 +563,7 @@ namespace BALL
 		return is_vicinal;
 	}
 
-	bool Atom::isValid(void) const
+	bool Atom::isValid() const
 	{ 
 		if (Composite::isValid() == false
 				|| PropertyManager::isValid() == false
@@ -680,7 +680,7 @@ namespace BALL
 		return processor.finish();
 	}
 
-	void Atom::clear_(void)
+	void Atom::clear_()
 	{
 		element_ = BALL_ATOM_DEFAULT_ELEMENT;
 		charge_ = BALL_ATOM_DEFAULT_CHARGE;

@@ -1,4 +1,4 @@
-// $Id: chain.h,v 1.1 1999/08/26 07:53:19 oliver Exp $
+// $Id: chain.h,v 1.2 1999/12/04 18:34:17 oliver Exp $
 
 #ifndef BALL_KERNEL_CHAIN_H
 #define BALL_KERNEL_CHAIN_H
@@ -51,7 +51,7 @@ namespace BALL {
 		//@{
 
 		/// Default constrcutor
-		Chain(void);
+		Chain();
 	
 		/// Copy constructor
 		Chain(const Chain& chain, bool deep = true);
@@ -60,13 +60,13 @@ namespace BALL {
 		Chain(const String& name);
 
 		/// Destructor
-		virtual ~Chain(void);
+		virtual ~Chain();
 
 		/// Clears the chains contents
-		virtual void clear(void);
+		virtual void clear();
 	
 		/// Clears the chains contents and removes the cahin from all composite structures
-		virtual void destroy(void);
+		virtual void destroy();
 			
 		//@}
 
@@ -102,10 +102,10 @@ namespace BALL {
 		//@{
 
 		///
-		Protein* getProtein(void);
+		Protein* getProtein();
 
 		///
-		const Protein* getProtein(void) const;
+		const Protein* getProtein() const;
 
 		///
 		SecondaryStructure* getSecondaryStructure(Index index);
@@ -120,16 +120,16 @@ namespace BALL {
 		const Residue* getResidue(Index index) const;
 	
 		///
-		Residue* getNTerminal(void);
+		Residue* getNTerminal();
 	
 		///
-		const Residue* getNTerminal(void) const;
+		const Residue* getNTerminal() const;
 
 		///
-		Residue* getCTerminal(void);
+		Residue* getCTerminal();
 	
 		///
-		const Residue* getCTerminal(void) const;
+		const Residue* getCTerminal() const;
 
 		///
 		PDBAtom* getPDBAtom(Index index);
@@ -138,13 +138,13 @@ namespace BALL {
 		const PDBAtom* getPDBAtom(Index index) const;
 	
 		///
-		Size countSecondaryStructures(void) const;
+		Size countSecondaryStructures() const;
 
 		///
-		Size countResidues(void) const;
+		Size countResidues() const;
 
 		///
-		Size countPDBAtoms(void) const;
+		Size countPDBAtoms() const;
 
 		///
 		void prepend(SecondaryStructure& secondary_structure);
@@ -197,7 +197,7 @@ namespace BALL {
 		//@{
 
 		///
-		virtual bool isValid(void) const;
+		virtual bool isValid() const;
 		
 		///
 		virtual void dump(ostream& s = cout, unsigned long depth = 0) const;
@@ -262,7 +262,7 @@ namespace BALL {
 
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(BaseFragment)
 
-		void clear_(void);
+		void clear_();
 	};
 
 } // namespace BALL

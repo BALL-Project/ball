@@ -1,4 +1,4 @@
-// $Id: forceField.C,v 1.6 1999/09/21 15:17:57 oliver Exp $
+// $Id: forceField.C,v 1.7 1999/12/04 18:34:31 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
 
@@ -11,7 +11,7 @@ namespace BALL
 {
 
 	// default constructor
-	ForceField::ForceField(void)
+	ForceField::ForceField()
 		:	periodic_boundary(*this),
 			system_( 0 ),
 			valid_(true),
@@ -109,7 +109,7 @@ namespace BALL
 	
 
 	// destructor
-	ForceField::~ForceField(void)
+	ForceField::~ForceField()
 	{
 		// clear pointers 
 
@@ -206,7 +206,7 @@ namespace BALL
 
 
 	// Returns the name of the force field
-	String ForceField::getName(void) const
+	String ForceField::getName() const
 	{
 		return name_;
 	}
@@ -219,31 +219,31 @@ namespace BALL
 
 
 	// Returns the number of atoms stored in the vector atoms_
-	Size ForceField::getNumberOfAtoms(void) const
+	Size ForceField::getNumberOfAtoms() const
 	{
 		return atoms_.size();
 	}
 
 	// Returns the number of movable (non-fixed) atoms stored in the vector atoms_
-	Size ForceField::getNumberOfMovableAtoms(void) const
+	Size ForceField::getNumberOfMovableAtoms() const
 	{
 		return number_of_movable_atoms_;
 	}
 
 	// Returns the reference of the atom vector atoms_
-	const vector<Atom*>& ForceField::getAtoms(void) const 
+	const vector<Atom*>& ForceField::getAtoms() const 
 	{
 		return atoms_;
 	}
 
 	// Return a pointer to the system
-	System* ForceField::getSystem(void)
+	System* ForceField::getSystem()
 	{
 		return system_;
 	}
 
 	// Return the parameter use_selection_
-	bool ForceField::getUseSelection(void)
+	bool ForceField::getUseSelection()
 	{
 		return use_selection_;
 	}
@@ -260,7 +260,7 @@ namespace BALL
 		return parameters_;
 	}
 
-	void ForceField::updateForces(void)
+	void ForceField::updateForces()
 	{
 		// check for validity of the force field
 		if (!isValid())
@@ -335,7 +335,7 @@ namespace BALL
 	}
 	
 
-	bool ForceField::specificSetup(void) 
+	bool ForceField::specificSetup() 
 	{
 		return true;
 	}

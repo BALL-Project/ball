@@ -1,11 +1,11 @@
-// $Id: autoDeletable.C,v 1.1 1999/08/26 08:02:34 oliver Exp $
+// $Id: autoDeletable.C,v 1.2 1999/12/04 18:34:26 oliver Exp $
 
 #include <BALL/CONCEPT/autoDeletable.h>
 
 namespace BALL {
 
 
-	AutoDeletable::AutoDeletable(void)
+	AutoDeletable::AutoDeletable()
 	{
 		if ((void*)this == last_ptr_)
 		{
@@ -38,7 +38,7 @@ namespace BALL {
 		}
 	}
 
-	AutoDeletable::~AutoDeletable(void)
+	AutoDeletable::~AutoDeletable()
 	{
 	}
 

@@ -1,4 +1,4 @@
-// $Id: iterator.h,v 1.1 1999/08/26 07:53:19 oliver Exp $
+// $Id: iterator.h,v 1.2 1999/12/04 18:34:18 oliver Exp $
 
 #ifndef BALL_KERNEL_ITERATOR_H
 #define BALL_KERNEL_ITERATOR_H
@@ -18,56 +18,56 @@
 #define BALL_KERNEL_DEFINE_ITERATOR_CREATORS(Type) \
 Type##Iterator \
 begin##Type \
-  (void) \
+  () \
 { \
   return Type##Iterator::begin(*this); \
 } \
  \
 Type##Iterator \
 end##Type\
-  (void) \
+  () \
 { \
   return Type##Iterator::end(*this); \
 } \
  \
 Type##ReverseIterator \
 rbegin##Type \
-  (void) \
+  () \
 { \
   return Type##ReverseIterator::begin(*this); \
 } \
  \
 Type##ReverseIterator \
 rend##Type## \
-  (void) \
+  () \
 { \
   return Type##ReverseIterator::end(*this); \
 } \
  \
 ##Type##ConstIterator \
 begin##Type## \
-  (void) const \
+  () const \
 { \
   return Type##ConstIterator::begin(*this); \
 } \
  \
 ##Type##ConstIterator \
 end##Type## \
-  (void) const \
+  () const \
 { \
   return Type##ConstIterator::end(*this); \
 } \
  \
 ##Type##ConstReverseIterator \
 rbegin##Type## \
-  (void) const \
+  () const \
 { \
   return Type##ConstReverseIterator::begin(*this); \
 } \
  \
 ##Type##ConstReverseIterator \
 rend##Type## \
-  (void) const \
+  () const \
 { \
   return Type##ConstReverseIterator::end(*this); \
 }
@@ -78,7 +78,7 @@ namespace BALL {
 	{
 		public:
 
-			CompositeIteratorTraits_(void)
+			CompositeIteratorTraits_()
 				:	bound_(0),
 					subcomposite_iterator_(),
 					predicate_(0)
@@ -99,7 +99,7 @@ namespace BALL {
 			{
 			}
 				
-			virtual ~CompositeIteratorTraits_(void)
+			virtual ~CompositeIteratorTraits_()
 			{
 			}
 
@@ -111,27 +111,27 @@ namespace BALL {
 				return *this;
 			}
 
-			Composite *getContainer(void)
+			Composite *getContainer()
 			{
 				return bound_;
 			}
 		
-			const Composite* getContainer(void) const
+			const Composite* getContainer() const
 			{
 				return bound_;
 			}
 		
-			bool isSingular(void) const
+			bool isSingular() const
 			{
 				return (bool)(bound_ == 0);
 			}
 		
-			Composite::SubcompositeIterator& getPosition(void)
+			Composite::SubcompositeIterator& getPosition()
 			{
 				return subcomposite_iterator_;
 			}
 		
-			const Composite::SubcompositeIterator& getPosition(void) const
+			const Composite::SubcompositeIterator& getPosition() const
 			{
 				return subcomposite_iterator_;
 			}
@@ -146,19 +146,19 @@ namespace BALL {
 				return (bool)(subcomposite_iterator_ != traits.subcomposite_iterator_);
 			}
 		
-			bool isValid(void) const
+			bool isValid() const
 			{
 				return (bool)(bound_ != 0 && subcomposite_iterator_.isValid() == true);
 			}
 
-			void invalidate(void)
+			void invalidate()
 			{
 				bound_ = 0;
 				subcomposite_iterator_.invalidate();
 			}
 
 			void toBegin
-				(void)
+				()
 			{
 				if (isSingular())
 					throw Exception::InvalidIterator(__FILE__, __LINE__);
@@ -170,7 +170,7 @@ namespace BALL {
 				}
 			}
 
-			bool isBegin(void) const
+			bool isBegin() const
 			{
 				if (isSingular())
 					throw Exception::InvalidIterator(__FILE__, __LINE__);
@@ -185,32 +185,32 @@ namespace BALL {
 				return (bool)(subcomposite_iterator_ == sub_iterator);
 			}
 
-			void toEnd(void)
+			void toEnd()
 			{
 				subcomposite_iterator_.toEnd();
 			}
 
-			bool isEnd(void) const
+			bool isEnd() const
 			{
 				return subcomposite_iterator_.isEnd();
 			}
 		
-			Composite& getData(void)
+			Composite& getData()
 			{
 				return *subcomposite_iterator_;
 			}
 		
-			const Composite &getData(void) const
+			const Composite &getData() const
 			{
 				return *subcomposite_iterator_;
 			}
 		
-			void forward(void)
+			void forward()
 			{
 				subcomposite_iterator_.findNext(*predicate_);
 			}
 		
-			void toRBegin(void)
+			void toRBegin()
 			{
 				if (isSingular())
 					throw Exception::InvalidIterator(__FILE__, __LINE__);
@@ -222,7 +222,7 @@ namespace BALL {
 				}
 			}
 
-			bool isRBegin(void) const
+			bool isRBegin() const
 			{
 				if (isSingular())
 					throw Exception::InvalidIterator(__FILE__, __LINE__);
@@ -236,17 +236,17 @@ namespace BALL {
 				return (bool)(subcomposite_iterator_ == sub_iterator);
 			}
 				
-			void toREnd(void)
+			void toREnd()
 			{
 				subcomposite_iterator_.toREnd();
 			}
 
-			bool isREnd(void) const
+			bool isREnd() const
 			{
 				return subcomposite_iterator_.isREnd();
 			}
 				
-			void backward(void)
+			void backward()
 			{
 				subcomposite_iterator_.findPrevious(*predicate_);
 			}
@@ -256,7 +256,7 @@ namespace BALL {
 				predicate_ = &predicate;
 			}
 				
-			const UnaryPredicate<Composite>* getPredicate(void) const
+			const UnaryPredicate<Composite>* getPredicate() const
 			{
 				return predicate_;
 			}

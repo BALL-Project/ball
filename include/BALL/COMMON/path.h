@@ -1,4 +1,4 @@
-// $Id: path.h,v 1.2 1999/09/08 14:07:45 oliver Exp $
+// $Id: path.h,v 1.3 1999/12/04 18:34:06 oliver Exp $
 
 #ifndef BALL_COMMON_PATH_H
 #define BALL_COMMON_PATH_H
@@ -81,7 +81,7 @@ namespace BALL
 		
 		protected:
 				
-		static void buildPathArray_(void);
+		static void buildPathArray_();
 
 		static string path_;
 

@@ -1,4 +1,4 @@
-// $Id: bidirectionalCirculator.h,v 1.1 1999/08/26 07:53:16 oliver Exp $
+// $Id: bidirectionalCirculator.h,v 1.2 1999/12/04 18:34:10 oliver Exp $
 
 #ifndef BALL_CONCEPT_BIDIRECTIONALCIRCULATOR_H
 #define BALL_CONCEPT_BIDIRECTIONALCIRCULATOR_H
@@ -35,7 +35,7 @@ namespace BALL {
 
 		/**
 		*/
-		BidirectionalCircularManipulator(void)
+		BidirectionalCircularManipulator()
 			: BidirectionalManipulator<Container, DataType, Position, Traits>()
 		{
 		}
@@ -61,14 +61,14 @@ namespace BALL {
 
 		/**
 		*/
-		bool operator + (void) const
+		bool operator + () const
 		{
 			return traits_->isValid();
 		}
 
 		/**
 		*/
-		BidirectionalCircularManipulator &operator ++ (void)
+		BidirectionalCircularManipulator &operator ++ ()
 		{
 			if (BidirectionalManipulator<Container, DataType, Position, Traits>::isRBegin() == true)
 			{
@@ -90,7 +90,7 @@ namespace BALL {
 
 		/**
 		*/
-		BidirectionalCircularManipulator &operator -- (void)
+		BidirectionalCircularManipulator &operator -- ()
 		{
 			if (BidirectionalManipulator<Container, DataType, Position, Traits>::isBegin() == true)
 			{
@@ -171,17 +171,17 @@ namespace BALL {
 
 		private:
 
-		void toEnd(void);
+		void toEnd();
 
-		bool isEnd(void) const;
+		bool isEnd() const;
 
-		void toRBegin(void);
+		void toRBegin();
 
-		bool isRBegin(void) const;
+		bool isRBegin() const;
 
-		void toREnd(void);
+		void toREnd();
 
-		bool isREnd(void) const;
+		bool isREnd() const;
 
 		DataType *findLast(const UnaryPredicate<DataType> &predicate);
 
@@ -204,7 +204,7 @@ namespace BALL {
 	{
 		public:
 
-			BidirectionalCirculator(void)
+			BidirectionalCirculator()
 				:	BidirectionalIterator<Container, DataType, Position, Traits>()
 			{
 			}
@@ -219,12 +219,12 @@ namespace BALL {
 			{
 			}
 
-			bool operator +	(void) const
+			bool operator +	() const
 			{
 				return traits_->isValid();
 			}
 
-			BidirectionalCirculator &operator ++ (void)
+			BidirectionalCirculator &operator ++ ()
 			{
 				if (BidirectionalIterator<Container, DataType, Position, Traits>::isRBegin() == true)
 				{
@@ -243,7 +243,7 @@ namespace BALL {
 			}
 
 			BidirectionalCirculator &operator --
-				(void)
+				()
 			{
 				if (BidirectionalIterator<Container, DataType, Position, Traits>::isBegin() == true)
 				{
@@ -311,17 +311,17 @@ namespace BALL {
 
 		private:
 
-			void toEnd(void);
+			void toEnd();
 
-			bool isEnd(void) const;
+			bool isEnd() const;
 
-			void toRBegin(void);
+			void toRBegin();
 
-			bool isRBegin(void) const;
+			bool isRBegin() const;
 
-			void toREnd(void);
+			void toREnd();
 
-			bool isREnd(void) const;
+			bool isREnd() const;
 
 			DataType *findLast(const UnaryPredicate<DataType> &predicate);
 
@@ -344,7 +344,7 @@ namespace BALL {
 	{
 		public:
 
-			ConstBidirectionalCirculator(void)
+			ConstBidirectionalCirculator()
 				:	ConstBidirectionalIterator<Container, DataType, Position, Traits>()
 			{
 			}
@@ -359,12 +359,12 @@ namespace BALL {
 			{
 			}
 
-			bool operator +	(void) const
+			bool operator +	() const
 			{
 				return traits_->isValid();
 			}
 
-			ConstBidirectionalCirculator &operator ++ (void)
+			ConstBidirectionalCirculator &operator ++ ()
 			{
 				if (ConstBidirectionalIterator<Container, DataType, Position, Traits>::isRBegin() == true)
 				{
@@ -382,7 +382,7 @@ namespace BALL {
 				return circulator;
 			}
 
-			ConstBidirectionalCirculator &operator -- (void)
+			ConstBidirectionalCirculator &operator -- ()
 			{
 				if (ConstBidirectionalIterator<Container, DataType, Position, Traits>::isBegin() == true)
 				{
@@ -450,17 +450,17 @@ namespace BALL {
 
 		private:
 
-			void toEnd(void);
+			void toEnd();
 
-			bool isEnd(void) const;
+			bool isEnd() const;
 
-			void toRBegin(void);
+			void toRBegin();
 
-			bool isRBegin(void) const;
+			bool isRBegin() const;
 
-			void toREnd(void);
+			void toREnd();
 
-			bool isREnd(void) const;
+			bool isREnd() const;
 
 			const DataType *findLast(const UnaryPredicate<DataType> &predicate);
 

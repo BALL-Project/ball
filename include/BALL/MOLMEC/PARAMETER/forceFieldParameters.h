@@ -1,4 +1,4 @@
-// $Id: forceFieldParameters.h,v 1.1 1999/08/26 07:53:21 oliver Exp $
+// $Id: forceFieldParameters.h,v 1.2 1999/12/04 18:34:23 oliver Exp $
 // Molecular Mechanics: general force field parameter class
 
 #ifndef BALL_MOLMEC_FORCEFIELDPARAMETERS_H
@@ -51,7 +51,7 @@ namespace BALL
 
 		/**	Default constructor.
 		*/
-		ForceFieldParameters(void);
+		ForceFieldParameters();
 
 		/**	Constructor.
 		*/
@@ -63,7 +63,7 @@ namespace BALL
 
 		/**	Destructor.
 		*/
-		virtual ~ForceFieldParameters(void);
+		virtual ~ForceFieldParameters();
 
 		//@}
 
@@ -76,7 +76,7 @@ namespace BALL
 
 		/**	Return the current INI file's name.
 		*/
-		const String& getFilename(void) const;
+		const String& getFilename() const;
 
 		/**	Return a reference to the INI file.
 		*/

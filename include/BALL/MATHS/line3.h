@@ -1,4 +1,4 @@
-// $Id: line3.h,v 1.2 1999/10/30 12:53:26 oliver Exp $
+// $Id: line3.h,v 1.3 1999/12/04 18:34:20 oliver Exp $
 
 #ifndef BALL_MATHS_LINE3_H
 #define BALL_MATHS_LINE3_H
@@ -52,7 +52,7 @@ namespace BALL {
 		//@{
 
 		///
-		TLine3(void)
+		TLine3()
 			:	p(),
 				d()
 		{
@@ -80,7 +80,7 @@ namespace BALL {
 		}
 
 		///
-		virtual ~TLine3(void)
+		virtual ~TLine3()
 		{
 		}
 		//@}
@@ -154,7 +154,7 @@ namespace BALL {
 		//@{
 
 		///
-		void normalize(void)
+		void normalize()
 		{
 			d.normalize();
 		}
@@ -207,7 +207,7 @@ namespace BALL {
 		//@{
 
 		///
-		bool isValid(void) const
+		bool isValid() const
 		{
 			return true;
 		}

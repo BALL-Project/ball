@@ -1,4 +1,4 @@
-// $Id: geometricProperties.h,v 1.2 1999/08/31 22:14:07 oliver Exp $
+// $Id: geometricProperties.h,v 1.3 1999/12/04 18:34:25 oliver Exp $
 
 #ifndef BALL_STRUCTURE_GEOMETRICPROPERTIES_H
 #define BALL_STRUCTURE_GEOMETRICPROPERTIES_H
@@ -157,7 +157,7 @@ namespace BALL {
 
 		/**	Default constructor
 		*/
-		FragmentDistanceCollector(void);
+		FragmentDistanceCollector();
 
 		/**	Constructor.
 				Creates a new collector and sets the reference composite/
@@ -183,7 +183,7 @@ namespace BALL {
 		/**	Returns the number of molecular fragments found
 				@return	the number of fragments in the array
 		*/
-		Size getNumberOfFragments(void);
+		Size getNumberOfFragments();
 
 		/**	Sets the reference composite
 				@param	composite the new reference composite
@@ -193,12 +193,12 @@ namespace BALL {
 		/**	Gets the reference composite
 				@return a const pointer to the reference composite
 		*/
-		const Composite* getComposite(void) const;
+		const Composite* getComposite() const;
 
 		/**	Gets the maximum distance
 				@return the maximum distance
 		*/
-		float getDistance(void) const;
+		float getDistance() const;
 		
 		/**	Sets the maximum distance
 				@param	distance the new maximum distance 

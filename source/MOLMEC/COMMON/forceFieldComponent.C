@@ -1,4 +1,4 @@
-// $Id: forceFieldComponent.C,v 1.1 1999/08/26 08:02:45 oliver Exp $
+// $Id: forceFieldComponent.C,v 1.2 1999/12/04 18:34:31 oliver Exp $
 
 
 #include <BALL/MOLMEC/COMMON/forceFieldComponent.h>
@@ -7,7 +7,7 @@ namespace BALL
 {
 
 	// default constructor 
-	ForceFieldComponent::ForceFieldComponent(void)
+	ForceFieldComponent::ForceFieldComponent()
 	{
 		name_ = "GenericForceFieldComponent";
 		force_field_ = 0;
@@ -32,12 +32,12 @@ namespace BALL
 
 
 	// destructor
-	ForceFieldComponent::~ForceFieldComponent(void)
+	ForceFieldComponent::~ForceFieldComponent()
 	{
 	}
 
 	// setup
-	bool ForceFieldComponent::setup(void)
+	bool ForceFieldComponent::setup()
 	{
 		return true;
 	}
@@ -55,7 +55,7 @@ namespace BALL
 	}
 
 	// Return a pointer to the force field
-	ForceField* ForceFieldComponent::getForceField(void) const
+	ForceField* ForceFieldComponent::getForceField() const
 	{
 		return force_field_;
 	}
@@ -66,16 +66,16 @@ namespace BALL
 		force_field_ = force_field;
 	}
 
-	float ForceFieldComponent::getEnergy(void) const
+	float ForceFieldComponent::getEnergy() const
 	{
 		return energy_;
 	}
 
-	void ForceFieldComponent::updateForces(void)
+	void ForceFieldComponent::updateForces()
 	{
 	}
 
-	float ForceFieldComponent::updateEnergy(void)
+	float ForceFieldComponent::updateEnergy()
 	{
 		return 0;
 	}

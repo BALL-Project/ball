@@ -1,4 +1,4 @@
-// $Id: PSE.h,v 1.1 1999/08/26 07:53:19 oliver Exp $
+// $Id: PSE.h,v 1.2 1999/12/04 18:34:16 oliver Exp $
 
 #ifndef BALL_KERNEL_PSE_H
 #define BALL_KERNEL_PSE_H
@@ -318,7 +318,7 @@ namespace BALL {
 			
 			/**	Default constructor
 			*/
-			Element(void);
+			Element();
 
 			/**	Constructor
 			*/
@@ -340,7 +340,7 @@ namespace BALL {
 
 			/**	Destructor
 			*/
-			virtual ~Element(void);
+			virtual ~Element();
 
 			//@}
 
@@ -365,68 +365,68 @@ namespace BALL {
 
 			/**
 			*/
-			String& getName(void);
+			String& getName();
 
 			/**
 			*/
-			const String& getName(void) const;
+			const String& getName() const;
 
 			///
 			void setSymbol(const String& symbol);
 
 			///
-			String& getSymbol(void);
+			String& getSymbol();
 
 			///
-			const String& getSymbol(void) const;
+			const String& getSymbol() const;
 
 			///
 			void setGroup(Group group);
 
 			///
-			Group getGroup(void) const;
+			Group getGroup() const;
 
 			///
 			void setPeriod(Period period);
 
 			///
-			Period getPeriod(void) const;
+			Period getPeriod() const;
 
 			///
 			void setAtomicNumber(AtomicNumber atomic_number);
 
 			///
-			AtomicNumber getAtomicNumber(void) const;
+			AtomicNumber getAtomicNumber() const;
 
 			///
 			void setAtomicWeight(float atomic_weight);
 
 			///
-			float getAtomicWeight(void) const;
+			float getAtomicWeight() const;
 
 			///
 			void setAtomicRadius(float atomic_radius);
 
 			///
-			float getAtomicRadius(void) const;
+			float getAtomicRadius() const;
 
 			///
 			void setCovalentRadius(float covalent_radius);
 
 			///
-			float getCovalentRadius(void) const;
+			float getCovalentRadius() const;
 
 			///
 			void setVanDerWaalsRadius(float van_der_waals_radius);
 
 			///
-			float getVanDerWaalsRadius(void) const;
+			float getVanDerWaalsRadius() const;
 
 			///
 			void setElectronegativity(float electronegativity);
 
 			///
-			float getElectronegativity(void) const;
+			float getElectronegativity() const;
 
 			//@}
 
@@ -462,7 +462,7 @@ namespace BALL {
 			//@{
 
 			///
-			bool isUnknown(void) const;
+			bool isUnknown() const;
 
 			//@}
 
@@ -578,7 +578,7 @@ namespace BALL {
 
 			/**	Destructor
 			*/
-			virtual ~PSE_(void);
+			virtual ~PSE_();
 
 			//@}
 

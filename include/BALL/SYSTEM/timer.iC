@@ -1,19 +1,19 @@
-// $Id: timer.iC,v 1.1 1999/08/26 07:53:20 oliver Exp $
+// $Id: timer.iC,v 1.2 1999/12/04 18:34:26 oliver Exp $
 
 BALL_INLINE 
-bool Timer::isValid(void) const
+bool Timer::isValid() const
 {
   return true;
 }
 
 BALL_INLINE 
-bool Timer::isRunning(void) const
+bool Timer::isRunning() const
 {
   return is_running_;
 }
 
 BALL_INLINE 
-float Timer::getCPUTime(void) const
+float Timer::getCPUTime() const
 { 
   return (getUserTime() + getSystemTime());
 }

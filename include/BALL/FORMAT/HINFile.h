@@ -1,4 +1,4 @@
-// $Id: HINFile.h,v 1.1 1999/08/26 07:53:20 oliver Exp $
+// $Id: HINFile.h,v 1.2 1999/12/04 18:34:15 oliver Exp $
 
 #ifndef BALL_FORMAT_HINFILE_H
 #define BALL_FORMAT_HINFILE_H
@@ -46,7 +46,7 @@ namespace BALL {
 
 		/**	Default constructor
 		*/
-		HINFile(void);
+		HINFile();
 
 		/// Filename constructor
 		HINFile(const String& filename);

@@ -1,4 +1,4 @@
-// $Id: geometricTransformations.C,v 1.1 1999/08/26 08:02:38 oliver Exp $
+// $Id: geometricTransformations.C,v 1.2 1999/12/04 18:34:33 oliver Exp $
 
 #include <BALL/STRUCTURE/geometricTransformations.h>
 
@@ -7,7 +7,7 @@ namespace BALL {
 	// TranslationProcessor
 	//=============================
 
-	TranslationProcessor::TranslationProcessor(void) 
+	TranslationProcessor::TranslationProcessor() 
 		:	translation_(0, 0, 0)
 	{
 	}
@@ -22,7 +22,7 @@ namespace BALL {
 		translation_ = translation;
 	}
 
-	const Vector3& TranslationProcessor::getTranslation(void) const
+	const Vector3& TranslationProcessor::getTranslation() const
 	{
 		return translation_;
 	}
@@ -38,7 +38,7 @@ namespace BALL {
 	// TransformationProcessor
 	//================================
 
-	TransformationProcessor::TransformationProcessor(void) 
+	TransformationProcessor::TransformationProcessor() 
 			:
 			transformation_(1,0,0,0,
 											0,1,0,0,
@@ -58,7 +58,7 @@ namespace BALL {
 		transformation_ = transformation;
 	}
 
-	const Matrix4x4& TransformationProcessor::getTransformation(void) const
+	const Matrix4x4& TransformationProcessor::getTransformation() const
 	{
 		return transformation_;
 	}

@@ -1,4 +1,4 @@
-// $Id: INIFile.C,v 1.2 1999/10/30 12:53:35 oliver Exp $
+// $Id: INIFile.C,v 1.3 1999/12/04 18:34:28 oliver Exp $
 
 #include <BALL/FORMAT/INIFile.h>
 
@@ -8,7 +8,7 @@ namespace BALL
 {
 
 	// Default constructor
-	INIFile::INIFile(void)
+	INIFile::INIFile()
 	{	
 	}
 
@@ -18,7 +18,7 @@ namespace BALL
 		setFilename(filename);
 	}
 
-	void INIFile::destroy(void)
+	void INIFile::destroy()
 	{
 		lines_.clear();
 		
@@ -32,13 +32,13 @@ namespace BALL
 		valid_ = false;
 	}
 
-	INIFile::~INIFile(void)
+	INIFile::~INIFile()
 	{
 		destroy();
 	}
 
 
-	bool INIFile::isValid(void) const 
+	bool INIFile::isValid() const 
 	{
 		return valid_;
 	}
@@ -49,12 +49,12 @@ namespace BALL
 	}
 
 
-	const String& INIFile::getFilename(void) const
+	const String& INIFile::getFilename() const
 	{
 		return filename_;
 	}
 
-	bool INIFile::read(void)
+	bool INIFile::read()
 	{
 		// destroy all datastructures - we make a new start
 		lines_.clear();
@@ -150,7 +150,7 @@ namespace BALL
 
 
 	// BAUSTELLE
-	bool INIFile::write(void)
+	bool INIFile::write()
 	{
 		return true;
 	}
@@ -173,7 +173,7 @@ namespace BALL
 		return true;
 	}
 
-	Size INIFile::getNumberOfLines(void) const 
+	Size INIFile::getNumberOfLines() const 
 	{
 		return lines_.size();
 	}

@@ -1,4 +1,4 @@
-// $Id: moleculeIterator.h,v 1.1 1999/08/26 07:53:19 oliver Exp $
+// $Id: moleculeIterator.h,v 1.2 1999/12/04 18:34:18 oliver Exp $
 
 #ifndef BALL_KERNEL_MOLECULEITERATOR_H
 #define BALL_KERNEL_MOLECULEITERATOR_H
@@ -28,7 +28,7 @@ namespace BALL {
 		
 		BALL_CREATE(MoleculeIteratorTraits_)
 
-		MoleculeIteratorTraits_(void)
+		MoleculeIteratorTraits_()
 			:	CompositeIteratorTraits_()
 		{
 			predicate_ = &RTTI<KernelPredicate<Molecule> >::getDefault();
@@ -51,7 +51,7 @@ namespace BALL {
 			return *this;
 		}
 
-		void resetPredicate(void)
+		void resetPredicate()
 		{
 			predicate_ = &RTTI<KernelPredicate<Molecule> >::getDefault();
 		}

@@ -1,4 +1,4 @@
-// $Id: PSE.C,v 1.2 1999/10/30 12:53:36 oliver Exp $
+// $Id: PSE.C,v 1.3 1999/12/04 18:34:28 oliver Exp $
 
 #	include <BALL/KERNEL/PSE.h>
 
@@ -365,7 +365,7 @@ namespace BALL
 		&PSE_::element_[Element::UNUNBIUM]
 	};
 
-	Element::Element(void)
+	Element::Element()
 		:	name_(BALL_ELEMENT_NAME_DEFAULT),
 			symbol_(BALL_ELEMENT_SYMBOL_DEFAULT),
 			group_(BALL_ELEMENT_GROUP_DEFAULT),
@@ -419,7 +419,7 @@ namespace BALL
 	}
 
 
-	Element::~Element(void)
+	Element::~Element()
 	{
 	}
 
@@ -442,7 +442,7 @@ namespace BALL
 
 
 
-	PSE_::PSE_(void)
+	PSE_::PSE_()
 	{
 	}
 
@@ -450,7 +450,7 @@ namespace BALL
 	{
 	}
 
-	PSE_::~PSE_(void)
+	PSE_::~PSE_()
 	{
 	}
 

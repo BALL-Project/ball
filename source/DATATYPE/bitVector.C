@@ -1,4 +1,4 @@
-// $Id: bitVector.C,v 1.2 1999/08/31 22:01:16 oliver Exp $
+// $Id: bitVector.C,v 1.3 1999/12/04 18:34:27 oliver Exp $
 
 #include <BALL/DATATYPE/bitVector.h>
 
@@ -52,7 +52,7 @@ namespace BALL {
 		set(bit_string);
 	}
 
-	BitVector::~BitVector(void)
+	BitVector::~BitVector()
 	{
 		delete [] bitset_;
 	}
@@ -228,7 +228,7 @@ namespace BALL {
 		*((unsigned char *)bitset_) = bit_pattern;
 	}
 
-	unsigned char BitVector::getUnsignedChar(void) const
+	unsigned char BitVector::getUnsignedChar() const
 	{
 		return *((unsigned char *)bitset_);
 	}
@@ -240,7 +240,7 @@ namespace BALL {
 		*((unsigned short *)bitset_) = bit_pattern;
 	}
 
-	unsigned short BitVector::getUnsignedShort(void) const
+	unsigned short BitVector::getUnsignedShort() const
 	{
 		return *((unsigned short *)bitset_);
 	}
@@ -252,7 +252,7 @@ namespace BALL {
 		*((unsigned int *)bitset_) = bit_pattern;
 	}
 
-	unsigned int BitVector::getUnsignedInt(void) const
+	unsigned int BitVector::getUnsignedInt() const
 	{
 		return *((unsigned int *)bitset_);
 	}
@@ -264,7 +264,7 @@ namespace BALL {
 		*((unsigned long *)bitset_) = bit_pattern;
 	}
 
-	unsigned long BitVector::getUnsignedLong(void) const
+	unsigned long BitVector::getUnsignedLong() const
 	{
 		return *((unsigned long *)bitset_);
 	}

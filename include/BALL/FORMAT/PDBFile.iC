@@ -1,4 +1,4 @@
-// $Id: PDBFile.iC,v 1.1 1999/08/26 07:53:20 oliver Exp $
+// $Id: PDBFile.iC,v 1.2 1999/12/04 18:34:15 oliver Exp $
 
 BALL_INLINE 
 bool PDBFile::readUnknownRecord(char * /* line */)
@@ -13,13 +13,13 @@ bool PDBFile::readInvalidRecord(char* /* line */)
 }
 
 BALL_INLINE 
-bool PDBFile::readRecordEND(void)
+bool PDBFile::readRecordEND()
 {
   return true;
 }
   
 BALL_INLINE 
-bool PDBFile::readRecordENDMDL(void)
+bool PDBFile::readRecordENDMDL()
 {
   return true;
 }

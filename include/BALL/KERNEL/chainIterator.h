@@ -1,4 +1,4 @@
-// $Id: chainIterator.h,v 1.1 1999/08/26 07:53:19 oliver Exp $
+// $Id: chainIterator.h,v 1.2 1999/12/04 18:34:17 oliver Exp $
 
 #ifndef BALL_KERNEL_CHAINITERATOR_H
 #define BALL_KERNEL_CHAINITERATOR_H
@@ -28,7 +28,7 @@ namespace BALL {
 
 		BALL_CREATE(ChainIteratorTraits_)
 
-		ChainIteratorTraits_(void)
+		ChainIteratorTraits_()
 			:	CompositeIteratorTraits_()
 		{
 			predicate_ = &RTTI<KernelPredicate<Chain> >::getDefault();
@@ -51,7 +51,7 @@ namespace BALL {
 			return *this;
 		}
 
-		void resetPredicate(void)
+		void resetPredicate()
 		{
 			predicate_ = &RTTI<KernelPredicate<Chain> >::getDefault();
 		}

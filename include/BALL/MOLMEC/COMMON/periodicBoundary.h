@@ -1,4 +1,4 @@
-// $Id: periodicBoundary.h,v 1.2 1999/09/25 14:26:38 oliver Exp $
+// $Id: periodicBoundary.h,v 1.3 1999/12/04 18:34:23 oliver Exp $
 // Molecular Mechanics: class representing periodic boundary conditions
 
 #ifndef BALL_MOLMEC_COMMON_PERIODICBOUNDARY_H
@@ -95,7 +95,7 @@ namespace BALL {
 
 		/**	Destructor.
 		*/
-		virtual ~PeriodicBoundary(void);
+		virtual ~PeriodicBoundary();
 
 		//@}
 

@@ -1,4 +1,4 @@
-// $Id: Fragment_test.C,v 1.1 1999/08/26 08:02:36 oliver Exp $
+// $Id: Fragment_test.C,v 1.2 1999/12/04 18:34:34 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 #include <BALL/KERNEL/fragment.h>
@@ -6,7 +6,7 @@
 
 using namespace BALL;
 
-START_TEST(Fragment, "$Id: Fragment_test.C,v 1.1 1999/08/26 08:02:36 oliver Exp $")
+START_TEST(Fragment, "$Id: Fragment_test.C,v 1.2 1999/12/04 18:34:34 oliver Exp $")
 
 
 
@@ -41,18 +41,18 @@ RESULT
 		(bool deep = true) const;
 
 	virtual void clear
-		(void);
+		();
 
 	virtual void destroy
-		(void);
+		();
 
 	Fragment &operator =
 		(const Fragment& fragment);
 
 	static const Fragment *getDefault
-		(void);
+		();
 	 virtual bool isValid
-		(void) const;
+		() const;
 
 	virtual void dump
 		(ostream &s = cout,

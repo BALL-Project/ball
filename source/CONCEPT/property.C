@@ -1,4 +1,4 @@
-// $Id: property.C,v 1.1 1999/08/26 08:02:35 oliver Exp $
+// $Id: property.C,v 1.2 1999/12/04 18:34:27 oliver Exp $
 
 #include <BALL/CONCEPT/property.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -175,7 +175,7 @@ namespace BALL {
 		return (type_ == BOOL ? data_.b : false);
 	}
 
-	PropertyManager::PropertyManager(void)
+	PropertyManager::PropertyManager()
 	{
 	}
 

@@ -1,4 +1,4 @@
-// $Id: bidirectionalIterator.h,v 1.1 1999/08/26 07:53:16 oliver Exp $ 
+// $Id: bidirectionalIterator.h,v 1.2 1999/12/04 18:34:10 oliver Exp $ 
 
 #ifndef BALL_CONCEPT_BIDIRECTIONALITERATOR_H
 #define BALL_CONCEPT_BIDIRECTIONALITERATOR_H
@@ -29,7 +29,7 @@ namespace BALL {
 	{
 		public:
 
-			BidirectionalManipulator(void)
+			BidirectionalManipulator()
 				:	BidirectionalManipulator_<Container, DataType, Position, Traits>()
 			{
 			}
@@ -44,17 +44,17 @@ namespace BALL {
 			{
 			}
 
-			bool operator + (void) const
+			bool operator + () const
 			{
 				return traits_ptr_->isValid();
 			}
 
-			bool operator -(void) const
+			bool operator -() const
 			{
 				return (bool)(traits_ptr_->isValid() == false);
 			}
 
-			void toBegin(void)
+			void toBegin()
 			{
 				if (traits_ptr_->isSingular())
 					throw Exception::InvalidIterator(__FILE__, __LINE__);
@@ -62,7 +62,7 @@ namespace BALL {
 				traits_ptr_->toBegin();
 			}
 
-			bool isBegin(void) const
+			bool isBegin() const
 			{	
 				if (traits_ptr_->isSingular())
 					throw Exception::InvalidIterator(__FILE__, __LINE__);
@@ -70,7 +70,7 @@ namespace BALL {
 				return traits_ptr_->isBegin();
 			}
 
-			void toEnd(void)
+			void toEnd()
 			{
 				if (traits_ptr_->isSingular())
 					throw Exception::InvalidIterator(__FILE__, __LINE__);
@@ -78,7 +78,7 @@ namespace BALL {
 				traits_ptr_->toEnd();
 			}
 
-			bool isEnd(void) const
+			bool isEnd() const
 			{
 				if (traits_ptr_->isSingular())
 					throw Exception::InvalidIterator(__FILE__, __LINE__);
@@ -86,7 +86,7 @@ namespace BALL {
 				return traits_ptr_->isEnd();
 			}
 
-			void toRBegin(void)
+			void toRBegin()
 			{
 				if (traits_ptr_->isSingular())
 					throw Exception::InvalidIterator(__FILE__, __LINE__);
@@ -94,7 +94,7 @@ namespace BALL {
 				traits_ptr_->toRBegin();
 			}
 
-			bool isRBegin(void) const
+			bool isRBegin() const
 			{
 				if (traits_ptr_->isSingular())
 					throw Exception::InvalidIterator(__FILE__, __LINE__);
@@ -102,7 +102,7 @@ namespace BALL {
 				return traits_ptr_->isRBegin();
 			}
 
-			void toREnd(void)
+			void toREnd()
 			{
 				if (traits_ptr_->isSingular())
 					throw Exception::InvalidIterator(__FILE__, __LINE__);
@@ -110,7 +110,7 @@ namespace BALL {
 				traits_ptr_->toREnd();
 			}
 
-			bool isREnd(void) const
+			bool isREnd() const
 			{
 				if (traits_ptr_->isSingular())
 					throw Exception::InvalidIterator(__FILE__, __LINE__);
@@ -118,7 +118,7 @@ namespace BALL {
 				return traits_ptr_->isREnd();
 			}
 
-			BidirectionalManipulator &operator ++ (void)
+			BidirectionalManipulator &operator ++ ()
 			{
 				if (!traits_ptr_->isValid())
 					throw Exception::InvalidIterator(__FILE__, __LINE__);
@@ -134,7 +134,7 @@ namespace BALL {
 				return manipulator;
 			}
 
-			BidirectionalManipulator &operator -- (void)
+			BidirectionalManipulator &operator -- ()
 			{
         if (traits_ptr_->isSingular())
           throw Exception::InvalidIterator(__FILE__, __LINE__);
@@ -268,7 +268,7 @@ namespace BALL {
 	{
 		public:
 
-			BidirectionalIterator(void)
+			BidirectionalIterator()
 				: BaseIterator<Container, DataType, Position, Traits>()
 			{
 			}
@@ -283,12 +283,12 @@ namespace BALL {
 			{
 			}
 
-			bool operator + (void) const
+			bool operator + () const
 			{
 				return traits_ptr_->isValid();
 			}
 
-			void toBegin(void)
+			void toBegin()
 			{
         if (traits_ptr_->isSingular())
           throw Exception::InvalidIterator(__FILE__, __LINE__);
@@ -296,7 +296,7 @@ namespace BALL {
 				traits_ptr_->toBegin();
 			}
 
-			bool isBegin(void) const
+			bool isBegin() const
 			{
         if (traits_ptr_->isSingular())
           throw Exception::InvalidIterator(__FILE__, __LINE__);
@@ -304,7 +304,7 @@ namespace BALL {
 				return traits_ptr_->isBegin();
 			}
 
-			void toEnd(void)
+			void toEnd()
 			{
         if (traits_ptr_->isSingular())
           throw Exception::InvalidIterator(__FILE__, __LINE__);
@@ -312,7 +312,7 @@ namespace BALL {
 				traits_ptr_->toEnd();
 			}
 
-			bool isEnd(void) const
+			bool isEnd() const
 			{
         if (traits_ptr_->isSingular())
           throw Exception::InvalidIterator(__FILE__, __LINE__);
@@ -320,7 +320,7 @@ namespace BALL {
 				return traits_ptr_->isEnd();
 			}
 
-			void toRBegin(void)
+			void toRBegin()
 			{
         if (traits_ptr_->isSingular())
           throw Exception::InvalidIterator(__FILE__, __LINE__);
@@ -328,7 +328,7 @@ namespace BALL {
 				traits_ptr_->toRBegin();
 			}
 
-			bool isRBegin(void) const
+			bool isRBegin() const
 			{
         if (traits_ptr_->isSingular())
           throw Exception::InvalidIterator(__FILE__, __LINE__);
@@ -336,7 +336,7 @@ namespace BALL {
 				return traits_ptr_->isRBegin();
 			}
 
-			void toREnd(void)
+			void toREnd()
 			{
         if (traits_ptr_->isSingular())
           throw Exception::InvalidIterator(__FILE__, __LINE__);
@@ -344,7 +344,7 @@ namespace BALL {
 				traits_ptr_->toREnd();
 			}
 
-			bool isREnd(void) const
+			bool isREnd() const
 			{
         if (traits_ptr_->isSingular())
           throw Exception::InvalidIterator(__FILE__, __LINE__);
@@ -352,7 +352,7 @@ namespace BALL {
 				return traits_ptr_->isREnd();
 			}
 
-			BidirectionalIterator& operator ++ (void)
+			BidirectionalIterator& operator ++ ()
 			{
         if (traits_ptr_->isSingular())
           throw Exception::InvalidIterator(__FILE__, __LINE__);
@@ -369,7 +369,7 @@ namespace BALL {
 			}
 
 			BidirectionalIterator &operator --
-				(void)
+				()
 			{
         if (traits_ptr_->isSingular())
           throw Exception::InvalidIterator(__FILE__, __LINE__);
@@ -502,7 +502,7 @@ namespace BALL {
 	{
 		public:
 
-			ConstBidirectionalIterator(void)
+			ConstBidirectionalIterator()
 				:	ConstBaseIterator<Container, DataType, Position, Traits>()
 			{
 			}
@@ -517,12 +517,12 @@ namespace BALL {
 			{
 			}
 
-			bool operator +(void) const
+			bool operator +() const
 			{
 				return traits_ptr_->isValid();
 			}
 
-			void toBegin(void)
+			void toBegin()
 			{
         if (traits_ptr_->isSingular())
           throw Exception::InvalidIterator(__FILE__, __LINE__);
@@ -530,7 +530,7 @@ namespace BALL {
 				traits_ptr_->toBegin();
 			}
 
-			bool isBegin(void) const
+			bool isBegin() const
 			{
         if (traits_ptr_->isSingular())
           throw Exception::InvalidIterator(__FILE__, __LINE__);
@@ -538,7 +538,7 @@ namespace BALL {
 				return traits_ptr_->isBegin();
 			}
 
-			void toEnd(void)
+			void toEnd()
 			{
         if (traits_ptr_->isSingular())
           throw Exception::InvalidIterator(__FILE__, __LINE__);
@@ -546,7 +546,7 @@ namespace BALL {
 				traits_ptr_->toEnd();
 			}
 
-			bool isEnd(void) const
+			bool isEnd() const
 			{
         if (traits_ptr_->isSingular())
           throw Exception::InvalidIterator(__FILE__, __LINE__);
@@ -554,7 +554,7 @@ namespace BALL {
 				return traits_ptr_->isEnd();
 			}
 
-			void toRBegin(void)
+			void toRBegin()
 			{
         if (traits_ptr_->isSingular())
           throw Exception::InvalidIterator(__FILE__, __LINE__);
@@ -562,7 +562,7 @@ namespace BALL {
 				traits_ptr_->toRBegin();
 			}
 
-			bool isRBegin(void) const
+			bool isRBegin() const
 			{
         if (traits_ptr_->isSingular())
           throw Exception::InvalidIterator(__FILE__, __LINE__);
@@ -570,7 +570,7 @@ namespace BALL {
 				return traits_ptr_->isRBegin();
 			}
 
-			void toREnd(void)
+			void toREnd()
 			{
         if (traits_ptr_->isSingular())
           throw Exception::InvalidIterator(__FILE__, __LINE__);
@@ -578,7 +578,7 @@ namespace BALL {
 				traits_ptr_->toREnd();
 			}
 
-			bool isREnd(void) const
+			bool isREnd() const
 			{
         if (traits_ptr_->isSingular())
           throw Exception::InvalidIterator(__FILE__, __LINE__);
@@ -586,7 +586,7 @@ namespace BALL {
 				return traits_ptr_->isREnd();
 			}
 
-			ConstBidirectionalIterator &operator ++ (void)
+			ConstBidirectionalIterator &operator ++ ()
 			{
         if (!traits_ptr_->isValid())
           throw Exception::InvalidIterator(__FILE__, __LINE__);
@@ -602,7 +602,7 @@ namespace BALL {
 				return iterator;
 			}
 
-			ConstBidirectionalIterator &operator -- (void)
+			ConstBidirectionalIterator &operator -- ()
 			{
         if (traits_ptr_->isSingular())
           throw Exception::InvalidIterator(__FILE__, __LINE__);

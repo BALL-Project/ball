@@ -1,4 +1,4 @@
-// $Id: periodicBoundary.C,v 1.1 1999/08/26 08:02:45 oliver Exp $
+// $Id: periodicBoundary.C,v 1.2 1999/12/04 18:34:32 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/periodicBoundary.h>
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -24,7 +24,7 @@ namespace BALL
 	const char* PeriodicBoundary::PERIODIC_WATER_FILE = "water.hin";
  
 	// Default Constructor
-	PeriodicBoundary::PeriodicBoundary(void)
+	PeriodicBoundary::PeriodicBoundary()
 		:	force_field_(0), 
 			enabled_(false)
 	{

@@ -1,4 +1,4 @@
-// $Id: circle3.h,v 1.2 1999/10/30 12:53:26 oliver Exp $
+// $Id: circle3.h,v 1.3 1999/12/04 18:34:19 oliver Exp $
 
 #ifndef BALL_MATHS_CIRCLE3_H
 #define BALL_MATHS_CIRCLE3_H
@@ -42,7 +42,7 @@ namespace BALL {
 		//@{
 
 		///
-		TCircle3(void)
+		TCircle3()
 			: p(),
 				n(),
 				radius(0)
@@ -66,7 +66,7 @@ namespace BALL {
 		}
 
 		///
-		virtual ~TCircle3(void)
+		virtual ~TCircle3()
 		{
 		}
 		//@}
@@ -172,7 +172,7 @@ namespace BALL {
 		//@{
 
 		///
-		bool isValid(void) const
+		bool isValid() const
 		{
 			return true;
 		}

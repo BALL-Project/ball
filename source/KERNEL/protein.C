@@ -1,4 +1,4 @@
-// $Id: protein.C,v 1.1 1999/08/26 08:02:34 oliver Exp $
+// $Id: protein.C,v 1.2 1999/12/04 18:34:30 oliver Exp $
 
 #include <BALL/KERNEL/protein.h>
 #include <BALL/KERNEL/global.h>
@@ -6,7 +6,7 @@
 namespace BALL 
 {
 
-	Protein::Protein(void)
+	Protein::Protein()
 		:	Molecule(),
 			id_(BALL_PROTEIN_DEFAULT_ID)
 	{
@@ -24,19 +24,19 @@ namespace BALL
 	{
 	}
 
-	Protein::~Protein(void)
+	Protein::~Protein()
 	{
 		destroy();
 	}
 
-	void Protein::clear(void)
+	void Protein::clear()
 	{
 		Molecule::clear();
 
 		clear_();
 	}
 		
-	void Protein::destroy(void)
+	void Protein::destroy()
 	{
 		Molecule::destroy();
 
@@ -151,22 +151,22 @@ namespace BALL
 		return ((Protein *)this)->getResidue(index);
 	}
 
-	Residue* Protein::getNTerminal(void)
+	Residue* Protein::getNTerminal()
 	{
 		return (Residue *)::BALL::getNTerminal(*this);
 	}
 		
-	const Residue* Protein::getNTerminal(void) const
+	const Residue* Protein::getNTerminal() const
 	{
 		return ::BALL::getNTerminal(*this);
 	}
 
-	Residue* Protein::getCTerminal(void)
+	Residue* Protein::getCTerminal()
 	{
 		return (Residue *)::BALL::getCTerminal(*this);
 	}
 		
-	const Residue* Protein::getCTerminal(void) const
+	const Residue* Protein::getCTerminal() const
 	{
 		return ::BALL::getCTerminal(*this);
 	}
@@ -198,17 +198,17 @@ namespace BALL
 		id_ = id;
 	}
 
-	String&  Protein::getID(void)
+	String&  Protein::getID()
 	{
 		return id_;
 	}
 
-	const String& Protein::getID(void) const
+	const String& Protein::getID() const
 	{
 		return id_;
 	}
 
-	Size Protein::countChains(void) const
+	Size Protein::countChains() const
 	{
 		Size size = 0;
 
@@ -220,7 +220,7 @@ namespace BALL
 		return size;
 	}
 
-	Size Protein::countSecondaryStructures(void) const
+	Size Protein::countSecondaryStructures() const
 	{
 		Size size = 0;
 
@@ -233,7 +233,7 @@ namespace BALL
 		return size;
 	}
 
-	Size Protein::countResidues(void) const
+	Size Protein::countResidues() const
 	{
 		Size size = 0;
 
@@ -245,7 +245,7 @@ namespace BALL
 		return size;
 	}
 
-	Size Protein::countPDBAtoms(void) const
+	Size Protein::countPDBAtoms() const
 	{
 		Size size = 0;
 
@@ -257,7 +257,7 @@ namespace BALL
 		return size;
 	}
 
-	bool Protein::isValid(void) const
+	bool Protein::isValid() const
 	{ 
 		if (Molecule::isValid() == false
 				|| id_.isValid() == false)
@@ -290,7 +290,7 @@ namespace BALL
 		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 
-	void Protein::clear_(void)
+	void Protein::clear_()
 	{
 		id_ = BALL_PROTEIN_DEFAULT_ID;
 	}

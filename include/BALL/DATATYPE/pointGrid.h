@@ -1,4 +1,4 @@
-// $Id: pointGrid.h,v 1.4 1999/09/25 14:26:32 oliver Exp $ 
+// $Id: pointGrid.h,v 1.5 1999/12/04 18:34:14 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_POINTGRID_H
 #define BALL_DATATYPE_POINTGRID_H
@@ -130,7 +130,7 @@ namespace BALL
 				Frees all allocated memory.
 				@memo
 		*/
-		virtual ~PointGrid(void);
+		virtual ~PointGrid();
 		//@}
 
 
@@ -158,33 +158,33 @@ namespace BALL
 		/**	Returns the largest possible x coordinate for the box.
 				@memo
 		*/
-		float getMaxX(void) const;
+		float getMaxX() const;
 
 		/**	Returns the largest possible y coordinate for the box.
 				@memo
 		*/
-		float getMaxY(void) const;
+		float getMaxY() const;
 
 		/**	Returns the largest possible z coordinate for the box.
 				@memo
 		*/
-		float getMaxZ(void) const;
+		float getMaxZ() const;
 
 		
 		/**	Returns the x coordinate of the grid origin.
 				@memo
 		*/
-		float getMinX(void) const;
+		float getMinX() const;
 
 		/**	Returns the y coordinate of the grid origin.
 				@memo
 		*/
-		float getMinY(void) const;
+		float getMinY() const;
 
 		/**	Returns the z coordinate of the grid origin.
 				@memo
 		*/
-		float getMinZ(void) const;
+		float getMinZ() const;
 
 		
 
@@ -194,7 +194,7 @@ namespace BALL
 				method returns the number of points in X direction minus one.
 				@memo
 		*/
-		Size getMaxXIndex(void) const;
+		Size getMaxXIndex() const;
 
 		/**	Return the largest grid index for the y direction.
 				This method returns the maximum index allowed in the grid.
@@ -202,7 +202,7 @@ namespace BALL
 				method returns the number of points in Y direction minus one.
 				@memo
 		*/
-		Size getMaxYIndex(void) const;
+		Size getMaxYIndex() const;
 
 		/**	Return the largest grid index for the z direction.
 				This method returns the maximum index allowed in the grid.
@@ -210,29 +210,29 @@ namespace BALL
 				method returns the number of points in Z direction minus one.
 				@memo
 		*/
-		Size getMaxZIndex(void) const;
+		Size getMaxZIndex() const;
 
 
 		/**	Returns the total number of grid points.
 				@memo
 		*/
-		Size getSize(void) const;
+		Size getSize() const;
 
 
 		/**	Returns the grid spacing in x direction.
 				@memo
 		*/	
-		float getXSpacing(void) const;
+		float getXSpacing() const;
 
 		/**	Returns the grid spacing in y direction.
 				@memo
 		*/	
-		float getYSpacing(void) const;
+		float getYSpacing() const;
 
 		/**	Returns the grid spacing in z direction.
 				@memo
 		*/	
-		float getZSpacing(void) const;
+		float getZSpacing() const;
 
 		/**	Returns the index of the grid point closest to the given vector.
 				If there are multiple grid points with equal distance, the
@@ -322,14 +322,14 @@ namespace BALL
 					@return					Vector3\&
 				@memo
 		*/
-		Vector3& getOrigin(void);
+		Vector3& getOrigin();
 
 		/**		Returns a vector to the grid's origin (const method).
 					@return					Vector3
 				@memo
 
 		*/
-		const Vector3& getOrigin(void) const;
+		const Vector3& getOrigin() const;
 
 		/**		Modifies the grid's origin
 					@return					bool, always true
@@ -351,13 +351,13 @@ namespace BALL
 					@return					Vector3\&
 				@memo
 		*/
-		Vector3& getDimension(void);
+		Vector3& getDimension();
 		
 		/**		Returns a vector containing the grid's dimensions (const method).
 					@return					Vector3
 				@memo
 		*/
-		const Vector3& getDimension(void) const;
+		const Vector3& getDimension() const;
 
 		/**	Returns the linear interpolation of the eight surrounding grid points.
 				This method calculates the corresponding box to a vector and linearly.
@@ -647,7 +647,7 @@ namespace BALL
 					Destructor, frees the array of allocated grid elements 
 	*/
 	template <class GridDataType>
-	PointGrid<GridDataType>::~PointGrid(void) {
+	PointGrid<GridDataType>::~PointGrid() {
 		delete [] data;
 	}
 
@@ -673,7 +673,7 @@ namespace BALL
 	// returns the state of this instance
 	template <class GridDataType>
 	BALL_INLINE 
-	bool PointGrid<GridDataType>::isValid(void) const
+	bool PointGrid<GridDataType>::isValid() const
 	{
 		return valid_;
 	}
@@ -682,14 +682,14 @@ namespace BALL
 	// the box, i.e. origin + size
 	template <class GridDataType>
 	BALL_INLINE 
-	float PointGrid<GridDataType>::getMaxX(void) const 
+	float PointGrid<GridDataType>::getMaxX() const 
 	{
 		return origin_.x + size_.x;
 	}
 
 	template <class GridDataType>
 	BALL_INLINE 
-	float PointGrid<GridDataType>::getMaxY(void) const 
+	float PointGrid<GridDataType>::getMaxY() const 
 	{
 		return origin_.y + size_.y;
 	}
@@ -697,7 +697,7 @@ namespace BALL
 
 	template <class GridDataType>
 	BALL_INLINE 
-	float PointGrid<GridDataType>::getMaxZ(void) const 
+	float PointGrid<GridDataType>::getMaxZ() const 
 	{
 		return origin_.z + size_.x;
 	}
@@ -706,14 +706,14 @@ namespace BALL
 	// the box, i.e. origin + size
 	template <class GridDataType>
 	BALL_INLINE 
-	float PointGrid<GridDataType>::getMinX(void) const 
+	float PointGrid<GridDataType>::getMinX() const 
 	{
 		return origin_.x;
 	}
 
 	template <class GridDataType>
 	BALL_INLINE 
-	float PointGrid<GridDataType>::getMinY(void) const 
+	float PointGrid<GridDataType>::getMinY() const 
 	{
 		return origin_.y;
 	}
@@ -721,7 +721,7 @@ namespace BALL
 
 	template <class GridDataType>
 	BALL_INLINE 
-	float PointGrid<GridDataType>::getMinZ(void) const 
+	float PointGrid<GridDataType>::getMinZ() const 
 	{
 		return origin_.z;
 	}
@@ -730,21 +730,21 @@ namespace BALL
 	// first point has index 0, getMax[X|Y|Z]Index therefore returns number_of_points
 	template <class GridDataType>
 	BALL_INLINE 
-	Size PointGrid<GridDataType>::getMaxXIndex(void) const 
+	Size PointGrid<GridDataType>::getMaxXIndex() const 
 	{
 		return number_of_points_x_ - 1;
 	}
 
 	template <class GridDataType>
 	BALL_INLINE 
-	Size PointGrid<GridDataType>::getMaxYIndex(void) const 
+	Size PointGrid<GridDataType>::getMaxYIndex() const 
 	{
 		return number_of_points_y_ - 1;
 	}
 
 	template <class GridDataType>
 	BALL_INLINE 
-	Size PointGrid<GridDataType>::getMaxZIndex(void) const 
+	Size PointGrid<GridDataType>::getMaxZIndex() const 
 	{
 		return number_of_points_z_ - 1;
 	}
@@ -752,7 +752,7 @@ namespace BALL
 	// getSize() returns the total number of grid points
 	template <class GridDataType>
 	BALL_INLINE 
-	Size PointGrid<GridDataType>::getSize(void) const 
+	Size PointGrid<GridDataType>::getSize() const 
 	{
 		return number_of_grid_points_;
 	}
@@ -804,21 +804,21 @@ namespace BALL
 	// between two grid points in the given direction
 	template <class GridDataType>
 	BALL_INLINE 
-	float PointGrid<GridDataType>::getXSpacing(void) const 
+	float PointGrid<GridDataType>::getXSpacing() const 
 	{
 		return spacing_.x;
 	}
 
 	template <class GridDataType>
 	BALL_INLINE 
-	float PointGrid<GridDataType>::getYSpacing(void) const 
+	float PointGrid<GridDataType>::getYSpacing() const 
 	{
 		return spacing_.y;
 	}
 
 	template <class GridDataType>
 	BALL_INLINE 
-	float PointGrid<GridDataType>::getZSpacing(void) const 
+	float PointGrid<GridDataType>::getZSpacing() const 
 	{
 		return spacing_.z;
 	}
@@ -977,14 +977,14 @@ namespace BALL
 
 	template <class GridDataType> 
 	BALL_INLINE
-	const Vector3& PointGrid<GridDataType>::getOrigin(void) const 
+	const Vector3& PointGrid<GridDataType>::getOrigin() const 
 	{
 		return origin_;
 	}
 
 	template <class GridDataType> 
 	BALL_INLINE
-	Vector3& PointGrid<GridDataType>::getOrigin(void) 
+	Vector3& PointGrid<GridDataType>::getOrigin() 
 	{
 		return origin_;
 	}
@@ -1005,13 +1005,13 @@ namespace BALL
 	}
 
 	template <class GridDataType> 
-	const Vector3& PointGrid<GridDataType>::getDimension(void) const 
+	const Vector3& PointGrid<GridDataType>::getDimension() const 
 	{
 		return size_;
 	}
 
 	template <class GridDataType> 
-	Vector3& PointGrid<GridDataType>::getDimension(void) 
+	Vector3& PointGrid<GridDataType>::getDimension() 
 	{
 		return size_;
 	}

@@ -1,4 +1,4 @@
-// $Id: bitVector.h,v 1.1 1999/08/26 07:53:13 oliver Exp $
+// $Id: bitVector.h,v 1.2 1999/12/04 18:34:12 oliver Exp $
 
 #ifndef BALL_DATATYPE_BITVECTOR_H
 #define BALL_DATATYPE_BITVECTOR_H
@@ -54,7 +54,7 @@ namespace BALL {
 
 			// --- CONVERTERS
 
-			operator bool(void) const;
+			operator bool() const;
 
 			// --- ASSIGNMENT METHODS
 
@@ -76,7 +76,7 @@ namespace BALL {
 
 		private:
 
-			Bit(void);
+			Bit();
 
 			// --- ATTRIBUTES
 
@@ -116,10 +116,10 @@ namespace BALL {
 		BitVector(const char *bit_string);
 
 		///
-		virtual ~BitVector(void);
+		virtual ~BitVector();
 
 		///
-		void clear(void);
+		void clear();
 		//@}
 
 
@@ -161,13 +161,13 @@ namespace BALL {
 		Size countValue(bool value) const;
 
 		///
-		Index getMaxIndex(void) const;
+		Index getMaxIndex() const;
 	
 		///
-		BlockType* getBitSet(void);
+		BlockType* getBitSet();
 
 		///
-		const BlockType* getBitSet(void) const;
+		const BlockType* getBitSet() const;
 
 		///
 		Bit operator []	(Index index)
@@ -235,25 +235,25 @@ namespace BALL {
 		void setUnsignedChar(unsigned char bit_pattern);
 
 		///
-		unsigned char getUnsignedChar(void) const;
+		unsigned char getUnsignedChar() const;
 
 		///
 		void setUnsignedShort(unsigned short bit_pattern);
 
 		///
-		unsigned short getUnsignedShort(void) const;
+		unsigned short getUnsignedShort() const;
 
 		///
 		void setUnsignedInt(unsigned int bit_pattern);
 
 		///
-		unsigned int getUnsignedInt(void) const;
+		unsigned int getUnsignedInt() const;
 
 		///
 		void setUnsignedLong(unsigned long bit_pattern);
 
 		///
-		unsigned long getUnsignedLong(void) const;
+		unsigned long getUnsignedLong() const;
 
 		///
 		void or(const BitVector& bit_vector);
@@ -283,7 +283,7 @@ namespace BALL {
 		BitVector &operator ^= (const BitVector& bit_vector);
 
 		///
-		BitVector operator ~(void);
+		BitVector operator ~();
 		//@}
 
 		/**	@name	Predicates */
@@ -308,7 +308,7 @@ namespace BALL {
 		//@{
 
 		///
-		bool isValid(void) const;
+		bool isValid() const;
 		//@}
 
 

@@ -1,4 +1,4 @@
-// $Id: matrix44.h,v 1.2 1999/10/30 12:53:26 oliver Exp $
+// $Id: matrix44.h,v 1.3 1999/12/04 18:34:20 oliver Exp $
 
 #ifndef BALL_MATHS_MATRIX44_H
 #define BALL_MATHS_MATRIX44_H
@@ -40,7 +40,7 @@ namespace BALL {
 		//@{
 
 		///
-		TMatrix4x4(void);
+		TMatrix4x4();
 
 		///
 		TMatrix4x4(const T* ptr);
@@ -64,7 +64,7 @@ namespace BALL {
 			 const T& m41, const T& m42, const T& m43, const T& m44);
 
 		///
-		virtual ~TMatrix4x4(void);
+		virtual ~TMatrix4x4();
 		//@}
 
 		/**	@name	Assignment
@@ -131,13 +131,13 @@ namespace BALL {
 		//@{
 
 		///
-		T getTrace(void) const;
+		T getTrace() const;
 
 		///
-		static const TMatrix4x4& getZero(void);
+		static const TMatrix4x4& getZero();
 
 		///
-		static const TMatrix4x4& getIdentity(void);
+		static const TMatrix4x4& getIdentity();
 
 		///
 		void setIdentity();
@@ -146,7 +146,7 @@ namespace BALL {
 		void fill(const T& t = (T)1);
 
 		///
-		void transpose(void);
+		void transpose();
 
 		///
 		TVector4<T> getRow(Index row);
@@ -155,7 +155,7 @@ namespace BALL {
 		TVector4<T> getColumn(Index col);
 
 		///
-		TVector4<T> getDiagonal(void) const;
+		TVector4<T> getDiagonal() const;
 		
 		///
 		T& operator ()(Index row, Index col);
@@ -164,10 +164,10 @@ namespace BALL {
 		const T& operator ()(Index row, Index col) const;
 
 		///
-		TMatrix4x4 operator + (void) const;
+		TMatrix4x4 operator + () const;
 
 		///
-		TMatrix4x4 operator - (void) const;
+		TMatrix4x4 operator - () const;
 
 		///
 		TMatrix4x4 operator + (const TMatrix4x4& m) const;
@@ -209,10 +209,10 @@ namespace BALL {
 		bool invert(TMatrix4x4& inverse) const;
 
 		///
-		bool invert(void);
+		bool invert();
 
 		///
-		T getDeterminant(void) const;
+		T getDeterminant() const;
 
 		///
 		void translate(const T &x, const T &y, const T &z);
@@ -333,25 +333,25 @@ namespace BALL {
 		bool operator != (const TMatrix4x4& m) const;
 
 		///
-		bool isIdentity(void) const;
+		bool isIdentity() const;
 
 		///
-		bool isRegular(void) const;
+		bool isRegular() const;
 
 		///
-		bool isSingular(void) const;
+		bool isSingular() const;
 
 		///
-		bool isSymmetric(void) const;
+		bool isSymmetric() const;
 
 		///
-		bool isLowerTriangular(void) const;
+		bool isLowerTriangular() const;
 
 		///
-		bool isUpperTriangular(void) const;
+		bool isUpperTriangular() const;
 
 		///
-		bool isDiagonal(void) const;
+		bool isDiagonal() const;
 		//@}
 
 		/**	@name	Debugging and Diagnostics
@@ -359,7 +359,7 @@ namespace BALL {
 		//@{
 
 		///
-		bool isValid(void) const;
+		bool isValid() const;
 
 		///
 		void dump(ostream& s = cout, unsigned long depth = 0) const;
@@ -432,7 +432,7 @@ namespace BALL {
 			 const T& m31, const T& m32, const T& m33, const T& m34, 
 			 const T& m41, const T& m42, const T& m43, const T& m44);
 
-		void initializeComponentPointers_(void)
+		void initializeComponentPointers_()
 		{
 			register T **ptr = (T **)comp_ptr_;
 
@@ -459,7 +459,7 @@ namespace BALL {
 	};
 
 	template <class T>
-	TMatrix4x4<T>::TMatrix4x4(void)
+	TMatrix4x4<T>::TMatrix4x4()
 		:	m11(0), m12(0), m13(0), m14(0), 
 			m21(0), m22(0), m23(0), m24(0), 
 			m31(0), m32(0), m33(0), m34(0), 
@@ -590,7 +590,7 @@ namespace BALL {
 	}
 
 	template <class T>
-	TMatrix4x4<T>::~TMatrix4x4(void)
+	TMatrix4x4<T>::~TMatrix4x4()
 	{
 	}
 
@@ -845,14 +845,14 @@ namespace BALL {
 
 	template <class T>
 	BALL_INLINE 
-	T TMatrix4x4<T>::getTrace(void) const
+	T TMatrix4x4<T>::getTrace() const
 	{
 		return (m11 + m22 + m33 + m44);
 	}
 
 	template <class T>
 	BALL_INLINE 
-	const TMatrix4x4<T>& TMatrix4x4<T>::getZero(void)
+	const TMatrix4x4<T>& TMatrix4x4<T>::getZero()
 	{
 		static TMatrix4x4<T> null_matrix
 			(0, 0, 0, 0,
@@ -873,7 +873,7 @@ namespace BALL {
 
 	template <class T>
 	BALL_INLINE 
-	const TMatrix4x4<T>& TMatrix4x4<T>::getIdentity(void)
+	const TMatrix4x4<T>& TMatrix4x4<T>::getIdentity()
 	{
 		static TMatrix4x4<T> identity
 			(1, 0, 0, 0,
@@ -916,7 +916,7 @@ namespace BALL {
 	}
 
 	template <class T>
-	void TMatrix4x4<T>::transpose(void)
+	void TMatrix4x4<T>::transpose()
 	{
 		T tmp = m12;
 		m12 = m21;
@@ -970,7 +970,7 @@ namespace BALL {
 	}
 
 	template <class T>
-	TVector4<T>TMatrix4x4<T>::getDiagonal(void) const
+	TVector4<T>TMatrix4x4<T>::getDiagonal() const
 	{
 		return TVector4<T>(m11, m22, m33, m44);
 	}
@@ -1015,14 +1015,14 @@ namespace BALL {
 
 	template <class T>
 	BALL_INLINE 
-	TMatrix4x4<T> TMatrix4x4<T>::operator + (void) const
+	TMatrix4x4<T> TMatrix4x4<T>::operator + () const
 	{
 		return *this;
 	}
 
 	template <class T>
 	BALL_INLINE TMatrix4x4<T>
-	TMatrix4x4<T>::operator - (void) const
+	TMatrix4x4<T>::operator - () const
 	{
 		return TMatrix4x4<T>
 			(-m11, -m12, -m13, -m14,
@@ -1327,13 +1327,13 @@ namespace BALL {
 	}
 
 	template <class T>
-	BALL_INLINE bool TMatrix4x4<T>::invert(void)
+	BALL_INLINE bool TMatrix4x4<T>::invert()
 	{
 		return invert(*this);
 	}
 
 	template <class T>
-	T TMatrix4x4<T>::getDeterminant(void) const
+	T TMatrix4x4<T>::getDeterminant() const
 	{
 		register Index i;
 		register Index j;
@@ -1896,7 +1896,7 @@ namespace BALL {
 	}
 
 	template <class T>
-	bool TMatrix4x4<T>::isIdentity(void) const
+	bool TMatrix4x4<T>::isIdentity() const
 	{
 		return (bool)
 			(   m11 == (T)1
@@ -1919,20 +1919,20 @@ namespace BALL {
 
 	template <class T>
 	BALL_INLINE 
-	bool TMatrix4x4<T>::isRegular(void) const
+	bool TMatrix4x4<T>::isRegular() const
 	{
 		return (getDeterminant() != (T)0);
 	}
 
 	template <class T>
 	BALL_INLINE
-	bool TMatrix4x4<T>::isSingular(void) const
+	bool TMatrix4x4<T>::isSingular() const
 	{
 		return (getDeterminant() == (T)0);
 	}
 
 	template <class T>
-	bool TMatrix4x4<T>::isSymmetric(void) const
+	bool TMatrix4x4<T>::isSymmetric() const
 	{
 		return (bool)(   m12 == m21 && m13 == m31
 									&& m14 == m41 && m23 == m32
@@ -1940,7 +1940,7 @@ namespace BALL {
 	}
 
 	template <class T>
-	bool TMatrix4x4<T>::isLowerTriangular(void) const
+	bool TMatrix4x4<T>::isLowerTriangular() const
 	{
 		return (bool)(   m12 == (T)0
 									&& m13 == (T)0
@@ -1951,7 +1951,7 @@ namespace BALL {
 	}
 
 	template <class T>
-	bool TMatrix4x4<T>::isUpperTriangular(void) const
+	bool TMatrix4x4<T>::isUpperTriangular() const
 	{
 		return (bool)(   m21 == (T)0
 									&& m31 == (T)0
@@ -1963,7 +1963,7 @@ namespace BALL {
 
 	template <class T>
 	BALL_INLINE 
-	bool TMatrix4x4<T>::isDiagonal(void) const
+	bool TMatrix4x4<T>::isDiagonal() const
 	{
 		return (bool)(   m12 == (T)0
 									&& m13 == (T)0
@@ -1980,7 +1980,7 @@ namespace BALL {
 	}
 
 	template <class T>
-	bool TMatrix4x4<T>::isValid(void) const
+	bool TMatrix4x4<T>::isValid() const
 	{
 		register T **ptr = (T **)comp_ptr_;
 		

@@ -1,4 +1,4 @@
-// $Id: atomTypes.C,v 1.2 1999/08/31 22:01:17 oliver Exp $
+// $Id: atomTypes.C,v 1.3 1999/12/04 18:34:32 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/atomTypes.h>
@@ -8,7 +8,7 @@ namespace BALL
 {
 
 
-	FFPSAtomTypes::FFPSAtomTypes(void)
+	FFPSAtomTypes::FFPSAtomTypes()
 		: FFParameterSection()
 	{
 	}
@@ -22,7 +22,7 @@ namespace BALL
 	}
 
 
-	void FFPSAtomTypes::destroy(void)
+	void FFPSAtomTypes::destroy()
 	{
 		names_.clear();
 		type_map_.destroy();
@@ -32,7 +32,7 @@ namespace BALL
 
 		
 
-	FFPSAtomTypes::~FFPSAtomTypes(void)
+	FFPSAtomTypes::~FFPSAtomTypes()
 	{
 		destroy();
 	}
@@ -115,7 +115,7 @@ namespace BALL
 		}
 	}
 
-	Size FFPSAtomTypes::getNumberOfTypes(void) const 
+	Size FFPSAtomTypes::getNumberOfTypes() const 
 	{
 		return type_map_.size();
 	}

@@ -1,4 +1,4 @@
-// $Id: forwardCirculator.h,v 1.1 1999/08/26 07:53:16 oliver Exp $
+// $Id: forwardCirculator.h,v 1.2 1999/12/04 18:34:11 oliver Exp $
 
 #ifndef BALL_CONCEPT_FORWARDCIRCULATOR_H
 #define BALL_CONCEPT_FORWARDCIRCULATOR_H
@@ -32,7 +32,7 @@ namespace BALL {
 
 		/**	
 		*/
-		ForwardCircularManipulator(void)
+		ForwardCircularManipulator()
 			:	ForwardManipulator<Container, DataType, Position, Traits>()
 		{
 		}
@@ -52,12 +52,12 @@ namespace BALL {
 		}
 		//@}
 
-		bool operator +	(void) const
+		bool operator +	() const
 		{
 			return traits_->isValid();
 		}
 
-		ForwardCircularManipulator &operator ++ (void)
+		ForwardCircularManipulator &operator ++ ()
 		{
 			ForwardManipulator<Container, DataType, Position, Traits>::operator++();
 
@@ -107,9 +107,9 @@ namespace BALL {
 
 		private:
 
-		void toEnd(void);
+		void toEnd();
 
-		bool isEnd(void) const;
+		bool isEnd() const;
 
 		static ForwardCircularManipulator end(const Container &container);
 	};
@@ -129,7 +129,7 @@ namespace BALL {
 		
 		/**	
 		*/
-		ForwardCirculator(void)
+		ForwardCirculator()
 			:	ForwardIterator<Container, DataType, Position, Traits>()
 		{
 		}
@@ -149,17 +149,17 @@ namespace BALL {
 		}
 		//@}
 
-		bool operator + (void) const
+		bool operator + () const
 		{
 			return traits_->isValid();
 		}
 
-		bool operator - (void) const
+		bool operator - () const
 		{
 			return (bool)(traits_->isValid() == false);
 		}
 
-		ForwardCirculator &operator ++ (void)
+		ForwardCirculator &operator ++ ()
 		{
 			ForwardIterator<Container, DataType, Position, Traits>::operator++();
 
@@ -209,9 +209,9 @@ namespace BALL {
 
 		private:
 
-		void toEnd(void);
+		void toEnd();
 
-		bool isEnd(void) const;
+		bool isEnd() const;
 
 		static ForwardCirculator end(const Container &container);
 	};
@@ -231,7 +231,7 @@ namespace BALL {
 
 		/**	
 		*/
-		ConstForwardCirculator(void)
+		ConstForwardCirculator()
 			:	ConstForwardIterator<Container, DataType, Position, Traits>()
 		{
 		}
@@ -251,12 +251,12 @@ namespace BALL {
 		}
 		//@}
 
-		bool operator + (void) const
+		bool operator + () const
 		{
 			return traits_->isValid();
 		}
 
-		ConstForwardCirculator &operator ++ (void)
+		ConstForwardCirculator &operator ++ ()
 		{
 			ConstForwardIterator<Container, DataType, Position, Traits>::operator++();
 
@@ -306,9 +306,9 @@ namespace BALL {
 
 		private:
 
-		void toEnd(void);
+		void toEnd();
 
-		bool isEnd(void) const;
+		bool isEnd() const;
 
 		static ConstForwardCirculator end(const Container &container);
 	};

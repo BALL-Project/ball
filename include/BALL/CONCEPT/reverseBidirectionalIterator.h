@@ -1,4 +1,4 @@
-// $Id: reverseBidirectionalIterator.h,v 1.1 1999/08/26 07:53:17 oliver Exp $
+// $Id: reverseBidirectionalIterator.h,v 1.2 1999/12/04 18:34:12 oliver Exp $
 
 #ifndef BALL_CONCEPT_REVERSEBIDIRECTIONALITERATOR_H
 #define BALL_CONCEPT_REVERSEBIDIRECTIONALITERATOR_H
@@ -36,7 +36,7 @@ namespace BALL {
 
 		/**
 		*/
-		ReverseBidirectionalManipulator(void)
+		ReverseBidirectionalManipulator()
 			:	BidirectionalManipulator<Container, DataType, Position, Traits>()
 		{
 		}
@@ -56,57 +56,57 @@ namespace BALL {
 		}
 		//@}
 
-		bool operator + (void) const
+		bool operator + () const
 		{
 			return traits_->isValid();
 		}
 
-		bool operator - (void) const
+		bool operator - () const
 		{
 			return (bool)(traits_->isValid() == false);
 		}
 
-		void toBegin(void)
+		void toBegin()
 		{
 			BidirectionalManipulator<Container, DataType, Position, Traits>::toRBegin();
 		}
 
-		bool isBegin(void) const
+		bool isBegin() const
 		{
 			return BidirectionalManipulator<Container, DataType, Position, Traits>::isRBegin();
 		}
 
-		void toEnd(void)
+		void toEnd()
 		{
 			BidirectionalManipulator<Container, DataType, Position, Traits>::toREnd();
 		}
 
-		bool isEnd(void) const
+		bool isEnd() const
 		{
 			return BidirectionalManipulator<Container, DataType, Position, Traits>::isREnd();
 		}
 
-		void toRBegin(void)
+		void toRBegin()
 		{
 			BidirectionalManipulator<Container, DataType, Position, Traits>::toBegin();
 		}
 
-		bool isRBegin(void) const
+		bool isRBegin() const
 		{
 			return BidirectionalManipulator<Container, DataType, Position, Traits>::isBegin();
 		}
 
-		void toREnd(void)
+		void toREnd()
 		{
 			BidirectionalManipulator<Container, DataType, Position, Traits>::toEnd();
 		}
 
-		bool isREnd(void) const
+		bool isREnd() const
 		{
 			return BidirectionalManipulator<Container, DataType, Position, Traits>::isEnd();
 		}
 
-		ReverseBidirectionalManipulator &operator ++ (void)
+		ReverseBidirectionalManipulator &operator ++ ()
 		{
 			BidirectionalManipulator<Container, DataType, Position, Traits>::operator--();
 			return *this;
@@ -119,7 +119,7 @@ namespace BALL {
 			return manipulator;
 		}
 
-		ReverseBidirectionalManipulator &operator -- (void)
+		ReverseBidirectionalManipulator &operator -- ()
 		{
 			BidirectionalManipulator<Container, DataType, Position, Traits>::operator++();
 			return *this;
@@ -224,7 +224,7 @@ namespace BALL {
 
 		/**
 		*/
-		ReverseBidirectionalIterator(void)
+		ReverseBidirectionalIterator()
 			:	BidirectionalIterator<Container, DataType, Position, Traits>()
 		{
 		}
@@ -244,57 +244,57 @@ namespace BALL {
 		}
 		//@}
 
-		bool operator + (void) const
+		bool operator + () const
 		{
 			return traits_->isValid();
 		}
 
-		bool operator - (void) const
+		bool operator - () const
 		{
 			return (bool)(traits_->isValid() == false);
 		}
 
-		void toBegin(void)
+		void toBegin()
 		{
 			BidirectionalIterator<Container, DataType, Position, Traits>::toRBegin();
 		}
 
-		bool isBegin(void) const
+		bool isBegin() const
 		{
 			return BidirectionalIterator<Container, DataType, Position, Traits>::isRBegin();
 		}
 
-		void toEnd(void)
+		void toEnd()
 		{
 			BidirectionalIterator<Container, DataType, Position, Traits>::toREnd();
 		}
 
-		bool isEnd(void) const
+		bool isEnd() const
 		{
 			return BidirectionalIterator<Container, DataType, Position, Traits>::isREnd();
 		}
 
-		void toRBegin(void)
+		void toRBegin()
 		{
 			BidirectionalIterator<Container, DataType, Position, Traits>::toBegin();
 		}
 
-		bool isRBegin(void) const
+		bool isRBegin() const
 		{
 			return BidirectionalIterator<Container, DataType, Position, Traits>::isBegin();
 		}
 
-		void toREnd(void)
+		void toREnd()
 		{
 			BidirectionalIterator<Container, DataType, Position, Traits>::toEnd();
 		}
 
-		bool isREnd(void) const
+		bool isREnd() const
 		{
 			return BidirectionalIterator<Container, DataType, Position, Traits>::isEnd();
 		}
 
-		ReverseBidirectionalIterator &operator ++ (void)
+		ReverseBidirectionalIterator &operator ++ ()
 		{
 			BidirectionalIterator<Container, DataType, Position, Traits>::operator--();
 			return *this;
@@ -307,7 +307,7 @@ namespace BALL {
 			return iterator;
 		}
 
-		ReverseBidirectionalIterator &operator -- (void)
+		ReverseBidirectionalIterator &operator -- ()
 		{
 			BidirectionalIterator<Container, DataType, Position, Traits>::operator++();
 			return *this;
@@ -412,7 +412,7 @@ namespace BALL {
 
 		/**
 		*/
-		ConstReverseBidirectionalIterator(void)
+		ConstReverseBidirectionalIterator()
 			:	ConstBidirectionalIterator<Container, DataType, Position, Traits>()
 		{
 		}
@@ -432,57 +432,57 @@ namespace BALL {
 		}
 		//@}
 
-		bool operator + (void) const
+		bool operator + () const
 		{
 			return traits_->isValid();
 		}
 
-		bool operator - (void) const
+		bool operator - () const
 		{
 			return (bool)(traits_->isValid() == false);
 		}
 
-		void toBegin(void)
+		void toBegin()
 		{
 			ConstBidirectionalIterator<Container, DataType, Position, Traits>::toRBegin();
 		}
 
-		bool isBegin(void) const
+		bool isBegin() const
 		{
 			return ConstBidirectionalIterator<Container, DataType, Position, Traits>::isRBegin();
 		}
 
-		void toEnd(void)
+		void toEnd()
 		{
 			ConstBidirectionalIterator<Container, DataType, Position, Traits>::toREnd();
 		}
 
-		bool isEnd(void) const
+		bool isEnd() const
 		{
 			return ConstBidirectionalIterator<Container, DataType, Position, Traits>::isREnd();
 		}
 
-		void toRBegin(void)
+		void toRBegin()
 		{
 			ConstBidirectionalIterator<Container, DataType, Position, Traits>::toBegin();
 		}
 
-		bool isRBegin(void) const
+		bool isRBegin() const
 		{
 			return ConstBidirectionalIterator<Container, DataType, Position, Traits>::isBegin();
 		}
 
-		void toREnd(void)
+		void toREnd()
 		{
 			ConstBidirectionalIterator<Container, DataType, Position, Traits>::toEnd();
 		}
 
-		bool isREnd(void) const
+		bool isREnd() const
 		{
 			return ConstBidirectionalIterator<Container, DataType, Position, Traits>::isEnd();
 		}
 
-		ConstReverseBidirectionalIterator &operator ++ (void)
+		ConstReverseBidirectionalIterator &operator ++ ()
 		{
 			ConstBidirectionalIterator<Container, DataType, Position, Traits>::operator--();
 			return *this;
@@ -495,7 +495,7 @@ namespace BALL {
 			return iterator;
 		}
 
-		ConstReverseBidirectionalIterator &operator -- (void)
+		ConstReverseBidirectionalIterator &operator -- ()
 		{
 			ConstBidirectionalIterator<Container, DataType, Position, Traits>::operator++();
 			return *this;

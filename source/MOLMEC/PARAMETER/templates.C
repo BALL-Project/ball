@@ -1,4 +1,4 @@
-// $Id: templates.C,v 1.2 1999/09/21 15:19:21 oliver Exp $
+// $Id: templates.C,v 1.3 1999/12/04 18:34:32 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/templates.h>
@@ -7,7 +7,7 @@
 namespace BALL 
 {
 
-	FFPSTemplates::FFPSTemplates(void)
+	FFPSTemplates::FFPSTemplates()
 		: FFParameterSection()
 	{
 	}
@@ -21,7 +21,7 @@ namespace BALL
 	}
 
 
-	void FFPSTemplates::destroy(void)
+	void FFPSTemplates::destroy()
 	{
 		charges_.destroy();
 		type_names_.destroy();
@@ -31,7 +31,7 @@ namespace BALL
 
 		
 
-	FFPSTemplates::~FFPSTemplates(void)
+	FFPSTemplates::~FFPSTemplates()
 	{
 		destroy();
 	}

@@ -1,4 +1,4 @@
-// $Id: singleton.h,v 1.1 1999/08/26 07:53:17 oliver Exp $
+// $Id: singleton.h,v 1.2 1999/12/04 18:34:12 oliver Exp $
 
 #ifndef BALL_CONCEPT_SINGLETON_H
 #define BALL_CONCEPT_SINGLETON_H
@@ -24,29 +24,29 @@ namespace BALL {
 		
 		/**
 		*/
-		~Singleton(void)
+		~Singleton()
 		{
 			--countReferences_();
 		}
 		//@}
 
-		static Size countReferences(void);
+		static Size countReferences();
 
-		T* operator -> (void);
+		T* operator -> ();
 
-		const T* operator -> (void) const;
+		const T* operator -> () const;
 
-		T& getExemplary(void);
+		T& getExemplary();
 
-		const T& getExemplary(void) const;
+		const T& getExemplary() const;
 	
-		operator T & (void);
+		operator T & ();
 
-		operator T * (void);
+		operator T * ();
 
 		protected:
 
-		Singleton(void)
+		Singleton()
 		{
 			++countReferences_();
 		}
@@ -55,17 +55,17 @@ namespace BALL {
 
 		private:
 
-		static Size &countReferences_(void);
+		static Size &countReferences_();
 	};
 
 	template <class T>
-	inline Size Singleton<T>::countReferences(void)
+	inline Size Singleton<T>::countReferences()
 	{
 		return countReferences_();
 	}
 
 	template <class T> 
-	T* Singleton<T>::operator -> (void)
+	T* Singleton<T>::operator -> ()
 	{
 		static T* exemplary = 0;
 		
@@ -78,37 +78,37 @@ namespace BALL {
 	}
 
 	template <class T>
-	inline const T*  Singleton<T>::operator -> (void) const
+	inline const T*  Singleton<T>::operator -> () const
 	{
 		return ((Singleton *)this)->operator->();
 	}
 
 	template <class T>
-	inline T& Singleton<T>::getExemplary(void)
+	inline T& Singleton<T>::getExemplary()
 	{
 		return *operator->();
 	}
 
 	template <class T> 
-	inline const T& Singleton<T>::getExemplary(void) const
+	inline const T& Singleton<T>::getExemplary() const
 	{
 		return ((Singleton *)this)->operator->();
 	}
 		
 	template <class T>
-	inline Singleton<T>::operator T& (void)
+	inline Singleton<T>::operator T& ()
 	{
 		return *operator->();
 	}
 
 	template <class T>
-	inline Singleton<T>::operator T * (void)
+	inline Singleton<T>::operator T * ()
 	{
 		return operator->();
 	}
 
 	template <class T>
-	Size& Singleton<T>::countReferences_(void)
+	Size& Singleton<T>::countReferences_()
 	{
 		static Size references = 0;
 		

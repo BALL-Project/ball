@@ -1,11 +1,11 @@
-// $Id: selectable.C,v 1.1 1999/08/26 08:02:35 oliver Exp $
+// $Id: selectable.C,v 1.2 1999/12/04 18:34:27 oliver Exp $
 
 #include <BALL/CONCEPT/selectable.h>
 #include <BALL/CONCEPT/persistenceManager.h>
 
 namespace BALL {
 
-	Selectable::Selectable(void)
+	Selectable::Selectable()
 		:	selected_(BALL_SELECTABLE_DEFAULT_SELECTION)
 	{
 	}
@@ -15,7 +15,7 @@ namespace BALL {
 	{
 	}
 
-	Selectable::~Selectable(void)
+	Selectable::~Selectable()
 	{
 	}
 

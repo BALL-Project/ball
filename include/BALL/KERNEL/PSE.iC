@@ -1,4 +1,4 @@
-// $Id: PSE.iC,v 1.1 1999/08/26 07:53:19 oliver Exp $
+// $Id: PSE.iC,v 1.2 1999/12/04 18:34:17 oliver Exp $
 
 BALL_INLINE 
 void Element::setName(const String& name)
@@ -7,13 +7,13 @@ void Element::setName(const String& name)
 }
 
 BALL_INLINE 
-String& Element::getName(void)
+String& Element::getName()
 {
   return name_;
 }
 
 BALL_INLINE 
-const String& Element::getName(void) const
+const String& Element::getName() const
 {
   return name_;
 }
@@ -25,13 +25,13 @@ void Element::setSymbol(const String& symbol)
 }
 
 BALL_INLINE 
-String& Element::getSymbol(void)
+String& Element::getSymbol()
 {
   return symbol_;
 }
 
 BALL_INLINE 
-const String& Element::getSymbol(void) const
+const String& Element::getSymbol() const
 {
   return symbol_;
 }
@@ -43,7 +43,7 @@ void Element::setGroup(Element::Group group)
 }
 
 BALL_INLINE 
-Element::Group Element::getGroup(void) const
+Element::Group Element::getGroup() const
 {
   return group_;
 }
@@ -55,7 +55,7 @@ void Element::setPeriod(Element::Period period)
 }
 
 BALL_INLINE 
-Element::Period Element::getPeriod(void) const
+Element::Period Element::getPeriod() const
 {
   return period_;
 }
@@ -67,7 +67,7 @@ void Element::setAtomicNumber(Element::AtomicNumber atomic_number)
 }
 
 BALL_INLINE 
-Element::AtomicNumber Element::getAtomicNumber(void) const
+Element::AtomicNumber Element::getAtomicNumber() const
 {
   return atomic_number_;
 }
@@ -79,7 +79,7 @@ void Element::setAtomicWeight(float atomic_weight)
 }
 
 BALL_INLINE 
-float Element::getAtomicWeight(void) const
+float Element::getAtomicWeight() const
 {
   return atomic_weight_;
 }
@@ -91,7 +91,7 @@ void Element::setAtomicRadius(float atomic_radius)
 }
 
 BALL_INLINE 
-float Element::getAtomicRadius(void) const
+float Element::getAtomicRadius() const
 {
   return atomic_radius_;
 }
@@ -103,7 +103,7 @@ void Element::setCovalentRadius(float covalent_radius)
 }
 
 BALL_INLINE 
-float Element::getCovalentRadius(void) const
+float Element::getCovalentRadius() const
 {
   return covalent_radius_;
 }
@@ -115,7 +115,7 @@ void Element::setVanDerWaalsRadius(float van_der_waals_radius)
 }
 
 BALL_INLINE 
-float Element::getVanDerWaalsRadius(void) const
+float Element::getVanDerWaalsRadius() const
 {
   return van_der_waals_radius_;
 }
@@ -127,7 +127,7 @@ void Element::setElectronegativity(float electronegativity)
 }
 
 BALL_INLINE 
-float Element::getElectronegativity(void) const
+float Element::getElectronegativity() const
 {
   return electronegativity_;
 }
@@ -169,7 +169,7 @@ bool Element::operator >(const Element& element) const
 }
 
 BALL_INLINE 
-bool Element::isUnknown(void) const
+bool Element::isUnknown() const
 {
   return operator==(Element::UNKNOWN);
 }

@@ -1,4 +1,4 @@
-// $Id: molecule.C,v 1.1 1999/08/26 08:02:34 oliver Exp $
+// $Id: molecule.C,v 1.2 1999/12/04 18:34:30 oliver Exp $
 
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/system.h>
@@ -6,7 +6,7 @@
 namespace BALL 
 {
 
-	Molecule::Molecule(void)
+	Molecule::Molecule()
 		:	BaseFragment()
 	{
 	}
@@ -21,17 +21,17 @@ namespace BALL
 	{
 	}
 
-	Molecule::~Molecule(void)
+	Molecule::~Molecule()
 	{
 		destroy();
 	}
 
-	void Molecule::clear(void)
+	void Molecule::clear()
 	{
 		BaseFragment::clear();
 	}
 		
-	void Molecule::destroy(void)
+	void Molecule::destroy()
 	{
 		BaseFragment::destroy();
 	}
@@ -72,7 +72,7 @@ namespace BALL
 		BaseFragment::swap(molecule);
 	}
 		
-	System* Molecule::getSystem(void)
+	System* Molecule::getSystem()
 	{
 		for (Composite::AncestorIterator ancestor_it = beginAncestor();
 				 !ancestor_it.isEnd(); ++ancestor_it)
@@ -86,7 +86,7 @@ namespace BALL
 		return 0;
 	}
 
-	const System* Molecule::getSystem(void) const
+	const System* Molecule::getSystem() const
 	{
 		return ((Molecule *)this)->getSystem();
 	}
@@ -167,7 +167,7 @@ namespace BALL
 		return BaseFragment::remove(base_fragment);
 	}
 
-	bool Molecule::isValid(void) const
+	bool Molecule::isValid() const
 	{ 
 		return BaseFragment::isValid();
 	}

@@ -1,4 +1,4 @@
-// $Id: surface.h,v 1.1 1999/08/26 07:53:18 oliver Exp $
+// $Id: surface.h,v 1.2 1999/12/04 18:34:21 oliver Exp $
 
 #ifndef BALL_MATHS_SURFACE_H
 #define BALL_MATHS_SURFACE_H
@@ -50,7 +50,7 @@ namespace BALL
 		Surface(const Surface& surface, bool deep = true);
 			
 		///
-		virtual ~Surface(void);
+		virtual ~Surface();
 		//@}
 
 		/**	@name	Assignment
@@ -81,10 +81,10 @@ namespace BALL
 		//@{
 
 		///
-		float getVolume(void) const;
+		float getVolume() const;
 
 		///
-		float getArea(void) const;
+		float getArea() const;
 	
 		///	
 		Size getNumberOfTriangles() const;
@@ -120,7 +120,7 @@ namespace BALL
 		*/
 		//@{
 		///
-		bool isValid(void) const;
+		bool isValid() const;
 		//@}
 
 

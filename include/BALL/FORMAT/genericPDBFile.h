@@ -1,4 +1,4 @@
-// $Id: genericPDBFile.h,v 1.1 1999/08/26 07:53:20 oliver Exp $
+// $Id: genericPDBFile.h,v 1.2 1999/12/04 18:34:15 oliver Exp $
 
 #ifndef BALL_FORMAT_GENERICPDBFILE_H
 #define BALL_FORMAT_GENERICPDBFILE_H
@@ -809,29 +809,29 @@ namespace BALL {
 	{
 		public:
 
-			GenericPDBFile(void);
+			GenericPDBFile();
 
-			virtual ~GenericPDBFile(void);
+			virtual ~GenericPDBFile();
 
 			virtual void clear(int state = 0);
 		
-			virtual float getVersion(void) const;
+			virtual float getVersion() const;
 
 			void selectModel(Index index);
 
-			void selectAllModels(void);
+			void selectAllModels();
 
-			Index getSelectedModel(void) const;
+			Index getSelectedModel() const;
 
-			Index getCurrentModel(void) const;
+			Index getCurrentModel() const;
 
-			char* getRecordString(void);
+			char* getRecordString();
 		
-			const char* getRecordString(void) const;
+			const char* getRecordString() const;
 		
-			Index getRecordNumber(void) const;
+			Index getRecordNumber() const;
 
-			PDB::RecordType getRecordType(void) const;
+			PDB::RecordType getRecordType() const;
 
 			virtual const char* getAtomElementSymbol
 				(const PDB::Atom atom_name,
@@ -846,7 +846,7 @@ namespace BALL {
 			virtual short getAtomBranchDesignator
 				(const PDB::Atom atom_name);
 		
-			Size countRecordFields(void) const;
+			Size countRecordFields() const;
 
 			Size countRecord
 				(PDB::RecordType record_type,
@@ -863,7 +863,7 @@ namespace BALL {
 		
 			bool readNextRecord(bool read_values = true);
 
-			bool readRecords(void);
+			bool readRecords();
 		
 			virtual bool readUnknownRecord(char* line);
 		
@@ -941,9 +941,9 @@ namespace BALL {
 				 PDB::RecordDBREF::InitialDatabaseSegment& initial_database_segment,
 				 PDB::RecordDBREF::EndingDatabaseSegment& ending_database_segment);
 
-			virtual bool readRecordEND(void);
+			virtual bool readRecordEND();
 		
-			virtual bool readRecordENDMDL(void);
+			virtual bool readRecordENDMDL();
 		
 			virtual bool readRecordEXPDTA
 				(PDB::Continuation continuation,
@@ -1190,9 +1190,9 @@ namespace BALL {
 				 PDB::Real translation_vector[3],
 				 PDB::PDBString comment);
 
-			virtual bool hasFormat(void);
+			virtual bool hasFormat();
 
-			bool hasFormat(void) const;
+			bool hasFormat() const;
 
 			virtual bool hasFormat(const String& s) const;
 
@@ -1200,7 +1200,7 @@ namespace BALL {
 
 		protected:
 		
-			void clear_(void);
+			void clear_();
 
 
 

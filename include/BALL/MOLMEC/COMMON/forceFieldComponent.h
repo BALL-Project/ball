@@ -1,4 +1,4 @@
-// $Id: forceFieldComponent.h,v 1.1 1999/08/26 07:53:21 oliver Exp $
+// $Id: forceFieldComponent.h,v 1.2 1999/12/04 18:34:23 oliver Exp $
 // Molecular Mechanics: general force field component class
 
 #ifndef BALL_MOLMEC_FORCEFIELDCOMPONENT_H
@@ -59,7 +59,7 @@ namespace BALL
 
 		/**	Default constructor.
 		*/
-		ForceFieldComponent(void);
+		ForceFieldComponent();
 
 		/**	Constructor.
 		*/
@@ -73,7 +73,7 @@ namespace BALL
 
 		/**	Destructor.
 		*/
-		virtual ~ForceFieldComponent(void);
+		virtual ~ForceFieldComponent();
 
 		//@} 
 
@@ -83,7 +83,7 @@ namespace BALL
 
 		/**	Setup method.
 		*/
-		virtual bool setup(void);
+		virtual bool setup();
 
 		//@}
 		
@@ -95,7 +95,7 @@ namespace BALL
 		/**	Returns the parent force field.
 			0 is returned, if no force field is assigned.
 		*/	
-		ForceField*	getForceField(void) const;
+		ForceField*	getForceField() const;
 
 		/**	Sets the force field.
 		*/
@@ -108,7 +108,7 @@ namespace BALL
 
 		/**	Returns the component's name 
 		*/
-		String	getName(void) const;
+		String	getName() const;
 
 		//@}
 
@@ -119,7 +119,7 @@ namespace BALL
 
 		/**	Returns the energy of the force field component
 		*/
-		virtual float getEnergy(void) const;
+		virtual float getEnergy() const;
 
 		/**	Returns the energy of the force field component.
 				The current energy for this force field component is being
@@ -127,7 +127,7 @@ namespace BALL
 				If the component isn't assigned to a ForceField object,
 				zero is returned.
 		*/
-		virtual float	updateEnergy(void);
+		virtual float	updateEnergy();
 		
 
 		/**	Updates the atomic forces in the force field.
@@ -136,7 +136,7 @@ namespace BALL
 				array (forces) of the ForceField instance this component 
 				is assigned to.
 		*/
-		virtual void updateForces(void);
+		virtual void updateForces();
 		
 		//@}
 

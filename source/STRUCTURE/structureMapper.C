@@ -1,4 +1,4 @@
-// $Id: structureMapper.C,v 1.3 1999/09/01 07:02:11 oliver Exp $
+// $Id: structureMapper.C,v 1.4 1999/12/04 18:34:34 oliver Exp $
 
 #include <BALL/STRUCTURE/structureMapper.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
@@ -19,7 +19,7 @@ namespace BALL {
 	using std::map;
 
 	/* Default constructor */
-	StructureMapper::StructureMapper(void)
+	StructureMapper::StructureMapper()
 	{
 	}
 
@@ -30,7 +30,7 @@ namespace BALL {
 	}
 
 	/** Destructor */
-	StructureMapper::~StructureMapper(void)
+	StructureMapper::~StructureMapper()
 	{
 		A_ = 0;
 		B_ = 0;
@@ -44,7 +44,7 @@ namespace BALL {
 	}
 
 	/* Calculate the root mean squared deviation */
-	float StructureMapper::calculateRMSD(void)
+	float StructureMapper::calculateRMSD()
 	{
 		// calculate bijection, if it is not already defined
 		if (bijection_.size() == 0) {
@@ -83,7 +83,7 @@ namespace BALL {
 
 	/* Calculate the transformation to map the first of two isomorphous
 			Composite objects onto the second */
-	bool StructureMapper::calculateTransformation(void)
+	bool StructureMapper::calculateTransformation()
 	{
 		// check whether both composites are defined
 		if ((A_ == 0) || (B_ == 0))
@@ -210,7 +210,7 @@ namespace BALL {
 		return true;
 	}
 
-	void StructureMapper::calculateDefaultBijection(void)
+	void StructureMapper::calculateDefaultBijection()
 	{
 	}
 

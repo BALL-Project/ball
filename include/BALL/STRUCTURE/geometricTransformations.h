@@ -1,4 +1,4 @@
-// $Id: geometricTransformations.h,v 1.1 1999/08/26 07:53:20 oliver Exp $
+// $Id: geometricTransformations.h,v 1.2 1999/12/04 18:34:25 oliver Exp $
 
 #ifndef BALL_STRUCTURE_GEOMETRICTRANSFORMATIONS_H
 #define BALL_STRUCTURE_GEOMETRICTRANSFORMATIONS_H
@@ -67,7 +67,7 @@ namespace BALL {
 		/**	Returns the translation vector
 				@return	the current translation vector
 		*/
-		const Vector3& getTranslation(void) const;
+		const Vector3& getTranslation() const;
 		
 		
 		//----------------  applicator methods ----------------
@@ -126,7 +126,7 @@ namespace BALL {
 		/**	Returns the transformation vector
 				@return	the current transformation matrix
 		*/
-		const Matrix4x4& getTransformation(void) const;
+		const Matrix4x4& getTransformation() const;
 		
 		
 		//----------------  applicator methods ----------------

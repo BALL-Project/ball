@@ -1,4 +1,4 @@
-// $Id: box3.h,v 1.1 1999/08/26 07:53:18 oliver Exp $
+// $Id: box3.h,v 1.2 1999/12/04 18:34:19 oliver Exp $
 
 #ifndef BALL_MATHS_BOX3_H
 #define BALL_MATHS_BOX3_H
@@ -32,7 +32,7 @@ namespace BALL {
 		//@{
 
 		///
-		TBox3(void);
+		TBox3();
 
 		///
 		TBox3(const TBox3& box, bool deep = true);
@@ -46,7 +46,7 @@ namespace BALL {
 			 const T& bx, const T& by, const T& bz);
 
 		///
-		virtual ~TBox3(void);
+		virtual ~TBox3();
 		//@}
 
 		/**	@name	Assignment
@@ -85,19 +85,19 @@ namespace BALL {
 		*/
 		//@{
 		///
-		T getSurface(void) const;
+		T getSurface() const;
 
 		///
-		T getVolume(void) const;
+		T getVolume() const;
 
 		///
-		T getWidth(void) const;
+		T getWidth() const;
 	
 		///
-		T getHeight(void) const;
+		T getHeight() const;
 	
 		///
-		T getDepth(void) const;
+		T getDepth() const;
 	
 		///
 		void join(const TBox3& box);
@@ -118,7 +118,7 @@ namespace BALL {
 		*/
 		//@{
 		///
-		bool isValid(void) const;
+		bool isValid() const;
 
 		///
 		void dump(ostream& s = cout, unsigned long depth = 0) const;
@@ -137,7 +137,7 @@ namespace BALL {
 	};
 
 	template <class T>
-	TBox3<T>::TBox3(void)
+	TBox3<T>::TBox3()
 		:	a(0, 0, 0),
 			b(0, 0, 0)
 	{
@@ -167,7 +167,7 @@ namespace BALL {
 	}
 
 	template <class T>
-	TBox3<T>::~TBox3(void)
+	TBox3<T>::~TBox3()
 	{
 	}
 
@@ -239,7 +239,7 @@ namespace BALL {
 
 	template <class T>
 	BALL_INLINE 
-	T TBox3<T>::getSurface(void) const
+	T TBox3<T>::getSurface() const
 	{
 		T width = Maths::abs(b.x - a.x);
 		T height = Maths::abs(b.y - a.y);
@@ -250,7 +250,7 @@ namespace BALL {
 
 	template <class T>
 	BALL_INLINE 
-	T TBox3<T>::getVolume(void) const
+	T TBox3<T>::getVolume() const
 	{
 		T width = Maths::abs(b.x - a.x);
 		T height = Maths::abs(b.y - a.y);
@@ -261,20 +261,20 @@ namespace BALL {
 
 	template <class T>
 	BALL_INLINE 
-	T TBox3<T>::getWidth(void) const
+	T TBox3<T>::getWidth() const
 	{
 		return Maths::abs(b.x - a.x);
 	}
 
 	template <class T>
 	BALL_INLINE T 
-	TBox3<T>::getHeight(void) const
+	TBox3<T>::getHeight() const
 	{
 		return Maths::abs(b.y - a.y);
 	}
 
 	template <class T>
-	BALL_INLINE T TBox3<T>::getDepth(void) const
+	BALL_INLINE T TBox3<T>::getDepth() const
 	{
 		return Maths::abs(b.z - a.z);
 	}
@@ -338,7 +338,7 @@ namespace BALL {
 
 	template <class T>
 	BALL_INLINE 
-	bool TBox3<T>::isValid(void) const
+	bool TBox3<T>::isValid() const
 	{
 		return (bool)(a.isValid() && b.isValid());
 	}

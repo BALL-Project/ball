@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.h,v 1.4 1999/09/21 11:06:54 oliver Exp $
+// $Id: amberNonBonded.h,v 1.5 1999/12/04 18:34:22 oliver Exp $
 // Molecular Mechanics: Amber force field, bond stretch component
 
 #ifndef BALL_MOLMEC_AMBER_NONBONDED_H
@@ -52,7 +52,7 @@ namespace BALL
 
 		/**	Default constructor.
 		*/
-		AmberNonBonded(void);
+		AmberNonBonded();
 
 		/**	Constructor.
 		*/
@@ -64,7 +64,7 @@ namespace BALL
 
 		/**	Destructor.
 		*/
-		virtual ~AmberNonBonded(void);
+		virtual ~AmberNonBonded();
 
 		//@}
 		
@@ -75,7 +75,7 @@ namespace BALL
 
 		/**	Setup method.
 		*/
-		virtual bool setup(void);
+		virtual bool setup();
 
 		//@}
 
@@ -86,11 +86,11 @@ namespace BALL
 
 		/**	Calculates and returns the component's energy.
 		*/
-		virtual float updateEnergy(void);
+		virtual float updateEnergy();
 
 		/**	Calculates and returns the component's forces.
 		*/
-		virtual void updateForces(void);
+		virtual void updateForces();
 
 		/**	Return the electrostatic energy.
 		*/
@@ -108,7 +108,7 @@ namespace BALL
 
 		/**	Computes the most efficient way to calculate the non-bonded atom pairs
 		*/
-		virtual int	determineMethodOfAtomPairGeneration(void);
+		virtual int	determineMethodOfAtomPairGeneration();
 
 		/**	Build a vector of non-bonded atom pairs with the vdw parameters
 		*/

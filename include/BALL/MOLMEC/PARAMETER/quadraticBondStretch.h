@@ -1,4 +1,4 @@
-// $Id: quadraticBondStretch.h,v 1.1 1999/08/26 07:53:21 oliver Exp $
+// $Id: quadraticBondStretch.h,v 1.2 1999/12/04 18:34:24 oliver Exp $
 // Molecular Mechanics Parameter: class describing the atom type section of a parameter file
  
 #ifndef BALL_MOLMEC_PARAMETER_QUADRATICBONDSTRETCH_H
@@ -40,15 +40,15 @@ namespace BALL {
 
 		/**	Default constructor.
 		*/
-		FFPSQuadraticBondStretch(void);
+		FFPSQuadraticBondStretch();
 
 		/**	Destructor.
 		*/
-		virtual ~FFPSQuadraticBondStretch(void);
+		virtual ~FFPSQuadraticBondStretch();
 
 		/**	Destroy method.
 		*/
-		virtual void destroy(void);
+		virtual void destroy();
 		
 		/**	Reads a parameter section from an INI file.
 				This method reads the section given in section\_name from ini\_file,

@@ -1,4 +1,4 @@
-// $Id: plane3.h,v 1.2 1999/10/30 12:53:27 oliver Exp $
+// $Id: plane3.h,v 1.3 1999/12/04 18:34:20 oliver Exp $
 
 #ifndef BALL_MATHS_PLANE3_H
 #define BALL_MATHS_PLANE3_H
@@ -65,7 +65,7 @@ namespace BALL
 		//@{
 
 		///
-		TPlane3(void)
+		TPlane3()
 			:	p(),
 				n()
 		{
@@ -93,7 +93,7 @@ namespace BALL
 		}
 
 		///
-		virtual ~TPlane3(void)
+		virtual ~TPlane3()
 		{
 		}
 		//@}
@@ -157,7 +157,7 @@ namespace BALL
 		//@{
 
 		///
-		void normalize(void)
+		void normalize()
 		{
 			T length = n.getLength();
 
@@ -200,7 +200,7 @@ namespace BALL
 		//@{
 
 		///
-		bool isValid(void) const
+		bool isValid() const
 		{
 			return true;
 		}

@@ -1,4 +1,4 @@
-// $Id: bond.C,v 1.2 1999/09/06 22:22:18 oliver Exp $
+// $Id: bond.C,v 1.3 1999/12/04 18:34:29 oliver Exp $
 
 #include <BALL/KERNEL/bond.h>
 
@@ -13,7 +13,7 @@ namespace BALL
 	{
 	}
 
-	Bond::Bond(void)
+	Bond::Bond()
 		: Composite(),
 			PropertyManager(),
 			first_(BALL_BOND_DEFAULT_FIRST_ATOM),
@@ -101,12 +101,12 @@ namespace BALL
 		return &bond;
 	}
 
-	Bond::~Bond(void)
+	Bond::~Bond()
 	{ 
 		arrangeBonds_();
 	}
 
-	void Bond::clear(void)
+	void Bond::clear()
 	{
 		PropertyManager::clear();
 		
@@ -114,7 +114,7 @@ namespace BALL
 		clear_();
 	}
 
-	void Bond::destroy(void)
+	void Bond::destroy()
 	{
 		PropertyManager::destroy();
 
@@ -215,12 +215,12 @@ namespace BALL
 		first_ = atom;
 	}
 		 
-	Atom* Bond::getFirstAtom(void)
+	Atom* Bond::getFirstAtom()
 	{
 		return first_;
 	}
 		 
-	const Atom* Bond::getFirstAtom(void) const
+	const Atom* Bond::getFirstAtom() const
 	{
 		return first_;
 	}
@@ -245,12 +245,12 @@ namespace BALL
 		second_ = atom;
 	}
 		 
-	Atom* Bond::getSecondAtom(void)
+	Atom* Bond::getSecondAtom()
 	{
 		return second_;
 	}
 		 
-	const Atom* Bond::getSecondAtom(void) const
+	const Atom* Bond::getSecondAtom() const
 	{
 		return second_;
 	}
@@ -260,12 +260,12 @@ namespace BALL
 		name_ = name;
 	}
 
-	String& Bond::getName(void)
+	String& Bond::getName()
 	{
 		return name_;
 	}
 
-	const String& Bond::getName(void) const
+	const String& Bond::getName() const
 	{
 		return name_;
 	}
@@ -275,7 +275,7 @@ namespace BALL
 		bond_order_ = bond_order;
 	}
 		
-	Bond::Order Bond::getOrder(void) const
+	Bond::Order Bond::getOrder() const
 	{
 		return bond_order_;
 	}
@@ -285,12 +285,12 @@ namespace BALL
 		bond_type_ = bond_type;
 	}
 		
-	Bond::Type Bond::getType(void) const
+	Bond::Type Bond::getType() const
 	{
 		return bond_type_;
 	}
 		
-	Real Bond::getLength(void) const
+	Real Bond::getLength() const
 	{
 		if (first_ == 0 || second_ == 0)
 		{
@@ -327,12 +327,12 @@ namespace BALL
 		return atom.hasBond(*this);
 	}
 
-	bool Bond::isBonded(void) const
+	bool Bond::isBonded() const
 	{
 		return (bool)(first_ != 0);
 	}
 
-	bool Bond::isInterBond(void) const
+	bool Bond::isInterBond() const
 	{
 		return (bool)(isBonded() == true
 			&& (first_->Composite::getRoot() != second_->Composite::getRoot()));
@@ -368,7 +368,7 @@ namespace BALL
 		}
 	}
 
-	bool Bond::isIntraBond(void) const
+	bool Bond::isIntraBond() const
 	{
 		return (bool)(isBonded() == true
 									&& (first_->Composite::getRoot() == second_->Composite::getRoot()));
@@ -388,7 +388,7 @@ namespace BALL
 									&& second_->Composite::isDescendantOf(system) == true);
 	}
 
-	bool  Bond::isValid (void) const
+	bool  Bond::isValid () const
 	{
 		return (bool)(PropertyManager::isValid() == true
 									&& first_ != 0
@@ -423,7 +423,7 @@ namespace BALL
 		BALL_DUMP_STREAM_SUFFIX(s);
 	}
 
-	void Bond::arrangeBonds_(void)
+	void Bond::arrangeBonds_()
 	{
 		if (first_ != 0 && second_ != 0)
 		{
@@ -439,7 +439,7 @@ namespace BALL
 		}
 	}
 
-	void Bond::clear_(void)
+	void Bond::clear_()
 	{
 		first_ = BALL_BOND_DEFAULT_FIRST_ATOM;
 		second_ = BALL_BOND_DEFAULT_SECOND_ATOM;

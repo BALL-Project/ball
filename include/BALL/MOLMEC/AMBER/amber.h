@@ -1,4 +1,4 @@
-// $Id: amber.h,v 1.4 1999/09/21 11:06:53 oliver Exp $ 
+// $Id: amber.h,v 1.5 1999/12/04 18:34:21 oliver Exp $ 
 // Molecular Mechanics: Amber force field class
 
 #ifndef BALL_MOLMEC_AMBER_AMBER_H
@@ -158,7 +158,7 @@ namespace BALL
 
 		/**	Default constructor.
 		*/
-		AmberFF(void);
+		AmberFF();
 
     /** Constructor.
     */
@@ -174,7 +174,7 @@ namespace BALL
 
 		/**	Destructor.
 		*/
-		virtual ~AmberFF(void);
+		virtual ~AmberFF();
 
 		//@}
 
@@ -184,7 +184,7 @@ namespace BALL
 
 		/**	Force field specific setup
 		*/
-		virtual bool specificSetup(void);
+		virtual bool specificSetup();
 
 		//@}
 

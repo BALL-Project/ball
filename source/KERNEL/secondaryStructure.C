@@ -1,4 +1,4 @@
-// $Id: secondaryStructure.C,v 1.1 1999/08/26 08:02:34 oliver Exp $
+// $Id: secondaryStructure.C,v 1.2 1999/12/04 18:34:31 oliver Exp $
 
 #include <BALL/KERNEL/secondaryStructure.h>
 
@@ -9,7 +9,7 @@
 namespace BALL 
 {
 
-	SecondaryStructure::SecondaryStructure(void)
+	SecondaryStructure::SecondaryStructure()
 		:	BaseFragment()
 	{
 	}
@@ -24,17 +24,17 @@ namespace BALL
 	{
 	}
 
-	SecondaryStructure::~SecondaryStructure(void)
+	SecondaryStructure::~SecondaryStructure()
 	{
 		destroy();
 	}
 
-	void SecondaryStructure::clear(void)
+	void SecondaryStructure::clear()
 	{
 		BaseFragment::clear();
 	}
 		
-	void SecondaryStructure::destroy(void)
+	void SecondaryStructure::destroy()
 	{
 		BaseFragment::destroy();
 	}
@@ -75,7 +75,7 @@ namespace BALL
 		BaseFragment::swap(secondary_structure);
 	}
 
-	Protein* SecondaryStructure::getProtein(void)
+	Protein* SecondaryStructure::getProtein()
 	{
 		for (Composite::AncestorIterator ancestor_it = beginAncestor(); !ancestor_it.isEnd(); ++ancestor_it)
 		{
@@ -88,12 +88,12 @@ namespace BALL
 		return 0;
 	}
 
-	const Protein *SecondaryStructure::getProtein(void) const
+	const Protein *SecondaryStructure::getProtein() const
 	{
 		return const_cast<SecondaryStructure *>(this)->getProtein();
 	}
 
-	Chain* SecondaryStructure::getChain(void)
+	Chain* SecondaryStructure::getChain()
 	{
 		for (Composite::AncestorIterator ancestor_it = beginAncestor(); !ancestor_it.isEnd(); ++ancestor_it)
 		{
@@ -106,7 +106,7 @@ namespace BALL
 		return 0;
 	}
 
-	const Chain* SecondaryStructure::getChain(void) const
+	const Chain* SecondaryStructure::getChain() const
 	{
 		return const_cast<SecondaryStructure*>(this)->getChain();
 	}
@@ -134,22 +134,22 @@ namespace BALL
 		return const_cast<SecondaryStructure*>(this)->getResidue(index);
 	}
 
-	Residue* SecondaryStructure::getNTerminal(void)
+	Residue* SecondaryStructure::getNTerminal()
 	{
 		return (Residue *)::BALL::getNTerminal(*this);
 	}
 		
-	const Residue* SecondaryStructure::getNTerminal(void) const
+	const Residue* SecondaryStructure::getNTerminal() const
 	{
 		return ::BALL::getNTerminal(*this);
 	}
 
-	Residue* SecondaryStructure::getCTerminal(void)
+	Residue* SecondaryStructure::getCTerminal()
 	{
 		return (Residue *)::BALL::getCTerminal(*this);
 	}
 		
-	const Residue* SecondaryStructure::getCTerminal(void) const
+	const Residue* SecondaryStructure::getCTerminal() const
 	{
 		return ::BALL::getCTerminal(*this);
 	}
@@ -175,7 +175,7 @@ namespace BALL
 		return ((SecondaryStructure *)this)->getPDBAtom(index);
 	}
 
-	Size SecondaryStructure::countResidues(void) const
+	Size SecondaryStructure::countResidues() const
 	{
 		Size size = 0;
 
@@ -187,7 +187,7 @@ namespace BALL
 		return size;
 	}
 
-	Size SecondaryStructure::countPDBAtoms(void) const
+	Size SecondaryStructure::countPDBAtoms() const
 	{
 		Size size = 0;
 
@@ -244,7 +244,7 @@ namespace BALL
 		BaseFragment::splice(secondary_structure);
 	}
 
-	bool SecondaryStructure::isValid(void) const
+	bool SecondaryStructure::isValid() const
 	{ 
 		return BaseFragment::isValid();
 	}

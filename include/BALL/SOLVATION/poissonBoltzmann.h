@@ -1,4 +1,4 @@
-// $Id: poissonBoltzmann.h,v 1.3 1999/11/30 19:47:45 oliver Exp $ 
+// $Id: poissonBoltzmann.h,v 1.4 1999/12/04 18:34:24 oliver Exp $ 
 // Finite Difference Poisson Boltzmann Solver
 
 #ifndef BALL_SOLVATION_POISSONBOLTZMANN_H
@@ -529,7 +529,7 @@ namespace BALL
 		/**	Default constructor.
 				Creates an empty FDPB object.
 		*/
-		FDPB(void);
+		FDPB();
 		
 		/** Copy constructor.
 				Copies an existing FDPB object.

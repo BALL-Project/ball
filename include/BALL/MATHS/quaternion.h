@@ -1,4 +1,4 @@
-// $Id: quaternion.h,v 1.2 1999/10/30 12:53:27 oliver Exp $
+// $Id: quaternion.h,v 1.3 1999/12/04 18:34:20 oliver Exp $
 
 #ifndef BALL_MATHS_QUATERNION_H
 #define BALL_MATHS_QUATERNION_H
@@ -37,7 +37,7 @@ namespace BALL
 		//@{
 
 		///
-		TQuaternion(void);
+		TQuaternion();
 
 		///
 		TQuaternion(const TQuaternion& q, bool deep = true);
@@ -49,7 +49,7 @@ namespace BALL
 		TQuaternion(const T& x, const T& y, const T& z, const T& angle);
 
 		///
-		virtual ~TQuaternion(void);
+		virtual ~TQuaternion();
 		//@}
 
 		/**	@name	Assignment
@@ -71,7 +71,7 @@ namespace BALL
 		void get(TQuaternion& q, bool deep = true);
 
 		///
-		void setIdentity(void);
+		void setIdentity();
 
 		///
 		void swap(TQuaternion& q);
@@ -82,7 +82,7 @@ namespace BALL
 		*/
 		//@{
 		///
-		T getAngle(void) const;
+		T getAngle() const;
 
 		///
 		TVector3<T> getAxis(TVector3<T> &v);
@@ -91,13 +91,13 @@ namespace BALL
 		TMatrix4x4<T>& getRotationMatrix(TMatrix4x4<T>& m) const;
 
 		///
-		TQuaternion operator - (void) const;
+		TQuaternion operator - () const;
 
 		///
-		TQuaternion getInverse(void) const;
+		TQuaternion getInverse() const;
 
 		///
-		TQuaternion getConjugate(void) const;
+		TQuaternion getConjugate() const;
 
 		///
 		TQuaternion& operator += (const TQuaternion& q);
@@ -165,7 +165,7 @@ namespace BALL
 	};
 
 	template <class T>
-	TQuaternion<T>::TQuaternion(void)
+	TQuaternion<T>::TQuaternion()
 		:	i((T)0), 
 			j((T)0), 
 			k((T)0),
@@ -195,7 +195,7 @@ namespace BALL
 	}
 
 	template <class T>
-	TQuaternion<T>::~TQuaternion(void)
+	TQuaternion<T>::~TQuaternion()
 	{
 	}
 
@@ -256,7 +256,7 @@ namespace BALL
 
 	template <class T>
 	BALL_INLINE 
-	void TQuaternion<T>::setIdentity(void)
+	void TQuaternion<T>::setIdentity()
 	{
 		i = j = k = (T)0;
 		angle = (T)1;
@@ -265,7 +265,7 @@ namespace BALL
 	// getAngle() -- get positive angle rotation
 
 	template <class T>
-	T TQuaternion<T>::getAngle(void) const
+	T TQuaternion<T>::getAngle() const
 	{
 		return (T)(2.0 * atan2(sqrt(i * i + j * j + k * k), angle));
 	}
@@ -317,7 +317,7 @@ namespace BALL
 	}
 
 	template <class T>
-	TQuaternion<T> TQuaternion<T>::operator - (void) const
+	TQuaternion<T> TQuaternion<T>::operator - () const
 	{
 		T tmp = ::sqrt(angle * angle + i * i + j * j + k * k);
 
@@ -333,7 +333,7 @@ namespace BALL
 
 	template <class T>
 	BALL_INLINE 
-	TQuaternion<T> TQuaternion<T>::getInverse(void) const
+	TQuaternion<T> TQuaternion<T>::getInverse() const
 	{
 		return -TQuaternion(*this);
 	}
@@ -341,7 +341,7 @@ namespace BALL
 	template <class T>
 	BALL_INLINE 
 	TQuaternion<T>
-	TQuaternion<T>::getConjugate(void) const
+	TQuaternion<T>::getConjugate() const
 	{
 		TQuaternion<T> tmp;
 

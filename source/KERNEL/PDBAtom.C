@@ -1,4 +1,4 @@
-// $Id: PDBAtom.C,v 1.1 1999/08/26 08:02:34 oliver Exp $
+// $Id: PDBAtom.C,v 1.2 1999/12/04 18:34:28 oliver Exp $
 
 #include <BALL/KERNEL/PDBAtom.h>
 
@@ -9,7 +9,7 @@
 namespace BALL 
 {
 
-	PDBAtom::PDBAtom(void)
+	PDBAtom::PDBAtom()
 		:	Atom(),
 			branch_designator_(BALL_PDBATOM_DEFAULT_BRANCH_DESIGNATOR),
 			remoteness_indicator_(BALL_PDBATOM_DEFAULT_REMOTENESS_INDICATOR),
@@ -54,19 +54,19 @@ namespace BALL
 	{
 	}
 		
-	PDBAtom::~PDBAtom(void)
+	PDBAtom::~PDBAtom()
 	{
 		destroy();
 	}
 
-	void PDBAtom::clear(void)
+	void PDBAtom::clear()
 	{
 		Atom::clear();
 
 		clear_();
 	}
 		
-	void PDBAtom::destroy(void)
+	void PDBAtom::destroy()
 	{
 		Atom::destroy();
 
@@ -147,7 +147,7 @@ namespace BALL
 		pdb_atom.temperature_factor_ = temp_float;
 	}
 		
-	Protein* PDBAtom::getProtein(void)
+	Protein* PDBAtom::getProtein()
 	{
 		for (Composite::AncestorIterator ancestor_it = beginAncestor();
 				 !ancestor_it.isEnd(); ++ancestor_it)
@@ -161,12 +161,12 @@ namespace BALL
 		return 0;
 	}
 
-	const Protein* PDBAtom::getProtein(void) const
+	const Protein* PDBAtom::getProtein() const
 	{
 		return ((PDBAtom *)this)->getProtein();
 	}
 
-	Chain* PDBAtom::getChain(void)
+	Chain* PDBAtom::getChain()
 	{
 		for (Composite::AncestorIterator ancestor_it = beginAncestor();
 				 !ancestor_it.isEnd(); ++ancestor_it)
@@ -180,12 +180,12 @@ namespace BALL
 		return 0;
 	}
 
-	const Chain* PDBAtom::getChain(void) const
+	const Chain* PDBAtom::getChain() const
 	{
 		return ((PDBAtom *)this)->getChain();
 	}
 
-	Residue* PDBAtom::getResidue(void)
+	Residue* PDBAtom::getResidue()
 	{
 		for (Composite::AncestorIterator ancestor_it = beginAncestor();
 				 !ancestor_it.isEnd(); ++ancestor_it)
@@ -199,7 +199,7 @@ namespace BALL
 		return 0;
 	}
 
-	const Residue* PDBAtom::getResidue(void) const
+	const Residue* PDBAtom::getResidue() const
 	{
 		return ((PDBAtom *)this)->getResidue();
 	}
@@ -209,7 +209,7 @@ namespace BALL
 		branch_designator_ = branch_designator;
 	}
 
-	char PDBAtom::getBranchDesignator(void) const
+	char PDBAtom::getBranchDesignator() const
 	{
 		return branch_designator_;
 	}
@@ -219,7 +219,7 @@ namespace BALL
 		remoteness_indicator_ = remoteness_indicator;
 	}
 
-	char PDBAtom::getRemotenessIndicator(void) const
+	char PDBAtom::getRemotenessIndicator() const
 	{
 		return remoteness_indicator_;
 	}
@@ -229,7 +229,7 @@ namespace BALL
 		alternate_location_indicator_ = alternate_location_indicator;
 	}
 
-	char PDBAtom::getAlternateLocationIndicator(void) const
+	char PDBAtom::getAlternateLocationIndicator() const
 	{
 		return alternate_location_indicator_;
 	}
@@ -239,7 +239,7 @@ namespace BALL
 		occupancy_ = occupancy;
 	}
 
-	float PDBAtom::getOccupancy(void) const
+	float PDBAtom::getOccupancy() const
 	{
 		return occupancy_;
 	}
@@ -249,12 +249,12 @@ namespace BALL
 		temperature_factor_ = temperature_factor;
 	}
 
-	float PDBAtom::getTemperatureFactor(void) const
+	float PDBAtom::getTemperatureFactor() const
 	{
 		return temperature_factor_;
 	}
 
-	bool PDBAtom::isValid(void) const
+	bool PDBAtom::isValid() const
 	{ 
 		return Atom::isValid();
 	}
@@ -282,7 +282,7 @@ namespace BALL
 		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 
-	void PDBAtom::clear_(void)
+	void PDBAtom::clear_()
 	{
 		branch_designator_						= BALL_PDBATOM_DEFAULT_BRANCH_DESIGNATOR;
 		remoteness_indicator_					= BALL_PDBATOM_DEFAULT_REMOTENESS_INDICATOR;

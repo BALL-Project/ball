@@ -1,4 +1,4 @@
-// $Id: baseFragment.C,v 1.2 1999/09/06 22:22:18 oliver Exp $
+// $Id: baseFragment.C,v 1.3 1999/12/04 18:34:29 oliver Exp $
 
 #include <BALL/KERNEL/baseFragment.h>
 
@@ -13,7 +13,7 @@
 namespace BALL 
 {
 
-	BaseFragment::BaseFragment(void)
+	BaseFragment::BaseFragment()
 		:	Composite(),
 			PropertyManager(),
 			name_(BALL_BASEFRAGMENT_DEFAULT_NAME)
@@ -35,12 +35,12 @@ namespace BALL
 	{
 	}
 
-	BaseFragment::~BaseFragment(void)
+	BaseFragment::~BaseFragment()
 	{
 		destroy();
 	}
 
-	void BaseFragment::clear(void)
+	void BaseFragment::clear()
 	{
 		Composite::clear();
 		PropertyManager::clear();
@@ -48,7 +48,7 @@ namespace BALL
 		clear_();
 	}
 		
-	void BaseFragment::destroy(void)
+	void BaseFragment::destroy()
 	{
 		Composite::destroy();
 		PropertyManager::destroy();
@@ -122,17 +122,17 @@ namespace BALL
 		name_ = name;
 	}
 
-	String& BaseFragment::getName(void)
+	String& BaseFragment::getName()
 	{
 		return name_;
 	}
 
-	const String& BaseFragment::getName(void) const
+	const String& BaseFragment::getName() const
 	{
 		return name_;
 	}
 
-	Molecule* BaseFragment::getMolecule(void)
+	Molecule* BaseFragment::getMolecule()
 	{
 		for (Composite::AncestorIterator ancestor_it = beginAncestor();
 				 !ancestor_it.isEnd(); ++ancestor_it)
@@ -144,12 +144,12 @@ namespace BALL
 		return 0;
 	}
 
-	const Molecule* BaseFragment::getMolecule(void) const
+	const Molecule* BaseFragment::getMolecule() const
 	{
 		return ((BaseFragment *)this)->getMolecule();
 	}
 
-	BaseFragment* BaseFragment::getSuperBaseFragment(void)
+	BaseFragment* BaseFragment::getSuperBaseFragment()
 	{
 		for (Composite::AncestorIterator ancestor_it = beginAncestor();
 				 !ancestor_it.isEnd(); ++ancestor_it)
@@ -163,7 +163,7 @@ namespace BALL
 		return 0;
 	}
 
-	const BaseFragment* BaseFragment::getSuperBaseFragment(void) const
+	const BaseFragment* BaseFragment::getSuperBaseFragment() const
 	{
 		return ((BaseFragment *)this)->getSuperBaseFragment();
 	}
@@ -229,7 +229,7 @@ namespace BALL
 		return ((BaseFragment *)this)->getAtom(name);
 	}
 
-	Size BaseFragment::countBaseFragments(void) const
+	Size BaseFragment::countBaseFragments() const
 	{
 		register Size size = 0;
 
@@ -242,7 +242,7 @@ namespace BALL
 		return size;
 	}
 
-	Size BaseFragment::countAtoms(void) const
+	Size BaseFragment::countAtoms() const
 	{
 		register Size size = 0;
 
@@ -254,7 +254,7 @@ namespace BALL
 		return size;
 	}
 
-	Size  BaseFragment::countBonds(void) const
+	Size  BaseFragment::countBonds() const
 	{
 		register Size			size = 0;
 		AtomIterator			atom_it;
@@ -268,7 +268,7 @@ namespace BALL
 		return size;
 	}
 
-	Size BaseFragment::countInterBonds(void) const
+	Size BaseFragment::countInterBonds() const
 	{
 		register Size size = 0;
 		AtomIterator atom_it;
@@ -282,7 +282,7 @@ namespace BALL
 		return size;
 	}
 
-	Size BaseFragment::countIntraBonds(void) const
+	Size BaseFragment::countIntraBonds() const
 	{
 		register Size size = 0;
 		AtomIterator atom_it;
@@ -371,7 +371,7 @@ namespace BALL
 		return Composite::removeChild(base_fragment);
 	}
 
-	void BaseFragment::destroyBonds(void)
+	void BaseFragment::destroyBonds()
 	{
 		for (AtomIterator atom_it = beginAtom(); !atom_it.isEnd(); ++atom_it)
 		{
@@ -389,7 +389,7 @@ namespace BALL
 		return isAncestorOf(base_fragment);
 	}
 
-	bool BaseFragment::isValid(void) const
+	bool BaseFragment::isValid() const
 	{ 
 		if (Composite::isValid() == false
 				|| PropertyManager::isValid() == false
@@ -466,7 +466,7 @@ namespace BALL
 		return processor.finish();
 	}
 
-	void BaseFragment::clear_(void)
+	void BaseFragment::clear_()
 	{
 		name_ = BALL_BASEFRAGMENT_DEFAULT_NAME;
 	}

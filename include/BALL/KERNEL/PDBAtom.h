@@ -1,4 +1,4 @@
-// $Id: PDBAtom.h,v 1.1 1999/08/26 07:53:19 oliver Exp $
+// $Id: PDBAtom.h,v 1.2 1999/12/04 18:34:16 oliver Exp $
 
 #ifndef BALL_KERNEL_PDBATOM_H
 #define BALL_KERNEL_PDBATOM_H
@@ -76,7 +76,7 @@ namespace BALL
 		//@{
 
 		/// Default constructor
-		PDBAtom(void);
+		PDBAtom();
 
 		/// Copy constructor
 		PDBAtom(const PDBAtom& pdb_atom, bool deep = true);
@@ -99,13 +99,13 @@ namespace BALL
 			 float temperature_factor = BALL_PDBATOM_DEFAULT_TEMPERATURE_FACTOR);
 
 		/// Destructor
-		virtual ~PDBAtom(void);
+		virtual ~PDBAtom();
 
 		/// Clears the contents of the atom
-		virtual void clear(void);
+		virtual void clear();
 	
 		/// Clears the contents of the atom and removes it from all composite structures
-		virtual void destroy(void);
+		virtual void destroy();
 
 		//@}
 
@@ -142,52 +142,52 @@ namespace BALL
 		//@{
 
 		///
-		Protein* getProtein(void);
+		Protein* getProtein();
 
 		///
-		const Protein* getProtein(void) const;
+		const Protein* getProtein() const;
 
 		///
-		Chain* getChain(void);
+		Chain* getChain();
 
 		///
-		const Chain* getChain(void) const;
+		const Chain* getChain() const;
 
 		///
-		Residue* getResidue(void);
+		Residue* getResidue();
 
 		///
-		const Residue* getResidue(void) const;
+		const Residue* getResidue() const;
 
 		///
 		void setBranchDesignator(char branch_designator);
 
 		///
-		char getBranchDesignator(void) const;
+		char getBranchDesignator() const;
 
 		///
 		void setRemotenessIndicator(char remoteness_indicator);
 
 		///
-		char getRemotenessIndicator(void) const;
+		char getRemotenessIndicator() const;
 
 		///
 		void setAlternateLocationIndicator(char alternate_location_indicator);
 
 		///
-		char getAlternateLocationIndicator(void) const;
+		char getAlternateLocationIndicator() const;
 
 		///
 		void setOccupancy(float occupancy);
 
 		///
-		float getOccupancy(void) const;
+		float getOccupancy() const;
 
 		///
 		void setTemperatureFactor(float temperature_factor);
 
 		///
-		float getTemperatureFactor(void) const;
+		float getTemperatureFactor() const;
 
 		//@}
 
@@ -195,7 +195,7 @@ namespace BALL
 		//@{
 
 		///
-		virtual bool isValid(void) const;
+		virtual bool isValid() const;
 
 		///
 		virtual void dump(ostream& s = cout, unsigned long depth = 0) const;
@@ -214,7 +214,7 @@ namespace BALL
 
 		private:
 
-		void clear_(void);
+		void clear_();
 
 		char 	branch_designator_;
 		char	remoteness_indicator_;

@@ -1,4 +1,4 @@
-// $Id: poissonBoltzmann.C,v 1.6 1999/10/26 11:35:54 oliver Exp $ 
+// $Id: poissonBoltzmann.C,v 1.7 1999/12/04 18:34:33 oliver Exp $ 
 // FDPB: Finite Difference Poisson Solver
 
 #include <BALL/SOLVATION/poissonBoltzmann.h>
@@ -68,7 +68,7 @@ namespace BALL
 
 
 	/////////////////////////
-	FDPB::FDPB(void)
+	FDPB::FDPB()
 		:	eps_grid(0),
 			kappa_grid(0),
 			q_grid(0),

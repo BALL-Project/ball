@@ -1,4 +1,4 @@
-// $Id: chain.C,v 1.1 1999/08/26 08:02:34 oliver Exp $
+// $Id: chain.C,v 1.2 1999/12/04 18:34:29 oliver Exp $
 
 #include <BALL/KERNEL/chain.h>
 #include <BALL/KERNEL/global.h>
@@ -6,7 +6,7 @@
 
 namespace BALL {
 
-	Chain::Chain(void)
+	Chain::Chain()
 		:	BaseFragment()
 	{
 	}
@@ -21,17 +21,17 @@ namespace BALL {
 	{
 	}
 
-	Chain::~Chain(void)
+	Chain::~Chain()
 	{
 		destroy();
 	}
 
-	void Chain::clear(void)
+	void Chain::clear()
 	{
 		BaseFragment::clear();
 	}
 		
-	void Chain::destroy(void)
+	void Chain::destroy()
 	{
 		BaseFragment::destroy();
 	}
@@ -72,7 +72,7 @@ namespace BALL {
 		BaseFragment::swap(chain);
 	}
 
-	Protein *Chain::getProtein(void)
+	Protein *Chain::getProtein()
 	{
 		for (Composite::AncestorIterator ancestor_it = beginAncestor();
 				 !ancestor_it.isEnd(); ++ancestor_it)
@@ -86,7 +86,7 @@ namespace BALL {
 		return 0;
 	}
 
-	const Protein *Chain::getProtein(void) const
+	const Protein *Chain::getProtein() const
 	{
 		return ((Chain *)this)->getProtein();
 	}
@@ -126,22 +126,22 @@ namespace BALL {
 		return ((Chain *)this)->getResidue(index);
 	}
 
-	Residue *Chain::getNTerminal(void)
+	Residue *Chain::getNTerminal()
 	{
 		return const_cast<Residue*>(::BALL::getNTerminal(*this));
 	}
 		
-	const Residue *Chain::getNTerminal(void) const
+	const Residue *Chain::getNTerminal() const
 	{
 		return ::BALL::getNTerminal(*this);
 	}
 
-	Residue *Chain::getCTerminal(void)
+	Residue *Chain::getCTerminal()
 	{
 		return const_cast<Residue*>(::BALL::getCTerminal(*this));
 	}
 		
-	const Residue *Chain::getCTerminal(void) const
+	const Residue *Chain::getCTerminal() const
 	{
 		return ::BALL::getCTerminal(*this);
 	}
@@ -166,7 +166,7 @@ namespace BALL {
 		return ((Chain *)this)->getPDBAtom(index);
 	}
 
-	Size Chain::countSecondaryStructures(void) const
+	Size Chain::countSecondaryStructures() const
 	{
 		Size size = 0;
 
@@ -177,7 +177,7 @@ namespace BALL {
 		return size;
 	}
 
-	Size Chain::countResidues(void) const
+	Size Chain::countResidues() const
 	{
 		Size size = 0;
 
@@ -187,7 +187,7 @@ namespace BALL {
 		return size;
 	}
 
-	Size Chain::countPDBAtoms(void) const
+	Size Chain::countPDBAtoms() const
 	{
 		Size size = 0;
 
@@ -277,7 +277,7 @@ namespace BALL {
 		BaseFragment::splice(chain);
 	}
 
-	bool Chain::isValid(void) const
+	bool Chain::isValid() const
 	{ 
 		return BaseFragment::isValid();
 	}

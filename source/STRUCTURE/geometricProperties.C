@@ -1,4 +1,4 @@
-// $Id: geometricProperties.C,v 1.2 1999/08/31 22:01:18 oliver Exp $
+// $Id: geometricProperties.C,v 1.3 1999/12/04 18:34:33 oliver Exp $
 
 #include <BALL/STRUCTURE/geometricProperties.h>
 
@@ -57,12 +57,12 @@ namespace BALL {
 	}
 
 
-	Vector3& BoundingBoxProcessor::getLower(void)
+	Vector3& BoundingBoxProcessor::getLower()
 	{
 		return lower_;
 	}
 
-	Vector3& BoundingBoxProcessor::getUpper(void)
+	Vector3& BoundingBoxProcessor::getUpper()
 	{
 		return upper_;
 	}
@@ -92,7 +92,7 @@ namespace BALL {
 		return Processor::CONTINUE;
 	}
 
-	Vector3& GeometricCenterProcessor::getCenter(void)
+	Vector3& GeometricCenterProcessor::getCenter()
 	{
 		return center_;
 	}
@@ -101,7 +101,7 @@ namespace BALL {
 	// ---------- FragmentDistanceCollector -----------------
 
 	// default constructor
-	FragmentDistanceCollector::FragmentDistanceCollector(void) 
+	FragmentDistanceCollector::FragmentDistanceCollector() 
 		:	reference_composite_(0)
 	{
 	}
@@ -119,7 +119,7 @@ namespace BALL {
 	}
 
 
-	bool FragmentDistanceCollector::start(void)
+	bool FragmentDistanceCollector::start()
 	{
 		// clear the array containing the collected fragments
 		fragments.clear();
@@ -132,7 +132,7 @@ namespace BALL {
 		return true;
 	}
 
-	float FragmentDistanceCollector::getDistance(void) const
+	float FragmentDistanceCollector::getDistance() const
 	{
 		return sqrt(squared_distance_);
 	}
@@ -220,7 +220,7 @@ namespace BALL {
 		return Processor::CONTINUE;
 	}
 
-	Size FragmentDistanceCollector::getNumberOfFragments(void)
+	Size FragmentDistanceCollector::getNumberOfFragments()
 	{
 		return fragments.size();
 	}
@@ -230,7 +230,7 @@ namespace BALL {
 		reference_composite_ = &composite;
 	}
 
-	const Composite* FragmentDistanceCollector::getComposite(void) const
+	const Composite* FragmentDistanceCollector::getComposite() const
 	{
 		return reference_composite_;
 	}

@@ -1,4 +1,4 @@
-// $Id: residue.h,v 1.1 1999/08/26 07:53:19 oliver Exp $
+// $Id: residue.h,v 1.2 1999/12/04 18:34:18 oliver Exp $
 
 #ifndef BALL_KERNEL_RESIDUE_H
 #define BALL_KERNEL_RESIDUE_H
@@ -71,7 +71,7 @@ namespace BALL
 		//@{	
 	
 		/// Default constructor
-		Residue(void);
+		Residue();
 	
 		/// Copy constructor
 		Residue(const Residue& residue, bool deep = true);
@@ -83,13 +83,13 @@ namespace BALL
 			 char insertion_code = BALL_RESIDUE_DEFAULT_INSERTION_CODE);
 
 		/// Destructor
-		virtual ~Residue(void);
+		virtual ~Residue();
 
 		/// Clears the residues contents
-		virtual void clear(void);
+		virtual void clear();
 	
 		/// Clears the residues contents and removes it from all composite structures
-		virtual void destroy(void);
+		virtual void destroy();
 	
 		//@}
 
@@ -126,16 +126,16 @@ namespace BALL
 		//@{
 
 		///
-		Protein* getProtein(void);
+		Protein* getProtein();
 
 		///
-		const Protein* getProtein(void) const;
+		const Protein* getProtein() const;
 
 		///
-		Chain* getChain(void);
+		Chain* getChain();
 		
 		///
-		const Chain* getChain(void) const;
+		const Chain* getChain() const;
 
 		///
 		PDBAtom* getPDBAtom(Index index);
@@ -147,19 +147,19 @@ namespace BALL
 		void setID(const String& id);
 
 		///
-		String& getID(void);
+		String& getID();
 
 		///
-		const String& getID(void) const;
+		const String& getID() const;
 
 		///
 		void setInsertionCode(char insertion_code);
 
 		///
-		char getInsertionCode(void) const;
+		char getInsertionCode() const;
 
 		///
-		Size countPDBAtoms(void) const;
+		Size countPDBAtoms() const;
 
 		///
 		void prepend(PDBAtom& atom);
@@ -196,16 +196,16 @@ namespace BALL
 		//@{
 
 		///
-		bool isAminoAcid(void) const;
+		bool isAminoAcid() const;
 	
 		///
-		bool isTerminal(void) const;
+		bool isTerminal() const;
 	
 		///
-		bool isNTerminal(void) const;
+		bool isNTerminal() const;
 	
 		///
-		bool isCTerminal(void) const;
+		bool isCTerminal() const;
 
 		//@}
 
@@ -214,7 +214,7 @@ namespace BALL
 		//@{
 
 		///
-		virtual bool isValid(void) const;
+		virtual bool isValid() const;
 
 		///
 		virtual void dump(ostream& s = cout, unsigned long depth = 0) const;
@@ -238,7 +238,7 @@ namespace BALL
 	
 		const BaseFragment* getBaseFragment(Index index) const;
 	
-		Size countBaseFragments(void) const;
+		Size countBaseFragments() const;
 
 		void prepend(BaseFragment& base_fragment);
 
@@ -262,7 +262,7 @@ namespace BALL
 
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(BaseFragment)
 
-		void clear_(void);
+		void clear_();
 
 		// --- ATTRIBUTES
 

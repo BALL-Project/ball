@@ -1,4 +1,4 @@
-// $Id: protein.h,v 1.1 1999/08/26 07:53:19 oliver Exp $ 
+// $Id: protein.h,v 1.2 1999/12/04 18:34:18 oliver Exp $ 
 
 #ifndef BALL_KERNEL_PROTEIN_H
 #define BALL_KERNEL_PROTEIN_H
@@ -62,7 +62,7 @@ namespace BALL
 		//@{
 
 		///
-		Protein(void);
+		Protein();
 	
 		///
 		Protein(const Protein& protein, bool deep = true);
@@ -71,13 +71,13 @@ namespace BALL
 		Protein(const String& name, const String& id = BALL_PROTEIN_DEFAULT_ID);
 
 		///
-		virtual ~Protein(void);
+		virtual ~Protein();
 	
 		///
-		virtual void clear(void);
+		virtual void clear();
 	
 		///
-		virtual void destroy(void);
+		virtual void destroy();
 
 		//@}
 
@@ -138,16 +138,16 @@ namespace BALL
 		const Residue* getResidue(Index index) const;
 
 		///		
-		Residue* getNTerminal(void);
+		Residue* getNTerminal();
 
 		///		
-		const Residue* getNTerminal(void) const;
+		const Residue* getNTerminal() const;
 
 		///
-		Residue* getCTerminal(void);
+		Residue* getCTerminal();
 
 		///		
-		const Residue* getCTerminal(void) const;
+		const Residue* getCTerminal() const;
 
 		///
 		PDBAtom* getPDBAtom(Index index);
@@ -159,22 +159,22 @@ namespace BALL
 		void setID(const String& id);
 
 		///
-		String& getID(void);
+		String& getID();
 
 		///
-		const String& getID(void) const;
+		const String& getID() const;
 
 		///
-		Size countChains(void) const;
+		Size countChains() const;
 
 		///
-		Size countSecondaryStructures(void) const;
+		Size countSecondaryStructures() const;
 
 		///
-		Size countResidues(void) const;
+		Size countResidues() const;
 
 		///
-		Size countPDBAtoms(void) const;
+		Size countPDBAtoms() const;
 		//@}
 
 #ifdef	BALL_CFG_USING_METHOD_DIRECTIVE
@@ -205,7 +205,7 @@ namespace BALL
 
 		/**
 		*/
-		virtual bool isValid(void) const;
+		virtual bool isValid() const;
 
 		/**
 		*/
@@ -235,7 +235,7 @@ namespace BALL
 		
 		private:
 
-		void clear_(void);
+		void clear_();
 
 		// --- ATTRIBUTES
 

@@ -1,4 +1,4 @@
-// $Id: vector4.h,v 1.2 1999/10/30 12:53:28 oliver Exp $
+// $Id: vector4.h,v 1.3 1999/12/04 18:34:21 oliver Exp $
 
 #ifndef BALL_MATHS_VECTOR4_H
 #define BALL_MATHS_VECTOR4_H
@@ -46,7 +46,7 @@ namespace BALL
 		//@{
 
 		///	
-		TVector4(void);
+		TVector4();
 
 		///	
 		TVector4(const T* ptr);
@@ -61,7 +61,7 @@ namespace BALL
 		TVector4(const TVector4& vector, bool deep = true);
 
 		///	
-		virtual ~TVector4(void);
+		virtual ~TVector4();
 		//@}
 
 		/**	@name	Converters
@@ -69,7 +69,7 @@ namespace BALL
 		//@{
 
 		///	
-		operator TVector_<T>(void) const;
+		operator TVector_<T>() const;
 		//@}
 
 		/**	@name	Assignment
@@ -118,22 +118,22 @@ namespace BALL
 		//@{
 
 		///	
-		T getLength(void) const;
+		T getLength() const;
 
 		///	
-		T getSquareLength(void) const;
+		T getSquareLength() const;
 
 		///	
-		void normalize(void);
+		void normalize();
 
 		///
-		static const TVector4& getZero(void);
+		static const TVector4& getZero();
 
 		///
-		void setUnit(void);
+		void setUnit();
 
 		///
-		static const TVector4& getUnit(void);
+		static const TVector4& getUnit();
 
 		///
 		void fill(const T& value = (T)1);
@@ -147,10 +147,10 @@ namespace BALL
 		// --- unary operators ---
 
 		///
-		TVector4 operator + (void) const;
+		TVector4 operator + () const;
 		
 		///
-		TVector4 operator - (void) const;
+		TVector4 operator - () const;
 
 		// --- vector addition ---
 
@@ -220,7 +220,7 @@ namespace BALL
 		*/
 		//@{
 		///
-		bool isValid(void) const;
+		bool isValid() const;
 
 		///
 		void dump(std::ostream& s = std::cout, unsigned long depth = 0) const;
@@ -258,7 +258,7 @@ namespace BALL
 	};
 
 	template <class T>
-	TVector4<T>::TVector4(void)
+	TVector4<T>::TVector4()
 		:	x(0),
 			y(0),
 			z(0),
@@ -306,13 +306,13 @@ namespace BALL
 	}
 
 	template <class T>
-	TVector4<T>::~TVector4(void)
+	TVector4<T>::~TVector4()
 	{
 	}
 
 	template <class T>
 	BALL_INLINE
-	TVector4<T>::operator TVector_<T>(void) const
+	TVector4<T>::operator TVector_<T>() const
 	{
 		return TVector_<T>(x, y, z, h);
 	}
@@ -464,20 +464,20 @@ namespace BALL
 
 	template <class T>
 	BALL_INLINE 
-	T TVector4<T>::getLength(void) const
+	T TVector4<T>::getLength() const
 	{
 		return (T)sqrt(x * x + y * y + z * z + h * h);
 	}
 
 	template <class T>
 	BALL_INLINE 
-	T TVector4<T>::getSquareLength(void) const
+	T TVector4<T>::getSquareLength() const
 	{
 		return (T)(x * x + y * y + z * z + h * h);
 	}
 
 	template <class T>
-	void TVector4<T>::normalize(void)
+	void TVector4<T>::normalize()
 	{
 		T len = (T)sqrt(x * x + y * y + z * z + h * h);
 
@@ -492,7 +492,7 @@ namespace BALL
 
 	template <class T>
 	BALL_INLINE 
-	const TVector4<T>& TVector4<T>::getZero(void)
+	const TVector4<T>& TVector4<T>::getZero()
 	{
 		static TVector4<T> null4(0, 0, 0, 0);
 
@@ -501,7 +501,7 @@ namespace BALL
 
 	template <class T>
 	BALL_INLINE 
-	const TVector4<T>& TVector4<T>::getUnit(void)
+	const TVector4<T>& TVector4<T>::getUnit()
 	{
 		static TVector4<T> unit_vector(1, 1, 1, 1);
 		
@@ -558,14 +558,14 @@ namespace BALL
 
 	template <class T>
 	BALL_INLINE 
-	TVector4<T> TVector4<T>::operator + (void) const
+	TVector4<T> TVector4<T>::operator + () const
 	{
 		return *this;
 	}
 
 	template <class T>
 	BALL_INLINE 
-	TVector4<T> TVector4<T>::operator - (void) const
+	TVector4<T> TVector4<T>::operator - () const
 	{
 		return TVector4<T>(-x, -y, -z, -h);
 	}
@@ -713,7 +713,7 @@ namespace BALL
 
 	template <class T>
 	BALL_INLINE 
-	bool TVector4<T>::isValid(void) const
+	bool TVector4<T>::isValid() const
 	{
 		return true;
 	}

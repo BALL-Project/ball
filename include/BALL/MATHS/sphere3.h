@@ -1,4 +1,4 @@
-// $Id: sphere3.h,v 1.2 1999/10/30 12:53:27 oliver Exp $
+// $Id: sphere3.h,v 1.3 1999/12/04 18:34:21 oliver Exp $
 
 #ifndef BALL_MATHS_SPHERE3_H
 #define BALL_MATHS_SPHERE3_H
@@ -45,7 +45,7 @@ namespace BALL
 		//@{
 
 		///
-		TSphere3(void)
+		TSphere3()
 			: p(),
 				radius(0)
 		{
@@ -66,7 +66,7 @@ namespace BALL
 		}
 
 		///
-		virtual ~TSphere3(void)
+		virtual ~TSphere3()
 		{
 		}
 		//@}
@@ -154,7 +154,7 @@ namespace BALL
 		}
 
 		///
-		bool isEmpty(void) const
+		bool isEmpty() const
 		{
 			return Maths::isZero(radius);
 		}
@@ -165,7 +165,7 @@ namespace BALL
 		//@{
 
 		///
-		bool isValid(void) const
+		bool isValid() const
 		{
 			return true;
 		}
