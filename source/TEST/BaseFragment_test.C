@@ -1,4 +1,4 @@
-// $Id: BaseFragment_test.C,v 1.12 2000/05/07 11:28:37 amoll Exp $
+// $Id: BaseFragment_test.C,v 1.13 2000/05/07 11:55:08 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -9,7 +9,7 @@
 ///////////////////////////
 
 
-START_TEST(BaseFragment, "$Id: BaseFragment_test.C,v 1.12 2000/05/07 11:28:37 amoll Exp $")
+START_TEST(BaseFragment, "$Id: BaseFragment_test.C,v 1.13 2000/05/07 11:55:08 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -249,6 +249,7 @@ CHECK(persistentRead(PersistenceManager&))
 	}
 RESULT
 */
+
 CHECK(set(BaseFragment&, bool))
 	BaseFragment bf1("name1");
 	BaseFragment bf2;
@@ -265,12 +266,12 @@ RESULT
 
 CHECK(operator = (BaseFragment&))
 	BaseFragment bf1("name1");
+	Atom a;
+	bf1.insert(a);
 	BaseFragment bf2;
-	bf1.insert(bf2);
-	BaseFragment bf3;
-	bf3.set(bf1, true);
-	TEST_EQUAL(bf3.getName(), "name1");
-	TEST_EQUAL(bf3.countBaseFragments(), 1);
+	bf2 = bf1;
+	TEST_EQUAL(bf2.getName(), "name1");
+	TEST_EQUAL(bf2.countAtoms(), 1);
 RESULT
 
 CHECK(get(BaseFragment&, bool))

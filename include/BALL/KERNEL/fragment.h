@@ -1,4 +1,4 @@
-// $Id: fragment.h,v 1.5 2000/04/25 16:52:25 amoll Exp $
+// $Id: fragment.h,v 1.6 2000/05/07 11:55:47 amoll Exp $
 
 #ifndef BALL_KERNEL_FRAGMENT_H
 #define BALL_KERNEL_FRAGMENT_H
@@ -75,8 +75,7 @@ namespace BALL
 		//@{
 
 		/** Assignment operator.
-				Assign the Fragment {\em fragment} to {\em *this} fragment.
-				The assignment is either deep or shallow (default).
+				Assign {\em fragment} to {\em *this} fragment.
 				@param   fragment the Fragment to be copied (cloned)
 				@return  Fragment& - {\em *this} Fragment
 		*/
@@ -91,7 +90,6 @@ namespace BALL
 		/** Internal state dump.
 				Dump the current internal state of {\em *this} Fragment to the output ostream 
 				{\em s} with dumping depth {\em depth}.
-	
 				@param   s - output stream where to output the internal state of {\em *this} Fragment
 				@param   depth - the dumping depth
 		*/
