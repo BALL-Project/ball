@@ -1,4 +1,4 @@
-// $Id: MOL2File.h,v 1.4 2000/05/23 05:45:33 oliver Exp $
+// $Id: MOL2File.h,v 1.5 2000/05/23 08:38:16 oliver Exp $
 
 #ifndef BALL_FORMAT_MOL2FILE_H
 #define BALL_FORMAT_MOL2FILE_H
@@ -108,7 +108,7 @@ namespace BALL
 		
 		void clear_();
 		
-		void buildAdd(System& system);
+		void buildAll_(System& system);
 
 		struct AtomStruct
 		{
