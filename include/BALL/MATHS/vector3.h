@@ -1,4 +1,4 @@
-// $Id: vector3.h,v 1.27 2000/03/20 01:38:18 amoll Exp $
+// $Id: vector3.h,v 1.28 2000/03/21 12:39:47 amoll Exp $
 
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -423,6 +423,14 @@ namespace BALL
 		*/
 		static TVector3 getPerpendicularNormalization
 			(const TVector3& a, const TVector3& b, const TVector3& c);
+
+		/**	Spat Product of three vectors.
+				@param a first vector
+				@param a second vector
+				@param a third vector
+				@return T the spat product
+		*/
+		static T getSpatProduct (const TVector3<T>& a, const TVector3<T>& b, const TVector3<T>& c);
 
 		//@}
 	
@@ -898,6 +906,18 @@ namespace BALL
 			(diff1.y * diff2.z - diff1.z * diff2.y,
 			 diff1.z * diff2.x - diff1.x * diff2.z,
 			 diff1.x * diff2.y - diff1.y * diff2.x);
+	}
+
+	template <class T>
+	BALL_INLINE
+	T TVector3<T>::getSpatProduct
+		(const TVector3<T>& a,
+		 const TVector3<T>& b,
+		 const TVector3<T>& c)
+	{
+		return (  a.x * (b.y * c.z - b.z * c.y)
+						+ a.y * (b.z * c.x - b.x * c.z)
+						+ a.z * (b.x * c.y - b.y * c.x));
 	}
 
 	template <typename T>
