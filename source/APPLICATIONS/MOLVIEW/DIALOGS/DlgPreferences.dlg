@@ -1,0 +1,22 @@
+DlgEdit:v1.2:Dialog:
+Dialog {
+	ClassHeader {DlgPreferences.h}
+	ClassSource {DlgPreferences.C}
+	ClassName {DlgPreferences}
+	DataHeader {DlgPreferencesData.h}
+	DataSource {DlgPreferencesData.C}
+	DataName {DlgPreferencesData}
+	WindowBaseClass {QTabDialog}
+	IsModal {FALSE}
+	WindowFlags {208}
+}
+WidgetLayout {
+InitialPos {-1 -1}
+Size {400 300}
+MinSize {400 300}
+MaxSize {400 300}
+Grid {10}
+TextTranslated {TRUE}
+
+
+}

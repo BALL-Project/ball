@@ -1,0 +1,398 @@
+/* XPM */
+static char *logo[] = {
+/* width height num_colors chars_per_pixel */
+"   140   175      202            2",
+/* colors */
+".. c #040204",
+".# c #7c8284",
+".a c #bcc2c4",
+".b c #3c4244",
+".c c #dce2e4",
+".d c #9ca2a4",
+".e c #5c6264",
+".f c #ccd2d4",
+".g c #acb2b4",
+".h c #1c2224",
+".i c #8c9294",
+".j c #6c7274",
+".k c #ecf2f4",
+".l c #4c5254",
+".m c #d4dadc",
+".n c #c4cacc",
+".o c #e4eaec",
+".p c #b4babc",
+".q c #2c3234",
+".r c #a4aaac",
+".s c #0c1214",
+".t c #848a8c",
+".u c #949a9c",
+".v c #747a7c",
+".w c #646a6c",
+".x c #444a4c",
+".y c #ccd2e4",
+".z c #545a5c",
+".A c #d4daec",
+".B c #c4c2c4",
+".C c #e4e2e4",
+".D c #f4fafc",
+".E c #cccacc",
+".F c #bcbabc",
+".G c #343a3c",
+".H c #a4a2a4",
+".I c #b4b2b4",
+".J c #242a2c",
+".K c #eceaec",
+".L c #acaaac",
+".M c #141a1c",
+".N c #848284",
+".O c #949294",
+".P c #747274",
+".Q c #8c8a8c",
+".R c #9c9a9c",
+".S c #7c7a7c",
+".T c #6c6a6c",
+".U c #0c0a0c",
+".V c #646264",
+".W c #d4d2d4",
+".X c #f4f2f4",
+".Y c #dcdadc",
+".Z c #c4c2d4",
+".0 c #e4e2f4",
+".1 c #cccadc",
+".2 c #bcbacc",
+".3 c #a4a2b4",
+".4 c #b4b2c4",
+".5 c #eceafc",
+".6 c #acaabc",
+".7 c #444244",
+".8 c #545254",
+".9 c #4c4a4c",
+"#. c #5c5a5c",
+"## c #3c3a3c",
+"#a c #848694",
+"#b c #9496a4",
+"#c c #747684",
+"#d c #8c8e9c",
+"#e c #9c9eac",
+"#f c #7c7e8c",
+"#g c #6c6e7c",
+"#h c #242224",
+"#i c #343234",
+"#j c #141214",
+"#k c #d4d2e4",
+"#l c #dcdaec",
+"#m c #c4c6c4",
+"#n c #e4e6e4",
+"#o c #cccecc",
+"#p c #bcbebc",
+"#q c #a4a6a4",
+"#r c #b4b6b4",
+"#s c #2c2a2c",
+"#t c #eceeec",
+"#u c #acaeac",
+"#v c #1c1a1c",
+"#w c #848684",
+"#x c #949694",
+"#y c #747674",
+"#z c #8c8e8c",
+"#A c #9c9e9c",
+"#B c #7c7e7c",
+"#C c #6c6e6c",
+"#D c #646664",
+"#E c #d4d6d4",
+"#F c #f4f6f4",
+"#G c #dcdedc",
+"#H c #444644",
+"#I c #545654",
+"#J c #4c4e4c",
+"#K c #5c5e5c",
+"#L c #3c3e3c",
+"#M c #040604",
+"#N c #bcc2d4",
+"#O c #dce2f4",
+"#P c #c4cadc",
+"#Q c #b4bacc",
+"#R c #fcfafc",
+"#S c #0c0e0c",
+"#T c #242624",
+"#U c #343634",
+"#V c #141614",
+"#W c #d4d6e4",
+"#X c #dcdeec",
+"#Y c #2c2e2c",
+"#Z c #1c1e1c",
+"#0 c #7c828c",
+"#1 c #bcc2cc",
+"#2 c #dce2ec",
+"#3 c #9ca2ac",
+"#4 c #5c626c",
+"#5 c #ccd2dc",
+"#6 c #acb2bc",
+"#7 c #8c929c",
+"#8 c #6c727c",
+"#9 c #ecf2fc",
+"a. c #d4dae4",
+"a# c #c4c6d4",
+"aa c #e4e6f4",
+"ab c #cccedc",
+"ac c #bcbecc",
+"ad c #a4a6b4",
+"ae c #b4b6c4",
+"af c #eceefc",
+"ag c #acaebc",
+"ah c #fcfefc",
+"ai c #c4cad4",
+"aj c #e4eaf4",
+"ak c #b4bac4",
+"al c #a4aab4",
+"am c #848a94",
+"an c #949aa4",
+"ao c #747a84",
+"ap c #646a74",
+"aq c #c4c2cc",
+"ar c #e4e2ec",
+"as c #cccad4",
+"at c #bcbac4",
+"au c #a4a2ac",
+"av c #b4b2bc",
+"aw c #eceaf4",
+"ax c #acaab4",
+"ay c #84828c",
+"az c #94929c",
+"aA c #74727c",
+"aB c #8c8a94",
+"aC c #9c9aa4",
+"aD c #7c7a84",
+"aE c #6c6a74",
+"aF c #64626c",
+"aG c #d4d2dc",
+"aH c #f4f2fc",
+"aI c #dcdae4",
+"aJ c #44424c",
+"aK c #54525c",
+"aL c #4c4a54",
+"aM c #5c5a64",
+"aN c #3c3a44",
+"aO c #c4c6cc",
+"aP c #e4e6ec",
+"aQ c #ccced4",
+"aR c #bcbec4",
+"aS c #a4a6ac",
+"aT c #b4b6bc",
+"aU c #eceef4",
+"aV c #acaeb4",
+"aW c #84868c",
+"aX c #94969c",
+"aY c #74767c",
+"aZ c #8c8e94",
+"a0 c #9c9ea4",
+"a1 c #7c7e84",
+"a2 c #6c6e74",
+"a3 c #64666c",
+"a4 c #d4d6dc",
+"a5 c #f4f6fc",
+"a6 c #dcdee4",
+"a7 c #44464c",
+"a8 c #54565c",
+"a9 c #4c4e54",
+"b. c #5c5e64",
+"b# c #3c3e44",
+"ba c #04060c",
+"bb c #0c0e14",
+"bc c #24262c",
+"bd c #34363c",
+"be c #14161c",
+"bf c #dcdef4",
+"bg c #2c2e34",
+"bh c #1c1e24",
+/* pixels */
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah.C.L#z.E.Cahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah.L......#M#h.Cahahahahahah.E.Cahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah.L..........#Z##ahahahah#m#v....#..Cahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah.P......#M.......P.n.E.L#v......#V#Iahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah.I.l....#S.J..#Ta8bda9aM.zaMa8.J.......Cahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah.Eav#0#b.P....#T.9#Saz#aaDa3aMaF#4.VaM......a1at.Cahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah.Eauay#eaca4aw#5....#V#ia7#3auanaZ#0a2aFa8.x....#Ja6#Paxadava4ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahaTaBay#eaea4aUa5aw#5ac#s......bhaZ#eadadauanaB#cb.#L.sa7ara5a5aP#5aeaCaT.E#tahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah.Ya0ayanac#WaU.Da5aI.ZagaBax.u#v......#V#gaB#eaxagad#eazayaAa3ayag.2aIaU.Yav#0#dauaVaOaUahahahahah.C.Cahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah.C##..#Z#Iahah.KaO.I#f#eaca4a5ah#R#Xa##6#baR.Cahah.L#Z....#haEaBaZ#f#fa0al#6agal#eaBa1ap#Bax.l......#Va9avaeaxav.Fa6.E#v..#M#s.Lahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah#v......#M#SaBa1#bat#WaU#R#RaP.1avadaR.Wahahahah#m....#M.7#famaZao.N.m.Cad#b.6#6.4agad#bam#T........#M#v#Z.Yaaabacag#s......#S#v.Eahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah.P..........#ha8aGaUahaharab.4adaVaQahahahahahahah.P....#Y#0aoaAaA#mahahahah.XaTazal.4aeav#b................a3a#araa#O#V.....s#j..#Cahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah.......U.M.....G#RaP#Paeanax.c.KahahahahahahahaG.I.J..#Ma3aE.V.w.Kahahahahahahah.KaOanad#6b#......#T#V......#s#8#badaW....#v.7.x.7a8ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah......#M#s......aYavaT.WahahahahahahahahaQ.Lada##XaG....#T.U#M.PahahahahahahahahahahahaQau.q......#V#M......#j.z.Ta3b##Z#v.Mbg##aJ.8aZ#tahahah.E#mahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah.Kbh#Zb#.h.P#Z....#Iahahahahahahah.KaRaxav.Zar#9#t#Wav...........Oahahahahahahahahahahahahah#I..ba#Ha8.........saFaDaY#8#ga3b.#.a7a7.baLaKaZ##..#M#Z.7.Cahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah.K#Hbc.Vanat#T......#Iahahahahah.KaOaga#ara5.k#Wae#daV.K#m#U..#V#4#g#rahahahahahahahahahahahah.L..a7.T#4###M....#sam#aaWayaDaoaA#gaEa3b.aM#Ibg.U.....U#M#vahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah#m.L.L.Ka7#sb#ay.2aiaF..........a8.CaOacaq#X#FaUa.ae#d.F#mahahahahahah.IaDa1aE.Xahahahahahahahahahahah.C#Ta3aoaZa9#S..bh#J#iaE#f#0ayay#0aDaoaYaA#gaEa3a8...........Eahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahah.O#v..#Mbg.7b#aE#3#lalbg#v.s......#va2a6aHaH#Wakat.L#Eahahahahahahahahahah.OaoaD#8ahahahahahahahahahahahah.RaAa1ayaJ..#U.Cah.E.g.I.O.z.b.7a7.9aLaK.eapaEaF#S#i.......8ahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahah.L....#M.GaKb..z#daq#NaB#8aBaZay#T#M..a9a.aR#b.L.EahahahahahahahahahahahahahahaAa1#c.OahahahahahahahahahahahaXa1#faA.l.Lahahahahahahahah.C.I.V#vbh#h#sbg###U.e.U......#Iahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahah#I....#TaK.ea8aDal#Wauamazam#d#7aY.7....aS.Eahahahahahahahahahahahahahahahahah.Wa3aD#g.YahahahahahahahahahahaE#faWb.#qahahahahahahahahahahah#nbe#V#V.w.7.s..#h........#zahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahah#I....bha3aMaMan.1acaya1#ca2a3aM#V.......Cahahahahahahahahahahahahahahahahahahah#t#g.vaD.I.Oahahahahahahah.YaYayaWa9.Wahahahahahahahahahahahah#B#j#V#h.P..........#VaMaTahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahah#z......#T##ay#6#k#e.iaO.Bah.E.........Qahahahahahahahahahahahahahahahahahahahahah.IaAaY.G.U.8ahahahahahahaS#fa1aD.z.KahahahahahahahahahahahahaP#v#jbe.V..........a0aka1.Yahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahah.Fa9.....U#4.3abakauahahahahah.Qb#bd#pahahahahahahahahahahahahahahahahahahahahahahah#Zbe#S.....LahahahahahaDay#aa3aDahahahahahahahahahahahahahah.V#V#V#T#M...8.jaB.KawadaDahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahah#t#aa4aT#jbdaB.2ab#eaUahahahahah.BaoaD.nahahahahahahahahahahahahahahahahahahahahahahah..........#ha0.E#tah.EaYayaWa8.Hahahahahahahahahahahahahah.C#hbe#jbe.....cah#oaeaU#XaXaXahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahazaca5ata3a2al#5aea0ahahahahahah#m#caYaOahahahahahahahahahahahahahahahahahahahahahah.R...........Mbc##aMaZaA#0#aaD.9.Wahahahahahahahahahahahah#u.P............ahahahaeasa5a#aB.Eahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahah.Had.Xab#0a3aCa#.1an.Xahahahahahah.IaY#c.Kahahahahahahahahahahahahahahahahahahahahah.Wa8#i......#v#H#Vbe#ZaMa2#aaW#8.Tahahahahahahahahah.Y.La2.7b#bc............ahahah.Xava6#9.4a1.Yahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahah#m#daP.oav#x#fav.yaeaxahahahahahahahaVaYaY.Yahahahahahahahahahahahahahahahahahahahah.Wb#a7bd.e.Q#zahah.C.g.9bdaD#aa1a8.bayaV.W#Z....#AaV.Nb#aN.GaJa8a3#M.........h.Wahahah.c.3aP#Xau#aahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahaBaia5.2.W.z#e#Pa#ad#tahahahahahahah.IaAaY#tahahahahahahahahahahahahahahahahahahahaRb#.7bd#Aahahahahahahahah.LaE.eaFaLaK.T#c#T....#ib#b#bda9b..PaA.#.K.C#I..#S#S#hb..KahahahaQakawabanaXahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahah#xaF.E#i....#ja3#k.4.IahahahahahahahahaVaAaAaOahahahahahahahahahahahahahahahahahah.Ba8#Hbd.Fahahahahahahahahah#BaKb.b.#..t.Vbg.U..#jbhaLa3aDaZ.E.oahahahahahah.Yap#h#T.OahahahahaOab.kacay.Eahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahaha4.9#...........ba#Y#7#tahahahahahahahah.I#8#8#Eahahahahahahahahahahahahahahahahah.Bb#.7bd.Fahahahahahahahah.E#I#j.Ubga7a3ahah#n....#S#va7.Qahahahahahahahahahahah.WaCas#g.LahahahahagaI.0agaB.Kahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahah.Kb#a8#S..........#h.U.Vahahahahahahahahah.TaAaE#Aahahahahahahahahahahahahahahahah#paJ.7aL#oahahahahahahahah.P......#M#h#S.Nahahah.8.......G.Cahahahahahahahahahahahah.p#6avaA.Yahahah.Cakar#W#3a0#tahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahah.Ta9a9........#V........#mahahahahahahah#.#j#Z#h#h#mahahahahahahahahahahahahahah.LaJ.b.9#oahahahahahahahah.O.............U..#mahahah#I#s.G.Fahahahahahahahahahahahahah.X#a.EalazahahahahaG#1aPa#azazahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahah.La7.T.q......#V#Y#vbc#h...Lahahahahahah.C....#Sbb..##.NauaX.HaQ.E.Yahahahah#.#Z.qaJ.7a7#oahahahahahahahah.C..................##ahahahahaZ#d.Lahahahahahahahahahahahahahah#Gamas#daVahahahahaR.1arae#f.Iahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahah.WaJ.za9#s........#h.N.va1a2#qahahahahahahah...........Ma8#4a2aA.waEaE#8a3aE.N.U..#jbd#K.Eahahahahahahahahah#m........#Y.s.........CahahahaZazaZahahahahahahahahahahahahahahahaG#3aGam.Eahahah.Xag#W#W.6a2.Kahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahaP.Qb.aLaJ#B..........aM#gao#0aDaCahahahahahah##.........V.Pb.#ibd##aJ.x.9aK.la8be#V....#.ahahahahahahah.KaQayaA.......h#V...........Cahahahax#b#c.Kahahahahahahahahahahahahahahaha0aTaTaA.Kahahah#nak#Wai#3aAahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahaS.3.ka8b.a1#V.........b.Va2aY#fayaWa6ahahah.I#V#j....#Cahahahahah.E#o#raT.T.P###M.......QahahahahahaRaRa0#eaVac#H..#S#u#j..........ahahahah.EaZ#e.EahahahahahahahahahahahahahahahahaS.Z#baZ.Kahahahas.2#W.2a1#T.U##.Eahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahah#z#Z..bd#Waaau.Sb.aD.q......#MbdaMaEaY#faW#f.Bah.E#v#V#U#nahahahahahahahahahahahahah.C#v....#Z.CahahaQax#dauagac#W.o#k#0....#V..........##ahahahah#t#daeaOahahahahahahahahahahahahahahahaha6amaOaZaZahahahah.p#1am#j..#S#S...Lahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahah#..........zaBaSaM#0aXaza9#K.8.G.L#yaKapaYa1#aayaza7bcbh.Iahahahahahahahahahahahahahahah.C.i#Tbd.B.raCauav#Naraaa6a#.2#6#d..............#Y.l.Kahahahahaqakaxahahahahahahahahahahahahahahahahah.YadagayaS.Eahah.X#h...............Cahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahah#m.......U#M#j#M.9aoazanamaxahahahahah.Wb#aFaAa1#aaBa1a7.Tahahahahahahahahahahahahahahahahah#uaF.t.3ae.1aPaw.0abaq#Qalaz.jaW#v..........a0ak#a.i.KahahahaRacaCahahahahahahahahahahahahahahahahahahaxada2#V.U#Z.L.B....#M#j#V.......Lahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahah.E....#s#.#U#M.7aAaB#baBa0ahahahahahahah.K#DaM#8a1#a#daBaX.Yahahahahahahahahahahahahah.EaXaC.3.4aba6.DaHa.#Pacagan#caCaOahahah.P.8..#S#7aHawaxaAaTahahah.E.2#e#tahahahahahahahahahahahahahahahahah.X#J#j........#I.....S#i#S.......rahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahah.c..#Zb.#bap#ia2am#baZauahahahahahahahahahah.Qa9apaDaW#damaM.Y.E.P#I.P.LahahahahaQ.H#b#eaeabara5ahaUaI#N.4#eaYaB.B.Kahahahahahahah.C.Cav#P#F#kanaEaOahah#Gadalatahahahahahahahahahahahahahahahahah.C....#Z.......8....#S#j#S.......Eahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahah.Pb##faCa9aE#aazaZa1ahahahahahahahahahahahah.V.7#4#ca1a8a9#j........#M###GaTaz#3ae.1#2aUah.XaP#Pae#e#0.H.I#tahahahahahahahahahahahah.Xaua.#9a#aZ.Pahahahau.4.dahahahahahahahahahahahahahahahahah.C.....7a9aW.zaX#v#SaMal#a#Z...8ahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahaQ.8#7aEb.a1#d#day.Kahahahahahahahahahahaha4#i#v#sa8a7a7#j..........#h#Zb..4a#a..Xaha5aa.1#QadazaBaXahahahahahahahahahahahahahahahahaha4agararae#faDahaha0#Q.8.P.Cahahahahahahahahahahahahahahahah......aYaBamaE#w##alac#b#Y##.Cahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahah.SaFaDa8a1#daZaya4ahahahahahahahahahahah.KaL#Zbe#n#r.9bc................aL.Xahahaw#5acaxaZa1aQaSaeae.Xahahahahahahahahahahahahahahahahah.BacaU.yaSao.H.Lbh#s.U..#zahahahahahahahahahahahahahahaha4aE#S..bhaEaBaZaYaCaeacaX.G#Jahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahah.Kbd.G.8aoamaBaAaOahahahahahahahahahah.C.E.z.7#j.Rahah.I##......#S#U#M......aiaG#Qadaza1aT.Kahah.YalacaQahahahahahahahahahahahahahahahahah#taga#ara##b.S.b..#..s...Sahahahahahahahahahahahahahah#tanauaY#w.L.Y#aam#da3#Q.2azaN#v.Kahahahahahahahahahahahahah",
+"ahahahahahahahahahahahah.C.La7##aLaA#aaBaoa0ahahahahahahahahahah.L#Z..#S#v.eahahahah#I......#M###D......a7#daX.L.aahahahahahahax.Z#eahahahahahahahahahahahahahahahahahah#F#6abab.2aB.l.U....aZab#1#Rahahahahahahahahahahahahatad#daYahahah#EaD#aaYatacaWb##h#oahahahahahahahahahahahahah",
+"ahahahahahahahahahahah#m#Z.....qa2ayamaDa3aCahahahahahahahahah.C..........#uahahahah#I........#V#i........#Eahahahahahahahahah#Eaeaq.PahahahahahahahahahahahahahahahahahahaPagababala1bd....ayac.A.1aQ.Xahahahahahahahahah.CaCanaE#nahahahah.K.S#dacakaybd#hbc.Oahahahahahahahahahahahah",
+"ahahahahahahahahahah.C#Z......aM#faWa1aMap#f#Gahahahahahahah.Y.N#Ubb.......Pahahahah#z..................#Uahahahahahahahahahah.Rb..b#jbdahahahahahahahahahahahahahahahahahahavae.y.ZaC#g.Q#mahasau#P#X#Wa4.Kahahahahahahah#e#eaY#Eahahahahahahahax#N.2ao#i#h.M...Pahahahahahahahahahahah",
+"ahahahahahahahahahah.P......ba#jaY#fa7#iaFa1.WahahahahaU.HaM#4aMbd#h......#zahahahahah#U.................Eahahahahahahahahahah#U..b#....arahahahahahahahahahahahahahahahaha6ax#eacai#Qaza3.KahahahaSalab#Xa#as.Xahahahah.F#3#a.Nahahahahahahahah#6.ZakaDbg#h#Z....ahahahahahahahahahahah",
+"ahahahahahahahahahah#I......#U#C.J#v#Mbhb.aDay.C#E.Ha2b.aFb..lb##Z.U.......Cahahahahah.C#v.............rahahahahahahahahahahah.P...s....a5aP#5.WarahahahahahahahahahahahaOaWag#baV.Z#1#6#aa2ahahahah.Xaxae.A#la#.cah.CaT#baz.Rahahahahahahahahahat.ZakaYbc#j......ahahahahahahahahahahah",
+"ahahahahahahahahahah#I........#V#S....#j.laAa3#Ma7aFb.a8a7a9.P#oah#m#y.U#VaXahahahahahahahb.aWa4.gaE#mahahahahahahahahahahahahau.l....#Iaz#5awafaUa..Cawahahahahahahah.Faz#bau#Ga4.6.Zac#3aDaDahahahahahaUav#Q#X#l.9..aDaCa3.Wahahahahahahahahahaca#aeaA#S........ahahahahahahahahahahah",
+"ahahahahahahahahahah.C..................#ia3bd#M.Ua9aN#y.R#nahahahah#n#Y#j.9ahahahahahahah.Q.3aU#X#e#Eahahahahahahahahahahah.B#2aT.O#Gah.K.YaTaxaq#Xaf.KaPasaP.E..#Zal#b#a.u.KahahaTaeacatana2.Iahahahahahah#oava8....a3#0bhahahahahahahahahahahada#aga3#j.......Qahahahahahahahahahahah",
+"ahahahahahahahahahahah#C..................#U#T.....N#oahahahahahahahahaX#V#j.Iahahahahahah.Oal.oarad.KahahahahahahahahahahaPac#kaVahahahahahahah#t#EaCaca6#2aI....#jaB#c.Iahahahahaha0aeacag#daF#tahahahahahahah#U..#Y#h.U...Eahahahahahahahahahaga##6aF.M#T#j#zahahahahahahahahahahahah",
+"ahahahahahahahahahahahah.L.haK.Hbd.u.L..........#vahahahahahahahahahahahbe#j.9ahahahahahahazadawaPauahahahahahahahahahahahaGaPaR.KahahahahahahahahahahahaOax.t..#U#h#S.Nahahahahahahasan.2akadayaE.Kahahahahahah.P........#vahahahahahahahahah.Xaea#agaF.7aM.Gahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahah.Taia5asahah#U........#mahahahahahahahahahahahaX#V#j.WahahahahahaZad.Kaaal.EahahahahahahahahahaR#2auahahahahahahahahahahahahahahah#u.........Lahahahahahahaha4#3.2aeaC.vaDahahahahahahah#v.......Cahahahahahahahahahah#Qa#ax#4b#.Vb#ahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahaFai#Ra#.Xah.Ca3.Sa2aQahahahahahahahahahahahah.K.xaJayahahahahah.H#3aP.0axaIahahahahahahahah.Y.1a#aRahahahahahahahahahahahahahahahah#I#s#S#yahahahahahahahahahatax#Qag#7a2.IahahahahahahahavaQ.pahahahahahahahahahaha6aca#adb.b.aEb#.Kahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahaDas#R#P.XahahaYat#1.Yahahahahahahahahahahahahah.QaJaX.Cahahahah.H.3aP#2.3#Eahahahahahahaha4aqa6.LahahahahahahahahahahahahahahahahahahanaB.Kahahahahahahahahahahat#6aead#ab..I.L.Eahahahah#1aba0ahahahahahahahahahah.Kax#aaD#.#eb..7ahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahah#fai#R#Pahahah.Satak.Cahahahahahahahahahahahahah.Kbd#eaqahahahahaW#3araaal.Wahahahahahahahas#9acahahahahahahahahahahahahahahahahahah.K#eay.Bahahahahahahahahahah.X#bav#6#ea7...U#Z###zahah.2a6.Hahahahahahahahahah.L##..#S#jba.Sazb##nahahahahahahahahahahahah",
+"ahahahahahahahahahahahahah.Saia5ab.XahahaYaTaeaQahahahahahahahahahahahahahah#y#7ac.Xahahah.N#ea6#Xaxa6ahahahahahahaQ#2as#oahahahahahahahahahahahahahahahahahahahaC#3#Eahahahahahahahahahahah#n#e#e##......#j#S...Oahalarauahahahahahahahah#z........#S#M...Sa9.Kahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahaZaqa5.1ahahahaZau.Z#Eahahahahahahahahahahahahahah.K#a.ZaV#mahahay#eaIaral#Gahahahah.E#zacaratahahahahahahahahahahahahahahahahahahah.K#7a0.KahahahahahahahahahahahahaE...................LazanaW.HaS.Hau#qauaSa0aFa7#V..........#ja2ahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahaB.Zahab.Cahah.QaeaRaGahahahahahahahahahahahahahahahaXaeb#..#.ah#raC#k#Xal.Yahahah#U....#haBahahahahahahahahahahahahahahahahahahahahaha0ax.Fahahahahahahahahahahahah.....U#s.U#V........#i.z#..zaMa8aM.za8a8#.a8a8b..V.h#s#M......aJ.Wahahahahahahahahahahahah",
+"ahahahahahahahahahahahahaha8ac#R#NaQahahaZaV#W.Yahahahahahahahahahahahahahahah.U..#j#j..aXaBanab#lal.6ab#ka.aB..#T..#Zahahahahahahahahahahahahahahahahahahahah.KaCaR.oahahahahahahahahahahah.C....#s.v#v#i.........ha7aLa7a7a7a7aJa7aJ.7aJ.7aJ.b#s.M........#Tahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahaha2acah.Z.Xahah.Oacara6ahahahahahahahahahahahahahah#m....#J#M..#6#f#bab.y.6aWagac.4ad..#j....ahahahahahahahahahahahahahahahahahahahahah#7at.Yahahahahahahahahahahah.C....#M.U............#j##bdbd##bdbdbd#ibd#i#Ubd#i#i.U..........a7.Kahahahahahahahahahahahah",
+"ahahahahahahahahahahahahaha2aeahac#tahahaSaTara6ahahahahahahahahahahahahahahah#Ibg.......F.t#d.1#5adaS#E.K#G#D....#v.uahahahahahahahahahahahahahahahahahahahahahagat#Gahahahahahahahahahahahah.....................s#hbc#h###h#I.8a2.8.G.T#ibeba..........#jaZ.Wahahahahahahahahahahahah",
+"ahahahahahahahahahahahahah.N#Q#R.2.XahahaBaTajaQahahahahahahahahahahahahahahahakawa1#U.Lah#uazaiabag.Eahahahah#z#IaX#9asahahahahahahahahahahahahahahahahahahahahaRa6aQahahahahahahahahahahahahaZ#s..............#U.EaVa4aVahahahahahahahah.r#Z..........#vaX#0.Wahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahaXaeaHae.cahahaZaV.5a4ahahahahahahahahahahahahahah.KadaUaRahahah.L#7.Z#PalaQahahahahahah.IaVa#atahahahahahahahahahahahahahahahahahahahae#Xa6ahahahahahahahahahahah.K#NaQa3............#mah.6aw.gahahahahahahahahah.C#U........amaPam.Wahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahaXavajak.CahahaWaVawa4ahahahahahahahahahahahahahaha1aqaGaPahahahaV#dacasad.Wahahahahahahah.Lagae.Cahahahahahahahahahahahahahahahahahahasar.Wahahahahahahahahahah.Xabara5#3#i......#U.Cahah#6#2atahahahahahahahahahahah.M#Zbc#Y.4#2aB.Wahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahaEagaw#Q.Yahah.NagaaaQahahahahahahahahahahahahahaha2aTatahahahah.B#aaca#ad.BahahahahahahahahaZaIaT.Xahahahahahahahahahahahahahahahah.EaL.VaXahahahahahahahahahahaQ#Wa5a#aY.G.R#m.Cahahah.Ca8aCaYahahahahahahahahahahah#sbd##bdaear#d#nahahahahahahahahahahahah",
+"ahahahahahahahahahahahahah.SagaH#Q.YahahaVaSawaIahahahahahahahahahahahahah.BaE#daQahahahah#maZ.2.Zadaqahahahahahahahah#EaXabacahahahahahahahahahahahahahahahah....#V...LahahahahahahahahaI.1aUa.aBa9.Hahahahahah.C##..#S.U#.ahahahahahahahahahahbc#Ub#bdaBar#7#Eahahahahahahahahahahahah",
+"ahahahahahahahahahahahahah.SadaUataQahah.Rauaaa4ahahahahahahahahahahahahaha9aA#wahahahahah.F#aak#NadaVahahahahahahahahahaOaqajahahahahahahahahahahahahahah.CaC..#Z.x..#IahahahahahahahawacaUaUaub..Pahahahahahah.L....#V.....Lahahahahahahahahah#hbdaNbd.laXb..Rahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahaY.6aj#N.Bah.C#T.Ma9.9.Cahahahahahahahahahahah.BaFa2.Lahahahahah.F#aaeaqad.Yahahahahahahahahahah.I#XaaaPahahahahahahahahah#oaq.ZaPaf#Y....aF#X.Kahahahahahaha#arahav#8bdaPahahahahah#F.P....bg.9bh.Lahahahahahahahahah.Pbd#####j#Vbb...Oahahahahahahahahahahah",
+"ahahahahahahahahahahahahaha1.6aj.1.f.C#Z.....U#S#Zahahahahahahahahahahahb.a2.laPahahahahah#p#aaeacad#Eahahahahahahahahahah.KaXawaG#FahahahahahahaIab.1aPa.aea1aZ....ap#5bfa#ahahahaha6.y#R#W#fa7.Wahahahahaha4aeag....a3alaz.Kahahahahahahahahaha2#iaNbd#Z#M......#mahahahahahahahahahah",
+"ahahahahahahahahahahahah.C#Ia2azaY.8.L....#V#......Nahahahahahahahahah.WaMaA.Nahahahahahah.Fay#6acadaOahahahahahahahahahahaha4aea5al.P.Cah.K#X#2awar#6axa4.Yahahah.C.K.Lac#O#Warah#Ra#.kawaza8.Pahahahaha4ac#P.Z#b#I#vbhadalakahahahahahahahahah.T#i.G##aK.P#M.....Lahahahahahahahahahah",
+"ahahahahahahahahahahahah#Z.......U#M....#M.w.b....b.amax.Bahahahahahah.japb..Kahahahahahah.F#0agacad.Fahahahahahahahahahahahah.Lbg..#S#jara5aaa#aCaX.oahahahahahahahahah.Fax#XbfaG.2aPaHalaE.x#nahah.Xalab.1agaW#EahahahaC.4a#aCahahahahahahahah#A#i.G##.xaz.l.....Lahahahahahahahahahah",
+"ahahahahahahahahahahah#I........#V#j....b#axae..#M#aaC#ea8#iaZ.Y#t.C.P#vaK.Qahahahahahahah.FaDag.2ada0ahahahahahahahahahahahah.L....#M..aoazaT#tahahahahahahahahahahahahah#taBaia#a.#Ra#a1b#.Kah#ta6ab.1aeaX.Fahahahahahah#eaean.Cahahahahahahah.I#ibd##aN#da9.....Cahahahahahahahahahah",
+"ahahahahahahahahahah.C#Z....#V.9#K......b.#6#b#v#r.QaBaYa9b#a9a8.Tbg.U....#yahahahahahah.C.G#s#T.Jbc#S.Lahahahahahahahahahahah#m........#Dahahahahahahahahahahahahahahahahah.Kas#P#F#W#da9#U.C.W#d#eax#d.RaPahahahahahahah.EaWadaXa4ahahahahah.XaFbgbdaN#L#ab#...rahahahahahahahahahahah",
+"ahahahahahahahahahah#m........#v.s....baa3#3aBahahahah.K#w###i.GaJaL#Y#S....ahahahahahah#v...............Lahahahahahahahahahahaha3a0.h#v.Cahahahahahahahahahahahahahahahahah#Fa#awaw#e.e#s.Ua7aCan#c.VaUahahahahahahahahahahaX#b.3aCahahahah#tayao#s.G##bg.N.l.Cahahahahahahahahahahahah",
+"ahahahahahahahahahahah..........aWa#agb#aE#baxahahahahahahah.E.R.Gbc#j......ahahahahah#.......#M#H#V.......Cahahahahahahahahahahacaw.gahahahahahahahahahahahahahahahahahahah#5aIaU#QaYaN#M#v#saAaW.Wahahahahahahahahahahahah.KaXagac.Hahaha4azaoaE#sbd##.qa3aDahahahahahahahahahahahahah",
+"ahahahahahahahahahahah#C......#haBae.1aS#caB.Rahahahahahahahahah.P........#Lahahahahah........#V.Q#T......#Aahahahahahahahahah.K#5aG#Eahahahahahahahahahahahahahahahahahah.C.1a5a#am.9#j..#Y...U.Cahahahahahahahahahahahahahah.Ya0#3bd#I.Q#daBaFb#bcbdaN#iaK.Bahahahahahahahahahahahahah",
+"ahahahahahahahahahahahah#I....#Va8#dakabadao.Yahahahahahahahahah.C.j....#H#c.Iahahah.E........#T#h........#bata4aPahahahahahaha4afakahahahahahahahahahahahahahahahahahaha5aiaHa.#bb.#K###s#s..#UahahahahahahahahahahahahahahahahaO#j..#saB#daAa9.g#Lbd##bdbc.Eahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahah#m.Pbc.hb.#bacabauaQahahahahahahahahahahah.C#na8aWa2.Yahah.E..................#v#Faa#W#Pasab.K#FahahasafaTahahahahahahahahahahahahahahahahahahaGaI#2axaAbdaP#mabac#Iahahahahahahahahahahahahahahahahah#z....a8ama2#i#n#v#v#U.G#i#S##ahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahah.I#hbgaFan.Z.yae.Xahahahahahahahahahahahah.WaJayaY.K.K.e#M................#4a6.Xah#RaaaIa#a#aw.Xa#aIatahahahahahahahahahahahahahahahahaha6.1awac#f.7#Aah.Y.0#1.Kahahahahahahahahahahahahahahahahah#I..#S.8#Zbc#M.P....#sbd#T....#Iahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahah#v#i##aE#3a##kal.Xahahahahahahahahahahahah#ya8aA#ba7b##j.................8ay#balabarah#Rafafah#Oai.Xahahahahahahahahahahahahahahahah#F#N#Xaiaz.z.Pahahavaaatahahahahahahahahahahahahahahahahahah.L............#U......#s......##.Cahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahaha9#YaJ.baAad.1#WaOaUahahahahahahahahahahahaPa3.VaEa9b#bd#M............#v#I.qaL.VaD#7#3acaP#R#Ra5aHafaaaPahahahahahahahahahahahahahahaqabab#eaF.9aPahahaka#aRahahahahahahahahahahahahahahahahahahaOaZ.........r#v......#S........ahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahah.C#Z#h##aJb#aoagab#kaTahahahahahahahahahahah.Y.Qapa3b####ibc#I........#I.Cahah#o.Na7.9b.aYaBanae.1#2.0.y.0afaw#2#l.Ca5ahahahah.C.P#IaA#Pabaga1b#aQahahahaqa#aCahahahahahahahahahahahahahahahahahaUabaraW.z.P#mah#I.................Cahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahah.L..#Vbg.7#s.b#fae.y.Aagahahahahahahahahah.EaYa3aF.8bd#ibc.Iahah.Cah.cahahahahahahah.E.Fb.b#a8a2#0#bax#1ab#kabai#Wara6araUah.O........aJacaB.l.Qahahah.XaeaeaRahahahahahahahahahahahahahahahah.XataUag.rahahahah#w#v............#Cahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahah.j....bb#S..#M.xaBae#W.1aVahahahahahahaUaSa3a3b..lb##sa9atahahahahahahahahahahahahahahahah#u###ha9a9aEa1#7.3aka#.1ai.Zababa0............#h.zaJaPahahah.Y#Nag.WahahahahahahahahahahahahahahahahaeaPaiayahahahahaP##aKa7#M......#Iahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahah.C#v..........#ia8#dat.AabatahahahahaUaXaFaFa8aLbdbc.8#Wafahahahahahahahahahahahahahahah.O....ba#T.E.t.9a7.VaAamaCal#Qac.Zap..#M#D#v.........OahahahahaQaw#aahahahahahahahahahahahahahahahahaUaGaram.Wahahahah#waLaY.x.7.8#z#mahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahah#z......#ja0#X#cb.az#N#l.jbb.....Tb..Vb.a8.7bg.8.I.KamaP#l.O#z.CahahahahahahaU#na6asa.au...U#M...Eahahah#Aa7aJa8.P#fazad#T...U#I#T#M........ahahahahas#kaBahahahahahahahahahahahahahahah#RaiaHaua0ahahahahaXaK.j.8b#.Fahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahah#m.8#I.e#1#RaqaZb.#b#s......##b.#4#..x###s.T#nahahaOaC.8..#M##.Wa6asaqabat#6.4aqajbfa.bg#i..#V.Lahahahahah#oa0#.bd.la3#j....#M##.U........ahahahahacak.tahahahahahahahahahahahahahah.Xabaf#1aW#nahahah#EaLa3a3aJ#yahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahaRaya6#Rac.z#v.......Ub.b.aKa7#ibc.Iahahahah.C#v..#v#j..a9.5ajaa#5#eaCam#f#daWaD#Z..#Y.0a##RahahahahahahahahaT#U..................#Zahahah#tad.4aXahahahahahahahahahahahahahahaRaaaraz.Wahahah.KaJ.zaDa7#Jahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahaCanaa#9av......#M.qa2a9b#bg.8#nahahahahah.C....#i#V..bdadazadaZaZ#m.F.I#nahah##..a7ad#OabaIahahahahahahahah#z...................8ahah.C.La7aM#qahahahahahahahahahahahahah.X.0.kan.Iahahahah.SaKaYaK#LaTahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahah.Vax#R.d......#j###Tbd#s#S.Lahahahahahahah..#S#0a1...R#nahahahahahahahahahahahahah.faubf.0.Cahahahahahahahah#U................#mahah#I..#M.U##ahahahahahahahahahahahahah.1a5a#aCahahahah.FaL.waF.7.Qahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahah.Kaoa#aS...................Lahahahahahahah#m#s.Z#N#JahahahahahahahahahahahahahahahahaQaVabacasahahahahahahah.E#v.............8ahah.E....#Y#sa9.Hahahahahahahahahahahaha4ajaIaZ.Kahahah.W.8.za2.x.Vahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahah#EaW#b................#v.Cahahahahahahahah#r.Z.Z#tahahahahahahahahahahahahahahahahaha6#3a#acaeahahahahahahah.C#U........#j.taUar#6#v..#vb..4#Naeag.Ya5ahahahahah.Car#2aH#3.Bahahahah.Sa9a2a9.8aPahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahah.I#e#j..............#LahahahahahahahahahaO#Nab.Yahahahahahahahahahahahahahahahahahaha6aC.Z#1aR.Xahahahahahahah.C.7.h#T#s#iaH#2aV.b....#Lay#3avac#N.ZaRaqar#E##..#jaRae.HahahahahaR.7b.aM.7auahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahaha0az#Y..........#SbcaRahahahahahahahah.E#baXaRahahahahahahahahahahahahahahahahahahahahaVa#.5abahahahahahahah.kaD#ibdbdbd#7aE.H#A#v.....Rava0ayanagaca#a##j....#Z..a8ahahahah.K##aKa3a7.Vahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahah.Kap.Z.aa9#L#Sbhb.b#.8ahahahahahahahah.Ba1ayaOahahahahahahahahahahahahahahahahahahahah#taza#afb.#Z#Z.OaUaw#laU.c#sbdbd#UaA#nahahahahahahahahah.B.L#g#baz....#I#M.....Cahahaha3a7aF.9bdaPahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahah.Fa1aGaHakaD.7a2aA##aXahahahahahahah#p#caW.EahahahahahahahahahahahahahahahahahahahahahahaVb.....#v..aGa5awaban.9#ibdbd.Vahahahahahahahahahahahahah.Y.j..#sa1#V....#mahahaB#HaM.l.b.Hahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahah.I#bara#aVbdaMaoaK.7.Kahahahahahah.BaYaBaTahahahahahahahahahahahahahahahahahahahahahahah#Z...b.U..aB#3auaTaha0bgbd###i.Wahahahahahahahahahahahahahah.9#6.2a8.....Cah.F.b.8a8a7b.ahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahaDalat.2aZaNa3a9a7a2ahahahahahah.o#b#P.Hahahahahahahahahahahahahahahahahahahahahahahah#IaF##.....7.Wahahahah.7#Ubd.q.VahahahahahahahahahahahahahahaTa#.6.b...8#I#I#saL.zaL.V.Kahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahah#f#ea##L#Za9##b#aJ.aahahahahah.Yav.AatahahahahahahahahahahahahahahahahahahahahahahahazadaW.....rahahahahah.P#ibdbdbdahahahahahahahahahahahahahaUax#N#7#z##........##a9aN.fahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahah.faB#S....#i####.7#..Kahahahah.Ibhbe#v.Eahahahahahahahahahahahahahahahahahahahahaharacau.b#v#zahahahahahah#Abgbdbd#i.Wahahahahahahahahahahahah.Y#Nata1.Q............be#wahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah......#MbebdaNb#a7a2aZ.IaQ.Bbg#j#M#M...Cahahahahahahahahahahahahahahahahahahah.Kababan.Kahahahahahahahah.K.7#ibd#i.vahahahahahahahahahahahahav#Pad#A.S.h#M..#M.......Pahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahah#m....#MbdaL#Ubd##.baJ.8aKa3agaxaW.8....a3ahahahahahahahahahahahahahahahahahahahat.y.3.EahahahahahahahahahahaN#ibd#i.Vahahahahahahahahahahah.XaCaDa3aMaFb.#i#M.G......#Iahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahah.C......#i.b.7bg##aN.7.bb#aKaWamaA#i.....HaPaPahahahahahahahahahahahahahahahahaq#k#Q.Rahahahahahahahahahahah#Abgbdbd#iaY.Eahahahahah.K.IaZaXb.#4aF#4.eb..z.7.U........#vahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahah.C#v....#h#ib#bdbd.Gb#aJ#.#Cb##s.h......a..Xaha5#laTa6#tahahahahahahahahahaha4#Paban.Kahahahahahahahahahahah.E#s#Ubd#i#j...L#taO.Oa1b.aFaFb.aFb.#.a8a9a7b#bd.U.........Pahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah.L#v....#Zbg##bg####.baN..#v........#JaV#dacaI#FaU#ka#avaVaUahahahahah.Caha##W#e.Iahahahahahahahahahahahah#I#v#ibdbd#T....b#aFaFaF#4b.aMa8a9.xaJaN#i#sbh.U..........#mahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah.C.r.L#m.Hbgbd#ibdaN.7.M......#U.Lahahah.I#7ayaxaiaaajaraaaIawah.C#I.....Vae.Lahahahahahahahahahahahahah...Ubg#ibd#M.....Ub.b.a8.8.9a7b#bd#ibdbdbdbh#i#C......#U#mahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah.N#Ybh##.G###V#Z..#vahahahahahahahahaR.HaDadacar.kaha5aD....#V...7ahahahahahahahahahahahahah.L......be#i........aL.xb#bd#i#h#ia7.9b##s#i.Eahahah#m.Cahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah#x..bhbh#v........#pahahahahahahahahah#n.YaZa3a0.Z#W#U...G#v##.sahahahahahahahahahahah.Ka2aD........#S.........q.7a2ao....#M#sbgbh#S#nahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah.O......#T.U.....U#4aWar.Xahahahahahahahahahah.Y.RaB#j..#vb.ak#baGahahahahahahahah.KaSaz.2a0...................1#5#Was#h.......U..#vahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah#q..............#Haqahahah#2awawahahahahahahahahahah......aE#eae.Zak.Yahahahah.BaT#3ae#6ad#b#Z..............#UaQaVaWaE.G...........Pahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah.C..............apagaIaU#Rah#R#2a#.2as.oahahahahahah.P....#Sa9ayadacacasa5aratae.4.6#e#daDb.b#.............UaDaA.laEa0.E.8#v.....8ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah#C..........#U.SaKaYaBadaq#X#Ra5.oa..Z.2aqaUahahahah.r#v...Pa8a3az#6a##6avagadanaZaA#.b####eak#D.......sb#.l.t.Kahahahahah.c.Cahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah.L#U....#C.Cahah.Wa1aLaE#0#eataIaUahaU#Xas#QaTa6.X.L........#M#eag.4al#eaz#0.TaL.qap#eaP#taqaZa3b#.9.j.Fahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah#n.S.Q.Vao#bagaQara5awa..1av......#Va7al.6adanaBaD#4aJ.J#j..aZ.BadaoaMaM.QaQahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah.Ha1aKaYazalac.A#F#m....#i#haW#eaX#aaAa8b##s#Ya7....#ia3#.aY#o#nahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahaR.Na9a3aB#ea3....#L#Ubg#0a3a9#i.h#sbc#h#V.......Wahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah.W.Ob##S.....U#S..#i#s#Vbe#vbe#v#j.......8ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah#U...............S.I.I#m........#Z#mahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah.P.............8ahahahah.C#v#U#U#mahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah.C.8........#Z#mahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah#z#U#I.Q.Cahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah",
+"ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah"
+};
+SIMPLE  =                    T                                                  BITPIX  =                    8                                                  NAXIS   =                    2                                                  NAXIS1  =                  140                                                  NAXIS2  =                  175                                                  HISTORY Written by XV 3.10a                                                     END                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             яяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяЌ8UЌвяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяявU    Жяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяq      Uяяяяв88Жяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяя8       yІІЖ    ЖяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяР”=   1)  Uяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяя»ЃNg€ i  >5.ЂfM2 )'$   Пяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяя ~Tw”«АЩхД  4$†Ў–†tU<*-E  4e[wНеяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяеzЉ`xЇОвчлЪМµ   G«¬Ё›ЌzbD)ЏАЁy[ZЊПяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяЄ8  qвяяС~JjЃ »ЫоьпЭЛ№¶ЬтЄ    ќ±іЄ “ЂhL3jЎзмДЋf>Lp·яяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяq     8zSvЌ§ДащчйЫД»ДляяяяЄ tUf“±Жіґ±ҐљЌtY=8ў№h   =QЉжяяяяяввяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяв       k®ЩншящвЖ»Йзяяяяяяq  L„ЁЅАМугёєµ¬џђ}_=     {sQkџЙU  UяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяЄ       DГяюябийяяяяяяяяяя   mќ№В№ШяяяяїµЎё±¦—       8О­‡l:     qяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяЌ   &  b†бпяяяяяяяяяяЩњ‹ _»—Уяяяяяяяяк¤•јќ         ОУШЛ"  	яяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяя•   јяяяяяяяяяжЫЌfќГЦ8 ::яяяяяяяяяяяйl|        3?mz  (.еяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяя…,697 яяяяяяяяЅ }¦Ѕдуюфx   CяяяяяяяяяяяяяЄ  1   LH?81#4EK?*3ЛяяяЖвяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяявЄЄЖџ.728<C  8Єяяя°ђ„«ЙзлгзШкявU  _·Єяяяяяяяяяяяяя -55  _\WQJD=8/785/q   8ЖяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяЄ 0:-89A;     N±‘ѕЬхоЦЖІ®ляяяяявяЖШ ®яяяяяяяяяяяяU264% >cdba^ZVNIB;2-     Жяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяв  #1=669>C[mA)!   ЪсэцЫµЬляяяяяяяяяяХЛПкяяяяяяяяяяяЙ)463 ЄкЖЏ\ccaa]YUMF>6    qяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяв   2AB/9;CB?Q…‰s3  ўждяяяяяяяяяяяяяяяяѕХј™яяяяяяяяяяяќ.562wЖяяяяяк°Ћ”^aca`]X?   яяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяЖ  7K48:@CQSgЇ¬†Q eяяяяяяяяяяяяяяяяяяя»Х¤Зяяяяяяяяяя<264`яяяяяяяяяяясќzg\ba1:  Uяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяя   	4;=Ep‹±НА0 вяяяяяяяяяяяяяяяяяяяиОО›кяяяяяяяяжB563wяяяяяяяяяяяя±Л§њz!    qяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяРЊ 3:9CXйяяяяіЖяяяяяяяяяяяяяяяяяяяяягѕў@Ќяяяяяяњ.563СяяяяяяяяяяяяЪГєЌ      …яяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяя}ћЖ=O9@DѕяяяяяХµЫјяяяяяяяяяяяяяяяяяяяяяяя“Ё‡  Єяяяяяo2654яяяяяяяяяяяяямЄД‘Ќ8    ;N=Пяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяz¬јјЊ<eMDlяяяяяяй–М яяяяяяяяяяяяяяяяяяяяяяяUe:  BТяяяяC563aяяяяяяяяяяяяяяґЗ­B UUU*IYIdзяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяІдИ¬8X{SCйяяяяяяѕuЊµяяяяяяяяяяяяяяяяяяяяяяя C	 Ћўў·яќ0574СяяяяяяяяяяяяяяH¶єV  вя№?QWE^яяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяя№ЃУт№{Cos:”яяяяяяяЅy„Ляяяяяяяяяяяяяяяяяяяяяя®a  ТщйСљJ366aяяяяяяяяяяяяяЬq )  Жяя‹D[P@ЎяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяякjГВO@^=Sяяяяяяяяѕ}…Жяяяяяяяяяяяяяяяяяяяям‘Ин^ЌозЭмв*574tжяяяяяяяяяА©m–”  W  вяяяdIcK5зяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяњ•/     &јяяяяяяяяИ–»яяяяяяяяяяяяяяяяяяяя®ЖоОяяяяяяят|0674“lЎњ  ›ґ Ђ™°АЗЗ  Uяяяяи:ReGaяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяІќ       ?яяяяяяяяяЖГОЫяяяяяяяяяяяяяяяяяяЮ›ДВјпяяяяяяявC!&,4фбЇ@  =„ЎІАДГЅДбХ8 Ѕ·Ўяяяя»A_\A¤яяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяЦ…љ        вяяяяяяяя¶ЕВмяяяяяяяяяяяяяяяяяЬЎЕї¶яяяяяяяв8   ‡мгµ _µВ¶°ЦфяяяяяввбсўВяяяяyNmMRеяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяякxИҐ       ЄяяяяяяяЖ)ЖГOяяяяяяяяяяяяяяяяН­РѕЛяяяяяяяЖ      UяяЖ -(OўяяяяяяяяяяяХйЬЏзяяяПRZnHaяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяa¬ъЈ   9%7)Єяяяяяяя Ѓ ™еяяяяяяяяяяяяяТўаеЯяяяяяяяя8        ЖяяU 8яяяяяяяяяяяяяНчИ™яяяя»JicB€яяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяя›љжсІ   2mN>-Rеяяяяяв  5 9Ё“§ЋЌЖ№µеяя8 IҐеНЫяяяяяяяяЌ         UяявЄG\Ґяяяяяяяяяяяяяндрљ°яяяя{TwS;·яяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяЅ…ЭыБY   ^\TF4&іяяяяв  MмкйТ љ‰ЃЋ…y +еЙщяяяяяяяя¶6        яяямЁІ”яяяяяяяяяяяяяяАзв”УяяяжCX|HLяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяЖUUaВщДЋ_•,   =_`YJ:*iеяяЕS 8СЭЙГО№ІґВйбЩ03ЄяяяяяМџ[8Pf  9    яяяяјє‰яяяяяяяяяяяяяясРпВ‡еяяяУLdfCuяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяЌ   џЮx]”ВЭp  i_a]SB/Sіи‰иЬ‘ЌвяяяяяямдЮЙЪ¦ 
+ ЖяяяћEDVpЂ”§( 	T(    яяяяМФЉяяяяяяяяяяяяяяяцМфўћяяяя–RqR>ёяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяв     4WЊ»ЪП№яяяям•cbXJ5'RЦняяяяяяяяяяяяяяяЌ 
+$Н‡KFatЉљ¬єїГj i    ‘яяяяОк€яяяяяяяяяяяяяяяялУгЉПяяяяѓJuHAUЌЖяяяяяяяяяяяяяяяяяяяяяяяяяяяяяq   IЉ·ШМ¬яяяяяям§ee^P>,N»яяяяяяяяяяяяяяяя®9"LMi‘ҐєЖНИЕПРќ      "XDжяяяЫБЇУяяяяяяяяяяяяяяяя№жЙЃяяяяз:SH   UяяяяяяяяяяяяяяяяяяяяяяяяяяяяЄ 0B(@ЂµФШ®яяяяяяяяяЙwgcP70%іяявявяяяяяяяМё^>Uo‚—«ВПФПКЦжЮаняЌ    EЅЊQ‰яяян№ёЅяяяяяяяяяяяяяяяяп»пЇ©яяяя„      qяяяяяяяяяяяяяяяяяяяяяяяяяяяв#:D@{®РФµяяяяяяяяяяяЫ€ig=94%W    UвяяО„FG]vЌљ¶ОбдУднлаЫафяяяявqUqЛС°}?ПяяяГД›яяяяяяяяяяяяяяяяялРв€[qЖяU        вяяяяяяяяяяяяяяяяяяяяяяяяяяяM,CArЁНХЗояяяяяяяяяяяеfakN?5      U2La|‘ЎАзшыфусжеяяяяяяяяяяяяяяАПП bJжяя№ИЅяяяяяяяяяяяяяяяяяяЗЏ    Є       яяяяяяяяяяяяяяяяяяяяяяяяяяяя3;iЎИУЁсяяяяяяяяяяяяwWqD>        RЃЄРгяънпявКряяяяяяяяяяяяяяяяфБЯИ”Xrяяій№яяяяяяяяяяяяяяяяяяЄ      8  ,  8вяяяяяяяяяяяяяяяяяяяяяяяяяяІ 0c›ГС№сяяяяяяяяяяяяРDѓuлиb        dЭтяшйЬЙИлпЙЬ»яяяяяяяяяяяяяяяяяЭЛлѕЃBќяЩеГкяяяяяяяяяяяяяяяяяU S%q (6#  UяяяяяяяяяяяяяяяяяяяяяяяяяЖq'!^•їП¤НяяяяяяяяяяявзW…kЪяяМ        уиЦКЙПеуяяЛрµяяяяяяяяяяяяяяяяяяСЮвЄs6жЖОѕTяяяяяяяяяяяяяяяяяЌ  TЉm3е4:48яяяяяяяяяяяяяяяяяяяяяяяяяU  UЏ»С§yЪяяяяяяяяявq  GwІяяяЖ    '#    ™єЦдяяяяяяХоєяяяяяяяяяяяяяяяяяяфКтЫ™^\;)+ 8яяяяяяяяяяяяяяяяД -ЌЌtO°<6:4'Мяяяяяяяяяяяяяяяяяяяяяяяяq   $ЊµНҐxЊяяяяяяяяяq    <яяяяя    €'   њяяяяяяяяяиУУХяяяяяяяяяяяяяяяяяяаМшЖЉH. 
+вяяяяяяяяяяяяяяЪћЈ6U‡ЋЌb='6:3Uѕяяяяяяяяяяяяяяяяяяяяяяяя     ‡Й®@i«яяяяяяяМњ8&  яяяяяU   G   вяяяяяяяяяяЅмЇяяяяяяяяяяяяяяяяяяяРЫпјx;)u„Уяяяяяяяяяяяяй•®ЅўяяФ•yj*7:2e}яяяяяяяяяяяяяяяяяяяяяяяЖ     fЎ‹яяяяй…>/9DL-  яяяяяя       Єяяяяяяяяяяяeџ"вяяяяяяяяяяяяяяяяяхЗлз `)
+Gњ™w`ояяяяяяяяяя—Ґяяяянѓ{*8:0ЂQвяяяяяяяяяяяяяяяяяяяяяяв  K] ^і™іЉ‹tO<NUi0	xяяяяяяв8+%)%ЄяяяяяяяяяяяЖ   eяяяяяяяяяяяяяяяяяйКЛхЩЏN7вР’ «ЏеяяяяяяяК†¦—Цяяяяяоd-8:<‡? ЄяяяяяяяяяяяяяяяяяяяяяяU      =Єё ‡њџW1ЋШлвqV‡яяяяяяяє|°є©њяяяяяяяяяяяяЄ 	 z”µляяяяяяяяяяяяямЊЙЙЪъИ~>иялЬОМё–єяяяяяя µ›Эяяяяяяяі/99;ЏQ  вяяяяяяяяяяяяяяяяяяяяяя     
+hA  `€«Аяяяяяяoh^ияяяяяя№ЃЇЅ©ёяяяяяяяяяяяя«. вциИњ•йяяяяяяяяяє­ЭвСѕит©jIеяятЁРЛ°€Цяяя™іЙ›яяяяяяяяњ099I•P  ЄяяяяяяяяяяяяяяяяяяяяяявTp•wRЄ  \ ~яяяяяяяяяТ\tЂяяяяяяјЃії§ЕяяяяяяяяяяяЦ·хЁqвяжЯанв±ЄЩЦяяявл©ївХвячЖсл”VsяяяяЦЅКД™U¦Є·яяяяяяяяяk2:9Tq  Єяяяяяяяяяяяяяяяяяяяяяяя|¬кКСв  яяяяяяяяяяя[nQжяяяяя»‡µБ¦Хяяяяяяяяяяи—мУхяяяяяяШПМеЩёЌ  jСаЕяяяяЬТщЧЂDРяяяяяХµ±  h«’ляяяяяяяяяm4;8   Жяяяяяяяяяяяяяяяяяяяяяяяx«кВВяв$MKвяяяяяяяяяяяАclЄяяяяяє†ёВ§Шяяяяяяяяяя°аегяяяяяяяяяМВДжп0  dазяяяяяяЗдьґr6жяяяяяуt  0J Єяяяяяяяяяo4;7 ЌяяяяяяяяяяяяяяяяяяяяяяяяwЄо»ОяяЈиФяяяяяяяяяяяяяNt„яяяяяє†єГЁ­яяяяяяяяяЕДкяяяяяяяяяяяяяяЭњ I Uяяяяяяякїнсў]sяяяяяяЄ    Єяяяяяяяяя"7<7O–]љяяяяяяяяяяяяяяяяяяяяяяяяяz®т»Щяя®¤лЪяяяяяяяяяяяяяГiђНяяяяЕЊјЕ§ВяяяяяяяяХ–Рїяяяяяяяяяяяяяяяя  ЄяяяяяяяяЪЙрШЉLЎяяяяяв8 
+Uяяяяяяяяяя'5<6Ќв‘ФяяяяяяяяяяяяяяяяяяяяяяяяяkЇл»Шяя‚®йОяяяяяяяяяяяяяяkёєяяяяБ€ѕЖЄАяяяяяяяяЋЩ¶тяяяяяяяяяяяяяяяяЖMd•яяяяяяяяяяМЩхЖw7љЖвяяявUњwяяяяяяяяяяя(6<5¶еЋзяяяяяяяяяяяяяяяяяяяяяяяяя—±лєаяя…ЇлФяяяяяяяяяяяяяя~ГУдяяя­ЏВЙ©ОяяяяяяяЄ±·бяяяяяяяяяяяяяяяяяяЛбСяяяяяяяяяятПех¤4  8вяяІдёяяяяяяяяяяя'-ґвЊРяяяяяяяяяяяяяяяяяяяяяяяяя”·ф·аяяЌЇлЦяяяяяяяяяяяяяяи¦оЅяяяЁ”ЕЛЄНяяяяяяЇ°Еєяяяяяяяяяяяяяяяяяяя¶ЯЭяяяяяяяяяяяиДМe      ЖяЄл±яяяяяяяяяв8   ‹е‰СяяяяяяяяяяяяяяяяяяяяяяяяяЃ№ыЅряяЊµйНяяяяяяяяяяяяяяя№н}8Єя­’КО¬КяяяяЌUсЙяяяяяяяяяяяяяяяяяяяяѕЬНяяяяяяяяяяяяЌ-       8Л®Х«яяяяяяяяЄ     “ѓСяяяяяяяяяяяяяяяяяяяяяяяяяnёэЅняя¦µдЮяяяяяяяяяяяяяяяU-   Ѕ€‘ЛТ§ЁЦлЭe  ™яяяяяяяяяяяяяяяяяяяяяЇјЬяяяяяяяяяяяя          %$#<"VTmS9k3
+     ЏТяяяяяяяяяяяяяяяяяяяяяяяяяmАьДсяя‘ѕеЮяяяяяяяяяяяяяяЖ  O І—МФ¬†®ѕµ¦   яяяяяяяяяяяяяяяяяяяяя’їХяяяяяяяяяяяв      87766554434432     FияяяяяяяяяяяяяяяяяяяяяяяяяTѕыГПяяЌ®ЧЩяяяяяяяяяяяяяяя  –Љ›РЫ«¬СТЩ‹'яяяяяяяяяяяяяяяяяяяяз›јйяяяяяяяяяяяв  ,y3   !GHHGFFEDDCBCBA*   'яяяяяяяяяяяяяяяяяяяяяяяяяяЊЕюНвяяЉ¶ЅТяяяяяяяяяяяяяяя–·@UяґќУб«Цяяя8 !Љяяяяяяяяяяяяяяяяяяяяяћ©»яяяяяяяяяяяя  ,
+    2YYYYXXXWVWVW_a"+   BСяяяяяяяяяяяяяяяяяяяяяяяяяЌВщКяяяЌЈЕЦяяяяяяяяяяяяяяз†Е­ЖяяѓћЫгЄЭяяяяЖЌѕвјяяяяяяяяяяяяяяяяяяяи’ йяяяяяяяяяяяяk         Є”™€ўЈўўЈЈҐќcG     mяяяяяяяяяяяяяяяяяяяяяяяяяяxКчПсяяtё·Няяяяяяяяяяяяяяs”ѕряяяЂџЮвЄЬяяяяяяНвЛМяяяяяяяяяяяяяяяяяяяљЎУяяяяяяяяяяяд  :   ЌяЄг яяяяяяяяЌ    {Mзяяяяяяяяяяяяяяяяяяяяяяяяя~КщМяяяw»»аяяяяяяяяяяяяяз7џЕяяяя„ўее©ФяяяяяяяЙујяяяяяяяяяяяяяяяяяязЎѓБяяяяяяяяяяріі F :Ќяя»аџяяяяяяяяяЄ8 	y”?зяяяяяяяяяяяяяяяяяяяяяяяяя|КьКряяw»БЩяяяяяяяяяяяяя‹D–ЭяяяяЈҐегҐФяяяяяяяХЕЯ§яяяяяяяяяяяяяяяяяя›Њкяяяяяяяяяя№І·¦€_ІЄЖяяяяАР›яяяяяяяяяяй¬…~Yћ^?яяяяяяяяяяяяяяяяяяяяяяяяяяbКщИрявf{oОяяяяяяяяяяяяеJC„яяяяя ўздЄЬяяяяяяяяХНЙЅяяяяяяяяяяяяяяяяU+wяяяяяяяяяє«»Ї“m°яяяяяяяіС»яяяяяяяяяяЬѕЗҐ^^k?жяяяяяяяяяяяяяяяяяяяяяяяяяiКцЙяя8    Жяяяяяяяяяяя—ОяяяяяЋҐииЄИяяяяяяяяяѕвЎяяяяяяяяяяяяяяя­   ЄяяяяяяяХ¤ј¶њwyяяяяяяя   вяяяяяяяяяяєИ­a@a=яяяяяяяяяяяяяяяяяяяяяяяяяЄ!V¤8™Є     яяяяяяяяяяяHяяяяяя“©кжҐяяяяяяяяяяяУеАзяяяяяяяяяяяЕ«€ 6#„яяяяяяЛ™єє©ѓlляяяяяяq    яяяяяяяяяс¶И®c@[:яяяяяяяяяяяяяяяяяяяяяяяяq         7'  ЂМяяяяяяяя–°яяяяяя‘ЄиеҐляяяяяяяяяядВФ­яяяяяяямЦљїЬеЭ  Њx±яяяяяћ·ї®‘`ляяяяяяя8 .$	 Жяяяяяяяяя­З°c%Ќяяяяяяяяяяяяяяяяяяяяяяв        5d5
+N;u›еяяяяд.HяяяяяяяЉЈнЯћХяяяяяяяяяяяѕв·ђвякЩ·«АвпйзИдЖ Ё–†™йяя·µВєљo±яяяяяяЛіU f‚яяяяяяяяяяЁЖ±g   ЌяяяяяяяяяяяяяяяяяяяяяU      QtfHb^TGQnМяЖv–яяяяяяя_†ШіmЖяяяяяяяяяяяяЈQ  U”СмснЩЯкяяяяяяя№“–¤ЯХ¬Дѕўzzяяяяяп±ЅЭЬI {›iРяяяяяяяяяЅЖ¶t    яяяяяяяяяяяяяяяяяяяяяU  6m(	\{„вФЎn^a]Q?  дяяяяяв      Єяяяяяяяяяяяq   чеПОвяяяяяяяяяяяГ‡°–ЇГВІ‡mяяяясЄ·ЬЬЖЯявµ—”™яяяяяяяяяєЕ»u'  яяяяяяяяяяяяяяяяяяяяяq   u}G3cНяяяямўZa[6#   Ќяяяяя8        Жяяяяяяяяяя8 A вяяяяяяяяяяяяяяяяЮ¬ ѕЛ»”dляяяҐ©СЮЕКтяяяя¶ў‡ѓяяяяяяяяіД№|,"  яяяяяяяяяяяяяяяяяяяяяв   ]‡}[jЬяяяяяяяШѓ4   qяяяяЌ         8яяяяяяяяяя—`@8яяяяяяяяяяяяяяяяяя°ёФБћpЊЖяЙ¤ЛЯЧХкяяяяяяяњћvЦяяяяяяя«Б»|2" qяяяяяяяяяяяяяяяяяяяяяяЖ  1l„‰zh›яяяяяяяяяв    ¬яяяяU    4   ХяяяяяяяяяФ¶ВqяяяяяяяяяяяяяяяяяяеІОН«7  ‚БЫМНпяяяяяяяяяањљkеяяяялzЏАє„5"(ЌяяяяяяяяяяяяяяяяяяяяяяяявЄH8Ls€‹wќяяяяяяяяяяЄ bяяяяU   9g  IЌ–©Бяяяяяя¬Г яяяяяяяяяяяяяяяяяяуІОПѕЊQ ђПБцяяяяяяяяяяяя№¦‘tяяяХ|‡vјј‡=#Ояяяяяяяяяяяяяяяяяяяяяяяяяяяз69Rx‹ЊrЗяяяяяяяяяявЖWC—яяІ=   7   ЛСє©’ёйяяЧ§АМяяяяяяяяяяяяяяяяяо°ИгЗ—{A [ yяяяяяяяяяяяяяян›¤w„ЄШ‡Љђfјѕ‘<жяяяяяяяяяяяяяяяяяяяяяяяяяяяяwd|V}ЏЋ„ХяяяяяяяяяяякJеµG(      LсяяйТѕЄЌЂП¦¶ёсяяяяяяяяяяяяяяяяяїѕоФ§xћЄ) ЌяяяяяяяяяяяяяяяУl !k‹Ќu›·ѕ–9MяяяяяяяяяяяяяяяяяяяяяяяяяяяяяСQ“h_Ђ‘Ќ„ляяяяяяяяяяяХ1,UEF    ]¶ИЪтэчйО»¦”Њ–яяяяяяяяяяяяяяяяяЧ±вв·~{яяќєOqвяяяяяяяяяяяяяяяя   vЌ‰k„;¬ѕ.;вяяяяяяяяяяяяяяяяяяяяяяяяяяяяq=Ѓ›Oi†”Ќ}яяяяяяяяяяяяa?bx~UM   9ЪґђўёЙбнэтдК№ ЂЈікяяяяяяяяяяяяпҐЪсИЋpяяяЎґЎяяяяяяяяяяяяяяяяяв  EO…Z—[Ё‡ Uяяяяяяяяяяяяяяяяяяяяяяяяяяяв ^—i4nЉ–Ћ яяяяяяяяяяЉOi|…ЏЉ[ЪЖqUqЄяяяяН — ·ПгчяоЪДµћyЉГйяяяяяяяввіЛуФ›kДяяЭ§«єяяяяяяяяяяяяяяяяяв     U     ЖяяяяяяяяяяяяяяяяяяяяяяяяяяЖ ,[7AuЌ‹ќяяяяяяязeZp~†ЏЉЩяяяяяяяяяяяяяЙ“™ЈµОЯщтЩЛЅЇљx™ЕяяяqU “флЄuґяяяЖѕЎняяяяяяяяяяяяяяяяятK  U  {3   ЄяяяяяяяяяяяяяяяяяяяяяяяяяяЖ   Iz“љ€«яяяяяУ>bu~‡‹Giяяяяяяяяяяяяяяяяя­b€Ґ·НемдРВєЄ•q†     Ўє†Џкяяяїѕ™яяяяяяяяяяяяяяяяяя¬§o
+ЄЖ     ЄяяяяяяяяяяяяяяяяяяяяяяяяяяяU    XЌЁZ‚—“O^U8ЄuShw~‡„“E%Іяяяяяяяяяяяяяяяв’(5БЁ™ЈіГвжЮЖѕІЋ       /RляяяяА»­яяяяяяяяяяяяяяяяяХЁЇЂ§Жяян#       вяяяяяяяяяяяяяяяяяяяяяяяяяяяяЌ 4Шжўx_{2   6ZkwЂ†~їяЛ3зяяяяяяяяяяяяяв  вяяНЄђў±АЦиХѓ       8яяяямђ¶ДяяяяяяяяяяяяяяяяЭ‹ЕЋЏяяяяёВЊ Єяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяя¤ҐрX_~    C_nvЃѓ„Эяяя± qяяяяяЛПґ¶kr:   ЌяяяяяјЅњЎ­АE ­     яяяяИЌџИяяяяяяяяяяяяяяяяҐЕЊйяяяКјХЅ}%<Жяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяз€]KA    [pyЃ{љяяяяяя=    as_26:BGLQQX  WяяяяяяякМЃs        вяяяЄ—vкяяяяяяяяяяяяяяяћ·µvйяяяж№ЧЛ qяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяУDXO*    "ѓx}o¤яяяяяяя     W`mqikjqdgЃ 7]МяяяяяяяяяЖ   -    вяяяЋ”ЏяяяяяяяяяяяяяяяУЎФ‰ЖяяярЇХЩ­pкяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяя¦Ih1   0($ Єяяяяяяв  8Ђў–ЈКЙЩяяяяU0BBFМяяяяяяяяв        8яяяяЏђЄяяяяяяяяяяяяяяЮ‰КЏ«яяяяјЛе¶~°яяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяhOO      ЖяяяяяяяU"!ЖяяяяяяяяяяяяяяЁBBJНяяяяяяяяЌ     ЖяяяU,9єяяяяяяяяяяяяян‰Й¬’яяяяУБиИ”’яяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяй?U     bяяяяяяяяяlshњяяяяяяяяяяяяяяяяїBCJНяяяяяяяяq   "~яяяU   8вяяяяяяяяяяяяёіґrШяяябєдХЎњкяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяФIZ    	,’няяяяяяяя°tqЦяяяяяяяяяяяяяяяяяѕAC7¶яяяяяяяяЖU	-Dgяяд  F‰яяяяяяяяяяяРњКp¬яяяяЇЪеЇ‹ляяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяя•bК2  gУіІяяяяяяяя­ttГяяяяяяяяяяяяяяяяяяЅVD6ёяяяяяяяяя|S^_Y€c/  KezЏМияяяяяяЫi%&ЏяяяяЖОрї…Зяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяя€ЛцјУYЎЛЗ¦няяяяяяя®vvляяяяяяяяяяяяяяяяяяяј=D7ќяяяяяяяяЄk`dKSiw$  1?<8M\rtЃмвU _ияяяН»лР–яяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяГЏжйі–~іФ·©яяяяяяя­txЧяяяяяяяяяяяяяяяяяяяяС=E6`ЌЌяяд°H7y€~X@ѓ­С њ¬‚?<9CVe   Тяяяв¤жЯ¤€яяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяЎ¤тПѓfљЕН™пяяяяяя®wwляяяяяяяяяяяяяяяяяяяяяСU4   H[p†…rjяяяяяяяяяХ«k@='      яяярґЯрі}Шяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяя”Бф»co«Т·ћяяяяяяЕwyДяяяяяяяяяяяяяяяяяяяяяяњ     ':[Ћt‚„}JПяяяяяяяяяяяя¬r      яяя¶КцЗЊИяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяк…Шё7ЊјО ряяяяяБy{Зяяяяяяяяяяяяяяяяяяяяяяя     #ќЙмяЕw„†UЈяяяяяяяяяяяяяв!  вяЛ№па–—яяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяя№P  
+aЈРєЎяяяяя‹A5ЅяяяяяяяяяяяяяяяяяяяяяяяЄяяяяя{ѓ‡f}яяяяяяяяяяяяяяd#	 UqЌлк©yяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяЌ  '<…іТџђЕВяЖ    Ќяяяяяяяяяяяяяяяяяяяяя±su9	Uяяяяяя¦~ЂyYжяяяяяяяяяяяяеc     Ў№|ШяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяU  f[WљНїѓЂxogY   вяяяяяяяяяяяяяяяяяяямpx{ІЌяяяяяяяЩvЃ…NРяяяяяяяяяяяя}"q     [·яяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяU  'T_UyЄЧЈЉ‘ЉЏ“v@  ЁИяяяяяяяяяяяяяяяяяФg|pЫяяяяяяяяяяjЂ€^§яяяяяяяяяяяеhD     ЌяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяЄ  9S_ZЋГГЌr‹Ќ…( NЫЅљЁЛяяяяяяяяяяяяяяq~xЏяяяяяяяяяяя—}ЃrPЄяяяяяяяяд°d"*-95a   UяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяЌ 1A@j¤ЬЄ.  oЬсфШєё©Чяяяяяяяяяяђ{zsяяяяяяяяяяяяu}‚D8вяК±І’[@AFIJSbhmc4  UяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяЖЄЄзE->„єКc     UвГАГЮфрЪ¶ЋєЕяяяяяяґy}mняяяяяяяяяяяв%g{ЌO  N3iЃ‚„ѓЃ}zwspleW    ЖяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяязF&_›Ѕ$   UяяяяяеЖЇИгфтШ¶Џ°кЖ8 bqіяяяяяяяяяяяяЄ Fia;  ,€€…Ѓ|xupke_YT/	  	яяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяз!@ s  Uяяяяяяяк»ЄґЗбснЧµ     ’яяяяяяяяяяяяяU 
+DX   d{wrmf`WFEAJSЋ8 ?вяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяя   ,  vµµСяяяяяяяяЛ©§ЖаФ  %	qяяяяяяяяяяяП¤1     Yhf>/8ERЋмяяяЖЖяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяя   
+  8ъеЛµњ¬ЮкяяяяяяяТЇ* hhajияяяяяяямЕ›Ґі=   %   )s–¦† CKATяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяq    "VФоыьеН¶©®Ояяяяяяяq  .‚xtsДяяяяп№“©ґёі        hИгиг  qяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяя   ‹}™»ЧмычеНіЁїПяяяяЖ  DЂ€Њ|‚Чб¦™ЄіµЇҐЉ$    ЪжРѕ°,   Жяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяв8 UяякГІЂ їЧхьщЯИІ—ѕвяяЄ  #l‹Ћ}Ђћ«±®©ћЋ~k{¬Q  Oґ·­І·ЭЖ %ЄяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяШ›…™АЧнщцЬЕ­Њ«›   p‰ Є®Ёџ”†reѓ°јЭоЩІ‚ЋЎ­ДмяяяяяввяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяіЉ„џёШошкХї*    ЌћЁЁ¤™‹x_<HвццдС¶ќґЙмяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяИ ‚ ѕЧкУ  2F¤Ј›ЏЂpbWI MЭМ­§іУяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяЗІЂ™q  &J“‰yf\ba`Z  №Яяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяя®Q  * &U8N[[YX+   вяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяq    qЖЖ©  VяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяЄ    :яяяяЖ VвяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяЄ   "вяяяяяяЖвяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяявЄЌЖвяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяя                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
