@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.96 2005/02/06 20:57:08 oliver Exp $
+// $Id: displayProperties.C,v 1.97 2005/02/15 12:35:50 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -23,7 +23,6 @@
 #include <BALL/VIEW/MODELS/forceModel.h>
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
 
-#include <qcolordialog.h>
 #include <qmenubar.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
@@ -347,12 +346,12 @@ void DisplayProperties::apply()
 
 void DisplayProperties::editColor()
 {
-	custom_color_.set(chooseColor_(custom_color_label));
+	custom_color_.set(chooseColor(custom_color_label));
 }
 
 void DisplayProperties::editSelectionColor()
 {
-	BALL_SELECTED_COLOR.set(chooseColor_(selection_color_label));
+	BALL_SELECTED_COLOR.set(chooseColor(selection_color_label));
 }
 
 // ------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lightSettings.C,v 1.17 2005/02/13 16:58:13 amoll Exp $
+// $Id: lightSettings.C,v 1.18 2005/02/15 12:35:51 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/lightSettings.h>
@@ -10,7 +10,6 @@
 #include <qpushbutton.h>
 #include <qlineedit.h> 
 #include <qlistbox.h>
-#include <qcolordialog.h>
 #include <qlabel.h>
 #include <qbuttongroup.h>
 #include <qradiobutton.h>
@@ -125,7 +124,7 @@ void LightSettings::addLightPressed()
 
 void LightSettings::colorPressed()
 {
-	color_sample->setBackgroundColor(QColorDialog::getColor(color_sample->backgroundColor()));
+	chooseColor(color_sample);
 }
 
 

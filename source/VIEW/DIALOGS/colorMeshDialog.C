@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.C,v 1.45 2005/02/06 20:57:07 oliver Exp $
+// $Id: colorMeshDialog.C,v 1.46 2005/02/15 12:35:50 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -18,7 +18,6 @@
 
 #include <qlineedit.h>
 #include <qspinbox.h>
-#include <qcolordialog.h>
 #include <qtabwidget.h>
 #include <qbuttongroup.h>
 #include <qpushbutton.h>
@@ -78,7 +77,7 @@ void ColorMeshDialog::cancelPressed()
 
 void ColorMeshDialog::choosePressed()
 {
-	QColor qcolor = setColor(custom_color_label);
+	QColor qcolor = chooseColor(custom_color_label);
 	selected_color.set(qcolor);
 	red_box->setValue(qcolor.red());
 	blue_box->setValue(qcolor.blue());
@@ -99,27 +98,27 @@ void ColorMeshDialog::colorBoxesChanged()
 
 void ColorMeshDialog::maxPressed()
 {
-	max_color.set(setColor(max_label));
+	max_color.set(chooseColor(max_label));
 }
 
 void ColorMeshDialog::midPressed()
 {
-	mid_color.set(setColor(mid_label));
+	mid_color.set(chooseColor(mid_label));
 }
 
 void ColorMeshDialog::minPressed()
 {
-	min_color.set(setColor(min_label));
+	min_color.set(chooseColor(min_label));
 }
 
 void ColorMeshDialog::minMinPressed()
 {
-	min_min_color.set(setColor(min_min_label));
+	min_min_color.set(chooseColor(min_min_label));
 }
 
 void ColorMeshDialog::maxMaxPressed()
 {
-	max_max_color.set(setColor(max_max_label));
+	max_max_color.set(chooseColor(max_max_label));
 }
 
 
@@ -274,13 +273,6 @@ void ColorMeshDialog::getColor_(const ColorRGBA& color, QLabel* label, QSpinBox*
 {
 	label->setBackgroundColor(color.getQColor());
 	box->setValue(color.getAlpha());
-}
-
-QColor ColorMeshDialog::setColor(QLabel* label)
-{
-	QColor qcolor = QColorDialog::getColor(label->backgroundColor());
-	label->setBackgroundColor(qcolor);
-	return qcolor;
 }
 
 void ColorMeshDialog::colorByCustomColor_()

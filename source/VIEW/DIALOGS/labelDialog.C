@@ -10,7 +10,6 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/common.h>
 
-#include <qcolordialog.h>
 #include <qpopupmenu.h>
 #include <qmenubar.h>
 #include <qlabel.h>
@@ -185,11 +184,7 @@ void LabelDialog::accept()
 
 void LabelDialog::editColor()
 {
-	color_sample_->setBackgroundColor(QColorDialog::getColor(color_sample_->backgroundColor()));
-	QColor qcolor = color_sample_->backgroundColor();
-
-	custom_color_.set(qcolor);
-	update();
+	custom_color_.set(chooseColor(color_sample_));
 }
 
 } } // namespaces

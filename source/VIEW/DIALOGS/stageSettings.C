@@ -6,7 +6,6 @@
 #include <BALL/VIEW/KERNEL/stage.h>
 
 #include <qpushbutton.h>
-#include <qcolordialog.h>
 #include <qlabel.h>
 #include <qcheckbox.h>
 #include <qslider.h>
@@ -34,8 +33,7 @@ StageSettings::StageSettings( QWidget* parent,  const char* name, WFlags fl )
 
 void StageSettings::colorPressed()
 {
-	color_sample->setBackgroundColor(QColorDialog::getColor(color_sample->backgroundColor()));
-	QWidget::update();
+	chooseColor(color_sample);
 }
 
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: coloringSettingsDialog.C,v 1.35 2005/02/06 20:57:08 oliver Exp $
+// $Id: coloringSettingsDialog.C,v 1.36 2005/02/15 12:35:50 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/coloringSettingsDialog.h>
@@ -417,102 +417,102 @@ namespace BALL
 
 		void ColoringSettingsDialog::minimumOccupancyColorPressed()
 		{
-			chooseColor_(minimum_o_label);
+			chooseColor(minimum_o_label);
 		}
 			
 		void ColoringSettingsDialog::middleResidueColorPressed()
 		{
-			chooseColor_(middle_residue_label);
+			chooseColor(middle_residue_label);
 		}
 			
 		void ColoringSettingsDialog::lastResidueColorPressed()
 		{
-			chooseColor_(last_residue_label);
+			chooseColor(last_residue_label);
 		}
 			
 		void ColoringSettingsDialog::negativeChargeColorPressed()
 		{
-			chooseColor_(negative_charge_label);
+			chooseColor(negative_charge_label);
 		}
 			
 		void ColoringSettingsDialog::neutralChargeColorPressed()
 		{
-			chooseColor_(neutral_charge_label);
+			chooseColor(neutral_charge_label);
 		}
 			
 		void ColoringSettingsDialog::positiveChargeColorPressed()
 		{
-			chooseColor_(positive_charge_label);
+			chooseColor(positive_charge_label);
 		}
 			
 		void ColoringSettingsDialog::nullDistanceColorPressed()
 		{
-			chooseColor_(null_distance_label);
+			chooseColor(null_distance_label);
 		}
 			
 		void ColoringSettingsDialog::maxDistanceColorPressed()
 		{
-			chooseColor_(max_distance_label);
+			chooseColor(max_distance_label);
 		}
 
 		void ColoringSettingsDialog::minimumTFColorPressed()
 		{
-			chooseColor_(minimum_tf_label);
+			chooseColor(minimum_tf_label);
 		}
 			
 		void ColoringSettingsDialog::maximumTFColorPressed()
 		{
-			chooseColor_(maximum_tf_label);
+			chooseColor(maximum_tf_label);
 		}
 			
 		void ColoringSettingsDialog::unassignedTFColorPressed()
 		{
-			chooseColor_(unassigned_tf_label);
+			chooseColor(unassigned_tf_label);
 		}
 			
 		void ColoringSettingsDialog::maximumOccupancyColorPressed()
 		{
-			chooseColor_(maximum_o_label);
+			chooseColor(maximum_o_label);
 		}
 			
 		void ColoringSettingsDialog::unassignedOccupancyColorPressed()
 		{
-			chooseColor_(unassigned_o_label);
+			chooseColor(unassigned_o_label);
 		}
 
 		void ColoringSettingsDialog::firstResidueColorPressed()
 		{
-			chooseColor_(first_residue_label);
+			chooseColor(first_residue_label);
 		}
 
 		void ColoringSettingsDialog::helixColorPressed()
 		{
-			chooseColor_(helix_color_label);
+			chooseColor(helix_color_label);
 		}
 
 		void ColoringSettingsDialog::turnColorPressed()
 		{
-			chooseColor_(turn_color_label);
+			chooseColor(turn_color_label);
 		}
 
 		void ColoringSettingsDialog::strandColorPressed()
 		{
-			chooseColor_(strand_color_label);
+			chooseColor(strand_color_label);
 		}
 
 		void ColoringSettingsDialog::coilColorPressed()
 		{
-			chooseColor_(coil_color_label);
+			chooseColor(coil_color_label);
 		}
 
 		void ColoringSettingsDialog::forceMaxColorPressed()
 		{
-			chooseColor_(force_max_color_label);
+			chooseColor(force_max_color_label);
 		}
 
 		void ColoringSettingsDialog::forceMinColorPressed()
 		{
-			chooseColor_(force_min_color_label);
+			chooseColor(force_min_color_label);
 		}
 
 		void ColoringSettingsDialog::maxDistanceChanged()

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.34 2005/02/13 16:42:42 amoll Exp $
+// $Id: common.h,v 1.35 2005/02/15 12:36:08 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -20,6 +20,8 @@
 #endif
 
 #include <qevent.h>
+#include <qcolordialog.h>
+#include <qlabel.h>
 
 namespace BALL
 {
@@ -388,6 +390,12 @@ namespace BALL
 		/// thread safe output to logview
 		void logString(const String& data);
 		
+		/** Choose a color.
+		 		The colordialog is initialised with the background color of the label.
+				If the colordialog returns a new color, this becomes the new backbground color of the label.
+		*/
+		QColor chooseColor(QLabel* label);
+
 		//@}
 
 	} // namespace VIEW

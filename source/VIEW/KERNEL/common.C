@@ -306,5 +306,12 @@ LogEvent::LogEvent()
 {
 }
 
+QColor chooseColor(QLabel* label)
+{
+	QColor qcolor = QColorDialog::getColor(label->backgroundColor());
+	if (!qcolor.isValid()) return label->backgroundColor();
+	label->setBackgroundColor(qcolor);
+	return qcolor;
+}
 
 } } //namespaces
