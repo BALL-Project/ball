@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: GenericPDBFile_test.C,v 1.3 2003/07/08 13:08:52 amoll Exp $
+// $Id: GenericPDBFile_test.C,v 1.4 2003/08/19 10:17:37 oliver Exp $
+//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,7 +13,7 @@
 #include <BALL/DATATYPE/options.h>
 ///////////////////////////
 
-START_TEST(GenericPDBFile, "$Id: GenericPDBFile_test.C,v 1.3 2003/07/08 13:08:52 amoll Exp $")
+START_TEST(GenericPDBFile, "$Id: GenericPDBFile_test.C,v 1.4 2003/08/19 10:17:37 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
