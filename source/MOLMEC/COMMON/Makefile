@@ -1,3 +1,5 @@
+# $Id: Makefile,v 1.11 2001/03/17 17:42:51 anker Exp $
+
 DIRECTORY=MOLMEC/COMMON
 
 THISLIB=$(LIBNAME)
