@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.21 2004/04/18 17:50:30 amoll Exp $
+// $Id: molecularFileDialog.C,v 1.22 2004/04/21 13:43:28 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -77,20 +77,7 @@ namespace BALL
  		  for (QStringList::Iterator it = files.begin(); it != files.end(); ++it) 
 			{
 				// construct a name for the system(the filename without the dir path)
-				String filename = (*it).ascii();
-				while (filename.has(FileSystem::PATH_SEPARATOR))
-				{
-					filename = filename.after(FileSystem::PATH_SEPARATOR);
-				}
-
-				String filter(filename);
-				while (filter.has('.'))
-				{
-					filter = filter.after(".");
-				}
-
-				filename = filename.left(filename.size() - filter.size() - 1);
-				openFile((*it).ascii(), filter, filename);
+				openFile((*it).ascii());
 			}
 		}
 
@@ -99,9 +86,15 @@ namespace BALL
 			throw()
 		{
 			vector<String> fields;
-			String seperator = FileSystem::PATH_SEPARATOR;
-			String filename = fields[file.split(fields, 
-															 String(FileSystem::PATH_SEPARATOR).c_str()) -1];
+			String seperators(FileSystem::PATH_SEPARATOR);
+			// workaround on windows: QT returns the filename in linux style
+			// but I am not sure, if this will stay this way.
+#ifdef BALL_PLATFORM_WINDOWS
+			 seperators += "/";
+#endif
+			Position p = file.split(fields, seperators.c_str()) -1;
+			String filename = fields[p];				
+			working_dir_ = file.getSubstring(0, file.size() - (filename.size() + 1));
 			String extension = fields[filename.split(fields, ".") -1];
 			filename = filename.getSubstring(0, filename.size() - (extension.size() + 1));
 			openFile(file, extension, filename);
