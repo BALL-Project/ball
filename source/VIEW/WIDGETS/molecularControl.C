@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.53 2004/04/16 11:33:07 amoll Exp $
+// $Id: molecularControl.C,v 1.54 2004/04/17 22:16:55 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1119,8 +1119,8 @@ void MolecularControl::applySelector()
 	for (; sit != roots.end(); sit++)
 	{
 		// faster, but doesnt always work:
-//	 	mc->updateRepresentationsOf(**sit, false);
-		getMainControl()->updateRepresentationsOf(**sit, true, true);
+	 	getMainControl()->updateRepresentationsOf(**sit, false);
+// 		getMainControl()->updateRepresentationsOf(**sit, true, true);
 	}
 
 	NewSelectionMessage* nm = new NewSelectionMessage;
