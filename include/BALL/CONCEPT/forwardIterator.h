@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forwardIterator.h,v 1.27 2004/02/23 15:19:57 anhi Exp $
+// $Id: forwardIterator.h,v 1.28 2004/02/26 15:04:02 sneumann Exp $
 //
 
 #ifndef BALL_CONCEPT_FORWARDITERATOR_H
@@ -67,7 +67,7 @@ namespace BALL
 		}
 
 		///
-		BALL_INLINE void swap(ConstForwardIterator& iterator) throw() { std::swap(getTraits(), iterator.getTraits()); }
+		BALL_INLINE void swap(ConstForwardIterator& iterator) throw() { std::swap(ConstForwardIterator<Container, DataType, Position, Traits>::getTraits(), iterator.getTraits()); }
 		//@}
 
 		/** @name Iterator methods
