@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>MaterialSettingsData</class>
 <widget class="QWidget">
     <property name="name">
@@ -321,7 +321,10 @@
                             </size>
                         </property>
                         <property name="maxValue">
-                            <number>128</number>
+                            <number>1280</number>
+                        </property>
+                        <property name="lineStep">
+                            <number>10</number>
                         </property>
                         <property name="pageStep">
                             <number>100</number>
@@ -333,7 +336,7 @@
                             <enum>Above</enum>
                         </property>
                         <property name="tickInterval">
-                            <number>40</number>
+                            <number>400</number>
                         </property>
                     </widget>
                     <widget class="QLabel">

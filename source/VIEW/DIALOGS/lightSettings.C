@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lightSettings.C,v 1.11 2004/09/30 15:51:21 amoll Exp $
+// $Id: lightSettings.C,v 1.12 2004/10/08 14:49:15 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/lightSettings.h>
@@ -342,7 +342,7 @@ void LightSettings::intensityChanged()
 }
 
 
-void LightSettings::setDefaultValues()
+void LightSettings::setDefaultValues(bool /*all*/)
 	throw()
 {
 	defaultsPressed();

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: materialSettings.C,v 1.7 2004/09/30 15:51:21 amoll Exp $
+// $Id: materialSettings.C,v 1.8 2004/10/08 14:49:15 amoll Exp $
 // 
 
 #include <BALL/VIEW/DIALOGS/materialSettings.h>
@@ -22,24 +22,12 @@ namespace BALL
 				PreferencesEntry()
 		{
 			setINIFileSectionName("MATERIAL_SETTINGS");
-			setDefaultValues();
+			setDefaultValues(true);
 			registerObject_(specular_slider);
 			registerObject_(diffuse_slider);
 			registerObject_(ambient_slider);
 			registerObject_(shininess_slider);
 			insertEntry(this, "Materials");
-		}
-
-
-		void MaterialSettings::updateFromStage()
-			throw()
-		{
-		}
-
-
-		void MaterialSettings::update()
-			throw()
-		{
 		}
 
 
@@ -56,19 +44,19 @@ namespace BALL
 			throw()
 		{
 			float f[4];
-			f[0] = f[1] = f[2] = f[3] = value;
+			f[0] = f[1] = f[2] = value;
+			f[3] = 1.0;
 			glMaterialfv(GL_FRONT, e, f);
 		}
 
 
-		void MaterialSettings::setDefaultValues()
+		void MaterialSettings::setDefaultValues(bool /*all*/)
 			throw()
 		{
-			for (Position i = 0; i < 3; i++)
-			{
-				material_values_[i] = 0.25;
-			}
-			material_values_[3] = 76.8;
+			material_values_[0] = 0.774;// specular
+			material_values_[1] = 0.4; 	// diffuse
+			material_values_[2] = 0.25; // ambient
+			material_values_[3] = 76.8; // shininess
 
 			setValues_();
 		}
@@ -96,9 +84,8 @@ namespace BALL
 
 		void MaterialSettings::setValues_(const QSlider& slider, QLabel& label, Position pos)
 		{
-			String text = String((float)slider.value() / 10.0);
+			String text = String(((float)slider.value()) / 10.0);
 			
-			if (&slider == shininess_slider) text = String((float)slider.value());
 			while (text.has('.') && text.hasSuffix("0"))
 			{
 				text = text.trimRight("0");
@@ -107,7 +94,7 @@ namespace BALL
 			if (text.hasSuffix(".")) text += "0";
 				
 			label.setText(text.c_str());
-			material_values_[pos] = slider.value() / 10.0;
+			material_values_[pos] = ((float)slider.value()) / 10.0;
 		}
 
 		void MaterialSettings::setValues_()
