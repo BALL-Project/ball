@@ -1,4 +1,4 @@
-// $Id: triangulatedSurface.h,v 1.15 2001/02/23 14:37:50 anker Exp $
+// $Id: triangulatedSurface.h,v 1.16 2001/02/23 18:24:59 anker Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATEDSURFACE_H
 #define BALL_STRUCTURE_TRIANGULATEDSURFACE_H
@@ -57,14 +57,14 @@ namespace BALL
 		}
 		void print()
 		{
-			cout << index << ": " << point[0]->index << "-" << point[1]->index << " ";
+			std::cout << index << ": " << point[0]->index << "-" << point[1]->index << " ";
 			if (triangle.size() > 0)
 			{
-				cout  << (triangle[0] == NULL ? -2 : triangle[0]->index);
+				std::cout  << (triangle[0] == NULL ? -2 : triangle[0]->index);
 			}
 			for (Position i = 1; i < triangle.size(); i++)
 			{
-				cout << "|"<< (triangle[i] == NULL ? -2 : triangle[i]->index);
+				std::cout << "|"<< (triangle[i] == NULL ? -2 : triangle[i]->index);
 			}
 		}
 		vector<TTrianglePoint<T>*> point;
@@ -109,7 +109,7 @@ namespace BALL
 		}
 		void print()
 		{
-			cout << index << "( ["
+			std::cout << index << "( ["
 					 << point[0]->index << " " << point[1]->index << " " << point[2]->index << "] {"
 					 << (edge[0] == NULL ? -2 : edge[0]->index) << " "
 					 << (edge[1] == NULL ? -2 : edge[1]->index) << " "
@@ -133,20 +133,20 @@ namespace BALL
 		}
 		TTriangleEdge<T>* has(TTriangleEdge<T>* test)
 		{
-			//cout << "*****************************************************\n";
-			//cout << "TTrianglePoint( "; print(); cout << " )->has(  TTriangleEdge( "; test->print(); cout << " )  )\n";
+			//std::cout << "*****************************************************\n";
+			//std::cout << "TTrianglePoint( "; print(); std::cout << " )->has(  TTriangleEdge( "; test->print(); cout << " )  )\n";
 			for (std::list<TTriangleEdge<T>*>::iterator e = edge.begin(); e != edge.end(); e++)
 			{
-				//cout << "  "; (*e)->print(); cout << "\n";
+				//std::cout << "  "; (*e)->print(); std::cout << "\n";
 				if (*(*e) == *test)
 				{
-					//cout << "return: "; (*e)->print();
-					//cout << "\n*****************************************************\n";
+					//std::cout << "return: "; (*e)->print();
+					//std::cout << "\n*****************************************************\n";
 					return *e;
 				}
 			}
-			//cout << "return: NULL\n";
-			//cout << "*****************************************************\n";
+			//std::cout << "return: NULL\n";
+			//std::cout << "*****************************************************\n";
 			return NULL;
 		}
 		bool operator == (const TTrianglePoint& point)
@@ -157,17 +157,17 @@ namespace BALL
 		{
 			std::list<TTriangleEdge<T>*>::iterator e;
 			std::list<TTriangle<T>*>::iterator t;
-			cout << index << "( {";
+			std::cout << index << "( {";
 			for (e = edge.begin(); e != edge.end(); e++)
 			{
-				cout << (*e)->index << " ";
+				std::cout << (*e)->index << " ";
 			}
-			cout << "} [";
+			std::cout << "} [";
 			for (t = triangle.begin(); t != triangle.end(); t++)
 			{
-				cout << (*t)->index << " ";
+				std::cout << (*t)->index << " ";
 			}
-			cout << "] )";
+			std::cout << "] )";
 		}
 		TVector3<T> p;
 		TVector3<T> n;
@@ -234,22 +234,22 @@ namespace BALL
 		*/
 		virtual ~TTriangulatedSurface()
 		{
-				cout << "########\n";
+				std::cout << "########\n";
 			for (list<TTrianglePoint<T>*>::iterator i = points.begin(); i != points.end(); i++)
 			{
 				delete *i;
 			}
-				cout << "########\n";
+				std::cout << "########\n";
 			for (list<TTriangleEdge<T>*>::iterator i = edges.begin(); i != edges.end(); i++)
 			{
 				delete *i;
 			}
-				cout << "########\n";
+				std::cout << "########\n";
 			for (list<TTriangle<T>*>::iterator i = triangles.begin(); i != triangles.end(); i++)
 			{
 				delete *i;
 			}
-				cout << "########\n";
+				std::cout << "########\n";
 		}
 		//@}
 

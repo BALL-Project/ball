@@ -1,4 +1,4 @@
-// $Id: triangulation.h,v 1.16 2001/02/23 14:37:51 anker Exp $
+// $Id: triangulation.h,v 1.17 2001/02/23 18:24:59 anker Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATION_H
 #define BALL_STRUCTURE_TRIANGULATION_H
@@ -678,7 +678,7 @@ namespace BALL
 		 TTriangulatedSurface<T>* surface,
 		 Index nummer, const T& /*Wozu braucht man das?*/)
 	{
-		cout << "    ... " << nummer << "\n";
+		std::cout << "    ... " << nummer << "\n";
 		if (border.size() == 0)
 		{
 			return;
@@ -689,7 +689,7 @@ namespace BALL
 		bool empty = (face_points.size() == 0);
 				#ifdef print_debug_info
 				string pre = "      ";
-				cout << pre << "i: ";
+				std::cout << pre << "i: ";
 				#endif
 		std::list<TTrianglePoint<T>*>::iterator p_;
 		for (p_ = face_points.begin(); p_ != face_points.end(); p_++)
@@ -697,11 +697,11 @@ namespace BALL
 			(*p_)->state = 0;
 			points.insert(*p_);
 					#ifdef print_debug_info
-					cout << (*p_)->index << " ";
+					std::cout << (*p_)->index << " ";
 					#endif
 		}
 				#ifdef print_debug_info
-				cout << "\n";
+				std::cout << "\n";
 				#endif
 		for (b = border.begin(); b != border.end(); b++)
 		{
@@ -719,7 +719,7 @@ namespace BALL
 			HashSet<TTrianglePoint<T>*> this_points;
 			std::list<TTriangleEdge<T>*>::iterator e;
 					#ifdef print_debug_info
-					cout << pre << "a:";
+					std::cout << pre << "a:";
 					#endif
 			for (e = edge_contours[*b].begin(); e != edge_contours[*b].end(); e++)
 			{
@@ -730,12 +730,12 @@ namespace BALL
 				this_points.insert((*e)->point[0]);
 				this_points.insert((*e)->point[1]);
 						#ifdef print_debug_info
-						cout << (*e)->point[0]->index << "-"
+						std::cout << (*e)->point[0]->index << "-"
 								 << (*e)->point[1]->index << " ";
 					#endif
 			}
 					#ifdef print_debug_info
-					cout << "\n";
+					std::cout << "\n";
 					#endif
 			HashSet<TTrianglePoint<T>*>::Iterator p;
 			for (p = this_points.begin(); p != this_points.end(); p++)
@@ -757,7 +757,7 @@ namespace BALL
 					diff *= sphere.radius;
 					(*p)->p = sphere.p+diff;
 							#ifdef print_debug_info
-							cout << (*p)->index << " put to sphere\n";
+							std::cout << (*p)->index << " put to sphere\n";
 							#endif
 				}
 			}
@@ -770,7 +770,7 @@ namespace BALL
 				HashSet<TTrianglePoint<T>*>::Iterator h;
 				for (h = points.begin(); h != points.end(); h++)
 				{
-					cout << pre << (*h)->index << "  " << (*h)->state << "\n";
+					std::cout << pre << (*h)->index << "  " << (*h)->state << "\n";
 				}
 				#endif
 		//if (empty)
@@ -783,7 +783,7 @@ namespace BALL
 		b = border.begin();
 		state = 1;
 				#ifdef print_debug_info
-				cout << "new state: " << state << "\n";
+				std::cout << "new state: " << state << "\n";
 				int halt = (((nummer == 31) || (nummer == 37)) ? 0 : -1);
 				//int halt = 0;
 				#endif
@@ -791,9 +791,9 @@ namespace BALL
 		{
 			TTriangleEdge<T>* edge = edges.front();
 					#ifdef print_debug_info
-					cout << pre << "derzeit " << edges.size() << " Edges";
-					if (halt == 0) cin >> halt; else { cout << "\n"; halt--; }
-			  	cout << pre << "gepopt\n";
+					std::cout << pre << "derzeit " << edges.size() << " Edges";
+					if (halt == 0) cin >> halt; else { std::cout << "\n"; halt--; }
+			  	std::cout << pre << "gepopt\n";
 			  	#endif
 			edges.pop_front();
 			if (b != border.end())
@@ -830,7 +830,7 @@ namespace BALL
 						state = 0;
 					}
 							#ifdef print_debug_info
-							cout << pre << "######  new state: " << state << "\n";
+							std::cout << pre << "######  new state: " << state << "\n";
 							#endif
 				}
 				else
@@ -851,10 +851,10 @@ namespace BALL
 			std::list<TTrianglePoint<T>*>::iterator last = third.begin();
 			bool pushed = false;
 					#ifdef print_debug_info
-					cout << pre << "starte mit Edge "; edge->print();
-					cout << " (" << edge << ")\n";
-					cout << pre << "third point: " << third_point->index << " ";
-					if (halt == 0)  cin >> halt; else { cout << "\n"; halt--; }
+					std::cout << pre << "starte mit Edge "; edge->print();
+					std::cout << " (" << edge << ")\n";
+					std::cout << pre << "third point: " << third_point->index << " ";
+					if (halt == 0)  cin >> halt; else { std::cout << "\n"; halt--; }
 					#endif
 			HashSet<TTrianglePoint<T>*>::Iterator next = points.begin();
 			HashSet<TTrianglePoint<T>*>::Iterator test;
@@ -864,7 +864,7 @@ namespace BALL
 						(*next == third_point))
 				{
 							#ifdef print_debug_info
-							cout << pre << "dritter Punkt: " << (*next)->index << " --\n";
+							std::cout << pre << "dritter Punkt: " << (*next)->index << " --\n";
 							#endif
 					next++;
 				}
@@ -881,7 +881,7 @@ namespace BALL
 					if (same_edge)
 					{
 								#ifdef print_debug_info
-								cout << pre << "dritter Punkt: " << (*next)->index << " --\n";
+								std::cout << pre << "dritter Punkt: " << (*next)->index << " --\n";
 								#endif
 						next++;
 					}
@@ -896,24 +896,24 @@ namespace BALL
 							test_value = -test_value;
 						}
 								#ifdef print_debug_info
-								cout << pre << "dritter Punkt: " << (*next)->index
+								std::cout << pre << "dritter Punkt: " << (*next)->index
 										 << " (" << test_value << ") " << normal << " ";
-								if (halt == 0)  cin >> halt; else { cout << "\n"; halt--; }
+								if (halt == 0)  cin >> halt; else { std::cout << "\n"; halt--; }
 								#endif
 						bool is_convex = true;
 						test = points.begin();
 								#ifdef print_debug_info
-								cout << pre << "teste mit ...\n";
+								std::cout << pre << "teste mit ...\n";
 								#endif
 						while ((test != points.end()) && is_convex)
 						{
 									#ifdef print_debug_info
-									cout << pre << "... " << (*test)->index << " :  ";
+									std::cout << pre << "... " << (*test)->index << " :  ";
 									#endif
 							if (test == next)
 							{
 										#ifdef print_debug_info
-										cout << "--\n";
+										std::cout << "--\n";
 										#endif
 								//third.push_back(*test);
 								//if (pushed == false)
@@ -930,7 +930,7 @@ namespace BALL
 								{
 									test++;
 											#ifdef print_debug_info
-											cout << "ok (" << this_value << ")\n";
+											std::cout << "ok (" << this_value << ")\n";
 											#endif
 								}
 								else
@@ -948,7 +948,7 @@ namespace BALL
 										if (same_edge == false)
 										{
 													#ifdef print_debug_info
-													cout << "not ok (" << this_value << ")\n";
+													std::cout << "not ok (" << this_value << ")\n";
 													#endif
 											is_convex = false;
 											//if (pushed == true)
@@ -960,7 +960,7 @@ namespace BALL
 										else
 										{
 													#ifdef print_debug_info
-													cout << "ok (gleiche SESEdge)\n";
+													std::cout << "ok (gleiche SESEdge)\n";
 													#endif
 											test++;
 										}
@@ -973,7 +973,7 @@ namespace BALL
 												((*test)->p != edge->point[1]->p)    )
 										{
 													#ifdef print_debug_info
-													cout << "added (" << this_value << ")";
+													std::cout << "added (" << this_value << ")";
 													#endif
 											third.push_back(*test);
 											if (pushed == false)
@@ -983,7 +983,7 @@ namespace BALL
 											}
 										}
 												#ifdef print_debug_info
-												cout << "\n";
+												std::cout << "\n";
 												#endif
 										test++;
 									}*/
@@ -994,7 +994,7 @@ namespace BALL
 						{
 							third.push_back(*next);
 									#ifdef print_debug_info
-									cout << "added ()\n";
+									std::cout << "added ()\n";
 									#endif
 						}
 						next++;
@@ -1005,7 +1005,7 @@ namespace BALL
 			{
 				case 0 :
 									#ifdef print_debug_info
-									cout << pre << "no convex triangle found\n";
+									std::cout << pre << "no convex triangle found\n";
 									#endif
 									break;
 				case 1 :
@@ -1062,7 +1062,7 @@ namespace BALL
 	{
 				#ifdef print_debug_info
 				string pre = "      ";
-				cout << pre << "eindeutiges Dreieck\n";
+				std::cout << pre << "eindeutiges Dreieck\n";
 				#endif
 		TTriangleEdge<T>* edge1;
 		TTriangleEdge<T>* edge2;
@@ -1080,14 +1080,14 @@ namespace BALL
 		{
 			edges.remove(edge1);
 					#ifdef print_debug_info
-					cout << pre << "remove Edge "; edge1->print();
-					cout << " (" << edge1 << ") from\n" << pre << "  edges\n";
+					std::cout << pre << "remove Edge "; edge1->print();
+					std::cout << " (" << edge1 << ") from\n" << pre << "  edges\n";
 					#endif
 			for (b = border.begin(); b != border.end(); b++)
 			{
 				edge_contours[*b].remove(edge1);
 						#ifdef print_debug_info
-						cout << pre << "  edge_contours[" << *b << "]\n";
+						std::cout << pre << "  edge_contours[" << *b << "]\n";
 						#endif
 			}
 		}
@@ -1099,22 +1099,22 @@ namespace BALL
 			surface->edges.push_back(edge1);
 			edges.push_back(edge1);
 					#ifdef print_debug_info
-					cout << pre << "pushe Edge "; edge1->print();
-					cout << " (" << edge1 << ") to\n" << pre << "  surface\n" << pre << "  edges\n";
+					std::cout << pre << "pushe Edge "; edge1->print();
+					std::cout << " (" << edge1 << ") to\n" << pre << "  surface\n" << pre << "  edges\n";
 					#endif
 		}
 		if (old2 == true)
 		{
 			edges.remove(edge2);
 					#ifdef print_debug_info
-					cout << pre << "remove Edge "; edge2->print();
-					cout << " (" << edge2 << ") from\n" << pre << "  edges\n";
+					std::cout << pre << "remove Edge "; edge2->print();
+					std::cout << " (" << edge2 << ") from\n" << pre << "  edges\n";
 					#endif
 			for (b = border.begin(); b != border.end(); b++)
 			{
 				edge_contours[*b].remove(edge2);
 						#ifdef print_debug_info
-						cout << pre << "  edge_contours[" << *b << "]\n";
+						std::cout << pre << "  edge_contours[" << *b << "]\n";
 						#endif
 			}
 		}
@@ -1126,8 +1126,8 @@ namespace BALL
 			surface->edges.push_back(edge2);
 			edges.push_back(edge2);
 					#ifdef print_debug_info
-					cout << pre << "pushe Edge "; edge2->print();
-					cout << " (" << edge2 << ") to\n" << pre << "  surface\n" << pre << "  edges\n";
+					std::cout << pre << "pushe Edge "; edge2->print();
+					std::cout << " (" << edge2 << ") to\n" << pre << "  surface\n" << pre << "  edges\n";
 					#endif
 		}
 		edge->triangle.push_back(triangle);
@@ -1155,20 +1155,20 @@ namespace BALL
 		triangle->index = surface->edges.size();
 		surface->triangles.push_back(triangle);
 					#ifdef print_debug_info
-					cout << pre << "geupdatet:\n";
-					cout << pre << "  Edge "; edge->print(); cout << " (" << edge << ")\n";
-					cout << pre << "  Edge "; edge1->print(); cout << " (" << edge1 << ")\n";
-					cout << pre << "  Edge "; edge2->print(); cout << " (" << edge2 << ")\n";
-					cout << pre << "  Point "; triangle->point[0]->print();
-							cout << " (" << triangle->point[0] << ")\n";
-					cout << pre << "  Point "; triangle->point[1]->print();
-							cout << " (" << triangle->point[1] << ")\n";
-					cout << pre << "  Point "; triangle->point[2]->print();
-							cout << " (" << triangle->point[2] << ")\n";
-					cout << pre << "  Triangle "; triangle->print(); cout << " (" << triangle << ")\n";
-					cout << pre << "pushe Triangle "; triangle->print();
-					cout << " (" << triangle << ") to\n" << pre << "  surface";
-					if (halt == 0)  cin >> halt; else { cout << "\n"; halt--; }
+					std::cout << pre << "geupdatet:\n";
+					std::cout << pre << "  Edge "; edge->print(); std::cout << " (" << edge << ")\n";
+					std::cout << pre << "  Edge "; edge1->print(); std::cout << " (" << edge1 << ")\n";
+					std::cout << pre << "  Edge "; edge2->print(); std::cout << " (" << edge2 << ")\n";
+					std::cout << pre << "  Point "; triangle->point[0]->print();
+							std::cout << " (" << triangle->point[0] << ")\n";
+					std::cout << pre << "  Point "; triangle->point[1]->print();
+							std::cout << " (" << triangle->point[1] << ")\n";
+					std::cout << pre << "  Point "; triangle->point[2]->print();
+							std::cout << " (" << triangle->point[2] << ")\n";
+					std::cout << pre << "  Triangle "; triangle->print(); std::cout << " (" << triangle << ")\n";
+					std::cout << pre << "pushe Triangle "; triangle->print();
+					std::cout << " (" << triangle << ") to\n" << pre << "  surface";
+					if (halt == 0)  cin >> halt; else { std::cout << "\n"; halt--; }
 					#endif
 	}
 
@@ -1267,8 +1267,8 @@ namespace BALL
 		points.push_back(edge->point[1]);
 				#ifdef print_debug_info
 				string pre = "        ";
-				cout << pre << points.size() << " Punkte in einer Ebene ... ";
-				if (halt == 0)  cin >> halt; else { cout << "\n"; halt--; }
+				std::cout << pre << points.size() << " Punkte in einer Ebene ... ";
+				if (halt == 0)  cin >> halt; else { std::cout << "\n"; halt--; }
 				#endif
 		std::list<TTriangleEdge<T>*> planar_edges;
 		planar_edges.push_back(edge);
@@ -1281,8 +1281,8 @@ namespace BALL
 		{
 			edge0 = planar_edges.front();
 					#ifdef print_debug_info
-					cout << pre << "suche nach Dreieck für Edge "; edge0->print(); cout << " (" << edge0 << ") ";
-					if (halt == 0)  cin >> halt; else { cout << "\n"; halt--; }
+					std::cout << pre << "suche nach Dreieck für Edge "; edge0->print(); std::cout << " (" << edge0 << ") ";
+					if (halt == 0)  cin >> halt; else { std::cout << "\n"; halt--; }
 					#endif
 			planar_edges.pop_front();
 			std::list<TTrianglePoint<T>*>::iterator p;
@@ -1297,8 +1297,8 @@ namespace BALL
 				else
 				{
 							#ifdef print_debug_info
-							cout << pre << "baue Dreieck mit Punkt "; (*p)->print(); cout << " (" << *p << ") ";
-							if (halt == 0)  cin >> halt; else { cout << "\n"; halt--; }
+							std::cout << pre << "baue Dreieck mit Punkt "; (*p)->print(); std::cout << " (" << *p << ") ";
+							if (halt == 0)  cin >> halt; else { std::cout << "\n"; halt--; }
 							#endif
 					#ifdef debug_triangulation
 					CreateTriangleAndEdges(edge0,*p,sphere,convex,molecule,
@@ -1308,8 +1308,8 @@ namespace BALL
 																 edge1,old1,edge2,old2,triangle);
 					#endif
 							#ifdef print_debug_info
-							cout << pre << "teste dieses Dreieck: ";
-							if (halt == 0) cin >> halt; else { cout << "\n"; halt--; }
+							std::cout << pre << "teste dieses Dreieck: ";
+							if (halt == 0) cin >> halt; else { std::cout << "\n"; halt--; }
 							#endif
 					if (edge0 == edge)
 					{
@@ -1322,9 +1322,9 @@ namespace BALL
 						TTrianglePoint<T>* third
 							= old_triangle->third(edge0->point[0],edge0->point[1]);
 								#ifdef print_debug_info
-								cout << pre << "  teste gegen Dreieck "; old_triangle->print();
-								cout << " (" << old_triangle << ") ";
-								if (halt == 0)  cin >> halt; else { cout << "\n"; halt--; }
+								std::cout << pre << "  teste gegen Dreieck "; old_triangle->print();
+								std::cout << " (" << old_triangle << ") ";
+								if (halt == 0)  cin >> halt; else { std::cout << "\n"; halt--; }
 								#endif
 						TVector3<T> orth1((edge0->point[0]->p-edge0->point[1]->p)%
 															(edge0->point[0]->p-third->p));
@@ -1335,12 +1335,12 @@ namespace BALL
 						TAngle<T> pi_2(Constants::PI/2.0,true);
 						TAngle<T> phi;
 								#ifdef print_debug_info
-								cout << pre << orth1 << "\n" << pre << orth2 << "\n" << pre << phi << "\n";
+								std::cout << pre << orth1 << "\n" << pre << orth2 << "\n" << pre << phi << "\n";
 								#endif
 						phi = orth1.getAngle(orth2);
 								#ifdef print_debug_info
-								cout << pre << orth1 << "\n" << pre << orth2 << "\n" << pre << phi << " ";
-								if (halt == 0)  cin >> halt; else { cout << "\n"; halt--; }
+								std::cout << pre << orth1 << "\n" << pre << orth2 << "\n" << pre << phi << " ";
+								if (halt == 0)  cin >> halt; else { std::cout << "\n"; halt--; }
 								#endif
 						if (phi > pi_2)
 						{
@@ -1348,8 +1348,8 @@ namespace BALL
 						}
 					}
 					#ifdef print_debug_info	
-					cout << pre << (built ? "ok " : "nok ") << edges.size() << " " << planar_edges.size() << " ";
-					if (halt == 0)  cin >> halt; else { cout << "\n"; halt--; }
+					std::cout << pre << (built ? "ok " : "nok ") << edges.size() << " " << planar_edges.size() << " ";
+					if (halt == 0)  cin >> halt; else { std::cout << "\n"; halt--; }
 					#endif
 					if (built)
 					{
@@ -1379,8 +1379,8 @@ namespace BALL
 						if (old1 == true)
 						{
 									#ifdef print_debug_info
-									cout << pre << "remove Edge "; edge1->print();
-									cout << " (" << edge1 << ") from\n" << pre << "  edges\n";
+									std::cout << pre << "remove Edge "; edge1->print();
+									std::cout << " (" << edge1 << ") from\n" << pre << "  edges\n";
 									#endif
 							edges.remove(edge1);
 							planar_edges.remove(edge1);
@@ -1388,7 +1388,7 @@ namespace BALL
 							{
 								edge_contours[*b].remove(edge1);
 										#ifdef print_debug_info
-										cout << pre << "  edge_contours[" << *b << "]\n";
+										std::cout << pre << "  edge_contours[" << *b << "]\n";
 										#endif
 							}
 						}
@@ -1401,15 +1401,15 @@ namespace BALL
 							edge1->index = surface->edges.size();
 							surface->edges.push_back(edge1);
 									#ifdef print_debug_info
-									cout << pre << "pushe Edge "; edge1->print();
-									cout << " (" << edge1 << ") to\n" << pre << "  planar_edges\n" << pre << "  surface\n";
+									std::cout << pre << "pushe Edge "; edge1->print();
+									std::cout << " (" << edge1 << ") to\n" << pre << "  planar_edges\n" << pre << "  surface\n";
 									#endif
 						}
 						if (old2 == true)
 						{
 									#ifdef print_debug_info
-									cout << pre << "remove Edge "; edge2->print();
-									cout << " (" << edge2 << ") from\n" << pre << "  edges\n";
+									std::cout << pre << "remove Edge "; edge2->print();
+									std::cout << " (" << edge2 << ") from\n" << pre << "  edges\n";
 									#endif
 							edges.remove(edge2);
 							planar_edges.remove(edge2);
@@ -1417,7 +1417,7 @@ namespace BALL
 							{
 								edge_contours[*b].remove(edge2);
 										#ifdef print_debug_info
-										cout << pre << "  edge_contours[" << *b << "]\n";
+										std::cout << pre << "  edge_contours[" << *b << "]\n";
 										#endif
 							}
 						}
@@ -1430,39 +1430,39 @@ namespace BALL
 							edge2->index = surface->edges.size();
 							surface->edges.push_back(edge2);
 									#ifdef print_debug_info
-									cout << pre << "pushe Edge "; edge2->print();
-									cout << " (" << edge2 << ") to\n" << pre << "  planar_edges\n" << pre << "  surface\n";
+									std::cout << pre << "pushe Edge "; edge2->print();
+									std::cout << " (" << edge2 << ") to\n" << pre << "  planar_edges\n" << pre << "  surface\n";
 									#endif
 						}
 						edges.remove(edge0);
 						triangle->index = surface->triangles.size();
 						surface->triangles.push_back(triangle);
 								#ifdef print_debug_info
-								cout << pre << "remove Edge"; edge0->print();
-								cout << " (" << edge0 << ") from\n" << pre << "  edges\n";
-								cout << pre << "pushe Triangle "; triangle->print();
-								cout << " (" << triangle << ") to\n" << pre << "  surface";
-								if (halt == 0)  cin >> halt; else { cout << "\n"; halt--; }
+								std::cout << pre << "remove Edge"; edge0->print();
+								std::cout << " (" << edge0 << ") from\n" << pre << "  edges\n";
+								std::cout << pre << "pushe Triangle "; triangle->print();
+								std::cout << " (" << triangle << ") to\n" << pre << "  surface";
+								if (halt == 0)  cin >> halt; else { std::cout << "\n"; halt--; }
 								#endif
 					}
 					else
 					{
 						p++;
 								#ifdef print_debug_info
-								cout << pre << "zerstöre Triangle "; triangle->print(); cout << " (" << triangle << ")\n";
+								std::cout << pre << "zerstöre Triangle "; triangle->print(); std::cout << " (" << triangle << ")\n";
 								#endif
 						delete triangle;
 						if (old1 == false)
 						{
 									#ifdef print_debug_info
-									cout << pre << "zerstöre Edge "; edge1->print(); cout << " (" << edge1 << ")\n";
+									std::cout << pre << "zerstöre Edge "; edge1->print(); std::cout << " (" << edge1 << ")\n";
 									#endif
 							delete edge1;
 						}
 						if (old2 == false)
 						{
 									#ifdef print_debug_info
-									cout << pre << "zerstöre Edge "; edge2->print(); cout << " (" << edge2 << ")\n";
+									std::cout << pre << "zerstöre Edge "; edge2->print(); std::cout << " (" << edge2 << ")\n";
 									#endif
 							delete edge2;
 						}
@@ -1497,21 +1497,21 @@ namespace BALL
 		edge2->triangle.clear();
 				#ifdef print_debug_info
 				string pre = "      ";
-				cout << pre << "zwei Edges konstruiert\n"
-						 << pre << "  "; edge1->print(); cout << " (" << edge1 << ")\n"
-						 << pre << "  "; edge2->print(); cout << " (" << edge2 << ")\n";
+				std::cout << pre << "zwei Edges konstruiert\n"
+						 << pre << "  "; edge1->print(); std::cout << " (" << edge1 << ")\n"
+						 << pre << "  "; edge2->print(); std::cout << " (" << edge2 << ")\n";
 				#endif
 		// do the edges exist
-		//cout << "############\n";
-		//edge->print(); cout << "\n";
-		//edge->point[0]->print(); cout << "\n";
+		//std::cout << "############\n";
+		//edge->print(); std::cout << "\n";
+		//edge->point[0]->print(); std::cout << "\n";
 		TTriangleEdge<T>* test = edge->point[0]->has(edge1);
-		//cout << "************\n";
+		//std::cout << "************\n";
 		if (test != NULL)
 		{
 					#ifdef print_debug_info
-					cout << pre << "erste existiert schon: "; test->print(); cout << " (" << test << ")\n";
-					cout << pre << "  zerstöre Edge " << edge1 << "\n";
+					std::cout << pre << "erste existiert schon: "; test->print(); std::cout << " (" << test << ")\n";
+					std::cout << pre << "  zerstöre Edge " << edge1 << "\n";
 					#endif
 			delete edge1;
 			edge1 = test;
@@ -1521,16 +1521,16 @@ namespace BALL
 		{
 			old1 = false;
 		}
-		//cout << "############\n";
-		//edge->print(); cout << "\n";
-		//edge->point[1]->print(); cout << "\n";
+		//std::cout << "############\n";
+		//edge->print(); std::cout << "\n";
+		//edge->point[1]->print(); std::cout << "\n";
 		test = edge->point[1]->has(edge2);
-		//cout << "************\n";
+		//std::cout << "************\n";
 		if (test != NULL)
 		{
 					#ifdef print_debug_info
-					cout << pre << "zweite existiert schon: "; test->print(); cout << " (" << test << ")\n";
-					cout << pre << "  zerstöre Edge " << edge2 << "\n";
+					std::cout << pre << "zweite existiert schon: "; test->print(); std::cout << " (" << test << ")\n";
+					std::cout << pre << "  zerstöre Edge " << edge2 << "\n";
 					#endif
 			delete edge2;
 			edge2 = test;
@@ -1540,7 +1540,7 @@ namespace BALL
 		{
 			old2 = false;
 		}
-		//cout << "############\n";
+		//std::cout << "############\n";
 		// build the new triangle
 		triangle = new TTriangle<T>;
 		triangle->point[0] = edge->point[0];
@@ -1573,7 +1573,7 @@ namespace BALL
 			}
 		}
 				#ifdef print_debug_info
-				cout << pre << "Dreieck gebaut: "; triangle->print(); cout << " (" << triangle << ")\n";
+				std::cout << pre << "Dreieck gebaut: "; triangle->print(); std::cout << " (" << triangle << ")\n";
 				#endif
 	}
 
