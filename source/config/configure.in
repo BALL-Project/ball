@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.146 2001/07/29 21:33:11 oliver Exp $
+dnl    $Id: configure.in,v 1.147 2001/07/30 00:51:41 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -1734,6 +1734,12 @@ else
 	AC_CHECK_FUNCS(sysinfo, HAVE_SYSINFO=1)
 	if test "${HAVE_SYSINFO}" = 1  ; then
 		AC_DEFINE(BALL_HAVE_SYSINFO)
+	else
+		AC_MSG_RESULT()
+		AC_MSG_RESULT([Could not find gethostname or sysinfo methods!])
+		AC_MSG_RESULT([Please refer to config.log to identify the problem.])
+		AC_MSG_RESULT()
+		AC_MSG_ERROR(Aborted)
 	fi
 fi
 
