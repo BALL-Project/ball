@@ -1,4 +1,4 @@
-// $Id: quadruple.h,v 1.4 2000/12/15 13:08:40 amoll Exp $
+// $Id: quadruple.h,v 1.5 2001/01/19 23:01:26 amoll Exp $
 
 #ifndef BALL_DATATYPE_QUADRUPLE_H
 #define BALL_DATATYPE_QUADRUPLE_H
@@ -62,22 +62,12 @@ namespace BALL
 		*/
 		//@{
 
-		/**	Assign a quadruple from another.
-				This method copies the contents of a quadruple to another.
-				@param	quadruple the quadruple to be copied
-		*/
-		void set(const Quadruple& quadruple) throw();
-
 		/**	Assignment operator.
 				Assigns the contents of a quadruple to another.
 				@param	quadruple the quadruple to be copied
 		*/
 		const Quadruple& operator = (const Quadruple& quadruple) throw();
 
-		/**	Assign the quadruple's content to another.
-				@param quadruple the quadruple to be assigned
-		*/
-		void get(Quadruple& quadruple) const throw();
 		//@}
 
 		/**	@name	Accessors
@@ -98,6 +88,7 @@ namespace BALL
 		//@{
 
 		/**	Equality operator 
+				Two instances are equal if they have the same members.
 		*/
 		bool operator == (const Quadruple& quadruple) const throw();
 
@@ -106,6 +97,9 @@ namespace BALL
 		bool operator != (const Quadruple& quadruple) const throw();
 
 		/**	Lesser than operator.	
+				One instance is lesser than an other if all members from first to
+				third are equal or less than the members of the other instance and at least
+				fourth is less.
 		*/
 		bool operator < (const Quadruple& quadruple) const throw();
 
@@ -163,12 +157,11 @@ namespace BALL
 
 	template <typename T1, typename T2, typename T3, typename T4>
 	Quadruple<T1, T2, T3, T4>::Quadruple
-		(const T1& first, const T2& second,
-		 const T3& third, const T4& fourth)
+		(const T1& new_first, const T2& new_second, const T3& new_third, const T4& fourth)
 		 throw()
-		:	first(first),
-			second(second),
-			third(third),
+		:	first(new_first),
+			second(new_second),
+			third(new_third),
 			fourth(fourth)
 	{
 	}
@@ -176,17 +169,6 @@ namespace BALL
 	template <typename T1, typename T2, typename T3, typename T4>
 	Quadruple<T1, T2, T3, T4>::~Quadruple()  throw()
 	{
-	}
-
-	template <typename T1, typename T2, typename T3, typename T4>
-	BALL_INLINE 
-	void Quadruple<T1, T2, T3, T4>::set(const Quadruple<T1, T2, T3, T4>& quadruple)
-		 throw()
-	{
-		first = quadruple.first;
-		second = quadruple.second;
-		third = quadruple.third;
-		fourth = quadruple.fourth;
 	}
 
 	template <typename T1, typename T2, typename T3, typename T4>
@@ -216,17 +198,6 @@ namespace BALL
 
 	template <typename T1, typename T2, typename T3, typename T4>
 	BALL_INLINE 
-	void Quadruple<T1, T2, T3, T4>::get
-		(Quadruple<T1, T2, T3, T4>& quadruple) const throw()
-	{
-		quadruple.first = first;
-		quadruple.second = second;
-		quadruple.third = third;
-		quadruple.fourth = fourth;
-	}
-
-	template <typename T1, typename T2, typename T3, typename T4>
-	BALL_INLINE 
 	void Quadruple<T1, T2, T3, T4>::get(T1& t1, T2& t2,	T3& t3, T4& t4) 
 		const throw()
 	{
@@ -239,7 +210,7 @@ namespace BALL
 	template <typename T1, typename T2, typename T3, typename T4>
 	BALL_INLINE 
 	bool Quadruple<T1, T2, T3, T4>::operator ==	(const Quadruple& quadruple) 
-		const  throw()
+		const throw()
 	{
 		return (first  == quadruple.first
 									&& second == quadruple.second
@@ -260,7 +231,8 @@ namespace BALL
 
 	template <typename T1, typename T2, typename T3, typename T4>
 	BALL_INLINE 
-	void Quadruple<T1, T2, T3, T4>::clear() throw()
+	void Quadruple<T1, T2, T3, T4>::clear() 
+		throw()
 	{
 		first = T1();
 		second = T2();
@@ -276,8 +248,8 @@ namespace BALL
 		return (first  <  quadruple.first	|| 
 						(first  == quadruple.first && second <  quadruple.second)															|| 
 						(first  == quadruple.first && second == quadruple.second && third < quadruple.third)	||
-						(first  == quadruple.first && second == quadruple.second 
-							&& third  == quadruple.third && fourth < quadruple.fourth));
+						(first  == quadruple.first && second == quadruple.second && third  == quadruple.third 
+											 && fourth < quadruple.fourth));
 	}
 
 	template <typename T1, typename T2, typename T3, typename T4>
@@ -285,9 +257,9 @@ namespace BALL
 	bool Quadruple<T1, T2, T3, T4>::operator <=
 		(const Quadruple<T1, T2, T3, T4>& quadruple) const throw()
 	{
-		return (first <= quadruple.first ||
-						(first == quadruple.first	&& second <= quadruple.second) || 
-						(first == quadruple.first	&& second == quadruple.second	&& third <= quadruple.third) ||
+		return (first < quadruple.first ||
+						(first == quadruple.first	&& second < quadruple.second) || 
+						(first == quadruple.first	&& second == quadruple.second	&& third < quadruple.third) ||
 						(first == quadruple.first	&& second == quadruple.second	&& third == quadruple.third
 											&& fourth <= quadruple.fourth));
 	}
@@ -297,9 +269,9 @@ namespace BALL
 	bool Quadruple<T1, T2, T3, T4>::operator >=
 		(const Quadruple<T1, T2, T3, T4>& quadruple) const throw()
 	{
-		return (first >= quadruple.first || 
-						(first == quadruple.first	&& second >= quadruple.second) || 
-						(first == quadruple.first	&& second == quadruple.second && third >= quadruple.third) || 
+		return (first > quadruple.first || 
+						(first == quadruple.first	&& second > quadruple.second) || 
+						(first == quadruple.first	&& second == quadruple.second && third > quadruple.third) || 
 						(first == quadruple.first	&& second == quadruple.second	&& third == quadruple.third
 											&& fourth >= quadruple.fourth));
 	}
