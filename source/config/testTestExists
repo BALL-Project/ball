@@ -1,8 +1,15 @@
 #!/bin/sh
-if [ ! `echo $1 | tail -c 3 | head -c 2` == ".h" ]
+echo $2
+if [ $1 = "" ]
+then
+	echo No argument given, aborting...
+	exit 1
+fi
+
+if [ ! `echo $1 | tail -c 3 | head -c 2` = ".h" ]
 then
 #	echo Invalid file
-	exit 1
+	exit 2
 fi
 
 prefix=`echo $1 | sed "s/.*\///g"`
@@ -13,9 +20,19 @@ size=$[ `echo $prefix | wc -c` ]
 testfile=`echo $prefix | head -c 1 | tr a-z A-Z`
 size=$[ `echo $prefix  | wc -c` ]
 testfile=$testfile`echo $prefix | tail -c $[ $size-1 ]`_test.C
+testfile=$BALL_PATH/source/TEST/$testfile
 #echo $testfile
 
-if [ ! -e $BALL_PATH/source/TEST/$testfile ]
+if [ ! -e $testfile ]
 then
 	echo Testfile missing for $prefix
+	exit 1
 fi
+
+if [ $2 = "-c" ]
+then
+	check_test $1 $testfile -c 2>/dev/null
+	exit 1
+fi
+
+check_test $1 $testfile 2>/dev/null
