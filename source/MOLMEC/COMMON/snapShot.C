@@ -1,4 +1,4 @@
-// $Id: snapShot.C,v 1.21 2001/03/11 19:32:31 anker Exp $
+// $Id: snapShot.C,v 1.22 2001/03/21 16:23:33 anker Exp $
 
 // BALL includes 
 #include <BALL/MOLMEC/COMMON/snapShot.h>
@@ -232,7 +232,8 @@ namespace BALL
 		if (system.countAtoms() != number_of_atoms_)
 		{
 			Log.error () << "SnapShot::applySnapShot(): "
-				<< "Atom counts do not match." << endl;
+				<< "Atom counts do not match: System: " << system.countAtoms()
+				<< " SnapShot: " << number_of_atoms_ << endl;
 			return;
 		}
 
@@ -240,9 +241,18 @@ namespace BALL
 
 		for (Size i = 0; +atom_it; ++atom_it, ++i)
 		{
-			atom_it->setPosition(atom_positions_[i]);
-			atom_it->setVelocity(atom_velocities_[i]);
-			atom_it->setForce(atom_forces_[i]);
+			if (atom_positions_.size() > 0)
+			{
+				atom_it->setPosition(atom_positions_[i]);
+			}
+			if (atom_velocities_.size() > 0)
+			{
+				atom_it->setVelocity(atom_velocities_[i]);
+			}
+			if (atom_forces_.size() > 0)
+			{
+				atom_it->setForce(atom_forces_[i]);
+			}
 		}
 	}
 
@@ -270,8 +280,9 @@ namespace BALL
 	{
 		if (system.countAtoms() != number_of_atoms_)
 		{
-			Log.error () << "SnapShot::applySnapShot(): "
-				<< "Atom counts do not match." << endl;
+			Log.error () << "SnapShot::setAtomPositions(): "
+				<< "Atom counts do not match: System: " << system.countAtoms()
+				<< " SnapShot: " << number_of_atoms_ << endl;
 			return;
 		}
 
@@ -302,8 +313,9 @@ namespace BALL
 	{
 		if (system.countAtoms() != number_of_atoms_)
 		{
-			Log.error () << "SnapShot::applySnapShot(): "
-				<< "Atom counts do not match." << endl;
+			Log.error () << "SnapShot::setAtomVelocitites(): "
+				<< "Atom counts do not match: System: " << system.countAtoms()
+				<< " SnapShot: " << number_of_atoms_ << endl;
 			return;
 		}
 
@@ -335,8 +347,9 @@ namespace BALL
 	{
 		if (system.countAtoms() != number_of_atoms_)
 		{
-			Log.error () << "SnapShot::applySnapShot(): "
-				<< "Atom counts do not match." << endl;
+			Log.error () << "SnapShot::setAtomForces(): "
+				<< "Atom counts do not match: System: " << system.countAtoms()
+				<< " SnapShot: " << number_of_atoms_ << endl;
 			return;
 		}
 
