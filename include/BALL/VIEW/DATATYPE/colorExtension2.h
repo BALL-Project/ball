@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorExtension2.h,v 1.2 2003/08/27 13:05:29 amoll Exp $
+// $Id: colorExtension2.h,v 1.3 2003/08/29 15:36:44 amoll Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLOREXTENSION2_H
 #define BALL_VIEW_DATATYPE_COLOREXTENSION2_H
@@ -97,18 +97,6 @@ namespace BALL
 					\see         set
 			*/
 			const ColorExtension2& operator = (const ColorExtension2& color_extension)
-				throw();
-
-			/** Copying.
-					Copy this colorExtension2 to the colorExtension2
-					<b> color_extension</b>.
-					Calls set.
-					The colors of the colorExtension2 <b> color_extension</b> 
-					are initialized to the colors of this colorExtension2.\par
-					\param       color_extension the colorExtension2 to be assigned to
-					\see         set
-			*/
-			void get(ColorExtension2& color_extension) const
 				throw();
 
 			/** Swapping of colorExtensions.

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorUnitHue.h,v 1.18 2003/08/26 08:04:57 oliver Exp $
+// $Id: colorUnitHue.h,v 1.19 2003/08/29 15:36:45 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DATATYPE_COLORUNITHUE_H
@@ -274,34 +274,16 @@ namespace BALL
 			//@{
 			
 			/** Assignment.
-					Assigns the colorUnitHue <b> color_unit_hue</b> to this colorUnitHue.
-					The value of this is initialized to the value of the colorUnitHue <b> color_unit_hue</b>.\par
 					\param       color_unit_hue the colorUnitHue to be copied 
 			*/
 			void set(const ColorUnitHue& color_unit_hue)
 				throw();
 
 			/** Assignment operator.
-					Assigns the colorUnitHue <b> color_unit_hue</b> to this colorUnitHue.
-					Calls set.
-					The value of this is initialized to the value of the colorUnitHue <b> color_unit_hue</b>.\par
-					\param       color_unit_hue the colorUnitHue to be copied
-					\return      ColorUnitHue& constant reference of this colorUnitHue
-					\see         set
 			*/
 			const ColorUnitHue& operator = (const ColorUnitHue& color_unit_hue)
 				throw();
 		
-			/** Copying.
-					Copies this colorUnitHue to the colorUnitHue <b> color_unit_hue</b>.
-					Calls set.
-					The value of the colorUnitHue <b> color_unit_hue</b> is initialized to the value of this colorUnitHue.\par
-					\param       color_unit_hue the colorUnitHue to be assigned to
-					\see         set
-			*/
-			void get(ColorUnitHue& color_unit_hue) const
-				throw();
-
 			/** Swapping of colorUnitHues.
 					Swaps the values of this colorUnitHue with the colorUnitHue <b> color_unit_hue</b>.
 					\param       color_unit_hue the colorUnitHue being swapped with this colorUnitHue 
@@ -310,13 +292,11 @@ namespace BALL
 			void swap(ColorUnitHue& color_unit_hue)
 				throw();
 
-			/** Changes the value of the colorUnitHue.
-					Changes the value of this colorUnitHue to the value represented by 
+			/** Changes the value of this colorUnitHue to the value represented by 
 					a pointer <b> value</b> to a string.
 					\param       value the new value of this colorUnitHue (a string in the format <tt> "00"-"168"</tt>)
 					\exception   InvalidRange if <tt> string length > 3</tt>
 					\exception   NotInHexFormat if string contains characters g-z or G-Z or the hex number exceeds 168h
-					\see         get
 			*/
 			void set(const char* value)
 				throw(Exception::InvalidRange, ColorUnit::NotInHexFormat);

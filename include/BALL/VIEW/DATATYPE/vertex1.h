@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertex1.h,v 1.2 2003/08/26 14:08:03 amoll Exp $
+// $Id: vertex1.h,v 1.3 2003/08/29 15:36:45 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_VERTEX1_H
@@ -96,7 +96,6 @@ namespace BALL
 				throw();
 
 			/** Assignment operator.
-					Assign the vertex <b> v</b> to this vertex.
 					Calls set.
 					The vector and the vertex address of this vertex is initialized
 					to the vector and the vertex address of the vertex <b> v</b>.\par
@@ -105,17 +104,6 @@ namespace BALL
 					\see         set
 			*/
 			const Vertex& operator = (const Vertex& v)
-				throw();
-
-			/** Copying.
-					Copy this vertex to the vertex <b> v</b>.
-					Calls set.
-					The vector and the vertex address of this vertex is initialized
-					to the vector and the vertex address of the vertex <b> v</b>.\par
-					\param       v the vertex to be assigned to
-					\see         set
-			*/
-			void get(Vertex& v) const
 				throw();
 
 			/** Swapping of vertices.

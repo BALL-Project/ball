@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: QTTimer.C,v 1.16 2003/08/26 09:18:46 oliver Exp $
+// $Id: QTTimer.C,v 1.17 2003/08/29 15:37:56 amoll Exp $
 
 
 #include <BALL/VIEW/KERNEL/QTTimer.h>
@@ -79,12 +79,6 @@ namespace BALL
 			set(timer);
 
 			return *this;
-		}
-
-		void QTTimer::get(QTTimer& timer) const
-				throw()
-		{
-			timer.set(*this);
 		}
 
 		void QTTimer::swap(QTTimer& timer)

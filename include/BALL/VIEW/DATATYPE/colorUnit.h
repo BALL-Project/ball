@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorUnit.h,v 1.21 2003/08/26 08:04:57 oliver Exp $
+// $Id: colorUnit.h,v 1.22 2003/08/29 15:36:45 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DATATYPE_COLORUNIT_H
@@ -300,35 +300,17 @@ namespace BALL
 			//@{
 			
 			/** Assignment.
-					Assigns the colorUnit <b> color_unit</b> to this colorUnit.
-					The value of this is initialized to the value of the colorUnit <b> color_unit</b>.\par
-					\param       color_unit the colorUnit to be copied 
 			*/
 			void set(const ColorUnit& color_unit)
 				throw();
 
 			/** Assignment operator.
-					Assigns the colorUnit <b> color_unit</b> to this colorUnit.
-					Calls set.
-					The value of this is initialized to the value of the colorUnit <b> color_unit</b>.\par
-					\param       color_unit the colorUnit to be copied
-					\return      ColorUnit& constant reference of this colorUnit
 					\see         set
 
 			*/
 			const ColorUnit& operator = (const ColorUnit& color_unit)
 				throw();
 		
-			/** Copying.
-					Copies this colorUnit to the colorUnit <b> color_unit</b>.
-					Calls set.
-					The value of the colorUnit <b> color_unit</b> is initialized to the value of this colorUnit.\par
-					\param       color_unit the colorUnit to be assigned to
-					\see         set
-			*/
-			void get(ColorUnit& color_unit) const
-				throw();
-
 			/** Swapping of colorUnits.
 					Swaps the values of this colorUnit with the colorUnit <b> color_unit</b>.
 					\param       color_unit the colorUnit being swapped with this colorUnit 

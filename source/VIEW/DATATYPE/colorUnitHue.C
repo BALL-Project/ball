@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorUnitHue.C,v 1.11 2003/08/26 09:18:34 oliver Exp $
+// $Id: colorUnitHue.C,v 1.12 2003/08/29 15:37:03 amoll Exp $
 //
 
 #include <BALL/VIEW/DATATYPE/colorUnitHue.h>
@@ -153,12 +153,6 @@ namespace BALL
 		{
 			set(color_h_unit);
 			return *this;
-		}
-
-		void ColorUnitHue::get(ColorUnitHue& color_h_unit) const
-			throw()
-		{
-			color_h_unit.set(*this);
 		}
 
 		void ColorUnitHue::set(const char* char_ptr)

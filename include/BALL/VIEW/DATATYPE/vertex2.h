@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertex2.h,v 1.4 2003/08/27 13:05:29 amoll Exp $
+// $Id: vertex2.h,v 1.5 2003/08/29 15:36:45 amoll Exp $
 
 #ifndef BALL_VIEW_DATATYPE_VERTEX2_H
 #define BALL_VIEW_DATATYPE_VERTEX2_H
@@ -110,23 +110,11 @@ namespace BALL
 			const Vertex2& operator = (const Vertex2& vertex)
 				throw();
 
-			/** Copying.
-					Copy this vertex2 to the vertex2 <b> vertex</b>.
-					Calls set.
-					The vectors and the vertex addresses of this vertex2 are initialized
-					to the vectors and the vertex addresses of the vertex <b> vertex</b>.\par
-					\param       vertex the vertex2 to be assigned to
-					\see         set
-			*/
-			void get(Vertex2& vertex) const
-				throw();
-
 			/** Swapping of vertices.
 					Swap the vectors of this vertex2 with the vertex2 <b> vertex</b>
 					and swaps the vertex addresses of this vertex2 with the vertex2
 					<b> vertex</b>.
 					\param       vertex the vertex2 being swapped with this vertex2 
-					\see         Vertex2
 			*/
 			void swap(Vertex2& vertex)
 				throw();
@@ -137,8 +125,6 @@ namespace BALL
 			//@{
 
 			/** Change the first vector of this vertex2.
-					Change the first vector of this vertex2 to the vector
-					represented by the parameter <b> v</b>.
 					\param       v the new first vector of this vertex2
 					\see         getVertex1
 					\see         Vector3

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorRGBA.C,v 1.6 2003/08/26 09:18:34 oliver Exp $
+// $Id: colorRGBA.C,v 1.7 2003/08/29 15:37:03 amoll Exp $
 
 #include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #include <BALL/VIEW/DATATYPE/colorHSV.h>
@@ -103,12 +103,6 @@ namespace BALL
 		{
 			set(color);
 			return *this;
-		}
-
-		void ColorRGBA::get(ColorRGBA& color) const
-			throw()
-		{
-		 color.set(*this);
 		}
 
 		void ColorRGBA::set(const ColorHSV& color_HSV)

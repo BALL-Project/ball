@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertex1.C,v 1.2 2003/08/26 13:14:47 oliver Exp $
+// $Id: vertex1.C,v 1.3 2003/08/29 15:37:04 amoll Exp $
 //
 
 #include <BALL/VIEW/DATATYPE/vertex1.h>
@@ -56,12 +56,6 @@ namespace BALL
 			set(v);
 
 			return *this;
-		}
-
-		void Vertex::get(Vertex& v) const
-			throw()
-		{
-			v.set(*this);
 		}
 
 		void Vertex::swap(Vertex& v)

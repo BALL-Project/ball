@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorExtension2.C,v 1.1 2003/08/26 13:14:47 oliver Exp $
+// $Id: colorExtension2.C,v 1.2 2003/08/29 15:37:03 amoll Exp $
 
 #include <BALL/VIEW/DATATYPE/colorExtension2.h>
 #include <BALL/COMMON/rtti.h>
@@ -52,12 +52,6 @@ namespace BALL
 		{
 			set(color_extension);
 			return *this;
-		}
-
-		void ColorExtension2::get(ColorExtension2& color_extension) const
-			throw()
-		{
-			color_extension.set(*this);
 		}
 
 		void ColorExtension2::swap(ColorExtension2& color_extension)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorRGBA.h,v 1.14 2003/08/26 08:04:56 oliver Exp $
+// $Id: colorRGBA.h,v 1.15 2003/08/29 15:36:44 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
@@ -152,32 +152,15 @@ namespace BALL
 			//@{
 
 			/** Assignment.
-					Assigns the colorRGBA <b> color</b> to this colorRGBA.
-					The color of this is initialized to the color of the colorRGBA <b> color</b>.\par
 					\param       color the colorRGBA to be copied 
 			*/
 			void set(const ColorRGBA& color)
 				throw();
 
 			/** Assignment operator.
-					Assigns the colorRGBA <b> color</b> to this colorRGBA.
-					Calls set.
-					The color of this is initialized to the color of the colorRGBA <b> color</b>.\par
-					\param       color the colorRGBA to be copied
-					\return      ColorRGBA& constant reference of this colorRGBA
 					\see         set
 			*/
 			const ColorRGBA& operator = (const ColorRGBA& color)
-				throw();
-
-			/** Copying.
-					Copies this colorRGBA to the colorRGBA <b> color</b>.
-					Calls set.
-					The color of the colorRGBA <b> color</b> is initialized to the color of this colorRGBA.\par
-					\param       color the colorRGBA to be assigned to
-					\see         set
-			*/
-			void get(ColorRGBA& color) const
 				throw();
 
 			/** Assignment with ColorHSV.

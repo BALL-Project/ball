@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorHSV.h,v 1.14 2003/08/26 08:04:56 oliver Exp $
+// $Id: colorHSV.h,v 1.15 2003/08/29 15:36:44 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DATATYPE_COLORHSV_H
@@ -164,32 +164,14 @@ namespace BALL
 			//@{
 
 			/** Assignment.
-					Assigns the colorHSV <b> color</b> to this colorHSV.
-					The color of this is initialized to the color of the colorHSV <b> color</b>.\par
-					\param       color the colorHSV to be copied 
 			*/
 			void set(const ColorHSV& color)
 				throw();
 
 			/** Assignment operator.
-					Assigns the colorHSV <b> color</b> to this colorHSV.
 					Calls set.
-					The color of this is initialized to the color of the colorHSV <b> color</b>.\par
-					\param       color the colorHSV to be copied
-					\return      ColorHSV& constant reference of this colorHSV
-					\see         set
 			*/
 			const ColorHSV& operator = (const ColorHSV& color)
-				throw();
-
-			/** Copying.
-					Copies this colorHSV to the colorHSV <b> color</b>.
-					Calls set.
-					The color of the colorHSV <b> color</b> is initialized to the color of this colorHSV.\par
-					\param       color the colorHSV to be assigned to
-					\see         set
-			*/
-			void get(ColorHSV& color) const
 				throw();
 
 			/** Assignment with ColorRGBA.

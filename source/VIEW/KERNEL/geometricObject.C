@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricObject.C,v 1.20 2003/08/29 10:55:02 amoll Exp $
+// $Id: geometricObject.C,v 1.21 2003/08/29 15:37:56 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/geometricObject.h>
 
@@ -59,12 +59,6 @@ namespace BALL
 		{
 			set(geometric_object);
 			return *this;
-		}
-
-		void GeometricObject::get(GeometricObject& geometric_object) const
-			throw()
-		{
-			geometric_object.set(*this);
 		}
 
 		void GeometricObject::swap(GeometricObject& geometric_object)
