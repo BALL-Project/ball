@@ -1,4 +1,4 @@
-// $Id: INIFile.h,v 1.21 2001/05/14 10:02:10 amoll Exp $
+// $Id: INIFile.h,v 1.22 2001/05/14 10:56:07 amoll Exp $
 
 #ifndef BALL_FORMAT_INIFILE_H
 #define BALL_FORMAT_INIFILE_H
@@ -309,9 +309,7 @@ namespace BALL
 		static const String UNDEFINED;
 		
 		/** Name of the HEADER section:
-				\begin{verbatim}
-					"#HEADER!"
-				\end{verbatim}		
+				$	"\#HEADER!" $
 		*/
 		static const String HEADER;		
 		
