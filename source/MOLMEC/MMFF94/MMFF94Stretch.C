@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Stretch.C,v 1.1.2.6 2005/03/22 18:27:25 amoll Exp $
+// $Id: MMFF94Stretch.C,v 1.1.2.7 2005/03/23 00:09:46 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Stretch.h>
@@ -125,12 +125,60 @@ namespace BALL
 				// is there an optional sbmb value ?
 				// is the bond order == 1 ?
 				// are both atoms sp or sp2 hypridised?
-				const bool get_sbmb = 
+				bool get_sbmb = 
 					parameters_.hasOptionalSBMBParameter(atom_type_A, atom_type_B) &&
 					bond.getOrder() == 1   									&&
 					(isSp_(atom1) || isSp2_(atom1)) 				&&
-					(isSp_(atom2) || isSp2_(atom2))					&&
-					!isInOneRing_(bond);
+					(isSp_(atom2) || isSp2_(atom2));//					&&
+//   					!isInOneRing_(bond);
+/*
+Log.info() << "-----------------------------------------------------" << std::endl;
+Log.info() << atom1.getFullName() << " 1> " 
+					 << atom2.getFullName() << " : "
+					 << atom_type_A << " " << atom_type_B << std::endl;
+
+get_sbmb = parameters_.hasOptionalSBMBParameter(atom_type_A, atom_type_B);
+	
+if (get_sbmb)
+{
+	Log.info() << atom1.getFullName() << " 2> " 
+						 << atom2.getFullName() << " : "
+						 << atom_type_A << " " << atom_type_B << std::endl;
+}
+
+get_sbmb &= (bond.getOrder() == 1);
+
+if (get_sbmb)
+{
+	Log.info() << atom1.getFullName() << " 3> " 
+						 << atom2.getFullName() << " : "
+						 << atom_type_A << " " << atom_type_B << std::endl;
+}
+
+
+get_sbmb &= (
+	(isSp_(atom1) || isSp2_(atom1)) 				&&
+	(isSp_(atom2) || isSp2_(atom2)));
+
+if (get_sbmb)
+{
+	Log.info() << atom1.getFullName() << " 4> " 
+						 << atom2.getFullName() << " : "
+						 << atom_type_A << " " << atom_type_B << std::endl;
+}
+
+
+get_sbmb &= !isInOneRing_(bond);
+
+if (get_sbmb)
+{
+	Log.info() << atom1.getFullName() << " 5> " 
+						 << atom2.getFullName() << " : "
+						 << atom_type_A << " " << atom_type_B << std::endl;
+}
+*/
+
+				dummy_stretch.sbmb = get_sbmb;
 
 				if (get_sbmb)
 				{
@@ -175,6 +223,11 @@ namespace BALL
 			if (rings_[pos].has(atom1) &&
 					rings_[pos].has(atom2))
 			{
+#ifdef _BALL_DEBUG_MMFF
+				Log.info() << atom1->getName() << " " 
+									 << atom2->getName() << " "  
+									 << " removed atom from sbmbs" << std::endl;
+#endif
 				return true;
 			}
 		}

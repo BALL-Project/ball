@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Stretch.h,v 1.1.2.5 2005/03/22 18:27:30 amoll Exp $ 
+// $Id: MMFF94Stretch.h,v 1.1.2.6 2005/03/23 00:09:56 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field, bond stretch component
@@ -59,6 +59,7 @@ namespace BALL
 			Atom* atom2;
 			float kb;
 			float r0;
+			bool  sbmb;
 		};
 
 		BALL_CREATE(MMFF94Stretch)
