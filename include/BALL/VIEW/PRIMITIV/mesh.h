@@ -1,4 +1,4 @@
-// $Id: mesh.h,v 1.4 2000/12/19 21:54:08 oliver Exp $
+// $Id: mesh.h,v 1.5 2000/12/21 17:03:45 amoll Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_MESH_H
 #define BALL_VIEW_PRIMITIV_MESH_H
@@ -42,11 +42,14 @@ namespace BALL
 			*/
 			//@{
 
-			Mesh();
+			Mesh()
+				throw();
 
-			Mesh(const Mesh& mesh, bool deep = true);
+			Mesh(const Mesh& mesh, bool deep = true)
+				throw();
 
-			Mesh(const GeometricObject& geometric_object);
+			Mesh(const GeometricObject& geometric_object)
+				throw();
 
 			virtual ~Mesh()
 				throw();
@@ -63,13 +66,17 @@ namespace BALL
 			*/
 			//@{
 
-			void set(const Mesh& mesh, bool deep = true);
+			void set(const Mesh& mesh, bool deep = true)
+				throw();
 
-			Mesh& operator = (const Mesh& mesh);
+			const Mesh& operator = (const Mesh& mesh)
+				throw();
 
-			void get(Mesh& mesh, bool deep = true) const;
+			void get(Mesh& mesh, bool deep = true) const
+				throw();
 
-			void swap(Mesh& mesh);
+			void swap(Mesh& mesh)
+				throw();
 			//@}
 
 
@@ -80,23 +87,25 @@ namespace BALL
 			virtual bool isValid() const
 				throw();
 
-			virtual void dump
-				(std::ostream&  s = std::cout, Size depth = 0) const
+			virtual void dump(std::ostream&  s = std::cout, Size depth = 0) const
 				throw();
 			//@}
 
 			/**	@name	Storers
 			*/
 			//@{
-			virtual void read(std::istream&  s);
+			virtual void read(std::istream&  s)
+				throw();
 
-			virtual void write(std::ostream& s) const;
+			virtual void write(std::ostream& s) const
+				throw();
 			//@}
 
 
 			protected:
 
-			virtual bool extract();
+			virtual bool extract()
+				throw();
 		};
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS

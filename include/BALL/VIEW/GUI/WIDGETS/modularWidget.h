@@ -1,4 +1,4 @@
-// $Id: modularWidget.h,v 1.4 2000/11/12 15:32:52 hekl Exp $
+// $Id: modularWidget.h,v 1.5 2000/12/21 17:03:39 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
 #define BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
@@ -77,7 +77,8 @@ class ModularWidget
 	/**	Destructor.
 			The destructor calls finalizeWidget.
 	*/
-	virtual ~ModularWidget();
+	virtual ~ModularWidget()
+		throw();
 	//@}
 
 	/**	@name Accessors

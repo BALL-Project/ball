@@ -1,4 +1,4 @@
-// $Id: tube.h,v 1.5 2000/12/19 21:54:08 oliver Exp $
+// $Id: tube.h,v 1.6 2000/12/21 17:03:45 amoll Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_TUBE_H
 #define BALL_VIEW_PRIMITIV_TUBE_H
@@ -33,11 +33,14 @@ namespace BALL
 			*/
 			//@{
 
-			Tube();
+			Tube()
+				throw();
 
-			Tube(const Tube& tube, bool deep = true);
+			Tube(const Tube& tube, bool deep = true)
+				throw();
 
-			Tube(const GeometricObject& geometric_object);
+			Tube(const GeometricObject& geometric_object)
+				throw();
 
 			virtual ~Tube()
 				throw();
@@ -54,13 +57,17 @@ namespace BALL
 			*/
 			//@{
 
-			void set(const Tube& tube, bool deep = true);
+			void set(const Tube& tube, bool deep = true)
+				throw();
 
-			Tube& operator = (const Tube& tube);
+			const Tube& operator = (const Tube& tube)
+				throw();
 
-			void get(Tube& tube, bool deep = true) const;
+			void get(Tube& tube, bool deep = true) const
+				throw();
 
-			void swap(Tube& tube);
+			void swap(Tube& tube)
+				throw();
 			//@}
 
 
@@ -71,8 +78,7 @@ namespace BALL
 			virtual bool isValid() const
 				throw();
 
-			virtual void dump
-				(std::ostream& s = std::cout, Size depth = 0) const
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
 			//@}
 				 
@@ -80,15 +86,18 @@ namespace BALL
 			/**	@name	Storers
 			*/
 			//@{
-			virtual void read(std::istream& s);
+			virtual void read(std::istream& s)
+				throw();
 
-			virtual void write(std::ostream& s) const;
+			virtual void write(std::ostream& s) const
+				throw();
 			//@}
 
 				
 			protected:
 
-			virtual bool extract();
+			virtual bool extract()
+				throw();
 		};
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS

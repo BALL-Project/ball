@@ -1,4 +1,4 @@
-// $Id: mesh.C,v 1.4 2000/12/19 22:07:28 oliver Exp $
+// $Id: mesh.C,v 1.5 2000/12/21 17:03:46 amoll Exp $
 
 #include <BALL/VIEW/PRIMITIV/mesh.h>
 
@@ -11,6 +11,7 @@ namespace BALL
 	{
 
 		Mesh::Mesh()
+			throw()
 			:	GeometricObject(),
 				ColorExtension(),
 				Surface()
@@ -18,6 +19,7 @@ namespace BALL
 		}
 
 		Mesh::Mesh(const Mesh& mesh, bool deep)
+			throw()
 			:	GeometricObject(mesh, deep),
 				ColorExtension(mesh, deep),
 				Surface(mesh)
@@ -25,6 +27,7 @@ namespace BALL
 		}
 
 		Mesh::Mesh(const GeometricObject& geometric_object)
+			throw()
 			:	GeometricObject(geometric_object),
 				ColorExtension(),
 				Surface()
@@ -57,25 +60,28 @@ namespace BALL
 		}
 
 		void Mesh::set(const Mesh& mesh, bool deep)
+			throw()
 		{
 			GeometricObject::set(mesh, deep);
 			ColorExtension::set(mesh, deep);
 			//			Surface::set(mesh);
 		}
 
-		Mesh& Mesh::operator = (const Mesh& mesh)
+		const Mesh& Mesh::operator = (const Mesh& mesh)
+			throw()
 		{
 			set(mesh);
-
 			return *this;
 		}
 
 		void Mesh::get(Mesh& mesh, bool deep) const
+			throw()
 		{
 			mesh.set(*this, deep);
 		}
 
 		void Mesh::swap(Mesh& mesh)
+			throw()
 		{
 			GeometricObject::swap(mesh);
 			ColorExtension::swap(mesh);
@@ -85,13 +91,12 @@ namespace BALL
 		bool Mesh::isValid() const
 			throw()
 		{
-			return (bool)(GeometricObject::isValid() == true
-										&& ColorExtension::isValid() == true);
-										//										&& Surface::isValid() == true);
+			return (GeometricObject::isValid()
+										&& ColorExtension::isValid());
+										//										&& Surface::isValid());
 		}
 
-		void Mesh::dump
-			(ostream& s, Size depth) const
+		void Mesh::dump(ostream& s, Size depth) const
 			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
@@ -106,16 +111,19 @@ namespace BALL
 		}
 
 		void Mesh::read(istream & /* s */)
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		void Mesh::write(ostream & /* s */) const
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		bool Mesh::extract()
+			throw()
 		{
 			return true;  
 		}

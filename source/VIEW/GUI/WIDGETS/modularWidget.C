@@ -1,4 +1,4 @@
-// $Id: modularWidget.C,v 1.2 2000/11/12 15:22:15 hekl Exp $
+// $Id: modularWidget.C,v 1.3 2000/12/21 17:03:46 amoll Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
 
@@ -23,6 +23,7 @@ ModularWidget::ModularWidget(const ModularWidget& widget)
 }
 
 ModularWidget::~ModularWidget()
+	throw()
 {
 	cerr << "destructing ModularWidget at " << this << endl;
 

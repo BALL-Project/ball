@@ -1,4 +1,4 @@
-// $Id: label.C,v 1.4 2000/12/19 22:07:28 oliver Exp $
+// $Id: label.C,v 1.5 2000/12/21 17:03:46 amoll Exp $
 
 #include <BALL/VIEW/PRIMITIV/label.h>
 
@@ -11,6 +11,7 @@ namespace BALL
 	{
 
 		Label::Label()
+			throw()
 			:	GeometricObject(),
 				ColorExtension()
 		{
@@ -20,6 +21,7 @@ namespace BALL
 		}
 
 		Label::Label(const Label& label, bool deep)
+			throw()
 			:	GeometricObject(label, deep),
 				ColorExtension(label, deep),
 				Vertex(label, deep)
@@ -30,6 +32,7 @@ namespace BALL
 		}
 
 		Label::Label(const GeometricObject& geometric_object)
+			throw()
 			:	GeometricObject(geometric_object),
 				ColorExtension()
 		{
@@ -64,30 +67,34 @@ namespace BALL
 		}
 
 		void Label::set(const Label& Label, bool deep)
+			throw()
 		{
 			GeometricObject::set(Label, deep);
 			ColorExtension::set(Label, deep);
 		}
 
-		Label& Label::operator = (const Label& Label)
+		const Label& Label::operator = (const Label& Label)
+			throw()
 		{
 			set(Label);
-
 			return *this;
 		}
 
 		void Label::get(Label& Label, bool deep) const
+			throw()
 		{
 			Label.set(*this, deep);
 		}
 
 		void Label::swap(Label& Label)
+			throw()
 		{
 			GeometricObject::swap(Label);
 			ColorExtension::swap(Label);
 		}
 
 	  String Label::getTypeName() const
+			throw()
     {
 			return String("Label");
     }
@@ -95,12 +102,10 @@ namespace BALL
 		bool Label::isValid() const
 			throw()
 		{
-			return (bool)(GeometricObject::isValid() == true
-										&& ColorExtension::isValid() == true);
+			return (GeometricObject::isValid() && ColorExtension::isValid());
 		}
 
-		void Label::dump
-			(ostream& s, Size depth) const
+		void Label::dump(ostream& s, Size depth) const
 			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
@@ -118,16 +123,19 @@ namespace BALL
 		}
 
 		void Label::read(istream & /* s */)
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		void Label::write(ostream & /* s */) const
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		bool Label::extract()
+			throw()
 		{
 			return true;  
 		}

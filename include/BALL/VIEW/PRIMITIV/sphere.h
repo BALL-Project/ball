@@ -1,4 +1,4 @@
-// $Id: sphere.h,v 1.5 2000/12/19 21:54:08 oliver Exp $
+// $Id: sphere.h,v 1.6 2000/12/21 17:03:45 amoll Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_SPHERE_H
 #define BALL_VIEW_PRIMITIV_SPHERE_H
@@ -52,11 +52,14 @@ namespace BALL
 			*/
 			//@{
 
-			Sphere();
+			Sphere()
+				throw();
 
-			Sphere(const Sphere& sphere, bool deep = true);
+			Sphere(const Sphere& sphere, bool deep = true)
+				throw();
 
-			Sphere(const GeometricObject& geometric_object);
+			Sphere(const GeometricObject& geometric_object)
+				throw();
 
 			virtual ~Sphere()
 				throw();
@@ -73,13 +76,17 @@ namespace BALL
 			*/
 			//@{
 
-			void set(const Sphere& sphere, bool deep = true);
+			void set(const Sphere& sphere, bool deep = true)
+				throw();
 
-			Sphere& operator = (const Sphere& sphere);
+			const Sphere& operator = (const Sphere& sphere)
+				throw();
 
-			void get(Sphere& sphere, bool deep = true) const;
+			void get(Sphere& sphere, bool deep = true) const
+				throw();
 
-			void swap(Sphere& sphere);
+			void swap(Sphere& sphere)
+				throw();
 			//@}
 
 
@@ -90,23 +97,25 @@ namespace BALL
 			virtual bool isValid() const
 				throw();
 
-			virtual void dump
-				(std::ostream&  s = std::cout, Size depth = 0) const
+			virtual void dump(std::ostream&  s = std::cout, Size depth = 0) const
 				throw();
 			//@}
 
 			/**	@name	Storers
 			*/
 			//@{
-			virtual void read(std::istream&  s);
+			virtual void read(std::istream&  s)
+				throw();
 
-			virtual void write(std::ostream& s) const;
+			virtual void write(std::ostream& s) const
+				throw();
 			//@}
 
 
 			protected:
 
-			virtual bool extract();
+			virtual bool extract()
+				throw();
 		};
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS

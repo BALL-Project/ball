@@ -1,4 +1,4 @@
-// $Id: point.C,v 1.6 2000/12/19 22:07:28 oliver Exp $
+// $Id: point.C,v 1.7 2000/12/21 17:03:46 amoll Exp $
 
 #include <BALL/VIEW/PRIMITIV/point.h>
 
@@ -12,6 +12,7 @@ namespace BALL
 
 
 		Point::Point()
+			throw()
 			:	GeometricObject(),
 				ColorExtension(),
 				Vertex()
@@ -19,6 +20,7 @@ namespace BALL
 		}
 
 		Point::Point(const Point& point, bool deep)
+			throw()
 			:	GeometricObject(point, deep),
 				ColorExtension(point, deep),
 				Vertex(point, deep)
@@ -26,6 +28,7 @@ namespace BALL
 		}
 
 		Point::Point(const GeometricObject& geometric_object)
+			throw()
 			:	GeometricObject(geometric_object),
 				ColorExtension(),
 				Vertex()
@@ -60,25 +63,28 @@ namespace BALL
 		}
 
 		void Point::set(const Point& point, bool deep)
+			throw()
 		{
 			GeometricObject::set(point, deep);
 			ColorExtension::set(point, deep);
 			Vertex::set(point, deep);
 		}
 
-		Point& Point::operator =(const Point& point)
+		const Point& Point::operator =(const Point& point)
+			throw()
 		{
 			set(point);
-
 			return *this;
 		}
 
 		void Point::get(Point& point, bool deep) const
+			throw()
 		{
 			point.set(*this, deep);
 		}
 
 		void Point::swap(Point& point)
+			throw()
 		{
 			GeometricObject::swap(point);
 			ColorExtension::swap(point);
@@ -88,13 +94,12 @@ namespace BALL
 		bool Point::isValid() const
 			throw()
 		{
-			return (bool)(GeometricObject::isValid() == true
-										&& ColorExtension::isValid() == true
-										&& Vertex::isValid() == true);
+			return (GeometricObject::isValid() && 
+							 ColorExtension::isValid() &&
+											 Vertex::isValid() );
 		}
 
-		void Point::dump
-			(ostream& s, Size depth) const
+		void Point::dump(ostream& s, Size depth) const
 			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
@@ -110,16 +115,19 @@ namespace BALL
 		}
 
 		void Point::read(istream & /* s */)
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		void Point::write(ostream & /* s */) const
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		bool Point::extract()
+			throw()
 		{
 			return true;  
 		}

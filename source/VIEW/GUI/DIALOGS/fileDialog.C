@@ -1,4 +1,4 @@
-// $Id: fileDialog.C,v 1.2 2000/10/07 15:24:38 hekl Exp $
+// $Id: fileDialog.C,v 1.3 2000/12/21 17:03:45 amoll Exp $
 
 #include <BALL/VIEW/GUI/DIALOGS/fileDialog.h>
  
@@ -24,6 +24,7 @@ namespace BALL
 		}
 			
 		FileDialog::~FileDialog()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 

@@ -1,4 +1,4 @@
-// $Id: line.C,v 1.6 2000/12/19 22:07:28 oliver Exp $
+// $Id: line.C,v 1.7 2000/12/21 17:03:46 amoll Exp $
 
 #include <BALL/VIEW/PRIMITIV/line.h>
 
@@ -11,6 +11,7 @@ namespace BALL
 	{
 
 		Line::Line()
+			throw()
 			:	GeometricObject(),
 				ColorExtension(),
 				Vertex2()
@@ -18,6 +19,7 @@ namespace BALL
 		}
 
 		Line::Line(const Line& line, bool deep)
+			throw()
 			:	GeometricObject(line, deep),
 				ColorExtension(line, deep),
 				Vertex2(line, deep)
@@ -25,6 +27,7 @@ namespace BALL
 		}
 
 		Line::Line(const GeometricObject& geometric_object)
+			throw()
 			:	GeometricObject(geometric_object),
 				ColorExtension(),
 				Vertex2()
@@ -59,25 +62,28 @@ namespace BALL
 		}
 
 		void Line::set(const Line& line, bool deep)
+			throw()
 		{
 			GeometricObject::set(line, deep);
 			ColorExtension::set(line, deep);
 			Vertex2::set(line, deep);
 		}
 
-		Line& Line::operator = (const Line& line)
+		const Line& Line::operator = (const Line& line)
+			throw()
 		{
 			set(line);
-
 			return *this;
 		}
 
 		void Line::get(Line& line, bool deep) const
+			throw()
 		{
 			line.set(*this, deep);
 		}
 
 		void Line::swap(Line& line)
+			throw()
 		{
 			GeometricObject::swap(line);
 			ColorExtension::swap(line);
@@ -87,13 +93,12 @@ namespace BALL
 		bool Line::isValid() const
 			throw()
 		{
-			return (bool)(GeometricObject::isValid() == true
-										&& ColorExtension::isValid() == true
-										&& Vertex2::isValid() == true);
+			return (GeometricObject::isValid() && 
+							 ColorExtension::isValid() &&
+										  Vertex2::isValid());
 		}
 
-		void Line::dump
-			(ostream& s, Size depth) const
+		void Line::dump(ostream& s, Size depth) const
 			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
@@ -109,16 +114,19 @@ namespace BALL
 		}
 
 		void Line::read(istream & /* s */)
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		void Line::write(ostream & /* s */) const
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		bool Line::extract()
+			throw()
 		{
 			return true;  
 		}

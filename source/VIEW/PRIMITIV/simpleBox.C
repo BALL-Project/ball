@@ -1,4 +1,4 @@
-// $Id: simpleBox.C,v 1.3 2000/12/19 22:07:28 oliver Exp $
+// $Id: simpleBox.C,v 1.4 2000/12/21 17:03:46 amoll Exp $
 
 #include <BALL/VIEW/PRIMITIV/simpleBox.h>
 
@@ -11,6 +11,7 @@ namespace BALL
 	{
 
 		SimpleBox::SimpleBox()
+			throw()
 			:	GeometricObject(),
 				ColorExtension(),
 				Vertex2()
@@ -18,6 +19,7 @@ namespace BALL
 		}
 
 		SimpleBox::SimpleBox(const SimpleBox& SimpleBox, bool deep)
+			throw()
 			:	GeometricObject(SimpleBox, deep),
 				ColorExtension(SimpleBox, deep),
 				Vertex2(SimpleBox, deep)
@@ -25,6 +27,7 @@ namespace BALL
 		}
 
 		SimpleBox::SimpleBox(const GeometricObject& geometric_object)
+			throw()
 			:	GeometricObject(geometric_object),
 				ColorExtension(),
 				Vertex2()
@@ -59,13 +62,15 @@ namespace BALL
 		}
 
 		void SimpleBox::set(const SimpleBox& SimpleBox, bool deep)
+			throw()
 		{
 			GeometricObject::set(SimpleBox, deep);
 			ColorExtension::set(SimpleBox, deep);
 			Vertex2::set(SimpleBox, deep);
 		}
 
-		SimpleBox& SimpleBox::operator = (const SimpleBox& SimpleBox)
+		const SimpleBox& SimpleBox::operator = (const SimpleBox& SimpleBox)
+			throw()
 		{
 			set(SimpleBox);
 
@@ -73,11 +78,13 @@ namespace BALL
 		}
 
 		void SimpleBox::get(SimpleBox& SimpleBox, bool deep) const
+			throw()
 		{
 			SimpleBox.set(*this, deep);
 		}
 
 		void SimpleBox::swap(SimpleBox& SimpleBox)
+			throw()
 		{
 			GeometricObject::swap(SimpleBox);
 			ColorExtension::swap(SimpleBox);
@@ -87,13 +94,12 @@ namespace BALL
 		bool SimpleBox::isValid() const
 			throw()
 		{
-			return (bool)(GeometricObject::isValid() == true
-										&& ColorExtension::isValid() == true
-										&& Vertex2::isValid() == true);
+			return (GeometricObject::isValid() && 
+							 ColorExtension::isValid() && 
+							        Vertex2::isValid());
 		}
 
-		void SimpleBox::dump
-			(ostream& s, Size depth) const
+		void SimpleBox::dump(ostream& s, Size depth) const
 			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);

@@ -1,13 +1,15 @@
-// $Id: label.iC,v 1.1 2000/05/09 09:27:30 hekl Exp $
+// $Id: label.iC,v 1.2 2000/12/21 17:03:45 amoll Exp $
 
 BALL_INLINE
 void Label::setText(const String text)
+	throw()
 {
 	setName(text);
 }
 
 BALL_INLINE
 String Label::getText() const
+	throw()
 {
 	return getName();
 }

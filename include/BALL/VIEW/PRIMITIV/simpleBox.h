@@ -1,4 +1,4 @@
-// $Id: simpleBox.h,v 1.3 2000/12/19 21:54:08 oliver Exp $
+// $Id: simpleBox.h,v 1.4 2000/12/21 17:03:45 amoll Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_SIMPLEBOX_H
 #define BALL_VIEW_PRIMITIV_SIMPLEBOX_H
@@ -43,11 +43,14 @@ namespace BALL
 			*/
 			//@{
 
-			SimpleBox();
+			SimpleBox()
+				throw();
 
-			SimpleBox(const SimpleBox& SimpleBox, bool deep = true);
+			SimpleBox(const SimpleBox& SimpleBox, bool deep = true)
+				throw();
 
-			SimpleBox(const GeometricObject& geometric_object);
+			SimpleBox(const GeometricObject& geometric_object)
+				throw();
 
 			virtual ~SimpleBox()
 				throw();
@@ -64,13 +67,17 @@ namespace BALL
 			*/
 			//@{
 
-			void set(const SimpleBox& SimpleBox, bool deep = true);
+			void set(const SimpleBox& SimpleBox, bool deep = true)
+				throw();
 
-			SimpleBox& operator = (const SimpleBox& SimpleBox);
+			const SimpleBox& operator = (const SimpleBox& SimpleBox)
+				throw();
 
-			void get(SimpleBox& SimpleBox, bool deep = true) const;
+			void get(SimpleBox& SimpleBox, bool deep = true) const
+				throw();
 
-			void swap(SimpleBox& SimpleBox);
+			void swap(SimpleBox& SimpleBox)
+				throw();
 			//@}
 
 
@@ -81,23 +88,25 @@ namespace BALL
 			virtual bool isValid() const
 				throw();
 
-			virtual void dump
-				(std::ostream&  s = std::cout, Size depth = 0) const
+			virtual void dump(std::ostream&  s = std::cout, Size depth = 0) const
 				throw();
 			//@}
 
 			/**	@name	Storers
 			*/
 			//@{
-			virtual void read(std::istream&  s);
+			virtual void read(std::istream&  s)
+				throw();
 
-			virtual void write(std::ostream& s) const;
+			virtual void write(std::ostream& s) const
+				throw();
 			//@}
 
 
 			protected:
 
-			virtual bool extract();
+			virtual bool extract()
+				throw();
 		};
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS

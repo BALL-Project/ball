@@ -1,4 +1,5 @@
-// $Id: basetube.h,v 1.5 2000/12/19 21:54:08 oliver Exp $
+
+// $Id: basetube.h,v 1.6 2000/12/21 17:03:45 amoll Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_BASETUBE_H
 #define BALL_VIEW_PRIMITIV_BASETUBE_H
@@ -37,11 +38,14 @@ namespace BALL
 			*/
 			//@{
 
-			BaseTube();
+			BaseTube()
+				throw();
 
-			BaseTube(const BaseTube& base_tube, bool deep = true);
+			BaseTube(const BaseTube& base_tube, bool deep = true)
+				throw();
 
-			BaseTube(const GeometricObject& geometric_object);
+			BaseTube(const GeometricObject& geometric_object)
+				throw();
 
 			virtual ~BaseTube()
 				throw();
@@ -58,22 +62,28 @@ namespace BALL
 			*/
 			//@{
 
-			void set(const BaseTube& base_tube, bool deep = true);
+			void set(const BaseTube& base_tube, bool deep = true)
+				throw();
 
-			BaseTube& operator = (const BaseTube& base_tube);
+			const BaseTube& operator = (const BaseTube& base_tube)
+				throw();
 
-			void get(BaseTube& base_tube, bool deep = true) const;
+			void get(BaseTube& base_tube, bool deep = true) const
+				throw();
 
-			void swap(BaseTube& base_tube);
+			void swap(BaseTube& base_tube)
+				throw();
 			//@}
 
 			/**	@name	Accessors
 			*/
 			//@{
 
-			Real getLength() const;
+			Real getLength() const
+				throw();
 
-			Real getSquareLength() const;
+			Real getSquareLength() const
+				throw();
 			//@}
 
 
@@ -84,8 +94,7 @@ namespace BALL
 			virtual bool isValid() const
 				throw();
 
-			virtual void dump
-				(std::ostream& s = std::cout, Size depth = 0) const
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
 
 			//@}
@@ -94,16 +103,19 @@ namespace BALL
 			*/
 			//@{
 
-			virtual void read(std::istream& s);
+			virtual void read(std::istream& s)
+				throw();
 
-			virtual void write(std::ostream& s) const;
+			virtual void write(std::ostream& s) const
+				throw();
 			//@}
 
 
 			
 			protected:
 
-			virtual bool extract();
+			virtual bool extract()
+				throw();
 		};
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS

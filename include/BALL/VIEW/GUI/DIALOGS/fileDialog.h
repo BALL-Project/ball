@@ -1,4 +1,4 @@
-// $Id: fileDialog.h,v 1.3 2000/10/07 15:27:44 hekl Exp $
+// $Id: fileDialog.h,v 1.4 2000/12/21 17:03:32 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_DIALOGS_FILEDIALOG_H
 #define BALL_VIEW_GUI_DIALOGS_FILEDIALOG_H
@@ -50,7 +50,8 @@ namespace BALL
 
 			/** Destructor.
 			*/
-			virtual ~FileDialog();
+			virtual ~FileDialog()
+				throw();
 			//@}
 
 			/**	@name Exceptions

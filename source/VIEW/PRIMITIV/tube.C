@@ -1,4 +1,4 @@
-// $Id: tube.C,v 1.6 2000/12/19 22:07:29 oliver Exp $
+// $Id: tube.C,v 1.7 2000/12/21 17:03:46 amoll Exp $
 
 #include <BALL/VIEW/PRIMITIV/tube.h>
 
@@ -11,18 +11,21 @@ namespace BALL
 	{
 
 		Tube::Tube()
+			throw()
 			:	BaseTube(),
 				ColorExtension()
 		{
 		}
 
 		Tube::Tube(const Tube& tube, bool deep)
+			throw()
 			:	BaseTube(tube, deep),
 				ColorExtension(tube, deep)
 		{
 		}
 
 		Tube::Tube(const GeometricObject& geometric_object)
+			throw()
 			:	BaseTube(geometric_object),
 				ColorExtension()
 		{
@@ -54,24 +57,27 @@ namespace BALL
 		}
 
 		void Tube::set(const Tube& tube, bool deep)
+			throw()
 		{
 			BaseTube::set(tube, deep);
 			ColorExtension::set(tube, deep);
 		}
 
-		Tube& Tube::operator = (const Tube& tube)
+		const Tube& Tube::operator = (const Tube& tube)
+			throw()
 		{
 			set(tube);
-
 			return *this;
 		}
 
 		void Tube::get(Tube& tube, bool deep) const
+			throw()
 		{
 			tube.set(*this, deep);
 		}
 
 		void Tube::swap(Tube& tube)
+			throw()
 		{
 			BaseTube::swap(tube);
 			ColorExtension::swap(tube);
@@ -80,12 +86,10 @@ namespace BALL
 		bool Tube::isValid() const
 			throw()
 		{
-			return (bool)(BaseTube::isValid() == true
-										&& ColorExtension::isValid() == true);
+			return (BaseTube::isValid()	&& ColorExtension::isValid());
 		}
 
-		void Tube::dump
-			(ostream& s, Size depth) const
+		void Tube::dump(ostream& s, Size depth) const
 			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
@@ -100,16 +104,19 @@ namespace BALL
 		}
 
 		void Tube::read(istream & /* s */)
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		void Tube::write(ostream & /* s */) const
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		bool Tube::extract()
+			throw()
 		{
 			return true;  
 		}

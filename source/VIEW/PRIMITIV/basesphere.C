@@ -1,4 +1,4 @@
-// $Id: basesphere.C,v 1.6 2000/12/19 22:07:28 oliver Exp $
+// $Id: basesphere.C,v 1.7 2000/12/21 17:03:46 amoll Exp $
 
 #include <BALL/VIEW/PRIMITIV/basesphere.h>
 
@@ -9,6 +9,7 @@ namespace BALL
 	{
 
 		BaseSphere::BaseSphere()
+			throw()
 			:	GeometricObject(),
 				ColorExtension(),
 				Vertex(),
@@ -17,6 +18,7 @@ namespace BALL
 		}
 
 		BaseSphere::BaseSphere(const BaseSphere& base_sphere, bool deep)
+			throw()
 			:	GeometricObject(base_sphere, deep),
 				ColorExtension(base_sphere, deep),
 				Vertex(base_sphere, deep),
@@ -25,6 +27,7 @@ namespace BALL
 		}
 
 		BaseSphere::BaseSphere(const GeometricObject& geometric_object)
+			throw()
 			:	GeometricObject(geometric_object),
 				ColorExtension(),
 				Vertex(),
@@ -62,6 +65,7 @@ namespace BALL
 		}
 
 		void BaseSphere::set(const BaseSphere& base_sphere, bool deep)
+			throw()
 		{
 			GeometricObject::set(base_sphere, deep);
 			ColorExtension::set(base_sphere, deep);
@@ -69,19 +73,21 @@ namespace BALL
 			Radius::set(base_sphere, deep);
 		}
 
-		BaseSphere& BaseSphere::operator = (const BaseSphere& base_sphere)
+		const BaseSphere& BaseSphere::operator = (const BaseSphere& base_sphere)
+			throw()
 		{
 			set(base_sphere);
-
 			return *this;
 		}
 
 		void BaseSphere::get(BaseSphere& base_sphere, bool deep) const
+			throw()
 		{
 			base_sphere.set(*this, deep);
 		}
 
 		void BaseSphere::swap(BaseSphere& base_sphere)
+			throw()
 		{
 			GeometricObject::swap(base_sphere);
 			ColorExtension::swap(base_sphere);
@@ -92,14 +98,13 @@ namespace BALL
 		bool BaseSphere::isValid() const
 			throw()
 		{
-			return (bool)(GeometricObject::isValid() == true
-										&& ColorExtension::isValid() == true
-										&& Vertex::isValid() == true
-										&& Radius::isValid() == true);
+			return (GeometricObject::isValid()
+							&& ColorExtension::isValid()
+							&& Vertex::isValid()
+							&& Radius::isValid());
 		}
 
-		void BaseSphere::dump
-			(ostream& s, Size depth) const
+		void BaseSphere::dump(ostream& s, Size depth) const
 			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
@@ -116,16 +121,19 @@ namespace BALL
 		}
 
 		void BaseSphere::read(istream & /* s */)
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		void BaseSphere::write(ostream & /* s */) const
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		bool BaseSphere::extract()
+			throw()
 		{
 			return true;  
 		}

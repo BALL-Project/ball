@@ -1,4 +1,4 @@
-// $Id: line.h,v 1.5 2000/12/19 21:54:08 oliver Exp $
+// $Id: line.h,v 1.6 2000/12/21 17:03:45 amoll Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_LINE_H
 #define BALL_VIEW_PRIMITIV_LINE_H
@@ -39,11 +39,14 @@ namespace BALL
 			*/
 			//@{
 
-			Line();
+			Line()
+				throw();
 
-			Line(const Line& line, bool deep = true);
+			Line(const Line& line, bool deep = true)
+				throw();
 
-			Line(const GeometricObject& geometric_object);
+			Line(const GeometricObject& geometric_object)
+				throw();
 
 			virtual ~Line()
 				throw();
@@ -60,13 +63,17 @@ namespace BALL
 			*/
 			//@{
 
-			void set(const Line& line, bool deep = true);
+			void set(const Line& line, bool deep = true)
+				throw();
 
-			Line& operator = (const Line& line);
+			const Line& operator = (const Line& line)
+				throw();
 
-			void get(Line& line, bool deep = true) const;
+			void get(Line& line, bool deep = true) const
+				throw();
 
-			void swap(Line& line);
+			void swap(Line& line)
+				throw();
 			//@}
 
 
@@ -77,8 +84,7 @@ namespace BALL
 			virtual bool isValid() const
 				throw();
 
-			virtual void dump
-				(std::ostream& s = std::cout, Size depth = 0) const
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
 			//@}
 
@@ -86,15 +92,18 @@ namespace BALL
 			*/
 			//@{
 
-			virtual void read(std::istream& s);
+			virtual void read(std::istream& s)
+				throw();
 
-			virtual void write(std::ostream& s) const;
+			virtual void write(std::ostream& s) const
+				throw();
 			//@}
 
 
 			protected:
 
-			virtual bool extract();
+			virtual bool extract()
+				throw();
 		};
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS

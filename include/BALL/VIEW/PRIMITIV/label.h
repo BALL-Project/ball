@@ -1,4 +1,4 @@
-// $Id: label.h,v 1.3 2000/12/19 21:54:08 oliver Exp $
+// $Id: label.h,v 1.4 2000/12/21 17:03:45 amoll Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_LABEL_H
 #define BALL_VIEW_PRIMITIV_LABEL_H
@@ -43,11 +43,14 @@ namespace BALL
 			*/
 			//@{
 
-			Label();
+			Label()
+				throw();
 
-			Label(const Label& Label, bool deep = true);
+			Label(const Label& Label, bool deep = true)
+				throw();
 
-			Label(const GeometricObject& geometric_object);
+			Label(const GeometricObject& geometric_object)
+				throw();
 
 			virtual ~Label()
 				throw();
@@ -64,23 +67,30 @@ namespace BALL
 			*/
 			//@{
 
-			void set(const Label& Label, bool deep = true);
+			void set(const Label& Label, bool deep = true)
+				throw();
 
-			Label& operator = (const Label& Label);
+			const Label& operator = (const Label& Label)
+				throw();
 
-			void get(Label& Label, bool deep = true) const;
+			void get(Label& Label, bool deep = true) const
+				throw();
 
-			void swap(Label& Label);
+			void swap(Label& Label)
+				throw();
 			//@}
 
 			/**	@name	Inspectors, Mutators, Accessors
 			*/
 			//@{
-			void setText(const String text);
+			void setText(const String text)
+				throw();
 
-			String getText() const;
+			String getText() const
+				throw();
 
-			virtual String getTypeName() const;
+			virtual String getTypeName() const
+				throw();
 			//@}
 
 			/**	@name	Debugging and Diagnostics
@@ -90,23 +100,25 @@ namespace BALL
 			virtual bool isValid() const
 				throw();
 
-			virtual void dump
-				(std::ostream&  s = std::cout, Size depth = 0) const
+			virtual void dump(std::ostream&  s = std::cout, Size depth = 0) const
 				throw();
 			//@}
 
 			/**	@name	Storers
 			*/
 			//@{
-			virtual void read(std::istream&  s);
+			virtual void read(std::istream&  s)
+				throw();
 
-			virtual void write(std::ostream& s) const;
+			virtual void write(std::ostream& s) const
+				throw();
 			//@}
 
 
 			protected:
 
-			virtual bool extract();
+			virtual bool extract()
+				throw();
 
   		private:	
 		};

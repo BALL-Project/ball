@@ -1,13 +1,15 @@
-// $Id: basetube.iC,v 1.2 1999/12/19 17:19:41 oliver Exp $
+// $Id: basetube.iC,v 1.3 2000/12/21 17:03:45 amoll Exp $
 
 BALL_INLINE
 Real BaseTube::getLength() const
+	throw()
 {
   return (getVertex1() - getVertex2()).getLength();
 }
 
 BALL_INLINE
 Real BaseTube::getSquareLength() const
+	throw()
 {
   return (getVertex1() - getVertex2()).getSquareLength();
 }

@@ -1,4 +1,4 @@
-// $Id: sphere.C,v 1.6 2000/12/19 22:07:28 oliver Exp $
+// $Id: sphere.C,v 1.7 2000/12/21 17:03:46 amoll Exp $
 
 #include <BALL/VIEW/PRIMITIV/sphere.h>
 
@@ -11,6 +11,7 @@ namespace BALL
 	{
 
 		Sphere::Sphere()
+			throw()
 			:	GeometricObject(),
 				ColorExtension(),
 				Vertex(),
@@ -19,6 +20,7 @@ namespace BALL
 		}
 
 		Sphere::Sphere(const Sphere& sphere, bool deep)
+			throw()
 			:	GeometricObject(sphere, deep),
 				ColorExtension(sphere, deep),
 				Vertex(sphere, deep),
@@ -27,6 +29,7 @@ namespace BALL
 		}
 
 		Sphere::Sphere(const GeometricObject& geometric_object)
+			throw()
 			:	GeometricObject(geometric_object),
 				ColorExtension(),
 				Vertex(),
@@ -64,6 +67,7 @@ namespace BALL
 		}
 
 		void Sphere::set(const Sphere& sphere, bool deep)
+			throw()
 		{
 			GeometricObject::set(sphere, deep);
 			ColorExtension::set(sphere, deep);
@@ -71,19 +75,21 @@ namespace BALL
 			Radius::set(sphere, deep);
 		}
 
-		Sphere& Sphere::operator = (const Sphere& sphere)
+		const Sphere& Sphere::operator = (const Sphere& sphere)
+			throw()
 		{
 			set(sphere);
-
 			return *this;
 		}
 
 		void Sphere::get(Sphere& sphere, bool deep) const
+			throw()
 		{
 			sphere.set(*this, deep);
 		}
 
 		void Sphere::swap(Sphere& sphere)
+			throw()
 		{
 			GeometricObject::swap(sphere);
 			ColorExtension::swap(sphere);
@@ -94,14 +100,13 @@ namespace BALL
 		bool Sphere::isValid() const
 			throw()
 		{
-			return (bool)(GeometricObject::isValid() == true
-										&& ColorExtension::isValid() == true
-										&& Vertex::isValid() == true
-										&& Radius::isValid() == true);
+			return (GeometricObject::isValid() && 
+							 ColorExtension::isValid() && 
+											 Vertex::isValid() &&
+										   Radius::isValid());
 		}
 
-		void Sphere::dump
-			(ostream& s, Size depth) const
+		void Sphere::dump(ostream& s, Size depth) const
 			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
