@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stringHashMap.h,v 1.21 2003/04/18 11:56:47 oliver Exp $
+// $Id: stringHashMap.h,v 1.22 2003/05/08 09:13:01 sneumann Exp $
 
 #ifndef BALL_DATATYPE_STRINGHASHMAP_H
 #define BALL_DATATYPE_STRINGHASHMAP_H
@@ -95,7 +95,7 @@ namespace BALL
 		void destroy()
 			throw()
 		{
-			clear();
+			HashMap<String, Value>::clear();
 		}
 	
 		//@}
@@ -111,7 +111,7 @@ namespace BALL
     void set(const StringHashMap& hash_map, bool /* deep */ = true)
 			throw()
 		{
-			clear();
+			HashMap<String, Value>::clear();
 
 			ConstIterator it = hash_map.begin();
 			for ( ; it != hash_map.end(); ++it)
@@ -176,14 +176,14 @@ namespace BALL
 		{
 			// search the key
 			Iterator it = HashMap<String, Value>::find(key);
-			if (it == end())
+			if (it == HashMap<String, Value>::end())
 			{
 				// we didn't find it..
 				return false;
 			}
 			
 			// found it: delete it
-			erase(it);
+			HashMap<String, Value>::erase(it);
 
 			return true;
 		}
@@ -193,7 +193,7 @@ namespace BALL
 		Size getSize() const
 			throw()
 		{
-			return size();
+			return HashMap<String, Value>::size();
 		}
 		
 		/**	Return the load factor of the hash map.
@@ -204,7 +204,7 @@ namespace BALL
 		float getLoadFactor() const
 			throw()
 		{
-			return (float)size() / (float)HashMap<String, Value>::getBucketSize();
+			return (float)HashMap<String, Value>::size() / (float)HashMap<String, Value>::getBucketSize();
 		}
 	
 		//@}
@@ -231,7 +231,7 @@ namespace BALL
 		bool has(const String& key) const
 			throw()
 		{
-			return !(HashMap<String, Value>::find(key) == end());
+			return !(HashMap<String, Value>::find(key) == HashMap<String, Value>::end());
 		}
 
 		/** Return true if the hash map is empty.
@@ -240,7 +240,7 @@ namespace BALL
 		bool isEmpty() const
 			throw()
 		{
-			return (size() == 0);
+			return (HashMap<String, Value>::size() == 0);
 		}
 		//@}
 
