@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.57.2.3 2004/06/03 13:59:45 amoll Exp $
+// $Id: scene.C,v 1.57.2.4 2004/06/03 17:52:51 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -561,6 +561,7 @@ namespace BALL
 			if (width == 0)	width = 1;
 			if (height == 0) height = 1;
 			gl_renderer_.pickObjects2(objects, width, height);
+			glFlush();
 
 			GeometricObjectSelectionMessage* message = new GeometricObjectSelectionMessage;
 			message->setSelection(objects);
