@@ -21,6 +21,7 @@ CPP_SOURCES=\
   representation.C\
   server.C\
   stage.C\
+	threads.C
 
 MOC_SOURCES=\
 	mainControl_moc.C
@@ -28,7 +29,7 @@ MOC_SOURCES=\
 include ../../common.mak
 include .Dependencies
 
-BALL_INCLUDES=$(VIEW_INCLUDES)
+BALL_INCLUDES=$(VIEW_INCLUDES) -DQT_THREAD_SUPPORT
 
 mainControl_moc.C:  $(BALL_PATH)/include/BALL/VIEW/KERNEL/mainControl.h
 	$(MOC) $(BALL_PATH)/include/BALL/VIEW/KERNEL/mainControl.h -o mainControl_moc.C

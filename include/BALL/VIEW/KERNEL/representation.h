@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.13 2003/12/15 18:13:08 amoll Exp $
+// $Id: representation.h,v 1.14 2003/12/18 02:43:01 amoll Exp $
 
 #ifndef  BALL_VIEW_KERNEL_REPRESENTATION_H
 #define  BALL_VIEW_KERNEL_REPRESENTATION_H
@@ -33,6 +33,7 @@ namespace BALL
 		class ModelProcessor;
 		class ColorProcessor;
 		class GeometricObject;
+		class UpdateRepresentationThread;
 
 		/** Representation
 		 		A Representation is a collection of geometric objects for a group of 
@@ -238,6 +239,10 @@ namespace BALL
 			void update(bool rebuild)
 				throw();
 
+			///
+			void clearGeometricObjects()
+				throw();
+
 			/** Get the time when the model was builded
 			 		This is needed for updating the Representation, after
 					the vector of atom attributes was modified.
@@ -270,9 +275,6 @@ namespace BALL
 
 			protected:
 
-			void clearGeometricObjects_()
-				throw();
-
 			//_
 			DrawingMode 				drawing_mode_;
 
@@ -304,6 +306,8 @@ namespace BALL
 			CompositeSet 				composites_;
 
 			PreciseTime 				model_build_time_;
+
+			static UpdateRepresentationThread* thread_;
 		};
 
 	} // namespace VIEW

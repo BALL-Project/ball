@@ -1,17 +1,27 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.16 2003/12/15 18:17:17 amoll Exp $
+// $Id: representation.C,v 1.17 2003/12/18 02:43:45 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/representation.h>
 #include <BALL/VIEW/MODELS/modelProcessor.h>
 #include <BALL/VIEW/MODELS/colorProcessor.h>
 #include <BALL/VIEW/KERNEL/geometricObject.h>
 
+#include <BALL/VIEW/KERNEL/threads.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
+
+#include <qapplication.h>
+
 namespace BALL
 {
 	namespace VIEW
 	{
+
+#ifdef BALL_QT_HAS_THREADS
+		UpdateRepresentationThread* Representation::thread_ = 0;
+#endif
+
 		Representation::Representation()
 			throw()
 				: PropertyManager(),
@@ -128,7 +138,7 @@ namespace BALL
 		void Representation::clear()
 			throw()
 		{
-			clearGeometricObjects_();
+			clearGeometricObjects();
 			composites_.clear();
 
 			if (model_processor_  != 0) delete model_processor_;
@@ -145,7 +155,7 @@ namespace BALL
 		}
 
 		
-		void Representation::clearGeometricObjects_()
+		void Representation::clearGeometricObjects()
 			throw()
 		{
 			List<GeometricObject*>::Iterator it = geometric_objects_.begin();
@@ -220,6 +230,7 @@ namespace BALL
 		void Representation::update(bool rebuild) 
 			throw()
 		{
+#ifndef BALL_QT_HAS_THREADS
 			// if no ModelProcessor was given, there can only exist 
 			// handmade GeometricObjects, which dont need to be updated
 			if (model_processor_ != 0 && rebuild) 
@@ -243,6 +254,41 @@ namespace BALL
 				color_processor_->setTransparency(transparency_);
 				geometric_objects_.apply(*color_processor_);
 			}
+#else
+			if (thread_ != 0)
+			{
+				thread_->wait();
+				delete thread_;
+				thread_ = 0;
+			}
+			thread_ = new UpdateRepresentationThread;
+			thread_->setRepresentation(*this);
+			thread_->setRebuild(rebuild);
+			thread_->start();
+			
+			Position pos = 3;
+			String dots;
+			while (thread_->running())
+			{
+				qApp->wakeUpGuiThread();
+ 				qApp->processEvents();
+				if (pos < 40) 
+				{
+					pos ++;
+					dots +=".";
+				}
+				else 
+				{
+					pos = 3;
+					dots = "...";
+				}
+				
+				MainControl::getInstance(0)->setStatusbarText("Creating Model " + dots);
+				usleep(1000);
+			}
+			
+			thread_->wait(); 
+#endif
 		}
 
 		
