@@ -1,4 +1,4 @@
-// $Id: regularData1D.h,v 1.19 2001/07/10 17:58:10 amoll Exp $
+// $Id: regularData1D.h,v 1.20 2001/07/15 23:33:45 oliver Exp $
 
 #ifndef BALL_DATATYPE_REGULARDATA1D_H
 #define BALL_DATATYPE_REGULARDATA1D_H
@@ -410,11 +410,18 @@ namespace BALL
 		VectorType new_data(new_size);
 		double factor1 = (double)data_.size() / (double)new_size;
 		double factor2 = (double)(data_.size() - 1) / (new_size - 1);
+
 		for (Size i = 0; i < new_size; i++)
 		{
 			// determine the interval of the old data set we are currently in
 			// ([old_idx, old_idx + 1])
-			Position old_idx = (Position)(i * factor1);
+			Position old_idx = (Position)((double)i * factor1);
+
+			// consider numerical inaccuracies...
+			if (old_idx >= (data_.size() - 1))
+			{
+				old_idx = data_.size() - 2;
+			}
 			double factor3 = (double)i * factor2 - (double)old_idx;
 			new_data[i] = data_[old_idx] * (1 - factor3) + factor3 * data_[old_idx + 1];
 		}
