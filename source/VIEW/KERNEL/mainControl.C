@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.63 2004/02/11 12:52:07 amoll Exp $
+// $Id: mainControl.C,v 1.64 2004/02/11 13:25:18 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -27,12 +27,13 @@
 #endif
 
 #include <qapplication.h>
-#include <qmenubar.h>
-#include <qpopupmenu.h>
-#include <qstatusbar.h>
-#include <qlabel.h>
+#include <qmenubar.h>    // menus
+#include <qpopupmenu.h>	 // menus
+#include <qstatusbar.h>  // statusbar
+#include <qlabel.h>			 // statusbar
 #include <qtooltip.h>
-#include <qpushbutton.h>
+#include <qpushbutton.h> // needed for preferences
+#include <qcursor.h>     // wait cursor
 
 #include <algorithm> // sort
 
@@ -97,6 +98,7 @@ void MainControl::setup_()
 {
 	preferences_.read();
 
+	statusBar()->resize(200, 30);
 	statusBar()->addWidget(message_label_, 20);
 
 	timer_->setInterval(1000);
@@ -1032,9 +1034,10 @@ void MainControl::deselectCompositeRecursive(Composite* composite, bool first_ca
 }
 
 
-void MainControl::setStatusbarText(const String& text)
+void MainControl::setStatusbarText(const String& text, bool beep)
 	throw()
 {
+	if (beep) QApplication::beep();
 	message_label_->setText(text.c_str());
 	message_label_->setPaletteForegroundColor( QColor(255, 0, 0) );
 	timer_->stopTimer();
@@ -1228,13 +1231,17 @@ void MainControl::enableDeleteEntry()
 
 void MainControl::setCompositesMuteable(bool state) 
 {
+	if (state == composites_muteable_) return;
+
 	composites_muteable_ = state;
 	if (state)
 	{
+		QApplication::restoreOverrideCursor();
 		simulation_icon_->hide();
 	}
 	else
 	{
+		QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
 		simulation_icon_->show();
 	}
 }

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.34 2004/02/11 12:52:49 amoll Exp $
+// $Id: mainControl.h,v 1.35 2004/02/11 13:25:27 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -636,9 +636,10 @@ namespace BALL
 				throw();
 
 			/** Sets the text in the statusbar.
-					The statusbar has a label, whose text is set to the given argument
+					The statusbar has a label, whose text is set to the given argument.
+					It is possible to notify the user with a beep sound.
 			*/
-			void setStatusbarText(const String& text)
+			void setStatusbarText(const String& text, bool beep = false)
 				throw();
 
 			/// Set a hint for a menu entry
