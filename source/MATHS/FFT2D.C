@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FFT2D.C,v 1.4 2003/05/03 17:29:32 oliver Exp $
+// $Id: FFT2D.C,v 1.5 2003/05/06 20:19:31 oliver Exp $
 
 #include <BALL/MATHS/FFT2D.h>
 
@@ -42,8 +42,7 @@ namespace BALL
 
 	FFT2D::FFT2D(Size ldnX, Size ldnY, double stepPhysX, double stepPhysY, Vector2 origin, bool inFourierSpace)
 		throw()
-		: TRegularData2D<FFTW_COMPLEX>(Vector2(-origin.x,-origin.y), Vector2((((1<<ldnX)-1)*stepPhysX_)-origin.x,(((1<<ldnX)-1)*stepPhysY_)-origin.y), 
-																	 TRegularData2D<FFTW_COMPLEX>::IndexType((1<<ldnX), (1<<ldnY))),
+		: TRegularData2D<FFTW_COMPLEX>(TRegularData2D<FFTW_COMPLEX>::IndexType((1<<ldnX), (1<<ldnY)), -origin, Vector2((((1<<ldnX)-1)*stepPhysX_),(((1<<ldnX)-1)*stepPhysY_))),
 		  lengthX_(1<<ldnX),
 			lengthY_(1<<ldnY),
 			inFourierSpace_(inFourierSpace),
