@@ -1,4 +1,4 @@
-// $Id: CharmmFF_test.C,v 1.1 2000/02/16 19:23:03 oliver Exp $
+// $Id: CharmmFF_test.C,v 1.2 2000/02/17 09:22:05 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 #include <BALL/STRUCTURE/fragmentDB.h>
 ///////////////////////////
 
-START_TEST(CharmmFF, "$Id: CharmmFF_test.C,v 1.1 2000/02/16 19:23:03 oliver Exp $")
+START_TEST(CharmmFF, "$Id: CharmmFF_test.C,v 1.2 2000/02/17 09:22:05 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -85,7 +85,7 @@ FragmentDB frag_db;
 	eef1.options[CharmmFF::Option::FILENAME] = "CHARMM/EEF1/param19_eef1.ini";
 
 
-	eef1.setup(s);
+	eef1.setup(s, options);
 
 	eef1.updateForces();
 	eef1.updateEnergy();
@@ -107,18 +107,19 @@ FragmentDB frag_db;
 	{
 		switch (i)
 		{
+			// values are taken from CHARMM calculaction
+			// (version 27b1 with param19_eef1.inp and toph19_eef1.inp,
+			// with modified nonbonded: atom rdiel cutnb 20. cutonnb 11. cutofnb 15.)
 			case 0:	force = Vector3( 26.44796,  91.42712, -23.82851); break;
 			case 1:	force = Vector3( 14.55307,   1.84307, -19.22059); break;
-			case 2:	force = Vector3(-14.70309, -88.76764,  62.63995); break;
+			case 2:	force = Vector3(-14.56795, -89.42944,  62.77158); break;
 			case 3:	force = Vector3(-16.84492, -12.50059,  -5.06838); break;
 			case 4:	force = Vector3( -8.71000,   3.45793, -15.72975); break;
 			case 5:	force = Vector3( -1.06629, -17.55152,  -0.53075); break;
-			case 6:	force = Vector3( 19.60904,  12.31904,  11.23689); break;
-			case 7:	force = Vector3(-19.28575,   9.77259,  -9.49886);
+			case 6:	force = Vector3( 19.60441,  12.80711,  11.19068); break;
+			case 7:	force = Vector3(-19.41627,   9.94631,  -9.58428);
 		}
 		force = force - atom_it->getForce() * Constants::NA * 1e-13 / -4.184;
-		std::cerr << atom_it->getFullName() << " " << atom_it->getTypeName() << " " << atom_it->getType() << " " 
-			<< " " << atom_it->countBonds() << atom_it->getForce() * Constants::NA * 1e-13 / -4.184 << std::endl;
 		TEST_REAL_EQUAL(force.getLength(), 0.0)
 	}
 	RESULT
@@ -171,17 +172,19 @@ for (; +atom_it; ++atom_it, ++i)
 {
 	switch (i)
 	{
-		case 0:	force = Vector3(-29.88574,  42.58230,  -9.95883); break;
-		case 1:	force = Vector3(  0.00347,  -0.15351,   0.08606); break;
-		case 2:	force = Vector3( -0.00715,   6.37587,  -0.57521); break;
-		case 3:	force = Vector3(  0.11338,  -0.22339,   0.06770); break;
-		case 4:	force = Vector3(  0.00000,   0.00000,   0.00000); break;
-		case 5:	force = Vector3( 25.47118, -20.67960,  10.22273); break;
-		case 6:	force = Vector3(  4.46096, -28.05544,   0.24947); break;
-		case 7:	force = Vector3( -0.15610,   0.15378,  -0.09192);
+		// values are taken from CHARMM calculaction
+		// (version 27b1 with param19_eef1.inp and toph19_eef1.inp,
+		// with modified nonbonded: atom rdiel cutnb 20. cutonnb 11. cutofnb 15.)
+		case 0:	force = Vector3( 32.09360,  -8.83321,   1.72968); break;
+		case 1:	force = Vector3(  0.27122,  -7.58892,  -0.52235); break;
+		case 2:	force = Vector3(-21.60332, -81.70418,  44.97363); break;
+		case 3:	force = Vector3(-33.70472,  65.80094, -50.27192); break;
+		case 4:	force = Vector3( 24.59176,  32.71333,   3.56059); break;
+		case 5:	force = Vector3( -4.89956,  20.53095,   2.43037); break;
+		case 6:	force = Vector3(  6.60390, -11.26640,   1.32471); break;
+		case 7:	force = Vector3( -3.35288,  -9.65251,  -3.22471);
 	}
 	force = force - atom_it->getForce() * Constants::NA * 1e-13 / -4.184;
-	std::cerr << atom_it->getName() << " " << atom_it->getForce() * Constants::NA * 1e-13 / -4.184 << std::endl;
 	TEST_REAL_EQUAL(force.getLength(), 0.0)
 }
 RESULT
@@ -231,17 +234,19 @@ for (; +atom_it; ++atom_it, ++i)
 {
 	switch (i)
 	{
+		// values are taken from CHARMM calculaction
+		// (version 27b1 with param19_eef1.inp and toph19_eef1.inp,
+		// with modified nonbonded: atom rdiel cutnb 20. cutonnb 11. cutofnb 15.)
 		case 0:	force = Vector3(-1.03592,   0.56305,   1.01054); break;
 		case 1:	force = Vector3(-0.29165,  -0.83152,  -0.30056); break;
-		case 2:	force = Vector3( 2.38577,   0.92010,  -1.62842); break;
+		case 2:	force = Vector3( 2.52092,   0.25830,  -1.49679); break;
 		case 3:	force = Vector3(-0.58905,   0.51427,   0.68932); break;
 		case 4:	force = Vector3(-2.73842,  -1.08243,   1.15208); break;
 		case 5:	force = Vector3( 2.13412,   0.57834,  -1.05459); break;
-		case 6:	force = Vector3( 0.00462,  -0.48807,   0.04621); break;
-		case 7:	force = Vector3( 0.13052,  -0.17372,   0.08542);
+		case 6:	force = Vector3( 0.00000,   0.00000,   0.00000); break;
+		case 7:	force = Vector3( 0.00000,   0.00000,   0.00000);
 	}
 	force = force - atom_it->getForce() * Constants::NA * 1e-13 / -4.184;
-	std::cerr << atom_it->getName() << " " << atom_it->getForce() * Constants::NA * 1e-13 / -4.184 << std::endl;
 	TEST_REAL_EQUAL(force.getLength(), 0.0)
 }
 RESULT
@@ -292,17 +297,19 @@ for (; +atom_it; ++atom_it, ++i)
 {
 	switch (i)
 	{
+		// values are taken from CHARMM calculaction
+		// (version 27b1 with param19_eef1.inp and toph19_eef1.inp,
+		// with modified nonbonded: atom rdiel cutnb 20. cutonnb 11. cutofnb 15.)
 		case 0:	force = Vector3(  0.00000,   0.00000,   0.00000); break;
 		case 1:	force = Vector3(  0.00000,   0.00000,   0.00000); break;
-		case 2:	force = Vector3( -0.13514,   0.66180,  -0.13163); break;
+		case 2:	force = Vector3(  0.00000,   0.00000,   0.00000); break;
 		case 3:	force = Vector3(  0.00000,   0.00000,   0.00000); break;
 		case 4:	force = Vector3(  4.98047,   2.50327,  -6.64754); break;
 		case 5:	force = Vector3(-16.96076,  -8.20699,  25.84288); break;
-		case 6:	force = Vector3(  5.27883,   1.85422, -10.10592); break;
-		case 7:	force = Vector3(  6.83660,   3.18770,  -8.95778);
+		case 6:	force = Vector3(  5.27421,   2.34230, -10.15213); break;
+		case 7:	force = Vector3(  6.70608,   3.36142,  -9.04320);
 	}
 	force = force - atom_it->getForce() * Constants::NA * 1e-13 / -4.184;
-	std::cerr << atom_it->getName() << " " << atom_it->getForce() * Constants::NA * 1e-13 / -4.184 << std::endl;
 	TEST_REAL_EQUAL(force.getLength(), 0.0)
 }
 RESULT
@@ -327,14 +334,14 @@ eef1.removeComponent("CHARMM ImproperTorsion");
 eef1.removeComponent("CHARMM Bend");
 eef1.removeComponent("CHARMM Stretch");
 eef1.options[CharmmFF::Option::USE_EEF1] = "false";
-eef1.options[CharmmFF::Option::ASSIGN_CHARGES] = "false";
+eef1.options[CharmmFF::Option::ASSIGN_CHARGES] = "true";
 eef1.options[CharmmFF::Option::ASSIGN_TYPENAMES] = "true";
 eef1.options[CharmmFF::Option::ASSIGN_TYPES] = "true";
 eef1.options[CharmmFF::Option::FILENAME] = "CHARMM/EEF1/param19_eef1.ini";
-ClearChargeProcessor clear_charges;
-s.apply(clear_charges);
 
 eef1.setup(s);
+ClearChargeProcessor clear_charges;
+s.apply(clear_charges);
 
 eef1.updateForces();
 eef1.updateEnergy();
@@ -356,21 +363,22 @@ for (; +atom_it; ++atom_it, ++i)
 {
 	switch (i)
 	{
+		// values are taken from CHARMM calculaction
+		// (version 27b1 with param19_eef1.inp and toph19_eef1.inp,
+		// with modified nonbonded: atom rdiel cutnb 20. cutonnb 11. cutofnb 15.)
 		case 0:	force = Vector3(-29.88574,  42.58230,  -9.95883); break;
 		case 1:	force = Vector3(  0.00347,  -0.15351,   0.08606); break;
-		case 2:	force = Vector3( -0.00715,   6.37587,  -0.57521); break;
+		case 2:	force = Vector3(  0.12799,   5.71407,  -0.44357); break;
 		case 3:	force = Vector3(  0.11338,  -0.22339,   0.06770); break;
 		case 4:	force = Vector3(  0.00000,   0.00000,   0.00000); break;
 		case 5:	force = Vector3( 25.47118, -20.67960,  10.22273); break;
-		case 6:	force = Vector3(  4.46096, -28.05544,   0.24947); break;
-		case 7:	force = Vector3( -0.15610,   0.15378,  -0.09192);
+		case 6:	force = Vector3(  4.45634, -27.56737,   0.20325); break;
+		case 7:	force = Vector3( -0.28662,   0.32750,  -0.17734);
 	}
 	force = force - atom_it->getForce() * Constants::NA * 1e-13 / -4.184;
-	std::cerr << atom_it->getName() << " " << atom_it->getForce() * Constants::NA * 1e-13 / -4.184 << std::endl;
 	TEST_REAL_EQUAL(force.getLength(), 0.0)
 }
 RESULT
-
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
