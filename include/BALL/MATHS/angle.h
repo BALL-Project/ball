@@ -1,4 +1,4 @@
-// $Id: angle.h,v 1.6 2000/01/07 21:50:46 oliver Exp $
+// $Id: angle.h,v 1.7 2000/02/16 17:05:46 oliver Exp $
 
 #ifndef BALL_MATHS_ANGLE_H
 #define BALL_MATHS_ANGLE_H
@@ -13,6 +13,27 @@
 
 namespace BALL 
 {
+	template <typename T>
+	class TAngle;
+
+	/**	
+	*/
+	template <typename T>
+	BALL_INLINE
+	TAngle<T> operator * (const T& val, const TAngle<T>& angle);
+
+	/**	
+	*/
+	template <typename T>
+	BALL_INLINE
+	TAngle<T> operator + (const T& val, const TAngle<T>& angle);
+
+	/**	
+	*/
+	template <typename T>
+	BALL_INLINE
+	TAngle<T> operator - (const T& val, const TAngle<T>& angle);
+
 
 	/**	Generic Angle Class.
 			Use this class to describe angles. The TAngle class permits the conversion
@@ -21,7 +42,7 @@ namespace BALL
 			{\bf Definition:} \URL{BALL/MATHS/angle.h}
 			\\
 	*/
-	template <class T>
+	template <typename T>
 	class TAngle
 	{
 		public:
@@ -31,12 +52,17 @@ namespace BALL
 		/**	@name	Enums
 		*/
 		//@{
-		///
+
+		/**
+		*/
 		enum Range
 		{
-			RANGE__UNLIMITED = 0, // no limitations
-			RANGE__UNSIGNED  = 1, // 0° <= angle <= 360°, 0 <= angle <= (Constants::PI * 2)
-			RANGE__SIGNED    = 2  // -180° <= angle <= 180°, -Constants::PI <= angle <= Constants::PI
+			// no limitations
+			RANGE__UNLIMITED = 0, 
+			// 0° <= angle <= 360°, 0 <= angle <= (Constants::PI * 2)
+			RANGE__UNSIGNED  = 1, 
+			// -180° <= angle <= 180°, -Constants::PI <= angle <= Constants::PI
+			RANGE__SIGNED    = 2 
 		};
 		//@}
 
@@ -91,10 +117,10 @@ namespace BALL
 		void set(const T& new_value, bool radian = true);
 
 		/**	Assign an Angle object from another.
-				@param	angle the angle obejct to be assigned from
+				@param	angle the angle object to be assigned from
 				@param	deep no effect
 		*/
-		void set(const TAngle& angle, bool /* deep */ = true);
+		void set(const TAngle& angle, bool deep = true);
 
 
 		/**	Assignment operator
@@ -110,25 +136,17 @@ namespace BALL
 
 		/**	
 		*/
-		void get(TAngle& angle, bool /* deep */ = true) const;
+		void get(TAngle& angle, bool deep = true) const;
 
 		/**	
 		*/
 		void get(T& val, bool radian = true) const;
-
-		/**	
-		*/
-		void setNull();
 
 		//@}
 
 		/**	@name	Accessors
 		*/
 		//@{
-
-		/**
-		*/
-		static TAngle getNull();
 
 		/**
 		*/
@@ -150,83 +168,62 @@ namespace BALL
 		*/
 		static T toDegree(const T& radian);
 
-		///
+		/**  */
 		static TAngle getTorsionAngle
 			(const T& ax, const T& ay, const T& az,
 			 const T& bx, const T& by, const T& bz,
 			 const T& cx, const T& cy, const T& cz, 
 			 const T& dx, const T& dy, const T& dz);
 
-		///
+		/**  */
 		void normalize(Range range);
 
-		///
+		/**  */
 		void negate();
 
-		///
+		/**  */
 		TAngle operator + () const;
 
-		///
+		/**  */
 		TAngle operator - () const;
 
-		///
+		/**  */
 		TAngle& operator += (const TAngle& angle);
 
-		///
+		/**  */
 		TAngle& operator += (const T& value);
 
-		///
+		/**  */
 		TAngle operator +	(const TAngle& angle);
 
-		///
+		/**  */
 		TAngle operator + (const T& val);
 
-		///
-		friend TAngle operator + (const T& val, const TAngle& angle) 
-		{
-			return TAngle(val + angle.value);
-		}
-
-		///
+		/**  */
 		TAngle& operator -= (const TAngle& angle);
 
-		///
+		/**  */
 		TAngle &operator -= (const T& val);
 
-		///
+		/**  */
 		TAngle operator - (const TAngle& angle);
 
-		///
+		/**  */
 		TAngle operator - (const T& val);
 
-		///
-		friend TAngle operator - (const T& val, const TAngle& angle) 
-		{
-			return TAngle(val - angle.value);
-		}
-
-		///
+		/**  */
 		TAngle& operator *= (const TAngle& angle);
 
-		///
+		/**  */
 		TAngle& operator *=	(const T& val);
 
-		///
+		/**  */
 		TAngle operator * (const T& value);
 
-		///
-		friend TAngle operator * (const T& val, const TAngle& angle) 
-		{
-			return TAngle(val * angle.value);
-		}
-
-		///
 		TAngle& operator /= (const TAngle& angle);
 
-		///
 		TAngle& operator /=	(const T& val);
 
-		///
 		TAngle operator /	(const T& val);
 		//@}
 
@@ -234,34 +231,24 @@ namespace BALL
 		*/
 		//@{
 
-		///
 		bool operator == (const TAngle& angle) const;
 
-		///
 		bool operator == (const T& val) const;
 
-		///
 		bool operator != (const TAngle& angle) const;
 
-		///
 		bool operator !=	(const T& val) const;
 
-		///
 		bool operator <	(const TAngle& angle) const;
 
-		///
 		bool operator <	(const T& val) const;
 
-		///
 		bool operator <= (const TAngle& angle) const;
 
-		///
 		bool operator >=	(const TAngle& angle) const;
 
-		///
 		bool operator > (const TAngle& angle) const;
 
-		///
 		bool isEquivalent(TAngle angle) const;
 		//@}
 
@@ -270,10 +257,12 @@ namespace BALL
 		*/
 		//@{
 
-		///
+		/**
+		*/
 		bool isValid () const;
 
-		///
+		/**
+		*/
 		void dump(std::ostream& s = std::cout, Size depth = 0) const;
 		//@}
 
@@ -281,7 +270,8 @@ namespace BALL
 		*/
 		//@{
 
-		///
+		/**	The value
+		*/
 		T value;
 		//@}
 	};
@@ -356,18 +346,6 @@ namespace BALL
 		val = (radian == true)
 					 ? value 
 					 : BALL_ANGLE_RADIAN_TO_DEGREE(value);
-	}
-
-	template <typename T>
-	void TAngle<T>::setNull()
-	{
-		value = 0;
-	}
-
-	template <typename T>
-	TAngle<T> TAngle<T>::getNull()
-	{
-		return TAngle(0);
 	}
 
 	template <typename T>
@@ -691,6 +669,28 @@ namespace BALL
 
 		BALL_DUMP_STREAM_SUFFIX(s);
 	}
+
+	template <typename T>
+	BALL_INLINE
+	TAngle<T> operator * (const T& val, const TAngle<T>& angle)
+	{
+		return TAngle<T>(val * angle.value);
+	}
+
+	template <typename T>
+	BALL_INLINE
+	TAngle<T> operator + (const T& val, const TAngle<T>& angle) 
+	{
+		return TAngle<T>(val + angle.value);
+	}
+
+	template <typename T>
+	BALL_INLINE
+	TAngle<T> operator - (const T& val, const TAngle<T>& angle) 
+	{
+		return TAngle<T>(val - angle.value);
+	}
+
 
 	/**	The Default Angle Type.
 			If double precision is not needed, {\tt TAngle<float>} should
