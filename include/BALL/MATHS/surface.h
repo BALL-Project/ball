@@ -1,4 +1,4 @@
-// $Id: surface.h,v 1.12 2002/01/05 02:53:40 oliver Exp $
+// $Id: surface.h,v 1.13 2002/01/05 03:57:45 oliver Exp $
 
 #ifndef BALL_MATHS_SURFACE_H
 #define BALL_MATHS_SURFACE_H
@@ -44,6 +44,7 @@ namespace BALL
 			Index	v3;
 
 			bool operator == (const Triangle& triangle) const throw();
+			bool operator != (const Triangle& triangle) const throw();
 		};
 			
 		/// A vertex
@@ -316,7 +317,7 @@ namespace BALL
 		}
 		
 		Triangle t;
-		Size number_of_vertices = vertex.size();
+		Size number_of_vertices = (Size)vertex.size();
 		while (file && (line.countFields() == 5))
 		{
 			// read the vertex indices
@@ -370,7 +371,7 @@ namespace BALL
 	Size TSurface<T>::getNumberOfTriangles() const
 			throw()
 	{
-		return triangle.size();
+		return (Size)triangle.size();
 	}
 		
 	template <typename T>
@@ -378,7 +379,7 @@ namespace BALL
 	Size TSurface<T>::getNumberOfVertices() const
 			throw()
 	{
-		return vertex.size();
+		return (Size)vertex.size();
 	}
 
 	template <typename T>
@@ -386,7 +387,7 @@ namespace BALL
 	Size TSurface<T>::getNumberOfNormals() const
 			throw()
 	{
-		return normal.size();
+		return (Size)normal.size();
 	}
 
 	
@@ -518,6 +519,12 @@ namespace BALL
 	bool TSurface<T>::Triangle::operator == (const TSurface<T>::Triangle& triangle) const throw()
 	{
 		return (v1 == triangle.v1) && (v2 == triangle.v2) && (v3 == triangle.v3);
+	}
+
+	template <typename T>
+	bool TSurface<T>::Triangle::operator != (const TSurface<T>::Triangle& triangle) const throw()
+	{
+		return !(v1 == triangle.v1) && (v2 == triangle.v2) && (v3 == triangle.v3);
 	}
 
 
