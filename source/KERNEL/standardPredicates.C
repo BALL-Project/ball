@@ -1,4 +1,4 @@
-// $Id: standardPredicates.C,v 1.21 2000/10/29 11:26:56 oliver Exp $
+// $Id: standardPredicates.C,v 1.22 2001/05/24 13:57:23 anker Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -121,12 +121,7 @@ namespace BALL
 		throw()
 	{
  		const SecondaryStructure* sec_struct = atom.getAncestor(RTTI::getDefault<SecondaryStructure>());
-		if (sec_struct != 0)
-		{
-			return (sec_struct->getName() == argument_);
-		}
-
-		return false;
+		return ((sec_struct != 0) && (sec_struct->getName() == argument_));
 	}
 	
 	// solvent predicate
@@ -138,6 +133,15 @@ namespace BALL
 		return ((molecule != 0) && (molecule->hasProperty(Molecule::IS_SOLVENT)));
 	}
 	
+	// molecule predicate
+
+	bool MoleculePredicate::operator () (const Atom& atom) const
+		throw()
+	{
+		const Molecule* molecule = atom.getMolecule();
+		return ((molecule != 0) && (molecule->getName() == argument_));
+	}
+
 	// backbone predicate
 
 	bool BackBonePredicate::operator () (const Atom& atom) const
@@ -253,11 +257,13 @@ namespace BALL
 
 	}
 
+
 	bool DoubleBondsPredicate::operator () (const Atom& atom) const
 		throw()
 	{
 		return testPredicate_(atom, Bond::ORDER__DOUBLE);
 	}
+
 
 	bool DoubleBondsPredicate::testPredicate_(const Atom& atom, 
 			Bond::Order order) const
@@ -338,11 +344,13 @@ namespace BALL
 		}
 	}
 	
+
 	bool SingleBondsPredicate::operator () (const Atom& atom) const
 		throw()
 	{
 		return testPredicate_(atom, Bond::ORDER__SINGLE);
 	}
+
 	
 	bool TripleBondsPredicate::operator () (const Atom& atom) const
 		throw()
