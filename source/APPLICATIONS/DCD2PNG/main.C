@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.9 2004/07/20 11:50:11 amoll Exp $
+// $Id: main.C,v 1.10 2004/07/21 13:21:16 amoll Exp $
 //
 
 // order of includes is important: first qapplication, than BALL includes
@@ -122,6 +122,13 @@ int main(int argc, char **argv)
 			MolecularFileDialog* mfd = MolecularFileDialog::getInstance(0);
 			if (mfd == 0) return 0;
 			system = mfd->openFile(argument);
+			if (system == 0)
+			{
+				std::cerr << "Could not open file: " << argument << std::endl;
+				error = true;
+				break;
+			}
+
 			molecular_file_name = argument;
 			continue;
 		}
@@ -177,7 +184,7 @@ int main(int argc, char **argv)
 	Scene::getInstance(0)->resize(width, height);
 
 	String povray_options;
-	povray_options = "-V +FN +QR -UV -D +I- +W" + String(width) + " +H" + String(height) + " +O" + working_dir + "/";
+	povray_options = "-V +FN +QR +A0.3 -UV -D +I- +W" + String(width) + " +H" + String(height) + " +O" + working_dir + "/";
 	POVRenderer pov;
 	pov.setHumanReadable(false);
 
