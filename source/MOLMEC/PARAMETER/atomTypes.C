@@ -1,4 +1,4 @@
-// $Id: atomTypes.C,v 1.1 1999/08/26 08:02:45 oliver Exp $
+// $Id: atomTypes.C,v 1.2 1999/08/31 22:01:17 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/atomTypes.h>
@@ -76,7 +76,7 @@ namespace BALL
 		for (it = section_entries_.begin(); !(it == section_entries_.end()); ++it)
 		{
 			names_[index] = it->first;
-			type_map_[(*it).first] = index++;
+			type_map_[it->first] = (Atom::Type)(index++);
 		}
 		
 		return true;

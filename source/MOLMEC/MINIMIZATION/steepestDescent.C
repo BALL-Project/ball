@@ -1,4 +1,4 @@
-// $Id: steepestDescent.C,v 1.1 1999/08/26 08:02:45 oliver Exp $
+// $Id: steepestDescent.C,v 1.2 1999/08/31 22:01:17 oliver Exp $
 
 #include <BALL/MOLMEC/MINIMIZATION/steepestDescent.h>
 #include <BALL/COMMON/limits.h>
@@ -142,7 +142,7 @@ namespace BALL
 
 			// calculate the RMS gradient (termination condition)
 			// in units of kJ/(mol A)
-			gradient_norm = sqrt(gradient_norm / (3.0 * number_of_movable_atoms));
+			gradient_norm = sqrt(gradient_norm / (3.0 * (float)number_of_movable_atoms));
 			gradient_norm *= Constants::AVOGADRO / 1e13;
 
 			// if the gradient norm is zero, return (we are converged)
@@ -211,7 +211,7 @@ namespace BALL
 				} 
 				// calculate the RMS gradient (termination condition)
 				// in units of kJ/(mol A)
-				gradient_norm = sqrt(gradient_norm / (3.0 * number_of_movable_atoms));
+				gradient_norm = sqrt(gradient_norm / (3.0 * (float)number_of_movable_atoms));
 				gradient_norm *= Constants::AVOGADRO / 1.0e13;
 
 				// check for convergence

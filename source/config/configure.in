@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.5 1999/08/26 14:20:49 oliver Exp $
+dnl    $Id: configure.in,v 1.6 1999/08/31 22:01:19 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -966,6 +966,10 @@ SIZE_T_SIZE=`/tmp/$$.conftest.exe|cut -d: -f3`
 POINTER_SIZE=`/tmp/$$.conftest.exe|cut -d: -f4`
 rm /tmp/$$.conftest.c /tmp/$$.conftest.exe
 AC_MSG_RESULT("int=${INT_SIZE}bit long=${LONG_SIZE}bit size_t=${SIZE_T_SIZE}bit pointer=${POINTER_SIZE}bit")
+AC_DEFINE_UNQUOTED(BALL_INT_SIZE,"${INT_SIZE}")
+AC_DEFINE_UNQUOTED(BALL_LONG_SIZE,"${LONG_SIZE}")
+AC_DEFINE_UNQUOTED(BALL_SIZE_T_SIZE,"${SIZE_T_SIZE}")
+AC_DEFINE_UNQUOTED(BALL_POINTER_SIZE,"${POINTER_SIZE}")
 
 if test "${POINTER_SIZE}" = "${INT_SIZE}" ; then
 	BALL_POINTERSIZE_INT=int
@@ -1664,7 +1668,7 @@ dnl
 
 AC_MSG_RESULT()
 AC_MSG_RESULT()
-AC_MSG_RESULT(Your Makfiles have been created. If everything went OK: just type)
+AC_MSG_RESULT(Your Makefiles have been created. If everything went OK: just type)
 AC_MSG_RESULT()
 AC_MSG_RESULT(		make)
 AC_MSG_RESULT()

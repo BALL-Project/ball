@@ -1,4 +1,4 @@
-// $Id: file.C,v 1.1 1999/08/26 08:02:36 oliver Exp $
+// $Id: file.C,v 1.2 1999/08/31 22:01:19 oliver Exp $
 
 #include <BALL/SYSTEM/file.h>
 
@@ -135,7 +135,7 @@ namespace BALL {
 		
 		while(source)
 		{
-			source.read(buffer, buffer_size);
+			source.read(buffer, (int)buffer_size);
 
 			if (!destination.write(buffer, source.gcount()))
 			{

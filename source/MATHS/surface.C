@@ -1,4 +1,4 @@
-// $Id: surface.C,v 1.1 1999/08/26 08:02:35 oliver Exp $
+// $Id: surface.C,v 1.2 1999/08/31 22:01:17 oliver Exp $
 
 #include <BALL/MATHS/surface.h>
 
@@ -125,9 +125,9 @@ namespace BALL
 			t.v3 = (Index)s[2].toInt() - 1;
 
 			// if all three vertex indices are valid, insert the triangle
-			if ((t.v1 < number_of_vertices) && (t.v1 >= 0)
-					&& (t.v1 < number_of_vertices) && (t.v1 >= 0)
-					&& (t.v1 < number_of_vertices) && (t.v1 >= 0))
+			if ((t.v1 < (Index)number_of_vertices) && (t.v1 >= 0)
+					&& (t.v1 < (Index)number_of_vertices) && (t.v1 >= 0)
+					&& (t.v1 < (Index)number_of_vertices) && (t.v1 >= 0))
 			{
 				triangles_.push_back(t);
 			}

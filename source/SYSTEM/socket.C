@@ -1,4 +1,4 @@
-// $Id: socket.C,v 1.1 1999/08/26 08:02:36 oliver Exp $
+// $Id: socket.C,v 1.2 1999/08/31 22:01:19 oliver Exp $
 
 // ORIGINAL COPYRIGHT DISCLAIMER
 // /////////////////////////////
@@ -146,13 +146,13 @@ namespace BALL {
 	// return EOF on eof, 0 on timeout, and # of chars read on success
 	_G_ssize_t SocketBuf::sys_read (char* buf, _G_ssize_t len)
 	{
-		return read (buf, len);
+		return read (buf, (int)len);
 	}
 
 	// return written_length; < len indicates error
 	_G_ssize_t SocketBuf::sys_write (const void* buf, long len)
 	{
-		return write (buf, (int) len);
+		return write (buf, (int)len);
 	}
 
 	// return 0 when there is nothing to flush or when the flush is a success
@@ -166,8 +166,8 @@ namespace BALL {
 
 		if (!(xflags () & _S_NO_WRITES)) 
 		{
-			int wlen = pptr () - pbase();
-			int wval = sys_write (pbase(), wlen);
+			int wlen = (int)(pptr () - pbase());
+			int wval = (int)sys_write(pbase(), wlen);
 			int status = (wval == wlen) ? 0: EOF;
 
 			if (unbuffered()) 
@@ -223,7 +223,7 @@ namespace BALL {
 		}
 		
 		int bufsz = unbuffered () ? 1: BUFSIZ;
-		int rval = sys_read(base (), bufsz);
+		int rval = (int)sys_read(base (), bufsz);
 
 		if (rval == EOF) 
 		{
@@ -363,7 +363,7 @@ namespace BALL {
 		}
 		
 		int	rval;
-		if ((rval = ::read (rep->sock, (char*) buf, len)) == -1)
+		if ((rval = (int)::read(rep->sock, (char*) buf, len)) == -1)
 		{
 			error("SocketBuf::read");
 		}
@@ -417,7 +417,7 @@ namespace BALL {
 		while(len>0) 
 		{
 			int	wval;
-			if ((wval = ::write (rep->sock, (char*) buf, len)) == -1) 
+			if ((wval = (int)::write (rep->sock, (char*) buf, len)) == -1) 
 			{
 				error ("SocketBuf::write");
 				return wval;
@@ -815,7 +815,7 @@ namespace BALL {
 	SockInetAddr::SockInetAddr(unsigned long addr, int port_no)
 	{
 		sin_family = SockInetBuf::af_inet;
-		sin_addr.s_addr = htonl(addr);
+		sin_addr.s_addr = (unsigned int)htonl(addr);
 		sin_port = htons(port_no);
 	}
 
@@ -823,7 +823,7 @@ namespace BALL {
 	SockInetAddr::SockInetAddr(unsigned long addr, const char* sn, const char* pn)
 	{
 		sin_family = SockInetBuf::af_inet;
-		sin_addr.s_addr = htonl (addr); // Added by cgay@cs.uoregon.edu May 29, 1993
+		sin_addr.s_addr = (unsigned int)htonl(addr); // Added by cgay@cs.uoregon.edu May 29, 1993
 		setport(sn, pn);
 	}
 

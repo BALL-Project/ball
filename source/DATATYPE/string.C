@@ -1,4 +1,4 @@
-// $Id: string.C,v 1.1 1999/08/26 08:02:34 oliver Exp $
+// $Id: string.C,v 1.2 1999/08/31 22:01:16 oliver Exp $
 
 #include <BALL/DATATYPE/string.h>
 
@@ -26,8 +26,8 @@ namespace BALL
 
 	Substring::Substring()
 		:	bound_(0),
-			from_(string::npos),
-			to_(string::npos)
+			from_((Index)string::npos),
+			to_((Index)string::npos)
 	{
 	}
 
@@ -44,7 +44,7 @@ namespace BALL
 
 		bound_	= (String *)& s;
 		from_		= from;
-		to_			= from + len - 1;
+		to_			= from + (Index)len - 1;
 	}
 
 	Substring::~Substring()
@@ -401,9 +401,11 @@ namespace BALL
 		// allow also negative indices (last field == -1)
 		if (index < 0)
 		{
-			index = countFields(delimiters) + index;
+			index = (Index)countFields(delimiters) + index;
 			if (index < 0)
+			{
 				throw Exception::IndexUnderflow(__FILE__, __LINE__, index);
+			}
 		}
 
 		const char *end = &c_str()[size()];
@@ -438,7 +440,7 @@ namespace BALL
 				{
 					if (current_char >= end)
 					{
-						*from_and_next_field = npos;
+						*from_and_next_field = (Index)npos;
 					} else {
 						*from_and_next_field = (Index)(current_char - c_str());
 					}
@@ -461,7 +463,7 @@ namespace BALL
 
 		if (from_and_next_field != 0)
 		{
-			*from_and_next_field = npos;
+			*from_and_next_field = (Index)npos;
 		}
 
 		return String();
@@ -491,12 +493,16 @@ namespace BALL
 	String& String::trimLeft(const char* trimmed_chars)
 	{
 		if (trimmed_chars == 0)
+		{
 			return *this;
+		}
 
-		Index index = find_first_not_of(trimmed_chars);
+		Index index = (Index)find_first_not_of(trimmed_chars);
 		
 		if (index > 0)
+		{
 			erase(0, index);
+		}
 
 		return *this;
 	}
@@ -640,7 +646,7 @@ namespace BALL
 
 		if ((result == 0) && (len != newlen))
 		{
-			result = len - s.size();
+			result = (int)len - (int)s.size();
 		}
 			
 		return result;
@@ -680,7 +686,7 @@ namespace BALL
 
 		if (result == 0)
 		{
-			result = len - s.size();
+			result = (int)len - (int)s.size();
 		}
 		
 		return result;
@@ -723,7 +729,7 @@ namespace BALL
 
 		if ((result == 0) && (len != newlen))
 		{
-			result = size() - from - strlen(char_ptr);
+			result = (int)size() - (int)from - (int)strlen(char_ptr);
 		}
 
 		return result;
@@ -771,7 +777,7 @@ namespace BALL
 
 		if ((result == 0) && (len == newlen))
 		{
-			return size() - from - strlen(char_ptr);
+			return (int)size() - (int)from - (int)strlen(char_ptr);
 		}
 
 		return result;
@@ -885,10 +891,14 @@ namespace BALL
 
 		Index found = 0;
 		if (to_replace != "")
-			found = find(to_replace);
+		{
+			found = (Index)find(to_replace);
+		}
 
 		if (found != (Index)npos)
+		{
 			replace(found, replaced_size, replacing);
+		}
 
 		return found;
 	}
@@ -899,15 +909,20 @@ namespace BALL
     // indices may be given as negative arguments: start from the end
     // -1 therefore means the last bit.
 		if (index < 0)
-			index = size() + index;
+		{
+			index = (Index)size() + index;
+		}
 
     // if the value is out of bounds - throw an exception
     // and leave it...
     if (index < 0)
+		{
       throw Exception::IndexUnderflow(__FILE__, __LINE__, index, size());
+		}
     if ((Size)index > size())
+		{
       throw Exception::IndexOverflow(__FILE__, __LINE__, index, size());
-
+		}
 	}
 
 	void String::validateRange_(Index& from, Size& len) const
@@ -916,7 +931,7 @@ namespace BALL
     // -1 therefore means the last character of the string.
     if (from < 0)
 		{
-      from = size() + from;
+      from = (Index)size() + from;
 		}
 
     // if the values are out of bounds - throw an exception
@@ -937,7 +952,7 @@ namespace BALL
 		
 		if (len > (size() - from))
 		{
-			throw Exception::IndexOverflow(__FILE__, __LINE__, len, size());
+			throw Exception::IndexOverflow(__FILE__, __LINE__, (Index)len, size());
 		}
  	}
 
@@ -949,7 +964,7 @@ namespace BALL
     // -1 therefore means the to bit.
     if (from < 0)
 		{
-      from = size + from;
+      from = (Index)size + from;
 		}
 
     // if the values are out of bounds - throw an exception
@@ -970,7 +985,7 @@ namespace BALL
 		
 		if (len > (size - from))
 		{
-			throw Exception::IndexOverflow(__FILE__, __LINE__, len, size);
+			throw Exception::IndexOverflow(__FILE__, __LINE__, (Index)len, size);
 		}
  	}
 
@@ -984,7 +999,9 @@ namespace BALL
     // indices may be given as negative arguments: start from the end
     // -1 therefore means the to bit.
     if (from < 0)
-      from = total_len + from;
+		{
+      from = (Index)total_len + from;
+		}
 
     // if the values are out of bounds - throw an exception
     // and leave it...
@@ -994,10 +1011,14 @@ namespace BALL
       throw Exception::IndexOverflow(__FILE__, __LINE__, from, len);
 
 		if (len == npos)
+		{
 			len = total_len - from;
+		}
 		
 		if (len > (total_len - from))
-			throw Exception::IndexOverflow(__FILE__, __LINE__, len, total_len);
+		{
+			throw Exception::IndexOverflow(__FILE__, __LINE__, (Index)len, total_len);
+		}
  	}
 
 

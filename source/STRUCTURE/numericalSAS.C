@@ -1,4 +1,4 @@
-// $Id: numericalSAS.C,v 1.1 1999/08/26 08:02:38 oliver Exp $
+// $Id: numericalSAS.C,v 1.2 1999/08/31 22:01:18 oliver Exp $
 
 #include <BALL/STRUCTURE/numericalSAS.h>
 #include <BALL/KERNEL/atom.h>
@@ -54,7 +54,7 @@ namespace BALL
 		double* surface_dots = 0;
 
 		// call nsc
-		nsc_(coordinates, radii, atoms.size(),
+		nsc_(coordinates, radii, (int)atoms.size(),
 				 number_of_dots, FLAG_ATOM_AREA, 
 				 &area, &atom_areas, &volume, 
 				 &surface_dots, &number_of_surface_dots);

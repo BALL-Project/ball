@@ -1,4 +1,4 @@
-// $Id: quadraticBondStretch.C,v 1.1 1999/08/26 08:02:45 oliver Exp $
+// $Id: quadraticBondStretch.C,v 1.2 1999/08/31 22:01:18 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/quadraticBondStretch.h>
@@ -116,11 +116,11 @@ namespace BALL {
 				{
 					type_I = atom_types.getType(type_name_I);
 					type_J = atom_types.getType(type_name_J);
-					index = type_I * number_of_atom_types_ + type_J;
+					index = (Index)(type_I * number_of_atom_types_ + type_J);
 					is_defined_[index] = true;
 					k_ [index] = getValue(key, "k").toFloat() * factor_k;
 					r0_ [index] = getValue(key, "r0").toFloat() * factor_r0;
-					index = type_I + number_of_atom_types_ * type_J;
+					index = (Index)(type_I + number_of_atom_types_ * type_J);
 					is_defined_[index] = true;
 					k_ [index] = getValue(key, "k").toFloat() * factor_k;
 					r0_ [index] = getValue(key, "r0").toFloat() * factor_r0;

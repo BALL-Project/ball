@@ -1,5 +1,5 @@
-// $Id: analyticalSES.C,v 1.1 1999/08/26 08:02:38 oliver Exp $
-// $Id: analyticalSES.C,v 1.1 1999/08/26 08:02:38 oliver Exp $
+// $Id: analyticalSES.C,v 1.2 1999/08/31 22:01:18 oliver Exp $
+// $Id: analyticalSES.C,v 1.2 1999/08/31 22:01:18 oliver Exp $
 
 #include <BALL/STRUCTURE/analyticalSES.h>
 #include <BALL/KERNEL/atom.h>
@@ -46,7 +46,7 @@ namespace BALL
 
 		double area;
 		double volume;
-		int number_of_atoms = atoms.size();
+		int number_of_atoms = (int)atoms.size();
 		double exclude_radius = 0.0;
 
 

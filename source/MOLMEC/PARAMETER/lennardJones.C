@@ -1,4 +1,4 @@
-// $Id: lennardJones.C,v 1.1 1999/08/26 08:02:45 oliver Exp $
+// $Id: lennardJones.C,v 1.2 1999/08/31 22:01:18 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/lennardJones.h>
@@ -166,8 +166,8 @@ namespace BALL {
 			for (Size j = i; j < number_of_atom_types_; j++)
 			{
 				// calculate the two indices for the Aij/Bij fields
-				Index index = i + number_of_atom_types_ * j;
-				Index sym_index = j + number_of_atom_types_ * i;
+				Index index = (Index)(i + number_of_atom_types_ * j);
+				Index sym_index = (Index)(j + number_of_atom_types_ * i);
 
 				if ((is_defined_[j] == true) && (is_defined_[i]))
 				{

@@ -1,4 +1,4 @@
-// $Id: geometricProperties.C,v 1.1 1999/08/26 08:02:38 oliver Exp $
+// $Id: geometricProperties.C,v 1.2 1999/08/31 22:01:18 oliver Exp $
 
 #include <BALL/STRUCTURE/geometricProperties.h>
 
@@ -233,6 +233,64 @@ namespace BALL {
 	const Composite* FragmentDistanceCollector::getComposite(void) const
 	{
 		return reference_composite_;
+	}
+
+  // Calculate the torsion angle between four atoms
+  Angle calculateTorsionAngle(const Atom& a1, const Atom& a2, const Atom& a3, const Atom& a4)
+	{
+		Vector3 a12(a2.getPosition() - a1.getPosition());
+		Vector3 a23(a3.getPosition() - a2.getPosition());
+		Vector3 a34(a4.getPosition() - a3.getPosition());
+
+		Vector3 n12(a12 % a23);
+		Vector3 n34(a23 % a34);
+		n12.normalize();
+		n34.normalize();
+
+		Vector3 cross_n12_n34(n12 % n34);
+		float direction = cross_n12_n34 * a23;
+		
+
+		float scalar_product = n12 * n34;
+		if (scalar_product > 1.0)
+		{
+			scalar_product = 1.0;
+		}
+		if (scalar_product < -1.0)
+		{
+			scalar_product = -1.0;
+		}
+		Angle a(acos(scalar_product));
+
+		if (direction < 0.0)
+		{
+			a = -1.0 * (float)a;
+		}
+
+		return a;
+	}
+
+  // Calculate the bond angle between three atoms
+  Angle calculateBondAngle(const Atom& a1, const Atom& a2, const Atom& a3)
+	{
+		Vector3 a12(a2.getPosition() - a1.getPosition());
+		Vector3 a23(a3.getPosition() - a2.getPosition());
+
+		a12.normalize();
+		a23.normalize();
+
+		float scalar_product = a12 * a23;
+		if (scalar_product > 1.0)
+		{
+			scalar_product = 1.0;
+		}
+		if (scalar_product < -1.0)
+		{
+			scalar_product = -1.0;
+		}
+		Angle a(acos(scalar_product));
+
+		return a;
 	}
 
 } // namespace BALL

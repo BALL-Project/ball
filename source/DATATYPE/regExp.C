@@ -1,4 +1,4 @@
-// $Id: regExp.C,v 1.1 1999/08/26 08:02:34 oliver Exp $ 
+// $Id: regExp.C,v 1.2 1999/08/31 22:01:16 oliver Exp $ 
 
 #include <BALL/DATATYPE/regExp.h>
 
@@ -94,7 +94,7 @@ namespace BALL
 			 BALL_REGULAR_EXPRESSION_ERROR_HANDLER(RegularExpression::ERROR__INDEX_UNDERFLOW));
 
 		BALL_PRECONDITION
-			(from < (Index)text.size(), 
+			(from <= (Index)text.size(), 
 			 BALL_REGULAR_EXPRESSION_ERROR_HANDLER(RegularExpression::ERROR__INDEX_OVERFLOW));
 
 		return (bool)(regexec(&regex_, text.c_str() + from, (size_t)0, 0, execute_flags) == 0);

@@ -1,4 +1,4 @@
-// $Id: structureMapper.C,v 1.1 1999/08/26 08:02:38 oliver Exp $
+// $Id: structureMapper.C,v 1.2 1999/08/31 22:01:19 oliver Exp $
 
 #include <BALL/STRUCTURE/structureMapper.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
@@ -171,7 +171,7 @@ namespace BALL {
 		bijection_ = fragment_bijection;
 
 		// calculate all triangles from the bijection
-		Index		i, j, k;
+		Size					i, j, k;
 		float					square_distance;
 		float					min_rmsd = FLT_MAX;
 		float					rmsd;
@@ -655,9 +655,7 @@ namespace BALL {
 				float lower_bound)
 	{
 		// determine number of fragments in the pattern
-		Size                      no_of_frag;
-
-		no_of_frag = pattern.size();
+		Size no_of_frag = pattern.size();
 
 		// calculate the distances of the centers of the pattern fragments 
 		// and store them in the array dist_pattern
@@ -665,21 +663,23 @@ namespace BALL {
 		vector<float>         pattern_distances(no_of_frag*no_of_frag);
 		vector<Vector3>  pattern_centers(no_of_frag);
 
-		int i,j;
+		Size i, j;
 		GeometricCenterProcessor geo_center;
 
-		for (i = 0; i < no_of_frag ; i++ ) {
+		for (i = 0; i < no_of_frag ; i++) 
+		{
 			 pattern[i]->apply(geo_center);
 			 pattern_centers[i] = geo_center.getCenter();  
 		}
 
 	 float                     distance;
 
-		for (i = 0; i < no_of_frag ; i++ ) 
-		 for (j = i; j < no_of_frag ; j++ ){
-			 distance = pattern_centers[i].getDistance(pattern_centers[j]);
-			 pattern_distances[i*no_of_frag + j] = distance;
-			 pattern_distances[j*no_of_frag + i] = distance;
+		for (i = 0; i < no_of_frag ; i++) 
+			for (j = i; j < no_of_frag ; j++)
+			{
+				distance = pattern_centers[i].getDistance(pattern_centers[j]);
+				pattern_distances[i * no_of_frag + j] = distance;
+				pattern_distances[j * no_of_frag + i] = distance;
 		}
 
 		pattern_centers.clear();
@@ -716,7 +716,7 @@ namespace BALL {
 		vector<float>    comp_frag_dist(no_of_comp_frag*no_of_comp_frag);
 	 
 		for (i = 0; i < no_of_comp_frag; i++) 
-		 for ( j = i; j < no_of_comp_frag ; j++) {
+		 for (j = i; j < no_of_comp_frag ; j++) {
 			 distance = composite_centers[i].getDistance(composite_centers[j]);
 			 comp_frag_dist[i*no_of_comp_frag + j] = distance;
 			 comp_frag_dist[j*no_of_comp_frag + i] = distance;
@@ -726,21 +726,27 @@ namespace BALL {
 
 		// calculate an array of arrays that contains the indices of potential matching fragments
 
-		vector<vector<int> >											indices_CF(no_of_frag);
+		vector<vector<Size> >											indices_CF(no_of_frag);
 		vector<vector<Fragment*> >*	result;
 		bool																												ready = false;
 		int																													counter;
 		
 		result = new vector<vector<Fragment*> >;
 	 
-		for ( i = 0; i < no_of_frag  && ready == false ; i++) {
-			for (j = 0, counter = 0; j < no_of_comp_frag ; ++j) {
-				 if ( composite_fragments[j]->getName() == pattern[i]->getName()) {
-						 counter++;
-						 indices_CF[i].push_back(j);
-				 }
+		for (i = 0; i < no_of_frag  && ready == false ; i++) 
+		{
+			for (j = 0, counter = 0; j < no_of_comp_frag ; ++j) 
+			{
+				if (composite_fragments[j]->getName() == pattern[i]->getName()) 
+				{
+					counter++;
+					indices_CF[i].push_back(j);
+				}
 			}
-			if (counter == 0) ready = true;
+			if (counter == 0) 
+			{	
+				ready = true;
+			}
 		} 
 
 		// search the pattern using the array of indices
@@ -749,7 +755,7 @@ namespace BALL {
 		vector<int>									indices_of_pot_pattern(no_of_frag);
 		Matrix4x4		T;
 		bool        distances_fit;
-		int         k;
+		Size				k;
 		stack<int>  index_stack;
 
 		i = 0;
@@ -757,54 +763,63 @@ namespace BALL {
 
 	 
 
-		while (!ready) {
-			 indices_of_pot_pattern[i] = indices_CF[i][j];
-			 distances_fit = true;
+		while (!ready) 
+		{
+			indices_of_pot_pattern[i] = indices_CF[i][j];
+			distances_fit = true;
 
-			 for ( k = 0; k < i && distances_fit == true; k++ ) {
-					distance = pattern_distances[i*no_of_frag + k] - 
+			for (k = 0; k < i && distances_fit == true; k++ ) 
+			{
+				distance = pattern_distances[i*no_of_frag + k] - 
 								comp_frag_dist[indices_of_pot_pattern[i]*no_of_comp_frag + indices_of_pot_pattern[k]];
-					if (distance < -max_center_tolerance || distance > max_center_tolerance)
-								distances_fit = false; 
-			 } 
+				if (distance < -max_center_tolerance || distance > max_center_tolerance)
+				{
+					distances_fit = false; 
+				}
+			}
 
-			 if (distances_fit == true) {
-					index_stack.push(j);
-					i++;
-					if ( i == no_of_frag) {
-						 for (k = 0; k < no_of_frag ; k++)
-								potential_pattern.push_back(composite_fragments[indices_of_pot_pattern[k]]);
+			if (distances_fit == true) 
+			{
+				index_stack.push(j);
+				i++;
+				if (i == no_of_frag) 
+				{
+					for (k = 0; k < no_of_frag ; k++)
+					{
+						potential_pattern.push_back(composite_fragments[indices_of_pot_pattern[k]]);
 						
-						 mapFragments(potential_pattern,pattern,&T,upper_bound,lower_bound);
-						 if (rmsd_ <= max_rmsd) {
-								 result->push_back(potential_pattern);
-								 potential_pattern.clear();
-						 }
+						mapFragments(potential_pattern,pattern,&T,upper_bound,lower_bound);
+						if (rmsd_ <= max_rmsd) 
+						{
+							result->push_back(potential_pattern);
+							potential_pattern.clear();
+						} else {
+							j = 0;
+						}
 					}
-					else {
-						 j = 0;
-					}
-			 }
-			 else {
+				} else {
 					j++;
-					if ( j == indices_CF[i].size()) {
+					if (j == indices_CF[i].size()) 
+					{
 						i--;
 						// BAUSTELLE: change top + pop to pop
-						j == index_stack.top() + 1;
+						j = (Size)index_stack.top() + 1;
 						index_stack.pop();
 					}
-			 }
+				}
 
-			 if ((i == 0) && (j == indices_CF[0].size())) 
+				if ((i == 0) && (j == indices_CF[0].size())) 
+				{
 					ready = true;
+				}
+			}
 		}
 
 		return *result;
 	}
 
 	Matrix4x4 StructureMapper::mapProteins_
-			 ( Protein &P1,
-				 Protein &P2,
+			 (Protein& P1, Protein& P2,
          map<String,int>& type_map, 
 				 int&         no_matched_ca,
 				 float&				rmsd,
@@ -976,11 +991,13 @@ namespace BALL {
 														current_rmsd = 0;
 														squared_atom_dist = 0;
 
-														for (int i = 0; i< no_ca_P1; i++) {
+														for (Size i = 0; i < no_ca_P1; i++) 
+														{
 															v = T * ca_atoms_P1[i];
 															ibox = fine_grid_P2.getBox(v);
 														
-															if (ibox != 0) {
+															if (ibox != 0) 
+															{
 																matched = false;
 
 																for (ibox_it = ibox->beginBox(); +ibox_it && !matched; ++ibox_it) 

@@ -1,4 +1,4 @@
-// $Id: composite.C,v 1.1 1999/08/26 08:02:35 oliver Exp $
+// $Id: composite.C,v 1.2 1999/08/31 22:01:16 oliver Exp $
 
 #include <BALL/CONCEPT/composite.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -159,7 +159,7 @@ namespace BALL
 		for (composite_ptr =& composite; composite_ptr != 0;composite_ptr = composite_ptr->parent_)
 			composites_b[index_b++] = composite_ptr;
 
-		for (composite_ptr = 0, index_a = size_a - 1, index_b = size_b - 1;
+		for (composite_ptr = 0, index_a = (Index)(size_a - 1), index_b = (Index)(size_b - 1);
 				 index_a >= 0 && index_b >= 0; --index_a, --index_b)
 		{
 			if (composites_a[index_a] == composites_b[index_b])

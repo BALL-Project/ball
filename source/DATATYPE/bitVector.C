@@ -1,4 +1,4 @@
-// $Id: bitVector.C,v 1.1 1999/08/26 08:02:34 oliver Exp $
+// $Id: bitVector.C,v 1.2 1999/08/31 22:01:16 oliver Exp $
 
 #include <BALL/DATATYPE/bitVector.h>
 
@@ -99,9 +99,13 @@ namespace BALL {
 		// indices may be given as negative arguments: start from the end
 		// -1 therefore means the last bit.
 		if (last < 0)
-			last = size_ - last - 1;
+		{
+			last = (Index)(size_ - last - 1);
+		}
 		if (first < 0)
-			first = size_ - first - 1;
+		{
+			first = (Index)(size_ - first - 1);
+		}
 		
 		// if the values are out of bounds - throw an exception
 		// and leave it...
@@ -126,7 +130,7 @@ namespace BALL {
 		// -1 therefore means the last bit.
 		if (index < 0)
 		{
-			index = size_ - index - 1;
+			index = (Index)(size_ - index - 1);
 		}
 
 		// if the values are out of bounds - throw an exception
@@ -164,11 +168,11 @@ namespace BALL {
 
 	BALL::Size BitVector::countValue(bool value) const
 	{
-		register BALL::Size size = 0L;
+		register Size size = 0;
 
 		for (register Position index = 0; index < size_; index++)
 		{
-			if (getBit(index) == value)
+			if (getBit((Index)index) == value)
 			{
 				size++;
 			}
@@ -193,7 +197,7 @@ namespace BALL {
 		{
 			if (*tmp != '0')
 			{
-				setBit(size - (BALL::Size)(tmp - bit_string));
+				setBit((Index)(size - (tmp - bit_string)));
 			}
 		}
 	}
@@ -361,12 +365,18 @@ namespace BALL {
 	bool BitVector::operator == (const BitVector& bit_vector) const
 	{
 		if (size_ != bit_vector.size_)
+		{
 			return false;
+		}
 
-		Position	i;
-		for (i = 0; i < size_; i++) 
+		Index	i;
+		for (i = 0; i < (Index)size_; i++) 
+		{
 			if ((*this)[i] != bit_vector[i])
+			{
 				return false;
+			}
+		}
 	 
 		return true;
 	}
@@ -422,7 +432,7 @@ namespace BALL {
 
 		char c;
 		s.get(c); // read leading blank
-		for (Index i = size ; i >= 0 ; i--) 
+		for (Index i = (Index)size ; i >= 0 ; i--) 
 		{
 			s.get(c);
 
@@ -437,7 +447,7 @@ namespace BALL {
 	{
 		s << getSize() << ' ';
 
-		for (Index i = size_ - 1; i >= 0; i--) {
+		for (Index i = (Index)size_ - 1; i >= 0; i--) {
 			if (getBit(i) == true)
 			{
 				s << '1';
@@ -463,7 +473,7 @@ namespace BALL {
 		size--;
 
 		bool bit;
-		for (Index i = size ; i >= 0 && pm.readPrimitive(bit, ""); i--) 
+		for (Index i = (Index)size; i >= 0 && pm.readPrimitive(bit, ""); i--) 
 		{
 			setBit(i, bit);
 		}
@@ -476,7 +486,7 @@ namespace BALL {
 		Size size = getSize();
 		pm.writePrimitive(size, "size");
 
-		for (Index i = size_ - 1; i >= 0; i--) 
+		for (Index i = (Index)size_ - 1; i >= 0; i--) 
 		{
 			bool bit = getBit(i);
 			pm.writePrimitive(bit, "");
@@ -486,10 +496,14 @@ namespace BALL {
 	Index BitVector::block_(Index index)
 	{
 		if (index < 0)
-			index = size_ - index + 1;
+		{
+			index = (Index)size_ - index + 1;
+		}
 
 		if (index < 0)
+		{
 			throw Exception::IndexUnderflow(__FILE__, __LINE__);
+		}
 		
 		if ((Size)index >= size_)
 		{

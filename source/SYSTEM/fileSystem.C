@@ -1,4 +1,4 @@
-// $Id: fileSystem.C,v 1.1 1999/08/26 08:02:36 oliver Exp $
+// $Id: fileSystem.C,v 1.2 1999/08/31 22:01:19 oliver Exp $
 
 #include <BALL/SYSTEM/fileSystem.h>
 
@@ -74,7 +74,7 @@ namespace BALL {
 			return path;                
 		}
 		
-		Index index = path.find_first_not_of(FileSystem::PATH_SEPARATOR, 1);
+		Index index = (Index)path.find_first_not_of(FileSystem::PATH_SEPARATOR, 1);
 		
 		if (index == 2)
 		{
@@ -94,7 +94,7 @@ namespace BALL {
 		else if (index == INVALID_INDEX)
 		{
 
-			index = path.size() - 1;
+			index = (Index)path.size() - 1;
 		}
 
 		char c = path[index];

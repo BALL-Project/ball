@@ -1,4 +1,4 @@
-// $Id: FFParameterSection.C,v 1.1 1999/08/26 08:02:45 oliver Exp $
+// $Id: FFParameterSection.C,v 1.2 1999/08/31 22:01:17 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/FFParameterSection.h>
@@ -113,7 +113,7 @@ namespace BALL {
 	
 		// f contains the field resulting from a split format line
 		String	f[FFParameterSection::MAX_FIELDS];
-		int number_of_fields = format_line_.split(f, FFParameterSection::MAX_FIELDS, String::CHARACTER_CLASS__WHITESPACE);
+		Size number_of_fields = format_line_.split(f, FFParameterSection::MAX_FIELDS, String::CHARACTER_CLASS__WHITESPACE);
 
 		if ((number_of_fields == 0) || (number_of_fields > FFParameterSection::MAX_FIELDS))
 		{
@@ -144,11 +144,11 @@ namespace BALL {
 		{
 			if (f[i].hasPrefix("key:"))
 			{
-				keys[number_of_keys++] = i;
+				keys[number_of_keys++] = (Index)i;
 			} else if (f[i].hasPrefix("value:")) 
 			{
-				variable_names_[f[i].after(":", 0)] = number_of_variables;
-				variables[number_of_variables++] = i;
+				variable_names_[f[i].after(":", 0)] = (Index)number_of_variables;
+				variables[number_of_variables++] = (Index)i;
 			} 
 		}
 

@@ -1,4 +1,4 @@
-// $Id: HINFile.C,v 1.1 1999/08/26 08:02:36 oliver Exp $
+// $Id: HINFile.C,v 1.2 1999/08/31 22:01:16 oliver Exp $
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/KERNEL/residue.h>
@@ -114,7 +114,7 @@ namespace BALL {
 
 		// the index_vector contains the index of the connected component
 		// (HyperChem molecule) it is in and initialize it to zero
-		vector<int>		index_vector(atom_vector.size(), -1);
+		vector<Index>		index_vector(atom_vector.size(), -1);
 
 		typedef list<Size> Component;
 		typedef	vector<Component>	ComponentVector;
@@ -147,7 +147,7 @@ namespace BALL {
 				
 				// our start atom is the first to be considered and is marked, too
 				atom_stack.push(start_index);
-				index_vector[start_index] = current_index;
+				index_vector[start_index] = (Index)current_index;
 
 				// never examine this atom again as start atom
 				start_index++;
@@ -172,7 +172,7 @@ namespace BALL {
 							// remember this atom in the stack
 							// and mark it in the index_vector
 							atom_stack.push(atom_index - 1);
-							index_vector[atom_index - 1] = current_index;
+							index_vector[atom_index - 1] = (Index)current_index;
 						}
 					}
 				}
@@ -426,6 +426,9 @@ namespace BALL {
 							{
 								residue->clearProperty(Residue::PROPERTY__AMINO_ACID);
 								residue->setProperty(Residue::PROPERTY__NON_STANDARD);
+							} else {
+								residue->setProperty(Residue::PROPERTY__AMINO_ACID);
+								residue->clearProperty(Residue::PROPERTY__NON_STANDARD);
 							}
 
 						} else {
@@ -476,9 +479,9 @@ namespace BALL {
 								}
 
 								bond_vector[number_of_bonds].atom1 = atom_number;
-								bond_vector[number_of_bonds].atom2 = (Index)line.getField(11 + 2 * i).toInt();
+								bond_vector[number_of_bonds].atom2 = (Index)line.getField(11 + 2 * (Index)i).toInt();
 								Bond::Order order = Bond::ORDER__UNKNOWN;
-								String type_field = line.getField(12 + 2 * i);
+								String type_field = line.getField(12 + 2 * (Index)i);
 
 								if (type_field.size() == 1)
 								{

@@ -1,4 +1,4 @@
-// $Id: resourceFile.C,v 1.1 1999/08/26 08:02:36 oliver Exp $
+// $Id: resourceFile.C,v 1.2 1999/08/31 22:01:16 oliver Exp $
 
 #include <BALL/FORMAT/resourceFile.h>
 
@@ -559,7 +559,7 @@ namespace BALL
 	bool  ResourceEntry::findGreaterOrEqual_(const String& key, Index& found) const
 	{
 		register Index lower_index = 0L;
-		register Index upper_index = number_children_ - 1;
+		register Index upper_index = (Index)number_children_ - 1;
 		register Index median_index;
 		
 		while (upper_index > lower_index)

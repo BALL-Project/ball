@@ -1,4 +1,4 @@
-// $Id: logStream.C,v 1.1 1999/08/26 08:02:33 oliver Exp $
+// $Id: logStream.C,v 1.2 1999/08/31 22:01:15 oliver Exp $
 
 #include <BALL/COMMON/logStream.h>
 
@@ -27,12 +27,12 @@ namespace BALL {
 	void LogStreamBuf::dump(ostream& stream) 
 	{
 		char buf[1024];
-		int line;
-		for ( line = loglines_.size() - 1; line >= 0; --line) 
+		Size line;
+		for (line = loglines_.size(); line > 0; --line) 
 		{
-			strftime(&(buf[0]), 1023, "%d.%m.%Y %T ", localtime(&(loglines_[line].time)));
-			stream << buf << "[" << loglines_[line].level
-						 << "]:" << loglines_[line].text << endl;
+			strftime(&(buf[0]), 1023, "%d.%m.%Y %T ", localtime(&(loglines_[line - 1].time)));
+			stream << buf << "[" << loglines_[line - 1].level
+						 << "]:" << loglines_[line - 1].text << endl;
 		}
 	}
  
@@ -114,7 +114,7 @@ namespace BALL {
 			}
 
 			// remove all processed lines from the buffer
-			pbump(pbase() - pptr());
+			pbump((int)(pbase() - pptr()));
 		}
 
 	

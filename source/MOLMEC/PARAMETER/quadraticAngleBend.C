@@ -1,4 +1,4 @@
-// $Id: quadraticAngleBend.C,v 1.1 1999/08/26 08:02:45 oliver Exp $
+// $Id: quadraticAngleBend.C,v 1.2 1999/08/31 22:01:18 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/quadraticAngleBend.h>
@@ -128,8 +128,8 @@ namespace BALL {
 					type_K = atom_types.getType(fields[2]);
 
 					// calculate the indices in the parameter array
-					index = type_I + number_of_atom_types_ * type_J + number_of_atom_types_ * number_of_atom_types_ * type_K;
-					sym_index = type_K + number_of_atom_types_ * type_J + number_of_atom_types_ * number_of_atom_types_ * type_I;
+					index = (Index)(type_I + number_of_atom_types_ * type_J + number_of_atom_types_ * number_of_atom_types_ * type_K);
+					sym_index = (Index)(type_K + number_of_atom_types_ * type_J + number_of_atom_types_ * number_of_atom_types_ * type_I);
 
 					// set the values
 					is_defined_[index] = true;
@@ -179,7 +179,7 @@ namespace BALL {
 		(FFPSQuadraticAngleBend::Values& parameters,
 		 Atom::Type I, Atom::Type J, Atom::Type K) const 
 	{
-		Index index = I + number_of_atom_types_ * J + number_of_atom_types_ * number_of_atom_types_ * K;
+		Index index = (Index)(I + number_of_atom_types_ * J + number_of_atom_types_ * number_of_atom_types_ * K);
 		if (is_defined_[index]) 
 		{
 			parameters.k = k_[index];

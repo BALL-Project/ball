@@ -1,4 +1,4 @@
-// $Id: atom.C,v 1.1 1999/08/26 08:02:34 oliver Exp $
+// $Id: atom.C,v 1.2 1999/08/31 22:01:16 oliver Exp $
 
 #include <BALL/KERNEL/atom.h>
 
@@ -389,31 +389,32 @@ namespace BALL
 		return number_of_bonds_;
 	}
 
-	Bond *Atom::getBond(Index index)
+	Bond* Atom::getBond(Position index)
 	{
-		if (index < 0)
-			throw Exception::IndexUnderflow(__FILE__, __LINE__, index);
-
 		if (index >= (Index)MAX_NUMBER_OF_BONDS)
-			throw Exception::IndexUnderflow(__FILE__, __LINE__, index, (Index)MAX_NUMBER_OF_BONDS);
+		{
+			throw Exception::IndexUnderflow(__FILE__, __LINE__, (Index)index, (Size)MAX_NUMBER_OF_BONDS);
+		}
 
-		return (index >= 0 && index < number_of_bonds_)
-					 ? bond_[index]
-					 : 0;
+		return ((Size)index < number_of_bonds_) ? bond_[index] : 0;
 	}
 
-	const Bond *Atom::getBond(Index index) const
+	const Bond* Atom::getBond(Position index) const
 	{
 		return (const Bond *)((Atom *)this)->getBond(index);
 	}
 
-	Bond *Atom::getBond(const Atom &atom)
+	Bond* Atom::getBond(const Atom &atom)
 	{
 		if (&atom != this)
 		{
 			for (register int i = 0; i < number_of_bonds_; ++i)
+			{
 				if (bond_[i]->first_ == &atom || bond_[i]->second_ == &atom)
+				{
 					return bond_[i];
+				}
+			}
 		}
 
 		return 0;
