@@ -1,4 +1,4 @@
-// $Id: PDBFile.C,v 1.10 2000/01/13 22:28:06 oliver Exp $
+// $Id: PDBFile.C,v 1.11 2000/02/10 15:12:01 oliver Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 
@@ -1309,6 +1309,8 @@ namespace BALL
 			{
 				first->second->setProperty(Residue::PROPERTY__HAS_SSBOND);
 				second->second->setProperty(Residue::PROPERTY__HAS_SSBOND);
+			} else {
+				Log.warn() << "PDBFile::postprocessSSBonds_: could not assign SSBOND for " << *it << endl;
 			}
 		}
 	}
