@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.76 2004/07/25 20:44:38 amoll Exp $
+// $Id: displayProperties.C,v 1.77 2004/08/24 14:01:58 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -235,6 +235,7 @@ void DisplayProperties::checkMenu(MainControl& main_control)
 
 void DisplayProperties::show()
 {
+	checkDrawingPrecision_();
 	DisplayPropertiesData::show();
 	raise();
 }
@@ -272,9 +273,9 @@ void DisplayProperties::modifyRepresentationMode()
 
 	transparency_slider->setValue((Size)(rep_->getTransparency() / 2.55));
 
-	checkDrawingPrecision_();
 	getAdvancedModelOptions_();
 	getAdvancedColoringOptions_();
+	checkDrawingPrecision_();
 
 	apply_button->setEnabled(true);
 }

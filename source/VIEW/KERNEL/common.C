@@ -113,7 +113,7 @@ bool modelMustBeRebuild(ModelType type)
 bool modelMuteableByDisplayProperties(ModelType type)
 	throw()
 { 
-	return type < MODEL_LABEL && type > MODEL_UNKNOWN;
+	return type < MODEL_LABEL;
 }
 
 // ===============================================
