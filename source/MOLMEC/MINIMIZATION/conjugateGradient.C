@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.C,v 1.13 2002/02/27 12:21:37 sturm Exp $
+// $Id: conjugateGradient.C,v 1.14 2003/01/31 15:33:37 anhi Exp $
 // Minimize the potential energy of a system using a nonlinear conjugate 
 // gradient method with  line search
 
@@ -124,8 +124,13 @@ namespace BALL
     // set the options  to their default values if not already set  
     step_ = options.setDefaultReal
 			(Option::STEP_LENGTH, Default::STEP_LENGTH); 
+
 		updateForces();
-		step_ *= current_grad_.norm;
+		// This is to avoid completely senseless behaviour
+		//if (current_grad_.norm < 1e6)
+		{
+			step_ *= current_grad_.norm;
+		}
 
     // determine the number of atoms
     number_of_atoms_ = (Size)force_field_->getAtoms().size(); 
@@ -458,11 +463,42 @@ namespace BALL
 
 		// define an alias for the atom vector
 		AtomVector& atoms = const_cast<AtomVector&>(force_field_->getAtoms());
+
+//Log.info() << "CG: " << step_ << " " << lambda_ << " " << initial_energy_ << " " << current_grad_.norm << " " << direction_.norm << endl;
 		
 		bool success = true;
 		while (success)
 		{
-			atoms.moveTo(direction_, step_);
+			// TEST! This is a workaround...
+			// We try to find those cases where at least one atom might be
+			// translated more than maximal_shift_
+			if (direction_.norm * step_ * lambda_ <= direction_.size() * maximal_shift_)
+			{
+				atoms.moveTo(direction_, lambda_ * step_);
+			}
+			else
+			{
+				Log.info() << "CG1: Adjusted!!!!!" << endl;
+				// find the maximal translation
+				Gradient::ConstIterator grad_it(direction_.begin());
+				double max=0;
+				double cur=0;
+				for (; grad_it != direction_.end(); ++grad_it)
+				{
+					cur = (*grad_it).getSquareLength();
+					if (cur >= max)
+					{
+						max = cur;
+					}
+				}
+				
+				if (sqrt(max)*lambda_*step_ >= maximal_shift_)
+				{
+					step_ = maximal_shift_ / (sqrt(max) * lambda_);
+				}
+
+				atoms.moveTo(direction_, lambda_ * step_);
+			}
 			success = (updateEnergy() < initial_energy_);
 			if (success)
 			{
@@ -477,7 +513,7 @@ namespace BALL
 				step_ *= 2.0;
 			}
 		}
-		
+//	Log.info() << "CG2: new step " << step_ << endl; 	
 		// now we perform line searches along direction_
 		LineSearch line_search(*this);
 	
@@ -630,9 +666,39 @@ namespace BALL
 			// try to find a new solution
 			bool result = findStep();
 			// take the step and save these positions
-			atoms.moveTo(direction_, lambda_ * step_);
-			atoms.savePositions();
 
+			// TEST! This is a workaround...
+			// We try to find those cases where at least one atom might be
+			// translated more than maximal_shift_
+			if (direction_.norm * step_ * lambda_ <= direction_.size() * maximal_shift_)
+			{
+				atoms.moveTo(direction_, lambda_ * step_);
+			}
+			else
+			{
+				Log.info() << "CG1: Adjusted!!!!!" << endl;
+				// find the maximal translation
+				Gradient::ConstIterator grad_it(direction_.begin());
+				double max=0;
+				double cur=0;
+				for (; grad_it != direction_.end(); ++grad_it)
+				{
+					cur = (*grad_it).getSquareLength();
+					if (cur >= max)
+					{
+						max = cur;
+					}
+				}
+				
+				if (sqrt(max)*lambda_*step_ >= maximal_shift_)
+				{
+					step_ = maximal_shift_ / (sqrt(max) * lambda_);
+				}
+
+				atoms.moveTo(direction_, lambda_ * step_);
+			}
+
+			atoms.savePositions();
 			// if findStep only found an emergency solution...
 			if (!result)
 			{	
