@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sphere.C,v 1.3 2003/08/29 10:53:25 amoll Exp $
+// $Id: sphere.C,v 1.4 2003/08/29 15:38:00 amoll Exp $
 
 #include <BALL/VIEW/PRIMITIVES/sphere.h>
 
@@ -58,12 +58,6 @@ namespace BALL
 		{
 			set(sphere);
 			return *this;
-		}
-
-		void Sphere::get(Sphere& sphere) const
-			throw()
-		{
-			sphere.set(*this);
 		}
 
 		void Sphere::swap(Sphere& sphere)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.2 2003/08/26 18:35:37 amoll Exp $
+// $Id: colorProcessor.C,v 1.3 2003/08/29 15:37:59 amoll Exp $
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
 
@@ -57,12 +57,6 @@ namespace BALL
 		{
 			set(color_Processor);
 			return *this;
-		}
-
-		void ColorProcessor::get(ColorProcessor& color_Processor) const
-			throw()
-		{
-			color_Processor.set(*this);
 		}
 
 		void ColorProcessor::swap(ColorProcessor& color_Processor)

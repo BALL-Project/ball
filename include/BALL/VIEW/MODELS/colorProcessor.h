@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.h,v 1.2 2003/08/26 18:35:33 amoll Exp $
+// $Id: colorProcessor.h,v 1.3 2003/08/29 15:36:49 amoll Exp $
 
 #ifndef BALL_VIEW_MODELS_COLORPROCESSOR_H
 #define BALL_VIEW_MODELS_COLORPROCESSOR_H
@@ -108,17 +108,6 @@ namespace BALL
 					\see         set
 			*/
 			const ColorProcessor&  operator = (const ColorProcessor& color_calculator)
-				throw();
-
-			/** Copying.
-					Copy this ColorProcessor to the ColorProcessor <b> color_calculator</b>.
-					Calls set.
-					The colors and the colorMap of this are initialized to the colors and 
-					the colorMap of the ColorProcessor <b> color_calculator</b>. 
-					\param       color_calculator the ColorProcessor to be assigned to
-					\see         set
-			*/
-			void get(ColorProcessor&  color_calculator) const
 				throw();
 
 			/** Swapping of ColorProcessor's.

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: box.C,v 1.3 2003/08/29 10:53:24 amoll Exp $
+// $Id: box.C,v 1.4 2003/08/29 15:37:59 amoll Exp $
 
 #include <BALL/VIEW/PRIMITIVES/box.h>
 
@@ -64,12 +64,6 @@ namespace BALL
 		{
 			set(box);
 			return *this;
-		}
-
-		void Box::get(Box& box) const
-			throw()
-		{
-			box.set(*this);
 		}
 
 		bool Box::isValid() const

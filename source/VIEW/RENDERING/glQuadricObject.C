@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glQuadricObject.C,v 1.2 2003/08/26 18:35:39 amoll Exp $
+// $Id: glQuadricObject.C,v 1.3 2003/08/29 15:38:00 amoll Exp $
 
 #include <BALL/VIEW/RENDERING/glQuadricObject.h>
 #include <BALL/COMMON/exception.h>
@@ -104,20 +104,12 @@ namespace BALL
 			generate_texture_coordinates_ = GL_quadric_object.generate_texture_coordinates_;
 		}
 
-		const GLQuadricObject& GLQuadricObject::operator =
-			(const GLQuadricObject& GL_quadric_object)
+		const GLQuadricObject& GLQuadricObject::operator = (const GLQuadricObject& GL_quadric_object)
 			throw()
 		{
 			set(GL_quadric_object);
 
 			return *this;
-		}
-
-		void GLQuadricObject::get
-			(GLQuadricObject& GL_quadric_object) const
-			throw()
-		{
-			GL_quadric_object.set(*this);
 		}
 
 		void GLQuadricObject::swap(GLQuadricObject& GL_quadric_object)

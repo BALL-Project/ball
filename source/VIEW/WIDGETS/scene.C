@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.2 2003/08/26 16:07:03 amoll Exp $
+// $Id: scene.C,v 1.3 2003/08/29 15:38:01 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -174,12 +174,6 @@ namespace BALL
 		{
 			set(scene);
 			return *this;
-		}
-
-		void Scene::get(Scene& scene) const
-			throw()
-		{
-			scene.set(*this);
 		}
 
 		bool Scene::isValid() const

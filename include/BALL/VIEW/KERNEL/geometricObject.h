@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricObject.h,v 1.30 2003/08/29 11:00:57 amoll Exp $
+// $Id: geometricObject.h,v 1.31 2003/08/29 15:36:49 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
@@ -82,16 +82,6 @@ namespace BALL
 					Calls set.
 			*/
 			GeometricObject& operator = (const GeometricObject& object)
-				throw();
-
-			/** Copying 
-					Calls set.
-					The state of the geometricObject <b> object</b> is initialized to the
-					state of this geometricObject.\par
-					\param       object the geometricObject to be assigned to
-					\see         set
-			*/
-			void get(GeometricObject& object) const
 				throw();
 
 			/** Swapping of geometricObjects.

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: label.C,v 1.3 2003/08/29 10:53:24 amoll Exp $
+// $Id: label.C,v 1.4 2003/08/29 15:37:59 amoll Exp $
 
 #include <BALL/VIEW/PRIMITIVES/label.h>
 
@@ -54,12 +54,6 @@ namespace BALL
 		{
 			set(label);
 			return *this;
-		}
-
-		void Label::get(Label& label) const
-			throw()
-		{
-			label.set(*this);
 		}
 
 		void Label::swap(Label& label)

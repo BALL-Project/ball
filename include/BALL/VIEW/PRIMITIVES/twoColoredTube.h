@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: twoColoredTube.h,v 1.4 2003/08/29 10:53:56 amoll Exp $
+// $Id: twoColoredTube.h,v 1.5 2003/08/29 15:36:50 amoll Exp $
 
 #ifndef BALL_VIEW_PRIMITIVES_TWOCOLOREDTUBE_H
 #define BALL_VIEW_PRIMITIVES_TWOCOLOREDTUBE_H
@@ -114,12 +114,6 @@ namespace BALL
 					\see         set
 			*/
 			const TwoColoredTube& operator = (const TwoColoredTube& two_colored_tube)
-				throw();
-
-			/** Copying 
-					Calls set.
-			*/
-			void get(TwoColoredTube& two_colored_tube) const
 				throw();
 
 			/** Swapping of two_colored_tube's.

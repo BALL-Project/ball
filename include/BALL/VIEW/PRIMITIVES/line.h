@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: line.h,v 1.3 2003/08/29 10:53:55 amoll Exp $
+// $Id: line.h,v 1.4 2003/08/29 15:36:50 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIVES_LINE_H
@@ -86,31 +86,14 @@ namespace BALL
 
 			/** Assign the line <b> line</b> to this line.
 					the line <b> line</b>.\par
-					\param       line the line to be copied
 			*/
 			void set(const Line& line)
 				throw();
 
 			/** Assignment operator.
-					Assign the line <b> line</b> to this line.
 					Calls set.
-					The value of this line is initialized to the value 
-					of the line <b> line</b>.\par
-					\param       line the line to be copied
-					\return      Line& this line
-					\see         set
 			*/
 			const Line& operator = (const Line& line)
-				throw();
-
-			/** Copying with cloning facility.
-					Calls set.
-					The value of the line <b> line</b> is initialized to the
-					value of this line.\par
-					\param       line the line to be assigned to
-					\see         set
-			*/
-			void get(Line& line) const
 				throw();
 
 			/** Swapping of line's.

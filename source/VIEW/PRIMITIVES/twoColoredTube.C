@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: twoColoredTube.C,v 1.3 2003/08/29 10:53:26 amoll Exp $
+// $Id: twoColoredTube.C,v 1.4 2003/08/29 15:38:00 amoll Exp $
 
 #include <BALL/VIEW/PRIMITIVES/twoColoredTube.h>
 
@@ -62,12 +62,6 @@ namespace BALL
 		{
 			set(two_colored_tube);
 			return *this;
-		}
-
-		void TwoColoredTube::get(TwoColoredTube& two_colored_tube) const
-			throw()
-		{
-			two_colored_tube.set(*this);
 		}
 
 		void TwoColoredTube::swap(TwoColoredTube& two_colored_tube)

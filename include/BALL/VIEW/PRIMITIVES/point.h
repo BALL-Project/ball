@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: point.h,v 1.3 2003/08/29 10:53:55 amoll Exp $
+// $Id: point.h,v 1.4 2003/08/29 15:36:50 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIVES_POINT_H
@@ -91,12 +91,6 @@ namespace BALL
 					Calls set.
 			*/
 			const Point& operator = (const Point& point)
-				throw();
-
-			/** Copying 
-					Calls set.
-			*/
-			void get(Point& point) const
 				throw();
 
 			/** Swapping of point's.

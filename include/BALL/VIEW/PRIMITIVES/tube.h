@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: tube.h,v 1.3 2003/08/29 10:53:56 amoll Exp $
+// $Id: tube.h,v 1.4 2003/08/29 15:36:50 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_TUBE_H
@@ -101,22 +101,9 @@ namespace BALL
 				throw();
 
 			/** Assignment operator.
-					Assign the tube <b> tube</b> to this tube.
 					Calls set.
-					\param       tube the tube to be copied
-					\return      Tube& this tube
-					\see         set
 			*/
 			const Tube& operator = (const Tube& tube)
-				throw();
-
-			/** Copying with cloning facility.
-					Copy this tube to the tube <b> tube</b>.
-					Calls set.
-					\param       tube the tube to be assigned to
-					\see         set
-			*/
-			void get(Tube& tube) const
 				throw();
 
 			/** Swapping of tube's.

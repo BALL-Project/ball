@@ -1,14 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: box.h,v 1.2 2003/08/29 10:53:54 amoll Exp $
+// $Id: box.h,v 1.3 2003/08/29 15:36:49 amoll Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_BOX_H
 #define BALL_VIEW_PRIMITIV_BOX_H
-
-#ifndef BALL_COMMON_H
-//#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
 # include <BALL/VIEW/KERNEL/geometricObject.h>
@@ -17,7 +13,6 @@
 #ifndef BALL_MATHS_BOX3_H
 #	include <BALL/MATHS/box3.h>
 #endif
-
 
 namespace BALL
 {
@@ -93,12 +88,6 @@ namespace BALL
 			/** Assignment operator.
 			*/
 			const Box& operator = (const Box& box)
-				throw();
-
-			/** Copying with cloning facility.
-					Copy this Box to the Box <b> Box</b>.
-			*/
-			void get(Box& box) const
 				throw();
 
 			//@}

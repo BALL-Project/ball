@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: disc.C,v 1.3 2003/08/29 10:53:24 amoll Exp $
+// $Id: disc.C,v 1.4 2003/08/29 15:37:59 amoll Exp $
 
 #include <BALL/VIEW/PRIMITIVES/disc.h>
 
@@ -54,12 +54,6 @@ namespace BALL
 		{
 			set(disc);
 			return *this;
-		}
-
-		void Disc::get(Disc& disc) const
-			throw()
-		{
-			disc.set(*this);
 		}
 
 		void Disc::swap(Disc& disc)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: disc.h,v 1.2 2003/08/29 10:53:54 amoll Exp $
+// $Id: disc.h,v 1.3 2003/08/29 15:36:49 amoll Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_DISC_H
 #define BALL_VIEW_PRIMITIV_DISC_H
@@ -77,11 +77,6 @@ namespace BALL
 			/** Assignment operator.
 			*/
 			const Disc& operator = (const Disc& Disc)
-				throw();
-
-			/** Copying 
-			*/
-			void get(Disc& Disc) const
 				throw();
 
 			/** Swapping of Disc's.

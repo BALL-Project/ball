@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: simpleBox.h,v 1.2 2003/08/29 10:53:55 amoll Exp $
+// $Id: simpleBox.h,v 1.3 2003/08/29 15:36:50 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_SIMPLEBOX_H
@@ -80,12 +80,6 @@ namespace BALL
 			/** Assignment operator.
 			*/
 			const SimpleBox& operator = (const SimpleBox& box)
-				throw();
-
-			/** Copying with cloning facility.
-					Copy this SimpleBox to the SimpleBox <b> Box</b>.
-			*/
-			void get(SimpleBox& box) const
 				throw();
 
 			//@}

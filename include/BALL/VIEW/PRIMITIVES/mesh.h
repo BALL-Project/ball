@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mesh.h,v 1.2 2003/08/29 10:53:55 amoll Exp $
+// $Id: mesh.h,v 1.3 2003/08/29 15:36:50 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_MESH_H
@@ -109,21 +109,8 @@ namespace BALL
 
 			/** Assignment operator.
 					Calls set.
-					The value of this mesh is initialized to the value 
-					of the mesh <b> mesh</b>.\par
-					\param       mesh the mesh to be copied
-					\return      Mesh& this mesh
-					\see         set
 			*/
 			const Mesh& operator = (const Mesh& mesh)
-				throw();
-
-			/** Copy this mesh to the mesh <b> mesh</b>.
-					Calls set.
-					\param       mesh the mesh to be assigned to
-					\see         set
-			*/
-			void get(Mesh& mesh) const
 				throw();
 
 			/** Swapping of mesh's.

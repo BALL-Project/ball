@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: label.h,v 1.3 2003/08/29 10:53:54 amoll Exp $
+// $Id: label.h,v 1.4 2003/08/29 15:36:50 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_LABEL_H
@@ -103,32 +103,12 @@ namespace BALL
 				throw();
 
 			/** Assignment operator.
-					Assign the label <b> label</b> to this label.
 					Calls set.
-					The value of this label is initialized to the value 
-					of the label <b> label</b>.\par
-					\param       label the label to be copied
-					\return      Label& this label
-					\see         set
 			*/
 			const Label& operator = (const Label& label)
 				throw();
 
-			/** Copying with cloning facility.
-					Copy this label to the label <b> label</b>.
-					Calls set.
-					The value of the label <b> label</b> is initialized to the
-					value of this label.\par
-					\param       label the label to be assigned to
-					\see         set
-			*/
-			void get(Label& label) const
-				throw();
-
 			/** Swapping of label's.
-					Swap the value of this label with the label <b> label</b>.
-					\param       label the label being swapped with this label 
-					\see         Label
 			*/
 			void swap(Label& label)
 				throw();

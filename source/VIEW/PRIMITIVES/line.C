@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: line.C,v 1.3 2003/08/29 10:53:24 amoll Exp $
+// $Id: line.C,v 1.4 2003/08/29 15:38:00 amoll Exp $
 
 #include <BALL/VIEW/PRIMITIVES/line.h>
 
@@ -54,12 +54,6 @@ namespace BALL
 		{
 			set(line);
 			return *this;
-		}
-
-		void Line::get(Line& line) const
-			throw()
-		{
-			line.set(*this);
 		}
 
 		void Line::swap(Line& line)

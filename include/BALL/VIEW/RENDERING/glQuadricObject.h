@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glQuadricObject.h,v 1.2 2003/08/26 18:35:34 amoll Exp $
+// $Id: glQuadricObject.h,v 1.3 2003/08/29 15:36:51 amoll Exp $
 
 #ifndef BALL_VIEW_RENDERING_GLQUADRICOBJECT_H
 #define BALL_VIEW_RENDERING_GLQUADRICOBJECT_H
@@ -156,36 +156,15 @@ namespace BALL
 			//@{
 
 			/** Assignment.
-					Assign the glQuadricObject <b> GL_quadric_object</b> to this
-					glQuadricObject.
-					The state of this glQuadricObject is initialized to the state
-					of the glQuadricObject <b> GL_quadric_object</b>
 					\param       GL_quadric_object the glQuadricObject to be copied
 			*/
 			void set(const GLQuadricObject& GL_quadric_object)
 				throw();
 
 			/** Assignment operator.
-					Assign the glQuadricObject <b> GL_quadric_object</b> to this glQuadricObject.
-					The state of this glQuadricObject is initialized to the state
-					of the glQuadricObject <b> GL_quadric_object</b>
 					Calls set.
-					\param       GL_quadric_object the glObject to be copied
-					\return      GLQuadricObject& constant reference of this glQuadricObject
-					\see         set
 			*/
 			const GLQuadricObject& operator = (const GLQuadricObject& GL_quadric_object)
-				throw();
-
-			/** Copying.
-					Copy this glQuadricObject to the glQuadricObject <b> GL_quadric_object</b>.
-					The state of this glQuadricObject is initialized to the state
-					of the glQuadricObject <b> GL_quadric_object</b>
-					Calls set.
-					\param       GL_quadric_object the glQuadricObject to be assigned to
-					\see         set
-			*/
-			void get(GLQuadricObject& GL_quadric_object) const
 				throw();
 
 			/** Swapping of glQuadricObjects.

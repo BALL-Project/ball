@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: QTTimer.h,v 1.18 2003/08/26 08:05:05 oliver Exp $
+// $Id: QTTimer.h,v 1.19 2003/08/29 15:36:49 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_QTTIMER_H
@@ -127,17 +127,6 @@ namespace BALL
 			*/
 			const QTTimer& operator = (const QTTimer& qt_timer)
 				throw();
-
-			/** Copying.
-					Copies this qtTimer to the qtTimer <b> qt_timer</b>.
-					Calls set.
-					The state of the qtTimer <b> qt_timer</b> is initialized to the
-					state of this qtTimer.\par
-					\param       qt_timer the qtTimer to be assigned to
-					\see         set
-			*/
-			void get(QTTimer& qt_timer) const
-  			throw();
 
 			/** Swapping of qtTimer's.
 					Swaps the states of this qtTimer with the qtTimer

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: twoColoredLine.h,v 1.4 2003/08/29 10:53:56 amoll Exp $
+// $Id: twoColoredLine.h,v 1.5 2003/08/29 15:36:50 amoll Exp $
 
 #ifndef BALL_VIEW_VIEW_PRIMITIVES_TWOCOLOREDLINE_H
 #define BALL_VIEW_VIEW_PRIMITIVES_TWOCOLOREDLINE_H
@@ -114,12 +114,6 @@ namespace BALL
 					Calls set.
 			*/
 			const TwoColoredLine& operator = (const TwoColoredLine& two_colored_line)
-				throw();
-
-			/** Copying 
-					\see         set
-			*/
-			void get(TwoColoredLine& two_colored_line) const
 				throw();
 
 			/** Swapping of two_colored_line's.

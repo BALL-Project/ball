@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.2 2003/08/26 16:07:14 amoll Exp $
+// $Id: scene.h,v 1.3 2003/08/29 15:36:51 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -170,26 +170,14 @@ namespace BALL
 			/** Assignment.
 					Initialize the width, height and camera position.
 					\param  scene the scene to be copied
-					\see    get
 			*/
 			void set(const Scene& scene)
 				throw();
 
 			/** Assignment operator.
 					Calls set.
-					\return  Scene& this scene copied from <b> scene</b>
-					\see     set
 			*/
 			const Scene& operator =	(const Scene& scene)
-				throw();
-
-			/** Copying.
-					Copy this scene to the scene	<b> scene</b>.
-					Calls set.
-					\param  scene the scene to be assigned to
-					\see    set
-			*/
-			void get(Scene& scene) const
 				throw();
 
 			//@}
@@ -201,9 +189,6 @@ namespace BALL
 					\param  rebuild_displaylists is set to <tt> true than all the GLDisplayList objects are updated. 
 									If set to <tt> false</tt> only the display is redrawed.
 					\see    GLDisplayList
-					\see    GLEntityDescriptor
-					\see    CompositeDescriptor
-					\see    MainControl
 			*/
 			void update(bool rebuild_displaylists = false)
 				throw();

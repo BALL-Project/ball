@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mesh.C,v 1.3 2003/08/29 10:53:24 amoll Exp $
+// $Id: mesh.C,v 1.4 2003/08/29 15:38:00 amoll Exp $
 
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 
@@ -41,8 +41,8 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<Mesh>() << endl;
+				Log.error() << "Destructing object " << (void *)this 
+										<< " of class " << RTTI::getName<Mesh>() << endl;
 			#endif 
 		}
 
@@ -65,12 +65,6 @@ namespace BALL
 		{
 			set(mesh);
 			return *this;
-		}
-
-		void Mesh::get(Mesh& mesh) const
-			throw()
-		{
-			mesh.set(*this);
 		}
 
 		void Mesh::swap(Mesh& mesh)
