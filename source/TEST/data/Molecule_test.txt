@@ -35,11 +35,11 @@
       charge: 0
       name: atom1
       type name: ?
-      position: (0 0 0)
+      position: VECTOR3(0 0 0)
       radius: 0
       type: -1
-      velocity: (0 0 0)
-      force: (0 0 0)
+      velocity: VECTOR3(0 0 0)
+      force: VECTOR3(0 0 0)
       number of bonds: 0
       bonds: 
 
@@ -64,11 +64,11 @@
       charge: 0
       name: atom2
       type name: ?
-      position: (0 0 0)
+      position: VECTOR3(0 0 0)
       radius: 0
       type: -1
-      velocity: (0 0 0)
-      force: (0 0 0)
+      velocity: VECTOR3(0 0 0)
+      force: VECTOR3(0 0 0)
       number of bonds: 0
       bonds: 
 
