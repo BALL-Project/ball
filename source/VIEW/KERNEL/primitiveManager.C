@@ -1,7 +1,7 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.34.2.2 2005/01/13 12:43:23 amoll Exp $
+// $Id: primitiveManager.C,v 1.34.2.3 2005/01/13 12:43:43 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -318,7 +318,7 @@ void PrimitiveManager::startUpdateThread_()
 
 	while (thread_.running())
 	{
-		main_control_->setStatusbarText("Creating Model " + dots);
+		main_control_->setStatusbarText("Creating Model ..." + dots);
 		qApp->wakeUpGuiThread();
 		qApp->processEvents();
 		if (pos < 40) 
