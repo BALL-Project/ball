@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.sip,v 1.7 2004/04/16 13:32:26 amoll Exp $
+// $Id: message.sip,v 1.8 2004/07/01 13:08:43 amoll Exp $
 //
 
 class Message
@@ -85,9 +85,9 @@ class SceneMessage
 	
 	void setType(SceneMessageType) throw();
 	SceneMessageType getType() const throw();
-	void setCamera(const Camera&) throw();
-	Camera& getCamera() throw();
-	const Camera& getCamera() const throw();
+	void setStage(Stage) throw();
+	Stage& getStage() throw();
+ 	const Stage& getStage() const throw();
 };
 
 
@@ -262,8 +262,8 @@ class NewTrajectoryMessage
 };
 
 
-class RegularData3DMessage
-	:CompositeMessage
+class RegularDataMessage
+	: CompositeMessage
 {
 %TypeHeaderCode
 	#include <BALL/VIEW/KERNEL/message.h>
@@ -272,16 +272,66 @@ class RegularData3DMessage
 %End
 
 	public:
-	enum RegularData3DMessageType
-	{
-		UNDEFINED = -1,
-		NEW = 100,
-		REMOVE,
-		UPDATE,
-		SELECTED
-	};
-	
-	RegularData3DMessage(RegularData3DMessageType ) throw();
-	void setRegularData3D(RegularData3D&) throw();
-	RegularData3D* getRegularData3D() throw();
+
+		enum RegularDataMessageType
+		{
+			UNDEFINED = -1,
+			NEW = 100,
+			REMOVE,
+			UPDATE,
+			SELECTED
+		};
+
+		RegularDataMessage() throw();
 };
+
+class RegularData1DMessage
+	: RegularDataMessage
+{
+%TypeHeaderCode
+	#include <BALL/VIEW/KERNEL/message.h>
+	using namespace BALL;
+	using namespace BALL::VIEW;
+%End
+
+	public:
+
+	RegularData1DMessage(RegularDataMessageType /*type = UNDEFINED*/) throw();
+	void setData(RegularData1D& /*data*/) throw();
+	RegularData1D* getData() throw();
+};
+
+class RegularData2DMessage
+	: RegularDataMessage
+{
+%TypeHeaderCode
+	#include <BALL/VIEW/KERNEL/message.h>
+	using namespace BALL;
+	using namespace BALL::VIEW;
+%End
+
+	public:
+
+	RegularData2DMessage(RegularDataMessageType /*type = UNDEFINED*/) throw();
+	void setData(RegularData2D& /*data*/) throw();
+	RegularData2D* getData() throw();
+};
+
+class RegularData3DMessage
+	: RegularDataMessage
+{
+%TypeHeaderCode
+	#include <BALL/VIEW/KERNEL/message.h>
+	using namespace BALL;
+	using namespace BALL::VIEW;
+%End
+
+	public:
+
+	RegularData3DMessage(RegularDataMessageType /*type = UNDEFINED*/) throw();
+	void setData(RegularData3D& /*data*/) throw();
+	RegularData3D* getData() throw();
+};
+
+
+

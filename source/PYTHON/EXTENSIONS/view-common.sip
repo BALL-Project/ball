@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: view-common.sip,v 1.3 2004/05/18 16:19:24 amoll Exp $
+// $Id: view-common.sip,v 1.4 2004/07/01 13:08:44 amoll Exp $
 //
 
 %ModuleHeaderCode 
@@ -72,7 +72,7 @@ String getColoringName(ColoringMethod)
 
 enum EventsIDs
 {
-	SCENE_UPDATE_EVENT = 60000,
+	SCENE_EXPORTPNG_EVENT = 60000,
 	SIMULATION_THREAD_FINISHED_EVENT,
 	SIMULATION_OUTPUT_EVENT,
 	UPDATE_COMPOSITE_EVENT
