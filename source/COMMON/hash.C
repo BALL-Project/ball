@@ -1,4 +1,4 @@
-// $Id: hash.C,v 1.3 1999/12/28 18:26:29 oliver Exp $
+// $Id: hash.C,v 1.4 2000/03/16 12:17:51 oliver Exp $
 
 #include <BALL/COMMON/hash.h>
 
@@ -19,7 +19,8 @@ namespace BALL
 
 	/* Summary: Algorithm to do fast hashing of variable length text     
 	 * strings. The result of the hash function is a number in the range 
-	 * [0..255]. This algorithm was published in CACM, 6/90. 
+	 * [0..255]. This algorithm was published by P. K. Pearson,
+	 * Comm. ACM, 33:6(1990), 677
 	 */
 	HashIndex hashString(register const char *s)
 	{
