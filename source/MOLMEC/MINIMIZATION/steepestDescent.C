@@ -1,4 +1,4 @@
-// $Id: steepestDescent.C,v 1.5 1999/09/25 12:14:56 oliver Exp $
+// $Id: steepestDescent.C,v 1.6 1999/12/17 18:39:14 pmueller Exp $
 
 #include <BALL/MOLMEC/MINIMIZATION/steepestDescent.h>
 #include <BALL/COMMON/limits.h>
@@ -6,10 +6,7 @@
 namespace BALL 
 {
 	Size	SteepestDescentMinimizer::Default::MAX_STEPS = 6;
-	float SteepestDescentMinimizer::Default::MAX_GRADIENT = 0.001;
-
 	const char* SteepestDescentMinimizer::Option::MAX_STEPS = "max_steps";
-	const char*	SteepestDescentMinimizer::Option::MAX_GRADIENT = "max_gradient";
 
 	// default constructor
 	SteepestDescentMinimizer::SteepestDescentMinimizer()
@@ -37,10 +34,12 @@ namespace BALL
 	{
     valid_ = setup(force_field);
 
+
     if (!valid_)
     {
       Log.level(LogStream::ERROR) << " line search minimizer setup failed! " << endl;
 		}
+
 	}
 	
 	// Constructor initialized with a force field and a set of options
@@ -65,7 +64,6 @@ namespace BALL
 	{
 
 		max_steps_ = (Size)options.setDefaultInteger(SteepestDescentMinimizer::Option::MAX_STEPS, (long)SteepestDescentMinimizer::Default::MAX_STEPS);
-		max_gradient_ = options.setDefaultReal(SteepestDescentMinimizer::Option::MAX_GRADIENT, SteepestDescentMinimizer::Default::MAX_GRADIENT);
 
 		return true;
 	}
@@ -82,17 +80,6 @@ namespace BALL
 		return max_steps_;
 	}
 
-	// Set the parameter max_gradient_
-	void	SteepestDescentMinimizer::setMaxGradient(float max_gradient)
-	{
-		max_gradient_	= max_gradient;
-	}
-
-	//	Get the parameter max_steps_
-	float	SteepestDescentMinimizer::getMaxGradient() const
-	{
-		return max_gradient_;
-	}
 
 	/*	The minimizer optimizes the energy of the system 
 			using a modified line search algorithm.
@@ -131,8 +118,14 @@ namespace BALL
 			// reset the step size to its default value
 			step_size = maximal_shift_;
 
+      // reset the counters
+      force_update_counter_ = 0;
+      energy_update_counter_ = 0; 
+
 			// calculate initial gradient and gradient norm
 			force_field_->updateForces();
+      force_update_counter_++; 
+
 			gradient_norm = 0;
 			it = force_field_->getAtoms().begin();
 			for ( ; it != force_field_->getAtoms().end() ; ++it)
@@ -164,18 +157,24 @@ namespace BALL
 		}
 
 		float energy_change = 0.0;
-		while ((number_of_iteration_ < maximal_number_of_iterations_) && (iteration < steps))
+
+    while(iteration < maximal_number_of_iterations_)
 		{
 			// calculate current energy 
+
 			energy_change = energy;
 			energy = force_field_->updateEnergy();
+      energy_update_counter_++;
+
 			energy_change = energy - energy_change;
 
+      iteration++;
+
 			// check whether the energy changed
-			if (fabs((energy - last_energy) / energy) < 1e-9)
+			if (fabs(energy - last_energy)  < energy_difference_bound_)
 			{
 				same_energy_counter++;
-				if (same_energy_counter == 20)
+				if (same_energy_counter == max_same_energy_)
 				{
 					break;
 				}
@@ -203,16 +202,20 @@ namespace BALL
 
 				// update gradient and gradient norm
 				force_field_->updateForces();
+        force_update_counter_++; 
+
 				gradient_norm = 0;
 				it = force_field_->getAtoms().begin();
 				for ( ; it != force_field_->getAtoms().end() ; ++it)
 				{
 					gradient_norm += (*it)->getForce().getSquareLength();
 				} 
+
 				// calculate the RMS gradient (termination condition)
 				// in units of kJ/(mol A)
 				gradient_norm = sqrt(gradient_norm / (3.0 * (float)number_of_movable_atoms));
 				gradient_norm *= Constants::AVOGADRO / 1.0e13;
+
 
 				// check for convergence
 				if (gradient_norm <= max_gradient_)
@@ -261,7 +264,7 @@ namespace BALL
 			{
 				Log.info() << "iteration " << number_of_iteration_ 
 									 << " energy: " << energy << " kJ/mol"
-									 << " grad: " << gradient_norm  << " kJ/(mol A)"
+									 << " grad  : " << gradient_norm  << " kJ/(mol A)"
 									 << endl;
 			}
 
@@ -270,8 +273,14 @@ namespace BALL
 			number_of_iteration_++;
 		}
 
+    Log.info() << endl ;
+    Log.info() << "No. of force updates : " << force_update_counter_ << endl;
+    Log.info() << "No. of energy updates: " << energy_update_counter_ << endl;
+    Log.info() << endl; 
+
+
 		// test whether convergence was reached
-		return (gradient_norm <= max_gradient_) || (same_energy_counter == 20);
+		return (gradient_norm <= max_gradient_) || (same_energy_counter == max_same_energy_);
 	}
 	
 } // namespace BALL
