@@ -1,4 +1,4 @@
-// $Id: nmr.doc,v 1.7 2001/03/07 22:19:47 amoll Exp $
+// $Id: nmr.doc,v 1.8 2001/06/14 11:45:23 oliver Exp $
 
 /**@name	Nuclear Magnetic Resonance Spectroscopy
 		This chapter contains all relevant information on 
@@ -16,11 +16,12 @@
 	/**	@name NMR spectra and related classes
 	*/
 	//@{
-		//@Include: NMRSpectrum.h
+		//@Include: spectrum.h
 		//@Include: assignShiftProcessor.h
+		//@Include: createSpectrumProcessor.h
 		//@Include:	peak.h
-    //@Include: createSpectrumProcessor.h
-    //@Include: makeSpectrumProcessor.h
+		//@Include:	peakList.h
+    //@Include: experiment.h
 	//@}
 
 	/**@name	NMR shift modules
