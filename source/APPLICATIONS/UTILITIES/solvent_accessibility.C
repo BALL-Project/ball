@@ -1,10 +1,10 @@
-// $Id: solvent_accessibility.C,v 1.1 2004/05/14 16:16:18 oliver Exp $
+// $Id: solvent_accessibility.C,v 1.2 2004/05/14 17:07:18 oliver Exp $
 //
 // This utility reads a PDB structure, removes water from it and
 // computes which residues are solvent exposed by summing up
 // atom-based solvent-accessible surface areas. It will then
 // print all residues along with their solvent-accessible
-// surface area and mark all residues with an area below 1 A^2 
+// surface area and mark all residues with an area below 10 A^2 
 // as buried.
 
 #include <BALL/common.h>
@@ -55,7 +55,7 @@ int main(int argc, char** argv)
 		min_area = String(argv[2]).toFloat();
 	}
 	cout << "Residues will be marked as 'buried' if their accessible area is below " 
-       << min_area << " A^" << endl;
+       << min_area << " A^2" << endl;
 
 	HashMap<const Atom*, float> atom_areas;
 	calculateSASAtomAreas(S, atom_areas);
@@ -72,7 +72,7 @@ int main(int argc, char** argv)
 				area += atom_areas[&*ai];
 			}
 		}
-		cout << "  " << ri->getName() << ri->getID() << "\t" << area << ((area < 5.0) ? "\t (buried)" : "") << endl;
+		cout << "  " << ri->getName() << ri->getID() << "\t" << area << ((area < min_area) ? "\t (buried)" : "") << endl;
 	}
 
 	return 0;
