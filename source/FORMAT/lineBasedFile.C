@@ -1,4 +1,4 @@
-// $Id: lineBasedFile.C,v 1.7 2000/10/16 15:14:14 amoll Exp $
+// $Id: lineBasedFile.C,v 1.8 2000/10/17 08:47:51 oliver Exp $
 
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/COMMON/exception.h>
@@ -244,7 +244,7 @@ namespace BALL
 		return line_.getFieldQuoted(pos, delimiters.c_str(), quotes.c_str());
 	}
 
-	int LineBasedFile::switchString(const vector<String>& data)
+	Index LineBasedFile::switchString(const vector<String>& data)
 		const throw()
 	{
 		for (Position i = 0; i < data.size(); i++)
