@@ -1,4 +1,4 @@
-// $Id: BinarySearchTree_test.C,v 1.12 2000/08/09 09:11:24 amoll Exp $
+// $Id: BinarySearchTree_test.C,v 1.13 2000/08/09 10:10:07 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -105,7 +105,7 @@ void initialize_()
 	rrrightitem_ = TBSTreeItem<int>(8, 0, 0, (char) BSTreeItem::BLACK);
 }
 
-START_TEST(class_name, "$Id: BinarySearchTree_test.C,v 1.12 2000/08/09 09:11:24 amoll Exp $")
+START_TEST(class_name, "$Id: BinarySearchTree_test.C,v 1.13 2000/08/09 10:10:07 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -856,35 +856,64 @@ CHECK(TBSTree::getSize() const )
 RESULT
 
 CHECK(TBSTree::clear())
-//BAUSTELLE
+	tree2.insert(12);
+	tree2.clear();
+	TEST_EQUAL(tree2.getSize(), 0)
+	TEST_EQUAL(tree2.getRoot(), 0)
 RESULT
 
 CHECK(TBSTree::destroy())
-//BAUSTELLE
+	tree2.insert(12);
+	tree2.destroy();
+	TEST_EQUAL(tree2.getSize(), 0)
+	TEST_EQUAL(tree2.getRoot(), 0)
 RESULT
 
 CHECK(TBSTree::set(const TBSTree& tree, bool deep = true))
-//BAUSTELLE
+	tree2.set(tree, true);
+	TEST_EQUAL(tree2.getSize(), 4)
+	TEST_EQUAL(tree2.getRoot()->getData(), tree2.getRoot()->getData())
+	TEST_EQUAL(tree2.getComparator(), tree2.getComparator())
 RESULT
 
 CHECK(TBSTree::set(const TBSTree& tree, BSTreeIterator::WalkOrder walk_order))
-//BAUSTELLE
+	tree2.clear();
+	tree2.set(tree, BSTreeIterator::WALK_ORDER__POSTORDER);
+	TEST_EQUAL(tree2.getSize(), 4)
+	TEST_EQUAL(tree2.getRoot()->getData(), tree2.getRoot()->getData())
+	TEST_EQUAL(tree2.getComparator(), tree2.getComparator())
 RESULT
 
 CHECK(TBSTree::operator = (const TBSTree& tree))
-//BAUSTELLE
+	tree2.clear();
+	tree2 = tree;
+	TEST_EQUAL(tree2.getSize(), 4)
+	TEST_EQUAL(tree2.getRoot()->getData(), tree2.getRoot()->getData())
+	TEST_EQUAL(tree2.getComparator(), tree2.getComparator())
 RESULT
 
 CHECK(TBSTree::get(TBSTree& tree, bool deep = true) const)
-//BAUSTELLE
+	tree2.clear();
+	tree.get(tree2, true);
+	TEST_EQUAL(tree2.getSize(), 4)
+	TEST_EQUAL(tree2.getRoot()->getData(), tree2.getRoot()->getData())
+	TEST_EQUAL(tree2.getComparator(), tree2.getComparator())
 RESULT
 
 CHECK(TBSTree::get(TBSTree& tree, BSTreeIterator::WalkOrder walk_order) const)
-//BAUSTELLE
+	tree2.clear();
+	tree.get(tree2, BSTreeIterator::WALK_ORDER__POSTORDER);
+	TEST_EQUAL(tree2.getSize(), 4)
+	TEST_EQUAL(tree2.getRoot()->getData(), tree2.getRoot()->getData())
+	TEST_EQUAL(tree2.getComparator(), tree2.getComparator())
 RESULT
 
 CHECK(TBSTree::swap(TBSTree &tree))
-//BAUSTELLE
+	tree2.clear();
+	tree2.swap(tree);
+	TEST_EQUAL(tree2.getSize(), 4)
+	TEST_EQUAL(tree.getSize(), 4)
+	tree2.swap(tree);
 RESULT
 
 CHECK(TBSTree::getMinimum() const )
