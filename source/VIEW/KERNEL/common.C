@@ -15,7 +15,7 @@ String getModelName(ModelTypes type)
 		case MODEL_STICK:
 			return "Stick";
 		case MODEL_BALL_AND_STICK:
-			return "BallandStick";
+			return "Ball and Stick";
 		case MODEL_VDW:
 			return "VDW";
 		case MODEL_SE_SURFACE:
