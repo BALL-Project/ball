@@ -1,6 +1,7 @@
-// $Id: file.C,v 1.19 2001/08/18 14:45:45 oliver Exp $
+// $Id: file.C,v 1.20 2001/10/29 19:59:14 amoll Exp $
 
 #include <BALL/SYSTEM/file.h>
+#include <BALL/SYSTEM/TCPTransfer.h>
 #include <math.h>
 
 using std::ios;
@@ -55,6 +56,8 @@ namespace BALL
 
 	const String File::TRANSFORMATION_EXEC_PREFIX = "exec:";
 	const String File::TRANSFORMATION_FILE_PREFIX = "exec:";
+	const String File::TRANSFORMATION_HTTP_PREFIX = "http://";
+	const String File::TRANSFORMATION_FTP_PREFIX  = "ftp://";
 
 	Size File::transformation_methods_ = BALL_BIT(File::TRANSFORMATION__EXEC) 
 										| BALL_BIT(File::TRANSFORMATION__FILTER) 
@@ -125,6 +128,20 @@ namespace BALL
 		// we are reading files
 		if (open_mode == IN)
 		{
+
+			// check for the FTP and HTTP transformation prefix
+			if (name_.hasPrefix(TRANSFORMATION_FTP_PREFIX) ||
+				 	name_.hasPrefix(TRANSFORMATION_HTTP_PREFIX))
+			{
+				// create a temporary file and redirect the file-transfer to that file
+				String tmp_file;
+				createTemporaryFilename(tmp_file);
+				ofstream out(tmp_file.c_str(), ios::out);
+				TCPTransfer tcp_t(out, name, false);
+				name_ = tmp_file;
+				is_temporary_ = true;
+			}
+				
 			// check for the EXEC transformation prefix
 			if (name_.hasPrefix(TRANSFORMATION_EXEC_PREFIX))
 			{
