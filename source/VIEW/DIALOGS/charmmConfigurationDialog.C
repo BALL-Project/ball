@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmConfigurationDialog.C,v 1.6 2004/04/30 11:47:03 amoll Exp $
+// $Id: charmmConfigurationDialog.C,v 1.7 2004/12/17 16:19:40 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/charmmConfigurationDialog.h>
@@ -66,6 +66,8 @@ namespace BALL
 			overwrite_charges_checkBox->setChecked(true);
 			overwrite_typenames_checkBox->setChecked(true);
 			use_eef1_checkBox->setChecked(true);
+
+			max_unassigned_atoms->setText("10");
 
 			/*
 			boundary_box->setChecked(false);
@@ -395,6 +397,24 @@ namespace BALL
 			charmm.options[CharmmFF::Option::SCALING_VDW_1_4] = getScalingVdw_1_4();
 
 			charmm.options[CharmmFF::Option::FILENAME] = getFilename();
+
+			bool error = false;
+			try
+			{
+				if (String(max_unassigned_atoms->text().ascii()).toUnsignedInt() == 0) error = true;
+				charmm.setMaximumUnassignedAtoms(String(max_unassigned_atoms->text().ascii()).toUnsignedInt());
+			}
+			catch(...)
+			{
+				error = true;
+			}
+
+			if (error)
+			{
+				max_unassigned_atoms->setText("10");
+				charmm.setMaximumUnassignedAtoms(10);
+ 				Log.error() << "Invalid value for max number of unassigned atoms, using default value of 10" << std::endl;
+			}
 
 			/*
 			if (boundary_box->isChecked())

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.76 2004/12/03 00:17:52 amoll Exp $
+// $Id: molecularStructure.C,v 1.77 2004/12/17 16:19:41 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -896,6 +896,7 @@ namespace BALL
 			if (!ff.setup(*system))
 			{
 				setStatusbarText("Setup up of force field failed", true);
+				selectUnassignedForceFieldAtoms_();
 				return;
 			}
 
@@ -959,6 +960,7 @@ namespace BALL
 			if (!ff.setup(*system))
 			{
 				setStatusbarText("Force field setup failed. See log for details.", true);
+				selectUnassignedForceFieldAtoms_();
 				return;
 			}
 
@@ -1099,13 +1101,13 @@ namespace BALL
 
 			// set up the force field
 			setStatusbarText("setting up force field...", true);
-
 		
 			// Setup the force field.
 			ff.disableSelection();
 			if (!ff.setup(*system))
 			{
 				setStatusbarText("Force field setup failed.", true);
+				selectUnassignedForceFieldAtoms_();
 				return;
 			}
 			ff.updateEnergy();
@@ -1363,6 +1365,28 @@ namespace BALL
 			}
 
 			fdpb_dialog_->show();
+		}
+
+		void MolecularStructure::selectUnassignedForceFieldAtoms_()
+		{
+			HashSet<Composite*>::Iterator it = getMainControl()->getCompositeManager().begin();
+			for (; it != getMainControl()->getCompositeManager().end(); it++)
+			{
+				(*it)->deselect();
+			}
+
+			HashSet<const Atom*>::ConstIterator ait = getForceField().getUnassignedAtoms().begin();
+			for (; ait != getForceField().getUnassignedAtoms().end(); ait++)
+			{
+				(const_cast<Atom*>(*ait))->select();
+	
+				CompositeMessage* msg = new CompositeMessage(**ait, CompositeMessage::SELECTED_COMPOSITE);
+				msg->setUpdateRepresentations(false);
+				notify_(msg);
+			}
+
+			CompositeMessage* msg = new CompositeMessage(*getForceField().getSystem(), CompositeMessage::CHANGED_COMPOSITE);
+			notify_(msg);
 		}
 
 	} // namespace VIEW

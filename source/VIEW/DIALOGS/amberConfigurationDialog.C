@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberConfigurationDialog.C,v 1.10 2004/04/30 11:47:32 amoll Exp $
+// $Id: amberConfigurationDialog.C,v 1.11 2004/12/17 16:19:40 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/amberConfigurationDialog.h>
@@ -63,6 +63,8 @@ namespace BALL
 			assign_types_checkBox->setChecked(true);
 			overwrite_charges_checkBox->setChecked(true);
 			overwrite_typenames_checkBox->setChecked(true);
+
+			max_unassigned_atoms->setText("10");
 
 			/*
 			boundary_box->setChecked(false);
@@ -317,6 +319,24 @@ namespace BALL
 			amber.options[AmberFF::Option::SCALING_VDW_1_4] = getScalingVdw_1_4();
 
 			amber.options[AmberFF::Option::FILENAME] = getFilename();
+
+			bool error = false;
+			try
+			{
+				if (String(max_unassigned_atoms->text().ascii()).toUnsignedInt() == 0) error = true;
+				amber.setMaximumUnassignedAtoms(String(max_unassigned_atoms->text().ascii()).toUnsignedInt());
+			}
+			catch(...)
+			{
+				error = true;
+			}
+
+			if (error)
+			{
+				max_unassigned_atoms->setText("10");
+				amber.setMaximumUnassignedAtoms(10);
+ 				Log.error() << "Invalid value for max number of unassigned atoms, using default value of 10" << std::endl;
+			}
 
 			/*
 			if (boundary_box->isChecked())
