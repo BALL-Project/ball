@@ -1,4 +1,4 @@
-// $Id: amberTorsion.C,v 1.8 1999/09/19 20:54:57 oliver Exp $
+// $Id: amberTorsion.C,v 1.9 1999/09/21 06:50:42 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberTorsion.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -66,7 +66,13 @@ namespace BALL
 		// extract the torsion parameters from the parameter file
 		bool result;
 		AmberFF* amber_force_field = dynamic_cast<AmberFF*>(force_field_);
+		bool has_initialized_parameters = true;
 		if ((amber_force_field == 0) || !amber_force_field->hasInitializedParameters())
+		{
+			has_initialized_parameters = false;
+		}
+
+		if (!has_initialized_parameters)
 		{
 			result = torsion_parameters_.extractSection(getForceField()->getParameters(), "Torsions");
 
@@ -129,7 +135,6 @@ namespace BALL
 									{
 
 										// search torsion parameters for (a1,a2,a3,a4)
-	
 										Atom::Type type_a1 = a1->getType();
 										Atom::Type type_a2 = a2->getType();
 										Atom::Type type_a3 = a3->getType();
@@ -175,14 +180,15 @@ namespace BALL
 			}
 		}
 
-		// extract parameters for improper torsions
-		FFPSCosineTorsion	improper_parameters;
-		result = improper_parameters.extractSection(getForceField()->getParameters(), "ImproperTorsions");
-
-		if (result == false) 
+		if (!has_initialized_parameters)
 		{
-			Log.error() << "cannot find section ImproperTorsions" << endl;
-			return false;
+			result = improper_parameters_.extractSection(getForceField()->getParameters(), "ImproperTorsions");
+
+			if (result == false) 
+			{
+				Log.error() << "cannot find section ImproperTorsions" << endl;
+				return false;
+			}
 		}
 	
 
@@ -191,12 +197,14 @@ namespace BALL
 
 		// find all improper torsion atoms: their names are stored in 
 		// the section ResidueImproperTorsions
-		FFParameterSection	impropers;
-		result = impropers.extractSection(getForceField()->getParameters(), "ResidueImproperTorsions");
-		if (result == false)
+		if (!has_initialized_parameters)
 		{
-			Log.error() << "cannot find section ResidueImproperTorsions" << endl;
-			return false;
+			result = impropers_.extractSection(getForceField()->getParameters(), "ResidueImproperTorsions");
+			if (result == false)
+			{
+				Log.error() << "cannot find section ResidueImproperTorsions" << endl;
+				return false;
+			}
 		}
 		
 		// check for each potential improper torsion atom (every atom having three bonds)
@@ -250,7 +258,7 @@ namespace BALL
 					}
 				}
 
-				if (impropers.has(key))
+				if (impropers_.has(key))
 				{
 					for (it1 = (*atom_it)->beginBond(); +it1 ; ++ it1) 
 					{
@@ -300,24 +308,24 @@ namespace BALL
 
 									bool found = false;
 
-									if (improper_parameters.hasParameters(type_a1, type_a2, type_a3, type_a4)) 
+									if (improper_parameters_.hasParameters(type_a1, type_a2, type_a3, type_a4)) 
 									{
-										improper_parameters.assignParameters(values, type_a1, type_a2, type_a3, type_a4);
+										improper_parameters_.assignParameters(values, type_a1, type_a2, type_a3, type_a4);
 	
 										found = true;
-									} else if (improper_parameters.hasParameters(Atom::ANY_TYPE, type_a2, type_a3, type_a4))
+									} else if (improper_parameters_.hasParameters(Atom::ANY_TYPE, type_a2, type_a3, type_a4))
 									{
-										improper_parameters.assignParameters(values, Atom::ANY_TYPE, type_a2, type_a3, type_a4);
+										improper_parameters_.assignParameters(values, Atom::ANY_TYPE, type_a2, type_a3, type_a4);
 
 										found = true;
-									} else if (improper_parameters.hasParameters(Atom::ANY_TYPE, Atom::ANY_TYPE, type_a3, type_a4)) 
+									} else if (improper_parameters_.hasParameters(Atom::ANY_TYPE, Atom::ANY_TYPE, type_a3, type_a4)) 
 									{
-										improper_parameters.assignParameters(values, Atom::ANY_TYPE, Atom::ANY_TYPE, type_a3, type_a4);
+										improper_parameters_.assignParameters(values, Atom::ANY_TYPE, Atom::ANY_TYPE, type_a3, type_a4);
 	
 										found = true;
-									} else if (improper_parameters.hasParameters(Atom::ANY_TYPE, type_a2, type_a3, Atom::ANY_TYPE)) 
+									} else if (improper_parameters_.hasParameters(Atom::ANY_TYPE, type_a2, type_a3, Atom::ANY_TYPE)) 
 									{
-										improper_parameters.assignParameters(values, Atom::ANY_TYPE, type_a2, type_a3, Atom::ANY_TYPE);
+										improper_parameters_.assignParameters(values, Atom::ANY_TYPE, type_a2, type_a3, Atom::ANY_TYPE);
 	
 										found = true;
 									}
