@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.17.2.35 2005/01/11 14:53:33 amoll Exp $
+// $Id: backboneModel.C,v 1.17.2.36 2005/01/11 15:12:55 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -380,13 +380,13 @@ namespace BALL
 			//------------------------------------------------------>
 			// iterate over all spline_points_
 			//------------------------------------------------------>
-			for (Position p = start; p <= end; p++)
+			for (Position p = start; p < end; p++)
 			{
 				// faster access to the current spline point
 				const Vector3& point = spline_points_[p];
 				
 				// new direction vector: new point - last point
-				const Vector3 dir_new = spline_points_[p + 1] - point;
+ 				const Vector3 dir_new = spline_points_[p + 1] - point;
 
 				// new normal vector
 				Vector3 r_new = r - (
@@ -469,13 +469,20 @@ namespace BALL
 				r = r_new;
 			}
 
+			Tube* tube = new Tube();
+			tube->setVertex1(spline_points_[end - 1]);
+			tube->setVertex2(spline_points_[end]);
+			tube->setComposite(atoms_of_spline_points_[end]);
+			tube->setRadius(tube_radius_);
+			geometric_objects_.push_back(tube);
+			
 			// create a sphere as an end cap for the point
 			sphere = new Sphere;
 			sphere->setRadius(tube_radius_);
 			sphere->setPosition(spline_points_[end]);
  			sphere->setComposite(atoms_of_spline_points_[end]);
  			geometric_objects_.push_back(sphere);
-
+			
 			last_spline_point_ = end;
 		}
 
