@@ -78,6 +78,7 @@ EXECUTABLES = \
 	Vector4_test\
 	XYZFile_test
 
+CPP_SOURCES=$(EXECUTABLE:=.C)
 OBJECTS=$(EXECUTABLES:=.o)
 
 
