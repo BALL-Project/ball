@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.36 2004/09/03 23:29:43 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.37 2004/09/07 12:29:28 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -184,7 +184,9 @@ namespace BALL
 			throw()
 			: ColorProcessor()
 		{
-			const unsigned char color_values[21][3] =
+#define BALL_NR_RESIDUES 25
+
+			const unsigned char color_values[BALL_NR_RESIDUES][3] =
 			{
 				{255, 255, 255},   // nomatch color 0
 				{255, 255, 255},   // GLY
@@ -206,19 +208,24 @@ namespace BALL
 				{ 26, 240,  26},   // HIS
 				{128, 209, 228},   // PHE
 				{142,  65, 211},   // TYR
-				{ 61, 255, 000}    // TRP
+				{ 61, 255, 000},   // TRP
+
+				{ 61, 255, 100},   // A
+				{ 42, 165, 211},   // C
+				{142, 165,  21},   // G
+				{255,  220, 211}   // T
 			};                                       
 
-			const char* residue_names[21] = 
+			const char* residue_names[BALL_NR_RESIDUES] = 
 			{
 				"---", "GLY", "ALA", "VAL", "LEU",
 				"ILE", "SER", "THR", "CYS", "MET",
 				"PRO", "ASP", "ASN", "GLU", "GLN",
 				"LYS", "ARG", "HIS", "PHE", "TYR",
-				"TRP"
+				"TRP", "A",   "C",   "G",   "T"
 			};
 			
-			for (Size i = 0; i < 21; i++)
+			for (Size i = 0; i < BALL_NR_RESIDUES; i++)
 			{
 				color_map_.insert
 					(StringHashMap<ColorRGBA>::ValueType(residue_names[i],
