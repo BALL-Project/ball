@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.h,v 1.14 2004/09/01 14:14:10 amoll Exp $
+// $Id: modelSettingsDialog.h,v 1.15 2004/09/02 12:57:07 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MODELSETTINGSDIALOG_H
@@ -184,7 +184,7 @@ namespace BALL
 
 			///
 			void setForceScaling(float value) 
-				throw() { setValue_(force_scaling_slider,value);}
+				throw() { setValue_(force_scaling_slider,value / 10.0);}
 
 			public slots:
 			

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: coloringSettingsDialog.h,v 1.13 2004/09/01 14:14:10 amoll Exp $
+// $Id: coloringSettingsDialog.h,v 1.14 2004/09/02 12:57:06 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_COLORINGSETTINGSDIALOG_H
@@ -165,6 +165,7 @@ namespace BALL
 			virtual void maxDistanceChanged();
 			virtual void maxTFChanged();
 			virtual void forceMaxValueChanged();
+			virtual void forceMinValueChanged();
 
 			protected:
 
