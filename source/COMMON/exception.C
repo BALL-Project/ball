@@ -1,4 +1,4 @@
-// $Id: exception.C,v 1.11 2000/07/17 13:45:48 oliver Exp $
+// $Id: exception.C,v 1.12 2000/08/03 21:53:24 oliver Exp $
 
 #include <BALL/COMMON/exception.h>
 #include <BALL/COMMON/logStream.h>
@@ -168,7 +168,9 @@ namespace BALL
 				:	GeneralException(file, line, "InvalidFormat", ""),
 					format_(s)
 			{
-				message_ = "problem converting " + s + " to a number.";
+				message_ = "problem converting '";
+				message_.append(s + "' to a number.");
+
 				globalHandler.setMessage(message_);
 			}
 		
