@@ -1,4 +1,4 @@
-// $Id: analyticalGeometry.h,v 1.5 2000/02/16 17:28:12 oliver Exp $
+// $Id: analyticalGeometry.h,v 1.6 2000/03/15 05:12:34 amoll Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -36,7 +36,18 @@
 
 namespace BALL 
 {
+	/**	@name AnalyticalGeometry
+			@memo representation of analytical geometry functions,
+						using the classes: common, TAngle, TCircle3, TLine3, TPlane3, TSphere3, TVector3.
+	*/
+	//@{
 
+	/**	Subroutine to get the determinant of any matrix.
+			Direct usage of this function should be avoided.
+			Instead use {\tt T GetDeterminant(const T* m, Size dim) }
+			@param	m pointer to matrix
+			@param	dim dimension of the matrix
+	*/
 	template <class T>
 	BALL_INLINE
 	T GetDeterminant_(const T* m, Size dim)
@@ -69,6 +80,10 @@ namespace BALL
 		return determinant;
 	}
 
+	/**	Get the determinant of any matrix.
+			@param	m pointer to matrix
+			@param	dim dimension of the matrix
+	*/
 	template <class T>
 	BALL_INLINE 
 	T GetDeterminant(const T* m, Size dim)
@@ -90,13 +105,21 @@ namespace BALL
 		}
 	}
 
+	/**	Get the determinant of an 2x2 matrix.
+			@param	m pointer to matrix
+	*/
 	template <class T>
 	BALL_INLINE 
 	T GetDeterminant2(const T* m)
 	{
 		return (BALL_CELL(0,0) * BALL_CELL(1,1) - BALL_CELL(0,1) * BALL_CELL(1,0));
 	}
-
+	/**	Get the determinant of an 2x2 matrix.
+			@param	m00 first value of the matrix
+			@param	m01 second value of the matrix
+			@param	m10 third value of the matrix
+			@param	m11 fourth value of the matrix
+	*/
 	template <class T>
 	BALL_INLINE 
 	T GetDeterminant2(const T& m00, const T& m01, const T& m10, const T& m11)
@@ -104,6 +127,9 @@ namespace BALL
 		return (m00 * m11 - m01 * m10);
 	}
 
+	/**	Get the determinant of an 3x3 matrix.
+			@param	m pointer to matrix
+	*/
 	template <class T>
 	BALL_INLINE 
 	T GetDeterminant3(const T *m)
@@ -116,6 +142,9 @@ namespace BALL
 						- BALL_CELL(0,1) * BALL_CELL(1,0) * BALL_CELL(2,2)); 
 	}
 
+	/**	Get the determinant of an 3x3 matrix.
+			@param	m00 - m22 the elements of the matrix
+	*/
 	template <class T>
 	BALL_INLINE T 
 	GetDeterminant3
@@ -131,6 +160,7 @@ namespace BALL
 						- m01 * m10 * m22); 
 	}
 
+// ???
 	template <class T>
 	bool SolveSystem(const T* m, T* x, const Size dim)
 	{
@@ -211,6 +241,7 @@ namespace BALL
 
 	#undef BALL_CELL
 
+	//???
 	template <class T>
 	BALL_INLINE 
 	bool SolveSystem2
@@ -229,6 +260,14 @@ namespace BALL
 		return true;
 	}
 
+	/**	Solve a square equation. ???
+			@param	a the 
+			@param	b the 
+			@param	c the 
+			@param x1 the first solution
+			@param x2 the second solution
+			@return short the number of solutions (0 - 2)
+	*/
 	template <class T>
 	short	SolveSquaredEquality
 		(const T& a, const T& b, const T &c,
@@ -253,6 +292,11 @@ namespace BALL
 		}
 	}
 
+	/**	Get the partition. ???
+			@param	a the 
+			@param	b the 
+			@return TVector3 the partition
+	*/
 	template <class T>
 	BALL_INLINE 
 	TVector3<T> GetPartition(const TVector3<T>& a, const TVector3<T>& b)
@@ -260,6 +304,13 @@ namespace BALL
 		return TVector3<T>((b.x + a.x) / 2, (b.y + a.y) / 2, (b.z + a.z) / 2);
 	}
 
+	/**	Get the partition. ???
+			@param	a the 
+			@param	b the 
+			@param r
+			@param s
+			@return TVector3 the partition
+	*/
 	template <class T>
 	BALL_INLINE 
 	TVector3<T> GetPartition
@@ -276,6 +327,11 @@ namespace BALL
 			 (s * a.z + r * b.z) / sum);
 	}
 
+	/**	Get the distance between two points.
+			@param	a the first point
+			@param	b the second point
+			@return T the distance
+	*/
 	template <class T>
 	BALL_INLINE 
 	T GetDistance(const TVector3<T>& a, const TVector3<T>& b)
@@ -287,6 +343,11 @@ namespace BALL
 		return sqrt(dx * dx + dy * dy + dz * dz); 
 	}
 
+	/**	Get the distance between a line and a point.
+			@param	line the line
+			@param	point the point
+			@return T the distance
+	*/
 	template <class T>
 	BALL_INLINE 
 	T GetDistance(const TLine3<T>& line, const TVector3<T>& point)
@@ -294,6 +355,11 @@ namespace BALL
 		return ((line.d % (point - line.p)).getLength() / line.d.getLength());
 	}
 
+	/**	Get the distance between a point and a line.
+			@param	point the point
+			@param	line the line
+			@return T the distance
+	*/
 	template <class T>
 	BALL_INLINE 
 	T GetDistance(const TVector3<T>& point, const TLine3<T>& line)
@@ -301,6 +367,11 @@ namespace BALL
 		return GetDistance(line, point);
 	}
 
+	/**	Get the distance between two lines.
+			@param	a the first line
+			@param	b the second line
+			@return T the distance
+	*/
 	template <class T>
 	T GetDistance(const TLine3<T>& a, const TLine3<T>& b)
 	{
@@ -324,6 +395,11 @@ namespace BALL
 		}
 	}
 
+	/**	Get the distance between a point and a plane.
+			@param	point the point
+			@param	plane the plane
+			@return T the distance
+	*/
 	template <class T>
 	BALL_INLINE 
 	T GetDistance(const TVector3<T>& point, const TPlane3<T>& plane)
@@ -335,6 +411,11 @@ namespace BALL
 		return (Abs(plane.n * (Point3 - plane.p)) / length);
 	}
 
+	/**	Get the distance between a plane and a point.
+			@param	plane the plane
+			@param	point the point
+			@return T the distance
+	*/
 	template <class T>
 	BALL_INLINE 
 	T GetDistance(const TPlane3<T>& plane, const TVector3<T>& point)
@@ -342,6 +423,12 @@ namespace BALL
 		return GetDistance(point, plane);
 	}
 
+
+	/**	Get the distance between a line and a plane.
+			@param	line the line
+			@param	plane the plane
+			@return T the distance
+	*/
 	template <class T>
 	BALL_INLINE 
 	T GetDistance(const TLine3<T>& line, const TPlane3<T>& plane)
@@ -353,6 +440,11 @@ namespace BALL
 		return (Abs(plane.n * (line.p - plane.p)) / length);
 	}
 
+	/**	Get the distance between a plane and a line.
+			@param	plane the plane
+			@param	line the line
+			@return T the distance
+	*/
 	template <class T>
 	BALL_INLINE 
 	T GetDistance(const TPlane3<T>& plane, const TLine3<T>& line)
@@ -360,6 +452,11 @@ namespace BALL
 		return GetDistance(line, plane);
 	}
 
+	/**	Get the distance between two planes.
+			@param	plane the plane
+			@param	line the line
+			@return T the distance
+	*/
 	template <class T>
 	BALL_INLINE 
 	T GetDistance(const TPlane3<T>& a, const TPlane3<T>& b)
@@ -371,6 +468,12 @@ namespace BALL
 		return (Abs(a.n * (a.p - b.p)) / length);
 	}
 
+	/**	Get the angle between two Vector3.
+			@param	a the Vector3
+			@param	b the Vector3
+			@param	intersection_angle the resulting angle
+			@return bool, always true
+	*/
 	template <class T>
 	BALL_INLINE 
 	bool GetAngle(const TVector3<T>& a, const TVector3<T>& b,
@@ -381,6 +484,12 @@ namespace BALL
 		return true;
 	}
 
+	/**	Get the angle between two lines.
+			@param	a the first line
+			@param	b the second line
+			@param	intersection_angle the resulting angle
+			@return bool, true if an angle can be calculated, otherwise false
+	*/
 	template <class T>
 	BALL_INLINE 
 	bool GetAngle(const TLine3<T>& a, const TLine3<T>& b, TAngle<T>& intersection_angle)
@@ -395,6 +504,12 @@ namespace BALL
 		return true;
 	}
 
+	/**	Get the angle between a plane and a Vector3.
+			@param	plane the plane
+			@param	vector the Vector3 
+			@param	intersection_angle the resulting angle
+			@return bool, true if an angle can be calculated, otherwise false
+	*/
 	template <class T>
 	BALL_INLINE 
 	bool GetAngle(const TPlane3<T>& plane, const TVector3<T> &Vector3,
@@ -412,6 +527,12 @@ namespace BALL
 		}
 	}
 
+	/**	Get the angle between a vector3 and a plane.
+			@param	vector the vector3
+			@param	plane the plane
+			@param	intersection_angle the resulting angle
+			@return bool, true if an angle can be calculated, otherwise false
+	*/
 	template <class T>
 	BALL_INLINE 
 	bool GetAngle
@@ -421,6 +542,12 @@ namespace BALL
 		return GetAngle(plane, vector, intersection_angle);
 	}
 
+	/**	Get the angle between a plane and a line.
+			@param	plane the plane
+			@param	line the line
+			@param	intersection_angle the resulting angle
+			@return bool, true if an angle can be calculated, otherwise false
+	*/
 	template <class T>
 	BALL_INLINE 
 	bool GetAngle
@@ -439,6 +566,12 @@ namespace BALL
 		}
 	}
 
+	/**	Get the angle between a line and a plane.
+			@param	line the line
+			@param	plane the plane
+			@param	intersection_angle the resulting angle
+			@return bool, true if an angle can be calculated, otherwise false
+	*/
 	template <class T>
 	BALL_INLINE 
 	bool GetAngle
@@ -448,6 +581,13 @@ namespace BALL
 		return GetAngle(plane, line, intersection_angle);
 	}
 
+
+	/**	Get the angle between two planes.
+			@param	a the first plane
+			@param	b the second plane
+			@param	intersection_angle the resulting angle
+			@return bool, true if an angle can be calculated, otherwise false
+	*/
 	template <class T>
 	BALL_INLINE 
 	bool GetAngle
@@ -464,6 +604,12 @@ namespace BALL
 		return true;
 	}
 
+	/**	Get the intersection point between two lines.
+			@param	a the first line
+			@param	b the second line
+			@param	point the resulting intersection
+			@return bool, true if an intersection can be calculated, otherwise false
+	*/
 	template <class T>
 	bool GetIntersection
 		(const TLine3<T>& a, const TLine3<T>& b,
@@ -491,6 +637,12 @@ namespace BALL
 		}
 	}
 
+	/**	Get the intersection point between a plane and a line.
+			@param	plane the plane
+			@param	line the line
+			@param	point the resulting intersection
+			@return bool, true if an intersection can be calculated, otherwise false
+	*/
 	template <class T>
 	BALL_INLINE 
 	bool GetIntersection
@@ -509,6 +661,12 @@ namespace BALL
 		}
 	}
 
+	/**	Get the intersection point between a line and a plane.
+			@param	line the line
+			@param	plane the plane
+			@param	point the resulting intersection
+			@return bool, true if an intersection can be calculated, otherwise false
+	*/
 	template <class T>
 	BALL_INLINE 
 	bool GetIntersection
@@ -518,6 +676,12 @@ namespace BALL
 		return GetIntersection(plane, line, intersection_point);
 	}
 
+	/**	Get the intersection line between two planes.
+			@param	a the first plane
+			@param	b the second plane
+			@param	line the resulting intersection
+			@return bool, true if an intersection can be calculated, otherwise false
+	*/
 	template <class T>
 	bool GetIntersection(const TPlane3<T>& a, const TPlane3<T>& b, TLine3<T>& line)
 	{
@@ -551,6 +715,13 @@ namespace BALL
 		return true;
 	}
 
+	/**	Get the intersection point between three planes.
+			@param	a the first plane
+			@param	b the second plane
+			@param	b the third plane
+			@param	point the resulting intersection
+			@return bool, true if an intersection can be calculated, otherwise false
+	*/
 	template <class T>
 	bool GetIntersection
 		(const TPlane3<T>& a, const TPlane3<T>& b,
@@ -580,17 +751,24 @@ namespace BALL
 		}
 	}
 
+	/**	Get the intersection point between a sphere and a line.
+			@param	sphere the sphere
+			@param	line the line
+			@param	intersection_point1 the first intersection point
+			@param	intersection_point2 the second intersection point
+			@return bool, true if an intersection can be calculated, otherwise false
+	*/
 	template <class T>
 	bool GetIntersection
-		(const TSphere3<T> &Sphere3, const TLine3<T>& line,
+		(const TSphere3<T> &sphere, const TLine3<T>& line,
 		 TVector3<T> &intersection_point1, TVector3<T> &intersection_point2)
 	{
 		T x1, x2;
 		short number_of_solutions 
 			= SolveSquaredEquality(line.d * line.d,
 								 						 2 * (line.p - Sphere3.p) * line.d,
-			 											 (line.p - Sphere3.p) * (line.p - Sphere3.p)
-															- Sphere3.radius * Sphere3.radius,
+			 											 (line.p - sphere.p) * (line.p - sphere.p)
+															- sphere.radius * sphere.radius,
 		 												 x1, x2);
 
 		if (number_of_solutions == 0)
@@ -602,19 +780,32 @@ namespace BALL
 		return true;
 	}
 
+	/**	Get the intersection point between a line and a sphere.
+			@param	line the line
+			@param	sphere the sphere
+			@param	intersection_point1 the first intersection point
+			@param	intersection_point2 the second intersection point
+			@return bool, true if an intersection can be calculated, otherwise false
+	*/
 	template <class T>
 	BALL_INLINE 
 	bool GetIntersection
-		(const TLine3<T>& line, const TSphere3<T>& Sphere3,
+		(const TLine3<T>& line, const TSphere3<T>& sphere,
 		 TVector3<T>& intersection_point1, TVector3<T>& intersection_point2)
 	{
-		return GetIntersection(Sphere3, line, intersection_point1, intersection_point2);
+		return GetIntersection(sphere, line, intersection_point1, intersection_point2);
 	}
 
+	/**	Get the intersection circle between a sphere and a plane.
+			@param	sphere the sphere
+			@param	plane the plane
+			@param	intersection_Circle the intersection circle
+			@return bool, true if an intersection can be calculated, otherwise false
+	*/
 	template <class T>
 	bool GetIntersection
 		(const TSphere3<T>& sphere, const TPlane3<T>& plane,
-		 TCircle3<T>& intersectionCircle3)
+		 TCircle3<T>& intersectionCircle)
 	{
 		T distance = GetDistance(sphere.p, plane);
 
@@ -628,7 +819,7 @@ namespace BALL
 
 			Vector3.normalize();
 
-			intersectionCircle3.set(sphere.p + sphere.radius * Vector3, plane.n, 0);
+			intersection_Circle.set(sphere.p + sphere.radius * Vector3, plane.n, 0);
 
 			return true;
 		} else {
@@ -636,7 +827,7 @@ namespace BALL
 
 			Vector3.normalize();
 
-			intersectionCircle3.set
+			intersection_Circle.set
 				(sphere.p + distance * Vector3,
 				 plane.n,
 				 sqrt(sphere.radius * sphere.radius - distance * distance));
@@ -644,7 +835,13 @@ namespace BALL
 			return true;
 		}
 	}
-	 
+
+	/**	Get the intersection circle between a plane and a sphere.
+			@param	plane the plane
+			@param	sphere the sphere
+			@param	intersection_Circle the intersection circle
+			@return bool, true if an intersection can be calculated, otherwise false
+	*/
 	template <class T>
 	BALL_INLINE bool
 	GetIntersection
@@ -654,6 +851,11 @@ namespace BALL
 		return GetIntersection(sphere, plane, intersection_circle);
 	}
 	 
+	/**	Get the intersection circle between two spheres.
+			@param	a the first sphere
+			@param	intersection_Circle the intersection circle
+			@return bool, true if an intersection can be calculated, otherwise false
+	*/
 	template <class T>
 	bool GetIntersection(const TSphere3<T>& a, const TSphere3<T>& b, TCircle3<T>& intersection_circle)
 	{
@@ -676,11 +878,16 @@ namespace BALL
 
 		Plane3.get(tmp_a, tmp_b, c, d);
 
-		intersectionCircle3.set(- d * Plane3.n, Plane3.n, sqrt(tmp_a.radius * tmp_a.radius - d * d));
+		intersection_Circle.set(- d * Plane3.n, Plane3.n, sqrt(tmp_a.radius * tmp_a.radius - d * d));
 
 		return true;
 	}
 
+	/**	Test if two vector3 are collinear
+			@param	a the first vector3
+			@param	b the second vector3
+			@return bool, true or false
+	*/
 	template <class T>
 	BALL_INLINE 
 	bool  isCollinear(const TVector3<T>& a, const TVector3<T>& b)
@@ -688,6 +895,12 @@ namespace BALL
 		return (a % b).isZero();
 	}
 
+	/**	Test if three vector3 are complanar
+			@param	a the first vector3
+			@param	b the second vector3
+			@param	c the third vector3
+			@return bool, true or false
+	*/
 	template <class T>
 	BALL_INLINE 
 	bool isComplanar(const TVector3<T>& a, const TVector3<T>& b, const TVector3<T>& c)
@@ -695,6 +908,13 @@ namespace BALL
 		return Maths::isZero(TVector3<T>::getSpatProduct(a, b, c));
 	}
 
+	/**	Test if four vector3 are complanar
+			@param	a the first vector3
+			@param	b the second vector3
+			@param	c the third vector3
+			@param	d the fourth vector3
+			@return bool, true or false
+	*/
 	template <class T>
 	BALL_INLINE 
 	bool isComplanar(const TVector3<T>& a, const TVector3<T>& b, const TVector3<T>& c, const TVector3<T>& d)
@@ -702,6 +922,11 @@ namespace BALL
 		return Maths::isComplanar(a - b, a - c, a - d);
 	}
 
+	/**	Test if two vector3 are orthogonal
+			@param	a the first vector3
+			@param	b the second vector3
+			@return bool, true or false
+	*/
 	template <class T>
 	BALL_INLINE 
 	bool isOrthogonal(const TVector3<T>& a, const TVector3<T>& b)
@@ -709,6 +934,11 @@ namespace BALL
 		return Maths::isZero(a * b);
 	}
 
+	/**	Test if a vector3 and a line are orthogonal
+			@param	vector the vector
+			@param	line the line
+			@return bool, true or false
+	*/
 	template <class T>
 	BALL_INLINE 
 	bool isOrthogonal(const TVector3<T>& vector, const TLine3<T>& line)
@@ -716,6 +946,11 @@ namespace BALL
 		return isZero(vector * line.d);
 	}
 
+	/**	Test if a line and a vector3 are orthogonal
+			@param	line the line
+			@param	vector the vector
+			@return bool, true or false
+	*/
 	template <class T>
 	BALL_INLINE 
 	bool isOrthogonal(const TLine3<T>& line, const TVector3<T>& vector)
@@ -723,6 +958,11 @@ namespace BALL
 		return isOrthogonal(vector, line);
 	}
 
+	/**	Test if two lines are orthogonal.
+			@param	a the first line
+			@param	b the second line
+			@return bool, true or false
+	*/
 	template <class T>
 	BALL_INLINE 
 	bool isOrthogonal(const TLine3<T>& a, const TLine3<T>& b)
@@ -730,6 +970,11 @@ namespace BALL
 		return isZero(a.d * b.d);
 	}
 
+	/**	Test if a vector3 and a plane are orthogonal.
+			@param	vector the vector3
+			@param	plane the plane
+			@return bool, true or false
+	*/
 	template <class T>
 	BALL_INLINE 
 	bool isOrthogonal(const TVector3<T>& vector, const TPlane3<T>& plane)
@@ -737,6 +982,11 @@ namespace BALL
 		return isCollinear(vector, plane.n);
 	}
 
+	/**	Test if a plane and a vector3 are orthogonal.
+			@param	plane the plane
+			@param	vector the vector3
+			@return bool, true or false
+	*/
 	template <class T>
 	BALL_INLINE 
 	bool isOrthogonal(const TPlane3<T>& plane, const TVector3<T>& vector)
@@ -744,6 +994,11 @@ namespace BALL
 		return isOrthogonal(vector, plane);
 	}
 
+	/**	Test if two planes are orthogonal.
+			@param	a the first plane
+			@param	b the second plane
+			@return bool, true or false
+	*/
 	template <class T>
 	BALL_INLINE 
 	bool isOrthogonal(const TPlane3<T>& a, const TPlane3<T>& b)
@@ -751,20 +1006,35 @@ namespace BALL
 		return isZero(a.n * b.n);
 	}
 
+	/**	Test if a line is intersecting a point.
+			@param	point the point
+			@param	line the line
+			@return bool, true or false
+	*/
 	template <class T>
 	BALL_INLINE 
-	bool isIntersecting(const TVector3<T>& Point3, const TLine3<T>& line)
+	bool isIntersecting(const TVector3<T>& point, const TLine3<T>& line)
 	{
-		return isZero(GetDistance(Point3, line));
+		return isZero(GetDistance(point, line));
 	}
 
+	/**	Test if a line is intersecting a point.
+			@param	line the line
+			@param	point the point
+			@return bool, true or false
+	*/
 	template <class T>
 	BALL_INLINE 
 	bool isIntersecting(const TLine3<T>& line, const TVector3<T>& point)
 	{
-		return isIntersecting(Point3, point);
+		return isIntersecting(point, line);
 	}
 
+	/**	Test if two line are intersecting.
+			@param	a the first line
+			@param	b the second line
+			@return bool, true or false
+	*/
 	template <class T>
 	BALL_INLINE 
 	bool isIntersecting(const TLine3<T>& a, const TLine3<T>& b)
@@ -772,6 +1042,11 @@ namespace BALL
 		return isZero(GetDistance(a, b));
 	}
 
+	/**	Test if a point is intersecting a plane.
+			@param	point the point
+			@param	plane the plane
+			@return bool, true or false
+	*/
 	template <class T>
 	BALL_INLINE 
 	bool isIntersecting(const TVector3<T>& point, const TPlane3<T>& plane)
@@ -779,6 +1054,11 @@ namespace BALL
 		return isZero(GetDistance(point, plane));
 	}
 
+	/**	Test if a point is intersecting a plane.
+			@param	plane the plane
+			@param	point the point
+			@return bool, true or false
+	*/
 	template <class T>
 	BALL_INLINE 
 	bool isIntersecting(const TPlane3<T>& plane, const TVector3<T>& point)
@@ -786,6 +1066,11 @@ namespace BALL
 		return isIntersecting(point, plane);
 	}
 
+	/**	Test if a line is intersecting a plane.
+			@param	line the line
+			@param	plane the plane
+			@return bool, true or false
+	*/
 	template <class T>
 	BALL_INLINE 
 	bool isIntersecting(const TLine3<T>& line, const TPlane3<T>& plane)
@@ -793,6 +1078,11 @@ namespace BALL
 		return isZero(GetDistance(line, plane));
 	}
 
+	/**	Test if a plane is intersecting a line.
+			@param	plane the plane
+			@param	line the line
+			@return bool, true or false
+	*/
 	template <class T>
 	BALL_INLINE 
 	bool isIntersecting(const TPlane3<T>& plane, const TLine3<T>& line)
@@ -800,6 +1090,11 @@ namespace BALL
 		return isIntersecting(line, plane);
 	}
 
+	/**	Test if two planes are intersecting.
+			@param	a the first plane
+			@param	b the second plane
+			@return bool, true or false
+	*/
 	template <class T>
 	BALL_INLINE 
 	bool isIntersecting(const TPlane3<T>& a, const TPlane3<T>& b)
@@ -807,6 +1102,11 @@ namespace BALL
 		return isZero(GetDistance(a, b));
 	}
 
+	/**	Test if a line and a plane are parallel.
+			@param	line the line
+			@param	plane the plane
+			@return bool, true or false
+	*/
 	template <class T>
 	BALL_INLINE 
 	bool isParallel(const TLine3<T>& line, const TPlane3<T>& plane)
@@ -814,6 +1114,11 @@ namespace BALL
 		return isOrthogonal(line.d, plane.n);
 	}
 
+	/**	Test if a plane and a line are parallel.
+			@param	plane the plane
+			@param	line the line
+			@return bool, true or false
+	*/
 	template <class T>
 	BALL_INLINE 
 	bool isParallel(const TPlane3<T>& plane, const TLine3<T>& line)
@@ -821,6 +1126,11 @@ namespace BALL
 		return isParallel(line, plane);
 	}
 
+	/**	Test if two planes are parallel.
+			@param	a the first plane
+			@param	b the second plane
+			@return bool, true or false
+	*/
 	template <class T>
 	BALL_INLINE 
 	bool isParallel(const TPlane3<T>& a, const TPlane3<T>& b)
