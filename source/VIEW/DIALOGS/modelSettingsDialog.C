@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.C,v 1.25 2004/09/16 14:36:54 amoll Exp $
+// $Id: modelSettingsDialog.C,v 1.26 2004/09/27 22:50:56 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modelSettingsDialog.h>
@@ -35,7 +35,7 @@ namespace BALL
 		ModelSettingsDialog::ModelSettingsDialog( QWidget* parent,  const char* name, WFlags fl )
 				: ModelSettingsDialogData( parent, name, fl )
 		{
-			setDefaults();
+			setDefaults(true);
 		}
 
 		void ModelSettingsDialog::setDefaults(bool all)
@@ -71,22 +71,22 @@ namespace BALL
 				AddBackboneModel dummy;
 				getSettings(dummy);
 			}
-			
+
 			if (all || list_box->currentItem() == 5)
 			{
-				HBondModelProcessor dummy;
+				AddCartoonModel dummy;
 				getSettings(dummy);
 			}
 			
 			if (all || list_box->currentItem() == 6)
 			{
-				ForceModel dummy;
+				HBondModelProcessor dummy;
 				getSettings(dummy);
 			}
-
+			
 			if (all || list_box->currentItem() == 7)
 			{
-				AddBallAndStickModel dummy;
+				ForceModel dummy;
 				getSettings(dummy);
 			}
 		}

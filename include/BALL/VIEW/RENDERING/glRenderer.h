@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.24 2004/07/20 22:28:37 amoll Exp $
+// $Id: glRenderer.h,v 1.25 2004/09/27 22:50:32 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -347,7 +347,6 @@ namespace BALL
 			//_
 			void setColorRGBA_(const ColorRGBA& color)
 				throw() { glColor4ub(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());}
-			
 			///
 			Index 								drawing_mode_;
 

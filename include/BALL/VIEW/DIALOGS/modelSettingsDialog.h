@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.h,v 1.18 2004/09/16 14:36:58 amoll Exp $
+// $Id: modelSettingsDialog.h,v 1.19 2004/09/27 22:50:32 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MODELSETTINGSDIALOG_H
@@ -183,7 +183,7 @@ namespace BALL
 
 			///
 			void setCartoonArrowWidth(float value) 
-				throw() { setValue_(cartoon_arrow_height_slider,value);}
+				throw() { setValue_(cartoon_arrow_width_slider,value);}
 
 			///
 			void setCartoonArrowHeight(float value) 
