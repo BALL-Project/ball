@@ -1,4 +1,4 @@
-// $Id: trajectoryFile.h,v 1.7 2001/03/21 18:10:35 anker Exp $
+// $Id: trajectoryFile.h,v 1.8 2001/05/14 19:21:03 amoll Exp $
 
 #ifndef BALL_FORMAT_TRAJECTORYFILE_H
 #define BALL_FORMAT_TRAJECTORYFILE_H
@@ -82,13 +82,13 @@ namespace BALL
 		/// @name Accessors
 		//@{
 
-		/** get the number of snapshots stored in this instance
+		/** get the number of snapshots stored in this instance.
 				@return the number of snapshots of this instance
 		*/
 		Size getNumberOfSnapShots() const
 			throw();
 
-		/** get the number of atoms coverd by each snapshot
+		/** get the number of atoms coverd by each snapshot.
 				@return the number of atoms 
 		*/
 		Size getNumberOfAtoms() const
@@ -98,19 +98,19 @@ namespace BALL
 		/// @name Public methods for file handling
 		//@{
 
-		/** Read the header of an existing file
-				return true if the header could be read successfully, false ow.
+		/** Read the header of an existing file.
+				@return true if the header could be read successfully, false ow.
 		*/
 		virtual bool readHeader()
 			throw();
 
 		/** Write a header.
-				Return true if the header could be written successfully, false ow.
+				@return true if the header could be written successfully, false ow.
 		*/
 		virtual bool writeHeader()
 			throw();
 
-		/** Append a list of SnapShots to an existing file
+		/** Append a list of SnapShots to an existing file.
 				@param buffer the list os SnapShots we want to save
 				@return true, if writing was successful
 		*/
@@ -119,7 +119,7 @@ namespace BALL
 
 		/** Read the next SnapShot from the file.
 				@param snapshot a buffer for result delivery
-				@return {\tt true} if a snapshot could be read, {\tt false} ow.
+				@return true if a snapshot could be read, {\tt false} ow.
 		*/
 		virtual bool read(SnapShot& snapshot)
 			throw();

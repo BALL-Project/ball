@@ -1,4 +1,4 @@
-// $Id: parameterSection.h,v 1.12 2001/03/10 20:40:35 amoll Exp $
+// $Id: parameterSection.h,v 1.13 2001/05/14 19:20:44 amoll Exp $
 // Format: general  parameter section class
 
 #ifndef BALL_FORMAT_PARAMETERSECTION_H
@@ -20,7 +20,7 @@ namespace BALL
 	/**	General Parameter Section Class.
 			It is similar to \Ref{INIFile}, but a little bit more sophisticated.
 			Just as in a INIFile there can be comment lines starting with either 
-			"{\bf ;}", "{\bf !}" or "{\bf #}" and it is divided in sections.
+			"{\bf ;}", "{\bf !}" or "{\bf \#}" and it is divided in sections.
 			A section-line looks like "{\bf [ElectricFieldEffect]}".
 			The first non-comment line in a section is the format-line.
 			It defines the sort of values stored in the section and their order: \\

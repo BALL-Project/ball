@@ -1,4 +1,4 @@
-// $Id: snapShotManager.h,v 1.2 2001/03/21 18:12:50 anker Exp $
+// $Id: snapShotManager.h,v 1.3 2001/05/14 19:22:09 amoll Exp $
 
 #ifndef BALL_MOLMEC_COMMON_SNAPSHOTMANAGER_H
 #define BALL_MOLMEC_COMMON_SNAPSHOTMANAGER_H
@@ -218,17 +218,17 @@ namespace BALL
 			throw();
 
 		/** Read a certain SnapShot from a TrajectoryFile. This method tries to
-				read SnapShot number {\number} from the file
+				read SnapShot number {\bf number} from the file
 				@param number the number of the snapshot we want to read
 				@param snapshot a buffer for returning the snapshot
-				@return {\true} if the snapshot could be read, {\false} ow.
+				@return true if the snapshot could be read, {\bf false} ow.
 		*/
 		virtual bool applySnapShot(Size number)
 			throw();
 
 		/** Read a the first SnapShot from the associated TrajectoryFile.
 				@param snapshot a buffer for returning the snapshot
-				@return {\true} if the snapshot could be read, {\false} ow.
+				@return true if the snapshot could be read, {\bf false} ow.
 		*/
 		virtual bool applyFirstSnapShot()
 			throw();
@@ -236,7 +236,7 @@ namespace BALL
 		/** Read a the next SnapShot from the associated TrajectoryFile and
 				apply it to the system
 				@param snapshot a buffer for returning the snapshot
-				@return {\true} if the snapshot could be read, {\false} ow.
+				@return true if the snapshot could be read, {\bf false} ow.
 		*/
 		virtual bool applyNextSnapShot()
 			throw();
