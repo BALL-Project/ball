@@ -1,4 +1,4 @@
-// $Id: snapShot.C,v 1.6 2000/01/10 21:48:43 oliver Exp $
+// $Id: snapShot.C,v 1.7 2000/01/18 16:44:15 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/snapShot.h>
 #include <BALL/CONCEPT/XDRPersistenceManager.h> 
@@ -850,11 +850,11 @@ namespace BALL
 
 
       // set the file pointer to the first entry
-      input_file.seekp(header_.start_position);
+      input_file.seekp((Index)header_.start_position);
 
 
       while(counter < header_.no_of_snapshots)
-        {
+      {
         // read the index of the snapshot object and check if it is
         // the right one
         position = input_file.tellp(); 
@@ -864,21 +864,21 @@ namespace BALL
         input_file.read((char *) &tmp.total_length, sizeof(tmp.total_length)); 
 
         if(tmp.valid == true && tmp.index == index)
-          {
+        {
           // the search has been successful 
-          input_file.seekp(position); 
+          input_file.seekp((Index)position); 
           input_file >> tmp; 
 
           input_file.close(); 
           return tmp; 
-          }
-        else
-         {
-         // skip this  entry 
-         input_file.seekp(position + tmp.total_length); 
-         counter++; 
-         }
         }
+        else
+				{
+          // skip this  entry 
+          input_file.seekp((Index)position + (Index)tmp.total_length); 
+          counter++; 
+        }
+      }
       
       input_file.close(); 
 
@@ -887,7 +887,7 @@ namespace BALL
       tmp.index = 0; 
       return tmp; 
 
-      } // end of SnapShotManager::getSnapShot
+    } // end of SnapShotManager::getSnapShot
 
 
 
