@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomContainer.C,v 1.13 2002/12/12 10:20:16 oliver Exp $
+// $Id: atomContainer.C,v 1.14 2003/02/08 16:14:48 oliver Exp $
 
 #include <BALL/KERNEL/atomContainer.h>
 
@@ -419,6 +419,7 @@ namespace BALL
 		BALL_DUMP_STREAM_PREFIX(s);
 		
 		Composite::dump(s, depth);
+		PropertyManager::dump(s, depth);
 
 		BALL_DUMP_DEPTH(s, depth);
 		s << "  name: " << name_ << endl;
