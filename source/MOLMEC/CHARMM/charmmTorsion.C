@@ -1,4 +1,4 @@
-// $Id: charmmTorsion.C,v 1.6 2000/06/30 05:56:15 oliver Exp $
+// $Id: charmmTorsion.C,v 1.7 2001/06/27 10:41:51 oliver Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmTorsion.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -117,7 +117,7 @@ namespace BALL
 				{
 					// central atoms
 					a2 = *atom_it;
-					a3 = it1->getSecondAtom();
+					a3 = const_cast<Atom*>(it1->getSecondAtom());
 
 					for (it2 = (*atom_it)->beginBond(); +it2 ; ++it2) 
 					{
@@ -126,30 +126,30 @@ namespace BALL
 							// determine the first atom
 							if ((*it2).getFirstAtom() == *atom_it) 
 							{
-								a1 = (*it2).getSecondAtom();
+								a1 = const_cast<Atom*>(it2->getSecondAtom());
 							} 
 							else 
 							{
-								a1 = (*it2).getFirstAtom();
+								a1 = const_cast<Atom*>(it2->getFirstAtom());
 							}
 
-							for (it3 = (*it1).getSecondAtom()->beginBond(); +it3 ; ++it3) 
+							for (it3 = const_cast<Atom*>(it1->getSecondAtom())->beginBond(); +it3 ; ++it3) 
 							{
 								if ((*it3).getFirstAtom() != a2 ) 
 								{
 									// determine the fourth atom a4
 									if ((*it3).getFirstAtom() == a3)
 									{
-										a4 = (*it3).getSecondAtom();
+										a4 = const_cast<Atom*>(it3->getSecondAtom());
 									} 
 									else 
 									{
-										a4 = (*it3).getFirstAtom();
+										a4 = const_cast<Atom*>(it3->getFirstAtom());
 									}
 
 									if (getForceField()->getUseSelection() == false ||
-										(getForceField()->getUseSelection() == true &&
-										(a1->isSelected() && a2->isSelected() && a3->isSelected() && a4->isSelected())))
+											(getForceField()->getUseSelection() == true &&
+											 (a1->isSelected() && a2->isSelected() && a3->isSelected() && a4->isSelected())))
 									{
 										// if we use ResidueTorsions (i.e. a list of torsions for each
 										// residue is specified in the parameter file), we have to check

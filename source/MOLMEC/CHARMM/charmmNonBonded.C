@@ -1,4 +1,4 @@
-// $Id: charmmNonBonded.C,v 1.12 2001/05/17 18:25:21 anker Exp $
+// $Id: charmmNonBonded.C,v 1.13 2001/06/27 10:41:50 oliver Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmNonBonded.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -1003,19 +1003,18 @@ namespace BALL
 
 			if (!use_selection)
 			{
-				it->atom1->setForce(it->atom1->getForce() + force);
-				it->atom2->setForce(it->atom2->getForce() - force);
+				it->atom1->getForce() += force;
+				it->atom2->getForce() += force;
 			} 
 			else 
 			{
 				if (it->atom1->isSelected()) 
 				{
-					it->atom1->setForce(it->atom1->getForce() + force);
+					it->atom1->getForce() += force;
 				}
-
 				if (it->atom2->isSelected()) 
 				{
-					it->atom2->setForce(it->atom2->getForce() - force);
+					it->atom2->getForce() -= force;
 				}
 			}
 		}
@@ -1108,7 +1107,7 @@ namespace BALL
 			// evaluate remaining non-bonded pairs (also in the same vector) 
 			for (i = 0; it != non_bonded_.end(); ++it, i++)  
 			{                                                                                            
-				if (use_selection == false || (use_selection == true  && (it->atom1->isSelected() || it->atom2->isSelected()))) 
+				if (use_selection == false || ((use_selection == true) && (it->atom1->isSelected() || it->atom2->isSelected()))) 
 				{                                                                                          
 					CHARMMcalculateVdWAndElectrostaticEnergy
 						(it, ENERGY_PARAMETERS, true, true, 
@@ -1127,7 +1126,7 @@ namespace BALL
 			// first evaluate 1-4 non-bonded pairs 
 			for (i = 0, it = non_bonded_.begin(); i < number_of_1_4_; ++it, i++)  
 			{                                                                                            
-				if (use_selection == false || (use_selection == true  && (it->atom1->isSelected() || it->atom2->isSelected()))) 
+				if (use_selection == false || ((use_selection == true)  && (it->atom1->isSelected() || it->atom2->isSelected()))) 
 				{                                                                                          
 					CHARMMcalculateVdWAndElectrostaticEnergy
 						(it, ENERGY_PARAMETERS, true, false, 
@@ -1138,7 +1137,7 @@ namespace BALL
 			// evaluate remaining non-bonded pairs (also in the same vector) 
 			for (i = 0; it != non_bonded_.end(); ++it, i++)  
 			{                                                                                    
-				if (use_selection == false || (use_selection == true  && (it->atom1->isSelected() || it->atom2->isSelected()))) 
+				if (use_selection == false || ((use_selection == true) && (it->atom1->isSelected() || it->atom2->isSelected()))) 
 				{                                                                                 
 					CHARMMcalculateVdWAndElectrostaticEnergy
 						(it, ENERGY_PARAMETERS, true, false, 
@@ -1152,7 +1151,7 @@ namespace BALL
 			// first evaluate 1-4 non-bonded pairs 
 			for (i = 0, it = non_bonded_.begin(); i < number_of_1_4_; ++it, i++)  
 			{                                                                                            
-				if (use_selection == false || (use_selection == true  && (it->atom1->isSelected() || it->atom2->isSelected())))
+				if (use_selection == false || ((use_selection == true)  && (it->atom1->isSelected() || it->atom2->isSelected())))
 				{                                                                                          
 					CHARMMcalculateVdWAndElectrostaticEnergy
 						(it, ENERGY_PARAMETERS, false, true, 
@@ -1164,7 +1163,7 @@ namespace BALL
 			for (i = 0; it != non_bonded_.end(); ++it, i++)  
 			{                                                                                            
 				if (use_selection == false 
-						|| (use_selection == true  && (it->atom1->isSelected() || it->atom2->isSelected()))) 
+						|| ((use_selection == true) && (it->atom1->isSelected() || it->atom2->isSelected()))) 
 				{                                                                                          
 					CHARMMcalculateVdWAndElectrostaticEnergy
 						(it, ENERGY_PARAMETERS, false, true, 
@@ -1179,7 +1178,7 @@ namespace BALL
 			// first evaluate 1-4 non-bonded pairs 
 			for (i = 0, it = non_bonded_.begin(); i < number_of_1_4_; ++it, i++)  
 			{                                                                                            
-				if (use_selection == false || (use_selection == true  && (it->atom1->isSelected() || it->atom2->isSelected()))) 
+				if (use_selection == false || ((use_selection == true) && (it->atom1->isSelected() || it->atom2->isSelected()))) 
 				{                                                                                          
 					CHARMMcalculateVdWAndElectrostaticEnergy
 						(it, ENERGY_PARAMETERS, false, false, 
@@ -1191,7 +1190,7 @@ namespace BALL
 			for (i = 0; it != non_bonded_.end(); ++it, i++)  
 			{                                                                                            
 				if (use_selection == false 
-						|| (use_selection == true  && (it->atom1->isSelected() || it->atom2->isSelected()))) 
+						|| ((use_selection == true) && (it->atom1->isSelected() || it->atom2->isSelected()))) 
 				{                                                                                          
 					CHARMMcalculateVdWAndElectrostaticEnergy
 						(it, ENERGY_PARAMETERS, false, false, 
@@ -1278,7 +1277,7 @@ namespace BALL
 
 		// calculate forces arising from 1-4 interaction pairs
 		// and remaining non-bonded interaction pairs
-		if (use_periodic_boundary == true && use_dist_depend_dielectric_ == true)
+		if ((use_periodic_boundary == true) && (use_dist_depend_dielectric_ == true))
 		{
 			// periodic boundary is enabled; use a distance dependent dielectric constant 
 			// Calculate periods and half periods
@@ -1291,7 +1290,7 @@ namespace BALL
 			for (i = 0, it = non_bonded_.begin(); i < number_of_1_4_; i++, ++it) 
 			{
 				if (use_selection == false 
-						|| ( use_selection == true  && ( it->atom1->isSelected() || it->atom2->isSelected())))
+						|| ((use_selection == true) && (it->atom1->isSelected() || it->atom2->isSelected())))
 				{
 					CHARMMcalculateVdWAndElectrostaticForce
 						(it, e_scaling_factor_1_4, vdw_scaling_factor_1_4,
@@ -1303,7 +1302,7 @@ namespace BALL
 			for (i = 0; it != non_bonded_.end(); i++, ++it) 
 			{
 				if (use_selection == false 
-						|| ( use_selection == true  && ( it->atom1->isSelected() || it->atom2->isSelected())))
+						|| ((use_selection == true) && (it->atom1->isSelected() || it->atom2->isSelected())))
 				{
 					CHARMMcalculateVdWAndElectrostaticForce
 						(it, e_scaling_factor, vdw_scaling_factor,
@@ -1322,7 +1321,7 @@ namespace BALL
 			// first deal with 1-4 non-bonded pairs
 			for (i = 0, it = non_bonded_.begin(); i < number_of_1_4_; i++, ++it) 
 			{
-				if (use_selection == false || ( use_selection == true  && ( it->atom1->isSelected() || it->atom2->isSelected())))
+				if (use_selection == false || ((use_selection == true) && (it->atom1->isSelected() || it->atom2->isSelected())))
 				{
 					CHARMMcalculateVdWAndElectrostaticForce
 						(it, e_scaling_factor_1_4, vdw_scaling_factor_1_4,
@@ -1333,7 +1332,7 @@ namespace BALL
 			// now deal with 'real' non-bonded pairs (in the same vector non_bonded_) 
 			for (i = 0; it != non_bonded_.end(); i++, ++it) 
 			{
-				if (use_selection == false || (use_selection == true  && (it->atom1->isSelected() || it->atom2->isSelected())))
+				if (use_selection == false || ((use_selection == true) && (it->atom1->isSelected() || it->atom2->isSelected())))
 				{
 					CHARMMcalculateVdWAndElectrostaticForce
 						(it, e_scaling_factor, vdw_scaling_factor,
@@ -1348,7 +1347,7 @@ namespace BALL
 			// first deal with 1-4 non-bonded pairs
 			for (i = 0, it = non_bonded_.begin(); i < number_of_1_4_; i++, ++it) 
 			{
-				if (use_selection == false || ( use_selection == true  && ( it->atom1->isSelected() || it->atom2->isSelected())))
+				if (use_selection == false || ((use_selection == true) && (it->atom1->isSelected() || it->atom2->isSelected())))
 				{
 					CHARMMcalculateVdWAndElectrostaticForce
 						(it, e_scaling_factor_1_4, vdw_scaling_factor_1_4,
@@ -1359,7 +1358,7 @@ namespace BALL
 			// now deal with 'real' non-bonded pairs (in the same vector non_bonded_)
 			for (i = 0; it != non_bonded_.end(); i++, ++it) 
 			{
-				if (use_selection == false || (use_selection == true  && ( it->atom1->isSelected() || it->atom2->isSelected())))
+				if (use_selection == false || ((use_selection == true) && (it->atom1->isSelected() || it->atom2->isSelected())))
 				{
 					CHARMMcalculateVdWAndElectrostaticForce
 						(it, e_scaling_factor, vdw_scaling_factor,
@@ -1374,7 +1373,7 @@ namespace BALL
 			// first deal with 1-4 non-bonded pairs
 			for (i = 0, it = non_bonded_.begin(); i < number_of_1_4_; i++, it++) 
 			{
-				if (use_selection == false || ( use_selection == true  && ( it->atom1->isSelected() || it->atom2->isSelected())))
+				if (use_selection == false || ((use_selection == true) && (it->atom1->isSelected() || it->atom2->isSelected())))
 				{
 					CHARMMcalculateVdWAndElectrostaticForce
 						(it, e_scaling_factor_1_4, vdw_scaling_factor_1_4,
@@ -1385,7 +1384,7 @@ namespace BALL
 			// now deal with 'real' non-bonded pairs (in the same vector non_bonded_)
 			for (i = 0; it != non_bonded_.end(); i++, ++it) 
 			{
-				if (use_selection == false || (use_selection == true  && ( it->atom1->isSelected() || it->atom2->isSelected())))
+				if (use_selection == false || ((use_selection == true) && (it->atom1->isSelected() || it->atom2->isSelected())))
 				{
 					CHARMMcalculateVdWAndElectrostaticForce
 						(it, e_scaling_factor, vdw_scaling_factor,

@@ -1,4 +1,4 @@
-// $Id: charmmStretch.C,v 1.5 2000/06/30 05:56:15 oliver Exp $
+// $Id: charmmStretch.C,v 1.6 2001/06/27 10:41:51 oliver Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmStretch.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -132,8 +132,8 @@ namespace BALL
 						Atom::Type atom_type_A = bond.getFirstAtom()->getType();
 						Atom::Type atom_type_B = bond.getSecondAtom()->getType();
 			
-						stretch_[i].atom1 = bond.getFirstAtom();
-						stretch_[i].atom2 = bond.getSecondAtom();
+						stretch_[i].atom1 = const_cast<Atom*>(bond.getFirstAtom());
+						stretch_[i].atom2 = const_cast<Atom*>(bond.getSecondAtom());
 			
 						// when retrieving the parameters, order does not matter
 						// first, we try an exact match, than we try wildcards
@@ -197,12 +197,17 @@ namespace BALL
 	// calculates and adds its forces to the current forces of the force field
 	void CharmmStretch::updateForces()
 	{
-
+		if (getForceField() == 0)
+		{	
+			return;
+		}
+		
 		// iterate over all bonds, update the forces
+		bool use_selection = getForceField()->getUseSelection();
 		for (Size i = 0 ; i < number_of_stretches_; i++)
 		{
-			if (getForceField()->getUseSelection() == false ||
-			   (getForceField()->getUseSelection() == true && 
+			if (use_selection == false ||
+			   (use_selection == true && 
 			   (stretch_[i].atom1->isSelected() || stretch_[i].atom2->isSelected())))
 			{
 
@@ -217,18 +222,20 @@ namespace BALL
 					//   J/mol -> J: Avogadro
 					direction *= 1e13 / Constants::AVOGADRO * 2 * stretch_[i].values.k * (distance - stretch_[i].values.r0)/distance;
 
-					if (getForceField()->getUseSelection() == false)
+					if (use_selection == false)
 					{
-						stretch_[i].atom1->setForce(stretch_[i].atom1->getForce() - direction);
-						stretch_[i].atom2->setForce(stretch_[i].atom2->getForce() + direction);
-					} else {
+						stretch_[i].atom1->getForce() -= direction;
+						stretch_[i].atom2->getForce() += direction;
+					} 
+					else 
+					{
 						if (stretch_[i].atom1->isSelected())
 						{
-							stretch_[i].atom1->setForce(stretch_[i].atom1->getForce() - direction);
+							stretch_[i].atom1->getForce() -= direction;
 						}
 						if (stretch_[i].atom2->isSelected())
 						{
-							stretch_[i].atom2->setForce(stretch_[i].atom2->getForce() + direction);
+							stretch_[i].atom2->getForce() += direction;
 						}
 					}
 				}
