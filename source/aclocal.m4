@@ -436,6 +436,7 @@
 			fi
 		fi
 	else
+		AC_MSG_RESULT()
 		CXXPATH=""
 		while test "${CXXPATH}" = "" ; do
 			CXX=`echo ${CXX_SEARCH_ORDER}|${CUT} -d\  -f1`
@@ -675,7 +676,7 @@ AC_DEFUN(CF_IDENTIFY_COMPAQ,[
 
 AC_DEFUN(CF_IDENTIFY_SGI, [
 	AC_MSG_CHECKING(for SGI/MipsPro C++ compiler)
-	SGI_CXX=`${CXX} -V -n32 2>/dev/null | ${GREP} "MIPSpro" | ${CUT} -d" " -f1`
+	SGI_CXX=`${CXX} -version -n32 2>&1 | ${GREP} "MIPSpro" | ${CUT} -d" " -f1`
 	if test "${SGI_CXX}" = "MIPSpro"; then
 		IS_MIPSPRO=true
 		AC_MSG_RESULT(yes)

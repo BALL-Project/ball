@@ -2752,6 +2752,8 @@ echo "$as_me: error: aborted" >&2;}
 			fi
 		fi
 	else
+		echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6
 		CXXPATH=""
 		while test "${CXXPATH}" = "" ; do
 			CXX=`echo ${CXX_SEARCH_ORDER}|${CUT} -d\  -f1`
@@ -3030,7 +3032,7 @@ echo "${ECHO_T}no" >&6
 if test "${CXX_IDENTIFIED}" != true ; then
 	echo "$as_me:$LINENO: checking for SGI/MipsPro C++ compiler" >&5
 echo $ECHO_N "checking for SGI/MipsPro C++ compiler... $ECHO_C" >&6
-	SGI_CXX=`${CXX} -V -n32 2>/dev/null | ${GREP} "MIPSpro" | ${CUT} -d" " -f1`
+	SGI_CXX=`${CXX} -version -n32 2>&1 | ${GREP} "MIPSpro" | ${CUT} -d" " -f1`
 	if test "${SGI_CXX}" = "MIPSpro"; then
 		IS_MIPSPRO=true
 		echo "$as_me:$LINENO: result: yes" >&5
