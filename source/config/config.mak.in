@@ -2,7 +2,7 @@
 # Please do ONLY change config.mak.in, as config.mak is automagically 
 # created by configure from config.mak.in
 #
-# RCS ID: $Id: config.mak.in,v 1.12 2000/07/18 23:12:49 oliver Exp $
+# RCS ID: $Id: config.mak.in,v 1.13 2000/07/18 23:22:22 oliver Exp $
 #
 # author:    $author$
 # date:      $date$
@@ -127,4 +127,4 @@ DIRS	= @SUBDIRS@
 # Rule to create .o files from .C files
 #
 .C.o:
-	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(BALL_CXXFLAGS) $(BALL_INCLUDES) -c $*.C -o $@
+	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(BALL_CXXFLAGS) $(BALL_INCLUDES) $(ADD_INCLUDES) -c $*.C -o $@
