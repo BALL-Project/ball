@@ -1,4 +1,4 @@
-// $Id: logStream.C,v 1.14 2000/05/24 00:05:34 amoll Exp $
+// $Id: logStream.C,v 1.15 2000/05/29 23:27:03 amoll Exp $
 
 #include <BALL/COMMON/logStream.h>
 #include <BALL/CONCEPT/notification.h>
@@ -143,7 +143,7 @@ namespace BALL
 		return 0;
 	}
 
-	string LogStreamBuf::expandPrefix_(const string& prefix, int level, time_t time) const
+	string LogStreamBuf::expandPrefix_(const string& prefix, const int& level, const time_t& time) const
 	{
 		Size		index = 0;
 		Size		copied_index = 0;
@@ -260,7 +260,7 @@ namespace BALL
 	}
 
 	// create a new buffer
-	LogStream::LogStream(bool associate_stdio)
+	LogStream::LogStream(const bool& associate_stdio)
 		: BALL_IOS(new LogStreamBuf),
 			BALL_OSTREAM(new LogStreamBuf),
 			delete_buffer_(true)
@@ -282,8 +282,13 @@ namespace BALL
 			delete rdbuf();
 		}
 	}
-		
-	void LogStream::insert(ostream& stream, int min_level, int max_level) 
+	
+	void LogStream::clear()
+	{
+		rdbuf()->loglines_.clear();
+	}
+
+	void LogStream::insert(ostream& stream, const int& min_level, const int& max_level) 
 	{
 		// return if no LogStreamBuf is defined!
 		if (rdbuf() == 0)
@@ -389,7 +394,7 @@ namespace BALL
 		// if the stream is not found nothing happens!		
 	}
 
-	void LogStream::setMinLevel(const ostream& stream, int level) 
+	void LogStream::setMinLevel(const ostream& stream, const int& level) 
 	{
 		// return if no LogStreamBuf is defined!
 		if (rdbuf() == 0)
@@ -412,7 +417,7 @@ namespace BALL
 		}
 	}
 
-	void LogStream::setMaxLevel(const ostream& stream, int level) 
+	void LogStream::setMaxLevel(const ostream& stream, const int& level) 
 	{
 		// return if no LogStreamBuf is defined!
 		if (rdbuf() == 0)
@@ -462,7 +467,7 @@ namespace BALL
 		}
 	}
 	
-	Size LogStream::getNumberOfLines(int min_level, int max_level) const  
+	Size LogStream::getNumberOfLines(const int& min_level, const int& max_level) const  
 	{
 
 		// cast this to const, to access non const method rdbuf() which
@@ -492,7 +497,7 @@ namespace BALL
 		return count;
 	}
 
-	string LogStream::getLineText(Index index) const
+	string LogStream::getLineText(const Index& index) const
 	{
 		if ((signed)getNumberOfLines() < index)
 		{
@@ -509,25 +514,25 @@ namespace BALL
 		return non_const_this->rdbuf()->loglines_[index].text;	
 	}
 
-	int LogStream::getLineLevel(Index index) const
+	int LogStream::getLineLevel(const Index& index) const
 	{
 		if ((signed)getNumberOfLines() < index)
 		{
-			return 0;
+			return -1;
 		}
 
 		LogStream*	non_const_this = const_cast<LogStream*>(this);
 
 		if (non_const_this->rdbuf() == 0)
 		{
-			return 0;
+			return -1;
 		}
 
 		return non_const_this->rdbuf()->loglines_[index].level;	
 	}
 
 
-	time_t LogStream::getLineTime(Index index) const
+	time_t LogStream::getLineTime(const Index& index) const
 	{
 		if ((signed)getNumberOfLines() < index)
 		{
@@ -542,6 +547,42 @@ namespace BALL
 		}
 
 		return non_const_this->rdbuf()->loglines_[index].time;	
+	}
+
+	list<int>	LogStream::filterLines(const int& min_level = INT_MIN, const int& max_level = INT_MAX,
+							const time_t& earliest = 0, const time_t& latest = LONG_MAX, const string& s = "") const
+	{
+    using std::list;																																
+		list<int>	list_indices;
+		Position pos = 0;
+		LogStreamBuf* log = const_cast<LogStream*>(this)->rdbuf();
+
+		while (pos < log->loglines_.size() && 
+					 log->loglines_[pos].time < earliest)
+		{
+			pos++;
+		}
+		while (pos < log->loglines_.size() && 
+					 log->loglines_[pos].time <= latest)
+		{
+			if (log->loglines_[pos].level >= min_level &&
+					log->loglines_[pos].level <= max_level)
+			{
+				if (s.length() > 0)
+				{
+					if (log->loglines_[pos].text.find(s, 0) != string::npos )
+					{
+						list_indices.push_back(pos);
+					}
+				}
+				else
+				{
+					list_indices.push_back(pos);
+				}
+			}
+			pos++;
+		}
+		return list_indices;
 	}
 
 	// global default logstream
