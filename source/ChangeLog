@@ -1,9 +1,10 @@
-0.95a: 03.04.2000
+0.95a: 05.05.2000
 		New:
 			- tutorial (at least a beginning)
-			- support for Tru64 Unix with Compaq C++ 6.2
+			- support for Tru64 Unix with Compaq C++ 6.2, Solaris 8
 			- complete rewrite of the energy minimization part
       - switching functions added for CHARMM and AMBER
+			- reaction field energy implemented (Poisson-Boltzmann code)
       - new architecture with better modularity for MolVIEW
       - new website 
       - license terms
