@@ -1,8 +1,6 @@
-// $Id: file.C,v 1.11 2000/07/18 08:30:01 oliver Exp $
+// $Id: file.C,v 1.12 2000/10/19 20:12:34 amoll Exp $
 
 #include <BALL/SYSTEM/file.h>
-
-
 #include <math.h>
 
 using std::ios;
@@ -32,22 +30,32 @@ namespace BALL
 	}
 
 	File::File(const String& name, File::OpenMode open_mode)
+		throw (Exception::FileNotFound)
 		:	fstream(),
 			name_(),
 			open_mode_(ios::in),
 			is_open_(false),
 			is_temporary_(false)
 	{
+		if (name == "")
+		{
+			throw (Exception::FileNotFound(__FILE__, __LINE__, name_));
+		}
 		open(name, open_mode);
 	}
 
 	File::File(const File& file)
-		: fstream()
+		throw (Exception::FileNotFound)
+		: fstream(),
+			name_(file.name_),
+			open_mode_(file.open_mode_),
+			is_open_(file.is_open_),
+			is_temporary_(file.is_temporary_)
 	{
-		name_ = file.name_;
-		open_mode_ = file.open_mode_;
-		is_open_ = file.is_open_;
-		is_temporary_ = file.is_temporary_;
+		if (name_ == "")
+		{
+			throw (Exception::FileNotFound(__FILE__, __LINE__, name_));
+		}
 
 		open(name_, open_mode_);
 	}
@@ -58,12 +66,18 @@ namespace BALL
 	}
 
 	bool File::open(const String& name, File::OpenMode open_mode)
+		throw (Exception::FileNotFound)
 	{
 		close();
 		
 		name_ = name;
 		
 		FileSystem::canonizePath(name_);
+
+		if (!isAccessible(name_))
+		{
+			throw (Exception::FileNotFound(__FILE__, __LINE__, name_));
+		}
 
 		fstream::open(name_.c_str(), open_mode);
 

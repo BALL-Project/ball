@@ -1,4 +1,4 @@
-// $Id: file.h,v 1.12 2000/10/05 22:30:26 oliver Exp $
+// $Id: file.h,v 1.13 2000/10/19 20:11:25 amoll Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -145,7 +145,8 @@ namespace BALL
 				@see    open
 				@return File - new constructed File object
 		*/
-		File(const String& name, OpenMode open_mode = IN);
+		File(const String& name, OpenMode open_mode = IN)
+			throw (Exception::FileNotFound);
 
 		/** Copy constructor.
 				Construct new File object by copying the File {\em file}
@@ -154,7 +155,8 @@ namespace BALL
 				@see    open
 				@return File - new constructed File cloned from {\em file}
 		*/
-		File(const File& file);
+		File(const File& file)
+			throw (Exception::FileNotFound);
 
 		/** Destructor.
 				Default destruction of {\em *this} File.
@@ -196,7 +198,8 @@ namespace BALL
 				@param open_mode the open mode, default is IN
 				@return bool true if the file could be opend
 		*/
-		bool open(const String& name, OpenMode open_mode = IN);
+		bool open(const String& name, OpenMode open_mode = IN)
+			throw (Exception::FileNotFound);
 
 		/**	Reopen the file.
 				The file is closed and reopend.

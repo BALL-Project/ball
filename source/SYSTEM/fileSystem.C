@@ -1,4 +1,4 @@
-// $Id: fileSystem.C,v 1.4 2000/03/30 19:49:24 oliver Exp $
+// $Id: fileSystem.C,v 1.5 2000/10/19 20:12:34 amoll Exp $
 
 #include <BALL/SYSTEM/fileSystem.h>
 
@@ -16,7 +16,13 @@ namespace BALL
 
 	String& FileSystem::canonizePath(String& path)
 	{
-		register Index index = 0;
+
+		if (path == "")
+		{
+			throw (Exception::FileNotFound(__FILE__, __LINE__, path));
+		}
+
+		Index index = 0;
 
 		// replace all double occurences of a PATH_SEPARATOR with a single PATH_SEPARATOR
 		String s(FileSystem::PATH_SEPARATOR);
@@ -96,7 +102,6 @@ namespace BALL
 		}
 		else if (index == INVALID_INDEX)
 		{
-
 			index = (Index)path.size() - 1;
 		}
 
