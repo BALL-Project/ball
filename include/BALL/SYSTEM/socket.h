@@ -1,4 +1,4 @@
-// $Id: socket.h,v 1.20 2001/05/18 16:54:01 anker Exp $
+// $Id: socket.h,v 1.21 2001/05/19 08:40:07 amoll Exp $
 
 #ifndef BALL_SYSTEM_SOCKET_H
 #define BALL_SYSTEM_SOCKET_H
@@ -345,7 +345,7 @@ namespace BALL
 
 		//_
 		int xflags() const
-			throw();
+			throw()
 		{ 
 			return x_flags; 
 		}
