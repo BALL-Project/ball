@@ -1,3 +1,4 @@
+// $Id: DlgMoveOverlayData.C,v 1.3 2001/01/24 13:04:11 amoll Exp $
 /**********************************************************************
 
 	--- Qt Architect generated file ---
