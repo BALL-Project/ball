@@ -1,4 +1,4 @@
-// $Id: spectrum.h,v 1.3 2001/07/29 19:29:31 oliver Exp $
+// $Id: spectrum.h,v 1.4 2001/07/29 22:18:31 oliver Exp $
 
 #ifndef BALL_NMR_SPECTRUM_H
 #define BALL_NMR_SPECTRUM_H
@@ -85,7 +85,7 @@ namespace BALL
 	/**	Calculate the difference between two spectra.
 	*/
 	template <typename DataT, typename PeakT, typename PositionT>
-	double Spectrum<DataT, PeakT, PositionT>::difference(const Spectrum<DataT, PeakT, PositionT>& /spectrum/) const
+	double Spectrum<DataT, PeakT, PositionT>::difference(const Spectrum<DataT, PeakT, PositionT>& /* spectrum */) const
 	{
 		// BAUSTELLE
 		return 0.0;
