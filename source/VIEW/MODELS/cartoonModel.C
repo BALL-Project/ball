@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.21 2004/02/24 18:47:58 amoll Exp $
+// $Id: cartoonModel.C,v 1.22 2004/02/26 17:44:26 amoll Exp $
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
@@ -27,9 +27,10 @@ namespace BALL
 			throw()
 			: AddBackboneModel(),
 				last_chain_(0),
+				spline_vector_position_(-1),
 				helix_radius_(2.4),
 				arrow_width_(2),
-				arrow_height_(0.5)
+				arrow_height_(0.4)
 		{
 		}
 
@@ -37,6 +38,7 @@ namespace BALL
 			throw()
 			:	AddBackboneModel(cartoon),
 				last_chain_(0),
+				spline_vector_position_(-1),
 				helix_radius_(cartoon.helix_radius_),
 				arrow_width_(cartoon.arrow_width_),
 				arrow_height_(cartoon.arrow_height_)
@@ -54,14 +56,26 @@ namespace BALL
 
 		bool AddCartoonModel::finish()
 		{
-			spline_vector_.clear();
-			spline_.clear();
-			have_start_point_ = false;
-
+			clear_();
 			return true;
 		}
 
+
+		void AddCartoonModel::clear_()
+			throw()
+		{
+			spline_vector_.clear();
+			last_parent_ = 0;
+			have_start_point_ = false;
+
+			spline_.clear();
+			last_chain_ = 0;
+			spline_vector_position_ = -1;
+		}
+
+		// -----------------------------------------------------------------
 		void AddCartoonModel::drawStrand_(SecondaryStructure& ss)
+			throw()
 		{
 			vector<Vector3> peptide_normals;
 			bool last_residue = false;
@@ -170,7 +184,6 @@ namespace BALL
 				// amino acid: we take the point between the current N (N) and the C_alpha (CA) and
 				// the point between the C_alpha and C
 				
-
 				// if this is the first residue, we also add the position of the N-atom to prevent
 				// large "holes" in the representation. we also reuse the same normal as for the
 				// first "real" spline point
@@ -468,16 +481,9 @@ namespace BALL
 		}
 
 
-		void AddCartoonModel::insertTriangle_(Position v1, Position v2, Position v3, Mesh& mesh)
-		{
-			Surface::Triangle t;
-			t.v1 = v1;
-			t.v2 = v2;
-			t.v3 = v3;
-			mesh.triangle.push_back(t);
-		}
-
+		// ---------------------------------------------------------------------
 		void AddCartoonModel::drawHelix_(SecondaryStructure& ss)
+			throw()
 		{
 			Atom* first = 0;
 			Atom* last = 0;
@@ -543,7 +549,6 @@ namespace BALL
 				}
 			}
 
-			
 			// smooth the normals of the neighbouring spline segment to the value of the cylinder normal
 			if (p1 != 0)
 			{
@@ -564,19 +569,18 @@ namespace BALL
 			spline_.clear();
 			spline_.push_back(spline_vector_[0].getVector());
 			
-			
  			last_spline_point_ = spline_vector_[p2];
 			last_point_ = last_spline_point_.getVector();
 			have_start_point_ = true;
 		}
 
-				
+		// -------------------------------------------------------------------	
 		Processor::Result AddCartoonModel::operator () (Composite& composite)
 		{
 			if (RTTI::isKindOf<Chain>(composite))
 			{
+				clear_();
 				last_chain_ = &composite;
-				have_start_point_ = false;
 				computeSpline_(*RTTI::castTo<Chain>(composite));
 				have_start_point_ = false;
 				return Processor::CONTINUE;
@@ -587,10 +591,7 @@ namespace BALL
 			// if called for a SS and no calculation done for the parent chain
 			if (last_chain_ != composite.getParent())
 			{
-				if (composite.getParent() == 0)
-				{
-					computeSpline_(*RTTI::castTo<SecondaryStructure>(composite));
-				}
+				clear_();
 
 				last_chain_ = composite.getParent();
 				computeSpline_(*RTTI::castTo<AtomContainer>(composite));
@@ -607,47 +608,90 @@ namespace BALL
 			}
 			else
 			{
-				if (spline_vector_.size() == 0) return Processor::CONTINUE;
-
-				Vector3 c1_position; // of first C
-				AtomIterator it;
-				BALL_FOREACH_ATOM(ss, it)
-				{
-					if (it->getName() == "C")
-					{
-						c1_position = it->getPosition();	
-						break;
-					}
-				}
-
-				Position index = 0; // start of spline points in the vector for the residues of this SS
-				for (; index<spline_vector_.size(); index++)
-				{
-					if (spline_vector_[index].getVector() == c1_position) break;
-				}
-
-				Position nr_of_residues = ss.countResidues();
-				for (Position res = 0; res < nr_of_residues; res++)
-				{
-					// dont draw the last residue of the chain, or we get a line to (0,0,0)
-					if (ss.getResidue(res) == ((Chain*)ss.getParent())->getCTerminal()) break;
-							
-					Position pos = res + index;
-					for (Position j = 0; j < 9; j++)
-					{
- 						buildGraphicalRepresentation_(
-							spline_[pos*9 + j], (j < 5) ? 
- 							spline_vector_[pos].getAtom() : 
- 							spline_vector_[pos+1].getAtom());
-					}
-				}
-
-				last_spline_point_ = spline_vector_[nr_of_residues + index];
-				last_point_ = last_spline_point_.getVector();
- 				have_start_point_ = false;
+				drawTube_(ss) ;
 			}
+
 			return Processor::CONTINUE;
 		}
+
+
+		// -----------------------------------------------------------------
+		void AddCartoonModel::drawTube_(SecondaryStructure& ss)
+			throw()
+		{
+			if (spline_vector_.size() == 0) 
+			{
+				have_start_point_ = false;
+				return;
+			}
+
+			Vector3 c1_position; // of first C atom
+			AtomIterator it;
+			BALL_FOREACH_ATOM(ss, it)
+			{
+				if (it->getName() == "C")
+				{
+					c1_position = it->getPosition();	
+					break;
+				}
+			}
+
+			Position index = 0; // start of spline points in the vector for the residues of this SS
+
+			// speed up search for current position in spline vector
+			if (spline_vector_position_ != -1)
+			{
+				index = spline_vector_position_ + 1;
+			}
+
+			for (; index<spline_vector_.size(); index++)
+			{
+				if (spline_vector_[index].getVector() == c1_position) 
+				{
+					spline_vector_position_ = index;
+					break;
+				}
+			}
+
+			Position nr_of_residues = ss.countResidues();
+			for (Position res = 0; res < nr_of_residues; res++)
+			{
+				// dont draw the last residue of the chain, or we get a line to (0,0,0)
+				if (((Chain*)ss.getParent())->getCTerminal() == ss.getResidue(res)) 
+				{
+ 				 	break;
+				}
+				
+
+				Position pos = res + index;
+				for (Position j = 0; j < 9; j++)
+				{
+					if (spline_.size() < pos*9 +j)
+					{
+						break;
+Log.error() << "#~~#   20 " << std::endl;
+					}
+					
+					if (spline_vector_.size() < pos +1)
+Log.error() << "#~~#   21 " << std::endl;
+
+					if (spline_vector_[pos + 1].getAtom() == 0)
+					{
+						break;
+Log.error() << "#~~#   22 " << std::endl;
+					}
+
+
+					buildGraphicalRepresentation_(
+						spline_[pos*9 + j], (j < 5) ? 
+						spline_vector_[pos].getAtom() : 
+						spline_vector_[pos+1].getAtom());
+				}
+			}
+
+		 	have_start_point_ = false;
+		}
+
 
 		void AddCartoonModel::dump(std::ostream& s, Size depth) const
 			throw()
@@ -665,9 +709,6 @@ namespace BALL
 
 		void AddCartoonModel::computeSpline_(AtomContainer& ac)
 		{
-			have_start_point_ = false;
-			spline_vector_.clear();
-			spline_.clear();
 			AtomIterator it;
 			BALL_FOREACH_ATOM(ac, it)
 			{
@@ -730,6 +771,15 @@ namespace BALL
 
 				spline_.push_back(new_vector);
 			}
+		}
+
+		void AddCartoonModel::insertTriangle_(Position v1, Position v2, Position v3, Mesh& mesh)
+		{
+			Surface::Triangle t;
+			t.v1 = v1;
+			t.v2 = v2;
+			t.v3 = v3;
+			mesh.triangle.push_back(t);
 		}
 
 	} // namespace VIEW

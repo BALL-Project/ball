@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.h,v 1.9 2004/02/26 08:41:40 anhi Exp $
+// $Id: backboneModel.h,v 1.10 2004/02/26 17:44:51 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_BACKBONEMODEL_H
@@ -38,7 +38,7 @@ namespace BALL
 			{
 			  public:
 
-				SplinePoint() {}
+				SplinePoint();
 				SplinePoint(const Vector3& point, const Atom* atom);
 				~SplinePoint() {}
 

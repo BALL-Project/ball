@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.9 2003/12/15 01:10:15 amoll Exp $
+// $Id: backboneModel.C,v 1.10 2004/02/26 17:45:04 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -17,6 +17,13 @@ namespace BALL
 {
 	namespace VIEW
 	{
+
+		AddBackboneModel::SplinePoint::SplinePoint()
+			: point_(),
+				tangent_(),
+				atom_(0)
+		{}
+
 
 		AddBackboneModel::SplinePoint::SplinePoint(const Vector3& point, const Atom* atom)
 			: point_(point),
@@ -55,7 +62,7 @@ namespace BALL
 			ModelProcessor::clear();
 			spline_vector_.clear();
 			last_parent_ = 0;
-			tube_radius_ = 0.4;
+			have_start_point_ = false;
 		}
 
 		bool AddBackboneModel::finish()

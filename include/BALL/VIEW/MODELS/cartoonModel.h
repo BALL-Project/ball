@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.h,v 1.13 2004/02/26 08:41:41 anhi Exp $
+// $Id: cartoonModel.h,v 1.14 2004/02/26 17:44:51 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_CARTOONMODEL_H
@@ -118,9 +118,18 @@ namespace BALL
 
 			protected:
 
-			void drawHelix_(SecondaryStructure& ss);
+			//_
+			virtual void clear_()
+				throw();
 
-			void drawStrand_(SecondaryStructure& ss);
+			void drawHelix_(SecondaryStructure& ss)
+				throw();
+
+			void drawStrand_(SecondaryStructure& ss)
+				throw();
+
+			void drawTube_(SecondaryStructure& ss)
+				throw();
 
 			//_ create a spline segment between two spline points a and b
 			void createSplineSegment2_(const SplinePoint &a, const SplinePoint &b);
@@ -134,6 +143,9 @@ namespace BALL
 			Composite* last_chain_;
 
 			SplinePoint last_spline_point_;
+
+			// used to speed up drawTube_
+			Index spline_vector_position_;
 
 			float helix_radius_;
 			float arrow_width_;
