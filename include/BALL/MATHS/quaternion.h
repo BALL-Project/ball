@@ -1,4 +1,4 @@
-// $Id: quaternion.h,v 1.11 2000/03/07 10:45:38 oliver Exp $
+// $Id: quaternion.h,v 1.12 2000/03/26 21:52:28 oliver Exp $
 
 #ifndef BALL_MATHS_QUATERNION_H
 #define BALL_MATHS_QUATERNION_H
@@ -35,7 +35,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE(TQuaternion<T>)
+		BALL_CREATE_NODEEP(TQuaternion<T>)
 		
 
 		/**	@name	Constructors and Destructors
@@ -51,9 +51,8 @@ namespace BALL
 		/**	Copy constructor.
 				Create a new TQuaternion object from another.
 				@param TQuaternion the TQuaternion object to be copied
-				@param bool ignored - just for interface consistency
 		*/	
-		TQuaternion(const TQuaternion& q, bool deep = true);
+		TQuaternion(const TQuaternion& q)
 
 		/**	Detailled constructor.
 				Create a new TQuaternion object from a TVector3 and an angle.
@@ -82,7 +81,7 @@ namespace BALL
 		*/
 		//@{
 		///
-		void set(const TQuaternion& q, bool deep = true);
+		void set(const TQuaternion& q)
 
 		/**	Assign the TQuaternion components.
 				@param axis the new axis component
@@ -100,16 +99,14 @@ namespace BALL
 
 		/**	Assign from another TQuaternion.
 				@param q the TQuaternion object to assign from
-				@param deep ignored
 		*/
 		TQuaternion& operator = (const TQuaternion& q);
 
 		/**	Assign to another TQuaternion.
 				Assigns the components to another TQuaternion.
 				@param q the TQuaternion to be asigned to
-				@param deep ignored
 		*/
-		void get(TQuaternion& q, bool deep = true);
+		void get(TQuaternion& q) const
 
 		/**	Assign the components to the standard values.
 				The axis-compnents are set to {\tt 0}, the angle is set to {\tt 1}.
@@ -226,7 +223,7 @@ namespace BALL
 	}
 
 	template <class T>
-	TQuaternion<T>::TQuaternion(const TQuaternion& q, bool /* deep */)
+	TQuaternion<T>::TQuaternion(const TQuaternion& q)
 		:	i(q.i),
 			j(q.j),
 			k(q.k),
@@ -252,7 +249,7 @@ namespace BALL
 	}
 
 	template <class T>
-	void TQuaternion<T>::set(const TQuaternion<T>& q, bool /* deep */)
+	void TQuaternion<T>::set(const TQuaternion<T>& q)
 	{
 		if (this != &q)
 		{
@@ -301,9 +298,9 @@ namespace BALL
 
 	template <class T>
 	BALL_INLINE 
-	void TQuaternion<T>::get(TQuaternion<T>& q, bool deep)
+	void TQuaternion<T>::get(TQuaternion<T>& q) const
 	{
-		q.set(*this, deep);
+		q.set(*this);
 	}
 
 	template <class T>
