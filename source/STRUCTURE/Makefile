@@ -43,10 +43,11 @@ include .Dependencies
 
 depend:	$(SMILES_SOURCES)
 
-smilesParserParser.C:	smilesParserParser.y
-	$(YACC) -d smilesParserParser.y &&\
-		$(MV) y.tab.h smilesParserParser.h &&\
-		$(MV) y.tab.c smilesParserParser.C
+default_clean:	clean_flex_bison
 
-smilesParserLexer.C: smilesParserLexer.l smilesParserParser.C
-	$(LEX) -osmilesParserLexer.C smilesParserLexer.l
+clean_flex_bison:
+	@-$(RM) smilesParserParser.C smilesParserLexer.C smilesParserParser.h
+
+smilesParserParser.o: smilesParserParser.C
+
+smilesParserLexer.o: smilesParserLexer.C
