@@ -1,4 +1,4 @@
-// $Id: AtomicContactEnergy_test.C,v 1.4 2000/01/17 15:21:53 oliver Exp $
+// $Id: AtomicContactEnergy_test.C,v 1.5 2000/01/18 16:45:53 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(AtomicContactEnergy, "$Id: AtomicContactEnergy_test.C,v 1.4 2000/01/17 15:21:53 oliver Exp $")
+START_TEST(AtomicContactEnergy, "$Id: AtomicContactEnergy_test.C,v 1.5 2000/01/18 16:45:53 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -36,7 +36,7 @@ TEST_EQUAL(B.countAtoms(), 454)
 
 // calculate the atomic contact energy of A and B
 #undef PRECISION
-#define PRECISION 4
+#define PRECISION 1e-2
 STATUS("calculating the ACE of A and B")
 float ACE_A = calculateACE(A);
 TEST_REAL_EQUAL(ACE_A, -2222.15)
@@ -50,8 +50,6 @@ float ACE_AB = calculateACE(A);
 TEST_REAL_EQUAL(ACE_AB, -2806.097)
 
 // calculate the difference in binding energies
-#undef PRECISION
-#define PRECISION 1e-3
 float dG_bind = ACE_AB - ACE_A - ACE_B;
 TEST_REAL_EQUAL(dG_bind, -21.5764)
 RESULT											
