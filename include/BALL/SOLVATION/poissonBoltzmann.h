@@ -1,4 +1,4 @@
-// $Id: poissonBoltzmann.h,v 1.6 2000/05/04 18:33:41 oliver Exp $ 
+// $Id: poissonBoltzmann.h,v 1.7 2000/05/04 19:15:09 oliver Exp $ 
 // Finite Difference Poisson Boltzmann Solver
 
 #ifndef BALL_SOLVATION_POISSONBOLTZMANN_H
@@ -335,7 +335,6 @@ namespace BALL
 					its 26 next grid neighbours to the grid point:\\
 					\[
 							\varepsilon_0 = \frac{1}{27} \left( \sum_{i=1}^{26} \varepsilon_i + \varepsilon_0 \right)
-						\end{equation}
 					\]\\
 			*/
 			static const char* UNIFORM;
@@ -345,7 +344,6 @@ namespace BALL
 					its 26 next grid neighbours to the grid point:\\
 					\[
 							\varepsilon_0 = \frac{1}{\sum_{i=1}^{26} \frac{1}{\varepsilon_i} + \frac{1}{\varepsilon_0}}
-						\end{equation}
 					\]\\
 			*/
 			static const char* HARMONIC;
