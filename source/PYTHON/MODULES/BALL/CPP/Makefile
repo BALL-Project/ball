@@ -1,7 +1,7 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.8 2000/11/15 14:20:09 oliver Exp $
+# $Id: Makefile,v 1.9 2000/11/15 20:29:41 oliver Exp $
 #
 
 all: libBALLc.so
@@ -212,7 +212,7 @@ include ../../../../config.mak
 SIPFLAGS += $(PYTHON_INCLUDES) $(SIP_INCLUDES)
 CXXFLAGS += $(SIPFLAGS)
 
-BALL_INCLUDES=$(BALLVIEW_INCLUDES)
+BALL_INCLUDES +=$(BALLVIEW_INCLUDES)
 BALL_LIBS=$(BALLVIEW_LIBS)
 
 SIP_OBJECTS			=	$(SIP_SOURCES:.C=.o)
