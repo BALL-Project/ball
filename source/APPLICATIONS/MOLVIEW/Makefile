@@ -6,12 +6,6 @@ include ../../common.mak
 
 BALL_INCLUDES=$(BALLVIEW_INCLUDES)
 
-DlgAbout_moc.C:	DlgAbout.h
-	moc DlgAbout.h -o $@
-
-DlgDisplayProperties_moc.C:	DlgDisplayProperties.h
-	moc DlgDisplayProperties.h -o $@
-
 OBJECTS=\
 	control.o\
 	control_moc.o\
@@ -31,4 +25,16 @@ OBJECTS=\
 
 molview:	$(OBJECTS) ../../VIEW/KERNEL/timerTextView.o
 	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) ../../VIEW/KERNEL/timerTextView.o $(BALLVIEW_LIBS)
+
+DlgAbout_moc.C:	DlgAbout.h
+	moc DlgAbout.h -o $@
+
+DlgDisplayProperties_moc.C:	DlgDisplayProperties.h
+	moc DlgDisplayProperties.h -o $@
+
+DlgAboutData_moc.C:	DlgAboutData.h
+	moc DlgAboutData.h -o $@
+
+DlgDisplayPropertiesData_moc.C:	DlgDisplayPropertiesData.h
+	moc DlgDisplayPropertiesData.h -o $@
 
