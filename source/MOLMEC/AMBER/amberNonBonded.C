@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.C,v 1.17 2001/06/27 10:40:04 oliver Exp $
+// $Id: amberNonBonded.C,v 1.18 2001/08/16 01:00:00 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -361,7 +361,7 @@ namespace BALL
 			if (result == false) 
 			{	
 				Log.error() << "AmberNonBonded::setup(): "
-					<< "cannot find section LennardJones" << endl;
+					<< "cannot find section LennardJones in " << getForceField()->getParameters().getFilename() << endl;
 				return false;
 			}
 		}
@@ -376,7 +376,7 @@ namespace BALL
 			if (result == false) 
 			{
 				Log.error() << "AmberNonBonded::setup(): "
-					<< "cannot find section HydrogenBonds" << endl;
+					<< "cannot find section HydrogenBonds in " << getForceField()->getParameters().getFilename() << endl;
 				return false;
 			}
 		}
@@ -450,8 +450,9 @@ namespace BALL
 					if (!hydrogen_bond.hasParameters(type_atom1, type_atom2))
 					{
 						Log.error() << "AmberNonBonded::setup(): "
-							<< "cannot find vdw parameters for:"
-							<< atom1->getTypeName() << "-" << atom2->getTypeName() << endl;
+							<< "cannot find vdw parameters for types "
+							<< atom1->getTypeName() << "-" << atom2->getTypeName() 
+							<< " (" << atom1->getFullName() << "-" << atom2->getFullName() << ")" << endl;
 						tmp.values.A = 0;
 						tmp.values.B = 0;
 					}
@@ -488,10 +489,11 @@ namespace BALL
 				else 
 				{
 					Log.error() << "AmberNonBonded::setup(): "
-						<< "cannot find Lennard Jones parameters for:"
+						<< "cannot find Lennard Jones parameters for types "
 						<< getForceField()->getParameters().getAtomTypes().getTypeName(type_atom1) 
 						<< "-"
 						<< getForceField()->getParameters().getAtomTypes().getTypeName(type_atom2) 
+						<< " (" << atom1->getFullName() << "-" << atom2->getFullName() << ")"
 						<< endl;
 					tmp.atom1 = atom1;
 					tmp.atom2 = atom2;
