@@ -1,54 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: canonicalMD.h,v 1.24 2004/04/17 14:14:52 oliver Exp $
+// $Id: canonicalMD.h,v 1.25 2004/04/20 11:40:28 amoll Exp $
 //
 
 #ifndef BALL_MOLMEC_MDSIMULATION_CANONICALMD_H   
 #define BALL_MOLMEC_MDSIMULATION_CANONICALMD_H   
 
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
-#ifndef BALL_KERNEL_SYSTEM_H
-#	include <BALL/KERNEL/system.h>
-#endif
-
-#ifndef BALL_KERNEL_ATOM_H         
-#	include <BALL/KERNEL/atom.h>
-#endif
-
-#ifndef BALL_MATHS_VECTOR3_H         
-#	include <BALL/MATHS/vector3.h>
-#endif
-
-#ifndef BALL_DATATYPE_OPTIONS_H
-#	include <BALL/DATATYPE/options.h>
-#endif
-
-#ifndef BALL_MOLMEC_PARAMETER_FORCEFIELDPARAMETER_H
-#	include <BALL/MOLMEC/PARAMETER/forceFieldParameters.h>
-#endif
-
-#ifndef BALL_MOLMEC_PARAMETER_ATOMTYPES_H
-#	include <BALL/MOLMEC/PARAMETER/atomTypes.h>
-#endif
-
-#ifndef BALL_MOLMEC_COMMON_PERIODIC_BOUNDARY_H
-#	include <BALL/MOLMEC/COMMON/periodicBoundary.h>
-#endif
-
-#ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
-#	include <BALL/MOLMEC/COMMON/forceField.h>
-#endif
-
 #ifndef BALL_MOLMEC_MDSIMULATION_MOLECULARDYNAMICS_H
 #	include <BALL/MOLMEC/MDSIMULATION/molecularDynamics.h>
 #endif
-
-
-#include <vector>
 
 namespace BALL 
 {

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: canonicalMD.C,v 1.18 2004/04/17 14:14:55 oliver Exp $
+// $Id: canonicalMD.C,v 1.19 2004/04/20 11:40:43 amoll Exp $
 
 #include <BALL/MOLMEC/MDSIMULATION/canonicalMD.h>
 #include <BALL/MOLMEC/COMMON/atomVector.h>
@@ -11,7 +11,6 @@
 
 namespace BALL
 {
-	// The default constructor with no arguments
 	CanonicalMD::CanonicalMD()
 		throw()
 		:	MolecularDynamics()
@@ -20,7 +19,6 @@ namespace BALL
 	}
 
 
-	// This constructor uses the given force field 
 	CanonicalMD::CanonicalMD(ForceField& myforcefield)
 		throw()
 		:	MolecularDynamics(myforcefield)
@@ -32,9 +30,7 @@ namespace BALL
 	}
 
 
-	// This constructor uses the given force field and a snapshot manager 
-	CanonicalMD::CanonicalMD(ForceField& myforcefield,
-			SnapShotManager* ssm)
+	CanonicalMD::CanonicalMD(ForceField& myforcefield, SnapShotManager* ssm)
 		throw()
 		:	MolecularDynamics(myforcefield)
 	{
@@ -42,9 +38,7 @@ namespace BALL
 	}
 
 
-	// This constructor uses the given force field and options 
-	CanonicalMD::CanonicalMD(ForceField &myforcefield,
-			SnapShotManager *ssm, const Options &myoptions)
+	CanonicalMD::CanonicalMD(ForceField& myforcefield, SnapShotManager* ssm, const Options& myoptions)
 		throw()
 		:	MolecularDynamics(myforcefield)
 	{
@@ -52,7 +46,6 @@ namespace BALL
 	}
 
 
-	// The copy constructor 
 	CanonicalMD::CanonicalMD(const CanonicalMD& rhs)
 		throw()
 		:	MolecularDynamics (rhs)
@@ -62,11 +55,9 @@ namespace BALL
 	}
 
 
-	// The destructor
 	CanonicalMD::~CanonicalMD()
 		throw()
 	{
-		// Nothing to do 
 	}
 
 
@@ -81,27 +72,13 @@ namespace BALL
 	}
 
 
-	bool CanonicalMD::setup(ForceField & myforcefield, SnapShotManager * ssm,
-			const Options & myoptions)
+	bool CanonicalMD::setup(ForceField& myforcefield, SnapShotManager* ssm, const Options& myoptions)
 		throw()
 	{
-		// First check whether the force field is valid. If not, then it is useless
-		// to do anything here.
-		if (myforcefield.isValid() == false)
-		{
-			// The setup has failed for some reason. Output an error message.
-			Log.error() << "CanonicalMD::setup(): "	<< "forcefield is not valid." << std::endl;
-			valid_ = false;
-			return false;
-		}
-
 		// first call the base class setup method
 		valid_ = MolecularDynamics::setup(myforcefield, ssm, myoptions);
 
-		if (valid_ == false)
-		{
-			return false;
-		}
+		if (!valid_) return false;
 
 		// base class setup was successful; we can go on
 
@@ -115,8 +92,7 @@ namespace BALL
 	}
 
 
-  // Choose a new time step. This means that all pre-factors must be
-  // recomputed.
+  // Choose a new time step. This means that all pre-factors must be recomputed.
 	void CanonicalMD::setTimeStep(double time)
 		throw()
   {
@@ -161,17 +137,14 @@ namespace BALL
 		mass_factor_.resize(atom_vector_.size());
 		for (it = atom_vector_.begin(); it != atom_vector_.end(); ++it, ++index)
 		{
-			// Factor1 = time_step_ * time_step_ / (2 * mass)
-			// Factor2 = time_step_ / (2 * mass)
 			// Factors must be scaled by 6.022 * 10^12 to adjust units
 			atom_ptr = *it;
 			item.factor2 = Constants::AVOGADRO / 1e23 * 1e12 * 0.5 * time_step_ 
 				/ atom_ptr->getElement().getAtomicWeight();
 			item.factor1 = item.factor2 * time_step_;
-			// ?????: use op[] and resize instead of push_back
 			mass_factor_[index] = item;
 		}
-	}	// end of 'calculateFactors' 
+	}	
 
 
 	// This method performs additional setup preparations in addition 
@@ -190,14 +163,12 @@ namespace BALL
 		// be coupled to a heat bath in order to keep the temperature constant.
 		options.setDefaultReal(MolecularDynamics::Option::BATH_RELAXATION_TIME,
 				MolecularDynamics::Default::BATH_RELAXATION_TIME);
-		bath_relaxation_time_ 
-			= options.getReal(MolecularDynamics::Option::BATH_RELAXATION_TIME);
+		bath_relaxation_time_ = options.getReal(MolecularDynamics::Option::BATH_RELAXATION_TIME);
 
 		return true;
 	}	
 
 
-	// The assignment operator 
 	CanonicalMD & CanonicalMD::operator = (const CanonicalMD & rhs)
 		throw()
 	{
@@ -233,10 +204,9 @@ namespace BALL
 		{
 			// reset the current number of iteration and the simulation time to
 			// the values given in the options
-			number_of_iteration_
-				= (Size)options.getInteger(MolecularDynamics::Option::NUMBER_OF_ITERATION);
-			current_time_
-				= options.getReal(MolecularDynamics::Option::CURRENT_TIME);
+			number_of_iteration_ = (Size)options.getInteger(MolecularDynamics::Option::NUMBER_OF_ITERATION);
+
+			current_time_ = options.getReal(MolecularDynamics::Option::CURRENT_TIME);
 		}
 		else
 		{
@@ -250,11 +220,10 @@ namespace BALL
 
 		// First check whether the  force field and the MD instance
 		// are valid
-		if ((valid_ == false) || (force_field_ptr_ == 0) 
-				|| (force_field_ptr_->isValid () == false))
+		if ((!valid_) || (force_field_ptr_ == 0) || (!force_field_ptr_->isValid ()))
 		{
 			Log.error() << "CanonicalMD::simulateIterations(): "
-				<< "MD simulation not possible, class is not valid." << std::endl;
+									<< "MD simulation not possible, class is not valid." << std::endl;
 			return;
 		}
 
@@ -305,18 +274,15 @@ namespace BALL
 			// In regular intervals, calculate and  output the current energy
 			if (iteration % energy_output_frequency_ == 0)
 			{
-				// update the current values for energy and temperature and 
-				// output them 
+				// update the current values for energy and temperature and output them 
 				current_energy = force_field_ptr_->updateEnergy();
 
-				Log.info()
-					<< "Canonical MD simulation System has potential energy "
-					<< current_energy << " kJ/mol at time " 
-					<< current_time_ + (double) iteration *time_step_ << " ps" << std::endl;
-				Log.info()
-					<< "Canonical MD simulation System has temperature  "
-					<< current_temperature_ << " at time " 
-					<< current_time_ + (double) iteration *time_step_ << " ps " << std::endl;
+				Log.info() << "Canonical MD simulation System has potential energy "
+									 << current_energy << " kJ/mol at time " 
+									 << current_time_ + (double) iteration *time_step_ << " ps" << std::endl;
+				Log.info() << "Canonical MD simulation System has temperature  "
+									 << current_temperature_ << " at time " 
+									 << current_time_ + (double) iteration *time_step_ << " ps " << std::endl;
 			}
 
 			// check whether the rescaling will be successful
@@ -354,7 +320,6 @@ namespace BALL
 			}	// next atom 
 
 
-
 			// Determine the forces for the next iteration
 			force_field_ptr_->updateForces();
 
@@ -383,7 +348,6 @@ namespace BALL
 
 		force_field_ptr_->updateEnergy();
 		updateInstantaneousTemperature();
-
 	}	// end of simulateIterations() 
 
 }	// end of namespace Ball
