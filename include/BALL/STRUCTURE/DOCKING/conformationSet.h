@@ -83,7 +83,7 @@ namespace BALL
 				/** Export the first num results in the order of the current scoring as dcd file
 				 *  with name filename. If num == 0, all results are exported.
 				 */
-				void writeDCDFile(const String& filename, const Size num=0);
+				bool writeDCDFile(const String& filename, const Size num=0);
 
 				/** Return the number of conformations.
 				 */
