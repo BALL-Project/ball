@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.54 2004/01/18 13:39:50 amoll Exp $
+// $Id: mainControl.C,v 1.55 2004/01/28 15:16:36 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -43,6 +43,29 @@ namespace BALL
 	namespace VIEW
 	{
 
+const char* MainControl::simulation_running_xpm_[] =
+{
+		"16 14 4 1",
+		"   c None",
+		".  c black",
+		"X  c red",
+		"o  c gray50",
+		"     .........  ",
+		"     .XXXXXX.o  ",
+		"    .XXXXXX.o   ",
+		"    .XXXXX.o    ",
+		"   .XXXXX.o     ",
+		"   .XXXX.....   ",
+		"  .XXXXXXXX.o   ",
+		"  .....XXX.o    ",
+		"   oo.XXX.o     ",
+		"     .XX.o      ",
+		"    .XX.o       ",
+		"    .X.o        ",
+		"   .X.o         ",
+		"   ..o          "
+};        
+  
 MainControl::MainControl(QWidget* parent, const char* name, String inifile)
 	throw()
 	:	QMainWindow(parent, name),
@@ -75,6 +98,15 @@ MainControl::MainControl(QWidget* parent, const char* name, String inifile)
 
 	QToolTip::setWakeUpDelay(500);
 	QToolTip::setGloballyEnabled(true);
+
+	simulation_icon_ = new QLabel(statusBar());
+	simulation_icon_->setMaximumSize(14,16);
+	statusBar()->addWidget(simulation_icon_, 1, TRUE );
+	QToolTip::add(simulation_icon_, "simulation status");
+	QPixmap icon(simulation_running_xpm_);
+
+	simulation_icon_->setPixmap(icon);
+	simulation_icon_->hide();
 }
 
 MainControl::MainControl(const MainControl& main_control)
@@ -88,6 +120,14 @@ MainControl::MainControl(const MainControl& main_control)
 		preferences_id_(-1),
 		composites_muteable_(main_control.composites_muteable_)
 {
+	simulation_icon_ = new QLabel(statusBar());
+	simulation_icon_->setMaximumSize(14,16);
+	main_control.statusBar()->addWidget(simulation_icon_, 1, TRUE );
+	QToolTip::add(simulation_icon_, "simulation status");
+	QPixmap icon(simulation_running_xpm_);
+
+	simulation_icon_->setPixmap(icon);
+	simulation_icon_->hide();
 }
 
 MainControl::~MainControl()
@@ -278,6 +318,9 @@ void MainControl::checkMenus()
 	{
 		(*it)->checkMenu(*this);
 	}
+
+	if (composites_muteable_) simulation_icon_->hide();
+	else 											simulation_icon_->show();
 }
 
 void MainControl::applyPreferencesTab()
@@ -1127,6 +1170,20 @@ void MainControl::clearSelection()
 
 	NewSelectionMessage* nm = new NewSelectionMessage;
 	sendMessage(*nm);
+}
+
+
+void MainControl::setCompositesMuteable(bool state) 
+{
+	composites_muteable_ = state;
+	if (state)
+	{
+		simulation_icon_->hide();
+	}
+	else
+	{
+		simulation_icon_->show();
+	}
 }
 
 // ======================= StatusbarTimer =========================

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.29 2004/01/18 21:55:33 oliver Exp $
+// $Id: mainControl.h,v 1.30 2004/01/28 15:16:13 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -637,7 +637,7 @@ namespace BALL
 			 		This is used e.g. to prevent changes in the composite hierarchy while a simulation is running.
 					@see compositesAreMuteable
 			*/
-			void setCompositesMuteable(bool state) {composites_muteable_ = state;}
+			void setCompositesMuteable(bool state);
 
 			/** Check wheter the stored composites can be modified at the moment.
 					This method returns false e.g. while a MD simulation is running.
@@ -726,7 +726,11 @@ namespace BALL
 			HashMap<Index, String>      menu_entries_hints_;
 
 			StatusbarTimer* 						timer_;
-		};
+
+			QLabel*             simulation_icon_;
+			static const char  *simulation_running_xpm_[];
+			static const char  *simulation_stoped_xpm_[];
+};
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/KERNEL/mainControl.iC>
