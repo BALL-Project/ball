@@ -14,7 +14,7 @@ namespace BALL
 	namespace VIEW
 	{
 
-		AdvancedOptionsDialog::advancedOptionsDialog(QWidget* parent, const char* name)
+		AdvancedOptionsDialog::AdvancedOptionsDialog(QWidget* parent, const char* name)
 			:AdvancedOptions( parent, name )
 		{
 		}
