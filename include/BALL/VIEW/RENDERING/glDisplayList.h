@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glDisplayList.h,v 1.4 2004/02/26 08:41:44 anhi Exp $
+// $Id: glDisplayList.h,v 1.5 2004/07/14 12:40:33 amoll Exp $
 
 #ifndef BALL_VIEW_RENDERING_GLDISPLAYLIST_H
 #define BALL_VIEW_RENDERING_GLDISPLAYLIST_H
@@ -19,13 +19,13 @@ namespace BALL
 
 /** GLDisplayList class.
 		The class GLDisplayList is a container for graphical objects.
-		Graphical objects can be drawn directly to the screen or the can be
+		Graphical objects can be drawn directly to the screen or they can be
 		stored in a display list for faster drawing afterwards. This class
 		provides the means for storing graphical objects in a own display list.
 		This class is a wrapper class for the OpenGL display list mechanims.
 		It defines some useful methods for easy creation of a display list and
 		handles errors that can occur when using display lists. See the OpenGL
-		defintion of display lists for further information concerning display lists.\par
+		defintion of display lists for further information concerning display lists.
 		\ingroup ViewRendering
 */
 class BALL_EXPORT GLDisplayList
@@ -103,14 +103,11 @@ class BALL_EXPORT GLDisplayList
 	//@{
 
 	/** Default Constructor.
-			Construct new glDisplayList.
-			There is no copy constructor because the OpenGL display lists
-			cannot be copied.
+			There is no copy constructor because the OpenGL display lists cannot be copied.
 			The state of this glDisplayList is set to:
 				- display list empty
 				- use compile mode instead of compile and execute mode
 			\par
-			\return      GLDisplayList new constructed glDisplayList
 	*/
 	GLDisplayList()
 			throw();
@@ -121,8 +118,7 @@ class BALL_EXPORT GLDisplayList
 	//@{
 
 	/** Destructor.
-			Calls destroy.
-			\see         destroy
+			Calls clear()
 	*/
 	virtual ~GLDisplayList()
 			throw();
@@ -133,14 +129,6 @@ class BALL_EXPORT GLDisplayList
 	virtual void clear()
 			throw();
 
-	/** Explicit destructor.
-			If this has already a display list then that display list
-			will be deleted.
-			This method can be used for clearing this glDisplayList before
-			compiling other graphical objects into this display list.
-	*/
-	virtual void destroy()
-			throw();
 	//@}
 	/**	@name	Accessors: inspectors and mutators 
 	*/
@@ -148,7 +136,7 @@ class BALL_EXPORT GLDisplayList
 
 	/** Begin the display list.
 			If graphical objects should be put into a display list they must be put
-			between a <b> startDefinition</b> and <b> endDefinition</b> command.
+			between a <b>startDefinition</b> and <b>endDefinition</b> command.
 			This method indicates the start of a display list. Every object drawn after
 			this method will be compiled into this glDisplayList.
 			\exception   NestedDisplayList thrown whenever a nested display list definition is tried.
@@ -212,7 +200,6 @@ class BALL_EXPORT GLDisplayList
 
 	/** Compile mode test.
 			Tests if this glDisplayList is set to compile only.
-			\return  bool <tt> true</tt> if this glDisplayList is set to compile only, <tt> false</tt> otherwise
 			\see         useCompileMode				
 	*/
 	bool isCompileMode() const
@@ -220,7 +207,6 @@ class BALL_EXPORT GLDisplayList
 
 	/** Compile and Execute mode test.
 			Tests if this glDisplayList is set to compile and execute.
-			\return  bool <tt> true</tt> if this glDisplayList is set to compile and execute, <tt> false</tt> otherwise
 			\see         useCompileAndExecuteMode				
 	*/
 	bool isCompileAndExecuteMode() const
@@ -231,20 +217,13 @@ class BALL_EXPORT GLDisplayList
 	*/
 	//@{
 	/** Internal state and consistency self-validation.
-			Initiate self-validation of the internal state and data structure 
-			consistencies	of this glDisplayList.
-			If the internal state of this glDisplayList is correct
-			(self-validated) and consistent <tt> true</tt> is returned,
-			<tt> false</tt> otherwise. 
-			this glDisplayList is valid if a display list is already defined.
-			\return			bool <tt> true</tt> if the internal state of this glDisplayList is correct (self-validated) and consistent,
-									<tt> false</tt> otherwise
+			A glDisplayList is valid if a display list is already defined.
 	*/
 	virtual bool isValid() const
 		throw() { return GL_list_ != 0; }
 
 	/** Internal value dump.
-			Dump the current state of this glDisplayList to 
+			Dump the current state to 
 			the output ostream <b> s</b> with dumping depth <b> depth</b>.
 			\param   s output stream where to output the state of this glDisplayList
 			\param   depth the dumping depth

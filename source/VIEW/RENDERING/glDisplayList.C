@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glDisplayList.C,v 1.4 2004/05/27 19:50:02 oliver Exp $
+// $Id: glDisplayList.C,v 1.6 2004/07/14 12:51:06 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glDisplayList.h>
@@ -56,12 +56,6 @@ namespace BALL
 										<< " of class " << RTTI::getName<GLDisplayList>() << endl;
 			#endif 
 
-			destroy();
-		}
-
-		void GLDisplayList::destroy()
-			throw()
-		{
 			clear();
 		}
 
