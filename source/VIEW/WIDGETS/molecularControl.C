@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.91.2.3 2005/01/14 14:27:14 amoll Exp $
+// $Id: molecularControl.C,v 1.91.2.4 2005/01/14 14:27:38 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -861,7 +861,7 @@ void MolecularControl::paste()
 	for (; it != changed_roots.end(); it++)
 	{
 		updateListViewItem_(0, **it);
-		CompositeMessage *new_message = new CompositeMessage(**it, CompositeMessage::CHANGED_COMPOSITE);
+		CompositeMessage *new_message = new CompositeMessage(**it, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
 		notify_(*new_message);
 	}
 }
