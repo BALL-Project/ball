@@ -1,4 +1,4 @@
-// $Id: Composite_test.C,v 1.17 2000/08/28 21:01:50 amoll Exp $
+// $Id: Composite_test.C,v 1.18 2000/08/29 19:59:33 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,12 +8,23 @@
 #include <BALL/KERNEL/protein.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/chain.h>
+#include <BALL/CONCEPT/visitor.h>
 ///////////////////////////
 
 using namespace BALL;
 using namespace std;
 
-START_TEST(Composite, "$Id: Composite_test.C,v 1.17 2000/08/28 21:01:50 amoll Exp $")
+class myVisitor : public  Visitor<class Composite>
+{
+	public:
+	Composite* c_ptr;
+	void visit(Composite& composite)
+	{
+		c_ptr = &composite;
+	}
+};
+
+START_TEST(Composite, "$Id: Composite_test.C,v 1.18 2000/08/29 19:59:33 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -644,7 +655,7 @@ CHECK(isDescendantOf() const)
 	TEST_EQUAL(e.isDescendantOf(d), false)
 	TEST_EQUAL(f.isDescendantOf(d), false)
 RESULT
-
+/*
 cout << endl;
 cout << "a " << &a <<endl;
 cout << "b " << &b <<endl;
@@ -652,7 +663,7 @@ cout << "c " << &c <<endl;
 cout << "d " << &d <<endl;
 cout << "e " << &e <<endl;
 cout << "f " << &f <<endl;
-cout << endl;
+cout << endl;*/
 
 CHECK(getLowestCommonAncestor(Composite& composite))
 	TEST_EQUAL(d.getLowestCommonAncestor(e), &b)
@@ -1077,7 +1088,9 @@ CHECK(dump())
 RESULT
 
 CHECK(host(Visitor<Composite>& visitor))
-//
+	myVisitor mv;
+	a.host(mv);
+	TEST_EQUAL(mv.c_ptr, &a)
 RESULT
 
 ItemCollector<Composite> myproc;
@@ -1193,17 +1206,18 @@ CHECK(bool applyPostorder(UnaryProcessor<Composite>& processor))
 	myproc.start();
 	e.applyPostorder(myproc);
 	myproc.reset();
-	TEST_EQUAL(myproc.getSize(), 0)
+	TEST_EQUAL(myproc.getSize(), 1)
+	TEST_EQUAL(myproc.getPointer(), &e) myproc.forward();
 
 	myproc.start();
 	a.applyPostorder(myproc);
 	myproc.reset();
-	TEST_EQUAL(myproc.getSize(), 4)
+	TEST_EQUAL(myproc.getSize(), 5)
 	TEST_EQUAL(myproc.getPointer(), &e) myproc.forward();
 	TEST_EQUAL(myproc.getPointer(), &c) myproc.forward();
 	TEST_EQUAL(myproc.getPointer(), &d) myproc.forward();
-	TEST_EQUAL(myproc.getPointer(), &b) myproc.forward();// ???
-	TEST_EQUAL(myproc.getPointer(), &a) myproc.forward();// ???
+	TEST_EQUAL(myproc.getPointer(), &b) myproc.forward();
+	TEST_EQUAL(myproc.getPointer(), &a) myproc.forward();
 	TEST_EQUAL(myproc.getPointer(), 0)
 RESULT
 
@@ -1233,11 +1247,18 @@ CHECK(bool applyLevel(UnaryProcessor<Composite>& processor, long level))
 	TEST_EQUAL(myproc.getPointer(), &e) myproc.forward();
 
 	myproc.start();
-	c.applyLevel(myproc, 0);
+	b.applyLevel(myproc, 1);
 	myproc.reset();
 	TEST_EQUAL(myproc.getSize(), 2)
 	TEST_EQUAL(myproc.getPointer(), &c) myproc.forward();
 	TEST_EQUAL(myproc.getPointer(), &d) myproc.forward();// ???
+	TEST_EQUAL(myproc.getPointer(), 0)
+
+	myproc.start();
+	b.applyLevel(myproc, 2);
+	myproc.reset();
+	TEST_EQUAL(myproc.getSize(), 1)
+	TEST_EQUAL(myproc.getPointer(), &e) myproc.forward();
 	TEST_EQUAL(myproc.getPointer(), 0)
 RESULT
 
