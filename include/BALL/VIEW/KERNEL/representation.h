@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.15 2003/12/18 11:59:10 amoll Exp $
+// $Id: representation.h,v 1.16 2004/01/16 15:12:30 amoll Exp $
 
 #ifndef  BALL_VIEW_KERNEL_REPRESENTATION_H
 #define  BALL_VIEW_KERNEL_REPRESENTATION_H
@@ -96,8 +96,8 @@ namespace BALL
 
 			///
 			Representation(ModelType model_type,
-										 DrawingPrecision drawing_precision_,
-										 DrawingMode drawing_mode_)
+										 DrawingPrecision drawing_precision,
+										 DrawingMode drawing_mode)
 				throw();
 
 			///
@@ -125,7 +125,7 @@ namespace BALL
 			//@{
 			
 			///
-			const Representation& operator = (const Representation& representation)
+			const Representation& operator = (const Representation& rep)
 				throw();
 			
 			///
