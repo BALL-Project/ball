@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.23 2004/04/19 12:53:12 amoll Exp $
+// $Id: pyWidget.C,v 1.24 2004/04/19 12:53:38 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -344,8 +344,6 @@ namespace BALL
 		void PyWidgetData::runFile(const String& filename)
 		{
 			append(String("> running File " + filename + "\n").c_str());
-//			 bool result;
-// 			String result_string;
 			LineBasedFile file;
 			try
 			{
