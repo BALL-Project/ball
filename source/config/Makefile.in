@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.in,v 1.10 2000/01/06 09:49:12 oliver Exp $
+# $Id: Makefile.in,v 1.11 2000/01/07 22:05:51 oliver Exp $
 #
 
 include config.mak
@@ -67,27 +67,20 @@ libVIEW.objects:
 
 collect:	$(OBJECT_LISTS)
 	
-prelink:	collect 
-	@echo "Prelinking object files..."
-	@__PRELINK__@	
-
-
 libBALL.@SHARED_LIB_SUFFIX@:	collect
 	$(DYNAR) $(DYNAROPTS) libBALL.@SHARED_LIB_SUFFIX@ `cat libBALL.objects` -lm
 
 libVIEW.@SHARED_LIB_SUFFIX@:	libBALL.so
-	$(DYNAR) $(DYNAROPTS) libVIEW.@SHARED_LIB_SUFFIX@ `cat libVIEW.objects` -L. -lBALL $(QT_PATH) -lqgl -lqt  $(OPENGL_PATH) -lGLU -lGL $(X11_PATH) -lXmu -lXext -lX11 -lm
+	$(DYNAR) $(DYNAROPTS) libVIEW.@SHARED_LIB_SUFFIX@ `cat libVIEW.objects` -L. -lBALL $(QT_LIBOPTS) $(OPENGL_LIBOPTS) $(X11_LIBOPTS) -lm
 
 libMOLVIEW.@SHARED_LIB_SUFFIX@:	libVIEW.so
-	$(DYNAR) $(DYNAROPTS) libMOLVIEW.@SHARED_LIB_SUFFIX@ `cat libMOLVIEW.objects` -L. -lVIEW -lBALL $(QT_PATH) -lqt $(OPENGL_PATH) -lGLU -lGL -lm
+	$(DYNAR) $(DYNAROPTS) libMOLVIEW.@SHARED_LIB_SUFFIX@ `cat libMOLVIEW.objects` -L. -lVIEW -lBALL $(QT_LIBOPTS) $(OPENGL_LIBOPTS) -lm
 
 .objects.a:	
 	@echo "Creating library $@ ..."
 	$(AR) $(AROPTS) $*.a `cat $*.objects`
 
-lib:	.Dependencies dirs collect prelink $(SHARED_LIBS)
-	@echo "Creating static libraries $(STATIC_LIBS) ... DONE"
-	@echo " "
+lib:	.Dependencies dirs collect $(SHARED_LIBS)
 	@echo " "
 	@echo "You may now install the libraries with the command"
 	@echo " "
