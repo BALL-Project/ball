@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferencesEntry.C,v 1.8 2004/09/29 20:40:19 amoll Exp $
+// $Id: preferencesEntry.C,v 1.9 2004/09/29 21:14:25 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/preferencesEntry.h>
@@ -183,12 +183,13 @@ namespace BALL
 			return ColorRGBA(label->backgroundColor());
 		}
 
-		void PreferencesEntry::chooseColor_(QLabel* label)
+		ColorRGBA PreferencesEntry::chooseColor_(QLabel* label)
 		{
 			QColor qcolor = QColorDialog::getColor(label->backgroundColor());
-			if (!qcolor.isValid()) return;
+			if (!qcolor.isValid()) return ColorRGBA();
 
 			label->setBackgroundColor(qcolor);
+			return ColorRGBA(qcolor);
 		}
 
 		bool PreferencesEntry::fetchPreference_(const INIFile& inifile, 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.108 2004/09/29 20:40:19 amoll Exp $
+// $Id: mainControl.C,v 1.109 2004/09/29 21:14:25 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -474,7 +474,6 @@ namespace BALL
 			preferences_.clear();
 			preferences_.appendSection("WINDOWS");
 			preferences_dialog_->writePreferences(preferences_);
-			writePreferences(preferences_);
 
 			// finalizes all modular widgets
 			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
@@ -484,6 +483,8 @@ namespace BALL
 				(*it)->finalizePreferencesTab(*preferences_dialog_);
 				(*it)->finalizeWidget(*this);
 			}
+
+			writePreferences(preferences_);
 
 			for (it = modular_widgets_.begin(); it != modular_widgets_.end(); ++it)
 			{

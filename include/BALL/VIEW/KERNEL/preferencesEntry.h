@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferencesEntry.h,v 1.4 2004/09/29 20:38:12 amoll Exp $
+// $Id: preferencesEntry.h,v 1.5 2004/09/29 21:14:02 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_PREFERENCES_ENTRY
@@ -70,7 +70,7 @@ namespace BALL
 			ColorRGBA getLabelColor_(QLabel* label) const;
 			
 			//_
-			void chooseColor_(QLabel* label);
+			ColorRGBA chooseColor_(QLabel* label);
 
 			//_
       bool fetchPreference_(const INIFile& inifile, const String& entry, ColorRGBA& color)

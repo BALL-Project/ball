@@ -102,13 +102,18 @@
         <receiver>PythonSettings</receiver>
         <slot>fileSelected()</slot>
     </connection>
+    <connection>
+        <sender>clear_button</sender>
+        <signal>clicked()</signal>
+        <receiver>script_edit</receiver>
+        <slot>clear()</slot>
+    </connection>
 </connections>
 <includes>
     <include location="global" impldecl="in declaration">BALL/COMMON/global.h</include>
 </includes>
 <slots>
     <slot>fileSelected()</slot>
-    <slot>clearSelected()</slot>
 </slots>
 <exportmacro>BALL_EXPORT</exportmacro>
 <layoutdefaults spacing="6" margin="11"/>

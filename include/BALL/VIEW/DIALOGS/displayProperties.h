@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.36 2004/09/01 14:14:10 amoll Exp $
+// $Id: displayProperties.h,v 1.37 2004/09/29 21:14:02 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
@@ -13,6 +13,10 @@
 
 #ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
 # include <BALL/VIEW/DATATYPE/colorRGBA.h>
+#endif
+
+#ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY
+# include <BALL/VIEW/KERNEL/preferencesEntry.h>
 #endif
 
 #include <BALL/VIEW/UIC/displayPropertiesData.h>
@@ -44,7 +48,8 @@ namespace BALL
 		*/
 		class BALL_EXPORT DisplayProperties 
 			: public DisplayPropertiesData,
-				public ModularWidget
+				public ModularWidget,
+				public PreferencesEntry
 		{
 			Q_OBJECT
 				
@@ -253,9 +258,6 @@ namespace BALL
 				
 			protected:
 			
-			//_ Set the selection of a given combobox to a given value 
-			void setComboBoxIndex_(QComboBox* combo_box, QString& item_string);
-
 			//_ Set buttons and slider according to the values
 			void checkDrawingPrecision_()
 				throw();
@@ -267,9 +269,6 @@ namespace BALL
 			*/
 			virtual Representation* createRepresentation_(const List<Composite*>& composites)
 				throw(Exception::InvalidOption);
-
-			//_ Read a inifile entry and set the accoring attribut and ComboBox.
-			virtual void getEntry_(INIFile& inifile, const String& key, QComboBox& box);
 
 			//_
 			virtual void getAdvancedModelOptions_()

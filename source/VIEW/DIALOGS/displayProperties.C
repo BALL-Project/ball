@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.86 2004/09/29 20:40:17 amoll Exp $
+// $Id: displayProperties.C,v 1.87 2004/09/29 21:14:24 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -31,6 +31,7 @@
 #include <qslider.h>
 #include <qradiobutton.h>
 #include <qlistbox.h>
+#include <qbuttongroup.h>
 
 namespace BALL
 {
@@ -41,6 +42,7 @@ DisplayProperties::DisplayProperties(QWidget* parent, const char* name)
 	throw()
 	:	DisplayPropertiesData( parent, name ),
 		ModularWidget(name),
+		PreferencesEntry(),
 		model_settings_(0),
 		coloring_settings_(0),
 		preferences_(0),
@@ -65,12 +67,24 @@ DisplayProperties::DisplayProperties(QWidget* parent, const char* name)
 	{
 		coloring_method_combobox->insertItem(VIEW::getColoringName((VIEW::ColoringMethod)p).c_str());
 	}
+
+	setINIFileSectionName("REPRESENTATION");
+	registerObject_(model_type_combobox);
+	registerObject_(precision_combobox);
+	registerObject_(precision_slider);
+	registerObject_(resolution_group);
+	registerObject_(mode_combobox);
+	registerObject_(coloring_method_combobox);
+	registerObject_(selection_color_label); 
+	registerObject_(custom_color_label);
+	registerObject_(transparency_slider);
 }
 
 DisplayProperties::DisplayProperties(const DisplayProperties& /*dp*/)
 	throw()
 	: DisplayPropertiesData(),
-		ModularWidget(*this)
+		ModularWidget(*this),
+		PreferencesEntry()
 {
 }
 
@@ -90,67 +104,14 @@ void DisplayProperties::fetchPreferences(INIFile& inifile)
 	throw()
 {
 	ModularWidget::fetchPreferences(inifile);
-	// 
-	// the combobox values
-	//
-	if (inifile.hasEntry("REPRESENTATION", "custom_color"))
-	{
-		custom_color_.set(inifile.getValue("REPRESENTATION", "custom_color"));
-		color_sample->setBackgroundColor(custom_color_.getQColor());
-	}
-
-	if (inifile.hasEntry("REPRESENTATION", "selected_color"))
-	{
-		BALL_SELECTED_COLOR.set(inifile.getValue("REPRESENTATION", "selected_color"));
-		color_sample_selection->setBackgroundColor(BALL_SELECTED_COLOR.getQColor());
-	}
-
-	getEntry_(inifile, "model", *model_type_combobox);
-	getEntry_(inifile, "coloring_method", *coloring_method_combobox);
-	getEntry_(inifile, "precision", *precision_combobox);
-
-	if (inifile.hasEntry("REPRESENTATION", "surface_precision"))
-	{
-		custom_precision_button->setChecked(true);
-		precision_slider->setValue((Position)
-				(inifile.getValue("REPRESENTATION", "surface_precision").toFloat() * 10.0));
-	}
-	else
-	{ 
-		precision_slider->setValue(12 * 10);
-		presets_precision_button->setChecked(true);
-	}
+	readPreferenceEntries(inifile);
 }
-
-void DisplayProperties::getEntry_(INIFile& inifile, const String& key, QComboBox& box)
-{
-	if (!inifile.hasEntry("REPRESENTATION", "" + key)) return;
-	box.setCurrentItem(inifile.getValue("REPRESENTATION", "" + key).toUnsignedInt());
-}
-
 
 void DisplayProperties::writePreferences(INIFile& inifile)
 	throw()
 {
 	ModularWidget::writePreferences(inifile);
-	inifile.appendSection("REPRESENTATION");
-	const QColor& qcolor = color_sample->backgroundColor();
-	custom_color_.set(qcolor);
-	custom_color_.setAlpha(255 - (Position) (transparency_slider->value() * 2.55));
-
-	// the combobox values
-	inifile.insertValue("REPRESENTATION", "model", model_type_combobox->currentItem());
-	if (presets_precision_button->isChecked())
-	{
-		inifile.insertValue("REPRESENTATION", "precision", precision_combobox->currentItem());
-	}
-	else
-	{
-		inifile.insertValue("REPRESENTATION", "surface_precision", ((float)precision_slider->value()) / 10.0);
-	}
-	inifile.insertValue("REPRESENTATION", "coloring_method", coloring_method_combobox->currentItem());
-	inifile.insertValue("REPRESENTATION", "custom_color", custom_color_);
-	inifile.insertValue("REPRESENTATION", "selected_color", BALL_SELECTED_COLOR);
+	writePreferenceEntries(inifile);
 }
 
 
@@ -240,7 +201,7 @@ void DisplayProperties::modifyRepresentationMode()
 	if (rep_->getColorProcessor() != 0)
 	{
 		custom_color_ = rep_->getColorProcessor()->getDefaultColor();
-		color_sample->setBackgroundColor(custom_color_.getQColor());
+		custom_color_label->setBackgroundColor(custom_color_.getQColor());
 	}
 
 	transparency_slider->setValue((Size)(rep_->getTransparency() / 2.55));
@@ -386,17 +347,12 @@ void DisplayProperties::apply()
 
 void DisplayProperties::editColor()
 {
-	color_sample->setBackgroundColor(QColorDialog::getColor(color_sample->backgroundColor()));
-	custom_color_.set(color_sample->backgroundColor());
-	update();
+	custom_color_.set(chooseColor_(custom_color_label));
 }
 
 void DisplayProperties::editSelectionColor()
 {
-	color_sample_selection->setBackgroundColor(QColorDialog::getColor(
-													color_sample_selection->backgroundColor()));
-	BALL_SELECTED_COLOR.set(color_sample_selection->backgroundColor());
-	update();
+	BALL_SELECTED_COLOR.set(chooseColor_(selection_color_label));
 }
 
 // ------------------------------------------------------------------------
@@ -412,7 +368,7 @@ Representation* DisplayProperties::createRepresentation_(const List<Composite*>&
 	ColorProcessor* color_processor = 
 		coloring_settings_->createColorProcessor((ColoringMethod) coloring_method_combobox->currentItem());
 
-	QColor qcolor = color_sample->backgroundColor();
+	QColor qcolor = custom_color_label->backgroundColor();
 	custom_color_.set(qcolor);
 	custom_color_.setAlpha(255 - (Position)(transparency_slider->value() * 2.55));
 	color_processor->setDefaultColor(custom_color_);
@@ -729,7 +685,7 @@ bool DisplayProperties::getSettingsFromString(const String& data)
 	void DisplayProperties::setCustomColor(const ColorRGBA& color)
 	{
 		custom_color_ = color;
-		color_sample->setBackgroundColor(custom_color_.getQColor());
+		custom_color_label->setBackgroundColor(custom_color_.getQColor());
 	}
 	
 } } // namespaces
