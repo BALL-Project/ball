@@ -52,6 +52,8 @@ String getColoringName(ColoringMethod type)
 			return "by residue index";
 		case COLORING_RESIDUE_NAME:
 			return "by residue name";
+		case COLORING_SECONDARY_STRUCTURE:
+			return "by secondary structure";
 		case COLORING_ATOM_CHARGE:
 			return "by atom charge";
 		case COLORING_DISTANCE:
