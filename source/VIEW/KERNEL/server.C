@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: server.C,v 1.15 2004/09/29 20:40:19 amoll Exp $
+// $Id: server.C,v 1.16 2004/09/30 16:16:30 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/server.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -168,18 +168,13 @@ namespace BALL
 			delete server_icon_;
 		}
 			
-		void Server::checkMenu(MainControl& /* main_control */)
-			throw()
-		{
-		}
-
 		void Server::initializePreferencesTab(Preferences &preferences)
 			throw()
 		{
 			server_preferences_ = new ServerPreferences();
 			CHECK_PTR(server_preferences_);
 
-			preferences.insertEntry(server_preferences_, "Server");
+			preferences.insertEntry(server_preferences_);
 		}
 
 		void Server::finalizePreferencesTab(Preferences &preferences)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.h,v 1.21 2004/09/28 21:40:10 amoll Exp $
+// $Id: modelSettingsDialog.h,v 1.22 2004/09/30 16:16:25 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MODELSETTINGSDIALOG_H
@@ -230,7 +230,6 @@ namespace BALL
 			void hbondsRadiusChanged(){setLabelText_(hbonds_radius_label, hbonds_radius_slider);}
 			void forceScalingChanged(){setLabelText_(force_scaling_label, force_scaling_slider);}
 			void forceMaxLengthChanged(){setLabelText_(force_max_length_label, force_max_length_slider);}
-			void showPage_(int nr);
 
 			protected:
 

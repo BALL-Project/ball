@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferencesEntry.C,v 1.9 2004/09/29 21:14:25 amoll Exp $
+// $Id: preferencesEntry.C,v 1.10 2004/09/30 16:16:30 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/preferencesEntry.h>
@@ -14,6 +14,7 @@
 #include <qlineedit.h>
 #include <qbuttongroup.h>
 #include <qcolordialog.h>
+#include <qwidgetstack.h>
 
 using namespace std;
 
@@ -23,6 +24,7 @@ namespace BALL
 	{
 
 		PreferencesEntry::PreferencesEntry()
+			: widget_stack_(0)
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "New PreferencesEntry " << (void *)this << std::endl;
@@ -209,6 +211,43 @@ namespace BALL
 			}
 			return false;
 		}
+
+		void PreferencesEntry::insertEntry(QWidget* widget, const String& name)
+		{
+			entries_.push_back(std::pair<QWidget*, String>(widget, name));
+		}
+
+		void PreferencesEntry::showEntry(Position nr) 
+		{ 
+			if (widget_stack_ == 0) return;
+			widget_stack_->raiseWidget(nr);
+		}
+
+		void PreferencesEntry::showEntry(QWidget* widget) 
+		{ 
+			if (widget_stack_ == 0) return;
+			widget_stack_->raiseWidget(widget);
+		}
+
+		void PreferencesEntry::setWidgetStack(QWidgetStack* stack)
+		{
+			widget_stack_ = stack;
+
+			if (widget_stack_ == 0) return;
+
+			for (Position p = 0; p < 9999; p++)
+			{
+				if (widget_stack_->widget(p) == 0) break;
+
+				String name = widget_stack_->widget(p)->name();
+				for (Position i = 0; i < name.size(); i++)
+				{
+					if (name[i] == '_') name[i] = ' ';
+				}
+				insertEntry(widget_stack_->widget(p), name);
+			}
+		}
+
 
 	} // namespace VIEW
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: coloringSettingsDialog.h,v 1.18 2004/09/29 20:38:11 amoll Exp $
+// $Id: coloringSettingsDialog.h,v 1.19 2004/09/30 16:16:25 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_COLORINGSETTINGSDIALOG_H
@@ -141,7 +141,6 @@ namespace BALL
 
 			protected slots:
 
-			void showPage_(int nr);
 			virtual void minimumOccupancyColorPressed();
 			virtual void middleResidueColorPressed();
 			virtual void lastResidueColorPressed();

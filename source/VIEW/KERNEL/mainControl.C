@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.109 2004/09/29 21:14:25 amoll Exp $
+// $Id: mainControl.C,v 1.110 2004/09/30 16:16:29 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -766,8 +766,8 @@ namespace BALL
 		{
 			main_control_preferences_ = new MainControlPreferences();
 
-			preferences.insertEntry(main_control_preferences_, "General");
-			preferences.showPage(0);
+			preferences.insertEntry(main_control_preferences_);
+			preferences.showEntry(main_control_preferences_);
 
 			main_control_preferences_->enableLoggingToFile(logging_to_file_);
 		}

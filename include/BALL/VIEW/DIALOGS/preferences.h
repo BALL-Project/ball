@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferences.h,v 1.12 2004/09/29 20:38:11 amoll Exp $
+// $Id: preferences.h,v 1.13 2004/09/30 16:16:25 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_PREFERENCES_H
@@ -13,6 +13,10 @@
 
 #ifndef BALL_DATATYPE_HASHSET_H
 # include <BALL/DATATYPE/hashSet.h>
+#endif
+
+#ifndef BALL_DATATYPE_HASHMAP_H
+# include <BALL/DATATYPE/hashMap.h>
 #endif
 
 namespace BALL
@@ -75,7 +79,7 @@ namespace BALL
 					\param  name the name of the new dialog
 					\see    removePage
 			*/
-			void insertEntry(PreferencesEntry *child, const String &name)
+			void insertEntry(PreferencesEntry *child)
 				throw();
 
 			/** Remove a previously inserted page.
@@ -118,16 +122,18 @@ namespace BALL
 			void show();
 			
 			/// Show the given page
-			void showPage(QWidget* page);
+			void showEntry(QWidget* page);
 						
-			/** Show the given page
-			 		@param nr the number of the dialog, that is to be shown
-			*/
-			void showPage(int nr);
+			///
+			void entrySelected(QListViewItem* item);
 
 			protected:
 
+
 			HashSet<PreferencesEntry*> entries_;
+			HashMap<QListViewItem*, QWidget*> item_to_widget_;
+			HashMap<QListViewItem*, PreferencesEntry*> item_to_entry_;
+			HashMap<QWidget*, QListViewItem*> widget_to_item_;
 
 			//@}
 		};

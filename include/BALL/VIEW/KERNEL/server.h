@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: server.h,v 1.9 2004/09/29 20:38:12 amoll Exp $
+// $Id: server.h,v 1.10 2004/09/30 16:16:25 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_SERVER_H
@@ -189,20 +189,6 @@ namespace BALL
 					\see  aboutToExit
 			*/
 			virtual void finalizeWidget(MainControl& main_control)
-				throw();
-			
-			/** Menu checking method.
-					This method checks, enables or disables all inserted menu entries of 
-					this server. It will be called by checkMenus of 
-					the class MainControl.	
-					See ModularWidget for further information concerning menu structure
-					creation of ModularWidget objects.\par
-					<b>Note</b> Because this server has no menu entries this method
-					is empty.
-				  \see        ModularWidget
-					\see        checkMenus
-			*/
-			virtual void checkMenu(MainControl& main_control)
 				throw();
 			
 			/** Initialize a preferences tab for the server.

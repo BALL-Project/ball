@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferencesEntry.h,v 1.5 2004/09/29 21:14:02 amoll Exp $
+// $Id: preferencesEntry.h,v 1.6 2004/09/30 16:16:25 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_PREFERENCES_ENTRY
@@ -17,6 +17,7 @@
 
 class QWidget;
 class QLabel;
+class QWidgetStack;
 
 namespace BALL
 {
@@ -33,7 +34,7 @@ namespace BALL
 			friend class PreferencesObject;
 
 			public:
-
+			typedef List<std::pair<QWidget*, String> > EntriesList;
 			///
 			PreferencesEntry();
 
@@ -50,13 +51,25 @@ namespace BALL
 			virtual void setDefaultValues(bool /*all*/ = false) {}
 
 			///
-			virtual void showPage(Position /*nr*/) {};
+			virtual void showEntry(Position nr);
+			
+			///
+			virtual void showEntry(QWidget* widget);
 
 			///
 			virtual Position currentPage() const { return 0;}
 
 			///
 			void setINIFileSectionName(const String& name) { inifile_section_name_ = name;}
+
+			///
+			void insertEntry(QWidget* widget, const String& name);
+
+			///
+			EntriesList& getEntries() { return entries_;}
+
+			///
+			void setWidgetStack(QWidgetStack* stack);
 
 			protected:
 
@@ -78,6 +91,8 @@ namespace BALL
 
 			String 							inifile_section_name_;
 			HashSet<QWidget*> 	preferences_objects_;
+			EntriesList 				entries_;
+			QWidgetStack*				widget_stack_;
 		};
   
 	} // namespace VIEW
