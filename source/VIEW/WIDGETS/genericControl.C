@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericControl.C,v 1.2 2003/09/07 23:24:06 amoll Exp $
+// $Id: genericControl.C,v 1.3 2003/09/08 02:21:29 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/genericControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -29,10 +29,6 @@ GenericControl::GenericControl(QWidget* parent, const char* name)
 	listview->setRootIsDecorated(true);
 	listview->setSorting(-1);
 	listview->setSelectionMode(QListView::Extended);
-	listview->addColumn("Name");
-	listview->addColumn("from");
-	listview->setColumnWidth(0, 120);
-	listview->setColumnWidth(1, 60);
 
 	caption_label->setText(name);
 
