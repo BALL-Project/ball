@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.35 2000/01/08 20:54:10 oliver Exp $
+dnl    $Id: configure.in,v 1.36 2000/01/08 20:56:21 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -958,8 +958,8 @@ else
 			DEF_BOOL=true
 			AR="${CXX}"
 			DYNAR="${CXX}"
-			AROPTS="-xar -o"
-			DYNAROPTS="-G -KPIC -o"
+			AROPTS="-xar -KPIC -pto -o"
+			DYNAROPTS="-G -KPIC -pto -o"
 			CXX_MAKEDEPEND="${CXX}"
 			MAKEDEP_CXX_OPTS="-xM1"
 			MAKEDEP_CXX_SUFFIX=" >.Dependencies"

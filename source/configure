@@ -1,6 +1,6 @@
 #! /bin/sh
 
-#  $Id: configure,v 1.42 2000/01/08 20:54:06 oliver Exp $
+#  $Id: configure,v 1.43 2000/01/08 20:56:16 oliver Exp $
 
 
 ##################################################
@@ -2114,8 +2114,8 @@ EOF
 			DEF_BOOL=true
 			AR="${CXX}"
 			DYNAR="${CXX}"
-			AROPTS="-xar -o"
-			DYNAROPTS="-G -KPIC -o"
+			AROPTS="-xar -KPIC -pto -o"
+			DYNAROPTS="-G -KPIC -pto -o"
 			CXX_MAKEDEPEND="${CXX}"
 			MAKEDEP_CXX_OPTS="-xM1"
 			MAKEDEP_CXX_SUFFIX=" >.Dependencies"
