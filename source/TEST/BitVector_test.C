@@ -1,4 +1,4 @@
-// $Id: BitVector_test.C,v 1.16 2000/08/24 11:55:14 amoll Exp $
+// $Id: BitVector_test.C,v 1.17 2000/08/31 15:49:46 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(BitVector, "$Id: BitVector_test.C,v 1.16 2000/08/24 11:55:14 amoll Exp $")
+START_TEST(BitVector, "$Id: BitVector_test.C,v 1.17 2000/08/31 15:49:46 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -214,6 +214,10 @@ CHECK(BitVector::setBit/getBit(Index, bool))
 	const BitVector const_bv(8);
 	TEST_EXCEPTION(Exception::IndexOverflow, const_bv.getBit(11))
 	TEST_EQUAL(const_bv.getSize(), 8)
+
+	BitVector bv;
+	bv.setBit(0, true);
+	TEST_EQUAL(bv.getBit(0), true)
 RESULT
 
 CHECK(BitVector::toggleBit(Index))
