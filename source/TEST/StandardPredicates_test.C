@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: StandardPredicates_test.C,v 1.28 2003/06/04 15:32:14 anker Exp $
+// $Id: StandardPredicates_test.C,v 1.29 2003/07/01 14:23:43 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -19,7 +19,7 @@
 
 ///////////////////////////
 
-START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.28 2003/06/04 15:32:14 anker Exp $")
+START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.29 2003/07/01 14:23:43 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -31,7 +31,7 @@ using namespace BALL;
 	
 // tests for class AtomNamePredicate::
 
-CHECK(AtomNamePredicate::operator () (const Atom& atom) const )
+CHECK([EXTRA]AtomNamePredicate::operator () (const Atom& atom) const )
   Atom atom;
 	atom.setName("Grmpfl.");
 	AtomNamePredicate atom_name;
@@ -49,7 +49,7 @@ RESULT
 
 // tests for class AtomTypePredicate::
 
-CHECK(AtomTypePredicate::operator () (const Atom& atom) const )
+CHECK([EXTRA]AtomTypePredicate::operator () (const Atom& atom) const )
   Atom atom;
 	atom.setTypeName("CT");
 	AtomTypePredicate type_name;
@@ -66,7 +66,7 @@ RESULT
 
 
 // tests for class ElementPredicate::
-CHECK(ElementPredicate::operator () (const Atom& atom) const )
+CHECK([EXTRA]ElementPredicate::operator () (const Atom& atom) const )
 	Atom atom;
 	ElementPredicate pred;
 	pred.setArgument("?");	
@@ -82,7 +82,7 @@ RESULT
 
 // tests for class ResiduePredicate::
 
-CHECK(ResiduePredicate::operator () (const Atom& atom) const )
+CHECK([EXTRA]ResiduePredicate::operator () (const Atom& atom) const )
 	ResiduePredicate pred;
 
 	Residue res;
@@ -104,7 +104,7 @@ RESULT
 
 // tests for class ResidueIDPredicate::
 
-CHECK(ResidueIDPredicate::operator () (const Atom& atom) const )
+CHECK([EXTRA]ResidueIDPredicate::operator () (const Atom& atom) const )
 	ResidueIDPredicate pred;
 
 	Residue res;
@@ -126,7 +126,7 @@ RESULT
 
 // tests for class ProteinPredicate::
 
-CHECK(ProteinPredicate::operator () (const Atom& atom) const )
+CHECK([EXTRA]ProteinPredicate::operator () (const Atom& atom) const )
 	ProteinPredicate pred;
 
 	Protein  p;
@@ -150,7 +150,7 @@ RESULT
 
 // tests for class ChainPredicate::
 
-CHECK(ChainPredicate::operator () (const Atom& atom) const )
+CHECK([EXTRA]ChainPredicate::operator () (const Atom& atom) const )
 	ChainPredicate pred;
 
 	Chain chain;
@@ -174,7 +174,7 @@ RESULT
 
 // tests for class SecondaryStructurePredicate::
 
-CHECK(SecondaryStructurePredicate::operator () (const Atom& atom) const )
+CHECK([EXTRA]SecondaryStructurePredicate::operator () (const Atom& atom) const )
 	SecondaryStructurePredicate pred;
 
 	SecondaryStructure sec_struct;
@@ -198,7 +198,7 @@ RESULT
 
 // tests for class SolventPredicate::
 
-CHECK(SolventPredicate::operator () (const Atom& atom) const )
+CHECK([EXTRA]SolventPredicate::operator () (const Atom& atom) const )
 	Molecule m;
 	Atom a1;
 	Atom a2;
@@ -214,7 +214,7 @@ RESULT
 
 // tests for class MoleculePredicate::
 
-CHECK(MoleculePredicate::operator () (const Atom& atom) const )
+CHECK([EXTRA]MoleculePredicate::operator () (const Atom& atom) const )
 	Atom atom;
 	Molecule mol;
 	mol.insert(atom);
@@ -230,7 +230,7 @@ RESULT
 
 // tests for class NucleicAcidPredicate::
 
-CHECK(NucleicAcidPredicate::operator () (const Atom& atom) const )
+CHECK([EXTRA]NucleicAcidPredicate::operator () (const Atom& atom) const )
 	Atom atom;
 	NucleicAcid n_a;
 	n_a.insert(atom);
@@ -246,7 +246,7 @@ RESULT
 
 // tests for class NucleotidePredicate::
 
-CHECK(NucleotidePredicate::operator () (const Atom& atom) const )
+CHECK([EXTRA]NucleotidePredicate::operator () (const Atom& atom) const )
 	ResiduePredicate pred;
 
 	Residue res;
@@ -272,7 +272,7 @@ f.close();
 
 // tests for class BackBonePredicate::
 
-CHECK(BackBonePredicate::operator () (const Atom& atom) const )
+CHECK([EXTRA]BackBonePredicate::operator () (const Atom& atom) const )
 	BackBonePredicate pred;
 
 	AtomIterator it = S.beginAtom();
@@ -296,7 +296,7 @@ RESULT
 // tests for InRingPredicate
 
 
-CHECK(InRingPredicate::operator () (const Atom& atom) const )
+CHECK([EXTRA]InRingPredicate::operator () (const Atom& atom) const )
 	InRingPredicate inRing;
 	InRingPredicate in0Ring;
 	in0Ring.setArgument("0");
@@ -389,7 +389,7 @@ RESULT
 
 // tests for class ConnectedToPredicate::
 
-CHECK(ConnectedToPredicate::operator () (const Atom& atom) const )
+CHECK([EXTRA]ConnectedToPredicate::operator () (const Atom& atom) const )
 	ConnectedToPredicate connectedTo;
 
 	// we may not walk back again!
@@ -595,7 +595,7 @@ RESULT
 
 // tests for class AromaticBondsPredicate::
 
-CHECK(AromaticBondsPredicate::operator () (const Atom& atom) const )
+CHECK([EXTRA]AromaticBondsPredicate::operator () (const Atom& atom) const )
 	AromaticBondsPredicate aromaticBonds0;
 	aromaticBonds0.setArgument("0");
 	AromaticBondsPredicate aromaticBonds1;
@@ -675,7 +675,7 @@ RESULT
 
 // tests for class NumberOfBondsPredicate::
 
-CHECK(NumberOfBondsPredicate::operator () (const Atom& atom) const )
+CHECK([EXTRA]NumberOfBondsPredicate::operator () (const Atom& atom) const )
 	NumberOfBondsPredicate numberOfBonds0;
 	numberOfBonds0.setArgument("0");
 	NumberOfBondsPredicate numberOfBonds1;
@@ -754,7 +754,7 @@ g.close();
 
 // tests for class DoubleBondsPredicate::
 
-CHECK(DoubleBondsPredicate::operator () (const Atom& atom) const )
+CHECK([EXTRA]DoubleBondsPredicate::operator () (const Atom& atom) const )
 	DoubleBondsPredicate doubleBonds0;
 	doubleBonds0.setArgument("0");
 	DoubleBondsPredicate doubleBonds1;
@@ -808,7 +808,7 @@ RESULT
 
 // tests for class SingleBondsPredicate::
 
-CHECK(SingleBondsPredicate::operator () (const Atom& atom) const )
+CHECK([EXTRA]SingleBondsPredicate::operator () (const Atom& atom) const )
 	SingleBondsPredicate singleBonds0;
 	singleBonds0.setArgument("0");
 	SingleBondsPredicate singleBondslt1;
@@ -889,7 +889,7 @@ RESULT
 
 // tests for class TripleBondsPredicate::
 
-CHECK(TripleBondsPredicate::operator () (const Atom& atom) const )
+CHECK([EXTRA]TripleBondsPredicate::operator () (const Atom& atom) const )
 	TripleBondsPredicate tripleBonds0;
 	tripleBonds0.setArgument("0");
 	TripleBondsPredicate tripleBonds1;
@@ -928,7 +928,7 @@ RESULT
 
 // tests for class SpHybridizedPredicate::
 
-CHECK(SpHybridizedPredicate::operator () (const Atom& atom) const )
+CHECK([EXTRA]SpHybridizedPredicate::operator () (const Atom& atom) const )
 	SpHybridizedPredicate isSp;
 
 	AtomIterator it = S.beginAtom();
@@ -951,7 +951,7 @@ RESULT
 
 // tests for class sp2HybridizedPredicate::
 
-CHECK(Sp2HybridizedPredicate::operator () (const Atom& atom) const )
+CHECK([EXTRA]Sp2HybridizedPredicate::operator () (const Atom& atom) const )
 	Sp2HybridizedPredicate isSp2;
 
 	AtomIterator it = S.beginAtom();
@@ -973,7 +973,7 @@ RESULT
 
 
 // tests for class sp3HybridizedPredicate::
-CHECK(Sp3HybridizedPredicate::operator () (const Atom& atom) const )
+CHECK([EXTRA]Sp3HybridizedPredicate::operator () (const Atom& atom) const )
 	Sp3HybridizedPredicate isSp3;
 
 	AtomIterator it = S.beginAtom();
@@ -994,7 +994,7 @@ CHECK(Sp3HybridizedPredicate::operator () (const Atom& atom) const )
 RESULT
 
 
-CHECK(ChargePredicate::operator ())
+CHECK([EXTRA]ChargePredicate::operator ())
   // ???
 RESULT
 
@@ -1003,7 +1003,7 @@ f.open("data/LacNAc.hin");
 f >> S;
 f.close();
 
-CHECK(AxialPredicate::operator () (const Atom& atom) )
+CHECK([EXTRA]AxialPredicate::operator () (const Atom& atom) )
 	AxialPredicate isAxial;
 
 	AtomIterator it = S.beginAtom();
@@ -1022,7 +1022,7 @@ CHECK(AxialPredicate::operator () (const Atom& atom) )
 	}
 RESULT
 
-CHECK(Conformation4C1Predicate::operator () (const Atom& atom) )
+CHECK([EXTRA]Conformation4C1Predicate::operator () (const Atom& atom) )
 	Conformation4C1Predicate is_4C1;
 
 	AtomIterator it = S.beginAtom();
@@ -1052,7 +1052,526 @@ CHECK(Conformation4C1Predicate::operator () (const Atom& atom) )
 	}
 RESULT
 
+CHECK(~ConnectedToPredicate() throw())
+	ConnectedToPredicate* ptr = new ConnectedToPredicate;
+	delete ptr;
+RESULT
 
+CHECK(~InRingPredicate() throw())
+	InRingPredicate* ptr = new InRingPredicate;
+	delete ptr;
+RESULT
+
+CHECK(ConnectedToPredicate() throw())
+	ConnectedToPredicate c;
+RESULT
+
+CHECK(InRingPredicate() throw())
+	InRingPredicate i;
+RESULT
+
+CHECK(InRingPredicate(Size n) throw())
+	InRingPredicate i(1);
+RESULT
+
+
+ExpressionPredicate* ptr = 0;
+ExpressionPredicate* test = 0;
+Atom atom;
+atom.setName("Grmpfl.");
+CHECK(BALL_CREATE(AromaticBondsPredicate))
+	ptr = new AromaticBondsPredicate();
+	test = (ExpressionPredicate*) ptr->create(true, false);
+	TEST_NOT_EQUAL(test, 0)
+	(*test)(atom);
+	delete test;
+	delete ptr;
+	test = ptr = 0;
+RESULT
+
+CHECK(BALL_CREATE(AtomNamePredicate))
+	ptr = new AtomNamePredicate();
+	test = (ExpressionPredicate*) ptr->create(true, false);
+	TEST_NOT_EQUAL(test, 0)
+	(*test)(atom);
+	delete test;
+	delete ptr;
+	test = ptr = 0;
+RESULT
+
+CHECK(BALL_CREATE(AtomTypePredicate))
+	ptr = new AtomTypePredicate();
+	test = (ExpressionPredicate*) ptr->create(true, false);
+	TEST_NOT_EQUAL(test, 0)
+	(*test)(atom);
+	delete test;
+	delete ptr;
+	test = ptr = 0;
+RESULT
+
+
+CHECK(BALL_CREATE(AxialPredicate))
+	ptr = new AxialPredicate();
+	test = (ExpressionPredicate*) ptr->create(true, false);
+	TEST_NOT_EQUAL(test, 0)
+	(*test)(atom);
+	delete test;
+	delete ptr;
+	test = ptr = 0;
+RESULT
+
+
+CHECK(BALL_CREATE(BackBonePredicate))
+	ptr = new BackBonePredicate();
+	test = (ExpressionPredicate*) ptr->create(true, false);
+	TEST_NOT_EQUAL(test, 0)
+	(*test)(atom);
+	delete test;
+	delete ptr;
+	test = ptr = 0;
+RESULT
+
+
+CHECK(BALL_CREATE(ChainPredicate))
+	ptr = new ChainPredicate();
+	test = (ExpressionPredicate*) ptr->create(true, false);
+	TEST_NOT_EQUAL(test, 0)
+	(*test)(atom);
+	delete test;
+	delete ptr;
+	test = ptr = 0;
+RESULT
+
+
+CHECK(BALL_CREATE(ChargePredicate))
+	ptr = new ChargePredicate();
+	test = (ExpressionPredicate*) ptr->create(true, false);
+	TEST_NOT_EQUAL(test, 0)
+	(*test)(atom);
+	delete test;
+	delete ptr;
+	test = ptr = 0;
+RESULT
+
+
+CHECK(BALL_CREATE(Conformation4C1Predicate))
+	ptr = new Conformation4C1Predicate();
+	test = (ExpressionPredicate*) ptr->create(true, false);
+	TEST_NOT_EQUAL(test, 0)
+	(*test)(atom);
+	delete test;
+	delete ptr;
+	test = ptr = 0;
+RESULT
+
+
+CHECK(BALL_CREATE(ConnectedToPredicate))
+	ptr = new ConnectedToPredicate();
+	test = (ExpressionPredicate*) ptr->create(true, false);
+	TEST_NOT_EQUAL(test, 0)
+	(*test)(atom);
+	delete test;
+	delete ptr;
+	test = ptr = 0;
+RESULT
+
+
+CHECK(BALL_CREATE(DoubleBondsPredicate))
+	ptr = new DoubleBondsPredicate();
+	test = (ExpressionPredicate*) ptr->create(true, false);
+	TEST_NOT_EQUAL(test, 0)
+	(*test)(atom);
+	delete test;
+	delete ptr;
+	test = ptr = 0;
+RESULT
+
+
+CHECK(BALL_CREATE(ElementPredicate))
+	ptr = new ElementPredicate();
+	test = (ExpressionPredicate*) ptr->create(true, false);
+	TEST_NOT_EQUAL(test, 0)
+	(*test)(atom);
+	delete test;
+	delete ptr;
+	test = ptr = 0;
+RESULT
+
+
+CHECK(BALL_CREATE(FalsePredicate))
+	ptr = new FalsePredicate();
+	test = (ExpressionPredicate*) ptr->create(true, false);
+	TEST_NOT_EQUAL(test, 0)
+	(*test)(atom);
+	delete test;
+	delete ptr;
+	test = ptr = 0;
+RESULT
+
+
+CHECK(BALL_CREATE(InRingPredicate))
+	ptr = new InRingPredicate();
+	test = (ExpressionPredicate*) ptr->create(true, false);
+	TEST_NOT_EQUAL(test, 0)
+	(*test)(atom);
+	delete test;
+	delete ptr;
+	test = ptr = 0;
+RESULT
+
+
+CHECK(BALL_CREATE(MoleculePredicate))
+	ptr = new MoleculePredicate();
+	test = (ExpressionPredicate*) ptr->create(true, false);
+	TEST_NOT_EQUAL(test, 0)
+	(*test)(atom);
+	delete test;
+	delete ptr;
+	test = ptr = 0;
+RESULT
+
+
+CHECK(BALL_CREATE(NucleicAcidPredicate))
+	ptr = new NucleicAcidPredicate();
+	test = (ExpressionPredicate*) ptr->create(true, false);
+	TEST_NOT_EQUAL(test, 0)
+	(*test)(atom);
+	delete test;
+	delete ptr;
+	test = ptr = 0;
+RESULT
+
+
+CHECK(BALL_CREATE(NucleotidePredicate))
+	ptr = new NucleotidePredicate();
+	test = (ExpressionPredicate*) ptr->create(true, false);
+	TEST_NOT_EQUAL(test, 0)
+	(*test)(atom);
+	delete test;
+	delete ptr;
+	test = ptr = 0;
+RESULT
+
+
+CHECK(BALL_CREATE(NumberOfBondsPredicate))
+	ptr = new NumberOfBondsPredicate();
+	test = (ExpressionPredicate*) ptr->create(true, false);
+	TEST_NOT_EQUAL(test, 0)
+	(*test)(atom);
+	delete test;
+	delete ptr;
+	test = ptr = 0;
+RESULT
+
+
+CHECK(BALL_CREATE(ProteinPredicate))
+	ptr = new ProteinPredicate();
+	test = (ExpressionPredicate*) ptr->create(true, false);
+	TEST_NOT_EQUAL(test, 0)
+	(*test)(atom);
+	delete test;
+	delete ptr;
+	test = ptr = 0;
+RESULT
+
+
+CHECK(BALL_CREATE(ResidueIDPredicate))
+	ptr = new ResidueIDPredicate();
+	test = (ExpressionPredicate*) ptr->create(true, false);
+	TEST_NOT_EQUAL(test, 0)
+	(*test)(atom);
+	delete test;
+	delete ptr;
+	test = ptr = 0;
+RESULT
+
+
+CHECK(BALL_CREATE(ResiduePredicate))
+	ptr = new ResiduePredicate();
+	test = (ExpressionPredicate*) ptr->create(true, false);
+	TEST_NOT_EQUAL(test, 0)
+	(*test)(atom);
+	delete test;
+	delete ptr;
+	test = ptr = 0;
+RESULT
+
+
+CHECK(BALL_CREATE(SecondaryStructurePredicate))
+	ptr = new SecondaryStructurePredicate();
+	test = (ExpressionPredicate*) ptr->create(true, false);
+	TEST_NOT_EQUAL(test, 0)
+	(*test)(atom);
+	delete test;
+	delete ptr;
+	test = ptr = 0;
+RESULT
+
+
+CHECK(BALL_CREATE(SelectedPredicate))
+	ptr = new SelectedPredicate();
+	test = (ExpressionPredicate*) ptr->create(true, false);
+	TEST_NOT_EQUAL(test, 0)
+	(*test)(atom);
+	delete test;
+	delete ptr;
+	test = ptr = 0;
+RESULT
+
+
+CHECK(BALL_CREATE(SingleBondsPredicate))
+	ptr = new SingleBondsPredicate();
+	test = (ExpressionPredicate*) ptr->create(true, false);
+	TEST_NOT_EQUAL(test, 0)
+	(*test)(atom);
+	delete test;
+	delete ptr;
+	test = ptr = 0;
+RESULT
+
+
+CHECK(BALL_CREATE(SolventPredicate))
+	ptr = new SolventPredicate();
+	test = (ExpressionPredicate*) ptr->create(true, false);
+	TEST_NOT_EQUAL(test, 0)
+	(*test)(atom);
+	delete test;
+	delete ptr;
+	test = ptr = 0;
+RESULT
+
+
+CHECK(BALL_CREATE(Sp2HybridizedPredicate))
+	ptr = new Sp2HybridizedPredicate();
+	test = (ExpressionPredicate*) ptr->create(true, false);
+	TEST_NOT_EQUAL(test, 0)
+	(*test)(atom);
+	delete test;
+	delete ptr;
+	test = ptr = 0;
+RESULT
+
+
+CHECK(BALL_CREATE(Sp3HybridizedPredicate))
+	ptr = new Sp3HybridizedPredicate();
+	test = (ExpressionPredicate*) ptr->create(true, false);
+	TEST_NOT_EQUAL(test, 0)
+	(*test)(atom);
+	delete test;
+	delete ptr;
+	test = ptr = 0;
+RESULT
+
+
+CHECK(BALL_CREATE(SpHybridizedPredicate))
+	ptr = new SpHybridizedPredicate();
+	test = (ExpressionPredicate*) ptr->create(true, false);
+	TEST_NOT_EQUAL(test, 0)
+	(*test)(atom);
+	delete test;
+	delete ptr;
+	test = ptr = 0;
+RESULT
+
+
+CHECK(BALL_CREATE(TripleBondsPredicate))
+	ptr = new TripleBondsPredicate();
+	test = (ExpressionPredicate*) ptr->create(true, false);
+	TEST_NOT_EQUAL(test, 0)
+	(*test)(atom);
+	delete test;
+	delete ptr;
+	test = ptr = 0;
+RESULT
+
+
+CHECK(BALL_CREATE(TruePredicate))
+	ptr = new TruePredicate();
+	test = (ExpressionPredicate*) ptr->create(true, false);
+	TEST_NOT_EQUAL(test, 0)
+	(*test)(atom);
+	delete test;
+	delete ptr;
+	test = ptr = 0;
+RESULT
+
+// =====================================================
+// Ringfinder
+// =====================================================
+
+RingFinder* finder = 0;
+CHECK(RingFinder() throw())
+	finder = new RingFinder;
+	TEST_NOT_EQUAL(finder, 0)
+RESULT
+
+CHECK(~RingFinder() throw())
+	delete finder;
+RESULT
+
+CHECK(RingFinder(Size n) throw())
+	RingFinder f(6);
+RESULT
+
+CHECK(bool operator () (const Atom& atom) throw())
+	RingFinder f;
+	f(atom);
+RESULT
+
+CHECK(const HashSet<const Bond*>& getVisitedBonds() const throw())
+	RingFinder f(6);
+	TEST_EQUAL(f.getVisitedBonds().size(), 0)
+RESULT
+
+CHECK(const std::vector<const Atom*>& getRingAtoms() const throw())
+	RingFinder f(6);
+	TEST_EQUAL(f.getRingAtoms().size(), 0)
+RESULT
+
+CHECK(bool dfs(const Atom& atom, const Size limit) throw())
+	RingFinder f(5);
+	TEST_EQUAL(f.dfs(atom, 1), false)
+RESULT
+
+CHECK(void setRingSize(Size n) throw())
+	RingFinder f;
+	f.setRingSize(1);
+RESULT
+
+// =====================================================
+// not to be tested
+// =====================================================
+CHECK(::std::list<CTPNode*>& getChildren() throw())
+// Not to be tested
+RESULT
+
+CHECK(CTPNode() throw())
+// Not to be tested
+RESULT
+
+CHECK(CTPNode(const CTPNode& node) throw())
+// Not to be tested
+RESULT
+
+CHECK(CTPNode* getParent() const throw())
+// Not to be tested
+RESULT
+
+CHECK(ConstIterator begin() const throw())
+// Not to be tested
+RESULT
+
+CHECK(ConstIterator end() const throw())
+// Not to be tested
+RESULT
+
+CHECK(Iterator begin() throw())
+// Not to be tested
+RESULT
+
+CHECK(Iterator end() throw())
+// Not to be tested
+RESULT
+
+CHECK(Size getBondType() const throw())
+// Not to be tested
+RESULT
+
+CHECK(Size getNumberOfChildren() const throw())
+// Not to be tested
+RESULT
+
+CHECK(String getSymbol() const throw())
+// Not to be tested
+RESULT
+
+CHECK(bool isFinished() const throw())
+// Not to be tested
+RESULT
+
+CHECK(bool isLinked() const throw())
+// Not to be tested
+RESULT
+
+CHECK(bool operator () (const Atom& atom) const throw())
+// Not to be tested
+RESULT
+
+CHECK(char getBondTypeChar() const throw())
+// Not to be tested
+RESULT
+
+CHECK(const HashSet<const CTPNode*>& getLinkSet() const throw())
+// Not to be tested
+RESULT
+
+CHECK(void addChild(CTPNode* child) throw())
+// Not to be tested
+RESULT
+
+CHECK(void clear() throw())
+// Not to be tested
+RESULT
+
+CHECK(void destroy() throw())
+// Not to be tested
+RESULT
+
+CHECK(void dump() const throw())
+// Not to be tested
+RESULT
+
+CHECK(void dump(const CTPNode* current) const throw())
+// Not to be tested
+RESULT
+
+CHECK(void linkWith(CTPNode* partner) throw())
+// Not to be tested
+RESULT
+
+CHECK(void removeChild(CTPNode* child) throw())
+// Not to be tested
+RESULT
+
+CHECK(void setArgument(const String& argument) throw())
+// Not to be tested
+RESULT
+
+CHECK(void setBondType(Size type) throw())
+// Not to be tested
+RESULT
+
+CHECK(void setBondType(char type) throw())
+// Not to be tested
+RESULT
+
+CHECK(void setFinished() throw())
+// Not to be tested
+RESULT
+
+CHECK(void setLinked() throw())
+// Not to be tested
+RESULT
+
+CHECK(void setParent(CTPNode* parent) throw())
+// Not to be tested
+RESULT
+
+CHECK(void setSymbol(const String& symbol) throw())
+// Not to be tested
+RESULT
+
+CHECK(void unsetFinished() throw())
+// Not to be tested
+RESULT
+
+CHECK(void unsetLinked() throw())
+// Not to be tested
+RESULT
+
+CHECK(~CTPNode() throw())
+// Not to be tested
+RESULT
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST
