@@ -1,5 +1,4 @@
-// $Id: bruker1DFile.C,v 1.10 2001/06/24 14:32:49 oliver Exp $
-
+// $Id: bruker1DFile.C,v 1.11 2001/07/09 22:07:17 amoll Exp $
 
 #include <BALL/FORMAT/bruker1DFile.h>
 
@@ -45,10 +44,8 @@ namespace BALL
 	  read();
 	}
 
-        void Bruker1D::read()
+  void Bruker1D::read()
 	{
-	  
-	  int i = 0;
 	  char c[4];
 	  signed long int &numdum = *(signed long int*) (&c[0]);
 	  Position actpos=0;
@@ -59,60 +56,60 @@ namespace BALL
 	  // endian on this machine.
 	  int endTest = 1;
 	  if (*(char *) &endTest == 1)
-	    {
-	      littleEndian = true;
-	    } 
+	  {
+	  	littleEndian = true;
+	  } 
 	  else 
-	    {
-	      littleEndian = false;
-	    };
+	  {
+	    littleEndian = false;
+	  }
 	  
 	  spectrum_.resize( (Size)pars_->parameter( "SI" ) );
-	  spectrum_.setLowerBound(pars_->parameter("YMIN_p"));
-	  spectrum_.setUpperBound(pars_->parameter("YMAX_p"));
+	  spectrum_.setBoundaries(pars_->parameter("YMIN_p"), pars_->parameter("YMAX_p"));
 
 	  // back to beginning of file
 	  f.reopen();
 	  
 	  // read data
-	  for (i=0; i < (int)pars_->parameter("SI"); i++)
+	  for (int i = 0; i < (int)pars_->parameter("SI"); i++)
 		{
-		  if (f.good())
-		    {
-		      f.get(c[0]); f.get(c[1]); f.get(c[2]); f.get(c[3]);
-		      if ( pars_->parameter( "BYTORDP" ) == 1 ) 
+		  if (!f.good())
+		  {
+				// BAUSTELLE: here should be a warning or exception
+				return;
+			}
+			
+		  f.get(c[0]); f.get(c[1]); f.get(c[2]); f.get(c[3]);
+		  if (pars_->parameter( "BYTORDP" ) == 1) 
 			{
-			  if (littleEndian == true) // no conversion needed;
-			    {
-			    } 
-			  else 
-			    { // conversion from little to big
-			      numdum = (signed long) ( ((numdum & 0x000000FFL) << 24)
-					 |((numdum & 0x0000FF00L) << 16)
-					 |((numdum & 0x00FF0000L) >> 16)
-					 |((numdum & 0xFF000000L) >> 24));
-			    }
+			 	if (littleEndian == false)
+			 	{ // conversion from little to big
+				 	numdum = (signed long) ( ((numdum & 0x000000FFL) << 24)
+					|((numdum & 0x0000FF00L) << 16)
+				 	|((numdum & 0x00FF0000L) >> 16)
+				 	|((numdum & 0xFF000000L) >> 24));
+			 	}
+				// else no conversion needed
 			} 
-		      else 
+		  else 
 			{
-			  if (littleEndian == true) // conversion from big to little
-			    {
-			      numdum = (signed long) ( ((numdum & 0x000000FFL) << 24)
-					 |((numdum & 0x0000FF00L) << 16)
-					 |((numdum & 0x00FF0000L) >> 16)
-					 |((numdum & 0xFF000000L) >> 24));
-			    } 
-			  else 
-			    { // no conversion needed;
-			    }
+				if (littleEndian == true) // conversion from big to little
+			 	{
+			    numdum = (signed long) ( ((numdum & 0x000000FFL) << 24)
+					|((numdum & 0x0000FF00L) << 16)
+					|((numdum & 0x00FF0000L) >> 16)
+					|((numdum & 0xFF000000L) >> 24));
+			   } 
+			  // else no conversion needed
 			}
 		      
-		      if ((max_ - min_) != 0) 
+		  if ((max_ - min_) != 0) 
 			{
-			  spectrum_[actpos] = ((double) (numdum - min_)) / (max_ - min_);
+				spectrum_[actpos] = ((double) (numdum - min_)) / (max_ - min_);
 			}
-		      actpos++;
-		    }
+		    
+			actpos++;
+				
 		}
 	}
   
