@@ -1,4 +1,4 @@
-// $Id: BALL.sip,v 1.6 2000/10/05 22:33:35 oliver Exp $
+// $Id: BALL.sip,v 1.7 2000/11/15 14:20:58 oliver Exp $
 /////////////////////////
 // BALL PYTHON SUPPORT
 /////////////////////////
@@ -153,14 +153,14 @@
 // MOLMEC/COMMON
 // assignTypes.h // ??
 %Include atomVector.sip
-// chargeRuleProcessor.h // ??
+%Include chargeRuleProcessor.sip
 %Include forceField.sip
 %Include forceFieldComponent.sip
 %Include gradient.sip
 %Include periodicBoundary.sip
-// radiusRuleProcessor.h // ??
-// ruleEvaluator.h // ??
-// ruleProcessor.h // ??
+%Include radiusRuleProcessor.sip
+%Include ruleEvaluator.sip
+%Include ruleProcessor.sip
 %Include snapShot.sip
 // support.h
 // typeRuleProcessor.h
