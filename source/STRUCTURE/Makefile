@@ -55,9 +55,10 @@ default_clean:	clean_flex_bison
 clean_flex_bison:
 	@-$(RM) smilesParserParser.C smilesParserLexer.C smilesParserParser.h
 
-smilesParserParser.C smilesParserParser.h: smilesParserParser.y
+smilesParserParser.C: smilesParserParser.y
+smilesParserParser.h: smilesParserParser.y
 
-smilesParserLexer.o: smilesParserLexer.C
+smilesParserLexer.o: smilesParserLexer.C smilesParserParser.C
 	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(LIB_CXXFLAGS) $(BALL_INCLUDES) $(ADD_INCLUDES) -c $*.C -o $@
 
 smilesParserParser.o: smilesParserParser.C
