@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.in,v 1.8 1999/12/22 16:51:31 oliver Exp $
+# $Id: Makefile.in,v 1.9 1999/12/22 17:50:44 oliver Exp $
 #
 
 include config.mak
@@ -37,10 +37,9 @@ install:	install.static install.shared
 
 clean:
 	@echo "Cleaning up object files, cores,  and (uninstalled) library files..."
-	@$(MAKE) subdirs SUBDIRS="$(DIRS)" TARGET=default_clean
+	@$(MAKE) subdirs SUBDIRS="$(DIRS) TEST" TARGET=default_clean
 	@-$(RM) -f  $(STATIC_LIBS) $(SHARED_LIBS)
 	@-$(RM) -rf .Dependencies */.Dependencies *.objects *~ @TEMPLATE_DIR@
-	@cd TEST ; $(MAKE) clean
 
 lib_clean:
 	@echo "Removing all installed libraries..."
