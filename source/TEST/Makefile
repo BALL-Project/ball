@@ -80,6 +80,8 @@ EXECUTABLES = \
 	RuleEvaluator_test\
 	SecondaryStructure_test\
 	Selectable_test\
+	ShiftModel_test\
+	ShiftModule_test\
 	Socket_test\
 	SolventDescriptor_test\
 	SolventParameter_test\
