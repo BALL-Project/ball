@@ -1,4 +1,4 @@
-// $Id: angle.h,v 1.12 2000/02/29 11:03:33 oliver Exp $
+// $Id: angle.h,v 1.13 2000/02/29 23:21:52 amoll Exp $
 
 #ifndef BALL_MATHS_ANGLE_H
 #define BALL_MATHS_ANGLE_H
@@ -53,15 +53,18 @@ namespace BALL
 		*/
 		//@{
 
-		/**
+		/** form of range of the angle:
+				{\tt RANGE__UNLIMITED = 0} no limitations
+				{\tt RANGE__UNSIGNED  = 1} 0° <= angle <= 360°, 0 <= angle <= PI * 2
+				{\tt RANGE__SIGNED    = 2} -180° <= angle <= 180°, -PI <= angle <= PI
 		*/
 		enum Range
 		{
-			/// no limitations
+			// no limitations
 			RANGE__UNLIMITED = 0, 
-			/// 0° <= angle <= 360°, 0 <= angle <= (Constants::PI * 2)
+			// 0° <= angle <= 360°, 0 <= angle <= (Constants::PI * 2)
 			RANGE__UNSIGNED  = 1, 
-			/// -180° <= angle <= 180°, -Constants::PI <= angle <= Constants::PI
+			// -180° <= angle <= 180°, -Constants::PI <= angle <= Constants::PI
 			RANGE__SIGNED    = 2 
 		};
 		//@}
@@ -154,7 +157,8 @@ namespace BALL
 		*/
 		//@{
 
-		/** /// BAUSTELLE
+		/** Casting operator
+				@return value in radians
 		*/
 		operator T () const;
 
