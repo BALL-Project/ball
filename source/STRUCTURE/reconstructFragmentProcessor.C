@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reconstructFragmentProcessor.C,v 1.2 2002/05/12 14:01:09 oliver Exp $
+// $Id: reconstructFragmentProcessor.C,v 1.3 2003/06/02 17:22:42 anker Exp $
 
 #include <BALL/STRUCTURE/reconstructFragmentProcessor.h>
 
@@ -25,7 +25,7 @@ namespace BALL
 {
 
 	/////////////////////////////////////////////////////////////////
-	//		ReconstructFragmentProcessor												 //
+	//		ReconstructFragmentProcessor												     //
 	/////////////////////////////////////////////////////////////////	
 
 	void ReconstructFragmentProcessor::setFragmentDB(const FragmentDB& db)
@@ -101,7 +101,7 @@ namespace BALL
 	// nothing important is done here
 	bool ReconstructFragmentProcessor::start()
 	{
-		number_of_inserted_atoms_ = 0;
+		inserted_atoms_.clear();
 		
 		if (fragment_db_ == 0)
 		{
@@ -144,7 +144,16 @@ namespace BALL
 		}
 
 		// Reconstruct the atoms and count the number of new atoms.
-		number_of_inserted_atoms_ += reconstructFragment(residue, *reference_fragment);
+		// number_of_inserted_atoms_ += reconstructFragment(residue, *reference_fragment);
+		list<Atom*> inserted_atoms;
+		list<Atom*>::iterator it;
+
+		inserted_atoms = reconstructFragment(residue, *reference_fragment);
+
+		for (it = inserted_atoms.begin(); it != inserted_atoms.end(); ++it)
+		{
+			inserted_atoms_.push_back(*it);
+		}
 
 		// Next residue.
 		return Processor::CONTINUE;
@@ -152,7 +161,7 @@ namespace BALL
 
 	ReconstructFragmentProcessor::ReconstructFragmentProcessor(const FragmentDB& db)
 		:	fragment_db_(&db),
-			number_of_inserted_atoms_(0)
+			inserted_atoms_()
 	{
 	}
 	
@@ -160,14 +169,14 @@ namespace BALL
 	ReconstructFragmentProcessor::ReconstructFragmentProcessor(const ReconstructFragmentProcessor& rfp)
 		:	UnaryProcessor<Fragment>(rfp),
 			fragment_db_(rfp.fragment_db_),
-			number_of_inserted_atoms_(rfp.number_of_inserted_atoms_)
+			inserted_atoms_(rfp.inserted_atoms_)
 	{
 	}
 	
 	// default constructor	
 	ReconstructFragmentProcessor::ReconstructFragmentProcessor()
 		:	fragment_db_(0),
-			number_of_inserted_atoms_(0)
+			inserted_atoms_()
 	{
 	}
 	
@@ -177,17 +186,23 @@ namespace BALL
 		fragment_db_ = 0;
 	}
 
+	list<Atom*>& ReconstructFragmentProcessor::getInsertedAtoms()
+	{
+		return inserted_atoms_;
+	}
+
 	// return the number of inserted atoms
 	Size ReconstructFragmentProcessor::getNumberOfInsertedAtoms() const
 	{
-		return number_of_inserted_atoms_;
+		return inserted_atoms_.size();
 	}
  
-	Size ReconstructFragmentProcessor::reconstructFragment
+	list<Atom*> ReconstructFragmentProcessor::reconstructFragment
 		(Fragment& fragment, const Fragment& tplate)
 	{
 		// We count the number of atoms created.
 		Size number_of_inserted_atoms = 0;
+		list<Atom*> inserted_atoms;
 		
 		// Get a copy of the atom names occurring in the current reference fragment....
 		StringHashMap<Atom*> name_to_atom;
@@ -224,6 +239,7 @@ namespace BALL
 				tpl_to_res.insert(std::pair<const Atom*, Atom*>(&*cit, new_atom));
 				// update the atom count
 				number_of_inserted_atoms++;
+				inserted_atoms.push_back(new_atom);
 				//??? cerr << "creating atom " << (void*)(new_atom) << " for tpl atom " << cit->getName() << " (" << (void*)&*cit << ")" << endl;
 			}
 		}
@@ -306,7 +322,8 @@ namespace BALL
 		}
 		
 		// Return the number of atoms created.
-		return number_of_inserted_atoms;
+		// return number_of_inserted_atoms;
+		return inserted_atoms;
 	}
 
 } // namespace BALL

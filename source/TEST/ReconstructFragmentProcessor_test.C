@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ReconstructFragmentProcessor_test.C,v 1.2 2002/05/12 14:05:13 oliver Exp $
+// $Id: ReconstructFragmentProcessor_test.C,v 1.3 2003/06/02 17:22:50 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -18,7 +18,7 @@
 
 ///////////////////////////
 
-START_TEST(ReconstructFragmentProcessor, "$Id: ReconstructFragmentProcessor_test.C,v 1.2 2002/05/12 14:05:13 oliver Exp $")
+START_TEST(ReconstructFragmentProcessor, "$Id: ReconstructFragmentProcessor_test.C,v 1.3 2003/06/02 17:22:50 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -68,8 +68,8 @@ CHECK(ReconstructFragmentProcessor::reconstructFragment(Fragment& fragment, cons
 
 	const Fragment& ref = *frag_db.getFragment("LYS");
 
-	Size n = ReconstructFragmentProcessor::reconstructFragment(res2, ref);
-	TEST_EQUAL(n, ref.countAtoms() - 1)
+	list<Atom*> reconstructed_atoms = ReconstructFragmentProcessor::reconstructFragment(res2, ref);
+	TEST_EQUAL(reconstructed_atoms.size(), ref.countAtoms() - 1)
 	TEST_EQUAL(res2.countAtoms(), ref.countAtoms())
 RESULT
 

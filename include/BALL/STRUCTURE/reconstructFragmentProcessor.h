@@ -1,10 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reconstructFragmentProcessor.h,v 1.8 2003/03/28 18:12:33 oliver Exp $
+// $Id: reconstructFragmentProcessor.h,v 1.9 2003/06/02 17:22:08 anker Exp $
 
 #ifndef BALL_STRUCTURE_RECONSTRUCFRAGMENTPROCESSOR_H
 #define BALL_STRUCTURE_RECONSTRUCFRAGMENTPROCESSOR_H
+
+#include <list>
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -14,7 +16,7 @@
 #	include <BALL/DATATYPE/triple.h>
 #endif
 
-#ifndef BALL_MATCH_MATRIX44_H
+#ifndef BALL_MATHS_MATRIX44_H
 #	include <BALL/MATHS/matrix44.h>
 #endif
 
@@ -85,7 +87,11 @@ namespace BALL
 		*/
 		//@{
 		
-		/** Returns number of recently inserted hydrogens
+		/** Returns a list of inserted atoms.
+		*/
+		list<Atom*>& getInsertedAtoms();
+
+		/** Returns number of recently inserted atoms.
 		*/
 		Size getNumberOfInsertedAtoms() const;
 
@@ -132,7 +138,7 @@ namespace BALL
 
 		/**
 		*/
-		static Size reconstructFragment(Fragment& frag, const Fragment& tplate);
+		static list<Atom*> reconstructFragment(Fragment& frag, const Fragment& tplate);
 		//@}
 
 		protected:
@@ -145,9 +151,9 @@ namespace BALL
 		*/	
 		const FragmentDB*	fragment_db_;
 		
-		/*_ Number of atoms inserted during the last application  of the processor
+		/*_ List of atoms inserted during the last application of the processor.
 		*/
-		Size	number_of_inserted_atoms_;
+		list<Atom*> inserted_atoms_;
 		//_@}
 	};
   
