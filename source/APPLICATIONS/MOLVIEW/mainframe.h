@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.38 2003/08/26 09:17:36 oliver Exp $
+// $Id: mainframe.h,v 1.39 2003/08/26 13:50:15 amoll Exp $
 //
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -24,15 +24,15 @@
 #endif
 
 #ifndef BALL_MOLVIEW_DIALOGS_DISPLAYPROPERTIES_H
-# include <BALL/MOLVIEW/DIALOGS/displayProperties.h>
+# include <BALL/VIEW/DIALOGS/displayProperties.h>
 #endif
 
 #ifndef BALL_MOLVIEW_DIALOGS_LABELPROPERTIES_H
-# include <BALL/MOLVIEW/DIALOGS/labelProperties.h>
+# include <BALL/VIEW/DIALOGS/labelProperties.h>
 #endif
 
 #ifndef BALL_MOLVIEW_WIDGETS_MOLECULARCONTROL_H
-# include <BALL/MOLVIEW/WIDGETS/molecularControl.h>
+# include <BALL/VIEW/WIDGETS/molecularControl.h>
 #endif
 
 #ifndef BALL_VIEW_GUI_WIDGETS_GEOMETRICCONTROL_H
@@ -40,7 +40,7 @@
 #endif
 
 #ifndef BALL_MOLVIEW_WIDGETS_MOLECULARPROPERTIES_H
-# include <BALL/MOLVIEW/WIDGETS/molecularProperties.h>
+# include <BALL/VIEW/WIDGETS/molecularProperties.h>
 #endif
 
 #ifndef BALL_VIEW_GUI_FUNCTOR_POVRENDERER_H
@@ -52,19 +52,19 @@
 #endif
 
 #ifndef BALL_MOLVIEW_DIALOGS_CONTOURSURFACEDIALOG_H
-# include <BALL/MOLVIEW/DIALOGS/contourSurfaceDialog.h>
+# include <BALL/VIEW/DIALOGS/contourSurfaceDialog.h>
 #endif
 
 #ifndef BALL_VIEW_DIALOGS_MOLECULARFILEDIALOG_H
-# include <BALL/MOLVIEW/DIALOGS/molecularFileDialog.h>
+# include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
 #endif
 
 #ifndef BALL_MOLVIEW_DIALOGS_AMBERMINIMIZATIONDIALOG_H
-# include <BALL/MOLVIEW/DIALOGS/amberMinimizationDialog.h>
+# include <BALL/VIEW/DIALOGS/amberMinimizationDialog.h>
 #endif
 
 #ifndef BALL_MOLVIEW_DIALOGS_MOLECULARDYNAMICSDIALOG_H
-# include <BALL/MOLVIEW/DIALOGS/molecularDynamicsDialog.h>
+# include <BALL/VIEW/DIALOGS/molecularDynamicsDialog.h>
 #endif
 
 #include <qwidget.h>

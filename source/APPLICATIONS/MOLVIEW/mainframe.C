@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.57 2003/08/26 09:17:36 oliver Exp $
+// $Id: mainframe.C,v 1.58 2003/08/26 13:50:15 amoll Exp $
 
 
 #include "mainframe.h"
@@ -19,9 +19,9 @@
 #include <BALL/VIEW/GUI/DIALOGS/fileDialog.h>
 #include <BALL/VIEW/GUI/DIALOGS/FDPBDialog.h>
 #include <BALL/VIEW/PRIMITIV/mesh.h>
-#include <BALL/MOLVIEW/KERNEL/moleculeObjectCreator.h>
-#include <BALL/MOLVIEW/DIALOGS/peptideDialog.h>
-#include <BALL/MOLVIEW/DIALOGS/snapShotVisualisation.h>
+#include <BALL/VIEW/KERNEL/moleculeObjectCreator.h>
+#include <BALL/VIEW/DIALOGS/peptideDialog.h>
+#include <BALL/VIEW/DIALOGS/snapShotVisualisation.h>
 #include <BALL/DATATYPE/regularData3D.h>
 #include <BALL/DATATYPE/contourSurface.h>
 #include <BALL/STRUCTURE/residueChecker.h>
