@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.67 2004/11/25 19:19:26 amoll Exp $
+// $Id: geometricControl.C,v 1.68 2004/12/09 16:17:37 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -126,12 +126,10 @@ namespace BALL
 		void GeometricControl::removeRepresentation(Representation& rep)
 			throw()
 		{
-			QListViewItem* item = representation_to_item_[&rep]; 
-			if (item != 0)
-			{
-				removeItem_(item, true);
-				representation_to_item_.erase(&rep);		
-			}
+			if (!representation_to_item_.has(&rep)) return;
+
+			removeItem_(representation_to_item_[&rep], true);
+			representation_to_item_.erase(&rep);		
 		}
 
 		void GeometricControl::updateRepresentation(Representation& rep)
