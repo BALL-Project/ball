@@ -122,8 +122,8 @@ namespace BALL
 				this dialog and is therefore not necessary for understanding.
 				@memo    DisplayProperties class (BALL MOLVIEW gui dialogs framework)
 				@author  $Author: aubertin $
-				@version $Revision: 1.7 $
-				@date    $Date: 2001/07/06 13:26:28 $
+				@version $Revision: 1.8 $
+				@date    $Date: 2001/07/06 13:54:47 $
 		*/
 		class DisplayProperties 
 			: public BALL::MOLVIEW::DisplayPropertiesData,
@@ -333,7 +333,7 @@ namespace BALL
 			void deselect();
 
 			/** Centers the camera.
-					Centers the camera of \Ref{Scene} to the geometric center of the molecular object
+					Centers the camera of \Ref{Scene} to the geometric center of the molecular objects
 					in the selection list.
 					The messages \Ref{WindowMessage} and \Ref{SceneMessage} will
 					be sent to inform the \Ref{MainControl} and the \Ref{Scene} about the change.
