@@ -359,8 +359,8 @@ namespace BALL
     {
       switch (s[i])
       {
-        case '(': bracket_count++; are_there_brackets = true; break;
-        case ')': bracket_count--; are_there_brackets = true; break;
+        case '(': bracket_count++; break;
+        case ')': bracket_count--; break;
 			}
 		}
 
