@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Gradient_test.C,v 1.4 2002/02/27 12:24:33 sturm Exp $
+// $Id: Gradient_test.C,v 1.5 2003/01/15 07:31:48 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +11,7 @@
 #include <BALL/MOLMEC/COMMON/atomVector.h>
 ///////////////////////////
 
-START_TEST(Gradient, "$Id: Gradient_test.C,v 1.4 2002/02/27 12:24:33 sturm Exp $")
+START_TEST(Gradient, "$Id: Gradient_test.C,v 1.5 2003/01/15 07:31:48 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -55,6 +55,7 @@ RESULT
 CHECK(Gradient::Gradient(const AtomVector& atoms))
 	Gradient grad(atom_vector);
 
+	PRECISION(1e-4)
 	TEST_EQUAL(grad.size(), 2)
 	TEST_REAL_EQUAL(grad.norm, sqrt(6.0) * factor)
 	TEST_REAL_EQUAL(grad.inv_norm, 1.0 / grad.norm)
@@ -146,14 +147,16 @@ CHECK(Gradient::set(const AtomVector& atoms))
 RESULT
 
 CHECK(Gradient::operator [] (int) const)
+	PRECISION(1e-6)
 	Gradient grad(atom_vector);
 	Vector3 force = grad[0]  - (atom_vector[0]->getForce() * Constants::NA / -1.0e13);
-	TEST_EQUAL(force.getLength(), 0.0)
+	TEST_REAL_EQUAL(force.getLength(), 0.0)
 	force = grad[1]  - (atom_vector[1]->getForce() * Constants::NA / -1.0e13);
-	TEST_EQUAL(force.getLength(), 0.0)
+	TEST_REAL_EQUAL(force.getLength(), 0.0)
 RESULT
 
 CHECK(Gradient::negate())
+	PRECISION(1e-4)
 	Gradient grad;
 	grad.set(atom_vector);
 

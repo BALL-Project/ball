@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: LineBasedFile_test.C,v 1.15 2002/12/12 11:34:41 oliver Exp $
+// $Id: LineBasedFile_test.C,v 1.16 2003/01/15 07:31:48 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -9,7 +9,7 @@
 #include <BALL/FORMAT/lineBasedFile.h>
 ///////////////////////////
 
-START_TEST(LineBasedFile, "$Id: LineBasedFile_test.C,v 1.15 2002/12/12 11:34:41 oliver Exp $")
+START_TEST(LineBasedFile, "$Id: LineBasedFile_test.C,v 1.16 2003/01/15 07:31:48 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -42,8 +42,14 @@ CHECK(LineBasedFile(const String& filename, File::OpenMode open_mode = std::ios:
 	f1.readLine();
 	TEST_EQUAL(f1.getLineNumber(), 1)
 	TEST_EQUAL(f1.getLine(), "line1")
+	f1.close();
 
-	TEST_EXCEPTION(Exception::FileNotFound, LineBasedFile f2("XXXXXXXX.txt"))
+	LineBasedFile* f2 = 0;
+	TEST_EXCEPTION(Exception::FileNotFound, f2 = new LineBasedFile("XXXXXXXX.txt"))
+	if (f2 != 0)
+	{
+		delete f2;
+	}
 RESULT
 
 LineBasedFile fx;
