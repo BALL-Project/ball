@@ -1,4 +1,4 @@
-// $Id: microCanonicalMD.h,v 1.5 2000/08/30 19:58:20 oliver Exp $
+// $Id: microCanonicalMD.h,v 1.6 2000/12/18 13:59:03 anker Exp $
 // Microcanonical MD: A class for doing molecular dynamics simulations      
 // according to the principle of a microcanonical ensemble (NVE), i.e., 
 // the total energy of the system is kept constant.
@@ -26,7 +26,6 @@
 #ifndef BALL_MATHS_VECTOR3_H         
 #	include <BALL/MATHS/vector3.h>
 #endif
-
 
 #ifndef BALL_DATATYPE_OPTIONS_H
 #	include <BALL/DATATYPE/options.h>
@@ -57,17 +56,29 @@
 #include <vector>
 
 namespace BALL 
-  {
+{
+
+	/** Microcanonical MD: A class for doing molecular dynamics simulations      
+			according to the principle of a microcanonical ensemble (NVE), i.e.,
+			the total energy of the system is kept constant. Numerical
+			integration for new atom positions is done via the Velocity Verlet
+			method. 
+			\\
+			{\bf Definition:} \URL{BALL/MOLMEC/MDSIMULATION/microCanonicalMD.h>
+			\\
+	*/
+
   class MicroCanonicalMD : public MolecularDynamics
-    {
+	{
+
     public: 
 
     /** A local auxiliary class
     */
     struct Aux_Factors
-      {
+		{
       double factor1,factor2; 
-      }; 
+		}; 
     
     /** @name Constructors and Destructors
     */
@@ -89,9 +100,11 @@ namespace BALL
     */
     MicroCanonicalMD(ForceField &myforcefield, SnapShotManager *ssm); 
 
-    /** This constructor wants a force field, a snapshot manager  and new options 
+		/** This constructor wants a force field, a snapshot manager and new
+				options 
     */
-    MicroCanonicalMD(ForceField &myforcefield, SnapShotManager *ssm, const Options &myoptions);
+		MicroCanonicalMD(ForceField &myforcefield, SnapShotManager *ssm, 
+				const Options &myoptions);
 
     /** The standard copy constructor
     */
@@ -124,7 +137,8 @@ namespace BALL
 
     /** This method does general setup things 
     */
-    virtual bool setup(ForceField &myforcefield, SnapShotManager *ssm, const Options &myoptions); 
+    virtual bool setup(ForceField &myforcefield, SnapShotManager *ssm,
+				const Options &myoptions); 
 
     /** This method is meant for additional preparations  apart from those
        done in setup 
@@ -189,6 +203,6 @@ namespace BALL
 
     };  // end of class MicroCanonicalMD  
 
-  } // end of namespace Ball
+  } // end of namespace BALL
 
 #endif // _BALL_MOLMEC_MICROCANONICALMD_H  
