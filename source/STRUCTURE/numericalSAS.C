@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: numericalSAS.C,v 1.26 2003/08/28 20:56:30 oliver Exp $
+// $Id: numericalSAS.C,v 1.27 2004/11/19 19:18:59 oliver Exp $
 //
 
 #include <utility>
@@ -25,6 +25,15 @@ namespace BALL
 
 	// forward
 	int nsc_(double*, double*, int, int, int, double*, double**, double*, double**, int*, int**);
+
+	// Some NSC variables
+	typedef double * point_double;
+	typedef int    * point_int;
+	point_double xpunsp=NULL;
+	point_int    ico_wk=NULL, ico_pt=NULL;
+	double       del_cube;
+	int          n_dot, ico_cube, last_n_dot=0, last_densit=0, last_unsp=0;
+	int          last_cubus=0;
 
 	float calculateSASAtomAreas
 		(const AtomContainer& fragment, HashMap<const Atom*,float>& atom_areas,
@@ -101,7 +110,16 @@ namespace BALL
 		{
 			free(internal_atom_dots);
 		}
-
+		if (xpunsp != 0)
+		{
+			free(xpunsp);
+			xpunsp = 0;
+		}
+		if (ico_wk != 0)
+		{
+			free(ico_wk);
+			ico_wk = 0;
+		}
 		// free the input fields
 		delete [] coordinates;
 		delete [] radii;
@@ -166,6 +184,16 @@ namespace BALL
 		{
 			free(surface_dots);
 		}
+		if (xpunsp != 0)
+		{
+			free(xpunsp);
+			xpunsp = 0;
+		}
+		if (ico_wk != 0)
+		{
+			free(ico_wk);
+			ico_wk = 0;
+		}
 
 		// free the input fields
 		delete [] coordinates;
@@ -229,6 +257,17 @@ namespace BALL
 		if (surface_dots != 0)
 		{
 			free(surface_dots);
+		}
+
+		if (xpunsp != 0)
+		{
+			free(xpunsp);
+			xpunsp = 0;
+		}
+		if (ico_wk != 0)
+		{
+			free(ico_wk);
+			ico_wk = 0;
 		}
 
 		// free the input fields
@@ -334,6 +373,16 @@ namespace BALL
 		if (internal_atom_dots != 0)
 		{
 			free(internal_atom_dots);
+		}
+		if (xpunsp != 0)
+		{
+			free(xpunsp);
+			xpunsp = 0;
+		}
+		if (ico_wk != 0)
+		{
+			free(ico_wk);
+			ico_wk = 0;
 		}
 
 
@@ -448,6 +497,17 @@ namespace BALL
 			free(internal_atom_dots);
 		}
 
+		if (xpunsp != 0)
+		{
+			free(xpunsp);
+			xpunsp = 0;
+		}
+		if (ico_wk != 0)
+		{
+			free(ico_wk);
+			ico_wk = 0;
+		}
+
 		// free the input fields
 		delete [] coordinates;
 		delete [] radii;
@@ -554,13 +614,6 @@ namespace BALL
 	Log.level(LogStream::ERROR) << "NSC: error in " << __FILE__\
 		<< ":" << __LINE__ << ": " 
 
-typedef double * point_double;
-typedef int    * point_int;
-point_double xpunsp=NULL;
-double       del_cube;
-point_int    ico_wk=NULL, ico_pt=NULL;
-int          n_dot, ico_cube, last_n_dot=0, last_densit=0, last_unsp=0;
-int          last_cubus=0;
 
 #define FOURPI (4.*M_PI)
 #define TORAD(A)     ((A)*0.017453293)
@@ -1092,7 +1145,8 @@ int          last_cubus=0;
 					}		/* cycle k */
 				}			/* cycle j */
 			}			/* cycle i */
-		free(work); return 0;
+			free(work); 
+			return 0;
 		}
 
 

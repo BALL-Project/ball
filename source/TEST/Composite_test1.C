@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Composite_test1.C,v 1.10 2003/08/26 09:18:29 oliver Exp $
+// $Id: Composite_test1.C,v 1.11 2004/11/19 19:18:59 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -30,7 +30,7 @@ class myVisitor
 	}
 };
 
-START_TEST(Composite, "$Id: Composite_test1.C,v 1.10 2003/08/26 09:18:29 oliver Exp $")
+START_TEST(Composite, "$Id: Composite_test1.C,v 1.11 2004/11/19 19:18:59 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -837,6 +837,7 @@ CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralExcept
 			Composite* pers_a = castTo<Composite>(*ptr);
 			TEST_EQUAL(pers_a->isSelected(), true)
 		}
+		delete ptr;
 	}
 RESULT
 

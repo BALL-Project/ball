@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Vector2_test.C,v 1.10 2003/06/09 22:40:54 oliver Exp $
+// $Id: Vector2_test.C,v 1.11 2004/11/19 19:19:00 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -13,7 +13,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(TVector2, "$Id: Vector2_test.C,v 1.10 2003/06/09 22:40:54 oliver Exp $")
+START_TEST(TVector2, "$Id: Vector2_test.C,v 1.11 2004/11/19 19:19:00 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -116,6 +116,7 @@ CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralExcept
 			TEST_REAL_EQUAL(v_ptr->x, 1.0)
 			TEST_REAL_EQUAL(v_ptr->y, 2.0)
 		}
+		delete ptr;
 	}
 RESULT
 
