@@ -10,6 +10,7 @@
 	*/
 	//@{
 		//@Include: angle.h
+		//@Include: vector2.h
 		//@Include: vector3.h
 		//@Include: vector4.h
 		//@Include: quaternion.h

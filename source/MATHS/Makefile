@@ -16,6 +16,7 @@ CPP_SOURCES=\
 	quaternion.C\
 	sphere3.C\
 	surface.C\
+	vector2.C\
 	vector3.C\
 	vector4.C
 
