@@ -1,4 +1,4 @@
-// $Id: amberStretch.C,v 1.13 2001/06/26 02:40:33 oliver Exp $
+// $Id: amberStretch.C,v 1.14 2001/06/27 10:40:04 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberStretch.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -88,8 +88,8 @@ namespace BALL
 						Atom::Type atom_type_A = bond.getFirstAtom()->getType();
 						Atom::Type atom_type_B = bond.getSecondAtom()->getType();
 						stretch_.push_back(QuadraticBondStretch::Data());
-						stretch_.back().atom1 = bond.getFirstAtom();
-						stretch_.back().atom2 = bond.getSecondAtom();
+						stretch_.back().atom1 = const_cast<Atom*>(bond.getFirstAtom());
+						stretch_.back().atom2 = const_cast<Atom*>(bond.getSecondAtom());
 			
 						// Pay attention to the symmetric database input
 						if (stretch_parameters_.hasParameters(atom_type_A, atom_type_B)) 
@@ -165,6 +165,13 @@ namespace BALL
 	// calculates and adds its forces to the current forces of the force field
 	void AmberStretch::updateForces()
 	{
+		if (getForceField() == 0)
+		{
+			return;
+		}
+
+		bool use_selection = getForceField()->getUseSelection();
+
 		// iterate over all bonds, update the forces
 		for (Size i = 0 ; i < stretch_.size(); i++)
 		{
@@ -181,13 +188,13 @@ namespace BALL
 				//   J/mol -> J: Avogadro
 				direction *= 1e13 / Constants::AVOGADRO * 2 * stretch_[i].values.k * (distance - stretch_[i].values.r0) / distance;
 
-				if (atom1.isSelected()) 
+				if (!use_selection || atom1.isSelected()) 
 				{
-					atom1.setForce(atom1.getForce() - direction);
+					atom1.getForce() -= direction;
 				}
-				if (atom2.isSelected()) 
+				if (!use_selection || atom2.isSelected()) 
 				{
-					atom2.setForce(atom2.getForce() + direction);
+					atom2.getForce() += direction;
 				}
 			}
 		}                                                                                                          

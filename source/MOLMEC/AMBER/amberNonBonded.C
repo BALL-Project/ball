@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.C,v 1.16 2001/06/26 02:41:32 oliver Exp $
+// $Id: amberNonBonded.C,v 1.17 2001/06/27 10:40:04 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -575,12 +575,12 @@ namespace BALL
 	void AMBERcalculateNBEnergy
 		(vector<LennardJones::Data>::const_iterator it,
 		 const Vector3& period, 
-		 const double& cut_off_vdw_2, 
-		 const double& cut_on_vdw_2, 
-		 const double& inverse_distance_off_on_vdw_3,
-		 const double& cut_off_electrostatic_2,
-		 const double& cut_on_electrostatic_2, 
-		 const double& inverse_distance_off_on_electrostatic_3,
+		 const double cut_off_vdw_2, 
+		 const double cut_on_vdw_2, 
+		 const double inverse_distance_off_on_vdw_3,
+		 const double cut_off_electrostatic_2,
+		 const double cut_on_electrostatic_2, 
+		 const double inverse_distance_off_on_electrostatic_3,
 		 double& vdw_energy, 
 		 double& electrostatic_energy, 
 	   bool is_hydrogen_bond, 
@@ -671,24 +671,27 @@ namespace BALL
 	void AMBERcalculateNBForce
 		(vector<LennardJones::Data>::iterator it, 
 		 Vector3& period,
-		 const double& cut_off_vdw_2, 
-		 const double& cut_on_vdw_2, 
-		 const double& inverse_distance_off_on_vdw_3,
-		 const double& cut_off_electrostatic_2,
-		 const double& cut_on_electrostatic_2, 
-		 const double& inverse_distance_off_on_electrostatic_3,
-		 const double& e_scaling_factor, 
-		 const double& vdw_scaling_factor, 
+		 const double cut_off_vdw_2, 
+		 const double cut_on_vdw_2, 
+		 const double inverse_distance_off_on_vdw_3,
+		 const double cut_off_electrostatic_2,
+		 const double cut_on_electrostatic_2, 
+		 const double inverse_distance_off_on_electrostatic_3,
+		 const double e_scaling_factor, 
+		 const double vdw_scaling_factor, 
      bool is_hydrogen_bond, 
 		 bool use_periodic_boundary, 
-		 bool use_dist_depend)
+		 bool use_dist_depend,
+		 bool use_selection)
 		throw()
 	{
     // calculate the difference vector between the two atoms
-    Vector3 direction = it->atom1->getPosition() - it->atom2->getPosition(); 
+		Atom& atom1 = *it->atom1;
+		Atom& atom2 = *it->atom2;
+    Vector3 direction = atom1.getPosition() - atom2.getPosition(); 
 
     // choose the nearest image if period boundary is enabled 
-    if(use_periodic_boundary == true)
+    if (use_periodic_boundary == true)
 		{
 			AMBERcalculateMinimumImage(direction, period); 
 		}
@@ -705,7 +708,7 @@ namespace BALL
 			if (distance_2 <= cut_off_electrostatic_2) 
 			{ 
 				// the product of the charges
-				double q1q2 = it->atom1->getCharge() * it->atom2->getCharge();
+				double q1q2 = atom1.getCharge() * atom2.getCharge();
 				factor = q1q2 * inverse_distance_2 * e_scaling_factor;
 				// distinguish between constant and distance dependent dielectric 
 				if (use_dist_depend)
@@ -808,15 +811,14 @@ namespace BALL
 
 					// First, multiply the current force with the switching function
 					tmp *= SQR(difference_to_off)
-						* (cut_off_vdw_2 + 2.0 * distance_2 - 3.0 * cut_on_vdw_2)
-						* inverse_distance_off_on_vdw_3;
+								* (cut_off_vdw_2 + 2.0 * distance_2 - 3.0 * cut_on_vdw_2)
+								* inverse_distance_off_on_vdw_3;
 
 					// Second, we add the product of the energy and the derivative
 					// of the switching function (the total force is the derivative of
 					// a product of functions)
-					double derivative_of_switch = 12.0 
-						* difference_to_off * difference_to_on
-						* inverse_distance_off_on_vdw_3;
+					double derivative_of_switch = 12.0 * difference_to_off * difference_to_on
+																				 * inverse_distance_off_on_vdw_3;
 
 
 					// calculate the vdW or hydrogen bond energy
@@ -842,13 +844,13 @@ namespace BALL
 		// now apply the force to the atoms
 		Vector3 force = (float)factor * direction; 
 
-		if (it->atom1->isSelected()) 
+		if (!use_selection || atom1.isSelected()) 
 		{
-			it->atom1->setForce(it->atom1->getForce() + force);
+			atom1.getForce() += force;
 		}
-		if (it->atom2->isSelected())
+		if (!use_selection || atom2.isSelected())
 		{
-			it->atom2->setForce(it->atom2->getForce() - force);
+			atom2.getForce() -= force;
 		}
 	} // end of function 	AMBERcalculateNBForce()
 
@@ -1019,10 +1021,15 @@ namespace BALL
 		inverse_distance_off_on_electrostatic_3_
 
 	// This method AMBERcalculates the current forces resulting from
-	// Van-der-Waals and electrostatic interactions 
+	// van-der-Waals and electrostatic interactions 
 	void AmberNonBonded::updateForces()
 		throw()
 	{
+		if (getForceField() == 0)
+		{
+			return;
+		}
+
 		// Define variables for the squared cut_offs, the unit factors and so on
 		double	cut_off_electrostatic_2 = SQR(cut_off_electrostatic_);
 		double	cut_off_vdw_2 = SQR(cut_off_vdw_);
@@ -1039,21 +1046,18 @@ namespace BALL
 		// Conversion factors are 1e-10 for Angstrom -> m
 		// and Constants::e0 for the proton charge
 
-		const double	e_scaling_factor 
-			= Constants::e0 * Constants::e0 
-			/ (4 * Constants::PI * Constants::VACUUM_PERMITTIVITY * 1e-20); 
-		const double e_scaling_factor_1_4 
-			= e_scaling_factor * scaling_electrostatic_1_4_;
-		const double vdw_scaling_factor 
-			= 1.0;
-		double vdw_scaling_factor_1_4 
-			= vdw_scaling_factor * scaling_vdw_1_4_;
+		const double	e_scaling_factor = Constants::e0 * Constants::e0 
+																		/ (4 * Constants::PI * Constants::VACUUM_PERMITTIVITY * 1e-20); 
+		const double e_scaling_factor_1_4 = e_scaling_factor * scaling_electrostatic_1_4_;
+		const double vdw_scaling_factor = 1.0;
+		double vdw_scaling_factor_1_4 = vdw_scaling_factor * scaling_vdw_1_4_;
 
 		Size i;
 		vector<LennardJones::Data>::iterator it;  
 		Vector3 period; 
 
 		bool use_periodic_boundary = force_field_->periodic_boundary.isEnabled(); 
+		bool use_selection = getForceField()->getUseSelection();
 
 		// calculate forces arising from 1-4 interaction pairs
 		// and remaining non-bonded interaction pairs
@@ -1073,7 +1077,7 @@ namespace BALL
 			{
 				AMBERcalculateNBForce
 					(it, FORCE_PARAMETERS,
-					 e_scaling_factor_1_4, vdw_scaling_factor_1_4, false, true, true);
+					 e_scaling_factor_1_4, vdw_scaling_factor_1_4, false, true, true, use_selection);
 			}
 
 			// now deal with 'real' non-bonded pairs (in the same vector non_bonded_) 
@@ -1081,7 +1085,7 @@ namespace BALL
 			{
 				AMBERcalculateNBForce
 					(it, FORCE_PARAMETERS, e_scaling_factor, 
-					 vdw_scaling_factor, is_hydrogen_bond_[i], true, true);
+					 vdw_scaling_factor, is_hydrogen_bond_[i], true, true, use_selection);
 			}
 		}
 		else
@@ -1101,7 +1105,7 @@ namespace BALL
 				{
 						AMBERcalculateNBForce
 							(it, FORCE_PARAMETERS, e_scaling_factor_1_4, 
-							 vdw_scaling_factor_1_4, false, true, false);
+							 vdw_scaling_factor_1_4, false, true, false, use_selection);
 				}
 
 				// now deal with 'real' non-bonded pairs (in the same vector
@@ -1110,7 +1114,7 @@ namespace BALL
 				{
 					AMBERcalculateNBForce
 						(it, FORCE_PARAMETERS, e_scaling_factor, 
-						 vdw_scaling_factor, is_hydrogen_bond_[i], true,false);
+						 vdw_scaling_factor, is_hydrogen_bond_[i], true, false, use_selection);
 				}
 			}
 			else
@@ -1126,7 +1130,7 @@ namespace BALL
 					{
 						AMBERcalculateNBForce
 							(it, FORCE_PARAMETERS, e_scaling_factor_1_4, 
-							 vdw_scaling_factor_1_4, false, false,true);
+							 vdw_scaling_factor_1_4, false, false, true, use_selection);
 					}
 
 					// now deal with 'real' non-bonded pairs (in the same vector
@@ -1135,7 +1139,7 @@ namespace BALL
 					{
 						AMBERcalculateNBForce
 							(it, FORCE_PARAMETERS, e_scaling_factor, 
-							 vdw_scaling_factor, is_hydrogen_bond_[i], false,true);
+							 vdw_scaling_factor, is_hydrogen_bond_[i], false, true, use_selection);
 					}
 				}
 				else
@@ -1147,7 +1151,7 @@ namespace BALL
 					{
 						AMBERcalculateNBForce
 							(it, FORCE_PARAMETERS, e_scaling_factor_1_4, 
-							 vdw_scaling_factor_1_4, false, false,false);
+							 vdw_scaling_factor_1_4, false, false, false, use_selection);
 					}
 
 					// now deal with 'real' non-bonded pairs (in the same vector
@@ -1156,7 +1160,7 @@ namespace BALL
 					{
 						AMBERcalculateNBForce
 							(it, FORCE_PARAMETERS, e_scaling_factor, 
-							 vdw_scaling_factor, is_hydrogen_bond_[i], false, false);
+							 vdw_scaling_factor, is_hydrogen_bond_[i], false, false, use_selection);
 					}
 				}
 			}
