@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: server.h,v 1.10 2004/09/30 16:16:25 amoll Exp $
+// $Id: server.h,v 1.11 2004/10/21 12:37:25 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_SERVER_H
@@ -154,9 +154,9 @@ namespace BALL
 			int getPort() const
 				throw();
 
-			/** Register a ObjectCreator.
-					Register a ObjectCreator that is used for converting 
+			/** Register a ObjectCreator that is used for converting 
 					PersistentObject objects into Composite objects.
+					Every ObjectCreator, that is still registered, when a Server instance is destructed, will be deleted.
 					\see ObjectCreator
 			*/
 			void registerObjectCreator(const ObjectCreator& s)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: server.C,v 1.16 2004/09/30 16:16:30 amoll Exp $
+// $Id: server.C,v 1.17 2004/10/21 12:37:10 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/server.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -81,6 +81,8 @@ namespace BALL
 			#endif 
 
 			ConnectionObject::destroy();
+
+			if (object_creator_ != 0) delete object_creator_;
 		}
 
 		void Server::clear()
