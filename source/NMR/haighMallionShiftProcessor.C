@@ -1,4 +1,4 @@
-// $Id: haighMallionShiftProcessor.C,v 1.4 2000/09/21 09:46:03 oliver Exp $
+// $Id: haighMallionShiftProcessor.C,v 1.5 2000/09/22 12:09:33 oliver Exp $
 
 #include <BALL/NMR/haighMallionShiftProcessor.h>
 #include <BALL/KERNEL/atomIterator.h>
@@ -6,6 +6,8 @@
 
 namespace BALL 
 {
+
+  const char* HaighMallionShiftProcessor::PROPERTY__RING_CURRENT_SHIFT = "RingCurrentShift[HM]";
 
 	const float HaighMallionShiftProcessor::big_loop_radius_		= 1.39e-10;
 	const float HaighMallionShiftProcessor::little_loop_radius_ = 1.182e-10;
