@@ -1,4 +1,4 @@
-// $Id: BaseFragment_test.C,v 1.13 2000/05/07 11:55:08 amoll Exp $
+// $Id: BaseFragment_test.C,v 1.14 2000/05/08 14:00:58 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -9,7 +9,7 @@
 ///////////////////////////
 
 
-START_TEST(BaseFragment, "$Id: BaseFragment_test.C,v 1.13 2000/05/07 11:55:08 amoll Exp $")
+START_TEST(BaseFragment, "$Id: BaseFragment_test.C,v 1.14 2000/05/08 14:00:58 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -506,6 +506,17 @@ CHECK(prepend(Atom&))
 	bf1.prepend(a2);
 	TEST_EQUAL(bf1.getAtom(0), &a2)
 	TEST_EQUAL(bf1.getAtom(1), &a1)
+RESULT
+
+CHECK(insert(Atom&))
+	BaseFragment bf1;
+	Atom a1;
+	Atom a2;
+	bf1.insert(a1);
+	TEST_EQUAL(bf1.getAtom(0), &a1)
+	bf1.insert(a2);
+	TEST_EQUAL(bf1.getAtom(0), &a1)
+	TEST_EQUAL(bf1.getAtom(1), &a2)
 RESULT
 
 CHECK(append(Atom&))

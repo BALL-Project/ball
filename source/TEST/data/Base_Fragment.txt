@@ -5,8 +5,8 @@
 /Object: [0-9a-fx]+ is instance of class: [0-9A-Z]*
   selected: 0
 /  parent: [0-9]
-  first: 180
-  last: 180
+/  first: [0-9]
+/  last: [0-9]
 /  previous: [0-9]
 /  next: [0-9]
   number of children:1

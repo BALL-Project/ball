@@ -1,4 +1,4 @@
-// $Id: Fragment_test.C,v 1.4 2000/05/07 11:55:32 amoll Exp $
+// $Id: Fragment_test.C,v 1.5 2000/05/08 14:01:53 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 #include <BALL/KERNEL/fragment.h>
@@ -6,7 +6,7 @@
 
 using namespace BALL;
 
-START_TEST(Fragment, "$Id: Fragment_test.C,v 1.4 2000/05/07 11:55:32 amoll Exp $")
+START_TEST(Fragment, "$Id: Fragment_test.C,v 1.5 2000/05/08 14:01:53 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -27,16 +27,6 @@ CHECK(destructor)
 delete frag;
 frag = new Fragment;
 delete frag;
-RESULT
-
-Fragment*	f;
-CHECK(Fragment())
-	f = new Fragment;
-	TEST_NOT_EQUAL(f, 0)
-RESULT
-
-CHECK(~Fragment())
-	delete f;
 RESULT
 
 CHECK(Fragment(String&))
@@ -95,7 +85,7 @@ CHECK(dump(ostream&, Size))
 	std::ofstream outfile(filename.c_str(), ios::out);
 	f1.dump(outfile);
 	outfile.close();
-	TEST_FILE(filename.c_str(), "data/Fragment.txt", true)
+	TEST_FILE(filename.c_str(), "data/Fragment_test.txt", true)
 RESULT
 
 /*
