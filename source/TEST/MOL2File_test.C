@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOL2File_test.C,v 1.9 2002/12/12 11:34:41 oliver Exp $
+// $Id: MOL2File_test.C,v 1.10 2003/02/20 06:50:37 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -18,7 +18,7 @@
 
 ///////////////////////////
 
-START_TEST(MOL2File, "$Id: MOL2File_test.C,v 1.9 2002/12/12 11:34:41 oliver Exp $")
+START_TEST(MOL2File, "$Id: MOL2File_test.C,v 1.10 2003/02/20 06:50:37 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -149,6 +149,14 @@ CHECK(MOL2File::MOL2File& operator << (const System& system))
 	f.close();
 	
 	TEST_FILE_REGEXP(filename.c_str(), "data/MOL2File_test.mol2")
+RESULT
+
+CHECK(Bug #11)
+	MOL2File f("data/MOL2File_test_bug11.mol2");
+	System S;
+	f >> S;
+	f.close();
+	TEST_EQUAL(S.countAtoms(), 15)
 RESULT
 
 /////////////////////////////////////////////////////////////
