@@ -1,4 +1,4 @@
-// $Id: chain.h,v 1.12 2000/04/27 15:09:46 amoll Exp $
+// $Id: chain.h,v 1.13 2000/05/09 16:12:12 amoll Exp $
 
 #ifndef BALL_KERNEL_CHAIN_H
 #define BALL_KERNEL_CHAIN_H
@@ -300,9 +300,7 @@ namespace BALL
 		void spliceAfter(Chain &chain);
 
 		/**	Move the children of {\tt chain} into this chain.
-				The children of {\tt chain} are inserted at the position of 
-				{\tt chain} if {\tt chain} is a child of {\tt this}.
-				Otherwise the children are inserted using \Ref{spliceBefore}.
+				The children of {\tt chain} are inserted using \Ref{spliceBefore}.
 		*/
 		void splice(Chain &chain);
 		
