@@ -1,4 +1,4 @@
-// $Id: amberBend.C,v 1.12 2000/06/30 05:56:09 oliver Exp $
+// $Id: amberBend.C,v 1.13 2001/06/24 21:25:19 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberBend.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -124,10 +124,11 @@ namespace BALL
 	{
 		double length;
 		energy_ = 0;
+		// BAUSTELLE: test
+		Size number_of_selected = 0;
 
 		for (Size i = 0 ; i < bend_.size() ; i++) 
 		{
-
 			if (getForceField()->getUseSelection() == false ||
 					(getForceField()->getUseSelection() == true  &&
 					(bend_[i].atom1->isSelected() || bend_[i].atom2->isSelected() || bend_[i].atom3->isSelected())))
@@ -169,12 +170,13 @@ namespace BALL
 					theta = acos(costheta);
 				}
 			
-
+				number_of_selected++;
 				energy_ += bend_[i].values.k * (theta - bend_[i].values.theta0) * (theta - bend_[i].values.theta0);
 			}
 
 		}
-
+		Log.info() << "AmberBend: " << (float)number_of_selected / bend_.size() * 100.0 << "% selected" << endl;
+		
 		return energy_;
 	}
 

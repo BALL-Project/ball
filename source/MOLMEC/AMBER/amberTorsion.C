@@ -1,4 +1,4 @@
-// $Id: amberTorsion.C,v 1.20 2000/06/30 05:56:10 oliver Exp $
+// $Id: amberTorsion.C,v 1.21 2001/06/24 21:25:20 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberTorsion.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -374,6 +374,9 @@ namespace BALL
 
 		vector<SingleAmberTorsion>::const_iterator it = torsion_.begin(); 
 
+		// BAUSTELLE: test
+		Size number_of_selected = 0;
+
 		for (; it != torsion_.end(); it++) 
 		{
 			if (getForceField()->getUseSelection() == false ||
@@ -408,9 +411,11 @@ namespace BALL
 					}
 
 					energy_ += it->V * ( 1 + cos(it->f * acos(cosphi) - it->phase));
+					number_of_selected++;
 				}
 			}
 		}
+		Log.info() << "AmberTorsion: " << (float)number_of_selected / torsion_.size() * 100.0 << "% selected" << endl;
 
 		return energy_;
 	}

@@ -1,4 +1,4 @@
-// $Id: forceField.C,v 1.23 2001/06/21 02:41:54 oliver Exp $
+// $Id: forceField.C,v 1.24 2001/06/24 21:25:20 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
 
@@ -312,7 +312,14 @@ namespace BALL
 	// Return the parameter use_selection_
 	bool ForceField::getUseSelection()
 	{
-		return use_selection_;
+		if (system_ != 0)
+		{
+			return system_->containsSelection();
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	// Return the parameter use_selection_
@@ -343,6 +350,25 @@ namespace BALL
 		
 		// update use_selection_
 		use_selection_ = system_->containsSelection();
+
+		// check whether the selection changed since the last call
+		// to update and call update oterwise
+		if (update_time_stamp_.isOlderThan(system_->getSelectionTime()))
+		{
+			// Call update if the selection time stamp changed since
+			// the last call to update. This ensures consistency of
+			// the selection information in pair lists, bond lists, etc.
+			update();
+		}
+
+		if (setup_time_stamp_.isOlderThan(system_->getModificationTime()))
+		{
+			// complain if someone meddled with the system while simulating it
+			Log.error() << "ForceField::updateForces: Error! System topology was modified (i.e., atoms, residues" << endl
+									<< "or the like were inserted or removed) after ForceField::Setup was called for the last" << endl
+									<< "time. The results obtained from this simulation might be erroneous." << endl;
+								
+		}
 
 		// call each component - they will add their forces...
 		vector<ForceFieldComponent*>::iterator		component_it = components_.begin();
@@ -387,8 +413,22 @@ namespace BALL
 
 		// check whether the selection changed since the last call
 		// to update and call update oterwise
-		// if (update_time_stamp_ )
-		// BAUSTELLE
+		if (update_time_stamp_.isOlderThan(system_->getSelectionTime()))
+		{
+			// Call update if the selection time stamp changed since
+			// the last call to update. This ensures consistency of
+			// the selection information in pair lists, bond lists, etc.
+			update();
+		}
+
+		if (setup_time_stamp_.isOlderThan(system_->getModificationTime()))
+		{
+			// complain if someone meddled with the system while simulating it
+			Log.error() << "ForceField::updateEnergy: Error! System topology was modified (i.e., atoms, residues" << endl
+									<< "or the like were inserted or removed) after ForceField::Setup was called for the last" << endl
+									<< "time. The results obtained from this simulation might be erroneous." << endl;
+								
+		}
 
 		// call each component and add their energies
 		vector<ForceFieldComponent*>::iterator		it;

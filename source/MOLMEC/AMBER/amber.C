@@ -1,4 +1,4 @@
-// $Id: amber.C,v 1.18 2000/10/16 19:57:15 oliver Exp $
+// $Id: amber.C,v 1.19 2001/06/24 21:25:19 oliver Exp $
 // Molecular Mechanics: Amber force field class
 
 #include <BALL/SYSTEM/path.h>
@@ -257,6 +257,11 @@ namespace BALL
 		}
 		
 		return true;
+	}
+
+	Size AmberFF::getUpdateFrequency() const
+	{
+		return 20;
 	}
 
 	double AmberFF::getStretchEnergy() const
