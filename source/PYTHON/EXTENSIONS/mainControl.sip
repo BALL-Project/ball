@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.sip,v 1.18 2004/12/13 22:45:18 amoll Exp $
+// $Id: mainControl.sip,v 1.19 2005/01/14 00:32:03 amoll Exp $
 //
 
 class MainControl
@@ -99,9 +99,9 @@ class MainControl
 	void restoreWindows(const INIFile&) throw();
 	// void setLabel(QLabel* /label/) throw();
 	void setMenuHint(Index /id/, const String& /hint/) throw();
-	void setStatusbarText(const String& /text/) throw();
+	void setStatusbarText(const String&, bool = false, bool = false);
 	void redrawAllRepresentations(bool /rebuild_display_lists/ = false) throw();
-	bool update(Composite& /composite/) throw();
+	bool update(Composite& /composite/, bool /changed_hierarchy/ = true) throw();
 	bool insert(Composite& /composite/) throw();
 	bool remove(Composite& /composite/, bool = true) throw();
 
