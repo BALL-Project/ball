@@ -1,8 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: box3.h,v 1.38 2003/06/09 22:40:48 oliver Exp $
-//
+// $Id: box3.h,v 1.39 2003/08/19 16:43:09 amoll Exp $
 
 #ifndef BALL_MATHS_BOX3_H
 #define BALL_MATHS_BOX3_H
@@ -25,10 +24,10 @@ namespace BALL
 	//@{
 
 	/**	Generic three-dimensional Box.
-			This class describes a three-dimensional box with edges parallel to
-			the coordinate system. Hence, a box is given by the coordinates of
-			the lower left front corner and ther upper right back corner. \par
-			S/box3.h
+			This class describes a three-dimensional box.
+			A box is given by the coordinates of the lower left front corner,
+			width, height, depth and the right vector.\\
+			{\bf Definition:} \URL{BALL/MATHS/box3.h}\\
 	*/
 	template <typename T>
 	class TBox3
@@ -42,43 +41,25 @@ namespace BALL
 		//@{
 
 		/**	Default constructor.
-				This method creates a new TBox3 object. The three components
-				of the two TVector3 are initialized to <tt>(T)0</tt>.
 		*/
 		TBox3()
 			throw();
 
 		/**	Copy constructor.
-				Create a new TBox3 object from another.
 				@param box the TBox3 object to be copied
 		*/	
 		TBox3(const TBox3& box)
 			throw();
 
 		/**	Detailed constructor.
-				Create a new TBox3 object from two instances of TVector3.
-				@param	a assigned to <tt>a</tt>
-				@param	b assigned to <tt>b</tt>
 		*/
-		TBox3(const TVector3<T>& a, const TVector3<T>& b)
-			throw();
-
-		/**	Detailed constructor.
-				Create a new TBox3 object from six variables of type <tt>T</tt>.
-				@param	ax assigned to <tt>a.x</tt>
-				@param	ay assigned to <tt>a.y</tt>
-				@param	az assigned to <tt>a.z</tt>
-				@param	bx assigned to <tt>b.x</tt>
-  			@param	by assigned to <tt>b.y</tt>
-				@param	bz assigned to <tt>b.z</tt>
-		*/
-		TBox3(const T& ax, const T& ay, const T& az,
-					const T& bx, const T& by, const T& bz)
+		TBox3(const TVector3<T>& point, 
+					const TVector3<T>& right_vector  = TVector3<T>((T) 0, (T)1, (T)0),
+					const TVector3<T>& height_vector = TVector3<T>((T)-1, (T)0, (T)0),
+					const T& depth = 1)
 			throw();
 
 		/**	Destructor.	
-				Destructs the TBox3 object. As there are no dynamic
-				data structures, nothing happens.
 		*/	
 		virtual ~TBox3()
 			throw()
@@ -92,8 +73,7 @@ namespace BALL
 			throw();
 
 		//@}
-		/**	@name	Assignment
-		*/
+		/**	@name	Assignment */
 		//@{
 
 		/**	Assign from another instance of TBox3.
@@ -109,23 +89,11 @@ namespace BALL
 		void set(const TVector3<T>& lower, const TVector3<T>& upper)
 			throw();
 
-		/**	Assign from six values of type <tt>T</tt>.
-				@param	ax assigned to <tt>a.x</tt>
-				@param	ay assigned to <tt>a.y</tt>
-				@param	az assigned to <tt>a.z</tt>
-				@param	bx assigned to <tt>b.x</tt>
-  			@param	by assigned to <tt>b.y</tt>
-				@param	bz assigned to <tt>b.z</tt>
-		*/
-		void set(const T& ax, const T& ay, const T& az,
-						 const T& bx, const T& by, const T& bz)
-			throw();
-
 		/**	Assignment operator.
 				Assign the box components from another instance of TBox3.
 				@param box the TBox3 to assign from
 		**/
-		TBox3& operator = (const TBox3& box)
+		const TBox3& operator = (const TBox3& box)
 			throw();
 
 		/**	Assign to another instance of TBox3.
@@ -135,24 +103,6 @@ namespace BALL
 		void get(TBox3& box) const
 			throw();
 
-		/**	Assign to two variables of type <tt>TVector3</tt>.
-				@param lower the lower corner of the box
-				@param upper the upper corner of the box
-		*/
-		void get(TVector3<T>& lower, TVector3<T>& upper) const
-			throw();
-
-		/**	Assign to six variables of type <tt>T</tt>.
-				@param	ax is assigned <tt>a.x</tt>
-				@param	ay is assigned <tt>a.y</tt>
-				@param	az is assigned <tt>a.z</tt>
-				@param	bx is assigned <tt>b.x</tt>
-				@param	by is assigned <tt>b.y</tt>
-				@param	bz is assigned <tt>b.z</tt>
-		*/
-		void get(T& ax, T& ay, T& az, T& bx, T& by, T& bz) const
-			throw();
-
 		/**	Swap the contents of two instances.
 				@param	box the box to swap contents with
 		*/
@@ -160,11 +110,57 @@ namespace BALL
 			throw();
 
 		//@}
-
-
-		/**	@name	Accessors
-		*/
+		/**	@name	Accessors */
 		//@{
+		
+		/// Set width
+		void setWidth(T width)
+			throw();
+
+		/// Get width
+		T getWidth() const
+			throw() { return width_;}
+
+		/// Set height
+		void setHeight(T height) 
+			throw();
+		
+		/// Get height
+		T getHeight() const
+			throw() { return height_;}
+
+		/// Set depth
+		void setDepth(T depth) 
+			throw() { depth_ = depth;}
+
+		/// Get depth
+		T getDepth() const
+			throw() { return depth_;}
+
+		/// Get the point
+		const TVector3<T>& getPoint() const
+			throw() { return point_;}
+
+		/// Set the point
+		void setPoint(const TVector3<T>& point) 
+			throw() { point_ = point;}
+
+		/// Get the right vector
+		const TVector3<T>& getRightVector() const
+			throw() { return right_vector_;}
+
+		/// Set the right vector
+		void setRightVector(const TVector3<T>& v)
+			throw();
+
+		/// Get the height vector
+		const TVector3<T>& getHeightVector() const
+			throw() { return height_vector_;}
+		
+		/// Set the height vector
+		void setHeightVector(const TVector3<T>& v)
+			throw();
+		
 		/**	Calculate the surface area.
 				@return T the surface
 		*/
@@ -177,35 +173,12 @@ namespace BALL
 		T getVolume() const
 			throw();
 
-		/**	Return the width of the box.
-				@return T the width
-		*/
-		T getWidth() const
-			throw();
-	
-		/**	Return the height of the box.
-				@return T the height
-		*/
-		T getHeight() const
-			throw();
-	
-		/**	Return the depth of the box.
-				@return T the depth
-		*/
-		T getDepth() const
-			throw();
-	
-		/**	Join the box with an other.
-				Instance is set to the box containing
-				both, this box and a given box.
-				@param	box the box to join with
-		*/
-		void join(const TBox3& box)
+		///
+		TVector3<T> getDiagonalVector() const
 			throw();
 
 		//@}
-		/**	@name	Predicates
-		*/
+		/**	@name	Predicates */
 		//@{
 
 		/**	Equality operator.
@@ -220,25 +193,24 @@ namespace BALL
 		bool operator != (const TBox3& box) const
 			throw();
 
-		/**	Test if a given point is a member of the box.
+		/*	Test if a given point is a member of the box.
 				Optional it can be testet, if the point lies on the surface.
 				@param point the point to be tested
 				@param on_surface true to test the surface (default = false)
 				@return bool, <b>true</b> or <b>false</b>
 		*/
-		bool has(const TVector3<T>& point, bool on_surface = false) const
-			throw();
+		//bool has(const TVector3<T>& point, bool on_surface = false) const
+		//	throw();
 
-		/**	Test if two boxes intersect.
+		/*	Test if two boxes intersect.
 				@param box the box to be tested
 				@return bool, <b>true</b> if the two boxes are intersecting, <b>false</b> otherwise
 		*/
-		bool isIntersecting(const TBox3& box) const
-			throw();
+		//bool isIntersecting(const TBox3& box) const
+		//	throw();
+	
 		//@}
-
-		/**	@name	Debugging and Diagnostics
-		*/
+		/**	@name	Debugging and Diagnostics */
 		//@{
 
 		/**	Test whether instance is valid.
@@ -258,85 +230,72 @@ namespace BALL
 			throw();
 		//@}
 
+		protected:
 
-		/**	@name	Public members
-		*/
-		//@{
+		//_	lower left point of the box.
+		TVector3<T> point_;
+		TVector3<T> right_vector_;
+		TVector3<T> height_vector_;
 
-		/**	First point of the box.
-		*/
-		TVector3<T> a;
-
-		/**	Second point of the box.
-		*/
-		TVector3<T> b;
-		//@}
+		T width_;
+		T height_;
+		T depth_;
 	};
+
+
+	template <typename T>
+	TBox3<T>::TBox3(const TVector3<T>& point, 
+									const TVector3<T>& right_vector,
+									const TVector3<T>& height_vector,
+									const T& depth)
+		throw()
+		: point_(point),
+			right_vector_(right_vector),
+			height_vector_(height_vector),
+			width_(right_vector.getLength()),
+			height_(height_vector.getLength()),
+			depth_(depth)
+	{}
 
 	template <typename T>
 	TBox3<T>::TBox3()
 		throw()
-		:	a(),
-			b()
+		:	point_((T)0, (T)0, (T)0),
+			right_vector_((T)0, (T)1, (T)0),
+			height_vector_((T)-1, (T)0, (T)0),
+			width_((T)1),
+			height_((T)1),
+			depth_((T)1)
 	{
 	}
 
 	template <typename T>
 	TBox3<T>::TBox3(const TBox3<T>& box)
 		throw()
-		:	a(box.a),
-			b(box.b)
+		: point_(box.point_),
+			right_vector_(box.right_vector_),
+			height_vector_(box.height_vector_),
+			width_(box.width_),
+			height_(box.height_),
+			depth_(box.depth_)
 	{
 	}
 
 	template <typename T>
-	TBox3<T>::TBox3(const TVector3<T>& lower, const TVector3<T>& upper)
-		throw()
-		:	a(lower),
-			b(upper)
-	{
-	}
-
-	template <typename T>
-	TBox3<T>::TBox3(const T& ax, const T& ay, const T& az,
-						 		  const T& bx, const T& by, const T& bz)
-		throw()
-		:	a(ax, ay, az),
-			b(bx, by, bz)
-	{
-	}
-
-	template <typename T>
-	BALL_INLINE 
 	void TBox3<T>::set(const TBox3<T>& box)
 		throw()
 	{
-		a.set(box.a);
-		b.set(box.b);
-	}
-
-	template <typename T>
-	BALL_INLINE 
-	void TBox3<T>::set(const TVector3<T>& lower, const TVector3<T>& upper)
-		throw()
-	{
-		a.set(lower);
-		b.set(upper);
-	}
-
-	template <typename T>
-	BALL_INLINE 
-	void TBox3<T>::set(const T& ax, const T& ay, const T& az,
-										 const T& bx, const T& by, const T& bz)
-		throw()
-	{
-		a.set(ax, ay, az);
-		b.set(bx, by, bz);
+		point_ = box.point_;
+		right_vector_ = box.right_vector_;
+		height_vector_ = box.height_vector_;
+		width_ = box.width_;
+		height_ = box.height_;
+		depth_ = box.depth_;
 	}
 
 	template <typename T>
 	BALL_INLINE
-	TBox3<T>& TBox3<T>::operator = (const TBox3<T> &box)
+	const TBox3<T>& TBox3<T>::operator = (const TBox3<T> &box)
 		throw()
 	{
 		set(box);
@@ -344,47 +303,76 @@ namespace BALL
 	}
 
 	template <typename T>
-	BALL_INLINE 
-	void TBox3<T>::get(TBox3<T>& box) const
-		throw()
-	{
-		box.set(*this);
-	}
-
-	template <typename T>
-	BALL_INLINE 
-	void TBox3<T>::get(TVector3<T>& lower, TVector3<T>& upper) const
-		throw()
-	{
-		lower.set(a);
-		upper.set(b);
-	}
-
-	template <typename T>
-	BALL_INLINE 
-	void TBox3<T>::get(T& ax, T& ay, T& az, T& bx, T& by, T& bz) const
-		throw()
-	{
-		a.get(ax, ay, az);
-		b.get(bx, by, bz);
-	}
-
-	template <typename T>
-	BALL_INLINE 
 	void TBox3<T>::swap(TBox3<T>& box)
 		throw()
 	{
-		a.swap(box.a);
-		b.swap(box.b);
+		point_.swap(box.swap);
+		right_vector_.swap(box.right_vector_);
+		height_vector_.swap(box.height_vector_);
+		T tmp;
+
+		tmp = width_;
+		width_ = box.width_;
+		box.width_ = tmp;
+
+		tmp = height_;
+		height_ = box.height_;
+		box.height_ = tmp.height_;
+
+		tmp = depth_;
+		depth_ = box.depth_;
+		box.depth_ = tmp;
+	}
+
+	template <typename T>
+	void TBox3<T>::clear()
+		throw()
+	{
+		point_.clear();
+		right_vector_ = TVector3<T>((T)0, (T)1, (T)0);
+		height_vector_ = TVector3<T>((T)-1, (T)0, (T)0);
+		width_ = (T) 1;
+		height_ = (T) 1;
+		depth_  = (T) 1;
+	}
+	
+
+	template <typename T>
+	BALL_INLINE
+	void TBox3<T>::setWidth(T width) 
+		throw()
+	{
+		right_vector_.normalize();
+		right_vector_ *= width;
+		width_ = width;
 	}
 
 	template <typename T>
 	BALL_INLINE
-	void TBox3<T>::clear()
+	void TBox3<T>::setHeight(T height) 
 		throw()
 	{
-		a.set((T)0, (T)0, (T)0);
-		b.set((T)0, (T)0, (T)0);
+		height_vector_.normalize();
+		height_vector_ *= height;
+		height_ = height;
+	}
+
+	template <typename T>
+	BALL_INLINE
+	void TBox3<T>::setRightVector(const TVector3<T>& v)
+		throw()
+	{
+		right_vector_ = v;
+		width_ = right_vector_.getLength();
+	}
+
+	template <typename T>
+	BALL_INLINE
+	void TBox3<T>::setHeightVector(const TVector3<T>& v)
+		throw()
+	{
+		height_vector_ = v;
+		height_ = height_vector_.getLength();
 	}
 
 	template <typename T>
@@ -392,11 +380,17 @@ namespace BALL
 	T TBox3<T>::getSurface() const
 		throw()
 	{
-		T width  = Maths::abs(b.x - a.x);
-		T height = Maths::abs(b.y - a.y);
-		T depth  = Maths::abs(b.z - a.z);
-		
-		return ((width  * height + width  * depth  + height * depth) * 2);
+		return ((width_  * height_ + width_  * depth_  + height_ * depth_) * 2);
+	}
+
+	template <typename T>
+	TVector3<T> TBox3<T>::getDiagonalVector() const
+		throw()
+	{
+		TVector3<T> v = right_vector_ % height_vector_;
+		v.normalize();
+		v *= depth_;
+		return (v + right_vector_ + height_vector_);
 	}
 
 	template <typename T>
@@ -404,87 +398,19 @@ namespace BALL
 	T TBox3<T>::getVolume() const
 		throw()
 	{
-		T width  = Maths::abs(b.x - a.x);
-		T height = Maths::abs(b.y - a.y);
-		T depth  = Maths::abs(b.z - a.z);
-		
-		return (width * height * depth);
+		return (width_ * height_ * depth_);
 	}
 
 	template <typename T>
-	BALL_INLINE 
-	T TBox3<T>::getWidth() const
-		throw()
-	{
-		return Maths::abs(b.x - a.x);
-	}
-
-	template <typename T>
-	BALL_INLINE
-	T TBox3<T>::getHeight() const
-		throw()
-	{
-		return Maths::abs(b.y - a.y);
-	}
-
-	template <typename T>
-	BALL_INLINE
-	T TBox3<T>::getDepth() const
-		throw()
-	{
-		return Maths::abs(b.z - a.z);
-	}
-
-	template <typename T>
-	void TBox3<T>::join(const TBox3<T>& box)
-		throw()
-	{
-		T minimum = a.x;
-		minimum = Maths::min(minimum, b.x);
-		minimum = Maths::min(minimum, box.a.x);
-		minimum = Maths::min(minimum, box.b.x);
-		
-		T maximum = a.x;
-		maximum = Maths::max(maximum, b.x);
-		maximum = Maths::max(maximum, box.a.x);
-		maximum = Maths::max(maximum, box.b.x);
-		
-		a.x = minimum;
-		b.x = maximum;
-		
-		minimum = a.y;
-		minimum = Maths::min(minimum, b.y);
-		minimum = Maths::min(minimum, box.a.y);
-		minimum = Maths::min(minimum, box.b.y);
-
-		maximum = a.y;
-		maximum = Maths::max(maximum, b.y);
-		maximum = Maths::max(maximum, box.a.y);
-		maximum = Maths::max(maximum, box.b.y);
-		
-		a.y = minimum;
-		b.y = maximum;
-		
-		minimum = a.z;
-		minimum = Maths::min(minimum, b.z);
-		minimum = Maths::min(minimum, box.a.z);
-		minimum = Maths::min(minimum, box.b.z);
-
-		maximum = a.z;
-		maximum = Maths::max(maximum, b.z);
-		maximum = Maths::max(maximum, box.a.z);
-		maximum = Maths::max(maximum, box.b.z);
-
-		a.z = minimum;
-		b.z = maximum;
-	}
-
-	template <typename T>
-	BALL_INLINE 
 	bool TBox3<T>::operator == (const TBox3<T>& box) const
 		throw()
 	{
-		return (a == box.a && b == box.b);
+		return (point_ 					== box.point_ 					&&
+						right_vector_ 	== box.right_vector_ 		&&
+						height_vector_ 	== box.height_vector_ 	&&
+						width_ 					== box.width_ 					&&
+						height_ 				== box.height_ 					&&
+						depth_ 					== box.depth_);
 	}
 
 	template <typename T>
@@ -500,94 +426,13 @@ namespace BALL
 	bool TBox3<T>::isValid() const
 		throw()
 	{
-		return (a.isValid() && b.isValid());
-	}
-
-	template <typename T>
-	bool TBox3<T>::has(const TVector3<T>& point, bool on_surface) const
-		throw()
-	{
-		if (!on_surface)
-		{
-			if (Maths::isLess(b[0],a[0]) || Maths::isLess(b[1],a[1]) || Maths::isLess(b[2],a[2]))
-			{
-				for (int i = 0; i < 3; i++)
-				{
-					if (Maths::isLess(point[i],b[i]) || Maths::isLess(a[i],point[i]))
-					{
-						return false;
-					}						
-				}
-			}
-			else
-			{
-				for (int i = 0; i < 3; i++)
-				{
-					if (Maths::isLess(point[i],a[i]) || Maths::isLess(b[i],point[i]))
-					{
-						return false;
-					}						
-				}
-			}
-			return true;
-		}
-
-		bool temp = false;
-    for (int i = 0; i < 3; i++)
-		{
-			if (Maths::isEqual(point[i],a[i]) || Maths::isEqual(point[i],b[i]))
-			{
-				temp = true;
-				break;
-			}
-		}
-		return (temp && has(point, false));
-	}
-
-	template <typename T>
-	bool TBox3<T>::isIntersecting(const TBox3& box) const
-		throw()
-	{
-		const TVector3<T>* lower;
-		const TVector3<T>* higher;
-		const TVector3<T>* box_lower;
-		const TVector3<T>* box_higher;
-
-		if (Maths::isLess(b[0],a[0]) || 
-				Maths::isLess(b[1],a[1]) || 
-				Maths::isLess(b[2],a[2]))
-		{
-			lower  = &b;
-			higher = &a;
-		}
-		else
-		{
-			lower  = &a; 
-			higher = &b;
-		}
-
-		if (Maths::isLess(box.b[0],box.a[0]) || 
-				Maths::isLess(box.b[1],box.a[1]) ||
-        Maths::isLess(box.b[2],box.a[2]))
-		{
-			box_lower  = &box.b;
-			box_higher = &box.a;
-		}
-		else
-		{
-			box_lower  = &box.a;
-			box_higher = &box.b;;
-		}
-
-    for (int i = 0; i < 3; i++)
-    {
-      if (Maths::isLess((*box_higher)[i],(*lower)[i]) || Maths::isLess((*higher)[i],(*box_lower)[i]))
-      {
-        return false;
-      }
-    }
-		
-		return true;
+		return (point_.isValid() && 
+						right_vector_.isValid() &&
+						height_vector_.isValid() &&
+						!right_vector_.isZero() &&
+						!height_vector_.isZero() && 
+						right_vector_.isOrthogonalTo(height_vector_));
+						
 	}
 
 	template <typename T>
@@ -599,10 +444,22 @@ namespace BALL
 		BALL_DUMP_HEADER(s, this, this);
 		
 		BALL_DUMP_DEPTH(s, depth);
-		s << "  a: " << a << std::endl;
+		s << "point: " << point_ << std::endl;
 		
 		BALL_DUMP_DEPTH(s, depth);
-		s << "  b: " << b << std::endl;
+		s << "right_vector: " << right_vector_ << std::endl;
+
+		BALL_DUMP_DEPTH(s, depth);
+		s << "height_vector: " << height_vector_ << std::endl;
+
+		BALL_DUMP_DEPTH(s, depth);
+		s << "width: " << width_ << std::endl;
+		
+		BALL_DUMP_DEPTH(s, depth);
+		s << "height: " << height_ << std::endl;
+		
+		BALL_DUMP_DEPTH(s, depth);
+		s << "depth: " << depth_ << std::endl;
 		
 		BALL_DUMP_STREAM_SUFFIX(s);
 	}
@@ -618,8 +475,13 @@ namespace BALL
 	std::istream& operator >> (std::istream& s, TBox3<T>& box)
 		throw()
 	{
-		char c;
-		s >> c >> box.a >> box.b >> c;
+		TVector3<T> point, right, height;
+		T depth;
+		s >> point >> right >> height >> depth;
+		box.setPoint(point);
+		box.setRightVector(right);
+		box.setHeightVector(height);
+		box.setDepth(depth);
 		return s;
 	}
 
@@ -634,16 +496,18 @@ namespace BALL
 	std::ostream& operator << (std::ostream& s, const TBox3<T>& box)
 		throw()
 	{
-		return s << "(" << box.a << ' ' << box.b << ')';
+		return s << box.getPoint() << " " 
+						 << box.getRightVector() << " " 
+						 << box.getHeightVector() << " " 
+						 << box.getDepth();
 	}
+
 	//@}
 
 	/**	Default three-dimensional box class of type <b>float</b>
 	*/
 	typedef TBox3<float> Box3;
 
-	//@}
-  /** @} */
 } // namespace BALL
 
 #endif // BALL_MATHS_BOX3_H
