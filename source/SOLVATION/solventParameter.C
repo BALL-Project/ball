@@ -1,4 +1,4 @@
-// $Id: solventParameter.C,v 1.5 2001/07/16 23:59:10 amoll Exp $
+// $Id: solventParameter.C,v 1.6 2001/08/21 11:21:42 aubertin Exp $
 
 #include <BALL/SOLVATION/solventParameter.h>
 
@@ -79,6 +79,20 @@ namespace BALL
 		return solvent_descriptor_;
 	}
 
+        const String& SolventParameter::getSolventName() const throw()
+	{
+	        return name_;
+	}
+
+        const std::vector<SolventAtomDescriptor>& SolventParameter::getSolventDescription() const throw()
+        {
+                return solvent_atoms_;
+        }  
+
+        const float& SolventParameter::getSolventDensity() const throw()
+        {
+                return number_density_;
+        }
 
 	bool SolventParameter::extractSection(ForceFieldParameters& parameters,
 			const String& section_name) throw()

@@ -1,4 +1,4 @@
-// $Id: solventParameter.h,v 1.6 2001/08/14 19:28:18 sturm Exp $
+// $Id: solventParameter.h,v 1.7 2001/08/21 11:22:30 aubertin Exp $
 
 #ifndef BALL_SOLVATION_SOLVENTPARAMETER_H
 #define BALL_SOLVATION_SOLVENTPARAMETER_H
@@ -78,6 +78,19 @@ namespace BALL
 		 * 	Muteable version.
 		 */
 		SolventDescriptor& getSolventDescriptor() throw();
+
+                /** Return the name of the SolventDescriptor 
+		*/
+		const String& getSolventName() const throw();
+
+
+                /** Return the solvents density 
+		*/
+		const float& getSolventDensity() const throw();
+
+                 /** Return the SolventDescription 
+		*/
+		const std::vector<SolventAtomDescriptor>& getSolventDescription() const throw();
 
 		//@}
 		/** @name Predicates 
