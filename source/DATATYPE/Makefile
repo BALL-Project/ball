@@ -8,6 +8,7 @@ CPP_SOURCES=\
 	hashGrid.C\
 	options.C\
 	regExp.C\
+        contourSurface.C\
 	regularData1D.C\
 	regularData2D.C\
 	regularData3D.C
