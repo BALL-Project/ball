@@ -1,4 +1,4 @@
-// $Id: poissonBoltzmann.C,v 1.8 1999/12/28 18:16:08 oliver Exp $ 
+// $Id: poissonBoltzmann.C,v 1.9 1999/12/29 00:48:51 oliver Exp $ 
 // FDPB: Finite Difference Poisson Solver
 
 #include <BALL/SOLVATION/poissonBoltzmann.h>
@@ -720,7 +720,7 @@ namespace BALL
 				// distribute the charge equally upon the eigth 
 				// closest gridpoints
 					
-				GridIndex	grid_index;
+				PointGrid<float>::GridIndex	grid_index;
 				long i;
 				for (i = 0; i < (long)(*atom_array).size(); i++)
 				{
@@ -771,7 +771,7 @@ namespace BALL
 				// distribute the charge uniform on each grid point
 				// inside the sphere given by an atom`s radius and position
 
-				GridIndex		lower_grid_index, upper_grid_index;
+				PointGrid<float>::GridIndex		lower_grid_index, upper_grid_index;
 
 				// the atom radius, and the squared atom radius
 				float atom_radius, atom_radius2;
@@ -1754,7 +1754,7 @@ namespace BALL
 		// point is calculated to speed up the evaluation of the
 		// electrostatic energy
 
-		GridIndex		grid_index;
+		PointGrid<float>::GridIndex		grid_index;
 		for ( i = 0; i < atom_array->size(); i++)
 		{
 			grid_index = phi_grid->getIndex((*atom_array)[i].x, (*atom_array)[i].y, (*atom_array)[i].z);
