@@ -1,4 +1,4 @@
-// $Id: HINFile.C,v 1.30 2001/05/06 20:37:33 oliver Exp $
+// $Id: HINFile.C,v 1.31 2001/05/07 00:56:00 oliver Exp $
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/CONCEPT/composite.h>
@@ -754,6 +754,7 @@ namespace BALL
 				system.remove(*molecule);
 				delete molecule;
 				molecule = 0;
+				continue;
 			}
 
 
