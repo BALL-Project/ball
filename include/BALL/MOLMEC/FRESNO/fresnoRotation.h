@@ -1,4 +1,4 @@
-// $Id: fresnoRotation.h,v 1.1.2.5 2002/04/03 16:44:21 anker Exp $
+// $Id: fresnoRotation.h,v 1.1.2.6 2002/04/08 16:35:36 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
 #ifndef BALL_MOLMEC_FRESNO_FRESNOROTATION_H
@@ -170,7 +170,7 @@ namespace BALL
 		*/
 		void heavyAtomsDFS_(const Atom* atom, const Bond* bond,
 				HashSet<const Atom*>& visited,
-				int& heavy_atom_count)
+				int& heavy_atom_count, int& nonlip_heavy_atom_count)
 			throw();
 		
 		/*_ Find out which bonds are still frozen
