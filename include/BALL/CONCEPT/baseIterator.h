@@ -1,4 +1,4 @@
-// $Id: baseIterator.h,v 1.10 2001/06/06 12:17:08 anker Exp $
+// $Id: baseIterator.h,v 1.11 2001/06/06 19:35:45 amoll Exp $
 
 #ifndef BALL_CONCEPT_BASEITERATOR_H
 #define BALL_CONCEPT_BASEITERATOR_H
@@ -27,8 +27,7 @@ namespace BALL
 			an iterator. Iterators are basically STL-like iterators. They 
 			provide the full STL iterator interface, but also offer additional
 			features.
-				
-			An important difference exists for the iterators of the kernel
+	 		An important difference exists for the iterators of the kernel
 			objects.  For most kernel onjects, multiple iterators exist.
 			Therefore, we could not simply use {\tt begin()} and {\tt end()} like
 			in STL, but we introduced specialized methods like
@@ -42,8 +41,7 @@ namespace BALL
 			has started, it "knows" about the end() of the container.
 			Therefore, BALL iterators additionally implement the unary plus operator
 			to check for the validity of the iterator.
-			this allows the convenient implementation of for loops, e.g. as follows:
-			\\
+			this allows the convenient implementation of for loops, e.g. as follows:\\ 
 			\begin{verbatim}
 				AtomIterator atom_it = system.beginAtom();
 				for (; +atom_it; ++atom_it)
@@ -51,9 +49,7 @@ namespace BALL
 					....
 				}
 			\end{verbatim}
-			\\
 			{\bf Definition:} \URL{BALL/CONCEPT/baseIterator.h}
-			\\
 	*/
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	class ConstBaseIterator
@@ -68,15 +64,19 @@ namespace BALL
 				BALL class names due to restrictions imposed by STL compliance.
 		*/
 		//@{
+		//
 		/**
 		*/
 		typedef DataType	value_type;
+		
 		/**
 		*/
 		typedef Position	difference_type;
+		
 		/**
 		*/
 		typedef	DataType*	pointer;
+		
 		/**
 		*/
 		typedef DataType&	reference;
@@ -86,7 +86,6 @@ namespace BALL
 		typedef std::bidirectional_iterator_tag iterator_category;
 
 		//@}
-
 		/**	@name	Constructors and Destructors 
 		*/
 		//@{
@@ -111,7 +110,6 @@ namespace BALL
 			throw();
 
 		//@}
-
 		/**	@name	Assignment
 		*/
 		//@{
@@ -131,19 +129,16 @@ namespace BALL
 			throw();
 
 		//@}
-
 		/**	@name	 Accessors 
 		*/
 		//@{
 
-		/** Return the total number of iterators of that type currently
-				instantiated.
+		/** Return the total number of iterators of that type currently	instantiated.
 		*/
 		static Size countIterators()
 			throw();
 
-		/**	Return the number of iterators of that type currently bound to a
-				container.
+		/**	Return the number of iterators of that type currently bound to a container.
 		*/
 		static Size countIterators(const Container& container)
 			throw();
@@ -176,15 +171,13 @@ namespace BALL
 			throw();
 
 		//@}
-
 		/** @name Converters
 		*/
 		//@{
 
 		/** Convert an iterator to Position.
 				This method returns the position of the iterator. Note that
-				Position is a template within this context and not the BALL data
-				type.
+				Position is a template within this context and not the BALL datatype.
 		*/
 		operator const Position& () const
 			throw();
@@ -201,13 +194,12 @@ namespace BALL
 			throw(Exception::InvalidIterator);
 
 		//@}
-
 		/**	@name	Predicates
 		*/
 		//@{
 
 		/** Equality operator.
-				@return {\bf true} if both iterators point to the same item.
+				@return true if both iterators point to the same item.
 		*/
 		bool operator == (const ConstBaseIterator& iterator) const
 			throw(Exception::IncompatibleIterators);
@@ -226,14 +218,13 @@ namespace BALL
 			throw();
 
 		/** Validity predicate.
-				@return {\bf true} if the iterator is valid, i. e. pointing at data
+				@return true if the iterator is valid, i. e. pointing at data
 				BAUSTELLE
 		*/
 		bool isValid() const
 			throw();
 
 		//@}
-
 
 		protected:
 
@@ -266,11 +257,8 @@ namespace BALL
 		///
 		ConstBaseIterator* 	next_;
 
-
 	};
 
-	
-	// method implementations
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	ConstBaseIterator<Container, DataType, Position, Traits>::ConstBaseIterator()
@@ -331,7 +319,9 @@ namespace BALL
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	const ConstBaseIterator<Container, DataType, Position, Traits>& ConstBaseIterator<Container, DataType, Position, Traits>::operator = (const ConstBaseIterator<Container, DataType, Position, Traits>& iterator)
+	const ConstBaseIterator<Container, DataType, Position, Traits>& 
+		ConstBaseIterator<Container, DataType, Position, Traits>::operator = 
+		(const ConstBaseIterator<Container, DataType, Position, Traits>& iterator)
 		throw()
 	{
 		if (this != &iterator)
@@ -525,7 +515,6 @@ namespace BALL
 
 
 	/**	Constant Basic Iterator.
-			\\
 			{\bf Definition:} \URL{BALL/CONCEPT/baseIterator.h}
 	*/
 	template <typename Container, typename DataType, typename Position, typename Traits>
@@ -554,7 +543,6 @@ namespace BALL
 			throw();
 
 		//@}
-
 		/**	@name	Accessors
 		*/
 		//@{
@@ -583,8 +571,8 @@ namespace BALL
 		*/
 		DataType* operator -> () const
 			throw(Exception::InvalidIterator);
+		
 		//@}
-
 
 		protected:
 
@@ -594,7 +582,6 @@ namespace BALL
 
 	};
 
-	// method implementations
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	BaseIterator<Container, DataType, Position, Traits>::BaseIterator()
