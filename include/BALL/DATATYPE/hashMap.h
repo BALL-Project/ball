@@ -1,4 +1,4 @@
-// $Id: hashMap.h,v 1.11 2000/09/01 06:23:55 oliver Exp $ 
+// $Id: hashMap.h,v 1.12 2000/09/01 11:12:16 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_HASHMAP_H
 #define BALL_DATATYPE_HASHMAP_H
@@ -222,7 +222,7 @@ namespace BALL
 		*/
 		//@{
 
-		/**	Host a visitor.
+		/**	Host a visitor for all map entries.
 		*/
 		void host(Visitor<ValueType>& visitor);
 		//@}
@@ -807,7 +807,11 @@ namespace BALL
 	BALL_INLINE 
 	void HashMap<Key, T>::host(Visitor<ValueType>& visitor)
 	{
-		visitor.visit(*this);
+		Iterator it = begin();
+		for (; it != end(); ++it)
+		{
+			visitor.visit(*it);
+		}
 	}
 		
 	template <class Key, class T>
