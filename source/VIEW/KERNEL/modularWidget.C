@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.C,v 1.13 2004/08/30 15:35:31 amoll Exp $
+// $Id: modularWidget.C,v 1.14 2004/08/30 15:36:04 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/modularWidget.h>
@@ -66,7 +66,7 @@ void ModularWidget::registerWidget(ModularWidget* mwidget)
 
 	if (!RTTI::isKindOf<QObject>(*mwidget)) 
 	{
-		Log.error() << "ModularWidget::ModularWidget: widget " << this << " is not " 
+		Log.error() << "ModularWidget::ModularWidget: widget " << mwidget << " is not " 
 								<< "in a MainControl object!" << endl;
 		return;
 	}
@@ -74,7 +74,7 @@ void ModularWidget::registerWidget(ModularWidget* mwidget)
 	MainControl* mc = MainControl::getMainControl(dynamic_cast<QObject*>(mwidget));
 	if (!mc)
 	{
-		Log.error() << "ModularWidget::ModularWidget(): widget " << this << " is not in a MainControl object!" << endl;
+		Log.error() << "ModularWidget::ModularWidget(): widget " << mwidget << " is not in a MainControl object!" << endl;
 		return;
 	}
 
