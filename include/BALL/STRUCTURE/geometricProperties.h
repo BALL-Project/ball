@@ -1,4 +1,4 @@
-// $Id: geometricProperties.h,v 1.12 2001/02/04 10:15:29 amoll Exp $
+// $Id: geometricProperties.h,v 1.13 2001/03/06 00:12:23 amoll Exp $
 
 #ifndef BALL_STRUCTURE_GEOMETRICPROPERTIES_H
 #define BALL_STRUCTURE_GEOMETRICPROPERTIES_H
@@ -44,7 +44,7 @@ namespace BALL
 			of a given molecular object or to extract parts of these
 			objects according to their geometric properties.\\
 			Using the \Ref{BoundingBoxProcessor}, the bounding box 
-			of a given molecular object can be calculated. THe bounding box is
+			of a given molecular object can be calculated. The bounding box is
 			represented by the lowest and highest coordinates occuring in the 
 			molecular object, i.e. the bounding box is the smallest rectangular
 			box (with sides parallel to the coordinate axes) that encloses all
@@ -61,7 +61,7 @@ namespace BALL
 	/**	Bounding box creating processor.
 			This class iterates over all atoms of a given molecular object and
 			determines the lowest and the highest coordinates occuring. It returns
-			Two coordinates (\Ref{getLower}, \Ref{getUpper}) describing the smallest
+			two coordinates (\Ref{getLower}, \Ref{getUpper}) describing the smallest
 			cuboid (whose sides are parallel to the planes defined by the corrdinate
 			axes) enclosing all atoms of the molecular object.\\
 			This processor is useful to determine the extent of a molecular object
@@ -95,11 +95,12 @@ namespace BALL
 		*/
 		virtual Processor::Result operator () (Atom& atom)
 			throw();
-		//@}
 
+		//@}
 		/**	@name Accessors
 		*/
 		//@{
+
 		/** Return the bounding box
 		*/
 		Box3 getBox() const
@@ -114,6 +115,7 @@ namespace BALL
 		*/
 		const Vector3& getUpper() const
 			throw();
+
 		//@}
 			
 		private:
@@ -131,7 +133,6 @@ namespace BALL
 			\]
 			Where $\vec{r_i}$ represents the coordinates of the ith atom.\\
 			{\bf Definition:} \URL{BALL/STRUCTURE/geometricProperties.h}
-			\\
 	*/
 	class GeometricCenterProcessor
 		:	public UnaryProcessor<Atom> 
@@ -156,15 +157,17 @@ namespace BALL
 		*/
 		virtual Processor::Result operator()(Atom& atom)
 			throw();
-		//@}
 
+		//@}
 		/**@name	Accessors
 		*/
 		//@{
+
 		/**	Returns the center of the object
 		*/
 		Vector3& getCenter()
 			throw();
+
 		//@}
 
 		private:
@@ -183,7 +186,7 @@ namespace BALL
 			The reference fragment itself is also contained in this array, if it is part
 			of the molecular object the collector is applied to.\\
 			The array only contains pointers to the fragments, the fragments are neither 
-			changed, nor remove from the molecular object.\\
+			changed, nor removed from the molecular object.\\
 			The reference fragment may either be given by a specialized constructor (also
 			together with the distance) or using \Ref{setFragment}.\\
 			The fragment array is emptied prior to each collection run.\\
@@ -205,7 +208,7 @@ namespace BALL
 			throw();
 
 		/**	Constructor.
-				Creates a new collector and sets the reference composite/
+				Creates a new collector and sets the reference composite
 				@param	composite the reference composite
 		*/
 		FragmentDistanceCollector(const Composite& composite)
@@ -224,7 +227,6 @@ namespace BALL
 		{}	
 			
 		//@}
-
 		/**	@name	Processor related methods
 		*/
 		//@{
@@ -243,11 +245,12 @@ namespace BALL
 		*/
 		virtual Processor::Result operator()(Composite& composite)
 			throw();
+
 		//@}
-		
 		/**	@name Accessors
 		*/
 		//@{
+
 		/**	Returns the number of molecular fragments found
 				@return	the number of fragments in the array
 		*/
@@ -277,9 +280,9 @@ namespace BALL
 		*/
 		void setDistance(float distance)
 			throw();
+
 		//@}
 		
-
 		/**	The array containing all molecular fragments collected
 		*/
 		vector<Fragment*>	fragments;
@@ -294,8 +297,6 @@ namespace BALL
 
 
 	//@}
-
-
 	/**	@name	
 	*/
 	//@{
@@ -309,6 +310,7 @@ namespace BALL
 	*/
 	Angle calculateBondAngle(const Atom& a1, const Atom& a2, const Atom& a3)
 		throw(Exception::IllegalPosition);
+
 	//@}
 
 } // namespace BALL

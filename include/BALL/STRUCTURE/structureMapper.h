@@ -1,4 +1,4 @@
-// $Id: structureMapper.h,v 1.7 2000/10/30 00:19:27 amoll Exp $
+// $Id: structureMapper.h,v 1.8 2001/03/06 00:12:24 amoll Exp $
 
 #ifndef BALL_STRUCTURE_STRUCTUREMAPPER_H
 #define BALL_STRUCTURE_STRUCTUREMAPPER_H
@@ -40,7 +40,8 @@ namespace BALL
 	using std::vector;
 	using std::map;
 
-	/**	Structure mapping class
+	/**	Structure mapping class. \\
+			{\bf Definition:} \URL{BALL/STRUCTURE/structureMapper.h}
 	*/
 	class StructureMapper
 		:	public TransformationProcessor
@@ -55,8 +56,7 @@ namespace BALL
 		
 		typedef struct AtomPairStruct	AtomPairType;
 
-		/*_	The list representing a bijection between
-				selected atoms of A and B
+		/*_	The list representing a bijection between	selected atoms of A and B
 		*/
 		typedef vector < AtomPairType >	AtomBijection;
 		
@@ -134,16 +134,20 @@ namespace BALL
 		Size countFragments_(const Composite& composite) const;
 		
 
-		/*_	The first of two composites - the "original" */
+		/*_	The first of two composites - the "original" 
+		*/
 		Composite*	A_;
 
-		/*_	The second composites - the "copy" to be mapped */
+		/*_	The second composites - the "copy" to be mapped 
+		*/
 		Composite*	B_;
 		
-		/*_	The current atom bijection (needed for the caclulation of the rmsd */
+		/*_	The current atom bijection (needed for the caclulation of the rmsd 
+		*/
 		StructureMapper::AtomBijection bijection_;
 		
-		/*_	The rmsd of the last mapping executed */
+		/*_	The rmsd of the last mapping executed 
+		*/
 		double	rmsd_;
 	};
 

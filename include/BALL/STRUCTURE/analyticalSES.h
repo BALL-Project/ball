@@ -1,4 +1,4 @@
-// $Id: analyticalSES.h,v 1.6 2000/08/30 19:58:26 oliver Exp $
+// $Id: analyticalSES.h,v 1.7 2001/03/06 00:12:23 amoll Exp $
 
 #ifndef BALL_STRUCTURE_ANALYTICALSES_H
 #define BALL_STRUCTURE_ANALYTICALSES_H
@@ -17,11 +17,9 @@ namespace BALL
 	
 	/**	Calculate the solvent excluded surface area analytically.
 			This method uses the algorithm by Michael L. Connolly.
-			BAUSTELLE
-		
+			BAUSTELLE		
 			@param	fragment the kernel object containing the atoms
 			@param	probe_radius the probe radius used for the SAS
-			@param	number_of_dots the number of dots used per atom
 			@return the SES area in $\AA^2$
 	*/
 	float calculateSESAtomAreas
@@ -30,10 +28,8 @@ namespace BALL
 	/**	Calculate the solvent excluded surface area analytically.
 			This method uses the algorithm by Michael L. Connolly.
 			BAUSTELLE
-		
 			@param	fragment the kernel object containing the atoms
 			@param	probe_radius the probe radius used for the SAS
-			@param	number_of_dots the number of dots used per atom
 			@return the SES area in $\AA^2$
 	*/
 	float calculateSESArea
@@ -42,10 +38,8 @@ namespace BALL
 	/**	Calculate the solvent excluded volume analytically.
 			This method uses the algorithm by Michael L. Connolly.
 			BAUSTELLE
-		
 			@param	fragment the kernel object containing the atoms
 			@param	probe_radius the probe radius used for the SAS
-			@param	number_of_dots the number of dots used per atom
 			@return the volume in $\AA^3$
 	*/
 	float calculateSESVolume

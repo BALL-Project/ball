@@ -1,4 +1,4 @@
-// $Id: numericalSAS.h,v 1.15 2001/02/03 15:24:04 amoll Exp $
+// $Id: numericalSAS.h,v 1.16 2001/03/06 00:12:23 amoll Exp $
 
 #ifndef BALL_STRUCTURE_NUMERICALSAS_H
 #define BALL_STRUCTURE_NUMERICALSAS_H
@@ -78,7 +78,7 @@ namespace BALL
 					|\vec{n_i}| = \frac{\mathrm{SAS of atom} i}{\mathrm{number of points on the SAS of atom} i}
 			\]
 			Atoms with a radius of 0 are ignored.
-			@param  surface a surface object containing the point coordinates and their normals (returned)
+			@param  surface_points a surface object containing the point coordinates and their normals (returned)
 			@param	fragment the kernel object containing the atoms
 			@param	probe_radius the probe radius used for the SAS
 			@param	number_of_dots the number of dots used per atom
@@ -89,9 +89,10 @@ namespace BALL
 
 	/** Calculate a point set on the Solvent Accessible Surface for each
 			atom. This method returns the point sets on the SAS used to calculate
-			the surface area for each atom. @see calculateSASAtomAreas.
+			the surface area for each atom. 
+			@see calculateSASAtomAreas
 			@param	fragment the kernel object containing the atoms
-			@param  atom_surfaces a hashmap of atoms and Surface objects containing the point sets for eacht atom (returned)
+			@param  atom_surfaces a hashmap of atoms and Surface objects containing the point sets for each atom (returned)
 			@param	probe_radius the probe radius used for the SAS
 			@param	number_of_dots the number of dots used per atom
 			@return the total SAS area in $ A^2$

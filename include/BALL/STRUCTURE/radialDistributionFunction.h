@@ -1,4 +1,4 @@
-// $Id: radialDistributionFunction.h,v 1.8 2001/02/03 15:24:04 amoll Exp $
+// $Id: radialDistributionFunction.h,v 1.9 2001/03/06 00:12:23 amoll Exp $
 
 #ifndef BALL_STRUCTURE_RADIALDISTRIBUTIONFUNCTION_H
 #define BALL_STRUCTURE_RADIALDISTRIBUTIONFUNCTION_H
@@ -119,7 +119,6 @@ namespace BALL
 			throw();
 
 		//@}
-
 
 		protected:
 

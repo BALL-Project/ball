@@ -1,4 +1,4 @@
-// $Id: defaultProcessors.h,v 1.4 2000/10/30 00:19:27 amoll Exp $
+// $Id: defaultProcessors.h,v 1.5 2001/03/06 00:12:23 amoll Exp $
 
 #ifndef BALL_STRUCTURE_DEFAULTPROCESSORS_H
 #define BALL_STRUCTURE_DEFAULTPROCESSORS_H
@@ -30,7 +30,7 @@
 namespace BALL 
 {
 
-	/**@name	Standard processors
+	/** @name	Standard processors
 	*/
 	//@{
 
@@ -57,10 +57,9 @@ namespace BALL
 
 
 	/**	Assigns the radius to each atom.
-			This processor reads a radius table from a file
-			and assigns each atom a raidus according to its
-			name and the name of the fragment the atom is contained
-			in.
+			This processor reads a radius table from a file	and assigns each 
+			atom a radius according to its name and the name of the fragment 
+			the atom is contained	in.
 	*/
 	class AssignRadiusProcessor
 		:	public UnaryProcessor<Atom> 
@@ -105,10 +104,9 @@ namespace BALL
 
 
 	/**	Assigns a charge to each atom.
-			This processor reads a charge table from a file
-			and assigns each atom a charge according to its
-			name and the name of the fragment the atom is contained
-			in.
+			This processor reads a charge table from a file	and assigns each 
+			atom a charge according to its name and the name of the fragment 
+			the atom is contained in.
 	*/
 	class AssignChargeProcessor
 		: public AssignRadiusProcessor 
@@ -122,7 +120,6 @@ namespace BALL
 		virtual bool start();
 		
 		virtual Processor::Result operator () (Atom& atom);
-
 
 		/**	Returns the net assigned charge
 		*/

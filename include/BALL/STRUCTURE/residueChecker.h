@@ -1,4 +1,4 @@
-// $Id: residueChecker.h,v 1.6 2001/01/26 12:11:02 oliver Exp $
+// $Id: residueChecker.h,v 1.7 2001/03/06 00:12:23 amoll Exp $
 
 
 #ifndef BALL_STRUCTURE_RESIDUECHECKER_H
@@ -21,8 +21,7 @@ namespace BALL
 			and non-integral or extremely large charges on the residue.
 			Atom positions are checked as well: a warning is printed, if any of the 
 			atom's coordinates is not a number (NaN).
-			Warnings are emitted to \Ref{Log}.
-			\\
+			Warnings are emitted to \Ref{Log}. \\
 			{\bf Definition:} \URL{BALL/STRUCTURE/residueChecker.h}
 	*/
 	class ResidueChecker
@@ -40,7 +39,7 @@ namespace BALL
 		*/
 		ResidueChecker();
 
-		/**
+		/** Detailled constructor
 		*/
 		ResidueChecker(FragmentDB& fragment_db);
 
@@ -51,8 +50,8 @@ namespace BALL
 		/**	Destructor
 		*/
 		virtual ~ResidueChecker();
-		//@}
 
+		//@}
 		/**	@name	Predicates
 		*/
 		//@{
@@ -63,8 +62,8 @@ namespace BALL
 				@return bool {\bf true} if no warnings occured, {\bf false} otherwise
 		*/
 		bool getStatus() const;
-		//@}
 
+		//@}
 		/**	Processor related methods
 		*/
 		//@{
@@ -80,6 +79,7 @@ namespace BALL
 		/**
 		*/
 		bool finish();
+
 		//@}
 			
 		protected:

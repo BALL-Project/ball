@@ -1,4 +1,4 @@
-// $Id: reducedSurface.h,v 1.11 2001/02/22 16:23:21 strobel Exp $
+// $Id: reducedSurface.h,v 1.12 2001/03/06 00:12:23 amoll Exp $
 
 //#define debug_rs
 //#define print cout
@@ -59,11 +59,8 @@
 namespace BALL
 {
 
-//	int HALT;
-	/** Generic ReducedSurface Class.
-			\\
+	/** Generic ReducedSurface Class.	\\
 			{\bf Definition:} \URL{BALL/STRUCTURE/reducedSurface.h}
-			\\
 	*/
 	template <class T>
 	class TReducedSurface
@@ -77,8 +74,7 @@ namespace BALL
 		//@{
 
 		/**	Default constructor.
-				This method creates a new ReducedSurface object. All components are
-				initialized to {\tt (T)0} or {\tt NULL}, respectivly.
+				All components are initialized to {\tt (T)0} or {\tt NULL}, respectivly.
 		*/
 		TReducedSurface()
 			:	atom_(), probe_radius_((T)0), tree_(), vertices_(), edges_(), faces_(), r_max_((T)0)
@@ -86,7 +82,6 @@ namespace BALL
 		}
 
 		/**	Copy constructor.
-				Create a new ReducedSurface object from another.
 				@param reduced_surface the ReducedSurface object to be copied
 				@param bool ignored - just for interface consistency
 		*/
@@ -99,7 +94,6 @@ namespace BALL
 
 		/**	Detailled constructor.
 				Create a new ReducedSurface object from a list of spheres.
-				@param	atom assigned to the vector of atoms
 		*/
 		TReducedSurface(const std::vector< TSphere3<T> >& spheres, const T& probe_radius)
 			:	atom_(), probe_radius_(probe_radius), tree_(),
@@ -132,7 +126,6 @@ namespace BALL
 		}
 
 		/**	Destructor.
-				Destructs the ReducedSurface object.
 		*/
 		virtual ~TReducedSurface()
 		{
@@ -147,8 +140,8 @@ namespace BALL
 					print << "ENDE\n";
 					#endif
 		}
-		//@}
 
+		//@}
 		/**	@name	Accessors
 		*/
 		//@{
@@ -313,7 +306,7 @@ namespace BALL
 			}
 		}
 
-		/** compute the reduced surface
+		/** Compute the reduced surface
 		*/
 		void compute()
 		{
@@ -563,7 +556,7 @@ namespace BALL
 						new_vertices.remove(test_vertex1);
 						vertices[test_vertex1->getAtom()].remove(test_vertex1);
 								//cout << *vertex1; //cin >> HALT;
-								//cout << "lösche " << *test_vertex1; //cin >> HALT;
+								//cout << "l÷sche " << *test_vertex1; //cin >> HALT;
 						delete test_vertex1;
 					}
 					if (*vertex2 != *test_vertex2)
@@ -575,10 +568,10 @@ namespace BALL
 						new_vertices.remove(test_vertex2);
 						vertices[test_vertex2->getAtom()].remove(test_vertex2);
 								//cout << *vertex2; //cin >> HALT;
-								//cout << "lösche " << *test_vertex2; //cin >> HALT;
+								//cout << "l÷sche " << *test_vertex2; //cin >> HALT;
 						delete test_vertex2;
 					}
-							//cout << "lösche korrespondierende Edge aus Vertex1 und Vertex2"; //cin >> HALT;
+							//cout << "l÷sche korrespondierende Edge aus Vertex1 und Vertex2"; //cin >> HALT;
 					vertex1->deleteEdge(test_edge);
 					vertex2->deleteEdge(test_edge);
 				}
@@ -596,7 +589,7 @@ namespace BALL
 						new_vertices.remove(test_vertex2);
 						vertices[test_vertex2->getAtom()].remove(test_vertex2);
 								//cout << *vertex1; //cin >> HALT;
-								//cout << "lösche " << *test_vertex2; //cin >> HALT;
+								//cout << "l÷sche " << *test_vertex2; //cin >> HALT;
 						delete test_vertex2;
 					}
 					if (*vertex2 != *test_vertex1)
@@ -608,10 +601,10 @@ namespace BALL
 						new_vertices.remove(test_vertex1);
 						vertices[test_vertex1->getAtom()].remove(test_vertex1);
 								//cout << *vertex2; //cin >> HALT;
-								//cout << "lösche " << *test_vertex1; //cin >> HALT;
+								//cout << "l÷sche " << *test_vertex1; //cin >> HALT;
 						delete test_vertex1;
 					}
-							//cout << "lösche korrespondierende Edge aus Vertex1 und Vertex2"; //cin >> HALT;
+							//cout << "l÷sche korrespondierende Edge aus Vertex1 und Vertex2"; //cin >> HALT;
 					vertex1->deleteEdge(test_edge);
 					vertex2->deleteEdge(test_edge);
 				}
@@ -621,16 +614,16 @@ namespace BALL
 						#ifdef debug_rs
 						print << pre << i << ". edge ersetzt: " << *test << "\n";
 						#endif
-						//cout << "lösche korrespondierende Edge aus new_edges"; //cin >> HALT;
+						//cout << "l÷sche korrespondierende Edge aus new_edges"; //cin >> HALT;
 				new_edges.remove(test_edge);
 				delete new_face;
 				delete test_edge;
 				delete vertex3;
-						//cout << "erzeugte face gelöscht"; //cin >> HALT;
-						//cout << "korrespondierende Edge gelöscht"; //cin >> HALT;
-						//cout << "erzeugter vertex gelöscht"; //cin >> HALT;
+						//cout << "erzeugte face gel÷scht"; //cin >> HALT;
+						//cout << "korrespondierende Edge gel÷scht"; //cin >> HALT;
+						//cout << "erzeugter vertex gel÷scht"; //cin >> HALT;
 						#ifdef debug_rs
-						print << pre << "konstruierte face gelöscht\n";
+						print << pre << "konstruierte face gel÷scht\n";
 						#endif
 				new_face = test;
 			}
@@ -663,7 +656,7 @@ namespace BALL
 					pre.replace(0,2,"");
 					print << pre << "end        // treat " << *edge << "\n";
 					#endif
-					//cout << "Edge aus new_edges gelöscht, in edges_ gepusht"; //cin >> HALT;
+					//cout << "Edge aus new_edges gel÷scht, in edges_ gepusht"; //cin >> HALT;
 					//cout << "Ergebnis:\n"
 					//		 << *start_face << "\n  "
 					//		 << *start_face->getEdge(0) << "\n  "
@@ -1620,8 +1613,8 @@ namespace BALL
 	*/
 	//@{
 
-	/**	Input- Operator
-			reads in a ReducedSurface
+	/**	Input- Operator.
+			Reads in a ReducedSurface
 	*/
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TReducedSurface<T>& rs)
@@ -1629,8 +1622,8 @@ namespace BALL
 		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 
-	/**	Output- Operator
-			prints out a ReducedSurface
+	/**	Output- Operator.
+			Prints out a ReducedSurface
 	*/
 		template <typename T>
 		std::ostream& operator << (std::ostream& s, TReducedSurface<T>& rs)
@@ -1664,8 +1657,8 @@ namespace BALL
 		  }
 		  return s;
 		}
-	//@}
 
+	//@}
 
 	/**	The Default ReducedSurface Type.
 			If double precision is not needed, {\tt TReducedSurface<float>} should

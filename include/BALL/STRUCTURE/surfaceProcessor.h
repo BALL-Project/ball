@@ -1,4 +1,4 @@
-// $Id: surfaceProcessor.h,v 1.12 2001/02/25 18:32:00 strobel Exp $
+// $Id: surfaceProcessor.h,v 1.13 2001/03/06 00:12:24 amoll Exp $
 
 #include <BALL/STRUCTURE/reducedSurface.h>
 #include <BALL/STRUCTURE/solventExcludedSurface.h>
@@ -13,7 +13,8 @@
 
 namespace BALL
 {
-	/**
+	/** SurfaceProcessor. \\
+			{\bf Definition:} \URL{BALL/STRUCTURE/surfaceProcessor.h}
 	*/
 	class SurfaceProcessor
 		:	public UnaryProcessor<Atom>

@@ -1,4 +1,4 @@
-// $Id: solventExcludedSurface.h,v 1.12 2001/02/27 21:33:08 strobel Exp $
+// $Id: solventExcludedSurface.h,v 1.13 2001/03/06 00:12:23 amoll Exp $
 
 #ifndef BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
 #define BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
@@ -32,7 +32,7 @@
 namespace BALL
 {
 
-	/** Generic SolventExcludedSurface Class.	\\
+	/** Generic SolventExcludedSurface Class.
 			{\bf Definition:} \URL{BALL/STRUCTURE/solventExcludedSurface.h}	\\
 	*/
 	template <class T>
@@ -56,7 +56,7 @@ namespace BALL
 
 		/**	Copy constructor.
 				Create a new SolventExcludedSurface object from another.
-				@param s_e_surface the SolventExcludedSurface object to be copied
+				@param ses the SolventExcludedSurface object to be copied
 				@param bool ignored - just for interface consistency
 		*/
 		TSolventExcludedSurface(const TSolventExcludedSurface<T>& ses, bool /* deep */ = true)
@@ -123,8 +123,7 @@ namespace BALL
 		}
 
 		/**	Destructor.
-				Destructs the SolventExcludedSurface object. As there are no dynamic
-				data structures, nothing happens.
+				As there are no dynamic	data structures, nothing happens.
 		*/
 		virtual ~TSolventExcludedSurface()
 		{
@@ -178,8 +177,7 @@ namespace BALL
 		*/
 		//@{
 		
-		/**	get.
-				Computes the solvent excluded surface from a ReducedSurface object and radius of the probe sphere
+		/**	Computes the solvent excluded surface from a ReducedSurface object and radius of the probe sphere
 				@param rs	the ReducedSurface object
 		*/
 		void get(TReducedSurface<T>* rs)
@@ -545,8 +543,8 @@ namespace BALL
 	};
 
 
-	/**	Input- Operator
-			reads in a SolventExcludedSurface
+	/**	Input- Operator.
+			Reads in a SolventExcludedSurface
 	*/
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TSolventExcludedSurface<T>& ses)
@@ -554,8 +552,8 @@ namespace BALL
 		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 
-	/**	Output- Operator
-			prints out a SolventExcludedSurface
+	/**	Output- Operator.
+			Prints out a SolventExcludedSurface
 	*/
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, TSolventExcludedSurface<T>& ses)

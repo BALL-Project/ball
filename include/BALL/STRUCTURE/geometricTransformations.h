@@ -1,4 +1,4 @@
-// $Id: geometricTransformations.h,v 1.6 2001/02/03 13:35:42 amoll Exp $
+// $Id: geometricTransformations.h,v 1.7 2001/03/06 00:12:23 amoll Exp $
 
 #ifndef BALL_STRUCTURE_GEOMETRICTRANSFORMATIONS_H
 #define BALL_STRUCTURE_GEOMETRICTRANSFORMATIONS_H
@@ -65,7 +65,7 @@ namespace BALL
 		*/
 		const Vector3& getTranslation() const;	
 		
-		//----------------  applicator methods ----------------
+		/// Applicator method
 		virtual Processor::Result operator()(Atom& atom);
 
 
@@ -120,7 +120,7 @@ namespace BALL
 		*/
 		const Matrix4x4& getTransformation() const;
 		
-		//----------------  applicator methods ----------------
+		/// Applicator method
 		virtual Processor::Result operator()(Atom& atom);
 
 

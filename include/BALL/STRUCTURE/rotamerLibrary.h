@@ -1,4 +1,4 @@
-// $Id: rotamerLibrary.h,v 1.11 2001/02/03 13:36:48 amoll Exp $
+// $Id: rotamerLibrary.h,v 1.12 2001/03/06 00:12:23 amoll Exp $
 
 #ifndef BALL_STRUCTURE_ROTAMERLIBRARY_H
 #define BALL_STRUCTURE_ROTAMERLIBRARY_H
@@ -22,7 +22,8 @@
 namespace BALL
 {
 
-	/** Rotamer class.
+	/** Rotamer class. \\
+			{\bf Definition:} \URL{BALL/STRUCTURE/rotamerLibrary.h}
 	*/
 	class Rotamer
 	{
@@ -43,8 +44,8 @@ namespace BALL
 		/**	Detailled constructor.
 		*/
 		Rotamer(float new_P, float new_chi1, float new_chi2, float new_chi3, float new_chi4);
-		//@}
 
+		//@}
 		/**	@name	Attributes.
 		*/
 		//@{
@@ -68,11 +69,13 @@ namespace BALL
 		/**	Angle \TeX{$\chi_4$}
 		*/
 		Angle chi4;
+
 		//@}
 	};
 
 
-	/**
+	/** ResidueRotamerSet. \\
+			{\bf Definition:} \URL{BALL/STRUCTURE/rotamerLibrary.h}
 	*/
 	class ResidueRotamerSet
 	{
@@ -81,13 +84,15 @@ namespace BALL
 		/**	@name	Type definitions
 		*/
 		//@{
+
 		typedef vector<Rotamer>::const_iterator	ConstIterator;
 		typedef vector<Rotamer>::iterator				Iterator;
-		//@}
 
+		//@}
 		/**	@name Constructors and Destructors
 		*/
 		//@{
+
 		BALL_CREATE_DEEP(ResidueRotamerSet)
 
 		/**	Default constructor
@@ -105,8 +110,8 @@ namespace BALL
 		/**	Destructor
 		*/
 		virtual ~ResidueRotamerSet();
-		//@}
 
+		//@}
 		/**	@name	External Iteration
 		*/
 		//@{
@@ -118,8 +123,8 @@ namespace BALL
 		ConstIterator begin() const;
 
 		ConstIterator end() const;
+
 		//@}
-		
 		/**	@name	Assignment Operator
 		*/
 		//@{
@@ -129,11 +134,11 @@ namespace BALL
 		ResidueRotamerSet&	operator = (const ResidueRotamerSet& residue_rotamer_set);
 
 		//@}
-
 		/** @name Accessors
 		*/
 		//{
-		/** get the name of the ResidueRotamerSet 
+
+		/** Get the name of the ResidueRotamerSet 
 		*/
 		const String & getName() const; 
 
@@ -141,7 +146,7 @@ namespace BALL
 		*/
 		Residue& getResidue() ; 
 
-		/** find out if the class instance is valid
+		/** Find out if the class instance is valid
 		*/
 		bool isValid() const; 
 
@@ -161,8 +166,7 @@ namespace BALL
 		*/
 		Rotamer& operator [] (Position index);
 
-		//}
-
+		//@}
 		/**	@name	Rotamer Assignment
 		*/
 		//@{
@@ -175,7 +179,7 @@ namespace BALL
 		*/
 		Rotamer getRotamer(const Residue& residue) const;
 
-		/**  assign a new name
+		/** Assign a new name
 		*/
 		void setName(String &name); 
 
@@ -186,63 +190,64 @@ namespace BALL
 		/**	Build a copy of a specified rotamer
 		*/
 		Residue* buildRotamer(const Rotamer& rotamer) ;
+
 		//@}
 		
 		protected:
+
 		/*_ @name Protected attributes 
 		*/
 		//@{
 
-		/*_ determines all movable atoms 
+		/*_ Determines all movable atoms 
 		*/
 		void addMoveable_(vector<String>& moveable, Atom& a); 
 
-		/*_ set the torsion angles
+		/*_ Set the torsion angles
 		*/
 		void setTorsionAngle_(const vector<String>& moveable, Angle angle); 
 
 
-		/*_ indicates whether the instance is valid 
+		/*_ Indicates whether the instance is valid 
 		*/ 
 		bool valid_; 
 
 
-		/*_ name of the variant (NOT the residue name, but the variant name
-		    obtained from the template DB)
-      		*/ 
+		/*_ Name of the variant.
+				(NOT the residue name, but the variant name obtained from the template DB)
+    */ 
 		String								name_;
 		
-		/*_ contains the residue (side chain and backbone)
+		/*_ Contains the residue (side chain and backbone)
 		*/
 		Residue								side_chain_;
 
-		/*_ hash map containing all atom names of the variant
+		/*_ Hash map containing all atom names of the variant
 		    and pointers to the corresponding atoms in residue_
 		*/
 		StringHashMap<Atom*>	atom_name_map_;
 
-		/*_ the three anchor atoms (backbone atoms)
+		/*_ The three anchor atoms (backbone atoms)
 		    used to determine the primary transformation
 		*/
 		Atom*									anchor_atoms_[3];
 
-		/*_ array containing all rotamers
+		/*_ Array containing all rotamers
 		*/
 		vector<Rotamer>				rotamers_;
 
-		/*_ names of the movable atoms (names) for each of the
-		    torsions
+		/*_ Names of the movable atoms (names) for each of the torsions
 		*/
 		vector<String>				moveable_atoms_chi1_;
 		vector<String>				moveable_atoms_chi2_;
 		vector<String>				moveable_atoms_chi3_;
 		vector<String>				moveable_atoms_chi4_;
 
-		/*_	number of valid torsions of the side chain
+		/*_	Nnumber of valid torsions of the side chain
 		*/
 		Size number_of_torsions_;
 
-		/*_	original atom coordinates of side_chain_
+		/*_	Original atom coordinates of side_chain_
 		*/
 		vector<Vector3>				original_coordinates_;
 
@@ -300,6 +305,7 @@ namespace BALL
 		/*_ Indicates whether the instance is valid 
 		*/ 
 		bool valid_;
+
 		//@}
 	};
 
