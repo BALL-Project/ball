@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.59 2004/02/05 17:02:28 amoll Exp $
+// $Id: mainControl.C,v 1.60 2004/02/10 13:17:08 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -194,7 +194,7 @@ QPopupMenu* MainControl::initPopupMenu(int ID)
 				initPopupMenu(MainControl::DISPLAY)->insertItem("&Viewpoint", menu, DISPLAY_VIEWPOINT);
 				break;
 			case MOLECULARMECHANICS:
-				menuBar()->insertItem("&MolecularMechanics", menu, MOLECULARMECHANICS, -1);
+				menuBar()->insertItem("&Molecular Mechanics", menu, MOLECULARMECHANICS, -1);
 				break;
 			case TOOLS:
 				menuBar()->insertItem("&Tools", menu, TOOLS, -1);

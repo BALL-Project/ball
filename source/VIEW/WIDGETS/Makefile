@@ -43,11 +43,6 @@ PYTHON_MOC_SOURCES=\
 include ../../common.mak
 include .Dependencies
 
-# replace library-specific flags by application-
-# specific compiler flags
-LIB_CXXFLAGS=$(NONLIB_CXXFLAGS) -DQT_THREAD_SUPPORT
-
-
 BALL_INCLUDES=$(VIEW_INCLUDES) $(PYTHON_INCLUDES)
 
 depend: $(MOC_SOURCES)

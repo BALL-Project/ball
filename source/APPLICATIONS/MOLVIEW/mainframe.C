@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.119 2004/02/09 14:01:25 amoll Exp $
+// $Id: mainframe.C,v 1.120 2004/02/10 13:23:38 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -14,7 +14,6 @@
 #include <BALL/VIEW/RENDERING/VRMLRenderer.h>
 
 #include <BALL/DATATYPE/contourSurface.h>
-#include <BALL/KERNEL/selector.h>
 
 #ifdef BALL_PYTHON_SUPPORT
 #	include <BALL/VIEW/WIDGETS/pyWidget.h>
@@ -37,7 +36,6 @@ namespace BALL
 			label_dialog_(0),
 			molecular_structure_(0),
 			file_dialog_(0),
-			selector_dialog_(this),
 			server_(0),
 			logview_(0),
 			fullscreen_(false)
@@ -134,21 +132,15 @@ namespace BALL
 		insertMenuEntry(MainControl::DISPLAY, "Toggle Fullscreen", this, SLOT(toggleFullScreen()),
 										ALT+Key_X, MENU_FULLSCREEN);
 		// Tools Menu -------------------------------------------------------------------
-
-		insertPopupMenuSeparator(MainControl::TOOLS);
-
 		hint = "Calculate the Electrostatics with FDPB, if one System selected.";
-		insertMenuEntry(MainControl::TOOLS_CREATE_GRID, "FDPB Electrostatics", FDPB_dialog_, SLOT(show()), 0,
+		insertMenuEntry(MainControl::TOOLS , "FDPB Electrostatics", FDPB_dialog_, SLOT(show()), 0,
 				MENU_FDPB, hint);
 				
+		insertPopupMenuSeparator(MainControl::TOOLS);
+
 		hint = "Calculate an isocontour surface from a 3D grid. The grid has to be loaded in the DatasetControl.";
 		insertMenuEntry(MainControl::TOOLS, "Contour S&urface", this,  SLOT(computeIsoContourSurface()), 
 										CTRL+Key_U,MENU_CONTOUR_SURFACE, hint);
-
-		insertPopupMenuSeparator(MainControl::TOOLS);
-		hint = "Select atoms from a system based on an expression.";
-		insertMenuEntry(MainControl::TOOLS, "Select atoms", this,  SLOT(showSelectorDialog()), 
-										ALT+Key_A, MENU_SELECT_ATOMS, hint);
 
 		// Help-Menu -------------------------------------------------------------------
 		insertMenuEntry(MainControl::HELP, "About", this, SLOT(about()), CTRL+Key_9, MENU__HELP_ABOUT);
@@ -291,11 +283,4 @@ namespace BALL
 	{
 		file_dialog_->openFile(file);
 	}
-
-	void Mainframe::showSelectorDialog()
-	{
-		selector_dialog_.show();
-		selector_dialog_.raise();
-	}
-
 } 

@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.32 2004/02/09 13:54:18 amoll Exp $
+# $Id: Makefile,v 1.33 2004/02/10 13:24:26 amoll Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -55,8 +55,6 @@ CPP_SOURCES=\
 	setCameraData.C\
 	pythonSettings.C\
 	pythonSettingsData.C\
-	selectorDialog.C\
-	selectorDialogData.C\
 	serverPreferences.C\
 	snapShotVisualisation.C\
 	snapShotVisualisationData.C\
@@ -106,8 +104,6 @@ MOC_SOURCES=\
 	preferencesData_moc.C\
 	pythonSettings_moc.C\
 	pythonSettingsData_moc.C\
-	selectorDialog_moc.C\
-	selectorDialogData_moc.C\
 	serverPreferences_moc.C\
 	setCamera_moc.C\
 	setCameraData_moc.C\
@@ -138,7 +134,6 @@ UIC_SOURCES=\
 	peptideDialogData.C\
 	preferencesData.C\
 	pythonSettingsData.C\
-	selectorDialogData.C\
 	setCameraData.C\
 	snapShotVisualisationData.C\
 	stageSettingsData.C\

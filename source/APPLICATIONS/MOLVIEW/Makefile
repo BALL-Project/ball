@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.50 2004/02/09 10:52:00 amoll Exp $
+# $Id: Makefile,v 1.51 2004/02/10 13:19:31 amoll Exp $
 #
 
 EXECUTABLE=molview
@@ -31,7 +31,7 @@ UIC_FILES=\
 	aboutDialog.h
 
 molview:	$(OBJECTS)	$(SPECIAL_OBJECTS)
-	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(VIEW_LIBS) $(BALL_INCLUDES) $(PYTHON_LIBS) -DQT_THREAD_SUPPORT
+	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(VIEW_LIBS) $(BALL_INCLUDES) $(PYTHON_LIBS)
 
 depend: $(UIC_FILES) $(MOC_SOURCES)
 
