@@ -1,13 +1,17 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1D.h,v 1.32 2003/05/03 17:29:19 oliver Exp $
+// $Id: regularData1D.h,v 1.33 2003/05/08 18:03:07 anhi Exp $
 
 #ifndef BALL_DATATYPE_REGULARDATA1D_H
 #define BALL_DATATYPE_REGULARDATA1D_H
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
+#endif
+
+#ifndef BALL_SYSTEM_FILE_H
+# include <BALL/SYSTEM/file.h>
 #endif
 
 #include <vector>
@@ -282,6 +286,12 @@ namespace BALL
 		*/
 		void rescale(const IndexType& new_size)
 			throw(Exception::OutOfMemory);
+
+		void binaryWrite(const String& filename) const
+			throw();
+
+		void binaryRead(const String& filename)
+			throw();
 		//@}
 	
 		protected:
@@ -635,6 +645,117 @@ namespace BALL
 		}
 	}
 
+	template <typename ValueType>
+	void TRegularData1D<ValueType>::binaryWrite(const String& filename) const
+		throw()
+	{
+		File outfile(filename, std::ios::out|std::ios::binary);
+		
+		BinaryFileAdaptor< BlockValueType > adapt_block;
+		BinaryFileAdaptor< ValueType >			 adapt_single;
+		
+		// TODO: check for endiannes and swap bytes accordingly
+
+		// write all information we need to recreate the grid
+		BinaryFileAdaptor<CoordinateType> adapt_coordinate;
+		BinaryFileAdaptor<Size> 					adapt_size;
+
+		adapt_size.setData(data_.size());
+		outfile << adapt_size;
+		
+		adapt_coordinate.setData(origin_);
+		outfile << adapt_coordinate;
+
+		adapt_coordinate.setData(dimension_);
+		outfile << adapt_coordinate;
+
+		adapt_coordinate.setData(spacing_);
+		outfile << adapt_coordinate;
+
+		BinaryFileAdaptor<IndexType> adapt_index;
+		adapt_index.setData(size_);
+		outfile << adapt_index;
+	
+		// we slide a window of size 1024 over our data
+		Index window_pos = 0;
+		
+		while ( ((int)data_.size() - (1024 + window_pos)) >= 0 )
+		{
+			adapt_block.setData(* (BlockValueType*)&(data_[window_pos]));
+			outfile << adapt_block;
+			window_pos+=1024;
+		}
+
+		// now we have to write the remaining data one by one
+		for (Size i=window_pos; i<data_.size(); i++)
+		{
+			adapt_single.setData(data_[i]);
+			outfile << adapt_single;
+		}
+
+		// that's it. I hope...
+		outfile.close();
+	}
+
+	template <typename ValueType>
+	void TRegularData1D<ValueType>::binaryRead(const String& filename)
+		throw()
+	{
+		File infile(filename, std::ios::in|std::ios::binary);
+		
+		BinaryFileAdaptor< BlockValueType > adapt_block;
+		BinaryFileAdaptor< ValueType >		  adapt_single;
+		
+		// TODO: check for endiannes and swap bytes accordingly
+
+		// read all information we need to recreate the grid
+		BinaryFileAdaptor<CoordinateType> adapt_coordinate;
+		BinaryFileAdaptor<Size> 					adapt_size;
+
+		infile >> adapt_size;
+		Size new_size = adapt_size.getData();
+	
+		infile >> adapt_coordinate;
+		origin_ = adapt_coordinate.getData();
+
+		infile >> adapt_coordinate;
+		dimension_ = adapt_coordinate.getData();
+
+		infile >> adapt_coordinate;
+		spacing_ = adapt_coordinate.getData();
+
+		BinaryFileAdaptor<IndexType> adapt_index;
+		infile >> adapt_index;
+		size_ =  adapt_index.getData();
+	
+		data_.resize(new_size);
+
+		// we slide a window of size 1024 over our data
+		Index window_pos = 0;
+		
+		while ( ((int)data_.size() - (1024 + window_pos)) >= 0 )
+		{
+			infile >> adapt_block;
+			*(BlockValueType*)(&(data_[window_pos])) = adapt_block.getData();
+			/*
+			for (Size i=0; i<1024; i++)
+			{
+				data_[i+window_pos] = adapt_block.getData().bt[i];
+			}
+			*/
+			window_pos+=1024;
+		}
+
+		// now we have to read the remaining data one by one
+		for (Size i=window_pos; i<data_.size(); i++)
+		{
+			infile >> adapt_single;
+			data_[i] = adapt_single.getData();
+		}
+
+		// that's it. I hope...
+		infile.close();
+	}
 } // namespace BALL
 
 #endif // BALL_DATATYPE_REGULARDATA1D_H

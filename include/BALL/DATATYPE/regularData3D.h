@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData3D.h,v 1.21 2003/05/08 17:56:14 anhi Exp $ 
+// $Id: regularData3D.h,v 1.22 2003/05/08 18:03:08 anhi Exp $ 
 //
 
 #ifndef BALL_DATATYPE_REGULARDATA3D_H
@@ -1083,6 +1083,7 @@ namespace BALL
 		// that's it. I hope...
 		infile.close();
 	}
+
 	/**	@name Stream I/O */
 	//@{
 	/// Output operator
