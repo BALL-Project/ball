@@ -1,4 +1,4 @@
-// $Id: XDRPersistenceManager.C,v 1.18 2001/07/13 20:49:56 oliver Exp $
+// $Id: XDRPersistenceManager.C,v 1.19 2001/07/15 21:07:03 oliver Exp $
 
 #include <BALL/CONCEPT/XDRPersistenceManager.h>
 
@@ -47,7 +47,7 @@ namespace BALL
 		Log.info() << "XDRPersistenceManager: read " << number_read << " bytes." << endl;
 #endif
 
-		return (int)number_read;
+		return (int)(long)number_read;
 	}
 
 #ifdef BALL_XDRREC_CREATE_VOID_CHAR_INT
@@ -634,7 +634,7 @@ namespace BALL
 		throw()
 	{
 		char* ptr = const_cast<char*>(s.c_str());
-		xdr_string(&xdr_out_, &ptr, s.size());
+		xdr_string(&xdr_out_, &ptr, ((int)s.size()));
 
 #		ifdef BALL_DEBUG_PERSISTENCE
 			Log.info() << "XDRPersistenceManager: put(string = `" << s << "')" << endl;
