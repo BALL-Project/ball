@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.h,v 1.6 2003/10/04 12:22:48 amoll Exp $
+// $Id: colorMeshDialog.h,v 1.7 2003/10/15 14:16:21 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_COLORMESHDIALOG_H
@@ -87,6 +87,7 @@ namespace BALL
 				void autoScalePressed();
 				void choosePressed();
 				void gridSelected();
+				void show();
 
 		protected:
 				QColor setColor(QPushButton* button);
