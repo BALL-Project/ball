@@ -1,4 +1,4 @@
-// $Id: dockResultDialog.C,v 1.1.2.6 2005/03/24 10:39:23 haid Exp $
+// $Id: dockResultDialog.C,v 1.1.2.7 2005/03/24 15:50:26 haid Exp $
 //
 
 #include <qtable.h>
@@ -69,11 +69,8 @@ namespace BALL
 			docked_system_ = new System(conformation_set_.getSystem());
 			best_result.applySnapShot(*docked_system_);
 			
-			Log.info() << "ResultDialog before insert" << std::endl;
 			getMainControl()->insert(*docked_system_);
 			Log.info() << "ResultDialog after insert" << std::endl;
-			//getMainControl()->update(*docked_system_, true);
-		
 		}
 
 				
@@ -85,13 +82,6 @@ namespace BALL
 		{
 			// get the conformations (= pair<Index, float> = Snapshot number & energy value) for the result dialog
 			std::vector<ConformationSet::Conformation> conformations = conformation_set_.getScoring();
-			
-			//clear table
-			/*int num_rows = result_table->numRows();
-			for(int j = num_rows; j >=0; j--)
-			{
-				result_table->removeRow(j);
-			}*/
 			
 			// fill the table of the result dialog
 			result_table->insertRows(0,conformations.size());
@@ -111,6 +101,15 @@ namespace BALL
 			{
 				result_table->adjustColumn(j);
 			}
+			
+			
+			//adjust table/dialog size
+			//QSize recommended_size = result_table->sizeHint();
+			//result_table->resize(recommended_size);
+			result_table->adjustSize();
+			adjustSize();
+			
+			
 			//show dialog to user
 			DockResultDialogData::show();
 		}
@@ -119,7 +118,7 @@ namespace BALL
 		void DockResultDialog::showSnapshot()
 		{
 			int selected_row = result_table->currentRow();
-			//Log.info() << "current Row: " << i << std::endl;
+		
 			int snapshot = (result_table->text(selected_row,0)).toInt();
 					
 			SnapShot selected_conformation = conformation_set_[snapshot];
@@ -128,7 +127,7 @@ namespace BALL
 			getMainControl()->update(*docked_system_, true);
 		}
 		
-		//
+		//selects and shows the entry above the current selected entry
 		void DockResultDialog::upwardClicked()
 		{
 			int selected_row = result_table->currentRow();
@@ -139,7 +138,7 @@ namespace BALL
 			}
 		}
 				
-		//
+		//selects and shows the entry below the current selected entry
 		void DockResultDialog::downwardClicked()
 		{
 			int selected_row = result_table->currentRow();
@@ -159,8 +158,8 @@ namespace BALL
 				scoring_dialogs_[index]->exec();
 			}
 		}
-					
-		//
+		
+		//adds a column which contains the sorted scores after reranking
 		void DockResultDialog::scoringClicked()
 		{
 			// create scoring function object
@@ -198,11 +197,7 @@ namespace BALL
 			// add new column to the table of the result dialog, where the new scores are shown
 			int num_column = result_table->numCols();
 			result_table->insertColumns(num_column,1);
-			result_table->horizontalHeader()->setLabel(num_column, scoring_functions->currentText());
-			
-			
-			//adjust the table size
-			
+			result_table->horizontalHeader()->setLabel(num_column, scoring_functions->currentText());			
 			
 			// fill table
 			for(int row = 0 ; row < result_table->numRows(); row++)
@@ -219,6 +214,12 @@ namespace BALL
 			sortTable(num_column);
 			
 			result_table->adjustColumn(num_column);
+			
+			//adjust the table/dialog size
+			//QSize recommended_size = result_table->sizeHint();
+			//result_table->resize(recommended_size);
+			result_table->adjustSize();
+			adjustSize();
 		}
 		
 		//
