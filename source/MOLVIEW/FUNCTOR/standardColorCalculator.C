@@ -1,4 +1,4 @@
-// $Id: standardColorCalculator.C,v 1.8 2000/12/12 16:19:25 oliver Exp $
+// $Id: standardColorCalculator.C,v 1.9 2000/12/13 16:43:22 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/standardColorCalculator.h>
 
@@ -241,7 +241,7 @@ namespace BALL
 			}
 		}
 
-	 void AtomChargeColorCalculator::visit(Atom& atom)
+		void AtomChargeColorCalculator::visit(Atom& atom)
 		{
 			float charge = atom.getCharge();
 			float red1, green1, blue1;
@@ -257,7 +257,9 @@ namespace BALL
 				red1   = positive_color_.red();
 				green1 = positive_color_.green();
 				blue1  = positive_color_.blue();
-			} else {
+			} 
+			else 
+			{
 				red1   = negative_color_.red();
 				green1 = negative_color_.green();
 				blue1  = negative_color_.blue();
@@ -278,10 +280,10 @@ namespace BALL
 				 blue1 * charge + (1.0 - charge) * blue2);
 		}
 		
-
-
-
-
+		AtomChargeColorCalculator::~AtomChargeColorCalculator()
+			throw()
+		{
+		}
 
 		AtomDistanceColorCalculator::AtomDistanceColorCalculator()
 			: UnaryProcessor<Atom>(),
