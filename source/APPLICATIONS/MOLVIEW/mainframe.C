@@ -11,6 +11,7 @@
 #include <BALL/MOLMEC/MDSIMULATION/canonicalMD.h>
 #include <BALL/MOLMEC/MDSIMULATION/molecularDynamics.h>
 
+#include <BALL/MOLVIEW/GUI/DIALOGS/molecularFileDialog.h>
 #include <BALL/MOLVIEW/GUI/DIALOGS/openHINFile.h>
 #include <BALL/MOLVIEW/GUI/DIALOGS/openMOL2File.h>
 #include <BALL/MOLVIEW/GUI/DIALOGS/openPDBFile.h>
@@ -98,7 +99,8 @@ Mainframe::Mainframe
 
 	label_properties_ = new LabelProperties(this);
 	CHECK_PTR(label_properties_);
-
+	
+	CHECK_PTR(new MolecularFileDialog(this));
 	CHECK_PTR(new OpenPDBFile(this));
 	CHECK_PTR(new OpenMOL2File(this));
 	//CHECK_PTR(new OpenMOLFile(this));
