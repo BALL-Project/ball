@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.17.2.24 2004/12/28 14:37:49 amoll Exp $
+// $Id: backboneModel.C,v 1.17.2.25 2004/12/28 14:47:59 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -324,9 +324,6 @@ namespace BALL
 				new_points.push_back(x);
 			}
 
-			// add also a dummy for the closing of the ring
-			new_points.push_back(new_points[0]);
-
 			////////////////////////////////////////////////////////////
 			// same data structures for faster access
 			////////////////////////////////////////////////////////////
@@ -371,21 +368,16 @@ namespace BALL
 				m.setRotation(slides_angle, dir_new);
 				x = r_new;
 				new_points[0] = x;
+
+				// second half of points can be calculated by negating first half
 				const Position middle = (Position)(slides / 2.0);
+				new_points[middle] = -x;
 				for (Position i= 1; i < middle; i++)
 				{
 					x = m * x;
 					new_points[i] = x;
+					new_points[i + middle] = -x;
 				}
-
-				// second half of points can be calculated by negating first half
-				for (Position i = middle; i < slides; i++)
-				{
-					new_points[i] = - new_points[i - middle];
-				}
-
-				// dont forget the dummy for closing the ring
- 				new_points[new_points.size() - 1] = new_points[0];
 
 				////////////////////////////////////////////////////////////
 				// create a new mesh if we have a different atom now
