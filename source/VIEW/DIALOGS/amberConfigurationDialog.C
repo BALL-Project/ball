@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberConfigurationDialog.C,v 1.6 2004/04/22 22:04:44 amoll Exp $
+// $Id: amberConfigurationDialog.C,v 1.7 2004/04/22 23:29:07 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/amberConfigurationDialog.h>
@@ -62,6 +62,11 @@ namespace BALL
 			assign_types_checkBox->setChecked(true);
 			overwrite_charges_checkBox->setChecked(true);
 			overwrite_typenames_checkBox->setChecked(true);
+
+			boundary_box_->setChecked(true);
+			add_solvent_box->setChecked(true);
+			box_size_edit->setText("40.0000");
+			solvent_file_edit->setText("");
 		}
 
 		const String& AmberConfigurationDialog::getFilename() const
@@ -76,32 +81,6 @@ namespace BALL
 			parameter_file_edit->setText(filename.c_str());
 		}
 		
-		//function to restore previously changed options
-		void AmberConfigurationDialog::setOptions
-					(float nonbonded_cutoff, float vdw_cutoff, 
-					 float vdw_cuton, float electrostatic_cutoff, 
-					 float electrostatic_cuton,
-					 float scaling_electrostatic_1_4, float scaling_vdw_1_4, 
-					 bool use_dddc, bool assign_charges,
-					 bool assign_typenames, bool assign_types, 
-					 bool overwrite_charges, bool overwrite_typenames)
-		{
-			nonbonded_cutoff_line_edit->setText(String(nonbonded_cutoff).c_str());
-			vdw_cutoff_line_edit->setText(String(vdw_cutoff).c_str());
-			vdw_cuton_line_edit->setText(String(vdw_cuton).c_str());
-			electrostatic_cutoff_line_edit->setText(String(electrostatic_cutoff).c_str());
-			electrostatic_cuton_line_edit->setText(String(electrostatic_cuton).c_str());
-			scaling_electrostatic_1_4_line_edit->setText(String(scaling_electrostatic_1_4).c_str());
-			scaling_vdw_1_4_line_edit->setText(String(scaling_vdw_1_4).c_str());
-
-			distance_button->setChecked(use_dddc);
-			assign_charges_checkBox->setChecked(assign_charges);
-			assign_typenames_checkBox->setChecked(assign_typenames);
-			assign_types_checkBox->setChecked(assign_types);
-			overwrite_charges_checkBox->setChecked(overwrite_charges);
-			overwrite_typenames_checkBox->setChecked(overwrite_typenames);
-			accept();
-		}
 
 		void AmberConfigurationDialog::writePreferences(INIFile& inifile) const
 			throw()
@@ -339,15 +318,30 @@ namespace BALL
 			if (boundary_box_->isChecked())
 			{
 				amber.options[PeriodicBoundary::Option::PERIODIC_BOX_ENABLED] = "true";
+				try
+				{
+					amber.options[PeriodicBoundary::Option::PERIODIC_BOX_DISTANCE] = 
+						String(box_size_edit->text().ascii()).toFloat();
+				}
+				catch(...)
+				{
+					Log.error() << "Invalid distance for Periodic Boundary choosen." << std::endl;
+				}
 				if (add_solvent_box->isChecked())
 				{
 					amber.options[PeriodicBoundary::Option::PERIODIC_BOX_ADD_SOLVENT] = "true";
+
+					if (solvent_file_edit->text() != "")
+					{
+						amber.options[PeriodicBoundary::Option::PERIODIC_BOX_SOLVENT_FILE] = 
+							solvent_file_edit->text().ascii();
+					}
 				}
 			}
 			else
 			{
-				amber.options[PeriodicBoundary::Option::PERIODIC_BOX_ENABLED] = "true";
-				amber.options[PeriodicBoundary::Option::PERIODIC_BOX_ADD_SOLVENT] = "true";
+				amber.options[PeriodicBoundary::Option::PERIODIC_BOX_ENABLED] = "false";
+				amber.options[PeriodicBoundary::Option::PERIODIC_BOX_ADD_SOLVENT] = "false";
 			}
 		}
 
@@ -355,6 +349,17 @@ namespace BALL
 			throw()
 		{
 			amber_ = &amber;
+		}
+	
+		void AmberConfigurationDialog::chooseSolventFile()
+			throw()
+		{
+			QString result = QFileDialog::getOpenFileName(
+					solvent_file_edit->text().ascii(), "", 0, "Select a solvent file");
+			if (!result.isEmpty())
+			{
+				solvent_file_edit->setText(result);
+			}
 		}
 	
 	}//namespace VIEW

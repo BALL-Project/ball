@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmConfigurationDialog.C,v 1.3 2004/04/22 22:04:44 amoll Exp $
+// $Id: charmmConfigurationDialog.C,v 1.4 2004/04/22 23:29:08 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/charmmConfigurationDialog.h>
@@ -65,6 +65,11 @@ namespace BALL
 			overwrite_charges_checkBox->setChecked(true);
 			overwrite_typenames_checkBox->setChecked(true);
 			use_eef1_checkBox->setChecked(true);
+
+			boundary_box_->setChecked(true);
+			add_solvent_box->setChecked(true);
+			box_size_edit->setText("40.0000");
+			solvent_file_edit->setText("");
 		}
 
 		const String& CharmmConfigurationDialog::getFilename() const
@@ -391,15 +396,30 @@ namespace BALL
 			if (boundary_box_->isChecked())
 			{
 				charmm.options[PeriodicBoundary::Option::PERIODIC_BOX_ENABLED] = "true";
+				try
+				{
+					charmm.options[PeriodicBoundary::Option::PERIODIC_BOX_DISTANCE] = 
+						String(box_size_edit->text().ascii()).toFloat();
+				}
+				catch(...)
+				{
+					Log.error() << "Invalid distance for Periodic Boundary choosen." << std::endl;
+				}
 				if (add_solvent_box->isChecked())
 				{
 					charmm.options[PeriodicBoundary::Option::PERIODIC_BOX_ADD_SOLVENT] = "true";
+
+					if (solvent_file_edit->text() != "")
+					{
+						charmm.options[PeriodicBoundary::Option::PERIODIC_BOX_SOLVENT_FILE] = 
+							solvent_file_edit->text().ascii();
+					}
 				}
 			}
 			else
 			{
-				charmm.options[PeriodicBoundary::Option::PERIODIC_BOX_ENABLED] = "true";
-				charmm.options[PeriodicBoundary::Option::PERIODIC_BOX_ADD_SOLVENT] = "true";
+				charmm.options[PeriodicBoundary::Option::PERIODIC_BOX_ENABLED] = "false";
+				charmm.options[PeriodicBoundary::Option::PERIODIC_BOX_ADD_SOLVENT] = "false";
 			}
 		}
 
@@ -407,6 +427,17 @@ namespace BALL
 			throw()
 		{
 			charmm_ = &charmm;
+		}
+
+		void CharmmConfigurationDialog::chooseSolventFile()
+			throw()
+		{
+			QString result = QFileDialog::getOpenFileName(
+					solvent_file_edit->text().ascii(), "", 0, "Select a solvent file");
+			if (!result.isEmpty())
+			{
+				solvent_file_edit->setText(result);
+			}
 		}
 	
 	}//namespace VIEW
