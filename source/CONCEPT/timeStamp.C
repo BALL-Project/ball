@@ -1,4 +1,4 @@
-// $Id: timeStamp.C,v 1.3 2000/08/28 23:11:01 oliver Exp $
+// $Id: timeStamp.C,v 1.4 2000/09/27 18:04:56 oliver Exp $
 
 #include <BALL/CONCEPT/timeStamp.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -86,16 +86,6 @@ namespace BALL
 		return t;
 	}
 
-	long Time::getSeconds() const throw()
-	{
-		return secs_;
-	}
-	
-	long Time::getMicroSeconds() const throw()
-	{
-		return usecs_;
-	}
-	
 	const Time Time::ZERO;
 
  
@@ -106,26 +96,6 @@ namespace BALL
 
 	TimeStamp::~TimeStamp()
 	{
-	}
-
-	bool TimeStamp::isOlderThan(const Time& time) const throw()
-	{
-		return (time_ < time);
-	}
-
-	bool TimeStamp::isNewerThan(const Time& time) const throw()
-	{
-		return (time_ > time);
-	}
-
-	bool TimeStamp::isOlderThan(const TimeStamp& stamp) const throw()
-	{
-		return (time_ < stamp.time_);
-	}
-
-	bool TimeStamp::isNewerThan(const TimeStamp& stamp) const throw()
-	{
-		return (time_ > stamp.time_);
 	}
 
 	void TimeStamp::stamp(const Time& time) throw ()
@@ -176,6 +146,9 @@ namespace BALL
 	{
 		return os << stamp.getTime();
 	}
- 
+
+# ifdef BALL_NO_INLINE_FUNCTIONS
+#   include <BALL/CONCEPT/timeStamp.iC>
+# endif
 
 }
