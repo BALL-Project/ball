@@ -1,4 +1,4 @@
-// $Id: poissonBoltzmann.C,v 1.1 1999/08/26 08:02:44 oliver Exp $ 
+// $Id: poissonBoltzmann.C,v 1.2 1999/09/22 17:43:51 oliver Exp $ 
 // FDPB: Finite Difference Poisson Solver
 
 #include <BALL/SOLVATION/poissonBoltzmann.h>
@@ -252,7 +252,6 @@ namespace BALL
 
 		if (options.isSet(Option::LOWER) && options.isSet(Option::UPPER))
 		{
-
 			// the grid dimension is given in the options
 			// first, check whether the entry contains a valid vector
 			if (!options.isVector(Option::LOWER) 
@@ -309,7 +308,6 @@ namespace BALL
 
 
 			// we need a cubic grid, so calculate the largest dimension of the grid
-
 			float size = BALL_MAX3(upper_.x - lower_.x, upper_.y - lower_.y, upper_.z - lower_.z);
 
 			// now expand the grid in all three directions. This also changes the origin.
@@ -340,7 +338,21 @@ namespace BALL
 			Log.info(2) << "calculating SES..." << endl;
 					
 		SES_grid = calculateSESGrid(lower_, upper_, spacing_, system, probe_radius); 
+		
+		// check whether the grid is really cubic
+		if ((SES_grid->getMaxXIndex() != SES_grid->getMaxYIndex()) 
+				|| (SES_grid->getMaxXIndex() != SES_grid->getMaxZIndex()))
+		{
+			Log.error() << "grid is not cubic - please check dimensions!" << endl;
+			return false;
+		}		
 					
+		if (verbosity > 1)
+		{
+			Log.info(2) << "grid dimensions: " << SES_grid->getMaxXIndex() << "x"
+								  << SES_grid->getMaxYIndex() << "x" << SES_grid->getMaxZIndex() << endl;	
+		}
+
 		step_timer.stop();
 		if (print_timing && (verbosity > 1))
 			Log.info(2) << "setupSESGrid: " << step_timer.getCPUTime() << endl;
@@ -547,6 +559,10 @@ namespace BALL
 					long index;
 
 					tmp_grid = new float[N];
+					if (tmp_grid == 0)
+					{
+						throw Exception::OutOfMemory(__FILE__, __LINE__, N * sizeof(float));
+					}
 
 					// copy the grid to perform the smoothing
 					memcpy(tmp_grid, &((*eps_grid)[0]), N * sizeof(float));
@@ -1483,6 +1499,10 @@ namespace BALL
 
 		Q	=	new float[N];
 		tmp_phi	= new float[N];
+		if (tmp_phi == 0)
+		{
+			throw Exception::OutOfMemory(__FILE__, __LINE__, N * sizeof(float));
+		}
 
 		// the potential will remain in its grid,
 		// we just take phi for a more convenient
@@ -1491,7 +1511,9 @@ namespace BALL
 
 
 		if (verbosity > 0)
+		{
 		 	Log.info(1) << "setting up some arrays..." << endl;
+		}
 
 		// now, setup d and Q    
 		// d contains  2 / ( 6 \sum \varepsilon_i ) 
@@ -1518,6 +1540,10 @@ namespace BALL
 		float					eps, tmp;
 
 		T	= new float[N * 6];
+		if (T == 0)
+		{
+			throw Exception::OutOfMemory(__FILE__, __LINE__, 6 * N * sizeof(float));
+		}
 
 		// T[i] = 0
 		for (i = 0; i < (6 * N); T[i++] = 0.0);
@@ -1581,7 +1607,16 @@ namespace BALL
 				}
 		
 		charged_black_points = new long[number_of_charged_black_points];
+		if (T == 0)
+		{
+			throw Exception::OutOfMemory(__FILE__, __LINE__, number_of_charged_black_points * sizeof(long));
+		}
+
 		charged_white_points = new long[number_of_charged_white_points];
+		if (T == 0)
+		{
+			throw Exception::OutOfMemory(__FILE__, __LINE__, number_of_charged_white_points * sizeof(long));
+		}
 
 
 		number_of_charged_black_points = 0;
