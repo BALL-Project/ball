@@ -474,7 +474,7 @@ cout << " auf\n";
 	bool GraphVertex<Edge,Face>::operator *= (const GraphVertex<Edge,Face>&) const
 		throw()
 	{
-cout << "GraphVertex";
+//cout << "GraphVertex";
 		return false;
 	}
 

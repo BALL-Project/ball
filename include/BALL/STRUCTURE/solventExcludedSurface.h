@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: solventExcludedSurface.h,v 1.24 2002/05/02 11:56:46 strobel Exp $
+// $Id: solventExcludedSurface.h,v 1.25 2002/06/14 02:55:05 oliver Exp $
 
 #ifndef BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
 #define BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
@@ -1075,8 +1075,8 @@ namespace BALL
 				number_of_edges_++;
 			if (Maths::isEqual(face->rsedge_->phi_.value,Constants::PI))
 			{
-cout << "Winkel von toroidaler Fläche Nummer " << face->index_ << " ist Pi " << face->rsedge_->phi_ << "\n";
-cout << "konvexe Kanten: " << *edge1 << "\n                " << edge2 << "\n";
+//cout << "Winkel von toroidaler Fläche Nummer " << face->index_ << " ist Pi " << face->rsedge_->phi_ << "\n";
+//cout << "konvexe Kanten: " << *edge1 << "\n                " << edge2 << "\n";
 				TRSFace<T>* rsface1 = face->rsedge_->face_[0];
 				TRSFace<T>* rsface2 = face->rsedge_->face_[1];
 				TRSVertex<T>* rsvertex1 = face->rsedge_->vertex_[0];
@@ -1097,7 +1097,7 @@ cout << "konvexe Kanten: " << *edge1 << "\n                " << edge2 << "\n";
 				if (test*(plane.n*(middle-plane.p)) > 0)
 				{
 					edge1->revert();
-cout << "erste umgedreht:  " << *edge1 << "\n";
+//cout << "erste umgedreht:  " << *edge1 << "\n";
 				}
 				middle = edge2->circle_.n%(edge2->vertex_[0]->point_-edge2->circle_.p);
 				middle.normalize();
@@ -1106,7 +1106,7 @@ cout << "erste umgedreht:  " << *edge1 << "\n";
 				if (test*(plane.n*(middle-plane.p)) > 0)
 				{
 					edge2->revert();
-cout << "zweite umgedreht: " << *edge2 << "\n";
+//cout << "zweite umgedreht: " << *edge2 << "\n";
 				}
 			}
 			if (face->rsedge_->singular_)
@@ -1173,7 +1173,7 @@ TAngle<T> tf(getOrientedAngle(edge->vertex_[0]->point_-edge->circle_.p,
 			if (Maths::abs(test_phi.value-(double)edge->rsedge_->phi_.value) <
 					Maths::abs((double)Constants::PI-(double)edge->rsedge_->phi_.value))
 			{
-				cout << "    different results!\n";
+//				cout << "    different results!\n";
 			}
 			edge->revert();
 		}
@@ -1182,21 +1182,21 @@ TAngle<T> tf(getOrientedAngle(edge->vertex_[0]->point_-edge->circle_.p,
 			if (Maths::abs(test_phi.value-(double)edge->rsedge_->phi_.value) >
 					Maths::abs((double)Constants::PI-(double)edge->rsedge_->phi_.value))
 			{
-				cout << "    different results!\n";
+//				cout << "    different results!\n";
 			}
 		}
 if ((test_phi.value-(double)Constants::PI)*((double)edge->rsedge_->phi_.value-(double)Constants::PI) < 0)
 {
 	if ((tf.value-Constants::PI)*(edge->rsedge_->phi_.value-Constants::PI) >= 0)
 	{
-		cout << "    different result with double in tf" << toric_face->index_ << "!\n";
+//		cout << "    different result with double in tf" << toric_face->index_ << "!\n";
 	}
 }
 else
 {
 	if ((tf.value-Constants::PI)*(edge->rsedge_->phi_.value-Constants::PI) < 0)
 	{
-		cout << "    different result with double in tf" << toric_face->index_ << "!\n";
+//		cout << "    different result with double in tf" << toric_face->index_ << "!\n";
 	}
 }
 		return edge;

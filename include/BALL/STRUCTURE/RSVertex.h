@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RSVertex.h,v 1.22 2002/04/18 18:28:18 strobel Exp $
+// $Id: RSVertex.h,v 1.23 2002/06/14 02:55:05 oliver Exp $
 
 #ifndef BALL_STRUCTURE_RSVERTEX_H
 #define BALL_STRUCTURE_RSVERTEX_H
@@ -624,7 +624,7 @@ namespace BALL
 	//bool TRSVertex<T>::similar(const TRSVertex<T>& rsvertex) const
 		throw()
 	{
-cout << "RSVertex";
+//cout << "RSVertex";
 		return (atom_ == rsvertex.atom_);
 	}
 

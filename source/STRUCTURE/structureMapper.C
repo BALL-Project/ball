@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: structureMapper.C,v 1.17 2002/05/12 14:01:09 oliver Exp $
+// $Id: structureMapper.C,v 1.18 2002/06/14 02:55:10 oliver Exp $
 
 #include <BALL/STRUCTURE/structureMapper.h>
 
@@ -362,7 +362,7 @@ namespace BALL
 
 
 	Matrix4x4 StructureMapper::matchBackboneAtoms
-		(const Residue* r1, const Residue* r2)
+		(const Residue& r1, const Residue& r2)
 	{
 		Size counter = 0;
 		bool	got_p1_r1 = false;
@@ -372,10 +372,7 @@ namespace BALL
 		bool  got_p2_r2 = false;
 		bool  got_p3_r2 = false;
 
-		Matrix4x4 T(0,0,0,0,
-								0,0,0,0,
-								0,0,0,0,
-								0,0,0,0);
+		Matrix4x4 T;
  
 		Vector3 p1_r1;  // Position of C_alpha atom of residue r1
 		Vector3 p2_r1;  // Position of backbone N atom of residue r1
@@ -387,46 +384,46 @@ namespace BALL
 		AtomConstIterator atom_it;
 
 		// searching the backbone atoms of residue r1
-		for(atom_it = r1->beginAtom(); atom_it != r1->endAtom(); ++atom_it)
+		for (atom_it = r1.beginAtom(); +atom_it; ++atom_it)
 		{
-			if (got_p1_r1 == false &&(*atom_it).getName() == "CA")
+			if (got_p1_r1 == false && atom_it->getName() == "CA")
 			{
-				p1_r1 =(*atom_it).getPosition();
+				p1_r1 = atom_it->getPosition();
 				got_p1_r1 = true;
 				counter++;
 			}
-			if (got_p2_r1 == false &&(*atom_it).getName() == "N")
+			if (got_p2_r1 == false && atom_it->getName() == "N")
 			{
-				p2_r1 =(*atom_it).getPosition();
+				p2_r1 = atom_it->getPosition();
 				got_p2_r1 = true;
 				counter++;
 			}
-			if (got_p3_r1 == false &&(*atom_it).getName() == "C")
+			if (got_p3_r1 == false && atom_it->getName() == "C")
 			{
-				p3_r1 =(*atom_it).getPosition();
+				p3_r1 = atom_it->getPosition();
 				got_p3_r1 = true;
 				counter++;
 			}
 		} 
 
 		// searching the backbone atoms of residue r2
-		for(atom_it = r2->beginAtom(); atom_it != r2->endAtom(); ++atom_it)
+		for (atom_it = r2.beginAtom(); +atom_it; ++atom_it)
 		{
-			if (got_p1_r2 == false &&(*atom_it).getName() == "CA")
+			if (got_p1_r2 == false && atom_it->getName() == "CA")
 			{
-				p1_r2 =(*atom_it).getPosition();
+				p1_r2 = atom_it->getPosition();
 				got_p1_r2 = true;
 				counter++;
 			}
-			if (got_p2_r2 == false &&(*atom_it).getName() == "N")
+			if (got_p2_r2 == false && atom_it->getName() == "N")
 			{
 				p2_r2 =(*atom_it).getPosition();
 				got_p2_r2 = true;
 				counter++;
 			}
-			if (got_p3_r2 == false &&(*atom_it).getName() == "C")
+			if (got_p3_r2 == false && atom_it->getName() == "C")
 			{
-				p3_r2 =(*atom_it).getPosition();
+				p3_r2 = atom_it->getPosition();
 				got_p3_r2 = true;
 				counter++;
 			}
@@ -436,7 +433,7 @@ namespace BALL
 		if (counter != 6)
 		{
 			// Error: Send error message	
-			Log.error() << "matchBackboneAtoms: missing backbone atoms" << endl;
+			Log.error() << "StructureMapper::matchBackboneAtoms: missing backbone atoms" << endl;
 		}
 		else
 		{
@@ -447,30 +444,37 @@ namespace BALL
 	}
 
 	// map the i-th residue in the list l1 
-  // on the i-th residue of the list l2(the backbone atoms are matched) 
-	Size StructureMapper::mapResidues(const list<Residue*>& l1, const list<Residue*>& l2)
+  // on the i-th residue of the list l2 (the backbone atoms are matched) 
+	Size StructureMapper::mapResiduesByBackbone
+		(const list<Residue*>& l1, const list<Residue*>& l2)
 	{
 		Size counter = 0; // number of matched residues
-		Matrix4x4 M;
-
-		list<Residue*>::const_iterator list_it_l1 = l1.begin();
-		list<Residue*>::const_iterator list_it_l2 = l2.begin();
-
+		Matrix4x4 null;   // the null Matrix
 		TransformationProcessor T;
 
+		// Walk down both lists and map the residues.
+		list<Residue*>::const_iterator list_it_l1 = l1.begin();
+		list<Residue*>::const_iterator list_it_l2 = l2.begin();
 		for( ; list_it_l1 != l1.end() && list_it_l2 != l2.end(); ++list_it_l1,++list_it_l2)
 		{
-			T.setTransformation(matchBackboneAtoms((*list_it_l1),(*list_it_l2)));
-			if (!(T.getTransformation().isEqual(M)))
+			// Compute the transformation matching the backbone atoms of 
+			// a residue of l1 onto the corresponding residue of l2.
+			T.setTransformation(matchBackboneAtoms(**list_it_l1, **list_it_l2));
+
+			// If a valid transformation is found, (i.e. T's transformation != null),
+			// apply it to the residue.
+			if (!(T.getTransformation().isEqual(null)))
 			{
 				(*list_it_l1)->apply(T);
 				counter++;
 			}   
 		}
+	
+		// Return the number of successfully matched residues.
 		return(counter);
 	}
 
-	vector<vector<Fragment*> >&StructureMapper::searchPattern
+	vector<vector<Fragment*> >& StructureMapper::searchPattern
 		(vector<Fragment*>& pattern,
 		 Composite& composite, double max_rmsd, double max_center_tolerance, double upper_bound, double lower_bound)
 	{
@@ -644,9 +648,10 @@ namespace BALL
 	}
 
 	Matrix4x4 StructureMapper::mapProteins
-		(Protein & P1, Protein & P2,
+		(Protein& P1, Protein& P2,
 		 map<String, Size>& type_map,
-		 Size &no_matched_ca, double& rmsd, double upper_bound, double lower_bound, double tolerance)
+		 Size& no_matched_ca, double& rmsd, 
+		 double upper_bound, double lower_bound, double tolerance)
 	{
 		// calculate bounding box of protein P1
 		BoundingBoxProcessor box_processor;
