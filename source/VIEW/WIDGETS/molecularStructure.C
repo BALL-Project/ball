@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.67 2004/11/15 15:12:01 amoll Exp $
+// $Id: molecularStructure.C,v 1.68 2004/11/24 23:50:16 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -625,8 +625,8 @@ namespace BALL
 
 		void MolecularStructure::calculateSecondaryStructure()
 		{
-			if (!getMainControl()->getSelectedSystem()) return;
-			System& s = *(System*) getMainControl()->getSelectedSystem();
+			if (getMainControl()->getSelectedSystem() == 0) return;
+			System& s = *getMainControl()->getSelectedSystem();
 			SecondaryStructureProcessor ssp;
 			s.apply(ssp);
 
