@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: UCK_test.C,v 1.1 2004/06/15 09:13:10 bender Exp $
+// $Id: UCK_test.C,v 1.2 2004/06/15 12:59:44 bender Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -24,12 +24,12 @@ using namespace BALL;
 UCK *u;
 
 
-START_TEST(UCK, "$Id: UCK_test.C,v 1.1 2004/06/15 09:13:10 bender Exp $")
+START_TEST(UCK, "$Id: UCK_test.C,v 1.2 2004/06/15 12:59:44 bender Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
-SDFile f("bencoic_acid.sdf");
+SDFile f("benzoic_acid.sdf");
 Molecule *m = f.read();
 f.close();
 
@@ -40,7 +40,7 @@ CHECK(bencoic_acid)
 RESULT											
 
 CHECK(output functions)
-	TEST_EQUAL(u->getId().trim(), "bencoic_acid.sdf:1:NSC88938 benzoic acid")
+	TEST_EQUAL(u->getId().trim(), "benzoic_acid.sdf:1:NSC88938 benzoic acid")
 	TEST_EQUAL(u->getFormula().trim(), "C7H6O2")
 	TEST_EQUAL(String(u->getWeight()), "122.123642")
 RESULT
