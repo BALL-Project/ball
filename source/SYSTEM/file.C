@@ -1,4 +1,4 @@
-// $Id: file.C,v 1.18 2001/08/01 01:06:04 oliver Exp $
+// $Id: file.C,v 1.19 2001/08/18 14:45:45 oliver Exp $
 
 #include <BALL/SYSTEM/file.h>
 #include <math.h>
@@ -12,6 +12,54 @@ using std::endl;
 
 namespace BALL 
 {
+
+	TransformationManager::TransformationManager()
+	{
+	}
+	
+	TransformationManager::~TransformationManager()
+	{
+	}
+
+	void TransformationManager::registerTransformation(const String& pattern, const String& command)
+	{
+		transformation_methods_.insert(std::pair<String, String>(pattern, command));
+	}
+	
+	void TransformationManager::unregisterTransformation(const String& pattern)
+	{
+		if (transformation_methods_.find(pattern) != transformation_methods_.end())
+		{
+			transformation_methods_.erase(pattern);
+		}
+	}
+
+	String TransformationManager::findTransformationCommand(const String& name) const
+	{		
+		std::map<String, String>::const_iterator it(transformation_methods_.begin());
+
+		for (; it != transformation_methods_.end(); ++it)
+		{
+			if (RegularExpression(it->first).match(name))
+			{
+				return it->second;
+			}
+		}
+
+		return "";
+	}
+
+	TransformationManager File::transformation_manager_;
+
+
+
+	const String File::TRANSFORMATION_EXEC_PREFIX = "exec:";
+	const String File::TRANSFORMATION_FILE_PREFIX = "exec:";
+
+	Size File::transformation_methods_ = BALL_BIT(File::TRANSFORMATION__EXEC) 
+										| BALL_BIT(File::TRANSFORMATION__FILTER) 
+										| BALL_BIT(File::TRANSFORMATION__URL);
+
 
   const File::OpenMode File::IN;
   const File::OpenMode File::OUT;
@@ -71,12 +119,88 @@ namespace BALL
 		throw (Exception::FileNotFound)
 	{
 		close();	
-		name_ = name;
-		FileSystem::canonizePath(name_);
+		original_name_ = name_ = name;
+		is_temporary_ = false;
 
-		if (open_mode == IN && !isAccessible(name_))
+		// we are reading files
+		if (open_mode == IN)
 		{
-			throw (Exception::FileNotFound(__FILE__, __LINE__, name_));
+			// check for the EXEC transformation prefix
+			if (name_.hasPrefix(TRANSFORMATION_EXEC_PREFIX))
+			{
+				// is the EXEC transformation enabled?
+				if (BALL_BIT_IS_CLEARED(transformation_methods_, File::TRANSFORMATION__EXEC))
+				{
+					throw Exception::FileNotFound(__FILE__, __LINE__, name);
+				}
+				
+				// remove the prefix from the filename
+				name_.erase(0, File::TRANSFORMATION_EXEC_PREFIX.size());
+					
+				// create a temporary file and redirect the command's output to that file
+				String tmp_file;
+				createTemporaryFilename(tmp_file);
+				String command = String("exec ") + name_ + " >" + tmp_file;
+				
+				// execute the command
+				system(command.c_str());
+		
+				// remember the current file is a temporary file!
+				name_ = tmp_file;
+				is_temporary_ = true;
+			}
+			else 
+			{
+				// any file may be prefixed with "file:" -- for convenience and to make
+				// it look like an URL...
+				if (name_.hasPrefix(File::TRANSFORMATION_FILE_PREFIX))
+				{
+					name_.erase(0, TRANSFORMATION_FILE_PREFIX.size());
+				}
+
+				// check whether the file itself is accessible
+				FileSystem::canonizePath(name_);
+				if (!File::isAccessible(name_))
+				{
+					throw Exception::FileNotFound(__FILE__, __LINE__, name_);
+				}
+
+				// check
+				String transformation_command = transformation_manager_.findTransformationCommand(name_);
+				if (transformation_command != "")
+				{
+					if (BALL_BIT_IS_CLEARED(transformation_methods_, File::TRANSFORMATION__FILTER))
+					{
+						throw Exception::FileNotFound(__FILE__, __LINE__, name_ + " (using " + transformation_command + ")");
+					}
+					String tmp_file;
+					createTemporaryFilename(tmp_file);
+
+					// substitute all occurences of "%s" with the source filename 
+					while (transformation_command.substitute("%s", name_) != String::EndPos);
+					
+					String command = String("exec ");
+
+					// substitute %d with the destination (the temporary file)
+          // and redirect the output (unix filter style) if no destination is given
+					if (transformation_command.substitute("%d", tmp_file) != String::EndPos)
+					{
+						while (transformation_command.substitute("%d", tmp_file) != String::EndPos);
+						command += transformation_command + " " + tmp_file;;
+					}
+					else
+					{
+						command += transformation_command + " >" + tmp_file;
+					}
+
+					// execute the transformation command
+					system(command.c_str());
+
+					// remember we have a temporary file
+					name_ = tmp_file;
+					is_temporary_ = true;
+				}
+			}	
 		}
 
 		fstream::open(name_.c_str(), open_mode);
@@ -138,7 +262,7 @@ namespace BALL
 			{
 				break;
 			}
-		};
+		}
 		
 		delete [] buffer;
 		source.close();

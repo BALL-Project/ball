@@ -1,4 +1,4 @@
-// $Id: file.h,v 1.30 2001/08/01 01:08:16 oliver Exp $
+// $Id: file.h,v 1.31 2001/08/18 14:45:45 oliver Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -26,9 +26,51 @@
 #include <stdio.h>			// 'rename'
 #include <unistd.h>			// 'access', 'rename', 'truncate'
 
+#include <map>
+
 namespace BALL 
 {
-	
+
+	/**	This class handles automatic file transformation methods.
+		  \Ref{File} provides the ability to transform files on the fly using predefined 
+			transformation commands  (e.g. unix-style filters). For example, compressed 
+      files can be automatically decompressed by calling the unic {\tt compress} command.
+			The respective commands are selectedvia a suitable regular expression, usually
+      matching the file suffix. A frequent application for this transformation is the
+			compressed storage of PDB files in the unix compressed format ({\tt *.Z}).
+			Transformation manager basically contains a map consisting of two strings.
+			Using \Ref{findTransformationCommand}, \Ref{File} can determine whether there
+			is a suitable transformation command available for a given file name.
+			User-defined transformation may be defined at any time using the 
+			\Ref{registerTransformation} method of the static instance of \Ref{TransformationManager}
+			accessible through \Ref{File::getTransformationManager}.
+	*/
+	class TransformationManager
+	{	
+		public:
+		/**	Constructors and Destructors
+		*/
+		//@{
+		/// Default constructor
+		TransformationManager();
+		/// Destructor
+		~TransformationManager();
+		//@}
+		/**	Accessors
+		*/
+		//@{
+		///
+		void registerTransformation(const String& pattern, const String& command);
+		///
+		void unregisterTransformation(const String& pattern);
+		///
+		String findTransformationCommand(const String& name) const;
+		//@}
+
+		protected:
+		std::map<String, String>	transformation_methods_;
+	};
+		
 	/**	File Class.	
 			{\bf Definition:} \URL{BALL/SYSTEM/file.h} \\
 	*/
@@ -48,6 +90,8 @@ namespace BALL
 		typedef std::ios::openmode OpenMode;			
 
 		//@}
+
+
 		/**	@name	Constants
 		*/
 		//@{
@@ -69,6 +113,20 @@ namespace BALL
 		/**	@name	Enums
 		*/
 		//@{
+
+		/**	Transformation types for file.
+				This enum defines some possible types for on-the-fly 
+				file transformation.
+		*/
+		enum Transformation
+		{
+			///
+			TRANSFORMATION__EXEC = 1,
+			///
+			TRANSFORMATION__FILTER = 2,
+			///
+			TRANSFORMATION__URL = 3,
+		};
 
 		/** Filetype
 		*/
@@ -92,7 +150,14 @@ namespace BALL
 			TYPE__FIFO_SPECIAL_FILE  = 7
 		};
 
+		/// Prefix for filenames that are created through the execution of commands
+		static const String TRANSFORMATION_EXEC_PREFIX;
+
+		/// Prefix for files (to mimick URL-like behavior)
+		static const String TRANSFORMATION_FILE_PREFIX;
+
 		//@}
+
 		/**	@name	Constructors and Destructors
 		*/
 		//@{
@@ -131,7 +196,14 @@ namespace BALL
 		virtual ~File()
 			throw();
 
+		/** Clear the File object.
+		*/
+		void clear()
+			throw();
+
 		//@}
+
+
 		/**	@name	Assignment 
 		*/
 		//@{
@@ -147,11 +219,6 @@ namespace BALL
 		/**	@name	Accessors 
 		*/
 		//@{
-
-		/** Clears the File object.
-		*/
-		void clear()
-			throw();
 
 		/**	Open a given file.
 				The standard constructor uses this method.
@@ -194,6 +261,10 @@ namespace BALL
 		void setName(const String& name)
 			throw (Exception::FileNotFound);
 
+		/**
+		*/
+		const String& getOriginalName() const;
+
 		/**	Return the size of the file.
 				If the file does not exist, 0 is returned.
 				@return Size the size of the file
@@ -229,7 +300,7 @@ namespace BALL
 		*/
 		Type getType(bool trace_link)
 			const	throw(Exception::FileNotFound);
-		
+
 		/**	Copy a given file to a given destination.
 				If a file with the destination name exists already, nothing happens.
 				@param source_name the name of the source file
@@ -327,7 +398,43 @@ namespace BALL
     */
     std::fstream& getFileStream();
 
+
+
 		//@}
+		
+		/**@name On-the-fly file transformation
+				@see TransformationManager
+		*/
+		//@{
+
+		/**	Access the TransformationManager.
+				\Ref{File} defines a static instance of \Ref{TransformationManager} to
+				handle on-the-fly conversions of files (e.g. compression, charset conversion, etc.).
+		*/
+		TransformationManager& getTransformationManager();
+		
+		/**
+		*/
+		static void enableTransformation(Transformation transformation);
+
+		/**
+		*/
+		static void disableTransformation(Transformation transformation);
+
+		/**
+		*/
+		static bool isTransformationEnabled(Transformation transformation);
+		/**	
+		*/
+		static void registerTransformation(const String& pattern, const String& exec);
+		/**	
+		*/
+		static void unregisterTransformation(const String& pattern);
+		/**	
+		*/
+		static void dumpRegisteredTransformations(std::ostream& s = std::cout);
+		//@}
+
 		/**	@name Predicates 
 		*/
 		//@{
@@ -436,12 +543,15 @@ namespace BALL
 
 		//@}
 
-		private:
+		protected:
 
 		String		name_;
+		String		original_name_;
 		OpenMode	open_mode_;
 		bool			is_open_;
 		bool			is_temporary_;
+		static TransformationManager transformation_manager_;
+		static Size	transformation_methods_;
 	};
 
 
