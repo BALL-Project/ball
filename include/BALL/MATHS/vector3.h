@@ -1,4 +1,4 @@
-// $Id: vector3.h,v 1.41 2000/07/03 10:52:03 oliver Exp $
+// $Id: vector3.h,v 1.42 2000/07/22 10:41:36 amoll Exp $
 
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -89,9 +89,7 @@ namespace BALL
 			:	PersistentObject()
 		{
 			if (ptr == 0) 
-			{
 				throw Exception::NullPointer(__FILE__, __LINE__);
-			}
 			
 			x = *ptr++;
 			y = *ptr++;
@@ -559,9 +557,7 @@ namespace BALL
 	void TVector3<T>::set(const T* ptr)
 	{
 		if (ptr == 0)	
-		{
 			throw Exception::NullPointer(__FILE__, __LINE__);
-		}
 		
 		x = *ptr++;
 		y = *ptr++;
@@ -607,9 +603,7 @@ namespace BALL
 	TVector3<T>& TVector3<T>::operator = (const T* ptr)
 	{
 		if (ptr == 0)
-		{
-			throw Exception::NullPointer(__FILE__, __LINE__);	
-		}
+			throw Exception::NullPointer(__FILE__, __LINE__);
 		
 		x = *ptr++;
 		y = *ptr++;
@@ -634,9 +628,7 @@ namespace BALL
 	void TVector3<T>::get(T* ptr) const
 	{
 		if (ptr == 0)
-		{
 			throw Exception::NullPointer(__FILE__, __LINE__);
-		}
 
 		*ptr++ = x;
 		*ptr++ = y;
@@ -749,17 +741,12 @@ namespace BALL
 	T& TVector3<T>::operator [] (Index index)
 	{
 		if (index < 0)
-		{
-			throw Exception::IndexUnderflow(__FILE__, __LINE__, index, 2);
-		}
+			throw Exception::IndexUnderflow(__FILE__, __LINE__);
 
 		if (index > 2)
-		{
-			throw Exception::IndexOverflow(__FILE__, __LINE__, index, 2);
-		}
+			throw Exception::IndexOverflow(__FILE__, __LINE__);
 	
-		switch (index) 
-		{
+		switch (index) {
 			case 0: return x;
 			case 1: return y;
 			case 2:
@@ -773,14 +760,10 @@ namespace BALL
 	const T& TVector3<T>::operator [] (Index index) const
 	{
 		if (index < 0)
-		{
-			throw Exception::IndexUnderflow(__FILE__, __LINE__, index, 0);
-		}
+			throw Exception::IndexUnderflow(__FILE__, __LINE__);
 
 		if (index > 2)
-		{
-			throw Exception::IndexOverflow(__FILE__, __LINE__, index, 2);
-		}
+			throw Exception::IndexOverflow(__FILE__, __LINE__);
 	
 		switch (index) {
 			case 0: return x;
@@ -849,9 +832,7 @@ namespace BALL
 	TVector3<T> TVector3<T>::operator / (const T& lambda)
 	{
 		if (lambda == (T)0)
-		{
 			throw Exception::DivisionByZero(__FILE__, __LINE__);
-		}
 		
 		return TVector3<T>(x / lambda, y / lambda, z / lambda);
 	}
@@ -860,9 +841,7 @@ namespace BALL
 	TVector3<T>& TVector3<T>::operator /= (const T& lambda)
 	{
 		if (lambda == (T)0)
-		{
 			throw Exception::DivisionByZero(__FILE__, __LINE__);		
-		}
 		
 		x /= lambda;
 		y /= lambda;
@@ -1057,7 +1036,7 @@ namespace BALL
 	}
 
 	/**	Input- Operator.
-			Reads the values of {\tt three} vector components ot type {\em T}
+			Reads the values of {\tt three} vector components of type {\em T}
 			from an istream. The components are read in the order of x, y, z.
 	*/
 	template <typename T>
@@ -1070,7 +1049,7 @@ namespace BALL
 	}
 
 	/**	Output- Operator.
-			Writes the values of {\tt three} vector components ot type {\em T}
+			Writes the values of {\tt three} vector components of type {\em T}
 			to an ostream. The components are writen in the order of x, y, z.
 	*/
 	template <typename T>
