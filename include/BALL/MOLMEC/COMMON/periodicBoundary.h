@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: periodicBoundary.h,v 1.19 2003/03/26 13:56:39 anhi Exp $
+// $Id: periodicBoundary.h,v 1.20 2003/08/19 15:53:10 amoll Exp $
 
 #ifndef BALL_MOLMEC_COMMON_PERIODICBOUNDARY_H
 #define BALL_MOLMEC_COMMON_PERIODICBOUNDARY_H
@@ -14,8 +14,8 @@
 #	include <BALL/DATATYPE/options.h>
 #endif
 
-#ifndef BALL_MATHS_BOX3_H
-#	include <BALL/MATHS/box3.h>
+#ifndef BALL_MATHS_SIMPLEBOX3_H
+#	include <BALL/MATHS/simpleBox3.h>
 #endif
 
 namespace BALL 
@@ -177,13 +177,13 @@ namespace BALL
 
 		/**	Retrieve the box dimensions.
 		*/
-		Box3 getBox() const;
+		SimpleBox3 getBox() const;
 
 		/**	Set the box dimensions.
 				The box dimensions are additionally stored in options
 				using keys  \link lower lower \endlink  and  \link upper upper \endlink .
 		*/
-		void setBox(const Box3& box);
+		void setBox(const SimpleBox3& box);
 
 		/** Fill the defined box with a solvent.
 				This method fills the defined box with solvent molecules.
@@ -257,7 +257,7 @@ namespace BALL
 		bool		enabled_;
 
 		//_ The box of the periodic boundary 
-		Box3		box_;
+		SimpleBox3		box_;
 
 		//_ An pair vector with the start and end indices of all molecules (atoms of the molecules)
 		AtomIndexArray	molecules_;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: support.h,v 1.22 2003/05/12 14:31:30 sneumann Exp $
+// $Id: support.h,v 1.23 2003/08/19 15:53:10 amoll Exp $
 
 #ifndef BALL_MOLMEC_COMMON_SUPPORT_H
 #define BALL_MOLMEC_COMMON_SUPPORT_H
@@ -10,8 +10,8 @@
 #	include <BALL/common.h>
 #endif
 
-#ifndef BALL_MATHS_BOX3_H
-#	include <BALL/MATHS/box3.h>
+#ifndef BALL_MATHS_SIMPLEBOX3_H
+#	include <BALL/MATHS/simpleBox3.h>
 #endif
 
 #ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
@@ -82,7 +82,7 @@ namespace BALL
 		*/
 		BALL::Size calculateNonBondedAtomPairs
 			(ForceField::PairVector& pair_vector, 
-			 const AtomVector& atom_vector, const Box3& box, 
+			 const AtomVector& atom_vector, const SimpleBox3& box, 
 			 double distance,	bool periodic_boundary_enabled, 
 			 PairListAlgorithmType type);
 
@@ -110,7 +110,7 @@ namespace BALL
 		*/
 		BALL::Size addNonOverlappingMolecules
 			(System& system, const HashGrid3<const Atom*>& solute_grid,
-			 const System& solvent, const Box3& box, double distance);
+			 const System& solvent, const SimpleBox3& box, double distance);
 
 		/** Adapt periodic water (or general solvent) boxes to our periodic
 				boundary definition. 
@@ -124,7 +124,7 @@ namespace BALL
 				@param system the system containing the water box which is to be adapted
 				@param box the box definition for the periodic boundary
 		*/
-		void adaptWaterBox(System& system, const Box3& box);
+		void adaptWaterBox(System& system, const SimpleBox3& box);
 
 		/** Compute the minimum image
 		*/
