@@ -1,4 +1,4 @@
-// $Id: standardPredicates.C,v 1.12 2000/05/26 08:53:49 oliver Exp $
+// $Id: standardPredicates.C,v 1.13 2000/05/26 09:25:15 anker Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -601,27 +601,37 @@ namespace BALL
 		// go through all bonds of this atom and through all substrings
 		// with matching bond.
 
+		const Bond* bond;
 		for (subgroups_it = subgroups.begin(); subgroups_it !=
 				 subgroups.end(); ++subgroups_it) 
 		{
 			HashSet<const Bond*> deeper;
 			for (Size i = 0; i < atom.countBonds(); ++i)
 			{
-				if (bondOrderMatch(subgroups_it->first, atom.getBond(i)->getOrder()))
+				bond = atom.getBond(i);
+				// Follow this bond only if its type matches and it wasn't found
+				// earlier.
+				if (deeper.has(bond))
+				{
+					Log.info() << "deeper has bond already!" << endl;
+					return false;
+				}
+				if (bondOrderMatch(subgroups_it->first, bond->getOrder()))
 				{
 					if (subgroups_it->second.size() < 1) 
 					{
 						Log.error() << "ConnectedToPredicate::find: subgroup too short: " 
-												<< subgroups_it->second.size() << " " << subgroups_it->second << endl;
+												<< subgroups_it->second.size() << " " 
+												<< subgroups_it->second << endl;
 						return false;
 					}
 
 					if (subgroups_it->second.size() == 1)
 					{
-						if ((atom.getBond(i)->getPartner(atom)->getElement().getSymbol()
+						if ((bond->getPartner(atom)->getElement().getSymbol()
 								== subgroups_it->second) || (subgroups_it->second == '*'))
 						{
-							deeper.insert(atom.getBond(i));
+							deeper.insert(bond);
 						}
 						else 
 						{//BAUSTELLE
