@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Sysinfo_test.C,v 1.11 2005/01/27 15:29:55 oliver Exp $
+// $Id: Sysinfo_test.C,v 1.12 2005/01/28 18:40:06 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -11,7 +11,7 @@
 #include <new>
 ///////////////////////////
 
-START_TEST(SysInfo, "$Id: Sysinfo_test.C,v 1.11 2005/01/27 15:29:55 oliver Exp $")
+START_TEST(SysInfo, "$Id: Sysinfo_test.C,v 1.12 2005/01/28 18:40:06 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -61,8 +61,8 @@ CHECK(getNumberOfProcessors())
 RESULT		
 
 CHECK([Extra checking for bad_alloc being thrown])
-	LongIndex i1 = getAvailableMemory();
- 	i1 = i1 * 5000;
+	LongIndex i1 = getTotalMemory();
+ 	i1 *= 4;
 	char* c = 0;
 	TEST_EXCEPTION(std::bad_alloc, c = new char[i1]);
 	if (c != 0)
