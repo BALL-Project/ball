@@ -1,6 +1,7 @@
-SIP						= /KM/comp-bio/BALL-contrib/sip/bin/sip
-SIP_INCLUDE		= -I/KM/comp-bio/BALL-contrib/sip/include/sip
-PY_INCLUDE    = -I/opt/misc/src/Python-1.5.2/Include -I/opt/misc/src/Python-1.5.2
+SIP						 = /BALL/bin/sip
+SIP_LIB	 			 = -L/BALL/lib
+SIP_INCL			 = -I/BALL/contrib/sip/siplib
+PYTHON_INCL    = -I/BALL/contrib/Python-1.5.2c1/Include -I/BALL/contrib/Python-1.5.2c1
 
 all: libBALLc.so
 
@@ -29,13 +30,14 @@ SIPSOURCES=\
 	sipBALLForceField.C\
 	sipBALLForceFieldComponent.C\
 	sipBALLGradient.C\
+	sipBALLHINFile.C\
 	sipBALLMolecule.C\
 	sipBALLNamedProperty.C\
 	sipBALLObject.C\
 	sipBALLOptions.C\
+	sipBALLMOL2File.C\
 	sipBALLPDBAtom.C\
 	sipBALLPDBFile.C\
-	sipBALLHINFile.C\
 	sipBALLProtein.C\
 	sipBALLPTE_.C\
 	sipBALLPersistentObject.C\
@@ -44,11 +46,12 @@ SIPSOURCES=\
 	sipBALLResidue.C\
 	sipBALLSelectable.C\
 	sipBALLSecondaryStructure.C\
-	sipBALLSnapShot.C\
 	sipBALLSnapShotManager.C\
 	sipBALLString.C\
 	sipBALLSystem.C\
-	sipBALLVector3.C
+	sipBALLVector3.C\
+	sipBALLXYZFile.C
+
 
 	
 sipBALLAtom.C:	atom.sip
@@ -60,9 +63,9 @@ SIPOBJECTS=$(SIPSOURCES:.C=.o)
 .sip.C:
 	sip
 
-include ../Solaris-5.7-sparc-g++_2.95.2/config.mak
+include ../config.mak
 
-SIPFLAGS= $(PY_INCLUDE) $(SIP_INCLUDE)
+SIPFLAGS= $(PYTHON_INCL) $(SIP_INCL)
 
 clean:	default_clean
 	@$(RM) -rf *.o *~ *.log ii_files Templates.DB	core a.out $(EXECUTABLES)

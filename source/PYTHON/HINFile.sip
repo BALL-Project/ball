@@ -1,4 +1,5 @@
 class HINFile
+	: File
 {
 %HeaderCode
 #include <BALL/FORMAT/HINFile.h>
@@ -6,7 +7,8 @@ using namespace BALL;
 %End
   public:
   HINFile();
-  HINFile(String&, int);
+	// default open mode is "READ"
+  HINFile(String&, int = 1);
 
   virtual void write(System&);
   virtual void read(System&);
@@ -14,5 +16,5 @@ using namespace BALL;
   // virtual HINFile& operator << (const System& system);
   bool hasPeriodicBoundary() const;
   Box3 getPeriodicBoundary() const;
-  Box3 getTemperature() const;
+  float getTemperature() const;
 };

@@ -1,3 +1,4 @@
+// $Id: file.sip,v 1.2 2000/06/20 22:16:11 oliver Exp $
 class File
 {
 %HeaderCode
@@ -5,51 +6,39 @@ class File
 using namespace BALL;
 %End
   public:
-	File();
-  File(String&, int);
-
-  // static void enableProtocol(Protocol);
-  // static void disableProtocol(Protocol);
-  bool open(String&, int);
+  File();
+	// default open mode: READ
+  File(const String&, int = 1);
+  File(const File&);
+  // virtual ~File();
+  // static void enableProtocol(Protocol protocol);
+  // static void disableProtocol(Protocol protocol);
+	// default open mode: READ
+  bool open(const String&, int = 1);
   bool reopen();
   void close();
   const String& getName() const;
   const String& getOriginalName() const;
-  int getSize() const;
-	int getOpenMode() const;
-  // static Type getType(String, bool);
-  int getType(bool) const;
+  int getSize();
+  int getOpenMode() const;
+  // int getType() const;
   // std::fstream& getFileStream();
-  // static bool copy(String, String, int);
-  bool copyTo(String&, int);
-  // static bool move(String&, String&);
-  bool moveTo(String&);
-  // static bool remove(String);
+  bool copyTo(const String&);
+  bool moveTo(const String&);
   bool remove() const;
-  // static bool rename(String, String);
-  bool renameTo(const String&) const;
-  // static bool truncate(String, int);
+  bool renameTo(const String&);
   bool truncate(int) const;
-  // static void registerAction(String&, String&);
-  // static void unregisterAction(String&);
-  // static bool createTemporaryFilename(String&);
-  // bool operator == (const File& file) const;
-  // bool operator != (const File& file) const;
-  // static bool isProtocolEnabled(Protocol);
+  // bool operator == (const File&) const;
+  // bool operator != (const File&) const;
   bool isOpen() const;
   bool isClosed() const;
-  // static bool isAccessible(String);
   bool isAccessible() const;
   bool isCanonized() const;
-  // static bool isReadable(String);
   bool isReadable() const;
-  // static bool isWritable(String);
   bool isWritable() const;
-  // static bool isExecutable(String);
   bool isExecutable() const;
   virtual bool hasFormat();
   bool hasFormat() const;
-  virtual bool hasFormat(String&) const;
+  virtual bool hasFormat(const String&) const;
   bool isValid() const;
 };
- 

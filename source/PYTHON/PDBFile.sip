@@ -6,7 +6,8 @@ using namespace BALL;
 %End
   public:
   PDBFile();
-  PDBFile(const String&, int);
+	// default open mode: READ
+  PDBFile(const String&, int = 1);
 	//  virtual ~PDBFile();
   virtual void read(Protein&);
   virtual void read(System&);

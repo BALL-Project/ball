@@ -1,51 +1,49 @@
-class SnapShot
-{
-%HeaderCode
-#include <BALL/MOLMEC/COMMON/snapShot.h>
-using namespace BALL;
-%End
-	public:
-  SnapShot(); 
-  SnapShot(int); 
-  SnapShot(SnapShot&, bool); 
+// class SnapShot
+// {
+// 	public:
+//   SnapShot(); 
+// 	SnapShot(int); 
+// 	SnapShot(const SnapShot&, bool); 
+// 	// ~SnapShot(); 
+// 	// friend std::fstream& operator<<(std::fstream& os, const SnapShot&  snap_shot); 
+//  // friend std::fstream& operator>>(std::fstream& in, SnapShot& snap_shot);
+// 	// SnapShot &operator=(const SnapShot &rhs); 
+// 	bool isValid();
+// 
+// 	bool valid;   
+// 	int index; 
+// 	int total_length; 
+// 	int data_length; 
+// 	int no_of_atoms; 
+// 	double potential_energy; 
+// 	double kinetic_energy; 
+// 	//vector<Vector3> position;
+// 	//vector<Vector3> velocity;
+// 	//vector<Vector3> force;
+// };
 
-  //  friend std::fstream& operator<<(std::fstream& os, SnapShot&  snap_shot); 
-  //  friend std::fstream& operator>>(std::fstream& in, SnapShot& snap_shot);
-  //  SnapShot &operator=(SnapShot &rhs); 
-  bool isValid();
-  bool valid;   
-  int index; 
-  int total_length; 
-  int data_length; 
-  int no_of_atoms; 
-  double potential_energy; 
-  double kinetic_energy; 
-  // vector<Vector3> position;
-  // vector<Vector3> velocity;
-  // vector<Vector3> force;
-};
-  
 class SnapShotManager
 {
 %HeaderCode
 #include <BALL/MOLMEC/COMMON/snapShot.h>
 using namespace BALL;
 %End
- public:
- SnapShotManager(); 
- SnapShotManager(System&, ForceField&, char*); 
- SnapShotManager(System&, ForceField&, char*, Options&);
- SnapShotManager(SnapShotManager&, bool);
-
- virtual bool setup(System&, ForceField&, char*, Options&);
- // SnapShotManager &operator=(SnapShotManager &rhs);
- virtual bool isValid() const;
- virtual void takeSnapShot();
- virtual void flushToDisk(); 
- virtual void close(); 
- int getNumberOfSnapShots() const;
- virtual SnapShot getSnapShot(int); 
- virtual System getSnapShotAsSystem(int); 
-
- Options options; 
-};   
+  public:
+	SnapShotManager(); 
+	SnapShotManager(System&, ForceField&, String,bool); 
+	SnapShotManager(System&, ForceField&, String, bool, Options&);
+	SnapShotManager(const  SnapShotManager& , bool);
+	// ~SnapShotManager(); 
+	bool setup( System&, ForceField&, String, bool, Options&);
+	// SnapShotManager &operator=(const SnapShotManager &rhs);
+	bool isValid() const;
+	void setFlushToDiskFrequency(int); 
+	int getFlushToDiskFrequency() const; 
+	void takeSnapShot(); 
+	void flushToDisk(); 
+	void close(); 
+	int getNumberOfSnapShots() const;
+	// SnapShot getSnapShot(int); 
+	System getSnapShotAsSystem(int); 
+	Options options; 
+};

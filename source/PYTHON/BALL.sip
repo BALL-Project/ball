@@ -24,6 +24,8 @@
 %Include PDBAtom.sip
 %Include PDBFile.sip
 %Include HINFile.sip
+%Include MOL2File.sip
+%Include XYZFile.sip
 %Include amber.sip
 %Include forceField.sip
 %Include forceFieldComponent.sip
