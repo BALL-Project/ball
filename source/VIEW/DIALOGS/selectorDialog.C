@@ -41,6 +41,8 @@ void SelectorDialog::accept()
 		return;
 	}
 
+	HashSet<Composite*> roots;
+
 	List<Composite*>::Iterator it = mc->getControlSelection().begin();
 	for(; it != mc->getControlSelection().end(); it++)
 	{
@@ -49,8 +51,14 @@ void SelectorDialog::accept()
 		for (; ait != s.getSelectedAtoms().end(); ait++)
 		{
 			mc->selectCompositeRecursive(*ait, true);
+			roots.insert(&(*ait)->getRoot());
 		}
-		mc->updateRepresentationsOf(**it, false);
+	}
+
+	HashSet<Composite*>::Iterator sit = roots.begin();
+	for (; sit != roots.end(); sit++)
+	{
+		mc->updateRepresentationsOf(**sit, false);
 	}
 
 	NewSelectionMessage* nm = new NewSelectionMessage;
