@@ -1,4 +1,4 @@
-// $Id: Timer_test.C,v 1.5 2000/09/03 09:00:09 oliver Exp $
+// $Id: Timer_test.C,v 1.6 2000/09/05 09:56:57 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 #include <unistd.h>
 ///////////////////////////
@@ -6,7 +6,7 @@
 #include <BALL/SYSTEM/file.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Timer_test.C,v 1.5 2000/09/03 09:00:09 oliver Exp $")
+START_TEST(class_name, "$Id: Timer_test.C,v 1.6 2000/09/05 09:56:57 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -124,12 +124,14 @@ CHECK(Timer::getCPUTime() const )
 	Timer t1;
 	TEST_EQUAL(t1.getCPUTime(), 0)	
 	t1.start();
-	sleep(1);
+	sleep(2);
 	t1.stop();
-	TEST_EQUAL(t1.getCPUTime() == 0, true)	
+	TEST_EQUAL(t1.getCPUTime() <= 1, true)	
+	t1.reset();
 	t1.start();
-	for (int i = 0;i < 20000000 ; i++);
-	TEST_EQUAL(t1.getCPUTime()> 0, true)	
+	for (int i = 0; i < 20000000 ; i++);
+	t1.stop();
+	TEST_EQUAL(t1.getCPUTime() > 0, true)	
 	TEST_REAL_EQUAL(t1.getCPUTime(), t1.getSystemTime() + t1.getUserTime())	
 RESULT
 
