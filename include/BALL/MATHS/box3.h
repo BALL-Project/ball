@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: box3.h,v 1.44 2004/05/18 11:36:42 amoll Exp $
+// $Id: box3.h,v 1.45 2004/05/27 19:49:41 oliver Exp $
 //
 
 #ifndef BALL_MATHS_BOX3_H

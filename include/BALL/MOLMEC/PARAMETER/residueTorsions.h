@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residueTorsions.h,v 1.18 2004/05/18 11:23:08 amoll Exp $
+// $Id: residueTorsions.h,v 1.19 2004/05/27 19:49:43 oliver Exp $
 //
 
 // Molecular Mechanics Parameter: class describing the ResidueTorsions section of a parameter file

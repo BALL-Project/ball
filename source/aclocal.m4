@@ -1,7 +1,7 @@
-dnl -*- Mode: C++; tab-width: 2; -*-
+dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.51 2004/05/11 21:08:17 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.52 2004/05/27 19:49:50 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -60,12 +60,20 @@ AC_DEFUN(CF_ERROR,[
 	AC_MSG_RESULT([information about your system setup and versions of compilers])
 	AC_MSG_RESULT([and other tools installed in your system.])
 	AC_MSG_RESULT()
+	CF_CONF_DIAG_TAR
+	AC_ERROR(Aborted.)
+])
+
+AC_DEFUN(CF_CONF_DIAG_TAR,[
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then 
 		${RM} $TARFILE ; 
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log 
-	AC_MSG_ERROR(Aborted.)
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
 ])
 
 dnl    define a macro to inform the user about failed tests for programs
@@ -2582,6 +2590,18 @@ AC_DEFUN(CF_VIEW, [
 				VIEW_PLATFORM="OpenGL-Darwin"
 				OPENGL_LIBOPTS="-framework OpenGL -framework AGL"
 				X11_LIBPATHOPT=""
+				AC_MSG_CHECKING(for OpenGL includes)
+				CF_FIND_HEADER(OPENGL_INCPATH,GL/gl.h)
+				if test "${OPENGL_INCPATH}" = "" ; then
+					AC_MSG_RESULT((not found!))
+					AC_MSG_RESULT()
+					AC_MSG_RESULT(no OpenGL headers found! Please use the option --with-opengl-incl=DIR)
+					AC_MSG_RESULT(of configure to specify the correct path to these headers (usually, /usr/X11R6/include).)
+					CF_ERROR
+				else
+					AC_MSG_RESULT((${OPENGL_INCPATH}))
+          VIEW_INCLUDES="${VIEW_INCLUDES} -I${OPENGL_INCPATH}"
+				fi
 			fi
 
 			if test "${VIEW_PLATFORM}" = Mesa ; then

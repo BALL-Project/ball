@@ -1,4 +1,9 @@
-# $Id: Makefile,v 1.19 2004/05/10 13:01:24 amoll Exp $
+# -*- Mode: C++; tab-width: 2; -*-
+# vi: set ts=2:
+#
+# $Id: Makefile,v 1.20 2004/05/27 19:49:57 oliver Exp $
+#
+
 #========================
 # BALL/EXAMPLES Makefile
 #========================

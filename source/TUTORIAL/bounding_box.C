@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bounding_box.C,v 1.9 2004/05/22 16:35:43 amoll Exp $
+// $Id: bounding_box.C,v 1.10 2004/05/27 19:50:01 oliver Exp $
+//
 // BALLView tutorial example
 // ------------------------
 // visualise the bounding box of a molecular structure

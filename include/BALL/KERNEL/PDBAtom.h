@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBAtom.h,v 1.33 2004/05/18 11:21:43 amoll Exp $
+// $Id: PDBAtom.h,v 1.34 2004/05/27 19:49:38 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_PDBATOM_H

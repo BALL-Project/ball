@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: energyMinimizer.C,v 1.26 2004/04/20 11:40:45 amoll Exp $
+// $Id: energyMinimizer.C,v 1.27 2004/05/27 19:49:59 oliver Exp $
 //
 
 #include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
@@ -373,7 +373,7 @@ namespace BALL
     energy_update_counter_ = 0; 
     force_update_counter_ = 0; 
 
-		// minimizer specific parts
+		// Minimizer-specific parts of the setup.
 		valid_ = specificSetup();
 		if (!valid_) 
 		{
@@ -387,38 +387,28 @@ namespace BALL
   bool EnergyMinimizer::setup
 		(ForceField& force_field, SnapShotManager* ssm)
 	{
-    bool result = setup(force_field);
-
-    // set a pointer to the indicated snapshot manager
-    if (ssm->isValid())
-		{
-      snapshot_ = ssm; 
-		}
-
-    return result; 
+		// Remember the Snapshot manager and call the 
+		// standard setup.
+    snapshot_ = ssm; 
+		return setup(force_field);
 	}
 
   // Setup with a force field and a snapshot manager and options 
   bool EnergyMinimizer::setup
 		(ForceField& force_field, SnapShotManager* ssm, const Options& new_options)
 	{
-    bool result = setup(force_field,new_options);
+    // Set a pointer to the indicated snapshot manager.
+		snapshot_ = ssm; 
 
-    // set a pointer to the indicated snapshot manager
-    if(ssm->isValid())
-		{
-			snapshot_ = ssm; 
-		}
-
-    return result; 
+		// Call the standard setup method.
+    return setup(force_field, new_options);
 	}
 
   // Setup with a force field and a set of options
   bool EnergyMinimizer::setup(ForceField& force_field, const Options& new_options)
 	{
 		options = new_options;
-		valid_ = setup(force_field);
-		return valid_;
+		return setup(force_field);
 	}
 
 	// virtual function for the specific setup of derived classes
@@ -536,19 +526,22 @@ namespace BALL
 	{
 		// perform a force field update in regular intervals
 		// (to update the pair list)
-		if (number_of_iterations_ % force_field_->getUpdateFrequency() == 0)
+		if ((force_field_->getUpdateFrequency() != 0)
+				&& (number_of_iterations_ % force_field_->getUpdateFrequency() == 0))
 		{
 			force_field_->update();
 		}
 
-		// take a snapshot of the system every snapshot_frequency_ iterations
-		if ((snapshot_ != 0) && (number_of_iterations_ % snapshot_frequency_ == 0))
+		// Take a snapshot of the system every snapshot_frequency_ iterations.
+		if ((snapshot_ != 0) && (snapshot_frequency_ != 0) 
+				&& (number_of_iterations_ % snapshot_frequency_ == 0))
 		{
 			takeSnapShot();
 		}
 
 		// print the energy every energy_output_frequency_ iterations
-		if (number_of_iterations_ % energy_output_frequency_ == 0)
+		if ((energy_output_frequency_ != 0)
+				&& (number_of_iterations_ % energy_output_frequency_ == 0))
 		{
 			printEnergy();
 		}

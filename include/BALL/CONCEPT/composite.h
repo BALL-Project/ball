@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: composite.h,v 1.59 2004/05/18 11:21:42 amoll Exp $
+// $Id: composite.h,v 1.60 2004/05/27 19:49:37 oliver Exp $
 //
 
 #ifndef BALL_CONCEPT_COMPOSITE_H

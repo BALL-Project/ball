@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: assignShiftProcessor.C,v 1.27 2004/05/07 13:07:47 amoll Exp $
+// $Id: assignShiftProcessor.C,v 1.28 2004/05/27 19:49:59 oliver Exp $
 //
 
 #include <BALL/NMR/assignShiftProcessor.h>

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: secondaryStructure.C,v 1.22 2004/05/22 16:20:51 amoll Exp $
+// $Id: secondaryStructure.C,v 1.23 2004/05/27 19:49:58 oliver Exp $
 //
 
 #include <BALL/KERNEL/secondaryStructure.h>

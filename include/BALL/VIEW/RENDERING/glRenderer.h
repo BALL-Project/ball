@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.15 2004/05/11 20:37:07 amoll Exp $
+// $Id: glRenderer.h,v 1.16 2004/05/27 19:49:50 oliver Exp $
+//
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
 #define BALL_VIEW_RENDERING_GLRENDERER_H

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorExtension2.h,v 1.6 2004/02/26 08:41:29 anhi Exp $
+// $Id: colorExtension2.h,v 1.7 2004/05/27 19:49:47 oliver Exp $
+//
 
 #ifndef BALL_VIEW_DATATYPE_COLOREXTENSION2_H
 #define BALL_VIEW_DATATYPE_COLOREXTENSION2_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: addHydrogens.C,v 1.13 2004/05/10 11:59:07 amoll Exp $
+// $Id: addHydrogens.C,v 1.14 2004/05/27 19:49:57 oliver Exp $
 //
 
 #include <BALL/FORMAT/PDBFile.h>

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragment.h,v 1.27 2004/05/18 11:21:44 amoll Exp $
+// $Id: fragment.h,v 1.28 2004/05/27 19:49:39 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_FRAGMENT_H

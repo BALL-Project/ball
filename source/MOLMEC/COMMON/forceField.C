@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceField.C,v 1.33 2004/03/08 21:44:13 oliver Exp $
+// $Id: forceField.C,v 1.34 2004/05/27 19:49:59 oliver Exp $
 //
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -24,6 +24,7 @@ namespace BALL
 			name_("Force Field"),
 			number_of_movable_atoms_(0),
 			use_selection_(false),
+			selection_enabled_(true),
 			update_time_stamp_(),
 			setup_time_stamp_()
 	{
@@ -42,6 +43,7 @@ namespace BALL
 		number_of_movable_atoms_ = 0;
 		parameters_.clear();
 		use_selection_ = false;
+		selection_enabled_ = true;
 		valid_ = true;
 		
 		update_time_stamp_.clear();
@@ -69,6 +71,7 @@ namespace BALL
 			energy_(force_field.energy_),
 			number_of_movable_atoms_(force_field.number_of_movable_atoms_),
 			use_selection_(force_field.use_selection_),
+			selection_enabled_(force_field.selection_enabled_),
 			update_time_stamp_(force_field.update_time_stamp_),
 			setup_time_stamp_(force_field.setup_time_stamp_)
 	{
@@ -96,6 +99,7 @@ namespace BALL
 			parameters_ = force_field.parameters_;
 			periodic_boundary = force_field.periodic_boundary;
 			use_selection_ = force_field.use_selection_;
+			selection_enabled_ = force_field.selection_enabled_;
 			valid_ = force_field.valid_;
 
 			Size i;
@@ -168,6 +172,10 @@ namespace BALL
 			return false;
 		}
 			
+
+		// Update the use_selection_ flag.
+		use_selection_ = (selection_enabled_ && system_->containsSelection());
+
 		// collect the atoms of the system in the atoms_vector_
 		collectAtoms_(system);
 		Size old_size = (Size)atoms_.size();
@@ -218,18 +226,22 @@ namespace BALL
 	// collect all atoms
 	void ForceField::collectAtoms_(const System& system)
 	{
-		// clear existing atoms entries
+		// Clear existing atoms entries.
 		atoms_.clear();
 
-		// check for selected atoms
-		// if any of the atoms is selected, the atoms_ array holds
+		// Check for selected atoms.
+		// Consider selection only if it has not been disabled
+		// and there are selected atoms in the system.
+		// If any of the atoms are selected, the atoms_ array holds
 		// the selected atoms first (0 < i < number_of_movable_atoms_) 
-		use_selection_ = system.containsSelection();
 		number_of_movable_atoms_ = 0;
 		AtomConstIterator atom_it;
-		bool use_selection = getUseSelection();
-		if (use_selection)
+
+		if (getUseSelection())
 		{
+			// We store the selected atoms only!
+			// All other atoms will not be considered in the
+			// calculation -- they become invisible to the force field.
 			AtomConstIterator atom_it = system.beginAtom();
 			for (; +atom_it; ++atom_it)
 			{
@@ -242,14 +254,14 @@ namespace BALL
 		}
 		else
 		{
+			// We store ALL atoms in the atom vector -- selection
+			// has been disabled for this purpose.
 			for (atom_it = system.beginAtom(); +atom_it; ++atom_it)
 			{
-				if (!use_selection || !atom_it->isSelected())
-				{
-					atoms_.push_back(const_cast<Atom*>(&(*atom_it)));
-				}
+				atoms_.push_back(const_cast<Atom*>(&(*atom_it)));
 			}
-			number_of_movable_atoms_ = (Size)atoms_.size();
+			// Make sure the selected atoms are in the front
+			sortSelectedAtomVector_();
 		}
 	}
 
@@ -257,7 +269,7 @@ namespace BALL
 	{
 		if (system_->containsSelection() && (atoms_.size() > 1))
 		{
-			// sort by swapping
+			// Exchange sort.
 			Position first = 0;
 			Position last = (Position)(atoms_.size() - 1);
 			while (last >= first)
@@ -292,6 +304,10 @@ namespace BALL
 		return setup(system);
 	}
 
+  ForceFieldParameters& ForceField::getParameters()
+	{
+		return parameters_;
+	}
 
 	// Returns the name of the force field
 	String ForceField::getName() const
@@ -356,49 +372,6 @@ namespace BALL
 		return number_of_movable_atoms_;
 	}
 
-	// Returns the reference of the atom vector atoms_
-	const AtomVector& ForceField::getAtoms() const 
-	{
-		return atoms_;
-	}
-
-	// Return a pointer to the system
-	System* ForceField::getSystem()
-	{
-		return system_;
-	}
-
-  // Return a pointer to the system
-  const System* ForceField::getSystem() const
-  {
-    return system_;
-  }
-
-	// Return the parameter use_selection_
-	bool ForceField::getUseSelection()
-	{
-		if (system_ != 0)
-		{
-			return system_->containsSelection();
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	// Return the parameter use_selection_
-	void ForceField::setUseSelection(bool use_selection)
-	{
-		use_selection_ = use_selection;
-	}
-
-	// Return a pointer to the parameter file
-	ForceFieldParameters& ForceField::getParameters()
-	{
-		return parameters_;
-	}
-
 	void ForceField::updateForces()
 	{
 		// check for validity of the force field
@@ -413,9 +386,6 @@ namespace BALL
 			(*it)->setForce(RTTI::getDefault<Vector3>());
 		}
 		
-		// update use_selection_
-		use_selection_ = system_->containsSelection();
-
 		// check whether the selection changed since the last call
 		// to update and call update otherwise
 		if (update_time_stamp_.isOlderThan(system_->getSelectionTime()))
@@ -427,6 +397,9 @@ namespace BALL
 			// of the atom vevtor.
 			sortSelectedAtomVector_();
 			update();
+
+			// Update the use_selection_ flag.
+			use_selection_ = (selection_enabled_ && system_->containsSelection());
 		}
 
 		if (setup_time_stamp_.isOlderThan(system_->getModificationTime()))
@@ -476,9 +449,6 @@ namespace BALL
 		// clear the total energy
 		energy_ = 0;
 
-		// update use_selection_
-		use_selection_ = system_->containsSelection();
-
 		// check whether the selection changed since the last call
 		// to update and call update oterwise
 		if (update_time_stamp_.isOlderThan(system_->getSelectionTime()))
@@ -488,6 +458,9 @@ namespace BALL
 			// the selection information in pair lists, bond lists, etc.
 			sortSelectedAtomVector_();
 			update();
+
+			// Update the use_selection_ flag.
+			use_selection_ = (selection_enabled_ && system_->containsSelection());
 		}
 
 		if (setup_time_stamp_.isOlderThan(system_->getModificationTime()))
@@ -615,6 +588,8 @@ namespace BALL
 		return 0;
 	}
 
+# ifdef BALL_NO_INLINE_FUNCTIONS
+#   include <BALL/MOLMEC/COMMON/forceField.iC>
+# endif
 	
-
 } // namespace BALL

@@ -1,4 +1,8 @@
-// $Id: view.doc,v 1.17 2004/05/18 12:57:17 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: view.doc,v 1.18 2004/05/27 19:49:47 oliver Exp $
+//
 
 /**	\addtogroup Visualisation
          VIEW is a framework for the implementation of GUI based visualizations.

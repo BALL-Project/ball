@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: proteinIterator.h,v 1.13 2004/05/17 14:02:01 amoll Exp $
+// $Id: proteinIterator.h,v 1.14 2004/05/27 19:49:40 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_PROTEINITERATOR_H

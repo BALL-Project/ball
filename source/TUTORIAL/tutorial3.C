@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: tutorial3.C,v 1.5 2004/05/10 11:55:28 amoll Exp $
+// $Id: tutorial3.C,v 1.6 2004/05/27 19:50:01 oliver Exp $
+//
 
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/selector.h>

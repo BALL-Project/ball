@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentDB.C,v 1.59 2004/05/10 12:13:52 amoll Exp $
+// $Id: fragmentDB.C,v 1.60 2004/05/27 19:50:00 oliver Exp $
 //
 
 #include <BALL/STRUCTURE/fragmentDB.h>

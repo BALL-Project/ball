@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: resourceFile.h,v 1.25 2004/05/18 11:21:43 amoll Exp $
+// $Id: resourceFile.h,v 1.26 2004/05/27 19:49:38 oliver Exp $
 //
 
 #ifndef BALL_FORMAT_RESOURCEFILE_H
@@ -641,7 +641,7 @@ namespace BALL
 
 		/**	Clear method
 		*/
-		void clear();
+		virtual void clear() throw();
 
 		//@}
 

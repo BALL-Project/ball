@@ -1,7 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: AutoDeletable_test.C,v 1.7 2004/05/04 18:45:48 oliver Exp $
+// $Id: AutoDeletable_test.C,v 1.8 2004/05/27 19:50:00 oliver Exp $
+//
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -17,7 +19,7 @@ class A
 {
 };
 
-START_TEST(AutoDeletable, "$Id: AutoDeletable_test.C,v 1.7 2004/05/04 18:45:48 oliver Exp $")
+START_TEST(AutoDeletable, "$Id: AutoDeletable_test.C,v 1.8 2004/05/27 19:50:00 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -41,7 +43,6 @@ RESULT
 
 a_ptr = new A;
 array_ptr = new A[12];
-std::vector<A> a_vector(10);
 
 CHECK(bool isAutoDeletable() const throw())
 	TEST_EQUAL(a.isAutoDeletable(), false)

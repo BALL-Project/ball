@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pairExpRDFIntegrator.h,v 1.22 2004/05/18 11:21:48 amoll Exp $
+// $Id: pairExpRDFIntegrator.h,v 1.23 2004/05/27 19:49:46 oliver Exp $
 //
 
 #ifndef BALL_SOLVATION_PAIREXPRDFINTEGRATOR_H

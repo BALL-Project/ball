@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberNonBonded.C,v 1.28 2003/08/26 09:17:51 oliver Exp $
+// $Id: amberNonBonded.C,v 1.29 2004/05/27 19:49:58 oliver Exp $
 //
 
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
@@ -1099,13 +1099,12 @@ namespace BALL
 		Vector3 period; 
 
 		bool use_periodic_boundary = force_field_->periodic_boundary.isEnabled(); 
-		bool use_selection = getForceField()->getUseSelection();
+		bool use_selection = getForceField()->getUseSelection() && getForceField()->getSystem()->containsSelection();
 
 		// calculate forces arising from 1-4 interaction pairs
 		// and remaining non-bonded interaction pairs
 
-		if ((use_periodic_boundary == true) 
-				&& (use_dist_depend_dielectric_ == true))
+		if ((use_periodic_boundary == true) && (use_dist_depend_dielectric_ == true))
 		{
 			// periodic boundary is enabled; use a distance dependent dielectric
 			// constant 

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: AssignShiftProcessor_test.C,v 1.15 2004/05/07 13:10:05 amoll Exp $
+// $Id: AssignShiftProcessor_test.C,v 1.16 2004/05/27 19:50:00 oliver Exp $
+//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,7 +13,7 @@
 #include <BALL/FORMAT/NMRStarFile.h>
 #include <BALL/SYSTEM/path.h>
 
-START_TEST(AssignShiftProcessor, "$Id: AssignShiftProcessor_test.C,v 1.15 2004/05/07 13:10:05 amoll Exp $")
+START_TEST(AssignShiftProcessor, "$Id: AssignShiftProcessor_test.C,v 1.16 2004/05/27 19:50:00 oliver Exp $")
 
 using namespace BALL;
 using namespace std;

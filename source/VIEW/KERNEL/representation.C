@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.35 2004/05/22 17:00:50 amoll Exp $
+// $Id: representation.C,v 1.36 2004/05/27 19:50:02 oliver Exp $
+//
 
 #include <BALL/VIEW/KERNEL/representation.h>
 #include <BALL/VIEW/MODELS/modelProcessor.h>

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: moleculeIterator.h,v 1.14 2004/05/17 14:02:00 amoll Exp $
+// $Id: moleculeIterator.h,v 1.15 2004/05/27 19:49:39 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_MOLECULEITERATOR_H

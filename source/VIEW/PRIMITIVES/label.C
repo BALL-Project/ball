@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: label.C,v 1.5 2004/05/18 16:12:02 amoll Exp $
+// $Id: label.C,v 1.6 2004/05/27 19:50:02 oliver Exp $
+//
 
 #include <BALL/VIEW/PRIMITIVES/label.h>
 

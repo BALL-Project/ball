@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RDFParameter.h,v 1.18 2004/05/18 11:21:49 amoll Exp $
+// $Id: RDFParameter.h,v 1.19 2004/05/27 19:49:46 oliver Exp $
 //
 
 #ifndef BALL_STRUCTURE_RDFPARAMETER_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberTorsion.C,v 1.29 2004/03/10 20:15:38 oliver Exp $
+// $Id: amberTorsion.C,v 1.30 2004/05/27 19:49:59 oliver Exp $
 //
 
 #include <BALL/MOLMEC/AMBER/amberTorsion.h>
@@ -95,6 +95,8 @@ namespace BALL
 		Atom*	a3;
 		Atom*	a4;
 
+		bool use_selection = getForceField()->getUseSelection();
+
 		// proper torsion will be added to the torsion vector
 		for (; atom_it != getForceField()->getAtoms().end(); ++atom_it) 
 		{
@@ -134,9 +136,9 @@ namespace BALL
 										a4 = const_cast<Atom*>(it3->getFirstAtom());
 									}
 
-									if (getForceField()->getUseSelection() == false ||
-											(getForceField()->getUseSelection() == true &&
-											 (a1->isSelected() && a2->isSelected() && a3->isSelected() && a4->isSelected())))
+									if ((use_selection == false) 
+											|| ((use_selection == true) 
+													&& (a1->isSelected() && a2->isSelected() && a3->isSelected() && a4->isSelected())))
 									{
 										// search torsion parameters for (a1,a2,a3,a4)
 										Atom::Type type_a1 = a1->getType();
@@ -306,8 +308,8 @@ namespace BALL
 									swap(a2, a4);
 								}
 
-								if	(getForceField()->getUseSelection() == false ||
-										 (getForceField()->getUseSelection() == true &&
+								if	((use_selection == false) ||
+										 ((use_selection == true) &&
 											(a1->isSelected() && a2->isSelected() && a3->isSelected() && a4->isSelected())))
 								{
 									Atom::Type type_a1 = a1->getType();
@@ -376,10 +378,12 @@ namespace BALL
 
 		vector<SingleAmberTorsion>::const_iterator it = torsion_.begin(); 
 
+		bool use_selection = getForceField()->getUseSelection();
+
 		for (; it != torsion_.end(); it++) 
 		{
-			if (getForceField()->getUseSelection() == false ||
-					(getForceField()->getUseSelection() == true &&
+			if ((use_selection == false) ||
+					((use_selection == true) &&
 					(it->atom1->ptr->isSelected() || it->atom2->ptr->isSelected() 
 					 || it->atom3->ptr->isSelected() || it->atom4->ptr->isSelected())))
 			{
@@ -427,12 +431,14 @@ namespace BALL
 		Vector3 cb;	// vector from atom2 to atom3
 		Vector3 dc;	// vector from atom3 to atom4
 
+		bool use_selection = getForceField()->getUseSelection();
+
 		vector<SingleAmberTorsion>::iterator it = torsion_.begin(); 
 
 		for ( ; it != torsion_.end(); it++) 
 		{
-			if (getForceField()->getUseSelection() == false ||
- 					(getForceField()->getUseSelection() == true &&
+			if ((use_selection == false) ||
+ 					((use_selection == true) &&
 					(it->atom1->ptr->isSelected() || it->atom2->ptr->isSelected() 
 					 || it->atom3->ptr->isSelected() || it->atom4->ptr->isSelected())))
 			{
@@ -485,7 +491,7 @@ namespace BALL
 						Vector3 dEdu = - (float)(dEdphi / (length_u2 * cb.getLength())) * (u % cb);
 	
 
-						if (getForceField()->getUseSelection() == false)
+						if (use_selection == false)
 						{
 							it->atom1->force += dEdt % cb;
 							it->atom2->force += ca % dEdt + dEdu % dc;

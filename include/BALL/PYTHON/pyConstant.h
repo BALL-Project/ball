@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyConstant.h,v 1.10 2004/05/19 13:48:21 amoll Exp $
+// $Id: pyConstant.h,v 1.11 2004/05/27 19:49:44 oliver Exp $
 //
 
 #ifndef BALL_PYTHON_PYCONSTANT_H

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FragmentDB_bench.C,v 1.5 2004/05/10 11:56:29 amoll Exp $
+// $Id: FragmentDB_bench.C,v 1.6 2004/05/27 19:49:57 oliver Exp $
+//
 
 #include <BALL/CONCEPT/benchmark.h>
 
@@ -15,8 +16,7 @@
 
 using namespace BALL;
 
-START_BENCHMARK(FragmentDB, 1.0, "$Id: FragmentDB_bench.C,v 1.5 2004/05/10 11:56:29 amoll Exp $")
-
+START_BENCHMARK(FragmentDB, 1.0, "$Id: FragmentDB_bench.C,v 1.6 2004/05/27 19:49:57 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

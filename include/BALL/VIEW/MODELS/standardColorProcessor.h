@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.h,v 1.22 2004/05/19 13:14:40 amoll Exp $
+// $Id: standardColorProcessor.h,v 1.23 2004/05/27 19:49:49 oliver Exp $
+//
 
 #ifndef BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
 #define BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: compositeProperties.h,v 1.2 2004/05/18 14:19:37 amoll Exp $
+// $Id: compositeProperties.h,v 1.3 2004/05/27 19:49:47 oliver Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_COMPOSITEPROPERTIES_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentIterator.h,v 1.18 2004/05/17 14:02:00 amoll Exp $
+// $Id: fragmentIterator.h,v 1.19 2004/05/27 19:49:39 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_FRAGMENTITERATOR_H

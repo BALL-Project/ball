@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOLFile.C,v 1.24 2004/05/10 11:00:05 amoll Exp $
+// $Id: MOLFile.C,v 1.25 2004/05/27 19:49:58 oliver Exp $
 //
 
 

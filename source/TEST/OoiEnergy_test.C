@@ -1,7 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: OoiEnergy_test.C,v 1.5 2004/05/07 13:10:06 amoll Exp $
+// $Id: OoiEnergy_test.C,v 1.6 2004/05/27 19:50:01 oliver Exp $
+//
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -14,15 +16,12 @@
 
 ///////////////////////////
 
-START_TEST(OoiEnergy, "$Id: OoiEnergy_test.C,v 1.5 2004/05/07 13:10:06 amoll Exp $")
+START_TEST(OoiEnergy, "$Id: OoiEnergy_test.C,v 1.6 2004/05/27 19:50:01 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
-
-///  insert tests for each member function here         
-///
 
 PRECISION(1.0) // it's not THAT precise
 CHECK(calculateOoiEnergy() / BPTI)

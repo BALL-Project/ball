@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residue.h,v 1.43 2004/05/18 11:21:45 amoll Exp $
+// $Id: residue.h,v 1.44 2004/05/27 19:49:40 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_RESIDUE_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: exception.h,v 1.45 2004/05/18 11:21:40 amoll Exp $
+// $Id: exception.h,v 1.46 2004/05/27 19:49:36 oliver Exp $
 //
    
 #ifndef BALL_COMMON_EXCEPTION_H

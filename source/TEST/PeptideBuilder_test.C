@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PeptideBuilder_test.C,v 1.8 2004/05/10 13:19:22 amoll Exp $
+// $Id: PeptideBuilder_test.C,v 1.9 2004/05/27 19:50:01 oliver Exp $
+//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -13,7 +14,7 @@
 
 ///////////////////////////
 
-START_TEST(PeptideBuilder, "$Id: PeptideBuilder_test.C,v 1.8 2004/05/10 13:19:22 amoll Exp $")
+START_TEST(PeptideBuilder, "$Id: PeptideBuilder_test.C,v 1.9 2004/05/27 19:50:01 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

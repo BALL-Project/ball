@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: system.h,v 1.36 2004/05/18 11:21:45 amoll Exp $
+// $Id: system.h,v 1.37 2004/05/27 19:49:40 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_SYSTEM_H

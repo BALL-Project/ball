@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FragmentDB_test.C,v 1.14 2004/05/10 11:54:24 amoll Exp $
+// $Id: FragmentDB_test.C,v 1.15 2004/05/27 19:50:00 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -21,7 +21,7 @@ using namespace BALL;
 
 ///////////////////////////
 
-START_TEST(Fragment, "$Id: FragmentDB_test.C,v 1.14 2004/05/10 11:54:24 amoll Exp $")
+START_TEST(Fragment, "$Id: FragmentDB_test.C,v 1.15 2004/05/27 19:50:00 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

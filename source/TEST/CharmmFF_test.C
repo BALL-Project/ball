@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: CharmmFF_test.C,v 1.14 2004/05/07 13:10:06 amoll Exp $
+// $Id: CharmmFF_test.C,v 1.15 2004/05/27 19:50:00 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -20,7 +20,7 @@
 #include <BALL/STRUCTURE/fragmentDB.h>
 ///////////////////////////
 
-START_TEST(CharmmFF, "$Id: CharmmFF_test.C,v 1.14 2004/05/07 13:10:06 amoll Exp $")
+START_TEST(CharmmFF, "$Id: CharmmFF_test.C,v 1.15 2004/05/27 19:50:00 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

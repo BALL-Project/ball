@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector3.h,v 1.73 2004/05/18 13:05:44 amoll Exp $
+// $Id: vector3.h,v 1.74 2004/05/27 19:49:42 oliver Exp $
 //
 
 #ifndef BALL_MATHS_VECTOR3_H

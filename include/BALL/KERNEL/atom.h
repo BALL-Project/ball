@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.h,v 1.67 2004/05/18 11:21:43 amoll Exp $
+// $Id: atom.h,v 1.68 2004/05/27 19:49:38 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_ATOM_H

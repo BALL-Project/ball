@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PTE.h,v 1.28 2004/05/18 11:21:43 amoll Exp $
+// $Id: PTE.h,v 1.29 2004/05/27 19:49:38 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_PTE_H
@@ -521,7 +521,7 @@ namespace BALL
 			/** Less or equal operator.
 					Tests if the atomic number of this instance is less
 					or equal compared with <b>  element </b>.
-					@param element the Element to compare with
+					@param element, the Element to compare with
 					@return bool
 			*/
 			bool operator <= (const Element& element) const

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceField.h,v 1.28 2004/02/19 18:46:26 amoll Exp $
+// $Id: forceField.h,v 1.29 2004/05/27 19:49:43 oliver Exp $
 //
 
 #ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
@@ -205,23 +205,37 @@ namespace BALL
 
 		/**	Returns a reference to the atom vector
 		*/
-		const	AtomVector& getAtoms() const;
+		BALL_INLINE
+		const	AtomVector& getAtoms() const throw();
 
 		/**	Returns a pointer to the system
 		*/
-		System* getSystem();
+		BALL_INLINE
+		System* getSystem() throw();
 
     /** Returns a const pointer to the system
     */
-    const System* getSystem() const;
+		BALL_INLINE
+    const System* getSystem() const throw();
 
 		/**	Return the status of the selection mechanism
 		*/
-		bool getUseSelection();
+		BALL_INLINE
+		bool getUseSelection() const throw();
 
 		/**	Set the status of the selection mechanism
 		*/
-		void setUseSelection(bool use_selection);
+		BALL_INLINE
+		void disableSelection() throw();
+
+		/**	Set the status of the selection mechanism
+		*/
+		BALL_INLINE
+		void enableSelection() throw();
+
+		/**	Return the status of the selection mechanism */
+		BALL_INLINE
+		bool isSelectionEnabled() const throw();
 
 		/**	Returns a pointer to the parameter file
 		*/
@@ -380,9 +394,13 @@ namespace BALL
 		*/
 		Size	number_of_movable_atoms_;
 
-		/*_	Are atoms in the system selected?
+		/*_	Do we have to check whether atoms are selected?
 		*/
 		bool	use_selection_;
+
+		/*_	This flag can temporarily disable the selection.
+		*/
+		bool selection_enabled_;
 
 		/*_	The time of the last call to update.
 		*/
@@ -394,6 +412,11 @@ namespace BALL
 
 		//_@}
 	};
+
+# ifndef BALL_NO_INLINE_FUNCTIONS
+#   include <BALL/MOLMEC/COMMON/forceField.iC>
+# endif
+
 } // namespace BALL
 
 #endif // BALL_MOLMEC_COMMON_FORCEFIELD_H

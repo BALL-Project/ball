@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricObject.sip,v 1.2 2004/05/19 13:19:05 amoll Exp $
+// $Id: geometricObject.sip,v 1.3 2004/05/27 19:49:59 oliver Exp $
 //
 
 class GeometricObject

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.h,v 1.64 2004/05/18 11:47:41 amoll Exp $
+// $Id: file.h,v 1.65 2004/05/27 19:49:47 oliver Exp $
 //
 
 #ifndef BALL_SYSTEM_FILE_H
@@ -277,10 +277,9 @@ namespace BALL
 
 		/** Clear the File object.
 		*/
-		void clear()
-			throw();
-
+		virtual void clear() throw();
 		//@}
+
 		/**	@name	Assignment 
 		*/
 		//@{
@@ -293,6 +292,7 @@ namespace BALL
 			throw();
 
 		//@}
+
 		/**	@name	Accessors 
 		*/
 		//@{

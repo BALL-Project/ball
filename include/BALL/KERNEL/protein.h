@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: protein.h,v 1.30 2004/05/18 11:21:45 amoll Exp $ 
+// $Id: protein.h,v 1.31 2004/05/27 19:49:40 oliver Exp $ 
 //
 
 #ifndef BALL_KERNEL_PROTEIN_H

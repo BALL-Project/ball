@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.h,v 1.15 2004/05/18 14:45:43 amoll Exp $
+// $Id: molecularFileDialog.h,v 1.16 2004/05/27 19:49:48 oliver Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MOLECULARFILEDIALOG_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amber.h,v 1.22 2004/05/18 11:39:21 amoll Exp $ 
+// $Id: amber.h,v 1.23 2004/05/27 19:49:43 oliver Exp $ 
 //
 
 // Molecular Mechanics: Amber force field class
