@@ -10,6 +10,9 @@ CPP_SOURCES=\
 	fragmentDB.C\
 	geometricProperties.C\
 	geometricTransformations.C\
+	graphEdge.C\
+	graphFace.C\
+	graphVertex.C\
 	numericalSAS.C\
 	radialDistributionFunction.C\
 	RDFIntegrator.C\
@@ -24,12 +27,14 @@ CPP_SOURCES=\
 	SESEdge.C\
 	SESFace.C\
 	SESVertex.C\
-	singularities.C\
 	solventExcludedSurface.C\
 	structureMapper.C\
 	surfaceProcessor.C\
-	triangulatedSurface.C\
-	triangulation.C
+	triangle.C\
+	triangleEdge.C\
+	trianglePoint.C\
+	triangulatedSES.C\
+	triangulatedSurface.C
 
 include ../common.mak
 include .Dependencies
