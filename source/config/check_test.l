@@ -1,5 +1,5 @@
 %{
-	// $Id: check_test.l,v 1.7 2003/06/12 18:37:25 oliver Exp $
+	// $Id: check_test.l,v 1.8 2003/06/19 10:50:47 oliver Exp $
 	// C++ scanner
 
 	#define YY_NO_UNPUT 
@@ -1121,6 +1121,13 @@ void parseTestFile(const char* filename)
 		{
 			line.erase(0, 6);
 			line.erase(line.length() - 1, 1);
+
+			// Remove round brackets
+			while ((line.size() > 0) && (line[0] == '(') && (line[line.size() - 1] == ')'))
+			{
+				line.erase(0, 1);
+				line.erase(line.length() - 1, 1);
+			}
 
 			if (tests_found.count(line) > 0)
 			{
