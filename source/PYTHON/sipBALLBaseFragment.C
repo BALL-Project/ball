@@ -1464,6 +1464,31 @@ static PyObject *sipDo_BaseFragment_apply(PyObject *sipThisObj,PyObject *sipArgs
 		}
 	}
 
+	{
+		CompositeProcessor *a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_CompositeProcessor,&a0obj))
+		{
+			bool res;
+			BaseFragment *ptr;
+
+			if ((ptr = (BaseFragment *)sipGetCppPtr(sipThis,sipClass_BaseFragment)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			sipConvertTo_CompositeProcessor(a0obj,&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			res = ptr -> BaseFragment::apply(* a0);
+
+			return sipConvertFromBool((int)res);
+		}
+	}
+
 	// Report an error if the arguments couldn't be parsed.
 
 	sipNoMethod(sipName_BALL_BaseFragment,sipName_BALL_apply);
@@ -1508,14 +1533,14 @@ static void sipDealloc_BaseFragment(sipThisType *sipThis)
 
 static PyObject *sipPyInternalRepr_BaseFragment(sipThisType *sipThis)
 {
-#line 72 "baseFragment.sip"
+#line 73 "baseFragment.sip"
   BaseFragment* ptr;
   if ((ptr = (BaseFragment*)sipGetCppPtr(sipThis,sipClass_BaseFragment)) == NULL)
     return NULL;
 
   return PyString_FromString(String(String("BaseFragment ") + ptr->getName() 
 						+ " { " + String(ptr->countAtoms()) + " atoms }").c_str());
-#line 1523 "./sipBALLBaseFragment.cpp"
+#line 1548 "./sipBALLBaseFragment.cpp"
 }
 
 PyObject *sipNew_BaseFragment(PyObject *sipSelf,PyObject *sipArgs)

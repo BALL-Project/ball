@@ -1,51 +1,128 @@
- class Bond
-  : Composite,
+// $Id: bond.sip,v 1.3 2000/07/06 14:08:45 oliver Exp $
+
+class Bond
+	: Composite,
     PropertyManager
- {
+{
 %HeaderCode
-#include <BALL/KERNEL/bond.h>
-using namespace BALL;
+	#include <BALL/KERNEL/bond.h>
+	#include <BALL/KERNEL/atom.h>
+	using namespace BALL;
 %End
-   public:
+  public:
+  // friend class Atom;
+  // BALL_CREATE(Bond)
+  // class TooManyBonds
+  //  : public Exception::GeneralException
+  // {
+  //  public:
+  //  TooManyBonds(const char* file, int line);
+  // };
+  typedef short Order;
+  typedef short Type;
+  enum BondOrder
+  {
+   ORDER__UNKNOWN        = 0,
+   ORDER__SINGLE         = 1,
+   ORDER__DOUBLE         = 2,
+   ORDER__TRIPLE         = 3,
+   ORDER__QUADRUPLE      = 4,
+   ORDER__AROMATIC       = 5,
+   NUMBER_OF_BOND_ORDERS
+  };
+  enum BondType
+  {
+   TYPE__UNKNOWN           = 0,
+   TYPE__COVALENT          = 1,
+   TYPE__HYDROGEN          = 2,
+   TYPE__DISULPHIDE_BRIDGE = 3,
+   TYPE__SALT_BRIDGE       = 4,
+   TYPE__PEPTIDE           = 5,
+   NUMBER_OF_BOND_TYPES
+  };
+  enum Property
+  {
+   NUMBER_OF_PROPERTIES
+  };
   Bond();
-	 Bond(const Bond&, bool = true);
-//	Bond(const String&, Atom&, Atom&, int = ORDER__UNKNOWN , int = TYPE__UNKNOWN );
-	  static Bond* createBond(Bond&, Atom&, Atom&);
-//	virtual ~Bond();
+  Bond(const Bond& /bond/, bool /deep/ = true);
+  Bond(const String& /name/, Atom& /first/, Atom& /second/, Order /order/ = ORDER__UNKNOWN ,
+     Type /type/ = TYPE__UNKNOWN );
+  static Bond* createBond(Bond& /bond/, Atom& /first/, Atom& /second/);
+  ~Bond();
   virtual void clear();
   virtual void destroy();
-//  void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
-//	void persistentRead(PersistenceManager& pm);
-//  void finalize();
-  void set(const Bond&, bool = true);
-//  Bond& operator = (const Bond&);
-  void get(Bond&, bool = true) const;
-   void swap(Bond&);
-   void setFirstAtom(Atom*);
-   Atom* getFirstAtom();
-   const Atom* getFirstAtom() const;
-   Atom* getPartner(const Atom&) const;
-   void setSecondAtom(Atom*);
-   Atom* getSecondAtom();
-   const Atom* getSecondAtom() const;
-   void setName(const String&);
-   const String& getName() const;
-   void setOrder(int);
-   int getOrder() const;
-   void setType(int);
-   int getType() const;
-   float getLength() const;
-   static Bond* getBond(Atom&, Atom&);
-   Atom* getBondedAtomOf(const Atom&);
-   const Atom* getBondedAtomOf(const Atom&) const;
-   bool isBondOf(const Atom&) const;
-   bool isBonded() const;
-   bool isInterBond() const;
-   bool isInterBondOf(const BaseFragment&) const;
-   bool isInterBondOf(const System&) const;
-   bool isIntraBond() const;
-   bool isIntraBondOf(const BaseFragment&) const;
-   bool isIntraBondOf(const System&) const;
-   virtual bool isValid() const;
-//   virtual void dump(ostream& s = cout, unsigned long depth = 0) const;
- };
+  // void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
+  // void persistentRead(PersistenceManager& pm);
+  void finalize();
+  void set(const Bond& /bond/, bool /deep/ = true);
+  // Bond& operator = (const Bond& bond);
+  void get(Bond& /bond/, bool /deep/ = true) const;
+  void swap(Bond& /bond/);
+  void setFirstAtom(Atom* /atom/);
+  Atom* getFirstAtom();
+  const Atom* getFirstAtom() const;
+  Atom* getPartner(const Atom& /atom/) const;
+  void setSecondAtom(Atom* /atom/);
+  Atom* getSecondAtom();
+  const Atom* getSecondAtom() const;
+  void setName(const String& /name/);
+  const String& getName() const;
+  void setOrder(Order /bond_order/);
+  Order getOrder() const;
+  void setType(Type /bond_type/);
+  Type getType() const;
+  float getLength() const;
+  static Bond* getBond(Atom& /first/, Atom& /second/);
+  Atom* getBondedAtomOf(const Atom& /atom/);
+  const Atom* getBondedAtomOf(const Atom& /atom/) const;
+  bool isBondOf(const Atom& /atom/) const;
+  bool isBonded() const;
+  bool isInterBond() const;
+  bool isInterBondOf(const BaseFragment& /base_fragment/) const;
+  bool isInterBondOf(const System& /system/) const;
+  bool isIntraBond() const;
+  bool isIntraBondOf(const BaseFragment& /base_fragment/) const;
+  bool isIntraBondOf(const System& /system/) const;
+  virtual bool isValid() const;
+  // virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
+  // convert the atom to a string representation
+  operator const char* ();
+%MemberCode
+  Bond* ptr;
+  if ((ptr = (Bond*)sipGetCppPtr(sipThis,sipClass_Bond)) == NULL)
+    return NULL;
+
+	Atom* a1 = ptr->getFirstAtom();
+	Atom* a2 = ptr->getSecondAtom();
+	String tmp("Bond {");
+	if ((a1 != 0) && (a2 != 0))
+	{
+		tmp += a1->getFullName();
+		tmp += " - ";
+		tmp += a2->getFullName();
+		tmp += ", ";
+		tmp += String(ptr->getLength());
+		tmp += " A";
+		switch (ptr->getOrder())
+		{
+			case Bond::ORDER__SINGLE:
+				tmp += ", single";
+				break;
+			case Bond::ORDER__DOUBLE:
+				tmp += ", double";
+				break;
+			case Bond::ORDER__AROMATIC:
+				tmp += ", aromatic";
+				break;
+			case Bond::ORDER__TRIPLE:
+				tmp += ", triple";
+				break;
+			default:
+				tmp += ", unknown";
+		}
+		tmp += " }";
+	}
+  return PyString_FromString(tmp.c_str());
+%End
+};

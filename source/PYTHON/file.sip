@@ -1,16 +1,16 @@
-// $Id: file.sip,v 1.4 2000/07/03 11:11:06 oliver Exp $
+// $Id: file.sip,v 1.5 2000/07/06 14:08:47 oliver Exp $
 class File
 {
 %HeaderCode
-#include <BALL/SYSTEM/file.h>
-using namespace BALL;
+	#include <BALL/SYSTEM/file.h>
+	using namespace BALL;
 %End
   public:
   File();
 	// default open mode: READ
   File(const String&, int = 1);
   File(const File&);
-  // virtual ~File();
+  ~File();
   // static void enableProtocol(Protocol protocol);
   // static void disableProtocol(Protocol protocol);
 	// default open mode: READ

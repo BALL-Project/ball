@@ -1,4 +1,4 @@
-// $Id: BALL.sip,v 1.10 2000/07/03 11:11:03 oliver Exp $
+// $Id: BALL.sip,v 1.11 2000/07/06 14:08:44 oliver Exp $
 /////////////////////////
 // BALL PYTHON SUPPORT
 /////////////////////////
@@ -35,7 +35,7 @@
 %Include object.sip 
 // persitenceManager.h // ??
 %Include persistentObject.sip
-// predicate.h       // ??
+%Include predicateConcept.sip
 %Include processor.sip
 %Include property.sip
 // randomAccessIterator.h // not supported
@@ -113,8 +113,8 @@
 // residueIterator.h // not needed
 %Include secondaryStructure.sip
 // secondaryStructureIterator.h // not needed
-// %Include selector.sip
-// %Include standardPredicates.sip
+%Include selector.sip
+// %Include standardPredicates.sip // not needed - use Selector class!
 %Include system.sip
 // universe.h  // not supported
 
@@ -123,7 +123,7 @@
 %Include angle.sip
 %Include box3.sip
 %Include circle3.sip
-//%Include common.sip
+// %Include common.sip
 %Include line3.sip
 %Include matrix44.sip
 %Include plane3.sip
@@ -165,9 +165,9 @@
 // typenameRuleProcessor.h
 
 // MOLMEC/MDSIMULATION
-// %Include canonicalMD.sip
-// %Include microCanonical.sip
-// %Include molecularDynamics.sip
+%Include canonicalMD.sip
+%Include microCanonicalMD.sip
+%Include molecularDynamics.sip
 
 // MOLMEC/MINIMIZATION
 %Include conjugateGradient.sip
@@ -203,6 +203,7 @@
 // %Include pyAtomDict.sip
 %Include pyAtomList.sip
 %Include pyAtomProcessor.sip
+%Include pyCompositeProcessor.sip
 %Include pyBondList.sip
 %Include pyBaseFragmentList.sip
 %Include pyFragmentList.sip
@@ -225,8 +226,8 @@
 // %Include analyticalSES.sip
 %Include defaultProcessors.sip
 // %Include fragmentDB.sip
-// %Include geometricProperties.sip // ??
-// %Include geometricTransformations.sip // ??
+%Include geometricProperties.sip
+%Include geometricTransformations.sip
 // %Include numericalSAS.sip 
 // %Include residueChecker.sip // ??
 // %Include rotamerLibrary.sip

@@ -6,6 +6,7 @@
 PyObject *sipClass_Box3;
 
 static void sipDealloc_Box3(sipThisType *);
+static PyObject *sipPyInternalRepr_Box3(sipThisType *);
 
 static PyTypeObject sipType_Box3 = {
 	PyObject_HEAD_INIT(&PyType_Type)
@@ -18,7 +19,7 @@ static PyTypeObject sipType_Box3 = {
 	0,
 	0,
 	0,
-	0,
+	(reprfunc)sipPyInternalRepr_Box3,
 };
 
 static PyObject *sipDo_Box3_set(PyObject *sipThisObj,PyObject *sipArgs)
@@ -470,6 +471,25 @@ static void sipDealloc_Box3(sipThisType *sipThis)
 	}
 
 	sipDeleteThis(sipThis);
+}
+
+static PyObject *sipPyInternalRepr_Box3(sipThisType *sipThis)
+{
+#line 41 "box3.sip"
+  	Box3* ptr;
+	  if ((ptr = (Box3*)sipGetCppPtr(sipThis,sipClass_Box3)) == NULL)
+	    return NULL;
+
+   static String tmp;
+   tmp = "Box3 { (";
+   tmp += String(ptr->a.x) + " ";
+   tmp += String(ptr->a.y) + " ";
+   tmp += String(ptr->a.z) + ") (";
+   tmp += String(ptr->b.x) + " ";
+   tmp += String(ptr->b.y) + " ";
+   tmp += String(ptr->b.z) + ") }";
+   return PyString_FromString(tmp.c_str());
+#line 497 "./sipBALLBox3.cpp"
 }
 
 PyObject *sipNew_Box3(PyObject *sipSelf,PyObject *sipArgs)

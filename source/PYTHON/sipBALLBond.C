@@ -6,6 +6,7 @@
 PyObject *sipClass_Bond;
 
 static void sipDealloc_Bond(sipThisType *);
+static PyObject *sipPyInternalRepr_Bond(sipThisType *);
 
 static PyTypeObject sipType_Bond = {
 	PyObject_HEAD_INIT(&PyType_Type)
@@ -18,7 +19,7 @@ static PyTypeObject sipType_Bond = {
 	0,
 	0,
 	0,
-	0,
+	(reprfunc)sipPyInternalRepr_Bond,
 };
 
 sipBond::sipBond(): Bond()
@@ -27,6 +28,11 @@ sipBond::sipBond(): Bond()
 }
 
 sipBond::sipBond(const Bond& a0,bool a1): Bond(a0,a1)
+{
+	sipCommonCtor(sipPyMethods,5);
+}
+
+sipBond::sipBond(const String& a0,Atom& a1,Atom& a2,short a3,short a4): Bond(a0,a1,a2,a3,a4)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
@@ -176,6 +182,35 @@ static PyObject *sipDo_Bond_destroy(PyObject *sipThisObj,PyObject *sipArgs)
 	// Report an error if the arguments couldn't be parsed.
 
 	sipNoMethod(sipName_BALL_Bond,sipName_BALL_destroy);
+
+	return NULL;
+}
+
+static PyObject *sipDo_Bond_finalize(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Bond)) == NULL)
+		return NULL;
+
+	{
+		if (sipParseArgs(sipArgs,""))
+		{
+			Bond *ptr;
+
+			if ((ptr = (Bond *)sipGetCppPtr(sipThis,sipClass_Bond)) == NULL)
+				return NULL;
+
+			ptr -> Bond::finalize();
+
+			Py_INCREF(Py_None);
+			return Py_None;
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_Bond,sipName_BALL_finalize);
 
 	return NULL;
 }
@@ -583,9 +618,9 @@ static PyObject *sipDo_Bond_setOrder(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		int a0;
+		short a0;
 
-		if (sipParseArgs(sipArgs,"i",&a0))
+		if (sipParseArgs(sipArgs,"h",&a0))
 		{
 			Bond *ptr;
 
@@ -616,7 +651,7 @@ static PyObject *sipDo_Bond_getOrder(PyObject *sipThisObj,PyObject *sipArgs)
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			int res;
+			short res;
 			Bond *ptr;
 
 			if ((ptr = (Bond *)sipGetCppPtr(sipThis,sipClass_Bond)) == NULL)
@@ -643,9 +678,9 @@ static PyObject *sipDo_Bond_setType(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		int a0;
+		short a0;
 
-		if (sipParseArgs(sipArgs,"i",&a0))
+		if (sipParseArgs(sipArgs,"h",&a0))
 		{
 			Bond *ptr;
 
@@ -676,7 +711,7 @@ static PyObject *sipDo_Bond_getType(PyObject *sipThisObj,PyObject *sipArgs)
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			int res;
+			short res;
 			Bond *ptr;
 
 			if ((ptr = (Bond *)sipGetCppPtr(sipThis,sipClass_Bond)) == NULL)
@@ -1140,6 +1175,47 @@ static void sipDealloc_Bond(sipThisType *sipThis)
 	sipDeleteThis(sipThis);
 }
 
+static PyObject *sipPyInternalRepr_Bond(sipThisType *sipThis)
+{
+#line 92 "bond.sip"
+  Bond* ptr;
+  if ((ptr = (Bond*)sipGetCppPtr(sipThis,sipClass_Bond)) == NULL)
+    return NULL;
+
+	Atom* a1 = ptr->getFirstAtom();
+	Atom* a2 = ptr->getSecondAtom();
+	String tmp("Bond {");
+	if ((a1 != 0) && (a2 != 0))
+	{
+		tmp += a1->getFullName();
+		tmp += " - ";
+		tmp += a2->getFullName();
+		tmp += ", ";
+		tmp += String(ptr->getLength());
+		tmp += " A";
+		switch (ptr->getOrder())
+		{
+			case Bond::ORDER__SINGLE:
+				tmp += ", single";
+				break;
+			case Bond::ORDER__DOUBLE:
+				tmp += ", double";
+				break;
+			case Bond::ORDER__AROMATIC:
+				tmp += ", aromatic";
+				break;
+			case Bond::ORDER__TRIPLE:
+				tmp += ", triple";
+				break;
+			default:
+				tmp += ", unknown";
+		}
+		tmp += " }";
+	}
+  return PyString_FromString(tmp.c_str());
+#line 1221 "./sipBALLBond.cpp"
+}
+
 PyObject *sipNew_Bond(PyObject *sipSelf,PyObject *sipArgs)
 {
 	static sipExtraType et = {
@@ -1178,6 +1254,35 @@ PyObject *sipNew_Bond(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipBond(* a0, (bool)a1);
+		}
+	}
+
+	if (sipNew == NULL)
+	{
+		const String *a0;
+		PyObject *a0obj;
+		Atom *a1;
+		PyObject *a1obj;
+		Atom *a2;
+		PyObject *a2obj;
+		short a3 = Bond::ORDER__UNKNOWN;
+		short a4 = Bond::TYPE__UNKNOWN;
+
+		if (sipParseArgs(sipArgs,"-III|hh",sipCanConvertTo_String,&a0obj,sipCanConvertTo_Atom,&a1obj,sipCanConvertTo_Atom,&a2obj,&a3,&a4))
+		{
+			int iserr = 0;
+
+			int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
+			sipConvertTo_Atom(a1obj,&a1,1,&iserr);
+			sipConvertTo_Atom(a2obj,&a2,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			sipNew = new sipBond(* a0,* a1,* a2, a3, a4);
+
+			if (istemp0)
+				delete a0;
 		}
 	}
 
@@ -1229,6 +1334,7 @@ PyMethodDef sipClassAttrTab_Bond[] = {
 	{sipName_BALL_createBond, sipDo_Bond_createBond, METH_VARARGS, NULL},
 	{sipName_BALL_clear, sipDo_Bond_clear, METH_VARARGS, NULL},
 	{sipName_BALL_destroy, sipDo_Bond_destroy, METH_VARARGS, NULL},
+	{sipName_BALL_finalize, sipDo_Bond_finalize, METH_VARARGS, NULL},
 	{sipName_BALL_set, sipDo_Bond_set, METH_VARARGS, NULL},
 	{sipName_BALL_get, sipDo_Bond_get, METH_VARARGS, NULL},
 	{sipName_BALL_swap, sipDo_Bond_swap, METH_VARARGS, NULL},

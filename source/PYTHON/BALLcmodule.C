@@ -8,6 +8,8 @@
 #include "sipBALLComposite.h"
 #include "sipBALLObject.h"
 #include "sipBALLPersistentObject.h"
+#include "sipBALLUnaryCompositePredicate.h"
+#include "sipBALLUnaryAtomPredicate.h"
 #include "sipBALLProcessor.h"
 #include "sipBALLNamedProperty.h"
 #include "sipBALLPropertyManager.h"
@@ -38,6 +40,7 @@
 #include "sipBALLProtein.h"
 #include "sipBALLResidue.h"
 #include "sipBALLSecondaryStructure.h"
+#include "sipBALLSelector.h"
 #include "sipBALLSystem.h"
 #include "sipBALLAngle.h"
 #include "sipBALLBox3.h"
@@ -67,10 +70,14 @@
 #include "sipBALLGradient.h"
 #include "sipBALLPeriodicBoundary.h"
 #include "sipBALLSnapShotManager.h"
+#include "sipBALLCanonicalMD.h"
+#include "sipBALLMicroCanonicalMD.h"
+#include "sipBALLMolecularDynamics.h"
 #include "sipBALLConjugateGradientMinimizer.h"
 #include "sipBALLEnergyMinimizer.h"
 #include "sipBALLPyAtomList.h"
 #include "sipBALLAtomProcessor.h"
+#include "sipBALLCompositeProcessor.h"
 #include "sipBALLPyBondList.h"
 #include "sipBALLPyBaseFragmentList.h"
 #include "sipBALLPyFragmentList.h"
@@ -86,6 +93,11 @@
 #include "sipBALLClearRadiusProcessor.h"
 #include "sipBALLAssignRadiusProcessor.h"
 #include "sipBALLAssignChargeProcessor.h"
+#include "sipBALLBoundingBoxProcessor.h"
+#include "sipBALLGeometricCenterProcessor.h"
+#include "sipBALLFragmentDistanceCollector.h"
+#include "sipBALLTranslationProcessor.h"
+#include "sipBALLTransformationProcessor.h"
 #include "sipBALLFile.h"
 
 char sipName_BALL_isExecutable[] = "isExecutable";
@@ -100,6 +112,23 @@ char sipName_BALL_renameTo[] = "renameTo";
 char sipName_BALL_copyTo[] = "copyTo";
 char sipName_BALL_getOpenMode[] = "getOpenMode";
 char sipName_BALL_reopen[] = "reopen";
+char sipName_BALL_getTransformation[] = "getTransformation";
+char sipName_BALL_setTransformation[] = "setTransformation";
+char sipName_BALL_TransformationProcessor[] = "TransformationProcessor";
+char sipName_BALL_getTranslation[] = "getTranslation";
+char sipName_BALL_TranslationProcessor[] = "TranslationProcessor";
+char sipName_BALL_calculateBondAngle[] = "calculateBondAngle";
+char sipName_BALL_calculateTorsionAngle[] = "calculateTorsionAngle";
+char sipName_BALL_setDistance[] = "setDistance";
+char sipName_BALL_getComposite[] = "getComposite";
+char sipName_BALL_setComposite[] = "setComposite";
+char sipName_BALL_getNumberOfFragments[] = "getNumberOfFragments";
+char sipName_BALL_FragmentDistanceCollector[] = "FragmentDistanceCollector";
+char sipName_BALL_getCenter[] = "getCenter";
+char sipName_BALL_GeometricCenterProcessor[] = "GeometricCenterProcessor";
+char sipName_BALL_getUpper[] = "getUpper";
+char sipName_BALL_getLower[] = "getLower";
+char sipName_BALL_BoundingBoxProcessor[] = "BoundingBoxProcessor";
 char sipName_BALL_getTotalCharge[] = "getTotalCharge";
 char sipName_BALL_AssignChargeProcessor[] = "AssignChargeProcessor";
 char sipName_BALL_getNumberOfErrors[] = "getNumberOfErrors";
@@ -119,7 +148,6 @@ char sipName_BALL_PyFragmentList[] = "PyFragmentList";
 char sipName_BALL_PyBaseFragmentList[] = "PyBaseFragmentList";
 char sipName_BALL_PyBondList[] = "PyBondList";
 char sipName_BALL_finish[] = "finish";
-char sipName_BALL_start[] = "start";
 char sipName_BALL_AtomProcessor[] = "AtomProcessor";
 char sipName_BALL_PyAtomList[] = "PyAtomList";
 char sipName_BALL_nucleicAcids[] = "nucleicAcids";
@@ -128,32 +156,24 @@ char sipName_BALL_proteins[] = "proteins";
 char sipName_BALL_chains[] = "chains";
 char sipName_BALL_secondaryStructures[] = "secondaryStructures";
 char sipName_BALL_residues[] = "residues";
-char sipName_BALL_PDBAtoms[] = "PDBAtoms";
 char sipName_BALL_molecules[] = "molecules";
 char sipName_BALL_fragments[] = "fragments";
 char sipName_BALL_baseFragments[] = "baseFragments";
 char sipName_BALL_bonds[] = "bonds";
+char sipName_BALL_PDBAtoms[] = "PDBAtoms";
 char sipName_BALL_atoms[] = "atoms";
-char sipName_BALL_getSnapShotFrequency[] = "getSnapShotFrequency";
-char sipName_BALL_setSnapShotFrequency[] = "setSnapShotFrequency";
 char sipName_BALL_getMaximalShift[] = "getMaximalShift";
 char sipName_BALL_setMaximalShift[] = "setMaximalShift";
 char sipName_BALL_getMaxGradient[] = "getMaxGradient";
 char sipName_BALL_setMaxGradient[] = "setMaxGradient";
 char sipName_BALL_getEnergyDifferenceBound[] = "getEnergyDifferenceBound";
 char sipName_BALL_setEnergyDifferenceBound[] = "setEnergyDifferenceBound";
-char sipName_BALL_getEnergyOutputFrequency[] = "getEnergyOutputFrequency";
-char sipName_BALL_setEnergyOutputFrequency[] = "setEnergyOutputFrequency";
 char sipName_BALL_getMaxSameEnergy[] = "getMaxSameEnergy";
 char sipName_BALL_setMaxSameEnergy[] = "setMaxSameEnergy";
-char sipName_BALL_setMaximalNumberOfIterations[] = "setMaximalNumberOfIterations";
-char sipName_BALL_getMaximalNumberOfIterations[] = "getMaximalNumberOfIterations";
-char sipName_BALL_setNumberOfIteration[] = "setNumberOfIteration";
 char sipName_BALL_getInitialEnergy[] = "getInitialEnergy";
 char sipName_BALL_getInitialGradient[] = "getInitialGradient";
 char sipName_BALL_getGradient[] = "getGradient";
 char sipName_BALL_getDirection[] = "getDirection";
-char sipName_BALL_getNumberOfIteration[] = "getNumberOfIteration";
 char sipName_BALL_finishIteration[] = "finishIteration";
 char sipName_BALL_printEnergy[] = "printEnergy";
 char sipName_BALL_isConverged[] = "isConverged";
@@ -164,6 +184,32 @@ char sipName_BALL_getStepLength[] = "getStepLength";
 char sipName_BALL_setStepLength[] = "setStepLength";
 char sipName_BALL_EnergyMinimizer[] = "EnergyMinimizer";
 char sipName_BALL_ConjugateGradientMinimizer[] = "ConjugateGradientMinimizer";
+char sipName_BALL_getKineticEnergy[] = "getKineticEnergy";
+char sipName_BALL_getPotentialEnergy[] = "getPotentialEnergy";
+char sipName_BALL_getTotalEnergy[] = "getTotalEnergy";
+char sipName_BALL_getTime[] = "getTime";
+char sipName_BALL_getSnapShotFrequency[] = "getSnapShotFrequency";
+char sipName_BALL_getTimeStep[] = "getTimeStep";
+char sipName_BALL_getMaximalSimulationTime[] = "getMaximalSimulationTime";
+char sipName_BALL_getMaximalNumberOfIterations[] = "getMaximalNumberOfIterations";
+char sipName_BALL_getNumberOfIteration[] = "getNumberOfIteration";
+char sipName_BALL_getEnergyOutputFrequency[] = "getEnergyOutputFrequency";
+char sipName_BALL_setSnapShotFrequency[] = "setSnapShotFrequency";
+char sipName_BALL_setEnergyOutputFrequency[] = "setEnergyOutputFrequency";
+char sipName_BALL_setCurrentTime[] = "setCurrentTime";
+char sipName_BALL_setReferenceTemperature[] = "setReferenceTemperature";
+char sipName_BALL_setMaximalSimulationTime[] = "setMaximalSimulationTime";
+char sipName_BALL_setMaximalNumberOfIterations[] = "setMaximalNumberOfIterations";
+char sipName_BALL_setNumberOfIteration[] = "setNumberOfIteration";
+char sipName_BALL_MicroCanonicalMD[] = "MicroCanonicalMD";
+char sipName_BALL_simulateTime[] = "simulateTime";
+char sipName_BALL_simulateIterations[] = "simulateIterations";
+char sipName_BALL_simulate[] = "simulate";
+char sipName_BALL_setTimeStep[] = "setTimeStep";
+char sipName_BALL_getBathRelaxationTime[] = "getBathRelaxationTime";
+char sipName_BALL_setBathRelaxationTime[] = "setBathRelaxationTime";
+char sipName_BALL_MolecularDynamics[] = "MolecularDynamics";
+char sipName_BALL_CanonicalMD[] = "CanonicalMD";
 char sipName_BALL_getSnapShotAsSystem[] = "getSnapShotAsSystem";
 char sipName_BALL_getNumberOfSnapShots[] = "getNumberOfSnapShots";
 char sipName_BALL_flushToDisk[] = "flushToDisk";
@@ -313,7 +359,6 @@ char sipName_BALL_Operator__add__[] = "Operator__add__";
 char sipName_BALL_Operator__neg__[] = "Operator__neg__";
 char sipName_BALL_Operator__pos__[] = "Operator__pos__";
 char sipName_BALL_Operator__getitem__[] = "Operator__getitem__";
-char sipName_BALL_Operator__call__[] = "Operator__call__";
 char sipName_BALL_getDiagonal[] = "getDiagonal";
 char sipName_BALL_isEqual[] = "isEqual";
 char sipName_BALL_setColumn[] = "setColumn";
@@ -355,6 +400,10 @@ char sipName_BALL_GetDistance[] = "GetDistance";
 char sipName_BALL_countFragments[] = "countFragments";
 char sipName_BALL_countMolecules[] = "countMolecules";
 char sipName_BALL_System[] = "System";
+char sipName_BALL_getNumberOfSelectedAtoms[] = "getNumberOfSelectedAtoms";
+char sipName_BALL_start[] = "start";
+char sipName_BALL_CompositeProcessor[] = "CompositeProcessor";
+char sipName_BALL_Selector[] = "Selector";
 char sipName_BALL_SecondaryStructure[] = "SecondaryStructure";
 char sipName_BALL_isCTerminal[] = "isCTerminal";
 char sipName_BALL_isNTerminal[] = "isNTerminal";
@@ -416,6 +465,7 @@ char sipName_BALL_setSecondAtom[] = "setSecondAtom";
 char sipName_BALL_getPartner[] = "getPartner";
 char sipName_BALL_getFirstAtom[] = "getFirstAtom";
 char sipName_BALL_setFirstAtom[] = "setFirstAtom";
+char sipName_BALL_finalize[] = "finalize";
 char sipName_BALL_Bond[] = "Bond";
 char sipName_BALL_AtomType[] = "AtomType";
 char sipName_BALL_isVicinal[] = "isVicinal";
@@ -599,6 +649,9 @@ char sipName_BALL_getBool[] = "getBool";
 char sipName_BALL_getName[] = "getName";
 char sipName_BALL_NamedProperty[] = "NamedProperty";
 char sipName_BALL_Processor[] = "Processor";
+char sipName_BALL_UnaryAtomPredicate[] = "UnaryAtomPredicate";
+char sipName_BALL_Operator__call__[] = "Operator__call__";
+char sipName_BALL_UnaryCompositePredicate[] = "UnaryCompositePredicate";
 char sipName_BALL_compare[] = "compare";
 char sipName_BALL_getNewHandle[] = "getNewHandle";
 char sipName_BALL_getNextHandle[] = "getNextHandle";
@@ -713,6 +766,83 @@ char sipName_BALL_E[] = "E";
 char sipName_BALL_PI[] = "PI";
 char sipName_BALL_Constant[] = "Constant";
 char sipName_BALL_BALL[] = "BALL";
+
+static PyObject *sipDo_calculateBondAngle(PyObject *,PyObject *sipArgs)
+{
+
+	{
+		const Atom *a0;
+		PyObject *a0obj;
+		const Atom *a1;
+		PyObject *a1obj;
+		const Atom *a2;
+		PyObject *a2obj;
+
+		if (sipParseArgs(sipArgs,"-III",sipCanConvertTo_Atom,&a0obj,sipCanConvertTo_Atom,&a1obj,sipCanConvertTo_Atom,&a2obj))
+		{
+			Angle *res;
+
+			int iserr = 0;
+
+			sipConvertTo_Atom(a0obj,(Atom **)&a0,1,&iserr);
+			sipConvertTo_Atom(a1obj,(Atom **)&a1,1,&iserr);
+			sipConvertTo_Atom(a2obj,(Atom **)&a2,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			res = new Angle(calculateBondAngle(* a0,* a1,* a2));
+
+			return sipNewCppToSelf(res,sipClass_Angle,SIP_SIMPLE | SIP_PY_OWNED);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoFunction(sipName_BALL_calculateBondAngle);
+
+	return NULL;
+}
+
+static PyObject *sipDo_calculateTorsionAngle(PyObject *,PyObject *sipArgs)
+{
+
+	{
+		const Atom *a0;
+		PyObject *a0obj;
+		const Atom *a1;
+		PyObject *a1obj;
+		const Atom *a2;
+		PyObject *a2obj;
+		const Atom *a3;
+		PyObject *a3obj;
+
+		if (sipParseArgs(sipArgs,"-IIII",sipCanConvertTo_Atom,&a0obj,sipCanConvertTo_Atom,&a1obj,sipCanConvertTo_Atom,&a2obj,sipCanConvertTo_Atom,&a3obj))
+		{
+			Angle *res;
+
+			int iserr = 0;
+
+			sipConvertTo_Atom(a0obj,(Atom **)&a0,1,&iserr);
+			sipConvertTo_Atom(a1obj,(Atom **)&a1,1,&iserr);
+			sipConvertTo_Atom(a2obj,(Atom **)&a2,1,&iserr);
+			sipConvertTo_Atom(a3obj,(Atom **)&a3,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			res = new Angle(calculateTorsionAngle(* a0,* a1,* a2,* a3));
+
+			return sipNewCppToSelf(res,sipClass_Angle,SIP_SIMPLE | SIP_PY_OWNED);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoFunction(sipName_BALL_calculateTorsionAngle);
+
+	return NULL;
+}
 
 static PyObject *sipDo_nucleicAcids(PyObject *,PyObject *sipArgs)
 {
@@ -918,40 +1048,6 @@ static PyObject *sipDo_residues(PyObject *,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_PDBAtoms(PyObject *,PyObject *sipArgs)
-{
-
-	{
-		const BaseFragment *a0;
-		PyObject *a0obj;
-		long a1 = false;
-
-		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_BaseFragment,&a0obj,&a1))
-		{
-			PyPDBAtomList *res;
-
-			int iserr = 0;
-
-			sipConvertTo_BaseFragment(a0obj,(BaseFragment **)&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			res = PDBAtoms(* a0, (bool)a1);
-
-			PyObject *resobj = sipConvertFrom_PyPDBAtomList(res);
-
-			return resobj;
-		}
-	}
-
-	// Report an error if the arguments couldn't be parsed.
-
-	sipNoFunction(sipName_BALL_PDBAtoms);
-
-	return NULL;
-}
-
 static PyObject *sipDo_molecules(PyObject *,PyObject *sipArgs)
 {
 
@@ -1111,26 +1207,70 @@ static PyObject *sipDo_bonds(PyObject *,PyObject *sipArgs)
 	return NULL;
 }
 
+static PyObject *sipDo_PDBAtoms(PyObject *,PyObject *sipArgs)
+{
+
+	{
+		const BaseFragment *a0;
+		PyObject *a0obj;
+		const String *a1 = NULL;
+		PyObject *a1obj = NULL;
+
+		if (sipParseArgs(sipArgs,"-I|I",sipCanConvertTo_BaseFragment,&a0obj,sipCanConvertTo_String,&a1obj))
+		{
+			PyPDBAtomList *res;
+
+			int iserr = 0;
+
+			sipConvertTo_BaseFragment(a0obj,(BaseFragment **)&a0,1,&iserr);
+			int istemp1 = sipConvertTo_String(a1obj,(String **)&a1,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			res = PDBAtoms(* a0,* a1);
+
+			if (istemp1)
+				delete a1;
+
+			PyObject *resobj = sipConvertFrom_PyPDBAtomList(res);
+
+			return resobj;
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoFunction(sipName_BALL_PDBAtoms);
+
+	return NULL;
+}
+
 static PyObject *sipDo_atoms(PyObject *,PyObject *sipArgs)
 {
 
 	{
 		const BaseFragment *a0;
 		PyObject *a0obj;
-		long a1 = false;
+		const String *a1 = NULL;
+		PyObject *a1obj = NULL;
 
-		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_BaseFragment,&a0obj,&a1))
+		if (sipParseArgs(sipArgs,"-I|I",sipCanConvertTo_BaseFragment,&a0obj,sipCanConvertTo_String,&a1obj))
 		{
 			PyAtomList *res;
 
 			int iserr = 0;
 
 			sipConvertTo_BaseFragment(a0obj,(BaseFragment **)&a0,1,&iserr);
+			int istemp1 = sipConvertTo_String(a1obj,(String **)&a1,1,&iserr);
 
 			if (iserr)
 				return NULL;
 
-			res = atoms(* a0, (bool)a1);
+			res = atoms(* a0,* a1);
+
+			if (istemp1)
+				delete a1;
 
 			PyObject *resobj = sipConvertFrom_PyAtomList(res);
 
@@ -2520,6 +2660,11 @@ static PyObject *sipDo_calculateACE(PyObject *,PyObject *sipArgs)
 }
 
 static sipClassDef classesTable[] = {
+	{sipName_BALL_TransformationProcessor, sipNew_TransformationProcessor, &sipClass_TransformationProcessor, sipClassAttrTab_TransformationProcessor, NULL},
+	{sipName_BALL_TranslationProcessor, sipNew_TranslationProcessor, &sipClass_TranslationProcessor, sipClassAttrTab_TranslationProcessor, NULL},
+	{sipName_BALL_FragmentDistanceCollector, sipNew_FragmentDistanceCollector, &sipClass_FragmentDistanceCollector, sipClassAttrTab_FragmentDistanceCollector, NULL},
+	{sipName_BALL_GeometricCenterProcessor, sipNew_GeometricCenterProcessor, &sipClass_GeometricCenterProcessor, sipClassAttrTab_GeometricCenterProcessor, NULL},
+	{sipName_BALL_BoundingBoxProcessor, sipNew_BoundingBoxProcessor, &sipClass_BoundingBoxProcessor, sipClassAttrTab_BoundingBoxProcessor, NULL},
 	{sipName_BALL_AssignChargeProcessor, sipNew_AssignChargeProcessor, &sipClass_AssignChargeProcessor, sipClassAttrTab_AssignChargeProcessor, NULL},
 	{sipName_BALL_AssignRadiusProcessor, sipNew_AssignRadiusProcessor, &sipClass_AssignRadiusProcessor, sipClassAttrTab_AssignRadiusProcessor, NULL},
 	{sipName_BALL_ClearRadiusProcessor, sipNew_ClearRadiusProcessor, &sipClass_ClearRadiusProcessor, sipClassAttrTab_ClearRadiusProcessor, NULL},
@@ -2539,6 +2684,9 @@ static sipClassDef classesTable[] = {
 	{NULL, NULL, NULL, NULL, NULL},
 	{sipName_BALL_EnergyMinimizer, sipNew_EnergyMinimizer, &sipClass_EnergyMinimizer, sipClassAttrTab_EnergyMinimizer, sipClassVarHierTab_EnergyMinimizer},
 	{sipName_BALL_ConjugateGradientMinimizer, sipNew_ConjugateGradientMinimizer, &sipClass_ConjugateGradientMinimizer, sipClassAttrTab_ConjugateGradientMinimizer, sipClassVarHierTab_ConjugateGradientMinimizer},
+	{sipName_BALL_MicroCanonicalMD, sipNew_MicroCanonicalMD, &sipClass_MicroCanonicalMD, sipClassAttrTab_MicroCanonicalMD, NULL},
+	{sipName_BALL_MolecularDynamics, sipNew_MolecularDynamics, &sipClass_MolecularDynamics, sipClassAttrTab_MolecularDynamics, sipClassVarHierTab_MolecularDynamics},
+	{sipName_BALL_CanonicalMD, sipNew_CanonicalMD, &sipClass_CanonicalMD, sipClassAttrTab_CanonicalMD, NULL},
 	{sipName_BALL_SnapShotManager, sipNew_SnapShotManager, &sipClass_SnapShotManager, sipClassAttrTab_SnapShotManager, sipClassVarHierTab_SnapShotManager},
 	{sipName_BALL_PeriodicBoundary, sipNew_PeriodicBoundary, &sipClass_PeriodicBoundary, sipClassAttrTab_PeriodicBoundary, sipClassVarHierTab_PeriodicBoundary},
 	{sipName_BALL_Gradient, sipNew_Gradient, &sipClass_Gradient, sipClassAttrTab_Gradient, sipClassVarHierTab_Gradient},
@@ -2568,6 +2716,8 @@ static sipClassDef classesTable[] = {
 	{sipName_BALL_Box3, sipNew_Box3, &sipClass_Box3, sipClassAttrTab_Box3, sipClassVarHierTab_Box3},
 	{sipName_BALL_Angle, sipNew_Angle, &sipClass_Angle, sipClassAttrTab_Angle, NULL},
 	{sipName_BALL_System, sipNew_System, &sipClass_System, sipClassAttrTab_System, NULL},
+	{sipName_BALL_CompositeProcessor, sipNew_CompositeProcessor, &sipClass_CompositeProcessor, sipClassAttrTab_CompositeProcessor, NULL},
+	{sipName_BALL_Selector, sipNew_Selector, &sipClass_Selector, sipClassAttrTab_Selector, NULL},
 	{sipName_BALL_SecondaryStructure, sipNew_SecondaryStructure, &sipClass_SecondaryStructure, sipClassAttrTab_SecondaryStructure, NULL},
 	{sipName_BALL_Residue, sipNew_Residue, &sipClass_Residue, sipClassAttrTab_Residue, NULL},
 	{sipName_BALL_Protein, sipNew_Protein, &sipClass_Protein, sipClassAttrTab_Protein, NULL},
@@ -2598,6 +2748,8 @@ static sipClassDef classesTable[] = {
 	{sipName_BALL_PropertyManager, sipNew_PropertyManager, &sipClass_PropertyManager, sipClassAttrTab_PropertyManager, NULL},
 	{sipName_BALL_NamedProperty, sipNew_NamedProperty, &sipClass_NamedProperty, sipClassAttrTab_NamedProperty, NULL},
 	{sipName_BALL_Processor, sipNew_Processor, &sipClass_Processor, sipClassAttrTab_Processor, NULL},
+	{sipName_BALL_UnaryAtomPredicate, sipNew_UnaryAtomPredicate, &sipClass_UnaryAtomPredicate, sipClassAttrTab_UnaryAtomPredicate, NULL},
+	{sipName_BALL_UnaryCompositePredicate, sipNew_UnaryCompositePredicate, &sipClass_UnaryCompositePredicate, sipClassAttrTab_UnaryCompositePredicate, NULL},
 	{sipName_BALL_Selectable, sipNew_Selectable, &sipClass_Selectable, sipClassAttrTab_Selectable, NULL},
 	{sipName_BALL_Object, sipNew_Object, &sipClass_Object, sipClassAttrTab_Object, NULL},
 	{sipName_BALL_PersistentObject, sipNew_PersistentObject, &sipClass_PersistentObject, sipClassAttrTab_PersistentObject, NULL},
@@ -2611,7 +2763,7 @@ static sipClassDef classesTable[] = {
 
 static sipModuleDef sipModule = {
 	sipName_BALL_BALL,
-	87,
+	99,
 	classesTable
 };
 
@@ -2646,17 +2798,19 @@ static PyObject *initModule(PyObject *,PyObject *)
 	// Add the global functions to the dictionary.
 
 	static PyMethodDef globfuncs[] = {
+		{sipName_BALL_calculateBondAngle, sipDo_calculateBondAngle, METH_VARARGS, NULL},
+		{sipName_BALL_calculateTorsionAngle, sipDo_calculateTorsionAngle, METH_VARARGS, NULL},
 		{sipName_BALL_nucleicAcids, sipDo_nucleicAcids, METH_VARARGS, NULL},
 		{sipName_BALL_nucleotides, sipDo_nucleotides, METH_VARARGS, NULL},
 		{sipName_BALL_proteins, sipDo_proteins, METH_VARARGS, NULL},
 		{sipName_BALL_chains, sipDo_chains, METH_VARARGS, NULL},
 		{sipName_BALL_secondaryStructures, sipDo_secondaryStructures, METH_VARARGS, NULL},
 		{sipName_BALL_residues, sipDo_residues, METH_VARARGS, NULL},
-		{sipName_BALL_PDBAtoms, sipDo_PDBAtoms, METH_VARARGS, NULL},
 		{sipName_BALL_molecules, sipDo_molecules, METH_VARARGS, NULL},
 		{sipName_BALL_fragments, sipDo_fragments, METH_VARARGS, NULL},
 		{sipName_BALL_baseFragments, sipDo_baseFragments, METH_VARARGS, NULL},
 		{sipName_BALL_bonds, sipDo_bonds, METH_VARARGS, NULL},
+		{sipName_BALL_PDBAtoms, sipDo_PDBAtoms, METH_VARARGS, NULL},
 		{sipName_BALL_atoms, sipDo_atoms, METH_VARARGS, NULL},
 		{sipName_BALL_getTorsionAngle, sipDo_getTorsionAngle, METH_VARARGS, NULL},
 		{sipName_BALL_isParallel, sipDo_isParallel, METH_VARARGS, NULL},

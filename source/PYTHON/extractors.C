@@ -1,4 +1,4 @@
-// $Id: extractors.C,v 1.3 2000/07/03 11:11:05 oliver Exp $
+// $Id: extractors.C,v 1.4 2000/07/06 14:08:46 oliver Exp $
 
 #include <BALL/PYTHON/pyAtomList.h>
 #include <BALL/PYTHON/pyPDBAtomList.h>
@@ -17,14 +17,14 @@
 
 namespace BALL
 {
-	PyAtomList* atoms(const BaseFragment& fragment, bool selected_only)
+	PyAtomList* atoms(const BaseFragment& fragment, const String& expression)
 	{
-		return new PyAtomList(fragment, selected_only);
+		return new PyAtomList(fragment, expression);
 	}
 
-	PyPDBAtomList* PDBAtoms(const BaseFragment& fragment, bool selected_only)
+	PyPDBAtomList* PDBAtoms(const BaseFragment& fragment, const String& expression)
 	{
-		return new PyPDBAtomList(fragment, selected_only);
+		return new PyPDBAtomList(fragment, expression);
 	}
 
 	PyBondList* bonds(const BaseFragment& fragment, bool selected_only)

@@ -1,7 +1,7 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.13 2000/07/03 11:11:04 oliver Exp $
+# $Id: Makefile,v 1.14 2000/07/06 14:08:45 oliver Exp $
 #
 
 all: libBALLc.so
@@ -14,13 +14,16 @@ SIP_SOURCES_COMMON=\
 
 SIP_SOURCES_CONCEPT=\
 	sipBALLAtomProcessor.C\
+	sipBALLCompositeProcessor.C\
 	sipBALLComposite.C\
 	sipBALLNamedProperty.C\
 	sipBALLObject.C\
 	sipBALLPersistentObject.C\
 	sipBALLProcessor.C\
 	sipBALLPropertyManager.C\
-	sipBALLSelectable.C
+	sipBALLSelectable.C\
+	sipBALLUnaryAtomPredicate.C\
+	sipBALLUnaryCompositePredicate.C
 
 SIP_SOURCES_DATATYPE=\
 	sipBALLOptions.C\
@@ -55,6 +58,7 @@ SIP_SOURCES_KERNEL=\
 	sipBALLProtein.C\
 	sipBALLResidue.C\
 	sipBALLSecondaryStructure.C\
+	sipBALLSelector.C\
 	sipBALLSystem.C
 
 SIP_SOURCES_MATHS=\
@@ -84,6 +88,11 @@ SIP_SOURCES_MOLMEC_CHARMM=\
 	sipBALLCharmmNonBonded.C\
 	sipBALLCharmmStretch.C\
 	sipBALLCharmmTorsion.C
+
+SIP_SOURCES_MOLMEC_MDSIMULATION=\
+	sipBALLCanonicalMD.C\
+	sipBALLMicroCanonicalMD.C\
+	sipBALLMolecularDynamics.C
 
 SIP_SOURCES_MOLMEC_MINIMIZATION=\
 	sipBALLConjugateGradientMinimizer.C\
@@ -123,7 +132,12 @@ SIP_SOURCES_STRUCTURE=\
 	sipBALLClearChargeProcessor.C\
 	sipBALLClearRadiusProcessor.C\
 	sipBALLAssignRadiusProcessor.C\
-	sipBALLAssignChargeProcessor.C
+	sipBALLAssignChargeProcessor.C\
+	sipBALLTranslationProcessor.C\
+	sipBALLTransformationProcessor.C\
+	sipBALLBoundingBoxProcessor.C\
+	sipBALLGeometricCenterProcessor.C\
+	sipBALLFragmentDistanceCollector.C
 
 SIP_SOURCES=\
 	$(SIP_SOURCES_COMMON)\
@@ -136,6 +150,7 @@ SIP_SOURCES=\
 	$(SIP_SOURCES_MOLMEC_CHARMM)\
 	$(SIP_SOURCES_MOLMEC_COMMON)\
 	$(SIP_SOURCES_MOLMEC_MINIMIZATION)\
+	$(SIP_SOURCES_MOLMEC_MDSIMULATION)\
 	$(SIP_SOURCES_NMR)\
 	$(SIP_SOURCES_PYTHON)\
 	$(SIP_SOURCES_SOLVATION)\

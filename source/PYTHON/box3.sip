@@ -1,8 +1,10 @@
+// $Id: box3.sip,v 1.2 2000/07/06 14:08:46 oliver Exp $
+
 class Box3
 {
 %HeaderCode
-#include <BALL/MATHS/box3.h>
-using namespace BALL;
+	#include <BALL/MATHS/box3.h>
+	using namespace BALL;
 %End
 	public:
   Box3();
@@ -34,4 +36,20 @@ using namespace BALL;
   // void dump(std::ostream& s = std::cout, Size depth = 0) const;
   Vector3 a;
   Vector3 b;
+	operator const char* ();
+%MemberCode
+  	Box3* ptr;
+	  if ((ptr = (Box3*)sipGetCppPtr(sipThis,sipClass_Box3)) == NULL)
+	    return NULL;
+
+   static String tmp;
+   tmp = "Box3 { (";
+   tmp += String(ptr->a.x) + " ";
+   tmp += String(ptr->a.y) + " ";
+   tmp += String(ptr->a.z) + ") (";
+   tmp += String(ptr->b.x) + " ";
+   tmp += String(ptr->b.y) + " ";
+   tmp += String(ptr->b.z) + ") }";
+   return PyString_FromString(tmp.c_str());
+%End
 };

@@ -1,7 +1,8 @@
-// $Id: pyPDBAtomList.C,v 1.2 2000/07/03 11:11:12 oliver Exp $
+// $Id: pyPDBAtomList.C,v 1.3 2000/07/06 14:08:51 oliver Exp $
 
 #include <BALL/PYTHON/pyPDBAtomList.h>
 #include <BALL/KERNEL/PDBAtom.h>
+#include <BALL/KERNEL/expression.h>
 #include <BALL/KERNEL/baseFragment.h>
 
 namespace BALL
@@ -21,26 +22,46 @@ namespace BALL
 	{
 	}
 
-	PyPDBAtomList::PyPDBAtomList(const BaseFragment& fragment, bool selected_only )
+	PyPDBAtomList::PyPDBAtomList(const BaseFragment& fragment, const String& expression)
 	{
-		set(fragment, selected_only);
+		set(fragment, expression);
 	}
 
-	void PyPDBAtomList::set(const BaseFragment& fragment, bool selected_only)
+	void PyPDBAtomList::set(const BaseFragment& fragment, const String& expression)
 	{
 		// clear the old contents of the list
 		clear();
 
-		// iterate over all PDBAtoms
-		AtomConstIterator it = fragment.beginAtom();
+		if (expression == "")
+		{
+			// iterate over all PDBAtoms
+			AtomConstIterator it = fragment.beginAtom();
 
-    for (; +it; ++it)
-    {
-      const PDBAtom* pdb_atom = dynamic_cast<const PDBAtom*>(&*it);
-      if ((pdb_atom != 0) && (it->isSelected() || !selected_only))
-      {
-        // store the pdb atom pointer in the list
-        push_back(const_cast<PDBAtom*>(pdb_atom));
+			for (; +it; ++it)
+			{
+				const PDBAtom* pdb_atom = dynamic_cast<const PDBAtom*>(&*it);
+				if (pdb_atom != 0)
+				{
+					// store the pdb atom pointer in the list
+					push_back(const_cast<PDBAtom*>(pdb_atom));
+				}
+			}
+		}
+		else
+		{
+			Expression match(expression);
+
+			// iterate over all PDBAtoms
+			AtomConstIterator it = fragment.beginAtom();
+
+			for (; +it; ++it)
+			{
+				const PDBAtom* pdb_atom = dynamic_cast<const PDBAtom*>(&*it);
+				if ((pdb_atom != 0) && match(*pdb_atom))
+				{
+					// store the pdb atom pointer in the list
+					push_back(const_cast<PDBAtom*>(pdb_atom));
+				}
 			}
 		}
 	}

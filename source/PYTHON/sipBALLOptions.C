@@ -29,7 +29,7 @@ static PyObject *sipDo_Options_isInteger(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		String *a0;
+		const String *a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -42,7 +42,7 @@ static PyObject *sipDo_Options_isInteger(PyObject *sipThisObj,PyObject *sipArgs)
 
 			int iserr = 0;
 
-			int istemp0 = sipConvertTo_String(a0obj,&a0,1,&iserr);
+			int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -71,7 +71,7 @@ static PyObject *sipDo_Options_isBool(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		String *a0;
+		const String *a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -84,7 +84,7 @@ static PyObject *sipDo_Options_isBool(PyObject *sipThisObj,PyObject *sipArgs)
 
 			int iserr = 0;
 
-			int istemp0 = sipConvertTo_String(a0obj,&a0,1,&iserr);
+			int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -113,7 +113,7 @@ static PyObject *sipDo_Options_isReal(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		String *a0;
+		const String *a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -126,7 +126,7 @@ static PyObject *sipDo_Options_isReal(PyObject *sipThisObj,PyObject *sipArgs)
 
 			int iserr = 0;
 
-			int istemp0 = sipConvertTo_String(a0obj,&a0,1,&iserr);
+			int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -155,7 +155,7 @@ static PyObject *sipDo_Options_isVector(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		String *a0;
+		const String *a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -168,7 +168,7 @@ static PyObject *sipDo_Options_isVector(PyObject *sipThisObj,PyObject *sipArgs)
 
 			int iserr = 0;
 
-			int istemp0 = sipConvertTo_String(a0obj,&a0,1,&iserr);
+			int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -197,7 +197,7 @@ static PyObject *sipDo_Options_isSet(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		String *a0;
+		const String *a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -210,7 +210,7 @@ static PyObject *sipDo_Options_isSet(PyObject *sipThisObj,PyObject *sipArgs)
 
 			int iserr = 0;
 
-			int istemp0 = sipConvertTo_String(a0obj,&a0,1,&iserr);
+			int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -239,7 +239,7 @@ static PyObject *sipDo_Options_setName(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		String *a0;
+		const String *a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -251,7 +251,7 @@ static PyObject *sipDo_Options_setName(PyObject *sipThisObj,PyObject *sipArgs)
 
 			int iserr = 0;
 
-			int istemp0 = sipConvertTo_String(a0obj,&a0,1,&iserr);
+			int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -283,15 +283,15 @@ static PyObject *sipDo_Options_getName(PyObject *sipThisObj,PyObject *sipArgs)
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			String *res;
+			const String *res;
 			Options *ptr;
 
 			if ((ptr = (Options *)sipGetCppPtr(sipThis,sipClass_Options)) == NULL)
 				return NULL;
 
-			res = new String(ptr -> Options::getName());
+			res = &ptr -> Options::getName();
 
-			return sipNewCppToSelf(res,sipClass_String,SIP_SIMPLE | SIP_PY_OWNED);
+			return sipMapCppToSelf(res,sipClass_String);
 		}
 	}
 
@@ -310,7 +310,7 @@ static PyObject *sipDo_Options_get(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		String *a0;
+		const String *a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -323,7 +323,7 @@ static PyObject *sipDo_Options_get(PyObject *sipThisObj,PyObject *sipArgs)
 
 			int iserr = 0;
 
-			int istemp0 = sipConvertTo_String(a0obj,&a0,1,&iserr);
+			int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -352,7 +352,7 @@ static PyObject *sipDo_Options_getBool(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		String *a0;
+		const String *a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -365,7 +365,7 @@ static PyObject *sipDo_Options_getBool(PyObject *sipThisObj,PyObject *sipArgs)
 
 			int iserr = 0;
 
-			int istemp0 = sipConvertTo_String(a0obj,&a0,1,&iserr);
+			int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -394,7 +394,7 @@ static PyObject *sipDo_Options_getReal(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		String *a0;
+		const String *a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -407,7 +407,7 @@ static PyObject *sipDo_Options_getReal(PyObject *sipThisObj,PyObject *sipArgs)
 
 			int iserr = 0;
 
-			int istemp0 = sipConvertTo_String(a0obj,&a0,1,&iserr);
+			int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -436,7 +436,7 @@ static PyObject *sipDo_Options_getVector(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		String *a0;
+		const String *a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -449,7 +449,7 @@ static PyObject *sipDo_Options_getVector(PyObject *sipThisObj,PyObject *sipArgs)
 
 			int iserr = 0;
 
-			int istemp0 = sipConvertTo_String(a0obj,&a0,1,&iserr);
+			int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -478,7 +478,7 @@ static PyObject *sipDo_Options_getInteger(PyObject *sipThisObj,PyObject *sipArgs
 		return NULL;
 
 	{
-		String *a0;
+		const String *a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -491,7 +491,7 @@ static PyObject *sipDo_Options_getInteger(PyObject *sipThisObj,PyObject *sipArgs
 
 			int iserr = 0;
 
-			int istemp0 = sipConvertTo_String(a0obj,&a0,1,&iserr);
+			int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -520,9 +520,9 @@ static PyObject *sipDo_Options_set(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		String *a0;
+		const String *a0;
 		PyObject *a0obj;
-		String *a1;
+		const String *a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(sipArgs,"II",sipCanConvertTo_String,&a0obj,sipCanConvertTo_String,&a1obj))
@@ -534,8 +534,8 @@ static PyObject *sipDo_Options_set(PyObject *sipThisObj,PyObject *sipArgs)
 
 			int iserr = 0;
 
-			int istemp0 = sipConvertTo_String(a0obj,&a0,1,&iserr);
-			int istemp1 = sipConvertTo_String(a1obj,&a1,1,&iserr);
+			int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
+			int istemp1 = sipConvertTo_String(a1obj,(String **)&a1,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -568,7 +568,7 @@ static PyObject *sipDo_Options_setReal(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		String *a0;
+		const String *a0;
 		PyObject *a0obj;
 		double a1;
 
@@ -581,7 +581,7 @@ static PyObject *sipDo_Options_setReal(PyObject *sipThisObj,PyObject *sipArgs)
 
 			int iserr = 0;
 
-			int istemp0 = sipConvertTo_String(a0obj,&a0,1,&iserr);
+			int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -611,9 +611,9 @@ static PyObject *sipDo_Options_setVector(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		String *a0;
+		const String *a0;
 		PyObject *a0obj;
-		Vector3 *a1;
+		const Vector3 *a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(sipArgs,"II",sipCanConvertTo_String,&a0obj,sipCanConvertTo_Vector3,&a1obj))
@@ -625,8 +625,8 @@ static PyObject *sipDo_Options_setVector(PyObject *sipThisObj,PyObject *sipArgs)
 
 			int iserr = 0;
 
-			int istemp0 = sipConvertTo_String(a0obj,&a0,1,&iserr);
-			sipConvertTo_Vector3(a1obj,&a1,1,&iserr);
+			int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
+			sipConvertTo_Vector3(a1obj,(Vector3 **)&a1,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -656,7 +656,7 @@ static PyObject *sipDo_Options_setInteger(PyObject *sipThisObj,PyObject *sipArgs
 		return NULL;
 
 	{
-		String *a0;
+		const String *a0;
 		PyObject *a0obj;
 		long a1;
 
@@ -669,7 +669,7 @@ static PyObject *sipDo_Options_setInteger(PyObject *sipThisObj,PyObject *sipArgs
 
 			int iserr = 0;
 
-			int istemp0 = sipConvertTo_String(a0obj,&a0,1,&iserr);
+			int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -699,7 +699,7 @@ static PyObject *sipDo_Options_setBool(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		String *a0;
+		const String *a0;
 		PyObject *a0obj;
 		long a1;
 
@@ -712,7 +712,7 @@ static PyObject *sipDo_Options_setBool(PyObject *sipThisObj,PyObject *sipArgs)
 
 			int iserr = 0;
 
-			int istemp0 = sipConvertTo_String(a0obj,&a0,1,&iserr);
+			int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -742,9 +742,9 @@ static PyObject *sipDo_Options_setDefault(PyObject *sipThisObj,PyObject *sipArgs
 		return NULL;
 
 	{
-		String *a0;
+		const String *a0;
 		PyObject *a0obj;
-		String *a1;
+		const String *a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(sipArgs,"II",sipCanConvertTo_String,&a0obj,sipCanConvertTo_String,&a1obj))
@@ -757,8 +757,8 @@ static PyObject *sipDo_Options_setDefault(PyObject *sipThisObj,PyObject *sipArgs
 
 			int iserr = 0;
 
-			int istemp0 = sipConvertTo_String(a0obj,&a0,1,&iserr);
-			int istemp1 = sipConvertTo_String(a1obj,&a1,1,&iserr);
+			int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
+			int istemp1 = sipConvertTo_String(a1obj,(String **)&a1,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -790,7 +790,7 @@ static PyObject *sipDo_Options_setDefaultInteger(PyObject *sipThisObj,PyObject *
 		return NULL;
 
 	{
-		String *a0;
+		const String *a0;
 		PyObject *a0obj;
 		long a1;
 
@@ -804,7 +804,7 @@ static PyObject *sipDo_Options_setDefaultInteger(PyObject *sipThisObj,PyObject *
 
 			int iserr = 0;
 
-			int istemp0 = sipConvertTo_String(a0obj,&a0,1,&iserr);
+			int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -833,7 +833,7 @@ static PyObject *sipDo_Options_setDefaultReal(PyObject *sipThisObj,PyObject *sip
 		return NULL;
 
 	{
-		String *a0;
+		const String *a0;
 		PyObject *a0obj;
 		double a1;
 
@@ -847,7 +847,7 @@ static PyObject *sipDo_Options_setDefaultReal(PyObject *sipThisObj,PyObject *sip
 
 			int iserr = 0;
 
-			int istemp0 = sipConvertTo_String(a0obj,&a0,1,&iserr);
+			int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -876,7 +876,7 @@ static PyObject *sipDo_Options_setDefaultBool(PyObject *sipThisObj,PyObject *sip
 		return NULL;
 
 	{
-		String *a0;
+		const String *a0;
 		PyObject *a0obj;
 		long a1;
 
@@ -890,7 +890,7 @@ static PyObject *sipDo_Options_setDefaultBool(PyObject *sipThisObj,PyObject *sip
 
 			int iserr = 0;
 
-			int istemp0 = sipConvertTo_String(a0obj,&a0,1,&iserr);
+			int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -919,7 +919,7 @@ static PyObject *sipDo_Options_readOptionFile(PyObject *sipThisObj,PyObject *sip
 		return NULL;
 
 	{
-		String *a0;
+		const String *a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -932,7 +932,7 @@ static PyObject *sipDo_Options_readOptionFile(PyObject *sipThisObj,PyObject *sip
 
 			int iserr = 0;
 
-			int istemp0 = sipConvertTo_String(a0obj,&a0,1,&iserr);
+			int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -998,15 +998,15 @@ PyObject *sipNew_Options(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		Options *a0;
+		const Options *a0;
 		PyObject *a0obj;
-		long a1;
+		long a1 = true;
 
-		if (sipParseArgs(sipArgs,"-Il",sipCanConvertTo_Options,&a0obj,&a1))
+		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_Options,&a0obj,&a1))
 		{
 			int iserr = 0;
 
-			sipConvertTo_Options(a0obj,&a0,1,&iserr);
+			sipConvertTo_Options(a0obj,(Options **)&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;
