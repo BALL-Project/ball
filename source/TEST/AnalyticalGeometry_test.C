@@ -1,4 +1,4 @@
-// $Id: AnalyticalGeometry_test.C,v 1.17 2000/05/26 19:25:00 amoll Exp $
+// $Id: AnalyticalGeometry_test.C,v 1.18 2000/06/20 11:39:13 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 #include <BALL/MATHS/analyticalGeometry.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: AnalyticalGeometry_test.C,v 1.17 2000/05/26 19:25:00 amoll Exp $")
+START_TEST(class_name, "$Id: AnalyticalGeometry_test.C,v 1.18 2000/06/20 11:39:13 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -521,7 +521,7 @@ CHECK(GetIntersection(const TPlane3<T>& a, const TPlane3<T>& b, TLine3<T>& line)
 	TEST_EQUAL(GetIntersection(p1, p1, l1), false)
 RESULT
 
-CHECK(GetIntersection(const TSphere3<T> &sphere, const TLine3<T>& line, TVector3<T> &intersection_point1, TVector3<T> &intersection_point2))
+CHECK(GetIntersection(const TSphere3<T>& sphere, const TLine3<T>& line, TVector3<T>& intersection_point1, TVector3<T>& intersection_point2))
 	v1.set(0.0, 0.0, 0.0);
 	s1 = Sphere3(v1, sqrt(3.0));
 	v1.set(-10.0, -10.0, -10.0);
@@ -537,7 +537,7 @@ CHECK(GetIntersection(const TSphere3<T> &sphere, const TLine3<T>& line, TVector3
 	TEST_EQUAL(GetIntersection(s1, l1, v3, v4), false);
 RESULT
 
-CHECK(GetIntersection(const TLine3<T>& line, const TSphere3<T> &sphere TVector3<T> &intersection_point1, TVector3<T> &intersection_point2))
+CHECK(GetIntersection(const TLine3<T>& line, const TSphere3<T>& sphere TVector3<T>& intersection_point1, TVector3<T>& intersection_point2))
 	v1.set(5.0, 0.0, 0.0);
 	s1 = Sphere3(v1, 2);
 	v1.set(0.0, 0.0, 0.0);
@@ -596,6 +596,7 @@ CHECK(GetIntersection(const TPlane3<T>& plane, const TSphere3<T>& sphere TCircle
 RESULT
 
 CHECK(GetIntersection(const TSphere3<T>& a, const TSphere3<T>& b, TCircle3<T>& intersection_circle))
+	// standard case: two intersecting spheres
 	v1.set(0.0, 0.0, 0.0);
 	s1 = Sphere3(v1, 5);
 	v1.set(5.0, 0.0, 0.0);
@@ -608,6 +609,32 @@ CHECK(GetIntersection(const TSphere3<T>& a, const TSphere3<T>& b, TCircle3<T>& i
 	TEST_REAL_EQUAL(c1.p.getDistance(c2.p), 0.0)
 	TEST_REAL_EQUAL(c1.n.getDistance(c2.n), 0.0)
 	TEST_REAL_EQUAL(c1.radius, radius)
+	TEST_EQUAL(GetIntersection(s2, s1, c1), true)
+	TEST_REAL_EQUAL(c1.p.getDistance(c2.p), 0.0)
+	TEST_REAL_EQUAL(c1.n.getDistance(c2.n), 0.0)
+	TEST_REAL_EQUAL(c1.radius, radius)
+
+
+	// special case: no intersection
+	s1 = Sphere3(Vector3(-2.0, 0.0, 0.0), 1.0);
+	s2 = Sphere3(Vector3( 2.0, 0.0, 0.0), 1.0);
+	TEST_EQUAL(GetIntersection(s1, s2, c1), false)
+	TEST_EQUAL(GetIntersection(s2, s1, c1), false)
+
+	// special case: concentric spheres
+	s1 = Sphere3(Vector3(0.0, 0.0, 0.0), 1.0);
+	s2 = Sphere3(Vector3(0.0, 0.0, 0.0), 2.0);
+	TEST_EQUAL(GetIntersection(s1, s2, c1), false)
+	TEST_EQUAL(GetIntersection(s2, s1, c1), false)
+
+	// special case: one inside the other, no intersection
+	s1 = Sphere3(Vector3(0.0, 0.0, 0.0), 3.0);
+	s2 = Sphere3(Vector3(1.0, 0.0, 0.0), 1.5);
+	TEST_EQUAL(GetIntersection(s1, s2, c1), false)
+	TEST_EQUAL(GetIntersection(s2, s1, c1), false)
+
+	// test for the degenerate case of two identical spheres
+	TEST_EQUAL(GetIntersection(s1, s1, c1), false)
 RESULT
 
 CHECK(isCollinear(const TVector3<T>& a, const TVector3<T>& b))
