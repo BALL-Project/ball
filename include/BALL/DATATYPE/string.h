@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: string.h,v 1.54 2004/02/23 16:33:15 oliver Exp $
+// $Id: string.h,v 1.55 2005/02/15 19:19:02 oliver Exp $
 //
 
 #ifndef BALL_DATATYPE_STRING_H
@@ -260,11 +260,14 @@ namespace BALL
 		*/
 		//@{
 
+		/**	Assign a string */
+		void set(const String& s);
+
 		/**	Assign a String from a range of another string
 				@exception Exception::IndexOverflow if <tt>from < 0</tt>
 				@exception Exception::IndexUnderflow if <tt>from >= size()</tt>
 		*/
-		void set(const String& string, Index from = 0, Size len = EndPos)
+		void set(const String& string, Index from, Size len = EndPos)
 			throw(Exception::IndexUnderflow, Exception::IndexOverflow);
 
 		/** Assign a String from a C type string 

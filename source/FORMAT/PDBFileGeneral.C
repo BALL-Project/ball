@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFileGeneral.C,v 1.3 2005/02/14 17:07:55 amoll Exp $
+// $Id: PDBFileGeneral.C,v 1.4 2005/02/15 19:18:41 oliver Exp $
 //
 
 // This file contains the more or less "general" portion of PDBFile.
@@ -439,9 +439,7 @@ namespace BALL
 					++format_column;
 
 					temp2 = format_column;
-					for (; isdigit(*format_column); ++format_column)
-					{
-					}
+					for (; isdigit(*format_column); ++format_column);
 				}
 			}
 

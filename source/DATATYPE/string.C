@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: string.C,v 1.52 2004/12/02 01:21:07 amoll Exp $
+// $Id: string.C,v 1.53 2005/02/15 19:18:41 oliver Exp $
 //
 
 #include <BALL/DATATYPE/string.h>
@@ -234,10 +234,14 @@ namespace BALL
 
 	#undef BALL_STRING_DEFINE_CONSTRUCTOR_METHOD
 
-	String::~String()
-		throw()
+	String::~String() throw()
 	{
 		erase();
+	}
+
+	void String::set(const String& s)
+	{
+		std::string::operator = (s);
 	}
 
 	void String::set(const String& s, Index from, Size len)

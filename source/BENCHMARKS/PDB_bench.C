@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDB_bench.C,v 1.6 2005/02/12 23:08:27 oliver Exp $
+// $Id: PDB_bench.C,v 1.7 2005/02/15 19:18:41 oliver Exp $
 //
 
 #include <BALL/CONCEPT/benchmark.h>
@@ -14,7 +14,7 @@
 
 using namespace BALL;
 
-START_BENCHMARK(PDBFile, 1.0, "$Id: PDB_bench.C,v 1.6 2005/02/12 23:08:27 oliver Exp $")
+START_BENCHMARK(PDBFile, 1.0, "$Id: PDB_bench.C,v 1.7 2005/02/15 19:18:41 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -30,8 +30,6 @@ START_SECTION(Reading, 0.2)
 		STOP_TIMER
 		infile.close();
 	}
-	
-
 END_SECTION
 
 /////////////////////////////////////////////////////////////
