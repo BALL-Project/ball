@@ -1,4 +1,4 @@
-// $Id: PCMCavFreeEnergyProcessor_test.C,v 1.1 2001/09/24 07:53:28 aubertin Exp $
+// $Id: PCMCavFreeEnergyProcessor_test.C,v 1.2 2002/01/15 13:13:08 aubertin Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 #include <BALL/STRUCTURE/fragmentDB.h>
 ///////////////////////////
 
-START_TEST(ReissCavFreeEnergyProcessor, "$Id: PCMCavFreeEnergyProcessor_test.C,v 1.1 2001/09/24 07:53:28 aubertin Exp $")
+START_TEST(PCMCavFreeEnergyProcessor, "$Id: PCMCavFreeEnergyProcessor_test.C,v 1.2 2002/01/15 13:13:08 aubertin Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
