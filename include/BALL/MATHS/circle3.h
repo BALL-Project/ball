@@ -1,4 +1,4 @@
-// $Id: circle3.h,v 1.24 2001/02/14 01:59:58 amoll Exp $
+// $Id: circle3.h,v 1.25 2001/02/21 14:27:22 anker Exp $
 
 #ifndef BALL_MATHS_CIRCLE3_H
 #define BALL_MATHS_CIRCLE3_H
@@ -36,8 +36,8 @@ namespace BALL
 	std::ostream& operator << (std::ostream& s, const TCircle3<T>& circle)
 		throw();
 
-	/**	Generic Circle in Three-Dimensional Space.
-      {\bf Definition:} \URL{BALL/MATHS/.h}  \\
+	/**	Generic Circle in Three-Dimensional Space.\\
+			{\bf Definition:} \URL{BALL/MATHS/.h}\\
 	*/
 	template <typename T>
 	class TCircle3

@@ -1,4 +1,4 @@
-// $Id: box3.h,v 1.29 2001/02/14 01:59:57 amoll Exp $
+// $Id: box3.h,v 1.30 2001/02/21 14:27:22 anker Exp $
 
 #ifndef BALL_MATHS_BOX3_H
 #define BALL_MATHS_BOX3_H
@@ -15,10 +15,10 @@ namespace BALL
 {
 
 	/**	Generic three-dimensional Box.
-			This class describes a three-dimensional box with edges parallel
-			to the coordinate system. A box is given by the coordinates of the lower
-			left front corner and ther upper right back corner.\\
-			{\bf Definition:} \URL{BALL/MATHS/box3.h}	\\
+			This class describes a three-dimensional box with edges parallel to
+			the coordinate system. Hence, a box is given by the coordinates of
+			the lower left front corner and ther upper right back corner.\\
+			{\bf Definition:} \URL{BALL/MATHS/box3.h}\\
 	*/
 	template <typename T>
 	class TBox3
