@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.C,v 1.1.2.10 2005/03/28 00:43:56 amoll Exp $
+// $Id: MMFF94Parameters.C,v 1.1.2.11 2005/03/31 13:45:26 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field parameters 
 //
@@ -9,7 +9,9 @@
 #include <BALL/MOLMEC/MMFF94/MMFF94Parameters.h>
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/SYSTEM/path.h>
+#include <BALL/KERNEL/PTE.h>
 
+#define BALL_DEBUG_MMFF
 using namespace std;
 
 namespace BALL 
@@ -104,7 +106,7 @@ namespace BALL
 	///////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////
 	
-	MMFF94BondStretchParameters::BondData::BondData()
+	MMFF94StretchParameters::BondData::BondData()
 		: kb_normal(0),
 			r0_normal(0),
 			standard_bond_exists(0),
@@ -114,24 +116,24 @@ namespace BALL
 	{
 	}
 
-	MMFF94BondStretchParameters::MMFF94BondStretchParameters()
+	MMFF94StretchParameters::MMFF94StretchParameters()
 		: is_initialized_(false)
 	{
 	}
 
-	MMFF94BondStretchParameters::~MMFF94BondStretchParameters()
+	MMFF94StretchParameters::~MMFF94StretchParameters()
 	{
 		clear();
 	}
 	
-	void MMFF94BondStretchParameters::clear()
+	void MMFF94StretchParameters::clear()
 		throw()
 	{
 		parameters_.clear();
 	}
 	
-	const MMFF94BondStretchParameters& MMFF94BondStretchParameters::operator = 
-		(const MMFF94BondStretchParameters& param)
+	const MMFF94StretchParameters& MMFF94StretchParameters::operator = 
+		(const MMFF94StretchParameters& param)
 		throw()
 	{
 		parameters_ = param.parameters_;
@@ -139,8 +141,8 @@ namespace BALL
 	}
 
 
-	MMFF94BondStretchParameters::StretchMap::ConstIterator 
-		MMFF94BondStretchParameters::getParameters(const Bond& bond) const
+	MMFF94StretchParameters::StretchMap::ConstIterator 
+		MMFF94StretchParameters::getParameters(const Bond& bond) const
 	{
 		// take the standard value
 		StretchMap::ConstIterator it = parameters_.find(getIndex_(bond.getFirstAtom()->getType(),
@@ -148,7 +150,7 @@ namespace BALL
 		return it;
 	}
 
-	bool MMFF94BondStretchParameters::readParameters(const String& filename)
+	bool MMFF94StretchParameters::readParameters(const String& filename)
 		throw(Exception::FileNotFound)
 	{
 		parameters_.clear();
@@ -217,7 +219,7 @@ namespace BALL
 		return true;
 	}
 
-	Position MMFF94BondStretchParameters::getIndex_(Position atom_type1, Position atom_type2) const
+	Position MMFF94StretchParameters::getIndex_(Position atom_type1, Position atom_type2) const
 	{ 
 		// make sure atom_type1 is smaller or equal atom_type2
 		// because the parameters are not mirrored
@@ -373,14 +375,29 @@ namespace BALL
 	}
 
 	bool MMFF94StretchBendParameters::getParameters(Position bend_type,
-			Position atom_type1, Position atom_type2, Position atom_type3, 
+			const Atom& atom1, const Atom& atom2, const Atom& atom3, 
 			float& kb_ijk, float& kb_kji) const
 	{
 		// take the standard value
 		StretchBendMap::ConstIterator it = parameters_.find(
-				getIndex_(bend_type, atom_type1, atom_type2, atom_type3));
+				getIndex_(bend_type, atom1.getType(), atom2.getType(), atom3.getType()));
 
-		if (it == parameters_.end()) return false;
+		if (it == parameters_.end())
+		{
+			Position r1 = atom1.getElement().getPeriod() - 1;
+			Position r2 = atom2.getElement().getPeriod() - 1;
+			Position r3 = atom3.getElement().getPeriod() - 1;
+
+			it = parameters_.find(getIndexByRow_(r1, r2, r3));
+
+			if (it == parameters_by_row_.end())
+			{
+				return false;
+			}
+#ifdef BALL_DEBUG_MMFF
+Log.error() << "MMFF94 StretchBend: from row: " << atom1.getName() << " " << atom2.getName() << " " << atom3.getName() << std::endl;
+#endif
+		}
 
 		kb_ijk = it->second.first;
 		kb_kji = it->second.second;
@@ -388,10 +405,11 @@ namespace BALL
 		return true;
 	}
 
-	bool MMFF94StretchBendParameters::readParameters(const String& filename)
+	bool MMFF94StretchBendParameters::readParameters(const String& filename, const String& by_row_filename)
 		throw(Exception::FileNotFound)
 	{
 		parameters_.clear();
+ 		parameters_by_row_.clear();
 
 		LineBasedFile infile(filename);
 		vector<String> fields;
@@ -435,6 +453,48 @@ namespace BALL
 
 		infile.close();
 
+		infile = LineBasedFile(by_row_filename);
+
+		try
+		{
+			while (infile.readLine())
+			{
+				// comments
+				if (infile.getLine().hasPrefix("*") || infile.getLine().hasPrefix("$")) 
+				{
+					continue;
+				}
+				
+				if (infile.getLine().split(fields) < 5)
+				{
+					Log.error() << "Error in " << __FILE__ << " " << __LINE__ << " : " 
+										  << filename << " Not 5 fields in one line " 
+											<< infile.getLine() << std::endl;
+					return false;
+				}
+
+				const Position ir = fields[0].toUnsignedInt();
+				const Position jr = fields[1].toUnsignedInt();
+				const Position kr = fields[2].toUnsignedInt();
+				const float    f_ijk = fields[3].toFloat();
+				const float    f_kji = fields[4].toFloat();
+				const Position index = getIndexByRow_(ir, jr, kr);
+
+				parameters_[index] = pair<float, float>();
+				parameters_[index].first  = f_ijk;
+				parameters_[index].second = f_kji;
+			}
+		}
+		catch(...)
+		{
+			Log.error() << "Error while parsing line " << infile.readLine() << std::endl;
+			Log.error() << " in File " << filename << std::endl;
+			infile.close();
+			return false;
+		}
+
+		infile.close();
+
 		is_initialized_ = true;
 		return true;
 	}
@@ -460,5 +520,20 @@ namespace BALL
 					 stretch_bend_type;
 	}
 
+
+	Position MMFF94StretchBendParameters::getIndexByRow_(Position r1, Position r2, Position r3) const
+	{
+		// row 1 is always less or equal row 3
+		if (r1 > r3)
+		{
+			Position temp(r1);
+			r1 = r3;
+			r3 = temp;
+		}
+
+		return r1 * 10 * 10 + 
+					 r2 * 10      +
+					 r3;
+	}
 
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Bend.C,v 1.1.2.9 2005/03/28 00:43:55 amoll Exp $
+// $Id: MMFF94Bend.C,v 1.1.2.10 2005/03/31 13:45:26 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Bend.h>
@@ -13,7 +13,7 @@
 
 #include <math.h>
 
-#define BALL_DEBUG_MMFF
+//   #define BALL_DEBUG_MMFF
 
 using namespace std;
 

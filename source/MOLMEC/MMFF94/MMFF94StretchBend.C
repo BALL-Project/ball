@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94StretchBend.C,v 1.1.2.3 2005/03/28 12:38:00 amoll Exp $
+// $Id: MMFF94StretchBend.C,v 1.1.2.4 2005/03/31 13:45:26 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
@@ -21,7 +21,7 @@ namespace BALL
 {
 
 	// Constant 
-	#define K0 2.5121
+	#define K0 2.51210
 
 
 	// default constructor
@@ -67,14 +67,13 @@ namespace BALL
 		if (!parameters_.isInitialized())
 		{
 			Path    path;
-			String  filename(path.find("MMFF94/MMFFSTBN.PAR"));
+			String  filename1(path.find("MMFF94/MMFFSTBN.PAR"));
+			String  filename2(path.find("MMFF94/MMFFDFSB.PAR"));
 
-			if (filename == "") 
-			{
-				throw Exception::FileNotFound(__FILE__, __LINE__, filename);
-			}
+			if (filename1 == "") throw Exception::FileNotFound(__FILE__, __LINE__, filename1);
+			if (filename2 == "") throw Exception::FileNotFound(__FILE__, __LINE__, filename2);
 
-			parameters_.readParameters(filename);
+			parameters_.readParameters(filename1, filename2);
 		}
 
 		stretch_bends_.clear();
@@ -143,10 +142,10 @@ namespace BALL
 																		 stretches[pos1].sbmb,
 																		 stretches[pos2].sbmb);
 
-			// store kba_ijk and kba_kji
+			// get kba_ijk and kba_kji
 			if (sbtijk == -1 ||
-					!parameters_.getParameters(sbtijk, 
-																		 sb.atom1->type, sb.atom2->type, sb.atom3->type,
+			    !parameters_.getParameters(sbtijk, 
+																		 *sb.atom1->ptr, *sb.atom2->ptr, *sb.atom3->ptr,
 																		 sb.kba_ijk, sb.kba_kji))
 			{
 				errorOccured_("stretch-bend", *sb.atom1->ptr, *sb.atom2->ptr, *sb.atom3->ptr);
@@ -183,10 +182,12 @@ namespace BALL
 
 		for (Size i = 0; i < stretch_bends_.size(); i++)
 		{
-			StretchBend& sb = stretch_bends_[0];
+			StretchBend& sb = stretch_bends_[i];
 			float energy = K0 * (sb.kba_ijk * (*sb.delta_r_ij) +
 													 sb.kba_kji * (*sb.delta_r_kj)) 
 										 	  * (*sb.delta_theta);
+	
+			sb.energy = energy;
 
 			energy_ += energy;
 		}

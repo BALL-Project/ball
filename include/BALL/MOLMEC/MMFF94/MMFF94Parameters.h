@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.h,v 1.1.2.6 2005/03/28 00:44:33 amoll Exp $ 
+// $Id: MMFF94Parameters.h,v 1.1.2.7 2005/03/31 13:45:29 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field class
@@ -94,10 +94,12 @@ namespace BALL
 	};
 
 
+	/////////////////////////////////////////////////////////////////////////////
+	
 	/**	MMFF94 parameters for bond stretching
       \ingroup  MMFF94
 	*/
-	class MMFF94BondStretchParameters
+	class MMFF94StretchParameters
 	{
 		public:
 
@@ -123,15 +125,15 @@ namespace BALL
 		*/
 		//@{
 
-		BALL_CREATE(MMFF94BondStretchParameters)
+		BALL_CREATE(MMFF94StretchParameters)
 
 		/**	Default constructor.
 		*/
-		MMFF94BondStretchParameters();
+		MMFF94StretchParameters();
 
 		/**	Destructor.
 		*/
-		virtual ~MMFF94BondStretchParameters();
+		virtual ~MMFF94StretchParameters();
 
 		//@}
 		/**	@name Assignment
@@ -140,7 +142,7 @@ namespace BALL
 
 		/**	Assignment operator
 		*/
-		const MMFF94BondStretchParameters& operator = (const MMFF94BondStretchParameters& param)
+		const MMFF94StretchParameters& operator = (const MMFF94StretchParameters& param)
 			throw();
 
 		/**	Clear method
@@ -174,6 +176,7 @@ namespace BALL
 		bool is_initialized_;
 	};
 
+///////////////////////////////////////////////////////////////////////////
 
 	/**	MMFF94 parameters for bond bending
       \ingroup  MMFF94
@@ -242,6 +245,10 @@ namespace BALL
 		bool is_initialized_;
 	};
 
+
+////////////////////////////////////////////////////////////////////
+
+	
 	/**	MMFF94 parameters for stretch-bend interactions
       \ingroup  MMFF94
 	*/
@@ -286,12 +293,13 @@ namespace BALL
 
 		///
 		bool getParameters(Position stretch_bend_type,
-											 Position atom_type1, 
-											 Position atom_type2, 
-											 Position atom_type3, float& kba_ijk, float& kba_kji) const;
+											 const Atom& atom1, 
+											 const Atom& atom2, 
+											 const Atom& atom3, 
+											 float& kba_ijk, float& kba_kji) const;
 
-		///
-		bool readParameters(const String& filename)
+		/// read parameters for stretch-bends and for assignment by periodic table row
+		bool readParameters(const String& filename, const String& by_row_filename)
 			throw(Exception::FileNotFound);
 		
 		//@}
@@ -303,8 +311,11 @@ namespace BALL
 											 Position atom_type2, 
 											 Position atom_type3) const;
 
+		Position getIndexByRow_(Position r1, Position r2, Position r3) const;
+
 		/// parameters 
 		StretchBendMap parameters_;
+		StretchBendMap parameters_by_row_;
 
 		bool is_initialized_;
 	};

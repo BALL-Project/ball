@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.C,v 1.1.2.8 2005/03/28 12:26:49 amoll Exp $
+// $Id: MMFF94.C,v 1.1.2.9 2005/03/31 13:45:25 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field class
 //
@@ -281,12 +281,12 @@ insertComponent(new MMFF94Stretch(*this));
 
 	bool MMFF94::assignMMFF94BondType(Bond& bond) const
 	{
-		const MMFF94BondStretchParameters::StretchMap::ConstIterator it 
+		const MMFF94StretchParameters::StretchMap::ConstIterator it 
 			= bond_parameters_.getParameters(bond);
 
 		if (!+it) return false;
 
-		const MMFF94BondStretchParameters::BondData& data = it->second;
+		const MMFF94StretchParameters::BondData& data = it->second;
 
 #ifdef BALL_DEBUG_MMFF
 		if (!data.sbmb_exists && !data.standard_bond_exists)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Stretch.C,v 1.1.2.15 2005/03/28 00:43:56 amoll Exp $
+// $Id: MMFF94Stretch.C,v 1.1.2.16 2005/03/31 13:45:26 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Stretch.h>
@@ -11,7 +11,7 @@
 #include <BALL/KERNEL/atom.h>
 #include <BALL/SYSTEM/path.h>
 
-#define BALL_DEBUG_MMFF
+//   #define BALL_DEBUG_MMFF
 
 using namespace std;
 
@@ -75,8 +75,8 @@ namespace BALL
 
 		MMFF94& mmff = *(MMFF94*)getForceField();
 
-		const MMFF94BondStretchParameters& stretch_data = mmff.getStretchParameters();
-		MMFF94BondStretchParameters::StretchMap::ConstIterator stretch_it;
+		const MMFF94StretchParameters& stretch_data = mmff.getStretchParameters();
+		MMFF94StretchParameters::StretchMap::ConstIterator stretch_it;
 
 		const vector<Bond*>& bonds = mmff.getBonds();
 		
@@ -108,7 +108,7 @@ namespace BALL
 			dummy_stretch.atom1 = &atom1; 
 			dummy_stretch.atom2 = &atom2;
 
-			const MMFF94BondStretchParameters::BondData& data = stretch_it->second;
+			const MMFF94StretchParameters::BondData& data = stretch_it->second;
 
 			if (is_sbmb)
 			{
