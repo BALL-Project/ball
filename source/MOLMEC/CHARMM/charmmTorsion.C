@@ -1,4 +1,4 @@
-// $Id: charmmTorsion.C,v 1.3 2000/02/14 22:44:09 oliver Exp $
+// $Id: charmmTorsion.C,v 1.4 2000/02/16 19:19:40 oliver Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmTorsion.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -162,9 +162,7 @@ namespace BALL
 											String atom_name_D = a4->getName();
 											
 											// the second atom is always in the residue in question
-											// 
-											String residue = a2->getFullName().before(":");
-											
+											// 											
 											// now check for the other three atoms: if it is in a different residue,
 											// add a "+" or "-"
 											Residue* res = a2->getAncestor(RTTI::getDefault<Residue>());
