@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glPrimitiveManager.h,v 1.10 2002/12/16 12:22:48 sturm Exp $
+// $Id: glPrimitiveManager.h,v 1.11 2002/12/17 15:42:47 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLPRIMITIVEMANAGER_H
 #define BALL_VIEW_GUI_KERNEL_GLPRIMITIVEMANAGER_H
@@ -64,7 +64,7 @@ namespace BALL
 			{
 				public:
 
-				WrongModes(const char* file, int line)
+				WrongModes(const char* file, int line, int mode, int precision)
 					throw();
 			};
 
