@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: gltube.C,v 1.8 2002/12/16 12:23:09 sturm Exp $
+// $Id: gltube.C,v 1.9 2002/12/17 16:10:35 amoll Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/gltube.h>
 
@@ -86,12 +86,12 @@ namespace BALL
 		bool GLTube::draw(bool with_names)
 			throw()
 		{
-			if (hasProperty(GeometricObject::PROPERTY__OBJECT_HIDDEN) == true)
+			if (hasProperty(GeometricObject::PROPERTY__OBJECT_HIDDEN))
 			{
 				return true;
 			}
 
-			if (isSelected() == false)
+			if (!isSelected())
 			{
 				glColor4ub((unsigned char)getColor().getRed(),
 									 (unsigned char)getColor().getGreen(),
