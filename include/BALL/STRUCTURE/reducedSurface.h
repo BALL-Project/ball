@@ -1,4 +1,4 @@
-// $Id: reducedSurface.h,v 1.17 2001/06/21 23:22:25 amoll Exp $
+// $Id: reducedSurface.h,v 1.18 2001/06/22 11:03:23 oliver Exp $
 
 #ifndef BALL_STRUCTURE_REDUCEDSURFACE_H
 #define BALL_STRUCTURE_REDUCEDSURFACE_H
@@ -1403,7 +1403,7 @@ namespace BALL
 				else
 				{
 					bool found = false;
-					list< pair< Index,TSphere3<T> > >::iterator j = candidates.begin();
+					typename list< pair< Index,TSphere3<T> > >::iterator j = candidates.begin();
 					while (j != candidates.end())
 					{
 						Index atom3 = j->first;
@@ -1493,7 +1493,7 @@ namespace BALL
 		}
 		list< pair< Index,TSphere3<T> > > candidates
 					= findThirdAtom(atom1,atom2,atom_list);
-		list< pair< Index,TSphere3<T> > >::iterator k;
+		typename list< pair< Index,TSphere3<T> > >::iterator k;
 		Index back(-1);
 		TAngle<T> old_angle(2*Constants::PI,true);
 		TAngle<T> new_angle;
@@ -1643,7 +1643,7 @@ namespace BALL
 		{
 			return NULL;
 		}
-		list< pair< Index,TSphere3<T> > >::iterator i = candidates.begin();
+		typename list< pair< Index,TSphere3<T> > >::iterator i = candidates.begin();
 		Index a3 = candidates.begin()->first;
 		TSphere3<T> probe = candidates.begin()->second;
 		while (checkProbe(probe) == false)
@@ -2158,7 +2158,7 @@ namespace BALL
 			const std::list< TRSVertex<T>* >& vertices)
 		throw()
 	{
-		std::list< TRSVertex<T>* >::const_iterator v;
+		typename std::list< TRSVertex<T>* >::const_iterator v;
 		for (v = vertices.begin(); v != vertices.end(); v++)
 		{
 			TRSFace<T>* f = (*v)->has(face);

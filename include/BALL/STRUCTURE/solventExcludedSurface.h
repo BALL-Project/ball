@@ -1,4 +1,4 @@
-// $Id: solventExcludedSurface.h,v 1.14 2001/06/19 21:15:06 strobel Exp $
+// $Id: solventExcludedSurface.h,v 1.15 2001/06/22 11:03:23 oliver Exp $
 
 #ifndef BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
 #define BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
@@ -581,7 +581,7 @@ namespace BALL
 			}
 		}
 		s << "singular Edges:\n";
-		list<TSESEdge<T>*>::iterator se;
+		typename list<TSESEdge<T>*>::iterator se;
 		for (se = ses.singular_edges.begin(); se != ses.singular_edges.end(); se++)
 		{
 			if (*se != NULL)

@@ -1,4 +1,4 @@
-// $Id: triangulatedSurface.h,v 1.18 2001/06/19 21:13:15 strobel Exp $
+// $Id: triangulatedSurface.h,v 1.19 2001/06/22 11:03:23 oliver Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATEDSURFACE_H
 #define BALL_STRUCTURE_TRIANGULATEDSURFACE_H
@@ -45,7 +45,7 @@ namespace BALL
 		}
 		void del(TTriangle<T>* p)
 		{
-			std::vector<TTriangle<T>*>::iterator i = triangle.begin();
+			typename std::vector<TTriangle<T>*>::iterator i = triangle.begin();
 			for (Position l = 0; l < triangle.size(); l++)
 			{
 				if (*i == p)
@@ -154,7 +154,7 @@ namespace BALL
 			//std::cout << "*****************************************************\n";
 			//std::cout << "TTrianglePoint( "; print();
 			//std::cout << " )->has(  TTriangleEdge( "; test->print(); cout << " )  )\n";
-			for (std::list<TTriangleEdge<T>*>::iterator e = edge.begin(); e != edge.end(); e++)
+			for (typename std::list<TTriangleEdge<T>*>::iterator e = edge.begin(); e != edge.end(); e++)
 			{
 				//std::cout << "  "; (*e)->print(); std::cout << "\n";
 				if (*(*e) == *test)
@@ -232,19 +232,19 @@ namespace BALL
 		*/
 		TTriangulatedSurface(const TTriangulatedSurface<T>& surface, bool /* deep */ = true)
 		{
-			std::list<TTrianglePoint<T>*>::const_iterator p;
+			typename std::list<TTrianglePoint<T>*>::const_iterator p;
 			for (p = surface.points.begin(); p != surface.points.end(); p++)
 			{
 				TTrianglePoint<T>* point = new TTrianglePoint<T>(*(*p));
 				points.push_back(point);
 			}
-			std::list<TTriangleEdge<T>*>::const_iterator e;
+			typename std::list<TTriangleEdge<T>*>::const_iterator e;
 			for (e = surface.edges.begin(); e != surface.edges.end(); e++)
 			{
 				TTriangleEdge<T>* edge = new TTriangleEdge<T>(*(*e));
 				edges.push_back(edge);
 			}
-			std::list<TTriangle<T>*>::const_iterator t;
+			typename std::list<TTriangle<T>*>::const_iterator t;
 			for (t = surface.triangles.begin(); t != surface.triangles.end(); t++)
 			{
 				TTriangle<T>* triangle = new TTriangle<T>(*(*t));
@@ -257,15 +257,15 @@ namespace BALL
 		*/
 		virtual ~TTriangulatedSurface()
 		{
-			for (list<TTrianglePoint<T>*>::iterator i = points.begin(); i != points.end(); i++)
+			for (typename list<TTrianglePoint<T>*>::iterator i = points.begin(); i != points.end(); i++)
 			{
 				delete *i;
 			}
-			for (list<TTriangleEdge<T>*>::iterator i = edges.begin(); i != edges.end(); i++)
+			for (typename list<TTriangleEdge<T>*>::iterator i = edges.begin(); i != edges.end(); i++)
 			{
 				delete *i;
 			}
-			for (list<TTriangle<T>*>::iterator i = triangles.begin(); i != triangles.end(); i++)
+			for (typename list<TTriangle<T>*>::iterator i = triangles.begin(); i != triangles.end(); i++)
 			{
 				delete *i;
 			}
@@ -477,7 +477,7 @@ namespace BALL
 		std::vector< TVector3<T> > surface_points;
 		std::vector< TSurface<T>::Triangle > surface_triangles;
 		std::vector< TVector3<T> > surface_normals;
-		std::list<TTrianglePoint<T>*>::iterator p;
+		typename std::list<TTrianglePoint<T>*>::iterator p;
 		Index i = 0;
 		for (p = points.begin(); p != points.end(); p++)
 		{
@@ -486,7 +486,7 @@ namespace BALL
 			(*p)->state = i;
 			i++;
 		}
-		std::list<TTriangle<T>*>::iterator t;
+		typename std::list<TTriangle<T>*>::iterator t;
 		for (t = triangles.begin(); t != triangles.end(); t++)
 		{
 			TSurface<T>::Triangle triangle;
@@ -504,17 +504,17 @@ namespace BALL
 	template <class T>
 	TTriangulatedSurface<T>& TTriangulatedSurface<T>::operator += (TTriangulatedSurface<T>& surface)
 	{
-		std::list<TTrianglePoint<T>*>::iterator p;
+		typename std::list<TTrianglePoint<T>*>::iterator p;
 		for (p = surface.points.begin(); p != surface.points.end(); p++)
 		{
 			points.push_back(*p);
 		}
-		std::list<TTriangleEdge<T>*>::iterator e;
+		typename std::list<TTriangleEdge<T>*>::iterator e;
 		for (e = surface.edges.begin(); e != surface.edges.end(); e++)
 		{
 			edges.push_back(*e);
 		}
-		std::list<TTriangle<T>*>::iterator t;
+		typename std::list<TTriangle<T>*>::iterator t;
 		for (t = surface.triangles.begin(); t != surface.triangles.end(); t++)
 		{
 			triangles.push_back(*t);
@@ -538,7 +538,7 @@ namespace BALL
 	template <class T>
 	void TTriangulatedSurface<T>::shift(const TVector3<T>& c)
 	{
-		std::list<TTrianglePoint<T>*>::iterator i;
+		typename std::list<TTrianglePoint<T>*>::iterator i;
 		for (i = points.begin(); i != points.end(); i++)
 		{
 			(*i)->p += c;
@@ -549,7 +549,7 @@ namespace BALL
 	template <class T>
 	void TTriangulatedSurface<T>::blowUp(const T& r)
 	{
-		std::list<TTrianglePoint<T>*>::iterator i;
+		typename std::list<TTrianglePoint<T>*>::iterator i;
 		for (i = points.begin(); i != points.end(); i++)
 		{
 			(*i)->p *= r;
@@ -564,7 +564,7 @@ namespace BALL
 		{
 			refineSphere(out);
 		}
-		for (std::list<TTriangle<T>*>::iterator t = triangles.begin(); t != triangles.end(); t++)
+		for (typename std::list<TTriangle<T>*>::iterator t = triangles.begin(); t != triangles.end(); t++)
 		{
 			TVector3<T> norm( ((*t)->point[1]->p-(*t)->point[0]->p) %
 												((*t)->point[2]->p-(*t)->point[0]->p)   );
@@ -589,7 +589,7 @@ namespace BALL
 	void TTriangulatedSurface<T>::refineSphere(bool out)
 	{
 		std::list<TTriangleEdge<T>*> new_edges;
-		for (std::list<TTriangleEdge<T>*>::iterator i = edges.begin(); i != edges.end(); i++)
+		for (typename std::list<TTriangleEdge<T>*>::iterator i = edges.begin(); i != edges.end(); i++)
 		{
 			TTrianglePoint<T>* point1 = (*i)->point[0];
 			TTrianglePoint<T>* point2 = (*i)->point[1];
@@ -620,7 +620,7 @@ namespace BALL
 			new_edges.push_back(new_edge2);
 		}
 		std::list<TTriangle<T>*> new_triangles;
-		for (std::list<TTriangle<T>*>::iterator i = triangles.begin(); i != triangles.end(); i++)
+		for (typename std::list<TTriangle<T>*>::iterator i = triangles.begin(); i != triangles.end(); i++)
 		{
 			TTriangle<T> current = *(*i);
 			vector< TTriangle<T>* > t(4);
@@ -645,7 +645,7 @@ namespace BALL
 				TTrianglePoint<T>* p1 = NULL;
 				TTrianglePoint<T>* p2 = NULL;
 				TTrianglePoint<T>* p3 = current.point[k];
-				list<TTriangleEdge<T>*>::iterator l = edge_list.begin();
+				typename list<TTriangleEdge<T>*>::iterator l = edge_list.begin();
 				while (first == NULL)
 				{
 					if ((*l)->point[0]->p == p3->p)
@@ -734,13 +734,13 @@ namespace BALL
 	template <class T>
 	void TTriangulatedSurface<T>::setIncidences()
 	{
-		std::list<TTrianglePoint<T>*>::iterator p;
+		typename std::list<TTrianglePoint<T>*>::iterator p;
 		for (p = points.begin(); p != points.end(); p++)
 		{
 			(*p)->edge.clear();
 			(*p)->triangle.clear();
 		}
-		std::list<TTriangleEdge<T>*>::iterator e;
+		typename std::list<TTriangleEdge<T>*>::iterator e;
 		for (e = edges.begin(); e != edges.end(); e++)
 		{
 			(*e)->point[0]->edge.push_back(*e);
@@ -794,7 +794,7 @@ namespace BALL
 		(const std::vector< TPlane3<T> >& plane
 		 /*std::vector< std::list<TTriangleEdge<T>*> >& border*/)
 	{
-		std::list<TTriangle<T>*>::iterator t
+		typename std::list<TTriangle<T>*>::iterator t
 			= triangles.begin();
 		while (t != triangles.end())
 		{
@@ -802,7 +802,7 @@ namespace BALL
 			t++;
 		}
 		triangles.clear();
-		std::list<TTriangleEdge<T>*>::iterator e
+		typename std::list<TTriangleEdge<T>*>::iterator e
 			= edges.begin();
 		while (e != edges.end())
 		{
@@ -813,11 +813,11 @@ namespace BALL
 		for (Position i = 0;  i < plane.size(); i++)
 		{
 			T test_value = plane[i].n*plane[i].p;
-			std::list<TTrianglePoint<T>*>::iterator p
+			typename std::list<TTrianglePoint<T>*>::iterator p
 				= points.begin();
 			while (p != points.end())
 			{
-				std::list<TTrianglePoint<T>*>::iterator next = p;
+				typename std::list<TTrianglePoint<T>*>::iterator next = p;
 				next++;
 				if (Maths::isLessOrEqual(plane[i].n*(*p)->p,test_value))
 				{

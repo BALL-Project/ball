@@ -1,4 +1,4 @@
-// $Id: singularities.h,v 1.7 2001/06/21 02:15:56 oliver Exp $
+// $Id: singularities.h,v 1.8 2001/06/22 11:03:23 oliver Exp $
 
 #ifndef BALL_STRUCTURE_SINGULARITIES_H
 #define BALL_STRUCTURE_SINGULARITIES_H
@@ -163,8 +163,8 @@ namespace BALL
 		}
 		TBSDTree<T>* tree = new TBSDTree<T>(points,indices);
 		tree->build();
-		list<TSESEdge<T>*>::iterator edge = ses->singular_edges.begin();
-		list<TSESEdge<T>*>::iterator tmp;
+		typename list<TSESEdge<T>*>::iterator edge = ses->singular_edges.begin();
+		typename list<TSESEdge<T>*>::iterator tmp;
 		while (edge != ses->singular_edges.end())
 		{
 			tmp = edge;
@@ -184,7 +184,7 @@ namespace BALL
 		{
 			TSESFace<T>* current = *singular.begin();
 			singular.remove(current);
-			list<TSESFace<T>*>::iterator i = singular.begin();
+			typename list<TSESFace<T>*>::iterator i = singular.begin();
 			while (i != singular.end())
 			{
 				if (current->rsface->similar(*((*i)->rsface)))

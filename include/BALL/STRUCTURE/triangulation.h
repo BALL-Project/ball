@@ -1,4 +1,4 @@
-// $Id: triangulation.h,v 1.20 2001/06/20 09:02:57 amoll Exp $
+// $Id: triangulation.h,v 1.21 2001/06/22 11:03:24 oliver Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATION_H
 #define BALL_STRUCTURE_TRIANGULATION_H
@@ -86,7 +86,7 @@ namespace BALL
 		}
 		std::list<TTrianglePoint<T>*> probe;
 		TTrianglePoint<T>* probe_point;
-		std::list<TTrianglePoint<T>*>::iterator p;
+		typename std::list<TTrianglePoint<T>*>::iterator p;
 					#ifdef with_indices
 					Index counter = 0;
 					#endif
@@ -131,7 +131,7 @@ namespace BALL
 			surface->join(*face_part);
 		}
 				std::cerr << "  treat singular edges\n";
-		std::list<TSESEdge<T>*>::iterator se;
+		typename std::list<TSESEdge<T>*>::iterator se;
 		for (se = ses->singular_edges.begin();
 				 se != ses->singular_edges.end(); se++)
 		{
@@ -275,7 +275,7 @@ namespace BALL
 											(test_triangle->point[2]->p-test_triangle->point[0]->p));
 		if (Maths::isGreater(orth*test_triangle->point[0]->p,orth*centers[0]))
 		{
-			std::list<TTriangle<T>*>::iterator t;
+			typename std::list<TTriangle<T>*>::iterator t;
 			for (t = surface->triangles.begin(); t != surface->triangles.end(); t++)
 			{
 				TTrianglePoint<T>* temp = (*t)->point[0];
@@ -360,7 +360,7 @@ namespace BALL
 			normal.negate();
 		}
 		Position offset = 0;
-		list<TTriangle<T>*>::iterator last = surface->triangles.end();
+		typename list<TTriangle<T>*>::iterator last = surface->triangles.end();
 		for (Position counter = 0; counter < 2; counter++)
 		{
 			TCircle3<T> circle(face->edge[0+offset]->circle.p,
@@ -404,7 +404,7 @@ namespace BALL
 												(test_triangle->point[2]->p-test_triangle->point[0]->p));
 			if (Maths::isGreater(orth*test_triangle->point[0]->p,orth*centers[0]))
 			{
-				std::list<TTriangle<T>*>::iterator t;
+				typename std::list<TTriangle<T>*>::iterator t;
 				for (t = surface->triangles.begin(); t != surface->triangles.end(); t++)
 				{
 					TTrianglePoint<T>* temp = (*t)->point[0];
@@ -507,7 +507,7 @@ namespace BALL
 		{
 			bool out;
 			Position i;
-			std::list<TTrianglePoint<T>*>::const_iterator p;
+			typename std::list<TTrianglePoint<T>*>::const_iterator p;
 			for (p = points.begin(); p != points.end(); p++)
 			{
 				out = false; i = 0;
@@ -549,7 +549,7 @@ namespace BALL
 		TTrianglePoint<T>* last_point = start_point;
 		sorted_edges.push_back(last_edge);
 		contour.push_back(last_point);
-		std::list<TTriangleEdge<T>*>::iterator e;
+		typename std::list<TTriangleEdge<T>*>::iterator e;
 		bool found = true;
 		while ((edges.size() > 0) && found)
 		{
@@ -595,7 +595,7 @@ namespace BALL
 			while ((edges.size() > 0) && found)
 			{
 				found = false;
-				std::list<TTriangleEdge<T>*>::iterator e
+				typename std::list<TTriangleEdge<T>*>::iterator e
 						= edges.begin();
 				while (e != edges.end())
 				{
@@ -689,7 +689,7 @@ namespace BALL
 				std::cout << pre << "i: ";
 				#endif
 		HashSet<TTrianglePoint<T>*> points;
-		std::list<TTrianglePoint<T>*>::const_iterator p_;
+		typename std::list<TTrianglePoint<T>*>::const_iterator p_;
 		for (p_ = face_points.begin(); p_ != face_points.end(); p_++)
 		{
 			(*p_)->state = 0;
@@ -702,8 +702,8 @@ namespace BALL
 				#ifdef print_debug_info
 				std::cout << "\n";
 				#endif
-		std::list<TTriangleEdge<T>*>::iterator e;
-		std::list<Index>::const_iterator b;
+		typename std::list<TTriangleEdge<T>*>::iterator e;
+		typename std::list<Index>::const_iterator b;
 		for (b = border.begin(); b != border.end(); b++)
 		{
 			for (e = edge_contours[*b].begin(); e != edge_contours[*b].end(); e++)
@@ -736,7 +736,7 @@ namespace BALL
 					#ifdef print_debug_info
 					std::cout << "\n";
 					#endif
-			HashSet<TTrianglePoint<T>*>::Iterator p;
+			typename HashSet<TTrianglePoint<T>*>::Iterator p;
 			for (p = this_points.begin(); p != this_points.end(); p++)
 			{
 				if (sesedge[*b]->type != 2)
@@ -859,8 +859,8 @@ namespace BALL
 					std::cout << pre << "third point: " << third_point->index << " ";
 					if (halt == 0)  std::cin >> halt; else { std::cout << "\n"; halt--; }
 					#endif
-			HashSet<TTrianglePoint<T>*>::Iterator next = points.begin();
-			HashSet<TTrianglePoint<T>*>::Iterator test;
+			typename HashSet<TTrianglePoint<T>*>::Iterator next = points.begin();
+			typename HashSet<TTrianglePoint<T>*>::Iterator test;
 			while (next != points.end())
 			{
 				if ((*next == edge->point[0]) || (*next == edge->point[1]) ||
@@ -1186,7 +1186,7 @@ namespace BALL
 				#endif
 		)
 	{
-		std::list<TTrianglePoint<T>*>::iterator p;
+		typename std::list<TTrianglePoint<T>*>::iterator p;
 				#ifdef print_debug_info
 				string pre = "        ";
 				std::cout << pre << points.size() << " Punkte gefunden ... (";
@@ -1202,13 +1202,13 @@ namespace BALL
 			T test_value = plane.p*plane.n;
 			TVector3<T> third(edge->triangle[0]->third(edge->point[0],
 																								 edge->point[1] )->p);
-			std::list<TTrianglePoint<T>*>::iterator p;
+			typename std::list<TTrianglePoint<T>*>::iterator p;
 			if (Maths::isGreater(plane.n*third,test_value))
 			{
 				p = points.begin();
 				while (p != points.end())
 				{
-					std::list<TTrianglePoint<T>*>::iterator next = p;
+					typename std::list<TTrianglePoint<T>*>::iterator next = p;
 					next++;
 					if (Maths::isGreater(plane.n*(*p)->p,test_value))
 					{
@@ -1222,7 +1222,7 @@ namespace BALL
 				p = points.begin();
 				while (p != points.end())
 				{
-					std::list<TTrianglePoint<T>*>::iterator next = p;
+					typename std::list<TTrianglePoint<T>*>::iterator next = p;
 					next++;
 					if (Maths::isLess(plane.n*(*p)->p,test_value))
 					{
@@ -1611,7 +1611,7 @@ namespace BALL
 			 string filename)
 	{
 		TVector3<T> point(0,0,0);
-		std::list<TTrianglePoint<T>*>::iterator c;
+		typename std::list<TTrianglePoint<T>*>::iterator c;
 		for (c = contour.begin(); c != contour.end(); c++)
 		{
 			point += (*c)->p;
