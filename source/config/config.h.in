@@ -1,4 +1,4 @@
-// $Id: config.h.in,v 1.29.2.7 2002/11/30 14:07:34 oliver Exp $ 
+// $Id: config.h.in,v 1.29.2.8 2002/12/01 13:37:28 oliver Exp $ 
 
 #ifndef BALL_CONFIG_CONFIG_H
 #define BALL_CONFIG_CONFIG_H
@@ -95,14 +95,6 @@
 #undef BALL_LITTLE_ENDIAN
 #undef BALL_BIG_ENDIAN
 
-// on some systems (e.g. Solaris) we need to include /usr/include/ieeefp.h
-// for some floating point functions
-#undef BALL_HAS_IEEEFP_H
-
-// on some systems (e.g. Solaris) we need to include /usr/include/values.h
-// for some floating point functions
-#undef BALL_HAS_VALUES_H
-
 // the signature of the function arguments used in xdrrec_create differs
 // from platform to platform, so we define some symbols describing the
 // correct arguments: (void*, char*, int), (char*, char*, int), or (void)
@@ -115,10 +107,6 @@
 // need a workaround for this
 #undef BALL_HAS_XDR_U_HYPER 
 
-// on some systems, we do not have regex.h, so we have to use regexp.h
-#undef BALL_HAS_REGEXP_H
-#undef BALL_HAS_REGEX_H
-
 // Define to `int' if <sys/types.h> doesn't define.  
 #undef pid_t
 
@@ -130,9 +118,6 @@
 
 // Define if numeric_limits is defined in <limits>
 #undef BALL_HAS_NUMERIC_LIMITS
-
-// Define whether float.h has to be included along with limits.h
-#undef BALL_HAS_FLOAT_H 
 
 // Define an unsigned integer type of 64 bit to hold (portable) pointers
 #define BALL_64BIT_UINT_TYPE long
@@ -191,14 +176,29 @@
 // Maximum line length for reading from files (see source/FORMAT)
 #define BALL_MAX_LINE_LENGTH 65535
 
+// on some systems (e.g. Solaris) we need to include /usr/include/ieeefp.h
+// for some floating point functions
+#undef BALL_HAS_IEEEFP_H
+
+// on some systems (e.g. Solaris) we need to include /usr/include/values.h
+// for some floating point functions
+#undef BALL_HAS_VALUES_H
+
+// on some systems, we do not have regex.h, so we have to use regexp.h
+#undef BALL_HAS_REGEXP_H
+#undef BALL_HAS_REGEX_H
+
+// Define whether float.h has to be included along with limits.h
+#undef BALL_HAS_FLOAT_H 
+
 #undef BALL_HAS_UNISTD_H
 #undef BALL_HAS_PROCESS_H
 #undef BALL_HAS_TIME_H
-#undef BALL_HAS_VALUES_H
 #undef BALL_HAS_LIMITS_H
 #undef BALL_HAS_FLOAT_H
 #undef BALL_HAS_DIRENT_H
 #undef BALL_HAS_DIRECT_H
+#undef BALL_HAS_PWD_H
 #undef BALL_HAS_SYS_IOCTL_H
 #undef BALL_HAS_SYS_TIME_H
 #undef BALL_HAS_SYS_STAT_H
@@ -214,9 +214,12 @@
 #undef BALL_HAS_KILL
 #undef BALL_HAS_SYSCONF
 
+
+// Specific to the Windows port (and actually not used here,
+// included for completeness, rather).
 #undef BALL_HAS_CLOCKS_PER_SEC
 #undef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
-
+#undef BALL_COMPILER_MSVC
 #undef BALL_USE_WINSOCK
 
 #endif // BALL_CONFIG_CONFIG_H
