@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.50 2004/07/23 13:50:47 amoll Exp $
+// $Id: mainControl.h,v 1.51 2004/07/23 14:16:01 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -837,6 +837,8 @@ namespace BALL
 			String 							logging_file_name_;
 			bool 								logging_to_file_;
 			File 								logging_file_;
+
+			bool about_to_quit_;
 };
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS

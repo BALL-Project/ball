@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.97 2004/07/23 13:50:20 amoll Exp $
+// $Id: mainControl.C,v 1.98 2004/07/23 14:15:59 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -87,7 +87,8 @@ namespace BALL
 				simulation_thread_(0),
 				timer_(new StatusbarTimer(this)),
 				logging_file_name_("VIEW.log"),
-				logging_to_file_(false)
+				logging_to_file_(false),
+				about_to_quit_(false)
 		{
 		#ifdef BALL_VIEW_DEBUG
 			Log.error() << "new MainControl " << this << std::endl;
@@ -179,7 +180,8 @@ namespace BALL
 				preferences_dialog_(new Preferences(this, "BALLView Preferences")),
 				preferences_id_(-1),
 				delete_id_(0),
-				composites_muteable_(main_control.composites_muteable_)
+				composites_muteable_(main_control.composites_muteable_),
+				about_to_quit_(false)
 		{
 			setup_();
 		}
@@ -439,6 +441,8 @@ namespace BALL
 		#ifdef BALL_VIEW_DEBUG
 			Log.error() << "MainControl::aboutToExit()" << std::endl;
 		#endif
+
+			about_to_quit_ = true;
 			
 			stopSimulation();
 
@@ -692,13 +696,15 @@ namespace BALL
 			 int /* accel */, int entry_ID)
 			throw()
 		{
+			if (about_to_quit_) return;
+
 			QMenuBar* menu_bar = menuBar();
 			if (menu_bar == 0) return;
 			
-			QPopupMenu* popup = initPopupMenu(parent_id);
-			if (popup == 0) return;
+			QMenuItem* item = menuBar()->findItem(parent_id);
+			if ((item == 0) || (item->popup() == 0) || entry_ID == -1) return;
+			QPopupMenu* popup = item->popup();
 
-			if (entry_ID == -1) return;
 			popup->removeItem(entry_ID);
 		}
 
