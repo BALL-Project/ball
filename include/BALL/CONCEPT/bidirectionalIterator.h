@@ -1,4 +1,4 @@
-// $Id: bidirectionalIterator.h,v 1.10 2001/06/22 00:00:42 amoll Exp $ 
+// $Id: bidirectionalIterator.h,v 1.11 2001/06/23 10:37:29 amoll Exp $ 
 
 #ifndef BALL_CONCEPT_BIDIRECTIONALITERATOR_H
 #define BALL_CONCEPT_BIDIRECTIONALITERATOR_H
@@ -33,8 +33,7 @@ namespace BALL
 		 */
 		//@{
 
-		/** Tag this iterator as a bidirectional iterator according to the STL
-				scheme
+		/** Tag this iterator as a bidirectional iterator according to the STL scheme
 		 */
 		typedef ::std::bidirectional_iterator_tag iterator_category;
 		
@@ -142,18 +141,6 @@ namespace BALL
 		DataType* findFirst(const UnaryPredicate<DataType>& predicate)
 			throw(Exception::InvalidIterator);
 	
-		// BAUSTELLE: 
-		// Are the const versions of the followin methods necessary? We have a
-		// ConstBidirectionalIterator...
-
-		/** Find the first item that matches the predicate {\tt predicate}
-				within the container (const version).
-				@param predicate the predicate
-				@return a const pointer to the item
-		*/
-		const DataType* findFirst(const UnaryPredicate<DataType>& predicate) const
-			throw(Exception::InvalidIterator);
-
 		/** Find the last item that matches the predicate {\tt predicate}
 				within the container.
 				@param predicate the predicate
@@ -162,28 +149,12 @@ namespace BALL
 		DataType* findLast(const UnaryPredicate<DataType> &predicate)
 			throw(Exception::InvalidIterator);
 	
-		/** Find the last item that matches the predicate {\tt predicate}
-				within the container (const version).
-				@param predicate the predicate
-				@return a const pointer to the item
-		*/
-		const DataType* findLast(const UnaryPredicate<DataType>& predicate) const
-			throw(Exception::InvalidIterator);
-
 		/** Find the next item that matches the predicate {\tt predicate}
 				within the container.
 				@param predicate the predicate
 				@return a mutable pointer to the item
 		*/
 		DataType* findNext(const UnaryPredicate<DataType>& predicate)
-			throw(Exception::InvalidIterator);
-
-		/** Find the next item that matches the predicate {\tt predicate}
-				within the container (const version).
-				@param predicate the predicate
-				@return a const pointer to the item
-		*/
-		const DataType* findNext(const UnaryPredicate<DataType>& predicate) const
 			throw(Exception::InvalidIterator);
 
 		/** Find the previous item that matches the predicate {\tt predicate}
@@ -194,14 +165,6 @@ namespace BALL
 		DataType* findPrevious(const UnaryPredicate<DataType>& predicate)
 			throw(Exception::InvalidIterator);
 	
-		/** Find the previous item that matches the predicate {\tt predicate}
-				within the container (const version).
-				@param predicate the predicate
-				@return a const pointer to the item
-		*/
-		const DataType* findPrevious(const UnaryPredicate<DataType>& predicate) const
-			throw(Exception::InvalidIterator);
-
 		/** Return the first item of the container.
 		 */
 		static BidirectionalIterator begin(const Container& container)
@@ -432,13 +395,6 @@ namespace BALL
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	const DataType* BidirectionalIterator<Container, DataType, Position, Traits>::findFirst(const UnaryPredicate<DataType>& predicate) const
-		throw(Exception::InvalidIterator)
-	{
-		return ((BidirectionalIterator *)this)->findFirst(predicate);
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
 	DataType* BidirectionalIterator<Container, DataType, Position, Traits>::findLast(const UnaryPredicate<DataType> &predicate)
 		throw(Exception::InvalidIterator)
 	{
@@ -456,13 +412,6 @@ namespace BALL
 		}
 
 		return 0;
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	const DataType* BidirectionalIterator<Container, DataType, Position, Traits>::findLast(const UnaryPredicate<DataType>& predicate) const
-		throw(Exception::InvalidIterator)
-	{
-		return ((BidirectionalIterator *)this)->findLast(predicate);
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
@@ -486,13 +435,6 @@ namespace BALL
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	const DataType* BidirectionalIterator<Container, DataType, Position, Traits>::findNext(const UnaryPredicate<DataType>& predicate) const
-		throw(Exception::InvalidIterator)
-	{
-		return ((BidirectionalIterator *)this)->findNext(predicate);
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
 	DataType* BidirectionalIterator<Container, DataType, Position, Traits>::findPrevious(const UnaryPredicate<DataType>& predicate)
 		throw(Exception::InvalidIterator)
 	{
@@ -510,13 +452,6 @@ namespace BALL
 		}
 
 		return 0;
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	const DataType* BidirectionalIterator<Container, DataType, Position, Traits>::findPrevious(const UnaryPredicate<DataType>& predicate) const
-		throw(Exception::InvalidIterator)
-	{
-		return ((BidirectionalIterator *)this)->findPrevious(predicate);
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
@@ -661,27 +596,15 @@ namespace BALL
 		const DataType* findFirst(const UnaryPredicate<DataType>& predicate)
 			throw(Exception::InvalidIterator);
 	
-		const DataType* findFirst(const UnaryPredicate<DataType>& predicate) const
-			throw(Exception::InvalidIterator);
-
 		const DataType* findLast(const UnaryPredicate<DataType>& predicate)
 			throw(Exception::InvalidIterator);
 	
-		const DataType* findLast(const UnaryPredicate<DataType>& predicate) const
-			throw(Exception::InvalidIterator);
-
 		const DataType* findNext(const UnaryPredicate<DataType>& predicate)
 			throw(Exception::InvalidIterator);
 	
-		const DataType* findNext(const UnaryPredicate<DataType>& predicate) const
-			throw(Exception::InvalidIterator);
-
 		const DataType* findPrevious(const UnaryPredicate<DataType>& predicate)
 			throw(Exception::InvalidIterator);
 	
-		const DataType* findPrevious(const UnaryPredicate<DataType>& predicate) const
-			throw(Exception::InvalidIterator);
-
 		static ConstBidirectionalIterator begin(const Container &container)
 			throw(Exception::InvalidIterator);
 
@@ -897,13 +820,6 @@ namespace BALL
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	const DataType* ConstBidirectionalIterator<Container, DataType, Position, Traits>::findFirst(const UnaryPredicate<DataType>& predicate) const
-		throw(Exception::InvalidIterator)
-	{
-		return ((ConstBidirectionalIterator *)this)->findFirst(predicate);
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
 	const DataType* ConstBidirectionalIterator<Container, DataType, Position, Traits>::findLast(const UnaryPredicate<DataType>& predicate)
 		throw(Exception::InvalidIterator)
 	{
@@ -921,13 +837,6 @@ namespace BALL
 		}
 
 		return 0;
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	const DataType* ConstBidirectionalIterator<Container, DataType, Position, Traits>::findLast(const UnaryPredicate<DataType>& predicate) const
-		throw(Exception::InvalidIterator)
-	{
-		return ((ConstBidirectionalIterator *)this)->findLast(predicate);
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
@@ -951,13 +860,6 @@ namespace BALL
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	const DataType* ConstBidirectionalIterator<Container, DataType, Position, Traits>::findNext(const UnaryPredicate<DataType>& predicate) const
-		throw(Exception::InvalidIterator)
-	{
-		return ((ConstBidirectionalIterator *)this)->findNext(predicate);
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
 	const DataType* ConstBidirectionalIterator<Container, DataType, Position, Traits>::findPrevious(const UnaryPredicate<DataType>& predicate)
 		throw(Exception::InvalidIterator)
 	{
@@ -975,13 +877,6 @@ namespace BALL
 		}
 
 		return 0;
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	const DataType* ConstBidirectionalIterator<Container, DataType, Position, Traits>::findPrevious(const UnaryPredicate<DataType>& predicate) const
-		throw(Exception::InvalidIterator)
-	{
-		return ((ConstBidirectionalIterator *)this)->findPrevious(predicate);
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
