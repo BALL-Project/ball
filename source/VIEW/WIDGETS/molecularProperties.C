@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularProperties.C,v 1.21 2004/01/20 15:08:35 amoll Exp $
+// $Id: molecularProperties.C,v 1.22 2004/01/29 14:05:42 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularProperties.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -76,6 +76,11 @@ MolecularProperties::MolecularProperties(QWidget* parent, const char* name)
 	hint = "Map two proteins.";
 	map_proteins_ = main_control.insertMenuEntry(MainControl::TOOLS,
 																			"&Map two Proteins", this, SLOT(mapProteins()), 0, -1, hint);
+
+	hint = "Calculate RMSD for two Molecules or Fragments of Molecules.";
+	calculate_RMSD_ = main_control.insertMenuEntry(MainControl::TOOLS,
+																			"&Calculate RMSD", this, SLOT(calculateRMSD()), 0, -1, hint);
+
 }
 
 MolecularProperties::~MolecularProperties()
@@ -316,6 +321,7 @@ void MolecularProperties::checkMenu(MainControl& main_control)
 	(main_control.menuBar()) ->setItemEnabled(center_camera_id_, number_of_selected_objects == 1);
 
 	(main_control.menuBar()) ->setItemEnabled(map_proteins_, number_of_selected_objects == 2);
+	(main_control.menuBar()) ->setItemEnabled(calculate_RMSD_, number_of_selected_objects == 2);
 
 	if (!selected)
 	{
@@ -503,6 +509,63 @@ void MolecularProperties::calculateSecondaryStructure()
 }
 
 
+void MolecularProperties::calculateRMSD()
+{
+	if (getMainControl()->getMolecularControlSelection().size() != 2)
+	{
+		return;
+	}
+
+	AtomContainer * a1 = 0;
+	AtomContainer * a2 = 0;
+
+	List<Composite*>::Iterator it = getMainControl()->getMolecularControlSelection().begin();
+	
+	if (!RTTI::isKindOf<AtomContainer>(**it)) 
+	{
+		setStatusbarText("Exact two AtomContainers have to be selected");
+		return;
+	}
+
+	a1 = (AtomContainer*) *it;
+	it++;
+	if (!RTTI::isKindOf<AtomContainer>(**it)) 
+	{
+		setStatusbarText("Exact two AtomContainers have to be selected");
+		return;
+	}
+	
+	a2 = (AtomContainer*) *it;
+
+	if (a1->isRelatedWith(*a2))
+	{
+		setStatusbarText("The two Proteins must not be descendet/ancestor of eachother.");
+		return;
+	}
+
+	if (!a1->apply(getFragmentDB().normalize_names) ||
+			!a2->apply(getFragmentDB().normalize_names)		) 
+	{
+		setStatusbarText("Could not apply normalize names, so cant calulate RMSD");
+		return;
+	}
+
+	StructureMapper sm(*a1, *a2);
+	double	rmsd = sm.calculateRMSD();
+
+	Log.info() << "Calcuted RMSD: " << rmsd << std::endl;
+	String rmsd_text("Calcuted RMSD: " + String(rmsd));
+	if (sm.getBijection().size() != a1->countAtoms())
+	{
+		Index not_matched = max(a1->countAtoms() - sm.getBijection().size(), a2->countAtoms() -sm.getBijection().size());
+		String warning("WARNING: " + String(not_matched) + " atoms were not mapped.");
+		Log.error() << warning << std::endl;
+		rmsd_text += "  WARNING: not all atoms were mapped.";
+	}
+
+	setStatusbarText(rmsd_text);
+}
+
 void MolecularProperties::mapProteins()
 {
 	if (getMainControl()->getMolecularControlSelection().size() != 2)
@@ -581,15 +644,15 @@ void MolecularProperties::mapProteins()
 	Matrix4x4	m;
 	m = sm.mapProteins(*a1, *a2, type_map, not_matched_ca, rmsd, upper, lower, tolerance);
 	sm.setTransformation(m);
-	a2->apply(sm);
+	a1->apply(sm);
 
 	CompositeMessage* cm =
 			new CompositeMessage(*a1, CompositeMessage::CHANGED_COMPOSITE);
 	notify_(cm);
 
 	Log.info() << "Calcuted RMSD: " << rmsd << std::endl;
-	Log.info() << "Calcuted Transformation: " << m<< std::endl;
-	Log.info() << "Not matched CA: " << not_matched_ca << std::endl << std::endl;
+	Log.info() << "Calcuted Transformation: " << std::endl << m<< std::endl;
+	Log.info() << "Number of not matched CA atoms: " << not_matched_ca << std::endl << std::endl;
 	setStatusbarText("Calcuted RMSD: " + String(rmsd));
 }
 
