@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferences.C,v 1.13 2004/10/01 14:45:02 amoll Exp $
+// $Id: preferences.C,v 1.14 2004/10/18 14:41:28 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/preferences.h>
@@ -182,6 +182,12 @@ namespace BALL
 			if (item == 0) return 0;
 			
 			return item_to_widget_[item];
+		}
+		
+		const QWidget* Preferences::currentEntry() const
+			throw()
+		{
+			return widget_stack->visibleWidget();
 		}
 		
 		void Preferences::entrySelected(QListViewItem* item)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.89 2004/10/01 14:20:15 amoll Exp $
+// $Id: displayProperties.C,v 1.90 2004/10/18 14:41:57 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -606,7 +606,7 @@ void DisplayProperties::applyPreferences()
 		return;
 	}
 
-	const QWidget* current_page = getMainControl()->getPreferences()->currentPage();
+	const QWidget* current_page = getMainControl()->getPreferences()->currentEntry();
 
 	if (current_page == model_settings_ ||
 			current_page == coloring_settings_) 
