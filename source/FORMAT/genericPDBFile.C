@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericPDBFile.C,v 1.22 2003/09/03 12:31:43 oliver Exp $
+// $Id: genericPDBFile.C,v 1.23 2004/02/18 14:56:50 oliver Exp $
 //
 
 #include <BALL/FORMAT/genericPDBFile.h>
@@ -178,7 +178,7 @@ namespace BALL
 		}
 		else
 		{
-			// if the element symbol starts with a blank,
+ 			// if the element symbol starts with a blank,
 			// drop the blank
 			if (element_symbol[0] == ' ')
 			{
