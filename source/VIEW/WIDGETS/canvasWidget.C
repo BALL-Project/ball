@@ -39,11 +39,11 @@ namespace BALL
       return pixmap_;
     }
 
-    //-----------------------class CanvasWidget
+    // ======================= class CanvasWidget =======================
     
     CanvasWidget::CanvasWidget(QWidget *parent, const char* name, WFlags f)
       : QCanvasView(parent, name, f),
-				canvas_(0,0)   //Constructs a QCanvas that is w pixels wide and h pixels high
+				canvas_(0,0)
     {
 			//Sets the QCanvas upon which the canvas item is to be drawn to c. 
       setCanvas(&canvas_);  
@@ -55,18 +55,10 @@ namespace BALL
 			// we are responsible for destrucing the items
       for (int i=0; i<(int)objects_.size(); i++)
 			{
-				if (objects_[i] != 0)
-					delete (objects_[i]);
+				if (objects_[i] != 0) delete (objects_[i]);
 			}
     }
 		
-    const QCanvas& CanvasWidget::getCanvas()
-			throw()
-		{
-			return canvas_;
-		}
-		
-    
     void CanvasWidget::showObjects()
       throw() 
     {
@@ -76,7 +68,6 @@ namespace BALL
       }
     }
     
-
     void CanvasWidget::zoomIn()
       throw()
     {
@@ -110,14 +101,14 @@ namespace BALL
       QWMatrix m  = worldMatrix();
 
 			// in order to prevend rounding errors we minimize the dividend
-			// -> subtract 5	
-      int conWidth  = viewport()->width()-15;  //content of scrollview
-      int conHeight = viewport()->height()-15; //content of scrollview
+			// -> subtract 15	
+      int conWidth  = viewport()->width() - 15;  //content of scrollview
+      int conHeight = viewport()->height()- 15;  //content of scrollview
 
       int visHeight = canvas_.height();  // height of canvas
       int visWidth  = canvas_.width();   // width of canvas
 
-      if((visWidth !=0.) && (visHeight!=0.))
+      if ((visWidth != 0) && (visHeight != 0))
       {
       	xfactor = (float)conWidth/(float)visWidth;
 				yfactor = (float)conHeight/(float)visHeight;
@@ -127,7 +118,6 @@ namespace BALL
 			//m.m12 and m.m21 are the old matrixvalues
 			//m.dx and m.dy are the old translation values	
 			QWMatrix m2(xfactor, m.m12(), m.m21(), yfactor, m.dx(), m.dy());
-
       setWorldMatrix(m2);
     }
 

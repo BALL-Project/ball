@@ -22,6 +22,7 @@ namespace BALL
 
       public:
       
+			///
       class BALL_EXPORT PixmapItem
 				: public QCanvasRectangle
       {
@@ -42,7 +43,7 @@ namespace BALL
 				QPixmap pixmap_;
 	
       }; //end of class PixmapItem
-      
+
 			///
       CanvasWidget (QWidget *parent  = 0, 
 										const char* name = 0, 
@@ -52,10 +53,6 @@ namespace BALL
       //Destructor
       virtual ~CanvasWidget();  
       
-			///
-			const QCanvas& getCanvas()
-				throw();
-			
       ///
       void showObjects()	 
 				throw();
