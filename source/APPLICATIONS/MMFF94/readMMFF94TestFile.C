@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.15 2005/04/01 15:30:06 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.16 2005/04/04 14:55:20 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -100,6 +100,8 @@ vector<float> getResults(String filename)
 
 bool testStretch(MMFF94& mmff, const String& filename, bool compare)
 {
+	bool ok = true;
+
 	String full_file_name = (dir +FileSystem::PATH_SEPARATOR + filename + ".stretch");
 	LineBasedFile infile(full_file_name);
 	vector<String> atoms1, atoms2;
@@ -140,6 +142,8 @@ bool testStretch(MMFF94& mmff, const String& filename, bool compare)
 										<< "got " << s.r0 << "   " << s.kb << "   " << s.sbmb << "    " << std::endl
 										<< "was " << r0s[poss2] << "   " << kbs[poss2] << "   " << is_sbmb[poss2]
 										<< std::endl;
+
+				ok = false;
 			}
 
 			break;
@@ -152,7 +156,7 @@ bool testStretch(MMFF94& mmff, const String& filename, bool compare)
 		}
 	}
 
-	if (!compare) return true;
+	if (!compare) return ok;
 
 	vector<float> results = getResults(dir +FileSystem::PATH_SEPARATOR + filename);
 
@@ -164,7 +168,7 @@ bool testStretch(MMFF94& mmff, const String& filename, bool compare)
 		return false;
 	}
 
-	return true;
+	return ok;
 }
 
 ///////////////////////////////////////////////////////////
@@ -270,6 +274,7 @@ bool testStretchBend(MMFF94& mmff, const String& filename, bool compare)
 ///////////////////////////////////////////////////////////
 bool testBend(MMFF94& mmff, const String& filename, bool compare)
 {
+	bool ok = true;
 	String full_file_name = (dir +FileSystem::PATH_SEPARATOR + filename + ".bend");
 	LineBasedFile infile(full_file_name);
 	vector<String> atoms1, atoms2, atoms3;
@@ -325,6 +330,7 @@ bool testBend(MMFF94& mmff, const String& filename, bool compare)
 										<< "got " << s.delta_theta << "  " << s.theta0 << "   " << s.ATIJK << "   " << s.energy << std::endl
 										<< "was " << delta[poss2] << " " <<  theta0[poss2] << "   " << type[poss2] << "   " << energy[poss2]
 										<< std::endl;
+				ok = false;
 			}
 
 			break;
@@ -338,7 +344,7 @@ bool testBend(MMFF94& mmff, const String& filename, bool compare)
 		}
 	}
 
-	if (!compare) return true;
+	if (!compare) return ok;
 
 	vector<float> results = getResults(dir +FileSystem::PATH_SEPARATOR + filename);
 
@@ -350,18 +356,17 @@ bool testBend(MMFF94& mmff, const String& filename, bool compare)
 		return false;
 	}
 
-	return true;
+	return ok;
 }
 
 int runtests(const vector<String>& filenames)
 {
 	MMFF94 mmff;
 
+	vector<String> not_ok;
 	Size ok = 0;
 	for (Position pos = 0; pos < filenames.size(); pos++)
 	{
-//   		if (pos > 5) break;
-
 		Log.info() << "> " << filenames[pos] << std::endl;
 		String full_file_name(dir +FileSystem::PATH_SEPARATOR + filenames[pos] + ".mol2");
 		System* system = readTestFile(full_file_name);
@@ -379,13 +384,28 @@ int runtests(const vector<String>& filenames)
 
 		mmff.updateEnergy();
 
-//    		if (testStretch(mmff, filenames[pos], true)) ok++;
- 		if (testBend(mmff, filenames[pos], true)) ok++;
+		bool result = true;
+//          		if (testStretch(mmff, filenames[pos], true)) ok++;
+    result = testBend(mmff, filenames[pos], true);
 //    		testBend(mmff, filenames[pos], false);
 //   		if (testStretchBend(mmff, filenames[pos], true)) ok++;
+
+		
+
+		if (!result) not_ok.push_back(filenames[pos]);
+		else ok++;
 	}
 
 	Log.info() << "Tested " << filenames.size() << " files, " << ok << " files ok" << std::endl;
+
+	Log.info() << "Test failed for: " << std::endl;;
+
+	for (Position pos = 0; pos < not_ok.size(); pos++)
+	{
+		Log.info() << not_ok[pos] << " ";
+	}
+
+	Log.info() << std::endl;
 		
 	return 0;
 }
