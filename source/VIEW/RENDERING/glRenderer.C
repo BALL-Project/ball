@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.5 2003/10/15 13:56:01 amoll Exp $
+// $Id: glRenderer.C,v 1.6 2003/10/24 18:22:27 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -1357,14 +1357,7 @@ namespace BALL
 		void GLRenderer::updateCamera()
 			throw()
 		{
-			glMatrixMode(GL_PROJECTION);
 			glLoadIdentity();
-
-			glFrustum (-2.0 * x_scale_, 
-									2.0 * x_scale_, 
-								 -2.0 * y_scale_, 
-									2.0 * y_scale_, 
-									1.5, 300);
 
 			const Camera& camera = stage_->getCamera();
 			gluLookAt(camera.getViewPoint().x, 
@@ -1376,8 +1369,6 @@ namespace BALL
 								camera.getLookUpVector().x,
 								camera.getLookUpVector().y,
 								camera.getLookUpVector().z);
-
-			glMatrixMode(GL_MODELVIEW);
 		}
 
 
