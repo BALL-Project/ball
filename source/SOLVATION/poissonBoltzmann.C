@@ -1,4 +1,4 @@
-// $Id: poissonBoltzmann.C,v 1.22 2001/07/15 21:04:17 oliver Exp $ 
+// $Id: poissonBoltzmann.C,v 1.23 2001/07/25 11:38:50 oliver Exp $ 
 // FDPB: Finite Difference Poisson Solver
 
 #include <BALL/SOLVATION/poissonBoltzmann.h>
@@ -856,6 +856,7 @@ namespace BALL
 		Position index;
 		Size Nx	= q_grid->getMaxXIndex() + 1;
 		Size Nxy = (q_grid->getMaxYIndex() + 1) * Nx;
+		RegularData3D<float>::GridIndex	grid_index;
 		
 		Vector3	position;
 
@@ -866,7 +867,6 @@ namespace BALL
 				// distribute the charge equally upon the eigth 
 				// closest gridpoints
 					
-				RegularData3D<float>::GridIndex	grid_index;
 				Index i;
 				for (i = 0; i < (Index)(*atom_array).size(); i++)
 				{
