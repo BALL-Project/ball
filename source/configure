@@ -3406,6 +3406,10 @@ _ACEOF
 
 
 		TEMPLATE_DIR="SunWS_cache"
+						cat >>confdefs.h <<\_ACEOF
+#define BALL_MUST_CAST_TEMPLATE_FUNCTION_ARGS
+_ACEOF
+
 
 						if test "${BINFMT_64_BIT}" = true ; then
 			SUN_BINFMT=V9
@@ -3433,6 +3437,7 @@ _ACEOF
 		cat >>confdefs.h <<\_ACEOF
 #define BALL_NO_INLINE_FUNCTIONS
 _ACEOF
+
 
 		CXXFLAGS="${CXXFLAGS} -KPIC"
 		CXXFLAGS_O="${CXXFLAGS_O} -xO5"
