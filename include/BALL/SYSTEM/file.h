@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.h,v 1.47 2003/03/26 13:08:44 sturm Exp $
+// $Id: file.h,v 1.48 2003/04/18 11:55:57 oliver Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -153,23 +153,25 @@ namespace BALL
 
 		//@}
 
-
-
-
 		/**	@name	Constants
 		*/
 		//@{
 
 		/// Open for input (default)
 		static const OpenMode IN = std::ios::in;
+
 		/// Open for output
 		static const OpenMode OUT = std::ios::out;
+
 		/// Append. Seek to end before each write operation
 		static const OpenMode APP = std::ios::app;
+
 		/// Binary mode
 		static const OpenMode BINARY = std::ios::binary;
+
 		/// Seek to end directly after opening.
 		static const OpenMode ATE =  std::ios::ate;
+
 		/// Truncate an existing file.
 		static const OpenMode TRUNC = std::ios::trunc;
 		//@}
@@ -248,7 +250,7 @@ namespace BALL
 				@return File - new constructed File object
 		*/
 		File(const String& name, OpenMode open_mode = std::ios::in)
-			throw (Exception::FileNotFound);
+			throw(Exception::FileNotFound);
 
 		/** Copy constructor.
 				Construct new File object by copying the filename from File {\em file}.
