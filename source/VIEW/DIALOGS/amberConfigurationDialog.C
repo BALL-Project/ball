@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberConfigurationDialog.C,v 1.2 2004/01/20 15:07:42 amoll Exp $
+// $Id: amberConfigurationDialog.C,v 1.3 2004/01/20 15:45:04 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/amberConfigurationDialog.h>
@@ -286,8 +286,6 @@ namespace BALL
 
 		void AmberConfigurationDialog::accept()
 		{
-			hide();
-
 			try
 			{
 				nonbonded_cutoff_ = String(nonbonded_cutoff_line_edit->text().ascii()).toFloat();
@@ -301,6 +299,7 @@ namespace BALL
 			catch(Exception::GeneralException e)
 			{
 				Log.error() << "Invalid value: " << std::endl << e << std::endl;
+				return;
 			}
 
 			use_dddc_ = distance_button->isChecked();
@@ -311,6 +310,7 @@ namespace BALL
 			overwrite_charges_ = overwrite_charges_checkBox->isChecked();
 
 			if (amber_ != 0) applyTo(*amber_);
+			hide();
 		}
 
 
