@@ -1,4 +1,4 @@
-; $Id: amber_types.rul,v 1.1 2003/05/09 13:06:16 anker Exp $
+; $Id: amber_types.rul,v 1.2 2003/08/26 09:17:26 oliver Exp $
 ;
 ; first tentative rule firl for assigning AMBER and GlyCam atom types. This
 ; is still *ALPHA* code. Use at your own risk. Use this file with
