@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.C,v 1.46 2003/04/23 08:23:58 oliver Exp $
+// $Id: standardPredicates.C,v 1.47 2003/05/09 12:55:16 anker Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -1556,8 +1556,8 @@ namespace BALL
 			<< fabs(angle_C1_R) - 109.5 << endl;
 #endif
 
-		if ((fabs(angle_C1_H) < 10.0) 
-				&& ((fabs(angle_C1_R) - 109.5) < 10))
+		if ((fabs(angle_C1_H) < 15.0) 
+				&& ((fabs(angle_C1_R) - 109.5) < 15.0))
 		{
 			// if the hydrogen stands in axial position and the substituent in
 			// equatorial position the carbon is equatorially substituted
