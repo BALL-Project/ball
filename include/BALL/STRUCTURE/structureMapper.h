@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: structureMapper.h,v 1.22 2003/09/02 07:02:16 oliver Exp $
+// $Id: structureMapper.h,v 1.23 2003/09/02 11:13:15 anker Exp $
 //
 
 #ifndef BALL_STRUCTURE_STRUCTUREMAPPER_H
@@ -135,7 +135,7 @@ namespace BALL
 		*/
 		Matrix4x4 mapProteins
 			(Protein& P1, Protein& P2, 
-			 map<String, Size>&	type_map,
+			 std::map<String, Size>&	type_map,
 			 Size&							no_matched_ca,
 			 double&						rmsd,
 			 double							upper_bound = 8.0,
