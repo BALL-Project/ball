@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.15 2004/12/07 15:33:53 amoll Exp $
+// $Id: main.C,v 1.16 2004/12/10 16:04:28 amoll Exp $
 //
 
 // order of includes is important: first qapplication, than BALL includes
@@ -13,7 +13,6 @@
 #include <BALL/SYSTEM/directory.h>
 
 #include <iostream>
-
 
 void myMessageOutput( QtMsgType type, const char *msg )
 {
@@ -40,12 +39,11 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, PSTR cmd_line, int )
 	char** argv = __argv;
 #endif
 
-	qInstallMsgHandler( myMessageOutput );
+	qInstallMsgHandler(myMessageOutput);
 
 	QApplication application(argc, argv);
 
 	// =============== testing if we can write in current directoy =====================
-	bool dir_error = false;
 	BALL::String home_dir = BALL::Directory::getUserHomeDir();
 
 	if (home_dir == "")
@@ -80,7 +78,7 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, PSTR cmd_line, int )
 	}
 
 	// Register the mainfram (required for Python support).
-	mainframe.setIdentifier("MAIN");
+	mainframe.setIdentifier("Mainframe");
 	mainframe.registerThis();
 
 	// Show the main window.
@@ -106,7 +104,6 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, PSTR cmd_line, int )
 		mainframe.aboutToExit();
 		return 0;
 	}
-
 
   // Hand over control to the application.
   return application.exec();
