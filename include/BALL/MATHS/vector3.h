@@ -1,4 +1,4 @@
-// $Id: vector3.h,v 1.4 2000/01/07 21:50:47 oliver Exp $
+// $Id: vector3.h,v 1.5 2000/01/07 22:37:40 oliver Exp $
 
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -62,6 +62,8 @@ namespace BALL
 	{
 		public:
 
+		BALL_CREATE(TVector3<T>)
+
 		/**	@name	Constructors and Destructors
 		*/
 		//@{
@@ -78,15 +80,22 @@ namespace BALL
 		{
 		}
 
-		BALL_CREATE(TVector3<T>)
-
 		/**	Array constructor.
 				This constructor creates a TVector3 object from the first
 				three elements pointed to by {\tt ptr}.
 				@param ptr the array to construct from
 				@exception NullPointer if {\tt ptr == 0}
 		*/
-		TVector3(const T* ptr);
+		TVector3(const T* ptr)
+			:	PersistentObject()
+		{
+			if (ptr == 0) 
+				throw Exception::NullPointer(__FILE__, __LINE__);
+			
+			x = *ptr++;
+			y = *ptr++;
+			z = *ptr;
+		}
 
 		/**	TVector\_ constructor.
 				This constructor creates a TVector3 object and initializes
@@ -94,14 +103,26 @@ namespace BALL
 				and {\tt vector.z}.
 				@param	vector the vector to construct from
 		*/
-		TVector3(const TVector_<T>& vector);
+		TVector3(const TVector_<T>& vector)
+			:	PersistentObject(),
+				x(vector.x),
+				y(vector.y),
+				z(vector.z)
+		{
+		}
 
 		/**	Scalar constructor.
 				Create a new vector with all components set
 				to the same {\tt value}.
 				@param	value the value of all components
 		*/
-		TVector3(const T& value);
+		TVector3(const T& value)
+			:	PersistentObject(),	
+				x(value),
+				y(value),
+				z(value)
+		{
+		}
 
 		/**	Detailled constructor.
 				Create a new TVector3 object from three {\tt T} variables.
@@ -122,7 +143,13 @@ namespace BALL
 				@param vector the TVector3 object to be copied
 				@param bool ignored - jjust for interface consistency
 		*/	
-		TVector3(const TVector3& vector, bool deep = true);
+		TVector3(const TVector3& vector, bool deep = true)
+			:	PersistentObject(),
+				x(vector.x),
+				y(vector.y),
+				z(vector.z)
+		{
+		}
 
 		/**	Spherical polar coordinate constructor.
 				Create a TVector3 object and set its coordinates to 
@@ -133,7 +160,13 @@ namespace BALL
 				@param phi the azimuth 
 				@param theta the co-latitude
 		*/
-		TVector3(const T& r, const TAngle<T>& phi, const TAngle<T>& theta);
+		TVector3(const T& r, const TAngle<T>& phi, const TAngle<T>& theta)
+			:	PersistentObject(),
+				x(r * cos(phi) * sin(theta)),
+				y(r * sin(phi) * sin(theta)),
+				z(r * cos(theta))
+		{
+		}
 
 		/**	Destructor.	
 				Destructs the TVector3 object. As there are no dynamic
@@ -516,54 +549,6 @@ namespace BALL
 		}
 	};
 
-	template <class T>
-	TVector3<T>::TVector3(const T* ptr)
-		:	PersistentObject()
-	{
-		if (ptr == 0) 
-			throw Exception::NullPointer(__FILE__, __LINE__);
-		
-		x = *ptr++;
-		y = *ptr++;
-		z = *ptr;
-	}
-
-	template <class T>
-	TVector3<T>::TVector3(const TVector_<T>& vector)
-		:	PersistentObject(),
-			x(vector.x),
-			y(vector.y),
-			z(vector.z)
-	{
-	}
-
-	template <class T>
-	TVector3<T>::TVector3(const T& value)
-		:	PersistentObject(),	
-			x(value),
-			y(value),
-			z(value)
-	{
-	}
-
-
-	template <class T>
-	TVector3<T>::TVector3(const TVector3<T>& vector, bool /* deep */)
-		:	PersistentObject(),
-			x(vector.x),
-			y(vector.y),
-			z(vector.z)
-	{
-	}
-
-	template <class T>
-	TVector3<T>::TVector3(const T& r, const TAngle<T>& phi, const TAngle<T>& theta)
-		:	PersistentObject(),
-			x(r * cos(phi) * sin(theta)),
-			y(r * sin(phi) * sin(theta)),
-			z(r * cos(theta))
-	{
-	}
 
 	template <class T>
   void TVector3<T>::persistentWrite(PersistenceManager& pm, const char* name) const
