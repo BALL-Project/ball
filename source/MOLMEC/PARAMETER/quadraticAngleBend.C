@@ -1,4 +1,4 @@
-// $Id: quadraticAngleBend.C,v 1.2 1999/08/31 22:01:18 oliver Exp $
+// $Id: quadraticAngleBend.C,v 1.3 1999/09/22 12:46:44 pmueller Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/quadraticAngleBend.h>
@@ -22,9 +22,9 @@ namespace BALL {
 	void FFPSQuadraticAngleBend::destroy() 
 	{
 		// clear allocatd parameter fields
-		delete k_;
-		delete theta0_;
-		delete is_defined_;
+		delete [] k_;
+		delete [] theta0_;
+		delete [] is_defined_;
 
 		FFParameterSection::destroy();
 	}
@@ -53,7 +53,8 @@ namespace BALL {
 		Size	i;
 		FFPSAtomTypes& atom_types = parameters.getAtomTypes();
 		number_of_atom_types_ = atom_types.getNumberOfTypes();
-		Size number_of_entries = number_of_atom_types_ * number_of_atom_types_ * number_of_atom_types_;
+		Size number_of_entries = number_of_atom_types_ * number_of_atom_types_ 
+                                                                    * number_of_atom_types_;
 		
 		// allocate two one-dimensional fields for the two parameters
 		k_  = new float[number_of_entries];
@@ -161,6 +162,7 @@ namespace BALL {
 
 		if ((K < 0) || ((Size)K >= number_of_atom_types_))
 			return false;
+
 
 		return is_defined_[I + number_of_atom_types_ * J + number_of_atom_types_ * number_of_atom_types_ * K];
 	}

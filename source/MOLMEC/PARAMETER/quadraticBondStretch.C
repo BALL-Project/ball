@@ -1,4 +1,4 @@
-// $Id: quadraticBondStretch.C,v 1.2 1999/08/31 22:01:18 oliver Exp $
+// $Id: quadraticBondStretch.C,v 1.3 1999/09/22 12:46:59 pmueller Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/quadraticBondStretch.h>
@@ -22,9 +22,9 @@ namespace BALL {
 	void FFPSQuadraticBondStretch::destroy() 
 	{
 		// clear allocated parameter fields
-		delete k_;
-		delete r0_;
-		delete is_defined_;
+		delete [] k_;
+		delete [] r0_;
+		delete [] is_defined_;
 
 		FFParameterSection::destroy();
 	}
