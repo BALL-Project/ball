@@ -1,19 +1,70 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertexBuffer.C,v 1.1.2.8 2005/01/18 16:24:09 amoll Exp $
+// $Id: vertexBuffer.C,v 1.1.2.9 2005/01/18 22:25:09 amoll Exp $
 //
+#ifdef _WINDOWS
+ #include <windows.h>
+ #include <wingdi.h>											// Header File For Windows
+#endif
+
+
 #include <BALL/VIEW/RENDERING/vertexBuffer.h>
 #include <BALL/VIEW/RENDERING/glRenderer.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/VIEW/KERNEL/common.h>
+
 #include <qgl.h>
-#include <GL/glext.h>
+//#include <BALL/VIEW/RENDERING/glext.h>
+
+#ifndef APIENTRY
+#define APIENTRY
+#endif
+#ifndef APIENTRYP
+#define APIENTRYP APIENTRY *
+#endif
+
+#ifndef GLAPI
+#define GLAPI extern
+#endif
 
 namespace BALL
 {
 	namespace VIEW
 	{
+
+GLAPI void glBindBuffer (GLenum, GLuint);
+GLAPI void glDeleteBuffers (GLsizei, const GLuint *);
+GLAPI void glGenBuffers (GLsizei, GLuint *);
+GLAPI void glBufferData (GLenum, GLsizei*, const GLvoid *, GLenum);
+GLAPI GLvoid* APIENTRY glMapBuffer (GLenum, GLenum);
+GLAPI GLboolean APIENTRY glUnmapBuffer (GLenum);
+
+// VBO Extension Definitions, From glext.h
+#define GL_ARRAY_BUFFER_ARB 0x8892
+#define GL_STATIC_DRAW_ARB 0x88E4
+#define GL_ELEMENT_ARRAY_BUFFER_ARB  0x8893
+
+typedef void (APIENTRY * PFNGLBINDBUFFERARBPROC) (GLenum target, GLuint buffer);
+typedef void (APIENTRY * PFNGLDELETEBUFFERSARBPROC) (GLsizei n, const GLuint *buffers);
+typedef void (APIENTRY * PFNGLGENBUFFERSARBPROC) (GLsizei n, GLuint *buffers);
+typedef void (APIENTRY * PFNGLBUFFERDATAARBPROC) (GLenum target, int size, const GLvoid *data, GLenum usage);
+
+
+// VBO Extension Function Pointers
+PFNGLGENBUFFERSARBPROC glGenBuffersARB = NULL;					// VBO Name Generation Procedure
+PFNGLBINDBUFFERARBPROC glBindBufferARB = NULL;					// VBO Bind Procedure
+PFNGLBUFFERDATAARBPROC glBufferDataARB = NULL;					// VBO Data Loading Procedure
+PFNGLDELETEBUFFERSARBPROC glDeleteBuffersARB = NULL;			// VBO Deletion Procedure
+
+void MeshBuffer::initGL()
+{
+		glGenBuffersARB = (PFNGLGENBUFFERSARBPROC) wglGetProcAddress("glGenBuffersARB");
+		glBindBufferARB = (PFNGLBINDBUFFERARBPROC) wglGetProcAddress("glBindBufferARB");
+		glBufferDataARB = (PFNGLBUFFERDATAARBPROC) wglGetProcAddress("glBufferDataARB");
+		glDeleteBuffersARB = (PFNGLDELETEBUFFERSARBPROC) wglGetProcAddress("glDeleteBuffersARB");
+}
+
 
 GLRenderer* MeshBuffer::gl_renderer_ = 0;
 
@@ -50,7 +101,6 @@ const MeshBuffer& MeshBuffer::operator = (const MeshBuffer& mesh_buffer)
 
 bool MeshBuffer::initialize()
 {
-#ifdef GL_ARB_vertex_buffer_object
 	clearBuffer();
 	if (mesh_ == 0) return false;
 
@@ -125,7 +175,6 @@ bool MeshBuffer::initialize()
 	glDisableClientState(GL_COLOR_ARRAY);
 
 	filled_ = true;
-#endif
 	return true;
 }
 
@@ -139,16 +188,13 @@ void MeshBuffer::clear()
 void MeshBuffer::clearBuffer()
 {
 	if (!filled_) return;
-#ifdef GL_ARB_vertex_buffer_object
 	glDeleteBuffersARB(4, buffers_);
-#endif
 	filled_ = false;
 }
 
 bool MeshBuffer::draw()
 {
 	if (!filled_ || gl_renderer_ == 0) return false;
-#ifdef GL_ARB_vertex_buffer_object
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
 
@@ -203,7 +249,6 @@ bool MeshBuffer::draw()
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_COLOR_ARRAY);
-#endif
 	return true;
 }
 

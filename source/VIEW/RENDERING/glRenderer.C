@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.57.2.21 2005/01/18 16:39:51 amoll Exp $
+// $Id: glRenderer.C,v 1.57.2.22 2005/01/18 22:25:09 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -156,6 +156,11 @@ namespace BALL
 			createBoxes_();
 
 			use_vertex_buffer_ = isExtensionSupported("GL_ARB_vertex_buffer_object");
+			if (use_vertex_buffer_)
+			{
+				Log.error() << "Using Vertex Buffer Object Extension" << std::endl;
+				MeshBuffer::initGL();
+			}
 
 			return true;
 		}
