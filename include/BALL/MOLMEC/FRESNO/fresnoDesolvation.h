@@ -1,4 +1,4 @@
-// $Id: fresnoDesolvation.h,v 1.1.2.3 2002/09/13 14:07:00 anker Exp $
+// $Id: fresnoDesolvation.h,v 1.1.2.4 2002/10/17 09:36:05 anker Exp $
 // Molecular Mechanics: Fresno force field, desolvation component
 
 #ifndef BALL_MOLMEC_FRESNO_FRESNODESOLVATION_H
@@ -42,6 +42,32 @@ namespace BALL
 			/**
 			*/
 			CALCULATION__EEF1
+
+		};
+
+		/** Averaging methods for model 0 and 3
+		*/
+		enum AveragingMethod
+		{
+			/** No averaging will be done.
+			*/
+			AVERAGING__NONE,
+
+			/** The grid of the PB solver will be translated a bit in every
+					direction by a fixed length.
+			*/
+			AVERAGING__STATIC,
+
+			/** The grid of the PB solver will be translated a bit in every
+					direction by a randomly chosen length (not yet implemented).
+			*/
+			AVERAGING__RANDOM_FACTOR,
+
+			/** The grid of the PB solver will be translated a bit in every
+					direction by different randomly chosen length (not yet
+					implemented).
+			*/
+			AVERAGING__RANDOM
 
 		};
 
@@ -131,11 +157,19 @@ namespace BALL
 
 		/*_
 		*/
+		Size averaging_;
+
+		/*_
+		*/
 		Size verbosity_;
 
 		/*_
 		*/
 		FDPB fdpb_;
+
+		/*_
+		*/
+		float spacing_;
 
 		/*_
 		*/
@@ -157,9 +191,20 @@ namespace BALL
 
 		/*_
 		*/
+		float computeESInteractionEnergy_(const Molecule& molecule)
+			throw();
+
+		/*_
+		*/
 		bool computeFullCycle_(System& system, Molecule& protein, 
 				Molecule& ligand, float& energy)
 			throw();
+
+		/*_
+		*/
+		Vector3 permuteComponentSigns_(Vector3 vector, Size permutation)
+			throw();
+
 
 	};
 

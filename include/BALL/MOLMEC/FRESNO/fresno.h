@@ -1,4 +1,4 @@
-// $Id: fresno.h,v 1.1.2.8 2002/09/13 14:05:44 anker Exp $
+// $Id: fresno.h,v 1.1.2.9 2002/10/17 09:36:04 anker Exp $
 
 #ifndef BALL_MOLMEC_FRESNO_FRESNO_H
 #define BALL_MOLMEC_FRESNO_FRESNO_H
@@ -134,6 +134,10 @@ namespace BALL
 
 			/**
 			*/
+			static const char* DESOLV_AVG;
+
+			/**
+			*/
 			static const char* VERBOSITY;
 
 
@@ -234,6 +238,10 @@ namespace BALL
 			/**
 			*/
 			static const Size DESOLV_METHOD;
+
+			/**
+			*/
+			static const Size DESOLV_AVG;
 
 			/**
 			*/
@@ -353,6 +361,12 @@ namespace BALL
 		/** Construct a FresnoFF with a system and options.
 		*/
 		FresnoFF(System& system, const Options& options)
+			throw();
+
+		/** Construct a FresnoFF with a system and options.
+		*/
+		FresnoFF(System& system, Molecule* protein, Molecule* ligand,
+				const Options& options)
 			throw();
 
 		/**	Copy constructor

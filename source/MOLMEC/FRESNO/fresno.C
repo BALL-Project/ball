@@ -1,4 +1,4 @@
-// $Id: fresno.C,v 1.1.2.11 2002/09/13 14:05:45 anker Exp $
+// $Id: fresno.C,v 1.1.2.12 2002/10/17 09:36:05 anker Exp $
 // Molecular Mechanics: Fresno force field class
 
 #include <BALL/SYSTEM/path.h>
@@ -47,6 +47,7 @@ namespace BALL
 	const char* FresnoFF::Option::METAL_R1 = "metal_r1";
 	const char* FresnoFF::Option::METAL_R2 = "metal_r2";
 	const char* FresnoFF::Option::DESOLV_METHOD = "desolvation_method";
+	const char* FresnoFF::Option::DESOLV_AVG = "desolvation_averaging";
 	const char* FresnoFF::Option::VERBOSITY = "verbosity";
 
 	const float FresnoFF::Default::CONST = -33.614;
@@ -73,6 +74,7 @@ namespace BALL
 	const float FresnoFF::Default::METAL_R1 = 2.2;
 	const float FresnoFF::Default::METAL_R2 = 2.6;
 	const Size FresnoFF::Default::DESOLV_METHOD = 0;
+	const Size FresnoFF::Default::DESOLV_AVG = 0;
 	const Size FresnoFF::Default::VERBOSITY = 9;
 
 	void FresnoFF::registerComponents_()
@@ -154,6 +156,29 @@ namespace BALL
 		:	ForceField(),
 			protein_(),
 			ligand_(),
+			fresno_types_()
+	{
+		// register all components of the force field
+		registerComponents_();
+
+		// set up with the given system
+		bool result = setup(system, new_options);
+
+    if (!result)
+    {
+			Log.error() << "FresnoFF::FresnoFF(System&): "
+				<< "Force Field setup failed! " << endl;
+      valid_ = false;
+		}
+	}
+
+
+	FresnoFF::FresnoFF(System& system, Molecule* protein, Molecule* ligand,
+			const Options& new_options)
+		throw()
+		:	ForceField(),
+			protein_(protein),
+			ligand_(ligand),
 			fresno_types_()
 	{
 		// register all components of the force field
