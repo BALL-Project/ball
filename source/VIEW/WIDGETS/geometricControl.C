@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.10 2003/09/18 12:59:23 amoll Exp $
+// $Id: geometricControl.C,v 1.11 2003/09/18 19:11:30 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -42,7 +42,7 @@ GeometricControl::GeometricControl(QWidget* parent, const char* name)
 		:	GenericControl(parent, name),
 			context_menu_(),
 			context_representation_(0),
-			colorMeshDlg_(0)
+			colorMeshDlg_(new ColorMeshDialog(this, "ColorMeshDialog"))
 {
 	listview->addColumn("[visible] Type");
 	listview->addColumn("Properties");
@@ -60,7 +60,7 @@ GeometricControl::~GeometricControl()
 								<< RTTI::getName<GeometricControl>() << endl;
   #endif 
 
-	if (colorMeshDlg_) delete colorMeshDlg_;
+	delete colorMeshDlg_;
 }
 
 void GeometricControl::addRepresentation(Representation& rep)
@@ -149,10 +149,6 @@ void GeometricControl::buildContextMenu(Representation& rep)
 	if ((rep.getModelType() == MODEL_SE_SURFACE || rep.getModelType() == MODEL_SA_SURFACE)	
 			&& rep.getGeometricObjects().size() > 0)
 	{
-		if (!colorMeshDlg_)
-		{
-			colorMeshDlg_ = new ColorMeshDialog(this);
-		}
 		colorMeshDlg_->setMesh(*(Mesh*)*(rep.getGeometricObjects().begin()));
 		colorMeshDlg_->setRepresentation(rep);
 		insertContextMenuEntry("Color Surface", colorMeshDlg_, SLOT(show()));	
