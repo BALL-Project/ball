@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.28 2004/02/26 08:41:32 anhi Exp $
+// $Id: displayProperties.h,v 1.28.2.1 2004/05/18 14:29:44 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
@@ -29,17 +29,16 @@ namespace BALL
 		class ModelSettingsDialog;
 		class Preferences;
 
-		/**	Dialog for creating and changing representations.
-				for a selection of molecular objects.
-				It can create a new Representation for a selection of Composites from the 
+		/**	Dialog for creating and changing representations for a selection of molecular objects.
+				It can create a new Representation for a selection of Composite 's from the 
 				MolecularControl. If a Representation is selected in the GeometricControl, it
 				can be modified with this dialog.
 				With the help of various combo boxes it is possible to customize the look of
 				the graphical visualization (the model, the drawing precision, the drawing mode,
 				the coloring method and the custom color).
-				For information about the drawing precision see Represenation.\par
-				If this dialog is used, it should be created with MainControl as parent.\par
-				If you want to add a new coloring method or type of representation, have a look at
+				For information about the drawing precision see Representation. <br>
+				If this dialog is used, it should be created with MainControl as parent. <br>
+				If you want to add a new coloring method or type of Representation, have a look at
 				VIEW/KERNEL/common.h.
 				\ingroup ViewDialogs
 		*/
@@ -141,11 +140,11 @@ namespace BALL
 			virtual void finalizeWidget(MainControl& main_control)
 					throw();
 
-			///
+			/// Insert the ModelSettingsDialog and the ColoringSettingsDialog into the Preferences
 			virtual void initializePreferencesTab(Preferences &preferences)
 				throw();
 
-			///
+			/// Remove the ModelSettingsDialog and the ColoringSettingsDialog from the Preferences
 			virtual void finalizePreferencesTab(Preferences &preferences)
 				throw();
 
@@ -159,7 +158,7 @@ namespace BALL
 
 			/**	Menu checking method.
 					This method is called by MainControl::checkMenus before a popup menu is shown.
-					The menu <b> Display Properties</b> will be checked if this displayProperties is visible. 
+					The menu entry <b>Display Properties</b> will be checked if this dialog is visible. 
 					\param main_control the MainControl object whose menus should be checked
 			*/
 			virtual void checkMenu(MainControl& main_control)
