@@ -1,4 +1,4 @@
-// $Id: fresnoRingStacking.h,v 1.1.2.3 2005/01/30 14:06:41 anker Exp $
+// $Id: fresnoRingStacking.h,v 1.1.2.4 2005/04/03 13:35:12 anker Exp $
 // Molecular Mechanics: Fresno force field, CH---pi interaction
 
 #ifndef BALL_MOLMEC_FRESNO_RINGSTACKING_H
@@ -81,6 +81,8 @@ namespace BALL
 			};
 
   
+			/// A class for storing aliphatic CH groups suitable for building
+			/// CH-\pi interactions with aromatic rings.
 			class CHGroup
 			{
 				public: 
@@ -272,6 +274,15 @@ namespace BALL
 
 			//_
 			float HX_projected_distance_upper_;
+
+			//_ The tolerance area for creating scores instead of simply counted
+			//_ interactions.
+			float distance_tolerance_;
+			float angle_tolerance_;
+
+			//_ A limit for ignoring interactions that have only very small
+			//_ scores
+			float limit_;
 
 	};
 

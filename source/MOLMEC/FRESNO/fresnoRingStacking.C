@@ -1,4 +1,4 @@
-// $Id: fresnoRingStacking.C,v 1.1.2.4 2005/02/10 10:48:03 anker Exp $
+// $Id: fresnoRingStacking.C,v 1.1.2.5 2005/04/03 13:35:53 anker Exp $
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 
@@ -337,7 +337,10 @@ namespace BALL
 			current_atoms2.clear();
 
 			// Find aromatic rings by their names: Trp, Phe, Tyr
-			if (residue_name == "TRP") 
+			if ((residue_name == "TRP") 
+					|| (residue_name == "TRP-C")
+					|| (residue_name == "TRP-N")
+					|| (residue_name == "TRP-M"))
 			{
 				AtomConstIterator at_it = res_it->beginAtom();
 				for (; +at_it; ++at_it)
@@ -365,7 +368,14 @@ namespace BALL
 			else
 			{
 				// Now Tyrosine and Phenylalanine
-				if ((residue_name == "TYR") || (residue_name == "PHE")) 
+				if ((residue_name == "TYR") 
+						|| (residue_name == "TYR-C")
+						|| (residue_name == "TYR-N")
+						|| (residue_name == "TYR-M")
+						|| (residue_name == "PHE")
+						|| (residue_name == "PHE-C")
+						|| (residue_name == "PHE-N")
+						|| (residue_name == "PHE-M"))
 				{	
 					AtomConstIterator at_it  = res_it->beginAtom();
 					for (; +at_it; ++at_it)
@@ -381,6 +391,7 @@ namespace BALL
 					}
 					current_ring = new AromaticRing(current_atoms);
 					all_aromatic_rings_.push_back(*current_ring);
+					cout << "Found!!" << endl;
 				}
 			}
 		}
@@ -397,8 +408,9 @@ namespace BALL
 		AtomConstIterator lig_it(ligand.beginAtom());
 		for (; +lig_it; ++lig_it) 
 		{ 
-			if ((lig_it->getElement() == PTE[Element::C])
-				&& (lig_it->countBonds() == 4))
+			if ((lig_it->getElement() == PTE[Element::C]))
+			// TEMPORARY!
+			//	&& (lig_it->countBonds() == 4))
 			{	
 				// The aliphatic C-Atom of this putative interaction
 				const Atom* aliphatic_C = &*lig_it;
@@ -594,7 +606,7 @@ namespace BALL
 		}
 		Log.info() << "CHPI: energy is " << energy_ << endl;
 #ifdef DEBUG
-		HINFile debug_file("debug.hin", std::ios::out);
+		HINFile debug_file("CHPI_debug.hin", std::ios::out);
 		debug_file << debug_molecule;
 		debug_file.close();
 #endif

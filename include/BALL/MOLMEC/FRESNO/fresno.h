@@ -1,4 +1,4 @@
-// $Id: fresno.h,v 1.1.2.20 2005/01/30 14:06:40 anker Exp $
+// $Id: fresno.h,v 1.1.2.21 2005/04/03 13:35:12 anker Exp $
 
 #ifndef BALL_MOLMEC_FRESNO_FRESNO_H
 #define BALL_MOLMEC_FRESNO_FRESNO_H
@@ -85,7 +85,10 @@ namespace BALL
 			BaseFunctionLinear()
 				throw();
 
-			///
+			/// The function is defined in such a way that the score is 1 for
+			/// values < lower and 0 for values > upper. If you need contrary 
+			/// behaviour, you have to supply a "lower" which is greater than
+			/// "upper". This will invert the function.
 			BaseFunctionLinear(float lower, float upper)
 				throw();
 
@@ -110,7 +113,10 @@ namespace BALL
 			BaseFunctionSigmoidal()
 				throw();
 
-			/// 
+			/// The function is defined in such a way that the score approaches 1
+			/// for values < lower and 0 for values > upper. If you need contrary
+			/// behaviour, you have to supply a "lower" which is greater than
+			/// "upper". This will invert the function.
 			BaseFunctionSigmoidal(float lower, float upper)
 				throw();
 
