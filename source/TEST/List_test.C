@@ -1,4 +1,4 @@
-// $Id: List_test.C,v 1.3 2000/07/07 04:20:58 amoll Exp $
+// $Id: List_test.C,v 1.4 2000/08/23 15:39:54 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(List<T>, "$Id: List_test.C,v 1.3 2000/07/07 04:20:58 amoll Exp $")
+START_TEST(List<T>, "$Id: List_test.C,v 1.4 2000/08/23 15:39:54 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -84,6 +84,20 @@ CHECK(isEmpty)
 	TEST_EQUAL(int_list.isEmpty(), true)
 	int_list.push_back(1);
 	TEST_EQUAL(int_list.isEmpty(), false)	
+RESULT
+
+CHECK(remove)
+	List<int> int_list2;
+	int_list2.push_back(1);
+	int_list2.push_back(2);
+	int_list2.push_back(3);
+	bool result = int_list2.remove(2);
+	TEST_EQUAL(result, true);
+	TEST_EQUAL(int_list2.size(), 2);
+	List<int>::Iterator it = int_list2.begin();
+	TEST_EQUAL(*it, 1);
+	++it;
+	TEST_EQUAL(*it, 3);
 RESULT
 
 /////////////////////////////////////////////////////////////
