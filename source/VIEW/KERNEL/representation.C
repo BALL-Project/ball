@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.56 2004/12/13 16:05:28 amoll Exp $
+// $Id: representation.C,v 1.57 2004/12/14 15:10:06 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/representation.h>
@@ -314,9 +314,9 @@ namespace BALL
 		{
 			if (VIEW::isSurfaceModel(model_type_))
 			{
-				GeometricObjectList::ConstIterator it = geometric_objects_.begin();
+				GeometricObjectList::ConstIterator it = getGeometricObjects().begin();
 				Size triangles = 0;
-				for (;it != geometric_objects_.end(); it++)
+				for (;it != getGeometricObjects().end(); it++)
 				{
 					if (RTTI::isKindOf<Mesh>(**it))
 					{ 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.69 2004/12/14 12:55:59 amoll Exp $
+// $Id: geometricControl.C,v 1.70 2004/12/14 15:10:00 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -50,6 +50,7 @@ namespace BALL
 			setText(0, text);
 			setText(1, representation->getColoringName().c_str());
 			setText(2, representation->getProperties().c_str());
+			setOn(!representation->isHidden());
 		}
 
 		void GeometricControl::SelectableListViewItem::stateChange(bool state)
@@ -319,15 +320,11 @@ namespace BALL
 		{
 			if (!getMainControl()->getPrimitiveManager().has(rep)) return;
 
-			QString properties = rep.getProperties().c_str();
 			// create a new list item
-			SelectableListViewItem* new_item = 
-				new SelectableListViewItem(listview, 
-							getRepresentationName_(rep).c_str(), 
-							&rep, *this);
+			SelectableListViewItem* new_item = new SelectableListViewItem(listview, 
+																								getRepresentationName_(rep).c_str(), &rep, *this);
 
 			CHECK_PTR(new_item);
-			new_item->setOn(!rep.isHidden());
 
 			representation_to_item_[&rep] = new_item;
 		}
