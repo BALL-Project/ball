@@ -1,4 +1,4 @@
-// $Id: mainControl.C,v 1.22.4.13 2002/12/09 00:50:38 amoll Exp $
+// $Id: mainControl.C,v 1.22.4.14 2002/12/09 18:41:06 amoll Exp $
 
 // this is required for QMenuItem
 #define INCLUDE_MENUITEM_DEF
@@ -318,7 +318,7 @@ namespace BALL
 
 			if (map_iterator != descriptor_map_.end())
 			{
-				 composite_map_.erase((void*)composite_descriptor.getComposite());
+				composite_map_.erase((void*)composite_descriptor.getComposite());
 				descriptor_map_.erase((void*)&composite_descriptor);
 				delete (CompositeDescriptor*)map_iterator->first;
 				descriptors_.erase(map_iterator->second);
@@ -332,13 +332,11 @@ namespace BALL
 		bool MainControl::setName(const Composite& composite, const String& s)
 			throw()
 		{
-			ListIteratorHashMap::Iterator map_iterator = 
-				composite_map_.find((void*)&composite);
+			ListIteratorHashMap::Iterator map_iterator = composite_map_.find((void*)&composite);
 
 			if (map_iterator != composite_map_.end())
 			{
 				(*map_iterator->second)->setName(s);
-
 				return true;
 			}
 
@@ -477,8 +475,8 @@ namespace BALL
 			list_iterator = descriptors_.end();
 			list_iterator--;
 
-			 composite_map_.insert(ListIteratorHashMap::ValueType((void *)composite, list_iterator));
-			descriptor_map_.insert(ListIteratorHashMap::ValueType((void *)composite_descriptor, list_iterator));
+			 composite_map_.insert(ListIteratorHashMap::ValueType((void*)composite, list_iterator));
+			descriptor_map_.insert(ListIteratorHashMap::ValueType((void*)composite_descriptor, list_iterator));
  		}	
 
 		void MainControl::onNotify(Message *message)
@@ -511,12 +509,12 @@ namespace BALL
 			}
 			else if(RTTI::isKindOf<CompositeSelectedMessage>(*message))
 			{
+				// Selection came from selecting checkbox in Control or "select" menu in displayProperties
 				CompositeSelectedMessage * selection_message = RTTI::castTo<CompositeSelectedMessage>(*message);
 				if (selection_message->selected_ == selection_.has(selection_message->composite_)) return;
 				selectCompositeRecursive(selection_message->composite_, selection_message->selected_);
 				NewSelectionMessage* nws_message = new NewSelectionMessage;					
 				notify_(nws_message);
-				return;
 
 				// sending of scene message and geometric object selector is done in MolecularProperties, because
 				// ObjectSelector is part of MOLVIEW
@@ -623,14 +621,14 @@ namespace BALL
 
 			List<CompositeDescriptor*>::Iterator list_iterator;
 
-			CompositeDescriptor* new_composite_descriptor 
-				= (CompositeDescriptor*)composite_descriptor.create(deep);
+			CompositeDescriptor* new_composite_descriptor = (CompositeDescriptor*)composite_descriptor.create(deep);
 
 			descriptors_.push_back(new_composite_descriptor);
 			list_iterator = descriptors_.end();
 			list_iterator--;
 
-			composite_map_.insert(ListIteratorHashMap::ValueType((void*)new_composite_descriptor->getComposite(), list_iterator));
+			composite_map_.insert(ListIteratorHashMap::ValueType((void*)new_composite_descriptor->getComposite(), 
+																													 list_iterator));
 
 			descriptor_map_.insert(ListIteratorHashMap::ValueType((void*)new_composite_descriptor, list_iterator));
 
@@ -661,7 +659,7 @@ namespace BALL
 			}
 
 			#ifdef BALL_DEBUG_VIEW
-				Log << "Top level widget : mc = " << mc << endl;
+				Log.info() << "Top level widget : mc = " << mc << endl;
 			#endif
 
 			return mc;
@@ -669,7 +667,8 @@ namespace BALL
 		
 		int MainControl::current_id_ = 15000;
 
-    int MainControl::insertMenuEntry(int ID, const String& name, const QObject* receiver, const char* slot, int accel, int entry_ID)
+    int MainControl::insertMenuEntry(int ID, const String& name, const QObject* receiver, const char* slot, 
+																		 int accel, int entry_ID)
 			throw()
 		{
 			QMenuBar* menu_bar = menuBar();
@@ -816,7 +815,7 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_DEBUG_VIEW
-				Log << "MainControl::addModularWidget(" << widget << ")" << endl;
+				Log.info() << "MainControl::addModularWidget(" << widget << ")" << endl;
 			#endif
 			modular_widgets_.push_back(widget);
 			widget->registerThis();
@@ -875,19 +874,6 @@ namespace BALL
 			return system;
 		}
 
-		void MainControl::selectComposite(Composite* composite, bool state)
-			throw()
-		{
-			if (state)
-			{
-				selection_.insert(composite);
-			}
-			else			
-			{
-				selection_.erase(composite);			
-			}				
-		}			
-
 
 		void MainControl::selectCompositeRecursive(Composite* composite, bool state)
 			throw()
@@ -905,48 +891,83 @@ namespace BALL
 				{
 					if (selection_.has(bi->getPartner(*atom)) == state)
 					{
-						if (state)
-						{
-							bi->select();			
-						}
-						else				
-						{				
-							bi->deselect();
-						}					
+						if (state) bi->select();			
+						else			 bi->deselect();
 					}				
 				}				
+
+				if (state)
+				{
+					atom->select();
+					selection_.insert(atom);
+				}
+				else
+				{
+					atom->deselect();
+					selection_.erase(atom);
+				}
 			}		
 
-			if (state)	selectRecursive_(composite);
-			else			  deselectRecursive_(composite);
 
-				
 			if (RTTI::isKindOf<AtomContainer> (*composite))
 			{
+				if (state)	selectRecursive_(composite);
+				else			  deselectRecursive_(composite);
+
 				AtomIterator ai;
 				AtomBondIterator bi;		
+				BALL_FOREACH_INTRABOND((*(AtomContainer*) composite), ai, bi)
+				{
+					if (state) bi->select();			
+					else			 bi->deselect();
+				}						
 				BALL_FOREACH_INTERBOND((*(AtomContainer*) composite), ai, bi)
 				{
 					if (selection_.has(bi->getPartner(*ai)) == state)
 					{			
-						if (state)
-						{
-							bi->select();			
-						}
-						else				
-						{				
-							bi->deselect();
-						}					
+						if (state) bi->select();			
+						else			 bi->deselect();
 					}				
+					else
+					{
+						bi->deselect();
+					}
 				}						
 			}		
+
+			Composite* parent = composite->getParent();
+			while (parent != 0 && !selection_.has(parent) == state)
+			{
+				for (Size i=0; i < parent->getDegree();i++)
+				{
+					if (!selection_.has(parent->getChild(i)) == state)
+					{
+						return;
+					}
+				}
+				
+				if (state)
+				{
+					selection_.insert(parent);
+					parent->select();
+				}
+				else
+				{
+					selection_.erase(parent);
+					parent->deselect();
+				}
+				parent = parent->getParent();
+			}
 		}
+
 
 		void MainControl::selectRecursive_(Composite* composite)
 			throw()
 		{
 			if (RTTI::isKindOf<GeometricObject> (*composite)) return;
+			composite->select();
 			selection_.insert(composite);
+			if (RTTI::isKindOf<Atom> (*composite)) return;
 			for (Size i=0; i< composite->getDegree();i++)
 			{
 				selectRecursive_(composite->getChild(i));			
@@ -957,16 +978,18 @@ namespace BALL
 			throw()
 		{
 			if (RTTI::isKindOf<GeometricObject> (*composite)) return;
+			composite->deselect();
 			selection_.erase(composite);
+			if (RTTI::isKindOf<Atom> (*composite)) return;
 			for (Size i=0; i< composite->getDegree();i++)
 			{
 				deselectRecursive_(composite->getChild(i));			
 			}
 		}		
 
-#ifdef BALL_NO_INLINE_FUNCTIONS
-#	include <BALL/VIEW/GUI/KERNEL/mainControl.iC>
-#endif
+#	ifdef BALL_NO_INLINE_FUNCTIONS
+#		include <BALL/VIEW/GUI/KERNEL/mainControl.iC>
+#	endif
 
 	} // namespace VIEW
 
