@@ -1,4 +1,4 @@
-// $Id: plane3.h,v 1.11 2000/03/22 00:49:20 amoll Exp $
+// $Id: plane3.h,v 1.12 2000/03/26 20:42:26 oliver Exp $
 
 #ifndef BALL_MATHS_PLANE3_H
 #define BALL_MATHS_PLANE3_H
@@ -48,7 +48,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE(TPlane3<T>)
+		BALL_CREATE_NODEEP(TPlane3<T>)
 
 		/**	@name	Constructors and Destructors
 		*/
@@ -67,9 +67,8 @@ namespace BALL
 		/**	Copy constructor.
 				Create a new TPlane3 object from another.
 				@param plane the TPlane3 object to be copied
-				@param bool ignored - just for interface consistency
 		*/	
-		TPlane3(const TPlane3& plane, bool /* deep */ = true)
+		TPlane3(const TPlane3& plane)
 			:	p(plane.p),
 				n(plane.n)
 		{
@@ -153,7 +152,7 @@ namespace BALL
 				@param vector the plane to swap contents with
 				@param bool ignored - just for interface consistency
 		*/
-		void set(const TPlane3& plane, bool /* deep */ = true)
+		void set(const TPlane3& plane)
 		{
 			p = plane.p;
 			n = plane.n;
@@ -195,9 +194,8 @@ namespace BALL
 		/**	Assign to another Plane3.
 				Assigns the components to another plane.
 				@param plane the plane to be asigned to
-				@param deep ignored
 		*/
-		void get(TPlane3 &plane, bool /* deep */ = true) const
+		void get(TPlane3& plane) const
 		{
 			plane.p = p;
 			plane.n = n;
@@ -206,7 +204,6 @@ namespace BALL
 		/**	Assign to a point and a normal.
 				@param point the point to be asigned to
 				@param normal the normal to be asigned to
-				@param deep ignored
 		*/
 		void get(TVector3<T>& point, TVector3<T>& normal) const
 		{
