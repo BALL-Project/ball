@@ -1,9 +1,9 @@
-// $Id: ClassTest_test.C,v 1.2 2000/01/10 15:51:16 oliver Exp $
+// $Id: ClassTest_test.C,v 1.3 2000/01/16 20:59:50 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 using namespace BALL;
 
-START_TEST(ClassTest, "$Id: ClassTest_test.C,v 1.2 2000/01/10 15:51:16 oliver Exp $")
+START_TEST(ClassTest, "$Id: ClassTest_test.C,v 1.3 2000/01/16 20:59:50 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -41,6 +41,10 @@ RESULT
 
 CHECK(TEST_EXCEPTION(a, b))
 TEST_EXCEPTION(Exception::NullPointer, throw Exception::NullPointer(__FILE__, __LINE__))
+RESULT
+
+CHECK(STATUS(a, b))
+STATUS("status message")
 RESULT
 
 CHECK(TEST_FILE(filename, templatename, use_regexps))
