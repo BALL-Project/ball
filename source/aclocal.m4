@@ -1,27 +1,25 @@
-dnl -*- Mode: M4; tab-width: 2; -*-
+dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.50.2.4 2004/05/24 10:41:17 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.50.2.5 2004/05/24 13:05:09 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
 dnl
-dnl		Display the license and abort if not accepted.
-dnl		We create the file config.lic if the license was
+dnl		display the license and abort if not accepted
+dnl		we create the file config.lic if the license was
 dnl		accepted and do not show the license the second time
 dnl
+
 AC_DEFUN(CF_CHECK_LICENSE,[
-	AC_PATH_PROG(PAGER, less, no)
-	if test "${PAGER}" = "no" ; then
-		AC_PATH_PROG(PAGER, more, no)
-	fi
+	AC_PATH_PROG(PAGER, more, no)
 	if test "${PAGER}" = "no" ; then
 		PAGER=cat
 	fi
 	if test ! -f config.lic ; then
 		${PAGER} LICENSE
 		echo " "
-		echo "Do you accept the terms of this license (y/n)?"
+		echo "Do you accept these license terms (y/n)?"
 		answer=""
 		while test "$answer" != "y" -a "$answer" != "n" ; do
 			read answer 
@@ -32,29 +30,6 @@ AC_DEFUN(CF_CHECK_LICENSE,[
 			echo "accepted" > config.lic
 		fi
 	fi
-])
-
-
-dnl    define a macro to abort configure, print an appropriate error message
-dnl    and package up the current stuff relevant to diagnosis into a tar
-dnl    file.
-AC_DEFUN(CF_ERROR,[
-	AC_MSG_RESULT()
-	AC_MSG_RESULT([Configure failed. If you cannot solve your problem with the aid])
-	AC_MSG_RESULT([of the above error message, please contact the OPENMS mailing list])
-	AC_MSG_RESULT([or the OPENMS developers. Please enclose the file 'conf.diag.tar'])
-	AC_MSG_RESULT([which has been created in OPENMS/source. It contains the relevant])
-	AC_MSG_RESULT([files from this configure run. In most cases, the information])
-	AC_MSG_RESULT([is necessary to diagnose what went wrong. This file contains])
-	AC_MSG_RESULT([information about your system setup and versions of compilers])
-	AC_MSG_RESULT([and other tools installed in your system.])
-	AC_MSG_RESULT()
-	TARFILE=conf.diag.tar
-	if test -f $TARFILE ; then 
-		${RM} $TARFILE ; 
-	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log 
-	AC_MSG_ERROR(Aborted.)
 ])
 
 dnl		define a macro to remove the directory name
@@ -71,6 +46,28 @@ AC_DEFUN(CF_BASENAME,[
 	done
 ])
 
+dnl    define a macro to abort configure, print an appropriate error message
+dnl    and package up the current stuff relevant to diagnosis into a tar
+dnl    file.
+AC_DEFUN(CF_ERROR,[
+	AC_MSG_RESULT()
+	AC_MSG_RESULT([Configure failed. If you cannot solve your problem with the aid])
+	AC_MSG_RESULT([of the above error message, please contact the BALL mailing list])
+	AC_MSG_RESULT([or the BALL developers. Please enclose the file 'conf.diag.tar'])
+	AC_MSG_RESULT([which has been created in BALL/source. It contains the relevant])
+	AC_MSG_RESULT([files from this configure run. In most cases, the information])
+	AC_MSG_RESULT([is necessary to diagnose what went wrong. This file contains])
+	AC_MSG_RESULT([information about your system setup and versions of compilers])
+	AC_MSG_RESULT([and other tools installed in your system.])
+	AC_MSG_RESULT()
+	TARFILE=conf.diag.tar
+	if test -f $TARFILE ; then 
+		${RM} $TARFILE ; 
+	fi
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log 
+	AC_MSG_ERROR(Aborted.)
+])
+
 dnl    define a macro to inform the user about failed tests for programs
 dnl    it checks for the unix command given as second parameter and
 dnl    sets the shell variable given as second parameter to its absolute path
@@ -82,9 +79,7 @@ AC_DEFUN(CF_MSG_PATH_PROG,[
 		AC_MSG_RESULT([This script requires the unix command $2, but cannot find it.])
 		AC_MSG_RESULT([Please add the correct path to $2 to your \$PATH variable])
 		AC_MSG_RESULT([and restart configure.])
-		AC_MSG_RESULT()
 		CF_ERROR
-		exit
 	fi
 ])
 
@@ -198,8 +193,14 @@ AC_DEFUN(CF_FIND_LIB,[
 		_LIBS=${$1}
 	fi
 
+	if test "$3" = "" ; then
+		_LIBDIRS="/usr/lib /opt/lib /usr/local/lib"
+	else
+		_LIBDIRS="$3"
+	fi
+		
 	if test "${_LIBS}" = "" ; then
-		for i in $3 /usr/lib /opt/lib ; do
+		for i in ${_LIBDIRS} ; do
 			for j in $i/$2.* ; do
 				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
@@ -209,7 +210,7 @@ AC_DEFUN(CF_FIND_LIB,[
 	fi
 
 	if test "${_LIBS}" = "" ; then
-		for i in /usr/*/lib /opt/*/lib ; do
+		for i in /usr/lib /opt/lib /usr/*/lib /opt/*/lib ; do
 			for j in $i/$2.* ; do
 				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
@@ -348,8 +349,11 @@ AC_DEFUN(CF_DETECT_OS,[
 			ARCHITECTURE=alpha
 			BINFMT=Linux-alpha
 		fi
-
-		if test "${ARCHITECTURE}" = "unknown" ; then
+		if test `echo $PROCESSOR` = x86_64 ; then
+			ARCHITECTURE=x86_64
+			BINFMT=Linux-Opteron
+		fi
+		if test "${ARCHITECTURE}" = "unknown" -a "${BALL_IGNORE_ARCH}" = ""; then
 			AC_MSG_RESULT(OS: ${OS} / hardware: ${PROCESSOR})
 			AC_MSG_RESULT(Sorry - this architecture is currently not supported...)
 			CF_ERROR
@@ -381,12 +385,12 @@ AC_DEFUN(CF_DETECT_OS,[
 
 	if test "`echo $OS | ${CUT} -d_ -f1`" = "CYGWIN" ; then
 		OS="CYGWIN"
-		OPENMS_NO_XDR=true
+		BALL_NO_XDR=true
 	fi
 
 	if test "$OS" != Linux -a "$OS" != Solaris -a "$OS" != IRIX \
 		-a  "$OS" != OSF1 -a "$OS" != FreeBSD -a "$OS" != "CYGWIN" \
-		-a "${OS}" != Darwin ; then
+		-a "${OS}" != Darwin -a "${BALL_IGNORE_ARCH}" = "" ; then
 		AC_MSG_RESULT(Sorry - your OS ($OS) is currently not supported...)
 		CF_ERROR
 	fi
@@ -395,38 +399,38 @@ AC_DEFUN(CF_DETECT_OS,[
 	dnl 	create OS defines in config.h:
 	dnl
 	if test "${OS}" = Linux ; then
-		AC_DEFINE(OPENMS_OS_LINUX,LINUX)
+		AC_DEFINE(BALL_OS_LINUX,LINUX)
 	fi
 	if test "${OS}" = Solaris ; then
-		AC_DEFINE(OPENMS_OS_SOLARIS,SOLARIS)
+		AC_DEFINE(BALL_OS_SOLARIS,SOLARIS)
 	fi
 	if test "${OS}" = IRIX ; then
-		AC_DEFINE(OPENMS_OS_IRIX,IRIX)
+		AC_DEFINE(BALL_OS_IRIX,IRIX)
 	fi
 	if test "${OS}" = OSF1 ; then
-		AC_DEFINE(OPENMS_OS_OSF1,OSF1)
+		AC_DEFINE(BALL_OS_OSF1,OSF1)
 	fi
 	if test "${OS}" = FreeBSD ; then
-		AC_DEFINE(OPENMS_OS_FREEBSD,FREEBSD)
+		AC_DEFINE(BALL_OS_FREEBSD,FREEBSD)
 	fi
 	if test "${OS}" = Darwin ; then
-		AC_DEFINE(OPENMS_OS_DARWIN,DARWIN)
+		AC_DEFINE(BALL_OS_DARWIN,DARWIN)
 	fi
 
 	dnl
 	dnl		create ARCHITECTURE defines
 	dnl
 	if test "$ARCHITECTURE" = sparc ; then
-		AC_DEFINE(OPENMS_ARCH_SPARC,SPARC)
+		AC_DEFINE(BALL_ARCH_SPARC,SPARC)
 	fi
 	if test "$ARCHITECTURE" = i386 ; then
-		AC_DEFINE(OPENMS_ARCH_I386,I386)
+		AC_DEFINE(BALL_ARCH_I386,I386)
 	fi
 	if test "$ARCHITECTURE" = mips ; then
-		AC_DEFINE(OPENMS_ARCH_MIPS,MIPS)
+		AC_DEFINE(BALL_ARCH_MIPS,MIPS)
 	fi
 	if test "$ARCHITECTURE" = alpha ; then
-		AC_DEFINE(OPENMS_ARCH_ALPHA,ALPHA)
+		AC_DEFINE(BALL_ARCH_ALPHA,ALPHA)
 	fi
 
 	AC_MSG_RESULT($OS $OSREV (BINFMT=$BINFMT))
@@ -508,7 +512,6 @@ AC_DEFUN(CF_DETECT_OS,[
 			AC_MSG_RESULT(or specify an absolute path in configure by setting the variable)
 			AC_MSG_RESULT(CXX=<pathname> or specify the compiler by passing the option)
 			AC_MSG_RESULT(--with-compiler=<compiler> to configure.)
-			AC_MSG_RESULT()
 			CF_ERROR
 		fi
 	fi
@@ -552,9 +555,9 @@ AC_DEFUN(CF_DIGEST_CXX_VERSION,[
 	if test "${CXX_VERSION_LENGTH}" -ge 4 ; then
 		CXX_VERSION_4=`echo ${CXX_VERSION} | ${CUT} -d. -f4`
 	fi
-	AC_DEFINE_UNQUOTED(OPENMS_COMPILER_VERSION_MAJOR, ${CXX_VERSION_1})
-	AC_DEFINE_UNQUOTED(OPENMS_COMPILER_VERSION_MINOR, ${CXX_VERSION_2})
-	AC_DEFINE_UNQUOTED(OPENMS_COMPILER_VERSION_MINOR_MINOR, ${CXX_VERSION_3})
+	AC_DEFINE_UNQUOTED(BALL_COMPILER_VERSION_MAJOR, ${CXX_VERSION_1})
+	AC_DEFINE_UNQUOTED(BALL_COMPILER_VERSION_MINOR, ${CXX_VERSION_2})
+	AC_DEFINE_UNQUOTED(BALL_COMPILER_VERSION_MINOR_MINOR, ${CXX_VERSION_3})
 	])
 
 dnl
@@ -581,8 +584,8 @@ EOF
 		dnl 
 		dnl 	Define a symbol for G++.
 		dnl
-		AC_DEFINE(OPENMS_COMPILER_GXX, )
-		AC_DEFINE(OPENMS_COMPILER, GXX)
+		AC_DEFINE(BALL_COMPILER_GXX, )
+		AC_DEFINE(BALL_COMPILER, GXX)
 	else
 		AC_MSG_RESULT(no)
 		HAS_GPLUSPLUS=false
@@ -612,12 +615,11 @@ AC_DEFUN(CF_GXX_OPTIONS, [
 	if test "${CXX_VERSION_1}" -lt 2 \
 		-o "${CXX_VERSION_1}" = 2 -a "${CXX_VERSION_2}" -lt 95 ; then
 		AC_MSG_RESULT()
-		AC_MSG_RESULT([The version of gcc you are using is not supported by OPENMS.])
+		AC_MSG_RESULT([The version of gcc you are using is not supported by BALL.])
 		AC_MSG_RESULT([Please update to a newer version of g++ (at least 2.95.x)])
 		AC_MSG_RESULT([which can be obtained from])
 		AC_MSG_RESULT([  ftp://gcc.gnu.org/pub/gcc/releases/index.html])
 		AC_MSG_RESULT([or specify a different compiler using the option --with-compiler=])
-		AC_MSG_RESULT()
 		CF_ERROR
 	fi
 
@@ -645,36 +647,40 @@ AC_DEFUN(CF_GXX_OPTIONS, [
 	dnl
 	dnl		Here go the g++-specific options
 	dnl
-  CXX_MAKEDEPEND="${CXX}"
+  CXXFLAGS="${CXXFLAGS} -pipe"
+	CXX_MAKEDEPEND="${CXX}"
   MAKEDEP_CXX_OPTS="-M"
   CXXFLAGS_D="${CXXFLAGS_D} -Wall -W -pedantic -Wno-long-long"
   CXXFLAGS_DI="${CXXFLAGS_DI} -g"
   CXXFLAGS_O="${CXXFLAGS_O} -O3 -Wall -W -pedantic -Wno-long-long"
   MAKEDEP_CXX_SUFFIX=" >.Dependencies"
 
-  dnl  We do not need the -fPIC flag for CYGWIN,
+  dnl  We do not need the -fPIC flag for CYGWIN and Darwin,
   dnl  because its code is always position independent.
   dnl  A warning is emitted otherwise.
-  if test "${OS}" != "CYGWIN" ; then
+  if test "${OS}" != "CYGWIN" -a "${OS}" != "Darwin" ; then
     CXXFLAGS="${CXXFLAGS} -fPIC"
   fi
 
   DYNAR="${CXX}"
-  if test "${OS}" == "Solaris" ; then
+  if test "${OS}" = "Solaris" ; then
     DYNAROPTS="${DYNAROPTS} -G -fPIC -o"
   else 
-    if test "${OS}" == Darwin ; then
-	    DYNAROPTS="${DYNAROPTS} -dynamiclib -fPIC -o"			
-		else	
-  	  DYNAROPTS="${DYNAROPTS} -shared -fPIC -o"
+    if test "${OS}" = "Darwin" ; then
+      DYNAROPTS="${DYNAROPTS} -prebind -dynamiclib -o"
+			ADD_DYNAROPTS_LIBBALL="-seg1addr 0xb0000000"
+			ADD_DYNAROPTS_LIBVIEW="-seg1addr 0x80000000"
+      RANLIB="ranlib -s "
+    else	
+      DYNAROPTS="${DYNAROPTS} -shared -fPIC -o"
 		fi
   fi
 
   if test "${IS_EGXX}" = true; then
-    OPENMS_TYPENAME=typename
+    BALL_TYPENAME=typename
   else
     if test "${CXX_VERSION_1}" -gt 2 -o "${CXX_VERSION_1}" -eq 2 -a "${CXX_VERSION_2}" -ge 8 ; then
-      OPENMS_TYPENAME=typename
+      BALL_TYPENAME=typename
     fi
   fi
 ])
@@ -699,8 +705,8 @@ AC_DEFUN(CF_IDENTIFY_KAI, [
 		dnl 
 		dnl 	Define a symbol for KAI C++.
 		dnl
-		AC_DEFINE(OPENMS_COMPILER_KAI, )
-		AC_DEFINE(OPENMS_COMPILER, KAI)
+		AC_DEFINE(BALL_COMPILER_KAI, )
+		AC_DEFINE(BALL_COMPILER, KAI)
 	else
 		IS_KCC=false
 		AC_MSG_RESULT(no)
@@ -793,8 +799,8 @@ AC_DEFUN(CF_IDENTIFY_INTEL, [
 		dnl 
 		dnl 	Define a symbol for Intel C++.
 		dnl
-		AC_DEFINE(OPENMS_COMPILER_INTEL, )
-		AC_DEFINE(OPENMS_COMPILER, INTEL)
+		AC_DEFINE(BALL_COMPILER_INTEL, )
+		AC_DEFINE(BALL_COMPILER, INTEL)
 	else
 		IS_INTELCC=false
 		AC_MSG_RESULT(no)
@@ -816,27 +822,27 @@ AC_DEFUN(CF_INTEL_OPTIONS,[
 	AC_MSG_RESULT(${VERSION_OUTPUT})
 	CF_DIGEST_CXX_VERSION
 
-	  dnl   KAI C++ stores a list of instantiated templates
+  dnl   KAI C++ stores a list of instantiated templates
   dnl   in directories called ti_files
   dnl   make clean should remove these
   TEMPLATE_DIR=""
   AR="${CXX}"
   DYNAR="${CXX}"
   AROPTS="${AROPTS} -o"
-  DYNAROPTS="${DYNAROPTS} -shared -o"
+  DYNAROPTS="${DYNAROPTS} -cxxlib-gcc -shared -o"
   CXX_MAKEDEPEND="${CXX}"
   MAKEDEP_CXX_OPTS="-M"
   MAKEDEP_CXX_SUFFIX=" >.Dependencies"
 
-  CXXFLAGS="${CXXFLAGS} -KPIC"
+  CXXFLAGS="${CXXFLAGS} -cxxlib-gcc -KPIC"
 
-  dnl   optimze as on highest level: this compiler
+  dnl   Turn on optimization
   CXXFLAGS_O="${CXXFLAGS_O} -O1"
 
   dnl   avoid high level optimization to
   dnl   get debuggable code...
-  CXXFLAGS_D="${CXXFLAGS_D} -O0 -g -w1"
-  CXXFLAGS_DI="${CXXFLAGS_DI}"
+  CXXFLAGS_D="${CXXFLAGS_D} -O0 -w1"
+  CXXFLAGS_DI="${CXXFLAGS_DI} -g"
 ])
 
 dnl
@@ -855,8 +861,8 @@ AC_DEFUN(CF_IDENTIFY_COMPAQ,[
 		dnl 
 		dnl 	Define a symbol for Compaq C++.
 		dnl
-		AC_DEFINE(OPENMS_COMPILER_COMPAQ, )
-		AC_DEFINE(OPENMS_COMPILER, COMPAQ)
+		AC_DEFINE(BALL_COMPILER_COMPAQ, )
+		AC_DEFINE(BALL_COMPILER, COMPAQ)
 	else
 		IS_DIGITALCXX=false
 		AC_MSG_RESULT(no)
@@ -878,9 +884,8 @@ AC_DEFUN(CF_COMPAQ_OPTIONS, [
 		if test "${CXX_VERSION_1}" -lt 6 -o "${CXX_VERSION_1}" -eq 6 -a "${CXX_VERSION_2}" -lt 2 ; then
 			AC_MSG_RESULT()
 			AC_MSG_RESULT(Your version of Digital/Compaq C++ does not provide all)
-			AC_MSG_RESULT(ANSI C++ features required by OPENMS.)
+			AC_MSG_RESULT(ANSI C++ features required by BALL.)
 			AC_MSG_RESULT(Please upgrade to release 6.2 or above.)
-			AC_MSG_RESULT()
 			CF_ERROR
 		fi
 
@@ -888,7 +893,7 @@ AC_DEFUN(CF_COMPAQ_OPTIONS, [
   AR="ar"
   DYNAR="${CXX}"
   AROPTS="${AROPTS} -o"
-  DYNAROPTS="${DYNAROPTS} -shared -nocxxstd -ptr \$(OPENMS_PATH)/source/cxx_rep -o"
+  DYNAROPTS="${DYNAROPTS} -shared -nocxxstd -ptr \$(BALL_PATH)/source/cxx_rep -o"
   CXX_MAKEDEPEND="${CXX}"
   MAKEDEP_CXX_OPTS="-M -noimplicit_include"
   MAKEDEP_CXX_SUFFIX=" >.Dependencies"
@@ -898,10 +903,17 @@ AC_DEFUN(CF_COMPAQ_OPTIONS, [
 	if test "${CXX_VERSION_2}" -lt 3 ; then
 	  CXXFLAGS="${CXXFLAGS} -ieee"
 	else
-	  CXXFLAGS="${CXXFLAGS} -ieee -nopure_cname"
+		if test "${CXX_VERSION_2}" -ge 5 ; then
+			dnl
+			dnl  Starting with cxx 6.5, we had some trouble with
+      dnl  floating point accuracy -- that should take care of it.
+		  CXXFLAGS="${CXXFLAGS} -ieee -nopure_cname"
+		else
+		  CXXFLAGS="${CXXFLAGS} -ieee -nopure_cname"
+		fi
 	fi
 
-  LIB_CXXFLAGS="${LIB_CXXFLAGS} -ptr \$(OPENMS_PATH)/source/cxx_rep"
+  LIB_CXXFLAGS="${LIB_CXXFLAGS} -ptr \$(BALL_PATH)/source/cxx_rep"
   CXXFLAGS_O="${CXXFLAGS_O} -O3"
 
   CXXFLAGS_D="${CXXFLAGS_D}"
@@ -928,8 +940,8 @@ AC_DEFUN(CF_IDENTIFY_SGI, [
 		dnl 
 		dnl 	Define a symbol for SGI C++.
 		dnl
-		AC_DEFINE(OPENMS_COMPILER_MIPSPRO, )
-		AC_DEFINE(OPENMS_COMPILER, MIPSPRO)
+		AC_DEFINE(BALL_COMPILER_MIPSPRO, )
+		AC_DEFINE(BALL_COMPILER, MIPSPRO)
 	else
 		IS_MIPSPRO=false
 		AC_MSG_RESULT(no)
@@ -965,7 +977,7 @@ AC_DEFUN(CF_MIPSPRO_OPTIONS, [
       CXX_NAME="${CXX_NAME}_N32"
     fi
 
-    OPENMS_TYPENAME=typename
+    BALL_TYPENAME=typename
 
     dnl
     dnl     a version above 7.2 is required
@@ -976,7 +988,7 @@ AC_DEFUN(CF_MIPSPRO_OPTIONS, [
             -o "${CXX_VERSION_1}" -eq 7 -a "${CXX_VERSION_2}" -lt 2; then
       AC_MSG_RESULT()
       AC_MSG_RESULT(MipsPro CC version 7.30 or above is required. Please update your compiler.)
-      AC_ERROR(Aborted)
+			CF_ERROR
     fi
 
    AR=${CXX}
@@ -1046,8 +1058,8 @@ AC_DEFUN(CF_IDENTIFY_SUN, [
 		dnl 
 		dnl 	Define a symbol for SUNPro C++.
 		dnl
-		AC_DEFINE(OPENMS_COMPILER_SUNPRO)
-		AC_DEFINE(OPENMS_COMPILER, SUNPRO)
+		AC_DEFINE(BALL_COMPILER_SUNPRO)
+		AC_DEFINE(BALL_COMPILER, SUNPRO)
 	else
 		IS_SUNCC=false
 		AC_MSG_RESULT(no)
@@ -1077,11 +1089,10 @@ AC_DEFUN(CF_SUNCC_OPTIONS, [
     dnl
     if test "${CXX_VERSION_1}" -lt 5 ; then
       AC_MSG_RESULT()
-      AC_MSG_RESULT(OPENMS requires an ANSI C++ compliant compiler)
+      AC_MSG_RESULT(BALL requires an ANSI C++ compliant compiler)
       AC_MSG_RESULT(SUNPro compilers are (mostly) ANSI compliant for version 5.3 and above)
       AC_MSG_RESULT(Please upgrade your compiler!)
-      AC_MSG_RESULT()
-      AC_ERROR(Abort)
+			CF_ERROR
     fi
 
     AC_DEFINE(SOLARIS,)
@@ -1090,7 +1101,7 @@ AC_DEFUN(CF_SUNCC_OPTIONS, [
 
     dnl  a nasty bug in SUNPro CC 5.3 causes trouble
     dnl  with the function templates in amberNonBonded.C
-    AC_DEFINE(OPENMS_MUST_CAST_TEMPLATE_FUNCTION_ARGS,)
+    AC_DEFINE(BALL_MUST_CAST_TEMPLATE_FUNCTION_ARGS,)
 
     dnl  set the default binary format (if none selected)
     dnl
@@ -1117,7 +1128,7 @@ AC_DEFUN(CF_SUNCC_OPTIONS, [
     MAKEDEP_CXX_OPTS="-xM1"
     MAKEDEP_CXX_SUFFIX=" >.Dependencies"
 
-    AC_DEFINE(OPENMS_NO_INLINE_FUNCTIONS,)
+    AC_DEFINE(BALL_NO_INLINE_FUNCTIONS,)
 
     CXXFLAGS="${CXXFLAGS} -KPIC"
     CXXFLAGS_O="${CXXFLAGS_O} -xO5"
@@ -1155,7 +1166,7 @@ AC_DEFUN(CF_CHECK_DEBUG_FLAG, [
 	AC_MSG_CHECKING(for DEBUG flag)
 	if test "$DEBUG" != "" ; then
 		dnl   define a debug flag and prevent the compilation of
-		dnl   inline functions by defining OPENMS_NO_INLINE_FUNCTIONS
+		dnl   inline functions by defining BALL_NO_INLINE_FUNCTIONS
 		dnl   (see COMMON/debug.h)
 		if test "$DEBUG" = true ; then
 			dnl  if debug information is also required, add the corresponding flag
@@ -1163,8 +1174,8 @@ AC_DEFUN(CF_CHECK_DEBUG_FLAG, [
 			if test "${DEBUG_INFO}" = true -a "$CXXFLAGS_DI" != "" ; then
 				CXXFLAGS_D="${CXXFLAGS_D} ${CXXFLAGS_DI}"
 			fi
-			AC_DEFINE(OPENMS_DEBUG,)
-			AC_DEFINE(OPENMS_NO_INLINE_FUNCTIONS,)
+			AC_DEFINE(BALL_DEBUG,)
+			AC_DEFINE(BALL_NO_INLINE_FUNCTIONS,)
 			AC_MSG_RESULT(enabled)
 			CPP_MODE_FLAGS="${CXXFLAGS_D}"
 			CPP_MODE_FLAGS_NO_OPTIMIZATION="${CXXFLAGS_D}"
@@ -1192,7 +1203,7 @@ AC_DEFUN(CF_C_BIGENDIAN, [
       #include <fstream>
       int main(int, char**)
       {
-    ] ${OPENMS_SIZE_TYPE} endian_one = 1; [
+    ] ${BALL_SIZE_TYPE} endian_one = 1; [
       std::ofstream os("config.endian.log", std::ios::out);
 
       if (*(char*)&endian_one == '\001')
@@ -1210,13 +1221,12 @@ AC_DEFUN(CF_C_BIGENDIAN, [
       return 0;
       }
     ],
-    OPENMS_ENDIAN_TEST=true,
+    BALL_ENDIAN_TEST=true,
     DUMMY=0,
     DUMMY=0
 	)
-	if test "${OPENMS_ENDIAN_TEST+set}" != set ; then
+	if test "${BALL_ENDIAN_TEST+set}" != set ; then
 		AC_MSG_RESULT(<cannot determine>)
-		AC_MSG_RESULT()
 		CF_ERROR
 	else
 		dnl
@@ -1226,18 +1236,16 @@ AC_DEFUN(CF_C_BIGENDIAN, [
 		ENDIAN_TYPE=`${CAT} config.endian.log`
 		${RM} config.endian.log 2>/dev/null
 		if test "${ENDIAN_TYPE}" = "LITTLE" ; then
-			OPENMS_LITTLE_ENDIAN=true
-			AC_DEFINE(OPENMS_LITTLE_ENDIAN, true)
+			BALL_LITTLE_ENDIAN=true
+			AC_DEFINE(BALL_LITTLE_ENDIAN, true)
 			AC_MSG_RESULT(little endian)
 		else
 			if test "${ENDIAN_TYPE}" = "BIG" ; then
-				OPENMS_BIG_ENDIAN=true
-				AC_DEFINE(OPENMS_BIG_ENDIAN, true)
+				BALL_BIG_ENDIAN=true
+				AC_DEFINE(BALL_BIG_ENDIAN, true)
 				AC_MSG_RESULT(big endian)
 			else
 				AC_MSG_RESULT(<cannot determine>)
-				AC_MSG_RESULT()
-				AC_MSG_RESULT(Cannot determine endianness of machine)
 				CF_ERROR
 			fi
 		fi
@@ -1258,14 +1266,14 @@ AC_DEFUN(CF_CHECK_NUM_LIMITS, [
 		[
 			float f = std::numeric_limits<float>::min();
 		],
-		OPENMS_HAS_NUMERIC_LIMITS=true
+		BALL_HAS_NUMERIC_LIMITS=true
 	)
 	if test "${HAS_NUMERIC_LIMITS}" = true ; then
 		AC_MSG_RESULT(available)
-		AC_DEFINE(OPENMS_HAS_NUMERIC_LIMITS)
+		AC_DEFINE(BALL_HAS_NUMERIC_LIMITS)
 	else
 		AC_MSG_RESULT(not available)
-		OPENMS_HAS_NUMERIC_LIMITS=false
+		BALL_HAS_NUMERIC_LIMITS=false
 
 		dnl
 		dnl  we didn't find a numeric limits class, so we implement
@@ -1283,9 +1291,9 @@ AC_DEFUN(CF_CHECK_NUM_LIMITS, [
 				float c = DBL_MAX;
 				float d = DBL_MIN;
 			],
-			OPENMS_HAS_FLOAT_H=false
+			BALL_HAS_FLOAT_H=false
 		)
-		if test "${OPENMS_HAS_FLOAT_H}" != false ; then
+		if test "${BALL_HAS_FLOAT_H}" != false ; then
 			AC_TRY_COMPILE(
 				[
 					#include <float.h>
@@ -1296,17 +1304,17 @@ AC_DEFUN(CF_CHECK_NUM_LIMITS, [
 					float c = DBL_MAX;
 					float d = DBL_MIN;
 				],
-				OPENMS_HAS_FLOAT_H=true
+				BALL_HAS_FLOAT_H=true
 			)
 		fi
-		if test "${OPENMS_HAS_FLOAT_H+set}" != set ; then
+		if test "${BALL_HAS_FLOAT_H+set}" != set ; then
 			AC_MSG_RESULT()
 			AC_MSG_RESULT(limits.h seems to be corrupt or float.h is missing!)
 			AC_MSG_RESULT()
 		else
-			if test "${OPENMS_HAS_FLOAT_H}" = true ; then
+			if test "${BALL_HAS_FLOAT_H}" = true ; then
 				AC_MSG_RESULT(yes)
-				AC_DEFINE(OPENMS_HAS_FLOAT_H)
+				AC_DEFINE(BALL_HAS_FLOAT_H)
 			else
 				AC_MSG_RESULT(no)
 			fi
@@ -1323,7 +1331,7 @@ dnl   others don't - so let's find it out!
 dnl
 AC_DEFUN(CF_CHECK_TPL_NULL_ARGS, [
 	AC_MSG_CHECKING(for null template arguments)
-	OPENMS_NULL_TEMPLATE_ARGS="NULL"
+	BALL_NULL_TEMPLATE_ARGS="NULL"
 	AC_TRY_COMPILE(
 		[
 			template <typename T>
@@ -1335,8 +1343,8 @@ AC_DEFUN(CF_CHECK_TPL_NULL_ARGS, [
 		],
 		[
 		],
-		OPENMS_NULL_TEMPLATE_ARGS="<>")
-	if test "${OPENMS_NULL_TEMPLATE_ARGS}" = "NULL" ; then
+		BALL_NULL_TEMPLATE_ARGS="<>")
+	if test "${BALL_NULL_TEMPLATE_ARGS}" = "NULL" ; then
 		AC_TRY_COMPILE(
 			[
 				template <typename T>
@@ -1348,12 +1356,12 @@ AC_DEFUN(CF_CHECK_TPL_NULL_ARGS, [
 			],
 			[
 			],
-			OPENMS_NULL_TEMPLATE_ARGS="")
+			BALL_NULL_TEMPLATE_ARGS="")
 	fi
-	AC_MSG_RESULT(\"$OPENMS_NULL_TEMPLATE_ARGS\")
-	if test "${OPENMS_NULL_TEMPLATE_ARGS}" = "NULL" ; then
+	AC_MSG_RESULT(\"$BALL_NULL_TEMPLATE_ARGS\")
+	if test "${BALL_NULL_TEMPLATE_ARGS}" = "NULL" ; then
 		AC_MSG_RESULT(could not find a suitable argument for null templates)
-		AC_ERROR(aborted)
+		CF_ERROR
 	fi
 ])
 
@@ -1363,7 +1371,7 @@ dnl		with inline functions (SGI CC has a problem with that)
 dnl
 AC_DEFUN(CF_CHECK_INLINE_TPL_ARGS, [
 	AC_MSG_CHECKING(for inline template function arguments)
-	OPENMS_HAS_INLINE_TPL_ARGS=no
+	BALL_HAS_INLINE_TPL_ARGS=no
 	AC_TRY_COMPILE(
 		[
 			template <int i>
@@ -1377,9 +1385,9 @@ AC_DEFUN(CF_CHECK_INLINE_TPL_ARGS, [
 		[
 			double d = bar< foo<3> >(2.0);
 		],
-		OPENMS_HAS_INLINE_TPL_ARGS=yes
+		BALL_HAS_INLINE_TPL_ARGS=yes
 	)
-	AC_MSG_RESULT($OPENMS_HAS_INLINE_TPL_ARGS)
+	AC_MSG_RESULT($BALL_HAS_INLINE_TPL_ARGS)
 ])
 
 dnl
@@ -1388,7 +1396,7 @@ dnl   We need this for the base classes (ios vs. basic_ios<char>) in socket.h/C
 dnl
 AC_DEFUN(CF_CHECK_ANSI_IOSTREAM, [
 	AC_MSG_CHECKING(for ANSI compliant iostream)
-	OPENMS_HAS_ANSI_IOSTREAM=no
+	BALL_HAS_ANSI_IOSTREAM=no
 	AC_TRY_COMPILE(
 		[
 			#include <iostream>
@@ -1400,9 +1408,9 @@ AC_DEFUN(CF_CHECK_ANSI_IOSTREAM, [
 		],
 		[
 		],
-		OPENMS_HAS_ANSI_IOSTREAM=yes
+		BALL_HAS_ANSI_IOSTREAM=yes
 	)
-	AC_MSG_RESULT($OPENMS_HAS_ANSI_IOSTREAM)
+	AC_MSG_RESULT($BALL_HAS_ANSI_IOSTREAM)
 ])
 
 dnl
@@ -1411,7 +1419,7 @@ dnl		style strstream
 dnl
 AC_DEFUN(CF_CHECK_HAS_SSTREAM, [
 	AC_MSG_CHECKING(for sstream headers)
-	OPENMS_HAS_SSTREAM=no
+	BALL_HAS_SSTREAM=no
 	AC_TRY_COMPILE(
 		[
 			#include <sstream>
@@ -1423,9 +1431,9 @@ AC_DEFUN(CF_CHECK_HAS_SSTREAM, [
 		],
 		[
 		],
-		OPENMS_HAS_SSTREAM=yes
+		BALL_HAS_SSTREAM=yes
 	)
-	AC_MSG_RESULT($OPENMS_HAS_SSTREAM)
+	AC_MSG_RESULT($BALL_HAS_SSTREAM)
 ])
 
 dnl
@@ -1434,7 +1442,7 @@ dnl   either (ARM style) Base::foo or (ANSI style) using Base::foo
 dnl
 AC_DEFUN(CF_CHECK_ARM_ACCESS_MODIFICATION, [
 	AC_MSG_CHECKING(for ANSI or ARM style access modification)
-	OPENMS_CFG_USING_METHOD_DIRECTIVE=none
+	BALL_CFG_USING_METHOD_DIRECTIVE=none
 	AC_TRY_COMPILE(
 		[
 			class A
@@ -1451,9 +1459,9 @@ AC_DEFUN(CF_CHECK_ARM_ACCESS_MODIFICATION, [
 			B b;
 			b.foo();
 		],
-		OPENMS_CFG_USING_METHOD_DIRECTIVE=ANSI
+		BALL_CFG_USING_METHOD_DIRECTIVE=ANSI
 	)
-	if test ${OPENMS_CFG_USING_METHOD_DIRECTIVE} = none ; then
+	if test ${BALL_CFG_USING_METHOD_DIRECTIVE} = none ; then
 		AC_TRY_COMPILE(
 			[
 				class A
@@ -1470,20 +1478,19 @@ AC_DEFUN(CF_CHECK_ARM_ACCESS_MODIFICATION, [
 				B b;
 				b.foo();
 			],
-			OPENMS_CFG_USING_METHOD_DIRECTIVE=ARM
+			BALL_CFG_USING_METHOD_DIRECTIVE=ARM
 		)
 	fi
-	AC_MSG_RESULT(${OPENMS_CFG_USING_METHOD_DIRECTIVE})
-	if test ${OPENMS_CFG_USING_METHOD_DIRECTIVE} = ANSI ; then
-		AC_DEFINE(OPENMS_CFG_USING_METHOD_DIRECTIVE)
+	AC_MSG_RESULT(${BALL_CFG_USING_METHOD_DIRECTIVE})
+	if test ${BALL_CFG_USING_METHOD_DIRECTIVE} = ANSI ; then
+		AC_DEFINE(BALL_CFG_USING_METHOD_DIRECTIVE)
 	fi
-	if test ${OPENMS_CFG_USING_METHOD_DIRECTIVE} = none ; then
+	if test ${BALL_CFG_USING_METHOD_DIRECTIVE} = none ; then
 		AC_MSG_RESULT()
 		AC_MSG_RESULT([Compiler does not understand ARM or ANSI style method access modification.])
 		AC_MSG_RESULT([Please specify a different compiler (e.g. g++ 2.95.2) using the option])
 		AC_MSG_RESULT([--with-compiler=<compiler>.])
-		AC_MSG_RESULT()
-		AC_ERROR(aborted.)
+		CF_ERROR
 	fi
 ])
 
@@ -1496,10 +1503,10 @@ AC_DEFUN(CF_GET_TYPE_SIZES, [
 	dnl
 	dnl   check for the size of int and pointers (may cause trouble on 64 bit architectures)
 	dnl   we define the type PointerInt (in COMMON/global.h) according to the macro
-	dnl   OPENMS_POINTERSIZE_INT (which is set here)
+	dnl   BALL_POINTERSIZE_INT (which is set here)
 	dnl   We also define a 64 bit unsigned numeric type. All pointers that are read or written
 	dnl   in persistence-related methods use this type to ensure compatibility between 32 and
-	dnl   64bit OPENMS versions.
+	dnl   64bit BALL versions.
 	dnl   missing: usage of the result of AC_TYPE_SIZE_T
 	dnl
 	AC_CHECK_SIZEOF(char, 4)
@@ -1517,25 +1524,25 @@ AC_DEFUN(CF_GET_TYPE_SIZES, [
 	SIZEOF_ULONG=$ac_cv_sizeof_long
 	SIZEOF_ULONGLONG=$ac_cv_sizeof_long_long
 
-	AC_DEFINE_UNQUOTED(OPENMS_CHAR_SIZE, ${SIZEOF_CHAR})
-	AC_DEFINE_UNQUOTED(OPENMS_INT_SIZE, ${SIZEOF_INT})
-	AC_DEFINE_UNQUOTED(OPENMS_LONG_SIZE, ${SIZEOF_LONG})
-	AC_DEFINE_UNQUOTED(OPENMS_SIZE_T_SIZE, ${SIZEOF_SIZE_T})
-	AC_DEFINE_UNQUOTED(OPENMS_POINTER_SIZE, ${SIZEOF_VOID_P})
-	AC_DEFINE_UNQUOTED(OPENMS_UINT_SIZE, ${SIZEOF_UINT})
-	AC_DEFINE_UNQUOTED(OPENMS_ULONG_SIZE, ${SIZEOF_ULONG})
-	AC_DEFINE_UNQUOTED(OPENMS_ULONGLONG_SIZE, ${SIZEOF_ULONGLONG})
+	AC_DEFINE_UNQUOTED(BALL_CHAR_SIZE, ${SIZEOF_CHAR})
+	AC_DEFINE_UNQUOTED(BALL_INT_SIZE, ${SIZEOF_INT})
+	AC_DEFINE_UNQUOTED(BALL_LONG_SIZE, ${SIZEOF_LONG})
+	AC_DEFINE_UNQUOTED(BALL_SIZE_T_SIZE, ${SIZEOF_SIZE_T})
+	AC_DEFINE_UNQUOTED(BALL_POINTER_SIZE, ${SIZEOF_VOID_P})
+	AC_DEFINE_UNQUOTED(BALL_UINT_SIZE, ${SIZEOF_UINT})
+	AC_DEFINE_UNQUOTED(BALL_ULONG_SIZE, ${SIZEOF_ULONG})
+	AC_DEFINE_UNQUOTED(BALL_ULONGLONG_SIZE, ${SIZEOF_ULONGLONG})
 	dnl
 	dnl  define an unsigned type that can hold 64 bit pointers
 	dnl
 	if test "${SIZEOF_UINT}" = 8; then
-		OPENMS_64BIT_UINT="unsigned int"
+		BALL_64BIT_UINT="unsigned int"
 	else
 		if test "${SIZEOF_ULONG}" = 8; then
-			OPENMS_64BIT_UINT="unsigned long"
+			BALL_64BIT_UINT="unsigned long"
 		else
 			if test "${SIZEOF_ULONGLONG}" = 8 ; then
-				OPENMS_64BIT_UINT="unsigned long long"
+				BALL_64BIT_UINT="unsigned long long"
 			else
 				AC_MSG_RESULT()
 				AC_MSG_RESULT(cannot find appropriate numeric type for 64bit unsigned int)
@@ -1543,23 +1550,23 @@ AC_DEFUN(CF_GET_TYPE_SIZES, [
 			fi
 		fi
 	fi
-	AC_DEFINE_UNQUOTED(OPENMS_64BIT_UINT_TYPE, ${OPENMS_64BIT_UINT})
+	AC_DEFINE_UNQUOTED(BALL_64BIT_UINT_TYPE, ${BALL_64BIT_UINT})
 
 	dnl
 	dnl define a 32 bit type for Size and Index
 	dnl
 	if test "${SIZEOF_UINT}" = "${SIZEOF_VOID_P}" ; then
-		OPENMS_POINTER_TYPE="unsigned int"
+		BALL_POINTER_TYPE="unsigned int"
 	else
 		if test "${SIZEOF_ULONG}" = "${SIZEOF_VOID_P}" ; then
-			OPENMS_POINTER_TYPE="unsigned long"
+			BALL_POINTER_TYPE="unsigned long"
 		else
 			AC_MSG_RESULT()
 			AC_MSG_RESULT(cannot find appropriate integer type of same size as void*)
 			CF_ERROR
 		fi
 	fi
-	AC_DEFINE_UNQUOTED(OPENMS_POINTERSIZEINT_TYPE, ${OPENMS_POINTER_TYPE})
+	AC_DEFINE_UNQUOTED(BALL_POINTERSIZEINT_TYPE, ${BALL_POINTER_TYPE})
 
 	dnl
 	dnl define a (true) pointer size int for several conversion issues
@@ -1567,49 +1574,48 @@ AC_DEFUN(CF_GET_TYPE_SIZES, [
 	dnl since for internal use only!
 	dnl
 	if test "${SIZEOF_INT}" = 4 ; then
-		OPENMS_INDEX_TYPE="int"
-		OPENMS_SIZE_TYPE="unsigned int"
+		BALL_INDEX_TYPE="int"
+		BALL_SIZE_TYPE="unsigned int"
 	else
 		if test "${SIZEOF_LONG}" = 4 ; then
-			OPENMS_INDEX_TYPE="long"
-			OPENMS_SIZE_TYPE="unsigned long"
+			BALL_INDEX_TYPE="long"
+			BALL_SIZE_TYPE="unsigned long"
 		else
 			AC_MSG_RESULT()
 			AC_MSG_RESULT(cannot find appropriate numeric type for 32bit int)
 			CF_ERROR
 		fi
 	fi
-	AC_DEFINE_UNQUOTED(OPENMS_SIZE_TYPE, ${OPENMS_SIZE_TYPE})
-	AC_DEFINE_UNQUOTED(OPENMS_INDEX_TYPE, ${OPENMS_INDEX_TYPE})
+	AC_DEFINE_UNQUOTED(BALL_SIZE_TYPE, ${BALL_SIZE_TYPE})
+	AC_DEFINE_UNQUOTED(BALL_INDEX_TYPE, ${BALL_INDEX_TYPE})
 
 	dnl  define 64 bit signed/unsigned type
 	if test "${SIZEOF_ULONG}" = "8" ; then
-		OPENMS_ULONG64_TYPE="unsigned long"
-		OPENMS_LONG64_TYPE="long"
-		AC_DEFINE(OPENMS_64BIT_ARCHITECTURE)
+		BALL_ULONG64_TYPE="unsigned long"
+		BALL_LONG64_TYPE="long"
+		AC_DEFINE(BALL_64BIT_ARCHITECTURE)
 	else
 		if test "${SIZEOF_ULONGLONG}" = "8" ; then
-			OPENMS_ULONG64_TYPE="unsigned long long"
-			OPENMS_LONG64_TYPE="long long"			
+			BALL_ULONG64_TYPE="unsigned long long"
+			BALL_LONG64_TYPE="long long"			
 		else
 			AC_MSG_RESULT()
 			AC_MSG_RESULT(cannot find unsigned 64bit type.)
-			AC_MSG_RESULT()
 			CF_ERROR
 		fi
 	fi
-	AC_DEFINE_UNQUOTED(OPENMS_ULONG64_TYPE, ${OPENMS_ULONG64_TYPE})
-	AC_DEFINE_UNQUOTED(OPENMS_LONG64_TYPE, ${OPENMS_LONG64_TYPE})
+	AC_DEFINE_UNQUOTED(BALL_ULONG64_TYPE, ${BALL_ULONG64_TYPE})
+	AC_DEFINE_UNQUOTED(BALL_LONG64_TYPE, ${BALL_LONG64_TYPE})
 
 	dnl
 	dnl Check for size of Complex type
 	dnl
-	OPENMS_COMPLEX_PRECISION=float
+	BALL_COMPLEX_PRECISION=float
 	AC_MSG_CHECKING(for Complex type precision)
 	if test "${enable_double_cplx}" = yes ; then
-		OPENMS_COMPLEX_PRECISION=double
+		BALL_COMPLEX_PRECISION=double
 	fi
-	AC_MSG_RESULT(${OPENMS_COMPLEX_PRECISION})
+	AC_MSG_RESULT(${BALL_COMPLEX_PRECISION})
 ])
 
 
@@ -1620,9 +1626,9 @@ AC_DEFUN(CF_CHECK_REGEX_H, [
 	AC_CHECK_HEADER(regex.h, HAS_REGEX_H=true, HAS_REGEX_H=false)
 	if test "${HAS_REGEX_H}" = "false" ; then
 		AC_CHECK_HEADER(regexp.h, HAS_REGEX_H=true, HAS_REGEX_H=false)
-		AC_DEFINE(OPENMS_HAS_REGEXP_H,)
+		AC_DEFINE(BALL_HAS_REGEXP_H,)
 	else
-		AC_DEFINE(OPENMS_HAS_REGEX_H,)
+		AC_DEFINE(BALL_HAS_REGEX_H,)
 	fi
 	if test "${HAS_REGEX_H}" = "false" ; then
 		AC_MSG_RESULT()
@@ -1631,7 +1637,6 @@ AC_DEFUN(CF_CHECK_REGEX_H, [
 		AC_MSG_RESULT([please install the GNU regexp package from])
 		AC_MSG_RESULT()
 		AC_MSG_RESULT([  ftp://ftp.gnu.org/gnu/regex/regex-0.12.tar.gz])
-		AC_MSG_RESULT()
 		CF_ERROR
 	fi
 ])
@@ -1641,10 +1646,10 @@ dnl   Check whether ieeefp.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_IEEEFP_H, [
 	AC_CHECK_HEADERS(ieeefp.h,
-			[OPENMS_HAS_IEEEFP_H=true],
-			[OPENMS_HAS_IEEEFP_H=false])
-	if test ${OPENMS_HAS_IEEEFP_H} = true ; then
-		AC_DEFINE(OPENMS_HAS_IEEEFP_H,)
+			[BALL_HAS_IEEEFP_H=true],
+			[BALL_HAS_IEEEFP_H=false])
+	if test ${BALL_HAS_IEEEFP_H} = true ; then
+		AC_DEFINE(BALL_HAS_IEEEFP_H,)
 	fi
 ])
 
@@ -1653,10 +1658,10 @@ dnl   check for ISO C99 stdint.h
 dnl
 AC_DEFUN(CF_CHECK_STDINT_H, [
 	AC_CHECK_HEADERS(stdint.h,
-				[OPENMS_HAS_STDINT_H=true],
-				[OPENMS_HAS_STDINT_H=false])
-	if test ${OPENMS_HAS_STDINT_H} = true ; then
-		AC_DEFINE(OPENMS_HAS_STDINT_H,)
+				[BALL_HAS_STDINT_H=true],
+				[BALL_HAS_STDINT_H=false])
+	if test ${BALL_HAS_STDINT_H} = true ; then
+		AC_DEFINE(BALL_HAS_STDINT_H,)
 	fi
 ])
 
@@ -1665,10 +1670,10 @@ dnl   check whether values.h does really exist
 dnl
 AC_DEFUN(CF_CHECK_VALUES_H, [
 	AC_CHECK_HEADERS(values.h,
-				[OPENMS_HAS_VALUES_H=true],
-				[OPENMS_HAS_VALUES_H=false])
-	if test ${OPENMS_HAS_VALUES_H} = true ; then
-		AC_DEFINE(OPENMS_HAS_VALUES_H,)
+				[BALL_HAS_VALUES_H=true],
+				[BALL_HAS_VALUES_H=false])
+	if test ${BALL_HAS_VALUES_H} = true ; then
+		AC_DEFINE(BALL_HAS_VALUES_H,)
 	fi
 ])
 
@@ -1677,10 +1682,10 @@ dnl   Check whether unistd.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_UNISTD_H, [
 	AC_CHECK_HEADERS(unistd.h,
-			[OPENMS_HAS_UNISTD_H=true],
-			[OPENMS_HAS_UNISTD_H=false])
-	if test ${OPENMS_HAS_UNISTD_H} = true ; then
-		AC_DEFINE(OPENMS_HAS_UNISTD_H,)
+			[BALL_HAS_UNISTD_H=true],
+			[BALL_HAS_UNISTD_H=false])
+	if test ${BALL_HAS_UNISTD_H} = true ; then
+		AC_DEFINE(BALL_HAS_UNISTD_H,)
 	fi
 ])
 
@@ -1689,10 +1694,10 @@ dnl   Check whether limits.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_LIMITS_H, [
 	AC_CHECK_HEADERS(limits.h,
-			[OPENMS_HAS_LIMITS_H=true],
-			[OPENMS_HAS_LIMITS_H=false])
-	if test ${OPENMS_HAS_LIMITS_H} = true ; then
-		AC_DEFINE(OPENMS_HAS_LIMITS_H,)
+			[BALL_HAS_LIMITS_H=true],
+			[BALL_HAS_LIMITS_H=false])
+	if test ${BALL_HAS_LIMITS_H} = true ; then
+		AC_DEFINE(BALL_HAS_LIMITS_H,)
 	fi
 ])
 
@@ -1701,10 +1706,10 @@ dnl   Check whether process.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_PROCESS_H, [
 	AC_CHECK_HEADERS(process.h,
-				[OPENMS_HAS_PROCESS_H=true],
-				[OPENMS_HAS_PROCESS_H=false])
-	if test ${OPENMS_HAS_PROCESS_H} = true ; then
-		AC_DEFINE(OPENMS_HAS_PROCESS_H,)
+				[BALL_HAS_PROCESS_H=true],
+				[BALL_HAS_PROCESS_H=false])
+	if test ${BALL_HAS_PROCESS_H} = true ; then
+		AC_DEFINE(BALL_HAS_PROCESS_H,)
 	fi
 ])
 
@@ -1713,10 +1718,10 @@ dnl   Check whether sys/time.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_SYS_TIME_H, [
 	AC_CHECK_HEADERS(sys/time.h,
-			[OPENMS_HAS_SYS_TIME_H=true],
-			[OPENMS_HAS_SYS_TIME_H=false])
-	if test ${OPENMS_HAS_SYS_TIME_H} = true ; then
-		AC_DEFINE(OPENMS_HAS_SYS_TIME_H,)
+			[BALL_HAS_SYS_TIME_H=true],
+			[BALL_HAS_SYS_TIME_H=false])
+	if test ${BALL_HAS_SYS_TIME_H} = true ; then
+		AC_DEFINE(BALL_HAS_SYS_TIME_H,)
 	fi
 ])
 
@@ -1725,10 +1730,10 @@ dnl   Check whether sys/stat.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_SYS_STAT_H, [
 	AC_CHECK_HEADERS(sys/stat.h,
-			[OPENMS_HAS_SYS_STAT_H=true],
-			[OPENMS_HAS_SYS_STAT_H=false])
-	if test ${OPENMS_HAS_SYS_STAT_H} = true ; then
-		AC_DEFINE(OPENMS_HAS_SYS_STAT_H,)
+			[BALL_HAS_SYS_STAT_H=true],
+			[BALL_HAS_SYS_STAT_H=false])
+	if test ${BALL_HAS_SYS_STAT_H} = true ; then
+		AC_DEFINE(BALL_HAS_SYS_STAT_H,)
 	fi
 ])
 
@@ -1737,10 +1742,10 @@ dnl   Check whether sys/times.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_SYS_TIMES_H, [
 	AC_CHECK_HEADERS(sys/times.h,
-			[OPENMS_HAS_SYS_TIMES_H=true],
-			[OPENMS_HAS_SYS_TIMES_H=false])
-	if test ${OPENMS_HAS_SYS_TIMES_H} = true ; then
-		AC_DEFINE(OPENMS_HAS_SYS_TIMES_H,)
+			[BALL_HAS_SYS_TIMES_H=true],
+			[BALL_HAS_SYS_TIMES_H=false])
+	if test ${BALL_HAS_SYS_TIMES_H} = true ; then
+		AC_DEFINE(BALL_HAS_SYS_TIMES_H,)
 	fi
 ])
 
@@ -1749,10 +1754,10 @@ dnl   Check whether sys/types.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_SYS_TYPES_H, [
 	AC_CHECK_HEADERS(sys/types.h,
-			[OPENMS_HAS_SYS_TYPES_H=true],
-			[OPENMS_HAS_SYS_TYPES_H=false])
-	if test ${OPENMS_HAS_SYS_TYPES_H} = true ; then
-		AC_DEFINE(OPENMS_HAS_SYS_TYPES_H,)
+			[BALL_HAS_SYS_TYPES_H=true],
+			[BALL_HAS_SYS_TYPES_H=false])
+	if test ${BALL_HAS_SYS_TYPES_H} = true ; then
+		AC_DEFINE(BALL_HAS_SYS_TYPES_H,)
 	fi
 ])
 
@@ -1761,10 +1766,10 @@ dnl   Check whether sys/ioctl.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_SYS_IOCTL_H, [
 	AC_CHECK_HEADERS(sys/ioctl.h,
-			[OPENMS_HAS_SYS_IOCTL_H=true],
-			[OPENMS_HAS_SYS_IOCTL_H=false])
-	if test ${OPENMS_HAS_SYS_IOCTL_H} = true ; then
-		AC_DEFINE(OPENMS_HAS_SYS_IOCTL_H,)
+			[BALL_HAS_SYS_IOCTL_H=true],
+			[BALL_HAS_SYS_IOCTL_H=false])
+	if test ${BALL_HAS_SYS_IOCTL_H} = true ; then
+		AC_DEFINE(BALL_HAS_SYS_IOCTL_H,)
 	fi
 ])
 
@@ -1773,10 +1778,10 @@ dnl   Check whether time.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_TIME_H, [
 	AC_CHECK_HEADERS(time.h,
-			[OPENMS_HAS_TIME_H=true],
-			[OPENMS_HAS_TIME_H=false])
-	if test ${OPENMS_HAS_TIME_H} = true ; then
-		AC_DEFINE(OPENMS_HAS_TIME_H,)
+			[BALL_HAS_TIME_H=true],
+			[BALL_HAS_TIME_H=false])
+	if test ${BALL_HAS_TIME_H} = true ; then
+		AC_DEFINE(BALL_HAS_TIME_H,)
 	fi
 ])
 
@@ -1785,10 +1790,10 @@ dnl   Check whether sys/param.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_SYS_PARAM_H, [
 	AC_CHECK_HEADERS(sys/param.h,
-			[OPENMS_HAS_SYS_PARAM_H=true],
-			[OPENMS_HAS_SYS_PARAM_H=false])
-	if test ${OPENMS_HAS_SYS_PARAM_H} = true ; then
-		AC_DEFINE(OPENMS_HAS_SYS_PARAM_H,)
+			[BALL_HAS_SYS_PARAM_H=true],
+			[BALL_HAS_SYS_PARAM_H=false])
+	if test ${BALL_HAS_SYS_PARAM_H} = true ; then
+		AC_DEFINE(BALL_HAS_SYS_PARAM_H,)
 	fi
 ])
 
@@ -1797,10 +1802,10 @@ dnl   Check whether dirent.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_DIRENT_H, [
 	AC_CHECK_HEADERS(dirent.h,
-			[OPENMS_HAS_DIRENT_H=true],
-			[OPENMS_HAS_DIRENT_H=false])
-	if test ${OPENMS_HAS_DIRENT_H} = true ; then
-		AC_DEFINE(OPENMS_HAS_DIRENT_H,)
+			[BALL_HAS_DIRENT_H=true],
+			[BALL_HAS_DIRENT_H=false])
+	if test ${BALL_HAS_DIRENT_H} = true ; then
+		AC_DEFINE(BALL_HAS_DIRENT_H,)
 	fi
 ])
 
@@ -1809,10 +1814,10 @@ dnl   Check whether pwd.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_PWD_H, [
 	AC_CHECK_HEADERS(pwd.h,
-			[OPENMS_HAS_PWD_H=true],
-			[OPENMS_HAS_PWD_H=false])
-	if test ${OPENMS_HAS_PWD_H} = true ; then
-		AC_DEFINE(OPENMS_HAS_PWD_H,)
+			[BALL_HAS_PWD_H=true],
+			[BALL_HAS_PWD_H=false])
+	if test ${BALL_HAS_PWD_H} = true ; then
+		AC_DEFINE(BALL_HAS_PWD_H,)
 	fi
 ])
 
@@ -1821,10 +1826,10 @@ dnl   Check whether direct.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_DIRECT_H, [
 	AC_CHECK_HEADERS(direct.h,
-			[OPENMS_HAS_DIRECT_H=true],
-			[OPENMS_HAS_DIRECT_H=false])
-	if test ${OPENMS_HAS_DIRECT_H} = true ; then
-		AC_DEFINE(OPENMS_HAS_DIRECT_H,)
+			[BALL_HAS_DIRECT_H=true],
+			[BALL_HAS_DIRECT_H=false])
+	if test ${BALL_HAS_DIRECT_H} = true ; then
+		AC_DEFINE(BALL_HAS_DIRECT_H,)
 	fi
 ])
 
@@ -1833,10 +1838,10 @@ dnl   Check whether io.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_IO_H, [
 	AC_CHECK_HEADERS(io.h,
-			[OPENMS_HAS_IO_H=true],
-			[OPENMS_HAS_IO_H=false])
-	if test ${OPENMS_HAS_IO_H} = true ; then
-		AC_DEFINE(OPENMS_HAS_IO_H,)
+			[BALL_HAS_IO_H=true],
+			[BALL_HAS_IO_H=false])
+	if test ${BALL_HAS_IO_H} = true ; then
+		AC_DEFINE(BALL_HAS_IO_H,)
 	fi
 ])
 
@@ -1845,10 +1850,10 @@ dnl   Check whether sys/socket.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_SYS_SOCKET_H, [
 	AC_CHECK_HEADERS(sys/socket.h,
-			[OPENMS_HAS_SYS_SOCKET_H=true],
-			[OPENMS_HAS_SYS_SOCKET_H=false])
-	if test ${OPENMS_HAS_SYS_SOCKET_H} = true ; then
-		AC_DEFINE(OPENMS_HAS_SYS_SOCKET_H,)
+			[BALL_HAS_SYS_SOCKET_H=true],
+			[BALL_HAS_SYS_SOCKET_H=false])
+	if test ${BALL_HAS_SYS_SOCKET_H} = true ; then
+		AC_DEFINE(BALL_HAS_SYS_SOCKET_H,)
 	fi
 ])
 
@@ -1857,10 +1862,10 @@ dnl   Check whether netinet/in.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_NETINET_IN_H, [
 	AC_CHECK_HEADERS(netinet/in.h,
-			[OPENMS_HAS_NETINET_IN_H=true],
-			[OPENMS_HAS_NETINET_IN_H=false])
-	if test ${OPENMS_HAS_NETINET_IN_H} = true ; then
-		AC_DEFINE(OPENMS_HAS_NETINET_IN_H,)
+			[BALL_HAS_NETINET_IN_H=true],
+			[BALL_HAS_NETINET_IN_H=false])
+	if test ${BALL_HAS_NETINET_IN_H} = true ; then
+		AC_DEFINE(BALL_HAS_NETINET_IN_H,)
 	fi
 ])
 
@@ -1869,10 +1874,10 @@ dnl   Check whether netdb.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_NETDB_H, [
 	AC_CHECK_HEADERS(netdb.h,
-			[OPENMS_HAS_NETDB_H=true],
-			[OPENMS_HAS_NETDB_H=false])
-	if test ${OPENMS_HAS_NETDB_H} = true ; then
-		AC_DEFINE(OPENMS_HAS_NETDB_H,)
+			[BALL_HAS_NETDB_H=true],
+			[BALL_HAS_NETDB_H=false])
+	if test ${BALL_HAS_NETDB_H} = true ; then
+		AC_DEFINE(BALL_HAS_NETDB_H,)
 	fi
 ])
 
@@ -1881,24 +1886,31 @@ dnl   Check whether arpa/inet.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_ARPA_INET_H, [
 	AC_CHECK_HEADERS(arpa/inet.h,
-			[OPENMS_HAS_ARPA_INET_H=true],
-			[OPENMS_HAS_ARPA_INET_H=false])
-	if test ${OPENMS_HAS_ARPA_INET_H} = true ; then
-		AC_DEFINE(OPENMS_HAS_ARPA_INET_H,)
+			[BALL_HAS_ARPA_INET_H=true],
+			[BALL_HAS_ARPA_INET_H=false])
+	if test ${BALL_HAS_ARPA_INET_H} = true ; then
+		AC_DEFINE(BALL_HAS_ARPA_INET_H,)
 	fi
 ])
 
 AC_DEFUN(CF_CHECK_SYSCONF, [
 	AC_CHECK_FUNCS(sysconf, HAS_SYSCONF=1)
 	if test "${HAS_SYSCONF}" = 1 ; then
-		AC_DEFINE(OPENMS_HAS_SYSCONF,)
+		AC_DEFINE(BALL_HAS_SYSCONF,)
 	fi
 ])
 
 AC_DEFUN(CF_CHECK_KILL, [
 	AC_CHECK_FUNCS(kill, HAS_KILL=1)
 	if test "${HAS_KILL}" = 1 ; then
-		AC_DEFINE(OPENMS_HAS_KILL,)
+		AC_DEFINE(BALL_HAS_KILL,)
+	fi
+])
+
+AC_DEFUN(CF_CHECK_HYPOT, [
+	AC_CHECK_FUNCS(kill, HAS_HYPOT=1)
+	if test "${HAS_HYPOT}" = 1 ; then
+		AC_DEFINE(BALL_HAS_HYPOT,)
 	fi
 ])
 
@@ -1906,8 +1918,8 @@ dnl
 dnl   check whether vsnprintf is defined
 dnl
 AC_DEFUN(CF_CHECK_VSNPRINTF, [
-	AC_CHECK_FUNCS(vsnprintf, OPENMS_HAVE_VSNPRINTF=1)
-	if test "${OPENMS_HAVE_VSNPRINTF}" = 1 ; then
+	AC_CHECK_FUNCS(vsnprintf, HAVE_VSNPRINTF=1)
+	if test "${HAVE_VSNPRINTF}" = 1 ; then
 		dnl
 		dnl   check whether vsnprintf works as expected
 		dnl   on Solaris 2.x it is broken in the 64bit version
@@ -1936,7 +1948,7 @@ AC_DEFUN(CF_CHECK_VSNPRINTF, [
 		)
 
 		if test "${VSNPRINTF_OK}" = 1 ; then
-			AC_DEFINE(OPENMS_HAVE_VSNPRINTF)
+			AC_DEFINE(BALL_HAVE_VSNPRINTF)
 		fi
 	fi
 ])
@@ -1946,26 +1958,25 @@ dnl
 dnl   check whether we need sysinfo or gethostname
 dnl
 AC_DEFUN(CF_CHECK_GETHOSTNAME, [
-	AC_CHECK_FUNCS(gethostname, OPENMS_HAVE_GETHOSTNAME=1)
-	if test "${OPENMS_HAVE_GETHOSTNAME}" = 1 ; then
-		AC_DEFINE(OPENMS_HAVE_GETHOSTNAME)
+	AC_CHECK_FUNCS(gethostname, HAVE_GETHOSTNAME=1)
+	if test "${HAVE_GETHOSTNAME}" = 1 ; then
+		AC_DEFINE(BALL_HAVE_GETHOSTNAME)
 	else
-		AC_CHECK_FUNCS(sysinfo, OPENMS_HAVE_SYSINFO=1)
-		if test "${OPENMS_HAVE_SYSINFO}" = 1  ; then
-			AC_DEFINE(OPENMS_HAVE_SYSINFO)
+		AC_CHECK_FUNCS(sysinfo, HAVE_SYSINFO=1)
+		if test "${HAVE_SYSINFO}" = 1  ; then
+			AC_DEFINE(BALL_HAVE_SYSINFO)
 		else
 			AC_MSG_RESULT()
 			AC_MSG_RESULT([Could not find gethostname or sysinfo methods!])
 			AC_MSG_RESULT([Please refer to config.log to identify the problem.])
-			AC_MSG_RESULT()
 			CF_ERROR
 		fi
-		fi
+	fi
 
 	dnl
 	dnl check for gethostname in the header
 	dnl
-	if test "${OPENMS_HAVE_GETHOSTNAME}" = 1 ; then
+	if test "${HAVE_GETHOSTNAME}" = 1 ; then
 		AC_MSG_CHECKING(for gethostname in unistd.h)
 		AC_TRY_COMPILE(
 			[
@@ -1975,11 +1986,11 @@ AC_DEFUN(CF_CHECK_GETHOSTNAME, [
 				char name[1024];
 				gethostname(name, 1023);
 			],
-			OPENMS_HAVE_GETHOSTNAME_HEADER=1
+			HAVE_GETHOSTNAME_HEADER=1
 		)
-		if test "${OPENMS_HAVE_GETHOSTNAME_HEADER+set}" != set ; then
+		if test "${HAVE_GETHOSTNAME_HEADER+set}" != set ; then
 			AC_MSG_RESULT(no)
-			AC_DEFINE(OPENMS_DEFINE_GETHOSTNAME)
+			AC_DEFINE(BALL_DEFINE_GETHOSTNAME)
 		else
 			AC_MSG_RESULT(yes)
 		fi
@@ -1990,50 +2001,50 @@ AC_DEFUN(CF_CHECK_NETLIBS, [
 dnl
 dnl   first check if everythings already defined in libc
 dnl
-AC_CHECK_FUNCS(inet_addr, OPENMS_HAVE_INET_ADDR=1)
-AC_CHECK_FUNCS(gethostbyname, OPENMS_HAVE_GETHOSTBYNAME=1)
-if test "${OPENMS_HAVE_INET_ADDR+set}" = set ; then
-  AC_CHECK_FUNC(inet_aton, OPENMS_HAVE_INET_ATON=1)
+AC_CHECK_FUNCS(inet_addr, HAVE_INET_ADDR=1)
+AC_CHECK_FUNCS(gethostbyname, HAVE_GETHOSTBYNAME=1)
+if test "${HAVE_INET_ADDR+set}" = set ; then
+  AC_CHECK_FUNC(inet_aton, HAVE_INET_ATON=1)
 fi
 
 dnl   if gethostbyname was not defined in libc, try libxnet (Solaris only?)
-	if test "${OPENMS_HAVE_GETHOSTBYNAME+set}" != set -a "${USE_LIBXNET}" != false; then
+	if test "${HAVE_GETHOSTBYNAME+set}" != set -a "${USE_LIBXNET}" != false; then
 		AC_CHECK_LIB(xnet, gethostbyname)
 		unset ac_cv_func_gethostbyname
-		AC_CHECK_FUNCS(gethostbyname,OPENMS_HAVE_GETHOSTBYNAME=1)
+		AC_CHECK_FUNCS(gethostbyname,HAVE_GETHOSTBYNAME=1)
 	fi
-	if test "${OPENMS_HAVE_INET_ADDR+set}" != set ; then
+	if test "${HAVE_INET_ADDR+set}" != set ; then
 		unset ac_cv_func_inet_addr
-		AC_CHECK_FUNCS(inet_addr,OPENMS_HAVE_INET_ADDR=1)
-		if test "${OPENMS_HAVE_INET_ADDR+set}" != set -a "${USE_LIBXNET}" != false; then
+		AC_CHECK_FUNCS(inet_addr,HAVE_INET_ADDR=1)
+		if test "${HAVE_INET_ADDR+set}" != set -a "${USE_LIBXNET}" != false; then
 			AC_CHECK_LIB(xnet, inet_addr)
 			unset ac_cv_func_inet_addr
-			AC_CHECK_FUNCS(inet_addr,OPENMS_HAVE_INET_ADDR=1)
+			AC_CHECK_FUNCS(inet_addr,HAVE_INET_ADDR=1)
 		fi
 	fi
 
-	if test "${OPENMS_HAVE_GETHOSTBYNAME+set}" != set ; then
+	if test "${HAVE_GETHOSTBYNAME+set}" != set ; then
 		AC_CHECK_LIB(nsl, gethostbyname)
 		unset ac_cv_func_gethostbyname
-		AC_CHECK_FUNCS(gethostbyname,OPENMS_HAVE_GETHOSTBYNAME=1)
+		AC_CHECK_FUNCS(gethostbyname,HAVE_GETHOSTBYNAME=1)
 	fi
 
-	if test "${OPENMS_HAVE_INET_ADDR+set}" != set ; then
+	if test "${HAVE_INET_ADDR+set}" != set ; then
 		AC_CHECK_LIB(socket, inet_addr)
 		unset ac_cv_func_inet_addr
-		AC_CHECK_FUNCS(inet_addr,OPENMS_HAVE_INET_ADDR=1)
+		AC_CHECK_FUNCS(inet_addr,HAVE_INET_ADDR=1)
 	fi
 
 
 	dnl check again whether inet_aton exists (perhaps it was hidden in one
 	dnl of the other libraries..
-	if test "${OPENMS_HAVE_INET_ATON+set}" != set ; then
+	if test "${HAVE_INET_ATON+set}" != set ; then
 		unset ac_cv_func_inet_aton
-		AC_CHECK_FUNC(inet_aton,OPENMS_HAVE_INET_ATON=1)
+		AC_CHECK_FUNC(inet_aton,HAVE_INET_ATON=1)
 	fi
 
-	if test "${OPENMS_HAVE_INET_ATON+set}" = set ; then
-		AC_DEFINE(OPENMS_HAVE_INET_ATON,)
+	if test "${HAVE_INET_ATON+set}" = set ; then
+		AC_DEFINE(HAVE_INET_ATON,)
 	fi
 
 ])
@@ -2057,8 +2068,8 @@ AC_DEFUN(CF_CHECK_SOCKET_ARGS_AND_TYPES, [
 			socklen_t     len = 0;
 			getsockname(0, (struct sockaddr*)&addr, &len);
 		],
-  OPENMS_SOCKLEN_TYPE=socklen_t)
-	if test "${OPENMS_SOCKLEN_TYPE}" = "" ; then
+  BALL_SOCKLEN_TYPE=socklen_t)
+	if test "${BALL_SOCKLEN_TYPE}" = "" ; then
 		AC_TRY_COMPILE(
 			[
 				#include <sys/types.h>
@@ -2069,9 +2080,9 @@ AC_DEFUN(CF_CHECK_SOCKET_ARGS_AND_TYPES, [
 				size_t    len = 0;
 				getsockname(0, (struct sockaddr*)&addr, &len);
 			],
-			OPENMS_SOCKLEN_TYPE=size_t)
+			BALL_SOCKLEN_TYPE=size_t)
 	fi
-	if test "${OPENMS_SOCKLEN_TYPE}" = "" ; then
+	if test "${BALL_SOCKLEN_TYPE}" = "" ; then
 		AC_TRY_COMPILE(
 			[
 				#include <sys/types.h>
@@ -2082,9 +2093,9 @@ AC_DEFUN(CF_CHECK_SOCKET_ARGS_AND_TYPES, [
 				unsigned int  len = 0;
 				getsockname(0, (struct sockaddr*)&addr, &len);
 			],
-			OPENMS_SOCKLEN_TYPE="unsigned int")
+			BALL_SOCKLEN_TYPE="unsigned int")
 	fi
-	if test "${OPENMS_SOCKLEN_TYPE}" = "" ; then
+	if test "${BALL_SOCKLEN_TYPE}" = "" ; then
 		AC_TRY_COMPILE(
 			[
 				#include <sys/types.h>
@@ -2095,32 +2106,32 @@ AC_DEFUN(CF_CHECK_SOCKET_ARGS_AND_TYPES, [
 				int           len = 0;
 				getsockname(0, (struct sockaddr*)&addr, &len);
 			],
-			OPENMS_SOCKLEN_TYPE="int")
+			BALL_SOCKLEN_TYPE="int")
 	fi
-	if test "${OPENMS_SOCKLEN_TYPE}" = "" ; then
+	if test "${BALL_SOCKLEN_TYPE}" = "" ; then
 		AC_MSG_RESULT(FAILED)
 		AC_MSG_RESULT(-------------WARNING!---------------)
 		AC_MSG_RESULT(could not find a matching type for socket length argument)
 		AC_MSG_RESULT(in call to getsockname)
-		AC_MSG_RESULT(please check the setting for OPENMS_SOCKLEN_TYPE in config.mak)
+		AC_MSG_RESULT(please check the setting for BALL_SOCKLEN_TYPE in config.mak)
 		AC_MSG_RESULT(and set it to the type needed for the third argument of getsockname)
 		AC_MSG_RESULT()
 	else
-		AC_MSG_RESULT($OPENMS_SOCKLEN_TYPE)
+		AC_MSG_RESULT($BALL_SOCKLEN_TYPE)
 	fi
 
-	AC_DEFINE_UNQUOTED(OPENMS_SOCKLEN_TYPE, ${OPENMS_SOCKLEN_TYPE})
+	AC_DEFINE_UNQUOTED(BALL_SOCKLEN_TYPE, ${BALL_SOCKLEN_TYPE})
 ])
 
 dnl
 dnl   check for the XDR functions: their interface and the libraries they're hidden in.
 dnl
 AC_DEFUN(CF_CHECK_XDR, [
-	if test "${OPENMS_NO_XDR}" = "true" ; then
+	if test "${BALL_NO_XDR}" = "true" ; then
 		AC_MSG_RESULT([No XDR headers available - building of XDR persistence support disabled])
-		AC_DEFINE(OPENMS_HAS_XDR, )
-		OPENMS_HAS_XDR=""
-		AC_SUBST(OPENMS_HAS_XDR)
+		AC_DEFINE(BALL_HAS_XDR, )
+		BALL_HAS_XDR=""
+		AC_SUBST(BALL_HAS_XDR)
 	else
 
 		AC_CHECK_HEADER(rpc/types.h, HAS_RPC_TYPES_H=true, HAS_RPC_TYPES_H=false)
@@ -2129,7 +2140,6 @@ AC_DEFUN(CF_CHECK_XDR, [
 			AC_MSG_RESULT([Cannot find RPC headers (rpc/types.h).])
 			AC_MSG_RESULT([If your system does not provide an RPC/XDR implementation (e.g., CYGWIN),])
 			AC_MSG_RESULT([please specify the option --without-xdr to avoid this error.])
-			AC_MSG_RESULT()
 			CF_ERROR
 		fi
 
@@ -2137,7 +2147,6 @@ AC_DEFUN(CF_CHECK_XDR, [
 		if test "${HAS_XDR_H}" = false ; then
 			AC_MSG_RESULT()
 			AC_MSG_RESULT([Cannot find XDR headers (rpc/xdr.h).])
-			AC_MSG_RESULT()
 			CF_ERROR
 		fi
 
@@ -2154,10 +2163,10 @@ AC_DEFUN(CF_CHECK_XDR, [
 				],
 				[	
 				],
-				OPENMS_XDRREC_VOID_VOID_UINT=true,
-				OPENMS_XDRREC_VOID_VOID_UINT=false
+				BALL_XDRREC_VOID_VOID_UINT=true,
+				BALL_XDRREC_VOID_VOID_UINT=false
 		)
-		if test "${OPENMS_XDRREC_VOID_VOID_UINT}" = false ; then
+		if test "${BALL_XDRREC_VOID_VOID_UINT}" = false ; then
 			AC_TRY_COMPILE(
 					[
 						#include <rpc/types.h>
@@ -2170,10 +2179,10 @@ AC_DEFUN(CF_CHECK_XDR, [
 					],
 					[	
 					],
-					OPENMS_XDRREC_VOID_CHAR_INT=true,
-					OPENMS_XDRREC_VOID_CHAR_INT=false
+					BALL_XDRREC_VOID_CHAR_INT=true,
+					BALL_XDRREC_VOID_CHAR_INT=false
 			)
-			if test "${OPENMS_XDRREC_VOID_CHAR_INT}" = true ; then
+			if test "${BALL_XDRREC_VOID_CHAR_INT}" = true ; then
 				AC_MSG_RESULT([(void*, char*, int)])
 			else
 				AC_TRY_COMPILE(
@@ -2188,10 +2197,10 @@ AC_DEFUN(CF_CHECK_XDR, [
 						],
 						[	
 						],
-						OPENMS_XDRREC_CHAR_CHAR_INT=true,
-						OPENMS_XDRREC_CHAR_CHAR_INT=false
+						BALL_XDRREC_CHAR_CHAR_INT=true,
+						BALL_XDRREC_CHAR_CHAR_INT=false
 				)
-				if test "${OPENMS_XDRREC_CHAR_CHAR_INT}" = true ; then
+				if test "${BALL_XDRREC_CHAR_CHAR_INT}" = true ; then
 					AC_MSG_RESULT([(char*, char*, int)])
 				else
 					AC_TRY_COMPILE(
@@ -2206,10 +2215,10 @@ AC_DEFUN(CF_CHECK_XDR, [
 						],
 						[
 						],
-						OPENMS_XDRREC_VOID=true,
-						OPENMS_XDRREC_VOID=false
+						BALL_XDRREC_VOID=true,
+						BALL_XDRREC_VOID=false
 					)
-					if test "${OPENMS_XDRREC_VOID}" = true ; then
+					if test "${BALL_XDRREC_VOID}" = true ; then
 						AC_MSG_RESULT(())
 					else
 						AC_MSG_RESULT(not found!)
@@ -2226,7 +2235,7 @@ AC_DEFUN(CF_CHECK_XDR, [
 		dnl  unsigned ints (xdr_u_hyper)
 		dnl
 		AC_MSG_CHECKING(for xdr_u_hyper function)
-		OPENMS_HAS_XDR_U_HYPER=false
+		BALL_HAS_XDR_U_HYPER=false
 		AC_TRY_COMPILE(
 			[
 				#include <rpc/types.h>
@@ -2235,14 +2244,14 @@ AC_DEFUN(CF_CHECK_XDR, [
 			[
 				xdr_u_hyper(0, 0);
 			],	
-			OPENMS_HAS_XDR_U_HYPER=true
+			BALL_HAS_XDR_U_HYPER=true
 		)	
 
-		if test "${OPENMS_HAS_XDR_U_HYPER}" = "true" ; then
+		if test "${BALL_HAS_XDR_U_HYPER}" = "true" ; then
 			AC_MSG_RESULT(found)
 
 			AC_MSG_CHECKING([for 64-bit XDR type (for xdr_u_hyper)])
-			OPENMS_U_QUAD_TYPE=""
+			BALL_U_QUAD_TYPE=""
 			AC_TRY_COMPILE(
 				[
 					#include <rpc/types.h>
@@ -2252,10 +2261,10 @@ AC_DEFUN(CF_CHECK_XDR, [
 					XDR xdrs;
 						xdr_u_hyper(&xdrs, &q);
 				],
-				OPENMS_U_QUAD_TYPE=u_quad_t
+				BALL_U_QUAD_TYPE=u_quad_t
 			)	
 
-			if test "${OPENMS_U_QUAD_TYPE}" = "" ; then
+			if test "${BALL_U_QUAD_TYPE}" = "" ; then
 				AC_TRY_COMPILE(
 					[
 						#include <rpc/types.h>
@@ -2265,11 +2274,11 @@ AC_DEFUN(CF_CHECK_XDR, [
 						XDR xdrs;
 						xdr_u_hyper(&xdrs, &q);
 					],
-					OPENMS_U_QUAD_TYPE=u_longlong_t
+					BALL_U_QUAD_TYPE=u_longlong_t
 				)	
 			fi
 
-			if test "${OPENMS_U_QUAD_TYPE}" = "" ; then
+			if test "${BALL_U_QUAD_TYPE}" = "" ; then
 				AC_TRY_COMPILE(
 					[
 						#include <rpc/types.h>
@@ -2279,11 +2288,11 @@ AC_DEFUN(CF_CHECK_XDR, [
 						XDR xdrs;
 						xdr_u_hyper(&xdrs, &q);
 					],
-					OPENMS_U_QUAD_TYPE="unsigned long long int"
+					BALL_U_QUAD_TYPE="unsigned long long int"
 				)	
 			fi
 
-			if test "${OPENMS_U_QUAD_TYPE}" = "" ; then
+			if test "${BALL_U_QUAD_TYPE}" = "" ; then
 				AC_TRY_COMPILE(
 					[
 						#include <rpc/types.h>
@@ -2293,22 +2302,22 @@ AC_DEFUN(CF_CHECK_XDR, [
 						XDR xdrs;
 						xdr_u_hyper(&xdrs, &q);
 					],
-					OPENMS_U_QUAD_TYPE=__uint64_t
+					BALL_U_QUAD_TYPE=__uint64_t
 				)	
 			fi
-			if test "${OPENMS_U_QUAD_TYPE}" = "" ; then
+			if test "${BALL_U_QUAD_TYPE}" = "" ; then
 				AC_MSG_RESULT([Could not identify an appropriate type for xdr_u_hyper.])
 				CF_ERROR
 			fi
 
-			AC_MSG_RESULT(${OPENMS_U_QUAD_TYPE})
-			AC_DEFINE_UNQUOTED(OPENMS_XDR_UINT64_TYPE, ${OPENMS_U_QUAD_TYPE})
-			AC_DEFINE(OPENMS_HAS_XDR_U_HYPER)
+			AC_MSG_RESULT(${BALL_U_QUAD_TYPE})
+			AC_DEFINE_UNQUOTED(BALL_XDR_UINT64_TYPE, ${BALL_U_QUAD_TYPE})
+			AC_DEFINE(BALL_HAS_XDR_U_HYPER)
 
 		else
 
 			dnl
-			dnl	we do not have xdr_u_hyper, so OPENMS has to use two 
+			dnl	we do not have xdr_u_hyper, so BALL has to use two 
 			dnl	calls to xdr_u_int instead. 
 			dnl	However, we have to identify whether the system supports
 			dnl	64bit unsigned types at all
@@ -2319,14 +2328,14 @@ AC_DEFUN(CF_CHECK_XDR, [
 				[	
 					unsigned long long int  q = 1234567890123456789LL;
 				],
-				OPENMS_U_QUAD_TYPE="unsigned long long int"
+				BALL_U_QUAD_TYPE="unsigned long long int"
 			)	
-			if test "${OPENMS_U_QUAD_TYPE}" = "" ; then
+			if test "${BALL_U_QUAD_TYPE}" = "" ; then
 				AC_MSG_RESULT([Could not identify an 64 bit unsigned type (long long).])
 				CF_ERROR
 			fi
 		
-			AC_DEFINE_UNQUOTED(OPENMS_XDR_UINT64_TYPE, ${OPENMS_U_QUAD_TYPE})
+			AC_DEFINE_UNQUOTED(BALL_XDR_UINT64_TYPE, ${BALL_U_QUAD_TYPE})
 			AC_MSG_RESULT(unsigned long long int)
 		
 		fi
@@ -2336,14 +2345,14 @@ AC_DEFUN(CF_CHECK_XDR, [
 		dnl Define appropriate symbols in config.h.
 		dnl The symbols are used in CONCEPT/XDRPersistenceManager.C only.
 		dnl
-		if test "${OPENMS_XDRREC_VOID_CHAR_INT}" = true ; then
-			AC_DEFINE(OPENMS_XDRREC_CREATE_VOID_CHAR_INT)
+		if test "${BALL_XDRREC_VOID_CHAR_INT}" = true ; then
+			AC_DEFINE(BALL_XDRREC_CREATE_VOID_CHAR_INT)
 		fi
-		if test "${OPENMS_XDRREC_CHAR_CHAR_INT}" = true ; then
-			AC_DEFINE(OPENMS_XDRREC_CREATE_CHAR_CHAR_INT)
+		if test "${BALL_XDRREC_CHAR_CHAR_INT}" = true ; then
+			AC_DEFINE(BALL_XDRREC_CREATE_CHAR_CHAR_INT)
 		fi
-		if test "${OPENMS_XDRREC_VOID}" = true ; then
-			AC_DEFINE(OPENMS_XDRREC_CREATE_VOID)
+		if test "${BALL_XDRREC_VOID}" = true ; then
+			AC_DEFINE(BALL_XDRREC_CREATE_VOID)
 		fi
 		
 		dnl
@@ -2393,9 +2402,9 @@ AC_DEFUN(CF_CHECK_XDR, [
 			dnl
 			AC_MSG_RESULT(yes)
 		fi
-		AC_DEFINE(OPENMS_HAS_XDR, true)
-		OPENMS_HAS_XDR=true
-		AC_SUBST(OPENMS_HAS_XDR)
+		AC_DEFINE(BALL_HAS_XDR, true)
+		BALL_HAS_XDR=true
+		AC_SUBST(BALL_HAS_XDR)
 	fi
 ])
 
@@ -2434,7 +2443,6 @@ AC_DEFUN(CF_CHECK_FFTW_SUPPORT, [
 			AC_MSG_RESULT(FFT library FFTW not found!)
 			AC_MSG_RESULT(Please install it in a standard location or specify the path)
 			AC_MSG_RESULT(with --with-fftw-lib=DIR on the command line.)
-			AC_MSG_RESULT()
 			CF_ERROR
 		else
 			AC_MSG_RESULT((${FFTW_LIB}))
@@ -2443,7 +2451,7 @@ AC_DEFUN(CF_CHECK_FFTW_SUPPORT, [
 		dnl prevent the use of -L/usr/lib - this may lead to problems with different
 		dnl binary formats (e.g. SGI O32/N32 format)
 		if test "${FFTW_INCL_PATH}" != /usr/include -a "${FFTW_INCL_PATH}" != "" ; then
-			OPENMS_INCLUDES="${OPENMS_INCLUDES} -I${FFTW_INCL_PATH}"
+			BALL_INCLUDES="${BALL_INCLUDES} -I${FFTW_INCL_PATH}"
 		fi
 
 		AC_MSG_CHECKING(for FFTW precision)
@@ -2490,21 +2498,20 @@ AC_DEFUN(CF_CHECK_FFTW_SUPPORT, [
 		dnl Consistency check with --enable-double-cplx
 		dnl
 		AC_MSG_CHECKING(for consistency between complex type and FFTW precision)
-		if test "${enable_double_cplx}" != "" -a "${OPENMS_COMPLEX_PRECISION}" != "${FFTW_PRECISION}" ; then
+		if test "${enable_double_cplx}" != "" -a "${BALL_COMPLEX_PRECISION}" != "${FFTW_PRECISION}" ; then
 			AC_MSG_RESULT()
 			AC_MSG_RESULT(Specified complex precision is inconsistent with the precision of FFTW.)
 			AC_MSG_RESULT(Please check ${FFTW_INCL_PATH}/fftw.h and your configure options.)
-			AC_MSG_RESULT()
 			CF_ERROR
 		fi
-		OPENMS_COMPLEX_PRECISION=${FFTW_PRECISION}
-		AC_MSG_RESULT(set to ${OPENMS_COMPLEX_PRECISION})
+		BALL_COMPLEX_PRECISION=${FFTW_PRECISION}
+		AC_MSG_RESULT(set to ${BALL_COMPLEX_PRECISION})
 
-		AC_DEFINE(OPENMS_HAS_FFTW, true)
-		AC_DEFINE(OPENMS_HAS_FFTW_H, true)
-		OPENMS_HAS_FFTW=true
-		AC_SUBST(OPENMS_HAS_FFTW)
-		AC_SUBST(OPENMS_HAS_FFTW_H)
+		AC_DEFINE(BALL_HAS_FFTW, true)
+		AC_DEFINE(BALL_HAS_FFTW_H, true)
+		BALL_HAS_FFTW=true
+		AC_SUBST(BALL_HAS_FFTW)
+		AC_SUBST(BALL_HAS_FFTW_H)
 
 
 		AC_MSG_CHECKING(linking against libfftw)
@@ -2526,32 +2533,31 @@ AC_DEFUN(CF_CHECK_FFTW_SUPPORT, [
 			AC_MSG_RESULT()
 			AC_MSG_RESULT([Cannot link against libfftw. Please check config.log and])
 			AC_MSG_RESULT([specify appropriate options to configure (e.g. --with-fftw-lib/incl).])
-			AC_MSG_RESULT()
 			CF_ERROR
 		else
 			AC_MSG_RESULT(yes)
 		fi
 	fi
-	AC_DEFINE_UNQUOTED(OPENMS_COMPLEX_TYPE, ${OPENMS_COMPLEX_TYPE})
+	AC_DEFINE_UNQUOTED(BALL_COMPLEX_TYPE, ${BALL_COMPLEX_TYPE})
 ])
 
 dnl
-dnl		QT support
+dnl		VIEW support
 dnl
-AC_DEFUN(CF_GUI, [
+AC_DEFUN(CF_VIEW, [
 	dnl
-	dnl    search for X-libs and includes and OPENMSView (OpenGL/MESA) stuff
+	dnl    search for X-libs and includes and BALLView (OpenGL/MESA) stuff
 	dnl 
-	if test "${USE_GUI}" = true ; then
+	if test "${USE_VIEW}" = true ; then
 		AC_PATH_X
 		X11_INCPATH=${x_includes}
 		X11_LIBPATH=${x_libraries}
 
 		if test "${no_x}" = "yes" ; then
-			USE_GUI=false
+			USE_VIEW=false
 		fi
 
-		if test "${USE_GUI}" = true ; then
+		if test "${USE_VIEW}" = true ; then
 			if test "${X11_LIBPATH}" = "/usr/lib" -o "${X11_LIBPATH}" = "" ; then
 				X11_LIBPATH=""
 				X11_LIBPATHOPT=""
@@ -2560,8 +2566,29 @@ AC_DEFUN(CF_GUI, [
 			fi
 		fi
 
-		if test "${USE_GUI}" = true ; then
-			if test "${GUI_PLATFORM}" = Mesa ; then
+		if test "${USE_VIEW}" = true ; then
+			dnl
+			dnl		Fix up the OpenGL stuff for MacOS X -- here we need to use OpenGL and AGL frameworks
+			dnl
+			if test "${OS}" = "Darwin" ; then
+				VIEW_PLATFORM="OpenGL-Darwin"
+				OPENGL_LIBOPTS="-framework OpenGL -framework AGL"
+				X11_LIBPATHOPT=""
+				AC_MSG_CHECKING(for OpenGL includes)
+				CF_FIND_HEADER(OPENGL_INCPATH,GL/gl.h)
+				if test "${OPENGL_INCPATH}" = "" ; then
+					AC_MSG_RESULT((not found!))
+					AC_MSG_RESULT()
+					AC_MSG_RESULT(no OpenGL headers found! Please use the option --with-opengl-incl=DIR)
+					AC_MSG_RESULT(of configure to specify the correct path to these headers (usually, /usr/X11R6/include).)
+					CF_ERROR
+				else
+					AC_MSG_RESULT((${OPENGL_INCPATH}))
+          VIEW_INCLUDES="${VIEW_INCLUDES} -I${OPENGL_INCPATH}"
+				fi
+			fi
+
+			if test "${VIEW_PLATFORM}" = Mesa ; then
 				AC_MSG_CHECKING(for Mesa includes)
 				CF_FIND_HEADER(MESA_INCLUDES,GL/gl.h, ${OPENGL_INCPATH} ${X11_INCPATH})
 				if test "${MESA_INCLUDES}" = "" ; then
@@ -2575,7 +2602,7 @@ AC_DEFUN(CF_GUI, [
 					AC_MSG_RESULT(${MESA_INCLUDES})
 				fi
 
-				if test "${USE_GUI}" = true ; then
+				if test "${USE_VIEW}" = true ; then
 					AC_MSG_CHECKING(for Mesa library)
 					CF_FIND_LIB(MESA_LIBS,libMesaGL, ${OPENGL_LIBPATH} ${X11_LIBPATH})
 					if test "${MESA_LIBS}" = "" ; then
@@ -2596,11 +2623,11 @@ AC_DEFUN(CF_GUI, [
 				dnl prevent the use of -L/usr/lib - this may lead to problems with different
 				dnl binary formats (e.g. SGI O32/N32 format)
 				if test "${MESA_INCLUDES}" != /usr/include -a "${MESA_INCLUDES}" != "" ; then
-					GUI_INCLUDES="${GUI_INCLUDES} -I${MESA_INCLUDES}"
+					VIEW_INCLUDES="${VIEW_INCLUDES} -I${MESA_INCLUDES}"
 				fi
 			fi
 
-			if test ${GUI_PLATFORM} = OpenGL ; then
+			if test ${VIEW_PLATFORM} = OpenGL ; then
 				AC_MSG_CHECKING(for OpenGL includes)
 				CF_FIND_HEADER(OPENGL_INCPATH,GL/gl.h)
 				if test "${OPENGL_INCPATH}" = "" ; then
@@ -2626,16 +2653,16 @@ AC_DEFUN(CF_GUI, [
 				fi
 				
 				if test "${OPENGL_INCPATH}" != /usr/include && test "${OPENGL_INCPATH}" != "" ; then
-					GUI_INCLUDES="${GUI_INCLUDES} -I${OPENGL_INCPATH}"
+					VIEW_INCLUDES="${VIEW_INCLUDES} -I${OPENGL_INCPATH}"
 				fi
 			fi
 
-			if test "${USE_GUI}" = true ; then
+			if test "${USE_VIEW}" = true ; then
 				AC_MSG_CHECKING(for QT headers)
 				if test "${QTDIR}" != "" ; then
-					CF_FIND_HEADER(QT_INCPATH,qgl.h,${QTDIR}/include ${OPENMS_PATH}/contrib/qt/include)
+					CF_FIND_HEADER(QT_INCPATH,qgl.h,${QTDIR}/include ${BALL_PATH}/contrib/qt/include)
 				else
-					CF_FIND_HEADER(QT_INCPATH,qgl.h,${OPENMS_PATH}/contrib/qt/include)
+					CF_FIND_HEADER(QT_INCPATH,qgl.h,${BALL_PATH}/contrib/qt/include)
 				fi
 
 				if test "${QT_INCPATH}" = "" ; then
@@ -2662,7 +2689,7 @@ AC_DEFUN(CF_GUI, [
 							QT_MT_SUFFIX=""
 						fi
 						if test "${QT_LIBPATH}" = "" ; then
-							CF_FIND_LIB(QT_LIBPATH, libqt${QT_MT_SUFFIX}, ${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${OPENMS_PATH}/contrib/qt/include)
+							CF_FIND_LIB(QT_LIBPATH, libqt${QT_MT_SUFFIX}, ${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include)
 						fi
 					else	
 						if test -a "${QTDIR}/lib/libqt.so" ; then
@@ -2672,11 +2699,11 @@ AC_DEFUN(CF_GUI, [
 							QT_MT_SUFFIX="-mt"
 						fi
 						if test "${QT_LIBPATH}" = "" ; then
-							CF_FIND_LIB(QT_LIBPATH, libqt${QT_MT_SUFFIX}, ${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${OPENMS_PATH}/contrib/qt/include)
+							CF_FIND_LIB(QT_LIBPATH, libqt${QT_MT_SUFFIX}, ${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include)
 						fi
 					fi
 				else
-					CF_FIND_LIB(QT_LIBPATH, libqt${QT_MT_SUFFIX}, ${OPENMS_PATH}/contrib/qt/lib ${OPENMS_PATH}/contrib/qt/lib/${BINFMT})
+					CF_FIND_LIB(QT_LIBPATH, libqt${QT_MT_SUFFIX}, ${BALL_PATH}/contrib/qt/lib ${BALL_PATH}/contrib/qt/lib/${BINFMT})
 				fi
 
 				if test "${QT_LIBPATH}" = "" ; then
@@ -2707,17 +2734,17 @@ AC_DEFUN(CF_GUI, [
 					AC_MSG_RESULT()
 					AC_MSG_RESULT([  Could not determine version number of QT library -- please])
 					AC_MSG_RESULT([  check config.log for details.])
-					AC_MSG_RESULT([  You might have a problem with your LD_LIBRARY_PATH.])
+					AC_MSG_RESULT([  You might have a problem with your (DY)LD_LIBRARY_PATH.])
 					AC_MSG_RESULT([  Please check the settings of QTDIR as well or specify])
 					AC_MSG_RESULT([  the path to the library/headers with])
 					AC_MSG_RESULT([    --with-qt-libs=<DIR> / --with-qt-incl=<DIR>])
 					CF_ERROR
 				else
 					AC_MSG_RESULT([${QT_VERSION} (${QT_VERSION_STR})])
-					AC_DEFINE_UNQUOTED(OPENMS_QT_VERSION, ${QT_VERSION})
-					AC_DEFINE_UNQUOTED(OPENMS_QT_VERSION_STR, ${QT_VERSION_STR})
+					AC_DEFINE_UNQUOTED(BALL_QT_VERSION, ${QT_VERSION})
+					AC_DEFINE_UNQUOTED(BALL_QT_VERSION_STR, ${QT_VERSION_STR})
 					if test "${QT_MT_SUFFIX}" = "-mt" ; then
-						AC_DEFINE(OPENMS_QT_HAS_THREADS,)
+						AC_DEFINE(BALL_QT_HAS_THREADS,)
 					fi
 				fi			
 		
@@ -2725,9 +2752,9 @@ AC_DEFUN(CF_GUI, [
 				dnl  We do require QT 3.x by now. 2.x won't do...
 				dnl
 				if test `echo ${QT_VERSION} | ${CUT} -c1-2` != "0x" ; then
-					if test "${QT_VERSION}" -lt 320 ; then
+					if test "${QT_VERSION}" -lt 300 ; then
 						AC_MSG_RESULT()
-						AC_MSG_RESULT([QT version 3.2 or above is required for OPENMS. Please update])
+						AC_MSG_RESULT([QT version 3.0 or above is required for BALL. Please update])
 						AC_MSG_RESULT([to a more current version or specify the path to a more])
 						AC_MSG_RESULT([recent version of libqt by passing the option --with-qt-libs=DIR])
 						AC_MSG_RESULT([to configure.])
@@ -2735,16 +2762,16 @@ AC_DEFUN(CF_GUI, [
 						AC_MSG_RESULT([path - configure will recognize this, too.])
 						AC_MSG_RESULT()
 						AC_MSG_RESULT([The complete QT package can be found under the following URL:])
-						AC_MSG_RESULT([  http://www.trolltech.com/products/qt])
+						AC_MSG_RESULT([  http://www.troll.no/qt])
 						CF_ERROR
 					fi
 				fi
 
 				dnl
-				dnl	Add the QT include path to the GUI includes
+				dnl	Add the QT include path to the VIEW includes
 				dnl
 				if test "${QT_INCPATH}" != /usr/include && test "${QT_INCPATH}" != "" ; then
-					GUI_INCLUDES="${GUI_INCLUDES} -I${QT_INCPATH}"
+					VIEW_INCLUDES="${VIEW_INCLUDES} -I${QT_INCPATH}"
 				fi	
 			fi
 		fi
@@ -2752,11 +2779,11 @@ AC_DEFUN(CF_GUI, [
 
 
 	dnl
-	dnl   verify libraries needed for GUI
+	dnl   verify libraries needed for VIEW
 	dnl   (X, QT, Mesa/OpenGL)
 	dnl
 
-	if test "${USE_GUI}" = true ; then		
+	if test "${USE_VIEW}" = true ; then		
 		dnl  
 		dnl
 		dnl  identify the X11 libraries needed to link agains
@@ -2772,6 +2799,16 @@ AC_DEFUN(CF_GUI, [
 			LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
 			AC_TRY_LINK([],[],X_LINKING_OK=1)
 			LIBS=${SAVE_LIBS}
+		fi
+
+		dnl
+		dnl  Special treatment for MacOS X -- we just ignore everything.
+		dnl		The OpenGL and AGL frameworks will take care of it...
+		dnl
+		if test "${OS}" = "Darwin" ; then
+			X11_LIBS=""
+			X11_LIBPATHOPTS=""
+			X_LINKING_OK="true"
 		fi
 
 		dnl 		
@@ -2831,19 +2868,19 @@ AC_DEFUN(CF_GUI, [
 			AC_MSG_RESULT(environment variable X11_LIBS)
 			AC_MSG_RESULT(If you are running Solaris 2.x you might also try the option --without-libxnet)
 			AC_MSG_RESULT(if your X libraries were linked against libsocket and libnsl instead of libxnet.)
-			AC_MSG_RESULT(Built of visualization component GUI disabled.)
+			AC_MSG_RESULT(Built of visualization component VIEW disabled.)
 			AC_MSG_RESULT()
-			USE_GUI=false
+			USE_VIEW=false
 		fi
 
 		dnl		
-		dnl  define some variables: X11_LIBOPTS and GUI_LIBS
+		dnl  define some variables: X11_LIBOPTS and VIEW_LIBS
 		dnl
 		X11_LIBOPTS="${X11_LIBPATHOPT} ${X11_LIBS}"
 	fi
 
-	if test "${USE_GUI}" = true ; then
-		if test "${GUI_PLATFORM}" = OpenGL ; then
+	if test "${USE_VIEW}" = true ; then
+		if test "${VIEW_PLATFORM}" = OpenGL ; then
 			if test "${OPENGL_LIBPATH}" != "/usr/lib" -a "${OPENGL_LIBPATH}" != "" ; then
 				OPENGL_LIBOPTS="-L${OPENGL_LIBPATH} -lGLU -lGL"
 			else
@@ -2859,10 +2896,10 @@ AC_DEFUN(CF_GUI, [
 			if test "${OPENGL_LIBPATH}" != "" ; then
 				LDFLAGS="${LDFLAGS} -L${OPENGL_LIBPATH}"
 			fi
-			AC_CHECK_LIB(GL, XMesaGarbageCollect, GUI_PLATFORM=Mesa)
+			AC_CHECK_LIB(GL, XMesaGarbageCollect, VIEW_PLATFORM=Mesa)
 			LIBS=${SAVE_LIBS}
 			LDFLAGS=${SAVE_LDFLAGS}
-			if test "${GUI_PLATFORM}" != Mesa ; then
+			if test "${VIEW_PLATFORM}" != Mesa ; then
 				AC_MSG_CHECKING(linking against OpenGL libraries)
 				SAVE_LIBS=${LIBS}
 				LIBS="${OPENGL_LIBOPTS} ${LIBS}"
@@ -2881,8 +2918,8 @@ AC_DEFUN(CF_GUI, [
 		fi
 	fi
 
-	if test "${USE_GUI}" = true ; then
-		if test "${GUI_PLATFORM}" = Mesa ; then
+	if test "${USE_VIEW}" = true ; then
+		if test "${VIEW_PLATFORM}" = Mesa ; then
 			dnl
 			dnl  strip default path
 			dnl
@@ -2937,7 +2974,7 @@ AC_DEFUN(CF_GUI, [
 		fi
 	fi
 
-	if test "${USE_GUI}" = true ; then
+	if test "${USE_VIEW}" = true ; then
 		if test "${QT_LIBPATH}" != "/usr/lib" ; then
 			QTQGL_LIBOPTS="-L${QT_LIBPATH} -lqgl -lqt${QT_MT_SUFFIX}"
 			QT_LIBOPTS="-L${QT_LIBPATH} -lqt${QT_MT_SUFFIX}"
@@ -2948,31 +2985,31 @@ AC_DEFUN(CF_GUI, [
 		fi
 	fi
 
-	if test "${USE_GUI}" = true ; then
+	if test "${USE_VIEW}" = true ; then
 		AC_MSG_CHECKING(linking against QT libraries)
 
-		SAVE_LIBS=${LIBS}
-		LIBS="${QTQGL_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${GUI_INCLUDES}"
-		AC_TRY_LINK([#include <qgl.h>], [QGLWidget widget;], QT_LINKING_OK=1)
-		LIBS=${SAVE_LIBS}
-
-		if test "${QT_LINKING_OK+set}" != set ; then
 			SAVE_LIBS=${LIBS}
-			LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${GUI_INCLUDES}"
-			AC_TRY_LINK([#include <qgl.h>], [QGLWidget wid;], QT_LINKING_OK=1)
+			LIBS="${QTQGL_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
+			AC_TRY_LINK([#include <qgl.h>], [QGLWidget widget;], QT_LINKING_OK=1)
 			LIBS=${SAVE_LIBS}
-		else
-			dnl link against qgl as well (for qt <= 2.0)
-			QT_LIBOPTS="${QTQGL_LIBOPTS}"
-		fi
+	
+			if test "${QT_LINKING_OK+set}" != set ; then
+				SAVE_LIBS=${LIBS}
+				LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
+				AC_TRY_LINK([#include <qgl.h>], [QGLWidget wid;], QT_LINKING_OK=1)
+				LIBS=${SAVE_LIBS}
+			else
+				dnl link against qgl as well (for qt <= 2.0)
+				QT_LIBOPTS="${QTQGL_LIBOPTS}"
+			fi
 
-		if test "${QT_LINKING_OK+set}" != set ; then
-			SAVE_LIBS=${LIBS}
-			X11_LIBOPTS="-lXrender -lfreetype ${X11_LIBOPTS}"
-			LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${GUI_INCLUDES}"
-			AC_TRY_LINK([#include <qgl.h>], [QGLWidget wid;], QT_LINKING_OK=1)
-			LIBS=${SAVE_LIBS}
-		fi
+			if test "${QT_LINKING_OK+set}" != set ; then
+				SAVE_LIBS=${LIBS}
+				X11_LIBOPTS="-lXrender -lfreetype ${X11_LIBOPTS}"
+				LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
+				AC_TRY_LINK([#include <qgl.h>], [QGLWidget wid;], QT_LINKING_OK=1)
+				LIBS=${SAVE_LIBS}
+			fi
 
 		if test "${QT_LINKING_OK+set}" != set ; then
 			AC_MSG_RESULT(no)
@@ -2990,9 +3027,15 @@ AC_DEFUN(CF_GUI, [
 			AC_MSG_CHECKING(QT library version)
 			SAVE_LIBS=${LIBS}
 			LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
-			LD_LIBRARY_PATH="${QT_LIBPATH}:${X11_LIBPATH}:${OPENGL_LIBPATH}:${LD_LIBRARY_PATH}"
-			export LD_LIBRARY_PATH
-			echo "LD_LIBRARY_PATH = ${LD_LIBRARY_PATH}" 1>&5
+			if test "${OS}" = "Darwin" ; then
+				DYLD_LIBRARY_PATH="${QT_LIBPATH}:${X11_LIBPATH}:${OPENGL_LIBPATH}:${DYLD_LIBRARY_PATH}"
+				export DYLD_LIBRARY_PATH
+				echo "DYLD_LIBRARY_PATH = ${DYLD_LIBRARY_PATH}" 1>&5
+			else
+				LD_LIBRARY_PATH="${QT_LIBPATH}:${X11_LIBPATH}:${OPENGL_LIBPATH}:${LD_LIBRARY_PATH}"
+				export LD_LIBRARY_PATH
+				echo "LD_LIBRARY_PATH = ${LD_LIBRARY_PATH}" 1>&5
+			fi
 			AC_TRY_RUN(
 				[
 					#include <stdio.h> 
@@ -3052,7 +3095,7 @@ AC_DEFUN(CF_GUI, [
 	dnl	try to find the MOC (QT meta object compiler)
 	dnl It is usually installed in ${QTDIR}/bin/moc
 	dnl
-	if test "${USE_GUI}" = true ; then
+	if test "${USE_VIEW}" = true ; then
 		if test "${MOC}" = moc ; then
 			if test "${QTDIR}" != "" ; then
 				MOC=${QTDIR}/bin/moc
@@ -3066,7 +3109,7 @@ AC_DEFUN(CF_GUI, [
 		if test "${MOC}" = moc ; then
 			AC_MSG_RESULT()
 			AC_MSG_RESULT([Could not find the QT Meta Object Compiler (moc)!])
-			AC_MSG_RESULT([You might run into trouble if you want to compile MolGUI.])
+			AC_MSG_RESULT([You might run into trouble if you want to compile MolVIEW.])
 			AC_MSG_RESULT([Please include the correct path to moc into your])
 			AC_MSG_RESULT([PATH environment variable or specify the path to moc])
 			AC_MSG_RESULT([using the option --with-moc=PATH to rerun configure.])
@@ -3106,7 +3149,7 @@ AC_DEFUN(CF_GUI, [
 	dnl	try to find the UIC (QT user interface compiler)
 	dnl It is usually installed in ${QTDIR}/bin/uic
 	dnl
-	if test "${USE_GUI}" = true ; then
+	if test "${USE_VIEW}" = true ; then
 		if test "${UIC}" = uic ; then
 			if test "${QTDIR}" != "" ; then
 				UIC=${QTDIR}/bin/uic
@@ -3120,7 +3163,7 @@ AC_DEFUN(CF_GUI, [
 		if test "${UIC}" = uic ; then
 			AC_MSG_RESULT()
 			AC_MSG_RESULT([Could not find the QT User Interface Compiler (uic)!])
-			AC_MSG_RESULT([You might run into trouble if you want to compile MolGUI.])
+			AC_MSG_RESULT([You might run into trouble if you want to compile MolVIEW.])
 			AC_MSG_RESULT([Please include the correct path to uic into your])
 			AC_MSG_RESULT([PATH environment variable or specify the path to uic])
 			AC_MSG_RESULT([using the option --with-uic=PATH to rerun configure.])
@@ -3158,804 +3201,14 @@ AC_DEFUN(CF_GUI, [
 	fi
     
 
-	if test "${USE_GUI}" = "true" ; then
-		LIBGUI="libGUI.a"
-		GUI="GUI"
+	if test "${USE_VIEW}" = "true" ; then
+		AC_DEFINE(BALL_HAS_VIEW,)
+		LIBVIEW="libVIEW.a"
+		VIEW="VIEW"
 	else
-		GUI=
+		VIEW=
 	fi
 ])
-
-
-dnl
-dnl		QT support
-dnl
-AC_DEFUN(CF_GUI_OLD, [
-	dnl
-	dnl    search for X-libs and includes and OPENMSView (OpenGL/MESA) stuff
-	dnl 
-	if test "${ENABLE_GUI}" = true ; then
-		AC_PATH_X
-		X11_INCPATH=${x_includes}
-		X11_LIBPATH=${x_libraries}
-
-		if test "${no_x}" = "yes" ; then
-			ENABLE_GUI=false
-		fi
-
-		if test "${ENABLE_GUI}" = true ; then
-			if test "${X11_LIBPATH}" = "/usr/lib" -o "${X11_LIBPATH}" = "" ; then
-				X11_LIBPATH=""
-				X11_LIBPATHOPT=""
-			else
-				X11_LIBPATHOPT="-L${X11_LIBPATH}"
-			fi
-		fi
-
-		if test "${ENABLE_GUI}" = true ; then
-			if test "${GUI_PLATFORM}" = Mesa ; then
-				AC_MSG_CHECKING(for Mesa includes)
-				CF_FIND_HEADER(MESA_INCLUDES,GL/gl.h, ${OPENGL_INCPATH} ${X11_INCPATH})
-				if test "${MESA_INCLUDES}" = "" ; then
-					AC_MSG_RESULT((not found!))
-					AC_MSG_RESULT()
-					AC_MSG_RESULT(No Mesa headers found! Please specify the path to the directory)
-					AC_MSG_RESULT(containing the Mesa headers using --with-opengl-incl=DIR.)
-					AC_MSG_RESULT(Mesa can be obtained from www.mesa3d.org.)
-					CF_ERROR
-				else
-					AC_MSG_RESULT(${MESA_INCLUDES})
-				fi
-
-				if test "${ENABLE_GUI}" = true ; then
-					AC_MSG_CHECKING(for Mesa library)
-					CF_FIND_LIB(MESA_LIBS,libMesaGL, ${OPENGL_LIBPATH} ${X11_LIBPATH})
-					if test "${MESA_LIBS}" = "" ; then
-						CF_FIND_LIB(MESA_LIBS,libGL, ${OPENGL_LIBPATH} ${X11_LIBPATH})
-					fi
-					if test "${MESA_LIBS}" = "" ; then
-						AC_MSG_RESULT((not found!))
-						AC_MSG_RESULT()
-						AC_MSG_RESULT(No Mesa library libMesaGL or libGL found! Please specify the path)
-						AC_MSG_RESULT(to the directory containing the library using the --with-opengl-libs=DIR.)
-						AC_MSG_RESULT(Mesa can be obtained from www.mesa3d.org.)
-						AC_MSG_RESULT(Aborted.)
-					else
-						AC_MSG_RESULT((${MESA_LIBS}))
-					fi
-				fi
-				
-				dnl prevent the use of -L/usr/lib - this may lead to problems with different
-				dnl binary formats (e.g. SGI O32/N32 format)
-				if test "${MESA_INCLUDES}" != /usr/include -a "${MESA_INCLUDES}" != "" ; then
-					GUI_INCLUDES="${GUI_INCLUDES} -I${MESA_INCLUDES}"
-				fi
-			fi
-
-			if test ${GUI_PLATFORM} = OpenGL ; then
-				AC_MSG_CHECKING(for OpenGL includes)
-				CF_FIND_HEADER(OPENGL_INCPATH,GL/gl.h)
-				if test "${OPENGL_INCPATH}" = "" ; then
-					AC_MSG_RESULT((not found!))
-					AC_MSG_RESULT()
-					AC_MSG_RESULT(no OpenGL headers found! Please use the option --with-opengl-incl=DIR)
-					AC_MSG_RESULT(of configure to specify the correct path to these headers.)
-					CF_ERROR
-				else
-					AC_MSG_RESULT((${OPENGL_INCPATH}))
-				fi
-
-				AC_MSG_CHECKING(for OpenGL library)
-				CF_FIND_LIB(OPENGL_LIBPATH,libGL)
-				if test "${OPENGL_LIBPATH}" = "" ; then
-					AC_MSG_RESULT((not found!))
-					AC_MSG_RESULT()
-					AC_MSG_RESULT(no OpenGL lib found! Please use the option --with-opengl-libs=DIR)
-					AC_MSG_RESULT(of configure to specify the correct path to these libraries.)
-					CF_ERROR
-				else
-					AC_MSG_RESULT((${OPENGL_LIBPATH}))
-				fi
-				
-				if test "${OPENGL_INCPATH}" != /usr/include && test "${OPENGL_INCPATH}" != "" ; then
-					GUI_INCLUDES="${GUI_INCLUDES} -I${OPENGL_INCPATH}"
-				fi
-			fi
-
-			if test "${ENABLE_GUI}" = true ; then
-				AC_MSG_CHECKING(for QT headers)
-				if test "${QTDIR}" != "" ; then
-					CF_FIND_HEADER(QT_INCPATH,qgl.h,${QTDIR}/include ${OPENMS_PATH}/contrib/qt/include)
-				else
-					CF_FIND_HEADER(QT_INCPATH,qgl.h,${OPENMS_PATH}/contrib/qt/include)
-				fi
-
-				if test "${QT_INCPATH}" = "" ; then
-					AC_MSG_RESULT((not found!))
-					AC_MSG_RESULT()
-					AC_MSG_RESULT(No QT header files found! Please specify the path to the QT headers)
-					AC_MSG_RESULT(by passing the option --with-qt-incl=DIR to configure.)
-					AC_MSG_RESULT(You may also set the environment variable QTDIR to the correct)
-					AC_MSG_RESULT(path - configure will recognize this, too.)
-					AC_MSG_RESULT(The QT package can be found under the following URL:)
-					AC_MSG_RESULT(  http://www.troll.no/qt)
-					CF_ERROR
-				else
-					AC_MSG_RESULT((${QT_INCPATH}))	
-				fi
-
-				AC_MSG_CHECKING(for libqt${QT_MT_SUFFIX})
-				if test "${QTDIR}" != "" ; then
-					if test "${QT_MT_SUFFIX}" = "-mt" ; then
-						if test -a "${QTDIR}/lib/libqt-mt.so" ; then
-							QT_LIBPATH="${QTDIR}/lib"
-						elif test -a "${QTDIR}/lib/libqt.so" ; then
-							QT_LIBPATH="${QTDIR}/lib"
-							QT_MT_SUFFIX=""
-						fi
-						if test "${QT_LIBPATH}" = "" ; then
-							CF_FIND_LIB(QT_LIBPATH, libqt${QT_MT_SUFFIX}, ${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${OPENMS_PATH}/contrib/qt/include)
-						fi
-					else	
-						if test -a "${QTDIR}/lib/libqt.so" ; then
-							QT_LIBPATH="${QTDIR}/lib"
-						elif test -a "${QTDIR}/lib/libqt-mt.so" ; then
-							QT_LIBPATH="${QTDIR}/lib"
-							QT_MT_SUFFIX="-mt"
-						fi
-						if test "${QT_LIBPATH}" = "" ; then
-							CF_FIND_LIB(QT_LIBPATH, libqt${QT_MT_SUFFIX}, ${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${OPENMS_PATH}/contrib/qt/include)
-						fi
-					fi
-				else
-					CF_FIND_LIB(QT_LIBPATH, libqt${QT_MT_SUFFIX}, ${OPENMS_PATH}/contrib/qt/lib ${OPENMS_PATH}/contrib/qt/lib/${BINFMT})
-				fi
-
-				if test "${QT_LIBPATH}" = "" ; then
-					AC_MSG_RESULT((not found!))
-					AC_MSG_RESULT()
-					AC_MSG_RESULT([The QT library could not be found. Please specify the path to libqt])
-					AC_MSG_RESULT([by passing the option --with-qt-libs=DIR to configure.])
-					AC_MSG_RESULT([You may also set the environment variable QTDIR to the correct])
-					AC_MSG_RESULT([path - configure will recognize this, too.])
-					AC_MSG_RESULT([If the QT library was built with thread support enabled (libqt-mt])
-					AC_MSG_RESULT([instead of libqt), please specify the option --with-threadsafe-qt.])
-					AC_MSG_RESULT([The QT package can be found under the following URL:])
-					AC_MSG_RESULT(  http://www.troll.no/qt)
-					AC_MSG_RESULT()
-					CF_ERROR
-				else
-					AC_MSG_RESULT((${QT_LIBPATH}))	
-				fi
-
-				
-				dnl
-				dnl extract the QT version number and version number string from include/qglobal.h
-				dnl
-				QT_VERSION=`${GREP} "#define QT_VERSION[^_]" ${QT_INCPATH}/qglobal.h | ${TR} '\011' ' ' | ${TR} -s ' ' | ${CUT} -d\  -f3`
-				QT_VERSION_STR=`${GREP} "#define QT_VERSION_STR" ${QT_INCPATH}/qglobal.h | ${TR} '\011' ' ' | ${TR} -s ' ' | ${CUT} -d\  -f3`
-				AC_MSG_CHECKING(for QT version number in qglobal.h)
-				if test "${QT_VERSION}" = "" ; then
-					AC_MSG_RESULT([<unknown>])
-					AC_MSG_RESULT()
-					AC_MSG_RESULT([  Could not determine version number of QT library -- please])
-					AC_MSG_RESULT([  check config.log for details.])
-					AC_MSG_RESULT([  You might have a problem with your LD_LIBRARY_PATH.])
-					AC_MSG_RESULT([  Please check the settings of QTDIR as well or specify])
-					AC_MSG_RESULT([  the path to the library/headers with])
-					AC_MSG_RESULT([    --with-qt-libs=<DIR> / --with-qt-incl=<DIR>])
-					AC_MSG_RESULT()
-					CF_ERROR
-				else
-					AC_MSG_RESULT([${QT_VERSION} (${QT_VERSION_STR})])
-				fi			
-		
-				dnl
-				dnl  QT libraries before release 2.0 contained the OGL support in a separate
-				dnl   librarie: libqgl.a, so we hav to look for that one as well....
-				dnl
-				if test `echo ${QT_VERSION} | ${CUT} -c1-2` != "0x" ; then
-					if test "${QT_VERSION}" -lt 200 ; then
-						QGL_LIBPATH=${QT_LIBPATH}
-						AC_MSG_CHECKING(for libqgl)
-						if test "${QTDIR}" != "" ; then
-							CF_FIND_LIB(QGL_LIBPATH,libqgl,${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${OPENMS_PATH}/contrib/qt/include)
-						else
-							CF_FIND_LIB(QGL_LIBPATH,libqgl,${OPENMS_PATH}/contrib/qt/lib ${OPENMS_PATH}/contrib/qt/lib/${BINFMT})
-						fi
-
-						if test "${QGL_LIBPATH}" = "" ; then
-							AC_MSG_RESULT((not found!))
-							AC_MSG_RESULT()
-							AC_MSG_RESULT([The QT Opengl library libqgl.a could not be found. Please specify])
-							AC_MSG_RESULT([the path to libqt/libqgl by passing the option --with-qt-libs=DIR])
-							AC_MSG_RESULT([to configure.])
-							AC_MSG_RESULT([You may also set the environment variable QTDIR to the correct])
-							AC_MSG_RESULT([path - configure will recognize this, too.])
-							AC_MSG_RESULT([Perhaps you simple forgot to compile the OpenGl extsions, too?])
-							AC_MSG_RESULT([You find these extensions in ${QTDIR}/extensions/opengl])
-							AC_MSG_RESULT()
-							AC_MSG_RESULT([The complete QT package can be found under the following URL:])
-							AC_MSG_RESULT([  http://www.troll.no/qt])
-							AC_MSG_RESULT()
-							CF_ERROR
-						else
-							AC_MSG_RESULT((${QT_LIBPATH}))	
-						fi
-						if test "${QGL_PATH}" != "${QT_PATH}" ; then
-							QT_PATH=${QGL_PATH}
-							AC_MSG_RESULT(using ${QT_PATH} to look for libqt.so and libqgl.s)
-						fi
-					fi
-				fi
-
-				if test "${QT_INCPATH}" != /usr/include && test "${QT_INCPATH}" != "" ; then
-					GUI_INCLUDES="${GUI_INCLUDES} -I${QT_INCPATH}"
-				fi	
-			fi
-		fi
-	fi
-
-
-	dnl
-	dnl   verify libraries needed for GUI
-	dnl   (X, QT, Mesa/OpenGL)
-	dnl
-
-	if test "${ENABLE_GUI}" = true ; then		
-		dnl  
-		dnl
-		dnl  identify the X11 libraries needed to link agains
-		dnl
-		dnl
-		
-		AC_MSG_CHECKING(linking against X11 libraries)
-		dnl 
-		dnl   if the user specified X libraries, try these first
-		dnl
-		if test "${X11_LIBS}" != "" ; then
-			SAVE_LIBS=${LIBS}
-			LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
-			AC_TRY_LINK([],[],X_LINKING_OK=1)
-			LIBS=${SAVE_LIBS}
-		fi
-
-		dnl 		
-		dnl  now try the default guess: Xmu, Xext, Xt, and X11 
-		dnl
-		if test "${X_LINKING_OK+set}" != set ; then
-			X11_LIBS="-lXmu -lXext -lXt -lX11 -lm"
-			SAVE_LIBS=${LIBS}
-			LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
-			AC_TRY_LINK([],[],X_LINKING_OK=1)
-			LIBS=${SAVE_LIBS}
-		fi
-		
-		dnl 		
-		dnl  second guess: add SM and ICE
-		dnl
-		if test "${X_LINKING_OK+set}" != set ; then
-			X11_LIBS="-lXmu -lXext -lXt -lX11 -lSM -lICE -lm"
-			SAVE_LIBS=${LIBS}
-			LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
-			AC_TRY_LINK([],[],X_LINKING_OK=1)
-			LIBS=${SAVE_LIBS}
-		fi
-		
-		dnl 		
-		dnl  now try the default guess: Xmu, Xext, Xt, and X11 
-		dnl
-		if test "${X_LINKING_OK+set}" != set ; then
-			X11_LIBS="-lXmu -lXt -lX11 -lm"
-			SAVE_LIBS=${LIBS}
-			LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
-			AC_TRY_LINK([],[],X_LINKING_OK=1)
-			LIBS=${SAVE_LIBS}
-		fi
-		
-		dnl 		
-		dnl  second guess: add SM and ICE
-		dnl
-		if test "${X_LINKING_OK+set}" != set ; then
-			X11_LIBS="-lXmu -lXt -lX11 -lSM -lICE -lm"
-			SAVE_LIBS=${LIBS}
-			LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
-			AC_TRY_LINK([],[],X_LINKING_OK=1)
-			LIBS=${SAVE_LIBS}
-		fi
-		
-		dnl 
-		dnl  if we could not link - complain about it!
-		dnl
-		if test "${X_LINKING_OK+set}" = set ; then
-			AC_MSG_RESULT(yes)	
-		else
-			AC_MSG_RESULT(no)
-			AC_MSG_RESULT()
-			AC_MSG_RESULT(Don't know how to link with X11 libraries.)
-			AC_MSG_RESULT(Please specify the correct libraries (e.g. -lXmu -lXt -lX11) in the)
-			AC_MSG_RESULT(environment variable X11_LIBS)
-			AC_MSG_RESULT(If you are running Solaris 2.x you might also try the option --without-libxnet)
-			AC_MSG_RESULT(if your X libraries were linked against libsocket and libnsl instead of libxnet.)
-			AC_MSG_RESULT(Built of visualization component GUI disabled.)
-			AC_MSG_RESULT()
-			ENABLE_GUI=false
-		fi
-
-		dnl		
-		dnl  define some variables: X11_LIBOPTS and GUI_LIBS
-		dnl
-		X11_LIBOPTS="${X11_LIBPATHOPT} ${X11_LIBS}"
-	fi
-
-	if test "${ENABLE_GUI}" = true ; then
-		if test "${GUI_PLATFORM}" = OpenGL ; then
-			if test "${OPENGL_LIBPATH}" != "/usr/lib" -a "${OPENGL_LIBPATH}" != "" ; then
-				OPENGL_LIBOPTS="-L${OPENGL_LIBPATH} -lGLU -lGL"
-			else
-				OPENGL_LIBPATH=""
-				OPENGL_LIBOPTS="-lGLU -lGL"
-			fi
-
-			dnl make sure we have OpenGL libs and no Mesa libs!
-			dnl
-			SAVE_LIBS=${LIBS}
-			SAVE_LDFLAGS=${LDFLAGS}
-			LIBS="${LIBS} ${X11_LIBOPTS}"
-			if test "${OPENGL_LIBPATH}" != "" ; then
-				LDFLAGS="${LDFLAGS} -L${OPENGL_LIBPATH}"
-			fi
-			AC_CHECK_LIB(GL, XMesaGarbageCollect, GUI_PLATFORM=Mesa)
-			LIBS=${SAVE_LIBS}
-			LDFLAGS=${SAVE_LDFLAGS}
-			if test "${GUI_PLATFORM}" != Mesa ; then
-				AC_MSG_CHECKING(linking against OpenGL libraries)
-				SAVE_LIBS=${LIBS}
-				LIBS="${OPENGL_LIBOPTS} ${LIBS}"
-				AC_TRY_LINK([],[],OPENGL_LINKING_OK=1)
-				LIBS=${SAVE_LIBS}
-				if test "${OPENGL_LINKING_OK+set}" != set ; then
-					AC_MSG_RESULT(no)
-					AC_MSG_RESULT()
-					AC_MSG_RESULT(Cannot link against libGL/GLU - disabling visualization support!)
-					AC_MSG_RESULT(Please specify the path to OpenGL libraries using --with-opengl-libs=DIR)
-					AC_MSG_RESULT()
-					CF_ERROR
-				else
-					AC_MSG_RESULT(yes)
-				fi
-			fi
-		fi
-	fi
-
-	if test "${ENABLE_GUI}" = true ; then
-		if test "${GUI_PLATFORM}" = Mesa ; then
-			dnl
-			dnl  strip default path
-			dnl
-		
-			if test "${MESA_LIBS}" = "" ; then 
-				MESA_LIBS=${OPENGL_LIBPATH}
-			fi
-			if test "${MESA_LIBS}" != "/usr/lib" -a "${MESA_LIBS}" != "" ; then
-				OPENGL_LIBPATH="${MESA_LIBS}"
-				OPENGL_LIBPATHOPT="-L${MESA_LIBS}"			
-			else
-				OPENGL_LIBPATH=""
-				OPENGL_LIBPATHOPT=""
-			fi
-			
-			dnl
-			dnl  out first guess for the names of the Mesa libraries
-			dnl
-			OPENGL_LIBS="-lGLU -lGL"
-
-			dnl
-			dnl  try to link against mesa libraries
-			dnl
-			AC_MSG_CHECKING(linking against Mesa libs)
-			SAVE_LIBS=${LIBS}
-			LIBS="${OPENGL_LIBPATHOPT} ${OPENGL_LIBS} ${X11_LIBOPTS} ${LIBS} "
-			AC_TRY_LINK([],[], HAVE_MESALIBS=1)
-			LIBS=${SAVE_LIBS}
-
-			dnl
-			dnl  could not link against libGLU/libGL,
-			dnl  so try libMesaGLU/libMesaGL
-			dnl
-			if test "${HAVE_MESALIBS+set}" != set ; then
-				OPENGL_LIBS="-lMesaGLU -lMesaGL"
-				SAVE_LIBS=${LIBS}
-				LIBS="${OPENGL_LIBPATHOPT} ${OPENGL_LIBS} ${X11_LIBOPTS} ${LIBS} "
-				AC_TRY_LINK([],[], HAVE_MESALIBS=1)
-				LIBS=${SAVE_LIBS}
-			fi
-
-			if test "${HAVE_MESALIBS+set}" != set ; then
-				AC_MSG_RESULT(no)
-				AC_MSG_RESULT()
-				AC_MSG_RESULT(Cannot link against libMesaGL/GLU - disabling visualization support!)
-				AC_MSG_RESULT(Please specify the path to libMesaGL using --with-opengl-libs=DIR)
-				AC_MSG_RESULT()
-				CF_ERROR
-			else
-				AC_MSG_RESULT(yes)
-				OPENGL_LIBOPTS="${OPENGL_LIBPATHOPT} ${OPENGL_LIBS}"
-			fi
-		fi
-	fi
-
-	if test "${ENABLE_GUI}" = true ; then
-		if test "${QT_LIBPATH}" != "/usr/lib" ; then
-			QTQGL_LIBOPTS="-L${QT_LIBPATH} -lqgl -lqt${QT_MT_SUFFIX}"
-			QT_LIBOPTS="-L${QT_LIBPATH} -lqt${QT_MT_SUFFIX}"
-		else 
-			QT_LIBPATH=""
-			QTQGL_LIBOPTS="-lqgl -lqt${QT_MT_SUFFIX}"
-			QT_LIBOPTS="-lqt${QT_MT_SUFFIX}"
-		fi
-	fi
-
-
-	if test "${ENABLE_GUI}" = true ; then
-		AC_MSG_CHECKING(linking against QT libraries)
-
-		SAVE_LIBS=${LIBS}
-		LIBS="${QTQGL_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${GUI_INCLUDES}"
-		AC_TRY_LINK([#include <qgl.h>], [QGLWidget widget;], QT_LINKING_OK=1)
-		LIBS=${SAVE_LIBS}
-
-		if test "${QT_LINKING_OK+set}" != set ; then
-			SAVE_LIBS=${LIBS}
-			LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${GUI_INCLUDES}"
-			AC_TRY_LINK([#include <qgl.h>], [QGLWidget wid;], QT_LINKING_OK=1)
-			LIBS=${SAVE_LIBS}
-		else
-			dnl link against qgl as well (for qt <= 2.0)
-			QT_LIBOPTS="${QTQGL_LIBOPTS}"
-		fi
-
-		if test "${QT_LINKING_OK+set}" != set ; then
-			SAVE_LIBS=${LIBS}
-			X11_LIBOPTS="-lXrender -lfreetype ${X11_LIBOPTS}"
-			LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${GUI_INCLUDES}"
-			AC_TRY_LINK([#include <qgl.h>], [QGLWidget wid;], QT_LINKING_OK=1)
-			LIBS=${SAVE_LIBS}
-		fi
-
-		if test "${QT_LINKING_OK+set}" != set ; then
-			AC_MSG_RESULT(no)
-			AC_MSG_RESULT()
-			AC_MSG_RESULT([Cannot link against libqgl/qt!])
-			AC_MSG_RESULT([If QT is installed, please specify the path to the library])
-			AC_MSG_RESULT([using the option --with-qt-libs=DIR])
-			AC_MSG_RESULT()
-			CF_ERROR
-		else
-			AC_MSG_RESULT(yes)
-			
-			dnl  
-			dnl  identify the version of the library
-			dnl
-			AC_MSG_CHECKING(QT library version)
-			SAVE_LIBS=${LIBS}
-			LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X12_LIBOPTS} ${LIBS}"
-			LD_LIBRARY_PATH="${QT_LIBPATH}:${X11_LIBPATH}:${OPENGL_LIBPATH}:${LD_LIBRARY_PATH}"
-			export LD_LIBRARY_PATH
-			echo "LD_LIBRARY_PATH = ${LD_LIBRARY_PATH}" 1>&5
-			AC_TRY_RUN(
-				[
-					#include <stdio.h> 
-					const char* qVersion();
-					int main()
-					{
-						FILE* f = fopen("qt.version", "w");
-						fprintf(f, "%s\n", qVersion());
-						fclose(f);
-						return 0;
-					}
-				], 
-				QT_VERSION_OK=1,
-				DUMMY=0,
-				DUMMY=0
-			)
-			LIBS=${SAVE_LIBS}
-			
-			dnl
-			dnl	if the program compiled and ran successfully,
-			dnl extract the QT version number
-			dnl
-			if test "${QT_VERSION_OK+set}" != set; then
-				AC_MSG_RESULT(no)
-				AC_MSG_RESULT()
-				AC_MSG_RESULT(The execution of a program linked against the QT)
-				AC_MSG_RESULT(library failed. Please have a look at config.log)
-				AC_MSG_RESULT((the last few lines) to find out what happened.)
-				AC_MSG_RESULT(Perhaps you specified the wrong library or the)
-				AC_MSG_RESULT(X11 libraries are in conflict with any other library.)
-				AC_MSG_RESULT(You might also want to check your LD_LIBRARY_PATH.)
-				AC_MSG_RESULT()
-				CF_ERROR
-			else
-				QT_VERSION_STRING=`cat qt.version`
-				AC_MSG_RESULT(${QT_VERSION_STRING})
-
-				dnl
-				dnl  test whether this version is the right one
-				dnl  (2.x.y and at least 2.0.2
-				dnl
-				${RM} qt.version 2>/dev/null
-				QT_MAJOR=`echo ${QT_VERSION_STRING} | ${CUT} -d. -f1`
-				if test "${QT_MAJOR}" -lt 3 ; then
-					AC_MSG_RESULT()
-					AC_MSG_RESULT(QT version 3.x is required.)
-					AC_MSG_RESULT(Please install version QT Version 3 (at least 3.0.6))
-					AC_MSG_RESULT(which can be obtained from)
-					AC_MSG_RESULT()
-					AC_MSG_RESULT(  www.troll.no/qt)
-					AC_MSG_RESULT()
-					CF_ERROR
-				fi
-			fi
-		fi
-	fi
-
-	dnl
-	dnl	try to find the MOC (QT meta object compiler)
-	dnl It is usually installed in ${QTDIR}/bin/moc
-	dnl
-	if test "${ENABLE_GUI}" = true ; then
-		if test "${MOC}" = moc ; then
-			if test "${QTDIR}" != "" ; then
-				MOC=${QTDIR}/bin/moc
-			fi
-		fi
-
-		dnl
-		dnl  try to find that damned moc
-		dnl
-		AC_PATH_PROG(MOC,moc,moc)
-		if test "${MOC}" = moc ; then
-			AC_MSG_RESULT()
-			AC_MSG_RESULT([Could not find the QT Meta Object Compiler (moc)!])
-			AC_MSG_RESULT([You might run into trouble if you want to compile MolVIEW.])
-			AC_MSG_RESULT([Please include the correct path to moc into your])
-			AC_MSG_RESULT([PATH environment variable or specify the path to moc])
-			AC_MSG_RESULT([using the option --with-moc=PATH to rerun configure.])
-			AC_MSG_RESULT()
-		fi
-	fi
-
-	dnl
-	dnl	try to find the UIC (QT user interface compiler)
-	dnl It is usually installed in ${QTDIR}/bin/uic
-	dnl
-	if test "${ENABLE_GUI}" = true ; then
-		if test "${UIC}" = uic ; then
-			if test "${QTDIR}" != "" ; then
-				UIC=${QTDIR}/bin/uic
-			fi
-		fi
-
-		dnl
-		dnl  try to find that damned uic
-		dnl
-		AC_PATH_PROG(UIC,uic,uic)
-		if test "${UIC}" = uic ; then
-			AC_MSG_RESULT()
-			AC_MSG_RESULT([Could not find the QT User Interface Compiler (uic)!])
-			AC_MSG_RESULT([You might run into trouble if you want to compile MolVIEW.])
-			AC_MSG_RESULT([Please include the correct path to uic into your])
-			AC_MSG_RESULT([PATH environment variable or specify the path to uic])
-			AC_MSG_RESULT([using the option --with-uic=PATH to rerun configure.])
-			AC_MSG_RESULT()
-		fi
-	fi
-
-	if test "${ENABLE_GUI}" = "true" ; then
-		LIBGUI="libOpenMSG.a"
-		GUI="VIEW MOLVIEW"
-		AC_SUBST(MOC)
-		GUI_LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X12_LIBOPTS} ${LIBS}"
-		AC_SUBST(UIC)
-		AC_SUBST(ENABLE_GUI)
-		AC_SUBST(GUI_INCLUDES)
-		AC_SUBST(GUI_LIBS)
-	else
-		GUI=
-	fi
-])
-
-
-
-
-
-
-
-dnl
-dnl		CGAL support
-dnl
-AC_DEFUN(CF_CGAL, [
-	dnl
-  dnl  variable substitutions required for CGAL support
-  dnl
-  AC_SUBST(CGAL_SUPPORT)
-  AC_SUBST(CGAL_INCLUDES)
-  AC_SUBST(CGAL_LIBS)
-
-	dnl
-	dnl    search for CGAL libs and includes 
-	dnl 
-  if test "${ENABLE_CGAL}" = true ; then
-		AC_DEFINE(OPENMS_HAS_CGAL)
-  	AC_MSG_CHECKING(for CGAL headers)
-    if test "${CGALDIR}" != "" ; then
-    	CF_FIND_HEADER(CGAL_INCPATH,CGAL/Cartesian.h,${CGALDIR}/include)
-    else
-	    CF_FIND_HEADER(CGAL_INCPATH,CGAL/Cartesian.h,${CGAL_LIB_DIR}/../..)
-	  fi	
-
-  	if test "${CGAL_INCPATH}" = "" ; then
-      AC_MSG_RESULT((not found!))
-  	  AC_MSG_RESULT()
-	    AC_MSG_RESULT(No CGAL header files found! Please specify the path to the CGAL headers)
-	    AC_MSG_RESULT(by passing the option --with-cgal-incl=DIR to configure.)
-  	  AC_MSG_RESULT(You may also set the environment variable CGAL to the correct)
-	    AC_MSG_RESULT(path - configure will recognize this, too.)
-  	  CF_ERROR
-  	else
-	   	AC_MSG_RESULT((${CGAL_INCPATH}))	
-  	fi
-
-	  AC_MSG_CHECKING(for libCGAL.a)
-  	if test "${CGAL_LIB_DIR}" != "" ; then
-      if test -a "${CGAL_LIB_DIR}/lib/libCGAL.a" ; then
-		  	CGAL_LIBPATH="${CGAL_LIB_DIR}/lib"
-  		fi
-	  else
-		  CF_FIND_LIB(CGAL_LIBPATH, libCGAL.a, ${CGAL_DIR}/../..)
-  	fi	
-
-  	if test "${CGAL_LIBPATH}" = "" ; then
-      AC_MSG_RESULT((not found!))
-		  AC_MSG_RESULT()
-		  AC_MSG_RESULT([The CGAL library could not be found. Please specify the path to libCGAL])
-		  AC_MSG_RESULT([by passing the option --with-cgal-libs=DIR to configure.])
-		  AC_MSG_RESULT([You may also set the environment variable CGAL_LIB_DIR to the correct])
-		  AC_MSG_RESULT([path - configure will recognize this, too.])
-		  AC_MSG_RESULT()
-		  CF_ERROR
-	  else
-  		AC_MSG_RESULT((${CGAL_LIBPATH}))	
-  	fi
-  fi
-
-])
-
-
-AC_DEFUN(CF_MYSQLPP, [
-	AC_MSG_CHECKING(Checking for MySQL++ support)
-	if test "${MYSQLPP_SUPPORT}" = "false" ; then
-		MYSQLPP_SUPPORT=""
-	fi
-	dnl
-  dnl  variable substitutions required for MYSQL++ support
-  dnl
-  AC_SUBST(MYSQLPP_SUPPORT)
-  AC_SUBST(MYSQLPP_INCLUDES)
-  AC_SUBST(MYSQLPP_LIBS)
-
-	dnl
-	dnl Check for the MYSQL++ headers
-	dnl
-	if test "${MYSQLPP_SUPPORT}" = "true" ; then	
-		AC_MSG_RESULT(enabled)
-
-		AC_DEFINE(OPENMS_HAS_MYSQLPP)
-		AC_DEFINE(OPENMS_HAS_MYSQLPP_H)
-
-		AC_MSG_CHECKING(for MySQL++ header files)
-		if test "${MYSQLPP_INCPATH}" = "" ; then
-			AC_MSG_RESULT([Please specify the path to <mysql++>])
-		  AC_MSG_RESULT([by passing the option --with-mysqlpp-incl=DIR to configure.])
-			CF_ERROR
-		fi
-
-   	CF_FIND_HEADER(MYSQLPP_INCDIR, 'mysql++', ${MYSQLPP_INCPATH})
-		if test "${MYSQLPP_INCDIR}" = "" ; then
-      AC_MSG_RESULT((not found!))
-		  AC_MSG_RESULT()
-		  AC_MSG_RESULT([The libMYSQL++ headers could not be found. Please specify the path to <mysql++>])
-		  AC_MSG_RESULT([by passing the option --with-mysqlpp-incl=DIR to configure.])
-		  AC_MSG_RESULT()
-		  CF_ERROR
-	  else
-  		AC_MSG_RESULT((${MYSQLPP_INCDIR}))	
-  	fi
-	
-		dnl ??? missing: check for mysql++ library
-
-
-	else
-		AC_MSG_RESULT(disabled)
-	fi
-	
-	MYSQLPP_LIBS=`${ITCONFIG_PATH}it-config --libs ${ITCONFIG_FLAGS}` 
-	OPENMS_INCLUDES="${OPENMS_INCLUDES} ${MYSQLPP_INCLUDES}"
-	OPENMS_LIBS="${OPENMS_LIBS} ${MYSQLPP_LIBS}"	
-])
-
-
-dnl
-dnl check for it-config   
-dnl
-AC_DEFUN(CF_ITPP, [
-	dnl
-  dnl  variable substitutions required for IT++ support
-  dnl
-	if test "${ITPP_SUPPORT}" = "false" ; then
-		ITPP_SUPPORT=""
-	fi
-  AC_SUBST(ITPP_SUPPORT)
-  AC_SUBST(ITPP_INCLUDES)
-  AC_SUBST(ITPP_LIBS)
-
-	dnl
-	dnl Check for the IT++ library
-	dnl
-	if test "${ITPP_SUPPORT}" = "true" ; then
-		AC_DEFINE(OPEMS_HAS_ITPP)
-		AC_DEFINE(OPEMS_HAS_ITPP_H)
-		if test "$with_it_config" != "" ; then
-			AC_CHECK_FILE($with_it_config/it-config,[ITCONFIG_PATH=$with_it_config],
-				[ AC_MSG_RESULT((not found!))
-					AC_MSG_RESULT()
-					AC_MSG_RESULT(The file it-config  wasn't found in the directory you specified!)
-					AC_MSG_RESULT(If you do not have IT++ you can obtain it from )
-					AC_MSG_RESULT(  http://itpp.sourceforge.net.)	
-					AC_MSG_RESULT(Please specify the location of the it-config file by )
-					AC_MSG_RESULT(passing the option --with-it-config=DIR to configure if it is)
-					AC_MSG_RESULT(installed in an unusual place.)
-					CF_ERROR
-			])	
-		else
-			AC_CHECK_FILE(${OPENMS_PATH}/it++/bin/it-config,[ITCONFIG_PATH=${OPENMS_PATH}/it++/bin/],
-				[ AC_MSG_RESULT((not found!))
-					AC_MSG_RESULT()
-					AC_MSG_RESULT(The file it-config  wasn't found! If you do not have IT++ you can obtain it from )
-					AC_MSG_RESULT(http://itpp.sourceforge.net.)	
-					AC_MSG_RESULT(You have to name the IT++ source directory ${OPENMS_PATH}/it++.)
-					AC_MSG_RESULT(When you already have IT++ specify the location of the it-config file by )
-					AC_MSG_RESULT(passing the option --with-it-config=DIR to configure.)
-					CF_ERROR	
-			])
-		fi
-	fi
-	dnl 
-	dnl  Check IT++ library version
-	dnl
-	AC_MSG_CHECKING(IT++ library version)
-	ITPP_VERSION=`${ITCONFIG_PATH}it-config --version` 
-	AC_MSG_RESULT(${ITPP_VERSION})
-  
-	dnl
-	dnl  Get compiler flags...
-	dnl
-	if test "${DEBUG}" = true ; then
-		ITCONFIG_FLAGS="--debug"
-	else
-		ITCONFIG_FLAGS=""
-	fi
-	AC_MSG_CHECKING(IT++ include path)
-	ITPP_INCLUDES=`${ITCONFIG_PATH}it-config --flags ${ITCONFIG_FLAGS}| ${CUT} -d\  -f1` 
-	AC_MSG_RESULT(${ITPP_INCLUDES})
-	AC_MSG_CHECKING(IT++ include path)
-	ITPP_LIBS=`${ITCONFIG_PATH}it-config --libs ${ITCONFIG_FLAGS}` 
-	AC_MSG_RESULT(${ITPP_LIBS})
-	OPENMS_INCLUDES="${OPENMS_INCLUDES} ${ITPP_INCLUDES}"
-	OPENMS_LIBS="${OPENMS_LIBS} ${ITPP_LIBS}"
-])
-
 
 
 
@@ -3975,17 +3228,16 @@ AC_DEFUN(CF_PYTHON, [
 
 	if test "${PYTHON_SUPPORT}" = true ; then
 		dnl
-		dnl Python support won't work without GUI!
+		dnl Python support won't work without VIEW!
 		dnl (at least for the moment...)
 		dnl
-		if test "${ENABLE_GUI}" = false ; then
+		if test "${USE_VIEW}" = false ; then
 			AC_MSG_RESULT()
-			AC_MSG_RESULT(OPENMS Python support requires the visualization component)
-			AC_MSG_RESULT(GUI. Please reconfigure without --without-GUI.)
-			AC_MSG_RESULT()
+			AC_MSG_RESULT(BALL Python support requires the visualization component)
+			AC_MSG_RESULT(VIEW. Please reconfigure without --without-VIEW.)
 			CF_ERROR
 		fi
-		AC_DEFINE(OPENMS_PYTHON_SUPPORT)
+		AC_DEFINE(BALL_PYTHON_SUPPORT)
 
 		dnl 
 		dnl Find the python executable (specified via --with-python)
@@ -4085,7 +3337,6 @@ AC_DEFUN(CF_PYTHON, [
 			AC_MSG_RESULT(the path where your Python library resides using --with-python-libs=DIR)
 			AC_MSG_RESULT(or ensure that libpython is installed in the correct directory)
 			AC_MSG_RESULT([(sys.prefix is ]${PYTHON_PREFIX}[)])
-			AC_MSG_RESULT()
 			CF_ERROR
 		fi
 		AC_MSG_RESULT(${PYTHON_LIBS})
@@ -4099,7 +3350,6 @@ AC_DEFUN(CF_PYTHON, [
 				AC_MSG_RESULT(against the Python library using)
 				AC_MSG_RESULT( --with-python-ldopts=OPTIONS)
 				AC_MSG_RESULT([(e.g. --with-python-ldopts="-ltermcap -lm")])
-				AC_MSG_RESULT()
 				CF_ERROR
 			fi
 			PYTHON_LIBS="${PYTHON_LIBS} `${GREP} \^LIBS= ${PYTHON_MAKEFILE} | ${CUT} -d=  -f2-`"
@@ -4119,34 +3369,51 @@ AC_DEFUN(CF_PYTHON, [
 			AC_MSG_RESULT(Please specify the location of SIP using the)
 			AC_MSG_RESULT( --with-sip=PATH)
 			AC_MSG_RESULT(option or make sure it is in your current PATH.)
-			AC_MSG_RESULT()
 			CF_ERROR
 		fi
 
 		dnl
-		dnl libsip.so 
+		dnl	 SIP executable
 		dnl
-		AC_MSG_CHECKING(libsip.so)
-		if test -r "${SIP_LIBPATH}/libsip.so" ; then
-			SIP_LIB=" -L${SIP_LIBPATH} -lsip"
-			AC_MSG_RESULT(${SIP_LIB})
-		else
-			SIP_LIB_LOCATION=`${FIND} "${PYTHON_PREFIX}/lib/python${PYTHON_VERSION}/site-packages" -name libsip.so 2>/dev/null`
-			if test "${SIP_LIB_LOCATION}" != "" ; then
-				SIP_LIB=" -L`AS_DIRNAME("${SIP_LIB_LOCATION}")` -lsip"
-				AC_MSG_RESULT(${SIP_LIB})			
-			else
-				AC_MSG_RESULT(not found in ${SIP_LIBPATH})
-				AC_MSG_RESULT()
-				AC_MSG_RESULT(Please specify the path to the directory that contains)
-				AC_MSG_RESULT(libsip.so using the option --with-sip-lib=DIR.)
-				AC_MSG_RESULT([If you do not have that file, you should obtain SIP])
-				AC_MSG_RESULT(from)
-				AC_MSG_RESULT(  www.thekompany.com/projects/pykde)
-				CF_ERROR
-			fi
+		AC_MSG_CHECKING(whether ${SIP} is executable)
+		if test ! -x "${SIP}" ; then
+			AC_MSG_RESULT()
+			AC_MSG_RESULT(Could not execute ${SIP}!)
+			AC_MSG_RESULT(Please specify the location of SIP using the)
+			AC_MSG_RESULT( --with-sip=PATH)
+			AC_MSG_RESULT(option or make sure it is in your current PATH.)
+			CF_ERROR
 		fi
-		
+		AC_MSG_RESULT(yes)
+
+		dnl
+		dnl		SIP version
+		dnl
+		AC_MSG_CHECKING(sip version)
+		SIP_VERSION=`$SIP -V`
+		AC_MSG_RESULT(${SIP_VERSION})
+		if test "${SIP}" = "" ; then
+			AC_MSG_RESULT()
+			AC_MSG_RESULT(Could not determine version number of ${SIP}!)
+			AC_MSG_RESULT(Please specify the location of SIP using the)
+			AC_MSG_RESULT( --with-sip=PATH)
+			AC_MSG_RESULT(option or make sure it is in your current PATH.)
+			CF_ERROR
+		fi
+		SIP_VERS_NUM=`echo ${SIP_VERSION}| ${CUT} -d\  -f1`
+		SIP_VERS_MAJOR=`echo ${SIP_VERS_NUM} | ${CUT} -d. -f1`
+		SIP_VERS_MINOR=`echo ${SIP_VERS_NUM} | ${CUT} -d. -f2`
+		if test "${SIP_VERS_MAJOR}" -lt 4 ; then
+			AC_MSG_RESULT()
+			AC_MSG_RESULT(SIP release 4.0 or above required.)
+			AC_MSG_RESULT(Your version: ${SIP_VERSION}")
+			AC_MSG_RESULT(Please upgrade or specify the location of the correct SIP using the)
+			AC_MSG_RESULT( --with-sip=PATH)
+			AC_MSG_RESULT()
+			CF_ERROR
+		fi
+	
+
 		dnl
 		dnl	SIP header file (sip.h)
 		dnl
@@ -4233,7 +3500,7 @@ AC_DEFUN([AM_INIT_AUTOMAKE],
 # test to see if srcdir already configured
 if test "`cd $srcdir && pwd`" != "`pwd`" &&
    test -f $srcdir/config.status; then
-  CF_ERROR
+  AC_MSG_ERROR([source directory already configured; run "make distclean" there first])
 fi
 
 # Define the identity of the package.
@@ -5061,7 +4328,7 @@ AC_DEFUN(CF_CHECK_MULTI_BUILD,[
 		dnl (this is usually a problem with a missing "include config.mak" in the makefile.
 		dnl
 		echo "#ifndef BFMT" >> config.h
-		echo "# error OPENMS was configured in MULTI BUILD mode! Please specify -DBMFT!" >> config.h
+		echo "# error BALL was configured in MULTI BUILD mode! Please specify -DBMFT!" >> config.h
 		echo "#endif" >> config.h
 		echo "" >> config.h
 
@@ -5070,22 +4337,22 @@ AC_DEFUN(CF_CHECK_MULTI_BUILD,[
 		while test $i -le $LINES ; do
 			BFMT=`cat ${BINFORMAT_FILE} | ${SED} -n ${i}p`
 			echo "#if ( BFMT == $i )" >> config.h
-			echo "# include <OPENMS/CONFIG/config.h.${BFMT}>" >> config.h
+			echo "# include <BALL/CONFIG/config.h.${BFMT}>" >> config.h
 			echo "#endif" >> config.h
 			echo " " >> config.h
 			i=`expr $i + 1`
 		done
 		${CAT} config/config.h.footer | ${SED} 1,2d >> config.h
-		${MKDIR} ${OPENMS_PATH}/include/OPENMS/CONFIG 2>/dev/null
-		if test -f ${OPENMS_PATH}/include/OPENMS/CONFIG/config.h ; then
-			if test "`${DIFF} ${OPENMS_PATH}/include/OPENMS/CONFIG/config.h config.h`" != "" ; then
-				${RM} ${OPENMS_PATH}/include/OPENMS/CONFIG/config.h
-				${MV} config.h  ${OPENMS_PATH}/include/OPENMS/CONFIG/config.h
+		${MKDIR} ${BALL_PATH}/include/BALL/CONFIG 2>/dev/null
+		if test -f ${BALL_PATH}/include/BALL/CONFIG/config.h ; then
+			if test "`${DIFF} ${BALL_PATH}/include/BALL/CONFIG/config.h config.h`" != "" ; then
+				${RM} ${BALL_PATH}/include/BALL/CONFIG/config.h
+				${MV} config.h  ${BALL_PATH}/include/BALL/CONFIG/config.h
 			else
 				${RM} config.h
 			fi
 		else
-			${MV} config.h  ${OPENMS_PATH}/include/OPENMS/CONFIG/config.h
+			${MV} config.h  ${BALL_PATH}/include/BALL/CONFIG/config.h
 		fi
 
 		dnl   define the string to substitute in common.mak
@@ -5117,8 +4384,8 @@ AC_DEFUN(CF_MOVE_CONFIG_FILES, [
 		${MV} Makefile.tmp ${BINFMT}/Makefile
 		${MV} common.mak.tmp ${BINFMT}/common.mak
 		${MV} config.mak.tmp ${BINFMT}/config.mak
-	  mkdir ${OPENMS_PATH}/include/OpenMS 2>/dev/null
-	  ${MV} -f config.h $OPENMS_PATH/include/OpenMS/config.h.${BINFMT}
+	  mkdir ${BALL_PATH}/include/BALL/CONFIG 2>/dev/null
+	  ${MV} -f config.h $BALL_PATH/include/BALL/CONFIG/config.h.${BINFMT}
 	else
 		${MV} Makefile.tmp Makefile
 		${MV} common.mak.tmp common.mak
@@ -5128,16 +4395,17 @@ AC_DEFUN(CF_MOVE_CONFIG_FILES, [
 		dnl move that damned file only if it differs from the previous
 		dnl version. Otherwise we have to rebuild _everything_ after each configure
 		dnl
-		if test -f $OPENMS_PATH/include/OpenMS/config.h ; then
-			if test "`${DIFF} config.h $OPENMS_PATH/include/OpenMS/config.h`" != "" ; then
-				${MV} -f config.h $OPENMS_PATH/include/OpenMS/config.h
+		if test -f $BALL_PATH/include/BALL/CONFIG/config.h ; then
+			if test "`${DIFF} config.h $BALL_PATH/include/BALL/CONFIG/config.h`" != "" ; then
+				${MV} -f config.h $BALL_PATH/include/BALL/CONFIG/config.h
 			fi
 		else
 			dnl
-			dnl  Move config.h to OpenMS/include
+			dnl  create the directory BALL/include/CONFIG
+			dnl  and move config.h to that directory
 			dnl
-			mkdir ${OPENMS_PATH}/include/OpenMS/CONFIG 2>/dev/null
-			${MV} -f config.h $OPENMS_PATH/include/OpenMS/config.h
+			mkdir ${BALL_PATH}/include/BALL/CONFIG 2>/dev/null
+			${MV} -f config.h $BALL_PATH/include/BALL/CONFIG/config.h
 		fi
 	fi
 ])
@@ -5155,26 +4423,14 @@ AC_DEFUN(CF_CLEAR_DEP_FILES, [
 	fi
 ])
 
-AC_DEFUN(CF_CHECK_LEX_YACC, [
-	dnl
-	dnl   We need Flex and Bison for a couple of parsers hideen in OPENMS (SMILES, Expression, ParsedFct)
-	dnl
-	AC_PROG_LEX
-	AC_PROG_YACC
-	if test "${LEX}" != "flex" -o "${YACC}" = "" ; then
-		OPENMS_HAS_FLEX_YACC=false
-		AC_DEFINE(OPENMS_HAS_FLEX_YACC, false)
-		AC_MSG_RESULT(flex and yacc/bison required!)
-		AC_MSG_RESULT(Please install them from your closest GNU mirror.)
-		AC_MSG_RESULT()
-		CF_ERROR
-	else
-		OPENMS_HAS_FLEX_YACC=true
-		AC_DEFINE(OPENMS_HAS_FLEX_YACC, true)
-		LIBS="${LIBS}"
-	fi
-	AC_SUBST(OPENMS_HAS_FLEX_YACC)
-	AC_SUBST(LEX)
-	AC_SUBST(YACC)
-])
 
+AC_DEFUN(CF_VALGRIND, [
+	dnl	
+	dnl	Check for the valgrind application (a memory leak tester).
+	dnl Valgrind can be used to identify leaks from the test programs
+ 	dnl	(target valgrind in BALL/source/TEST).
+	dnl
+	AC_PATH_PROG(VALGRIND, valgrind, valgrind)
+	AC_SUBST(VALGRIND, $VALGRIND)
+	AC_SUBST(VALGRIND_OPTS, "-v --leak-check=yes --leak-resolution=high")
+])
