@@ -1,4 +1,4 @@
-// $Id: NMRSpectrum.C,v 1.11 2000/09/27 20:47:17 oliver Exp $
+// $Id: NMRSpectrum.C,v 1.12 2000/09/30 16:43:25 oliver Exp $
 
 #include<BALL/NMR/NMRSpectrum.h>
 #include<BALL/NMR/randomCoilShiftProcessor.h>
@@ -66,6 +66,12 @@ namespace BALL
 	void NMRSpectrum::calculateShifts()
 	{
 		system_->apply(shift_model_);
+	}
+
+	CreateSpectrumProcessor& NMRSpectrum::getCreateSpectrumProcessor()
+		throw()
+	{
+		return create_spectrum_;
 	}
 
 	void NMRSpectrum::createSpectrum()
@@ -192,9 +198,9 @@ namespace BALL
 
 		// Berechnung der Dichteverteilung:
 
-	  float min = 0.0;
-	  float max = 10.0;
-	  float step_size = (max - min) / density_;
+	  float min = -2.0;
+	  float max = 12.0;
+	  float step_size = (max - min) / 5000;
 
 		
 		if (step_size <= 0.0)
@@ -203,9 +209,6 @@ namespace BALL
 		}
 		else 
 		{
-		
-			Log.info() << " min = " << min << "   max = " << max << "   density_ = " << density_ << "   step_size = " << step_size << endl;
-
 			List<Peak1D>::const_iterator peak_it;
 			for (float x = min; x <= max; x += step_size)
 			{
