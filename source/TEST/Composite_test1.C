@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Composite_test1.C,v 1.8 2003/06/19 10:45:51 oliver Exp $
+// $Id: Composite_test1.C,v 1.9 2003/06/19 13:26:38 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -30,7 +30,7 @@ class myVisitor
 	}
 };
 
-START_TEST(Composite, "$Id: Composite_test1.C,v 1.8 2003/06/19 10:45:51 oliver Exp $")
+START_TEST(Composite, "$Id: Composite_test1.C,v 1.9 2003/06/19 13:26:38 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -292,7 +292,7 @@ CHECK([EXTRA] Composite forward iteration)
 	++sub_it;
 	TEST_EQUAL(sub_it.isValid(), false)
 	TEST_EQUAL(sub_it == f.endComposite(), true)
-	TEST_EXCEPTION(Exception::Precondition, ++sub_it)
+	TEST_PRECONDITION_EXCEPTION(++sub_it)
 
 	Composite g;
 	Composite h;
@@ -303,7 +303,7 @@ CHECK([EXTRA] Composite forward iteration)
 	++sub_it;
 	TEST_EQUAL(sub_it.isValid(), false)
 	TEST_EQUAL(sub_it == h.endComposite(), true)
-	TEST_EXCEPTION(Exception::Precondition, ++sub_it)
+	TEST_PRECONDITION_EXCEPTION(++sub_it)
 RESULT
 
 CHECK([EXTRA] Composite forward const iteration)
@@ -343,7 +343,7 @@ CHECK([EXTRA] Composite forward const iteration)
 	++sub_it;
 	TEST_EQUAL(sub_it.isValid(), false)
 	TEST_EQUAL(sub_it == const_cast<const Composite&>(f).endComposite(), true)
-	TEST_EXCEPTION(Exception::Precondition, ++sub_it)
+	TEST_PRECONDITION_EXCEPTION(++sub_it)
 
 	Composite g;
 	Composite h;
@@ -354,7 +354,7 @@ CHECK([EXTRA] Composite forward const iteration)
 	++sub_it;
 	TEST_EQUAL(sub_it.isValid(), false)
 	TEST_EQUAL(sub_it == const_cast<const Composite&>(h).endComposite(), true)
-	TEST_EXCEPTION(Exception::Precondition, ++sub_it)
+	TEST_PRECONDITION_EXCEPTION(++sub_it)
 RESULT
 
 CHECK([EXTRA] Composite backward iteration)
@@ -610,7 +610,7 @@ CHECK([EXTRA] ChildComposite forward iteration)
 	sub_it = f.beginChildComposite();
 	TEST_EQUAL(sub_it.isValid(), false)
 	TEST_EQUAL(sub_it == f.endChildComposite(), true)
-	TEST_EXCEPTION(Exception::Precondition, ++sub_it)
+	TEST_PRECONDITION_EXCEPTION(++sub_it)
 
 	Composite g;
 	Composite h;
@@ -618,7 +618,7 @@ CHECK([EXTRA] ChildComposite forward iteration)
 	sub_it = h.beginChildComposite();
 	TEST_EQUAL(sub_it.isValid(), false)
 	TEST_EQUAL(sub_it == h.endChildComposite(), true)
-	TEST_EXCEPTION(Exception::Precondition, ++sub_it)
+	TEST_PRECONDITION_EXCEPTION(++sub_it)
 RESULT
 
 CHECK([EXTRA] ChildComposite forward const iteration)
@@ -649,7 +649,7 @@ CHECK([EXTRA] ChildComposite forward const iteration)
 	sub_it = const_cast<const Composite&>(f).beginChildComposite();
 	TEST_EQUAL(sub_it.isValid(), false)
 	TEST_EQUAL(sub_it == const_cast<const Composite&>(f).endChildComposite(), true)
-	TEST_EXCEPTION(Exception::Precondition, ++sub_it)
+	TEST_PRECONDITION_EXCEPTION(++sub_it)
 
 	Composite g;
 	Composite h;
@@ -657,7 +657,7 @@ CHECK([EXTRA] ChildComposite forward const iteration)
 	sub_it = const_cast<const Composite&>(h).beginChildComposite();
 	TEST_EQUAL(sub_it.isValid(), false)
 	TEST_EQUAL(sub_it == const_cast<const Composite&>(h).endChildComposite(), true)
-	TEST_EXCEPTION(Exception::Precondition, ++sub_it)
+	TEST_PRECONDITION_EXCEPTION(++sub_it)
 RESULT
 
 CHECK([EXTRA] ChildComposite backward iteration)
