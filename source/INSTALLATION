@@ -1,11 +1,11 @@
 1) System requirements
 ======================
 Compiler:
-	BALL requires an ANSI compliant C++ compiler or GNU egcs 
-	(version above 2.95 or above).
+  BALL requires an ANSI compliant C++ compiler or GNU egcs 
+  (version above 2.95 or above).
   It has been successfully built and tested on the following platforms:
 
-		- Linux 2.0 using g++ 2.95.1 and 2.95.2
+    - Linux 2.0 using g++ 2.95.1 and 2.95.2
     - Solaris 2.6 and 7/SPARC using g++ 2.95.2
     - Solaris 7/x86 using g++ 2.95.2
     - IRIX 6.5 using CC 7.3.1.1m 
@@ -13,21 +13,24 @@ Compiler:
 External software and libraries:
   The compilation of the visualization component BALLVIEW also requires
   the QT library (version 2.x) which is available from
+
     http://www.troll.no/qt
 
   If QT was not installed in one of the standard library paths or the
   QT header files were not installed in one of the compiler's default
   include directories, use "--with-qt-libs=DIR" and "--with-qt-incl=DIR" as
-	options to configure (see below, "Building BALL") to specify the paths
+  options to configure (see below, "Building BALL") to specify the paths
   QT was installed to.
-	Please remember to compile also libqgl.a, which is one of the QT extensions
+  Please remember to compile also libqgl.a, which is one of the QT extensions
   (to build libqgl.a, cd to $QTDIR/extensions/opengl/src and type make).
 
   QT also requires OpenGL. On platforms that do not provide OpenGL, MESA can
   be used (e.g. Linux). Mesa is a 3-D graphics library with an API which is 
-	very similar to that of OpenGL. It can be obtained from
-    http://www.mesa3d.org	
-	If MESA is used, please add call configure with the option "--with-mesa"
+  very similar to that of OpenGL. It can be obtained from
+
+    http://www.mesa3d.org 
+
+  If MESA is used, please add call configure with the option "--with-mesa"
 
 
 2) Building the libraries
@@ -65,10 +68,10 @@ An overview of these options can also be obtained by executing "configure --help
 
   --disable-BALLVIEW      disable the compilation of BALLVIEW, the visualization component
 
-	--enable-64             build 64 bit objects (currently only supported for IRIX MipsPro 
+  --enable-64             build 64 bit objects (currently only supported for IRIX MipsPro 
                           compiler)
 
-	--with-compiler=CXX     use CXX to compile BALL
+  --with-compiler=CXX     use CXX to compile BALL
 
   --with-cxxflags=FLAGS   add C++ compiler FLAGS to compile BALL
 
@@ -180,3 +183,5 @@ are included in the LD_LIBRARY_PATH. molview needs the BALL libraries (libBALL.s
 and libMOLVIEW.so), the qt libraries (libqt.so, libqgl.so), and the OpenGL/Mesa libraries 
 (libGL.so, libGLU.so).
 
+--------------------------------------------------------------------
+document revision: $Id: INSTALLATION,v 1.4 2000/01/18 16:15:59 oliver Exp $
