@@ -1,4 +1,4 @@
-// $Id: baseFragment.h,v 1.10 2000/04/14 00:40:22 amoll Exp $
+// $Id: baseFragment.h,v 1.11 2000/04/14 13:09:54 amoll Exp $
 
 #ifndef BALL_KERNEL_BASEFRAGMENT_H
 #define BALL_KERNEL_BASEFRAGMENT_H
@@ -404,7 +404,12 @@ namespace BALL
 		*/
 		virtual bool isValid() const;
 
-		///
+		/** Internal state dump.
+				Dump the current internal state of {\em *this} BaseFragment to the output ostream {\em s} with dumping depth {\em depth}.
+	
+				@param   s - output stream where to output the internal state of {\em *this} BaseFragment
+				@param   depth - the dumping depth
+		*/
 		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 		//@}
 

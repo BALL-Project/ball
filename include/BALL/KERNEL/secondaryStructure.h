@@ -1,4 +1,4 @@
-// $Id: secondaryStructure.h,v 1.5 2000/04/14 00:40:23 amoll Exp $
+// $Id: secondaryStructure.h,v 1.6 2000/04/14 13:09:55 amoll Exp $
 
 #ifndef BALL_KERNEL_SECONDARYSTRUCTURE_H
 #define BALL_KERNEL_SECONDARYSTRUCTURE_H
@@ -297,7 +297,12 @@ namespace BALL
 		*/
 		virtual bool isValid() const;
 
-		///
+		/** Internal state dump.
+				Dump the current internal state of {\em *this} SecondaryStructure to the output ostream {\em s} with dumping depth {\em depth}.
+	
+				@param	s output stream where to output the internal state of {\em *this} SecondaryStructure
+				@param  depth the dumping depth
+		*/
 		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 		//@}
 

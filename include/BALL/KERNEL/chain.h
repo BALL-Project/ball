@@ -1,4 +1,4 @@
-// $Id: chain.h,v 1.7 2000/04/14 00:40:22 amoll Exp $
+// $Id: chain.h,v 1.8 2000/04/14 13:09:54 amoll Exp $
 
 #ifndef BALL_KERNEL_CHAIN_H
 #define BALL_KERNEL_CHAIN_H
@@ -122,14 +122,14 @@ namespace BALL
 		/**	@name	Accessors */
 		//@{
 
-		/** Get a pointer to the superior protein.
+		/** Get a pointer to the parent protein.
 				The reference is 0 if {\em *this} chain does not have a parent protein.
 				@return  Protein* -
 								 mutable reference to the parent protein of {\em *this} chain,
 		*/
 		Protein* getProtein();
 
-		/** Get a constant pointer to the superior chain.
+		/** Get a constant pointer to the parent protein.
 				The reference is 0 if {\em *this} chain does not have a parent protein.
 				@return  Protein* -
 								 constant reference to the parent protein of {\em *this} chain,
@@ -137,7 +137,7 @@ namespace BALL
 		const Protein* getProtein() const;
 
 		/** Get a pointer to a subaltern SecondaryStructure at a given position.
-				The reference is 0 if {\em *this} chain does not have a SecondaryStructure at the given position.
+				The reference is 0 if {\em *this} chain does not have a SecondaryStructure at this position.
 				@param   index the position of the subaltern SecondaryStructure
 				@exception IndexUnderflow if {\tt index < 0}
 				@return  SecondaryStructure* -
@@ -145,8 +145,8 @@ namespace BALL
 		*/
 		SecondaryStructure* getSecondaryStructure(Index index);
 	
-		/** Get a pointer to a subaltern SecondaryStructure at a given position.
-				The reference is 0 if {\em *this} chain does not have a SecondaryStructure at the given position.
+		/** Get a constant pointer to a subaltern SecondaryStructure at a given position.
+				The reference is 0 if {\em *this} chain does not have a SecondaryStructure at this position.
 				@param   index the position of the subaltern SecondaryStructure
 				@exception IndexUnderflow if {\tt index < 0}
 				@return  SecondaryStructure* -
@@ -155,7 +155,7 @@ namespace BALL
 		const SecondaryStructure* getSecondaryStructure(Index index) const;
 	
 		/** Get a pointer to a subaltern Residue at a given position.
-				The reference is 0 if {\em *this} chain does not have a Residue at the given position.
+				The reference is 0 if {\em *this} chain does not have a Residue at this position.
 				@param   index the position of the subaltern Residue
 				@exception IndexUnderflow if {\tt index < 0}
 				@return  Residue* -
@@ -164,7 +164,7 @@ namespace BALL
 		Residue* getResidue(Index index);
 	
 		/** Get a pointer to a subaltern Residue at a given position.
-				The reference is 0 if {\em *this} chain does not have a Residue at the given position.
+				The reference is 0 if {\em *this} chain does not have a Residue at this position.
 				@param   index the position of the subaltern Residue
 				@exception IndexUnderflow if {\tt index < 0}
 				@return  Residue* -
@@ -173,15 +173,15 @@ namespace BALL
 		const Residue* getResidue(Index index) const;
 	
 		/** Get a pointer to the N-terminal Residue.
-				The reference is 0 if {\em *this} chain does not have a Residue at the given position.
+				The reference is 0 if {\em *this} chain does not have a Residue at this position.
 
 				@return  Residue* -
 								 mutable reference to the N-terminal Residue
 		*/
 		Residue* getNTerminal();
 	
-		/** Get a pointer to the N-terminal Residue.
-				The reference is 0 if {\em *this} chain does not have a Residue at the given position.
+		/** Get a constant pointer to the N-terminal Residue.
+				The reference is 0 if {\em *this} chain does not have a Residue at this position.
 
 				@return  Residue* -
 								 constant reference to the N-terminal Residue
@@ -189,15 +189,15 @@ namespace BALL
 		const Residue* getNTerminal() const;
 
 		/** Get a pointer to the C-terminal Residue.
-				The reference is 0 if {\em *this} chain does not have a Residue at the given position.
+				The reference is 0 if {\em *this} chain does not have a Residue at this position.
 
 				@return  Residue* -
 								 mutable reference to the C-terminal Residue
 		*/
 		Residue* getCTerminal();
 	
-		/** Get a pointer to the C-terminal Residue.
-				The reference is 0 if {\em *this} chain does not have a Residue at the given position.
+		/** Get a constant pointer to the C-terminal Residue.
+				The reference is 0 if {\em *this} chain does not have a Residue at this position.
 
 				@return  Residue* -
 								 constant reference to the C-terminal Residue
@@ -205,20 +205,20 @@ namespace BALL
 		const Residue* getCTerminal() const;
 
 		/** Get a pointer to a subaltern PDBAtom at a given position.
-				The reference is 0 if {\em *this} chain does not have a PDBAtom at the given position.
-				@param   index the position of the subaltern PDBAtom
-				@exception IndexUnderflow if {\tt index < 0}
-				@return  PDBAtom* -
-								 constant reference to the subaltern PDBAtom at positon {\em index} of {\em *this} chain,
-		*/
-		PDBAtom* getPDBAtom(Index index);
-	
-		/** Get a pointer to a subaltern PDBAtom at a given position.
-				The reference is 0 if {\em *this} chain does not have a PDBAtom at the given position.
+				The reference is 0 if {\em *this} chain does not have a PDBAtom at this position.
 				@param   index the position of the subaltern PDBAtom
 				@exception IndexUnderflow if {\tt index < 0}
 				@return  PDBAtom* -
 								 mutable reference to the subaltern PDBAtom at positon {\em index} of {\em *this} chain,
+		*/
+		PDBAtom* getPDBAtom(Index index);
+	
+		/** Get a pointer to a subaltern PDBAtom at a given position.
+				The reference is 0 if {\em *this} chain does not have a PDBAtom at this position.
+				@param   index the position of the subaltern PDBAtom
+				@exception IndexUnderflow if {\tt index < 0}
+				@return  PDBAtom* -
+								 constant reference to the subaltern PDBAtom at positon {\em index} of {\em *this} chain,
 		*/
 		const PDBAtom* getPDBAtom(Index index) const;
 	
@@ -252,13 +252,13 @@ namespace BALL
 		*/
 		void insert(SecondaryStructure& secondary_structure);
 
-		/** Insert a SecondaryStructure before an given {\em Comosite} object.
+		/** Insert a SecondaryStructure before a given {\em Comosite} object.
 				@param secondary_structure, the SecondaryStructure to insert
 				@param before, the {\em Comosite} object to insert before
 		*/
 		void insertBefore(SecondaryStructure& secondary_structure, Composite& before);
 
-		/** Insert a SecondaryStructure after an given {\em Comosite} object.
+		/** Insert a SecondaryStructure after a given {\em Comosite} object.
 				@param secondary_structure, the SecondaryStructure to insert
 				@param after, the {\em Comosite} object to insert before
 		*/
@@ -284,19 +284,19 @@ namespace BALL
 		*/
 		void insert(Residue& residue);
 
-		/** Insert a Residue before an given {\em Comosite} object.
+		/** Insert a Residue before a given {\em Comosite} object.
 				@param residue, the Residue to insert
 				@param before, the {\em Comosite} object to insert before
 		*/
 		void insertBefore(Residue& residue,Composite& before);
 
-		/** Insert a Residue after an given {\em Comosite} object.
+		/** Insert a Residue after a given {\em Comosite} object.
 				@param residue, the Residue to insert
-				@param after, the {\em Comosite} object to insert before
+				@param after, the {\em Comosite} object to insert after
 		*/
 		void insertAfter(Residue& residue, Composite& after);
 
-		/** Remove a Residue
+		/** Remove a Residue.
 				@param residue the Residue to remove
 		*/
 		bool remove(Residue& residue);
@@ -333,7 +333,12 @@ namespace BALL
 		*/
 		virtual bool isValid() const;
 		
-		///
+		/** Internal state dump.
+				Dump the current internal state of {\em *this} chain to the output ostream {\em s} with dumping depth {\em depth}.
+	
+				@param   s - output stream where to output the internal state of {\em *this} chain
+				@param   depth - the dumping depth
+		*/
 		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 
 		//@}
@@ -341,7 +346,7 @@ namespace BALL
 		// --- STORERS
 
 		/* Persistent stream input and state restorage.
-				Read persistent bond data from the input stream {\em s} and restore the state of {\em *this} chain.
+				Read persistent chain data from the input stream {\em s} and restore the state of {\em *this} chain.
 				\\
 				{\bf Note:} Not yet implemented.
 				@param  s input stream from where to restore the internal state of {\em *this} chain
@@ -349,7 +354,7 @@ namespace BALL
 		virtual void read(std::istream& s);
 
 		/* Persistent stream output and state storage.
-				Write persistent bond data to the output stream {\em s} and store the state of {\em *this} chain.
+				Write persistent chain data to the output stream {\em s} and store the state of {\em *this} chain.
 				\\
 				{\bf Note:} Not yet implemented.	
 				@param  s input stream from where to restore the internal state of {\em *this} chain
