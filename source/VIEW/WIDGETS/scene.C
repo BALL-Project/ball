@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.18 2003/10/15 13:33:04 amoll Exp $
+// $Id: scene.C,v 1.19 2003/10/24 22:37:19 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -328,81 +328,85 @@ void Scene::resizeGL(int width, int height)
 void Scene::renderView_(RenderMode mode)
 	throw()
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	//abort if GL was not yet initialised
 	if (!gl_renderer_.hasStage()) return;
-	
+
+	if (gl_renderer_.isInStereoMode())
+	{
+		glDrawBuffer(GL_BACK_LEFT);
+	}
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glPushMatrix();
 
-	gl_renderer_.setTranslationAndRotation(system_origin_, quaternion_);
+	Vector3 view_point, diff;
+	if (gl_renderer_.isInStereoMode())
+	{
+		view_point = stage_->getCamera().getViewPoint();
+		diff = stage_->getCamera().getRightVector();
+		diff.normalize();
+		diff *= 2;  // half the distance between the eyepoints
+		stage_->getCamera().setViewPoint(view_point - diff);
+		gl_renderer_.updateCamera();
+	}
 
+	renderRepresentations_(mode);
+	glPopMatrix();
+
+	if (!gl_renderer_.isInStereoMode())
+	{
+		return;
+	}
+
+  glDrawBuffer(GL_BACK_RIGHT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glPushMatrix();
+	stage_->getCamera().setViewPoint(view_point + (diff * 2));
+	gl_renderer_.updateCamera();
+	renderRepresentations_(DISPLAY_LISTS_RENDERING);
+	glPopMatrix();
+	stage_->getCamera().setViewPoint(view_point);
+}
+
+
+void Scene::renderRepresentations_(RenderMode mode)
+	throw()
+{
 	// draw the representations
 	PrimitiveManager::RepresentationList::ConstIterator it;
-	bool init_transparent = false;
 
+	gl_renderer_.initSolid();
 	it = getMainControl()->getPrimitiveManager().getRepresentations().begin();
 	for(; it != getMainControl()->getPrimitiveManager().getRepresentations().end(); it++)
 	{
-		if ((*it)->hasProperty(Representation::PROPERTY__TRANSPARENT_FULL))
+		if (!(*it)->hasProperty(Representation::PROPERTY__TRANSPARENT_BLENDING)&&
+				!(*it)->hasProperty(Representation::PROPERTY__ALWAYS_FRONT))
 		{
-			if (!init_transparent) 
-			{
-				gl_renderer_.initTransparent(false);
-				init_transparent = true;
-			}
 			render_(**it, mode);
 		}
 	}
 
-	it = getMainControl()->getPrimitiveManager().getRepresentations().begin();
-	for(; it != getMainControl()->getPrimitiveManager().getRepresentations().end(); it++)
-	{
-		if ((!(*it)->hasProperty(Representation::PROPERTY__TRANSPARENT_FULL)) &&
-				 !(*it)->hasProperty(Representation::PROPERTY__TRANSPARENT_BLENDING)&&
-				 !(*it)->hasProperty(Representation::PROPERTY__ALWAYS_FRONT))
-		{
-			if (init_transparent) 
-			{
-				gl_renderer_.initSolid();
-				init_transparent = false;
-			}
-			render_(**it, mode);
-		}
-	}
-
+	gl_renderer_.initTransparent(true);
 	it = getMainControl()->getPrimitiveManager().getRepresentations().begin();
 	for(; it != getMainControl()->getPrimitiveManager().getRepresentations().end(); it++)
 	{
 		if ((*it)->hasProperty(Representation::PROPERTY__TRANSPARENT_BLENDING))
 		{
-			if (!init_transparent) 
-			{
-				gl_renderer_.initTransparent(true);
-				init_transparent = true;
-			}
 			render_(**it, mode);
 		}
 	}
 
+	gl_renderer_.initSolid();
 	glDisable(GL_DEPTH_TEST);
 	it = getMainControl()->getPrimitiveManager().getRepresentations().begin();
 	for(; it != getMainControl()->getPrimitiveManager().getRepresentations().end(); it++)
 	{
 		if ((*it)->hasProperty(Representation::PROPERTY__ALWAYS_FRONT))
 		{
-			if (init_transparent) 
-			{
-				gl_renderer_.initSolid();
-				init_transparent = false;
-			}
 			render_(**it, mode);
 		}
 	}
 	glEnable(GL_DEPTH_TEST);
-
-	glPopMatrix();
-	gl_renderer_.initSolid();
 }
 
 
@@ -1027,10 +1031,8 @@ void Scene::initializeWidget(MainControl& main_control)
 		MainControl::DISPLAY, "&Picking Mode", this, SLOT(pickingMode_()), CTRL+Key_P, -1, hint);
 	main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
 
-	/*
 	stereo_id_ = main_control.insertMenuEntry(
 		MainControl::DISPLAY, "&Stereo Mode", this, SLOT(switchStereo()));
-	*/
 
 	hint = "Change the mouse sensitivity. (It also depends on how large the group is, you focused on";
 	main_control.insertMenuEntry(
@@ -1525,92 +1527,11 @@ void Scene::switchStereo()
 		stereo = true;
 	}
 
-Log.error() << "#~~#   3 " << stereo << std::endl;
 	menu->setItemChecked(stereo_id_, stereo);
-	//gl_renderer_.setStereoMode(stereo);
+	gl_renderer_.setStereoMode(stereo);
 	update();
 }
 
-/*
-   glDrawBuffer(GL_BACK_LEFT);
-   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-   if (stereo) {
-      glDrawBuffer(GL_BACK_RIGHT);
-      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-   }
-
-   if (stereo) {
-
-      // Derive the two eye positions 
-      CROSSPROD(camera.vd,camera.vu,r);
-      Normalise(&r);
-      r.x *= camera.eyesep / 2.0;
-      r.y *= camera.eyesep / 2.0;
-      r.z *= camera.eyesep / 2.0;
-
-      glMatrixMode(GL_PROJECTION);
-      glLoadIdentity();
-      left  = - ratio * wd2 - 0.5 * camera.eyesep * ndfl;
-      right =   ratio * wd2 - 0.5 * camera.eyesep * ndfl;
-      top    =   wd2;
-      bottom = - wd2;
-      glFrustum(left,right,bottom,top,near,far);
-
-      glMatrixMode(GL_MODELVIEW);
-      glDrawBuffer(GL_BACK_RIGHT);
-      glLoadIdentity();
-      gluLookAt(camera.vp.x + r.x,camera.vp.y + r.y,camera.vp.z + r.z,
-                camera.vp.x + r.x + camera.vd.x,
-                camera.vp.y + r.y + camera.vd.y,
-                camera.vp.z + r.z + camera.vd.z,
-                camera.vu.x,camera.vu.y,camera.vu.z);
-      MakeLighting();
-      MakeGeometry();
-
-      glMatrixMode(GL_PROJECTION);
-      glLoadIdentity();
-      left  = - ratio * wd2 + 0.5 * camera.eyesep * ndfl;
-      right =   ratio * wd2 + 0.5 * camera.eyesep * ndfl;
-      top    =   wd2;
-      bottom = - wd2;
-      glFrustum(left,right,bottom,top,near,far);
-
-      glMatrixMode(GL_MODELVIEW);
-      glDrawBuffer(GL_BACK_LEFT);
-      glLoadIdentity();
-      gluLookAt(camera.vp.x - r.x,camera.vp.y - r.y,camera.vp.z - r.z,
-                camera.vp.x - r.x + camera.vd.x,
-                camera.vp.y - r.y + camera.vd.y,
-                camera.vp.z - r.z + camera.vd.z,
-                camera.vu.x,camera.vu.y,camera.vu.z);
-      MakeLighting();
-      MakeGeometry();
-
-   } else {
-
-      glMatrixMode(GL_PROJECTION);
-      glLoadIdentity();
-      left  = - ratio * wd2;
-      right =   ratio * wd2;
-      top    =   wd2;
-      bottom = - wd2;
-      glFrustum(left,right,bottom,top,near,far);
-
-      glMatrixMode(GL_MODELVIEW);
-      glDrawBuffer(GL_BACK_LEFT);
-      glLoadIdentity();
-      gluLookAt(camera.vp.x,camera.vp.y,camera.vp.z,
-                camera.vp.x + camera.vd.x,
-                camera.vp.y + camera.vd.y,
-                camera.vp.z + camera.vd.z,
-                camera.vu.x,camera.vu.y,camera.vu.z);
-      MakeLighting();
-      MakeGeometry();
-   }
-
-   /// glFlush(); This isn't necessary for double buffers
-   glutSwapBuffers();
-*/
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/WIDGETS/scene.iC>
