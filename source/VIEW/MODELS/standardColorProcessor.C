@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.21 2003/12/15 01:14:12 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.22 2004/02/20 11:43:57 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -648,29 +648,42 @@ namespace BALL
 			else 																																	return default_color_;
 		}
 
+		void SecondaryStructureColorProcessor::setTransparency(Size t)
+			throw()
+		{
+			transparency_ = t;
+			helix_color_.setAlpha(255-transparency_);
+			coil_color_.setAlpha(255-transparency_);
+			strand_color_.setAlpha(255-transparency_);
+			turn_color_.setAlpha(255-transparency_);
+		}
 
 		void SecondaryStructureColorProcessor::setHelixColor(const ColorRGBA& color)
 			throw()
 		{
 			helix_color_ = color;
+			helix_color_.setAlpha(255-transparency_);
 		}
 
 		void SecondaryStructureColorProcessor::setCoilColor(const ColorRGBA& color)
 			throw()
 		{
 			coil_color_ = color;
+			coil_color_.setAlpha(255-transparency_);
 		}
 
 		void SecondaryStructureColorProcessor::setStrandColor(const ColorRGBA& color)
 			throw()
 		{
 			strand_color_ = color;
+			strand_color_.setAlpha(255-transparency_);
 		}
 
 		void SecondaryStructureColorProcessor::setTurnColor(const ColorRGBA& color)
 			throw()
 		{
 			turn_color_ = color;
+			turn_color_.setAlpha(255-transparency_);
 		}
 
 		const ColorRGBA& SecondaryStructureColorProcessor::getHelixColor() const

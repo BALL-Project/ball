@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.h,v 1.20 2004/02/18 23:24:06 oliver Exp $
+// $Id: colorProcessor.h,v 1.21 2004/02/20 11:43:33 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_COLORPROCESSOR_H
@@ -144,7 +144,7 @@ namespace BALL
 				throw() { return transparency_;}
 
 			///
-			void setTransparency(Size value)
+			virtual void setTransparency(Size value)
 				throw();
 
 			/** Set the pointer to the CompositeSet.

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.h,v 1.18 2003/12/15 01:38:14 amoll Exp $
+// $Id: standardColorProcessor.h,v 1.19 2004/02/20 11:43:33 amoll Exp $
 
 #ifndef BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
 #define BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
@@ -470,6 +470,10 @@ namespace BALL
 
 			///
 			const ColorRGBA& getTurnColor() const
+				throw();
+
+			///
+			virtual void setTransparency(Size t)
 				throw();
 
 			private:
