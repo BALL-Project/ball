@@ -1,4 +1,4 @@
-// $Id: classTest.h,v 1.4 1999/11/30 19:46:01 oliver Exp $
+// $Id: classTest.h,v 1.5 1999/12/28 18:39:42 oliver Exp $
 
 #include <BALL/common.h>
 #include <BALL/SYSTEM/file.h>
@@ -173,7 +173,7 @@ int main(int argc, char **argv)\
 	}\
 \
 	/* clean up all temporary files */\
-	while (TEST::tmp_file_list.size() > 0)\
+	while (TEST::tmp_file_list.size() > 0 && TEST::verbose < 1)\
 	{\
 		::BALL::File::remove(TEST::tmp_file_list.back());\
 		TEST::tmp_file_list.pop_back();\
