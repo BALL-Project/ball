@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.h,v 1.6 2003/10/17 16:17:23 amoll Exp $
+// $Id: colorProcessor.h,v 1.7 2003/10/18 11:24:50 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_COLORPROCESSOR_H
@@ -40,6 +40,9 @@ namespace BALL
 		{
 			public:
 			
+			///
+			typedef HashSet<const Composite*>  CompositeSet;
+
 			/**	@name	Type definitions
 			*/
 			//@{
@@ -95,11 +98,6 @@ namespace BALL
 			const ColorProcessor&  operator = (const ColorProcessor& color_calculator)
 				throw();
 
-			/** Swapping of ColorProcessor's.
-			*/
-			void swap(ColorProcessor&  color_calculator)
-				throw();
-
 			//@} /**	@name	Accessors: inspectors and mutators */ //@{
 
 			/** Change the default color.
@@ -119,6 +117,14 @@ namespace BALL
 			///
 			virtual ColorRGBA getColor(const Composite* /*composite*/)
 			{ return default_color_;}
+
+			///
+			void setComposites(const CompositeSet* composites)
+				throw() { composites_ = composites;}
+
+			///
+			const CompositeSet* getComposites()
+				throw() { return composites_;}
 
 			//@} 
 			/**	@name	debuggers and diagnostics 
@@ -146,6 +152,7 @@ namespace BALL
 			*/
 			ColorRGBA		default_color_;
 
+			const CompositeSet* composites_;
 			//@}
 		};
 

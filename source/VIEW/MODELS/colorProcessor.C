@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.6 2003/10/18 10:22:43 amoll Exp $
+// $Id: colorProcessor.C,v 1.7 2003/10/18 11:24:20 amoll Exp $
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
 #include <BALL/VIEW/DATATYPE/colorExtension2.h>
@@ -40,12 +40,14 @@ void ColorProcessor::clear()
 	throw()
 {
 	default_color_.set("FF0000FF");
+	composites_ = 0;
 }
 
 void ColorProcessor::set(const ColorProcessor& color_Processor)
 	throw()
 {
 	default_color_ = color_Processor.default_color_;
+	composites_ = color_Processor.composites_;
 }
 
 
@@ -54,13 +56,6 @@ const ColorProcessor& ColorProcessor::operator = (const ColorProcessor& color_Pr
 {
 	set(color_Processor);
 	return *this;
-}
-
-
-void ColorProcessor::swap(ColorProcessor& color_Processor)
-	throw()
-{
-	default_color_.swap(color_Processor.default_color_);
 }
 
 
