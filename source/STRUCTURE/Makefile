@@ -7,6 +7,7 @@ SMILES_SOURCES= \
 	smilesParserLexer.C
 
 CPP_SOURCES= \
+	molecularGraph.C\
 	analyticalSES.C\
 	BSDTree.C\
 	connolly.C\
@@ -31,18 +32,23 @@ CPP_SOURCES= \
 	RSEdge.C\
 	RSFace.C\
 	RSVertex.C\
+	SASEdge.C\
+	SASFace.C\
+	SASVertex.C\
 	SESEdge.C\
 	SESFace.C\
 	SESVertex.C\
 	smilesParser.C\
 	smilesParserLexer.C\
 	smilesParserParser.C\
+	solventAccessibleSurface.C\
 	solventExcludedSurface.C\
 	structureMapper.C\
 	surfaceProcessor.C\
 	triangle.C\
 	triangleEdge.C\
 	trianglePoint.C\
+	triangulatedSAS.C\
 	triangulatedSES.C\
 	triangulatedSurface.C
 
