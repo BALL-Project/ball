@@ -1,4 +1,4 @@
-// $Id: path.h,v 1.5 2000/05/21 19:38:59 amoll Exp $
+// $Id: path.h,v 1.1 2000/06/21 14:15:39 amoll Exp $
 
 #ifndef BALL_COMMON_PATH_H
 #define BALL_COMMON_PATH_H

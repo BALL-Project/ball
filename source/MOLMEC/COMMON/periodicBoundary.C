@@ -1,11 +1,11 @@
-// $Id: periodicBoundary.C,v 1.8 2000/06/06 13:19:01 oliver Exp $
+// $Id: periodicBoundary.C,v 1.9 2000/06/21 14:16:02 amoll Exp $
 
 #include <BALL/MOLMEC/COMMON/periodicBoundary.h>
 #include <BALL/MOLMEC/COMMON/forceField.h>
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/STRUCTURE/geometricTransformations.h>
-#include <BALL/COMMON/path.h>
+#include <BALL/SYSTEM/path.h>
 #include <BALL/CONCEPT/processor.h>
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/MATHS/common.h>

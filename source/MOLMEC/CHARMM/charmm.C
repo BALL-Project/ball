@@ -1,4 +1,4 @@
-// $Id: charmm.C,v 1.7 2000/06/06 13:19:00 oliver Exp $
+// $Id: charmm.C,v 1.8 2000/06/21 14:16:00 amoll Exp $
 // Molecular Mechanics: Charmm force field class
 
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -9,7 +9,7 @@
 #include <BALL/MOLMEC/CHARMM/charmmNonBonded.h>
 #include <BALL/MOLMEC/COMMON/assignTypes.h>
 #include <BALL/MOLMEC/PARAMETER/templates.h>
-#include <BALL/COMMON/path.h>
+#include <BALL/SYSTEM/path.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/bond.h>

@@ -1,11 +1,11 @@
-// $Id: File_test.C,v 1.1 2000/06/09 00:12:35 amoll Exp $
+// $Id: File_test.C,v 1.2 2000/06/21 14:16:14 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/SYSTEM/file.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: File_test.C,v 1.1 2000/06/09 00:12:35 amoll Exp $")
+START_TEST(class_name, "$Id: File_test.C,v 1.2 2000/06/21 14:16:14 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -99,7 +99,7 @@ CHECK(Type getType(bool trace_link) const;)
 RESULT
 
 CHECK(std::fstream& getFileStream();)
-	std::fstream fs();
+	//std::fstream fs();
 	//fs = f.getFileStream(); //!!!
 	TEST_EQUAL(f.getSize(), 100)
 RESULT
@@ -211,13 +211,7 @@ CHECK(truncate(Size size = 0))
 	TEST_EQUAL(f1.getSize(), 0)
 	f1.remove();
 RESULT
-/*
-CHECK(registerAction(const String& pattern, const String& exec))
-RESULT
 
-CHECK(unregisterAction(const String& pattern))
-RESULT
-*/
 CHECK(createTemporaryFilename(String& temporary))
 	String s;
 	TEST_EQUAL(f.createTemporaryFilename(s), true)
@@ -241,9 +235,6 @@ CHECK(operator != (const File& file))
 	TEST_EQUAL(f2 != f, true)	
 	TEST_EQUAL(f.getSize(), 100)
 RESULT
-/*
-CHECK(bool isProtocolEnabled(Protocol protocol))
-RESULT*/
 
 CHECK(isOpen())
 	f.copyTo("XXX");
@@ -298,24 +289,13 @@ RESULT
 CHECK(isExecutable())
 RESULT
 
-CHECK(hasFormat())
-RESULT
-
-CHECK(hasFormat() const)
-RESULT
-
-CHECK(hasFormat(const String& s))
-RESULT*/
-
+*/
 CHECK(isValid())
 	TEST_EQUAL(f.isValid(), true)	
 	File f1("XXX");
 	TEST_EQUAL(f1.isValid(), false)	
 RESULT
-/*
-CHECK(dumpRegisteredActions(std::ostream& s))
-RESULT
-*/
+
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST

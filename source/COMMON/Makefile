@@ -8,7 +8,6 @@ CPP_SOURCES=\
 	global.C\
 	hash.C\
 	logStream.C\
-	path.C\
 	rtti.C
 
 include ../common.mak

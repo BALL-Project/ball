@@ -1,10 +1,10 @@
-// $Id: ooiEnergy.C,v 1.7 2000/06/06 13:19:02 oliver Exp $
+// $Id: ooiEnergy.C,v 1.8 2000/06/21 14:16:05 amoll Exp $
 
 #include <BALL/SOLVATION/ooiEnergy.h>
 
 
 #include <BALL/common.h>
-#include <BALL/COMMON/path.h>
+#include <BALL/SYSTEM/path.h>
 #include <BALL/DATATYPE/hashGrid.h>
 #include <BALL/DATATYPE/string.h>
 #include <BALL/DATATYPE/stringHashMap.h>

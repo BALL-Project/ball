@@ -1,4 +1,4 @@
-// $Id: fragmentDB.C,v 1.20 2000/06/06 13:19:03 oliver Exp $
+// $Id: fragmentDB.C,v 1.21 2000/06/21 14:16:13 amoll Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 
@@ -6,7 +6,7 @@
 #include <vector>
 
 #include <BALL/KERNEL/PTE.h>
-#include <BALL/COMMON/path.h>
+#include <BALL/SYSTEM/path.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/forEach.h>
 	

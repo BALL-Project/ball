@@ -1,7 +1,7 @@
-// $Id: path.C,v 1.8 2000/06/20 22:23:13 oliver Exp $
+// $Id: path.C,v 1.1 2000/06/21 14:16:14 amoll Exp $
 
 #include <BALL/COMMON/global.h>
-#include <BALL/COMMON/path.h>
+#include <BALL/SYSTEM/path.h>
 #include <BALL/SYSTEM/file.h>
 #include <fstream>
 #include <stdlib.h>

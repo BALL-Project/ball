@@ -6,6 +6,7 @@ CPP_SOURCES=\
 	directory.C\
 	file.C\
 	fileSystem.C\
+	path.C\
 	socket.C\
 	timer.C
 
