@@ -1,4 +1,4 @@
-// $Id: logStream.h,v 1.10 2000/05/29 23:44:07 amoll Exp $
+// $Id: logStream.h,v 1.11 2000/05/30 18:25:53 oliver Exp $
 
 #ifndef BALL_COMMON_LOGSTREAM_H
 #define BALL_COMMON_LOGSTREAM_H
@@ -151,7 +151,7 @@ namespace BALL
 					This method calls sync and {\tt streambuf::overflow(c)} to 
 					prevent a buffer overflow.
 			*/
-			virtual int overflow(const int& c = -1);
+			virtual int overflow(int c = -1);
 			//@}
 
 			struct Stream 

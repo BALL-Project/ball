@@ -1,7 +1,7 @@
-// $Id: logStream.iC,v 1.5 2000/05/29 23:42:49 amoll Exp $
+// $Id: logStream.iC,v 1.6 2000/05/30 18:25:53 oliver Exp $
 
 BALL_INLINE
-int LogStreamBuf::overflow(const int& c)
+int LogStreamBuf::overflow(int c)
 {
 	sync();
 	return ::std::streambuf::overflow(c);
