@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.57.2.3 2005/01/03 13:05:03 amoll Exp $
+// $Id: glRenderer.C,v 1.57.2.4 2005/01/03 13:23:52 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -20,8 +20,6 @@
 #include <BALL/VIEW/PRIMITIVES/twoColoredLine.h>
 #include <BALL/VIEW/PRIMITIVES/twoColoredTube.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
-
-#include <BALL/MATHS/matrix44.h>
 
 #include <qfont.h>
 #include <qpainter.h>
@@ -130,25 +128,10 @@ namespace BALL
 			GLfloat spec[] = {0.774597, 0.774597, 0.774597, 1.0};
 			GLfloat ambient[] = {0.25, 0.25, 0.25, 1.0};
 
-			glMaterialfv(GL_FRONT, GL_SPECULAR,  spec);
-			glMaterialfv(GL_FRONT, GL_SHININESS, shin );
-			glMaterialfv(GL_FRONT, GL_DIFFUSE,  diff);
-			glMaterialfv(GL_FRONT, GL_AMBIENT,  ambient);
-
-			// BACKSIDE MATERIAL PROPERTIES
 			glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,  spec);
 			glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shin );
 			glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE,  diff);
 			glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT,  ambient);
-			GLfloat diff2[] = {0.3, 0.3, 0.3, 1.0};
-			GLfloat shin2[] = {76.8};
-			GLfloat spec2[] = {0.674597, 0.674597, 0.674597, 1.0};
-			GLfloat ambient2[] = {0.20, 0.20, 0.20, 1.0};
-		
-			glMaterialfv(GL_BACK, GL_SPECULAR,  spec2);
-			glMaterialfv(GL_BACK, GL_SHININESS, shin2);
-			glMaterialfv(GL_BACK, GL_DIFFUSE,  diff2);
-			glMaterialfv(GL_BACK, GL_AMBIENT,  ambient2);
 
 			// if displaylists were already calculated, return
 			if (GL_spheres_list_ != 0) return true;
@@ -228,8 +211,7 @@ namespace BALL
 			List<LightSource>::ConstIterator it = stage_->getLightSources().begin();
 			for (; it != stage_->getLightSources().end(); it++)
 			{
-				if (reset_all &&
-						!it->isRelativeToCamera())
+				if (reset_all && !it->isRelativeToCamera())
 				{
 					continue;
 				}
@@ -392,6 +374,7 @@ namespace BALL
 			List<GeometricObject*>::ConstIterator it = geometric_objects.begin();
 			for (; it != geometric_objects.end(); it++)
 			{
+				glLoadName(getName(**it));
 				render_(*it);
 			}
 
@@ -412,7 +395,7 @@ namespace BALL
 			s << "Drawing Precision: " 	<< drawing_precision_ 	<< std::endl;
 
 			BALL_DUMP_DEPTH(s, depth);
-			s << "Drawing Mode: " 		 		<< drawing_mode_  << std::endl;
+			s << "Drawing Mode: " 		 	<< drawing_mode_  << std::endl;
 
 			BALL_DUMP_DEPTH(s, depth);
 			s << "Width: " << width_ << endl;
@@ -1446,13 +1429,6 @@ namespace BALL
 		{
 			if (state == stereo_) return;
 			stereo_ = state;
-		}
-
-		void GLRenderer::render_(const GeometricObject* object)
-			throw()
-		{
-			glLoadName(getName(*object));
-			Renderer::render_(object);
 		}
 
 
