@@ -1,5 +1,5 @@
 
-// $Id: SnapShotManager_test.C,v 1.3 2001/12/30 13:29:01 sturm Exp $
+// $Id: SnapShotManager_test.C,v 1.4 2002/01/16 00:24:52 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,29 +9,22 @@
 
 ///////////////////////////
 
-START_TEST(SnapShotManager, "$Id: SnapShotManager_test.C,v 1.3 2001/12/30 13:29:01 sturm Exp $")
+START_TEST(SnapShotManager, "$Id: SnapShotManager_test.C,v 1.4 2002/01/16 00:24:52 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
 
-///  insert tests for each member function here         
-///
-
 CHECK(SnapshotManager::SnapshotManager())
 	// ?????
 RESULT
 
-CHECK(SnapshotManager::SnapshotManager(const System* my_system, const
-ForceField* my_force_field, const String& my_snapshot_file, bool
-overwrite))
+CHECK(SnapshotManager::SnapshotManager(const System* my_system, const ForceField* my_force_field, const String& my_snapshot_file, bool overwrite))
 	// ?????
 RESULT
 
-CHECK(SnapshotManager::SnapShotManager	(const System* my_system, const
-ForceField* my_force_field, const Options& my_options, const String&
-filename, bool overwrite = true))
+CHECK(SnapshotManager::SnapShotManager	(const System* my_system, const ForceField* my_force_field, const Options& my_options, const String& filename, bool overwrite = true))
 	// ?????
 RESULT
 

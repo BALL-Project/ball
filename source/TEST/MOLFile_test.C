@@ -1,4 +1,4 @@
-// $Id: MOLFile_test.C,v 1.3 2001/12/18 03:01:48 oliver Exp $
+// $Id: MOLFile_test.C,v 1.4 2002/01/16 00:24:51 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -14,7 +14,7 @@
 
 ///////////////////////////
 
-START_TEST(MOLFile, "$Id: MOLFile_test.C,v 1.3 2001/12/18 03:01:48 oliver Exp $")
+START_TEST(MOLFile, "$Id: MOLFile_test.C,v 1.4 2002/01/16 00:24:51 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -40,6 +40,11 @@ CHECK(MOLFile::read(System& system))
 	f.read(system);
 	TEST_EQUAL(system.countAtoms(), 23)
 	TEST_EQUAL(system.countBonds(), 26)
+	ABORT_IF(system.countAtoms() == 0)
+	Atom& atom = *system.beginAtom();
+	TEST_REAL_EQUAL(atom.getPosition().x,  1.5737)
+	TEST_REAL_EQUAL(atom.getPosition().y, -3.1475)
+	TEST_REAL_EQUAL(atom.getPosition().z,  0.0000)
 RESULT
 
 
@@ -96,6 +101,19 @@ CHECK(MOLFile::MOLFile& operator >> (System& system))
 	TEST_EQUAL(S.countAtoms(), 23)
 	TEST_EQUAL(S.countBonds(), 26)
 	TEST_EQUAL(S.countMolecules(), 1)
+
+	MOLFile f2("data/MOLFile_test3.mol");
+	S.destroy();
+	f2 >> S;
+	TEST_EQUAL(S.countAtoms(), 49)
+	TEST_EQUAL(S.countBonds(), 52)
+	TEST_EQUAL(s.countMolecules(), 1)
+	ABORT_IF(S.countAtoms() == 0)
+	Atom& atom = *S.beginAtom();
+	TEST_EQUAL(atom.getElement(), PTE[Element::C])
+	TEST_REAL_EQUAL(atom.getPosition().x, -2.6970)
+	TEST_REAL_EQUAL(atom.getPosition().y, -1.2710)
+	TEST_REAL_EQUAL(atom.getPosition().z,  1.4370)
 RESULT
 
 CHECK(MOLFile::MOLFile& operator << (const System& system))

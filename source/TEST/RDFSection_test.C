@@ -1,22 +1,18 @@
-// $Id: RDFSection_test.C,v 1.4 2001/12/30 13:29:01 sturm Exp $
+// $Id: RDFSection_test.C,v 1.5 2002/01/16 00:24:51 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 
-// insert includes here
 #include <BALL/STRUCTURE/RDFSection.h>
 
 ///////////////////////////
 
-START_TEST(RDFSection, "$Id: RDFSection_test.C,v 1.4 2001/12/30 13:29:01 sturm Exp $")
+START_TEST(RDFSection, "$Id: RDFSection_test.C,v 1.5 2002/01/16 00:24:51 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
-
-///  insert tests for each member function here         
-///
 
 RDFSection* pointer;
 
