@@ -1,29 +1,22 @@
 
 // vi: set ts=2:
 //
-// $Id: PTE.h,v 1.24 2003/06/19 13:16:54 oliver Exp $
+// $Id: PTE.h,v 1.25 2003/07/01 16:44:12 amoll Exp $
 
 #ifndef BALL_KERNEL_PTE_H
 #define BALL_KERNEL_PTE_H
 
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
-#ifndef BALL_CONCEPT_PROPERTY_H
-#	include <BALL/CONCEPT/property.h>
+#ifndef BALL_COMMON_CREATE_H
+# include <BALL/COMMON/create.h>
 #endif
 
 #ifndef BALL_DATATYPE_STRING_H
-#	include <BALL/DATATYPE/string.h>
+# include <BALL/DATATYPE/string.h>
 #endif
 
 #ifndef BALL_CONCEPT_PROCESSOR_H
-#	include <BALL/CONCEPT/processor.h>
+# include <BALL/CONCEPT/processor.h>
 #endif
-
-#include <ctype.h> 	//  toupper, tolower
-#include <stdlib.h> //  bsearch
 
 #define BALL_ELEMENT_NAME_DEFAULT                "Unknown"
 #define BALL_ELEMENT_SYMBOL_DEFAULT              "?"
@@ -57,7 +50,6 @@ namespace BALL
 			\ingroup KernelMiscellaneous	
 	*/
 	class Element
-		: public PropertyManager
 	{
 		public:
 
@@ -315,16 +307,6 @@ namespace BALL
 				Zr
 			};
 
-			/**	@name	Property
-					Enum to define atom element properties.
-			*/
-			enum Property
-			{
-				/**	@name NUMBER_OF_PROPERTIES
-				*/
-				NUMBER_OF_PROPERTIES
-			};
-			
 			/**	@name	Constructors and Destructors.
 			*/
 			//@{
@@ -684,18 +666,10 @@ namespace BALL
 	/**	Periodic Table of Elements Class
 	*/
 	class PTE_
-		: public PropertyManager
 	{
 		public:
 
 			BALL_CREATE(PTE_)
-
-			/**	
-			*/
-			enum Property
-			{
-				NUMBER_OF_PROPERTIES
-			};
 
 			/**	@name	Constructors and Destructors
 			*/
@@ -717,7 +691,6 @@ namespace BALL
 				throw();
 
 			/** Clear method.
-					This method just calls  \link PropertyManager::clear PropertyManager::clear \endlink .
 			*/
 			virtual void clear()
 				throw();

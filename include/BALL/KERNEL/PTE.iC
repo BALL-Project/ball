@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PTE.iC,v 1.8 2003/06/19 13:16:54 oliver Exp $
+// $Id: PTE.iC,v 1.9 2003/07/01 16:44:13 amoll Exp $
 
 BALL_INLINE 
 void Element::clear()
@@ -204,7 +204,6 @@ BALL_INLINE
 void PTE_::clear()
 	throw()
 {
-  PropertyManager::clear();
 }
 
 BALL_INLINE 

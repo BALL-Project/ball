@@ -1,19 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PTE.C,v 1.15 2003/06/19 13:24:02 oliver Exp $
+// $Id: PTE.C,v 1.16 2003/07/01 16:44:25 amoll Exp $
 //
 
 #include <BALL/KERNEL/PTE.h>
-
 #include <ctype.h>			// toupper, tolower
 #include <stdlib.h>			// bsearch
-#include <string.h>
 
-#include <iostream>
-
-using namespace std;
-
+using std::ostream;
 namespace BALL 
 {
 
@@ -399,8 +394,7 @@ namespace BALL
 
 	Element::Element(const Element& element)
 		throw()
-			:	PropertyManager(),
-				name_(element.name_),
+			:	name_(element.name_),
 				symbol_(element.symbol_),
 				group_(element.group_),
 				period_(element.period_),
@@ -483,9 +477,8 @@ namespace BALL
 	{
 	}
 
-	PTE_::PTE_(const PTE_& pte)
+	PTE_::PTE_(const PTE_& /*pte*/)
 		throw()
-		:	PropertyManager(pte)
 	{
 		// no nonstatic members to copy
 	}
