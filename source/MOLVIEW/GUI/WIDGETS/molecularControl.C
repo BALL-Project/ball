@@ -1,8 +1,8 @@
-// $Id: molecularControl.C,v 1.6.4.16 2002/12/10 00:11:36 amoll Exp $
+// $Id: molecularControl.C,v 1.6.4.17 2002/12/10 17:07:49 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/WIDGETS/molecularControl.h>
 #include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
-#include <BALL/MOLVIEW/GUI/DIALOGS/atomSettings.h>
+#include <BALL/MOLVIEW/GUI/DIALOGS/atomProperties.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/VIEW/KERNEL/message.h>
 
@@ -177,7 +177,7 @@ void MolecularControl::buildContextMenu(Composite* composite, QListViewItem* ite
 
 void MolecularControl::atomProperties()
 {
-	AtomSettings as((Atom*)context_composite_, this);
+	AtomProperties as((Atom*)context_composite_, this);
 	as.exec();
 	ChangedCompositeMessage* message = new ChangedCompositeMessage;
 	message->setComposite(context_composite_);
