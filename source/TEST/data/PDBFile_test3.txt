@@ -1,0 +1,22 @@
+/HEADER                                            [ 1-3][0-9]-[JFMASOND][AEPUCO][NBRYLGPTVC]-[ 0-9][0-9]       
+SEQRES   1      1  ALA                                                
+MODEL        1
+ATOM      1 1HB  ALA     0      -2.525   1.536  -2.196  1.00 20.00           H  
+ATOM      2 2HB  ALA     0      -1.909   0.166  -1.256  1.00 20.00           H  
+ATOM      3  H   ALA     0       0.912   2.022   0.095  1.00 20.00           H  
+ATOM      4 3HB  ALA     0      -2.622   1.561  -0.419  1.00 20.00           H  
+ATOM      5  C   ALA     0      -0.706   3.434  -1.195  1.00 20.00           C  
+ATOM      6  CA  ALA     0      -0.634   1.904  -1.199  1.00 20.00           C  
+ATOM      7  CB  ALA     0      -2.019   1.251  -1.273  1.00 20.00           C  
+ATOM      8  HA  ALA     0      -0.066   1.609  -2.082  1.00 20.00           H  
+ATOM      9  N   ALA     0       0.100   1.426  -0.014  1.00 20.00           N  
+ATOM     10  O   ALA     0       0.277   4.020  -0.688  1.00 20.00           O  
+TER      11      ALA     0 
+ENDMDL
+CONECT    6    5    0    0    0    0    0    0    0    0    0
+CONECT    7    1    2    4    6    0    0    0    0    0    0
+CONECT    8    6    0    0    0    0    0    0    0    0    0
+CONECT    9    3    6    0    0    0    0    0    0    0    0
+CONECT   10    5    0    0    0    0    0    0    0    0    0
+MASTER        0    0    0    0    0    0    0    0   10    1    5    1
+END   

@@ -1,13 +1,14 @@
-// $Id: PDBFile_test.C,v 1.3 2000/07/12 19:36:47 oliver Exp $
+// $Id: PDBFile_test.C,v 1.4 2001/08/24 01:25:36 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 
 #include <BALL/FORMAT/PDBFile.h>
+#include <BALL/STRUCTURE/fragmentDB.h>
 
 ///////////////////////////
 
-START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.3 2000/07/12 19:36:47 oliver Exp $")
+START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.4 2001/08/24 01:25:36 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -51,6 +52,23 @@ CHECK(PDBFile::write(System&))
 RESULT
 
 
+CHECK(writing of Systems containing Atoms instead of PDBAtoms)
+	FragmentDB db;
+	System* system = new System;
+	Protein* protein = new Protein;
+	Chain* chain = new Chain;
+	system->insert(*protein);
+	protein->insert(*chain);
+	chain->insert(*db.getResidueCopy("ALA"));
+	TEST_EQUAL(system->countAtoms(), 10)
+	String filename;
+	NEW_TMP_FILE(filename)
+	PDBFile outfile(filename, File::OUT);
+	outfile << *system;
+	outfile.close();
+	delete system;
+	TEST_FILE(filename.c_str(), "data/PDBFile_test3.txt", true)
+RESULT
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
