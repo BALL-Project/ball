@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.20 2004/02/11 12:52:38 amoll Exp $
+// $Id: datasetControl.C,v 1.21 2004/02/12 10:59:29 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -62,7 +62,6 @@ void DatasetControl::initializeWidget(MainControl& main_control)
 		main_control.insertMenuEntry(MainControl::FILE_OPEN, "3D Grid", this, SLOT(add3DGrid()), 0, -1,
 		String("Open a 3D data grid"));
 	GenericControl::initializeWidget(main_control);
-	main_control.insertDeleteEntry();
 }
 
 

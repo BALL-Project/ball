@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.10 2004/02/10 15:51:36 amoll Exp $
+// $Id: molecularStructure.C,v 1.11 2004/02/12 10:59:30 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -381,6 +381,7 @@ namespace BALL
 		menuBar()->setItemEnabled(check_structure_id_, selected);
 
 		menuBar()->setItemEnabled(calculate_ss_id_, main_control.getSelectedSystem() && composites_muteable);
+		menuBar()->setItemEnabled(calculate_hbonds_id_, selected && composites_muteable);
 
 		// these menu point for single items only
 		menuBar() ->setItemEnabled(center_camera_id_, one_item);

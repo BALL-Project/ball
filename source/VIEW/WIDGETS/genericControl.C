@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericControl.C,v 1.10 2004/02/11 12:52:38 amoll Exp $
+// $Id: genericControl.C,v 1.11 2004/02/12 10:59:30 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/genericControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -110,6 +110,7 @@ void GenericControl::initializeWidget(MainControl& main_control)
 	throw()
 {
 	main_control.insertDeleteEntry();
+	DockWidget::initializeWidget(main_control);
 } 
 
 } } // namespaces
