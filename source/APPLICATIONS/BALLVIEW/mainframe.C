@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.14 2004/07/07 17:21:49 amoll Exp $
+// $Id: mainframe.C,v 1.15 2004/07/07 18:41:11 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -26,6 +26,9 @@
 #include <qpainter.h>
 #include <qimage.h>
 #include <qapplication.h>
+
+#include <BALL/CONCEPT/XDRPersistenceManager.h>
+#include <sstream>
 
 namespace BALL
 {
@@ -317,14 +320,16 @@ namespace BALL
 		{
 			(*mit)->writePreferences(out);
 		}
-		
 
 		System& system = *getSelectedSystem();
-		String molecular_file = String(result.ascii())+"_molecule.pdb";
+ 		String molecular_file = String(result.ascii())+"_molecule.xdr";
 		out.appendSection("BALLVIEW_PROJECT");
 		out.insertValue("BALLVIEW_PROJECT", "MolecularFile", molecular_file);
 
-		file_dialog_->writePDBFile(molecular_file, system);
+	 	ofstream outfile(molecular_file.c_str(), std::ios::out);
+		TextPersistenceManager pm(outfile);
+		system >> pm;
+		outfile.close();
 
 		out.insertValue("BALLVIEW_PROJECT", "Camera", scene_->getStage()->getCamera().toString());
 
@@ -383,15 +388,23 @@ namespace BALL
 			(*it)->applyPreferences();
 		}
 
+		System* new_system = 0;
 		String molecular_file;
 		if (in.hasEntry("BALLVIEW_PROJECT", "MolecularFile"))
 		{
 			molecular_file = in.getValue("BALLVIEW_PROJECT", "MolecularFile");
 			display_properties_->enableCreationForNewMolecules(false);
-			openFile(molecular_file);
+
+			ifstream infile(molecular_file.c_str(), std::ios::in);
+			TextPersistenceManager pm(infile);
+			PersistentObject* po = pm.readObject();
+			if (!RTTI::isKindOf<System>(*po))
+			{
+			}
+			new_system = (System*) po;
+			infile.close();
+			insert(*new_system);
 		}
-						
-		System* new_system = getSelectedSystem();
 
 		try
 		{
