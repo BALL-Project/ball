@@ -1,4 +1,4 @@
-// $Id: EFShiftProcessor.h,v 1.8 2001/02/03 13:33:25 amoll Exp $
+// $Id: EFShiftProcessor.h,v 1.9 2001/03/02 22:19:33 amoll Exp $
 
 #ifndef BALL_NMR_EFSHIFTPROCESSOR_H
 #define BALL_NMR_EFSHIFTPROCESSOR_H
@@ -16,7 +16,8 @@ namespace BALL
 
 	class Atom;
 		
-	/**	Shift assignment processor implementing the electric field effect.
+	/**	Shift assignment processor implementing the electric field effect. \\
+			{\bf Definition}\URL{BALL/NMR/EFShiftProcessor.h}
 	*/
 	class EFShiftProcessor
 		:	public ShiftModule
@@ -60,18 +61,18 @@ namespace BALL
 		//@{
 
 		/**	Initialization method.
-				This method reads the parameter section "ElectricFieldEffect" and
+				This method reads the parameter section {\bf ElectricFieldEffect} and
 				parses its contents.
 				This section contains the definition of two expressions that define
 				a bond (the first expression matches the atom whose shift is to be
 				calculated, the second describes its bond partner).
 				For each of these bonds, two parameters are given, 
 				$\varepsilon_1$ and	$\varepsilon_2$. \\
-				Then, this method extracts the contents of the "Charges"
-				section and thus constructs an hash map containing residue and atom names 
+				Then, this method extracts the contents of the {\bf Charges}
+				section and thus constructs a hash map containing residue and atom names 
 				the corresponding charges.
-				This processor is applied to all atoms in \Ref{operator ()}, so 
-				expect the atom charges to change!
+				This processor is applied to all atoms in \Ref{operator ()}, 
+				so expect the atom charges to change!
 				@see operator ()
 		*/
 		virtual void init()
@@ -96,7 +97,7 @@ namespace BALL
 				(using \Ref{assign_charge_processor_}). 
 				Charged atoms	are stored in the atom list \Ref{effector_list_}.
 				All bonds are stored in \Ref{bond_list_}.
-				@return \Ref{Processor::CONTINUE}
+				@return Processor::CONTINUE
 				@param composite an arbitrary composite. All non-atom objects are ignored.
 		*/
 		virtual Processor::Result operator () (Composite& composite)
@@ -106,14 +107,14 @@ namespace BALL
 				This method performs the chemical shift calculation.
 				It iterates over all bonds stored in \Ref{bond_list_}.
 				If the two bond atoms match a pair of expressions from
-				\Ref{first_atom_Expressions_} and \Ref{second_atom_expressions_},
+				\Ref{first_atom_expressions_} and \Ref{second_atom_expressions_},
 				the electric field vector is calculated at the bond position using
 				Coulomb's law and the charges and positions of the atoms in the 
 				\Ref{effector_list_}.
 				The chemical shift induced by the electric field effect is calculated as
 					$ delta_{EF} = varepsilon_1 * E_z + varepsilon_2 * E^2 $
 				where constants $ varepsilon_1 $ and $ varpesilon_2 $ are read
-				from the parameter file (section "ElectricFieldEffect").
+				from the parameter file (section {\bf ElectricFieldEffect}).
 				The chemical shift is stored in the \emph{first} atom
 				using the named property \Ref{ShiftModule::PROPERTY__SHIFT} 
 				and in the named property \Ref{PROPERTY__EF_SHIFT}.

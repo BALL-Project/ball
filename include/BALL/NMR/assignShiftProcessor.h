@@ -1,4 +1,4 @@
-// $Id: assignShiftProcessor.h,v 1.10 2000/10/05 22:26:12 oliver Exp $
+// $Id: assignShiftProcessor.h,v 1.11 2001/03/02 22:19:33 amoll Exp $
 
 #ifndef BALL_NMR_ASSIGNSHIFTPROCESSOR_H
 #define BALL_NMR_ASSIGNSHIFTPROCESSOR_H
@@ -21,13 +21,14 @@ namespace BALL
 {
                
 	/**	Set a property called chemical_shift.
+			{\bf Definition}\URL{BALL/NMR/assignShiftProcessor.h}
 	*/
 	class AssignShiftProcessor
 		: public UnaryProcessor<Composite>
 	{
 		public:
 		
-		/**@name	Constructors and Destructors
+		/** @name	Constructors and Destructors
 		*/
 		//@{
 
@@ -50,8 +51,7 @@ namespace BALL
 		virtual ~AssignShiftProcessor();
 		
 		//@}
-
-		/**@name	Processor specific functions.
+		/** @name	Processor specific functions.
 		*/
 		//@{
 		
@@ -66,14 +66,15 @@ namespace BALL
 		/**	Application method
 		*/
 		virtual Processor::Result operator () (Composite& composite);
-		//@}
 
+		//@}
 		/**	@name	Accessors
 		*/
 		//@{
 		/**	Return the state of the object
 		*/
 		bool isValid() const;
+
 		//@}
 		
 		protected:

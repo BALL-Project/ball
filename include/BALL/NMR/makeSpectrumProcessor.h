@@ -1,4 +1,4 @@
-// $Id: makeSpectrumProcessor.h,v 1.5 2000/09/22 17:18:29 oliver Exp $
+// $Id: makeSpectrumProcessor.h,v 1.6 2001/03/02 22:19:33 amoll Exp $
 
 #ifndef BALL_NMR_MAKESPECTRUMPROCESSOR_H
 #define BALL_NMR_MAKESPECTRUMPROCESSOR_H
@@ -11,31 +11,27 @@
 #	include<BALL/NMR/NMRSpectrum.h>
 #endif
 
-class System;
+//class System;
 
 namespace BALL
 {
-/**@name 	MakeSpectrumProcessor
+
+/** MakeSpectrumProcessor.	
+		Processor designed to built the well known processor user Interface of NMRSpectrum. \\
+		{\bf Definition}\URL{BALL/NMR/makeSpectrumProcessor.h}
 */
-
-//@{
-
-/** 	Processor designed to built the well known processor user Interface of NMRSpectrum
-*/
-
 class MakeSpectrumProcessor
 	:	public UnaryProcessor<Atom>
 {
 	public:
 	
-	/**@name Constructors and Destructors
+	/** @name Constructors and Destructors
 	*/
-	
 	//@{
 	
-	/**	Default Constructor
-			A new NMRSpectrum is allocated for {\tt spectrum\_}
-			and some standard shift modules are inserted : JB , HM , ANISO and RC
+	/**	Default Constructor.
+			A new NMRSpectrum is allocated for {\tt spectrum_} and some standard 
+			shift modules are inserted : JB , HM , ANISO and RC.
 	*/
 	MakeSpectrumProcessor();
 	
@@ -44,29 +40,26 @@ class MakeSpectrumProcessor
 	virtual ~MakeSpectrumProcessor();
 	
 	//@}
-
-	/**@name class special functions
+	/** @name class special functions
 	*/
-
 	//@{
 
-	/**	finish funcion
+	/**	Finish funcion.
 			NMRSpectrum function calculate_shifts() is called
 	*/
 	virtual bool finish();
 	
-	/**	operator function
-			if object is kind of system 
-			the {\tt system\_} variable of NMRSpectrum {\tt spectrum\_} is set to this system
+	/**	Operator function.
+			If object is kind of system the {\tt system_} variable of 
+			NMRSpectrum {\tt spectrum_} is set to this system.
 	*/
 	virtual Processor::Result operator () (Atom& atom);
 	
 	//@}
+
 	protected:
 		NMRSpectrum spectrum_;
 };
-
-//@}
 
 } // namespace BALL	 
 

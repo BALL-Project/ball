@@ -1,4 +1,4 @@
-// $Id: johnsonBoveyShiftProcessor.h,v 1.5 2000/09/27 16:26:45 burch Exp $
+// $Id: johnsonBoveyShiftProcessor.h,v 1.6 2001/03/02 22:19:33 amoll Exp $
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -29,7 +29,8 @@
 namespace BALL 
 {
 		
-	/**	Shift assignment processor implementing Johnson Bovey theory.
+	/**	Shift assignment processor implementing Johnson Bovey theory. \\
+			{\bf Definition}\URL{BALL/NMR/johnsonBoveyShiftProcessor.h}
 	*/
 	class JohnsonBoveyShiftProcessor
 		:	public ShiftModule
@@ -61,7 +62,7 @@ namespace BALL
     static const char* PROPERTY__RING_CURRENT_SHIFT;
     //@}
  
-		/**@name	Constructors and Destructors
+		/** @name	Constructors and Destructors
 		*/
 		//@{
 
@@ -75,7 +76,7 @@ namespace BALL
 
 		//@}
 
-		/**@name	Processor specific functions.
+		/** @name	Processor specific functions.
 		*/
 		//@{
 

@@ -1,4 +1,4 @@
-// $Id: NMRSpectrum.h,v 1.10 2000/10/05 22:24:41 oliver Exp $
+// $Id: NMRSpectrum.h,v 1.11 2001/03/02 22:19:33 amoll Exp $
 
 #ifndef BALL_NMR_NMRSPECTRUM_H
 #define BALL_NMR_NMRSPECTRUM_H
@@ -21,17 +21,16 @@ namespace BALL
 {
 
 	/**	Realizing the NMRSpectrum Datastructure
-			containing a pointer to a system named {\tt system\_} from which the spectrum will be
-			calculated.
-			the spectrum is realized with a list of peaks called {\tt spectrum\_}.
+			containing a pointer to a system named {\tt system_} from which the spectrum will be
+			calculated.	The spectrum is realized with a list of peaks called {\tt spectrum_}. \\
+			{\bf Definition}\URL{BALL/NMR/NMRSpectrum.h}
 	*/
 	class NMRSpectrum
 	{
 		public:
 		
-		/**@name	Constructors and Destructors
+		/** @name	Constructors and Destructors
 		*/
-
 		//@{
 
 		/**	Default Constructor
@@ -43,45 +42,44 @@ namespace BALL
 		~NMRSpectrum();
 		
 		//@}
-
-		/**@name 	class special functions
+		/** @name 	class special functions
 		*/
 		//@{
 		
-		/**	Sets {\tt system\_} to a system
+		/**	Sets {\tt system_} to a system
 		*/
 		void setSystem(System* s);
 
-		/**	Returns a pointer to the system set to {\tt system\_}.
+		/**	Returns a pointer to the system.
 		*/
 		const System* getSystem() const;
 		
-		/**	Starts every processor in {\tt processorlist\_}
+		/**	Starts every processor in {\tt processorlist_}
 		*/
 		void calculateShifts();
 		
-		/**	Starts the CreateSpectrumProcessor which creates the peaklist {\tt spectrum\_}.
-				This list will be sortet after peak큦 {\tt ppm\_}.
+		/**	Starts the CreateSpectrumProcessor which creates the peaklist {\tt spectrum_}.
+				This list will be sortet after peak큦 {\tt ppm_}.
 		*/
 		void createSpectrum();
 		
-		/** Returns a pointer to {\tt spectrum\_}.
+		/** Returns a pointer to {\tt spectrum_}.
 		*/
 		const list<Peak1D>& getPeakList() const;	
 		
-		/**	Sets {\tt spectrum\_} to a peaklist.
+		/**	Sets {\tt spectrum_} to a peaklist.
 		*/
 		void setPeakList(const list<Peak1D>& spectrum);
 		
-		/**	Returns the ppm of the lowest peak of {\tt spectrum\_}.
+		/**	Returns the ppm of the lowest peak of {\tt spectrum_}.
 		*/
 		float getSpectrumMin() const;
 		
-		/**	Returns the ppm of the highest peak of {\tt spectrum\_}.
+		/**	Returns the ppm of the highest peak of {\tt spectrum_}.
 		*/
 		float getSpectrumMax() const;
 		
-		/**	Explicitly sorts the peaklist {\tt spectrum\_}.
+		/**	Explicitly sorts the peaklist {\tt spectrum_}.
 		*/
 		void sortSpectrum();
 
@@ -89,20 +87,20 @@ namespace BALL
 		*/
 		void plotSpectrum(const String& filename) const;
 		
-		/**	Writes a file containing all peak큦 {\tt ppm\_} value.
+		/**	Writes a file containing all peak큦 {\tt ppm_} value.
 		*/
 		void plotPeaks(const String& filename) const;	
 		
-		/**	Iterates through every atom of {\tt system\_} writing
+		/**	Iterates through every atom of {\tt system_} writing
 				in a file its full name and the chemical shift property.
 		*/
 		void writePeaks(const String& filename) const;
 
-		/**	Sets the value of {\tt density\_} used for the plot_spectrum function.
+		/**	Sets the value of {\tt density_} used for the plot_spectrum function.
 		*/
 		void setDensity(Size density);
 		
-		/**	Returns the value of {\tt density\_}.
+		/**	Returns the value of {\tt density_}.
 		*/
 		Size getDensity() const;	
 
@@ -118,10 +116,8 @@ namespace BALL
 			throw();
 			
 		//@}
-
-		/**@name 	friend functions
+		/** @name 	friend functions
 		*/
-
 		//@{
 		
 		/** Writes in a file the difference of the two first files.

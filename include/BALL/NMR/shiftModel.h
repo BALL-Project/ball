@@ -1,4 +1,4 @@
-// $Id: shiftModel.h,v 1.4 2000/09/25 19:09:54 oliver Exp $
+// $Id: shiftModel.h,v 1.5 2001/03/02 22:19:33 amoll Exp $
 
 #ifndef BALL_NMR_SHIFTMODEL_H
 #define BALL_NMR_SHIFTMODEL_H
@@ -22,11 +22,9 @@ namespace BALL
 			The model consists of a set of single contributions (e.g. ring curent,
 			magnetic anisotropy, etc.). Each of these contributions is calculated
 			by a separate \Ref{ShiftModule} object. ShiftModel contains a list of 
-			these processors and is also derived from ShiftModel. Hence, it can
-			be applied to arbitrary kernel objects in the same fashion as \Ref{ShiftModule}s.
-			\\
+			these processors and is also derived from ShiftModul. Hence, it can
+			be applied to arbitrary kernel objects in the same fashion as \Ref{ShiftModule}s.	\\
 			{\bf Definition:}\URL{BALL/NMR/shiftModel.h}
-			\\
 	*/
 	class ShiftModel 
 		: public ShiftModule		
@@ -51,30 +49,30 @@ namespace BALL
 
 		/**	The creation method hash map type.
 				This type is used internally to store the creation
-				method corresponding to a certaion symbolic name
-				(usually the class name).
+				method corresponding to a certain symbolic name (usually the class name).
 		*/
 		typedef StringHashMap<CreateMethod>	CreateMethodMap;
-		//@}
 
+		//@}
 		/**	@name Constants
 		*/
 		//@{
+
 		/**	The name of the section containing the module types and names of the model
 		*/
 		static const char* MODULE_LIST_SECTION;
-		//@}
 
+		//@}
 		/**	@name	Constructors and Destructors
 		*/
 		//@{
 		
-		/** 	Default Constructor
+		/** Default Constructor
 		*/
 		ShiftModel()
 			throw();
 
-		/** 	Detailed Constructor
+		/** Detailed Constructor
 		*/
 		ShiftModel(const String& filename)
 			throw();
@@ -90,19 +88,17 @@ namespace BALL
 			throw();
 
 		/**	Clear method.
-				This method destructs all shift modules in the
-				module list.Then, it clears the module list, the parameters, 
-				and the options.
-			
+				This method destructs all shift modules in the module list.
+				Then, it clears the module list, the parameters, and the options.		
 		*/
 		void clear()
 			throw();
 
 		//@}
-
 		/**	@name Accessors
 		*/	
 		//@{
+
 		/**
 		*/
 		Parameters& getParameters()
@@ -124,7 +120,6 @@ namespace BALL
 			throw();
 		
 		/**	Register a new module type.
-				Add the 
 		*/
 		void registerModule(const String& name, CreateMethod method) 
 			throw(Exception::NullPointer);
@@ -133,8 +128,8 @@ namespace BALL
 		*/
 		void unregisterModule(const String& name) 
 			throw();
-		//@}
 
+		//@}
 		/**	@name	Predicates
 		*/
 		//@{
@@ -148,8 +143,8 @@ namespace BALL
 		*/
 		bool isRegistered(const String& name) const
 			throw();
-		//@}
 
+		//@}
 		/**	@name	Assignment
 		*/
 		//@{
@@ -163,8 +158,8 @@ namespace BALL
 		*/
 		const ShiftModel& operator = (const String& filename)
 			throw();
-		//@}
 
+		//@}
 		/**	@name Public Attributes
 		*/
 		//@{
@@ -174,7 +169,6 @@ namespace BALL
 		Options options;
 
 		//@}
-
 		/**	@name	Processor related methods
 		*/
 		//@{
@@ -198,9 +192,8 @@ namespace BALL
 		protected:
 
 		/**	Initialize the model from the parameter file.
-				This method assumes that object has a valid
-				parameter file assigned. It sets {\tt valid_} 
-				to {\bf true} if it could create a shfit model 
+				This method assumes that object has a valid	parameter file assigned.
+				It sets {\tt valid_} to {\bf true} if it could create a shift model 
 				from the contents of the parameter file.
 		*/
 		bool init_()

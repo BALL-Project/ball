@@ -1,4 +1,4 @@
-// $Id: clearShiftProcessor.h,v 1.4 2000/09/22 12:07:12 oliver Exp $
+// $Id: clearShiftProcessor.h,v 1.5 2001/03/02 22:19:33 amoll Exp $
 
 #ifndef BALL_NMR_CLEARSHIFTPROCESSOR_H
 #define BALL_NMR_CLEARSHIFTPROCESSOR_H
@@ -12,14 +12,15 @@ namespace BALL
 		
 	/**	Clear assigned shift data of all atoms.
 			This processors clears the named property defined by \Ref{ShiftModule::PROPERTY__SHIFT}
-			in the atoms of all data structures it is applied to.
+			in the atoms of all data structures it is applied to. \\
+			{\bf Definition}\URL{BALL/NMR/clearShiftProcessor.h}
 	*/
 	class ClearShiftProcessor
 		:	public ShiftModule
 	{
 		public:
 		
-		/**@name	Constructors and Destructors
+		/** @name	Constructors and Destructors
 		*/
 		//@{
 
@@ -40,7 +41,7 @@ namespace BALL
 		
 		//@}
 
-		/**@name	Processor specific functions.
+		/** @name	Processor specific functions.
 		*/
 		//@{
 
@@ -48,6 +49,7 @@ namespace BALL
 		*/
 		virtual Processor::Result operator () (Composite& composite)
 			throw();
+
 		//@}
 		
 	};

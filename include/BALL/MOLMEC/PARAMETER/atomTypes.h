@@ -1,4 +1,4 @@
-// $Id: atomTypes.h,v 1.6 2001/03/02 22:10:27 amoll Exp $
+// $Id: atomTypes.h,v 1.7 2001/03/02 22:24:03 amoll Exp $
 // Molecular Mechanics Parameter: class describing the atom type section of a parameter file
 
 #ifndef BALL_MOLMEC_PARAMETER_ATOMTYPES_H
@@ -44,10 +44,6 @@ namespace BALL
 		*/
 		virtual ~AtomTypes() throw();
 
-		/** Clear method 
-		*/
-		virtual void clear() throw();
-
 		//@}
 		/**	Parameter extraction
 		*/
@@ -81,6 +77,10 @@ namespace BALL
 		/**	@name	Assignment
 		*/
 		//@{
+
+		/** Clear method 
+		*/
+		virtual void clear() throw();
 
 		/**	Assignment operator.
 				@param	atom_types the atom types object to be copied

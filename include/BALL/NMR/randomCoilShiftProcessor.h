@@ -1,4 +1,4 @@
-// $Id: randomCoilShiftProcessor.h,v 1.6 2000/09/26 19:27:47 oliver Exp $
+// $Id: randomCoilShiftProcessor.h,v 1.7 2001/03/02 22:19:33 amoll Exp $
 
 #ifndef BALL_NMR_SHIFTMODULE_H
 #	include<BALL/NMR/shiftModule.h>
@@ -10,9 +10,9 @@
 
 namespace BALL 
 {
-		
 
-	/**	Random coil shift assignment processor
+	/**	Random coil shift assignment processor. \\
+			{\bf Definition}\URL{BALL/NMR/randomCoilShiftProcessor.h}
 	*/
 	class RandomCoilShiftProcessor
 		:	public ShiftModule
@@ -29,9 +29,9 @@ namespace BALL
         @see ShiftModule::PROPERTY__SHIFT
     */
     static const char* PROPERTY__RANDOM_COIL_SHIFT;
+
     //@}
- 
-		/**@name	Constructors and Destructors
+		/** @name	Constructors and Destructors
 		*/
 		//@{
 
@@ -51,28 +51,27 @@ namespace BALL
 			throw();
 		
 		//@}
-
 		/**	@name Accessors
 		*/
 		//@{
 
 		/**	Initialize the module.
-				This method fails if not \Ref{Parameters} object was assigned
+				This method fails if no \Ref{Parameters} object was assigned
 				or the parameter file does not contain the proper section ({\tt RandomCoilShifts}).
-				If it terminates correctly, the modules is valid.
+				If it terminates correctly, the module is valid.
 				@see isValid
 		*/
 		virtual void init()
 			throw();
+
 		//@}
-		
-		/**@name	Processor specific functions.
+		/** @name	Processor specific functions.
 		*/
 		//@{
 		
-		/**	Application method
+		/**	Application method.
 				If current object is a Atom of kind Hydrogen its random coil shift has to be looked up
-				in {\tt rc\_table}.
+				in {\tt rc_table}.
 				Get Hydrogens residue name append ":" and its name, the lookup entry is reconstruced.
 				If this entry is found within the table the randomcoil shift is added to the Hydrogens
 				chemical shift.
@@ -80,6 +79,7 @@ namespace BALL
 				Hydrogens chemical shift, to mark that Hydrogen not to have a random coil shift table entry.
 		*/
 		virtual Processor::Result operator () (Composite& composite) throw();
+
 		//@}
 
 		protected:

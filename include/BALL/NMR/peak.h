@@ -1,4 +1,4 @@
-// $Id: peak.h,v 1.5 2000/09/22 11:49:39 amoll Exp $
+// $Id: peak.h,v 1.6 2001/03/02 22:19:33 amoll Exp $
 
 #ifndef BALL_NMR_PEAK_H
 #define BALL_NMR_PEAK_H
@@ -10,22 +10,17 @@ namespace BALL
 	
 	class Atom;
 
-	/**@name 	One-dimensional (NMR) Peaks.
-	*/
-
-	//@{
-
 	/**	1D Peak Class.
 			Each peak contains a pointer to an associated atom 
-			(in the case of NMR: the atom that causes this peak).																													
+			(in the case of NMR: the atom that causes this peak).	\\
+			{\bf Definition}\URL{BALL/NMR/peak.h}
 	*/
 	class Peak1D
 	{
 		public:
 
-		/**@name	Constructors and Destructors
+		/** @name	Constructors and Destructors
 		*/
-		
 		//@{
 
 		/**	Default Constructor
@@ -41,8 +36,7 @@ namespace BALL
 		~Peak1D();
 		
 		//@}
-
-		/**@name Accessors
+		/** @name Accessors
 		*/
 		//@{
 
@@ -77,21 +71,21 @@ namespace BALL
 		/**	Set the atom pointer.
 		*/
 		void setAtom(const Atom* atom);
-		//@}
 
-			
+		//@}
 		/**	@name Assignment
 		*/
 		//@{
+
 		/** Assignment Operator
 		*/
 		void operator = (const Peak1D& peak);
+
 		//@}
-
-
 		/**	@name Predicates
 		*/
 		//@{
+
 		/**	Equality operator
 		*/
 		bool operator == (const Peak1D& peak) const;
@@ -99,6 +93,7 @@ namespace BALL
 		/**	Lesser than operator
 		*/
 		bool operator < (const Peak1D& peak) const;
+
 		//@}
 
 		protected:
@@ -113,7 +108,6 @@ namespace BALL
 	*/
 	std::ostream& operator << (std::ostream& os, const Peak1D& peak);
 
-//@}
 
 } // namespace BALL
 

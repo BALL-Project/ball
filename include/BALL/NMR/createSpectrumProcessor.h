@@ -1,4 +1,4 @@
-// $Id: createSpectrumProcessor.h,v 1.9 2000/09/30 16:37:55 oliver Exp $
+// $Id: createSpectrumProcessor.h,v 1.10 2001/03/02 22:19:33 amoll Exp $
 
 #ifndef BALL_NMR_CREATESPECTRUMPROCESSOR_H
 #define BALL_NMR_CREATESPECTRUMPROCESSOR_H
@@ -29,18 +29,18 @@ namespace BALL
 {
 	class Atom;
 
-	/**	Processor creates {\tt peaklist\_}. 
+	/**	Processor creates {\tt peaklist_}. 
 			Each atom´s chemical shift will create a new peak.
-			Thist peak´s {\tt atomlist\_} will contain the corresponding atom.
+			Thist peak´s {\tt atomlist_} will contain the corresponding atom. \\
+			{\bf Definition}\URL{BALL/NMR/createSpectrumProcessor.h}
 	*/
 	class CreateSpectrumProcessor
 		:	public ShiftModule
 	{
 		public:
 
-		/**@name	Constructors and Destructors
+		/** @name	Constructors and Destructors
 		*/
-		
 		//@{
 
 		/**	Default Constructor
@@ -54,7 +54,7 @@ namespace BALL
 		
 		//@}
 
-		/**@name	class special functions
+		/** @name	class special functions
 		*/
 
 		//@{
@@ -63,17 +63,17 @@ namespace BALL
 		*/
 		virtual bool start() 
 			throw();
+
 		/**	Application method.
 		*/
 		virtual Processor::Result operator () (Composite& atom)
 			throw();
 		
-		/**	Returns a reference to {\tt peaklist\_}.
+		/**	Returns a reference to {\tt peaklist_}.
 		*/
 		const list<Peak1D>& getPeakList() const;
 		
 		//@}
-
 		/**	@name Accessors
 		*/
 		//@{
@@ -83,21 +83,28 @@ namespace BALL
 		virtual void init()
 			throw();
 
+		///
 		void setWidth(float width)
 			throw();
 
+		///
 		float getWidth() const
 			throw();
 
+		///
 		void enableAveraging(bool flag = true)
 			throw();
 			
+		///
 		void enableIgnoreTable(bool flag = true)
 			throw();
 
+		///
 		void setExpression(const String& expression)
 			throw();
+
 		//@}
+
 		protected:
 
 		std::list<Peak1D> peaklist_;

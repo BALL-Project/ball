@@ -1,4 +1,4 @@
-// $Id: shiftModule.h,v 1.8 2000/09/21 13:41:16 oliver Exp $
+// $Id: shiftModule.h,v 1.9 2001/03/02 22:19:34 amoll Exp $
 
 #ifndef BALL_NMR_SHIFTMODULE_H
 #define BALL_NMR_SHIFTMODULE_H
@@ -26,27 +26,19 @@
 namespace BALL 
 {
 
-	/**@name	 ShiftModule
-	*/
-
-	//@{		
-
 	/**	A single contribution of a NMR shift model.
 			NMR shift models typically consist of a number of different 
 			contributions (e.g. ring current, ansisotopy, etc.). Each of these
 			contributions is implemented in a ShiftModule. Several of these ShiftModules 
 			can then be combined to a complete \Ref{ShiftModel}.
 			Since ShiftModules are derived from \Ref{UnaryProcessor}, they can be applied
-			to arbitrary kernel data structures. 
-			\\
+			to arbitrary kernel data structures. 	\\
 			{\bf Caveat:} The shifts are usually stored in a property of the corresponding atom.
 			Applying the same processor multiply will give incorrect results, as the ShiftModules
 			\emph{add} their shift contribution. Before applying a ShiftModule, these
-			properties can be reset to zero by applying a \Ref{ClearShiftProcessor}.
-			\\
+			properties can be reset to zero by applying a \Ref{ClearShiftProcessor}. \\
 			{\bf Definition}\URL{BALL/NMR/shiftModule.h}
 	*/
-
 	class ShiftModule 
 		: public UnaryProcessor<Composite>
 	{
@@ -57,20 +49,21 @@ namespace BALL
 		/**	@name	Enums and Constants
 		*/
 		//@{
+
 		/**	Named property to store the shift values.
 				Use this string constant to access the shift values stored in the single
 				atoms.\\
 				{\bf Example:}
-				{\tt atom.setProperty(ShiftModule::PROPERTY__SHIFT, 0.0);}\\
+				{\tt atom.setProperty(ShiftModule::PROPERTY__SHIFT, 0.0);}
 		*/
 		static const char* PROPERTY__SHIFT;
 		//@}
 
-		/**@name	Constructors and Destructors
+		/** @name	Constructors and Destructors
 		*/
 		//@{
 		
-		/** 	Default Constructor
+		/** Default Constructor
 		*/
 		ShiftModule()
 			throw();
@@ -95,8 +88,8 @@ namespace BALL
 		*/
 		virtual void clear()
 			throw();
-		//@}
 
+		//@}
 		/**	@name Assignment
 		*/
 		//@{
@@ -107,10 +100,10 @@ namespace BALL
 			throw();
 
 		//@}
-
 		/**	@name Accessors
 		*/
 		//@{
+
 		/**	Set the modules name
 		*/
 		void setName(const String& name)
@@ -135,22 +128,22 @@ namespace BALL
 		const Parameters* getParameters() const
 			throw();
 
-		/**	Parameter iniitalization.
+		/**	Parameter initalization.
 				Use this method to implement the extraction and initialization of
 				the module's parameters.
 				\Ref{init} is called by \Ref{ShiftModel} as soon as the \Ref{ShiftModule}
 				is constructed and parameters and name are assigned.\\
-
 				All implementations in derived classes should set the \Ref{valid_} flag
 				to {\bf true} if the initialization was successful and to {\bf false} otherwise.
 		*/
 		virtual void init() 
 			throw();
-		//@}
 
+		//@}
 		/**	@name Processor related methods
 		*/
 		//@{
+
 		/**	Start method.
 				This method aborts, if the module is not correctly initialized.
 				@see isValid
@@ -164,17 +157,19 @@ namespace BALL
 		*/
 		virtual bool finish() 
 			throw();
-		//@}
 
+		//@}
 		/**	@name	Predicates
 		*/
 		//@{
+
 		/**	Return the module state.
 				The module is valid if \Ref{init} was executed successfully.
 				@return the module state
 		*/
 		bool isValid() const
 			throw();
+
 		//@}
 
 		protected:
@@ -188,12 +183,11 @@ namespace BALL
 		Parameters*	parameters_;
 
 		/**	The module's validity flag.
-				This flag should indicate that the modules was correctly
+				This flag should indicate that the module was correctly
 				initialized (using \Ref{init}).
 		*/
 		bool valid_;
 	};
-	//@}
 
 } // namespace BALL
 
