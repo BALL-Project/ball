@@ -1,10 +1,11 @@
 
                     BALL  -  Biochemical ALgorithm Library
                     --------------------------------------
-                        public alpha release 1.0a BF 3
+                           public beta release 1.0b
 ------------------------------------------------------------------------------
-    N. P. Boghossian, A. Burchardt, A. Hildebrandt, H. Klein, A. Kerzmann, 
-         O. Kohlbacher, H.-P. Lenhof, A. Moll, P. Mueller, S. Strobel
+         T. Aubertin, N. P. Boghossian, A. Burchardt, A. Hildebrandt, 
+            H. Klein, A. Kerzmann, O. Kohlbacher, H.-P. Lenhof, 
+                A. Moll, P. Mueller, S. Strobel, M. Sturm
 	
 
 To install BALL it should be sufficient to typed the following
