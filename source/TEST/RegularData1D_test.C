@@ -1,4 +1,4 @@
-// $Id: RegularData1D_test.C,v 1.6 2001/07/10 10:38:42 oliver Exp $
+// $Id: RegularData1D_test.C,v 1.7 2001/07/10 17:50:11 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: RegularData1D_test.C,v 1.6 2001/07/10 10:38:42 oliver Exp $")
+START_TEST(class_name, "$Id: RegularData1D_test.C,v 1.7 2001/07/10 17:50:11 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -42,6 +42,27 @@ CHECK(TRegularData1D::TRegularData1D(const TRegularData1D& data))
 	TEST_REAL_EQUAL(rd2.getUpperBound(), 2.1)
 	TEST_REAL_EQUAL(rd2[0], 1.2) 
 	TEST_EQUAL(rd2.getSize(), 1)
+RESULT
+
+
+RegularData1D::VectorType v;
+v.push_back(1.1);
+v.push_back(1.2);
+v.push_back(1.3);
+v.push_back(1.4);
+
+CHECK(TRegularData1D(const VectorType& data, double lower, double upper))
+	RegularData1D rd2(v, 1.0, 1.5);
+	TEST_REAL_EQUAL(rd2.getLowerBound(), 1.0)
+	TEST_REAL_EQUAL(rd2.getUpperBound(), 1.5)
+	TEST_EQUAL(rd2.getSize(), 4)
+	TEST_REAL_EQUAL(rd2[0], 1.1)
+	TEST_REAL_EQUAL(rd2[3], 1.4)
+
+	RegularData1D rd3(v);
+	TEST_REAL_EQUAL(rd3.getLowerBound(), 0.0)
+	TEST_REAL_EQUAL(rd3.getUpperBound(), 0.0)
+	TEST_EQUAL(rd3.getSize(), 4)
 RESULT
 
 
