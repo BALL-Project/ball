@@ -1,4 +1,4 @@
-// $Id: residue.C,v 1.13 2000/05/16 21:38:43 amoll Exp $
+// $Id: residue.C,v 1.14 2000/06/26 10:41:07 oliver Exp $
 
 #include <BALL/KERNEL/residue.h>
 
@@ -484,7 +484,7 @@ namespace BALL
 			}
 		}
 
-		return full_name;
+		return full_name + getID();
 	}
 
 } // namespace BALL
