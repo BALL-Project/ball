@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.h,v 1.44 2004/05/17 14:36:09 amoll Exp $
+// $Id: standardPredicates.h,v 1.45 2004/05/17 15:07:07 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_STANDARDPREDICATES_H
@@ -352,7 +352,7 @@ namespace BALL
 	};
 
 	/** Predicate class for atoms bearing a certain number of bonds.
-			Arguments of this class are	\bf{required} to consist 
+			Arguments of this class are	\<b> required </b> to consist 
 			of an relational operator and a number between 1 and 8.
 			The default is ">0" which means that the atom under siege has to bear
 			at least one bond to make this predicate's operator () () return
@@ -383,7 +383,7 @@ namespace BALL
 
 
 	/** Predicate class for atoms bearing single bonds.
-			Arguments of this class are	\bf{required} to consist 
+			Arguments of this class are	\<b> required </b> to consist 
 			of an relational operator and a number between 1 and 8.
 	 */
 	class SingleBondsPredicate
@@ -402,7 +402,7 @@ namespace BALL
 
 
 	/** Predicate for atoms bearing double bonds. 
-			Arguments of this class are	\bf{required} to consist 
+			Arguments of this class are	\<b> required </b> to consist 
 			of an relational operator and a number between 1 and 8.
 	 */
 	class DoubleBondsPredicate
@@ -422,7 +422,7 @@ namespace BALL
 
 
 	/** Predicate class for atoms bearing triple bonds.
-			Arguments of this class are	\bf{required} to consist 
+			Arguments of this class are	\<b> required </b> to consist 
 			of an relational operator and a number between 1 and 8.
 	 */
 	class TripleBondsPredicate
@@ -441,7 +441,7 @@ namespace BALL
 
 
 	/** Predicate class for atoms bearing aromatic bonds.
-			Arguments of this class are	\bf{required} to consist 
+			Arguments of this class are	\<b> required </b> to consist 
 			of an relational operator and a number between 1 and 8.
 	 */
 	class AromaticBondsPredicate
