@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PARSE_test.C,v 1.2 2003/02/07 14:32:31 anker Exp $
+// $Id: PARSE_test.C,v 1.3 2003/02/07 14:42:48 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -18,7 +18,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: PARSE_test.C,v 1.2 2003/02/07 14:32:31 anker Exp $")
+START_TEST(class_name, "$Id: PARSE_test.C,v 1.3 2003/02/07 14:42:48 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -32,8 +32,7 @@ System ref_system;
 FragmentDB db;
 
 Path path;
-// String tmp = path.find("solvation/PARSE.rul");
-String tmp("PARSE.rul");
+String tmp = path.find("solvation/PARSE.rul");
 INIFile PARSE_rule_file(tmp);
 PARSE_rule_file.read();
 ChargeRuleProcessor charges(PARSE_rule_file);
@@ -68,7 +67,6 @@ RESULT
 
 CHECK("AspGluAsnGlnArg: -COOH -CONH2 -CONH- -CNC-(NH2)2")
 system.clear();
-// hinfile.open("data/AspGluAsnGlnArg_PARSE_charges.hin");
 hinfile.open("data/AspGluAsnGlnArg.hin");
 hinfile >> system;
 hinfile.close();
