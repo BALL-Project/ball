@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferences.h,v 1.3 2003/09/04 22:17:47 amoll Exp $
+// $Id: preferences.h,v 1.4 2003/10/15 14:19:39 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_PREFERENCES_H
@@ -15,132 +15,112 @@ namespace BALL
 
 	namespace VIEW
 	{
-		/** Preferences class.
-				The class Preferences is a tab dialog for other preference dialogs to be
-				inserted. An interface for adding and removing other tab dialogs is
-				available. this preferences dialog will be created by the class
-				MainControl. The MainControl will add other tab dialogs of
-				ModularWidget objects to this preferences dialog if those
-				other ModularWidget objects have preferences tab dialogs. \par
-				\ingroup ViewDialogs
-		*/
-		class Preferences 
-			: public QTabDialog
-		{
-			Q_OBJECT
-			
-			public:
 
-			/**	@name	Constructors
-			*/	
-			//@{
+/** Preferences is a tab dialog for other preference dialogs to be
+		inserted. An interface for adding and removing the tab dialogs is
+		available. The Preferences dialog will be created by the MainControl. 
+		All ModularWidget classes can add their own prefrences tabs.
+		\ingroup ViewDialogs
+*/
+class Preferences 
+	: public QTabDialog
+{
+	Q_OBJECT
+	
+	public:
 
-			/** Default Constructor.
-					Set the size of this preferences to <tt> width</tt> and <tt> height</tt>.
-					Tab dialogs that are inserted must have their size accordingly adjusted to the
-					size given to this preferences.
-					There are two buttons in this preferences:
-					  -  apply - apply the preferences
-						-  cancel - hide the preferences dialog
-					\par
-					\param       parent the parent QWidget of this preferences (See QFileDialog in the QT documentation)
-					\param       name the name of this preferences (See QFileDialog in the QT documentation)
-					\param       width the width of this preferences (Default <tt> width=400</tt>)
-					\param       height the height of this preferences (Default <tt> height=300</tt>)
-			*/
-			Preferences(QWidget *parent = NULL,	const char *name = NULL, int width = 400, int height = 300)
-				throw();
+	/**	@name	Constructors
+	*/	
+	//@{
 
-			//@}
-			/** @name Destructors 
-			*/
-			//@{
+	/** Default Constructor.
+			Set the size of this preferences to <tt> width</tt> and <tt> height</tt>.
+			Tab dialogs that are inserted must have their size accordingly adjusted to the
+			size given to this preferences.
+			There are two buttons in this preferences:
+				-  apply - apply the preferences
+				-  cancel - hide the preferences dialog
+			\par
+			\param       parent the parent QWidget (See QTabDialog in the QT documentation)
+			\param       name (See QTabeDialog in the QT documentation)
+			\param       width (Default <tt>width=400</tt>)
+			\param       height (Default <tt>height=300</tt>)
+	*/
+	Preferences(QWidget *parent = NULL,	const char *name = NULL, int width = 400, int height = 300)
+		throw();
 
-			/** Destructor.
-			*/
-			virtual ~Preferences()
-				throw();
+	//@}
+	/** @name Destructors 
+	*/
+	//@{
 
-			/** Explicit default initialization.
-					Empty for further purpose.
-			*/
-			virtual void clear()
-				throw();
+	/** Destructor.
+	*/
+	virtual ~Preferences()
+		throw();
 
-			//@}
-			/**	@name	Accessors: inspectors and mutators 
-			*/
-			//@{
+	//@}
+	/**	@name	Accessors: inspectors and mutators 
+	*/
+	//@{
 
-			/** Check if tabs are available.				
-					\return bool <tt> true</tt> if tabs are available in this preferences, <tt> false</tt> otherwise
-			*/
-			bool hasTabs()
-				throw();
+	/** Check if tabs are available.				
+			\return bool <tt>true</tt> if tabs are available
+	*/
+	bool hasTabs()
+		throw();
 
-			/** Insert new tab dialog.
-					Insert a new tab dialog into this preferences.
-					This method can be called inside the initializePreferencesTab from
-					the class ModularWidget.
-					\param  child a pointer to the new tab dialog to be inserted into this preferences.
-					\param  name the name of the new tab dialog
-					\see    removeTab
-			*/
-			void insertTab(QWidget *child, const QString &name)
-				throw();
+	/** Insert a new tab dialog 
+			This method can be called inside ModularWidget::initializePreferencesTab
+			\param  child a pointer to the new tab dialog
+			\param  name the name of the new tab dialog
+			\see    removeTab
+	*/
+	void insertTab(QWidget *child, const QString &name)
+		throw();
 
-			/** Remove a tab dialog.
-					Remove a tab dialog previously inserted from this preferences.
-					This method can called inside the finalizePreferencesTab from
-					the class ModularWidget.
-					\param  child a pointer to the tab dialog to be removed from this preferences
-					\see    insertTab
-			*/
-			void removeTab(QWidget *child)
-				throw();
+	/** Remove a tab dialog previously inserted from this preferences.
+			This method can called inside ModularWidget::finalizePreferencesTab 
+			\param  child a pointer to the tab dialog to be removed 
+			\see    insertTab
+	*/
+	void removeTab(QWidget *child)
+		throw();
 
-			/** Fetch the preferences.
-					Fetch the preferences (the position of this preferences) from the
-					INIFile <b> inifile.
-					This method will be called inside the method show from the class
-					MainControl.
-					\param  inifile the INIFile that contains the needed information for this preferences
-					\see    writePreferences
-			*/
-			void fetchPreferences(INIFile &inifile)
-				throw();
+	/** Fetch the preferences (the position) from the INIFile <tt>inifile</tt>.
+			This method will be called inside MainControl::show().
+			\param  inifile the INIFile that contains the needed information
+			\see    writePreferences
+	*/
+	void fetchPreferences(INIFile &inifile)
+		throw();
 
-			/** Write the preferences.
-					Write the preferences (the position of this preferences) to the
-					INIFile <b> inifile.
-					This method will be called inside the method aboutToExit from the class
-					MainControl.
-					\param  inifile the INIFile to be written into
-					\see    fetchPreferences
-			*/
-			void writePreferences(INIFile &inifile)
-				throw();
+	/** Write the preferences (the position) to the INIFile <tt> inifile</tt>.
+			This method will be called in MainControl::aboutToExit.
+			\param  inifile the INIFile to be written into
+			\see    fetchPreferences
+	*/
+	void writePreferences(INIFile &inifile)
+		throw();
 
-			public slots:
+	public slots:
 
-			//@}
-			/** @name Public slots
-			*/
-			//@{
+	//@}
+	/** @name Public slots
+	*/
+	//@{
 
-			/** Open the preferences dialog.
-					Open this preferences.
-			*/
-			void openDialog();
-						
-			//@}
+	/** Open the preferences dialog.
+	*/
+	void show();
+				
+	//@}
 
-		  private:
+	private:
 
-			int number_of_tabs_;
-		};
+	int number_of_tabs_;
+};
   
-	} // namespace VIEW
-} // namespace BALL
+} } // namespace
 
 #endif // BALL_VIEW_DIALOGS_PREFERENCES_H
