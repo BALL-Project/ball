@@ -1,4 +1,4 @@
-// $Id: complex.h,v 1.2 2002/08/27 09:31:34 oliver Exp $
+// $Id: complex.h,v 1.3 2002/08/27 11:58:16 oliver Exp $
 
 #ifndef BALL_MATHS_COMPLEX_H
 #define BALL_MATHS_COMPLEX_H
@@ -8,6 +8,8 @@
 #endif
 
 #include <math.h>
+#include <complex>
+#include <iostream>
 
 namespace BALL 
 {
@@ -197,7 +199,7 @@ namespace BALL
 				@param cpx the to multiply by
 				@return TComplex&, {\em *this}
 		*/
-		TComplex& operator *= (const T& cpx)
+		TComplex& operator *= (const TComplex<T>& cpx)
 			throw();
 
 		/**	Divide by a real number.
@@ -303,7 +305,7 @@ namespace BALL
 
 	/**	@name Default complex type.
 	*/
-	typedef TComplex<float> Complex;
+	typedef TComplex<BALL_COMPLEX_PRECISION> Complex;
 		
 	//@}
 
@@ -561,7 +563,7 @@ namespace BALL
 	TComplex<T2> operator * (const T1& r, const TComplex<T2>& cpx)
 		throw()
 	{
-		return TComplex<T>(r * cpx.re, r * cpx.im);
+		return TComplex<T2>(r * cpx.re, r * cpx.im);
 	}
 
 	template <typename T>
