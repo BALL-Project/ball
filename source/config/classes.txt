@@ -53,10 +53,12 @@ HashSet                             DX          /       store methods
       IteratorTraits_
 List                                /           /
 Options                             /           /
-PointGrid                           EI          /
-Quadruple                           EI          /
-OrderedQuadruple                    EI          /
-RegularExpression                   DEI         /
+Quadruple                           /           Z
+OrderedQuadruple                    /           Z
+RegularData1D                       E           Z
+RegularData2D                       E           Z
+RegularData3D                       /           /
+RegularExpression                   D           /
 String                              DEI         /
 Substring                           DEI         /
       UnboundSubstring
