@@ -1,4 +1,4 @@
-// $Id: socket.h,v 1.8 2000/01/08 12:18:35 oliver Exp $
+// $Id: socket.h,v 1.9 2000/01/13 22:20:20 oliver Exp $
 
 #ifndef BALL_SYSTEM_SOCKET_H
 #define BALL_SYSTEM_SOCKET_H
@@ -403,9 +403,9 @@ namespace BALL
 
 #ifdef BALL_HAS_ANSI_IOSTREAM
 #	define BALL_IOS std::basic_ios<char>
-#	define BALL_ISTREAM std::basic_istream<char>
-#	define BALL_OSTREAM std::basic_ostream<char>
-#	define BALL_IOSTREAM std::basic_iostream<char>
+#	define BALL_ISTREAM std::istream
+#	define BALL_OSTREAM std::ostream
+#	define BALL_IOSTREAM std::iostream
 #else
 #	define BALL_IOS ios
 #	define BALL_ISTREAM istream
@@ -428,10 +428,14 @@ namespace BALL
 
 		public:
 						
-		ISockStream(const SocketBuf& sb)
-			: BALL_IOS(new SocketBuf(sb)),
-				BALL_ISTREAM(0)
+		ISockStream(SocketBuf* sb)
+			: BALL_IOS(sb),
+				BALL_ISTREAM(sb)
 		{
+			if (rdbuf() == 0)
+			{
+				throw Exception::NullPointer(__FILE__, __LINE__);
+			}
 		}
 
 		~ISockStream();
@@ -469,10 +473,14 @@ namespace BALL
 		//@{
 
 		///
-		OSockStream(SocketBuf& sb)
-			: BALL_IOS(new SocketBuf(sb)),
-				BALL_OSTREAM(0)
+		OSockStream(SocketBuf* sb)
+			: BALL_IOS(sb),
+				BALL_OSTREAM(sb)
 		{
+			if (rdbuf() == 0)
+			{
+				throw Exception::NullPointer(__FILE__, __LINE__);
+			}
 		}
 
 		/// Destructor
@@ -711,10 +719,14 @@ namespace BALL
 		//@{
 
 		/// Constructor
-		IOSockStream(const SocketBuf& sb)
-			: BALL_IOS(new SocketBuf(sb)),
-				BALL_IOSTREAM(0)
+		IOSockStream(SocketBuf* sb)
+			: BALL_IOS(sb),
+				BALL_IOSTREAM(sb)
 		{
+			if (rdbuf() == 0)
+			{
+				throw Exception::NullPointer(__FILE__, __LINE__);
+			}
 		}
 		
 		/// Destructor
