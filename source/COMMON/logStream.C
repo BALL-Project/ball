@@ -1,4 +1,4 @@
-// $Id: logStream.C,v 1.8 1999/11/05 10:36:14 oliver Exp $
+// $Id: logStream.C,v 1.9 1999/12/21 01:30:09 oliver Exp $
 
 #include <BALL/COMMON/logStream.h>
 
@@ -457,13 +457,19 @@ namespace BALL
 		}
 	}
 	
-	Size LogStream::getNumberOfLines(int min_level, int max_level) const  {
-		
+	Size LogStream::getNumberOfLines(int min_level, int max_level) const  
+	{
+
 		// cast this to const, to access non const method rdbuf() which
 		// is usually const, but declared non const
 
 		LogStream*	non_const_this = const_cast<LogStream*>(this);
 
+		// if rdbuf() is NULL, return
+		if (non_const_this->rdbuf() == 0)
+		{
+			return 0;
+		}
 
 		// iterate over all loglines and count the lines of interest
 
