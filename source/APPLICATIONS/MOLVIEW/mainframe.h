@@ -1,4 +1,4 @@
-// $Id: mainframe.h,v 1.26 2001/02/12 12:21:50 amoll Exp $
+// $Id: mainframe.h,v 1.27 2001/05/13 15:07:00 hekl Exp $
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
 #define BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -71,10 +71,6 @@
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_MOLECULEGLOBJECTCOLLECTOR_H
 # include <BALL/MOLVIEW/GUI/FUNCTOR/moleculeGLObjectCollector.h>
-#endif  
-
-#ifndef BALL_MOLVIEW_GUI_FUNCTOR_MOLECULEOBJECTPROCESSOR_H
-# include <BALL/MOLVIEW/GUI/FUNCTOR/moleculeObjectProcessor.h>
 #endif  
 
 #include "DIALOGS/DlgPreferences.h"
@@ -170,7 +166,6 @@ class Mainframe
 	Server*   						server_;
 
 	MoleculeGLObjectCollector		GL_object_collector_;
-	MoleculeObjectProcessor			object_processor_;
 
 	FragmentDB		fragment_db_;
 				

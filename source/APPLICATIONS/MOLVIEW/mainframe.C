@@ -33,7 +33,6 @@ Mainframe::Mainframe
 		molecular_properties_(0),
 		server_(0),
 		GL_object_collector_(),
-		object_processor_(),
 		fragment_db_(),
 		hor_splitter_(0),
 		vert_splitter_(0),
