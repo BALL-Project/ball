@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: string.C,v 1.51 2004/02/23 16:33:18 oliver Exp $
+// $Id: string.C,v 1.52 2004/12/02 01:21:07 amoll Exp $
 //
 
 #include <BALL/DATATYPE/string.h>
@@ -1006,7 +1006,8 @@ namespace BALL
 	String& String::trimRight(const char* trimmed_chars)
 		throw()
 	{
-		if (trimmed_chars == 0)
+		if (trimmed_chars == 0 ||
+				size() == 0)
 		{
 			return *this;
 		}
