@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.h,v 1.42 2003/08/28 12:25:04 anker Exp $
+// $Id: standardPredicates.h,v 1.43 2004/04/28 15:36:05 anker Exp $
 //
 
 #ifndef BALL_KERNEL_STANDARDPREDICATES_H
@@ -507,52 +507,52 @@ namespace BALL
 					typedef std::list<CTPNode*>::iterator Iterator;
 					typedef std::list<CTPNode*>::const_iterator ConstIterator;
 
-					/**
+					/*
 					 */
 					CTPNode()
 						throw();
 
-					/**
+					/*
 					 */
 					CTPNode(const CTPNode& node)
 						throw();
 
-					/**
+					/*
 					 */
 					virtual ~CTPNode()
 						throw();
 
-					/**
+					/*
 					*/
 					virtual void destroy()
 						throw();
 
-					/**
+					/*
 					*/
 					virtual void clear()
 						throw();
 
-					/**
+					/*
 					 */
 					void setParent(CTPNode* parent)
 						throw();
 
-					/**
+					/*
 					 */
 					CTPNode* getParent() const
 						throw();
 
-					/**
+					/*
 					 */
 					void addChild(CTPNode* child)
 						throw();
 
-					/**
+					/*
 					 */
 					void removeChild(CTPNode* child)
 						throw();
 
-					/**
+					/*
 					 */
 					::std::list<CTPNode*>& getChildren()
 						throw();
@@ -569,77 +569,77 @@ namespace BALL
 					ConstIterator end() const
 						throw();
 
-					/**
+					/*
 					 */
 					Size getNumberOfChildren() const
 						throw();
 
-					/**
+					/*
 					 */
 					void setBondType(Size type)
 						throw();
 
-					/**
+					/*
 					 */
 					void setBondType(char type)
 						throw();
 
-					/**
+					/*
 					 */
 					Size getBondType() const
 						throw();
 
-					/**
+					/*
 					 */
 					char getBondTypeChar() const
 						throw();
 
-					/**
+					/*
 					 */
 					String getSymbol() const
 						throw();
 
-					/**
+					/*
 					 */
 					void setSymbol(const String& symbol)
 						throw();
 
-					/**
+					/*
 					 */
 					void setFinished()
 						throw();
 
-					/**
+					/*
 					 */
 					void unsetFinished()
 						throw();
 
-					/**
+					/*
 					 */
 					bool isFinished() const
 						throw();
 
-					/**
+					/*
 					 */
 					void setLinked()
 						throw();
 
-					/**
+					/*
 					 */
 					void unsetLinked()
 						throw();
 
-					/**
+					/*
 					 */
 					bool isLinked() const
 						throw();
 
-					/**
+					/*
 					 */
 					void linkWith(CTPNode* partner)
 						throw();
 
-					/**
+					/*
 					 */
 					const HashSet<const CTPNode*>& getLinkSet() const
 						throw();
@@ -647,35 +647,35 @@ namespace BALL
 
 				private: 
 
-					/*_
+					/*
 					 */
 					String element_symbol_;
 
-					/*_ Bond type means the bond connecting *to* this node.
+					/* Bond type means the bond connecting *to* this node.
 					 */
 					Size bond_type_;
 
-					/*_
+					/*
 					 */
 					std::list<CTPNode*> children_;
 
-					/*_
+					/*
 					 */
 					CTPNode* parent_;
 
-					/*_
+					/*
 					 */
 					bool finished_;
 
-					/*_
+					/*
 					 */
 					bool linked_;
 
-					/*_
+					/*
 					 */
 					HashSet<const CTPNode*> link_set_;
 
-					/*_
+					/*
 					*/
 					struct greater_
 						: public binary_function<const CTPNode*, const CTPNode*, bool>
