@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.39 2004/06/13 19:18:49 amoll Exp $
+// $Id: scene.h,v 1.40 2004/06/14 14:47:33 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -587,7 +587,6 @@ namespace BALL
 			QPoint last_pos_;
 
 			static QGLFormat gl_format_;
-			Position current_clipping_plane_;
 		};
 
 } } // namespaces
