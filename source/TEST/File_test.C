@@ -1,0 +1,321 @@
+// $Id: File_test.C,v 1.1 2000/06/09 00:12:35 amoll Exp $
+#include <BALL/CONCEPT/classTest.h>
+
+///////////////////////////
+#include <BALL/SYSTEM/file.h>
+///////////////////////////
+
+START_TEST(class_name, "$Id: File_test.C,v 1.1 2000/06/09 00:12:35 amoll Exp $")
+
+/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
+
+using namespace BALL;
+	
+File* f1;
+
+CHECK(File())
+	f1 = new File();
+	TEST_NOT_EQUAL(f1, 0)
+RESULT
+
+CHECK(~File())
+	delete f1;
+RESULT
+
+CHECK(File(const String& name, OpenMode open_mode = std::ios::in))
+	File f("data/File_test.txt");
+	TEST_EQUAL(f.getSize(), 100)
+RESULT
+
+File f("data/File_test.txt");
+
+CHECK(File(const File& file))
+	File f1(f);
+	TEST_EQUAL(f1 == f, true)
+RESULT
+
+CHECK(enableProtocol(Protocol protocol))
+RESULT
+
+CHECK(disableProtocol(Protocol protocol))
+RESULT
+
+CHECK(close())
+	TEST_EQUAL(f.getSize(), 100)
+	f.close();
+	TEST_EQUAL(f.isClosed(), true)
+	TEST_EQUAL(f.getSize(), 100)
+RESULT
+
+CHECK(open(const String& name, OpenMode open_mode = std::ios::in))
+	f.open("data/File_test.txt");
+	TEST_EQUAL(f.isOpen(), true)
+	TEST_EQUAL(f.getSize(), 100)
+RESULT
+
+CHECK(reopen())
+	f.close();
+	f.reopen();
+	f.reopen();
+	TEST_EQUAL(f.isOpen(), true)
+	TEST_EQUAL(f.getSize(), 100)
+RESULT
+
+CHECK(getName())
+	TEST_EQUAL(f.getName(), "data/File_test.txt")
+	TEST_EQUAL(f.getSize(), 100)
+RESULT
+
+CHECK(getOriginalName())
+	TEST_EQUAL(f.getOriginalName(), "data/File_test.txt")
+	TEST_EQUAL(f.getSize(), 100)
+RESULT
+
+CHECK(getSize())
+	TEST_EQUAL(f.getSize(), 100)
+RESULT
+
+CHECK(static getSize(String filename))
+	TEST_EQUAL(f.getSize("data/File_test.txt"), 100)
+	f.remove("XXX");
+	TEST_EQUAL(f.getSize("XXX"), 0)
+RESULT
+
+CHECK(int getOpenMode() const)
+	TEST_EQUAL(f.getOpenMode(), 1)
+	TEST_EQUAL(f.getSize(), 100)
+RESULT
+
+CHECK(static Type getType(String name, bool trace_link))
+	TEST_EQUAL(f.getType("data/File_test.txt", false), 4)
+	TEST_EQUAL(f.getSize(), 100)
+RESULT
+
+CHECK(Type getType(bool trace_link) const;)
+	TEST_EQUAL(f.getType(false), 4)
+	TEST_EQUAL(f.getType(true), 4)
+	TEST_EQUAL(f.getSize(), 100)
+RESULT
+
+CHECK(std::fstream& getFileStream();)
+	std::fstream fs();
+	//fs = f.getFileStream(); //!!!
+	TEST_EQUAL(f.getSize(), 100)
+RESULT
+
+CHECK(copy(String source_name, String destination_name, Size buffer_size = 4096))
+	TEST_EQUAL(f.copy("data/File_test.txt", "data/File_test.txt"), false)
+	TEST_EQUAL(f.copy("", "data/File_test.txt"), false)
+	TEST_EQUAL(f.copy("data/File_test.txt", ""), false)
+	TEST_EQUAL(f.copy("", ""), false)
+	TEST_EQUAL(f.copy("ZZZZZZZZZZ", "XXX"), false)
+	TEST_EQUAL(f.copy("data/File_test.txt", "XXX"), true)
+	TEST_EQUAL(f.copy("data/File_test.txt", "XXX"), true)
+	TEST_EQUAL(f.getSize(), 100)
+	TEST_EQUAL(f.getSize("XXX"), 100)
+	f.remove("XXX");
+RESULT
+
+CHECK(copyTo(const String& destination_name, Size buffer_size = 4096))
+	TEST_EQUAL(f.copyTo("data/File_test.txt"), false)
+	TEST_EQUAL(f.copyTo(""), false)
+	TEST_EQUAL(f.copyTo("XXX"), true)
+	TEST_EQUAL(f.copyTo("XXX"), true)
+	TEST_EQUAL(f.getSize(), 100)
+	TEST_EQUAL(f.getSize("XXX"), 100)
+	f.remove("XXX");
+RESULT
+
+CHECK(move(const String& source_name, const String& destination_name))
+	TEST_EQUAL(f.copyTo("XXX"), true)
+	TEST_EQUAL(f.copyTo("YYY"), true)
+	TEST_EQUAL(f.move("XXX", "XXX"), false)
+	TEST_EQUAL(f.move("", "XXX"), false)
+	TEST_EQUAL(f.move("XXX", ""), false)
+
+	TEST_EQUAL(f.move("XXX", "YYY"), true) // <<<<<<<<<<<<<<
+	TEST_EQUAL(f.isAccessible("XXX"), false)
+	TEST_EQUAL(f.getSize("YYY"), 100)
+
+	f.copyTo("XXX");
+	TEST_EQUAL(f.move("XXX", "YYY"), true) // <<<<<<<<<<<<<<
+	TEST_EQUAL(f.getSize(), 100)
+	f.remove("XXX");
+	f.remove("YYY");
+RESULT
+
+CHECK(moveTo(const String& destination_name))
+	f.copyTo("XXX");
+	File f1("XXX");
+	TEST_EQUAL(f1.moveTo("XXX"), false)
+	TEST_EQUAL(f1.moveTo(""), false)
+	TEST_EQUAL(f1.moveTo("YYY"), true)
+	TEST_EQUAL(f1.isAccessible(), true)
+	TEST_EQUAL(f1.moveTo("YYY"), false)
+	TEST_EQUAL(f1.isAccessible(), true)
+	TEST_EQUAL(f.getSize("YYY"), 100)
+RESULT
+
+CHECK(remove(String name))
+	f.copyTo("XXX");
+	TEST_EQUAL(f.remove("XXX"), true)
+	TEST_EQUAL(f.getSize(), 100)
+RESULT
+
+CHECK(remove())
+	File f1 = File("XXX");
+	f1.remove();
+	TEST_EQUAL(f1.isAccessible(), false)
+RESULT
+
+CHECK(rename(String old_path, String new_path))
+	f.copyTo("XXX");
+	File f1("XXX");
+	TEST_EQUAL(f1.rename("XXX", "XXX"), true)
+	TEST_EQUAL(f1.rename("XXX", "YYY"), true)
+	TEST_EQUAL(f1.isAccessible("XXX"), false)
+	TEST_EQUAL(f1.isAccessible("YYY"), true)
+	f1.remove();
+	TEST_EQUAL(f.getSize(), 100)
+	f.remove("YYY");
+RESULT
+
+CHECK(renameTo(const String& new_path))
+	f.copyTo("XXX");
+	File f1("XXX");
+	TEST_EQUAL(f1.renameTo("XXX"), true)
+	TEST_EQUAL(f1.isAccessible("XXX"), true)
+	TEST_EQUAL(f1.renameTo("YYY"), true)
+	TEST_EQUAL(f1.isAccessible("XXX"), false)
+	TEST_EQUAL(f1.isAccessible("YYY"), true)
+	f1.remove();
+RESULT
+
+CHECK(truncate(String path, Size size = 0))
+	f.copyTo("XXX");
+	File f1("XXX");
+	TEST_EQUAL(f1.truncate("XXX", 50), true)
+	TEST_EQUAL(f1.getSize(), 50)
+	TEST_EQUAL(f1.truncate("XXX", 0), true)
+	TEST_EQUAL(f1.getSize(), 0)
+	f1.remove();
+RESULT
+
+CHECK(truncate(Size size = 0))
+	f.copyTo("XXX");
+	File f1("XXX");
+	TEST_EQUAL(f1.truncate(50), true)
+	TEST_EQUAL(f1.getSize(), 50)
+	TEST_EQUAL(f1.truncate(0), true)
+	TEST_EQUAL(f1.getSize(), 0)
+	f1.remove();
+RESULT
+/*
+CHECK(registerAction(const String& pattern, const String& exec))
+RESULT
+
+CHECK(unregisterAction(const String& pattern))
+RESULT
+*/
+CHECK(createTemporaryFilename(String& temporary))
+	String s;
+	TEST_EQUAL(f.createTemporaryFilename(s), true)
+	TEST_NOT_EQUAL(s, "")
+RESULT
+
+CHECK(operator == (const File& file))
+	File f1(f);
+	TEST_EQUAL(f1 == f, true)	
+	f.copyTo("XXX");
+	File f2("XXX");
+	TEST_EQUAL(f2 == f, false)	
+	TEST_EQUAL(f.getSize(), 100)
+RESULT
+
+CHECK(operator != (const File& file))
+	File f1(f);
+	TEST_EQUAL(f1 != f, false)	
+	f.copyTo("XXX");
+	File f2("XXX");
+	TEST_EQUAL(f2 != f, true)	
+	TEST_EQUAL(f.getSize(), 100)
+RESULT
+/*
+CHECK(bool isProtocolEnabled(Protocol protocol))
+RESULT*/
+
+CHECK(isOpen())
+	f.copyTo("XXX");
+	File f1("XXX");
+	TEST_EQUAL(f1.isOpen(), true)	
+	f1.close();
+	TEST_EQUAL(f1.isOpen(), false)	
+RESULT
+
+CHECK(isClosed())
+	f.copyTo("XXX");
+	File f1("XXX");
+	TEST_EQUAL(f1.isClosed(), false)	
+	f1.close();
+	TEST_EQUAL(f1.isClosed(), true)	
+RESULT
+
+CHECK(isAccessible(String name))
+	TEST_EQUAL(f.isAccessible("data/File_test.txt"), true)
+	f.remove("XXX");
+	TEST_EQUAL(f.isAccessible("XXX"), false)
+RESULT
+
+CHECK(isAccessible())
+	TEST_EQUAL(f.isAccessible(), true)
+	f.copyTo("XXX");
+	File f1("XXX");
+	f1.remove();
+	TEST_EQUAL(f1.isAccessible(), false)
+RESULT
+
+/*
+
+CHECK(isCanonized())
+RESULT
+
+CHECK(isReadable(String name))
+RESULT
+
+CHECK(isReadable())
+RESULT
+
+CHECK(isWritable(String name))
+RESULT
+
+CHECK(isWritable())
+RESULT
+
+CHECK(isExecutable(String name))
+RESULT
+
+CHECK(isExecutable())
+RESULT
+
+CHECK(hasFormat())
+RESULT
+
+CHECK(hasFormat() const)
+RESULT
+
+CHECK(hasFormat(const String& s))
+RESULT*/
+
+CHECK(isValid())
+	TEST_EQUAL(f.isValid(), true)	
+	File f1("XXX");
+	TEST_EQUAL(f1.isValid(), false)	
+RESULT
+/*
+CHECK(dumpRegisteredActions(std::ostream& s))
+RESULT
+*/
+/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
+END_TEST
