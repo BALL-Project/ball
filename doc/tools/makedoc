@@ -1,5 +1,5 @@
 #!/usr/local/bin/bash
-# $Id: makedoc,v 1.6 2001/07/17 12:12:51 amoll Exp $
+# $Id: makedoc,v 1.7 2002/12/18 18:43:57 amoll Exp $
 
 # This script is used to build the BALL-documentation.
 # It can receive "complete", "html", and "tex" as first parameter to
@@ -99,7 +99,7 @@ build_html_docu ()
 		echo "copying headers..."
 
 		for i in ${HEADER_NAMES} ; do 
-			cat $BALL_PATH/include/$i | expand -t 2 | /opt/gnu/bin/gawk -f $BALL_PATH/doc/tools/remove_comments.awk  > $i
+			cat $BALL_PATH/include/$i | expand -t 2 | `which gawk` -f $BALL_PATH/doc/tools/remove_comments.awk  > $i
 		done
 
 	fi
