@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Surface_test.C,v 1.6 2003/06/09 22:40:54 oliver Exp $
+// $Id: Surface_test.C,v 1.7 2003/06/10 13:32:47 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(Surface, "$Id: Surface_test.C,v 1.6 2003/06/09 22:40:54 oliver Exp $")
+START_TEST(Surface, "$Id: Surface_test.C,v 1.7 2003/06/10 13:32:47 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -550,19 +550,33 @@ CHECK(bool operator != (const TSurface& surface) const throw())
 RESULT
 
 CHECK(BALL_CREATE(TSurface))
-  // ???
+	Surface* v_ptr = (Surface*)s.create(false, true);
+	TEST_EQUAL(v_ptr->getNumberOfVertices(), 0)
+	delete v_ptr;
+	v_ptr = (Surface*)s.create();
+	TEST_REAL_EQUAL(v_ptr->getNumberOfVertices(), 4)
+	delete v_ptr;
 RESULT
 
 CHECK(TSurface(const TSurface& surface) throw())
-  // ???
+	Surface s2(s);
+	TEST_EQUAL(s == s2, true)
 RESULT
 
 CHECK(bool operator != (const Triangle& triangle) const throw())
-  // ???
+	Surface s, s2;
+	TEST_EQUAL(s != s2, false)
+	Surface::Triangle t1;
+	s.pushBackTriangle(t1);
+	TEST_EQUAL(s != s2, true)
 RESULT
 
 CHECK(bool operator == (const Triangle& triangle) const throw())
-  // ???
+ 	Surface s, s2;
+	TEST_EQUAL(s == s2, true)
+	Surface::Triangle t1;
+	s.pushBackTriangle(t1);
+	TEST_EQUAL(s == s2, false)
 RESULT
 
 /////////////////////////////////////////////////////////////
