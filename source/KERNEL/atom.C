@@ -1,4 +1,4 @@
-// $Id: atom.C,v 1.22 2000/04/17 22:43:01 oliver Exp $
+// $Id: atom.C,v 1.23 2000/04/29 12:53:21 oliver Exp $
 
 #include <BALL/KERNEL/atom.h>
 
@@ -219,6 +219,16 @@ namespace BALL
 		atom.number_of_bonds_ = temp_c;
 	}
 		
+	Molecule* Atom::getMolecule()
+	{
+		return Composite::getAncestor(RTTI::getDefault<Molecule>());
+	}
+
+	Fragment* Atom::getFragment()
+	{
+		return Composite::getAncestor(RTTI::getDefault<Fragment>());
+	}
+					                                                                                                                              
 	String Atom::getFullName(Atom::FullNameType type) const
 	{
 		// determine the parent`s name

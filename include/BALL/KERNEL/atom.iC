@@ -1,7 +1,7 @@
-// $Id: atom.iC,v 1.6 2000/04/17 20:52:17 amoll Exp $
+// $Id: atom.iC,v 1.7 2000/04/29 12:53:19 oliver Exp $
 
 	BALL_INLINE
-  void Atom::setElement(Element &element)
+  void Atom::setElement(Element& element)
   {
     element_ = &element;
 	}
@@ -37,27 +37,15 @@
 	}
 
 	BALL_INLINE
-  Molecule* Atom::getMolecule()
-  {
-    return Composite::getAncestor(RTTI::getDefault<Molecule>());
-	}
-
-	BALL_INLINE
   const Molecule* Atom::getMolecule() const
   {
     return ((Atom *)this)->getMolecule();
 	}
 
 	BALL_INLINE
-  Fragment* Atom::getFragment()
+  const Fragment* Atom::getFragment() const
   {
-    return Composite::getAncestor(RTTI::getDefault<Fragment>());
-	}
-
-	BALL_INLINE
-  const Fragment *Atom::getFragment() const
-  {
-    return ((Atom *)this)->getFragment();
+    return ((Atom*)this)->getFragment();
 	}
 
 	BALL_INLINE
