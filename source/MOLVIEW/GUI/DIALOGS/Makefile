@@ -14,7 +14,6 @@ CPP_SOURCES=\
 	openBruker1DFile.C\
 	openBruker2DFile.C\
 	contourSurfaceDialog.C\
-	contourSurfaceDialogData.C\
 	atomSettings.C\
 	atomSettingsData.C
 
@@ -24,7 +23,6 @@ MOC_SOURCES=\
 	labelProperties_moc.C\
 	labelPropertiesData_moc.C\
 	contourSurfaceDialog_moc.C\
-	contourSurfaceDialogData_moc.C\
 	atomSettings_moc.C\
 	atomSettingsData_moc.C
 
@@ -47,9 +45,6 @@ labelPropertiesData_moc.C:	$(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/labelPr
 
 contourSurfaceDialog_moc.C:	$(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/contourSurfaceDialog.h
 	$(MOC) $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/contourSurfaceDialog.h -o contourSurfaceDialog_moc.C
-
-contourSurfaceDialogData_moc.C:	$(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/contourSurfaceDialogData.h
-	$(MOC) $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/contourSurfaceDialogData.h -o contourSurfaceDialogData_moc.C
 
 atomSettings_moc.C: $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/atomSettings.h
 	$(MOC) $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/atomSettings.h -o atomSettings_moc.C
