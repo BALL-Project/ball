@@ -1,4 +1,4 @@
-// $Id: format.doc,v 1.1 1999/08/26 07:53:20 oliver Exp $
+// $Id: format.doc,v 1.2 2000/02/14 09:15:15 oliver Exp $
 
 /**@name	Fileformats
 		This chapter contains all relevant information on 
@@ -7,20 +7,24 @@
 */
 //@{
 
-	//@Include: INIFile.h
-
-	/**	@name	Support for PDB files
+	/**	@name	Molecular structure file formats
 	*/
 	//@{
 
 		//@Include: genericPDBFile.h
 		//@Include: PDBFile.h
+		//@Include: HINFile.h
+		//@Include: MOL2File.h
 
 	//@}
 
-	//@Include: INIFile.h
-	//@Include: HINFile.h
-	//@Include: MOL2File.h
+	/**	@name	Support for Windows-style INI files
+	*/
+	//@{
+		//@Include: INIFile.h
+		//@Include: parameters.h
+		//@Include: parameterSection.h
+	//@}
 	//@Include: resourceFile.h
 	
 //@}
