@@ -1,4 +1,4 @@
-// $Id: timer.h,v 1.6.4.3 2002/12/01 22:25:10 oliver Exp $
+// $Id: timer.h,v 1.6.4.4 2002/12/09 12:55:56 crauser Exp $
 
 #ifndef BALL_SYSTEM_TIMER_H
 #define BALL_SYSTEM_TIMER_H
@@ -13,6 +13,8 @@
 #ifdef BALL_HAS_TIME_H
 #	include <time.h>
 #endif
+
+
 
 #include <iostream>
 

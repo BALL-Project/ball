@@ -1,4 +1,4 @@
-// $Id: Timer_test.C,v 1.12.4.2 2002/12/06 15:29:09 oliver Exp $
+// $Id: Timer_test.C,v 1.12.4.3 2002/12/09 12:55:56 crauser Exp $
 #include <BALL/CONCEPT/classTest.h>
 #include <unistd.h>
 ///////////////////////////
@@ -10,7 +10,7 @@
 #endif
 ///////////////////////////
 
-START_TEST(Timer, "$Id: Timer_test.C,v 1.12.4.2 2002/12/06 15:29:09 oliver Exp $")
+START_TEST(Timer, "$Id: Timer_test.C,v 1.12.4.3 2002/12/09 12:55:56 crauser Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -19,7 +19,7 @@ using namespace BALL;
 
 #define BUSY_WAIT \
 	STATUS("WAITING")\
-	{ double x = 0.0; for (int i = 0; i < 500000; i++, x += rand()); }
+	{ double x = 0.0; for (int i = 0; i < 5000000; i++, x += rand()); }
 
 CHECK(Timer::Timer())
 	Timer* t1 = new Timer();
@@ -102,6 +102,7 @@ CHECK(Timer::getClockTime() const )
 	sleep(2);
 #endif
 	t1.stop();
+	std::cout << "t1.getClockTime():"<<t1.getClockTime()<<std::endl;
 	TEST_EQUAL(t1.getClockTime() > 1, true)
 	TEST_EQUAL(t1.getClockTime() < 3, true)	
 RESULT
@@ -146,6 +147,9 @@ CHECK(Timer::getCPUTime() const )
 	t1.reset();
 	t1.start();
 	BUSY_WAIT
+#ifdef BALL_COMPILER_MSVC
+	BUSY_WAIT
+#endif
 	t1.stop();
 	TEST_EQUAL(t1.getCPUTime() > 0, true)	
 	TEST_REAL_EQUAL(t1.getCPUTime(), t1.getSystemTime() + t1.getUserTime())	
