@@ -1,4 +1,4 @@
-// $Id: residue.h,v 1.18 2000/06/03 00:12:03 amoll Exp $
+// $Id: residue.h,v 1.19 2000/08/28 15:54:51 oliver Exp $
 
 #ifndef BALL_KERNEL_RESIDUE_H
 #define BALL_KERNEL_RESIDUE_H
@@ -141,7 +141,7 @@ namespace BALL
 		void set(const Residue& residue, bool deep = true);
 
 		/**	Assignment operator	*/
-		Residue &operator = (const Residue& residue);
+		Residue& operator = (const Residue& residue);
 
 		/**	Assign a Residue object from another instance.*/
 		void get(Residue& residue, bool deep = true) const;

@@ -1,4 +1,4 @@
-// $Id: composite.C,v 1.20 2000/08/28 14:15:58 amoll Exp $
+// $Id: composite.C,v 1.21 2000/08/28 15:50:29 oliver Exp $
 
 #include <BALL/CONCEPT/composite.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -13,6 +13,7 @@ namespace BALL
 	UnaryPredicate<Composite> Composite::DEFAULT_UNARY_PREDICATE;
 	UnaryProcessor<Composite> Composite::DEFAULT_PROCESSOR;
 
+	// default ctor
 	Composite::Composite()
 		:	PersistentObject(),
 			Object(),
@@ -32,6 +33,7 @@ namespace BALL
 		BALL_BIT_CLEAR_ALL(properties_);
 	}
 
+	// copy ctor
 	Composite::Composite(const Composite& composite, bool deep)
 		:	PersistentObject(composite),
 			Object(composite),
@@ -55,6 +57,7 @@ namespace BALL
 		properties_ = composite.properties_;
 	}
 
+	// destructor
 	Composite::~Composite()
 	{
 		destroy();

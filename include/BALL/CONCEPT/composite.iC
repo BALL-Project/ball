@@ -1,4 +1,4 @@
-// $Id: composite.iC,v 1.10 2000/08/28 14:15:16 amoll Exp $
+// $Id: composite.iC,v 1.11 2000/08/28 15:52:39 oliver Exp $
 
 BALL_INLINE 
 void Composite::set(const Composite& composite, UnaryPredicate<Composite>& predicate)
@@ -14,8 +14,9 @@ void Composite::set(const Composite& composite, bool deep)
 		// predicative cloning
 		composite.clone(*this, Composite::DEFAULT_UNARY_PREDICATE);
 
-	} else {
-
+	} 
+	else 
+	{
 		// clear old contents
 		destroy();
 		
@@ -303,7 +304,7 @@ bool Composite::isNextSiblingOf(const Composite &composite) const
 {
   return (previous_ == &composite);
 }
-
+  
 BALL_INLINE 
 bool Composite::isRelatedWith(const Composite &composite) const
 {
