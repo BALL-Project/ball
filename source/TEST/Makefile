@@ -78,6 +78,7 @@ EXECUTABLES = \
 	PropertyManager_test\
 	Protein_test\
 	PTE_test\
+	Quadruple_test\
 	Quaternion_test\
 	RadialDistributionFunction_test\
 	RandomCoilShiftProcessor_test\
