@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.27 2004/02/13 16:27:43 amoll Exp $
+// $Id: representation.C,v 1.28 2004/03/05 12:39:43 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/representation.h>
 #include <BALL/VIEW/MODELS/modelProcessor.h>
@@ -234,6 +234,12 @@ namespace BALL
 			update_(rebuild);
 #else
 			MainControl* mc = MainControl::getInstance(0);
+			
+			// ????? dirty trick to avoid getInstance problem under windows
+#ifdef BALL_PLATFORM_WINDOWS
+			mc = dynamic_cast<MainControl*>(qApp->mainWidget());
+#endif
+
 			if (mc == 0)
 			{
 				update_(rebuild);
@@ -285,12 +291,7 @@ namespace BALL
 				return;
 			}
 
- 			mc->getPrimitiveManager().insert(*this);
-
- 			RepresentationMessage* message = new RepresentationMessage;
- 			message->setType(RepresentationMessage::ADD);
- 			message->setRepresentation(*this);
- 			mc->sendMessage(*message);
+			mc->insert(*this);
  			mc->setStatusbarText("");
 
 #endif
