@@ -1,0 +1,10 @@
+// $Id: functor.doc,v 1.1 2001/02/18 20:54:21 amoll Exp $
+
+/** Functor methods
+*/
+//@{
+		//@Include: filter.h
+    //@Include: geometricCollector.h
+    //@Include: information.h
+//@}
+
