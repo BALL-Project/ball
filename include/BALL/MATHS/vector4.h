@@ -1,4 +1,4 @@
-// $Id: vector4.h,v 1.14 2000/02/21 18:21:06 amoll Exp $
+// $Id: vector4.h,v 1.15 2000/02/27 18:49:47 amoll Exp $
 
 #ifndef BALL_MATHS_VECTOR4_H
 #define BALL_MATHS_VECTOR4_H
@@ -815,13 +815,19 @@ namespace BALL
 	template <class T>
 	std::istream& operator >> (std::istream& s, TVector4<T>& v)
 	{
-		s >> v.x >> v.y >> v.z >> v.h;
+		char c;
+		s >> c;
+		if (c == '(') 
+		{
+			s >> v.x >> v.y >> v.z >> v.h;
+			s >> c;
+		}
 
 		return s;
 	}
 
 	/**	Output- Operator
-			gives four {\bf T} out: x, y, z, h
+			prints out four {\bf T} : x, y, z, h
 	*/
 	template <class T>
 	std::ostream& operator << (std::ostream& s, const TVector4<T>& v)

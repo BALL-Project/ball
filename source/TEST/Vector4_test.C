@@ -1,4 +1,4 @@
-// $Id: Vector4_test.C,v 1.7 2000/02/21 15:32:20 oliver Exp $
+// $Id: Vector4_test.C,v 1.8 2000/02/27 18:49:51 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,12 +7,16 @@
 
 ///////////////////////////
 
-START_TEST(TVector4, "$Id: Vector4_test.C,v 1.7 2000/02/21 15:32:20 oliver Exp $")
+START_TEST(TVector4, "$Id: Vector4_test.C,v 1.8 2000/02/27 18:49:51 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
+
+String filename;
+using std::ofstream;
+using std::ios;
 
 //line
 CHECK(TVector4();)
@@ -118,26 +122,42 @@ RESULT
 
 //line 49: method std::istream& operator >> (std::istream& s, TVector4<T>& vector)
 CHECK(std::istream& operator >> (std::istream& s, TVector4<T>& vector))
-	//std::ostream ostream;
-	//v = Vector4(1, 2, 3, 4);
-	//ostream = << v;
-	//TEST_EQUAL(ostream, << 1 << 2 << 3 << 4)  //BAUSTELLE
+	std::ifstream instr("data/Vector4_test2.txt");
+	Vector4 v(1, 2, 3, 4);
+	instr >> v;
+	instr.close();
+	TEST_REAL_EQUAL(v.x, 1.2)
+	TEST_REAL_EQUAL(v.y, 2.3)
+	TEST_REAL_EQUAL(v.z, 3.4)
+	TEST_REAL_EQUAL(v.h, 4.5)
 RESULT
 
+
+NEW_TMP_FILE(filename)
 //line 52: method std::ostream& operator << (std::ostream& s, const TVector4<T>& vector)
 CHECK(std::ostream& operator << (std::ostream& s, const TVector4<T>& vector))
-	// std::istream instream;
-	//instream >> 1 >> 2 >> 3 >> 4 ;
-	//v  = Vector4(instream);  //BAUSTELLE
-	//TEST_EQUAL(v[0], 1)
-	//TEST_EQUAL(v[1], 2)
-	//TEST_EQUAL(v[2], 3)
-	//TEST_EQUAL(v[3], 4)
+	Vector4 v(1.2, 2.3, 3.4, 4.5);
+	std::ofstream outstr(filename.c_str(), std::ios::out);
+	outstr << v;
+	outstr.close();
+	TEST_FILE(filename.c_str(), "data/Vector4_test2.txt", false)
 RESULT
 
 //line 67: method TVector4::BALL_CREATE(TVector4<T>)
 CHECK(TVector4::BALL_CREATE(TVector4<T>))
-  //BAUSTELLE
+	Vector4 v(1, 2, 3, 4);
+	Vector4* v_ptr = (Vector4*)v.create(false, true);
+	TEST_REAL_EQUAL(v_ptr->x, 0.0)
+	TEST_REAL_EQUAL(v_ptr->y, 0.0)
+	TEST_REAL_EQUAL(v_ptr->z, 0.0)
+	TEST_REAL_EQUAL(v_ptr->h, 0.0)
+	delete v_ptr;
+	v_ptr = (Vector4*)v.create();
+	TEST_REAL_EQUAL(v_ptr->x, 1.0)
+	TEST_REAL_EQUAL(v_ptr->y, 2.0)
+	TEST_REAL_EQUAL(v_ptr->z, 3.0)
+	TEST_REAL_EQUAL(v_ptr->h, 4.0)
+	delete v_ptr;
 RESULT
 
 //line 183: method TVector4::getLength() const 
@@ -352,8 +372,14 @@ CHECK(TVector4::isValid() const )
 RESULT
 
 //line 326: method TVector4::dump(std::ostream& s = std::cout, Size depth = 0) const 
-CHECK(TVector4::dump(std::ostream& s = std::cout, Size depth = 0) const )
-  //BAUSTELLE
+CHECK(TVector3::dump(std::ostream& s = std::cout, Size depth = 0) const )
+	Vector4 v(1.2, 2.3, 3.4, 4.5);
+  String filename;
+	NEW_TMP_FILE(filename)
+	std::ofstream outfile(filename.c_str(), ios::out);
+	v.dump(outfile);
+	outfile.close();
+	TEST_FILE(filename.c_str(), "data/Vector4_test.txt", true)
 RESULT
 
 //line 395 method TVector4::TVector4<T>::set(const T* ptr)
@@ -441,6 +467,41 @@ CHECK(TVector4<T>::swap(TVector4<T>& v))
 	TEST_EQUAL(u, u2)
 RESULT
 
+
+//line 471
+CHECK(TVector4::dump(std::ostream& s = std::cout, Size depth = 0) const )
+	Vector4 v(1.2, 2.3, 3.4, 4.5);
+  String filename;
+	NEW_TMP_FILE(filename)
+	std::ofstream outfile(filename.c_str(), ios::out);
+	v.dump(outfile);
+	outfile.close();
+	TEST_FILE(filename.c_str(), "data/Vector4_test.txt", true)
+RESULT
+
+
+//line 
+CHECK(std::istream& operator >> (std::istream& s, TVector4<T>& vector))
+	std::ifstream instr("data/Vector4_test2.txt");
+	Vector4 v(1, 2, 3, 4);
+	instr >> v;
+	instr.close();
+	TEST_REAL_EQUAL(v.x, 1.2)
+	TEST_REAL_EQUAL(v.y, 2.3)
+	TEST_REAL_EQUAL(v.z, 3.4)
+	TEST_REAL_EQUAL(v.h, 4.5)
+RESULT
+
+
+//line 
+NEW_TMP_FILE(filename)
+CHECK(std::ostream& operator << (std::ostream& s, const TVector4<T>& vector))
+	Vector4 v(1.2, 2.3, 3.4, 4.5);
+	std::ofstream outstr(filename.c_str(), std::ios::out);
+	outstr << v;
+	outstr.close();
+	TEST_FILE(filename.c_str(), "data/Vector4_test2.txt", false)
+RESULT
 /////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST
