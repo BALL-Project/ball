@@ -112,7 +112,7 @@ TextPersistenceManager              EI          Z
 Time                                /           X
 TimeStamp                           /           X
 Visitor                             DI          Z
-XDRPersistenceManager               I           Z
+XDRPersistenceManager               IX          Z
 
 UnaryFunctor                        D,          /
 BinaryFunctor                       D,          /
@@ -122,10 +122,10 @@ UnaryProcessor                      DI          Z
 BinaryProcessor                     DI          Z
 ------------------------ENERGY----------------------------------------------
 (atomicContactEnergy)               E           /
-ComposedEnergyProcessor             /           Z
+ComposedEnergyProcessor             X           Z
 (COULOMB)                           E           Z
 (DistanceCoulomb)                   E           Z
-EnergyProcessor                     /           Z
+EnergyProcessor                     X           Z
 ------------------------FORMAT----------------------------------------------
 Bruker1D                            DEI,        Z
 Bruker2D                            DEI,        Z
@@ -144,6 +144,7 @@ Parameters                          E           X
 ParameterSection                    I,          X
 PDBFile                             DEI,        X
 XYZFile                             DEI,        /
+DCDFile				    X?		?
 ------------------------KERNEL----------------------------------------------
 Atom                                DX          /           read, write fehlt
             BondIteratorTraits_     DEI         Z
@@ -212,14 +213,16 @@ TBox3                               /           /
 TCircle3                            /           /
 TLine3                              /           /
 TMatrix4x4                          /           /
-PiecewiseFunction                   I           X
-PiecewisePolynomial                 I           X
+PiecewiseFunction                   IX          X
+PiecewisePolynomial                 IX          X
 TPlane3                             /           /
 TQuaternion                         /           /
 TSphere3                            /           /
 TSurface                            X           Z    
 TVector3                            /           /
 TVector4                            /           /
+Function			    IX		/
+NumericalIntegrator		    ?		Z
 ------------------------MOLMEC----------------------------------------------
                         ---------AMBER-----
 amberBend                           DEI         Z
@@ -330,13 +333,13 @@ NewMolecularMessage                 DEI         Z
 TwoColoredLine                      DEI         Z
 TwoColoredTube                      DEI         Z
 ------------------------NMR-------------------------------------------------
-AnisotropyShiftProcessor            I           X
+AnisotropyShiftProcessor            IX          X
 AssignShiftProcessor                DI          /
 ClearShiftProcessor                 I           X
 CreateSpectrumProcessor             DI          Z
 EFShiftProcessor                    I           X
-HaighMallionShiftProcessor          I           X
-JohnsonBoveyShiftProcessor          I           X
+HaighMallionShiftProcessor          IX          X
+JohnsonBoveyShiftProcessor          IX          X
 MakeSpectrumProcessor               EI          X
 NMRSpectrum                         EI          X
 Peak1D                              EI          X
@@ -359,17 +362,17 @@ PyProteinList                       DEI         Z
 PySecondaryStructureList            DEI         Z
 ------------------------SOLVATION-------------------------------------------
 ClaverieParameter                   D           Z
-FDPB                                DI          X
+FDPB                                DIX         X
 (molecularSurfaceGrid)              D           Z
-Pair6_12InteractionEnergyProcessor  DI          X
-Pair6_12RDFIntegrator               DI          X
-PairExpRDFIntegrator                DI          X
-PairExpInteractionEnergyProcessor   DI          X
+Pair6_12InteractionEnergyProcessor  DIX         X
+Pair6_12RDFIntegrator               DIX         X
+PairExpRDFIntegrator                DIX         X
+PairExpInteractionEnergyProcessor   DIX         X
 PCMCavFreeEnergyProcessor           I           Z
 PierottiCavFreeEnergyProcessor      DI          Z
 ReissCavFreeEnergyProcessor         I           Z
-SolventParameter                    DI          Z
-SolventDescriptor                   I           Z
+SolventParameter                    DIX         Z
+SolventDescriptor                   IX          Z
 UhligCavFreeEnergyProcessor         I           Z
 ------------------------STRUCTURE-------------------------------------------
 analyticalSES                       EI          /
