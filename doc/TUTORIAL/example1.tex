@@ -293,8 +293,9 @@ water molecules.
 // the TranslationProcessor
 #include <BALL/STRUCTURE/geometricTransformations.h>
 
-// we use the BALL namespace  and the std namespace (for cout and endl)
+// we use the BALL namespace
 using namespace BALL;
+// .. and the std namespace (for cout and endl)
 using namespace std;
 
 int main()
@@ -326,19 +327,26 @@ int main()
 	oxygen->createBond(*hydrogen1);
 	oxygen->createBond(*hydrogen2);
 
-	// Some statics: Molecule::countAtoms() writes the number of
-	// atoms, Atom::countBonds() the number of bonds the atom shares
-	cout << "# of atoms in water: " << water->countAtoms() << endl;
-	cout << "# of bonds in O: " << oxygen->countBonds() << endl;
-	cout << "# of atoms in H1: " << hydrogen1->countBonds() << endl;
-	cout << "# of atoms in H2: " << hydrogen2->countBonds() << endl;
+	// Some statistics: Molecule::countAtoms() 
+	// returns the number of atoms, Atom::countBonds() 
+	// the number of bonds the atom shares
+	cout << "# of atoms in water: " 
+			 << water->countAtoms() << endl;
+	cout << "# of bonds in O: " 
+			 << oxygen->countBonds() << endl;
+	cout << "# of atoms in H1: " 
+			 << hydrogen1->countBonds() << endl;
+	cout << "# of atoms in H2: " 
+			 << hydrogen2->countBonds() << endl;
 
 	// bond_vector is a vector and is set to the
 	// difference of atom positions of oxygen and hydrogen1
-	Vector3 bond_vector = oxygen->getPosition() - hydrogen1->getPosition();
+	Vector3 bond_vector = oxygen->getPosition() 
+											- hydrogen1->getPosition();
 
-	// Vector3::getLength prints the length of the vector
-	cout << "bond distance: " << bond_vector.getLength() << endl;
+	// Vector3::getLength: the length of the vector
+	cout << "bond distance: " 
+			 << bond_vector.getLength() << endl;
 
 	// Now we copy our molecule using a copy constructor.
 	Molecule* water2 = new Molecule(*water);
@@ -358,8 +366,8 @@ int main()
 	outfile << *S;
 	outfile.close();
 
-	// We delete the system. This also deletes the molecules
-	// and the atoms therein
+	// We delete the system. This also deletes 
+	// the molecules and the atoms therein
 	delete S;
 }
 \end{lstlisting}
