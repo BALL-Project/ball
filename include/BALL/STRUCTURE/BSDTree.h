@@ -1,4 +1,4 @@
-// $Id: BSDTree.h,v 1.1 2000/10/10 14:24:53 oliver Exp $
+// $Id: BSDTree.h,v 1.2 2000/10/11 09:38:07 oliver Exp $
 
 #ifndef BALL_STRUCTURE_BSDTREE_H
 #define BALL_STRUCTURE_BSDTREE_H
@@ -352,8 +352,8 @@ namespace BALL
 		*/
 		TBSDTree<T>* right;
 		
-		string pre;
-		string side;
+		String pre;
+		String side;
 		//@}
 	};
 
