@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.12 2005/03/22 11:32:38 haid Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.13 2005/03/23 15:38:35 leonhardt Exp $
 //
 
 #include "dockDialog.h"
@@ -81,8 +81,8 @@ namespace BALL
 			//build HashMap for scoring function advanced option dialogs
 			addScoringFunction("Default", DEFAULT);
 			addScoringFunction("Random", RANDOM);
-			
-			result_dialog_ = new DockResultDialog(this);
+	
+			result_dialog_ = 0;
 			
 			hide(); 
 		}
@@ -373,24 +373,35 @@ namespace BALL
 			{
 				case DEFAULT:
 					scoring = new EnergeticEvaluation();
-					Log.info() << "in DEFAULT" << std::endl;
 					break;
 				case RANDOM:
 					scoring = new RandomEvaluation();
-					Log.info() << "in RANDOM" << std::endl;
 					break;
 			}
 			
 			// score the results of the docking algorithm
 			std::vector<ConformationSet::Conformation> ranked_conformations = (*scoring)(conformation_set);
-			for(unsigned int i = 0; i < ranked_conformations.size() ; i++)
-			{
-				Log.info() << "conformation: " << ranked_conformations[i].first << " score: " << ranked_conformations[i].second << std::endl;
-			}
 			conformation_set.setScoring(ranked_conformations);
+			
+			Log.info() << "before if" << std::endl;
+			if(result_dialog_ != 0)
+			{
+				result_dialog_->hide();
+				delete result_dialog_;
+				result_dialog_ = 0;
+			}
+			Log.info() << "after if " << std::endl;
+			result_dialog_ = new DockResultDialog(this);
 			
 			// setup result_dialog 
 			result_dialog_->setConformationSet(conformation_set);
+	
+			vector<float> score;
+			for (unsigned int i = 0; i < ranked_conformations.size(); i++)
+			{
+				score.push_back(ranked_conformations[i].second);
+			}
+			result_dialog_->addScore(score);
 	
 			result_dialog_->setScoringName(scoring_functions->currentText());
 			
@@ -398,6 +409,9 @@ namespace BALL
 			result_dialog_->displayDockedSystem();
 			result_dialog_->show();
 
+			delete dock_alg;
+			delete scoring;
+			
 			Log.info() << "End of calculate" << std::endl;
 			return true;
 		}

@@ -53,6 +53,10 @@ namespace BALL
 					void setScoringName(QString name)
 						throw() {scoring_name_ = name;}
 					
+					void addScore(vector<float> new_score)
+						throw() { scores_.push_back(new_score); }
+						
+						
 					// add scoring function to HashMap and ComboBox
 					void addScoringFunction(QString name, int score_func, QDialog* dialog=0)
 						throw();
@@ -84,12 +88,45 @@ namespace BALL
 					//
 					virtual void scoringFuncChosen();
 					
+					//
+					virtual void sortTable(int section);
+					
 				protected:
+							
+				/**
+				nested class Compare_ 
+				This class is needed for the sorting of the table;
+				the rows of the table should be sorted by a certain column
+      */
+      class Compare_
+			{
+				public:
+
+					// constructor
+					Compare_() throw()
+					{}
+					
+					Compare_(int index) throw()
+					{ index_ = index; }
+		
+					// destructor
+					~Compare_() throw()
+					{}
+					
+					// Operator ()
+					bool operator() (const vector<float> a, const vector<float> b) const
+						{ return a[index_] < b[index_]; }
+					
+					int index_;
+			};
 				
+					
 				private:
 					ConformationSet conformation_set_;
 					System* docked_system_;
 					QString scoring_name_;
+					// vector contains scores of different scoring functions
+					vector<vector<float> > scores_;
 					
 					// key: ScoringFunction(enum), value: advanced options dialog
 					HashMap<int, QDialog*> scoring_dialogs_;

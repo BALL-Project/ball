@@ -1,4 +1,4 @@
-// $Id: dockResultDialog.C,v 1.1.2.4 2005/03/22 11:32:38 haid Exp $
+// $Id: dockResultDialog.C,v 1.1.2.5 2005/03/23 15:38:35 leonhardt Exp $
 //
 
 #include <qtable.h>
@@ -33,6 +33,10 @@ namespace BALL
 			addScoringFunction("Default", DEFAULT);
 			addScoringFunction("Random", RANDOM);
 		
+			// signals and slots connections
+    	QHeader* columns = result_table->horizontalHeader();
+			connect( columns, SIGNAL( clicked(int) ), this, SLOT( sortTable(int) ) );
+			
 			hide();
 		}
 		
@@ -83,11 +87,12 @@ namespace BALL
 			std::vector<ConformationSet::Conformation> conformations = conformation_set_.getScoring();
 			
 			//clear table
-			int num_rows = result_table->numRows();
+			/*int num_rows = result_table->numRows();
 			for(int j = num_rows; j >=0; j--)
 			{
 				result_table->removeRow(j);
-			}
+			}*/
+			
 			
 			// fill the table of the result dialog
 			result_table->insertRows(0,conformations.size());
@@ -95,11 +100,11 @@ namespace BALL
 			for(unsigned int i = 0; i < conformations.size() ; i++)
 			{
 				//1.column = snapshot number; 2.column = energy value 
-				QString string;
-				result_table->setText(i,0,string.setNum(conformations[i].first));
-				result_table->setText(i,1,string.setNum(conformations[i].second));
+				QString s;
+				result_table->setText(i,0,s.setNum(conformations[i].first));
+				result_table->setText(i,1,s.setNum(conformations[i].second));
 			}
-			
+			// set the scoring function name as lable of the column
 			result_table->horizontalHeader()->setLabel(1, scoring_name_);
 			
 			//adjust column width
@@ -177,7 +182,51 @@ namespace BALL
 			std::vector<ConformationSet::Conformation> ranked_conformations = (*scoring)(conformation_set_);
 			conformation_set_.setScoring(ranked_conformations);
 			
+			// add new score column to score vector
+			vector<float> score;
+			for (unsigned int i = 0; i < ranked_conformations.size(); i++)
+			{
+				score.push_back(ranked_conformations[i].second);
+			}
+			addScore(score);
 			
+			//before filling the table clear it
+			result_table->setSelectionMode(QTable::Multi);
+			result_table->selectCells(0,0,result_table->numRows()-1, result_table->numCols()-1);
+			result_table->clearSelection();
+			result_table->setSelectionMode(QTable::SingleRow);
+			
+			
+			// add new column to the table of the result dialog, where the new scores are shown
+			int num_column = result_table->numCols();
+			result_table->insertColumns(num_column,1);
+			result_table->horizontalHeader()->setLabel(num_column, scoring_functions->currentText());
+			// fill table
+			for(int row = 0 ; row < result_table->numRows(); row++)
+			{
+				QString s;
+				result_table->setText(row,0,s.setNum(row));
+				for(unsigned int column = 0; column < scores_.size(); column++)
+				{
+				 result_table->setText(row,column+1,s.setNum(scores_[column][row]));
+				}
+			}
+			
+			
+			/*for(unsigned int i = 0; i < ranked_conformations.size() ; i++)
+			{
+				for(unsigned int j = 0; j < result_table->numRows(); j++)
+				{
+					QString snapshot = result_table->text(j,0);
+					QString s;
+					if (snapshot == s.setNum(ranked_conformations[i].first))
+					{
+						result_table->setText(j,num_column,s.setNum(ranked_conformations[i].second));
+					}
+				}
+			}*/
+			
+			result_table->adjustColumn(num_column);
 		}
 		
 		//
@@ -191,6 +240,38 @@ namespace BALL
 			else
 			{
 				advanced_button->setEnabled(false);
+			}
+		}
+		
+		void DockResultDialog::sortTable(int section)
+		{
+			//create vector which contains the rows of the table
+			vector<vector<float> > rows;
+			for(int row_it = 0; row_it < result_table->numRows(); row_it++)
+			{
+				vector<float> row;
+				for(int column_it = 0; column_it < result_table->numCols(); column_it++)
+				{
+					QString s = result_table->text(row_it,column_it);
+					row.push_back(s.toFloat());
+				}
+				rows.push_back(row);
+			}
+			
+			//sort vector by column section which the user clicked
+			Compare_ compare_func = Compare_(section);
+			sort(rows.begin(), rows.end(), compare_func);
+			 
+			//fill table
+			for(int row_it = 0; row_it < result_table->numRows(); row_it++)
+			{
+				QString s;
+				int index = (int) rows[row_it][0];
+				result_table->setText(row_it,0,s.setNum(index));
+				for(int column_it = 1; column_it < result_table->numCols(); column_it++)
+				{
+					result_table->setText(row_it,column_it,s.setNum(rows[row_it][column_it]));
+				}
 			}
 		}
 	}
