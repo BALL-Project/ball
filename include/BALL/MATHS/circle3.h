@@ -1,4 +1,4 @@
-// $Id: circle3.h,v 1.8 2000/02/16 17:25:30 oliver Exp $
+// $Id: circle3.h,v 1.9 2000/03/02 17:40:13 amoll Exp $
 
 #ifndef BALL_MATHS_CIRCLE3_H
 #define BALL_MATHS_CIRCLE3_H
@@ -21,12 +21,25 @@
 
 namespace BALL 
 {
+	/**	@name	Three-dimensional circle.
+	*/
+	//@{
+
+	template <typename T>
+	class TCircle3;
+
+	template <typename T>
+	std::istream& operator >> (std::istream& s, TCircle3<T>& circle);
+
+	template <typename T>
+	std::ostream& operator << (std::ostream& s, const TCircle3<T>& circle);
+
 
 	/**	Generic Circle in Three-Dimensional Space.
       {\bf Definition:} \URL{BALL/MATHS/.h}
       \\
 	*/
-	template <class T>
+	template <typename T>
 	class TCircle3
 	{
 		public:
@@ -38,7 +51,10 @@ namespace BALL
 		*/
 		//@{
 
-		///
+		/**	Default constructor.
+				This method creates a new TCircle3 object. The three components
+				are initialized to {\tt 0}.
+		*/
 		TCircle3()
 			: p(),
 				n(),
@@ -46,7 +62,11 @@ namespace BALL
 		{
 		}
 
-		///
+		/**	Copy constructor.
+				Create a new TCircle3 object from another.
+				@param vector the TCircle3 object to be copied
+				@param bool ignored - just for interface consistency
+		*/	
 		TCircle3(const TCircle3& circle, bool /* deep */ = true)
 			:	p(circle.p),
 				n(circle.n),
@@ -54,15 +74,23 @@ namespace BALL
 		{
 		}
 
-		///
+		/**	Detailled constructor.
+				Create a new TCircle3 object from two points and a {\tt T} value.
+				@param	point assigned to the point 
+				@param	normal assigned to the normal
+				@param	radius assigned tp the radius
+		*/
 		TCircle3(const TVector3<T>& point, const TVector3<T>& normal, const T& radius)
 			:	p(point),
 				n(normal),
-				radius(radiuse)
+				radius(radius)
 		{
 		}
 
-		///
+		/**	Destructor.	
+				Destructs the TCircle3 object. As there are no dynamic
+				data structures, nothing happens.
+		*/	
 		virtual ~TCircle3()
 		{
 		}
@@ -73,7 +101,9 @@ namespace BALL
 		*/
 		//@{
 
-		///
+		/**	Swap the contents of two circles.
+				@param	circle the circle to swap contents with
+		*/
 		void swap(TCircle3& circle)
 		{
 			TVector3<T> temp_vector(p);
@@ -89,7 +119,10 @@ namespace BALL
 			circle.radius = temp;
 		}
 
-		///
+		/**	Assign from another TCircle3.
+				@param vector	the TCirce3 object to assign from
+				@param deep ignored
+		*/
 		void set(const TCircle3& circle, bool /* deep */ = true)
 		{
 			p = circle.p;
@@ -97,7 +130,11 @@ namespace BALL
 			radius = circle.radius;
 		}
 
-		///
+		/**	Assign the circle components.
+				@param	point assigned to the point 
+				@param	normal assigned to the normal
+				@param	radius assigned tp the radius
+		*/
 		void set(const TVector3<T>& point, const TVector3<T>& normal, const T& radius)
 		{
 			p = point;
@@ -105,8 +142,11 @@ namespace BALL
 			radius = radius;
 		}
 
-		///
-		TCircle3& operator = (const TCircle3 &)
+		/**	Assignment operator.
+				Assign the components from another circle.
+				@param circle the circle to assign from
+		**/
+		TCircle3& operator = (const TCircle3& circle)
 		{
 			p = circle.p;
 			n = circle.n;
@@ -115,7 +155,11 @@ namespace BALL
 			return *this;
 		}
 
-		///
+		/**	Assign to another TCircle3.
+				Assigns the components to another circle.
+				@param circle	the circle to be asigned to
+				@param deep ignored
+		*/
 		void get(TCircle3& circle, bool /* deep */ = true) const
 		{
 			circle.p = p;
@@ -123,12 +167,16 @@ namespace BALL
 			circle.radius = radius;
 		}
 
-		///
-		void get(TVector3<T>& point, TVector3<T>& normal, T& radius) const
+		/**	Assign to two variables of type TVector3 and one {\tt T} value.
+				@param	point
+				@param	normal
+				@param	radius
+		*/
+		void get(TVector3<T>& point, TVector3<T>& normal, T& rhs) const
 		{
 			point = p;
 			normal = n;
-			radius = radius;
+			radius = rhs;
 		}
 		//@}
 
@@ -136,20 +184,29 @@ namespace BALL
 		*/
 		//@{
 
-		///
+		/**	Equality operator.
+				@return bool, {\bf true} if all components are equal, {\bf false} otherwise
+		*/
 		bool operator == (const TCircle3& circle) const
 		{
 			return (bool)(p == circle.p && n == circle.n && Maths::isEqual(radius, circle.radius));
 		}
 
-		///
+		/**	Inequality operator.
+				@return bool, {\bf false} if all components are equal, {\bf true} otherwise
+		*/
 		bool operator != (const TCircle3& circle) const
 		{
 			return (bool)(p != circle.p || n != circle.n || Maths::isNotEqual(radius, circle.radius));
 		}
 
 
-		///
+		/**	Test if a given point is a member of the circle.
+				Optional it can be testet, if it is a member of the surface.
+				@param point the point to be tested
+				@param on_surface = true, to test the surface (default = false)
+				@return bool, {\bf true} or {\bf false}
+		*/
 		bool has(const TVector3<T>& point, bool on_surface = false) const
 		{
 			if (on_surface == true)
@@ -168,7 +225,10 @@ namespace BALL
 		*/
 		//@{
 
-		///
+		/**	Test if instance is valid.
+				always retruns true
+				@return bool {\bf true}
+		*/
 		bool isValid() const
 		{
 			return true;
@@ -194,25 +254,6 @@ namespace BALL
 		}
 		//@}
 
-		/**	@name	Storers
-		*/
-		//@{
-
-		///
-		friend std::istream& operator >> (std::istream& s, TCircle3 &)
-		{
-			return (s >> circle.p >> circle.n  >> circle.radius);
-		}
-
-		///
-		friend std::ostream& operator << (std::ostream& s,const TCircle3& circle)
-		{
-			return (s << "CIRCLE(" << circle.p 
-								<< ", " << circle.n
-								<< ", " << circle.radius << ")");
-		}
-		//@}
-
 		/**	@name	Attributes
 		*/
 		//@{
@@ -220,7 +261,7 @@ namespace BALL
 		/**	Circle Center.
 				This point describes the center of the circle.
 		*/
-		TVector3<T> 	p;
+		TVector3<T> p;
 
 		/**	Normal vector.
 				This vector is orthogonal to the circle's plane.
@@ -230,12 +271,38 @@ namespace BALL
 		/**	Radius.
 				The radius of the circle.
 		*/
-		T 					radius;
+		T radius;
 		//@}
 	};
 
-	///
+	/**	Default three-dimensional circle class of type {\bf float}
+	*/
 	typedef TCircle3<float> Circle3;
+
+	/**	@name	Storers
+	*/
+	//@{
+
+	/**	Input- Operator
+			reads in two TVector3 and a {\bf T} value: p, n, radius
+	*/
+	template <typename T>
+	std::istream& operator >> (std::istream& s, TCircle3<T>& circle)
+	{
+			return (s >> circle.p >> circle.n  >> circle.radius);
+	}
+
+	/**	Output- Operator
+			prints out two TVector3 and a {\bf T} value: p, n. radius
+	*/
+	template <typename T>
+	std::ostream& operator << (std::ostream& s, const TCircle3<T>& circle)
+	{
+			return (s << "CIRCLE(" << circle.p 
+								<< ", " << circle.n
+								<< ", " << circle.radius << ")");
+	}
+	//@}
 
 } // namespace BALL
 
