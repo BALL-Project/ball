@@ -137,6 +137,9 @@ ColoringSettingsDialog::ColoringSettingsDialog( QWidget* parent,  const char* na
 	registerObject_(force_min_color_label);
 	registerObject_(force_max_value_slider);
 	registerObject_(force_min_value_slider);
+
+	insertEntry(this, "Coloring");
+	setWidgetStack(widget_stack);
 }
 
 void ColoringSettingsDialog::writePreferenceEntries(INIFile& inifile)
@@ -685,24 +688,10 @@ void ColoringSettingsDialog::getSettings(const ColorProcessor& cp)
 	}
 }
 
-void ColoringSettingsDialog::showPage_(int nr)
-{
-	if (widget_stack->widget(nr) == 0)
-	{
-		return;
-	}
-
-	if (list_box->currentItem() != nr)
-	{
-		list_box->setCurrentItem(nr);
-	}
-	widget_stack->raiseWidget(nr);
-}
-
-
 void ColoringSettingsDialog::showPage(ColoringMethod method)
 	throw()
 {
+	/*
 	switch (method)
 	{
 		case COLORING_ELEMENT:
@@ -744,6 +733,7 @@ void ColoringSettingsDialog::showPage(ColoringMethod method)
 		default:
 			break;
 	}
+	*/
 }
 
 

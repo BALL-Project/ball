@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: materialSettings.C,v 1.6 2004/09/29 20:40:18 amoll Exp $
+// $Id: materialSettings.C,v 1.7 2004/09/30 15:51:21 amoll Exp $
 // 
 
 #include <BALL/VIEW/DIALOGS/materialSettings.h>
@@ -27,6 +27,7 @@ namespace BALL
 			registerObject_(diffuse_slider);
 			registerObject_(ambient_slider);
 			registerObject_(shininess_slider);
+			insertEntry(this, "Materials");
 		}
 
 

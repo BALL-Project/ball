@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lightSettings.C,v 1.10 2004/09/29 20:40:17 amoll Exp $
+// $Id: lightSettings.C,v 1.11 2004/09/30 15:51:21 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/lightSettings.h>
@@ -31,6 +31,7 @@ LightSettings::LightSettings(QWidget* parent,  const char* name, WFlags fl)
 	current_light_ = -1;
 	
 	updateFromStage();
+	insertEntry(this, "Lighting");
 }
 
 

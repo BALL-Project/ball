@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.C,v 1.29 2004/09/28 21:41:05 amoll Exp $
+// $Id: modelSettingsDialog.C,v 1.30 2004/09/30 15:51:21 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modelSettingsDialog.h>
@@ -65,11 +65,15 @@ namespace BALL
 			registerObject_(hbonds_radius_slider);
 
 			setDefaults(true);
+
+			insertEntry(this, "Models");
+			setWidgetStack(widget_stack);
 		}
 
 		void ModelSettingsDialog::setDefaults(bool all)
 			throw()
 		{
+			/*
 			if (all || list_box->currentItem() == 0)
 			{
 				AddBallAndStickModel dummy;
@@ -118,6 +122,7 @@ namespace BALL
 				ForceModel dummy;
 				getSettings(dummy);
 			}
+			*/
 		}
 
 		float ModelSettingsDialog::getFloatValue_(const QSlider* const& slider) const
@@ -146,21 +151,6 @@ namespace BALL
 		{
 			setDefaults(false);
 		}
-
-		void ModelSettingsDialog::showPage_(int nr)
-		{
-			if (widget_stack->widget(nr) == 0)
-			{
-				return;
-			}
-
-			if (list_box->currentItem() != nr)
-			{
-				list_box->setCurrentItem(nr);
-			}
-			widget_stack->raiseWidget(nr);
-		}
-
 
 		void ModelSettingsDialog::applySettingsTo(ModelProcessor& mp) const
 			throw()
@@ -356,6 +346,7 @@ namespace BALL
 		void ModelSettingsDialog::showPage(ModelType type)
 			throw()
 		{
+			/*
 			switch (type)
 			{
 				case MODEL_LINES:
@@ -397,6 +388,7 @@ namespace BALL
 				default:
 					break;
 			}
+			*/
 		}
 
 	} // namespace VIEW

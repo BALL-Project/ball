@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: serverPreferences.C,v 1.6 2004/09/29 20:40:18 amoll Exp $
+// $Id: serverPreferences.C,v 1.7 2004/09/30 15:51:22 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/serverPreferences.h>
@@ -65,6 +65,8 @@ namespace BALL
 			setINIFileSectionName("NETWORK");
 			registerObject_(server_status_);
 			registerObject_(port_);
+
+			insertEntry(this, "Server");
 		}
 
 		ServerPreferences::~ServerPreferences()

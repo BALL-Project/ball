@@ -15,79 +15,21 @@
     <property name="caption">
         <string>ColoringSettingsDialog</string>
     </property>
-    <widget class="QListBox">
-        <item>
-            <property name="text">
-                <string>Element</string>
-            </property>
-        </item>
-        <item>
-            <property name="text">
-                <string>Residue Index</string>
-            </property>
-        </item>
-        <item>
-            <property name="text">
-                <string>Residue Name</string>
-            </property>
-        </item>
-        <item>
-            <property name="text">
-                <string>Atom Charge</string>
-            </property>
-        </item>
-        <item>
-            <property name="text">
-                <string>Atom Distance</string>
-            </property>
-        </item>
-        <item>
-            <property name="text">
-                <string>Temperature Factor</string>
-            </property>
-        </item>
-        <item>
-            <property name="text">
-                <string>Occupancy</string>
-            </property>
-        </item>
-        <item>
-            <property name="text">
-                <string>Secondary Structure</string>
-            </property>
-        </item>
-        <item>
-            <property name="text">
-                <string>Forces</string>
-            </property>
-        </item>
-        <property name="name">
-            <cstring>list_box</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>8</x>
-                <y>12</y>
-                <width>154</width>
-                <height>359</height>
-            </rect>
-        </property>
-    </widget>
     <widget class="QWidgetStack">
         <property name="name">
             <cstring>widget_stack</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>167</x>
-                <y>14</y>
-                <width>378</width>
-                <height>359</height>
+                <x>0</x>
+                <y>-1</y>
+                <width>547</width>
+                <height>378</height>
             </rect>
         </property>
         <widget class="QWidget">
             <property name="name">
-                <cstring>element</cstring>
+                <cstring>Element</cstring>
             </property>
             <attribute name="id">
                 <number>0</number>
@@ -95,7 +37,7 @@
         </widget>
         <widget class="QWidget">
             <property name="name">
-                <cstring>index</cstring>
+                <cstring>Residue_Index</cstring>
             </property>
             <attribute name="id">
                 <number>1</number>
@@ -1232,7 +1174,7 @@
         </widget>
         <widget class="QWidget">
             <property name="name">
-                <cstring>residue_name</cstring>
+                <cstring>Residue_Name</cstring>
             </property>
             <attribute name="id">
                 <number>2</number>
@@ -1240,7 +1182,7 @@
         </widget>
         <widget class="QWidget">
             <property name="name">
-                <cstring>charge</cstring>
+                <cstring>Charge</cstring>
             </property>
             <attribute name="id">
                 <number>3</number>
@@ -2361,7 +2303,7 @@
         </widget>
         <widget class="QWidget">
             <property name="name">
-                <cstring>distance</cstring>
+                <cstring>Distance</cstring>
             </property>
             <attribute name="id">
                 <number>4</number>
@@ -3225,7 +3167,7 @@
         </widget>
         <widget class="QWidget">
             <property name="name">
-                <cstring>temperature_factor</cstring>
+                <cstring>Temperature_Factor</cstring>
             </property>
             <attribute name="id">
                 <number>5</number>
@@ -4445,7 +4387,7 @@
         </widget>
         <widget class="QWidget">
             <property name="name">
-                <cstring>occupancy</cstring>
+                <cstring>Occupancy</cstring>
             </property>
             <attribute name="id">
                 <number>6</number>
@@ -5590,7 +5532,7 @@
         </widget>
         <widget class="QWidget">
             <property name="name">
-                <cstring>secondaryStructure</cstring>
+                <cstring>Secondary_Structure</cstring>
             </property>
             <attribute name="id">
                 <number>7</number>
@@ -7114,7 +7056,7 @@
         </widget>
         <widget class="QWidget">
             <property name="name">
-                <cstring>forces</cstring>
+                <cstring>Forces</cstring>
             </property>
             <attribute name="id">
                 <number>8</number>
@@ -8090,12 +8032,6 @@
         <slot>helixColorPressed()</slot>
     </connection>
     <connection>
-        <sender>list_box</sender>
-        <signal>highlighted(int)</signal>
-        <receiver>ColoringSettingsDialog</receiver>
-        <slot>showPage_(int)</slot>
-    </connection>
-    <connection>
         <sender>max_distance_button</sender>
         <signal>clicked()</signal>
         <receiver>ColoringSettingsDialog</receiver>
@@ -8222,7 +8158,6 @@
     <slot>coilColorPressed()</slot>
     <slot>turnColorPressed()</slot>
     <slot>maxTFChanged()</slot>
-    <slot>showPage_(int)</slot>
     <slot>forceMaxColorPressed()</slot>
     <slot>forceMinColorPressed()</slot>
     <slot>forceMaxValueChanged()</slot>

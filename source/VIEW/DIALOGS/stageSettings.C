@@ -10,6 +10,7 @@
 #include <qlabel.h>
 #include <qcheckbox.h>
 #include <qslider.h>
+#include <qwidgetstack.h>
 
 namespace BALL
 {
@@ -24,6 +25,9 @@ StageSettings::StageSettings( QWidget* parent,  const char* name, WFlags fl )
 	if (stage_ == 0) return;
 	scene_ = (Scene*) parent;
 	updateFromStage();
+
+	insertEntry(this, "Scene");
+	setWidgetStack(widget_stack);
 }
 
 

@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>ModelSettingsDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -27,80 +27,21 @@
     <property name="caption">
         <string>ModelSettingsDialog</string>
     </property>
-    <widget class="QListBox">
-        <item>
-            <property name="text">
-                <string>Stick</string>
-            </property>
-        </item>
-        <item>
-            <property name="text">
-                <string>Ball &amp; Stick</string>
-            </property>
-        </item>
-        <item>
-            <property name="text">
-                <string>VDW</string>
-            </property>
-        </item>
-        <item>
-            <property name="text">
-                <string>Surface</string>
-            </property>
-        </item>
-        <item>
-            <property name="text">
-                <string>Tube</string>
-            </property>
-        </item>
-        <item>
-            <property name="text">
-                <string>Cartoon</string>
-            </property>
-        </item>
-        <item>
-            <property name="text">
-                <string>H-Bonds</string>
-            </property>
-        </item>
-        <item>
-            <property name="text">
-                <string>Forces</string>
-            </property>
-        </item>
-        <property name="name">
-            <cstring>list_box</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>6</x>
-                <y>8</y>
-                <width>105</width>
-                <height>364</height>
-            </rect>
-        </property>
-        <property name="maximumSize">
-            <size>
-                <width>105</width>
-                <height>32767</height>
-            </size>
-        </property>
-    </widget>
     <widget class="QWidgetStack">
         <property name="name">
             <cstring>widget_stack</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>118</x>
-                <y>3</y>
-                <width>429</width>
+                <x>-1</x>
+                <y>0</y>
+                <width>553</width>
                 <height>372</height>
             </rect>
         </property>
         <widget class="QWidget">
             <property name="name">
-                <cstring>stick</cstring>
+                <cstring>Stick</cstring>
             </property>
             <attribute name="id">
                 <number>0</number>
@@ -245,7 +186,7 @@
         </widget>
         <widget class="QWidget">
             <property name="name">
-                <cstring>bs</cstring>
+                <cstring>Ball_And_Stick</cstring>
             </property>
             <attribute name="id">
                 <number>1</number>
@@ -546,7 +487,7 @@
         </widget>
         <widget class="QWidget">
             <property name="name">
-                <cstring>vdw</cstring>
+                <cstring>VDW</cstring>
             </property>
             <attribute name="id">
                 <number>2</number>
@@ -688,7 +629,7 @@
         </widget>
         <widget class="QWidget">
             <property name="name">
-                <cstring>surface</cstring>
+                <cstring>Surface</cstring>
             </property>
             <attribute name="id">
                 <number>3</number>
@@ -833,7 +774,7 @@
         </widget>
         <widget class="QWidget">
             <property name="name">
-                <cstring>tube</cstring>
+                <cstring>Tube</cstring>
             </property>
             <attribute name="id">
                 <number>4</number>
@@ -978,7 +919,7 @@
         </widget>
         <widget class="QWidget">
             <property name="name">
-                <cstring>cartoon</cstring>
+                <cstring>Cartoon</cstring>
             </property>
             <attribute name="id">
                 <number>5</number>
@@ -2064,7 +2005,7 @@
         </widget>
         <widget class="QWidget">
             <property name="name">
-                <cstring>hbonds</cstring>
+                <cstring>H_Bonds</cstring>
             </property>
             <attribute name="id">
                 <number>6</number>
@@ -2209,7 +2150,7 @@
         </widget>
         <widget class="QWidget">
             <property name="name">
-                <cstring>forces</cstring>
+                <cstring>Forces</cstring>
             </property>
             <attribute name="id">
                 <number>7</number>
@@ -2577,12 +2518,6 @@
         <slot>forceScalingChanged()</slot>
     </connection>
     <connection>
-        <sender>list_box</sender>
-        <signal>highlighted(int)</signal>
-        <receiver>ModelSettingsDialog</receiver>
-        <slot>showPage_(int)</slot>
-    </connection>
-    <connection>
         <sender>cartoon_dna_base_radius_slider</sender>
         <signal>valueChanged(int)</signal>
         <receiver>ModelSettingsDialog</receiver>
@@ -2616,7 +2551,6 @@
     <slot>cartoonArrowWidthChanged()</slot>
     <slot>cartoonArrowHeightChanged()</slot>
     <slot>hbondsRadiusChanged()</slot>
-    <slot>showPage_(int)</slot>
     <slot>forceMaxLengthChanged()</slot>
     <slot>forceScalingChanged()</slot>
     <slot>cartoonDNAHelixRadiusChanged()</slot>

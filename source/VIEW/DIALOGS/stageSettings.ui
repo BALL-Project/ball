@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>StageSettingsData</class>
 <widget class="QDialog">
     <property name="name">
@@ -15,58 +15,21 @@
     <property name="caption">
         <string>StageSettings</string>
     </property>
-    <widget class="QListBox">
-        <item>
-            <property name="text">
-                <string>Common</string>
-            </property>
-        </item>
-        <item>
-            <property name="text">
-                <string>Mouse</string>
-            </property>
-        </item>
-        <item>
-            <property name="text">
-                <string>3D Stereo</string>
-            </property>
-        </item>
-        <property name="name">
-            <cstring>list_box</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>13</x>
-                <y>8</y>
-                <width>100</width>
-                <height>351</height>
-            </rect>
-        </property>
-        <property name="maximumSize">
-            <size>
-                <width>100</width>
-                <height>32767</height>
-            </size>
-        </property>
-        <property name="currentItem">
-            <number>0</number>
-        </property>
-    </widget>
     <widget class="QWidgetStack">
         <property name="name">
             <cstring>widget_stack</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>118</x>
-                <y>3</y>
-                <width>427</width>
-                <height>310</height>
+                <x>-1</x>
+                <y>0</y>
+                <width>553</width>
+                <height>381</height>
             </rect>
         </property>
         <widget class="QWidget">
             <property name="name">
-                <cstring>WStackPage</cstring>
+                <cstring>Display</cstring>
             </property>
             <attribute name="id">
                 <number>0</number>
@@ -389,7 +352,7 @@
         </widget>
         <widget class="QWidget">
             <property name="name">
-                <cstring>WStackPage</cstring>
+                <cstring>Mouse</cstring>
             </property>
             <attribute name="id">
                 <number>1</number>
@@ -567,7 +530,7 @@
         </widget>
         <widget class="QWidget">
             <property name="name">
-                <cstring>WStackPage</cstring>
+                <cstring>Stereo</cstring>
             </property>
             <attribute name="id">
                 <number>2</number>
@@ -868,12 +831,6 @@
 </widget>
 <connections>
     <connection>
-        <sender>list_box</sender>
-        <signal>highlighted(int)</signal>
-        <receiver>widget_stack</receiver>
-        <slot>raiseWidget(int)</slot>
-    </connection>
-    <connection>
         <sender>color_button</sender>
         <signal>clicked()</signal>
         <receiver>StageSettings</receiver>
@@ -902,7 +859,6 @@
     <include location="global" impldecl="in declaration">BALL/COMMON/global.h</include>
 </includes>
 <slots>
-    <slot>showPage(int)</slot>
     <slot>colorPressed()</slot>
     <slot>eyeDistanceChanged()</slot>
     <slot>focalDistanceChanged()</slot>

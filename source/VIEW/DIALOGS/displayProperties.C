@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.87 2004/09/29 21:14:24 amoll Exp $
+// $Id: displayProperties.C,v 1.88 2004/09/30 15:51:21 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -138,9 +138,9 @@ void DisplayProperties::initializePreferencesTab(Preferences &preferences)
 {
 	preferences_ = &preferences;
 	model_settings_ = new ModelSettingsDialog(this);
-	preferences.insertEntry(model_settings_, "Models");
+	preferences.insertEntry(model_settings_);
 	coloring_settings_ = new ColoringSettingsDialog(this);
-	preferences.insertEntry(coloring_settings_, "Model Colors");
+	preferences.insertEntry(coloring_settings_);
 }
 
 void DisplayProperties::finalizePreferencesTab(Preferences &preferences)
@@ -500,8 +500,8 @@ void DisplayProperties::coloringOptionsPressed()
 {
 	if (preferences_ == 0) return;
 
-	preferences_->showPage(coloring_settings_);
-	coloring_settings_->showPage((ColoringMethod) coloring_method_combobox->currentItem());
+	preferences_->showEntry(coloring_settings_);
+	coloring_settings_->showEntry((ColoringMethod) coloring_method_combobox->currentItem());
 	preferences_->show();
 }
 
@@ -509,9 +509,9 @@ void DisplayProperties::modelOptionsPressed()
 {
 	if (preferences_ == 0) return;
 
-	preferences_->showPage(model_settings_);
+	preferences_->showEntry(model_settings_);
 
-	model_settings_->showPage((ModelType) model_type_combobox->currentItem());
+	model_settings_->showEntry((ModelType) model_type_combobox->currentItem());
 
 	preferences_->show();
 }

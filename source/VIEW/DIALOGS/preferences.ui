@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>PreferencesData</class>
 <widget class="QDialog">
     <property name="name">
@@ -38,58 +38,6 @@
     <property name="sizeGripEnabled">
         <bool>false</bool>
     </property>
-    <widget class="Line">
-        <property name="name">
-            <cstring>line1</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>132</x>
-                <y>6</y>
-                <width>3</width>
-                <height>397</height>
-            </rect>
-        </property>
-        <property name="frameShape">
-            <enum>VLine</enum>
-        </property>
-        <property name="frameShadow">
-            <enum>Sunken</enum>
-        </property>
-        <property name="orientation">
-            <enum>Vertical</enum>
-        </property>
-    </widget>
-    <widget class="QWidgetStack">
-        <property name="name">
-            <cstring>widget_stack</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>139</x>
-                <y>7</y>
-                <width>560</width>
-                <height>400</height>
-            </rect>
-        </property>
-        <property name="frameShape">
-            <enum>NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-            <enum>Plain</enum>
-        </property>
-        <property name="lineWidth">
-            <number>0</number>
-        </property>
-        <widget class="QWidget">
-            <property name="name">
-                <cstring>WStackPage</cstring>
-            </property>
-            <attribute name="id">
-                <number>0</number>
-            </attribute>
-        </widget>
-    </widget>
     <widget class="QPushButton">
         <property name="name">
             <cstring>ok_button</cstring>
@@ -177,47 +125,95 @@
             <bool>true</bool>
         </property>
     </widget>
-    <widget class="QListBox">
+    <widget class="QWidgetStack">
         <property name="name">
-            <cstring>list_box</cstring>
+            <cstring>widget_stack</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>4</x>
-                <y>6</y>
-                <width>122</width>
-                <height>398</height>
+                <x>206</x>
+                <y>7</y>
+                <width>493</width>
+                <height>400</height>
             </rect>
         </property>
-        <property name="sizePolicy">
-            <sizepolicy>
-                <hsizetype>0</hsizetype>
-                <vsizetype>7</vsizetype>
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-            </sizepolicy>
+        <property name="frameShape">
+            <enum>NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+            <enum>Plain</enum>
+        </property>
+        <property name="lineWidth">
+            <number>0</number>
+        </property>
+        <widget class="QWidget">
+            <property name="name">
+                <cstring>WStackPage</cstring>
+            </property>
+            <attribute name="id">
+                <number>0</number>
+            </attribute>
+        </widget>
+    </widget>
+    <widget class="QListView">
+        <column>
+            <property name="text">
+                <string>Category</string>
+            </property>
+            <property name="clickable">
+                <bool>false</bool>
+            </property>
+            <property name="resizable">
+                <bool>false</bool>
+            </property>
+        </column>
+        <property name="name">
+            <cstring>entries_listview</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>0</x>
+                <y>2</y>
+                <width>205</width>
+                <height>442</height>
+            </rect>
+        </property>
+        <property name="rootIsDecorated">
+            <bool>true</bool>
         </property>
     </widget>
 </widget>
 <connections>
-    <connection>
-        <sender>list_box</sender>
-        <signal>highlighted(int)</signal>
-        <receiver>PreferencesData</receiver>
-        <slot>showPage(int)</slot>
-    </connection>
     <connection>
         <sender>cancel_button</sender>
         <signal>clicked()</signal>
         <receiver>PreferencesData</receiver>
         <slot>close()</slot>
     </connection>
+    <connection>
+        <sender>defaults_button</sender>
+        <signal>clicked()</signal>
+        <receiver>PreferencesData</receiver>
+        <slot>defaultsClicked()</slot>
+    </connection>
+    <connection>
+        <sender>ok_button</sender>
+        <signal>clicked()</signal>
+        <receiver>PreferencesData</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>entries_listview</sender>
+        <signal>clicked(QListViewItem*)</signal>
+        <receiver>PreferencesData</receiver>
+        <slot>entrySelected(QListViewItem*)</slot>
+    </connection>
 </connections>
 <includes>
     <include location="global" impldecl="in declaration">BALL/COMMON/global.h</include>
 </includes>
 <slots>
-    <slot>showPage(int)</slot>
+    <slot>entrySelected(QListViewItem*)</slot>
     <slot>defaultsClicked()</slot>
 </slots>
 <exportmacro>BALL_EXPORT</exportmacro>

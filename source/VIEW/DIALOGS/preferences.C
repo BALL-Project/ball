@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferences.C,v 1.10 2004/09/29 20:40:18 amoll Exp $
+// $Id: preferences.C,v 1.11 2004/09/30 15:51:22 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/preferences.h>
 #include <BALL/VIEW/KERNEL/preferencesEntry.h>
 #include <BALL/FORMAT/INIFile.h>
 #include <qwidgetstack.h>
-#include <qlistbox.h>
+#include <qlistview.h>
 
 namespace BALL
 {
@@ -40,10 +40,10 @@ namespace BALL
 		bool Preferences::hasPages()
 			throw()
 		{
-			return (list_box->count() > 0);
+			 return (entries_listview->childCount() > 0);
 		}
 
-		void Preferences::insertEntry(PreferencesEntry *child, const String& name)
+		void Preferences::insertEntry(PreferencesEntry *child)
 			throw()
 		{
 			if (!RTTI::isKindOf<QWidget>(*child)) 
@@ -51,27 +51,46 @@ namespace BALL
 				Log.error() << "PreferencesEntry not derived from QWidget in " 
 										<< __FILE__ << "  " << __LINE__<< std::endl;
 				return;
+			
 			}
+
+			if (child->getEntries().size() == 0) return;
 
 			QWidget* widget = dynamic_cast<QWidget*>(child);
 
- 			widget_stack->addWidget(widget, list_box->count() + 1);
-			list_box->insertItem(name.c_str());
+ 			widget_stack->addWidget(widget);
 
 			// set size for all child tabs
-			widget->setMinimumSize(560,400);
-			widget->setMaximumSize(560,400);
-			widget->resize(560,400);
+			widget->setMinimumSize(widget_stack->width(), widget_stack->height());
+			widget->setMaximumSize(widget_stack->width(), widget_stack->height());
+			widget->resize(widget_stack->width(), widget_stack->height());
 
 			entries_.insert(child);
+
+			PreferencesEntry::EntriesList::Iterator it = child->getEntries().begin();
+			QListViewItem* item = new QListViewItem(entries_listview, (*it).second);
+			entries_listview->insertItem(item);
+			item_to_widget_[item] = (*it).first;
+			item_to_entry_[item] = child;
+			widget_to_item_[widget] = item;
+			it++;
+			for (; it != child->getEntries().end(); it++)
+			{
+				QListViewItem* new_item = new QListViewItem(item, (*it).second);
+				item->insertItem(new_item);
+				item_to_widget_[new_item] = (*it).first;
+				widget_to_item_[(*it).first] = new_item;
+			}
 		}
 
 		void Preferences::removeEntry(PreferencesEntry *child)
 			throw()
 		{
 			if (!entries_.has(child)) return;
-			list_box->removeItem(widget_stack->id((QWidget*)child) - 1);
-			widget_stack->removeWidget((QWidget*)child);
+
+			QWidget* widget = (dynamic_cast<QWidget*>(child));
+			entries_listview->removeItem(widget_to_item_[widget]);
+			widget_stack->removeWidget(widget);
 			entries_.erase(child);
 			delete child;
 		}
@@ -120,34 +139,49 @@ namespace BALL
 			raise();
 		}
 
-		void Preferences::showPage(QWidget* child)
+		void Preferences::showEntry(QWidget* child)
 		{
-			if (widget_stack->id(child) == -1) return;
-
- 			list_box->setCurrentItem(widget_stack->id(child) - 1);
-			widget_stack->raiseWidget(child);
-		}	
-
-		void Preferences::showPage(int nr)
-		{
-			if (widget_stack->widget(nr + 1) == 0)
+			if (!widget_to_item_.has(child)) 
 			{
 				return;
 			}
 
-			if (list_box->currentItem() != nr)
+			QListViewItem* item = widget_to_item_[child];
+			if (widget_stack->id(child) != -1)
 			{
-				list_box->setCurrentItem(nr);
+				if (item->firstChild() == 0)
+				{
+					widget_stack->raiseWidget(child);
+				}
+				else
+				{
+					widget_stack->raiseWidget(0);
+				}
+				return;
 			}
-			widget_stack->raiseWidget(nr + 1);
-		}
+
+			if (!item_to_entry_.has(item->parent())) return;
+			PreferencesEntry* entry= item_to_entry_[item->parent()];
+
+			widget_stack->raiseWidget(item_to_widget_[item->parent()]);
+
+			entry->showEntry(child);
+		}	
 
 		const QWidget* Preferences::currentPage() const
 			throw()
 		{
-			return widget_stack->visibleWidget();
+			QListViewItem* item = entries_listview->selectedItem();
+			if (item == 0) return 0;
+			
+			return item_to_widget_[item];
 		}
 		
+		void Preferences::entrySelected(QListViewItem* item)
+		{
+			showEntry(item_to_widget_[item]);
+		}
+
 	} // namespace VIEW
 } // namespace BALL
 
