@@ -1,4 +1,4 @@
-// $Id: piecewiseFunction.h,v 1.10 2001/02/26 00:23:00 amoll Exp $
+// $Id: piecewiseFunction.h,v 1.11 2001/06/21 02:33:54 oliver Exp $
 
 #ifndef BALL_MATHS_PIECEWISEFUNCTION_H
 #define BALL_MATHS_PIECEWISEFUNCTION_H
@@ -25,6 +25,9 @@ namespace BALL
 	/** An interval is defined by its limits 
 	*/
 	typedef std::pair<double,double> Interval;
+	#ifdef INFINITY
+	#undef INFINITY
+	#endif
 	static const double INFINITY = Limits<double>::max();
 
 	/** Piecewise function object.
