@@ -120,13 +120,14 @@ namespace BALL
       bool islower_(char ch)
       	throw();
  
-			void insert_(const String& aa)
+			void insert_(String aa)
 				throw();
 
 			void truncString_(String& data)
 				throw();
 
 			Protein* protein_;
+			static String all_amino_acids_;
 		};
 
 } } // namespaces
