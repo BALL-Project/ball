@@ -1,4 +1,4 @@
-// $Id: mainframe.h,v 1.25 2000/11/12 15:16:44 hekl Exp $
+// $Id: mainframe.h,v 1.26 2001/02/12 12:21:50 amoll Exp $
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
 #define BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -132,7 +132,8 @@ class Mainframe
 	Mainframe
 		(QWidget* parent = 0, const char* name = 0);
 
-	virtual ~Mainframe();
+	virtual ~Mainframe()
+		throw();
 
 
 	virtual void fetchPreferences(INIFile& inifile);

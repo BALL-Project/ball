@@ -180,6 +180,7 @@ Mainframe::Mainframe
 }
 
 Mainframe::~Mainframe()
+	throw()
 {
 	//
 	// extract preferences 
