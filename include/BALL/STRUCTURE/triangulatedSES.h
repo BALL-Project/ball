@@ -1,10 +1,10 @@
-// $Id: triangulatedSES.h,v 1.2 2002/01/07 18:00:49 strobel Exp $
+// $Id: triangulatedSES.h,v 1.3 2002/01/07 18:09:09 strobel Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATEDSES_H
 #define BALL_STRUCTURE_TRIANGULATEDSES_H
 
 //#define with_indices
-#define debug_triangulation
+//#define debug_triangulation
 //#define debug_triangulation_with_planes
 #ifdef debug_triangulation
 #	define with_bonds
