@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.C,v 1.11 2003/10/15 13:54:45 amoll Exp $
+// $Id: colorMeshDialog.C,v 1.12 2003/10/24 22:55:48 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
@@ -293,17 +293,10 @@ void ColorMeshDialog::colorByCustomColor_()
 
 	if (transparency_group_custom->selected() == (QButton*) none_button_custom)
 	{
-		rep_->clearProperty(Representation::PROPERTY__TRANSPARENT_FULL);
 		rep_->clearProperty(Representation::PROPERTY__TRANSPARENT_BLENDING);
 	}
-	else if (transparency_group_custom->selected() == (QButton*) full_button_custom)
-	{
-		rep_->clearProperty(Representation::PROPERTY__TRANSPARENT_BLENDING);
-		rep_->setProperty(Representation::PROPERTY__TRANSPARENT_FULL);
-	}			
 	else if (transparency_group_custom->selected() == (QButton*) alpha_button_custom)
 	{
-		rep_->clearProperty(Representation::PROPERTY__TRANSPARENT_FULL);
 		rep_->setProperty(Representation::PROPERTY__TRANSPARENT_BLENDING);
 	}
 }
@@ -348,17 +341,10 @@ void ColorMeshDialog::colorByGrid_()
 
 	if (transparency_group_grid->selected() == (QButton*) none_button_grid)
 	{
-		rep_->clearProperty(Representation::PROPERTY__TRANSPARENT_FULL);
 		rep_->clearProperty(Representation::PROPERTY__TRANSPARENT_BLENDING);
 	}
-	else if (transparency_group_grid->selected() == (QButton*) full_button_grid)
-	{
-		rep_->clearProperty(Representation::PROPERTY__TRANSPARENT_BLENDING);
-		rep_->setProperty(Representation::PROPERTY__TRANSPARENT_FULL);
-	}			
 	else if (transparency_group_grid->selected() == (QButton*) alpha_button_grid)
 	{
-		rep_->clearProperty(Representation::PROPERTY__TRANSPARENT_FULL);
 		rep_->setProperty(Representation::PROPERTY__TRANSPARENT_BLENDING);
 	}
 }
@@ -392,10 +378,6 @@ void ColorMeshDialog::saveSettings_()
 		{
 			config.transparency = 0;
 		}
-		else if (transparency_group_grid->selected() == (QButton*) full_button_grid)
-		{
-			config.transparency = 1;
-		}			
 		else
 		{
 			config.transparency = 2;
@@ -409,10 +391,6 @@ void ColorMeshDialog::saveSettings_()
 		{
 			config.transparency = 0;
 		}
-		else if (transparency_group_custom->selected() == (QButton*) full_button_custom)
-		{
-			config.transparency = 1;
-		}			
 		else
 		{
 			config.transparency = 2;
@@ -458,10 +436,6 @@ void ColorMeshDialog::loadSettings_()
 		{
 			alpha_button_grid->setEnabled(true);
 		}
-		else
-		{
-			full_button_grid->setEnabled(true);
-		}
 	}
 	else if (config.tab == 1)
 	{
@@ -472,10 +446,6 @@ void ColorMeshDialog::loadSettings_()
 		else if (config.transparency == 1)
 		{
 			alpha_button_custom->setEnabled(true);
-		}
-		else
-		{
-			full_button_custom->setEnabled(true);
 		}
 	}
 			
