@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.27 2004/01/15 13:11:42 amoll Exp $
+// $Id: geometricControl.C,v 1.28 2004/02/05 12:55:43 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -397,7 +397,7 @@ void GeometricControl::updateSelection()
 	setStatusbarText("Representation from " + name);
 
 	// update ColorMeshDialog if representation is a surface
-	if ((rep->getModelType() == MODEL_SE_SURFACE || rep->getModelType() == MODEL_SA_SURFACE) &&
+	if (isSurfaceModel(rep->getModelType()) &&
 			rep->getGeometricObjects().size() > 0)
 	{
 		colorMeshDlg_->setMesh((Mesh*)*(rep->getGeometricObjects().begin()), rep);
