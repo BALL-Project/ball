@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.34 2004/09/08 14:30:58 amoll Exp $
+// $Id: cartoonModel.C,v 1.35 2004/09/10 13:28:29 amoll Exp $
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
 
@@ -38,7 +38,8 @@ namespace BALL
 				spline_vector_position_(-1),
 				helix_radius_(2.4),
 				arrow_width_(2),
-				arrow_height_(0.4)
+				arrow_height_(0.4),
+				draw_DNA_as_ladder_(false)
 		{
 		}
 
@@ -49,7 +50,8 @@ namespace BALL
 				spline_vector_position_(-1),
 				helix_radius_(cartoon.helix_radius_),
 				arrow_width_(cartoon.arrow_width_),
-				arrow_height_(cartoon.arrow_height_)
+				arrow_height_(cartoon.arrow_height_),
+				draw_DNA_as_ladder_(cartoon.draw_DNA_as_ladder_)
 		{
 		}
 
@@ -96,6 +98,12 @@ namespace BALL
 
 			createBackbone_();
 
+			if (!draw_DNA_as_ladder_)
+			{
+				drawWatsonCrickModel_(ss);
+				return;
+			}
+
 			Position nr_of_residues = ss.countResidues();
 			for (Position pos = 0; pos < nr_of_residues; pos++)
 			{
@@ -109,62 +117,24 @@ namespace BALL
 				}
 
 				Atom* base_atom = 0;
-				Atom* atom2 = 0;
-				Atom* atom3 = 0;
-				if (r->getName() == "A")
+				BALL_FOREACH_ATOM(*r, it)
 				{
-					BALL_FOREACH_ATOM(*r, it)
+					if (it->getName() == "P")
 					{
-						if 			(it->getName() == "P") 	base_atom = &*it;
-						else if (it->getName() == "C2") atom2 = &*it;
-						else if (it->getName() == "N6") atom3 = &*it;
-					}
-				}
-				else if (r->getName() == "C")
-				{
-					BALL_FOREACH_ATOM(*r, it)
-					{
-						if 			(it->getName() == "P") 	base_atom = &*it;
-						else if (it->getName() == "N4") atom2 = &*it;
-						else if (it->getName() == "O2") atom3 = &*it;
-					}
-				}
-				else if (r->getName() == "G")
-				{
-					BALL_FOREACH_ATOM(*r, it)
-					{
-						if 			(it->getName() == "P") 	base_atom = &*it;
-						else if (it->getName() == "O6") atom2 = &*it;
-						else if (it->getName() == "N2") atom3 = &*it;
-					}
-				}
-				else if (r->getName() == "T")
-				{
-					BALL_FOREACH_ATOM(*r, it)
-					{
-						if 			(it->getName() == "P") 	base_atom = &*it;
-						else if (it->getName() == "C5M") atom2 = &*it;
-						else if (it->getName() == "O2") atom3 = &*it;
+						base_atom = &*it;
+						break;
 					}
 				}
 
-				// did we find all needed atoms?
-				if (base_atom == 0 ||
-						atom2   	== 0 ||
-						atom3   	== 0)
+				// did we find the atom?
+				if (base_atom == 0)
 				{
 					continue;
 				}
 
+				// ?????? what to do here?
 				if (!complementary_bases_.has(r))
 				{
-					Box* box = new Box(
-								atom2->getPosition(),
-								base_atom->getPosition() - atom2->getPosition() ,
-								atom3->getPosition() - atom2->getPosition(),
-								0.3);
-					box->setComposite(r);
-					geometric_objects_.push_back(box);
 					continue;
 				}
 
@@ -952,6 +922,205 @@ namespace BALL
 				}
 			}
 		}
+
+		void AddCartoonModel::createTriangle_(Mesh& mesh, const Atom& a1, const Atom& a2, const Atom& a3,
+																											const Atom* sa1, const Atom* sa2, const Atom* sa3)
+			throw()
+		{
+			vector<Vector3>& vertices = mesh.vertex;
+			vector<Vector3>& normals  = mesh.normal;
+			vector<Surface::Triangle>& triangles = mesh.triangle;
+
+			Vector3 p1 = a1.getPosition();
+			Vector3 p2 = a2.getPosition();
+			Vector3 p3 = a3.getPosition();
+
+			float d = 0.1;
+
+			Vector3 v1 = p1 - p2;
+			Vector3 v2 = p3 - p2;
+			Vector3 normal = v1 % v2;
+			normal *= d;
+
+			vertices.push_back(p1 + normal);
+			vertices.push_back(p2 + normal);
+			vertices.push_back(p3 + normal);
+			normals.push_back(normal);
+			normals.push_back(normal);
+			normals.push_back(normal);
+
+			Surface::Triangle t;
+			t.v1 = vertices.size() - 3;
+			t.v2 = vertices.size() - 2;
+			t.v3 = vertices.size() - 1;
+			triangles.push_back(t);
+
+			// lower side
+			vertices.push_back(p1 - normal);
+			vertices.push_back(p2 - normal);
+			vertices.push_back(p3 - normal);
+			normals.push_back(-normal);
+			normals.push_back(-normal);
+			normals.push_back(-normal);
+
+			t.v1 = vertices.size() - 3;
+			t.v2 = vertices.size() - 2;
+			t.v3 = vertices.size() - 1;
+			triangles.push_back(t);
+
+			if (sa1 == 0) return;
+
+			// ------------------------------------
+			// create first half of first side side
+			v1 = sa1->getPosition() - sa2->getPosition();
+			Vector3 normal2 = v1 % Vector3(1,0,0);
+
+			Vector3 ul = sa1->getPosition() + normal;
+			Vector3 ur = sa2->getPosition() + normal;
+			Vector3 ll = sa1->getPosition() - normal;
+			Vector3 lr = sa2->getPosition() - normal;
+
+			vertices.push_back(ul);
+			vertices.push_back(ur);
+			vertices.push_back(lr);
+			vertices.push_back(ll);
+			normals.push_back(normal2);
+			normals.push_back(normal2);
+			normals.push_back(normal2);
+			normals.push_back(normal2);
+
+			// ul ll lr
+			t.v1 = vertices.size() - 4;
+			t.v2 = vertices.size() - 1;
+			t.v3 = vertices.size() - 2;
+			triangles.push_back(t);
+
+			// create second half of first side side
+			// ul ur lr
+			t.v1 = vertices.size() - 4;
+			t.v2 = vertices.size() - 3;
+			t.v3 = vertices.size() - 2;
+			triangles.push_back(t);
+
+			if (sa3 == 0) return;
+
+			// ------------------------------------
+			// create first half of second side side
+			v1 = sa2->getPosition() - sa3->getPosition();
+			Vector3 normal3 = v1 % Vector3(1,0,0);
+
+			Vector3 ur2 = sa3->getPosition() + normal;
+			Vector3 lr2 = sa3->getPosition() - normal;
+			vertices.push_back(ur);
+			vertices.push_back(lr);
+			vertices.push_back(ur2);
+			vertices.push_back(lr2);
+
+			normals.push_back(normal3);
+			normals.push_back(normal3);
+			normals.push_back(normal3);
+			normals.push_back(normal3);
+
+			// ur lr lr2
+			t.v1 = vertices.size() - 4;
+			t.v2 = vertices.size() - 3;
+			t.v3 = vertices.size() - 1;
+			triangles.push_back(t);
+
+			// create second half of second side side
+			// ur ur2 lr2
+			t.v1 = vertices.size() - 4;
+			t.v2 = vertices.size() - 2;
+			t.v3 = vertices.size() - 1;
+			triangles.push_back(t);
+		}
+
+
+		void AddCartoonModel::drawWatsonCrickModel_(const SecondaryStructure& ss)
+			throw()
+		{
+			Position nr_of_residues = ss.countResidues();
+			for (Position pos = 0; pos < nr_of_residues; pos++)
+			{
+				Residue* r = (Residue*) ss.getResidue(pos);
+				Mesh* mesh = new Mesh;
+				mesh->setComposite(r);
+				geometric_objects_.push_back(mesh);
+
+				Atom* atoms[9];
+				for (Position p = 0; p < 9; p++)
+				{
+					atoms[p] = 0;
+				}
+
+				if (r->getName() == "A" ||
+						r->getName() == "G")
+				{
+					AtomIterator it;
+					BALL_FOREACH_ATOM(*r, it)
+					{
+						if 			(it->getName() == "N9") atoms[0] = &*it;
+						else if (it->getName() == "C4") atoms[1] = &*it;
+						else if (it->getName() == "N3") atoms[2] = &*it;
+						else if (it->getName() == "C2") atoms[3] = &*it;
+						else if (it->getName() == "N1") atoms[4] = &*it;
+						else if (it->getName() == "C6") atoms[5] = &*it;
+						else if (it->getName() == "C5") atoms[6] = &*it;
+						else if (it->getName() == "N7") atoms[7] = &*it;
+						else if (it->getName() == "C8") atoms[8] = &*it;
+					}
+
+					bool error = false;
+					for (Position p = 0; p < 9; p++)
+					{
+						if (atoms[p] == 0)
+						{
+							error = true;
+							break;
+						}
+					}
+					// all atoms found?
+					if (error) continue;
+
+					createTriangle_(*mesh, *atoms[1], *atoms[0], *atoms[8], atoms[1], atoms[0], atoms[8]); // C4,N9,C8
+					/*
+					createTriangle_(*mesh, *atoms[1], *atoms[6], *atoms[8], 0, 0, 0); 											// C4,C5,C8
+					createTriangle_(*mesh, *atoms[6], *atoms[7], *atoms[8], atoms[6], atoms[7], atoms[8]); // C5,N7,C8
+					createTriangle_(*mesh, *atoms[2], *atoms[3], *atoms[4], atoms[2], atoms[3], atoms[4]); // N3,C2,N1
+					createTriangle_(*mesh, *atoms[1], *atoms[2], *atoms[4], atoms[1], atoms[2], 0); 				// C4,N3,N1
+					createTriangle_(*mesh, *atoms[1], *atoms[4], *atoms[5], atoms[4], atoms[5], 0); 				// C4,N1,C6
+					createTriangle_(*mesh, *atoms[1], *atoms[5], *atoms[6], atoms[5], atoms[6], 0); 				// C4,C6,C5
+					*/
+					// we are done for A + G
+					continue;
+				}
+
+				continue;
+
+				/*
+				// -------------------------------------------------
+				if (r->getName() == "C")
+				{
+					BALL_FOREACH_ATOM(*r, it)
+					{
+						if 			(it->getName() == "") atoms[] = &*it;
+						else if (it->getName() == "") atoms[] = &*it;
+					}
+				}
+
+				// -------------------------------------------------
+				if (r->getName() == "T")
+				{
+					BALL_FOREACH_ATOM(*r, it)
+					{
+						if 			(it->getName() == "") atoms[] = &*it;
+						else if (it->getName() == "") atoms[] = &*it;
+					}
+				}
+				*/
+			}
+		}
+
 
 	} // namespace VIEW
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.h,v 1.18 2004/09/08 14:31:34 amoll Exp $
+// $Id: cartoonModel.h,v 1.19 2004/09/10 13:28:33 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_CARTOONMODEL_H
@@ -135,6 +135,9 @@ namespace BALL
 			void drawDNA_(SecondaryStructure& ss)
 				throw();
 
+			void drawWatsonCrickModel_(const SecondaryStructure& ss)
+				throw();
+
 			//_ create a spline segment between two spline points a and b
 			void createSplineSegment2_(const SplinePoint &a, const SplinePoint &b);
 
@@ -150,6 +153,10 @@ namespace BALL
 
 			void calculateComplementaryBases_(const Composite& composite) throw();
 
+			void createTriangle_(Mesh& mesh, const Atom& a1, const Atom& a2, const Atom& a3,
+																			 const Atom* sa1, const Atom* sa2, const Atom* sa3)
+ 				throw();
+
 			Composite* last_chain_;
 
 			SplinePoint last_spline_point_;
@@ -160,6 +167,7 @@ namespace BALL
 			float helix_radius_;
 			float arrow_width_;
 			float arrow_height_;
+			bool  draw_DNA_as_ladder_;
 
 			HashMap<Residue*, Residue*> complementary_bases_;
 	};
