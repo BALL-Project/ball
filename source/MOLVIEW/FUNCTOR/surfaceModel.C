@@ -1,11 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceModel.C,v 1.16 2002/12/12 10:57:43 oliver Exp $
+// $Id: surfaceModel.C,v 1.17 2002/12/17 18:07:27 amoll Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/surfaceModel.h>
 #include <BALL/STRUCTURE/surfaceProcessor.h>
 #include <BALL/MOLVIEW/FUNCTOR/molecularInformation.h>
+#include <BALL/KERNEL/system.h>
 
 using namespace std;
 
@@ -64,59 +65,51 @@ namespace BALL
 		bool AddSurfaceModel::finish()
 		{
 			// insert surface only if a composite exist
-			if (start_composite_ != 0)
+			if (start_composite_ == 0) return false;
+			
+			Mesh* mesh = createMesh_();
+
+			if (mesh == 0)
 			{
-				Mesh* mesh = createMesh_();
-
-				if (mesh == 0)
-				{
-					throw Exception::OutOfMemory(__FILE__, __LINE__, sizeof(Mesh));
-				}
-				// create mesh
-				// ...
-
-				// get info from the start composite
-				MolecularInformation molecular_information;
-				start_composite_->host(molecular_information);
-
-				mesh->PropertyManager::set(*this);
-
-				System* system = dynamic_cast<System*>(start_composite_);
-				if (system != 0)
-				{
-					SurfaceProcessor sp;
-					try 
-					{
-						system->apply(sp);
-					}
-					catch (Exception::GeneralException e)
-					{
-						Log.error() << "SurfaceModel: caught exception while calculating molecular surface: " << e << endl;
-					}
-					catch (std::exception e)
-					{
-						Log.error() << "SurfaceModel: caught exception while calculating molecular surface: " << e.what() << endl;
-					}
-					catch (...)
-					{
-						Log.error() << "SurfaceModel: caught unknown exception while calculating molecular surface" << endl;
-					}
-					Log.info() << "assigning surface (" << sp.getSurface().vertex.size() << " vertices, " 
-										 << sp.getSurface().triangle.size() << " triangles)" << endl;
-					
-					*static_cast<Surface*>(mesh) = sp.getSurface();
-				
-					mesh->setName(String("Surface of ")
-												+ molecular_information.getTypeName() 
-												+ String(" (")
-												+ molecular_information.getName()
-												+ String(")"));
-
-
-					start_composite_->getRoot().appendChild(*mesh);
-				}
-
+				throw Exception::OutOfMemory(__FILE__, __LINE__, sizeof(Mesh));
 			}
+
+			// get info from the start composite
+			MolecularInformation molecular_information;
+			start_composite_->host(molecular_information);
+
+			mesh->PropertyManager::set(*this);
+
+			SurfaceProcessor sp;
+			try 
+			{
+				start_composite_->apply(sp);
+			}
+			catch (Exception::GeneralException e)
+			{
+				Log.error() << "SurfaceModel: caught exception while calculating molecular surface: " << e << endl;
+			}
+			catch (std::exception e)
+			{
+				Log.error() << "SurfaceModel: caught exception while calculating molecular surface: " << e.what() << endl;
+			}
+			catch (...)
+			{
+				Log.error() << "SurfaceModel: caught unknown exception while calculating molecular surface" << endl;
+			}
+			Log.info() << "assigning surface (" << sp.getSurface().vertex.size() << " vertices, " 
+								 << sp.getSurface().triangle.size() << " triangles)" << endl;
+			
+			*static_cast<Surface*>(mesh) = sp.getSurface();
+		
+			mesh->setName(String("Surface of ")
+										+ molecular_information.getTypeName() 
+										+ String(" (")
+										+ molecular_information.getName()
+										+ String(")"));
+
+
+			start_composite_->getRoot().appendChild(*mesh);
 
 			return true;
 		}
