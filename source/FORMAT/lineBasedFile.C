@@ -1,4 +1,4 @@
-// $Id: lineBasedFile.C,v 1.6 2000/10/15 22:36:10 amoll Exp $
+// $Id: lineBasedFile.C,v 1.7 2000/10/16 15:14:14 amoll Exp $
 
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/COMMON/exception.h>
@@ -38,15 +38,7 @@ namespace BALL
 		: File(f),
 			line_number_(0)
 	{
-		if (f.line_number_ == 1)
-		{
-			readLine();
-		}
-
-		if (f.line_number_ > 1)
-		{
 			skipLines(f.line_number_ - 1);
-		}
 	}
 
 	LineBasedFile::LineBasedFile(const String& filename, File::OpenMode open_mode)
@@ -63,7 +55,9 @@ namespace BALL
 	const LineBasedFile& LineBasedFile::operator = (const LineBasedFile& f)
 		throw()
 	{
-		*this = LineBasedFile(f);
+		open(f.name_, f.getOpenMode());
+		line_number_ = 0;
+		skipLines(f.line_number_ - 1);
 		return *this;
 	}
 
