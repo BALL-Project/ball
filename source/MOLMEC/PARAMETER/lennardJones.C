@@ -1,4 +1,4 @@
-// $Id: lennardJones.C,v 1.2 1999/08/31 22:01:18 oliver Exp $
+// $Id: lennardJones.C,v 1.3 1999/09/22 12:57:37 pmueller Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/lennardJones.h>
@@ -24,11 +24,11 @@ namespace BALL {
 	void FFPSLennardJones::destroy() 
 	{
 		// clear allocated parameter fields
-		delete A_;
-		delete B_;
-		delete Aij_;
-		delete Bij_;
-		delete is_defined_;
+		delete [] A_;
+		delete [] B_;
+		delete [] Aij_;
+		delete [] Bij_;
+		delete [] is_defined_;
 
 		FFParameterSection::destroy();
 	}

@@ -1,4 +1,4 @@
-// $Id: potential1210.C,v 1.2 1999/08/31 22:01:18 oliver Exp $
+// $Id: potential1210.C,v 1.3 1999/09/22 12:58:26 pmueller Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/potential1210.h>
@@ -22,9 +22,9 @@ namespace BALL {
 	void FFPSPotential1210::destroy() 
 	{
 		// clear parameter fields
-		delete A_;
-		delete B_;
-		delete is_defined_;
+		delete [] A_;
+		delete [] B_;
+		delete [] is_defined_;
 
 		FFParameterSection::destroy();
 	}
