@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.7 2004/02/13 13:55:48 anhi Exp $
+// $Id: POVRenderer.C,v 1.8 2004/02/13 15:38:09 anhi Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -148,9 +148,12 @@ namespace BALL
 								<< std::endl 
 								<< std::endl;
 
+			outfile_ << "// Width of the original scene: " << width_ << std::endl;
+			outfile_ << "// Height of the original scene: " << height_ << std::endl;
 			outfile_ << "camera {" << std::endl;
 			outfile_ << "\tperspective" << std::endl;
 			outfile_ << "\tdirection <0,0,-1>" << std::endl;
+			outfile_ << "\tright " << width_ / height_ << "*x" << std::endl;
 			outfile_ << "\tangle 90.000000" << std::endl;
 			outfile_ << "\ttransform {" << std::endl;
 			outfile_ << "\t\tmatrix <" << std::endl;
@@ -202,7 +205,7 @@ namespace BALL
 			// Define the finish we will use for our molecular objects (defining the molecular
 			// "material properties"
 			// TODO: allow for more than one finish in order to have seperate parameters for different objects
-			outfile_ << "#declare BALLFinish             		 = finish { specular 0.4 diffuse 1.0 ambient 0.0 }" << endl;
+			outfile_ << "#declare BALLFinish            		 = finish { specular 0.4 diffuse 1.0 ambient 0.0 }" << endl;
 			outfile_ << "#declare BALLFinishSphereSolid      = finish { specular 0.4 diffuse 1.0 ambient 0.0 }" << endl;
 			outfile_ << "#declare BALLFinishSphereTransp     = finish { specular 0.4 diffuse 1.0 ambient 0.0 }" << endl;
 			outfile_ << "#declare BALLFinishTubeSolid        = finish { specular 0.4 diffuse 1.0 ambient 0.0 }" << endl;
@@ -438,9 +441,9 @@ namespace BALL
 					c3 = mesh.colorList[t.v3];
 
 					outfile_ << "\t\tsmooth_triangle {" << endl;
-					outfile_ << "\t\t\t#local BALLColor1 = texture { pigment { " << POVColorRGBA(c1) << " } }" << endl;
-					outfile_ << "\t\t\t#local BALLColor2 = texture { pigment { " << POVColorRGBA(c2) << " } }" << endl;
-					outfile_ << "\t\t\t#local BALLColor3 = texture { pigment { " << POVColorRGBA(c3) << " } }" << endl << endl;
+					outfile_ << "\t\t\t#local BALLColor1 = texture { pigment { " << POVColorRGBA(c1) << " } finish { BALLFinishMesh } }" << endl;
+					outfile_ << "\t\t\t#local BALLColor2 = texture { pigment { " << POVColorRGBA(c2) << " } finish { BALLFinishMesh } }" << endl;
+					outfile_ << "\t\t\t#local BALLColor3 = texture { pigment { " << POVColorRGBA(c3) << " } finish { BALLFinishMesh } }" << endl << endl;
 
 					outfile_ << "\t\t\t" << POVVector3(v1) << ", ";
 					outfile_             << POVVector3(n1) << ", " << endl;
