@@ -1,4 +1,4 @@
-// $Id: INIFile.C,v 1.17 2001/04/09 23:04:40 amoll Exp $
+// $Id: INIFile.C,v 1.18 2001/04/10 12:30:34 amoll Exp $
 
 #include <BALL/FORMAT/INIFile.h>
 #include <fstream>
@@ -365,7 +365,7 @@ namespace BALL
 	{
 		if (!section_index_.has(section_name)) 
 		{
-			return 0;
+			return Section_iterator();
 		}
 		return section_index_[section_name];
 	}
@@ -375,7 +375,7 @@ namespace BALL
 	{
 		if (pos >= sections_.size())
 		{
-			return 0;
+			return Section_iterator();
 		}
 
 		Section_iterator it = sections_.begin();
