@@ -1,4 +1,4 @@
-// $Id: file.h,v 1.9 2000/07/12 19:33:50 oliver Exp $
+// $Id: file.h,v 1.10 2000/07/12 19:42:33 oliver Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -44,7 +44,7 @@ namespace BALL
 				This type is used to describe the standard openmodes for files
 				as described in Section 27.4.2.1.4 of the ANSI C++ standard.
 		*/
-		typedef std::ios::open_mode OpenMode;			
+		typedef std::ios::openmode OpenMode;			
 		//@}
 		
 		/**	@name	Constants
