@@ -7,13 +7,14 @@ check_test $1 \
 grep "ostream" $FILE | sed -e "s/^/\/\//" > $FILE2
 grep "operator = (" $FILE | sed -e "s/^/\/\//" >> $FILE2
 
-cat $FILE 								\
- | sed "/ostream/d" 			\
- | sed "/operator = (/d"	\
- | sed -e "s/ = .*,/,/)/"	\
- | sed -e "s/ = .*)/)/"		\
- | sed -e "s/ [a-z_0-9]*)/)/" \
- | sed -e "s/ [a-z_0-9]*,/,/"
+cat $FILE 							|\
+sed "/ostream/d" 				|\
+sed "/operator = (/d"		|\
+sed -e "s/\/\*.*\*\///"	|\
+sed -e "s/ = .*,/,/"		|\
+sed -e "s/ = .*)/)/"		|\
+sed -e "s/ [a-z_0-9]*)/)/" | \
+sed -e "s/ [a-z_0-9]*,/,/" \
 >> $FILE2
 
 cat $FILE2
