@@ -1,4 +1,4 @@
-// $Id: amberBend.h,v 1.1 1999/08/26 07:53:21 oliver Exp $
+// $Id: amberBend.h,v 1.2 1999/09/21 11:06:54 oliver Exp $
 // Molecular Mechanics: Amber force field, bond stretch component
 
 #ifndef BALL_MOLMEC_AMBER_AMBERBEND_H
@@ -99,6 +99,7 @@ namespace BALL
 		*/	
 		vector<FFPSQuadraticAngleBend::QuadraticAngleBend> bend_;
 
+		FFPSQuadraticAngleBend	bend_parameters_;
 		//_@}
 	 
 	};

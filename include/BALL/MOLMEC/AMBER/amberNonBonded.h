@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.h,v 1.3 1999/09/21 09:25:39 pmueller Exp $
+// $Id: amberNonBonded.h,v 1.4 1999/09/21 11:06:54 oliver Exp $
 // Molecular Mechanics: Amber force field, bond stretch component
 
 #ifndef BALL_MOLMEC_AMBER_NONBONDED_H
@@ -184,6 +184,10 @@ namespace BALL
 			1: box grid
 		*/
 		int	algorithm_type_;
+		
+		FFPSLennardJones van_der_waals_;
+
+		FFPSPotential1210 hydrogen_bond_;
 
 		//_@}
 

@@ -1,4 +1,4 @@
-// $Id: amberTorsion.h,v 1.1 1999/08/26 07:53:21 oliver Exp $
+// $Id: amberTorsion.h,v 1.2 1999/09/21 11:06:54 oliver Exp $
 // Molecular Mechanics: Amber force field, bond stretch component
 
 #ifndef BALL_MOLMEC_AMBER_AMBERTORSION_H
@@ -141,6 +141,12 @@ namespace BALL
 		/*_	array with the torsions
 		*/
 		vector<SingleAmberTorsion> 	torsion_;
+
+		FFPSCosineTorsion		torsion_parameters_;
+		
+		FFPSCosineTorsion		improper_parameters_;
+
+		FFParameterSection	impropers_;
 		//@}
 	 
 	};

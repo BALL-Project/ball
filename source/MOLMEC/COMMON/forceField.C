@@ -1,4 +1,4 @@
-// $Id: forceField.C,v 1.4 1999/09/03 14:09:57 len Exp $
+// $Id: forceField.C,v 1.5 1999/09/21 11:08:28 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
 
@@ -134,6 +134,8 @@ namespace BALL
 	// setup methods
 	bool  ForceField::setup(System& system)
 	{
+		Log.info() << "starting ForceField::setup()" << endl;
+
 		bool  success = true;
 
 		// store the specified system
@@ -145,7 +147,8 @@ namespace BALL
 			Log.level(LogStream::ERROR) << "setup of periodic boundary failed" << endl;
 			return false;
 		}
-		
+			
+
 		// clear existing atoms entries
 		atoms_.clear();
 
@@ -173,6 +176,8 @@ namespace BALL
 		}
 		number_of_movable_atoms_ = atoms_.size();
 
+		Log.info() << "starting specificSetup()" << endl;
+
 		// force field specific parts
 		success = specificSetup();
 		if (!success) 
@@ -185,6 +190,7 @@ namespace BALL
 		vector<ForceFieldComponent*>::iterator  it;
 		for (it = components_.begin(); (it != components_.end()) && success; ++it)
 		{
+			Log.info() << "starting setup() for " << (*it)->name_ << endl;
 			success = (*(*it)).setup();
 			if (!success) 
 			{
@@ -193,6 +199,7 @@ namespace BALL
 			}
 		}
 
+		Log.info() << "finished ForceField::setup()" << endl;
 		return success;
 	}
 
