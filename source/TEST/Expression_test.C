@@ -1,4 +1,4 @@
-// $Id: Expression_test.C,v 1.11 2001/07/16 12:38:25 anker Exp $
+// $Id: Expression_test.C,v 1.12 2001/07/17 00:25:36 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -18,7 +18,7 @@ using namespace BALL;
 
 ///////////////////////////
 
-START_TEST(Expression, "$Id: Expression_test.C,v 1.11 2001/07/16 12:38:25 anker Exp $")
+START_TEST(Expression, "$Id: Expression_test.C,v 1.12 2001/07/17 00:25:36 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -585,7 +585,7 @@ CHECK(SyntaxTree::parse() throw())
 	st.parse();
 	TEST_EQUAL(st.expression, "true()")
 	TEST_EQUAL(st.argument, "")
-	TEST_EQUAL(st.evaluated, false)
+	TEST_EQUAL(st.evaluated, true)
 	TEST_EQUAL(st.negate, false)
 	TEST_EQUAL(st.type, ExpressionTree::INVALID)
 	TEST_EQUAL(st.children.size(), 1)
@@ -610,7 +610,7 @@ Expression* e_ptr = 0;
 CHECK(Expression::Expression() throw())
 	e_ptr = new Expression;
 	TEST_NOT_EQUAL(e_ptr, 0)
-	TEST_EQUAL(e_ptr->getCreationMethods().size(), 22)
+	TEST_EQUAL(e_ptr->getCreationMethods().size(), 23)
 RESULT
 
 
@@ -635,7 +635,7 @@ RESULT
 
 CHECK(Expression::Expression(const String& expression_string) throw())
 	Expression e("true()");
-	TEST_EQUAL(e.getCreationMethods().size(), 22)
+	TEST_EQUAL(e.getCreationMethods().size(), 23)
 	TEST_EQUAL(e(Atom()), true)
 RESULT
 
@@ -670,11 +670,15 @@ CHECK(Expression::bool operator () (const Atom& atom) const  throw())
 	file.read(S);
 	HashMap<String, Size> test_expressions;
 	test_expressions.insert(pair<String, Size>("true()", 6));
-	test_expressions.insert(pair<String, Size>("connectedTo((-H))", 2));
+	test_expressions.insert(pair<String, Size>("false()", 0));
+	test_expressions.insert(pair<String, Size>("element(H) AND connectedTo((C))", 3));
+	test_expressions.insert(pair<String, Size>("element(O) AND connectedTo((C)) AND connectedTo((H))", 1));
+	test_expressions.insert(pair<String, Size>("connectedTo((H))", 2));
+	test_expressions.insert(pair<String, Size>("connectedTo(C(H)(H)(H))", 1));
 	test_expressions.insert(pair<String, Size>("element(H)", 4));
 	test_expressions.insert(pair<String, Size>("element(O)", 1));
 	test_expressions.insert(pair<String, Size>("element(C)", 1));
-	test_expressions.insert(pair<String, Size>("element(H) OR (name(OXT) AND chain(A))", 0));
+	test_expressions.insert(pair<String, Size>("element(H) OR (name(OXT) AND chain(A))", 4));
 
 	Expression e;
 	Size counter;
@@ -690,6 +694,45 @@ CHECK(Expression::bool operator () (const Atom& atom) const  throw())
 		TEST_EQUAL(counter, exp_iterator->second);
 	}
 
+	Atom dummy;
+	TEST_EQUAL(Expression("true() AND true()")(dummy), true)
+	TEST_EQUAL(Expression("true() AND false()")(dummy), false)
+	TEST_EQUAL(Expression("false() AND true()")(dummy), false)
+	TEST_EQUAL(Expression("false() AND false()")(dummy), false)
+	TEST_EQUAL(Expression("true() OR false()")(dummy), true)
+	TEST_EQUAL(Expression("true() OR true()")(dummy), true)
+	TEST_EQUAL(Expression("false() OR false()")(dummy), false)
+	TEST_EQUAL(Expression("false() OR true()")(dummy), true)
+	// triple OR
+	TEST_EQUAL(Expression("false() OR false() OR false()")(dummy), false)
+	TEST_EQUAL(Expression("false() OR false() OR true()")(dummy), true)
+	TEST_EQUAL(Expression("false() OR true() OR false()")(dummy), true)
+	TEST_EQUAL(Expression("true() OR false() OR false()")(dummy), true)
+	TEST_EQUAL(Expression("true() OR true() OR true()")(dummy), true)
+	// triple AND
+	TEST_EQUAL(Expression("false() AND false() AND false()")(dummy), false)
+	TEST_EQUAL(Expression("false() AND false() AND true()")(dummy), false)
+	TEST_EQUAL(Expression("false() AND true() AND false()")(dummy), false)
+	TEST_EQUAL(Expression("true() AND false() AND false()")(dummy), false)
+	TEST_EQUAL(Expression("true() AND true() AND true()")(dummy), true)
+	// AND/OR
+	TEST_EQUAL(Expression("false() OR (false() AND false())")(dummy), false)
+	TEST_EQUAL(Expression("false() OR (false() AND true())")(dummy), false)
+	TEST_EQUAL(Expression("false() OR (true() AND false())")(dummy), false)
+	TEST_EQUAL(Expression("false() OR (true() AND true())")(dummy), true)
+	TEST_EQUAL(Expression("true() OR (false() AND false())")(dummy), true)
+	TEST_EQUAL(Expression("true() OR (false() AND true())")(dummy), true)
+	TEST_EQUAL(Expression("true() OR (true() AND false())")(dummy), true)
+	TEST_EQUAL(Expression("true() OR (true() AND true())")(dummy), true)
+	// OR/AND
+	TEST_EQUAL(Expression("false() AND (false() OR false())")(dummy), false)
+	TEST_EQUAL(Expression("false() AND (false() OR true())")(dummy), false)
+	TEST_EQUAL(Expression("false() AND (true() OR false())")(dummy), false)
+	TEST_EQUAL(Expression("false() AND (true() OR true())")(dummy), false)
+	TEST_EQUAL(Expression("true() AND (false() OR false())")(dummy), false)
+	TEST_EQUAL(Expression("true() AND (false() OR true())")(dummy), true)
+	TEST_EQUAL(Expression("true() AND (true() OR false())")(dummy),true)
+	TEST_EQUAL(Expression("true() AND (true() OR true())")(dummy), true)
 RESULT
 
 
