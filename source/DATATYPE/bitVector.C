@@ -1,4 +1,4 @@
-// $Id: bitVector.C,v 1.23 2000/12/05 11:03:23 amoll Exp $
+// $Id: bitVector.C,v 1.24 2000/12/08 09:21:46 oliver Exp $
 
 #include <BALL/DATATYPE/bitVector.h>
 #include <BALL/MATHS/common.h>
@@ -251,7 +251,7 @@ namespace BALL
 		}
 
 		const char* tmp = bit_string;
-		setSize(strlen(bit_string));
+		setSize((Size)strlen(bit_string));
 		for (Size i = 0; i < size_ ; i++)
 		{
 			setBit((Index)i, (*tmp != '0'));
