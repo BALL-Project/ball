@@ -1,4 +1,4 @@
-// $Id: pairExpInteractionEnergyProcessor.C,v 1.3 2000/09/02 14:34:12 oliver Exp $
+// $Id: pairExpInteractionEnergyProcessor.C,v 1.4 2000/09/21 13:35:13 anker Exp $
 
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/MATHS/surface.h>
@@ -26,7 +26,7 @@ namespace BALL
 	const char* PairExpInteractionEnergyProcessor::Option::CLAVERIE_FILENAME
 		= "claverie_filename";
 	const char* PairExpInteractionEnergyProcessor::Option::USE_RDF
-		= "rdf";
+		= "use_rdf";
 	const char* PairExpInteractionEnergyProcessor::Option::RDF_FILENAME
 		= "rdf_filename";
 	const char* PairExpInteractionEnergyProcessor::Option::SOLVENT_FILENAME
@@ -46,10 +46,10 @@ namespace BALL
 	const double PairExpInteractionEnergyProcessor::Default::C1
 		= 4.7e4;
 	const double PairExpInteractionEnergyProcessor::Default::C2
-		= -0.214;
+		= 0.214;
 	const char* PairExpInteractionEnergyProcessor::Default::CLAVERIE_FILENAME
 		= "claverie.ini";
-	const bool PairExpInteractionEnergyProcessor::Default::USE_RDF = false;
+	const bool PairExpInteractionEnergyProcessor::Default::USE_RDF = true;
 	const char* PairExpInteractionEnergyProcessor::Default::RDF_FILENAME
 		= "rdf.ini";
 	const char* PairExpInteractionEnergyProcessor::Default::SOLVENT_FILENAME
@@ -64,13 +64,19 @@ namespace BALL
 		= "surface.surf";
 
 	PairExpInteractionEnergyProcessor::PairExpInteractionEnergyProcessor()
+		:	EnergyProcessor(),
+			options(),
+			solvent_(),
+			alpha_(0),
+			C1_(0),
+			C2_(0)
 	{
 		options.setDefaultInteger(Option::VERBOSITY, Default::VERBOSITY);
 		options.setDefaultReal(Option::ALPHA, Default::ALPHA);
 		options.setDefaultReal(Option::C1, Default::C1);
 		options.setDefaultReal(Option::C2, Default::C2);
 		options.setDefault(Option::CLAVERIE_FILENAME, Default::CLAVERIE_FILENAME);
-		options.setDefaultInteger(Option::USE_RDF, Default::USE_RDF);
+		options.setDefaultBool(Option::USE_RDF, Default::USE_RDF);
 		options.setDefault(Option::RDF_FILENAME, Default::RDF_FILENAME);
 		options.setDefault(Option::SOLVENT_FILENAME, Default::SOLVENT_FILENAME);
 		options.setDefaultReal(Option::SOLVENT_NUMBER_DENSITY, 
@@ -81,9 +87,60 @@ namespace BALL
 		options.setDefault(Option::SURFACE_FILENAME, Default::SURFACE_FILENAME);
 	}
 
-	PairExpInteractionEnergyProcessor::~PairExpInteractionEnergyProcessor()
+	
+	PairExpInteractionEnergyProcessor::PairExpInteractionEnergyProcessor(const
+			PairExpInteractionEnergyProcessor& proc)
+		:	EnergyProcessor(proc),
+			options(proc.options),
+			solvent_(proc.solvent_),
+			alpha_(proc.alpha_),
+			C1_(proc.C1_),
+			C2_(proc.C2_)
 	{
 	}
+
+	
+	PairExpInteractionEnergyProcessor::~PairExpInteractionEnergyProcessor()
+	{
+		destroy();
+	}
+
+	
+	void PairExpInteractionEnergyProcessor::destroy()
+	{
+		clear();
+	}
+
+	
+	void PairExpInteractionEnergyProcessor::clear()
+	{
+		options.clear();
+		solvent_.clear();
+		alpha_ = 0.0;
+		C1_ = 0.0;
+		C2_ = 0.0;
+	}
+
+
+	void PairExpInteractionEnergyProcessor::set(const
+			PairExpInteractionEnergyProcessor& proc)
+	{
+		options = proc.options;
+		solvent_ = proc.solvent_;
+		alpha_ = proc.alpha_;
+		C1_ = proc.C1_;
+		C2_ = proc.C2_;
+	}
+
+
+	const PairExpInteractionEnergyProcessor&
+		PairExpInteractionEnergyProcessor::operator = 
+			(const PairExpInteractionEnergyProcessor& proc)
+	{
+		set(proc);
+		return *this;
+	}
+
 
 	bool PairExpInteractionEnergyProcessor::finish()
 	{
@@ -98,6 +155,8 @@ namespace BALL
 		C2_ = options.getReal(Option::C2);
 		String claverie_filename = options.get(Option::CLAVERIE_FILENAME);
 		bool use_rdf = options.getBool(Option::USE_RDF);
+		// BAUSTELLE
+		use_rdf = true;
 		// the file containing the rdf descriptions
 		String rdf_filename = options.get(Option::RDF_FILENAME);
 		// the file contacining the solvent description
@@ -119,6 +178,7 @@ namespace BALL
 		double E = 0.0;
 		double E_D = 0.0;
 		double E_R = 0.0;
+		double E_ij = 0.0;
 		double E_ij_D = 0.0;
 		double E_ij_R = 0.0;
 		double e_ij_D = 0.0;
@@ -161,14 +221,14 @@ namespace BALL
 		rho = solvent_descriptor.getNumberDensity();
 
 		// define the rdf, if desired
+		ForceFieldParameters rdf_ff_param(rdf_filename);
 		RDFParameter rdf_parameter;
 		if (use_rdf)
 		{
 			// BAUSTELLE
-			ffparam.setFilename(rdf_filename);
-			if (!rdf_parameter.extractSection(ffparam, "RDF"))
+			if (!rdf_parameter.extractSection(rdf_ff_param, "RDF"))
 			{
-				Log.error() << "Pair6_12InteractionEnergyProcessor::finish(); "
+				Log.error() << "PairExpInteractionEnergyProcessor::finish(); "
 					<< "Cannot read RDF descriptions." << endl;
 				return 0.0;
 			}
@@ -241,6 +301,7 @@ namespace BALL
 					return false;
 			}
 
+			E_ij = 0.0;
 			E_ij_D = 0.0;
 			E_ij_R = 0.0;
 
@@ -277,6 +338,7 @@ namespace BALL
 				// iterate over all surface points
 
 				I_disp = I_rep = 0.0;
+				e_ij = e_ij_D = e_ij_R = 0.0;
 
 				for (Size sphere_index = 0; sphere_index < surface_map.size(); ++sphere_index)
 				{
@@ -303,24 +365,47 @@ namespace BALL
 							float k2 = A;
 
 							// DEBUG
-
+							/*
 							Log.info() << "sphere_center = " << sphere_center << endl;
 							Log.info() << "atom_center = " << atom_center << endl;
 							Log.info() << "A = " << A << endl;
 							Log.info() << "B = " << B << endl;
 							Log.info() << "C = " << C << endl;
 							Log.info() << "k1 = " << k1 << ", k2 = " << k2 << endl;
+							Log.info() << "rho = " << rho << endl;
+							Log.info() << "r_k = " << r_k << endl;
+							Log.info() << "r_k_vec * n_k_vec = " << r_k_vec * n_k_vec << endl;
+							*/
 
-
-							// BAUSTELLE: Sollte protected werden...
+							// BAUSTELLE: Sollte protected werden. Und nicht geteilt in
+							// zwei Beiträge
 							PairExpRDFIntegrator integrator(alpha_, C1_, C2_, R_ij_o, 
 									k1, k2, rdf_parameter.getRDF(type_i, type_j));
+							e_ij += rho * integrator.integrateToInf(r_k)
+								* ((r_k_vec * n_k_vec)) / (r_k * r_k * r_k);
 
-							e_ij += rho * integrator(r_k)
-								* (-(r_k_vec * n_k_vec)) / (r_k * r_k * r_k);
+							// DEBUG
+							/*
+							e_ij_D += rho * integrator.integrateToInf(r_k, alpha_, 0.0,
+									C2_, R_ij_o, k1, k2) 
+								* ((r_k_vec * n_k_vec)) / (r_k * r_k * r_k);
+							e_ij_R += rho * integrator.integrateToInf(r_k, alpha_, C1_,
+									0.0, R_ij_o, k1, k2) 
+								* ((r_k_vec * n_k_vec)) / (r_k * r_k * r_k);
 
-							Log.info() << "e_ij_D (single tess) = " << I_disp << endl;
-							Log.info() << "e_ij_R (single tess) = " << I_rep << endl;
+							a_r_k = a * r_k;
+							I_disp += (r_k_vec * n_k_vec) / (3.0 * pow(r_k,6));
+
+							I_rep += (r_k_vec * n_k_vec) * (exp(-a * r_k) *
+									((1.0 / a_r_k) + (2.0 / (a_r_k * a_r_k)) + 
+									 (2.0 / (a_r_k * a_r_k * a_r_k))));
+
+							Log.info() << "e_ij = " << e_ij << endl;
+							Log.info() << "Dis: " << e_ij_D << " " 
+								<< rho * - C2_ * K_ij_D * R_ij_o_6 * I_disp << endl;
+							Log.info() << "Rep: " << e_ij_R << " " 
+								<< rho * C1_ * K_ij_R * I_rep << endl;
+							*/
 
 						}
 						else
@@ -336,7 +421,7 @@ namespace BALL
 
 							// BAUSTELLE
 							e_ij_R = rho * C1_ * K_ij_R * I_rep;
-							e_ij_D = rho * C2_ * K_ij_D * R_ij_o_6 * I_disp;
+							e_ij_D = rho * - C2_ * K_ij_D * R_ij_o_6 * I_disp;
 
 							e_ij = rho * ( C1_ * K_ij_R * I_rep + C2_ * K_ij_D * R_ij_o_6
 									* I_disp);
@@ -346,6 +431,7 @@ namespace BALL
 
 				// E_ij_x is the contribution of the combination of solvent atom
 				// type i and solute atom type j
+				E_ij += e_ij;
 				E_ij_D += e_ij_D;
 				E_ij_R += e_ij_R;
 
@@ -353,6 +439,7 @@ namespace BALL
 
 
 			// E_x is the total energy contribution
+			E += solvent_atom.number_of_atoms * E_ij;
 			E_D += solvent_atom.number_of_atoms * E_ij_D;
 			E_R += solvent_atom.number_of_atoms * E_ij_R;
 
@@ -364,7 +451,8 @@ namespace BALL
 				<< "Repulsion energy: " << E_R << " kcal/mol" << endl;
 		}
 
-		energy_ = 4184 * (E_R + E_D);
+		// energy_ = 4184 * (E_R + E_D);
+		energy_ = 4184 * E;
 		return true;
 	}
 
