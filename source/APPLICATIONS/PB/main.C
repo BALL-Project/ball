@@ -1,4 +1,4 @@
-// $Id: main.C,v 1.6 2000/06/06 13:16:13 oliver Exp $
+// $Id: main.C,v 1.7 2000/06/08 08:36:04 oliver Exp $
 
 #include <iomanip>
 
@@ -204,15 +204,36 @@ int main(int argc, char** argv)
 		return 6;
 	}
 
+	// setup logging to print the current time in front of each line
+	Log.setPrefix(cout, "[%T] ");
+	Log.setPrefix(cerr, "[%T ERROR] ");
+
+
+	// calculate the solvent excluded surface area of the solute
+	// (used to estimate the non electrostatic contribution
+	// to the solvation free energy)
+	if (ses_calculation)
+	{
+		total_SES_area = calculateSESArea(S, probe_radius);
+		Log.info() << "Solvent excluded surface : " << total_SES_area << " A^2";
+		Log.info() << " (" << probe_radius << " Angstrom probe radius)" << endl;
+	}
+
+	// calculate the solvent accessible surface area of the solute
+	// (used to estimate the non electrostatic contribution
+	// to the solvation free energy)
+	if (sas_calculation)
+	{
+		total_SAS_area = calculateSASAtomAreas(S, surface_map, probe_radius);
+		Log.info() << "Solvent accessible surface : " << total_SAS_area << " A^2";
+		Log.info() << " (" << probe_radius << " Angstrom probe radius)" << endl;
+	}
+
 	// if the option -d was give, dump the positions, charges, and radii to a file
 	if (dump_file != "")
 	{
 		dumpFile();
 	}
-
-	// setup logging to print the current time in front of each line
-	Log.setPrefix(cout, "[%T] ");
-	Log.setPrefix(cerr, "[%T ERROR] ");
 
 	// the part that performs the FDPB calculation
 	if (fdpb_calculation)
@@ -297,26 +318,6 @@ int main(int argc, char** argv)
 			Log.info() << "Solvation energy as change of the reaction field: " 
 								 << dG_RF - fdpb.getReactionFieldEnergy() << " kJ/mol" << endl;
 		}
-	}
-
-	// calculate the solvent excluded surface area of the solute
-	// (used to estimate the non electrostatic contribution
-	// to the solvation free energy)
-	if (ses_calculation)
-	{
-		total_SES_area = calculateSESArea(S, probe_radius);
-		Log.info() << "Solvent excluded surface : " << total_SES_area << " A^2";
-		Log.info() << " (" << probe_radius << " Angstrom probe radius)" << endl;
-	}
-
-	// calculate the solvent accessible surface area of the solute
-	// (used to estimate the non electrostatic contribution
-	// to the solvation free energy)
-	if (sas_calculation)
-	{
-		total_SAS_area = calculateSASAtomAreas(S, surface_map, probe_radius);
-		Log.info() << "Solvent accessible surface : " << total_SAS_area << " A^2";
-		Log.info() << " (" << probe_radius << " Angstrom probe radius)" << endl;
 	}
 
 	// done

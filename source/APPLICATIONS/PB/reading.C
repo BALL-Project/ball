@@ -1,8 +1,9 @@
-// $Id: reading.C,v 1.5 2000/06/06 13:16:14 oliver Exp $
+// $Id: reading.C,v 1.6 2000/06/08 08:36:05 oliver Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/FORMAT/INIFile.h>
+#include <BALL/KERNEL/PTE.h>
 #include "global.h"
 #include "reading.h"
 #include "assignment.h"
@@ -179,8 +180,8 @@ void dumpFile()
 	ofstream outfile(dump_file.c_str(), ios::out);
 	
 	outfile << "#   PB dump file" << endl;
-	outfile << "# atom      charge[e0]  radius[A]   SAS[A^2] " << endl;
-	outfile << "#--------------------------------------------" << endl;
+	outfile << "# atom  element   charge[e0]  radius[A]   SAS[A^2] " << endl;
+	outfile << "#---------------------------------------------------" << endl;
 	
 	AtomIterator it = S.beginAtom();
 	double total_charge = 0.0;
@@ -189,8 +190,10 @@ void dumpFile()
 		total_charge += it->getCharge();
 		outfile << setprecision(5) 
 						<< it->getFullName() 
+						<< " " << it->getElement().getSymbol()
 						<< " " << it->getCharge()
 						<< " " << it->getRadius();
+
 		if (sas_calculation && surface_map.has(&*it))
 		{	
 			outfile << " " << surface_map[&*it];
@@ -204,11 +207,11 @@ void dumpFile()
 	outfile << "# total charge: " << total_charge << " e0" << endl;
 	if (ses_calculation)
 	{
-		outfile << "total solvent excluded surface area: " << total_SES_area << " A^2" << endl;
+		outfile << "# total solvent excluded surface area: " << total_SES_area << " A^2" << endl;
 	}
 	if (sas_calculation)
 	{
-		outfile << "total solvent accessible surface area: " << total_SAS_area << " A^2" << endl;
+		outfile << "# total solvent accessible surface area: " << total_SAS_area << " A^2" << endl;
 	}
 	outfile.close();
 }
