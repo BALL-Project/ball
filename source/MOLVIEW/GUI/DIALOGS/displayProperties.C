@@ -595,6 +595,13 @@ void DisplayProperties::selectModel(const QString& string)
 		object_processor_.
 			setValue(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
 	}
+	else if (string == "backbone")
+	{
+		object_processor_.
+			setValue(ADDRESS__STATIC_MODEL, VALUE__MODEL_BACKBONE);
+		object_processor_.
+			setValue(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
+	}
 	else if (string == "surface")
 	{
 		object_processor_.

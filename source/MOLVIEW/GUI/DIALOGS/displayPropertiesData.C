@@ -162,6 +162,7 @@ DisplayPropertiesData::DisplayPropertiesData(QWidget *parent, const char *name)
     model_type_combobox_->insertItem( tr( "line" ) );
     model_type_combobox_->insertItem( tr( "stick" ) );
     model_type_combobox_->insertItem( tr( "ball and stick" ) );
+    model_type_combobox_->insertItem( tr( "backbone" ) );
     model_type_combobox_->insertItem( tr( "surface" ) );
     model_type_combobox_->insertItem( tr( "van der Waals" ) );
     model_type_combobox_->setMaxCount( 2147483647 );
