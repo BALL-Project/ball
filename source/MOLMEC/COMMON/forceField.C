@@ -1,4 +1,4 @@
-// $Id: forceField.C,v 1.21 2001/05/17 01:30:53 oliver Exp $
+// $Id: forceField.C,v 1.22 2001/06/05 15:55:26 anker Exp $
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
 
@@ -227,20 +227,20 @@ namespace BALL
 		// the selected atoms first (0 < i < number_of_movable_atoms_) 
 		use_selection_ = system.containsSelection();
 		number_of_movable_atoms_ = 0;
-		AtomIterator atom_it = system.beginAtom();
+		AtomConstIterator atom_it = system.beginAtom();
 		if (use_selection_ == true)
 		{
 			for (; +atom_it; ++atom_it)
 			{
 				if (atom_it->isSelected() == true)
 				{
-					atoms_.push_back(&(*atom_it));
+					atoms_.push_back(const_cast<Atom*>(&(*atom_it)));
 				}
 			}
 		} else {
 			for (; +atom_it; ++atom_it)
 			{
-				atoms_.push_back(&(*atom_it));
+				atoms_.push_back(const_cast<Atom*>(&(*atom_it)));
 			}
 		}
 		
@@ -356,7 +356,7 @@ namespace BALL
 	double	ForceField::getRMSGradient() const
 	{
 		double sum = 0;
-		AtomVector::ConstIterator it = atoms_.begin();
+		AtomConstVector::ConstIterator it = atoms_.begin();
 		for (; it != atoms_.end(); ++it)
 		{
 			sum += (*it)->getForce().getSquareLength();
