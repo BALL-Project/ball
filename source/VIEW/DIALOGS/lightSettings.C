@@ -43,6 +43,7 @@ void LightSettings::updateFromStage()
 
 	clearFields_();
 	update();
+	lights_list->setCurrentItem(lights_.size() -1 );
 }
 
 
