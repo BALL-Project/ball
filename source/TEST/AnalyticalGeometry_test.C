@@ -1,4 +1,4 @@
-// $Id: AnalyticalGeometry_test.C,v 1.10 2000/03/24 15:46:07 amoll Exp $
+// $Id: AnalyticalGeometry_test.C,v 1.11 2000/03/24 18:57:08 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 #include <BALL/MATHS/analyticalGeometry.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: AnalyticalGeometry_test.C,v 1.10 2000/03/24 15:46:07 amoll Exp $")
+START_TEST(class_name, "$Id: AnalyticalGeometry_test.C,v 1.11 2000/03/24 18:57:08 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -77,12 +77,19 @@ RESULT
 
 //line301
 CHECK(GetPartition(const TVector3<T>& a, const TVector3<T>& b))
-  //BAUSTELLE
+	v1.set(0.0, 0.0, 0.0);
+	v2.set(10.0, 0.0, 0.0);
+	v3.set(5.0, 0.0, 0.0);
+	TEST_EQUAL(GetPartition(v1, v2), v3)
 RESULT
 
 //line319: method GetPartition(const TVector3<T>& a, const TVector3<T>& b, const T& r, const T& s)
 CHECK(GetPartition(const TVector3<T>& a, const TVector3<T>& b, const T& r, const T& s))
-  //BAUSTELLE
+	v1.set(0.0, 10.0, 10.0);
+	v2.set(20.0, 0.0, 0.0);
+	v3.set(10.0, 5.0, 5.0);
+	TEST_EQUAL(GetPartition(v1, v2,(float)2.0, (float)2.0), v3)
+	TEST_EXCEPTION(Exception::DivisionByZero, GetPartition(v1, v2, (float)0.0, (float)0.0))
 RESULT
 
 //line337
@@ -103,6 +110,8 @@ CHECK(GetDistance(const TLine3<T>& line, const TVector3<T>& point))
 	TEST_REAL_EQUAL(GetDistance(l1, v1), 5.0)
 	v1.set(0.0, 0.0, 0.0);
 	TEST_REAL_EQUAL(GetDistance(l1, v1), 0.0)
+	l1 = Line3(v1, v1);
+	TEST_EXCEPTION(Exception::DivisionByZero, GetDistance(l1, v1))
 RESULT
 
 //line365
@@ -126,8 +135,17 @@ CHECK(GetDistance(const TLine3<T>& a, const TLine3<T>& b))
 	v2.set(10.0, 0.0, 0.0);
 	l2.set(v1, v2);
 	TEST_REAL_EQUAL(GetDistance(l1, l2), 5.0)
+	v1.set(0.0, 0.0, -5.0);
+	v2.set(0.0, 10.0, 0.0);
+	l2.set(v1, v2);
+	TEST_REAL_EQUAL(GetDistance(l1, l2), 5.0)
 	l2 = l1;
 	TEST_REAL_EQUAL(GetDistance(l1, l2), 0.0)
+	v1.set(0.0, 0.0, 0.0);
+	v2.set(0.0, 0.0, 0.0);
+	l1 = Line3(v1, v2);
+	l2 = l1;
+	TEST_EXCEPTION(Exception::DivisionByZero, GetDistance(l1, l2))
 RESULT
 
 //line405
@@ -140,6 +158,9 @@ CHECK(GetDistance(const TVector3<T>& point, const TPlane3<T>& plane))
 	TEST_REAL_EQUAL(GetDistance(v1, p1), 5.0)
 	v1.set(5.0, 5.0, 0.0);
 	TEST_REAL_EQUAL(GetDistance(v1, p1), 0.0)
+	v1.set(0.0, 0.0, 0.0);
+	p1 = Plane3(v1, v1, v1);
+	TEST_EXCEPTION(Exception::DivisionByZero, GetDistance(v1, p1))
 RESULT
 
 //line422: method GetDistance(const TPlane3<T>& plane, const TVector3<T>& point)
@@ -168,6 +189,9 @@ CHECK(GetDistance(const TLine3<T>& line, const TPlane3<T>& plane))
 	v2.set(0.0, 10.0, 0.0);
 	l1.set(v1, v2);
 	TEST_REAL_EQUAL(GetDistance(l1, p1), 0.0)
+	v2.set(0.0, 0.0, 0.0);
+	l1.set(v1, v2);
+	TEST_EXCEPTION(Exception::DivisionByZero, GetDistance(l1, p1))
 RESULT
 
 //line451: method GetDistance(const TPlane3<T>& plane, const TLine3<T>& line)
@@ -199,6 +223,9 @@ CHECK(GetDistance(const TPlane3<T>& a, const TPlane3<T>& b))
 	TEST_REAL_EQUAL(GetDistance(p1, p2), 10.0)
 	p1 = p2;
 	TEST_REAL_EQUAL(GetDistance(p1, p2), 0.0)
+	v3.set(0.0, 0.0, 0.0);  
+	p1 = Plane3(v1, v1, v1);
+	TEST_EXCEPTION(Exception::DivisionByZero, GetDistance(p1, p2))
 RESULT
 
 //line481: method GetAngle(const TVector3<T>& a, const TVector3<T>& b, TAngle<T> &intersection_angle)
@@ -450,6 +477,14 @@ CHECK(GetIntersection(const TSphere3<T>& sphere, const TPlane3<T>& plane, TCircl
 	v2.set(-0.0, -0.0, -100.0);
 	c1.set(v1, v2, 2.0);
 	TEST_EQUAL(GetIntersection(s1, p1, c2), true)
+
+	v1.set(-5.0, 0.0, 0.0);
+	s1.set(v1, 5.0);
+	v1.set(5.0, 0.0, 0.0);
+	v2.set(-0.0, -0.0, -100.0);
+	c1.set(v1, v2, 2.0);
+	TEST_EQUAL(GetIntersection(s1, p1, c2), true)
+
 	TEST_EQUAL(c2, c1)
 	v1.set(500.0, 0.0, 0.0);
 	s1 = Sphere3(v1, 2);
