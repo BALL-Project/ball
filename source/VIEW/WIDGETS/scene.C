@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.62 2004/06/02 14:24:10 amoll Exp $
+// $Id: scene.C,v 1.63 2004/06/02 15:57:35 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -644,7 +644,7 @@ namespace BALL
 		{
 			// Differences between the old and new x and y positions in the window
 			float delta_x = scene->x_window_pos_new_ - scene->x_window_pos_old_;
-			float new_distance = stage_->getEyeDistance() + (delta_x / 20.0);
+			float new_distance = stage_->getFocalDistance() + (delta_x / 10.0);
 			
 			// prevent strange values
 			if (new_distance < 0 || new_distance > 100) return;
