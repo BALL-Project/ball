@@ -1,4 +1,4 @@
-// $Id: persistenceManager.C,v 1.12 2000/12/19 12:51:06 amoll Exp $
+// $Id: persistenceManager.C,v 1.13 2001/05/30 15:15:22 anker Exp $
 
 #include <BALL/CONCEPT/persistenceManager.h>
 #include <BALL/KERNEL/system.h>
@@ -15,13 +15,42 @@ namespace BALL
 
 	PersistenceManager::PersistenceManager()
 		throw()
+		: create_methods_(),
+			object_out_(),
+			object_out_needed_(),
+			pointer_map_(),
+			pointer_list_(),
+			object_in_(),
+			ostr_(),
+			istr_()
 	{
 		// all kernel classes	
 		registerKernelClasses_();
 	}
 
+	PersistenceManager::PersistenceManager(const PersistenceManager& pm)
+		throw()
+		: create_methods_(pm.create_methods_),
+			object_out_(pm.object_out_),
+			object_out_needed_(pm.object_out_needed_),
+			pointer_map_(pm.pointer_map_),
+			pointer_list_(pm.pointer_list_),
+			object_in_(pm.object_in_),
+			ostr_(pm.ostr_),
+			istr_(pm.istr_)
+	{
+	}
+
 	PersistenceManager::PersistenceManager(istream& is)
 		throw()
+		: create_methods_(),
+			object_out_(),
+			object_out_needed_(),
+			pointer_map_(),
+			pointer_list_(),
+			object_in_(),
+			ostr_(),
+			istr_()
 	{
 		// all kernel classes	
 		registerKernelClasses_();
@@ -30,6 +59,14 @@ namespace BALL
 
 	PersistenceManager::PersistenceManager(ostream& os)
 		throw()
+		: create_methods_(),
+			object_out_(),
+			object_out_needed_(),
+			pointer_map_(),
+			pointer_list_(),
+			object_in_(),
+			ostr_(),
+			istr_()
 	{
 		// all kernel classes	
 		registerKernelClasses_();
@@ -38,6 +75,14 @@ namespace BALL
 
 	PersistenceManager::PersistenceManager(istream& is, ostream& os)
 		throw()
+		: create_methods_(),
+			object_out_(),
+			object_out_needed_(),
+			pointer_map_(),
+			pointer_list_(),
+			object_in_(),
+			ostr_(),
+			istr_()
 	{
 		// all kernel classes	
 		registerKernelClasses_();
@@ -245,7 +290,7 @@ namespace BALL
 			// check whether the creation was successful
 			if (obj == 0)
 			{
-				Log.level(LogStream::ERROR) << "Could not create object of typ " 
+				Log.level(LogStream::ERROR) << "Could not create object of type " 
 																		<< type_name << "!" << endl;
 				error = false;
 				break;
@@ -360,5 +405,9 @@ namespace BALL
 		
 		return result;
 	}
+
+#ifdef BALL_NO_INLINE_FUNCTIONS
+#include <BALL/CONCEPT/persistenceManager.iC>
+#endif
 
 } // namespace BALL

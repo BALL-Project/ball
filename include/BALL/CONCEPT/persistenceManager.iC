@@ -1,0 +1,25 @@
+// $Id: persistenceManager.iC,v 1.1 2001/05/30 15:15:19 anker Exp $
+
+BALL_INLINE
+bool PersistenceManager::checkObjectHeader(const char* type_name)
+	throw()
+{
+	PointerSizeInt ptr;
+	return checkHeader(type_name, 0, ptr);
+}
+
+
+BALL_INLINE
+void PersistenceManager::writeObjectTrailer(const char* name)
+	throw()
+{
+	writeTrailer(name);
+}
+
+
+BALL_INLINE
+bool PersistenceManager::checkObjectTrailer(const char* name)
+throw()
+{
+	return checkTrailer(name);
+}

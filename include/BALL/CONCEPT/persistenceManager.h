@@ -1,4 +1,4 @@
-// $Id: persistenceManager.h,v 1.25 2001/05/29 16:33:36 anker Exp $
+// $Id: persistenceManager.h,v 1.26 2001/05/30 15:15:18 anker Exp $
 
 #ifndef BALL_CONCEPT_PERSISTENCE_H
 #define BALL_CONCEPT_PERSISTENCE_H
@@ -50,6 +50,11 @@ namespace BALL
 					set the associated streams, and to store or retrieve objects.
 			\end{itemize}
 			BAUSTELLE: One or two words about persistent object pointers
+			\\
+			{\bf Note:} This class is mainly an interface definition and contains
+			abstract methods. Do not try to instantiate a PersistenceManager,
+			your compiler will be complaining.
+			\\
 			@see	PersistentObject
 			@see	XDRPersistenceManager
 			@see	TextPersistenceManager
@@ -85,6 +90,11 @@ namespace BALL
 		PersistenceManager()
       throw();
 
+		/** Copy constructor
+		*/
+		PersistenceManager(const PersistenceManager& pm)
+			throw();
+
 		/**	Detailed constructor with an input stream.
 				Creates a persistence manager object and assigns an input stream.
 		*/
@@ -106,7 +116,7 @@ namespace BALL
 			
 		/**	Destructor.
 				Destruct the persistence manager and and clear up all data
-				structures.  The associated streams or sockets
+				structures. The associated streams or sockets
 				(\Ref{setIStream}/\Ref{setOStream}) are not closed.
 		*/
 		virtual ~PersistenceManager()
@@ -241,22 +251,14 @@ namespace BALL
 		*/
 		template <typename T>
 		bool checkObjectHeader(const T& /* object */, const char* name = 0)
-			throw()
-		{
-			PointerSizeInt ptr;
-			return checkHeader(RTTI::getStreamName<T>(), name, ptr);
-		}
+			throw();
 
 		/** Check an object header by supplying its stream name.
 				@param	type_name the stream name of the object type
 				@return	{\bf true} if the object header could be checked successfully
 		*/
 		bool checkObjectHeader(const char* type_name)
-			throw()
-		{
-			PointerSizeInt ptr;
-			return checkHeader(type_name, 0, ptr);
-		}
+			throw();
 
 		/** Write an object Header.
 				Determine the stream name of the object via @see RTTI and call @see
@@ -266,29 +268,19 @@ namespace BALL
 		*/
 		template <typename T>
 		void writeObjectHeader(const T* object, const char* name = 0)
-			throw()
-		{
-			object_out_.insert(object);
-			writeHeader(RTTI::getStreamName<T>(), name, (PointerSizeInt)(void*)object);
-		}
+			throw();
 
 		/** Write an object trailer by calling @see writeTrailer.
 				@param	name the name of the object
 		*/
 		void writeObjectTrailer(const char* name = 0)
-			throw()
-		{
-			writeTrailer(name);
-		}
+			throw();
 
 		/** Check an object trailer by calling @see checkTrailer.
 				@param	name the name of the object
 		*/
 		bool checkObjectTrailer(const char* name = 0)
-			throw()
-		{
-			return checkTrailer(name);
-		}
+			throw();
 
 		/**	Write a primitive member variable.
 				This method also writes the necessary header and trailer of the
@@ -298,12 +290,7 @@ namespace BALL
 		*/
 		template <typename T>
 		void writePrimitive(const T& t, const char* name)
-			throw()
-		{
-			writePrimitiveHeader(RTTI::getStreamName<T>(), name);
-			put(t);
-			writePrimitiveTrailer();
-		}
+			throw();
  
 		/**	Read a primitive member variable. 
 				This method also checks header and trailer of the primitive.
@@ -313,16 +300,7 @@ namespace BALL
 		*/
 		template <typename T>
 		bool readPrimitive(T& t, const char* name)
-			throw()
-		{
-			if (!checkPrimitiveHeader(RTTI::getStreamName<T>(), name))
-			{
-				return false;
-			}
-
-			get(t);
-			return checkPrimitiveTrailer();
-		}
+			throw();
 
 		/**	Write a storable object. 
 				This method also writes header and trailer of the object.
@@ -331,13 +309,8 @@ namespace BALL
 		*/
 		template <typename T>
 		void writeStorableObject(const T& t, const char* name)
-			throw()
-		{
-			writeStorableHeader(RTTI::getStreamName<T>(), name);
-			t.write(*this);
-			writeStorableTrailer();
-		}
-			
+			throw();
+
 		/**	Read a storable object. This method also checks header and trailer
 				of the object.
 				@param	t a mutable reference of the object
@@ -346,11 +319,7 @@ namespace BALL
 		*/
 		template <typename T>
 		bool readStorableObject(T& t, const char* name)
-			throw()
-		{
-			return (checkStorableHeader(RTTI::getStreamName<T>(), name) 
-							&& t.read(*this) && checkStorableTrailer());
-		}
+			throw();
 
 		// BAUSTELLE:
 		// Regarding the next few methods: is it the name of the object or its
@@ -363,17 +332,7 @@ namespace BALL
 		*/
 		template <class T>
 		void writeObjectPointer(const T* object, const char* name)
-			throw()
-	 	{
-			if (object != 0 && !object_out_.has(object))
-			{
-				object_out_needed_.push_back(object);
-			}
-
-			writeObjectPointerHeader(RTTI::getStreamName<T>(), name);
-			put((PointerSizeInt)(void*)object);
-			writePrimitiveTrailer();
-		}
+			throw();
  
 		/**	Read a pointer to a PersistentObject.
 				This method also checks header and trailer.
@@ -383,25 +342,7 @@ namespace BALL
 		*/
 		template <class T>
 		bool readObjectPointer(T*& object, const char* name)
-			throw()
-		{
-			if (!checkObjectPointerHeader(RTTI::getStreamName<T>(), name))
-			{
-				return false;
-			}
-
-			PointerSizeInt ptr;
-			get(ptr);
-
-			if (ptr != 0)
-			{
-				pointer_list_.push_back(pair<void**, PointerSizeInt>((void**)&object, ptr));
-			}
-
-			object = (T*)ptr;
-
-			return checkPrimitiveTrailer();
-		} 
+			throw();
 
 		/** Write a reference to a PersistentObject. 
 				This method also writes the necessary header and trailer.
@@ -410,17 +351,7 @@ namespace BALL
 		*/
 		template <class T>
 		void writeObjectReference(const T& object, const char* name)
-			throw()
-		{
-			if (&object != 0 && !object_out_.has(&object))
-			{
-				object_out_needed_.push_back(&object);
-			}
-
-			writeObjectReferenceHeader(RTTI::getStreamName<T>(), name);
-			put((PointerSizeInt)(void*)&object);
-			writePrimitiveTrailer();
-		} 
+			throw();
 
 		/**	Read a reference to a PersistentObject.
 				This method also checks header and trailer of the object reference.
@@ -430,30 +361,7 @@ namespace BALL
 		*/
 		template <class T>
 		bool readObjectReference(T& object, const char* name)
-			throw()
-		{
-			if (!checkObjectReferenceHeader(RTTI::getStreamName<T>(), name))
-			{
-				return false;
-			}
-
-			PointerSizeInt ptr;
-			get(ptr);
-
-			// store a zero in the corresponding pointer
-			// since we cannot convert 64 bit pointers to
-			// 32 bit pointers - this is required, if an object
-			// written on a 64 bit architecture is read on a 32 bit
-			// machine
-			object = 0;
-
-			if (ptr != 0);
-			{
-				pointer_list_.push_back(pair<void**, PointerSizeInt>((void**)&object, ptr));
-			}
-
-			return checkPrimitiveTrailer();
-		}
+			throw();
 
 		/**	Write an array of persistent objects.
 				This method writes {\tt size} persistent objects to the persistent
@@ -464,15 +372,7 @@ namespace BALL
 		*/
 		template <class T>
 		void writeObjectArray(const T* array, const char* name, Size size)
-			throw()
-		{
-			writeObjectArrayHeader(RTTI::getStreamName<T>(), name, size);
-
-			for (Position i = 0; i < size; i++)
-				(*this).writeObject(array[i], "-");
-
-			writeObjectArrayTrailer();
-		}
+			throw();
 
 		/**	Read an array of persistent objects.
 				This method reads {\tt size} persistent objects from the persistent
@@ -483,21 +383,7 @@ namespace BALL
 		*/
 		template <class T>
 		bool readObjectArray(const T* array, const char* name, Size& size)
-			throw()
-		{
-			if (!checkObjectArrayHeader(RTTI::getStreamName<T>(), name, size))
-			{
-				return false;
-			}
-
-			T* ptr = const_cast<T*>(array);
-			for (Position i = 0; i < size; i++) 
-			{
-				(*this).readObject(ptr[i], "");
-			}
-
-			return checkObjectArrayTrailer();
-		} 
+			throw();
 
 		/** Write an array of pointers to persistent objects.
 				Thhis method writes {\tt size} persistent objects to the persistent
@@ -508,23 +394,7 @@ namespace BALL
 		*/
 		template <class T>
 		void writeObjectPointerArray(T** arr, const char* name, const Size size)
-			throw()
-		{
-			writeObjectPointerArrayHeader(RTTI::getStreamName<T>(), name, size);
-
-			PersistentObject* ptr;
-			for (Position i = 0; i < size; i++)
-			{
-				ptr = (PersistentObject*)arr[i];
-				put((PointerSizeInt)(void*)ptr);
-				if (ptr != 0 && !object_out_.has(ptr))
-				{
-					object_out_needed_.push_back(ptr);
-				}
-			}
-			
-			writeObjectPointerArrayTrailer();
-		}
+			throw();
 	
 		/**	Read an array of persistent object pointers.
 				This method reads {\tt size} persistent object pointers from the
@@ -535,28 +405,7 @@ namespace BALL
 		*/
 		template <class T>
 		bool readObjectPointerArray(T** array, const char* name, Size& size)
-			throw()
-		{
-			if (!checkObjectPointerArrayHeader(RTTI::getStreamName<T>(), name, size))
-			{
-				return false;
-			}
-
-			PointerSizeInt ptr;
-			for (Position i = 0; i < size; i++) 
-			{
-				get(ptr);
-
-				if (ptr != 0)
-				{
-					pointer_list_.push_back(pair<void**, PointerSizeInt>((void**)&(array[i]), ptr));
-				}
-
-				array[i] = (T*)ptr;
-			}
-
-			return checkObjectPointerArrayTrailer();
-		}
+			throw();
 	 
 		//@}
 
@@ -655,13 +504,15 @@ namespace BALL
 				@param type_name the stream name of the storable object
 				@param name the name of the object
 		*/
-		virtual void writeStorableHeader(const char* type_name, const char* name) = 0;
+		virtual void writeStorableHeader(const char* type_name,
+				const char* name) = 0;
 			
 		/**	Check for storable object header.
 				@param type_name the stream name of the storable object
 				@param name the name of the object
 		*/
-		virtual bool checkStorableHeader(const char* type_name, const char* name) = 0;
+		virtual bool checkStorableHeader(const char* type_name,
+				const char* name) = 0;
 
 		/**	Write the trailer for a storable object.
 		*/
@@ -678,14 +529,16 @@ namespace BALL
 				@param	type_name the stream name of the primitive
 				@param	name the name of the primitive
 		*/
-		virtual void writePrimitiveHeader(const char* type_name, const char* name) = 0;
+		virtual void writePrimitiveHeader(const char* type_name,
+				const char* name) = 0;
 
 		/**	Check for a type header and name for a primitive type.
 				@param	type_name the stream name of the primitive
 				@param	name the name of the primitive
 				@return	{\bf true} if type and name of the primitive match
 		*/
-		virtual bool checkPrimitiveHeader(const char* type_name, const char* name) = 0;
+		virtual bool checkPrimitiveHeader(const char* type_name,
+				const char* name) = 0;
 
 		/**	Write the trailer for a primitive type.
 		*/
@@ -702,7 +555,8 @@ namespace BALL
 				@param	type_name the stream name of the object type
 				@param	name the name of the object
 		*/
-		virtual void writeObjectPointerHeader(const char* type_name, const char* name) = 0;
+		virtual void writeObjectPointerHeader(const char* type_name,
+				const char* name) = 0;
 
 
 		/**	Check for header for a pointer to a PersistentObject.
@@ -710,14 +564,16 @@ namespace BALL
 				@param	name the name of the object
 				@return	{\bf true} if the header was correct
 		*/
-		virtual bool checkObjectPointerHeader(const char* type_name, const char* name) = 0;
+		virtual bool checkObjectPointerHeader(const char* type_name,
+				const char* name) = 0;
 
 
 		/**	Write header for a reference to a PersistentObject.
 				@param	type_name the stream name of the object type
 				@param	name the name of the object
 		*/
-		virtual void writeObjectReferenceHeader(const char* type_name, const char* name) = 0;
+		virtual void writeObjectReferenceHeader(const char* type_name,
+				const char* name) = 0;
 
 
 		/**	Check for header for a reference to a PersistentObject.
@@ -725,7 +581,8 @@ namespace BALL
 				@param	name the name of the object
 				@return	{\bf true} if the header was correct
 		*/
-		virtual bool checkObjectReferenceHeader(const char* type_name, const char* name) = 0;
+		virtual bool checkObjectReferenceHeader(const char* type_name,
+				const char* name) = 0;
 
 
 		/**	Write header for an array of pointers to PersistentObjects.
@@ -882,6 +739,11 @@ namespace BALL
 
 		//@}
 
+		/** @name Accessors
+		*/
+		//@{
+
+		//@}
 
 		protected:
 
@@ -951,6 +813,240 @@ namespace BALL
 		//_
 		::std::istream*	istr_;
 	};
+
+
+	// implementation of templated methods
+	
+	template <typename T>
+	bool PersistenceManager::checkObjectHeader(const T& /* object */,
+			const char* name)
+		throw()
+	{
+		PointerSizeInt ptr;
+		return checkHeader(RTTI::getStreamName<T>(), name, ptr);
+	}
+
+
+	template <typename T>
+	void PersistenceManager::writeObjectHeader(const T* object,
+			const char* name)
+		throw()
+	{
+		object_out_.insert(object);
+		writeHeader(RTTI::getStreamName<T>(), name, (PointerSizeInt)(void*)object);
+	}
+
+
+	template <typename T>
+	void PersistenceManager::writePrimitive(const T& t, const char* name)
+		throw()
+	{
+		writePrimitiveHeader(RTTI::getStreamName<T>(), name);
+		put(t);
+		writePrimitiveTrailer();
+	}
+
+
+	template <typename T>
+	bool PersistenceManager::readPrimitive(T& t, const char* name)
+		throw()
+	{
+		if (!checkPrimitiveHeader(RTTI::getStreamName<T>(), name))
+		{
+			return false;
+		}
+
+		get(t);
+		return checkPrimitiveTrailer();
+	}
+
+
+	template <typename T>
+	void PersistenceManager::writeStorableObject(const T& t, const char* name)
+		throw()
+	{
+		writeStorableHeader(RTTI::getStreamName<T>(), name);
+		t.write(*this);
+		writeStorableTrailer();
+	}
+
+
+	template <typename T>
+	bool PersistenceManager::readStorableObject(T& t, const char* name)
+		throw()
+	{
+		return (checkStorableHeader(RTTI::getStreamName<T>(), name) 
+						&& t.read(*this) && checkStorableTrailer());
+	}
+
+
+	template <class T>
+	void PersistenceManager::writeObjectPointer(const T* object, const char* name)
+		throw()
+	{
+		if (object != 0 && !object_out_.has(object))
+		{
+			object_out_needed_.push_back(object);
+		}
+
+		writeObjectPointerHeader(RTTI::getStreamName<T>(), name);
+		put((PointerSizeInt)(void*)object);
+		writePrimitiveTrailer();
+	}
+
+
+	template <class T>
+	bool PersistenceManager::readObjectPointer(T*& object, const char* name)
+		throw()
+	{
+		if (!checkObjectPointerHeader(RTTI::getStreamName<T>(), name))
+		{
+			return false;
+		}
+
+		PointerSizeInt ptr;
+		get(ptr);
+
+		if (ptr != 0)
+		{
+			pointer_list_.push_back(pair<void**, PointerSizeInt>((void**)&object, ptr));
+		}
+
+		object = (T*)ptr;
+
+		return checkPrimitiveTrailer();
+	} 
+
+
+	template <class T>
+	void PersistenceManager::writeObjectReference(const T& object,
+			const char* name)
+		throw()
+	{
+		if (&object != 0 && !object_out_.has(&object))
+		{
+			object_out_needed_.push_back(&object);
+		}
+
+		writeObjectReferenceHeader(RTTI::getStreamName<T>(), name);
+		put((PointerSizeInt)(void*)&object);
+		writePrimitiveTrailer();
+	} 
+
+
+	template <class T>
+	bool PersistenceManager::readObjectReference(T& object, const char* name)
+		throw()
+	{
+		if (!checkObjectReferenceHeader(RTTI::getStreamName<T>(), name))
+		{
+			return false;
+		}
+
+		PointerSizeInt ptr;
+		get(ptr);
+
+		// store a zero in the corresponding pointer
+		// since we cannot convert 64 bit pointers to
+		// 32 bit pointers - this is required, if an object
+		// written on a 64 bit architecture is read on a 32 bit
+		// machine
+		object = 0;
+
+		if (ptr != 0);
+		{
+			pointer_list_.push_back(pair<void**, PointerSizeInt>((void**)&object, ptr));
+		}
+
+		return checkPrimitiveTrailer();
+	}
+
+
+	template <class T>
+	void PersistenceManager::writeObjectArray(const T* array, const char* name,
+			Size size)
+		throw()
+	{
+		writeObjectArrayHeader(RTTI::getStreamName<T>(), name, size);
+
+		for (Position i = 0; i < size; i++)
+			(*this).writeObject(array[i], "-");
+
+		writeObjectArrayTrailer();
+	}
+
+
+	template <class T>
+	bool PersistenceManager::readObjectArray(const T* array, const char* name,
+			Size& size)
+		throw()
+	{
+		if (!checkObjectArrayHeader(RTTI::getStreamName<T>(), name, size))
+		{
+			return false;
+		}
+
+		T* ptr = const_cast<T*>(array);
+		for (Position i = 0; i < size; i++) 
+		{
+			(*this).readObject(ptr[i], "");
+		}
+
+		return checkObjectArrayTrailer();
+	} 
+
+
+	template <class T>
+	void PersistenceManager::writeObjectPointerArray(T** arr, const char* name,
+			const Size size)
+		throw()
+	{
+		writeObjectPointerArrayHeader(RTTI::getStreamName<T>(), name, size);
+
+		PersistentObject* ptr;
+		for (Position i = 0; i < size; i++)
+		{
+			ptr = (PersistentObject*)arr[i];
+			put((PointerSizeInt)(void*)ptr);
+			if (ptr != 0 && !object_out_.has(ptr))
+			{
+				object_out_needed_.push_back(ptr);
+			}
+		}
+		
+		writeObjectPointerArrayTrailer();
+	}
+
+
+	template <class T>
+	bool PersistenceManager::readObjectPointerArray(T** array, const char* name,
+			Size& size)
+		throw()
+	{
+		if (!checkObjectPointerArrayHeader(RTTI::getStreamName<T>(), name, size))
+		{
+			return false;
+		}
+
+		PointerSizeInt ptr;
+		for (Position i = 0; i < size; i++) 
+		{
+			get(ptr);
+
+			if (ptr != 0)
+			{
+				pointer_list_.push_back(pair<void**, PointerSizeInt>((void**)&(array[i]), ptr));
+			}
+
+			array[i] = (T*)ptr;
+		}
+
+		return checkObjectPointerArrayTrailer();
+	}
+
+#ifndef BALL_NO_INLINE_FUNCTIONS
+#include <BALL/CONCEPT/persistenceManager.iC>
+#endif
 
 } // namespace BALL
 
