@@ -1,4 +1,4 @@
-// $Id: control.C,v 1.3 2000/11/05 14:32:21 hekl Exp $
+// $Id: control.C,v 1.4 2000/12/03 15:52:56 hekl Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/control.h>
 #include <qpopupmenu.h>
@@ -21,9 +21,11 @@ Control::Control
 			paste_id_(-1),
 			clipboard_id_(-1),
 			selected_(),
-			selection_changed_(true),
 			information_(),
-			geometric_filter_()
+			geometric_filter_(),
+			context_menu_(),
+			context_composite_(0),
+			context_item_(0)
 {
 	// appearance
 	setRootIsDecorated(TRUE);
@@ -42,6 +44,11 @@ Control::Control
 					SIGNAL(selectionChanged()),
 					this,
 					SLOT(updateSelection()));
+
+	connect(this,
+					SIGNAL(rightButtonClicked(QListViewItem*, const QPoint&, int)),
+					this,
+					SLOT(onContextMenu(QListViewItem*, const QPoint&, int)));
 
 	// register ModularWidget
 	registerWidget(this);
@@ -105,7 +112,6 @@ bool Control::addComposite
 	generateListViewItem_(0, composite, &name);
 
 	// update the view
-  selection_changed_ = true;
 	updateContents();
 
 	return true;
@@ -117,7 +123,6 @@ bool Control::removeComposite(Composite* composite)
 	if (item != 0)
 	{
 		delete item;
-		selection_changed_ = true;
 		updateContents();
 	}
 
@@ -133,12 +138,12 @@ bool Control::updateComposite
 	}
 
 	// update ListViewItem and insert it into the ListView
-	selection_changed_ = updateListViewItem_(0, composite);
+	bool changed = updateListViewItem_(0, composite);
 
 	// update the view
 	updateContents();
 
-	return selection_changed_;
+	return changed;
 }
 
 void Control::onNotify(Message *message)
@@ -152,6 +157,22 @@ void Control::onNotify(Message *message)
 	}
 }
 
+void Control::buildContextMenu(Composite* composite, QListViewItem* item)
+{
+	if (RTTI::isKindOf<GeometricObject>(*composite))
+	{
+		String entry = String("erase ") + getTypeName_(item).ascii();
+		insertContextMenuEntry(entry, this, SLOT(eraseGeometricObject()));
+	}
+}
+
+void Control::insertContextMenuEntry
+  (const String& name, const QObject* receiver, 
+	 const char* slot, int accel, int entry_ID)
+{
+	context_menu_.insertItem(name.c_str(), receiver, slot, accel, entry_ID);
+}
+
 void Control::invalidateSelection()
 {
 	QListViewItemIterator it(this);
@@ -160,13 +181,12 @@ void Control::invalidateSelection()
 		it.current()->setSelected(FALSE);
 	}
 
-	selection_changed_ = true;
 	updateSelection();
 }
 
 void Control::updateSelection()
 {
-	filterSelection_(geometric_filter_, true);
+	filterSelection_(geometric_filter_);
 
 	sentSelection();
 }
@@ -210,15 +230,30 @@ bool Control::recurseUpdate_(QListViewItem* item, Composite* composite)
 	return tree_updated;
 }
 
-void Control::filterSelection_(Filter& filter, bool refill_list)
+void Control::filterSelection_(Filter& filter)
 {
-	if (refill_list)
-	{
-		selection_changed_ = true;
+	selected_.clear();
 
-		fillSelectionList_();
+	QListViewItemIterator it(this);
+	for (; it.current(); ++it)
+	{
+		if (it.current()->isSelected())
+		{
+			Composite* composite = getCompositeAddress_(it.current());
+			
+			if (composite != 0)
+			{
+				composite->host(filter);
+				
+				if (filter)
+				{
+					selected_.push_back(composite);
+				}
+			}
+		}
 	}
 
+	/*		
 	List<Composite*>::Iterator it = selected_.begin();
 	List<Composite*>::Iterator remove_it = selected_.end();
 	
@@ -245,6 +280,7 @@ void Control::filterSelection_(Filter& filter, bool refill_list)
 	{
 		selected_.erase(remove_it);
 	}
+	*/
 }
 
 bool Control::reactToMessages_(Message* message)
@@ -445,30 +481,6 @@ QListViewItem* Control::findListViewItem_
 	return 0;
 }
 
-void Control::fillSelectionList_() 
-{
-	if (selection_changed_)
-	{
-		selected_.clear();
-
-		QListViewItemIterator it(this);
-		for (; it.current(); ++it)
-		{
-			if (it.current()->isSelected())
-			{
-				Composite* composite = getCompositeAddress_(it.current());
-
-				if (composite != 0)
-				{
-					selected_.push_back(composite);
-				}
-			}
-		}
-		
-		selection_changed_ = false;
-	}
-}
-
 void Control::cut()
 {
 	const List<Composite*> *selection = &getSelection();
@@ -647,6 +659,67 @@ void Control::clearClipboard()
 	notify_(window_message_2);
 }
 
+void Control::onContextMenu(QListViewItem* item,  const QPoint& point, int /* column */)
+{
+	// clear the context menu
+	context_menu_.clear();
+
+	// get composite address
+	Composite* composite = getCompositeAddress_(item);
+
+	// create the context menu
+	if (composite != 0
+			&& item != 0)
+	{
+		context_composite_ = composite;
+		context_item_ = item;
+
+		buildContextMenu(composite, item);
+	}
+
+	// is the context menu not empty
+	if (context_menu_.count())
+	{
+		context_menu_.exec(point);
+	}
+}
+
+void Control::eraseGeometricObject()
+{
+	Composite *parent = context_composite_->getParent();
+
+	if (parent != 0)
+	{
+		parent->removeChild(*context_composite_);
+
+		// mark root Composite for update
+		ChangedCompositeMessage *changed_message = new ChangedCompositeMessage;
+		changed_message->setComposite(parent->getRoot());
+		changed_message->setDeletable(true);
+		notify_(changed_message);
+		
+		// delete composite
+		delete context_composite_;
+	}
+	else // no parent => composite is root
+	{
+		// remove Composite from from mainControl
+		RemovedCompositeMessage *remove_message = new RemovedCompositeMessage;
+		remove_message->setComposite(context_composite_);
+		remove_message->setDeletable(true);
+		notify_(remove_message);
+	}
+
+	// update scene
+	SceneMessage *scene_message = new SceneMessage;
+	scene_message->updateOnly();
+	scene_message->setDeletable(true);
+	notify_(scene_message);
+
+	// clean up
+	delete context_item_;
+	updateContents();
+}
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/GUI/WIDGETS/control.iC>

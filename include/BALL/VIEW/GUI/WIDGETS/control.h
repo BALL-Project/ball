@@ -1,4 +1,4 @@
-// $Id: control.h,v 1.4 2000/10/22 15:26:18 hekl Exp $
+// $Id: control.h,v 1.5 2000/12/03 15:55:21 hekl Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_CONTROL_H
 #define BALL_VIEW_GUI_WIDGETS_CONTROL_H
@@ -51,8 +51,7 @@ namespace BALL
 		/**
 		 */
 		class Control
-			: public QListView,
-			public ModularWidget
+			: public QListView, public ModularWidget
 		{
 			
 			Q_OBJECT
@@ -108,12 +107,27 @@ namespace BALL
 			
 			// processes messages
 			virtual void onNotify(Message *message);
-			
+
+			// create the context menu for the given composite
+			virtual void buildContextMenu(Composite* composite, QListViewItem* item);
+
+			/** insert a new context menu entry
+					@param name - the name of the new menu entry
+					@param receiver - the object to which the menu action will be connected
+					@param slot - the function that will be called by activation of the menu entry
+					@param accel - the acceleration key
+					@param entry_ID - the id for the new menu entry (default: -1, will create a new one)
+			*/
+			void insertContextMenuEntry
+				(const String& name, const QObject* receiver = 0, 
+				 const char* slot = 0, int accel = 0, int entry_ID = -1);
+
 			// ModularWidget stuff
 			virtual void initializeWidget(MainControl& main_control);
 			virtual void finalizeWidget(MainControl& main_control);
 			virtual void checkMenu(MainControl& main_control);
 			
+
 			public slots:
 				
 			// clear all selected listviewitems in the tree
@@ -124,13 +138,19 @@ namespace BALL
 			
 			// override for distinguishing selected composites
 			virtual void sentSelection();
-			
+
 			void cut();
 			void copy();
 			void paste();
 			void clearClipboard();
 
-			
+			// controlling function for context menus
+			void onContextMenu(QListViewItem* item,  const QPoint& point, int column);
+
+			// slot for erasing geometric objects
+			void eraseGeometricObject();
+		
+
 		  signals:
 			
 			
@@ -158,7 +178,7 @@ namespace BALL
 			
 			// filters the given selection list according to the filter object
 			// changes the contents of the selection list
-			void filterSelection_(Filter& filter, bool refill_list = false);
+			void filterSelection_(Filter& filter);
 
 			// get copied composites
 			List<Composite*>& getCopyList_();
@@ -179,9 +199,6 @@ namespace BALL
 			// finds the corresponding listviewitem to the given composite
 			QListViewItem* findListViewItem_(Composite* composite);
 			
-			// insert all selected composites into the selection list
-			void fillSelectionList_();
-
 			// MenuId's
 			int cut_id_;
 			int copy_id_;
@@ -203,13 +220,17 @@ namespace BALL
 			List<Composite*> selected_;
 			List<Composite*> copy_list_;
 			
-			bool selection_changed_;
-			
 			// Information visitor
 			Information information_;
 			
 			// GeometricObject Filter
 			Filter geometric_filter_;
+
+			// the context menu
+			QPopupMenu context_menu_;
+
+			Composite* context_composite_;
+			QListViewItem *context_item_;
 		};
 		
 		
