@@ -1,4 +1,4 @@
-// $Id: scene.C,v 1.6.4.7 2002/11/27 14:04:56 anhi Exp $
+// $Id: scene.C,v 1.6.4.8 2002/11/27 17:16:39 amoll Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/scene.h>
 #include <BALL/VIEW/GUI/FUNCTOR/externalRenderer.h>
@@ -16,13 +16,6 @@ namespace BALL
 {
 	namespace VIEW
 	{
-
-	  Scene::MainControlMissing::MainControlMissing(const char* file, int line, const string& data)
-			throw()
-			: Exception::GeneralException(file, line, string("MainControlMissing"), data)
-		{
-    }
-    
 		// --------------------------------------------------------------------------
 		// ---- Scene Constructors --------------------------------------------------
 		// --------------------------------------------------------------------------
@@ -219,7 +212,7 @@ namespace BALL
 			throw(MainControlMissing)
 		{
 			// rebuild displaylists
-			if (rebuild_displaylists == true)
+			if (rebuild_displaylists)
 			{
 				MainControl::DescriptorIterator descriptor_iterator;
 				
@@ -228,7 +221,7 @@ namespace BALL
 				
 				if (main_control == 0)
 				{
-					throw ::BALL::VIEW::Scene::MainControlMissing(__FILE__, __LINE__, "");
+					throw MainControlMissing(__FILE__, __LINE__, "");
 				}
 
 				// redraw the system
@@ -814,14 +807,14 @@ namespace BALL
 			
 			if (object == 0)
 			{
-				throw ::BALL::VIEW::Scene::MainControlMissing(__FILE__, __LINE__, "");
+				throw MainControlMissing(__FILE__, __LINE__, "");
 			}
 			
 			MainControl *main_control = RTTI::castTo<MainControl>(*object);
 
 			if (main_control == 0)
 			{
-				throw ::BALL::VIEW::Scene::MainControlMissing(__FILE__, __LINE__, "");
+				throw MainControlMissing(__FILE__, __LINE__, "");
 			}
 			
 			// draw the system
@@ -968,6 +961,14 @@ namespace BALL
 			need_update_ = true;
 			updateGL();
     }
+
+  	void Scene::deselectionReleased_(Scene* /* scene */)
+    {
+			selectObjects_(false);
+			need_update_ = true;
+			updateGL();
+    }
+
 
 	  void Scene::selectionPressedMoved_(Scene* /* scene */)
     {
@@ -1253,7 +1254,7 @@ namespace BALL
 			ConnectionObject *object = getParent();
 			if (object == 0)
 			{
-				throw ::BALL::VIEW::Scene::MainControlMissing(__FILE__, __LINE__, "");
+				throw MainControlMissing(__FILE__, __LINE__, "");
 			}
 			
 			MainControl *main_control = RTTI::castTo<MainControl>(*object);
@@ -1269,7 +1270,6 @@ namespace BALL
 			}			
 
 			message->setSelection(collector.getCollection());
-
 			// sent collected objects
 			notify_(message);
 
