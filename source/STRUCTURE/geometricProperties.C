@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricProperties.C,v 1.17 2003/08/19 18:59:29 amoll Exp $
+// $Id: geometricProperties.C,v 1.18 2003/08/19 19:03:26 amoll Exp $
 
 #include <BALL/STRUCTURE/geometricProperties.h>
 
@@ -188,7 +188,7 @@ namespace BALL
 		bool                                	collect_it = false;
 		AtomIterator                        	atom_iterator2;
 		Fragment*															mol_fragment;
-		Composite::SubcompositeConstIterator  composite_it;
+		Composite::CompositeConstIterator  		composite_it;
 		vector<Atom*>													reference_atoms;
 		Atom*                               	atom_ptr;
 		GeometricCenterProcessor            	center_processor;
@@ -200,8 +200,8 @@ namespace BALL
 		Size																	size;
 
 
-		for (composite_it = reference_composite_->beginSubcomposite(); 
-				 composite_it != reference_composite_->endSubcomposite(); ++composite_it) 
+		for (composite_it = reference_composite_->beginComposite(); 
+				 composite_it != reference_composite_->endComposite(); ++composite_it) 
 		{
 			if (RTTI::isKindOf<Atom>(*composite_it))
 			{
