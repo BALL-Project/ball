@@ -1,4 +1,4 @@
-// $Id: defaultProcessors.h,v 1.2 1999/09/22 17:46:38 oliver Exp $
+// $Id: defaultProcessors.h,v 1.3 2000/02/15 21:10:05 oliver Exp $
 
 #ifndef BALL_STRUCTURE_DEFAULTPROCESSORS_H
 #define BALL_STRUCTURE_DEFAULTPROCESSORS_H
@@ -137,53 +137,6 @@ namespace BALL
 		float		total_charge_;
 	};
 
-	/**	Select atoms of a certain element.
-			This processor \Ref{select}s all atoms that match the given element.
-			Atoms that do not match are left alone (i.e. not deselected).
-	*/
-	class ElementSelector
-		: public UnaryProcessor<Atom>
-	{
-
-		public:
-
-		/**	@name	Constructors and Destructors
-		*/
-		//@{
-		
-		/**	Default constructor.
-				
-		*/
-		ElementSelector();
-
-		/**	
-		*/
-		ElementSelector(const Element& element);
-		//@}
-			
-		/**	@name	Processor Specific Methods
-		*/
-		//@{
-
-		/**
-		*/
-		virtual Processor::Result operator () (Atom& atom);
-		//@}
-
-		/**	@name	Accessors
-		*/
-		//@{
-			
-		/**	Set the element of the selector.
-		*/
-		void setElement(const Element& element);
-		//@}
-		
-		protected:
-		
-		const Element*	element_;
-	};
-				
 	//@}
 
 } // namespace BALL
