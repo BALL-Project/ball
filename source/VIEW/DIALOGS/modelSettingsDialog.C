@@ -34,9 +34,9 @@ void ModelSettingsDialog::setDefaults()
 				surface_probe_radius->setText("1.5");
 							 	 tube_radius->setText("0.4");
 				 cartoon_tube_radius->setText("0.4");
- 			 cartoon_sphere_radius->setText("2.4");
-				 cartoon_arrow_width->setText("0.6");
-				cartoon_arrow_height->setText("1.5");
+ 			  cartoon_helix_radius->setText("2.0");
+				 cartoon_arrow_width->setText("0.4");
+				cartoon_arrow_height->setText("0.8");
 						   hbonds_radius->setText("0.3");
 }
 
@@ -90,7 +90,7 @@ void ModelSettingsDialog::writePreferences(INIFile& file)
   writePreference_(file, "surface_probe_radius", *surface_probe_radius);
   writePreference_(file, "tube_radius", *tube_radius);
   writePreference_(file, "cartoon_tube_radius", *cartoon_tube_radius);
-  writePreference_(file, "cartoon_sphere_radius", *cartoon_sphere_radius);
+  writePreference_(file, "cartoon_helere_radius", *cartoon_helere_radius);
   writePreference_(file, "cartoon_arrow_height", *cartoon_arrow_height);
   writePreference_(file, "cartoon_arrow_width", *cartoon_arrow_width);
 }
@@ -105,7 +105,7 @@ void ModelSettingsDialog::fetchPreferences(const INIFile& file)
   fetchPreference_(file, "surface_probe_radius", *surface_probe_radius);
   fetchPreference_(file, "tube_radius", *tube_radius);
   fetchPreference_(file, "cartoon_tube_radius", *cartoon_tube_radius);
-  fetchPreference_(file, "cartoon_sphere_radius", *cartoon_sphere_radius);
+  fetchPreference_(file, "cartoon_helere_radius", *cartoon_helere_radius);
   fetchPreference_(file, "cartoon_arrow_height", *cartoon_arrow_height);
 	fetchPreference_(file, "cartoon_arrow_width", *cartoon_arrow_width);
 }

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.38 2003/11/14 01:29:55 amoll Exp $
+// $Id: displayProperties.C,v 1.39 2003/11/14 13:54:49 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -438,7 +438,7 @@ void DisplayProperties::createRepresentation_(const Composite* composite)
 		case MODEL_CARTOON:
 			model_processor = new AddCartoonModel;
 			((AddCartoonModel*) model_processor)->setTubeRadius(model_settings_->getCartoonTubeRadius());
-			((AddCartoonModel*) model_processor)->setHelixRadius(model_settings_->getCartoonSphereRadius());
+			((AddCartoonModel*) model_processor)->setHelixRadius(model_settings_->getCartoonHelixRadius());
 			((AddCartoonModel*) model_processor)->setArrowWidth(model_settings_->getCartoonArrowWidth());
 			((AddCartoonModel*) model_processor)->setArrowHeight(model_settings_->getCartoonArrowHeight());
 			break;
@@ -741,7 +741,7 @@ void DisplayProperties::getAdvancedOptions_()
 
 		case MODEL_CARTOON:
 			model_settings_->setCartoonTubeRadius(((AddCartoonModel*) mp)->getTubeRadius());
-			model_settings_->setCartoonSphereRadius(((AddCartoonModel*) mp)->getHelixRadius());
+			model_settings_->setCartoonHelixRadius(((AddCartoonModel*) mp)->getHelixRadius());
 			model_settings_->setCartoonArrowWidth(((AddCartoonModel*) mp)->getArrowWidth());
 			model_settings_->setCartoonArrowHeight(((AddCartoonModel*) mp)->getArrowHeight());
 			break;
