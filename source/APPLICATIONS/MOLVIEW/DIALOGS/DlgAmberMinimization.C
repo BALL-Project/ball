@@ -12,11 +12,8 @@
 #include "DlgAmberMinimization.h"
 #include <qfiledialog.h>
 
-#define Inherited DlgAmberMinimizationData
-
-DlgAmberMinimization::DlgAmberMinimization
-	(QWidget* parent, const char* name)
-	:	Inherited( parent, name )
+DlgAmberMinimization::DlgAmberMinimization(QWidget* parent, const char* name)
+	:	DlgAmberMinimizationData( parent, name )
 {
 }
 
@@ -42,7 +39,7 @@ void DlgAmberMinimization::browseParameterFiles()
 	}
 }
 
-void DlgAmberMinimization::setPreferences(INIFile& inifile) const
+void DlgAmberMinimization::writePreferences(INIFile& inifile) const
 {
 	//	
 	// the minimizer options
@@ -61,7 +58,7 @@ void DlgAmberMinimization::setPreferences(INIFile& inifile) const
 }
 
 
-void DlgAmberMinimization::getPreferences(const INIFile& inifile)
+void DlgAmberMinimization::readPreferences(const INIFile& inifile)
 {
 	// 
 	// the minimizer options
