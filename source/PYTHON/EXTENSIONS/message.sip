@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.sip,v 1.2 2003/12/10 17:16:20 amoll Exp $
+// $Id: message.sip,v 1.3 2003/12/10 20:37:05 amoll Exp $
 //
 
 class Message
@@ -47,15 +47,15 @@ class CompositeMessage
 	};
 
 	CompositeMessage();
-	CompositeMessage(const Composite& /composite/, Index /type/);
+	CompositeMessage(const Composite& /composite/, CompositeMessageType /type/);
 	CompositeMessage(const CompositeMessage& /message/);
 	~CompositeMessage();
 	void setComposite(const Composite& /composite/);
 	Composite* getComposite() const;
 	void setCompositeName(const String& /name/);
 	const String& getCompositeName() const;
-	void setType(Index /type/);
-	Index getType() const;
+	void setType(CompositeMessageType /type/);
+	CompositeMessageType getType() const;
 };
 
 
