@@ -1,4 +1,4 @@
-// $Id: Socket_test.C,v 1.5.4.1 2002/12/05 16:48:26 crauser Exp $
+// $Id: Socket_test.C,v 1.5.4.2 2002/12/05 17:35:09 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -13,16 +13,16 @@
 using namespace BALL;
 
 SockInetBuf sock_inet_buf(SocketBuf::sock_stream);
-
-void socket_listener(void* p)
+char c;
+void socket_listener()
 {
-		char c;
 		sock_inet_buf.listen();
 		IOStreamSocket  s(sock_inet_buf.accept());
 		s.get(c);
 		s.get(c);
 }
-START_TEST(Socket, "$Id: Socket_test.C,v 1.5.4.1 2002/12/05 16:48:26 crauser Exp $")
+
+START_TEST(Socket, "$Id: Socket_test.C,v 1.5.4.2 2002/12/05 17:35:09 oliver Exp $")
 
 
 /////////////////////////////////////////////////////////////
@@ -31,7 +31,6 @@ START_TEST(Socket, "$Id: Socket_test.C,v 1.5.4.1 2002/12/05 16:48:26 crauser Exp
 CHECK(simple socket transmission)
 	
 	sock_inet_buf.bind();
-	char c;
 	int port = sock_inet_buf.localport();
 	STATUS("localport = " << sock_inet_buf.localport())
 	STATUS("localhost = " << sock_inet_buf.localhost())
@@ -44,7 +43,6 @@ CHECK(simple socket transmission)
 	STATUS("B:connect = " << result)
 	sio.put((char)123);
 	STATUS("B:done.")
-	return 0;
 #else
 	if (fork())
 	{	
