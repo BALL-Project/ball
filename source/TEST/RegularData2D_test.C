@@ -1,9 +1,9 @@
-// $Id: RegularData2D_test.C,v 1.6 2001/07/25 11:37:30 oliver Exp $
+// $Id: RegularData2D_test.C,v 1.7 2001/07/29 18:58:54 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALL/DATATYPE/regularData2D.h>
 
-START_TEST(RegularData2D, "$Id: RegularData2D_test.C,v 1.6 2001/07/25 11:37:30 oliver Exp $")
+START_TEST(RegularData2D, "$Id: RegularData2D_test.C,v 1.7 2001/07/29 18:58:54 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -300,7 +300,6 @@ CHECK(getMinValue())
 	g.data[13] = -123.231;
 	g.data[3] = -123.230;
 	float min = g.getMinValue();
-	TEST_NOT_EQUAL(float_ptr, 0)
 	TEST_REAL_EQUAL(min, (float) -123.231)
 	g.data[120] = -124.11;
 	TEST_REAL_EQUAL(g.getMinValue(), (float) -124.11)
@@ -316,7 +315,7 @@ CHECK(getMaxValue())
 	g.data[13] = +123.231;
 	g.data[3] = -123.230;
 	Vector2 vector2;
-	float max = g.getMaxValue(vector2);
+	float max = g.getMaxValue();
 	TEST_REAL_EQUAL(max, (float) +123.231)
 	g.data[120] = +124.11;
 	TEST_REAL_EQUAL(g.getMaxValue(), (float) +124.11)
