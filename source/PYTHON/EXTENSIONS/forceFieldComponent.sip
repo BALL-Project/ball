@@ -7,7 +7,7 @@ using namespace BALL;
   public:
   ForceFieldComponent();
   ForceFieldComponent(ForceField& /force_field/);
-  ForceFieldComponent(const ForceFieldComponent& /force_field/, bool /deep/ = true);
+  ForceFieldComponent(const ForceFieldComponent& /force_field/);
   virtual bool setup();
   ForceField* getForceField() const;
   void setForceField(ForceField& /force_field/);

@@ -1,4 +1,4 @@
-// $Id: charmmBend.sip,v 1.1 2001/09/03 16:53:05 oliver Exp $
+// $Id: charmmBend.sip,v 1.2 2003/06/18 15:49:15 anker Exp $
 
 class CharmmBend 
   : ForceFieldComponent
@@ -10,7 +10,7 @@ class CharmmBend
   public:
   CharmmBend();
   CharmmBend(ForceField& /force_field/);
-  CharmmBend(const CharmmBend& /charmm_stretch/, bool /clone_deep/ = true);
+  CharmmBend(const CharmmBend& /charmm_stretch/);
   ~CharmmBend();
   virtual bool setup();
   virtual double updateEnergy();

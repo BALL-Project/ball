@@ -1,4 +1,4 @@
-// $Id: charmmNonBonded.sip,v 1.1 2001/09/03 16:53:05 oliver Exp $
+// $Id: charmmNonBonded.sip,v 1.2 2003/06/18 15:49:16 anker Exp $
 
 class CharmmNonBonded 
   : ForceFieldComponent
@@ -11,7 +11,7 @@ class CharmmNonBonded
   // BALL_CREATE(CharmmNonBonded)
   CharmmNonBonded();
   CharmmNonBonded(ForceField& /force_field/);
-  CharmmNonBonded(const CharmmNonBonded& /charmm_non_bonded/, bool /clone_deep/ = true);
+  CharmmNonBonded(const CharmmNonBonded& /charmm_non_bonded/);
   ~CharmmNonBonded() throw();
   virtual bool setup() throw();
   virtual double updateEnergy() throw();

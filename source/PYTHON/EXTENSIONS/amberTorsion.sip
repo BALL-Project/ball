@@ -1,4 +1,4 @@
-// $Id: amberTorsion.sip,v 1.1 2001/09/03 16:53:03 oliver Exp $
+// $Id: amberTorsion.sip,v 1.2 2003/06/18 15:50:43 anker Exp $
 
 class AmberTorsion 
   : ForceFieldComponent
@@ -11,7 +11,7 @@ class AmberTorsion
   // BALL_CREATE(AmberTorsion)
   AmberTorsion();
   AmberTorsion(ForceField& /force_field/);
-  AmberTorsion(const AmberTorsion& /amber_stretch/, bool /clone_deep/ = true);
+  AmberTorsion(const AmberTorsion& /amber_stretch/);
   ~AmberTorsion();
   virtual bool setup();
   virtual double updateEnergy();

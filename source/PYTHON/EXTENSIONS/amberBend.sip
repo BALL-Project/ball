@@ -1,4 +1,4 @@
-// $Id: amberBend.sip,v 1.1 2001/09/03 16:53:03 oliver Exp $
+// $Id: amberBend.sip,v 1.2 2003/06/18 15:50:42 anker Exp $
 
 class AmberBend 
   : ForceFieldComponent
@@ -10,7 +10,7 @@ class AmberBend
   public:
   AmberBend();
   AmberBend(ForceField& /force_field/);
-  AmberBend(const AmberBend& /amber_stretch/, bool /clone_deep/ = true);
+  AmberBend(const AmberBend& /amber_stretch/);
   ~AmberBend();
   virtual bool setup();
   virtual double updateEnergy();

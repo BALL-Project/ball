@@ -1,4 +1,4 @@
-// $Id: regularData2D.sip,v 1.3 2003/03/25 17:09:00 anhi Exp $
+// $Id: regularData2D.sip,v 1.4 2003/06/18 15:49:18 anker Exp $
 
 
 typedef float GridDataType;
@@ -11,7 +11,7 @@ class RegularData2D
 	using namespace BALL;
 	using namespace BALL::Exception;
 %End
-	class GridIndex
+	class IndexType
 	{
 %HeaderCode
 	#include <BALL/DATATYPE/regularData2D.h>
@@ -28,7 +28,7 @@ class RegularData2D
 	public:
 
 	// BALL_CREATE_DEEP(RegularData2D)
-	// typedef TVector2<Position> GridIndex;
+	// typedef TVector2<Position> IndexType;
 
 	RegularData2D() throw();
 	RegularData2D(const RegularData2D& /grid/)
@@ -65,9 +65,9 @@ class RegularData2D
 	Size getSize() const throw();
 	float getXSpacing() const throw();
 	float getYSpacing() const throw();
-	GridIndex getIndex(const Vector2& /v/) const 
+	IndexType getIndex(const Vector2& /v/) const 
 		throw(OutOfGrid);
-	GridIndex getIndex(float /x/, float /y/) const
+	IndexType getIndex(float /x/, float /y/) const
 		throw(OutOfGrid);
 	//GridDataType getData(const Position /i/, const Position /j/)
 	//	throw(OutOfGrid);

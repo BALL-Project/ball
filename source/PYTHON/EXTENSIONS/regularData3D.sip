@@ -1,4 +1,4 @@
-// $Id: regularData3D.sip,v 1.3 2003/03/25 17:09:00 anhi Exp $
+// $Id: regularData3D.sip,v 1.4 2003/06/18 15:49:19 anker Exp $
 class RegularData3D 
 {
 %HeaderCode
@@ -6,7 +6,7 @@ class RegularData3D
 	using namespace BALL;
 	using namespace BALL::Exception;
 %End
-	class GridIndex
+	class IndexType
 	{
 %HeaderCode
 	#include <BALL/DATATYPE/regularData3D.h>
@@ -63,8 +63,8 @@ class RegularData3D
 	float getXSpacing() const throw();
 	float getYSpacing() const throw();
 	float getZSpacing() const throw();
-	GridIndex getIndex(const Vector3&) const throw(OutOfGrid);
-	GridIndex getIndex(float, float, float) const
+	IndexType getIndex(const Vector3&) const throw(OutOfGrid);
+	IndexType getIndex(float, float, float) const
 		throw(OutOfGrid);
 	// float* getData(const Position /i/, const Position /j/, const Position /k/)
 	//	throw(OutOfGrid);

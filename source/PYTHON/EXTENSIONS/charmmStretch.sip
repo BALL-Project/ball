@@ -1,4 +1,4 @@
-// $Id: charmmStretch.sip,v 1.1 2001/09/03 16:53:06 oliver Exp $
+// $Id: charmmStretch.sip,v 1.2 2003/06/18 15:49:16 anker Exp $
 
 class CharmmStretch 
   : ForceFieldComponent
@@ -11,7 +11,7 @@ class CharmmStretch
   // BALL_CREATE(CharmmStretch)
   CharmmStretch();
   CharmmStretch(ForceField& /force_field/);
-  CharmmStretch(const CharmmStretch& /charmm_stretch/, bool /clone_deep/ = true);
+  CharmmStretch(const CharmmStretch& /charmm_stretch/);
   ~CharmmStretch();
   virtual bool setup();
   virtual double updateEnergy();

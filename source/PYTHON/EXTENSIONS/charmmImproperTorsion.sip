@@ -1,4 +1,4 @@
-// $Id: charmmImproperTorsion.sip,v 1.1 2001/09/03 16:53:05 oliver Exp $
+// $Id: charmmImproperTorsion.sip,v 1.2 2003/06/18 15:49:16 anker Exp $
 
 class CharmmImproperTorsion 
   : ForceFieldComponent
@@ -11,7 +11,7 @@ class CharmmImproperTorsion
   // BALL_CREATE(CharmmImproperTorsion)
   CharmmImproperTorsion();
   CharmmImproperTorsion(ForceField& /force_field/);
-  CharmmImproperTorsion(const CharmmImproperTorsion& /charmm_stretch/, bool /clone_deep/ = true);
+  CharmmImproperTorsion(const CharmmImproperTorsion& /charmm_stretch/);
   ~CharmmImproperTorsion();
   virtual bool setup();
   virtual double updateEnergy();
