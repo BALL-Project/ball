@@ -1,4 +1,4 @@
-// $Id: file.C,v 1.7 2000/06/29 14:12:56 amoll Exp $
+// $Id: file.C,v 1.8 2000/06/30 15:45:25 amoll Exp $
 
 #include <BALL/SYSTEM/file.h>
 
@@ -52,6 +52,10 @@ namespace BALL
 	bool File::open(const String& name, File::OpenMode open_mode)
 	{
 		close();
+		
+		name_ = name;
+		
+		FileSystem::canonizePath(name_);
 
 		fstream::open(name_.c_str(), open_mode);
 
@@ -64,6 +68,7 @@ namespace BALL
 	bool File::reopen()
 	{
 		close();
+
 		return open(name_, open_mode_);
 	}
 
