@@ -1,4 +1,4 @@
-// $Id: control.C,v 1.2 2000/10/22 15:17:52 hekl Exp $
+// $Id: control.C,v 1.3 2000/11/05 14:32:21 hekl Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/control.h>
 #include <qpopupmenu.h>
@@ -29,6 +29,11 @@ Control::Control
 	setRootIsDecorated(TRUE);
 	setMultiSelection(TRUE);
 	setSorting(-1);
+
+	addColumn("Name");
+	addColumn("Type");
+	setColumnWidth(0, 80);
+	setColumnWidth(1, 60);
 
 	// if the selection of any item changed,
 	// mark the complete selection as invalid
