@@ -1,4 +1,4 @@
-// $Id: fragmentDB.h,v 1.1 1999/09/17 11:16:37 oliver Exp $
+// $Id: fragmentDB.h,v 1.2 1999/10/27 08:04:48 oliver Exp $
 
 #ifndef BALL_STRUCTURE_FRAGMENTDB_H
 #define BALL_STRUCTURE_FRAGMENTDB_H
@@ -295,9 +295,53 @@ namespace BALL {
 
 		};
 
-		/** The AddHydrogensProcessor adds missing hydrogen atoms to all residues its started for.
-				It uses a geometric calculation based on aminoacid prototypes which are 
-				saved within the FragmentDataBase. 
+
+		/** AddHydrogensProcessor.
+		The AddHydrogensProcessor adds missing hydrogen atoms to all residues its started for.
+		It uses a geometric calculation based on aminoacid prototypes which are saved within the FragmentDataBase. 
+		For calculation several hashtables are used : ini_table_ , h_table_ and prot_table.
+		ini_table contains for every hydrogen the list of names of reference atoms used to start calculation.
+		h_table contains for every residue the list of names of hydrogens to be inserted.
+		prot_table contains the set of atoms of all residues in order to access atoms by name.
+		First, the actual residue is identified and its database template is stored in tmp.
+		Next, tmp is beeing searched for hydrogens to be inserted. Their names are saved in h_atoms_ and this
+		entry is stored in h_table_ for further use.
+		Now the actual residue's h_table entry is iterated in order to insert the missing hydrogens.
+		At first a check is done , wether the actual hydrogen is inserted or not. If it is inserted 
+		the next hydrogen is checked. If it is not, try to acces ini_table entry of actual hydrogen
+		in order to get names of reference atoms. If it is not accessable, entry has to be built and saved for further use.
+		Get the first reference atom by simply follow the bound of template hydrogen. 
+		This atom is saved in atom_feld[0]. Now start at atom in atom_feld[0] and check its bonds. If the next bond points
+		to a non-hydrogen atom this atom is stored within the next field of atom_feld. If actual atom has no more bonds to
+		check, procedure continues with next field of atom_feld. Procedure stops if 4 reference atoms are found. These
+		reference atoms are saved in ini_table_ under name of hydrogen now to be inserted.
+		Now the coordinates of reference atoms have to be determined in both coordinate systems.
+		prot_table_ contains names of template residue. If prot_table entry does not exist so far, it has to be built.
+		In order to do this a function named addToTemplateTable is called which saves every atom of template under its name
+		in prot_table, so next time it atoms can be easily accessed through their names. Finally the coordinates of 
+		reference atoms are saved in vector field xx.
+		Next the actual residue is searched for the reference atoms, simply by iterating through its atoms. Their coordinates
+		are stored in vector field x. The vector xtarget contains position of template hydrogen which has to be transferred 
+		into coordinate system of the actual residue.
+		Bindungsatom contains the atom with which the inserted atom has to built a bound.
+		With these informations the calculate function is called.
+		It creates a new PDBAtom which is added to the atom list of the current residue
+		It creates a new bond between inserted hydrogen and passed Bindungsatom.
+		The passed template hydrogen is transferred from one coordinate system into another. In order to do the right 
+		operations some calculation is done using the passed reference atoms. The following operations are done with 
+		reference atoms of actual residue and the template residue. Of course every operation calculated for one reference 
+		atom is done with any other reference atom (example:third point is turned the same angles as second point).
+		At First, the first reference point is moved to the center in both coordinate systems. After that, the second point
+		is turned onto x1x2-plane , and then its turned onto x1-axis. In both coordinate systems the appropriate operations
+		are done to the other reference points. The third point is then turned onto x1x2-plane. Mirror variables are set
+		in order to get the third point into first quadrant of x1x2-plane. Again appropriate operations are done to the 
+		other points in both coordinate systems. See that third point operations are uneffected to first and second
+		point. The forth point is needed just to check whether it is necessary to set another mirror at x1x2-plane.
+		Finally the operations calculated for template residue coordinate system are executed for x_target, which is the 
+		reference hydrogen to be inserted. After that, the operations calculated for actual residue coordinate system are
+		executed backwards for x_target, to bring the hydrogen into the right position.
+		At last, the new atom is assigned and bounded. The next hydrogen of residue can be processed. If all hydrogens
+		of actual residue are fitted, next residue can be processed.
 		*/
 		class AddHydrogensProcessor 
 			: public UnaryProcessor<Fragment> 
@@ -312,14 +356,12 @@ namespace BALL {
 			/**	Default Constructor.
 					 Creates a new processor
 					 the according pointer to the FragmentDatabase is set 0.
-					 shortnames of the aminoacids are saved within as\_ini\_.
 			*/
 			AddHydrogensProcessor();
 			
 			/**	Copy Constructor.
 					 Creates a new processor.
 					 The according pointer to the FragmentDataBase is set to the adress of the passed DataBase.
-					 shortnames of the aminoacids are saved within as\_ini\_.
 			*/
 			AddHydrogensProcessor(const FragmentDB& db);
 
@@ -332,8 +374,8 @@ namespace BALL {
 			//@{
 			/**start function.
 				 is called first after an apply() call.
-				 is calling the procedures ini\_einlesen and prot\_einlesen
 				 count\_h\_ is set to 0.
+				 nothing important is done here
 			*/
 			virtual bool start();
 			
@@ -343,8 +385,21 @@ namespace BALL {
 			*/
 			virtual bool finish();
 			
-			/**apply() function
-				 adds the missing hydrogens to the passed fragment
+			/**
+			apply() function
+			adds the missing hydrogens to the passed fragment
+			\begin{itemize}
+			\item first the actual residue is identified and its database template is stored in tmp
+			\item searching tmp for hydrogens to be inserted,
+			      save them names in h_atoms_ and store thisentry in h_table_ for further use
+			\item iterating the actual residues h_table entry :
+				\item test wether actual hydrogen is inserted
+				\item try to acces ini_table entry of actual hydrogen in order to get names of reference atoms
+			       	      if not accessable, entry is built and stored for further use
+				\item getting coordinates of reference vectors and call calculate function in order
+			   	      to calculate position of actual hydrogen 
+			\end{itemize}
+
 			*/
 			virtual Processor::Result operator()(Fragment&);
 			//@}
@@ -398,7 +453,7 @@ namespace BALL {
 			//_@{
 
 			/*_ saves prototype atoms of the fragmentDataBase in prot\_table*/
-			void buildProtonTable_();
+			void addToTemplateTable_(const Fragment*);
 						
 			/*_ create tables ini_table_ and h_table_*/
 			void readTemplates_();
@@ -418,22 +473,34 @@ namespace BALL {
 			/*_ calculates angle of passed vector to x1_x3 plane*/
 			float winkelx1_x3_(Vector3&);
 			
-			/*_ calculates position of hydrogen to be inserted based on geometric comparison.
-					creates a new PDBAtom which is added to the atom list of the current residue
-					creates a new bond between inserted hydrogen and passed Bindungsatom
+			/*
+			_ calculates position of hydrogen to be inserted based on geometric comparison.
+			creates a new PDBAtom which is added to the atom list of the current residue
+			creates a new bond between inserted hydrogen and passed Bindungsatom
+				
+			the passed template hydrogen is transferred from one coordinate system into another
+			in order to do the right operations some calculation is done using the passed
+			reference atoms :
+				
+			the following operations are done with reference atoms of actual residue and the prototype
+			of course every operation calculated for one reference atom is done with any other reference
+			atom (example:third point is turned the same angles as second point)
+			\begin{itemize}
+			\item first point is moved to center
+			\item second point is turned onto x1x2 - plane
+			\item second point is turned onto x1 - axis
+			\item third point is turned onto x1x2 - plane
+			\item setting of mirrors in order to get the third point into first quadrant of x1x2 plane
+			\item forth point is needed just to check wether it is necessary to set another mirror
+			  	at x1x2 plane
+			\item operations calculated for prototype coordinate system are executed for x_target, the
+			        reference hydrogen to be inserted
+			\item operations calculated for actual residue coordinate system are executed backwards for x_target in orde
+			  	to bring hydrogen into the right position.
+			\end{itemize}		  
+					
 			*/
-			void calculate_(String, Atom*, Vector3& ,Vector3& ,Vector3&, Vector3&, Vector3& ,Vector3& ,Vector3& ,Vector3& ,Vector3&);
-			
-			/*_ called only if residue is N-terminal
-					creates tetraeder around N_atom
-			*/
-			void buildTetraeder_(Atom*, Vector3&, Vector3&);
-			
-			/*_ called only if residue is not N-terminal
-					adds single hydrogen at bond between the 2 residues
-			*/
-			void addSingleH_(Atom*,Vector3&, Vector3&, Vector3&);
-			
+			void calculate_(String, Atom*, Vector3& ,Vector3& ,Vector3&, Vector3&, Vector3& ,Vector3& ,Vector3& ,Vector3& ,Vector3&);			
 			//_@}	
 			
 		};

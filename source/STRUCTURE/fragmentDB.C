@@ -1,4 +1,4 @@
-// $Id: fragmentDB.C,v 1.3 1999/09/26 17:20:07 oliver Exp $
+// $Id: fragmentDB.C,v 1.4 1999/10/27 08:04:55 oliver Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 
@@ -1073,12 +1073,11 @@ namespace BALL
 	}
 
 
-
 	/////////////////////////////////////////////////////////////////
 	//		FragmentDB::AddHydrogensProcessor												 //
 	/////////////////////////////////////////////////////////////////	
 
-	// dreht Vektor um die x1 Achse
+	// turns vector around x1-axis
 	void FragmentDB::AddHydrogensProcessor::turn_x1_(Vector3& v,const float winkel) 
 	{
 		float hilf_y = v.y * cos(winkel) + v.z * -sin(winkel);
@@ -1087,7 +1086,7 @@ namespace BALL
 		v.z = hilf_z;
 	}
 
-	// dreht Vektor um die x2 Achse
+	// turns vector around x2-axis
 	void FragmentDB::AddHydrogensProcessor::turn_x2_(Vector3& v,const float winkel)
 	{
 		float hilf_x = v.x * cos(winkel) + v.z * -sin(winkel);
@@ -1096,7 +1095,7 @@ namespace BALL
 		v.z = hilf_z;
 	}
 
-	// dreht Vektor um die x3 Achse
+	// turns vector around x3-axis
 	void FragmentDB::AddHydrogensProcessor::turn_x3_(Vector3& v,const float winkel) 
 	{
 		float hilf_x = v.x * cos(winkel) + v.y * -sin(winkel);
@@ -1105,7 +1104,7 @@ namespace BALL
 		v.y = hilf_y;
 	}
 
-	// berechnet Winkel zur x1x2 Ebene
+	// calculates angle to x1x2 plane
 	float FragmentDB::AddHydrogensProcessor::winkelx1_x2_(Vector3& v) 
 	{
 		float hilf = v.x;
@@ -1116,7 +1115,7 @@ namespace BALL
 		return alpha;
 	}
 
-	// berechnet Winkel zur x1x3 Ebene
+	// calculates angle to x1x3 plane
 	float FragmentDB::AddHydrogensProcessor::winkelx1_x3_(Vector3& v) 
 	{
 		float hilf = v.z;
@@ -1128,49 +1127,47 @@ namespace BALL
 		return beta;
 	}
 
-	// berechnet Wasserstoff Koordinaten
+	// calculates position of hydrogen to be added
 	void FragmentDB::AddHydrogensProcessor::calculate_	
 		(String atom_name, Atom* bindungs_atom, Vector3& a, Vector3& b,Vector3& c, Vector3& d,
 		 Vector3& xa, Vector3& xb,Vector3& xc, Vector3& xd, Vector3& xtarget)
 	{
-		// Setzen der lokalen Variablen    
-		// Variablen mit beginnendem x beziehen sich auf die             
-		// Prototypen
+		//cout << endl << "Erreiche jetzt calculate Funktion";
+		
+		// setting of local variables    
+		// variables beginning with x, are related to             
+		// the prototypes of the fragment Databas
 		int spiegel1 = 0;	
 		int spiegel2 = 0;
 		int xspiegel1 = 0;
 		int xspiegel2 = 0;
 		int xxspiegel = 0;	
 
-		// bezieht sich auf beide Objekte, gesetzt,wenn am Ende 
-		// noch Spiegelung zur x1x2 Ebene noetig ist
-
-		// Verschieben des ersten Punktes in den Ursprung
-		// Protein 
+		// moving first point to coordinate center
+		// actual residue 
 		Vector3 b_a = b-a;	
 		Vector3 c_a = c-a;
 		Vector3 d_a = d-a;
-		// Prototyp      
+		// residue prototype    
 		Vector3 xb_a = xb-xa;
 		Vector3 xc_a = xc-xa;
 		Vector3 xd_a = xd-xa;
-		Vector3 xtarget_a = xtarget-xa; // einzufuegendes H-Atom
-		//        
+		// hydrogen to be added
+		Vector3 xtarget_a = xtarget-xa;      
 
-
-		// Drehen des ersten Punktes auf die x1_x2 Ebene
-		// Protein
+		// turning the second point onto x1_x2 plane
+		// actual residue
 		float alpha = winkelx1_x2_(b_a);
-		// Ueberpruefen der Drehrichtung
+		// checking turn direction
 		if (b_a.y > 0)
 		{
 			alpha =-alpha; 
 		}
 		
 		turn_x1_(b_a,alpha);	
-		// Prototyp
+		// residue prototype
 		float xalpha = winkelx1_x2_(xb_a);
-		// Ueberpruefen der Drehrichtung
+		// checking turn direction
 		if (xb_a.y>0) 
 		{
 			xalpha=-xalpha; 
@@ -1179,8 +1176,8 @@ namespace BALL
 
 		turn_x1_(xb_a,xalpha);	
 	 
-		// Drehen des ersten Punktes auf die x1 Achse
-		// Protein
+	 	// turning second point onto x-axis
+		// actual residue
 		float beta = winkelx1_x3_(b_a);
 		if (b_a.x>0)
 		{
@@ -1188,17 +1185,17 @@ namespace BALL
 		}
 		turn_x3_(b_a,beta);	
 
-		// Prototyp      
+		// residue prototype    
 		float xbeta = winkelx1_x3_(xb_a);
 		if (xb_a.x > 0)
 		{
 			xbeta=-xbeta; 
 		}
 		turn_x3_(xb_a,xbeta);	
-					
-		// Drehen des zweiten Punktes um alpha und beta
-		// Drehen des zeiten Punktes auf die x1_x2 Ebene
-		// Protein
+		
+		// turning third point with alpha and beta			
+		// turning third point onto x1_x2 plane
+		// actual residue
 		turn_x1_(c_a, alpha);
 		turn_x3_(c_a, beta);	
 		float gamma = winkelx1_x2_(c_a);
@@ -1208,7 +1205,7 @@ namespace BALL
 		}
 		turn_x1_(c_a,gamma);
 
-		// Prototyp 
+		// residue prototype
 		turn_x1_(xc_a,xalpha);
 		turn_x3_(xc_a,xbeta);	       
 
@@ -1219,9 +1216,9 @@ namespace BALL
 		}
 		turn_x1_(xc_a,xgamma);	
 
-		// Setzen der Spiegel	
-		// der zweite Punkt liegt dann im 1.Quadranten der x1x2-Ebene
-		// Protein
+		// setting the mirrors
+		// third point lies in first quadrant of x1x2-plane	
+		// actual residue
 		if (c_a.x<0) 
 		{
 			spiegel1=1;
@@ -1232,7 +1229,7 @@ namespace BALL
 			spiegel2=1;
 		}
 
-		// Prototyp
+		// residue prototype
 		if (xc_a.x<0)
 		{
 			xspiegel1=1;
@@ -1243,8 +1240,8 @@ namespace BALL
 			xspiegel2=1;
 		}
 			
-		// Anwenden der Spiegel
-		// Protein
+		// using mirrors
+		// actual residue
 		if (spiegel1)
 		{
 			b_a.x=-b_a.x;
@@ -1255,7 +1252,7 @@ namespace BALL
 			b_a.y=-b_a.y;
 			c_a.y=-c_a.y;
 		}
-		// Prototyp
+		// residue prototype
 		if (xspiegel1)
 		{
 			xb_a.x=-xb_a.x;
@@ -1267,7 +1264,7 @@ namespace BALL
 			xc_a.y=-xc_a.y;
 		}
 
-		// Winkeltest : korrigiert den Fehlerabstand der beiden Punkte in der Ebene
+		// error distance of both points on plane is corrected
 		float w;
 		float n,z;
 		float abstand1, abstand2;
@@ -1299,12 +1296,11 @@ namespace BALL
 			w = 0;
 		}
 			
-		//
-
-		// Drehen und Spiegeln des dritten Punktes um die
-		// errechneten Werte
-		// Ueberprueft ob beide Objekte noch an der x1x2-Ebene gespiegelt sind
-		// Protein
+		
+		// turning and using mirrors with forth point
+		// check wether there is need of another mirror at x1x2 plane
+		
+		// actual residue
 		turn_x1_(d_a,alpha);
 		turn_x3_(d_a,beta);
 		turn_x1_(d_a,gamma);
@@ -1316,7 +1312,7 @@ namespace BALL
 		{
 			d_a.y = -d_a.y;
 		}
-		// Prototyp
+		// residue prototype
 		turn_x1_(xd_a, xalpha);
 		turn_x3_(xd_a, xbeta);
 		turn_x1_(xd_a, xgamma);
@@ -1330,7 +1326,7 @@ namespace BALL
 			xd_a.y = -xd_a.y;
 		}
 						
-		// ueberprueft den Spiegel
+		// check for mirror
 		if (d_a.z * xd_a.z < 0) 
 		{
 			if ((d_a.z + xd_a.z < 0.2) && (d_a.z + xd_a.z > -0.2)) 
@@ -1340,14 +1336,14 @@ namespace BALL
 		}
 	 
 		//
-					
-		// Berechnen von xtarget ::	// die Koordinaten des H-Atoms werden berechnet
+		
+		// calculating of xtarget : coordinates of hydrogen to be added are calculated			
 					
 		turn_x1_(xtarget_a, xalpha);
 		turn_x3_(xtarget_a, xbeta);
 		turn_x1_(xtarget_a, xgamma);
 		turn_x3_(xtarget_a, w);		
-		//Winkeltest
+		//checking the mirrors
 		if (xspiegel1)
 		{
 			xtarget_a.x = -xtarget_a.x;
@@ -1376,6 +1372,7 @@ namespace BALL
 		// extract the atom name
 		String name(atom_name.before(":"));
 
+		// creating new atom and inserting it 
 		PDBAtom& atom = *new PDBAtom;
 		atom.setElement(PSE["H"]);
 		atom.setPosition(xtarget);
@@ -1394,518 +1391,155 @@ namespace BALL
 		residue_->insert(atom);
 
 		count_h_++;
+		
+		//cout << endl <<"Verlasse jetzt die calculate Funktion";
+		
 	}
-		
-	// liest die Datei as.ini ein
-	void FragmentDB::AddHydrogensProcessor::readTemplates_()
+	
+	// adds the structure of a template to the hashtable prot_table
+	void FragmentDB::AddHydrogensProcessor::addToTemplateTable_(const Fragment* tplate)  
 	{
-		String h_name;
-		String atom_name;
-
-		ResourceEntry::Iterator iter;
-
-		Size as_zaehler;
-		Size zaehler1 = 0;
-		Size zaehler2 = 0;
-		Size h_anzahl = 0;
-		const Size anzahl = 4;
-		
-		String s[5];
-	 
-		// this variable contains the number of fragment
-		// types (excluding variants of fragments)
-		Size number_of_raw_templates = template_names_.size();
-
-		as_zaehler = 0;
-		for (; as_zaehler < number_of_raw_templates; ++as_zaehler)
-		{
-			if (!fragment_db_->name_to_variants_.has(template_names_[as_zaehler]))
-			{
-				continue;
-			}
-
-			list<Residue*> variant_list = fragment_db_->name_to_variants_[template_names_[as_zaehler]];
-			list<Residue*>::iterator list_it = variant_list.begin();
-			for (; list_it != variant_list.end(); ++list_it)
-			{
-				String name = (*list_it)->getName();
-
-				// check whether the path exists
-				ResourceEntry* tmp = fragment_db_->tree->getEntry(fragment_db_->name_to_path_[name] + "/addh");
-				if (tmp == 0)
-				{
-					Log.warn() << "Didn't find addh entry for " << name 
-						<< " in path " << fragment_db_->name_to_path_[name] << "/addh" << endl;
-					continue;
-				}
-
-				iter = tmp->begin();
-				zaehler1 = 0;
-				for (++iter; +iter; ++iter) 
-				{
-					zaehler1++;
-				}
-				// if the addh entry is empty, continue the main loop
-				if (zaehler1 == 0)
-				{
-					Log.level(LogStream::WARNING) << "Cannot find addh entries for " << name << endl;
-					continue;
-				}
-				
-				h_anzahl = zaehler1;
-					
-				// if the variant is not the default variant, store its name
-				if (name != template_names_[as_zaehler])
-				{
-					template_names_.push_back(name);
-				}
-				
-								
-				h_atoms_ = new String[h_anzahl + 1];
-									
-				iter = tmp->begin();
-					
-				// lese fuer jedes H-Atom ein
-				for (zaehler1 = 0; zaehler1 < h_anzahl; zaehler1++) 
-				{
-					++iter;
-					// Eindeutiger Name des einzufuegenden H-Atoms
-					h_name = (*iter).getKey() + ":" + name;
-			
-					// einfuegen des Namens
-					h_atoms_[zaehler1] = h_name; 
-													
-					atoms_ = new String[anzahl + 1]; // anlegen des Feldes der Referenzatome
-					(*iter).getValue().split(s, 5);
-			
-					for (zaehler2 = 0; zaehler2 < anzahl; zaehler2++)
-					{
-						atom_name = s[zaehler2];
-						
-						if (atom_name != "x") 
-						{
-							atom_name.append(":");
-							atom_name.append(name);
-						}
-						atoms_[zaehler2] = atom_name;
-						
-					}
-					// terminierender String fuer H-Feld
-					atoms_[zaehler2] = "NULL"; 
-					ini_table_[h_name] = atoms_;
-				}
-				// terminierender String fuer H-Feld
-				h_atoms_[zaehler1] = "NULL"; 
-				h_table_[name] = h_atoms_;
-			}
-		}
-	}    
-
-	// liest die Prototypen ein
-	// und speichert die Struktur in prot_table_
-	void FragmentDB::AddHydrogensProcessor::buildProtonTable_()  
-	{
+		//cout << endl <<" buildProtonTable()- anfang";
 		// Setzen der lokalen Variablen        
-		Size as_zaehler = 0;
 		String residue_name;
 		String atom_name;
-		const Fragment* tplate;
 		AtomIterator atom_iter;
-			
-		for (as_zaehler = 0; as_zaehler < template_names_.size(); as_zaehler++) 
-		{
-			residue_name = template_names_[as_zaehler];
-			tplate = fragment_db_->getFragment(residue_name);
+		
+		residue_name = tplate->getName();
 
-			for(atom_iter = tplate->beginAtom(); +atom_iter; ++atom_iter) 
+		//cout << endl << "fuege jetzt ein :"<< residue_name;
+
+		for(atom_iter = tplate->beginAtom(); +atom_iter; ++atom_iter) 
 			{
-				atom_name = (*atom_iter).getName();
-				atom_name.append(":");
-				atom_name.append(residue_name);
-				prot_table_[atom_name] = *atom_iter;
+			atom_name = (*atom_iter).getName();
+			atom_name.append(":");
+			atom_name.append(residue_name);
+			//cout << endl <<"..."<<atom_name<<" eingefuegt.";
+			prot_table_[atom_name] = *atom_iter;
 			}
-		}			
-			 
+
+		//cout << endl << "buildProtonTable() -Ende";			 
 	}
 
-	// fuegt ein einzelnes H-Atom ein.
-	// wird aufgerufen , wenn das Residue nicht N-Terminal ist
-	void FragmentDB::AddHydrogensProcessor::addSingleH_(Atom* bindungs_atom, Vector3& n,Vector3& ca,Vector3& old_c)
-	{
-		// Setzen der lokalen Variablen
-
-		int spiegel1=0;
-		int spiegel2=0;
-		Vector3 old_c_n=old_c-n; // letzte C-Atom des vorangehenden Residues
-		Vector3 ca_n=ca-n;
-		Vector3 h;
-		const float length=1; // ungefaehr die Länge der H-Verbindung
-		const float winkel=2.094395; //Winkel von 120 Grad
-		h.set(length,0,0); // setze Positionsvektor des H-Atoms
-		//	
-		
-		// Berechne Winkel zur x1x2-Ebene und drehe      
-		float alpha = winkelx1_x2_(old_c_n);
-		if (old_c_n.y>0) alpha=-alpha;
-		turn_x1_(old_c_n,alpha);
-
-		// Berechne Winkel zur x1x3-Ebene und drehe      
-		float beta=winkelx1_x3_(old_c_n);
-		if (old_c_n.x>0) beta=-beta;
-		turn_x3_(old_c_n,beta);
-		
-		//drehe den zweiten Punkt um berechnete Winkel und drehe in dann auf x1x2 Ebene      
-		turn_x1_(ca_n,alpha);
-		turn_x3_(ca_n,beta);	
-		float gamma=winkelx1_x2_(ca_n);
-		if (ca_n.y>0) gamma=-gamma;	
-		turn_x1_(ca_n,gamma);
-					
-		if (ca_n.x<0) spiegel1=1;
-		if (ca_n.y<0) spiegel2=1;
-		
-		turn_x3_(h,-winkel/2); // H-Atom wird um 60 Grad gedreht
-		
-		if (spiegel1) h.x=-h.x;
-		if (spiegel2) h.y=-h.y;
-					
-		turn_x1_(h,-gamma); // drehe H-Atom in Bezugssystem des Proteins
-		turn_x3_(h,-beta);
-		turn_x1_(h,-alpha);
-		
-		h=h+n;
-		// lege neues Atom an und fuege es ein
-		PDBAtom& atom = *new PDBAtom; 
-		atom.setPosition(h);
-		atom.setElement(PSE["H"]);
-		atom.setName("H");
-		atom.createBond(*bindungs_atom);
-		residue_->insert(atom);
-			
-		count_h_++;
-	}
-		
-					
-	void FragmentDB::AddHydrogensProcessor::buildTetraeder_(Atom* bindungs_atom, Vector3& n, Vector3& c)
-	{
-		// wird aufgerufen wenn Residue N-Terminal ist und baut ein Tetraeder aus H-Atomen auf
-		// Setzen der lokalen Variablen
-		int spiegel=0;  // BAUSTELLE!!!
-		const float length=1; // Laenge der H-Verbindung
-		const float winkel1=1.911135; // winkel von 109.5 Grad
-		const float winkel2=2.094395; // winkel von 120 Grad
-		Vector3 c_n=c-n;
-		Vector3 h1,h2,h3;
-		h1.set(length,0,0);
-		h2.set(length,0,0);
-		h3.set(length,0,0); // setzen der Vektoren
-
-
-		String residue_name,name;
-		residue_name = residue_->getName();
-		AtomIterator atom_iter;
-		int h1_set = 0;
-		int h2_set = 0;
-		int h3_set = 0;
-		int set = 0;
-		float w1;
-		Vector3 hilf1, hilf2, hilf3;
-
-
-		//iteriere ueber residue;
-		for(atom_iter=residue_->beginAtom();+atom_iter;++atom_iter)
-		{
-			name=(*atom_iter).getName();
-			if (name=="1H") {h1=(*atom_iter).getPosition();h1_set=1;}
-			if (name=="2H") {h2=(*atom_iter).getPosition();h2_set=1;}
-			if (name=="3H") {h3=(*atom_iter).getPosition();h3_set=1;}
-		}
-		
-		// drehen auf x1x2Ebene
-		float alpha=winkelx1_x2_(c_n);
-		if (c_n.y>0) alpha = -alpha;
-		turn_x1_(c_n,alpha);
-									
-		// drehen auf x1 Achse
-		float beta=winkelx1_x3_(c_n);
-		if (c_n.x>0) beta=-beta;
-		turn_x3_(c_n,beta);
-		
-		if (c_n.x<0) spiegel=1;
-		//
-		if (h1_set+h2_set+h3_set==0) // alles ist ungesetzt
-		{	  	
-			turn_x3_(h1,winkel1);
-			
-			turn_x3_(h2,winkel1);
-			turn_x1_(h2,winkel2);
-			
-			turn_x3_(h3,winkel1);
-			turn_x1_(h3,2*winkel2); // baue Tetraeder auf
-			
-			if (spiegel)
-			{
-				h1.x=-h1.x;
-				h2.x=-h2.x;
-				h3.x=-h3.x;
-			}
-			
-			// drehen in das Bezugssystem des Proteins   
-			turn_x3_(h1,-beta);
-			turn_x3_(h2,-beta);
-			turn_x3_(h3,-beta);
-		
-			turn_x1_(h1,-alpha);
-			turn_x1_(h2,-alpha);
-			turn_x1_(h3,-alpha); 
-		
-			h1 = h1 + n;
-			h2 = h2 + n;
-			h3 = h3 + n;
-		
-			// einfuegen der berechneten Atome
-			PDBAtom& atom = *new PDBAtom;	
-			atom.setElement(PSE["H"]);
-			atom.setPosition(h1);
-			atom.setName("1H");
-			atom.createBond(*bindungs_atom);
-			residue_->insert(atom);
-
-			atom = *new PDBAtom;
-			atom.setElement(PSE["H"]);
-			atom.setPosition(h2);
-			atom.setName("2H");
-			atom.createBond(*bindungs_atom);
-			residue_->insert(atom);
-
-			atom = *new PDBAtom;
-			atom.setElement(PSE["H"]);
-			atom.setPosition(h3);
-			atom.setName("3H");
-			atom.createBond(*bindungs_atom);
-			residue_->insert(atom);
-			
-			count_h_ += 3;
-			h1_set = 1;
-			h2_set = 1;
-			h3_set = 1;
-		} // Ende if alles ungesetzt
-		
-		if (h1_set+h2_set+h3_set==1) // nur ein Proton ist gesetzt
-		{
-			if (h1_set==1) 
-			{
-				hilf1 = h1 - n;
-				set=1;
-			}
-			if (h2_set==1) 
-			{
-				hilf1 = h2 - n;
-				set=2;
-			}
-			if (h3_set==1) 
-			{
-				hilf1 = h3 - n;
-				set=3;
-			}
-			
-			// hilf1 ist schon gesetzt, drehe in auf die positive x1_2 Ebene
-			
-			// zuerst nachdrehen
-			turn_x1_(hilf1,alpha);
-			turn_x3_(hilf1,beta);
-			if (spiegel) hilf1.x=-hilf1.x;
-			
-			w1=winkelx1_x2_(hilf1);
-			if (hilf1.y>0) w1=-w1;
-			turn_x1_(hilf1,w1);
-			
-			//setze hilf2
-			hilf2=hilf1;
-			turn_x1_(hilf2,winkel2);
-			
-			//setze hilf3
-			hilf3=hilf2;
-			turn_x1_(hilf3,winkel2);
-			
-			
-			// drehe in das Bezugssystem
-			
-			turn_x1_(hilf1,-w1);
-			turn_x1_(hilf2,-w1);
-			turn_x1_(hilf3,-w1);
-					
-			if (spiegel)
-			{
-				hilf1.x=-hilf1.x;
-				hilf2.x=-hilf2.x;
-				hilf3.x=-hilf3.x;
-			}
-			
-			turn_x3_(hilf1,-beta);
-			turn_x3_(hilf2,-beta);
-			turn_x3_(hilf3,-beta);
-		
-			turn_x1_(hilf1,-alpha);
-			turn_x1_(hilf2,-alpha);
-			turn_x1_(hilf3,-alpha); // drehen in das Bezugssystem des Proteins   
-		
-			hilf1=hilf1+n;
-			hilf2=hilf2+n;
-			hilf3=hilf3+n;
-		
-			PDBAtom& atom = *new PDBAtom;	// einfuegen der berechneten Atome
-			atom.setPosition(hilf2);
-			atom.setElement(PSE["H"]);
-			if (set==3) atom.setName("1H");
-			if (set==2) atom.setName("3H");
-			if (set==1) atom.setName("2H");
-			atom.createBond(*bindungs_atom);
-			residue_->insert(atom);
-
-			atom = *new PDBAtom;
-			atom.setElement(PSE["H"]);
-			atom.setPosition(hilf3);
-			if (set==3) atom.setName("2H");
-			if (set==2) atom.setName("1H");
-			if (set==1) atom.setName("3H");
-			atom.createBond(*bindungs_atom);
-			residue_->insert(atom);
-			
-			count_h_ += 2;
-			h1_set = 1;
-			h2_set = 1;
-			h3_set = 1;
-		} //Ende if nur ein Proton gesetzt
-
-		if (h1_set+h2_set+h3_set==2) // 2 Protonen sind gesetzt
-		{
-			if (h1_set==1) set+=1;
-			if (h2_set==1) set+=2;
-			if (h3_set==1) set+=3;
-			if (set==4) {set=2;hilf1=h1-n;}
-			if (set==5) {set=1;hilf1=h3-n;}
-			if (set==3) {set=3;hilf1=h2-n;}
-			
-			// hilf ist schon gesetzt, drehe in auf die positive x1_2 Ebene
-			
-			// zuerst nachdrehen
-			turn_x1_(hilf1,alpha);
-			turn_x3_(hilf1,beta);
-			if (spiegel) {hilf1.x=-hilf1.x;}
-			
-			w1=winkelx1_x2_(hilf1);
-			if (hilf1.y>0) w1=-w1;
-			turn_x1_(hilf1,w1);
-			
-			//setze hilf2
-			hilf2=hilf1;
-			turn_x1_(hilf2,winkel2);
-			
-			// drehe in das Bezugssystem
-			
-			turn_x1_(hilf1,-w1);
-					turn_x1_(hilf2,-w1);
-					
-			if (spiegel)
-			{
-				hilf1.x=-hilf1.x;
-				hilf2.x=-hilf2.x;
-			}
-			
-			turn_x3_(hilf1,-beta);
-			turn_x3_(hilf2,-beta);
-		
-			turn_x1_(hilf1,-alpha);
-			turn_x1_(hilf2,-alpha); // drehen in das Bezugssystem des Proteins   
-			
-			hilf1=hilf1+n;
-			hilf2=hilf2+n;
-			
-			PDBAtom& atom = *new PDBAtom;	// einfuegen der berechneten Atome
-			atom.setElement(PSE["H"]);
-			atom.setPosition(hilf2);
-			if (set==3) atom.setName("3H");
-			if (set==2) atom.setName("2H");
-			if (set==1) atom.setName("1H");
-			atom.createBond(*bindungs_atom);
-			residue_->insert(atom);
-
-			count_h_ += 1;
-			h1_set = 1;
-			h2_set = 1;
-			h3_set = 1;
-		} //Ende if nur 2 Protonen gesetzt
-	}
-		
-
-
+	// start function of AddHydorgensProcessor
+	// nothing important is done here
 	bool FragmentDB::AddHydrogensProcessor::start()
 	{
 		count_h_ = 0;
-						
-		// einlesen von as.ini und Aufbau von h_table_ und ini_table_
-		readTemplates_(); 
-
+		//cout << endl << "addh::start()";				
 		// einlesen der Prototypen und Aufbau von prot_table__
-		buildProtonTable_(); 
 		
 		return true;
 	}
-
+	
+	// finish function of AddHydrogensProcessor
+	// nothing is done here
 	bool FragmentDB::AddHydrogensProcessor::finish()
 	{
 		return true;
 	}
-		
+	
+	// operator function of AddHydrogensProcessor
+	// works on residues
+
 	Processor::Result FragmentDB::AddHydrogensProcessor::operator () (Fragment& object)
 	{
-		// applyObject Operator
-		// Definition der lokalen Variablen
+		//cout << endl <<"addh::operator()";
+
+		// setting of local variables
 		
-		// check Variable fuer bereits eingefuegte Wasserstoffe
+		// check variable for already inserted hydrogens
 		bool inserted;
 		// lopp variables
 		int i = 0;
 		int k = 0;
-		Vector3 x[4]; //Vektoren des Proteins
+		
+		// actual residues vectors
+		Vector3 x[4]; 
+		// residue prototype vectors
 		Vector3 xx[4]; //Vektoren der Prototypen
+		// vector of hydrogen to be added
 		Vector3 xtarget;
 		static Vector3 old_C;
 		AtomIterator atom_iter;
 		Atom bindungs_atom;
-		PDBAtom* atom;
+		Atom* atom;
+		Atom** atom_feld=new Atom*[4];
+		// some counting variables
+		int h_zaehler=0;
+		int zaehler1=0;
+		int zaehler2=0;
+		int test_zaehler=0;
+		int bond_zaehler=0;
+		String atom_name;
 
-
-		// Setzen des aktuellen Residues 
+		// setting the actual residue
 		
 		if (RTTI<Residue>::isKindOf(object))
 		{
 			residue_ = RTTI<Residue>::castTo(object);
 			
 			String atom_name;
-	
+
 			const Fragment* tmp = fragment_db_->getReferenceFragment(*residue_);
 			if (tmp == 0)
 			{
 				Log.level(LogStream::WARNING) << "couldn't find reference fragment for " << residue_->getName() << endl;
 				return Processor::CONTINUE;
-			} else {
+			}
+			if (tmp != 0)
+			{
 				String variant_name = tmp->getName();
-			
+				//cout << "reference variant for " << residue_->getName() << " is: " << variant_name << endl;
+				//cout << endl << "suche Wasserstoffe";
+				
+				// the name is known, searching the residue prototype for hydrogens to be added
+				// save them in h_table_
+				
 				if (h_table_.has(variant_name)) 
 				{
 					h_atoms_ = h_table_[variant_name];
 				} else {
-					Log.level(LogStream::WARNING) << "No information on hydrogens for residue "<< variant_name << endl;	
-					return Processor::CONTINUE;
+					//cout << endl <<"Eintrag muss aufgebaut werden";
+					// constructing hashtable entry using prototype information
+					
+					// iterating the fragment and save the name of every hydrogen
+					
+					for (atom_iter=tmp->beginAtom();+atom_iter;++atom_iter)
+						{
+						if ((*atom_iter).getElement()==PSE[Element::H])
+							{
+							zaehler1++;
+							}
+						}
+					// cout << endl << zaehler1;
+					h_zaehler=zaehler1;
+					h_atoms_=new String[h_zaehler+1];
+					zaehler1=0;
+					for (atom_iter=tmp->beginAtom();+atom_iter;++atom_iter)
+						{
+						if ((*atom_iter).getElement()==PSE[Element::H])
+							{
+							atom_name=(*atom_iter).getName();
+							atom_name.append(":");
+							atom_name.append(variant_name);
+							h_atoms_[zaehler1]=atom_name;
+							zaehler1++;
+							// cout << endl << zaehler1;
+							}
+						}
+						h_atoms_[zaehler1]="NULL";
+						h_table_[variant_name]=h_atoms_;
+						// cout << endl <<"Eintrag ist eingefuegt";
 				}
-			
-				// Iterieren ueber die Wasserstoffe		
+				
+				// iterating the hydrogens		
 				while(h_atoms_[k] != "NULL")	
 				{
 					inserted = false;
-					// teste ob Wasserstoff schon enthalten ist
+					//cout << endl <<" ist Wasserstoff schon enthalten ?";
+					
+					// test wethe hydrogen is already inserted
 					for (atom_iter = residue_->beginAtom(); +atom_iter; ++atom_iter)
 					{
 						atom_name = (*atom_iter).getName();
@@ -1918,43 +1552,142 @@ namespace BALL
 							break;
 						}
 					}
-			
+					
 					if (inserted) 
-					{
+					{      //  cout << endl <<"...ja";
 						k++;
 					} else {
+						// cout << endl <<"...nein";
+						// cout << endl <<" k: "<<k;
 						if(ini_table_.has(h_atoms_[k]))	
 						{
-							// identify the atoms needed to get the new atom`s coordinates
+							// identify the atoms needed to get the new atom's coordinates
 							atoms_ = ini_table_[h_atoms_[k]]; 
 						} else {
-							Log.level(LogStream::WARNING) << "Did not find entry for " << h_atoms_[k] << endl;
-							continue;
+							// cout << endl << "ini_table EIntrag muss aufgebaut werden";
+							// constructing hashtable entry
+							atoms_=new String[5];
+							// cout << endl << " suche jetzt im Prototypen das Wasserstoff";
+							// searching prototype for h_atoms_[k] 
+							for(atom_iter=tmp->beginAtom();+atom_iter;++atom_iter)
+								{
+								atom_name=(*atom_iter).getName();
+								atom_name.append(":");
+								atom_name.append(variant_name);
+								if (atom_name==h_atoms_[k]) 
+									{
+									// cout << endl <<"found";
+									 atom=&(*atom_iter);
+									 }
+								//cout << endl << "test";
+								}
+							//cout << endl <<"Wasserstoff ist identifiziert";
+							//cout << endl;
+							//atom->dump(cout);
+							
+							// access hydrogen bound and get first reference atom
+							
+							// cout << atom->isBonded();
+							
+							atom=atom->getBond(0)->getBondedAtomOf(*atom);
+							atom_feld[0]=atom;
+							zaehler1=0;
+							zaehler2=1;
+							bond_zaehler=0;
+							// cout << endl << "erstes Referenzatom gespeichert : "<< atom->getName();
+							// cout << endl << " suche jetzt den Rest";
+							
+							// searching for more reference atoms
+							// if the actual atom has no more bonds start over with next
+							// atom stored in atom_feld
+							
+							while (zaehler2<4)
+								{
+								atom=atom_feld[zaehler1];
+								if (atom->getBond(bond_zaehler))
+									{
+									// cout << endl <<"naechste Bindung des Atoms";
+									atom=atom->getBond(bond_zaehler)->getBondedAtomOf(*atom);
+									if (atom->getElement()!=PSE[Element::H])
+										{
+										// cout << endl <<"Ueberpruefe ob Atom schon gespeichert ist ";
+										test_zaehler=0;
+										inserted=0;
+										while (test_zaehler < zaehler2)
+											{
+											if (atom_feld[test_zaehler]==atom) inserted=1; 
+											test_zaehler++;
+											}
+										// next reference atom found and stored in atom_feld	
+										if (!inserted)
+											{
+											// cout << endl <<"ein Referenzatom gefunden und gespeichert : "<<atom->getName();
+											atom_feld[zaehler2]=atom;
+											zaehler2++;
+											// cout << endl <<"zaehler2 :" << zaehler2;
+											}
+										}
+									bond_zaehler++;
+									}
+									else {  
+										// cout << endl << "atom hat keine Bindung mehr, nehme naechstes im Feld";
+										zaehler1++;
+										bond_zaehler=0;
+										}
+								}
+							// cout << endl << " alle Referenzatome sind gefunden.";
+							zaehler1=0;
+							while (zaehler1<4)
+								{
+								atom_name=atom_feld[zaehler1]->getName();
+								atom_name.append(":");
+								atom_name.append(variant_name);
+								atoms_[zaehler1]=atom_name;
+								zaehler1++;
+								}
+							atoms_[4]="NULL";
+							ini_table_[h_atoms_[k] ]=atoms_;
+							// cout <<endl <<"EIntrag ist aufgebatu";
+							
 						}
-
-						if (atoms_[3] != "x") 
-						{
-							for (i = 0; i <= 3; i++)
+						
+						// cout << endl <<"fuege jetzt das Wasserstoff ein";
+						
+						// hydrogen is going to be inserted
+					
+						// getting the position of reference atoms
+						for (i = 0; i <= 3; i++)
 							{	
 								if (prot_table_.has(atoms_[i]))
 								{
 									atom = (PDBAtom*)&prot_table_[atoms_[i]];
 									xx[i] = atom->getPosition();
 								} else {
-									Log.level(LogStream::ERROR) << "prot_table_ Eintrag nicht gefunden :"<< atoms_[i] << endl;
-									continue;
+									// if template is not known in prot_table
+									// it has to be added
+									//cout << endl << "Fuege das Template in die Hashtabelle ein";
+									addToTemplateTable_(tmp);
+									atom = (PDBAtom*)&prot_table_[atoms_[i]];
+									xx[i] = atom->getPosition();
 								}
 							}
+						
+						//cout  << endl <<"Habe Prototype Referenzatome gefunden";
+						
+						// getting the position of reference hydrogen
 							if (prot_table_.has(h_atoms_[k]))
 							{
 								atom = (PDBAtom*)&prot_table_[h_atoms_[k]];
-								// Koordinaten der Prototypatome
 								xtarget = atom->getPosition(); 
 							} else {
 								Log.level(LogStream::ERROR) << "prot_table_ Eintrag nicht gefunden :"<< h_atoms_[k] << endl;
+								//cout << endl <<"ERROR :: Wasserstoff nicht in prot_table gefunden";
 								continue;
 							}
+					
+						//cout << endl <<"Habe Prototype Wasserstoff gefunden";
 						
+						// getting position of reference atoms of actual residue
 							for (i = 0; i <= 3; i++)
 							{
 								for (atom_iter = residue_->beginAtom(); +atom_iter; ++atom_iter)
@@ -1973,55 +1706,27 @@ namespace BALL
 								}
 							}
 		
-
-							// Berechne xtarget
+						//cout << endl <<"Beginne jetzt die Berechnung";
+						
+						// xtarget is calculated
 							calculate_(h_atoms_[k], &bindungs_atom,
 												 x[0], x[1], x[2], x[3],
 												 xx[0], xx[1], xx[2], xx[3], 
 												 xtarget); 
-		
-							k++;
-		
-						}else {
-
-							//Setzen der N - Wasserstoffe
-		
-							for(i = 0; i <= 2; i++) // lauft 3 mal durch
-							{
-								for(atom_iter = residue_->beginAtom(); +atom_iter; ++atom_iter)
-								{
-									atom_name = (*atom_iter).getName();
-									atom_name.append(":");
-									atom_name.append(variant_name);
-									if (atom_name == atoms_[i]) 
-									{
-										x[i] = (*atom_iter).getPosition();
-										if (!i) 
-										{
-											bindungs_atom=(*atom_iter);
-										}
-									}
-								}
-							}
-							if (residue_->isNTerminal())
-							{
-								buildTetraeder_(&bindungs_atom, x[0], x[1]);
-							} else {
-								addSingleH_(&bindungs_atom, x[0], x[1], old_C);
-							}
 							
-							old_C = x[2];
 							k++;
-						}
+							// cout << endl << "Wasserstoff ist eingefuegt...:"<<k;
+		
 					}
 				}
 			}
 		}
+		
 
 		return Processor::CONTINUE;
 	}
 
-		
+	// copy constructor	
 	FragmentDB::AddHydrogensProcessor::AddHydrogensProcessor(const FragmentDB& db)
 	{
 		fragment_db_ = &db;
@@ -2037,12 +1742,14 @@ namespace BALL
 			}
 		}
 	}
-		
+	
+	// constructor	
 	FragmentDB::AddHydrogensProcessor::AddHydrogensProcessor()
 	{
 		fragment_db_ = 0;
 	}
-		
+	
+	// destructor	
 	FragmentDB::AddHydrogensProcessor::~AddHydrogensProcessor()
 	{
 		// BAUSTELLE: Da fehlt ja wohl noch alles!
@@ -2051,12 +1758,11 @@ namespace BALL
 		
 		fragment_db_ = 0;
 	}
-
+	// returning numbers of inserted hydrogens
 	unsigned long FragmentDB::AddHydrogensProcessor::getNumberOfInsertedH()
 	{
 		return count_h_;
 	}
-
 
 
 	//	BuildBondsProcessor
