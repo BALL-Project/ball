@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.122 2004/11/10 01:20:08 amoll Exp $
+// $Id: mainControl.C,v 1.123 2004/11/10 02:56:46 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -171,8 +171,8 @@ namespace BALL
 			message_label_->setFont(font); 
 			message_label_->setFrameShape(QLabel::NoFrame);
 
-			timer_->setInterval(2000);
 			timer_->setLabel(message_label_);
+			timer_->setInterval(2000);
 
 			connect(qApp,	SIGNAL(aboutToQuit()), this, SLOT(aboutToExit()));
 			connect(menuBar(), SIGNAL(highlighted(int)), this, SLOT(menuItemHighlighted(int)));
@@ -980,7 +980,7 @@ namespace BALL
 		{
 			if (selection_.size() > 4)
 			{
-				setStatusbarText(String(selection_.size()) + " objects selected.");
+				setStatusbarText(String(selection_.size()) + " objects selected.", true);
 				return;
 			}
 
@@ -1017,7 +1017,7 @@ namespace BALL
 			{
 				case 0:
 				{
-					setStatusbarText("0 objects selected.");
+					setStatusbarText("0 objects selected.", true);
 					return;
 				}
 				case 1:
@@ -1031,7 +1031,7 @@ namespace BALL
 													 String(atom.getPosition().y) + "|" +
 													 String(atom.getPosition().z) + ")" + "  Charge: " + 
 													 String(atom.getCharge());
-					setStatusbarText(text);
+					setStatusbarText(text, true);
 					Log.info() << text << std::endl;
 					break;
 				}
@@ -1042,7 +1042,7 @@ namespace BALL
 														atoms[0]->getFullName() + " and " + 
 														atoms[1]->getFullName() + ": " + 
 														String(GetDistance(atoms[0]->getPosition(), atoms[1]->getPosition()));
-					setStatusbarText(text);
+					setStatusbarText(text, true);
 					Log.info() << text << std::endl;
 					break;
 				}
@@ -1057,7 +1057,7 @@ namespace BALL
 														atoms[1]->getFullName() + ", " +
 														atoms[2]->getFullName() + ": " +
 														String(result.toDegree()); 
-					setStatusbarText(text);
+					setStatusbarText(text, true);
 					Log.info() << text << std::endl;
 					break;
 				}
@@ -1076,7 +1076,7 @@ namespace BALL
 														ordered_atoms[2]->getFullName() + ", " +
 														ordered_atoms[3]->getFullName() + ": " +
 														String(result.toDegree());
-					setStatusbarText(text);
+					setStatusbarText(text, true);
 					Log.info() << text << std::endl;
 					break;
 				}
@@ -1192,16 +1192,26 @@ namespace BALL
 		}
 
 
-		void MainControl::setStatusbarText(const String& text, bool beep)
+		void MainControl::setStatusbarText(const String& text, bool important, bool beep)
 			throw()
 		{
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << text << std::endl;
 #endif
-			if (beep) QApplication::beep();
+
+			if (beep) 
+			{
+				QApplication::beep();
+			}
+
+			if (!important && timer_->isImportant())
+			{
+				return;
+			}
+
 			message_label_->setText(text.c_str());
-			message_label_->setPaletteForegroundColor( QColor(255, 0, 0) );
-			timer_->stopTimer();
+
+			timer_->setImportant(important);
 			timer_->startTimer();
 			QWidget::update();
 		}
@@ -1466,13 +1476,20 @@ namespace BALL
 				stopSimulation();
 				return;
 			}
+			
 			if (e->type() == (QEvent::Type)SIMULATION_OUTPUT_EVENT)
 			{
 				SimulationOutput* so = (SimulationOutput*) e;
 				Log.info() << so->getMessage() << std::endl;
+//   				if (so->isImportant() ||
+//   				    getStatusbarText().size() == 0)
+//   				{
+				setStatusbarText(so->getMessage(), so->isImportant());
+//   				}
 				return;
 			}
-			if ( e->type() == (QEvent::Type)UPDATE_COMPOSITE_EVENT)
+			
+			if (e->type() == (QEvent::Type)UPDATE_COMPOSITE_EVENT)
 			{
 				UpdateCompositeEvent* so = (UpdateCompositeEvent*) e;
 				if (so->getComposite() == 0) 
@@ -1616,8 +1633,7 @@ namespace BALL
 		StatusbarTimer::StatusbarTimer(QObject* parent)
 			throw()
 			: QTTimer(parent),
-				label_(0),
-				seconds_(0)
+				label_(0)
 		{}
 
 		void StatusbarTimer::timer()
@@ -1625,21 +1641,20 @@ namespace BALL
 		{
 			stopTimer();
 
-			if (!label_) return;
-			if (label_->text() == "") 
+			if (!label_ || label_->text() == "")
 			{
-				seconds_ = 0;
 				return;
 			}
 
-			label_->setPaletteForegroundColor( QColor(0,0,0) );
+			if (important_)
+			{
+				label_->setPaletteForegroundColor( QColor(0,0,0) );
+				setInterval(10000);
+				important_ = false;
+				startTimer();
+				return;
+			}
 
-			startTimer();
-			seconds_ ++;
-
-			if (seconds_ < 9) return;
-
-			seconds_ = 0;
 			label_->setText("");
 		}
 
@@ -1648,6 +1663,25 @@ namespace BALL
 		{
 			label_ = label;
 		}
+
+		void StatusbarTimer::setImportant(bool state)
+			throw() 
+		{ 
+			important_ = state;
+			if (state)
+			{
+				label_->setPaletteForegroundColor( QColor(255, 0, 0) );
+				setInterval(1000);
+			}
+			else
+			{
+				label_->setPaletteForegroundColor( QColor(0, 0, 0) );
+				setInterval(4000);
+			}
+		}
+
+		// ----------------------------------------------------
+
 
 		void MainControl::setWorkingDir(const String& dir)
 			throw() 
@@ -1779,6 +1813,7 @@ namespace BALL
 		{
 			return message_label_->text().ascii();
 		}
+		
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/KERNEL/mainControl.iC>

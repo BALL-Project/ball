@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.65 2004/11/09 15:55:49 amoll Exp $
+// $Id: molecularStructure.C,v 1.66 2004/11/10 02:56:47 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -170,8 +170,6 @@ namespace BALL
 																											SLOT(addHydrogens()), CTRL+Key_H);
 			main_control.removeMenuEntry(MainControl::BUILD, "Chec&k Structure", this, 
 																											SLOT(checkResidue()), CTRL+Key_K);
-			main_control.removeMenuEntry(MainControl::EDIT, "&Select", this, SLOT(select()), ALT+Key_S);   
-			main_control.removeMenuEntry(MainControl::EDIT, "&Deselect", this, SLOT(deselect()), ALT+Key_D);   
 			main_control.removeMenuEntry(MainControl::TOOLS_CREATE_GRID, "&Distance Grid", this, 
 																											SLOT(createGridFromDistance()));   
 			main_control.removeMenuEntry(MainControl::BUILD, "Calculate Secondary Structure", this,

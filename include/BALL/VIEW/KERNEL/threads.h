@@ -141,7 +141,7 @@ namespace VIEW
 			void updateScene_();
 
 			/// Sends the string as outout to Log.info
-			void output_(const String& string);
+			void output_(const String& string, bool important = false);
 
 			/// Notifies the main thread to delete the simulating thread
 			void finish_();
@@ -227,9 +227,9 @@ namespace VIEW
 			: public QCustomEvent
 		{
 			public:
+
 				///
-				SimulationOutput()
-					: QCustomEvent( SIMULATION_OUTPUT_EVENT ){}
+				SimulationOutput();
 
 				///
 				void setMessage(const String& msg) {message_ = msg;}
@@ -237,8 +237,15 @@ namespace VIEW
 				///
 				String getMessage() {return message_;}
 
+				/// will allways be shown in Statusbar or just when no other message shown?
+				bool isImportant() { return important_;}
+
+				///
+				void setImportant(bool state) { important_ = state;}
+
 			protected:
 				String message_;
+				bool   important_;
 		};
 
 		///

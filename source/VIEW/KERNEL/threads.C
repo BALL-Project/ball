@@ -112,12 +112,13 @@ namespace BALL
 			qApp->postEvent(scene, e);
 		}
 
-		void SimulationThread::output_(const String& string)
+		void SimulationThread::output_(const String& string, bool important)
 		{
 			if (main_control_->stopedSimulation()) return;
 
 			SimulationOutput* su = new SimulationOutput;
 			su->setMessage(string);
+			su->setImportant(important);
 			qApp->postEvent(main_control_, su);  // Qt will delete it when done
 		}
 
@@ -161,14 +162,15 @@ namespace BALL
 
 				output_(ff.getResults());
 				output_("final RMS gadient    : " + String(ff.getRMSGradient()) + " kJ/(mol A)   after " 
-								+ String(minimizer_->getNumberOfIterations()) + " iterations\n");
+								+ String(minimizer_->getNumberOfIterations()) + " iterations\n",
+								true);
 				finish_();
 			}
 			catch(Exception::GeneralException e)
 			{
 				String txt = String("Calculation aborted because of throwed exception: ")
 											+ __FILE__ + " " + __LINE__ + " " + e.getMessage();
-				output_(txt);
+				output_(txt, true);
 				finish_();
 			}
 		}
@@ -244,14 +246,15 @@ namespace BALL
 
  				output_(ff.getResults());
 				output_("final RMS gadient    : " + String(ff.getRMSGradient()) + " kJ/(mol A)   after " 
-								+ String(md_->getNumberOfIterations()) + " iterations\n");
+								+ String(md_->getNumberOfIterations()) + " iterations\n", 
+								true);
 				finish_();
 			}
 			catch(Exception::GeneralException e)
 			{
 				String txt = String("Calculation aborted because of throwed exception: ")
 											+ __FILE__ + " " + __LINE__ + " " + e.getMessage();
-				output_(txt);
+				output_(txt, true);
 				finish_();
 			}
 		}
@@ -281,6 +284,12 @@ namespace BALL
 			}
 			
 			md_ = md;
+		}
+
+		SimulationOutput::SimulationOutput()
+			: QCustomEvent(SIMULATION_OUTPUT_EVENT),
+			  important_(false)
+		{
 		}
 
 	} // namespace VIEW

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.60 2004/11/09 21:35:30 amoll Exp $
+// $Id: mainControl.h,v 1.61 2004/11/10 02:56:59 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -79,14 +79,21 @@ namespace BALL
 				void setLabel(QLabel* label)
 					throw();
 
+				/// Important messages are shown first in red, and then for an other 4 seconds in black
+				void setImportant(bool state)
+					throw();
+
+				///
+				bool isImportant() const
+					throw() { return important_;}
+
 			protected:
 				virtual void timer()
 					throw();
 
 			private:
 				QLabel* label_;
-				// used to know when to change the color of the text and when to remove it
-				Size 		seconds_;
+				bool 		important_;
 		};
 
 		/**	MainControl is the main administration unit for a program and must be
@@ -660,7 +667,11 @@ namespace BALL
 					The statusbar has a label, whose text is set to the given argument.
 					It is possible to notify the user with a beep sound.
 			*/
-			void setStatusbarText(const String& text, bool beep = false)
+			void setStatusbarText(const String& text, bool important = false, bool beep = false)
+				throw();
+
+			///
+			String getStatusbarText() const
 				throw();
 
 			/// Set a hint for a menu entry

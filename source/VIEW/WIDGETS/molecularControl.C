@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.76 2004/11/09 15:55:49 amoll Exp $
+// $Id: molecularControl.C,v 1.77 2004/11/10 02:56:46 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -214,7 +214,8 @@ void MolecularControl::checkMenu(MainControl& main_control)
  	getMainControl()->setMenuHint(paste_id_, hint);
 
 	// ------------------------------------------------------------------
-	// check for clearClipboard-slot: enable only if copy_list_ not empty
+	// clearClipboard
+	// enable only if copy_list_ not empty
 	bool copy_list_filled = (getCopyList_().size() > 0);
 	menuBar()->setItemEnabled(clipboard_id_, copy_list_filled && 
 																					 !main_control.compositesAreLocked());
@@ -229,7 +230,7 @@ void MolecularControl::checkMenu(MainControl& main_control)
  	getMainControl()->setMenuHint(clipboard_id_, hint);
 
 	// ------------------------------------------------------------------
-	// check for cut and delete slot 
+	// cut / delete  +  select / deselect
 	bool list_filled = (selected_.size() != 0 && !main_control.compositesAreLocked());
 	
 	if (list_filled) hint = "";
@@ -239,6 +240,12 @@ void MolecularControl::checkMenu(MainControl& main_control)
  	getMainControl()->setMenuHint(cut_id_, hint);
 	menuBar()->setItemEnabled(copy_id_, list_filled);	
  	getMainControl()->setMenuHint(copy_id_, hint);
+
+	menuBar()->setItemEnabled(select_id_, list_filled);
+ 	getMainControl()->setMenuHint(select_id_, hint);
+	menuBar()->setItemEnabled(deselect_id_, list_filled);	
+ 	getMainControl()->setMenuHint(deselect_id_, hint);
+
 
 	if (selected_.size() > 0)
 	{
@@ -583,6 +590,8 @@ void MolecularControl::finalizeWidget(MainControl& main_control)
 	main_control.removeMenuEntry(MainControl::EDIT, "Paste", this, SLOT(paste()), CTRL+Key_V);
 	main_control.removeMenuEntry(MainControl::EDIT, "&Delete", this, SLOT(deleteCurrentItems()), 0);
 	main_control.removeMenuEntry(MainControl::EDIT, "Clear Clipboard", this, SLOT(clearClipboard()));
+	main_control.removeMenuEntry(MainControl::EDIT, "&Select", this, SLOT(select()), ALT+Key_S);   
+	main_control.removeMenuEntry(MainControl::EDIT, "&Deselect", this, SLOT(deselect()), ALT+Key_D);   
 	GenericControl::finalizeWidget(main_control);
 }
 
