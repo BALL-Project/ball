@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.23 2000/01/03 22:03:22 oliver Exp $
+dnl    $Id: configure.in,v 1.24 2000/01/03 22:07:06 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -73,7 +73,7 @@ else
  	BALLVIEW_PLATFORM=Mesa
 fi
 
-if test "$with_BALLVIEW" != "no" ; then
+if test "$with_BALLVIEW" = "no" ; then
 	USE_BALLVIEW=false
 fi
 
