@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Timer_test.C,v 1.18 2002/12/22 13:09:57 oliver Exp $
+// $Id: Timer_test.C,v 1.19 2002/12/23 08:16:42 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 #include <unistd.h>
@@ -15,7 +15,7 @@
 #endif
 ///////////////////////////
 
-START_TEST(Timer, "$Id: Timer_test.C,v 1.18 2002/12/22 13:09:57 oliver Exp $")
+START_TEST(Timer, "$Id: Timer_test.C,v 1.19 2002/12/23 08:16:42 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -45,9 +45,16 @@ CHECK(Timer::Timer(Timer& timer))
 	Timer t2(t1);
 	TEST_EQUAL(t2.isRunning(), false)
 
+	STATUS(t1.getClockTime())
+	STATUS(t2.getClockTime())
+	STATUS(t1.getClockTime())
+	STATUS(t2.getClockTime())
+	STATUS(t1.getClockTime())
+	STATUS(t2.getClockTime())
+
 	double diff = t1.getClockTime() - t2.getClockTime();
 	STATUS("t1.getClockTime() = " << t1.getClockTime() << " / diff = " << diff)
-	PRECISION(1e-9)
+	PRECISION(1e-5)
 	TEST_REAL_EQUAL(diff, 0.0)	
 
 	diff = t1.getUserTime() - t2.getUserTime();
@@ -190,6 +197,17 @@ CHECK(Timer::Timer& operator = (const Timer& timer))
 	Timer t2;
 	t2 = t1;
 	TEST_EQUAL(t2.isRunning(), false)
+
+	STATUS(t1.getClockTime())
+	STATUS(t2.getClockTime())
+	BUSY_WAIT
+	STATUS(t1.getClockTime())
+	STATUS(t2.getClockTime())
+	STATUS(t1.getClockTime())
+	STATUS(t2.getClockTime())
+	STATUS(t1.getClockTime())
+	BUSY_WAIT
+	STATUS(t2.getClockTime())
 
 	double diff = t1.getClockTime() - t2.getClockTime();
 	STATUS("t1.getClockTime() = " << t1.getClockTime() << " / diff = " << diff)

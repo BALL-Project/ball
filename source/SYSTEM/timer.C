@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: timer.C,v 1.14 2002/12/22 13:09:57 oliver Exp $
+// $Id: timer.C,v 1.15 2002/12/23 08:16:41 oliver Exp $
 
 #include <BALL/SYSTEM/timer.h>
 
@@ -222,13 +222,6 @@ namespace BALL
 	/************************************************************************/
 	double Timer::getClockTime() const
 	{
-		#ifdef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
-			LARGE_INTEGER tms;
-		#else
-			struct timeval timeval_buffer;
-			struct timezone timezone_buffer;
-		#endif
-
 		PointerSizeInt elapsed_seconds;
 		PointerSizeInt elapsed_useconds;
 
@@ -243,6 +236,7 @@ namespace BALL
 			/* timer is currently running, so add the elapsed time since */
 			/* the timer was last started to the accumulated time        */
 			#ifdef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
+				LARGE_INTEGER tms;
 				if (QueryPerformanceCounter(&tms))
 				{
 					PointerSizeInt secs_to_add = tms.QuadPart / cpu_speed_;
@@ -251,6 +245,9 @@ namespace BALL
 					elapsed_useconds  = current_usecs_ + usecs_to_add - last_usecs_;
 				}
 			#else
+				struct timeval timeval_buffer;
+				struct timezone timezone_buffer;
+
 				gettimeofday(&timeval_buffer, &timezone_buffer);
 
 				elapsed_seconds = current_secs_ + timeval_buffer.tv_sec - last_secs_;
@@ -258,13 +255,22 @@ namespace BALL
 			#endif
 		}
 
+		/* Adjust for the fact that the useconds may be negative. */
+		/* If they are, take away 1 second and add 1 million      */
+		/* microseconds until they are positive.                  */
+		while (elapsed_useconds < 0L)
+		{
+			elapsed_useconds += 1000000L;
+			elapsed_seconds--;
+		}
+
 		/* convert into floating point number of seconds */
-		return (double)((double)elapsed_seconds + (double) elapsed_useconds / 1000000.0);
+		return (double)((double)elapsed_seconds + (double)elapsed_useconds / 1000000.0);
 	}
 
 	/************************************************************************/
 	/*																																			*/
-	/*   getUserTime reports the current amount of user cpu time         */
+	/*   getUserTime reports the current amount of user cpu time						*/
 	/*   accumulated by this Timer.  If the timer is currently off,					*/
 	/*   this is just the accumulated time.  If the Timer is running, this	*/
 	/*   is the accumulated time plust the time since the timer was last    */
@@ -310,7 +316,7 @@ namespace BALL
 			return (double)(temp_value / 1000000.0);
 		#else		
 			/* convert from clock ticks to seconds using the */
-			/* cpu-speed value obtained by the constructor   */
+			/* cpu-speed value obtained in the constructor   */
 			return (double)(temp_value / (double)cpu_speed_);
 		#endif	
 	}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bitVector.C,v 1.33 2002/12/22 15:48:38 oliver Exp $
+// $Id: bitVector.C,v 1.34 2002/12/23 08:16:56 oliver Exp $
 
 #include <BALL/DATATYPE/bitVector.h>
 #include <BALL/MATHS/common.h>
@@ -14,14 +14,6 @@ namespace BALL
 	#	ifdef BALL_NO_INLINE_FUNCTIONS
 	#		include <BALL/DATATYPE/bitVector.iC>
 	#	endif
-
-	// CHECK: min/max issue
-	// collision in the defintion of Maths::min/max and std::min/max
-	#ifndef BALL_COMPILER_MSVC
-		using namespace Maths;
-	#else
-		#include <algorithm>
-	#endif
 
 	const Size BitVector::BlockSize = BALL_BLOCK_BITS;
 
@@ -193,14 +185,12 @@ namespace BALL
 	BitVector BitVector::operator () (Index first, Index last) const
 	 throw(Exception::IndexUnderflow, Exception::IndexOverflow)
 	{
-		using std::min;
-
 		validateRange_(first, last);
 
 		BitVector temp(last - first + 1);
 		Index source = first;
 		Index target = 0;
-		Position end = min((Position)last, size_ - 1);
+		Position end = std::min((Position)last, size_ - 1);
 		
 		for (; (Position)source <= end; source++, target++)
 		{

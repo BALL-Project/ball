@@ -1,10 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer.C,v 1.23 2002/12/20 14:01:45 oliver Exp $
+// $Id: TCPTransfer.C,v 1.24 2002/12/23 08:16:56 oliver Exp $
 
 // workaround for Solaris -- this should be caught by configure -- OK / 15.01.2002
 #define BSD_COMP
+
+#define DEBUG
 
 #include <BALL/SYSTEM/TCPTransfer.h>
 #include <BALL/SYSTEM/timer.h>
@@ -629,7 +631,10 @@ namespace BALL
 		
 		sendData_(query, socket_);
 		
-		if (!getFTPMessage_(230)) return status_;
+		if (!getFTPMessage_(230)) 
+		{
+			return status_;
+		}
 
 		// we will use a passive connection
 		query = "PASV\n";
