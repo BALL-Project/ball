@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.30 2004/03/04 13:01:20 amoll Exp $
+// $Id: molecularStructure.C,v 1.31 2004/03/04 13:02:39 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -1252,7 +1252,7 @@ namespace BALL
 				(**it2).host(information);
 				info2 += information.getName();
 
-				Log.error() << info1 << "  " << info2 << std::endl;
+				Log.error() << info1 << "  " << info2 << " : " << square_distance*square_distance << " A" << std::endl;
 				(**it1).select();
 				(**it2).select();
 
