@@ -17,21 +17,28 @@ The implementation follows (includes are omitted):
 \begin{lstlisting}{}
 class GLBoundingBoxModel: public BaseModelProcessor
 {
-public:
-	GLBoundingBoxModel() {}
-	virtual ~GLBoundingBoxModel() {}
+	public:
+		GLBoundingBoxModel() 
+			throw();
+		virtual ~GLBoundingBoxModel()
+			throw();
 
-	void setColor(const ColorRGBA &color) { color_ = color; }
+		void setColor(const ColorRGBA &color) 
+			throw();
 
-	virtual bool start();
-	virtual bool finish();
-	virtual Processor::Result operator() (Composite& composite);
+		virtual bool start()
+			throw();
+		virtual bool finish()
+			throw();
+		virtual Processor::Result operator() (Composite& composite)
+			throw();
 
-private:
-	ColorRGBA color_;
-	bool new_start_;
-	Composite* start_composite_;
-	Box3 bbox_;
+	private:
+		ColorRGBA color_;
+		bool new_start_;
+		Composite* start_composite_;
+		Box3 bbox_;
+
 };
 \end{lstlisting}
 
@@ -46,6 +53,7 @@ any information about the molecular structure the bounding box was created for.
 
 \begin{lstlisting}{}
 bool GLBoundingBoxModel::start()
+	throw()
 {
 	new_start_ = true;
 	start_composite_ = 0;
@@ -60,13 +68,14 @@ all atoms of the molecular structure are processed thus the bounding box is comp
 
 \begin{lstlisting}{}
 bool GLBoundingBoxModel::finish()
+	throw()
 {
 	Composite *root = &(start_composite_->getRoot());
 
-	if (bbox_.a == bbox_.b ||
-			!RTTI::isKindOf<System>(*root))
+	if (bbox_.a == bbox_.b || !RTTI::isKindOf<System>(*root))
+	{
 		return false;
-}
+	}
 \end{lstlisting}
 
 If the calculated box is degenerated or if the root of our start composite is
@@ -114,12 +123,17 @@ The implementation is straight forward.
 \begin{lstlisting}{}
 Processor::Result GLBoundingBoxModel::operator() 
 	(Composite &composite)
+	throw()
 {
 	if (start_composite_ == 0)
+	{
 		start_composite_ = &composite;
+	}
 
 	if (!RTTI::isKindOf<Atom>(composite))
+	{
 		return Processor::CONTINUE;
+	}
 \end{lstlisting}
 
 In this part of the code we store the start Composite so that later in the finish
@@ -139,8 +153,10 @@ is the case we tell the processor to continue.
 		bbox_ = bbox;
 		new_start_ = false;
 	}
-
-	bbox_.join(bbox);
+	else
+	{
+		bbox_.join(bbox);
+	}
 
 	return Processor::CONTINUE;
 }

@@ -32,14 +32,15 @@ defines used by BALL).
 \subsection{Benchmarks}
 
 If you want to know how fast the version of BALL is compared to other systems,
-you might want to run the benchmark suite in {\tt BALL/source/BENCHMARKS}.
-You can compile the benchmark suite with {\tt make} and then run the
-benchmarks with {\tt make bench}. Depending on your hardware and 
-whether you compiled BALL with or without optimization, running the benchmarks
-will take up to several minutes. Upon termination, it will print an overall
-number, the BALLStones. This number is a crude estimate of the performance you
-can expect for a mix of typical BALL applications. The benchmark suite
-currently includes benchmarks for the BALL kernel data structures, file I/O,
-the AMBER force field, and the Poisson-Boltzmann solver. The BALL web site
-contains a list of benchmark results for different platforms, please feel free
-to submit your results for inclusion.
+you might want to run the benchmark suite in \directory{BALL/source/BENCHMARKS}.
+You can compile the benchmark suite by changing to that directory and running
+"{\tt make}". After thta, run the benchmarks with "{\tt make bench}".
+Depending on your hardware and whether you compiled BALL with or without
+optimization, running the benchmarks will take up to several minutes. Upon
+termination, it will print an overall number, the BALLStones. This number is a
+crude estimate of the performance you can expect for a mix of typical BALL
+applications. The benchmark suite currently includes benchmarks for the BALL
+kernel data structures, file I/O, the AMBER force field, and the
+Poisson-Boltzmann solver. The BALL web site contains a list of benchmark
+results for different platforms, please feel free to submit your results for
+inclusion.

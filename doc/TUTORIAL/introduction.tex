@@ -27,7 +27,12 @@ as well as further documentation, bug reports, and changes.
 The next section of this tutorial gives a short overview of the structure and
 contents of BALL. Chapter \ref{chapter:getting-started} describes the
 installation and related issues. In Chapter \ref{chapter:first-steps}, some
-fundamental concepts and classes are explained. Finally, Chapter
+fundamental concepts and classes are explained. After that we will show how to
+use more advanced features of BALL. We will have a look at general things
+(chapter \ref{chapter:general-stuff}) and the usage of the visualization parts
+of BALL (chapters \ref{chapter:view-programming} and
+\ref{chapter:molview-programming}). Chapter \ref{chapter:python} will show you
+the mechanisms and the usage of BALL's Python bindings.  Finally, Chapter
 \ref{chapter:faq} tries to answer the most frequently asked questions.
 
 \section{Overview}
@@ -56,7 +61,7 @@ provides the functionality required for applications. We call them
 \newterm{basic components}. Each of these basic components is independent of
 the other components.  We have implemented five basic components that cover
 \Index{Molecular Mechanics}, file import/export, advanced \Index{solvation
-methods}, structure analysis/comparison, and \Index{visualization}. These
+methods}, structure analysis/comparison and \Index{visualization}. These
 areas were selected, because our main interest stems from the field of protein
 docking. The Molecular Mechanics component does not only provide standard
 force fields (AMBER~\cite{AMBER95}, CHARMM~\cite{BBO+83}), but also a generic
@@ -81,7 +86,7 @@ using OpenGL and QT~\cite{QT}. Hence, it is highly portable and enables the
 user to produce state-of-the-art graphical user interfaces with a minimum
 effort.
 
-THe fourth layer in BALL consistes of Python bindings. Python is an
+The fourth layer in BALL consistes of Python bindings. Python is an
 object-oriented scripting language that is easy to learn and very readable.
 BALL provides Python bindings for most of its classes, which allow the use of
 the BALL \CPP classes from Python. This approach drastically reduces the

@@ -1,93 +1,113 @@
+The visualization part of BALL is divided into two parts, namely {\tt VIEW}
+and {\tt MOLVIEW}. {\tt VIEW} is responsible for general visualization tasks
+while {\tt MOLVIEW} focuses on molecular visualization tasks. This part of the
+tutorial will deal with {\tt VIEW} and explain how to use it for creating BALL
+applications with visualization.
 
-This tutorial will show you how to implement geometric primitives and dialogs/widgets.
-In VIEW there are a number of predefined geometric primitives already available,
-e.g. {\em GLSphere}, {\em GLTube} etc. More often there is the case that a needed
-primitive is not available and therefore must be programmed anew. The first part
-of this tutorial will show how this is achieved. A new primitive, the cross, will
-be introduced.\\
-Another crucial step in implementing an application is the programming of
-dialogs or widgets, their interaction with the other widgets and the integration into
-the main application. In the second part we will discuss the creation of a dialog 
-that will have all the above properties.
+Visualization not only covers the graphical representation of things (\eg
+molecules, measurement data, \dots) but also the graphical user interface
+(GUI). Both jobs can be done using {\tt VIEW} functionality. Both areas are
+discussed in the next few sections. First we will learn how to create
+geometric primitives one can use for graphical representations. After that
+building a GUI will be shown by creating a user dialog as example.
+
+Let us turn to the graphical representation. In VIEW there are a number of
+predefined geometric primitives already available, \eg {\em GLSphere}, {\em
+GLTube} etc. But sometimes a needed primitive may not be available and
+therefore must be programmed anew. So now we will show how this can be
+achieved. A new primitive, the cross, will be introduced.
 
 \section{How to create a geometric primitive}
 \label{section:view_create_a_geometric_primitive}
 
 In this section we want to create a new geometric primitive called 'cross'.
-A cross is a shape that consists of three lines that merge in one point.
-The lines are each axis aligned and meet each other in the middle.
-To accomplish this we need three additional properties for the geometric object:
-first the class {\em Radius} that describes the half length of each line,
-second the class {\em Vertex} for the middle point of the geometric primitive
-and third the class {\em ColorExtension} which contains methods for changing
-the color of the cross.
-In addition to these classes we need the main base classes for creating a geometric
-primitive. These are: {\em GeometricObject} which implements the interface each
-geometric shape must have and {\em GLObject} which is needed because of the drawing
-methods that must be overridden.\\
-The implementation of the class GLCross follows (includes are omitted):
+We define a cross to be a shape that consists of three lines that merge in one
+point. Additionally we require all lines to be axis aligned and meet each
+other in the middle.
 
+To accomplish this we need three properties for the geometric object: the
+class \class{Radius} that describes the half length of each line, the class 
+\class{Vertex} for the middle point of the geometric primitive and the class 
+\class{ColorExtension} which contains methods for changing the color of the
+cross. In addition to these classes we need the main base classes for
+creating a geometric primitive. These are: \class{GeometricObject} which
+implements the interface each geometric shape must have and \class{GLObject}
+which defines the drawing interface.
+
+The definition of \class{GLCross} looks as follows:
 \begin{lstlisting}{}
 class GLCross: 
-	public GeometricObject,
 	public ColorExtension,
 	public Radius,
 	public Vertex,
+	public GeometricObject,
 	public GLObject
 {
-public:
+	public:
 
-	GLCross() {}
-	virtual ~GLCross() {}
+		GLCross()
+			throw();
+		virtual ~GLCross()
+			throw();
 
-protected:
+	protected:
 
-	virtual bool draw(bool with_names = false);
+		virtual bool draw(bool with_names = false)
+			throw();
 };
 \end{lstlisting}
+As this object is derived from all the base classes, we only need to implement
+a standard constructor, the destructor and a method for drawing the object on
+the screen. \footnote{The copy constructor and the copy assignment methods
+have been omitted because they are not crucial to the implementation of a
+primitive.} All additional functionality is povided by inheritance.
 
-The copy constructor and the copy assignment methods have been omitted because
-they are not crucial to the implementation of a primitive. 
-We have a closer look to the implementation of the drawing method.
-We use OpenGL code in this method to create the cross.
-
+We will now have a closer look at the implementation of the drawing method. We
+use OpenGL code in this method to create the cross. First we check whether
+this object needs to be drawn at all. If the property of the primitive is set
+to {\em PROPERTY\_\_OBJECT\_HIDDEN} than \method{draw} must not draw it, but
+return.
 \begin{lstlisting}{}
 bool GLCross::draw(bool with_names)
+	throw()
 {
 	if (hasProperty(GeometricObject::PROPERTY__OBJECT_HIDDEN))
+	{
 		return true;
+	}
 \end{lstlisting}
-
-If the property of the primitive is set to {\em PROPERTY\_\_OBJECT\_HIDDEN} than
-do not draw it. 
-
+If the primitive is selected we use the color assigned to selected items.
+Otherwise we use the color that was assigned to this object with the method
+\method{setColor}.
 \begin{lstlisting}{}
 	if (isSelected() == false)
+	{
 		glColor4ub((unsigned char)getColor().getRed(),
 							 (unsigned char)getColor().getGreen(),
 							 (unsigned char)getColor().getBlue(),
 							 (unsigned char)getColor().getAlpha());
+	}
 	else
+	{
 		glColor4ub((unsigned char)getSelectedColor().getRed(),
 							 (unsigned char)getSelectedColor().getGreen(),
 							 (unsigned char)getSelectedColor().getBlue(),
 							 (unsigned char)getSelectedColor().getAlpha());
+	}
 \end{lstlisting}
-
-If the primitive is selected than use the selected color. Otherwise
-we use the color set with the method {\em setColor}.
-
+If we want to allow our primitive to be picked we have to add the following
+code to the \method{draw} method in order to obtain a unique name by which the
+object can be identified later. The method \method{glLoadName} is a method
+of the OpenGL library which assigns the identifying name. To assure that the
+names are unique we use the name generating facility the class 
+\class{GLPrimitiveManager} provides.
 \begin{lstlisting}{}
 	if (with_names)
+	{
 		glLoadName(getGLPrimitiveManager()->getName(*this));
+	}
 \end{lstlisting}
-
-If we want to allow our primitive to be picked than we have to add this code
-to the draw method. The method {\em glLoadName} is a method from the OpenGL
-library. This method sets the name of the primitive so that it can be identified
-later. To assure that the names are unique we use the name generating facility the class
-{\em GLPrimitiveManager} provides.
-
+The last part of the method contains the OpenGL code for rendering the cross.
 \begin{lstlisting}{}
 	glBegin(GL_LINES);
 	glVertex3f((GLfloat)(getVertex().x - getRadius()),
@@ -115,86 +135,106 @@ later. To assure that the names are unique we use the name generating facility t
 	return true;
 }
 \end{lstlisting}
-
-The last part of the method contains the OpenGL code for rendering the cross.
-We use three lines to create the cross. All have the vertex as the middle point
-and extend half the radius in each axis direction.
-
-Now we are finished and can use the new shape by appending it to a {\em Composite}
-object. It will be properly rendered.
-
+Now we are finished and can use the new shape by appending it to a 
+\class{Composite} object. It will then be properly rendered.
 
 \section{Construction of a dialog}
 \label{section:view_construction_of_a_dialog}
 
-In this tutorial we discuss the creation of a dialog. The construction of a widget
-is equally easy. Just swap the base class QDialog with the base class QWidget.
-That should do the trick.
-The construction of a dialog/widget is somewhat complicated because of the many
-actions it can perform.
-A dialog can have menu entries in the main application (derived from the {\em MainControl}),
-uses preferences tab widgets inserted into the {\em Preferences} dialog and can react to
-messages sent from other dialogs/widgets (see {\em Message} and {\em ModularWidget}).
-We want to create a dialog which have all of the above properties.\\
-The menu entry our dialog should have will toggle the visibility of the dialog. Further
-if the dialog is visible the menu entry will be checked, otherwise it will not be checked.
-The preference tab widget has only a color control whose contents can be changed. This contents
-will be written to and read from the {\em INIFile} the main application keeps.
-The {\em Message} that should trigger some effect will be the message {\em SelectionMessage}
-that is sent by the class {\em Control} whenever the selection changes.
-To accomlish all these things we have to override certain methods and create a preferences tab
-widget.\\ \\
-First we have a look to the header file of our dialog (includes are omitted):
+A crucial step in implementing an application is the programming of dialogs or
+widgets, their interaction with other widgets and the integration into the
+main application. We will now discuss the creation of a dialog that will have
+all the above properties. A widget can be created in a similar manner, by
+exchanging the \class{QDialog} base class with the \class{QWidget} class. That
+should do the trick.
 
+The construction of a dialog/widget is somewhat complicated because of the
+many actions it can perform. A dialog can have menu entries in the main
+application (derived from the \class{MainControl}), uses preferences tab
+widgets inserted into the \class{Preferences} dialog and can react to messages
+sent from other dialogs/widgets (see \class{Message} and
+\class{ModularWidget}). We want to create a dialog which have all of the
+above properties.
+
+The menu entry our dialog will toggle the visibility of the dialog itself.
+Additionally the menu entry will be checked if the dialog is visible,
+otherwise it will not be checked. The preference tab widget has only a color
+control the contents of which can be changed. Its contents will be written to
+and read from the \class{INIFile} the main application keeps. The
+\class{Message} that should trigger some effect will be the message {\em
+SelectionMessage} that is sent by the class \class{Control} whenever the
+selection changes. To accomlish all these things we have to override certain
+methods and create a preferences tab widget.
+
+First we have a look to the header file of our dialog (includes are omitted).
+See \class{ModularWidget} for information about the various methods that must
+be overridden.
 \begin{lstlisting}{}
 class TestDialog: public QDialog, public ModularWidget
 {
 	Q_OBJECT
 
-public:
+	public:
 
-	TestDialog(QWidget* parent = 0, const char* name = 0);
-	virtual ~TestDialog() {}
+		TestDialog(QWidget* parent = 0, const char* name = 0)
+			throw();
+		virtual ~TestDialog()
+			throw();
 
-	virtual void initializeWidget(MainControl& main_control);
-	virtual void checkMenu(MainControl& main_control);
-	virtual void finalizeWidget(MainControl& main_control);
-	virtual void initializePreferencesTab(Preferences &preferences);
-	virtual void finalizePreferencesTab(Preferences &preferences);
-	virtual void applyPreferences(Preferences &preferences);
-	virtual void fetchPreferences(INIFile &inifile);
-	virtual void writePreferences(INIFile &inifile);
-	virtual void onNotify(Message *message);
+		virtual void initializeWidget(MainControl& main_control)
+			throw();
+		virtual void checkMenu(MainControl& main_control)
+			throw();
+		virtual void finalizeWidget(MainControl& main_control)
+			throw();
+		virtual void initializePreferencesTab(Preferences &preferences)
+			throw();
+		virtual void finalizePreferencesTab(Preferences &preferences)
+			throw();
+		virtual void applyPreferences(Preferences &preferences)
+			throw();
+		virtual void fetchPreferences(INIFile &inifile)
+			throw();
+		virtual void writePreferences(INIFile &inifile)
+			throw();
+		virtual void onNotify(Message *message)
+			throw();
 
-protected slots:
-			
-	void applyButtonClicked() {};
-	void openDialog();
+	protected slots:
+				
+		void applyButtonClicked()
+			throw();
+		void openDialog()
+			throw();
 
-private:
+	private:
 
-	TestPreferences *test_preferences_;
-	QPushButton *apply_button_;
-	int id_;
-	List<Composite*> selection_;
-	ColorRGBA color_;
+		TestPreferences *test_preferences_;
+		QPushButton *apply_button_;
+		int id_;
+		List<Composite*> selection_;
+		ColorRGBA color_;
 };
 \end{lstlisting}
 
-See {\em ModularWidget} for information about the various methods that must be
-overridden.
-Now we discuss the implementation of these methods:\\
-
-Before we handle the initialization, update and the removal of the menu entries lets
-have a look to the implementation of the constructor.
-
+Now we discuss the implementation. Before we handle the initialization,
+update and the removal of the menu entries let's have a look to the
+implementation of the constructor. First we set the caption of this dialog
+and register it as a modular widget. This action is very important because it
+creates the internal mechanism that connects all widgets with each other. If
+you create own dialogs/widgets always make sure this method is called.
 \begin{lstlisting}{}
 TestDialog::TestDialog(QWidget* parent, const char* name)
+	throw()
 	: QDialog(parent, name, FALSE, 2768)
 {
 	setCaption("TestDialog");
 	ModularWidget::registerWidget(this);
-
+\end{lstlisting}
+The next thing we do is create an apply button and connect it to our created
+slot \member{applyButtonClicked}{TestDialog}. For information about the
+signal/slot mechanism see the QT-library documentation.
+\begin{lstlisting}{}
 	apply_button_ = new QPushButton(this, "apply_button");
 	apply_button_->setGeometry(10, 25, 110, 30);
 	apply_button_->setText( tr( "&Apply" ) );
@@ -205,27 +245,21 @@ TestDialog::TestDialog(QWidget* parent, const char* name)
 }
 \end{lstlisting}
 
-First we set the caption of this dialog than we register this dialog as a modular
-widget. This action is very important because it creates the internal mechanism
-that connects all widgets with each other. If you create own dialogs/widgets always
-make sure this method is called.
-The next thing we do is to create an apply button and connect it to our created slot
-{\em applyButtonClicked}. For information about signal/slot mechanism see the QT-
-library documentation.\\
-
-In this method we create the menu entry for our dialog and connect it to a slot
-that will open our dialog.
-
+The next method creates the menu entry for our dialog and connects it to a slot
+that will open our dialog. First we create the menu {\em DISPLAY} if it is not
+already created and set the flag {\em checkable} to assure that all entries
+can have a check flag.
 \begin{lstlisting}{}
 void TestDialog::initializeWidget(MainControl& main_control)
+	throw()
 {
 	(main_control.initPopupMenu(MainControl::DISPLAY))
 		->setCheckable(true);
 \end{lstlisting}
-
-First we create the menu {\em DISPLAY} if it is not already created and set
-the flag {\em checkable} to assure that all entries can have a check flag.
-
+Then we create the menu entry {\em Test Dialog} in the menu {\em DISPLAY} and
+connect it with the slot \member{openDialog}{TestDialog}. The id we get from
+this method is stored in the variable \member{id\_}{TestDialog}. We need this
+id to check the menu entry if this dialog is open.
 \begin{lstlisting}{}
 	id_ = main_control.insertMenuEntry
 					 (MainControl::DISPLAY, "&Test Dialog", this,
@@ -233,23 +267,21 @@ the flag {\em checkable} to assure that all entries can have a check flag.
 }
 \end{lstlisting}
 
-Then we create the menu entry {\em Test Dialog} in the menu {\em DISPLAY}
-and connect it with the slot {\em openDialog}. The id we get from this method is
-stored in the variable {\em id\_}. We need this id to check the menu entry if
-this dialog is open.
-
+The method \method{checkMenu} is used to check or uncheck the menu entry
+according to the visibility of our dialog.
 \begin{lstlisting}{}
 void TestDialog::checkMenu(MainControl& main_control)
+	throw()
 {
 	(main_control.menuBar())->setItemChecked(id_, isVisible());
 }
 \end{lstlisting}
 
-The method checkMenu is used to check or uncheck the menu entry according to the
-visibility of our dialog.
-
+Finally, if the dialog is to be destroyed the menu entry will be removed from
+the main application (derived from {\em MainControl}).
 \begin{lstlisting}{}
 void TestDialog::finalizeWidget(MainControl& main_control)
+	throw()
 {
 	main_control.removeMenuEntry
 		(MainControl::DISPLAY, "&Test Dialog", this,
@@ -257,54 +289,56 @@ void TestDialog::finalizeWidget(MainControl& main_control)
 }
 \end{lstlisting}
 
-And last if the dialog is to be destroyed the menu entry will be removed from
-the main application (derived from {\em MainControl}).\\
-
-In these methods it as also possible to do other initialization or menu handling stuff.
+In the above methods it as also possible to do other initialization or menu handling stuff.
 It is even possible to add, update and remove more menu entries (for each menu entry
 there must be a slot to be connected to).
-For information about signal/slot mechanism see the QT-library documentation.\\
 
-After the widget stuff we have a close look to the insertion of the preferences tab widget.
-First we need a preferences tab widget.
-
+We will now have a close look at the insertion of the preferences tab widget.
+First we need the definition of a preferences tab widget:
 \begin{lstlisting}{}
-class TestPreferences : public QWidget
+class TestPreferences 
+	: public QWidget
 {
 	Q_OBJECT
 		
-public:
+	public:
 
-	TestPreferences(QWidget *parent = NULL, 
-									const char *name = NULL );
-	virtual ~TestPreferences() {}
-	
-	void fetchPreferences(INIFile& inifile);
-	void writePreferences(INIFile& inifile);
+		TestPreferences(QWidget *parent = NULL, const char *name = NULL )
+			throw();
+		virtual ~TestPreferences()
+			throw();
+		
+		void fetchPreferences(INIFile& inifile)
+			throw();
+		void writePreferences(INIFile& inifile)
+			throw();
 
-	ColorRGBA getColor() const { return custom_color_; }
+		ColorRGBA getColor() const 
+			throw();
 
-public slots:
+	public slots:
 
-	virtual void editColor();
+		virtual void editColor()
+			throw();
 
-private:
+	private:
 
-	QLabel *color_sample_;
-	ColorRGBA custom_color_;
+		QLabel *color_sample_;
+		ColorRGBA custom_color_;
 };
 \end{lstlisting}
 
 In this tab widget only the contents of the color label can be changed.
-This contents will be written to and read from the inifile of the main application.
-This widget creates a label and an edit button. The label has no text but is
+This preference will be written to and read from the inifile of the main application.
+The widget creates a label and an edit button. The label has no text but is
 actually only a rectangle with a background color. The edit button opens a dialog
 in which the color can be changed. This dialog is predefined in QT.
 In the constructor we create these widgets.
-
+The following code creates the edit button and connects it to the slot \member{editColor}{}.
 \begin{lstlisting}{}
-TestPreferences::TestPreferencesi
+TestPreferences::TestPreferences
 	(QWidget* parent, const char* name)
+	throw()
 	: QWidget(parent, name, 0)
 {
 	QPushButton* edit_button 
@@ -313,9 +347,8 @@ TestPreferences::TestPreferencesi
 	edit_button->setText( tr( "&Edit" ) );
 	connect(edit_button, SIGNAL(clicked()), SLOT(editColor()));
 \end{lstlisting}
-
-This creates the edit button and connects it to the slot {\em editColor}.
-	
+Now we create the label and resize the whole widget to the needed size. This
+size is related to the size of the \class{Preferences} dialog.
 \begin{lstlisting}{}
 	color_sample_ = new QLabel(this, "color_sample__label");
 	color_sample_->setGeometry(20, 30, 70, 30);
@@ -325,58 +358,55 @@ This creates the edit button and connects it to the slot {\em editColor}.
 }
 \end{lstlisting}
 
-The last initialization we perform in the constructor is the creation of the
-label. Then we resize the widget to the needed size. This size is related to the
-size of the {\em Preferences} dialog.
 The next methods we will discuss are the methods responsible for reading and
-writing the contents of this widget into the inifile.\\
-
-This method reads the preferences from the inifile.
-
+writing the contents of this widget into the inifile. First we look at the
+method respnsible form reading the preferences.
+If the inifile has the section {\tt WINDOWS} and the key {\tt Test::color} then
+we read the contents of this key and convert it to a color which we store in
+\member{custom\_color\_}{} (see \class{ColorRGBA}). Additionally we assign the color to the label to be displayed in the widget.
 \begin{lstlisting}{}
 void TestPreferences::fetchPreferences(INIFile& inifile)
+	throw()
 {
 	if (inifile.hasEntry("WINDOWS", "Test::color"))
 	{
 		custom_color_.set(inifile.getValue("WINDOWS", "Test::color"));
-		color_sample_->setBackgroundColor(QColor(custom_color_.getRed(), 
-																						 custom_color_.getGreen(), 
-																						 custom_color_.getBlue()));
+		color_sample_->setBackgroundColor
+			(QColor(custom_color_.getRed(), 
+			 custom_color_.getGreen(), 
+			 custom_color_.getBlue()));
 	}
 }
 \end{lstlisting}
-
-If the inifile has the section {\tt WINDOWS} and the key {\tt Test::color} then
-we read the contents of this key and convert it to a color which we store in the
-{\em custom\_color\_} (see {\em ColorRGBA}). Additionally we set the color in the label to be displayed
-in the widget.\\
 
 To write the preferences to the inifile we override this method.
 
 \begin{lstlisting}{}
 void TestPreferences::writePreferences(INIFile& inifile)
+	throw()
 {
 	inifile.setValue("WINDOWS", "Test::color", custom_color_);
 }
 \end{lstlisting}
 
 {\em Note:} It is important that the section {\tt WINDOWS} and the key {\tt Test::color} are
-already inserted into the inifile else the inifile will not insert the color
-into it. See {\em INIFile} for further information.\\
+already inserted into the inifile, else the inifile will not store the color.
+See \class{INIFile} for further information.
 
-The last method of the preferences tab widget is the method {\em editColor} that
+The last method of the preferences tab widget is the \method{editColor} that
 is called if the edit button is pressed.
-
 \begin{lstlisting}{}
 void BoundingBoxPreferences::editColor()
+	throw()
 {
 	color_sample_->setBackgroundColor(
 			QColorDialog::getColor(color_sample_->backgroundColor()));
 \end{lstlisting}
-
-Here we call the dialog {\em QColorDialog} where we can change the color. If this
-dialog was exited by pressing the ok button we transfer the color into the color label.
-
+First we call the dialog \class{QColorDialog} where we can change the color.
+If this dialog was exited by pressing the ok button we transfer the color into
+the color label.  Then we convert the \class{QColor} into a \class{ColorRGBA}
+which we store in the variable \member{custom\_color\_}{} so that we can
+access this color with the method \method{getColor}.
 \begin{lstlisting}{}
 	ColorRGBA color;
 	QColor qcolor = color_sample_->backgroundColor();
@@ -388,45 +418,45 @@ dialog was exited by pressing the ok button we transfer the color into the color
 }
 \end{lstlisting}
 
-Now we convert the {\em QColor} into a {\em ColorRGBA} which we store in the
-variable {\em custom\_color\_} so that we can access this color with the method
-{\em getColor}.\\
 
-Now that we have created the preferences tab widget we can implement the methods that 
-are needed in our dialog to install this preferences tab widget.\\ 
+Now that we have created the preferences tab widget we can implement the
+methods that are needed in our dialog to install this preferences tab widget.
 
-In this method the preferences tab widget will be initialized and inserted into the
-{\em MainControl}
-
+In this method the preferences tab widget will be initialized and inserted
+into the {\em MainControl}.
+We create a new \class{TestPreferences} instance and insert it as a tab widget
+it into the \class{Preferences} dialog with name {\tt TestPreferences}.
 \begin{lstlisting}{}
 void TestDialog::initializePreferencesTab(Preferences &preferences)
+	throw()
 {
 	test_preferences_ = new TestPreferences();
 	preferences.insertTab(test_preferences_, "TestPreferences");
 }
 \end{lstlisting}
 
-We create a new {\em TestPreferences} and insert as a tab widget it into the 
-{\em Preferences} dialog with name {\tt TestPreferences}.
-
+The following method is called from {\em MainControl} if the apply button in
+the \class{Preferences} dialog is pressed.  In this method we transfer the
+color from the preferences tab widget into the private member \member{color\_}
+for later usage.
 \begin{lstlisting}{}
 void TestDialog::applyPreferences(Preferences &)
+	throw()
 {
 	if test_preferences_ != 0)
+	{
 		color_ = test_preferences_->getColor();
+	}
 }
 \end{lstlisting}
 
-This method is called from {\em MainControl} if the apply button in the {\em Preferences} dialog
-is pressed.
-In this method we transfer the color from the preferences tab widget into the private
-variable {\em color\_} for later usage.\\
-
-Removal of the preferences tab widget from the {\em MainControl} and freeing of used
-memory.
-
+Removal of the preferences tab widget from the {\em MainControl} and freeing
+of used memory: This method will be called by the {\em MainControl} if the
+application is closed. We remove our preferences tab widget from the
+preferences dialog and delete it afterwards.
 \begin{lstlisting}{}
 void TestDialog::finalizePreferencesTab(Preferences &preferences)
+	throw()
 {
 	if (test_preferences_ != 0)
 	{
@@ -436,34 +466,36 @@ void TestDialog::finalizePreferencesTab(Preferences &preferences)
 }
 \end{lstlisting}
 
-This method will be called by the {\em MainControl} if the application is closed. We
-remove our preferences tab widget from the preferences dialog and delete it afterwards.\\
-
 To relay fetch and write actions to the preferences tab widget we must override
-the same methods in the dialog.\\
-This method reads the preferences of our dialog from the inifile and calls
-the same method of the preferences tab widget.
-
+the same methods in the dialog.  We read the preferences of our dialog from
+the inifile and call the same method of the preferences tab widget.
 \begin{lstlisting}{}
 void TestDialog::fetchPreferences(INIFile& inifile)
+	throw()
 {
 	int x_pos = x();
 	int y_pos = y();
 
 	if (inifile.hasEntry("WINDOWS", "Test::x"))
+	{
 		x_pos = inifile.getValue("WINDOWS", "Test::x").toInt();
+	}
 
 	if (inifile.hasEntry("WINDOWS", "Test::y"))
+	{
 		y_pos = inifile.getValue("WINDOWS", "Test::y").toInt();
+	}
 
 	move(x_pos, y_pos);
 \end{lstlisting}
+Above we read the position of our dialog from the inifile and convert it into
+integer. If the needed keys do not exist in the inifile we use the position of
+our dialog (see QT-library documentation for further informations). If we have
+a valid position we move our dialog to this position.  
 
-Here we read the position of our dialog from the inifile and convert it into
-integer. If the needed keys do not exist in the inifile we use the position
-of our dialog (see QT-library documentation for further informations). If
-we have a valid position we move our dialog to this position.
-
+If a preferences tab
+widget exists we fetch its preferences from the inifile and retrieve the color
+from it.
 \begin{lstlisting}{}
 	if (test_preferences_ != 0)
 	{
@@ -473,61 +505,64 @@ we have a valid position we move our dialog to this position.
 }
 \end{lstlisting}
 
-If a preferences tab widget exists we fetch its preferences from the inifile and
-retrieve the color from it.\\
 
-To write the preferences to the inifile we override this method. In this method we
-write all preferences this dialog has to the inifile and call the same method
-for our preferences tab widget.
-
+To write the preferences to the inifile we override this method. In this
+method we write all preferences this dialog has to the inifile and call the
+same method for our preferences tab widget.
 \begin{lstlisting}{}
 void TestDialog::writePreferences(INIFile& inifile)
+	throw()
 {
 	inifile.setValue("WINDOWS", "Test::x", String(x()));
 	inifile.setValue("WINDOWS", "Test::y", String(y()));
 \end{lstlisting}
 
-With the method {\em setValue} we set the position of our dialog into the inifile.\\
+With the method \method{setValue} we set the position of our dialog into the inifile.
 {\em Note:} this method only works if the section {\tt WINDOWS} and the keys
 {\tt Test::x} and {\tt Test::y} are already inserted into the inifile.
-
 \begin{lstlisting}{}
 	if (test_preferences_ != 0)
+	{
 		test_preferences_->writePreferences(inifile);
+	}
 }
 \end{lstlisting}
+If our preferences tab widget exists we write its preferences into the inifile
+as well.
 
-If our preferences tab widget exists we write its preferences into the inifile as well.\\
-
-The only thing that must be implemented yet is the mechanism that handles any
-messages received from our dialog.
-This is done in the method {\em onNotify}. 
-
+The only thing that still must be implemented is the mechanism that handles
+any messages received from our dialog. This is done in the method
+\method{onNotify}. 
 \begin{lstlisting}{}
 void TestDialog::onNotify(Message *message)
+	throw()
 {
 	selection_.clear();
 
 	if (RTTI::isKindOf<SelectionMessage>(*message))
+	{
 		selection_ = (RTTI::castTo<SelectionMessage>(*message))
 										->getSelection();
+	}
 \end{lstlisting}
-
-First we clear our previously stored selection then we perform a runtime type identification
-of the received message and react only if the message is of kind {\em SelectionMessage}.
-	
+First we clear our previously stored selection then we perform a runtime type
+identification of the received message and react only if the message is of
+type {\em SelectionMessage}.
 \begin{lstlisting}{}
 	if (selection_.empty())
+	{
 		apply_button_->setEnabled(false);
+	}
 	else
+	{
 		apply_button_->setEnabled(true);
+	}
 }
 \end{lstlisting}
+We enable the apply button in our dialog if the selection list contains any
+elements. Otherwise we disable it.
 
-We enable the apply button in our dialog if the selection list contains any elements.
-Otherwise we disable it.\\
-
-Now we are finished with the construction of this dialog. It can be added to the main application
-by creating it with a pointer to the application ({\em MainControl}) as
-parent.
+Now we are finished with the construction of this dialog. It can be added to
+the main application by creating it with a pointer to the application ({\em
+MainControl}) as parent.
 

@@ -3,12 +3,13 @@
 \subsection{Compiler}
 \index{compiler}
   BALL requires a (more or less) ANSI compliant \CPP compiler.
-  (version above 2.95 or above).
   It has been successfully built and tested on the following platforms:
 	\begin{itemize}	
-   	\item Linux/x86 2.x using g{\tt ++} 3.0
+   	\item Linux/x86 2.x using g{\tt ++} 2.95.3
+   	\item Linux/x86 2.x using g{\tt ++} 3.0.3
    	\item Linux/x86 2.x using Kuck \& Associate (KAI) \CPP 4.0
    	\item Solaris/SPARC 8 using g{\tt ++} 2.95.3
+   	\item Solaris/SPARC 8 using g{\tt ++} 3.0.3
    	\item Solaris/SPARC 8 using Kuck \& Associate (KAI) \CPP 4.0
    	\item IRIX 6.5 using CC 7.3.1.1m (32 and 64 bit)
    	\item Compaq Tru64 Unix V4.0f using Compaq \CPP 6.3
@@ -21,11 +22,11 @@ the QT library (version 2.3.2) which is available from
 
 If QT was not installed in one of the standard library paths or the
 QT header files were not installed in one of the compiler's default
-include directories, use "\option{--with-qt-libs}{\tt{}=DIR}" and
-"\option{--with-qt-incl}{\tt{}=DIR}" as
+include directories, use \mbox{"\option{--with-qt-libs}{\tt{}=DIR}"} and
+\mbox{"\option{--with-qt-incl}{\tt{}=DIR}"} as
 options to configure (see Section \ref{section:building-ball}) to specify the paths
 QT was installed to.\index{QT}
-Please remember to compile also \file{libqgl.a}, which is one of the QT extensions
+Please remember to compile also \file{libqgl.so}, which is one of the QT extensions
 (to build \file{libqgl.a}, cd to {\tt\nobreak{\$QTDIR/extensions/opengl/src}} and type {\tt
 make}).
 
@@ -36,8 +37,9 @@ very similar to that of OpenGL. It can be obtained from \URL{http://www.mesa3d.o
 
 To use the Python extensions of BALL (Python is an object oriented scripting
 language), you will also need Python 2.1 installed
-(\URL{http://www.python.org}) and a special version of SIP 3.0distributed through 
-our website (\URL{http://www.mpi-sb.mpg.de/BALL/}). 
+(\URL{http://www.python.org}) and a special version of SIP 3.0 distributed through 
+our website (\URL{http://www.mpi-sb.mpg.de/BALL/}). SIP is a tool for
+generating Python bindings for C++ class libraries.
 
 Please make sure that the required external \CPP libraries (i.e. QT and SIP)
 have been compiled with the same compiler (and compiler version!) as the BALL
@@ -80,7 +82,7 @@ An overview of these options can also be obtained by executing "{\tt configure
 
   \option{--enable-optimization}&          optimize the library for speed, remove debug info\\\vspace{3mm}
 
-  \option{--enable-debuginfo}&             add -g to the compiler flags (to create debug information)\\\vspace{3mm}
+  \option{--enable-debuginfo}&             create debug information\\\vspace{3mm}
 
   \option{--disable-BALLVIEW}&             disable the compilation of BALLVIEW, the visualization
                                            component\\\vspace{3mm}
@@ -193,13 +195,13 @@ like this:
 
 \subsection{Building the Libraries}
 
-After the successful termination of configure, "make" builds the shared libraries.
-There exist three different libraries:
+After the successful termination of configure, issuing "make" will build the
+shared libraries. Three different libraries will be built:
 \begin{center}
 	\begin{tabular}{ll}
   	\file{libBALL.so}&     the main BALL library\\
   	\file{libVIEW.so}&     the visualization component BALLVIEW\\
-	  \file{libMOLVIEW.so}&  the molecule--related stuff of BALLVIEW\\
+	  \file{libMOLVIEW.so}&  the molecule--related part of BALLVIEW\\
 	\end{tabular}
 \end{center}
 
@@ -208,7 +210,7 @@ cannot find X libraries, OpenGL libraries, or QT libraries (and the respective h
 
 It is also possible (although not recommended) to build the corresponding static libraries
 \file{libBALL.a}, \file{libVIEW.a}, and \file{libMOLVIEW.a} using "{\tt make
-staticlibs}".
+staticlibs}". Please note that statically linked binaries are huge.
 
 \subsection{Installing the Libraries}
 

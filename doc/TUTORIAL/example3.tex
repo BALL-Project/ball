@@ -3,7 +3,7 @@
 \index{Energy minimization}
 \index{optimizing hydrogens}
 
-Having introduced the basic of handling proteins in the last
+Having introduced the basics of handling proteins in the last
 chapter, we now turn towards real-life examples: getting a protein
 from the PDB and performing a molecular dynamics simulation with it.
 Again, we will be using BPTI, reading to from a PDB file as in the
@@ -26,9 +26,9 @@ templates in the \class{FragmentDB}, we can identify the missing bonds
 and hydrogen atoms. A matching between atoms is computed based on the names,
 so the atom names have to adhere to the PDB naming convention.
 For deviating naming schemes, \class{FragmentDB} provides a member instance
-\member{normalize\_names}, which tries to convert the names to the PDB 
-naming convention. \member{normalize\_names} is a processor, so we
-can \member{apply} it to any given kernel data structure:
+\member{normalize\_names}{}, which tries to convert the names to the PDB 
+naming convention. \member{normalize\_names}{} is a processor, so we
+can \member{apply}{} it to any given kernel data structure:
 
 \begin{lstlisting}{}
 	FragmentDB db;
@@ -38,9 +38,9 @@ can \member{apply} it to any given kernel data structure:
 \noindent
 Instantiating \class{FragmentDB} usually takes a few seconds to parse the 
 fragment database and the naming conversion tables. The corresponding data is
-using the \member{add\_hydrogens} processor and rebuild the missing bonds
+using the \member{add\_hydrogens}{} processor and rebuild the missing bonds
 stored in \directory{BALL/data/Fragments}. Now we will add the missing hydrogens 
-using the \member{build\_bonds} processor:
+using the \member{build\_bonds}{} processor:
 
 \begin{lstlisting}{}
 	S.apply(db.add_hydrogens);

@@ -15,23 +15,24 @@ To start the construction of a water molecule, we first create an (empty)
 \end{lstlisting}
 	
 \noindent
-Atoms have a number of attributes. These attributes are set to their defaults
-for our new atom. The following table lists the attributes of an atom along
-with its \newtermdef{accessors} (methods to access or modify an attribute) and
-default values.
+Atoms have a number of attributes. As we created this atom without specifying
+any of its properties, these attributes are set to their defaults. The
+following table lists the attributes of an atom along with its
+\newtermdef{accessors} (methods to access or modify an attribute) and default
+values.
 \begin{center}
-	\begin{tabular}{llc}
-	attribute		&	accessors     		& default\\
+	\begin{tabular}{lllc}
+	attribute		&	type				& accessors     						& default\\
 	\hline
-	name				& set/getName				& {\tt ""}\\
-	element			& set/getElement    & {\tt Element::UNKNOWN}\\
-	charge			& set/getCharge			& 0.0\\
-	radius			& set/getRadius			& 0.0\\
-	type name   & set/getTypeName   & {\tt ""}\\
-	type        & set/getType       & {\tt Atom::INVALID\_TYPE}\\
-	position    & set/getPosition   & (0, 0, 0)\\
-	velocity    & set/getVelocity   & (0, 0, 0)\\
-	force		    & set/getForce		  & (0, 0, 0)
+	name				& String			& setName,getName						& {\tt ""}\\
+	element			& Element			& setElement,getElement			& {\tt Element::UNKNOWN}\\
+	charge			& float				& setCharge,getCharge				& 0.0\\
+	radius			& float				& setRadius,getRadius				& 0.0\\
+	type name   & String			& setTypeName,getTypeName		& {\tt ""}\\
+	type        & Atom::Type	& setType,getType						& {\tt Atom::INVALID\_TYPE}\\
+	position    & Vector3			& setPosition,getPosition		& (0, 0, 0)\\
+	velocity    & Vector3			& setVelocity,getVelocity		& (0, 0, 0)\\
+	force		    & Vector3			& setForce,getForce					& (0, 0, 0)
 	\end{tabular}
 \end{center}
 
@@ -42,11 +43,11 @@ For example, we can assign the \Index{element} for our new atom:
 	oxygen->setElement(PTE[Element::O]);
 \end{lstlisting}
 
-
 \noindent
 The expression {\tt PTE[\class{Element}::O]} returns an instance of class
 \class{Element}. It is assigned to our atom using the \method{setElement}
-method. We leave our it at the default position (0, 0, 0) and create two hydrogen atoms:
+method. We leave our new atom at the default position (0, 0, 0) and create two
+new atoms, which will be the still missing hydrogen atoms:
 
 \begin{lstlisting}{}
 	Atom* hydrogen1 = new Atom;
@@ -104,19 +105,19 @@ atoms in the molecule or the number of bonds for each atom:
 \begin{lstlisting}{}
 	cout << "# of atoms in water: " 
  			 << water->countAtoms() << endl;
-	cout << "# of bonds in O: " 
+	cout << "# of bonds of oxygen: " 
 			 << oxygen->countBonds() << endl;
-	cout << "# of atoms in H1: " 
+	cout << "# of bonds of hydrogen1: " 
 		   << hydrogen1->countBonds() << endl;
-	cout << "# of atoms in H2: " 
+	cout << "# of bonds of hydrogen2: " 
 			 << hydrogen2->countBonds() << endl;
 \end{lstlisting}
 
 \noindent
-The method \method{countAtoms} is available for all kernel classes and returns
-the total number of atoms for this object. The method \method{countBonds}
-returns the number of bonds the atom shares. An atom can have at most eight
-bonds.
+The method \method{countAtoms} is available for all kernel classes that might
+contain atoms and returns the total number of atoms for this object. The
+method \method{countBonds} returns the number of bonds the atom shares. An
+atom can have at most eight bonds.
 
 We can also verify the bond distances:
 \begin{lstlisting}{}
@@ -133,7 +134,7 @@ returns the current position of an atom. The return value is again of type
 \class{Vector3}. The length of this vector is then returned by the
 \method{getLength} method. 
 
-Water molecules seldom occur alone, so we are going to create further water.
+Water molecules rarely occur alone, so we are going to create further water.
 All BALL kernel classes are container classes and support \newterm{deep
 copying}, \ie when assigned or copy constructed their contents are copied as
 well. So, we can easily create a new water molecule:
@@ -202,10 +203,10 @@ to a HyperChem HIN file~\cite{HyperChem}:
 \noindent
 These three lines of code create a \class{HINFile} object which is used to
 read and write HyperChem files. The first line opens a file named {\tt
-water.hin} for output ({\tt ios::out}, if the second argument is omitted the
-file is opened for reading).
+water.hin} for output ({\tt ios::out}; if the second argument is omitted the
+file is opened for reading only).
 The second line uses the stream operator {\tt <<} to write the contents
-of system {\tt S} to this file. Finally, the file is closed in the third line.
+of system {\tt S} to this file. The file is closed in the third line.
 
 Finally, we have to delete all the objects we created. This is very simple:
 
@@ -217,14 +218,13 @@ Finally, we have to delete all the objects we created. This is very simple:
 As all molecules and atoms we created are inside the system, they are deleted
 automatically as soon as the system is deleted.
 
-If this short program is run (the complete source is in {\tt
-tutorial1.C}) it creates the following output:
+If this short program is run it creates the following output:
 
 \begin{lstlisting}[frameround=]{}
 	# of atoms in water: 3
-	# of bonds in O: 2
-	# of atoms in H1: 1
-	# of atoms in H2: 1
+	# of bonds of oxygen: 2
+	# of bonds of hydrogen1: 1
+	# of bonds of hydrogen2: 1
 	bond distance: 0.95
 \end{lstlisting}
 
@@ -266,7 +266,7 @@ environment variable {\tt LD\_LIBRARY\_PATH} to the directory where your
 libraries are installed.
 
 After the successful execution of the example, a file named {\tt water.hin}
-should exist in the current directory. This file contains the two water
+should appear in the current directory. This file contains the two water
 molecules. You might inspect it with the molecule viewer MolVIEW.
 Fig.~\ref{fig:tut1-screenshot} shows a screenshot of MolVIEW showing the two
 water molecules.
@@ -332,11 +332,11 @@ int main()
 	// the number of bonds the atom shares
 	cout << "# of atoms in water: " 
 			 << water->countAtoms() << endl;
-	cout << "# of bonds in O: " 
+	cout << "# of bonds in oxygen: " 
 			 << oxygen->countBonds() << endl;
-	cout << "# of atoms in H1: " 
+	cout << "# of bonds of hydrogen1: " 
 			 << hydrogen1->countBonds() << endl;
-	cout << "# of atoms in H2: " 
+	cout << "# of bonds of hydrogen2: " 
 			 << hydrogen2->countBonds() << endl;
 
 	// bond_vector is a vector and is set to the
