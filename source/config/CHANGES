@@ -9,7 +9,7 @@ Added:
 - new application: DCD2PNG to create series of PNG-images from a DCD trajectory file
 - new rotate mode for Scene
 - Backbone Model for DNA
-- Cartoon Model for DNA
+- 2 new Cartoon Models for DNA
 - DataSetControl:
 	management of 1D and 2D grids 
   ability to start visualisation of 1D and 2D grids
