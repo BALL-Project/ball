@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceFieldComponent.C,v 1.9 2002/02/27 12:21:34 sturm Exp $
+// $Id: forceFieldComponent.C,v 1.10 2003/04/29 16:07:17 oliver Exp $
 
 
 #include <BALL/MOLMEC/COMMON/forceFieldComponent.h>
@@ -28,7 +28,7 @@ namespace BALL
 	}
 
 	// copy constructor 
-	ForceFieldComponent::ForceFieldComponent(const ForceFieldComponent& force_field_component, bool /* clone_deep */)
+	ForceFieldComponent::ForceFieldComponent(const ForceFieldComponent& force_field_component)
 	{
 		name_ = force_field_component.name_;
 		force_field_ = force_field_component.force_field_;
@@ -59,7 +59,7 @@ namespace BALL
 	}
 
 	// Return the name of the component
-	String ForceFieldComponent::getName( ) const
+	String ForceFieldComponent::getName() const
 	{
 		return name_;
 	}

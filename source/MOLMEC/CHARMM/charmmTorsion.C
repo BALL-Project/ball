@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmTorsion.C,v 1.9 2002/02/27 12:21:33 sturm Exp $
+// $Id: charmmTorsion.C,v 1.10 2003/04/29 16:07:17 oliver Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmTorsion.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -36,8 +36,8 @@ namespace BALL
 
 
 	// copy constructor
-	CharmmTorsion::CharmmTorsion(const CharmmTorsion&	component, bool clone_deep)
-		:	ForceFieldComponent(component, clone_deep)
+	CharmmTorsion::CharmmTorsion(const CharmmTorsion&	component)
+		:	ForceFieldComponent(component)
 	{
 		// assign the torsion array
 		torsion_ = component.torsion_;

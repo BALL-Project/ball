@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberNonBonded.C,v 1.25 2002/12/20 19:10:22 oliver Exp $
+// $Id: amberNonBonded.C,v 1.26 2003/04/29 16:07:16 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -81,9 +81,9 @@ namespace BALL
 
 
 	// copy constructor
-	AmberNonBonded::AmberNonBonded(const AmberNonBonded&	component, bool clone_deep)
+	AmberNonBonded::AmberNonBonded(const AmberNonBonded& component)
 		throw()
-		:	ForceFieldComponent(component, clone_deep),
+		:	ForceFieldComponent(component),
 			electrostatic_energy_(component.electrostatic_energy_),
 			vdw_energy_(component.vdw_energy_),
 			non_bonded_(component.non_bonded_),

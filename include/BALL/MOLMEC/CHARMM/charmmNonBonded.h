@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmNonBonded.h,v 1.16 2003/03/26 13:56:37 anhi Exp $
+// $Id: charmmNonBonded.h,v 1.17 2003/04/29 16:07:15 oliver Exp $
 // Molecular Mechanics: Charmm force field, bond stretch component
 
 #ifndef BALL_MOLMEC_CHARMM_NONBONDED_H
@@ -46,7 +46,7 @@ namespace BALL
 		*/
 		//@{
 
-		BALL_CREATE_DEEP(CharmmNonBonded)
+		BALL_CREATE(CharmmNonBonded)
 
 		/**	Default constructor.
 		*/
@@ -60,7 +60,7 @@ namespace BALL
 
 		/**	Copy constructor
 		*/
-		CharmmNonBonded(const CharmmNonBonded& charmm_non_bonded, bool clone_deep = true)
+		CharmmNonBonded(const CharmmNonBonded& charmm_non_bonded)
 			throw();
 
 		/**	Destructor.

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberTorsion.C,v 1.26 2002/12/12 10:40:12 oliver Exp $
+// $Id: amberTorsion.C,v 1.27 2003/04/29 16:07:16 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberTorsion.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -36,12 +36,11 @@ namespace BALL
 
 
 	// copy constructor
-	AmberTorsion::AmberTorsion(const AmberTorsion&	component, bool clone_deep)
-		:	ForceFieldComponent(component, clone_deep)
+	AmberTorsion::AmberTorsion(const AmberTorsion& component)
+		:	ForceFieldComponent(component)
 	{
 		// assign the torsion array
 		torsion_ = component.torsion_;
-
 	}
 
 	// destructor

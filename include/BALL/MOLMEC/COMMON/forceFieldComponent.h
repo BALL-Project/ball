@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceFieldComponent.h,v 1.16 2003/03/26 13:56:39 anhi Exp $
+// $Id: forceFieldComponent.h,v 1.17 2003/04/29 16:07:16 oliver Exp $
 // Molecular Mechanics: general force field component class
 
 #ifndef BALL_MOLMEC_FORCEFIELDCOMPONENT_H
@@ -41,7 +41,7 @@ namespace BALL
 
 		public:
 
-		BALL_CREATE_DEEP(ForceFieldComponent)
+		BALL_CREATE(ForceFieldComponent)
 
 		/**	Default constructor.
 		*/
@@ -55,7 +55,7 @@ namespace BALL
 				Creates a new instance of the given ForceFieldComponent.
 				The created object will not be assigned to an existing force field.
 		*/
-		ForceFieldComponent(const ForceFieldComponent&	force_field_component, bool clone_deep = true);
+		ForceFieldComponent(const ForceFieldComponent&	force_field_component);
 
 		/**	Destructor.
 		*/

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ForceField_test.C,v 1.1 2003/02/02 10:15:51 oliver Exp $
+// $Id: ForceField_test.C,v 1.2 2003/04/29 16:07:17 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -13,7 +13,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: ForceField_test.C,v 1.1 2003/02/02 10:15:51 oliver Exp $")
+START_TEST(class_name, "$Id: ForceField_test.C,v 1.2 2003/04/29 16:07:17 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -43,10 +43,17 @@ CHECK(ForceField(System& system))
 	TEST_EQUAL(ff.isValid(), true)
 RESULT
 
+CHECK(ForceField::ForceField(const ForceField& force_field))
+	ForceField ff;
+	TEST_EQUAL(ff.isValid(), false)
+	ForceField* ff_ptr = new ForceField(ff);
+	TEST_EQUAL(ff_ptr->isValid(), false)
+	delete ff_ptr;
+RESULT
+
 
 /* ??????
 		ForceField(System& system, const Options& options);
-		ForceField(const ForceField& force_field);
 		virtual void clear()
 			throw();
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberNonBonded.h,v 1.25 2003/03/26 13:56:36 anhi Exp $
+// $Id: amberNonBonded.h,v 1.26 2003/04/29 16:07:15 oliver Exp $
 
 // Molecular Mechanics: Amber force field, non-bonded component
 
@@ -43,7 +43,7 @@ namespace BALL
 		*/
 		//@{
 
-		BALL_CREATE_DEEP(AmberNonBonded)
+		BALL_CREATE(AmberNonBonded)
 
 		/**	Default constructor.
 		*/
@@ -57,7 +57,7 @@ namespace BALL
 
 		/**	Copy constructor
 		*/
-		AmberNonBonded(const AmberNonBonded& amber_non_bonded, bool clone_deep = true)
+		AmberNonBonded(const AmberNonBonded& amber_non_bonded)
 			throw();
 
 		/**	Destructor.

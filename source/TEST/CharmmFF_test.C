@@ -1,17 +1,23 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: CharmmFF_test.C,v 1.8 2003/04/22 19:35:01 oliver Exp $
+// $Id: CharmmFF_test.C,v 1.9 2003/04/29 16:07:17 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/MOLMEC/CHARMM/charmm.h>
+#include <BALL/MOLMEC/CHARMM/charmmNonBonded.h>
+#include <BALL/MOLMEC/CHARMM/charmmBend.h>
+#include <BALL/MOLMEC/CHARMM/charmmStretch.h>
+#include <BALL/MOLMEC/CHARMM/charmmTorsion.h>
+#include <BALL/MOLMEC/CHARMM/charmmImproperTorsion.h>
+
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/STRUCTURE/defaultProcessors.h>
 #include <BALL/STRUCTURE/fragmentDB.h>
 ///////////////////////////
 
-START_TEST(CharmmFF, "$Id: CharmmFF_test.C,v 1.8 2003/04/22 19:35:01 oliver Exp $")
+START_TEST(CharmmFF, "$Id: CharmmFF_test.C,v 1.9 2003/04/29 16:07:17 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -1052,6 +1058,106 @@ CHECK(force test 11 (2 atoms, solvation switching function) [EEF1])
 				TEST_REAL_EQUAL(energy, -83.68)
 		}
 	}
+RESULT
+
+
+CharmmNonBonded* cnb_ptr = 0;
+CHECK(CharmmNonBonded::CharmmNonBonded())
+	cnb_ptr = new CharmmNonBonded;
+	TEST_NOT_EQUAL(cnb_ptr, 0)
+RESULT
+
+CHECK(CharmmNonBonded::CharmmNonBonded())
+	delete cnb_ptr;
+RESULT
+
+CHECK(CharmmNonBonded::CharmmNonBonded(const CharmmNonBonded& cnb))
+	CharmmNonBonded cnb;
+	CharmmNonBonded cnb2(cnb);
+RESULT
+
+CharmmBend* cb_ptr = 0;
+CHECK(CharmmBend::CharmmBend())
+	cb_ptr = new CharmmBend;
+	TEST_NOT_EQUAL(cb_ptr, 0)
+RESULT
+
+CHECK(CharmmBend::CharmmBend())
+	delete cb_ptr;
+RESULT
+
+CHECK(CharmmBend::CharmmBend(const CharmmBend& cnb))
+	CharmmBend cb;
+	CharmmBend cb2(cb);
+RESULT
+
+
+CharmmImproperTorsion* cit_ptr = 0;
+CHECK(CharmmImproperTorsion::CharmmImproperTorsion())
+	cit_ptr = new CharmmImproperTorsion;
+	TEST_NOT_EQUAL(cit_ptr, 0)
+RESULT
+
+CHECK(CharmmImproperTorsion::CharmmImproperTorsion())
+	delete cit_ptr;
+RESULT
+
+CHECK(CharmmImproperTorsion::CharmmImproperTorsion(const CharmmImproperTorsion& cit))
+	CharmmImproperTorsion cit;
+	CharmmImproperTorsion cit2(cit);
+RESULT
+
+CharmmStretch* cs_ptr = 0;
+CHECK(CharmmStretch::CharmmStretch())
+	cs_ptr = new CharmmStretch;
+	TEST_NOT_EQUAL(cs_ptr, 0)
+RESULT
+
+CHECK(CharmmStretch::CharmmStretch())
+	delete cs_ptr;
+RESULT
+
+CHECK(CharmmStretch::CharmmStretch(const CharmmStretch& cs))
+	CharmmStretch cs;
+	CharmmStretch cs2(cs);
+RESULT
+
+CharmmTorsion* ct_ptr = 0;
+CHECK(CharmmTorsion::CharmmTorsion())
+	ct_ptr = new CharmmTorsion;
+	TEST_NOT_EQUAL(ct_ptr, 0)
+RESULT
+
+CHECK(CharmmTorsion::CharmmTorsion())
+	delete ct_ptr;
+RESULT
+
+CHECK(CharmmTorsion::CharmmTorsion(const CharmmTorsion& ct))
+	CharmmTorsion ct;
+	CharmmTorsion ct2(ct);
+RESULT
+
+CHECK(void* CharmmNonBonded::create())
+	CharmmNonBonded cnb;
+	STATUS("initialized")
+	CharmmNonBonded* clone = (CharmmNonBonded*)cnb.create();
+	STATUS("cloned")
+	delete clone;
+	STATUS("deleted")
+	ForceFieldComponent* ffc = &cnb;
+	ForceFieldComponent* ffc_clone = (ForceFieldComponent*)ffc->create();
+	STATUS("cloned after cast")
+	delete ffc_clone;
+	STATUS("deleted")
+RESULT
+
+CHECK(test)
+	ForceField ff;
+	ff.insertComponent(new CharmmNonBonded);
+	TEST_EQUAL(ff.countComponents(), 1)
+	ForceField* ff_ptr = new ForceField(ff);
+	TEST_EQUAL(ff_ptr->countComponents(), 1)
+	delete ff_ptr;
 RESULT
 
 /////////////////////////////////////////////////////////////

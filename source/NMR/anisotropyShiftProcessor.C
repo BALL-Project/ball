@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: anisotropyShiftProcessor.C,v 1.13 2003/04/28 21:11:23 oliver Exp $
+// $Id: anisotropyShiftProcessor.C,v 1.14 2003/04/29 16:07:17 oliver Exp $
 
 #include <BALL/NMR/anisotropyShiftProcessor.h>
 
@@ -66,7 +66,7 @@ namespace BALL
 	bool AnisotropyShiftProcessor::finish()
 		throw()
 	{
-		// Abort if the parameters wer not initialized correctly.
+		// Abort if the parameters were not initialized correctly.
 		if (!isValid())
 		{
 			return false;
@@ -110,6 +110,7 @@ namespace BALL
 					c_atom = bond->getSecondAtom();
 				}
 				
+				// Make surethe proton and the effector are from different residues.
 				const Atom* x_atom = 0;
 				if ((*proton_it)->getFragment() != c_atom->getFragment())
 				{
@@ -164,7 +165,7 @@ namespace BALL
 						const Vector3& o_pos = o_atom->getPosition();
 						const Vector3& x_pos = x_atom->getPosition();
 
-						// baue rechtwinkliges Koordinatensystem auf :
+						// Construct an orthogonal coordinate system.
 						Vector3 vz(o_pos - c_pos);
 						vz.normalize();
 						Vector3 vy(vz % (x_pos - c_pos));
@@ -220,7 +221,7 @@ namespace BALL
 				}
 				const Atom* o_atom = 0;
 
-				// Skip the H atom of this residue
+				// Skip the H atom of this residue.
 				if ((*proton_it)->getName() == "H" && (*proton_it)->getFragment() == n_atom->getFragment())
 				{
 					continue;
@@ -299,8 +300,8 @@ namespace BALL
 	Processor::Result AnisotropyShiftProcessor::operator () (Composite& composite)
 		throw()
 	{
-		// hier werden alle Effektorbindungen gesammelt( C=O ) und in eff_list_ gespeichert.
-		// hier werden alle Wasserstoffe in proton_list_ gespeichert.
+		// Collect all effector bonds(C=O) and store them in eff_list_
+		// All protons are collected in proton_list_.
 		if (!RTTI::isKindOf<Atom>(composite))
 		{
 			return Processor::CONTINUE;
@@ -319,14 +320,14 @@ namespace BALL
 			return Processor::CONTINUE;
 		}
 
-		// suche im Backbone
+		// Figure out whether we found a backbon C atom in a carbonyl group.
 		if (patom->getName() == "C" && patom->isBound())
 		{
 			bool foundN = false;
 			bool foundO = false;
 			Position bondN = 0;
 
-			// laufe alle Bindungen des Atoms durch und suche nach Sauerstoff-Doppelbindung
+			// Iterate over all bonds and search for a double bond to an oxygen.
 			for (Position pos = 0; pos < patom->countBonds(); pos++)
 			{
 				const Bond* bond = patom->getBond(pos);
@@ -348,13 +349,14 @@ namespace BALL
 			return Processor::CONTINUE;
 		}
 
-		// suche in der Seitenkette nach ASP ASN GLU GLN
+		// Search for side-chain effectors in ASP ASN GLU GLN.
 		const String& residue_name = patom->getFragment()->getName();
 
+		// Search for ASP and ASN, look for ASP/ASN:CG=OD1
 		if ((residue_name == "ASP" || residue_name == "ASN") &&
 				 patom->getName() == "CG" && patom->isBound()	)
 		{
-			// laufe alle Bindungen des Atoms durch und suche nach Sauerstoff-Doppelbindung
+			// Walk over all bonds and search for a double bond to an oxygen.
 			for (Position pos = 0; pos < patom->countBonds(); pos++)
 			{
 				const Bond* bond = patom->getBond(pos);
@@ -367,10 +369,11 @@ namespace BALL
 			return Processor::CONTINUE;
 		}
 
+		// Search for GLU/GLN:CD=OE1.
 		if ((residue_name == "GLU" || residue_name == "GLN") &&
 				 patom->getName() == "CD" && patom->isBound()	)
 		{
-			// laufe alle Bindungen des Atoms durch und suche nach Sauerstoff-Doppelbindung
+			// Walk over all bonds and search for a double bond to an oxygen.
 			for (Position pos = 0; pos < patom->countBonds(); pos++)
 			{
 				const Bond* bond = patom->getBond(pos);

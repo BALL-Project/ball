@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmm.C,v 1.15 2002/12/22 14:48:30 anker Exp $
+// $Id: charmm.C,v 1.16 2003/04/29 16:07:16 oliver Exp $
 // Molecular Mechanics: Charmm force field class
 
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -124,7 +124,7 @@ namespace BALL
  
 	// copy constructor  
 	CharmmFF::CharmmFF(const CharmmFF& force_field)
-		:	ForceField(force_field),
+		:	ForceField(/* force_field */),
 			filename_(force_field.filename_)
 	{
 	}

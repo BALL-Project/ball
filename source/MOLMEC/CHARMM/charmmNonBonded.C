@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmNonBonded.C,v 1.21 2003/04/22 15:31:44 oliver Exp $
+// $Id: charmmNonBonded.C,v 1.22 2003/04/29 16:07:17 oliver Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmNonBonded.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -90,9 +90,9 @@ namespace BALL
 
 
 	// copy constructor
-	CharmmNonBonded::CharmmNonBonded(const CharmmNonBonded&	component, bool clone_deep)
+	CharmmNonBonded::CharmmNonBonded(const CharmmNonBonded&	component)
 		throw()
-		:	ForceFieldComponent(component, clone_deep),
+		:	ForceFieldComponent(component),
 			electrostatic_energy_(component.electrostatic_energy_),
 			vdw_energy_(component.vdw_energy_),
 			solvation_energy_(component.solvation_energy_),

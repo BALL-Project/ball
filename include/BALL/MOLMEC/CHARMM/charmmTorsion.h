@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmTorsion.h,v 1.14 2003/03/26 13:56:37 anhi Exp $
+// $Id: charmmTorsion.h,v 1.15 2003/04/29 16:07:16 oliver Exp $
 // Molecular Mechanics: CHARMM force field, proper torsion component
 
 #ifndef BALL_MOLMEC_CHARMM_CHARMMTORSION_H
@@ -80,7 +80,7 @@ namespace BALL
 		*/
 		//@{
 
-		BALL_CREATE_DEEP(CharmmTorsion)
+		BALL_CREATE(CharmmTorsion)
 
 		/**	Default constructor.
 		*/
@@ -92,7 +92,7 @@ namespace BALL
 
 		/**	Copy constructor
 		*/
-		CharmmTorsion(const CharmmTorsion& charmm_stretch, bool clone_deep = true);
+		CharmmTorsion(const CharmmTorsion& charmm_stretch);
 
 		/**	Destructor.
 		*/

@@ -230,7 +230,5 @@ void ColorMeshDialog::tab_changed()
 	}
 }
 
-
-// NAMESPACE
-	}
-}
+} // namespace VIEW
+} // namespace BALL

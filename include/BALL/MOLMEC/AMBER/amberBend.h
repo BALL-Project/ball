@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberBend.h,v 1.15 2003/03/26 13:56:35 anhi Exp $
+// $Id: amberBend.h,v 1.16 2003/04/29 16:07:15 oliver Exp $
 
 // Molecular Mechanics: Amber force field, bond stretch component
 
@@ -35,6 +35,8 @@ namespace BALL
 	{
 		public:
 
+		BALL_CREATE(AmberBend)
+
 		/** @name	Constructors and Destructors	
 		*/
 		//@{ 
@@ -49,7 +51,7 @@ namespace BALL
 
 		/**	Copy constructor
 		*/
-		AmberBend(const AmberBend& amber_stretch, bool clone_deep = true);
+		AmberBend(const AmberBend& amber_stretch);
 
 		/**	Destructor.
 		*/

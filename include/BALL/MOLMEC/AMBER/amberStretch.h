@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberStretch.h,v 1.19 2003/03/26 13:56:36 anhi Exp $ 
+// $Id: amberStretch.h,v 1.20 2003/04/29 16:07:15 oliver Exp $ 
 
 // Molecular Mechanics: Amber force field, bond stretch component
 
@@ -39,7 +39,7 @@ namespace BALL
 		*/
 		//@{
 
-		BALL_CREATE_DEEP(AmberStretch)
+		BALL_CREATE(AmberStretch)
 
 		/**	Default constructor.
 		*/
@@ -51,7 +51,7 @@ namespace BALL
 
 		/**	Copy constructor
 		*/
-		AmberStretch(const AmberStretch& amber_stretch, bool clone_deep = true);
+		AmberStretch(const AmberStretch& amber_stretch);
 
 		/**	Destructor.
 		*/

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberStretch.C,v 1.16 2002/12/12 10:40:12 oliver Exp $
+// $Id: amberStretch.C,v 1.17 2003/04/29 16:07:16 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberStretch.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -34,8 +34,8 @@ namespace BALL
 
 
 	// copy constructor
-	AmberStretch::AmberStretch(const AmberStretch&	component, bool clone_deep)
-		:	ForceFieldComponent(component, clone_deep)
+	AmberStretch::AmberStretch(const AmberStretch&	component)
+		:	ForceFieldComponent(component)
 	{
 		stretch_ = component.stretch_;
 	}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmStretch.C,v 1.8 2002/12/12 10:41:03 oliver Exp $
+// $Id: charmmStretch.C,v 1.9 2003/04/29 16:07:17 oliver Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmStretch.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -36,8 +36,8 @@ namespace BALL
 
 
 	// copy constructor
-	CharmmStretch::CharmmStretch(const CharmmStretch&	component, bool clone_deep)
-		:	ForceFieldComponent(component, clone_deep)
+	CharmmStretch::CharmmStretch(const CharmmStretch&	component)
+		:	ForceFieldComponent(component)
 	{
 		number_of_stretches_ = component.number_of_stretches_;
 		stretch_ = new QuadraticBondStretch::Data[number_of_stretches_];

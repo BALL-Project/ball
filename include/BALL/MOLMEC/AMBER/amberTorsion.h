@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberTorsion.h,v 1.18 2003/03/26 13:56:36 anhi Exp $
+// $Id: amberTorsion.h,v 1.19 2003/04/29 16:07:15 oliver Exp $
 
 // Molecular Mechanics: Amber force field, bond stretch component
 
@@ -76,7 +76,7 @@ namespace BALL
 		*/
 		//@{
 
-		BALL_CREATE_DEEP(AmberTorsion)
+		BALL_CREATE(AmberTorsion)
 
 		/**	Default constructor.
 		*/
@@ -88,7 +88,7 @@ namespace BALL
 
 		/**	Copy constructor
 		*/
-		AmberTorsion(const AmberTorsion& amber_stretch, bool clone_deep = true);
+		AmberTorsion(const AmberTorsion& amber_stretch);
 
 		/**	Destructor.
 		*/
