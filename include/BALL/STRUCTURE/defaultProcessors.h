@@ -1,4 +1,4 @@
-// $Id: defaultProcessors.h,v 1.6 2001/07/15 17:53:03 amoll Exp $
+// $Id: defaultProcessors.h,v 1.7 2001/07/15 18:12:42 amoll Exp $
 
 #ifndef BALL_STRUCTURE_DEFAULTPROCESSORS_H
 #define BALL_STRUCTURE_DEFAULTPROCESSORS_H
@@ -97,7 +97,9 @@ namespace BALL
 
 		protected:
 
-		bool										buildTable_();
+		bool buildTable_()
+			throw(Exception::FileNotFound);
+
 		String									filename_;
 		StringHashMap<float>		table_;
 		Size 										number_of_errors_;
@@ -117,8 +119,9 @@ namespace BALL
 
 		AssignChargeProcessor();
 
-		AssignChargeProcessor(const String& filename);
-
+		AssignChargeProcessor(const String& filename)
+			throw(Exception::FileNotFound);
+			
 		virtual bool start();
 		
 		virtual Processor::Result operator () (Atom& atom);
