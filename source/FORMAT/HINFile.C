@@ -1,4 +1,4 @@
-// $Id: HINFile.C,v 1.8 1999/12/30 18:05:30 oliver Exp $
+// $Id: HINFile.C,v 1.9 2000/01/11 20:15:35 oliver Exp $
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/KERNEL/residue.h>
@@ -245,7 +245,7 @@ namespace BALL
 			{
 				// counter for the residues
 				Atom* this_atom = atom_vector[*comp_it];
-				Residue* this_residue = dynamic_cast<Residue*>(this_atom->getAncestor(RTTI::getDefault<Residue>()));
+				Residue* this_residue = this_atom->getAncestor<Residue>();
 				if (this_residue != current_residue)
 				{
 					if (current_residue != 0)
