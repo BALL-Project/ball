@@ -4,7 +4,7 @@
 #   Sitkoff, Sharp, and Honig: Accurate Calculation of Hydration Free Energies 
 #   Using Macroscopic Solvent Models, H. Phys. Chem, (1994), 98, 1978-1988
 #
-# $Id: PARSE.rul,v 1.5 2000/11/21 16:20:59 anker Exp $
+# $Id: PARSE.rul,v 1.5.4.1 2002/12/05 15:23:44 anker Exp $
 #
 
 
@@ -178,7 +178,35 @@
 ; missing: CYS-CYS (CHn-S-S-CHn)
 -0.29   = connectedTo((-S(-C))(-C))
 
+[ChargeRules:Li]
+ 1.0 = true()
 
+[ChargeRules:Na]
+ 1.0 = true()
+
+[ChargeRules:K]
+ 1.0 = true()
+
+[ChargeRules:Rb]
+ 1.0 = true()
+
+[ChargeRules:Cs]
+ 1.0 = true()
+
+[ChargeRules:Mg]
+ 2.0 = true()
+
+[ChargeRules:Ca]
+ 2.0 = true()
+
+[ChargeRules:Sr]
+ 2.0 = true()
+
+[ChargeRules:Ba]
+ 2.0 = true()
+
+; set the charge to something incredibly insane in order to find charge
+; assignment errors easily
 [ChargeRules:*]
  4711 = true()
 
@@ -210,4 +238,31 @@
 [RadiusRules:S]
  1.85 = true()
 
+; Ion radii (Aqvist, J. Phys. Chem. 94:8021-8024, 1990)
 
+[RadiusRules:Li]
+ 0.645 = true()
+
+[RadiusRules:Na]
+ 1.005 = true()
+
+[RadiusRules:K]
+ 1.365 = true()
+
+[RadiusRules:Rb]
+ 1.505 = true()
+
+[RadiusRules:Cs]
+ 1.715 = true()
+
+[RadiusRules:Mg]
+ 0.615 = true()
+
+[RadiusRules:Ca]
+ 1.015 = true()
+
+[RadiusRules:Sr]
+ 1.195 = true()
+
+[RadiusRules:Ba]
+ 1.385 = true()
