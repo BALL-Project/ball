@@ -1,4 +1,4 @@
-// $Id: hashSet.h,v 1.8 2000/05/22 09:58:40 anker Exp $ 
+// $Id: hashSet.h,v 1.9 2000/05/22 14:02:00 anker Exp $ 
 
 #ifndef BALL_DATATYPE_HASHSET_H
 #define BALL_DATATYPE_HASHSET_H
@@ -125,7 +125,6 @@ namespace BALL
 			deleteBuckets_();
 		}
 
-
 		/**
 		*/
 		virtual void clear();
@@ -139,15 +138,18 @@ namespace BALL
 		*/
 		//@{
 
-		/**
+		/** assign this HashSet with the contents of another HashSet
+			@param hash_set the HashSet to assign from
 		*/
 		void set(const HashSet& hash_set);
 
-		/**
+		/** assign this HashSet with the contents of another HashSet
+			@param hash_set the HashSet to assign from
 		*/
 		HashSet& operator = (const HashSet& hash_set);
 
-		/**
+		/** assing another HashSet with the contents of this HashSet
+			@param hash_set the HashSet to assign to
 		*/
 		void get(HashSet& hash_set) const;
 
@@ -183,12 +185,20 @@ namespace BALL
     */
 		ConstIterator find(const Key& key) const;
 
+		/**
+		*/
 		std::pair<Iterator, bool> insert(const ValueType& item);
 
+		/**
+		*/
 		void erase(Iterator pos);
 
+		/**
+		*/
 		Size erase(const KeyType& key);
 
+		/**
+		*/
 		void erase(Iterator f, Iterator l);
 		//@}
 
@@ -196,6 +206,8 @@ namespace BALL
 		*/
 		//@{
 
+		/**
+		*/
 		void host(Visitor<ValueType>& visitor);
 		//@}
 	
@@ -203,12 +215,20 @@ namespace BALL
 		*/
 		//@{
 
+		/**
+		*/
 		bool has(const Key& key) const;
 
+		/**
+		*/
 		bool isEmpty() const;
 
+		/**
+		*/
 		bool operator == (const HashSet& hash_set) const;
 
+		/**
+		*/
 		bool operator != (const HashSet& hash_set) const;
 		//@}
 
@@ -216,8 +236,12 @@ namespace BALL
 		*/
 		//@{
 
+		/**
+		*/
 		bool isValid() const;
 
+		/**
+		*/
 		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 		//@}
 
@@ -415,21 +439,29 @@ namespace BALL
 
 		friend class IteratorTraits_;
 
+		/**
+		*/
 		Iterator begin()
 		{
 			return Iterator::begin(*this);
 		}
 
+		/**
+		*/
 		Iterator end()
 		{
 			return Iterator::end(*this);
 		}
 
+		/**
+		*/
 		ConstIterator begin() const
 		{
 			return ConstIterator::begin(*this);
 		}
 
+		/**
+		*/
 		ConstIterator end() const
 		{
 			return ConstIterator::end(*this);
