@@ -1,4 +1,4 @@
-// $Id: fresnoRotation.h,v 1.1.2.9 2003/06/04 15:32:59 anker Exp $
+// $Id: fresnoRotation.h,v 1.1.2.10 2003/06/13 14:38:01 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
 #ifndef BALL_MOLMEC_FRESNO_FRESNOROTATION_H
@@ -33,16 +33,19 @@ namespace BALL
 		enum CalculationMethod
 		{
 			/// The original Chemscore term.
-			CALCULATION__ORIGINAL = 0,
+			CALCULATION__ORIGINAL = 1,
 
 			/// The term developed by Böhm (N_rot)
-			CALCULATION__BOEHM = 1,
+			CALCULATION__BOEHM = 2,
 
 			/// The number of glycosidic bonds
-			CALCULATION__GLYCOSIDIC_BONDS = 2,
+			CALCULATION__GLYCOSIDIC_BONDS = 3,
 
 			/// The number of frozen glycosidic bonds
-			CALCULATION__FROZEN_GLYCOSIDIC_BONDS = 3
+			CALCULATION__FROZEN_GLYCOSIDIC_BONDS = 4,
+
+			/// The contribution of glycosidic bonds to the original term
+			CALCULATION__GLYCOSIDIC_CONTRIBUTION = 5
 		};
 
 			/// 
