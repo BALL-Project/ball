@@ -1,23 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.20 2004/12/28 11:24:07 amoll Exp $
+// $Id: backboneModel.C,v 1.21 2004/12/28 11:38:51 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
 #include <BALL/VIEW/PRIMITIVES/sphere.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
-#include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/residue.h>
 #include <BALL/KERNEL/forEach.h>
-
-#include <BALL/VIEW/PRIMITIVES/line.h>
-#include <BALL/MATHS/analyticalGeometry.h>
-#include <BALL/MATHS/matrix44.h>
-#include <BALL/VIEW/KERNEL/common.h>
-
-#include <algorithm>
 
 using namespace std;
 
@@ -41,29 +33,19 @@ namespace BALL
 		{
 		}
 
-		bool AddBackboneModel::SplinePoint::operator < (const SplinePoint::SplinePoint& point) const
-			throw()
-		{
-			return ((Residue*)       atom_->getParent())->getID() <
-						 ((Residue*) point.atom_->getParent())->getID();
-		}
-
-
 		AddBackboneModel::AddBackboneModel()
 			throw()
 			: ModelProcessor(),
 				last_parent_(0),
-				tube_radius_((float)0.4),
-				interpolation_steps_(9)
+				tube_radius_((float)0.4)
 		{
 		}
 
-		AddBackboneModel::AddBackboneModel(const AddBackboneModel& bm)
+		AddBackboneModel::AddBackboneModel(const AddBackboneModel& add_Backbone)
 			throw()
-			:	ModelProcessor(bm),
+			:	ModelProcessor(add_Backbone),
 				last_parent_(0),
-				tube_radius_(bm.tube_radius_),
-				interpolation_steps_(bm.interpolation_steps_)
+				tube_radius_(add_Backbone.tube_radius_)
 		{
 		}
 
@@ -71,7 +53,8 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				Log.error() << "Destructing object of class AddBackboneModel" << endl;
+				Log.error() << "Destructing object " << (void *)this 
+										<< " of class " << RTTI::getName<AddBackboneModel>() << endl;
 			#endif 
 		}
 
@@ -79,12 +62,13 @@ namespace BALL
 			throw()
 		{
 			ModelProcessor::clear();
-			interpolation_steps_ = 9;
-			tube_radius_ = 0.4;
-			clear_();
+			spline_vector_.clear();
+			spline_.clear();
+			last_parent_ = 0;
+			have_start_point_ = false;
 		}
 
-		Processor::Result AddBackboneModel::operator() (Composite& composite)
+		Processor::Result AddBackboneModel::operator () (Composite& composite)
 		{
 			if (!RTTI::isKindOf<Residue>(composite))  return Processor::CONTINUE;
 			Residue& residue(*RTTI::castTo<Residue>(composite));
@@ -98,18 +82,9 @@ namespace BALL
 					spline_vector_.size() > 0) 
 			{
 				createBackbone_();
-				clear_();
 			}
 			
 			last_parent_ = residue.getParent()->getParent();
-			collectAtoms_(residue);
-
-			return Processor::CONTINUE;
-		}
-
-		void AddBackboneModel::collectAtoms_(Residue& residue)
-			throw()
-		{
 			AtomIterator it;
 			BALL_FOREACH_ATOM(residue, it)
 			{
@@ -123,18 +98,19 @@ namespace BALL
 						)) || (
 						// or we collect P atoms in nucleotides
 						residue.getName().size() == 1 &&
-						it->getName() == "P" 					&&
 						(
 						 residue.getName() == "C" ||
 						 residue.getName() == "G" ||
 						 residue.getName() == "T" ||
-						 residue.getName() == "A"
-						)))
+						 residue.getName() == "A")) &&
+						(it->getName() == "P"))
 				{
 					SplinePoint spline_point((*it).getPosition(), &*it);
 					spline_vector_.push_back(spline_point);
 				}
 			}
+
+			return Processor::CONTINUE;
 		}
 
 		void AddBackboneModel::dump(std::ostream& s, Size depth) const
@@ -156,15 +132,13 @@ namespace BALL
 			throw()
 		{
 			have_start_point_ = false;
-//   			sort(spline_vector_.begin(), spline_vector_.end());
-
 			calculateTangentialVectors_();
 			createSplinePath_();
-			buildGraphicalRepresentation_();
+			spline_vector_.clear();
 		}
 
 
-		// calculates for every splinepoint the tangential vector
+		// calculates to every splinepoint the tangential vector
 		void AddBackboneModel::calculateTangentialVectors_()
 		{
 			// first and last spline point have tangential vectors (0,0,0)
@@ -202,10 +176,11 @@ namespace BALL
 		// create a spline segment between two spline points a and b
 		void AddBackboneModel::createSplineSegment_(const SplinePoint &a, const SplinePoint &b)
 		{
+			int max_step = 9;
 			double time = 0.0;
-			double step = (double)1 / (double)interpolation_steps_;
+			double step = (double)1 / (double)max_step;
 
-			for (Size index = 0; index < interpolation_steps_; ++index, time += step)
+			for (int index = 0; index <= max_step; ++index, time += step)
 			{
 				double t_2 = time * time;
 				double t_3 = t_2 * time;
@@ -237,271 +212,65 @@ namespace BALL
 											 (h3 * a.getTangentialVector().z) + 
 											 (h4 * b.getTangentialVector().z));
 
-				spline_points_.push_back(new_vector);
-				atoms_of_spline_points_.push_back((index <= interpolation_steps_/2) ? a.getAtom() : b.getAtom());
+				spline_.push_back(new_vector);
+
+				// build the objects
+				buildGraphicalRepresentation_
+					(new_vector, ((index <= max_step/2) ? a.getAtom() : b.getAtom()));
 			}
 		}
 
 
 		// builds a graphical representation to this point
-		void AddBackboneModel::buildGraphicalRepresentation_(Size start, Size end)
+		void AddBackboneModel::buildGraphicalRepresentation_
+			(const Vector3& point, const Atom* atom)
 			throw(Exception::OutOfMemory)
 		{
-			if (spline_points_.size() == 0) return;
-			if (spline_points_.size() != atoms_of_spline_points_.size() ||
-														end >= atoms_of_spline_points_.size() ||
-													start >= atoms_of_spline_points_.size() )
+			if (have_start_point_)
 			{
-				Log.error() << "Error in " << __FILE__ << __LINE__ << std::endl;
-				return;
-			}
-
-			if (end == 0) end = spline_points_.size();
-
-			if (!have_start_point_)
-			{
-				last_point_ = spline_points_[start];
-				start++;
-			}
-
-			// create sphere for the point
-			Sphere* sphere = new Sphere;
-			if (!sphere) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Sphere));
-			sphere->setRadius(tube_radius_);
-			sphere->setPosition(last_point_);
-			sphere->setComposite(atoms_of_spline_points_[start]);
-			geometric_objects_.push_back(sphere);
-
-			// calculate the number of slides for the circle and the angle in between them
- 			Size slides = (Size)(8.0 + drawing_precision_ * 8.0);
-			Angle slides_angle = Angle(360.0 / slides, false);
-
-			// direction vector of the two current spline points
-			Vector3 dir;
-
-			// prevent problems if last point is the same as the start point
-			while (true)
-			{
-				dir = spline_points_[start] - last_point_;
-				if (Maths::isZero(dir.getSquareLength()))
+				if (point == last_point_) 
 				{
-					start++;
+					return;	
 				}
-				else
-				{
-					break;
-				}
-			}
-					
-			////////////////////////////////////////////////////////////
-			Vector3 n = Vector3(0,1,0);
-			// normal vector to direction vector dir, with length of radius
-			Vector3 r = dir % n;
-			if (Maths::isZero(r.getSquareLength())) 
-			{ 
-				r = dir % n;
-				if (Maths::isZero(r.getSquareLength())) 
-				{
-					n = Vector3(0,0,1);
-					r = dir % n;
-				}
-			}
-			r.normalize();
-			r *= tube_radius_;
-
-			////////////////////////////////////////////////////////////
-			// initialise a first set of points in a circle around the start position
-			vector<Vector3> points1, points2;
-			Matrix4x4 m;
-			m.setRotation(slides_angle, n % r);
-			Vector3 x = r;
-			points1.push_back(x);
-			for (Position p = 0; p < slides - 1; p++)
-			{
-				x = m * x;
-				points1.push_back(x);
-			}
-			// add also a dummy for closing of ring
-			points1.push_back(points1[0]);
-
-			points2.resize(points1.size());
-
-			////////////////////////////////////////////////////////////
-			// same data structures for faster access
-			Mesh::Triangle t;
-			vector<Vector3>*  new_points = &points2;
-			vector<Vector3>* last_points = &points1;
-			vector<Vector3>* dummy = 0;
 				
-			// create a new mesh with the points and triangles
-			// every residue get its own mesh to enable picking for the tube model
-			Mesh* mesh = new Mesh();
-			mesh->setComposite(atoms_of_spline_points_[start]->getParent());
-			geometric_objects_.push_back(mesh);
+				// build tube connection to the last point
+				Tube* tube = new Tube;
+				if (!tube) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Tube));
 				
-			//------------------------------------------------------>
-			// iterate over all spline_points_
-			for (Position p = start; p < end -1; p++)
-			{
-				// faster access to the current spline point
-				const Vector3 point = spline_points_[p];
-				
-				// new direction vector: new point - last point
-				const Vector3 dir_new = point - last_point_;
-
-				// new normal vector
-				Vector3 r_new = r - (
-				           (dir_new.x * r.x       + dir_new.y *       r.y + dir_new.z *       r.z)  /
-				           (dir_new.x * dir_new.x + dir_new.y * dir_new.y + dir_new.z * dir_new.z) 
-									 * dir_new);
-				r_new.normalize();
-				r_new *= tube_radius_;
-
-				////////////////////////////////////////////////////////////
-				// rotate all points of the circle according to new normal
-				m.setRotation(slides_angle, dir_new);
-				x = r_new;
-				(*new_points)[0] = x;
-				const Position middle = (Position)(slides / 2.0);
-				for (Position i= 1; i < middle; i++)
-				{
-					x = m * x;
-					(*new_points)[i] = x;
-				}
-
-				// second part of points can be calculated by negating first points
-				for (Position i = middle; i < slides; i++)
-				{
-					(*new_points)[i] = - (*new_points)[i - middle];
-				}
-
-				// dont forget the dummy for closing the ring
- 				(*new_points)[new_points->size() - 1] = (*new_points)[0];
-				////////////////////////////////////////////////////////////
-				
-				if (mesh->getComposite() != atoms_of_spline_points_[p]->getParent())
-				{
-					mesh = new Mesh();
-					mesh->setComposite(atoms_of_spline_points_[p]->getParent());
-					geometric_objects_.push_back(mesh);
-
-					// iterater over all points of the circle
-					for (Position point_pos = 0; point_pos < slides; point_pos++)
-					{
-						// insert the vertices and normals of last points again into the new mesh
-						mesh->vertex.push_back(last_point_ + (*last_points)[point_pos]);
-						mesh->vertex.push_back(			point  + (* new_points)[point_pos]);
-						mesh->vertex.push_back(last_point_ + (*last_points)[point_pos + 1]);
-						mesh->vertex.push_back(     point  + (* new_points)[point_pos + 1]);
-
-						mesh->normal.push_back((*last_points)[point_pos]);
-						mesh->normal.push_back((*new_points)[point_pos]);
-						mesh->normal.push_back((*last_points)[point_pos + 1]);
-						mesh->normal.push_back((*new_points)[point_pos + 1]);
-
-						const Size s = mesh->vertex.size() - 1;
-						t.v1 = s - 3; 	// last lower
-						t.v2 = s - 1;		// last upper
-						t.v3 = s;				// new  upper
-						mesh->triangle.push_back(t);
-
-						t.v1 = s;				// new upper
-						t.v2 = s - 2;   // new lower
-						t.v3 = s - 3;   // last lower
-						mesh->triangle.push_back(t);
-					}
-				}
-				else
-				{
-					// insert only the new points, the old ones are already stored in the mesh
-					//
-					// we have to differ if the last round was the first for this mesh.
-					// this is important for the number of vertices, which were added in the last round
-					// step is used to calculate the position of the vertices from the last round
-					Size step = 0;
-					Size step2 = 0;
-					if (mesh->vertex.size() > 4 * slides)
-					{
-						step = 2;
-						step2 = 1;
-					}
-					else
-					{
-						step = 4;
-						step2 = 2;
-					}
-					
-					Size s_old = mesh->vertex.size() - 1;
-					// iterater over all points of the circle
-					for (Position point_pos = 0; point_pos < slides; point_pos++)
-					{
-						mesh->vertex.push_back(point + (*new_points)[point_pos]);
-						mesh->vertex.push_back(point + (*new_points)[point_pos + 1]);
-
-						mesh->normal.push_back((*new_points)[point_pos]);
-						mesh->normal.push_back((*new_points)[point_pos + 1]);
-
-						const Size s_new = mesh->vertex.size() - 1;
-						
-						t.v1 = s_old - step2;		// last lower
-						t.v2 = s_old;						// last upper
-						t.v3 = s_new;						// new upper
-						mesh->triangle.push_back(t);
-
-						t.v1 = s_new;					// new upper
-						t.v2 = s_new - 1;			// new lower
-						t.v3 = s_old - step2; // last lower
-						mesh->triangle.push_back(t);
-
-						s_old += step;
-					}
-				}
-
-				// swap between the two point vectors to prevent copying the values from
-				// one vector to the other
-				dummy = new_points;
-				new_points  = last_points;
-				last_points = dummy;
-
-				r = r_new;
-				last_point_ = point;
-			}
-
-			if (*geometric_objects_.rbegin() != mesh)
-			{
-				geometric_objects_.push_back(mesh);
+				tube->setRadius(tube_radius_);
+				tube->setVertex1(last_point_);
+				tube->setVertex2(point);
+				tube->setComposite(atom);
+				geometric_objects_.push_back(tube);
 			}
 
 			have_start_point_ = true;
-			
-			// create a sphere as an end cap for the point
-			sphere = new Sphere;
-			if (!sphere) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Sphere));
+			last_point_ = point;
+
+			// create sphere for the point
+			Sphere* sphere = new Sphere;
+			if (!sphere) 
+			{
+				throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Sphere));
+			}
+
 			sphere->setRadius(tube_radius_);
-			sphere->setPosition(last_point_);
- 			sphere->setComposite(atoms_of_spline_points_[end - 1]);
+			sphere->setPosition(point);
+			sphere->setComposite(atom);
 			geometric_objects_.push_back(sphere);
 		}
 
-		void AddBackboneModel::clear_()
-			throw()
+		bool AddBackboneModel::finish()
 		{
-			spline_vector_.clear();
-			last_parent_ = 0;
-			have_start_point_ = false;
+			if (spline_vector_.size() == 0) 
+			{
+				return true;
+			}
 
-			spline_points_.clear();
-			atoms_of_spline_points_.clear();
-		}
-
-		bool AddBackboneModel::createGeometricObjects()
-			throw()
-		{
-			if (spline_vector_.size() == 0) return true;
 			createBackbone_();
-			clear_();
+			spline_.clear();
 			return true;
 		}
-
+		
 	} // namespace VIEW
 } // namespace BALL
