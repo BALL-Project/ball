@@ -1,4 +1,4 @@
-// $Id: common.doc,v 1.5 2001/02/18 20:51:19 amoll Exp $
+// $Id: common.doc,v 1.6 2001/03/11 19:27:06 anker Exp $
 
 /**	@name	General Force Field Classes.
 */
@@ -12,6 +12,7 @@
 	//@Include: periodicBoundary.h
 	//@Include: support.h
 	//@Include: snapShot.h
+	//@Include: snapShotManager.h
 	/**	@name	Rule-based parameter assignment
 	*/
 	//@{
