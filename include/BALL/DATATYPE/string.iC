@@ -1,4 +1,4 @@
-// $Id: string.iC,v 1.32 2000/12/17 17:10:33 amoll Exp $
+// $Id: string.iC,v 1.33 2001/05/10 22:53:18 oliver Exp $
 
 BALL_INLINE 
 String::String()
@@ -609,13 +609,13 @@ BALL_INLINE
 Substring String::before(const String& s, Index from) const
 	throw()
 {
-	Position found = EndPos;
+	string::size_type found = string::npos;
 	if (s != "")
 	{
-		found = (Position)find(s, from);
+		found = find(s, from);
 	}
 
-	if (found == 0 || found == EndPos) 
+	if (found == 0 || found == string::npos) 
 	{
 		return Substring(*this, 0, 0);
 	}
@@ -627,18 +627,18 @@ BALL_INLINE
 Substring String::through (const String& s, Index from) const
 	throw()
 {
-	Position found = EndPos;
+	string::size_type found = string::npos;
 	if (s != "")
 	{
-		found = (Position)find(s, from); 
+		found = find(s, from); 
 	}
 
-	if (found == EndPos) 
+	if (found == string::npos) 
 	{
 		return Substring(*this, 0, 0);
 	}
 
-  return getSubstring(0, found + (Size)s.size());
+  return getSubstring(0, (Size)found + (Size)s.size());
 }
 
 BALL_INLINE 
@@ -650,9 +650,9 @@ Substring String::from(const String& s, Index from) const
 		return getSubstring(0);
 	}
 
-  Size found = (Size)find(s, from); 
+  string::size_type found = find(s, from); 
 
-	if (found == EndPos)
+	if (found == string::npos)
 	{
 		return Substring(*this, -1, 0);
 	}
@@ -669,9 +669,9 @@ Substring String::after(const String& s, Index from) const
 		return getSubstring(0);
 	}
 
-  Position found = (Position)find(s, from); 
+  string::size_type found = find(s, from); 
 
-	if ((found == EndPos) || (found + s.size() >= size()))
+	if ((found == string::npos) || ((Size)found + s.size() >= size()))
 	{
 		return Substring(*this, -1, 0);
 	}
@@ -747,9 +747,9 @@ BALL_INLINE
 Substring String::instr(const String& patterns, Index from) const
 	throw()
 {
-  Size found = (Size)find(patterns, from); 
+  string::size_type found = find(patterns, from); 
 
-  return (found == EndPos)
+  return (found == string::npos)
          ? Substring(*this, 0, 0)
          : Substring(*this, (Index)found, (Size)patterns.size());
 }
@@ -799,7 +799,7 @@ BALL_INLINE
 bool String::has(char c) const
 	throw()
 {
-  return ((c != 0) && (find(c, 0) != EndPos));
+  return ((c != 0) && (find(c, 0) != string::npos));
 }
 
 BALL_INLINE 
@@ -811,7 +811,7 @@ bool String::hasSubstring(const String& s, Index from) const
 		return true;
 	}
 
-  return (find(s, from) != EndPos);
+  return (find(s, from) != string::npos);
 }
 
 BALL_INLINE 
