@@ -1,4 +1,4 @@
-// $Id: displayProperties.C,v 1.20 2002/12/16 15:34:17 amoll Exp $
+// $Id: displayProperties.C,v 1.21 2002/12/17 17:56:22 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/displayProperties.h>
 #include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
@@ -370,6 +370,7 @@ namespace BALL
 																								const ColorRGBA &first_color,
 																								const ColorRGBA & /* second_color */,
 																								const ColorRGBA & /* third_color */)
+			throw(InvalidOption)
 		{
 			switch (values)
 			{
@@ -555,7 +556,7 @@ namespace BALL
 
 		// selects and setups the static model processor
 		void DisplayProperties::setupStaticProcessor_()
-			throw()
+			throw(InvalidOption)
 		{
 			switch (getValue_(ADDRESS__STATIC_MODEL))
 			{
@@ -643,7 +644,7 @@ namespace BALL
 
 		// selects and setups the dynamic model processor ------------------------------
 		void DisplayProperties::setupDynamicProcessor_()
-			throw()
+			throw(InvalidOption)
 		{
 			switch (getValue_(ADDRESS__DYNAMIC_MODEL))
 			{

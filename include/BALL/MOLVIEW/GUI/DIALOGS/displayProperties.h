@@ -1,4 +1,4 @@
-// $Id: displayProperties.h,v 1.18 2002/12/17 16:09:30 amoll Exp $
+// $Id: displayProperties.h,v 1.19 2002/12/17 17:57:39 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
 #define BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
@@ -417,17 +417,17 @@ namespace BALL
 			bool hasValue_(int address, int value);
 
 			virtual void applyOn_(Composite& composite);
-			virtual void setColorCalculator_(ColorCalculatorValues values,
-																			 const ColorRGBA &first_color = ColorRGBA(),
-																			 const ColorRGBA &second_color = ColorRGBA(),
-																			 const ColorRGBA &third_color = ColorRGBA());
+			virtual void setColorCalculator_(ColorCalculatorValues values, const ColorRGBA &first_color = ColorRGBA(),
+																			 const ColorRGBA &second_color = ColorRGBA(), const ColorRGBA &third_color = ColorRGBA())
+																			 throw(InvalidOption);
+
 			virtual void setColorCalculator_(ColorCalculator& color_calculator);
 
 			virtual void setupStaticProcessor_()
-				throw();
+				throw(InvalidOption);
 
 			virtual void setupDynamicProcessor_()
-				throw();
+				throw(InvalidOption);
 
 			// --------------------------------------------------------------------------------
 			// attributs
