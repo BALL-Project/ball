@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile.h,v 1.30 2004/03/19 00:52:00 amoll Exp $
+// $Id: DCDFile.h,v 1.31 2004/03/20 15:23:35 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_DCDFILE_H
@@ -94,11 +94,9 @@ namespace BALL
 		/// @name Public methods for file handling
 		//@{
 
-		// ?????
 		/** open a DCDFile
 		*/
-		virtual bool open(const String& name,
-				File::OpenMode open_mode = std::ios::in)
+		virtual bool open(const String& name, File::OpenMode open_mode = std::ios::in)
 			throw(Exception::FileNotFound);
 
 		/** Initialize this instance, i. e. read the header and update members
@@ -144,9 +142,10 @@ namespace BALL
 		*/
 		virtual bool flushToDisk(const std::vector<SnapShot>& buffer)
 			throw(File::CannotWrite);
-		//@}
 
-		/** @name Accessors */
+		//@}
+		/** @name Accessors 
+		*/
 		//@{
 
 		/// 
@@ -219,7 +218,7 @@ namespace BALL
 		//_
 		Size number_of_comments_;
 
-		BinaryFileAdaptor<Size> adapt_size_;
+		BinaryFileAdaptor<Size>  adapt_size_;
 		BinaryFileAdaptor<float> adapt_float_;
 	};
 } // namespace BALL

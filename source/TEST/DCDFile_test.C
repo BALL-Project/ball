@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile_test.C,v 1.23 2004/03/17 22:18:00 amoll Exp $
+// $Id: DCDFile_test.C,v 1.24 2004/03/20 15:22:58 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -14,7 +14,7 @@
 #include <BALL/MOLMEC/AMBER/amber.h>
 ///////////////////////////
 
-START_TEST(DCDFile, "$Id: DCDFile_test.C,v 1.23 2004/03/17 22:18:00 amoll Exp $")
+START_TEST(DCDFile, "$Id: DCDFile_test.C,v 1.24 2004/03/20 15:22:58 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -47,7 +47,7 @@ RESULT
 CHECK(DCDFile(const String& name, File::OpenMode open_mode = std::ios::in) throw())
   DCDFile test_file(dcd_test_file, std::ios::in);
 	TEST_EQUAL(test_file.isOpen(), true)
-	TEST_EQUAL(test_file.getOpenMode(), std::ios::in)
+	TEST_EQUAL(test_file.getOpenMode(), std::ios::binary | std::ios::in)
 	test_file.close();
 	TEST_EQUAL(test_file.isOpen(), false)
 
@@ -55,7 +55,7 @@ CHECK(DCDFile(const String& name, File::OpenMode open_mode = std::ios::in) throw
 	NEW_TMP_FILE(filename)
 	DCDFile test_file2(filename, std::ios::out);
 	TEST_EQUAL(test_file2.isOpen(), true)
-	TEST_EQUAL(test_file2.getOpenMode(), std::ios::out)
+	TEST_EQUAL(test_file2.getOpenMode(), std::ios::binary | std::ios::out)
 	test_file2.close();
 	TEST_EQUAL(test_file2.isOpen(), false)
 RESULT
@@ -89,14 +89,15 @@ CHECK(bool operator == (const DCDFile& file) const throw())
 	TEST_EQUAL(test, false)
 RESULT
 
-
 String filename;
 System system;
 Size nr_of_atoms;
+
 CHECK([EXTRA] full test writing)
 	PDBFile pfile("data/DCDFile_test.pdb");
 	pfile.read(system);
 	nr_of_atoms = system.countAtoms();
+	TEST_EQUAL(nr_of_atoms, 892)
 	TEST_EQUAL(system.getAtom(0)->getPosition(), Vector3(11.936, 104.294, 10.149))
 	AmberFF amberFF;
 	NEW_TMP_FILE(filename);
@@ -116,9 +117,11 @@ CHECK([EXTRA] full test writing)
 	system.getAtom(0)->setVelocity(Vector3(1,2,3));
 RESULT
 
+
 SnapShot ss;
 CHECK(bool read(SnapShot& snapshot) throw())
 	DCDFile dcd(filename);
+	TEST_EQUAL(dcd.getNumberOfSnapShots(), 2)
 	bool result = dcd.read(ss);
 	TEST_EQUAL(result, true)
 	ss.applySnapShot(system);
@@ -128,12 +131,13 @@ CHECK(bool read(SnapShot& snapshot) throw())
 	TEST_EQUAL(system.getAtom(0)->getVelocity(), Vector3(0,0,0))
 	result = dcd.read(ss);
 	TEST_EQUAL(result, true)
+	TEST_EQUAL(ss.getNumberOfAtoms(), nr_of_atoms)
 	ss.applySnapShot(system);
 	TEST_EQUAL(system.getAtom(0)->getPosition(), Vector3(1,2,1111))
 	TEST_EQUAL(system.getAtom(0)->getForce(), Vector3(3,4,5))
 	TEST_EQUAL(system.getAtom(0)->getVelocity(), Vector3(6,7,8))
 	result = dcd.read(ss);
-	TEST_EQUAL(result, true)
+	TEST_EQUAL(result, false)
 RESULT
 
 
@@ -204,7 +208,7 @@ CHECK(bool flushToDisk(const std::vector<SnapShot>& buffer) throw(File::CannotWr
 	DCDFile dcd(temporary, std::ios::out);
 	TEST_EQUAL(dcd.isOpen(), true)
 	TEST_EQUAL(dcd.isWritable(), true)
-	TEST_EQUAL(dcd.getOpenMode(), std::ios::out)
+	TEST_EQUAL(dcd.getOpenMode(), std::ios::binary | std::ios::out)
 	TEST_EQUAL(dcd.isAccessible(), true)
 	TEST_EQUAL(dcd.getNumberOfSnapShots(), 0)
 	bool result = dcd.flushToDisk(v);
@@ -242,7 +246,7 @@ RESULT
 
 CHECK(bool open(const String& name, File::OpenMode open_mode = std::ios::in) throw(Exception::FileNotFound))
 	DCDFile dcd;
-	TEST_EXCEPTION(Exception::FileNotFound, dcd.open(""))
+	TEST_EXCEPTION(Exception::FileNotFound, dcd.open("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", std::ios::in))
 RESULT
 
 CHECK(bool seekAndWriteHeader() throw())
