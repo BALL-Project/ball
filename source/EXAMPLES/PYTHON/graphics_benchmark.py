@@ -5,7 +5,7 @@ dp = DisplayProperties.getInstance(0)
 fd = MolecularFileDialog.getInstance(0)
 
 result = 0
-nr_runs = 1
+nr_runs = 5
 
 def clearRepresentations():
 	nr = pm.getNumberOfRepresentations()
