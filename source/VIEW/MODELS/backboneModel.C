@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.17.2.29 2004/12/29 15:57:39 amoll Exp $
+// $Id: backboneModel.C,v 1.17.2.30 2004/12/29 17:06:14 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -291,6 +291,8 @@ namespace BALL
 					break;
 				}
 			}
+
+			if (start >= atoms_of_spline_points_.size()) return;
 					
 			////////////////////////////////////////////////////////////
 			// calculate normal vector r to direction vector dir, with length of radius
