@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferencesEntry.h,v 1.7 2004/10/01 14:20:22 amoll Exp $
+// $Id: preferencesEntry.h,v 1.8 2004/10/08 14:49:21 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_PREFERENCES_ENTRY
@@ -61,6 +61,9 @@ namespace BALL
 
 			///
 			void setINIFileSectionName(const String& name) { inifile_section_name_ = name;}
+
+			///
+			const String& getINIFileSectionName() const { return inifile_section_name_;}
 
 			///
 			void insertEntry(QWidget* widget, const String& name);

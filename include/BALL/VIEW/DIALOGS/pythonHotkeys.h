@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pythonHotkeys.h,v 1.2 2004/09/29 20:38:12 amoll Exp $
+// $Id: pythonHotkeys.h,v 1.3 2004/10/08 14:49:20 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_PYTHONHOTKEYS_H
@@ -41,7 +41,7 @@ namespace BALL
 			~PythonHotkeys() {}
 
 			/// 
-			virtual void setDefaults(bool all = true)
+			virtual void setDefaults(bool /*all*/ = true)
 				throw();
 
 			///

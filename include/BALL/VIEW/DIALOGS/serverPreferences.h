@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: serverPreferences.h,v 1.10 2004/09/29 20:38:12 amoll Exp $
+// $Id: serverPreferences.h,v 1.11 2004/10/08 14:49:20 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_SERVERPREFERENCES_H
@@ -67,7 +67,7 @@ namespace BALL
 			//@{
 
 			/// 
-			void setDefaultValues()
+			void setDefaultValues(bool /*all*/ = false)
 				throw();
 
 			/** Access the port the Server tries to connect to.

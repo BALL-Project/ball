@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: serverPreferences.C,v 1.7 2004/09/30 15:51:22 amoll Exp $
+// $Id: serverPreferences.C,v 1.8 2004/10/08 14:49:15 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/serverPreferences.h>
@@ -91,7 +91,7 @@ namespace BALL
 			return server_status_->isChecked();
 		}
 
-		void ServerPreferences::setDefaultValues()
+		void ServerPreferences::setDefaultValues(bool /*all*/)
 			throw()
 		{
 			port_->setText(String(VIEW_DEFAULT_PORT).c_str());

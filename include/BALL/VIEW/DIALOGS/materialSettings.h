@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: materialSettings.h,v 1.3 2004/09/29 20:38:11 amoll Exp $
+// $Id: materialSettings.h,v 1.4 2004/10/08 14:49:20 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MATERIALSETTINGS_H
@@ -42,20 +42,12 @@ namespace BALL
 			/// Destructor
 			~MaterialSettings() {}
 
-			/// Update the display of all fields
-			void update()
-				throw();
-
-			/// Get the values for Materialing from the stage
-			void updateFromStage()
-				throw();
-
 			/// Apply the new values to the stage
 			void apply()
 				throw();
 
 			/// Called when defaults is pressed in Preferences, calls setDefaults
-			virtual void setDefaultValues()
+			virtual void setDefaultValues(bool /*all*/ = false)
 				throw();
 
 			public slots:
