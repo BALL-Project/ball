@@ -1,4 +1,4 @@
-// $Id: object.h,v 1.2 1999/10/30 12:53:21 oliver Exp $ 
+// $Id: object.h,v 1.3 1999/12/22 16:57:04 oliver Exp $ 
 
 #ifndef BALL_CONCEPT_OBJECT_H
 #define BALL_CONCEPT_OBJECT_H
@@ -181,7 +181,7 @@ namespace BALL
 
 			/// Returns the total number of registered objects of a certain kind
 			template <class U>
-			static Size countObjects(const U& u)
+			Size countObjects(const U& u)
 			{
 				Size count = 0;
 

@@ -1,4 +1,4 @@
-// $Id: persistenceManager.h,v 1.3 1999/10/30 12:53:22 oliver Exp $
+// $Id: persistenceManager.h,v 1.4 1999/12/22 16:57:04 oliver Exp $
 
 #ifndef BALL_CONCEPT_PERSISTENCE_H
 #define BALL_CONCEPT_PERSISTENCE_H
@@ -177,7 +177,7 @@ namespace BALL
 
 		/**
 		*/
-		template <typename T>
+		template <class T>
 		bool checkObjectHeader(const T& /* object */, const char* name = 0)
 		{
 			void* ptr;
@@ -194,7 +194,7 @@ namespace BALL
 
 		/**
 		*/
-		template <typename T>
+		template <class T>
 		void writeObjectHeader(const T* object, const char* name = 0)
 		{
 			object_out_.insert(object);
@@ -220,7 +220,7 @@ namespace BALL
 				@param	t the variable
 				@param	name the variable name
 		*/
-		template <typename T>
+		template <class T>
 		void writePrimitive(const T& t, const char* name)
 		{
 			writePrimitiveHeader(RTTI<T>::getStreamName(), name);
@@ -230,7 +230,7 @@ namespace BALL
  
 		/**	Read a primitive member variable.
 		*/
-		template <typename T>
+		template <class T>
 		bool readPrimitive(T& t, const char* name)
 		{
 			if (!checkPrimitiveHeader(RTTI<T>::getStreamName(), name))
@@ -245,7 +245,7 @@ namespace BALL
 
 		/**	Write a storable object.
 		*/
-		template <typename T>
+		template <class T>
 		void writeStorableObject(const T& t, const char* name)
 		{
 			writeStorableHeader(RTTI<T>::getStreamName(), name);
@@ -255,7 +255,7 @@ namespace BALL
 			
 		/**	Read a storable object.
 		*/
-		template <typename T>
+		template <class T>
 		bool readStorableObject(T& t, const char* name)
 		{
 			return (checkStorableHeader(RTTI<T>::getStreamName(), name) 
@@ -264,7 +264,7 @@ namespace BALL
 
 		/**	Write a pointer to a PersistentObject.
 		*/
-		template <typename T>
+		template <class T>
 		void writeObjectPointer(const T* object, const char* name)
 	 	{
 			if (object != 0 && !object_out_.has(object))
@@ -277,7 +277,7 @@ namespace BALL
  
 		/**	Read a pointer to a PersistentObject
 		*/
-		template <typename T>
+		template <class T>
 		bool readObjectPointer(T*& object, const char* name)
 		{
 			if (!checkObjectPointerHeader(RTTI<T>::getStreamName(), name))
@@ -298,7 +298,7 @@ namespace BALL
 
 		/**
 		*/
-		template <typename T>
+		template <class T>
 		void writeObjectReference(const T& object, const char* name)
 		{
 			if (&object != 0 && !object_out_.has(&object))
@@ -311,7 +311,7 @@ namespace BALL
 
 		/**	Read a reference to a PersistentObject
 		*/
-		template <typename T>
+		template <class T>
 		bool readObjectReference(T& object, const char* name)
 		{
 			if (!checkObjectReferenceHeader(RTTI<T>::getStreamName(), name))
@@ -336,7 +336,7 @@ namespace BALL
 				@param	name the name
 				@param	size the number of elements in the array
 		*/
-		template <typename T>
+		template <class T>
 		void writeObjectArray(const T* array, const char* name, Size size)
 		{
 			writeObjectArrayHeader(RTTI<T>::getStreamName(), name, size);
@@ -353,7 +353,7 @@ namespace BALL
 				@param	name the name
 				@param	size the number of elements in the array
 		*/
-		template <typename T>
+		template <class T>
 		bool readObjectArray(const T* array, const char* name, Size& size)
 		{
 			if (!checkObjectArrayHeader(RTTI<T>::getStreamName(), name, size))
@@ -372,7 +372,7 @@ namespace BALL
 
 		/**
 		*/
-		template <typename T>
+		template <class T>
 		void writeObjectPointerArray(T** arr, const char* name, const Size size)
 		{
 			writeObjectPointerArrayHeader(RTTI<T>::getStreamName(), name, size);
@@ -393,7 +393,7 @@ namespace BALL
 	
 		/**
 		*/
-		template <typename T>
+		template <class T>
 		bool readObjectPointerArray(T** array, const char* name, Size& size)
 		{
 			if (!checkObjectPointerArrayHeader(RTTI<T>::getStreamName(), name, size))
