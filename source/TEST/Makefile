@@ -5,6 +5,7 @@ EXECUTABLES = \
 	AnalyticalGeometry_test\
 	AnalyticalSES_test\
 	Angle_test\
+	AnisotropyShiftProcessor_test\
 	AssignShiftProcessor_test\
 	Atom_test\
 	AtomContainer_test\
@@ -20,8 +21,10 @@ EXECUTABLES = \
 	Circle3_test\
 	ClassTest_test\
 	ClaverieParameter_test\
+	ClearShiftProcessor_test\
 	ComposedEnergyProcessor_test\
 	Composite_test\
+	CreateSpectrumProcessor_test\
 	Directory_test\
 	DefaultProcessors_test\
 	EFShiftProcessor_test\
@@ -34,20 +37,24 @@ EXECUTABLES = \
 	Fragment_test\
 	FragmentDB_test\
 	Gradient_test\
+	HaighMallionShiftProcessor_test\
 	Hash_test\
 	HashMap_test\
 	HashSet_test\
 	HINFile_test\
 	INIFile_test\
+	JohnsonBoveyShiftProcessor_test\
 	KernelPredicate_test\
 	Limits_test\
 	Line3_test\
 	List_test\
 	LogStream_test\
+	MakeSpectrumProcessor_test\
 	MathsCommon_test\
 	Matrix44_test\
 	MOL2File_test\
 	Molecule_test\
+	NMRSpectrum_test\
 	NMRStarFile_test\
 	NumericalSAS_test\
 	NucleicAcid_test\
@@ -59,6 +66,7 @@ EXECUTABLES = \
 	Parameters_test\
 	ParameterSection_test\
 	Path_test\
+	Peak_test\
 	PDBFile_test\
 	PiecewiseFunction_test\
 	PiecewisePolynomial_test\

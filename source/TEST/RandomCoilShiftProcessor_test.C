@@ -1,4 +1,4 @@
-// $Id: RandomCoilShiftProcessor_test.C,v 1.1 2000/09/21 13:38:55 oliver Exp $
+// $Id: RandomCoilShiftProcessor_test.C,v 1.2 2000/09/22 00:33:48 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -6,10 +6,11 @@
 #include <BALL/NMR/randomCoilShiftProcessor.h>
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/FORMAT/PDBFile.h>
+#include <BALL/STRUCTURE/defaultProcessors.h>
 
 ///////////////////////////
 
-START_TEST(RandomCoilShiftProcessor, "$Id: RandomCoilShiftProcessor_test.C,v 1.1 2000/09/21 13:38:55 oliver Exp $")
+START_TEST(RandomCoilShiftProcessor, "$Id: RandomCoilShiftProcessor_test.C,v 1.2 2000/09/22 00:33:48 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
