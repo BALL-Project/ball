@@ -1,4 +1,4 @@
-/HEADER    BPTI                                    [ 1-3][0-9]-[JFMASOND][AEPUCO][NBRYLGPTVC]-[ 0-9][0-9]       
+/HEADER    BPTI                                   .*
 SEQRES   1     58  ARG PRO ASP PHE CYS LEU GLU PRO PRO TYR THR GLY PRO
 SEQRES   2     58  CYS LYS ALA ARG ILE ILE ARG TYR PHE TYR ASN ALA LYS
 SEQRES   3     58  ALA GLY LEU CYS GLN THR PHE VAL TYR GLY GLY CYS ARG

@@ -1,4 +1,4 @@
-/HEADER                                            [ 1-3][0-9]-[JFMASOND][AEPUCO][NBRYLGPTVC]-[ 0-9][0-9]       
+/HEADER                                            .*
 SEQRES   1      1  ALA                                                
 MODEL        1
 ATOM      1 1HB  ALA     0      -2.525   1.536  -2.196  1.00 20.00           H  
