@@ -1,4 +1,4 @@
-// $Id: fresno.h,v 1.1.2.12 2002/11/21 12:53:17 anker Exp $
+// $Id: fresno.h,v 1.1.2.13 2002/11/21 20:28:54 anker Exp $
 
 #ifndef BALL_MOLMEC_FRESNO_FRESNO_H
 #define BALL_MOLMEC_FRESNO_FRESNO_H
@@ -425,7 +425,8 @@ namespace BALL
 		FresnoFF(System& system)
 			throw();
 
-		/** Construct a FresnoFF with a system.
+		/** Construct a FresnoFF with a system and pointers to protein and
+				ligand
 		*/
 		FresnoFF(System& system, Molecule* protein, Molecule* ligand)
 			throw();
@@ -480,6 +481,16 @@ namespace BALL
 		/**	@name Accessors specific to the FRESNO force field
 		*/
 		//@{
+
+		/**
+		*/
+		void setProtein(Molecule* protein)
+			throw();
+
+		/**
+		*/
+		void setLigand(Molecule* ligand)
+			throw();
 
 		/**
 		*/

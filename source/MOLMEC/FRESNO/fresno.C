@@ -1,4 +1,4 @@
-// $Id: fresno.C,v 1.1.2.15 2002/11/21 12:52:30 anker Exp $
+// $Id: fresno.C,v 1.1.2.16 2002/11/21 20:28:53 anker Exp $
 // Molecular Mechanics: Fresno force field class
 
 #include <BALL/SYSTEM/path.h>
@@ -65,13 +65,20 @@ namespace BALL
 		= "atom_types_file";
 
 
-	const float FresnoFF::Default::CONST = -33.614;
-	const float FresnoFF::Default::HB = -0.014;
-	const float FresnoFF::Default::LIPO = -0.076;
-	const float FresnoFF::Default::ROT = 0.017;
-	const float FresnoFF::Default::BP = 0.021;
-	const float FresnoFF::Default::DESOLV = 0.026;
-	const float FresnoFF::Default::METAL = -6.03;
+	// const float FresnoFF::Default::CONST = -33.614;
+	// const float FresnoFF::Default::HB = -0.014;
+	// const float FresnoFF::Default::LIPO = -0.076;
+	// const float FresnoFF::Default::ROT = 0.017;
+	// const float FresnoFF::Default::BP = 0.021;
+	// const float FresnoFF::Default::DESOLV = 0.026;
+	// const float FresnoFF::Default::METAL = -6.03;
+	const float FresnoFF::Default::CONST = 1.0;
+	const float FresnoFF::Default::HB = 1.0;
+	const float FresnoFF::Default::LIPO = 1.0;
+	const float FresnoFF::Default::ROT = 1.0;
+	const float FresnoFF::Default::BP = 1.0;
+	const float FresnoFF::Default::DESOLV = 1.0;
+	const float FresnoFF::Default::METAL = 1.0;
 	const float FresnoFF::Default::HB_IDEAL_LENGTH = 1.85;
 	const float FresnoFF::Default::HB_IDEAL_ANGLE = 180;
 	const float FresnoFF::Default::HB_DIST_LOWER = 0.25;
@@ -812,6 +819,20 @@ namespace BALL
 	}
 
 
+	void FresnoFF::setProtein(Molecule* protein)
+		throw()
+	{
+		protein_ = protein;
+	}
+
+
+	void FresnoFF::setLigand(Molecule* ligand)
+		throw()
+	{
+		ligand_ = ligand;
+	}
+
+
 	Molecule* FresnoFF::getProtein() const
 		throw()
 	{
@@ -829,7 +850,7 @@ namespace BALL
 	double FresnoFF::getHydrogenBondEnergy() const
 		throw()
 	{
-		ForceFieldComponent* component = getComponent("Fresno Hydrogen Bond");
+		ForceFieldComponent* component = getComponent("Fresno HydrogenBond");
 		if (component != 0)
 		{
 			return component->getEnergy();
@@ -859,7 +880,7 @@ namespace BALL
 	double FresnoFF::getRotationalEnergy() const
 		throw()
 	{
-		ForceFieldComponent* component = getComponent("Fresno Rotational");
+		ForceFieldComponent* component = getComponent("Fresno RotationalEntropyLoss");
 		if (component != 0)
 		{
 			return component->getEnergy();
@@ -874,7 +895,7 @@ namespace BALL
 	double FresnoFF::getBuriedPolarEnergy() const
 		throw()
 	{
-		ForceFieldComponent* component = getComponent("Fresno Buried Polar");
+		ForceFieldComponent* component = getComponent("Fresno BuriedPolar");
 		if (component != 0)
 		{
 			return component->getEnergy();
