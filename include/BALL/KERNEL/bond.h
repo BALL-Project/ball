@@ -1,4 +1,4 @@
-// $Id: bond.h,v 1.3 1999/12/28 18:38:44 oliver Exp $
+// $Id: bond.h,v 1.4 2000/02/06 19:43:24 oliver Exp $
 
 #ifndef BALL_KERNEL_BOND_H
 #define BALL_KERNEL_BOND_H
@@ -41,7 +41,6 @@ namespace BALL
 			{\bf Definition:} "\URL{BALL/KERNEL/bond.h}
 			\\
 			{\bf Concept:} association\\
-			{\bf Errors:} see \Ref{ErrorCode}\\
 			
 			An instance of Bond represents a chemical connectivity ("bond")
 			between two \Ref{Atom} instances ("first atom" and "second atom").
@@ -63,8 +62,8 @@ namespace BALL
 			
 			@memo    Bond class (BALL kernel framework)
 			@author  $Author: oliver $
-			@version $Revision: 1.3 $
-			@date    $Date: 1999/12/28 18:38:44 $
+			@version $Revision: 1.4 $
+			@date    $Date: 2000/02/06 19:43:24 $
 	*/
 	class Bond
 		: public Composite,
