@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HashMap_test.C,v 1.14 2002/12/12 11:34:41 oliver Exp $
+// $Id: HashMap_test.C,v 1.15 2003/06/17 12:51:02 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -38,7 +38,7 @@ class MyVisitor
 	}
 };
 
-START_TEST(HashMap, "$Id: HashMap_test.C,v 1.14 2002/12/12 11:34:41 oliver Exp $")
+START_TEST(HashMap, "$Id: HashMap_test.C,v 1.15 2003/06/17 12:51:02 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -53,27 +53,28 @@ CHECK(HashMap::~HashMap())
 	delete map_ptr;
 RESULT
 
-CHECK(HashMap::size())
+CHECK(Size size() const throw())
 	HashMap<int, int> hm;
 	TEST_EQUAL(hm.size(), 0)
 RESULT
 
-CHECK(HashMap::getSize())
+CHECK(Size getSize() const throw())
 	HashMap<int, int> hm;
 	TEST_EQUAL(hm.getSize(), 0)
 RESULT
 
-CHECK(HashMap::getBucketSize() const)
+CHECK(Size getBucketSize() const throw())
 	HashMap<int, int> hm;
 	TEST_EQUAL(hm.getBucketSize(), 3)
 RESULT
 
-CHECK(HashMap::getCapacity())
+CHECK(Size getCapacity() const throw())
 	HashMap<int, int> hm;
 	TEST_EQUAL(hm.getCapacity(), 4)
 RESULT
 
-CHECK(HashMap::insert(const ValueType& entry))
+//CHECK(std::pair<Iterator, bool> insert(const ValueType& entry) throw())
+CHECK([EXTRA] otherwise_there_is_a_problem_here)
 	HashMap<int, int> hm;
 	TEST_EQUAL(hm.getSize(), 0)
 	hm.insert(HashMap<int, int>::ValueType(0, 0));
@@ -86,7 +87,7 @@ CHECK(HashMap::insert(const ValueType& entry))
 	TEST_EQUAL(hm.getSize(), 2)
 RESULT
 
-CHECK(HashMap::find(const int& key))
+CHECK(Iterator find(const Key& key) throw())
 	HashMap<int, int> hm;
 	TEST_EQUAL((hm.find(0) == hm.end()), true)
 	TEST_EQUAL((hm.find(1) == hm.end()), true)
@@ -104,7 +105,7 @@ CHECK(HashMap::find(const int& key))
 	TEST_EQUAL((hm.find(-2) == hm.end()), true)
 RESULT
 
-CHECK(HashMap::find(const int& key) const)
+CHECK(ConstIterator find(const Key& key) const throw())
 	HashMap<int, int> h_mutable;
 	const HashMap<int, int>& hm = const_cast<const HashMap<int, int>&>(h_mutable);
 	TEST_EQUAL((hm.find(0) == hm.end()), true)
@@ -123,7 +124,7 @@ CHECK(HashMap::find(const int& key) const)
 	TEST_EQUAL((hm.find(-2) == hm.end()), true)
 RESULT
 
-CHECK(HashMap::erase(const KeyType& key))
+CHECK(Size erase(const Key& key) throw())
 	HashMap<int, int> hm;
 	TEST_EQUAL(hm.getSize(), 0)
 	hm.insert(HashMap<int, int>::ValueType(0, 0));
@@ -146,7 +147,7 @@ CHECK(HashMap::erase(const KeyType& key))
 	TEST_EQUAL(hm.getSize(), 2)
 RESULT
 
-CHECK(HashMap::erase(Iterator first, Iterator last))
+CHECK(void erase(Iterator first, Iterator last) throw(Exception::IncompatibleIterators))
 	HashMap<int, int> hm;
 	hm.insert(HashMap<int, int>::ValueType(0, 0));
 	hm.insert(HashMap<int, int>::ValueType(1, 1));
@@ -189,7 +190,7 @@ CHECK(HashMap::erase(Iterator first, Iterator last))
 	TEST_EXCEPTION(Exception::IncompatibleIterators, hm.erase(hm2.begin(), hm.end()))
 RESULT
 
-CHECK(Hashmet::erase(Iterator pos))
+CHECK(void erase(Iterator pos) throw(Exception::IncompatibleIterators, Exception::InvalidIterator))
 	HashMap<int, int> hm;
 	hm.insert(HashMap<int, int>::ValueType(0, 0));
 	hm.insert(HashMap<int, int>::ValueType(1, 1));
@@ -219,7 +220,7 @@ CHECK(Hashmet::erase(Iterator pos))
 	TEST_EXCEPTION(Exception::IncompatibleIterators, hm2.erase(hm.begin()))
 RESULT
 
-CHECK(HashMap::operator [] (const int& key))
+CHECK(T& operator [] (const Key& key) throw())
 	HashMap<int, int> hm;
 	hm[0] = 0;
 	hm[0] = 1;
@@ -237,7 +238,7 @@ CHECK(HashMap::operator [] (const int& key))
 	TEST_EQUAL(hm[5], 32)
 RESULT
 
-CHECK(HashMap::operator [] (const int& key) const)
+CHECK(const T& operator [] (const Key& key) const throw(typename HashMap<Key, T>::IllegalKey))
 	HashMap<int, int> hm;
 	hm[0] = 0;
 	hm[0] = 1;
@@ -254,9 +255,11 @@ CHECK(HashMap::operator [] (const int& key) const)
 	TEST_EQUAL(const_map[3], 8)
 	TEST_EQUAL(const_map[4], 16)
 	TEST_EQUAL(const_map[5], 32)
+	typedef HashMap<int,int> MyHashMap; // otherwise next line wont work
+	TEST_EXCEPTION(MyHashMap::IllegalKey, const_map[6])
 RESULT
 
-CHECK(HashMap::HashMap(const HashMap&, bool))
+CHECK(HashMap(const HashMap& hash_map) throw())
 	HashMap<int, int> hm;
 	hm.insert(HashMap<int, int>::ValueType(0, 0));
 	hm.insert(HashMap<int, int>::ValueType(1, 1));
@@ -270,7 +273,7 @@ CHECK(HashMap::HashMap(const HashMap&, bool))
 	TEST_EQUAL(hm2[3], 3)
 RESULT
 
-CHECK(HashMap::clear())
+CHECK(void clear() throw())
 	HashMap<int, int> hm;
 	hm.insert(HashMap<int, int>::ValueType(0, 0));
 	hm.clear();
@@ -279,7 +282,7 @@ CHECK(HashMap::clear())
 	TEST_EQUAL(hm.getBucketSize(), 3)
 RESULT
 
-CHECK(HashMap::destroy())
+CHECK(void destroy() throw())
 	HashMap<int, int> hm;
 	hm.insert(HashMap<int, int>::ValueType(0, 0));
 	hm.destroy();
@@ -288,7 +291,7 @@ CHECK(HashMap::destroy())
 	TEST_EQUAL(hm.getBucketSize(), 3)
 RESULT
 
-CHECK(HashMap::set(const HashMap&, bool))
+CHECK(void set(const HashMap& hash_map) throw())
 	HashMap<int, int> hm1;
 	hm1.insert(pair<int, int>(12, 34));
 	hm1.insert(pair<int, int>(44, 55));
@@ -306,7 +309,7 @@ CHECK(HashMap::set(const HashMap&, bool))
 	TEST_EQUAL(hm1.has(44), true)
 RESULT
 
-CHECK(HashMap::get(HashMap&, bool) const)
+CHECK(void get(HashMap& hash_map) const throw())
 	HashMap<int, int> hm, hm2;
 	hm.insert(HashMap<int, int>::ValueType(0, 0));
 	hm.insert(HashMap<int, int>::ValueType(1, 1));
@@ -316,7 +319,7 @@ CHECK(HashMap::get(HashMap&, bool) const)
 	TEST_EQUAL(hm2[1], 1)
 RESULT
 
-CHECK(HashMap::swap(HashMap&, bool))
+CHECK(void swap(HashMap& hash_map) throw())
 	HashMap<int, int> hm, hm2;
 	hm.insert(HashMap<int, int>::ValueType(0, 0));
 	hm.insert(HashMap<int, int>::ValueType(1, 1));
@@ -339,7 +342,7 @@ CHECK(HashMap::swap(HashMap&, bool))
 	TEST_EQUAL(hm2[1], 1)
 RESULT
 
-CHECK(HashMap::operator = (const HashMap&))
+CHECK(const HashMap& operator = (const HashMap& hash_map) throw())
 	HashMap<int, int> hm, hm2;
 	hm.insert(HashMap<int, int>::ValueType(0, 0));
 	hm.insert(HashMap<int, int>::ValueType(1, 1));
@@ -349,7 +352,7 @@ CHECK(HashMap::operator = (const HashMap&))
 	TEST_EQUAL(hm2[1], 1)
 RESULT
 
-CHECK(HashMap::host(Visitor<pair<key, value> >& visitor))
+CHECK(void host(Visitor<HashMap<Key, T> >& visitor) throw())
 	HashMap<int, int> hm;
 	hm.insert(HashMap<int, int>::ValueType(100, 200));
 	hm.insert(HashMap<int, int>::ValueType(11, 22));
@@ -360,7 +363,7 @@ CHECK(HashMap::host(Visitor<pair<key, value> >& visitor))
 	TEST_EQUAL(mv.value_sum, 222)
 RESULT
 
-CHECK(HashMap::has(const Key&))
+CHECK(bool has(const Key& key) const throw())
 	HashMap<int, int> hm;
 	hm.insert(HashMap<int, int>::ValueType(0, 0));
 	hm.insert(HashMap<int, int>::ValueType(1, 1));
@@ -369,7 +372,7 @@ CHECK(HashMap::has(const Key&))
 	TEST_EQUAL(hm.has(2), false)
 RESULT
 
-CHECK(HashMap::isEmpty())
+CHECK(bool isEmpty() const throw())
 	HashMap<int, int> hm;
 	TEST_EQUAL(hm.isEmpty(), true)
 	hm.insert(HashMap<int, int>::ValueType(0, 0));
@@ -378,7 +381,7 @@ CHECK(HashMap::isEmpty())
 	TEST_EQUAL(hm.isEmpty(), true)
 RESULT
 
-CHECK(HashMap::operator == (const HashMap&) const)
+CHECK(bool operator == (const HashMap& hash_map) const throw())
 	HashMap<int, int> hm;
 	HashMap<int, int> hm2;
 	TEST_EQUAL(hm == hm2, true)
@@ -400,7 +403,8 @@ CHECK(HashMap::operator == (const HashMap&) const)
 	TEST_EQUAL(hm == hm2, false)
 RESULT
 
-CHECK(HashMap::operator != (const HashMap&) const)
+
+CHECK(bool operator != (const HashMap& hash_map) const throw())
 	HashMap<int, int> hm;
 	HashMap<int, int> hm2;
 
@@ -416,7 +420,8 @@ CHECK(HashMap::operator != (const HashMap&) const)
 	TEST_EQUAL(hm != hm2, true)
 RESULT
 
-CHECK(HashMap::dump(std::ostream&, Size) const)
+
+CHECK(void dump(::std::ostream& s = ::std::cout, Size depth = 0) const throw())
 	HashMap<int, int> hm;
 	hm.insert(HashMap<int, int>::ValueType(0, 0));
 	hm.insert(HashMap<int, int>::ValueType(1, 1));
@@ -429,12 +434,14 @@ CHECK(HashMap::dump(std::ostream&, Size) const)
 	TEST_FILE_REGEXP(filename.c_str(), "data/HashMap_test.txt")
 RESULT
 
-CHECK(HashMap::isValid() const)
+
+CHECK(bool isValid() const throw())
 	HashMap<int, int> hm;
 	TEST_EQUAL(hm.isValid(), true)
 RESULT
 
-CHECK(HashMap::apply(UnaryProcessor))
+
+CHECK(bool apply(UnaryProcessor<ValueType>& processor) throw())
 	HashMap<int, int> hm;
 	hm.insert(HashMap<int, int>::ValueType(0, 0));
 	hm.insert(HashMap<int, int>::ValueType(1, 1));
